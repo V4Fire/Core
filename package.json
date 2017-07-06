@@ -1,0 +1,30 @@
+{
+  "name": "@v4fire/core",
+  "description": "V4Fire core library",
+  "homepage": "https://github.com/V4Fire/Core#readme",
+  "main": "src/index.js",
+  "license": "MIT",
+  "version": "1.0.0",
+  "author": {
+    "name": "kobezzza",
+    "email": "kobezzza@gmail.com",
+    "url": "https://github.com/kobezzza"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/V4Fire/Core.git"
+  },
+  "bugs": {
+    "url": "https://github.com/V4Fire/Core/issues"
+  },
+  "keywords": [
+    "V4Fire"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 0"
+  },
+  "dependencies": {
+    "collection.js": "^6.0.0-beta.19",
+    "sugar": "^2.0.0"
+  }
+}
