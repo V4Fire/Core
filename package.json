@@ -25,11 +25,17 @@
   },
   "dependencies": {
     "collection.js": "^6.0.0-beta.19",
+    "dotenv": "^4.0.0",
     "sugar": "^2.0.0",
     "tosource": "^1.0.0"
   },
   "devDependencies": {
     "eslint": "^4.1.1",
-    "eslint-plugin-flowtype": "^2.34.1"
+    "eslint-plugin-flowtype": "^2.34.1",
+    "gulp": "^3.9.1",
+    "gulp-convert-newline": "0.0.3",
+    "gulp-header": "^1.8.8",
+    "gulp-replace": "^0.6.1",
+    "through2": "^2.0.3"
   }
 }
