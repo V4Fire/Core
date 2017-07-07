@@ -27,5 +27,9 @@
     "collection.js": "^6.0.0-beta.19",
     "sugar": "^2.0.0",
     "tosource": "^1.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^4.1.1",
+    "eslint-plugin-flowtype": "^2.34.1"
   }
 }
