@@ -8,13 +8,15 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+const {env} = process;
+env.NODE_ENV = env.NODE_ENV || 'standalone';
+
 const
-	gulp = require('gulp'),
-	{getHead} = require('./build/helpers');
+	gulp = require('gulp');
 
 module.exports = function (gulp) {
 	gulp.task('setProd', (cb) => {
-		process.env.NODE_ENV = 'production';
+		env.NODE_ENV = 'production';
 		cb();
 	});
 
@@ -50,6 +52,9 @@ module.exports = function (gulp) {
 	gulp.task('head', (cb) => {
 		const
 			through = require('through2'),
+			{getHead} = require('./build/helpers');
+
+		const
 			fullHead = `${getHead()}\n`,
 			headRgxp = /(\/\*![\s\S]*?\*\/\n{2})/;
 
