@@ -8,10 +8,10 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-module.exports = function (gulp = require('gulp')) {
-	const {env} = process;
-	env.NODE_ENV = env.NODE_ENV || 'standalone';
+const {env} = process;
+env.NODE_ENV = env.NODE_ENV || 'standalone';
 
+module.exports = function (gulp = require('gulp')) {
 	gulp.task('setProd', (cb) => {
 		env.NODE_ENV = 'production';
 		cb();
