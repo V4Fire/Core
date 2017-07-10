@@ -12,7 +12,7 @@ const
 	gulp = require('gulp'),
 	{getHead} = require('./build/helpers');
 
-module.exports = (gulp) => {
+module.exports = function (gulp) {
 	gulp.task('setProd', (cb) => {
 		process.env.NODE_ENV = 'production';
 		cb();
