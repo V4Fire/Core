@@ -1,3 +1,5 @@
+'use strict';
+
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -5,8 +7,6 @@
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
-
-'use strict';
 
 const
 	minDateLength = '2017-02-03T'.length,
