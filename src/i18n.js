@@ -9,7 +9,7 @@
  */
 
 import { GLOBAL, IS_NODE } from './const/links';
-import * as langs from '../lang';
+import * as langs from './lang';
 
 const
 	$C = require('collection.js'),
