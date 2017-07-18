@@ -4,7 +4,7 @@
   "homepage": "https://github.com/V4Fire/Core#readme",
   "main": "src/index.js",
   "license": "MIT",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "author": {
     "name": "kobezzza",
     "email": "kobezzza@gmail.com",
@@ -26,16 +26,17 @@
   "dependencies": {
     "collection.js": "^6.0.0-beta.19",
     "dotenv": "^4.0.0",
+    "gulp": "^3.9.1",
+    "gulp-convert-newline": "0.0.3",
+    "gulp-header": "^1.8.9",
+    "gulp-replace": "^0.6.1",
     "sugar": "^2.0.0",
+    "through2": "^2.0.3",
     "tosource": "^1.0.0"
   },
   "devDependencies": {
+    "babel-eslint": "^7.2.3",
     "eslint": "^4.2.0",
-    "eslint-plugin-flowtype": "^2.35.0",
-    "gulp": "^3.9.1",
-    "gulp-convert-newline": "0.0.3",
-    "gulp-header": "^1.8.8",
-    "gulp-replace": "^0.6.1",
-    "through2": "^2.0.3"
+    "eslint-plugin-flowtype": "^2.35.0"
   }
 }
