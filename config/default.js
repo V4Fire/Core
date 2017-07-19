@@ -8,8 +8,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-require('dotenv')
-	.config();
+require('dotenv').config();
+process.env.NODE_ENV = process.env.NODE_ENV || 'standalone';
 
 module.exports = {
 	snakeskin: {

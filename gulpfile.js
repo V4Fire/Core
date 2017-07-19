@@ -8,9 +8,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-const {env} = process;
-env.NODE_ENV = env.NODE_ENV || 'standalone';
-
+require('./config/default');
 module.exports = function (gulp = require('gulp')) {
 	gulp.task('setProd', (cb) => {
 		env.NODE_ENV = 'production';
