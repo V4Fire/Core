@@ -8,6 +8,9 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+require('dotenv')
+	.config();
+
 module.exports = {
 	snakeskin: {
 		base: {
