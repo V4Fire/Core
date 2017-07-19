@@ -26,7 +26,6 @@ module.exports = {
 				'transform-class-properties',
 				'transform-es2015-object-super',
 				'transform-function-bind',
-				['transform-es2015-modules-commonjs', {loose: true}],
 				['transform-object-rest-spread', {useBuiltIns: true}],
 				['transform-runtime', {
 					helpers: true,
