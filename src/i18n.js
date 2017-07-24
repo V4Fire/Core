@@ -13,7 +13,7 @@ import * as langs from 'lang';
 
 const
 	$C = require('collection.js'),
-	config = require('./config');
+	config = require('config');
 
 const
 	ws = /[\r\n]+/g;
