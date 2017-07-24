@@ -123,18 +123,3 @@ export function getDateFromInput(value: string): Date {
 export function getTimeFormattedValue(time: Array<number>): string {
 	return $C(time).map((el) => el.pad(2)).join(':');
 }
-
-/**
- * Converts language enum data from the server to b-select format
- * @param obj
- */
-export function lang2select(obj: Object): Array<Object> {
-	if (!obj) {
-		return [];
-	}
-
-	return $C(obj.data || obj).map((el) => ({
-		value: el.name,
-		label: getLangDescription(el.name)
-	}));
-}
