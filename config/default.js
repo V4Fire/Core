@@ -12,6 +12,7 @@ require('dotenv').config();
 process.env.NODE_ENV = process.env.NODE_ENV || 'standalone';
 
 module.exports = {
+	appName: 'v4Fire',
 	snakeskin: {
 		pack: false,
 		filters: {global: ['undef']},
