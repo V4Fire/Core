@@ -8,4 +8,9 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-export default require(`./config/${process.env.NODE_ENV}`);
+export default {
+	/**
+	 * Default system language
+	 */
+	lang: 'en'
+};
