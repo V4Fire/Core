@@ -91,6 +91,8 @@ module.exports = function (gulp = require('gulp')) {
 			.pipe(gulp.dest('./'))
 			.on('end', cb);
 	});
+
+	gulp.task('prod', ['setProd', 'default']);
 };
 
 module.exports();
