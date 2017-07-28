@@ -9,10 +9,16 @@
  */
 
 require('dotenv').config();
-process.env.NODE_ENV = process.env.NODE_ENV || 'standalone';
+
+const
+	{env} = process;
+
+Object.assign(env, {
+	NODE_ENV: env.NODE_ENV || 'standalone',
+	APP_NAME: env.APP_NAME || 'V4Fire'
+});
 
 module.exports = {
-	appName: 'v4Fire',
 	snakeskin: {
 		pack: false,
 		filters: {global: ['undef']},
