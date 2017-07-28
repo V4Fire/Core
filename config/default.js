@@ -18,11 +18,20 @@ Object.assign(env, {
 	APP_NAME: env.APP_NAME || 'V4Fire'
 });
 
-module.exports = {
+const config = module.exports = {
+	envs: {
+		env: env.NODE_ENV,
+		service: env.SERVICE_NAME,
+		appName: env.APP_NAME
+	},
+
 	snakeskin: {
 		pack: false,
 		filters: {global: ['undef']},
-		adapterOptions: {transpiler: true}
+		adapterOptions: {transpiler: true},
+		get vars() {
+			return config.envs;
+		}
 	},
 
 	babel: {
