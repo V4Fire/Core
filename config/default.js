@@ -20,10 +20,7 @@ Object.assign(env, {
 });
 
 const config = module.exports = {
-	src: [
-		path.join(__dirname, '../src')
-	],
-
+	coreSrc: path.join(__dirname, '../src'),
 	envs: {
 		env: env.NODE_ENV,
 		service: env.SERVICE_NAME,
