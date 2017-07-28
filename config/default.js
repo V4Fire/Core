@@ -21,7 +21,7 @@ Object.assign(env, {
 
 const config = module.exports = {
 	src: [
-		path.basename(__dirname, '../src')
+		path.join(__dirname, '../src')
 	],
 
 	envs: {
