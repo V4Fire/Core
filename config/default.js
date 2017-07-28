@@ -11,6 +11,7 @@
 require('dotenv').config();
 
 const
+	path = require('path'),
 	{env} = process;
 
 Object.assign(env, {
@@ -19,6 +20,10 @@ Object.assign(env, {
 });
 
 const config = module.exports = {
+	src: [
+		path.basename(__dirname, '../src')
+	],
+
 	envs: {
 		env: env.NODE_ENV,
 		service: env.SERVICE_NAME,
