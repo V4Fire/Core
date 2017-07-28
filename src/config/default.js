@@ -8,6 +8,9 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-module.exports = {
+export default {
+	/**
+	 * Default system language
+	 */
 	lang: 'en'
 };

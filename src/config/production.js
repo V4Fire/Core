@@ -8,9 +8,11 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import config from './default';
+
 const
 	$C = require('collection.js');
 
-module.exports = $C.extend(true, {}, require('./default'), {
+export default $C.extend(true, {}, config, {
 
 });

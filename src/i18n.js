@@ -8,12 +8,12 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import config from 'config';
 import { GLOBAL, IS_NODE } from './const/links';
 import * as langs from 'lang';
 
 const
-	$C = require('collection.js'),
-	config = require('config');
+	$C = require('collection.js');
 
 const
 	ws = /[\r\n]+/g;

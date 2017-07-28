@@ -8,4 +8,4 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-module.exports = require(`./config/${process.env.NODE_ENV}`);
+export default require(`./config/${process.env.NODE_ENV}`);
