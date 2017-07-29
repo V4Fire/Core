@@ -11,7 +11,10 @@
 require('dotenv').config();
 
 const
-	path = require('path'),
+	Sugar = require('sugar'),
+	path = require('path');
+
+const
 	{env} = process;
 
 Object.assign(env, {
@@ -20,6 +23,13 @@ Object.assign(env, {
 });
 
 const config = module.exports = {
+	extend: {
+		deep: true,
+		withProto: true,
+		concatArray: true,
+		concatFn: Sugar.Array.union
+	},
+
 	src: {
 		cwd: process.cwd(),
 		core: path.join(__dirname, '../src'),
