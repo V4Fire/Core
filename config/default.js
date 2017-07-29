@@ -20,7 +20,14 @@ Object.assign(env, {
 });
 
 const config = module.exports = {
-	coreSrc: path.join(__dirname, '../src'),
+	src: {
+		cwd: process.cwd(),
+		core: path.join(__dirname, '../src'),
+		output() {
+			return path.join(this.cwd, 'dist');
+		}
+	},
+
 	envs: {
 		env: env.NODE_ENV,
 		service: env.SERVICE_NAME,
