@@ -32,7 +32,7 @@ export default class Store {
 					return target[prop];
 				}
 
-				return target[prop] = Symbol(prop);
+				return typeof prop === 'symbol' ? prop : Symbol(prop);
 			}
 		});
 	}
