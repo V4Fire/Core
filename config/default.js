@@ -33,6 +33,11 @@ const config = module.exports = {
 	src: {
 		cwd: process.cwd(),
 		core: path.join(__dirname, '../src'),
+		client: [],
+		get server() {
+			return [this.core];
+		},
+
 		assets() {
 			return path.join(this.cwd, 'assets');
 		},
