@@ -17,6 +17,9 @@ const
 /** @see {$C.extend} */
 Object.mixin = $C.extend;
 
+/**
+ * Object.toSource implementation
+ */
 Object.defineProperty(Object.prototype, 'toSource', {
 	enumerable: false,
 	value() {

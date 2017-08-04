@@ -56,15 +56,24 @@ if (IS_NODE) {
 	}
 }
 
-const {format} = Date.prototype;
-Date.prototype.format = function (str, locale) {
+const
+	{format} = Date.prototype;
+
+/**
+ * Date.format wrapper
+ * (added: {humanTimeDate} and {humanDate})
+ *
+ * @param value
+ * @param [locale]
+ */
+Date.prototype.format = function (value: string, locale: ?string) {
 	const aliases = {
 		humanTimeDate: '{HH}:{mm} {humanDate}',
 		humanDate: lang === 'ru' ? '{dd}.{MM}.{yyyy}' : '{MM}.{dd}.{yyyy}'
 	};
 
 	const replace = (str) => str.replace(/{(humanTimeDate|humanDate)}/g, (str, $1) => replace(aliases[$1]));
-	return format.call(this, replace(str), locale || lang);
+	return format.call(this, replace(value), locale || lang);
 };
 
 /**
