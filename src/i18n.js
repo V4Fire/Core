@@ -19,14 +19,15 @@ const
 	ws = /[\r\n]+/g;
 
 // Normalize translates
-$C(langs).forEach((el) => {
+$C(langs).forEach((el, data, key) => {
 	if (typeof el !== 'object') {
 		return;
 	}
 
-	$C(el).forEach((el, key, data) => {
-		data[key.replace(ws, ' ')] = el.replace(ws, ' ');
-	});
+	data[key] = $C(el).reduce((map, el, key) => {
+		map[key.replace(ws, ' ')] = el.replace(ws, ' ');
+		return map;
+	}, Object.create(null));
 });
 
 /**
