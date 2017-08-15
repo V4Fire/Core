@@ -19,7 +19,7 @@ const
 	ws = /[\r\n]+/g;
 
 // Normalize translates
-$C(langs).forEach((el, data, key) => {
+$C(langs).forEach((el, key, data) => {
 	if (typeof el !== 'object') {
 		return;
 	}
