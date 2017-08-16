@@ -10,7 +10,7 @@
 
 import config from 'config';
 import { GLOBAL, IS_NODE } from './const/links';
-import * as langs from 'lang';
+import * as baseLangs from 'lang';
 
 const
 	$C = require('collection.js');
@@ -19,12 +19,12 @@ const
 	ws = /[\r\n]+/g;
 
 // Normalize translates
-$C(langs).forEach((el, key, data) => {
+const langs = $C(baseLangs).map((el) => {
 	if (typeof el !== 'object') {
-		return;
+		return el;
 	}
 
-	data[key] = $C(el).reduce((map, el, key) => {
+	return $C(el).reduce((map, el, key) => {
 		map[key.replace(ws, ' ')] = el.replace(ws, ' ');
 		return map;
 	}, Object.create(null));
