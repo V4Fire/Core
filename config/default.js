@@ -39,19 +39,19 @@ const config = module.exports = {
 		client: [],
 		server: [src],
 		assets() {
-			return path.join(this.cwd, 'assets');
+			return path.resolve(this.cwd, 'assets');
 		},
 
 		output() {
-			return path.join(this.cwd, 'dist');
+			return path.resolve(this.cwd, 'dist');
 		},
 
 		clientOutput() {
-			return path.join(this.output(), 'client');
+			return path.resolve(this.output(), 'client');
 		},
 
 		serverOutput() {
-			return path.join(this.output(), 'server');
+			return path.resolve(this.output(), 'server');
 		}
 	},
 
