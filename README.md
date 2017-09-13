@@ -1,1 +1,2 @@
-# Core
+V4Fire Core Library
+===================

@@ -22,6 +22,9 @@ Object.assign(env, {
 	APP_NAME: env.APP_NAME || 'V4Fire'
 });
 
+const
+	src = path.join(__dirname, '../src');
+
 const config = module.exports = {
 	extend: {
 		deep: true,
@@ -32,9 +35,23 @@ const config = module.exports = {
 
 	src: {
 		cwd: process.cwd(),
-		core: path.join(__dirname, '../src'),
+		core: src,
+		client: [],
+		server: [src],
+		assets() {
+			return path.resolve(this.cwd, 'assets');
+		},
+
 		output() {
-			return path.join(this.cwd, 'dist');
+			return path.resolve(this.cwd, 'dist');
+		},
+
+		clientOutput() {
+			return path.resolve(this.output(), 'client');
+		},
+
+		serverOutput() {
+			return path.resolve(this.output(), 'server');
 		}
 	},
 

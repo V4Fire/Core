@@ -9,7 +9,12 @@
  */
 
 try {
-	const fnNameRgxp = /^function\s+([^\s(]+)/;
+	const
+		fnNameRgxp = /^function\s+([^\s(]+)/;
+
+	/**
+	 * Function.name shim
+	 */
 	Object.defineProperty(Function.prototype, 'name', {
 		get(): string {
 			try {
@@ -20,4 +25,5 @@ try {
 			}
 		}
 	});
+
 } catch (_) {}

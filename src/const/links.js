@@ -8,10 +8,16 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/**
+ * Link to the global object
+ */
 export const
-	GLOBAL = Function('return this')();
+	GLOBAL: global = Function('return this')();
 
-export const IS_NODE = (() => {
+/**
+ * True if NodeJS runtime
+ */
+export const IS_NODE: boolean = (() => {
 	try {
 		return typeof process === 'object' && {}.toString.call(process) === '[object process]';
 

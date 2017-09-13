@@ -10,7 +10,7 @@
 
 import config from 'config';
 import { GLOBAL, IS_NODE } from './const/links';
-import * as langs from 'lang';
+import * as baseLangs from 'lang';
 
 const
 	$C = require('collection.js');
@@ -19,14 +19,15 @@ const
 	ws = /[\r\n]+/g;
 
 // Normalize translates
-$C(langs).forEach((el) => {
+const langs = $C(baseLangs).map((el) => {
 	if (typeof el !== 'object') {
-		return;
+		return el;
 	}
 
-	$C(el).forEach((el, key, data) => {
-		data[key.replace(ws, ' ')] = el.replace(ws, ' ');
-	});
+	return $C(el).reduce((map, el, key) => {
+		map[key.replace(ws, ' ')] = el.replace(ws, ' ');
+		return map;
+	}, Object.create(null));
 });
 
 /**
@@ -56,15 +57,24 @@ if (IS_NODE) {
 	}
 }
 
-const {format} = Date.prototype;
-Date.prototype.format = function (str, locale) {
+const
+	{format} = Date.prototype;
+
+/**
+ * Date.format wrapper
+ * (added: {humanTimeDate} and {humanDate})
+ *
+ * @param value
+ * @param [locale]
+ */
+Date.prototype.format = function (value: string, locale: ?string) {
 	const aliases = {
 		humanTimeDate: '{HH}:{mm} {humanDate}',
 		humanDate: lang === 'ru' ? '{dd}.{MM}.{yyyy}' : '{MM}.{dd}.{yyyy}'
 	};
 
 	const replace = (str) => str.replace(/{(humanTimeDate|humanDate)}/g, (str, $1) => replace(aliases[$1]));
-	return format.call(this, replace(str), locale || lang);
+	return format.call(this, replace(value), locale || lang);
 };
 
 /**

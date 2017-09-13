@@ -15,7 +15,7 @@ try {
 		{camelize, dasherize, underscore} = String.prototype;
 
 	const
-		cache = !IS_NODE && GLOBAL.FN_CACHE && GLOBAL.FN_CACHE.string || {};
+		cache = !IS_NODE && GLOBAL.FN_CACHE && GLOBAL.FN_CACHE.string || Object.create(null);
 
 	const saveCache = () => {
 		try {
@@ -24,9 +24,9 @@ try {
 	};
 
 	const
-		camelizeCache = cache.camelize = cache.camelize || {},
-		dasherizeCache = cache.dasherize = cache.dasherize || {},
-		underscoreCache = cache.underscore = cache.underscore || {};
+		camelizeCache = cache.camelize = cache.camelize || Object.create(null),
+		dasherizeCache = cache.dasherize = cache.dasherize || Object.create(null),
+		underscoreCache = cache.underscore = cache.underscore || Object.create(null);
 
 	let timer;
 

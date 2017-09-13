@@ -11,7 +11,7 @@
 require('./config/default');
 module.exports = function (gulp = require('gulp')) {
 	gulp.task('setProd', (cb) => {
-		env.NODE_ENV = 'production';
+		process.env.NODE_ENV = 'production';
 		cb();
 	});
 
@@ -72,7 +72,7 @@ module.exports = function (gulp = require('gulp')) {
 
 				} else {
 					const
-						useStrict = /^('|")use strict\1;\n+/;
+						useStrict = /^(['"])use strict\1;\n+/;
 
 					if (useStrict.test(contents)) {
 						file.contents = new Buffer(contents.replace(useStrict, (str) => str + fullHead));
