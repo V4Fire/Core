@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "baseUrl": "./src",
+    "lib": [
+      "dom",
+      "scripthost",
+      "es5",
+      "es6"
+    ]
+  },
+
+  "files": [
+    "node_modules/@types/node",
+    "src/global.ts"
+  ]
+}

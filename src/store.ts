@@ -18,7 +18,7 @@ export default class Store {
 	/**
 	 * @param fields - array of fields
 	 */
-	constructor(fields?: Array) {
+	constructor(fields?: string[]) {
 		if (typeof Proxy !== 'function') {
 			return $C(fields).reduce((obj, el) => {
 				obj[el] = Symbol(el);

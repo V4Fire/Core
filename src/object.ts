@@ -1,5 +1,7 @@
 'use strict';
 
+/// <reference path="lib"/>
+
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -26,6 +28,10 @@ Object.defineProperty(Object.prototype, 'toSource', {
 		return toSource(this);
 	}
 });
+
+interface ObjectConstructor {
+	parse(value: any): any;
+}
 
 /**
  * Parses the specified value as JSON / JS object and returns the result

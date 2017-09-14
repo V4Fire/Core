@@ -12,7 +12,7 @@
  * Link to the global object
  */
 export const
-	GLOBAL: global = Function('return this')();
+	GLOBAL = Function('return this')();
 
 /**
  * True if NodeJS runtime
