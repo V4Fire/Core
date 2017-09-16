@@ -1,7 +1,5 @@
 'use strict';
 
-/// <reference path="lib"/>
-
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -24,14 +22,10 @@ Object.mixin = $C.extend;
  */
 Object.defineProperty(Object.prototype, 'toSource', {
 	enumerable: false,
-	value() {
+	value(): string {
 		return toSource(this);
 	}
 });
-
-interface ObjectConstructor {
-	parse(value: any): any;
-}
 
 /**
  * Parses the specified value as JSON / JS object and returns the result
@@ -52,14 +46,14 @@ Object.parse = function (value: any): any {
  * @param [replacer] - JSON.stringify replacer
  * @param [reviver] - JSON.parse reviver
  */
-Object.fastClone = function (
-	obj: Object,
+Object.fastClone = function <T extends Object>(
+	obj: T,
 	{replacer, reviver}: {
-		replacer(key: string, value: any): any,
-		reviver(key: string, value: any): any
-	} | false = {}
+		replacer?: (key: string, value: any) => any,
+		reviver?: (key: string, value: any) => any
+	} = {}
 
-): Object {
+): T {
 	if (typeof obj === 'object') {
 		return JSON.parse(JSON.stringify(obj, replacer), arguments[1] !== false ? reviver || convertDate : undefined);
 	}
@@ -96,18 +90,15 @@ Object.fastCompare = function (a: any, b: any): boolean {
 
 /**
  * Creates an object {key: value, value: key}
- *
- * @template T
- * @param {T} obj - source object
- * @returns {T}
+ * @param obj - source object
  */
-Object.createMap = function (obj) {
+Object.createMap = function <T extends Object>(obj: T): T & HashTable<any> {
 	const
 		map = {};
 
 	if (Object.isArray(obj)) {
 		for (let i = 0; i < obj.length; i++) {
-			const el = obj[i];
+			const el = <string>obj[i];
 			map[i] = el;
 			map[el] = i;
 		}
@@ -118,7 +109,7 @@ Object.createMap = function (obj) {
 
 		for (let i = 0; i < keys.length; i++) {
 			const
-				key = keys[i],
+				key = <string>keys[i],
 				el = obj[key];
 
 			map[key] = el;
@@ -126,14 +117,14 @@ Object.createMap = function (obj) {
 		}
 	}
 
-	return map;
+	return <T & HashTable<any>>map;
 };
 
 /**
  * Creates an object from the specified array
  * @param arr
  */
-Object.fromArray = function (arr: Array): Object {
+Object.fromArray = function (arr: any[]): HashTable<boolean> {
 	const
 		map = {};
 
@@ -148,7 +139,7 @@ Object.fromArray = function (arr: Array): Object {
  * Creates an array of objects {value: element} from the specified object
  * @param obj
  */
-Object.mapToValue = function (obj: any): Array<{value: any}> {
+Object.mapToValue = function <T>(obj: T): Array<{value: T}> {
 	const
 		tmp = [].concat(obj),
 		arr = [];
@@ -160,13 +151,10 @@ Object.mapToValue = function (obj: any): Array<{value: any}> {
 	return arr;
 };
 
-const
-	toString = {}.toString;
-
 /**
  * Returns true if the specified object is a hash table
  * @param obj
  */
-Object.isTable = function (obj: any): boolean {
-	return toString.call(obj) === '[object Object]';
+Object.isTable = function (obj: any): obj is HashTable<any> {
+	return {}.toString.call(obj) === '[object Object]';
 };
