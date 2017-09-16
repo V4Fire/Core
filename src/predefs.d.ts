@@ -19,6 +19,9 @@ declare function i18n(strings: any | any[], ...expr: any[]): string | undefined;
 declare function t(strings: any | any[], ...expr: any[]): string | undefined;
 declare function l(strings: any | any[], ...expr: any[]): string | undefined;
 
+declare function requestIdleCallback(cb: Function): number;
+declare function cancelIdleCallback(id: number): number;
+
 interface ObjectConstructor {
 	mixin<T>(
 		params: CollectionJS.ExtendParams<T> & CollectionJS.Async,
@@ -44,7 +47,7 @@ interface ObjectConstructor {
 	parse(value: any): any;
 	createMap<T extends Object>(obj: T): T & HashTable<any>;
 	fromArray(arr: any[]): HashTable<boolean>;
-	mapToValue<T>(obj: T): Array<{value: T}>;
+	mapToValue<T>(obj: T): {value: T}[];
 	isTable(obj: any): obj is HashTable<any>;
 }
 

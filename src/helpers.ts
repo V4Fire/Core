@@ -33,7 +33,7 @@ export function isEmptyValue(value: any): boolean {
  * Simplifies the specified list to a single value (map)
  * @param list
  */
-export function list2Map(list: Object): Object {
+export function list2Map(list: HashTable<any>): HashTable<any> {
 	return list && (list.data && list.data[0] || list[0]) || {};
 }
 
@@ -42,14 +42,14 @@ export function list2Map(list: Object): Object {
  *
  * @param obj
  * @param lang
- * @param defLang - hotel language
+ * @param defLang
  */
-export function getLangValue(obj: ?Object, lang: string, defLang: string): ?string {
+export function getLangValue(obj: HashTable<string> | null | undefined, lang: string, defLang: string): string | undefined {
 	if (!obj) {
 		return undefined;
 	}
 
-	return lang in obj ? obj[lang] : obj[defLang] || obj[Object.keys(obj)[0]];
+	return lang in obj ? obj[lang] : obj[defLang] || obj[<string>Object.keys(obj)[0]];
 }
 
 /**
@@ -59,7 +59,7 @@ export function getLangValue(obj: ?Object, lang: string, defLang: string): ?stri
  * @param obj
  * @param [sys]
  */
-export function setJSONToUTC(obj: Object, sys?: boolean): Object {
+export function setJSONToUTC(obj: HashTable<any>, sys?: boolean): HashTable<any> {
 	if (!sys) {
 		obj = Object.fastClone(obj);
 	}
@@ -70,7 +70,7 @@ export function setJSONToUTC(obj: Object, sys?: boolean): Object {
 				minutes: el.getTimezoneOffset(),
 				seconds: 0,
 				milliseconds: 0
-			}).valueOf();
+			}).valueOf().toString();
 
 		} else if (Object.isObject(el) || Object.isArray(el)) {
 			setJSONToUTC(el, true);
@@ -84,14 +84,17 @@ export function setJSONToUTC(obj: Object, sys?: boolean): Object {
  * Returns a date range by the specified parameters
  *
  * @param from
- * @param to
+ * @param [to]
  */
-export function getDateRange(from: string | number | Date, to?: string | number | Date = from): Array<Date> {
+export function getDateRange(from: string | number | Date, to: string | number | Date = from): Date[] {
 	return [
 		Date.create(from).beginningOfDay(),
 		Date.create(to).endOfDay()
 	];
 }
+
+export function normalizeDate(value: any, params?: HashTable<any>): Date | undefined;
+export function normalizeDate(value: any[], params?: HashTable<any>): Date[];
 
 /**
  * Normalizes the specified value as date
@@ -99,7 +102,7 @@ export function getDateRange(from: string | number | Date, to?: string | number 
  * @param value
  * @param [params] - additional parameters for Date.create
  */
-export function normalizeDate(value: Array | any, params?: Object): ?Date | Array<Date> {
+export function normalizeDate(value, params){
 	if (Object.isArray(value)) {
 		return $C(value).map((date) => Date.create(date, params));
 	}
@@ -108,7 +111,7 @@ export function normalizeDate(value: Array | any, params?: Object): ?Date | Arra
 }
 
 /**
- * Returns date value from the specified
+ * Returns date value from the specified value
  * @param value
  */
 export function getDateFromInput(value: string): Date {
@@ -120,6 +123,6 @@ export function getDateFromInput(value: string): Date {
  * Returns formatted time value
  * @param time
  */
-export function getTimeFormattedValue(time: Array<number>): string {
+export function getTimeFormattedValue(time: number[]): string {
 	return $C(time).map((el) => el.pad(2)).join(':');
 }

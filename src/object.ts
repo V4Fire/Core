@@ -8,7 +8,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { convertDate } from './json';
+import { convertIfDate } from './json';
 
 const
 	$C = require('collection.js'),
@@ -55,7 +55,7 @@ Object.fastClone = function <T extends Object>(
 
 ): T {
 	if (typeof obj === 'object') {
-		return JSON.parse(JSON.stringify(obj, replacer), arguments[1] !== false ? reviver || convertDate : undefined);
+		return JSON.parse(JSON.stringify(obj, replacer), arguments[1] !== false ? reviver || convertIfDate : undefined);
 	}
 
 	return obj;
@@ -139,7 +139,7 @@ Object.fromArray = function (arr: any[]): HashTable<boolean> {
  * Creates an array of objects {value: element} from the specified object
  * @param obj
  */
-Object.mapToValue = function <T>(obj: T): Array<{value: T}> {
+Object.mapToValue = function <T>(obj: T): {value: T}[] {
 	const
 		tmp = [].concat(obj),
 		arr = [];
