@@ -24,7 +24,7 @@
     "test": "echo \"Error: no test specified\" && exit 0"
   },
   "dependencies": {
-    "collection.js": "^6.0.0-beta.19",
+    "collection.js": "^6.1.1",
     "dotenv": "^4.0.0",
     "sugar": "^2.0.0",
     "tosource": "^1.0.0"
@@ -48,7 +48,7 @@
   "devDependencies": {
     "@types/node": "^8.0.28",
     "babel-eslint": "^7.2.3",
-    "eslint": "^4.4.1",
-    "eslint-plugin-flowtype": "^2.35.0"
+    "eslint": "^4.7.0",
+    "eslint-plugin-flowtype": "^2.35.1"
   }
 }
