@@ -27,13 +27,13 @@ interface ObjectConstructor {
 		params: CollectionJS.ExtendParams<T> & CollectionJS.Async,
 		target?: T,
 		...source: any[]
-	): Promise<T> & CollectionJS.ThreadObj;
+	): Promise<T & CollectionJS.HashTable> & CollectionJS.ThreadObj;
 
 	mixin<T>(
 		deepOrParams: boolean | CollectionJS.ExtendParams<T>,
 		target?: T,
 		...source: any[]
-	): T;
+	): T & CollectionJS.HashTable;
 
 	fastClone<T extends Object>(
 		obj: T,
@@ -47,7 +47,6 @@ interface ObjectConstructor {
 	parse(value: any): any;
 	createMap<T extends Object>(obj: T): T & HashTable<any>;
 	fromArray(arr: any[]): HashTable<boolean>;
-	mapToValue<T>(obj: T): {value: T}[];
 	isTable(obj: any): obj is HashTable<any>;
 }
 

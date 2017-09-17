@@ -1,5 +1,3 @@
-'use strict';
-
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -30,26 +28,11 @@ export function isEmptyValue(value: any): boolean {
 }
 
 /**
- * Simplifies the specified list to a single value (map)
+ * Simplifies the specified list data to a single value (map)
  * @param list
  */
-export function list2Map(list: HashTable<any>): HashTable<any> {
+export function simplifyListToMap(list: HashTable<any>): HashTable<any> {
 	return list && (list.data && list.data[0] || list[0]) || {};
-}
-
-/**
- * Returns a value from an object by the specified language
- *
- * @param obj
- * @param lang
- * @param defLang
- */
-export function getLangValue(obj: HashTable<string> | null | undefined, lang: string, defLang: string): string | undefined {
-	if (!obj) {
-		return undefined;
-	}
-
-	return lang in obj ? obj[lang] : obj[defLang] || obj[<string>Object.keys(obj)[0]];
 }
 
 /**
@@ -102,7 +85,7 @@ export function normalizeDate(value: any[], params?: HashTable<any>): Date[];
  * @param value
  * @param [params] - additional parameters for Date.create
  */
-export function normalizeDate(value, params){
+export function normalizeDate(value, params) {
 	if (Object.isArray(value)) {
 		return $C(value).map((date) => Date.create(date, params));
 	}

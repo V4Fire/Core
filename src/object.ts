@@ -1,5 +1,3 @@
-'use strict';
-
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -28,7 +26,7 @@ Object.defineProperty(Object.prototype, 'toSource', {
 });
 
 /**
- * Parses the specified value as JSON / JS object and returns the result
+ * Parses the specified value as a JSON / JS object and returns the result
  * @param value
  */
 Object.parse = function (value: any): any {
@@ -89,8 +87,8 @@ Object.fastCompare = function (a: any, b: any): boolean {
 };
 
 /**
- * Creates an object {key: value, value: key}
- * @param obj - source object
+ * Creates an object {key: value, value: key} from the specified
+ * @param obj
  */
 Object.createMap = function <T extends Object>(obj: T): T & HashTable<any> {
 	const
@@ -133,22 +131,6 @@ Object.fromArray = function (arr: any[]): HashTable<boolean> {
 	}
 
 	return map;
-};
-
-/**
- * Creates an array of objects {value: element} from the specified object
- * @param obj
- */
-Object.mapToValue = function <T>(obj: T): {value: T}[] {
-	const
-		tmp = [].concat(obj),
-		arr = [];
-
-	for (let i = 0; i < tmp.length; i++) {
-		arr.push({value: tmp[i]});
-	}
-
-	return arr;
 };
 
 /**
