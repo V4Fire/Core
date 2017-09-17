@@ -1,5 +1,3 @@
-'use strict';
-
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -34,8 +32,8 @@ const langs = $C(baseLangs).map((el) => {
  * System language
  */
 export let
-	lang: ?string,
-	isLangDef: ?boolean;
+	lang: string | undefined,
+	isLangDef: boolean | undefined;
 
 if (IS_NODE) {
 	setLang(config.lang);
@@ -67,7 +65,7 @@ const
  * @param value
  * @param [locale]
  */
-Date.prototype.format = function (value: string, locale: ?string) {
+Date.prototype.format = function (value: string, locale?: string) {
 	const aliases = {
 		humanTimeDate: '{HH}:{mm} {humanDate}',
 		humanDate: lang === 'ru' ? '{dd}.{MM}.{yyyy}' : '{MM}.{dd}.{yyyy}'
@@ -90,7 +88,7 @@ export function setLang(value: string, def?: boolean) {
 	if (!IS_NODE) {
 		try {
 			localStorage.setItem('SYSTEM_LANGUAGE', value);
-			localStorage.setItem('SYSTEM_LANGUAGE_DEF', isLangDef);
+			localStorage.setItem('SYSTEM_LANGUAGE_DEF', String(isLangDef));
 
 		} catch (_) {}
 	}
@@ -101,9 +99,9 @@ export function setLang(value: string, def?: boolean) {
 /**
  * Global i18n function (string tag)
  */
-GLOBAL.i18n = GLOBAL.t = function (strings: any | Array, ...expr?: any): ?string {
+GLOBAL.i18n = GLOBAL.t = function (strings: any | string[], ...expr: any[]): string {
 	if (strings == null) {
-		return undefined;
+		return '';
 	}
 
 	if (!Object.isArray(strings)) {
@@ -128,9 +126,9 @@ GLOBAL.i18n = GLOBAL.t = function (strings: any | Array, ...expr?: any): ?string
 /**
  * Global i18n helper function (string tag)
  */
-GLOBAL.l = function (strings: any | Array, ...expr?: any): ?string {
+GLOBAL.l = function (strings: any | string[], ...expr: any[]): string {
 	if (strings == null) {
-		return undefined;
+		return '';
 	}
 
 	if (!Object.isArray(strings)) {

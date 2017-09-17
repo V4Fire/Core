@@ -15,9 +15,9 @@ declare function Any(obj: any): any;
 declare function stderr(err: any);
 declare function infinity<T>(): Iterable<T>;
 
-declare function i18n(strings: any | any[], ...expr: any[]): string | undefined;
-declare function t(strings: any | any[], ...expr: any[]): string | undefined;
-declare function l(strings: any | any[], ...expr: any[]): string | undefined;
+declare function i18n(strings: any | string[], ...expr: any[]): string;
+declare function t(strings: any | string[], ...expr: any[]): string;
+declare function l(strings: any | string[], ...expr: any[]): string;
 
 declare function requestIdleCallback(cb: Function): number;
 declare function cancelIdleCallback(id: number): number;

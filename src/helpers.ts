@@ -76,8 +76,8 @@ export function getDateRange(from: string | number | Date, to: string | number |
 	];
 }
 
-export function normalizeDate(value: any, params?: HashTable<any>): Date | undefined;
-export function normalizeDate(value: any[], params?: HashTable<any>): Date[];
+export function normalizeIfDate(value: any, params?: HashTable<any>): Date | undefined;
+export function normalizeIfDate(value: any[], params?: HashTable<any>): Date[];
 
 /**
  * Normalizes the specified value as date
@@ -85,7 +85,7 @@ export function normalizeDate(value: any[], params?: HashTable<any>): Date[];
  * @param value
  * @param [params] - additional parameters for Date.create
  */
-export function normalizeDate(value, params) {
+export function normalizeIfDate(value, params) {
 	if (Object.isArray(value)) {
 		return $C(value).map((date) => Date.create(date, params));
 	}
@@ -94,18 +94,20 @@ export function normalizeDate(value, params) {
 }
 
 /**
- * Returns date value from the specified value
- * @param value
+ * Returns date value from the specified string
+ *
+ * @param str
+ * @param [separator] - separator pattern
  */
-export function getDateFromInput(value: string): Date {
-	const p = value.split(/\/|-|\.|\s+/);
-	return Date.create(lang === 'ru' ? [p[1], p[0], p[2]].join('.') : value);
+export function getDateFromStr(str: string, separator: RegExp = /\/|-|\.|\s+/): Date {
+	const p = str.split(separator);
+	return Date.create(lang === 'ru' ? [p[1], p[0], p[2]].join('.') : str);
 }
 
 /**
- * Returns formatted time value
+ * Returns formatted time string from the specified time array
  * @param time
  */
-export function getTimeFormattedValue(time: number[]): string {
+export function getTimeFormattedStr(time: number[]): string {
 	return $C(time).map((el) => el.pad(2)).join(':');
 }
