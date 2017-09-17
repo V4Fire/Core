@@ -71,21 +71,7 @@ const config = module.exports = {
 	},
 
 	babel: {
-		plugins: [
-			'syntax-flow',
-			'transform-flow-strip-types',
-			'transform-decorators-legacy',
-			'transform-class-properties',
-			'transform-es2015-object-super',
-			'transform-function-bind',
-			['transform-object-rest-spread', {useBuiltIns: true}],
-			['transform-runtime', {
-				helpers: true,
-				polyfill: false,
-				regenerator: false
-			}]
-		],
-
+		plugins: [],
 		compact: false
 	}
 };
