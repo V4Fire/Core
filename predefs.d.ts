@@ -6,8 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-/// <reference path="../node_modules/collection.js/collection.d.ts"/>
-/// <reference path="../node_modules/sugar/sugar-extended.d.ts"/>
+/// <reference path="node_modules/collection.js/collection.d.ts"/>
+/// <reference path="node_modules/sugar/sugar-extended.d.ts"/>
 
 declare type HashTable<T> = {[key: string]: T};
 
