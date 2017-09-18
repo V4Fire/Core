@@ -80,7 +80,7 @@ const config = module.exports = {
 			'transform-function-bind',
 			['transform-object-rest-spread', {useBuiltIns: true}],
 			['transform-runtime', {
-				helpers: false,
+				helpers: true,
 				polyfill: false,
 				regenerator: false
 			}]
