@@ -110,10 +110,19 @@ export function normalizeDate(value: Array | any, params?: Object): ?Date | Arra
 /**
  * Returns date value from the specified
  * @param value
+ * @param opts
  */
-export function getDateFromInput(value: string): Date {
+export function getDateFromInput(value: string, opts: ?Object): Date {
 	const p = value.split(/\/|-|\.|\s+/);
-	return Date.create(lang === 'ru' ? [p[1], p[0], p[2]].join('.') : value);
+	return Date.create(lang === 'ru' ? [p[1], p[0], p[2]].join('.') : value, opts);
+}
+
+/**
+ * Returns date value with UTC from the specified
+ * @param value
+ */
+export function getUTCDateFromInput(value: string): Date {
+	return getDateFromInput(value, {fromUTC: true});
 }
 
 /**
