@@ -99,7 +99,7 @@ export function setLang(value: string, def?: boolean) {
 /**
  * Global i18n function (string tag)
  */
-GLOBAL.i18n = GLOBAL.t = function (strings: any | string[], ...expr: any[]): string {
+GLOBAL.i18n = GLOBAL.t = function (strings: any | string[], ...exprs: any[]): string {
 	if (strings == null) {
 		return '';
 	}
@@ -109,14 +109,14 @@ GLOBAL.i18n = GLOBAL.t = function (strings: any | string[], ...expr: any[]): str
 	}
 
 	let str = '';
-	if (expr.length === 0) {
+	if (exprs.length === 0) {
 		for (let i = 0; i < strings.length; i++) {
 			str += i18n(strings[i]);
 		}
 
 	} else {
 		for (let i = 0; i < strings.length; i++) {
-			str += i18n(strings[i]) + (i in expr ? expr[i] : '');
+			str += i18n(strings[i]) + (i in exprs ? exprs[i] : '');
 		}
 	}
 
@@ -126,7 +126,7 @@ GLOBAL.i18n = GLOBAL.t = function (strings: any | string[], ...expr: any[]): str
 /**
  * Global i18n helper function (string tag)
  */
-GLOBAL.l = function (strings: any | string[], ...expr: any[]): string {
+GLOBAL.l = function (strings: any | string[], ...exprs: any[]): string {
 	if (strings == null) {
 		return '';
 	}
@@ -141,7 +141,7 @@ GLOBAL.l = function (strings: any | string[], ...expr: any[]): string {
 
 	let str = '';
 	for (let i = 0; i < strings.length; i++) {
-		str += strings[i] + (i in expr ? expr[i] : '');
+		str += strings[i] + (i in exprs ? exprs[i] : '');
 	}
 
 	return str;

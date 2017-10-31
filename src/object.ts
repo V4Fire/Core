@@ -41,19 +41,18 @@ Object.parse = function (value: any): any {
  * Clones the specified object using JSON.parse -> JSON.stringify
  *
  * @param obj
- * @param [replacer] - JSON.stringify replacer
- * @param [reviver] - JSON.parse reviver
+ * @param [params] - additional parameters:
+ *   *) [replacer] - JSON.stringify replacer
+ *   *) [reviver] - JSON.parse reviver
  */
-Object.fastClone = function <T extends Object>(
-	obj: T,
-	{replacer, reviver}: {
-		replacer?: (key: string, value: any) => any,
-		reviver?: (key: string, value: any) => any
-	} = {}
+Object.fastClone = function <T extends Object>(obj: T, params?: {replacer?: JSONCb, reviver?: JSONCb}): T {
+	const
+		p = params || {};
 
-): T {
 	if (typeof obj === 'object') {
-		return JSON.parse(JSON.stringify(obj, replacer), arguments[1] !== false ? reviver || convertIfDate : undefined);
+		return JSON.parse(
+			JSON.stringify(obj, p.replacer), arguments[1] !== false ? p.reviver || convertIfDate : undefined
+		);
 	}
 
 	return obj;
@@ -66,7 +65,7 @@ Object.fastClone = function <T extends Object>(
  * @param a
  * @param b
  */
-Object.fastCompare = function (a: any, b: any): boolean {
+Object.fastCompare = function <T>(a: any, b: T): a is T {
 	if (a === b) {
 		return true;
 	}
@@ -90,7 +89,7 @@ Object.fastCompare = function (a: any, b: any): boolean {
  * Creates an object {key: value, value: key} from the specified
  * @param obj
  */
-Object.createMap = function <T extends Object>(obj: T): T & HashTable<any> {
+Object.createMap = function <T extends Object>(obj: T): T & Record<string, any> {
 	const
 		map = {};
 
@@ -115,14 +114,14 @@ Object.createMap = function <T extends Object>(obj: T): T & HashTable<any> {
 		}
 	}
 
-	return <T & HashTable<any>>map;
+	return <T & Record<string, any>>map;
 };
 
 /**
  * Creates an object from the specified array
  * @param arr
  */
-Object.fromArray = function (arr: any[]): HashTable<boolean> {
+Object.fromArray = function (arr: any[]): Record<string, boolean> {
 	const
 		map = {};
 
@@ -137,6 +136,6 @@ Object.fromArray = function (arr: any[]): HashTable<boolean> {
  * Returns true if the specified object is a hash table
  * @param obj
  */
-Object.isTable = function (obj: any): obj is HashTable<any> {
+Object.isTable = function (obj: any): obj is Record<string, any> {
 	return {}.toString.call(obj) === '[object Object]';
 };

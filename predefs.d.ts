@@ -9,8 +9,6 @@
 /// <reference path="node_modules/collection.js/collection.d.ts"/>
 /// <reference path="node_modules/sugar/sugar-extended.d.ts"/>
 
-declare type HashTable<T> = {[key: string]: T};
-
 declare function Any(obj: any): any;
 declare function stderr(err: any);
 declare function infinity<T>(): Iterable<T>;
@@ -22,32 +20,36 @@ declare function l(strings: any | string[], ...expr: any[]): string;
 declare function requestIdleCallback(cb: Function): number;
 declare function cancelIdleCallback(id: number): number;
 
+interface JSONCb {
+	(key: string, value: any): any;
+}
+
 interface ObjectConstructor {
 	mixin<T>(
 		params: CollectionJS.ExtendParams<T> & CollectionJS.Async,
 		target?: T,
 		...source: any[]
-	): Promise<T & CollectionJS.HashTable> & CollectionJS.ThreadObj;
+	): CollectionJS.ThreadObj<T & CollectionJS.AnyRecord>;
 
 	mixin<T>(
 		deepOrParams: boolean | CollectionJS.ExtendParams<T>,
 		target?: T,
 		...source: any[]
-	): T & CollectionJS.HashTable;
+	): T & CollectionJS.AnyRecord;
 
 	fastClone<T extends Object>(
 		obj: T,
 		params?: {
-			replacer?: (key: string, value: any) => any,
-			reviver?: (key: string, value: any) => any
+			replacer?: JSONCb,
+			reviver?: JSONCb
 		}
 	): T;
 
-	fastCompare(a: any, b: any): boolean;
+	fastCompare<T>(a: any, b: T): a is T;
 	parse(value: any): any;
-	createMap<T extends Object>(obj: T): T & HashTable<any>;
-	fromArray(arr: any[]): HashTable<boolean>;
-	isTable(obj: any): obj is HashTable<any>;
+	createMap<T extends Object>(obj: T): T & Record<string, any>;
+	fromArray(arr: any[]): Record<string, boolean>;
+	isTable(obj: any): obj is Record<string, any>;
 }
 
 interface Object {

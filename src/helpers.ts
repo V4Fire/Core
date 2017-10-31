@@ -28,21 +28,13 @@ export function isEmptyValue(value: any): boolean {
 }
 
 /**
- * Simplifies the specified list data to a single value (map)
- * @param list
- */
-export function simplifyListToMap(list: HashTable<any>): HashTable<any> {
-	return list && (list.data && list.data[0] || list[0]) || {};
-}
-
-/**
  * Sets .toJSON function that converts dates to UTC for all dates from the specified object
  * (returns new object)
  *
  * @param obj
  * @param [sys]
  */
-export function setJSONToUTC(obj: HashTable<any>, sys?: boolean): HashTable<any> {
+export function setJSONToUTC(obj: Record<string, any>, sys?: boolean): Record<string, any> {
 	if (!sys) {
 		obj = Object.fastClone(obj);
 	}
@@ -76,8 +68,7 @@ export function getDateRange(from: string | number | Date, to: string | number |
 	];
 }
 
-export function normalizeIfDate(value: any, params?: HashTable<any>): Date | undefined;
-export function normalizeIfDate(value: any[], params?: HashTable<any>): Date[];
+type DateCreateOptions = sugarjs.Date.DateCreateOptions;
 
 /**
  * Normalizes the specified value as date
@@ -85,6 +76,13 @@ export function normalizeIfDate(value: any[], params?: HashTable<any>): Date[];
  * @param value
  * @param [params] - additional parameters for Date.create
  */
+export function normalizeIfDate(value: any, params?: DateCreateOptions): Date | undefined;
+
+/**
+ * @param value - list of values
+ * @param [params] - additional parameters for Date.create
+ */
+export function normalizeIfDate(value: any[], params?: DateCreateOptions): Date[];
 export function normalizeIfDate(value, params) {
 	if (Object.isArray(value)) {
 		return $C(value).map((date) => Date.create(date, params));
@@ -98,10 +96,11 @@ export function normalizeIfDate(value, params) {
  *
  * @param str
  * @param [separator] - separator pattern
+ * @param [params] - additional parameters for Date.create
  */
-export function getDateFromStr(str: string, separator: RegExp = /\/|-|\.|\s+/): Date {
+export function getDateFromStr(str: string, separator: RegExp = /\/|-|\.|\s+/, params?: DateCreateOptions): Date {
 	const p = str.split(separator);
-	return Date.create(lang === 'ru' ? [p[1], p[0], p[2]].join('.') : str);
+	return Date.create(lang === 'ru' ? [p[1], p[0], p[2]].join('.') : str, params);
 }
 
 /**
