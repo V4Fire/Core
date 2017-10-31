@@ -14,9 +14,10 @@ try {
 	 * Function.name shim
 	 */
 	Object.defineProperty(Function.prototype, 'name', {
-		get(): string {
+		get(): string | undefined {
 			try {
-				return fnNameRgxp.exec(this.toString())[1];
+				const v = fnNameRgxp.exec(this.toString());
+				return v && v[1] || undefined;
 
 			} catch (_) {
 				return undefined;
