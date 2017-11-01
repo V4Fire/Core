@@ -1,10 +1,4 @@
-/*!
- * V4Fire Core
- * https://github.com/V4Fire/Core
- *
- * Released under the MIT license
- * https://github.com/V4Fire/Core/blob/master/LICENSE
- */
+/// <reference types="node" />
 
 export interface AsyncLink {
 	id: any;
@@ -431,38 +425,28 @@ export default class Async<CTX extends Object> {
 	 * Обертка для setImmediate
 	 *
 	 * @param fn - функция обратного вызова
-	 * @param [args] - дополнительные аргументы setImmediate
-	 */
-	setImmediate(fn: Function, ...args: any[]): number;
-
-	/**
-	 * @param params - параметры операции:
-	 *   *) fn - функция обратного вызова
+	 * @param [params] - дополнительные параметры операции:
 	 *   *) [join] - если true, то смежные операции (с одинаковой меткой) будут объединены с первой
 	 *   *) [label] - метка операции (предыдущие операции с этой меткой будут отменены)
 	 *   *) [group] - группа операции
 	 *   *) [onClear] - обработчик события clearAsync
-	 *
-	 * @param [args] - дополнительные аргументы setImmediate
 	 */
-	setImmediate(params: AsyncCbOpts, ...args: any[]): number;
-	setImmediate(p, ...args) {
+	setImmediate(fn: Function, params?: SimpleAsyncCbOpts): number | NodeJS.Timer {
 		return this.setAsync({
-			...p,
+			...params,
 			name: 'immediate',
-			obj: p.fn || Async.getIfNotObject(p),
+			obj: fn,
 			clearFn: clearImmediate,
 			wrapper: setImmediate,
-			linkByWrapper: true,
-			args
+			linkByWrapper: true
 		});
 	}
 
 	/**
 	 * Обертка для clearImmediate
-	 * @param id - ид операции
+	 * @param [id] - ид операции (если не задан, то удаляются все обработчики)
 	 */
-	clearImmediate(id: number): this;
+	clearImmediate(id?: number | NodeJS.Timer): this;
 
 	/**
 	 * @param params - параметры операции:
@@ -470,21 +454,18 @@ export default class Async<CTX extends Object> {
 	 *   *) [label] - метка операции
 	 *   *) [group] - группа операции
 	 */
-	clearImmediate(params: ClearOptsId<number>): this;
+	clearImmediate(params: ClearOptsId<number | NodeJS.Timer>): this;
 	clearImmediate(p): this {
+		if (p == null) {
+			return this.clearAllAsync({name: 'immediate', clearFn: clearImmediate});
+		}
+
 		return this.clearAsync({
 			...p,
 			name: 'immediate',
 			clearFn: clearImmediate,
 			id: p.id || Async.getIfNotObject(p)
 		});
-	}
-
-	/**
-	 * Отменяет все setImmediate операции
-	 */
-	clearAllImmediates(): this {
-		return this.clearAllAsync({name: 'immediate', clearFn: clearImmediate});
 	}
 
 	/**
@@ -492,40 +473,30 @@ export default class Async<CTX extends Object> {
 	 *
 	 * @param fn - функция обратного вызова
 	 * @param interval - значение интервала
-	 * @param [args] - дополнительные аргументы setInterval
-	 */
-	setInterval(fn: Function, interval: number, ...args: any[]): number;
-
-	/**
-	 * @param params - параметры операции:
-	 *   *) fn - функция обратного вызова
+	 * @param [params] - дополнительные параметры операции:
 	 *   *) [join] - если true, то смежные операции (с одинаковой меткой) будут объединены с первой
 	 *   *) [label] - метка операции (предыдущие операции с этой меткой будут отменены)
 	 *   *) [group] - группа операции
 	 *   *) [onClear] - обработчик события clearAsync
-	 *
-	 * @param interval - значение интервала
-	 * @param [args] - дополнительные аргументы setInterval
 	 */
-	setInterval(params: AsyncCbOpts, interval: number, ...args: any[]): number;
-	setInterval(p, interval: number, ...args) {
+	setInterval(fn: Function, interval: number, params?: SimpleAsyncCbOpts): number | NodeJS.Timer {
 		return this.setAsync({
-			...p,
+			...params,
 			name: 'interval',
-			obj: p.fn || Async.getIfNotObject(p),
+			obj: fn,
 			clearFn: clearInterval,
 			wrapper: setInterval,
 			linkByWrapper: true,
 			interval: true,
-			args: [interval, ...args]
+			args: [interval]
 		});
 	}
 
 	/**
 	 * Обертка для clearInterval
-	 * @param id - ид операции
+	 * @param [id] - ид операции (если не задан, то удаляются все обработчики)
 	 */
-	clearInterval(id: number): this;
+	clearInterval(id?: number | NodeJS.Timer): this;
 
 	/**
 	 * @param params - параметры операции:
@@ -533,21 +504,18 @@ export default class Async<CTX extends Object> {
 	 *   *) [label] - метка операции
 	 *   *) [group] - группа операции
 	 */
-	clearInterval(params: ClearOptsId<number>): this;
+	clearInterval(params: ClearOptsId<number | NodeJS.Timer>): this;
 	clearInterval(p): this {
+		if (p == null) {
+			return this.clearAllAsync({name: 'interval', clearFn: clearInterval});
+		}
+
 		return this.clearAsync({
 			...p,
 			name: 'interval',
 			clearFn: clearInterval,
 			id: p.id || Async.getIfNotObject(p)
 		});
-	}
-
-	/**
-	 * Отменяет все setInterval операции
-	 */
-	clearAllIntervals(): this {
-		return this.clearAllAsync({name: 'interval', clearFn: clearInterval});
 	}
 
 	/**
@@ -555,39 +523,29 @@ export default class Async<CTX extends Object> {
 	 *
 	 * @param fn - функция обратного вызова
 	 * @param timer - значение таймера
-	 * @param [args] - дополнительные аргументы setTimeout
-	 */
-	setTimeout(fn: Function, timer: number, ...args: any[]): number;
-
-	/**
-	 * @param params - параметры операции:
-	 *   *) fn - функция обратного вызова
+	 * @param [params] - дополнительные параметры операции:
 	 *   *) [join] - если true, то смежные операции (с одинаковой меткой) будут объединены с первой
 	 *   *) [label] - метка операции (предыдущие операции с этой меткой будут отменены)
 	 *   *) [group] - группа операции
 	 *   *) [onClear] - обработчик события clearAsync
-	 *
-	 * @param timer - значение таймера
-	 * @param [args] - дополнительные аргументы setTimeout
 	 */
-	setTimeout(params: AsyncCbOpts, timer: number, ...args: any[]): number;
-	setTimeout(p, timer: number, ...args) {
+	setTimeout(fn: Function, timer: number, params?: SimpleAsyncCbOpts): number | NodeJS.Timer {
 		return this.setAsync({
-			...p,
+			...params,
 			name: 'timeout',
-			obj: p.fn || Async.getIfNotObject(p),
+			obj: fn,
 			clearFn: clearTimeout,
 			wrapper: setTimeout,
 			linkByWrapper: true,
-			args: [timer, ...args]
+			args: [timer]
 		});
 	}
 
 	/**
 	 * Обертка для clearTimeout
-	 * @param id - ид операции
+	 * @param [id] - ид операции (если не задан, то удаляются все обработчики)
 	 */
-	clearTimeout(id: number): this;
+	clearTimeout(id?: number | NodeJS.Timer): this;
 
 	/**
 	 * @param params - параметры операции:
@@ -595,21 +553,18 @@ export default class Async<CTX extends Object> {
 	 *   *) [label] - метка операции
 	 *   *) [group] - группа операции
 	 */
-	clearTimeout(params: ClearOptsId<number>): this;
+	clearTimeout(params: ClearOptsId<number | NodeJS.Timer>): this;
 	clearTimeout(p): this {
+		if (p == null) {
+			return this.clearAllAsync({name: 'timeout', clearFn: clearTimeout});
+		}
+
 		return this.clearAsync({
 			...p,
 			name: 'timeout',
 			clearFn: clearTimeout,
 			id: p.id || Async.getIfNotObject(p)
 		});
-	}
-
-	/**
-	 * Отменяет все setTimeout операции
-	 */
-	clearAllTimeouts(): this {
-		return this.clearAllAsync({name: 'timeout', clearFn: clearTimeout});
 	}
 
 	/**
@@ -621,33 +576,34 @@ export default class Async<CTX extends Object> {
 	requestAnimationFrame(fn: Function, element?: Element): number;
 
 	/**
-	 * @param params - параметры операции:
-	 *   *) fn - функция обратного вызова
+	 * Обертка для requestAnimationFrame
+	 *
+	 * @param fn - функция обратного вызова
+	 * @param [params] - дополнительные параметры операции:
+	 *   *) [element] - ссылка на анимируемый элемент
 	 *   *) [join] - если true, то смежные операции (с одинаковой меткой) будут объединены с первой
 	 *   *) [label] - метка операции (предыдущие операции с этой меткой будут отменены)
 	 *   *) [group] - группа операции
 	 *   *) [onClear] - обработчик события clearAsync
-	 *
-	 * @param [element] - сылка на анимируемый элемент
 	 */
-	requestAnimationFrame(params: AsyncCbOpts, element?: Element): number;
-	requestAnimationFrame(p, element) {
+	requestAnimationFrame(fn: Function, params?: SimpleAsyncCbOpts & {element?: Element}): number;
+	requestAnimationFrame(fn: Function, p) {
 		return this.setAsync({
-			...p,
+			...Object.isObject(p) ? p : {},
 			name: 'animationFrame',
-			obj: p.fn || Async.getIfNotObject(p),
+			obj: fn,
 			clearFn: cancelAnimationFrame,
 			wrapper: requestAnimationFrame,
 			linkByWrapper: true,
-			args: element
+			args: p && (Async.getIfNotObject(p) || p.element)
 		});
 	}
 
 	/**
 	 * Обертка для cancelAnimationFrame
-	 * @param id - ид операции
+	 * @param [id] - ид операции (если не задан, то удаляются все обработчики)
 	 */
-	cancelAnimationFrame(id: number): this;
+	cancelAnimationFrame(id?: number): this;
 
 	/**
 	 * @param params - параметры операции:
@@ -657,6 +613,10 @@ export default class Async<CTX extends Object> {
 	 */
 	cancelAnimationFrame(params: ClearOptsId<number>): this;
 	cancelAnimationFrame(p): this {
+		if (p == null) {
+			return this.clearAllAsync({name: 'animationFrame', clearFn: cancelAnimationFrame});
+		}
+
 		return this.clearAsync({
 			...p,
 			name: 'animationFrame',
@@ -666,48 +626,33 @@ export default class Async<CTX extends Object> {
 	}
 
 	/**
-	 * Отменяет все requestAnimationFrame операции
-	 */
-	cancelAllAnimationFrames(): this {
-		return this.clearAllAsync({name: 'animationFrame', clearFn: cancelAnimationFrame});
-	}
-
-	/**
 	 * Обертка для requestIdleCallback
 	 *
 	 * @param fn - функция обратного вызова
-	 * @param [options] - дополнительные опции метода
-	 */
-	requestIdleCallback(fn: Function, options?: {timeout?: number}): number;
-
-	/**
-	 * @param params - параметры операции:
-	 *   *) fn - функция обратного вызова
+	 * @param [params] - дополнительные параметры операции:
+	 *   *) [timeout] - параметр timeout для нативного requestIdleCallback
 	 *   *) [join] - если true, то смежные операции (с одинаковой меткой) будут объединены с первой
 	 *   *) [label] - метка операции (предыдущие операции с этой меткой будут отменены)
 	 *   *) [group] - группа операции
 	 *   *) [onClear] - обработчик события clearAsync
-	 *
-	 * @param [options] - дополнительные опции метода
 	 */
-	requestIdleCallback(params: AsyncCbOpts, options?: {timeout?: number}): number;
-	requestIdleCallback(p, options) {
+	requestIdleCallback(fn: Function, params?: SimpleAsyncCbOpts & {timeout?: number}): number | NodeJS.Timer {
 		return this.setAsync({
-			...p,
+			...params && Object.reject(params, 'timeout'),
 			name: 'idleCallback',
-			obj: p.fn || Async.getIfNotObject(p),
+			obj: fn,
 			clearFn: cancelIdleCallback,
 			wrapper: requestIdleCallback,
 			linkByWrapper: true,
-			args: options
+			args: params && Object.select(params, 'timeout')
 		});
 	}
 
 	/**
 	 * Обертка для cancelIdleCallback
-	 * @param id - ид операции
+	 * @param [id] - ид операции (если не задан, то удаляются все обработчики)
 	 */
-	cancelIdleCallback(id: number): this;
+	cancelIdleCallback(id?: number | NodeJS.Timer): this;
 
 	/**
 	 * @param params - параметры операции:
@@ -715,21 +660,18 @@ export default class Async<CTX extends Object> {
 	 *   *) [label] - метка операции
 	 *   *) [group] - группа операции
 	 */
-	cancelIdleCallback(params: ClearOptsId<number>): this;
+	cancelIdleCallback(params: ClearOptsId<number | NodeJS.Timer>): this;
 	cancelIdleCallback(p): this {
+		if (p == null) {
+			return this.clearAllAsync({name: 'idleCallback', clearFn: cancelIdleCallback});
+		}
+
 		return this.clearAsync({
 			...p,
 			name: 'idleCallback',
 			clearFn: cancelIdleCallback,
 			id: p.id || Async.getIfNotObject(p)
 		});
-	}
-
-	/**
-	 * Отменяет все requestIdleCallback операции
-	 */
-	cancelAllIdleCallbacks(): this {
-		return this.clearAllAsync({name: 'idleCallback', clearFn: cancelIdleCallback});
 	}
 
 	/**
@@ -754,9 +696,9 @@ export default class Async<CTX extends Object> {
 
 	/**
 	 * Уничтожает заданный поток
-	 * @param worker
+	 * @param [worker] - поток (если не задан, то удаляются все потоки)
 	 */
-	terminateWorker<T>(worker: T & WorkerLike): this;
+	terminateWorker<T>(worker?: T & WorkerLike): this;
 
 	/**
 	 * @param params - параметры операции:
@@ -766,19 +708,16 @@ export default class Async<CTX extends Object> {
 	 */
 	terminateWorker<T>(params: ClearOptsId<T & WorkerLike>): this;
 	terminateWorker(p): this {
+		if (p == null) {
+			return this.clearAllAsync({name: 'worker', clearFn: Async.terminateWorker});
+		}
+
 		return this.clearAsync({
 			...p,
 			name: 'worker',
 			clearFn: Async.terminateWorker,
 			id: p.id || Async.getIfNotObject(p)
 		});
-	}
-
-	/**
-	 * Уничтожает все зарегистрированные потоки
-	 */
-	terminateAllWorkers(): this {
-		return this.clearAllAsync({name: 'worker', clearFn: Async.terminateWorker});
 	}
 
 	/**
@@ -805,9 +744,9 @@ export default class Async<CTX extends Object> {
 
 	/**
 	 * Отменяет заданный удаленный запрос
-	 * @param request
+	 * @param [request] - запрос (если не задан, то удаляются все запросы)
 	 */
-	cancelRequest<T>(request: RequestLike): this;
+	cancelRequest<T>(request?: RequestLike): this;
 
 	/**
 	 * @param params - параметры операции:
@@ -817,19 +756,16 @@ export default class Async<CTX extends Object> {
 	 */
 	cancelRequest<T>(params: ClearOptsId<T & WorkerLike>): this;
 	cancelRequest(p): this {
+		if (p == null) {
+			return this.clearAllAsync({name: 'request', clearFn: Async.cancelRequest});
+		}
+
 		return this.clearAsync({
 			...p,
 			name: 'request',
 			clearFn: Async.cancelRequest,
 			id: p.id || Async.getIfNotObject(p)
 		});
-	}
-
-	/**
-	 * Уничтожает все зарегистрированные удаленные запросы
-	 */
-	cancelAllRequests(): this {
-		return this.clearAllAsync({name: 'request', clearFn: Async.cancelRequest});
 	}
 
 	/**
@@ -854,9 +790,9 @@ export default class Async<CTX extends Object> {
 
 	/**
 	 * Отменяет выполнение заданной callback функции
-	 * @param cb
+	 * @param [cb] - callback (если не задан, то удаляются все callback-и)
 	 */
-	cancelProxy<T>(cb: Function): this;
+	cancelProxy<T>(cb?: Function): this;
 
 	/**
 	 * @param params - параметры операции:
@@ -866,18 +802,15 @@ export default class Async<CTX extends Object> {
 	 */
 	cancelProxy<T>(params: ClearOptsId<Function>): this;
 	cancelProxy(p): this {
+		if (p == null) {
+			return this.clearAllAsync({name: 'proxy'});
+		}
+
 		return this.clearAsync({
 			...p,
 			name: 'proxy',
 			id: p.id || Async.getIfNotObject(p)
 		});
-	}
-
-	/**
-	 * Отменяет выполнение всех зарегистрированных callback функций
-	 */
-	cancelAllProxies(): this {
-		return this.clearAllAsync({name: 'proxy'});
 	}
 
 	/**
@@ -917,15 +850,10 @@ export default class Async<CTX extends Object> {
 	 */
 	sleep(timer: number, params?: AsyncOpts): Promise<any> {
 		return new Promise((resolve, reject) => {
-			this.setTimeout(
-				{
-					...params,
-					fn: resolve,
-					onClear: Async.onPromiseClear(resolve, reject)
-				},
-
-				timer
-			);
+			this.setTimeout(resolve, timer, {
+				...params,
+				onClear: Async.onPromiseClear(resolve, reject)
+			});
 		});
 	}
 
@@ -941,9 +869,8 @@ export default class Async<CTX extends Object> {
 	 */
 	nextTick(params?: AsyncOpts): Promise<any> {
 		return new Promise((resolve, reject) => {
-			this.setImmediate({
+			this.setImmediate(resolve, {
 				...params,
-				fn: resolve,
 				onClear: Async.onPromiseClear(resolve, reject)
 			});
 		});
@@ -961,9 +888,8 @@ export default class Async<CTX extends Object> {
 	 */
 	idle(params?: AsyncOpts): Promise<any> {
 		return new Promise((resolve, reject) => {
-			this.requestIdleCallback({
+			this.requestIdleCallback(resolve, {
 				...params,
-				fn: resolve,
 				onClear: Async.onPromiseClear(resolve, reject)
 			});
 		});
@@ -971,19 +897,24 @@ export default class Async<CTX extends Object> {
 
 	/**
 	 * Промис обертка над requestAnimationFrame
-	 *
-	 * @param [params] - дополнительные параметры операции:
-	 *   *) [join] - если true, то смежные операции (с одинаковой меткой) будут объединены с первой,
-	 *        а если replace, то с последней
-	 *
+	 * @param [element] - ссылка на анимируемый элемент
+	 */
+	animationFrame(element?: Element): Promise<any>;
+
+	/**
+	 * @param params - параметры операции:
+	 *   *) [element] - ссылка на анимируемый элемент
+	 *   *) [join] - если true, то смежные операции (с одинаковой меткой) будут объединены с первой
 	 *   *) [label] - метка операции (предыдущие операции с этой меткой будут отменены)
 	 *   *) [group] - группа операции
+	 *   *) [onClear] - обработчик события clearAsync
 	 */
-	animationFrame(params?: AsyncOpts): Promise<any> {
+	animationFrame(params?: SimpleAsyncCbOpts & {element?: Element}): Promise<any>;
+	animationFrame(p) {
 		return new Promise((resolve, reject) => {
-			this.requestAnimationFrame({
-				...params,
-				fn: resolve,
+			this.requestAnimationFrame(resolve, {
+				...Object.isObject(p) ? p : {},
+				element: p && (Async.getIfNotObject(p) || p.element),
 				onClear: Async.onPromiseClear(resolve, reject)
 			});
 		});
@@ -1002,18 +933,18 @@ export default class Async<CTX extends Object> {
 	 */
 	wait(fn: Function, params?: AsyncOpts): Promise<any> {
 		return new Promise((resolve, reject) => {
-			const id = this.setInterval({
+			let id;
+			const cb = () => {
+				if (fn()) {
+					resolve();
+					this.clearInterval(id);
+				}
+			};
+
+			id = this.setInterval(cb, 15, {
 				...params,
-
-				fn: () => {
-					if (fn()) {
-						resolve();
-						this.clearInterval(id);
-					}
-				},
-
 				onClear: Async.onPromiseClear(resolve, reject)
-			}, 15);
+			});
 		});
 	}
 
@@ -1155,9 +1086,9 @@ export default class Async<CTX extends Object> {
 
 	/**
 	 * Обертка для удаления обработчика событий
-	 * @param id - ид операции
+	 * @param [id] - ид операции (если не задан, то удаляются все обработчики)
 	 */
-	off(id: Object): this;
+	off(id?: Object): this;
 
 	/**
 	 * @param params - параметры операции:
@@ -1167,20 +1098,14 @@ export default class Async<CTX extends Object> {
 	 */
 	off(params: ClearOptsId<Object>): this;
 	off(p) {
+		if (p == null) {
+			return this.clearAllAsync({name: 'eventListener', clearFn: Async.removeEventListener});
+		}
+
 		return this.clearAsync({
 			...p,
 			name: 'eventListener',
 			id: p.id || Async.getIfEvent(p),
-			clearFn: Async.removeEventListener
-		});
-	}
-
-	/**
-	 * Удаляет все установленные обработчики событий
-	 */
-	removeAllEventListeners(): this {
-		return this.clearAllAsync({
-			name: 'eventListener',
 			clearFn: Async.removeEventListener
 		});
 	}
@@ -1293,43 +1218,28 @@ export default class Async<CTX extends Object> {
 	/**
 	 * Отменяет все асинхронные обработчики
 	 *
-	 * @param params - дополнительные параметры операции:
+	 * @param [params] - дополнительные параметры операции:
 	 *   *) [label] - метка операции
 	 *   *) [group] - группа операции
 	 */
-	clearAll(params: ClearOpts = {}): this {
-		if (params.group || params.label) {
-			this
-				.off(params);
+	clearAll(params?: ClearOpts): this {
+		const
+			p: any = params;
 
-			this
-				.clearImmediate(params)
-				.clearInterval(params)
-				.clearTimeout(params)
-				.cancelIdleCallback(params)
-				.cancelAnimationFrame(params);
+		this
+			.off(p);
 
-			this
-				.cancelRequest(params)
-				.terminateWorker(params)
-				.cancelProxy(params);
+		this
+			.clearImmediate(p)
+			.clearInterval(p)
+			.clearTimeout(p)
+			.cancelIdleCallback(p)
+			.cancelAnimationFrame(p);
 
-		} else {
-			this
-				.removeAllEventListeners();
-
-			this
-				.clearAllImmediates()
-				.clearAllIntervals()
-				.clearAllTimeouts()
-				.cancelAllIdleCallbacks()
-				.cancelAllAnimationFrames();
-
-			this
-				.cancelAllRequests()
-				.terminateAllWorkers()
-				.cancelAllProxies();
-		}
+		this
+			.cancelRequest(p)
+			.terminateWorker(p)
+			.cancelProxy(p);
 
 		return this;
 	}
