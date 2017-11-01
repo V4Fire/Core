@@ -5,7 +5,7 @@ export interface AsyncLink {
 	obj: any;
 	objName: string | undefined;
 	label: string | symbol | undefined;
-	onComplete: Function[];
+	onComplete: Function[][];
 	onClear: Function[];
 }
 
@@ -68,7 +68,7 @@ export interface WorkerLike {
 	close?: Function;
 }
 
-export type RequestLike = Promise<any> & {abort: Function};
+export type RequestLike<T> = PromiseLike<T> & {abort: Function};
 
 export interface NodeEventCb {
 	(e: Event, el: Node): void;
@@ -146,7 +146,7 @@ export default class Async<CTX extends Object> {
 	 * @param request
 	 * @param ctx - объект контекста
 	 */
-	protected static cancelRequest(request: RequestLike, ctx: AsyncCtx): void {
+	protected static cancelRequest(request: RequestLike<any>, ctx: AsyncCtx): void {
 		request.abort(ctx.join === 'replace' ? ctx.replacedBy && ctx.replacedBy.id : undefined);
 	}
 
@@ -259,7 +259,7 @@ export default class Async<CTX extends Object> {
 
 				if (!p.interval) {
 					links.delete(id);
-					delete labels[p.label];
+					labels[p.label] = undefined;
 				}
 
 				const execTasks = (i = 0) => function () {
@@ -431,7 +431,7 @@ export default class Async<CTX extends Object> {
 	 *   *) [group] - группа операции
 	 *   *) [onClear] - обработчик события clearAsync
 	 */
-	setImmediate(fn: Function, params?: SimpleAsyncCbOpts): number | NodeJS.Timer {
+	setImmediate(fn: () => void, params?: SimpleAsyncCbOpts): number | NodeJS.Timer {
 		return this.setAsync({
 			...params,
 			name: 'immediate',
@@ -479,7 +479,7 @@ export default class Async<CTX extends Object> {
 	 *   *) [group] - группа операции
 	 *   *) [onClear] - обработчик события clearAsync
 	 */
-	setInterval(fn: Function, interval: number, params?: SimpleAsyncCbOpts): number | NodeJS.Timer {
+	setInterval(fn: () => void, interval: number, params?: SimpleAsyncCbOpts): number | NodeJS.Timer {
 		return this.setAsync({
 			...params,
 			name: 'interval',
@@ -529,7 +529,7 @@ export default class Async<CTX extends Object> {
 	 *   *) [group] - группа операции
 	 *   *) [onClear] - обработчик события clearAsync
 	 */
-	setTimeout(fn: Function, timer: number, params?: SimpleAsyncCbOpts): number | NodeJS.Timer {
+	setTimeout(fn: () => void, timer: number, params?: SimpleAsyncCbOpts): number | NodeJS.Timer {
 		return this.setAsync({
 			...params,
 			name: 'timeout',
@@ -573,7 +573,7 @@ export default class Async<CTX extends Object> {
 	 * @param fn - функция обратного вызова
 	 * @param [element] - ссылка на анимируемый элемент
 	 */
-	requestAnimationFrame(fn: Function, element?: Element): number;
+	requestAnimationFrame(fn: (timeStamp: number) => void, element?: Element): number;
 
 	/**
 	 * Обертка для requestAnimationFrame
@@ -586,7 +586,7 @@ export default class Async<CTX extends Object> {
 	 *   *) [group] - группа операции
 	 *   *) [onClear] - обработчик события clearAsync
 	 */
-	requestAnimationFrame(fn: Function, params?: SimpleAsyncCbOpts & {element?: Element}): number;
+	requestAnimationFrame(fn: (timeStamp: number) => void, params?: SimpleAsyncCbOpts & {element?: Element}): number;
 	requestAnimationFrame(fn: Function, p) {
 		return this.setAsync({
 			...Object.isObject(p) ? p : {},
@@ -636,7 +636,10 @@ export default class Async<CTX extends Object> {
 	 *   *) [group] - группа операции
 	 *   *) [onClear] - обработчик события clearAsync
 	 */
-	requestIdleCallback(fn: Function, params?: SimpleAsyncCbOpts & {timeout?: number}): number | NodeJS.Timer {
+	requestIdleCallback(
+		fn: (deadline: IdleDeadline) => void,
+		params?: SimpleAsyncCbOpts & {timeout?: number}
+	): number | NodeJS.Timer {
 		return this.setAsync({
 			...params && Object.reject(params, 'timeout'),
 			name: 'idleCallback',
@@ -731,7 +734,7 @@ export default class Async<CTX extends Object> {
 	 *   *) [label] - метка операции (предыдущие операции с этой меткой будут отменены)
 	 *   *) [group] - группа операции
 	 */
-	request(request: RequestLike, params?: AsyncOpts): Promise<any> {
+	request<T>(request: RequestLike<T>, params?: AsyncOpts): RequestLike<T> {
 		return this.setAsync({
 			...params,
 			name: 'request',
@@ -746,7 +749,7 @@ export default class Async<CTX extends Object> {
 	 * Отменяет заданный удаленный запрос
 	 * @param [request] - запрос (если не задан, то удаляются все запросы)
 	 */
-	cancelRequest<T>(request?: RequestLike): this;
+	cancelRequest<T>(request?: RequestLike<T>): this;
 
 	/**
 	 * @param params - параметры операции:
@@ -824,7 +827,7 @@ export default class Async<CTX extends Object> {
 	 *   *) [label] - метка операции (предыдущие операции с этой меткой будут отменены)
 	 *   *) [group] - группа операции
 	 */
-	promise(promise: Promise<any>, params?: AsyncOpts): Promise<any> {
+	promise<T>(promise: PromiseLike<T>, params?: AsyncOpts): Promise<T> {
 		return new Promise((resolve, reject) => {
 			promise.then(
 				<any>this.proxy(resolve, {
@@ -848,7 +851,7 @@ export default class Async<CTX extends Object> {
 	 *   *) [label] - метка операции (предыдущие операции с этой меткой будут отменены)
 	 *   *) [group] - группа операции
 	 */
-	sleep(timer: number, params?: AsyncOpts): Promise<any> {
+	sleep(timer: number, params?: AsyncOpts): Promise<void> {
 		return new Promise((resolve, reject) => {
 			this.setTimeout(resolve, timer, {
 				...params,
@@ -867,7 +870,7 @@ export default class Async<CTX extends Object> {
 	 *   *) [label] - метка операции (предыдущие операции с этой меткой будут отменены)
 	 *   *) [group] - группа операции
 	 */
-	nextTick(params?: AsyncOpts): Promise<any> {
+	nextTick(params?: AsyncOpts): Promise<void> {
 		return new Promise((resolve, reject) => {
 			this.setImmediate(resolve, {
 				...params,
@@ -886,7 +889,7 @@ export default class Async<CTX extends Object> {
 	 *   *) [label] - метка операции (предыдущие операции с этой меткой будут отменены)
 	 *   *) [group] - группа операции
 	 */
-	idle(params?: AsyncOpts): Promise<any> {
+	idle(params?: AsyncOpts): Promise<IdleDeadline> {
 		return new Promise((resolve, reject) => {
 			this.requestIdleCallback(resolve, {
 				...params,
@@ -899,7 +902,7 @@ export default class Async<CTX extends Object> {
 	 * Промис обертка над requestAnimationFrame
 	 * @param [element] - ссылка на анимируемый элемент
 	 */
-	animationFrame(element?: Element): Promise<any>;
+	animationFrame(element?: Element): Promise<number>;
 
 	/**
 	 * @param params - параметры операции:
@@ -909,7 +912,7 @@ export default class Async<CTX extends Object> {
 	 *   *) [group] - группа операции
 	 *   *) [onClear] - обработчик события clearAsync
 	 */
-	animationFrame(params?: SimpleAsyncCbOpts & {element?: Element}): Promise<any>;
+	animationFrame(params?: SimpleAsyncCbOpts & {element?: Element}): Promise<number>;
 	animationFrame(p) {
 		return new Promise((resolve, reject) => {
 			this.requestAnimationFrame(resolve, {
@@ -931,7 +934,7 @@ export default class Async<CTX extends Object> {
 	 *   *) [label] - метка операции (предыдущие операции с этой меткой будут отменены)
 	 *   *) [group] - группа операции
 	 */
-	wait(fn: Function, params?: AsyncOpts): Promise<any> {
+	wait(fn: Function, params?: AsyncOpts): Promise<void> {
 		return new Promise((resolve, reject) => {
 			let id;
 			const cb = () => {

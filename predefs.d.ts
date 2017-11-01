@@ -17,6 +17,11 @@ declare function i18n(strings: any | string[], ...expr: any[]): string;
 declare function t(strings: any | string[], ...expr: any[]): string;
 declare function l(strings: any | string[], ...expr: any[]): string;
 
+declare class IdleDeadline {
+	readonly didTimeout: boolean;
+	timeRemaining(): number;
+}
+
 declare function requestIdleCallback(cb: Function): number;
 declare function cancelIdleCallback(id: number): number;
 
