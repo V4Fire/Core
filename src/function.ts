@@ -15,13 +15,8 @@ try {
 	 */
 	Object.defineProperty(Function.prototype, 'name', {
 		get(): string | undefined {
-			try {
-				const v = fnNameRgxp.exec(this.toString());
-				return v && v[1] || undefined;
-
-			} catch (_) {
-				return undefined;
-			}
+			const v = fnNameRgxp.exec(this.toString());
+			return v && v[1] || undefined;
 		}
 	});
 
