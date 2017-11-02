@@ -322,7 +322,7 @@ export default class Async<CTX extends Object> {
 
 		if (p.wrapper) {
 			const
-				link = p.wrapper(...[wrappedObj].concat(p.needCall ? id : [], p.args));
+				link = p.wrapper.apply(null, [wrappedObj].concat(p.needCall ? id : [], p.args));
 
 			if (p.linkByWrapper) {
 				id = link;
@@ -417,7 +417,7 @@ export default class Async<CTX extends Object> {
 				}
 
 				if (p.clearFn) {
-					p.clearFn(link.id, ctx);
+					p.clearFn.call(null, link.id, ctx);
 				}
 			}
 
