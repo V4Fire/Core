@@ -1025,6 +1025,7 @@ export default class Async<CTX extends Object> {
 		}
 
 		const
+			that = this,
 			links: any[] = [];
 
 		for (const event of events) {
@@ -1036,7 +1037,7 @@ export default class Async<CTX extends Object> {
 					if (p.single && !emitter.once) {
 						const baseHandler = handler;
 						handler = function () {
-							this.eventListenerDestructor({emitter, event, handler, args});
+							that.eventListenerDestructor({emitter, event, handler, args});
 							return baseHandler.apply(this, arguments);
 						};
 					}
