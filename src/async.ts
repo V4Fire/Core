@@ -1011,9 +1011,10 @@ export default class Async<CTX extends Object> {
 	on(emitter, events, handler, p, ...args) {
 		if (p !== undefined && !Object.isObject(p)) {
 			args.unshift(p);
-			p = {};
+			p = undefined;
 		}
 
+		p = p || {};
 		events = Object.isArray(events) ? events : events.split(/\s+/);
 
 		const
