@@ -31,12 +31,8 @@ export type AsyncCtx = {
 	replacedBy?: AsyncLink;
 } & AsyncOpts & ClearOptsId<any>;
 
-export interface SimpleAsyncCbOpts extends AsyncOpts {
+export interface AsyncCbOpts extends AsyncOpts {
 	onClear?: Function | Function[];
-}
-
-export interface AsyncCbOpts extends SimpleAsyncCbOpts {
-	fn: Function;
 }
 
 export interface AsyncCbOptsSingle extends AsyncCbOpts {
@@ -461,7 +457,7 @@ export default class Async<CTX extends Object> {
 	 *   *) [group] - группа операции
 	 *   *) [onClear] - обработчик события clearAsync
 	 */
-	setImmediate(fn: () => void, params?: SimpleAsyncCbOpts): number | NodeJS.Timer {
+	setImmediate(fn: () => void, params?: AsyncCbOpts): number | NodeJS.Timer {
 		return this.setAsync({
 			...params,
 			name: 'immediate',
@@ -486,7 +482,7 @@ export default class Async<CTX extends Object> {
 	 */
 	clearImmediate(params: ClearOptsId<number | NodeJS.Timer>): this;
 	clearImmediate(p): this {
-		if (p == null) {
+		if (p === undefined) {
 			return this.clearAllAsync({name: 'immediate', clearFn: clearImmediate});
 		}
 
@@ -509,7 +505,7 @@ export default class Async<CTX extends Object> {
 	 *   *) [group] - группа операции
 	 *   *) [onClear] - обработчик события clearAsync
 	 */
-	setInterval(fn: () => void, interval: number, params?: SimpleAsyncCbOpts): number | NodeJS.Timer {
+	setInterval(fn: () => void, interval: number, params?: AsyncCbOpts): number | NodeJS.Timer {
 		return this.setAsync({
 			...params,
 			name: 'interval',
@@ -536,7 +532,7 @@ export default class Async<CTX extends Object> {
 	 */
 	clearInterval(params: ClearOptsId<number | NodeJS.Timer>): this;
 	clearInterval(p): this {
-		if (p == null) {
+		if (p === undefined) {
 			return this.clearAllAsync({name: 'interval', clearFn: clearInterval});
 		}
 
@@ -559,7 +555,7 @@ export default class Async<CTX extends Object> {
 	 *   *) [group] - группа операции
 	 *   *) [onClear] - обработчик события clearAsync
 	 */
-	setTimeout(fn: () => void, timer: number, params?: SimpleAsyncCbOpts): number | NodeJS.Timer {
+	setTimeout(fn: () => void, timer: number, params?: AsyncCbOpts): number | NodeJS.Timer {
 		return this.setAsync({
 			...params,
 			name: 'timeout',
@@ -585,7 +581,7 @@ export default class Async<CTX extends Object> {
 	 */
 	clearTimeout(params: ClearOptsId<number | NodeJS.Timer>): this;
 	clearTimeout(p): this {
-		if (p == null) {
+		if (p === undefined) {
 			return this.clearAllAsync({name: 'timeout', clearFn: clearTimeout});
 		}
 
@@ -616,10 +612,10 @@ export default class Async<CTX extends Object> {
 	 *   *) [group] - группа операции
 	 *   *) [onClear] - обработчик события clearAsync
 	 */
-	requestAnimationFrame(fn: (timeStamp: number) => void, params?: SimpleAsyncCbOpts & {element?: Element}): number;
+	requestAnimationFrame(fn: (timeStamp: number) => void, params?: AsyncCbOpts & {element?: Element}): number;
 	requestAnimationFrame(fn: Function, p) {
 		return this.setAsync({
-			...Object.isObject(p) ? p : {},
+			...Object.isObject(p) ? p : undefined,
 			name: 'animationFrame',
 			obj: fn,
 			clearFn: cancelAnimationFrame,
@@ -643,7 +639,7 @@ export default class Async<CTX extends Object> {
 	 */
 	cancelAnimationFrame(params: ClearOptsId<number>): this;
 	cancelAnimationFrame(p): this {
-		if (p == null) {
+		if (p === undefined) {
 			return this.clearAllAsync({name: 'animationFrame', clearFn: cancelAnimationFrame});
 		}
 
@@ -668,7 +664,7 @@ export default class Async<CTX extends Object> {
 	 */
 	requestIdleCallback(
 		fn: (deadline: IdleDeadline) => void,
-		params?: SimpleAsyncCbOpts & {timeout?: number}
+		params?: AsyncCbOpts & {timeout?: number}
 	): number | NodeJS.Timer {
 		return this.setAsync({
 			...params && Object.reject(params, 'timeout'),
@@ -695,7 +691,7 @@ export default class Async<CTX extends Object> {
 	 */
 	cancelIdleCallback(params: ClearOptsId<number | NodeJS.Timer>): this;
 	cancelIdleCallback(p): this {
-		if (p == null) {
+		if (p === undefined) {
 			return this.clearAllAsync({name: 'idleCallback', clearFn: cancelIdleCallback});
 		}
 
@@ -717,7 +713,7 @@ export default class Async<CTX extends Object> {
 	 *   *) [group] - группа операции
 	 *   *) [onClear] - обработчик события clearAsync
 	 */
-	worker<T>(worker: T & WorkerLike, params?: SimpleAsyncCbOpts): T {
+	worker<T>(worker: T & WorkerLike, params?: AsyncCbOpts): T {
 		return this.setAsync({
 			...params,
 			name: 'worker',
@@ -741,7 +737,7 @@ export default class Async<CTX extends Object> {
 	 */
 	terminateWorker<T>(params: ClearOptsId<T & WorkerLike>): this;
 	terminateWorker(p): this {
-		if (p == null) {
+		if (p === undefined) {
 			return this.clearAllAsync({name: 'worker', clearFn: this.workerDestructor});
 		}
 
@@ -789,7 +785,7 @@ export default class Async<CTX extends Object> {
 	 */
 	cancelRequest<T>(params: ClearOptsId<T & WorkerLike>): this;
 	cancelRequest(p): this {
-		if (p == null) {
+		if (p === undefined) {
 			return this.clearAllAsync({name: 'request', clearFn: this.requestDestructor});
 		}
 
@@ -811,7 +807,7 @@ export default class Async<CTX extends Object> {
 	 *   *) [group] - группа операции
 	 *   *) [onClear] - обработчик события clearAsync
 	 */
-	proxy(cb: Function, params?: SimpleAsyncCbOpts): Function {
+	proxy(cb: Function, params?: AsyncCbOpts): Function {
 		return this.setAsync({
 			...params,
 			name: 'proxy',
@@ -835,7 +831,7 @@ export default class Async<CTX extends Object> {
 	 */
 	cancelProxy<T>(params: ClearOptsId<Function>): this;
 	cancelProxy(p): this {
-		if (p == null) {
+		if (p === undefined) {
 			return this.clearAllAsync({name: 'proxy'});
 		}
 
@@ -942,11 +938,11 @@ export default class Async<CTX extends Object> {
 	 *   *) [group] - группа операции
 	 *   *) [onClear] - обработчик события clearAsync
 	 */
-	animationFrame(params?: SimpleAsyncCbOpts & {element?: Element}): Promise<number>;
+	animationFrame(params?: AsyncCbOpts & {element?: Element}): Promise<number>;
 	animationFrame(p) {
 		return new Promise((resolve, reject) => {
 			this.requestAnimationFrame(resolve, {
-				...Object.isObject(p) ? p : {},
+				...Object.isObject(p) ? p : undefined,
 				element: p && (this.getIfNotObject(p) || p.element),
 				onClear: this.onPromiseClear(resolve, reject)
 			});
@@ -986,16 +982,16 @@ export default class Async<CTX extends Object> {
 	 *
 	 * @param emitter - источник событий
 	 * @param events - событие или массив событий (можно также указывать несколько событий через пробел)
-	 * @param fn - функция обратного вызова
+	 * @param handler - обработчик события
 	 * @param [args] - дополнительные аргументы для emitter
 	 */
-	on<T>(emitter: T & EventEmitterLike, events: string | string[], fn: Function, ...args: any[]): Object;
+	on<T>(emitter: T & EventEmitterLike, events: string | string[], handler: Function, ...args: any[]): Object;
 
 	/**
 	 * @param emitter - источник событий
 	 * @param events - событие или массив событий (можно также указывать несколько событий через пробел)
-	 * @param params - параметры операции:
-	 *   *) fn - функция обратного вызова
+	 * @param handler - обработчик события
+	 * @param [params] - дополнительные параметры операции:
 	 *   *) [join] - если true, то смежные операции (с одинаковой меткой) будут объединены с первой
 	 *   *) [label] - метка операции (предыдущие операции с этой меткой будут отменены)
 	 *   *) [group] - группа операции
@@ -1007,20 +1003,23 @@ export default class Async<CTX extends Object> {
 	on<T>(
 		emitter: T & EventEmitterLike,
 		events: string | string[],
-		params: AsyncCbOptsSingle,
+		handler: Function,
+		params?: AsyncCbOptsSingle,
 		...args: any[]
 	): Object;
 
-	on(emitter, events, p, ...args) {
+	on(emitter, events, handler, p, ...args) {
+		if (p !== undefined && !Object.isObject(p)) {
+			args.unshift(p);
+			p = {};
+		}
+
 		events = Object.isArray(events) ? events : events.split(/\s+/);
 
 		const
 			links: any[] = [];
 
 		for (const event of events) {
-			let
-				handler = p.fn || this.getIfNotObject(p);
-
 			links.push(this.setAsync({
 				...p,
 				name: 'eventListener',
@@ -1060,16 +1059,16 @@ export default class Async<CTX extends Object> {
 	 *
 	 * @param emitter - источник событий
 	 * @param events - событие или массив событий (можно также указывать несколько событий через пробел)
-	 * @param fn - функция обратного вызова
+	 * @param handler - обработчик события
 	 * @param [args] - дополнительные аргументы для emitter
 	 */
-	once<T>(emitter: T & EventEmitterLike, events: string | string[], fn: Function, ...args: any[]): Object;
+	once<T>(emitter: T & EventEmitterLike, events: string | string[], handler: Function, ...args: any[]): Object;
 
 	/**
 	 * @param emitter - источник событий
 	 * @param events - событие или массив событий (можно также указывать несколько событий через пробел)
+	 * @param handler - обработчик события
 	 * @param params - параметры операции:
-	 *   *) fn - функция обратного вызова
 	 *   *) [join] - если true, то смежные операции (с одинаковой меткой) будут объединены с первой
 	 *   *) [label] - метка операции (предыдущие операции с этой меткой будут отменены)
 	 *   *) [group] - группа операции
@@ -1080,12 +1079,18 @@ export default class Async<CTX extends Object> {
 	once<T>(
 		emitter: T & EventEmitterLike,
 		events: string | string[],
+		handler: Function,
 		params: AsyncCbOpts,
 		...args: any[]
 	): Object;
 
-	once(emitter, events, p, ...args) {
-		return this.on(emitter, events, Object.isFunction(p) ? {fn: p, single: true} : {...p, single: true}, ...args);
+	once(emitter, events, handler, p, ...args) {
+		if (p !== undefined && !Object.isObject(p)) {
+			args.unshift(p);
+			p = undefined;
+		}
+
+		return this.on(emitter, events, handler, {...p, single: true}, ...args);
 	}
 
 	/**
@@ -1107,11 +1112,23 @@ export default class Async<CTX extends Object> {
 		events: string | string[],
 		params: AsyncOpts,
 		...args: any[]
-	): Promise<any> {
+	): Promise<any>;
+
+	/**
+	 * @param emitter - источник событий
+	 * @param events - событие или массив событий (можно также указывать несколько событий через пробел)
+	 * @param [args] - дополнительные аргументы для emitter
+	 */
+	promisifyOnce<T>(emitter: T & EventEmitterLike, events: string | string[], ...args: any[]): Promise<any>;
+	promisifyOnce(emitter, events, p, ...args) {
+		if (p !== undefined && !Object.isObject(p)) {
+			args.unshift(p);
+			p = undefined;
+		}
+
 		return new Promise((resolve, reject) => {
-			this.once(emitter, events, {
-				...params,
-				fn: resolve,
+			this.once(emitter, events, resolve, {
+				...p,
 				onClear: this.onPromiseClear(resolve, reject)
 			}, ...args);
 		});
@@ -1131,7 +1148,7 @@ export default class Async<CTX extends Object> {
 	 */
 	off(params: ClearOptsId<Object>): this;
 	off(p) {
-		if (p == null) {
+		if (p === undefined) {
 			return this.clearAllAsync({name: 'eventListener', clearFn: this.eventListenerDestructor});
 		}
 
@@ -1160,7 +1177,7 @@ export default class Async<CTX extends Object> {
 	 */
 	dnd(
 		el: Element,
-		params: SimpleAsyncCbOpts & {
+		params: AsyncCbOpts & {
 			onDragStart?: NodeEventCb | NodeEventOpts,
 			onDrag?: NodeEventCb | NodeEventOpts,
 			onDragEnd?: NodeEventCb | NodeEventOpts
@@ -1226,7 +1243,7 @@ export default class Async<CTX extends Object> {
 				links: any[] = [];
 
 			$C(['mousemove', 'touchmove']).forEach((e) => {
-				links.push(that.on(document, e, {...opts, fn: drag, onClear: dragClear}, dragUseCapture));
+				links.push(that.on(document, e, drag, {...opts, onClear: dragClear}, dragUseCapture));
 			});
 
 			const dragEnd = (e) => {
@@ -1240,11 +1257,11 @@ export default class Async<CTX extends Object> {
 			};
 
 			$C(['mouseup', 'touchend']).forEach((e) => {
-				links.push(that.on(document, e, {...opts, fn: dragEnd, onClear: dragEndClear}, dragEndUseCapture));
+				links.push(that.on(document, e, dragEnd, {...opts, onClear: dragEndClear}, dragEndUseCapture));
 			});
 		}
 
-		this.on(el, 'mousedown touchstart', {...opts, fn: dragStart, onClear: dragStartClear}, dragStartUseCapture);
+		this.on(el, 'mousedown touchstart', dragStart, {...opts, onClear: dragStartClear}, dragStartUseCapture);
 		return p.group;
 	}
 
