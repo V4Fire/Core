@@ -22,8 +22,8 @@ declare class IdleDeadline {
 	timeRemaining(): number;
 }
 
-declare function requestIdleCallback(cb: Function): number;
-declare function cancelIdleCallback(id: number): number;
+declare function requestIdleCallback(fn: (deadline: IdleDeadline) => void, opts?: {timer?: number}): number;
+declare function cancelIdleCallback(id: number): void;
 
 interface JSONCb {
 	(key: string, value: any): any;
