@@ -155,8 +155,11 @@ export default class Async<CTX extends Object> {
 			e = params.emitter,
 			fn = e.removeEventListener || e.removeListener || e.off;
 
-		if (fn) {
+		if (fn && Object.isFunction(fn)) {
 			fn.call(e, params.event, params.handler, ...params.args);
+
+		} else {
+			throw new ReferenceError('Remove event listener function for the event emitter is not defined');
 		}
 	}
 
@@ -165,8 +168,15 @@ export default class Async<CTX extends Object> {
 	 * @param worker
 	 */
 	protected workerDestructor<T>(worker: T & WorkerLike): void {
-		const fn = worker.terminate || worker.destroy || worker.close;
-		fn && fn.call(worker);
+		const
+			fn = worker.terminate || worker.destroy || worker.close;
+
+		if (fn && Object.isFunction(fn)) {
+			fn.call(worker);
+
+		} else {
+			throw new ReferenceError('Destructor function for the worker is not defined');
+		}
 	}
 
 	/**
@@ -176,7 +186,15 @@ export default class Async<CTX extends Object> {
 	 * @param ctx - объект контекста
 	 */
 	protected requestDestructor(request: RequestLike<any>, ctx: AsyncCtx): void {
-		request.abort(ctx.join === 'replace' ? ctx.replacedBy && ctx.replacedBy.id : undefined);
+		const
+			fn = request.abort;
+
+		if (fn && Object.isFunction(fn)) {
+			fn.call(request, ctx.join === 'replace' ? ctx.replacedBy && ctx.replacedBy.id : undefined);
+
+		} else {
+			throw new ReferenceError('Abort function for the request is not defined');
+		}
 	}
 
 	/**
