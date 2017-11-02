@@ -1,4 +1,5 @@
 /// <reference types="node" />
+import $C = require('collection.js');
 
 export interface AsyncLink {
 	id: any;
@@ -92,10 +93,28 @@ export interface NodeEventOpts {
  */
 export default class Async<CTX extends Object> {
 	/**
+	 * Объект кеша для операций
+	 */
+	protected cache: Record<string, CacheObject>;
+
+	/**
+	 * Контекст для функция
+	 */
+	protected context: CTX | undefined;
+
+	/**
+	 * @param [ctx] - контекст для функций
+	 */
+	constructor(ctx?: CTX) {
+		this.cache = Object.create(null);
+		this.context = ctx;
+	}
+
+	/**
 	 * Возвращает заданное значение если оно является событием
 	 * @param value
 	 */
-	protected static getIfEvent(value: any & {event?: string}): Function | undefined {
+	protected getIfEvent(value: any & {event?: string}): Function | undefined {
 		return Object.isObject(value) && Object.isString(value.event) ? value : undefined;
 	}
 
@@ -103,8 +122,18 @@ export default class Async<CTX extends Object> {
 	 * Возвращает заданное значение если оно не является объектом
 	 * @param value
 	 */
-	protected static getIfNotObject(value: any): Function | undefined {
+	protected getIfNotObject(value: any): Function | undefined {
 		return Object.isObject(value) ? undefined : value;
+	}
+
+	/**
+	 * Возвращает true если заданное значение является промисом
+	 * @param value
+	 */
+	protected isPromiseLike(value: any): value is PromiseLike<any> {
+		return Boolean(
+			value && (value instanceof Promise || Object.isFunction(value.then) && Object.isFunction(value.catch))
+		);
 	}
 
 	/**
@@ -116,7 +145,7 @@ export default class Async<CTX extends Object> {
 	 *   *) handler - функция обработчик
 	 *   *) args - дополнительные аргументы для emitter
 	 */
-	protected static removeEventListener<T>(params: {
+	protected eventListenerDestructor<T>(params: {
 		emitter: T & EventEmitterLike,
 		event: string,
 		handler: Function,
@@ -135,7 +164,7 @@ export default class Async<CTX extends Object> {
 	 * Уничтожает заданный поток
 	 * @param worker
 	 */
-	protected static terminateWorker<T>(worker: T & WorkerLike): void {
+	protected workerDestructor<T>(worker: T & WorkerLike): void {
 		const fn = worker.terminate || worker.destroy || worker.close;
 		fn && fn.call(worker);
 	}
@@ -146,7 +175,7 @@ export default class Async<CTX extends Object> {
 	 * @param request
 	 * @param ctx - объект контекста
 	 */
-	protected static cancelRequest(request: RequestLike<any>, ctx: AsyncCtx): void {
+	protected requestDestructor(request: RequestLike<any>, ctx: AsyncCtx): void {
 		request.abort(ctx.join === 'replace' ? ctx.replacedBy && ctx.replacedBy.id : undefined);
 	}
 
@@ -156,7 +185,7 @@ export default class Async<CTX extends Object> {
 	 * @param resolve
 	 * @param reject
 	 */
-	protected static onPromiseClear(resolve: Function, reject: Function): Function {
+	protected onPromiseClear(resolve: Function, reject: Function): Function {
 		return (obj) => {
 			const
 				{replacedBy} = obj;
@@ -175,24 +204,6 @@ export default class Async<CTX extends Object> {
 				reject(obj);
 			}
 		};
-	}
-
-	/**
-	 * Объект кеша для операций
-	 */
-	protected cache: Record<string, CacheObject>;
-
-	/**
-	 * Контекст для функция
-	 */
-	protected context: CTX | undefined;
-
-	/**
-	 * @param [ctx] - контекст для функций
-	 */
-	constructor(ctx?: CTX) {
-		this.cache = Object.create(null);
-		this.context = ctx;
 	}
 
 	/**
@@ -240,6 +251,7 @@ export default class Async<CTX extends Object> {
 		}
 
 		const
+			that = this,
 			ctx = this.context;
 
 		let
@@ -279,7 +291,7 @@ export default class Async<CTX extends Object> {
 					res = finalObj.apply(fnCtx, arguments);
 				}
 
-				if (finalObj instanceof Promise) {
+				if (that.isPromiseLike(finalObj)) {
 					finalObj.then(execTasks(), execTasks(1));
 
 				} else {
@@ -464,7 +476,7 @@ export default class Async<CTX extends Object> {
 			...p,
 			name: 'immediate',
 			clearFn: clearImmediate,
-			id: p.id || Async.getIfNotObject(p)
+			id: p.id || this.getIfNotObject(p)
 		});
 	}
 
@@ -514,7 +526,7 @@ export default class Async<CTX extends Object> {
 			...p,
 			name: 'interval',
 			clearFn: clearInterval,
-			id: p.id || Async.getIfNotObject(p)
+			id: p.id || this.getIfNotObject(p)
 		});
 	}
 
@@ -563,7 +575,7 @@ export default class Async<CTX extends Object> {
 			...p,
 			name: 'timeout',
 			clearFn: clearTimeout,
-			id: p.id || Async.getIfNotObject(p)
+			id: p.id || this.getIfNotObject(p)
 		});
 	}
 
@@ -595,7 +607,7 @@ export default class Async<CTX extends Object> {
 			clearFn: cancelAnimationFrame,
 			wrapper: requestAnimationFrame,
 			linkByWrapper: true,
-			args: p && (Async.getIfNotObject(p) || p.element)
+			args: p && (this.getIfNotObject(p) || p.element)
 		});
 	}
 
@@ -621,7 +633,7 @@ export default class Async<CTX extends Object> {
 			...p,
 			name: 'animationFrame',
 			clearFn: cancelAnimationFrame,
-			id: p.id || Async.getIfNotObject(p)
+			id: p.id || this.getIfNotObject(p)
 		});
 	}
 
@@ -673,7 +685,7 @@ export default class Async<CTX extends Object> {
 			...p,
 			name: 'idleCallback',
 			clearFn: cancelIdleCallback,
-			id: p.id || Async.getIfNotObject(p)
+			id: p.id || this.getIfNotObject(p)
 		});
 	}
 
@@ -691,8 +703,8 @@ export default class Async<CTX extends Object> {
 		return this.setAsync({
 			...params,
 			name: 'worker',
-			obj: worker || Async.getIfNotObject(params),
-			clearFn: Async.terminateWorker,
+			obj: worker || this.getIfNotObject(params),
+			clearFn: this.workerDestructor,
 			interval: true
 		});
 	};
@@ -712,14 +724,14 @@ export default class Async<CTX extends Object> {
 	terminateWorker<T>(params: ClearOptsId<T & WorkerLike>): this;
 	terminateWorker(p): this {
 		if (p == null) {
-			return this.clearAllAsync({name: 'worker', clearFn: Async.terminateWorker});
+			return this.clearAllAsync({name: 'worker', clearFn: this.workerDestructor});
 		}
 
 		return this.clearAsync({
 			...p,
 			name: 'worker',
-			clearFn: Async.terminateWorker,
-			id: p.id || Async.getIfNotObject(p)
+			clearFn: this.workerDestructor,
+			id: p.id || this.getIfNotObject(p)
 		});
 	}
 
@@ -739,7 +751,7 @@ export default class Async<CTX extends Object> {
 			...params,
 			name: 'request',
 			obj: request,
-			clearFn: Async.cancelRequest,
+			clearFn: this.requestDestructor,
 			wrapper: (fn, req) => req.then(fn, fn),
 			needCall: true
 		});
@@ -760,14 +772,14 @@ export default class Async<CTX extends Object> {
 	cancelRequest<T>(params: ClearOptsId<T & WorkerLike>): this;
 	cancelRequest(p): this {
 		if (p == null) {
-			return this.clearAllAsync({name: 'request', clearFn: Async.cancelRequest});
+			return this.clearAllAsync({name: 'request', clearFn: this.requestDestructor});
 		}
 
 		return this.clearAsync({
 			...p,
 			name: 'request',
-			clearFn: Async.cancelRequest,
-			id: p.id || Async.getIfNotObject(p)
+			clearFn: this.requestDestructor,
+			id: p.id || this.getIfNotObject(p)
 		});
 	}
 
@@ -812,7 +824,7 @@ export default class Async<CTX extends Object> {
 		return this.clearAsync({
 			...p,
 			name: 'proxy',
-			id: p.id || Async.getIfNotObject(p)
+			id: p.id || this.getIfNotObject(p)
 		});
 	}
 
@@ -832,7 +844,7 @@ export default class Async<CTX extends Object> {
 			promise.then(
 				<any>this.proxy(resolve, {
 					...params,
-					onClear: Async.onPromiseClear(resolve, reject)
+					onClear: this.onPromiseClear(resolve, reject)
 				}),
 
 				reject
@@ -855,7 +867,7 @@ export default class Async<CTX extends Object> {
 		return new Promise((resolve, reject) => {
 			this.setTimeout(resolve, timer, {
 				...params,
-				onClear: Async.onPromiseClear(resolve, reject)
+				onClear: this.onPromiseClear(resolve, reject)
 			});
 		});
 	}
@@ -874,7 +886,7 @@ export default class Async<CTX extends Object> {
 		return new Promise((resolve, reject) => {
 			this.setImmediate(resolve, {
 				...params,
-				onClear: Async.onPromiseClear(resolve, reject)
+				onClear: this.onPromiseClear(resolve, reject)
 			});
 		});
 	}
@@ -893,7 +905,7 @@ export default class Async<CTX extends Object> {
 		return new Promise((resolve, reject) => {
 			this.requestIdleCallback(resolve, {
 				...params,
-				onClear: Async.onPromiseClear(resolve, reject)
+				onClear: this.onPromiseClear(resolve, reject)
 			});
 		});
 	}
@@ -917,8 +929,8 @@ export default class Async<CTX extends Object> {
 		return new Promise((resolve, reject) => {
 			this.requestAnimationFrame(resolve, {
 				...Object.isObject(p) ? p : {},
-				element: p && (Async.getIfNotObject(p) || p.element),
-				onClear: Async.onPromiseClear(resolve, reject)
+				element: p && (this.getIfNotObject(p) || p.element),
+				onClear: this.onPromiseClear(resolve, reject)
 			});
 		});
 	}
@@ -946,7 +958,7 @@ export default class Async<CTX extends Object> {
 
 			id = this.setInterval(cb, 15, {
 				...params,
-				onClear: Async.onPromiseClear(resolve, reject)
+				onClear: this.onPromiseClear(resolve, reject)
 			});
 		});
 	}
@@ -989,7 +1001,7 @@ export default class Async<CTX extends Object> {
 
 		for (const event of events) {
 			let
-				handler = p.fn || Async.getIfNotObject(p);
+				handler = p.fn || this.getIfNotObject(p);
 
 			links.push(this.setAsync({
 				...p,
@@ -999,7 +1011,7 @@ export default class Async<CTX extends Object> {
 					if (p.single && !emitter.once) {
 						const baseHandler = handler;
 						handler = function () {
-							Async.removeEventListener({emitter, event, handler, args});
+							this.eventListenerDestructor({emitter, event, handler, args});
 							return baseHandler.apply(this, arguments);
 						};
 					}
@@ -1015,7 +1027,7 @@ export default class Async<CTX extends Object> {
 					};
 				},
 
-				clearFn: Async.removeEventListener,
+				clearFn: this.eventListenerDestructor,
 				linkByWrapper: true,
 				interval: !p.single,
 				group: p.group || event
@@ -1082,7 +1094,7 @@ export default class Async<CTX extends Object> {
 			this.once(emitter, events, {
 				...params,
 				fn: resolve,
-				onClear: Async.onPromiseClear(resolve, reject)
+				onClear: this.onPromiseClear(resolve, reject)
 			}, ...args);
 		});
 	};
@@ -1102,14 +1114,14 @@ export default class Async<CTX extends Object> {
 	off(params: ClearOptsId<Object>): this;
 	off(p) {
 		if (p == null) {
-			return this.clearAllAsync({name: 'eventListener', clearFn: Async.removeEventListener});
+			return this.clearAllAsync({name: 'eventListener', clearFn: this.eventListenerDestructor});
 		}
 
 		return this.clearAsync({
 			...p,
 			name: 'eventListener',
-			id: p.id || Async.getIfEvent(p),
-			clearFn: Async.removeEventListener
+			id: p.id || this.getIfEvent(p),
+			clearFn: this.eventListenerDestructor
 		});
 	}
 
