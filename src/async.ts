@@ -991,7 +991,8 @@ export default class Async<CTX extends Object> {
 	 * @param emitter - источник событий
 	 * @param events - событие или массив событий (можно также указывать несколько событий через пробел)
 	 * @param handler - обработчик события
-	 * @param [params] - дополнительные параметры операции:
+	 * @param params - параметры операции:
+	 *   *) [options] - дополнительные параметры для addEventListener
 	 *   *) [join] - если true, то смежные операции (с одинаковой меткой) будут объединены с первой
 	 *   *) [label] - метка операции (предыдущие операции с этой меткой будут отменены)
 	 *   *) [group] - группа операции
@@ -1004,7 +1005,7 @@ export default class Async<CTX extends Object> {
 		emitter: T & EventEmitterLike,
 		events: string | string[],
 		handler: Function,
-		params?: AsyncCbOptsSingle,
+		params: AsyncCbOptsSingle & {options?: AddEventListenerOptions},
 		...args: any[]
 	): Object;
 
@@ -1016,6 +1017,12 @@ export default class Async<CTX extends Object> {
 
 		p = p || {};
 		events = Object.isArray(events) ? events : events.split(/\s+/);
+
+		if (p.options) {
+			p.single = p.options.once = 'single' in p ? p.single : p.options.once;
+			p.options = undefined;
+			args.unshift(p.options);
+		}
 
 		const
 			links: any[] = [];
@@ -1070,6 +1077,7 @@ export default class Async<CTX extends Object> {
 	 * @param events - событие или массив событий (можно также указывать несколько событий через пробел)
 	 * @param handler - обработчик события
 	 * @param params - параметры операции:
+	 *   *) [options] - дополнительные параметры для addEventListener
 	 *   *) [join] - если true, то смежные операции (с одинаковой меткой) будут объединены с первой
 	 *   *) [label] - метка операции (предыдущие операции с этой меткой будут отменены)
 	 *   *) [group] - группа операции
@@ -1081,7 +1089,7 @@ export default class Async<CTX extends Object> {
 		emitter: T & EventEmitterLike,
 		events: string | string[],
 		handler: Function,
-		params: AsyncCbOpts,
+		params: AsyncCbOpts & {options?: AddEventListenerOptions},
 		...args: any[]
 	): Object;
 
@@ -1100,6 +1108,7 @@ export default class Async<CTX extends Object> {
 	 * @param emitter - источник событий
 	 * @param events - событие или массив событий (можно также указывать несколько событий через пробел)
 	 * @param params - параметры операции:
+	 *   *) [options] - дополнительные параметры для addEventListener
 	 *   *) [join] - если true, то смежные операции (с одинаковой меткой) будут объединены с первой,
 	 *        а если replace, то с последней
 	 *
@@ -1111,7 +1120,7 @@ export default class Async<CTX extends Object> {
 	promisifyOnce<T>(
 		emitter: T & EventEmitterLike,
 		events: string | string[],
-		params: AsyncOpts,
+		params: AsyncOpts & {options?: AddEventListenerOptions},
 		...args: any[]
 	): Promise<any>;
 
@@ -1165,7 +1174,14 @@ export default class Async<CTX extends Object> {
 	 * Добавляет Drag&Drop обработчики на заданный элемент
 	 *
 	 * @param el
+	 * @param [useCapture]
+	 */
+	dnd(el: Element, useCapture?: boolean): string | symbol;
+
+	/**
+	 * @param el
 	 * @param params - параметры операции:
+	 *   *) [options] - дополнительные параметры для addEventListener
 	 *   *) [join] - если true, то смежные операции (с одинаковой меткой) будут объединены с первой
 	 *   *) [label] - метка операции (предыдущие операции с этой меткой будут отменены)
 	 *   *) [group] - группа операции
@@ -1173,22 +1189,25 @@ export default class Async<CTX extends Object> {
 	 *   *) [onDragStart]
 	 *   *) [onDrag]
 	 *   *) [onDragEnd]
-	 *
-	 * @param [useCapture]
 	 */
-	dnd(
-		el: Element,
-		params: AsyncCbOpts & {
-			onDragStart?: NodeEventCb | NodeEventOpts,
-			onDrag?: NodeEventCb | NodeEventOpts,
-			onDragEnd?: NodeEventCb | NodeEventOpts
-		},
+	dnd(el: Element, params: AsyncCbOpts & {
+		options?: AddEventListenerOptions;
+		onDragStart?: NodeEventCb | NodeEventOpts;
+		onDrag?: NodeEventCb | NodeEventOpts;
+		onDragEnd?: NodeEventCb | NodeEventOpts;
+	}): string | symbol;
 
-		useCapture?: boolean
+	dnd(el, p) {
+		let
+			useCapture;
 
-	): string | symbol {
-		const
-			p = params;
+		if (Object.isObject(p)) {
+			useCapture = p.options && p.options.capture;
+
+		} else {
+			useCapture = p;
+			p = {};
+		}
 
 		p.group = p.group || `dnd.${Math.random()}`;
 		p.onClear = (<Function[]>[]).concat(p.onClear || []);
