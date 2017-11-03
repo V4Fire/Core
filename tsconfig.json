@@ -2,8 +2,10 @@
   "compilerOptions": {
     "target": "es5",
     "baseUrl": "./src",
+    "downlevelIteration": true,
     "lib": ["dom", "esnext"],
     "strictNullChecks": true,
-    "strictFunctionTypes": true
+    "strictFunctionTypes": true,
+    "typeRoots": ["node_modules", "node_modules/@types"]
   }
 }
