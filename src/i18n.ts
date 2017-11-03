@@ -6,12 +6,10 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import $C = require('collection.js');
 import config from 'config';
 import { GLOBAL, IS_NODE } from './const/links';
 import * as baseLangs from 'lang';
-
-const
-	$C = require('collection.js');
 
 const
 	ws = /[\r\n]+/g;
@@ -56,7 +54,7 @@ if (IS_NODE) {
 }
 
 const
-	{format} = Date.prototype;
+	{format: sugarFormat} = Date.prototype;
 
 /**
  * Date.format wrapper
@@ -65,14 +63,14 @@ const
  * @param value
  * @param [locale]
  */
-Date.prototype.format = function (value: string, locale?: string) {
+Date.prototype.format = function format(value: string, locale?: string): string {
 	const aliases = {
 		humanTimeDate: '{HH}:{mm} {humanDate}',
 		humanDate: lang === 'ru' ? '{dd}.{MM}.{yyyy}' : '{MM}.{dd}.{yyyy}'
 	};
 
 	const replace = (str) => str.replace(/{(humanTimeDate|humanDate)}/g, (str, $1) => replace(aliases[$1]));
-	return format.call(this, replace(value), locale || lang);
+	return sugarFormat.call(this, replace(value), locale || lang);
 };
 
 /**
@@ -81,7 +79,7 @@ Date.prototype.format = function (value: string, locale?: string) {
  * @param [value]
  * @param [def] - if true, then the language is system default
  */
-export function setLang(value: string, def?: boolean) {
+export function setLang(value: string, def?: boolean): string {
 	lang = value;
 	isLangDef = Boolean(def);
 
@@ -99,7 +97,7 @@ export function setLang(value: string, def?: boolean) {
 /**
  * Global i18n function (string tag)
  */
-GLOBAL.i18n = GLOBAL.t = function (strings: any | string[], ...exprs: any[]): string {
+GLOBAL.i18n = GLOBAL.t = function t(strings: any | string[], ...exprs: any[]): string {
 	if (strings == null) {
 		return '';
 	}
@@ -126,7 +124,7 @@ GLOBAL.i18n = GLOBAL.t = function (strings: any | string[], ...exprs: any[]): st
 /**
  * Global i18n helper function (string tag)
  */
-GLOBAL.l = function (strings: any | string[], ...exprs: any[]): string {
+GLOBAL.l = function l(strings: any | string[], ...exprs: any[]): string {
 	if (strings == null) {
 		return '';
 	}

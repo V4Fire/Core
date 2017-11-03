@@ -6,10 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import $C = require('collection.js');
 import { lang } from './i18n';
-
-const
-	$C = require('collection.js');
 
 /**
  * Returns a value without translation instead the standard i18n behaviour
@@ -83,6 +81,8 @@ export function normalizeIfDate(value: any, params?: DateCreateOptions): Date | 
  * @param [params] - additional parameters for Date.create
  */
 export function normalizeIfDate(value: any[], params?: DateCreateOptions): Date[];
+
+// tslint:disable-next-line
 export function normalizeIfDate(value, params) {
 	if (Object.isArray(value)) {
 		return $C(value).map((date) => Date.create(date, params));

@@ -9,6 +9,6 @@
 /**
  * Returns a list of week days
  */
-Date.getWeekDays = function (): string[] {
+Date.getWeekDays = function getWeekDays(): string[] {
 	return [t`Mn`, t`Ts`, t`Wd`, t`Th`, t`Fr`, t`St`, t`Sn`];
 };

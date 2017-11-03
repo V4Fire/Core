@@ -29,7 +29,7 @@ try {
 	let timer;
 
 	/** @override */
-	String.prototype.camelize = function (upper?: boolean) {
+	String.prototype.camelize = function (this: string, upper?: boolean): string {
 		if (this in camelizeCache) {
 			return camelizeCache[this];
 		}
@@ -46,7 +46,7 @@ try {
 	};
 
 	/** @override */
-	String.prototype.dasherize = function () {
+	String.prototype.dasherize = function (this: string): string {
 		if (this in dasherizeCache) {
 			return dasherizeCache[this];
 		}
@@ -63,7 +63,7 @@ try {
 	};
 
 	/** @override */
-	String.prototype.underscore = function () {
+	String.prototype.underscore = function (this: string): string {
 		if (this in underscoreCache) {
 			return underscoreCache[this];
 		}

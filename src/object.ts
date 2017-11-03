@@ -6,11 +6,9 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import $C = require('collection.js');
+import toSource = require('tosource');
 import { convertIfDate } from './json';
-
-const
-	$C = require('collection.js'),
-	toSource = require('tosource');
 
 /** @see {$C.extend} */
 Object.mixin = $C.extend;
@@ -20,7 +18,7 @@ Object.mixin = $C.extend;
  */
 Object.defineProperty(Object.prototype, 'toSource', {
 	enumerable: false,
-	value(): string {
+	value(this: Object): string {
 		return toSource(this);
 	}
 });
@@ -29,7 +27,7 @@ Object.defineProperty(Object.prototype, 'toSource', {
  * Parses the specified value as a JSON / JS object and returns the result
  * @param value
  */
-Object.parse = function (value: any): any {
+Object.parse = function parse(value: any): any {
 	try {
 		return new Function(`return ${value}`)();
 	} catch (_) {}
@@ -45,7 +43,7 @@ Object.parse = function (value: any): any {
  *   *) [replacer] - JSON.stringify replacer
  *   *) [reviver] - JSON.parse reviver
  */
-Object.fastClone = function <T extends Object>(obj: T, params?: {replacer?: JSONCb, reviver?: JSONCb}): T {
+Object.fastClone = function fastClone<T extends Object>(obj: T, params?: {replacer?: JSONCb; reviver?: JSONCb}): T {
 	const
 		p = params || {};
 
@@ -65,7 +63,7 @@ Object.fastClone = function <T extends Object>(obj: T, params?: {replacer?: JSON
  * @param a
  * @param b
  */
-Object.fastCompare = function <T>(a: any, b: T): a is T {
+Object.fastCompare = function fastCompare<T>(a: any, b: T): a is T {
 	if (a === b) {
 		return true;
 	}
@@ -89,7 +87,7 @@ Object.fastCompare = function <T>(a: any, b: T): a is T {
  * Creates an object {key: value, value: key} from the specified
  * @param obj
  */
-Object.createMap = function <T extends Object>(obj: T): T & Record<string, any> {
+Object.createMap = function createMap<T extends Object>(obj: T): T & Record<string, any> {
 	const
 		map = {};
 
@@ -121,7 +119,7 @@ Object.createMap = function <T extends Object>(obj: T): T & Record<string, any> 
  * Creates an object from the specified array
  * @param arr
  */
-Object.fromArray = function (arr: any[]): Record<string, boolean> {
+Object.fromArray = function fromArray(arr: any[]): Record<string, boolean> {
 	const
 		map = {};
 
@@ -136,6 +134,6 @@ Object.fromArray = function (arr: any[]): Record<string, boolean> {
  * Returns true if the specified object is a hash table
  * @param obj
  */
-Object.isTable = function (obj: any): obj is Record<string, any> {
+Object.isTable = function isTable(obj: any): obj is Record<string, any> {
 	return {}.toString.call(obj) === '[object Object]';
 };

@@ -1,4 +1,6 @@
-/// <reference types="node" />
+/* tslint:disable:max-file-line-count */
+
+/// <reference types="node"/>
 import $C = require('collection.js');
 
 export interface AsyncLink {
@@ -89,16 +91,6 @@ export interface NodeEventOpts {
  */
 export default class Async<CTX extends Object> {
 	/**
-	 * Объект кеша для операций
-	 */
-	protected cache: Record<string, CacheObject>;
-
-	/**
-	 * Контекст для функция
-	 */
-	protected context: CTX | undefined;
-
-	/**
 	 * @param [ctx] - контекст для функций
 	 */
 	constructor(ctx?: CTX) {
@@ -107,345 +99,14 @@ export default class Async<CTX extends Object> {
 	}
 
 	/**
-	 * Возвращает заданное значение если оно является событием
-	 * @param value
+	 * Объект кеша для операций
 	 */
-	protected getIfEvent(value: any & {event?: string}): Function | undefined {
-		return Object.isObject(value) && Object.isString(value.event) ? value : undefined;
-	}
+	protected cache: Record<string, CacheObject>;
 
 	/**
-	 * Возвращает заданное значение если оно не является объектом
-	 * @param value
+	 * Контекст для функция
 	 */
-	protected getIfNotObject(value: any): Function | undefined {
-		return Object.isObject(value) ? undefined : value;
-	}
-
-	/**
-	 * Возвращает true если заданное значение является промисом
-	 * @param value
-	 */
-	protected isPromiseLike(value: any): value is PromiseLike<any> {
-		return Boolean(
-			value && (value instanceof Promise || Object.isFunction(value.then) && Object.isFunction(value.catch))
-		);
-	}
-
-	/**
-	 * Удаляет обработчик события для заданного источника
-	 *
-	 * @param params - параметры:
-	 *   *) emitter - источник событий
-	 *   *) event - событие
-	 *   *) handler - функция обработчик
-	 *   *) args - дополнительные аргументы для emitter
-	 */
-	protected eventListenerDestructor<T>(params: {
-		emitter: T & EventEmitterLike,
-		event: string,
-		handler: Function,
-		args: any[]
-	}): void {
-		const
-			e = params.emitter,
-			fn = e.removeEventListener || e.removeListener || e.off;
-
-		if (fn && Object.isFunction(fn)) {
-			fn.call(e, params.event, params.handler, ...params.args);
-
-		} else {
-			throw new ReferenceError('Remove event listener function for the event emitter is not defined');
-		}
-	}
-
-	/**
-	 * Уничтожает заданный поток
-	 * @param worker
-	 */
-	protected workerDestructor<T>(worker: T & WorkerLike): void {
-		const
-			fn = worker.terminate || worker.destroy || worker.close;
-
-		if (fn && Object.isFunction(fn)) {
-			fn.call(worker);
-
-		} else {
-			throw new ReferenceError('Destructor function for the worker is not defined');
-		}
-	}
-
-	/**
-	 * Отменяет заданный запрос
-	 *
-	 * @param request
-	 * @param ctx - объект контекста
-	 */
-	protected requestDestructor(request: RequestLike<any>, ctx: AsyncCtx): void {
-		const
-			fn = request.abort;
-
-		if (fn && Object.isFunction(fn)) {
-			fn.call(request, ctx.join === 'replace' ? ctx.replacedBy && ctx.replacedBy.id : undefined);
-
-		} else {
-			throw new ReferenceError('Abort function for the request is not defined');
-		}
-	}
-
-	/**
-	 * Фабрика для функций очистки промисов
-	 *
-	 * @param resolve
-	 * @param reject
-	 */
-	protected onPromiseClear(resolve: Function, reject: Function): Function {
-		return (obj) => {
-			const
-				{replacedBy} = obj;
-
-			if (replacedBy && obj.join === 'replace' && obj.link.onClear.length < 25) {
-				replacedBy.onComplete.push([resolve, reject]);
-
-				const
-					onClear = (<Function[]>[]).concat(obj.link.onClear, reject);
-
-				for (let i = 0; i < onClear.length; i++) {
-					replacedBy.onClear.push(onClear[i]);
-				}
-
-			} else {
-				reject(obj);
-			}
-		};
-	}
-
-	/**
-	 * Возвращает объект кеша по заданному имени
-	 * @param name
-	 */
-	protected initCache(name: string): CacheObject {
-		return this.cache[name] = this.cache[name] || {
-			root: {
-				labels: Object.create(null),
-				links: new Map()
-			},
-
-			groups: Object.create(null)
-		};
-	}
-
-	/**
-	 * Инициализирует обработчик
-	 * @param p
-	 */
-	protected setAsync(p): any {
-		const
-			baseCache = this.initCache(p.name);
-
-		let cache;
-		if (p.group) {
-			baseCache.groups[p.group] = baseCache.groups[p.group] || {
-				labels: Object.create(null),
-				links: new Map()
-			};
-
-			cache = baseCache.groups[p.group];
-
-		} else {
-			cache = baseCache.root;
-		}
-
-		const
-			{labels, links} = cache,
-			labelCache = labels[p.label];
-
-		if (labelCache && p.join === true) {
-			return labelCache;
-		}
-
-		const
-			that = this,
-			ctx = this.context;
-
-		let
-			id,
-			finalObj,
-			wrappedObj = id = finalObj = p.needCall && Object.isFunction(p.obj) ? p.obj.call(ctx || this) : p.obj;
-
-		if (!p.interval || Object.isFunction(wrappedObj)) {
-			wrappedObj = function () {
-				const
-					link = links.get(id),
-					fnCtx = ctx || this;
-
-				if (!link) {
-					return;
-				}
-
-				if (!p.interval) {
-					links.delete(id);
-					labels[p.label] = undefined;
-				}
-
-				const execTasks = (i = 0) => function () {
-					const
-						fns = link.onComplete;
-
-					if (fns) {
-						for (let j = 0; j < fns.length; j++) {
-							const fn = fns[j];
-							(fn[i] || fn).apply(fnCtx, arguments);
-						}
-					}
-				};
-
-				let res = finalObj;
-				if (Object.isFunction(finalObj)) {
-					res = finalObj.apply(fnCtx, arguments);
-				}
-
-				if (that.isPromiseLike(finalObj)) {
-					finalObj.then(execTasks(), execTasks(1));
-
-				} else {
-					execTasks().apply(null, arguments);
-				}
-
-				return res;
-			};
-		}
-
-		if (p.wrapper) {
-			const
-				link = p.wrapper.apply(null, [wrappedObj].concat(p.needCall ? id : [], p.args));
-
-			if (p.linkByWrapper) {
-				id = link;
-			}
-		}
-
-		const link = {
-			id,
-			obj: p.obj,
-			objName: p.obj.name,
-			label: p.label,
-			onComplete: [],
-			onClear: [].concat(p.onClear || [])
-		};
-
-		if (labelCache) {
-			this.clearAsync({...p, replacedBy: link});
-		}
-
-		links.set(id, link);
-
-		if (p.label) {
-			labels[p.label] = id;
-		}
-
-		return id;
-	}
-
-	/**
-	 * Отменяет заданные обработчики
-	 * @param p
-	 */
-	protected clearAsync(p): this {
-		const
-			baseCache = this.initCache(p.name);
-
-		let cache;
-		if (p.group) {
-			if (Object.isRegExp(p.group)) {
-				$C(baseCache.groups).forEach((g) => {
-					if (p.group.test(g)) {
-						this.clearAsync({...p, group: g});
-					}
-				});
-
-				return this;
-			}
-
-			if (!baseCache.groups[p.group]) {
-				return this;
-			}
-
-			cache = baseCache.groups[p.group];
-
-		} else {
-			cache = baseCache.root;
-		}
-
-		const
-			{labels, links} = cache;
-
-		if (p.label) {
-			const
-				tmp = labels[p.label];
-
-			if (p.id != null && p.id !== tmp) {
-				return this;
-			}
-
-			p.id = tmp;
-		}
-
-		if (p.id != null) {
-			const
-				link = links.get(p.id);
-
-			if (link) {
-				links.delete(link.id);
-				labels[link.label] = undefined;
-
-				const ctx = {
-					...p,
-					link,
-					type: 'clearAsync'
-				};
-
-				const
-					clearHandlers = link.onClear;
-
-				for (let i = 0; i < clearHandlers.length; i++) {
-					clearHandlers[i].call(this.context || this, ctx);
-				}
-
-				if (p.clearFn) {
-					p.clearFn.call(null, link.id, ctx);
-				}
-			}
-
-		} else {
-			const
-				values = links.values();
-
-			for (let el = values.next(); !el.done; el = values.next()) {
-				this.clearAsync({...p, id: el.value.id});
-			}
-		}
-
-		return this;
-	}
-
-	/**
-	 * Отменяет все асинхронные обработчики по заданным параметрам
-	 * @param p
-	 */
-	protected clearAllAsync(p): this {
-		this.clearAsync.apply(this, arguments);
-
-		const
-			obj = this.initCache(p.name).groups,
-			keys = Object.keys(obj);
-
-		for (let i = 0; i < keys.length; i++) {
-			this.clearAsync({...p, group: keys[i]});
-		}
-
-		return this;
-	}
+	protected context: CTX | undefined;
 
 	/**
 	 * Обертка для setImmediate
@@ -481,7 +142,9 @@ export default class Async<CTX extends Object> {
 	 *   *) [group] - группа операции
 	 */
 	clearImmediate(params: ClearOptsId<number | NodeJS.Timer>): this;
-	clearImmediate(p): this {
+
+	// tslint:disable-next-line
+	clearImmediate(p) {
 		if (p === undefined) {
 			return this.clearAllAsync({name: 'immediate', clearFn: clearImmediate});
 		}
@@ -531,7 +194,9 @@ export default class Async<CTX extends Object> {
 	 *   *) [group] - группа операции
 	 */
 	clearInterval(params: ClearOptsId<number | NodeJS.Timer>): this;
-	clearInterval(p): this {
+
+	// tslint:disable-next-line
+	clearInterval(p) {
 		if (p === undefined) {
 			return this.clearAllAsync({name: 'interval', clearFn: clearInterval});
 		}
@@ -580,7 +245,9 @@ export default class Async<CTX extends Object> {
 	 *   *) [group] - группа операции
 	 */
 	clearTimeout(params: ClearOptsId<number | NodeJS.Timer>): this;
-	clearTimeout(p): this {
+
+	// tslint:disable-next-line
+	clearTimeout(p) {
 		if (p === undefined) {
 			return this.clearAllAsync({name: 'timeout', clearFn: clearTimeout});
 		}
@@ -605,15 +272,17 @@ export default class Async<CTX extends Object> {
 	 * Обертка для requestAnimationFrame
 	 *
 	 * @param fn - функция обратного вызова
-	 * @param [params] - дополнительные параметры операции:
+	 * @param params - параметры операции:
 	 *   *) [element] - ссылка на анимируемый элемент
 	 *   *) [join] - если true, то смежные операции (с одинаковой меткой) будут объединены с первой
 	 *   *) [label] - метка операции (предыдущие операции с этой меткой будут отменены)
 	 *   *) [group] - группа операции
 	 *   *) [onClear] - обработчик события clearAsync
 	 */
-	requestAnimationFrame(fn: (timeStamp: number) => void, params?: AsyncCbOpts & {element?: Element}): number;
-	requestAnimationFrame(fn: Function, p) {
+	requestAnimationFrame(fn: (timeStamp: number) => void, params: AsyncCbOpts & {element?: Element}): number;
+
+	// tslint:disable-next-line
+	requestAnimationFrame(fn, p) {
 		return this.setAsync({
 			...Object.isObject(p) ? p : undefined,
 			name: 'animationFrame',
@@ -638,7 +307,9 @@ export default class Async<CTX extends Object> {
 	 *   *) [group] - группа операции
 	 */
 	cancelAnimationFrame(params: ClearOptsId<number>): this;
-	cancelAnimationFrame(p): this {
+
+	// tslint:disable-next-line
+	cancelAnimationFrame(p) {
 		if (p === undefined) {
 			return this.clearAllAsync({name: 'animationFrame', clearFn: cancelAnimationFrame});
 		}
@@ -690,7 +361,9 @@ export default class Async<CTX extends Object> {
 	 *   *) [group] - группа операции
 	 */
 	cancelIdleCallback(params: ClearOptsId<number | NodeJS.Timer>): this;
-	cancelIdleCallback(p): this {
+
+	// tslint:disable-next-line
+	cancelIdleCallback(p) {
 		if (p === undefined) {
 			return this.clearAllAsync({name: 'idleCallback', clearFn: cancelIdleCallback});
 		}
@@ -721,7 +394,7 @@ export default class Async<CTX extends Object> {
 			clearFn: this.workerDestructor,
 			interval: true
 		});
-	};
+	}
 
 	/**
 	 * Уничтожает заданный поток
@@ -736,7 +409,9 @@ export default class Async<CTX extends Object> {
 	 *   *) [group] - группа операции
 	 */
 	terminateWorker<T>(params: ClearOptsId<T & WorkerLike>): this;
-	terminateWorker(p): this {
+
+	// tslint:disable-next-line
+	terminateWorker(p) {
 		if (p === undefined) {
 			return this.clearAllAsync({name: 'worker', clearFn: this.workerDestructor});
 		}
@@ -769,7 +444,7 @@ export default class Async<CTX extends Object> {
 			wrapper: (fn, req) => req.then(fn, fn),
 			needCall: true
 		});
-	};
+	}
 
 	/**
 	 * Отменяет заданный удаленный запрос
@@ -784,7 +459,9 @@ export default class Async<CTX extends Object> {
 	 *   *) [group] - группа операции
 	 */
 	cancelRequest<T>(params: ClearOptsId<T & WorkerLike>): this;
-	cancelRequest(p): this {
+
+	// tslint:disable-next-line
+	cancelRequest(p) {
 		if (p === undefined) {
 			return this.clearAllAsync({name: 'request', clearFn: this.requestDestructor});
 		}
@@ -815,7 +492,7 @@ export default class Async<CTX extends Object> {
 			wrapper: (fn) => fn,
 			linkByWrapper: true
 		});
-	};
+	}
 
 	/**
 	 * Отменяет выполнение заданной callback функции
@@ -830,7 +507,9 @@ export default class Async<CTX extends Object> {
 	 *   *) [group] - группа операции
 	 */
 	cancelProxy<T>(params: ClearOptsId<Function>): this;
-	cancelProxy(p): this {
+
+	// tslint:disable-next-line
+	cancelProxy(p) {
 		if (p === undefined) {
 			return this.clearAllAsync({name: 'proxy'});
 		}
@@ -938,7 +617,9 @@ export default class Async<CTX extends Object> {
 	 *   *) [group] - группа операции
 	 *   *) [onClear] - обработчик события clearAsync
 	 */
-	animationFrame(params?: AsyncCbOpts & {element?: Element}): Promise<number>;
+	animationFrame(params: AsyncCbOpts & {element?: Element}): Promise<number>;
+
+	// tslint:disable-next-line
 	animationFrame(p) {
 		return new Promise((resolve, reject) => {
 			this.requestAnimationFrame(resolve, {
@@ -961,6 +642,7 @@ export default class Async<CTX extends Object> {
 	 *   *) [group] - группа операции
 	 */
 	wait(fn: Function, params?: AsyncOpts): Promise<void> {
+		const DELAY = 15;
 		return new Promise((resolve, reject) => {
 			let id;
 			const cb = () => {
@@ -970,7 +652,7 @@ export default class Async<CTX extends Object> {
 				}
 			};
 
-			id = this.setInterval(cb, 15, {
+			id = this.setInterval(cb, DELAY, {
 				...params,
 				onClear: this.onPromiseClear(resolve, reject)
 			});
@@ -1009,6 +691,7 @@ export default class Async<CTX extends Object> {
 		...args: any[]
 	): Object;
 
+	// tslint:disable-next-line
 	on(emitter, events, handler, p, ...args) {
 		if (p !== undefined && !Object.isObject(p)) {
 			args.unshift(p);
@@ -1033,10 +716,10 @@ export default class Async<CTX extends Object> {
 				...p,
 				name: 'eventListener',
 				obj: handler,
-				wrapper() {
+				wrapper(): any {
 					if (p.single && !emitter.once) {
 						const baseHandler = handler;
-						handler = function () {
+						handler = function (this: any): any {
 							that.eventListenerDestructor({emitter, event, handler, args});
 							return baseHandler.apply(this, arguments);
 						};
@@ -1101,6 +784,7 @@ export default class Async<CTX extends Object> {
 		...args: any[]
 	): Object;
 
+	// tslint:disable-next-line
 	once(emitter, events, handler, p, ...args) {
 		if (p !== undefined && !Object.isObject(p)) {
 			args.unshift(p);
@@ -1138,6 +822,8 @@ export default class Async<CTX extends Object> {
 	 * @param [args] - дополнительные аргументы для emitter
 	 */
 	promisifyOnce<T>(emitter: T & EventEmitterLike, events: string | string[], ...args: any[]): Promise<any>;
+
+	// tslint:disable-next-line
 	promisifyOnce(emitter, events, p, ...args) {
 		if (p !== undefined && !Object.isObject(p)) {
 			args.unshift(p);
@@ -1150,7 +836,7 @@ export default class Async<CTX extends Object> {
 				onClear: this.onPromiseClear(resolve, reject)
 			}, ...args);
 		});
-	};
+	}
 
 	/**
 	 * Обертка для удаления обработчика событий
@@ -1165,6 +851,8 @@ export default class Async<CTX extends Object> {
 	 *   *) [group] - группа операции
 	 */
 	off(params: ClearOptsId<Object>): this;
+
+	// tslint:disable-next-line
 	off(p) {
 		if (p === undefined) {
 			return this.clearAllAsync({name: 'eventListener', clearFn: this.eventListenerDestructor});
@@ -1205,6 +893,7 @@ export default class Async<CTX extends Object> {
 		onDragEnd?: NodeEventCb | NodeEventOpts;
 	}): string | symbol;
 
+	// tslint:disable-next-line
 	dnd(el, p) {
 		let
 			useCapture;
@@ -1220,17 +909,17 @@ export default class Async<CTX extends Object> {
 		p.group = p.group || `dnd.${Math.random()}`;
 		p.onClear = (<Function[]>[]).concat(p.onClear || []);
 
-		function dragStartClear(...args) {
+		const dragStartClear = (...args) => {
 			$C(p.onClear).forEach((fn) => fn.call(this, ...args, 'dragstart'));
-		}
+		};
 
-		function dragClear(...args) {
+		const dragClear = (...args) => {
 			$C(p.onClear).forEach((fn) => fn.call(this, ...args, 'drag'));
-		}
+		};
 
-		function dragEndClear(...args) {
+		const dragEndClear = (...args) => {
 			$C(p.onClear).forEach((fn) => fn.call(this, ...args, 'dragend'));
-		}
+		};
 
 		const dragStartUseCapture = Boolean(
 			p.onDragStart && Object.isBoolean((<any>p.onDragStart).capture) ?
@@ -1251,7 +940,7 @@ export default class Async<CTX extends Object> {
 			that = this,
 			opts = {join: p.join, label: p.label, group: p.group};
 
-		function dragStart(e) {
+		function dragStart(e: Event): void {
 			e.preventDefault();
 
 			let res;
@@ -1318,6 +1007,348 @@ export default class Async<CTX extends Object> {
 			.cancelRequest(p)
 			.terminateWorker(p)
 			.cancelProxy(p);
+
+		return this;
+	}
+
+	/**
+	 * Возвращает заданное значение если оно является событием
+	 * @param value
+	 */
+	protected getIfEvent(value: any & {event?: string}): Function | undefined {
+		return Object.isObject(value) && Object.isString(value.event) ? value : undefined;
+	}
+
+	/**
+	 * Возвращает заданное значение если оно не является объектом
+	 * @param value
+	 */
+	protected getIfNotObject(value: any): Function | undefined {
+		return Object.isObject(value) ? undefined : value;
+	}
+
+	/**
+	 * Возвращает true если заданное значение является промисом
+	 * @param value
+	 */
+	protected isPromiseLike(value: any): value is PromiseLike<any> {
+		return Boolean(
+			value && (value instanceof Promise || Object.isFunction(value.then) && Object.isFunction(value.catch))
+		);
+	}
+
+	/**
+	 * Удаляет обработчик события для заданного источника
+	 *
+	 * @param params - параметры:
+	 *   *) emitter - источник событий
+	 *   *) event - событие
+	 *   *) handler - функция обработчик
+	 *   *) args - дополнительные аргументы для emitter
+	 */
+	protected eventListenerDestructor<T>(params: {
+		emitter: T & EventEmitterLike;
+		event: string;
+		handler: Function;
+		args: any[];
+	}): void {
+		const
+			e = params.emitter,
+			fn = e.removeEventListener || e.removeListener || e.off;
+
+		if (fn && Object.isFunction(fn)) {
+			fn.call(e, params.event, params.handler, ...params.args);
+
+		} else {
+			throw new ReferenceError('Remove event listener function for the event emitter is not defined');
+		}
+	}
+
+	/**
+	 * Уничтожает заданный поток
+	 * @param worker
+	 */
+	protected workerDestructor<T>(worker: T & WorkerLike): void {
+		const
+			fn = worker.terminate || worker.destroy || worker.close;
+
+		if (fn && Object.isFunction(fn)) {
+			fn.call(worker);
+
+		} else {
+			throw new ReferenceError('Destructor function for the worker is not defined');
+		}
+	}
+
+	/**
+	 * Отменяет заданный запрос
+	 *
+	 * @param request
+	 * @param ctx - объект контекста
+	 */
+	protected requestDestructor(request: RequestLike<any>, ctx: AsyncCtx): void {
+		const
+			fn = request.abort;
+
+		if (fn && Object.isFunction(fn)) {
+			fn.call(request, ctx.join === 'replace' ? ctx.replacedBy && ctx.replacedBy.id : undefined);
+
+		} else {
+			throw new ReferenceError('Abort function for the request is not defined');
+		}
+	}
+
+	/**
+	 * Фабрика для функций очистки промисов
+	 *
+	 * @param resolve
+	 * @param reject
+	 */
+	protected onPromiseClear(resolve: Function, reject: Function): Function {
+		const MAX_PROMISE_DEPTH = 25;
+		return (obj) => {
+			const
+				{replacedBy} = obj;
+
+			if (replacedBy && obj.join === 'replace' && obj.link.onClear.length < MAX_PROMISE_DEPTH) {
+				replacedBy.onComplete.push([resolve, reject]);
+
+				const
+					onClear = (<Function[]>[]).concat(obj.link.onClear, reject);
+
+				for (let i = 0; i < onClear.length; i++) {
+					replacedBy.onClear.push(onClear[i]);
+				}
+
+			} else {
+				reject(obj);
+			}
+		};
+	}
+
+	/**
+	 * Возвращает объект кеша по заданному имени
+	 * @param name
+	 */
+	protected initCache(name: string): CacheObject {
+		return this.cache[name] = this.cache[name] || {
+			root: {
+				labels: Object.create(null),
+				links: new Map()
+			},
+
+			groups: Object.create(null)
+		};
+	}
+
+	/**
+	 * Инициализирует обработчик
+	 * @param p
+	 */
+	protected setAsync(p: any): any {
+		const
+			baseCache = this.initCache(p.name);
+
+		let cache;
+		if (p.group) {
+			baseCache.groups[p.group] = baseCache.groups[p.group] || {
+				labels: Object.create(null),
+				links: new Map()
+			};
+
+			cache = baseCache.groups[p.group];
+
+		} else {
+			cache = baseCache.root;
+		}
+
+		const
+			{labels, links} = cache,
+			labelCache = labels[p.label];
+
+		if (labelCache && p.join === true) {
+			return labelCache;
+		}
+
+		const
+			that = this,
+			ctx = this.context;
+
+		let
+			id,
+			finalObj,
+			wrappedObj = id = finalObj = p.needCall && Object.isFunction(p.obj) ? p.obj.call(ctx || this) : p.obj;
+
+		if (!p.interval || Object.isFunction(wrappedObj)) {
+			wrappedObj = function (this: any): any {
+				const
+					link = links.get(id),
+					fnCtx = ctx || this;
+
+				if (!link) {
+					return;
+				}
+
+				if (!p.interval) {
+					links.delete(id);
+					labels[p.label] = undefined;
+				}
+
+				const execTasks = (i = 0) => (...args) => {
+					const
+						fns = link.onComplete;
+
+					if (fns) {
+						for (let j = 0; j < fns.length; j++) {
+							const fn = fns[j];
+							(fn[i] || fn).apply(fnCtx, args);
+						}
+					}
+				};
+
+				let res = finalObj;
+				if (Object.isFunction(finalObj)) {
+					res = finalObj.apply(fnCtx, arguments);
+				}
+
+				if (that.isPromiseLike(finalObj)) {
+					finalObj.then(execTasks(), execTasks(1));
+
+				} else {
+					execTasks().apply(null, arguments);
+				}
+
+				return res;
+			};
+		}
+
+		if (p.wrapper) {
+			const
+				link = p.wrapper.apply(null, [wrappedObj].concat(p.needCall ? id : [], p.args));
+
+			if (p.linkByWrapper) {
+				id = link;
+			}
+		}
+
+		const link = {
+			id,
+			obj: p.obj,
+			objName: p.obj.name,
+			label: p.label,
+			onComplete: [],
+			onClear: [].concat(p.onClear || [])
+		};
+
+		if (labelCache) {
+			this.clearAsync({...p, replacedBy: link});
+		}
+
+		links.set(id, link);
+
+		if (p.label) {
+			labels[p.label] = id;
+		}
+
+		return id;
+	}
+
+	/**
+	 * Отменяет заданные обработчики
+	 * @param p
+	 */
+	protected clearAsync(p: any): this {
+		const
+			baseCache = this.initCache(p.name);
+
+		let cache;
+		if (p.group) {
+			if (Object.isRegExp(p.group)) {
+				$C(baseCache.groups).forEach((g) => {
+					if (p.group.test(g)) {
+						this.clearAsync({...p, group: g});
+					}
+				});
+
+				return this;
+			}
+
+			if (!baseCache.groups[p.group]) {
+				return this;
+			}
+
+			cache = baseCache.groups[p.group];
+
+		} else {
+			cache = baseCache.root;
+		}
+
+		const
+			{labels, links} = cache;
+
+		if (p.label) {
+			const
+				tmp = labels[p.label];
+
+			if (p.id != null && p.id !== tmp) {
+				return this;
+			}
+
+			p.id = tmp;
+		}
+
+		if (p.id != null) {
+			const
+				link = links.get(p.id);
+
+			if (link) {
+				links.delete(link.id);
+				labels[link.label] = undefined;
+
+				const ctx = {
+					...p,
+					link,
+					type: 'clearAsync'
+				};
+
+				const
+					clearHandlers = link.onClear;
+
+				for (let i = 0; i < clearHandlers.length; i++) {
+					clearHandlers[i].call(this.context || this, ctx);
+				}
+
+				if (p.clearFn) {
+					p.clearFn.call(null, link.id, ctx);
+				}
+			}
+
+		} else {
+			const
+				values = links.values();
+
+			for (let el = values.next(); !el.done; el = values.next()) {
+				this.clearAsync({...p, id: el.value.id});
+			}
+		}
+
+		return this;
+	}
+
+	/**
+	 * Отменяет все асинхронные обработчики по заданным параметрам
+	 * @param p
+	 */
+	protected clearAllAsync(p: any): this {
+		this.clearAsync.apply(this, arguments);
+
+		const
+			obj = this.initCache(p.name).groups,
+			keys = Object.keys(obj);
+
+		for (let i = 0; i < keys.length; i++) {
+			this.clearAsync({...p, group: keys[i]});
+		}
 
 		return this;
 	}

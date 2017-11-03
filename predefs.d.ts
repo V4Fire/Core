@@ -6,11 +6,11 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-/// <reference path="node_modules/collection.js/collection.d.ts"/>
-/// <reference path="node_modules/sugar/sugar-extended.d.ts"/>
+/// <reference types="collection.js"/>
+/// <reference types="sugar/sugar-extended"/>
 
 declare function Any(obj: any): any;
-declare function stderr(err: any);
+declare function stderr(err: any): void;
 declare function infinity<T>(): Iterable<T>;
 
 declare function i18n(strings: any | string[], ...expr: any[]): string;
@@ -45,8 +45,8 @@ interface ObjectConstructor {
 	fastClone<T extends Object>(
 		obj: T,
 		params?: {
-			replacer?: JSONCb,
-			reviver?: JSONCb
+			replacer?: JSONCb;
+			reviver?: JSONCb;
 		}
 	): T;
 

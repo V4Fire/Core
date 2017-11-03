@@ -6,8 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-const
-	$C = require('collection.js');
+import $C = require('collection.js');
 
 /**
  * Symbol generator
@@ -25,7 +24,7 @@ export default class Store {
 		}
 
 		return new Proxy(this, {
-			get(target, prop) {
+			get(target: Store, prop: string): symbol {
 				if (target[prop]) {
 					return target[prop];
 				}

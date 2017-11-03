@@ -12,14 +12,14 @@ import { GLOBAL } from './const/links';
  * Constructor for any types
  * @param obj
  */
-GLOBAL.Any = function (obj: any): any {
+GLOBAL.Any = function Any(obj: any): any {
 	return obj;
 };
 
 /**
  * Infinity iterator
  */
-GLOBAL.infinity = function *() {
+GLOBAL.infinity = function *infinity(): IterableIterator<true> {
 	while (true) {
 		yield true;
 	}
@@ -29,6 +29,6 @@ GLOBAL.infinity = function *() {
  * STDERR wrapper
  * @param err
  */
-GLOBAL.stderr = function (err: any) {
+GLOBAL.stderr = function stderr(err: any): void {
 	console.error(err);
 };
