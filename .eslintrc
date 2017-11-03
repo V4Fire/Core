@@ -4,12 +4,6 @@
     "sourceType": "module"
   },
 
-  "settings": {
-    "flowtype": {
-      "onlyFilesWithFlowAnnotation": false
-    }
-  },
-
   "rules": {
     /* [Flow] */
     "flowtype/space-after-type-colon": ["error", "always"],
