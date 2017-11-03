@@ -4,10 +4,6 @@
     "sourceType": "module"
   },
 
-  "plugins": [
-    "flowtype"
-  ],
-
   "settings": {
     "flowtype": {
       "onlyFilesWithFlowAnnotation": false
