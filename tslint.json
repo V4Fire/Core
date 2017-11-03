@@ -146,7 +146,7 @@
       "tags": {"content": {"see": ["#.*"]}, "exists": ["inheritdoc"]}
     }],
     "encoding": true,
-    "file-header": false,
+    "file-header": [true, "V4Fire"],
     "import-spacing": true,
     "interface-name": false,
     "interface-over-type-literal": true,

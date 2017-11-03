@@ -88,7 +88,7 @@
     "computed-property-spacing": ["error"],
     "consistent-this": ["error"],
     "eol-last": ["error"],
-    // "indent": ["error", "tab", {"SwitchCase": 1}],
+    "indent": ["error", "tab", {"SwitchCase": 1}],
     "key-spacing": ["error"],
     "keyword-spacing": ["error"],
     "linebreak-style": ["error"],
