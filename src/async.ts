@@ -1042,8 +1042,15 @@ export default class Async<CTX extends Object> {
 						};
 					}
 
-					const fn = p.single && emitter.once || emitter.addEventListener || emitter.addListener || emitter.on;
-					fn.call(emitter, event, handler, ...args);
+					const
+						fn = p.single && emitter.once || emitter.addEventListener || emitter.addListener || emitter.on;
+
+					if (Object.isFunction(fn)) {
+						fn.call(emitter, event, handler, ...args);
+
+					} else {
+						throw new ReferenceError('Add event listener function for the event emitter is not defined');
+					}
 
 					return {
 						event,
