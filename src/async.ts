@@ -1020,8 +1020,8 @@ export default class Async<CTX extends Object> {
 
 		if (p.options) {
 			p.single = p.options.once = 'single' in p ? p.single : p.options.once;
-			p.options = undefined;
 			args.unshift(p.options);
+			p.options = undefined;
 		}
 
 		const
