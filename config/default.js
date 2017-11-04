@@ -22,6 +22,9 @@ Object.assign(env, {
 	APP_NAME: env.APP_NAME || 'V4Fire'
 });
 
+global.include = require('../build/include')(process.cwd());
+global.isProd = env.NODE_ENV === 'production';
+
 const
 	src = path.join(__dirname, '../src');
 

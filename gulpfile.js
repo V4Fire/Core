@@ -9,16 +9,9 @@
  */
 
 require('./config/default');
-
-const
-	{env} = process;
-
 module.exports = function (gulp = require('gulp')) {
-	global.include = require('./build/include')(process.cwd());
-	global.isProd = env.NODE_ENV === 'production';
-
 	gulp.task('setProd', (cb) => {
-		env.NODE_ENV = 'production';
+		process.env.NODE_ENV = 'production';
 		global.isProd = true;
 		cb();
 	});
