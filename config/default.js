@@ -22,7 +22,6 @@ Object.assign(env, {
 	APP_NAME: env.APP_NAME || 'V4Fire'
 });
 
-global.include = require('../build/include')(process.cwd());
 global.isProd = env.NODE_ENV === 'production';
 
 const
@@ -41,6 +40,10 @@ const config = module.exports = {
 		core: src,
 		client: [],
 		server: [src],
+		include() {
+			return require('../build/include')(this.cwd);
+		},
+
 		assets() {
 			return path.resolve(this.cwd, 'assets');
 		},
