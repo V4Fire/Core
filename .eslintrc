@@ -5,11 +5,6 @@
   },
 
   "rules": {
-    /* [Flow] */
-    "flowtype/space-after-type-colon": ["error", "always"],
-    "flowtype/space-before-type-colon": ["error", "never"],
-    "flowtype/type-id-match": ["error", "^(\\$\\$[a-z0-9]+[a-zA-Z0-9]*)$"],
-
     /* [Possible Errors] */
     "comma-dangle": ["error", "only-multiline"],
     "no-cond-assign": ["error", "except-parens"],
