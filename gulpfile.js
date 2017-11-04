@@ -9,9 +9,17 @@
  */
 
 require('./config/default');
+
+const
+	{env} = process;
+
 module.exports = function (gulp = require('gulp')) {
+	global.include = require('./build/include')(process.cwd());
+	global.isProd = env.NODE_ENV === 'production';
+
 	gulp.task('setProd', (cb) => {
-		process.env.NODE_ENV = 'production';
+		env.NODE_ENV = 'production';
+		global.isProd = true;
 		cb();
 	});
 
@@ -34,7 +42,7 @@ module.exports = function (gulp = require('gulp')) {
 			convertNewline = require('gulp-convert-newline');
 
 		const src = [
-			'./@(src|config|build|web_loaders)/**/*',
+			'./@(src|config|build)/**/*',
 			'./*'
 		];
 
@@ -54,7 +62,7 @@ module.exports = function (gulp = require('gulp')) {
 			headRgxp = /(\/\*![\s\S]*?\*\/\n{2})/;
 
 		const src = [
-			'./@(src|config|build|web_loaders)/**/*.@(js|styl|ss)',
+			'./@(src|config|build)/**/*.@(js|ts|styl|ss)',
 			'./@(index|gulpfile|webpack.config).js'
 		];
 
