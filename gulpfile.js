@@ -8,7 +8,15 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-require('./config/default');
+const
+	config = require('config');
+
+/**
+ * Global require wrapper
+ * @type {function(string): ?}
+ */
+global.include = config.src.include.bind(config.src);
+
 module.exports = function (gulp = require('gulp')) {
 	gulp.task('setProd', (cb) => {
 		process.env.NODE_ENV = 'production';
@@ -48,7 +56,7 @@ module.exports = function (gulp = require('gulp')) {
 	gulp.task('head', (cb) => {
 		const
 			through = require('through2'),
-			{getHead} = require('./build/helpers');
+			{getHead} = include('build/helpers');
 
 		const
 			fullHead = `${getHead()}\n`,
