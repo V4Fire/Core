@@ -137,10 +137,7 @@
     "class-name": false,
     "comment-format": [true, "check-space", "check-uppercase"],
     "completed-docs": [true, {
-      "enums": {"visibilities": ["exported"]},
       "functions": {"visibilities": ["exported"]},
-      "interfaces": {"visibilities": ["exported"]},
-      "types": {"visibilities": ["exported"]},
       "properties": {"locations": "all", "privacies": ["public", "protected"]},
       "methods": {"locations": "all", "privacies": ["public", "protected"]},
       "tags": {"content": {"see": ["#.*"]}, "exists": ["inheritdoc"]}
