@@ -70,7 +70,6 @@ const config = module.exports = {
 	snakeskin: {
 		pack: false,
 		filters: {global: ['undef']},
-		adapterOptions: {transpiler: true},
 		get vars() {
 			return config.envs;
 		}
