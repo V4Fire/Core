@@ -35,13 +35,13 @@
     "gulp-convert-newline": "0.0.3",
     "gulp-header": "^1.8.8",
     "gulp-replace": "^0.6.1",
-    "through2": "^2.0.3"
+    "through2": "^2.0.3",
+    "typescript": "^2.6.1"
   },
   "devDependencies": {
     "babel-eslint": "^8.0.0",
     "eslint": "^4.10.0",
     "packages-version-check": "^1.1.1",
-    "tslint": "^5.8.0",
-    "typescript": "^2.6.1"
+    "tslint": "^5.8.0"
   }
 }
