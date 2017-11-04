@@ -39,17 +39,20 @@ Object.parse = function parse(value: any): any {
  * Clones the specified object using JSON.parse -> JSON.stringify
  *
  * @param obj
- * @param [params] - additional parameters:
+ * @param [params] - additional parameters (or false for disable defaults):
  *   *) [replacer] - JSON.stringify replacer
  *   *) [reviver] - JSON.parse reviver
  */
-Object.fastClone = function fastClone<T extends Object>(obj: T, params?: {replacer?: JSONCb; reviver?: JSONCb}): T {
+Object.fastClone = function fastClone<T extends Object>(
+	obj: T,
+	params?: {replacer?: JSONCb; reviver?: JSONCb} | false
+): T {
 	const
 		p = params || {};
 
 	if (typeof obj === 'object') {
 		return JSON.parse(
-			JSON.stringify(obj, p.replacer), arguments[1] !== false ? p.reviver || convertIfDate : undefined
+			JSON.stringify(obj, p.replacer), params !== false ? p.reviver || convertIfDate : undefined
 		);
 	}
 
@@ -92,10 +95,10 @@ Object.createMap = function createMap<T extends Object>(obj: T): T & Record<stri
 		map = {};
 
 	if (Object.isArray(obj)) {
-		for (let i = 0; i < obj.length; i++) {
-			const el = <string>obj[i];
+		for (let i = 0; i < (<any[]>obj).length; i++) {
+			const el = obj[i];
 			map[i] = el;
-			map[el] = i;
+			map[<string>el] = i;
 		}
 
 	} else {

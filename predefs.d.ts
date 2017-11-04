@@ -44,10 +44,7 @@ interface ObjectConstructor {
 
 	fastClone<T extends Object>(
 		obj: T,
-		params?: {
-			replacer?: JSONCb;
-			reviver?: JSONCb;
-		}
+		params?: {replacer?: JSONCb; reviver?: JSONCb} | false
 	): T;
 
 	fastCompare<T>(a: any, b: T): a is T;
