@@ -87,19 +87,19 @@ export interface NodeEventOpts {
 }
 
 /**
- * Базовый класс для асинхронный действий
+ * Base class for Async IO
  *
  * @example
- * this.setImmediate(() => alert(1));                                    // 1
- * this.setImmediate({fn: () => alert(2), label: 'foo'});                // -
- * this.setImmediate({fn: () => alert(3), label: 'foo'});                // 3
- * this.setImmediate({fn: () => alert(4), group: 'bar'});                // 4
- * this.setImmediate({fn: () => alert(5), label: 'foo', group: 'bar'});  // -
- * this.setImmediate({fn: () => alert(6), label: 'foo', group: 'bar'});  // 6
+ * this.setImmediate(() => alert(1));                                // 1
+ * this.setImmediate(() => alert(2), {label: 'foo'});                // -
+ * this.setImmediate(() => alert(3), {label: 'foo'});                // 3, calls only last task with a same label
+ * this.setImmediate(() => alert(4), {group: 'bar'});                // 4
+ * this.setImmediate(() => alert(5), {label: 'foo', group: 'bar'});  // -
+ * this.setImmediate(() => alert(6), {label: 'foo', group: 'bar'});  // 6
  */
 export default class Async<CTX extends Object> {
 	/**
-	 * @param [ctx] - контекст для функций
+	 * @param [ctx] - context for functions
 	 */
 	constructor(ctx?: CTX) {
 		this.cache = Object.create(null);
@@ -107,24 +107,24 @@ export default class Async<CTX extends Object> {
 	}
 
 	/**
-	 * Объект кеша для операций
+	 * Cache object for async operations
 	 */
 	protected cache: Record<string, CacheObject>;
 
 	/**
-	 * Контекст для функция
+	 * Context for functions
 	 */
 	protected context: CTX | undefined;
 
 	/**
-	 * Обертка для setImmediate
+	 * Wrapper for setImmediate
 	 *
-	 * @param fn - функция обратного вызова
-	 * @param [params] - дополнительные параметры операции:
-	 *   *) [join] - если true, то смежные операции (с одинаковой меткой) будут объединены с первой
-	 *   *) [label] - метка операции (предыдущие операции с этой меткой будут отменены)
-	 *   *) [group] - группа операции
-	 *   *) [onClear] - обработчик события clearAsync
+	 * @param fn - callback function
+	 * @param [params] - additional parameters for the operation:
+	 *   *) [join] - if true, then competitive tasks (with same labels) will be joined to the first
+	 *   *) [label] - label for the task (previous task with the same label will be canceled)
+	 *   *) [group] - group name for the task
+	 *   *) [onClear] - clear handler
 	 */
 	setImmediate(fn: () => void, params?: AsyncCbOpts): number | NodeJS.Timer {
 		return this.setAsync({
@@ -138,16 +138,16 @@ export default class Async<CTX extends Object> {
 	}
 
 	/**
-	 * Обертка для clearImmediate
-	 * @param [id] - ид операции (если не задан, то удаляются все обработчики)
+	 * Wrapper for clearImmediate
+	 * @param [id] - operation id (if not defined will be remove all handlers)
 	 */
 	clearImmediate(id?: number | NodeJS.Timer): this;
 
 	/**
-	 * @param params - параметры операции:
-	 *   *) [id] - ид операции
-	 *   *) [label] - метка операции
-	 *   *) [group] - группа операции
+	 * @param params - parameters for the operation:
+	 *   *) [id] - operation id
+	 *   *) [label] - label for the task
+	 *   *) [group] - group name for the task
 	 */
 	clearImmediate(params: ClearOptsId<number | NodeJS.Timer>): this;
 
@@ -166,15 +166,15 @@ export default class Async<CTX extends Object> {
 	}
 
 	/**
-	 * Обертка для setInterval
+	 * Wrapper for setInterval
 	 *
-	 * @param fn - функция обратного вызова
-	 * @param interval - значение интервала
-	 * @param [params] - дополнительные параметры операции:
-	 *   *) [join] - если true, то смежные операции (с одинаковой меткой) будут объединены с первой
-	 *   *) [label] - метка операции (предыдущие операции с этой меткой будут отменены)
-	 *   *) [group] - группа операции
-	 *   *) [onClear] - обработчик события clearAsync
+	 * @param fn - callback function
+	 * @param interval - interval value
+	 * @param [params] - additional parameters for the operation:
+	 *   *) [join] - if true, then competitive tasks (with same labels) will be joined to the first
+	 *   *) [label] - label for the task (previous task with the same label will be canceled)
+	 *   *) [group] - group name for the task
+	 *   *) [onClear] - clear handler
 	 */
 	setInterval(fn: () => void, interval: number, params?: AsyncCbOpts): number | NodeJS.Timer {
 		return this.setAsync({
@@ -190,16 +190,16 @@ export default class Async<CTX extends Object> {
 	}
 
 	/**
-	 * Обертка для clearInterval
-	 * @param [id] - ид операции (если не задан, то удаляются все обработчики)
+	 * Wrapper for clearInterval
+	 * @param [id] - operation id (if not defined will be remove all handlers)
 	 */
 	clearInterval(id?: number | NodeJS.Timer): this;
 
 	/**
-	 * @param params - параметры операции:
-	 *   *) [id] - ид операции
-	 *   *) [label] - метка операции
-	 *   *) [group] - группа операции
+	 * @param params - parameters for the operation:
+	 *   *) [id] - operation id
+	 *   *) [label] - label for the task
+	 *   *) [group] - group name for the task
 	 */
 	clearInterval(params: ClearOptsId<number | NodeJS.Timer>): this;
 
@@ -218,15 +218,15 @@ export default class Async<CTX extends Object> {
 	}
 
 	/**
-	 * Обертка для setTimeout
+	 * Wrapper for setTimeout
 	 *
-	 * @param fn - функция обратного вызова
-	 * @param timer - значение таймера
-	 * @param [params] - дополнительные параметры операции:
-	 *   *) [join] - если true, то смежные операции (с одинаковой меткой) будут объединены с первой
-	 *   *) [label] - метка операции (предыдущие операции с этой меткой будут отменены)
-	 *   *) [group] - группа операции
-	 *   *) [onClear] - обработчик события clearAsync
+	 * @param fn - callback function
+	 * @param timer - timer value
+	 * @param [params] - additional parameters for the operation:
+	 *   *) [join] - if true, then competitive tasks (with same labels) will be joined to the first
+	 *   *) [label] - label for the task (previous task with the same label will be canceled)
+	 *   *) [group] - group name for the task
+	 *   *) [onClear] - clear handler
 	 */
 	setTimeout(fn: () => void, timer: number, params?: AsyncCbOpts): number | NodeJS.Timer {
 		return this.setAsync({
@@ -241,16 +241,16 @@ export default class Async<CTX extends Object> {
 	}
 
 	/**
-	 * Обертка для clearTimeout
-	 * @param [id] - ид операции (если не задан, то удаляются все обработчики)
+	 * Wrapper for clearTimeout
+	 * @param [id] - operation id (if not defined will be remove all handlers)
 	 */
 	clearTimeout(id?: number | NodeJS.Timer): this;
 
 	/**
-	 * @param params - параметры операции:
-	 *   *) [id] - ид операции
-	 *   *) [label] - метка операции
-	 *   *) [group] - группа операции
+	 * @param params - parameters for the operation:
+	 *   *) [id] - operation id
+	 *   *) [label] - label for the task
+	 *   *) [group] - group name for the task
 	 */
 	clearTimeout(params: ClearOptsId<number | NodeJS.Timer>): this;
 
@@ -269,25 +269,25 @@ export default class Async<CTX extends Object> {
 	}
 
 	/**
-	 * Обертка для requestAnimationFrame
+	 * Wrapper for requestAnimationFrame
 	 *
-	 * @param fn - функция обратного вызова
-	 * @param [element] - ссылка на анимируемый элемент
+	 * @param fn - callback function
+	 * @param [element] - link for the element
 	 */
-	requestAnimationFrame(fn: (timeStamp: number) => void, element?: Element): number;
+	requestAnimationFrame(fn: (timeStamp: number) => void, element?: HTMLElement): number;
 
 	/**
-	 * Обертка для requestAnimationFrame
+	 * Wrapper for requestAnimationFrame
 	 *
-	 * @param fn - функция обратного вызова
-	 * @param params - параметры операции:
-	 *   *) [element] - ссылка на анимируемый элемент
-	 *   *) [join] - если true, то смежные операции (с одинаковой меткой) будут объединены с первой
-	 *   *) [label] - метка операции (предыдущие операции с этой меткой будут отменены)
-	 *   *) [group] - группа операции
-	 *   *) [onClear] - обработчик события clearAsync
+	 * @param fn - callback function
+	 * @param params - parameters for the operation:
+	 *   *) [element] - link for the element
+	 *   *) [join] - if true, then competitive tasks (with same labels) will be joined to the first
+	 *   *) [label] - label for the task (previous task with the same label will be canceled)
+	 *   *) [group] - group name for the task
+	 *   *) [onClear] - clear handler
 	 */
-	requestAnimationFrame(fn: (timeStamp: number) => void, params: AsyncCbOpts & {element?: Element}): number;
+	requestAnimationFrame(fn: (timeStamp: number) => void, params: AsyncCbOpts & {element?: HTMLElement}): number;
 
 	// tslint:disable-next-line
 	requestAnimationFrame(fn, p) {
@@ -303,16 +303,16 @@ export default class Async<CTX extends Object> {
 	}
 
 	/**
-	 * Обертка для cancelAnimationFrame
-	 * @param [id] - ид операции (если не задан, то удаляются все обработчики)
+	 * Wrapper for cancelAnimationFrame
+	 * @param [id] - operation id (if not defined will be remove all handlers)
 	 */
 	cancelAnimationFrame(id?: number): this;
 
 	/**
-	 * @param params - параметры операции:
-	 *   *) [id] - ид операции
-	 *   *) [label] - метка операции
-	 *   *) [group] - группа операции
+	 * @param params - parameters for the operation:
+	 *   *) [id] - operation id
+	 *   *) [label] - label for the task
+	 *   *) [group] - group name for the task
 	 */
 	cancelAnimationFrame(params: ClearOptsId<number>): this;
 
@@ -331,15 +331,15 @@ export default class Async<CTX extends Object> {
 	}
 
 	/**
-	 * Обертка для requestIdleCallback
+	 * Wrapper for requestIdleCallback
 	 *
-	 * @param fn - функция обратного вызова
-	 * @param [params] - дополнительные параметры операции:
-	 *   *) [timeout] - параметр timeout для нативного requestIdleCallback
-	 *   *) [join] - если true, то смежные операции (с одинаковой меткой) будут объединены с первой
-	 *   *) [label] - метка операции (предыдущие операции с этой меткой будут отменены)
-	 *   *) [group] - группа операции
-	 *   *) [onClear] - обработчик события clearAsync
+	 * @param fn - callback function
+	 * @param [params] - additional parameters for the operation:
+	 *   *) [timeout] - timeout value for the native requestIdleCallback
+	 *   *) [join] - if true, then competitive tasks (with same labels) will be joined to the first
+	 *   *) [label] - label for the task (previous task with the same label will be canceled)
+	 *   *) [group] - group name for the task
+	 *   *) [onClear] - clear handler
 	 */
 	requestIdleCallback(
 		fn: (deadline: IdleDeadline) => void,
@@ -357,16 +357,16 @@ export default class Async<CTX extends Object> {
 	}
 
 	/**
-	 * Обертка для cancelIdleCallback
-	 * @param [id] - ид операции (если не задан, то удаляются все обработчики)
+	 * Wrapper for cancelIdleCallback
+	 * @param [id] - operation id (if not defined will be remove all handlers)
 	 */
 	cancelIdleCallback(id?: number | NodeJS.Timer): this;
 
 	/**
-	 * @param params - параметры операции:
-	 *   *) [id] - ид операции
-	 *   *) [label] - метка операции
-	 *   *) [group] - группа операции
+	 * @param params - parameters for the operation:
+	 *   *) [id] - operation id
+	 *   *) [label] - label for the task
+	 *   *) [group] - group name for the task
 	 */
 	cancelIdleCallback(params: ClearOptsId<number | NodeJS.Timer>): this;
 
@@ -385,14 +385,14 @@ export default class Async<CTX extends Object> {
 	}
 
 	/**
-	 * Обертка для потоков: WebWorker, Socket и т.д.
+	 * Wrapper for workers: WebWorker, Socket and etc.
 	 *
 	 * @param worker
-	 * @param [params] - дополнительные параметры операции:
-	 *   *) [join] - если true, то смежные операции (с одинаковой меткой) будут объединены с первой
-	 *   *) [label] - метка операции (предыдущие операции с этой меткой будут отменены)
-	 *   *) [group] - группа операции
-	 *   *) [onClear] - обработчик события clearAsync
+	 * @param [params] - additional parameters for the operation:
+	 *   *) [join] - if true, then competitive tasks (with same labels) will be joined to the first
+	 *   *) [label] - label for the task (previous task with the same label will be canceled)
+	 *   *) [group] - group name for the task
+	 *   *) [onClear] - clear handler
 	 */
 	worker<T>(worker: T & WorkerLike, params?: AsyncCbOpts): T {
 		return this.setAsync({
@@ -405,16 +405,16 @@ export default class Async<CTX extends Object> {
 	}
 
 	/**
-	 * Уничтожает заданный поток
-	 * @param [worker] - поток (если не задан, то удаляются все потоки)
+	 * Terminates the specified worker
+	 * @param [worker] - link for the worker (if not defined wil be terminate all workers)
 	 */
 	terminateWorker<T>(worker?: T & WorkerLike): this;
 
 	/**
-	 * @param params - параметры операции:
-	 *   *) [id] - исходный поток
-	 *   *) [label] - метка операции
-	 *   *) [group] - группа операции
+	 * @param params - parameters for the operation:
+	 *   *) [id] - link for the worker
+	 *   *) [label] - label for the task
+	 *   *) [group] - group name for the task
 	 */
 	terminateWorker<T>(params: ClearOptsId<T & WorkerLike>): this;
 
@@ -433,15 +433,16 @@ export default class Async<CTX extends Object> {
 	}
 
 	/**
-	 * Обертка для удаленного запроса
+	 * Wrapper for a remote request
 	 *
 	 * @param request
-	 * @param [params] - дополнительные параметры операции:
-	 *   *) [join] - если true, то смежные операции (с одинаковой меткой) будут объединены с первой,
-	 *        а если replace, то с последней
+	 * @param [params] - additional parameters for the operation:
+	 *   *) [join] - strategy for joining competitive tasks (with same labels):
+	 *       *) true - all tasks will be joined to the first;
+	 *       *) 'replace' - all tasks will be joined (replaced) to the last.
 	 *
-	 *   *) [label] - метка операции (предыдущие операции с этой меткой будут отменены)
-	 *   *) [group] - группа операции
+	 *   *) [label] - label for the task (previous task with the same label will be canceled)
+	 *   *) [group] - group name for the task
 	 */
 	request<T>(request: RequestLike<T>, params?: AsyncOpts): RequestLike<T> {
 		return this.setAsync({
@@ -461,10 +462,10 @@ export default class Async<CTX extends Object> {
 	cancelRequest<T>(request?: RequestLike<T>): this;
 
 	/**
-	 * @param params - параметры операции:
+	 * @param params - parameters for the operation:
 	 *   *) [id] - объект запроса
-	 *   *) [label] - метка операции
-	 *   *) [group] - группа операции
+	 *   *) [label] - label for the task
+	 *   *) [group] - group name for the task
 	 */
 	cancelRequest<T>(params: ClearOptsId<T & WorkerLike>): this;
 
@@ -483,14 +484,14 @@ export default class Async<CTX extends Object> {
 	}
 
 	/**
-	 * Обертка для callback функции
+	 * Wrapper for callback функции
 	 *
 	 * @param cb
-	 * @param [params] - дополнительные параметры операции:
-	 *   *) [join] - если true, то смежные операции (с одинаковой меткой) будут объединены с первой
-	 *   *) [label] - метка операции (предыдущие операции с этой меткой будут отменены)
-	 *   *) [group] - группа операции
-	 *   *) [onClear] - обработчик события clearAsync
+	 * @param [params] - additional parameters for the operation:
+	 *   *) [join] - if true, then competitive tasks (with same labels) will be joined to the first
+	 *   *) [label] - label for the task (previous task with the same label will be canceled)
+	 *   *) [group] - group name for the task
+	 *   *) [onClear] - clear handler
 	 */
 	proxy(cb: Function, params?: AsyncCbOpts): Function {
 		return this.setAsync({
@@ -503,16 +504,16 @@ export default class Async<CTX extends Object> {
 	}
 
 	/**
-	 * Отменяет выполнение заданной callback функции
-	 * @param [cb] - callback (если не задан, то удаляются все callback-и)
+	 * Cancels the specified callback function
+	 * @param [cb] - link for the callback (if not defined will be remove all callbacks)
 	 */
 	cancelProxy<T>(cb?: Function): this;
 
 	/**
-	 * @param params - параметры операции:
-	 *   *) [id] - исходный callback
-	 *   *) [label] - метка операции
-	 *   *) [group] - группа операции
+	 * @param params - parameters for the operation:
+	 *   *) [id] - link for the callback
+	 *   *) [label] - label for the task
+	 *   *) [group] - group name for the task
 	 */
 	cancelProxy<T>(params: ClearOptsId<Function>): this;
 
@@ -530,15 +531,16 @@ export default class Async<CTX extends Object> {
 	}
 
 	/**
-	 * Обертка для промиса
+	 * Wrapper for a promise
 	 *
 	 * @param promise
-	 * @param [params] - дополнительные параметры операции:
-	 *   *) [join] - если true, то смежные операции (с одинаковой меткой) будут объединены с первой,
-	 *        а если replace, то с последней
+	 * @param [params] - additional parameters for the operation:
+	 *   *) [join] - strategy for joining competitive tasks (with same labels):
+	 *       *) true - all tasks will be joined to the first;
+	 *       *) 'replace' - all tasks will be joined (replaced) to the last.
 	 *
-	 *   *) [label] - метка операции (предыдущие операции с этой меткой будут отменены)
-	 *   *) [group] - группа операции
+	 *   *) [label] - label for the task (previous task with the same label will be canceled)
+	 *   *) [group] - group name for the task
 	 */
 	promise<T>(promise: PromiseLike<T>, params?: AsyncOpts): Promise<T> {
 		return new Promise((resolve, reject) => {
@@ -554,15 +556,16 @@ export default class Async<CTX extends Object> {
 	}
 
 	/**
-	 * Промис обертка над setTimeout
+	 * Promise for setTimeout
 	 *
 	 * @param timer
-	 * @param [params] - дополнительные параметры операции:
-	 *   *) [join] - если true, то смежные операции (с одинаковой меткой) будут объединены с первой,
-	 *        а если replace, то с последней
+	 * @param [params] - additional parameters for the operation:
+	 *   *) [join] - strategy for joining competitive tasks (with same labels):
+	 *       *) true - all tasks will be joined to the first;
+	 *       *) 'replace' - all tasks will be joined (replaced) to the last.
 	 *
-	 *   *) [label] - метка операции (предыдущие операции с этой меткой будут отменены)
-	 *   *) [group] - группа операции
+	 *   *) [label] - label for the task (previous task with the same label will be canceled)
+	 *   *) [group] - group name for the task
 	 */
 	sleep(timer: number, params?: AsyncOpts): Promise<void> {
 		return new Promise((resolve, reject) => {
@@ -574,14 +577,15 @@ export default class Async<CTX extends Object> {
 	}
 
 	/**
-	 * Промис обертка над setImmediate
+	 * Promise for setImmediate
 	 *
-	 * @param [params] - дополнительные параметры операции:
-	 *   *) [join] - если true, то смежные операции (с одинаковой меткой) будут объединены с первой,
-	 *        а если replace, то с последней
+	 * @param [params] - additional parameters for the operation:
+	 *   *) [join] - strategy for joining competitive tasks (with same labels):
+	 *       *) true - all tasks will be joined to the first;
+	 *       *) 'replace' - all tasks will be joined (replaced) to the last.
 	 *
-	 *   *) [label] - метка операции (предыдущие операции с этой меткой будут отменены)
-	 *   *) [group] - группа операции
+	 *   *) [label] - label for the task (previous task with the same label will be canceled)
+	 *   *) [group] - group name for the task
 	 */
 	nextTick(params?: AsyncOpts): Promise<void> {
 		return new Promise((resolve, reject) => {
@@ -593,16 +597,18 @@ export default class Async<CTX extends Object> {
 	}
 
 	/**
-	 * Промис обертка над requestIdleCallback
+	 * Promise for requestIdleCallback
 	 *
-	 * @param [params] - дополнительные параметры операции:
-	 *   *) [join] - если true, то смежные операции (с одинаковой меткой) будут объединены с первой,
-	 *        а если replace, то с последней
+	 * @param [params] - additional parameters for the operation:
+	 *   *) [timeout] - timeout value for the native requestIdleCallback
+	 *   *) [join] - strategy for joining competitive tasks (with same labels):
+	 *       *) true - all tasks will be joined to the first;
+	 *       *) 'replace' - all tasks will be joined (replaced) to the last.
 	 *
-	 *   *) [label] - метка операции (предыдущие операции с этой меткой будут отменены)
-	 *   *) [group] - группа операции
+	 *   *) [label] - label for the task (previous task with the same label will be canceled)
+	 *   *) [group] - group name for the task
 	 */
-	idle(params?: AsyncOpts): Promise<IdleDeadline> {
+	idle(params?: AsyncOpts & {timeout?: number}): Promise<IdleDeadline> {
 		return new Promise((resolve, reject) => {
 			this.requestIdleCallback(resolve, {
 				...params,
@@ -612,20 +618,20 @@ export default class Async<CTX extends Object> {
 	}
 
 	/**
-	 * Промис обертка над requestAnimationFrame
-	 * @param [element] - ссылка на анимируемый элемент
+	 * Promise for requestAnimationFrame
+	 * @param [element] - link for the element
 	 */
-	animationFrame(element?: Element): Promise<number>;
+	animationFrame(element?: HTMLElement): Promise<number>;
 
 	/**
-	 * @param params - параметры операции:
-	 *   *) [element] - ссылка на анимируемый элемент
-	 *   *) [join] - если true, то смежные операции (с одинаковой меткой) будут объединены с первой
-	 *   *) [label] - метка операции (предыдущие операции с этой меткой будут отменены)
-	 *   *) [group] - группа операции
-	 *   *) [onClear] - обработчик события clearAsync
+	 * @param params - parameters for the operation:
+	 *   *) [element] - link for the element
+	 *   *) [join] - if true, then competitive tasks (with same labels) will be joined to the first
+	 *   *) [label] - label for the task (previous task with the same label will be canceled)
+	 *   *) [group] - group name for the task
+	 *   *) [onClear] - clear handler
 	 */
-	animationFrame(params: AsyncCbOpts & {element?: Element}): Promise<number>;
+	animationFrame(params: AsyncCbOpts & {element?: HTMLElement}): Promise<number>;
 
 	// tslint:disable-next-line
 	animationFrame(p) {
@@ -639,15 +645,16 @@ export default class Async<CTX extends Object> {
 	}
 
 	/**
-	 * Возвращает промис, который не зарезолвится пока функция fn не вернет положительное значение
+	 * Waits until the specified function returns a positive value (== true)
 	 *
 	 * @param fn
-	 * @param [params] - дополнительные параметры операции:
-	 *   *) [join] - если true, то смежные операции (с одинаковой меткой) будут объединены с первой,
-	 *        а если replace, то с последней
+	 * @param [params] - additional parameters for the operation:
+	 *   *) [join] - strategy for joining competitive tasks (with same labels):
+	 *       *) true - all tasks will be joined to the first;
+	 *       *) 'replace' - all tasks will be joined (replaced) to the last.
 	 *
-	 *   *) [label] - метка операции (предыдущие операции с этой меткой будут отменены)
-	 *   *) [group] - группа операции
+	 *   *) [label] - label for the task (previous task with the same label will be canceled)
+	 *   *) [group] - group name for the task
 	 */
 	wait(fn: Function, params?: AsyncOpts): Promise<void> {
 		const DELAY = 15;
@@ -668,28 +675,28 @@ export default class Async<CTX extends Object> {
 	}
 
 	/**
-	 * Обертка для установки обработчика событий
+	 * Wrapper for an event emitter add listener
 	 *
-	 * @param emitter - источник событий
-	 * @param events - событие или массив событий (можно также указывать несколько событий через пробел)
-	 * @param handler - обработчик события
-	 * @param [args] - дополнительные аргументы для emitter
+	 * @param emitter - event emitter
+	 * @param events - event or a list of events (can also specify multiple events with a space)
+	 * @param handler - event handler
+	 * @param [args] - additional arguments for the emitter
 	 */
 	on<T>(emitter: T & EventEmitterLike, events: string | string[], handler: Function, ...args: any[]): Object;
 
 	/**
-	 * @param emitter - источник событий
-	 * @param events - событие или массив событий (можно также указывать несколько событий через пробел)
-	 * @param handler - обработчик события
-	 * @param params - параметры операции:
-	 *   *) [options] - дополнительные параметры для addEventListener
-	 *   *) [join] - если true, то смежные операции (с одинаковой меткой) будут объединены с первой
-	 *   *) [label] - метка операции (предыдущие операции с этой меткой будут отменены)
-	 *   *) [group] - группа операции
+	 * @param emitter - event emitter
+	 * @param events - event or a list of events (can also specify multiple events with a space)
+	 * @param handler - event handler
+	 * @param params - parameters for the operation:
+	 *   *) [options] - additional options for addEventListener
+	 *   *) [join] - if true, then competitive tasks (with same labels) will be joined to the first
+	 *   *) [label] - label for the task (previous task with the same label will be canceled)
+	 *   *) [group] - group name for the task
 	 *   *) [single] - если true, то после первого вызова события оно будет очищено
-	 *   *) [onClear] - обработчик события clearAsync
+	 *   *) [onClear] - clear handler
 	 *
-	 * @param [args] - дополнительные аргументы для emitter
+	 * @param [args] - additional arguments for the emitter
 	 */
 	on<T>(
 		emitter: T & EventEmitterLike,
@@ -762,27 +769,27 @@ export default class Async<CTX extends Object> {
 	}
 
 	/**
-	 * Обертка для установки разового (once) обработчика событий
+	 * Wrapper for an event emitter once
 	 *
-	 * @param emitter - источник событий
-	 * @param events - событие или массив событий (можно также указывать несколько событий через пробел)
-	 * @param handler - обработчик события
-	 * @param [args] - дополнительные аргументы для emitter
+	 * @param emitter - event emitter
+	 * @param events - event or a list of events (can also specify multiple events with a space)
+	 * @param handler - event handler
+	 * @param [args] - additional arguments for the emitter
 	 */
 	once<T>(emitter: T & EventEmitterLike, events: string | string[], handler: Function, ...args: any[]): Object;
 
 	/**
-	 * @param emitter - источник событий
-	 * @param events - событие или массив событий (можно также указывать несколько событий через пробел)
-	 * @param handler - обработчик события
-	 * @param params - параметры операции:
-	 *   *) [options] - дополнительные параметры для addEventListener
-	 *   *) [join] - если true, то смежные операции (с одинаковой меткой) будут объединены с первой
-	 *   *) [label] - метка операции (предыдущие операции с этой меткой будут отменены)
-	 *   *) [group] - группа операции
-	 *   *) [onClear] - обработчик события clearAsync
+	 * @param emitter - event emitter
+	 * @param events - event or a list of events (can also specify multiple events with a space)
+	 * @param handler - event handler
+	 * @param params - parameters for the operation:
+	 *   *) [options] - additional options for addEventListener
+	 *   *) [join] - if true, then competitive tasks (with same labels) will be joined to the first
+	 *   *) [label] - label for the task (previous task with the same label will be canceled)
+	 *   *) [group] - group name for the task
+	 *   *) [onClear] - clear handler
 	 *
-	 * @param [args] - дополнительные аргументы для emitter
+	 * @param [args] - additional arguments for the emitter
 	 */
 	once<T>(
 		emitter: T & EventEmitterLike,
@@ -803,19 +810,20 @@ export default class Async<CTX extends Object> {
 	}
 
 	/**
-	 * Промис обертка над once
+	 * Promise for once
 	 *
-	 * @param emitter - источник событий
-	 * @param events - событие или массив событий (можно также указывать несколько событий через пробел)
-	 * @param params - параметры операции:
-	 *   *) [options] - дополнительные параметры для addEventListener
-	 *   *) [join] - если true, то смежные операции (с одинаковой меткой) будут объединены с первой,
-	 *        а если replace, то с последней
+	 * @param emitter - event emitter
+	 * @param events - event or a list of events (can also specify multiple events with a space)
+	 * @param params - parameters for the operation:
+	 *   *) [options] - additional options for addEventListener
+	 *   *) [join] - strategy for joining competitive tasks (with same labels):
+	 *       *) true - all tasks will be joined to the first;
+	 *       *) 'replace' - all tasks will be joined (replaced) to the last.
 	 *
-	 *   *) [label] - метка операции (предыдущие операции с этой меткой будут отменены)
-	 *   *) [group] - группа операции
+	 *   *) [label] - label for the task (previous task with the same label will be canceled)
+	 *   *) [group] - group name for the task
 	 *
-	 * @param [args] - дополнительные аргументы для emitter
+	 * @param [args] - additional arguments for the emitter
 	 */
 	promisifyOnce<T>(
 		emitter: T & EventEmitterLike,
@@ -825,9 +833,9 @@ export default class Async<CTX extends Object> {
 	): Promise<any>;
 
 	/**
-	 * @param emitter - источник событий
-	 * @param events - событие или массив событий (можно также указывать несколько событий через пробел)
-	 * @param [args] - дополнительные аргументы для emitter
+	 * @param emitter - event emitter
+	 * @param events - event or a list of events (can also specify multiple events with a space)
+	 * @param [args] - additional arguments for the emitter
 	 */
 	promisifyOnce<T>(emitter: T & EventEmitterLike, events: string | string[], ...args: any[]): Promise<any>;
 
@@ -847,16 +855,16 @@ export default class Async<CTX extends Object> {
 	}
 
 	/**
-	 * Обертка для удаления обработчика событий
-	 * @param [id] - ид операции (если не задан, то удаляются все обработчики)
+	 * Wrapper for an event emitter remove listener
+	 * @param [id] - operation id (if not defined will be remove all handlers)
 	 */
 	off(id?: Object): this;
 
 	/**
-	 * @param params - параметры операции:
-	 *   *) [id] - ид операции
-	 *   *) [label] - метка операции
-	 *   *) [group] - группа операции
+	 * @param params - parameters for the operation:
+	 *   *) [id] - operation id
+	 *   *) [label] - label for the task
+	 *   *) [group] - group name for the task
 	 */
 	off(params: ClearOptsId<Object>): this;
 
@@ -875,26 +883,26 @@ export default class Async<CTX extends Object> {
 	}
 
 	/**
-	 * Добавляет Drag&Drop обработчики на заданный элемент
+	 * Adds Drag&Drop listeners to the specified element
 	 *
 	 * @param el
 	 * @param [useCapture]
 	 */
-	dnd(el: Element, useCapture?: boolean): string | symbol;
+	dnd(el: HTMLElement, useCapture?: boolean): string | symbol;
 
 	/**
 	 * @param el
-	 * @param params - параметры операции:
-	 *   *) [options] - дополнительные параметры для addEventListener
-	 *   *) [join] - если true, то смежные операции (с одинаковой меткой) будут объединены с первой
-	 *   *) [label] - метка операции (предыдущие операции с этой меткой будут отменены)
-	 *   *) [group] - группа операции
-	 *   *) [onClear] - обработчик события clearAsync
+	 * @param params - parameters for the operation:
+	 *   *) [options] - additional options for addEventListener
+	 *   *) [join] - if true, then competitive tasks (with same labels) will be joined to the first
+	 *   *) [label] - label for the task (previous task with the same label will be canceled)
+	 *   *) [group] - group name for the task
+	 *   *) [onClear] - clear handler
 	 *   *) [onDragStart]
 	 *   *) [onDrag]
 	 *   *) [onDragEnd]
 	 */
-	dnd(el: Element, params: AsyncCbOpts & {
+	dnd(el: HTMLElement, params: AsyncCbOpts & {
 		options?: AddEventListenerOptions;
 		onDragStart?: NodeEventCb | NodeEventOpts;
 		onDrag?: NodeEventCb | NodeEventOpts;
@@ -917,17 +925,20 @@ export default class Async<CTX extends Object> {
 		p.group = p.group || `dnd.${Math.random()}`;
 		p.onClear = (<Function[]>[]).concat(p.onClear || []);
 
-		const dragStartClear = (...args) => {
+		// tslint:disable-next-line
+		function dragStartClear(...args) {
 			$C(p.onClear).forEach((fn) => fn.call(this, ...args, 'dragstart'));
-		};
+		}
 
-		const dragClear = (...args) => {
+		// tslint:disable-next-line
+		function dragClear(...args) {
 			$C(p.onClear).forEach((fn) => fn.call(this, ...args, 'drag'));
-		};
+		}
 
-		const dragEndClear = (...args) => {
+		// tslint:disable-next-line
+		function dragEndClear(...args) {
 			$C(p.onClear).forEach((fn) => fn.call(this, ...args, 'dragend'));
-		};
+		}
 
 		const dragStartUseCapture = Boolean(
 			p.onDragStart && Object.isBoolean((<any>p.onDragStart).capture) ?
@@ -991,11 +1002,11 @@ export default class Async<CTX extends Object> {
 	}
 
 	/**
-	 * Отменяет все асинхронные обработчики
+	 * Clears all async operations
 	 *
-	 * @param [params] - дополнительные параметры операции:
-	 *   *) [label] - метка операции
-	 *   *) [group] - группа операции
+	 * @param [params] - additional parameters for the operation:
+	 *   *) [label] - label for the task
+	 *   *) [group] - group name for the task
 	 */
 	clearAll(params?: ClearOpts): this {
 		const
@@ -1020,7 +1031,7 @@ export default class Async<CTX extends Object> {
 	}
 
 	/**
-	 * Возвращает заданное значение если оно является событием
+	 * Returns the specified value if it is an event object
 	 * @param value
 	 */
 	protected getIfEvent(value: any & {event?: string}): Function | undefined {
@@ -1028,7 +1039,7 @@ export default class Async<CTX extends Object> {
 	}
 
 	/**
-	 * Возвращает заданное значение если оно не является объектом
+	 * Returns the specified value if it is not a plain object
 	 * @param value
 	 */
 	protected getIfNotObject(value: any): Function | undefined {
@@ -1036,7 +1047,7 @@ export default class Async<CTX extends Object> {
 	}
 
 	/**
-	 * Возвращает true если заданное значение является промисом
+	 * Returns true if the specified value is promise like
 	 * @param value
 	 */
 	protected isPromiseLike(value: any): value is PromiseLike<any> {
@@ -1046,13 +1057,13 @@ export default class Async<CTX extends Object> {
 	}
 
 	/**
-	 * Удаляет обработчик события для заданного источника
+	 * Removes an event handler from the specified emitter
 	 *
-	 * @param params - параметры:
-	 *   *) emitter - источник событий
-	 *   *) event - событие
-	 *   *) handler - функция обработчик
-	 *   *) args - дополнительные аргументы для emitter
+	 * @param params - parameters:
+	 *   *) emitter - event emitter
+	 *   *) event - event name
+	 *   *) handler - event handler
+	 *   *) args - additional arguments for the emitter
 	 */
 	protected eventListenerDestructor<T>(params: {
 		emitter: T & EventEmitterLike;
@@ -1073,7 +1084,7 @@ export default class Async<CTX extends Object> {
 	}
 
 	/**
-	 * Уничтожает заданный поток
+	 * Terminates the specified worker
 	 * @param worker
 	 */
 	protected workerDestructor<T>(worker: T & WorkerLike): void {
@@ -1089,10 +1100,10 @@ export default class Async<CTX extends Object> {
 	}
 
 	/**
-	 * Отменяет заданный запрос
+	 * Cancels the specified request
 	 *
 	 * @param request
-	 * @param ctx - объект контекста
+	 * @param ctx - context object
 	 */
 	protected requestDestructor(request: RequestLike<any>, ctx: AsyncCtx): void {
 		const
@@ -1107,7 +1118,7 @@ export default class Async<CTX extends Object> {
 	}
 
 	/**
-	 * Фабрика для функций очистки промисов
+	 * Factory for promise clear handlers
 	 *
 	 * @param resolve
 	 * @param reject
@@ -1135,7 +1146,7 @@ export default class Async<CTX extends Object> {
 	}
 
 	/**
-	 * Возвращает объект кеша по заданному имени
+	 * Returns a cache object by the specified name
 	 * @param name
 	 */
 	protected initCache(name: string): CacheObject {
@@ -1150,7 +1161,7 @@ export default class Async<CTX extends Object> {
 	}
 
 	/**
-	 * Инициализирует обработчик
+	 * Initializes the specified listener
 	 * @param p
 	 */
 	protected setAsync(p: any): any {
@@ -1262,7 +1273,7 @@ export default class Async<CTX extends Object> {
 	}
 
 	/**
-	 * Отменяет заданные обработчики
+	 * Clears the specified listeners
 	 * @param p
 	 */
 	protected clearAsync(p: any): this {
@@ -1344,7 +1355,7 @@ export default class Async<CTX extends Object> {
 	}
 
 	/**
-	 * Отменяет все асинхронные обработчики по заданным параметрам
+	 * Clears all listeners by the specified parameters
 	 * @param p
 	 */
 	protected clearAllAsync(p: any): this {
