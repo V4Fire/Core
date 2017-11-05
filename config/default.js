@@ -16,101 +16,149 @@ const
 	fs = require('fs-extra-promise'),
 	path = require('path');
 
-/**
- * @type {{
- *   NODE_ENV: string,
- *   APP_NAME: string,
- *   SERVICE_NAME: (string|undefined)
- * }}
- */
-const env = Object.assign(process.env, {
-	NODE_ENV: 'standalone',
-	APP_NAME: 'V4Fire'
-}, $C.clone(process.env));
+/** @template C */
+class Config {
+	constructor() {
+		this.src = {};
+		this.envs = {};
 
-const config = module.exports = {
-	appName() {
-		return env.APP_NAME;
+		/** @type {Array<string>} */
+		this.roots = [];
+
+		/** @type {Array<string>} */
+		this.clients = [];
+
+		/** @type {Array<string>} */
+		this.server = [];
+	}
+
+	/**
+	 * Wrapper for $C.extend
+	 *
+	 * @param {...?} args
+	 * @returns {!Object}
+	 */
+	extend(...args) {
+		return $C.extend({
+			deep: true,
+			withProto: true,
+			concatArray: true,
+			concatFn: Sugar.Array.union
+		}, ...args);
+	}
+
+	/**
+	 * Creates config object with the specified options
+	 *
+	 * @template T
+	 * @param {!Array<string>} dirs - list of init directories ([0] - dirname, [1+] - src fields)
+	 * @param {Object=} [envs] - map of path environments
+	 * @param {T} opts
+	 * @returns {C<T>}
+	 */
+	createConfig({dirs, envs}, opts) {
+		const
+			{env} = process;
+
+		if (envs) {
+			this.extend(env, envs, $C.clone(env));
+		}
+
+		const
+			config = this.extend(Object.getPrototypeOf(opts), opts),
+			p = this.getSrcMap(dirs[0]);
+
+		$C(['roots'].concat(dirs.slice(1))).forEach((nm, i) => {
+			config.src[nm] = (this.src[nm] || []).concat(i ? p.src : p.root);
+		});
+
+		if (envs) {
+			$C(Object.keys(envs)).forEach((nm) => {
+				config.envs[nm] = env[nm];
+			});
+		}
+
+		return config;
+	}
+
+	/**
+	 * Returns src map by the specified init directory
+	 *
+	 * @param {string} dir - init directory (usually __dirname)
+	 * @returns {{root: string, src: string}}
+	 */
+	getSrcMap(dir) {
+		const
+			root = path.join(dir, '../'),
+			pzlr = /** @type {{sourceDir: string}} */ fs.readJSONSync(path.join(root, '.pzlrrc'));
+
+		return {
+			root,
+			src: path.join(root, pzlr.sourceDir)
+		};
+	}
+}
+
+const config = new Config();
+module.exports = config.createConfig(
+	{
+		dirs: [__dirname, 'server'],
+		envs: {
+			NODE_ENV: 'standalone',
+			APP_NAME: 'V4Fire',
+			SERVICE_NAME: undefined
+		}
 	},
 
-	extend: {
-		deep: true,
-		withProto: true,
-		concatArray: true,
-		concatFn: Sugar.Array.union
-	},
+	{
+		__proto__: config,
 
-	src: {
-		init(dir) {
-			const
-				root = path.join(dir, '../'),
-				pzlr = /** @type {{sourceDir: string}} */ fs.readJSONSync(path.join(root, '.pzlrrc'));
+		appName() {
+			return env.APP_NAME;
+		},
 
+		snakeskin() {
 			return {
-				root,
-				src: path.join(root, pzlr.sourceDir)
+				pack: false,
+				filters: {global: ['undef']},
+				vars: require('config').envs
 			};
-		}
-	},
-
-	envs: {
-		env: env.NODE_ENV,
-		service: env.SERVICE_NAME,
-		appName: env.APP_NAME
-	},
-
-	snakeskin() {
-		return {
-			pack: false,
-			filters: {global: ['undef']},
-			vars: require('config').envs
-		};
-	},
-
-	babel() {
-		return {
-			plugins: [],
-			compact: false
-		};
-	}
-};
-
-const
-	s = config.src,
-	p = s.init(__dirname);
-
-$C.extend(config.extend, config, {
-	src: /** @lends {config.src} */ {
-		cwd() {
-			return this.roots[this.roots.length - 1] || process.cwd();
 		},
 
-		core: p.src,
-		roots: [p.root],
-		client: [],
-		server: [p.src],
-
-		include() {
-			return require('../build/include')(this.roots);
+		babel() {
+			return {
+				plugins: [],
+				compact: false
+			};
 		},
 
-		assets() {
-			return path.resolve(this.cwd(), 'assets');
-		},
+		src: {
+			cwd() {
+				return this.roots[this.roots.length - 1] || process.cwd();
+			},
 
-		output() {
-			return path.resolve(this.cwd(), 'dist');
-		},
+			include() {
+				return require('../build/include')(this.roots);
+			},
 
-		clientOutput() {
-			return path.resolve(this.output(), 'client');
-		},
+			assets() {
+				return path.resolve(this.cwd(), 'assets');
+			},
 
-		serverOutput() {
-			return path.resolve(this.output(), 'server');
+			output() {
+				return path.resolve(this.cwd(), 'dist');
+			},
+
+			clientOutput() {
+				return path.resolve(this.output(), 'client');
+			},
+
+			serverOutput() {
+				return path.resolve(this.output(), 'server');
+			}
 		}
 	}
-});
+);
 
 Object.defineProperties(global, {
 	include: {
