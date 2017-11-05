@@ -8,15 +8,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-const
-	config = require('config');
-
-/**
- * Global require wrapper
- * @type {function(string): ?}
- */
-global.include = config.src.include();
-
+require('config');
 module.exports = function (gulp = require('gulp')) {
 	gulp.task('setProd', (cb) => {
 		process.env.NODE_ENV = 'production';

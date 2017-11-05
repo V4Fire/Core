@@ -16,15 +16,17 @@ const
 	fs = require('fs-extra-promise'),
 	path = require('path');
 
-const
-	{env} = process;
-
-Object.assign(env, {
+/**
+ * @type {{
+ *   NODE_ENV: string,
+ *   APP_NAME: string,
+ *   SERVICE_NAME: (string|undefined)
+ * }}
+ */
+const env = Object.assign(process.env, {
 	NODE_ENV: env.NODE_ENV || 'standalone',
 	APP_NAME: env.APP_NAME || 'V4Fire'
 });
-
-global.isProd = env.NODE_ENV === 'production';
 
 const config = module.exports = {
 	extend: {
@@ -38,18 +40,43 @@ const config = module.exports = {
 		init(dir) {
 			const
 				root = path.join(dir, '../'),
-				pzlr = fs.readJSONSync(path.join(root, '.pzlrrc'));
+				pzlr = /** @type {{sourceDir: string}} */ fs.readJSONSync(path.join(root, '.pzlrrc'));
 
 			return {
 				root,
 				src: path.join(root, pzlr.sourceDir)
 			};
 		}
+	},
+
+	envs: {
+		env: env.NODE_ENV,
+		service: env.SERVICE_NAME,
+		appName: env.APP_NAME
+	},
+
+	snakeskin: {
+		pack: false,
+		filters: {global: ['undef']},
+		get vars() {
+			return config.envs;
+		}
+	},
+
+	babel: {
+		plugins: [],
+		compact: false
 	}
 };
 
 const
-	p = config.src.init(__dirname);
+	s = config.src,
+	p = s.init(__dirname);
+
+Object.assign(global, {
+	isProd: env.NODE_ENV === 'production',
+	include: s.include()
+});
 
 $C.extend(config.extend, config, {
 	src: {
@@ -57,8 +84,8 @@ $C.extend(config.extend, config, {
 			return this.roots[this.roots.length - 1] || process.cwd();
 		},
 
-		roots: [p.root],
 		core: p.src,
+		roots: [p.root],
 		client: [],
 		server: [p.src],
 
@@ -81,24 +108,5 @@ $C.extend(config.extend, config, {
 		serverOutput() {
 			return path.resolve(this.output(), 'server');
 		}
-	},
-
-	envs: {
-		env: env.NODE_ENV,
-		service: env.SERVICE_NAME,
-		appName: env.APP_NAME
-	},
-
-	snakeskin: {
-		pack: false,
-		filters: {global: ['undef']},
-		get vars() {
-			return config.envs;
-		}
-	},
-
-	babel: {
-		plugins: [],
-		compact: false
 	}
 });
