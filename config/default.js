@@ -16,6 +16,9 @@ const
 	fs = require('fs-extra-promise'),
 	path = require('path');
 
+const
+	{env} = process;
+
 /** @template C */
 class Config {
 	constructor() {
@@ -57,9 +60,6 @@ class Config {
 	 * @returns {C<T>}
 	 */
 	createConfig({dirs, envs}, opts) {
-		const
-			{env} = process;
-
 		if (envs) {
 			this.extend(env, envs, $C.clone(env));
 		}
