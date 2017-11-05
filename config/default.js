@@ -59,17 +59,19 @@ const config = module.exports = {
 		appName: env.APP_NAME
 	},
 
-	snakeskin: {
-		pack: false,
-		filters: {global: ['undef']},
-		get vars() {
-			return config.envs;
-		}
+	snakeskin() {
+		return {
+			pack: false,
+			filters: {global: ['undef']},
+			vars: require('config').envs
+		};
 	},
 
-	babel: {
-		plugins: [],
-		compact: false
+	babel() {
+		return {
+			plugins: [],
+			compact: false
+		};
 	}
 };
 
