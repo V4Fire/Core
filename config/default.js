@@ -49,7 +49,7 @@ const config = module.exports = {
 };
 
 const
-	paths = config.src.init(__dirname);
+	p = config.src.init(__dirname);
 
 $C.extend(config.extend, config, {
 	src: {
@@ -57,10 +57,10 @@ $C.extend(config.extend, config, {
 			return this.roots[this.roots.length - 1] || process.cwd();
 		},
 
-		roots: [paths.root],
-		core: paths.src,
+		roots: [p.root],
+		core: p.src,
 		client: [],
-		server: [paths.src],
+		server: [p.src],
 
 		include() {
 			return require('../build/include')(this.roots);
