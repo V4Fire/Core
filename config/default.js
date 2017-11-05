@@ -29,7 +29,7 @@ class Config {
 		this.roots = [];
 
 		/** @type {Array<string>} */
-		this.clients = [];
+		this.client = [];
 
 		/** @type {Array<string>} */
 		this.server = [];
@@ -69,7 +69,22 @@ class Config {
 			p = this.getSrcMap(dirs[0]);
 
 		$C(['roots'].concat(dirs.slice(1))).forEach((nm, i) => {
-			config.src[nm] = (this.src[nm] || []).concat(i ? p.src : p.root);
+			let src;
+
+			if (i) {
+				if ({client: true, server: true}[nm]) {
+					const s = p.pzlr;
+					src = path.join(p.src, (nm === 'client' ? s.blockDir : s.serverDir) || '');
+
+				} else {
+					src = p.src;
+				}
+
+			} else {
+				src = p.root;
+			}
+
+			config.src[nm] = (this.src[nm] || []).concat(src);
 		});
 
 		$C(config).object(true).set((el) => {
@@ -91,7 +106,7 @@ class Config {
 	 * Returns src map by the specified init directory
 	 *
 	 * @param {string} dir - init directory (usually __dirname)
-	 * @returns {{root: string, src: string}}
+	 * @returns {{root: string, src: string, pzlr: {blockDir: (string|undefined), serverDir: (string|undefined)}}}
 	 */
 	getSrcMap(dir) {
 		const
@@ -99,6 +114,7 @@ class Config {
 			pzlr = /** @type {{sourceDir: string}} */ fs.readJSONSync(path.join(root, '.pzlrrc'));
 
 		return {
+			pzlr,
 			root,
 			src: path.join(root, pzlr.sourceDir)
 		};
