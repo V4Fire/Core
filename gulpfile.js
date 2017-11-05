@@ -35,7 +35,7 @@ module.exports = function (gulp = require('gulp')) {
 			convertNewline = require('gulp-convert-newline');
 
 		const src = [
-			'./@(src|config|build|typings)/**/*',
+			'./@(src|config|build|ts-definitions)/**/*',
 			'./*'
 		];
 
@@ -55,7 +55,7 @@ module.exports = function (gulp = require('gulp')) {
 			headRgxp = /(\/\*![\s\S]*?\*\/\n{2})/;
 
 		const src = [
-			'./@(src|config|build|typings)/**/*.@(js|ts|styl|ss)',
+			'./@(src|config|build|ts-definitions)/**/*.@(js|ts|styl|ss)',
 			'./@(index|gulpfile|webpack.config).js',
 			'./predefs.d.ts'
 		];
