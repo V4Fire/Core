@@ -35,9 +35,9 @@ const config = module.exports = {
 	},
 
 	src: {
-		init() {
+		init(dir) {
 			const
-				root = path.join(__dirname, '../'),
+				root = path.join(dir, '../'),
 				pzlr = fs.readJSONSync(path.join(root, '.pzlrrc'));
 
 			return {
@@ -49,7 +49,7 @@ const config = module.exports = {
 };
 
 const
-	paths = config.src.init();
+	paths = config.src.init(__dirname);
 
 $C.extend(config.extend, config, {
 	src: {
