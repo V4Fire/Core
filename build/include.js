@@ -26,9 +26,18 @@ module.exports = function (roots) {
 		}
 
 		for (let i = roots.length; i--;) {
+			const
+				url = resolve(roots[i]);
+
 			try {
 				return require(resolve(roots[i]));
-			} catch (_) {}
+
+			} catch (err) {
+				if (err.code !== 'MODULE_NOT_FOUND') {
+					console.error(`Failed to load ${url}`);
+					throw err;
+				}
+			}
 		}
 
 		require(src);
