@@ -5,15 +5,14 @@ const
  * Factory for creating require wrappers:
  *
  * 1) If the string has substring ${root}:
- *    substring will be replace to cwd directory, or if the module isn't exists, the substring will be replaced to base directory
+ *    substring will be replace to one of roots values (from the end) until the will be find
  *
- * 2) Or, cwd / base directory will be add to the beginning of the source string
+ * 2) Or, one of roots values will be add to the beginning of the source string
  *
- * @param {string} cwd - working directory
- * @param {string=} [base]
+ * @param {Array<string>} roots - list of root directories
  * @returns {function (string): ?}
  */
-module.exports = function (cwd, base = path.dirname(module.parent.filename)) {
+module.exports = function (roots) {
 	return function (src) {
 		function resolve(root) {
 			const
@@ -26,11 +25,12 @@ module.exports = function (cwd, base = path.dirname(module.parent.filename)) {
 			return path.join(root, src);
 		}
 
-		try {
-			return require(resolve(cwd));
-
-		} catch (_) {
-			return require(resolve(base));
+		for (let i = roots.length; i--;) {
+			try {
+				return require(resolve(roots[i]));
+			} catch (_) {}
 		}
+
+		require(src);
 	};
 };

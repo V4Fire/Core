@@ -11,7 +11,9 @@
 require('dotenv').config();
 
 const
+	$C = require('collection.js'),
 	Sugar = require('sugar'),
+	fs = require('fs-extra-promise'),
 	path = require('path');
 
 const
@@ -24,9 +26,6 @@ Object.assign(env, {
 
 global.isProd = env.NODE_ENV === 'production';
 
-const
-	src = path.join(__dirname, '../src');
-
 const config = module.exports = {
 	extend: {
 		deep: true,
@@ -36,12 +35,35 @@ const config = module.exports = {
 	},
 
 	src: {
-		cwd: process.cwd(),
-		core: src,
+		init() {
+			const
+				root = path.join(__dirname, '../'),
+				pzlr = fs.readJSONSync(path.join(root, '.pzlrrc'));
+
+			return {
+				root,
+				src: path.join(root, pzlr.sourceDir)
+			};
+		}
+	}
+};
+
+const
+	paths = config.src.init();
+
+$C.extend(config.extend, config, {
+	src: {
+		get cwd() {
+			return this.roots[this.roots.length - 1] || process.cwd();
+		},
+
+		roots: [paths.root],
+		core: paths.src,
 		client: [],
-		server: [src],
+		server: [paths.src],
+
 		include() {
-			return require('../build/include')(this.cwd);
+			return require('../build/include')(this.roots);
 		},
 
 		assets() {
@@ -79,4 +101,4 @@ const config = module.exports = {
 		plugins: [],
 		compact: false
 	}
-};
+});
