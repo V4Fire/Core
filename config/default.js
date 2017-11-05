@@ -77,11 +77,6 @@ const
 	s = config.src,
 	p = s.init(__dirname);
 
-Object.assign(global, {
-	isProd: env.NODE_ENV === 'production',
-	include: s.include()
-});
-
 $C.extend(config.extend, config, {
 	src: /** @lends {config.src} */ {
 		cwd() {
@@ -113,4 +108,9 @@ $C.extend(config.extend, config, {
 			return path.resolve(this.output(), 'server');
 		}
 	}
+});
+
+Object.assign(global, {
+	isProd: env.NODE_ENV === 'production',
+	include: s.include()
 });
