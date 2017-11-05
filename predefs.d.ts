@@ -59,5 +59,5 @@ interface Object {
 }
 
 interface DateConstructor {
-	getWeekDays(): string[]
+	getWeekDays(): string[];
 }
