@@ -65,7 +65,7 @@ class Config {
 		}
 
 		const
-			config = this.extend(Object.getPrototypeOf(opts), opts),
+			config = this.extend(Object.create(Object.getPrototypeOf(opts)), opts),
 			p = this.getSrcMap(dirs[0]);
 
 		$C(['roots'].concat(dirs.slice(1))).forEach((nm, i) => {
