@@ -3,6 +3,7 @@
   "description": "V4Fire core library",
   "homepage": "https://github.com/V4Fire/Core#readme",
   "main": "src/index.js",
+  "typings": "predefs.d.ts",
   "license": "MIT",
   "version": "1.0.31",
   "author": {
