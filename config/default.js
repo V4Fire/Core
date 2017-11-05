@@ -29,7 +29,7 @@ const env = Object.assign(process.env, {
 });
 
 const config = module.exports = {
-	get appName() {
+	appName() {
 		return env.APP_NAME;
 	},
 
@@ -84,7 +84,7 @@ Object.assign(global, {
 
 $C.extend(config.extend, config, {
 	src: /** @lends {config.src} */ {
-		get cwd() {
+		cwd() {
 			return this.roots[this.roots.length - 1] || process.cwd();
 		},
 
@@ -98,11 +98,11 @@ $C.extend(config.extend, config, {
 		},
 
 		assets() {
-			return path.resolve(this.cwd, 'assets');
+			return path.resolve(this.cwd(), 'assets');
 		},
 
 		output() {
-			return path.resolve(this.cwd, 'dist');
+			return path.resolve(this.cwd(), 'dist');
 		},
 
 		clientOutput() {
