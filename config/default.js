@@ -72,6 +72,12 @@ class Config {
 			config.src[nm] = (this.src[nm] || []).concat(i ? p.src : p.root);
 		});
 
+		$C(config).object(true).set((el) => {
+			if (Sugar.Object.isFunction(el)) {
+				return el.bind(this);
+			}
+		});
+
 		if (envs) {
 			$C(Object.keys(envs)).forEach((nm) => {
 				config.envs[nm] = env[nm];
