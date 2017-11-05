@@ -24,9 +24,9 @@ const
  * }}
  */
 const env = Object.assign(process.env, {
-	NODE_ENV: env.NODE_ENV || 'standalone',
-	APP_NAME: env.APP_NAME || 'V4Fire'
-});
+	NODE_ENV: 'standalone',
+	APP_NAME: 'V4Fire'
+}, $C.clone(process.env));
 
 const config = module.exports = {
 	appName() {
