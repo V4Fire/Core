@@ -29,6 +29,10 @@ const env = Object.assign(process.env, {
 });
 
 const config = module.exports = {
+	get appName() {
+		return env.APP_NAME;
+	},
+
 	extend: {
 		deep: true,
 		withProto: true,
