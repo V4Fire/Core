@@ -31,8 +31,10 @@
     "tosource": "^1.0.0"
   },
   "optionalDependencies": {
+    "@types/fs-extra-promise": "^1.0.3",
     "@types/gulp": "^3.8.34",
     "config": "^1.27.0",
+    "fs-extra-promise": "^1.0.1",
     "gulp": "^3.9.1",
     "gulp-convert-newline": "0.0.3",
     "gulp-header": "^1.8.8",
