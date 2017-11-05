@@ -110,7 +110,16 @@ $C.extend(config.extend, config, {
 	}
 });
 
-Object.assign(global, {
-	isProd: env.NODE_ENV === 'production',
-	include: s.include()
+Object.defineProperties(global, {
+	include: {
+		get() {
+			return require('config').src.include();
+		}
+	},
+
+	isProd: {
+		get() {
+			return env.NODE_ENV === 'production';
+		}
+	}
 });
