@@ -79,7 +79,7 @@ Object.assign(global, {
 });
 
 $C.extend(config.extend, config, {
-	src: {
+	src: /** @lends {config.src} */ {
 		get cwd() {
 			return this.roots[this.roots.length - 1] || process.cwd();
 		},
