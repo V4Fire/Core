@@ -15,7 +15,7 @@ const
  * Global require wrapper
  * @type {function(string): ?}
  */
-global.include = config.src.include.bind(config.src);
+global.include = config.src.include();
 
 module.exports = function (gulp = require('gulp')) {
 	gulp.task('setProd', (cb) => {
