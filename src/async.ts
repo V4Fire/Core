@@ -1137,14 +1137,15 @@ export default class Async<CTX extends Object> {
 				};
 
 				const
-					clearHandlers = link.onClear;
+					clearHandlers = link.onClear,
+					clearFn = p.clearFn || link.clearFn;
 
 				for (let i = 0; i < clearHandlers.length; i++) {
 					clearHandlers[i].call(this.context || this, ctx);
 				}
 
-				if (link.clearFn) {
-					link.clearFn.call(null, link.id, ctx);
+				if (clearFn) {
+					clearFn.call(null, link.id, ctx);
 				}
 			}
 
