@@ -89,9 +89,8 @@ class Config {
 		});
 
 		$C(config).object(true).set((el) => {
-			el[origin] = el[origin] || el;
-
 			if (Sugar.Object.isFunction(el)) {
+				el[origin] = el[origin] || el;
 				return el[origin].bind(config);
 			}
 		});
