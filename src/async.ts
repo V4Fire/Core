@@ -11,11 +11,15 @@
 /// <reference types="node"/>
 import $C = require('collection.js');
 
+export const
+	asyncCounter = Symbol('Async counter id');
+
 export interface AsyncLink {
 	id: any;
 	obj: any;
 	objName: string | undefined;
 	label: string | symbol | undefined;
+	clearFn: Function | undefined;
 	onComplete: Function[][];
 	onClear: Function[];
 }
@@ -73,6 +77,7 @@ export interface WorkerLike {
 	terminate?: Function;
 	destroy?: Function;
 	close?: Function;
+	abort?: Function;
 }
 
 export type RequestLike<T> = PromiseLike<T> & {abort: Function};
@@ -106,6 +111,11 @@ export default class Async<CTX extends Object> {
 	 * Context for functions
 	 */
 	protected context: CTX | undefined;
+
+	/**
+	 * Map of initialized workers
+	 */
+	protected store = new WeakMap();
 
 	/**
 	 * Wrapper for setImmediate
@@ -145,13 +155,12 @@ export default class Async<CTX extends Object> {
 	// tslint:disable-next-line
 	clearImmediate(p) {
 		if (p === undefined) {
-			return this.clearAllAsync({name: 'immediate', clearFn: clearImmediate});
+			return this.clearAllAsync({name: 'immediate'});
 		}
 
 		return this.clearAsync({
 			...p,
 			name: 'immediate',
-			clearFn: clearImmediate,
 			id: p.id || this.getIfNotObject(p)
 		});
 	}
@@ -197,13 +206,12 @@ export default class Async<CTX extends Object> {
 	// tslint:disable-next-line
 	clearInterval(p) {
 		if (p === undefined) {
-			return this.clearAllAsync({name: 'interval', clearFn: clearInterval});
+			return this.clearAllAsync({name: 'interval'});
 		}
 
 		return this.clearAsync({
 			...p,
 			name: 'interval',
-			clearFn: clearInterval,
 			id: p.id || this.getIfNotObject(p)
 		});
 	}
@@ -248,13 +256,12 @@ export default class Async<CTX extends Object> {
 	// tslint:disable-next-line
 	clearTimeout(p) {
 		if (p === undefined) {
-			return this.clearAllAsync({name: 'timeout', clearFn: clearTimeout});
+			return this.clearAllAsync({name: 'timeout'});
 		}
 
 		return this.clearAsync({
 			...p,
 			name: 'timeout',
-			clearFn: clearTimeout,
 			id: p.id || this.getIfNotObject(p)
 		});
 	}
@@ -302,13 +309,12 @@ export default class Async<CTX extends Object> {
 	// tslint:disable-next-line
 	cancelIdleCallback(p) {
 		if (p === undefined) {
-			return this.clearAllAsync({name: 'idleCallback', clearFn: cancelIdleCallback});
+			return this.clearAllAsync({name: 'idleCallback'});
 		}
 
 		return this.clearAsync({
 			...p,
 			name: 'idleCallback',
-			clearFn: cancelIdleCallback,
 			id: p.id || this.getIfNotObject(p)
 		});
 	}
@@ -318,17 +324,26 @@ export default class Async<CTX extends Object> {
 	 *
 	 * @param worker
 	 * @param [params] - additional parameters for the operation:
+	 *   *) [destructor] - name of destructor method
 	 *   *) [join] - if true, then competitive tasks (with same labels) will be joined to the first
 	 *   *) [label] - label for the task (previous task with the same label will be canceled)
 	 *   *) [group] - group name for the task
 	 *   *) [onClear] - clear handler
 	 */
-	worker<T>(worker: T & WorkerLike, params?: AsyncCbOpts): T {
+	worker<T>(worker: T & WorkerLike, params?: AsyncCbOpts & {destructor?: string}): T {
+		const
+			{store} = this;
+
+		if (!store.has(worker)) {
+			store.set(worker, true);
+			worker[asyncCounter] = (worker[asyncCounter] || 0) + 1;
+		}
+
 		return this.setAsync({
 			...params,
 			name: 'worker',
-			obj: worker || this.getIfNotObject(params),
-			clearFn: this.workerDestructor,
+			obj: worker,
+			clearFn: this.workerDestructor.bind(this, params && params.destructor),
 			interval: true
 		});
 	}
@@ -350,13 +365,12 @@ export default class Async<CTX extends Object> {
 	// tslint:disable-next-line
 	terminateWorker(p) {
 		if (p === undefined) {
-			return this.clearAllAsync({name: 'worker', clearFn: this.workerDestructor});
+			return this.clearAllAsync({name: 'worker'});
 		}
 
 		return this.clearAsync({
 			...p,
 			name: 'worker',
-			clearFn: this.workerDestructor,
 			id: p.id || this.getIfNotObject(p)
 		});
 	}
@@ -401,13 +415,12 @@ export default class Async<CTX extends Object> {
 	// tslint:disable-next-line
 	cancelRequest(p) {
 		if (p === undefined) {
-			return this.clearAllAsync({name: 'request', clearFn: this.requestDestructor});
+			return this.clearAllAsync({name: 'request'});
 		}
 
 		return this.clearAsync({
 			...p,
 			name: 'request',
-			clearFn: this.requestDestructor,
 			id: p.id || this.getIfNotObject(p)
 		});
 	}
@@ -773,14 +786,13 @@ export default class Async<CTX extends Object> {
 	// tslint:disable-next-line
 	off(p) {
 		if (p === undefined) {
-			return this.clearAllAsync({name: 'eventListener', clearFn: this.eventListenerDestructor});
+			return this.clearAllAsync({name: 'eventListener'});
 		}
 
 		return this.clearAsync({
 			...p,
 			name: 'eventListener',
-			id: p.id || this.getIfEvent(p),
-			clearFn: this.eventListenerDestructor
+			id: p.id || this.getIfEvent(p)
 		});
 	}
 
@@ -867,17 +879,28 @@ export default class Async<CTX extends Object> {
 
 	/**
 	 * Terminates the specified worker
+	 *
+	 * @param destructor - name of destructor method
 	 * @param worker
 	 */
-	protected workerDestructor<T>(worker: T & WorkerLike): void {
+	protected workerDestructor<T>(destructor: string | undefined, worker: T & WorkerLike): void {
 		const
-			fn = worker.terminate || worker.destroy || worker.close;
+			{store} = this;
 
-		if (fn && Object.isFunction(fn)) {
-			fn.call(worker);
+		if (store.has(worker)) {
+			store.delete(worker);
 
-		} else {
-			throw new ReferenceError('Destructor function for the worker is not defined');
+			if (--worker[asyncCounter] <= 0) {
+				const
+					fn = destructor ? worker[destructor] : worker.terminate || worker.destroy || worker.close || worker.abort;
+
+				if (fn && Object.isFunction(fn)) {
+					fn.call(worker);
+
+				} else {
+					throw new ReferenceError('Destructor function for the worker is not defined');
+				}
+			}
 		}
 	}
 
@@ -1037,6 +1060,7 @@ export default class Async<CTX extends Object> {
 			obj: p.obj,
 			objName: p.obj.name,
 			label: p.label,
+			clearFn: p.clearFn,
 			onComplete: [],
 			onClear: [].concat(p.onClear || [])
 		};
@@ -1119,8 +1143,8 @@ export default class Async<CTX extends Object> {
 					clearHandlers[i].call(this.context || this, ctx);
 				}
 
-				if (p.clearFn) {
-					p.clearFn.call(null, link.id, ctx);
+				if (link.clearFn) {
+					link.clearFn.call(null, link.id, ctx);
 				}
 			}
 
