@@ -17,7 +17,7 @@ const
 	path = require('path');
 
 const
-	orign = Symbol('Original function'),
+	origin = Symbol('Original function'),
 	{env} = process;
 
 /** @template C */
@@ -89,10 +89,10 @@ class Config {
 		});
 
 		$C(config).object(true).set((el) => {
-			el[orign] = el[orign] || el;
+			el[origin] = el[origin] || el;
 
 			if (Sugar.Object.isFunction(el)) {
-				return el[orign].bind(config);
+				return el[origin].bind(config);
 			}
 		});
 
