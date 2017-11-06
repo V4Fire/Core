@@ -241,7 +241,7 @@ export default class Then<T> {
 				resolve,
 				reject;
 
-			if (Sugar.Object.isFunction(onFulfilled)) {
+			if (Object.isFunction(onFulfilled)) {
 				resolve = (v) => {
 					Then.evaluate(onFulfilled, [v], rej, res);
 				};
@@ -250,7 +250,7 @@ export default class Then<T> {
 				resolve = res;
 			}
 
-			if (Sugar.Object.isFunction(onRejected)) {
+			if (Object.isFunction(onRejected)) {
 				reject = (r) => {
 					Then.evaluate(onRejected, [r], rej, res);
 				};
