@@ -381,6 +381,7 @@ export default class Async<CTX extends Object> {
 	 *
 	 * @param request
 	 * @param [params] - additional parameters for the operation:
+	 *   *) [destructor] - name of destructor method
 	 *   *) [join] - strategy for joining competitive tasks (with same labels):
 	 *       *) true - all tasks will be joined to the first;
 	 *       *) 'replace' - all tasks will be joined (replaced) to the last.
@@ -388,12 +389,12 @@ export default class Async<CTX extends Object> {
 	 *   *) [label] - label for the task (previous task with the same label will be canceled)
 	 *   *) [group] - group name for the task
 	 */
-	request<T>(request: RequestLike<T>, params?: AsyncOpts): RequestLike<T> {
+	request<T>(request: RequestLike<T>, params?: AsyncOpts & {destructor?: string}): RequestLike<T> {
 		return this.setAsync({
 			...params,
 			name: 'request',
 			obj: request,
-			clearFn: this.requestDestructor,
+			clearFn: this.requestDestructor.bind(this, params && params.destructor),
 			wrapper: (fn, req) => req.then(fn, fn),
 			needCall: true
 		});
@@ -908,12 +909,13 @@ export default class Async<CTX extends Object> {
 	/**
 	 * Cancels the specified request
 	 *
+	 * @param destructor - name of destructor method
 	 * @param request
 	 * @param ctx - context object
 	 */
-	protected requestDestructor(request: RequestLike<any>, ctx: AsyncCtx): void {
+	protected requestDestructor(destructor: string | undefined, request: RequestLike<any>, ctx: AsyncCtx): void {
 		const
-			fn = request.abort || request.cancel;
+			fn = destructor ? request[destructor] : request.abort || request.cancel;
 
 		if (fn && Object.isFunction(fn)) {
 			fn.call(request, ctx.join === 'replace' ? ctx.replacedBy && ctx.replacedBy.id : undefined);
