@@ -78,9 +78,10 @@ export interface WorkerLike {
 	destroy?: Function;
 	close?: Function;
 	abort?: Function;
+	cancel?: Function;
 }
 
-export type RequestLike<T> = PromiseLike<T> & {abort: Function};
+export type RequestLike<T> = PromiseLike<T> & {abort?: Function; cancel?: Function};
 
 /**
  * Base class for Async IO
@@ -891,8 +892,8 @@ export default class Async<CTX extends Object> {
 			store.delete(worker);
 
 			if (--worker[asyncCounter] <= 0) {
-				const
-					fn = destructor ? worker[destructor] : worker.terminate || worker.destroy || worker.close || worker.abort;
+				const fn = destructor ?
+					worker[destructor] : worker.terminate || worker.destroy || worker.close || worker.abort || worker.cancel;
 
 				if (fn && Object.isFunction(fn)) {
 					fn.call(worker);
@@ -912,7 +913,7 @@ export default class Async<CTX extends Object> {
 	 */
 	protected requestDestructor(request: RequestLike<any>, ctx: AsyncCtx): void {
 		const
-			fn = request.abort;
+			fn = request.abort || request.cancel;
 
 		if (fn && Object.isFunction(fn)) {
 			fn.call(request, ctx.join === 'replace' ? ctx.replacedBy && ctx.replacedBy.id : undefined);
