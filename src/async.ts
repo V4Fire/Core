@@ -96,14 +96,6 @@ export type RequestLike<T> = PromiseLike<T> & {abort?: Function; cancel?: Functi
  */
 export default class Async<CTX extends Object> {
 	/**
-	 * @param [ctx] - context for functions
-	 */
-	constructor(ctx?: CTX) {
-		this.cache = Object.create(null);
-		this.context = ctx;
-	}
-
-	/**
 	 * Cache object for async operations
 	 */
 	protected cache: Record<string, CacheObject>;
@@ -116,7 +108,15 @@ export default class Async<CTX extends Object> {
 	/**
 	 * Map of initialized workers
 	 */
-	protected store = new WeakMap();
+	protected store: WeakMap<Object, true> = new WeakMap();
+
+	/**
+	 * @param [ctx] - context for functions
+	 */
+	constructor(ctx?: CTX) {
+		this.cache = Object.create(null);
+		this.context = ctx;
+	}
 
 	/**
 	 * Wrapper for setImmediate
