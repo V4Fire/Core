@@ -401,14 +401,14 @@ export default class Async<CTX extends Object> {
 	}
 
 	/**
-	 * Отменяет заданный удаленный запрос
-	 * @param [request] - запрос (если не задан, то удаляются все запросы)
+	 * Cancels the specified request
+	 * @param [request] - link for the request (if not defined wil be cancel all request)
 	 */
 	cancelRequest<T>(request?: RequestLike<T>): this;
 
 	/**
 	 * @param params - parameters for the operation:
-	 *   *) [id] - объект запроса
+	 *   *) [id] - link for the request
 	 *   *) [label] - label for the task
 	 *   *) [group] - group name for the task
 	 */
@@ -428,7 +428,7 @@ export default class Async<CTX extends Object> {
 	}
 
 	/**
-	 * Wrapper for callback функции
+	 * Wrapper for a callback function
 	 *
 	 * @param cb
 	 * @param [params] - additional parameters for the operation:
@@ -610,7 +610,7 @@ export default class Async<CTX extends Object> {
 	 *   *) [join] - if true, then competitive tasks (with same labels) will be joined to the first
 	 *   *) [label] - label for the task (previous task with the same label will be canceled)
 	 *   *) [group] - group name for the task
-	 *   *) [single] - если true, то после первого вызова события оно будет очищено
+	 *   *) [single] - if true, then after first invocation the event listener will be removed
 	 *   *) [onClear] - clear handler
 	 *
 	 * @param [args] - additional arguments for the emitter
