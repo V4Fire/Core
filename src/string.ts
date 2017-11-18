@@ -6,27 +6,14 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { GLOBAL, IS_NODE } from './const/links';
-
 try {
 	const
 		{camelize, dasherize, underscore} = String.prototype;
 
 	const
-		cache = !IS_NODE && GLOBAL.FN_CACHE && GLOBAL.FN_CACHE.string || Object.create(null);
-
-	const saveCache = () => {
-		try {
-			localStorage.setItem('STRING_CACHE', JSON.stringify(cache));
-		} catch (_) {}
-	};
-
-	const
-		camelizeCache = cache.camelize = cache.camelize || Object.create(null),
-		dasherizeCache = cache.dasherize = cache.dasherize || Object.create(null),
-		underscoreCache = cache.underscore = cache.underscore || Object.create(null);
-
-	let timer;
+		camelizeCache = Object.create(null),
+		dasherizeCache = Object.create(null),
+		underscoreCache = Object.create(null);
 
 	/** @override */
 	String.prototype.camelize = function (this: string, upper?: boolean): string {
@@ -34,15 +21,7 @@ try {
 			return camelizeCache[this];
 		}
 
-		const
-			res = camelizeCache[this] = camelize.call(this, upper);
-
-		if (!IS_NODE) {
-			cancelIdleCallback(timer);
-			timer = requestIdleCallback(saveCache);
-		}
-
-		return res;
+		return camelizeCache[this] = camelize.call(this, upper);
 	};
 
 	/** @override */
@@ -51,15 +30,7 @@ try {
 			return dasherizeCache[this];
 		}
 
-		const
-			res = dasherizeCache[this] = dasherize.call(this);
-
-		if (!IS_NODE) {
-			cancelIdleCallback(timer);
-			timer = requestIdleCallback(saveCache);
-		}
-
-		return res;
+		return dasherizeCache[this] = dasherize.call(this);
 	};
 
 	/** @override */
@@ -68,15 +39,7 @@ try {
 			return underscoreCache[this];
 		}
 
-		const
-			res = underscoreCache[this] = underscore.call(this);
-
-		if (!IS_NODE) {
-			cancelIdleCallback(timer);
-			timer = requestIdleCallback(saveCache);
-		}
-
-		return res;
+		return underscoreCache[this] = underscore.call(this);
 	};
 
 } catch (_) {}
