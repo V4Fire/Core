@@ -4,8 +4,11 @@
     "baseUrl": "./src",
     "downlevelIteration": true,
     "lib": ["dom", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
     "strictNullChecks": true,
     "strictFunctionTypes": true,
+    "experimentalDecorators": true,
     "typeRoots": ["node_modules", "node_modules/@types"]
   }
 }
