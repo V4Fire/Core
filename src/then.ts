@@ -1,17 +1,12 @@
+/*!
+ * V4Fire Core
+ * https://github.com/V4Fire/Core
+ *
+ * Released under the MIT license
+ * https://github.com/V4Fire/Core/blob/master/LICENSE
+ */
+
 import $C = require('collection.js');
-
-export type Value<T> = T | PromiseLike<T>;
-export interface onAbort {
-	(reason: any): void;
-}
-
-export interface Executor<T> {
-	(
-		resolve?: (value?: Value<T>) => void,
-		reject?: (reason?: any) => void,
-		onAbort?: (cb: onAbort) => void
-	): void;
-}
 
 export const enum State {
 	pending,
@@ -19,47 +14,37 @@ export const enum State {
 	rejected
 }
 
-export default class Then<T> {
+export type Value<T> = T | PromiseLike<T>;
+export class PromiseAbortError extends Error {}
+
+export interface OnError {
+	(reason?: any): void;
+}
+
+export interface Executor<T> {
+	(
+		resolve: (value?: Value<T>) => void,
+		reject: (reason?: any) => void,
+		onAbort: (cb: OnError) => void
+	): void;
+}
+
+export default class Then<T> implements PromiseLike<T> {
 	/**
-	 * Промис который никогда не зарезолвится
+	 * Promise that never will be resolved
 	 */
+	// tslint:disable-next-line
 	static readonly never: Promise<any> = new Promise(() => {});
 
 	/**
-	 * Выполняет заданную функцию с указанными аргументами
-	 *
-	 * @param fn
-	 * @param args
-	 * @param [onError] - обработчик ошибки
-	 * @param [onValue] - обработчик успешной операции
-	 */
-	protected static evaluate<T, V>(
-		fn: (...args: T[]) => V,
-		args: T[] = [],
-		onError?: (r: any) => void,
-		onValue?: (v: V) => void
-	): void {
-		try {
-			const value = fn(...args);
-			onValue && onValue(value);
-
-		} catch (err) {
-			onError && onError(err);
-		}
-	}
-
-	/**
-	 * Возвращает true если заданное значение является PromiseLike
+	 * Returns true if the specified value is PromiseLike
 	 * @param obj
 	 */
 	static isThenable(obj: any): obj is PromiseLike<any> {
 		return Boolean(obj) && Object.isFunction(obj.then) && Object.isFunction(obj.catch);
 	}
 
-	/**
-	 * Оборачивает заданное значение в Then
-	 * @param value
-	 */
+	/** @see {Promise.resolve} */
 	static resolve<V>(value?: Value<V>): Then<V> {
 		if (value instanceof Then) {
 			return value;
@@ -75,29 +60,19 @@ export default class Then<T> {
 		});
 	}
 
-	/**
-	 * Оборачивает заданное значение в Then, который зарезолвиться по setImmediate
-	 * @param [value]
-	 */
-	static immediate<V>(value?: Value<V>): Then<V> {
-		return new Then((res, rej, onAbort) => {
-			const
-				id = setImmediate(() => res(value));
-
-			onAbort((r) => {
-				clearImmediate(id);
-
-				if (value instanceof Then) {
-					value.bubblingAbort(r);
-				}
-			});
-		});
+	/** @see {Promise.reject} */
+	static reject(reason?: any): Then<any> {
+		return new Then((res, rej) => rej(reason));
 	}
 
 	/** @see {Promise.all} */
+	// @ts-ignore
+	static all<T1, T2, T3, T4>(values: [Value<T1>, Value<T2>, Value<T3>, Value<T4>]): Then<[T1, T2, T3, T4]>;
 	static all<T1, T2, T3>(values: [Value<T1>, Value<T2>, Value<T3>]): Then<[T1, T2, T3]>;
 	static all<T1, T2>(values: [Value<T1>, Value<T2>]): Then<[T1, T2]>;
-	static all<T>(values: Array<Value<T>>): Then<T[]>;
+	static all<T>(values: Iterable<Value<T>>): Then<T[]>;
+
+	// tslint:disable-next-line
 	static all(values) {
 		values = $C(values).map(Then.resolve);
 
@@ -105,7 +80,7 @@ export default class Then<T> {
 			let counter = 0;
 
 			const
-				resolved = [];
+				resolved: any[] = [];
 
 			$C(values).forEach((promise, i) => {
 				promise.then(
@@ -122,27 +97,71 @@ export default class Then<T> {
 			});
 
 			onAbort((reason) => {
-				$C(values).forEach((val: Then<any>) => {
-					val.bubblingAbort(reason);
-				});
+				$C(values).forEach((el: Then<any>) => el.bubblingAbort(reason));
 			});
 		});
 	}
 
+	/** @see {Promise.race} */
+	static race<T>(values: Iterable<Value<T>>): Then<T> {
+		values = $C(values).map(Then.resolve);
+
+		return new Then((res, rej, onAbort) => {
+			$C(values).forEach((promise) => {
+				promise.then(res, rej);
+			});
+
+			onAbort((reason) => {
+				$C(values).forEach((el: Then<any>) => el.bubblingAbort(reason));
+			});
+		});
+	}
+
+	/**
+	 * Returns true if the current promise is pending
+	 */
+	get isPending(): boolean {
+		return this.state === State.pending;
+	}
+
+	/**
+	 * Number of child promises
+	 */
 	protected pendingChildren: number = 0;
 
+	/**
+	 * Promise state
+	 */
 	protected state: State = State.pending;
 
+	/**
+	 * Internal promise
+	 */
 	protected promise: Promise<T>;
 
+	/**
+	 * Resolve function
+	 */
 	protected resolve: (value?: Value<T>) => void;
 
-	protected onAbort: onAbort;
+	/**
+	 * Reject function
+	 */
+	protected reject: OnError;
 
+	/**
+	 * Abort handler
+	 */
+	protected onAbort: OnError;
+
+	/**
+	 * @param executor - executor function
+	 * @param [parent] - parent promise
+	 */
 	constructor(executor: Executor<T>, parent?: Then<any>) {
 		this.promise = new Promise((res, rej) => {
-			const resolve = (v) => {
-				if (!this.isPending()) {
+			const resolve = this.resolve = (v) => {
+				if (!this.isPending) {
 					return;
 				}
 
@@ -150,8 +169,8 @@ export default class Then<T> {
 				res(v);
 			};
 
-			const reject = (v) => {
-				if (!this.isPending()) {
+			const reject = this.reject = (v) => {
+				if (!this.isPending) {
 					return;
 				}
 
@@ -159,80 +178,55 @@ export default class Then<T> {
 				rej(v);
 			};
 
-			this.resolve = resolve;
-
 			let
 				setOnAbort;
 
 			if (parent) {
-				const ap = (r) => {
-					parent.bubblingAbort(r);
-				};
+				const
+					abortParent = this.onAbort = (r) => parent.bubblingAbort(r);
 
-				this.onAbort = ap;
 				setOnAbort = (cb) => {
 					this.onAbort = (r) => {
-						ap(r);
+						abortParent(r);
 						cb(r);
 					};
 				};
 
 			} else {
-				setOnAbort = (cb) => {
-					this.onAbort = cb;
-				};
+				setOnAbort = (cb) => this.onAbort = cb;
 			}
 
-			Then.evaluate(executor, [resolve, reject, setOnAbort], reject);
+			this.evaluate(executor, [resolve, reject, setOnAbort], reject);
 		});
 	}
 
-	/**
-	 * Отменяет исходный запрос:
-	 * если .pendingChildren > 1 то запрос физически не отменяется
-	 *
-	 * @param [reason] - причина отмены
-	 */
-	protected bubblingAbort(reason: any): void {
-		if (this.pendingChildren < 2) {
-			this.abort(reason);
-		}
-
-		this.pendingChildren--;
-	}
-
-	/**
-	 * Вернет true если промис обрабатывается
-	 */
-	isPending(): boolean {
-		return this.state === State.pending;
-	}
-
 	/** @see {Promise.prototype.then} */
+	// @ts-ignore
 	then(
 		onFulfilled?: ((value: T) => Value<T>) | null | undefined,
 		onRejected?: ((reason: any) => Value<T>) | null | undefined,
-		abortCb?: onAbort | null | undefined
+		abortCb?: OnError | null | undefined
 	): Then<T>;
 
 	then<TReason>(
 		onFulfilled: ((value: T) => Value<T>) | null | undefined,
 		onRejected: (reason: any) => Value<TReason>,
-		abortCb?: onAbort | null | undefined
+		abortCb?: OnError | null | undefined
 	): Then<T | TReason>;
 
 	then<TValue>(
 		onFulfilled: (value: T) => Value<TValue>,
 		onRejected?: ((reason: any) => Value<TValue>) | null | undefined,
-		abortCb?: onAbort | null | undefined
+		abortCb?: OnError | null | undefined
 	): Then<TValue>;
 
 	then<TValue, TReason>(
 		onFulfilled: (value: T) => Value<TValue>,
 		onRejected: (reason: any) => Value<TReason>,
-		abortCb?: onAbort | null | undefined
+		abortCb?: OnError | null | undefined
 	): Then<TValue | TReason>;
 
+	// tslint:disable-next-line
 	then(onFulfilled, onRejected, abortCb) {
 		this.pendingChildren++;
 
@@ -243,7 +237,7 @@ export default class Then<T> {
 
 			if (Object.isFunction(onFulfilled)) {
 				resolve = (v) => {
-					Then.evaluate(onFulfilled, [v], rej, res);
+					this.evaluate(onFulfilled, [v], rej, res);
 				};
 
 			} else {
@@ -252,7 +246,7 @@ export default class Then<T> {
 
 			if (Object.isFunction(onRejected)) {
 				reject = (r) => {
-					Then.evaluate(onRejected, [r], rej, res);
+					this.evaluate(onRejected, [r], rej, res);
 				};
 
 			} else {
@@ -277,20 +271,59 @@ export default class Then<T> {
 	/** @see {Promise.prototype.catch} */
 	catch(onRejected?: ((reason: any) => Value<T>) | null | undefined): Then<T>;
 	catch<TReason>(onRejected: (reason: any) => Value<TReason>): Then<TReason>;
+
+	// tslint:disable-next-line
 	catch(onRejected) {
 		return this.then(null, onRejected);
 	}
 
 	/**
-	 * Отменяет исходный запрос
-	 * @param [reason] - причина отмены
+	 * Aborts the current promise
+	 * @param [reason] - abort reason
 	 */
 	abort(reason: any = null): void {
-		if (this.isPending()) {
+		if (this.isPending) {
 			setImmediate(() => {
-				Then.evaluate(this.onAbort, [reason]);
-				this.resolve(Then.never);
+				this.evaluate(this.onAbort, [reason]);
+				this.reject(reason);
 			});
+		}
+	}
+
+	/**
+	 * Aborts the current promise:
+	 * if .pendingChildren > 1, then the promise won't be aborted really
+	 *
+	 * @param [reason] - abort reason
+	 */
+	protected bubblingAbort(reason: any): void {
+		if (this.pendingChildren < 2) {
+			this.abort(reason);
+		}
+
+		this.pendingChildren--;
+	}
+
+	/**
+	 * Executes a function with the specified parameters
+	 *
+	 * @param fn
+	 * @param args - arguments
+	 * @param [onError] - error handler
+	 * @param [onValue] - success handler
+	 */
+	protected evaluate<T, V>(
+		fn: (...args: T[]) => V,
+		args: T[] = [],
+		onError?: OnError,
+		onValue?: (value: V) => void
+	): void {
+		try {
+			const v = fn(...args);
+			onValue && onValue(v);
+
+		} catch (err) {
+			onError && onError(err);
 		}
 	}
 }
