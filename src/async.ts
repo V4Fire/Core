@@ -10,6 +10,7 @@
 
 /// <reference types="node"/>
 import $C = require('collection.js');
+import Then from './then';
 
 export const
 	asyncCounter = Symbol('Async counter id');
@@ -80,8 +81,6 @@ export interface WorkerLike {
 	abort?: Function;
 	cancel?: Function;
 }
-
-export type RequestLike<T> = PromiseLike<T> & {abort?: Function; cancel?: Function};
 
 /**
  * Base class for Async IO
@@ -381,7 +380,6 @@ export default class Async<CTX extends Object> {
 	 *
 	 * @param request
 	 * @param [params] - additional parameters for the operation:
-	 *   *) [destructor] - name of destructor method
 	 *   *) [join] - strategy for joining competitive tasks (with same labels):
 	 *       *) true - all tasks will be joined to the first;
 	 *       *) 'replace' - all tasks will be joined (replaced) to the last.
@@ -389,14 +387,15 @@ export default class Async<CTX extends Object> {
 	 *   *) [label] - label for the task (previous task with the same label will be canceled)
 	 *   *) [group] - group name for the task
 	 */
-	request<T>(request: RequestLike<T>, params?: AsyncOpts & {destructor?: string}): RequestLike<T> {
+	request<T>(request: PromiseLike<T>, params?: AsyncOpts): Then<T> {
 		return this.setAsync({
 			...params,
 			name: 'request',
-			obj: request,
-			clearFn: this.requestDestructor.bind(this, params && params.destructor),
-			wrapper: (fn, req) => req.then(fn, fn),
-			needCall: true
+			obj: Then.resolve(request),
+			needCall: true,
+			linkByWrapper: true,
+			clearFn: this.requestDestructor.bind(this),
+			wrapper: (fn, req) => req.then(fn, fn)
 		});
 	}
 
@@ -404,7 +403,7 @@ export default class Async<CTX extends Object> {
 	 * Cancels the specified request
 	 * @param [request] - link for the request (if not defined wil be cancel all request)
 	 */
-	cancelRequest<T>(request?: RequestLike<T>): this;
+	cancelRequest(request?: Then<any>): this;
 
 	/**
 	 * @param params - parameters for the operation:
@@ -412,7 +411,7 @@ export default class Async<CTX extends Object> {
 	 *   *) [label] - label for the task
 	 *   *) [group] - group name for the task
 	 */
-	cancelRequest<T>(params: ClearOptsId<T & WorkerLike>): this;
+	cancelRequest(params: ClearOptsId<Then<any>>): this;
 
 	// tslint:disable-next-line
 	cancelRequest(p) {
@@ -843,16 +842,6 @@ export default class Async<CTX extends Object> {
 	}
 
 	/**
-	 * Returns true if the specified value is promise like
-	 * @param value
-	 */
-	protected isPromiseLike(value: any): value is PromiseLike<any> {
-		return Boolean(
-			value && (value instanceof Promise || Object.isFunction(value.then) && Object.isFunction(value.catch))
-		);
-	}
-
-	/**
 	 * Removes an event handler from the specified emitter
 	 *
 	 * @param params - parameters:
@@ -909,20 +898,11 @@ export default class Async<CTX extends Object> {
 	/**
 	 * Cancels the specified request
 	 *
-	 * @param destructor - name of destructor method
 	 * @param request
 	 * @param ctx - context object
 	 */
-	protected requestDestructor(destructor: string | undefined, request: RequestLike<any>, ctx: AsyncCtx): void {
-		const
-			fn = destructor ? request[destructor] : request.abort || request.cancel;
-
-		if (fn && Object.isFunction(fn)) {
-			fn.call(request, ctx.join === 'replace' ? ctx.replacedBy && ctx.replacedBy.id : undefined);
-
-		} else {
-			throw new ReferenceError('Abort function for the request is not defined');
-		}
+	protected requestDestructor(request: Then<any>, ctx: AsyncCtx): void {
+		request.abort(ctx.join === 'replace' ? ctx.replacedBy && ctx.replacedBy.id : undefined);
 	}
 
 	/**
@@ -998,7 +978,6 @@ export default class Async<CTX extends Object> {
 		}
 
 		const
-			that = this,
 			ctx = this.context;
 
 		let
@@ -1038,7 +1017,7 @@ export default class Async<CTX extends Object> {
 					res = finalObj.apply(fnCtx, arguments);
 				}
 
-				if (that.isPromiseLike(finalObj)) {
+				if (Then.isThenable(finalObj)) {
 					finalObj.then(execTasks(), execTasks(1));
 
 				} else {
