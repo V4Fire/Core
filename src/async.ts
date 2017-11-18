@@ -9,7 +9,6 @@
 /* tslint:disable:max-file-line-count */
 
 /// <reference types="node"/>
-import $C = require('collection.js');
 import Then from './then';
 
 export const
@@ -1071,11 +1070,18 @@ export default class Async<CTX extends Object> {
 		let cache;
 		if (p.group) {
 			if (Object.isRegExp(p.group)) {
-				$C(baseCache.groups).forEach((g) => {
+				const
+					obj = baseCache.groups,
+					keys = Object.keys(obj);
+
+				for (let i = 0; i < keys.length; i++) {
+					const
+						g = obj[<string>keys[i]];
+
 					if (p.group.test(g)) {
 						this.clearAsync({...p, group: g});
 					}
-				});
+				}
 
 				return this;
 			}
