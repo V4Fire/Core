@@ -8,7 +8,6 @@
     "skipLibCheck": true,
     "strictNullChecks": true,
     "strictFunctionTypes": true,
-    "experimentalDecorators": true,
-    "typeRoots": ["node_modules", "node_modules/@types"]
+    "experimentalDecorators": true
   }
 }

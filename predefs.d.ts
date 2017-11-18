@@ -6,9 +6,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-/// <reference types="collection.js"/>
-/// <reference types="sugar/sugar-extended"/>
-
 declare function Any(obj: any): any;
 declare function stderr(err: any): void;
 declare function infinity<T>(): Iterable<T>;
