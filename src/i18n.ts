@@ -8,7 +8,7 @@
 
 import $C = require('collection.js');
 import config from 'config';
-import { GLOBAL, IS_NODE } from './const/links';
+import { GLOBAL, IS_NODE } from 'const/links';
 import * as baseLangs from 'lang';
 
 const

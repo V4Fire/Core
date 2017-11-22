@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { GLOBAL } from './const/links';
+import { GLOBAL } from 'const/links';
 
 /**
  * Constructor for any types
