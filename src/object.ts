@@ -8,7 +8,7 @@
 
 import $C = require('collection.js');
 import toSource = require('tosource');
-import { convertIfDate } from 'json';
+import { convertIfDate } from './json';
 
 /** @see {$C.extend} */
 Object.mixin = $C.extend;

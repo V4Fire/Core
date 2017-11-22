@@ -7,7 +7,7 @@
  */
 
 import $C = require('collection.js');
-import { lang } from 'i18n';
+import { lang } from './i18n';
 
 /**
  * Returns a value without translation instead the standard i18n behaviour
