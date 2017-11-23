@@ -12,7 +12,7 @@
  * Returns the project version
  */
 exports.getVersion = function () {
-	return require('../package.json').version;
+	return include('package.json').version;
 };
 
 /**

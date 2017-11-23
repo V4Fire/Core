@@ -126,7 +126,7 @@ class Config {
 const config = new Config();
 module.exports = config.createConfig(
 	{
-		dirs: [__dirname, 'server'],
+		dirs: [__dirname, 'client', 'server'],
 		envs: {
 			NODE_ENV: 'standalone',
 			APP_NAME: 'V4Fire',
