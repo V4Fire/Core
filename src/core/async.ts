@@ -9,7 +9,7 @@
 /* tslint:disable:max-file-line-count */
 
 /// <reference types="node"/>
-import Then from './then';
+import Then from 'core/then';
 
 export const
 	asyncCounter = Symbol('Async counter id');

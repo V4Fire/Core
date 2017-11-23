@@ -6,9 +6,9 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import './object';
-import './string';
-import './function';
-import './global';
-import './date';
-import './i18n';
+import 'core/object';
+import 'core/string';
+import 'core/function';
+import 'core/global';
+import 'core/date';
+import 'core/i18n';
