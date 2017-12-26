@@ -24,6 +24,15 @@ Object.defineProperty(Object.prototype, 'toSource', {
 });
 
 /**
+ * Creates a hash table without prototype
+ * @param fields
+ */
+// tslint:disable-next-line
+Object.createDict = function (...fields: any[]): Dictionary<any> {
+	return Object.assign(Object.create(null), ...fields);
+};
+
+/**
  * Parses the specified value as a JSON / JS object and returns the result
  * @param value
  */
@@ -90,7 +99,7 @@ Object.fastCompare = function fastCompare<T>(a: any, b: T): a is T {
  * Creates an object {key: value, value: key} from the specified
  * @param obj
  */
-Object.createMap = function createMap<T extends Object>(obj: T): T & Record<string, any> {
+Object.createMap = function createMap<T extends Object>(obj: T): T & Dictionary<any> {
 	const
 		map = {};
 
@@ -115,14 +124,14 @@ Object.createMap = function createMap<T extends Object>(obj: T): T & Record<stri
 		}
 	}
 
-	return <T & Record<string, any>>map;
+	return <T & Dictionary<any>>map;
 };
 
 /**
  * Creates an object from the specified array
  * @param arr
  */
-Object.fromArray = function fromArray(arr: any[]): Record<string, boolean> {
+Object.fromArray = function fromArray(arr: any[]): Dictionary<boolean> {
 	const
 		map = {};
 
@@ -137,6 +146,6 @@ Object.fromArray = function fromArray(arr: any[]): Record<string, boolean> {
  * Returns true if the specified object is a hash table
  * @param obj
  */
-Object.isTable = function isTable(obj: any): obj is Record<string, any> {
+Object.isTable = function isTable(obj: any): obj is Dictionary<any> {
 	return {}.toString.call(obj) === '[object Object]';
 };

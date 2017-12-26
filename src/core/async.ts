@@ -54,13 +54,13 @@ export interface AsyncCbOptsSingle extends AsyncCbOpts {
 }
 
 export interface LocalCacheObject {
-	labels: Record<string, any>;
+	labels: Dictionary<any>;
 	links: Map<any, any>;
 }
 
 export interface CacheObject {
 	root: LocalCacheObject;
-	groups: Record<string, LocalCacheObject>;
+	groups: Dictionary<LocalCacheObject>;
 }
 
 export interface EventEmitterLike {
@@ -96,7 +96,7 @@ export default class Async<CTX extends Object> {
 	/**
 	 * Cache object for async operations
 	 */
-	protected cache: Record<string, CacheObject>;
+	protected cache: Dictionary<CacheObject>;
 
 	/**
 	 * Context for functions

@@ -25,6 +25,10 @@ declare class IdleDeadline {
 declare function requestIdleCallback(fn: (deadline: IdleDeadline) => void, opts?: {timer?: number}): number;
 declare function cancelIdleCallback(id: number): void;
 
+interface Dictionary<T = any> {
+	[key: string]: T;
+}
+
 interface JSONCb {
 	(key: string, value: any): any;
 }
@@ -49,9 +53,12 @@ interface ObjectConstructor {
 
 	fastCompare<T>(a: any, b: T): a is T;
 	parse(value: any): any;
-	createMap<T extends Object>(obj: T): T & Record<string, any>;
-	fromArray(arr: any[]): Record<string, boolean>;
-	isTable(obj: any): obj is Record<string, any>;
+	createMap<T extends Object>(obj: T): T & Dictionary<any>;
+	createDict<T>(fields: T): {[P in keyof T]: T[P]};
+	createDict<T = any>(): Dictionary<T>;
+	createDict(...fields: any[]): Dictionary<any>;
+	fromArray(arr: any[]): Dictionary<boolean>;
+	isTable(obj: any): obj is Dictionary<any>;
 }
 
 interface Object {
