@@ -32,16 +32,16 @@
     "tosource": "^1.0.0"
   },
   "optionalDependencies": {
-    "@types/fs-extra-promise": "^1.0.3",
+    "@types/fs-extra-promise": "^1.0.4",
     "@types/gulp": "^3.8.34",
-    "config": "^1.27.0",
+    "config": "^1.29.0",
     "fs-extra-promise": "^1.0.1",
     "gulp": "^3.9.1",
     "gulp-convert-newline": "0.0.3",
     "gulp-header": "^1.8.8",
     "gulp-replace": "^0.6.1",
     "through2": "^2.0.3",
-    "typescript": "^2.6.1"
+    "typescript": "^2.6.2"
   },
   "devDependencies": {
     "babel-eslint": "^8.1.2",
