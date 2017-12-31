@@ -9,6 +9,7 @@
 import $C = require('collection.js');
 
 /**
+ * Creates a generator for symbols
  * @param fields - array of fields
  */
 export default function generator(fields?: string[]): Dictionary<symbol> {
