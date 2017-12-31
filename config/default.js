@@ -165,6 +165,10 @@ module.exports = config.createConfig(
 				return require('../build/include')(this.roots);
 			},
 
+			lib() {
+				return path.resolve(this.cwd(), 'node_modules');
+			},
+
 			assets() {
 				return path.resolve(this.cwd(), 'assets');
 			},
