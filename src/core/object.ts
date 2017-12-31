@@ -29,7 +29,11 @@ Object.defineProperty(Object.prototype, 'toSource', {
  */
 // tslint:disable-next-line
 Object.createDict = function (...fields: any[]): Dictionary<any> {
-	return Object.assign(Object.create(null), ...fields);
+	if (fields.length) {
+		return Object.assign(Object.create(null), ...fields);
+	}
+
+	return Object.create(null);
 };
 
 /**

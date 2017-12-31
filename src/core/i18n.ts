@@ -23,7 +23,7 @@ const langs = $C(baseLangs).map((el) => {
 	return $C(el).reduce((map, el, key) => {
 		map[key.replace(ws, ' ')] = el.replace(ws, ' ');
 		return map;
-	}, Object.create(null));
+	}, Object.createDict());
 });
 
 /**

@@ -112,7 +112,7 @@ export default class Async<CTX extends Object> {
 	 * @param [ctx] - context for functions
 	 */
 	constructor(ctx?: CTX) {
-		this.cache = Object.create(null);
+		this.cache = Object.createDict();
 		this.context = ctx;
 	}
 
@@ -939,11 +939,11 @@ export default class Async<CTX extends Object> {
 	protected initCache(name: string): CacheObject {
 		return this.cache[name] = this.cache[name] || {
 			root: {
-				labels: Object.create(null),
+				labels: Object.createDict(),
 				links: new Map()
 			},
 
-			groups: Object.create(null)
+			groups: Object.createDict()
 		};
 	}
 
@@ -958,7 +958,7 @@ export default class Async<CTX extends Object> {
 		let cache;
 		if (p.group) {
 			baseCache.groups[p.group] = baseCache.groups[p.group] || {
-				labels: Object.create(null),
+				labels: Object.createDict(),
 				links: new Map()
 			};
 

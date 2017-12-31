@@ -11,9 +11,9 @@ try {
 		{camelize, dasherize, underscore} = String.prototype;
 
 	const
-		camelizeCache = Object.create(null),
-		dasherizeCache = Object.create(null),
-		underscoreCache = Object.create(null);
+		camelizeCache = Object.createDict(),
+		dasherizeCache = Object.createDict(),
+		underscoreCache = Object.createDict();
 
 	/** @override */
 	String.prototype.camelize = function (this: string, upper?: boolean): string {
