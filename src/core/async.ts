@@ -54,7 +54,7 @@ export interface AsyncCbOptsSingle extends AsyncCbOpts {
 }
 
 export interface LocalCacheObject {
-	labels: Dictionary<any>;
+	labels: Dictionary;
 	links: Map<any, any>;
 }
 

@@ -53,12 +53,12 @@ interface ObjectConstructor {
 
 	fastCompare<T>(a: any, b: T): a is T;
 	parse(value: any): any;
-	createMap<T extends Object>(obj: T): T & Dictionary<any>;
+	createMap<T extends Object>(obj: T): T & Dictionary;
 	createDict<T>(fields: T): {[P in keyof T]: T[P]};
 	createDict<T = any>(): Dictionary<T>;
-	createDict(...fields: any[]): Dictionary<any>;
+	createDict(...fields: any[]): Dictionary;
 	fromArray(arr: any[]): Dictionary<boolean>;
-	isTable(obj: any): obj is Dictionary<any>;
+	isTable(obj: any): obj is Dictionary;
 }
 
 interface Object {

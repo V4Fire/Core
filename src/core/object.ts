@@ -28,7 +28,7 @@ Object.defineProperty(Object.prototype, 'toSource', {
  * @param fields
  */
 // tslint:disable-next-line
-Object.createDict = function (...fields: any[]): Dictionary<any> {
+Object.createDict = function (...fields: any[]): Dictionary {
 	if (fields.length) {
 		return Object.assign(Object.create(null), ...fields);
 	}
@@ -103,7 +103,7 @@ Object.fastCompare = function fastCompare<T>(a: any, b: T): a is T {
  * Creates an object {key: value, value: key} from the specified
  * @param obj
  */
-Object.createMap = function createMap<T extends Object>(obj: T): T & Dictionary<any> {
+Object.createMap = function createMap<T extends Object>(obj: T): T & Dictionary {
 	const
 		map = {};
 
@@ -150,6 +150,6 @@ Object.fromArray = function fromArray(arr: any[]): Dictionary<boolean> {
  * Returns true if the specified object is a hash table
  * @param obj
  */
-Object.isTable = function isTable(obj: any): obj is Dictionary<any> {
+Object.isTable = function isTable(obj: any): obj is Dictionary {
 	return {}.toString.call(obj) === '[object Object]';
 };

@@ -32,7 +32,7 @@ export function isEmptyValue(value: any): boolean {
  * @param obj
  * @param [sys]
  */
-export function setJSONToUTC(obj: Dictionary<any>, sys?: boolean): Dictionary<any> {
+export function setJSONToUTC(obj: Dictionary, sys?: boolean): Dictionary {
 	if (!sys) {
 		obj = Object.fastClone(obj);
 	}
