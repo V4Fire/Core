@@ -10,42 +10,39 @@
 
 require('config');
 module.exports = function (gulp = require('gulp')) {
+	const
+		$ = require('gulp-load-plugins')({scope: ['optionalDependencies']});
+
 	gulp.task('setProd', (cb) => {
 		process.env.NODE_ENV = 'production';
 		global.isProd = true;
 		cb();
 	});
 
-	gulp.task('copyright', (cb) => {
-		const
-			replace = require('gulp-replace');
-
+	gulp.task('copyright', () =>
 		gulp.src('./LICENSE')
-			.pipe(replace(/(Copyright \(c\) )(\d+)-?(\d*)/, (str, intro, from, to) => {
+			.pipe($.plumber())
+			.pipe($.replace(/(Copyright \(c\) )(\d+)-?(\d*)/, (str, intro, from, to) => {
 				const year = new Date().getFullYear();
 				return intro + from + (to || from !== year ? `-${year}` : '');
 			}))
 
 			.pipe(gulp.dest('./'))
-			.on('end', cb);
-	});
+	);
 
-	gulp.task('lf', (cb) => {
-		const
-			convertNewline = require('gulp-convert-newline');
-
+	gulp.task('lf', () => {
 		const src = [
 			'./@(src|config|build|ts-definitions)/**/*',
 			'./*'
 		];
 
-		gulp.src(src, {base: './'})
-			.pipe(convertNewline())
-			.pipe(gulp.dest('./'))
-			.on('end', cb);
+		return gulp.src(src, {base: './'})
+			.pipe($.plumber())
+			.pipe($.convertNewline())
+			.pipe(gulp.dest('./'));
 	});
 
-	gulp.task('head', (cb) => {
+	gulp.task('head', () => {
 		const
 			through = require('through2'),
 			{getHead} = include('build/helpers');
@@ -60,7 +57,7 @@ module.exports = function (gulp = require('gulp')) {
 			'./predefs.d.ts'
 		];
 
-		gulp.src(src, {base: './'})
+		return gulp.src(src, {base: './'})
 			.pipe(through.obj(function (file, enc, cb) {
 				const
 					contents = file.contents.toString(),
@@ -86,15 +83,11 @@ module.exports = function (gulp = require('gulp')) {
 					this.push(file);
 				}
 
-
 				return cb();
 			}))
 
-			.pipe(gulp.dest('./'))
-			.on('end', cb);
+			.pipe(gulp.dest('./'));
 	});
-
-	gulp.task('prod', ['setProd', 'default']);
 };
 
 module.exports();

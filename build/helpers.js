@@ -8,6 +8,10 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+const
+	fs = require('fs'),
+	path = require('path');
+
 /**
  * Returns the project version
  */
@@ -20,10 +24,6 @@ exports.getVersion = function () {
  * @param {boolean=} [withVersion]
  */
 exports.getHead = function (withVersion) {
-	const
-		fs = require('fs'),
-		path = require('path');
-
 	return fs
 		.readFileSync(path.join(process.cwd(), 'disclaimer.txt'), 'utf-8')
 		.replace(/\* (\w.*?)(?=\n)/, (str) => str + (withVersion ? ` v${exports.getVersion()}` : ''));
