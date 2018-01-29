@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
-    "target": "es5",
     "baseUrl": "./src",
+    "target": "es5",
     "downlevelIteration": true,
-    "lib": ["dom", "esnext"],
+    "noLib": true,
     "allowJs": true,
     "skipLibCheck": true,
     "strictNullChecks": true,
