@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "@types/node": "^9.4.0",
-    "collection.js": "^6.3.18",
+    "collection.js": "^6.3.19",
     "dotenv": "^4.0.0",
     "sugar": "^2.0.0",
     "tosource": "^1.0.0"
