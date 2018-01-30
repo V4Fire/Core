@@ -8,8 +8,8 @@
 
 /// <reference types="collection.js"/>
 /// <reference types="sugar/sugar-extended"/>
-/// <reference types="typescript/lib/lib.dom" />
-/// <reference types="typescript/lib/lib.esnext" />
+/// <reference types="typescript/lib/lib.dom"/>
+/// <reference types="typescript/lib/lib.esnext"/>
 
 declare function Any(obj: any): any;
 declare function stderr(err: any): void;
