@@ -32,9 +32,11 @@
     "tosource": "^1.0.0"
   },
   "optionalDependencies": {
+    "@pzlr/build-core": "^2.5.1",
     "@types/fs-extra-promise": "^1.0.4",
     "@types/gulp": "^4.0.5",
     "@types/gulp-load-plugins": "0.0.31",
+    "@types/through2": "^2.0.33",
     "config": "^1.29.0",
     "fs-extra-promise": "^1.0.1",
     "gulp": "^4.0.0",
@@ -44,6 +46,7 @@
     "gulp-plumber": "^1.2.0",
     "gulp-replace": "^0.6.1",
     "through2": "^2.0.3",
+    "tsconfig": "^7.0.0",
     "typescript": "^2.7.0-rc"
   },
   "devDependencies": {

@@ -11,6 +11,8 @@
 require('config');
 module.exports = function (gulp = require('gulp')) {
 	const
+		fs = require('fs'),
+		path = require('path'),
 		$ = require('gulp-load-plugins')({scope: ['optionalDependencies']});
 
 	gulp.task('setProd', (cb) => {
@@ -84,6 +86,47 @@ module.exports = function (gulp = require('gulp')) {
 				}
 
 				return cb();
+			}))
+
+			.pipe(gulp.dest('./'));
+	});
+
+	gulp.task('build:tsconfig', () => {
+		const
+			cwd = process.cwd(),
+			tsconfig = require('tsconfig'),
+			through = require('through2');
+
+		return gulp.src(['./**/*.tsconfig', './**/.tsconfig'], {since: gulp.lastRun('build:tsconfig')})
+			.pipe($.plumber())
+			.pipe(through.obj((file, enc, cb) => {
+				const resolveExtends = (config) => {
+					if (config.extends) {
+						const parentSrc = require.resolve(
+							/^\.?[/\\]/.test(config.extends) ? path.resolve(cwd, config.extends) : config.extends
+						);
+
+						const
+							parent = resolveExtends(tsconfig.parse(fs.readFileSync(parentSrc, 'utf-8'), parentSrc));
+
+						config = $C.extend(/** @type {?} */ {
+							deep: true,
+							concatArray: true,
+							concatFn: (a, b) => b
+						}, parent, config);
+					}
+
+					delete config.extends;
+					return config;
+				};
+
+				const
+					config = tsconfig.parse(file.contents.toString(), file.path);
+
+				file.path = file.path.replace(/([^/\\]*?)\.tsconfig$/, (str, nm) => `${nm ? `${nm}.tsconfig` : 'tsconfig'}.json`);
+				file.contents = new Buffer(JSON.stringify(resolveExtends(config), null, 2));
+
+				cb(null, file);
 			}))
 
 			.pipe(gulp.dest('./'));
