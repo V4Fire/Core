@@ -25,8 +25,8 @@
     "test": "echo \"Error: no test specified\" && exit 0"
   },
   "dependencies": {
-    "@types/node": "^9.4.0",
-    "collection.js": "^6.3.19",
+    "@types/node": "^9.4.5",
+    "collection.js": "^6.6.5",
     "dotenv": "^4.0.0",
     "sugar": "^2.0.0",
     "tosource": "^1.0.0"
@@ -44,11 +44,12 @@
     "gulp-plumber": "^1.2.0",
     "gulp-replace": "^0.6.1",
     "through2": "^2.0.3",
+    "tsconfig": "^7.0.0",
     "typescript": "^2.7.0-rc"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.1",
-    "eslint": "^4.16.0",
+    "eslint": "^4.17.0",
     "packages-version-check": "^1.1.1",
     "tslint": "^5.9.1"
   }
