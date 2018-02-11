@@ -85,7 +85,7 @@ export function normalizeIfDate(value: any[], params?: DateCreateOptions): Date[
 // tslint:disable-next-line
 export function normalizeIfDate(value, params) {
 	if (Object.isArray(value)) {
-		return $C(value).map((date) => Date.create(date, params));
+		return $C(<any[]>value).map<Date>((date) => Date.create(date, params));
 	}
 
 	return value ? Date.create(value, params) : undefined;

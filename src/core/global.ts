@@ -17,15 +17,6 @@ GLOBAL.Any = function Any(obj: any): any {
 };
 
 /**
- * Infinity iterator
- */
-GLOBAL.infinity = function *infinity(): IterableIterator<true> {
-	while (true) {
-		yield true;
-	}
-};
-
-/**
  * STDERR wrapper
  * @param err
  */

@@ -29,12 +29,11 @@ export interface Executor<T> {
 	): void;
 }
 
-export default class Then<T> implements PromiseLike<T> {
+export default class Then<T = any> implements PromiseLike<T> {
 	/**
 	 * Promise that never will be resolved
 	 */
-	// tslint:disable-next-line
-	static readonly never: Promise<any> = new Promise(() => {});
+	static readonly never: Promise<any> = new Promise(() => undefined);
 
 	/**
 	 * Returns true if the specified value is PromiseLike
@@ -61,7 +60,7 @@ export default class Then<T> implements PromiseLike<T> {
 	}
 
 	/** @see {Promise.reject} */
-	static reject(reason?: any): Then<any> {
+	static reject(reason?: any): Then {
 		return new Then((res, rej) => rej(reason));
 	}
 
@@ -71,10 +70,9 @@ export default class Then<T> implements PromiseLike<T> {
 	static all<T1, T2, T3>(values: [Value<T1>, Value<T2>, Value<T3>]): Then<[T1, T2, T3]>;
 	static all<T1, T2>(values: [Value<T1>, Value<T2>]): Then<[T1, T2]>;
 	static all<T>(values: Iterable<Value<T>>): Then<T[]>;
-
-	// tslint:disable-next-line
-	static all(values) {
-		values = $C(values).map(Then.resolve);
+	static all<T>(values: Iterable<Value<T>>): Then<T[]> {
+		const
+			promises = $C(values).map<Then>(Then.resolve);
 
 		return new Then((res, rej, onAbort) => {
 			let counter = 0;
@@ -82,12 +80,12 @@ export default class Then<T> implements PromiseLike<T> {
 			const
 				resolved: any[] = [];
 
-			$C(values).forEach((promise, i) => {
+			$C(promises).forEach((promise, i) => {
 				promise.then(
 					(val) => {
 						resolved[i] = val;
 
-						if (++counter === values.length) {
+						if (++counter === promises.length) {
 							res(resolved);
 						}
 					},
@@ -97,22 +95,23 @@ export default class Then<T> implements PromiseLike<T> {
 			});
 
 			onAbort((reason) => {
-				$C(values).forEach((el: Then<any>) => el.bubblingAbort(reason));
+				$C(promises).forEach((el) => el.bubblingAbort(reason));
 			});
 		});
 	}
 
 	/** @see {Promise.race} */
 	static race<T>(values: Iterable<Value<T>>): Then<T> {
-		values = $C(values).map(Then.resolve);
+		const
+			promises = $C(values).map<Then>(Then.resolve);
 
 		return new Then((res, rej, onAbort) => {
-			$C(values).forEach((promise) => {
+			$C(promises).forEach((promise) => {
 				promise.then(res, rej);
 			});
 
 			onAbort((reason) => {
-				$C(values).forEach((el: Then<any>) => el.bubblingAbort(reason));
+				$C(promises).forEach((el) => el.bubblingAbort(reason));
 			});
 		});
 	}
@@ -158,7 +157,7 @@ export default class Then<T> implements PromiseLike<T> {
 	 * @param executor - executor function
 	 * @param [parent] - parent promise
 	 */
-	constructor(executor: Executor<T>, parent?: Then<any>) {
+	constructor(executor: Executor<T>, parent?: Then) {
 		this.promise = new Promise((res, rej) => {
 			const resolve = this.resolve = (v) => {
 				if (!this.isPending) {

@@ -402,7 +402,7 @@ export default class Async<CTX extends Object> {
 	 * Cancels the specified request
 	 * @param [request] - link for the request (if not defined wil be cancel all request)
 	 */
-	cancelRequest(request?: Then<any>): this;
+	cancelRequest(request?: Then): this;
 
 	/**
 	 * @param params - parameters for the operation:
@@ -410,7 +410,7 @@ export default class Async<CTX extends Object> {
 	 *   *) [label] - label for the task
 	 *   *) [group] - group name for the task
 	 */
-	cancelRequest(params: ClearOptsId<Then<any>>): this;
+	cancelRequest(params: ClearOptsId<Then>): this;
 
 	// tslint:disable-next-line
 	cancelRequest(p) {
@@ -900,7 +900,7 @@ export default class Async<CTX extends Object> {
 	 * @param request
 	 * @param ctx - context object
 	 */
-	protected requestDestructor(request: Then<any>, ctx: AsyncCtx): void {
+	protected requestDestructor(request: Then, ctx: AsyncCtx): void {
 		request.abort(ctx.join === 'replace' ? ctx.replacedBy && ctx.replacedBy.id : undefined);
 	}
 
