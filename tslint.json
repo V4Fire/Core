@@ -136,7 +136,7 @@
     "prefer-const": true,
     "trailing-comma": [true, {"multiline": "never", "singleline": "never"}],
     "align": [true, "elements", "members", "parameters", "statements"],
-    "array-type": [true, "array-simple"],
+    "array-type": false,
     "arrow-parens": true,
     "arrow-return-shorthand": [true, "multiline"],
     "binary-expression-operand-order": true,
