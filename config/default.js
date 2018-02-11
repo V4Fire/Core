@@ -12,9 +12,11 @@ require('dotenv').config();
 
 const
 	$C = require('collection.js'),
-	Sugar = require('sugar'),
 	fs = require('fs-extra-promise'),
 	path = require('path');
+
+const Sugar = require('sugar');
+Sugar.extend(true);
 
 const
 	origin = Symbol('Original function'),
@@ -187,6 +189,9 @@ module.exports = config.createConfig(
 		}
 	}
 );
+
+global.isProd = false;
+global.include = require;
 
 Object.defineProperties(global, {
 	include: {
