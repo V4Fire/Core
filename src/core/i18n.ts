@@ -20,10 +20,10 @@ const langs = $C(baseLangs).map((el) => {
 		return el;
 	}
 
-	return $C(el).reduce((map, el, key) => {
+	return $C(el).to(Object.createDict()).reduce((map, el, key) => {
 		map[key.replace(ws, ' ')] = el.replace(ws, ' ');
 		return map;
-	}, Object.createDict());
+	});
 });
 
 /**

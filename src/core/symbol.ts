@@ -17,10 +17,10 @@ export default function generator(fields?: string[]): Dictionary<symbol> {
 		obj = Object.createDict();
 
 	if (typeof Proxy !== 'function') {
-		return $C(fields).reduce((obj, el) => {
+		return $C(fields).to(obj).reduce((obj, el) => {
 			obj[el] = Symbol(el);
 			return obj;
-		}, obj);
+		});
 	}
 
 	return new Proxy(this, {
