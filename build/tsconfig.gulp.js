@@ -10,9 +10,12 @@
 
 module.exports = function (gulp) {
 	const
-		fs = require('fs'),
-		path = require('path'),
+		$C = require('collection.js'),
 		$ = require('gulp-load-plugins')({scope: ['optionalDependencies']});
+
+	const
+		fs = require('fs'),
+		path = require('path');
 
 	gulp.task('build:tsconfig', () => {
 		const
