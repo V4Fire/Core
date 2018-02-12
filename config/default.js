@@ -16,7 +16,7 @@ const
 	path = require('path');
 
 const Sugar = require('sugar');
-Sugar.extend(true);
+Sugar.extend();
 
 const
 	origin = Symbol('Original function'),
