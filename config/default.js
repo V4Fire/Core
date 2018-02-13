@@ -12,15 +12,16 @@ require('dotenv').config();
 
 const
 	$C = require('collection.js'),
+	Sugar = require('sugar'),
 	fs = require('fs-extra-promise'),
 	path = require('path');
 
-const Sugar = require('sugar');
-Sugar.extend();
-
 const
-	origin = Symbol('Original function'),
+	{resolve} = require('@pzlr/build-core'),
 	{env} = process;
+
+const origin = Symbol('Original function');
+Sugar.extend();
 
 /** @template C */
 class Config {
@@ -160,7 +161,7 @@ module.exports = config.createConfig(
 
 		src: {
 			cwd() {
-				return this.roots[this.roots.length - 1] || process.cwd();
+				return this.roots[this.roots.length - 1] || resolve.cwd;
 			},
 
 			include() {
@@ -168,7 +169,7 @@ module.exports = config.createConfig(
 			},
 
 			lib() {
-				return path.resolve(this.cwd(), 'node_modules');
+				return resolve.lib;
 			},
 
 			assets() {
