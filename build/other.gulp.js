@@ -19,7 +19,7 @@ module.exports = function (gulp) {
 	});
 
 	gulp.task('copyright', () =>
-		gulp.src('./LICENSE')
+		gulp.src('./LICENSE', {since: gulp.lastRun('copyright')})
 			.pipe($.plumber())
 			.pipe($.replace(/(Copyright \(c\) )(\d+)-?(\d*)/, (str, intro, from, to) => {
 				const year = new Date().getFullYear();
@@ -35,7 +35,7 @@ module.exports = function (gulp) {
 			'./*'
 		];
 
-		return gulp.src(src, {base: './'})
+		return gulp.src(src, {base: './', since: gulp.lastRun('lf')})
 			.pipe($.plumber())
 			.pipe($.convertNewline())
 			.pipe(gulp.dest('./'));
@@ -56,7 +56,7 @@ module.exports = function (gulp) {
 			'./predefs.d.ts'
 		];
 
-		return gulp.src(src, {base: './'})
+		return gulp.src(src, {base: './', since: gulp.lastRun('head')})
 			.pipe(through.obj(function (file, enc, cb) {
 				const
 					contents = file.contents.toString(),
