@@ -141,17 +141,17 @@ export default class Then<T = any> implements PromiseLike<T> {
 	/**
 	 * Resolve function
 	 */
-	protected resolve: (value?: Value<T>) => void;
+	protected resolve!: (value?: Value<T>) => void;
 
 	/**
 	 * Reject function
 	 */
-	protected reject: OnError;
+	protected reject!: OnError;
 
 	/**
 	 * Abort handler
 	 */
-	protected onAbort: OnError;
+	protected onAbort!: OnError;
 
 	/**
 	 * @param executor - executor function
