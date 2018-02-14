@@ -64,9 +64,23 @@ Object.fastClone = function fastClone<T extends Object>(
 		p = params || {};
 
 	if (typeof obj === 'object') {
-		return JSON.parse(
+		const clone = JSON.parse(
 			JSON.stringify(obj, p.replacer), params !== false ? p.reviver || convertIfDate : undefined
 		);
+
+		if (!Object.isExtensible(obj)) {
+			Object.preventExtensions(clone);
+		}
+
+		if (Object.isSealed(obj)) {
+			Object.seal(clone);
+		}
+
+		if (Object.isFrozen(obj)) {
+			Object.freeze(clone);
+		}
+
+		return clone;
 	}
 
 	return obj;
