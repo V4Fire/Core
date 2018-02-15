@@ -18,6 +18,7 @@
 
           "public-instance-field",
           "protected-instance-field",
+          "private-instance-field",
 
           "public-constructor",
           "protected-constructor",
@@ -29,7 +30,6 @@
           "private-static-method",
 
           "private-constructor",
-          "private-instance-field",
           "private-instance-method"
         ]
       }
@@ -39,7 +39,7 @@
     "no-import-side-effect": false,
     "no-inferrable-types": [true, "ignore-params", "ignore-properties"],
     "no-internal-module": true,
-    "no-magic-numbers": [true, -1, 0, 1, 2],
+    "no-magic-numbers": false,
     "no-namespace": false,
     "no-non-null-assertion": false,
     "no-parameter-reassignment": false,
