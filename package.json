@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "@types/node": "^9.4.6",
-    "collection.js": "^6.6.13",
+    "collection.js": "^6.6.14",
     "dotenv": "^4.0.0",
     "sugar": "^2.0.0",
     "tosource": "^1.0.0"
@@ -50,7 +50,7 @@
     "typescript": "^2.8.0-dev.20180214"
   },
   "devDependencies": {
-    "babel-eslint": "^8.2.1",
+    "babel-eslint": "^8.2.2",
     "eslint": "^4.18.0",
     "packages-version-check": "^1.1.1",
     "tslint": "^5.9.1"
