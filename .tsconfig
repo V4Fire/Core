@@ -3,6 +3,7 @@
     "baseUrl": "./src",
     "target": "es5",
     "downlevelIteration": true,
+    "importHelpers": true,
     "noLib": true,
     "allowJs": true,
     "skipLibCheck": true,
