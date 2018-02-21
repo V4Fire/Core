@@ -17,9 +17,9 @@ export const
 export interface AsyncLink {
 	id: any;
 	obj: any;
-	objName: string | undefined;
-	label: string | symbol | undefined;
-	clearFn: Function | undefined;
+	objName?: string;
+	label?: string | symbol;
+	clearFn?: Function;
 	onComplete: Function[][];
 	onClear: Function[];
 }
@@ -101,7 +101,7 @@ export default class Async<CTX extends Object> {
 	/**
 	 * Context for functions
 	 */
-	protected context: CTX | undefined;
+	protected context?: CTX;
 
 	/**
 	 * Map of initialized workers
