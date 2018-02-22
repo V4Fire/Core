@@ -8,7 +8,7 @@
 
 import $C = require('collection.js');
 import toSource = require('tosource');
-import { convertIfDate } from 'core/json';
+import { convertIfDate } from 'core/helpers/json';
 
 /** @see {$C.extend} */
 Object.mixin = $C.extend;
@@ -158,6 +158,33 @@ Object.fromArray = function fromArray(arr: any[]): Dictionary<boolean> {
 	}
 
 	return map;
+};
+
+const
+	protoChains = new WeakMap<Function, Object[]>();
+
+/**
+ * Returns a prototype chain from the specified constructor
+ * @param constructor
+ */
+Object.getPrototypeChain = function getPrototypeChain(constructor: Function): Object[] {
+	if (protoChains.has(constructor)) {
+		return (<Object[]>protoChains.get(constructor)).slice();
+	}
+
+	const
+		chain: Object[] = [];
+
+	let
+		proto = constructor.prototype;
+
+	while (proto && proto.constructor !== Object) {
+		chain.push(proto);
+		proto = Object.getPrototypeOf(proto);
+	}
+
+	protoChains.set(constructor, chain.reverse());
+	return chain.slice();
 };
 
 /** @override */

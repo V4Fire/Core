@@ -58,6 +58,7 @@ interface ObjectConstructor {
 	createDict<T>(fields: T): {[P in keyof T]: T[P]};
 	createDict<T = any>(): Dictionary<T>;
 	createDict(...fields: any[]): Dictionary;
+	getPrototypeChain(constructor: Function): Object[];
 	fromArray(arr: any[]): Dictionary<boolean>;
 	isTable(obj: any): obj is Dictionary;
 }
