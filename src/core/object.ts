@@ -160,6 +160,33 @@ Object.fromArray = function fromArray(arr: any[]): Dictionary<boolean> {
 	return map;
 };
 
+/** @override */
+Object.isArray = Array.isArray;
+
+/** @override */
+// @ts-ignore
+Object.isFunction = function isFunction(obj: any): boolean {
+	return typeof obj === 'function';
+};
+
+/** @override */
+// @ts-ignore
+Object.isString = function isString(obj: any): boolean {
+	return typeof obj === 'string';
+};
+
+/** @override */
+// @ts-ignore
+Object.isNumber = function isNumber(obj: any): boolean {
+	return typeof obj === 'number';
+};
+
+/** @override */
+// @ts-ignore
+Object.isBoolean = function isBoolean(obj: any): boolean {
+	return typeof obj === 'boolean';
+};
+
 /**
  * Returns true if the specified object is a hash table
  * @param obj
