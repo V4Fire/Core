@@ -7,7 +7,6 @@
  */
 
 export * from 'core/helpers/date';
-export * from 'core/helpers/i18n';
 export * from 'core/helpers/string';
 export * from 'core/helpers/json';
 export * from 'core/url';
