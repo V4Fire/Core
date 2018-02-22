@@ -7,6 +7,7 @@
  */
 
 import $C = require('collection.js');
+import Then from 'core/then';
 import { lang } from 'core/i18n';
 
 /**
@@ -109,4 +110,192 @@ export function getDateFromStr(str: string, separator: RegExp = /\/|-|\.|\s+/, p
  */
 export function getTimeFormattedStr(time: number[]): string {
 	return $C(time).map((el) => el.pad(2)).join(':');
+}
+
+export const NBSP = String.fromCharCode(160);
+
+/**
+ * Returns the word in the right declination depending on the number
+ *
+ * @param num
+ * @param one - 1 кот
+ * @param two - 2 кота
+ * @param five - 5 котов
+ */
+export function pluralize(num: number, one: string, two: string, five: string): string;
+export function pluralize(num: number, variants: [string, string, string]): string;
+export function pluralize(n: number, opts: string | string[], ...rest: string[]): string {
+	let one, two, five;
+
+	if (Array.isArray(opts)) {
+		[one, two, five] = opts;
+
+	} else {
+		one = opts;
+		[two, five] = rest;
+	}
+
+	const
+		num = n.toString(10),
+		l = num.length,
+		last = /[05-9]$/;
+
+	if (last.test(num) || (l > 1 && num[l - 2] === '1')) {
+		return five;
+
+	} else if (num[num.length - 1] === '1') {
+		return one;
+	}
+
+	return two;
+}
+
+/**
+ * Concatenates the specified parts of URLs, correctly arranging slashes
+ * @param urls
+ */
+export function concatUrls(...urls: Array<string | null | undefined>): string {
+	return $C(urls).filter((e) => e != null).to('').reduce((res, url) => {
+		res = String(res);
+		url = String(url);
+
+		if (url[0] === '/') {
+			url = url.slice(1);
+		}
+
+		return res[res.length - 1] === '/' ? res + url : `${res}/${url}`;
+	});
+}
+
+/**
+ * Stable stringify for querystring
+ * @param data
+ */
+export function qsStableStringify(data: any): string {
+	function enc(v: any): string {
+		return encodeURIComponent(String(v));
+	}
+
+	if (!data || Array.isArray(data) && !data.length || JSON.stringify(data) === '{}') {
+		return '';
+	}
+
+	if (typeof data !== 'object') {
+		const res = Array.isArray(data) ? $C(data).map(enc).join() : enc(data);
+		return `?${res}`;
+	}
+
+	const
+		keys = Object.keys(data).sort();
+
+	function reducer(res: string, key: string): string {
+		const
+			value = data[key];
+
+		if (!value && value !== 0 && value !== '' || Array.isArray(value) && !value.length) {
+			return res;
+		}
+
+		key = enc(key);
+
+		if (Array.isArray(value)) {
+			return $C(value.slice().sort()).reduce((r, item) => `${r}&${key}=${enc(item)}`, res);
+		}
+
+		return `${res}&${key}=${enc(value)}`;
+	}
+
+	return $C(keys).to('').reduce(reducer).replace('&', '?');
+}
+
+const
+	protoChains = new WeakMap<Function, Object[]>();
+
+/**
+ * Returns a prototype chain from the specified constructor
+ * @param constructor
+ */
+export function getPrototypeChain(constructor: Function): Object[] {
+	if (protoChains.has(constructor)) {
+		return (<Object[]>protoChains.get(constructor)).slice();
+	}
+
+	const
+		chain: Object[] = [];
+
+	let
+		proto = constructor.prototype;
+
+	while (proto && proto.constructor !== Object) {
+		chain.push(proto);
+		proto = Object.getPrototypeOf(proto);
+	}
+
+	protoChains.set(constructor, chain.reverse());
+	return chain.slice();
+}
+
+/**
+ * Set the descriptor parameters to configurable parameters
+ * (and, if it is not a getter / setter, writable) to true
+ *
+ * @param descriptor
+ */
+export function configurableAndWritable(descriptor: PropertyDescriptor): PropertyDescriptor {
+	descriptor.configurable = true;
+
+	if (!descriptor.get && !descriptor.set) {
+		descriptor.writable = true;
+	}
+
+	return descriptor;
+}
+
+/**
+ * Wrapper for async functions:
+ * caches running requests and, for several identical queries in a row,
+ * returns the forks of the result (promise) of the first of them
+ *
+ * @param fn - asynchronous function, which we wrap
+ * @param keyGen - key generator for the cache
+ */
+export function mergePendingWrapper<T extends Function>(
+	fn: T,
+	keyGen: (...args: any[]) => string = (...args) => JSON.stringify(args)
+): T {
+	const
+		cache = Object.createDict();
+
+	return <any>function (...args: any[]): any {
+		const
+			key = keyGen(...args);
+
+		if (!cache[key]) {
+			const
+				val = <Then<any>>fn.apply(this, args);
+
+			if (Then.isThenable(val)) {
+				cache[key] = val.then(
+					(v) => {
+						delete cache[key];
+						return v;
+					},
+
+					(r) => {
+						delete cache[key];
+						throw r;
+					},
+
+					() => {
+						delete cache[key];
+					}
+				);
+
+			} else {
+				return val;
+			}
+		}
+
+		return cache[key].then();
+	};
 }
