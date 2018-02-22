@@ -6,6 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import $C = require('collection.js');
+
 /**
  * Concatenates the specified parts of URLs, correctly arranging slashes
  * @param urls

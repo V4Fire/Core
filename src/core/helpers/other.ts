@@ -15,17 +15,9 @@ export function isEmptyValue(value: any): boolean {
 }
 
 /**
- * Set the descriptor parameters to configurable parameters
- * (and, if it is not a getter / setter, writable) to true
- *
- * @param descriptor
+ * Returns a value without translation instead the standard i18n behaviour
+ * @param value
  */
-export function configurableAndWritable(descriptor: PropertyDescriptor): PropertyDescriptor {
-	descriptor.configurable = true;
-
-	if (!descriptor.get && !descriptor.set) {
-		descriptor.writable = true;
-	}
-
-	return descriptor;
+export function noi18n(value: string): string {
+	return value;
 }

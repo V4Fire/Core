@@ -9,19 +9,6 @@
 import $C = require('collection.js');
 import { lang } from 'core/i18n';
 
-/**
- * Returns a date range by the specified parameters
- *
- * @param from
- * @param [to]
- */
-export function getDateRange(from: string | number | Date, to: string | number | Date = from): Date[] {
-	return [
-		Date.create(from).beginningOfDay(),
-		Date.create(to).endOfDay()
-	];
-}
-
 type DateCreateOptions = sugarjs.Date.DateCreateOptions;
 
 /**
