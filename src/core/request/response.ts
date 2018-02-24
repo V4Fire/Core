@@ -8,6 +8,7 @@
 
 import $C = require('collection.js');
 import Then from 'core/then';
+import StatusCodes from 'core/statusCodes';
 
 import { IS_NODE } from 'core/const/links';
 import { once } from 'core/decorators';
@@ -43,7 +44,7 @@ export default class Response {
 	/**
 	 * Range of success status codes
 	 */
-	readonly successStatuses: sugarjs.Range = Number.range(200, 299);
+	readonly successStatuses: sugarjs.Range | StatusCodes[];
 
 	/**
 	 * True if .successStatuses contains .status
@@ -86,6 +87,7 @@ export default class Response {
 		};
 
 		this.status = p.status;
+		this.successStatuses = p.successStatuses;
 		this.success = this.successStatuses.contains(this.status);
 		this.headers = this.parseHeaders(p.headers);
 		this.sourceType = this.type = p.type;
@@ -112,7 +114,7 @@ export default class Response {
 	 * Parses .body as .sourceType and returns the result
 	 */
 	@once
-	response<T = string | json | ArrayBuffer | Blob | Document | null | any>(): Then<T> {
+	decode<T = string | json | ArrayBuffer | Blob | Document | null | any>(): Then<T> {
 		let data;
 		switch (this.sourceType) {
 			case 'json':
@@ -157,13 +159,13 @@ export default class Response {
 		}
 
 		const
-			body = <any>this.body;
+			body = <Document | void>this.body;
 
 		if (!body) {
 			return <any>Then.resolve(null);
 		}
 
-		return Then.resolve(body);
+		return <any>Then.resolve(body);
 	}
 
 	/**
@@ -175,9 +177,9 @@ export default class Response {
 		}
 
 		const
-			body = <any>this.body;
+			body = <string | json | void>this.body;
 
-		if (!body) {
+		if (body == null || body === '') {
 			return <any>Then.resolve(null);
 		}
 
@@ -185,7 +187,7 @@ export default class Response {
 			return Then.immediate(() => JSON.parse(body, convertIfDate));
 		}
 
-		return Then.immediate(() => Object.fastClone(body));
+		return <any>Then.immediate(() => Object.fastClone(body));
 	}
 
 	/**
@@ -197,13 +199,13 @@ export default class Response {
 		}
 
 		const
-			body = <any>this.body;
+			body = <ArrayBuffer | void>this.body;
 
-		if (!body) {
+		if (!body || !body.byteLength) {
 			return <any>Then.resolve(null);
 		}
 
-		return Then.resolve(body.slice());
+		return <any>Then.resolve(body.slice(0));
 	}
 
 	/**
@@ -225,7 +227,7 @@ export default class Response {
 		const
 			{body, sourceType} = this;
 
-		if (!body) {
+		if (!body || sourceType === 'arrayBuffer' && !(<ArrayBuffer>body).byteLength) {
 			return <any>Then.resolve(null);
 		}
 
