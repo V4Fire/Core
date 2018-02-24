@@ -312,8 +312,8 @@ export default function create<T>(path, ...args) {
 
 		} else if (fromLocalStorage) {
 			res = Then.immediate(() => storage.get(localKey))
-				.then(<any>ctx.saveCache(cacheKey))
-				.then(wrapAsResponse);
+				.then(wrapAsResponse)
+				.then(<any>ctx.saveCache(cacheKey));
 
 		} else if (!ctx.isOnline && !p.externalRequest) {
 			res = Then.reject(new RequestError('offline'));
