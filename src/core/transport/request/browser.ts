@@ -33,13 +33,23 @@ const urlEncodeRequests = {
  */
 export default function createTransport<T>(params: RequestOptions): Then<Response> {
 	const
-		p = {...defaultRequestOpts, ...params},
+		p = <typeof defaultRequestOpts & RequestOptions>{...defaultRequestOpts, ...params},
 		xhr = new XMLHttpRequest();
 
 	let
 		data = p.body;
 
-	if (data) {
+	if (p.encoder) {
+		const
+			v = p.encoder(data);
+
+		if (v.contentType) {
+			p.contentType = v.contentType;
+		}
+
+		data = v.data;
+
+	} else if (data) {
 		if (simpleTypes[typeof data]) {
 			data = {data: String(data)};
 

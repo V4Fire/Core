@@ -13,7 +13,7 @@ import { IS_NODE } from 'core/const/links';
 import { convertIfDate } from 'core/json';
 import { normalizeHeaderName } from 'core/transport/utils';
 import { defaultResponseOpts } from 'core/transport/const';
-import { ResponseOptions, ResponseHeaders, ResponseTypes, ResponseType } from 'core/transport/interface';
+import { ResponseOptions, ResponseHeaders, ResponseTypes, ResponseType, Decoder } from 'core/transport/interface';
 
 export type json =
 	string |
@@ -25,14 +25,14 @@ export type json =
 
 export default class Response {
 	/**
-	 * Range of success status codes
-	 */
-	readonly successStatuses: sugarjs.Range = Number.range(200, 299);
-
-	/**
 	 * Response status code
 	 */
 	readonly status: number;
+
+	/**
+	 * Range of success status codes
+	 */
+	readonly successStatuses: sugarjs.Range = Number.range(200, 299);
 
 	/**
 	 * True if .successStatuses contains .status
@@ -48,6 +48,11 @@ export default class Response {
 	 * Response type
 	 */
 	readonly type: ResponseTypes;
+
+	/**
+	 * Response decoder
+	 */
+	readonly decoder?: Decoder;
 
 	/**
 	 * Response body
@@ -69,7 +74,7 @@ export default class Response {
 	 * @param [params]
 	 */
 	constructor(body?: ResponseType, params?: ResponseOptions) {
-		const p = {
+		const p = <typeof defaultResponseOpts & ResponseOptions>{
 			...defaultResponseOpts,
 			...params
 		};
@@ -78,6 +83,7 @@ export default class Response {
 		this.ok = this.successStatuses.contains(this.status);
 		this.headers = this.parseHeaders(p.headers);
 		this.type = p.type;
+		this.decoder = p.decoder;
 
 		// tslint:disable-next-line
 		if (this.type === 'json' && body && typeof body === 'object') {
@@ -99,7 +105,7 @@ export default class Response {
 	/**
 	 * Parses .body as .type and returns the result
 	 */
-	response<T = string | json | ArrayBuffer | Blob | Document | null>(): Then<T> {
+	response<T = string | json | ArrayBuffer | Blob | Document | null | any>(): Then<T> {
 		switch (this.type) {
 			case 'text':
 				return <any>this.text();
@@ -108,6 +114,10 @@ export default class Response {
 				return <any>this.json();
 
 			case 'arrayBuffer':
+				if (this.decoder) {
+					return this.decode();
+				}
+
 				return <any>this.arrayBuffer();
 
 			case 'blob':
@@ -175,6 +185,21 @@ export default class Response {
 		}
 
 		return <any>Then.resolve((<ArrayBuffer>this.body).slice(0));
+	}
+
+	/**
+	 * Parses .body as ArrayBuffer, decodes it using .decoder and returns the result
+	 */
+	decode<T = any>(): Then<T> {
+		if (this.type !== 'arrayBuffer') {
+			throw new TypeError('Invalid data type');
+		}
+
+		if (!this.decoder) {
+			throw new ReferenceError('Decoder is not defined');
+		}
+
+		return this.arrayBuffer().then(this.decoder);
 	}
 
 	/**

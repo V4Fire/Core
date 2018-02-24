@@ -39,6 +39,10 @@ export type BodyType =
 	FormData |
 	ArrayBuffer;
 
+export interface Encoder<I = any, O = any> {
+	(data: I): {contentType: string; data: O};
+}
+
 export interface RequestOptions {
 	url: string;
 	method?: RequestMethods;
@@ -50,14 +54,20 @@ export interface RequestOptions {
 	withCredentials?: boolean;
 	user?: string;
 	password?: string;
+	encoder?: Encoder;
 }
 
 export interface ResponseHeaders {
 	readonly [name: string]: string;
 }
 
+export interface Decoder<O = any> {
+	(data: ArrayBuffer | null): O;
+}
+
 export interface ResponseOptions {
 	type?: ResponseTypes;
 	status?: StatusCodes;
 	headers?: string | Dictionary<string>;
+	decoder?: Decoder;
 }
