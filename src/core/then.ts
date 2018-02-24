@@ -16,7 +16,6 @@ export const enum State {
 
 export type Value<T = any> = T | PromiseLike<T>;
 export type ExecValue<T = any> = (() => T) | Value<T>;
-export class PromiseAbortError extends Error {}
 
 export interface OnError {
 	(reason?: any): void;
@@ -301,7 +300,7 @@ export default class Then<T = any> implements PromiseLike<T> {
 	 * Aborts the current promise
 	 * @param [reason] - abort reason
 	 */
-	abort(reason: any = null): void {
+	abort(reason?: any): void {
 		if (this.isPending) {
 			setImmediate(() => {
 				this.evaluate(this.onAbort, [reason]);
