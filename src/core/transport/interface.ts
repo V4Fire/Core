@@ -50,7 +50,6 @@ export interface RequestOptions {
 	withCredentials?: boolean;
 	user?: string;
 	password?: string;
-	status?: RegExp | StatusCodes | StatusCodes[];
 }
 
 export interface ResponseHeaders {
