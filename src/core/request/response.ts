@@ -10,6 +10,7 @@ import $C = require('collection.js');
 import Then from 'core/then';
 
 import { IS_NODE } from 'core/const/links';
+import { once } from 'core/decorators';
 import { convertIfDate } from 'core/json';
 import { normalizeHeaderName } from 'core/request/utils';
 import { defaultResponseOpts } from 'core/request/const';
@@ -28,6 +29,11 @@ export default class Response {
 	 * Response type
 	 */
 	type: ResponseTypes | 'object';
+
+	/**
+	 * Response source type
+	 */
+	readonly sourceType: ResponseTypes;
 
 	/**
 	 * Response status code
@@ -82,11 +88,11 @@ export default class Response {
 		this.status = p.status;
 		this.success = this.successStatuses.contains(this.status);
 		this.headers = this.parseHeaders(p.headers);
-		this.type = p.type;
+		this.sourceType = this.type = p.type;
 		this.decoders = (<Decoder[]>[]).concat(p.decoder || []);
 
 		// tslint:disable-next-line
-		if (this.type === 'json' && body && typeof body === 'object') {
+		if (this.sourceType === 'json' && body && typeof body === 'object') {
 			this.body = JSON.stringify(body);
 
 		} else {
@@ -103,11 +109,12 @@ export default class Response {
 	}
 
 	/**
-	 * Parses .body as .type and returns the result
+	 * Parses .body as .sourceType and returns the result
 	 */
+	@once
 	response<T = string | json | ArrayBuffer | Blob | Document | null | any>(): Then<T> {
 		let data;
-		switch (this.type) {
+		switch (this.sourceType) {
 			case 'json':
 				data = this.json();
 				break;
@@ -143,9 +150,10 @@ export default class Response {
 	/**
 	 * Parses .body as Document and returns the result
 	 */
+	@once
 	document(): Then<Document | null> {
-		if (this.type !== 'document') {
-			throw new TypeError('Invalid data type');
+		if (this.sourceType !== 'document') {
+			throw new TypeError('Invalid data sourceType');
 		}
 
 		const
@@ -162,8 +170,8 @@ export default class Response {
 	 * Parses .body as JSON and returns the result
 	 */
 	json<T = json>(): Then<T | null> {
-		if (this.type !== 'json') {
-			throw new TypeError('Invalid data type');
+		if (this.sourceType !== 'json') {
+			throw new TypeError('Invalid data sourceType');
 		}
 
 		const
@@ -177,15 +185,15 @@ export default class Response {
 			return Then.immediate(() => JSON.parse(body, convertIfDate));
 		}
 
-		return Then.resolve(body);
+		return Then.immediate(() => Object.fastClone(body));
 	}
 
 	/**
 	 * Parses .body as ArrayBuffer and returns the result
 	 */
 	arrayBuffer(): Then<ArrayBuffer | null> {
-		if (this.type !== 'arrayBuffer') {
-			throw new TypeError('Invalid data type');
+		if (this.sourceType !== 'arrayBuffer') {
+			throw new TypeError('Invalid data sourceType');
 		}
 
 		const
@@ -202,29 +210,30 @@ export default class Response {
 	 * Parses .body as Blob and returns the result
 	 */
 	blob(): Then<Blob> {
-		if (this.type !== 'blob') {
-			throw new TypeError('Invalid data type');
+		if (this.sourceType !== 'blob') {
+			throw new TypeError('Invalid data sourceType');
 		}
 
-		return Then.resolve(new Blob([this.body], {type: this.getHeader('content-type')}));
+		return Then.resolve(new Blob([this.body], {type: this.getHeader('content-sourceType')}));
 	}
 
 	/**
 	 * Parses .body as string and returns the result
 	 */
+	@once
 	text(): Then<string | null> {
 		const
-			{body, type} = this;
+			{body, sourceType} = this;
 
 		if (!body) {
 			return <any>Then.resolve(null);
 		}
 
-		if ({text: true, document: true}[type]) {
+		if ({text: true, document: true}[sourceType]) {
 			return <any>Then.resolve(String(body));
 		}
 
-		if ({json: true, object: true}[type]) {
+		if ({json: true, object: true}[sourceType]) {
 			if (Object.isString(body)) {
 				return <any>Then.resolve(body);
 			}
@@ -233,7 +242,7 @@ export default class Response {
 		}
 
 		const
-			contentType = this.getHeader('content-type');
+			contentType = this.getHeader('content-sourceType');
 
 		let
 			encoding = 'utf-8';
