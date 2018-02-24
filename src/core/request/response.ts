@@ -25,6 +25,11 @@ export type json =
 
 export default class Response {
 	/**
+	 * Response type
+	 */
+	type: ResponseTypes | 'object';
+
+	/**
 	 * Response status code
 	 */
 	readonly status: number;
@@ -37,7 +42,7 @@ export default class Response {
 	/**
 	 * True if .successStatuses contains .status
 	 */
-	readonly ok: boolean;
+	readonly success: boolean;
 
 	/**
 	 * Response headers
@@ -45,14 +50,9 @@ export default class Response {
 	readonly headers: ResponseHeaders;
 
 	/**
-	 * Response type
+	 * Response decoders
 	 */
-	readonly type: ResponseTypes;
-
-	/**
-	 * Response decoder
-	 */
-	readonly decoder?: Decoder;
+	readonly decoders: Decoder[];
 
 	/**
 	 * Response body
@@ -80,10 +80,10 @@ export default class Response {
 		};
 
 		this.status = p.status;
-		this.ok = this.successStatuses.contains(this.status);
+		this.success = this.successStatuses.contains(this.status);
 		this.headers = this.parseHeaders(p.headers);
 		this.type = p.type;
-		this.decoder = p.decoder;
+		this.decoders = (<Decoder[]>[]).concat(p.decoder || []);
 
 		// tslint:disable-next-line
 		if (this.type === 'json' && body && typeof body === 'object') {
@@ -106,26 +106,38 @@ export default class Response {
 	 * Parses .body as .type and returns the result
 	 */
 	response<T = string | json | ArrayBuffer | Blob | Document | null | any>(): Then<T> {
+		let data;
 		switch (this.type) {
-			case 'text':
-				return <any>this.text();
-
 			case 'json':
-				return <any>this.json();
+				data = this.json();
+				break;
 
 			case 'arrayBuffer':
-				if (this.decoder) {
-					return this.decode();
-				}
-
-				return <any>this.arrayBuffer();
+				data = this.arrayBuffer();
+				break;
 
 			case 'blob':
-				return <any>this.blob();
+				data = this.blob();
+				break;
 
 			case 'document':
-				return <any>this.document();
+				data = this.document();
+				break;
+
+			default:
+				data = this.text();
 		}
+
+		return data
+			.then((obj) => $C(this.decoders).reduce((res, d) => d.call(this, res), obj))
+			.then((res) => {
+				if (res && typeof res === 'object' && {object: true, json: true}[this.type]) {
+					res.valueOf = () => $C.clone(res);
+					Object.freeze(res);
+				}
+
+				return res;
+			});
 	}
 
 	/**
@@ -136,11 +148,14 @@ export default class Response {
 			throw new TypeError('Invalid data type');
 		}
 
-		if (!this.body) {
+		const
+			body = <any>this.body;
+
+		if (!body) {
 			return <any>Then.resolve(null);
 		}
 
-		return <any>Then.resolve(this.body);
+		return Then.resolve(body);
 	}
 
 	/**
@@ -151,25 +166,18 @@ export default class Response {
 			throw new TypeError('Invalid data type');
 		}
 
-		if (!this.body) {
+		const
+			body = <any>this.body;
+
+		if (!body) {
 			return <any>Then.resolve(null);
 		}
 
-		const
-			body = String(this.body);
-
-		if (!this.objFactory && this.objFactory !== null) {
-			this.objFactory = null;
-			this.factoryTimer = requestIdleCallback(() => {
-				let data = JSON.parse(body, convertIfDate);
-				this.factoryTimer = requestIdleCallback(() => {
-					data = data.toSource();
-					this.factoryTimer = requestIdleCallback(() => this.objFactory = new Function(`return ${data}`));
-				});
-			});
+		if (Object.isString(body)) {
+			return Then.immediate(() => JSON.parse(body, convertIfDate));
 		}
 
-		return Then.resolve(this.objFactory ? this.objFactory() : JSON.parse(body, convertIfDate));
+		return Then.resolve(body);
 	}
 
 	/**
@@ -180,26 +188,14 @@ export default class Response {
 			throw new TypeError('Invalid data type');
 		}
 
-		if (!this.body) {
+		const
+			body = <any>this.body;
+
+		if (!body) {
 			return <any>Then.resolve(null);
 		}
 
-		return <any>Then.resolve((<ArrayBuffer>this.body).slice(0));
-	}
-
-	/**
-	 * Parses .body as ArrayBuffer, decodes it using .decoder and returns the result
-	 */
-	decode<T = any>(): Then<T> {
-		if (this.type !== 'arrayBuffer') {
-			throw new TypeError('Invalid data type');
-		}
-
-		if (!this.decoder) {
-			throw new ReferenceError('Decoder is not defined');
-		}
-
-		return this.arrayBuffer().then(this.decoder);
+		return Then.resolve(body.slice());
 	}
 
 	/**
@@ -224,8 +220,16 @@ export default class Response {
 			return <any>Then.resolve(null);
 		}
 
-		if ({json: true, text: true, document: true}[type]) {
+		if ({text: true, document: true}[type]) {
 			return <any>Then.resolve(String(body));
+		}
+
+		if ({json: true, object: true}[type]) {
+			if (Object.isString(body)) {
+				return <any>Then.resolve(body);
+			}
+
+			return <any>Then.resolve(JSON.stringify(body));
 		}
 
 		const
