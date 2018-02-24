@@ -29,7 +29,7 @@ export default class Response {
 	/**
 	 * Response type
 	 */
-	type: ResponseTypes | 'object';
+	type: ResponseTypes;
 
 	/**
 	 * Response source type
