@@ -40,10 +40,6 @@ export function toQueryString(data: any): string {
  * @param [prfx]
  */
 export function chunkToQueryString(data: any, prfx: string = ''): string {
-	function enc(v: any): string {
-		return encodeURIComponent(String(v));
-	}
-
 	if (data == null || data === '') {
 		return '';
 	}
@@ -89,5 +85,5 @@ export function chunkToQueryString(data: any, prfx: string = ''): string {
 		return $C(Object.keys(data).sort()).to('').reduce(reducer);
 	}
 
-	return enc(data);
+	return encodeURIComponent(String(data));
 }
