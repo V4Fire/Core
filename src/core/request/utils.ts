@@ -11,6 +11,14 @@ import { defaultRequestOpts } from 'core/request/const';
 import { RequestOptions } from 'core/request/interface';
 
 /**
+ * Returns a string key for saving data in a storage
+ * @param key
+ */
+export function getStorageKey(key: string): string {
+	return `data:${key}`;
+}
+
+/**
  * Generates a cache string by the specified params and returns it
  * @param params
  */
