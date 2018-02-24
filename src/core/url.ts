@@ -30,38 +30,64 @@ export function concatUrls(...urls: Array<string | null | undefined>): string {
  * @param data
  */
 export function toQueryString(data: any): string {
+	return chunkToQueryString(data);
+}
+
+/**
+ * Stable stringify for querystring chunk
+ *
+ * @param data
+ * @param [prfx]
+ */
+export function chunkToQueryString(data: any, prfx: string = ''): string {
 	function enc(v: any): string {
 		return encodeURIComponent(String(v));
 	}
 
-	if (!data || Array.isArray(data) && !data.length || JSON.stringify(data) === '{}') {
+	if (data == null || data === '') {
 		return '';
 	}
 
-	if (typeof data !== 'object') {
-		const res = Array.isArray(data) ? $C(data).map(enc).join() : enc(data);
-		return `?${res}`;
-	}
-
 	const
-		keys = Object.keys(data).sort();
+		isArr = Object.isArray(data);
 
-	function reducer(res: string, key: string): string {
+	const reducer = (res, key) => {
 		const
-			value = data[key];
+			val = data[key],
+			valIsArr = Object.isArray(val);
 
-		if (!value && value !== 0 && value !== '' || Array.isArray(value) && !value.length) {
+		if (val == null || val === '' || valIsArr && !val.length) {
 			return res;
 		}
 
-		key = enc(key);
+		// tslint:disable-next-line
+		if (!isArr) {
+			key = prfx ? `${prfx}_${key}` : key;
 
-		if (Array.isArray(value)) {
-			return $C(value.slice().sort()).reduce((r, item) => `${r}&${key}=${enc(item)}`, res);
+		} else {
+			key = prfx;
 		}
 
-		return `${res}&${key}=${enc(value)}`;
+		let str;
+
+		// tslint:disable-next-line
+		if (valIsArr || Object.isObject(val)) {
+			str = chunkToQueryString(val, key);
+
+		} else {
+			str = `${key}=${chunkToQueryString(val)}`;
+		}
+
+		if (res) {
+			return `${res}&${str}`;
+		}
+
+		return str;
+	};
+
+	if (isArr || Object.isObject(data)) {
+		return $C(Object.keys(data).sort()).to('').reduce(reducer);
 	}
 
-	return $C(keys).to('').reduce(reducer).replace('&', '?');
+	return enc(data);
 }
