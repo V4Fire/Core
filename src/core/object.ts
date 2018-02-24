@@ -56,7 +56,7 @@ Object.parse = function parse(value: any): any {
  *   *) [replacer] - JSON.stringify replacer
  *   *) [reviver] - JSON.parse reviver
  */
-Object.fastClone = function fastClone<T extends Object>(
+Object.fastClone = function fastClone<T>(
 	obj: T,
 	params?: {replacer?: JSONCb; reviver?: JSONCb} | false
 ): T {

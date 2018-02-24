@@ -47,7 +47,7 @@ interface ObjectConstructor {
 		...source: any[]
 	): T & CollectionJS.AnyRecord;
 
-	fastClone<T extends Object>(
+	fastClone<T>(
 		obj: T,
 		params?: {replacer?: JSONCb; reviver?: JSONCb} | false
 	): T;
