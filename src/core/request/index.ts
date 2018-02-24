@@ -94,25 +94,9 @@ export default function create<T>(path, ...args) {
 		...params
 	};
 
-	if (p.headers) {
-		p.headers = normalizeHeaders(p.headers);
-	}
-
 	const ctx: RequestContext<T> = <any>{
-		rewriter,
-		params: p,
-		canCache: p.method === 'GET',
-		query: p.query ? Object.fastClone(p.query) : {},
-		encoders: (<Encoder[]>[]).concat(p.encoder || []),
-		decoders: (<Decoder[]>[]).concat(p.decoder || [])
+		rewriter
 	};
-
-	if (ctx.canCache) {
-		ctx.pendingCache = new Cache<Then<T>>();
-		ctx.cache = (<any>{queue: requestCache, never: null, forever: new Cache<T>()})[p.cacheStrategy];
-	}
-
-	ctx.qs = toQueryString(ctx.query);
 
 	/**
 	 * Returns absolute path to API for the request
@@ -239,10 +223,6 @@ export default function create<T>(path, ...args) {
 
 	// tslint:disable-next-line
 	return async (...args) => {
-		let res;
-
-		ctx.isOnline = await isOnline();
-
 		/**
 		 * Returns absolute path for the request
 		 * @param api - API URL
@@ -269,8 +249,28 @@ export default function create<T>(path, ...args) {
 		};
 
 		await Promise.all(
-			$C(p.middlewares).map((fn) => fn(p))
+			$C(p.middlewares).map((fn) => fn(p, globalOpts))
 		);
+
+		Object.assign(ctx, {
+			params: p,
+			isOnline: await isOnline(),
+			canCache: p.method === 'GET',
+			query: Object.fastClone(p.query),
+			encoders: (<Encoder[]>[]).concat(p.encoder || []),
+			decoders: (<Decoder[]>[]).concat(p.decoder || [])
+		});
+
+		if (ctx.canCache) {
+			ctx.pendingCache = new Cache<Then<T>>();
+			ctx.cache = (<any>{queue: requestCache, never: null, forever: new Cache<T>()})[p.cacheStrategy];
+		}
+
+		ctx.qs = toQueryString(ctx.query);
+
+		if (p.headers) {
+			p.headers = normalizeHeaders(p.headers);
+		}
 
 		const
 			newRes = await configurator(ctx, globalOpts);
@@ -307,6 +307,7 @@ export default function create<T>(path, ...args) {
 		const
 			wrapAsResponse = (res) => new Response(res, {type: 'object'}).decode();
 
+		let res;
 		if (fromCache) {
 			res = Then.immediate(() => (<Cache>ctx.cache).get(cacheKey)).then(wrapAsResponse);
 

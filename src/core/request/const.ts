@@ -15,7 +15,8 @@ export const defaultRequestOpts = {
 	method: <RequestMethods>'GET',
 	responseType: <ResponseTypes>'json',
 	cacheStrategy: <CacheStrategy>'never',
-	headers: {}
+	headers: {},
+	query: {}
 };
 
 export const defaultResponseOpts = {
