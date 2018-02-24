@@ -10,7 +10,7 @@ import $C = require('collection.js');
 import Then from 'core/then';
 
 import { IS_NODE } from 'core/const/links';
-import { convertIfDate } from 'core/helpers/json';
+import { convertIfDate } from 'core/json';
 import { normalizeHeaderName } from 'core/transport/utils';
 import { defaultResponseOpts } from 'core/transport/const';
 import { ResponseOptions, ResponseHeaders, ResponseTypes, ResponseType } from 'core/transport/interface';
