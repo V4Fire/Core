@@ -67,16 +67,6 @@ export default class Response {
 	protected readonly body: ResponseType;
 
 	/**
-	 * Object factory
-	 */
-	protected objFactory?: Function | null;
-
-	/**
-	 * Object factory timer
-	 */
-	protected factoryTimer?: number;
-
-	/**
 	 * @param [body]
 	 * @param [params]
 	 */
