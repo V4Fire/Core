@@ -14,14 +14,15 @@ export const enum State {
 	rejected
 }
 
-export type Value<T> = T | PromiseLike<T>;
+export type Value<T = any> = T | PromiseLike<T>;
+export type ExecValue<T = any> = (() => T) | Value<T>;
 export class PromiseAbortError extends Error {}
 
 export interface OnError {
 	(reason?: any): void;
 }
 
-export interface Executor<T> {
+export interface Executor<T = any> {
 	(
 		resolve: (value?: Value<T>) => void,
 		reject: (reason?: any) => void,
@@ -43,6 +44,26 @@ export default class Then<T = any> implements PromiseLike<T> {
 		return Boolean(obj) && Object.isFunction(obj.then) && Object.isFunction(obj.catch);
 	}
 
+	/**
+	 * Wraps the specified value with Then, that will be resolved after setImmediate
+	 * @param [value] - if function, it will be executed
+	 */
+	static immediate<V>(value?: ExecValue<V>): Then<V> {
+		return new Then((res, rej, onAbort) => {
+			const id = setImmediate(() => {
+				res(value && Object.isFunction(value) ? (<Function>value)() : value);
+			});
+
+			onAbort((r) => {
+				clearImmediate(id);
+
+				if (value instanceof Then) {
+					value.bubblingAbort(r);
+				}
+			});
+		});
+	}
+
 	/** @see {Promise.resolve} */
 	static resolve<V>(value?: Value<V>): Then<V> {
 		if (value instanceof Then) {
@@ -60,7 +81,7 @@ export default class Then<T = any> implements PromiseLike<T> {
 	}
 
 	/** @see {Promise.reject} */
-	static reject(reason?: any): Then {
+	static reject<V>(reason?: Value<V>): Then {
 		return new Then((res, rej) => rej(reason));
 	}
 
