@@ -15,7 +15,16 @@ import { once } from 'core/decorators';
 import { convertIfDate } from 'core/json';
 import { normalizeHeaderName } from 'core/request/utils';
 import { defaultResponseOpts } from 'core/request/const';
-import { ResponseOptions, ResponseHeaders, ResponseTypes, ResponseType, Decoder } from 'core/request/interface';
+import {
+
+	ResponseOptions,
+	ResponseHeaders,
+	ResponseTypes,
+	ResponseType,
+	Decoder,
+	SuccessStatus
+
+} from 'core/request/interface';
 
 export type json =
 	string |
@@ -44,7 +53,7 @@ export default class Response {
 	/**
 	 * Range of success status codes
 	 */
-	readonly successStatuses: sugarjs.Range | StatusCodes[];
+	readonly successStatuses: SuccessStatus;
 
 	/**
 	 * True if .successStatuses contains .status
@@ -77,8 +86,16 @@ export default class Response {
 		};
 
 		this.status = p.status;
-		this.successStatuses = p.successStatuses;
-		this.success = this.successStatuses.contains(this.status);
+		const s = this.successStatuses = p.successStatus;
+
+		// tslint:disable-next-line
+		if (typeof s === 'object' && !Object.isArray(s)) {
+			this.success = s.contains(this.status);
+
+		} else {
+			this.success = (<StatusCodes[]>[]).concat(s || []).includes(this.status);
+		}
+
 		this.headers = this.parseHeaders(p.headers);
 		this.sourceType = this.type = p.type;
 		this.decoders = (<Decoder[]>[]).concat(p.decoder || []);
