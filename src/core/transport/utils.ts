@@ -7,6 +7,36 @@
  */
 
 import $C = require('collection.js');
+import { defaultRequestOpts } from 'core/transport/const';
+import { RequestOptions } from 'core/transport/interface';
+
+/**
+ * Generates a cache string by the specified params and returns it
+ * @param params
+ */
+export function getRequestKey(params: RequestOptions): string {
+	const p = <typeof defaultRequestOpts & RequestOptions>{
+		...defaultRequestOpts,
+		...params
+	};
+
+	const plainHeaders = $C(normalizeHeaders(p.headers))
+		.to([])
+		.reduce((res, value, name) => (res.push([name, value]), res))
+		.sort(([name1], [name2]) => {
+			if (name1 < name2) {
+				return -1;
+			}
+
+			if (name1 > name2) {
+				return 1;
+			}
+
+			return 0;
+		});
+
+	return JSON.stringify([p.method, p.url, plainHeaders, p.timeout]);
+}
 
 /**
  * Normalizes the specified HTTP header name
