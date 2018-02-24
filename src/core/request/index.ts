@@ -268,15 +268,15 @@ export default function create<T>(path, ...args) {
 			return url + (ctx.qs ? `?${ctx.qs}` : '');
 		};
 
+		await Promise.all(
+			$C(p.middlewares).map((fn) => fn(p))
+		);
+
 		const
 			newRes = await configurator(ctx, globalOpts);
 
 		if (newRes) {
 			return Then.resolve(newRes());
-		}
-
-		if (globalOpts.token) {
-			p.headers.Authorization = globalOpts.token;
 		}
 
 		const

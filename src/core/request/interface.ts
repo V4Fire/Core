@@ -71,10 +71,14 @@ export interface RequestOptions {
 	responseType?: ResponseTypes;
 	headers?: Dictionary<any | any[]>;
 	body?: BodyType;
-	query?: Dictionary | any[] | string;
 	withCredentials?: boolean;
 	user?: string;
 	password?: string;
+}
+
+export type RequestQuery = Dictionary | any[] | string;
+export interface Middleware<T = any> {
+	(params: CreateRequestOptions<T>): any
 }
 
 export interface CreateRequestOptions<T = any> extends RequestOptions {
@@ -86,6 +90,8 @@ export interface CreateRequestOptions<T = any> extends RequestOptions {
 		namespace?: string | null;
 	};
 
+	middlewares?: Dictionary<Middleware<T>> | Iterable<Middleware<T>>;
+	query?: RequestQuery;
 	cacheStrategy?: CacheStrategy;
 	cacheTime?: number;
 	externalRequest?: boolean;
@@ -103,14 +109,14 @@ export interface RequestContext<T> {
 	isOnline: boolean;
 	canCache: boolean;
 	params: typeof defaultRequestOpts & CreateRequestOptions<T>;
-	rewriter?: Rewriter;
-	query: CreateRequestOptions['query'];
+	query: RequestQuery;
 	qs: string;
 	prefetch?: Then<any>;
 	pendingCache?: Cache<Then<T>>;
 	cache?: Cache<T> | RestrictedCache<T> | null;
 	encoders: Encoder[];
 	decoders: Decoder[];
+	rewriter?(this: CreateRequestOptions<T>, ...args: any[]): Rewriter;
 	resolveAPI(base?: string): string;
 	resolveURL(api?: string): string;
 	saveCache(url: string): (data: T) => T;
