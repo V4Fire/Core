@@ -70,3 +70,22 @@ interface Object {
 interface DateConstructor {
 	getWeekDays(): string[];
 }
+
+declare namespace decoders {
+	interface TextDecoder {
+		readonly encoding: string;
+		readonly fatal: boolean;
+		readonly ignoreBOM: boolean;
+		decode(buffer?: ArrayBufferView, options?: {stream?: boolean}): string;
+	}
+
+	export interface TextDecoderConstructor {
+		new (utfLabel?: string, options?: {fatal?: boolean}): TextDecoder;
+	}
+}
+
+interface Window {
+	TextDecoder: decoders.TextDecoderConstructor;
+}
+
+declare const TextDecoder: decoders.TextDecoderConstructor;

@@ -9,10 +9,11 @@
 import $C = require('collection.js');
 import Then from 'core/then';
 import Response from 'core/transport/response';
+import RequestError from 'core/transport/request/error';
 
+import { toQueryString } from 'core/url';
 import { RequestOptions } from 'core/transport/interface';
 import { normalizeHeaders } from 'core/transport/utils';
-import { toQueryString } from 'core/url';
 import { defaultRequestOpts } from 'core/transport/const';
 
 const simpleTypes = {
@@ -26,18 +27,17 @@ const urlEncodeRequests = {
 	HEAD: true
 };
 
-export interface Transport extends XMLHttpRequest {
-	requestData: any;
-	responseData: any;
-	responseDataSource: any;
-}
-
+/**
+ * Creates request by XMLHttpRequest with the specified parameters and returns a promise
+ * @param params
+ */
 export default function createTransport<T>(params: RequestOptions): Then<Response> {
 	const
 		p = {...defaultRequestOpts, ...params},
-		xhr: Transport = <any>new XMLHttpRequest();
+		xhr = new XMLHttpRequest();
 
-	let data = p.body;
+	let
+		data = p.body;
 
 	if (data) {
 		if (simpleTypes[typeof data]) {
@@ -69,7 +69,13 @@ export default function createTransport<T>(params: RequestOptions): Then<Respons
 		url = p.url + (urlEncodeRequest && p.body ? `?${p.body}` : ''),
 		isJSON = p.responseType === 'json';
 
-	xhr.open(p.method, url, true, p.user, p.password);
+	xhr.open(
+		p.method,
+		url,
+		true,
+		p.user,
+		p.password
+	);
 
 	if (p.timeout != null) {
 		xhr.timeout = p.timeout;
@@ -79,7 +85,7 @@ export default function createTransport<T>(params: RequestOptions): Then<Respons
 		xhr.responseType = '';
 
 	} else if (p.responseType) {
-		xhr.responseType = <any>p.responseType;
+		xhr.responseType = <XMLHttpRequestResponseType>p.responseType.toLowerCase();
 	}
 
 	if (p.withCredentials) {
@@ -114,10 +120,17 @@ export default function createTransport<T>(params: RequestOptions): Then<Respons
 		});
 
 		xhr.addEventListener('timeout', () => {
-			reject(new Error('timeout'));
+			reject(new RequestError('timeout'));
 		});
 
-		onAbort(() => {
+		onAbort((replacedBy) => {
+			if (replacedBy) {
+				resolve(replacedBy);
+
+			} else {
+				reject(new RequestError('abort'));
+			}
+
 			xhr.abort();
 		});
 
