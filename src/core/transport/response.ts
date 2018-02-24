@@ -9,6 +9,7 @@
 import $C = require('collection.js');
 import Then from 'core/then';
 
+import { IS_NODE } from 'core/const/links';
 import { convertIfDate } from 'core/helpers/json';
 import { normalizeHeaderName } from 'core/transport/utils';
 import { defaultResponseOpts } from 'core/transport/const';
@@ -24,19 +25,17 @@ export type json =
 
 export default class Response {
 	/**
+	 * Range of success status codes
+	 */
+	readonly successStatuses: sugarjs.Range = Number.range(200, 299);
+
+	/**
 	 * Response status code
 	 */
 	readonly status: number;
 
 	/**
-	 * @alias status
-	 */
-	get statusCode(): number {
-		return this.status;
-	}
-
-	/**
-	 * True if 200 <= .status < 300
+	 * True if .successStatuses contains .status
 	 */
 	readonly ok: boolean;
 
@@ -58,24 +57,35 @@ export default class Response {
 	/**
 	 * Object factory
 	 */
-	protected clone?: Function | null;
+	protected objFactory?: Function | null;
 
 	/**
 	 * Object factory timer
 	 */
-	protected cloneTimer?: number;
+	protected factoryTimer?: number;
 
 	/**
 	 * @param [body]
 	 * @param [params]
 	 */
 	constructor(body?: ResponseType, params?: ResponseOptions) {
-		const p = {...defaultResponseOpts, ...params};
+		const p = {
+			...defaultResponseOpts,
+			...params
+		};
+
 		this.status = p.status;
-		this.ok = Number.range(200, 299).contains(this.status);
+		this.ok = this.successStatuses.contains(this.status);
 		this.headers = this.parseHeaders(p.headers);
-		this.body = body;
 		this.type = p.type;
+
+		// tslint:disable-next-line
+		if (this.type === 'json' && body && typeof body === 'object') {
+			this.body = JSON.stringify(body);
+
+		} else {
+			this.body = body;
+		}
 	}
 
 	/**
@@ -138,18 +148,18 @@ export default class Response {
 		const
 			body = String(this.body);
 
-		if (!this.clone && this.clone !== null) {
-			this.clone = null;
-			this.cloneTimer = requestIdleCallback(() => {
+		if (!this.objFactory && this.objFactory !== null) {
+			this.objFactory = null;
+			this.factoryTimer = requestIdleCallback(() => {
 				let data = JSON.parse(body, convertIfDate);
-				this.cloneTimer = requestIdleCallback(() => {
+				this.factoryTimer = requestIdleCallback(() => {
 					data = data.toSource();
-					this.cloneTimer = requestIdleCallback(() => this.clone = new Function(`return ${data}`));
+					this.factoryTimer = requestIdleCallback(() => this.objFactory = new Function(`return ${data}`));
 				});
 			});
 		}
 
-		return Then.resolve(this.clone ? this.clone() : JSON.parse(body, convertIfDate));
+		return Then.resolve(this.objFactory ? this.objFactory() : JSON.parse(body, convertIfDate));
 	}
 
 	/**
@@ -206,6 +216,11 @@ export default class Response {
 			if (search) {
 				encoding = search[1].toLowerCase();
 			}
+		}
+
+		if (IS_NODE) {
+			// @ts-ignore
+			return Buffer.from(body).toString(encoding);
 		}
 
 		if (typeof TextDecoder !== 'undefined') {
