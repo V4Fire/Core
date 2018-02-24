@@ -7,8 +7,8 @@
  */
 
 import $C = require('collection.js');
-import { defaultRequestOpts } from 'core/transport/const';
-import { RequestOptions } from 'core/transport/interface';
+import { defaultRequestOpts } from 'core/request/const';
+import { RequestOptions } from 'core/request/interface';
 
 /**
  * Generates a cache string by the specified params and returns it

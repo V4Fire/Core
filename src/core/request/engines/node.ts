@@ -7,8 +7,8 @@
  */
 
 import Then from 'core/then';
-import Response from 'core/transport/response';
-import { RequestOptions } from 'core/transport/interface';
+import Response from 'core/request/response';
+import { RequestOptions } from 'core/request/interface';
 
 /**
  * Creates request by node.js with the specified parameters and returns a promise

@@ -7,8 +7,9 @@
  */
 
 import StatusCodes from 'core/statusCodes';
-import { RequestMethods, ResponseTypes } from 'core/transport/interface';
+import { RequestMethods, ResponseTypes, GlobalOptions, Cache } from 'core/request/interface';
 export { asyncLocal as storage } from 'core/kv-storage';
+export { RestrictedCache } from 'core/cache';
 
 export const defaultRequestOpts = {
 	method: <RequestMethods>'GET',
@@ -21,3 +22,7 @@ export const defaultResponseOpts = {
 	status: StatusCodes.OK,
 	headers: {}
 };
+
+export const
+	globalOpts: GlobalOptions = {},
+	requestCache: Cache = new RestrictedCache();

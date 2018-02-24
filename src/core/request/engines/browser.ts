@@ -8,13 +8,13 @@
 
 import $C = require('collection.js');
 import Then from 'core/then';
-import Response from 'core/transport/response';
-import RequestError from 'core/transport/request/error';
+import Response from 'core/request/response';
+import RequestError from 'core/request/error';
 
 import { toQueryString } from 'core/url';
-import { RequestOptions } from 'core/transport/interface';
-import { normalizeHeaders } from 'core/transport/utils';
-import { defaultRequestOpts } from 'core/transport/const';
+import { RequestOptions } from 'core/request/interface';
+import { normalizeHeaders } from 'core/request/utils';
+import { defaultRequestOpts } from 'core/request/const';
 
 const simpleTypes = {
 	string: true,

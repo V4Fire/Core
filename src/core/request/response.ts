@@ -11,9 +11,9 @@ import Then from 'core/then';
 
 import { IS_NODE } from 'core/const/links';
 import { convertIfDate } from 'core/json';
-import { normalizeHeaderName } from 'core/transport/utils';
-import { defaultResponseOpts } from 'core/transport/const';
-import { ResponseOptions, ResponseHeaders, ResponseTypes, ResponseType, Decoder } from 'core/transport/interface';
+import { normalizeHeaderName } from 'core/request/utils';
+import { defaultResponseOpts } from 'core/request/const';
+import { ResponseOptions, ResponseHeaders, ResponseTypes, ResponseType, Decoder } from 'core/request/interface';
 
 export type json =
 	string |
