@@ -6,6 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import { convertIfDate } from 'core/json';
 import { syncLocalStorage, asyncLocalStorage, syncSessionStorage, asyncSessionStorage } from 'core/kv-storage/engines';
 
 export const
@@ -67,7 +68,7 @@ function factory(storage: Storage, async?: boolean): FactoryResult | AsyncFactor
 		 */
 		get(key: string): any {
 			const val = storage.getItem(key);
-			return wrap(val === null ? undefined : JSON.parse(val));
+			return wrap(val === null ? undefined : JSON.parse(val, convertIfDate));
 		},
 
 		/**
