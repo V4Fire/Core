@@ -13,8 +13,7 @@ export { asyncLocal as storage } from 'core/kv-storage';
 export const defaultRequestOpts = {
 	method: <RequestMethods>'GET',
 	responseType: <ResponseTypes>'json',
-	headers: {},
-	body: null
+	headers: {}
 };
 
 export const defaultResponseOpts = {
