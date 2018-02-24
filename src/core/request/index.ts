@@ -254,19 +254,19 @@ export default function create<T>(path, ...args) {
 
 		Object.assign(ctx, {
 			params: p,
-			isOnline: await isOnline(),
 			canCache: p.method === 'GET',
 			query: Object.fastClone(p.query),
 			encoders: (<Encoder[]>[]).concat(p.encoder || []),
 			decoders: (<Decoder[]>[]).concat(p.decoder || [])
 		});
 
+		ctx.isOnline = await isOnline();
+		ctx.qs = toQueryString(ctx.query);
+
 		if (ctx.canCache) {
 			ctx.pendingCache = new Cache<Then<T>>();
 			ctx.cache = (<any>{queue: requestCache, never: null, forever: new Cache<T>()})[p.cacheStrategy];
 		}
-
-		ctx.qs = toQueryString(ctx.query);
 
 		if (p.headers) {
 			p.headers = normalizeHeaders(p.headers);
