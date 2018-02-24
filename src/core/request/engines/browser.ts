@@ -11,9 +11,7 @@ import Then from 'core/then';
 
 import Response from 'core/request/response';
 import RequestError from 'core/request/error';
-
 import { RequestOptions } from 'core/request/interface';
-import { defaultRequestOpts } from 'core/request/const';
 
 /**
  * Creates request by XMLHttpRequest with the specified parameters and returns a promise
@@ -21,7 +19,7 @@ import { defaultRequestOpts } from 'core/request/const';
  */
 export default function createTransport<T>(params: RequestOptions): Then<Response> {
 	const
-		p = <typeof defaultRequestOpts & RequestOptions>{...defaultRequestOpts, ...params},
+		p = params,
 		xhr = new XMLHttpRequest();
 
 	let
@@ -37,13 +35,7 @@ export default function createTransport<T>(params: RequestOptions): Then<Respons
 		}
 	}
 
-	xhr.open(
-		p.method,
-		p.url,
-		true,
-		p.user,
-		p.password
-	);
+	xhr.open(<string>p.method, p.url, true, p.user, p.password);
 
 	if (p.timeout != null) {
 		xhr.timeout = p.timeout;

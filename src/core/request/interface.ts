@@ -6,7 +6,11 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import Then from 'core/then';
 import StatusCodes from 'core/statusCodes';
+import Response from 'core/request/response';
+import { Cache, RestrictedCache } from 'core/cache';
+import { defaultRequestOpts } from 'core/request/const';
 
 export type RequestMethods =
 	'GET' |
@@ -19,12 +23,18 @@ export type RequestMethods =
 	'OPTIONS' |
 	'TRACE';
 
+export type CacheStrategy =
+	'queue' |
+	'forever' |
+	'never';
+
 export type ResponseTypes =
 	'text' |
 	'json' |
 	'document' |
 	'arrayBuffer' |
-	'blob';
+	'blob' |
+	'object';
 
 export type ResponseType =
 	string |
@@ -39,24 +49,35 @@ export type BodyType =
 	FormData |
 	ArrayBuffer;
 
+export type SuccessStatus =
+	sugarjs.Range |
+	StatusCodes |
+	StatusCodes[];
+
 export interface Encoder<I = any, O = any> {
 	(data: I): {contentType: string; data: O};
+}
+
+export interface Decoder<I = any, O = any> {
+	(this: Response, data: I): O;
 }
 
 export interface RequestOptions {
 	url: string;
 	method?: RequestMethods;
 	timeout?: number;
+	successStatus?: SuccessStatus;
 	contentType?: string;
 	responseType?: ResponseTypes;
 	headers?: Dictionary<any | any[]>;
 	body?: BodyType;
+	query?: Dictionary | any[] | string;
 	withCredentials?: boolean;
 	user?: string;
 	password?: string;
 }
 
-export interface CreateRequestOptions<T> extends RequestOptions {
+export interface CreateRequestOptions<T = any> extends RequestOptions {
 	api?: {
 		protocol?: string | null;
 		domain3?: string | null;
@@ -65,25 +86,12 @@ export interface CreateRequestOptions<T> extends RequestOptions {
 		namespace?: string | null;
 	};
 
-	appRequest?: boolean;
-	offline?: boolean;
-	decoder?: string;
-	encoder?: Encoder;
-
-	method?: string;
-	query?: Dictionary;
-	emptyValue?: any;
-	okStatus?: StatusCodes | StatusCodes[];
-	responseType?: 'protobuf';
-	converterPath?: string;
-	cacheStrategy?: 'default' | 'forever' | 'never';
+	cacheStrategy?: CacheStrategy;
 	cacheTime?: number;
-	headers?: Dictionary<any | any[]>;
-	suppressLogging?: boolean;
-	body?: any | null;
-
-	postProcessor?(data: any): T;
-	preProcessor?(data: any): any;
+	externalRequest?: boolean;
+	offline?: boolean;
+	encoder?: Encoder | Encoder[];
+	decoder?: Decoder<T> | Decoder[];
 }
 
 export interface Rewriter {
@@ -94,38 +102,28 @@ export interface Rewriter {
 export interface RequestContext<T> {
 	isOnline: boolean;
 	canCache: boolean;
-	params: typeof defaultRequestOpts & CreateOptions<T>;
-
+	params: typeof defaultRequestOpts & CreateRequestOptions<T>;
 	rewriter?: Rewriter;
-	okStatus: number[];
-	query: Dictionary;
+	query: CreateRequestOptions['query'];
 	qs: string;
-
 	prefetch?: Then<any>;
 	pendingCache?: Cache<Then<T>>;
 	cache?: Cache<T> | RestrictedCache<T> | null;
-
-	decoder?: ProtobufType;
-	encoder?: ProtobufType;
-
+	encoders: Encoder[];
+	decoders: Decoder[];
 	resolveAPI(base?: string): string;
 	resolveURL(api?: string): string;
-
 	saveCache(url: string): (data: T) => T;
 	wrapRequest(url: string, promise: Then<T>): Then<T>;
-	decodeResponse(buffer: ArrayBuffer): Dictionary | CreateOptions<any>['emptyValue'];
 }
 
 export interface ResponseHeaders {
 	readonly [name: string]: string;
 }
 
-export interface Decoder<O = any> {
-	(data: ArrayBuffer | null): O;
-}
-
 export interface ResponseOptions {
 	type?: ResponseTypes;
+	successStatus?: SuccessStatus;
 	status?: StatusCodes;
 	headers?: string | Dictionary<string>;
 	decoder?: Decoder;
@@ -134,11 +132,4 @@ export interface ResponseOptions {
 export interface GlobalOptions {
 	api?: string;
 	token?: string;
-}
-
-export interface Cache<T = any> {
-	exist(key: string): boolean;
-	get(key: string): T;
-	set(key: string, value: T): T;
-	remove(key: string): T | undefined;
 }
