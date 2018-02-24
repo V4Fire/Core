@@ -1,20 +1,30 @@
+/*!
+ * V4Fire Core
+ * https://github.com/V4Fire/Core
+ *
+ * Released under the MIT license
+ * https://github.com/V4Fire/Core/blob/master/LICENSE
+ */
+
 import $C = require('collection.js');
 import Then from 'core/then';
 
 import StatusCodes from 'core/statusCodes';
-import RequestError from 'core/transport/request/error';
+import RequestError from 'core/request/error';
 
-import request from 'core/transport/request';
-import configurator from 'core/data/configurator';
+import Response from 'core/request/response';
+import request from 'core/request/engines';
+import configurator from 'core/request/configurator';
 
 import { Cache } from 'core/cache';
-import { getStorageKey, isOnline } from 'core/data/utils';
-import { concatUrls, qsStableStringify } from 'core/helpers';
-import { CreateOptions, Rewriter, RequestContext } from 'core/data/interface';
-import { storage, requestCache, globalOpts, defaultRequestOpts, SERVICE_UNAVAILABLE } from 'core/data/const';
+import { isOnline } from 'core/net';
+import { normalizeHeaders, getStorageKey, getRequestKey } from 'core/request/utils';
+import { concatUrls, toQueryString } from 'core/url';
+import { CreateRequestOptions, Rewriter, RequestContext, Encoder, Decoder } from 'core/request/interface';
+import { storage, requestCache, globalOpts, defaultRequestOpts } from 'core/request/const';
 
 /**
- * Создает AJAX запрос на заданный URL
+ * Creates a new request with the specified options
  *
  * @param path
  * @param opts
@@ -23,38 +33,40 @@ import { storage, requestCache, globalOpts, defaultRequestOpts, SERVICE_UNAVAILA
 export default function create<T>(path: string, opts?: CreateOptions<T>): () => Then<T>;
 
 /**
- * Создать фасад create c заданными параметрами по умолчанию
+ * Creates a request wrapper by the specified options
  * @param opts
  */
-export default function create<T, A>(opts: CreateOptions<T>): typeof create;
+export default function create<T, A>(opts: CreateRequestOptions<T>): typeof create;
 
 /**
  * @param path
- * @param rewriter - функция перезаписи url
+ * @param rewriter - url rewrite function
  * @param opts
  */
 export default function create<T, A>(
 	path: string,
-	rewriter: (this: CreateOptions<T>, arg: A) => Rewriter,
-	opts?: CreateOptions<T>
+	rewriter: (this: CreateRequestOptions<T>, arg: A) => Rewriter,
+	opts?: CreateRequestOptions<T>
 ): (a: A) => Then<T>;
 
 export default function create<T, A1, A2>(
 	path: string,
-	rewriter: (this: CreateOptions<T>, arg1: A1, arg2: A2) => Rewriter,
-	opts?: CreateOptions<T>
+	rewriter: (this: CreateRequestOptions<T>, arg1: A1, arg2: A2) => Rewriter,
+	opts?: CreateRequestOptions<T>
 ): (arg1: A1, arg2: A2) => Then<T>;
 
 export default function create<T, A1, A2, A3>(
 	path: string,
-	rewriter: (this: CreateOptions<T>, arg1: A1, arg2: A2, arg3: A3) => Rewriter,
-	opts?: CreateOptions<T>
+	rewriter: (this: CreateRequestOptions<T>, arg1: A1, arg2: A2, arg3: A3) => Rewriter,
+	opts?: CreateRequestOptions<T>
 ): (arg1: A1, arg2: A2, arg3: A3) => Then<T>;
 
 // tslint:disable-next-line
 export default function create<T>(path, ...args) {
 	if (Object.isObject(path)) {
-		const defOpts = path;
+		const
+			defOpts = path;
+
 		return (path, rewriter, opts) => {
 			if (Object.isObject(path)) {
 				return create({...path, ...defOpts});
@@ -68,7 +80,7 @@ export default function create<T>(path, ...args) {
 		};
 	}
 
-	let rewriter, params: CreateOptions<T>;
+	let rewriter, params: CreateRequestOptions<T>;
 
 	if (args.length > 1) {
 		([rewriter, params] = args);
@@ -77,35 +89,33 @@ export default function create<T>(path, ...args) {
 		params = args[0];
 	}
 
-	const p: RequestContext<T>['params'] = <any>{
-		headers: {},
+	const p = <typeof defaultRequestOpts & CreateRequestOptions<T>>{
 		...defaultRequestOpts,
 		...params
 	};
 
-	const ctx: RequestContext<T> = <any>{
-		rewriter,
-		canCache: p.method === 'GET',
-		params: p
-	};
-
-	if (p.converterPath) {
-		const c = getProtobuf(p.converterPath);
-		ctx.decoder = $C(c.decoders).get([p.decoder]),
-			ctx.encoder = $C(c.encoders).get([p.encoder]);
+	if (p.headers) {
+		p.headers = normalizeHeaders(p.headers);
 	}
 
-	ctx.okStatus = p.okStatus ? (<number[]>[]).concat(p.okStatus) : [StatusCodes.OK];
-	ctx.query = p.query ? Object.fastClone(p.query) : {};
-	ctx.qs = qsStableStringify(ctx.query);
+	const ctx: RequestContext<T> = <any>{
+		rewriter,
+		params: p,
+		canCache: p.method === 'GET',
+		query: p.query ? Object.fastClone(p.query) : {},
+		encoders: (<Encoder[]>[]).concat(p.encoder || []),
+		decoders: (<Decoder[]>[]).concat(p.decoder || [])
+	};
 
 	if (ctx.canCache) {
 		ctx.pendingCache = new Cache<Then<T>>();
-		ctx.cache = {default: requestCache, never: null, forever: new Cache<T>()}[p.cacheStrategy];
+		ctx.cache = (<any>{queue: requestCache, never: null, forever: new Cache<T>()})[p.cacheStrategy];
 	}
 
+	ctx.qs = toQueryString(ctx.query);
+
 	/**
-	 * Возвращает полную строку АПИ для запроса
+	 * Returns absolute path to API for the request
 	 * @param [base]
 	 */
 	ctx.resolveAPI = (base = globalOpts.api) => {
@@ -165,30 +175,15 @@ export default function create<T>(path, ...args) {
 		});
 	};
 
-	/**
-	 * Декодирует ArrayBuffer в JS объект
-	 * @param buffer
-	 */
-	ctx.decodeResponse = (buffer) => {
-		if (ctx.decoder && buffer.byteLength) {
-			const decodedData = (<any>ctx.decoder.decode(new Uint8Array(buffer))).toObject();
-			return p.postProcessor ? p.postProcessor(decodedData) : decodedData;
-		}
-
-		return p.emptyValue;
-	};
-
 	let cacheId;
 
 	/**
-	 * Фабрика для создания функции кеширования результата запроса
-	 * @param url - URL запроса
+	 * Factory for a cache middleware
+	 * @param url - request URL
 	 */
 	ctx.saveCache = (url) => (res) => {
 		if (ctx.canCache && p.offline) {
-			storage.set(getStorageKey(url), res, p.cacheTime || (1).day()).catch(() => {
-				// ...
-			});
+			storage.set(getStorageKey(url), res, p.cacheTime || (1).day()).catch(stderr);
 		}
 
 		if (ctx.cache) {
@@ -210,9 +205,9 @@ export default function create<T>(path, ...args) {
 	};
 
 	/**
-	 * Враппер для запроса (runtime кеширование и т.д.)
+	 * Wrapper for the request (pending cache and etc.)
 	 *
-	 * @param url - URL запроса
+	 * @param url - request URL
 	 * @param promise
 	 */
 	ctx.wrapRequest = (url, promise) => {
@@ -249,7 +244,7 @@ export default function create<T>(path, ...args) {
 		ctx.isOnline = await isOnline();
 
 		/**
-		 * Возвращает полную строку запроса (вместе с параметрами)
+		 * Returns absolute path for the request
 		 * @param api - API URL
 		 */
 		ctx.resolveURL = (api?) => {
@@ -262,7 +257,7 @@ export default function create<T>(path, ...args) {
 
 				if (mut.query) {
 					Object.assign(ctx.query, mut.query);
-					ctx.qs = qsStableStringify(ctx.query);
+					ctx.qs = toQueryString(ctx.query);
 				}
 
 				if (mut.subPath) {
@@ -270,14 +265,14 @@ export default function create<T>(path, ...args) {
 				}
 			}
 
-			return url + ctx.qs;
+			return url + (ctx.qs ? `?${ctx.qs}` : '');
 		};
 
 		const
 			newRes = await configurator(ctx, globalOpts);
 
 		if (newRes) {
-			return newRes();
+			return Then.resolve(newRes());
 		}
 
 		if (globalOpts.token) {
@@ -293,7 +288,7 @@ export default function create<T>(path, ...args) {
 			fromCache = false;
 
 		if (ctx.canCache) {
-			cacheKey = [url, JSON.stringify(p.headers)].join();
+			cacheKey = getRequestKey(url, p);
 			fromCache = Boolean(ctx.cache && ctx.cache.exist(cacheKey));
 		}
 
@@ -309,61 +304,46 @@ export default function create<T>(path, ...args) {
 			}
 		}
 
+		const
+			wrapAsResponse = (res) => new Response(res, {type: 'object'}).decode();
+
 		if (fromCache) {
-			res = Then.immediate((<Cache<T>>ctx.cache).get(cacheKey));
+			res = Then.immediate(() => (<Cache>ctx.cache).get(cacheKey)).then(wrapAsResponse);
 
 		} else if (fromLocalStorage) {
-			res = Then.resolve(storage.get(localKey))
-				.then((res) => JSON.parse(res))
-				.then(ctx.saveCache(cacheKey));
+			res = Then.immediate(() => storage.get(localKey))
+				.then(<any>ctx.saveCache(cacheKey))
+				.then(wrapAsResponse);
 
-		} else if (!ctx.isOnline && !p.appRequest) {
-			res = new Then(() => {
-				throw new RequestError(null, 'offline');
-			});
+		} else if (!ctx.isOnline && !p.externalRequest) {
+			res = Then.reject(new RequestError('offline'));
 
 		} else {
 			const success = (response) => {
-				if (response.status === SERVICE_UNAVAILABLE) {
-					throw new RequestError({response});
+				if (!response.success) {
+					throw new RequestError('Invalid status', {response});
 				}
 
-				if (
-					response.status === StatusCodes.NO_CONTENT ||
-					response.status === StatusCodes.OK && !response.body.byteLength
-				) {
-					return p.emptyValue;
-				}
+				response.decode().then((res) => {
+					if (p.externalRequest && !ctx.isOnline && !res) {
+						throw new RequestError('offline');
+					}
 
-				if (!ctx.okStatus.includes(response.status)) {
-					throw new RequestError({response});
-				}
-
-				return response.arrayBuffer().then(ctx.decodeResponse).then((res) => {
-					if (p.appRequest && !ctx.isOnline && !res) {
-						throw new RequestError(null, 'offline');
+					if (
+						response.status === StatusCodes.NO_CONTENT ||
+						response.status === StatusCodes.OK && !res
+					) {
+						return null;
 					}
 
 					return res;
 				});
 			};
 
-			let b = p.body;
-			if (p.preProcessor) {
-				b = p.preProcessor(Object.fastClone(b));
-			}
-
-			if (ctx.encoder) {
-				b = ctx.encoder.encode(b).finish();
-			}
-
-			b = b || null;
 			const reqOpts = {
+				...p,
 				url,
-				method: p.method,
-				headers: p.headers,
-				body: b,
-				encoding: null
+				body: $C(ctx.encoders).reduce((res, e) => e.call(p, res), p.body)
 			};
 
 			const r = () => request(reqOpts).then(success).then(ctx.saveCache(cacheKey));

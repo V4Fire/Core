@@ -11,9 +11,6 @@ import { RequestMethods, ResponseTypes, GlobalOptions, CacheStrategy } from 'cor
 export { asyncLocal as storage } from 'core/kv-storage';
 export { RestrictedCache } from 'core/cache';
 
-export const
-	SERVICE_UNAVAILABLE = 503;
-
 export const defaultRequestOpts = {
 	method: <RequestMethods>'GET',
 	responseType: <ResponseTypes>'json',

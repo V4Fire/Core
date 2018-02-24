@@ -20,9 +20,11 @@ export function getStorageKey(key: string): string {
 
 /**
  * Generates a cache string by the specified params and returns it
- * @param params
+ *
+ * @param url
+ * @param [params]
  */
-export function getRequestKey(params: RequestOptions): string {
+export function getRequestKey(url: string, params?: RequestOptions): string {
 	const p = <typeof defaultRequestOpts & RequestOptions>{
 		...defaultRequestOpts,
 		...params
@@ -43,7 +45,7 @@ export function getRequestKey(params: RequestOptions): string {
 			return 0;
 		});
 
-	return JSON.stringify([p.method, p.url, plainHeaders, p.timeout]);
+	return JSON.stringify([url, p.method, plainHeaders, p.timeout]);
 }
 
 /**
