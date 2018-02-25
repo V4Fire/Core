@@ -96,17 +96,17 @@ export default class Async<CTX extends Object> {
 	/**
 	 * Cache object for async operations
 	 */
-	protected cache: Dictionary<CacheObject>;
+	protected readonly cache: Dictionary<CacheObject>;
 
 	/**
 	 * Context for functions
 	 */
-	protected context?: CTX;
+	protected readonly context?: CTX;
 
 	/**
 	 * Map of initialized workers
 	 */
-	protected store: WeakMap<Object, true> = new WeakMap();
+	protected readonly store: WeakMap<Object, true> = new WeakMap();
 
 	/**
 	 * @param [ctx] - context for functions
