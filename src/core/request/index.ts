@@ -41,7 +41,7 @@ export type RequestResponse<T = any> = Then<{
  * @param opts
  */
 // @ts-ignore
-export default function create<T>(path: string, opts?: CreateOptions<T>): () => RequestResponse<T>;
+export default function create<T>(path: string, opts?: CreateRequestOptions<T>): () => RequestResponse<T>;
 
 /**
  * Creates a request wrapper by the specified options
