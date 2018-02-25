@@ -81,6 +81,7 @@ export interface Middleware<T = any> {
 	(opts: CreateRequestOptions<T>, globalOpts: GlobalOptions): any
 }
 
+export type Middlewares<T = any> = Dictionary<Middleware<T>> | Iterable<Middleware<T>>;
 export interface CreateRequestOptions<T = any> extends RequestOptions {
 	api?: {
 		protocol?: string | null;
@@ -90,7 +91,7 @@ export interface CreateRequestOptions<T = any> extends RequestOptions {
 		namespace?: string | null;
 	};
 
-	middlewares?: Dictionary<Middleware<T>> | Iterable<Middleware<T>>;
+	middlewares?: Middlewares<T>;
 	query?: RequestQuery;
 	cacheStrategy?: CacheStrategy;
 	cacheTime?: number;
