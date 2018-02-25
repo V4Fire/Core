@@ -34,6 +34,11 @@ export type RequestResponse<T = any> = Then<{
 	response: Response;
 }>;
 
+export interface RequestFunctionResponse<T = any, A1 = any, A2 = any, A3 = any> {
+	(arg1?: A1, arg2?: A2, arg3?: A3): RequestResponse<T>;
+	(...args: any[]): RequestResponse<T>;
+}
+
 /**
  * Creates a new request with the specified options
  *
@@ -41,13 +46,13 @@ export type RequestResponse<T = any> = Then<{
  * @param opts
  */
 // @ts-ignore
-export default function create<T>(path: string, opts?: CreateRequestOptions<T>): () => RequestResponse<T>;
+export default function create<T>(path: string, opts?: CreateRequestOptions<T>): RequestFunctionResponse<T>;
 
 /**
  * Creates a request wrapper by the specified options
  * @param opts
  */
-export default function create<T, A>(opts: CreateRequestOptions<T>): typeof create;
+export default function create<T>(opts: CreateRequestOptions<T>): typeof create;
 
 /**
  * @param path
@@ -58,19 +63,19 @@ export default function create<T, A>(
 	path: string,
 	rewriter: (this: CreateRequestOptions<T>, arg: A) => Rewriter,
 	opts?: CreateRequestOptions<T>
-): (a: A) => RequestResponse<T>;
+): RequestFunctionResponse<T, A>;
 
 export default function create<T, A1, A2>(
 	path: string,
 	rewriter: (this: CreateRequestOptions<T>, arg1: A1, arg2: A2) => Rewriter,
 	opts?: CreateRequestOptions<T>
-): (arg1: A1, arg2: A2) => RequestResponse<T>;
+): RequestFunctionResponse<T, A1, A2>;
 
 export default function create<T, A1, A2, A3>(
 	path: string,
 	rewriter: (this: CreateRequestOptions<T>, arg1: A1, arg2: A2, arg3: A3) => Rewriter,
 	opts?: CreateRequestOptions<T>
-): (arg1: A1, arg2: A2, arg3: A3) => RequestResponse<T>;
+): RequestFunctionResponse<T, A1, A2, A3>;
 
 // tslint:disable-next-line
 export default function create<T>(path, ...args) {
@@ -91,18 +96,18 @@ export default function create<T>(path, ...args) {
 		};
 	}
 
-	let rewriter, params: CreateRequestOptions<T>;
+	let rewriter, opts: CreateRequestOptions<T>;
 
 	if (args.length > 1) {
-		([rewriter, params] = args);
+		([rewriter, opts] = args);
 
 	} else {
-		params = args[0];
+		opts = args[0];
 	}
 
 	const p = <typeof defaultRequestOpts & CreateRequestOptions<T>>{
 		...defaultRequestOpts,
-		...params
+		...opts
 	};
 
 	const ctx: RequestContext<T> = <any>{

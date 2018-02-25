@@ -8,7 +8,7 @@
 
 import $C = require('collection.js');
 import { defaultRequestOpts } from 'core/request/const';
-import { RequestOptions } from 'core/request/interface';
+import { CreateRequestOptions } from 'core/request/interface';
 
 /**
  * Returns a string key for saving data in a storage
@@ -24,8 +24,8 @@ export function getStorageKey(key: string): string {
  * @param url
  * @param [params]
  */
-export function getRequestKey(url: string, params?: RequestOptions): string {
-	const p = <typeof defaultRequestOpts & RequestOptions>{
+export function getRequestKey(url: string, params?: CreateRequestOptions): string {
+	const p = <typeof defaultRequestOpts & CreateRequestOptions>{
 		...defaultRequestOpts,
 		...params
 	};

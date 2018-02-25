@@ -82,7 +82,18 @@ export interface Middleware<T = any> {
 }
 
 export type Middlewares<T = any> = Dictionary<Middleware<T>> | Iterable<Middleware<T>>;
-export interface CreateRequestOptions<T = any> extends RequestOptions {
+export interface CreateRequestOptions<T = any> {
+	method?: RequestMethods;
+	timeout?: number;
+	successStatus?: SuccessStatus;
+	contentType?: string;
+	responseType?: ResponseTypes;
+	headers?: Dictionary<any | any[]>;
+	body?: BodyType;
+	withCredentials?: boolean;
+	user?: string;
+	password?: string;
+
 	api?: {
 		protocol?: string | null;
 		domain3?: string | null;
