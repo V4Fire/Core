@@ -81,7 +81,7 @@ export interface Middleware<T = any, CTX = void> {
 	(this: CTX, url: string, opts: CreateRequestOptions<T>, globalOpts: GlobalOptions): any
 }
 
-export type Middlewares<T = any> = Dictionary<Middleware<T>> | Iterable<Middleware<T>>;
+export type Middlewares<T = any, CTX = void> = Dictionary<Middleware<T, CTX>> | Iterable<Middleware<T, CTX>>;
 export interface CreateRequestOptions<T = any> {
 	method?: RequestMethods;
 	timeout?: number;
