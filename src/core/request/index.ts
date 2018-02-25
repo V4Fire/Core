@@ -23,6 +23,12 @@ import { concatUrls, toQueryString } from 'core/url';
 import { CreateRequestOptions, Rewriter, RequestContext, Encoder, Decoder } from 'core/request/interface';
 import { storage, requestCache, globalOpts, defaultRequestOpts } from 'core/request/const';
 
+export * from 'core/request/interface';
+export * from 'core/request/utils';
+export { globalOpts, requestCache } from 'core/request/const';
+export { default as RequestError } from 'core/request/error';
+export { default as Response } from 'core/request/response';
+
 /**
  * Creates a new request with the specified options
  *
