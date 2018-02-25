@@ -9,8 +9,8 @@
 import config from 'config';
 import StatusCodes from 'core/statusCodes';
 import { RequestMethods, ResponseTypes, GlobalOptions, CacheStrategy } from 'core/request/interface';
+import { RestrictedCache } from 'core/cache';
 export { asyncLocal as storage } from 'core/kv-storage';
-export { RestrictedCache } from 'core/cache';
 
 export const defaultRequestOpts = {
 	method: <RequestMethods>'GET',
@@ -29,5 +29,4 @@ export const defaultResponseOpts = {
 
 export const
 	globalOpts: GlobalOptions = {api: config.api},
-	// @ts-ignore
 	requestCache = new RestrictedCache();
