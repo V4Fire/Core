@@ -6,6 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import $C = require('collection.js');
 export const NBSP = String.fromCharCode(160);
 
 /**
@@ -32,7 +33,7 @@ export function pluralize(num: number, variants: [string, string, string]): stri
 export function pluralize(n: number, opts: string | string[], ...rest: string[]): string {
 	let one, two, five;
 
-	if (Array.isArray(opts)) {
+	if (Object.isArray(opts)) {
 		[one, two, five] = opts;
 
 	} else {
