@@ -6,6 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import config from 'config';
 import StatusCodes from 'core/statusCodes';
 import { RequestMethods, ResponseTypes, GlobalOptions, CacheStrategy } from 'core/request/interface';
 export { asyncLocal as storage } from 'core/kv-storage';
@@ -27,6 +28,6 @@ export const defaultResponseOpts = {
 };
 
 export const
-	globalOpts: GlobalOptions = {},
+	globalOpts: GlobalOptions = {api: config.api},
 	// @ts-ignore
 	requestCache = new RestrictedCache();
