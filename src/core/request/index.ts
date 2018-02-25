@@ -264,8 +264,12 @@ export default function create<T>(path, ...args) {
 			return url + (ctx.qs ? `?${ctx.qs}` : '');
 		};
 
+		const
+			url = ctx.resolveURL(globalOpts.api),
+			localKey = getStorageKey(url);
+
 		await Promise.all(
-			$C(p.middlewares).map((fn) => fn(p, globalOpts))
+			$C(p.middlewares).map((fn) => fn(url, p, globalOpts))
 		);
 
 		Object.assign(ctx, {
@@ -299,10 +303,6 @@ export default function create<T>(path, ...args) {
 		if (newRes) {
 			return Then.resolve(newRes()).then(wrapAsResponse);
 		}
-
-		const
-			url = ctx.resolveURL(globalOpts.api),
-			localKey = getStorageKey(url);
 
 		let
 			cacheKey,

@@ -78,7 +78,7 @@ export interface RequestOptions {
 
 export type RequestQuery = Dictionary | any[] | string;
 export interface Middleware<T = any> {
-	(opts: CreateRequestOptions<T>, globalOpts: GlobalOptions): any
+	(url: string, opts: CreateRequestOptions<T>, globalOpts: GlobalOptions): any
 }
 
 export type Middlewares<T = any> = Dictionary<Middleware<T>> | Iterable<Middleware<T>>;
