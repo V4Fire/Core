@@ -18,7 +18,7 @@ export const
 export const
 	{get, set, remove, namespace} = local;
 
-interface Namespace {
+export interface Namespace {
 	exists(key: string): boolean;
 	get(key: string): any;
 	set(key: string, value: any): void;
@@ -26,11 +26,11 @@ interface Namespace {
 	clear(filter?: (el: string, key: string) => any): void;
 }
 
-interface FactoryResult extends Namespace {
+export interface FactoryResult extends Namespace {
 	namespace(name: string): Namespace;
 }
 
-interface AsyncNamespace {
+export interface AsyncNamespace {
 	exists(key: string): Promise<boolean>;
 	get(key: string): Promise<any>;
 	set(key: string, value: any, ttl?: number): Promise<void>;
@@ -38,7 +38,7 @@ interface AsyncNamespace {
 	clear(filter?: (el: string, key: string) => any): Promise<void>;
 }
 
-interface AsyncFactoryResult extends AsyncNamespace {
+export interface AsyncFactoryResult extends AsyncNamespace {
 	namespace(name: string): AsyncNamespace;
 }
 
