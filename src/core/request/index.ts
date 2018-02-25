@@ -29,6 +29,11 @@ export { globalOpts, requestCache } from 'core/request/const';
 export { default as RequestError } from 'core/request/error';
 export { default as Response } from 'core/request/response';
 
+export type RequestResponse<T> = Then<{
+	data: T | null;
+	response: Response;
+}>;
+
 /**
  * Creates a new request with the specified options
  *
@@ -36,7 +41,7 @@ export { default as Response } from 'core/request/response';
  * @param opts
  */
 // @ts-ignore
-export default function create<T>(path: string, opts?: CreateOptions<T>): () => Then<T>;
+export default function create<T>(path: string, opts?: CreateOptions<T>): () => RequestResponse<T>;
 
 /**
  * Creates a request wrapper by the specified options
@@ -53,19 +58,19 @@ export default function create<T, A>(
 	path: string,
 	rewriter: (this: CreateRequestOptions<T>, arg: A) => Rewriter,
 	opts?: CreateRequestOptions<T>
-): (a: A) => Then<T>;
+): (a: A) => RequestResponse<T>;
 
 export default function create<T, A1, A2>(
 	path: string,
 	rewriter: (this: CreateRequestOptions<T>, arg1: A1, arg2: A2) => Rewriter,
 	opts?: CreateRequestOptions<T>
-): (arg1: A1, arg2: A2) => Then<T>;
+): (arg1: A1, arg2: A2) => RequestResponse<T>;
 
 export default function create<T, A1, A2, A3>(
 	path: string,
 	rewriter: (this: CreateRequestOptions<T>, arg1: A1, arg2: A2, arg3: A3) => Rewriter,
 	opts?: CreateRequestOptions<T>
-): (arg1: A1, arg2: A2, arg3: A3) => Then<T>;
+): (arg1: A1, arg2: A2, arg3: A3) => RequestResponse<T>;
 
 // tslint:disable-next-line
 export default function create<T>(path, ...args) {
@@ -278,11 +283,16 @@ export default function create<T>(path, ...args) {
 			p.headers = normalizeHeaders(p.headers);
 		}
 
+		const wrapAsResponse = async (res) => {
+			const response = new Response(res, {type: 'object'});
+			return {data: await response.decode(), response};
+		};
+
 		const
 			newRes = await configurator(ctx, globalOpts);
 
 		if (newRes) {
-			return Then.resolve(newRes());
+			return Then.resolve(newRes()).then(wrapAsResponse);
 		}
 
 		const
@@ -310,41 +320,39 @@ export default function create<T>(path, ...args) {
 			}
 		}
 
-		const
-			wrapAsResponse = (res) => new Response(res, {type: 'object'}).decode();
-
 		let res;
 		if (fromCache) {
 			res = Then.immediate(() => (<Cache>ctx.cache).get(cacheKey)).then(wrapAsResponse);
 
 		} else if (fromLocalStorage) {
 			res = Then.immediate(() => storage.get(localKey))
-				.then(wrapAsResponse)
-				.then(<any>ctx.saveCache(cacheKey));
+				.then(<any>ctx.saveCache(cacheKey))
+				.then(wrapAsResponse);
 
 		} else if (!ctx.isOnline && !p.externalRequest) {
 			res = Then.reject(new RequestError('offline'));
 
 		} else {
-			const success = (response) => {
+			const success = async (response) => {
 				if (!response.success) {
 					throw new RequestError('Invalid status', {response});
 				}
 
-				response.decode().then((res) => {
-					if (p.externalRequest && !ctx.isOnline && !res) {
-						throw new RequestError('offline');
-					}
+				const
+					data = await response.decode();
 
-					if (
-						response.status === StatusCodes.NO_CONTENT ||
-						response.status === StatusCodes.OK && !res
-					) {
-						return null;
-					}
+				if (p.externalRequest && !ctx.isOnline && !data) {
+					throw new RequestError('offline');
+				}
 
-					return res;
-				});
+				if (
+					response.status === StatusCodes.NO_CONTENT ||
+					response.status === StatusCodes.OK && !data
+				) {
+					return {data: null, response};
+				}
+
+				return {data, response};
 			};
 
 			const reqOpts = {
