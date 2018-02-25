@@ -182,7 +182,7 @@ export default function create<T>(path, ...args) {
 	 * @param url - request URL
 	 */
 	ctx.saveCache = (url) => (res) => {
-		if (ctx.canCache && p.offline) {
+		if (ctx.canCache && p.offlineCache) {
 			storage.set(getStorageKey(url), res, p.cacheTime || (1).day()).catch(stderr);
 		}
 
@@ -313,7 +313,7 @@ export default function create<T>(path, ...args) {
 		}
 
 		const
-			fromLocalStorage = !fromCache && ctx.canCache && p.offline && !ctx.isOnline && await storage.exists(localKey);
+			fromLocalStorage = !fromCache && ctx.canCache && p.offlineCache && !ctx.isOnline && await storage.exists(localKey);
 
 		if (ctx.canCache) {
 			const

@@ -106,8 +106,8 @@ export interface CreateRequestOptions<T = any> {
 	query?: RequestQuery;
 	cacheStrategy?: CacheStrategy;
 	cacheTime?: number;
+	offlineCache?: boolean;
 	externalRequest?: boolean;
-	offline?: boolean;
 	encoder?: Encoder | Encoder[];
 	decoder?: Decoder<T> | Decoder[];
 }
