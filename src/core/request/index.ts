@@ -339,7 +339,7 @@ export default function create<T>(path, ...args) {
 		} else {
 			const success = async (response) => {
 				if (!response.success) {
-					throw new RequestError('Invalid status', {response});
+					throw new RequestError('invalidStatus', {response});
 				}
 
 				const
