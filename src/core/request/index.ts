@@ -29,7 +29,7 @@ export { globalOpts, requestCache } from 'core/request/const';
 export { default as RequestError } from 'core/request/error';
 export { default as Response } from 'core/request/response';
 
-export type RequestResponse<T> = Then<{
+export type RequestResponse<T = any> = Then<{
 	data: T | null;
 	response: Response;
 }>;
