@@ -43,7 +43,7 @@ export type ResponseType =
 	null |
 	undefined;
 
-export type BodyType =
+export type RequestBody =
 	string | number | boolean |
 	Dictionary |
 	FormData |
@@ -70,7 +70,7 @@ export interface RequestOptions {
 	contentType?: string;
 	responseType?: ResponseTypes;
 	headers?: Dictionary<any | any[]>;
-	body?: BodyType;
+	body?: RequestBody;
 	withCredentials?: boolean;
 	user?: string;
 	password?: string;
@@ -89,7 +89,7 @@ export interface CreateRequestOptions<T = any> {
 	contentType?: string;
 	responseType?: ResponseTypes;
 	headers?: Dictionary<any | any[]>;
-	body?: BodyType;
+	body?: RequestBody;
 	withCredentials?: boolean;
 	user?: string;
 	password?: string;
