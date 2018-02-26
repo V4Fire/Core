@@ -319,7 +319,7 @@ export default class Async<CTX extends Object> {
 	}
 
 	/**
-	 * Wrapper for workers: WebWorker, Socket and etc.
+	 * Wrapper for workers: WebWorker, Socket, etc.
 	 *
 	 * @param worker
 	 * @param [params] - additional parameters for the operation:

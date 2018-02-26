@@ -205,7 +205,7 @@ export default function create<T>(path, ...args) {
 	};
 
 	/**
-	 * Wrapper for the request (pending cache and etc.)
+	 * Wrapper for the request (pending cache, etc.)
 	 *
 	 * @param url - request URL
 	 * @param promise
