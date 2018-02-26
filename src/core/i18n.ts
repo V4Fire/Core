@@ -30,8 +30,8 @@ const langs = $C(baseLangs).map((el) => {
  * System language
  */
 export let
-	lang: string | undefined,
-	isLangDef: boolean | undefined;
+	lang: string,
+	isLangDef: boolean;
 
 if (IS_NODE) {
 	setLang(config.lang);
