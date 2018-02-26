@@ -47,7 +47,7 @@ interface ObjectConstructor {
 		...source: any[]
 	): T & CollectionJS.AnyRecord;
 
-	fastClone<T extends Object>(
+	fastClone<T>(
 		obj: T,
 		params?: {replacer?: JSONCb; reviver?: JSONCb} | false
 	): T;
@@ -58,6 +58,7 @@ interface ObjectConstructor {
 	createDict<T>(fields: T): {[P in keyof T]: T[P]};
 	createDict<T = any>(): Dictionary<T>;
 	createDict(...fields: any[]): Dictionary;
+	getPrototypeChain(constructor: Function): Object[];
 	fromArray(arr: any[]): Dictionary<boolean>;
 	isTable(obj: any): obj is Dictionary;
 }
@@ -69,3 +70,22 @@ interface Object {
 interface DateConstructor {
 	getWeekDays(): string[];
 }
+
+declare namespace decoders {
+	interface TextDecoder {
+		readonly encoding: string;
+		readonly fatal: boolean;
+		readonly ignoreBOM: boolean;
+		decode(buffer?: ArrayBufferView, options?: {stream?: boolean}): string;
+	}
+
+	export interface TextDecoderConstructor {
+		new (utfLabel?: string, options?: {fatal?: boolean}): TextDecoder;
+	}
+}
+
+interface Window {
+	TextDecoder: decoders.TextDecoderConstructor;
+}
+
+declare const TextDecoder: decoders.TextDecoderConstructor;

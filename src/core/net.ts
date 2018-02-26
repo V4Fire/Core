@@ -6,14 +6,9 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-export default {
-	/**
-	 * Default system language
-	 */
-	lang: 'en',
-
-	/**
-	 * Base API URL
-	 */
-	api: ''
-};
+/**
+ * If online returns true
+ */
+export async function isOnline(): Promise<boolean> {
+	return true;
+}

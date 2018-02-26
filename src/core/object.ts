@@ -56,7 +56,7 @@ Object.parse = function parse(value: any): any {
  *   *) [replacer] - JSON.stringify replacer
  *   *) [reviver] - JSON.parse reviver
  */
-Object.fastClone = function fastClone<T extends Object>(
+Object.fastClone = function fastClone<T>(
 	obj: T,
 	params?: {replacer?: JSONCb; reviver?: JSONCb} | false
 ): T {
@@ -158,6 +158,60 @@ Object.fromArray = function fromArray(arr: any[]): Dictionary<boolean> {
 	}
 
 	return map;
+};
+
+const
+	protoChains = new WeakMap<Function, Object[]>();
+
+/**
+ * Returns a prototype chain from the specified constructor
+ * @param constructor
+ */
+Object.getPrototypeChain = function getPrototypeChain(constructor: Function): Object[] {
+	if (protoChains.has(constructor)) {
+		return (<Object[]>protoChains.get(constructor)).slice();
+	}
+
+	const
+		chain: Object[] = [];
+
+	let
+		proto = constructor.prototype;
+
+	while (proto && proto.constructor !== Object) {
+		chain.push(proto);
+		proto = Object.getPrototypeOf(proto);
+	}
+
+	protoChains.set(constructor, chain.reverse());
+	return chain.slice();
+};
+
+/** @override */
+Object.isArray = Array.isArray;
+
+/** @override */
+// @ts-ignore
+Object.isFunction = function isFunction(obj: any): boolean {
+	return typeof obj === 'function';
+};
+
+/** @override */
+// @ts-ignore
+Object.isString = function isString(obj: any): boolean {
+	return typeof obj === 'string';
+};
+
+/** @override */
+// @ts-ignore
+Object.isNumber = function isNumber(obj: any): boolean {
+	return typeof obj === 'number';
+};
+
+/** @override */
+// @ts-ignore
+Object.isBoolean = function isBoolean(obj: any): boolean {
+	return typeof obj === 'boolean';
 };
 
 /**

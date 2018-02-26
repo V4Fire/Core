@@ -24,3 +24,31 @@ export function convertIfDate(key: string, val: any): any {
 
 	return val;
 }
+
+/**
+ * Sets .toJSON function that converts dates to UTC for all dates from the specified object
+ * (returns new object)
+ *
+ * @param obj
+ * @param [sys]
+ */
+export function setJSONToUTC(obj: Dictionary, sys?: boolean): Dictionary {
+	if (!sys) {
+		obj = Object.fastClone(obj);
+	}
+
+	$C(obj).forEach((el) => {
+		if (Object.isDate(el)) {
+			el.toJSON = () => el.clone().set({
+				minutes: el.getTimezoneOffset(),
+				seconds: 0,
+				milliseconds: 0
+			}).valueOf().toString();
+
+		} else if (Object.isObject(el) || Object.isArray(el)) {
+			setJSONToUTC(el, true);
+		}
+	});
+
+	return obj;
+}
