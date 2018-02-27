@@ -63,24 +63,41 @@ Object.fastClone = function fastClone<T>(
 	const
 		p = params || {};
 
-	if (typeof obj === 'object') {
-		const clone = JSON.parse(
-			JSON.stringify(obj, p.replacer), params !== false ? p.reviver || convertIfDate : undefined
-		);
+	if (Object.isFunction(obj)) {
+		return obj;
+	}
 
-		if (!Object.isExtensible(obj)) {
-			Object.preventExtensions(clone);
+	if (obj) {
+		const
+			noJSON = !('toJSON' in obj);
+
+		if (noJSON && obj instanceof Map) {
+			return <any>new Map(...obj.entries());
 		}
 
-		if (Object.isSealed(obj)) {
-			Object.seal(clone);
+		if (noJSON && obj instanceof Set) {
+			return <any>new Set(...obj.values());
 		}
 
-		if (Object.isFrozen(obj)) {
-			Object.freeze(clone);
-		}
+		if (typeof obj === 'object') {
+			const clone = JSON.parse(
+				JSON.stringify(obj, p.replacer), params !== false ? p.reviver || convertIfDate : undefined
+			);
 
-		return clone;
+			if (!Object.isExtensible(obj)) {
+				Object.preventExtensions(clone);
+			}
+
+			if (Object.isSealed(obj)) {
+				Object.seal(clone);
+			}
+
+			if (Object.isFrozen(obj)) {
+				Object.freeze(clone);
+			}
+
+			return clone;
+		}
 	}
 
 	return obj;
