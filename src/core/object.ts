@@ -69,7 +69,7 @@ Object.fastClone = function fastClone<T>(
 
 	if (obj) {
 		const
-			noJSON = !('toJSON' in obj);
+			noJSON = !Object.isFunction((<any>obj).toJSON);
 
 		if (noJSON && obj instanceof Map) {
 			return <any>new Map(...obj.entries());
