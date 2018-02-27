@@ -183,7 +183,7 @@ export default class Async<CTX extends Object> {
 			clearFn: clearInterval,
 			wrapper: setInterval,
 			linkByWrapper: true,
-			interval: true,
+			periodic: true,
 			args: [interval]
 		});
 	}
@@ -343,7 +343,7 @@ export default class Async<CTX extends Object> {
 			name: 'worker',
 			obj: worker,
 			clearFn: this.workerDestructor.bind(this, params && params.destructor),
-			interval: true
+			periodic: true
 		});
 	}
 
@@ -433,15 +433,17 @@ export default class Async<CTX extends Object> {
 	 *   *) [join] - if true, then competitive tasks (with same labels) will be joined to the first
 	 *   *) [label] - label for the task (previous task with the same label will be canceled)
 	 *   *) [group] - group name for the task
+	 *   *) [single] - if false, then after first invocation the proxy it won't be removed
 	 *   *) [onClear] - clear handler
 	 */
-	proxy(cb: Function, params?: AsyncCbOpts): Function {
+	proxy(cb: Function, params?: AsyncCbOptsSingle): Function {
 		return this.setAsync({
 			...params,
 			name: 'proxy',
 			obj: cb,
 			wrapper: (fn) => fn,
-			linkByWrapper: true
+			linkByWrapper: true,
+			periodic: params && params.single === false
 		});
 	}
 
@@ -675,7 +677,7 @@ export default class Async<CTX extends Object> {
 
 				clearFn: this.eventListenerDestructor,
 				linkByWrapper: true,
-				interval: !p.single,
+				periodic: !p.single,
 				group: p.group || event
 			}));
 		}
@@ -984,7 +986,7 @@ export default class Async<CTX extends Object> {
 			finalObj,
 			wrappedObj = id = finalObj = p.needCall && Object.isFunction(p.obj) ? p.obj.call(ctx || this) : p.obj;
 
-		if (!p.interval || Object.isFunction(wrappedObj)) {
+		if (!p.periodic || Object.isFunction(wrappedObj)) {
 			wrappedObj = function (this: any): any {
 				const
 					link = links.get(id),
@@ -994,7 +996,7 @@ export default class Async<CTX extends Object> {
 					return;
 				}
 
-				if (!p.interval) {
+				if (!p.periodic) {
 					links.delete(id);
 					labels[p.label] = undefined;
 				}
