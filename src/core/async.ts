@@ -126,7 +126,7 @@ export default class Async<CTX extends Object> {
 	 *   *) [group] - group name for the task
 	 *   *) [onClear] - clear handler
 	 */
-	setImmediate(fn: () => void, params?: AsyncCbOpts): number | NodeJS.Timer {
+	setImmediate(fn: Function, params?: AsyncCbOpts): number | NodeJS.Timer {
 		return this.setAsync({
 			...params,
 			name: 'immediate',
@@ -175,7 +175,7 @@ export default class Async<CTX extends Object> {
 	 *   *) [group] - group name for the task
 	 *   *) [onClear] - clear handler
 	 */
-	setInterval(fn: () => void, interval: number, params?: AsyncCbOpts): number | NodeJS.Timer {
+	setInterval(fn: Function, interval: number, params?: AsyncCbOpts): number | NodeJS.Timer {
 		return this.setAsync({
 			...params,
 			name: 'interval',
@@ -226,7 +226,7 @@ export default class Async<CTX extends Object> {
 	 *   *) [group] - group name for the task
 	 *   *) [onClear] - clear handler
 	 */
-	setTimeout(fn: () => void, timer: number, params?: AsyncCbOpts): number | NodeJS.Timer {
+	setTimeout(fn: Function, timer: number, params?: AsyncCbOpts): number | NodeJS.Timer {
 		return this.setAsync({
 			...params,
 			name: 'timeout',
@@ -277,7 +277,7 @@ export default class Async<CTX extends Object> {
 	 *   *) [onClear] - clear handler
 	 */
 	requestIdleCallback(
-		fn: (deadline: IdleDeadline) => void,
+		fn: (deadline: IdleDeadline) => any,
 		params?: AsyncCbOpts & {timeout?: number}
 	): number | NodeJS.Timer {
 		return this.setAsync({
