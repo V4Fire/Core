@@ -21,3 +21,11 @@ export function isEmptyValue(value: any): boolean {
 export function noi18n(value: string): string {
 	return value;
 }
+
+/**
+ * Simplifies the specified list to a single value (map)
+ * @param list
+ */
+export function list2Map(list: Dictionary): Dictionary {
+	return list && (list.data && list.data[0] || list[0]) || {};
+}
