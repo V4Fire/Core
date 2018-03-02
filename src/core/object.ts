@@ -208,27 +208,59 @@ Object.getPrototypeChain = function getPrototypeChain(constructor: Function): Ob
 Object.isArray = Array.isArray;
 
 /** @override */
-// @ts-ignore
-Object.isFunction = function isFunction(obj: any): boolean {
+Object.isFunction = function isFunction(obj: any): obj is Function {
 	return typeof obj === 'function';
 };
 
 /** @override */
-// @ts-ignore
-Object.isString = function isString(obj: any): boolean {
+Object.isString = function isString(obj: any): obj is string {
 	return typeof obj === 'string';
 };
 
 /** @override */
-// @ts-ignore
-Object.isNumber = function isNumber(obj: any): boolean {
+Object.isNumber = function isNumber(obj: any): obj is number {
 	return typeof obj === 'number';
 };
 
 /** @override */
-// @ts-ignore
-Object.isBoolean = function isBoolean(obj: any): boolean {
+Object.isBoolean = function isBoolean(obj: any): obj is boolean {
 	return typeof obj === 'boolean';
+};
+
+/** @override */
+Object.isRegExp = function isRegExp(obj: any): obj is RegExp {
+	return obj instanceof RegExp;
+};
+
+/** @override */
+Object.isDate = function isDate(obj: any): obj is Date {
+	return obj instanceof Date;
+};
+
+/** @override */
+Object.isMap = function isBoolean(obj: any): obj is Map<any, any> {
+	return obj instanceof Map;
+};
+
+/**
+ * Returns true if the specified object is WeakMap
+ * @param obj
+ */
+Object.isWeakMap = function isBoolean(obj: any): obj is WeakMap<any, any> {
+	return obj instanceof WeakMap;
+};
+
+/** @override */
+Object.isSet = function isBoolean(obj: any): obj is Set<any> {
+	return obj instanceof Set;
+};
+
+/**
+ * Returns true if the specified object is WeakSet
+ * @param obj
+ */
+Object.isWeakSet = function isBoolean(obj: any): obj is WeakSet<any> {
+	return obj instanceof WeakSet;
 };
 
 /**

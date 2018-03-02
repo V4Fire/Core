@@ -60,6 +60,8 @@ interface ObjectConstructor {
 	createDict(...fields: any[]): Dictionary;
 	getPrototypeChain(constructor: Function): Object[];
 	fromArray(arr: any[]): Dictionary<boolean>;
+	isWeakMap(obj: any): obj is WeakMap<any, any>;
+	isWeakSet(obj: any): obj is WeakSet<any>;
 	isTable(obj: any): obj is Dictionary;
 }
 

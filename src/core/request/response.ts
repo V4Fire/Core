@@ -266,8 +266,7 @@ export default class Response {
 		}
 
 		if (IS_NODE) {
-			// @ts-ignore
-			return Buffer.from(body).toString(encoding);
+			return <any>Then.resolve<string>(Buffer.from(<any>body).toString(encoding));
 		}
 
 		if (typeof TextDecoder !== 'undefined') {
