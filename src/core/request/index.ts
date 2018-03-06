@@ -110,7 +110,7 @@ export default function create<T>(path, ...args) {
 		...opts
 	};
 
-	const ctx: RequestContext<T> = <any>{
+	const baseCtx: RequestContext<T> = <any>{
 		rewriter
 	};
 
@@ -118,7 +118,7 @@ export default function create<T>(path, ...args) {
 	 * Returns absolute path to API for the request
 	 * @param [base]
 	 */
-	ctx.resolveAPI = (base = globalOpts.api) => {
+	baseCtx.resolveAPI = (base = globalOpts.api) => {
 		const
 			a = <any>p.api,
 			rgxp = /(?:^|(https?:\/\/)(?:(.*?)\.)?(.*?)\.(.*?))(\/.*|$)/;
@@ -181,14 +181,14 @@ export default function create<T>(path, ...args) {
 	 * Factory for a cache middleware
 	 * @param url - request URL
 	 */
-	ctx.saveCache = (url) => (res) => {
-		if (ctx.canCache && p.offlineCache) {
+	baseCtx.saveCache = (url) => (res) => {
+		if (baseCtx.canCache && p.offlineCache) {
 			storage.set(getStorageKey(url), res, p.cacheTime || (1).day()).catch(stderr);
 		}
 
-		if (ctx.cache) {
+		if (baseCtx.cache) {
 			const
-				cache = ctx.cache as Cache<T>;
+				cache = baseCtx.cache as Cache<T>;
 
 			if (cacheId) {
 				clearTimeout(cacheId);
@@ -210,10 +210,10 @@ export default function create<T>(path, ...args) {
 	 * @param url - request URL
 	 * @param promise
 	 */
-	ctx.wrapRequest = (url, promise) => {
-		if (ctx.canCache) {
+	baseCtx.wrapRequest = (url, promise) => {
+		if (baseCtx.canCache) {
 			const
-				cache = ctx.pendingCache as Cache<Then<T>>;
+				cache = baseCtx.pendingCache as Cache<Then<T>>;
 
 			promise = promise.then(
 				(v) => {
@@ -239,6 +239,9 @@ export default function create<T>(path, ...args) {
 
 	// tslint:disable-next-line
 	return async (...args) => {
+		const
+			ctx = Object.create(baseCtx);
+
 		/**
 		 * Returns absolute path for the request
 		 * @param api - API URL
