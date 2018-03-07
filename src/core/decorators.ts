@@ -68,7 +68,7 @@ export function debounce(delay: number = 250): MethodDecorator {
  * @decorator
  * @param [delay]
  */
-export function  throttle(delay: number = 250): MethodDecorator {
+export function throttle(delay: number = 250): MethodDecorator {
 	return (target, name, descriptor: PropertyDescriptor) => {
 		const
 			method = descriptor.value;
