@@ -26,16 +26,15 @@
   },
   "dependencies": {
     "@types/got": "^7.1.7",
-    "@types/node": "^9.4.6",
+    "@types/node": "^9.4.7",
     "collection.js": "^6.6.16",
-    "dotenv": "^4.0.0",
+    "dotenv": "^5.0.0",
     "fs-extra-promise": "^1.0.1",
-    "got": "^8.2.0",
+    "got": "^8.3.0",
     "localstorage-memory": "^1.0.2",
     "node-localstorage": "^1.3.0",
     "sugar": "^2.0.0",
-    "tosource": "^1.0.0",
-    "tslib": "^1.9.0"
+    "tosource": "^1.0.0"
   },
   "optionalDependencies": {
     "@pzlr/build-core": "^2.6.4",
@@ -43,10 +42,10 @@
     "@types/gulp": "^4.0.5",
     "@types/gulp-load-plugins": "0.0.31",
     "@types/through2": "^2.0.33",
-    "config": "^1.29.0",
+    "config": "^1.30.0",
     "gulp": "^4.0.0",
     "gulp-convert-newline": "0.0.3",
-    "gulp-header": "^2.0.1",
+    "gulp-header": "^2.0.5",
     "gulp-load-plugins": "^1.5.0",
     "gulp-plumber": "^1.2.0",
     "gulp-replace": "^0.6.1",
