@@ -13,7 +13,7 @@ import $C = require('collection.js');
  * @param urls
  */
 export function concatUrls(...urls: Array<string | null | undefined>): string {
-	return $C(urls).filter((e) => e != null).to('').reduce((res, url) => {
+	return $C(urls).filter((e) => e != null && e !== '').to('').reduce((res, url) => {
 		res = String(res);
 		url = String(url);
 
