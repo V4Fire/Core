@@ -80,10 +80,8 @@ export default class Response {
 	 * @param [params]
 	 */
 	constructor(body?: ResponseType, params?: ResponseOptions) {
-		const p = <typeof defaultResponseOpts & ResponseOptions>{
-			...defaultResponseOpts,
-			...params
-		};
+		const
+			p = <typeof defaultResponseOpts & ResponseOptions>$C.extend(false, {}, defaultResponseOpts, params);
 
 		this.status = p.status;
 		const s = this.successStatuses = p.successStatus;

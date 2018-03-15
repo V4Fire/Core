@@ -20,7 +20,7 @@ if (IS_NODE) {
 	//#endif
 
 } else {
-	transport = require('core/request/engines/browser');
+	transport = require('core/request/engines/browser').default;
 }
 
 export default transport;

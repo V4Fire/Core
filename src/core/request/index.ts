@@ -268,7 +268,11 @@ export default function create<T>(path, ...args) {
 		};
 
 		const baseURL = concatUrls(ctx.resolveAPI(), path);
-		await Promise.all($C(p.middlewares).map((fn) => fn(baseURL, p, globalOpts)));
+		await Promise.all($C(p.middlewares as any[]).to([] as any[]).reduce((arr, fn) => {
+			// @ts-ignore
+			arr.push(fn(baseURL, p, globalOpts));
+			return arr;
+		}));
 
 		Object.assign(ctx, {
 			params: p,

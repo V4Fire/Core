@@ -60,6 +60,7 @@ export default function createTransport<T>(params: RequestOptions): Then<Respons
 	return new Then<Response>((resolve, reject, onAbort) => {
 		xhr.addEventListener('load', () => {
 			resolve(new Response(xhr.response, {
+				type: p.responseType,
 				successStatus: p.successStatus,
 				status: xhr.status,
 				headers: xhr.getAllResponseHeaders()
