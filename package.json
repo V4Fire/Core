@@ -25,7 +25,7 @@
     "test": "echo \"Error: no test specified\" && exit 0"
   },
   "dependencies": {
-    "@types/got": "^7.1.7",
+    "@types/got": "^7.1.8",
     "@types/node": "^9.4.7",
     "collection.js": "^6.6.16",
     "dotenv": "^5.0.0",
