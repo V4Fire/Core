@@ -32,6 +32,7 @@ export { default as Response } from 'core/request/response';
 export type RequestResponse<T = any> = Then<{
 	data: T | null;
 	response: Response;
+	dropCache(): Promise<void>;
 }>;
 
 export interface RequestFunctionResponse<T = any, A1 = any, A2 = any, A3 = any> {
@@ -110,8 +111,27 @@ export default function create<T>(path, ...args) {
 		...opts
 	};
 
+	const
+		canCache = p.method === 'GET';
+
 	const baseCtx: RequestContext<T> = <any>{
-		rewriter
+		rewriter,
+		canCache,
+		...canCache && {
+			pendingCache: new Cache<Then<T>>(),
+			cache: (() => {
+				switch (p.cacheStrategy) {
+					case 'queue':
+						return requestCache;
+
+					case 'forever':
+						return new Cache<T>();
+
+					default:
+						return null;
+				}
+			})()
+		}
 	};
 
 	/**
@@ -182,8 +202,8 @@ export default function create<T>(path, ...args) {
 	 * @param url - request URL
 	 */
 	baseCtx.saveCache = (url) => (res) => {
-		if (baseCtx.canCache && p.offlineCache) {
-			storage.set(getStorageKey(url), res, p.cacheTime || (1).day()).catch(stderr);
+		if (canCache && p.offlineCache) {
+			storage.set(getStorageKey(url), res, p.cacheTTL || (1).day()).catch(stderr);
 		}
 
 		if (baseCtx.cache) {
@@ -196,8 +216,8 @@ export default function create<T>(path, ...args) {
 
 			cache.set(url, res);
 
-			if (p.cacheTime) {
-				cacheId = setTimeout(() => cache.remove(url), p.cacheTime);
+			if (p.cacheTTL) {
+				cacheId = setTimeout(() => cache.remove(url), p.cacheTTL);
 			}
 		}
 
@@ -211,7 +231,7 @@ export default function create<T>(path, ...args) {
 	 * @param promise
 	 */
 	baseCtx.wrapRequest = (url, promise) => {
-		if (baseCtx.canCache) {
+		if (canCache) {
 			const
 				cache = baseCtx.pendingCache as Cache<Then<T>>;
 
@@ -276,7 +296,6 @@ export default function create<T>(path, ...args) {
 
 		Object.assign(ctx, {
 			params: p,
-			canCache: p.method === 'GET',
 			query: Object.fastClone(p.query),
 			encoders: (<Encoder[]>[]).concat(p.encoder || []),
 			decoders: (<Decoder[]>[]).concat(p.decoder || [])
@@ -285,18 +304,19 @@ export default function create<T>(path, ...args) {
 		ctx.isOnline = await isOnline();
 		ctx.qs = toQueryString(ctx.query);
 
-		if (ctx.canCache) {
-			ctx.pendingCache = new Cache<Then<T>>();
-			ctx.cache = (<any>{queue: requestCache, never: null, forever: new Cache<T>()})[p.cacheStrategy];
-		}
-
 		if (p.headers) {
 			p.headers = normalizeHeaders(p.headers);
 		}
 
+		async function dropCache(): Promise<void> {
+			if (ctx.cache && ctx.cacheKey) {
+				await (<Cache>ctx.cache).remove(ctx.cacheKey);
+			}
+		}
+
 		const wrapAsResponse = async (res) => {
 			const response = new Response(res, {type: 'object'});
-			return {data: await response.decode(), response};
+			return {data: await response.decode(), response, dropCache};
 		};
 
 		const
@@ -314,15 +334,15 @@ export default function create<T>(path, ...args) {
 			cacheKey,
 			fromCache = false;
 
-		if (ctx.canCache) {
-			cacheKey = getRequestKey(url, p);
+		if (canCache) {
+			cacheKey = ctx.cacheKey = ctx.cacheKey || getRequestKey(url, p);
 			fromCache = Boolean(ctx.cache && ctx.cache.exist(cacheKey));
 		}
 
 		const
-			fromLocalStorage = !fromCache && ctx.canCache && p.offlineCache && !ctx.isOnline && await storage.exists(localKey);
+			fromLocalStorage = !fromCache && canCache && p.offlineCache && !ctx.isOnline && await storage.exists(localKey);
 
-		if (ctx.canCache) {
+		if (canCache) {
 			const
 				cache = ctx.pendingCache as Cache<Then<T>>;
 
@@ -360,7 +380,7 @@ export default function create<T>(path, ...args) {
 					response.status === StatusCodes.NO_CONTENT ||
 					response.status === StatusCodes.OK && !data
 				) {
-					return {data: null, response};
+					return {data: null, response, dropCache};
 				}
 
 				return {data, response};

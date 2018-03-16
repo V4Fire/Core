@@ -63,17 +63,17 @@ export interface Decoder<I = any, O = any> {
 }
 
 export interface RequestOptions {
-	url: string;
-	method?: RequestMethods;
-	timeout?: number;
-	successStatus?: SuccessStatus;
-	contentType?: string;
-	responseType?: ResponseTypes;
-	headers?: Dictionary<any | any[]>;
-	body?: RequestBody;
-	withCredentials?: boolean;
-	user?: string;
-	password?: string;
+	readonly url: string;
+	readonly method?: RequestMethods;
+	readonly timeout?: number;
+	readonly successStatus?: SuccessStatus;
+	readonly contentType?: string;
+	readonly responseType?: ResponseTypes;
+	readonly headers?: Dictionary<string>;
+	readonly body?: RequestBody;
+	readonly withCredentials?: boolean;
+	readonly user?: string;
+	readonly password?: string;
 }
 
 export type RequestQuery = Dictionary | any[] | string;
@@ -83,16 +83,24 @@ export interface Middleware<T = any, CTX = void> {
 
 export type Middlewares<T = any, CTX = void> = Dictionary<Middleware<T, CTX>> | Iterable<Middleware<T, CTX>>;
 export interface CreateRequestOptions<T = any> {
-	method?: RequestMethods;
-	timeout?: number;
-	successStatus?: SuccessStatus;
+	readonly method?: RequestMethods;
+	readonly cacheStrategy?: CacheStrategy;
+
 	contentType?: string;
 	responseType?: ResponseTypes;
-	headers?: Dictionary<any | any[]>;
+	successStatus?: SuccessStatus;
+	externalRequest?: boolean;
+
 	body?: RequestBody;
+	query?: RequestQuery;
+	headers?: Dictionary<any | any[]>;
 	withCredentials?: boolean;
 	user?: string;
 	password?: string;
+
+	timeout?: number;
+	cacheTTL?: number;
+	offlineCache?: boolean;
 
 	api?: {
 		protocol?: string | null;
@@ -103,11 +111,6 @@ export interface CreateRequestOptions<T = any> {
 	};
 
 	middlewares?: Middlewares<T>;
-	query?: RequestQuery;
-	cacheStrategy?: CacheStrategy;
-	cacheTime?: number;
-	offlineCache?: boolean;
-	externalRequest?: boolean;
 	encoder?: Encoder | Encoder[];
 	decoder?: Decoder<T> | Decoder[];
 }
@@ -118,21 +121,22 @@ export interface Rewriter {
 }
 
 export interface RequestContext<T> {
-	isOnline: boolean;
-	canCache: boolean;
-	params: typeof defaultRequestOpts & CreateRequestOptions<T>;
-	query: RequestQuery;
-	qs: string;
-	prefetch?: Then<any>;
-	pendingCache?: Cache<Then<T>>;
-	cache?: Cache<T> | RestrictedCache<T> | null;
+	readonly canCache: boolean;
+	readonly cache?: Cache<T> | RestrictedCache<T> | null;
+	readonly pendingCache?: Cache<Then<T>>;
+	readonly params: typeof defaultRequestOpts & CreateRequestOptions<T>;
 	encoders: Encoder[];
 	decoders: Decoder[];
-	rewriter?(this: CreateRequestOptions<T>, ...args: any[]): Rewriter;
-	resolveAPI(base?: string): string;
-	resolveURL(api?: string): string;
+	query: RequestQuery;
+	isOnline: boolean;
+	qs: string;
+	cacheKey?: string;
+	prefetch?: Then<any>;
+	resolveAPI(base?: string | undefined): string;
+	resolveURL(api?: string | undefined): string;
 	saveCache(url: string): (data: T) => T;
 	wrapRequest(url: string, promise: Then<T>): Then<T>;
+	rewriter?(this: CreateRequestOptions<T>, ...args: any[]): Rewriter;
 }
 
 export interface ResponseHeaders {
