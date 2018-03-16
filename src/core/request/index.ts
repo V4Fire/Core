@@ -383,7 +383,7 @@ export default function create<T>(path, ...args) {
 					return {data: null, response, dropCache};
 				}
 
-				return {data, response};
+				return {data, response, dropCache};
 			};
 
 			const reqOpts = {
