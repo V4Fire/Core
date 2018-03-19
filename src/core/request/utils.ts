@@ -32,7 +32,7 @@ export function getRequestKey(url: string, params?: CreateRequestOptions): strin
 
 	const plainHeaders = $C(normalizeHeaders(p.headers))
 		.to([] as string[][])
-		.reduce((res, value, name) => (res.push([name, value]), res))
+		.reduce((res, value, name) => (res.push([name.toString(), value.toString()]), res))
 		.sort(([name1], [name2]) => {
 			if (name1 < name2) {
 				return -1;

@@ -51,7 +51,12 @@ export default function createTransport<T>(params: RequestOptions): Then<Respons
 	}
 
 	$C(p.headers).forEach((val, name) => {
-		xhr.setRequestHeader(name, val);
+		if (Object.isArray(val)) {
+			$C(val).forEach((val) => xhr.setRequestHeader(name, val));
+
+		} else {
+			xhr.setRequestHeader(name, val);
+		}
 	});
 
 	if (contentType) {

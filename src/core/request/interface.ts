@@ -69,7 +69,7 @@ export interface RequestOptions {
 	readonly successStatus?: SuccessStatus;
 	readonly contentType?: string;
 	readonly responseType?: ResponseTypes;
-	readonly headers?: Dictionary<string>;
+	readonly headers?: Dictionary<string | string[]>;
 	readonly body?: RequestBody;
 	readonly withCredentials?: boolean;
 	readonly user?: string;
