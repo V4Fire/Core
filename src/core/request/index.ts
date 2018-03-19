@@ -31,6 +31,7 @@ export { default as Response } from 'core/request/response';
 
 export type RequestResponse<T = any> = Then<{
 	data: T | null;
+	ctx: Readonly<RequestContext<T>>;
 	response: Response;
 	dropCache(): Promise<void>;
 }>;
@@ -316,7 +317,12 @@ export default function create<T>(path, ...args) {
 
 		const wrapAsResponse = async (res) => {
 			const response = new Response(res, {type: 'object'});
-			return {data: await response.decode(), response, dropCache};
+			return {
+				data: await response.decode(),
+				ctx,
+				response,
+				dropCache
+			};
 		};
 
 		const
@@ -380,10 +386,15 @@ export default function create<T>(path, ...args) {
 					response.status === StatusCodes.NO_CONTENT ||
 					response.status === StatusCodes.OK && !data
 				) {
-					return {data: null, response, dropCache};
+					return {
+						data: null,
+						ctx,
+						response,
+						dropCache
+					};
 				}
 
-				return {data, response, dropCache};
+				return {data, ctx, response, dropCache};
 			};
 
 			const reqOpts = {
