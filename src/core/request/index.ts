@@ -29,13 +29,14 @@ export { globalOpts, requestCache } from 'core/request/const';
 export { default as RequestError } from 'core/request/error';
 export { default as Response } from 'core/request/response';
 
-export type RequestResponse<T = any> = Then<{
+export interface RequestResponseObject<T = any> {
 	data: T | null;
 	ctx: Readonly<RequestContext<T>>;
 	response: Response;
 	dropCache(): Promise<void>;
-}>;
+}
 
+export type RequestResponse<T = any> = Then<RequestResponseObject<T>>;
 export interface RequestFunctionResponse<T = any, A1 = any, A2 = any, A3 = any> {
 	(arg1?: A1, arg2?: A2, arg3?: A3): RequestResponse<T>;
 	(...args: any[]): RequestResponse<T>;
