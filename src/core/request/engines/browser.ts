@@ -23,15 +23,16 @@ export default function createTransport<T>(params: RequestOptions): Then<Respons
 		xhr = new XMLHttpRequest();
 
 	let
-		data = p.body;
+		data = p.body,
+		{contentType} = p;
 
 	if (data) {
 		if (data instanceof FormData) {
-			p.contentType = '';
+			contentType = '';
 
 		} else if (Object.isObject(data)) {
 			data = JSON.stringify(data);
-			p.contentType = 'application/json;charset=UTF-8';
+			contentType = 'application/json;charset=UTF-8';
 		}
 	}
 
@@ -53,8 +54,8 @@ export default function createTransport<T>(params: RequestOptions): Then<Respons
 		xhr.setRequestHeader(name, val);
 	});
 
-	if (p.contentType) {
-		xhr.setRequestHeader('Content-Type', p.contentType);
+	if (contentType) {
+		xhr.setRequestHeader('Content-Type', contentType);
 	}
 
 	return new Then<Response>((resolve, reject, onAbort) => {
