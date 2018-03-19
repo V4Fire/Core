@@ -120,7 +120,7 @@ export interface Rewriter {
 	subPath?: string;
 }
 
-export interface RequestContext<T> {
+export interface RequestContext<T = any> {
 	readonly canCache: boolean;
 	readonly cache?: Cache<T> | RestrictedCache<T> | null;
 	readonly pendingCache?: Cache<Then<T>>;
