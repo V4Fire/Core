@@ -105,7 +105,6 @@ Object.fastClone = function fastClone<T>(
 
 /**
  * Compares two specified objects and returns the result
- * (only for primitives, arrays and plain objects)
  *
  * @param a
  * @param b
@@ -120,8 +119,41 @@ Object.fastCompare = function fastCompare<T>(a: any, b: T): a is T {
 	}
 
 	const
-		length1 = (Object.isArray(a) ? a : Object.keys(a)).length,
-		length2 = (Object.isArray(b) ? b : Object.keys(b)).length;
+		aIsArr = Object.isArray(a),
+		bIsArr = Object.isArray(b);
+
+	if (
+		!aIsArr && !Object.isObject(a) && !Object.isDate(a) && !Object.isRegExp(a) ||
+		!Object.isFunction(a.toJSON) ||
+		!bIsArr && !Object.isObject(b) && !Object.isDate(b) && !Object.isRegExp(b) ||
+		!Object.isFunction((<any>b).toJSON)
+	) {
+		return a === b;
+	}
+
+	let
+		length1,
+		length2;
+
+	if (aIsArr) {
+		length1 = a.length;
+
+	} else if (Object.isSet(a) || Object.isMap(a)) {
+		length1 = a.size;
+
+	} else {
+		length1 = typeof a.length === 'number' ? a.length : Object.keys(a).length;
+	}
+
+	if (bIsArr) {
+		length2 = (<any>b).length;
+
+	} else if (Object.isSet(b) || Object.isMap(b)) {
+		length2 = b.size;
+
+	} else {
+		length2 = typeof (<any>b).length === 'number' ? (<any>b).length : Object.keys(b).length;
+	}
 
 	if (length1 !== length2) {
 		return false;
