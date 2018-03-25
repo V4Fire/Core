@@ -87,7 +87,7 @@ Object.fastClone = function fastClone<T>(
 			const
 				set = new Set();
 
-			for (let o = obj.entries(), el = o.next(); !el.done; el = o.next()) {
+			for (let o = obj.values(), el = o.next(); !el.done; el = o.next()) {
 				set.add(el.value);
 			}
 
