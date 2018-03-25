@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "@types/got": "^7.1.8",
-    "@types/node": "^9.4.7",
+    "@types/node": "^9.6.0",
     "collection.js": "^6.6.17",
     "dotenv": "^5.0.0",
     "fs-extra-promise": "^1.0.1",
