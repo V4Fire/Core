@@ -72,11 +72,26 @@ Object.fastClone = function fastClone<T>(
 			noJSON = !Object.isFunction((<any>obj).toJSON);
 
 		if (noJSON && obj instanceof Map) {
-			return <any>new Map(...obj.entries());
+			const
+				map = new Map();
+
+			for (let o = obj.entries(), el = o.next(); !el.done; el = o.next()) {
+				const val = el.value;
+				map.set(val[0], Object.fastClone(val[1]));
+			}
+
+			return <any>map;
 		}
 
 		if (noJSON && obj instanceof Set) {
-			return <any>new Set(...obj.values());
+			const
+				set = new Set();
+
+			for (let o = obj.entries(), el = o.next(); !el.done; el = o.next()) {
+				set.add(el.value);
+			}
+
+			return <any>set;
 		}
 
 		if (typeof obj === 'object') {
