@@ -573,13 +573,13 @@ export default class Async<CTX extends Object> {
 	 *   *) [label] - label for the task (previous task with the same label will be canceled)
 	 *   *) [group] - group name for the task
 	 */
-	wait(fn: Function, params?: AsyncOpts): Promise<void> {
+	wait(fn: Function, params?: AsyncOpts): Promise<boolean> {
 		const DELAY = 15;
 		return new Promise((resolve, reject) => {
 			let id;
 			const cb = () => {
 				if (fn()) {
-					resolve();
+					resolve(true);
 					this.clearInterval(id);
 				}
 			};
