@@ -51,7 +51,7 @@
     "gulp-replace": "^0.6.1",
     "through2": "^2.0.3",
     "tsconfig": "^7.0.0",
-    "typescript": "^2.8.0-dev.20180214"
+    "typescript": "^2.8.1"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.2",
