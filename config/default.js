@@ -131,7 +131,7 @@ module.exports = config.createConfig(
 	{
 		dirs: [__dirname, 'client', 'server'],
 		envs: {
-			NODE_ENV: 'standalone',
+			NODE_ENV: 'development',
 			APP_NAME: 'V4Fire',
 			SERVICE_NAME: undefined
 		}
