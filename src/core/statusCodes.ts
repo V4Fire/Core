@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-const enum StatusCodes {
+enum StatusCodes {
 	CONTINUE = 100,
 	SWITCHING_PROTOCOLS = 101,
 
