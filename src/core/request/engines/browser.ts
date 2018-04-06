@@ -43,7 +43,12 @@ export default function createTransport<T>(params: RequestOptions): Then<Respons
 	}
 
 	if (p.responseType) {
-		xhr.responseType = <XMLHttpRequestResponseType>p.responseType.toLowerCase();
+		if (p.responseType === 'json') {
+			xhr.responseType = 'text';
+
+		} else {
+			xhr.responseType = <XMLHttpRequestResponseType>p.responseType.toLowerCase();
+		}
 	}
 
 	if (p.withCredentials) {

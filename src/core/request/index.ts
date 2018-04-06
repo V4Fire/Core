@@ -20,27 +20,24 @@ import { Cache } from 'core/cache';
 import { isOnline } from 'core/net';
 import { normalizeHeaders, getStorageKey, getRequestKey } from 'core/request/utils';
 import { concatUrls, toQueryString } from 'core/url';
-import { CreateRequestOptions, Rewriter, RequestContext, Encoder, Decoder } from 'core/request/interface';
 import { storage, requestCache, globalOpts, defaultRequestOpts } from 'core/request/const';
+import {
+
+	RequestFunctionResponse,
+	RequestResponseObject,
+	CreateRequestOptions,
+	Rewriter,
+	RequestContext,
+	Encoder,
+	Decoder
+
+} from 'core/request/interface';
 
 export * from 'core/request/interface';
 export * from 'core/request/utils';
 export { globalOpts, requestCache } from 'core/request/const';
 export { default as RequestError } from 'core/request/error';
 export { default as Response } from 'core/request/response';
-
-export interface RequestResponseObject<T = any> {
-	data: T | null;
-	ctx: Readonly<RequestContext<T>>;
-	response: Response;
-	dropCache(): Promise<void>;
-}
-
-export type RequestResponse<T = any> = Then<RequestResponseObject<T>>;
-export interface RequestFunctionResponse<T = any, A1 = any, A2 = any, A3 = any> {
-	(arg1?: A1, arg2?: A2, arg3?: A3): RequestResponse<T>;
-	(...args: any[]): RequestResponse<T>;
-}
 
 /**
  * Creates a new request with the specified options
@@ -203,9 +200,9 @@ export default function create<T>(path, ...args) {
 	 * Factory for a cache middleware
 	 * @param url - request URL
 	 */
-	baseCtx.saveCache = (url) => (res) => {
+	baseCtx.saveCache = (url) => (res: RequestResponseObject) => {
 		if (canCache && p.offlineCache) {
-			storage.set(getStorageKey(url), res, p.cacheTTL || (1).day()).catch(stderr);
+			storage.set(getStorageKey(url), res.data, p.cacheTTL || (1).day()).catch(stderr);
 		}
 
 		if (baseCtx.cache) {
@@ -216,7 +213,7 @@ export default function create<T>(path, ...args) {
 				clearTimeout(cacheId);
 			}
 
-			cache.set(url, res);
+			cache.set(url, res.data);
 
 			if (p.cacheTTL) {
 				cacheId = setTimeout(() => cache.remove(url), p.cacheTTL);

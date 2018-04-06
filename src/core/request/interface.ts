@@ -62,6 +62,19 @@ export interface Decoder<I = any, O = any> {
 	(this: Response, data: I): O;
 }
 
+export interface RequestResponseObject<T = any> {
+	data: T | null;
+	ctx: Readonly<RequestContext<T>>;
+	response: Response;
+	dropCache(): Promise<void>;
+}
+
+export type RequestResponse<T = any> = Then<RequestResponseObject<T>>;
+export interface RequestFunctionResponse<T = any, A1 = any, A2 = any, A3 = any> {
+	(arg1?: A1, arg2?: A2, arg3?: A3): RequestResponse<T>;
+	(...args: any[]): RequestResponse<T>;
+}
+
 export interface RequestOptions {
 	readonly url: string;
 	readonly method?: RequestMethods;
@@ -134,7 +147,7 @@ export interface RequestContext<T = any> {
 	prefetch?: Then<any>;
 	resolveAPI(base?: string | undefined): string;
 	resolveURL(api?: string | undefined): string;
-	saveCache(url: string): (data: T) => T;
+	saveCache(url: string): (data: RequestResponseObject<T>) => RequestResponseObject<T>;
 	wrapRequest(url: string, promise: Then<T>): Then<T>;
 	rewriter?(this: CreateRequestOptions<T>, ...args: any[]): Rewriter;
 }

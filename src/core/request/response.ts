@@ -97,14 +97,7 @@ export default class Response {
 		this.headers = this.parseHeaders(p.headers);
 		this.sourceType = this.type = p.type;
 		this.decoders = (<Decoder[]>[]).concat(p.decoder || []);
-
-		// tslint:disable-next-line
-		if (this.sourceType === 'json' && body && typeof body === 'object') {
-			this.body = JSON.stringify(body);
-
-		} else {
-			this.body = body;
-		}
+		this.body = body;
 	}
 
 	/**
@@ -138,6 +131,10 @@ export default class Response {
 				data = this.document();
 				break;
 
+			case 'object':
+				data = Then.resolve(this.body);
+				break;
+
 			default:
 				data = this.text();
 		}
@@ -145,6 +142,10 @@ export default class Response {
 		return data
 			.then((obj) => $C(this.decoders).reduce((res, d) => d.call(this, res), obj))
 			.then((res) => {
+				if (Object.isFrozen(res)) {
+					return res;
+				}
+
 				if (res && typeof res === 'object' && {object: true, json: true}[this.type]) {
 					res.valueOf = () => $C.clone(res);
 					Object.freeze(res);
@@ -192,7 +193,7 @@ export default class Response {
 			return Then.immediate(() => JSON.parse(body, convertIfDate));
 		}
 
-		return <any>Then.immediate(() => Object.fastClone(body));
+		return <any>Then.immediate(() => this.decoders.length ? Object.fastClone(body) : body);
 	}
 
 	/**
