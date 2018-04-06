@@ -398,6 +398,7 @@ export default function create<T>(path, ...args) {
 			const reqOpts = {
 				...p,
 				url,
+				decoder: ctx.decoders,
 				body: $C(ctx.encoders).reduce((res, e) => e.call(p, res), p.body)
 			};
 

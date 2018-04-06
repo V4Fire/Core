@@ -82,6 +82,7 @@ export interface RequestOptions {
 	readonly successStatus?: SuccessStatus;
 	readonly contentType?: string;
 	readonly responseType?: ResponseTypes;
+	readonly decoder?: Decoder | Decoder[];
 	readonly headers?: Dictionary<string | string[]>;
 	readonly body?: RequestBody;
 	readonly withCredentials?: boolean;
@@ -161,7 +162,7 @@ export interface ResponseOptions {
 	successStatus?: SuccessStatus;
 	status?: StatusCodes;
 	headers?: string | Dictionary<string>;
-	decoder?: Decoder;
+	decoder?: Decoder | Decoder[];
 }
 
 export interface GlobalOptions {

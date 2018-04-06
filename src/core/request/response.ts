@@ -193,7 +193,8 @@ export default class Response {
 			return Then.immediate(() => JSON.parse(body, convertIfDate));
 		}
 
-		return <any>Then.immediate(() => this.decoders.length ? Object.fastClone(body) : body);
+		return <any>Then.immediate(() =>
+			this.decoders.length && !Object.isFrozen(body) ? Object.fastClone(body) : body);
 	}
 
 	/**

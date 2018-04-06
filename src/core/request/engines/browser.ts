@@ -74,7 +74,8 @@ export default function createTransport<T>(params: RequestOptions): Then<Respons
 				type: p.responseType,
 				successStatus: p.successStatus,
 				status: xhr.status,
-				headers: xhr.getAllResponseHeaders()
+				headers: xhr.getAllResponseHeaders(),
+				decoder: p.decoder
 			}));
 		});
 
