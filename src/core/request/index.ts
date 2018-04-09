@@ -280,6 +280,9 @@ export default function create<T>(path, ...args) {
 
 				if (mut.subPath) {
 					url = concatUrls(url, mut.subPath);
+
+				} else if (mut.newPath) {
+					url = mut.newPath;
 				}
 			}
 

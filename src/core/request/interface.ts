@@ -132,6 +132,7 @@ export interface CreateRequestOptions<T = any> {
 export interface Rewriter {
 	query?: Dictionary;
 	subPath?: string;
+	newPath?: string;
 }
 
 export interface RequestContext<T = any> {
