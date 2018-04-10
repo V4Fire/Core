@@ -106,7 +106,7 @@ export default class Async<CTX extends Object> {
 	/**
 	 * Map of initialized workers
 	 */
-	protected readonly store: WeakMap<Object, true> = new WeakMap();
+	protected readonly store: WeakMap<object, true> = new WeakMap();
 
 	/**
 	 * @param [ctx] - context for functions
@@ -783,7 +783,7 @@ export default class Async<CTX extends Object> {
 	 *   *) [label] - label for the task
 	 *   *) [group] - group name for the task
 	 */
-	off(params: ClearOptsId<Object>): this;
+	off(params: ClearOptsId<object>): this;
 
 	// tslint:disable-next-line
 	off(p) {

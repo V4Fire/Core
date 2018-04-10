@@ -58,7 +58,7 @@ interface ObjectConstructor {
 	createDict<T>(fields: T): {[P in keyof T]: T[P]};
 	createDict<T = any>(): Dictionary<T>;
 	createDict(...fields: any[]): Dictionary;
-	getPrototypeChain(constructor: Function): Object[];
+	getPrototypeChain(constructor: Function): object[];
 	fromArray(arr: any[]): Dictionary<boolean>;
 	isWeakMap(obj: any): obj is WeakMap<any, any>;
 	isWeakSet(obj: any): obj is WeakSet<any>;

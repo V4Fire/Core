@@ -225,19 +225,19 @@ Object.fromArray = function fromArray(arr: any[]): Dictionary<boolean> {
 };
 
 const
-	protoChains = new WeakMap<Function, Object[]>();
+	protoChains = new WeakMap<Function, object[]>();
 
 /**
  * Returns a prototype chain from the specified constructor
  * @param constructor
  */
-Object.getPrototypeChain = function getPrototypeChain(constructor: Function): Object[] {
+Object.getPrototypeChain = function getPrototypeChain(constructor: Function): object[] {
 	if (protoChains.has(constructor)) {
-		return (<Object[]>protoChains.get(constructor)).slice();
+		return (<object[]>protoChains.get(constructor)).slice();
 	}
 
 	const
-		chain: Object[] = [];
+		chain: object[] = [];
 
 	let
 		proto = constructor.prototype;
