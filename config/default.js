@@ -159,6 +159,12 @@ module.exports = config.createConfig(
 			};
 		},
 
+		typescript() {
+			return {
+				transpileOnly: !isProd
+			};
+		},
+
 		src: {
 			cwd() {
 				return this.roots[this.roots.length - 1] || resolve.cwd;
