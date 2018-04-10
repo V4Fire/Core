@@ -26,7 +26,7 @@ import {
 	RequestFunctionResponse,
 	RequestResponseObject,
 	CreateRequestOptions,
-	Rewriter,
+	ResolveResult,
 	RequestContext,
 	Encoder,
 	Decoder
@@ -56,24 +56,24 @@ export default function create<T>(opts: CreateRequestOptions<T>): typeof create;
 
 /**
  * @param path
- * @param rewriter - url rewrite function
+ * @param resolver - request resolve function
  * @param opts
  */
 export default function create<T, A>(
 	path: string,
-	rewriter: (this: CreateRequestOptions<T>, arg: A) => Rewriter,
+	resolver: (url: string, opts: CreateRequestOptions<T>, arg: A) => ResolveResult,
 	opts?: CreateRequestOptions<T>
 ): RequestFunctionResponse<T, A>;
 
 export default function create<T, A1, A2>(
 	path: string,
-	rewriter: (this: CreateRequestOptions<T>, arg1: A1, arg2: A2) => Rewriter,
+	resolver: (url: string, opts: CreateRequestOptions<T>, arg1: A1, arg2: A2) => ResolveResult,
 	opts?: CreateRequestOptions<T>
 ): RequestFunctionResponse<T, A1, A2>;
 
 export default function create<T, A1, A2, A3>(
 	path: string,
-	rewriter: (this: CreateRequestOptions<T>, arg1: A1, arg2: A2, arg3: A3) => Rewriter,
+	resolver: (url: string, opts: CreateRequestOptions<T>, arg1: A1, arg2: A2, arg3: A3) => ResolveResult,
 	opts?: CreateRequestOptions<T>
 ): RequestFunctionResponse<T, A1, A2, A3>;
 
@@ -83,43 +83,44 @@ export default function create<T>(path, ...args) {
 		const
 			defOpts = path;
 
-		return (path, rewriter, opts) => {
+		return (path, resolver, opts) => {
 			if (Object.isObject(path)) {
 				return create({...path, ...defOpts});
 			}
 
-			if (Object.isFunction(rewriter)) {
-				return create(path, rewriter, {...defOpts, ...opts});
+			if (Object.isFunction(resolver)) {
+				return create(path, resolver, {...defOpts, ...opts});
 			}
 
-			return create(path, {...defOpts, ...rewriter});
+			return create(path, {...defOpts, ...resolver});
 		};
 	}
 
-	let rewriter, opts: CreateRequestOptions<T>;
+	let
+		resolver, opts: CreateRequestOptions<T>;
 
 	if (args.length > 1) {
-		([rewriter, opts] = args);
+		([resolver, opts] = args);
 
 	} else {
 		opts = args[0];
 	}
 
-	const p = <typeof defaultRequestOpts & CreateRequestOptions<T>>{
+	opts = <typeof defaultRequestOpts & CreateRequestOptions<T>>{
 		...defaultRequestOpts,
 		...opts
 	};
 
 	const
-		canCache = p.method === 'GET';
+		canCache = opts.method === 'GET';
 
 	const baseCtx: RequestContext<T> = <any>{
-		rewriter,
+		resolver,
 		canCache,
 		...canCache && {
 			pendingCache: new Cache<Then<T>>(),
 			cache: (() => {
-				switch (p.cacheStrategy) {
+				switch (opts.cacheStrategy) {
 					case 'queue':
 						return requestCache;
 
@@ -133,133 +134,140 @@ export default function create<T>(path, ...args) {
 		}
 	};
 
-	/**
-	 * Returns absolute path to API for the request
-	 * @param [base]
-	 */
-	baseCtx.resolveAPI = (base = globalOpts.api) => {
-		const
-			a = <any>p.api,
-			rgxp = /(?:^|(https?:\/\/)(?:(.*?)\.)?(.*?)\.(.*?))(\/.*|$)/;
-
-		if (!base) {
-			const def = {
-				namespace: '',
-				...a
-			};
-
-			const
-				nm = def.namespace;
-
-			if (!def.protocol) {
-				return nm[0] === '/' ? nm : `/${nm}`;
-			}
-
-			return concatUrls(
-				[
-					def.protocol + (def.domain3 ? `${def.domain3}.` : '') + a.domain2,
-					def.zone
-				].join('.'),
-
-				nm
-			);
-		}
-
-		const v = (f, def) => {
-			const
-				v = a[f] != null ? a[f] : def || '';
-
-			if (f === 'domain3') {
-				return v ? `${v}.` : '';
-			}
-
-			return v;
-		};
-
-		return base.replace(rgxp, (str, protocol, domain3, domain2, zone, nm) => {
-			nm = v('namespace', nm);
-
-			if (!protocol) {
-				return nm[0] === '/' ? nm : `/${nm}`;
-			}
-
-			return concatUrls(
-				[
-					v('protocol', protocol) + v('domain3', domain3) + v('domain2', domain2),
-					v('zone', zone)
-				].join('.'),
-
-				nm
-			);
-		});
-	};
-
-	let cacheId;
-
-	/**
-	 * Factory for a cache middleware
-	 * @param url - request URL
-	 */
-	baseCtx.saveCache = (url) => (res: RequestResponseObject) => {
-		if (canCache && p.offlineCache) {
-			storage.set(getStorageKey(url), res.data, p.cacheTTL || (1).day()).catch(stderr);
-		}
-
-		if (baseCtx.cache) {
-			const
-				cache = baseCtx.cache as Cache<T>;
-
-			if (cacheId) {
-				clearTimeout(cacheId);
-			}
-
-			cache.set(url, res.data);
-
-			if (p.cacheTTL) {
-				cacheId = setTimeout(() => cache.remove(url), p.cacheTTL);
-			}
-		}
-
-		return res;
-	};
-
-	/**
-	 * Wrapper for the request (pending cache, etc.)
-	 *
-	 * @param url - request URL
-	 * @param promise
-	 */
-	baseCtx.wrapRequest = (url, promise) => {
-		if (canCache) {
-			const
-				cache = baseCtx.pendingCache as Cache<Then<T>>;
-
-			promise = promise.then(
-				(v) => {
-					cache.remove(url);
-					return v;
-				},
-
-				(r) => {
-					cache.remove(url);
-					throw r;
-				},
-
-				() => {
-					cache.remove(url);
-				}
-			);
-
-			cache.set(url, promise);
-		}
-
-		return promise.then();
-	};
-
 	// tslint:disable-next-line
 	return async (...args) => {
+		const p = {
+			...opts,
+			query: Object.fastClone(opts.query),
+			headers: {...opts.headers},
+			api: {...opts.api}
+		};
+
 		const
 			ctx = Object.create(baseCtx);
+
+		/**
+		 * Returns absolute path to API for the request
+		 * @param [base]
+		 */
+		ctx.resolveAPI = (base = globalOpts.api) => {
+			const
+				a = <any>p.api,
+				rgxp = /(?:^|(https?:\/\/)(?:(.*?)\.)?(.*?)\.(.*?))(\/.*|$)/;
+
+			if (!base) {
+				const def = {
+					namespace: '',
+					...a
+				};
+
+				const
+					nm = def.namespace;
+
+				if (!def.protocol) {
+					return nm[0] === '/' ? nm : `/${nm}`;
+				}
+
+				return concatUrls(
+					[
+						def.protocol + (def.domain3 ? `${def.domain3}.` : '') + a.domain2,
+						def.zone
+					].join('.'),
+
+					nm
+				);
+			}
+
+			const v = (f, def) => {
+				const
+					v = a[f] != null ? a[f] : def || '';
+
+				if (f === 'domain3') {
+					return v ? `${v}.` : '';
+				}
+
+				return v;
+			};
+
+			return base.replace(rgxp, (str, protocol, domain3, domain2, zone, nm) => {
+				nm = v('namespace', nm);
+
+				if (!protocol) {
+					return nm[0] === '/' ? nm : `/${nm}`;
+				}
+
+				return concatUrls(
+					[
+						v('protocol', protocol) + v('domain3', domain3) + v('domain2', domain2),
+						v('zone', zone)
+					].join('.'),
+
+					nm
+				);
+			});
+		};
+
+		let cacheId;
+
+		/**
+		 * Factory for a cache middleware
+		 * @param url - request URL
+		 */
+		ctx.saveCache = (url) => (res: RequestResponseObject) => {
+			if (canCache && p.offlineCache) {
+				storage.set(getStorageKey(url), res.data, p.cacheTTL || (1).day()).catch(stderr);
+			}
+
+			if (ctx.cache) {
+				const
+					cache = ctx.cache as Cache<T>;
+
+				if (cacheId) {
+					clearTimeout(cacheId);
+				}
+
+				cache.set(url, res.data);
+
+				if (p.cacheTTL) {
+					cacheId = setTimeout(() => cache.remove(url), p.cacheTTL);
+				}
+			}
+
+			return res;
+		};
+
+		/**
+		 * Wrapper for the request (pending cache, etc.)
+		 *
+		 * @param url - request URL
+		 * @param promise
+		 */
+		ctx.wrapRequest = (url, promise) => {
+			if (canCache) {
+				const
+					cache = ctx.pendingCache as Cache<Then<T>>;
+
+				promise = promise.then(
+					(v) => {
+						cache.remove(url);
+						return v;
+					},
+
+					(r) => {
+						cache.remove(url);
+						throw r;
+					},
+
+					() => {
+						cache.remove(url);
+					}
+				);
+
+				cache.set(url, promise);
+			}
+
+			return promise.then();
+		};
 
 		/**
 		 * Returns absolute path for the request
@@ -269,46 +277,44 @@ export default function create<T>(path, ...args) {
 			let
 				url = concatUrls(api ? ctx.resolveAPI(api) : null, path);
 
-			if (Object.isFunction(rewriter)) {
+			if (Object.isFunction(resolver)) {
 				const
-					mut = rewriter.call(p, ...args) || {};
+					res = resolver(url, p, ...args);
 
-				if (mut.query) {
-					Object.assign(ctx.query, mut.query);
-					ctx.qs = toQueryString(ctx.query);
+				if (Object.isArray(res)) {
+					url = <string>res[0];
+
+				} else if (res) {
+					url = concatUrls(url, res);
 				}
 
-				if (mut.subPath) {
-					url = concatUrls(url, mut.subPath);
-
-				} else if (mut.newPath) {
-					url = mut.newPath;
-				}
+				ctx.qs = toQueryString(ctx.query);
 			}
 
 			return url + (ctx.qs ? `?${ctx.qs}` : '');
 		};
 
-		const baseURL = concatUrls(ctx.resolveAPI(), path);
+		const
+			baseURL = concatUrls(ctx.resolveAPI(), path);
+
 		await Promise.all($C(p.middlewares as any[]).to([] as any[]).reduce((arr, fn) => {
 			// @ts-ignore
 			arr.push(fn(baseURL, p, globalOpts));
 			return arr;
 		}));
 
-		Object.assign(ctx, {
-			params: p,
-			query: Object.fastClone(p.query),
-			encoders: (<Encoder[]>[]).concat(p.encoder || []),
-			decoders: (<Decoder[]>[]).concat(p.decoder || [])
-		});
-
-		ctx.isOnline = await isOnline();
-		ctx.qs = toQueryString(ctx.query);
-
 		if (p.headers) {
 			p.headers = normalizeHeaders(p.headers);
 		}
+
+		Object.assign(ctx, {
+			params: p,
+			query: p.query,
+			qs: toQueryString(p.query),
+			isOnline: await isOnline(),
+			encoders: (<Encoder[]>[]).concat(p.encoder || []),
+			decoders: (<Decoder[]>[]).concat(p.decoder || [])
+		});
 
 		async function dropCache(): Promise<void> {
 			if (ctx.cache && ctx.cacheKey) {
@@ -317,7 +323,10 @@ export default function create<T>(path, ...args) {
 		}
 
 		const wrapAsResponse = async (res) => {
-			const response = new Response(res, {type: 'object'});
+			const response = new Response(res, {
+				type: 'object'
+			});
+
 			return {
 				data: await response.decode(),
 				ctx,

@@ -129,29 +129,28 @@ export interface CreateRequestOptions<T = any> {
 	decoder?: Decoder<T> | Decoder[];
 }
 
-export interface Rewriter {
-	query?: Dictionary;
-	subPath?: string;
-	newPath?: string;
-}
+export type ResolveResult =
+	string |
+	string[] |
+	undefined;
 
 export interface RequestContext<T = any> {
 	readonly canCache: boolean;
 	readonly cache?: Cache<T> | RestrictedCache<T> | null;
 	readonly pendingCache?: Cache<Then<T>>;
-	readonly params: typeof defaultRequestOpts & CreateRequestOptions<T>;
+	readonly qs: string;
+	query: RequestQuery;
+	params: typeof defaultRequestOpts & CreateRequestOptions<T>;
 	encoders: Encoder[];
 	decoders: Decoder[];
-	query: RequestQuery;
 	isOnline: boolean;
-	qs: string;
 	cacheKey?: string;
 	prefetch?: Then<any>;
 	resolveAPI(base?: string | undefined): string;
 	resolveURL(api?: string | undefined): string;
 	saveCache(url: string): (data: RequestResponseObject<T>) => RequestResponseObject<T>;
 	wrapRequest(url: string, promise: Then<T>): Then<T>;
-	rewriter?(this: CreateRequestOptions<T>, ...args: any[]): Rewriter;
+	rewriter?(url: string, opts: CreateRequestOptions<T>, ...args: any[]): ResolveResult;
 }
 
 export interface ResponseHeaders {
