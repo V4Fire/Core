@@ -26,7 +26,7 @@ import {
 	RequestFunctionResponse,
 	RequestResponseObject,
 	CreateRequestOptions,
-	ResolveResult,
+	ResolverResult,
 	RequestContext,
 	Encoder,
 	Decoder
@@ -61,19 +61,19 @@ export default function create<T>(opts: CreateRequestOptions<T>): typeof create;
  */
 export default function create<T, A>(
 	path: string,
-	resolver: (url: string, opts: CreateRequestOptions<T>, arg: A) => ResolveResult,
+	resolver: (url: string, opts: CreateRequestOptions<T>, arg: A) => ResolverResult,
 	opts?: CreateRequestOptions<T>
 ): RequestFunctionResponse<T, A>;
 
 export default function create<T, A1, A2>(
 	path: string,
-	resolver: (url: string, opts: CreateRequestOptions<T>, arg1: A1, arg2: A2) => ResolveResult,
+	resolver: (url: string, opts: CreateRequestOptions<T>, arg1: A1, arg2: A2) => ResolverResult,
 	opts?: CreateRequestOptions<T>
 ): RequestFunctionResponse<T, A1, A2>;
 
 export default function create<T, A1, A2, A3>(
 	path: string,
-	resolver: (url: string, opts: CreateRequestOptions<T>, arg1: A1, arg2: A2, arg3: A3) => ResolveResult,
+	resolver: (url: string, opts: CreateRequestOptions<T>, arg1: A1, arg2: A2, arg3: A3) => ResolverResult,
 	opts?: CreateRequestOptions<T>
 ): RequestFunctionResponse<T, A1, A2, A3>;
 
