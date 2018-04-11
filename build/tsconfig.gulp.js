@@ -46,10 +46,28 @@ module.exports = function (gulp) {
 				};
 
 				const
-					config = tsconfig.parse(file.contents.toString(), file.path);
+					config = resolveExtends(tsconfig.parse(file.contents.toString(), file.path));
+
+				$C($C(config).get('compilerOptions.paths')).forEach((list) => {
+					$C(list).forEach((url, i) => {
+						if (/^[^.]/.test(url) && !path.isAbsolute(url)) {
+							const
+								parts = url.split(':');
+
+							if (parts.length !== 2) {
+								return;
+							}
+
+							list[i] = path.join(
+								path.dirname(require.resolve(path.join(parts[0], 'package.json'))),
+								parts[1]
+							);
+						}
+					});
+				});
 
 				file.path = file.path.replace(/([^/\\]*?)\.tsconfig$/, (str, nm) => `${nm ? `${nm}.tsconfig` : 'tsconfig'}.json`);
-				file.contents = new Buffer(JSON.stringify(resolveExtends(config), null, 2));
+				file.contents = new Buffer(JSON.stringify(config, null, 2));
 
 				cb(null, file);
 			}))
