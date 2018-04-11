@@ -574,7 +574,7 @@ export default class Async<CTX extends Object> {
 	 *   *) [group] - group name for the task
 	 */
 	wait(fn: Function, params?: AsyncOpts): Promise<boolean> {
-		const DELAY = 15;
+		const DELAY = 50;
 		return new Promise((resolve, reject) => {
 			let id;
 			const cb = () => {
