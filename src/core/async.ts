@@ -572,9 +572,10 @@ export default class Async<CTX extends Object> {
 	 *
 	 *   *) [label] - label for the task (previous task with the same label will be canceled)
 	 *   *) [group] - group name for the task
+	 *   *) [delay] - delay in milliseconds
 	 */
-	wait(fn: Function, params?: AsyncOpts): Promise<boolean> {
-		const DELAY = 50;
+	wait(fn: Function, params?: AsyncOpts & {delay: number}): Promise<boolean> {
+		const DELAY = params && params.delay || 100;
 		return new Promise((resolve, reject) => {
 			let id;
 			const cb = () => {
@@ -584,7 +585,7 @@ export default class Async<CTX extends Object> {
 				}
 			};
 
-			id = this.setInterval(cb, DELAY, {
+			id = this.setInterval(cb, DELAY, <any>{
 				...params,
 				onClear: this.onPromiseClear(resolve, reject)
 			});
