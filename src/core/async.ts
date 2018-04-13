@@ -575,7 +575,7 @@ export default class Async<CTX extends Object> {
 	 *   *) [delay] - delay in milliseconds
 	 */
 	wait(fn: Function, params?: AsyncOpts & {delay?: number}): Promise<boolean> {
-		const DELAY = params && params.delay || 100;
+		const DELAY = params && params.delay || 30;
 		return new Promise((resolve, reject) => {
 			let id;
 			const cb = () => {
