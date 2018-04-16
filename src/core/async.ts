@@ -14,14 +14,14 @@ import Then from 'core/then';
 export const
 	asyncCounter = Symbol('Async counter id');
 
-export interface AsyncLink {
+export interface AsyncLink<T extends object = Async> {
 	id: any;
 	obj: any;
 	objName?: string;
 	label?: string | symbol;
 	clearFn?: Function;
-	onComplete: Function[][];
-	onClear: Function[];
+	onComplete: AsyncCompleteHandler<T>[][];
+	onClear: AsyncClearHandler<T>[];
 }
 
 export interface ClearOpts {
@@ -39,18 +39,55 @@ export interface AsyncOpts {
 	group?: string | symbol;
 }
 
-export type AsyncCtx = {
+export type AsyncCtx<T extends object = Async> = {
 	type: string;
-	link: AsyncLink;
-	replacedBy?: AsyncLink;
+	link: AsyncLink<T>;
+	replacedBy?: AsyncLink<T>;
 } & AsyncOpts & ClearOptsId<any>;
 
-export interface AsyncCbOpts extends AsyncOpts {
-	onClear?: Function | Function[];
+export interface AsyncClearHandler<T extends object = Async> {
+	(this: T, ctx: AsyncCtx<T>): void;
 }
 
-export interface AsyncCbOptsSingle extends AsyncCbOpts {
+export interface AsyncCompleteHandler<T extends object = Async> {
+	(this: T, ...args: any[]): void;
+}
+
+export interface AsyncMergeHandler<T extends object = Async> {
+	(this: T, link: AsyncLink<T>): void;
+}
+
+export interface AsyncCbOpts<T extends object = Async> extends AsyncOpts {
+	onClear?: AsyncClearHandler<T> | AsyncClearHandler<T>[];
+	onMerge?: AsyncMergeHandler<T> | AsyncMergeHandler<T>[];
+}
+
+export interface AsyncCbOptsSingle<T extends object = Async> extends AsyncCbOpts<T> {
 	single?: boolean;
+}
+
+export interface AsyncCreateIdleOpts<T extends object = Async> extends AsyncCbOpts<T> {
+	timeout?: number;
+}
+
+export interface AsyncIdleOpts extends AsyncOpts {
+	timeout?: number;
+}
+
+export interface AsyncWaitOpts extends AsyncOpts {
+	delay?: number;
+}
+
+export interface AsyncOnOpts<T extends object = Async> extends AsyncCbOptsSingle<T> {
+	options?: AddEventListenerOptions;
+}
+
+export interface AsyncOnceOpts<T extends object = Async> extends AsyncCbOpts<T> {
+	options?: AddEventListenerOptions;
+}
+
+export interface AsyncWorkerOpts<T extends object = Async> extends AsyncCbOpts<T> {
+	destructor?: string;
 }
 
 export interface LocalCacheObject {
@@ -92,11 +129,11 @@ export interface WorkerLike {
  * this.setImmediate(() => alert(5), {label: 'foo', group: 'bar'});  // -
  * this.setImmediate(() => alert(6), {label: 'foo', group: 'bar'});  // 6
  */
-export default class Async<CTX extends object> {
+export default class Async<CTX extends object = Async<any>> {
 	/**
 	 * Cache object for async operations
 	 */
-	protected readonly cache: Dictionary<CacheObject>;
+	protected readonly cache: Dictionary<CacheObject> = Object.createDict();
 
 	/**
 	 * Context for functions
@@ -112,7 +149,6 @@ export default class Async<CTX extends object> {
 	 * @param [ctx] - context for functions
 	 */
 	constructor(ctx?: CTX) {
-		this.cache = Object.createDict();
 		this.context = ctx;
 	}
 
@@ -126,7 +162,7 @@ export default class Async<CTX extends object> {
 	 *   *) [group] - group name for the task
 	 *   *) [onClear] - clear handler
 	 */
-	setImmediate(fn: Function, params?: AsyncCbOpts): number | NodeJS.Timer {
+	setImmediate(fn: Function, params?: AsyncCbOpts<CTX>): number | NodeJS.Timer {
 		return this.setAsync({
 			...params,
 			name: 'immediate',
@@ -175,7 +211,7 @@ export default class Async<CTX extends object> {
 	 *   *) [group] - group name for the task
 	 *   *) [onClear] - clear handler
 	 */
-	setInterval(fn: Function, interval: number, params?: AsyncCbOpts): number | NodeJS.Timer {
+	setInterval(fn: Function, interval: number, params?: AsyncCbOpts<CTX>): number | NodeJS.Timer {
 		return this.setAsync({
 			...params,
 			name: 'interval',
@@ -226,7 +262,7 @@ export default class Async<CTX extends object> {
 	 *   *) [group] - group name for the task
 	 *   *) [onClear] - clear handler
 	 */
-	setTimeout(fn: Function, timer: number, params?: AsyncCbOpts): number | NodeJS.Timer {
+	setTimeout(fn: Function, timer: number, params?: AsyncCbOpts<CTX>): number | NodeJS.Timer {
 		return this.setAsync({
 			...params,
 			name: 'timeout',
@@ -278,7 +314,7 @@ export default class Async<CTX extends object> {
 	 */
 	requestIdleCallback(
 		fn: (deadline: IdleDeadline) => any,
-		params?: AsyncCbOpts & {timeout?: number}
+		params?: AsyncCreateIdleOpts<CTX>
 	): number | NodeJS.Timer {
 		return this.setAsync({
 			...params && Object.reject(params, 'timeout'),
@@ -329,7 +365,7 @@ export default class Async<CTX extends object> {
 	 *   *) [group] - group name for the task
 	 *   *) [onClear] - clear handler
 	 */
-	worker<T>(worker: T & WorkerLike, params?: AsyncCbOpts & {destructor?: string}): T {
+	worker<T>(worker: T & WorkerLike, params?: AsyncWorkerOpts<CTX>): T {
 		const
 			{store} = this;
 
@@ -387,14 +423,17 @@ export default class Async<CTX extends object> {
 	 *   *) [group] - group name for the task
 	 */
 	request<T>(request: PromiseLike<T>, params?: AsyncOpts): Then<T> {
-		return this.setAsync({
-			...params,
-			name: 'request',
-			obj: Then.resolve(request),
-			needCall: true,
-			linkByWrapper: true,
-			clearFn: this.requestDestructor.bind(this),
-			wrapper: (fn, req) => req.then(fn, fn)
+		return new Then((resolve, reject) => {
+			resolve(this.setAsync({
+				...params,
+				name: 'request',
+				obj: Then.resolve(request),
+				needCall: true,
+				linkByWrapper: true,
+				clearFn: this.requestDestructor.bind(this),
+				wrapper: (fn, req) => req.then(fn, fn),
+				onClear: this.onPromiseClear(resolve, reject)
+			}));
 		});
 	}
 
@@ -436,7 +475,7 @@ export default class Async<CTX extends object> {
 	 *   *) [single] - if false, then after first invocation the proxy it won't be removed
 	 *   *) [onClear] - clear handler
 	 */
-	proxy(cb: Function, params?: AsyncCbOptsSingle): Function {
+	proxy(cb: Function, params?: AsyncCbOptsSingle<CTX>): Function {
 		return this.setAsync({
 			...params,
 			name: 'proxy',
@@ -490,8 +529,9 @@ export default class Async<CTX extends object> {
 		return new Promise((resolve, reject) => {
 			promise.then(
 				<any>this.proxy(resolve, {
-					...params,
-					onClear: this.onPromiseClear(resolve, reject)
+					...<any>params,
+					onClear: this.onPromiseClear(resolve, reject),
+					onMerge: this.onPromiseMerge(resolve, reject)
 				}),
 
 				reject
@@ -514,8 +554,9 @@ export default class Async<CTX extends object> {
 	sleep(timer: number, params?: AsyncOpts): Promise<void> {
 		return new Promise((resolve, reject) => {
 			this.setTimeout(resolve, timer, {
-				...params,
-				onClear: this.onPromiseClear(resolve, reject)
+				...<any>params,
+				onClear: this.onPromiseClear(resolve, reject),
+				onMerge: this.onPromiseMerge(resolve, reject)
 			});
 		});
 	}
@@ -534,8 +575,9 @@ export default class Async<CTX extends object> {
 	nextTick(params?: AsyncOpts): Promise<void> {
 		return new Promise((resolve, reject) => {
 			this.setImmediate(resolve, {
-				...params,
-				onClear: this.onPromiseClear(resolve, reject)
+				...<any>params,
+				onClear: this.onPromiseClear(resolve, reject),
+				onMerge: this.onPromiseMerge(resolve, reject)
 			});
 		});
 	}
@@ -552,11 +594,12 @@ export default class Async<CTX extends object> {
 	 *   *) [label] - label for the task (previous task with the same label will be canceled)
 	 *   *) [group] - group name for the task
 	 */
-	idle(params?: AsyncOpts & {timeout?: number}): Promise<IdleDeadline> {
+	idle(params?: AsyncIdleOpts): Promise<IdleDeadline> {
 		return new Promise((resolve, reject) => {
 			this.requestIdleCallback(resolve, {
-				...params,
-				onClear: this.onPromiseClear(resolve, reject)
+				...<any>params,
+				onClear: this.onPromiseClear(resolve, reject),
+				onMerge: this.onPromiseMerge(resolve, reject)
 			});
 		});
 	}
@@ -574,7 +617,7 @@ export default class Async<CTX extends object> {
 	 *   *) [group] - group name for the task
 	 *   *) [delay] - delay in milliseconds
 	 */
-	wait(fn: Function, params?: AsyncOpts & {delay?: number}): Promise<boolean> {
+	wait(fn: Function, params?: AsyncWaitOpts): Promise<boolean> {
 		const
 			DELAY = params && params.delay || 50;
 
@@ -594,7 +637,8 @@ export default class Async<CTX extends object> {
 
 			id = this.setInterval(cb, DELAY, <any>{
 				...params,
-				onClear: this.onPromiseClear(resolve, reject)
+				onClear: this.onPromiseClear(resolve, reject),
+				onMerge: this.onPromiseMerge(resolve, reject)
 			});
 		});
 	}
@@ -627,7 +671,7 @@ export default class Async<CTX extends object> {
 		emitter: T & EventEmitterLike,
 		events: string | string[],
 		handler: Function,
-		params: AsyncCbOptsSingle & {options?: AddEventListenerOptions},
+		params: AsyncOnOpts<CTX>,
 		...args: any[]
 	): Object;
 
@@ -720,7 +764,7 @@ export default class Async<CTX extends object> {
 		emitter: T & EventEmitterLike,
 		events: string | string[],
 		handler: Function,
-		params: AsyncCbOpts & {options?: AddEventListenerOptions},
+		params: AsyncOnceOpts<CTX>,
 		...args: any[]
 	): Object;
 
@@ -774,7 +818,8 @@ export default class Async<CTX extends object> {
 		return new Promise((resolve, reject) => {
 			this.once(emitter, events, resolve, {
 				...p,
-				onClear: this.onPromiseClear(resolve, reject)
+				onClear: this.onPromiseClear(resolve, reject),
+				onMerge: this.onPromiseMerge(resolve, reject)
 			}, ...args);
 		});
 	}
@@ -921,7 +966,9 @@ export default class Async<CTX extends object> {
 	 * @param reject
 	 */
 	protected onPromiseClear(resolve: Function, reject: Function): Function {
-		const MAX_PROMISE_DEPTH = 25;
+		const
+			MAX_PROMISE_DEPTH = 25;
+
 		return (obj) => {
 			const
 				{replacedBy} = obj;
@@ -940,6 +987,16 @@ export default class Async<CTX extends object> {
 				reject(obj);
 			}
 		};
+	}
+
+	/**
+	 * Factory for promise merge handlers
+	 *
+	 * @param resolve
+	 * @param reject
+	 */
+	protected onPromiseMerge(resolve: Function, reject: Function): Function {
+		return (obj) => obj.onComplete.push([resolve, reject]);
 	}
 
 	/**
@@ -983,6 +1040,14 @@ export default class Async<CTX extends object> {
 			labelCache = labels[p.label];
 
 		if (labelCache && p.join === true) {
+			const
+				mergeHandlers = <AsyncMergeHandler<CTX>[]>[].concat(p.onMerge || []),
+				ctx = links.get(labelCache);
+
+			for (let i = 0; i < mergeHandlers.length; i++) {
+				mergeHandlers[i].call(this.context || this, ctx);
+			}
+
 			return labelCache;
 		}
 
@@ -1021,7 +1086,9 @@ export default class Async<CTX extends object> {
 					}
 				};
 
-				let res = finalObj;
+				let
+					res = finalObj;
+
 				if (Object.isFunction(finalObj)) {
 					res = finalObj.apply(fnCtx, arguments);
 				}
@@ -1053,7 +1120,7 @@ export default class Async<CTX extends object> {
 			label: p.label,
 			clearFn: p.clearFn,
 			onComplete: [],
-			onClear: [].concat(p.onClear || [])
+			onClear: <AsyncClearHandler<CTX>[]>[].concat(p.onClear || [])
 		};
 
 		if (labelCache) {
