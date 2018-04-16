@@ -423,17 +423,14 @@ export default class Async<CTX extends object = Async<any>> {
 	 *   *) [group] - group name for the task
 	 */
 	request<T>(request: PromiseLike<T>, params?: AsyncOpts): Then<T> {
-		return new Then((resolve, reject) => {
-			resolve(this.setAsync({
-				...params,
-				name: 'request',
-				obj: Then.resolve(request),
-				needCall: true,
-				linkByWrapper: true,
-				clearFn: this.requestDestructor.bind(this),
-				wrapper: (fn, req) => req.then(fn, fn),
-				onClear: this.onPromiseClear(resolve, reject)
-			}));
+		return this.setAsync({
+			...params,
+			name: 'request',
+			obj: Then.resolve(request),
+			needCall: true,
+			linkByWrapper: true,
+			clearFn: this.requestDestructor.bind(this),
+			wrapper: (fn, req) => req.then(fn, fn)
 		});
 	}
 
