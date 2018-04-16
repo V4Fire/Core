@@ -92,7 +92,7 @@ export interface WorkerLike {
  * this.setImmediate(() => alert(5), {label: 'foo', group: 'bar'});  // -
  * this.setImmediate(() => alert(6), {label: 'foo', group: 'bar'});  // 6
  */
-export default class Async<CTX extends Object> {
+export default class Async<CTX extends object> {
 	/**
 	 * Cache object for async operations
 	 */
@@ -443,7 +443,7 @@ export default class Async<CTX extends Object> {
 			obj: cb,
 			wrapper: (fn) => fn,
 			linkByWrapper: true,
-			periodic: params && params.single === false
+			periodic: !params || params.single !== true
 		});
 	}
 
