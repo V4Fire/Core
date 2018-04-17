@@ -136,14 +136,14 @@ export default class Async<CTX extends object = Async<any>> {
 	protected readonly cache: Dictionary<CacheObject> = Object.createDict();
 
 	/**
+	 * Cache object for initialized workers
+	 */
+	protected readonly workerCache: WeakMap<object, true> = new WeakMap();
+
+	/**
 	 * Context for functions
 	 */
 	protected readonly context?: CTX;
-
-	/**
-	 * Map of initialized workers
-	 */
-	protected readonly store: WeakMap<object, true> = new WeakMap();
 
 	/**
 	 * @param [ctx] - context for functions
@@ -367,10 +367,10 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	worker<T>(worker: T & WorkerLike, params?: AsyncWorkerOpts<CTX>): T {
 		const
-			{store} = this;
+			{workerCache} = this;
 
-		if (!store.has(worker)) {
-			store.set(worker, true);
+		if (!workerCache.has(worker)) {
+			workerCache.set(worker, true);
 			worker[asyncCounter] = (worker[asyncCounter] || 0) + 1;
 		}
 
@@ -927,10 +927,10 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	protected workerDestructor<T>(destructor: string | undefined, worker: T & WorkerLike): void {
 		const
-			{store} = this;
+			{workerCache} = this;
 
-		if (store.has(worker)) {
-			store.delete(worker);
+		if (workerCache.has(worker)) {
+			workerCache.delete(worker);
 
 			if (--worker[asyncCounter] <= 0) {
 				const fn = destructor ?
