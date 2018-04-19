@@ -21,7 +21,7 @@ import {
 	ResponseHeaders,
 	ResponseTypes,
 	ResponseType,
-	Decoder,
+	Decoders,
 	OkStatuses
 
 } from 'core/request/interface';
@@ -68,7 +68,7 @@ export default class Response {
 	/**
 	 * Response decoders
 	 */
-	readonly decoders: Decoder[];
+	readonly decoders: Decoders;
 
 	/**
 	 * Response body
@@ -96,7 +96,14 @@ export default class Response {
 
 		this.headers = this.parseHeaders(p.headers);
 		this.sourceResponseType = this.responseType = p.responseType;
-		this.decoders = (<Decoder[]>[]).concat(p.decoder || []);
+
+		if (p.decoder) {
+			this.decoders = Object.isFunction(p.decoder) ? [p.decoder] : p.decoder;
+
+		} else {
+			this.decoders = [];
+		}
+
 		this.body = body;
 	}
 
@@ -194,7 +201,7 @@ export default class Response {
 		}
 
 		return <any>Then.immediate(() =>
-			this.decoders.length && !Object.isFrozen(body) ? Object.fastClone(body) : body);
+			$C(this.decoders).length() && !Object.isFrozen(body) ? Object.fastClone(body) : body);
 	}
 
 	/**

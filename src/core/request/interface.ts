@@ -94,6 +94,9 @@ export interface Middleware<T = any, CTX = void> {
 }
 
 export type Middlewares<T = any, CTX = void> = Dictionary<Middleware<T, CTX>> | Iterable<Middleware<T, CTX>>;
+export type Encoders<T = any> = Dictionary<Encoder<T>> | Iterable<Encoder<T>>;
+export type Decoders<T = any> = Dictionary<Decoder<T>> | Iterable<Decoder<T>>;
+
 export interface CreateRequestOptions<T = any> {
 	readonly method?: RequestMethods;
 	readonly cacheStrategy?: CacheStrategy;
@@ -121,8 +124,8 @@ export interface CreateRequestOptions<T = any> {
 	};
 
 	middlewares?: Middlewares<T>;
-	encoder?: Encoder | Encoder[];
-	decoder?: Decoder<T> | Decoder[];
+	encoder?: Encoder | Encoders;
+	decoder?: Decoder | Decoders;
 }
 
 export type ResolverResult =
@@ -137,8 +140,8 @@ export interface RequestContext<T = any> {
 	readonly qs: string;
 	query: RequestQuery;
 	params: typeof defaultRequestOpts & CreateRequestOptions<T>;
-	encoders: Encoder[];
-	decoders: Decoder[];
+	encoders: Encoders;
+	decoders: Decoders;
 	isOnline: boolean;
 	cacheKey?: string;
 	prefetch?: Then<any>;
@@ -158,7 +161,7 @@ export interface ResponseOptions {
 	okStatuses?: OkStatuses;
 	status?: StatusCodes;
 	headers?: string | Dictionary<string>;
-	decoder?: Decoder | Decoder[];
+	decoder?: Decoder | Decoders;
 }
 
 export interface GlobalOptions {

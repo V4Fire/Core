@@ -27,9 +27,7 @@ import {
 	RequestResponseObject,
 	CreateRequestOptions,
 	ResolverResult,
-	RequestContext,
-	Encoder,
-	Decoder
+	RequestContext
 
 } from 'core/request/interface';
 
@@ -312,8 +310,8 @@ export default function create<T>(path, ...args) {
 			query: p.query,
 			qs: toQueryString(p.query),
 			isOnline: await isOnline(),
-			encoders: (<Encoder[]>[]).concat(p.encoder || []),
-			decoders: (<Decoder[]>[]).concat(p.decoder || [])
+			encoders: p.encoder ? Object.isFunction(p.encoder) ? [p.encoder] : p.encoder : [],
+			decoders: p.decoder ? Object.isFunction(p.decoder) ? [p.decoder] : p.decoder : []
 		});
 
 		async function dropCache(): Promise<void> {
@@ -410,8 +408,8 @@ export default function create<T>(path, ...args) {
 			const reqOpts = {
 				...p,
 				url,
-				decoder: ctx.decoders,
-				body: $C(ctx.encoders).reduce((res, e) => e.call(p, res), p.body)
+				decoder: ctx.decoder,
+				body: $C(ctx.encoder).reduce((res, e) => e.call(p, res), p.body)
 			};
 
 			const r = () => request(reqOpts).then(success).then(ctx.saveCache(cacheKey));
