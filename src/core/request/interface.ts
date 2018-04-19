@@ -100,7 +100,7 @@ export interface CreateRequestOptions<T = any> {
 
 	contentType?: string;
 	responseType?: ResponseTypes;
-	okStatus?: OkStatuses;
+	okStatuses?: OkStatuses;
 	externalRequest?: boolean;
 
 	body?: RequestBody;
