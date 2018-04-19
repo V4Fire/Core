@@ -97,6 +97,7 @@ export default class Response {
 		this.headers = this.parseHeaders(p.headers);
 		this.sourceResponseType = this.responseType = p.responseType;
 
+		// tslint:disable-next-line
 		if (p.decoder) {
 			this.decoders = Object.isFunction(p.decoder) ? [p.decoder] : p.decoder;
 
