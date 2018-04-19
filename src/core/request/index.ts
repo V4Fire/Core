@@ -324,7 +324,7 @@ export default function create<T>(path, ...args) {
 
 		const wrapAsResponse = async (res) => {
 			const response = new Response(res, {
-				type: 'object'
+				responseType: 'object'
 			});
 
 			return {
@@ -381,7 +381,7 @@ export default function create<T>(path, ...args) {
 
 		} else {
 			const success = async (response) => {
-				if (!response.success) {
+				if (!response.ok) {
 					throw new RequestError('invalidStatus', {response});
 				}
 

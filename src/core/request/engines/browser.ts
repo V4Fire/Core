@@ -36,7 +36,7 @@ export default function createTransport<T>(params: RequestOptions): Then<Respons
 		}
 	}
 
-	xhr.open(<string>p.method, p.url, true, p.user, p.password);
+	xhr.open(<string>p.method, p.url, true);
 
 	if (p.timeout != null) {
 		xhr.timeout = p.timeout;
@@ -48,7 +48,7 @@ export default function createTransport<T>(params: RequestOptions): Then<Respons
 			<XMLHttpRequestResponseType>p.responseType.toLowerCase();
 	}
 
-	if (p.withCredentials) {
+	if (p.credentials) {
 		xhr.withCredentials = true;
 	}
 
@@ -68,8 +68,8 @@ export default function createTransport<T>(params: RequestOptions): Then<Respons
 	return new Then<Response>((resolve, reject, onAbort) => {
 		xhr.addEventListener('load', () => {
 			resolve(new Response(xhr.response, {
-				type: p.responseType,
-				successStatus: p.successStatus,
+				responseType: p.responseType,
+				okStatuses: p.okStatuses,
 				status: xhr.status,
 				headers: xhr.getAllResponseHeaders(),
 				decoder: p.decoder

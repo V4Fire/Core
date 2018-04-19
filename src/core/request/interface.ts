@@ -49,7 +49,7 @@ export type RequestBody =
 	FormData |
 	ArrayBuffer;
 
-export type SuccessStatus =
+export type OkStatuses =
 	sugarjs.Range |
 	StatusCodes |
 	StatusCodes[];
@@ -79,15 +79,13 @@ export interface RequestOptions {
 	readonly url: string;
 	readonly method?: RequestMethods;
 	readonly timeout?: number;
-	readonly successStatus?: SuccessStatus;
+	readonly okStatuses?: OkStatuses;
 	readonly contentType?: string;
 	readonly responseType?: ResponseTypes;
 	readonly decoder?: Decoder | Decoder[];
 	readonly headers?: Dictionary<string | string[]>;
 	readonly body?: RequestBody;
-	readonly withCredentials?: boolean;
-	readonly user?: string;
-	readonly password?: string;
+	readonly credentials?: boolean;
 }
 
 export type RequestQuery = Dictionary | any[] | string;
@@ -102,15 +100,13 @@ export interface CreateRequestOptions<T = any> {
 
 	contentType?: string;
 	responseType?: ResponseTypes;
-	successStatus?: SuccessStatus;
+	okStatus?: OkStatuses;
 	externalRequest?: boolean;
 
 	body?: RequestBody;
 	query?: RequestQuery;
 	headers?: Dictionary<any | any[]>;
-	withCredentials?: boolean;
-	user?: string;
-	password?: string;
+	credentials?: boolean;
 
 	timeout?: number;
 	cacheTTL?: number;
@@ -158,8 +154,8 @@ export interface ResponseHeaders {
 }
 
 export interface ResponseOptions {
-	type?: ResponseTypes;
-	successStatus?: SuccessStatus;
+	responseType?: ResponseTypes;
+	okStatuses?: OkStatuses;
 	status?: StatusCodes;
 	headers?: string | Dictionary<string>;
 	decoder?: Decoder | Decoder[];

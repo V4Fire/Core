@@ -22,7 +22,7 @@ import {
 	ResponseTypes,
 	ResponseType,
 	Decoder,
-	SuccessStatus
+	OkStatuses
 
 } from 'core/request/interface';
 
@@ -36,14 +36,14 @@ export type json =
 
 export default class Response {
 	/**
-	 * Response type
+	 * Response data type
 	 */
-	type: ResponseTypes;
+	responseType: ResponseTypes;
 
 	/**
-	 * Response source type
+	 * Response source data type
 	 */
-	readonly sourceType: ResponseTypes;
+	readonly sourceResponseType: ResponseTypes;
 
 	/**
 	 * Response status code
@@ -51,14 +51,14 @@ export default class Response {
 	readonly status: number;
 
 	/**
-	 * Range of success status codes
+	 * Range of ok status codes
 	 */
-	readonly successStatuses: SuccessStatus;
+	readonly okStatuses: OkStatuses;
 
 	/**
-	 * True if .successStatuses contains .status
+	 * True if .okStatuses contains .status
 	 */
-	readonly success: boolean;
+	readonly ok: boolean;
 
 	/**
 	 * Response headers
@@ -84,18 +84,18 @@ export default class Response {
 			p = <typeof defaultResponseOpts & ResponseOptions>$C.extend(false, {}, defaultResponseOpts, params);
 
 		this.status = p.status;
-		const s = this.successStatuses = p.successStatus;
+		const s = this.okStatuses = p.okStatuses;
 
 		// tslint:disable-next-line
 		if (typeof s === 'object' && !Object.isArray(s)) {
-			this.success = s.contains(this.status);
+			this.ok = s.contains(this.status);
 
 		} else {
-			this.success = (<StatusCodes[]>[]).concat(s || []).includes(this.status);
+			this.ok = (<StatusCodes[]>[]).concat(s || []).includes(this.status);
 		}
 
 		this.headers = this.parseHeaders(p.headers);
-		this.sourceType = this.type = p.type;
+		this.sourceResponseType = this.responseType = p.responseType;
 		this.decoders = (<Decoder[]>[]).concat(p.decoder || []);
 		this.body = body;
 	}
@@ -114,7 +114,7 @@ export default class Response {
 	@once
 	decode<T = string | json | ArrayBuffer | Blob | Document | null | any>(): Then<T> {
 		let data;
-		switch (this.sourceType) {
+		switch (this.sourceResponseType) {
 			case 'json':
 				data = this.json();
 				break;
@@ -146,7 +146,7 @@ export default class Response {
 					return res;
 				}
 
-				if (res && typeof res === 'object' && {object: true, json: true}[this.type]) {
+				if (res && typeof res === 'object' && {object: true, json: true}[this.responseType]) {
 					res.valueOf = () => $C.clone(res);
 					Object.freeze(res);
 				}
@@ -160,7 +160,7 @@ export default class Response {
 	 */
 	@once
 	document(): Then<Document | null> {
-		if (this.sourceType !== 'document') {
+		if (this.sourceResponseType !== 'document') {
 			throw new TypeError('Invalid data sourceType');
 		}
 
@@ -178,7 +178,7 @@ export default class Response {
 	 * Parses .body as JSON and returns the result
 	 */
 	json<T = json>(): Then<T | null> {
-		if (this.sourceType !== 'json') {
+		if (this.sourceResponseType !== 'json') {
 			throw new TypeError('Invalid data sourceType');
 		}
 
@@ -201,7 +201,7 @@ export default class Response {
 	 * Parses .body as ArrayBuffer and returns the result
 	 */
 	arrayBuffer(): Then<ArrayBuffer | null> {
-		if (this.sourceType !== 'arrayBuffer') {
+		if (this.sourceResponseType !== 'arrayBuffer') {
 			throw new TypeError('Invalid data sourceType');
 		}
 
@@ -219,7 +219,7 @@ export default class Response {
 	 * Parses .body as Blob and returns the result
 	 */
 	blob(): Then<Blob> {
-		if (this.sourceType !== 'blob') {
+		if (this.sourceResponseType !== 'blob') {
 			throw new TypeError('Invalid data sourceType');
 		}
 
@@ -232,17 +232,17 @@ export default class Response {
 	@once
 	text(): Then<string | null> {
 		const
-			{body, sourceType} = this;
+			{body, sourceResponseType} = this;
 
-		if (!body || sourceType === 'arrayBuffer' && !(<ArrayBuffer>body).byteLength) {
+		if (!body || sourceResponseType === 'arrayBuffer' && !(<ArrayBuffer>body).byteLength) {
 			return <any>Then.resolve(null);
 		}
 
-		if ({text: true, document: true}[sourceType]) {
+		if ({text: true, document: true}[sourceResponseType]) {
 			return <any>Then.resolve(String(body));
 		}
 
-		if ({json: true, object: true}[sourceType]) {
+		if ({json: true, object: true}[sourceResponseType]) {
 			if (Object.isString(body)) {
 				return <any>Then.resolve(body);
 			}

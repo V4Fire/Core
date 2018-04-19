@@ -21,8 +21,8 @@ export const defaultRequestOpts = {
 };
 
 export const defaultResponseOpts = {
-	type: <ResponseTypes>'text',
-	successStatus: <sugarjs.Range>Number.range(200, 299),
+	responseType: <ResponseTypes>'text',
+	okStatuses: <sugarjs.Range>Number.range(200, 299),
 	status: StatusCodes.OK,
 	headers: {}
 };
