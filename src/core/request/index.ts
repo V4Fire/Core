@@ -257,25 +257,26 @@ export default function create<T>(path, ...args) {
 		ctx.wrapRequest = (promise) => {
 			if (canCache) {
 				const
-					cache = ctx.pendingCache as Cache<Then<T>>;
+					cache = ctx.pendingCache as Cache<Then<T>>,
+					key = ctx.cacheKey;
 
 				promise = promise.then(
 					(v) => {
-						cache.remove(ctx.cacheKey);
+						cache.remove(key);
 						return v;
 					},
 
 					(r) => {
-						cache.remove(ctx.cacheKey);
+						cache.remove(key);
 						throw r;
 					},
 
 					() => {
-						cache.remove(ctx.cacheKey);
+						cache.remove(key);
 					}
 				);
 
-				cache.set(ctx.cacheKey, promise);
+				cache.set(key, promise);
 			}
 
 			return promise.then();
