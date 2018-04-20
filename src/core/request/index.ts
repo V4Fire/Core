@@ -18,7 +18,7 @@ import configurator from 'core/request/configurator';
 
 import { Cache } from 'core/cache';
 import { isOnline } from 'core/net';
-import { normalizeHeaders, getStorageKey, getRequestKey } from 'core/request/utils';
+import { normalizeHeaders, applyQueryForStr, getStorageKey, getRequestKey } from 'core/request/utils';
 import { concatUrls, toQueryString } from 'core/url';
 import {
 
@@ -43,6 +43,7 @@ import {
 
 export * from 'core/request/interface';
 export * from 'core/request/utils';
+
 export { globalOpts, globalCache } from 'core/request/const';
 export { default as RequestError } from 'core/request/error';
 export { default as Response } from 'core/request/response';
@@ -124,7 +125,7 @@ export default function create<T>(path, ...args) {
 
 	const
 		canCache = opts.method === 'GET',
-		baseCtx: RequestContext<T> = <any>{resolver, canCache};
+		baseCtx: RequestContext<T> = <any>{canCache};
 
 	if (canCache) {
 		Object.assign(baseCtx, {
@@ -156,14 +157,14 @@ export default function create<T>(path, ...args) {
 
 		/**
 		 * Returns absolute path to API for the request
-		 * @param [base]
+		 * @param [api]
 		 */
-		ctx.resolveAPI = (base = globalOpts.api) => {
+		ctx.resolveAPI = (api = globalOpts.api) => {
 			const
 				a = <any>p.api,
 				rgxp = /(?:^|(https?:\/\/)(?:(.*?)\.)?(.*?)\.(.*?))(\/.*|$)/;
 
-			if (!base) {
+			if (!api) {
 				const def = {
 					namespace: '',
 					...a
@@ -197,7 +198,7 @@ export default function create<T>(path, ...args) {
 				return v;
 			};
 
-			return base.replace(rgxp, (str, protocol, domain3, domain2, zone, nm) => {
+			return api.replace(rgxp, (str, protocol, domain3, domain2, zone, nm) => {
 				nm = v('namespace', nm);
 
 				if (!protocol) {
@@ -219,12 +220,13 @@ export default function create<T>(path, ...args) {
 			cacheId;
 
 		/**
-		 * Factory for a cache middleware
-		 * @param url - request URL
+		 * Cache middleware
 		 */
-		ctx.saveCache = (url) => (res: RequestResponseObject) => {
+		ctx.saveCache = (res: RequestResponseObject) => {
 			if (canCache && p.offlineCache) {
-				storage.set(getStorageKey(url), res.data, p.cacheTTL || (1).day()).catch(stderr);
+				storage
+					.set(getStorageKey(ctx.cacheKey), res.data, p.cacheTTL || (1).day())
+					.catch(stderr);
 			}
 
 			if (ctx.cache) {
@@ -235,10 +237,13 @@ export default function create<T>(path, ...args) {
 					clearTimeout(cacheId);
 				}
 
-				cache.set(url, res.data);
+				cache.set(
+					ctx.cacheKey,
+					res.data
+				);
 
 				if (p.cacheTTL) {
-					cacheId = setTimeout(() => cache.remove(url), p.cacheTTL);
+					cacheId = setTimeout(() => cache.remove(cacheKey), p.cacheTTL);
 				}
 			}
 
@@ -247,40 +252,38 @@ export default function create<T>(path, ...args) {
 
 		/**
 		 * Wrapper for the request (pending cache, etc.)
-		 *
-		 * @param url - request URL
 		 * @param promise
 		 */
-		ctx.wrapRequest = (url, promise) => {
+		ctx.wrapRequest = (promise) => {
 			if (canCache) {
 				const
 					cache = ctx.pendingCache as Cache<Then<T>>;
 
 				promise = promise.then(
 					(v) => {
-						cache.remove(url);
+						cache.remove(ctx.cacheKey);
 						return v;
 					},
 
 					(r) => {
-						cache.remove(url);
+						cache.remove(ctx.cacheKey);
 						throw r;
 					},
 
 					() => {
-						cache.remove(url);
+						cache.remove(ctx.cacheKey);
 					}
 				);
 
-				cache.set(url, promise);
+				cache.set(ctx.cacheKey, promise);
 			}
 
 			return promise.then();
 		};
 
 		/**
-		 * Returns absolute path for the request
-		 * @param api - API URL
+		 * Returns an absolute path for the request
+		 * @param [api]
 		 */
 		ctx.resolveURL = (api?) => {
 			let
@@ -296,11 +299,23 @@ export default function create<T>(path, ...args) {
 				} else if (res) {
 					url = concatUrls(url, res);
 				}
-
-				ctx.qs = toQueryString(ctx.query);
 			}
 
-			return url + (ctx.qs ? `?${ctx.qs}` : '');
+			if (p.headers) {
+				p.headers = normalizeHeaders(p.headers, ctx.query);
+			}
+
+			url = applyQueryForStr(url, ctx.query, /:([^/]+)/g);
+
+			if (canCache) {
+				ctx.cacheKey = getRequestKey(url, p);
+			}
+
+			if ($C(ctx.query).length()) {
+				return `${url}?${toQueryString(ctx.query)}`;
+			}
+
+			return url;
 		};
 
 		const
@@ -312,14 +327,9 @@ export default function create<T>(path, ...args) {
 			return arr;
 		}));
 
-		if (p.headers) {
-			p.headers = normalizeHeaders(p.headers);
-		}
-
 		Object.assign(ctx, {
 			params: p,
 			query: p.query,
-			qs: toQueryString(p.query),
 			isOnline: await isOnline(),
 			encoders: p.encoder ? Object.isFunction(p.encoder) ? [p.encoder] : p.encoder : [],
 			decoders: p.decoder ? Object.isFunction(p.decoder) ? [p.decoder] : p.decoder : []
@@ -353,36 +363,36 @@ export default function create<T>(path, ...args) {
 
 		const
 			url = ctx.resolveURL(globalOpts.api),
-			localKey = getStorageKey(url);
+			cacheKey = ctx.cacheKey;
 
 		let
-			cacheKey,
-			fromCache = false;
+			localCacheKey,
+			fromCache = false,
+			fromLocalStorage = false;
 
 		if (canCache) {
-			cacheKey = ctx.cacheKey = ctx.cacheKey || getRequestKey(url, p);
-			fromCache = Boolean(ctx.cache && ctx.cache.exist(cacheKey));
-		}
+			localCacheKey = getStorageKey(cacheKey);
 
-		const
-			fromLocalStorage = !fromCache && canCache && p.offlineCache && !ctx.isOnline && await storage.exists(localKey);
-
-		if (canCache) {
 			const
 				cache = ctx.pendingCache as Cache<Then<T>>;
 
-			if (cache.exist(url)) {
-				return cache.get(url).then();
+			if (cache.exist(cacheKey)) {
+				return cache.get(cacheKey).then();
 			}
+
+			fromCache = Boolean(ctx.cache && ctx.cache.exist(cacheKey));
+			fromLocalStorage = Boolean(!fromCache && p.offlineCache && !ctx.isOnline && await storage.exists(localCacheKey));
 		}
 
-		let res;
+		let
+			res;
+
 		if (fromCache) {
 			res = Then.immediate(() => (<Cache>ctx.cache).get(cacheKey)).then(wrapAsResponse);
 
 		} else if (fromLocalStorage) {
-			res = Then.immediate(() => storage.get(localKey))
-				.then(<any>ctx.saveCache(cacheKey))
+			res = Then.immediate(() => storage.get(localCacheKey))
+				.then(ctx.saveCache)
 				.then(wrapAsResponse);
 
 		} else if (!ctx.isOnline && !p.externalRequest) {
@@ -420,13 +430,13 @@ export default function create<T>(path, ...args) {
 				...p,
 				url,
 				decoder: ctx.decoder,
-				body: $C(ctx.encoder).reduce((res, e) => e.call(p, res), p.body)
+				body: $C(ctx.encoders).reduce((res, e) => e(res), p.body)
 			};
 
 			const r = () => request(reqOpts).then(success).then(ctx.saveCache(cacheKey));
 			res = ctx.prefetch ? ctx.prefetch.then(r) : r();
 		}
 
-		return ctx.wrapRequest(url, res);
+		return ctx.wrapRequest(res);
 	};
 }

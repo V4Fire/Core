@@ -148,7 +148,9 @@ export default class Response {
 		}
 
 		return data
-			.then((obj) => $C(this.decoders).reduce((res, d) => d.call(this, res), obj))
+			.then((obj) =>
+				$C(this.decoders).reduce((res, d) => d(res), obj))
+
 			.then((res) => {
 				if (Object.isFrozen(res)) {
 					return res;

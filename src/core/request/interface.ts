@@ -55,11 +55,11 @@ export type OkStatuses =
 	StatusCodes[];
 
 export interface Encoder<I = any, O = any> {
-	(data: I): {contentType: string; data: O};
+	(data: I): O;
 }
 
 export interface Decoder<I = any, O = any> {
-	(this: Response, data: I): O;
+	(data: I): O;
 }
 
 export interface RequestResponseObject<T = any> {
@@ -138,17 +138,17 @@ export interface RequestContext<T = any> {
 	readonly canCache: boolean;
 	readonly cache?: Cache<T> | RestrictedCache<T> | null;
 	readonly pendingCache?: Cache<Then<T>>;
+	cacheKey?: string;
+	isOnline: boolean;
 	query: RequestQuery;
 	params: typeof defaultRequestOpts & CreateRequestOptions<T>;
 	encoders: Encoders;
 	decoders: Decoders;
-	isOnline: boolean;
-	cacheKey?: string;
 	prefetch?: Then<any>;
 	resolveAPI(base?: string | undefined): string;
 	resolveURL(api?: string | undefined): string;
-	saveCache(url: string): (data: RequestResponseObject<T>) => RequestResponseObject<T>;
-	wrapRequest(url: string, promise: Then<T>): Then<T>;
+	saveCache(data: RequestResponseObject<T>): RequestResponseObject<T>;
+	wrapRequest(promise: Then<T>): Then<T>;
 }
 
 export interface ResponseHeaders {
