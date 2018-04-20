@@ -112,6 +112,7 @@ export interface CreateRequestOptions<T = any> {
 	credentials?: boolean;
 
 	timeout?: number;
+	cacheId?: string | symbol;
 	cacheTTL?: number;
 	offlineCache?: boolean;
 
