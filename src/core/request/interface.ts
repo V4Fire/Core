@@ -138,7 +138,6 @@ export interface RequestContext<T = any> {
 	readonly canCache: boolean;
 	readonly cache?: Cache<T> | RestrictedCache<T> | null;
 	readonly pendingCache?: Cache<Then<T>>;
-	readonly qs: string;
 	query: RequestQuery;
 	params: typeof defaultRequestOpts & CreateRequestOptions<T>;
 	encoders: Encoders;
@@ -150,7 +149,6 @@ export interface RequestContext<T = any> {
 	resolveURL(api?: string | undefined): string;
 	saveCache(url: string): (data: RequestResponseObject<T>) => RequestResponseObject<T>;
 	wrapRequest(url: string, promise: Then<T>): Then<T>;
-	rewriter?(url: string, opts: CreateRequestOptions<T>, ...args: any[]): ResolverResult;
 }
 
 export interface ResponseHeaders {
