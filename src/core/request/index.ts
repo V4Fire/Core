@@ -20,7 +20,17 @@ import { Cache } from 'core/cache';
 import { isOnline } from 'core/net';
 import { normalizeHeaders, getStorageKey, getRequestKey } from 'core/request/utils';
 import { concatUrls, toQueryString } from 'core/url';
-import { storage, requestCache, globalOpts, defaultRequestOpts } from 'core/request/const';
+import {
+
+	storage,
+	globalCache,
+	pendingCache,
+	sharedCache,
+	globalOpts,
+	defaultRequestOpts
+
+} from 'core/request/const';
+
 import {
 
 	RequestFunctionResponse,
@@ -33,7 +43,7 @@ import {
 
 export * from 'core/request/interface';
 export * from 'core/request/utils';
-export { globalOpts, requestCache } from 'core/request/const';
+export { globalOpts, globalCache } from 'core/request/const';
 export { default as RequestError } from 'core/request/error';
 export { default as Response } from 'core/request/response';
 
@@ -77,20 +87,26 @@ export default function create<T, A1, A2, A3>(
 
 // tslint:disable-next-line
 export default function create<T>(path, ...args) {
+	const merge = (...args: any[]) => Object.mixin({
+		deep: true,
+		concatArray: true,
+		concatFn: (a, b) => a.union(b)
+	}, {}, ...args);
+
 	if (Object.isObject(path)) {
 		const
 			defOpts = path;
 
 		return (path, resolver, opts) => {
 			if (Object.isObject(path)) {
-				return create({...path, ...defOpts});
+				return create(merge(defOpts, path));
 			}
 
 			if (Object.isFunction(resolver)) {
-				return create(path, resolver, {...defOpts, ...opts});
+				return create(path, resolver, merge(defOpts, opts));
 			}
 
-			return create(path, {...defOpts, ...resolver});
+			return create(path, merge(defOpts, resolver));
 		};
 	}
 
@@ -104,44 +120,38 @@ export default function create<T>(path, ...args) {
 		opts = args[0];
 	}
 
-	opts = <typeof defaultRequestOpts & CreateRequestOptions<T>>{
-		...defaultRequestOpts,
-		...opts
-	};
+	opts = merge(defaultRequestOpts, opts);
 
 	const
-		canCache = opts.method === 'GET';
+		canCache = opts.method === 'GET',
+		baseCtx: RequestContext<T> = <any>{resolver, canCache};
 
-	const baseCtx: RequestContext<T> = <any>{
-		resolver,
-		canCache,
-		...canCache && {
-			pendingCache: new Cache<Then<T>>(),
+	if (canCache) {
+		Object.assign(baseCtx, {
+			pendingCache,
 			cache: (() => {
 				switch (opts.cacheStrategy) {
 					case 'queue':
-						return requestCache;
+						return globalCache;
 
 					case 'forever':
+						if (opts.cacheId) {
+							return sharedCache[opts.cacheId] = sharedCache[opts.cacheId] || new Cache<T>();
+						}
+
 						return new Cache<T>();
 
 					default:
 						return null;
 				}
 			})()
-		}
-	};
+		});
+	}
 
 	// tslint:disable-next-line
 	return async (...args) => {
-		const p = {
-			...opts,
-			query: Object.fastClone(opts.query),
-			headers: {...opts.headers},
-			api: {...opts.api}
-		};
-
 		const
+			p: CreateRequestOptions<T> = merge(opts),
 			ctx = Object.create(baseCtx);
 
 		/**
@@ -205,7 +215,8 @@ export default function create<T>(path, ...args) {
 			});
 		};
 
-		let cacheId;
+		let
+			cacheId;
 
 		/**
 		 * Factory for a cache middleware

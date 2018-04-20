@@ -9,7 +9,7 @@
 import config from 'config';
 import StatusCodes from 'core/statusCodes';
 import { RequestMethods, ResponseTypes, GlobalOptions, CacheStrategy } from 'core/request/interface';
-import { RestrictedCache } from 'core/cache';
+import { Cache, RestrictedCache } from 'core/cache';
 export { asyncLocal as storage } from 'core/kv-storage';
 
 export const defaultRequestOpts = {
@@ -29,4 +29,6 @@ export const defaultResponseOpts = {
 
 export const
 	globalOpts: GlobalOptions = {api: config.api},
-	requestCache = new RestrictedCache();
+	globalCache = new RestrictedCache(),
+	pendingCache = new Cache(),
+	sharedCache: Dictionary<Cache> = {};
