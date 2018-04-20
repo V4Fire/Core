@@ -7,7 +7,6 @@
  */
 
 import $C = require('collection.js');
-import { defaultRequestOpts } from 'core/request/const';
 import { CreateRequestOptions } from 'core/request/interface';
 
 /**
@@ -19,58 +18,109 @@ export function getStorageKey(key: string): string {
 }
 
 /**
- * Generates a cache string by the specified params and returns it
+ * Generates a cache string by the specified parameters and returns it
  *
  * @param url
  * @param [params]
  */
 export function getRequestKey(url: string, params?: CreateRequestOptions): string {
-	const p = <typeof defaultRequestOpts & CreateRequestOptions>{
-		...defaultRequestOpts,
-		...params
-	};
+	const
+		p = <any>(params || {}),
+		plainHeaders = <string[][]>[];
 
-	const plainHeaders = $C(normalizeHeaders(p.headers))
-		.to([] as string[][])
-		.reduce((res, value, name) => (res.push([name.toString(), value.toString()]), res))
-		.sort(([name1], [name2]) => {
-			if (name1 < name2) {
-				return -1;
-			}
+	if (params) {
+		$C(normalizeHeaders(params))
+			.to(plainHeaders)
+			.reduce((res, value, name) => (res.push([name.toString(), value.toString()]), res))
+			.sort(([name1], [name2]) => {
+				if (name1 < name2) {
+					return -1;
+				}
 
-			if (name1 > name2) {
-				return 1;
-			}
+				if (name1 > name2) {
+					return 1;
+				}
 
-			return 0;
-		});
+				return 0;
+			});
+	}
 
 	return JSON.stringify([url, p.method, plainHeaders, p.timeout]);
 }
 
 /**
- * Normalizes the specified HTTP header name
- * @param name
+ * Applies a query object fot the specified string
+ * (used keys will be removed from the query)
+ *
+ * @param str
+ * @param [query]
+ * @param [rgxp] - template regexp
  */
-export function normalizeHeaderName(name: string): string {
-	return String(name).trim().toLowerCase();
+export function applyQueryForStr(str: string, query?: Dictionary, rgxp: RegExp = /\${([^}]+)}/g): string {
+	if (!query) {
+		return str;
+	}
+
+	return str.replace(rgxp, (str, param) => {
+		if (query[param]) {
+			return [query[param], delete query[param]][0];
+		}
+
+		return '';
+	});
+}
+
+/**
+ * Normalizes the specified HTTP header name
+ *
+ * @param name
+ * @param [query] - request query object (for value interpolation)
+ */
+export function normalizeHeaderName(name: string, query?: Dictionary): string {
+	return applyQueryForStr(String(name).trim(), query);
 }
 
 /**
  * Normalizes the specified HTTP header value
+ *
  * @param value
+ * @param [query] - request query object (for value interpolation)
  */
-export function normalizeHeaderValue(value: any): string {
-	return String(value).trim();
+export function normalizeHeaderValue(value: any, query?: Dictionary): string {
+	return applyQueryForStr(String(value).trim(), query);
 }
 
 /**
  * Normalizes the specified HTTP header object
+ *
  * @param headers
+ * @param [query] - request query object (for key/value interpolation)
  */
-export function normalizeHeaders(headers: Dictionary): Dictionary<string | string[]> {
+export function normalizeHeaders(headers: Dictionary, query?: Dictionary): Dictionary<string | string[]> {
 	return $C(headers).to({}).reduce((res, val, name) => {
-		res[normalizeHeaderName(name)] = Object.isArray(val) ? $C(val).map(normalizeHeaderValue) : normalizeHeaderValue(val);
+		if (Object.isArray(val)) {
+			val = $C(val).to([]).reduce((arr, val) => {
+				val = normalizeHeaderValue(val, query);
+
+				if (val) {
+					arr.push(val);
+				}
+
+				return arr;
+			});
+
+		} else {
+			val = normalizeHeaderValue(val, query);
+		}
+
+		if (val.length) {
+			name = normalizeHeaderName(name, query);
+
+			if (name) {
+				res[name] = val;
+			}
+		}
+
 		return res;
 	});
 }
