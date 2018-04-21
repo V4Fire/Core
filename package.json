@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "@types/got": "^7.1.8",
-    "@types/node": "^9.6.2",
+    "@types/node": "^9.6.6",
     "collection.js": "^6.6.18",
     "dotenv": "^5.0.0",
     "fs-extra-promise": "^1.0.1",
@@ -52,7 +52,7 @@
     "gulp-replace": "^0.6.1",
     "through2": "^2.0.3",
     "tsconfig": "^7.0.0",
-    "typescript": "^2.8.1"
+    "typescript": "^2.9.0-dev.20180421"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.3",
