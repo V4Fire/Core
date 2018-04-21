@@ -349,8 +349,8 @@ export default function create<T>(path, ...args) {
 
 			return {
 				data: await response.decode(),
-				ctx,
 				response,
+				ctx,
 				dropCache
 			};
 		};
@@ -418,13 +418,13 @@ export default function create<T>(path, ...args) {
 				) {
 					return {
 						data: null,
-						ctx,
 						response,
+						ctx,
 						dropCache
 					};
 				}
 
-				return {data, ctx, response, dropCache};
+				return {data, response, ctx, dropCache};
 			};
 
 			const reqOpts = {

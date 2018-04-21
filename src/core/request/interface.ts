@@ -64,8 +64,8 @@ export interface Decoder<I = any, O = any> {
 
 export interface RequestResponseObject<T = any> {
 	data: T | null;
-	ctx: Readonly<RequestContext<T>>;
 	response: Response;
+	ctx: Readonly<RequestContext<T>>;
 	dropCache(): Promise<void>;
 }
 
