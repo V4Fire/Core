@@ -63,7 +63,7 @@ export function applyQueryForStr(str: string, query?: Dictionary, rgxp: RegExp =
 
 	return str.replace(rgxp, (str, param) => {
 		if (query[param]) {
-			return [query[param], delete query[param]][0];
+			return (str[0] === '/' ? '/' : '') + [query[param], delete query[param]][0];
 		}
 
 		return '';
