@@ -306,7 +306,7 @@ export default function create<T>(path, ...args) {
 				p.headers = normalizeHeaders(p.headers, ctx.query);
 			}
 
-			url = applyQueryForStr(url, ctx.query, /\/?:([^/]+)/g);
+			url = applyQueryForStr(url, ctx.query, /\/:(.+?)(\(.*?\)|\/)/g);
 
 			if (canCache) {
 				ctx.cacheKey = getRequestKey(url, p);
