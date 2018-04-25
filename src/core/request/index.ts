@@ -91,7 +91,7 @@ export default function create<T>(path, ...args) {
 	const merge = (...args: any[]) => Object.mixin({
 		deep: true,
 		concatArray: true,
-		concatFn: (a, b) => a.union(b)
+		concatFn: (a: any[], b: any[]) => a.union(b)
 	}, {}, ...args);
 
 	if (Object.isObject(path)) {
@@ -431,7 +431,7 @@ export default function create<T>(path, ...args) {
 				...p,
 				url,
 				decoder: ctx.decoder,
-				body: $C(ctx.encoders).reduce((res, e) => e(res), p.body)
+				body: $C(ctx.encoders).reduce((res, e, i) => e(i ? res : Object.fastClone(res)), p.body)
 			};
 
 			const r = () => request(reqOpts).then(success).then(ctx.saveCache(cacheKey));
