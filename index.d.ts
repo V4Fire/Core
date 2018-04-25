@@ -35,17 +35,17 @@ interface JSONCb {
 }
 
 interface ObjectConstructor {
-	mixin<T>(
-		params: CollectionJS.ExtendParams<T> & CollectionJS.Async,
-		target?: T,
+	mixin<D, K, V>(
+		params: CollectionJS.ExtendParams<D, K, V> & CollectionJS.Async,
+		target?: D,
 		...source: any[]
-	): CollectionJS.ThreadObj<T & CollectionJS.AnyRecord>;
+	): CollectionJS.ThreadObj<D & CollectionJS.AnyRecord>;
 
-	mixin<T>(
-		deepOrParams: boolean | CollectionJS.ExtendParams<T>,
-		target?: T,
+	mixin<D, K, V>(
+		deepOrParams: boolean | CollectionJS.ExtendParams<D, K, V>,
+		target?: D,
 		...source: any[]
-	): T & CollectionJS.AnyRecord;
+	): D & CollectionJS.AnyRecord;
 
 	fastClone<T>(
 		obj: T,
