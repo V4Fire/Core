@@ -137,7 +137,8 @@ export default function create<T>(path, ...args) {
 
 					case 'forever':
 						if (opts.cacheId) {
-							return sharedCache[opts.cacheId] = sharedCache[opts.cacheId] || new Cache<T>();
+							const id = <any>opts.cacheId;
+							return sharedCache[id] = sharedCache[id] || new Cache<T>();
 						}
 
 						return new Cache<T>();
