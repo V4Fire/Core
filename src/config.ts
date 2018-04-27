@@ -10,5 +10,10 @@ export default {
 	/**
 	 * Default system language
 	 */
-	lang: 'en'
+	lang: 'en',
+
+	/**
+	 * Base API URL
+	 */
+	api: undefined
 };

@@ -217,72 +217,6 @@ export default function create<T>(path, ...args) {
 			});
 		};
 
-		let
-			cacheId;
-
-		/**
-		 * Cache middleware
-		 */
-		ctx.saveCache = (res: RequestResponseObject) => {
-			if (canCache && p.offlineCache) {
-				storage
-					.set(getStorageKey(ctx.cacheKey), res.data, p.cacheTTL || (1).day())
-					.catch(stderr);
-			}
-
-			if (ctx.cache) {
-				const
-					cache = ctx.cache as Cache<T>;
-
-				if (cacheId) {
-					clearTimeout(cacheId);
-				}
-
-				cache.set(
-					ctx.cacheKey,
-					res.data
-				);
-
-				if (p.cacheTTL) {
-					cacheId = setTimeout(() => cache.remove(cacheKey), p.cacheTTL);
-				}
-			}
-
-			return res;
-		};
-
-		/**
-		 * Wrapper for the request (pending cache, etc.)
-		 * @param promise
-		 */
-		ctx.wrapRequest = (promise) => {
-			if (canCache) {
-				const
-					cache = ctx.pendingCache as Cache<Then<T>>,
-					key = ctx.cacheKey;
-
-				promise = promise.then(
-					(v) => {
-						cache.remove(key);
-						return v;
-					},
-
-					(r) => {
-						cache.remove(key);
-						throw r;
-					},
-
-					() => {
-						cache.remove(key);
-					}
-				);
-
-				cache.set(key, promise);
-			}
-
-			return promise.then();
-		};
-
 		/**
 		 * Returns an absolute path for the request
 		 * @param [api]
@@ -337,14 +271,67 @@ export default function create<T>(path, ...args) {
 			decoders: p.decoder ? Object.isFunction(p.decoder) ? [p.decoder] : p.decoder : []
 		});
 
-		async function dropCache(): Promise<void> {
-			if (ctx.cache && ctx.cacheKey) {
-				await (<Cache>ctx.cache).remove(ctx.cacheKey);
+		let
+			cacheId;
+
+		const saveCache = (res) => {
+			if (canCache && p.offlineCache) {
+				storage
+					.set(getStorageKey(ctx.cacheKey), res.data, p.cacheTTL || (1).day())
+					.catch(stderr);
 			}
-		}
+
+			if (ctx.cache) {
+				const
+					cache = ctx.cache as Cache<T>;
+
+				if (cacheId) {
+					clearTimeout(cacheId);
+				}
+
+				cache.set(
+					ctx.cacheKey,
+					res.data
+				);
+
+				if (p.cacheTTL) {
+					cacheId = setTimeout(() => cache.remove(cacheKey), p.cacheTTL);
+				}
+			}
+
+			return res;
+		};
+
+		const wrapRequest = (promise) => {
+			if (canCache) {
+				const
+					cache = ctx.pendingCache as Cache<Then<T>>,
+					key = ctx.cacheKey;
+
+				promise = promise.then(
+					(v) => {
+						cache.remove(key);
+						return v;
+					},
+
+					(r) => {
+						cache.remove(key);
+						throw r;
+					},
+
+					() => {
+						cache.remove(key);
+					}
+				);
+
+				cache.set(key, promise);
+			}
+
+			return promise.then();
+		};
 
 		const wrapAsResponse = async (res) => {
-			const response = new Response(res, {
+			const response = res instanceof Response ? res : new Response(res, {
 				responseType: 'object'
 			});
 
@@ -356,11 +343,19 @@ export default function create<T>(path, ...args) {
 			};
 		};
 
+		async function dropCache(): Promise<void> {
+			if (ctx.cache && ctx.cacheKey) {
+				await (<Cache>ctx.cache).remove(ctx.cacheKey);
+			}
+		}
+
 		const
 			newRes = await configurator(ctx, globalOpts);
 
 		if (newRes) {
-			return Then.resolve(newRes()).then(wrapAsResponse);
+			return wrapRequest(
+				Then.resolve(newRes()).then(wrapAsResponse).then(saveCache)
+			);
 		}
 
 		const
@@ -394,8 +389,8 @@ export default function create<T>(path, ...args) {
 
 		} else if (fromLocalStorage) {
 			res = Then.immediate(() => storage.get(localCacheKey))
-				.then(ctx.saveCache)
-				.then(wrapAsResponse);
+				.then(wrapAsResponse)
+				.then(saveCache);
 
 		} else if (!ctx.isOnline && !p.externalRequest) {
 			res = Then.reject(new RequestError('offline'));
@@ -431,14 +426,14 @@ export default function create<T>(path, ...args) {
 			const reqOpts = {
 				...p,
 				url,
-				decoder: ctx.decoder,
+				decoder: ctx.decoders,
 				body: $C(ctx.encoders).reduce((res, e, i) => e(i ? res : Object.fastClone(res)), p.body)
 			};
 
-			const r = () => request(reqOpts).then(success).then(ctx.saveCache(cacheKey));
+			const r = () => request(reqOpts).then(success).then(saveCache);
 			res = ctx.prefetch ? ctx.prefetch.then(r) : r();
 		}
 
-		return ctx.wrapRequest(res);
+		return wrapRequest(res);
 	};
 }
