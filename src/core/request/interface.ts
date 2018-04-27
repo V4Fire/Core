@@ -145,8 +145,8 @@ export interface RequestContext<T = any> {
 	encoders: Encoders;
 	decoders: Decoders;
 	prefetch?: Then<any>;
-	resolveAPI(base?: string | undefined): string;
-	resolveURL(api?: string | undefined): string;
+	resolveAPI(base?: string | null | undefined): string;
+	resolveURL(api?: string | null | undefined): string;
 	saveCache(data: RequestResponseObject<T>): RequestResponseObject<T>;
 	wrapRequest(promise: Then<T>): Then<T>;
 }
@@ -164,6 +164,6 @@ export interface ResponseOptions {
 }
 
 export interface GlobalOptions {
-	api?: string | undefined | null;
-	token?: string | undefined | null;
+	api?: string | null | undefined;
+	token?: string | null | undefined;
 }
