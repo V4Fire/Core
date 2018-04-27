@@ -164,6 +164,6 @@ export interface ResponseOptions {
 }
 
 export interface GlobalOptions {
-	api?: string;
-	token?: string;
+	api?: string | undefined | null;
+	token?: string | undefined | null;
 }
