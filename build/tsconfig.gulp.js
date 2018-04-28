@@ -15,7 +15,8 @@ module.exports = function (gulp) {
 
 	const
 		fs = require('fs'),
-		path = require('path');
+		path = require('path'),
+		find = require('find-up').sync;
 
 	gulp.task('build:tsconfig', () => {
 		const
@@ -25,11 +26,39 @@ module.exports = function (gulp) {
 		return gulp.src(['./**/*.tsconfig', './**/.tsconfig', '!./node_modules/**'], {since: gulp.lastRun('build:tsconfig')})
 			.pipe($.plumber())
 			.pipe(through((file, enc, cb) => {
-				const resolveExtends = (config) => {
+				const
+					config = resolveExtends(tsconfig.parse(file.contents.toString(), file.path));
+
+				$C($C(config).get('compilerOptions.paths')).forEach((list) => {
+					$C(list).forEach((url, i) => {
+						if (isNodeModule(url)) {
+							const
+								parts = url.split(':');
+
+							if (parts.length !== 2) {
+								return;
+							}
+
+							list[i] = path.join(
+								path.dirname(find(path.join('node_modules', parts[0], 'package.json'))),
+								parts[1]
+							);
+						}
+					});
+				});
+
+				file.path = file.path.replace(/([^/\\]*?)\.tsconfig$/, (str, nm) => `${nm ? `${nm}.tsconfig` : 'tsconfig'}.json`);
+				file.contents = new Buffer(JSON.stringify(config, null, 2));
+				cb(null, file);
+
+				function isNodeModule(url) {
+					return /^[^.]/.test(url) && !path.isAbsolute(url);
+				}
+
+				function resolveExtends(config) {
 					if (config.extends) {
-						const parentSrc = require.resolve(
-							/^\.?[/\\]/.test(config.extends) ? path.resolve(process.cwd(), config.extends) : config.extends
-						);
+						const parentSrc = isNodeModule(config.extends) ?
+							find(path.join('node_modules', config.extends)) : require.resolve(config.extends);
 
 						const
 							parent = resolveExtends(tsconfig.parse(fs.readFileSync(parentSrc, 'utf-8'), parentSrc));
@@ -43,33 +72,7 @@ module.exports = function (gulp) {
 
 					delete config.extends;
 					return config;
-				};
-
-				const
-					config = resolveExtends(tsconfig.parse(file.contents.toString(), file.path));
-
-				$C($C(config).get('compilerOptions.paths')).forEach((list) => {
-					$C(list).forEach((url, i) => {
-						if (/^[^.]/.test(url) && !path.isAbsolute(url)) {
-							const
-								parts = url.split(':');
-
-							if (parts.length !== 2) {
-								return;
-							}
-
-							list[i] = path.join(
-								path.dirname(require.resolve(path.join(parts[0], 'package.json'))),
-								parts[1]
-							);
-						}
-					});
-				});
-
-				file.path = file.path.replace(/([^/\\]*?)\.tsconfig$/, (str, nm) => `${nm ? `${nm}.tsconfig` : 'tsconfig'}.json`);
-				file.contents = new Buffer(JSON.stringify(config, null, 2));
-
-				cb(null, file);
+				}
 			}))
 
 			.pipe(gulp.dest('./'));
