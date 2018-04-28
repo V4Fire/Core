@@ -346,15 +346,6 @@ export default function create<T>(path, ...args) {
 			};
 		};
 
-		const
-			baseURL = concatUrls(resolveAPI(), path);
-
-		await Promise.all($C(p.middlewares as any[]).to([] as any[]).reduce((arr, fn) => {
-			// @ts-ignore
-			arr.push(fn(baseURL, p, globalOpts));
-			return arr;
-		}));
-
 		Object.assign(ctx, {
 			params: p,
 			query: p.query,
@@ -364,7 +355,14 @@ export default function create<T>(path, ...args) {
 		});
 
 		const
-			newRes = await configurator(ctx, globalOpts);
+			newRes = await configurator(ctx, globalOpts),
+			baseURL = concatUrls(resolveAPI(), path);
+
+		await Promise.all($C(p.middlewares as any[]).to([] as any[]).reduce((arr, fn) => {
+			// @ts-ignore
+			arr.push(fn(baseURL, p, globalOpts));
+			return arr;
+		}));
 
 		if (newRes) {
 			return Then.resolve(newRes());
