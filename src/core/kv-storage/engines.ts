@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { IS_NODE } from 'core/const/links';
+import { IS_NODE, GLOBAL } from 'core/const/links';
 
 export let
 	syncLocalStorage,
@@ -42,8 +42,8 @@ if (IS_NODE) {
 	// tslint:enable
 
 } else {
-	syncLocalStorage = localStorage;
-	asyncLocalStorage = localStorage;
-	syncSessionStorage = sessionStorage;
-	asyncSessionStorage = sessionStorage;
+	syncLocalStorage = GLOBAL.localStorage;
+	asyncLocalStorage = GLOBAL.localStorage;
+	syncSessionStorage = GLOBAL.sessionStorage;
+	asyncSessionStorage = GLOBAL.sessionStorage;
 }
