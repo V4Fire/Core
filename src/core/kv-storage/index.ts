@@ -67,7 +67,7 @@ function factory(storage: Dictionary, async?: boolean): FactoryResult | AsyncFac
 		const _keys = storage.keys;
 		keys = Object.isFunction(_keys) ? _keys.bind(storage) : () => Object.keys(storage);
 
-	} catch (err) {
+	} catch (_) {
 		throw new TypeError('Invalid storage driver');
 	}
 
