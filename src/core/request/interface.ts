@@ -147,6 +147,10 @@ export interface RequestContext<T = any> {
 	prefetch?: Then<any>;
 	resolveAPI(base?: string | null | undefined): string;
 	resolveURL(api?: string | null | undefined): string;
+	saveCache(data: RequestResponseObject<T>): RequestResponseObject<T>;
+	wrapRequest(promise: Then<T>): Then<T>;
+	wrapAsResponse(obj: any): RequestResponseObject<T>;
+	dropCache(): Promise<void>;
 }
 
 export interface ResponseHeaders {

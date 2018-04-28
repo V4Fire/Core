@@ -160,7 +160,7 @@ export default function create<T>(path, ...args) {
 		 * Returns absolute path to API for the request
 		 * @param [api]
 		 */
-		ctx.resolveAPI = (api = globalOpts.api) => {
+		const resolveAPI = ctx.resolveAPI = (api = globalOpts.api) => {
 			const
 				a = <any>p.api,
 				rgxp = /(?:^|(https?:\/\/)(?:(.*?)\.)?(.*?)\.(.*?))(\/.*|$)/;
@@ -221,9 +221,9 @@ export default function create<T>(path, ...args) {
 		 * Returns an absolute path for the request
 		 * @param [api]
 		 */
-		ctx.resolveURL = (api?) => {
+		const resolveURL = ctx.resolveURL = (api?) => {
 			let
-				url = concatUrls(api ? ctx.resolveAPI(api) : null, path);
+				url = concatUrls(api ? resolveAPI(api) : null, path);
 
 			if (Object.isFunction(resolver)) {
 				const
@@ -254,27 +254,13 @@ export default function create<T>(path, ...args) {
 			return url;
 		};
 
-		const
-			baseURL = concatUrls(ctx.resolveAPI(), path);
-
-		await Promise.all($C(p.middlewares as any[]).to([] as any[]).reduce((arr, fn) => {
-			// @ts-ignore
-			arr.push(fn(baseURL, p, globalOpts));
-			return arr;
-		}));
-
-		Object.assign(ctx, {
-			params: p,
-			query: p.query,
-			isOnline: await isOnline(),
-			encoders: p.encoder ? Object.isFunction(p.encoder) ? [p.encoder] : p.encoder : [],
-			decoders: p.decoder ? Object.isFunction(p.decoder) ? [p.decoder] : p.decoder : []
-		});
-
 		let
 			cacheId;
 
-		const saveCache = (res) => {
+		/**
+		 * Cache middleware
+		 */
+		const saveCache = ctx.saveCache = (res) => {
 			if (canCache && p.offlineCache) {
 				storage
 					.set(getStorageKey(ctx.cacheKey), res.data, p.cacheTTL || (1).day())
@@ -302,7 +288,11 @@ export default function create<T>(path, ...args) {
 			return res;
 		};
 
-		const wrapRequest = (promise) => {
+		/**
+		 * Wrapper for the request (pending cache, etc.)
+		 * @param promise
+		 */
+		const wrapRequest = ctx.wrapRequest = (promise) => {
 			if (canCache) {
 				const
 					cache = ctx.pendingCache as Cache<Then<T>>,
@@ -330,7 +320,20 @@ export default function create<T>(path, ...args) {
 			return promise.then();
 		};
 
-		const wrapAsResponse = async (res) => {
+		/**
+		 * Drops the request cache
+		 */
+		const dropCache = ctx.dropCache = async () => {
+			if (ctx.cache && ctx.cacheKey) {
+				await (<Cache>ctx.cache).remove(ctx.cacheKey);
+			}
+		};
+
+		/**
+		 * Wraps the specified value as RequestResponseObject
+		 * @param res
+		 */
+		const wrapAsResponse = ctx.wrapAsResponse = async (res) => {
 			const response = res instanceof Response ? res : new Response(res, {
 				responseType: 'object'
 			});
@@ -343,23 +346,32 @@ export default function create<T>(path, ...args) {
 			};
 		};
 
-		async function dropCache(): Promise<void> {
-			if (ctx.cache && ctx.cacheKey) {
-				await (<Cache>ctx.cache).remove(ctx.cacheKey);
-			}
-		}
+		const
+			baseURL = concatUrls(resolveAPI(), path);
+
+		await Promise.all($C(p.middlewares as any[]).to([] as any[]).reduce((arr, fn) => {
+			// @ts-ignore
+			arr.push(fn(baseURL, p, globalOpts));
+			return arr;
+		}));
+
+		Object.assign(ctx, {
+			params: p,
+			query: p.query,
+			isOnline: await isOnline(),
+			encoders: p.encoder ? Object.isFunction(p.encoder) ? [p.encoder] : p.encoder : [],
+			decoders: p.decoder ? Object.isFunction(p.decoder) ? [p.decoder] : p.decoder : []
+		});
 
 		const
 			newRes = await configurator(ctx, globalOpts);
 
 		if (newRes) {
-			return wrapRequest(
-				Then.resolve(newRes()).then(wrapAsResponse).then(saveCache)
-			);
+			return Then.resolve(newRes());
 		}
 
 		const
-			url = ctx.resolveURL(globalOpts.api),
+			url = resolveURL(globalOpts.api),
 			cacheKey = ctx.cacheKey;
 
 		let
