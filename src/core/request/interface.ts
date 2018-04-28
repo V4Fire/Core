@@ -167,5 +167,5 @@ export interface ResponseOptions {
 
 export interface GlobalOptions {
 	api?: string | null | undefined;
-	token?: string | null | undefined;
+	meta: Dictionary;
 }
