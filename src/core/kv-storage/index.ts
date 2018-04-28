@@ -42,12 +42,50 @@ export interface AsyncFactoryResult extends AsyncNamespace {
 	namespace(name: string): AsyncNamespace;
 }
 
-function factory(storage: Storage, async: true): AsyncFactoryResult;
-function factory(storage: Storage, async?: false): FactoryResult;
-function factory(storage: Storage, async?: boolean): FactoryResult | AsyncFactoryResult {
-	function wrap(val?: any): any {
+function factory(storage: Dictionary, async: true): AsyncFactoryResult;
+function factory(storage: Dictionary, async?: false): FactoryResult;
+function factory(storage: Dictionary, async?: boolean): FactoryResult | AsyncFactoryResult {
+	let
+		get,
+		set,
+		remove,
+		exists,
+		clear,
+		keys;
+
+	try {
+		get = (storage.getItem || storage.get).bind(storage);
+		set = (storage.setItem || storage.set).bind(storage);
+		remove = (storage.removeItem || storage.remove || storage.delete).bind(storage);
+
+		const _exists = storage.exists || storage.includes || storage.has;
+		exists = Object.isFunction(_exists) ? _exists.bind(storage) : undefined;
+
+		const _clear = storage.clear || storage.clearAll || storage.truncate;
+		clear = Object.isFunction(_clear) ? _clear.bind(storage) : undefined;
+
+		const _keys = storage.keys;
+		keys = Object.isFunction(_keys) ? _keys.bind(storage) : () => Object.keys(storage);
+
+	} catch (err) {
+		throw new TypeError('Invalid storage driver');
+	}
+
+	function wrap(val?: any, action?: (val: any) => any): any {
 		if (async) {
-			return (async () => val)();
+			return (async () => {
+				val = await val;
+
+				if (action) {
+					return action(val);
+				}
+
+				return val;
+			})();
+		}
+
+		if (action) {
+			return action(val);
 		}
 
 		return val;
@@ -59,7 +97,11 @@ function factory(storage: Storage, async?: boolean): FactoryResult | AsyncFactor
 		 * @param key
 		 */
 		exists(key: string): any {
-			return wrap(storage.getItem(key) !== null);
+			if (exists) {
+				return wrap(exists(key));
+			}
+
+			return wrap(get(key), (v) => v !== null);
 		},
 
 		/**
@@ -67,8 +109,17 @@ function factory(storage: Storage, async?: boolean): FactoryResult | AsyncFactor
 		 * @param key
 		 */
 		get(key: string): any {
-			const val = storage.getItem(key);
-			return wrap(val === null ? undefined : JSON.parse(val, convertIfDate));
+			return wrap(get(key), (v) => {
+				if (v === null) {
+					return undefined;
+				}
+
+				if (Object.isString(v) && /^[[{"]|^(?:true|false|\d+)$/.test(v)) {
+					return JSON.parse(v, convertIfDate);
+				}
+
+				return v;
+			});
 		},
 
 		/**
@@ -79,8 +130,7 @@ function factory(storage: Storage, async?: boolean): FactoryResult | AsyncFactor
 		 * @param [ttl]
 		 */
 		set(key: string, value: any, ttl?: number): any {
-			storage.setItem(key, JSON.stringify(value));
-			return wrap();
+			return wrap(set(key, JSON.stringify(value)), () => undefined);
 		},
 
 		/**
@@ -88,8 +138,7 @@ function factory(storage: Storage, async?: boolean): FactoryResult | AsyncFactor
 		 * @param key
 		 */
 		remove(key: string): any {
-			storage.removeItem(key);
-			return wrap();
+			return wrap(remove(key), () => undefined);
 		},
 
 		/**
@@ -97,18 +146,20 @@ function factory(storage: Storage, async?: boolean): FactoryResult | AsyncFactor
 		 * @param [filter] - filter for removing (if not defined, then the storage will be cleared)
 		 */
 		clear(filter?: Function): any {
-			if (filter) {
-				$C(storage).forEach((el, key) => {
-					if (filter(el, key)) {
-						storage.removeItem(key);
+			if (filter || !clear) {
+				return wrap(keys(), async (keys) => {
+					for (const key of keys) {
+						const
+							el = await obj.get(key);
+
+						if (!filter || filter(el, key)) {
+							await remove(key);
+						}
 					}
 				});
-
-			} else {
-				storage.clear();
 			}
 
-			return wrap();
+			return wrap(clear(), () => undefined);
 		},
 
 		/**
@@ -137,17 +188,20 @@ function factory(storage: Storage, async?: boolean): FactoryResult | AsyncFactor
 				},
 
 				clear(filter?: Function): any {
-					$C(storage).forEach((el, key) => {
-						if (key.split('.')[0] !== name) {
-							return;
-						}
+					return wrap(keys(), async (keys) => {
+						for (const key of keys) {
+							if (key.split('.')[0] !== name) {
+								return;
+							}
 
-						if (!filter || filter(el, key)) {
-							storage.removeItem(key);
+							const
+								el = await obj.get(key);
+
+							if (!filter || filter(el, key)) {
+								await remove(key);
+							}
 						}
 					});
-
-					return wrap();
 				}
 			};
 		}
