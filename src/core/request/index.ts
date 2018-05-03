@@ -188,7 +188,7 @@ export default function create<T>(path, ...args) {
 
 				localCacheKey = getStorageKey(cacheKey);
 				fromCache = ctx.cache.has(cacheKey);
-				fromLocalStorage = Boolean(!fromCache && p.offlineCache && !ctx.isOnline && await storage.exists(localCacheKey));
+				fromLocalStorage = Boolean(!fromCache && p.offlineCache && !ctx.isOnline && await storage.has(localCacheKey));
 			}
 
 			let
