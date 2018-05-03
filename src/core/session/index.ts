@@ -9,19 +9,37 @@
 import session from 'core/session/engines';
 
 /**
+ * Returns the current session object
+ */
+export async function get(): Promise<{auth: string | undefined; csrf: string | undefined}> {
+	try {
+		return {
+			auth: await session.get('auth'),
+			csrf: await session.get('csrf')
+		};
+
+	} catch (_) {
+		return {
+			auth: undefined,
+			csrf: undefined
+		};
+	}
+}
+
+/**
  * Sets a new session
  *
- * @param [jwt]
- * @param [xsrf]
+ * @param [auth]
+ * @param [csrf]
  */
-export async function setSession(jwt?: string | undefined, xsrf?: string | undefined): Promise<boolean> {
+export async function set(auth?: string | undefined, csrf?: string | undefined): Promise<boolean> {
 	try {
-		if (jwt) {
-			await session.set('jwt', jwt);
+		if (auth) {
+			await session.set('auth', auth);
 		}
 
-		if (xsrf) {
-			await session.set('xsrf', xsrf);
+		if (csrf) {
+			await session.set('csrf', csrf);
 		}
 
 	} catch (_) {
@@ -32,30 +50,12 @@ export async function setSession(jwt?: string | undefined, xsrf?: string | undef
 }
 
 /**
- * Returns the current session object
- */
-export async function getSession(): Promise<{xsrf: string | undefined; jwt: string | undefined}> {
-	try {
-		return {
-			jwt: await session.get('jwt'),
-			xsrf: await session.get('xsrf')
-		};
-
-	} catch (_) {
-		return {
-			jwt: undefined,
-			xsrf: undefined
-		};
-	}
-}
-
-/**
  * Clears the current session
  */
-export async function clearSession(): Promise<boolean> {
+export async function clear(): Promise<boolean> {
 	try {
-		session.remove('jwt');
-		session.remove('xsrf');
+		await session.remove('auth');
+		await session.remove('csrf');
 
 	} catch (_) {
 		return false;
@@ -70,13 +70,13 @@ export async function clearSession(): Promise<boolean> {
 /**
  * Matches the specified session and the current
  *
- * @param [jwt]
- * @param [xsrf]
+ * @param [auth]
+ * @param [csrf]
  */
-export async function matchSession(jwt?: string | undefined, xsrf?: string | undefined): Promise<boolean> {
+export async function match(auth?: string | undefined, csrf?: string | undefined): Promise<boolean> {
 	try {
-		const s = await getSession();
-		return jwt === s.jwt && xsrf === s.xsrf;
+		const s = await get();
+		return auth === s.auth && csrf === s.csrf;
 
 	} catch (_) {
 		return false;
@@ -85,12 +85,12 @@ export async function matchSession(jwt?: string | undefined, xsrf?: string | und
 
 /**
  * Returns true if the session object is exists
- * @param [onlyJWT] - if true, then the session will be checked without xsrf token
+ * @param [onlyJWT] - if true, then the session will be checked without csrf token
  */
-export async function isSessionExists(onlyJWT?: boolean): Promise<boolean> {
+export async function isExists(onlyJWT?: boolean): Promise<boolean> {
 	try {
-		const s = await getSession();
-		return Boolean(s.jwt && (onlyJWT || s.xsrf));
+		const s = await get();
+		return Boolean(s.auth && (onlyJWT || s.csrf));
 
 	} catch (_) {
 		return false;
