@@ -61,6 +61,13 @@ export class Cache<V = any, K = string> {
 	}
 
 	/**
+	 * Returns an iterator with cache keys
+	 */
+	keys(): Iterator<K> {
+		return this.storage.keys();
+	}
+
+	/**
 	 * Clears a cache by the specified filter and returns a list of the removed keys
 	 * @param [filter] - filter for removing (if not defined, then the cache will be cleared)
 	 */
