@@ -182,12 +182,12 @@ export default function create<T>(path, ...args) {
 				fromLocalStorage = false;
 
 			if (ctx.canCache) {
-				if (ctx.pendingCache.exist(cacheKey)) {
+				if (ctx.pendingCache.has(cacheKey)) {
 					return ctx.pendingCache.get(cacheKey).then();
 				}
 
 				localCacheKey = getStorageKey(cacheKey);
-				fromCache = ctx.cache.exist(cacheKey);
+				fromCache = ctx.cache.has(cacheKey);
 				fromLocalStorage = Boolean(!fromCache && p.offlineCache && !ctx.isOnline && await storage.exists(localCacheKey));
 			}
 

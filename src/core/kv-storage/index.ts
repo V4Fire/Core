@@ -19,7 +19,7 @@ export const
 	{get, set, remove, namespace} = local;
 
 export interface Namespace {
-	exists(key: string): boolean;
+	has(key: string): boolean;
 	get(key: string): any;
 	set(key: string, value: any): void;
 	remove(key: string): void;
@@ -31,7 +31,7 @@ export interface FactoryResult extends Namespace {
 }
 
 export interface AsyncNamespace {
-	exists(key: string): Promise<boolean>;
+	has(key: string): Promise<boolean>;
 	get(key: string): Promise<any>;
 	set(key: string, value: any, ttl?: number): Promise<void>;
 	remove(key: string): Promise<void>;
@@ -46,10 +46,10 @@ function factory(storage: Dictionary, async: true): AsyncFactoryResult;
 function factory(storage: Dictionary, async?: false): FactoryResult;
 function factory(storage: Dictionary, async?: boolean): FactoryResult | AsyncFactoryResult {
 	let
+		has,
 		get,
 		set,
 		remove,
-		exists,
 		clear,
 		keys;
 
@@ -58,8 +58,8 @@ function factory(storage: Dictionary, async?: boolean): FactoryResult | AsyncFac
 		set = (storage.setItem || storage.set).bind(storage);
 		remove = (storage.removeItem || storage.remove || storage.delete).bind(storage);
 
-		const _exists = storage.exists || storage.includes || storage.has;
-		exists = Object.isFunction(_exists) ? _exists.bind(storage) : undefined;
+		const _has = storage.exists || storage.exist || storage.includes || storage.has;
+		has = Object.isFunction(_has) ? _has.bind(storage) : undefined;
 
 		const _clear = storage.clear || storage.clearAll || storage.truncate;
 		clear = Object.isFunction(_clear) ? _clear.bind(storage) : undefined;
@@ -96,9 +96,9 @@ function factory(storage: Dictionary, async?: boolean): FactoryResult | AsyncFac
 		 * Returns true if the specified key exists in a storage
 		 * @param key
 		 */
-		exists(key: string): any {
-			if (exists) {
-				return wrap(exists(key));
+		has(key: string): any {
+			if (has) {
+				return wrap(has(key));
 			}
 
 			return wrap(get(key), (v) => v !== null);
@@ -171,8 +171,8 @@ function factory(storage: Dictionary, async?: boolean): FactoryResult | AsyncFac
 				k = (key) => `${name}.${key}`;
 
 			return {
-				exists(key: string): boolean {
-					return obj.exists(k(key));
+				has(key: string): boolean {
+					return obj.has(k(key));
 				},
 
 				get(key: string): any {

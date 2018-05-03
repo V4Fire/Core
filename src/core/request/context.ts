@@ -263,7 +263,7 @@ export default class RequestContext<T = any> {
 			key = this.cacheKey,
 			cache = this.pendingCache;
 
-		if (key && !cache.exist(key)) {
+		if (key && !cache.has(key)) {
 			promise = promise.then(
 				(v) => {
 					cache.remove(key);

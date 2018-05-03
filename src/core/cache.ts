@@ -21,7 +21,7 @@ export class Cache<V = any, K = string> {
 	 * Returns true if in a cache exists a value by the specified key
 	 * @param key
 	 */
-	exist(key: K): boolean {
+	has(key: K): boolean {
 		return this.storage.has(key);
 	}
 
@@ -30,7 +30,7 @@ export class Cache<V = any, K = string> {
 	 * @param key
 	 */
 	get(key: K): V {
-		if (!this.exist(key)) {
+		if (!this.has(key)) {
 			throw Error(`${key} is not exist`);
 		}
 
@@ -53,7 +53,7 @@ export class Cache<V = any, K = string> {
 	 * @param key
 	 */
 	remove(key: K): V | undefined {
-		if (this.exist(key)) {
+		if (this.has(key)) {
 			const val = this.storage.get(key);
 			this.storage.delete(key);
 			return val;
@@ -123,7 +123,7 @@ export class RestrictedCache<V = any, K = string> extends Cache<V, K> {
 
 	/** @override */
 	get(key: K): V {
-		if (this.exist(key)) {
+		if (this.has(key)) {
 			this.queue.delete(key);
 			this.queue.add(key);
 		}
@@ -150,7 +150,7 @@ export class RestrictedCache<V = any, K = string> extends Cache<V, K> {
 
 	/** @override */
 	remove(key: K): V | undefined {
-		if (this.exist(key)) {
+		if (this.has(key)) {
 			this.queue.delete(key);
 			return super.remove(key);
 		}

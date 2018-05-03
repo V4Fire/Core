@@ -10,12 +10,20 @@
 
 import { IS_NODE } from 'core/const/links';
 
+export let
+	syncLocalStorage,
+	asyncLocalStorage,
+	syncSessionStorage,
+	asyncSessionStorage;
+
 // tslint:disable-next-line
 if (IS_NODE) {
 	//#if node_js
-	module.exports = require('core/kv-storage/engines/node.localstorage');
+	({syncLocalStorage, asyncLocalStorage, syncSessionStorage, asyncSessionStorage} =
+		require('core/kv-storage/engines/node.localstorage'));
 	//#endif
 
 } else {
-	module.exports = require('core/kv-storage/engines/browser.localstorage');
+	({syncLocalStorage, asyncLocalStorage, syncSessionStorage, asyncSessionStorage} =
+		require('core/kv-storage/engines/browser.localstorage'));
 }
