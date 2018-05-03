@@ -9,8 +9,7 @@
 import Then from 'core/then';
 import StatusCodes from 'core/statusCodes';
 import Response from 'core/request/response';
-import { Cache, RestrictedCache } from 'core/cache';
-import { defaultRequestOpts } from 'core/request/const';
+import RequestContext from 'core/request/context';
 
 export type RequestMethods =
 	'GET' |
@@ -58,15 +57,23 @@ export interface Encoder<I = any, O = any> {
 	(data: I): O;
 }
 
+export type Encoders<T = any> =
+	Dictionary<Encoder<T>> |
+	Iterable<Encoder<T>>;
+
 export interface Decoder<I = any, O = any> {
 	(data: I): O;
 }
+
+export type Decoders<T = any> =
+	Dictionary<Decoder<T>> |
+	Iterable<Decoder<T>>;
 
 export interface RequestResponseObject<T = any> {
 	data: T | null;
 	response: Response;
 	ctx: Readonly<RequestContext<T>>;
-	dropCache(): Promise<void>;
+	dropCache(): void;
 }
 
 export type RequestResponse<T = any> = Then<RequestResponseObject<T>>;
@@ -88,14 +95,24 @@ export interface RequestOptions {
 	readonly credentials?: boolean;
 }
 
-export type RequestQuery = Dictionary | any[] | string;
-export interface Middleware<T = any, CTX = void> {
-	(this: CTX, url: string, opts: CreateRequestOptions<T>, globalOpts: GlobalOptions): any
+export type RequestQuery =
+	Dictionary |
+	any[] |
+	string;
+
+export interface MiddlewareParams<T = any> {
+	ctx: RequestContext<T>;
+	opts: CreateRequestOptions<T>;
+	globalOpts: GlobalOptions;
 }
 
-export type Middlewares<T = any, CTX = void> = Dictionary<Middleware<T, CTX>> | Iterable<Middleware<T, CTX>>;
-export type Encoders<T = any> = Dictionary<Encoder<T>> | Iterable<Encoder<T>>;
-export type Decoders<T = any> = Dictionary<Decoder<T>> | Iterable<Decoder<T>>;
+export interface Middleware<T = any> {
+	(params: MiddlewareParams): void | Function;
+}
+
+export type Middlewares<T = any> =
+	Dictionary<Middleware<T>> |
+	Iterable<Middleware<T>>;
 
 export interface CreateRequestOptions<T = any> {
 	readonly method?: RequestMethods;
@@ -133,25 +150,6 @@ export type ResolverResult =
 	string |
 	string[] |
 	undefined;
-
-export interface RequestContext<T = any> {
-	readonly canCache: boolean;
-	readonly cache?: Cache<T> | RestrictedCache<T> | null;
-	readonly pendingCache?: Cache<Then<T>>;
-	cacheKey?: string;
-	isOnline: boolean;
-	query: RequestQuery;
-	params: typeof defaultRequestOpts & CreateRequestOptions<T>;
-	encoders: Encoders;
-	decoders: Decoders;
-	prefetch?: Then<any>;
-	resolveAPI(base?: string | null | undefined): string;
-	resolveURL(api?: string | null | undefined): string;
-	saveCache(data: RequestResponseObject<T>): RequestResponseObject<T>;
-	wrapRequest(promise: Then<T>): Then<T>;
-	wrapAsResponse(obj: any): RequestResponseObject<T>;
-	dropCache(): Promise<void>;
-}
 
 export interface ResponseHeaders {
 	readonly [name: string]: string;

@@ -9,42 +9,22 @@
 import $C = require('collection.js');
 import Then from 'core/then';
 
+import request from 'core/request/engines';
 import StatusCodes from 'core/statusCodes';
 import RequestError from 'core/request/error';
+import RequestContext from 'core/request/context';
 
-import Response from 'core/request/response';
-import request from 'core/request/engines';
-import configurator from 'core/request/configurator';
-
-import { Cache } from 'core/cache';
 import { isOnline } from 'core/net';
-import { normalizeHeaders, applyQueryForStr, getStorageKey, getRequestKey } from 'core/request/utils';
-import { concatUrls, toQueryString } from 'core/url';
-import {
+import { getStorageKey } from 'core/request/utils';
+import { concatUrls } from 'core/url';
 
-	storage,
-	globalCache,
-	pendingCache,
-	sharedCache,
-	globalOpts,
-	defaultRequestOpts
-
-} from 'core/request/const';
-
-import {
-
-	RequestFunctionResponse,
-	RequestResponseObject,
-	CreateRequestOptions,
-	ResolverResult,
-	RequestContext
-
-} from 'core/request/interface';
+import { storage, globalCache, globalOpts } from 'core/request/const';
+import { RequestFunctionResponse, CreateRequestOptions, ResolverResult } from 'core/request/interface';
 
 export * from 'core/request/interface';
 export * from 'core/request/utils';
 
-export { globalOpts, globalCache } from 'core/request/const';
+export { globalOpts, globalCache, pendingCache, sharedCache } from 'core/request/const';
 export { default as RequestError } from 'core/request/error';
 export { default as Response } from 'core/request/response';
 
@@ -92,7 +72,7 @@ export default function create<T>(path, ...args) {
 		deep: true,
 		concatArray: true,
 		concatFn: (a: any[], b: any[]) => a.union(b)
-	}, {}, ...args);
+	}, undefined, ...args);
 
 	if (Object.isObject(path)) {
 		const
@@ -121,329 +101,150 @@ export default function create<T>(path, ...args) {
 		opts = args[0];
 	}
 
-	opts = merge(defaultRequestOpts, opts);
-
 	const
-		canCache = opts.method === 'GET',
-		baseCtx: RequestContext<T> = <any>{canCache};
-
-	if (canCache) {
-		Object.assign(baseCtx, {
-			pendingCache,
-			cache: (() => {
-				switch (opts.cacheStrategy) {
-					case 'queue':
-						return globalCache;
-
-					case 'forever':
-						if (opts.cacheId) {
-							const id = <any>opts.cacheId;
-							return sharedCache[id] = sharedCache[id] || new Cache<T>();
-						}
-
-						return new Cache<T>();
-
-					default:
-						return null;
-				}
-			})()
-		});
-	}
+		baseCtx: RequestContext<T> = new RequestContext<T>(opts);
 
 	// tslint:disable-next-line
-	return async (...args) => {
+	return (...args) => {
 		const
-			p: CreateRequestOptions<T> = merge(opts),
+			p: CreateRequestOptions<T> = merge(baseCtx.params),
 			ctx = Object.create(baseCtx);
 
-		/**
-		 * Returns absolute path to API for the request
-		 * @param [api]
-		 */
-		const resolveAPI = ctx.resolveAPI = (api = globalOpts.api) => {
-			const
-				a = <any>p.api,
-				rgxp = /(?:^|(https?:\/\/)(?:(.*?)\.)?(.*?)\.(.*?))(\/.*|$)/;
-
-			if (!api) {
-				const def = {
-					namespace: '',
-					...a
-				};
-
-				const
-					nm = def.namespace;
-
-				if (!def.protocol) {
-					return nm[0] === '/' ? nm : `/${nm}`;
-				}
-
-				return concatUrls(
-					[
-						def.protocol + (def.domain3 ? `${def.domain3}.` : '') + a.domain2,
-						def.zone
-					].join('.'),
-
-					nm
-				);
-			}
-
-			const v = (f, def) => {
-				const
-					v = a[f] != null ? a[f] : def || '';
-
-				if (f === 'domain3') {
-					return v ? `${v}.` : '';
-				}
-
-				return v;
-			};
-
-			return api.replace(rgxp, (str, protocol, domain3, domain2, zone, nm) => {
-				nm = v('namespace', nm);
-
-				if (!protocol) {
-					return nm[0] === '/' ? nm : `/${nm}`;
-				}
-
-				return concatUrls(
-					[
-						v('protocol', protocol) + v('domain3', domain3) + v('domain2', domain2),
-						v('zone', zone)
-					].join('.'),
-
-					nm
-				);
-			});
-		};
-
-		/**
-		 * Returns an absolute path for the request
-		 * @param [api]
-		 */
-		const resolveURL = ctx.resolveURL = (api?) => {
-			let
-				url = concatUrls(api ? resolveAPI(api) : null, path);
-
-			if (Object.isFunction(resolver)) {
-				const
-					res = resolver(url, p, ...args);
-
-				if (Object.isArray(res)) {
-					url = <string>res[0];
-
-				} else if (res) {
-					url = concatUrls(url, res);
-				}
-			}
-
-			if (p.headers) {
-				p.headers = normalizeHeaders(p.headers, ctx.query);
-			}
-
-			url = applyQueryForStr(url, ctx.query, /\/:(.+?)(\(.*?\)|\/)/g);
-
-			if (canCache) {
-				ctx.cacheKey = getRequestKey(url, p);
-			}
-
-			if ($C(ctx.query).length()) {
-				return `${url}?${toQueryString(ctx.query)}`;
-			}
-
-			return url;
-		};
-
-		let
-			cacheId;
-
-		/**
-		 * Cache middleware
-		 */
-		const saveCache = ctx.saveCache = (res) => {
-			if (canCache && p.offlineCache) {
-				storage
-					.set(getStorageKey(ctx.cacheKey), res.data, p.cacheTTL || (1).day())
-					.catch(stderr);
-			}
-
-			if (ctx.cache) {
-				const
-					cache = ctx.cache as Cache<T>;
-
-				if (cacheId) {
-					clearTimeout(cacheId);
-				}
-
-				cache.set(
-					ctx.cacheKey,
-					res.data
-				);
-
-				if (p.cacheTTL) {
-					cacheId = setTimeout(() => cache.remove(cacheKey), p.cacheTTL);
-				}
-			}
-
-			return res;
-		};
-
-		/**
-		 * Wrapper for the request (pending cache, etc.)
-		 * @param promise
-		 */
-		const wrapRequest = ctx.wrapRequest = (promise) => {
-			if (canCache) {
-				const
-					cache = ctx.pendingCache as Cache<Then<T>>,
-					key = ctx.cacheKey;
-
-				promise = promise.then(
-					(v) => {
-						cache.remove(key);
-						return v;
-					},
-
-					(r) => {
-						cache.remove(key);
-						throw r;
-					},
-
-					() => {
-						cache.remove(key);
-					}
-				);
-
-				cache.set(key, promise);
-			}
-
-			return promise.then();
-		};
-
-		/**
-		 * Drops the request cache
-		 */
-		const dropCache = ctx.dropCache = async () => {
-			if (ctx.cache && ctx.cacheKey) {
-				await (<Cache>ctx.cache).remove(ctx.cacheKey);
-			}
-		};
-
-		/**
-		 * Wraps the specified value as RequestResponseObject
-		 * @param res
-		 */
-		const wrapAsResponse = ctx.wrapAsResponse = async (res) => {
-			const response = res instanceof Response ? res : new Response(res, {
-				responseType: 'object'
-			});
-
-			return {
-				data: await response.decode(),
-				response,
-				ctx,
-				dropCache
-			};
-		};
-
 		Object.assign(ctx, {
+			// Merge request options
 			params: p,
-			query: p.query,
-			isOnline: await isOnline(),
-			encoders: p.encoder ? Object.isFunction(p.encoder) ? [p.encoder] : p.encoder : [],
-			decoders: p.decoder ? Object.isFunction(p.decoder) ? [p.decoder] : p.decoder : []
+			encoders: merge(ctx.encoders),
+			decoders: merge(ctx.decoders),
+
+			// Bind middlewares to new context
+			saveCache: ctx.saveCache.bind(ctx),
+			dropCache: ctx.dropCache.bind(ctx),
+			wrapAsResponse: ctx.wrapAsResponse.bind(ctx),
+			wrapRequest: ctx.wrapRequest.bind(ctx),
+
+			// Wrap resolve function with .resolver
+			resolveURL(api?: string | null | undefined): string {
+				let
+					url = concatUrls(api ? this.resolveAPI(api) : null, path);
+
+				if (Object.isFunction(resolver)) {
+					const
+						res = resolver(url, p, ...args);
+
+					if (Object.isArray(res)) {
+						url = <string>res[0];
+
+					} else if (res) {
+						url = concatUrls(url, res);
+					}
+				}
+
+				return baseCtx.resolveURL.call(this, url);
+			}
 		});
 
-		const
-			newRes = await configurator(ctx, globalOpts),
-			baseURL = concatUrls(resolveAPI(), path);
+		return new Then(async (resolve, reject) => {
+			ctx.isOnline = await isOnline();
 
-		await Promise.all($C(p.middlewares as any[]).to([] as any[]).reduce((arr, fn) => {
-			// @ts-ignore
-			arr.push(fn(baseURL, p, globalOpts));
-			return arr;
-		}));
+			try {
+				const arr = await Promise.all($C(p.middlewares).to([]).reduce((arr: any[], fn) => {
+					arr.push(fn({opts: p, ctx, globalOpts}));
+					return arr;
+				}));
 
-		if (newRes) {
-			return Then.resolve(newRes());
-		}
+				if ($C(arr).some(Object.isFunction)) {
+					resolve((() => {
+						const
+							res = $C(arr).filter(Object.isFunction).map((fn) => fn());
 
-		const
-			url = resolveURL(globalOpts.api),
-			cacheKey = ctx.cacheKey;
+						if (res.length <= 1) {
+							return res[0];
+						}
 
-		let
-			localCacheKey,
-			fromCache = false,
-			fromLocalStorage = false;
+						return res;
+					})());
 
-		if (canCache) {
-			localCacheKey = getStorageKey(cacheKey);
+					return;
+				}
 
-			const
-				cache = ctx.pendingCache as Cache<Then<T>>;
-
-			if (cache.exist(cacheKey)) {
-				return cache.get(cacheKey).then();
+			} catch (err) {
+				reject(err);
+				return;
 			}
 
-			fromCache = Boolean(ctx.cache && ctx.cache.exist(cacheKey));
-			fromLocalStorage = Boolean(!fromCache && p.offlineCache && !ctx.isOnline && await storage.exists(localCacheKey));
-		}
+			const
+				url = ctx.resolveURL(globalOpts.api),
+				cacheKey = ctx.cacheKey;
 
-		let
-			res;
+			let
+				localCacheKey,
+				fromCache = false,
+				fromLocalStorage = false;
 
-		if (fromCache) {
-			res = Then.immediate(() => (<Cache>ctx.cache).get(cacheKey)).then(wrapAsResponse);
-
-		} else if (fromLocalStorage) {
-			res = Then.immediate(() => storage.get(localCacheKey))
-				.then(wrapAsResponse)
-				.then(saveCache);
-
-		} else if (!ctx.isOnline && !p.externalRequest) {
-			res = Then.reject(new RequestError('offline'));
-
-		} else {
-			const success = async (response) => {
-				if (!response.ok) {
-					throw new RequestError('invalidStatus', {response});
+			if (ctx.canCache) {
+				if (ctx.pendingCache.exist(cacheKey)) {
+					return ctx.pendingCache.get(cacheKey).then();
 				}
 
-				const
-					data = await response.decode();
+				localCacheKey = getStorageKey(cacheKey);
+				fromCache = ctx.cache.exist(cacheKey);
+				fromLocalStorage = Boolean(!fromCache && p.offlineCache && !ctx.isOnline && await storage.exists(localCacheKey));
+			}
 
-				if (p.externalRequest && !ctx.isOnline && !data) {
-					throw new RequestError('offline');
-				}
+			let
+				res;
 
-				if (
-					response.status === StatusCodes.NO_CONTENT ||
-					response.status === StatusCodes.OK && !data
-				) {
-					return {
-						data: null,
-						response,
-						ctx,
-						dropCache
-					};
-				}
+			if (fromCache) {
+				res = Then.immediate(() => ctx.cache.get(cacheKey))
+					.then(ctx.wrapAsResponse);
 
-				return {data, response, ctx, dropCache};
-			};
+			} else if (fromLocalStorage) {
+				res = Then.immediate(() => storage.get(localCacheKey))
+					.then(ctx.wrapAsResponse)
+					.then(ctx.saveCache);
 
-			const reqOpts = {
-				...p,
-				url,
-				decoder: ctx.decoders,
-				body: $C(ctx.encoders).reduce((res, e, i) => e(i ? res : Object.fastClone(res)), p.body)
-			};
+			} else if (!ctx.isOnline && !p.externalRequest) {
+				res = Then.reject(new RequestError('offline'));
 
-			const r = () => request(reqOpts).then(success).then(saveCache);
-			res = ctx.prefetch ? ctx.prefetch.then(r) : r();
-		}
+			} else {
+				const success = async (response) => {
+					if (!response.ok) {
+						throw new RequestError('invalidStatus', {response});
+					}
 
-		return wrapRequest(res);
+					const
+						data = await response.decode();
+
+					if (p.externalRequest && !ctx.isOnline && !data) {
+						throw new RequestError('offline');
+					}
+
+					if (
+						response.status === StatusCodes.NO_CONTENT ||
+						response.status === StatusCodes.OK && !data
+					) {
+						return {
+							data: null,
+							response,
+							ctx,
+							dropCache: ctx.dropCache
+						};
+					}
+
+					return {data, response, ctx, dropCache: ctx.dropCache};
+				};
+
+				const reqOpts = {
+					...p,
+					url,
+					decoder: ctx.decoders,
+					body: $C(ctx.encoders).reduce((res, e, i) => e(i ? res : Object.fastClone(res)), p.body)
+				};
+
+				res = request(reqOpts).then(success).then(ctx.saveCache);
+			}
+
+			resolve(ctx.wrapRequest(res));
+		});
 	};
 }
