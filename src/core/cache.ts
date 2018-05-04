@@ -33,11 +33,7 @@ export class Cache<V = any, K = string> {
 	 * Returns a value from a cache by the specified key
 	 * @param key
 	 */
-	get(key: K): V {
-		if (!this.has(key)) {
-			throw Error(`${key} is not exist`);
-		}
-
+	get(key: K): V | undefined {
 		return <any>this.storage.get(key);
 	}
 
@@ -126,7 +122,7 @@ export class RestrictedCache<V = any, K = string> extends Cache<V, K> {
 	}
 
 	/** @override */
-	get(key: K): V {
+	get(key: K): V | undefined {
 		if (this.has(key)) {
 			this.queue.delete(key);
 			this.queue.add(key);
