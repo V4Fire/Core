@@ -18,12 +18,16 @@ export const
 export const
 	{get, set, remove, namespace} = local;
 
+export interface ClearFilter {
+	(el: string, key: string): any;
+}
+
 export interface Namespace {
 	has(key: string): boolean;
 	get(key: string): any;
 	set(key: string, value: any): void;
 	remove(key: string): void;
-	clear(filter?: (el: string, key: string) => any): void;
+	clear(filter?: ClearFilter): void;
 }
 
 export interface FactoryResult extends Namespace {

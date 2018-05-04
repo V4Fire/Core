@@ -8,6 +8,10 @@
 
 import $C = require('collection.js');
 
+export interface ClearFilter<V = any, K = string> {
+	(el: V, key: K): any;
+}
+
 /**
  * Class for caching
  */
@@ -71,7 +75,7 @@ export class Cache<V = any, K = string> {
 	 * Clears a cache by the specified filter and returns a list of the removed keys
 	 * @param [filter] - filter for removing (if not defined, then the cache will be cleared)
 	 */
-	clear(filter?: (el: V, key: K) => any): Set<K> {
+	clear(filter?: ClearFilter<V, K>): Set<K> {
 		if (filter) {
 			const
 				removed = new Set();
@@ -157,7 +161,7 @@ export class RestrictedCache<V = any, K = string> extends Cache<V, K> {
 	}
 
 	/** @override */
-	clear(filter?: (el: V, key: K) => any): Set<K> {
+	clear(filter?: ClearFilter<V, K>): Set<K> {
 		const removed = super.clear();
 		$C(this.queue).remove((el) => removed.has(el));
 		return removed;
