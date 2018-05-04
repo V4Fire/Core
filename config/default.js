@@ -91,10 +91,10 @@ class Config {
 			config.src[nm] = (this.src[nm] || []).concat(src);
 		});
 
-		$C(config).object(true).set((el) => {
+		$C(config).object(true).forEach((el, key) => {
 			if (Sugar.Object.isFunction(el)) {
-				el[origin] = el[origin] || el;
-				return el[origin].bind(config);
+				const o = el[origin] = el[origin] || el;
+				config[key] = Object.assign(o.bind(config), {[origin]: o});
 			}
 		});
 
