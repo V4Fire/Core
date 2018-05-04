@@ -107,7 +107,7 @@ export interface MiddlewareParams<T = any> {
 }
 
 export interface Middleware<T = any> {
-	(params: MiddlewareParams): void | Function;
+	(params: MiddlewareParams): CanPromise<void | Function>;
 }
 
 export type Middlewares<T = any> =
