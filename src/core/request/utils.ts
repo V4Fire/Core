@@ -88,7 +88,7 @@ export function normalizeHeaderName(name: string, query?: Dictionary): string {
  * @param [query] - request query object (for value interpolation)
  */
 export function normalizeHeaderValue(value: any, query?: Dictionary): string {
-	return applyQueryForStr(String(value).trim(), query);
+	return applyQueryForStr(String(value != null ? value : '').trim(), query);
 }
 
 /**
