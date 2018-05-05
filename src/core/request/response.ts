@@ -156,8 +156,8 @@ export default class Response {
 					return res;
 				}
 
-				if (res && typeof res === 'object' && {object: true, json: true}[this.responseType]) {
-					res.valueOf = () => $C.clone(res);
+				if (Object.isArray(res) || Object.isObject(res)) {
+					res.valueOf = () => Object.fastClone(res);
 					Object.freeze(res);
 				}
 
