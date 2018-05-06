@@ -15,14 +15,24 @@ try {
 		dasherizeCache = Object.createDict(),
 		underscoreCache = Object.createDict();
 
+	const
+		needCamelize = /[_-]|[^\w$]/;
+
 	/** @override */
 	String.prototype.camelize = function (this: string, upper?: boolean): string {
 		if (this in camelizeCache) {
 			return camelizeCache[this];
 		}
 
-		return camelizeCache[this] = camelize.call(this, upper);
+		if (needCamelize.test(this)) {
+			return camelizeCache[this] = camelize.call(this, upper);
+		}
+
+		return this;
 	};
+
+	const
+		needDasherize = /[A-Z-_]|[^\w$]/;
 
 	/** @override */
 	String.prototype.dasherize = function (this: string): string {
@@ -30,8 +40,15 @@ try {
 			return dasherizeCache[this];
 		}
 
-		return dasherizeCache[this] = dasherize.call(this);
+		if (needDasherize.test(this)) {
+			return dasherizeCache[this] = dasherize.call(this);
+		}
+
+		return this;
 	};
+
+	const
+		needUnderscore = /[A-Z-]|[^\w$]/;
 
 	/** @override */
 	String.prototype.underscore = function (this: string): string {
@@ -39,7 +56,11 @@ try {
 			return underscoreCache[this];
 		}
 
-		return underscoreCache[this] = underscore.call(this);
+		if (needUnderscore.test(this)) {
+			return underscoreCache[this] = underscore.call(this);
+		}
+
+		return this;
 	};
 
 } catch (_) {}
