@@ -16,7 +16,7 @@ try {
 		underscoreCache = Object.createDict();
 
 	const
-		needCamelize = /[_-]|[^\w$]/;
+		needCamelize = /[\s_-]|[^\w$]/;
 
 	/** @override */
 	String.prototype.camelize = function (this: string, upper?: boolean): string {
@@ -35,7 +35,7 @@ try {
 	};
 
 	const
-		needDasherize = /[A-Z-_]|[^\w$]/;
+		needDasherize = /[A-Z\s_-]|[^\w$]/;
 
 	/** @override */
 	String.prototype.dasherize = function (this: string): string {
@@ -54,7 +54,7 @@ try {
 	};
 
 	const
-		needUnderscore = /[A-Z-]|[^\w$]/;
+		needUnderscore = /[A-Z\s-]|[^\w$]/;
 
 	/** @override */
 	String.prototype.underscore = function (this: string): string {
