@@ -20,15 +20,18 @@ try {
 
 	/** @override */
 	String.prototype.camelize = function (this: string, upper?: boolean): string {
-		if (this in camelizeCache) {
-			return camelizeCache[this];
+		const
+			str = this.toString();
+
+		if (str in camelizeCache) {
+			return camelizeCache[str];
 		}
 
-		if (needCamelize.test(this)) {
-			return camelizeCache[this] = camelize.call(this, upper);
+		if (needCamelize.test(str)) {
+			return camelizeCache[str] = camelize.call(str, upper);
 		}
 
-		return this;
+		return str;
 	};
 
 	const
@@ -36,15 +39,18 @@ try {
 
 	/** @override */
 	String.prototype.dasherize = function (this: string): string {
-		if (this in dasherizeCache) {
-			return dasherizeCache[this];
+		const
+			str = this.toString();
+
+		if (str in dasherizeCache) {
+			return dasherizeCache[str];
 		}
 
-		if (needDasherize.test(this)) {
-			return dasherizeCache[this] = dasherize.call(this);
+		if (needDasherize.test(str)) {
+			return dasherizeCache[str] = dasherize.call(str);
 		}
 
-		return this;
+		return str;
 	};
 
 	const
@@ -52,15 +58,18 @@ try {
 
 	/** @override */
 	String.prototype.underscore = function (this: string): string {
-		if (this in underscoreCache) {
-			return underscoreCache[this];
+		const
+			str = this.toString();
+
+		if (str in underscoreCache) {
+			return underscoreCache[str];
 		}
 
-		if (needUnderscore.test(this)) {
-			return underscoreCache[this] = underscore.call(this);
+		if (needUnderscore.test(str)) {
+			return underscoreCache[str] = underscore.call(str);
 		}
 
-		return this;
+		return str;
 	};
 
 } catch (_) {}
