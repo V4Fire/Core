@@ -116,6 +116,7 @@ export interface WorkerLike {
 	close?: Function;
 	abort?: Function;
 	cancel?: Function;
+	disconnect?: Function;
 }
 
 /**
@@ -934,7 +935,13 @@ export default class Async<CTX extends object = Async<any>> {
 
 			if (--worker[asyncCounter] <= 0) {
 				const fn = destructor ?
-					worker[destructor] : worker.terminate || worker.destroy || worker.close || worker.abort || worker.cancel;
+					worker[destructor] :
+						worker.terminate ||
+						worker.destroy ||
+						worker.close ||
+						worker.abort ||
+						worker.cancel ||
+						worker.disconnect;
 
 				if (fn && Object.isFunction(fn)) {
 					fn.call(worker);
