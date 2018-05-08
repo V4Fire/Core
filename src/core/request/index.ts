@@ -183,7 +183,8 @@ export default function create<T>(path, ...args) {
 
 			if (ctx.canCache) {
 				if (ctx.pendingCache.has(cacheKey)) {
-					return ctx.pendingCache.get(cacheKey).then();
+					resolve(ctx.pendingCache.get(cacheKey).then());
+					return;
 				}
 
 				localCacheKey = getStorageKey(cacheKey);
