@@ -86,7 +86,7 @@ export interface AsyncOnceOpts<T extends object = Async> extends AsyncCbOpts<T> 
 	options?: AddEventListenerOptions;
 }
 
-export interface AsyncWorkerOpts<T extends object = Async> extends AsyncCbOpts<T> {
+export interface AsyncWorkerOpts<T extends object = Async> extends AsyncCbOptsSingle<T> {
 	destructor?: string;
 }
 
@@ -110,14 +110,14 @@ export interface EventEmitterLike {
 	removeEventListener?: Function;
 }
 
-export interface WorkerLike {
+export type WorkerLike = Function | {
 	terminate?: Function;
 	destroy?: Function;
 	close?: Function;
 	abort?: Function;
 	cancel?: Function;
 	disconnect?: Function;
-}
+};
 
 /**
  * Base class for Async IO
@@ -380,7 +380,7 @@ export default class Async<CTX extends object = Async<any>> {
 			name: 'worker',
 			obj: worker,
 			clearFn: this.workerDestructor.bind(this, params && params.destructor),
-			periodic: true
+			periodic: !params || params.single !== true
 		});
 	}
 
@@ -934,14 +934,23 @@ export default class Async<CTX extends object = Async<any>> {
 			workerCache.delete(worker);
 
 			if (--worker[asyncCounter] <= 0) {
-				const fn = destructor ?
-					worker[destructor] :
+				let fn;
+
+				if (destructor) {
+					fn = destructor;
+
+				} else if (Object.isFunction(worker)) {
+					fn = worker;
+
+				} else {
+					fn =
 						worker.terminate ||
 						worker.destroy ||
 						worker.close ||
 						worker.abort ||
 						worker.cancel ||
 						worker.disconnect;
+				}
 
 				if (fn && Object.isFunction(fn)) {
 					fn.call(worker);
