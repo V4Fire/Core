@@ -18,7 +18,7 @@ import { isOnline } from 'core/net';
 import { getStorageKey } from 'core/request/utils';
 import { concatUrls } from 'core/url';
 
-import { storage, globalCache, globalOpts } from 'core/request/const';
+import { storage, globalCache, globalOpts, defaultRequestOpts } from 'core/request/const';
 import { RequestFunctionResponse, CreateRequestOptions, ResolverResult } from 'core/request/interface';
 
 export * from 'core/request/interface';
@@ -107,7 +107,7 @@ export default function create<T>(path, ...args) {
 	// tslint:disable-next-line
 	return (...args) => {
 		const
-			p: CreateRequestOptions<T> = merge(baseCtx.params),
+			p: CreateRequestOptions<T> = merge(defaultRequestOpts, baseCtx.params),
 			ctx = Object.create(baseCtx);
 
 		Object.assign(ctx, {
