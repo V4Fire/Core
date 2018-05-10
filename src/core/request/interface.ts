@@ -54,7 +54,7 @@ export type OkStatuses =
 	StatusCodes[];
 
 export interface Encoder<I = any, O = any> {
-	(data: I): O;
+	(data: I, opts: CreateRequestOptions): O;
 }
 
 export type Encoders<T = any> =
@@ -62,7 +62,7 @@ export type Encoders<T = any> =
 	Iterable<Encoder<T>>;
 
 export interface Decoder<I = any, O = any> {
-	(data: I): O;
+	(data: I, opts: CreateRequestOptions): O;
 }
 
 export type Decoders<T = any> =

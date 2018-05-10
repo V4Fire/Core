@@ -148,8 +148,9 @@ export default class Response {
 		}
 
 		return data
-			.then((obj) =>
-				$C(this.decoders).reduce((res, d) => d(res), obj))
+			.then((obj) => $C(this.decoders)
+				.to(Then.resolve(obj))
+				.reduce((res, fn) => res.then(fn)))
 
 			.then((res) => {
 				if (Object.isFrozen(res)) {

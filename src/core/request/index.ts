@@ -113,8 +113,8 @@ export default function create<T>(path, ...args) {
 		Object.assign(ctx, {
 			// Merge request options
 			params: p,
-			encoders: merge(ctx.encoders),
-			decoders: merge(ctx.decoders),
+			encoders: $C(merge(ctx.encoders)).map((fn) => (d) => fn(d, p)),
+			decoders: $C(merge(ctx.decoders)).map((fn) => (d) => fn(d, p)),
 
 			// Bind middlewares to new context
 			saveCache: ctx.saveCache.bind(ctx),
@@ -239,7 +239,11 @@ export default function create<T>(path, ...args) {
 					...p,
 					url,
 					decoder: ctx.decoders,
-					body: $C(ctx.encoders).reduce((res, e, i) => e(i ? res : Object.fastClone(res)), p.body)
+					body: await $C(ctx.encoders)
+						.to(Then.resolve(p.body))
+						.reduce((res, fn, i) => res.then(
+							(obj) => fn(i ? obj : Object.fastClone(obj)))
+						)
 				};
 
 				res = request(reqOpts).then(success).then(ctx.saveCache);
