@@ -164,7 +164,7 @@ export default class RequestContext<T = any> {
 
 		const
 			p = this.params,
-			q = this.query;
+			q = p.method === 'GET' ? this.query : Object.isObject(<any>p.body) ? p.body : this.query;
 
 		if (Object.isTable(q)) {
 			if (p.headers) {
