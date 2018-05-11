@@ -37,6 +37,11 @@ export default class RequestContext<T = any> {
 	cacheKey?: string;
 
 	/**
+	 * Parent operation promise
+	 */
+	readonly then!: Then;
+
+	/**
 	 * Request parameters
 	 */
 	readonly params!: typeof defaultRequestOpts & CreateRequestOptions<T>;
@@ -243,6 +248,7 @@ export default class RequestContext<T = any> {
 	 */
 	async wrapAsResponse(obj: any): Promise<RequestResponseObject<T>> {
 		const response = obj instanceof Response ? obj : new Response(obj, {
+			parent: this.then,
 			responseType: 'object'
 		});
 

@@ -153,7 +153,11 @@ export default function create<T>(path, ...args) {
 				}
 			});
 
-			await new Promise((r) => setImmediate(r));
+			await new Promise((r) => {
+				setImmediate(r)
+			});
+
+			ctx.then = then;
 			ctx.isOnline = await Then.resolve(isOnline(), then);
 
 			const arr = await Then.all($C(p.middlewares).reduce((arr, fn) => {
