@@ -55,11 +55,10 @@ export default class Then<T = any> implements PromiseLike<T> {
 				res(value && Object.isFunction(value) ? (<Function>value)() : value);
 			});
 
-			onAbort((r) => {
+			onAbort((err) => {
 				clearImmediate(id);
-
 				if (value instanceof Then) {
-					value.bubblingAbort(r);
+					value.abort(err);
 				}
 			});
 		}, parent);
@@ -72,6 +71,12 @@ export default class Then<T = any> implements PromiseLike<T> {
 	 */
 	static resolve<V>(value?: Value<V>, parent?: Then): Then<V> {
 		if (value instanceof Then) {
+			if (parent) {
+				parent.catch((err) => {
+					value.abort(err);
+				});
+			}
+
 			return value;
 		}
 
@@ -82,7 +87,6 @@ export default class Then<T = any> implements PromiseLike<T> {
 			} else {
 				res(value);
 			}
-
 		}, parent);
 	}
 
@@ -112,7 +116,7 @@ export default class Then<T = any> implements PromiseLike<T> {
 
 			onAbort((reason) => {
 				$C(promises).forEach((el) => {
-					el.bubblingAbort(reason);
+					el.abort(reason);
 				});
 			});
 
@@ -151,7 +155,7 @@ export default class Then<T = any> implements PromiseLike<T> {
 
 			onAbort((reason) => {
 				$C(promises).forEach((el) => {
-					el.bubblingAbort(reason);
+					el.abort(reason);
 				});
 			});
 
@@ -226,7 +230,7 @@ export default class Then<T = any> implements PromiseLike<T> {
 				setOnAbort;
 
 			if (parent) {
-				const abortParent = this.onAbort = (r) => parent.bubblingAbort(r);
+				const abortParent = this.onAbort = (err) => parent.abort(err);
 				parent.catch((err) => this.abort(err));
 
 				setOnAbort = (cb) => {
@@ -306,7 +310,7 @@ export default class Then<T = any> implements PromiseLike<T> {
 					} catch (_) {}
 				}
 
-				this.bubblingAbort(r);
+				this.abort(r);
 			});
 
 			this.promise.then(resolve, reject);
@@ -327,21 +331,9 @@ export default class Then<T = any> implements PromiseLike<T> {
 	 * @param [reason] - abort reason
 	 */
 	abort(reason?: any): void {
-		if (this.isPending) {
+		if (this.pendingChildren < 2) {
 			this.evaluate(this.onAbort, [reason]);
 			this.reject(reason);
-		}
-	}
-
-	/**
-	 * Aborts the current promise:
-	 * if .pendingChildren > 1, then the promise won't be aborted really
-	 *
-	 * @param [reason] - abort reason
-	 */
-	protected bubblingAbort(reason: any): void {
-		if (this.pendingChildren < 2) {
-			this.abort(reason);
 		}
 
 		this.pendingChildren--;
