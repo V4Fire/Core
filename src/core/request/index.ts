@@ -154,7 +154,7 @@ export default function create<T>(path, ...args) {
 			});
 
 			await new Promise((r) => {
-				setImmediate(r)
+				setImmediate(r);
 			});
 
 			ctx.then = then;
