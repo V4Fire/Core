@@ -86,11 +86,13 @@ export default class Response {
 	 */
 	constructor(body?: ResponseType, params?: ResponseOptions) {
 		const
-			p = <typeof defaultResponseOpts & ResponseOptions>$C.extend(false, {}, defaultResponseOpts, params);
+			p = <typeof defaultResponseOpts & ResponseOptions>$C.extend(false, {}, defaultResponseOpts, params),
+			s = this.okStatuses = p.okStatuses;
 
 		this.parent = p.parent;
 		this.status = p.status;
-		const s = this.okStatuses = p.okStatuses;
+		this.headers = this.parseHeaders(p.headers);
+		this.sourceResponseType = this.responseType = p.responseType;
 
 		// tslint:disable-next-line
 		if (typeof s === 'object' && !Object.isArray(s)) {
@@ -99,9 +101,6 @@ export default class Response {
 		} else {
 			this.ok = (<StatusCodes[]>[]).concat(s || []).includes(this.status);
 		}
-
-		this.headers = this.parseHeaders(p.headers);
-		this.sourceResponseType = this.responseType = p.responseType;
 
 		// tslint:disable-next-line
 		if (p.decoder) {
