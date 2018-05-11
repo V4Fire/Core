@@ -45,12 +45,16 @@ export default class Then<T = any> implements PromiseLike<T> {
 
 	/**
 	 * Wraps the specified value with Then, that will be resolved after setImmediate
+	 *
 	 * @param [value] - if function, it will be executed
+	 * @param [parent] - parent promise
 	 */
-	static immediate<V>(value?: ExecValue<V>): Then<V> {
-		return new Then((res, rej, onAbort) => {
+	static immediate<V>(value?: ExecValue<V>, parent?: Then): Then<V> {
+		const then = new Then((res, rej, onAbort) => {
 			const id = setImmediate(() => {
-				res(value && Object.isFunction(value) ? (<Function>value)() : value);
+				if (!parent || parent.state !== State.rejected) {
+					res(value && Object.isFunction(value) ? (<Function>value)() : value);
+				}
 			});
 
 			onAbort((r) => {
@@ -60,45 +64,85 @@ export default class Then<T = any> implements PromiseLike<T> {
 					value.bubblingAbort(r);
 				}
 			});
-		});
-	}
+		}, parent);
 
-	/** @see {Promise.resolve} */
-	static resolve<V>(value?: Value<V>): Then<V> {
-		if (value instanceof Then) {
-			return value;
+		if (parent) {
+			parent.catch((err) => then.abort(err));
 		}
 
-		return new Then((res, rej) => {
-			if (Then.isThenable(value)) {
-				value.then(res, rej);
-
-			} else {
-				res(value);
-			}
-		});
+		return then;
 	}
 
-	/** @see {Promise.reject} */
-	static reject<V>(reason?: Value<V>): Then {
-		return new Then((res, rej) => rej(reason));
+	/**
+	 * @see {Promise.resolve}
+	 * @param value
+	 * @param [parent] - parent promise
+	 */
+	static resolve<V>(value?: Value<V>, parent?: Then): Then<V> {
+		let
+			then;
+
+		if (value instanceof Then) {
+			then = value;
+
+		} else {
+			then = new Then((res, rej) => {
+				if (Then.isThenable(value)) {
+					value.then(res, rej);
+
+				} else {
+					res(value);
+				}
+
+			}, parent);
+		}
+
+		if (parent) {
+			parent.catch((err) => then.abort(err));
+		}
+
+		return then;
 	}
 
-	/** @see {Promise.all} */
-	// @ts-ignore
-	static all<T1, T2, T3, T4>(values: [Value<T1>, Value<T2>, Value<T3>, Value<T4>]): Then<[T1, T2, T3, T4]>;
-	static all<T1, T2, T3>(values: [Value<T1>, Value<T2>, Value<T3>]): Then<[T1, T2, T3]>;
-	static all<T1, T2>(values: [Value<T1>, Value<T2>]): Then<[T1, T2]>;
-	static all<T>(values: Iterable<Value<T>>): Then<T[]>;
-	static all<T>(values: Iterable<Value<T>>): Then<T[]> {
+	/**
+	 * @see {Promise.reject}
+	 * @param reason
+	 * @param [parent] - parent promise
+	 */
+	static reject<V>(reason?: Value<V>, parent?: Then): Then {
 		const
-			promises = $C(values).map<Then>(Then.resolve);
+			then = new Then((res, rej) => rej(reason), parent);
 
-		return new Then((res, rej, onAbort) => {
-			let counter = 0;
+		if (parent) {
+			parent.catch((err) => then.abort(err));
+		}
 
+		return then;
+	}
+
+	/**
+	 * @see {Promise.all}
+	 * @param values
+	 * @param [parent] - parent promise
+	 */
+	// @ts-ignore
+	static all<T1, T2, T3>(values: [Value<T1>, Value<T2>, Value<T3>], parent?: Then): Then<[T1, T2, T3]>;
+	static all<T1, T2>(values: [Value<T1>, Value<T2>], parent?: Then): Then<[T1, T2]>;
+	static all<T>(values: Iterable<Value<T>>, parent?: Then): Then<T[]>;
+	static all<T>(values: Iterable<Value<T>>, parent?: Then): Then<T[]> {
+		const then = new Then((res, rej, onAbort) => {
 			const
-				resolved: any[] = [];
+				promises = $C(values).map((el) => Then.resolve(el)),
+				resolved = <any[]>[];
+
+			onAbort((reason) => {
+				$C(promises).forEach((el) => {
+					el.bubblingAbort(reason);
+				});
+			});
+
+			let
+				counter = 0;
 
 			$C(promises).forEach((promise, i) => {
 				promise.then(
@@ -114,26 +158,42 @@ export default class Then<T = any> implements PromiseLike<T> {
 				);
 			});
 
-			onAbort((reason) => {
-				$C(promises).forEach((el) => el.bubblingAbort(reason));
-			});
-		});
+		}, parent);
+
+		if (parent) {
+			parent.catch((err) => then.abort(err));
+		}
+
+		return then;
 	}
 
-	/** @see {Promise.race} */
-	static race<T>(values: Iterable<Value<T>>): Then<T> {
-		const
-			promises = $C(values).map<Then>(Then.resolve);
+	/**
+	 * @see {Promise.race}
+	 * @param values
+	 * @param [parent] - parent promise
+	 */
+	static race<T>(values: Iterable<Value<T>>, parent?: Then): Then<T> {
+		const then = new Then((res, rej, onAbort) => {
+			const
+				promises = $C(values).map<Then>((el) => Then.resolve(el));
 
-		return new Then((res, rej, onAbort) => {
+			onAbort((reason) => {
+				$C(promises).forEach((el) => {
+					el.bubblingAbort(reason);
+				});
+			});
+
 			$C(promises).forEach((promise) => {
 				promise.then(res, rej);
 			});
 
-			onAbort((reason) => {
-				$C(promises).forEach((el) => el.bubblingAbort(reason));
-			});
-		});
+		}, parent);
+
+		if (parent) {
+			parent.catch((err) => then.abort(err));
+		}
+
+		return then;
 	}
 
 	/**
@@ -200,7 +260,7 @@ export default class Then<T = any> implements PromiseLike<T> {
 			let
 				setOnAbort;
 
-			if (parent) {
+			if (parent instanceof Then) {
 				const
 					abortParent = this.onAbort = (r) => parent.bubblingAbort(r);
 
@@ -302,10 +362,8 @@ export default class Then<T = any> implements PromiseLike<T> {
 	 */
 	abort(reason?: any): void {
 		if (this.isPending) {
-			setImmediate(() => {
-				this.evaluate(this.onAbort, [reason]);
-				this.reject(reason);
-			});
+			this.evaluate(this.onAbort, [reason]);
+			this.reject(reason);
 		}
 	}
 
