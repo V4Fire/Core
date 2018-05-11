@@ -146,10 +146,6 @@ export default class Then<T = any> implements PromiseLike<T> {
 	 */
 	static race<T>(values: Iterable<Value<T>>, parent?: Then): Then<T> {
 		return new Then((res, rej, onAbort) => {
-			if (parent && parent.state === State.rejected) {
-				return;
-			}
-
 			const
 				promises = $C(values).map<Then>((el) => Then.resolve(el));
 
