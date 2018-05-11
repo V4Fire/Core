@@ -52,9 +52,11 @@ export default class Then<T = any> implements PromiseLike<T> {
 	static immediate<V>(value?: ExecValue<V>, parent?: Then): Then<V> {
 		const then = new Then((res, rej, onAbort) => {
 			const id = setImmediate(() => {
-				if (!parent || parent.state !== State.rejected) {
-					res(value && Object.isFunction(value) ? (<Function>value)() : value);
+				if (parent && parent.state === State.rejected) {
+					return;
 				}
+
+				res(value && Object.isFunction(value) ? (<Function>value)() : value);
 			});
 
 			onAbort((r) => {
@@ -64,6 +66,7 @@ export default class Then<T = any> implements PromiseLike<T> {
 					value.bubblingAbort(r);
 				}
 			});
+
 		}, parent);
 
 		if (parent) {
@@ -87,6 +90,10 @@ export default class Then<T = any> implements PromiseLike<T> {
 
 		} else {
 			then = new Then((res, rej) => {
+				if (parent && parent.state === State.rejected) {
+					return;
+				}
+
 				if (Then.isThenable(value)) {
 					value.then(res, rej);
 
@@ -110,8 +117,13 @@ export default class Then<T = any> implements PromiseLike<T> {
 	 * @param [parent] - parent promise
 	 */
 	static reject<V>(reason?: Value<V>, parent?: Then): Then {
-		const
-			then = new Then((res, rej) => rej(reason), parent);
+		const then = new Then((res, rej) => {
+			if (parent && parent.state === State.rejected) {
+				return;
+			}
+
+			rej(reason);
+		}, parent);
 
 		if (parent) {
 			parent.catch((err) => then.abort(err));
@@ -131,6 +143,10 @@ export default class Then<T = any> implements PromiseLike<T> {
 	static all<T>(values: Iterable<Value<T>>, parent?: Then): Then<T[]>;
 	static all<T>(values: Iterable<Value<T>>, parent?: Then): Then<T[]> {
 		const then = new Then((res, rej, onAbort) => {
+			if (parent && parent.state === State.rejected) {
+				return;
+			}
+
 			const
 				promises = $C(values).map((el) => Then.resolve(el)),
 				resolved = <any[]>[];
@@ -174,6 +190,10 @@ export default class Then<T = any> implements PromiseLike<T> {
 	 */
 	static race<T>(values: Iterable<Value<T>>, parent?: Then): Then<T> {
 		const then = new Then((res, rej, onAbort) => {
+			if (parent && parent.state === State.rejected) {
+				return;
+			}
+
 			const
 				promises = $C(values).map<Then>((el) => Then.resolve(el));
 
