@@ -283,6 +283,6 @@ export default class RequestContext<T = any> {
 			cache.set(key, promise);
 		}
 
-		return promise.then();
+		return promise;
 	}
 }
