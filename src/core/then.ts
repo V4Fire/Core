@@ -132,7 +132,6 @@ export default class Then<T = any> implements PromiseLike<T> {
 					rej
 				);
 			});
-
 		}, parent);
 	}
 
