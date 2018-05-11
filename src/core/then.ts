@@ -50,12 +50,8 @@ export default class Then<T = any> implements PromiseLike<T> {
 	 * @param [parent] - parent promise
 	 */
 	static immediate<V>(value?: ExecValue<V>, parent?: Then): Then<V> {
-		const then = new Then((res, rej, onAbort) => {
+		return new Then((res, rej, onAbort) => {
 			const id = setImmediate(() => {
-				if (parent && parent.state === State.rejected) {
-					return;
-				}
-
 				res(value && Object.isFunction(value) ? (<Function>value)() : value);
 			});
 
@@ -66,14 +62,7 @@ export default class Then<T = any> implements PromiseLike<T> {
 					value.bubblingAbort(r);
 				}
 			});
-
 		}, parent);
-
-		if (parent) {
-			parent.catch((err) => then.abort(err));
-		}
-
-		return then;
 	}
 
 	/**
@@ -82,33 +71,19 @@ export default class Then<T = any> implements PromiseLike<T> {
 	 * @param [parent] - parent promise
 	 */
 	static resolve<V>(value?: Value<V>, parent?: Then): Then<V> {
-		let
-			then;
-
 		if (value instanceof Then) {
-			then = value;
-
-		} else {
-			then = new Then((res, rej) => {
-				if (parent && parent.state === State.rejected) {
-					return;
-				}
-
-				if (Then.isThenable(value)) {
-					value.then(res, rej);
-
-				} else {
-					res(value);
-				}
-
-			}, parent);
+			return value;
 		}
 
-		if (parent) {
-			parent.catch((err) => then.abort(err));
-		}
+		return new Then((res, rej) => {
+			if (Then.isThenable(value)) {
+				value.then(res, rej);
 
-		return then;
+			} else {
+				res(value);
+			}
+
+		}, parent);
 	}
 
 	/**
@@ -117,19 +92,7 @@ export default class Then<T = any> implements PromiseLike<T> {
 	 * @param [parent] - parent promise
 	 */
 	static reject<V>(reason?: Value<V>, parent?: Then): Then {
-		const then = new Then((res, rej) => {
-			if (parent && parent.state === State.rejected) {
-				return;
-			}
-
-			rej(reason);
-		}, parent);
-
-		if (parent) {
-			parent.catch((err) => then.abort(err));
-		}
-
-		return then;
+		return new Then((res, rej) => rej(reason), parent);
 	}
 
 	/**
@@ -142,11 +105,7 @@ export default class Then<T = any> implements PromiseLike<T> {
 	static all<T1, T2>(values: [Value<T1>, Value<T2>], parent?: Then): Then<[T1, T2]>;
 	static all<T>(values: Iterable<Value<T>>, parent?: Then): Then<T[]>;
 	static all<T>(values: Iterable<Value<T>>, parent?: Then): Then<T[]> {
-		const then = new Then((res, rej, onAbort) => {
-			if (parent && parent.state === State.rejected) {
-				return;
-			}
-
+		return new Then((res, rej, onAbort) => {
 			const
 				promises = $C(values).map((el) => Then.resolve(el)),
 				resolved = <any[]>[];
@@ -175,12 +134,6 @@ export default class Then<T = any> implements PromiseLike<T> {
 			});
 
 		}, parent);
-
-		if (parent) {
-			parent.catch((err) => then.abort(err));
-		}
-
-		return then;
 	}
 
 	/**
@@ -189,7 +142,7 @@ export default class Then<T = any> implements PromiseLike<T> {
 	 * @param [parent] - parent promise
 	 */
 	static race<T>(values: Iterable<Value<T>>, parent?: Then): Then<T> {
-		const then = new Then((res, rej, onAbort) => {
+		return new Then((res, rej, onAbort) => {
 			if (parent && parent.state === State.rejected) {
 				return;
 			}
@@ -206,14 +159,7 @@ export default class Then<T = any> implements PromiseLike<T> {
 			$C(promises).forEach((promise) => {
 				promise.then(res, rej);
 			});
-
 		}, parent);
-
-		if (parent) {
-			parent.catch((err) => then.abort(err));
-		}
-
-		return then;
 	}
 
 	/**
@@ -280,9 +226,9 @@ export default class Then<T = any> implements PromiseLike<T> {
 			let
 				setOnAbort;
 
-			if (parent instanceof Then) {
-				const
-					abortParent = this.onAbort = (r) => parent.bubblingAbort(r);
+			if (parent) {
+				const abortParent = this.onAbort = (r) => parent.bubblingAbort(r);
+				parent.catch((err) => this.abort(err));
 
 				setOnAbort = (cb) => {
 					this.onAbort = (r) => {
@@ -295,7 +241,9 @@ export default class Then<T = any> implements PromiseLike<T> {
 				setOnAbort = (cb) => this.onAbort = cb;
 			}
 
-			this.evaluate(executor, [resolve, reject, setOnAbort], reject);
+			if (this.isPending && (!parent || parent.state !== State.rejected)) {
+				this.evaluate(executor, [resolve, reject, setOnAbort], reject);
+			}
 		});
 	}
 
@@ -328,7 +276,6 @@ export default class Then<T = any> implements PromiseLike<T> {
 	// tslint:disable-next-line
 	then(onFulfilled, onRejected, abortCb) {
 		this.pendingChildren++;
-
 		return new Then((res, rej, onAbort) => {
 			let
 				resolve,
