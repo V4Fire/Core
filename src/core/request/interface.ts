@@ -93,6 +93,7 @@ export interface RequestOptions {
 	readonly headers?: Dictionary<string | string[]>;
 	readonly body?: RequestBody;
 	readonly credentials?: boolean;
+	readonly parent: Then;
 }
 
 export type RequestQuery =
@@ -161,6 +162,7 @@ export interface ResponseOptions {
 	status?: StatusCodes;
 	headers?: string | Dictionary<string>;
 	decoder?: Decoder | Decoders;
+	parent?: Then;
 }
 
 export interface GlobalOptions {

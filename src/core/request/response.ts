@@ -46,6 +46,11 @@ export default class Response {
 	readonly sourceResponseType: ResponseTypes;
 
 	/**
+	 * Parent operation promise
+	 */
+	readonly parent?: Then;
+
+	/**
 	 * Response status code
 	 */
 	readonly status: number;
@@ -83,6 +88,7 @@ export default class Response {
 		const
 			p = <typeof defaultResponseOpts & ResponseOptions>$C.extend(false, {}, defaultResponseOpts, params);
 
+		this.parent = p.parent;
 		this.status = p.status;
 		const s = this.okStatuses = p.okStatuses;
 
@@ -140,7 +146,7 @@ export default class Response {
 				break;
 
 			case 'object':
-				data = Then.resolve(this.body);
+				data = Then.resolve(this.body, this.parent);
 				break;
 
 			default:
@@ -149,7 +155,7 @@ export default class Response {
 
 		return data
 			.then((obj) => $C(this.decoders)
-				.to(Then.resolve(obj))
+				.to(Then.resolve(obj, this.parent))
 				.reduce((res, fn) => res.then(fn)))
 
 			.then((res) => {
@@ -179,10 +185,10 @@ export default class Response {
 			body = <Document | void>this.body;
 
 		if (!body) {
-			return <any>Then.resolve(null);
+			return <any>Then.resolve(null, this.parent);
 		}
 
-		return <any>Then.resolve(body);
+		return <any>Then.resolve(body, this.parent);
 	}
 
 	/**
@@ -197,15 +203,16 @@ export default class Response {
 			body = <string | json | void>this.body;
 
 		if (body == null || body === '') {
-			return <any>Then.resolve(null);
+			return <any>Then.resolve(null, this.parent);
 		}
 
 		if (Object.isString(body)) {
-			return Then.immediate(() => JSON.parse(body, convertIfDate));
+			return Then.immediate(() => JSON.parse(body, convertIfDate), this.parent);
 		}
 
-		return <any>Then.immediate(() =>
-			$C(this.decoders).length() && !Object.isFrozen(body) ? Object.fastClone(body) : body);
+		return <any>Then.immediate(() => {
+			return $C(this.decoders).length() && !Object.isFrozen(body) ? Object.fastClone(body) : body;
+		}, this.parent);
 	}
 
 	/**
@@ -220,10 +227,10 @@ export default class Response {
 			body = <ArrayBuffer | void>this.body;
 
 		if (!body || !body.byteLength) {
-			return <any>Then.resolve(null);
+			return <any>Then.resolve(null, this.parent);
 		}
 
-		return <any>Then.resolve(body.slice(0));
+		return <any>Then.resolve(body.slice(0), this.parent);
 	}
 
 	/**
@@ -234,7 +241,7 @@ export default class Response {
 			throw new TypeError('Invalid data sourceType');
 		}
 
-		return Then.resolve(new Blob([this.body], {type: this.getHeader('content-sourceType')}));
+		return Then.resolve(new Blob([this.body], {type: this.getHeader('content-sourceType')}), this.parent);
 	}
 
 	/**
@@ -246,19 +253,19 @@ export default class Response {
 			{body, sourceResponseType} = this;
 
 		if (!body || sourceResponseType === 'arrayBuffer' && !(<ArrayBuffer>body).byteLength) {
-			return <any>Then.resolve(null);
+			return <any>Then.resolve(null, this.parent);
 		}
 
 		if ({text: true, document: true}[sourceResponseType]) {
-			return <any>Then.resolve(String(body));
+			return <any>Then.resolve(String(body), this.parent);
 		}
 
 		if ({json: true, object: true}[sourceResponseType]) {
 			if (Object.isString(body)) {
-				return <any>Then.resolve(body);
+				return <any>Then.resolve(body, this.parent);
 			}
 
-			return <any>Then.resolve(JSON.stringify(body));
+			return <any>Then.immediate(JSON.stringify(body), this.parent);
 		}
 
 		const
@@ -282,7 +289,7 @@ export default class Response {
 
 		if (typeof TextDecoder !== 'undefined') {
 			const decoder = new TextDecoder(encoding, {fatal: true});
-			return <any>Then.resolve(decoder.decode(new DataView(<any>body)));
+			return <any>Then.resolve(decoder.decode(new DataView(<any>body)), this.parent);
 		}
 
 		return new Then((resolve, reject, onAbort) => {
@@ -293,10 +300,11 @@ export default class Response {
 			reader.onerror = reject;
 
 			this.blob().then((blob) => {
-				reader.readAsText(blob, encoding);
 				onAbort(() => reader.abort());
+				reader.readAsText(blob, encoding);
 			});
-		});
+
+		}, this.parent);
 	}
 
 	/**

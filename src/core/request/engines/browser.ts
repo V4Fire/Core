@@ -66,8 +66,13 @@ export default function createTransport<T>(params: RequestOptions): Then<Respons
 	}
 
 	return new Then<Response>((resolve, reject, onAbort) => {
+		onAbort(() => {
+			xhr.abort();
+		});
+
 		xhr.addEventListener('load', () => {
 			resolve(new Response(xhr.response, {
+				parent: p.parent,
 				responseType: p.responseType,
 				okStatuses: p.okStatuses,
 				status: xhr.status,
@@ -84,17 +89,6 @@ export default function createTransport<T>(params: RequestOptions): Then<Respons
 			reject(new RequestError('timeout'));
 		});
 
-		onAbort((replacedBy) => {
-			if (replacedBy) {
-				resolve(replacedBy);
-
-			} else {
-				reject(new RequestError('abort'));
-			}
-
-			xhr.abort();
-		});
-
 		xhr.send(data);
-	});
+	}, p.parent);
 }

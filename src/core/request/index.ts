@@ -143,32 +143,36 @@ export default function create<T>(path, ...args) {
 			}
 		});
 
-		return new Then(async (resolve, reject) => {
-			ctx.isOnline = await isOnline();
+		const then = new Then(async (resolve, reject, onAbort) => {
+			onAbort((replacedBy) => {
+				if (Then.isThenable(replacedBy)) {
+					resolve(replacedBy);
 
-			try {
-				const arr = await Promise.all($C(p.middlewares).to([]).reduce((arr: any[], fn) => {
-					arr.push(fn({opts: p, ctx, globalOpts}));
-					return arr;
-				}));
-
-				if ($C(arr).some(Object.isFunction)) {
-					resolve((() => {
-						const
-							res = $C(arr).filter(Object.isFunction).map((fn) => fn());
-
-						if (res.length <= 1) {
-							return res[0];
-						}
-
-						return res;
-					})());
-
-					return;
+				} else {
+					reject(replacedBy || new RequestError('abort'));
 				}
+			});
 
-			} catch (err) {
-				reject(err);
+			await new Promise((r) => setImmediate(r));
+			ctx.isOnline = await Then.resolve(isOnline(), then);
+
+			const arr = await Then.all($C(p.middlewares).reduce((arr, fn) => {
+				arr.push(fn({opts: p, ctx, globalOpts}));
+				return arr;
+			}, [] as any[]), then);
+
+			if ($C(arr).some(Object.isFunction)) {
+				resolve((() => {
+					const
+						res = $C(arr).filter(Object.isFunction).map((fn) => (<Function>fn)());
+
+					if (res.length <= 1) {
+						return res[0];
+					}
+
+					return res;
+				})());
+
 				return;
 			}
 
@@ -196,11 +200,11 @@ export default function create<T>(path, ...args) {
 				res;
 
 			if (fromCache) {
-				res = Then.immediate(() => ctx.cache.get(cacheKey))
+				res = Then.immediate(() => ctx.cache.get(cacheKey), then)
 					.then(ctx.wrapAsResponse);
 
 			} else if (fromLocalStorage) {
-				res = Then.immediate(() => storage.get(localCacheKey))
+				res = Then.immediate(() => storage.get(localCacheKey), then)
 					.then(ctx.wrapAsResponse)
 					.then(ctx.saveCache);
 
@@ -240,10 +244,8 @@ export default function create<T>(path, ...args) {
 					url,
 					decoder: ctx.decoders,
 					body: await $C(ctx.encoders)
-						.to(Then.resolve(p.body))
-						.reduce((res, fn, i) => res.then(
-							(obj) => fn(i ? obj : Object.fastClone(obj)))
-						)
+						.to(Then.resolve(p.body, then))
+						.reduce((res, fn, i) => res.then((obj) => fn(i ? obj : Object.fastClone(obj))))
 				};
 
 				res = request(reqOpts).then(success).then(ctx.saveCache);
@@ -251,5 +253,7 @@ export default function create<T>(path, ...args) {
 
 			resolve(ctx.wrapRequest(res));
 		});
+
+		return then;
 	};
 }
