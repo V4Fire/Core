@@ -332,7 +332,7 @@ export default class Then<T = any> implements PromiseLike<T> {
 				reject = rej;
 			}
 
-			this.promise.then(null, reject);
+			this.promise.then(res, reject);
 		});
 	}
 
