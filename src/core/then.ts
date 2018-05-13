@@ -319,7 +319,21 @@ export default class Then<T = any> implements PromiseLike<T> {
 
 	// tslint:disable-next-line
 	catch(onRejected) {
-		return this.then(null, onRejected);
+		return new Then((res, rej) => {
+			let
+				reject;
+
+			if (Object.isFunction(onRejected)) {
+				reject = (r) => {
+					this.evaluate(onRejected, [r], rej, res);
+				};
+
+			} else {
+				reject = rej;
+			}
+
+			this.promise.then(null, reject);
+		});
 	}
 
 	/**
