@@ -182,8 +182,12 @@ module.exports = config.createConfig(
 				return path.resolve(resolve.lib, ...arguments);
 			},
 
+			src() {
+				return path.resolve(resolve.sourceDir, ...arguments);
+			},
+
 			assets() {
-				return path.resolve(this.cwd(), 'assets', ...arguments);
+				return path.resolve(this.src(), 'assets', ...arguments);
 			},
 
 			output() {
