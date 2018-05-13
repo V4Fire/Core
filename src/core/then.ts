@@ -319,7 +319,7 @@ export default class Then<T = any> implements PromiseLike<T> {
 
 	// tslint:disable-next-line
 	catch(onRejected) {
-		return new Then((res, rej) => {
+		return new Then((res, rej, onAbort) => {
 			let
 				reject;
 
@@ -331,6 +331,10 @@ export default class Then<T = any> implements PromiseLike<T> {
 			} else {
 				reject = rej;
 			}
+
+			onAbort((r) => {
+				this.abort(r);
+			});
 
 			this.promise.then(res, reject);
 		});
