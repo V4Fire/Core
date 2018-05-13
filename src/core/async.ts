@@ -530,18 +530,36 @@ export default class Async<CTX extends object = Async<any>> {
 	 *   *) [label] - label for the task (previous task with the same label will be canceled)
 	 *   *) [group] - group name for the task
 	 */
-	promise<T>(promise: PromiseLike<T>, params?: AsyncOpts): Promise<T> {
+	promise<T>(promise: () => PromiseLike<T> | PromiseLike<T>, params?: AsyncOpts): Promise<T> {
 		return new Promise((resolve, reject) => {
-			promise.then(
-				<any>this.proxy(resolve, {
-					...<any>params,
-					clearFn: this.promiseDestructor.bind(this, promise),
-					onClear: this.onPromiseClear(resolve, reject),
-					onMerge: this.onPromiseMerge(resolve, reject)
-				}),
+			let
+				canceled = false;
 
-				reject
-			);
+			const proxyResolve = <any>this.proxy(resolve, {
+				...<any>params,
+
+				clearFn: () => {
+					this.promiseDestructor(<any>promise);
+				},
+
+				onClear: (...args) => {
+					canceled = true;
+					return this.onPromiseClear(resolve, reject)(...args);
+				},
+
+				onMerge: (...args) => {
+					canceled = true;
+					return this.onPromiseMerge(resolve, reject)(...args);
+				}
+			});
+
+			if (!canceled) {
+				if (Object.isFunction(promise)) {
+					promise = <any>promise();
+				}
+
+				(<any>promise).then(proxyResolve, reject);
+			}
 		});
 	}
 
@@ -981,6 +999,12 @@ export default class Async<CTX extends object = Async<any>> {
 			fn = promise.abort || promise.cancel;
 
 		if (fn && Object.isFunction(fn)) {
+			if (Object.isFunction(promise.catch)) {
+				promise.catch(() => {
+					// Promise error loopback
+				});
+			}
+
 			fn.call(promise);
 		}
 	}
