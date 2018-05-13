@@ -138,10 +138,8 @@ Object.fastCompare = function fastCompare<T>(a: any, b: T): a is T {
 		bIsArr = Object.isArray(b);
 
 	if (
-		!aIsArr && !Object.isObject(a) && !Object.isDate(a) && !Object.isRegExp(a) ||
-		!Object.isFunction(a.toJSON) ||
-		!bIsArr && !Object.isObject(b) && !Object.isDate(b) && !Object.isRegExp(b) ||
-		!Object.isFunction((<any>b).toJSON)
+		!aIsArr && !Object.isObject(a) && !Object.isDate(a) && !Object.isRegExp(a) && !Object.isFunction(a.toJSON) ||
+		!bIsArr && !Object.isObject(b) && !Object.isDate(b) && !Object.isRegExp(b) && !Object.isFunction((<any>b).toJSON)
 	) {
 		return a === b;
 	}
