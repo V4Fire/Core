@@ -100,7 +100,7 @@ export interface CacheObject {
 	groups: Dictionary<LocalCacheObject>;
 }
 
-export interface EventEmitterLike {
+export type EventEmitterLike = Function | {
 	on?: Function;
 	addListener?: Function;
 	addEventListener?: Function;
@@ -108,16 +108,23 @@ export interface EventEmitterLike {
 	off?: Function;
 	removeListener?: Function;
 	removeEventListener?: Function;
-}
+};
 
 export type WorkerLike = Function | {
 	terminate?: Function;
 	destroy?: Function;
+	destructor?: Function;
 	close?: Function;
 	abort?: Function;
 	cancel?: Function;
 	disconnect?: Function;
+	unwatch?: Function;
 };
+
+export interface CancelablePromise<T> extends Promise<T> {
+	abort?: Function;
+	cancel?: Function;
+}
 
 /**
  * Base class for Async IO
@@ -528,6 +535,7 @@ export default class Async<CTX extends object = Async<any>> {
 			promise.then(
 				<any>this.proxy(resolve, {
 					...<any>params,
+					clearFn: this.promiseDestructor.bind(this, promise),
 					onClear: this.onPromiseClear(resolve, reject),
 					onMerge: this.onPromiseMerge(resolve, reject)
 				}),
@@ -910,7 +918,7 @@ export default class Async<CTX extends object = Async<any>> {
 	}): void {
 		const
 			e = params.emitter,
-			fn = e.removeEventListener || e.removeListener || e.off;
+			fn = Object.isFunction(e) ? e : e.removeEventListener || e.removeListener || e.off;
 
 		if (fn && Object.isFunction(fn)) {
 			fn.call(e, params.event, params.handler, ...params.args);
@@ -946,10 +954,12 @@ export default class Async<CTX extends object = Async<any>> {
 					fn =
 						worker.terminate ||
 						worker.destroy ||
+						worker.destructor ||
 						worker.close ||
 						worker.abort ||
 						worker.cancel ||
-						worker.disconnect;
+						worker.disconnect ||
+						worker.unwatch;
 				}
 
 				if (fn && Object.isFunction(fn)) {
@@ -959,6 +969,19 @@ export default class Async<CTX extends object = Async<any>> {
 					throw new ReferenceError('Destructor function for the worker is not defined');
 				}
 			}
+		}
+	}
+
+	/**
+	 * Aborts the specified promise
+	 * @param promise
+	 */
+	protected promiseDestructor<T>(promise: CancelablePromise<T>): void {
+		const
+			fn = promise.abort || promise.cancel;
+
+		if (fn && Object.isFunction(fn)) {
+			fn.call(promise);
 		}
 	}
 
