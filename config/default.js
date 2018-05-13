@@ -174,24 +174,28 @@ module.exports = config.createConfig(
 				return require('../build/include')(this.roots);
 			},
 
+			rel(field, ...args) {
+				return path.join(path.relative(this.cwd(), this[field]()), ...args);
+			},
+
 			lib() {
-				return resolve.lib;
+				return path.resolve(resolve.lib, ...arguments);
 			},
 
 			assets() {
-				return path.resolve(this.cwd(), 'assets');
+				return path.resolve(this.cwd(), 'assets', ...arguments);
 			},
 
 			output() {
-				return path.resolve(this.cwd(), 'dist');
+				return path.resolve(this.cwd(), 'dist', ...arguments);
 			},
 
 			clientOutput() {
-				return path.resolve(this.output(), 'client');
+				return path.resolve(this.output(), 'client', ...arguments);
 			},
 
 			serverOutput() {
-				return path.resolve(this.output(), 'server');
+				return path.resolve(this.output(), 'server', ...arguments);
 			}
 		}
 	}
