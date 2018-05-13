@@ -530,7 +530,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 *   *) [label] - label for the task (previous task with the same label will be canceled)
 	 *   *) [group] - group name for the task
 	 */
-	promise<T>(promise: () => PromiseLike<T> | PromiseLike<T>, params?: AsyncOpts): Promise<T> {
+	promise<T>(promise: (() => PromiseLike<T>) | PromiseLike<T>, params?: AsyncOpts): Promise<T> {
 		return new Promise((resolve, reject) => {
 			let
 				canceled = false;
