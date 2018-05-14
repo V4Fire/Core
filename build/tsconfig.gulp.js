@@ -27,7 +27,7 @@ module.exports = function (gulp) {
 
 		const
 			{src, extend} = require('config'),
-			pzlr = require('@pzlr/build-core');
+			{config: pzlr, resolve} = require('@pzlr/build-core');
 
 		return gulp.src(['./**/*.tsconfig', './**/.tsconfig', '!./node_modules/**'], {since: gulp.lastRun('build:tsconfig')})
 			.pipe($.plumber())
@@ -36,7 +36,7 @@ module.exports = function (gulp) {
 					config = resolveExtends(tsconfig.parse(file.contents.toString(), file.path)),
 					deps = {};
 
-				const depsList = $C(pzlr.config.dependencies).map((el, i) => pzlr.resolve.rootDependencies[i].replace(
+				const depsList = $C(pzlr.dependencies).map((el, i) => resolve.rootDependencies[i].replace(
 					new RegExp(`.*?${RegExp.escape(el)}/(.*)`),
 					(str, path) => (deps[`${el}/*`] = [`${el}:${path}/*`])[0]
 				));
@@ -46,13 +46,10 @@ module.exports = function (gulp) {
 						paths: {
 							'*': [
 								`./${src.rel('src')}/*`,
-								...$C(pzlr.config.dependencies).map((el, i) => pzlr.resolve.rootDependencies[i].replace(
-									new RegExp(`.*?${RegExp.escape(el)}/(.*)`),
-									(str, path) => (deps[`${el}/*`] = [`${el}:${path}/*`])[0]
-								))
+								...depsList
 							],
 
-							[`${pzlr.config.super}/*`]: depsList,
+							[`${pzlr.super}/*`]: depsList,
 							...deps
 						}
 					}
@@ -86,6 +83,11 @@ module.exports = function (gulp) {
 
 				function resolveExtends(config) {
 					if (config.extends) {
+
+						if (pzlr.superRgxp.test(config.extends)) {
+							config.extends = config.extends.replace(pzlr.superRgxp, `${pzlr.dependencies[0]}/`);
+						}
+
 						const parentSrc = isNodeModule(config.extends) ?
 							find(path.join('node_modules', config.extends)) : require.resolve(config.extends);
 
