@@ -52,7 +52,7 @@ module.exports = function (gulp) {
 								))
 							],
 
-							'@super/*': depsList,
+							[`${pzlr.config.super}/*`]: depsList,
 							...deps
 						}
 					}

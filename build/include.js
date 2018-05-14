@@ -7,6 +7,7 @@
  */
 
 const
+	{config: {superRgxp}} = require('@pzlr/build-core'),
 	path = require('path');
 
 /**
@@ -32,9 +33,6 @@ module.exports = function (roots) {
 
 			return path.join(root, src);
 		}
-
-		const
-			superRgxp = /^@super[/\\]/;
 
 		let
 			r = roots;
