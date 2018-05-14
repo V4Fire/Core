@@ -37,7 +37,7 @@
     "tslib": "^1.9.0"
   },
   "optionalDependencies": {
-    "@pzlr/build-core": "^2.8.3",
+    "@pzlr/build-core": "^2.8.4",
     "@types/fs-extra-promise": "^1.0.4",
     "@types/gulp": "^4.0.5",
     "@types/gulp-load-plugins": "0.0.31",
