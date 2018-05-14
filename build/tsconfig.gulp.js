@@ -36,6 +36,11 @@ module.exports = function (gulp) {
 					config = resolveExtends(tsconfig.parse(file.contents.toString(), file.path)),
 					deps = {};
 
+				const depsList = $C(pzlr.config.dependencies).map((el, i) => pzlr.resolve.rootDependencies[i].replace(
+					new RegExp(`.*?${RegExp.escape(el)}/(.*)`),
+					(str, path) => (deps[`${el}/*`] = [`${el}:${path}/*`])[0]
+				));
+
 				extend(config, {
 					compilerOptions: {
 						paths: {
@@ -47,6 +52,7 @@ module.exports = function (gulp) {
 								))
 							],
 
+							'@super/*': depsList,
 							...deps
 						}
 					}

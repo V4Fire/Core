@@ -33,12 +33,23 @@ module.exports = function (roots) {
 			return path.join(root, src);
 		}
 
-		for (let i = roots.length; i--;) {
+		const
+			superRgxp = /^@super[/\\]/;
+
+		let
+			r = roots;
+
+		if (superRgxp.test(src)) {
+			src = src.replace(superRgxp, '');
+			r = r.slice(0, -1);
+		}
+
+		for (let i = r.length; i--;) {
 			const
-				url = resolve(roots[i]);
+				url = resolve(r[i]);
 
 			try {
-				return require(resolve(roots[i]));
+				return require(resolve(r[i]));
 
 			} catch (err) {
 				if (err.code !== 'MODULE_NOT_FOUND') {
