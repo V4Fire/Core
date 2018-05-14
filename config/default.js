@@ -104,6 +104,7 @@ class Config {
 			});
 		}
 
+		config.extend = this.extend;
 		return config;
 	}
 
