@@ -10,26 +10,49 @@
 
 module.exports = function (gulp) {
 	const
-		$C = require('collection.js'),
 		$ = require('gulp-load-plugins')({scope: ['optionalDependencies']});
-
-	const
-		fs = require('fs'),
-		path = require('path'),
-		find = require('find-up').sync;
 
 	gulp.task('build:tsconfig', () => {
 		const
+			$C = require('collection.js');
+
+		const
+			fs = require('fs'),
+			path = require('path'),
+			find = require('find-up').sync;
+
+		const
 			tsconfig = require('tsconfig'),
 			through = require('through2').obj;
+
+		const
+			{src, extend} = require('config'),
+			pzlr = require('@pzlr/build-core');
 
 		return gulp.src(['./**/*.tsconfig', './**/.tsconfig', '!./node_modules/**'], {since: gulp.lastRun('build:tsconfig')})
 			.pipe($.plumber())
 			.pipe(through((file, enc, cb) => {
 				const
-					config = resolveExtends(tsconfig.parse(file.contents.toString(), file.path));
+					config = resolveExtends(tsconfig.parse(file.contents.toString(), file.path)),
+					deps = {};
 
-				$C($C(config).get('compilerOptions.paths')).forEach((list) => {
+				extend(config, {
+					compilerOptions: {
+						paths: {
+							'*': [
+								`./${src.rel('src')}/*`,
+								...$C(pzlr.config.dependencies).map((el, i) => pzlr.resolve.rootDependencies[i].replace(
+									new RegExp(`.*?${RegExp.escape(el)}/(.*)`),
+									(str, path) => (deps[`${el}/*`] = [`${el}:${path}/*`])[0]
+								))
+							],
+
+							...deps
+						}
+					}
+				});
+
+				$C(config.compilerOptions.paths).forEach((list) => {
 					$C(list).forEach((url, i) => {
 						if (isNodeModule(url)) {
 							const
