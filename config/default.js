@@ -17,7 +17,7 @@ const
 	path = require('path');
 
 const
-	{resolve} = require('@pzlr/build-core'),
+	{config: pzlr, resolve} = require('@pzlr/build-core'),
 	{env} = process;
 
 const origin = Symbol('Original function');
@@ -188,7 +188,7 @@ module.exports = config.createConfig(
 			},
 
 			assets() {
-				return path.resolve(this.src(), 'assets', ...arguments);
+				return path.resolve(this.src(), pzlr.assets.dir, ...arguments);
 			},
 
 			output() {
