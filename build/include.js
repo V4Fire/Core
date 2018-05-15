@@ -7,8 +7,12 @@
  */
 
 const
-	{config: {superRgxp}} = require('@pzlr/build-core'),
-	path = require('path');
+	{config: {superRgxp}} = require('@pzlr/build-core');
+
+const
+	path = require('path'),
+	findUp = require('find-up'),
+	isPathInside = require('is-path-inside');
 
 /**
  * Factory for creating require wrappers:
@@ -19,10 +23,10 @@ const
  * 2) Or, one of roots values will be add to the beginning of the source string
  *
  * @param {Array<string>} roots - list of root directories
- * @returns {function (string): ?}
+ * @returns {function (string, string?): ?}
  */
 module.exports = function (roots) {
-	return function (src) {
+	return function (src, ctx) {
 		function resolve(root) {
 			const
 				r = /\${root}/g;
@@ -38,8 +42,24 @@ module.exports = function (roots) {
 			r = roots;
 
 		if (superRgxp.test(src)) {
-			src = src.replace(superRgxp, '');
+			if (!ctx) {
+				throw new Error('Context for @super id not defined');
+			}
+
+			ctx = path.dirname(findUp.sync('.pzlrrc', {
+				cwd: ctx
+			}));
+
 			r = r.slice(0, -1);
+
+			for (let i = r.length; i--;) {
+				if (isPathInside(ctx, r[i])) {
+					r = r.slice(0, i);
+					break;
+				}
+			}
+
+			src = src.replace(superRgxp, '');
 		}
 
 		for (let i = r.length; i--;) {
