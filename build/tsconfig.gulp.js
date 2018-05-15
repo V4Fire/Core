@@ -83,10 +83,6 @@ module.exports = function (gulp) {
 
 				function resolveExtends(config) {
 					if (config.extends) {
-						if (pzlr.superRgxp.test(config.extends)) {
-							config.extends = config.extends.replace(pzlr.superRgxp, `${pzlr.dependencies[0]}/`);
-						}
-
 						const parentSrc = isNodeModule(config.extends) ?
 							find(path.join('node_modules', config.extends)) : require.resolve(config.extends);
 
