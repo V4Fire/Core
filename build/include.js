@@ -43,7 +43,7 @@ module.exports = function (roots) {
 
 		if (superRgxp.test(src)) {
 			if (!ctx) {
-				throw new Error('Context for @super id not defined');
+				throw new Error('Context for @super is not defined');
 			}
 
 			ctx = path.dirname(findUp.sync('.pzlrrc', {
