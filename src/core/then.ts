@@ -114,6 +114,11 @@ export default class Then<T = any> implements PromiseLike<T> {
 				promises = $C(values).map((el) => Then.resolve(el)),
 				resolved = <any[]>[];
 
+			if (!$C(promises).length()) {
+				res(resolved);
+				return;
+			}
+
 			onAbort((reason) => {
 				$C(promises).forEach((el) => {
 					el.abort(reason);
@@ -148,6 +153,11 @@ export default class Then<T = any> implements PromiseLike<T> {
 		return new Then((res, rej, onAbort) => {
 			const
 				promises = $C(values).map<Then>((el) => Then.resolve(el));
+
+			if (!$C(promises).length()) {
+				res();
+				return;
+			}
 
 			onAbort((reason) => {
 				$C(promises).forEach((el) => {
