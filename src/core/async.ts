@@ -100,17 +100,7 @@ export interface CacheObject {
 	groups: Dictionary<LocalCacheObject>;
 }
 
-export type EventEmitterLike = Function | {
-	on?: Function;
-	addListener?: Function;
-	addEventListener?: Function;
-	once?: Function;
-	off?: Function;
-	removeListener?: Function;
-	removeEventListener?: Function;
-};
-
-export type WorkerLike = Function | {
+export interface WorkerLike {
 	terminate?: Function;
 	destroy?: Function;
 	destructor?: Function;
@@ -119,7 +109,20 @@ export type WorkerLike = Function | {
 	cancel?: Function;
 	disconnect?: Function;
 	unwatch?: Function;
-};
+}
+
+export interface EventEmitterLike {
+	on?: Function;
+	addListener?: Function;
+	addEventListener?: Function;
+	once?: Function;
+	off?: Function;
+	removeListener?: Function;
+	removeEventListener?: Function;
+}
+
+export type WorkerLikeP = Function | WorkerLike;
+export type EventEmitterLikeP = Function | EventEmitterLike;
 
 export interface CancelablePromise<T> extends Promise<T> {
 	abort?: Function;
@@ -373,7 +376,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 *   *) [group] - group name for the task
 	 *   *) [onClear] - clear handler
 	 */
-	worker<T>(worker: T & WorkerLike, params?: AsyncWorkerOpts<CTX>): T {
+	worker<T>(worker: T & WorkerLikeP, params?: AsyncWorkerOpts<CTX>): T {
 		const
 			{workerCache} = this;
 
@@ -395,7 +398,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 * Terminates the specified worker
 	 * @param [worker] - link for the worker (if not defined wil be terminate all workers)
 	 */
-	terminateWorker<T>(worker?: T & WorkerLike): this;
+	terminateWorker<T>(worker?: T & WorkerLikeP): this;
 
 	/**
 	 * @param params - parameters for the operation:
@@ -403,7 +406,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 *   *) [label] - label for the task
 	 *   *) [group] - group name for the task
 	 */
-	terminateWorker<T>(params: ClearOptsId<T & WorkerLike>): this;
+	terminateWorker<T>(params: ClearOptsId<T & WorkerLikeP>): this;
 
 	// tslint:disable-next-line
 	terminateWorker(p) {
@@ -675,7 +678,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @param handler - event handler
 	 * @param [args] - additional arguments for the emitter
 	 */
-	on<T>(emitter: T & EventEmitterLike, events: string | string[], handler: Function, ...args: any[]): Object;
+	on<T>(emitter: T & EventEmitterLikeP, events: string | string[], handler: Function, ...args: any[]): Object;
 
 	/**
 	 * @param emitter - event emitter
@@ -692,7 +695,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @param [args] - additional arguments for the emitter
 	 */
 	on<T>(
-		emitter: T & EventEmitterLike,
+		emitter: T & EventEmitterLikeP,
 		events: string | string[],
 		handler: Function,
 		params: AsyncOnOpts<CTX>,
@@ -769,7 +772,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @param handler - event handler
 	 * @param [args] - additional arguments for the emitter
 	 */
-	once<T>(emitter: T & EventEmitterLike, events: string | string[], handler: Function, ...args: any[]): Object;
+	once<T>(emitter: T & EventEmitterLikeP, events: string | string[], handler: Function, ...args: any[]): Object;
 
 	/**
 	 * @param emitter - event emitter
@@ -785,7 +788,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @param [args] - additional arguments for the emitter
 	 */
 	once<T>(
-		emitter: T & EventEmitterLike,
+		emitter: T & EventEmitterLikeP,
 		events: string | string[],
 		handler: Function,
 		params: AsyncOnceOpts<CTX>,
@@ -819,7 +822,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @param [args] - additional arguments for the emitter
 	 */
 	promisifyOnce<T>(
-		emitter: T & EventEmitterLike,
+		emitter: T & EventEmitterLikeP,
 		events: string | string[],
 		params: AsyncOpts & {options?: AddEventListenerOptions},
 		...args: any[]
@@ -830,7 +833,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @param events - event or a list of events (can also specify multiple events with a space)
 	 * @param [args] - additional arguments for the emitter
 	 */
-	promisifyOnce<T>(emitter: T & EventEmitterLike, events: string | string[], ...args: any[]): Promise<any>;
+	promisifyOnce<T>(emitter: T & EventEmitterLikeP, events: string | string[], ...args: any[]): Promise<any>;
 
 	// tslint:disable-next-line
 	promisifyOnce(emitter, events, p, ...args) {
@@ -929,7 +932,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 *   *) args - additional arguments for the emitter
 	 */
 	protected eventListenerDestructor<T>(params: {
-		emitter: T & EventEmitterLike;
+		emitter: T & EventEmitterLikeP;
 		event: string;
 		handler: Function;
 		args: any[];
@@ -952,7 +955,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @param destructor - name of destructor method
 	 * @param worker
 	 */
-	protected workerDestructor<T>(destructor: string | undefined, worker: T & WorkerLike): void {
+	protected workerDestructor<T>(destructor: string | undefined, worker: T & WorkerLikeP): void {
 		const
 			{workerCache} = this;
 
