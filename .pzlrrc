@@ -1,6 +1,5 @@
 {
   "projectType": "ts",
   "sourceDir": "src",
-  "disclaimer": "disclaimer.txt",
-  "assets": {"sprite": "svg"}
+  "disclaimer": "disclaimer.txt"
 }
