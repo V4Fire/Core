@@ -12,7 +12,7 @@ const
 const
 	path = require('path'),
 	findUp = require('find-up'),
-	isPathInside = require('is-path-inside');
+	{pathEqual} = require('path-equal');
 
 /**
  * Factory for creating require wrappers:
@@ -53,7 +53,7 @@ module.exports = function (roots) {
 			r = r.slice(0, -1);
 
 			for (let i = r.length; i--;) {
-				if (isPathInside(ctx, r[i])) {
+				if (pathEqual(ctx, r[i])) {
 					r = r.slice(0, i);
 					break;
 				}
