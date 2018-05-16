@@ -59,9 +59,6 @@ export async function clear(): Promise<boolean> {
 
 	} catch (_) {
 		return false;
-
-	} finally {
-		location.href = '/';
 	}
 
 	return true;
