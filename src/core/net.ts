@@ -17,6 +17,10 @@ let
 
 /**
  * If online returns true
+ *
+ * @emits online()
+ * @emits offline()
+ * @emits status(value: boolean)
  */
 export async function isOnline(): Promise<boolean> {
 	const
