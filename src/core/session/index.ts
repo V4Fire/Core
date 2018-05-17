@@ -7,6 +7,10 @@
  */
 
 import session from 'core/session/engines';
+import { EventEmitter2 as EventEmitter } from 'eventemitter2';
+
+export const
+	event = new EventEmitter();
 
 /**
  * Returns the current session object
@@ -31,6 +35,7 @@ export async function get(): Promise<{auth: string | undefined; csrf: string | u
  *
  * @param [auth]
  * @param [csrf]
+ * @emits set({auth?: string, csrf?: string})
  */
 export async function set(auth?: string | undefined, csrf?: string | undefined): Promise<boolean> {
 	try {
@@ -42,6 +47,8 @@ export async function set(auth?: string | undefined, csrf?: string | undefined):
 			await session.set('csrf', csrf);
 		}
 
+		event.emit('set', {auth, csrf});
+
 	} catch (_) {
 		return false;
 	}
@@ -51,11 +58,13 @@ export async function set(auth?: string | undefined, csrf?: string | undefined):
 
 /**
  * Clears the current session
+ * @emits clear()
  */
 export async function clear(): Promise<boolean> {
 	try {
 		await session.remove('auth');
 		await session.remove('csrf');
+		event.emit('clear');
 
 	} catch (_) {
 		return false;
