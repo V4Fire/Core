@@ -15,5 +15,15 @@ export default {
 	/**
 	 * Base API URL
 	 */
-	api: undefined
+	api: undefined,
+
+	/**
+	 * Online check url
+	 */
+	onlineCheckURL: 'https://www.google.com/favicon.ico',
+
+	/**
+	 * Online check interval
+	 */
+	onlineCheckInterval: (5).seconds()
 };
