@@ -8,37 +8,102 @@
 
 import config from 'config';
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
+import { asyncLocal } from 'core/kv-storage';
 
 export const
 	event = new EventEmitter();
 
+const
+	storage = asyncLocal.namespace('[[NET]]');
+
 let
-	onlineStatus;
+	status,
+	lastOnline,
+	cache,
+	syncTimer;
 
 /**
  * If online returns true
  *
  * @emits online()
- * @emits offline()
- * @emits status(value: boolean)
+ * @emits offline(lastOnline: Date)
+ * @emits status({status: boolean, lastOnline?: Date})
  */
-export async function isOnline(): Promise<boolean> {
-	const
-		prev = onlineStatus,
-		img = new Image();
-
-	onlineStatus = await new Promise<boolean>((resolve) => {
-		img.onload = () => resolve(true);
-		img.onerror = () => resolve(false);
-		img.src = `${config.onlineCheckURL}?d=${Date.now()}`;
-	});
-
-	if (prev === undefined || onlineStatus !== prev) {
-		event.emit(onlineStatus ? 'online' : 'offline');
-		event.emit('status', onlineStatus);
+export function isOnline(): Promise<{status: boolean; lastOnline?: Date}> {
+	if (cache) {
+		return cache;
 	}
 
-	return onlineStatus;
+	cache = (async () => {
+		const
+			url = config.onlineCheckURL,
+			prevStatus = status;
+
+		let
+			loadFromStorage;
+
+		if (!lastOnline && url) {
+			loadFromStorage = storage.get('lastOnline').then((v) => {
+				if (v) {
+					lastOnline = v;
+				}
+			});
+		}
+
+		status = await new Promise<boolean>((resolve) => {
+			if (!url) {
+				resolve(true);
+				return;
+			}
+
+			const
+				img = new Image(),
+				timer = setTimeout(() => resolve(false), config.onlineCheckTimeout);
+
+			img.onload = () => (clearTimeout(timer), resolve(true));
+			img.onerror = () => (clearTimeout(timer), resolve(true));
+			img.src = `${url}?d=${Date.now()}`;
+		});
+
+		setTimeout(() => cache = undefined, config.onlineCheckCacheTTL);
+
+		const res = {
+			status,
+			lastOnline
+		};
+
+		const updateDate = () => {
+			clearTimeout(syncTimer);
+			syncTimer = undefined;
+
+			if (url) {
+				storage.set('lastOnline', lastOnline = new Date()).catch(stderr);
+			}
+		};
+
+		if (prevStatus === undefined || status !== prevStatus) {
+			if (status) {
+				updateDate();
+				event.emit('online', lastOnline);
+
+			} else {
+				event.emit('offline');
+			}
+
+			event.emit('status', res);
+
+		} else if (status && syncTimer != null) {
+			syncTimer = setTimeout(updateDate, config.onlineLastDateSyncInterval);
+		}
+
+		try {
+			await loadFromStorage;
+		} catch (_) {}
+
+		return res;
+	})();
+
+	return cache;
 }
 
 async function onlineCheck(): Promise<void> {

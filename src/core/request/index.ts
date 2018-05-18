@@ -158,7 +158,7 @@ export default function create<T>(path, ...args) {
 			});
 
 			ctx.then = then;
-			ctx.isOnline = await Then.resolve(isOnline(), then);
+			ctx.isOnline = (await Then.resolve(isOnline(), then)).status;
 
 			const arr = await Then.all($C(p.middlewares).reduce((arr, fn) => {
 				arr.push(fn({opts: p, ctx, globalOpts}));

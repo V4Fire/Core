@@ -25,5 +25,20 @@ export default {
 	/**
 	 * Online check interval
 	 */
-	onlineCheckInterval: (5).seconds()
+	onlineCheckInterval: (5).seconds(),
+
+	/**
+	 * Timeout for online check
+	 */
+	onlineCheckTimeout: (2).seconds(),
+
+	/**
+	 * TTL for an online cache response
+	 */
+	onlineCheckCacheTTL: 0.3.second(),
+
+	/**
+	 * Last online date sync interval
+	 */
+	onlineLastDateSyncInterval: (1).minute()
 };
