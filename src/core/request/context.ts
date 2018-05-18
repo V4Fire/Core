@@ -182,12 +182,12 @@ export default class RequestContext<T = any> {
 			p.headers = normalizeHeaders(p.headers);
 		}
 
-		if (this.canCache) {
-			this.cacheKey = getRequestKey(url, p);
+		if ($C(q).length()) {
+			url = `${url}?${toQueryString(q)}`;
 		}
 
-		if ($C(q).length()) {
-			return `${url}?${toQueryString(q)}`;
+		if (this.canCache) {
+			this.cacheKey = getRequestKey(url, p);
 		}
 
 		return url;
