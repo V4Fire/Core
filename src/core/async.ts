@@ -728,13 +728,21 @@ export default class Async<CTX extends object = Async<any>> {
 				name: 'eventListener',
 				obj: handler,
 				wrapper(): any {
-					if (p.single && !emitter.once) {
-						const baseHandler = handler;
-						handler = function (this: any): any {
+					const baseHandler = handler;
+					handler = function (this: any): any {
+						if (p.single && !emitter.once) {
 							that.eventListenerDestructor({emitter, event, handler, args});
-							return baseHandler.apply(this, arguments);
-						};
-					}
+						}
+
+						const
+							res = baseHandler.apply(this, arguments);
+
+						if (Then.isThenable(res)) {
+							(<Promise<any>>res).catch(devNull);
+						}
+
+						return res;
+					};
 
 					const
 						fn = p.single && emitter.once || emitter.addEventListener || emitter.addListener || emitter.on;
