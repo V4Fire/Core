@@ -738,7 +738,7 @@ export default class Async<CTX extends object = Async<any>> {
 							res = baseHandler.apply(this, arguments);
 
 						if (Then.isThenable(res)) {
-							(<Promise<any>>res).catch(devNull);
+							(<Promise<any>>res).catch(stderr);
 						}
 
 						return res;

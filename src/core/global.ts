@@ -21,7 +21,13 @@ GLOBAL.Any = function Any(obj: any): any {
  * @param err
  */
 GLOBAL.stderr = function stderr(err: any): void {
-	console.error(err);
+	if (err) {
+		if (err.type === 'clearAsync') {
+			return;
+		}
+
+		console.error(err);
+	}
 };
 
 /**
