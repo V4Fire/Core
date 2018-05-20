@@ -124,6 +124,7 @@ Object.fastClone = function fastClone<T>(
  * @param a
  * @param b
  */
+// tslint:disable-next-line:cyclomatic-complexity
 Object.fastCompare = function fastCompare<T>(a: any, b: T): a is T {
 	if (a === b) {
 		return true;
@@ -135,12 +136,20 @@ Object.fastCompare = function fastCompare<T>(a: any, b: T): a is T {
 
 	const
 		aIsArr = Object.isArray(a),
-		bIsArr = Object.isArray(b);
+		aIsMap = !aIsArr && Object.isMap(a),
+		aIsSet = !aIsMap && Object.isSet(a),
+		bIsArr = Object.isArray(b),
+		bIsMap = !bIsArr && Object.isMap(b),
+		bIsSet = !bIsMap && Object.isSet(b);
 
 	if (
 		!aIsArr && !Object.isObject(a) && !Object.isDate(a) && !Object.isRegExp(a) && !Object.isFunction(a.toJSON) ||
 		!bIsArr && !Object.isObject(b) && !Object.isDate(b) && !Object.isRegExp(b) && !Object.isFunction((<any>b).toJSON)
 	) {
+		if ((aIsMap && bIsMap || aIsSet && bIsSet) && a.size === 0 && (<any>b).size === 0) {
+			return true;
+		}
+
 		return a === b;
 	}
 
@@ -151,7 +160,7 @@ Object.fastCompare = function fastCompare<T>(a: any, b: T): a is T {
 	if (aIsArr) {
 		length1 = a.length;
 
-	} else if (Object.isSet(a) || Object.isMap(a)) {
+	} else if (aIsMap || aIsSet) {
 		length1 = a.size;
 
 	} else {
@@ -161,8 +170,8 @@ Object.fastCompare = function fastCompare<T>(a: any, b: T): a is T {
 	if (bIsArr) {
 		length2 = (<any>b).length;
 
-	} else if (Object.isSet(b) || Object.isMap(b)) {
-		length2 = b.size;
+	} else if (bIsMap || bIsSet) {
+		length2 = (<any>b).size;
 
 	} else {
 		length2 = typeof (<any>b).length === 'number' ? (<any>b).length : Object.keys(b).length;
@@ -170,6 +179,10 @@ Object.fastCompare = function fastCompare<T>(a: any, b: T): a is T {
 
 	if (length1 !== length2) {
 		return false;
+	}
+
+	if ((aIsArr && bIsArr || aIsMap && bIsMap || aIsSet && bIsSet) && length1 === 0) {
+		return true;
 	}
 
 	return JSON.stringify(a) === JSON.stringify(b);
