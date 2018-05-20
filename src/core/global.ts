@@ -23,3 +23,11 @@ GLOBAL.Any = function Any(obj: any): any {
 GLOBAL.stderr = function stderr(err: any): void {
 	console.error(err);
 };
+
+/**
+ * dev/null wrapper
+ * @param obj
+ */
+GLOBAL.devNull = function stderr(obj: any): void {
+	return undefined;
+};

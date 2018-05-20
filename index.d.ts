@@ -13,6 +13,7 @@
 
 declare function Any(obj: any): any;
 declare function stderr(err: any): void;
+declare function devNull(obj: any): void;
 
 declare function i18n(strings: any | string[], ...expr: any[]): string;
 declare function t(strings: any | string[], ...expr: any[]): string;
