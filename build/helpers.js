@@ -28,13 +28,3 @@ exports.getHead = function (withVersion) {
 		.readFileSync(path.join(process.cwd(), 'disclaimer.txt'), 'utf-8')
 		.replace(/\* (\w.*?)(?=\n)/, (str) => str + (withVersion ? ` v${exports.getVersion()}` : ''));
 };
-
-/**
- * Normalizes path separators in the specified url
- *
- * @param url
- * @returns {string}
- */
-exports.normalizeSep = function (url) {
-	return url.replace(/\\/g, '/');
-};
