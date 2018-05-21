@@ -6,6 +6,16 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+export interface Config {
+	lang: string;
+	api?: string | undefined;
+	onlineCheckURL?: string | undefined;
+	onlineCheckInterval: number;
+	onlineCheckTimeout: number;
+	onlineCheckCacheTTL: number;
+	onlineLastDateSyncInterval: number;
+}
+
 export default {
 	/**
 	 * Default system language
@@ -41,4 +51,4 @@ export default {
 	 * Last online date sync interval
 	 */
 	onlineLastDateSyncInterval: (1).minute()
-};
+} as Config;

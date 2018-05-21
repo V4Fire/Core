@@ -28,7 +28,18 @@ export const defaultResponseOpts = {
 };
 
 export const
-	globalOpts: GlobalOptions = {api: config.api, meta: {}},
 	globalCache = new RestrictedCache(),
 	pendingCache = new Cache(),
 	sharedCache: Dictionary<Cache> = {};
+
+export const globalOpts: GlobalOptions = {
+	get api(): string | undefined {
+		return config.api;
+	},
+
+	set api(value: string | undefined) {
+		config.api = value;
+	},
+
+	meta: {}
+};
