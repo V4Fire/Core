@@ -54,7 +54,8 @@
     "path-equal": "^1.1.0",
     "through2": "^2.0.3",
     "tsconfig": "^7.0.0",
-    "typescript": "^2.9.0-dev.20180421"
+    "typescript": "^2.9.0-dev.20180421",
+    "upath": "^1.1.0"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.3",
