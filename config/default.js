@@ -132,17 +132,12 @@ module.exports = config.createConfig(
 	{
 		dirs: [__dirname, 'client', 'server'],
 		envs: {
-			NODE_ENV: 'development',
-			APP_NAME: 'V4Fire'
+			NODE_ENV: 'development'
 		}
 	},
 
 	{
 		__proto__: config,
-
-		appName() {
-			return env.APP_NAME;
-		},
 
 		snakeskin() {
 			return {
