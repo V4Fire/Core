@@ -14,7 +14,8 @@ const
 	$C = require('collection.js'),
 	Sugar = require('sugar'),
 	fs = require('fs-extra-promise'),
-	path = require('path');
+	path = require('upath'),
+	o = require('uniconf/options').option;
 
 const
 	{config: pzlr, resolve} = require('@pzlr/build-core'),
@@ -138,6 +139,11 @@ module.exports = config.createConfig(
 
 	{
 		__proto__: config,
+
+		appName: o('app-name', {
+			env: true,
+			default: 'Default app'
+		}),
 
 		snakeskin() {
 			return {

@@ -11,6 +11,7 @@ import $C = require('collection.js');
 export interface Config {
 	lang: string;
 	api?: string | undefined;
+	appName?: string | undefined,
 	onlineCheckURL?: string | undefined;
 	onlineCheckInterval: number;
 	onlineCheckTimeout: number;
@@ -28,6 +29,11 @@ const config: Config = {
 	 * Base API URL
 	 */
 	api: undefined,
+
+	/**
+	 * Base app name
+	 */
+	appName: undefined,
 
 	/**
 	 * Online check url
