@@ -6,6 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import $C = require('collection.js');
+
 export interface Config {
 	lang: string;
 	api?: string | undefined;
@@ -16,7 +18,7 @@ export interface Config {
 	onlineLastDateSyncInterval: number;
 }
 
-export default {
+const config: Config = {
 	/**
 	 * Default system language
 	 */
@@ -51,4 +53,18 @@ export default {
 	 * Last online date sync interval
 	 */
 	onlineLastDateSyncInterval: (1).minute()
-} as Config;
+};
+
+/**
+ * Extends the config object
+ * @param args
+ */
+export function extend<T extends Config = Config>(...args: Dictionary[]): T {
+	return <any>$C.extend({
+		deep: true,
+		concatArray: true,
+		concatFn: (a: any[], b: any[]) => a.union(b)
+	}, config, ...args);
+}
+
+export default config;
