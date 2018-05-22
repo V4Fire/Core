@@ -55,6 +55,7 @@
     "through2": "^2.0.3",
     "tsconfig": "^7.0.0",
     "typescript": "^2.9.0-dev.20180421",
+    "uniconf": "^2.0.0",
     "upath": "^1.1.0"
   },
   "devDependencies": {
