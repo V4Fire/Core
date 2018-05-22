@@ -133,8 +133,7 @@ module.exports = config.createConfig(
 		dirs: [__dirname, 'client', 'server'],
 		envs: {
 			NODE_ENV: 'development',
-			APP_NAME: 'V4Fire',
-			SERVICE_NAME: undefined
+			APP_NAME: 'V4Fire'
 		}
 	},
 
