@@ -162,7 +162,7 @@ module.exports = config.createConfig(
 
 		typescript() {
 			return {
-				transpileOnly: !isProd
+				transpileOnly: true
 			};
 		},
 
