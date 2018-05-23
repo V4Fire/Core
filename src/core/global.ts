@@ -9,6 +9,14 @@
 import { GLOBAL } from 'core/const/links';
 
 /**
+ * Constructor for any types
+ * @param obj
+ */
+GLOBAL.Any = function Any(obj: any): any {
+	return obj;
+};
+
+/**
  * STDERR wrapper
  * @param err
  */

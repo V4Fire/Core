@@ -11,6 +11,7 @@
 /// <reference types="typescript/lib/lib.dom"/>
 /// <reference types="typescript/lib/lib.esnext"/>
 
+declare function Any(obj: any): any;
 declare function stderr(err: any): void;
 declare function devNull(obj: any): void;
 
@@ -26,7 +27,6 @@ declare class IdleDeadline {
 declare function requestIdleCallback(fn: (deadline: IdleDeadline) => void, opts?: {timer?: number}): number;
 declare function cancelIdleCallback(id: number): void;
 
-type Any<T> = any;
 type Wrap<T> = T & any;
 type CanPromise<T> = T | Promise<T>;
 interface Dictionary<T = any> {[key: string]: T}
