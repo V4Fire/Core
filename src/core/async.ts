@@ -540,6 +540,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 			const proxyResolve = <any>this.proxy(resolve, {
 				...<any>params,
+				single: true,
 
 				clearFn: () => {
 					this.promiseDestructor(<any>promise);
