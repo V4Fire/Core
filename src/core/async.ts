@@ -490,7 +490,7 @@ export default class Async<CTX extends object = Async<any>> {
 			obj: cb,
 			wrapper: (fn) => fn,
 			linkByWrapper: true,
-			periodic: !params || params.single !== true
+			periodic: Boolean(params && params.single === false)
 		});
 	}
 
