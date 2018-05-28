@@ -66,6 +66,14 @@ export interface AsyncCbOptsSingle<T extends object = Async> extends AsyncCbOpts
 	single?: boolean;
 }
 
+export interface AsyncProxyOpts<T extends object = Async> extends AsyncCbOptsSingle<T> {
+	name?: string;
+}
+
+export interface AsyncPromiseOpts extends AsyncOpts {
+	name?: string;
+}
+
 export interface AsyncCreateIdleOpts<T extends object = Async> extends AsyncCbOpts<T> {
 	timeout?: number;
 }
@@ -433,15 +441,10 @@ export default class Async<CTX extends object = Async<any>> {
 	 *   *) [label] - label for the task (previous task with the same label will be canceled)
 	 *   *) [group] - group name for the task
 	 */
-	request<T>(request: PromiseLike<T>, params?: AsyncOpts): Then<T> {
-		return this.setAsync({
-			...params,
-			name: 'request',
-			obj: Then.resolve(request),
-			needCall: true,
-			linkByWrapper: true,
-			clearFn: this.requestDestructor.bind(this),
-			wrapper: (fn, req) => req.then(fn, fn)
+	request<T>(request: (() => PromiseLike<T>) | PromiseLike<T>, params?: AsyncOpts): Promise<T> {
+		return this.promise(request, {
+			...<any>params,
+			name: 'request'
 		});
 	}
 
@@ -483,14 +486,15 @@ export default class Async<CTX extends object = Async<any>> {
 	 *   *) [single] - if false, then after first invocation the proxy it won't be removed
 	 *   *) [onClear] - clear handler
 	 */
-	proxy(cb: Function, params?: AsyncCbOptsSingle<CTX>): Function {
+	proxy(cb: Function, params?: AsyncProxyOpts<CTX>): Function {
+		const p = params || {};
 		return this.setAsync({
 			...params,
-			name: 'proxy',
+			name: p.name || 'proxy',
 			obj: cb,
 			wrapper: (fn) => fn,
 			linkByWrapper: true,
-			periodic: Boolean(params && params.single === false)
+			periodic: p.single === false
 		});
 	}
 
@@ -533,17 +537,19 @@ export default class Async<CTX extends object = Async<any>> {
 	 *   *) [label] - label for the task (previous task with the same label will be canceled)
 	 *   *) [group] - group name for the task
 	 */
-	promise<T>(promise: (() => PromiseLike<T>) | PromiseLike<T>, params?: AsyncOpts): Promise<T> {
+	promise<T>(promise: (() => PromiseLike<T>) | PromiseLike<T>, params?: AsyncPromiseOpts): Promise<T> {
+		const
+			p = <AsyncPromiseOpts>(params || {});
+
 		return new Promise((resolve, reject) => {
 			let
 				canceled = false;
 
 			const proxyResolve = <any>this.proxy(resolve, {
-				...<any>params,
-				single: true,
+				...<any>p,
 
 				clearFn: () => {
-					this.promiseDestructor(<any>promise);
+					this.promiseDestructor(<Promise<any>>promise);
 				},
 
 				onClear: (...args) => {
@@ -562,7 +568,13 @@ export default class Async<CTX extends object = Async<any>> {
 					promise = <any>promise();
 				}
 
-				(<any>promise).then(proxyResolve, reject);
+				(<Promise<any>>promise).then(proxyResolve, (err) => {
+					reject(err);
+
+					if (!canceled) {
+						this.cancelProxy(proxyResolve);
+					}
+				});
 			}
 		});
 	}
@@ -1006,12 +1018,16 @@ export default class Async<CTX extends object = Async<any>> {
 	 * Aborts the specified promise
 	 * @param promise
 	 */
-	protected promiseDestructor<T>(promise: CancelablePromise<T>): void {
-		const
-			fn = promise.abort || promise.cancel;
+	protected promiseDestructor<T>(promise: PromiseLike<T> | CancelablePromise<T>): void {
+		if ('abort' in promise || 'cancel' in promise) {
+			const
+				fn = (promise.abort || promise.cancel);
 
-		if (fn && Object.isFunction(fn)) {
-			if (Object.isFunction(promise.catch)) {
+			if (!fn || !Object.isFunction(fn)) {
+				return;
+			}
+
+			if ('catch' in promise && Object.isFunction(promise.catch)) {
 				promise.catch(() => {
 					// Promise error loopback
 				});
@@ -1019,16 +1035,6 @@ export default class Async<CTX extends object = Async<any>> {
 
 			fn.call(promise);
 		}
-	}
-
-	/**
-	 * Cancels the specified request
-	 *
-	 * @param request
-	 * @param ctx - context object
-	 */
-	protected requestDestructor(request: Then, ctx: AsyncCtx): void {
-		request.abort(ctx.join === 'replace' ? ctx.replacedBy && ctx.replacedBy.id : undefined);
 	}
 
 	/**
@@ -1165,7 +1171,7 @@ export default class Async<CTX extends object = Async<any>> {
 					res = finalObj.apply(fnCtx, arguments);
 				}
 
-				if (Then.isThenable(finalObj)) {
+				if (Then.isThenable(res)) {
 					finalObj.then(execTasks(), execTasks(1));
 
 				} else {
