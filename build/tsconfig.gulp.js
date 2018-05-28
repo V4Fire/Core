@@ -18,7 +18,7 @@ module.exports = function (gulp) {
 
 		const
 			fs = require('fs'),
-			path = require('upath'),
+			path = require('path'),
 			find = require('find-up').sync;
 
 		const
