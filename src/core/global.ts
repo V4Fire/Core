@@ -22,7 +22,7 @@ GLOBAL.Any = function Any(obj: any): any {
  */
 GLOBAL.stderr = function stderr(err: any): void {
 	if (err) {
-		if (err.type === 'clearAsync') {
+		if ({clearAsync: true, abort: true}[err.type]) {
 			return;
 		}
 
