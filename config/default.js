@@ -14,7 +14,7 @@ const
 	$C = require('collection.js'),
 	Sugar = require('sugar'),
 	fs = require('fs-extra-promise'),
-	path = require('upath'),
+	path = require('path'),
 	o = require('uniconf/options').option;
 
 const

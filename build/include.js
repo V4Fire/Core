@@ -10,7 +10,7 @@ const
 	{config: {superRgxp}} = require('@pzlr/build-core');
 
 const
-	path = require('upath'),
+	path = require('path'),
 	findUp = require('find-up'),
 	{pathEqual} = require('path-equal');
 

@@ -10,7 +10,7 @@
 
 const
 	fs = require('fs'),
-	path = require('upath');
+	path = require('path');
 
 /**
  * Returns the project version
