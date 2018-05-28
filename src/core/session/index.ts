@@ -13,7 +13,7 @@ export const
 	event = new EventEmitter();
 
 /**
- * Returns the current session object
+ * Returns current session object
  */
 export async function get(): Promise<{auth: string | undefined; csrf: string | undefined}> {
 	try {
@@ -57,7 +57,7 @@ export async function set(auth?: string | undefined, csrf?: string | undefined):
 }
 
 /**
- * Clears the current session
+ * Clears current session
  * @emits clear()
  */
 export async function clear(): Promise<boolean> {
@@ -74,7 +74,7 @@ export async function clear(): Promise<boolean> {
 }
 
 /**
- * Matches the specified session and the current
+ * Matches the specified session and current
  *
  * @param [auth]
  * @param [csrf]
