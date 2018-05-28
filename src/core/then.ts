@@ -172,7 +172,7 @@ export default class Then<T = any> implements PromiseLike<T> {
 	}
 
 	/**
-	 * Returns true if the current promise is pending
+	 * Returns true if current promise is pending
 	 */
 	get isPending(): boolean {
 		return this.state === State.pending;
@@ -187,6 +187,11 @@ export default class Then<T = any> implements PromiseLike<T> {
 	 * Promise state
 	 */
 	protected state: State = State.pending;
+
+	/**
+	 * If true, then the promise was be aborted
+	 */
+	protected aborted: boolean = false;
 
 	/**
 	 * Internal promise
@@ -214,40 +219,47 @@ export default class Then<T = any> implements PromiseLike<T> {
 	 */
 	constructor(executor: Executor<T>, parent?: Then) {
 		this.promise = new Promise((res, rej) => {
-			const resolve = this.resolve = (v) => {
+			const resolve = this.resolve = (val) => {
 				if (!this.isPending) {
 					return;
 				}
 
 				this.state = State.fulfilled;
-				res(v);
+				res(val);
 			};
 
-			const reject = this.reject = (v) => {
+			const reject = this.reject = (err) => {
 				if (!this.isPending) {
 					return;
 				}
 
 				this.state = State.rejected;
-				rej(v);
+				rej(err);
 			};
 
 			let
 				setOnAbort;
 
 			if (parent) {
-				const abortParent = this.onAbort = (err) => parent.abort(err);
-				parent.catch((err) => this.abort(err));
+				const abortParent = this.onAbort = (reason) => {
+					parent.abort(reason);
+				};
+
+				parent.catch((err) => {
+					this.abort(err);
+				});
 
 				setOnAbort = (cb) => {
 					this.onAbort = (r) => {
 						abortParent(r);
-						cb(r);
+						cb.call(this, r);
 					};
 				};
 
 			} else {
-				setOnAbort = (cb) => this.onAbort = cb;
+				setOnAbort = (cb) => {
+					this.onAbort = Object.assign(cb.bind(this), {cb});
+				};
 			}
 
 			if (this.isPending && (!parent || parent.state !== State.rejected)) {
@@ -291,8 +303,8 @@ export default class Then<T = any> implements PromiseLike<T> {
 				reject;
 
 			if (Object.isFunction(onFulfilled)) {
-				resolve = (v) => {
-					this.evaluate(onFulfilled, [v], rej, res);
+				resolve = (val) => {
+					this.evaluate(onFulfilled, [val], rej, res);
 				};
 
 			} else {
@@ -300,23 +312,30 @@ export default class Then<T = any> implements PromiseLike<T> {
 			}
 
 			if (Object.isFunction(onRejected)) {
-				reject = (r) => {
-					this.evaluate(onRejected, [r], rej, res);
+				reject = (err) => {
+					this.evaluate(onRejected, [err], rej, res);
 				};
 
 			} else {
 				reject = rej;
 			}
 
-			onAbort((r) => {
+			const
+				that = this;
+
+			onAbort(function (reason: any): void {
 				if (Object.isFunction(abortCb)) {
 					try {
-						abortCb(r);
+						abortCb(reason);
 
 					} catch (_) {}
 				}
 
-				this.abort(r);
+				this.aborted = true;
+
+				if (!that.abort(reason)) {
+					reject(reason);
+				}
 			});
 
 			this.promise.then(resolve, reject);
@@ -334,16 +353,23 @@ export default class Then<T = any> implements PromiseLike<T> {
 				reject;
 
 			if (Object.isFunction(onRejected)) {
-				reject = (r) => {
-					this.evaluate(onRejected, [r], rej, res);
+				reject = (err) => {
+					this.evaluate(onRejected, [err], rej, res);
 				};
 
 			} else {
 				reject = rej;
 			}
 
-			onAbort((r) => {
-				this.abort(r);
+			const
+				that = this;
+
+			onAbort(function (reason: any): void {
+				this.aborted = true;
+
+				if (!that.abort(reason)) {
+					reject(reason);
+				}
 			});
 
 			this.promise.then(res, reject);
@@ -351,16 +377,26 @@ export default class Then<T = any> implements PromiseLike<T> {
 	}
 
 	/**
-	 * Aborts the current promise
+	 * Aborts current promise
 	 * @param [reason] - abort reason
 	 */
-	abort(reason?: any): void {
-		if (this.pendingChildren < 2) {
-			this.evaluate(this.onAbort, [reason]);
-			this.reject(reason);
+	abort(reason?: any): boolean {
+		if (this.pendingChildren) {
+			this.pendingChildren--;
 		}
 
-		this.pendingChildren--;
+		if (!this.pendingChildren) {
+			this.evaluate(this.onAbort, [reason]);
+
+			if (!this.aborted) {
+				this.reject(reason);
+				this.aborted = true;
+			}
+
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -386,3 +422,5 @@ export default class Then<T = any> implements PromiseLike<T> {
 		}
 	}
 }
+
+Then.prototype = Object.mixin({withAccessors: true}, Object.create(Promise.prototype), Then.prototype);
