@@ -144,13 +144,8 @@ export default function create<T>(path, ...args) {
 		});
 
 		const then = new Then(async (resolve, reject, onAbort) => {
-			onAbort((replacedBy) => {
-				if (Then.isThenable(replacedBy)) {
-					resolve(replacedBy);
-
-				} else {
-					reject(replacedBy || new RequestError('abort'));
-				}
+			onAbort((err) => {
+				reject(err || new RequestError('abort'));
 			});
 
 			await new Promise((r) => {
@@ -246,6 +241,7 @@ export default function create<T>(path, ...args) {
 				const reqOpts = {
 					...p,
 					url,
+					parent: then,
 					decoder: ctx.decoders,
 					body: await $C(ctx.encoders)
 						.to(Then.resolve(p.body, then))
