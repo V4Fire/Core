@@ -61,7 +61,7 @@ export function applyQueryForStr(str: string, query?: Dictionary, rgxp: RegExp =
 		return str;
 	}
 
-	return str.replace(rgxp, (str, param, adv) => {
+	return str.replace(rgxp, (str, param, adv = '') => {
 		if (query[param]) {
 			const val = [query[param], delete query[param]][0];
 			return (str[0] === '/' ? '/' : '') + val + (Object.isNumber(adv) ? '' : adv);
