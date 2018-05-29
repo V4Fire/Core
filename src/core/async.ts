@@ -1172,7 +1172,7 @@ export default class Async<CTX extends object = Async<any>> {
 				}
 
 				if (Then.isThenable(res)) {
-					finalObj.then(execTasks(), execTasks(1));
+					res.then(execTasks(), execTasks(1));
 
 				} else {
 					execTasks().apply(null, arguments);
