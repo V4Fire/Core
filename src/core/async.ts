@@ -33,6 +33,10 @@ export interface ClearOptsId<T> extends ClearOpts {
 	id?: T;
 }
 
+export interface ClearProxyOpts<T> extends ClearOptsId<T> {
+	name?: string;
+}
+
 export interface AsyncOpts {
 	join?: boolean | 'replace';
 	label?: string | symbol;
@@ -94,7 +98,7 @@ export interface AsyncOnceOpts<T extends object = Async> extends AsyncCbOpts<T> 
 	options?: AddEventListenerOptions;
 }
 
-export interface AsyncWorkerOpts<T extends object = Async> extends AsyncCbOptsSingle<T> {
+export interface AsyncWorkerOpts<T extends object = Async> extends AsyncProxyOpts<T> {
 	destructor?: string;
 }
 
@@ -208,15 +212,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	// tslint:disable-next-line
 	clearImmediate(p) {
-		if (p === undefined) {
-			return this.clearAllAsync({name: 'immediate'});
-		}
-
-		return this.clearAsync({
-			...p,
-			name: 'immediate',
-			id: p.id || this.getIfNotObject(p)
-		});
+		return this.clearAsync(p, 'immediate');
 	}
 
 	/**
@@ -259,15 +255,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	// tslint:disable-next-line
 	clearInterval(p) {
-		if (p === undefined) {
-			return this.clearAllAsync({name: 'interval'});
-		}
-
-		return this.clearAsync({
-			...p,
-			name: 'interval',
-			id: p.id || this.getIfNotObject(p)
-		});
+		return this.clearAsync(p, 'interval');
 	}
 
 	/**
@@ -309,15 +297,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	// tslint:disable-next-line
 	clearTimeout(p) {
-		if (p === undefined) {
-			return this.clearAllAsync({name: 'timeout'});
-		}
-
-		return this.clearAsync({
-			...p,
-			name: 'timeout',
-			id: p.id || this.getIfNotObject(p)
-		});
+		return this.clearAsync(p, 'timeout');
 	}
 
 	/**
@@ -362,15 +342,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	// tslint:disable-next-line
 	cancelIdleCallback(p) {
-		if (p === undefined) {
-			return this.clearAllAsync({name: 'idleCallback'});
-		}
-
-		return this.clearAsync({
-			...p,
-			name: 'idleCallback',
-			id: p.id || this.getIfNotObject(p)
-		});
+		return this.clearAsync(p, 'idleCallback');
 	}
 
 	/**
@@ -378,6 +350,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 *
 	 * @param worker
 	 * @param [params] - additional parameters for the operation:
+	 *   *) [name] - worker name
 	 *   *) [destructor] - name of destructor method
 	 *   *) [join] - if true, then competitive tasks (with same labels) will be joined to the first
 	 *   *) [label] - label for the task (previous task with the same label will be canceled)
@@ -386,6 +359,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	worker<T>(worker: T & WorkerLikeP, params?: AsyncWorkerOpts<CTX>): T {
 		const
+			p = params || {},
 			{workerCache} = this;
 
 		if (!workerCache.has(worker)) {
@@ -394,11 +368,11 @@ export default class Async<CTX extends object = Async<any>> {
 		}
 
 		return this.setAsync({
-			...params,
+			...p,
 			name: 'worker',
 			obj: worker,
-			clearFn: this.workerDestructor.bind(this, params && params.destructor),
-			periodic: !params || params.single !== true
+			clearFn: this.workerDestructor.bind(this, p.destructor),
+			periodic: p.single !== true
 		});
 	}
 
@@ -414,19 +388,11 @@ export default class Async<CTX extends object = Async<any>> {
 	 *   *) [label] - label for the task
 	 *   *) [group] - group name for the task
 	 */
-	terminateWorker<T>(params: ClearOptsId<T & WorkerLikeP>): this;
+	terminateWorker<T>(params: ClearProxyOpts<T & WorkerLikeP>): this;
 
 	// tslint:disable-next-line
 	terminateWorker(p) {
-		if (p === undefined) {
-			return this.clearAllAsync({name: 'worker'});
-		}
-
-		return this.clearAsync({
-			...p,
-			name: 'worker',
-			id: p.id || this.getIfNotObject(p)
-		});
+		return this.clearAsync(p, Object.isObject(p) && p.name || 'worker');
 	}
 
 	/**
@@ -464,15 +430,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	// tslint:disable-next-line
 	cancelRequest(p) {
-		if (p === undefined) {
-			return this.clearAllAsync({name: 'request'});
-		}
-
-		return this.clearAsync({
-			...p,
-			name: 'request',
-			id: p.id || this.getIfNotObject(p)
-		});
+		return this.clearAsync(p, 'request');
 	}
 
 	/**
@@ -510,19 +468,11 @@ export default class Async<CTX extends object = Async<any>> {
 	 *   *) [label] - label for the task
 	 *   *) [group] - group name for the task
 	 */
-	cancelProxy<T>(params: ClearOptsId<Function>): this;
+	cancelProxy<T>(params: ClearProxyOpts<Function>): this;
 
 	// tslint:disable-next-line
 	cancelProxy(p) {
-		if (p === undefined) {
-			return this.clearAllAsync({name: 'proxy'});
-		}
-
-		return this.clearAsync({
-			...p,
-			name: 'proxy',
-			id: p.id || this.getIfNotObject(p)
-		});
+		return this.clearAsync(p, Object.isObject(p) && p.name || 'proxy');
 	}
 
 	/**
@@ -574,7 +524,7 @@ export default class Async<CTX extends object = Async<any>> {
 					}
 
 					reject(err);
-					this.cancelProxy(proxyResolve);
+					this.cancelProxy({id: proxyResolve, name: p.name});
 				});
 			}
 		});
@@ -889,15 +839,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	// tslint:disable-next-line
 	off(p) {
-		if (p === undefined) {
-			return this.clearAllAsync({name: 'eventListener'});
-		}
-
-		return this.clearAsync({
-			...p,
-			name: 'eventListener',
-			id: p.id || this.getIfEvent(p)
-		});
+		return this.clearAsync(Object.isObject(p) && Object.isString(p.event) ? {id: p} : p, 'eventListener');
 	}
 
 	/**
@@ -926,22 +868,6 @@ export default class Async<CTX extends object = Async<any>> {
 			.cancelProxy(p);
 
 		return this;
-	}
-
-	/**
-	 * Returns the specified value if it is an event object
-	 * @param value
-	 */
-	protected getIfEvent(value: any & {event?: string}): Function | undefined {
-		return Object.isObject(value) && Object.isString(value.event) ? value : undefined;
-	}
-
-	/**
-	 * Returns the specified value if it is not a plain object
-	 * @param value
-	 */
-	protected getIfNotObject(value: any): Function | undefined {
-		return Object.isObject(value) ? undefined : value;
 	}
 
 	/**
@@ -1097,7 +1023,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 * Initializes the specified listener
 	 * @param p
 	 */
-	protected setAsync(p: any): any {
+	protected setAsync(p: Dictionary): any {
 		const
 			baseCache = this.initCache(p.name);
 
@@ -1217,9 +1143,19 @@ export default class Async<CTX extends object = Async<any>> {
 
 	/**
 	 * Clears the specified listeners
+	 *
 	 * @param p
+	 * @param [name]
 	 */
-	protected clearAsync(p: any): this {
+	protected clearAsync(p: Dictionary, name?: string): this {
+		if (name) {
+			if (p === undefined) {
+				return this.clearAllAsync({name});
+			}
+
+			p = Object.isObject(p) ? {...p, name} : {name, id: p};
+		}
+
 		const
 			baseCache = this.initCache(p.name);
 
@@ -1232,10 +1168,10 @@ export default class Async<CTX extends object = Async<any>> {
 
 				for (let i = 0; i < keys.length; i++) {
 					const
-						g = obj[<string>keys[i]];
+						group = keys[i];
 
-					if (p.group.test(g)) {
-						this.clearAsync({...p, group: g});
+					if (p.group.test(group)) {
+						this.clearAsync({...p, group});
 					}
 				}
 
@@ -1309,7 +1245,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 * Clears all listeners by the specified parameters
 	 * @param p
 	 */
-	protected clearAllAsync(p: any): this {
+	protected clearAllAsync(p: Dictionary): this {
 		this.clearAsync.apply(this, arguments);
 
 		const
