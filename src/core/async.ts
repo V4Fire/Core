@@ -569,11 +569,12 @@ export default class Async<CTX extends object = Async<any>> {
 				}
 
 				(<Promise<any>>promise).then(proxyResolve, (err) => {
-					reject(err);
-
-					if (!canceled) {
-						this.cancelProxy(proxyResolve);
+					if (canceled) {
+						return;
 					}
+
+					reject(err);
+					this.cancelProxy(proxyResolve);
 				});
 			}
 		});
