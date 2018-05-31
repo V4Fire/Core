@@ -23,7 +23,7 @@ export default function generator(fields?: string[]): Dictionary<symbol> {
 		});
 	}
 
-	return new Proxy(this, {
+	return new Proxy(obj, {
 		get(target: typeof obj, prop: string): symbol {
 			if (target[prop]) {
 				return target[prop];
