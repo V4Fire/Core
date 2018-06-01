@@ -66,10 +66,6 @@ interface ObjectConstructor {
 	isTable(obj: any): obj is Dictionary;
 }
 
-interface Object {
-	toSource(): string;
-}
-
 interface DateConstructor {
 	getWeekDays(): string[];
 }
