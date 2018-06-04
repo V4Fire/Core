@@ -95,7 +95,7 @@ export async function match(auth?: string | undefined, csrf?: string | undefined
 export async function isExists(): Promise<boolean> {
 	try {
 		const s = await get();
-		return Boolean(s.auth && (!session.has('csrf') || s.csrf));
+		return Boolean(s.auth && (!await session.has('csrf') || s.csrf));
 
 	} catch (_) {
 		return false;
