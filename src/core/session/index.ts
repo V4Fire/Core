@@ -91,12 +91,11 @@ export async function match(auth?: string | undefined, csrf?: string | undefined
 
 /**
  * Returns true if the session object is exists
- * @param [onlyJWT] - if true, then the session will be checked without csrf token
  */
-export async function isExists(onlyJWT?: boolean): Promise<boolean> {
+export async function isExists(): Promise<boolean> {
 	try {
 		const s = await get();
-		return Boolean(s.auth && (onlyJWT || s.csrf));
+		return Boolean(s.auth && (!session.has('csrf') || s.csrf));
 
 	} catch (_) {
 		return false;
