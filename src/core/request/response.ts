@@ -165,7 +165,7 @@ export default class Response {
 				if (Object.isArray(res) || Object.isObject(res)) {
 					Object.defineProperty(res, 'valueOf', {
 						enumerable: false,
-						value: () => Object.fastClone(res)
+						value: () => Object.fastClone(res, {freezable: false})
 					});
 
 					Object.freeze(res);

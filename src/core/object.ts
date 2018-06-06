@@ -41,13 +41,14 @@ Object.parse = function parse(value: any): any {
  * Clones the specified object using JSON.parse -> JSON.stringify
  *
  * @param obj
- * @param [params] - additional parameters (or false for disable defaults):
+ * @param [params] - additional parameters:
  *   *) [replacer] - JSON.stringify replacer
- *   *) [reviver] - JSON.parse reviver
+ *   *) [reviver] - JSON.parse reviver (false for disable defaults)
+ *   *) [freezable] - if false the object freeze state wont be copy
  */
 Object.fastClone = function fastClone<T>(
 	obj: T,
-	params?: {replacer?: JSONCb; reviver?: JSONCb} | false
+	params?: {replacer?: JSONCb; reviver?: JSONCb | false; freezable?: boolean}
 ): T {
 	const
 		p = params || {};
@@ -85,19 +86,21 @@ Object.fastClone = function fastClone<T>(
 
 		if (typeof obj === 'object') {
 			const clone = JSON.parse(
-				JSON.stringify(obj, p.replacer), params !== false ? p.reviver || convertIfDate : undefined
+				JSON.stringify(obj, p.replacer), p.reviver !== false ? p.reviver || convertIfDate : undefined
 			);
 
-			if (!Object.isExtensible(obj)) {
-				Object.preventExtensions(clone);
-			}
+			if (p.freezable !== false) {
+				if (!Object.isExtensible(obj)) {
+					Object.preventExtensions(clone);
+				}
 
-			if (Object.isSealed(obj)) {
-				Object.seal(clone);
-			}
+				if (Object.isSealed(obj)) {
+					Object.seal(clone);
+				}
 
-			if (Object.isFrozen(obj)) {
-				Object.freeze(clone);
+				if (Object.isFrozen(obj)) {
+					Object.freeze(clone);
+				}
 			}
 
 			return clone;
