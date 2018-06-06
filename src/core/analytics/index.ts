@@ -16,6 +16,9 @@ import sendAnalyticsEvent from 'core/analytics/engines';
  * @param [details] - event details
  */
 export function send(event: string, details: Dictionary = {}): void {
-	details = $C(details).filter((el) => el != null && (typeof el === 'object' ? $C(el).length() : el)).map();
+	details = $C(details)
+		.filter((el) => el != null && el !== '' && (typeof el === 'object' ? $C(el).length() : true))
+		.map();
+
 	sendAnalyticsEvent(event, details);
 }
