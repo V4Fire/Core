@@ -163,7 +163,11 @@ export default class Response {
 				}
 
 				if (Object.isArray(res) || Object.isObject(res)) {
-					res.valueOf = () => Object.fastClone(res);
+					Object.defineProperty(res, 'valueOf', {
+						enumerable: false,
+						value: () => Object.fastClone(res)
+					});
+
 					Object.freeze(res);
 				}
 
