@@ -223,18 +223,6 @@ export default function create<T>(path, ...args) {
 						throw new RequestError('offline');
 					}
 
-					if (
-						response.status === StatusCodes.NO_CONTENT ||
-						response.status === StatusCodes.OK && !data
-					) {
-						return {
-							data: null,
-							response,
-							ctx,
-							dropCache: ctx.dropCache
-						};
-					}
-
 					return {data, response, ctx, dropCache: ctx.dropCache};
 				};
 
