@@ -698,8 +698,8 @@ export default class Async<CTX extends object = Async<any>> {
 						const
 							res = baseHandler.apply(this, arguments);
 
-						if (Then.isThenable(res)) {
-							(<Promise<any>>res).catch(stderr);
+						if (Object.isPromise(res)) {
+							res.catch(stderr);
 						}
 
 						return res;
@@ -1095,7 +1095,7 @@ export default class Async<CTX extends object = Async<any>> {
 					res = finalObj.apply(fnCtx, arguments);
 				}
 
-				if (Then.isThenable(res)) {
+				if (Object.isPromise(res)) {
 					res.then(execTasks(), execTasks(1));
 
 				} else {

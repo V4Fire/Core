@@ -314,6 +314,14 @@ Object.isWeakSet = function isBoolean(obj: any): obj is WeakSet<any> {
 };
 
 /**
+ * Returns true if the specified object is Promise
+ * @param obj
+ */
+Object.isPromise = function isBoolean(obj: any): obj is Promise<any> {
+	return Boolean(obj) && Object.isFunction(obj.then) && Object.isFunction(obj.catch);
+};
+
+/**
  * Returns true if the specified object is a hash table
  * @param obj
  */

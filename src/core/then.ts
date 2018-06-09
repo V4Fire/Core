@@ -40,7 +40,7 @@ export default class Then<T = any> implements PromiseLike<T> {
 	 * @param obj
 	 */
 	static isThenable(obj: any): obj is PromiseLike<any> {
-		return Boolean(obj) && Object.isFunction(obj.then) && Object.isFunction(obj.catch);
+		return Boolean(obj) && Object.isFunction(obj.then);
 	}
 
 	/**

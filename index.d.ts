@@ -63,6 +63,7 @@ interface ObjectConstructor {
 	fromArray(arr: any[]): Dictionary<boolean>;
 	isWeakMap(obj: any): obj is WeakMap<any, any>;
 	isWeakSet(obj: any): obj is WeakSet<any>;
+	isPromise(obj: any): obj is Promise<any>;
 	isTable(obj: any): obj is Dictionary;
 }
 
