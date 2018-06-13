@@ -104,7 +104,7 @@ export default class RequestContext<T = any> {
 	resolveAPI(api: string | null | undefined = globalOpts.api): string {
 		const
 			a = <any>this.params.api,
-			rgxp = /(?:^|(https?:\/\/)(?:(.*?)\.)?(.*?)\.(.*?))(\/.*|$)/;
+			rgxp = /(?:^|(\w+:\/\/)(?:(.*?)\.)?(.*?)\.(.*?))(\/.*|$)/;
 
 		if (!api) {
 			const def = {

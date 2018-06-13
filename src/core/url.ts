@@ -21,7 +21,15 @@ export function concatUrls(...urls: Array<string | null | undefined>): string {
 			url = url.slice(1);
 		}
 
-		return res[res.length - 1] === '/' ? res + url : `${res}/${url}`;
+		if (res) {
+			if (res[res.length - 1] === '/') {
+				return res + url;
+			}
+
+			return `${res}/${url}`;
+		}
+
+		return /^(\w+:)?\/?\//.test(url) ? url : `/${url}`;
 	});
 }
 
