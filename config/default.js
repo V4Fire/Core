@@ -70,7 +70,8 @@ class Config {
 		}
 
 		const
-			config = this.extend(Object.create(Object.getPrototypeOf(opts)), opts),
+			proto = Object.getPrototypeOf(opts),
+			config = this.extend(Object.create(proto), opts),
 			p = this.getSrcMap(dirs[0]);
 
 		$C(['roots'].concat(dirs.slice(1))).forEach((nm, i) => {
@@ -92,12 +93,22 @@ class Config {
 			config.src[nm] = (this.src[nm] || []).concat(src);
 		});
 
-		$C(config).object(true).forEach((el, key) => {
-			if (Sugar.Object.isFunction(el)) {
-				const o = el[origin] = el[origin] || el;
-				config[key] = Object.assign(o.bind(config), {[origin]: o});
-			}
-		});
+		function bindObjCtx(obj) {
+			$C(obj).object(true).forEach((el, key) => {
+				if (Object.isFunction(el)) {
+					const
+						o = el[origin] = el[origin] || el,
+						ctx = Object.assign(Object.create({config, super: proto}), obj);
+
+					obj[key] = Object.assign(o.bind(ctx), {[origin]: o});
+
+				} else if (el && typeof el === 'object') {
+					bindObjCtx(el);
+				}
+			});
+		}
+
+		bindObjCtx(config);
 
 		if (envs) {
 			$C(Object.keys(envs)).forEach((nm) => {
