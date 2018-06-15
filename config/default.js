@@ -194,7 +194,10 @@ module.exports = config.createConfig(
 			return {
 				pack: false,
 				filters: {global: ['undef']},
-				vars: require('config').envs
+				vars: {
+					...require('config').envs,
+					isProd
+				}
 			};
 		},
 
