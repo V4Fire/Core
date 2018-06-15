@@ -12,17 +12,20 @@ require('dotenv').config();
 
 const
 	$C = require('collection.js'),
-	Sugar = require('sugar'),
+	Sugar = require('sugar').extend(),
+	o = require('uniconf/options').option;
+
+const
 	fs = require('fs-extra-promise'),
 	path = require('path'),
-	o = require('uniconf/options').option;
+	isPathEqual = require('path-equal').pathEqual;
 
 const
 	{config: pzlr, resolve} = require('@pzlr/build-core'),
 	{env} = process;
 
-const origin = Symbol('Original function');
-Sugar.extend();
+const
+	origin = Symbol('Original function');
 
 /** @template C */
 class Config {
@@ -70,7 +73,30 @@ class Config {
 		}
 
 		const
-			proto = Object.getPrototypeOf(opts),
+			proto = Object.getPrototypeOf(opts);
+
+		function setProto(obj, link = []) {
+			$C(obj).forEach((el, key) => {
+				if (!el || typeof el !== 'object') {
+					return;
+				}
+
+				key = [...link, key];
+
+				const
+					parent = $C(proto).get(key);
+
+				if (parent && el !== parent) {
+					Object.setPrototypeOf(el, parent);
+				}
+
+				setProto(el, key);
+			});
+		}
+
+		setProto(opts);
+
+		const
 			config = this.extend(Object.create(proto), opts),
 			p = this.getSrcMap(dirs[0]);
 
@@ -96,19 +122,27 @@ class Config {
 		function bindObjCtx(obj) {
 			$C(obj).object(true).forEach((el, key) => {
 				if (Object.isFunction(el)) {
-					const
-						o = el[origin] = el[origin] || el,
-						ctx = Object.assign(Object.create({config, super: proto}), obj);
+					if (isPathEqual(path.join(process.cwd(), 'config'), dirs[0])) {
+						const
+							o = el[origin] = el[origin] || el,
+							ctx = Object.assign(Object.create({config}), obj);
 
-					obj[key] = Object.assign(o.bind(ctx), {[origin]: o});
+						obj[key] = Object.assign(o.bind(ctx), {[origin]: o});
+					}
 
-				} else if (el && typeof el === 'object') {
-					bindObjCtx(el);
+				} else {
+					obj[key] = el;
+
+					if (el && typeof el === 'object') {
+						bindObjCtx(el);
+					}
 				}
 			});
 		}
 
-		bindObjCtx(config);
+		if (isPathEqual(path.join(process.cwd(), 'config'), dirs[0])) {
+			bindObjCtx(config);
+		}
 
 		if (envs) {
 			$C(Object.keys(envs)).forEach((nm) => {
