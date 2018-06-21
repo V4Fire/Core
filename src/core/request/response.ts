@@ -233,7 +233,7 @@ export default class Response {
 			return <any>Then.resolve(null, this.parent);
 		}
 
-		return <any>Then.resolve(body.slice(0), this.parent);
+		return <any>Then.resolve(body, this.parent);
 	}
 
 	/**
