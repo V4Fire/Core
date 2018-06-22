@@ -7,10 +7,21 @@
  */
 
 import $C = require('collection.js');
+import toSource = require('tosource');
 import { convertIfDate } from 'core/json';
 
 /** @see {$C.extend} */
 Object.mixin = $C.extend;
+
+/**
+ * Object.toSource implementation
+ */
+Object.defineProperty(Object.prototype, 'toSource', {
+	enumerable: false,
+	value(): string {
+		return toSource(this);
+	}
+});
 
 /**
  * Creates a hash table without prototype

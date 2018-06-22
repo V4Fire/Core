@@ -53,6 +53,7 @@ interface ObjectConstructor {
 		params?: {replacer?: JSONCb; reviver?: JSONCb | false; freezable?: boolean}
 	): T;
 
+	toSource(): string;
 	fastCompare<T>(a: any, b: T): a is T;
 	parse(value: any): any;
 	createMap<T extends Object>(obj: T): T & Dictionary;
