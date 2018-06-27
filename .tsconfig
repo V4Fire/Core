@@ -11,5 +11,12 @@
     "strictFunctionTypes": true,
     "strictPropertyInitialization": true,
     "experimentalDecorators": true
-  }
+  },
+  "exclude": [
+    "dist",
+    "build",
+    "config",
+    "node_modules",
+    "**/*.spec.ts"
+  ]
 }
