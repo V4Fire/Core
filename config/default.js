@@ -190,6 +190,17 @@ module.exports = config.createConfig(
 			default: 'Default app'
 		}),
 
+		environment: o('environment', {
+			env: true,
+			short: 'e',
+			default: env.NODE_ENV,
+			coerce(value) {
+				value = {prod: 'production', dev: 'development', stage: 'staging'}[value] || value;
+				env.NODE_ENV = value;
+				return value;
+			}
+		}),
+
 		snakeskin() {
 			return {
 				pack: false,
@@ -266,7 +277,7 @@ Object.defineProperties(global, {
 
 	isProd: {
 		get() {
-			return env.NODE_ENV === 'production';
+			return require('config').environment === 'production';
 		}
 	}
 });
