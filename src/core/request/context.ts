@@ -129,7 +129,7 @@ export default class RequestContext<T = any> {
 			);
 		}
 
-		const v = (f, def) => {
+		const v = (f, def?) => {
 			const
 				v = a[f] != null ? a[f] : def || '';
 
@@ -139,6 +139,10 @@ export default class RequestContext<T = any> {
 
 			return v;
 		};
+
+		if (!rgxp.test(api)) {
+			return concatUrls(...v('domain3').split('.'), v('namespace'));
+		}
 
 		return api.replace(rgxp, (str, protocol, domain3, domain2, zone, nm) => {
 			nm = v('namespace', nm);
