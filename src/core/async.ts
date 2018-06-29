@@ -154,6 +154,11 @@ export interface CancelablePromise<T> extends Promise<T> {
  */
 export default class Async<CTX extends object = Async<any>> {
 	/**
+	 * Disabled status
+	 */
+	disabled: boolean = false;
+
+	/**
 	 * Cache object for async operations
 	 */
 	protected readonly cache: Dictionary<CacheObject> = Object.createDict();
@@ -1054,6 +1059,7 @@ export default class Async<CTX extends object = Async<any>> {
 		}
 
 		const
+			that = this,
 			ctx = this.context;
 
 		let
@@ -1063,6 +1069,10 @@ export default class Async<CTX extends object = Async<any>> {
 
 		if (!p.periodic || Object.isFunction(wrappedObj)) {
 			wrappedObj = function (this: any): any {
+				if (that.disabled) {
+					return;
+				}
+
 				const
 					link = links.get(id),
 					fnCtx = ctx || this;
