@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "@types/got": "^7.1.8",
-    "@types/node": "^10.3.6",
+    "@types/node": "^10.5.1",
     "collection.js": "^6.6.27",
     "dotenv": "^5.0.1",
     "eventemitter2": "^5.0.1",
@@ -56,7 +56,8 @@
     "tsconfig": "^7.0.0",
     "typescript": "^2.9.1",
     "uniconf": "^2.0.0",
-    "upath": "^1.1.0"
+    "upath": "^1.1.0",
+    "urlconcat": "0.0.12"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.5",
