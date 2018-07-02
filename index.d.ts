@@ -11,6 +11,11 @@
 /// <reference types="typescript/lib/lib.dom"/>
 /// <reference types="typescript/lib/lib.esnext"/>
 
+declare const APP_NAME: string;
+declare const API_URL: string | undefined;
+declare const IS_PROD: boolean;
+declare const LANG: string;
+
 declare function Any(obj: any): any;
 declare function stderr(err: any): void;
 declare function devNull(obj: any): void;

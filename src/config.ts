@@ -23,17 +23,17 @@ const config: Config = {
 	/**
 	 * Default system language
 	 */
-	lang: 'en',
+	lang: LANG,
 
 	/**
 	 * Base API URL
 	 */
-	api: undefined,
+	api: API_URL,
 
 	/**
 	 * Base app name
 	 */
-	appName: undefined,
+	appName: APP_NAME,
 
 	/**
 	 * Online check url
