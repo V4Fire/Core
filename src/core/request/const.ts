@@ -27,7 +27,7 @@ export const defaultResponseOpts = {
 	headers: {}
 };
 
-export const
+export let
 	globalCache = new RestrictedCache(),
 	pendingCache = new Cache(),
 	sharedCache: Dictionary<Cache> = {};
@@ -43,3 +43,12 @@ export const globalOpts: GlobalOptions = {
 
 	meta: {}
 };
+
+/**
+ * Drops all request caches
+ */
+export function dropCache(): void {
+	globalCache = new RestrictedCache();
+	pendingCache = new Cache();
+	sharedCache = {};
+}

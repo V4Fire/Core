@@ -10,7 +10,6 @@ import $C = require('collection.js');
 import Then from 'core/then';
 
 import request from 'core/request/engines';
-import StatusCodes from 'core/statusCodes';
 import RequestError from 'core/request/error';
 import RequestContext from 'core/request/context';
 
@@ -24,7 +23,7 @@ import { RequestFunctionResponse, CreateRequestOptions, ResolverResult } from 'c
 export * from 'core/request/interface';
 export * from 'core/request/utils';
 
-export { globalOpts, globalCache, pendingCache, sharedCache } from 'core/request/const';
+export { globalOpts, globalCache, pendingCache, sharedCache, dropCache } from 'core/request/const';
 export { default as RequestError } from 'core/request/error';
 export { default as Response } from 'core/request/response';
 
