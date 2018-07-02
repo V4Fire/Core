@@ -19,6 +19,7 @@ const
 const
 	fs = require('fs-extra-promise'),
 	path = require('path'),
+	url = require('url'),
 	isPathEqual = require('path-equal').pathEqual;
 
 const
