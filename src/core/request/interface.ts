@@ -132,6 +132,7 @@ export interface CreateRequestOptions<T = any> {
 	timeout?: number;
 	cacheId?: string | symbol;
 	cacheTTL?: number;
+	offlineCacheTTL?: number;
 	offlineCache?: boolean;
 
 	api?: {

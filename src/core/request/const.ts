@@ -9,13 +9,14 @@
 import config from 'config';
 import StatusCodes from 'core/statusCodes';
 import { RequestMethods, ResponseTypes, GlobalOptions, CacheStrategy } from 'core/request/interface';
-import { Cache, RestrictedCache } from 'core/cache';
+import { Cache, RestrictedCache, NeverCache } from 'core/cache';
 export { asyncLocal as storage } from 'core/kv-storage';
 
 export const defaultRequestOpts = {
 	method: <RequestMethods>'GET',
 	responseType: <ResponseTypes>'json',
 	cacheStrategy: <CacheStrategy>'never',
+	offlineCacheTTL: (1).day(),
 	headers: {},
 	query: {}
 };
@@ -27,10 +28,14 @@ export const defaultResponseOpts = {
 	headers: {}
 };
 
-export let
-	globalCache = new RestrictedCache(),
-	pendingCache = new Cache(),
-	sharedCache: Dictionary<Cache> = {};
+export const
+	pendingCache = new Cache();
+
+export const cache: Record<CacheStrategy, Cache> = {
+	queue: new RestrictedCache(),
+	forever: new Cache(),
+	never: new NeverCache()
+};
 
 export const globalOpts: GlobalOptions = {
 	get api(): string | undefined {
@@ -48,7 +53,6 @@ export const globalOpts: GlobalOptions = {
  * Drops all request caches
  */
 export function dropCache(): void {
-	globalCache = new RestrictedCache();
-	pendingCache = new Cache();
-	sharedCache = {};
+	$C(cache).forEach((cache) => cache.clear());
+	pendingCache.clear();
 }

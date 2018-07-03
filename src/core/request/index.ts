@@ -17,13 +17,13 @@ import { isOnline } from 'core/net';
 import { getStorageKey } from 'core/request/utils';
 import { concatUrls } from 'core/url';
 
-import { storage, globalCache, globalOpts, defaultRequestOpts } from 'core/request/const';
-import { RequestFunctionResponse, CreateRequestOptions, ResolverResult } from 'core/request/interface';
+import { storage, globalOpts, defaultRequestOpts } from 'core/request/const';
+import { RequestFunctionResponse, RequestResponse, CreateRequestOptions, ResolverResult } from 'core/request/interface';
 
 export * from 'core/request/interface';
 export * from 'core/request/utils';
 
-export { globalOpts, globalCache, pendingCache, sharedCache, dropCache } from 'core/request/const';
+export { globalOpts, cache, pendingCache, dropCache } from 'core/request/const';
 export { default as RequestError } from 'core/request/error';
 export { default as Response } from 'core/request/response';
 
@@ -33,8 +33,7 @@ export { default as Response } from 'core/request/response';
  * @param path
  * @param opts
  */
-// @ts-ignore
-export default function create<T>(path: string, opts?: CreateRequestOptions<T>): RequestFunctionResponse<T>;
+export default function create<T>(path: string, opts?: CreateRequestOptions<T>): RequestResponse<T>;
 
 /**
  * Creates a request wrapper by the specified options
@@ -103,8 +102,7 @@ export default function create<T>(path, ...args) {
 	const
 		baseCtx: RequestContext<T> = new RequestContext<T>(opts);
 
-	// tslint:disable-next-line
-	return (...args) => {
+	const run = (...args) => {
 		const
 			p: CreateRequestOptions<T> = merge(defaultRequestOpts, baseCtx.params),
 			ctx = Object.create(baseCtx);
@@ -243,4 +241,10 @@ export default function create<T>(path, ...args) {
 
 		return then;
 	};
+
+	if (Object.isFunction(resolver)) {
+		return run;
+	}
+
+	return run();
 }

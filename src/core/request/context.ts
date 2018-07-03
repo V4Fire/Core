@@ -13,7 +13,7 @@ import { Cache } from 'core/cache';
 import { concatUrls, toQueryString } from 'core/url';
 import { normalizeHeaders, applyQueryForStr, getStorageKey, getRequestKey } from 'core/request/utils';
 import { Encoders, Decoders, RequestQuery, CreateRequestOptions, RequestResponseObject } from 'core/request/interface';
-import { globalCache, pendingCache, sharedCache, storage, globalOpts, defaultRequestOpts } from 'core/request/const';
+import { cache, pendingCache, storage, globalOpts, defaultRequestOpts } from 'core/request/const';
 
 export default class RequestContext<T = any> {
 	/**
@@ -61,7 +61,7 @@ export default class RequestContext<T = any> {
 	/**
 	 * Cache object
 	 */
-	readonly cache: Cache = globalCache;
+	readonly cache: Cache;
 
 	/**
 	 * Cache object for pending requests
@@ -86,15 +86,16 @@ export default class RequestContext<T = any> {
 		this.canCache = p.method === 'GET';
 		this.encoders = p.encoder ? Object.isFunction(p.encoder) ? [p.encoder] : p.encoder : [];
 		this.decoders = p.decoder ? Object.isFunction(p.decoder) ? [p.decoder] : p.decoder : [];
+		this.cache = cache[p.cacheStrategy] || cache.never;
+	}
 
-		if (this.canCache && p.cacheStrategy === 'forever') {
-			if (p.cacheId) {
-				const id = p.cacheId;
-				this.cache = sharedCache[id] = sharedCache[id] || new Cache<T>();
-			}
-
-			this.cache = new Cache<T>();
-		}
+	/**
+	 * Generates a cache string by the specified url and returns it
+	 * @param url
+	 */
+	getRequestKey(url: string): string {
+		const p = this.params;
+		return [getRequestKey(url, this.params), p.cacheStrategy, p.cacheId || ''].join();
 	}
 
 	/**
@@ -191,7 +192,7 @@ export default class RequestContext<T = any> {
 		}
 
 		if (this.canCache) {
-			this.cacheKey = getRequestKey(url, p);
+			this.cacheKey = this.getRequestKey(url);
 		}
 
 		return url;
@@ -209,7 +210,7 @@ export default class RequestContext<T = any> {
 		if (key) {
 			if (p.offlineCache) {
 				storage
-					.set(getStorageKey(key), res.data, p.cacheTTL || (1).day())
+					.set(getStorageKey(key), res.data, p.offlineCacheTTL)
 					.catch(stderr);
 			}
 
