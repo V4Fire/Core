@@ -10,7 +10,7 @@
  * Decorator for Sugar.Function.once
  * @decorator
  */
-export function once(target: Object, propertyKey: string | symbol, descriptor: PropertyDescriptor): void {
+export function once(target: Object, key: string | symbol, descriptor: PropertyDescriptor): void {
 	const
 		method = descriptor.value;
 
@@ -18,8 +18,13 @@ export function once(target: Object, propertyKey: string | symbol, descriptor: P
 		throw new TypeError(`descriptor.value is not a function: ${method}`);
 	}
 
-	// tslint:disable-next-line
-	return descriptor.value = method.once();
+	descriptor.value = function (): any {
+		Object.defineProperty(this, key, {
+			value: method.once()
+		});
+
+		return this[key].apply(this, arguments);
+	};
 }
 
 /**
@@ -30,7 +35,7 @@ export function once(target: Object, propertyKey: string | symbol, descriptor: P
  * @param [limit]
  */
 export function memoize(hashFn?: string | Function | number, limit?: number): MethodDecorator {
-	return (target, name, descriptor: PropertyDescriptor) => {
+	return (target, key, descriptor: PropertyDescriptor) => {
 		const
 			method = descriptor.value;
 
@@ -38,8 +43,13 @@ export function memoize(hashFn?: string | Function | number, limit?: number): Me
 			throw new TypeError(`descriptor.value is not a function: ${method}`);
 		}
 
-		// tslint:disable-next-line
-		return descriptor.value = method.memoize(hashFn, limit);
+		descriptor.value = function (): any {
+			Object.defineProperty(this, key, {
+				value: method.memoize(hashFn, limit)
+			});
+
+			return this[key].apply(this, arguments);
+		};
 	};
 }
 
@@ -50,7 +60,7 @@ export function memoize(hashFn?: string | Function | number, limit?: number): Me
  * @param [delay]
  */
 export function debounce(delay: number = 250): MethodDecorator {
-	return (target, name, descriptor: PropertyDescriptor) => {
+	return (target, key, descriptor: PropertyDescriptor) => {
 		const
 			method = descriptor.value;
 
@@ -58,7 +68,13 @@ export function debounce(delay: number = 250): MethodDecorator {
 			throw new TypeError(`descriptor.value is not a function: ${method}`);
 		}
 
-		descriptor.value = method.debounce(delay);
+		descriptor.value = function (): any {
+			Object.defineProperty(this, key, {
+				value: method.debounce(delay)
+			});
+
+			return this[key].apply(this, arguments);
+		};
 	};
 }
 
@@ -69,7 +85,7 @@ export function debounce(delay: number = 250): MethodDecorator {
  * @param [delay]
  */
 export function throttle(delay: number = 250): MethodDecorator {
-	return (target, name, descriptor: PropertyDescriptor) => {
+	return (target, key, descriptor: PropertyDescriptor) => {
 		const
 			method = descriptor.value;
 
@@ -77,6 +93,12 @@ export function throttle(delay: number = 250): MethodDecorator {
 			throw new TypeError(`descriptor.value is not a function: ${method}`);
 		}
 
-		descriptor.value = method.value.throttle(delay);
+		descriptor.value = function (): any {
+			Object.defineProperty(this, key, {
+				value: method.throttle(delay)
+			});
+
+			return this[key].apply(this, arguments);
+		};
 	};
 }
