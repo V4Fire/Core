@@ -8,7 +8,10 @@
 
 /**
  * Prints the specified parameters to a console
+ *
+ * @param key - log key
+ * @param [details]
  */
-export default function log(key: string, details: any): void {
-	console.log(`[[${key}]]: ${Object.isObject(details) ? JSON.stringify(details) : details}`);
+export default function log(key: string, ...details: any[]): void {
+	console.log(`[[${key}]]:`, ...details);
 }

@@ -25,8 +25,11 @@ env.event.on('remove.log', setConfig);
 
 /**
  * Puts the specified parameters to log
+ *
+ * @param key - log key
+ * @param [details]
  */
-export default function log(key: string, details: any): void {
+export default function log(key: string, ...details: any[]): void {
 	if (!config) {
 		stack.push([key, details]);
 		return;
@@ -52,7 +55,7 @@ export default function log(key: string, details: any): void {
 				[key, details] = stack[i];
 
 			if (check(key)) {
-				logDriver(key, details);
+				logDriver(key, ...details);
 			}
 		}
 
@@ -60,6 +63,6 @@ export default function log(key: string, details: any): void {
 	}
 
 	if (check(key)) {
-		logDriver(key, details);
+		logDriver(key, ...details);
 	}
 }
