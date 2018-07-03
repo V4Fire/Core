@@ -10,7 +10,7 @@ import session from 'core/session/engines';
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 
 export const
-	event = new EventEmitter();
+	event = new EventEmitter({maxListeners: 100});
 
 /**
  * Returns current session object
