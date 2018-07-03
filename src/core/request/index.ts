@@ -9,6 +9,7 @@
 import $C = require('collection.js');
 import Then from 'core/then';
 
+import log from 'core/log';
 import request from 'core/request/engines';
 import RequestError from 'core/request/error';
 import RequestContext from 'core/request/context';
@@ -107,11 +108,30 @@ export default function create<T>(path, ...args) {
 			p: CreateRequestOptions<T> = merge(defaultRequestOpts, baseCtx.params),
 			ctx = Object.create(baseCtx);
 
+		const addLogger = (type) => (fn, key) => (d) => {
+			const
+				time = Date.now(),
+				res = fn(d, p);
+
+			const
+				logKey = `request:${type}:${key}:${path}`,
+				getTime = () => `Finished at ${Date.now() - time}ms`;
+
+			if (Object.isPromise(res)) {
+				res.then(() => log(logKey, getTime()));
+
+			} else {
+				log(logKey, getTime());
+			}
+
+			return res;
+		};
+
 		Object.assign(ctx, {
 			// Merge request options
 			params: p,
-			encoders: $C(merge(ctx.encoders)).map((fn) => (d) => fn(d, p)),
-			decoders: $C(merge(ctx.decoders)).map((fn) => (d) => fn(d, p)),
+			encoders: $C(merge(ctx.encoders)).map(addLogger('encoders')),
+			decoders: $C(merge(ctx.decoders)).map(addLogger('decoders')),
 
 			// Bind middlewares to new context
 			saveCache: ctx.saveCache.bind(ctx),
@@ -193,13 +213,16 @@ export default function create<T>(path, ...args) {
 			}
 
 			let
-				res;
+				res,
+				cache = 'none';
 
 			if (fromCache) {
+				cache = 'memory';
 				res = Then.immediate(() => ctx.cache.get(cacheKey), then)
 					.then(ctx.wrapAsResponse);
 
 			} else if (fromLocalStorage) {
+				cache = 'offline';
 				res = Then.immediate(() => storage.get(localCacheKey), then)
 					.then(ctx.wrapAsResponse)
 					.then(ctx.saveCache);
@@ -235,6 +258,12 @@ export default function create<T>(path, ...args) {
 
 				res = request(reqOpts).then(success).then(ctx.saveCache);
 			}
+
+			res.then((response) => log(`request:response:${path}`, response.data, {
+				cache,
+				externalRequest: opts.externalRequest,
+				request: opts
+			}));
 
 			resolve(ctx.wrapRequest(res));
 		});
