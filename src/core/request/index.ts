@@ -122,7 +122,7 @@ export default function create<T>(path, ...args) {
 				res.then((data) => log(logKey, getTime(), clone(data)));
 
 			} else {
-				log(logKey, getTime(), clone(data));
+				log(logKey, getTime(), clone(res));
 			}
 
 			return res;
