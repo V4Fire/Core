@@ -115,13 +115,14 @@ export default function create<T>(path, ...args) {
 
 			const
 				logKey = `request:${type}:${key}:${path}`,
-				getTime = () => `Finished at ${Date.now() - time}ms`;
+				getTime = () => `Finished at ${Date.now() - time}ms`,
+				clone = (data) => () => Object.isObject(data) || Object.isArray(data) ? Object.fastClone(data) : data;
 
 			if (Object.isPromise(res)) {
-				res.then(() => log(logKey, getTime()));
+				res.then((data) => log(logKey, getTime(), clone(data)));
 
 			} else {
-				log(logKey, getTime());
+				log(logKey, getTime(), clone(data));
 			}
 
 			return res;
