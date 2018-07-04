@@ -55,6 +55,11 @@ export default function log(key: string, ...details: any[]): void {
 				[key, details] = stack[i];
 
 			if (check(key)) {
+				for (let i = 0; i < details.length; i++) {
+					const el = details[i];
+					details[i] = Object.isFunction(el) ? el() : el;
+				}
+
 				logDriver(key, ...details);
 			}
 		}
@@ -63,6 +68,11 @@ export default function log(key: string, ...details: any[]): void {
 	}
 
 	if (check(key)) {
+		for (let i = 0; i < details.length; i++) {
+			const el = details[i];
+			details[i] = Object.isFunction(el) ? el() : el;
+		}
+
 		logDriver(key, ...details);
 	}
 }
