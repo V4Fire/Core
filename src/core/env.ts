@@ -43,6 +43,6 @@ export function remove(key: string): void {
 }
 
 GLOBAL.envs = storage;
-GLOBAL.getEnv = get;
+GLOBAL.getEnv = (key) => get(key).then(console.log);
 GLOBAL.setEnv = set;
 GLOBAL.removeEnv = remove;
