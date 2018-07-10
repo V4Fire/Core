@@ -287,7 +287,9 @@ export default class Response {
 		}
 
 		if (IS_NODE) {
+			//#if node_js
 			return <any>Then.resolve<string>(Buffer.from(<any>body).toString(encoding));
+			//#endif
 		}
 
 		if (typeof TextDecoder !== 'undefined') {
