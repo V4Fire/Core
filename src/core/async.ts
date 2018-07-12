@@ -7,9 +7,7 @@
  */
 
 /* tslint:disable:max-file-line-count */
-
 /// <reference types="node"/>
-import Then from 'core/then';
 
 export const
 	asyncCounter = Symbol('Async counter id');
@@ -19,6 +17,9 @@ export interface AsyncLink<T extends object = Async> {
 	obj: any;
 	objName?: string;
 	label?: string | symbol;
+	paused: boolean;
+	muted: boolean;
+	queue: Function[];
 	clearFn?: Function;
 	onComplete: AsyncCompleteHandler<T>[][];
 	onClear: AsyncClearHandler<T>[];
@@ -154,11 +155,6 @@ export interface CancelablePromise<T> extends Promise<T> {
  */
 export default class Async<CTX extends object = Async<any>> {
 	/**
-	 * Disabled status
-	 */
-	disabled: boolean = false;
-
-	/**
 	 * Cache object for async operations
 	 */
 	protected readonly cache: Dictionary<CacheObject> = Object.createDict();
@@ -221,6 +217,82 @@ export default class Async<CTX extends object = Async<any>> {
 	}
 
 	/**
+	 * Mutes a setImmediate operation
+	 * @param [id] - operation id (if not defined will be remove all handlers)
+	 */
+	muteImmediate(id?: number | NodeJS.Timer): this;
+
+	/**
+	 * @param params - parameters for the operation:
+	 *   *) [id] - operation id
+	 *   *) [label] - label for the task
+	 *   *) [group] - group name for the task
+	 */
+	muteImmediate(params: ClearOptsId<number | NodeJS.Timer>): this;
+
+	// tslint:disable-next-line
+	muteImmediate(p) {
+		return this.markAsync('muted', p, 'immediate');
+	}
+
+	/**
+	 * Unmutes a setImmediate operation
+	 * @param [id] - operation id (if not defined will be remove all handlers)
+	 */
+	unmuteImmediate(id?: number | NodeJS.Timer): this;
+
+	/**
+	 * @param params - parameters for the operation:
+	 *   *) [id] - operation id
+	 *   *) [label] - label for the task
+	 *   *) [group] - group name for the task
+	 */
+	unmuteImmediate(params: ClearOptsId<number | NodeJS.Timer>): this;
+
+	// tslint:disable-next-line
+	unmuteImmediate(p) {
+		return this.markAsync('!muted', p, 'immediate');
+	}
+
+	/**
+	 * Suspends a setImmediate operation
+	 * @param [id] - operation id (if not defined will be remove all handlers)
+	 */
+	suspendImmediate(id?: number | NodeJS.Timer): this;
+
+	/**
+	 * @param params - parameters for the operation:
+	 *   *) [id] - operation id
+	 *   *) [label] - label for the task
+	 *   *) [group] - group name for the task
+	 */
+	suspendImmediate(params: ClearOptsId<number | NodeJS.Timer>): this;
+
+	// tslint:disable-next-line
+	suspendImmediate(p) {
+		return this.markAsync('paused', p, 'immediate');
+	}
+
+	/**
+	 * Unsuspends a setImmediate operation
+	 * @param [id] - operation id (if not defined will be remove all handlers)
+	 */
+	unsuspendImmediate(id?: number | NodeJS.Timer): this;
+
+	/**
+	 * @param params - parameters for the operation:
+	 *   *) [id] - operation id
+	 *   *) [label] - label for the task
+	 *   *) [group] - group name for the task
+	 */
+	unsuspendImmediate(params: ClearOptsId<number | NodeJS.Timer>): this;
+
+	// tslint:disable-next-line
+	unsuspendImmediate(p) {
+		return this.markAsync('!paused', p, 'immediate');
+	}
+
+	/**
 	 * Wrapper for setInterval
 	 *
 	 * @param fn - callback function
@@ -261,6 +333,82 @@ export default class Async<CTX extends object = Async<any>> {
 	// tslint:disable-next-line
 	clearInterval(p) {
 		return this.clearAsync(p, 'interval');
+	}
+
+	/**
+	 * Mutes a setInterval operation
+	 * @param [id] - operation id (if not defined will be remove all handlers)
+	 */
+	muteInterval(id?: number | NodeJS.Timer): this;
+
+	/**
+	 * @param params - parameters for the operation:
+	 *   *) [id] - operation id
+	 *   *) [label] - label for the task
+	 *   *) [group] - group name for the task
+	 */
+	muteInterval(params: ClearOptsId<number | NodeJS.Timer>): this;
+
+	// tslint:disable-next-line
+	muteInterval(p) {
+		return this.markAsync('!muted', p, 'interval');
+	}
+
+	/**
+	 * Unmutes a setInterval operation
+	 * @param [id] - operation id (if not defined will be remove all handlers)
+	 */
+	unmuteInterval(id?: number | NodeJS.Timer): this;
+
+	/**
+	 * @param params - parameters for the operation:
+	 *   *) [id] - operation id
+	 *   *) [label] - label for the task
+	 *   *) [group] - group name for the task
+	 */
+	unmuteInterval(params: ClearOptsId<number | NodeJS.Timer>): this;
+
+	// tslint:disable-next-line
+	unmuteInterval(p) {
+		return this.markAsync('!muted', p, 'interval');
+	}
+
+	/**
+	 * Suspends a setInterval operation
+	 * @param [id] - operation id (if not defined will be remove all handlers)
+	 */
+	suspendInterval(id?: number | NodeJS.Timer): this;
+
+	/**
+	 * @param params - parameters for the operation:
+	 *   *) [id] - operation id
+	 *   *) [label] - label for the task
+	 *   *) [group] - group name for the task
+	 */
+	suspendInterval(params: ClearOptsId<number | NodeJS.Timer>): this;
+
+	// tslint:disable-next-line
+	suspendInterval(p) {
+		return this.markAsync('paused', p, 'interval');
+	}
+
+	/**
+	 * Unsuspends a setImmediate operation
+	 * @param [id] - operation id (if not defined will be remove all handlers)
+	 */
+	unsuspendInterval(id?: number | NodeJS.Timer): this;
+
+	/**
+	 * @param params - parameters for the operation:
+	 *   *) [id] - operation id
+	 *   *) [label] - label for the task
+	 *   *) [group] - group name for the task
+	 */
+	unsuspendInterval(params: ClearOptsId<number | NodeJS.Timer>): this;
+
+	// tslint:disable-next-line
+	unsuspendInterval(p) {
+		return this.markAsync('!paused', p, 'interval');
 	}
 
 	/**
@@ -306,6 +454,82 @@ export default class Async<CTX extends object = Async<any>> {
 	}
 
 	/**
+	 * Mutes a setTimeout operation
+	 * @param [id] - operation id (if not defined will be remove all handlers)
+	 */
+	muteTimeout(id?: number | NodeJS.Timer): this;
+
+	/**
+	 * @param params - parameters for the operation:
+	 *   *) [id] - operation id
+	 *   *) [label] - label for the task
+	 *   *) [group] - group name for the task
+	 */
+	muteTimeout(params: ClearOptsId<number | NodeJS.Timer>): this;
+
+	// tslint:disable-next-line
+	muteTimeout(p) {
+		return this.markAsync('muted', p, 'timeout');
+	}
+
+	/**
+	 * Unmutes a setTimeout operation
+	 * @param [id] - operation id (if not defined will be remove all handlers)
+	 */
+	unmuteTimeout(id?: number | NodeJS.Timer): this;
+
+	/**
+	 * @param params - parameters for the operation:
+	 *   *) [id] - operation id
+	 *   *) [label] - label for the task
+	 *   *) [group] - group name for the task
+	 */
+	unmuteTimeout(params: ClearOptsId<number | NodeJS.Timer>): this;
+
+	// tslint:disable-next-line
+	unmuteTimeout(p) {
+		return this.markAsync('!muted', p, 'timeout');
+	}
+
+	/**
+	 * Suspends a setTimeout operation
+	 * @param [id] - operation id (if not defined will be remove all handlers)
+	 */
+	suspendTimeout(id?: number | NodeJS.Timer): this;
+
+	/**
+	 * @param params - parameters for the operation:
+	 *   *) [id] - operation id
+	 *   *) [label] - label for the task
+	 *   *) [group] - group name for the task
+	 */
+	suspendTimeout(params: ClearOptsId<number | NodeJS.Timer>): this;
+
+	// tslint:disable-next-line
+	suspendTimeout(p) {
+		return this.markAsync('paused', p, 'timeout');
+	}
+
+	/**
+	 * Unsuspends a setTimeout operation
+	 * @param [id] - operation id (if not defined will be remove all handlers)
+	 */
+	unsuspendTimeout(id?: number | NodeJS.Timer): this;
+
+	/**
+	 * @param params - parameters for the operation:
+	 *   *) [id] - operation id
+	 *   *) [label] - label for the task
+	 *   *) [group] - group name for the task
+	 */
+	unsuspendTimeout(params: ClearOptsId<number | NodeJS.Timer>): this;
+
+	// tslint:disable-next-line
+	unsuspendTimeout(p) {
+		return this.markAsync('!paused', p, 'timeout');
+	}
+
+	/**
 	 * Wrapper for requestIdleCallback
 	 *
 	 * @param fn - callback function
@@ -348,6 +572,82 @@ export default class Async<CTX extends object = Async<any>> {
 	// tslint:disable-next-line
 	cancelIdleCallback(p) {
 		return this.clearAsync(p, 'idleCallback');
+	}
+
+	/**
+	 * Mutes a requestIdleCallback operation
+	 * @param [id] - operation id (if not defined will be remove all handlers)
+	 */
+	muteIdleCallback(id?: number | NodeJS.Timer): this;
+
+	/**
+	 * @param params - parameters for the operation:
+	 *   *) [id] - operation id
+	 *   *) [label] - label for the task
+	 *   *) [group] - group name for the task
+	 */
+	muteIdleCallback(params: ClearOptsId<number | NodeJS.Timer>): this;
+
+	// tslint:disable-next-line
+	muteIdleCallback(p) {
+		return this.markAsync('muted', p, 'idleCallback');
+	}
+
+	/**
+	 * Unmutes a requestIdleCallback operation
+	 * @param [id] - operation id (if not defined will be remove all handlers)
+	 */
+	unmuteIdleCallback(id?: number | NodeJS.Timer): this;
+
+	/**
+	 * @param params - parameters for the operation:
+	 *   *) [id] - operation id
+	 *   *) [label] - label for the task
+	 *   *) [group] - group name for the task
+	 */
+	unmuteIdleCallback(params: ClearOptsId<number | NodeJS.Timer>): this;
+
+	// tslint:disable-next-line
+	unmuteIdleCallback(p) {
+		return this.markAsync('!muted', p, 'idleCallback');
+	}
+
+	/**
+	 * Suspends a requestIdleCallback operation
+	 * @param [id] - operation id (if not defined will be remove all handlers)
+	 */
+	suspendIdleCallback(id?: number | NodeJS.Timer): this;
+
+	/**
+	 * @param params - parameters for the operation:
+	 *   *) [id] - operation id
+	 *   *) [label] - label for the task
+	 *   *) [group] - group name for the task
+	 */
+	suspendIdleCallback(params: ClearOptsId<number | NodeJS.Timer>): this;
+
+	// tslint:disable-next-line
+	suspendIdleCallback(p) {
+		return this.markAsync('paused', p, 'idleCallback');
+	}
+
+	/**
+	 * Unsuspends a requestIdleCallback operation
+	 * @param [id] - operation id (if not defined will be remove all handlers)
+	 */
+	unsuspendIdleCallback(id?: number | NodeJS.Timer): this;
+
+	/**
+	 * @param params - parameters for the operation:
+	 *   *) [id] - operation id
+	 *   *) [label] - label for the task
+	 *   *) [group] - group name for the task
+	 */
+	unsuspendIdleCallback(params: ClearOptsId<number | NodeJS.Timer>): this;
+
+	// tslint:disable-next-line
+	unsuspendIdleCallback(p) {
+		return this.markAsync('!paused', p, 'idleCallback');
 	}
 
 	/**
@@ -420,7 +720,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 * Cancels the specified request
 	 * @param [request] - link for the request (if not defined wil be cancel all request)
 	 */
-	cancelRequest(request?: Then): this;
+	cancelRequest(request?: Promise<any>): this;
 
 	/**
 	 * @param params - parameters for the operation:
@@ -428,11 +728,87 @@ export default class Async<CTX extends object = Async<any>> {
 	 *   *) [label] - label for the task
 	 *   *) [group] - group name for the task
 	 */
-	cancelRequest(params: ClearOptsId<Then>): this;
+	cancelRequest(params: ClearOptsId<Promise<any>>): this;
 
 	// tslint:disable-next-line
 	cancelRequest(p) {
 		return this.clearAsync(p, 'request');
+	}
+
+	/**
+	 * Mutes a request operation
+	 * @param [id] - operation id (if not defined will be remove all handlers)
+	 */
+	muteRequest(id?: Promise<any>): this;
+
+	/**
+	 * @param params - parameters for the operation:
+	 *   *) [id] - operation id
+	 *   *) [label] - label for the task
+	 *   *) [group] - group name for the task
+	 */
+	muteRequest(params: ClearOptsId<Promise<any>>): this;
+
+	// tslint:disable-next-line
+	muteRequest(p) {
+		return this.markAsync('muted', p, 'request');
+	}
+
+	/**
+	 * Unmutes a request operation
+	 * @param [id] - operation id (if not defined will be remove all handlers)
+	 */
+	unmuteRequest(id?: Promise<any>): this;
+
+	/**
+	 * @param params - parameters for the operation:
+	 *   *) [id] - operation id
+	 *   *) [label] - label for the task
+	 *   *) [group] - group name for the task
+	 */
+	unmuteRequest(params: ClearOptsId<Promise<any>>): this;
+
+	// tslint:disable-next-line
+	unmuteRequest(p) {
+		return this.markAsync('!muted', p, 'request');
+	}
+
+	/**
+	 * Suspends a request operation
+	 * @param [id] - operation id (if not defined will be remove all handlers)
+	 */
+	suspendRequest(id?: Promise<any>): this;
+
+	/**
+	 * @param params - parameters for the operation:
+	 *   *) [id] - operation id
+	 *   *) [label] - label for the task
+	 *   *) [group] - group name for the task
+	 */
+	suspendRequest(params: ClearOptsId<Promise<any>>): this;
+
+	// tslint:disable-next-line
+	suspendRequest(p) {
+		return this.markAsync('paused', p, 'request');
+	}
+
+	/**
+	 * Unsuspends a request operation
+	 * @param [id] - operation id (if not defined will be remove all handlers)
+	 */
+	unsuspendRequest(id?: Promise<any>): this;
+
+	/**
+	 * @param params - parameters for the operation:
+	 *   *) [id] - operation id
+	 *   *) [label] - label for the task
+	 *   *) [group] - group name for the task
+	 */
+	unsuspendRequest(params: ClearOptsId<Promise<any>>): this;
+
+	// tslint:disable-next-line
+	unsuspendRequest(p) {
+		return this.markAsync('!paused', p, 'request');
 	}
 
 	/**
@@ -475,6 +851,82 @@ export default class Async<CTX extends object = Async<any>> {
 	// tslint:disable-next-line
 	cancelProxy(p) {
 		return this.clearAsync(p, Object.isObject(p) && p.name || 'proxy');
+	}
+
+	/**
+	 * Mutes a proxy operation
+	 * @param [id] - operation id (if not defined will be remove all handlers)
+	 */
+	muteProxy(id?: Function): this;
+
+	/**
+	 * @param params - parameters for the operation:
+	 *   *) [id] - operation id
+	 *   *) [label] - label for the task
+	 *   *) [group] - group name for the task
+	 */
+	muteProxy(params: ClearOptsId<Function>): this;
+
+	// tslint:disable-next-line
+	muteProxy(p) {
+		return this.markAsync('muted', p, Object.isObject(p) && p.name || 'proxy');
+	}
+
+	/**
+	 * Unmutes a proxy operation
+	 * @param [id] - operation id (if not defined will be remove all handlers)
+	 */
+	unmuteProxy(id?: Function): this;
+
+	/**
+	 * @param params - parameters for the operation:
+	 *   *) [id] - operation id
+	 *   *) [label] - label for the task
+	 *   *) [group] - group name for the task
+	 */
+	unmuteProxy(params: ClearOptsId<Function>): this;
+
+	// tslint:disable-next-line
+	unmuteProxy(p) {
+		return this.markAsync('!muted', p, Object.isObject(p) && p.name || 'proxy');
+	}
+
+	/**
+	 * Suspends a proxy operation
+	 * @param [id] - operation id (if not defined will be remove all handlers)
+	 */
+	suspendProxy(id?: Function): this;
+
+	/**
+	 * @param params - parameters for the operation:
+	 *   *) [id] - operation id
+	 *   *) [label] - label for the task
+	 *   *) [group] - group name for the task
+	 */
+	suspendProxy(params: ClearOptsId<Function>): this;
+
+	// tslint:disable-next-line
+	suspendProxy(p) {
+		return this.markAsync('paused', p, Object.isObject(p) && p.name || 'proxy');
+	}
+
+	/**
+	 * Unsuspends a proxy operation
+	 * @param [id] - operation id (if not defined will be remove all handlers)
+	 */
+	unsuspendProxy(id?: Function): this;
+
+	/**
+	 * @param params - parameters for the operation:
+	 *   *) [id] - operation id
+	 *   *) [label] - label for the task
+	 *   *) [group] - group name for the task
+	 */
+	unsuspendProxy(params: ClearOptsId<Function>): this;
+
+	// tslint:disable-next-line
+	unsuspendProxy(p) {
+		return this.markAsync('!paused', p, Object.isObject(p) && p.name || 'proxy');
 	}
 
 	/**
@@ -644,7 +1096,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @param handler - event handler
 	 * @param [args] - additional arguments for the emitter
 	 */
-	on<T>(emitter: T & EventEmitterLikeP, events: string | string[], handler: Function, ...args: any[]): Object;
+	on<T>(emitter: T & EventEmitterLikeP, events: string | string[], handler: Function, ...args: any[]): object;
 
 	/**
 	 * @param emitter - event emitter
@@ -666,7 +1118,7 @@ export default class Async<CTX extends object = Async<any>> {
 		handler: Function,
 		params: AsyncOnOpts<CTX>,
 		...args: any[]
-	): Object;
+	): object;
 
 	// tslint:disable-next-line
 	on(emitter, events, handler, p, ...args) {
@@ -746,7 +1198,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @param handler - event handler
 	 * @param [args] - additional arguments for the emitter
 	 */
-	once<T>(emitter: T & EventEmitterLikeP, events: string | string[], handler: Function, ...args: any[]): Object;
+	once<T>(emitter: T & EventEmitterLikeP, events: string | string[], handler: Function, ...args: any[]): object;
 
 	/**
 	 * @param emitter - event emitter
@@ -767,7 +1219,7 @@ export default class Async<CTX extends object = Async<any>> {
 		handler: Function,
 		params: AsyncOnceOpts<CTX>,
 		...args: any[]
-	): Object;
+	): object;
 
 	// tslint:disable-next-line
 	once(emitter, events, handler, p, ...args) {
@@ -829,7 +1281,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 * Wrapper for an event emitter remove listener
 	 * @param [id] - operation id (if not defined will be remove all handlers)
 	 */
-	off(id?: Object): this;
+	off(id?: object): this;
 
 	/**
 	 * @param params - parameters for the operation:
@@ -842,6 +1294,98 @@ export default class Async<CTX extends object = Async<any>> {
 	// tslint:disable-next-line
 	off(p) {
 		return this.clearAsync(Object.isObject(p) && Object.isString(p.event) ? {id: p} : p, 'eventListener');
+	}
+
+	/**
+	 * Mutes an event operation
+	 * @param [id] - operation id (if not defined will be remove all handlers)
+	 */
+	muteEventListeners(id?: object): this;
+
+	/**
+	 * @param params - parameters for the operation:
+	 *   *) [id] - operation id
+	 *   *) [label] - label for the task
+	 *   *) [group] - group name for the task
+	 */
+	muteEventListeners(params: ClearOptsId<object>): this;
+
+	// tslint:disable-next-line
+	muteEventListeners(p) {
+		return this.markAsync(
+			'muted',
+			Object.isObject(p) && Object.isString(p.event) ? {id: p} : p,
+			'eventListener'
+		);
+	}
+
+	/**
+	 * Unmutes an event operation
+	 * @param [id] - operation id (if not defined will be remove all handlers)
+	 */
+	unmuteEventListeners(id?: object): this;
+
+	/**
+	 * @param params - parameters for the operation:
+	 *   *) [id] - operation id
+	 *   *) [label] - label for the task
+	 *   *) [group] - group name for the task
+	 */
+	unmuteEventListeners(params: ClearOptsId<object>): this;
+
+	// tslint:disable-next-line
+	unmuteEventListeners(p) {
+		return this.markAsync(
+			'!muted',
+			Object.isObject(p) && Object.isString(p.event) ? {id: p} : p,
+			'eventListener'
+		);
+	}
+
+	/**
+	 * Suspends an event operation
+	 * @param [id] - operation id (if not defined will be remove all handlers)
+	 */
+	suspendEventListeners(id?: object): this;
+
+	/**
+	 * @param params - parameters for the operation:
+	 *   *) [id] - operation id
+	 *   *) [label] - label for the task
+	 *   *) [group] - group name for the task
+	 */
+	suspendEventListeners(params: ClearOptsId<object>): this;
+
+	// tslint:disable-next-line
+	suspendEventListeners(p) {
+		return this.markAsync(
+			'paused',
+			Object.isObject(p) && Object.isString(p.event) ? {id: p} : p,
+			'eventListener'
+		);
+	}
+
+	/**
+	 * Unsuspends an event operation
+	 * @param [id] - operation id (if not defined will be remove all handlers)
+	 */
+	unsuspendEventListeners(id?: object): this;
+
+	/**
+	 * @param params - parameters for the operation:
+	 *   *) [id] - operation id
+	 *   *) [label] - label for the task
+	 *   *) [group] - group name for the task
+	 */
+	unsuspendEventListeners(params: ClearOptsId<object>): this;
+
+	// tslint:disable-next-line
+	unsuspendEventListeners(p) {
+		return this.markAsync(
+			'!paused',
+			Object.isObject(p) && Object.isString(p.event) ? {id: p} : p,
+			'eventListener'
+		);
 	}
 
 	/**
@@ -868,6 +1412,114 @@ export default class Async<CTX extends object = Async<any>> {
 			.cancelRequest(p)
 			.terminateWorker(p)
 			.cancelProxy(p);
+
+		return this;
+	}
+
+	/**
+	 * Mutes all async operations
+	 *
+	 * @param [params] - additional parameters for the operation:
+	 *   *) [label] - label for the task
+	 *   *) [group] - group name for the task
+	 */
+	muteAll(params?: ClearOpts): this {
+		const
+			p: any = params;
+
+		this
+			.muteEventListeners(p);
+
+		this
+			.muteImmediate(p)
+			.muteInterval(p)
+			.muteTimeout(p)
+			.muteIdleCallback(p);
+
+		this
+			.muteRequest(p)
+			.muteProxy(p);
+
+		return this;
+	}
+
+	/**
+	 * Unmutes all async operations
+	 *
+	 * @param [params] - additional parameters for the operation:
+	 *   *) [label] - label for the task
+	 *   *) [group] - group name for the task
+	 */
+	unmuteAll(params?: ClearOpts): this {
+		const
+			p: any = params;
+
+		this
+			.unmuteEventListeners(p);
+
+		this
+			.unmuteImmediate(p)
+			.unmuteInterval(p)
+			.unmuteTimeout(p)
+			.unmuteIdleCallback(p);
+
+		this
+			.unmuteRequest(p)
+			.unmuteProxy(p);
+
+		return this;
+	}
+
+	/**
+	 * Suspends all async operations
+	 *
+	 * @param [params] - additional parameters for the operation:
+	 *   *) [label] - label for the task
+	 *   *) [group] - group name for the task
+	 */
+	suspendAll(params?: ClearOpts): this {
+		const
+			p: any = params;
+
+		this
+			.suspendEventListeners(p);
+
+		this
+			.suspendImmediate(p)
+			.suspendInterval(p)
+			.suspendTimeout(p)
+			.suspendIdleCallback(p);
+
+		this
+			.suspendRequest(p)
+			.suspendProxy(p);
+
+		return this;
+	}
+
+	/**
+	 * Unsuspends all async operations
+	 *
+	 * @param [params] - additional parameters for the operation:
+	 *   *) [label] - label for the task
+	 *   *) [group] - group name for the task
+	 */
+	unsuspendAll(params?: ClearOpts): this {
+		const
+			p: any = params;
+
+		this
+			.unsuspendEventListeners(p);
+
+		this
+			.unsuspendImmediate(p)
+			.unsuspendInterval(p)
+			.unsuspendTimeout(p)
+			.unsuspendIdleCallback(p);
+
+		this
+			.unsuspendRequest(p)
+			.unsuspendProxy(p);
 
 		return this;
 	}
@@ -1059,7 +1711,6 @@ export default class Async<CTX extends object = Async<any>> {
 		}
 
 		const
-			that = this,
 			ctx = this.context;
 
 		let
@@ -1069,21 +1720,23 @@ export default class Async<CTX extends object = Async<any>> {
 
 		if (!p.periodic || Object.isFunction(wrappedObj)) {
 			wrappedObj = function (this: any): any {
-				if (that.disabled) {
-					return;
-				}
-
 				const
+					args = arguments,
 					link = links.get(id),
 					fnCtx = ctx || this;
 
-				if (!link) {
+				if (!link || link.muted) {
 					return;
 				}
 
 				if (!p.periodic) {
-					links.delete(id);
-					labels[p.label] = undefined;
+					if (link.paused) {
+						link.muted = true;
+
+					} else {
+						links.delete(id);
+						labels[p.label] = undefined;
+					}
 				}
 
 				const execTasks = (i = 0) => (...args) => {
@@ -1098,21 +1751,30 @@ export default class Async<CTX extends object = Async<any>> {
 					}
 				};
 
-				let
-					res = finalObj;
+				const exec = () => {
+					let
+						res = finalObj;
 
-				if (Object.isFunction(finalObj)) {
-					res = finalObj.apply(fnCtx, arguments);
+					if (Object.isFunction(finalObj)) {
+						res = finalObj.apply(fnCtx, args);
+					}
+
+					if (Object.isPromise(res)) {
+						res.then(execTasks(), execTasks(1));
+
+					} else {
+						execTasks().apply(null, args);
+					}
+
+					return res;
+				};
+
+				if (link.paused) {
+					link.queue.push(exec);
+					return;
 				}
 
-				if (Object.isPromise(res)) {
-					res.then(execTasks(), execTasks(1));
-
-				} else {
-					execTasks().apply(null, arguments);
-				}
-
-				return res;
+				return exec();
 			};
 		}
 
@@ -1130,6 +1792,9 @@ export default class Async<CTX extends object = Async<any>> {
 			obj: p.obj,
 			objName: p.obj.name,
 			label: p.label,
+			paused: false,
+			muted: false,
+			queue: [],
 			clearFn: p.clearFn,
 			onComplete: [],
 			onClear: <AsyncClearHandler<CTX>[]>[].concat(p.onClear || [])
@@ -1261,6 +1926,122 @@ export default class Async<CTX extends object = Async<any>> {
 
 		for (let i = 0; i < keys.length; i++) {
 			this.clearAsync({...p, group: keys[i]});
+		}
+
+		return this;
+	}
+
+	/**
+	 * Marks the specified listeners as a field
+	 *
+	 * @param field
+	 * @param p
+	 * @param [name]
+	 */
+	protected markAsync(field: string, p: Dictionary, name?: string): this {
+		if (name) {
+			if (p === undefined) {
+				return this.markAllAsync(field, {name});
+			}
+
+			p = Object.isObject(p) ? {...p, name} : {name, id: p};
+		}
+
+		const
+			baseCache = this.initCache(p.name);
+
+		let cache;
+		if (p.group) {
+			if (Object.isRegExp(p.group)) {
+				const
+					obj = baseCache.groups,
+					keys = Object.keys(obj);
+
+				for (let i = 0; i < keys.length; i++) {
+					const
+						group = keys[i];
+
+					if (p.group.test(group)) {
+						this.clearAsync({...p, group});
+					}
+				}
+
+				return this;
+			}
+
+			if (!baseCache.groups[p.group]) {
+				return this;
+			}
+
+			cache = baseCache.groups[p.group];
+
+		} else {
+			cache = baseCache.root;
+		}
+
+		const
+			{labels, links} = cache;
+
+		if (p.label) {
+			const
+				tmp = labels[p.label];
+
+			if (p.id != null && p.id !== tmp) {
+				return this;
+			}
+
+			p.id = tmp;
+		}
+
+		if (p.id != null) {
+			const
+				link = links.get(p.id);
+
+			if (link) {
+				if (field === '!paused') {
+					for (let o = link.queue, i = 0; i < o.length; i++) {
+						o[i]();
+					}
+
+					link.muted = false;
+					link.paused = false;
+					link.queue = [];
+
+				} else if (field[0] === '!') {
+					link[field.slice(1)] = false;
+
+				} else {
+					link[field] = true;
+				}
+			}
+
+		} else {
+			const
+				values = links.values();
+
+			for (let el = values.next(); !el.done; el = values.next()) {
+				this.markAsync(field, {...p, id: el.value.id});
+			}
+		}
+
+		return this;
+	}
+
+	/**
+	 * Marks all listeners by the specified parameters as a field
+	 *
+	 * @param field
+	 * @param p
+	 */
+	protected markAllAsync(field: string, p: Dictionary): this {
+		this.markAsync.apply(this, arguments);
+
+		const
+			obj = this.initCache(p.name).groups,
+			keys = Object.keys(obj);
+
+		for (let i = 0; i < keys.length; i++) {
+			this.markAsync(field, {...p, group: keys[i]});
 		}
 
 		return this;
