@@ -1751,7 +1751,15 @@ export default class Async<CTX extends object = Async<any>> {
 					}
 				};
 
+				const
+					needDelete = !p.periodic && link.paused;
+
 				const exec = () => {
+					if (needDelete) {
+						links.delete(id);
+						labels[p.label] = undefined;
+					}
+
 					let
 						res = finalObj;
 
