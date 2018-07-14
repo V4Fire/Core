@@ -25,10 +25,10 @@
     "test": "echo \"Error: no test specified\" && exit 0"
   },
   "dependencies": {
-    "@types/got": "^7.1.8",
+    "@types/got": "^8.3.3",
     "@types/node": "^10.5.2",
     "collection.js": "^6.6.27",
-    "dotenv": "^5.0.1",
+    "dotenv": "^6.0.0",
     "eventemitter2": "^5.0.1",
     "fs-extra-promise": "^1.0.1",
     "got": "^8.3.2",
@@ -44,7 +44,7 @@
     "@types/gulp-load-plugins": "0.0.31",
     "@types/through2": "^2.0.33",
     "config": "^1.30.0",
-    "find-up": "^2.1.0",
+    "find-up": "^3.0.0",
     "gulp": "^4.0.0",
     "gulp-convert-newline": "0.0.3",
     "gulp-header": "^2.0.5",
@@ -54,14 +54,14 @@
     "path-equal": "^1.1.0",
     "through2": "^2.0.3",
     "tsconfig": "^7.0.0",
-    "typescript": "^2.9.1",
+    "typescript": "^3.0.0-rc",
     "uniconf": "^2.0.0",
     "upath": "^1.1.0",
     "urlconcat": "0.0.12"
   },
   "devDependencies": {
-    "babel-eslint": "^8.2.5",
-    "eslint": "^4.19.1",
+    "babel-eslint": "^8.2.6",
+    "eslint": "^5.1.0",
     "tslint": "^5.10.0"
   }
 }
