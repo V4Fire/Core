@@ -713,7 +713,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 *   *) [group] - group name for the task
 	 */
 	request<T>(request: (() => PromiseLike<T>) | PromiseLike<T>, params?: AsyncOpts): Promise<T> {
-		return this.promise(request, {...<any>params, name: 'request'});
+		return this.promise(request, {...params, name: 'request'});
 	}
 
 	/**
@@ -949,7 +949,7 @@ export default class Async<CTX extends object = Async<any>> {
 			let
 				canceled = false;
 
-			const proxyResolve = <any>this.proxy(resolve, {
+			const proxyResolve = <(value: any) => any>this.proxy(resolve, {
 				...<any>p,
 
 				clearFn: () => {
