@@ -323,7 +323,7 @@ export default class Then<T = any> implements PromiseLike<T> {
 			const
 				that = this;
 
-			onAbort(function (reason: any): void {
+			onAbort(function (this: Then, reason: any): void {
 				if (Object.isFunction(abortCb)) {
 					try {
 						abortCb(reason);
@@ -364,7 +364,7 @@ export default class Then<T = any> implements PromiseLike<T> {
 			const
 				that = this;
 
-			onAbort(function (reason: any): void {
+			onAbort(function (this: Then, reason: any): void {
 				this.aborted = true;
 
 				if (!that.abort(reason)) {

@@ -23,7 +23,7 @@ export function afterEvents(emitter: EventEmitter, ...events: string[]): Promise
 			emitter.once(ev, () => {
 				res[ev] = true;
 
-				if (events.every((e) => res[e])) {
+				if (events.every((e: string) => res[e])) {
 					resolve();
 				}
 			});
