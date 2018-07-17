@@ -1121,7 +1121,7 @@ export default class Async<CTX extends object = Async<any>> {
 	): object;
 
 	// tslint:disable-next-line
-	on(emitter, events, handler, p, ...args) {
+	on(emitter, events, cb, p, ...args) {
 		if (p !== undefined && !Object.isObject(p)) {
 			args.unshift(p);
 			p = undefined;
@@ -1140,20 +1140,22 @@ export default class Async<CTX extends object = Async<any>> {
 			that = this,
 			links: any[] = [];
 
-		for (const event of events) {
+		for (let i = 0; i < events.length; i++) {
+			const
+				event = events[i];
+
 			links.push(this.setAsync({
 				...p,
 				name: 'eventListener',
-				obj: handler,
-				wrapper(): any {
-					const baseHandler = handler;
-					handler = function (this: any): any {
+				obj: cb,
+				wrapper(cb: Function): any {
+					const handler = function (this: any): any {
 						if (p.single && !emitter.once) {
 							that.eventListenerDestructor({emitter, event, handler, args});
 						}
 
 						const
-							res = baseHandler.apply(this, arguments);
+							res = cb.apply(this, arguments);
 
 						if (Object.isPromise(res)) {
 							res.catch(stderr);
@@ -1544,7 +1546,7 @@ export default class Async<CTX extends object = Async<any>> {
 			fn = Object.isFunction(e) ? e : e.removeEventListener || e.removeListener || e.off;
 
 		if (fn && Object.isFunction(fn)) {
-			fn.call(e, params.event, params.handler, ...params.args);
+			fn.call(e, params.event, params.handler);
 
 		} else {
 			throw new ReferenceError('Remove event listener function for the event emitter is not defined');
