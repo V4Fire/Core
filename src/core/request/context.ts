@@ -174,7 +174,8 @@ export default class RequestContext<T = any> {
 
 		const
 			p = this.params,
-			q = p.method === 'GET' ? this.query : Object.isObject(<any>p.body) ? p.body : this.query;
+			isGET = p.method === 'GET',
+			q = isGET ? this.query : Object.isObject(<any>p.body) ? p.body : this.query;
 
 		if (Object.isTable(q)) {
 			if (p.headers) {
@@ -187,15 +188,18 @@ export default class RequestContext<T = any> {
 			p.headers = normalizeHeaders(p.headers);
 		}
 
+		let
+			fullURL = url;
+
 		if ($C(q).length()) {
-			url = `${url}?${toQueryString(q)}`;
+			fullURL = `${url}?${toQueryString(q)}`;
 		}
 
 		if (this.canCache) {
-			this.cacheKey = this.getRequestKey(url);
+			this.cacheKey = this.getRequestKey(fullURL);
 		}
 
-		return url;
+		return isGET ? fullURL : url;
 	}
 
 	/**
