@@ -174,32 +174,31 @@ export default class RequestContext<T = any> {
 
 		const
 			p = this.params,
-			isGET = p.method === 'GET',
-			q = isGET ? this.query : Object.isObject(<any>p.body) ? p.body : this.query;
+			q = this.query;
 
-		if (Object.isTable(q)) {
+		const data = p.method === 'GET' ?
+			q : Object.isObject(<any>p.body) ? p.body : q;
+
+		if (Object.isTable(data)) {
 			if (p.headers) {
-				p.headers = normalizeHeaders(p.headers, q);
+				p.headers = normalizeHeaders(p.headers, data);
 			}
 
-			url = applyQueryForStr(url, q, /\/:(.+?)(\(.*?\))?(?=\/|$)/g);
+			url = applyQueryForStr(url, data, /\/:(.+?)(\(.*?\))?(?=\/|$)/g);
 
 		} else if (p.headers) {
 			p.headers = normalizeHeaders(p.headers);
 		}
 
-		let
-			fullURL = url;
-
 		if ($C(q).length()) {
-			fullURL = `${url}?${toQueryString(q)}`;
+			url = `${url}?${toQueryString(q)}`;
 		}
 
 		if (this.canCache) {
-			this.cacheKey = this.getRequestKey(fullURL);
+			this.cacheKey = this.getRequestKey(url);
 		}
 
-		return isGET ? fullURL : url;
+		return url;
 	}
 
 	/**
