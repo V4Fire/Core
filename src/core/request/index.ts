@@ -111,7 +111,7 @@ export default function create<T>(path, ...args) {
 		const addLogger = (type) => (fn, key) => (d) => {
 			const
 				time = Date.now(),
-				res = fn(d, p);
+				res = fn(d, {opts: p, ctx, globalOpts});
 
 			const
 				logKey = `request:${type}:${key}:${path}`,
