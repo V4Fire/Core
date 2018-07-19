@@ -61,16 +61,11 @@ export function isOnline(): Promise<{status: boolean; lastOnline?: Date}> {
 				timer = setTimeout(() => resolve(false), config.onlineCheckTimeout);
 
 			img.onload = () => (clearTimeout(timer), resolve(true));
-			img.onerror = () => (clearTimeout(timer), resolve(true));
+			img.onerror = () => (clearTimeout(timer), resolve(false));
 			img.src = `${url}?d=${Date.now()}`;
 		});
 
 		setTimeout(() => cache = undefined, config.onlineCheckCacheTTL);
-
-		const res = {
-			status,
-			lastOnline
-		};
 
 		const updateDate = () => {
 			clearTimeout(syncTimer);
@@ -83,14 +78,14 @@ export function isOnline(): Promise<{status: boolean; lastOnline?: Date}> {
 
 		if (prevStatus === undefined || status !== prevStatus) {
 			if (status) {
-				updateDate();
 				event.emit('online', lastOnline);
 
 			} else {
 				event.emit('offline');
 			}
 
-			event.emit('status', res);
+			updateDate();
+			event.emit('status', {status, lastOnline});
 
 		} else if (status && syncTimer != null) {
 			syncTimer = setTimeout(updateDate, config.onlineLastDateSyncInterval);
@@ -100,7 +95,7 @@ export function isOnline(): Promise<{status: boolean; lastOnline?: Date}> {
 			await loadFromStorage;
 		} catch (_) {}
 
-		return res;
+		return {status, lastOnline};
 	})();
 
 	return cache;
