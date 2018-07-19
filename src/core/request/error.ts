@@ -6,17 +6,18 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-export default class RequestError extends Error {
+export default class RequestError {
 	readonly type: string;
 	readonly details: any;
+	readonly message: string;
 
 	/**
 	 * @param type - error type
 	 * @param details - error details
 	 */
 	constructor(type: string, details?: any) {
-		super(`API error, type: ${type}`);
 		this.type = type;
 		this.details = details;
+		this.message = `API error, type: ${type}`;
 	}
 }
