@@ -118,7 +118,7 @@ function factory(storage: Dictionary, async?: boolean): FactoryResult | AsyncFac
 					return undefined;
 				}
 
-				if (Object.isString(v) && /^[[{"]|^(?:true|false|\d+)$/.test(v)) {
+				if (Object.isString(v) && /^[[{"]|^(?:true|false|null|undefined|\d+)$/.test(v)) {
 					return JSON.parse(v, convertIfDate);
 				}
 

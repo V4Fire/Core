@@ -6,6 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import $C = require('collection.js');
 import Then from 'core/then';
 import Response from 'core/request/response';
 
@@ -174,14 +175,17 @@ export default class RequestContext<T = any> {
 
 		const
 			p = this.params,
-			q = p.method === 'GET' ? this.query : Object.isObject(<any>p.body) ? p.body : this.query;
+			q = this.query;
 
-		if (Object.isTable(q)) {
+		const data = p.method === 'GET' ?
+			q : Object.isObject(<any>p.body) ? p.body : q;
+
+		if (Object.isTable(data)) {
 			if (p.headers) {
-				p.headers = normalizeHeaders(p.headers, q);
+				p.headers = normalizeHeaders(p.headers, data);
 			}
 
-			url = applyQueryForStr(url, q, /\/:(.+?)(\(.*?\))?(?=\/|$)/g);
+			url = applyQueryForStr(url, data, /\/:(.+?)(\(.*?\))?(?=\/|$)/g);
 
 		} else if (p.headers) {
 			p.headers = normalizeHeaders(p.headers);

@@ -8,14 +8,21 @@
 
 import $C = require('collection.js');
 import config from 'config';
+import * as dict from 'lang';
+
+import { asyncLocal } from 'core/kv-storage';
 import { GLOBAL, IS_NODE } from 'core/const/links';
-import * as baseLangs from 'lang';
+import { EventEmitter2 as EventEmitter } from 'eventemitter2';
+
+export const
+	event = new EventEmitter({maxListeners: 100});
 
 const
+	storage = asyncLocal.namespace('[[I18N]]'),
 	ws = /[\r\n]+/g;
 
 // Normalize translates
-const langs = $C(baseLangs).map((el) => {
+const langs = $C(dict).map((el) => {
 	if (typeof el !== 'object') {
 		return el;
 	}
@@ -31,66 +38,51 @@ const langs = $C(baseLangs).map((el) => {
  */
 export let
 	lang: string,
-	isLangDef: boolean;
+	isLangDef: boolean,
+	isInitialized: Promise<void> = Promise.resolve();
 
 if (IS_NODE) {
 	setLang(config.lang);
 
 } else {
-	try {
-		const
-			l = localStorage.getItem('SYSTEM_LANGUAGE');
+	isInitialized = (async () => {
+		try {
+			const
+				l = await storage.get('lang');
 
-		if (l && !{null: true, undefined: true}[l]) {
-			setLang(l, Object.parse(localStorage.getItem('SYSTEM_LANGUAGE_DEF')));
+			if (l) {
+				setLang(l, await storage.get('isLangDef'));
+				return;
+			}
 
-		} else {
+			throw new Error('Default language');
+
+		} catch (_) {
 			setLang(config.lang, true);
 		}
-
-	} catch (_) {
-		setLang(config.lang, true);
-	}
+	})();
 }
-
-const
-	{format: sugarFormat} = Date.prototype;
-
-/**
- * Date.format wrapper
- * (added: {humanTimeDate} and {humanDate})
- *
- * @param value
- * @param [locale]
- */
-Date.prototype.format = function format(value: string, locale?: string): string {
-	const aliases = {
-		humanTimeDate: '{HH}:{mm} {humanDate}',
-		humanDate: lang === 'ru' ? '{dd}.{MM}.{yyyy}' : '{MM}.{dd}.{yyyy}'
-	};
-
-	const replace = (str) => str.replace(/{(humanTimeDate|humanDate)}/g, (str, $1) => replace(aliases[$1]));
-	return sugarFormat.call(this, replace(value), locale || lang);
-};
 
 /**
  * Sets a new system language
  *
  * @param [value]
  * @param [def] - if true, then the language is system default
+ * @emits setLang(value: string, oldValue?: string)
  */
 export function setLang(value: string, def?: boolean): string {
+	const
+		oldLang = lang;
+
 	lang = value;
 	isLangDef = Boolean(def);
 
 	if (!IS_NODE) {
-		try {
-			localStorage.setItem('SYSTEM_LANGUAGE', value);
-			localStorage.setItem('SYSTEM_LANGUAGE_DEF', String(isLangDef));
-
-		} catch (_) {}
+		storage.set('lang', value).catch(stderr);
+		storage.set('isLangDef', isLangDef).catch(stderr);
 	}
 
+	event.emit('setLang', lang, oldLang);
 	return lang;
 }
 
