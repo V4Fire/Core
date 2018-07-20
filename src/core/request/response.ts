@@ -8,7 +8,6 @@
 
 import $C = require('collection.js');
 import Then from 'core/then';
-import StatusCodes from 'core/statusCodes';
 
 import { IS_NODE } from 'core/const/links';
 import { once } from 'core/decorators';
@@ -99,7 +98,7 @@ export default class Response {
 			this.ok = s.contains(this.status);
 
 		} else {
-			this.ok = (<StatusCodes[]>[]).concat(s || []).includes(this.status);
+			this.ok = (<number[]>[]).concat(s || []).includes(this.status);
 		}
 
 		// tslint:disable-next-line
@@ -152,10 +151,10 @@ export default class Response {
 				data = this.text();
 		}
 
-		return data
+		return (<Then>data)
 			.then((obj) => $C(this.decoders)
 				.to(Then.resolve(obj, this.parent))
-				.reduce((res, fn) => res.then(fn)))
+				.reduce((res: Then, fn) => res.then(fn)))
 
 			.then((res) => {
 				if (Object.isFrozen(res)) {
@@ -184,14 +183,16 @@ export default class Response {
 			throw new TypeError('Invalid data sourceType');
 		}
 
+		type _ = Document | null;
+
 		const
-			body = <Document | void>this.body;
+			body = <_>this.body;
 
 		if (!body) {
-			return <any>Then.resolve(null, this.parent);
+			return Then.resolve<_>(null, this.parent);
 		}
 
-		return <any>Then.resolve(body, this.parent);
+		return Then.resolve<_>(body, this.parent);
 	}
 
 	/**
@@ -202,20 +203,23 @@ export default class Response {
 			throw new TypeError('Invalid data sourceType');
 		}
 
+		type _ = string | json | null;
+
 		const
-			body = <string | json | void>this.body;
+			body = <_>this.body;
 
 		if (body == null || body === '') {
-			return <any>Then.resolve(null, this.parent);
+			return Then.resolve<T | null>(null, this.parent);
 		}
 
 		if (Object.isString(body)) {
 			return Then.immediate(() => JSON.parse(body, convertIfDate), this.parent);
 		}
 
-		return <any>Then.immediate(() => {
-			return $C(this.decoders).length() && !Object.isFrozen(body) ? Object.fastClone(body) : body;
-		}, this.parent);
+		return Then.immediate<T | null>(
+			<() => T>(() => $C(this.decoders).length() && !Object.isFrozen(body) ? Object.fastClone(body) : body),
+			this.parent
+		);
 	}
 
 	/**
@@ -226,25 +230,36 @@ export default class Response {
 			throw new TypeError('Invalid data sourceType');
 		}
 
+		type _ = ArrayBuffer | null;
+
 		const
-			body = <ArrayBuffer | void>this.body;
+			body = <_>this.body;
 
 		if (!body || !body.byteLength) {
-			return <any>Then.resolve(null, this.parent);
+			return Then.resolve<_>(null, this.parent);
 		}
 
-		return <any>Then.resolve(body, this.parent);
+		return Then.resolve<_>(body, this.parent);
 	}
 
 	/**
 	 * Parses .body as Blob and returns the result
 	 */
-	blob(): Then<Blob> {
+	blob(): Then<Blob | null> {
 		if (this.sourceResponseType !== 'blob') {
 			throw new TypeError('Invalid data sourceType');
 		}
 
-		return Then.resolve(new Blob([this.body], {type: this.getHeader('content-sourceType')}), this.parent);
+		type _ = Blob | null;
+
+		const
+			{body} = this;
+
+		if (!body) {
+			return Then.resolve<_>(null);
+		}
+
+		return Then.resolve<_>(new Blob([<any>body], {type: this.getHeader('content-sourceType')}), this.parent);
 	}
 
 	/**
@@ -252,23 +267,25 @@ export default class Response {
 	 */
 	@once
 	text(): Then<string | null> {
+		type _ = string | null;
+
 		const
 			{body, sourceResponseType} = this;
 
 		if (!body || sourceResponseType === 'arrayBuffer' && !(<ArrayBuffer>body).byteLength) {
-			return <any>Then.resolve(null, this.parent);
+			return Then.resolve<_>(null, this.parent);
 		}
 
 		if ({text: true, document: true}[sourceResponseType]) {
-			return <any>Then.resolve(String(body), this.parent);
+			return Then.resolve<_>(String(body), this.parent);
 		}
 
 		if ({json: true, object: true}[sourceResponseType]) {
 			if (Object.isString(body)) {
-				return <any>Then.resolve(body, this.parent);
+				return Then.resolve<_>(body, this.parent);
 			}
 
-			return <any>Then.immediate(JSON.stringify(body), this.parent);
+			return Then.immediate<_>(JSON.stringify(body), this.parent);
 		}
 
 		const
@@ -288,25 +305,25 @@ export default class Response {
 
 		if (IS_NODE) {
 			//#if node_js
-			return <any>Then.resolve<string>(Buffer.from(<any>body).toString(encoding));
+			return Then.resolve<_>(Buffer.from(<any>body).toString(encoding));
 			//#endif
 		}
 
 		if (typeof TextDecoder !== 'undefined') {
 			const decoder = new TextDecoder(encoding, {fatal: true});
-			return <any>Then.resolve(decoder.decode(new DataView(<any>body)), this.parent);
+			return Then.resolve<_>(decoder.decode(new DataView(<any>body)), this.parent);
 		}
 
 		return new Then((resolve, reject, onAbort) => {
 			const
 				reader = new FileReader();
 
-			reader.onload = () => resolve(reader.result);
+			reader.onload = () => resolve(<string>reader.result);
 			reader.onerror = reject;
 
 			this.blob().then((blob) => {
 				onAbort(() => reader.abort());
-				reader.readAsText(blob, encoding);
+				reader.readAsText(<Blob>blob, encoding);
 			});
 
 		}, this.parent);
