@@ -6,6 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import $C = require('collection.js');
+
 const
 	minDateLength = '2017-02-03T'.length,
 	isDate = /^\d{4}-\d{2}-\d{2}T[\d:.]+Z/;

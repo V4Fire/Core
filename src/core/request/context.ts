@@ -6,6 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import $C = require('collection.js');
 import Then from 'core/then';
 import Response from 'core/request/response';
 

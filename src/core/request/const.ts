@@ -6,8 +6,10 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import config from 'config';
+import $C = require('collection.js');
 import StatusCodes from 'core/statusCodes';
+import config from 'config';
+
 import { RequestMethods, ResponseTypes, GlobalOptions, CacheStrategy } from 'core/request/interface';
 import { Cache, RestrictedCache, NeverCache } from 'core/cache';
 export { asyncLocal as storage } from 'core/kv-storage';
