@@ -8,14 +8,18 @@
 
 import $C = require('collection.js');
 import config from 'config';
+
 import { GLOBAL, IS_NODE } from 'core/const/links';
-import * as baseLangs from 'lang';
+import { asyncLocal } from 'core/kv-storage';
+
+import * as dict from 'lang';
 
 const
+	storage = asyncLocal.namespace('[[I18N]]'),
 	ws = /[\r\n]+/g;
 
 // Normalize translates
-const langs = $C(baseLangs).map((el) => {
+const langs = $C(dict).map((el) => {
 	if (typeof el !== 'object') {
 		return el;
 	}
@@ -37,41 +41,23 @@ if (IS_NODE) {
 	setLang(config.lang);
 
 } else {
-	try {
-		const
-			l = localStorage.getItem('SYSTEM_LANGUAGE');
+	(async () => {
+		try {
+			const
+				l = await storage.get('lang');
 
-		if (l && !{null: true, undefined: true}[l]) {
-			setLang(l, Object.parse(localStorage.getItem('SYSTEM_LANGUAGE_DEF')));
+			if (l) {
+				setLang(l, await storage.get('isLangDef'));
 
-		} else {
+			} else {
+				setLang(config.lang, true);
+			}
+
+		} catch (_) {
 			setLang(config.lang, true);
 		}
-
-	} catch (_) {
-		setLang(config.lang, true);
-	}
+	})();
 }
-
-const
-	{format: sugarFormat} = Date.prototype;
-
-/**
- * Date.format wrapper
- * (added: {humanTimeDate} and {humanDate})
- *
- * @param value
- * @param [locale]
- */
-Date.prototype.format = function format(value: string, locale?: string): string {
-	const aliases = {
-		humanTimeDate: '{HH}:{mm} {humanDate}',
-		humanDate: lang === 'ru' ? '{dd}.{MM}.{yyyy}' : '{MM}.{dd}.{yyyy}'
-	};
-
-	const replace = (str) => str.replace(/{(humanTimeDate|humanDate)}/g, (str, $1) => replace(aliases[$1]));
-	return sugarFormat.call(this, replace(value), locale || lang);
-};
 
 /**
  * Sets a new system language
@@ -84,11 +70,8 @@ export function setLang(value: string, def?: boolean): string {
 	isLangDef = Boolean(def);
 
 	if (!IS_NODE) {
-		try {
-			localStorage.setItem('SYSTEM_LANGUAGE', value);
-			localStorage.setItem('SYSTEM_LANGUAGE_DEF', String(isLangDef));
-
-		} catch (_) {}
+		storage.set('lang', value).catch(stderr);
+		storage.set('isLangDef', isLangDef).catch(stderr);
 	}
 
 	return lang;
