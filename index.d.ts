@@ -59,6 +59,7 @@ interface ObjectConstructor {
 	): T;
 
 	toSource(): string;
+	keys(obj: object | Dictionary): string[];
 	fastCompare<T>(a: any, b: T): a is T;
 	parse(value: any): any;
 	createMap<T extends Object>(obj: T): T & Dictionary;

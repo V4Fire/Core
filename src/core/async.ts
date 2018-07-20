@@ -1846,7 +1846,7 @@ export default class Async<CTX extends object = Async<any>> {
 			if (Object.isRegExp(p.group)) {
 				const
 					obj = baseCache.groups,
-					keys = <string[]>Object.keys(obj);
+					keys = Object.keys(obj);
 
 				for (let i = 0; i < keys.length; i++) {
 					const
@@ -1965,7 +1965,7 @@ export default class Async<CTX extends object = Async<any>> {
 			if (Object.isRegExp(p.group)) {
 				const
 					obj = baseCache.groups,
-					keys = <string[]>Object.keys(obj);
+					keys = Object.keys(obj);
 
 				for (let i = 0; i < keys.length; i++) {
 					const
