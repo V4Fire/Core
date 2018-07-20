@@ -120,7 +120,7 @@
     "typeof-compare": true,
     "use-default-type-parameter": false,
     "use-isnan": true,
-    "cyclomatic-complexity": [true, 30],
+    "cyclomatic-complexity": [true, 50],
     "deprecation": true,
     "eofline": true,
     "indent": [true, "tabs"],
@@ -142,7 +142,7 @@
     "binary-expression-operand-order": true,
     "callable-types": false,
     "class-name": false,
-    "comment-format": [true, "check-space", "check-uppercase"],
+    "comment-format": [false, "check-space", "check-uppercase"],
     "completed-docs": [true, {
       "functions": {"visibilities": ["exported"]},
       "properties": {"locations": "all", "privacies": ["public", "protected"]},
