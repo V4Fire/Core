@@ -68,6 +68,14 @@ interface ObjectConstructor {
 	createDict(...fields: any[]): Dictionary;
 	getPrototypeChain(constructor: Function): object[];
 	fromArray(arr: any[]): Dictionary<boolean>;
+	isArray(obj: any): obj is any[];
+	isFunction(obj: any): obj is Function;
+	isString(obj: any): obj is string;
+	isNumber(obj: any): obj is number;
+	isBoolean(obj: any): obj is boolean;
+	isRegExp(obj: any): obj is RegExp;
+	isDate(obj: any): obj is Date;
+	isDate(obj: any): obj is Date;
 	isWeakMap(obj: any): obj is WeakMap<any, any>;
 	isWeakSet(obj: any): obj is WeakSet<any>;
 	isPromise(obj: any): obj is Promise<any>;
