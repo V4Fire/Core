@@ -7,9 +7,9 @@
  */
 
 import Then from 'core/then';
-import StatusCodes from 'core/statusCodes';
 import Response from 'core/request/response';
 import RequestContext from 'core/request/context';
+import { StatusCodes } from 'core/statusCodes';
 
 export type RequestMethods =
 	'GET' |

@@ -89,6 +89,6 @@ export default function createTransport<T>(params: RequestOptions): Then<Respons
 			reject(new RequestError('timeout'));
 		});
 
-		xhr.send(data);
+		xhr.send(<any>data);
 	}, p.parent);
 }
