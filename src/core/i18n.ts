@@ -8,11 +8,14 @@
 
 import $C = require('collection.js');
 import config from 'config';
-
-import { GLOBAL, IS_NODE } from 'core/const/links';
-import { asyncLocal } from 'core/kv-storage';
-
 import * as dict from 'lang';
+
+import { asyncLocal } from 'core/kv-storage';
+import { GLOBAL, IS_NODE } from 'core/const/links';
+import { EventEmitter2 as EventEmitter } from 'eventemitter2';
+
+export const
+	event = new EventEmitter({maxListeners: 100});
 
 const
 	storage = asyncLocal.namespace('[[I18N]]'),
@@ -35,23 +38,24 @@ const langs = $C(dict).map((el) => {
  */
 export let
 	lang: string,
-	isLangDef: boolean;
+	isLangDef: boolean,
+	isInitialized: Promise<void> = Promise.resolve();
 
 if (IS_NODE) {
 	setLang(config.lang);
 
 } else {
-	(async () => {
+	isInitialized = (async () => {
 		try {
 			const
 				l = await storage.get('lang');
 
 			if (l) {
 				setLang(l, await storage.get('isLangDef'));
-
-			} else {
-				setLang(config.lang, true);
+				return;
 			}
+
+			throw new Error('Default language');
 
 		} catch (_) {
 			setLang(config.lang, true);
@@ -64,8 +68,12 @@ if (IS_NODE) {
  *
  * @param [value]
  * @param [def] - if true, then the language is system default
+ * @emits setLang(value: string, oldValue?: string)
  */
 export function setLang(value: string, def?: boolean): string {
+	const
+		oldLang = lang;
+
 	lang = value;
 	isLangDef = Boolean(def);
 
@@ -74,6 +82,7 @@ export function setLang(value: string, def?: boolean): string {
 		storage.set('isLangDef', isLangDef).catch(stderr);
 	}
 
+	event.emit('setLang', lang, oldLang);
 	return lang;
 }
 
