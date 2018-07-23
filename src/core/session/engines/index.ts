@@ -7,4 +7,4 @@
  */
 
 import { namespace } from 'core/kv-storage';
-export default namespace('session');
+export default namespace('[[SESSION]]');
