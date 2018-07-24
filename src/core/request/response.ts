@@ -37,12 +37,12 @@ export default class Response {
 	/**
 	 * Response data type
 	 */
-	responseType: ResponseTypes;
+	responseType?: ResponseTypes;
 
 	/**
 	 * Response source data type
 	 */
-	readonly sourceResponseType: ResponseTypes;
+	readonly sourceResponseType?: ResponseTypes;
 
 	/**
 	 * Parent operation promise
@@ -270,17 +270,18 @@ export default class Response {
 		type _ = string | null;
 
 		const
-			{body, sourceResponseType} = this;
+			body = this.body,
+			type = <any>this.sourceResponseType;
 
-		if (!body || sourceResponseType === 'arrayBuffer' && !(<ArrayBuffer>body).byteLength) {
+		if (!body || type === 'arrayBuffer' && !(<ArrayBuffer>body).byteLength) {
 			return Then.resolve<_>(null, this.parent);
 		}
 
-		if ({text: true, document: true}[sourceResponseType]) {
+		if ({text: true, document: true}[type]) {
 			return Then.resolve<_>(String(body), this.parent);
 		}
 
-		if ({json: true, object: true}[sourceResponseType]) {
+		if ({json: true, object: true}[type]) {
 			if (Object.isString(body)) {
 				return Then.resolve<_>(body, this.parent);
 			}

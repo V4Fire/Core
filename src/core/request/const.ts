@@ -23,7 +23,6 @@ export const mimeTypes: Dictionary<ResponseTypes> = Object.createDict(<any>{
 
 export const defaultRequestOpts = {
 	method: <RequestMethods>'GET',
-	responseType: <ResponseTypes>'json',
 	cacheStrategy: <CacheStrategy>'never',
 	offlineCacheTTL: (1).day(),
 	headers: {},
