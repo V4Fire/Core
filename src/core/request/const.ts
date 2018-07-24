@@ -14,6 +14,13 @@ import { RequestMethods, ResponseTypes, GlobalOptions, CacheStrategy } from 'cor
 import { Cache, RestrictedCache, NeverCache } from 'core/cache';
 export { asyncLocal as storage } from 'core/kv-storage';
 
+export const mimeTypes: Dictionary<ResponseTypes> = Object.createDict(<any>{
+	'application/json': 'json',
+	'application/javascript': 'text',
+	'application/xml': 'document',
+	'application/x-www-form-urlencoded': 'text'
+});
+
 export const defaultRequestOpts = {
 	method: <RequestMethods>'GET',
 	responseType: <ResponseTypes>'json',

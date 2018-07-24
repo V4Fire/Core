@@ -18,7 +18,7 @@ import { isOnline } from 'core/net';
 import { getStorageKey } from 'core/request/utils';
 import { concatUrls } from 'core/url';
 
-import { storage, globalOpts, defaultRequestOpts } from 'core/request/const';
+import { storage, globalOpts, defaultRequestOpts, mimeTypes } from 'core/request/const';
 import { RequestFunctionResponse, RequestResponse, CreateRequestOptions, ResolverResult } from 'core/request/interface';
 
 export * from 'core/request/interface';
@@ -142,6 +142,26 @@ export default function create<T>(path, ...args) {
 
 			// Wrap resolve function with .resolver
 			resolveURL(api?: string | null | undefined): string {
+				if (/^\w+:/.test(path)) {
+					const
+						dataURI = /^data:([^;]+);/.exec(path),
+						type = dataURI && dataURI[1];
+
+					if (type && !p.responseType) {
+						if (mimeTypes[type]) {
+							p.responseType = mimeTypes[type];
+
+						} else if (/^text(?:\/|$)/.test(type)) {
+							p.responseType = 'text';
+
+						} else {
+							p.responseType = 'arrayBuffer';
+						}
+					}
+
+					return path;
+				}
+
 				let
 					url = concatUrls(api ? this.resolveAPI(api) : null, path);
 
