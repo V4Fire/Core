@@ -256,12 +256,27 @@ module.exports = config.createConfig(
 			}
 		},
 
+		build: {
+			id: o('build-id', {
+				env: true,
+				default: (() => {
+					if (!isProd) {
+						const username = env.USER || env.USERNAME || 'unknown';
+						return `debug version${username ? `, author: ${username}` : ''}`;
+					}
+
+					return null;
+				})()
+			})
+		},
+
 		snakeskin() {
 			return {
 				pack: false,
 				filters: {global: ['undef']},
 				vars: {
 					...require('config').envs,
+					buildId: this.build.id,
 					isProd
 				}
 			};
