@@ -191,7 +191,7 @@ module.exports = config.createConfig(
 			env: true,
 			default: 'Default app',
 			coerce(value) {
-				global.APP_NAME = value;
+				global['APP_NAME'] = value;
 				return value;
 			}
 		}),
@@ -200,7 +200,7 @@ module.exports = config.createConfig(
 			env: true,
 			default: 'en',
 			coerce(value) {
-				global.LANG = value;
+				global['LANG'] = value;
 				return value;
 			}
 		}),
