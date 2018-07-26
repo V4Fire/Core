@@ -257,17 +257,19 @@ module.exports = config.createConfig(
 		},
 
 		build: {
-			id: o('build-id', {
-				env: true,
-				default: (() => {
-					if (!isProd) {
-						const username = env.USER || env.USERNAME || 'unknown';
-						return `debug version${username ? `, author: ${username}` : ''}`;
-					}
+			id() {
+				return o('build-id', {
+					env: true,
+					default: (() => {
+						if (!isProd) {
+							const username = env.USER || env.USERNAME || 'unknown';
+							return `debug version${username ? `, author: ${username}` : ''}`;
+						}
 
-					return null;
-				})()
-			})
+						return null;
+					})()
+				});
+			}
 		},
 
 		snakeskin() {
@@ -277,7 +279,7 @@ module.exports = config.createConfig(
 				vars: {
 					...require('config').envs,
 					version: include('package.json').version,
-					buildVersion: this.build.id,
+					buildVersion: this.build.id(),
 					isProd
 				}
 			};
