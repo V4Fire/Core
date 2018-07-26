@@ -276,7 +276,8 @@ module.exports = config.createConfig(
 				filters: {global: ['undef']},
 				vars: {
 					...require('config').envs,
-					buildId: this.build.id,
+					version: include('package.json').version,
+					buildVersion: this.build.id,
 					isProd
 				}
 			};
