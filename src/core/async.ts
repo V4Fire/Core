@@ -1972,7 +1972,7 @@ export default class Async<CTX extends object = Async<any>> {
 						group = keys[i];
 
 					if (p.group.test(group)) {
-						this.clearAsync({...p, group});
+						this.markAsync(field, {...p, group});
 					}
 				}
 
