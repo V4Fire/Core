@@ -70,7 +70,7 @@ export function isOnline(): Promise<{status: boolean; lastOnline?: Date}> {
 			img.onerror = () => {
 				clearTimeout(timer);
 				retryCount++;
-				return retryCount < config.onlineRetryCount;
+				resolve(retryCount < config.onlineRetryCount);
 			};
 
 			img.src = `${url}?d=${Date.now()}`;
