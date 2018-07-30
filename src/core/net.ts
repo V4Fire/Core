@@ -21,7 +21,7 @@ let
 	lastOnline,
 	cache,
 	syncTimer,
-	networkBreaks = 0;
+	retryCount = 0;
 
 /**
  * If online returns true
@@ -61,15 +61,17 @@ export function isOnline(): Promise<{status: boolean; lastOnline?: Date}> {
 				img = new Image(),
 				timer = setTimeout(() => resolve(false), config.onlineCheckTimeout);
 
-			img.onload = () => (clearTimeout(timer), resolve((() => {
-				networkBreaks = 0;
-				return true;
-			})()));
+			img.onload = () => {
+				clearTimeout(timer);
+				retryCount = 0;
+				resolve(true);
+			};
 
-			img.onerror = () => (clearTimeout(timer), resolve((() => {
-				networkBreaks++;
-				return networkBreaks < config.onlineCheckErrorsCount;
-			})()));
+			img.onerror = () => {
+				clearTimeout(timer);
+				retryCount++;
+				return retryCount < config.onlineRetryCount;
+			};
 
 			img.src = `${url}?d=${Date.now()}`;
 		});
