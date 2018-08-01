@@ -381,7 +381,7 @@ export default class Then<T = any> implements PromiseLike<T> {
 	 * @param [reason] - abort reason
 	 */
 	abort(reason?: any): boolean {
-		if (!this.isPending || !this.aborted) {
+		if (!this.isPending || this.aborted) {
 			return false;
 		}
 
