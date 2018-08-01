@@ -943,7 +943,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	promise<T>(promise: (() => PromiseLike<T>) | PromiseLike<T>, params?: AsyncPromiseOpts): Promise<T> {
 		const
-			p = <AsyncPromiseOpts>(params || {});
+			p = <AsyncPromiseOpts>({name: 'proxy', ...params});
 
 		return new Promise((resolve, reject) => {
 			let
