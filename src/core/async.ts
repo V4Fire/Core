@@ -1900,7 +1900,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 				const
 					clearHandlers = link.onClear,
-					clearFn = p.clearFn || link.clearFn;
+					clearFn = link.clearFn;
 
 				for (let i = 0; i < clearHandlers.length; i++) {
 					clearHandlers[i].call(this.context || this, ctx);
