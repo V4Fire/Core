@@ -53,13 +53,18 @@ export function isOnline(): Promise<{status: boolean; lastOnline?: Date}> {
 
 		status = await new Promise<boolean>((resolve) => {
 			if (!url) {
+				retryCount = 0;
 				resolve(true);
 				return;
 			}
 
 			const
 				img = new Image(),
-				timer = setTimeout(() => resolve(false), config.onlineCheckTimeout);
+				retry = () => {
+					retryCount++;
+					resolve(retryCount < config.onlineRetryCount);
+				},
+				timer = setTimeout(retry, config.onlineCheckTimeout);
 
 			img.onload = () => {
 				clearTimeout(timer);
@@ -69,8 +74,7 @@ export function isOnline(): Promise<{status: boolean; lastOnline?: Date}> {
 
 			img.onerror = () => {
 				clearTimeout(timer);
-				retryCount++;
-				resolve(retryCount < config.onlineRetryCount);
+				retry();
 			};
 
 			img.src = `${url}?d=${Date.now()}`;
