@@ -943,7 +943,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	promise<T>(promise: (() => PromiseLike<T>) | PromiseLike<T>, params?: AsyncPromiseOpts): Promise<T> {
 		const
-			p = <AsyncPromiseOpts>(params || {});
+			p = <AsyncPromiseOpts>({name: 'proxy', ...params});
 
 		return new Promise((resolve, reject) => {
 			let
@@ -1900,7 +1900,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 				const
 					clearHandlers = link.onClear,
-					clearFn = p.clearFn || link.clearFn;
+					clearFn = link.clearFn;
 
 				for (let i = 0; i < clearHandlers.length; i++) {
 					clearHandlers[i].call(this.context || this, ctx);
