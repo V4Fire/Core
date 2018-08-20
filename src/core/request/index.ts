@@ -70,7 +70,8 @@ export default function create<T>(path, ...args) {
 	const merge = (...args: any[]) => Object.mixin({
 		deep: true,
 		concatArray: true,
-		concatFn: (a: any[], b: any[]) => a.union(b)
+		concatFn: (a: any[], b: any[]) => a.union(b),
+		extendFilter: (el) => Array.isArray(el) || Object.isObject(el)
 	}, undefined, ...args);
 
 	if (Object.isObject(path)) {
