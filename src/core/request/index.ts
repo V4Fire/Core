@@ -71,7 +71,7 @@ export default function create<T>(path, ...args) {
 		deep: true,
 		concatArray: true,
 		concatFn: (a: any[], b: any[]) => a.union(b),
-		extendFilter: (el) => Array.isArray(el) || Object.isObject(el)
+		extendFilter: (d, v) => Array.isArray(v) || Object.isObject(v)
 	}, undefined, ...args);
 
 	if (Object.isObject(path)) {

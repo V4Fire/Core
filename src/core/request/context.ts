@@ -81,7 +81,8 @@ export default class RequestContext<T = any> {
 		const p = this.params = <any>Object.mixin({
 			deep: true,
 			concatArray: true,
-			concatFn: (a: any[], b: any[]) => a.union(b)
+			concatFn: (a: any[], b: any[]) => a.union(b),
+			extendFilter: (d, v) => Array.isArray(v) || Object.isObject(v)
 		}, {}, params);
 
 		this.canCache = p.method === 'GET';
