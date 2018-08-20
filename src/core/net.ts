@@ -58,12 +58,13 @@ export function isOnline(): Promise<{status: boolean; lastOnline?: Date}> {
 				return;
 			}
 
+			const retry = () => {
+				retryCount++;
+				resolve(retryCount < config.onlineRetryCount);
+			};
+
 			const
 				img = new Image(),
-				retry = () => {
-					retryCount++;
-					resolve(retryCount < config.onlineRetryCount);
-				},
 				timer = setTimeout(retry, config.onlineCheckTimeout);
 
 			img.onload = () => {
