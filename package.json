@@ -5,7 +5,7 @@
   "main": "src/core/index.js",
   "typings": "index.d.ts",
   "license": "MIT",
-  "version": "2.0.0-beta.1",
+  "version": "2.0.0-beta.2",
   "author": {
     "name": "kobezzza",
     "email": "kobezzza@gmail.com",
@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "@types/got": "^8.3.3",
-    "@types/node": "^10.7.1",
+    "@types/node": "^10.9.2",
     "collection.js": "^6.6.27",
     "dotenv": "^6.0.0",
     "eventemitter2": "^5.0.1",
