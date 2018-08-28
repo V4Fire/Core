@@ -40,6 +40,10 @@ interface JSONCb {
 	(key: string, value: any): any;
 }
 
+interface Object {
+	toSource(): string;
+}
+
 interface ObjectConstructor {
 	mixin<D, K, V>(
 		params: CollectionJS.ExtendParams<D, K, V> & CollectionJS.Async,
@@ -58,7 +62,6 @@ interface ObjectConstructor {
 		params?: {replacer?: JSONCb; reviver?: JSONCb | false; freezable?: boolean}
 	): T;
 
-	toSource(): string;
 	keys(obj: object | Dictionary): string[];
 	fastCompare<T>(a: any, b: T): a is T;
 	parse(value: any): any;
