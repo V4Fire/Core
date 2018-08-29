@@ -15,7 +15,6 @@ export interface Config {
 	onlineCheckURL?: string | undefined;
 	onlineCheckInterval: number;
 	onlineCheckTimeout: number;
-	onlineCheckCacheTTL: number;
 	onlineLastDateSyncInterval: number;
 	onlineRetryCount: number;
 }
@@ -50,11 +49,6 @@ const config: Config = {
 	 * Timeout for online check
 	 */
 	onlineCheckTimeout: (2).seconds(),
-
-	/**
-	 * TTL for an online cache response
-	 */
-	onlineCheckCacheTTL: 0.3.second(),
 
 	/**
 	 * Allowed count of online status checking errors

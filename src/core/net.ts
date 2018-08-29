@@ -19,7 +19,6 @@ const
 let
 	status,
 	lastOnline,
-	cache,
 	syncTimer,
 	retryCount = 0;
 
@@ -30,91 +29,81 @@ let
  * @emits offline(lastOnline: Date)
  * @emits status({status: boolean, lastOnline?: Date})
  */
-export function isOnline(): Promise<{status: boolean; lastOnline?: Date}> {
-	if (cache) {
-		return cache;
+export async function isOnline(): Promise<{status: boolean; lastOnline?: Date}> {
+	const
+		url = config.onlineCheckURL,
+		prevStatus = status;
+
+	let
+		loadFromStorage;
+
+	if (!lastOnline && url) {
+		loadFromStorage = storage.get('lastOnline').then((v) => {
+			if (v) {
+				lastOnline = v;
+			}
+		});
 	}
 
-	cache = (async () => {
-		const
-			url = config.onlineCheckURL,
-			prevStatus = status;
-
-		let
-			loadFromStorage;
-
-		if (!lastOnline && url) {
-			loadFromStorage = storage.get('lastOnline').then((v) => {
-				if (v) {
-					lastOnline = v;
-				}
-			});
+	status = await new Promise<boolean>((resolve) => {
+		if (!url) {
+			retryCount = 0;
+			resolve(true);
+			return;
 		}
 
-		status = await new Promise<boolean>((resolve) => {
-			if (!url) {
-				retryCount = 0;
-				resolve(true);
-				return;
-			}
-
-			const retry = () => {
-				retryCount++;
-				resolve(retryCount < config.onlineRetryCount);
-			};
-
-			const
-				img = new Image(),
-				timer = setTimeout(retry, config.onlineCheckTimeout);
-
-			img.onload = () => {
-				clearTimeout(timer);
-				retryCount = 0;
-				resolve(true);
-			};
-
-			img.onerror = () => {
-				clearTimeout(timer);
-				retry();
-			};
-
-			img.src = `${url}?d=${Date.now()}`;
-		});
-
-		setTimeout(() => cache = undefined, config.onlineCheckCacheTTL);
-
-		const updateDate = () => {
-			clearTimeout(syncTimer);
-			syncTimer = undefined;
-
-			if (url) {
-				storage.set('lastOnline', lastOnline = new Date()).catch(stderr);
-			}
+		const retry = () => {
+			retryCount++;
+			resolve(retryCount < config.onlineRetryCount);
 		};
 
-		if (prevStatus === undefined || status !== prevStatus) {
-			if (status) {
-				event.emit('online', lastOnline);
+		const
+			img = new Image(),
+			timer = setTimeout(retry, config.onlineCheckTimeout);
 
-			} else {
-				event.emit('offline');
-			}
+		img.onload = () => {
+			clearTimeout(timer);
+			retryCount = 0;
+			resolve(true);
+		};
 
-			updateDate();
-			event.emit('status', {status, lastOnline});
+		img.onerror = () => {
+			clearTimeout(timer);
+			retry();
+		};
 
-		} else if (status && syncTimer != null) {
-			syncTimer = setTimeout(updateDate, config.onlineLastDateSyncInterval);
+		img.src = `${url}?d=${Date.now()}`;
+	});
+
+	const updateDate = () => {
+		clearTimeout(syncTimer);
+		syncTimer = undefined;
+
+		if (url) {
+			storage.set('lastOnline', lastOnline = new Date()).catch(stderr);
+		}
+	};
+
+	if (prevStatus === undefined || status !== prevStatus) {
+		if (status) {
+			event.emit('online', lastOnline);
+
+		} else {
+			event.emit('offline');
 		}
 
-		try {
-			await loadFromStorage;
-		} catch (_) {}
+		updateDate();
+		event.emit('status', {status, lastOnline});
 
-		return {status, lastOnline};
-	})();
+	} else if (status && syncTimer != null) {
+		syncTimer = setTimeout(updateDate, config.onlineLastDateSyncInterval);
+	}
 
-	return cache;
+	try {
+		await loadFromStorage;
+	} catch (_) {}
+
+	return {status, lastOnline};
 }
 
 async function onlineCheck(): Promise<void> {
