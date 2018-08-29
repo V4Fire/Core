@@ -59,26 +59,34 @@ export function isOnline(): Promise<{status: boolean; lastOnline?: Date}> {
 			}
 
 			const retry = () => {
-				retryCount++;
-				resolve(retryCount < config.onlineRetryCount);
+				if (status === undefined || ++retryCount > config.onlineRetryCount) {
+					resolve(false);
+
+				} else {
+					checkOnline();
+				}
 			};
 
-			const
-				img = new Image(),
-				timer = setTimeout(retry, config.onlineCheckTimeout);
+			const checkOnline = () => {
+				const
+					img = new Image(),
+					timer = setTimeout(retry, config.onlineCheckTimeout);
 
-			img.onload = () => {
-				clearTimeout(timer);
-				retryCount = 0;
-				resolve(true);
+				img.onload = () => {
+					clearTimeout(timer);
+					retryCount = 0;
+					resolve(true);
+				};
+
+				img.onerror = () => {
+					clearTimeout(timer);
+					retry();
+				};
+
+				img.src = `${url}?d=${Date.now()}`;
 			};
 
-			img.onerror = () => {
-				clearTimeout(timer);
-				retry();
-			};
-
-			img.src = `${url}?d=${Date.now()}`;
+			checkOnline();
 		});
 
 		setTimeout(() => cache = undefined, config.onlineCheckCacheTTL);
