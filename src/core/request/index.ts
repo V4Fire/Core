@@ -236,7 +236,12 @@ export default function create<T>(path, ...args) {
 							return;
 						}
 
-					} catch (_) {}
+					} catch (err) {
+						if (err && !{clearAsync: true, abort: true}[err.type]) {
+							reject(err);
+							return;
+						}
+					}
 				}
 
 				localCacheKey = getStorageKey(cacheKey);
