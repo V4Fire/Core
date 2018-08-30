@@ -11,6 +11,8 @@ import Then from 'core/then';
 
 import log from 'core/log';
 import request from 'core/request/engines';
+
+import Response from 'core/request/response';
 import RequestError from 'core/request/error';
 import RequestContext from 'core/request/context';
 
@@ -225,8 +227,16 @@ export default function create<T>(path, ...args) {
 
 			if (ctx.canCache) {
 				if (ctx.pendingCache.has(cacheKey)) {
-					resolve(ctx.pendingCache.get(cacheKey).then());
-					return;
+					try {
+						const
+							res = await ctx.pendingCache.get(cacheKey);
+
+						if (res && res.response instanceof Response) {
+							resolve(res);
+							return;
+						}
+
+					} catch (_) {}
 				}
 
 				localCacheKey = getStorageKey(cacheKey);

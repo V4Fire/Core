@@ -62,5 +62,4 @@ export const globalOpts: GlobalOptions = {
  */
 export function dropCache(): void {
 	$C(cache).forEach((cache) => cache.clear());
-	pendingCache.clear();
 }
