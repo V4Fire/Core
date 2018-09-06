@@ -27,7 +27,7 @@ export interface AsyncLink<T extends object = Async> {
 
 export interface ClearOpts {
 	label?: string | symbol;
-	group?: string | symbol | RegExp;
+	group?: string | RegExp;
 }
 
 export interface ClearOptsId<T> extends ClearOpts {
@@ -41,7 +41,7 @@ export interface ClearProxyOpts<T> extends ClearOptsId<T> {
 export interface AsyncOpts {
 	join?: boolean | 'replace';
 	label?: string | symbol;
-	group?: string | symbol;
+	group?: string;
 }
 
 export type AsyncCtx<T extends object = Async> = {
