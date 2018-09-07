@@ -10,6 +10,11 @@ import config from 'config';
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 import { asyncLocal } from 'core/kv-storage';
 
+export interface StatusEvent {
+	status: boolean;
+	lastOnline?: Date;
+}
+
 export const
 	event = new EventEmitter();
 

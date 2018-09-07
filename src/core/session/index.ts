@@ -9,6 +9,11 @@
 import session from 'core/session/engines';
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 
+export interface SetEvent {
+	auth: string | undefined;
+	csrf: string | undefined;
+}
+
 export const
 	event = new EventEmitter({maxListeners: 100});
 
