@@ -45,6 +45,7 @@ Icon
 /coverage
 /dist
 .env
+tsconfig.json
 
 # Log
 *.log
@@ -57,6 +58,7 @@ Makefile
 /Releases-js
 /tmp
 /app-cache
+/app-std-cache
 /src/entries/tmp
 /db
 /synmaster.txt

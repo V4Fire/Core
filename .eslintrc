@@ -4,22 +4,7 @@
     "sourceType": "module"
   },
 
-  "plugins": [
-    "flowtype"
-  ],
-
-  "settings": {
-    "flowtype": {
-      "onlyFilesWithFlowAnnotation": false
-    }
-  },
-
   "rules": {
-    /* [Flow] */
-    "flowtype/space-after-type-colon": ["error", "always"],
-    "flowtype/space-before-type-colon": ["error", "never"],
-    "flowtype/type-id-match": ["error", "^(\\$\\$[a-z0-9]+[a-zA-Z0-9]*)$"],
-
     /* [Possible Errors] */
     "comma-dangle": ["error", "only-multiline"],
     "no-cond-assign": ["error", "except-parens"],
@@ -98,7 +83,7 @@
     "computed-property-spacing": ["error"],
     "consistent-this": ["error"],
     "eol-last": ["error"],
-    // "indent": ["error", "tab", {"SwitchCase": 1}],
+    "indent": ["error", "tab", {"SwitchCase": 1}],
     "key-spacing": ["error"],
     "keyword-spacing": ["error"],
     "linebreak-style": ["error"],

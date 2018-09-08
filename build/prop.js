@@ -16,8 +16,7 @@ module.exports = function (str, module, needType) {
 			return `import { ${modules}, prop } from '${from}';`;
 		})
 
-		/* eslint-disable max-params */
-
+		// eslint-disable-next-line
 		.replace(/^(\t)([\w$]+)\s*:\s*([ \w|$?()[\]{}<>'"`:.]+?)(\s*)(=|;$)/gm, (str, sp, prop, type, esp, end) => {
 			if (!decorate) {
 				return str;
@@ -57,6 +56,4 @@ module.exports = function (str, module, needType) {
 			type = type.length > 1 ? `[${type.join()}]` : type[0];
 			return `${sp}@prop(${needType ? `${type}, ${!opt}` : !opt})\n${sp + prop + esp}${end === ';' ? ' = undefined;' : end}`;
 		});
-
-	/* eslint-enable max-params */
 };
