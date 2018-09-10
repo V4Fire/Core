@@ -67,7 +67,7 @@ module.exports = function (roots) {
 				url = resolve(r[i]);
 
 			try {
-				return require(resolve(r[i]));
+				return require(url);
 
 			} catch (err) {
 				if (err.code !== 'MODULE_NOT_FOUND') {
