@@ -60,7 +60,7 @@
     "urlconcat": "0.0.12"
   },
   "devDependencies": {
-    "babel-eslint": "^8.2.6",
+    "babel-eslint": "^9.0.0",
     "eslint": "^5.5.0",
     "tslint": "^5.11.0"
   }
