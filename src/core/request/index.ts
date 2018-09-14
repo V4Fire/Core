@@ -216,6 +216,17 @@ export default function create<T>(path, ...args) {
 				return;
 			}
 
+			const applyEncoders = (data) => $C(ctx.encoders)
+				.to(Then.resolve(data, then))
+				.reduce((res, fn, i) => res.then((obj) => fn(i ? obj : Object.fastClone(obj))));
+
+			const
+				withoutBody = {GET: true, HEAD: true}[<any>p.method];
+
+			if (withoutBody) {
+				p.query = await applyEncoders(p.query);
+			}
+
 			const
 				url = ctx.resolveURL(globalOpts.api),
 				cacheKey = ctx.cacheKey;
@@ -288,9 +299,7 @@ export default function create<T>(path, ...args) {
 					url,
 					parent: then,
 					decoder: ctx.decoders,
-					body: await $C(ctx.encoders)
-						.to(Then.resolve(p.body, then))
-						.reduce((res, fn, i) => res.then((obj) => fn(i ? obj : Object.fastClone(obj))))
+					body: withoutBody ? p.body : await applyEncoders(p.body)
 				};
 
 				res = request(reqOpts).then(success).then(ctx.saveCache);
