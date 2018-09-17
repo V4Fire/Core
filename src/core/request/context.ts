@@ -151,7 +151,7 @@ export default class RequestContext<T = any> {
 			nm = v('namespace', nm);
 
 			if (!protocol) {
-				return nm[0] === '/' ? nm : `/${nm}`;
+				return concatUrls(...v('domain3').split('.'), nm);
 			}
 
 			return concatUrls(
