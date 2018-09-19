@@ -98,22 +98,26 @@ function factory(storage: Dictionary, async?: boolean): FactoryResult | AsyncFac
 	const obj = {
 		/**
 		 * Returns true if the specified key exists in a storage
-		 * @param key
+		 *
+		 * @param key,
+		 * @param [args]
 		 */
-		has(key: string): any {
+		has(key: string, ...args: any[]): any {
 			if (has) {
-				return wrap(has(key));
+				return wrap(has(key, ...args));
 			}
 
-			return wrap(get(key), (v) => v !== null);
+			return wrap(get(key, ...args), (v) => v !== null);
 		},
 
 		/**
 		 * Returns a value from a storage by the specified key
+		 *
 		 * @param key
+		 * @param [args]
 		 */
-		get(key: string): any {
-			return wrap(get(key), (v) => {
+		get(key: string, ...args: any[]): any {
+			return wrap(get(key, ...args), (v) => {
 				if (v === null) {
 					return undefined;
 				}
@@ -131,25 +135,29 @@ function factory(storage: Dictionary, async?: boolean): FactoryResult | AsyncFac
 		 *
 		 * @param key
 		 * @param value
-		 * @param [ttl]
+		 * @param [args]
 		 */
-		set(key: string, value: any, ttl?: number): any {
-			return wrap(set(key, JSON.stringify(value), ttl), () => undefined);
+		set(key: string, value: any, ...args: any[]): any {
+			return wrap(set(key, JSON.stringify(value), ...args), () => undefined);
 		},
 
 		/**
 		 * Removes a value from a storage by the specified key
+		 *
 		 * @param key
+		 * @param [args]
 		 */
-		remove(key: string): any {
-			return wrap(remove(key), () => undefined);
+		remove(key: string, ...args: any[]): any {
+			return wrap(remove(key, ...args), () => undefined);
 		},
 
 		/**
 		 * Clears a storage by the specified filter and returns a list of the removed keys
+		 *
 		 * @param [filter] - filter for removing (if not defined, then the storage will be cleared)
+		 * @param [args]
 		 */
-		clear(filter?: Function): any {
+		clear(filter?: Function, ...args: any[]): any {
 			if (filter || !clear) {
 				return wrap(keys(), async (keys) => {
 					for (const key of keys) {
@@ -157,13 +165,13 @@ function factory(storage: Dictionary, async?: boolean): FactoryResult | AsyncFac
 							el = await obj.get(key);
 
 						if (!filter || filter(el, key)) {
-							await remove(key);
+							await remove(key, ...args);
 						}
 					}
 				});
 			}
 
-			return wrap(clear(), () => undefined);
+			return wrap(clear(...args), () => undefined);
 		},
 
 		/**
@@ -175,23 +183,23 @@ function factory(storage: Dictionary, async?: boolean): FactoryResult | AsyncFac
 				k = (key) => `${name}.${key}`;
 
 			return {
-				has(key: string): boolean {
-					return obj.has(k(key));
+				has(key: string, ...args: any[]): boolean {
+					return obj.has(k(key), ...args);
 				},
 
-				get(key: string): any {
-					return obj.get(k(key));
+				get(key: string, ...args: any[]): any {
+					return obj.get(k(key), ...args);
 				},
 
-				set(key: string, value: any, ttl?: number): any {
-					return obj.set(k(key), value, ttl);
+				set(key: string, value: any, ...args: any[]): any {
+					return obj.set(k(key), value, ...args);
 				},
 
-				remove(key: string): any {
-					return obj.remove(k(key));
+				remove(key: string, ...args: any[]): any {
+					return obj.remove(k(key), ...args);
 				},
 
-				clear(filter?: Function): any {
+				clear(filter?: Function, ...args: any[]): any {
 					return wrap(keys(), async (keys) => {
 						for (const key of keys) {
 							if (key.split('.')[0] !== name) {
@@ -202,7 +210,7 @@ function factory(storage: Dictionary, async?: boolean): FactoryResult | AsyncFac
 								el = await obj.get(key);
 
 							if (!filter || filter(el, key)) {
-								await remove(key);
+								await remove(key, ...args);
 							}
 						}
 					});
