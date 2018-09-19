@@ -134,7 +134,7 @@ function factory(storage: Dictionary, async?: boolean): FactoryResult | AsyncFac
 		 * @param [ttl]
 		 */
 		set(key: string, value: any, ttl?: number): any {
-			return wrap(set(key, JSON.stringify(value)), () => undefined);
+			return wrap(set(key, JSON.stringify(value), ttl), () => undefined);
 		},
 
 		/**
