@@ -220,10 +220,7 @@ export default function create<T>(path, ...args) {
 				.to(Then.resolve(data, then))
 				.reduce((res, fn, i) => res.then((obj) => fn(i ? obj : Object.fastClone(obj))));
 
-			const
-				withoutBody = {GET: true, HEAD: true}[<any>p.method];
-
-			if (withoutBody) {
+			if (ctx.withoutBody) {
 				p.query = await applyEncoders(p.query);
 			}
 
@@ -299,7 +296,7 @@ export default function create<T>(path, ...args) {
 					url,
 					parent: then,
 					decoder: ctx.decoders,
-					body: withoutBody ? p.body : await applyEncoders(p.body)
+					body: ctx.withoutBody ? p.body : await applyEncoders(p.body)
 				};
 
 				res = request(reqOpts).then(success).then(ctx.saveCache);

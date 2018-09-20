@@ -55,6 +55,11 @@ export default class RequestContext<T = any> {
 	}
 
 	/**
+	 * True if a request can provide parameters only as an query string
+	 */
+	readonly withoutBody: boolean;
+
+	/**
 	 * True if a request can be cached
 	 */
 	readonly canCache: boolean;
@@ -86,6 +91,7 @@ export default class RequestContext<T = any> {
 		}, {}, params);
 
 		this.canCache = p.method === 'GET';
+		this.withoutBody = Boolean({GET: true, HEAD: true}[<any>p.method]);
 		this.encoders = p.encoder ? Object.isFunction(p.encoder) ? [p.encoder] : p.encoder : [];
 		this.decoders = p.decoder ? Object.isFunction(p.decoder) ? [p.decoder] : p.decoder : [];
 		this.cache = cache[p.cacheStrategy] || cache.never;
@@ -178,7 +184,7 @@ export default class RequestContext<T = any> {
 			p = this.params,
 			q = this.query;
 
-		const data = p.method === 'GET' ?
+		const data = this.withoutBody ?
 			q : Object.isObject(<any>p.body) ? p.body : q;
 
 		if (Object.isTable(data)) {
