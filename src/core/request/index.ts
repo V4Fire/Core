@@ -201,6 +201,17 @@ export default function create<T>(path, ...args) {
 				return arr;
 			}, [] as any[]), then);
 
+			const applyEncoders = (data) => $C(ctx.encoders)
+				.to(Then.resolve(data, then))
+				.reduce((res, fn, i) => res.then((obj) => fn(i ? obj : Object.fastClone(obj))));
+
+			if (ctx.withoutBody) {
+				p.query = await applyEncoders(p.query);
+
+			} else {
+				p.body = await applyEncoders(p.body);
+			}
+
 			if ($C(arr).some(Object.isFunction)) {
 				resolve((() => {
 					const
@@ -214,14 +225,6 @@ export default function create<T>(path, ...args) {
 				})());
 
 				return;
-			}
-
-			const applyEncoders = (data) => $C(ctx.encoders)
-				.to(Then.resolve(data, then))
-				.reduce((res, fn, i) => res.then((obj) => fn(i ? obj : Object.fastClone(obj))));
-
-			if (ctx.withoutBody) {
-				p.query = await applyEncoders(p.query);
 			}
 
 			const
@@ -295,8 +298,7 @@ export default function create<T>(path, ...args) {
 					...p,
 					url,
 					parent: then,
-					decoder: ctx.decoders,
-					body: ctx.withoutBody ? p.body : await applyEncoders(p.body)
+					decoder: ctx.decoders
 				};
 
 				res = request(reqOpts).then(success).then(ctx.saveCache);
