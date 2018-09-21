@@ -5,7 +5,7 @@
   "main": "src/core/index.js",
   "typings": "index.d.ts",
   "license": "MIT",
-  "version": "2.0.0-beta.13",
+  "version": "2.0.0-beta.14",
   "author": {
     "name": "kobezzza",
     "email": "kobezzza@gmail.com",
@@ -25,7 +25,7 @@
     "test": "echo \"Error: no test specified\" && exit 0"
   },
   "dependencies": {
-    "@types/got": "^8.3.3",
+    "@types/got": "^8.3.4",
     "@types/node": "^10.10.1",
     "collection.js": "^6.6.27",
     "dotenv": "^6.0.0",
@@ -54,7 +54,7 @@
     "path-equal": "^1.1.0",
     "through2": "^2.0.3",
     "tsconfig": "^7.0.0",
-    "typescript": "^3.0.3",
+    "typescript": "^3.1.0-rc.20180911",
     "uniconf": "^2.0.0",
     "upath": "^1.1.0",
     "urlconcat": "0.0.12"
