@@ -9,35 +9,57 @@
 import $C = require('collection.js');
 import * as env from 'core/env';
 import logDriver from 'core/log/engines';
+import config from 'config';
 
 let
-	config,
+	options,
 	stack: [string, any][] = [];
 
 const setConfig = (val) => {
-	config = {patterns: [], ...val};
-	$C(config.patterns).set((el) => Object.isRegExp(el) ? el : new RegExp(el));
+	options = {patterns: [], ...val};
+	$C(options.patterns).set((el) => Object.isRegExp(el) ? el : new RegExp(el));
 };
 
 env.get('log').then(setConfig, setConfig);
 env.event.on('set.log', setConfig);
 env.event.on('remove.log', setConfig);
 
+export interface LogStyles extends Dictionary {
+	default: Dictionary;
+}
+
+export interface LogPreferences extends Dictionary {
+	styles?: LogStyles;
+}
+
+export interface LogMessageOptions {
+	key: string;
+	type: string;
+}
+
 /**
  * Puts the specified parameters to log
  *
- * @param key - log key
+ * @param key - log key or log type options
  * @param [details]
  */
-export default function log(key: string, ...details: any[]): void {
-	if (!config) {
+export default function log(key: string | LogMessageOptions, ...details: any[]): void {
+	let
+		type;
+
+	if (!Object.isString(key)) {
+		type = key.type;
+		key = key.key;
+	}
+
+	if (!options) {
 		stack.push([key, details]);
 		return;
 	}
 
 	const check = (key) => {
-		if (config.patterns) {
-			for (let o = config.patterns, i = 0; i < o.length; i++) {
+		if (options.patterns) {
+			for (let o = options.patterns, i = 0; i < o.length; i++) {
 				if (o[i].test(key)) {
 					return true;
 				}
@@ -60,7 +82,7 @@ export default function log(key: string, ...details: any[]): void {
 					details[i] = Object.isFunction(el) ? el() : el;
 				}
 
-				logDriver(key, ...details);
+				logDriver(key, config.log, type, ...details);
 			}
 		}
 
@@ -73,6 +95,6 @@ export default function log(key: string, ...details: any[]): void {
 			details[i] = Object.isFunction(el) ? el() : el;
 		}
 
-		logDriver(key, ...details);
+		logDriver(key, config.log, type, ...details);
 	}
 }

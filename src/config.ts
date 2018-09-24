@@ -18,6 +18,7 @@ export interface Config {
 	onlineCheckCacheTTL: number;
 	onlineLastDateSyncInterval: number;
 	onlineRetryCount: number;
+	log: Dictionary;
 }
 
 const config: Config = {
@@ -64,7 +65,35 @@ const config: Config = {
 	/**
 	 * Last online date sync interval
 	 */
-	onlineLastDateSyncInterval: (1).minute()
+	onlineLastDateSyncInterval: (1).minute(),
+
+	/**
+	 * Log preferences
+	 */
+	log: {
+		styles: {
+			default: {
+				fontSize: '13px',
+				padding: '3px',
+				marginBottom: '3px'
+			},
+
+			success: {
+				backgroundColor: '#27AE61',
+				color: '#FFF'
+			},
+
+			warning: {
+				backgroundColor: '#FFCE00',
+				color: '#FFF'
+			},
+
+			error: {
+				backgroundColor: '#FF3B5B',
+				color: '#FFF'
+			}
+		}
+	}
 };
 
 /**
