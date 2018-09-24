@@ -122,7 +122,7 @@ export function isOnline(): Promise<{status: boolean; lastOnline?: Date}> {
 
 		try {
 			await loadFromStorage;
-		} catch (_) {}
+		} catch {}
 
 		return {status, lastOnline};
 	})();

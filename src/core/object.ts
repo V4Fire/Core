@@ -43,7 +43,7 @@ Object.createDict = function (...fields: any[]): Dictionary {
 Object.parse = function parse(value: any): any {
 	try {
 		return new Function(`return ${value}`)();
-	} catch (_) {}
+	} catch {}
 
 	return undefined;
 };

@@ -72,4 +72,4 @@ try {
 		return str;
 	};
 
-} catch (_) {}
+} catch {}

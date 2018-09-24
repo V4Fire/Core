@@ -27,7 +27,7 @@ export async function get(): Promise<{auth: string | undefined; csrf: string | u
 			csrf: await session.get('csrf')
 		};
 
-	} catch (_) {
+	} catch {
 		return {
 			auth: undefined,
 			csrf: undefined
@@ -54,7 +54,7 @@ export async function set(auth?: string | undefined, csrf?: string | undefined):
 
 		event.emit('set', {auth, csrf});
 
-	} catch (_) {
+	} catch {
 		return false;
 	}
 
@@ -71,7 +71,7 @@ export async function clear(): Promise<boolean> {
 		await session.remove('csrf');
 		event.emit('clear');
 
-	} catch (_) {
+	} catch {
 		return false;
 	}
 
@@ -89,7 +89,7 @@ export async function match(auth?: string | undefined, csrf?: string | undefined
 		const s = await get();
 		return auth === s.auth && csrf === s.csrf;
 
-	} catch (_) {
+	} catch {
 		return false;
 	}
 }
@@ -102,7 +102,7 @@ export async function isExists(): Promise<boolean> {
 		const s = await get();
 		return Boolean(s.auth && (!await session.has('csrf') || s.csrf));
 
-	} catch (_) {
+	} catch {
 		return false;
 	}
 }

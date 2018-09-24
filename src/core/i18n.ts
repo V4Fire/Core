@@ -57,7 +57,7 @@ if (IS_NODE) {
 
 			throw new Error('Default language');
 
-		} catch (_) {
+		} catch {
 			setLang(config.lang, true);
 		}
 	})();

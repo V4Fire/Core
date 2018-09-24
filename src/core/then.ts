@@ -328,7 +328,7 @@ export default class Then<T = any> implements PromiseLike<T> {
 					try {
 						abortCb(reason);
 
-					} catch (_) {}
+					} catch {}
 				}
 
 				this.aborted = true;

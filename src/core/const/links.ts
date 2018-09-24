@@ -19,7 +19,7 @@ export const IS_NODE: boolean = (() => {
 	try {
 		return typeof process === 'object' && {}.toString.call(process) === '[object process]';
 
-	} catch (_) {
+	} catch {
 		return false;
 	}
 })();
