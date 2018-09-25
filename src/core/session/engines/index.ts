@@ -6,5 +6,5 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { asyncSession } from 'core/kv-storage';
-export default asyncSession.namespace('[[SESSION]]');
+import { asyncLocal } from 'core/kv-storage';
+export default asyncLocal.namespace('[[SESSION]]');
