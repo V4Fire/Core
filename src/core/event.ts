@@ -34,16 +34,23 @@ export function afterEvents(emitter: EventEmitter, ...events: string[]): Promise
 }
 
 /**
- * Executes the specified function after DOMContentLoaded
- * @param cb
+ * Executes the specified function after DOMContentLoaded and returns a promise
+ * @param [cb]
  */
-export function whenDomLoaded(cb: () => void): void {
-	if (document.readyState === 'loading') {
-		document.addEventListener('DOMContentLoaded', cb);
+export function whenDomLoaded(cb?: () => void): Promise<void> {
+	return new Promise((resolve) => {
+		if (document.readyState === 'loading') {
+			if (cb) {
+				document.addEventListener('DOMContentLoaded', cb);
+			}
 
-	} else {
-		cb();
-	}
+			resolve();
+
+		} else {
+			cb && cb();
+			resolve();
+		}
+	});
 }
 
 /**
