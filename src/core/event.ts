@@ -39,16 +39,16 @@ export function afterEvents(emitter: EventEmitter, ...events: string[]): Promise
  */
 export function whenDomLoaded(cb?: () => void): Promise<void> {
 	return new Promise((resolve) => {
-		if (document.readyState === 'loading') {
-			if (cb) {
-				document.addEventListener('DOMContentLoaded', cb);
-			}
-
-			resolve();
-
-		} else {
+		const exec = () => {
 			cb && cb();
 			resolve();
+		};
+
+		if (document.readyState === 'loading') {
+			document.addEventListener('DOMContentLoaded', exec);
+
+		} else {
+			exec();
 		}
 	});
 }
