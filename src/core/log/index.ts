@@ -34,7 +34,7 @@ export interface LogPreferences extends Dictionary {
 
 export interface LogMessageOptions {
 	key: string;
-	type: string;
+	type: string | undefined;
 }
 
 /**
@@ -82,7 +82,7 @@ export default function log(key: string | LogMessageOptions, ...details: any[]):
 					details[i] = Object.isFunction(el) ? el() : el;
 				}
 
-				logDriver(key, config.log, type, ...details);
+				logDriver({key, type}, config.log, ...details);
 			}
 		}
 
@@ -95,6 +95,6 @@ export default function log(key: string | LogMessageOptions, ...details: any[]):
 			details[i] = Object.isFunction(el) ? el() : el;
 		}
 
-		logDriver(key, config.log, type, ...details);
+		logDriver({key, type}, config.log, ...details);
 	}
 }

@@ -5,23 +5,23 @@
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
-import { LogPreferences } from 'core/log';
+import { LogPreferences, LogMessageOptions } from 'core/log';
 
 /**
  * Prints the specified parameters to a console
  *
  * @param key - log key
- * @param config - preferences for logging
  * @param type - type of the message
+ * @param config - preferences for logging
  * @param [details]
  */
-export default function log(key: string, config: LogPreferences, type: string, ...details: any[]): void {
+export default function log({key, type}: LogMessageOptions, config: LogPreferences, ...details: any[]): void {
 	const
-		style = config.styles && {...config.styles.default, ...(config.styles[type] || {})};
+		style = config.styles && {...config.styles.default, ...(type ? config.styles[type] : {})};
 
 	console.log(
 		`%c${key}:`,
-		$C(style).to('').reduce((res, value, key) => res += `${key.dasherize()}:${value};`),
+		$C(style).to('').reduce((res, value, key) => res + `${key.dasherize()}:${value};`),
 		...details
 	);
 }
