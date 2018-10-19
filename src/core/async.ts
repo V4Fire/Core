@@ -175,7 +175,7 @@ export default class Async<CTX extends object = Async<any>> {
 	/**
 	 * Object with default names of async operations
 	 */
-	protected linkNamesStore: AsyncLinksList = linkNamesDictionary;
+	linkNames: AsyncLinksList = linkNamesDictionary;
 
 	/**
 	 * Cache object for async operations
@@ -197,13 +197,6 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	constructor(ctx?: CTX) {
 		this.context = ctx;
-	}
-
-	/**
-	 * Available link names for the current instance
-	 */
-	get linkNames(): AsyncLinksList {
-		return this.linkNamesStore;
 	}
 
 	/**
