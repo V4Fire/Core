@@ -157,9 +157,8 @@ export enum LinkNames {
 export type Link = keyof typeof LinkNames;
 export type AsyncLinksList = Record<Link, Link> & Dictionary;
 
-const
-	linkNamesDictionary =
-		(<Record<Link, Link>>$C(LinkNames).filter((el) => !isNaN(Number(el))).map((value, key) => key));
+const linkNamesDictionary =
+	(<Record<Link, Link>>$C(LinkNames).filter((el) => !isNaN(Number(el))).map((value, key) => key));
 
 /**
  * Base class for Async IO
