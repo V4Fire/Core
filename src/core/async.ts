@@ -154,7 +154,8 @@ export enum LinkNames {
 	eventListener
 }
 
-type Link = keyof typeof LinkNames;
+export type Link = keyof typeof LinkNames;
+export type AsyncLinks = Record<Link, Link> & Dictionary;
 
 const
 	linkNamesDictionary =
@@ -175,7 +176,7 @@ export default class Async<CTX extends object = Async<any>> {
 	/**
 	 * Object with default names of async operations
 	 */
-	protected linkNames: Record<Link, Link> & Record<string, string> = linkNamesDictionary;
+	protected linkNames: AsyncLinks = linkNamesDictionary;
 
 	/**
 	 * Cache object for async operations
@@ -197,13 +198,6 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	constructor(ctx?: CTX) {
 		this.context = ctx;
-
-		if (ctx.linkNames) {
-			this.linkNames = {
-				...this.linkNames,
-				...ctx.linkNames
-			};
-		}
 	}
 
 	/**
