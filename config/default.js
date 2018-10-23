@@ -275,9 +275,15 @@ module.exports = config.createConfig(
 		snakeskin() {
 			return {
 				pack: false,
-				filters: {global: ['undef']},
+
+				filters: {
+					global: ['undef']
+				},
+
 				vars: {
-					...require('config').envs,
+					...this.envs,
+					appName: this.appName,
+					lang: this.lang,
 					version: include('package.json').version,
 					buildVersion: this.build.id(),
 					isProd
