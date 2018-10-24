@@ -7,7 +7,7 @@
  */
 
 import $C = require('collection.js');
-import StatusCodes from 'core/statusCodes';
+import StatusCodes from 'core/status-сodes';
 import config from 'config';
 
 import { RequestMethods, ResponseTypes, GlobalOptions, CacheStrategy } from 'core/request/interface';
