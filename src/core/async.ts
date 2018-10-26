@@ -9,6 +9,8 @@
 /* tslint:disable:max-file-line-count */
 /// <reference types="node"/>
 
+import { convertEnumToDict } from 'core/helpers';
+
 export const
 	asyncCounter = Symbol('Async counter id');
 
@@ -158,7 +160,7 @@ export type Link = keyof typeof LinkNames;
 export type AsyncLinksList = Record<Link, Link> & Dictionary;
 
 const linkNamesDictionary =
-	(<Record<Link, Link>>$C(LinkNames).filter((el) => !isNaN(Number(el))).map((value, key) => key));
+	<Record<Link, Link>>convertEnumToDict(LinkNames);
 
 /**
  * Base class for Async IO
@@ -212,7 +214,7 @@ export default class Async<CTX extends object = Async<any>> {
 	setImmediate(fn: Function, params?: AsyncCbOpts<CTX>): number | NodeJS.Timer {
 		return this.setAsync({
 			...params,
-			name: this.linkNames.immediate,
+			name: this.linkNames.idleCallback,
 			obj: fn,
 			clearFn: clearImmediate,
 			wrapper: setImmediate,
