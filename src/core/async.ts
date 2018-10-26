@@ -1524,17 +1524,14 @@ export default class Async<CTX extends object = Async<any>> {
 		this
 			.off(p);
 
-		this
-			.clearImmediate(p)
-			.clearInterval(p)
-			.clearTimeout(p)
-			.cancelIdleCallback(p);
+		$C(this.linkNames).forEach((el) => {
+			const
+				alias = `clear-${el}`.camelize(false);
 
-		this
-			.cancelRequest(p)
-			.terminateWorker(p)
-			.cancelPromise(p)
-			.cancelProxy(p);
+			if (this[alias]) {
+				this[alias](p);
+			}
+		});
 
 		return this;
 	}
@@ -1553,16 +1550,14 @@ export default class Async<CTX extends object = Async<any>> {
 		this
 			.muteEventListeners(p);
 
-		this
-			.muteImmediate(p)
-			.muteInterval(p)
-			.muteTimeout(p)
-			.muteIdleCallback(p);
+		$C(this.linkNames).forEach((el) => {
+			const
+				alias = `mute-${el}`.camelize(false);
 
-		this
-			.muteRequest(p)
-			.mutePromise(p)
-			.muteProxy(p);
+			if (this[alias]) {
+				this[alias](p);
+			}
+		});
 
 		return this;
 	}
@@ -1581,16 +1576,14 @@ export default class Async<CTX extends object = Async<any>> {
 		this
 			.unmuteEventListeners(p);
 
-		this
-			.unmuteImmediate(p)
-			.unmuteInterval(p)
-			.unmuteTimeout(p)
-			.unmuteIdleCallback(p);
+		$C(this.linkNames).forEach((el) => {
+			const
+				alias = `unmute-${el}`.camelize(false);
 
-		this
-			.unmuteRequest(p)
-			.unmutePromise(p)
-			.unmuteProxy(p);
+			if (this[alias]) {
+				this[alias](p);
+			}
+		});
 
 		return this;
 	}
@@ -1609,16 +1602,14 @@ export default class Async<CTX extends object = Async<any>> {
 		this
 			.suspendEventListeners(p);
 
-		this
-			.suspendImmediate(p)
-			.suspendInterval(p)
-			.suspendTimeout(p)
-			.suspendIdleCallback(p);
+		$C(this.linkNames).forEach((el) => {
+			const
+				alias = `suspend-${el}`.camelize(false);
 
-		this
-			.suspendRequest(p)
-			.suspendPromise(p)
-			.suspendProxy(p);
+			if (this[alias]) {
+				this[alias](p);
+			}
+		});
 
 		return this;
 	}
@@ -1637,16 +1628,14 @@ export default class Async<CTX extends object = Async<any>> {
 		this
 			.unsuspendEventListeners(p);
 
-		this
-			.unsuspendImmediate(p)
-			.unsuspendInterval(p)
-			.unsuspendTimeout(p)
-			.unsuspendIdleCallback(p);
+		$C(this.linkNames).forEach((el) => {
+			const
+				alias = `unsuspend-${el}`.camelize(false);
 
-		this
-			.unsuspendRequest(p)
-			.unsuspendPromise(p)
-			.unsuspendProxy(p);
+			if (this[alias]) {
+				this[alias](p);
+			}
+		});
 
 		return this;
 	}
