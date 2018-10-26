@@ -157,7 +157,7 @@ export enum LinkNames {
 }
 
 export type Link = keyof typeof LinkNames;
-export type AsyncLinksList = Record<Link, Link> & Dictionary;
+export type LinkNamesList = Record<Link, Link> & Dictionary;
 
 const linkNamesDictionary =
 	<Record<Link, Link>>convertEnumToDict(LinkNames);
@@ -177,7 +177,7 @@ export default class Async<CTX extends object = Async<any>> {
 	/**
 	 * Object with default names of async operations
 	 */
-	linkNames: AsyncLinksList = linkNamesDictionary;
+	linkNames: LinkNamesList = linkNamesDictionary;
 
 	/**
 	 * Cache object for async operations
