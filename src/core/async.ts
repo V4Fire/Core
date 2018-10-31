@@ -9,6 +9,8 @@
 /* tslint:disable:max-file-line-count */
 /// <reference types="node"/>
 
+import { convertEnumToDict } from 'core/helpers';
+
 export const
 	asyncCounter = Symbol('Async counter id');
 
@@ -142,6 +144,24 @@ export interface CancelablePromise<T> extends Promise<T> {
 	cancel?: Function;
 }
 
+export enum LinkNames {
+	proxy,
+	promise,
+	request,
+	idleCallback,
+	timeout,
+	interval,
+	immediate,
+	worker,
+	eventListener
+}
+
+export type Link = keyof typeof LinkNames;
+export type LinkNamesList = Record<Link, Link> & Dictionary;
+
+const linkNamesDictionary =
+	<Record<Link, Link>>convertEnumToDict(LinkNames);
+
 /**
  * Base class for Async IO
  *
@@ -154,6 +174,11 @@ export interface CancelablePromise<T> extends Promise<T> {
  * this.setImmediate(() => alert(6), {label: 'foo', group: 'bar'});  // 6
  */
 export default class Async<CTX extends object = Async<any>> {
+	/**
+	 * Object with default names of async operations
+	 */
+	static linkNames: LinkNamesList = linkNamesDictionary;
+
 	/**
 	 * Cache object for async operations
 	 */
@@ -189,7 +214,7 @@ export default class Async<CTX extends object = Async<any>> {
 	setImmediate(fn: Function, params?: AsyncCbOpts<CTX>): number | NodeJS.Timer {
 		return this.setAsync({
 			...params,
-			name: 'immediate',
+			name: Async.linkNames.idleCallback,
 			obj: fn,
 			clearFn: clearImmediate,
 			wrapper: setImmediate,
@@ -213,7 +238,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	// tslint:disable-next-line
 	clearImmediate(p) {
-		return this.clearAsync(p, 'immediate');
+		return this.clearAsync(p, Async.linkNames.immediate);
 	}
 
 	/**
@@ -232,7 +257,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	// tslint:disable-next-line
 	muteImmediate(p) {
-		return this.markAsync('muted', p, 'immediate');
+		return this.markAsync('muted', p, Async.linkNames.immediate);
 	}
 
 	/**
@@ -251,7 +276,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	// tslint:disable-next-line
 	unmuteImmediate(p) {
-		return this.markAsync('!muted', p, 'immediate');
+		return this.markAsync('!muted', p, Async.linkNames.immediate);
 	}
 
 	/**
@@ -270,7 +295,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	// tslint:disable-next-line
 	suspendImmediate(p) {
-		return this.markAsync('paused', p, 'immediate');
+		return this.markAsync('paused', p, Async.linkNames.immediate);
 	}
 
 	/**
@@ -289,7 +314,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	// tslint:disable-next-line
 	unsuspendImmediate(p) {
-		return this.markAsync('!paused', p, 'immediate');
+		return this.markAsync('!paused', p, Async.linkNames.immediate);
 	}
 
 	/**
@@ -306,7 +331,7 @@ export default class Async<CTX extends object = Async<any>> {
 	setInterval(fn: Function, interval: number, params?: AsyncCbOpts<CTX>): number | NodeJS.Timer {
 		return this.setAsync({
 			...params,
-			name: 'interval',
+			name: Async.linkNames.interval,
 			obj: fn,
 			clearFn: clearInterval,
 			wrapper: setInterval,
@@ -332,7 +357,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	// tslint:disable-next-line
 	clearInterval(p) {
-		return this.clearAsync(p, 'interval');
+		return this.clearAsync(p, Async.linkNames.interval);
 	}
 
 	/**
@@ -351,7 +376,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	// tslint:disable-next-line
 	muteInterval(p) {
-		return this.markAsync('!muted', p, 'interval');
+		return this.markAsync('!muted', p, Async.linkNames.interval);
 	}
 
 	/**
@@ -370,7 +395,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	// tslint:disable-next-line
 	unmuteInterval(p) {
-		return this.markAsync('!muted', p, 'interval');
+		return this.markAsync('!muted', p, Async.linkNames.interval);
 	}
 
 	/**
@@ -389,7 +414,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	// tslint:disable-next-line
 	suspendInterval(p) {
-		return this.markAsync('paused', p, 'interval');
+		return this.markAsync('paused', p, Async.linkNames.interval);
 	}
 
 	/**
@@ -408,7 +433,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	// tslint:disable-next-line
 	unsuspendInterval(p) {
-		return this.markAsync('!paused', p, 'interval');
+		return this.markAsync('!paused', p, Async.linkNames.interval);
 	}
 
 	/**
@@ -425,7 +450,7 @@ export default class Async<CTX extends object = Async<any>> {
 	setTimeout(fn: Function, timer: number, params?: AsyncCbOpts<CTX>): number | NodeJS.Timer {
 		return this.setAsync({
 			...params,
-			name: 'timeout',
+			name: Async.linkNames.timeout,
 			obj: fn,
 			clearFn: clearTimeout,
 			wrapper: setTimeout,
@@ -450,7 +475,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	// tslint:disable-next-line
 	clearTimeout(p) {
-		return this.clearAsync(p, 'timeout');
+		return this.clearAsync(p, Async.linkNames.timeout);
 	}
 
 	/**
@@ -469,7 +494,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	// tslint:disable-next-line
 	muteTimeout(p) {
-		return this.markAsync('muted', p, 'timeout');
+		return this.markAsync('muted', p, Async.linkNames.timeout);
 	}
 
 	/**
@@ -488,7 +513,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	// tslint:disable-next-line
 	unmuteTimeout(p) {
-		return this.markAsync('!muted', p, 'timeout');
+		return this.markAsync('!muted', p, Async.linkNames.timeout);
 	}
 
 	/**
@@ -507,7 +532,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	// tslint:disable-next-line
 	suspendTimeout(p) {
-		return this.markAsync('paused', p, 'timeout');
+		return this.markAsync('paused', p, Async.linkNames.timeout);
 	}
 
 	/**
@@ -526,7 +551,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	// tslint:disable-next-line
 	unsuspendTimeout(p) {
-		return this.markAsync('!paused', p, 'timeout');
+		return this.markAsync('!paused', p, Async.linkNames.timeout);
 	}
 
 	/**
@@ -546,7 +571,7 @@ export default class Async<CTX extends object = Async<any>> {
 	): number | NodeJS.Timer {
 		return this.setAsync({
 			...params && Object.reject(params, 'timeout'),
-			name: 'idleCallback',
+			name: Async.linkNames.idleCallback,
 			obj: fn,
 			clearFn: cancelIdleCallback,
 			wrapper: requestIdleCallback,
@@ -571,7 +596,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	// tslint:disable-next-line
 	cancelIdleCallback(p) {
-		return this.clearAsync(p, 'idleCallback');
+		return this.clearAsync(p, Async.linkNames.idleCallback);
 	}
 
 	/**
@@ -590,7 +615,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	// tslint:disable-next-line
 	muteIdleCallback(p) {
-		return this.markAsync('muted', p, 'idleCallback');
+		return this.markAsync('muted', p, Async.linkNames.idleCallback);
 	}
 
 	/**
@@ -609,7 +634,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	// tslint:disable-next-line
 	unmuteIdleCallback(p) {
-		return this.markAsync('!muted', p, 'idleCallback');
+		return this.markAsync('!muted', p, Async.linkNames.idleCallback);
 	}
 
 	/**
@@ -628,7 +653,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	// tslint:disable-next-line
 	suspendIdleCallback(p) {
-		return this.markAsync('paused', p, 'idleCallback');
+		return this.markAsync('paused', p, Async.linkNames.idleCallback);
 	}
 
 	/**
@@ -647,7 +672,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	// tslint:disable-next-line
 	unsuspendIdleCallback(p) {
-		return this.markAsync('!paused', p, 'idleCallback');
+		return this.markAsync('!paused', p, Async.linkNames.idleCallback);
 	}
 
 	/**
@@ -674,7 +699,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 		return this.setAsync({
 			...p,
-			name: 'worker',
+			name: Async.linkNames.worker,
 			obj: worker,
 			clearFn: this.workerDestructor.bind(this, p.destructor),
 			periodic: p.single !== true
@@ -697,7 +722,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	// tslint:disable-next-line
 	terminateWorker(p) {
-		return this.clearAsync(p, Object.isObject(p) && p.name || 'worker');
+		return this.clearAsync(p, Object.isObject(p) && p.name || Async.linkNames.worker);
 	}
 
 	/**
@@ -713,12 +738,12 @@ export default class Async<CTX extends object = Async<any>> {
 	 *   *) [group] - group name for the task
 	 */
 	request<T>(request: (() => PromiseLike<T>) | PromiseLike<T>, params?: AsyncOpts): Promise<T> {
-		return this.promise(request, {...params, name: 'request'});
+		return this.promise(request, {...params, name: Async.linkNames.request});
 	}
 
 	/**
 	 * Cancels the specified request
-	 * @param [request] - link for the request (if not defined wil be cancel all request)
+	 * @param [request] - link for the request (if not defined will be cancel all request)
 	 */
 	cancelRequest(request?: Promise<any>): this;
 
@@ -732,7 +757,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	// tslint:disable-next-line
 	cancelRequest(p) {
-		return this.clearAsync(p, 'request');
+		return this.clearAsync(p, Async.linkNames.request);
 	}
 
 	/**
@@ -751,7 +776,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	// tslint:disable-next-line
 	muteRequest(p) {
-		return this.markAsync('muted', p, 'request');
+		return this.markAsync('muted', p, Async.linkNames.request);
 	}
 
 	/**
@@ -770,7 +795,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	// tslint:disable-next-line
 	unmuteRequest(p) {
-		return this.markAsync('!muted', p, 'request');
+		return this.markAsync('!muted', p, Async.linkNames.request);
 	}
 
 	/**
@@ -789,7 +814,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	// tslint:disable-next-line
 	suspendRequest(p) {
-		return this.markAsync('paused', p, 'request');
+		return this.markAsync('paused', p, Async.linkNames.request);
 	}
 
 	/**
@@ -808,7 +833,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	// tslint:disable-next-line
 	unsuspendRequest(p) {
-		return this.markAsync('!paused', p, 'request');
+		return this.markAsync('!paused', p, Async.linkNames.request);
 	}
 
 	/**
@@ -826,7 +851,7 @@ export default class Async<CTX extends object = Async<any>> {
 		const p = params || {};
 		return this.setAsync({
 			...params,
-			name: p.name || 'proxy',
+			name: p.name || Async.linkNames.proxy,
 			obj: cb,
 			wrapper: (fn) => fn,
 			linkByWrapper: true,
@@ -850,7 +875,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	// tslint:disable-next-line
 	cancelProxy(p) {
-		return this.clearAsync(p, Object.isObject(p) && p.name || 'proxy');
+		return this.clearAsync(p, Object.isObject(p) && p.name || Async.linkNames.proxy);
 	}
 
 	/**
@@ -869,7 +894,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	// tslint:disable-next-line
 	muteProxy(p) {
-		return this.markAsync('muted', p, Object.isObject(p) && p.name || 'proxy');
+		return this.markAsync('muted', p, Object.isObject(p) && p.name || Async.linkNames.proxy);
 	}
 
 	/**
@@ -888,7 +913,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	// tslint:disable-next-line
 	unmuteProxy(p) {
-		return this.markAsync('!muted', p, Object.isObject(p) && p.name || 'proxy');
+		return this.markAsync('!muted', p, Object.isObject(p) && p.name || Async.linkNames.proxy);
 	}
 
 	/**
@@ -907,7 +932,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	// tslint:disable-next-line
 	suspendProxy(p) {
-		return this.markAsync('paused', p, Object.isObject(p) && p.name || 'proxy');
+		return this.markAsync('paused', p, Object.isObject(p) && p.name || Async.linkNames.proxy);
 	}
 
 	/**
@@ -926,7 +951,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	// tslint:disable-next-line
 	unsuspendProxy(p) {
-		return this.markAsync('!paused', p, Object.isObject(p) && p.name || 'proxy');
+		return this.markAsync('!paused', p, Object.isObject(p) && p.name || Async.linkNames.proxy);
 	}
 
 	/**
@@ -943,7 +968,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	promise<T>(promise: (() => PromiseLike<T>) | PromiseLike<T>, params?: AsyncPromiseOpts): Promise<T> {
 		const
-			p = <AsyncPromiseOpts>({name: 'proxy', ...params});
+			p = <AsyncPromiseOpts>({name: Async.linkNames.promise, ...params});
 
 		return new Promise((resolve, reject) => {
 			let
@@ -982,6 +1007,101 @@ export default class Async<CTX extends object = Async<any>> {
 				});
 			}
 		});
+	}
+
+	/**
+	 * Cancels the specified promise
+	 * @param [cb] - link for the promise (if not defined will be remove all promises)
+	 */
+	cancelPromise<T>(cb?: Function): this;
+
+	/**
+	 * @param params - parameters for the operation:
+	 *   *) [id] - link for the promise
+	 *   *) [label] - label for the task
+	 *   *) [group] - group name for the task
+	 */
+	cancelPromise<T>(params: ClearProxyOpts<Function>): this;
+
+	// tslint:disable-next-line
+	cancelPromise(p) {
+		return this.clearAsync(p, Object.isObject(p) && p.name || Async.linkNames.promise);
+	}
+
+	/**
+	 * Mutes a promise operation
+	 * @param [id] - operation id (if not defined will be remove all handlers)
+	 */
+	mutePromise(id?: Function): this;
+
+	/**
+	 * @param params - parameters for the operation:
+	 *   *) [id] - operation id
+	 *   *) [label] - label for the task
+	 *   *) [group] - group name for the task
+	 */
+	mutePromise(params: ClearOptsId<Function>): this;
+
+	// tslint:disable-next-line
+	mutePromise(p) {
+		return this.markAsync('muted', p, Object.isObject(p) && p.name || Async.linkNames.promise);
+	}
+
+	/**
+	 * Unmutes a proxy operation
+	 * @param [id] - operation id (if not defined will be remove all handlers)
+	 */
+	unmutePromise(id?: Function): this;
+
+	/**
+	 * @param params - parameters for the operation:
+	 *   *) [id] - operation id
+	 *   *) [label] - label for the task
+	 *   *) [group] - group name for the task
+	 */
+	unmutePromise(params: ClearOptsId<Function>): this;
+
+	// tslint:disable-next-line
+	unmutePromise(p) {
+		return this.markAsync('!muted', p, Object.isObject(p) && p.name || Async.linkNames.promise);
+	}
+
+	/**
+	 * Suspends a promise operation
+	 * @param [id] - operation id (if not defined will be remove all handlers)
+	 */
+	suspendPromise(id?: Function): this;
+
+	/**
+	 * @param params - parameters for the operation:
+	 *   *) [id] - operation id
+	 *   *) [label] - label for the task
+	 *   *) [group] - group name for the task
+	 */
+	suspendPromise(params: ClearOptsId<Function>): this;
+
+	// tslint:disable-next-line
+	suspendPromise(p) {
+		return this.markAsync('paused', p, Object.isObject(p) && p.name || Async.linkNames.promise);
+	}
+
+	/**
+	 * Unsuspends a promise operation
+	 * @param [id] - operation id (if not defined will be remove all handlers)
+	 */
+	unsuspendPromise(id?: Function): this;
+
+	/**
+	 * @param params - parameters for the operation:
+	 *   *) [id] - operation id
+	 *   *) [label] - label for the task
+	 *   *) [group] - group name for the task
+	 */
+	unsuspendPromise(params: ClearOptsId<Function>): this;
+
+	// tslint:disable-next-line
+	unsuspendPromise(p) {
+		return this.markAsync('!paused', p, Object.isObject(p) && p.name || Async.linkNames.promise);
 	}
 
 	/**
@@ -1146,7 +1266,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 			links.push(this.setAsync({
 				...p,
-				name: 'eventListener',
+				name: Async.linkNames.eventListener,
 				obj: cb,
 				wrapper(cb: Function): any {
 					const handler = function (this: any): any {
@@ -1295,7 +1415,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	// tslint:disable-next-line
 	off(p) {
-		return this.clearAsync(Object.isObject(p) && Object.isString(p.event) ? {id: p} : p, 'eventListener');
+		return this.clearAsync(Object.isObject(p) && Object.isString(p.event) ? {id: p} : p, Async.linkNames.eventListener);
 	}
 
 	/**
@@ -1317,7 +1437,7 @@ export default class Async<CTX extends object = Async<any>> {
 		return this.markAsync(
 			'muted',
 			Object.isObject(p) && Object.isString(p.event) ? {id: p} : p,
-			'eventListener'
+			Async.linkNames.eventListener
 		);
 	}
 
@@ -1340,7 +1460,7 @@ export default class Async<CTX extends object = Async<any>> {
 		return this.markAsync(
 			'!muted',
 			Object.isObject(p) && Object.isString(p.event) ? {id: p} : p,
-			'eventListener'
+			Async.linkNames.eventListener
 		);
 	}
 
@@ -1363,7 +1483,7 @@ export default class Async<CTX extends object = Async<any>> {
 		return this.markAsync(
 			'paused',
 			Object.isObject(p) && Object.isString(p.event) ? {id: p} : p,
-			'eventListener'
+			Async.linkNames.eventListener
 		);
 	}
 
@@ -1386,7 +1506,7 @@ export default class Async<CTX extends object = Async<any>> {
 		return this.markAsync(
 			'!paused',
 			Object.isObject(p) && Object.isString(p.event) ? {id: p} : p,
-			'eventListener'
+			Async.linkNames.eventListener
 		);
 	}
 
@@ -1404,16 +1524,14 @@ export default class Async<CTX extends object = Async<any>> {
 		this
 			.off(p);
 
-		this
-			.clearImmediate(p)
-			.clearInterval(p)
-			.clearTimeout(p)
-			.cancelIdleCallback(p);
+		$C(Async.linkNames).forEach((el) => {
+			const
+				alias = `clear-${el}`.camelize(false);
 
-		this
-			.cancelRequest(p)
-			.terminateWorker(p)
-			.cancelProxy(p);
+			if (this[alias]) {
+				this[alias](p);
+			}
+		});
 
 		return this;
 	}
@@ -1432,15 +1550,14 @@ export default class Async<CTX extends object = Async<any>> {
 		this
 			.muteEventListeners(p);
 
-		this
-			.muteImmediate(p)
-			.muteInterval(p)
-			.muteTimeout(p)
-			.muteIdleCallback(p);
+		$C(Async.linkNames).forEach((el) => {
+			const
+				alias = `mute-${el}`.camelize(false);
 
-		this
-			.muteRequest(p)
-			.muteProxy(p);
+			if (this[alias]) {
+				this[alias](p);
+			}
+		});
 
 		return this;
 	}
@@ -1459,15 +1576,14 @@ export default class Async<CTX extends object = Async<any>> {
 		this
 			.unmuteEventListeners(p);
 
-		this
-			.unmuteImmediate(p)
-			.unmuteInterval(p)
-			.unmuteTimeout(p)
-			.unmuteIdleCallback(p);
+		$C(Async.linkNames).forEach((el) => {
+			const
+				alias = `unmute-${el}`.camelize(false);
 
-		this
-			.unmuteRequest(p)
-			.unmuteProxy(p);
+			if (this[alias]) {
+				this[alias](p);
+			}
+		});
 
 		return this;
 	}
@@ -1486,15 +1602,14 @@ export default class Async<CTX extends object = Async<any>> {
 		this
 			.suspendEventListeners(p);
 
-		this
-			.suspendImmediate(p)
-			.suspendInterval(p)
-			.suspendTimeout(p)
-			.suspendIdleCallback(p);
+		$C(Async.linkNames).forEach((el) => {
+			const
+				alias = `suspend-${el}`.camelize(false);
 
-		this
-			.suspendRequest(p)
-			.suspendProxy(p);
+			if (this[alias]) {
+				this[alias](p);
+			}
+		});
 
 		return this;
 	}
@@ -1513,15 +1628,14 @@ export default class Async<CTX extends object = Async<any>> {
 		this
 			.unsuspendEventListeners(p);
 
-		this
-			.unsuspendImmediate(p)
-			.unsuspendInterval(p)
-			.unsuspendTimeout(p)
-			.unsuspendIdleCallback(p);
+		$C(Async.linkNames).forEach((el) => {
+			const
+				alias = `unsuspend-${el}`.camelize(false);
 
-		this
-			.unsuspendRequest(p)
-			.unsuspendProxy(p);
+			if (this[alias]) {
+				this[alias](p);
+			}
+		});
 
 		return this;
 	}
