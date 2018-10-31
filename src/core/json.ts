@@ -18,10 +18,10 @@ const
  * @param key
  * @param val
  */
-export function convertIfDate(key: string, val: any): any {
+export function convertIfDate(key: string, val: unknown): unknown {
 	if (Object.isString(val) && (val.length > minDateLength) && isDate.test(val)) {
 		const utc = Date.parse(val);
-		val = isNaN(utc) ? val : new Date(utc);
+		return isNaN(utc) ? val : new Date(utc);
 	}
 
 	return val;

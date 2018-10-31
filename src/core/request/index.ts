@@ -49,30 +49,17 @@ export default function create<T>(opts: CreateRequestOptions<T>): typeof create;
  * @param resolver - request resolve function
  * @param opts
  */
-export default function create<T, A>(
+export default function create<T, A extends unknown[]>(
 	path: string,
-	resolver: (url: string, opts: CreateRequestOptions<T>, arg: A) => ResolverResult,
+	resolver: (url: string, opts: CreateRequestOptions<T>, ...args: A) => ResolverResult,
 	opts?: CreateRequestOptions<T>
-): RequestFunctionResponse<T, A>;
+): RequestFunctionResponse<T, A extends (infer V)[] ? V[] : unknown[]>;
 
-export default function create<T, A1, A2>(
-	path: string,
-	resolver: (url: string, opts: CreateRequestOptions<T>, arg1: A1, arg2: A2) => ResolverResult,
-	opts?: CreateRequestOptions<T>
-): RequestFunctionResponse<T, A1, A2>;
-
-export default function create<T, A1, A2, A3>(
-	path: string,
-	resolver: (url: string, opts: CreateRequestOptions<T>, arg1: A1, arg2: A2, arg3: A3) => ResolverResult,
-	opts?: CreateRequestOptions<T>
-): RequestFunctionResponse<T, A1, A2, A3>;
-
-// tslint:disable-next-line
-export default function create<T>(path, ...args) {
-	const merge = (...args: any[]) => Object.mixin({
+export default function create<T>(path: any, ...args: any[]): unknown {
+	const merge = (...args: unknown[]) => Object.mixin({
 		deep: true,
 		concatArray: true,
-		concatFn: (a: any[], b: any[]) => a.union(b),
+		concatFn: (a: unknown[], b: unknown[]) => a.union(b),
 		extendFilter: (d, v) => Array.isArray(v) || Object.isObject(v)
 	}, undefined, ...args);
 
@@ -199,7 +186,7 @@ export default function create<T>(path, ...args) {
 			const arr = await Then.all($C(p.middlewares).reduce((arr, fn) => {
 				arr.push(fn({opts: p, ctx, globalOpts}));
 				return arr;
-			}, [] as any[]), then);
+			}, [] as unknown[]), then);
 
 			const applyEncoders = (data) => $C(ctx.encoders)
 				.to(Then.resolve(data, then))

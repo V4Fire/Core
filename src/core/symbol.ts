@@ -14,7 +14,7 @@ import $C = require('collection.js');
  */
 export default function generator(fields?: string[]): Dictionary<symbol> {
 	const
-		obj = Object.createDict();
+		obj = Object.createDict<symbol>();
 
 	if (typeof Proxy !== 'function') {
 		return $C(fields).to(obj).reduce((obj, el) => {

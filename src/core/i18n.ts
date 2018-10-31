@@ -48,10 +48,10 @@ if (IS_NODE) {
 	isInitialized = (async () => {
 		try {
 			const
-				l = await storage.get('lang');
+				l = await storage.get<string | undefined>('lang');
 
 			if (l) {
-				setLang(l, await storage.get('isLangDef'));
+				setLang(l, await storage.get<boolean | undefined>('isLangDef'));
 				return;
 			}
 
@@ -89,7 +89,7 @@ export function setLang(value: string, def?: boolean): string {
 /**
  * Global i18n function (string tag)
  */
-GLOBAL.i18n = GLOBAL.t = function t(strings: any | string[], ...exprs: any[]): string {
+GLOBAL.i18n = GLOBAL.t = function t(strings: unknown | string[], ...exprs: unknown[]): string {
 	if (strings == null) {
 		return '';
 	}
@@ -116,40 +116,42 @@ GLOBAL.i18n = GLOBAL.t = function t(strings: any | string[], ...exprs: any[]): s
 /**
  * Global i18n helper function (string tag)
  */
-GLOBAL.l = function l(strings: any | string[], ...exprs: any[]): string {
+GLOBAL.l = function l(strings: unknown | string[], ...exprs: unknown[]): string {
 	if (strings == null) {
 		return '';
 	}
 
-	if (!Object.isArray(strings)) {
-		return String(strings);
+	if (Object.isArray(strings)) {
+		if (strings.length === 1) {
+			return String(strings[0]);
+		}
+
+		let
+			str = '';
+
+		for (let i = 0; i < strings.length; i++) {
+			str += strings[i] + (i in exprs ? String(exprs[i]) : '');
+		}
+
+		return str;
 	}
 
-	if (strings.length === 1) {
-		return String(strings[0]);
-	}
-
-	let str = '';
-	for (let i = 0; i < strings.length; i++) {
-		str += strings[i] + (i in exprs ? exprs[i] : '');
-	}
-
-	return str;
+	return String(strings);
 };
 
 /**
  * Base i18n function
  *
- * @param str
+ * @param val
  * @param [defLang]
  */
-function i18n(str: any, defLang?: string): string {
-	str = String(str);
+function i18n(val: unknown, defLang?: string): string {
+	const str = String(val);
 	defLang = defLang === undefined ? lang : defLang;
 
 	if (defLang) {
 		const w = langs[defLang] && langs[defLang][str];
-		return w != null ? w : str;
+		return w != null ? String(w) : str;
 	}
 
 	return str;

@@ -53,33 +53,32 @@ export type OkStatuses =
 	StatusCodes |
 	StatusCodes[];
 
-export interface Encoder<I = any, O = any> {
+export interface Encoder<I = unknown, O = unknown> {
 	(data: I, params: MiddlewareParams): O;
 }
 
-export type Encoders<T = any> =
+export type Encoders<T = unknown> =
 	Dictionary<Encoder<T>> |
 	Iterable<Encoder<T>>;
 
-export interface Decoder<I = any, O = any> {
+export interface Decoder<I = unknown, O = unknown> {
 	(data: I, params: MiddlewareParams): O;
 }
 
-export type Decoders<T = any> =
+export type Decoders<T = unknown> =
 	Dictionary<Decoder<T>> |
 	Iterable<Decoder<T>>;
 
-export interface RequestResponseObject<T = any> {
+export interface RequestResponseObject<T = unknown> {
 	data: T | null;
 	response: Response;
 	ctx: Readonly<RequestContext<T>>;
 	dropCache(): void;
 }
 
-export type RequestResponse<T = any> = Then<RequestResponseObject<T>>;
-export interface RequestFunctionResponse<T = any, A1 = any, A2 = any, A3 = any> {
-	(arg1?: A1, arg2?: A2, arg3?: A3): RequestResponse<T>;
-	(...args: any[]): RequestResponse<T>;
+export type RequestResponse<T = unknown> = Then<RequestResponseObject<T>>;
+export interface RequestFunctionResponse<T = unknown, A extends unknown[] = []> {
+	(...args: A extends (infer V)[] ? V[] : unknown[]): RequestResponse<T>;
 }
 
 export interface RequestOptions {
@@ -98,24 +97,24 @@ export interface RequestOptions {
 
 export type RequestQuery =
 	Dictionary |
-	any[] |
+	unknown[] |
 	string;
 
-export interface MiddlewareParams<T = any> {
+export interface MiddlewareParams<T = unknown> {
 	ctx: RequestContext<T>;
 	opts: CreateRequestOptions<T>;
 	globalOpts: GlobalOptions;
 }
 
-export interface Middleware<T = any> {
+export interface Middleware<T = unknown> {
 	(params: MiddlewareParams): CanPromise<void | Function>;
 }
 
-export type Middlewares<T = any> =
+export type Middlewares<T = unknown> =
 	Dictionary<Middleware<T>> |
 	Iterable<Middleware<T>>;
 
-export interface CreateRequestOptions<T = any> {
+export interface CreateRequestOptions<T = unknown> {
 	readonly method?: RequestMethods;
 	readonly cacheStrategy?: CacheStrategy;
 
@@ -126,7 +125,7 @@ export interface CreateRequestOptions<T = any> {
 
 	body?: RequestBody;
 	query?: RequestQuery;
-	headers?: Dictionary<any | any[]>;
+	headers?: Dictionary<unknown | unknown[]>;
 	credentials?: boolean;
 
 	timeout?: number;

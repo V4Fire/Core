@@ -16,9 +16,9 @@ declare const API_URL: string | undefined;
 declare const IS_PROD: boolean;
 declare const LANG: string;
 
-declare function Any(obj: any): any;
-declare function stderr(err: any): void;
-declare function devNull(obj: any): void;
+declare function Any(obj: unknown): any;
+declare function stderr(err: unknown): void;
+declare function devNull(obj: unknown): void;
 
 declare function i18n(strings: any | string[], ...expr: any[]): string;
 declare function t(strings: any | string[], ...expr: any[]): string;
@@ -34,7 +34,7 @@ declare function cancelIdleCallback(id: number): void;
 
 type Wrap<T> = T & any;
 type CanPromise<T> = T | Promise<T>;
-interface Dictionary<T = any> {[key: string]: T}
+interface Dictionary<T = unknown> {[key: string]: T}
 
 interface JSONCb {
 	(key: string, value: any): any;
@@ -42,6 +42,12 @@ interface JSONCb {
 
 interface Object {
 	toSource(): string;
+}
+
+interface FastCloneParams {
+	replacer?: JSONCb;
+	reviver?: JSONCb | false;
+	freezable?: boolean;
 }
 
 interface ObjectConstructor {
@@ -57,32 +63,36 @@ interface ObjectConstructor {
 		...source: any[]
 	): D & CollectionJS.AnyRecord;
 
-	fastClone<T>(
-		obj: T,
-		params?: {replacer?: JSONCb; reviver?: JSONCb | false; freezable?: boolean}
-	): T;
-
+	fastClone<T>(obj: T, params?: FastCloneParams): T;
+	fastCompare<T>(a: unknown, b: T): a is T;
 	keys(obj: object | Dictionary): string[];
-	fastCompare<T>(a: any, b: T): a is T;
-	parse(value: any): any;
-	createMap<T extends Object>(obj: T): T & Dictionary;
-	createDict<T>(fields: T): {[P in keyof T]: T[P]};
-	createDict<T = any>(): Dictionary<T>;
-	createDict(...fields: any[]): Dictionary;
+
+	parse<T, R>(value: T): R | undefined;
 	getPrototypeChain(constructor: Function): object[];
 	fromArray(arr: any[]): Dictionary<boolean>;
-	isArray(obj: any): obj is any[];
-	isFunction(obj: any): obj is Function;
-	isString(obj: any): obj is string;
-	isNumber(obj: any): obj is number;
-	isBoolean(obj: any): obj is boolean;
-	isRegExp(obj: any): obj is RegExp;
-	isDate(obj: any): obj is Date;
-	isDate(obj: any): obj is Date;
-	isWeakMap(obj: any): obj is WeakMap<any, any>;
-	isWeakSet(obj: any): obj is WeakSet<any>;
-	isPromise(obj: any): obj is Promise<any>;
-	isTable(obj: any): obj is Dictionary;
+
+	createMap<T extends object>(obj: T): T & Dictionary;
+	createDict<T>(fields: T): {[P in keyof T]: T[P]};
+	createDict<T>(): Dictionary<T>;
+	createDict(...fields: unknown[]): Dictionary;
+
+	isObject(obj: unknown): obj is object;
+	isTable(obj: unknown): obj is Dictionary;
+	isArray(obj: unknown): obj is unknown[];
+	isFunction(obj: unknown): obj is Function;
+
+	isString(obj: unknown): obj is string;
+	isNumber(obj: unknown): obj is number;
+	isBoolean(obj: unknown): obj is boolean;
+
+	isRegExp(obj: unknown): obj is RegExp;
+	isDate(obj: unknown): obj is Date;
+	isPromise(obj: unknown): obj is Promise<unknown>;
+
+	isMap(obj: unknown): obj is Map<unknown, unknown>;
+	isWeakMap(obj: unknown): obj is WeakMap<object, unknown>;
+	isSet(obj: unknown): obj is Set<unknown>;
+	isWeakSet(obj: unknown): obj is WeakSet<object>;
 }
 
 interface DateConstructor {

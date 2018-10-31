@@ -30,7 +30,7 @@ export type json =
 	number |
 	boolean |
 	null |
-	any[] |
+	unknown[] |
 	Dictionary;
 
 export default class Response {
@@ -93,22 +93,15 @@ export default class Response {
 		this.headers = this.parseHeaders(p.headers);
 		this.sourceResponseType = this.responseType = p.responseType;
 
-		// tslint:disable-next-line
+		// tslint:disable-next-line:prefer-conditional-expression
 		if (typeof s === 'object' && !Object.isArray(s)) {
 			this.ok = s.contains(this.status);
 
 		} else {
-			this.ok = (<number[]>[]).concat(s || []).includes(this.status);
+			this.ok = (<any[]>[]).concat(s || []).includes(this.status);
 		}
 
-		// tslint:disable-next-line
-		if (p.decoder) {
-			this.decoders = Object.isFunction(p.decoder) ? [p.decoder] : p.decoder;
-
-		} else {
-			this.decoders = [];
-		}
-
+		this.decoders = p.decoder ? Object.isFunction(p.decoder) ? [p.decoder] : p.decoder : [];
 		this.body = body;
 	}
 
@@ -124,7 +117,7 @@ export default class Response {
 	 * Parses .body as .sourceType and returns the result
 	 */
 	@once
-	decode<T = string | json | ArrayBuffer | Blob | Document | null | any>(): Then<T> {
+	decode<T = string | json | ArrayBuffer | Blob | Document | null | unknown>(): Then<T> {
 		let data;
 		switch (this.sourceResponseType) {
 			case 'json':
@@ -151,7 +144,7 @@ export default class Response {
 				data = this.text();
 		}
 
-		return (<Then>data)
+		return (<Then<T>>data)
 			.then((obj) => $C(this.decoders)
 				.to(Then.resolve(obj, this.parent))
 				.reduce((res: Then, fn) => res.then(fn)))
@@ -271,7 +264,7 @@ export default class Response {
 
 		const
 			body = this.body,
-			type = <any>this.sourceResponseType;
+			type = <NonNullable<ResponseTypes>>this.sourceResponseType;
 
 		if (!body || type === 'arrayBuffer' && !(<ArrayBuffer>body).byteLength) {
 			return Then.resolve<_>(null, this.parent);

@@ -16,7 +16,7 @@ import { normalizeHeaders, applyQueryForStr, getStorageKey, getRequestKey } from
 import { Encoders, Decoders, RequestQuery, CreateRequestOptions, RequestResponseObject } from 'core/request/interface';
 import { cache, pendingCache, storage, globalOpts, defaultRequestOpts } from 'core/request/const';
 
-export default class RequestContext<T = any> {
+export default class RequestContext<T = unknown> {
 	/**
 	 * True if the client is online
 	 */
@@ -86,12 +86,12 @@ export default class RequestContext<T = any> {
 		const p = this.params = <any>Object.mixin({
 			deep: true,
 			concatArray: true,
-			concatFn: (a: any[], b: any[]) => a.union(b),
+			concatFn: (a: unknown[], b: unknown[]) => a.union(b),
 			extendFilter: (d, v) => Array.isArray(v) || Object.isObject(v)
 		}, {}, params);
 
 		this.canCache = p.method === 'GET';
-		this.withoutBody = Boolean({GET: true, HEAD: true}[<any>p.method]);
+		this.withoutBody = Boolean({GET: true, HEAD: true}[p.method]);
 		this.encoders = p.encoder ? Object.isFunction(p.encoder) ? [p.encoder] : p.encoder : [];
 		this.decoders = p.decoder ? Object.isFunction(p.decoder) ? [p.decoder] : p.decoder : [];
 		this.cache = cache[p.cacheStrategy] || cache.never;
@@ -112,11 +112,11 @@ export default class RequestContext<T = any> {
 	 */
 	resolveAPI(api: string | null | undefined = globalOpts.api): string {
 		const
-			a = <any>this.params.api,
+			a = <NonNullable<CreateRequestOptions['api']>>this.params.api,
 			rgxp = /(?:^|(\w+:\/\/)(?:(.*?)\.)?(.*?)\.(.*?))(\/.*|$)/;
 
 		if (!api) {
-			const def = {
+			const def = <any>{
 				namespace: '',
 				...a
 			};
@@ -185,7 +185,7 @@ export default class RequestContext<T = any> {
 			q = this.query;
 
 		const data = this.withoutBody ?
-			q : Object.isObject(<any>p.body) ? p.body : q;
+			q : Object.isObject(p.body) ? p.body : q;
 
 		if (Object.isTable(data)) {
 			if (p.headers) {
@@ -262,7 +262,7 @@ export default class RequestContext<T = any> {
 	 * Middleware for wrapping an object as RequestResponseObject
 	 * @param obj
 	 */
-	async wrapAsResponse(obj: any): Promise<RequestResponseObject<T>> {
+	async wrapAsResponse(obj: Response | ResponseType): Promise<RequestResponseObject<T>> {
 		const response = obj instanceof Response ? obj : new Response(obj, {
 			parent: this.then,
 			responseType: 'object'
@@ -271,7 +271,7 @@ export default class RequestContext<T = any> {
 		return {
 			response,
 			ctx: this,
-			data: await response.decode(),
+			data: await response.decode<T>(),
 			dropCache: this.dropCache.bind(this)
 		};
 	}

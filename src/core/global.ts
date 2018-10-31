@@ -12,7 +12,7 @@ import { GLOBAL } from 'core/const/links';
  * Constructor for any types
  * @param obj
  */
-GLOBAL.Any = function Any(obj: any): any {
+GLOBAL.Any = function Any(obj: unknown): any {
 	return obj;
 };
 
@@ -20,9 +20,9 @@ GLOBAL.Any = function Any(obj: any): any {
  * STDERR wrapper
  * @param err
  */
-GLOBAL.stderr = function stderr(err: any): void {
-	if (err) {
-		if ({clearAsync: true, abort: true}[err.type]) {
+GLOBAL.stderr = function stderr(err: unknown): void {
+	if (Object.isTable(err)) {
+		if ({clearAsync: true, abort: true}[String(err.type)]) {
 			return;
 		}
 
@@ -34,6 +34,6 @@ GLOBAL.stderr = function stderr(err: any): void {
  * dev/null wrapper
  * @param obj
  */
-GLOBAL.devNull = function stderr(obj: any): void {
+GLOBAL.devNull = function stderr(obj: unknown): void {
 	return undefined;
 };

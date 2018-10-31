@@ -11,9 +11,9 @@ try {
 		{camelize, dasherize, underscore} = String.prototype;
 
 	const
-		camelizeCache = Object.createDict(),
-		dasherizeCache = Object.createDict(),
-		underscoreCache = Object.createDict();
+		camelizeCache = Object.createDict<string>(),
+		dasherizeCache = Object.createDict<string>(),
+		underscoreCache = Object.createDict<string>();
 
 	const
 		needCamelize = /[\s_-]|[^\w$]/;

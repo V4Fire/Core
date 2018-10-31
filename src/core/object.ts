@@ -27,7 +27,7 @@ Object.defineProperty(Object.prototype, 'toSource', {
  * Creates a hash table without prototype
  * @param fields
  */
-// tslint:disable-next-line
+// tslint:disable-next-line:only-arrow-functions
 Object.createDict = function (...fields: any[]): Dictionary {
 	if (fields.length) {
 		return Object.assign(Object.create(null), ...fields);
@@ -40,7 +40,7 @@ Object.createDict = function (...fields: any[]): Dictionary {
  * Parses the specified value as a JSON / JS object and returns the result
  * @param value
  */
-Object.parse = function parse(value: any): any {
+Object.parse = function parse<T, R>(value: T): R | undefined {
 	try {
 		return new Function(`return ${value}`)();
 	} catch {}
@@ -57,10 +57,7 @@ Object.parse = function parse(value: any): any {
  *   *) [reviver] - JSON.parse reviver (false for disable defaults)
  *   *) [freezable] - if false the object freeze state wont be copy
  */
-Object.fastClone = function fastClone<T>(
-	obj: T,
-	params?: {replacer?: JSONCb; reviver?: JSONCb | false; freezable?: boolean}
-): T {
+Object.fastClone = function fastClone<T>(obj: T, params?: FastCloneParams): T {
 	const
 		p = params || {};
 
@@ -121,14 +118,16 @@ Object.fastClone = function fastClone<T>(
 	return obj;
 };
 
+Object.fastCompare = fastCompare;
+
 /**
  * Compares two specified objects and returns the result
  *
  * @param a
  * @param b
  */
-// tslint:disable-next-line:cyclomatic-complexity
-Object.fastCompare = function fastCompare<T>(a: any, b: T): a is T {
+function fastCompare<T = any>(a: any, b: T): a is T;
+function fastCompare<T = any>(a: any, b: any): boolean {
 	if (a === b) {
 		return true;
 	}
@@ -147,9 +146,9 @@ Object.fastCompare = function fastCompare<T>(a: any, b: T): a is T {
 
 	if (
 		!aIsArr && !Object.isObject(a) && !Object.isDate(a) && !Object.isRegExp(a) && !Object.isFunction(a.toJSON) ||
-		!bIsArr && !Object.isObject(b) && !Object.isDate(b) && !Object.isRegExp(b) && !Object.isFunction((<any>b).toJSON)
+		!bIsArr && !Object.isObject(b) && !Object.isDate(b) && !Object.isRegExp(b) && !Object.isFunction(b.toJSON)
 	) {
-		if ((aIsMap && bIsMap || aIsSet && bIsSet) && a.size === 0 && (<any>b).size === 0) {
+		if ((aIsMap && bIsMap || aIsSet && bIsSet) && a.size === 0 && b.size === 0) {
 			return true;
 		}
 
@@ -167,17 +166,17 @@ Object.fastCompare = function fastCompare<T>(a: any, b: T): a is T {
 		length1 = a.size;
 
 	} else {
-		length1 = typeof a.length === 'number' ? a.length : Object.keys(a).length;
+		length1 = typeof a.length === 'number' ? a.length : Object.keys((<any>a)).length;
 	}
 
 	if (bIsArr) {
-		length2 = (<any>b).length;
+		length2 = b.length;
 
 	} else if (bIsMap || bIsSet) {
-		length2 = (<any>b).size;
+		length2 = b.size;
 
 	} else {
-		length2 = typeof (<any>b).length === 'number' ? (<any>b).length : Object.keys(b).length;
+		length2 = typeof b.length === 'number' ? b.length : Object.keys(b).length;
 	}
 
 	if (length1 !== length2) {
@@ -189,18 +188,18 @@ Object.fastCompare = function fastCompare<T>(a: any, b: T): a is T {
 	}
 
 	return JSON.stringify(a) === JSON.stringify(b);
-};
+}
 
 /**
  * Creates an object {key: value, value: key} from the specified
  * @param obj
  */
-Object.createMap = function createMap<T extends Object>(obj: T): T & Dictionary {
+Object.createMap = function createMap<T extends object>(obj: T): T & Dictionary {
 	const
 		map = {};
 
 	if (Object.isArray(obj)) {
-		for (let i = 0; i < (<any[]>obj).length; i++) {
+		for (let i = 0; i < obj.length; i++) {
 			const el = obj[i];
 			map[i] = el;
 			map[<string>el] = i;
@@ -212,7 +211,7 @@ Object.createMap = function createMap<T extends Object>(obj: T): T & Dictionary 
 
 		for (let i = 0; i < keys.length; i++) {
 			const
-				key = <string>keys[i],
+				key = keys[i],
 				el = obj[key];
 
 			map[key] = el;
@@ -220,19 +219,19 @@ Object.createMap = function createMap<T extends Object>(obj: T): T & Dictionary 
 		}
 	}
 
-	return <T & Dictionary<any>>map;
+	return <T & Dictionary>map;
 };
 
 /**
  * Creates an object from the specified array
  * @param arr
  */
-Object.fromArray = function fromArray(arr: any[]): Dictionary<boolean> {
+Object.fromArray = function fromArray(arr: unknown[]): Dictionary<boolean> {
 	const
 		map = {};
 
 	for (let i = 0; i < arr.length; i++) {
-		map[arr[i]] = true;
+		map[String(arr[i])] = true;
 	}
 
 	return map;
@@ -269,37 +268,37 @@ Object.getPrototypeChain = function getPrototypeChain(constructor: Function): ob
 Object.isArray = Array.isArray;
 
 /** @override */
-Object.isFunction = function isFunction(obj: any): obj is Function {
+Object.isFunction = function isFunction(obj: unknown): obj is Function {
 	return typeof obj === 'function';
 };
 
 /** @override */
-Object.isString = function isString(obj: any): obj is string {
+Object.isString = function isString(obj: unknown): obj is string {
 	return typeof obj === 'string';
 };
 
 /** @override */
-Object.isNumber = function isNumber(obj: any): obj is number {
+Object.isNumber = function isNumber(obj: unknown): obj is number {
 	return typeof obj === 'number';
 };
 
 /** @override */
-Object.isBoolean = function isBoolean(obj: any): obj is boolean {
+Object.isBoolean = function isBoolean(obj: unknown): obj is boolean {
 	return typeof obj === 'boolean';
 };
 
 /** @override */
-Object.isRegExp = function isRegExp(obj: any): obj is RegExp {
+Object.isRegExp = function isRegExp(obj: unknown): obj is RegExp {
 	return obj instanceof RegExp;
 };
 
 /** @override */
-Object.isDate = function isDate(obj: any): obj is Date {
+Object.isDate = function isDate(obj: unknown): obj is Date {
 	return obj instanceof Date;
 };
 
 /** @override */
-Object.isMap = function isBoolean(obj: any): obj is Map<any, any> {
+Object.isMap = function isMap(obj: unknown): obj is Map<unknown, unknown> {
 	return obj instanceof Map;
 };
 
@@ -307,12 +306,12 @@ Object.isMap = function isBoolean(obj: any): obj is Map<any, any> {
  * Returns true if the specified object is WeakMap
  * @param obj
  */
-Object.isWeakMap = function isBoolean(obj: any): obj is WeakMap<any, any> {
+Object.isWeakMap = function isWeakMap(obj: unknown): obj is WeakMap<object, unknown> {
 	return obj instanceof WeakMap;
 };
 
 /** @override */
-Object.isSet = function isBoolean(obj: any): obj is Set<any> {
+Object.isSet = function isSet(obj: unknown): obj is Set<unknown> {
 	return obj instanceof Set;
 };
 
@@ -320,7 +319,7 @@ Object.isSet = function isBoolean(obj: any): obj is Set<any> {
  * Returns true if the specified object is WeakSet
  * @param obj
  */
-Object.isWeakSet = function isBoolean(obj: any): obj is WeakSet<any> {
+Object.isWeakSet = function isWeakSet(obj: unknown): obj is WeakSet<object> {
 	return obj instanceof WeakSet;
 };
 
@@ -328,14 +327,21 @@ Object.isWeakSet = function isBoolean(obj: any): obj is WeakSet<any> {
  * Returns true if the specified object is Promise
  * @param obj
  */
-Object.isPromise = function isBoolean(obj: any): obj is Promise<any> {
-	return Boolean(obj) && Object.isFunction(obj.then) && Object.isFunction(obj.catch);
+Object.isPromise = function isPromise(obj: unknown): obj is Promise<unknown> {
+	if (Object.isTable(obj)) {
+		return Object.isFunction(obj.then) && Object.isFunction(obj.catch);
+	}
+
+	return false;
 };
+
+const
+	toString = Object.prototype.toString;
 
 /**
  * Returns true if the specified object is a hash table
  * @param obj
  */
-Object.isTable = function isTable(obj: any): obj is Dictionary {
-	return {}.toString.call(obj) === '[object Object]';
+Object.isTable = function isTable(obj: unknown): obj is Dictionary {
+	return toString.call(obj) === '[object Object]';
 };

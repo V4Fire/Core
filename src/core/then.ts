@@ -14,33 +14,37 @@ export const enum State {
 	rejected
 }
 
-export type Value<T = any> = T | PromiseLike<T>;
-export type ExecValue<T = any> = (() => T) | Value<T>;
+export type Value<T = unknown> = PromiseLike<T> | T;
+export type ExecValue<T = unknown> = (() => T) | Value<T>;
 
 export interface OnError {
-	(reason?: any): void;
+	(reason?: unknown): void;
 }
 
-export interface Executor<T = any> {
+export interface Executor<T = unknown> {
 	(
 		resolve: (value?: Value<T>) => void,
-		reject: (reason?: any) => void,
+		reject: (reason?: unknown) => void,
 		onAbort: (cb: OnError) => void
 	): void;
 }
 
-export default class Then<T = any> implements PromiseLike<T> {
+export default class Then<T = unknown> implements PromiseLike<T> {
 	/**
 	 * Promise that never will be resolved
 	 */
-	static readonly never: Promise<any> = new Promise(() => undefined);
+	static readonly never: Promise<never> = new Promise(() => undefined);
 
 	/**
 	 * Returns true if the specified value is PromiseLike
 	 * @param obj
 	 */
-	static isThenable(obj: any): obj is PromiseLike<any> {
-		return Boolean(obj) && Object.isFunction(obj.then);
+	static isThenable(obj: unknown): obj is PromiseLike<unknown> {
+		if (Object.isTable(obj)) {
+			return Object.isFunction(obj.then);
+		}
+
+		return false;
 	}
 
 	/**
@@ -49,7 +53,7 @@ export default class Then<T = any> implements PromiseLike<T> {
 	 * @param [value] - if function, it will be executed
 	 * @param [parent] - parent promise
 	 */
-	static immediate<V>(value?: ExecValue<V>, parent?: Then): Then<V> {
+	static immediate<T>(value?: ExecValue<T>, parent?: Then): Then<T> {
 		return new Then((res, rej, onAbort) => {
 			const id = setImmediate(() => {
 				res(value && Object.isFunction(value) ? (<Function>value)() : value);
@@ -61,6 +65,7 @@ export default class Then<T = any> implements PromiseLike<T> {
 					value.abort(err);
 				}
 			});
+
 		}, parent);
 	}
 
@@ -69,12 +74,10 @@ export default class Then<T = any> implements PromiseLike<T> {
 	 * @param value
 	 * @param [parent] - parent promise
 	 */
-	static resolve<V>(value?: Value<V>, parent?: Then): Then<V> {
+	static resolve<T>(value?: Value<T>, parent?: Then): Then<T> {
 		if (value instanceof Then) {
 			if (parent) {
-				parent.catch((err) => {
-					value.abort(err);
-				});
+				parent.catch((err) => value.abort(err));
 			}
 
 			return value;
@@ -87,6 +90,7 @@ export default class Then<T = any> implements PromiseLike<T> {
 			} else {
 				res(value);
 			}
+
 		}, parent);
 	}
 
@@ -95,7 +99,7 @@ export default class Then<T = any> implements PromiseLike<T> {
 	 * @param reason
 	 * @param [parent] - parent promise
 	 */
-	static reject<V>(reason?: Value<V>, parent?: Then): Then {
+	static reject<T>(reason?: Value<T>, parent?: Then): Then<never> {
 		return new Then((res, rej) => rej(reason), parent);
 	}
 
@@ -105,10 +109,10 @@ export default class Then<T = any> implements PromiseLike<T> {
 	 * @param [parent] - parent promise
 	 */
 	// @ts-ignore
-	static all<T1, T2, T3>(values: [Value<T1>, Value<T2>, Value<T3>], parent?: Then): Then<[T1, T2, T3]>;
-	static all<T1, T2>(values: [Value<T1>, Value<T2>], parent?: Then): Then<[T1, T2]>;
-	static all<T>(values: Iterable<Value<T>>, parent?: Then): Then<T[]>;
-	static all<T>(values: Iterable<Value<T>>, parent?: Then): Then<T[]> {
+	static all<T extends Iterable<Value>>(
+		values: T,
+		parent?: Then
+	): Then<(T extends Iterable<Value<infer V>> ? V : unknown)[]> {
 		return new Then((res, rej, onAbort) => {
 			const
 				promises = $C(values).map((el) => Then.resolve(el)),
@@ -141,6 +145,7 @@ export default class Then<T = any> implements PromiseLike<T> {
 					rej
 				);
 			});
+
 		}, parent);
 	}
 
@@ -149,10 +154,13 @@ export default class Then<T = any> implements PromiseLike<T> {
 	 * @param values
 	 * @param [parent] - parent promise
 	 */
-	static race<T>(values: Iterable<Value<T>>, parent?: Then): Then<T> {
-		return new Then((res, rej, onAbort) => {
+	static race<T extends Iterable<Value>>(
+		values: T,
+		parent?: Then
+	): Then<T extends Iterable<Value<infer V>> ? V : unknown> {
+		return new Then<any>((res, rej, onAbort) => {
 			const
-				promises = $C(values).map<Then>((el) => Then.resolve(el));
+				promises = $C(values).map((el) => Then.resolve(el));
 
 			if (!$C(promises).length()) {
 				res();
@@ -168,6 +176,7 @@ export default class Then<T = any> implements PromiseLike<T> {
 			$C(promises).forEach((promise) => {
 				promise.then(res, rej);
 			});
+
 		}, parent);
 	}
 
@@ -272,30 +281,29 @@ export default class Then<T = any> implements PromiseLike<T> {
 	// @ts-ignore
 	then(
 		onFulfilled?: ((value: T) => Value<T>) | null | undefined,
-		onRejected?: ((reason: any) => Value<T>) | null | undefined,
+		onRejected?: ((reason: unknown) => Value<T>) | null | undefined,
 		abortCb?: OnError | null | undefined
 	): Then<T>;
 
-	then<TReason>(
+	then<R>(
 		onFulfilled: ((value: T) => Value<T>) | null | undefined,
-		onRejected: (reason: any) => Value<TReason>,
+		onRejected: (reason: unknown) => Value<R>,
 		abortCb?: OnError | null | undefined
-	): Then<T | TReason>;
+	): Then<T | R>;
 
-	then<TValue>(
-		onFulfilled: (value: T) => Value<TValue>,
-		onRejected?: ((reason: any) => Value<TValue>) | null | undefined,
+	then<V>(
+		onFulfilled: (value: T) => Value<V>,
+		onRejected?: ((reason: unknown) => Value<V>) | null | undefined,
 		abortCb?: OnError | null | undefined
-	): Then<TValue>;
+	): Then<V>;
 
-	then<TValue, TReason>(
-		onFulfilled: (value: T) => Value<TValue>,
-		onRejected: (reason: any) => Value<TReason>,
+	then<V, R>(
+		onFulfilled: (value: T) => Value<V>,
+		onRejected: (reason: unknown) => Value<R>,
 		abortCb?: OnError | null | undefined
-	): Then<TValue | TReason>;
+	): Then<V | R>;
 
-	// tslint:disable-next-line
-	then(onFulfilled, onRejected, abortCb) {
+	then(onFulfilled: any, onRejected: any, abortCb: any): any {
 		this.pendingChildren++;
 		return new Then((res, rej, onAbort) => {
 			let
@@ -323,7 +331,7 @@ export default class Then<T = any> implements PromiseLike<T> {
 			const
 				that = this;
 
-			onAbort(function (this: Then, reason: any): void {
+			onAbort(function (this: Then, reason: unknown): void {
 				if (Object.isFunction(abortCb)) {
 					try {
 						abortCb(reason);
@@ -343,11 +351,9 @@ export default class Then<T = any> implements PromiseLike<T> {
 	}
 
 	/** @see {Promise.prototype.catch} */
-	catch(onRejected?: ((reason: any) => Value<T>) | null | undefined): Then<T>;
-	catch<TReason>(onRejected: (reason: any) => Value<TReason>): Then<TReason>;
-
-	// tslint:disable-next-line
-	catch(onRejected) {
+	catch(onRejected?: ((reason: unknown) => Value<T>) | null | undefined): Then<T>;
+	catch<R>(onRejected: (reason: unknown) => Value<R>): Then<R>;
+	catch(onRejected?: any): any {
 		return new Then((res, rej, onAbort) => {
 			let
 				reject;
@@ -364,7 +370,7 @@ export default class Then<T = any> implements PromiseLike<T> {
 			const
 				that = this;
 
-			onAbort(function (this: Then, reason: any): void {
+			onAbort(function (this: Then, reason: unknown): void {
 				this.aborted = true;
 
 				if (!that.abort(reason)) {
@@ -380,7 +386,7 @@ export default class Then<T = any> implements PromiseLike<T> {
 	 * Aborts current promise
 	 * @param [reason] - abort reason
 	 */
-	abort(reason?: any): boolean {
+	abort(reason?: unknown): boolean {
 		if (!this.isPending || this.aborted) {
 			return false;
 		}
@@ -411,9 +417,9 @@ export default class Then<T = any> implements PromiseLike<T> {
 	 * @param [onError] - error handler
 	 * @param [onValue] - success handler
 	 */
-	protected evaluate<T, V>(
-		fn: (...args: T[]) => V,
-		args: T[] = [],
+	protected evaluate<A, V>(
+		fn: (...args: A[]) => V,
+		args: A[] = [],
 		onError?: OnError,
 		onValue?: (value: V) => void
 	): void {

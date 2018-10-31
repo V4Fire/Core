@@ -23,8 +23,8 @@ export const
 export async function get(): Promise<{auth: string | undefined; csrf: string | undefined}> {
 	try {
 		return {
-			auth: await session.get('auth'),
-			csrf: await session.get('csrf')
+			auth: await session.get<string | undefined>('auth'),
+			csrf: await session.get<string | undefined>('csrf')
 		};
 
 	} catch {

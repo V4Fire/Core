@@ -9,7 +9,7 @@
 import $C = require('collection.js');
 import Cache, { ClearFilter } from 'core/cache/cache';
 
-export default class RestrictedCache<V = any, K = string> extends Cache<V, K> {
+export default class RestrictedCache<V = unknown, K = string> extends Cache<V, K> {
 	/**
 	 * Queue object
 	 */

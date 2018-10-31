@@ -8,11 +8,11 @@
 
 import $C = require('collection.js');
 
-export interface ClearFilter<V = any, K = string> {
-	(el: V, key: K): any;
+export interface ClearFilter<V = unknown, K = string> {
+	(el: V, key: K): unknown;
 }
 
-export default class Cache<V = any, K = string> {
+export default class Cache<V = unknown, K = string> {
 	/**
 	 * Cache object
 	 */
@@ -31,7 +31,7 @@ export default class Cache<V = any, K = string> {
 	 * @param key
 	 */
 	get(key: K): V | undefined {
-		return <any>this.storage.get(key);
+		return this.storage.get(key);
 	}
 
 	/**

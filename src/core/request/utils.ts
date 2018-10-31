@@ -25,7 +25,7 @@ export function getStorageKey(key: string): string {
  */
 export function getRequestKey(url: string, params?: CreateRequestOptions): string {
 	const
-		p = <any>(params || {}),
+		p = <NonNullable<typeof params>>(params || {}),
 		plainHeaders = <string[][]>[];
 
 	if (params) {
@@ -48,6 +48,9 @@ export function getRequestKey(url: string, params?: CreateRequestOptions): strin
 	return JSON.stringify([url, p.method, plainHeaders, p.timeout]);
 }
 
+const
+	tplRgxp = /\${([^}]+)}/g;
+
 /**
  * Applies a query object fot the specified string
  * (used keys will be removed from the query)
@@ -56,7 +59,7 @@ export function getRequestKey(url: string, params?: CreateRequestOptions): strin
  * @param [query]
  * @param [rgxp] - template regexp
  */
-export function applyQueryForStr(str: string, query?: Dictionary, rgxp: RegExp = /\${([^}]+)}/g): string {
+export function applyQueryForStr(str: string, query?: Dictionary, rgxp: RegExp = tplRgxp): string {
 	if (!query) {
 		return str;
 	}
@@ -87,7 +90,7 @@ export function normalizeHeaderName(name: string, query?: Dictionary): string {
  * @param value
  * @param [query] - request query object (for value interpolation)
  */
-export function normalizeHeaderValue(value: any, query?: Dictionary): string {
+export function normalizeHeaderValue(value: unknown, query?: Dictionary): string {
 	return applyQueryForStr(String(value != null ? value : '').trim(), query);
 }
 
@@ -97,7 +100,7 @@ export function normalizeHeaderValue(value: any, query?: Dictionary): string {
  * @param headers
  * @param [query] - request query object (for key/value interpolation)
  */
-export function normalizeHeaders(headers: Dictionary, query?: Dictionary): Dictionary<string | string[]> {
+export function normalizeHeaders(headers: Dictionary | undefined, query?: Dictionary): Dictionary<string | string[]> {
 	return $C(headers).to({}).reduce((res, val, name) => {
 		if (Object.isArray(val)) {
 			val = $C(val).to([]).reduce((arr, val) => {

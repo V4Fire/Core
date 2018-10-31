@@ -7,13 +7,13 @@
  */
 
 import $C = require('collection.js');
-import * as env from 'core/env';
-import logDriver from 'core/log/engines';
 import config from 'config';
+import logDriver from 'core/log/engines';
+import * as env from 'core/env';
 
 let
 	options,
-	stack: [string, any][] = [];
+	stack: [string, unknown[]][] = [];
 
 const setConfig = (val) => {
 	options = {patterns: [], ...val};
@@ -43,7 +43,7 @@ export interface LogMessageOptions {
  * @param key - log key or log type options
  * @param [details]
  */
-export default function log(key: string | LogMessageOptions, ...details: any[]): void {
+export default function log(key: string | LogMessageOptions, ...details: unknown[]): void {
 	let
 		type;
 

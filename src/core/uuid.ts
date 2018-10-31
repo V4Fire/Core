@@ -18,7 +18,7 @@ export function serialize(uuid: Buffer | Uint8Array): string {
 	for (let i = 0; i < uuid.length; ++i) {
 		res += uuid[i].toString(HEX).padLeft(2, '0');
 
-		// tslint:disable-next-line
+		// tslint:disable-next-line:prefer-switch
 		if (i === 3 || i === 5 || i === 7 || i === 9) {
 			res += '-';
 		}

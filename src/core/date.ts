@@ -16,7 +16,8 @@ Date.getWeekDays = function getWeekDays(): string[] {
 };
 
 const
-	{format: sugarFormat} = Date.prototype;
+	{format: sugarFormat} = Date.prototype,
+	formatRgxp = /{(humanTimeDate|humanDate)}/g;
 
 /**
  * Date.format wrapper
@@ -31,6 +32,6 @@ Date.prototype.format = function format(value: string, locale?: string): string 
 		humanDate: lang === 'ru' ? '{dd}.{MM}.{yyyy}' : '{MM}.{dd}.{yyyy}'
 	};
 
-	const replace = (str) => str.replace(/{(humanTimeDate|humanDate)}/g, (str, $1) => replace(aliases[$1]));
+	const replace = (str) => str.replace(formatRgxp, (str, $1) => aliases[$1]);
 	return sugarFormat.call(this, replace(value), locale || lang);
 };

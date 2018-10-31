@@ -26,6 +26,6 @@ export function noi18n(value: string): string {
  * Returns values only for string fields. For converting enums
  * @param names
  */
-export function convertEnumToDict(names: Dictionary): Record<string, string> {
+export function convertEnumToDict(names: Dictionary): Dictionary<string> {
 	return $C(names).filter((el) => !isNaN(Number(el))).map((value, key) => key);
 }

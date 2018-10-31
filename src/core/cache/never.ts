@@ -8,7 +8,7 @@
 
 import Cache, { ClearFilter } from 'core/cache/cache';
 
-export default class NeverCache<V = any, K = string> extends Cache<V, K> {
+export default class NeverCache<V = unknown, K = string> extends Cache<V, K> {
 	/** @override */
 	has(key: K): boolean {
 		return false;

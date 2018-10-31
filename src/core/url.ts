@@ -8,6 +8,9 @@
 
 import $C = require('collection.js');
 
+const
+	isUrlWithSep = /^(\w+:)?\/?\//;
+
 /**
  * Concatenates the specified parts of URLs, correctly arranging slashes
  * @param urls
@@ -29,7 +32,7 @@ export function concatUrls(...urls: Array<string | null | undefined>): string {
 			return `${res}/${url}`;
 		}
 
-		return /^(\w+:)?\/?\//.test(url) ? url : `/${url}`;
+		return isUrlWithSep.test(url) ? url : `/${url}`;
 	});
 }
 
@@ -37,7 +40,7 @@ export function concatUrls(...urls: Array<string | null | undefined>): string {
  * Stable stringify for querystring
  * @param data
  */
-export function toQueryString(data: any): string {
+export function toQueryString(data: unknown): string {
 	return chunkToQueryString(data);
 }
 
@@ -47,7 +50,7 @@ export function toQueryString(data: any): string {
  * @param data
  * @param [prfx]
  */
-export function chunkToQueryString(data: any, prfx: string = ''): string {
+export function chunkToQueryString(data: unknown, prfx: string = ''): string {
 	if (data == null || data === '') {
 		return '';
 	}
@@ -57,30 +60,17 @@ export function chunkToQueryString(data: any, prfx: string = ''): string {
 
 	const reducer = (res, key) => {
 		const
-			val = data[key],
+			val = (<Extract<typeof data, unknown[] | Dictionary>>data)[key],
 			valIsArr = Object.isArray(val);
 
 		if (val == null || val === '' || valIsArr && !val.length) {
 			return res;
 		}
 
-		// tslint:disable-next-line
-		if (!isArr) {
-			key = prfx ? `${prfx}_${key}` : key;
+		key = isArr ? prfx : prfx ? `${prfx}_${key}` : key;
 
-		} else {
-			key = prfx;
-		}
-
-		let str;
-
-		// tslint:disable-next-line
-		if (valIsArr || Object.isObject(val)) {
-			str = chunkToQueryString(val, key);
-
-		} else {
-			str = `${key}=${chunkToQueryString(val)}`;
-		}
+		const
+			str = valIsArr || Object.isObject(val) ? chunkToQueryString(val, key) : `${key}=${chunkToQueryString(val)}`;
 
 		if (res) {
 			return `${res}&${str}`;
@@ -89,8 +79,15 @@ export function chunkToQueryString(data: any, prfx: string = ''): string {
 		return str;
 	};
 
-	if (isArr || Object.isObject(data)) {
-		return $C(Object.keys(data).sort()).to('').reduce(reducer);
+	const
+		reduce = (data) => $C(data.sort()).to('').reduce(reducer);
+
+	if (isArr) {
+		return reduce(data);
+	}
+
+	if (Object.isTable(data)) {
+		return reduce(Object.keys(data));
 	}
 
 	return encodeURIComponent(String(data));

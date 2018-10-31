@@ -8,14 +8,14 @@
 
 export default class RequestError {
 	readonly type: string;
-	readonly details: any;
+	readonly details: unknown;
 	readonly message: string;
 
 	/**
 	 * @param type - error type
 	 * @param details - error details
 	 */
-	constructor(type: string, details?: any) {
+	constructor(type: string, details?: unknown) {
 		this.type = type;
 		this.details = details;
 		this.message = `API error, type: ${type}`;

@@ -19,13 +19,13 @@ export const
 	{get, set, remove, namespace} = local;
 
 export interface ClearFilter {
-	(el: string, key: string): any;
+	(el: string, key: string): unknown;
 }
 
 export interface Namespace {
 	has(key: string): boolean;
-	get(key: string): any;
-	set(key: string, value: any): void;
+	get<T>(key: string): T;
+	set(key: string, value: unknown): void;
 	remove(key: string): void;
 	clear(filter?: ClearFilter): void;
 }
@@ -36,19 +36,22 @@ export interface FactoryResult extends Namespace {
 
 export interface AsyncNamespace {
 	has(key: string): Promise<boolean>;
-	get(key: string): Promise<any>;
-	set(key: string, value: any, ttl?: number): Promise<void>;
+	get<T>(key: string): Promise<T>;
+	set(key: string, value: unknown, ttl?: number): Promise<void>;
 	remove(key: string): Promise<void>;
-	clear(filter?: (el: string, key: string) => any): Promise<void>;
+	clear(filter?: (el: string, key: string) => unknown): Promise<void>;
 }
 
 export interface AsyncFactoryResult extends AsyncNamespace {
 	namespace(name: string): AsyncNamespace;
 }
 
+export const
+	canParse = /^[[{"]|^(?:true|false|null|undefined|\d+)$/;
+
 function factory(storage: Dictionary, async: true): AsyncFactoryResult;
 function factory(storage: Dictionary, async?: false): FactoryResult;
-function factory(storage: Dictionary, async?: boolean): FactoryResult | AsyncFactoryResult {
+function factory(storage: Dictionary, async?: boolean): AsyncFactoryResult | FactoryResult {
 	let
 		has,
 		get,
@@ -58,9 +61,32 @@ function factory(storage: Dictionary, async?: boolean): FactoryResult | AsyncFac
 		keys;
 
 	try {
-		get = (storage.getItem || storage.get).bind(storage);
-		set = (storage.setItem || storage.set).bind(storage);
-		remove = (storage.removeItem || storage.remove || storage.delete).bind(storage);
+		get = storage.getItem || storage.get;
+
+		if (Object.isFunction(get)) {
+			get = get.bind(storage);
+
+		} else {
+			throw new Error('Get method for a storage is not defined');
+		}
+
+		set = storage.setItem || storage.set;
+
+		if (Object.isFunction(set)) {
+			set = set.bind(storage);
+
+		} else {
+			throw new Error('Set method for a storage is not defined');
+		}
+
+		remove = storage.removeItem || storage.remove || storage.delete;
+
+		if (Object.isFunction(remove)) {
+			remove = remove.bind(storage);
+
+		} else {
+			throw new Error('Remove method for a storage is not defined');
+		}
 
 		const _has = storage.exists || storage.exist || storage.includes || storage.has;
 		has = Object.isFunction(_has) ? _has.bind(storage) : undefined;
@@ -75,7 +101,16 @@ function factory(storage: Dictionary, async?: boolean): FactoryResult | AsyncFac
 		throw new TypeError('Invalid storage driver');
 	}
 
-	function wrap(val?: any, action?: (val: any) => any): any {
+	type WrapFn<T> = (val: T | undefined) => any;
+	function wrap(val?: undefined): CanPromise<undefined>;
+	function wrap<T>(val: T): CanPromise<T>;
+
+	function wrap<T, R extends WrapFn<T>>(
+		val: T | undefined,
+		action: R
+	): CanPromise<R extends (val: T | undefined) => infer R ? R extends Promise<infer RV> ? RV : R : unknown>;
+
+	function wrap<T, R extends WrapFn<T>>(val?: T | undefined, action?: R): CanPromise<T | ReturnType<R> | undefined> {
 		if (async) {
 			return (async () => {
 				val = await val;
@@ -102,7 +137,7 @@ function factory(storage: Dictionary, async?: boolean): FactoryResult | AsyncFac
 		 * @param key,
 		 * @param [args]
 		 */
-		has(key: string, ...args: any[]): any {
+		has(key: string, ...args: unknown[]): CanPromise<boolean> {
 			if (has) {
 				return wrap(has(key, ...args));
 			}
@@ -116,13 +151,13 @@ function factory(storage: Dictionary, async?: boolean): FactoryResult | AsyncFac
 		 * @param key
 		 * @param [args]
 		 */
-		get(key: string, ...args: any[]): any {
+		get<T>(key: string, ...args: unknown[]): CanPromise<T> {
 			return wrap(get(key, ...args), (v) => {
 				if (v === null) {
 					return undefined;
 				}
 
-				if (Object.isString(v) && /^[[{"]|^(?:true|false|null|undefined|\d+)$/.test(v)) {
+				if (Object.isString(v) && canParse.test(v)) {
 					return JSON.parse(v, convertIfDate);
 				}
 
@@ -137,7 +172,7 @@ function factory(storage: Dictionary, async?: boolean): FactoryResult | AsyncFac
 		 * @param value
 		 * @param [args]
 		 */
-		set(key: string, value: any, ...args: any[]): any {
+		set(key: string, value: unknown, ...args: unknown[]): CanPromise<void> {
 			return wrap(set(key, JSON.stringify(value), ...args), () => undefined);
 		},
 
@@ -147,7 +182,7 @@ function factory(storage: Dictionary, async?: boolean): FactoryResult | AsyncFac
 		 * @param key
 		 * @param [args]
 		 */
-		remove(key: string, ...args: any[]): any {
+		remove(key: string, ...args: unknown[]): CanPromise<void> {
 			return wrap(remove(key, ...args), () => undefined);
 		},
 
@@ -157,7 +192,7 @@ function factory(storage: Dictionary, async?: boolean): FactoryResult | AsyncFac
 		 * @param [filter] - filter for removing (if not defined, then the storage will be cleared)
 		 * @param [args]
 		 */
-		clear(filter?: Function, ...args: any[]): any {
+		clear(filter?: Function, ...args: unknown[]): CanPromise<void> {
 			if (filter || !clear) {
 				return wrap(keys(), async (keys) => {
 					for (const key of keys) {
@@ -178,28 +213,28 @@ function factory(storage: Dictionary, async?: boolean): FactoryResult | AsyncFac
 		 * Returns a storage object by the specified namespace
 		 * @param name
 		 */
-		namespace(name: string): any {
+		namespace(name: string): AsyncNamespace | Namespace {
 			const
 				k = (key) => `${name}.${key}`;
 
-			return {
-				has(key: string, ...args: any[]): boolean {
+			return <ReturnType<typeof obj['namespace']>>{
+				has(key: string, ...args: unknown[]): CanPromise<boolean> {
 					return obj.has(k(key), ...args);
 				},
 
-				get(key: string, ...args: any[]): any {
+				get<T>(key: string, ...args: unknown[]): CanPromise<T> {
 					return obj.get(k(key), ...args);
 				},
 
-				set(key: string, value: any, ...args: any[]): any {
+				set(key: string, value: unknown, ...args: unknown[]): CanPromise<void> {
 					return obj.set(k(key), value, ...args);
 				},
 
-				remove(key: string, ...args: any[]): any {
+				remove(key: string, ...args: unknown[]): CanPromise<void> {
 					return obj.remove(k(key), ...args);
 				},
 
-				clear(filter?: Function, ...args: any[]): any {
+				clear(filter?: Function, ...args: unknown[]): CanPromise<void> {
 					return wrap(keys(), async (keys) => {
 						for (const key of keys) {
 							if (key.split('.')[0] !== name) {
@@ -219,5 +254,5 @@ function factory(storage: Dictionary, async?: boolean): FactoryResult | AsyncFac
 		}
 	};
 
-	return obj;
+	return <AsyncFactoryResult | FactoryResult>obj;
 }

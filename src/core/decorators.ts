@@ -18,7 +18,7 @@ export function once(target: Object, key: string | symbol, descriptor: PropertyD
 		throw new TypeError(`descriptor.value is not a function: ${method}`);
 	}
 
-	descriptor.value = function (): any {
+	descriptor.value = function (): unknown {
 		Object.defineProperty(this, key, {
 			value: method.once()
 		});
@@ -43,7 +43,7 @@ export function memoize(hashFn?: string | Function | number, limit?: number): Me
 			throw new TypeError(`descriptor.value is not a function: ${method}`);
 		}
 
-		descriptor.value = function (): any {
+		descriptor.value = function (): unknown {
 			Object.defineProperty(this, key, {
 				value: method.memoize(hashFn, limit)
 			});
@@ -68,7 +68,7 @@ export function debounce(delay: number = 250): MethodDecorator {
 			throw new TypeError(`descriptor.value is not a function: ${method}`);
 		}
 
-		descriptor.value = function (): any {
+		descriptor.value = function (): unknown {
 			Object.defineProperty(this, key, {
 				value: method.debounce(delay)
 			});
@@ -93,7 +93,7 @@ export function throttle(delay: number = 250): MethodDecorator {
 			throw new TypeError(`descriptor.value is not a function: ${method}`);
 		}
 
-		descriptor.value = function (): any {
+		descriptor.value = function (): unknown {
 			Object.defineProperty(this, key, {
 				value: method.throttle(delay)
 			});

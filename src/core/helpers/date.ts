@@ -32,6 +32,9 @@ export function normalizeIfDate(value: any | any[], params?: DateCreateOptions):
 	return value ? Date.create(value, params) : undefined;
 }
 
+const
+	separatorRgxp = /\/|-|\.|\s+/;
+
 /**
  * Returns date value from the specified string
  *
@@ -39,7 +42,7 @@ export function normalizeIfDate(value: any | any[], params?: DateCreateOptions):
  * @param [separator] - separator pattern
  * @param [params] - additional parameters for Date.create
  */
-export function getDateFromStr(str: string, separator: RegExp = /\/|-|\.|\s+/, params?: DateCreateOptions): Date {
+export function getDateFromStr(str: string, separator: RegExp = separatorRgxp, params?: DateCreateOptions): Date {
 	const p = str.split(separator);
 	return Date.create(lang === 'ru' ? [p[1], p[0], p[2]].join('.') : str, params);
 }
