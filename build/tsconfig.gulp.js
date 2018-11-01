@@ -41,17 +41,22 @@ module.exports = function (gulp) {
 					(str, path) => (deps[`${el}/*`] = [`${el}:${path}/*`])[0]
 				));
 
+				const paths = {
+					'*': [
+						`./${src.rel('src')}/*`,
+						...depsList
+					],
+
+					...deps
+				};
+
+				if (depsList.length) {
+					paths[`${pzlr.super}/*`] = depsList;
+				}
+
 				extend(config, {
 					compilerOptions: {
-						paths: {
-							'*': [
-								`./${src.rel('src')}/*`,
-								...depsList
-							],
-
-							[`${pzlr.super}/*`]: depsList,
-							...deps
-						}
+						paths
 					}
 				});
 
