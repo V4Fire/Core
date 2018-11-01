@@ -63,7 +63,7 @@ export function chunkToQueryString(data: unknown, prfx: string = ''): string {
 			val = (<Extract<typeof data, unknown[] | Dictionary>>data)[key],
 			valIsArr = Object.isArray(val);
 
-		if (val == null || val === '' || valIsArr && !val.length) {
+		if (val == null || val === '' || valIsArr && !(<unknown[]>val).length) {
 			return res;
 		}
 
