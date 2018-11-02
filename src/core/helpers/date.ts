@@ -7,9 +7,9 @@
  */
 
 import $C = require('collection.js');
-import { lang } from 'core/i18n';
 
-type DateCreateOptions = sugarjs.Date.DateCreateOptions;
+import { lang } from 'core/i18n';
+import { DateValue, DateCreateOptions } from 'core/date';
 
 /**
  * Normalizes the specified value as date
@@ -17,19 +17,26 @@ type DateCreateOptions = sugarjs.Date.DateCreateOptions;
  * @param value
  * @param [params] - additional parameters for Date.create
  */
-export function normalizeIfDate(value: any, params?: DateCreateOptions): Date | undefined;
+export function normalizeIfDate(value: unknown, params?: DateCreateOptions): Date | undefined;
 
 /**
  * @param value - list of values
  * @param [params] - additional parameters for Date.create
  */
-export function normalizeIfDate(value: any[], params?: DateCreateOptions): Date[];
-export function normalizeIfDate(value: any | any[], params?: DateCreateOptions): Date | Date[] | undefined {
+export function normalizeIfDate(value: unknown[], params?: DateCreateOptions): Date[];
+export function normalizeIfDate(value: unknown | unknown[], params?: DateCreateOptions): Date | Date[] | undefined {
+	const
+		f = (v) => Object.isString(v) || Object.isNumber(v) || Object.isDate(v);
+
 	if (Object.isArray(value)) {
-		return $C(<any[]>value).map((date) => Date.create(date, params));
+		return $C(value).filter(f).map((date) => Date.create(<DateValue>date, params));
 	}
 
-	return value ? Date.create(value, params) : undefined;
+	if (f(value)) {
+		return Date.create(<DateValue>value, params);
+	}
+
+	return undefined;
 }
 
 const

@@ -28,7 +28,7 @@ Object.defineProperty(Object.prototype, 'toSource', {
  * @param fields
  */
 // tslint:disable-next-line:only-arrow-functions
-Object.createDict = function (...fields: any[]): Dictionary {
+Object.createDict = function (...fields: unknown[]): Dictionary {
 	if (fields.length) {
 		return Object.assign(Object.create(null), ...fields);
 	}
@@ -166,7 +166,7 @@ function fastCompare<T = any>(a: any, b: any): boolean {
 		length1 = a.size;
 
 	} else {
-		length1 = typeof a.length === 'number' ? a.length : Object.keys((<any>a)).length;
+		length1 = typeof a.length === 'number' ? a.length : Object.keys(a).length;
 	}
 
 	if (bIsArr) {

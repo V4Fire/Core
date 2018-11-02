@@ -20,9 +20,9 @@ declare function Any(obj: unknown): any;
 declare function stderr(err: unknown): void;
 declare function devNull(obj: unknown): void;
 
-declare function i18n(strings: any | string[], ...expr: any[]): string;
-declare function t(strings: any | string[], ...expr: any[]): string;
-declare function l(strings: any | string[], ...expr: any[]): string;
+declare function i18n(strings: unknown | string[], ...expr: unknown[]): string;
+declare function t(strings: unknown | string[], ...expr: unknown[]): string;
+declare function l(strings: unknown | string[], ...expr: unknown[]): string;
 
 declare class IdleDeadline {
 	readonly didTimeout: boolean;
@@ -37,7 +37,7 @@ type CanPromise<T> = T | Promise<T>;
 interface Dictionary<T = unknown> {[key: string]: T}
 
 interface JSONCb {
-	(key: string, value: any): any;
+	(key: string, value: unknown): unknown;
 }
 
 interface Object {
@@ -54,13 +54,13 @@ interface ObjectConstructor {
 	mixin<D, K, V>(
 		params: CollectionJS.ExtendParams<D, K, V> & CollectionJS.Async,
 		target?: D,
-		...source: any[]
+		...source: unknown[]
 	): CollectionJS.ThreadObj<D & CollectionJS.AnyRecord>;
 
 	mixin<D, K, V>(
 		deepOrParams: boolean | CollectionJS.ExtendParams<D, K, V>,
 		target?: D,
-		...source: any[]
+		...source: unknown[]
 	): D & CollectionJS.AnyRecord;
 
 	fastClone<T>(obj: T, params?: FastCloneParams): T;
@@ -69,7 +69,7 @@ interface ObjectConstructor {
 
 	parse<T, R>(value: T): R | undefined;
 	getPrototypeChain(constructor: Function): object[];
-	fromArray(arr: any[]): Dictionary<boolean>;
+	fromArray(arr: unknown[]): Dictionary<boolean>;
 
 	createMap<T extends object>(obj: T): T & Dictionary;
 	createDict<T>(fields: T): {[P in keyof T]: T[P]};

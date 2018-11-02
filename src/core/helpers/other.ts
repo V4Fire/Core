@@ -10,7 +10,7 @@
  * Returns true if the specified value is empty
  * @param value
  */
-export function isEmptyValue(value: any): boolean {
+export function isEmptyValue(value: unknown): boolean {
 	return !value;
 }
 

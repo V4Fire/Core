@@ -104,7 +104,7 @@ export function extend<T extends Config = Config>(...args: Dictionary[]): T {
 	return <any>$C.extend({
 		deep: true,
 		concatArray: true,
-		concatFn: (a: any[], b: any[]) => a.union(b),
+		concatFn: (a: unknown[], b: unknown[]) => a.union(b),
 		withUndef: true
 	}, config, ...args);
 }

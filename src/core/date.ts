@@ -8,6 +8,9 @@
 
 import { lang } from 'core/i18n';
 
+export type DateValue = string | number | Date;
+export type DateCreateOptions = sugarjs.Date.DateCreateOptions;
+
 /**
  * Returns a list of week days
  */
