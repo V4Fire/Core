@@ -126,8 +126,8 @@ Object.fastCompare = fastCompare;
  * @param a
  * @param b
  */
-function fastCompare<T = any>(a: any, b: T): a is T;
-function fastCompare<T = any>(a: any, b: any): boolean {
+function fastCompare<T>(a: any, b: T): a is T;
+function fastCompare<T>(a: any, b: any): boolean {
 	if (a === b) {
 		return true;
 	}
