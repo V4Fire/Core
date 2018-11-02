@@ -100,7 +100,7 @@ const config: Config = {
  * Extends the config object
  * @param args
  */
-export function extend<T extends Config = Config>(...args: Dictionary[]): T {
+export function extend<T extends Config>(...args: Dictionary[]): T {
 	return <any>$C.extend({
 		deep: true,
 		concatArray: true,
