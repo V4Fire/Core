@@ -6,18 +6,43 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-export default class RequestError {
+import Response from 'core/request/response';
+
+export interface Details extends Dictionary {
+	response?: Response;
+}
+
+export default class RequestError implements Error {
+	/**
+	 * Error name
+	 */
+	readonly name: string = 'RequestError';
+
+	/**
+	 * Error type
+	 */
 	readonly type: string;
-	readonly details: unknown;
+
+	/**
+	 * Error message
+	 */
 	readonly message: string;
+
+	/**
+	 * Error details
+	 */
+	readonly details: Details = {};
 
 	/**
 	 * @param type - error type
 	 * @param details - error details
 	 */
-	constructor(type: string, details?: unknown) {
+	constructor(type: string, details?: Details) {
 		this.type = type;
-		this.details = details;
 		this.message = `API error, type: ${type}`;
+
+		if (details) {
+			this.details = details;
+		}
 	}
 }
