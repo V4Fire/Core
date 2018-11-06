@@ -36,6 +36,8 @@ type Wrap<T> = T & any;
 type CanPromise<T> = T | Promise<T>;
 type CanUndef<T> = T | undefined;
 type Nullable<T> = T | null | undefined;
+
+interface StrictDictionary<T = unknown> {[key: string]: T}
 interface Dictionary<T> {[key: string]: CanUndef<T>}
 interface Dictionary<T extends unknown = unknown> {[key: string]: T}
 

@@ -12,9 +12,9 @@ import $C = require('collection.js');
  * Creates a generator for symbols
  * @param fields - array of fields
  */
-export default function generator(fields?: string[]): Dictionary<symbol> {
+export default function generator(fields?: string[]): StrictDictionary<symbol> {
 	const
-		obj = Object.createDict<symbol>();
+		obj = <StrictDictionary<symbol>>Object.createDict<symbol>();
 
 	if (typeof Proxy !== 'function') {
 		return $C(fields).to(obj).reduce((obj, el) => {
