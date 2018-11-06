@@ -109,7 +109,7 @@ export default class Response {
 	 * Returns HTTP header by the specified name from the response
 	 * @param name
 	 */
-	getHeader(name: string): string | undefined {
+	getHeader(name: string): CanUndef<string> {
 		return this.headers[normalizeHeaderName(name)];
 	}
 
@@ -117,7 +117,7 @@ export default class Response {
 	 * Parses .body as .sourceType and returns the result
 	 */
 	@once
-	decode<T = string | json | ArrayBuffer | Blob | Document | null | unknown>(): Then<T> {
+	decode<T = Nullable<string | json | ArrayBuffer | Blob | Document | unknown>>(): Then<T> {
 		let data;
 		switch (this.sourceResponseType) {
 			case 'json':

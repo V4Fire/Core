@@ -17,14 +17,14 @@ import { DateValue, DateCreateOptions } from 'core/date';
  * @param value
  * @param [params] - additional parameters for Date.create
  */
-export function normalizeIfDate(value: unknown, params?: DateCreateOptions): Date | undefined;
+export function normalizeIfDate(value: unknown, params?: DateCreateOptions): CanUndef<Date>;
 
 /**
  * @param value - list of values
  * @param [params] - additional parameters for Date.create
  */
 export function normalizeIfDate(value: unknown[], params?: DateCreateOptions): Date[];
-export function normalizeIfDate(value: unknown | unknown[], params?: DateCreateOptions): Date | Date[] | undefined {
+export function normalizeIfDate(value: unknown | unknown[], params?: DateCreateOptions): CanUndef<Date | Date[]> {
 	const
 		f = (v) => Object.isString(v) || Object.isNumber(v) || Object.isDate(v);
 

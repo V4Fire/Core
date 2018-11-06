@@ -280,27 +280,27 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	/** @see {Promise.prototype.then} */
 	// @ts-ignore
 	then(
-		onFulfilled?: ((value: T) => Value<T>) | null | undefined,
-		onRejected?: ((reason: unknown) => Value<T>) | null | undefined,
-		abortCb?: OnError | null | undefined
+		onFulfilled?: Nullable<(value: T) => Value<T>>,
+		onRejected?: Nullable<(reason: unknown) => Value<T>>,
+		abortCb?: Nullable<OnError>
 	): Then<T>;
 
 	then<R>(
-		onFulfilled: ((value: T) => Value<T>) | null | undefined,
+		onFulfilled: Nullable<(value: T) => Value<T>>,
 		onRejected: (reason: unknown) => Value<R>,
-		abortCb?: OnError | null | undefined
+		abortCb?: Nullable<OnError>
 	): Then<T | R>;
 
 	then<V>(
 		onFulfilled: (value: T) => Value<V>,
-		onRejected?: ((reason: unknown) => Value<V>) | null | undefined,
-		abortCb?: OnError | null | undefined
+		onRejected?: Nullable<(reason: unknown) => Value<V>>,
+		abortCb?: Nullable<OnError>
 	): Then<V>;
 
 	then<V, R>(
 		onFulfilled: (value: T) => Value<V>,
 		onRejected: (reason: unknown) => Value<R>,
-		abortCb?: OnError | null | undefined
+		abortCb?: Nullable<OnError>
 	): Then<V | R>;
 
 	then(onFulfilled: any, onRejected: any, abortCb: any): any {
@@ -351,7 +351,7 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	}
 
 	/** @see {Promise.prototype.catch} */
-	catch(onRejected?: ((reason: unknown) => Value<T>) | null | undefined): Then<T>;
+	catch(onRejected?: Nullable<(reason: unknown) => Value<T>>): Then<T>;
 	catch<R>(onRejected: (reason: unknown) => Value<R>): Then<R>;
 	catch(onRejected?: any): any {
 		return new Then((res, rej, onAbort) => {

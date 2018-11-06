@@ -46,11 +46,11 @@ export const cache: Record<CacheStrategy, Cache> = {
 };
 
 export const globalOpts: GlobalOptions = {
-	get api(): string | undefined {
+	get api(): CanUndef<string> {
 		return config.api;
 	},
 
-	set api(value: string | undefined) {
+	set api(value: CanUndef<string>) {
 		config.api = value;
 	},
 

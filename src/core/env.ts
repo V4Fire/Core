@@ -18,7 +18,7 @@ export const
  * Returns settings from the app environment by the specified key
  * @param key
  */
-export function get(key: string): Promise<Dictionary | undefined> {
+export function get(key: string): Promise<CanUndef<Dictionary>> {
 	return storage.get(key);
 }
 

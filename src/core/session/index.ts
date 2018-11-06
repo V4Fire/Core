@@ -10,8 +10,8 @@ import session from 'core/session/engines';
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 
 export interface SetEvent {
-	auth: string | undefined;
-	csrf: string | undefined;
+	auth: CanUndef<string>;
+	csrf: CanUndef<string>;
 }
 
 export const
@@ -20,11 +20,11 @@ export const
 /**
  * Returns current session object
  */
-export async function get(): Promise<{auth: string | undefined; csrf: string | undefined}> {
+export async function get(): Promise<{auth: CanUndef<string>; csrf: CanUndef<string>}> {
 	try {
 		return {
-			auth: await session.get<string | undefined>('auth'),
-			csrf: await session.get<string | undefined>('csrf')
+			auth: await session.get<string>('auth'),
+			csrf: await session.get<string>('csrf')
 		};
 
 	} catch {
@@ -42,7 +42,7 @@ export async function get(): Promise<{auth: string | undefined; csrf: string | u
  * @param [csrf]
  * @emits set({auth?: string, csrf?: string})
  */
-export async function set(auth?: string | undefined, csrf?: string | undefined): Promise<boolean> {
+export async function set(auth?: CanUndef<string>, csrf?: CanUndef<string>): Promise<boolean> {
 	try {
 		if (auth) {
 			await session.set('auth', auth);
@@ -84,7 +84,7 @@ export async function clear(): Promise<boolean> {
  * @param [auth]
  * @param [csrf]
  */
-export async function match(auth?: string | undefined, csrf?: string | undefined): Promise<boolean> {
+export async function match(auth?: CanUndef<string>, csrf?: CanUndef<string>): Promise<boolean> {
 	try {
 		const s = await get();
 		return auth === s.auth && csrf === s.csrf;

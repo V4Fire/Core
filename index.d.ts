@@ -12,7 +12,7 @@
 /// <reference types="typescript/lib/lib.esnext"/>
 
 declare const APP_NAME: string;
-declare const API_URL: string | undefined;
+declare const API_URL: CanUndef<string>;
 declare const IS_PROD: boolean;
 declare const LANG: string;
 
@@ -34,7 +34,9 @@ declare function cancelIdleCallback(id: number): void;
 
 type Wrap<T> = T & any;
 type CanPromise<T> = T | Promise<T>;
-interface Dictionary<T> {[key: string]: T | undefined}
+type CanUndef<T> = T | undefined;
+type Nullable<T> = T | null | undefined;
+interface Dictionary<T> {[key: string]: CanUndef<T>}
 interface Dictionary<T extends unknown = unknown> {[key: string]: T}
 
 interface JSONCb {
@@ -68,7 +70,7 @@ interface ObjectConstructor {
 	fastCompare<T>(a: unknown, b: T): a is T;
 	keys(obj: object | Dictionary): string[];
 
-	parse<T, R>(value: T): R | undefined;
+	parse<T, R>(value: T): CanUndef<R>;
 	getPrototypeChain(constructor: Function): object[];
 	fromArray(arr: unknown[]): Dictionary<boolean>;
 

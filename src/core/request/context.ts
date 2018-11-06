@@ -110,7 +110,7 @@ export default class RequestContext<T = unknown> {
 	 * Returns an absolute path to the API for a request
 	 * @param [api] - base api url
 	 */
-	resolveAPI(api: string | null | undefined = globalOpts.api): string {
+	resolveAPI(api: Nullable<string> = globalOpts.api): string {
 		const
 			a = <NonNullable<CreateRequestOptions['api']>>this.params.api,
 			rgxp = /(?:^|(\w+:\/\/)(?:(.*?)\.)?(.*?)\.(.*?))(\/.*|$)/;
@@ -175,7 +175,7 @@ export default class RequestContext<T = unknown> {
 	 * Returns an absolute path for the request
 	 * @param [url] - base request url
 	 */
-	resolveURL(url?: string | null | undefined): string {
+	resolveURL(url?: Nullable<string>): string {
 		if (url == null) {
 			return '';
 		}

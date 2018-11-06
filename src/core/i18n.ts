@@ -48,10 +48,10 @@ if (IS_NODE) {
 	isInitialized = (async () => {
 		try {
 			const
-				l = await storage.get<string | undefined>('lang');
+				l = await storage.get<string>('lang');
 
 			if (l) {
-				setLang(l, await storage.get<boolean | undefined>('isLangDef'));
+				setLang(l, await storage.get<boolean>('isLangDef'));
 				return;
 			}
 

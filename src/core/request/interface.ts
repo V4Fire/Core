@@ -135,11 +135,11 @@ export interface CreateRequestOptions<T = unknown> {
 	offlineCache?: boolean;
 
 	api?: {
-		protocol?: string | null;
-		domain3?: string | null;
-		domain2?: string | null;
-		zone?: string | null;
-		namespace?: string | null;
+		protocol?: Nullable<string>;
+		domain3?: Nullable<string>;
+		domain2?: Nullable<string>;
+		zone?: Nullable<string>;
+		namespace?: Nullable<string>;
 	};
 
 	middlewares?: Middlewares<T>;
@@ -166,6 +166,6 @@ export interface ResponseOptions {
 }
 
 export interface GlobalOptions {
-	api?: string | null | undefined;
+	api?: Nullable<string>;
 	meta: Dictionary;
 }

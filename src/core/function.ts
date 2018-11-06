@@ -14,7 +14,7 @@ try {
 	 * Function.name shim
 	 */
 	Object.defineProperty(Function.prototype, 'name', {
-		get(): string | undefined {
+		get(): CanUndef<string> {
 			const v = fnNameRgxp.exec(this.toString());
 			return v && v[1] || undefined;
 		}

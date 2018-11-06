@@ -33,7 +33,7 @@ export default class RestrictedCache<V = unknown, K = string> extends Cache<V, K
 	}
 
 	/** @override */
-	get(key: K): V | undefined {
+	get(key: K): CanUndef<V> {
 		if (this.has(key)) {
 			this.queue.delete(key);
 			this.queue.add(key);
@@ -60,7 +60,7 @@ export default class RestrictedCache<V = unknown, K = string> extends Cache<V, K
 	}
 
 	/** @override */
-	remove(key: K): V | undefined {
+	remove(key: K): CanUndef<V> {
 		if (this.has(key)) {
 			this.queue.delete(key);
 			return super.remove(key);

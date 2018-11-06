@@ -30,7 +30,7 @@ export default class Cache<V = unknown, K = string> {
 	 * Returns a value from a cache by the specified key
 	 * @param key
 	 */
-	get(key: K): V | undefined {
+	get(key: K): CanUndef<V> {
 		return this.storage.get(key);
 	}
 
@@ -49,7 +49,7 @@ export default class Cache<V = unknown, K = string> {
 	 * Removes a value from a cache by the specified key
 	 * @param key
 	 */
-	remove(key: K): V | undefined {
+	remove(key: K): CanUndef<V> {
 		if (this.has(key)) {
 			const val = this.storage.get(key);
 			this.storage.delete(key);

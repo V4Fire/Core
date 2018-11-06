@@ -15,7 +15,7 @@ const
  * Concatenates the specified parts of URLs, correctly arranging slashes
  * @param urls
  */
-export function concatUrls(...urls: Array<string | null | undefined>): string {
+export function concatUrls(...urls: Nullable<string>[]): string {
 	return $C(urls).filter((e) => e != null && e !== '').to('').reduce((res, url) => {
 		res = String(res);
 		url = String(url);

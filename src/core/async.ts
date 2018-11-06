@@ -1580,7 +1580,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @param destructor - name of destructor method
 	 * @param worker
 	 */
-	protected workerDestructor<T>(destructor: string | undefined, worker: T & WorkerLikeP): void {
+	protected workerDestructor<T>(destructor: CanUndef<string>, worker: T & WorkerLikeP): void {
 		const
 			{workerCache} = this;
 

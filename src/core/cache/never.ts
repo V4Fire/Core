@@ -25,7 +25,7 @@ export default class NeverCache<V = unknown, K = string> extends Cache<V, K> {
 	}
 
 	/** @override */
-	remove(key: K): V | undefined {
+	remove(key: K): CanUndef<V> {
 		return undefined;
 	}
 

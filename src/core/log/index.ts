@@ -34,7 +34,7 @@ export interface LogPreferences extends Dictionary {
 
 export interface LogMessageOptions {
 	key: string;
-	type: string | undefined;
+	type: CanUndef<string>;
 }
 
 /**

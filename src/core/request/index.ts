@@ -131,7 +131,7 @@ export default function create<T>(path: any, ...args: any[]): unknown {
 			wrapRequest: ctx.wrapRequest.bind(ctx),
 
 			// Wrap resolve function with .resolver
-			resolveURL(api?: string | null | undefined): string {
+			resolveURL(api?: Nullable<string>): string {
 				if (/^\w+:/.test(path)) {
 					const
 						dataURI = /^data:([^;]+);/.exec(path),

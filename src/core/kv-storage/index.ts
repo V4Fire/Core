@@ -36,7 +36,7 @@ export interface FactoryResult extends Namespace {
 
 export interface AsyncNamespace {
 	has(key: string): Promise<boolean>;
-	get<T>(key: string): Promise<T>;
+	get<T>(key: string): Promise<CanUndef<T>>;
 	set(key: string, value: unknown, ttl?: number): Promise<void>;
 	remove(key: string): Promise<void>;
 	clear(filter?: (el: string, key: string) => unknown): Promise<void>;
@@ -101,16 +101,16 @@ function factory(storage: Dictionary, async?: boolean): AsyncFactoryResult | Fac
 		throw new TypeError('Invalid storage driver');
 	}
 
-	type WrapFn<T> = (val: T | undefined) => any;
+	type WrapFn<T> = (val: CanUndef<T>) => any;
 	function wrap(val?: undefined): CanPromise<undefined>;
 	function wrap<T>(val: T): CanPromise<T>;
 
 	function wrap<T, R extends WrapFn<T>>(
-		val: T | undefined,
+		val: CanUndef<T>,
 		action: R
-	): CanPromise<R extends (val: T | undefined) => infer R ? R extends Promise<infer RV> ? RV : R : unknown>;
+	): CanPromise<R extends (val: CanUndef<T>) => infer R ? R extends Promise<infer RV> ? RV : R : unknown>;
 
-	function wrap<T, R extends WrapFn<T>>(val?: T | undefined, action?: R): CanPromise<T | ReturnType<R> | undefined> {
+	function wrap<T, R extends WrapFn<T>>(val?: CanUndef<T>, action?: R): CanUndef<CanPromise<T | ReturnType<R>>> {
 		if (async) {
 			return (async () => {
 				val = await val;
