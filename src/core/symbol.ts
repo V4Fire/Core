@@ -25,8 +25,11 @@ export default function generator(fields?: string[]): Dictionary<symbol> {
 
 	return new Proxy(obj, {
 		get(target: typeof obj, prop: string): symbol {
-			if (target[prop]) {
-				return target[prop];
+			const
+				val = target[prop];
+
+			if (val) {
+				return val;
 			}
 
 			return target[prop] = typeof prop === 'symbol' ? prop : Symbol(prop);

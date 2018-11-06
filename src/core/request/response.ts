@@ -343,7 +343,7 @@ export default class Response {
 
 		} else {
 			$C(headers).reduce((value, name) => {
-				if (!value) {
+				if (!value || !name) {
 					return;
 				}
 

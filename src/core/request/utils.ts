@@ -31,7 +31,7 @@ export function getRequestKey(url: string, params?: CreateRequestOptions): strin
 	if (params) {
 		$C(normalizeHeaders(p.headers))
 			.to(plainHeaders)
-			.reduce((res, value, name) => (res.push([name, value.toString()]), res))
+			.reduce((res, value, name) => (res.push([name, String(value)]), res))
 			.sort(([name1], [name2]) => {
 				if (name1 < name2) {
 					return -1;

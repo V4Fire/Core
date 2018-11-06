@@ -21,10 +21,11 @@ try {
 	/** @override */
 	String.prototype.camelize = function (this: string, upper?: boolean): string {
 		const
-			str = this.toString();
+			str = this.toString(),
+			val = camelizeCache[str];
 
-		if (str in camelizeCache) {
-			return camelizeCache[str];
+		if (val !== undefined) {
+			return val;
 		}
 
 		if (needCamelize.test(str)) {
@@ -40,10 +41,11 @@ try {
 	/** @override */
 	String.prototype.dasherize = function (this: string): string {
 		const
-			str = this.toString();
+			str = this.toString(),
+			val = dasherizeCache[str];
 
-		if (str in dasherizeCache) {
-			return dasherizeCache[str];
+		if (val !== undefined) {
+			return val;
 		}
 
 		if (needDasherize.test(str)) {
@@ -59,10 +61,11 @@ try {
 	/** @override */
 	String.prototype.underscore = function (this: string): string {
 		const
-			str = this.toString();
+			str = this.toString(),
+			val = needUnderscore[str];
 
-		if (str in underscoreCache) {
-			return underscoreCache[str];
+		if (val !== undefined) {
+			return val;
 		}
 
 		if (needUnderscore.test(str)) {

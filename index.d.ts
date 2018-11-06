@@ -34,7 +34,8 @@ declare function cancelIdleCallback(id: number): void;
 
 type Wrap<T> = T & any;
 type CanPromise<T> = T | Promise<T>;
-interface Dictionary<T = unknown> {[key: string]: T}
+interface Dictionary<T> {[key: string]: T | undefined}
+interface Dictionary<T extends unknown = unknown> {[key: string]: T}
 
 interface JSONCb {
 	(key: string, value: unknown): unknown;
