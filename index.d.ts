@@ -33,9 +33,10 @@ declare function requestIdleCallback(fn: (deadline: IdleDeadline) => void, opts?
 declare function cancelIdleCallback(id: number): void;
 
 type Wrap<T> = T & any;
+type Nullable<T> = T | null | undefined;
 type CanPromise<T> = T | Promise<T>;
 type CanUndef<T> = T | undefined;
-type Nullable<T> = T | null | undefined;
+type CanArray<T> = T | T[];
 
 interface StrictDictionary<T = unknown> {[key: string]: T}
 interface Dictionary<T> {[key: string]: CanUndef<T>}
