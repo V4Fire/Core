@@ -49,7 +49,7 @@ export default function create<T>(opts: CreateRequestOptions<T>): typeof create;
  * @param resolver - request resolve function
  * @param opts
  */
-export default function create<T, A extends unknown[]>(
+export default function create<T, A extends unknown[] = unknown[]>(
 	path: string,
 	resolver: (url: string, opts: CreateRequestOptions<T>, ...args: A) => ResolverResult,
 	opts?: CreateRequestOptions<T>

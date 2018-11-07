@@ -40,7 +40,7 @@ Object.createDict = function (...fields: unknown[]): Dictionary {
  * Parses the specified value as a JSON / JS object and returns the result
  * @param value
  */
-Object.parse = function parse<T, R>(value: T): CanUndef<R> {
+Object.parse = function parse<V, R = unknown>(value: V): CanUndef<R> {
 	try {
 		return new Function(`return ${value}`)();
 	} catch {}

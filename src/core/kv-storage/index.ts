@@ -18,8 +18,8 @@ export const
 export const
 	{get, set, remove, namespace} = local;
 
-export interface ClearFilter {
-	(el: string, key: string): unknown;
+export interface ClearFilter<T = unknown> {
+	(el: T, key: string): unknown;
 }
 
 export interface Namespace {
@@ -27,7 +27,7 @@ export interface Namespace {
 	get<T>(key: string): T;
 	set(key: string, value: unknown): void;
 	remove(key: string): void;
-	clear(filter?: ClearFilter): void;
+	clear<T>(filter?: ClearFilter<T>): void;
 }
 
 export interface FactoryResult extends Namespace {
@@ -39,7 +39,7 @@ export interface AsyncNamespace {
 	get<T>(key: string): Promise<CanUndef<T>>;
 	set(key: string, value: unknown, ttl?: number): Promise<void>;
 	remove(key: string): Promise<void>;
-	clear(filter?: (el: string, key: string) => unknown): Promise<void>;
+	clear<T>(filter?: ClearFilter<T>): Promise<void>;
 }
 
 export interface AsyncFactoryResult extends AsyncNamespace {
@@ -192,12 +192,12 @@ function factory(storage: Dictionary, async?: boolean): AsyncFactoryResult | Fac
 		 * @param [filter] - filter for removing (if not defined, then the storage will be cleared)
 		 * @param [args]
 		 */
-		clear(filter?: Function, ...args: unknown[]): CanPromise<void> {
+		clear<T>(filter?: ClearFilter<T>, ...args: unknown[]): CanPromise<void> {
 			if (filter || !clear) {
 				return wrap(keys(), async (keys) => {
 					for (const key of keys) {
 						const
-							el = await obj.get(key);
+							el = await obj.get<T>(key);
 
 						if (!filter || filter(el, key)) {
 							await remove(key, ...args);
@@ -234,7 +234,7 @@ function factory(storage: Dictionary, async?: boolean): AsyncFactoryResult | Fac
 					return obj.remove(k(key), ...args);
 				},
 
-				clear(filter?: Function, ...args: unknown[]): CanPromise<void> {
+				clear<T>(filter?: ClearFilter<T>, ...args: unknown[]): CanPromise<void> {
 					return wrap(keys(), async (keys) => {
 						for (const key of keys) {
 							if (key.split('.')[0] !== name) {
@@ -242,7 +242,7 @@ function factory(storage: Dictionary, async?: boolean): AsyncFactoryResult | Fac
 							}
 
 							const
-								el = await obj.get(key);
+								el = await obj.get<T>(key);
 
 							if (!filter || filter(el, key)) {
 								await remove(key, ...args);

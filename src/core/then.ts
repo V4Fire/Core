@@ -417,7 +417,7 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	 * @param [onError] - error handler
 	 * @param [onValue] - success handler
 	 */
-	protected evaluate<A, V>(
+	protected evaluate<A, V = unknown>(
 		fn: (...args: A[]) => V,
 		args: A[] = [],
 		onError?: OnError,
