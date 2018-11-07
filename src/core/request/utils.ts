@@ -100,7 +100,7 @@ export function normalizeHeaderValue(value: unknown, query?: Dictionary): string
  * @param headers
  * @param [query] - request query object (for key/value interpolation)
  */
-export function normalizeHeaders(headers: CanUndef<Dictionary>, query?: Dictionary): Dictionary<string | string[]> {
+export function normalizeHeaders(headers: CanUndef<Dictionary>, query?: Dictionary): Dictionary<CanArray<string>> {
 	return $C(headers).to({}).reduce((res, val, name) => {
 		if (Object.isArray(val)) {
 			val = $C(val).to([]).reduce((arr, val) => {

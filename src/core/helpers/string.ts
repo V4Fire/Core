@@ -30,7 +30,7 @@ const
  */
 export function pluralize(num: number, one: string, two: string, five: string): string;
 export function pluralize(num: number, variants: [string, string, string]): string;
-export function pluralize(n: number, opts: string | string[], ...rest: string[]): string {
+export function pluralize(n: number, opts: CanArray<string>, ...rest: string[]): string {
 	let one, two, five;
 
 	if (Object.isArray(opts)) {

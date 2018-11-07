@@ -89,7 +89,7 @@ export interface RequestOptions {
 	readonly contentType?: string;
 	readonly responseType?: ResponseTypes;
 	readonly decoder?: Decoder | Decoder[];
-	readonly headers?: Dictionary<string | string[]>;
+	readonly headers?: Dictionary<CanArray<string>>;
 	readonly body?: RequestBody;
 	readonly credentials?: boolean;
 	readonly parent: Then;
