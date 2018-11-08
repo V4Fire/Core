@@ -24,7 +24,7 @@ export function normalizeIfDate(value: unknown, params?: DateCreateOptions): Can
  * @param [params] - additional parameters for Date.create
  */
 export function normalizeIfDate(value: unknown[], params?: DateCreateOptions): Date[];
-export function normalizeIfDate(value: unknown | unknown[], params?: DateCreateOptions): CanUndef<Date | Date[]> {
+export function normalizeIfDate(value: CanArray<unknown>, params?: DateCreateOptions): CanUndef<CanArray<Date>> {
 	const
 		f = (v) => Object.isString(v) || Object.isNumber(v) || Object.isDate(v);
 

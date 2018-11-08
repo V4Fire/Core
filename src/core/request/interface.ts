@@ -125,7 +125,7 @@ export interface CreateRequestOptions<T = unknown> {
 
 	body?: RequestBody;
 	query?: RequestQuery;
-	headers?: Dictionary<unknown | unknown[]>;
+	headers?: Dictionary<CanArray<unknown>>;
 	credentials?: boolean;
 
 	timeout?: number;
