@@ -86,7 +86,7 @@ export function chunkToQueryString(data: unknown, prfx: string = ''): string {
 		return reduce(data);
 	}
 
-	if (Object.isTable(data)) {
+	if (Object.isObject(data)) {
 		return reduce(Object.keys(data));
 	}
 

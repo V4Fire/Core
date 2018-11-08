@@ -335,8 +335,9 @@ Object.isPromise = function isPromise(obj: unknown): obj is Promise<unknown> {
 		return true;
 	}
 
-	if (Object.isTable(obj)) {
-		return Object.isFunction(obj.then) && Object.isFunction(obj.catch);
+	if (obj instanceof Object) {
+		const v = <Dictionary>obj;
+		return Object.isFunction(v.then) && Object.isFunction(v.catch);
 	}
 
 	return false;

@@ -187,7 +187,7 @@ export default class RequestContext<T = unknown> {
 		const data = this.withoutBody ?
 			q : Object.isObject(p.body) ? p.body : q;
 
-		if (Object.isTable(data)) {
+		if (Object.isObject(data)) {
 			if (p.headers) {
 				p.headers = normalizeHeaders(p.headers, data);
 			}
