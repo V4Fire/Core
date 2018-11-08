@@ -40,8 +40,8 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	 * @param obj
 	 */
 	static isThenable(obj: unknown): obj is PromiseLike<unknown> {
-		if (Object.isTable(obj)) {
-			return Object.isFunction(obj.then);
+		if (obj instanceof Object) {
+			return Object.isFunction((<Dictionary>obj).then);
 		}
 
 		return false;

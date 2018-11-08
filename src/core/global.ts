@@ -21,8 +21,8 @@ GLOBAL.Any = function Any(obj: unknown): any {
  * @param err
  */
 GLOBAL.stderr = function stderr(err: unknown): void {
-	if (Object.isTable(err)) {
-		if ({clearAsync: true, abort: true}[String(err.type)]) {
+	if (err instanceof Object) {
+		if ({clearAsync: true, abort: true}[String((<Dictionary>err).type)]) {
 			return;
 		}
 

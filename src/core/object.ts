@@ -342,15 +342,10 @@ Object.isPromise = function isPromise(obj: unknown): obj is Promise<unknown> {
 	return false;
 };
 
-const
-	classRgxp = /\[object ([^\s]*)]/,
-	primitives = {boolean: true, number: true, string: true, symbol: true, null: true, undefined: true};
-
 /**
  * Returns true if the specified object is a hash table
  * @param obj
  */
 Object.isTable = function isTable(obj: unknown): obj is Dictionary {
-	const v = classRgxp.exec(toString.call(obj));
-	return Boolean(v && primitives[v[1].toLowerCase()]);
+	return toString.call(obj) === '[object Object]';
 };
