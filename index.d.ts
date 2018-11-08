@@ -73,7 +73,7 @@ interface ObjectConstructor {
 	fastCompare<T = unknown>(a: unknown, b: T): a is T;
 	keys(obj: object | Dictionary): string[];
 
-	parse<T = unknown, R = unknown>(value: T): CanUndef<R>;
+	parse<V = unknown, R = unknown>(value: V): CanUndef<R>;
 	getPrototypeChain(constructor: Function): object[];
 	fromArray(arr: unknown[]): Dictionary<boolean>;
 
