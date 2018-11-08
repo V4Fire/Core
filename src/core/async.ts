@@ -145,10 +145,11 @@ export interface EventEmitterLike {
 export type WorkerLikeP = Function | WorkerLike;
 export type EventEmitterLikeP = Function | EventEmitterLike;
 
-export type IdleCb<R = unknown, CTX extends object = Async> = (this: CTX, deadline: IdleDeadline) => R;
-export type ProxyCb<T = unknown, R = unknown, CTX extends object = Async> = T extends never ?
-	((this: CTX) => R) : T extends unknown[] ?
-		((this: CTX, ...args: T) => R) : ((this: CTX, e: T) => R);
+export type ProxyCb<A = unknown, R = unknown, CTX extends object = Async> = A extends never ?
+	((this: CTX) => R) : A extends unknown[] ?
+		((this: CTX, ...args: A) => R) : ((this: CTX, e: A) => R);
+
+export type IdleCb<R = unknown, CTX extends object = Async> = ProxyCb<IdleDeadline, R, CTX>;
 
 export interface CancelablePromise<T> extends Promise<T> {
 	abort?: Function;
