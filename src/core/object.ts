@@ -323,20 +323,24 @@ Object.isWeakSet = function isWeakSet(obj: unknown): obj is WeakSet<object> {
 	return obj instanceof WeakSet;
 };
 
+const
+	toString = Object.prototype.toString;
+
 /**
  * Returns true if the specified object is Promise
  * @param obj
  */
 Object.isPromise = function isPromise(obj: unknown): obj is Promise<unknown> {
+	if (toString.call(obj) === '[object Promise]') {
+		return true;
+	}
+
 	if (Object.isTable(obj)) {
 		return Object.isFunction(obj.then) && Object.isFunction(obj.catch);
 	}
 
 	return false;
 };
-
-const
-	toString = Object.prototype.toString;
 
 /**
  * Returns true if the specified object is a hash table
