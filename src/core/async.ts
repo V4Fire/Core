@@ -285,7 +285,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	/**
 	 * Unmutes a setImmediate operation
-	 * @param [id] - operation id (if not defined will be unmute all handlers)
+	 * @param [id] - operation id (if not defined will be get all handlers)
 	 */
 	unmuteImmediate(id?: number | object): this;
 
