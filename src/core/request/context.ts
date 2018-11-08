@@ -192,7 +192,7 @@ export default class RequestContext<T = unknown> {
 				p.headers = normalizeHeaders(p.headers, data);
 			}
 
-			url = applyQueryForStr(url, data, /\/:(.+?)(\(.*?\))?(?=\/|$)/g);
+			url = applyQueryForStr(url, data, /\/:(.+?)(\(.*?\))?(?=[\\/.?#]|$)/g);
 
 		} else if (p.headers) {
 			p.headers = normalizeHeaders(p.headers);
