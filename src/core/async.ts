@@ -147,7 +147,7 @@ export type EventEmitterLikeP = Function | EventEmitterLike;
 
 export type ProxyCb<A = unknown, R = unknown, CTX extends object = Async> = A extends never ?
 	((this: CTX) => R) : A extends unknown[] ?
-		((this: CTX, ...args: A) => R) : ((this: CTX, e: A) => R);
+		((this: CTX, ...args: A) => R) : ((this: CTX, e: A) => R) | Function;
 
 export type IdleCb<R = unknown, CTX extends object = Async> = ProxyCb<IdleDeadline, R, CTX>;
 
