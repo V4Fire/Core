@@ -1208,7 +1208,7 @@ export default class Async<CTX extends object = Async<any>> {
 		...args: unknown[]
 	): object;
 
-	on<E = unknown, R = unknown>(
+	on<E, R>(
 		emitter: EventEmitterLikeP,
 		events: CanArray<string>,
 		cb: ProxyCb<E, R, CTX>,
@@ -1321,7 +1321,7 @@ export default class Async<CTX extends object = Async<any>> {
 		...args: unknown[]
 	): object;
 
-	once<E = unknown, R = unknown>(
+	once<E, R>(
 		emitter: EventEmitterLikeP,
 		events: CanArray<string>,
 		handler: ProxyCb<E, R, CTX>,
@@ -1370,7 +1370,7 @@ export default class Async<CTX extends object = Async<any>> {
 		...args: unknown[]
 	): Promise<T>;
 
-	promisifyOnce<T = unknown>(
+	promisifyOnce<T>(
 		emitter: EventEmitterLikeP,
 		events: CanArray<string>,
 		p: any,
