@@ -563,7 +563,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 *   *) [group] - group name for the task
 	 *   *) [onClear] - clear handler
 	 */
-	requestIdleCallback<R>(
+	requestIdleCallback<R = unknown>(
 		fn: IdleCb<R, CTX>,
 		params?: AsyncCreateIdleOpts<CTX>
 	): number | object {
@@ -724,7 +724,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 *   *) [label] - label for the task (previous task with the same label will be canceled)
 	 *   *) [group] - group name for the task
 	 */
-	request<T>(request: (() => PromiseLike<T>) | PromiseLike<T>, params?: AsyncOpts): Promise<T> {
+	request<T = unknown>(request: (() => PromiseLike<T>) | PromiseLike<T>, params?: AsyncOpts): Promise<T> {
 		return this.promise(request, {...params, name: Async.linkNames.request});
 	}
 
@@ -825,7 +825,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 *   *) [single] - if false, then after first invocation the proxy it won't be removed
 	 *   *) [onClear] - clear handler
 	 */
-	proxy<A, R = unknown>(cb: Function, params?: AsyncProxyOpts<CTX>): ProxyCb<A, R, CTX> {
+	proxy<A = unknown, R = unknown>(cb: Function, params?: AsyncProxyOpts<CTX>): ProxyCb<A, R, CTX> {
 		const p = params || {};
 		return this.setAsync({
 			...params,
@@ -939,7 +939,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 *   *) [label] - label for the task (previous task with the same label will be canceled)
 	 *   *) [group] - group name for the task
 	 */
-	promise<T>(promise: (() => PromiseLike<T>) | PromiseLike<T>, params?: AsyncPromiseOpts): Promise<T> {
+	promise<T = unknown>(promise: (() => PromiseLike<T>) | PromiseLike<T>, params?: AsyncPromiseOpts): Promise<T> {
 		const
 			p = <AsyncPromiseOpts>({name: Async.linkNames.promise, ...params});
 
@@ -994,7 +994,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 *   *) [label] - label for the task
 	 *   *) [group] - group name for the task
 	 */
-	cancelPromise<T>(params: ClearProxyOpts<Function>): this;
+	cancelPromise(params: ClearProxyOpts<Function>): this;
 	cancelPromise(p: any): this {
 		return this.clearAsync(p, isParams<ClearProxyOpts>(p) && p.name || Async.linkNames.promise);
 	}
@@ -1179,7 +1179,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @param handler - event handler
 	 * @param [args] - additional arguments for the emitter
 	 */
-	on<E, R = unknown>(
+	on<E = unknown, R = unknown>(
 		emitter: EventEmitterLikeP,
 		events: CanArray<string>,
 		handler: ProxyCb<E, R, CTX>,
@@ -1200,7 +1200,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 *
 	 * @param [args] - additional arguments for the emitter
 	 */
-	on<E, R = unknown>(
+	on<E = unknown, R = unknown>(
 		emitter: EventEmitterLikeP,
 		events: CanArray<string>,
 		handler: ProxyCb<E, R, CTX>,
@@ -1208,7 +1208,7 @@ export default class Async<CTX extends object = Async<any>> {
 		...args: unknown[]
 	): object;
 
-	on<E, R>(
+	on<E = unknown, R = unknown>(
 		emitter: EventEmitterLikeP,
 		events: CanArray<string>,
 		cb: ProxyCb<E, R, CTX>,
@@ -1293,7 +1293,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @param handler - event handler
 	 * @param [args] - additional arguments for the emitter
 	 */
-	once<E, R = unknown>(
+	once<E = unknown, R = unknown>(
 		emitter: EventEmitterLikeP,
 		events: CanArray<string>,
 		handler: ProxyCb<E, R, CTX>,
@@ -1313,7 +1313,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 *
 	 * @param [args] - additional arguments for the emitter
 	 */
-	once<E, R = unknown>(
+	once<E = unknown, R = unknown>(
 		emitter: EventEmitterLikeP,
 		events: CanArray<string>,
 		handler: ProxyCb<E, R, CTX>,
@@ -1321,7 +1321,7 @@ export default class Async<CTX extends object = Async<any>> {
 		...args: unknown[]
 	): object;
 
-	once<E, R>(
+	once<E = unknown, R = unknown>(
 		emitter: EventEmitterLikeP,
 		events: CanArray<string>,
 		handler: ProxyCb<E, R, CTX>,
@@ -1352,7 +1352,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 *
 	 * @param [args] - additional arguments for the emitter
 	 */
-	promisifyOnce<T>(
+	promisifyOnce<T = unknown>(
 		emitter: EventEmitterLikeP,
 		events: CanArray<string>,
 		params: AsyncOpts & {options?: AddEventListenerOptions},
@@ -1364,13 +1364,18 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @param events - event or a list of events (can also specify multiple events with a space)
 	 * @param [args] - additional arguments for the emitter
 	 */
-	promisifyOnce<R>(
+	promisifyOnce<T = unknown>(
 		emitter: EventEmitterLikeP,
 		events: CanArray<string>,
 		...args: unknown[]
-	): Promise<R>;
+	): Promise<T>;
 
-	promisifyOnce<R>(emitter: EventEmitterLikeP, events: CanArray<string>, p: any, ...args: unknown[]): Promise<R> {
+	promisifyOnce<T = unknown>(
+		emitter: EventEmitterLikeP,
+		events: CanArray<string>,
+		p: any,
+		...args: unknown[]
+	): Promise<T> {
 		if (p !== undefined && !Object.isObject(p)) {
 			args.unshift(p);
 			p = undefined;

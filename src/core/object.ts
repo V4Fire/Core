@@ -40,7 +40,7 @@ Object.createDict = function (...fields: unknown[]): Dictionary {
  * Parses the specified value as a JSON / JS object and returns the result
  * @param value
  */
-Object.parse = function parse<V, R = unknown>(value: V): CanUndef<R> {
+Object.parse = function parse<V = unknown, R = unknown>(value: V): CanUndef<R> {
 	try {
 		return new Function(`return ${value}`)();
 	} catch {}
@@ -57,7 +57,7 @@ Object.parse = function parse<V, R = unknown>(value: V): CanUndef<R> {
  *   *) [reviver] - JSON.parse reviver (false for disable defaults)
  *   *) [freezable] - if false the object freeze state wont be copy
  */
-Object.fastClone = function fastClone<T>(obj: T, params?: FastCloneParams): T {
+Object.fastClone = function fastClone<T = unknown>(obj: T, params?: FastCloneParams): T {
 	const
 		p = params || {};
 

@@ -14,7 +14,7 @@ import { RequestOptions } from 'core/request/interface';
  * Creates request by node.js with the specified parameters and returns a promise
  * @param params
  */
-export default function createTransport<T>(params: RequestOptions): Then<Response> {
+export default function createTransport(params: RequestOptions): Then<Response> {
 	// TODO: implement for node.js
 	return Then.resolve(new Response());
 }

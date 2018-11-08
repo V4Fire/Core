@@ -17,7 +17,7 @@ import { RequestOptions } from 'core/request/interface';
  * Creates request by XMLHttpRequest with the specified parameters and returns a promise
  * @param params
  */
-export default function createTransport<T>(params: RequestOptions): Then<Response> {
+export default function createTransport(params: RequestOptions): Then<Response> {
 	const
 		p = params,
 		xhr = new XMLHttpRequest();

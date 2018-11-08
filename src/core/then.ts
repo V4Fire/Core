@@ -53,7 +53,7 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	 * @param [value] - if function, it will be executed
 	 * @param [parent] - parent promise
 	 */
-	static immediate<T>(value?: ExecValue<T>, parent?: Then): Then<T> {
+	static immediate<T = unknown>(value?: ExecValue<T>, parent?: Then): Then<T> {
 		return new Then((res, rej, onAbort) => {
 			const id = setImmediate(() => {
 				res(value && Object.isFunction(value) ? (<Function>value)() : value);
@@ -74,7 +74,7 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	 * @param value
 	 * @param [parent] - parent promise
 	 */
-	static resolve<T>(value?: Value<T>, parent?: Then): Then<T> {
+	static resolve<T = unknown>(value?: Value<T>, parent?: Then): Then<T> {
 		if (value instanceof Then) {
 			if (parent) {
 				parent.catch((err) => value.abort(err));
@@ -99,7 +99,7 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	 * @param reason
 	 * @param [parent] - parent promise
 	 */
-	static reject<T>(reason?: Value<T>, parent?: Then): Then<never> {
+	static reject<T = unknown>(reason?: Value<T>, parent?: Then): Then<never> {
 		return new Then((res, rej) => rej(reason), parent);
 	}
 
@@ -353,7 +353,7 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	/** @see {Promise.prototype.catch} */
 	catch(onRejected?: Nullable<(reason: unknown) => Value<T>>): Then<T>;
 	catch<R>(onRejected: (reason: unknown) => Value<R>): Then<R>;
-	catch(onRejected?: any): any {
+	catch(onRejected?: any): Then<any> {
 		return new Then((res, rej, onAbort) => {
 			let
 				reject;
@@ -417,7 +417,7 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	 * @param [onError] - error handler
 	 * @param [onValue] - success handler
 	 */
-	protected evaluate<A, V = unknown>(
+	protected evaluate<A = unknown, V = unknown>(
 		fn: (...args: A[]) => V,
 		args: A[] = [],
 		onError?: OnError,

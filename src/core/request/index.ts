@@ -36,26 +36,26 @@ export { default as Response } from 'core/request/response';
  * @param path
  * @param opts
  */
-export default function create<T>(path: string, opts?: CreateRequestOptions<T>): RequestResponse<T>;
+export default function create<T = unknown>(path: string, opts?: CreateRequestOptions<T>): RequestResponse<T>;
 
 /**
  * Creates a request wrapper by the specified options
  * @param opts
  */
-export default function create<T>(opts: CreateRequestOptions<T>): typeof create;
+export default function create<T = unknown>(opts: CreateRequestOptions<T>): typeof create;
 
 /**
  * @param path
  * @param resolver - request resolve function
  * @param opts
  */
-export default function create<T, A extends unknown[] = unknown[]>(
+export default function create<T = unknown, A extends unknown[] = unknown[]>(
 	path: string,
 	resolver: (url: string, opts: CreateRequestOptions<T>, ...args: A) => ResolverResult,
 	opts?: CreateRequestOptions<T>
 ): RequestFunctionResponse<T, A extends (infer V)[] ? V[] : unknown[]>;
 
-export default function create<T>(path: any, ...args: any[]): unknown {
+export default function create<T = unknown>(path: any, ...args: any[]): unknown {
 	const merge = (...args: unknown[]) => Object.mixin({
 		deep: true,
 		concatArray: true,

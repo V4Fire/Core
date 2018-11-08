@@ -57,29 +57,29 @@ interface FastCloneParams {
 }
 
 interface ObjectConstructor {
-	mixin<D, K, V>(
+	mixin<D = unknown, K = unknown, V = unknown>(
 		params: CollectionJS.ExtendParams<D, K, V> & CollectionJS.Async,
 		target?: D,
 		...source: unknown[]
 	): CollectionJS.ThreadObj<D & CollectionJS.AnyRecord>;
 
-	mixin<D, K, V>(
+	mixin<D = unknown, K = unknown, V = unknown>(
 		deepOrParams: boolean | CollectionJS.ExtendParams<D, K, V>,
 		target?: D,
 		...source: unknown[]
 	): D & CollectionJS.AnyRecord;
 
-	fastClone<T>(obj: T, params?: FastCloneParams): T;
-	fastCompare<T>(a: unknown, b: T): a is T;
+	fastClone<T = unknown>(obj: T, params?: FastCloneParams): T;
+	fastCompare<T = unknown>(a: unknown, b: T): a is T;
 	keys(obj: object | Dictionary): string[];
 
-	parse<T, R>(value: T): CanUndef<R>;
+	parse<T = unknown, R = unknown>(value: T): CanUndef<R>;
 	getPrototypeChain(constructor: Function): object[];
 	fromArray(arr: unknown[]): Dictionary<boolean>;
 
 	createMap<T extends object>(obj: T): T & Dictionary;
-	createDict<T>(fields: T): {[P in keyof T]: T[P]};
-	createDict<T>(): Dictionary<T>;
+	createDict<T extends Dictionary>(fields: T): {[P in keyof T]: T[P]};
+	createDict<T = unknown>(): Dictionary<T>;
 	createDict(...fields: unknown[]): Dictionary;
 
 	isObject(obj: unknown): obj is object;

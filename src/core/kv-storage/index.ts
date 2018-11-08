@@ -24,10 +24,10 @@ export interface ClearFilter<T = unknown> {
 
 export interface Namespace {
 	has(key: string): boolean;
-	get<T>(key: string): T;
+	get<T = unknown>(key: string): T;
 	set(key: string, value: unknown): void;
 	remove(key: string): void;
-	clear<T>(filter?: ClearFilter<T>): void;
+	clear<T = unknown>(filter?: ClearFilter<T>): void;
 }
 
 export interface FactoryResult extends Namespace {
@@ -36,10 +36,10 @@ export interface FactoryResult extends Namespace {
 
 export interface AsyncNamespace {
 	has(key: string): Promise<boolean>;
-	get<T>(key: string): Promise<CanUndef<T>>;
+	get<T = unknown>(key: string): Promise<CanUndef<T>>;
 	set(key: string, value: unknown, ttl?: number): Promise<void>;
 	remove(key: string): Promise<void>;
-	clear<T>(filter?: ClearFilter<T>): Promise<void>;
+	clear<T = unknown>(filter?: ClearFilter<T>): Promise<void>;
 }
 
 export interface AsyncFactoryResult extends AsyncNamespace {
