@@ -145,8 +145,8 @@ export interface EventEmitterLike {
 export type WorkerLikeP = Function | WorkerLike;
 export type EventEmitterLikeP = Function | EventEmitterLike;
 
-export type IdleCb<CTX extends object = Async, R = unknown> = (this: CTX, deadline: IdleDeadline) => R;
-export type ProxyCb<CTX extends object = Async, T = unknown, R = unknown> = T extends never ?
+export type IdleCb<R = unknown, CTX extends object = Async> = (this: CTX, deadline: IdleDeadline) => R;
+export type ProxyCb<T = unknown, R = unknown, CTX extends object = Async> = T extends never ?
 	((this: CTX) => R) : T extends unknown[] ?
 		((this: CTX, ...args: T) => R) : ((this: CTX, e: T) => R);
 
@@ -563,7 +563,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 *   *) [onClear] - clear handler
 	 */
 	requestIdleCallback<R>(
-		fn: IdleCb<CTX, R>,
+		fn: IdleCb<R, CTX>,
 		params?: AsyncCreateIdleOpts<CTX>
 	): number | object {
 		return this.setAsync({
@@ -824,7 +824,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 *   *) [single] - if false, then after first invocation the proxy it won't be removed
 	 *   *) [onClear] - clear handler
 	 */
-	proxy<A, R = unknown>(cb: Function, params?: AsyncProxyOpts<CTX>): ProxyCb<CTX, A, R> {
+	proxy<A, R = unknown>(cb: Function, params?: AsyncProxyOpts<CTX>): ProxyCb<A, R, CTX> {
 		const p = params || {};
 		return this.setAsync({
 			...params,
@@ -1181,7 +1181,7 @@ export default class Async<CTX extends object = Async<any>> {
 	on<E, R = unknown>(
 		emitter: EventEmitterLikeP,
 		events: CanArray<string>,
-		handler: ProxyCb<CTX, E, R>,
+		handler: ProxyCb<E, R, CTX>,
 		...args: unknown[]
 	): object;
 
@@ -1202,7 +1202,7 @@ export default class Async<CTX extends object = Async<any>> {
 	on<E, R = unknown>(
 		emitter: EventEmitterLikeP,
 		events: CanArray<string>,
-		handler: ProxyCb<CTX, E, R>,
+		handler: ProxyCb<E, R, CTX>,
 		params: AsyncOnOpts<CTX>,
 		...args: unknown[]
 	): object;
@@ -1210,7 +1210,7 @@ export default class Async<CTX extends object = Async<any>> {
 	on<E, R>(
 		emitter: EventEmitterLikeP,
 		events: CanArray<string>,
-		cb: ProxyCb<CTX, E, R>,
+		cb: ProxyCb<E, R, CTX>,
 		p: any,
 		...args: unknown[]
 	): object {
@@ -1295,7 +1295,7 @@ export default class Async<CTX extends object = Async<any>> {
 	once<E, R = unknown>(
 		emitter: EventEmitterLikeP,
 		events: CanArray<string>,
-		handler: ProxyCb<CTX, E, R>,
+		handler: ProxyCb<E, R, CTX>,
 		...args: unknown[]
 	): object;
 
@@ -1315,7 +1315,7 @@ export default class Async<CTX extends object = Async<any>> {
 	once<E, R = unknown>(
 		emitter: EventEmitterLikeP,
 		events: CanArray<string>,
-		handler: ProxyCb<CTX, E, R>,
+		handler: ProxyCb<E, R, CTX>,
 		params: AsyncOnceOpts<CTX>,
 		...args: unknown[]
 	): object;
@@ -1323,7 +1323,7 @@ export default class Async<CTX extends object = Async<any>> {
 	once<E, R>(
 		emitter: EventEmitterLikeP,
 		events: CanArray<string>,
-		handler: ProxyCb<CTX, E, R>,
+		handler: ProxyCb<E, R, CTX>,
 		p: any,
 		...args: unknown[]
 	): object {
