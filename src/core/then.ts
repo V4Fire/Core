@@ -423,12 +423,24 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 		onError?: OnError,
 		onValue?: (value: V) => void
 	): void {
+		const
+			loopback = () => undefined,
+			reject = onError || loopback,
+			resolve = onValue || loopback;
+
 		try {
-			const v = fn(...args);
-			onValue && onValue(v);
+			const
+				v = fn(...args);
+
+			if (Object.isPromise(v)) {
+				v.then(<any>resolve, reject);
+
+			} else {
+				resolve(v);
+			}
 
 		} catch (err) {
-			onError && onError(err);
+			reject(err);
 		}
 	}
 }
