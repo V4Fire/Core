@@ -42,6 +42,10 @@ interface StrictDictionary<T = unknown> {[key: string]: T}
 interface Dictionary<T> {[key: string]: CanUndef<T>}
 interface Dictionary<T extends unknown = unknown> {[key: string]: T}
 
+type DictionaryType<T extends Dictionary> = T extends Dictionary<infer V> ? NonNullable<V> : T;
+type IterableType<T extends Iterable<unknown>> = T extends Iterable<infer V> ? V : T;
+type PromiseType<T extends Promise<unknown>> = T extends Promise<infer V> ? V : T;
+
 interface JSONCb {
 	(key: string, value: unknown): unknown;
 }
