@@ -42,7 +42,7 @@ export async function get(): Promise<{auth: CanUndef<string>; csrf: CanUndef<str
  * @param [csrf]
  * @emits set({auth?: string, csrf?: string})
  */
-export async function set(auth?: CanUndef<string>, csrf?: CanUndef<string>): Promise<boolean> {
+export async function set(auth?: string, csrf?: string): Promise<boolean> {
 	try {
 		if (auth) {
 			await session.set('auth', auth);
@@ -84,7 +84,7 @@ export async function clear(): Promise<boolean> {
  * @param [auth]
  * @param [csrf]
  */
-export async function match(auth?: CanUndef<string>, csrf?: CanUndef<string>): Promise<boolean> {
+export async function match(auth?: string, csrf?: string): Promise<boolean> {
 	try {
 		const s = await get();
 		return auth === s.auth && csrf === s.csrf;
