@@ -1,0 +1,5 @@
+**/*.ts
+dist/**
+src/*/**/index.js
+src/*/**/*.index.js
+src/**/*_es5.js
