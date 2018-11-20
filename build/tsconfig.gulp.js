@@ -91,6 +91,10 @@ module.exports = function (gulp) {
 						const parentSrc = isNodeModule(config.extends) ?
 							find(path.join('node_modules', config.extends)) : require.resolve(config.extends);
 
+						if (!parentSrc) {
+							throw new ReferenceError(`Parent config for inheritance "${config.extends}" is not find`);
+						}
+
 						const
 							parent = resolveExtends(tsconfig.parse(fs.readFileSync(parentSrc, 'utf-8'), parentSrc));
 
