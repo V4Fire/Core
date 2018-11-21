@@ -43,7 +43,9 @@ export type ResponseType =
 	undefined;
 
 export type RequestBody =
-	string | number | boolean |
+	string |
+	number |
+	boolean |
 	Dictionary |
 	FormData |
 	ArrayBuffer;
