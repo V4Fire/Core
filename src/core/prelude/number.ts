@@ -56,35 +56,66 @@ for (let i = 0; i < cssMethods.length; i++) {
 }
 
 /** @see Sugar.Number.floor */
-extend(Number.prototype, 'floor', function (this: Number, precision?: number): number {
-	const
-		v = Number(this);
+extend(Number.prototype, 'floor', createRoundingFunction(Math.floor));
 
-	if (precision) {
-		if (precision > 0) {
-			return Number(v.toFixed(precision));
-		}
+/** @see Sugar.Number.round */
+extend(Number.prototype, 'round', createRoundingFunction(Math.round));
 
-		const
-			s = v.toFixed().replace(new RegExp(`\\d{0,${Math.abs(precision)}}$`), collapse);
+/** @see Sugar.Number.ceil */
+extend(Number.prototype, 'ceil', createRoundingFunction(Math.ceil));
 
-		if (s[0] === '0') {
-			return 0;
-		}
-
-		return Number(s);
-	}
-
-	return Math.floor(v);
+const opts = Object.createDict({
+	decimal: '.',
+	thousands: ','
 });
 
-function collapse(str: string): string {
+/** @see Sugar.Number.setOption */
+extend(Number, 'getOption', (key: string) => opts[key]);
+extend(Number, 'setOption', (key: string, val: string) => opts[key] = val);
+
+/** @see Sugar.Number.floor */
+extend(Number.prototype, 'format', function (this: Number, place?: number): string {
+	const
+		val = Number(this),
+		str = place !== undefined ? val.toFixed(place) : val.toString(),
+		[int, dec] = str.split('.');
+
 	let
 		res = '';
 
-	for (let i = 0; i < str.length; i++) {
-		res += '0';
+	for (let j = 0, i = int.length; i--;) {
+		if (j === 3) {
+			j = 0;
+			res = opts.thousands + res;
+		}
+
+		j++;
+		res = int[i] + res;
+	}
+
+	if (dec && dec.length) {
+		return res + opts.decimal + dec;
 	}
 
 	return res;
+});
+
+function createRoundingFunction(method: Function): Function {
+	return function (this: Number, precision?: number): number {
+		const
+			val = Number(this);
+
+		if (precision) {
+			let
+				multiplier = Math.pow(10, Math.abs(precision));
+
+			if (precision < 0) {
+				multiplier = 1 / multiplier;
+			}
+
+			return method(val * multiplier) / multiplier;
+		}
+
+		return method(val);
+	};
 }
