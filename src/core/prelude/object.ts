@@ -36,6 +36,12 @@ extend(Object, 'createDict', (...fields) => {
 	return Object.create(null);
 });
 
+/** @see Sugar.Object.select */
+extend(Object, 'select', selectReject(true));
+
+/** @see Sugar.Object.reject */
+extend(Object, 'reject', selectReject(false));
+
 /**
  * Parses the specified value as a JSON / JS object and returns the result
  * @param value
@@ -78,7 +84,7 @@ extend(Object, 'fastClone', (obj, params?: FastCloneParams) => {
 				map.set(val[0], Object.fastClone(val[1]));
 			}
 
-			return <any>map;
+			return map;
 		}
 
 		if (noJSON && obj instanceof Set) {
@@ -89,7 +95,7 @@ extend(Object, 'fastClone', (obj, params?: FastCloneParams) => {
 				set.add(el.value);
 			}
 
-			return <any>set;
+			return set;
 		}
 
 		if (typeof obj === 'object') {
@@ -263,3 +269,48 @@ extend(Object, 'getPrototypeChain', (constructor: Function) => {
 	protoChains.set(constructor, chain.reverse());
 	return chain.slice();
 });
+
+function selectReject(select: boolean): Function {
+	return (obj: Dictionary, condition: CanArray<string> | Dictionary | RegExp) => {
+		const
+			res = {};
+
+		if (Object.isRegExp(condition)) {
+			for (let keys = Object.keys(obj), i = 0; i < keys.length; i++) {
+				const
+					key = keys[i],
+					test = condition.test(key);
+
+				if (select ? test : !test) {
+					res[key] = obj[key];
+				}
+			}
+
+			return res;
+		}
+
+		const
+			map = Object.isObject(condition) ? condition : Object.createDict();
+
+		if (Object.isString(condition)) {
+			map[condition] = true;
+
+		} else if (Object.isArray(condition)) {
+			for (let i = 0; i < condition.length; i++) {
+				map[condition[i]] = true;
+			}
+		}
+
+		for (let keys = Object.keys(obj), i = 0; i < keys.length; i++) {
+			const
+				key = keys[i],
+				test = map[key];
+
+			if (select ? test : !test) {
+				res[key] = obj[key];
+			}
+		}
+
+		return res;
+	};
+}
