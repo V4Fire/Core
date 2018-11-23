@@ -57,17 +57,6 @@ for (let i = 0; i < cssMethods.length; i++) {
 
 /** @see Sugar.Number.floor */
 extend(Number.prototype, 'floor', function (this: Number, precision?: number): number {
-	const collapse = (str) => {
-		let
-			res = '';
-
-		for (let i = 0; i < str.length; i++) {
-			res += '0';
-		}
-
-		return res;
-	};
-
 	const
 		v = Number(this);
 
@@ -88,3 +77,14 @@ extend(Number.prototype, 'floor', function (this: Number, precision?: number): n
 
 	return Math.floor(v);
 });
+
+function collapse(str: string): string {
+	let
+		res = '';
+
+	for (let i = 0; i < str.length; i++) {
+		res += '0';
+	}
+
+	return res;
+}
