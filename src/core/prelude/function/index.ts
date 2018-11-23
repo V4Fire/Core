@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import 'core/prelude/function.shim';
+import 'core/prelude/function/shim';
 import extend from 'core/prelude/extend';
 
 /** @see Sugar.Function.once */
