@@ -15,7 +15,7 @@
  */
 export default function extend(obj: Function | object, name: string, method: Function): void {
 	const
-		key = Symbol.for(`__V4_TRAP_${name}__`);
+		key = Symbol.for(`[[V4_PROP_TRAP:${name}]]`);
 
 	if (typeof obj === 'function') {
 		Object.defineProperty(obj, key, {
@@ -25,16 +25,22 @@ export default function extend(obj: Function | object, name: string, method: Fun
 		});
 
 	} else {
-		Object.defineProperty(Object.prototype, key, {
+		Object.defineProperty(obj, key, {
 			writable: true,
 			configurable: true,
 			value(): unknown {
-				if (name in this) {
-					return this[name];
-				}
-
 				return method;
 			}
 		});
+
+		if (obj !== Object.prototype) {
+			Object.defineProperty(Object.prototype, key, {
+				writable: true,
+				configurable: true,
+				value(): unknown {
+					return this[name];
+				}
+			});
+		}
 	}
 }
