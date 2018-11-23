@@ -6,7 +6,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import $C = require('collection.js');
 import sendAnalyticsEvent from 'core/analytics/engines';
 
 /**
@@ -16,9 +15,18 @@ import sendAnalyticsEvent from 'core/analytics/engines';
  * @param [details] - event details
  */
 export function send(event: string, details: Dictionary = {}): void {
-	details = $C(details)
-		.filter((el) => el != null && el !== '' && (typeof el === 'object' ? $C(el).length() : true))
-		.map();
+	const
+		finalDetails = {};
 
-	sendAnalyticsEvent(event, details);
+	for (let keys = Object.keys(details), i = 0; i < keys.length; i++) {
+		const
+			key = keys[i],
+			el = details[key];
+
+		if (el != null && el !== '' && (typeof el === 'object' ? Object.size(el) : true)) {
+			finalDetails[key] = el;
+		}
+	}
+
+	sendAnalyticsEvent(event, finalDetails);
 }

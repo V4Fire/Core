@@ -6,7 +6,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import $C = require('collection.js');
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 
 /**
@@ -17,9 +16,14 @@ import { EventEmitter2 as EventEmitter } from 'eventemitter2';
  */
 export function afterEvents(emitter: EventEmitter, ...events: string[]): Promise<void> {
 	return new Promise((resolve) => {
-		$C(events).to({}).reduce((res, ev) => {
-			res[ev] = false;
+		const
+			res = {};
 
+		for (let i = 0; i < events.length; i++) {
+			const
+				ev = events[i];
+
+			res[ev] = false;
 			emitter.once(ev, () => {
 				res[ev] = true;
 
@@ -27,9 +31,7 @@ export function afterEvents(emitter: EventEmitter, ...events: string[]): Promise
 					resolve();
 				}
 			});
-
-			return res;
-		});
+		}
 	});
 }
 
@@ -73,9 +75,13 @@ export function onEverythingReady(cb: () => void, ...flags: string[]): (flag: st
 
 		flagsStatus[flag] = true;
 
-		if ($C(flags).every((name) => flagsStatus[name])) {
-			ready = true;
-			cb();
+		for (let i = 0; i < flags.length; i++) {
+			if (!flagsStatus[name]) {
+				return;
+			}
 		}
+
+		ready = true;
+		cb();
 	};
 }

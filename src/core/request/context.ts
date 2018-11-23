@@ -6,7 +6,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import $C = require('collection.js');
 import Then from 'core/then';
 import Response from 'core/request/response';
 
@@ -198,7 +197,7 @@ export default class RequestContext<T = unknown> {
 			p.headers = normalizeHeaders(p.headers);
 		}
 
-		if ($C(q).length()) {
+		if (Object.size(q)) {
 			url = `${url}?${toQueryString(q)}`;
 		}
 

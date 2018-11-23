@@ -6,9 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import $C = require('collection.js');
 import config from 'config';
-
 import statusCodes from 'core/status-codes';
 import Range from 'core/range';
 
@@ -63,5 +61,7 @@ export const globalOpts: GlobalOptions = {
  * Drops all request caches
  */
 export function dropCache(): void {
-	$C(cache).forEach((cache) => cache.clear());
+	for (let keys = Object.keys(cache), i = 0; i < keys.length; i++) {
+		cache[keys[i]].clear();
+	}
 }

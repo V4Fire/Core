@@ -6,7 +6,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import $C = require('collection.js');
 import config from 'config';
 import logDriver from 'core/log/engines';
 import * as env from 'core/env';
@@ -17,7 +16,13 @@ let
 
 const setConfig = (val) => {
 	options = {patterns: [], ...val};
-	$C(options.patterns).set((el) => Object.isRegExp(el) ? el : new RegExp(el));
+
+	if (Object.isArray(options.patterns)) {
+		for (let o = options.patterns, i = 0; i < o.length; i++) {
+			const el = o[i];
+			o[i] = Object.isRegExp(el) ? el : new RegExp(el);
+		}
+	}
 };
 
 env.get('log').then(setConfig, setConfig);

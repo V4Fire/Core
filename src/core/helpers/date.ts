@@ -6,10 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import $C = require('collection.js');
-
 import { lang } from 'core/i18n';
-import { DateValue, DateCreateOptions } from 'core/date';
+import { DateValue, DateCreateOptions } from 'core/prelude/date';
 
 /**
  * Normalizes the specified value as date
@@ -25,14 +23,23 @@ export function normalizeIfDate(value: unknown, params?: DateCreateOptions): Can
  */
 export function normalizeIfDate(value: unknown[], params?: DateCreateOptions): Date[];
 export function normalizeIfDate(value: CanArray<unknown>, params?: DateCreateOptions): CanUndef<CanArray<Date>> {
-	const
-		f = (v) => Object.isString(v) || Object.isNumber(v) || Object.isDate(v);
-
 	if (Object.isArray(value)) {
-		return $C(value).filter(f).map((date) => Date.create(<DateValue>date, params));
+		const
+			res = <Date[]>[];
+
+		for (let i = 0; i < value.length; i++) {
+			const
+				date = value[i];
+
+			if (canDate(date)) {
+				res.push(Date.create(<DateValue>date, params));
+			}
+		}
+
+		return res;
 	}
 
-	if (f(value)) {
+	if (canDate(value)) {
 		return Date.create(<DateValue>value, params);
 	}
 
@@ -52,4 +59,8 @@ const
 export function getDateFromStr(str: string, separator: RegExp = separatorRgxp, params?: DateCreateOptions): Date {
 	const p = str.split(separator);
 	return Date.create(lang === 'ru' ? [p[1], p[0], p[2]].join('.') : str, params);
+}
+
+function canDate(value: unknown): boolean {
+	return Object.isString(value) || Object.isNumber(value) || Object.isDate(value);
 }

@@ -9,6 +9,6 @@
 import 'core/object';
 import 'core/string';
 import 'core/function';
-import 'core/global';
-import 'core/date';
+import 'core/prelude/global';
+import 'core/prelude/date';
 import 'core/i18n';
