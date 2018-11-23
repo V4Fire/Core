@@ -12,7 +12,7 @@ const
 	isUrlWithSep = /^(\w+:)?\/?\//;
 
 /**
- * Concatenates the specified parts of URLs, correctly arranging slashes
+ * Concatenates the specified parts of URLs, correctly arranging slashes and returns the full url
  * @param urls
  */
 export function concatUrls(...urls: Nullable<string>[]): string {
@@ -37,20 +37,38 @@ export function concatUrls(...urls: Nullable<string>[]): string {
 }
 
 /**
- * Stable stringify for querystring
+ * Creates a querystring from the specified data and returns it
  * @param data
  */
-export function toQueryString(data: unknown): string {
+export function toQueryString(data: Nullable<string>): string {
 	return chunkToQueryString(data);
 }
 
 /**
- * Stable stringify for querystring chunk
- *
- * @param data
- * @param [prfx]
+ * Creates an object from the specified querystring and returns it
+ * @param str
  */
-export function chunkToQueryString(data: unknown, prfx: string = ''): string {
+export function fromQueryString<T extends Dictionary>(str: string): T {
+	const
+		res = <T>{};
+
+	if (str[0] === '?') {
+		str = str.slice(1);
+	}
+
+	const
+		opts = {separator: '_'},
+		chunks = str.split('&');
+
+	for (let i = 0; i < chunks.length; i++) {
+		const [key, val] = chunks[i].split('=');
+		Object.set(res, key, val == null ? null : val, opts);
+	}
+
+	return res;
+}
+
+function chunkToQueryString(data: Nullable<string>, prfx: string = ''): string {
 	if (data == null || data === '') {
 		return '';
 	}
