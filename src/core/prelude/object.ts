@@ -25,36 +25,6 @@ extend(Object.prototype, 'toSource', function (): string {
 extend(Object, 'mixin', $C.extend);
 
 /**
- * Creates a hash table without prototype
- * @param fields
- */
-extend(Object, 'createDict', (...fields) => {
-	if (fields.length) {
-		return Object.assign(Object.create(null), ...fields);
-	}
-
-	return Object.create(null);
-});
-
-/** @see Sugar.Object.select */
-extend(Object, 'select', selectReject(true));
-
-/** @see Sugar.Object.reject */
-extend(Object, 'reject', selectReject(false));
-
-/**
- * Parses the specified value as a JSON / JS object and returns the result
- * @param value
- */
-extend(Object, 'parse', (value) => {
-	try {
-		return new Function(`return ${value}`)();
-	} catch {}
-
-	return undefined;
-});
-
-/**
  * Clones the specified object using JSON.parse -> JSON.stringify
  *
  * @param obj
@@ -194,6 +164,30 @@ extend(Object, 'fastCompare', (a, b) => {
 });
 
 /**
+ * Parses the specified value as a JSON / JS object and returns the result
+ * @param value
+ */
+extend(Object, 'parse', (value) => {
+	try {
+		return new Function(`return ${value}`)();
+	} catch {}
+
+	return undefined;
+});
+
+/**
+ * Creates a hash table without prototype
+ * @param fields
+ */
+extend(Object, 'createDict', (...fields) => {
+	if (fields.length) {
+		return Object.assign(Object.create(null), ...fields);
+	}
+
+	return Object.create(null);
+});
+
+/**
  * Creates an object {key: value, value: key} from the specified
  * @param obj
  */
@@ -238,6 +232,116 @@ extend(Object, 'fromArray', (arr: unknown[]) => {
 	}
 
 	return map;
+});
+
+/** @see Sugar.Object.select */
+extend(Object, 'select', selectReject(true));
+
+/** @see Sugar.Object.reject */
+extend(Object, 'reject', selectReject(false));
+
+/**
+ * Returns a value from an object by the specified path
+ *
+ * @param obj
+ * @param path
+ * @param [params] - additional parameters
+ */
+extend(Object, 'get', (
+	obj: Dictionary,
+	path: string,
+	params?: {separator: string}
+) => {
+	const
+		p = {separator: '.', ...params},
+		chunks = path.split(p.separator);
+
+	let
+		res = obj;
+
+	for (let i = 0; i < chunks.length; i++) {
+		if (res == null) {
+			return undefined;
+		}
+
+		res = <Dictionary>res[chunks[i]];
+	}
+
+	return res;
+});
+
+/**
+ * Returns true if an object has a property by the specified path
+ *
+ * @param obj
+ * @param path
+ * @param [params] - additional parameters
+ */
+extend(Object, 'has', (
+	obj: Dictionary,
+	path: string,
+	params?: {separator: string}
+) => {
+	const
+		p = {separator: '.', ...params},
+		chunks = path.split(p.separator);
+
+	let
+		res = obj,
+		i = 0;
+
+	for (; i < chunks.length - 1; i++) {
+		if (res == null) {
+			return false;
+		}
+
+		res = <Dictionary>res[chunks[i]];
+	}
+
+	return chunks[i] in res;
+});
+
+/**
+ * Sets a value to an object by the specified path
+ *
+ * @param obj
+ * @param path
+ * @param value
+ * @param [params] - additional parameters
+ */
+extend(Object, 'set', (
+	obj: Dictionary,
+	path: string,
+	value: unknown,
+	opts?: {separator: string; concat: boolean}
+) => {
+	const
+		p = {separator: '.', concat: false, ...opts},
+		chunks = path.split(p.separator);
+
+	let
+		ref = obj;
+
+	for (let i = 0; i < chunks.length; i++) {
+		const
+			prop = chunks[i];
+
+		if (chunks.length === i + 1) {
+			path = prop;
+			continue;
+		}
+
+		if (!ref[prop] || typeof ref[prop] !== 'object') {
+			ref[prop] = isNaN(Number(chunks[i + 1])) ? {} : [];
+		}
+
+		ref = <Dictionary>ref[prop];
+	}
+
+	ref[path] = path in ref && p.concat ?
+		(<unknown[]>[]).concat(ref[path], value) : value;
+
+	return value;
 });
 
 const
