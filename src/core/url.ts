@@ -40,7 +40,7 @@ export function concatUrls(...urls: Nullable<string>[]): string {
  * Creates a querystring from the specified data and returns it
  * @param data
  */
-export function toQueryString(data: Nullable<string>): string {
+export function toQueryString(data: unknown): string {
 	return chunkToQueryString(data);
 }
 
@@ -68,7 +68,7 @@ export function fromQueryString<T extends Dictionary>(str: string): T {
 	return res;
 }
 
-function chunkToQueryString(data: Nullable<string>, prfx: string = ''): string {
+function chunkToQueryString(data: unknown, prfx: string = ''): string {
 	if (data == null || data === '') {
 		return '';
 	}
