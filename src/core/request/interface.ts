@@ -7,6 +7,7 @@
  */
 
 import Then from 'core/then';
+import Range from 'core/range';
 import Response from 'core/request/response';
 import RequestContext from 'core/request/context';
 import { StatusCodes } from 'core/status-codes';
@@ -51,7 +52,7 @@ export type RequestBody =
 	ArrayBuffer;
 
 export type OkStatuses =
-	sugarjs.Range |
+	Range<number> |
 	StatusCodes |
 	StatusCodes[];
 

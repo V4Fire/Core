@@ -8,6 +8,7 @@
 
 import $C = require('collection.js');
 import Then from 'core/then';
+import Range from 'core/range';
 
 import { IS_NODE } from 'core/const/links';
 import { once } from 'core/decorators';
@@ -89,17 +90,11 @@ export default class Response {
 			s = this.okStatuses = p.okStatuses;
 
 		this.parent = p.parent;
-		this.status = p.status;
-		this.headers = this.parseHeaders(p.headers);
 		this.sourceResponseType = this.responseType = p.responseType;
 
-		// tslint:disable-next-line:prefer-conditional-expression
-		if (typeof s === 'object' && !Object.isArray(s)) {
-			this.ok = s.contains(this.status);
-
-		} else {
-			this.ok = (<any[]>[]).concat(s || []).includes(this.status);
-		}
+		this.status = p.status;
+		this.ok = s instanceof Range ? s.contains(this.status) : (<number[]>[]).concat(s || []).includes(this.status);
+		this.headers = this.parseHeaders(p.headers);
 
 		this.decoders = p.decoder ? Object.isFunction(p.decoder) ? [p.decoder] : p.decoder : [];
 		this.body = body;

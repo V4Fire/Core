@@ -7,8 +7,10 @@
  */
 
 import $C = require('collection.js');
-import statusCodes from 'core/status-codes';
 import config from 'config';
+
+import statusCodes from 'core/status-codes';
+import Range from 'core/range';
 
 import { RequestMethods, ResponseTypes, GlobalOptions, CacheStrategy } from 'core/request/interface';
 import { Cache, RestrictedCache, NeverCache } from 'core/cache';
@@ -31,7 +33,7 @@ export const defaultRequestOpts = {
 
 export const defaultResponseOpts = {
 	responseType: <ResponseTypes>'text',
-	okStatuses: <sugarjs.Range>Number.range(200, 299),
+	okStatuses: new Range(200, 299),
 	status: statusCodes.OK,
 	headers: {}
 };
