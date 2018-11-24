@@ -6,8 +6,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import $C = require('collection.js');
-
 const
 	isUrlWithSep = /^(\w+:)?\/?\//;
 
@@ -16,7 +14,17 @@ const
  * @param urls
  */
 export function concatUrls(...urls: Nullable<string>[]): string {
-	return $C(urls).filter((e) => e != null && e !== '').to('').reduce((res, url) => {
+	let
+		res = '';
+
+	for (let i = 0; i < urls.length; i++) {
+		let
+			url = urls[i];
+
+		if (url != null && url !== '') {
+			continue;
+		}
+
 		res = String(res);
 		url = String(url);
 
@@ -26,14 +34,18 @@ export function concatUrls(...urls: Nullable<string>[]): string {
 
 		if (res) {
 			if (res[res.length - 1] === '/') {
-				return res + url;
+				res += url;
+				continue;
 			}
 
-			return `${res}/${url}`;
+			res += `/${url}`;
+			continue;
 		}
 
-		return isUrlWithSep.test(url) ? url : `/${url}`;
-	});
+		res = isUrlWithSep.test(url) ? url : `/${url}`;
+	}
+
+	return res;
 }
 
 /**
@@ -76,29 +88,39 @@ function chunkToQueryString(data: unknown, prfx: string = ''): string {
 	const
 		isArr = Object.isArray(data);
 
-	const reducer = (res, key) => {
-		const
-			val = (<Extract<typeof data, unknown[] | Dictionary>>data)[key],
-			valIsArr = Object.isArray(val);
+	const reduce = (data) => {
+		data.sort();
 
-		if (val == null || val === '' || valIsArr && !(<unknown[]>val).length) {
-			return res;
+		let
+			res = '';
+
+		for (let i = 0; i < data.length; i++) {
+			let
+				key = data[i];
+
+			const
+				val = (<Extract<typeof data, unknown[] | Dictionary>>data)[key],
+				valIsArr = Object.isArray(val);
+
+			if (val == null || val === '' || valIsArr && !(<unknown[]>val).length) {
+				continue;
+			}
+
+			key = isArr ? prfx : prfx ? `${prfx}_${key}` : key;
+
+			const
+				str = valIsArr || Object.isObject(val) ? chunkToQueryString(val, key) : `${key}=${chunkToQueryString(val)}`;
+
+			if (res) {
+				res += `&${str}`;
+				continue;
+			}
+
+			res = str;
 		}
 
-		key = isArr ? prfx : prfx ? `${prfx}_${key}` : key;
-
-		const
-			str = valIsArr || Object.isObject(val) ? chunkToQueryString(val, key) : `${key}=${chunkToQueryString(val)}`;
-
-		if (res) {
-			return `${res}&${str}`;
-		}
-
-		return str;
+		return res;
 	};
-
-	const
-		reduce = (data) => $C(data.sort()).to('').reduce(reducer);
 
 	if (isArr) {
 		return reduce(data);

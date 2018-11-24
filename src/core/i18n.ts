@@ -6,7 +6,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import $C = require('collection.js');
 import config from 'config';
 import * as dict from 'lang';
 
@@ -18,17 +17,21 @@ export const
 	event = new EventEmitter({maxListeners: 100});
 
 const
+	langs = [],
 	storage = asyncLocal.namespace('[[I18N]]'),
 	ws = /[\r\n]+/g;
 
 // Normalize translates
-const langs = $C(dict).map((el) => {
+Object.forEach(dict, (el) => {
 	if (typeof el !== 'object') {
 		return el;
 	}
 
-	return $C(el).to(Object.createDict()).reduce((map, el, key) => {
-		map[key.replace(ws, ' ')] = el.replace(ws, ' ');
+	const
+		map = Object.createDict();
+
+	Object.forEach(el, (el, key) => {
+		map[String(key).replace(ws, ' ')] = String(el).replace(ws, ' ');
 		return map;
 	});
 });

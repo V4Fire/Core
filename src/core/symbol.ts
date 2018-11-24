@@ -6,8 +6,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import $C = require('collection.js');
-
 /**
  * Creates a generator for symbols
  * @param fields - array of fields
@@ -17,10 +15,14 @@ export default function generator(fields?: string[]): StrictDictionary<symbol> {
 		obj = <StrictDictionary<symbol>>Object.createDict<symbol>();
 
 	if (typeof Proxy !== 'function') {
-		return $C(fields).to(obj).reduce((obj, el) => {
-			obj[el] = Symbol(el);
-			return obj;
-		});
+		if (fields) {
+			for (let i = 0; i < fields.length; i++) {
+				const el = fields[i];
+				obj[el] = Symbol(el);
+			}
+		}
+
+		return obj;
 	}
 
 	return new Proxy(obj, {

@@ -18,14 +18,15 @@ import { LogPreferences, LogMessageOptions } from 'core/log';
  */
 export default function log({key, type}: LogMessageOptions, config: LogPreferences, ...details: unknown[]): void {
 	const
-		style = config.styles && {...config.styles.default, ...(type ? config.styles[type] : {})};
+		style = config.styles ? <Dictionary>{...config.styles.default, ...type ? config.styles[type] : {}} : {};
 
-	console.log(
-		`%c${key}:`,
+	let
+		str = '';
 
-		$C(style).to('')
-			.reduce((res, value, key) => res + `${key.dasherize()}:${value};`),
+	for (let keys = Object.keys(style), i = 0; i < keys.length; i++) {
+		const key = keys[i];
+		str += `${key.dasherize()}:${style[key]};`;
+	}
 
-		...details
-	);
+	console.log(`%c${key}:`, str, ...details);
 }

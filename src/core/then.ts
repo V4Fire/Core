@@ -6,8 +6,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import $C = require('collection.js');
-
 export const enum State {
 	pending,
 	fulfilled,
@@ -115,25 +113,29 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	): Then<(T extends Iterable<Value<infer V>> ? V : unknown)[]> {
 		return new Then((res, rej, onAbort) => {
 			const
-				promises = $C(values).map((el) => Then.resolve(el)),
+				promises = <Then[]>[],
 				resolved = <any[]>[];
 
-			if (!$C(promises).length()) {
+			Object.forEach(values, (el) => {
+				promises.push(Then.resolve(el));
+			});
+
+			if (!promises.length) {
 				res(resolved);
 				return;
 			}
 
 			onAbort((reason) => {
-				$C(promises).forEach((el) => {
-					el.abort(reason);
-				});
+				for (let i = 0; i < promises.length; i++) {
+					promises[i].abort(reason);
+				}
 			});
 
 			let
 				counter = 0;
 
-			$C(promises).forEach((promise, i) => {
-				promise.then(
+			for (let i = 0; i < promises.length; i++) {
+				promises[i].then(
 					(val) => {
 						resolved[i] = val;
 
@@ -144,7 +146,7 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 
 					rej
 				);
-			});
+			}
 
 		}, parent);
 	}
@@ -160,22 +162,26 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	): Then<T extends Iterable<Value<infer V>> ? V : unknown> {
 		return new Then<any>((res, rej, onAbort) => {
 			const
-				promises = $C(values).map((el) => Then.resolve(el));
+				promises = <Then[]>[];
 
-			if (!$C(promises).length()) {
+			Object.forEach(values, (el) => {
+				promises.push(Then.resolve(el));
+			});
+
+			if (!promises.length) {
 				res();
 				return;
 			}
 
 			onAbort((reason) => {
-				$C(promises).forEach((el) => {
-					el.abort(reason);
-				});
+				for (let i = 0; i < promises.length; i++) {
+					promises[i].abort(reason);
+				}
 			});
 
-			$C(promises).forEach((promise) => {
-				promise.then(res, rej);
-			});
+			for (let i = 0; i < promises.length; i++) {
+				promises[i].then(res, rej);
+			}
 
 		}, parent);
 	}

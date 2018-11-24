@@ -6,8 +6,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import $C = require('collection.js');
-
 export interface Config {
 	lang: string;
 	api?: string | undefined;
@@ -101,7 +99,7 @@ const config: Config = {
  * @param args
  */
 export function extend<T extends Config>(...args: Dictionary[]): T {
-	return <any>$C.extend({
+	return Object.mixin({
 		deep: true,
 		concatArray: true,
 		concatFn: (a: unknown[], b: unknown[]) => a.union(b),
