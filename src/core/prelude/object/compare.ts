@@ -82,7 +82,7 @@ function createReplacer(
 	a: unknown,
 	b: unknown,
 	funcMap: WeakMap<Function, number>
-): (key: string, value: unknown) => unknown {
+): JSONCb {
 	return (key, value) => {
 		if (value === a) {
 			return '[[OBJ_REF:a]]';
