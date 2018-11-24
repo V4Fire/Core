@@ -6,8 +6,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-/// <reference types="collection.js"/>
-/// <reference types="sugar/sugar-extended"/>
 /// <reference types="typescript/lib/lib.dom"/>
 /// <reference types="typescript/lib/lib.esnext"/>
 
@@ -32,6 +30,9 @@ declare class IdleDeadline {
 declare function requestIdleCallback(fn: (deadline: IdleDeadline) => void, opts?: {timer?: number}): number;
 declare function cancelIdleCallback(id: number): void;
 
+declare function setImmediate(fn: Function): number;
+declare function cancelImmediate(id: number): void;
+
 type Wrap<T> = T & any;
 type Nullable<T> = T | null | undefined;
 type CanPromise<T> = T | Promise<T>;
@@ -46,12 +47,13 @@ type DictionaryType<T extends Dictionary> = T extends Dictionary<infer V> ? NonN
 type IterableType<T extends Iterable<unknown>> = T extends Iterable<infer V> ? V : T;
 type PromiseType<T extends Promise<unknown>> = T extends Promise<infer V> ? V : T;
 
-interface JSONCb {
-	(key: string, value: unknown): unknown;
+interface ArrayLike<T = unknown> {
+	[i: number]: T;
+	length: number;
 }
 
-interface Object {
-	toSource(): string;
+interface JSONCb {
+	(key: string, value: unknown): unknown;
 }
 
 interface FastCloneParams {
@@ -60,36 +62,57 @@ interface FastCloneParams {
 	freezable?: boolean;
 }
 
+interface MixinParams<V = unknown, K = unknown, D = unknown> {
+	deep?: boolean;
+	traits?: boolean;
+	withUndef?: boolean;
+	withDescriptor?: boolean;
+	withAccessors?: boolean;
+	withProto?: boolean;
+	concatArray?: boolean;
+	concatFn?(a: V, b: unknown[], key: K): unknown[];
+	extendFilter?(a: V, b: unknown, key: K): unknown;
+	filter?(el: V, key: K, data: D): unknown;
+}
+
 interface ObjectConstructor {
-	mixin<D = unknown, K = unknown, V = unknown>(
-		params: CollectionJS.ExtendParams<D, K, V> & CollectionJS.Async,
-		target?: D,
-		...source: unknown[]
-	): CollectionJS.ThreadObj<D & CollectionJS.AnyRecord>;
+	get<T = unknown>(obj: object, path: string | unknown[], params?: {separator?: string}): T;
+	has<T = unknown>(obj: object, path: string | unknown[], params?: {separator?: string}): T;
+	set<T = unknown>(obj: object, path: string | unknown[], params?: {separator?: string; concat?: boolean}): T;
 
-	mixin<D = unknown, K = unknown, V = unknown>(
-		deepOrParams: boolean | CollectionJS.ExtendParams<D, K, V>,
-		target?: D,
-		...source: unknown[]
-	): D & CollectionJS.AnyRecord;
-
-	fastClone<T = unknown>(obj: T, params?: FastCloneParams): T;
-	fastCompare<T = unknown>(a: unknown, b: T): a is T;
+	size(obj: unknown): number;
 	keys(obj: object | Dictionary): string[];
+	forEach<V, K, D = unknown>(obj: D, cb: (el: V, key: K, data: D) => unknown): void;
+
+	fastCompare<T = unknown>(a: unknown, b: T): a is T;
+	fastClone<T = unknown>(obj: T, params?: FastCloneParams): T;
+	mixin<R = unknown, D = unknown, K = unknown, V = unknown>(
+		params: MixinParams | boolean,
+		target?: D,
+		...source: unknown[]
+	): R;
 
 	parse<V = unknown, R = unknown>(value: V): CanUndef<R>;
 	getPrototypeChain(constructor: Function): object[];
-	fromArray(arr: unknown[]): Dictionary<boolean>;
 
-	createMap<T extends object>(obj: T): T & Dictionary;
 	createDict<T extends Dictionary>(fields: T): {[P in keyof T]: T[P]};
 	createDict<T = unknown>(): Dictionary<T>;
 	createDict(...fields: unknown[]): Dictionary;
 
+	createMap<T extends object>(obj: T): T & Dictionary;
+	fromArray(arr: unknown[]): Dictionary<boolean>;
+
+	select<T extends Dictionary = Dictionary>(obj: Dictionary, condition: CanArray<string> | Dictionary | RegExp): T;
+	reject<T extends Dictionary = Dictionary>(obj: Dictionary, condition: CanArray<string> | Dictionary | RegExp): T;
+
 	isObject(obj: unknown): obj is object;
 	isTable(obj: unknown): obj is Dictionary;
 	isArray(obj: unknown): obj is unknown[];
+	isArrayLike(obj: unknown): obj is ArrayLike;
+
 	isFunction(obj: unknown): obj is Function;
+	isGenerator(obj: unknown): obj is GeneratorFunction;
+	isIterator(obj: unknown): obj is Iterator;
 
 	isString(obj: unknown): obj is string;
 	isNumber(obj: unknown): obj is number;
@@ -105,8 +128,62 @@ interface ObjectConstructor {
 	isWeakSet(obj: unknown): obj is WeakSet<object>;
 }
 
+interface Object {
+	toSource(): string;
+}
+
+type NumberOptions =
+	'decimal' |
+	'thousands';
+
+interface NumberConstructor {
+	getOption(key: NumberOptions): string;
+	setOption(key: NumberOptions, value: string): string;
+}
+
+interface Number {
+	em: string;
+	ex: string;
+	rem: string;
+	px: string;
+	per: string;
+	vh: string;
+	vw: string;
+	vmin: string;
+	vmax: string;
+
+	second(): number;
+	seconds(): number;
+	minute(): number;
+	minutes(): number;
+	hour(): number;
+	hours(): number;
+	day(): number;
+	days(): number;
+	week(): number;
+	weeks(): number;
+
+	pad(place?: number, sign?: boolean, base?: number): string;
+	format(place?: number): string;
+
+	floor(precision?: number): string;
+	round(precision?: number): string;
+	ceil(precision?: number): string;
+}
+
+interface RegExpConstructor {
+	escape(pattern: string): string;
+}
+
 interface DateConstructor {
 	getWeekDays(): string[];
+}
+
+interface Function {
+	name: string;
+	once(): Function;
+	debounce(delay?: number): Function;
+	throttle(delay?: number): Function;
 }
 
 declare namespace decoders {
