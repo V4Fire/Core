@@ -16,13 +16,13 @@ import extend from 'core/prelude/extend';
  * @param [params] - additional parameters
  */
 extend(Object, 'get', (
-	obj: Dictionary,
-	path: string,
+	obj: any,
+	path: string | any[],
 	params?: {separator: string}
 ) => {
 	const
 		p = {separator: '.', ...params},
-		chunks = path.split(p.separator);
+		chunks = Object.isString(path) ? path.split(p.separator) : path;
 
 	let
 		res = obj;
@@ -32,7 +32,17 @@ extend(Object, 'get', (
 			return undefined;
 		}
 
-		res = <Dictionary>res[chunks[i]];
+		const
+			key = chunks[i];
+
+		// tslint:disable:prefer-conditional-expression
+		if (Object.isMap(res) || Object.isWeakMap(res)) {
+			// @ts-ignore
+			res = res.get(key);
+
+		} else {
+			res = res[key];
+		}
 	}
 
 	return res;
@@ -46,13 +56,13 @@ extend(Object, 'get', (
  * @param [params] - additional parameters
  */
 extend(Object, 'has', (
-	obj: Dictionary,
-	path: string,
+	obj: any,
+	path: string | any[],
 	params?: {separator: string}
 ) => {
 	const
 		p = {separator: '.', ...params},
-		chunks = path.split(p.separator);
+		chunks = Object.isString(path) ? path.split(p.separator) : path;
 
 	let
 		res = obj,
@@ -63,10 +73,29 @@ extend(Object, 'has', (
 			return false;
 		}
 
-		res = <Dictionary>res[chunks[i]];
+		const
+			key = chunks[i];
+
+		// tslint:disable:prefer-conditional-expression
+		if (Object.isMap(res) || Object.isWeakMap(res)) {
+			// @ts-ignore
+			res = res.get(key);
+
+		} else {
+			// @ts-ignore
+			res = res[key];
+		}
 	}
 
-	return chunks[i] in res;
+	const
+		key = chunks[i];
+
+	if (Object.isMap(res) || Object.isWeakMap(res)) {
+		// @ts-ignore
+		return res.has(key);
+	}
+
+	return key in res;
 });
 
 /**
@@ -78,36 +107,72 @@ extend(Object, 'has', (
  * @param [params] - additional parameters
  */
 extend(Object, 'set', (
-	obj: Dictionary,
-	path: string,
+	obj: any,
+	path: string | any[],
 	value: unknown,
 	opts?: {separator: string; concat: boolean}
 ) => {
 	const
 		p = {separator: '.', concat: false, ...opts},
-		chunks = path.split(p.separator);
+		chunks = Object.isString(path) ? path.split(p.separator) : path;
 
 	let
-		ref = obj;
+		ref = obj,
+		cursor: any;
 
 	for (let i = 0; i < chunks.length; i++) {
 		const
-			prop = chunks[i];
+			key = chunks[i];
 
 		if (chunks.length === i + 1) {
-			path = prop;
+			cursor = key;
 			continue;
 		}
 
-		if (!ref[prop] || typeof ref[prop] !== 'object') {
-			ref[prop] = isNaN(Number(chunks[i + 1])) ? {} : [];
-		}
+		const
+			nextChunkIsObj = isNaN(Number(chunks[i + 1]));
 
-		ref = <Dictionary>ref[prop];
+		// tslint:disable:prefer-conditional-expression
+		if (Object.isMap(ref) || Object.isWeakMap(ref)) {
+			let
+				// @ts-ignore
+				val = ref.get(key);
+
+			if (!val || typeof val !== 'object') {
+				// @ts-ignore
+				ref.set(key, (val = nextChunkIsObj ? {} : []));
+			}
+
+			ref = val;
+
+		} else {
+			let
+				val = ref[key];
+
+			if (!val || typeof val !== 'object') {
+				ref[key] = (val = nextChunkIsObj ? {} : []);
+			}
+
+			ref = val;
+		}
 	}
 
-	ref[path] = path in ref && p.concat ?
-		(<unknown[]>[]).concat(ref[path], value) : value;
+	// tslint:disable:prefer-conditional-expression
+	if (Object.isMap(ref) || Object.isWeakMap(ref)) {
+		// @ts-ignore
+		if (ref.has(cursor) && p.concat) {
+			// @ts-ignore
+			ref.set(cursor, (<unknown[]>[]).concat(ref[cursor], value));
+
+		} else {
+			// @ts-ignore
+			ref.set(cursor, value);
+		}
+
+	} else {
+		ref[cursor] = cursor in ref && p.concat ?
+			(<unknown[]>[]).concat(ref[cursor], value) : value;
+	}
 
 	return value;
 });
