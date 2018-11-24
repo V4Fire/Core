@@ -6,7 +6,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import $C = require('collection.js');
 import Then from 'core/then';
 import Range from 'core/range';
 
@@ -86,7 +85,7 @@ export default class Response {
 	 */
 	constructor(body?: ResponseType, params?: ResponseOptions) {
 		const
-			p = <typeof defaultResponseOpts & ResponseOptions>$C.extend(false, {}, defaultResponseOpts, params),
+			p = Object.mixin<typeof defaultResponseOpts & ResponseOptions>(false, {}, defaultResponseOpts, params),
 			s = this.okStatuses = p.okStatuses;
 
 		this.parent = p.parent;
@@ -139,27 +138,29 @@ export default class Response {
 				data = this.text();
 		}
 
-		return (<Then<T>>data)
-			.then((obj) => $C(this.decoders)
-				.to(Then.resolve(obj, this.parent))
-				.reduce((res: Then, fn) => res.then(fn)))
+		let
+			decoders = Then.resolve(data, this.parent);
 
-			.then((res) => {
-				if (Object.isFrozen(res)) {
-					return res;
-				}
+		Object.forEach(this.decoders, (fn: (val: unknown) => void) => {
+			decoders = decoders.then(fn);
+		});
 
-				if (Object.isArray(res) || Object.isObject(res)) {
-					Object.defineProperty(res, 'valueOf', {
-						enumerable: false,
-						value: () => Object.fastClone(res, {freezable: false})
-					});
-
-					Object.freeze(res);
-				}
-
+		return decoders.then((res) => {
+			if (Object.isFrozen(res)) {
 				return res;
-			});
+			}
+
+			if (Object.isArray(res) || Object.isObject(res)) {
+				Object.defineProperty(res, 'valueOf', {
+					enumerable: false,
+					value: () => Object.fastClone(res, {freezable: false})
+				});
+
+				Object.freeze(res);
+			}
+
+			return res;
+		});
 	}
 
 	/**
@@ -205,7 +206,7 @@ export default class Response {
 		}
 
 		return Then.immediate<T | null>(
-			<() => T>(() => $C(this.decoders).length() && !Object.isFrozen(body) ? Object.fastClone(body) : body),
+			<() => T>(() => Object.size(this.decoders) && !Object.isFrozen(body) ? Object.fastClone(body) : body),
 			this.parent
 		);
 	}
@@ -294,7 +295,8 @@ export default class Response {
 
 		if (IS_NODE) {
 			//#if node_js
-			return Then.resolve<_>(Buffer.from(<any>body).toString(encoding));
+			// @ts-ignore
+			return Then.resolve<_>(Buffer.from(body).toString(encoding));
 			//#endif
 		}
 
@@ -327,23 +329,30 @@ export default class Response {
 			res = {};
 
 		if (Object.isString(headers)) {
-			$C(headers.split(/[\r\n]+/)).forEach((header: string) => {
+			for (let o = headers.split(/[\r\n]+/), i = 0; i < o.length; i++) {
+				const
+					header = o[i];
+
 				if (!header) {
-					return;
+					continue;
 				}
 
 				const [name, value] = header.split(':', 2);
 				res[normalizeHeaderName(name)] = value.trim();
-			});
+			}
 
-		} else {
-			$C(headers).reduce((value, name) => {
+		} else if (headers) {
+			for (let keys = Object.keys(headers), i = 0; i < keys.length; i++) {
+				const
+					name = keys[i],
+					value = headers[name];
+
 				if (!value || !name) {
-					return;
+					continue;
 				}
 
 				res[normalizeHeaderName(name)] = value.trim();
-			});
+			}
 		}
 
 		return Object.freeze(res);
