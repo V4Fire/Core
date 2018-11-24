@@ -9,7 +9,7 @@
 import extend from 'core/prelude/extend';
 
 /**
- * Compares two specified objects and returns the result
+ * Compares two specified objects using JSON.stringify/parse strategy and returns the result
  *
  * @param a
  * @param b
@@ -74,5 +74,30 @@ extend(Object, 'fastCompare', (a, b) => {
 		return true;
 	}
 
-	return JSON.stringify(a) === JSON.stringify(b);
+	const replacer = createReplacer(a, b, new WeakMap());
+	return JSON.stringify(a, replacer) === JSON.stringify(b, replacer);
 });
+
+function createReplacer(
+	a: unknown,
+	b: unknown,
+	funcMap: WeakMap<Function, number>
+): (key: string, value: unknown) => unknown {
+	return (key, value) => {
+		if (value === a) {
+			return '[[OBJ_REF:a]]';
+		}
+
+		if (value === b) {
+			return '[[OBJ_REF:b]]';
+		}
+
+		if (Object.isFunction(value)) {
+			const key = funcMap.get(value) || Math.random();
+			funcMap.set(value, key);
+			return key;
+		}
+
+		return value;
+	};
+}
