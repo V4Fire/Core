@@ -14,9 +14,18 @@ export function serialize(uuid: Buffer | Uint8Array): string {
 	const
 		HEX = 16;
 
-	let res = '';
+	let
+		res = '';
+
 	for (let i = 0; i < uuid.length; ++i) {
-		res += uuid[i].toString(HEX).padLeft(2, '0');
+		let
+			chunk = uuid[i].toString(HEX);
+
+		if (chunk.length < 2) {
+			chunk = `0${chunk}`;
+		}
+
+		res += chunk;
 
 		// tslint:disable-next-line:prefer-switch
 		if (i === 3 || i === 5 || i === 7 || i === 9) {
