@@ -14,7 +14,7 @@ import { convertIfDate } from 'core/json';
 extend(Object, 'mixin', $C.extend);
 
 /**
- * Clones the specified object using JSON.parse -> JSON.stringify
+ * Clones the specified object using JSON.stringify/parse strategy
  *
  * @param obj
  * @param [params] - additional parameters:
@@ -58,9 +58,11 @@ extend(Object, 'fastClone', (obj, params?: FastCloneParams) => {
 		}
 
 		if (typeof obj === 'object') {
-			const clone = JSON.parse(
-				JSON.stringify(obj, p.replacer), p.reviver !== false ? p.reviver || convertIfDate : undefined
-			);
+			const
+				funcMap = new Map(),
+				replacer = createReplacer(obj, funcMap, p.replacer),
+				reviewer = createReviewer(obj, funcMap, p.reviver),
+				clone = JSON.parse(JSON.stringify(obj, replacer), reviewer);
 
 			if (p.freezable !== false) {
 				if (!Object.isExtensible(obj)) {
@@ -82,3 +84,54 @@ extend(Object, 'fastClone', (obj, params?: FastCloneParams) => {
 
 	return obj;
 });
+
+function createReplacer(
+	base: unknown,
+	funcMap: Map<Function | number, Function | number>,
+	replacer?: JSONCb
+): JSONCb {
+	return (key, value) => {
+		if (value === base) {
+			return '[[OBJ_REF:base]]';
+		}
+
+		if (Object.isFunction(value)) {
+			const key = funcMap.get(value) || Math.random();
+			funcMap.set(value, key);
+			funcMap.set(key, value);
+			return key;
+		}
+
+		if (replacer) {
+			return replacer(key, value);
+		}
+
+		return value;
+	};
+}
+
+function createReviewer(
+	base: unknown,
+	funcMap: Map<Function | number, Function | number>,
+	reviewer?: JSONCb | false
+): JSONCb {
+	return (key, value) => {
+		if (value === '[[OBJ_REF:base]]') {
+			return base;
+		}
+
+		if (funcMap && Object.isFunction(value)) {
+			return funcMap.get(value);
+		}
+
+		if (reviewer !== false) {
+			value = convertIfDate(key, value);
+		}
+
+		if (reviewer) {
+			return reviewer(key, value);
+		}
+
+		return value;
+	};
+}
