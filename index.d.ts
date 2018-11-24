@@ -204,16 +204,23 @@ interface RegExpConstructor {
 	escape(pattern: string): string;
 }
 
-type DateCreateValues = number | string | Date;
+type DateCreateValue =
+	number |
+	string |
+	Date;
+
+interface DateCreateParams {
+
+}
 
 interface DateConstructor {
-	create(pattern: DateCreateValues): Date;
+	create(pattern: DateCreateValue, params?: DateCreateParams): Date;
 	getWeekDays(): string[];
 }
 
 interface Date {
 	clone(): Date;
-	format(pattern: string, locale?: string): string;
+	format(pattern: string): string;
 
 	set(params: {
 		milliseconds?: number;
@@ -226,10 +233,10 @@ interface Date {
 		years?: number;
 	}): Date;
 
-	is(date: DateCreateValues, margin?: number): boolean;
-	isAfter(date: DateCreateValues, margin?: number): boolean;
-	isBefore(date: DateCreateValues, margin?: number): boolean;
-	isBetween(start: DateCreateValues, end: DateCreateValues, margin?: number): boolean;
+	is(date: DateCreateValue, margin?: number): boolean;
+	isAfter(date: DateCreateValue, margin?: number): boolean;
+	isBefore(date: DateCreateValue, margin?: number): boolean;
+	isBetween(start: DateCreateValue, end: DateCreateValue, margin?: number): boolean;
 
 	isFuture(): boolean;
 	isPast(): boolean;

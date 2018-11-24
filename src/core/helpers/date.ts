@@ -7,7 +7,6 @@
  */
 
 import { lang } from 'core/i18n';
-import { DateValue, DateCreateOptions } from 'core/prelude/date';
 
 /**
  * Normalizes the specified value as date
@@ -15,14 +14,14 @@ import { DateValue, DateCreateOptions } from 'core/prelude/date';
  * @param value
  * @param [params] - additional parameters for Date.create
  */
-export function normalizeIfDate(value: unknown, params?: DateCreateOptions): CanUndef<Date>;
+export function normalizeIfDate(value: unknown, params?: DateCreateParams): CanUndef<Date>;
 
 /**
  * @param value - list of values
  * @param [params] - additional parameters for Date.create
  */
-export function normalizeIfDate(value: unknown[], params?: DateCreateOptions): Date[];
-export function normalizeIfDate(value: CanArray<unknown>, params?: DateCreateOptions): CanUndef<CanArray<Date>> {
+export function normalizeIfDate(value: unknown[], params?: DateCreateParams): Date[];
+export function normalizeIfDate(value: CanArray<unknown>, params?: DateCreateParams): CanUndef<CanArray<Date>> {
 	if (Object.isArray(value)) {
 		const
 			res = <Date[]>[];
@@ -32,7 +31,7 @@ export function normalizeIfDate(value: CanArray<unknown>, params?: DateCreateOpt
 				date = value[i];
 
 			if (canDate(date)) {
-				res.push(Date.create(<DateValue>date, params));
+				res.push(Date.create(<DateCreateValue>date, params));
 			}
 		}
 
@@ -40,7 +39,7 @@ export function normalizeIfDate(value: CanArray<unknown>, params?: DateCreateOpt
 	}
 
 	if (canDate(value)) {
-		return Date.create(<DateValue>value, params);
+		return Date.create(<DateCreateValue>value, params);
 	}
 
 	return undefined;
@@ -56,7 +55,7 @@ const
  * @param [separator] - separator pattern
  * @param [params] - additional parameters for Date.create
  */
-export function getDateFromStr(str: string, separator: RegExp = separatorRgxp, params?: DateCreateOptions): Date {
+export function getDateFromStr(str: string, separator: RegExp = separatorRgxp, params?: DateCreateParams): Date {
 	const p = str.split(separator);
 	return Date.create(lang === 'ru' ? [p[1], p[0], p[2]].join('.') : str, params);
 }

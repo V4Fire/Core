@@ -8,9 +8,6 @@
 
 import { lang } from 'core/i18n';
 
-export type DateValue = string | number | Date;
-export type DateCreateOptions = sugarjs.Date.DateCreateOptions;
-
 /**
  * Returns a list of week days
  */
@@ -27,14 +24,13 @@ const
  * (added: {humanTimeDate} and {humanDate})
  *
  * @param value
- * @param [locale]
  */
-Date.prototype.format = function format(value: string, locale?: string): string {
+Date.prototype.format = function format(value: string): string {
 	const aliases = {
 		humanTimeDate: '{HH}:{mm} {humanDate}',
 		humanDate: lang === 'ru' ? '{dd}.{MM}.{yyyy}' : '{MM}.{dd}.{yyyy}'
 	};
 
 	const replace = (str) => str.replace(formatRgxp, (str, $1) => aliases[$1]);
-	return sugarFormat.call(this, replace(value), locale || lang);
+	return sugarFormat.call(this, replace(value), lang);
 };
