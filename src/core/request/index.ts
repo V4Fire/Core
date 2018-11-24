@@ -6,7 +6,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import $C = require('collection.js');
 import Then from 'core/then';
 
 import log from 'core/log';
@@ -56,7 +55,7 @@ export default function create<T = unknown, A extends unknown[] = unknown[]>(
 ): RequestFunctionResponse<T, A extends (infer V)[] ? V[] : unknown[]>;
 
 export default function create<T = unknown>(path: any, ...args: any[]): unknown {
-	const merge = (...args: unknown[]) => Object.mixin({
+	const merge = <T>(...args: unknown[]) => Object.mixin<T>({
 		deep: true,
 		concatArray: true,
 		concatFn: (a: unknown[], b: unknown[]) => a.union(b),
@@ -69,14 +68,14 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 
 		return (path, resolver, opts) => {
 			if (Object.isObject(path)) {
-				return create(merge(defOpts, path));
+				return create(merge<CreateRequestOptions<T>>(defOpts, path));
 			}
 
 			if (Object.isFunction(resolver)) {
-				return create(path, resolver, merge(defOpts, opts));
+				return create(path, resolver, merge<CreateRequestOptions<T>>(defOpts, opts));
 			}
 
-			return create(path, merge(defOpts, resolver));
+			return create(path, merge<CreateRequestOptions<T>>(defOpts, resolver));
 		};
 	}
 
@@ -95,10 +94,10 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 
 	const run = (...args) => {
 		const
-			p: CreateRequestOptions<T> = merge(defaultRequestOpts, baseCtx.params),
+			p = merge<CreateRequestOptions<T>>(defaultRequestOpts, baseCtx.params),
 			ctx = Object.create(baseCtx);
 
-		const addLogger = (type) => (fn, key) => (d) => {
+		const addLogger = (type, fn, key) => (d) => {
 			const
 				time = Date.now(),
 				res = fn(d, {opts: p, ctx, globalOpts});
@@ -118,11 +117,23 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 			return res;
 		};
 
+		const
+			encoders = <Function[]>[],
+			decoders = <Function[]>[];
+
+		Object.forEach(merge(ctx.encoders), (el, key) => {
+			encoders.push(addLogger('encoders', el, key));
+		});
+
+		Object.forEach(merge(ctx.decoders), (el, key) => {
+			decoders.push(addLogger('decoders', el, key));
+		});
+
 		Object.assign(ctx, {
 			// Merge request options
 			params: p,
-			encoders: $C(merge(ctx.encoders)).map(addLogger('encoders')),
-			decoders: $C(merge(ctx.decoders)).map(addLogger('decoders')),
+			encoders,
+			decoders,
 
 			// Bind middlewares to new context
 			saveCache: ctx.saveCache.bind(ctx),
@@ -183,14 +194,26 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 			ctx.then = then;
 			ctx.isOnline = (await Then.resolve(isOnline(), then)).status;
 
-			const arr = await Then.all($C(p.middlewares).reduce((arr, fn) => {
-				arr.push(fn({opts: p, ctx, globalOpts}));
-				return arr;
-			}, [] as unknown[]), then);
+			const
+				tasks = <any[]>[];
 
-			const applyEncoders = (data) => $C(ctx.encoders)
-				.to(Then.resolve(data, then))
-				.reduce((res, fn, i) => res.then((obj) => fn(i ? obj : Object.fastClone(obj))));
+			Object.forEach(p.middlewares, (fn: Function) => {
+				tasks.push(fn({opts: p, ctx, globalOpts}));
+			});
+
+			const
+				middlewareResults = await Then.all(tasks, then);
+
+			const applyEncoders = (data) => {
+				let
+					res = Then.resolve(data, then);
+
+				Object.forEach(ctx.encoders, (fn: Function, i) => {
+					res = res.then((obj) => fn(i ? obj : Object.fastClone(obj)));
+				});
+
+				return res;
+			};
 
 			if (ctx.withoutBody) {
 				p.query = await applyEncoders(p.query);
@@ -199,12 +222,25 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 				p.body = await applyEncoders(p.body);
 			}
 
-			if ($C(arr).some(Object.isFunction)) {
+			for (let i = 0; i < middlewareResults.length; i++) {
+				if (!Object.isFunction(middlewareResults[i])) {
+					continue;
+				}
+
 				resolve((() => {
 					const
-						res = $C(arr).filter(Object.isFunction).map((fn) => (<Function>fn)());
+						res = <any[]>[];
 
-					if (res.length <= 1) {
+					for (let j = i; j < middlewareResults.length; j++) {
+						const
+							el = middlewareResults[j];
+
+						if (Object.isFunction(el)) {
+							res.push(el());
+						}
+					}
+
+					if (res.length === 1) {
 						return res[0];
 					}
 
