@@ -53,7 +53,7 @@ export default class Range<T extends string | number | Date> {
 	 * Returns true if the range is valid
 	 */
 	isValid(): boolean {
-		return isNaN(this.start);
+		return !isNaN(this.start);
 	}
 
 	/**
@@ -81,7 +81,7 @@ export default class Range<T extends string | number | Date> {
 		}
 
 		const val = Object.isString(el) ? charCodeAt(el, 0) : Number(el);
-		return this.start >= val && val <= this.end;
+		return this.start <= val && val <= this.end;
 	}
 
 	/**
@@ -92,11 +92,19 @@ export default class Range<T extends string | number | Date> {
 		const
 			val = Object.isString(el) ? charCodeAt(el, 0) : Number(el);
 
-		if (!this.isValid() || !isFinite(this.end)) {
+		if (!this.isValid()) {
 			return this.toType(val);
 		}
 
-		return this.toType(this.end > val ? this.end : val);
+		if (this.end < val) {
+			return this.toType(this.end);
+		}
+
+		if (this.start > val) {
+			return this.toType(this.start);
+		}
+
+		return this.toType(val);
 	}
 
 	/**
@@ -148,17 +156,22 @@ export default class Range<T extends string | number | Date> {
 
 	/**
 	 * Creates an array from the range and returns it
+	 * @param [step] - iteration step value
 	 */
-	toArray(): T[] {
+	toArray(step: number = 1): T[] {
 		const
 			res = <any[]>[];
 
-		if (!this.isValid() || !isFinite(this.end)) {
+		if (!this.isValid()) {
 			return res;
 		}
 
-		for (let i = this.start; i < this.end; i++) {
+		for (let i = this.start; i <= this.end; i += step) {
 			res.push(this.toType(i));
+
+			if (i >= Number.MAX_SAFE_INTEGER) {
+				break;
+			}
 		}
 
 		if (this.reverse) {
