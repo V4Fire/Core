@@ -18,7 +18,7 @@ import extend from 'core/prelude/extend';
 extend(Object, 'get', (
 	obj: any,
 	path: string | any[],
-	params?: {separator: string}
+	params?: ObjectGetParams
 ) => {
 	const
 		p = {separator: '.', ...params},
@@ -58,7 +58,7 @@ extend(Object, 'get', (
 extend(Object, 'has', (
 	obj: any,
 	path: string | any[],
-	params?: {separator: string}
+	params?: ObjectGetParams
 ) => {
 	const
 		p = {separator: '.', ...params},
@@ -110,10 +110,10 @@ extend(Object, 'set', (
 	obj: any,
 	path: string | any[],
 	value: unknown,
-	opts?: {separator: string; concat: boolean}
+	params?: ObjectSetParams
 ) => {
 	const
-		p = {separator: '.', concat: false, ...opts},
+		p = {separator: '.', concat: false, ...params},
 		chunks = Object.isString(path) ? path.split(p.separator) : path;
 
 	let
@@ -177,13 +177,16 @@ extend(Object, 'set', (
 	return value;
 });
 
+const
+	hasOwnProperty = Object.prototype.hasOwnProperty;
+
 /**
  * Iterates over the specified object
  *
  * @param obj
  * @param cb
  */
-extend(Object, 'forEach', (obj: any, cb: Function) => {
+extend(Object, 'forEach', (obj: any, cb: Function, params: ObjectForEachParams = {}) => {
 	if (!obj) {
 		return;
 	}
@@ -210,9 +213,20 @@ extend(Object, 'forEach', (obj: any, cb: Function) => {
 	}
 
 	if (Object.isTable(obj)) {
-		for (let keys = Object.keys(obj), i = 0; i < keys.length; i++) {
-			const key = keys[i];
-			cb(obj[key], key, obj);
+		if (params.notOwn) {
+			for (const key in obj) {
+				if (params.notOwn === -1 && hasOwnProperty.call(obj, key)) {
+					continue;
+				}
+
+				cb(params.withDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : obj[key], key, obj);
+			}
+
+		} else {
+			for (let keys = Object.keys(obj), i = 0; i < keys.length; i++) {
+				const key = keys[i];
+				cb(params.withDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : obj[key], key, obj);
+			}
 		}
 	}
 

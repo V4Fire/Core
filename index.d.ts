@@ -62,9 +62,9 @@ interface FastCloneParams {
 	freezable?: boolean;
 }
 
-interface MixinParams<V = unknown, K = unknown, D = unknown> {
+interface ObjectMixinParams<V = unknown, K = unknown, D = unknown> {
 	deep?: boolean;
-	traits?: boolean;
+	traits?: boolean | -1;
 	withUndef?: boolean;
 	withDescriptor?: boolean;
 	withAccessors?: boolean;
@@ -75,21 +75,38 @@ interface MixinParams<V = unknown, K = unknown, D = unknown> {
 	filter?(el: V, key: K, data: D): unknown;
 }
 
+interface ObjectForEachParams {
+	withDescriptor?: boolean;
+	notOwn?: boolean | -1;
+}
+
+interface ObjectGetParams {
+	separator?: string;
+}
+
+interface ObjectSetParams extends ObjectGetParams {
+	concat?: boolean;
+}
+
 interface ObjectConstructor {
-	get<T = unknown>(obj: object, path: string | unknown[], params?: {separator?: string}): T;
-	has(obj: object, path: string | unknown[], params?: {separator?: string}): boolean;
-	set<T = unknown>(obj: object, path: string | unknown[], value: T, params?: {separator?: string; concat?: boolean}): T;
+	get<T = unknown>(obj: unknown, path: string | unknown[], params?: ObjectGetParams): T;
+	has(obj: object, path: string | unknown[], params?: ObjectGetParams): boolean;
+	set<T = unknown>(obj: unknown, path: string | unknown[], value: T, params?: ObjectSetParams): T;
 
 	size(obj: unknown): number;
 	keys(obj: object | Dictionary): string[];
-	forEach<V = unknown, K = unknown, D = unknown>(obj: D, cb: (el: V, key: K, data: D) => unknown): void;
+	forEach<V = unknown, K = unknown, D = unknown>(
+		obj: D,
+		cb: (el: V, key: K, data: D) => unknown,
+		params?: ObjectForEachParams
+	): void;
 
 	fastCompare<T = unknown>(a: unknown, b: T): a is T;
 	fastClone<T = unknown>(obj: T, params?: FastCloneParams): T;
 	mixin<R = unknown, D = unknown, K = unknown, V = unknown>(
-		params: MixinParams | boolean,
-		target?: D,
-		...source: unknown[]
+		params: ObjectMixinParams | boolean,
+		base?: D,
+		...objs: unknown[]
 	): R;
 
 	parse<V = unknown, R = unknown>(value: V): CanUndef<R>;
