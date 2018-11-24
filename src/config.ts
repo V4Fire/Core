@@ -7,11 +7,10 @@
  */
 
 export interface Config {
-	lang: string;
-	api?: CanUndef<string>;
 	appName?: CanUndef<string>;
+	api?: CanUndef<string>;
+	lang: string;
 	log: Dictionary;
-
 	online: {
 		checkURL?: CanUndef<string>;
 		checkInterval?: number;
