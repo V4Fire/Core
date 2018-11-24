@@ -8,8 +8,6 @@
 
 /* tslint:disable:max-file-line-count */
 
-import { convertEnumToDict } from 'core/helpers';
-
 export const
 	asyncCounter = Symbol('Async counter id');
 
@@ -172,7 +170,7 @@ export type Link = keyof typeof LinkNames;
 export type LinkNamesList = Record<Link, Link> & Dictionary;
 
 export const linkNamesDictionary =
-	<Record<Link, Link>>convertEnumToDict(LinkNames);
+	<Record<Link, Link>>Object.convertEnumToDict(LinkNames);
 
 /**
  * Returns true if the specified value is instance of AsyncOpts
@@ -240,12 +238,25 @@ export default class Async<CTX extends object = Async<any>> {
 	 *   *) [onClear] - clear handler
 	 */
 	setImmediate(fn: Function, params?: AsyncCbOpts<CTX>): number | object {
+		let
+			wrapper,
+			clearFn;
+
+		if (typeof setImmediate !== 'function') {
+			wrapper = (fn) => setTimeout(fn, 0);
+			clearFn = clearTimeout;
+
+		} else {
+			wrapper = setImmediate;
+			clearFn = clearImmediate;
+		}
+
 		return this.setAsync({
 			...params,
 			name: Async.linkNames.idleCallback,
 			obj: fn,
-			clearFn: clearImmediate,
-			wrapper: setImmediate,
+			clearFn,
+			wrapper,
 			linkByWrapper: true
 		});
 	}
@@ -567,12 +578,25 @@ export default class Async<CTX extends object = Async<any>> {
 		fn: IdleCb<R, CTX>,
 		params?: AsyncCreateIdleOpts<CTX>
 	): number | object {
+		let
+			wrapper,
+			clearFn;
+
+		if (typeof requestIdleCallback !== 'function') {
+			wrapper = (fn) => setTimeout(() => fn({timeRemaining: () => 0}), 50);
+			clearFn = clearTimeout;
+
+		} else {
+			wrapper = requestIdleCallback;
+			clearFn = cancelIdleCallback;
+		}
+
 		return this.setAsync({
 			...params && Object.reject(params, 'timeout'),
 			name: Async.linkNames.idleCallback,
 			obj: fn,
-			clearFn: cancelIdleCallback,
-			wrapper: requestIdleCallback,
+			clearFn,
+			wrapper,
 			linkByWrapper: true,
 			args: params && Object.select(params, 'timeout')
 		});
