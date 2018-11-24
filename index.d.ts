@@ -175,8 +175,45 @@ interface RegExpConstructor {
 	escape(pattern: string): string;
 }
 
+type DateCreateValues = number | string | Date;
+
 interface DateConstructor {
+	create(pattern: DateCreateValues): Date;
 	getWeekDays(): string[];
+}
+
+interface Date {
+	clone(): Date;
+	format(pattern: string, locale?: string): string;
+
+	set(params: {
+		milliseconds?: number;
+		seconds?: number;
+		minutes?: number;
+		hours?: number;
+		days?: number;
+		weeks?: number;
+		months?: number;
+		years?: number;
+	}): Date;
+
+	is(date: DateCreateValues, margin?: number): boolean;
+	isAfter(date: DateCreateValues, margin?: number): boolean;
+	isBefore(date: DateCreateValues, margin?: number): boolean;
+	isBetween(start: DateCreateValues, end: DateCreateValues, margin?: number): boolean;
+
+	isFuture(): boolean;
+	isPast(): boolean;
+
+	beginningOfDay(): Date;
+	beginningOfWeek(): Date;
+	beginningOfMonth(): Date;
+	beginningOfYear(): Date;
+
+	endOfDay(): Date;
+	endOfWeek(): Date;
+	endOfMonth(): Date;
+	endOfYear(): Date;
 }
 
 interface Function {
