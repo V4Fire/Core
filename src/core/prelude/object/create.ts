@@ -67,6 +67,29 @@ extend(Object, 'fromArray', (arr: unknown[]) => {
 	return map;
 });
 
+/**
+ * Returns values only for string fields (for converting enums)
+ * @param obj
+ */
+extend(Object, 'convertEnumToDict', (obj: Dictionary) => {
+	const
+		res = {};
+
+	for (let keys = Object.keys(obj), i = 0; i < keys.length; i++) {
+		const
+			key = keys[i],
+			el = obj[key];
+
+		if (isNaN(Number(el))) {
+			continue;
+		}
+
+		res[key] = el;
+	}
+
+	return res;
+});
+
 /** @see Sugar.Object.select */
 extend(Object, 'select', selectReject(true));
 
