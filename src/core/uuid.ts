@@ -6,31 +6,30 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+const serializeFilter = {
+	3: true,
+	5: true,
+	7: true,
+	9: true
+};
+
 /**
  * Converts the specified binary UUID to a string and returns it
  * @param uuid
  */
 export function serialize(uuid: Buffer | Uint8Array): string {
-	const
-		HEX = 16;
-
 	let
 		res = '';
 
 	for (let i = 0; i < uuid.length; ++i) {
 		let
-			chunk = uuid[i].toString(HEX);
+			chunk = uuid[i].toString(16);
 
 		if (chunk.length < 2) {
 			chunk = `0${chunk}`;
 		}
 
-		res += chunk;
-
-		// tslint:disable-next-line:prefer-switch
-		if (i === 3 || i === 5 || i === 7 || i === 9) {
-			res += '-';
-		}
+		res += chunk + (serializeFilter[i] ? '-' : '');
 	}
 
 	return res;
