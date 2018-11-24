@@ -31,7 +31,7 @@ declare function requestIdleCallback(fn: (deadline: IdleDeadline) => void, opts?
 declare function cancelIdleCallback(id: number): void;
 
 declare function setImmediate(fn: Function): number;
-declare function cancelImmediate(id: number): void;
+declare function clearImmediate(id: number): void;
 
 type Wrap<T> = T & any;
 type Nullable<T> = T | null | undefined;
@@ -77,12 +77,12 @@ interface MixinParams<V = unknown, K = unknown, D = unknown> {
 
 interface ObjectConstructor {
 	get<T = unknown>(obj: object, path: string | unknown[], params?: {separator?: string}): T;
-	has<T = unknown>(obj: object, path: string | unknown[], params?: {separator?: string}): T;
-	set<T = unknown>(obj: object, path: string | unknown[], params?: {separator?: string; concat?: boolean}): T;
+	has(obj: object, path: string | unknown[], params?: {separator?: string}): boolean;
+	set<T = unknown>(obj: object, path: string | unknown[], value: T, params?: {separator?: string; concat?: boolean}): T;
 
 	size(obj: unknown): number;
 	keys(obj: object | Dictionary): string[];
-	forEach<V, K, D = unknown>(obj: D, cb: (el: V, key: K, data: D) => unknown): void;
+	forEach<V = unknown, K = unknown, D = unknown>(obj: D, cb: (el: V, key: K, data: D) => unknown): void;
 
 	fastCompare<T = unknown>(a: unknown, b: T): a is T;
 	fastClone<T = unknown>(obj: T, params?: FastCloneParams): T;
@@ -101,6 +101,7 @@ interface ObjectConstructor {
 
 	createMap<T extends object>(obj: T): T & Dictionary;
 	fromArray(arr: unknown[]): Dictionary<boolean>;
+	convertEnumToDict(obj: Dictionary): Dictionary<string>;
 
 	select<T extends Dictionary = Dictionary>(obj: Dictionary, condition: CanArray<string> | Dictionary | RegExp): T;
 	reject<T extends Dictionary = Dictionary>(obj: Dictionary, condition: CanArray<string> | Dictionary | RegExp): T;
@@ -130,6 +131,17 @@ interface ObjectConstructor {
 
 interface Object {
 	toSource(): string;
+}
+
+interface Array<T> {
+	union<A extends unknown[]>(...args: A): A extends (infer V)[][] ?
+		Array<T | V> : A extends (infer V)[] ? Array<T | V> : T[];
+}
+
+interface String {
+	camelize(upper?: boolean): string;
+	dasherize(): string;
+	underscore(): string;
 }
 
 type NumberOptions =
