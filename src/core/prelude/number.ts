@@ -7,6 +7,7 @@
  */
 
 // tslint:disable:binary-expression-operand-order
+// tslint:disable:no-bitwise
 
 import extend from 'core/prelude/extend';
 
@@ -54,6 +55,28 @@ for (let i = 0; i < cssMethods.length; i++) {
 		return this + nm;
 	});
 }
+
+const
+	decPartRgxp = /\.\d+/;
+
+extend(Number.prototype, 'pad', function (
+	this: Number,
+	place: number = 0,
+	sign?: boolean,
+	base: number = 10
+): string {
+	const
+		val = Number(this);
+
+	let str = Math.abs(val).toString(base || 10);
+	str = repeatString('0', place - str.replace(decPartRgxp, '').length) + str;
+
+	if (sign || val < 0) {
+		str = (val < 0 ? '-' : '+') + str;
+	}
+
+	return str;
+});
 
 /** @see Sugar.Number.floor */
 extend(Number.prototype, 'floor', createRoundingFunction(Math.floor));
@@ -118,4 +141,25 @@ function createRoundingFunction(method: Function): Function {
 
 		return method(val);
 	};
+}
+
+function repeatString(str: string, num: number): string {
+	str = String(str);
+
+	let
+		res = '';
+
+	while (num > 0) {
+		if (num & 1) {
+			res += str;
+		}
+
+		num >>= 1;
+
+		if (num) {
+			str += str;
+		}
+	}
+
+	return res;
 }
