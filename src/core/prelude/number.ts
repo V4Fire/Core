@@ -18,43 +18,80 @@ const
 	day = 24 * hour,
 	week = 7 * day;
 
-const msMethods = <Array<[string, number]>>[
-	['second', second],
-	['minute', minute],
-	['hour', hour],
-	['day', day],
-	['week', week]
-];
+/** @see Sugar.Number.second */
+extend(Number.prototype, 'second', createMsFunction(second));
 
-for (let i = 0; i < msMethods.length; i++) {
-	const
-		[nm, offset] = msMethods[i];
+/** @see Sugar.Number.seconds */
+extend(Number.prototype, 'seconds', Number.prototype.second);
 
-	extend(Number.prototype, nm, function (this: Number): number {
-		return Number(this) * offset;
-	});
-}
+/** @see Sugar.Number.minute */
+extend(Number.prototype, 'minute', createMsFunction(minute));
 
-const cssMethods = <string[]>[
-	'em',
-	'ex',
-	'rem',
-	'px',
-	'per',
-	'vh',
-	'vw',
-	'vmin',
-	'vmax'
-];
+/** @see Sugar.Number.minutes */
+extend(Number.prototype, 'minutes', Number.prototype.minute);
 
-for (let i = 0; i < cssMethods.length; i++) {
-	const
-		nm = cssMethods[i];
+/** @see Sugar.Number.hour */
+extend(Number.prototype, 'hour', createMsFunction(hour));
 
-	extend(Number.prototype, nm, function (this: Number): string {
-		return this + nm;
-	});
-}
+/** @see Sugar.Number.hours */
+extend(Number.prototype, 'hours', Number.prototype.hour);
+
+/** @see Sugar.Number.day */
+extend(Number.prototype, 'day', createMsFunction(day));
+
+/** @see Sugar.Number.days */
+extend(Number.prototype, 'days', Number.prototype.day);
+
+/** @see Sugar.Number.week */
+extend(Number.prototype, 'week', createMsFunction(week));
+
+/** @see Sugar.Number.weeks */
+extend(Number.prototype, 'weeks', Number.prototype.week);
+
+/**
+ * Returns string: number + 'em'
+ */
+extend(Number.prototype, 'em', createPostfixGetter('em'));
+
+/**
+ * Returns string: number + 'ex'
+ */
+extend(Number.prototype, 'ex', createPostfixGetter('ex'));
+
+/**
+ * Returns string: number + 'rem'
+ */
+extend(Number.prototype, 'rem', createPostfixGetter('rem'));
+
+/**
+ * Returns string: number + 'px'
+ */
+extend(Number.prototype, 'px', createPostfixGetter('px'));
+
+/**
+ * Returns string: number + 'per'
+ */
+extend(Number.prototype, 'per', createPostfixGetter('per'));
+
+/**
+ * Returns string: number + 'vh'
+ */
+extend(Number.prototype, 'vh', createPostfixGetter('vh'));
+
+/**
+ * Returns string: number + 'vw'
+ */
+extend(Number.prototype, 'vw', createPostfixGetter('vw'));
+
+/**
+ * Returns string: number + 'vmin'
+ */
+extend(Number.prototype, 'vmin', createPostfixGetter('vmin'));
+
+/**
+ * Returns string: number + 'vmax'
+ */
+extend(Number.prototype, 'vmax', createPostfixGetter('vmax'));
 
 const
 	decPartRgxp = /\.\d+/;
@@ -122,6 +159,23 @@ extend(Number.prototype, 'format', function (this: Number, place?: number): stri
 
 	return res;
 });
+
+function createPostfixGetter(nm: string): PropertyDescriptor {
+	return {
+		get(): string {
+			return Number(this) + nm;
+		}
+	};
+}
+
+function createMsFunction(offset: number): Function {
+	const fn = function (this: Number): number {
+		return Number(this) * offset;
+	};
+
+	fn.valueOf = fn;
+	return fn;
+}
 
 function createRoundingFunction(method: Function): Function {
 	return function (this: Number, precision?: number): number {
