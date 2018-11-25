@@ -135,6 +135,7 @@ interface ObjectConstructor {
 	isString(obj: unknown): obj is string;
 	isNumber(obj: unknown): obj is number;
 	isBoolean(obj: unknown): obj is boolean;
+	isSymbol(obj: unknown): obj is symbol;
 
 	isRegExp(obj: unknown): obj is RegExp;
 	isDate(obj: unknown): obj is Date;

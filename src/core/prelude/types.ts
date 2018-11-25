@@ -8,37 +8,9 @@
 
 import extend from 'core/prelude/extend';
 
-const defaultMethods = <Array<[string, string | Function]>>[
-	['isFunction', 'function'],
-	['isString', 'string'],
-	['isNumber', 'number'],
-	['isBoolean', 'boolean'],
-	['isRegExp', RegExp],
-	['isDate', Date],
-	['isMap', Map],
-	['isWeakMap', WeakMap],
-	['isSet', Set],
-	['isWeakSet', WeakSet]
-];
-
-for (let i = 0; i < defaultMethods.length; i++) {
-	const
-		[nm, test] = defaultMethods[i];
-
-	if (typeof test === 'function') {
-		extend(Object, nm, (obj) => obj instanceof test);
-
-	} else {
-		extend(Object, nm, (obj) => typeof obj === test);
-	}
-}
-
 const
 	toString = Object.prototype.toString,
 	baseProto = Object.prototype;
-
-/** @see Sugar.Object.isArray */
-extend(Object, 'isArray', Array.isArray);
 
 /** @see Sugar.Object.isObject */
 extend(Object, 'isObject', (obj) => {
@@ -49,6 +21,57 @@ extend(Object, 'isObject', (obj) => {
 	const proto = Object.getPrototypeOf(obj);
 	return proto === null || proto === baseProto;
 });
+
+/** @see Sugar.Object.isArray */
+extend(Object, 'isArray', Array.isArray);
+
+/** @see Sugar.Object.isFunction */
+extend(Object, 'isFunction', (obj) => typeof obj === 'function');
+
+/** @see Sugar.Object.isRegExp */
+extend(Object, 'isRegExp', (obj) => obj instanceof RegExp);
+
+/** @see Sugar.Object.isDate */
+extend(Object, 'isDate', (obj) => obj instanceof Date);
+
+/** @see Sugar.Object.isString */
+extend(Object, 'isString', (obj) => typeof obj === 'string');
+
+/** @see Sugar.Object.isNumber */
+extend(Object, 'isNumber', (obj) => typeof obj === 'number');
+
+/** @see Sugar.Object.isBoolean */
+extend(Object, 'isBoolean', (obj) => typeof obj === 'boolean');
+
+/**
+ * Returns true if the specified value is a symbol
+ * @param obj
+ */
+extend(Object, 'isSymbol', (obj) => typeof obj === 'symbol');
+
+/**
+ * Returns true if the specified value is a map
+ * @param obj
+ */
+extend(Object, 'isMap', (obj) => obj instanceof Map);
+
+/**
+ * Returns true if the specified value is a weak map
+ * @param obj
+ */
+extend(Object, 'isWeakMap', (obj) => obj instanceof WeakMap);
+
+/**
+ * Returns true if the specified value is a set
+ * @param obj
+ */
+extend(Object, 'isSet', (obj) => obj instanceof Set);
+
+/**
+ * Returns true if the specified value is a weak set
+ * @param obj
+ */
+extend(Object, 'isWeakSet', (obj) => obj instanceof WeakSet);
 
 /**
  * Returns true if the specified value is an array or like an array
