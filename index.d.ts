@@ -215,24 +215,24 @@ interface DateCreateParams {
 }
 
 interface DateConstructor {
-	create(pattern: DateCreateValue, params?: DateCreateParams): Date;
+	create(pattern?: DateCreateValue, params?: DateCreateParams): Date;
 	getWeekDays(): string[];
+}
+
+interface DateSetParams {
+	milliseconds?: number;
+	seconds?: number;
+	minutes?: number;
+	hours?: number;
+	days?: number;
+	weeks?: number;
+	months?: number;
+	years?: number;
 }
 
 interface Date {
 	clone(): Date;
 	format(pattern: string): string;
-
-	set(params: {
-		milliseconds?: number;
-		seconds?: number;
-		minutes?: number;
-		hours?: number;
-		days?: number;
-		weeks?: number;
-		months?: number;
-		years?: number;
-	}): Date;
 
 	is(date: DateCreateValue, margin?: number): boolean;
 	isAfter(date: DateCreateValue, margin?: number): boolean;
@@ -242,6 +242,7 @@ interface Date {
 	isFuture(): boolean;
 	isPast(): boolean;
 
+	set(params: DateSetParams, reset?: boolean): Date;
 	beginningOfDay(): Date;
 	beginningOfWeek(): Date;
 	beginningOfMonth(): Date;
