@@ -9,17 +9,36 @@
 import extend from 'core/prelude/extend';
 
 /** @see Sugar.Date.is */
-extend(Date.prototype, 'is', function (date: DateCreateValue, margin: number = 0): boolean {
+extend(Date.prototype, 'is', function (this: Date, date: DateCreateValue, margin: number = 0): boolean {
 	return Math.abs(this.valueOf() - Date.create(date).valueOf()) <= margin;
 });
 
 /** @see Sugar.Date.isAfter */
-extend(Date.prototype, 'isAfter', function (date: DateCreateValue, margin: number = 0): boolean {
+extend(Date.prototype, 'isAfter', function (
+	this: Date,
+	date: DateCreateValue,
+	margin: number = 0
+): boolean {
 	return this.valueOf() > Date.create(date).valueOf() - margin;
 });
 
+/** @see Sugar.Date.isBetween */
+extend(Date.prototype, 'isBetween', function (
+	this: Date,
+	date1: DateCreateValue,
+	date2: DateCreateValue,
+	margin: number = 0
+): boolean {
+	const v = this.valueOf();
+	return v >= Date.create(date1).valueOf() - margin && v <= Date.create(date2).valueOf() + margin;
+});
+
 /** @see Sugar.Date.isBefore */
-extend(Date.prototype, 'isBefore', function (date: DateCreateValue, margin: number = 0): boolean {
+extend(Date.prototype, 'isBefore', function (
+	this: Date,
+	date: DateCreateValue,
+	margin: number = 0
+): boolean {
 	return this.valueOf() < Date.create(date).valueOf() + margin;
 });
 
@@ -31,11 +50,6 @@ extend(Date.prototype, 'isPast', function (this: Date): boolean {
 /** @see Sugar.Date.isFuture */
 extend(Date.prototype, 'isFuture', function (this: Date): boolean {
 	return this.valueOf() > Date.now();
-});
-
-/** @see Sugar.Date.isPast */
-extend(Date.prototype, 'isPast', function (this: Date): boolean {
-	return this.valueOf() < Date.now();
 });
 
 /** @see Sugar.Date.beginningOfDay */
