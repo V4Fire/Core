@@ -7,7 +7,6 @@
  */
 
 import extend from 'core/prelude/extend';
-import { lang } from 'core/i18n';
 
 /** @see Sugar.Date.is */
 extend(Date.prototype, 'is', function (date: DateCreateValue, margin: number = 0): boolean {
