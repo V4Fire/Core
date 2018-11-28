@@ -28,24 +28,21 @@ export default function extend(obj: Function | object, name: string, method: Fun
 
 	//#if runtime has noGlobals
 
-	const
-		key = Symbol.for(`[[V4_PROP_TRAP:${name}]]`);
+	const key = Symbol.for(`[[V4_PROP_TRAP:${name}]]`);
+	Object.defineProperty(obj, key, descriptor);
 
-	if (typeof obj === 'function') {
-		Object.defineProperty(obj, key, descriptor);
+	if (obj === Function.prototype || typeof obj !== 'function' && obj !== Object.prototype) {
+		Object.defineProperty(Object.prototype, key, {
+			configurable: true,
 
-	} else {
-		Object.defineProperty(obj, key, descriptor);
+			set(val: unknown): void {
+				this[name] = val;
+			},
 
-		if (obj !== Object.prototype) {
-			Object.defineProperty(Object.prototype, key, {
-				writable: true,
-				configurable: true,
-				value(): unknown {
-					return this[name];
-				}
-			});
-		}
+			get(): unknown {
+				return this[name];
+			}
+		});
 	}
 
 	//#endif
