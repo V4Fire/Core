@@ -20,7 +20,7 @@ export default function extend(obj: Function | object, name: string, method: Fun
 
 	if (typeof method === 'function') {
 		descriptor.writable = true;
-		descriptor.value = () => method;
+		descriptor.value = method;
 
 	} else {
 		Object.assign(descriptor, method);
