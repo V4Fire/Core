@@ -221,23 +221,3 @@ extend(Date, 'create', (pattern?: DateCreateValue) => {
 
 	return new Date(pattern.valueOf());
 });
-
-const
-	{format: sugarFormat} = Date.prototype,
-	formatRgxp = /{(humanTimeDate|humanDate)}/g;
-
-/**
- * Date.format wrapper
- * (added: {humanTimeDate} and {humanDate})
- *
- * @param value
- */
-Date.prototype.format = function format(value: string): string {
-	const aliases = {
-		humanTimeDate: '{HH}:{mm} {humanDate}',
-		humanDate: lang === 'ru' ? '{dd}.{MM}.{yyyy}' : '{MM}.{dd}.{yyyy}'
-	};
-
-	const replace = (str) => str.replace(formatRgxp, (str, $1) => aliases[$1]);
-	return sugarFormat.call(this, replace(value), lang);
-};

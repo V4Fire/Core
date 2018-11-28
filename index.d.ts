@@ -231,7 +231,7 @@ interface DateSetParams {
 
 interface Date {
 	clone(): Date;
-	format(pattern: string): string;
+	set(params: DateSetParams, reset?: boolean): Date;
 
 	is(date: DateCreateValue, margin?: number): boolean;
 	isAfter(date: DateCreateValue, margin?: number): boolean;
@@ -241,7 +241,6 @@ interface Date {
 	isFuture(): boolean;
 	isPast(): boolean;
 
-	set(params: DateSetParams, reset?: boolean): Date;
 	beginningOfDay(): Date;
 	beginningOfWeek(): Date;
 	beginningOfMonth(): Date;
