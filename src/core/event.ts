@@ -76,7 +76,7 @@ export function onEverythingReady(cb: () => void, ...flags: string[]): (flag: st
 		flagsStatus[flag] = true;
 
 		for (let i = 0; i < flags.length; i++) {
-			if (!flagsStatus[name]) {
+			if (!flagsStatus[flags[i]]) {
 				return;
 			}
 		}
