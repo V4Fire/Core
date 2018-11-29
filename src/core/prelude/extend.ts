@@ -50,5 +50,5 @@ export default function extend(obj: Function | object, name: string, method: Fun
 
 	Object.defineProperty(obj, name, descriptor);
 
-	//#endunles
+	//#endunless
 }
