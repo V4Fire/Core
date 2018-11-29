@@ -228,6 +228,8 @@ extend(Object, 'forEach', (obj: any, cb: Function, params: ObjectForEachParams =
 				cb(params.withDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : obj[key], key, obj);
 			}
 		}
+
+		return;
 	}
 
 	for (const el of obj) {
