@@ -220,18 +220,28 @@ interface DateConstructor {
 }
 
 interface DateSetParams {
+	millisecond?: number;
 	milliseconds?: number;
+	second?: number;
 	seconds?: number;
+	minute?: number;
 	minutes?: number;
+	hour?: number;
 	hours?: number;
+	day?: number;
 	days?: number;
+	month?: number;
 	months?: number;
+	year?: number;
 	years?: number;
 }
 
 interface Date {
 	clone(): Date;
+
+	add(params: DateSetParams, reset?: boolean): Date;
 	set(params: DateSetParams, reset?: boolean): Date;
+	rewind(params: DateSetParams, reset?: boolean): Date;
 
 	is(date: DateCreateValue, margin?: number): boolean;
 	isAfter(date: DateCreateValue, margin?: number): boolean;

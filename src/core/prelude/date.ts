@@ -106,91 +106,14 @@ extend(Date.prototype, 'endOfYear', function (this: Date): Date {
 	return this;
 });
 
+/** @see Sugar.Date.add */
+extend(Date.prototype, 'add', createDateModifier((v, b) => b + v));
+
 /** @see Sugar.Date.set */
-extend(Date.prototype, 'set', function (this: Date, params: DateSetParams, reset?: boolean): Date {
-	const
-		resetValues = <Record<keyof DateSetParams, boolean>>{};
+extend(Date.prototype, 'set', createDateModifier());
 
-	const setResetValue = (...keys: Array<keyof DateSetParams>) => {
-		for (let i = 0; i < keys.length; i++) {
-			const
-				key = keys[i];
-
-			if (resetValues[key] !== false) {
-				resetValues[key] = true;
-			}
-		}
-	};
-
-	if (params.milliseconds != null) {
-		resetValues.milliseconds = false;
-		this.setMilliseconds(params.milliseconds);
-	}
-
-	if (params.seconds != null) {
-		resetValues.seconds = false;
-		setResetValue('milliseconds');
-		this.setSeconds(params.seconds);
-	}
-
-	if (params.minutes != null) {
-		resetValues.minutes = false;
-		setResetValue('milliseconds', 'seconds');
-		this.setMinutes(params.minutes);
-	}
-
-	if (params.hours) {
-		resetValues.hours = false;
-		setResetValue('milliseconds', 'seconds', 'minutes');
-		this.setHours(params.hours);
-	}
-
-	if (params.days) {
-		resetValues.days = false;
-		setResetValue('milliseconds', 'seconds', 'minutes', 'hours');
-		this.setDate(params.days);
-	}
-
-	if (params.months) {
-		resetValues.months = false;
-		setResetValue('milliseconds', 'seconds', 'minutes', 'hours', 'days');
-		this.setDate(params.months);
-	}
-
-	if (params.years) {
-		resetValues.months = false;
-		setResetValue('milliseconds', 'seconds', 'minutes', 'hours', 'days', 'months');
-		this.setDate(params.years);
-	}
-
-	if (reset) {
-		if (resetValues.milliseconds) {
-			this.setMilliseconds(0);
-		}
-
-		if (resetValues.seconds) {
-			this.setSeconds(0);
-		}
-
-		if (resetValues.minutes) {
-			this.setMinutes(0);
-		}
-
-		if (resetValues.hours) {
-			this.setHours(0);
-		}
-
-		if (resetValues.days) {
-			this.setDate(1);
-		}
-
-		if (resetValues.months) {
-			this.setMonth(0);
-		}
-	}
-
-	return this;
-});
+/** @see Sugar.Date.rewind */
+extend(Date.prototype, 'rewind', createDateModifier((v, b) => b - v));
 
 /**
  * Returns a list of week days
@@ -234,3 +157,99 @@ extend(Date, 'create', (pattern?: DateCreateValue) => {
 
 	return new Date(pattern.valueOf());
 });
+
+function createDateModifier(mod: (val: number, base: number) => number = Any): Function {
+	return function modifyDate(this: Date, params: DateSetParams, reset?: boolean): Date {
+		const
+			resetValues = <Record<keyof DateSetParams, boolean>>{};
+
+		const setResetValue = (...keys: Array<keyof DateSetParams>) => {
+			for (let i = 0; i < keys.length; i++) {
+				const
+					key = keys[i];
+
+				if (resetValues[key] !== false) {
+					resetValues[key] = true;
+				}
+			}
+		};
+
+		for (let keys = Object.keys(params), i = 0; i < keys.length; i++) {
+			const
+				key = keys[i];
+
+			if (key.slice(-1) !== 's') {
+				params[`${key}s`] = params[key];
+			}
+		}
+
+		if (params.milliseconds != null) {
+			resetValues.milliseconds = false;
+			this.setMilliseconds(mod(params.milliseconds, this.getMilliseconds()));
+		}
+
+		if (params.seconds != null) {
+			resetValues.seconds = false;
+			setResetValue('milliseconds');
+			this.setSeconds(mod(params.seconds, this.getSeconds()));
+		}
+
+		if (params.minutes != null) {
+			resetValues.minutes = false;
+			setResetValue('milliseconds', 'seconds');
+			this.setMinutes(mod(params.minutes, this.getMinutes()));
+		}
+
+		if (params.hours) {
+			resetValues.hours = false;
+			setResetValue('milliseconds', 'seconds', 'minutes');
+			this.setHours(mod(params.hours, this.getHours()));
+		}
+
+		if (params.days) {
+			resetValues.days = false;
+			setResetValue('milliseconds', 'seconds', 'minutes', 'hours');
+			this.setDate(mod(params.days, this.getDate()));
+		}
+
+		if (params.months) {
+			resetValues.months = false;
+			setResetValue('milliseconds', 'seconds', 'minutes', 'hours', 'days');
+			this.setMonth(mod(params.months, this.getMonth()));
+		}
+
+		if (params.years) {
+			resetValues.years = false;
+			setResetValue('milliseconds', 'seconds', 'minutes', 'hours', 'days', 'months');
+			this.setFullYear(params.years);
+		}
+
+		if (reset) {
+			if (resetValues.milliseconds) {
+				this.setMilliseconds(0);
+			}
+
+			if (resetValues.seconds) {
+				this.setSeconds(0);
+			}
+
+			if (resetValues.minutes) {
+				this.setMinutes(0);
+			}
+
+			if (resetValues.hours) {
+				this.setHours(0);
+			}
+
+			if (resetValues.days) {
+				this.setDate(1);
+			}
+
+			if (resetValues.months) {
+				this.setMonth(0);
+			}
+		}
+
+		return this;
+	};
+}
