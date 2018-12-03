@@ -7,19 +7,18 @@
  */
 
 import { GLOBAL } from 'core/const/links';
-import { asyncLocal } from 'core/kv-storage';
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 
 export const
 	event = new EventEmitter({maxListeners: 1e3}),
-	storage = asyncLocal.namespace('[[ENV]]');
+	storage = import('core/kv-storage').then(({asyncLocal}) => asyncLocal.namespace('[[ENV]]'));
 
 /**
  * Returns settings from the app environment by the specified key
  * @param key
  */
-export function get(key: string): Promise<CanUndef<Dictionary>> {
-	return storage.get(key);
+export async function get(key: string): Promise<CanUndef<Dictionary>> {
+	return (await storage).get<Dictionary>(key);
 }
 
 /**
@@ -29,7 +28,7 @@ export function get(key: string): Promise<CanUndef<Dictionary>> {
  * @param value
  */
 export function set(key: string, value: Dictionary): void {
-	storage.set(key, value).catch(stderr);
+	storage.then((storage) => storage.set(key, value)).catch(stderr);
 	event.emit(`set.${key}`, value);
 }
 
@@ -38,7 +37,7 @@ export function set(key: string, value: Dictionary): void {
  * @param key
  */
 export function remove(key: string): void {
-	storage.remove(key).catch(stderr);
+	storage.then((storage) => storage.remove(key)).catch(stderr);
 	event.emit(`remove.${key}`);
 }
 
