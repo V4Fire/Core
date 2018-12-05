@@ -144,6 +144,9 @@ export interface EventEmitterLike {
 
 export type WorkerLikeP = Function | WorkerLike;
 export type EventEmitterLikeP = Function | EventEmitterLike;
+export interface WrappedFunction<CTX extends object = Async> extends Function {
+	(this: CTX, ...args: any[]): any;
+}
 
 export type ProxyCb<A = unknown, R = unknown, CTX extends object = Async> = A extends never ?
 	((this: CTX) => R) : A extends unknown[] ?
@@ -825,7 +828,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 *   *) [single] - if false, then after first invocation the proxy it won't be removed
 	 *   *) [onClear] - clear handler
 	 */
-	proxy<A = unknown, R = unknown>(cb: Function, params?: AsyncProxyOpts<CTX>): ProxyCb<A, R, CTX> {
+	proxy<T extends WrappedFunction, CTX extends object = Async>(cb: T, params?: AsyncProxyOpts<CTX>): T {
 		const p = params || {};
 		return this.setAsync({
 			...params,
