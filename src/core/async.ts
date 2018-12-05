@@ -145,7 +145,7 @@ export interface EventEmitterLike {
 export type WorkerLikeP = Function | WorkerLike;
 export type EventEmitterLikeP = Function | EventEmitterLike;
 export interface WrappedFunction<CTX extends object = Async> extends Function {
-	(this: CTX, ...args: any[]): unknown;
+	(this: CTX, ...args: any[]): any;
 }
 
 export type ProxyCb<A = unknown, R = unknown, CTX extends object = Async> = A extends never ?
