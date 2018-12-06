@@ -89,11 +89,6 @@ const config: Config = {
 				marginBottom: '3px'
 			},
 
-			success: {
-				backgroundColor: '#27AE61',
-				color: '#FFF'
-			},
-
 			warning: {
 				backgroundColor: '#FFCE00',
 				color: '#FFF'
