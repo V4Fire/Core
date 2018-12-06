@@ -11,7 +11,9 @@ import Logger from './logger';
 class LoggerFactory {
 	private loggers: {[context: string]: Logger} = {};
 
-	public get(context: string): Logger {
+	public get(context?: string): Logger {
+		context = context || '';
+
 		if (!this.loggers[context]) {
 			this.loggers[context] = new Logger(context);
 		}
