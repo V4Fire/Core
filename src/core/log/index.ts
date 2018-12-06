@@ -24,14 +24,6 @@ env.get('log').then(setConfig, setConfig);
 env.event.on('set.log', setConfig);
 env.event.on('remove.log', setConfig);
 
-export interface LogStyles extends Dictionary {
-	default: Dictionary;
-}
-
-export interface LogPreferences extends Dictionary {
-	styles?: LogStyles;
-}
-
 export interface LogMessageOptions {
 	key: string;
 	type: CanUndef<string>;

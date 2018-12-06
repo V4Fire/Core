@@ -7,3 +7,11 @@
  */
 
 export type LogLevel = 'info' | 'warn' | 'error';
+
+export interface LogStyles extends Dictionary {
+	default: Dictionary;
+}
+
+export interface LogPreferences extends Dictionary {
+	styles?: LogStyles;
+}
