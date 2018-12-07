@@ -22,9 +22,12 @@ export const
  */
 export async function get(): Promise<{auth: CanUndef<string>; csrf: CanUndef<string>}> {
 	try {
+		const
+			s = await session;
+
 		return {
-			auth: await session.get<string>('auth'),
-			csrf: await session.get<string>('csrf')
+			auth: await s.get<string>('auth'),
+			csrf: await s.get<string>('csrf')
 		};
 
 	} catch {
@@ -44,12 +47,15 @@ export async function get(): Promise<{auth: CanUndef<string>; csrf: CanUndef<str
  */
 export async function set(auth?: string, csrf?: string): Promise<boolean> {
 	try {
+		const
+			s = await session;
+
 		if (auth) {
-			await session.set('auth', auth);
+			await s.set('auth', auth);
 		}
 
 		if (csrf) {
-			await session.set('csrf', csrf);
+			await s.set('csrf', csrf);
 		}
 
 		event.emit('set', {auth, csrf});
@@ -67,8 +73,9 @@ export async function set(auth?: string, csrf?: string): Promise<boolean> {
  */
 export async function clear(): Promise<boolean> {
 	try {
-		await session.remove('auth');
-		await session.remove('csrf');
+		const s = await session;
+		await s.remove('auth');
+		await s.remove('csrf');
 		event.emit('clear');
 
 	} catch {
@@ -100,7 +107,7 @@ export async function match(auth?: string, csrf?: string): Promise<boolean> {
 export async function isExists(): Promise<boolean> {
 	try {
 		const s = await get();
-		return Boolean(s.auth && (!await session.has('csrf') || s.csrf));
+		return Boolean(s.auth && (!await (await session).has('csrf') || s.csrf));
 
 	} catch {
 		return false;

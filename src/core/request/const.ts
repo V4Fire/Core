@@ -12,7 +12,9 @@ import Range from 'core/range';
 
 import { RequestMethods, ResponseTypes, GlobalOptions, CacheStrategy } from 'core/request/interface';
 import { Cache, RestrictedCache, NeverCache } from 'core/cache';
-export { asyncLocal as storage } from 'core/kv-storage';
+
+export const
+	storage = import('core/kv-storage').then(({asyncLocal}) => asyncLocal);
 
 export const mimeTypes: Dictionary<ResponseTypes> = Object.createDict<any>({
 	'application/json': 'json',

@@ -9,7 +9,6 @@
 import config from 'config';
 import * as dict from 'lang';
 
-import { asyncLocal } from 'core/kv-storage';
 import { GLOBAL, IS_NODE } from 'core/const/links';
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 
@@ -18,7 +17,7 @@ export const
 
 const
 	langs = [],
-	storage = asyncLocal.namespace('[[I18N]]'),
+	storage = import('core/kv-storage').then(({asyncLocal}) => asyncLocal.namespace('[[I18N]]')),
 	ws = /[\r\n]+/g;
 
 // Normalize translates
@@ -51,10 +50,11 @@ if (IS_NODE) {
 	isInitialized = (async () => {
 		try {
 			const
-				l = await storage.get<string>('lang');
+				s = await storage,
+				l = await s.get<string>('lang');
 
 			if (l) {
-				setLang(l, await storage.get<boolean>('isLangDef'));
+				setLang(l, await s.get<boolean>('isLangDef'));
 				return;
 			}
 
@@ -81,8 +81,10 @@ export function setLang(value: string, def?: boolean): string {
 	isLangDef = Boolean(def);
 
 	if (!IS_NODE) {
-		storage.set('lang', value).catch(stderr);
-		storage.set('isLangDef', isLangDef).catch(stderr);
+		storage.then((storage) => Promise.all([
+			storage.set('lang', value),
+			storage.set('isLangDef', isLangDef)
+		])).catch(stderr);
 	}
 
 	event.emit('setLang', lang, oldLang);

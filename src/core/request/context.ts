@@ -220,7 +220,7 @@ export default class RequestContext<T = unknown> {
 		if (key) {
 			if (p.offlineCache) {
 				storage
-					.set(getStorageKey(key), res.data, p.offlineCacheTTL)
+					.then((storage) => storage.set(getStorageKey(key), res.data, p.offlineCacheTTL))
 					.catch(stderr);
 			}
 
@@ -252,7 +252,7 @@ export default class RequestContext<T = unknown> {
 			this.cache.remove(key);
 
 			if (this.params.offlineCache) {
-				storage.remove(getStorageKey(key)).catch(stderr);
+				storage.then((storage) => storage.remove(getStorageKey(key))).catch(stderr);
 			}
 		}
 	}

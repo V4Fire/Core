@@ -8,7 +8,6 @@
 
 import config from 'config';
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
-import { asyncLocal } from 'core/kv-storage';
 
 export interface StatusEvent {
 	status: boolean;
@@ -20,7 +19,7 @@ export const
 
 const
 	{online} = config,
-	storage = asyncLocal.namespace('[[NET]]');
+	storage = import('core/kv-storage').then(({asyncLocal}) => asyncLocal.namespace('[[NET]]'));
 
 let
 	status,
@@ -50,11 +49,11 @@ export function isOnline(): Promise<{status: boolean; lastOnline?: Date}> {
 			loadFromStorage;
 
 		if (online.persistence && !lastOnline && url) {
-			loadFromStorage = storage.get('lastOnline').then((v) => {
+			loadFromStorage = storage.then((storage) => storage.get('lastOnline').then((v) => {
 				if (v) {
 					lastOnline = v;
 				}
-			});
+			})).catch(stderr);
 		}
 
 		status = await new Promise<boolean>((resolve) => {
@@ -104,7 +103,7 @@ export function isOnline(): Promise<{status: boolean; lastOnline?: Date}> {
 			syncTimer = undefined;
 
 			if (online.persistence && url) {
-				storage.set('lastOnline', lastOnline = new Date()).catch(stderr);
+				storage.then((storage) => storage.set('lastOnline', lastOnline = new Date())).catch(stderr);
 			}
 		};
 
