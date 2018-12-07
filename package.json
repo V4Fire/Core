@@ -5,7 +5,7 @@
   "main": "src/core/index.js",
   "typings": "index.d.ts",
   "license": "MIT",
-  "version": "2.0.0-beta.23",
+  "version": "2.0.0-beta.24",
   "author": {
     "name": "kobezzza",
     "email": "kobezzza@gmail.com",
@@ -28,7 +28,7 @@
     "@types/got": "^9.2.1",
     "@types/node": "^10.12.12",
     "collection.js": "^6.6.27",
-    "dotenv": "^6.1.0",
+    "dotenv": "^6.2.0",
     "eventemitter2": "^5.0.1",
     "fs-extra-promise": "^1.0.1",
     "got": "^9.3.2",
