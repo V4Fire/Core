@@ -133,7 +133,7 @@ const mediumOpts = {
 	year: 'numeric'
 };
 
-/** @see Sugar.Date.short */
+/** @see Sugar.Date.medium */
 extend(Date.prototype, 'medium', function (this: Date, locale: string = lang): string {
 	return this.toLocaleString(locale, mediumOpts);
 });
