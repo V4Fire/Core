@@ -26,8 +26,6 @@
     "postinstall": "rm -rf ./node_modules/@types/node"
   },
   "dependencies": {
-    "@types/got": "^9.2.1",
-    "@types/node": "^10.12.12",
     "collection.js": "^6.6.27",
     "dotenv": "^6.2.0",
     "eventemitter2": "^5.0.1",
@@ -40,6 +38,7 @@
   "optionalDependencies": {
     "@pzlr/build-core": "^2.8.11",
     "@types/fs-extra-promise": "^1.0.7",
+    "@types/got": "^9.2.1",
     "@types/gulp": "^4.0.5",
     "@types/gulp-load-plugins": "0.0.31",
     "@types/through2": "^2.0.33",
@@ -63,7 +62,7 @@
   },
   "devDependencies": {
     "babel-eslint": "^10.0.1",
-    "eslint": "^5.9.0",
+    "eslint": "^5.10.0",
     "tslint": "^5.11.0"
   }
 }
