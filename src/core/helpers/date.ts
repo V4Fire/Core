@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { lang } from 'core/i18n';
+import { lang } from 'core/prelude/i18n';
 
 /**
  * Normalizes the specified value as date

@@ -15,3 +15,4 @@ import 'core/prelude/function';
 import 'core/prelude/date';
 import 'core/prelude/string';
 import 'core/prelude/number';
+import 'core/prelude/i18n';

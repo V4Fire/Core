@@ -284,6 +284,7 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 					!fromCache &&
 					p.offlineCache &&
 					!ctx.isOnline &&
+					storage &&
 					await (await storage).has(localCacheKey)
 				);
 			}
@@ -299,7 +300,8 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 
 			} else if (fromLocalStorage) {
 				cache = 'offline';
-				res = Then.immediate(() => storage.then((storage) => storage.get(localCacheKey)), then)
+				res = Then.immediate(() => (<NonNullable<typeof storage>>storage)
+					.then((storage) => storage.get(localCacheKey)), then)
 					.then(ctx.wrapAsResponse)
 					.then(ctx.saveCache);
 

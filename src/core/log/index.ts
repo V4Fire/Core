@@ -8,7 +8,7 @@
 
 import config from 'config';
 import logDriver from 'core/log/engines';
-import * as env from 'core/env';
+import * as env from 'core/prelude/env';
 
 let
 	options,

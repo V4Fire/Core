@@ -16,10 +16,12 @@ let
 // tslint:disable-next-line
 if (IS_NODE) {
 	//#if node_js
+	// @ts-ignore
 	transport = require('core/request/engines/node');
 	//#endif
 
 } else {
+	// @ts-ignore
 	transport = require('core/request/engines/browser').default;
 }
 

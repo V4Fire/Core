@@ -219,6 +219,10 @@ export default class RequestContext<T = unknown> {
 
 		if (key) {
 			if (p.offlineCache) {
+				if (!storage) {
+					throw new ReferenceError('kv-storage module is not loaded');
+				}
+
 				storage
 					.then((storage) => storage.set(getStorageKey(key), res.data, p.offlineCacheTTL))
 					.catch(stderr);
@@ -251,7 +255,7 @@ export default class RequestContext<T = unknown> {
 		if (key) {
 			this.cache.remove(key);
 
-			if (this.params.offlineCache) {
+			if (this.params.offlineCache && storage) {
 				storage.then((storage) => storage.remove(getStorageKey(key))).catch(stderr);
 			}
 		}

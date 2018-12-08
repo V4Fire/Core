@@ -17,6 +17,7 @@ export const
  */
 export const IS_NODE: boolean = (() => {
 	try {
+		// @ts-ignore
 		return typeof process === 'object' && {}.toString.call(process) === '[object process]';
 
 	} catch {

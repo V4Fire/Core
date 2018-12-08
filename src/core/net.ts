@@ -7,6 +7,7 @@
  */
 
 import config from 'config';
+import { AsyncNamespace } from 'core/kv-storage';
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 
 export interface StatusEvent {
@@ -18,8 +19,14 @@ export const
 	event = new EventEmitter();
 
 const
-	{online} = config,
-	storage = import('core/kv-storage').then(({asyncLocal}) => asyncLocal.namespace('[[NET]]'));
+	{online} = config;
+
+let
+	storage: CanUndef<Promise<AsyncNamespace>>;
+
+//#if runtime has kv-storage
+storage = import('core/kv-storage').then(({asyncLocal}) => asyncLocal.namespace('[[NET]]'));
+//#endif
 
 let
 	status,
@@ -49,6 +56,10 @@ export function isOnline(): Promise<{status: boolean; lastOnline?: Date}> {
 			loadFromStorage;
 
 		if (online.persistence && !lastOnline && url) {
+			if (!storage) {
+				throw new ReferenceError('kv-storage module is not loaded');
+			}
+
 			loadFromStorage = storage.then((storage) => storage.get('lastOnline').then((v) => {
 				if (v) {
 					lastOnline = v;
@@ -103,6 +114,10 @@ export function isOnline(): Promise<{status: boolean; lastOnline?: Date}> {
 			syncTimer = undefined;
 
 			if (online.persistence && url) {
+				if (!storage) {
+					throw new ReferenceError('kv-storage module is not loaded');
+				}
+
 				storage.then((storage) => storage.set('lastOnline', lastOnline = new Date())).catch(stderr);
 			}
 		};

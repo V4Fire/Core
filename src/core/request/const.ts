@@ -10,11 +10,16 @@ import config from 'config';
 import statusCodes from 'core/status-codes';
 import Range from 'core/range';
 
+import { AsyncFactoryResult } from 'core/kv-storage';
 import { RequestMethods, ResponseTypes, GlobalOptions, CacheStrategy } from 'core/request/interface';
 import { Cache, RestrictedCache, NeverCache } from 'core/cache';
 
-export const
-	storage = import('core/kv-storage').then(({asyncLocal}) => asyncLocal);
+export let
+	storage: CanUndef<Promise<AsyncFactoryResult>>;
+
+//#if runtime has kv-storage
+storage = import('core/kv-storage').then(({asyncLocal}) => asyncLocal);
+//#endif
 
 export const mimeTypes: Dictionary<ResponseTypes> = Object.createDict<any>({
 	'application/json': 'json',

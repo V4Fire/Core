@@ -6,10 +6,12 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import extend from 'core/prelude/extend';
 import config from 'config';
 import * as dict from 'lang';
 
 import { GLOBAL, IS_NODE } from 'core/const/links';
+import { AsyncNamespace } from 'core/kv-storage';
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 
 export const
@@ -17,8 +19,14 @@ export const
 
 const
 	langs = [],
-	storage = import('core/kv-storage').then(({asyncLocal}) => asyncLocal.namespace('[[I18N]]')),
 	ws = /[\r\n]+/g;
+
+let
+	storage: CanUndef<Promise<AsyncNamespace>>;
+
+//#if runtime has kv-storage
+storage = import('core/kv-storage').then(({asyncLocal}) => asyncLocal.namespace('[[I18N]]'));
+//#endif
 
 // Normalize translates
 Object.forEach(dict, (el) => {
@@ -80,7 +88,7 @@ export function setLang(value: string, def?: boolean): string {
 	lang = value;
 	isLangDef = Boolean(def);
 
-	if (!IS_NODE) {
+	if (!IS_NODE && storage) {
 		storage.then((storage) => Promise.all([
 			storage.set('lang', value),
 			storage.set('isLangDef', isLangDef)
@@ -91,10 +99,39 @@ export function setLang(value: string, def?: boolean): string {
 	return lang;
 }
 
+extend(GLOBAL, 'i18n', t);
+extend(GLOBAL, 't', t);
+
+/**
+ * Global i18n helper function (string tag)
+ */
+extend(GLOBAL, 'l', function l(strings: unknown | string[], ...exprs: unknown[]): string {
+	if (strings == null) {
+		return '';
+	}
+
+	if (Object.isArray(strings)) {
+		if (strings.length === 1) {
+			return String(strings[0]);
+		}
+
+		let
+			str = '';
+
+		for (let i = 0; i < strings.length; i++) {
+			str += strings[i] + (i in exprs ? String(exprs[i]) : '');
+		}
+
+		return str;
+	}
+
+	return String(strings);
+});
+
 /**
  * Global i18n function (string tag)
  */
-GLOBAL.i18n = GLOBAL.t = function t(strings: unknown | string[], ...exprs: unknown[]): string {
+function t(strings: unknown | string[], ...exprs: unknown[]): string {
 	if (strings == null) {
 		return '';
 	}
@@ -116,33 +153,7 @@ GLOBAL.i18n = GLOBAL.t = function t(strings: unknown | string[], ...exprs: unkno
 	}
 
 	return str;
-};
-
-/**
- * Global i18n helper function (string tag)
- */
-GLOBAL.l = function l(strings: unknown | string[], ...exprs: unknown[]): string {
-	if (strings == null) {
-		return '';
-	}
-
-	if (Object.isArray(strings)) {
-		if (strings.length === 1) {
-			return String(strings[0]);
-		}
-
-		let
-			str = '';
-
-		for (let i = 0; i < strings.length; i++) {
-			str += strings[i] + (i in exprs ? String(exprs[i]) : '');
-		}
-
-		return str;
-	}
-
-	return String(strings);
-};
+}
 
 /**
  * Base i18n function

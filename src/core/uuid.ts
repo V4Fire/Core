@@ -17,7 +17,7 @@ const serializeFilter = {
  * Converts the specified binary UUID to a string and returns it
  * @param uuid
  */
-export function serialize(uuid: Buffer | Uint8Array): string {
+export function serialize(uuid: Uint8Array): string {
 	let
 		res = '';
 
