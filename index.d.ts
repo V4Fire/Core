@@ -239,6 +239,10 @@ interface DateSetParams {
 interface Date {
 	clone(): Date;
 
+	short(local?: string): string;
+	medium(local?: string): string;
+	long(local?: string): string;
+
 	add(params: DateSetParams, reset?: boolean): Date;
 	set(params: DateSetParams, reset?: boolean): Date;
 	rewind(params: DateSetParams, reset?: boolean): Date;

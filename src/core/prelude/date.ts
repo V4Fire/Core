@@ -7,6 +7,7 @@
  */
 
 import extend from 'core/prelude/extend';
+import { lang } from 'core/prelude/i18n';
 
 /** @see Sugar.Date.is */
 extend(Date.prototype, 'is', function (this: Date, date: DateCreateValue, margin: number = 0): boolean {
@@ -114,6 +115,33 @@ extend(Date.prototype, 'set', createDateModifier());
 
 /** @see Sugar.Date.rewind */
 extend(Date.prototype, 'rewind', createDateModifier((v, b) => b - v));
+
+const shortOpts = {
+	month: 'numeric',
+	day: 'numeric',
+	year: 'numeric'
+};
+
+/** @see Sugar.Date.short */
+extend(Date.prototype, 'short', function (this: Date, locale: string = lang): string {
+	return this.toLocaleString(locale, shortOpts);
+});
+
+const mediumOpts = {
+	month: 'long',
+	day: 'numeric',
+	year: 'numeric'
+};
+
+/** @see Sugar.Date.short */
+extend(Date.prototype, 'medium', function (this: Date, locale: string = lang): string {
+	return this.toLocaleString(locale, mediumOpts);
+});
+
+/** @see Sugar.Date.long */
+extend(Date.prototype, 'long', function (this: Date, locale: string = lang): string {
+	return this.toLocaleString(locale);
+});
 
 /**
  * Returns a list of week days
