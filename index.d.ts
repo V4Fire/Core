@@ -264,6 +264,8 @@ interface Date {
 	endOfWeek(): Date;
 	endOfMonth(): Date;
 	endOfYear(): Date;
+
+	daysInMonth(): number;
 }
 
 interface Function {

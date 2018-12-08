@@ -10,6 +10,11 @@ import extend from 'core/prelude/extend';
 import { lang } from 'core/prelude/i18n';
 
 /** @see Sugar.Date.is */
+extend(Date.prototype, 'clone', function (this: Date): Date {
+	return new Date(this);
+});
+
+/** @see Sugar.Date.is */
 extend(Date.prototype, 'is', function (this: Date, date: DateCreateValue, margin: number = 0): boolean {
 	return Math.abs(this.valueOf() - Date.create(date).valueOf()) <= margin;
 });
@@ -91,6 +96,11 @@ extend(Date.prototype, 'endOfMonth', function (this: Date): Date {
 	this.setMonth(this.getMonth() + 1, 0);
 	this.endOfDay();
 	return this;
+});
+
+/** @see Sugar.Date.daysInMonth */
+extend(Date.prototype, 'daysInMonth', function (this: Date): number {
+	return this.clone().endOfMonth().getDate();
 });
 
 /** @see Sugar.Date.beginningOfYear */
