@@ -99,8 +99,8 @@ export function setLang(value: string, def?: boolean): string {
 	return lang;
 }
 
-extend(GLOBAL, 'i18n', t);
-extend(GLOBAL, 't', t);
+extend(GLOBAL, 'i18n', globalI18n);
+extend(GLOBAL, 't', globalI18n);
 
 /**
  * Global i18n helper function (string tag)
@@ -131,24 +131,24 @@ extend(GLOBAL, 'l', (strings: unknown | string[], ...exprs: unknown[]): string =
 /**
  * Global i18n function (string tag)
  */
-function t(strings: unknown | string[], ...exprs: unknown[]): string {
+function globalI18n(strings: unknown | string[], ...exprs: unknown[]): string {
 	if (strings == null) {
 		return '';
 	}
 
 	if (!Object.isArray(strings)) {
-		return i18n(strings);
+		return localI18n(strings);
 	}
 
 	let str = '';
 	if (exprs.length === 0) {
 		for (let i = 0; i < strings.length; i++) {
-			str += i18n(strings[i]);
+			str += localI18n(strings[i]);
 		}
 
 	} else {
 		for (let i = 0; i < strings.length; i++) {
-			str += i18n(strings[i]) + (i in exprs ? exprs[i] : '');
+			str += localI18n(strings[i]) + (i in exprs ? exprs[i] : '');
 		}
 	}
 
@@ -161,7 +161,7 @@ function t(strings: unknown | string[], ...exprs: unknown[]): string {
  * @param val
  * @param [defLang]
  */
-function i18n(val: unknown, defLang?: string): string {
+function localI18n(val: unknown, defLang?: string): string {
 	const str = String(val);
 	defLang = defLang === undefined ? lang : defLang;
 
