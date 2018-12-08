@@ -9,7 +9,7 @@
 import extend from 'core/prelude/extend';
 import { lang } from 'core/prelude/i18n';
 
-/** @see Sugar.Date.is */
+/** @see Sugar.Date.clone */
 extend(Date.prototype, 'clone', function (this: Date): Date {
 	return new Date(this);
 });
