@@ -105,7 +105,7 @@ extend(GLOBAL, 't', t);
 /**
  * Global i18n helper function (string tag)
  */
-extend(GLOBAL, 'l', function l(strings: unknown | string[], ...exprs: unknown[]): string {
+extend(GLOBAL, 'l', (strings: unknown | string[], ...exprs: unknown[]): string => {
 	if (strings == null) {
 		return '';
 	}
