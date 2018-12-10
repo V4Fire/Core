@@ -74,8 +74,8 @@ export default function log(
 			const
 				logRecord = queue[i];
 
-			if (this.isAbleToLog(logRecord.context)) {
-				details = this.prepareDetails(logRecord.details);
+			if (isAbleToLog(logRecord.context)) {
+				details = prepareDetails(logRecord.details);
 				logEngine.log(logRecord.context, logRecord.logLevel, logRecord.message, logRecord.error, ...details);
 			}
 		}
@@ -83,8 +83,8 @@ export default function log(
 		queue = [];
 	}
 
-	if (this.isAbleToLog(context)) {
-		details = this.prepareDetails(details);
+	if (isAbleToLog(context)) {
+		details = prepareDetails(details);
 		logEngine.log(context, logLevel, message, error, ...details);
 	}
 }
