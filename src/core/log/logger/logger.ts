@@ -49,7 +49,7 @@ export default class Logger {
 	}
 
 	private log(
-		context: string | undefined,
+		context: CanUndef<string>,
 		logLevel: LogLevel,
 		errorOrMessage: Error | string,
 		...details: unknown[])
