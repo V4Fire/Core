@@ -11,9 +11,17 @@ import logEngine from 'core/log/engines';
 import * as env from 'core/env';
 import { LogLevel } from '../types';
 
+interface LogRecord {
+	context: string,
+	message: string,
+	logLevel: LogLevel,
+	error: CanUndef<Error>,
+	details: unknown[],
+}
+
 let
 	options,
-	queue: [string, string, LogLevel, Error | undefined, unknown[]][] = [];
+	queue: LogRecord[] = [];
 
 const setConfig = (val) => {
 	options = {
@@ -33,11 +41,12 @@ export default function log(
 	errorOrMessage: Error | string,
 	...details: unknown[])
 	: void {
-	let error: Error | undefined;
+	let error: CanUndef<Error>;
 	let message = '';
 
 	if (errorOrMessage instanceof Error) {
 		error = errorOrMessage;
+
 		if (Object.isString(details[0])) {
 			message = <string>details[0];
 			details = details.slice(1);
@@ -48,18 +57,18 @@ export default function log(
 	}
 
 	if (!options) {
-		queue.push([context, message, logLevel, error, details]);
+		queue.push({context, message, logLevel, error, details});
 		return;
 	}
 
 	if (queue.length) {
 		for (let i = 0; i < queue.length; i++) {
 			const
-				[ctx, msg, lvl, err, ...d] = queue[i];
+				logRecord = queue[i];
 
-			if (this.isAbleToLog(ctx)) {
-				details = this.prepareDetails(d);
-				logEngine.log(ctx, lvl, msg, err, ...details);
+			if (this.isAbleToLog(logRecord.context)) {
+				details = this.prepareDetails(logRecord.details);
+				logEngine.log(logRecord.context, logRecord.logLevel, logRecord.message, logRecord.error, ...details);
 			}
 		}
 
