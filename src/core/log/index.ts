@@ -6,5 +6,5 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-export { default } from './loggerFactory';
+export { default } from './logger/loggerFactory';
 export * from './types';

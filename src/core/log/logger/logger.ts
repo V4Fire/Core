@@ -9,7 +9,7 @@
 import $C = require('collection.js');
 import logEngine from 'core/log/engines';
 import * as env from 'core/env';
-import { LogLevel } from './types';
+import { LogLevel } from '../types';
 
 let
 	options,
