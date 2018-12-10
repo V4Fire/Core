@@ -35,6 +35,14 @@ env.get('log').then(setConfig, setConfig);
 env.event.on('set.log', setConfig);
 env.event.on('remove.log', setConfig);
 
+/**
+ * Call appropriate log engine. Enqueue log records until options set up and then log them.
+ *
+ * @param context - log record context
+ * @param logLevel - log level
+ * @param errorOrMessage - error or message to log
+ * @param details - additional details. If it's a function then call it
+ */
 export default function log(
 	context: string,
 	logLevel: LogLevel,
@@ -81,6 +89,11 @@ export default function log(
 	}
 }
 
+/**
+ * Returns true if patterns allow to log record with specified context
+ *
+ * @param context - context that's checking for ability to log
+ */
 function isAbleToLog(context: string): boolean {
 	if (options.patterns) {
 		for (let o = options.patterns, i = 0; i < o.length; i++) {
@@ -95,6 +108,13 @@ function isAbleToLog(context: string): boolean {
 	return true;
 }
 
+/**
+ * For each element in details array check whether it's a function.
+ * If so then call it and set it's result in the array instead of the function.
+ * If it's not a function then leave element as is.
+ *
+ * @param details - details
+ */
 function prepareDetails(details: unknown[]): unknown[] {
 	for (let i = 0; i < details.length; i++) {
 		const el = details[i];

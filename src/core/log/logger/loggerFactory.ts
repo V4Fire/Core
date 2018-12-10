@@ -11,6 +11,11 @@ import Logger from './logger';
 class LoggerFactory {
 	private loggers: {[context: string]: Logger} = {};
 
+	/**
+	 * Returns logger with specified global context, that will be inserted before each context in log record.
+	 *
+	 * @param [context] - global context for returning logger
+	 */
 	public get(context?: string): Logger {
 		context = context || '';
 
