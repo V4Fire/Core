@@ -51,6 +51,7 @@ export default function log(
 	: void {
 	let error: CanUndef<Error>;
 	let message = '';
+	context = `${context || 'no-context'}:${logLevel}`;
 
 	if (errorOrMessage instanceof Error) {
 		error = errorOrMessage;
