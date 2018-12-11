@@ -7,7 +7,7 @@
  */
 
 import config from 'config';
-import { LogLevel, LogPreferences } from '../types';
+import { LogLevel, LogPreferences } from 'core/log/types';
 
 class ConsoleLogEngine {
 	protected config: LogPreferences;

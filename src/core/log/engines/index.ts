@@ -6,6 +6,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import logEngine from './consoleLogEngine';
+import logEngine from 'core/log/engines/console-log-engine';
 
 export default logEngine;
