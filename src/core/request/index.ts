@@ -9,8 +9,8 @@
 import $C = require('collection.js');
 import Then from 'core/then';
 
-import loggerFactory from 'core/log';
-const logger = loggerFactory.get('request');
+import { log as baseLog } from 'core/log';
+const log = baseLog.namespace('request');
 
 import request from 'core/request/engines';
 
@@ -111,10 +111,10 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 				clone = (data) => () => Object.isObject(data) || Object.isArray(data) ? Object.fastClone(data) : data;
 
 			if (Object.isPromise(res)) {
-				res.then((data) => logger.infoCtx(loggingContext, getTime(), clone(data)));
+				res.then((data) => log.info(loggingContext, getTime(), clone(data)));
 
 			} else {
-				logger.infoCtx(loggingContext, getTime(), clone(res));
+				log.info(loggingContext, getTime(), clone(res));
 			}
 
 			return res;
@@ -298,7 +298,7 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 				res = request(reqOpts).then(success).then(ctx.saveCache);
 			}
 
-			res.then((response) => logger.infoCtx(`response:${path}`, response.data, {
+			res.then((response) => log.info(`response:${path}`, response.data, {
 				cache,
 				externalRequest: opts.externalRequest,
 				request: opts
