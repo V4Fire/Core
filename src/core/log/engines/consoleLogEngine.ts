@@ -10,7 +10,7 @@ import config from 'config';
 import { LogLevel, LogPreferences } from '../types';
 
 class ConsoleLogEngine {
-	private config: LogPreferences;
+	protected config: LogPreferences;
 
 	constructor(config: LogPreferences) {
 		this.config = config;
@@ -20,7 +20,7 @@ class ConsoleLogEngine {
 	 * Prints the specified parameters to a console
 	 *
 	 * @param context - logging context
-	 * @param logLevel - level of current logging record
+	 * @param logLevel - level of a current logging record
 	 * @param message - logging message
 	 * @param [error] - exception that's going to be logged
 	 * @param [details] - additional details
