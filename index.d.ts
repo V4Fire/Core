@@ -116,7 +116,10 @@ interface ObjectConstructor {
 	createDict<T = unknown>(): Dictionary<T>;
 	createDict(...fields: unknown[]): Dictionary;
 
-	createMap<T extends object>(obj: T): T & Dictionary;
+	createMap<T extends object, V = unknown>(obj: T):
+		T extends Dictionary<infer E> ?
+			Dictionary<E | string> : T extends Array<infer E> ? Dictionary<E | number> : Dictionary<V>;
+
 	fromArray(arr: unknown[]): Dictionary<boolean>;
 	convertEnumToDict(obj: Dictionary): Dictionary<string>;
 
