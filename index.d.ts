@@ -245,6 +245,7 @@ interface Date {
 	short(local?: string): string;
 	medium(local?: string): string;
 	long(local?: string): string;
+	format(format: string, local?: string): string;
 
 	add(params: DateSetParams, reset?: boolean): Date;
 	set(params: DateSetParams, reset?: boolean): Date;

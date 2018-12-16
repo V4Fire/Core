@@ -153,6 +153,82 @@ extend(Date.prototype, 'long', function (this: Date, locale: string = lang): str
 	return this.toLocaleString(locale);
 });
 
+const formatAliases = Object.createMap({
+	e: 'era',
+	Y: 'year',
+	M: 'month',
+	d: 'day',
+	w: 'weekday',
+	h: 'hour',
+	m: 'minute',
+	s: 'second',
+	z: 'timeZoneName'
+});
+
+const defaultFormat = {
+	era: 'short',
+	year: 'numeric',
+	month: 'short',
+	day: 'numeric',
+	weekday: 'short',
+	hour: 'numeric',
+	minute: 'numeric',
+	second: 'numeric',
+	timeZoneName: 'short'
+};
+
+const
+	formatCache = Object.createDict<Intl.DateTimeFormatOptions>();
+
+/**
+ * Returns a string representation of a date by the specified format
+ *
+ * @param format
+ * @param [locale]
+ */
+extend(Date.prototype, 'format', function (this: Date, format: string, locale: string = lang): string {
+	const
+		cache = formatCache[format];
+
+	if (cache) {
+		return this.toLocaleString(locale, cache);
+	}
+
+	const
+		chunks = format.split(';'),
+		config = {};
+
+	for (let i = 0; i < chunks.length; i++) {
+		const
+			el = chunks[i].trim();
+
+		let
+			[key, val] = el.split(':');
+
+		key = key.trim();
+
+		if (val) {
+			val = val.trim();
+		}
+
+		const
+			alias = formatAliases[key];
+
+		if (alias) {
+			key = alias;
+		}
+
+		if (!val) {
+			val = defaultFormat[key];
+		}
+
+		config[key] = val;
+	}
+
+	formatCache[format] = config;
+	return this.toLocaleString(locale, config);
+});
+
 /**
  * Returns a list of week days
  */
