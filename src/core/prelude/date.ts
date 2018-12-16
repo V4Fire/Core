@@ -169,11 +169,11 @@ const defaultFormat = {
 	era: 'short',
 	year: 'numeric',
 	month: 'short',
-	day: 'numeric',
+	day: '2-digit',
 	weekday: 'short',
-	hour: 'numeric',
-	minute: 'numeric',
-	second: 'numeric',
+	hour: '2-digit',
+	minute: '2-digit',
+	second: '2-digit',
 	timeZoneName: 'short'
 };
 
