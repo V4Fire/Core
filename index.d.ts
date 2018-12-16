@@ -160,6 +160,7 @@ interface Array<T> {
 }
 
 interface String {
+	capitalize(lower?: boolean, all?: boolean): string;
 	camelize(upper?: boolean): string;
 	dasherize(): string;
 	underscore(): string;

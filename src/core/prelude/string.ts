@@ -9,9 +9,38 @@
 import extend from 'core/prelude/extend';
 
 const
+	capitalizeCache = Object.createDict<string>(),
 	camelizeCache = Object.createDict<string>(),
 	dasherizeCache = Object.createDict<string>(),
 	underscoreCache = Object.createDict<string>();
+
+/** @see Sugar.String.capitalize */
+extend(String.prototype, 'capitalize', function (this: string, lower?: boolean, all?: boolean): string {
+	const
+		str = this.toString(),
+		val = capitalizeCache[str];
+
+	if (val !== undefined) {
+		return val;
+	}
+
+	if (all) {
+		const
+			chunks = str.split(' '),
+			res = <string[]>[];
+
+		for (let i = 0; i < chunks.length; i++) {
+			res.push(chunks[i].capitalize(lower, all));
+		}
+
+		return capitalizeCache[str] = res.join(' ');
+	}
+
+	let res = lower ? str.toLowerCase() : str;
+	res = res[0].toUpperCase() + res.slice(1);
+
+	return capitalizeCache[str] = res;
+});
 
 const
 	normalizeRgxp = /(?:^|([^\s_-]))[\s_-]+(?:$|([^\s_-]))/g;
