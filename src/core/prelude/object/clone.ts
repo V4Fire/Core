@@ -339,9 +339,16 @@ function createReplacer(
 	funcMap: Map<Function | number, Function | number>,
 	replacer?: JSONCb
 ): JSONCb {
+	let
+		init = false;
+
 	return (key, value) => {
-		if (value === base) {
+		if (init && value === base) {
 			return '[[OBJ_REF:base]]';
+		}
+
+		if (!init) {
+			init = true;
 		}
 
 		if (Object.isFunction(value)) {
