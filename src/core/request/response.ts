@@ -147,7 +147,7 @@ export default class Response {
 		return (<Then<T>>data)
 			.then((obj) => $C(this.decoders)
 				.to(Then.resolve(obj, this.parent))
-				.reduce((res: Then, fn) => res.then(fn)))
+				.reduce((res: Then, fn) => res.then((data) => fn(data, this))))
 
 			.then((res) => {
 				if (Object.isFrozen(res)) {
@@ -299,6 +299,7 @@ export default class Response {
 
 		if (IS_NODE) {
 			//#if node_js
+			// @ts-ignore
 			return Then.resolve<_>(Buffer.from(<any>body).toString(encoding));
 			//#endif
 		}
