@@ -138,11 +138,8 @@ export default class Response {
 				data = this.text();
 		}
 
-		let
-			decoders = Then.resolve(data, this.parent);
-
 		Object.forEach(this.decoders, (fn: (val: unknown) => void) => {
-			decoders = decoders.then(fn);
+			decoders = decoders.then((data) => fn(data, this));
 		});
 
 		return decoders.then((res) => {

@@ -97,13 +97,13 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 			p = merge<CreateRequestOptions<T>>(defaultRequestOpts, baseCtx.params),
 			ctx = Object.create(baseCtx);
 
-		const addLogger = (type, fn, key) => (d) => {
+		const wrapProcessor = (namespace, fn, key) => (data, ...args) => {
 			const
 				time = Date.now(),
-				res = fn(d, {opts: p, ctx, globalOpts});
+				res = fn(data, {opts: p, ctx, globalOpts}, ...args);
 
 			const
-				logKey = `request:${type}:${key}:${path}`,
+				logKey = `request:${namespace}:${key}:${path}`,
 				getTime = () => `Finished at ${Date.now() - time}ms`,
 				clone = (data) => () => Object.isObject(data) || Object.isArray(data) ? Object.fastClone(data) : data;
 
@@ -122,11 +122,11 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 			decoders = <Function[]>[];
 
 		Object.forEach(merge(ctx.encoders), (el, key) => {
-			encoders.push(addLogger('encoders', el, key));
+			encoders.push(wrapProcessor('encoders', el, key));
 		});
 
 		Object.forEach(merge(ctx.decoders), (el, key) => {
-			decoders.push(addLogger('decoders', el, key));
+			decoders.push(wrapProcessor('decoders', el, key));
 		});
 
 		Object.assign(ctx, {

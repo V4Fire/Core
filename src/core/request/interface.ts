@@ -65,7 +65,7 @@ export type Encoders<T = unknown> =
 	Iterable<Encoder<T>>;
 
 export interface Decoder<I = unknown, O = unknown> {
-	(data: I, params: MiddlewareParams): O;
+	(data: I, params: MiddlewareParams, response: Response): O;
 }
 
 export type Decoders<T = unknown> =
