@@ -81,7 +81,7 @@ export function applyQueryForStr(str: string, query?: Dictionary, rgxp: RegExp =
  * @param [query] - request query object (for value interpolation)
  */
 export function normalizeHeaderName(name: string, query?: Dictionary): string {
-	return applyQueryForStr(String(name).trim(), query);
+	return applyQueryForStr(String(name).trim(), query).toLowerCase();
 }
 
 /**
