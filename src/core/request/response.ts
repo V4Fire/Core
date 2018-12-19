@@ -138,7 +138,10 @@ export default class Response {
 				data = this.text();
 		}
 
-		Object.forEach(this.decoders, (fn: (val: unknown) => void) => {
+		let
+			decoders = data.then((obj) => Then.resolve(obj, this.parent));
+
+		Object.forEach(this.decoders, (fn: Function) => {
 			decoders = decoders.then((data) => fn(data, this));
 		});
 

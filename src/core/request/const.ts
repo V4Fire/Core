@@ -39,7 +39,7 @@ export const defaultRequestOpts = {
 export const defaultResponseOpts = {
 	responseType: <ResponseTypes>'text',
 	okStatuses: new Range(200, 299),
-	status: statusCodes.OK,
+	status: <number>statusCodes.OK,
 	headers: {}
 };
 
