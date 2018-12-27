@@ -50,6 +50,11 @@ export default class Response {
 	readonly parent?: Then;
 
 	/**
+	 * Important flag
+	 */
+	readonly important?: boolean;
+
+	/**
 	 * Response status code
 	 */
 	readonly status: number;
@@ -89,6 +94,7 @@ export default class Response {
 			s = this.okStatuses = p.okStatuses;
 
 		this.parent = p.parent;
+		this.important = p.important;
 		this.status = p.status;
 		this.headers = this.parseHeaders(p.headers);
 		this.sourceResponseType = this.responseType = p.responseType;

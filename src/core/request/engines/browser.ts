@@ -73,6 +73,7 @@ export default function createTransport(params: RequestOptions): Then<Response> 
 		xhr.addEventListener('load', () => {
 			resolve(new Response(xhr.response, {
 				parent: p.parent,
+				important: p.important,
 				responseType: p.responseType,
 				okStatuses: p.okStatuses,
 				status: xhr.status,

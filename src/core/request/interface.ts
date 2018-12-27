@@ -93,6 +93,7 @@ export interface RequestOptions {
 	readonly decoder?: Decoder | Decoder[];
 	readonly headers?: Dictionary<CanArray<string>>;
 	readonly body?: RequestBody;
+	readonly important?: boolean;
 	readonly credentials?: boolean;
 	readonly parent: Then;
 }
@@ -128,6 +129,8 @@ export interface CreateRequestOptions<T = unknown> {
 	body?: RequestBody;
 	query?: RequestQuery;
 	headers?: Dictionary<CanArray<unknown>>;
+
+	important?: boolean;
 	credentials?: boolean;
 
 	timeout?: number;
@@ -159,12 +162,13 @@ export interface ResponseHeaders {
 }
 
 export interface ResponseOptions {
+	parent?: Then;
+	important?: boolean;
 	responseType?: ResponseTypes;
 	okStatuses?: OkStatuses;
 	status?: StatusCodes;
 	headers?: string | Dictionary<string>;
 	decoder?: Decoder | Decoders;
-	parent?: Then;
 }
 
 export interface GlobalOptions {
