@@ -50,6 +50,11 @@ export default class Response {
 	readonly parent?: Then;
 
 	/**
+	 * Important flag
+	 */
+	readonly important?: boolean;
+
+	/**
 	 * Response status code
 	 */
 	readonly status: number;
@@ -90,6 +95,7 @@ export default class Response {
 
 		this.parent = p.parent;
 		this.sourceResponseType = this.responseType = p.responseType;
+		this.important = p.important;
 
 		this.status = p.status;
 		this.ok = s instanceof Range ? s.contains(this.status) : (<number[]>[]).concat(s || []).includes(this.status);
