@@ -62,7 +62,7 @@ try {
 	String.prototype.underscore = function (this: string): string {
 		const
 			str = this.toString(),
-			val = needUnderscore[str];
+			val = underscoreCache[str];
 
 		if (val !== undefined) {
 			return val;
