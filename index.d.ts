@@ -37,6 +37,7 @@ type Wrap<T> = T & any;
 type Nullable<T> = T | null | undefined;
 type CanPromise<T> = T | Promise<T>;
 type CanUndef<T> = T | undefined;
+type CanVoid<T> = T | void;
 type CanArray<T> = T | T[];
 
 interface StrictDictionary<T = unknown> {[key: string]: T}
