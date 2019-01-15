@@ -40,6 +40,7 @@ type CanUndef<T> = T | undefined;
 type CanVoid<T> = T | void;
 type CanArray<T> = T | T[];
 
+interface ClassConstructor<T = unknown> {new: T}
 interface StrictDictionary<T = unknown> {[key: string]: T}
 interface Dictionary<T> {[key: string]: CanUndef<T>}
 interface Dictionary<T extends unknown = unknown> {[key: string]: T}
