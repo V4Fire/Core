@@ -199,6 +199,11 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 				p.body = await applyEncoders(p.body);
 			}
 
+			if (Object.isObject(p.query) && 'meta' in p.query) {
+				opts.meta = p.query.meta;
+				delete p.query.meta;
+			}
+
 			if ($C(arr).some(Object.isFunction)) {
 				resolve((() => {
 					const

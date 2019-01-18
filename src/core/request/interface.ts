@@ -150,6 +150,7 @@ export interface CreateRequestOptions<T = unknown> {
 	middlewares?: Middlewares<T>;
 	encoder?: Encoder | Encoders;
 	decoder?: Decoder | Decoders;
+	meta?: unknown;
 }
 
 export type ResolverResult =
