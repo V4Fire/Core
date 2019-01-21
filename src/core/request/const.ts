@@ -17,7 +17,7 @@ import { Cache, RestrictedCache, NeverCache } from 'core/cache';
 export let
 	storage: CanUndef<Promise<AsyncFactoryResult>>;
 
-//#if runtime has kv-storage
+//#if runtime has core/kv-storage
 storage = import('core/kv-storage').then(({asyncLocal}) => asyncLocal);
 //#endif
 

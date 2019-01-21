@@ -20,7 +20,7 @@ const
 let
 	storage: CanUndef<Promise<AsyncNamespace>>;
 
-//#if runtime has kv-storage
+//#if runtime has core/kv-storage
 storage = import('core/kv-storage').then(({asyncLocal}) => asyncLocal.namespace('[[ENV]]'));
 //#endif
 

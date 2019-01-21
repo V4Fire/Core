@@ -11,11 +11,11 @@ import { AsyncNamespace } from 'core/kv-storage';
 let
 	engine: Promise<AsyncNamespace>;
 
-//#if runtime has kv-storage
+//#if runtime has core/kv-storage
 engine = import('core/kv-storage').then(({asyncLocal}) => asyncLocal.namespace('[[SESSION]]'));
 //#endif
 
-//#unless runtime has kv-storage
+//#unless runtime has core/kv-storage
 engine = <any>import('core/cache/cache').then(({default: Cache}) => new Cache());
 //#endunless
 
