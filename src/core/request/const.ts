@@ -28,7 +28,8 @@ export const defaultRequestOpts = {
 	cacheStrategy: <CacheStrategy>'never',
 	offlineCacheTTL: (1).day(),
 	headers: {},
-	query: {}
+	query: {},
+	meta: {}
 };
 
 export const defaultResponseOpts = {
