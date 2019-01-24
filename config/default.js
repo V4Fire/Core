@@ -314,7 +314,7 @@ module.exports = config.createConfig(
 			},
 
 			rel(field, ...args) {
-				return path.join(path.relative(this.cwd(), this[field]()), ...args);
+				return path.join(path.relative(this.cwd(), this[field] ? this[field]() : field), ...args);
 			},
 
 			lib() {
