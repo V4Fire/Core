@@ -2006,10 +2006,7 @@ export default class Async<CTX extends object = Async<any>> {
 			}
 
 		} else {
-			const
-				values = links.values();
-
-			for (let el = values.next(); !el.done; el = values.next()) {
+			for (let o = links.values(), el = o.next(); !el.done; el = o.next()) {
 				this.clearAsync({...p, id: el.value.id});
 			}
 		}
