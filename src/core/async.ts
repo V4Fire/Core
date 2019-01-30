@@ -1799,7 +1799,10 @@ export default class Async<CTX extends object = Async<any>> {
 
 					} else {
 						links.delete(id);
-						labels[p.label] = undefined;
+
+						if (labels[p.label]) {
+							labels[p.label] = undefined;
+						}
 					}
 				}
 
@@ -1903,7 +1906,9 @@ export default class Async<CTX extends object = Async<any>> {
 		const
 			baseCache = this.initCache(p.name);
 
-		let cache;
+		let
+			cache;
+
 		if (p.group) {
 			if (Object.isRegExp(p.group)) {
 				const
@@ -1952,7 +1957,10 @@ export default class Async<CTX extends object = Async<any>> {
 
 			if (link) {
 				links.delete(link.id);
-				labels[link.label] = undefined;
+
+				if (link.label) {
+					labels[link.label] = undefined;
+				}
 
 				const ctx = {
 					...p,
