@@ -5,7 +5,7 @@
   "main": "src/core/index.js",
   "typings": "index.d.ts",
   "license": "MIT",
-  "version": "2.0.0-beta.31",
+  "version": "2.0.0-beta.32",
   "author": {
     "name": "kobezzza",
     "email": "kobezzza@gmail.com",
@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "@types/got": "^9.4.0",
-    "@types/node": "^10.12.19",
+    "@types/node": "^10.12.21",
     "collection.js": "^6.6.27",
     "dotenv": "^6.2.0",
     "eventemitter2": "^5.0.1",
@@ -52,9 +52,9 @@
     "gulp-plumber": "^1.2.0",
     "gulp-replace": "^1.0.0",
     "path-equal": "^1.1.0",
-    "through2": "^2.0.3",
+    "through2": "^3.0.0",
     "tsconfig": "^7.0.0",
-    "typescript": "3.1.6",
+    "typescript": "^3.3.1",
     "uniconf": "^2.0.0",
     "upath": "^1.1.0",
     "urlconcat": "0.0.12"
