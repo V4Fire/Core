@@ -6,19 +6,20 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import $C = require('collection.js');
-
 export interface Config {
+	appName?: CanUndef<string>;
+	api?: CanUndef<string>;
 	lang: string;
-	api?: string | undefined;
-	appName?: string | undefined,
-	onlineCheckURL?: string | undefined;
-	onlineCheckInterval: number;
-	onlineCheckTimeout: number;
-	onlineCheckCacheTTL: number;
-	onlineLastDateSyncInterval: number;
-	onlineRetryCount: number;
 	log: Dictionary;
+	online: {
+		checkURL?: CanUndef<string>;
+		checkInterval?: number;
+		checkTimeout?: number;
+		cacheTTL?: number;
+		lastDateSyncInterval?: number;
+		retryCount?: number;
+		persistence?: boolean;
+	}
 }
 
 const config: Config = {
@@ -38,34 +39,44 @@ const config: Config = {
 	appName: APP_NAME,
 
 	/**
-	 * Online check url
+	 * Online daemon options
 	 */
-	onlineCheckURL: 'https://www.google.com/favicon.ico',
+	online: {
+		/**
+		 * Online check url
+		 */
+		checkURL: 'https://www.google.com/favicon.ico',
 
-	/**
-	 * Online check interval
-	 */
-	onlineCheckInterval: (5).seconds(),
+		/**
+		 * Online check interval
+		 */
+		checkInterval: (5).seconds(),
 
-	/**
-	 * Timeout for online check
-	 */
-	onlineCheckTimeout: (2).seconds(),
+		/**
+		 * Timeout for online check
+		 */
+		checkTimeout: (2).seconds(),
 
-	/**
-	 * TTL for an online cache response
-	 */
-	onlineCheckCacheTTL: 0.3.second(),
+		/**
+		 * TTL for an online cache response
+		 */
+		cacheTTL: 0.3.second(),
 
-	/**
-	 * Allowed count of online status checking errors
-	 */
-	onlineRetryCount: 3,
+		/**
+		 * Allowed count of online status checking errors
+		 */
+		retryCount: 3,
 
-	/**
-	 * Last online date sync interval
-	 */
-	onlineLastDateSyncInterval: (1).minute(),
+		/**
+		 * Last online date sync interval
+		 */
+		lastDateSyncInterval: (1).minute(),
+
+		/**
+		 * If true, then results of checks will be saved to a local storage
+		 */
+		persistence: true
+	},
 
 	/**
 	 * Log preferences
@@ -101,7 +112,7 @@ const config: Config = {
  * @param args
  */
 export function extend<T extends Config>(...args: Dictionary[]): T {
-	return <any>$C.extend({
+	return <any>Object.mixin({
 		deep: true,
 		concatArray: true,
 		concatFn: (a: unknown[], b: unknown[]) => a.union(b),
