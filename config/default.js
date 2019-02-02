@@ -314,6 +314,7 @@ module.exports = config.createConfig(
 			},
 
 			rel(field, ...args) {
+				const path = require('upath');
 				return path.join(path.relative(this.cwd(), this[field] ? this[field]() : field), ...args);
 			},
 
