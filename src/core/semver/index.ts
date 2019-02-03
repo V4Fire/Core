@@ -31,8 +31,9 @@ export type Strategies =
  *
  * @example
  * console.log(check('1.4.1', '1.5.2', '>'))  //false
+ * console.log(check('1', '1.5.2', '=='))     //false
  */
-export default function (a: string, b: string, comparator: Operations = '>'): boolean {
+export default function (a: string, b: string, comparator: Operations): boolean {
 	const compares: Record<Operations, (a: number, b: number) => boolean> = {
 		'>': (a, b) => a > b,
 		'>=': (a, b) => a >= b,
@@ -48,8 +49,7 @@ export default function (a: string, b: string, comparator: Operations = '>'): bo
 
 	const
 		aArr = a.split('.'),
-		bArr = b.split('.'),
-		lengthDiff = Math.abs(aArr.length - bArr.length);
+		bArr = b.split('.');
 
 	let
 		target = $C(bArr).map((el) => parseInt(el, 10) || 0),
@@ -69,6 +69,9 @@ export default function (a: string, b: string, comparator: Operations = '>'): bo
 			strategy = 'fullEq';
 		}
 	}
+
+	const
+		lengthDiff = Math.abs(aArr.length - bArr.length);
 
 	if (candidate.length > target.length) {
 		target = target.concat(Array(lengthDiff).fill(0));
