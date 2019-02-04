@@ -49,8 +49,9 @@ export function toQueryString(data: unknown): string {
  *
  * @param data
  * @param [prfx]
+ * @param [encode]
  */
-export function chunkToQueryString(data: unknown, prfx: string = ''): string {
+export function chunkToQueryString(data: unknown, prfx: string = '', encode: boolean = true): string {
 	if (data == null || data === '') {
 		return '';
 	}
@@ -90,24 +91,5 @@ export function chunkToQueryString(data: unknown, prfx: string = ''): string {
 		return reduce(Object.keys(data));
 	}
 
-	return encodeURIComponent(String(data));
-}
-
-/**
- * Creates an unescaped query string
- * @param obj
- *
- * @example
- * toUnescapedQueryString({test: 'v1', test2: 'v2'})
- * -> 'key1=value1&key2=value2'
- */
-export function toUnescapedQueryString(obj: Dictionary): string {
-	const
-		res: string[] = [];
-
-	for (let keys = Object.keys(obj), i = 0; i < keys.length; i++) {
-		res.push(`${keys[i]}=${obj[keys[i]]}`)
-	}
-
-	return res.join('&');
+	return encode ? encodeURIComponent(String(data)) : String(data);
 }
