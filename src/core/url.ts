@@ -92,3 +92,22 @@ export function chunkToQueryString(data: unknown, prfx: string = ''): string {
 
 	return encodeURIComponent(String(data));
 }
+
+/**
+ * Creates an unescaped query string
+ * @param obj
+ *
+ * @example
+ * toUnescapedQueryString({test: 'v1', test2: 'v2'})
+ * -> 'key1=value1&key2=value2'
+ */
+export function toUnescapedQueryString(obj: Dictionary): string {
+	const
+		res: string[] = [];
+
+	for (let keys = Object.keys(obj), i = 0; i < keys.length; i++) {
+		res.push(`${keys[i]}=${obj[keys[i]]}`)
+	}
+
+	return res.join('&');
+}
