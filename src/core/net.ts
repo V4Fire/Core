@@ -7,7 +7,6 @@
  */
 
 import config from 'config';
-import { AsyncNamespace } from 'core/kv-storage';
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 
 export interface StatusEvent {
@@ -21,12 +20,8 @@ export const
 const
 	{online} = config;
 
-let
-	storage: CanUndef<Promise<AsyncNamespace>>;
-
-//#if runtime has core/kv-storage
-storage = import('core/kv-storage').then(({asyncLocal}) => asyncLocal.namespace('[[NET]]'));
-//#endif
+const
+	storage = import('core/kv-storage').then(({asyncLocal}) => asyncLocal.namespace('[[NET]]'));
 
 let
 	status,
