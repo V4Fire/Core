@@ -40,7 +40,7 @@ export function concatUrls(...urls: Nullable<string>[]): string {
  * Stable stringify for querystring
  *
  * @param data
- * @param encode - if true, then for data will be applied encodeURIComponent
+ * @param [encode] - if true, then for data will be applied encodeURIComponent
  */
 export function toQueryString(data: unknown, encode: boolean = true): string {
 	return chunkToQueryString(data, encode);
