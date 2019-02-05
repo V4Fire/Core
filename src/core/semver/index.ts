@@ -6,8 +6,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import $C = require('collection.js');
-
 export type Operations =
 	'>' |
 	'>=' |
@@ -54,11 +52,12 @@ export default function (a: string, b: string, comparator: Operations): boolean 
 		bArr = b.split('.');
 
 	let
-		target = $C(bArr).map((el) => el),
-		candidate = $C(aArr).map((el) => el),
+		target = bArr.map((el) => el),
+		candidate = aArr.map((el) => el),
 		strategy = 'default';
 
-	const match = comparator.match(/((^|\^|)=)/);
+	const
+		match = comparator.match(/((^|\^|)=)/);
 
 	if (match) {
 		if (match.index === 1) {
@@ -85,8 +84,9 @@ export default function (a: string, b: string, comparator: Operations): boolean 
 	let
 		res = false;
 
-	$C(target).some((t, i) => {
+	for (let i = 0; i < target.length; i++) {
 		const
+			t = target[i],
 			c = candidate[i];
 
 		let
@@ -102,7 +102,7 @@ export default function (a: string, b: string, comparator: Operations): boolean 
 					tNum = t === '*' ? 0 : tNum;
 
 					res = i > 0 && cNum < tNum;
-					return true;
+					return res;
 				}
 
 				break;
@@ -113,7 +113,7 @@ export default function (a: string, b: string, comparator: Operations): boolean 
 						res = true;
 					}
 
-					return true;
+					return res;
 				}
 
 				break;
@@ -124,17 +124,17 @@ export default function (a: string, b: string, comparator: Operations): boolean 
 						res = true;
 					}
 
-					return true;
+					return res;
 				}
 
 				break;
 
 			case 'default':
 				if (res || cNum !== tNum) {
-					return true;
+					return res;
 				}
 		}
-	});
+	}
 
 	return res;
 }
