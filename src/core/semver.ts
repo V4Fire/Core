@@ -72,13 +72,16 @@ export default function (a: string, b: string, comparator: Operations): boolean 
 	}
 
 	const
-		lengthDiff = Math.abs(aArr.length - bArr.length);
+		lengthDiff = Math.abs(aArr.length - bArr.length),
+		filledDiff = Array(lengthDiff).fill('*');
 
-	if (candidate.length > target.length) {
-		target = target.concat(Array(lengthDiff).fill('*'));
+	if (lengthDiff) {
+		if (candidate.length > target.length) {
+			target = target.concat(filledDiff);
 
-	} else {
-		candidate = candidate.concat(Array(lengthDiff).fill('*'));
+		} else {
+			candidate = candidate.concat(filledDiff);
+		}
 	}
 
 	let
@@ -100,31 +103,21 @@ export default function (a: string, b: string, comparator: Operations): boolean 
 				if (!res) {
 					cNum = c === '*' ? 0 : cNum;
 					tNum = t === '*' ? 0 : tNum;
-
-					res = i > 0 && cNum < tNum;
-					return res;
+					return i > 0 && cNum < tNum;
 				}
 
 				break;
 
 			case 'fullEq':
 				if (!res) {
-					if (c === '*' || t === '*') {
-						res = true;
-					}
-
-					return res;
+					return c === '*' || t === '*';
 				}
 
 				break;
 
 			case 'eq':
 				if (cNum !== tNum || i === target.length - 1) {
-					if (c === '*' || t === '*') {
-						res = true;
-					}
-
-					return res;
+					return c === '*' || t === '*' || res;
 				}
 
 				break;
