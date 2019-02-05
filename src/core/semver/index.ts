@@ -30,8 +30,10 @@ export type Strategies =
  * @param comparator
  *
  * @example
- * console.log(check('1.4.1', '1.5.2', '>'))  //false
- * console.log(check('1', '1.5.2', '=='))     //false
+ * console.log(check('1.4.1', '1.5.2', '>'))  // false
+ * console.log(check('1', '1.5.2', '=='))     // true
+ * console.log(check('2.4.1', '2.4', '<='))   // true
+ * console.log(check('2.4', '2.4.2', '^='))   // true
  */
 export default function (a: string, b: string, comparator: Operations): boolean {
 	const compares: Record<Operations, (a: number, b: number) => boolean> = {
@@ -52,8 +54,8 @@ export default function (a: string, b: string, comparator: Operations): boolean 
 		bArr = b.split('.');
 
 	let
-		target = $C(bArr).map((el) => parseInt(el, 10) || 0),
-		candidate = $C(aArr).map((el) => parseInt(el, 10) || 0),
+		target = $C(bArr).map((el) => el),
+		candidate = $C(aArr).map((el) => el),
 		strategy = 'default';
 
 	const match = comparator.match(/((^|\^|)=)/);
@@ -74,10 +76,10 @@ export default function (a: string, b: string, comparator: Operations): boolean 
 		lengthDiff = Math.abs(aArr.length - bArr.length);
 
 	if (candidate.length > target.length) {
-		target = target.concat(Array(lengthDiff).fill(0));
+		target = target.concat(Array(lengthDiff).fill('*'));
 
 	} else {
-		candidate = candidate.concat(Array(lengthDiff).fill(0));
+		candidate = candidate.concat(Array(lengthDiff).fill('*'));
 	}
 
 	let
@@ -85,14 +87,21 @@ export default function (a: string, b: string, comparator: Operations): boolean 
 
 	$C(target).some((t, i) => {
 		const
-			cNum = candidate[i] || 0;
+			c = candidate[i];
 
-		res = compares[comparator](cNum, t);
+		let
+			cNum = parseInt(c, 10),
+			tNum = parseInt(t,  10);
+
+		res = compares[comparator](cNum, tNum);
 
 		switch (strategy) {
 			case 'fromEq':
 				if (!res) {
-					res = aArr.length > bArr.length ? false : i > 0 && cNum < t;
+					cNum = c === '*' ? 0 : cNum;
+					tNum = t === '*' ? 0 : tNum;
+
+					res = i > 0 && cNum < tNum;
 					return true;
 				}
 
@@ -100,20 +109,28 @@ export default function (a: string, b: string, comparator: Operations): boolean 
 
 			case 'fullEq':
 				if (!res) {
+					if (c === '*' || t === '*') {
+						res = true;
+					}
+
 					return true;
 				}
 
 				break;
 
 			case 'eq':
-				if (cNum !== t || i === target.length - 1) {
+				if (cNum !== tNum || i === target.length - 1) {
+					if (c === '*' || t === '*') {
+						res = true;
+					}
+
 					return true;
 				}
 
 				break;
 
 			case 'default':
-				if (res || cNum !== t) {
+				if (res || cNum !== tNum) {
 					return true;
 				}
 		}
