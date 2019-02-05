@@ -18,6 +18,9 @@ export const
 	event = new EventEmitter();
 
 const
+	{online} = config;
+
+const
 	storage = import('core/kv-storage').then(({asyncLocal}) => asyncLocal.namespace('[[NET]]'));
 
 let
@@ -39,20 +42,24 @@ export function isOnline(): Promise<{status: boolean; lastOnline?: Date}> {
 		return cache;
 	}
 
-	cache = (async () => {
+	const res = (async () => {
 		const
-			url = config.onlineCheckURL,
+			url = online.checkURL,
 			prevStatus = status;
 
 		let
 			loadFromStorage;
 
-		if (!lastOnline && url) {
-			loadFromStorage = storage.then((storage) => storage.get('lastOnline')).then((v) => {
+		if (online.persistence && !lastOnline && url) {
+			if (!storage) {
+				throw new ReferenceError('kv-storage module is not loaded');
+			}
+
+			loadFromStorage = storage.then((storage) => storage.get('lastOnline').then((v) => {
 				if (v) {
 					lastOnline = v;
 				}
-			}).catch(stderr);
+			})).catch(stderr);
 		}
 
 		status = await new Promise<boolean>((resolve) => {
@@ -63,7 +70,7 @@ export function isOnline(): Promise<{status: boolean; lastOnline?: Date}> {
 			}
 
 			const retry = () => {
-				if (status === undefined || ++retryCount > config.onlineRetryCount) {
+				if (!online.retryCount || status === undefined || ++retryCount > online.retryCount) {
 					resolve(false);
 
 				} else {
@@ -74,7 +81,7 @@ export function isOnline(): Promise<{status: boolean; lastOnline?: Date}> {
 			const checkOnline = () => {
 				const
 					img = new Image(),
-					timer = setTimeout(retry, config.onlineCheckTimeout);
+					timer = setTimeout(retry, online.checkTimeout || 0);
 
 				img.onload = () => {
 					clearTimeout(timer);
@@ -93,13 +100,19 @@ export function isOnline(): Promise<{status: boolean; lastOnline?: Date}> {
 			checkOnline();
 		});
 
-		setTimeout(() => cache = undefined, config.onlineCheckCacheTTL);
+		if (online.cacheTTL) {
+			setTimeout(() => cache = undefined, online.cacheTTL);
+		}
 
 		const updateDate = () => {
 			clearTimeout(syncTimer);
 			syncTimer = undefined;
 
-			if (url) {
+			if (online.persistence && url) {
+				if (!storage) {
+					throw new ReferenceError('kv-storage module is not loaded');
+				}
+
 				storage.then((storage) => storage.set('lastOnline', lastOnline = new Date())).catch(stderr);
 			}
 		};
@@ -116,7 +129,9 @@ export function isOnline(): Promise<{status: boolean; lastOnline?: Date}> {
 			event.emit('status', {status, lastOnline});
 
 		} else if (status && syncTimer != null) {
-			syncTimer = setTimeout(updateDate, config.onlineLastDateSyncInterval);
+			if (online.lastDateSyncInterval) {
+				syncTimer = setTimeout(updateDate, online.lastDateSyncInterval);
+			}
 		}
 
 		try {
@@ -126,12 +141,18 @@ export function isOnline(): Promise<{status: boolean; lastOnline?: Date}> {
 		return {status, lastOnline};
 	})();
 
-	return cache;
+	if (online.cacheTTL) {
+		cache = res;
+	}
+
+	return res;
 }
 
 async function onlineCheck(): Promise<void> {
-	await isOnline();
-	setTimeout(onlineCheck, config.onlineCheckInterval);
+	if (online.checkInterval) {
+		await isOnline();
+		setTimeout(onlineCheck, online.checkInterval);
+	}
 }
 
 onlineCheck().catch(stderr);

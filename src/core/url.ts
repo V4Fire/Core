@@ -38,19 +38,22 @@ export function concatUrls(...urls: Nullable<string>[]): string {
 
 /**
  * Stable stringify for querystring
+ *
  * @param data
+ * @param [encode] - if true, then for data will be applied encodeURIComponent
  */
-export function toQueryString(data: unknown): string {
-	return chunkToQueryString(data);
+export function toQueryString(data: unknown, encode: boolean = true): string {
+	return chunkToQueryString(data, encode);
 }
 
 /**
  * Stable stringify for querystring chunk
  *
  * @param data
+ * @param encode - if true, then for data will be applied encodeURIComponent
  * @param [prfx]
  */
-export function chunkToQueryString(data: unknown, prfx: string = ''): string {
+export function chunkToQueryString(data: unknown, encode: boolean, prfx: string = ''): string {
 	if (data == null || data === '') {
 		return '';
 	}
@@ -70,7 +73,7 @@ export function chunkToQueryString(data: unknown, prfx: string = ''): string {
 		key = isArr ? prfx : prfx ? `${prfx}_${key}` : key;
 
 		const
-			str = valIsArr || Object.isObject(val) ? chunkToQueryString(val, key) : `${key}=${chunkToQueryString(val)}`;
+			str = valIsArr || Object.isObject(val) ? chunkToQueryString(val, encode, key) : `${key}=${chunkToQueryString(val, encode)}`;
 
 		if (res) {
 			return `${res}&${str}`;
@@ -90,5 +93,5 @@ export function chunkToQueryString(data: unknown, prfx: string = ''): string {
 		return reduce(Object.keys(data));
 	}
 
-	return encodeURIComponent(String(data));
+	return encode ? encodeURIComponent(String(data)) : String(data);
 }
