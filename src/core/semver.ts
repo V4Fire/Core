@@ -44,7 +44,7 @@ export default function (a: string, b: string, comparator: Operations): boolean 
 	};
 
 	if (!compares[comparator]) {
-		throw new Error(`Unknown comparator: ${comparator}. Only ${Object.keys(compares).join(', ')} available`);
+		throw new TypeError(`Unknown comparator: ${comparator}. Only ${Object.keys(compares).join(', ')} available`);
 	}
 
 	const
