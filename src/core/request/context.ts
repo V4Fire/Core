@@ -113,7 +113,7 @@ export default class RequestContext<T = unknown> {
 	resolveAPI(api: Nullable<string> = globalOpts.api): string {
 		const
 			a = <NonNullable<CreateRequestOptions['api']>>this.params.api,
-			rgxp = /(?:^|(\w+:\/\/)(?:(.*?)\.)?(.*?)\.(.*?))(\/.*|$)/;
+			rgxp = /(?:^|(\w+:\/\/)(?:(.*?)\.)?(.*?)(?:\.(.*?))?)(\/.*|$)/;
 
 		if (!api) {
 			const def = <any>{
@@ -153,6 +153,24 @@ export default class RequestContext<T = unknown> {
 			return concatUrls(...v('domain3').split('.'), v('namespace'));
 		}
 
+		console.log(api.replace(rgxp, (str, protocol, domain3, domain2, zone, nm) => {
+			nm = v('namespace', nm);
+
+			if (!protocol) {
+				return concatUrls(...v('domain3').split('.'), nm);
+			}
+
+			zone = v('zone', zone);
+
+			return concatUrls(
+				[
+					v('protocol', protocol) + v('domain3', domain3) + v('domain2', domain2),
+				].concat(zone || []).join('.'),
+
+				nm
+			);
+		}));
+
 		return api.replace(rgxp, (str, protocol, domain3, domain2, zone, nm) => {
 			nm = v('namespace', nm);
 
@@ -160,11 +178,12 @@ export default class RequestContext<T = unknown> {
 				return concatUrls(...v('domain3').split('.'), nm);
 			}
 
+			zone = v('zone', zone) || [];
+
 			return concatUrls(
 				[
-					v('protocol', protocol) + v('domain3', domain3) + v('domain2', domain2),
-					v('zone', zone)
-				].join('.'),
+					v('protocol', protocol) + v('domain3', domain3) + v('domain2', domain2)
+				].concat(zone).join('.'),
 
 				nm
 			);
