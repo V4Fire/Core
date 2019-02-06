@@ -223,6 +223,7 @@ module.exports = config.createConfig(
 		api: {
 			proxy: o('api-proxy', {
 				env: true,
+				type: 'boolean',
 				default: true
 			}),
 
