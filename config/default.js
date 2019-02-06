@@ -221,7 +221,10 @@ module.exports = config.createConfig(
 		},
 
 		api: {
-			proxy: true,
+			proxy: o('api-proxy', {
+				env: true,
+				default: true
+			}),
 
 			url: o('api-url', {
 				env: true,
