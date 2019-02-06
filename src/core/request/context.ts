@@ -153,24 +153,6 @@ export default class RequestContext<T = unknown> {
 			return concatUrls(...v('domain3').split('.'), v('namespace'));
 		}
 
-		console.log(api.replace(rgxp, (str, protocol, domain3, domain2, zone, nm) => {
-			nm = v('namespace', nm);
-
-			if (!protocol) {
-				return concatUrls(...v('domain3').split('.'), nm);
-			}
-
-			zone = v('zone', zone);
-
-			return concatUrls(
-				[
-					v('protocol', protocol) + v('domain3', domain3) + v('domain2', domain2),
-				].concat(zone || []).join('.'),
-
-				nm
-			);
-		}));
-
 		return api.replace(rgxp, (str, protocol, domain3, domain2, zone, nm) => {
 			nm = v('namespace', nm);
 
