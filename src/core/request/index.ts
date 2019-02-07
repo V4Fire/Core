@@ -9,8 +9,7 @@
 import $C = require('collection.js');
 import Then from 'core/then';
 
-import { log as baseLog } from 'core/log';
-const log = baseLog.namespace('request');
+import { log } from 'core/log';
 
 import request from 'core/request/engines';
 
