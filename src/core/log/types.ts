@@ -8,14 +8,6 @@
 
 export type LogLevel = 'info' | 'warn' | 'error';
 
-export interface LogStyles extends Dictionary {
-	default: Dictionary;
-}
-
-export interface LogPreferences extends Dictionary {
-	styles?: LogStyles;
-}
-
 export interface Logger {
 	(context: string, logLevel: LogLevel, messageOrError: Error | string, ...details: unknown[]): void;
 }

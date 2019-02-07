@@ -6,8 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import config from 'config';
-import { LogLevel, LogPreferences } from 'core/log/types';
+import config, { LogPreferences } from 'config';
+import { LogLevel } from 'core/log/types';
 
 class ConsoleLogEngine {
 	protected config: LogPreferences;
