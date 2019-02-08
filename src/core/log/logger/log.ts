@@ -9,13 +9,11 @@
 import $C = require('collection.js');
 import logEngine from 'core/log/engines';
 import * as env from 'core/env';
-import { LogLevel } from 'core/log/types';
+import { LogLevel, LogMessageOptions } from 'core/log/types';
 
 interface LogRecord {
 	context: string,
-	message: string,
-	logLevel: LogLevel,
-	error: CanUndef<Error>,
+	logLevel?: LogLevel,
 	details: unknown[],
 }
 
@@ -39,34 +37,19 @@ env.event.on('remove.log', setConfig);
  * Call appropriate log engine. Enqueue log records until options set up and then log them.
  *
  * @param context - log record context
- * @param logLevel - log level
- * @param errorOrMessage - error or message to log
- * @param details - additional details. If it's a function then call it
+ * @param [details] - additional details. If it's a function then call it
  */
-export default function log(
-	context: string,
-	logLevel: LogLevel,
-	errorOrMessage: Error | string,
-	...details: unknown[])
-	: void {
-	let error: CanUndef<Error>;
-	let message = '';
-	context = `${context || 'no-context'}:${logLevel}`;
+export default function log(context: string | LogMessageOptions, ...details: unknown[]): void {
+	let
+		logLevel: CanUndef<LogLevel>;
 
-	if (errorOrMessage instanceof Error) {
-		error = errorOrMessage;
-
-		if (Object.isString(details[0])) {
-			message = <string>details[0];
-			details = details.slice(1);
-		}
-
-	} else if (Object.isString(errorOrMessage)) {
-		message = errorOrMessage;
+	if (!Object.isString(context)) {
+		logLevel = context.logLevel;
+		context = `${context.context || '--'}:${logLevel}`;
 	}
 
 	if (!options) {
-		queue.push({context, message, logLevel, error, details});
+		queue.push({context, logLevel, details});
 		return;
 	}
 
@@ -77,7 +60,7 @@ export default function log(
 
 			if (isAbleToLog(logRecord.context)) {
 				details = prepareDetails(logRecord.details);
-				logEngine.log(logRecord.context, logRecord.logLevel, logRecord.message, logRecord.error, ...details);
+				logEngine(logRecord.context, logRecord.logLevel, ...details);
 			}
 		}
 
@@ -86,13 +69,12 @@ export default function log(
 
 	if (isAbleToLog(context)) {
 		details = prepareDetails(details);
-		logEngine.log(context, logLevel, message, error, ...details);
+		logEngine(context, logLevel, ...details);
 	}
 }
 
 /**
  * Returns true if patterns allow to log record with specified context
- *
  * @param context - context that's checking for ability to log
  */
 function isAbleToLog(context: string): boolean {
@@ -113,7 +95,6 @@ function isAbleToLog(context: string): boolean {
  * For each element in details array check whether it's a function.
  * If so then call it and set it's result in the array instead of the function.
  * If it's not a function then leave element as is.
- *
  * @param details - details
  */
 function prepareDetails(details: unknown[]): unknown[] {
