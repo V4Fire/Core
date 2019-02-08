@@ -41,7 +41,7 @@ const extend = (func: Logger): ExtendedLogger => {
 				};
 			}
 
-			func.call(func, contextCopy, ...details);
+			func(contextCopy, ...details);
 		};
 
 		return extend(copy);
