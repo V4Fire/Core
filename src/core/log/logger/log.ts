@@ -37,7 +37,7 @@ env.event.on('set.log', setConfig);
 env.event.on('remove.log', setConfig);
 
 /**
- * Call appropriate log engine. Enqueue log records until options set up and then log them.
+ * Call appropriate log engine. Enqueue log records until set options up and then log them.
  *
  * @param context - log record context
  * @param [details] - additional details. If it's a function then call it
@@ -98,9 +98,7 @@ function isAbleToLog(context: string): boolean {
 }
 
 /**
- * For each element in details array check whether it's a function.
- * If so then call it and set it's result in the array instead of the function.
- * If it's not a function then leave element as is.
+ * Returns each element or executing result if an element is a function.
  * @param details - details
  */
 function prepareDetails(details: unknown[]): unknown[] {
