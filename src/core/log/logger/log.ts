@@ -26,7 +26,7 @@ const setConfig = (val) => {
 		patterns: [],
 		...val
 	};
-	$C(options.patterns).set((el) => Object.isRegExp(el) ? el : new RegExp(el));
+	options.patterns = $C(options.patterns).map((el) => Object.isRegExp(el) ? el : new RegExp(el));
 };
 
 const
