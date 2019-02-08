@@ -29,6 +29,9 @@ const setConfig = (val) => {
 	$C(options.patterns).set((el) => Object.isRegExp(el) ? el : new RegExp(el));
 };
 
+const
+	defaultContext = 'global';
+
 env.get('log').then(setConfig, setConfig);
 env.event.on('set.log', setConfig);
 env.event.on('remove.log', setConfig);
@@ -45,7 +48,10 @@ export default function log(context: string | LogMessageOptions, ...details: unk
 
 	if (!Object.isString(context)) {
 		logLevel = context.logLevel;
-		context = `${context.context || '--'}:${logLevel}`;
+		context = `${context.context || defaultContext}:${logLevel}`;
+
+	} else {
+		context = context || defaultContext;
 	}
 
 	if (!options) {

@@ -22,48 +22,25 @@ export interface ExtendedLogger extends Logger {
 	 * Log message with level 'info' and specific context
 	 *
 	 * @param context - log record context
-	 * @param message - message to log
 	 * @param [details] - additional details
 	 */
-	info(context: string, message: string, ...details: unknown[]): void;
+	info(context: string, ...details: unknown[]): void;
 
 	/**
 	 * Log message with level 'warn' and specific context
 	 *
 	 * @param context - log record context
-	 * @param message - message to log
 	 * @param [details] - additional details
 	 */
-	warn(context: string, message: string, ...details: unknown[]): void;
-
-	/**
-	 * Log message with level 'warn' and specific context
-	 *
-	 * @param context - log record context
-	 * @param error - error to log
-	 * @param message - message to log
-	 * @param [details] - additional details
-	 */
-	warn(context: string, error: Error, message: string, ...details: unknown[]): void;
+	warn(context: string, ...details: unknown[]): void;
 
 	/**
 	 * Log message with level 'error' and specific context
 	 *
 	 * @param context - log record context
-	 * @param message - message to log
 	 * @param [details] - additional details
 	 */
-	error(context: string, message: string, ...details: unknown[]): void;
-
-	/**
-	 * Log message with level 'error' and specific context
-	 *
-	 * @param context - log record context
-	 * @param error - error to log
-	 * @param message - message to log
-	 * @param [details] - additional details
-	 */
-	error(context: string, error: Error, message: string, ...details: unknown[]): void;
+	error(context: string, ...details: unknown[]): void;
 
 	/**
 	 * Return new log function with defined namespace.

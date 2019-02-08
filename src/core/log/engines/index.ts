@@ -6,6 +6,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { log } from 'core/log/engines/console-log-engine';
+import { log } from 'core/log/engines/console-log';
 
 export default log;
