@@ -9,7 +9,7 @@
 import $C = require('collection.js');
 import Then from 'core/then';
 
-import { log } from 'core/log';
+import log from 'core/log';
 
 import request from 'core/request/engines';
 

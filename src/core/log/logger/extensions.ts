@@ -6,7 +6,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import internalLog from 'core/log/logger/log';
 import { Logger, ExtendedLogger, LogMessageOptions } from 'core/log/types';
 
 const extend = (func: Logger): ExtendedLogger => {
@@ -52,4 +51,4 @@ const extend = (func: Logger): ExtendedLogger => {
 	return res;
 };
 
-export default extend(internalLog);
+export default extend;
