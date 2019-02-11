@@ -43,98 +43,115 @@ extend(String.prototype, 'capitalize', function (this: string, lower?: boolean, 
 });
 
 const
-	normalizeRgxp = /(?:^|([^\s_-]))[\s_-]+(?:$|([^\s_-]))/g;
+	normalizeRgxp = /(^[\s_-]+)|([\s_-]+$)|([\s_-]+)/g,
+	camelizeRgxp = /(^[\s_-]+)|([\s_-]+$)|[\s_-]+([^\s-]|$)/g;
 
 /** @see Sugar.String.camelize */
-extend(String.prototype, 'camelize', function (this: string, upper?: boolean): string {
+extend(String.prototype, 'camelize', function (this: string, upper: boolean = true): string {
 	const
 		str = this.toString(),
-		val = camelizeCache[str];
+		key = `${Boolean(upper)}:${str}`,
+		val = camelizeCache[key];
 
 	if (val !== undefined) {
 		return val;
 	}
 
 	let
-		res = str.toLowerCase().replace(normalizeRgxp, toCamelize);
+		res = str.trim().replace(camelizeRgxp, toCamelize);
 
 	if (upper) {
 		res = res[0].toUpperCase() + res.slice(1);
 	}
 
-	return camelizeCache[str] = res;
+	return camelizeCache[key] = res;
 });
 
-/** @see Sugar.String.dasherize */
-extend(String.prototype, 'dasherize', function (this: string): string {
+/**
+ * Returns dasherize version of the specified string
+ * @param [stable] - if false, then the operation can't be reverted
+ */
+extend(String.prototype, 'dasherize', function (this: string, stable?: boolean): string {
 	const
 		str = this.toString(),
-		val = dasherizeCache[str];
+		key = `${Boolean(stable)}:${str}`,
+		val = dasherizeCache[`${Boolean(stable)}:${str}`];
 
 	if (val !== undefined) {
 		return val;
 	}
 
-	return dasherizeCache[str] = finalizeTpl(str.replace(normalizeRgxp, toDasherize), '-');
+	return dasherizeCache[key] = convertToSeparatedStr(
+		str.trim().replace(normalizeRgxp, toDasherize),
+		'-',
+		stable
+	);
 });
 
-/** @see Sugar.String.underscore */
-extend(String.prototype, 'underscore', function (this: string): string {
+/**
+ * Returns underscore version of the specified string
+ * @param [stable] - if false, then the operation can't be reverted
+ */
+extend(String.prototype, 'underscore', function (this: string, stable?: boolean): string {
 	const
 		str = this.toString(),
-		val = underscoreCache[str];
+		key = `${Boolean(stable)}:${str}`,
+		val = underscoreCache[key];
 
 	if (val !== undefined) {
 		return val;
 	}
 
-	return underscoreCache[str] = finalizeTpl(str.replace(normalizeRgxp, toUnderscore), '_');
+	return underscoreCache[key] = convertToSeparatedStr(
+		str.trim().replace(normalizeRgxp, toUnderscore),
+		'_',
+		stable
+	);
 });
+
+function toCamelize(str: string, start: CanUndef<string>, end: CanUndef<string>, middle: CanUndef<string>): string {
+	if (middle) {
+		return middle.toUpperCase();
+	}
+
+	return start || end || '';
+}
+
+function toDasherize(str: string, start: CanUndef<string>, end: CanUndef<string>, middle: CanUndef<string>): string {
+	if (middle) {
+		return '-';
+	}
+
+	return new Array((start || end || '').length + 1).join('-');
+}
+
+function toUnderscore(str: string, start: CanUndef<string>, end: CanUndef<string>, middle: CanUndef<string>): string {
+	if (middle) {
+		return '_';
+	}
+
+	return new Array((start || end || '').length + 1).join('_');
+}
 
 function isUpper(char: string): boolean {
 	const up = char.toUpperCase();
 	return char === up && char.toLowerCase() !== up;
 }
 
-function toCamelize(str: string, $1?: string, $2?: string): string {
-	if ($1 && $2) {
-		return $1 + $2.toUpperCase();
-	}
-
-	return ($1 || '') + ($2 || '');
-}
-
-function toDasherize(str: string, $1?: string, $2?: string): string {
-	if ($1 && $2) {
-		return `${$1}-${$2}`;
-	}
-
-	return ($1 || '') + ($2 || '');
-}
-
-function toUnderscore(str: string, $1?: string, $2?: string): string {
-	if ($1 && $2) {
-		return `${$1}_${$2}`;
-	}
-
-	return ($1 || '') + ($2 || '');
-}
-
-function finalizeTpl(str: string, char: string): string {
+function convertToSeparatedStr(str: string, separator: string, stable: boolean = true): string {
 	let
-		res = '',
-		begin = true;
+		res = '';
 
 	for (let i = 0; i < str.length; i++) {
 		const
 			el = str[i];
 
-		if (el === char) {
-			res += char;
+		if (el === separator) {
+			res += separator;
 			continue;
 		}
 
-		if (res[res.length - 1] === char) {
+		if (res[res.length - 1] === separator) {
 			res += el.toLowerCase();
 			continue;
 		}
@@ -143,18 +160,17 @@ function finalizeTpl(str: string, char: string): string {
 			nextChar = str[i + 1];
 
 		if (isUpper(el)) {
-			if (!begin && nextChar && !isUpper(nextChar)) {
-				res += char;
+			if (i && (stable || nextChar && !isUpper(nextChar))) {
+				res += separator;
 			}
 
 			res += el.toLowerCase();
 
 		} else {
 			res += el;
-			begin = false;
 
 			if (nextChar && isUpper(nextChar)) {
-				res += char;
+				res += separator;
 			}
 		}
 	}
