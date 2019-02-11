@@ -17,11 +17,10 @@ const
  * @param [logLevel] - level of log which need style
  */
 function getStringifiedStyle(logLevel?: LogLevel): string {
-	if (!logLevel) {
-		return '';
-	}
+	const
+		level = logLevel || 'default';
 
-	if (styleCache[logLevel] === undefined) {
+	if (styleCache[level] === undefined) {
 		const stringifiedStyle = $C(getStyle(logLevel)).to('')
 			.reduce((res, value, key) => res + `${key.dasherize()}:${value};`);
 
@@ -29,10 +28,10 @@ function getStringifiedStyle(logLevel?: LogLevel): string {
 			return '';
 		}
 
-		styleCache[logLevel] = stringifiedStyle;
+		styleCache[level] = stringifiedStyle;
 	}
 
-	return styleCache[logLevel];
+	return styleCache[level];
 }
 
 /**

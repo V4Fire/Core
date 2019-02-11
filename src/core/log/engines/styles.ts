@@ -11,16 +11,14 @@ import { LogLevel } from 'core/log/types';
 
 const
 	{styles} = config.log,
-	configCache = {};
+	configCache = {default: {}};
 
 if (styles) {
 	for (const key in styles) {
-		if (key !== 'default') {
-			configCache[key] = {
-				...styles.default,
-				...styles[key]
-			};
-		}
+		configCache[key] = {
+			...styles.default,
+			...styles[key]
+		};
 	}
 }
 
@@ -28,10 +26,10 @@ if (styles) {
  * Returns object representing style for specific logLevel
  * @param [logLevel] - level of log which need style
  */
-export function getStyle(logLevel?: LogLevel): Nullable<Dictionary> {
+export function getStyle(logLevel?: LogLevel): Dictionary {
 	if (logLevel && configCache[logLevel] !== undefined) {
 		return configCache[logLevel];
 	}
 
-	return null;
+	return configCache.default;
 }
