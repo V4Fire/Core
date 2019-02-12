@@ -69,7 +69,7 @@ extend(String.prototype, 'camelize', function (this: string, upper: boolean = tr
 
 /**
  * Returns dasherize version of the specified string
- * @param [stable] - if false, then the operation can't be reverted
+ * @param [stable] - if true, then the operation can be reverted
  */
 extend(String.prototype, 'dasherize', function (this: string, stable?: boolean): string {
 	const
@@ -90,7 +90,7 @@ extend(String.prototype, 'dasherize', function (this: string, stable?: boolean):
 
 /**
  * Returns underscore version of the specified string
- * @param [stable] - if false, then the operation can't be reverted
+ * @param [stable] - if true, then the operation can be reverted
  */
 extend(String.prototype, 'underscore', function (this: string, stable?: boolean): string {
 	const
@@ -138,7 +138,7 @@ function isUpper(char: string): boolean {
 	return char === up && char.toLowerCase() !== up;
 }
 
-function convertToSeparatedStr(str: string, separator: string, stable: boolean = true): string {
+function convertToSeparatedStr(str: string, separator: string, stable?: boolean): string {
 	let
 		res = '';
 
