@@ -110,10 +110,10 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 				clone = (data) => () => Object.isObject(data) || Object.isArray(data) ? Object.fastClone(data) : data;
 
 			if (Object.isPromise(res)) {
-				res.then((data) => log.info(loggingContext, getTime(), clone(data)));
+				res.then((data) => log(loggingContext, getTime(), clone(data)));
 
 			} else {
-				log.info(loggingContext, getTime(), clone(res));
+				log(loggingContext, getTime(), clone(res));
 			}
 
 			return res;
@@ -297,7 +297,7 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 				res = request(reqOpts).then(success).then(ctx.saveCache);
 			}
 
-			res.then((response) => log.info(`response:${path}`, response.data, {
+			res.then((response) => log(`response:${path}`, response.data, {
 				cache,
 				externalRequest: opts.externalRequest,
 				request: opts
