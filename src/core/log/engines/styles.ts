@@ -23,8 +23,8 @@ if (styles) {
 }
 
 /**
- * Returns object representing style for specific logLevel
- * @param [logLevel] - level of log which need style
+ * Returns an object representing style for the specific logLevel
+ * @param [logLevel] - level of log which needs a style
  */
 export function getStyle(logLevel?: LogLevel): Dictionary {
 	if (logLevel && configCache[logLevel] !== undefined) {

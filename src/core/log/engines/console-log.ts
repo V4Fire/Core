@@ -13,8 +13,8 @@ const
 	styleCache = {};
 
 /**
- * Returns string representing style for specific logLevel
- * @param [logLevel] - level of log which need style
+ * Returns a string representing style for the specific logLevel
+ * @param [logLevel] - level of log which needs a style
  */
 function getStringifiedStyle(logLevel?: LogLevel): string {
 	const
