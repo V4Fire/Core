@@ -14,16 +14,19 @@ const extend = (func: Logger): ExtendedLogger => {
 	function info(context: string, ...details: unknown[]): void {
 		func({context, logLevel: 'info'}, ...details);
 	}
+
 	res.info = info;
 
 	function warn(context: string, ...details: unknown[]): void {
 		func({context, logLevel: 'warn'}, ...details);
 	}
+
 	res.warn = warn;
 
 	function error(context: string, ...details: unknown[]): void {
 		func({context, logLevel: 'error'}, ...details);
 	}
+
 	res.error = error;
 
 	function namespace(ns: string): ExtendedLogger {
@@ -46,6 +49,7 @@ const extend = (func: Logger): ExtendedLogger => {
 
 		return extend(copy);
 	}
+
 	res.namespace = namespace;
 
 	return res;
