@@ -42,8 +42,5 @@ function getStringifiedStyle(logLevel?: LogLevel): string {
  * @param [details] - additional details
  */
 export function log(context: string, logLevel?: LogLevel, ...details: unknown[]): void {
-	const
-		style = getStringifiedStyle(logLevel);
-
-	console.log(`%c${context}`, style, ...details);
+	console.log(`%c${context}`, getStringifiedStyle(logLevel), ...details);
 }
