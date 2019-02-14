@@ -36,11 +36,11 @@ env.event.on('set.log', setConfig);
 env.event.on('remove.log', setConfig);
 
 /**
- * Call appropriate log engine.
+ * Calls appropriate log engine.
  * Enqueues log records until set options up and then logs them.
  *
  * @param context - log record context
- * @param [details] - additional details. If it's a function then call it
+ * @param [details] - additional details. If it's a function, it will be called
  */
 export default function log(context: string | LogMessageOptions, ...details: unknown[]): void {
 	let
@@ -80,7 +80,7 @@ export default function log(context: string | LogMessageOptions, ...details: unk
 }
 
 /**
- * Returns true if patterns allow to log record with specified context
+ * Returns true if patterns allow to log record with the specified context
  * @param context - context that's checking for ability to log
  */
 function isAbleToLog(context: string): boolean {
@@ -99,7 +99,7 @@ function isAbleToLog(context: string): boolean {
 
 /**
  * Returns each element or executing result if an element is a function.
- * @param details - details
+ * @param details - array of elements
  */
 function prepareDetails(details: unknown[]): unknown[] {
 	for (let i = 0; i < details.length; i++) {

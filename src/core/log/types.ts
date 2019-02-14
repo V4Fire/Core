@@ -19,7 +19,7 @@ export interface Logger {
 
 export interface ExtendedLogger extends Logger {
 	/**
-	 * Log message with level 'info' and specific context
+	 * Logs message with an info level and a context
 	 *
 	 * @param context - log record context
 	 * @param [details] - additional details
@@ -27,7 +27,7 @@ export interface ExtendedLogger extends Logger {
 	info(context: string, ...details: unknown[]): void;
 
 	/**
-	 * Log message with level 'warn' and specific context
+	 * Logs message with a warn level and a context
 	 *
 	 * @param context - log record context
 	 * @param [details] - additional details
@@ -35,7 +35,7 @@ export interface ExtendedLogger extends Logger {
 	warn(context: string, ...details: unknown[]): void;
 
 	/**
-	 * Log message with level 'error' and specific context
+	 * Logs message with an error level and a context
 	 *
 	 * @param context - log record context
 	 * @param [details] - additional details
@@ -43,7 +43,7 @@ export interface ExtendedLogger extends Logger {
 	error(context: string, ...details: unknown[]): void;
 
 	/**
-	 * Return new log function with defined namespace.
+	 * Returns a new log function with the specified namespace.
 	 * The namespace will precede a context of every log record of the function.
 	 *
 	 * @example
@@ -56,7 +56,7 @@ export interface ExtendedLogger extends Logger {
 	 * log3.info('res', 'hello');
 	 * // prints context 'super:global:res'
 	 *
-	 * @param ns - namespace that will precede a context of each log record
+	 * @param value
 	 */
-	namespace(ns: string): ExtendedLogger;
+	namespace(value: string): ExtendedLogger;
 }

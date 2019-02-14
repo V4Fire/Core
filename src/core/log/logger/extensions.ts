@@ -29,17 +29,17 @@ const extend = (func: Logger): ExtendedLogger => {
 
 	res.error = error;
 
-	function namespace(ns: string): ExtendedLogger {
+	function namespace(value: string): ExtendedLogger {
 		const copy = (context: string | LogMessageOptions, ...details: unknown[]): void => {
 			let
 				contextCopy: string | LogMessageOptions;
 
 			if (Object.isString(context)) {
-				contextCopy = `${ns}:${context}`;
+				contextCopy = `${value}:${context}`;
 
 			} else {
 				contextCopy = {
-					context: `${ns}:${context.context}`,
+					context: `${value}:${context.context}`,
 					logLevel: context.logLevel
 				};
 			}
