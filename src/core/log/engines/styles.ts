@@ -14,7 +14,13 @@ const
 	configCache = {default: {}};
 
 if (styles) {
-	for (const key in styles) {
+	const
+		keys = Object.keys(styles);
+
+	for (let i = 0; i < keys.length; i++) {
+		const
+			key = keys[i];
+
 		configCache[key] = {
 			...styles.default,
 			...styles[key]
