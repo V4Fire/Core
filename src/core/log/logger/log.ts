@@ -6,7 +6,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import $C = require('collection.js');
 import logEngine from 'core/log/engines';
 import * as env from 'core/env';
 import { LogLevel, LogMessageOptions } from 'core/log/types';
@@ -23,11 +22,10 @@ let
 
 const setConfig = (val) => {
 	options = {
-		patterns: [],
 		...val
 	};
 
-	options.patterns = $C(options.patterns).map((el) => Object.isRegExp(el) ? el : new RegExp(el));
+	options.patterns = (options.patterns || []).map((el) => Object.isRegExp(el) ? el : new RegExp(el));
 };
 
 const
