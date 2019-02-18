@@ -36,8 +36,7 @@ env.event.on('set.log', setConfig);
 env.event.on('remove.log', setConfig);
 
 /**
- * Calls an appropriate log engine.
- * Enqueues log records until set options up and then logs them
+ * Calls an appropriate log engine
  *
  * @param context - log record context
  * @param [details] - additional details. If it's a function, it will be called
