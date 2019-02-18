@@ -9,7 +9,4 @@
 import extend from 'core/log/logger/extensions';
 import log from 'core/log/logger/log';
 
-const
-	extendedLog = extend(log);
-
-export default extendedLog;
+export default extend(log);

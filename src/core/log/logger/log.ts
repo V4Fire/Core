@@ -20,9 +20,9 @@ let
 	options,
 	queue: LogRecord[] = [];
 
-const setConfig = (val) => {
+const setConfig = (opts) => {
 	options = {
-		...val
+		...opts
 	};
 
 	options.patterns = (options.patterns || []).map((el) => Object.isRegExp(el) ? el : new RegExp(el));
