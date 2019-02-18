@@ -43,8 +43,7 @@ export interface ExtendedLogger extends Logger {
 	error(context: string, ...details: unknown[]): void;
 
 	/**
-	 * Returns a new log function with the specified namespace.
-	 * The namespace will precede a context of every log record of the function.
+	 * Returns a new log function with the specified namespace
 	 *
 	 * @example
 	 * const log2 = log.namespace('global');
