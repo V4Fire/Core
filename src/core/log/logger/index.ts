@@ -6,5 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-export { default } from 'core/log/logger';
-export * from 'core/log/types';
+import extend from 'core/log/logger/extensions';
+import log from 'core/log/logger/log';
+
+export default extend(log);
