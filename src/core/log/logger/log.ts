@@ -11,9 +11,9 @@ import logEngine from 'core/log/engines';
 import { LogLevel, LogMessageOptions } from 'core/log/interface';
 
 interface LogRecord {
-	context: string,
-	logLevel?: LogLevel,
-	details: unknown[],
+	context: string;
+	logLevel?: LogLevel;
+	details: unknown[];
 }
 
 let
