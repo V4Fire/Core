@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import * as env from 'core/env';
+import * as env from 'core/prelude/env';
 import logEngine from 'core/log/engines';
 import { LogLevel, LogMessageOptions } from 'core/log/interface';
 
