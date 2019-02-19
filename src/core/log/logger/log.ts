@@ -6,9 +6,9 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import logEngine from 'core/log/engines';
 import * as env from 'core/env';
-import { LogLevel, LogMessageOptions } from 'core/log/types';
+import logEngine from 'core/log/engines';
+import { LogLevel, LogMessageOptions } from 'core/log/interface';
 
 interface LogRecord {
 	context: string,
@@ -39,18 +39,18 @@ env.event.on('remove.log', setConfig);
  * Calls an appropriate log engine
  *
  * @param context - log record context
- * @param [details] - additional details. If it's a function, it will be called
+ * @param [details] - additional details (if it's a function, it will be called)
  */
 export default function log(context: string | LogMessageOptions, ...details: unknown[]): void {
 	let
 		logLevel: CanUndef<LogLevel>;
 
-	if (!Object.isString(context)) {
-		logLevel = context.logLevel;
-		context = `${context.context || defaultContext}:${logLevel}`;
+	if (Object.isString(context)) {
+		context = context || defaultContext;
 
 	} else {
-		context = context || defaultContext;
+		logLevel = context.logLevel;
+		context = `${context.context || defaultContext}:${logLevel}`;
 	}
 
 	if (!options) {
@@ -80,7 +80,7 @@ export default function log(context: string | LogMessageOptions, ...details: unk
 
 /**
  * Returns true if patterns allow to log a record with the specified context
- * @param context - context that's checking for ability to log
+ * @param context
  */
 function isAbleToLog(context: string): boolean {
 	if (options.patterns) {

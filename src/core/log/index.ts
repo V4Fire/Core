@@ -7,4 +7,4 @@
  */
 
 export { default } from 'core/log/logger';
-export * from 'core/log/types';
+export * from 'core/log/interface';

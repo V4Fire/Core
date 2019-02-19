@@ -6,11 +6,11 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { getStyle } from 'core/log/engines/styles';
-import { LogLevel } from 'core/log/types';
+import { getStyle } from 'core/log/styles';
+import { LogLevel } from 'core/log/interface';
 
 const
-	styleCache = {};
+	styleCache = Object.createDict<string>();
 
 /**
  * Returns a string representing style for the specific logLevel
@@ -18,9 +18,10 @@ const
  */
 function getStringifiedStyle(logLevel?: LogLevel): string {
 	const
-		level = logLevel || 'default';
+		level = logLevel || 'default',
+		val = styleCache[level];
 
-	if (styleCache[level] === undefined) {
+	if (val === undefined) {
 		const
 			style = getStyle(logLevel);
 
@@ -31,10 +32,10 @@ function getStringifiedStyle(logLevel?: LogLevel): string {
 			return '';
 		}
 
-		styleCache[level] = stringifiedStyle;
+		return styleCache[level] = stringifiedStyle;
 	}
 
-	return styleCache[level];
+	return val;
 }
 
 /**

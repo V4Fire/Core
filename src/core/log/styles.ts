@@ -7,7 +7,7 @@
  */
 
 import config from 'config';
-import { LogLevel } from 'core/log/types';
+import { LogLevel } from 'core/log/interface';
 
 const
 	{styles} = config.log,
