@@ -9,6 +9,7 @@
 import Then from 'core/then';
 
 import log from 'core/log';
+
 import request from 'core/request/engines';
 
 import Response from 'core/request/response';
@@ -103,15 +104,15 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 				res = fn(data, {opts: p, ctx, globalOpts}, ...args);
 
 			const
-				logKey = `request:${namespace}:${key}:${path}`,
+				loggingContext = `request:${namespace}:${key}:${path}`,
 				getTime = () => `Finished at ${Date.now() - time}ms`,
 				clone = (data) => () => Object.isObject(data) || Object.isArray(data) ? Object.fastClone(data) : data;
 
 			if (Object.isPromise(res)) {
-				res.then((data) => log(logKey, getTime(), clone(data)));
+				res.then((data) => log(loggingContext, getTime(), clone(data)));
 
 			} else {
-				log(logKey, getTime(), clone(res));
+				log(loggingContext, getTime(), clone(res));
 			}
 
 			return res;
@@ -334,7 +335,7 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 				res = request(reqOpts).then(success).then(ctx.saveCache);
 			}
 
-			res.then((response) => log(`request:response:${path}`, response.data, {
+			res.then((response) => log(`response:${path}`, response.data, {
 				cache,
 				externalRequest: opts.externalRequest,
 				request: opts
