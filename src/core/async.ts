@@ -211,6 +211,11 @@ export default class Async<CTX extends object = Async<any>> {
 	static linkNames: LinkNamesList = linkNamesDictionary;
 
 	/**
+	 * Lock status
+	 */
+	locked: boolean = false;
+
+	/**
 	 * Cache object for async operations
 	 */
 	protected readonly cache: Dictionary<CacheObject> = Object.createDict();
@@ -1742,6 +1747,10 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @param p
 	 */
 	protected setAsync(p: Dictionary<any>): any {
+		if (this.locked) {
+			throw new Error('Async object is locked');
+		}
+
 		const
 			baseCache = this.initCache(p.name);
 
