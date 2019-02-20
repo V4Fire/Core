@@ -113,7 +113,7 @@ export default class RequestContext<T = unknown> {
 	resolveAPI(api: Nullable<string> = globalOpts.api): string {
 		const
 			a = <NonNullable<CreateRequestOptions['api']>>this.params.api,
-			rgxp = /(?:^|(\w+:\/\/)(?:(.*?)\.)?(.*?)(?:\.(.*?))?)(\/.*|$)/;
+			rgxp = /(?:^|(\w+:\/\/)(?:([^./]+)\.)?([^./]+)(?:\.([^./]+))?)(\/.+|$)/;
 
 		if (!api) {
 			const def = <any>{
@@ -154,6 +154,12 @@ export default class RequestContext<T = unknown> {
 		}
 
 		return api.replace(rgxp, (str, protocol, domain3, domain2, zone, nm) => {
+			if (zone == null && domain3 != null) {
+				zone = domain2;
+				domain2 = domain3;
+				domain3 = undefined;
+			}
+
 			nm = v('namespace', nm);
 
 			if (!protocol) {
