@@ -118,7 +118,7 @@ class Config {
 				src = p.root;
 			}
 
-			config.src[nm] = (this.src[nm] || []).concat(src);
+			config.src[nm] = (this.src[nm] || []).union(src);
 		});
 
 		function bindObjCtx(obj) {
