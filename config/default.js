@@ -355,7 +355,7 @@ global.include = require;
 Object.defineProperties(global, {
 	include: {
 		get() {
-			return require('config').src.include();
+			return require(path.join(process.cwd(), 'config/default')).src.include();
 		}
 	},
 
