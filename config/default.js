@@ -72,7 +72,8 @@ class Config {
 	 */
 	createConfig({dirs, envs, mod}, opts) {
 		const
-			isActiveConfig = isPathEqual(path.join(process.cwd(), 'config'), dirs[0]);
+			activeDir = dirs[0],
+			isActiveConfig = isPathEqual(path.join(process.cwd(), 'config'), activeDir);
 
 		if (envs) {
 			this.extend(env, envs, $C.clone(env));
@@ -106,9 +107,13 @@ class Config {
 
 		setProto(opts);
 
+		const modObj = $C((Object.isString(mod) ? include(mod, activeDir) : mod) || {})
+			.filter((el, key) => !opts.hasOwnProperty(key))
+			.map();
+
 		const
-			config = this.extend(Object.create(proto), Object.isString(mod) ? include(mod) : mod || {}, opts),
-			p = this.getSrcMap(dirs[0]);
+			config = this.extend(Object.create(proto), opts, modObj),
+			p = this.getSrcMap(activeDir);
 
 		$C(['roots'].concat(dirs.slice(1))).forEach((nm, i) => {
 			let src;
@@ -132,7 +137,7 @@ class Config {
 		function bindObjCtx(obj) {
 			$C(obj).object(true).forEach((el, key) => {
 				if (Object.isFunction(el)) {
-					if (isPathEqual(path.join(process.cwd(), 'config'), dirs[0])) {
+					if (isPathEqual(path.join(process.cwd(), 'config'), activeDir)) {
 						const
 							o = el[origin] = el[origin] || el,
 							ctx = Object.assign(Object.create({config}), obj);
