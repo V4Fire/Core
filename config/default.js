@@ -66,12 +66,20 @@ class Config {
 	 * @template T
 	 * @param {!Array<string>} dirs - list of init directories ([0] - dirname, [1+] - src fields)
 	 * @param {Object=} [envs] - map of path environments
+	 * @param {(string|Object)=} [mod] - url for a config modifier or an object modifier (env configs)
 	 * @param {T} opts
 	 * @returns {C<T>}
 	 */
-	createConfig({dirs, envs}, opts) {
+	createConfig({dirs, envs, mod}, opts) {
+		const
+			isActiveConfig = isPathEqual(path.join(process.cwd(), 'config'), dirs[0]);
+
 		if (envs) {
 			this.extend(env, envs, $C.clone(env));
+		}
+
+		if (mod !== undefined && !isActiveConfig) {
+			return {...opts};
 		}
 
 		const
@@ -99,7 +107,7 @@ class Config {
 		setProto(opts);
 
 		const
-			config = this.extend(Object.create(proto), opts),
+			config = this.extend(Object.create(proto), Object.isString(mod) ? include(mod) : mod || {}, opts),
 			p = this.getSrcMap(dirs[0]);
 
 		$C(['roots'].concat(dirs.slice(1))).forEach((nm, i) => {
@@ -142,7 +150,7 @@ class Config {
 			});
 		}
 
-		if (isPathEqual(path.join(process.cwd(), 'config'), dirs[0])) {
+		if (isActiveConfig) {
 			bindObjCtx(config);
 		}
 
