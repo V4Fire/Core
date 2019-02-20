@@ -65,7 +65,7 @@ class Config {
 	 *
 	 * @template T
 	 * @param {!Array<string>} dirs - list of init directories ([0] - dirname, [1+] - src fields)
-	 * @param {Object=} [envs] - map of path environments
+	 * @param {Object=} [envs] - map of environment variables
 	 * @param {(string|Object)=} [mod] - url for a config modifier or an object modifier (env configs)
 	 * @param {T} opts
 	 * @returns {C<T>}
@@ -165,7 +165,7 @@ class Config {
 	}
 
 	/**
-	 * Returns src map by the specified init directory
+	 * Returns src map for the specified init directory
 	 *
 	 * @param {string} dir - init directory (usually __dirname)
 	 * @returns {{root: string, src: string, pzlr: {blockDir: (string|undefined), serverDir: (string|undefined)}}}
