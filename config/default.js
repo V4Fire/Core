@@ -64,13 +64,22 @@ class Config {
 	 *
 	 * @template T
 	 * @param {!Array<string>} dirs - list of init directories ([0] - dirname, [1+] - src fields)
-	 * @param {Object=} [envs] - map of path environments
+	 * @param {Object=} [envs] - map of environment variables
+	 * @param {(string|Object)=} [mod] - url for a config modifier or an object modifier (env configs)
 	 * @param {T} opts
 	 * @returns {C<T>}
 	 */
-	createConfig({dirs, envs}, opts) {
+	createConfig({dirs, envs, mod}, opts) {
+		const
+			activeDir = dirs[0],
+			isActiveConfig = isPathEqual(path.join(process.cwd(), 'config'), activeDir);
+
 		if (envs) {
 			this.extend(env, envs, $C.clone(env));
+		}
+
+		if (mod !== undefined && !isActiveConfig) {
+			return {...opts};
 		}
 
 		const
@@ -97,9 +106,13 @@ class Config {
 
 		setProto(opts);
 
+		const modObj = $C((Object.isString(mod) ? include(mod, activeDir) : mod) || {})
+			.filter((el, key) => !opts.hasOwnProperty(key))
+			.map();
+
 		const
-			config = this.extend(Object.create(proto), opts),
-			p = this.getSrcMap(dirs[0]);
+			config = this.extend(Object.create(proto), opts, modObj),
+			p = this.getSrcMap(activeDir);
 
 		$C(['roots'].concat(dirs.slice(1))).forEach((nm, i) => {
 			let src;
@@ -117,13 +130,13 @@ class Config {
 				src = p.root;
 			}
 
-			config.src[nm] = (this.src[nm] || []).concat(src);
+			config.src[nm] = (this.src[nm] || []).union(src);
 		});
 
 		function bindObjCtx(obj) {
 			$C(obj).object(true).forEach((el, key) => {
 				if (Object.isFunction(el)) {
-					if (isPathEqual(path.join(process.cwd(), 'config'), dirs[0])) {
+					if (isPathEqual(path.join(process.cwd(), 'config'), activeDir)) {
 						const
 							o = el[origin] = el[origin] || el,
 							ctx = Object.assign(Object.create({config}), obj);
@@ -141,7 +154,7 @@ class Config {
 			});
 		}
 
-		if (isPathEqual(path.join(process.cwd(), 'config'), dirs[0])) {
+		if (isActiveConfig) {
 			bindObjCtx(config);
 		}
 
@@ -156,7 +169,7 @@ class Config {
 	}
 
 	/**
-	 * Returns src map by the specified init directory
+	 * Returns src map for the specified init directory
 	 *
 	 * @param {string} dir - init directory (usually __dirname)
 	 * @returns {{root: string, src: string, pzlr: {blockDir: (string|undefined), serverDir: (string|undefined)}}}
