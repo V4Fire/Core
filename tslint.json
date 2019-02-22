@@ -126,7 +126,7 @@
     "indent": [true, "tabs"],
     "linebreak-style": [true, "LF"],
     "max-classes-per-file": [true, 5, "exclude-class-expressions"],
-    "max-file-line-count": [true, 500],
+    "max-file-line-count": [true, 1000],
     "max-line-length": [true, 120],
     "no-default-export": false,
     "no-duplicate-imports": true,
