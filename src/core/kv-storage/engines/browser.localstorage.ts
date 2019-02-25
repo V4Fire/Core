@@ -21,6 +21,6 @@ try {
 	}
 
 } catch {
-	syncLocalStorage = GLOBAL.sessionStorage;
-	asyncLocalStorage = GLOBAL.sessionStorage;
+	syncLocalStorage = syncSessionStorage;
+	asyncLocalStorage = asyncSessionStorage;
 }
