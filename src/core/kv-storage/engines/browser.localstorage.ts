@@ -9,7 +9,18 @@
 import { GLOBAL } from 'core/const/links';
 
 export let
-	syncLocalStorage = GLOBAL.localStorage,
-	asyncLocalStorage = GLOBAL.localStorage,
+	syncLocalStorage,
+	asyncLocalStorage,
 	syncSessionStorage = GLOBAL.sessionStorage,
 	asyncSessionStorage = GLOBAL.sessionStorage;
+
+try {
+	if (typeof GLOBAL.localStorage !== 'undefined') {
+		syncLocalStorage = GLOBAL.localStorage;
+		asyncLocalStorage = GLOBAL.localStorage;
+	}
+
+} catch {
+	syncLocalStorage = GLOBAL.sessionStorage;
+	asyncLocalStorage = GLOBAL.sessionStorage;
+}
