@@ -23,24 +23,20 @@ export interface ClearFilter<T = unknown> {
 }
 
 export interface Namespace {
-	has(key: string): boolean;
-	get<T = unknown>(key: string): T;
-	set(key: string, value: unknown): void;
-	remove(key: string): void;
-	clear<T = unknown>(filter?: ClearFilter<T>): void;
+	has(key: string, ...args: unknown[]): boolean;
+	get<T = unknown>(key: string, ...args: unknown[]): CanUndef<T>;
+	set(key: string, value: unknown, ...args: unknown[]): void;
+	remove(key: string, ...args: unknown[]): void;
+	clear<T = unknown>(filter?: ClearFilter<T>, ...args: unknown[]): void;
 }
 
 export interface FactoryResult extends Namespace {
 	namespace(name: string): Namespace;
 }
 
-export interface AsyncNamespace {
-	has(key: string): Promise<boolean>;
-	get<T = unknown>(key: string): Promise<CanUndef<T>>;
-	set(key: string, value: unknown, ttl?: number): Promise<void>;
-	remove(key: string): Promise<void>;
-	clear<T = unknown>(filter?: ClearFilter<T>): Promise<void>;
-}
+export type AsyncNamespace = {
+	[T in keyof Namespace]: Promise<T>;
+};
 
 export interface AsyncFactoryResult extends AsyncNamespace {
 	namespace(name: string): AsyncNamespace;
