@@ -16,7 +16,7 @@ import { normalizeHeaderName } from 'core/request/utils';
 import { defaultResponseOpts } from 'core/request/const';
 import {
 
-	ResponseOptions,
+	ResponseOpts,
 	ResponseHeaders,
 	ResponseTypes,
 	ResponseType,
@@ -88,9 +88,9 @@ export default class Response {
 	 * @param [body]
 	 * @param [params]
 	 */
-	constructor(body?: ResponseType, params?: ResponseOptions) {
+	constructor(body?: ResponseType, params?: ResponseOpts) {
 		const
-			p = Object.mixin<typeof defaultResponseOpts & ResponseOptions>(false, {}, defaultResponseOpts, params),
+			p = Object.mixin<typeof defaultResponseOpts & ResponseOpts>(false, {}, defaultResponseOpts, params),
 			s = this.okStatuses = p.okStatuses;
 
 		this.parent = p.parent;

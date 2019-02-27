@@ -168,13 +168,13 @@ interface String {
 	underscore(stable?: boolean): string;
 }
 
-type NumberOptions =
+type NumberOpts =
 	'decimal' |
 	'thousands';
 
 interface NumberConstructor {
-	getOption(key: NumberOptions): string;
-	setOption(key: NumberOptions, value: string): string;
+	getOption(key: NumberOpts): string;
+	setOption(key: NumberOpts, value: string): string;
 }
 
 interface Number {

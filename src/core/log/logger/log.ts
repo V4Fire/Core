@@ -8,7 +8,7 @@
 
 import * as env from 'core/prelude/env';
 import logEngine from 'core/log/engines';
-import { LogLevel, LogMessageOptions } from 'core/log/interface';
+import { LogLevel, LogMessageOpts } from 'core/log/interface';
 
 interface LogRecord {
 	context: string;
@@ -41,7 +41,7 @@ env.event.on('remove.log', setConfig);
  * @param context - log record context
  * @param [details] - additional details (if it's a function, it will be called)
  */
-export default function log(context: string | LogMessageOptions, ...details: unknown[]): void {
+export default function log(context: string | LogMessageOpts, ...details: unknown[]): void {
 	let
 		logLevel: CanUndef<LogLevel>;
 

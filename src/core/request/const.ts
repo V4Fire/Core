@@ -11,7 +11,7 @@ import statusCodes from 'core/status-codes';
 import Range from 'core/range';
 
 import { AsyncFactoryResult } from 'core/kv-storage';
-import { RequestMethods, ResponseTypes, GlobalOptions, CacheStrategy } from 'core/request/interface';
+import { RequestMethods, ResponseTypes, GlobalOpts, CacheStrategy } from 'core/request/interface';
 import { Cache, RestrictedCache, NeverCache } from 'core/cache';
 
 export let
@@ -53,7 +53,7 @@ export const cache: Record<CacheStrategy, Cache> = {
 	never: new NeverCache()
 };
 
-export const globalOpts: GlobalOptions = {
+export const globalOpts: GlobalOpts = {
 	get api(): CanUndef<string> {
 		return config.api;
 	},
