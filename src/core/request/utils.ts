@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { CreateRequestOptions } from 'core/request/interface';
+import { CreateRequestOpts } from 'core/request/interface';
 
 /**
  * Returns a string key for saving data in a storage
@@ -22,7 +22,7 @@ export function getStorageKey(key: string): string {
  * @param url
  * @param [params]
  */
-export function getRequestKey(url: string, params?: CreateRequestOptions): string {
+export function getRequestKey(url: string, params?: CreateRequestOpts): string {
 	const
 		p = <NonNullable<typeof params>>(params || {}),
 		plainHeaders = <string[][]>[];

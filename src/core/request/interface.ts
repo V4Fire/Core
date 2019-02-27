@@ -106,7 +106,7 @@ export type RequestQuery =
 
 export interface MiddlewareParams<T = unknown> {
 	ctx: RequestContext<T>;
-	opts: CreateRequestOptions<T>;
+	opts: CreateRequestOpts<T>;
 	globalOpts: GlobalOptions;
 }
 
@@ -118,7 +118,7 @@ export type Middlewares<T = unknown> =
 	Dictionary<Middleware<T>> |
 	Iterable<Middleware<T>>;
 
-export interface CreateRequestOptions<T = unknown> {
+export interface CreateRequestOpts<T = unknown> {
 	readonly method?: RequestMethods;
 	readonly cacheStrategy?: CacheStrategy;
 

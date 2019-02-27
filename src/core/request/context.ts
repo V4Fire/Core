@@ -12,7 +12,7 @@ import Response from 'core/request/response';
 import { Cache } from 'core/cache';
 import { concatUrls, toQueryString } from 'core/url';
 import { normalizeHeaders, applyQueryForStr, getStorageKey, getRequestKey } from 'core/request/utils';
-import { Encoders, Decoders, RequestQuery, CreateRequestOptions, RequestResponseObject } from 'core/request/interface';
+import { Encoders, Decoders, RequestQuery, CreateRequestOpts, RequestResponseObject } from 'core/request/interface';
 import { cache, pendingCache, storage, globalOpts, defaultRequestOpts } from 'core/request/const';
 
 export default class RequestContext<T = unknown> {
@@ -44,7 +44,7 @@ export default class RequestContext<T = unknown> {
 	/**
 	 * Request parameters
 	 */
-	readonly params!: typeof defaultRequestOpts & CreateRequestOptions<T>;
+	readonly params!: typeof defaultRequestOpts & CreateRequestOpts<T>;
 
 	/**
 	 * Alias for .params.query
@@ -81,7 +81,7 @@ export default class RequestContext<T = unknown> {
 	/**
 	 * @param [params] - request parameters
 	 */
-	constructor(params?: CreateRequestOptions<T>) {
+	constructor(params?: CreateRequestOpts<T>) {
 		const p = this.params = <any>Object.mixin({
 			deep: true,
 			concatArray: true,
@@ -111,7 +111,7 @@ export default class RequestContext<T = unknown> {
 	 */
 	resolveAPI(api: Nullable<string> = globalOpts.api): string {
 		const
-			a = <NonNullable<CreateRequestOptions['api']>>this.params.api,
+			a = <NonNullable<CreateRequestOpts['api']>>this.params.api,
 			rgxp = /(?:^|(\w+:\/\/)(?:([^./]+)\.)?([^./]+)(?:\.([^./]+))?)(\/.+|$)/;
 
 		if (!api) {
