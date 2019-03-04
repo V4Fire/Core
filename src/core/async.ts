@@ -62,6 +62,7 @@ export interface AsyncMergeHandler<T extends object = Async> {
 }
 
 export interface AsyncCbOpts<T extends object = Async> extends AsyncOpts {
+	promise?: boolean;
 	onClear?: AsyncClearHandler<T> | AsyncClearHandler<T>[];
 	onMerge?: AsyncMergeHandler<T> | AsyncMergeHandler<T>[];
 }
@@ -163,21 +164,29 @@ export interface CancelablePromise<T = unknown> extends Promise<T> {
 
 export enum LinkNames {
 	proxy,
+	proxyPromise,
 	promise,
 	request,
-	idleCallback,
+	idle,
+	idlePromise,
 	timeout,
+	timeoutPromise,
 	interval,
+	intervalPromise,
 	immediate,
+	immediatePromise,
 	worker,
-	eventListener
+	eventListener,
+	eventListenerPromise
 }
 
 export type Link = keyof typeof LinkNames;
-export type LinkNamesList = Record<Link, Link> & Dictionary;
+export type LinkNamesList = Record<Link, Link>;
 
-export const linkNamesDictionary =
-	<Record<Link, Link>>Object.convertEnumToDict(LinkNames);
+export const
+	isPromisifyLinkName = /Promise$/,
+	isZombieGroup = /:zombie\b/,
+	linkNamesDictionary = <LinkNamesList>Object.convertEnumToDict(LinkNames);
 
 /**
  * Returns true if the specified value is instance of AsyncOpts
@@ -233,6 +242,13 @@ export default class Async<CTX extends object = Async<any>> {
 	protected readonly context?: CTX;
 
 	/**
+	 * Link for Async.linkNames
+	 */
+	protected get linkNames(): LinkNamesList {
+		return (<typeof Async>this.constructor).linkNames;
+	}
+
+	/**
 	 * @param [ctx] - context for functions
 	 */
 	constructor(ctx?: CTX) {
@@ -265,7 +281,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 		return this.setAsync({
 			...params,
-			name: Async.linkNames.idleCallback,
+			name: this.linkNames.idle,
 			obj: fn,
 			clearFn,
 			wrapper,
@@ -287,7 +303,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	clearImmediate(params: ClearOptsId<TimerId>): this;
 	clearImmediate(p: any): this {
-		return this.clearAsync(p, Async.linkNames.immediate);
+		return this.clearAsync(p, this.linkNames.immediate);
 	}
 
 	/**
@@ -304,7 +320,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	muteImmediate(params: ClearOptsId<TimerId>): this;
 	muteImmediate(p: any): this {
-		return this.markAsync('muted', p, Async.linkNames.immediate);
+		return this.markAsync('muted', p, this.linkNames.immediate);
 	}
 
 	/**
@@ -321,7 +337,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	unmuteImmediate(params: ClearOptsId<TimerId>): this;
 	unmuteImmediate(p: any): this {
-		return this.markAsync('!muted', p, Async.linkNames.immediate);
+		return this.markAsync('!muted', p, this.linkNames.immediate);
 	}
 
 	/**
@@ -338,7 +354,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	suspendImmediate(params: ClearOptsId<TimerId>): this;
 	suspendImmediate(p: any): this {
-		return this.markAsync('paused', p, Async.linkNames.immediate);
+		return this.markAsync('paused', p, this.linkNames.immediate);
 	}
 
 	/**
@@ -355,7 +371,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	unsuspendImmediate(params: ClearOptsId<TimerId>): this;
 	unsuspendImmediate(p: any): this {
-		return this.markAsync('!paused', p, Async.linkNames.immediate);
+		return this.markAsync('!paused', p, this.linkNames.immediate);
 	}
 
 	/**
@@ -372,7 +388,7 @@ export default class Async<CTX extends object = Async<any>> {
 	setInterval(fn: Function, interval: number, params?: AsyncCbOpts<CTX>): Nullable<TimerId> {
 		return this.setAsync({
 			...params,
-			name: Async.linkNames.interval,
+			name: this.linkNames.interval,
 			obj: fn,
 			clearFn: clearInterval,
 			wrapper: setInterval,
@@ -396,7 +412,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	clearInterval(params: ClearOptsId<TimerId>): this;
 	clearInterval(p: any): this {
-		return this.clearAsync(p, Async.linkNames.interval);
+		return this.clearAsync(p, this.linkNames.interval);
 	}
 
 	/**
@@ -413,7 +429,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	muteInterval(params: ClearOptsId<TimerId>): this;
 	muteInterval(p: any): this {
-		return this.markAsync('!muted', p, Async.linkNames.interval);
+		return this.markAsync('!muted', p, this.linkNames.interval);
 	}
 
 	/**
@@ -430,7 +446,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	unmuteInterval(params: ClearOptsId<TimerId>): this;
 	unmuteInterval(p: any): this {
-		return this.markAsync('!muted', p, Async.linkNames.interval);
+		return this.markAsync('!muted', p, this.linkNames.interval);
 	}
 
 	/**
@@ -447,7 +463,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	suspendInterval(params: ClearOptsId<TimerId>): this;
 	suspendInterval(p: any): this {
-		return this.markAsync('paused', p, Async.linkNames.interval);
+		return this.markAsync('paused', p, this.linkNames.interval);
 	}
 
 	/**
@@ -464,7 +480,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	unsuspendInterval(params: ClearOptsId<TimerId>): this;
 	unsuspendInterval(p: any): this {
-		return this.markAsync('!paused', p, Async.linkNames.interval);
+		return this.markAsync('!paused', p, this.linkNames.interval);
 	}
 
 	/**
@@ -481,7 +497,7 @@ export default class Async<CTX extends object = Async<any>> {
 	setTimeout(fn: Function, timer: number, params?: AsyncCbOpts<CTX>): Nullable<TimerId> {
 		return this.setAsync({
 			...params,
-			name: Async.linkNames.timeout,
+			name: this.linkNames.timeout,
 			obj: fn,
 			clearFn: clearTimeout,
 			wrapper: setTimeout,
@@ -504,7 +520,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	clearTimeout(params: ClearOptsId<TimerId>): this;
 	clearTimeout(p: any): this {
-		return this.clearAsync(p, Async.linkNames.timeout);
+		return this.clearAsync(p, this.linkNames.timeout);
 	}
 
 	/**
@@ -521,7 +537,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	muteTimeout(params: ClearOptsId<TimerId>): this;
 	muteTimeout(p: any): this {
-		return this.markAsync('muted', p, Async.linkNames.timeout);
+		return this.markAsync('muted', p, this.linkNames.timeout);
 	}
 
 	/**
@@ -538,7 +554,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	unmuteTimeout(params: ClearOptsId<TimerId>): this;
 	unmuteTimeout(p: any): this {
-		return this.markAsync('!muted', p, Async.linkNames.timeout);
+		return this.markAsync('!muted', p, this.linkNames.timeout);
 	}
 
 	/**
@@ -555,7 +571,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	suspendTimeout(params: ClearOptsId<TimerId>): this;
 	suspendTimeout(p: any): this {
-		return this.markAsync('paused', p, Async.linkNames.timeout);
+		return this.markAsync('paused', p, this.linkNames.timeout);
 	}
 
 	/**
@@ -572,7 +588,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	unsuspendTimeout(params: ClearOptsId<TimerId>): this;
 	unsuspendTimeout(p: any): this {
-		return this.markAsync('!paused', p, Async.linkNames.timeout);
+		return this.markAsync('!paused', p, this.linkNames.timeout);
 	}
 
 	/**
@@ -605,7 +621,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 		return this.setAsync({
 			...params && Object.reject(params, 'timeout'),
-			name: Async.linkNames.idleCallback,
+			name: this.linkNames.idle,
 			obj: fn,
 			clearFn,
 			wrapper,
@@ -628,7 +644,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	cancelIdleCallback(params: ClearOptsId<TimerId>): this;
 	cancelIdleCallback(p: any): this {
-		return this.clearAsync(p, Async.linkNames.idleCallback);
+		return this.clearAsync(p, this.linkNames.idle);
 	}
 
 	/**
@@ -645,7 +661,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	muteIdleCallback(params: ClearOptsId<TimerId>): this;
 	muteIdleCallback(p: any): this {
-		return this.markAsync('muted', p, Async.linkNames.idleCallback);
+		return this.markAsync('muted', p, this.linkNames.idle);
 	}
 
 	/**
@@ -662,7 +678,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	unmuteIdleCallback(params: ClearOptsId<TimerId>): this;
 	unmuteIdleCallback(p: any): this {
-		return this.markAsync('!muted', p, Async.linkNames.idleCallback);
+		return this.markAsync('!muted', p, this.linkNames.idle);
 	}
 
 	/**
@@ -679,7 +695,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	suspendIdleCallback(params: ClearOptsId<TimerId>): this;
 	suspendIdleCallback(p: any): this {
-		return this.markAsync('paused', p, Async.linkNames.idleCallback);
+		return this.markAsync('paused', p, this.linkNames.idle);
 	}
 
 	/**
@@ -696,7 +712,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	unsuspendIdleCallback(params: ClearOptsId<TimerId>): this;
 	unsuspendIdleCallback(p: any): this {
-		return this.markAsync('!paused', p, Async.linkNames.idleCallback);
+		return this.markAsync('!paused', p, this.linkNames.idle);
 	}
 
 	/**
@@ -723,7 +739,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 		return this.setAsync({
 			...p,
-			name: Async.linkNames.worker,
+			name: this.linkNames.worker,
 			obj: worker,
 			clearFn: this.workerDestructor.bind(this, p.destructor),
 			periodic: p.single !== true
@@ -745,7 +761,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	terminateWorker(params: ClearProxyOpts<WorkerLikeP>): this;
 	terminateWorker(p: any): this {
-		return this.clearAsync(p, isParams<ClearProxyOpts>(p) && p.name || Async.linkNames.worker);
+		return this.clearAsync(p, isParams<ClearProxyOpts>(p) && p.name || this.linkNames.worker);
 	}
 
 	/**
@@ -761,7 +777,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 *   *) [group] - group name for the task
 	 */
 	request<T = unknown>(request: (() => PromiseLike<T>) | PromiseLike<T>, params?: AsyncOpts): Promise<T> {
-		return this.promise(request, {...params, name: Async.linkNames.request}) || new Promise<T>(() => undefined);
+		return this.promise(request, {...params, name: this.linkNames.request}) || new Promise<T>(() => undefined);
 	}
 
 	/**
@@ -778,7 +794,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	cancelRequest(params: ClearOptsId<Promise<unknown>>): this;
 	cancelRequest(p: any): this {
-		return this.clearAsync(p, Async.linkNames.request);
+		return this.clearAsync(p, this.linkNames.request);
 	}
 
 	/**
@@ -795,7 +811,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	muteRequest(params: ClearOptsId<Promise<unknown>>): this;
 	muteRequest(p: any): this {
-		return this.markAsync('muted', p, Async.linkNames.request);
+		return this.markAsync('muted', p, this.linkNames.request);
 	}
 
 	/**
@@ -812,7 +828,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	unmuteRequest(params: ClearOptsId<Promise<unknown>>): this;
 	unmuteRequest(p: any): this {
-		return this.markAsync('!muted', p, Async.linkNames.request);
+		return this.markAsync('!muted', p, this.linkNames.request);
 	}
 
 	/**
@@ -829,7 +845,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	suspendRequest(params: ClearOptsId<Promise<unknown>>): this;
 	suspendRequest(p: any): this {
-		return this.markAsync('paused', p, Async.linkNames.request);
+		return this.markAsync('paused', p, this.linkNames.request);
 	}
 
 	/**
@@ -846,7 +862,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	unsuspendRequest(params: ClearOptsId<Promise<unknown>>): this;
 	unsuspendRequest(p: any): this {
-		return this.markAsync('!paused', p, Async.linkNames.request);
+		return this.markAsync('!paused', p, this.linkNames.request);
 	}
 
 	/**
@@ -865,7 +881,7 @@ export default class Async<CTX extends object = Async<any>> {
 		const p = params || {};
 		return this.setAsync({
 			...params,
-			name: p.name || Async.linkNames.proxy,
+			name: p.name || this.linkNames.proxy,
 			obj: cb,
 			wrapper: (fn) => fn,
 			linkByWrapper: true,
@@ -888,7 +904,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	cancelProxy(params: ClearProxyOpts<Function>): this;
 	cancelProxy(p: any): this {
-		return this.clearAsync(p, isParams<ClearProxyOpts>(p) && p.name || Async.linkNames.proxy);
+		return this.clearAsync(p, isParams<ClearProxyOpts>(p) && p.name || this.linkNames.proxy);
 	}
 
 	/**
@@ -906,7 +922,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	muteProxy(params: ClearProxyOpts<Function>): this;
 	muteProxy(p: any): this {
-		return this.markAsync('muted', p, isParams<ClearProxyOpts>(p) && p.name || Async.linkNames.proxy);
+		return this.markAsync('muted', p, isParams<ClearProxyOpts>(p) && p.name || this.linkNames.proxy);
 	}
 
 	/**
@@ -924,7 +940,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	unmuteProxy(params: ClearProxyOpts<Function>): this;
 	unmuteProxy(p: any): this {
-		return this.markAsync('!muted', p, isParams<ClearProxyOpts>(p) && p.name || Async.linkNames.proxy);
+		return this.markAsync('!muted', p, isParams<ClearProxyOpts>(p) && p.name || this.linkNames.proxy);
 	}
 
 	/**
@@ -942,7 +958,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	suspendProxy(params: ClearProxyOpts<Function>): this;
 	suspendProxy(p: any): this {
-		return this.markAsync('paused', p, isParams<ClearProxyOpts>(p) && p.name || Async.linkNames.proxy);
+		return this.markAsync('paused', p, isParams<ClearProxyOpts>(p) && p.name || this.linkNames.proxy);
 	}
 
 	/**
@@ -960,7 +976,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	unsuspendProxy(params: ClearProxyOpts<Function>): this;
 	unsuspendProxy(p: any): this {
-		return this.markAsync('!paused', p, isParams<ClearProxyOpts>(p) && p.name || Async.linkNames.proxy);
+		return this.markAsync('!paused', p, isParams<ClearProxyOpts>(p) && p.name || this.linkNames.proxy);
 	}
 
 	/**
@@ -978,7 +994,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	promise<T = unknown>(promise: (() => PromiseLike<T>) | PromiseLike<T>, params?: AsyncPromiseOpts): Promise<T> {
 		const
-			p = <AsyncPromiseOpts>({name: Async.linkNames.promise, ...params});
+			p = <AsyncPromiseOpts>({name: this.linkNames.promise, ...params});
 
 		return new Promise((resolve, reject) => {
 			let
@@ -1033,7 +1049,26 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	cancelPromise(params: ClearProxyOpts<Function>): this;
 	cancelPromise(p: any): this {
-		return this.clearAsync(p, isParams<ClearProxyOpts>(p) && p.name || Async.linkNames.promise);
+		const
+			nms = this.linkNames,
+			nm = isParams<ClearProxyOpts>(p) && p.name;
+
+		this
+			.clearAsync(p, nm || nms.promise);
+
+		if (!nm) {
+			for (let keys = Object.keys(nms), i = 0; i < keys.length; i++) {
+				const
+					key = keys[i],
+					nm = nms[key];
+
+				if (nm && isPromisifyLinkName.test(key)) {
+					this.clearAsync(p, nm);
+				}
+			}
+		}
+
+		return this;
 	}
 
 	/**
@@ -1050,7 +1085,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	mutePromise(params: ClearOptsId<Function>): this;
 	mutePromise(p: any): this {
-		return this.markAsync('muted', p, isParams<ClearProxyOpts>(p) && p.name || Async.linkNames.promise);
+		return this.markPromise('muted', p);
 	}
 
 	/**
@@ -1067,7 +1102,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	unmutePromise(params: ClearOptsId<Function>): this;
 	unmutePromise(p: any): this {
-		return this.markAsync('!muted', p, isParams<ClearProxyOpts>(p) && p.name || Async.linkNames.promise);
+		return this.markPromise('!muted', p);
 	}
 
 	/**
@@ -1084,7 +1119,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	suspendPromise(params: ClearOptsId<Function>): this;
 	suspendPromise(p: any): this {
-		return this.markAsync('paused', p, isParams<ClearProxyOpts>(p) && p.name || Async.linkNames.promise);
+		return this.markPromise('paused', p);
 	}
 
 	/**
@@ -1101,7 +1136,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	unsuspendPromise(params: ClearOptsId<Function>): this;
 	unsuspendPromise(p: any): this {
-		return this.markAsync('!paused', p, isParams<ClearProxyOpts>(p) && p.name || Async.linkNames.promise);
+		return this.markPromise('!paused', p);
 	}
 
 	/**
@@ -1120,6 +1155,7 @@ export default class Async<CTX extends object = Async<any>> {
 		return new Promise((resolve, reject) => {
 			this.setTimeout(resolve, timer, {
 				...<any>params,
+				promise: true,
 				onClear: this.onPromiseClear(resolve, reject),
 				onMerge: this.onPromiseMerge(resolve, reject)
 			});
@@ -1141,6 +1177,7 @@ export default class Async<CTX extends object = Async<any>> {
 		return new Promise((resolve, reject) => {
 			this.setImmediate(resolve, {
 				...<any>params,
+				promise: true,
 				onClear: this.onPromiseClear(resolve, reject),
 				onMerge: this.onPromiseMerge(resolve, reject)
 			});
@@ -1163,6 +1200,7 @@ export default class Async<CTX extends object = Async<any>> {
 		return new Promise((resolve, reject) => {
 			this.requestIdleCallback(resolve, {
 				...<any>params,
+				promise: true,
 				onClear: this.onPromiseClear(resolve, reject),
 				onMerge: this.onPromiseMerge(resolve, reject)
 			});
@@ -1202,6 +1240,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 			id = this.setInterval(cb, DELAY, {
 				...<any>params,
+				promise: true,
 				onClear: this.onPromiseClear(resolve, reject),
 				onMerge: this.onPromiseMerge(resolve, reject)
 			});
@@ -1276,7 +1315,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 			const link = this.setAsync({
 				...p,
-				name: Async.linkNames.eventListener,
+				name: this.linkNames.eventListener,
 				obj: cb,
 				wrapper(cb: Function): unknown {
 					const handler = function (this: unknown): unknown {
@@ -1425,6 +1464,7 @@ export default class Async<CTX extends object = Async<any>> {
 		return new Promise((resolve, reject) => {
 			this.once(emitter, events, resolve, {
 				...p,
+				promise: true,
 				onClear: this.onPromiseClear(resolve, reject),
 				onMerge: this.onPromiseMerge(resolve, reject)
 			}, ...args);
@@ -1445,7 +1485,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	off(params: ClearOptsId<EventId>): this;
 	off(p: any): this {
-		return this.clearAsync(isEvent(p) ? {id: p} : p, Async.linkNames.eventListener);
+		return this.clearAsync(isEvent(p) ? {id: p} : p, this.linkNames.eventListener);
 	}
 
 	/**
@@ -1462,7 +1502,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	muteEventListeners(params: ClearOptsId<EventId>): this;
 	muteEventListeners(p: any): this {
-		return this.markAsync('muted', isEvent(p) ? {id: p} : p, Async.linkNames.eventListener);
+		return this.markAsync('muted', isEvent(p) ? {id: p} : p, this.linkNames.eventListener);
 	}
 
 	/**
@@ -1479,7 +1519,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	unmuteEventListeners(params: ClearOptsId<EventId>): this;
 	unmuteEventListeners(p: any): this {
-		return this.markAsync('!muted', isEvent(p) ? {id: p} : p, Async.linkNames.eventListener);
+		return this.markAsync('!muted', isEvent(p) ? {id: p} : p, this.linkNames.eventListener);
 	}
 
 	/**
@@ -1496,7 +1536,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	suspendEventListeners(params: ClearOptsId<EventId>): this;
 	suspendEventListeners(p: any): this {
-		return this.markAsync('paused', isEvent(p) ? {id: p} : p, Async.linkNames.eventListener);
+		return this.markAsync('paused', isEvent(p) ? {id: p} : p, this.linkNames.eventListener);
 	}
 
 	/**
@@ -1513,7 +1553,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	unsuspendEventListeners(params: ClearOptsId<EventId>): this;
 	unsuspendEventListeners(p: any): this {
-		return this.markAsync('!paused', isEvent(p) ? {id: p} : p, Async.linkNames.eventListener);
+		return this.markAsync('!paused', isEvent(p) ? {id: p} : p, this.linkNames.eventListener);
 	}
 
 	/**
@@ -1625,6 +1665,45 @@ export default class Async<CTX extends object = Async<any>> {
 
 			if (Object.isFunction(this[alias])) {
 				this[alias](params);
+			}
+		}
+
+		return this;
+	}
+
+	/**
+	 * Marks a promise operation as a field
+	 *
+	 * @param field
+	 * @param [id] - operation id (if not defined will be get all operations)
+	 */
+	protected markPromise(field: string, id?: Promise<unknown>): this;
+
+	/**
+	 * @param field
+	 * @param params - parameters for the operation:
+	 *   *) [id] - operation id
+	 *   *) [label] - label for the task
+	 *   *) [group] - group name for the task
+	 */
+	protected markPromise(field: string, params: ClearOptsId<Function>): this;
+	protected markPromise(field: string, p: any): this {
+		const
+			nms = this.linkNames,
+			nm = isParams<ClearProxyOpts>(p) && p.name;
+
+		this
+			.markAsync(field, p, nm || nms.promise);
+
+		if (!nm) {
+			for (let keys = Object.keys(nms), i = 0; i < keys.length; i++) {
+				const
+					key = keys[i],
+					nm = nms[key];
+
+				if (nm && isPromisifyLinkName.test(key)) {
+					this.markAsync(field, p, nm);
+				}
 			}
 		}
 
@@ -1773,9 +1852,12 @@ export default class Async<CTX extends object = Async<any>> {
 
 	/**
 	 * Returns a cache object by the specified name
+	 *
 	 * @param name
+	 * @param [promise] - if true, the the name will marked as promisified
 	 */
-	protected initCache(name: string): CacheObject {
+	protected initCache(name: string, promise?: boolean): CacheObject {
+		name = promise ? `${name}Promise` : name;
 		return this.cache[name] = this.cache[name] || {
 			root: {
 				labels: Object.createDict(),
@@ -1796,9 +1878,11 @@ export default class Async<CTX extends object = Async<any>> {
 		}
 
 		const
-			baseCache = this.initCache(p.name);
+			baseCache = this.initCache(p.name, p.promise);
 
-		let cache;
+		let
+			cache;
+
 		if (p.group) {
 			baseCache.groups[p.group] = baseCache.groups[p.group] || {
 				labels: Object.createDict(),
@@ -2055,7 +2139,12 @@ export default class Async<CTX extends object = Async<any>> {
 			keys = Object.keys(obj);
 
 		for (let i = 0; i < keys.length; i++) {
-			this.clearAsync({...p, group: keys[i]});
+			const
+				group = keys[i];
+
+			if (!isZombieGroup.test(group)) {
+				this.clearAsync({...p, group});
+			}
 		}
 
 		return this;
@@ -2173,7 +2262,12 @@ export default class Async<CTX extends object = Async<any>> {
 			keys = Object.keys(obj);
 
 		for (let i = 0; i < keys.length; i++) {
-			this.markAsync(field, {...p, group: keys[i]});
+			const
+				group = keys[i];
+
+			if (!isZombieGroup.test(group)) {
+				this.markAsync(field, {...p, group});
+			}
 		}
 
 		return this;
