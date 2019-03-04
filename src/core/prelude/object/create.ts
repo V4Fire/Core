@@ -84,7 +84,7 @@ extend(Object, 'convertEnumToDict', (obj: Dictionary) => {
 			continue;
 		}
 
-		res[key] = el;
+		res[key] = key;
 	}
 
 	return res;
