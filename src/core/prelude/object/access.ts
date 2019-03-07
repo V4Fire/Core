@@ -212,7 +212,7 @@ extend(Object, 'forEach', (obj: any, cb: Function, params: ObjectForEachParams =
 		return;
 	}
 
-	if (Object.isTable(obj)) {
+	if (Object.isTable(obj) || !obj[Symbol.iterator]) {
 		if (params.notOwn) {
 			for (const key in obj) {
 				if (params.notOwn === -1 && hasOwnProperty.call(obj, key)) {
