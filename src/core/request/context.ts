@@ -17,7 +17,7 @@ import { Encoders, Decoders, RequestQuery, CreateRequestOptions, RequestResponse
 import { cache, pendingCache, storage, globalOpts, defaultRequestOpts } from 'core/request/const';
 
 const
-	resolveURLRgxp = /(?:^|(\w+:\/\/)(?:([^./]+)\.)?([^./]+)(?:\.([^./]+))?)(\/.+|$)/,
+	resolveURLRgxp = /(?:^|(\w+:\/\/)(?:([^./]+)\.)?([^./]+)(?:\.([^./]+))?)(\/.*|$)/,
 	queryTplRgxp = /\/:(.+?)(\(.*?\))?(?=[\\/.?#]|$)/g;
 
 export default class RequestContext<T = unknown> {
