@@ -142,6 +142,7 @@ export interface CreateRequestOpts<T = unknown> {
 	offlineCache?: boolean;
 
 	api?: {
+		url?: Nullable<string>;
 		protocol?: Nullable<string>;
 		domain3?: Nullable<string>;
 		domain2?: Nullable<string>;
