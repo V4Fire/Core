@@ -16,6 +16,10 @@ import { normalizeHeaders, applyQueryForStr, getStorageKey, getRequestKey } from
 import { Encoders, Decoders, RequestQuery, CreateRequestOptions, RequestResponseObject } from 'core/request/interface';
 import { cache, pendingCache, storage, globalOpts, defaultRequestOpts } from 'core/request/const';
 
+const
+	resolveURLRgxp = /(?:^|(\w+:\/\/)(?:([^./]+)\.)?([^./]+)(?:\.([^./]+))?)(\/.+|$)/,
+	queryTplRgxp = /\/:(.+?)(\(.*?\))?(?=[\\/.?#]|$)/g;
+
 export default class RequestContext<T = unknown> {
 	/**
 	 * True if the client is online
@@ -112,8 +116,11 @@ export default class RequestContext<T = unknown> {
 	 */
 	resolveAPI(api: Nullable<string> = globalOpts.api): string {
 		const
-			a = <NonNullable<CreateRequestOptions['api']>>this.params.api,
-			rgxp = /(?:^|(\w+:\/\/)(?:([^./]+)\.)?([^./]+)(?:\.([^./]+))?)(\/.+|$)/;
+			a = <NonNullable<CreateRequestOptions['api']>>this.params.api;
+
+		if (a.url) {
+			return a.url;
+		}
 
 		if (!api) {
 			const def = <any>{
@@ -149,11 +156,11 @@ export default class RequestContext<T = unknown> {
 			return v;
 		};
 
-		if (!rgxp.test(api)) {
+		if (!resolveURLRgxp.test(api)) {
 			return concatUrls(...v('domain3').split('.'), v('namespace'));
 		}
 
-		return api.replace(rgxp, (str, protocol, domain3, domain2, zone, nm) => {
+		return api.replace(resolveURLRgxp, (str, protocol, domain3, domain2, zone, nm) => {
 			if (zone == null && domain3 != null) {
 				zone = domain2;
 				domain2 = domain3;
@@ -199,7 +206,7 @@ export default class RequestContext<T = unknown> {
 				p.headers = normalizeHeaders(p.headers, data);
 			}
 
-			url = applyQueryForStr(url, data, /\/:(.+?)(\(.*?\))?(?=[\\/.?#]|$)/g);
+			url = applyQueryForStr(url, data, queryTplRgxp);
 
 		} else if (p.headers) {
 			p.headers = normalizeHeaders(p.headers);
