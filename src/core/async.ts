@@ -20,8 +20,8 @@ export interface AsyncLink<T extends object = Async> {
 	muted: boolean;
 	queue: Function[];
 	clearFn?: Function;
-	onComplete: AsyncCompleteHandler<T>[][];
-	onClear: AsyncClearHandler<T>[];
+	onComplete: AsyncCompleteCb<T>[][];
+	onClear: AsyncCb<T>[];
 }
 
 export interface ClearOpts {
@@ -49,22 +49,18 @@ export type AsyncCtx<T extends object = Async> = {
 	replacedBy?: AsyncLink<T>;
 } & AsyncOpts & ClearOptsId<unknown>;
 
-export interface AsyncClearHandler<T extends object = Async> {
+export interface AsyncCb<T extends object = Async> {
 	(this: T, ctx: AsyncCtx<T>): void;
 }
 
-export interface AsyncCompleteHandler<T extends object = Async> {
+export interface AsyncCompleteCb<T extends object = Async> {
 	(this: T, ...args: unknown[]): void;
-}
-
-export interface AsyncMergeHandler<T extends object = Async> {
-	(this: T, link: AsyncLink<T>): void;
 }
 
 export interface AsyncCbOpts<T extends object = Async> extends AsyncOpts {
 	promise?: boolean;
-	onClear?: CanArray<AsyncClearHandler<T>>;
-	onMerge?: CanArray<AsyncMergeHandler<T>>;
+	onClear?: CanArray<AsyncCb<T>>;
+	onMerge?: CanArray<AsyncCb<T>>;
 }
 
 export interface AsyncCbOptsSingle<T extends object = Async> extends AsyncCbOpts<T> {
@@ -1901,7 +1897,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 		if (labelCache && p.join === true) {
 			const
-				mergeHandlers = <AsyncMergeHandler<CTX>[]>[].concat(p.onMerge || []),
+				mergeHandlers = <AsyncCb<CTX>[]>[].concat(p.onMerge || []),
 				ctx = links.get(labelCache);
 
 			for (let i = 0; i < mergeHandlers.length; i++) {
@@ -2009,7 +2005,7 @@ export default class Async<CTX extends object = Async<any>> {
 			queue: [],
 			clearFn: p.clearFn,
 			onComplete: [],
-			onClear: <AsyncClearHandler<CTX>[]>[].concat(p.onClear || [])
+			onClear: <AsyncCb<CTX>[]>[].concat(p.onClear || [])
 		};
 
 		if (labelCache) {
