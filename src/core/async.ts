@@ -63,8 +63,8 @@ export interface AsyncMergeHandler<T extends object = Async> {
 
 export interface AsyncCbOpts<T extends object = Async> extends AsyncOpts {
 	promise?: boolean;
-	onClear?: AsyncClearHandler<T> | AsyncClearHandler<T>[];
-	onMerge?: AsyncMergeHandler<T> | AsyncMergeHandler<T>[];
+	onClear?: CanArray<AsyncClearHandler<T>>;
+	onMerge?: CanArray<AsyncMergeHandler<T>>;
 }
 
 export interface AsyncCbOptsSingle<T extends object = Async> extends AsyncCbOpts<T> {
