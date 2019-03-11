@@ -9,7 +9,6 @@
 import Then from 'core/then';
 
 import log from 'core/log';
-
 import request from 'core/request/engines';
 
 import Response from 'core/request/response';
