@@ -76,6 +76,10 @@ export interface AsyncPromiseOpts extends AsyncOpts {
 	destructor?: string;
 }
 
+export interface AsyncRequestOpts extends AsyncOpts {
+	destructor?: string;
+}
+
 export interface AsyncCreateIdleOpts<T extends object = Async> extends AsyncCbOpts<T> {
 	timeout?: number;
 }
@@ -260,6 +264,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 *   *) [label] - label for the task (previous task with the same label will be canceled)
 	 *   *) [group] - group name for the task
 	 *   *) [onClear] - clear handler
+	 *   *) [onMerge] - merge handler (join: true)
 	 */
 	setImmediate(fn: Function, params?: AsyncCbOpts<CTX>): Nullable<TimerId> {
 		let
@@ -380,6 +385,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 *   *) [label] - label for the task (previous task with the same label will be canceled)
 	 *   *) [group] - group name for the task
 	 *   *) [onClear] - clear handler
+	 *   *) [onMerge] - merge handler (join: true)
 	 */
 	setInterval(fn: Function, interval: number, params?: AsyncCbOpts<CTX>): Nullable<TimerId> {
 		return this.setAsync({
@@ -489,6 +495,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 *   *) [label] - label for the task (previous task with the same label will be canceled)
 	 *   *) [group] - group name for the task
 	 *   *) [onClear] - clear handler
+	 *   *) [onMerge] - merge handler (join: true)
 	 */
 	setTimeout(fn: Function, timer: number, params?: AsyncCbOpts<CTX>): Nullable<TimerId> {
 		return this.setAsync({
@@ -597,6 +604,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 *   *) [label] - label for the task (previous task with the same label will be canceled)
 	 *   *) [group] - group name for the task
 	 *   *) [onClear] - clear handler
+	 *   *) [onMerge] - merge handler (join: true)
 	 */
 	requestIdleCallback<R = unknown>(
 		fn: IdleCb<R, CTX>,
@@ -722,6 +730,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 *   *) [label] - label for the task (previous task with the same label will be canceled)
 	 *   *) [group] - group name for the task
 	 *   *) [onClear] - clear handler
+	 *   *) [onMerge] - merge handler (join: true)
 	 */
 	worker<T extends WorkerLikeP>(worker: T, params?: AsyncWorkerOpts<CTX>): T {
 		const
@@ -771,8 +780,9 @@ export default class Async<CTX extends object = Async<any>> {
 	 *
 	 *   *) [label] - label for the task (previous task with the same label will be canceled)
 	 *   *) [group] - group name for the task
+	 *   *) [destructor] - name of destructor method
 	 */
-	request<T = unknown>(request: (() => PromiseLike<T>) | PromiseLike<T>, params?: AsyncOpts): Promise<T> {
+	request<T = unknown>(request: (() => PromiseLike<T>) | PromiseLike<T>, params?: AsyncRequestOpts): Promise<T> {
 		return this.promise(request, {...params, name: this.linkNames.request}) || new Promise<T>(() => undefined);
 	}
 
@@ -872,6 +882,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 *   *) [group] - group name for the task
 	 *   *) [single] - if false, then after first invocation the proxy it won't be removed
 	 *   *) [onClear] - clear handler
+	 *   *) [onMerge] - merge handler (join: true)
 	 */
 	proxy<T extends WrappedFunction, CTX extends object = Async>(cb: T, params?: AsyncProxyOpts<CTX>): T {
 		const p = params || {};
@@ -1269,6 +1280,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 *   *) [group] - group name for the task
 	 *   *) [single] - if true, then after first invocation the event listener will be removed
 	 *   *) [onClear] - clear handler
+	 *   *) [onMerge] - merge handler (join: true)
 	 *
 	 * @param [args] - additional arguments for the emitter
 	 */
@@ -1386,6 +1398,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 *   *) [label] - label for the task (previous task with the same label will be canceled)
 	 *   *) [group] - group name for the task
 	 *   *) [onClear] - clear handler
+	 *   *) [onMerge] - merge handler (join: true)
 	 *
 	 * @param [args] - additional arguments for the emitter
 	 */
