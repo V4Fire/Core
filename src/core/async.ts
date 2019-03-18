@@ -836,7 +836,7 @@ export default class Async<CTX extends object = Async<any>> {
 	proxy<T extends WrappedFunction, CTX extends object = Async>(cb: T, params?: AsyncProxyOpts<CTX>): T {
 		const p = params || {};
 		return this.setAsync({
-			...params,
+			...p,
 			name: p.name || Async.linkNames.proxy,
 			obj: cb,
 			wrapper: (fn) => fn,
@@ -1228,7 +1228,7 @@ export default class Async<CTX extends object = Async<any>> {
 			p = undefined;
 		}
 
-		p = p || {};
+		p = {...p};
 		events = Object.isArray(events) ? events : events.split(/\s+/);
 
 		if (p.options) {
