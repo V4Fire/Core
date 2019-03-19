@@ -5,7 +5,7 @@
   "main": "src/core/index.js",
   "typings": "index.d.ts",
   "license": "MIT",
-  "version": "2.0.0-beta.51",
+  "version": "2.0.0-beta.53",
   "author": {
     "name": "kobezzza",
     "email": "kobezzza@gmail.com",
@@ -28,8 +28,8 @@
     "postinstall": "npm run removeBadDeps"
   },
   "dependencies": {
-    "@types/got": "^9.4.0",
-    "@types/node": "^10.12.26",
+    "@types/got": "^9.4.1",
+    "@types/node": "^10.14.1",
     "collection.js": "^6.6.27",
     "dotenv": "^6.2.0",
     "eventemitter2": "^5.0.1",
@@ -66,7 +66,7 @@
   },
   "devDependencies": {
     "babel-eslint": "^10.0.1",
-    "eslint": "^5.14.1",
-    "tslint": "^5.12.1"
+    "eslint": "^5.15.2",
+    "tslint": "^5.14.0"
   }
 }
