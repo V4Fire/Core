@@ -15,7 +15,7 @@ import { AsyncNamespace } from 'core/kv-storage';
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 
 export const
-	event = new EventEmitter({maxListeners: 100});
+	event = new EventEmitter({maxListeners: 100, newListener: false});
 
 const
 	langs = [],

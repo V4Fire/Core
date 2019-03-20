@@ -12,7 +12,7 @@ import { AsyncNamespace } from 'core/kv-storage';
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 
 export const
-	event = new EventEmitter({maxListeners: 1e3});
+	event = new EventEmitter({maxListeners: 1e3, newListener: false});
 
 const
 	memoryStorage = Object.createDict<Dictionary>();
