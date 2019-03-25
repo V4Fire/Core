@@ -8,6 +8,8 @@
 
 /* tslint:disable:max-file-line-count */
 
+import { createSyncPromise } from 'core/event';
+
 export const
 	asyncCounter = Symbol('Async counter id');
 
@@ -1231,13 +1233,18 @@ export default class Async<CTX extends object = Async<any>> {
 		const
 			DELAY = params && params.delay || 15;
 
-		return new Promise((resolve, reject) => {
-			if ((!params || !params.label) && fn()) {
-				resolve(true);
-				return;
+		if (fn()) {
+			if (params && params.label) {
+				this.cancelPromise(params);
 			}
 
-			let id;
+			return createSyncPromise(true);
+		}
+
+		return new Promise((resolve, reject) => {
+			let
+				id;
+
 			const cb = () => {
 				if (fn()) {
 					resolve(true);

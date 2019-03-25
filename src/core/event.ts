@@ -85,3 +85,29 @@ export function onEverythingReady(cb: () => void, ...flags: string[]): (flag: st
 		cb();
 	};
 }
+
+/**
+ * Creates a synchronous promise wrapper for the specified value
+ *
+ * @param resolveValue
+ * @param rejectValue
+ */
+export function createSyncPromise<R = unknown>(resolveValue?: R, rejectValue?: unknown): Promise<R> {
+	return <any>{
+		then: (resolve, reject) => {
+			try {
+				if (rejectValue !== undefined) {
+					return createSyncPromise(undefined, reject ? reject(rejectValue) : rejectValue);
+				}
+
+				return createSyncPromise(resolve ? resolve(resolveValue) : resolveValue);
+
+			} catch (err) {
+				return createSyncPromise(undefined, reject ? reject(err) : err);
+			}
+		},
+
+		catch: (cb) => createSyncPromise(undefined, cb(rejectValue)),
+		finally: (cb) => createSyncPromise(cb())
+	};
+}
