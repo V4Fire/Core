@@ -282,7 +282,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 		return this.setAsync({
 			...params,
-			name: this.linkNames.idle,
+			name: this.linkNames.immediate,
 			obj: fn,
 			clearFn,
 			wrapper,
