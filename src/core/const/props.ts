@@ -12,3 +12,9 @@ export const def = Object.freeze({
 	writable: true,
 	value: undefined
 });
+
+export const defReadonly = Object.freeze({
+	configurable: true,
+	enumerable: true,
+	value: undefined
+});
