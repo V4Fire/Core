@@ -31,7 +31,7 @@ const setConfig = (opts) => {
 const
 	defaultContext = 'global';
 
-env.get('log').then(setConfig, setConfig);
+env.get('log').then(setConfig, stderr);
 env.event.on('set.log', setConfig);
 env.event.on('remove.log', setConfig);
 
