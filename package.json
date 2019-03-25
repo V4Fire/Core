@@ -29,7 +29,6 @@
   },
   "dependencies": {
     "@types/got": "^9.4.1",
-    "@types/node": "^10.14.1",
     "collection.js": "^6.6.27",
     "dotenv": "^6.2.0",
     "eventemitter2": "^5.0.1",
@@ -66,7 +65,7 @@
   },
   "devDependencies": {
     "babel-eslint": "^10.0.1",
-    "eslint": "^5.15.2",
+    "eslint": "^5.15.3",
     "tslint": "^5.14.0"
   }
 }
