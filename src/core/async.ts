@@ -1232,7 +1232,7 @@ export default class Async<CTX extends object = Async<any>> {
 			DELAY = params && params.delay || 15;
 
 		return new Promise((resolve, reject) => {
-			if ((!params || params.label) || fn()) {
+			if ((!params || !params.label) && fn()) {
 				resolve(true);
 				return;
 			}
@@ -1241,7 +1241,7 @@ export default class Async<CTX extends object = Async<any>> {
 			const cb = () => {
 				if (fn()) {
 					resolve(true);
-					this.clearInterval(id);
+					this.cancelPromise(id);
 				}
 			};
 
@@ -2050,7 +2050,7 @@ export default class Async<CTX extends object = Async<any>> {
 		}
 
 		const
-			baseCache = this.initCache(p.name);
+			baseCache = this.initCache(p.name, p.promise);
 
 		let
 			cache;
@@ -2144,7 +2144,7 @@ export default class Async<CTX extends object = Async<any>> {
 		this.clearAsync.apply(this, arguments);
 
 		const
-			obj = this.initCache(p.name).groups,
+			obj = this.initCache(p.name, p.promise).groups,
 			keys = Object.keys(obj);
 
 		for (let i = 0; i < keys.length; i++) {
