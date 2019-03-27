@@ -11,8 +11,11 @@ import Async from 'core/async';
 export const
 	daemon = new Async(),
 	DELAY = 15,
-	LIMIT = 500;
+	LIMIT = 0.3.second();
 
-export default function sleep(): Promise<void> {
-	return daemon.sleep(DELAY);
+/**
+ * Stops the daemon for the specified delay
+ */
+export default function sleep(delay: number = DELAY): Promise<void> {
+	return daemon.sleep(delay);
 }

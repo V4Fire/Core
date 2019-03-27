@@ -284,7 +284,6 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	}
 
 	/** @see {Promise.prototype.then} */
-	// @ts-ignore
 	then(
 		onFulfilled?: Nullable<(value: T) => Value<T>>,
 		onRejected?: Nullable<(reason: unknown) => Value<T>>,
@@ -424,7 +423,7 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	 * @param [onValue] - success handler
 	 */
 	protected evaluate<A = unknown, V = unknown>(
-		fn: (...args: A[]) => V,
+		fn: (...args: CanUndef<A>[]) => V,
 		args: A[] = [],
 		onError?: OnError,
 		onValue?: (value: V) => void

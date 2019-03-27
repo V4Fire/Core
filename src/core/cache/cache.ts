@@ -85,8 +85,7 @@ export default class Cache<V = unknown, K = string> {
 		}
 
 		const
-			// @ts-ignore
-			removed = new Set(...this.storage.keys());
+			removed = new Set([...this.storage.keys()]);
 
 		this.storage.clear();
 		return removed;

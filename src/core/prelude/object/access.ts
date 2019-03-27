@@ -37,7 +37,6 @@ extend(Object, 'get', (
 
 		// tslint:disable:prefer-conditional-expression
 		if (Object.isMap(res) || Object.isWeakMap(res)) {
-			// @ts-ignore
 			res = res.get(key);
 
 		} else {
@@ -78,11 +77,9 @@ extend(Object, 'has', (
 
 		// tslint:disable:prefer-conditional-expression
 		if (Object.isMap(res) || Object.isWeakMap(res)) {
-			// @ts-ignore
 			res = res.get(key);
 
 		} else {
-			// @ts-ignore
 			res = res[key];
 		}
 	}
@@ -91,7 +88,6 @@ extend(Object, 'has', (
 		key = chunks[i];
 
 	if (Object.isMap(res) || Object.isWeakMap(res)) {
-		// @ts-ignore
 		return res.has(key);
 	}
 
@@ -135,11 +131,9 @@ extend(Object, 'set', (
 		// tslint:disable:prefer-conditional-expression
 		if (Object.isMap(ref) || Object.isWeakMap(ref)) {
 			let
-				// @ts-ignore
 				val = ref.get(key);
 
 			if (!val || typeof val !== 'object') {
-				// @ts-ignore
 				ref.set(key, (val = nextChunkIsObj ? {} : []));
 			}
 
@@ -159,13 +153,10 @@ extend(Object, 'set', (
 
 	// tslint:disable:prefer-conditional-expression
 	if (Object.isMap(ref) || Object.isWeakMap(ref)) {
-		// @ts-ignore
 		if (ref.has(cursor) && p.concat) {
-			// @ts-ignore
 			ref.set(cursor, (<unknown[]>[]).concat(ref[cursor], value));
 
 		} else {
-			// @ts-ignore
 			ref.set(cursor, value);
 		}
 

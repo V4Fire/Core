@@ -4,7 +4,7 @@
     "target": "es5",
     "downlevelIteration": true,
     "importHelpers": true,
-    "noLib": true,
+    "lib": ["dom", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strictNullChecks": true,

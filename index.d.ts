@@ -6,9 +6,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-/// <reference types="typescript/lib/lib.dom"/>
-/// <reference types="typescript/lib/lib.esnext"/>
-
 declare const APP_NAME: string;
 declare const API_URL: CanUndef<string>;
 declare const IS_PROD: boolean;
