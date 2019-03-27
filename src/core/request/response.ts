@@ -9,7 +9,7 @@
 import Then from 'core/then';
 import Range from 'core/range';
 
-import { IS_NODE } from 'core/const/links';
+import { IS_NODE } from 'core/env';
 import { once } from 'core/decorators';
 import { convertIfDate } from 'core/json';
 import { normalizeHeaderName } from 'core/request/utils';

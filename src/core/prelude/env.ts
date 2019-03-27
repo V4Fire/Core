@@ -7,7 +7,7 @@
  */
 
 import extend from 'core/prelude/extend';
-import { GLOBAL } from 'core/const/links';
+import { GLOBAL } from 'core/env';
 import { AsyncNamespace } from 'core/kv-storage';
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 

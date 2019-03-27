@@ -8,7 +8,7 @@
 
 // tslint:disable:no-var-requires comment-format
 
-import { IS_NODE } from 'core/const/links';
+import { IS_NODE } from 'core/env';
 
 let
 	transport;

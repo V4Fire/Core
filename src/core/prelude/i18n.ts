@@ -10,7 +10,7 @@ import extend from 'core/prelude/extend';
 import config from 'config';
 import * as dict from 'lang';
 
-import { GLOBAL, IS_NODE } from 'core/const/links';
+import { GLOBAL, IS_NODE } from 'core/env';
 import { AsyncNamespace } from 'core/kv-storage';
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 
