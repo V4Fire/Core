@@ -5,7 +5,7 @@
     "downlevelIteration": true,
     "importHelpers": true,
     "lib": ["dom", "esnext"],
-    "allowJs": true,
+    "allowJs": false,
     "skipLibCheck": true,
     "strictNullChecks": true,
     "strictFunctionTypes": true,
