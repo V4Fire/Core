@@ -7,9 +7,27 @@
  */
 
 import extend from 'core/prelude/extend';
-import { GLOBAL } from 'core/env';
 import { AsyncNamespace } from 'core/kv-storage';
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
+
+/**
+ * Link to the global object
+ */
+export const
+	GLOBAL = Function('return this')();
+
+/**
+ * True if NodeJS runtime
+ */
+export const IS_NODE: boolean = (() => {
+	try {
+		// @ts-ignore
+		return typeof process === 'object' && {}.toString.call(process) === '[object process]';
+
+	} catch {
+		return false;
+	}
+})();
 
 export const
 	event = new EventEmitter({maxListeners: 1e3, newListener: false});

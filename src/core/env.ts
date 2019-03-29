@@ -6,21 +6,4 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-/**
- * Link to the global object
- */
-export const
-	GLOBAL = Function('return this')();
-
-/**
- * True if NodeJS runtime
- */
-export const IS_NODE: boolean = (() => {
-	try {
-		// @ts-ignore
-		return typeof process === 'object' && {}.toString.call(process) === '[object process]';
-
-	} catch {
-		return false;
-	}
-})();
+export * from 'core/prelude/env';
