@@ -239,6 +239,21 @@ interface DateSetParams {
 	years?: number;
 }
 
+interface DateHTMLDateStringParams {
+	month?: boolean;
+	date?: boolean;
+}
+
+interface DateHTMLTimeStringParams {
+	minutes?: boolean;
+	seconds?: boolean;
+	milliseconds?: boolean;
+}
+
+type DateHTMLStringParams =
+	DateHTMLTimeStringParams &
+	DateHTMLDateStringParams;
+
 interface Date {
 	clone(): Date;
 
@@ -246,6 +261,9 @@ interface Date {
 	medium(local?: string): string;
 	long(local?: string): string;
 	format(format: string, local?: string): string;
+	toHTMLDateString(params?: DateHTMLDateStringParams): string;
+	toHTMLTimeString(params?: DateHTMLTimeStringParams): string;
+	toHTMLString(params?: DateHTMLStringParams): string;
 
 	add(params: DateSetParams, reset?: boolean): Date;
 	set(params: DateSetParams, reset?: boolean): Date;

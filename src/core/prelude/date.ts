@@ -230,6 +230,59 @@ extend(Date.prototype, 'format', function (this: Date, format: string, locale: s
 });
 
 /**
+ * Returns a HTML string representation of a date (without time)
+ * @param [params]
+ */
+extend(Date.prototype, 'toHTMLDateString', function (
+	this: Date,
+	params: DateHTMLDateStringParams = {}
+): string {
+	const
+		s = String,
+		needMonth = params.month !== false;
+
+	return [
+		this.getFullYear(),
+		needMonth ? s(this.getMonth() + 1).padStart(2, '0') : '01',
+		needMonth && params.date !== false ? s(this.getDate()).padStart(2, '0') : '01'
+	].join('-');
+});
+
+/**
+ * Returns a HTML string representation of a timestamp
+ * @param [params]
+ */
+extend(Date.prototype, 'toHTMLTimeString', function (
+	this: Date,
+	params: DateHTMLTimeStringParams = {}
+): string {
+	const
+		res = [this.getHours(), params.minutes ? this.getMinutes() : '00'];
+
+	if (params.seconds) {
+		const
+			s = this.getSeconds();
+
+		if (params.milliseconds) {
+			res.push(`${s}.${this.getMilliseconds()}`);
+
+		} else {
+			res.push(s);
+		}
+	}
+
+	return res.join(':');
+});
+
+/**
+ * Returns a HTML string representation of a datetime
+ * @param [params]
+ */
+extend(Date.prototype, 'toHTMLString', function (this: Date, params: DateHTMLStringParams): string {
+	return `${this.toHTMLDateString(params)}T${this.toHTMLTimeString(params)}`;
+});
+
+/**
  * Returns a list of week days
  */
 extend(Date, 'getWeekDays', () =>
