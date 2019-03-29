@@ -30,7 +30,8 @@ const compares: Record<Operations, (a: number, b: number) => boolean> = {
 };
 
 const
-	compareRgxp = /((^|\^|)=)/;
+	compareRgxp = /((^|\^|)=)/,
+	inequalityRgxp = /[><]/;
 
 /**
  * Compares version strings via a comparator
@@ -99,6 +100,11 @@ export default function (a: string, b: string, comparator: Operations): boolean 
 			cNum = parseInt(c, 10),
 			tNum = parseInt(t, 10);
 
+		if (inequalityRgxp.test(comparator)) {
+			cNum = c === '*' ? 0 : cNum;
+			tNum = t === '*' ? 0 : tNum;
+		}
+
 		res = compares[comparator](
 			cNum,
 			tNum
@@ -107,8 +113,6 @@ export default function (a: string, b: string, comparator: Operations): boolean 
 		switch (strategy) {
 			case 'fromEq':
 				if (!res) {
-					cNum = c === '*' ? 0 : cNum;
-					tNum = t === '*' ? 0 : tNum;
 					return i > 0 && cNum < tNum;
 				}
 
@@ -129,7 +133,7 @@ export default function (a: string, b: string, comparator: Operations): boolean 
 				break;
 
 			case 'default':
-				if (res || cNum !== tNum) {
+				if (res) {
 					return res;
 				}
 		}
