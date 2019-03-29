@@ -85,7 +85,7 @@ export default class Cache<V = unknown, K = string> {
 		}
 
 		const
-			removed = new Set([...this.storage.keys()]);
+			removed = new Set(this.storage.keys());
 
 		this.storage.clear();
 		return removed;
