@@ -6,8 +6,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { lang } from 'core/i18n';
-
 /**
  * Normalizes the specified value as date
  *
@@ -43,21 +41,6 @@ export function normalizeIfDate(value: CanArray<unknown>, params?: DateCreatePar
 	}
 
 	return undefined;
-}
-
-const
-	separatorRgxp = /\/|-|\.|\s+/;
-
-/**
- * Returns date value from the specified string
- *
- * @param str
- * @param [separator] - separator pattern
- * @param [params] - additional parameters for Date.create
- */
-export function getDateFromStr(str: string, separator: RegExp = separatorRgxp, params?: DateCreateParams): Date {
-	const p = str.split(separator);
-	return Date.create(lang === 'ru' ? [p[1], p[0], p[2]].join('.') : str, params);
 }
 
 function canDate(value: unknown): boolean {
