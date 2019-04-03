@@ -6,18 +6,16 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import $C = require('collection.js');
 import Then from 'core/then';
-
 import Response from 'core/request/response';
 import RequestError from 'core/request/error';
-import { RequestOptions } from 'core/request/interface';
+import { RequestOpts } from 'core/request/interface';
 
 /**
  * Creates request by XMLHttpRequest with the specified parameters and returns a promise
  * @param params
  */
-export default function createTransport(params: RequestOptions): Then<Response> {
+export default function createTransport(params: RequestOpts): Then<Response> {
 	const
 		p = params,
 		xhr = new XMLHttpRequest();
@@ -52,14 +50,27 @@ export default function createTransport(params: RequestOptions): Then<Response> 
 		xhr.withCredentials = true;
 	}
 
-	$C(p.headers).forEach((val, name) => {
-		if (Object.isArray(val)) {
-			$C(val as string[]).forEach((val) => xhr.setRequestHeader(name, val));
+	if (p.headers) {
+		for (let o = p.headers, keys = Object.keys(o), i = 0; i < keys.length; i++) {
+			const
+				name = keys[i],
+				val = o[name];
 
-		} else {
-			xhr.setRequestHeader(name, val);
+			if (Object.isArray(val)) {
+				for (let i = 0; i < val.length; i++) {
+					const
+						el = val[i];
+
+					if (el != null) {
+						xhr.setRequestHeader(name, el);
+					}
+				}
+
+			} else if (val != null) {
+				xhr.setRequestHeader(name, val);
+			}
 		}
-	});
+	}
 
 	if (contentType) {
 		xhr.setRequestHeader('Content-Type', contentType);

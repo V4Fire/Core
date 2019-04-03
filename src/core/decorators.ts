@@ -28,38 +28,12 @@ export function once(target: Object, key: string | symbol, descriptor: PropertyD
 }
 
 /**
- * Decorator for Sugar.Function.memoize
- *
- * @decorator
- * @param [hashFn]
- * @param [limit]
- */
-export function memoize(hashFn?: string | Function | number, limit?: number): MethodDecorator {
-	return (target, key, descriptor: PropertyDescriptor) => {
-		const
-			method = descriptor.value;
-
-		if (!Object.isFunction(method)) {
-			throw new TypeError(`descriptor.value is not a function: ${method}`);
-		}
-
-		descriptor.value = function (): unknown {
-			Object.defineProperty(this, key, {
-				value: method.memoize(hashFn, limit)
-			});
-
-			return this[key].apply(this, arguments);
-		};
-	};
-}
-
-/**
  * Decorator for Sugar.Function.debounce
  *
  * @decorator
  * @param [delay]
  */
-export function debounce(delay: number = 250): MethodDecorator {
+export function debounce(delay?: number): MethodDecorator {
 	return (target, key, descriptor: PropertyDescriptor) => {
 		const
 			method = descriptor.value;
@@ -84,7 +58,7 @@ export function debounce(delay: number = 250): MethodDecorator {
  * @decorator
  * @param [delay]
  */
-export function throttle(delay: number = 250): MethodDecorator {
+export function throttle(delay?: number): MethodDecorator {
 	return (target, key, descriptor: PropertyDescriptor) => {
 		const
 			method = descriptor.value;

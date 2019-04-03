@@ -8,13 +8,13 @@
 
 export type LogLevel = 'info' | 'warn' | 'error';
 
-export interface LogMessageOptions {
+export interface LogMessageOpts {
 	context: string;
 	logLevel?: LogLevel;
 }
 
 export interface Logger {
-	(context: string | LogMessageOptions, ...details: unknown[]): void;
+	(context: string | LogMessageOpts, ...details: unknown[]): void;
 }
 
 export interface ExtendedLogger extends Logger {

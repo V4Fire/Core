@@ -6,7 +6,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import $C = require('collection.js');
 export const NBSP = String.fromCharCode(160);
 
 /**
@@ -14,7 +13,14 @@ export const NBSP = String.fromCharCode(160);
  * @param time
  */
 export function getTimeFormattedStr(time: number[]): string {
-	return $C(time).map((el) => el.pad(2)).join(':');
+	const
+		res = <string[]>[];
+
+	for (let i = 0; i < time.length; i++) {
+		res.push(time[i].pad(2));
+	}
+
+	return res.join(':');
 }
 
 const

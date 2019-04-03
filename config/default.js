@@ -13,7 +13,6 @@ require('dotenv').config();
 const
 	$C = require('collection.js'),
 	Sugar = require('sugar').extend(),
-	concatUrls = require('urlconcat').concat,
 	o = require('uniconf/options').option;
 
 const
@@ -230,6 +229,7 @@ module.exports = config.createConfig(
 		}),
 
 		apiURL() {
+			const concatUrls = require('urlconcat').concat;
 			return this.api.proxy ? concatUrls(this.api.pathname(), 'api') : this.api.url;
 		},
 

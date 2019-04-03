@@ -6,8 +6,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import $C = require('collection.js');
-
 const
 	minDateLength = '2017-02-03T'.length,
 	isDate = /^\d{4}-\d{2}-\d{2}T[\d:.]+Z/;
@@ -16,30 +14,29 @@ const
  * Reviver for JSON.parse: converts date string to Date
  *
  * @param key
- * @param val
+ * @param value
  */
-export function convertIfDate(key: string, val: unknown): unknown {
-	if (Object.isString(val) && (val.length > minDateLength) && isDate.test(val)) {
-		const utc = Date.parse(val);
-		return isNaN(utc) ? val : new Date(utc);
+export function convertIfDate(key: string, value: unknown): unknown {
+	if (Object.isString(value) && (value.length > minDateLength) && isDate.test(value)) {
+		const utc = Date.parse(value);
+		return isNaN(utc) ? value : new Date(utc);
 	}
 
-	return val;
+	return value;
 }
 
 /**
  * Sets .toJSON function that converts dates to UTC for all dates from the specified object
- * (returns new object)
  *
  * @param obj
- * @param [sys]
+ * @param [clone] - if true, then will be created new object
  */
-export function setJSONToUTC(obj: Dictionary, sys?: boolean): Dictionary {
-	if (!sys) {
+export function setJSONToUTC<T = unknown>(obj: T, clone?: boolean): T {
+	if (!clone) {
 		obj = Object.fastClone(obj);
 	}
 
-	$C(obj).forEach((el) => {
+	Object.forEach(obj, (el) => {
 		if (Object.isDate(el)) {
 			el.toJSON = () => el.clone().set({
 				minutes: el.getTimezoneOffset(),
