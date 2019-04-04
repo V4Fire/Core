@@ -1322,7 +1322,8 @@ export default class Async<CTX extends object = Async<any>> {
 
 		const
 			that = this,
-			links: object[] = [];
+			links: object[] = [],
+			multEvent = events.length > 1;
 
 		for (let i = 0; i < events.length; i++) {
 			const
@@ -1334,8 +1335,13 @@ export default class Async<CTX extends object = Async<any>> {
 				obj: cb,
 				wrapper(cb: Function): unknown {
 					const handler = function (this: unknown): unknown {
-						if (Object.isFunction(emitter) || p.single && !emitter.once) {
-							that.eventListenerDestructor({emitter, event, handler, args});
+						if (Object.isFunction(emitter) || p.single && (multEvent || !emitter.once)) {
+							if (multEvent) {
+								that.off(links);
+
+							} else {
+								that.eventListenerDestructor({emitter, event, handler, args});
+							}
 						}
 
 						const
@@ -1501,6 +1507,14 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	off(params: ClearOptsId<EventId>): this;
 	off(p: any): this {
+		if (Object.isArray(p)) {
+			for (let i = 0; i < p.length; i++) {
+				this.off(<EventId>p[i]);
+			}
+
+			return this;
+		}
+
 		return this.clearAsync(isEvent(p) ? {id: p} : p, this.linkNames.eventListener);
 	}
 
@@ -1518,7 +1532,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	muteEventListener(params: ClearOptsId<EventId>): this;
 	muteEventListener(p: any): this {
-		return this.markAsync('muted', isEvent(p) ? {id: p} : p, this.linkNames.eventListener);
+		return this.markEvent('muted', p);
 	}
 
 	/**
@@ -1535,7 +1549,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	unmuteEventListener(params: ClearOptsId<EventId>): this;
 	unmuteEventListener(p: any): this {
-		return this.markAsync('!muted', isEvent(p) ? {id: p} : p, this.linkNames.eventListener);
+		return this.markEvent('!muted', p);
 	}
 
 	/**
@@ -1552,7 +1566,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	suspendEventListener(params: ClearOptsId<EventId>): this;
 	suspendEventListener(p: any): this {
-		return this.markAsync('paused', isEvent(p) ? {id: p} : p, this.linkNames.eventListener);
+		return this.markEvent('paused', p);
 	}
 
 	/**
@@ -1569,7 +1583,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	unsuspendEventListener(params: ClearOptsId<EventId>): this;
 	unsuspendEventListener(p: any): this {
-		return this.markAsync('!paused', isEvent(p) ? {id: p} : p, this.linkNames.eventListener);
+		return this.markEvent('!paused');
 	}
 
 	/**
@@ -1724,6 +1738,34 @@ export default class Async<CTX extends object = Async<any>> {
 		}
 
 		return this;
+	}
+
+	/**
+	 * Marks an event operation as a field
+	 *
+	 * @param field
+	 * @param [id] - operation id (if not defined will be get all operations)
+	 */
+	protected markEvent(field: string, id?: EventId): this;
+
+	/**
+	 * @param field
+	 * @param params - parameters for the operation:
+	 *   *) [id] - operation id
+	 *   *) [label] - label for the task
+	 *   *) [group] - group name for the task
+	 */
+	protected markEvent(field: string, params: ClearOptsId<EventId>): this;
+	protected markEvent(field: string, p: any): this {
+		if (Object.isArray(p)) {
+			for (let i = 0; i < p.length; i++) {
+				this.markEvent(field, <EventId>p[i]);
+			}
+
+			return this;
+		}
+
+		return this.markAsync(field, isEvent(p) ? {id: p} : p, this.linkNames.eventListener);
 	}
 
 	/**
