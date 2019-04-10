@@ -101,7 +101,7 @@
     "no-submodule-imports": false,
     "no-switch-case-fall-through": true,
     "no-this-assignment": [true, {"allowed-names": ["^that"], "allow-destructuring": true}],
-    "no-unbound-method": [true, "ignore-static"],
+    "no-unbound-method": false,
     "no-unnecessary-class": ["allow-empty-class", "allow-constructor-only", "allow-static-only"],
     "no-unsafe-any": false,
     "no-unsafe-finally": true,
