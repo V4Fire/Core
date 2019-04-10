@@ -5,7 +5,7 @@
   "main": "src/core/index.js",
   "typings": "index.d.ts",
   "license": "MIT",
-  "version": "3.0.0-beta.2",
+  "version": "3.0.0-beta.3",
   "author": {
     "name": "kobezzza",
     "email": "kobezzza@gmail.com",
@@ -23,12 +23,9 @@
   ],
   "scripts": {
     "build": "npx gulp build:tsconfig",
-    "test": "echo \"Error: no test specified\" && exit 0",
-    "removeBadDeps": "rm -rf ./node_modules/@types/node",
-    "postinstall": "npm run removeBadDeps"
+    "test": "echo \"Error: no test specified\" && exit 0"
   },
   "dependencies": {
-    "@types/got": "^9.4.1",
     "collection.js": "^6.6.27",
     "dotenv": "^6.2.0",
     "eventemitter2": "^5.0.1",
