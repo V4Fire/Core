@@ -238,13 +238,13 @@ extend(Date.prototype, 'toHTMLDateString', function (
 	params: DateHTMLDateStringParams = {}
 ): string {
 	const
-		s = String,
+		s = (v) => String(v).padStart(2, '0'),
 		needMonth = params.month !== false;
 
 	return [
 		this.getFullYear(),
-		needMonth ? s(this.getMonth() + 1).padStart(2, '0') : '01',
-		needMonth && params.date !== false ? s(this.getDate()).padStart(2, '0') : '01'
+		needMonth ? s(this.getMonth() + 1) : '01',
+		needMonth && params.date !== false ? s(this.getDate()) : '01'
 	].join('-');
 });
 
@@ -257,17 +257,18 @@ extend(Date.prototype, 'toHTMLTimeString', function (
 	params: DateHTMLTimeStringParams = {}
 ): string {
 	const
-		res = [this.getHours(), params.minutes ? this.getMinutes() : '00'];
+		s = (v) => String(v).padStart(2, '0'),
+		res = [s(this.getHours()), params.minutes ? s(this.getMinutes()) : '00'];
 
 	if (params.seconds) {
 		const
-			s = this.getSeconds();
+			sec = s(this.getSeconds());
 
 		if (params.milliseconds) {
-			res.push(`${s}.${this.getMilliseconds()}`);
+			res.push(`${sec}.${this.getMilliseconds()}`);
 
 		} else {
-			res.push(s);
+			res.push(sec);
 		}
 	}
 
