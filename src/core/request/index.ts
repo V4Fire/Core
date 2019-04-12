@@ -91,6 +91,8 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 		opts = args[0];
 	}
 
+	opts = opts || {};
+
 	const
 		baseCtx: RequestContext<T> = new RequestContext<T>(opts);
 
