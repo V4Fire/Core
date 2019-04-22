@@ -252,7 +252,7 @@ export default class RequestContext<T = unknown> {
 			);
 
 			if (p.cacheTTL) {
-				this.cacheTimeoutId = setTimeout(() => cache.remove(key), p.cacheTTL);
+				this.cacheTimeoutId = <any>setTimeout(() => cache.remove(key), p.cacheTTL);
 			}
 		}
 
