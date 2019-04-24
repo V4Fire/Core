@@ -7,8 +7,8 @@
  */
 
 import 'core/prelude/types';
-import 'core/prelude/global';
 import 'core/prelude/object';
+import 'core/prelude/global';
 import 'core/prelude/array';
 import 'core/prelude/number';
 import 'core/prelude/regexp';
