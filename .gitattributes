@@ -1,5 +1,5 @@
 # Perform LF normalization
-* text eol=lf
+* eol=lf
 
 *.gz binary
 *.ico binary
