@@ -9,7 +9,7 @@
 import { GLOBAL } from 'core/const/links';
 
 /**
- * Constructor for any types
+ * Converts the specified unknown value to any
  * @param obj
  */
 GLOBAL.Any = function Any(obj: unknown): any {
