@@ -126,6 +126,20 @@ extend(Date.prototype, 'set', createDateModifier());
 /** @see Sugar.Date.rewind */
 extend(Date.prototype, 'rewind', createDateModifier((v, b) => b - v));
 
+/**
+ * Returns a relative value for the current date
+ */
+extend(Date.prototype, 'relative', function (this: Date): DateRelative {
+	return relative(this, new Date());
+});
+
+/**
+ * Returns a relative value for the specified date
+ */
+extend(Date.prototype, 'relativeTo', function (this: Date, date: DateCreateValue): DateRelative {
+	return relative(this, date);
+});
+
 const shortOpts = {
 	month: 'numeric',
 	day: 'numeric',
@@ -325,6 +339,38 @@ extend(Date, 'create', (pattern?: DateCreateValue) => {
 
 	return new Date(pattern.valueOf());
 });
+
+function relative(from: DateCreateValue, to: DateCreateValue): DateRelative {
+	const
+		diff = Date.create(to).valueOf() - Date.create(from).valueOf();
+
+	const intervals = [
+		{type: 'milliseconds', bound: 1e3},
+		{type: 'seconds', bound: 1e3 * 60},
+		{type: 'minutes', bound: 1e3 * 60 * 60},
+		{type: 'hours', bound: 1e3 * 60 * 60 * 24},
+		{type: 'days', bound: 1e3 * 60 * 60 * 24 * 7},
+		{type: 'weeks', bound: 1e3 * 60 * 60 * 24 * 30},
+		{type: 'months', bound: 1e3 * 60 * 60 * 24 * 365}
+	];
+
+	for (let i = 0; i < intervals.length; i++) {
+		const
+			{type, bound} = intervals[i];
+
+		if (Math.abs(diff) < bound) {
+			return {
+				type: <DateRelative['type']>type,
+				value: Math.round(diff / (i ? intervals[i - 1].bound : 1))
+			};
+		}
+	}
+
+	return {
+		type: 'years',
+		value: Math.round(diff / intervals[intervals.length - 1].bound)
+	};
+}
 
 function createDateModifier(mod: (val: number, base: number) => number = Any): Function {
 	return function modifyDate(this: Date, params: DateSetParams, reset?: boolean): Date {

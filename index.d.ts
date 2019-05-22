@@ -254,6 +254,11 @@ type DateHTMLStringParams =
 	DateHTMLTimeStringParams &
 	DateHTMLDateStringParams;
 
+interface DateRelative {
+	type: 'milliseconds' | 'seconds' | 'minutes' | 'hours' | 'days' | 'weeks' | 'months' | 'years';
+	value: number;
+}
+
 interface Date {
 	clone(): Date;
 
@@ -268,6 +273,9 @@ interface Date {
 	add(params: DateSetParams, reset?: boolean): Date;
 	set(params: DateSetParams, reset?: boolean): Date;
 	rewind(params: DateSetParams, reset?: boolean): Date;
+
+	relative(): DateRelative;
+	relativeTo(date: DateCreateValue): DateRelative;
 
 	is(date: DateCreateValue, margin?: number): boolean;
 	isAfter(date: DateCreateValue, margin?: number): boolean;
