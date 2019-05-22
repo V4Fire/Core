@@ -21,7 +21,7 @@ export function concatUrls(...urls: Nullable<string>[]): string {
 		let
 			url = urls[i];
 
-		if (url != null && url !== '') {
+		if (url == null || url === '') {
 			continue;
 		}
 
