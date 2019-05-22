@@ -250,7 +250,7 @@ extend(Object, 'mixin', (params: ObjectMixinParams | boolean, base: any, ...objs
 					clone = isStructure(src) ? src : struct || {};
 				}
 
-				Object.set(base, [key], Object.mixin(p, clone));
+				Object.set(base, [key], Object.mixin(p, clone, val));
 
 			} else {
 				setVal(base, key, val);
