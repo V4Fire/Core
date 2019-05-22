@@ -361,14 +361,16 @@ function relative(from: DateCreateValue, to: DateCreateValue): DateRelative {
 		if (Math.abs(diff) < bound) {
 			return {
 				type: <DateRelative['type']>type,
-				value: Math.round(diff / (i ? intervals[i - 1].bound : 1))
+				value: Number((diff / (i ? intervals[i - 1].bound : 1)).toFixed(2)),
+				diff
 			};
 		}
 	}
 
 	return {
 		type: 'years',
-		value: Math.round(diff / intervals[intervals.length - 1].bound)
+		value: Number((diff / intervals[intervals.length - 1].bound).toFixed(2)),
+		diff
 	};
 }
 

@@ -257,6 +257,7 @@ type DateHTMLStringParams =
 interface DateRelative {
 	type: 'milliseconds' | 'seconds' | 'minutes' | 'hours' | 'days' | 'weeks' | 'months' | 'years';
 	value: number;
+	diff: number;
 }
 
 interface Date {
