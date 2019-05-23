@@ -74,8 +74,8 @@ extend(Object, 'fastCompare', (a, b) => {
 		return true;
 	}
 
-	const replacer = createReplacer(a, b, new WeakMap());
-	return JSON.stringify(a, replacer) === JSON.stringify(b, replacer);
+	const cache = new WeakMap();
+	return JSON.stringify(a, createReplacer(a, b, cache)) === JSON.stringify(b, createReplacer(a, b, cache));
 });
 
 function createReplacer(
@@ -83,13 +83,22 @@ function createReplacer(
 	b: unknown,
 	funcMap: WeakMap<Function, number>
 ): JSONCb {
+	let
+		init = false;
+
 	return (key, value) => {
-		if (value === a) {
-			return '[[OBJ_REF:a]]';
+		if (init) {
+			if (value === a) {
+				return '[[OBJ_REF:a]]';
+			}
+
+			if (value === b) {
+				return '[[OBJ_REF:b]]';
+			}
 		}
 
-		if (value === b) {
-			return '[[OBJ_REF:b]]';
+		if (!init) {
+			init = true;
 		}
 
 		if (Object.isFunction(value)) {
