@@ -7,8 +7,8 @@
  */
 
 import * as env from 'core/env';
-import logEngine from 'core/log/engines';
 import { LogLevel, LogMessageOptions } from 'core/log/interface';
+import { LogEngine } from 'core/log/engines';
 
 interface LogRecord {
 	context: string;
@@ -39,9 +39,10 @@ env.event.on('remove.log', setConfig);
  * Calls an appropriate log engine
  *
  * @param context - log record context
+ * @param engine
  * @param [details] - additional details (if it's a function, it will be called)
  */
-export default function log(context: string | LogMessageOptions, ...details: unknown[]): void {
+export default function log(context: string | LogMessageOptions, engine: LogEngine, ...details: unknown[]): void {
 	let
 		logLevel: CanUndef<LogLevel>;
 
@@ -65,7 +66,7 @@ export default function log(context: string | LogMessageOptions, ...details: unk
 
 			if (isAbleToLog(logRecord.context)) {
 				details = prepareDetails(logRecord.details);
-				logEngine(logRecord.context, logRecord.logLevel, ...details);
+				engine(logRecord.context, logRecord.logLevel, ...details);
 			}
 		}
 
@@ -74,7 +75,7 @@ export default function log(context: string | LogMessageOptions, ...details: unk
 
 	if (isAbleToLog(context)) {
 		details = prepareDetails(details);
-		logEngine(context, logLevel, ...details);
+		engine(context, logLevel, ...details);
 	}
 }
 
