@@ -1714,8 +1714,11 @@ export default class Async<CTX extends object = Async<any>> {
 			const
 				alias = `clear-${o[keys[i]]}`.camelize(false);
 
-			if (!isPromisifyLinkName.test(alias)) {
+			if (Object.isFunction(this[alias])) {
 				this[alias](params);
+
+			} else if (!isPromisifyLinkName.test(alias)) {
+				throw new ReferenceError(`Method "${alias}" is not defined`);
 			}
 		}
 
@@ -1734,7 +1737,7 @@ export default class Async<CTX extends object = Async<any>> {
 			const
 				alias = `mute-${o[keys[i]]}`.camelize(false);
 
-			if (!isPromisifyLinkName.test(alias)) {
+			if (!isPromisifyLinkName.test(alias) && Object.isFunction(this[alias])) {
 				this[alias](params);
 			}
 		}
@@ -1754,7 +1757,7 @@ export default class Async<CTX extends object = Async<any>> {
 			const
 				alias = `unmute-${o[keys[i]]}`.camelize(false);
 
-			if (!isPromisifyLinkName.test(alias)) {
+			if (!isPromisifyLinkName.test(alias) && Object.isFunction(this[alias])) {
 				this[alias](params);
 			}
 		}
@@ -1774,7 +1777,7 @@ export default class Async<CTX extends object = Async<any>> {
 			const
 				alias = `suspend-${o[keys[i]]}`.camelize(false);
 
-			if (!isPromisifyLinkName.test(alias)) {
+			if (!isPromisifyLinkName.test(alias) && Object.isFunction(this[alias])) {
 				this[alias](params);
 			}
 		}
@@ -1794,7 +1797,7 @@ export default class Async<CTX extends object = Async<any>> {
 			const
 				alias = `unsuspend-${o[keys[i]]}`.camelize(false);
 
-			if (!isPromisifyLinkName.test(alias)) {
+			if (!isPromisifyLinkName.test(alias) && Object.isFunction(this[alias])) {
 				this[alias](params);
 			}
 		}
