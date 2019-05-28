@@ -6,8 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import configurableLogger from 'core/log/logger/log';
-import immediateLogger from 'core/log/logger/immediate';
+import configurableLogger from 'core/log/loggers/log';
+import immediateLogger from 'core/log/loggers/immediate';
 
 const loggersStrategy = {
 	configurableLogger,
