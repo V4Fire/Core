@@ -16,5 +16,7 @@ export interface LogFlowConfig {
 	logger: string;
 	engine: string;
 	minimumLevel?: LogLevel;
-	styles?: {[key in LogLevel | 'default']?: unknown};
+	styles?: LogStylesConfig;
 }
+
+export type LogStylesConfig = {[key in LogLevel | 'default']?: Dictionary};

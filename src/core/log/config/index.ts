@@ -7,3 +7,4 @@
  */
 
 export * from 'core/log/config/types';
+export * from 'core/log/config/styles';
