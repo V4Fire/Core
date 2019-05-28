@@ -169,8 +169,8 @@ export enum LinkNames {
 	proxyPromise,
 	promise,
 	request,
-	idle,
-	idlePromise,
+	idleCallback,
+	idleCallbackPromise,
 	timeout,
 	timeoutPromise,
 	interval,
@@ -627,7 +627,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 		return this.setAsync({
 			...params && Object.reject(params, 'timeout'),
-			name: this.linkNames.idle,
+			name: this.linkNames.idleCallback,
 			obj: fn,
 			clearFn,
 			wrapper,
@@ -669,7 +669,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	clearIdleCallback(params: ClearOptsId<TimerId>): this;
 	clearIdleCallback(p: any): this {
-		return this.clearAsync(p, this.linkNames.idle);
+		return this.clearAsync(p, this.linkNames.idleCallback);
 	}
 
 	/**
@@ -686,7 +686,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	muteIdleCallback(params: ClearOptsId<TimerId>): this;
 	muteIdleCallback(p: any): this {
-		return this.markAsync('muted', p, this.linkNames.idle);
+		return this.markAsync('muted', p, this.linkNames.idleCallback);
 	}
 
 	/**
@@ -703,7 +703,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	unmuteIdleCallback(params: ClearOptsId<TimerId>): this;
 	unmuteIdleCallback(p: any): this {
-		return this.markAsync('!muted', p, this.linkNames.idle);
+		return this.markAsync('!muted', p, this.linkNames.idleCallback);
 	}
 
 	/**
@@ -720,7 +720,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	suspendIdleCallback(params: ClearOptsId<TimerId>): this;
 	suspendIdleCallback(p: any): this {
-		return this.markAsync('paused', p, this.linkNames.idle);
+		return this.markAsync('paused', p, this.linkNames.idleCallback);
 	}
 
 	/**
@@ -737,7 +737,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	unsuspendIdleCallback(params: ClearOptsId<TimerId>): this;
 	unsuspendIdleCallback(p: any): this {
-		return this.markAsync('!paused', p, this.linkNames.idle);
+		return this.markAsync('!paused', p, this.linkNames.idleCallback);
 	}
 
 	/**
