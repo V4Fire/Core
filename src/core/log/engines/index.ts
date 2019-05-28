@@ -6,4 +6,11 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-export { log as default } from 'core/log/engines/console-log';
+import { log as console } from 'core/log/engines/console-log';
+export * from 'core/log/engines/types';
+
+const enginesStrategy = {
+	console
+};
+
+export default enginesStrategy;
