@@ -8,6 +8,6 @@
 
 import { LogLevel } from 'core/log';
 
-export interface Engine {
+export interface LogEngine {
 	(context: string, logLevel?: LogLevel, ...details: unknown[]): void;
 }
