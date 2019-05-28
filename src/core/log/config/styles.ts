@@ -6,20 +6,21 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { LogStylesConfig } from 'core/log/config/types';
+import { LogStylesConfig, StylesCache } from 'core/log/config/types';
+import { LogLevel } from 'core/log';
 
 /**
  * Creates styles object where each LogLevel's property merged with default property of log styles config
  * @param styles
  */
-export function createStyleCache(styles?: LogStylesConfig): Nullable<LogStylesConfig> {
+export function createStyleCache(styles?: LogStylesConfig): Nullable<StylesCache> {
 	if (!styles) {
 		return null;
 	}
 
 	const
 		keys = Object.keys(styles),
-		configCache: LogStylesConfig = {default: {}};
+		configCache = <StylesCache>{default: {}};
 
 	for (let i = 0; i < keys.length; i++) {
 		const
@@ -30,6 +31,18 @@ export function createStyleCache(styles?: LogStylesConfig): Nullable<LogStylesCo
 			...styles[key]
 		};
 	}
+
+	configCache.getStyle = (logLevel?: LogLevel): Nullable<Dictionary> => {
+		if (!configCache) {
+			return null;
+		}
+
+		if (logLevel && configCache[logLevel] !== undefined) {
+			return configCache[logLevel];
+		}
+
+		return configCache.default;
+	};
 
 	return configCache;
 }
