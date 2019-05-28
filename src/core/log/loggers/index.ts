@@ -8,6 +8,7 @@
 
 import configurableLogger from 'core/log/loggers/log';
 import immediateLogger from 'core/log/loggers/immediate';
+export * from 'core/log/loggers/types';
 
 const loggersStrategy = {
 	configurableLogger,
