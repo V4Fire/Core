@@ -8,9 +8,10 @@
 
 import configurableLogger from 'core/log/loggers/log';
 import immediateLogger from 'core/log/loggers/immediate';
+import { InternalLogger } from 'core/log/loggers/types';
 export * from 'core/log/loggers/types';
 
-const loggersStrategy = {
+const loggersStrategy: StrictDictionary<InternalLogger> = {
 	configurableLogger,
 	immediateLogger
 };

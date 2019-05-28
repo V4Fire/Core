@@ -7,9 +7,10 @@
  */
 
 import { log as console } from 'core/log/engines/console';
+import { LogEngine } from 'core/log/engines/types';
 export * from 'core/log/engines/types';
 
-const enginesStrategy = {
+const enginesStrategy: StrictDictionary<LogEngine> = {
 	console
 };
 
