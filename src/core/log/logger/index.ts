@@ -6,7 +6,12 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import log from 'core/log/logger/log';
-import extend from 'core/log/logger/extensions';
+import configurableLogger from 'core/log/logger/log';
+import immediateLogger from 'core/log/logger/immediate';
 
-export default extend(log);
+const loggersStrategy = {
+	configurableLogger,
+	immediateLogger
+};
+
+export default loggersStrategy;
