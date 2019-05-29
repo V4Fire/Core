@@ -84,8 +84,8 @@ const config: Config = {
 	 * Log preferences
 	 */
 	log: {
-		flows: [{
-				logger: 'configurableLogger',
+		pipelines: [{
+				middlewares: ['configurable'],
 				engine: 'console',
 				styles: {
 					default: {

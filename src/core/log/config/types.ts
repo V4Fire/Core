@@ -9,12 +9,12 @@
 import { LogLevel } from 'core/log';
 
 export interface LogConfig {
-	flows?: LogFlowConfig[];
+	pipelines?: LogPipelineConfig[];
 }
 
-export interface LogFlowConfig {
-	logger: string;
+export interface LogPipelineConfig {
 	engine: string;
+	middlewares?: string;
 	minimumLevel?: LogLevel;
 	styles?: LogStylesConfig;
 }
