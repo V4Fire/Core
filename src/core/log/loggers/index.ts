@@ -6,14 +6,20 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import configurableLogger from 'core/log/loggers/configurable';
-import immediateLogger from 'core/log/loggers/immediate';
-import { InternalLogger } from 'core/log/loggers/types';
+import { ConfigurableMiddleware } from 'core/log/loggers/configurable';
+import { LogMiddleware } from 'core/log/loggers/types';
 export * from 'core/log/loggers/types';
 
-const loggersStrategy: StrictDictionary<InternalLogger> = {
-	configurableLogger,
-	immediateLogger
+/**
+ * Returns a function that creates objects of specified class
+ * @param ctor - a constructor or just a class
+ */
+export function creatorFor<T extends LogMiddleware>(ctor: new () => T): () => T {
+	return () => new ctor();
+}
+
+const middlewareStrategy: StrictDictionary<() => LogMiddleware> = {
+	configurable: creatorFor(ConfigurableMiddleware)
 };
 
-export default loggersStrategy;
+export default middlewareStrategy;
