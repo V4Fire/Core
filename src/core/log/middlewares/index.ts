@@ -11,7 +11,7 @@ import { LogMiddleware } from 'core/log/middlewares/types';
 export * from 'core/log/middlewares/types';
 
 /**
- * Returns a function that creates objects of specified class
+ * Returns a function that creates middleware of specified class
  * @param ctor - a constructor or just a class
  */
 export function creatorFor<T extends LogMiddleware>(ctor: new () => T): () => T {

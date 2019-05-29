@@ -6,12 +6,20 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { log as console } from 'core/log/engines/console';
+import { ConsoleEngine } from 'core/log/engines/console';
 import { LogEngine } from 'core/log/engines/types';
 export * from 'core/log/engines/types';
 
-const enginesStrategy: StrictDictionary<LogEngine> = {
-	console
+/**
+ * Returns a function that creates engine of specified class
+ * @param ctor - a constructor or just a class
+ */
+export function creatorFor<T extends LogEngine>(ctor: new () => T): () => T {
+	return () => new ctor();
+}
+
+const engineStrategy: StrictDictionary<() => LogEngine> = {
+	console: creatorFor(ConsoleEngine)
 };
 
-export default enginesStrategy;
+export default engineStrategy;
