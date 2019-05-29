@@ -22,5 +22,5 @@ export interface LogFlowConfig {
 export type LogStylesConfig = {[key in LogLevel | 'default']?: Dictionary};
 
 export interface StylesCache extends LogStylesConfig {
-	getStyle(logLevel?: LogLevel): Nullable<Dictionary>;
+	getStyle(logLevel: LogLevel): CanUndef<Dictionary>;
 }

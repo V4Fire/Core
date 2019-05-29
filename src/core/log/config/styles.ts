@@ -13,11 +13,7 @@ import { LogLevel } from 'core/log';
  * Creates styles object where each LogLevel's property merged with default property of log styles config
  * @param styles
  */
-export function createStyleCache(styles?: LogStylesConfig): Nullable<StylesCache> {
-	if (!styles) {
-		return null;
-	}
-
+export function createStyleCache(styles: LogStylesConfig): StylesCache {
 	const
 		keys = Object.keys(styles),
 		configCache = <StylesCache>{default: {}};
@@ -32,12 +28,8 @@ export function createStyleCache(styles?: LogStylesConfig): Nullable<StylesCache
 		};
 	}
 
-	configCache.getStyle = (logLevel?: LogLevel): Nullable<Dictionary> => {
-		if (!configCache) {
-			return null;
-		}
-
-		if (logLevel && configCache[logLevel] !== undefined) {
+	configCache.getStyle = (logLevel: LogLevel): CanUndef<Dictionary> => {
+		if (configCache[logLevel] !== undefined) {
 			return configCache[logLevel];
 		}
 
