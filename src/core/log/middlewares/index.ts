@@ -18,7 +18,7 @@ export function creatorFor<T extends LogMiddleware>(ctor: new () => T): () => T 
 	return () => new ctor();
 }
 
-const middlewareStrategy: StrictDictionary<() => LogMiddleware> = {
+const middlewareStrategy = {
 	configurable: creatorFor(ConfigurableMiddleware)
 };
 

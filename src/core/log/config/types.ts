@@ -7,6 +7,7 @@
  */
 
 import { LogLevel } from 'core/log';
+import { LogMiddlewares } from 'core/log/middlewares';
 
 export interface LogConfig {
 	pipelines?: LogPipelineConfig[];
@@ -14,7 +15,7 @@ export interface LogConfig {
 
 export interface LogPipelineConfig {
 	engine: string;
-	middlewares?: string;
+	middlewares?: LogMiddlewares[];
 	minimumLevel?: LogLevel;
 	styles?: LogStylesConfig;
 }
