@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import configurableLogger from 'core/log/loggers/log';
+import configurableLogger from 'core/log/loggers/configurable';
 import immediateLogger from 'core/log/loggers/immediate';
 import { InternalLogger } from 'core/log/loggers/types';
 export * from 'core/log/loggers/types';
