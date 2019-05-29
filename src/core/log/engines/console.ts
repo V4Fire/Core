@@ -9,7 +9,7 @@
 import { createStyleCache } from 'core/log/config/styles';
 import { LogLevel } from 'core/log/interface';
 import { LogEngine } from 'core/log/engines/types';
-import { LogEvent } from 'core/log/loggers';
+import { LogEvent } from 'core/log/middlewares';
 import { LogStylesConfig, StylesCache } from 'core/log/config';
 
 export class ConsoleEngine implements LogEngine {

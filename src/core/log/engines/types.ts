@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { LogEvent } from 'core/log/loggers';
+import { LogEvent } from 'core/log/middlewares';
 
 export interface LogEngine {
 	log(event: LogEvent): void;

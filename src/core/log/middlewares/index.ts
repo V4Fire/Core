@@ -6,9 +6,9 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { ConfigurableMiddleware } from 'core/log/loggers/configurable';
-import { LogMiddleware } from 'core/log/loggers/types';
-export * from 'core/log/loggers/types';
+import { ConfigurableMiddleware } from 'core/log/middlewares/configurable';
+import { LogMiddleware } from 'core/log/middlewares/types';
+export * from 'core/log/middlewares/types';
 
 /**
  * Returns a function that creates objects of specified class
