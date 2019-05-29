@@ -14,8 +14,16 @@ export interface InternalLogger {
 }
 
 export interface LogEvent {
-	context: string;
-	level: LogLevel;
-	details?: unknown[];
-	error?: Error;
+	readonly context: string;
+	readonly level: LogLevel;
+	readonly details?: unknown[];
+	readonly error?: Error;
+}
+
+export interface NextCallback {
+	(events: LogEvent | LogEvent[]): void;
+}
+
+export interface LogMiddleware {
+	exec(events: LogEvent | LogEvent[], next: NextCallback): void;
 }
