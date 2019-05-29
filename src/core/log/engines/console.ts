@@ -6,24 +6,64 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { getStyle } from 'core/log/styles';
+import { createStyleCache } from 'core/log/config/styles';
 import { LogLevel } from 'core/log/interface';
+import { LogEngine } from 'core/log/engines/types';
+import { LogEvent } from 'core/log/loggers';
+import { LogStylesConfig, StylesCache } from 'core/log/config';
 
-const
-	styleCache = Object.createDict<string>();
+export class ConsoleEngine implements LogEngine {
+	private stylesCache?: StylesCache;
+	private stringifiedStylesCache: Dictionary<string> = Object.createDict();
 
-/**
- * Returns a string representing style for the specific logLevel
- * @param [logLevel] - level of log which needs a style
- */
-function getStringifiedStyle(logLevel?: LogLevel): string {
-	const
-		level = logLevel || 'default',
-		val = styleCache[level];
+	constructor(styles?: LogStylesConfig) {
+		if (styles) {
+			this.stylesCache = createStyleCache(styles);
+		}
+	}
 
-	if (val === undefined) {
+	/**
+	 * Prints the specified event to a console
+	 * @param event - log event to print
+	 */
+	log(event: LogEvent): void {
+		if (!event.details && !event.error) {
+			console.log(`%c${event.context}`, this.getStringifiedStyle(event.level));
+
+		} else {
+			const
+				details = [...event.details];
+
+			if (!!event.error) {
+				details.concat(event.error);
+			}
+
+			console.log(`%c${event.context}`, this.getStringifiedStyle(event.level), ...details);
+		}
+	}
+
+	/**
+	 * Returns a string representing style for the specific logLevel
+	 * @param logLevel - level of log which needs a style
+	 */
+	private getStringifiedStyle(logLevel: LogLevel): string {
+		if (!this.stylesCache) {
+			return '';
+		}
+
 		const
-			style = getStyle(logLevel);
+			val = this.stringifiedStylesCache[logLevel];
+
+		if (val !== undefined) {
+			return val;
+		}
+
+		const
+			style = this.stylesCache.getStyle(logLevel);
+
+		if (!style) {
+			return '';
+		}
 
 		const stringifiedStyle = Object.keys(style)
 			.reduce((res, key) => res + `${key.dasherize()}:${style[key]};`, '');
@@ -32,19 +72,6 @@ function getStringifiedStyle(logLevel?: LogLevel): string {
 			return '';
 		}
 
-		return styleCache[level] = stringifiedStyle;
+		return this.stringifiedStylesCache[logLevel] = stringifiedStyle;
 	}
-
-	return val;
-}
-
-/**
- * Prints the specified parameters to a console
- *
- * @param context - logging context
- * @param [logLevel] - level of a current logging record
- * @param [details] - additional details
- */
-export function log(context: string, logLevel?: LogLevel, ...details: unknown[]): void {
-	console.log(`%c${context}`, getStringifiedStyle(logLevel), ...details);
 }

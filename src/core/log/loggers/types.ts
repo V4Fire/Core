@@ -6,9 +6,16 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { LogMessageOptions } from 'core/log';
+import { LogLevel, LogMessageOptions } from 'core/log';
 import { LogEngine } from 'core/log/engines';
 
 export interface InternalLogger {
 	(context: string | LogMessageOptions, engine: LogEngine, ...details: unknown[]): void;
+}
+
+export interface LogEvent {
+	context: string;
+	level: LogLevel;
+	details?: unknown[];
+	error?: Error;
 }

@@ -6,8 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { LogLevel } from 'core/log';
+import { LogEvent } from 'core/log/loggers';
 
 export interface LogEngine {
-	(context: string, logLevel?: LogLevel, ...details: unknown[]): void;
+	log(event: LogEvent): void;
 }
