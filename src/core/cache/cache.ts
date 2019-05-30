@@ -69,7 +69,7 @@ export default class Cache<V = unknown, K = string> {
 	clear(filter?: ClearFilter<V, K>): Set<K> {
 		if (filter) {
 			const
-				removed = new Set();
+				removed = new Set<K>();
 
 			for (let o = this.storage.entries(), i = o.next(); !i.done; i = o.next()) {
 				const

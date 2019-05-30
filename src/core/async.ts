@@ -182,13 +182,13 @@ export enum LinkNames {
 	eventListenerPromise
 }
 
-export type Link = keyof typeof LinkNames;
-export type LinkNamesList = Record<Link, Link>;
-
 export const
 	isPromisifyLinkName = /Promise$/,
 	isZombieGroup = /:zombie\b/,
-	linkNamesDictionary = <LinkNamesList>Object.convertEnumToDict(LinkNames);
+	linkNamesDictionary = Object.convertEnumToDict(LinkNames);
+
+export type Link = keyof typeof LinkNames;
+export type LinkNamesList = typeof linkNamesDictionary;
 
 /**
  * Returns true if the specified value is instance of AsyncOpts
@@ -1699,7 +1699,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	unsuspendEventListener(params: ClearOptsId<EventId>): this;
 	unsuspendEventListener(p: any): this {
-		return this.markEvent('!paused');
+		return this.markEvent('!paused', p);
 	}
 
 	/**

@@ -51,9 +51,10 @@
     "gulp-plumber": "^1.2.1",
     "gulp-replace": "^1.0.0",
     "path-equal": "^1.1.1",
+    "sugar": "^2.0.6",
     "through2": "^3.0.1",
     "tsconfig": "^7.0.0",
-    "typescript": "^3.4.5",
+    "typescript": "^3.5.1",
     "uniconf": "^2.1.1",
     "upath": "^1.1.2",
     "urlconcat": "0.0.12"

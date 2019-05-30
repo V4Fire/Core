@@ -336,7 +336,7 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 			const
 				that = this;
 
-			onAbort(function (this: Then, reason: unknown): void {
+			onAbort(/** @this {Then} */ function (this: Then, reason: unknown): void {
 				if (Object.isFunction(abortCb)) {
 					try {
 						abortCb(reason);
@@ -375,7 +375,7 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 			const
 				that = this;
 
-			onAbort(function (this: Then, reason: unknown): void {
+			onAbort(/** @this {Then} */ function (this: Then, reason: unknown): void {
 				this.aborted = true;
 
 				if (!that.abort(reason)) {

@@ -9,7 +9,7 @@
 import extend from 'core/prelude/extend';
 
 const
-	escapeRgxp = /([\\\/\'*+?|()\[\]{}.^$-])/g;
+	escapeRgxp = /([\\\/'*+?|()\[\]{}.^$-])/g;
 
 /** @see Sugar.RegExp.escape */
 extend(RegExp, 'escape', (pattern: unknown) => String(pattern).replace(escapeRgxp, '\\$1'));

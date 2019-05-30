@@ -69,7 +69,7 @@ export default class RestrictedCache<V = unknown, K = string> extends Cache<V, K
 	/** @override */
 	clear(filter?: ClearFilter<V, K>): Set<K> {
 		const
-			removed = super.clear();
+			removed = super.clear(filter);
 
 		for (let o = this.queue.values(), i = o.next(); !i.done; i = o.next()) {
 			const

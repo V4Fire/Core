@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-const statusCodes = Object.createMap({
+const statusCodes = {
 	CONTINUE: 100,
 	SWITCHING_PROTOCOLS: 101,
 
@@ -71,7 +71,7 @@ const statusCodes = Object.createMap({
 	LOOP_DETECTED: 508,
 	NOT_EXTENDED: 510,
 	NETWORK_AUTHENTICATION_REQUIRED: 511
-});
+};
 
 export type StatusCodes = typeof statusCodes[keyof typeof statusCodes];
-export default statusCodes;
+export default Object.createMap(statusCodes);

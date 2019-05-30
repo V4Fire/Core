@@ -108,7 +108,7 @@ extend(Object, 'isIterator', (obj) => {
  * Returns true if the specified value is a HashTable object
  * @param obj
  */
-extend(Object, 'isTable', (obj) =>
+extend(Object, 'isSimpleObject', (obj) =>
 	toString.call(obj) === '[object Object]');
 
 /**

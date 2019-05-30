@@ -35,5 +35,6 @@ GLOBAL.stderr = function stderr(err: unknown): void {
  * @param obj
  */
 GLOBAL.devNull = function stderr(obj: unknown): void {
-	return undefined;
+	// tslint:disable-next-line
+	return void obj;
 };
