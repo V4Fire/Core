@@ -24,13 +24,17 @@ export class LogPipeline {
 	 * @param events
 	 */
 	run(events: LogEvent | LogEvent[]): void {
-		this.middlewareIndex = 0;
+		this.middlewareIndex = -1; // ++ in next method
 		this.next(events);
 	}
 
 	private next(events: LogEvent | LogEvent[]): void {
-		if (this.middlewares[this.middlewareIndex] !== undefined) {
-			this.middlewareIndex++;
+		this.middlewareIndex++;
+		if (this.middlewareIndex < this.middlewares.length) {
+			if (!this.middlewares[this.middlewareIndex]) {
+				throw new Error(`Can't find middleware at index [${this.middlewareIndex}]`);
+			}
+
 			this.middlewares[this.middlewareIndex].exec(events, this.next);
 
 		} else {
