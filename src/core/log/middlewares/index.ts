@@ -18,8 +18,8 @@ export function creatorFor<T extends LogMiddleware>(ctor: new () => T): () => T 
 	return () => new ctor();
 }
 
-const middlewareStrategy = {
+const middlewareFactory = {
 	configurable: creatorFor(ConfigurableMiddleware)
 };
 
-export default middlewareStrategy;
+export default middlewareFactory;

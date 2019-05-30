@@ -18,8 +18,8 @@ export function creatorFor<T extends LogEngine>(ctor: LogEngineConstructor<T>): 
 	return (options?: Dictionary) => new ctor(options);
 }
 
-const engineStrategy = {
+const engineFactory = {
 	console: creatorFor(ConsoleEngine)
 };
 
-export default engineStrategy;
+export default engineFactory;

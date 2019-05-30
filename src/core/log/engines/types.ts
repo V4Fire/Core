@@ -7,7 +7,7 @@
  */
 
 import { LogEvent } from 'core/log/middlewares';
-import engineStrategy from 'core/log/engines/index';
+import engineFactory from 'core/log/engines';
 
 export interface LogEngineConstructor<T extends LogEngine> {
 	new (options?: Dictionary): T
@@ -17,4 +17,4 @@ export interface LogEngine {
 	log(event: LogEvent): void;
 }
 
-export type LogEngines = keyof typeof engineStrategy;
+export type LogEngines = keyof typeof engineFactory;

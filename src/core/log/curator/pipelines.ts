@@ -9,8 +9,8 @@
 import config from 'config';
 import { LogPipelineConfig } from 'core/log/config';
 import { LogPipeline } from 'core/log/curator/pipeline';
-import engineStrategy from 'core/log/engines';
-import middlewareStrategy, { LogMiddleware } from 'core/log/middlewares';
+import engineFactory from 'core/log/engines';
+import middlewareFactory, { LogMiddleware } from 'core/log/middlewares';
 
 const
 	pipelines: LogPipeline[] = [];
@@ -38,25 +38,25 @@ function createPipeline(pipelineConfig: LogPipelineConfig): CanUndef<LogPipeline
 
 	if (middlewares !== undefined) {
 		for (let i = 0; i < middlewares.length; ++i) {
-			if (!middlewareStrategy[middlewares[i]]) {
+			if (!middlewareFactory[middlewares[i]]) {
 				console.error(`Can't find middleware '${middlewares[i]}'`);
 				return undefined;
 			}
 		}
 	}
 
-	if (!engineStrategy[engine]) {
+	if (!engineFactory[engine]) {
 		console.error(`Can't find engine '${engine}'`);
 		return undefined;
 	}
 
 	const
-		engineInstance = engineStrategy[engine](engineOptions),
+		engineInstance = engineFactory[engine](engineOptions),
 		middlewareInstances: LogMiddleware[] = [];
 
 	if (middlewares !== undefined) {
 		for (let i = 0; i < middlewares.length; ++i) {
-			middlewareInstances.push(middlewareStrategy[middlewares[i]]());
+			middlewareInstances.push(middlewareFactory[middlewares[i]]());
 		}
 	}
 

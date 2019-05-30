@@ -7,7 +7,7 @@
  */
 
 import { LogLevel } from 'core/log';
-import middlewareStrategy from 'core/log/middlewares/index';
+import middlewareFactory from 'core/log/middlewares';
 
 export interface LogEvent {
 	readonly context: string;
@@ -24,4 +24,4 @@ export interface LogMiddleware {
 	exec(events: LogEvent | LogEvent[], next: NextCallback): void;
 }
 
-export type LogMiddlewares = keyof typeof middlewareStrategy;
+export type LogMiddlewares = keyof typeof middlewareFactory;
