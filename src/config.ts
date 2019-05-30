@@ -87,7 +87,7 @@ const config: Config = {
 		pipelines: [{
 				middlewares: ['configurable'],
 				engine: 'console',
-				styles: {
+				engineOptions: {
 					default: {
 						fontSize: '13px',
 						padding: '3px',

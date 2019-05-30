@@ -8,16 +8,17 @@
 
 import { LogLevel } from 'core/log';
 import { LogMiddlewares } from 'core/log/middlewares';
+import { LogEngines } from 'core/log/engines';
 
 export interface LogConfig {
 	pipelines?: LogPipelineConfig[];
 }
 
 export interface LogPipelineConfig {
-	engine: string;
+	engine: LogEngines;
 	middlewares?: LogMiddlewares[];
 	minimumLevel?: LogLevel;
-	styles?: LogStylesConfig;
+	engineOptions?: Dictionary;
 }
 
 export type LogStylesConfig = {[key in LogLevel | 'default']?: Dictionary};

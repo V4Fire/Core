@@ -7,7 +7,10 @@
  */
 
 import { LogEvent } from 'core/log/middlewares';
+import engineStrategy from 'core/log/engines/index';
 
 export interface LogEngine {
 	log(event: LogEvent): void;
 }
+
+export type LogEngines = keyof typeof engineStrategy;
