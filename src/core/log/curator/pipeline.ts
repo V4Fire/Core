@@ -12,11 +12,13 @@ import { LogEngine } from 'core/log/engines';
 export class LogPipeline {
 	private engine!: LogEngine;
 	private middlewares!: LogMiddleware[];
+	private nextCallback!: (events: LogEvent | LogEvent[]) => void;
 	private middlewareIndex: number = 0;
 
 	constructor(engine: LogEngine, middlewares: LogMiddleware[]) {
 		this.engine = engine;
 		this.middlewares = middlewares;
+		this.nextCallback = this.next.bind(this);
 	}
 
 	/**
@@ -35,7 +37,7 @@ export class LogPipeline {
 				throw new Error(`Can't find middleware at index [${this.middlewareIndex}]`);
 			}
 
-			this.middlewares[this.middlewareIndex].exec(events, this.next);
+			this.middlewares[this.middlewareIndex].exec(events, this.nextCallback);
 
 		} else {
 			if (Array.isArray(events)) {
