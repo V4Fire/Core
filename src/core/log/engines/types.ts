@@ -9,6 +9,10 @@
 import { LogEvent } from 'core/log/middlewares';
 import engineStrategy from 'core/log/engines/index';
 
+export interface LogEngineConstructor<T extends LogEngine> {
+	new (options?: Dictionary): T
+}
+
 export interface LogEngine {
 	log(event: LogEvent): void;
 }

@@ -7,18 +7,18 @@
  */
 
 import { ConsoleEngine } from 'core/log/engines/console';
-import { LogEngine } from 'core/log/engines/types';
+import { LogEngine, LogEngineConstructor } from 'core/log/engines/types';
 export * from 'core/log/engines/types';
 
 /**
  * Returns a function that creates engine of specified class
  * @param ctor - a constructor or just a class
  */
-export function creatorFor<T extends LogEngine>(ctor: new () => T): () => T {
-	return () => new ctor();
+export function creatorFor<T extends LogEngine>(ctor: LogEngineConstructor<T>): (options?: Dictionary) => T {
+	return (options?: Dictionary) => new ctor(options);
 }
 
-const engineStrategy: StrictDictionary<() => LogEngine> = {
+const engineStrategy = {
 	console: creatorFor(ConsoleEngine)
 };
 
