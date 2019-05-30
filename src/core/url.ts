@@ -90,15 +90,15 @@ function chunkToQueryString(data: unknown, encode: boolean, prfx: string = ''): 
 	const
 		isArr = Object.isArray(data);
 
-	const reduce = (v) => {
-		v.sort();
+	const reduce = (arr) => {
+		arr.sort();
 
 		let
 			res = '';
 
-		for (let i = 0; i < v.length; i++) {
+		for (let i = 0; i < arr.length; i++) {
 			let
-				key = v[i];
+				key = arr[i];
 
 			const
 				val = (<Extract<typeof data, unknown[] | Dictionary>>data)[key],
