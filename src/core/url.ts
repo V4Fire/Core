@@ -62,9 +62,9 @@ export function toQueryString(data: unknown, encode: boolean = true): string {
  * Creates an object from the specified querystring and returns it
  * @param str
  */
-export function fromQueryString<T>(str: string): Dictionary<T> {
+export function fromQueryString(str: string): Dictionary<string | null> {
 	const
-		res = <Dictionary<T>>{};
+		res = {};
 
 	if (str[0] === '?') {
 		str = str.slice(1);
