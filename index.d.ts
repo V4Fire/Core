@@ -202,9 +202,9 @@ interface Number {
 	pad(place?: number, sign?: boolean, base?: number): string;
 	format(place?: number): string;
 
-	floor(precision?: number): string;
-	round(precision?: number): string;
-	ceil(precision?: number): string;
+	floor(precision?: number): number;
+	round(precision?: number): number;
+	ceil(precision?: number): number;
 }
 
 interface RegExpConstructor {
