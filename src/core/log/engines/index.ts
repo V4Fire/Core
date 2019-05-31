@@ -8,6 +8,7 @@
 
 import { ConsoleEngine } from 'core/log/engines/console';
 import { LogEngine, LogEngineConstructor } from 'core/log/engines/types';
+export { extend, Merge } from 'core/log/base';
 export * from 'core/log/engines/types';
 
 /**
