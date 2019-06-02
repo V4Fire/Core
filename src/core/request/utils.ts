@@ -46,7 +46,14 @@ export function getRequestKey(url: string, params?: CreateRequestOpts): string {
 		});
 	}
 
-	return JSON.stringify([url, p.method, plainHeaders, p.timeout]);
+	const
+		values = [url, p.method, plainHeaders, p.timeout];
+
+	if (p.method === 'POST' && p.body) {
+		values.push(p.body.toSource());
+	}
+
+	return JSON.stringify(values);
 }
 
 const
@@ -68,7 +75,7 @@ export function applyQueryForStr(str: string, query?: Dictionary, rgxp: RegExp =
 	return str.replace(rgxp, (str, param, adv = '') => {
 		if (query[param]) {
 			const val = [query[param], delete query[param]][0];
-			return (str[0] === '/' ? '/' : '') + val + (Object.isNumber(adv) ? '' : adv);
+			return `${str[0] === '/' ? '/' : ''}${val}${Object.isNumber(adv) ? '' : adv}`;
 		}
 
 		return '';
