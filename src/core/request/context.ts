@@ -93,7 +93,7 @@ export default class RequestContext<T = unknown> {
 			extendFilter: (d, v) => Array.isArray(v) || Object.isObject(v)
 		}, {}, params);
 
-		this.canCache = p.method === 'GET';
+		this.canCache = Boolean({GET: true, POST: true}[p.method]);
 		this.withoutBody = Boolean({GET: true, HEAD: true}[p.method]);
 		this.encoders = p.encoder ? Object.isFunction(p.encoder) ? [p.encoder] : p.encoder : [];
 		this.decoders = p.decoder ? Object.isFunction(p.decoder) ? [p.decoder] : p.decoder : [];
