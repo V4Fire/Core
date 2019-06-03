@@ -7,6 +7,35 @@
  */
 
 export type LogLevel = 'info' | 'warn' | 'error';
+type LogLevelOrder = {[K in LogLevel]: number};
+
+const order: LogLevelOrder = {
+	error: 1,
+	warn: 2,
+	info: 3
+};
+
+/**
+ * Compares log levels.
+ * If left < right returns < 0.
+ * If left > right returns > 0.
+ * If left === right returns 0.
+ * @param left
+ * @param right
+ */
+export function cmpLevel(left: LogLevel, right: LogLevel): number {
+	if (!order[left] && !order[right]) {
+		return 0;
+
+	} else if (!order[left]) {
+		return -1;
+
+	} else if (!order[right]) {
+		return 1;
+	}
+
+	return order[left] - order[right];
+}
 
 export interface LogMessageOptions {
 	context: string;
