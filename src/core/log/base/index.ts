@@ -7,4 +7,5 @@
  */
 
 export { default as extend } from 'core/log/base/extend';
+export { cmpLevel } from 'core/log/base/level';
 export * from 'core/log/base/types';
