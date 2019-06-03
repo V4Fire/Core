@@ -8,6 +8,8 @@
 
 import { LogLevel } from 'core/log';
 
+export const DEFAULT_LEVEL: LogLevel = 'info';
+
 type LogLevelOrder = {[K in LogLevel]: number};
 
 const order: LogLevelOrder = {

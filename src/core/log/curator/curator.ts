@@ -7,12 +7,12 @@
  */
 
 import { LogEvent } from 'core/log/middlewares';
-import { LogLevel, LogMessageOptions } from 'core/log';
+import { LogMessageOptions } from 'core/log';
 import pipelines from 'core/log/curator/pipelines';
+import { DEFAULT_LEVEL } from 'core/log/base';
 
 const
-	DEFAULT_CONTEXT = 'global',
-	DEFAULT_LEVEL: LogLevel = 'info';
+	DEFAULT_CONTEXT = 'global';
 
 /**
  * Sends data to every logging pipeline

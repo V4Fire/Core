@@ -11,6 +11,7 @@ import { LogPipelineConfig } from 'core/log/config';
 import { LogPipeline } from 'core/log/curator/pipeline';
 import engineFactory from 'core/log/engines';
 import middlewareFactory, { LogMiddleware } from 'core/log/middlewares';
+import { DEFAULT_LEVEL } from 'core/log/base';
 
 const
 	pipelines: LogPipeline[] = [];
@@ -60,5 +61,5 @@ function createPipeline(pipelineConfig: LogPipelineConfig): CanUndef<LogPipeline
 		}
 	}
 
-	return new LogPipeline(engineInstance, middlewareInstances, minimumLevel || 'info');
+	return new LogPipeline(engineInstance, middlewareInstances, minimumLevel || DEFAULT_LEVEL);
 }
