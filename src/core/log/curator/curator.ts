@@ -22,7 +22,9 @@ const
 export default function log(context: string | LogMessageOptions, ...details: unknown[]): void {
 	let
 		logContext: string,
-		logLevel = DEFAULT_LEVEL;
+		logLevel = DEFAULT_LEVEL,
+		logDetails = prepareDetails(details),
+		logError: CanUndef<Error>;
 
 	if (Object.isString(context)) {
 		logContext = context || DEFAULT_CONTEXT;
@@ -34,13 +36,16 @@ export default function log(context: string | LogMessageOptions, ...details: unk
 
 	logContext = `${logContext}:${logLevel}`;
 
-	const
-		logDetails = prepareDetails(details);
+	if (details && details.length && details[0] instanceof Error) {
+		logError = details[0] as Error;
+		logDetails = logDetails.slice(1);
+	}
 
 	const event: LogEvent = {
 			context: logContext,
 			level: logLevel,
-			details: logDetails
+			details: logDetails,
+			error: logError
 		};
 
 	for (let i = 0; i < pipelines.length; ++i) {
