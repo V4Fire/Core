@@ -44,7 +44,13 @@ export default function log(context: string | LogMessageOptions, ...details: unk
 		};
 
 	for (let i = 0; i < pipelines.length; ++i) {
-		pipelines[i].run(event);
+		try {
+			pipelines[i].run(event);
+
+		} catch (e) {
+			// TODO: get rid of console
+			console.error(e);
+		}
 	}
 }
 
