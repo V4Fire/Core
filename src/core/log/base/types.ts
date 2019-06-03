@@ -9,4 +9,4 @@
 type ExcludeProps<S, T> = Pick<S, Exclude<keyof S, keyof T>>;
 type DefinedOnly<T> = T extends undefined ? never : T;
 type IntersectProps<L, R> = {[K in keyof L & keyof R]: undefined extends R[K] ? DefinedOnly<L[K]> : R[K]};
-export type Merge<L, R> = ExcludeProps<L, R> & ExcludeProps<R, L> & IntersectProps<L, R>;
+export type Extended<L, R> = ExcludeProps<L, R> & ExcludeProps<R, L> & IntersectProps<L, R>;
