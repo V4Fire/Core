@@ -8,17 +8,20 @@
 
 import { LogEvent, LogMiddleware } from 'core/log/middlewares';
 import { LogEngine } from 'core/log/engines';
+import { LogLevel, cmpLevel } from 'core/log';
 
 export class LogPipeline {
 	private engine!: LogEngine;
 	private middlewares!: LogMiddleware[];
 	private nextCallback!: (events: LogEvent | LogEvent[]) => void;
 	private middlewareIndex: number = 0;
+	private minLevel!: LogLevel;
 
-	constructor(engine: LogEngine, middlewares: LogMiddleware[]) {
+	constructor(engine: LogEngine, middlewares: LogMiddleware[], minLevel: LogLevel) {
 		this.engine = engine;
 		this.middlewares = middlewares;
 		this.nextCallback = this.next.bind(this);
+		this.minLevel = minLevel;
 	}
 
 	/**
@@ -26,6 +29,18 @@ export class LogPipeline {
 	 * @param events
 	 */
 	run(events: LogEvent | LogEvent[]): void {
+		if (Array.isArray(events)) {
+			events = events.filter((e) => cmpLevel(this.minLevel, e.level) >= 0);
+			if (!events.length) {
+				return;
+			}
+
+		} else {
+			if (cmpLevel(this.minLevel, events.level) < 0) {
+				return;
+			}
+		}
+
 		this.middlewareIndex = -1; // ++ in next method
 		this.next(events);
 	}
