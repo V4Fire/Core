@@ -7,11 +7,8 @@
  */
 
 import config from 'config';
-import { LogPipelineConfig } from 'core/log/config';
 import { LogPipeline } from 'core/log/curator/pipeline';
-import engineFactory from 'core/log/engines';
-import middlewareFactory, { LogMiddleware } from 'core/log/middlewares';
-import { DEFAULT_LEVEL } from 'core/log/base';
+import { createPipeline } from 'core/log/config';
 
 const
 	pipelines: LogPipeline[] = [];
@@ -28,38 +25,3 @@ if (config && config.log && config.log.pipelines) {
 }
 
 export default pipelines;
-
-/**
- * Creates pipeline using config
- * @param pipelineConfig
- */
-function createPipeline(pipelineConfig: LogPipelineConfig): CanUndef<LogPipeline> {
-	const
-		{middlewares, engine, engineOptions, minLevel} = pipelineConfig;
-
-	if (middlewares !== undefined) {
-		for (let i = 0; i < middlewares.length; ++i) {
-			if (!middlewareFactory[middlewares[i]]) {
-				console.error(`Can't find middleware '${middlewares[i]}'`);
-				return undefined;
-			}
-		}
-	}
-
-	if (!engineFactory[engine]) {
-		console.error(`Can't find engine '${engine}'`);
-		return undefined;
-	}
-
-	const
-		engineInstance = engineFactory[engine](engineOptions),
-		middlewareInstances: LogMiddleware[] = [];
-
-	if (middlewares !== undefined) {
-		for (let i = 0; i < middlewares.length; ++i) {
-			middlewareInstances.push(middlewareFactory[middlewares[i]]());
-		}
-	}
-
-	return new LogPipeline(engineInstance, middlewareInstances, minLevel || DEFAULT_LEVEL);
-}
