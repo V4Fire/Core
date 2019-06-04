@@ -11,7 +11,7 @@ import { LogMiddlewares } from 'core/log/middlewares';
 import { LogEngines } from 'core/log/engines';
 
 export interface LogConfig {
-	pipelines?: LogPipelineConfig[];
+	pipelines: LogPipelineConfig[];
 }
 
 export interface LogPipelineConfig {
