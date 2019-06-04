@@ -459,6 +459,6 @@ export default class Then<T = unknown> extends Parent() implements PromiseLike<T
 	}
 }
 
-if (Parent() === Promise) {
+if (Parent() !== Promise) {
 	Then.prototype = Object.mixin({withAccessors: true}, Object.create(Promise.prototype), Then.prototype);
 }
