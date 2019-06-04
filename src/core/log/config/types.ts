@@ -17,7 +17,7 @@ export interface LogConfig {
 export interface LogPipelineConfig {
 	engine: LogEngines;
 	middlewares?: LogMiddlewares[];
-	minimumLevel?: LogLevel;
+	minLevel?: LogLevel;
 	engineOptions?: Dictionary;
 }
 

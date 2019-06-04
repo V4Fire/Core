@@ -35,7 +35,7 @@ export default pipelines;
  */
 function createPipeline(pipelineConfig: LogPipelineConfig): CanUndef<LogPipeline> {
 	const
-		{middlewares, engine, engineOptions, minimumLevel} = pipelineConfig;
+		{middlewares, engine, engineOptions, minLevel} = pipelineConfig;
 
 	if (middlewares !== undefined) {
 		for (let i = 0; i < middlewares.length; ++i) {
@@ -61,5 +61,5 @@ function createPipeline(pipelineConfig: LogPipelineConfig): CanUndef<LogPipeline
 		}
 	}
 
-	return new LogPipeline(engineInstance, middlewareInstances, minimumLevel || DEFAULT_LEVEL);
+	return new LogPipeline(engineInstance, middlewareInstances, minLevel || DEFAULT_LEVEL);
 }
