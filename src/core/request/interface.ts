@@ -138,7 +138,7 @@ export interface CreateRequestOpts<T = unknown> {
 	timeout?: number;
 	cacheId?: string | symbol;
 	cacheTTL?: number;
-	cacheMethods?: RequestMethods;
+	cacheMethods?: RequestMethods[];
 	offlineCacheTTL?: number;
 	offlineCache?: boolean;
 
