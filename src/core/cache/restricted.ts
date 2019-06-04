@@ -6,7 +6,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import $C = require('collection.js');
 import Cache, { ClearFilter } from 'core/cache/cache';
 
 export default class RestrictedCache<V = unknown, K = string> extends Cache<V, K> {
@@ -48,7 +47,7 @@ export default class RestrictedCache<V = unknown, K = string> extends Cache<V, K
 
 		if (this.queue.size === this.max) {
 			const
-				key = $C(this.queue).one.get();
+				key = this.queue.values().next().value;
 
 			if (key !== undefined) {
 				this.remove(key);
@@ -69,8 +68,18 @@ export default class RestrictedCache<V = unknown, K = string> extends Cache<V, K
 
 	/** @override */
 	clear(filter?: ClearFilter<V, K>): Set<K> {
-		const removed = super.clear();
-		$C(this.queue).remove((el) => removed.has(el));
+		const
+			removed = super.clear(filter);
+
+		for (let o = this.queue.values(), i = o.next(); !i.done; i = o.next()) {
+			const
+				el = i.value;
+
+			if (removed.has(el)) {
+				this.queue.delete(el);
+			}
+		}
+
 		return removed;
 	}
 }

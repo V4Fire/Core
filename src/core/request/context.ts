@@ -6,14 +6,13 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import $C = require('collection.js');
 import Then from 'core/then';
 import Response from 'core/request/response';
 
 import { Cache } from 'core/cache';
 import { concatUrls, toQueryString } from 'core/url';
 import { normalizeHeaders, applyQueryForStr, getStorageKey, getRequestKey } from 'core/request/utils';
-import { Encoders, Decoders, RequestQuery, CreateRequestOptions, RequestResponseObject } from 'core/request/interface';
+import { Encoders, Decoders, RequestQuery, CreateRequestOpts, RequestResponseObject } from 'core/request/interface';
 import { cache, pendingCache, storage, globalOpts, defaultRequestOpts } from 'core/request/const';
 
 const
@@ -49,7 +48,7 @@ export default class RequestContext<T = unknown> {
 	/**
 	 * Request parameters
 	 */
-	readonly params!: typeof defaultRequestOpts & CreateRequestOptions<T>;
+	readonly params!: typeof defaultRequestOpts & CreateRequestOpts<T>;
 
 	/**
 	 * Alias for .params.query
@@ -86,7 +85,7 @@ export default class RequestContext<T = unknown> {
 	/**
 	 * @param [params] - request parameters
 	 */
-	constructor(params?: CreateRequestOptions<T>) {
+	constructor(params?: CreateRequestOpts<T>) {
 		const p = this.params = <any>Object.mixin({
 			deep: true,
 			concatArray: true,
@@ -94,7 +93,7 @@ export default class RequestContext<T = unknown> {
 			extendFilter: (d, v) => Array.isArray(v) || Object.isObject(v)
 		}, {}, params);
 
-		this.canCache = p.method === 'GET';
+		this.canCache = p.cacheMethods ? p.cacheMethods.includes(p.method) : false;
 		this.withoutBody = Boolean({GET: true, HEAD: true}[p.method]);
 		this.encoders = p.encoder ? Object.isFunction(p.encoder) ? [p.encoder] : p.encoder : [];
 		this.decoders = p.decoder ? Object.isFunction(p.decoder) ? [p.decoder] : p.decoder : [];
@@ -116,7 +115,7 @@ export default class RequestContext<T = unknown> {
 	 */
 	resolveAPI(api: Nullable<string> = globalOpts.api): string {
 		const
-			a = <NonNullable<CreateRequestOptions['api']>>this.params.api;
+			a = <NonNullable<CreateRequestOpts['api']>>this.params.api;
 
 		if (a.url) {
 			return a.url;
@@ -212,7 +211,7 @@ export default class RequestContext<T = unknown> {
 			p.headers = normalizeHeaders(p.headers);
 		}
 
-		if ($C(q).length()) {
+		if (Object.size(q)) {
 			url = `${url}?${toQueryString(q)}`;
 		}
 
@@ -234,6 +233,10 @@ export default class RequestContext<T = unknown> {
 
 		if (key) {
 			if (p.offlineCache) {
+				if (!storage) {
+					throw new ReferenceError('kv-storage module is not loaded');
+				}
+
 				storage
 					.then((storage) => storage.set(getStorageKey(key), res.data, p.offlineCacheTTL))
 					.catch(stderr);
@@ -249,7 +252,7 @@ export default class RequestContext<T = unknown> {
 			);
 
 			if (p.cacheTTL) {
-				this.cacheTimeoutId = setTimeout(() => cache.remove(key), p.cacheTTL);
+				this.cacheTimeoutId = <any>setTimeout(() => cache.remove(key), p.cacheTTL);
 			}
 		}
 
@@ -266,7 +269,7 @@ export default class RequestContext<T = unknown> {
 		if (key) {
 			this.cache.remove(key);
 
-			if (this.params.offlineCache) {
+			if (this.params.offlineCache && storage) {
 				storage.then((storage) => storage.remove(getStorageKey(key))).catch(stderr);
 			}
 		}

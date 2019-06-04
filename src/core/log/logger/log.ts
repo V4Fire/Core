@@ -8,7 +8,7 @@
 
 import * as env from 'core/env';
 import logEngine from 'core/log/engines';
-import { LogLevel, LogMessageOptions } from 'core/log/interface';
+import { LogLevel, LogMessageOpts } from 'core/log/interface';
 
 interface LogRecord {
 	context: string;
@@ -31,7 +31,7 @@ const setConfig = (opts) => {
 const
 	defaultContext = 'global';
 
-env.get('log').then(setConfig, setConfig);
+env.get('log').then(setConfig, stderr);
 env.event.on('set.log', setConfig);
 env.event.on('remove.log', setConfig);
 
@@ -41,7 +41,7 @@ env.event.on('remove.log', setConfig);
  * @param context - log record context
  * @param [details] - additional details (if it's a function, it will be called)
  */
-export default function log(context: string | LogMessageOptions, ...details: unknown[]): void {
+export default function log(context: string | LogMessageOpts, ...details: unknown[]): void {
 	let
 		logLevel: CanUndef<LogLevel>;
 

@@ -14,6 +14,7 @@ const
 	LocalStorage = Storage.LocalStorage,
 	tmpDir = './tmp/local';
 
+// @ts-ignore
 if (!fs.existsSync(tmpDir)) {
 	fs.mkdirpSync(tmpDir);
 }

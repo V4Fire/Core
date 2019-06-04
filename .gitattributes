@@ -1,16 +1,2 @@
 # Perform LF normalization
-* text eol=lf
-
-*.gz binary
-*.ico binary
-*.jpg binary
-*.png binary
-*.gif binary
-
-*.aac binary
-*.ogg binary
-*.mp3 binary
-*.exe binary
-
-*.ai binary
-*.psd binary
+* text=auto eol=lf

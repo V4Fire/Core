@@ -6,10 +6,10 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { GLOBAL } from 'core/const/links';
+import { GLOBAL } from 'core/env';
 
 /**
- * Constructor for any types
+ * Converts the specified unknown value to any
  * @param obj
  */
 GLOBAL.Any = function Any(obj: unknown): any {
@@ -35,5 +35,6 @@ GLOBAL.stderr = function stderr(err: unknown): void {
  * @param obj
  */
 GLOBAL.devNull = function stderr(obj: unknown): void {
-	return undefined;
+	// tslint:disable-next-line
+	return void obj;
 };

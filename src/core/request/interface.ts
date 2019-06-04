@@ -7,6 +7,7 @@
  */
 
 import Then from 'core/then';
+import Range from 'core/range';
 import Response from 'core/request/response';
 import RequestContext from 'core/request/context';
 import { StatusCodes } from 'core/status-codes';
@@ -51,7 +52,7 @@ export type RequestBody =
 	ArrayBuffer;
 
 export type OkStatuses =
-	sugarjs.Range |
+	Range<number> |
 	StatusCodes |
 	StatusCodes[];
 
@@ -83,7 +84,7 @@ export interface RequestFunctionResponse<T = unknown, A extends unknown[] = []> 
 	(...args: A extends (infer V)[] ? V[] : unknown[]): RequestResponse<T>;
 }
 
-export interface RequestOptions {
+export interface RequestOpts {
 	readonly url: string;
 	readonly method?: RequestMethods;
 	readonly timeout?: number;
@@ -105,8 +106,8 @@ export type RequestQuery =
 
 export interface MiddlewareParams<T = unknown> {
 	ctx: RequestContext<T>;
-	opts: CreateRequestOptions<T>;
-	globalOpts: GlobalOptions;
+	opts: CreateRequestOpts<T>;
+	globalOpts: GlobalOpts;
 }
 
 export interface Middleware<T = unknown> {
@@ -117,7 +118,7 @@ export type Middlewares<T = unknown> =
 	Dictionary<Middleware<T>> |
 	Iterable<Middleware<T>>;
 
-export interface CreateRequestOptions<T = unknown> {
+export interface CreateRequestOpts<T = unknown> {
 	readonly method?: RequestMethods;
 	readonly cacheStrategy?: CacheStrategy;
 
@@ -137,6 +138,7 @@ export interface CreateRequestOptions<T = unknown> {
 	timeout?: number;
 	cacheId?: string | symbol;
 	cacheTTL?: number;
+	cacheMethods?: RequestMethods[];
 	offlineCacheTTL?: number;
 	offlineCache?: boolean;
 
@@ -163,7 +165,7 @@ export interface ResponseHeaders {
 	readonly [name: string]: string;
 }
 
-export interface ResponseOptions {
+export interface ResponseOpts {
 	parent?: Then;
 	important?: boolean;
 	responseType?: ResponseTypes;
@@ -173,7 +175,7 @@ export interface ResponseOptions {
 	decoder?: Decoder | Decoders;
 }
 
-export interface GlobalOptions {
+export interface GlobalOpts {
 	api?: Nullable<string>;
 	meta: Dictionary;
 }

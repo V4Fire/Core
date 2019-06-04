@@ -6,8 +6,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import $C = require('collection.js');
-
 export const enum State {
 	pending,
 	fulfilled,
@@ -29,7 +27,15 @@ export interface Executor<T = unknown> {
 	): void;
 }
 
-export default class Then<T = unknown> implements PromiseLike<T> {
+function Parent(): any {
+	//#if runtime has es6
+	return Promise;
+	//#endif
+
+	return class Loopback {};
+}
+
+export default class Then<T = unknown> extends Parent() implements PromiseLike<T> {
 	/**
 	 * Promise that never will be resolved
 	 */
@@ -115,25 +121,29 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	): Then<(T extends Iterable<Value<infer V>> ? V : unknown)[]> {
 		return new Then((res, rej, onAbort) => {
 			const
-				promises = $C(values).map((el) => Then.resolve(el)),
+				promises = <Then[]>[],
 				resolved = <any[]>[];
 
-			if (!$C(promises).length()) {
+			Object.forEach(values, (el) => {
+				promises.push(Then.resolve(el));
+			});
+
+			if (!promises.length) {
 				res(resolved);
 				return;
 			}
 
 			onAbort((reason) => {
-				$C(promises).forEach((el) => {
-					el.abort(reason);
-				});
+				for (let i = 0; i < promises.length; i++) {
+					promises[i].abort(reason);
+				}
 			});
 
 			let
 				counter = 0;
 
-			$C(promises).forEach((promise, i) => {
-				promise.then(
+			for (let i = 0; i < promises.length; i++) {
+				promises[i].then(
 					(val) => {
 						resolved[i] = val;
 
@@ -144,7 +154,7 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 
 					rej
 				);
-			});
+			}
 
 		}, parent);
 	}
@@ -160,22 +170,26 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	): Then<T extends Iterable<Value<infer V>> ? V : unknown> {
 		return new Then<any>((res, rej, onAbort) => {
 			const
-				promises = $C(values).map((el) => Then.resolve(el));
+				promises = <Then[]>[];
 
-			if (!$C(promises).length()) {
+			Object.forEach(values, (el) => {
+				promises.push(Then.resolve(el));
+			});
+
+			if (!promises.length) {
 				res();
 				return;
 			}
 
 			onAbort((reason) => {
-				$C(promises).forEach((el) => {
-					el.abort(reason);
-				});
+				for (let i = 0; i < promises.length; i++) {
+					promises[i].abort(reason);
+				}
 			});
 
-			$C(promises).forEach((promise) => {
-				promise.then(res, rej);
-			});
+			for (let i = 0; i < promises.length; i++) {
+				promises[i].then(res, rej);
+			}
 
 		}, parent);
 	}
@@ -227,6 +241,7 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	 * @param [parent] - parent promise
 	 */
 	constructor(executor: Executor<T>, parent?: Then) {
+		super(executor);
 		this.promise = new Promise((res, rej) => {
 			const resolve = this.resolve = (val) => {
 				if (!this.isPending) {
@@ -278,7 +293,6 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	}
 
 	/** @see {Promise.prototype.then} */
-	// @ts-ignore
 	then(
 		onFulfilled?: Nullable<(value: T) => Value<T>>,
 		onRejected?: Nullable<(reason: unknown) => Value<T>>,
@@ -331,7 +345,7 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 			const
 				that = this;
 
-			onAbort(function (this: Then, reason: unknown): void {
+			onAbort(/** @this {Then} */ function (this: Then, reason: unknown): void {
 				if (Object.isFunction(abortCb)) {
 					try {
 						abortCb(reason);
@@ -370,7 +384,7 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 			const
 				that = this;
 
-			onAbort(function (this: Then, reason: unknown): void {
+			onAbort(/** @this {Then} */ function (this: Then, reason: unknown): void {
 				this.aborted = true;
 
 				if (!that.abort(reason)) {
@@ -418,7 +432,7 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	 * @param [onValue] - success handler
 	 */
 	protected evaluate<A = unknown, V = unknown>(
-		fn: (...args: A[]) => V,
+		fn: (...args: CanUndef<A>[]) => V,
 		args: A[] = [],
 		onError?: OnError,
 		onValue?: (value: V) => void
@@ -445,4 +459,6 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	}
 }
 
-Then.prototype = Object.mixin({withAccessors: true}, Object.create(Promise.prototype), Then.prototype);
+if (Parent() !== Promise) {
+	Then.prototype = Object.mixin({withAccessors: true}, Object.create(Promise.prototype), Then.prototype);
+}

@@ -6,17 +6,17 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import $C = require('collection.js');
 import Then from 'core/then';
+import Range from 'core/range';
 
-import { IS_NODE } from 'core/const/links';
+import { IS_NODE } from 'core/env';
 import { once } from 'core/decorators';
 import { convertIfDate } from 'core/json';
 import { normalizeHeaderName } from 'core/request/utils';
 import { defaultResponseOpts } from 'core/request/const';
 import {
 
-	ResponseOptions,
+	ResponseOpts,
 	ResponseHeaders,
 	ResponseTypes,
 	ResponseType,
@@ -25,7 +25,7 @@ import {
 
 } from 'core/request/interface';
 
-export type json =
+export type JSONLike =
 	string |
 	number |
 	boolean |
@@ -88,24 +88,18 @@ export default class Response {
 	 * @param [body]
 	 * @param [params]
 	 */
-	constructor(body?: ResponseType, params?: ResponseOptions) {
+	constructor(body?: ResponseType, params?: ResponseOpts) {
 		const
-			p = <typeof defaultResponseOpts & ResponseOptions>$C.extend(false, {}, defaultResponseOpts, params),
+			p = Object.mixin<typeof defaultResponseOpts & ResponseOpts>(false, {}, defaultResponseOpts, params),
 			s = this.okStatuses = p.okStatuses;
 
 		this.parent = p.parent;
-		this.important = p.important;
-		this.status = p.status;
-		this.headers = this.parseHeaders(p.headers);
 		this.sourceResponseType = this.responseType = p.responseType;
+		this.important = p.important;
 
-		// tslint:disable-next-line:prefer-conditional-expression
-		if (typeof s === 'object' && !Object.isArray(s)) {
-			this.ok = s.contains(this.status);
-
-		} else {
-			this.ok = (<any[]>[]).concat(s || []).includes(this.status);
-		}
+		this.status = p.status;
+		this.ok = s instanceof Range ? s.contains(this.status) : (<number[]>[]).concat(s || []).includes(this.status);
+		this.headers = this.parseHeaders(p.headers);
 
 		this.decoders = p.decoder ? Object.isFunction(p.decoder) ? [p.decoder] : p.decoder : [];
 		this.body = body;
@@ -123,7 +117,7 @@ export default class Response {
 	 * Parses .body as .sourceType and returns the result
 	 */
 	@once
-	decode<T = Nullable<string | json | ArrayBuffer | Blob | Document | unknown>>(): Then<T> {
+	decode<T extends Nullable<string | JSONLike | ArrayBuffer | Blob | Document | unknown>>(): Then<T> {
 		let data;
 		switch (this.sourceResponseType) {
 			case 'json':
@@ -150,27 +144,29 @@ export default class Response {
 				data = this.text();
 		}
 
-		return (<Then<T>>data)
-			.then((obj) => $C(this.decoders)
-				.to(Then.resolve(obj, this.parent))
-				.reduce((res: Then, fn) => res.then((data) => fn(data, this))))
+		let
+			decoders = data.then((obj) => Then.resolve(obj, this.parent));
 
-			.then((res) => {
-				if (Object.isFrozen(res)) {
-					return res;
-				}
+		Object.forEach(this.decoders, (fn: Function) => {
+			decoders = decoders.then((data) => fn(data, this));
+		});
 
-				if (Object.isArray(res) || Object.isObject(res)) {
-					Object.defineProperty(res, 'valueOf', {
-						enumerable: false,
-						value: () => Object.fastClone(res, {freezable: false})
-					});
-
-					Object.freeze(res);
-				}
-
+		return decoders.then((res) => {
+			if (Object.isFrozen(res)) {
 				return res;
-			});
+			}
+
+			if (Object.isArray(res) || Object.isObject(res)) {
+				Object.defineProperty(res, 'valueOf', {
+					enumerable: false,
+					value: () => Object.fastClone(res, {freezable: false})
+				});
+
+				Object.freeze(res);
+			}
+
+			return res;
+		});
 	}
 
 	/**
@@ -197,12 +193,12 @@ export default class Response {
 	/**
 	 * Parses .body as JSON and returns the result
 	 */
-	json<T = json>(): Then<T | null> {
+	json<T extends JSONLike>(): Then<T | null> {
 		if (this.sourceResponseType !== 'json') {
 			throw new TypeError('Invalid data sourceType');
 		}
 
-		type _ = string | json | null;
+		type _ = string | JSONLike | null;
 
 		const
 			body = <_>this.body;
@@ -216,7 +212,7 @@ export default class Response {
 		}
 
 		return Then.immediate<T | null>(
-			<() => T>(() => $C(this.decoders).length() && !Object.isFrozen(body) ? Object.fastClone(body) : body),
+			<() => T>(() => Object.size(this.decoders) && !Object.isFrozen(body) ? Object.fastClone(body) : body),
 			this.parent
 		);
 	}
@@ -306,7 +302,7 @@ export default class Response {
 		if (IS_NODE) {
 			//#if node_js
 			// @ts-ignore
-			return Then.resolve<_>(Buffer.from(<any>body).toString(encoding));
+			return Then.resolve<_>(Buffer.from(body).toString(encoding));
 			//#endif
 		}
 
@@ -339,23 +335,30 @@ export default class Response {
 			res = {};
 
 		if (Object.isString(headers)) {
-			$C(headers.split(/[\r\n]+/)).forEach((header: string) => {
+			for (let o = headers.split(/[\r\n]+/), i = 0; i < o.length; i++) {
+				const
+					header = o[i];
+
 				if (!header) {
-					return;
+					continue;
 				}
 
 				const [name, value] = header.split(':', 2);
 				res[normalizeHeaderName(name)] = value.trim();
-			});
+			}
 
-		} else {
-			$C(headers).reduce((value, name) => {
+		} else if (headers) {
+			for (let keys = Object.keys(headers), i = 0; i < keys.length; i++) {
+				const
+					name = keys[i],
+					value = headers[name];
+
 				if (!value || !name) {
-					return;
+					continue;
 				}
 
 				res[normalizeHeaderName(name)] = value.trim();
-			});
+			}
 		}
 
 		return Object.freeze(res);

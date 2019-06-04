@@ -6,8 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import $C = require('collection.js');
-import { CreateRequestOptions } from 'core/request/interface';
+import { CreateRequestOpts } from 'core/request/interface';
 
 /**
  * Returns a string key for saving data in a storage
@@ -23,29 +22,74 @@ export function getStorageKey(key: string): string {
  * @param url
  * @param [params]
  */
-export function getRequestKey(url: string, params?: CreateRequestOptions): string {
+export function getRequestKey<T>(url: string, params?: CreateRequestOpts<T>): string {
 	const
 		p = <NonNullable<typeof params>>(params || {}),
 		plainHeaders = <string[][]>[];
 
+	let
+		bodyKey = '';
+
 	if (params) {
-		$C(normalizeHeaders(p.headers))
-			.to(plainHeaders)
-			.reduce((res, value, name) => (res.push([name, String(value)]), res))
-			.sort(([name1], [name2]) => {
-				if (name1 < name2) {
-					return -1;
-				}
+		for (let o = normalizeHeaders(p.headers), keys = Object.keys(o), i = 0; i < keys.length; i++) {
+			const name = keys[i];
+			plainHeaders.push([name, String(o[name])]);
+		}
 
-				if (name1 > name2) {
-					return 1;
-				}
+		plainHeaders.sort(([name1], [name2]) => {
+			if (name1 < name2) {
+				return -1;
+			}
 
-				return 0;
-			});
+			if (name1 > name2) {
+				return 1;
+			}
+
+			return 0;
+		});
+
+		const
+			{body} = params;
+
+		if (body != null) {
+			if (Object.isString(body)) {
+				bodyKey = body;
+
+			} else if (Object.isObject(body)) {
+				bodyKey = JSON.stringify(body);
+
+			} else if (body instanceof FormData) {
+				body.forEach((el, key) => {
+					if (el == null) {
+						el = String(el);
+					}
+
+					if (!Object.isString(el)) {
+						try {
+							// @ts-ignore
+							el = el.toString('base64');
+
+						} catch {
+							el = el.toString();
+						}
+					}
+
+					bodyKey += `${key}=${el}`;
+				});
+
+			} else {
+				try {
+					// @ts-ignore
+					bodyKey = body.toString('base64');
+
+				} catch {
+					bodyKey = body.toString();
+				}
+			}
+		}
 	}
 
-	return JSON.stringify([url, p.method, plainHeaders, p.timeout]);
+	return JSON.stringify([url, p.method, plainHeaders, bodyKey, p.timeout]);
 }
 
 const
@@ -101,30 +145,43 @@ export function normalizeHeaderValue(value: unknown, query?: Dictionary): string
  * @param [query] - request query object (for key/value interpolation)
  */
 export function normalizeHeaders(headers?: Dictionary, query?: Dictionary): Dictionary<CanArray<string>> {
-	return $C(headers).to({}).reduce((res, val, name) => {
-		if (Object.isArray(val)) {
-			val = $C(val).to([]).reduce((arr, val) => {
-				val = normalizeHeaderValue(val, query);
+	const
+		res = {};
 
-				if (val) {
-					arr.push(val);
+	if (headers) {
+		for (let keys = Object.keys(headers), i = 0; i < keys.length; i++) {
+			let
+				name = keys[i],
+				val = <CanArray<string>>headers[name];
+
+			if (Object.isArray(val)) {
+				const
+					arr = <string[]>[];
+
+				for (let i = 0; i < val.length; i++) {
+					const
+						el = normalizeHeaderValue(val[i], query);
+
+					if (el) {
+						arr.push(el);
+					}
 				}
 
-				return arr;
-			});
+				val = arr;
 
-		} else {
-			val = normalizeHeaderValue(val, query);
-		}
+			} else {
+				val = normalizeHeaderValue(val, query);
+			}
 
-		if (val.length) {
-			name = normalizeHeaderName(name, query);
+			if (val.length) {
+				name = normalizeHeaderName(name, query);
 
-			if (name) {
-				res[name] = val;
+				if (name) {
+					res[name] = val;
+				}
 			}
 		}
+	}
 
-		return res;
-	});
+	return res;
 }

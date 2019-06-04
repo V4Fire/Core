@@ -8,7 +8,7 @@
 
 // tslint:disable:no-var-requires comment-format
 
-import { IS_NODE } from 'core/const/links';
+import { IS_NODE } from 'core/env';
 
 export let
 	syncLocalStorage,
@@ -20,10 +20,12 @@ export let
 if (IS_NODE) {
 	//#if node_js
 	({syncLocalStorage, asyncLocalStorage, syncSessionStorage, asyncSessionStorage} =
+		// @ts-ignore
 		require('core/kv-storage/engines/node.localstorage'));
 	//#endif
 
 } else {
 	({syncLocalStorage, asyncLocalStorage, syncSessionStorage, asyncSessionStorage} =
+		// @ts-ignore
 		require('core/kv-storage/engines/browser.localstorage'));
 }

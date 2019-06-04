@@ -20,8 +20,21 @@ export type Strategies =
 	'fromEq' |
 	'default';
 
+const compares: Record<Operations, (a: number, b: number) => boolean> = {
+	'>': (a, b) => a > b,
+	'>=': (a, b) => a >= b,
+	'<': (a, b) => a < b,
+	'<=': (a, b) => a <= b,
+	'==': (a, b) => a === b,
+	'^=': (a, b) => a === b
+};
+
+const
+	compareRgxp = /((^|\^|)=)/,
+	inequalityRgxp = /[><]/;
+
 /**
- * Compares versioning strings via a comparator
+ * Compares version strings via a comparator
  *
  * @param a
  * @param b
@@ -34,15 +47,6 @@ export type Strategies =
  * console.log(check('2.4', '2.4.2', '^='))   // true
  */
 export default function (a: string, b: string, comparator: Operations): boolean {
-	const compares: Record<Operations, (a: number, b: number) => boolean> = {
-		'>': (a, b) => a > b,
-		'>=': (a, b) => a >= b,
-		'<': (a, b) => a < b,
-		'<=': (a, b) => a <= b,
-		'==': (a, b) => a === b,
-		'^=': (a, b) => a === b
-	};
-
 	if (!compares[comparator]) {
 		throw new TypeError(`Unknown comparator: ${comparator}. Only ${Object.keys(compares).join(', ')} available`);
 	}
@@ -57,7 +61,7 @@ export default function (a: string, b: string, comparator: Operations): boolean 
 		strategy = 'default';
 
 	const
-		match = comparator.match(/((^|\^|)=)/);
+		match = comparator.match(compareRgxp);
 
 	if (match) {
 		if (match.index === 1) {
@@ -94,15 +98,21 @@ export default function (a: string, b: string, comparator: Operations): boolean 
 
 		let
 			cNum = parseInt(c, 10),
-			tNum = parseInt(t,  10);
+			tNum = parseInt(t, 10);
 
-		res = compares[comparator](cNum, tNum);
+		if (inequalityRgxp.test(comparator)) {
+			cNum = c === '*' ? 0 : cNum;
+			tNum = t === '*' ? 0 : tNum;
+		}
+
+		res = compares[comparator](
+			cNum,
+			tNum
+		);
 
 		switch (strategy) {
 			case 'fromEq':
 				if (!res) {
-					cNum = c === '*' ? 0 : cNum;
-					tNum = t === '*' ? 0 : tNum;
 					return i > 0 && cNum < tNum;
 				}
 
@@ -123,7 +133,7 @@ export default function (a: string, b: string, comparator: Operations): boolean 
 				break;
 
 			case 'default':
-				if (res || cNum !== tNum) {
+				if (res) {
 					return res;
 				}
 		}

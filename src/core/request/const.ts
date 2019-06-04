@@ -6,15 +6,20 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import $C = require('collection.js');
-import statusCodes from 'core/status-codes';
 import config from 'config';
+import statusCodes from 'core/status-codes';
+import Range from 'core/range';
 
-import { RequestMethods, ResponseTypes, GlobalOptions, CacheStrategy } from 'core/request/interface';
+import { AsyncFactoryResult } from 'core/kv-storage';
+import { RequestMethods, ResponseTypes, GlobalOpts, CacheStrategy } from 'core/request/interface';
 import { Cache, RestrictedCache, NeverCache } from 'core/cache';
 
-export const
-	storage = import('core/kv-storage').then(({asyncLocal}) => asyncLocal);
+export let
+	storage: CanUndef<Promise<AsyncFactoryResult>>;
+
+//#if runtime has core/kv-storage
+storage = import('core/kv-storage').then(({asyncLocal}) => asyncLocal);
+//#endif
 
 export const mimeTypes: Dictionary<ResponseTypes> = Object.createDict<any>({
 	'application/json': 'json',
@@ -26,6 +31,7 @@ export const mimeTypes: Dictionary<ResponseTypes> = Object.createDict<any>({
 export const defaultRequestOpts = {
 	method: <RequestMethods>'GET',
 	cacheStrategy: <CacheStrategy>'never',
+	cacheMethods: ['GET'],
 	offlineCacheTTL: (1).day(),
 	headers: {},
 	query: {},
@@ -34,8 +40,8 @@ export const defaultRequestOpts = {
 
 export const defaultResponseOpts = {
 	responseType: <ResponseTypes>'text',
-	okStatuses: <sugarjs.Range>Number.range(200, 299),
-	status: statusCodes.OK,
+	okStatuses: new Range(200, 299),
+	status: <number>statusCodes.OK,
 	headers: {}
 };
 
@@ -48,7 +54,7 @@ export const cache: Record<CacheStrategy, Cache> = {
 	never: new NeverCache()
 };
 
-export const globalOpts: GlobalOptions = {
+export const globalOpts: GlobalOpts = {
 	get api(): CanUndef<string> {
 		return config.api;
 	},
@@ -64,5 +70,7 @@ export const globalOpts: GlobalOptions = {
  * Drops all request caches
  */
 export function dropCache(): void {
-	$C(cache).forEach((cache) => cache.clear());
+	for (let keys = Object.keys(cache), i = 0; i < keys.length; i++) {
+		cache[keys[i]].clear();
+	}
 }

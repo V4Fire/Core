@@ -13,7 +13,6 @@ require('dotenv').config();
 const
 	$C = require('collection.js'),
 	Sugar = require('sugar').extend(),
-	concatUrls = require('urlconcat').concat,
 	o = require('uniconf/options').option;
 
 const
@@ -68,7 +67,7 @@ class Config {
 	 * @param {Object=} [envs] - map of environment variables
 	 * @param {(string|Object)=} [mod] - url for a config modifier or an object modifier (env configs)
 	 * @param {T} opts
-	 * @returns {C<T>}
+	 * @returns {!Object}
 	 */
 	createConfig({dirs, envs, mod}, opts) {
 		const
@@ -230,6 +229,7 @@ module.exports = config.createConfig(
 		}),
 
 		apiURL() {
+			const concatUrls = require('urlconcat').concat;
 			return this.api.proxy ? concatUrls(this.api.pathname(), 'api') : this.api.url;
 		},
 

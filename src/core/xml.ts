@@ -8,7 +8,7 @@
 
 const
 	xmlSerializer = new XMLSerializer(),
-	normalizeRgxp = /"|(\s+)|[{}\|\\\^~\[\]`"<>#%]/g;
+	normalizeRgxp = /"|(\s+)|[{}|\\^~\[\]`"<>#%]/g;
 
 /**
  * Converts the specified node to a data:uri string

@@ -6,11 +6,9 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import $C = require('collection.js');
 import Then from 'core/then';
 
 import log from 'core/log';
-
 import request from 'core/request/engines';
 
 import Response from 'core/request/response';
@@ -22,7 +20,7 @@ import { getStorageKey } from 'core/request/utils';
 import { concatUrls } from 'core/url';
 
 import { storage, globalOpts, defaultRequestOpts, mimeTypes } from 'core/request/const';
-import { RequestFunctionResponse, RequestResponse, CreateRequestOptions, ResolverResult } from 'core/request/interface';
+import { RequestFunctionResponse, RequestResponse, CreateRequestOpts, ResolverResult } from 'core/request/interface';
 
 export * from 'core/request/interface';
 export * from 'core/request/utils';
@@ -37,13 +35,13 @@ export { default as Response } from 'core/request/response';
  * @param path
  * @param opts
  */
-export default function create<T = unknown>(path: string, opts?: CreateRequestOptions<T>): RequestResponse<T>;
+export default function create<T = unknown>(path: string, opts?: CreateRequestOpts<T>): RequestResponse<T>;
 
 /**
  * Creates a request wrapper by the specified options
  * @param opts
  */
-export default function create<T = unknown>(opts: CreateRequestOptions<T>): typeof create;
+export default function create<T = unknown>(opts: CreateRequestOpts<T>): typeof create;
 
 /**
  * @param path
@@ -52,12 +50,12 @@ export default function create<T = unknown>(opts: CreateRequestOptions<T>): type
  */
 export default function create<T = unknown, A extends unknown[] = unknown[]>(
 	path: string,
-	resolver: (url: string, opts: CreateRequestOptions<T>, ...args: A) => ResolverResult,
-	opts?: CreateRequestOptions<T>
+	resolver: (url: string, opts: CreateRequestOpts<T>, ...args: A) => ResolverResult,
+	opts?: CreateRequestOpts<T>
 ): RequestFunctionResponse<T, A extends (infer V)[] ? V[] : unknown[]>;
 
 export default function create<T = unknown>(path: any, ...args: any[]): unknown {
-	const merge = (...args: unknown[]) => Object.mixin({
+	const merge = <T>(...args: unknown[]) => Object.mixin<T>({
 		deep: true,
 		concatArray: true,
 		concatFn: (a: unknown[], b: unknown[]) => a.union(b),
@@ -70,19 +68,19 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 
 		return (path, resolver, opts) => {
 			if (Object.isObject(path)) {
-				return create(merge(defOpts, path));
+				return create(merge<CreateRequestOpts<T>>(defOpts, path));
 			}
 
 			if (Object.isFunction(resolver)) {
-				return create(path, resolver, merge(defOpts, opts));
+				return create(path, resolver, merge<CreateRequestOpts<T>>(defOpts, opts));
 			}
 
-			return create(path, merge(defOpts, resolver));
+			return create(path, merge<CreateRequestOpts<T>>(defOpts, resolver));
 		};
 	}
 
 	let
-		resolver, opts: CreateRequestOptions<T>;
+		resolver, opts: CreateRequestOpts<T>;
 
 	if (args.length > 1) {
 		([resolver, opts] = args);
@@ -91,15 +89,17 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 		opts = args[0];
 	}
 
+	opts = opts || {};
+
 	const
-		baseCtx: RequestContext<T> = new RequestContext<T>(opts);
+		baseCtx: RequestContext<T> = new RequestContext<T>(merge(defaultRequestOpts, opts));
 
 	const run = (...args) => {
 		const
-			p: CreateRequestOptions<T> = merge(defaultRequestOpts, baseCtx.params),
+			p = merge<CreateRequestOpts<T>>(baseCtx.params),
 			ctx = Object.create(baseCtx);
 
-		const wrapProcessor = (namespace) => (fn, key) => (data, ...args) => {
+		const wrapProcessor = (namespace, fn, key) => (data, ...args) => {
 			const
 				time = Date.now(),
 				res = fn(data, {opts: p, ctx, globalOpts}, ...args);
@@ -119,11 +119,23 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 			return res;
 		};
 
+		const
+			encoders = <Function[]>[],
+			decoders = <Function[]>[];
+
+		Object.forEach(merge(ctx.encoders), (el, key) => {
+			encoders.push(wrapProcessor('encoders', el, key));
+		});
+
+		Object.forEach(merge(ctx.decoders), (el, key) => {
+			decoders.push(wrapProcessor('decoders', el, key));
+		});
+
 		Object.assign(ctx, {
 			// Merge request options
 			params: p,
-			encoders: $C(merge(ctx.encoders)).map(wrapProcessor('encoders')),
-			decoders: $C(merge(ctx.decoders)).map(wrapProcessor('decoders')),
+			encoders,
+			decoders,
 
 			// Bind middlewares to new context
 			saveCache: ctx.saveCache.bind(ctx),
@@ -184,14 +196,26 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 			ctx.then = then;
 			ctx.isOnline = (await Then.resolve(isOnline(), then)).status;
 
-			const arr = await Then.all($C(p.middlewares).reduce((arr, fn) => {
-				arr.push(fn({opts: p, ctx, globalOpts}));
-				return arr;
-			}, [] as unknown[]), then);
+			const
+				tasks = <any[]>[];
 
-			const applyEncoders = (data) => $C(ctx.encoders)
-				.to(Then.resolve(data, then))
-				.reduce((res, fn, i) => res.then((obj) => fn(i ? obj : Object.fastClone(obj))));
+			Object.forEach(p.middlewares, (fn: Function) => {
+				tasks.push(fn({opts: p, ctx, globalOpts}));
+			});
+
+			const
+				middlewareResults = await Then.all(tasks, then);
+
+			const applyEncoders = (data) => {
+				let
+					res = Then.resolve(data, then);
+
+				Object.forEach(ctx.encoders, (fn: Function, i) => {
+					res = res.then((obj) => fn(i ? obj : Object.fastClone(obj)));
+				});
+
+				return res;
+			};
 
 			if (ctx.withoutBody) {
 				p.query = await applyEncoders(p.query);
@@ -200,12 +224,25 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 				p.body = await applyEncoders(p.body);
 			}
 
-			if ($C(arr).some(Object.isFunction)) {
+			for (let i = 0; i < middlewareResults.length; i++) {
+				if (!Object.isFunction(middlewareResults[i])) {
+					continue;
+				}
+
 				resolve((() => {
 					const
-						res = $C(arr).filter(Object.isFunction).map((fn) => (<Function>fn)());
+						res = <any[]>[];
 
-					if (res.length <= 1) {
+					for (let j = i; j < middlewareResults.length; j++) {
+						const
+							el = middlewareResults[j];
+
+						if (Object.isFunction(el)) {
+							res.push(el());
+						}
+					}
+
+					if (res.length === 1) {
 						return res[0];
 					}
 
@@ -249,6 +286,7 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 					!fromCache &&
 					p.offlineCache &&
 					!ctx.isOnline &&
+					storage &&
 					await (await storage).has(localCacheKey)
 				);
 			}
@@ -264,7 +302,8 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 
 			} else if (fromLocalStorage) {
 				cache = 'offline';
-				res = Then.immediate(() => storage.then((storage) => storage.get(localCacheKey)), then)
+				res = Then.immediate(() => (<NonNullable<typeof storage>>storage)
+					.then((storage) => storage.get(localCacheKey)), then)
 					.then(ctx.wrapAsResponse)
 					.then(ctx.saveCache);
 

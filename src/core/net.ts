@@ -15,7 +15,7 @@ export interface StatusEvent {
 }
 
 export const
-	event = new EventEmitter();
+	event = new EventEmitter({newListener: false});
 
 const
 	{online} = config;

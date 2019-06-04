@@ -6,8 +6,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import $C = require('collection.js');
-
 export interface ClearFilter<V = unknown, K = string> {
 	(el: V, key: K): unknown;
 }
@@ -71,21 +69,23 @@ export default class Cache<V = unknown, K = string> {
 	clear(filter?: ClearFilter<V, K>): Set<K> {
 		if (filter) {
 			const
-				removed = new Set();
+				removed = new Set<K>();
 
-			$C(this.storage).remove((el, key) => {
+			for (let o = this.storage.entries(), i = o.next(); !i.done; i = o.next()) {
+				const
+					[key, el] = i.value;
+
 				if (filter(el, key)) {
 					removed.add(key);
-					return true;
+					this.storage.delete(key);
 				}
-			});
+			}
 
 			return removed;
 		}
 
 		const
-			// @ts-ignore
-			removed = new Set(...this.storage.keys());
+			removed = new Set(this.storage.keys());
 
 		this.storage.clear();
 		return removed;

@@ -112,8 +112,8 @@ const config: Config = {
  * Extends the config object
  * @param args
  */
-export function extend<T extends Config>(...args: Dictionary[]): T {
-	return <any>Object.mixin({
+export function extend<T extends Config>(...args: CanUndef<Dictionary>[]): T {
+	return Object.mixin({
 		deep: true,
 		concatArray: true,
 		concatFn: (a: unknown[], b: unknown[]) => a.union(b),

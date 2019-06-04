@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { Logger, ExtendedLogger, LogMessageOptions } from 'core/log/interface';
+import { Logger, ExtendedLogger, LogMessageOpts } from 'core/log/interface';
 
 const extend = (func: Logger): ExtendedLogger => {
 	const res = <ExtendedLogger>func;
@@ -30,9 +30,9 @@ const extend = (func: Logger): ExtendedLogger => {
 	res.error = error;
 
 	function namespace(value: string): ExtendedLogger {
-		const copy = (context: string | LogMessageOptions, ...details: unknown[]): void => {
+		const copy = (context: string | LogMessageOpts, ...details: unknown[]): void => {
 			let
-				contextCopy: string | LogMessageOptions;
+				contextCopy: string | LogMessageOpts;
 
 			if (Object.isString(context)) {
 				contextCopy = `${value}:${context}`;
