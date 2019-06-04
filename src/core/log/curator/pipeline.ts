@@ -9,7 +9,7 @@
 import { LogEvent, LogMiddleware } from 'core/log/middlewares';
 import { LogEngine } from 'core/log/engines';
 import { LogLevel } from 'core/log';
-import { cmpLevel } from 'core/log/base';
+import { cmpLevels } from 'core/log/base';
 
 export class LogPipeline {
 	private engine!: LogEngine;
@@ -31,13 +31,13 @@ export class LogPipeline {
 	 */
 	run(events: LogEvent | LogEvent[]): void {
 		if (Array.isArray(events)) {
-			events = events.filter((e) => cmpLevel(this.minLevel, e.level) >= 0);
+			events = events.filter((e) => cmpLevels(this.minLevel, e.level) >= 0);
 			if (!events.length) {
 				return;
 			}
 
 		} else {
-			if (cmpLevel(this.minLevel, events.level) < 0) {
+			if (cmpLevels(this.minLevel, events.level) < 0) {
 				return;
 			}
 		}

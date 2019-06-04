@@ -26,7 +26,7 @@ const order: LogLevelOrder = {
  * @param left
  * @param right
  */
-export function cmpLevel(left: LogLevel, right: LogLevel): number {
+export function cmpLevels(left: LogLevel, right: LogLevel): number {
 	if (!order[left] && !order[right]) {
 		return 0;
 
