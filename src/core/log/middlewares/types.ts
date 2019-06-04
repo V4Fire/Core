@@ -21,6 +21,12 @@ export interface NextCallback {
 }
 
 export interface LogMiddleware {
+	/**
+	 * Processes the events. If has data to pass to the next middleware, calls the next callback.
+	 *
+	 * @param events
+	 * @param next
+	 */
 	exec(events: LogEvent | LogEvent[], next: NextCallback): void;
 }
 

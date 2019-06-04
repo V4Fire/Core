@@ -23,6 +23,8 @@ const order: LogLevelOrder = {
  * If left < right returns < 0.
  * If left > right returns > 0.
  * If left === right returns 0.
+ * Non existing levels always lose.
+ *
  * @param left
  * @param right
  */

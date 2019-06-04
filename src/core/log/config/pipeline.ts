@@ -13,7 +13,7 @@ import engineFactory from 'core/log/engines';
 import { DEFAULT_LEVEL } from 'core/log/base';
 
 /**
- * Creates pipeline using config
+ * Creates a pipeline using config. Returns undefined if there are not enough data to create one.
  * @param pipelineConfig
  */
 export function createPipeline(pipelineConfig: LogPipelineConfig): CanUndef<LogPipeline> {

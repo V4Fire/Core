@@ -9,7 +9,8 @@
 import { Extended } from 'core/log/base/types';
 
 /**
- * Mix two objects
+ * Mixes two objects
+ *
  * @param factory
  * @param records
  */

@@ -10,7 +10,7 @@ import { LogStylesConfig, StylesCache } from 'core/log/config/types';
 import { LogLevel } from 'core/log';
 
 /**
- * Creates styles object where each LogLevel's property merged with default property of log styles config
+ * Creates a styles' object where each LogLevel's property merged with default property of log styles' config
  * @param styles
  */
 export function createStyleCache(styles: LogStylesConfig): StylesCache {
