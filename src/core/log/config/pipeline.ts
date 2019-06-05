@@ -25,14 +25,14 @@ export function createPipeline(pipelineConfig: LogPipelineConfig): CanUndef<LogP
 		for (let i = 0; i < middlewares.length; ++i) {
 			if (!middlewareFactory[middlewares[i]]) {
 				console.error(`Can't find middleware '${middlewares[i]}'`);
-				return undefined;
+				return;
 			}
 		}
 	}
 
 	if (!engineFactory[engine]) {
 		console.error(`Can't find engine '${engine}'`);
-		return undefined;
+		return;
 	}
 
 	const
