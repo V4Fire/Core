@@ -1422,7 +1422,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 * Mutes an event operation
 	 * @param [id] - operation id (if not defined will be get all operations)
 	 */
-	muteEventListeners(id?: object): this;
+	muteEventListener(id?: object): this;
 
 	/**
 	 * @param params - parameters for the operation:
@@ -1430,8 +1430,8 @@ export default class Async<CTX extends object = Async<any>> {
 	 *   *) [label] - label for the task
 	 *   *) [group] - group name for the task
 	 */
-	muteEventListeners(params: ClearOptsId<object>): this;
-	muteEventListeners(p: any): this {
+	muteEventListener(params: ClearOptsId<object>): this;
+	muteEventListener(p: any): this {
 		return this.markAsync('muted', isEvent(p) ? {id: p} : p, Async.linkNames.eventListener);
 	}
 
@@ -1439,7 +1439,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 * Unmutes an event operation
 	 * @param [id] - operation id (if not defined will be get all operations)
 	 */
-	unmuteEventListeners(id?: object): this;
+	unmuteEventListener(id?: object): this;
 
 	/**
 	 * @param params - parameters for the operation:
@@ -1447,8 +1447,8 @@ export default class Async<CTX extends object = Async<any>> {
 	 *   *) [label] - label for the task
 	 *   *) [group] - group name for the task
 	 */
-	unmuteEventListeners(params: ClearOptsId<object>): this;
-	unmuteEventListeners(p: any): this {
+	unmuteEventListener(params: ClearOptsId<object>): this;
+	unmuteEventListener(p: any): this {
 		return this.markAsync('!muted', isEvent(p) ? {id: p} : p, Async.linkNames.eventListener);
 	}
 
@@ -1456,7 +1456,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 * Suspends an event operation
 	 * @param [id] - operation id (if not defined will be get all operations)
 	 */
-	suspendEventListeners(id?: object): this;
+	suspendEventListener(id?: object): this;
 
 	/**
 	 * @param params - parameters for the operation:
@@ -1464,8 +1464,8 @@ export default class Async<CTX extends object = Async<any>> {
 	 *   *) [label] - label for the task
 	 *   *) [group] - group name for the task
 	 */
-	suspendEventListeners(params: ClearOptsId<object>): this;
-	suspendEventListeners(p: any): this {
+	suspendEventListener(params: ClearOptsId<object>): this;
+	suspendEventListener(p: any): this {
 		return this.markAsync('paused', isEvent(p) ? {id: p} : p, Async.linkNames.eventListener);
 	}
 
@@ -1473,7 +1473,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 * Unsuspends an event operation
 	 * @param [id] - operation id (if not defined will be get all operations)
 	 */
-	unsuspendEventListeners(id?: object): this;
+	unsuspendEventListener(id?: object): this;
 
 	/**
 	 * @param params - parameters for the operation:
@@ -1481,8 +1481,8 @@ export default class Async<CTX extends object = Async<any>> {
 	 *   *) [label] - label for the task
 	 *   *) [group] - group name for the task
 	 */
-	unsuspendEventListeners(params: ClearOptsId<object>): this;
-	unsuspendEventListeners(p: any): this {
+	unsuspendEventListener(params: ClearOptsId<object>): this;
+	unsuspendEventListener(p: any): this {
 		return this.markAsync('!paused', isEvent(p) ? {id: p} : p, Async.linkNames.eventListener);
 	}
 
@@ -1495,14 +1495,20 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	clearAll(params?: ClearOpts): this {
 		this
-			.off(params);
+			.off(params)
+			.terminateWorker(<any>params);
+
+		const
+			clearMethods = ['clear', 'cancel'];
 
 		for (let o = Async.linkNames, keys = Object.keys(o), i = 0; i < keys.length; i++) {
-			const
-				alias = `clear-${o[keys[i]]}`.camelize(false);
+			for (let j = 0; j < clearMethods.length; j++) {
+				const
+					alias = `${clearMethods}-${o[keys[i]]}`.camelize(false);
 
-			if (Object.isFunction(this[alias])) {
-				this[alias](params);
+				if (Object.isFunction(this[alias])) {
+					this[alias](params);
+				}
 			}
 		}
 
@@ -1517,9 +1523,6 @@ export default class Async<CTX extends object = Async<any>> {
 	 *   *) [group] - group name for the task
 	 */
 	muteAll(params?: ClearOpts): this {
-		this
-			.muteEventListeners(params);
-
 		for (let o = Async.linkNames, keys = Object.keys(o), i = 0; i < keys.length; i++) {
 			const
 				alias = `mute-${o[keys[i]]}`.camelize(false);
@@ -1540,9 +1543,6 @@ export default class Async<CTX extends object = Async<any>> {
 	 *   *) [group] - group name for the task
 	 */
 	unmuteAll(params?: ClearOpts): this {
-		this
-			.unmuteEventListeners(params);
-
 		for (let o = Async.linkNames, keys = Object.keys(o), i = 0; i < keys.length; i++) {
 			const
 				alias = `unmute-${o[keys[i]]}`.camelize(false);
@@ -1563,9 +1563,6 @@ export default class Async<CTX extends object = Async<any>> {
 	 *   *) [group] - group name for the task
 	 */
 	suspendAll(params?: ClearOpts): this {
-		this
-			.suspendEventListeners(params);
-
 		for (let o = Async.linkNames, keys = Object.keys(o), i = 0; i < keys.length; i++) {
 			const
 				alias = `suspend-${o[keys[i]]}`.camelize(false);
@@ -1586,9 +1583,6 @@ export default class Async<CTX extends object = Async<any>> {
 	 *   *) [group] - group name for the task
 	 */
 	unsuspendAll(params?: ClearOpts): this {
-		this
-			.unsuspendEventListeners(params);
-
 		for (let o = Async.linkNames, keys = Object.keys(o), i = 0; i < keys.length; i++) {
 			const
 				alias = `unsuspend-${o[keys[i]]}`.camelize(false);
