@@ -6,17 +6,13 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { LogLevel } from 'core/log';
-
-export interface LogPreferences extends Dictionary {
-	styles?: {[key in LogLevel | 'default']?: unknown};
-}
+import { LogConfig } from 'core/log';
 
 export interface Config {
 	appName?: CanUndef<string>;
 	api?: CanUndef<string>;
 	lang: string;
-	log: LogPreferences;
+	log: LogConfig;
 	online: {
 		checkURL?: CanUndef<string>;
 		checkInterval?: number;
@@ -88,23 +84,28 @@ const config: Config = {
 	 * Log preferences
 	 */
 	log: {
-		styles: {
-			default: {
-				fontSize: '13px',
-				padding: '3px',
-				marginBottom: '3px'
-			},
+		pipelines: [{
+				middlewares: ['configurable'],
+				engine: 'console',
+				engineOptions: {
+					default: {
+						fontSize: '13px',
+						padding: '3px',
+						marginBottom: '3px'
+					},
 
-			warn: {
-				backgroundColor: '#FFCE00',
-				color: '#FFF'
-			},
+					warn: {
+						backgroundColor: '#FFCE00',
+						color: '#FFF'
+					},
 
-			error: {
-				backgroundColor: '#FF3B5B',
-				color: '#FFF'
+					error: {
+						backgroundColor: '#FF3B5B',
+						color: '#FFF'
+					}
+				}
 			}
-		}
+		]
 	}
 };
 

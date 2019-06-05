@@ -7,6 +7,7 @@
  */
 
 import { GLOBAL } from 'core/const/links';
+import log from 'core/log';
 
 /**
  * Converts the specified unknown value to any
@@ -26,7 +27,7 @@ GLOBAL.stderr = function stderr(err: unknown): void {
 			return;
 		}
 
-		console.error(err);
+		log.error('stderr', err);
 	}
 };
 
