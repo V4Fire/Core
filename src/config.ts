@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { LogConfig } from 'core/log/config';
+import { LogConfig } from 'core/log';
 
 export interface Config {
 	appName?: CanUndef<string>;
