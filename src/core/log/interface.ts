@@ -15,6 +15,7 @@ export interface LogMessageOptions {
 
 export interface Logger {
 	(context: string | LogMessageOptions, ...details: unknown[]): void;
+	(context: string | LogMessageOptions, error: Error, ...details: unknown[]): void;
 }
 
 export interface ExtendedLogger extends Logger {
@@ -35,12 +36,26 @@ export interface ExtendedLogger extends Logger {
 	warn(context: string, ...details: unknown[]): void;
 
 	/**
+	 * @param context - log record context
+	 * @param error - thrown error
+	 * @param [details] - additional details
+	 */
+	warn(context: string, error: Error, ...details: unknown[]): void;
+
+	/**
 	 * Logs message with an error level and a context
 	 *
 	 * @param context - log record context
 	 * @param [details] - additional details
 	 */
 	error(context: string, ...details: unknown[]): void;
+
+	/**
+	 * @param context - log record context
+	 * @param error - thrown error
+	 * @param [details] - additional details
+	 */
+	error(context: string, error: Error, ...details: unknown[]): void;
 
 	/**
 	 * Returns a new log function with the specified namespace
