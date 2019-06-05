@@ -17,7 +17,7 @@ export interface LogEvent {
 }
 
 export interface NextCallback {
-	(events: LogEvent | LogEvent[]): void;
+	(events: CanArray<LogEvent>): void;
 }
 
 export interface LogMiddleware {
@@ -27,7 +27,7 @@ export interface LogMiddleware {
 	 * @param events
 	 * @param next
 	 */
-	exec(events: LogEvent | LogEvent[], next: NextCallback): void;
+	exec(events: CanArray<LogEvent>, next: NextCallback): void;
 }
 
 export type LogMiddlewares = keyof typeof middlewareFactory;

@@ -31,7 +31,7 @@ env.event.on('remove.log', setConfig);
 export class ConfigurableMiddleware implements LogMiddleware {
 	private queue: LogEvent[] = [];
 
-	exec(events: LogEvent | LogEvent[], next: NextCallback): void {
+	exec(events: CanArray<LogEvent>, next: NextCallback): void {
 		if (!options) {
 			if (Array.isArray(events)) {
 				this.queue.push(...events);

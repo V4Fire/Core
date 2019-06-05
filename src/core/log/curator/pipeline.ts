@@ -14,7 +14,7 @@ import { cmpLevels } from 'core/log/base';
 export class LogPipeline {
 	private engine!: LogEngine;
 	private middlewares!: LogMiddleware[];
-	private nextCallback!: (events: LogEvent | LogEvent[]) => void;
+	private nextCallback!: (events: CanArray<LogEvent>) => void;
 	private middlewareIndex: number = 0;
 	private minLevel!: LogLevel;
 
@@ -29,7 +29,7 @@ export class LogPipeline {
 	 * Carries events through the chain of middlewares and passes them to the engine in the end
 	 * @param events
 	 */
-	run(events: LogEvent | LogEvent[]): void {
+	run(events: CanArray<LogEvent>): void {
 		if (Array.isArray(events)) {
 			events = events.filter((e) => cmpLevels(this.minLevel, e.level) >= 0);
 			if (!events.length) {
@@ -46,7 +46,7 @@ export class LogPipeline {
 		this.next(events);
 	}
 
-	private next(events: LogEvent | LogEvent[]): void {
+	private next(events: CanArray<LogEvent>): void {
 		this.middlewareIndex++;
 		if (this.middlewareIndex < this.middlewares.length) {
 			if (!this.middlewares[this.middlewareIndex]) {
