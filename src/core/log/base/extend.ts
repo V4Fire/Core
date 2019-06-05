@@ -14,6 +14,6 @@ import { Extended } from 'core/log/base/types';
  * @param factory
  * @param records
  */
-export default function extend<S extends object, T extends object>(factory: S, records: T): Extended<S, T> {
+export default function extend<S extends Dictionary, T extends Dictionary>(factory: S, records: T): Extended<S, T> {
 	return <any>Object.mixin(false, factory, records);
 }
