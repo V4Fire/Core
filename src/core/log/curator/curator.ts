@@ -16,6 +16,7 @@ const
 
 /**
  * Sends data to every logging pipeline
+ *
  * @param context
  * @param details
  */
