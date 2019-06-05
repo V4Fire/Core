@@ -8,9 +8,10 @@
 
 import { LogPipelineConfig } from 'core/log/config/types';
 import { LogPipeline } from 'core/log/curator/pipeline';
+import { DEFAULT_LEVEL } from 'core/log/base';
+
 import middlewareFactory, { LogMiddleware } from 'core/log/middlewares';
 import engineFactory from 'core/log/engines';
-import { DEFAULT_LEVEL } from 'core/log/base';
 
 /**
  * Creates a pipeline using config.
