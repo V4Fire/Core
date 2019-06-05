@@ -12,11 +12,11 @@ import { LogLevel } from 'core/log';
 import { cmpLevels } from 'core/log/base';
 
 export class LogPipeline {
-	private engine!: LogEngine;
-	private middlewares!: LogMiddleware[];
-	private nextCallback!: (events: CanArray<LogEvent>) => void;
-	private middlewareIndex: number = 0;
-	private minLevel!: LogLevel;
+	protected engine!: LogEngine;
+	protected middlewares!: LogMiddleware[];
+	protected nextCallback!: (events: CanArray<LogEvent>) => void;
+	protected middlewareIndex: number = 0;
+	protected minLevel!: LogLevel;
 
 	constructor(engine: LogEngine, middlewares: LogMiddleware[], minLevel: LogLevel) {
 		this.engine = engine;
@@ -46,7 +46,7 @@ export class LogPipeline {
 		this.next(events);
 	}
 
-	private next(events: CanArray<LogEvent>): void {
+	protected next(events: CanArray<LogEvent>): void {
 		this.middlewareIndex++;
 		if (this.middlewareIndex < this.middlewares.length) {
 			if (!this.middlewares[this.middlewareIndex]) {

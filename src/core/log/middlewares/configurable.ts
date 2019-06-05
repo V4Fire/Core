@@ -29,7 +29,7 @@ env.event.on('set.log', setConfig);
 env.event.on('remove.log', setConfig);
 
 export class ConfigurableMiddleware implements LogMiddleware {
-	private queue: LogEvent[] = [];
+	protected queue: LogEvent[] = [];
 
 	exec(events: CanArray<LogEvent>, next: NextCallback): void {
 		if (!options) {
@@ -72,7 +72,7 @@ export class ConfigurableMiddleware implements LogMiddleware {
 	 * Returns true if patterns allow to log a record with the specified context
 	 * @param context
 	 */
-	private filterContext(context: string): boolean {
+	protected filterContext(context: string): boolean {
 		if (options.patterns) {
 			for (let patterns = options.patterns, i = 0; i < patterns.length; i++) {
 				if (patterns[i].test(context)) {

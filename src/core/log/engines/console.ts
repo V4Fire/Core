@@ -13,8 +13,8 @@ import { LogEvent } from 'core/log/middlewares';
 import { LogStylesConfig, StylesCache } from 'core/log/config';
 
 export class ConsoleEngine implements LogEngine {
-	private stylesCache?: StylesCache;
-	private stringifiedStylesCache: Dictionary<string> = Object.createDict();
+	protected stylesCache?: StylesCache;
+	protected stringifiedStylesCache: Dictionary<string> = Object.createDict();
 
 	constructor(styles?: LogStylesConfig) {
 		if (styles) {
@@ -46,7 +46,7 @@ export class ConsoleEngine implements LogEngine {
 	 * Returns a string representing style for the specific logLevel
 	 * @param logLevel - level of log which needs a style
 	 */
-	private getStringifiedStyle(logLevel: LogLevel): string {
+	protected getStringifiedStyle(logLevel: LogLevel): string {
 		if (!this.stylesCache) {
 			return '';
 		}
