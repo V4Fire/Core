@@ -29,7 +29,7 @@ export function createStyleCache(styles: LogStylesConfig): StylesCache {
 	}
 
 	configCache.getStyle = (logLevel: LogLevel): CanUndef<Dictionary> => {
-		if (configCache[logLevel] !== undefined) {
+		if (configCache[logLevel]) {
 			return configCache[logLevel];
 		}
 

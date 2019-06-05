@@ -14,15 +14,16 @@ import middlewareFactory, { LogMiddleware } from 'core/log/middlewares';
 import engineFactory from 'core/log/engines';
 
 /**
- * Creates a pipeline using config.
- * Returns undefined if there are not enough data to create one.
+ * Creates a pipeline using config
+ * (returns undefined if there are not enough data to create one)
+ *
  * @param pipelineConfig
  */
 export function createPipeline(pipelineConfig: LogPipelineConfig): CanUndef<LogPipeline> {
 	const
 		{middlewares, engine, engineOptions, minLevel} = pipelineConfig;
 
-	if (middlewares !== undefined) {
+	if (middlewares) {
 		for (let i = 0; i < middlewares.length; ++i) {
 			if (!middlewareFactory[middlewares[i]]) {
 				console.error(`Can't find middleware '${middlewares[i]}'`);
@@ -40,7 +41,7 @@ export function createPipeline(pipelineConfig: LogPipelineConfig): CanUndef<LogP
 		engineInstance = engineFactory[engine](engineOptions),
 		middlewareInstances: LogMiddleware[] = [];
 
-	if (middlewares !== undefined) {
+	if (middlewares) {
 		for (let i = 0; i < middlewares.length; ++i) {
 			middlewareInstances.push(middlewareFactory[middlewares[i]]());
 		}

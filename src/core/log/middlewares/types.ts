@@ -6,8 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { LogLevel } from 'core/log';
 import middlewareFactory from 'core/log/middlewares';
+import { LogLevel } from 'core/log';
 
 export interface LogEvent {
 	readonly context: string;

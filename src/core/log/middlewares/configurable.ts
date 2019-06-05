@@ -39,6 +39,7 @@ export class ConfigurableMiddleware implements LogMiddleware {
 			} else {
 				this.queue.push(events);
 			}
+
 			return;
 		}
 

@@ -6,9 +6,10 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import pipelines from 'core/log/curator/pipelines';
+
 import { LogEvent } from 'core/log/middlewares';
 import { LogMessageOptions } from 'core/log';
-import pipelines from 'core/log/curator/pipelines';
 import { DEFAULT_LEVEL } from 'core/log/base';
 
 const
@@ -43,11 +44,11 @@ export default function log(context: string | LogMessageOptions, ...details: unk
 	}
 
 	const event: LogEvent = {
-			context: logContext,
-			level: logLevel,
-			details: logDetails,
-			error: logError
-		};
+		context: logContext,
+		level: logLevel,
+		details: logDetails,
+		error: logError
+	};
 
 	for (let i = 0; i < pipelines.length; ++i) {
 		try {

@@ -8,6 +8,7 @@
 
 import { ConfigurableMiddleware } from 'core/log/middlewares/configurable';
 import { LogMiddleware } from 'core/log/middlewares/types';
+
 export { extend, Extended } from 'core/log/base';
 export * from 'core/log/middlewares/types';
 

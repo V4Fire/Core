@@ -8,9 +8,13 @@
 
 import { LogLevel } from 'core/log';
 
-export const DEFAULT_LEVEL: LogLevel = 'info';
+export const
+	DEFAULT_LEVEL: LogLevel = 'info';
 
-type LogLevelOrder = Record<LogLevel, number>;
+type LogLevelOrder = Record<
+	LogLevel,
+	number
+>;
 
 const order: LogLevelOrder = {
 	error: 1,
@@ -19,11 +23,11 @@ const order: LogLevelOrder = {
 };
 
 /**
- * Compares log levels.
- * If left < right returns < 0.
- * If left > right returns > 0.
- * If left === right returns 0.
- * Non existing levels always lose.
+ * Compares log levels:
+ *
+ * < 0 if left < right
+ * > 0 if left > right
+ * = 0 if left === right
  *
  * @param left
  * @param right
@@ -31,11 +35,13 @@ const order: LogLevelOrder = {
 export function cmpLevels(left: LogLevel, right: LogLevel): number {
 	if (!order[left] && !order[right]) {
 		return 0;
+	}
 
-	} else if (!order[left]) {
+	if (!order[left]) {
 		return -1;
+	}
 
-	} else if (!order[right]) {
+	if (!order[right]) {
 		return 1;
 	}
 

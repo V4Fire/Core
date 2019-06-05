@@ -31,18 +31,19 @@ export class LogPipeline {
 	 */
 	run(events: CanArray<LogEvent>): void {
 		if (Array.isArray(events)) {
-			events = events.filter((e) => cmpLevels(this.minLevel, e.level) >= 0);
+			events = events
+				.filter((e) => cmpLevels(this.minLevel, e.level) >= 0);
+
 			if (!events.length) {
 				return;
 			}
 
-		} else {
-			if (cmpLevels(this.minLevel, events.level) < 0) {
-				return;
-			}
+		} else if (cmpLevels(this.minLevel, events.level) < 0) {
+			return;
 		}
 
-		this.middlewareIndex = -1; // ++ in next method
+		// ++ in next method
+		this.middlewareIndex = -1;
 		this.next(events);
 	}
 

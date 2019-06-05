@@ -34,7 +34,7 @@ export class ConsoleEngine implements LogEngine {
 			const
 				details = [...event.details];
 
-			if (!!event.error) {
+			if (Boolean(event.error)) {
 				details.concat(event.error);
 			}
 
