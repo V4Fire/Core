@@ -173,10 +173,6 @@ interface ObjectConstructor {
 	isWeakSet(obj: unknown): obj is WeakSet<object>;
 }
 
-interface Object {
-	toSource(): string;
-}
-
 interface Array<T> {
 	union<A extends unknown[]>(...args: A): A extends (infer V)[][] ?
 		Array<T | V> : A extends (infer V)[] ? Array<T | V> : T[];

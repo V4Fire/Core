@@ -27,7 +27,15 @@ export interface Executor<T = unknown> {
 	): void;
 }
 
-export default class Then<T = unknown> implements PromiseLike<T> {
+function Parent(): any {
+	//#if runtime has es6
+	return Promise;
+	//#endif
+
+	return class Loopback {};
+}
+
+export default class Then<T = unknown> extends Parent() implements PromiseLike<T> {
 	/**
 	 * Promise that never will be resolved
 	 */
@@ -233,6 +241,7 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	 * @param [parent] - parent promise
 	 */
 	constructor(executor: Executor<T>, parent?: Then) {
+		super(executor);
 		this.promise = new Promise((res, rej) => {
 			const resolve = this.resolve = (val) => {
 				if (!this.isPending) {
@@ -450,4 +459,6 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	}
 }
 
-Then.prototype = Object.mixin({withAccessors: true}, Object.create(Promise.prototype), Then.prototype);
+if (Parent() !== Promise) {
+	Then.prototype = Object.mixin({withAccessors: true}, Object.create(Promise.prototype), Then.prototype);
+}
