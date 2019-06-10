@@ -334,7 +334,7 @@ extend(Date, 'create', (pattern?: DateCreateValue) => {
 			return aliases[pattern]();
 		}
 
-		return Date.parse(pattern);
+		return new Date(Date.parse(pattern));
 	}
 
 	return new Date(pattern.valueOf());
