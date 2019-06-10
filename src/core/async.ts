@@ -45,10 +45,19 @@ export interface AsyncOpts {
 	group?: string;
 }
 
+export type ClearReasons =
+	'id' |
+	'label' |
+	'collision' |
+	'group' |
+	'rgxp' |
+	'all';
+
 export type AsyncCtx<T extends object = Async> = {
 	type: string;
 	link: AsyncLink<T>;
 	replacedBy?: AsyncLink<T>;
+	reason?: ClearReasons;
 } & AsyncOpts & ClearOptsId<unknown>;
 
 export interface AsyncCb<T extends object = Async> {
@@ -2175,7 +2184,7 @@ export default class Async<CTX extends object = Async<any>> {
 		};
 
 		if (labelCache) {
-			this.clearAsync({...p, replacedBy: link});
+			this.clearAsync({...p, replacedBy: link, reason: 'collision'});
 		}
 
 		links.set(id, link);
@@ -2196,7 +2205,7 @@ export default class Async<CTX extends object = Async<any>> {
 	protected clearAsync(p: Dictionary<any>, name?: string): this {
 		if (name) {
 			if (p === undefined) {
-				return this.clearAllAsync({name});
+				return this.clearAllAsync({name, reason: 'all'});
 			}
 
 			p = Object.isObject(p) ? {...p, name} : {name, id: p};
@@ -2219,7 +2228,7 @@ export default class Async<CTX extends object = Async<any>> {
 						group = keys[i];
 
 					if (p.group.test(group)) {
-						this.clearAsync({...p, group});
+						this.clearAsync({...p, group, reason: 'rgxp'});
 					}
 				}
 
@@ -2231,6 +2240,10 @@ export default class Async<CTX extends object = Async<any>> {
 			}
 
 			cache = baseCache.groups[p.group];
+
+			if (!p.reason) {
+				p.reason = 'group';
+			}
 
 		} else {
 			cache = baseCache.root;
@@ -2248,6 +2261,14 @@ export default class Async<CTX extends object = Async<any>> {
 			}
 
 			p.id = tmp;
+
+			if (!p.reason) {
+				p.reason = 'label';
+			}
+		}
+
+		if (!p.reason) {
+			p.reason = 'id';
 		}
 
 		if (p.id != null) {
