@@ -72,7 +72,7 @@ export default function log(context: string | LogMessageOpts, ...details: unknow
 }
 
 /**
- * Maps the specified details: executes functions and returns it result.
+ * Maps the specified details: executes functions and returns it result
  * @param details
  */
 function prepareDetails(details: unknown[]): unknown[] {
