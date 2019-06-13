@@ -203,7 +203,7 @@ extend(Object, 'forEach', (obj: any, cb: Function, params: ObjectForEachParams =
 		return;
 	}
 
-	if (Object.isTable(obj) || !obj[Symbol.iterator]) {
+	if (Object.isSimpleObject(obj) || !obj[Symbol.iterator]) {
 		if (params.notOwn) {
 			for (const key in obj) {
 				if (params.notOwn === -1 && hasOwnProperty.call(obj, key)) {
@@ -253,7 +253,7 @@ extend(Object, 'size', (obj: any) => {
 		return obj.size;
 	}
 
-	if (Object.isTable(obj)) {
+	if (Object.isSimpleObject(obj)) {
 		return Object.keys(obj).length;
 	}
 

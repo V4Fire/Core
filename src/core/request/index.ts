@@ -89,12 +89,14 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 		opts = args[0];
 	}
 
+	opts = opts || {};
+
 	const
-		baseCtx: RequestContext<T> = new RequestContext<T>(opts);
+		baseCtx: RequestContext<T> = new RequestContext<T>(merge(defaultRequestOpts, opts));
 
 	const run = (...args) => {
 		const
-			p = merge<CreateRequestOpts<T>>(defaultRequestOpts, baseCtx.params),
+			p = merge<CreateRequestOpts<T>>(baseCtx.params),
 			ctx = Object.create(baseCtx);
 
 		const wrapProcessor = (namespace, fn, key) => (data, ...args) => {

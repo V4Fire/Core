@@ -21,7 +21,7 @@ export function concatUrls(...urls: Nullable<string>[]): string {
 		let
 			url = urls[i];
 
-		if (url != null && url !== '') {
+		if (url == null || url === '') {
 			continue;
 		}
 
@@ -62,9 +62,9 @@ export function toQueryString(data: unknown, encode: boolean = true): string {
  * Creates an object from the specified querystring and returns it
  * @param str
  */
-export function fromQueryString<T extends Dictionary>(str: string): T {
+export function fromQueryString(str: string): Dictionary<string | null> {
 	const
-		res = <T>{};
+		res = {};
 
 	if (str[0] === '?') {
 		str = str.slice(1);
@@ -90,15 +90,15 @@ function chunkToQueryString(data: unknown, encode: boolean, prfx: string = ''): 
 	const
 		isArr = Object.isArray(data);
 
-	const reduce = (data) => {
-		data.sort();
+	const reduce = (arr) => {
+		arr.sort();
 
 		let
 			res = '';
 
-		for (let i = 0; i < data.length; i++) {
+		for (let i = 0; i < arr.length; i++) {
 			let
-				key = data[i];
+				key = arr[i];
 
 			const
 				val = (<Extract<typeof data, unknown[] | Dictionary>>data)[key],

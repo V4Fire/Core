@@ -93,7 +93,6 @@ interface ObjectConstructor {
 	set<T = unknown>(obj: unknown, path: string | unknown[], value: T, params?: ObjectSetParams): T;
 
 	size(obj: unknown): number;
-	keys(obj: object | Dictionary): string[];
 	forEach<V = unknown, K = unknown, D = unknown>(
 		obj: D,
 		cb: (el: V, key: K, data: D) => unknown,
@@ -102,31 +101,56 @@ interface ObjectConstructor {
 
 	fastCompare<T = unknown>(a: unknown, b: T): a is T;
 	fastClone<T = unknown>(obj: T, params?: FastCloneParams): T;
-	mixin<R = unknown, D = unknown, K = unknown, V = unknown>(
+
+	mixin<B = unknown, O1 = unknown>(
 		params: ObjectMixinParams | boolean,
-		base?: D,
+		base?: B,
+		obj1: O1
+	): B & O1;
+
+	mixin<B = unknown, O1 = unknown, O2 = unknown>(
+		params: ObjectMixinParams | boolean,
+		base?: B,
+		obj1: O1,
+		obj2: O2
+	): B & O1 & O2;
+
+	mixin<B = unknown, O1 = unknown, O2 = unknown, O3 = unknown>(
+		params: ObjectMixinParams | boolean,
+		base?: B,
+		obj1: O1,
+		obj2: O2,
+		obj3: O3
+	): B & O1 & O2 & O3;
+
+	mixin<R = unknown>(
+		params: ObjectMixinParams | boolean,
+		base?: unknown,
 		...objs: unknown[]
 	): R;
 
 	parse<V = unknown, R = unknown>(value: V): CanUndef<R>;
 	getPrototypeChain(constructor: Function): object[];
 
-	createDict<T extends Dictionary>(fields: T): {[P in keyof T]: T[P]};
-	createDict<T = unknown>(): Dictionary<T>;
-	createDict(...fields: unknown[]): Dictionary;
+	createDict<V = unknown>(): Dictionary<V>;
+	createDict<D extends object>(...fields: D[]): Pick<D, keyof D>;
 
-	createMap<T extends object, V = unknown>(obj: T):
-		T extends Dictionary<infer E> ?
-			Dictionary<E | string> : T extends Array<infer E> ? Dictionary<E | number> : Dictionary<V>;
+	createMap<D extends object, K extends keyof D>(obj: D):
+		D extends Array<infer E> ? Dictionary<E | number> : D & {[I: string]: K};
 
 	fromArray(arr: unknown[]): Dictionary<boolean>;
-	convertEnumToDict(obj: Dictionary): Dictionary<string>;
+	convertEnumToDict<D extends object>(obj: D): {[K in keyof D]: K};
 
-	select<T extends Dictionary = Dictionary>(obj: Dictionary, condition: CanArray<string> | Dictionary | RegExp): T;
-	reject<T extends Dictionary = Dictionary>(obj: Dictionary, condition: CanArray<string> | Dictionary | RegExp): T;
+	select<D extends object>(obj: D, condition: RegExp): {[K in keyof D]?: D[K]};
+	select<D extends object, C extends string>(obj: D, condition: CanArray<C>): Pick<D, Extract<keyof D, C>>;
+	select<D extends object, C extends object>(obj: D, condition: C): Pick<D, Extract<keyof D, keyof C>>;
 
-	isObject(obj: unknown): obj is object;
-	isTable(obj: unknown): obj is Dictionary;
+	reject<D extends object>(obj: D, condition: RegExp): {[K in keyof D]?: D[K]};
+	reject<D extends object, C extends string>(obj: D, condition: CanArray<C>): Omit<D, C>;
+	reject<D extends object, C extends object>(obj: D, condition: C): Omit<D, keyof C>;
+
+	isObject(obj: unknown): obj is Dictionary;
+	isSimpleObject(obj: unknown): obj is object;
 	isArray(obj: unknown): obj is unknown[];
 	isArrayLike(obj: unknown): obj is ArrayLike;
 
@@ -147,10 +171,6 @@ interface ObjectConstructor {
 	isWeakMap(obj: unknown): obj is WeakMap<object, unknown>;
 	isSet(obj: unknown): obj is Set<unknown>;
 	isWeakSet(obj: unknown): obj is WeakSet<object>;
-}
-
-interface Object {
-	toSource(): string;
 }
 
 interface Array<T> {
@@ -199,9 +219,9 @@ interface Number {
 	pad(place?: number, sign?: boolean, base?: number): string;
 	format(place?: number): string;
 
-	floor(precision?: number): string;
-	round(precision?: number): string;
-	ceil(precision?: number): string;
+	floor(precision?: number): number;
+	round(precision?: number): number;
+	ceil(precision?: number): number;
 }
 
 interface RegExpConstructor {
@@ -254,6 +274,12 @@ type DateHTMLStringParams =
 	DateHTMLTimeStringParams &
 	DateHTMLDateStringParams;
 
+interface DateRelative {
+	type: 'milliseconds' | 'seconds' | 'minutes' | 'hours' | 'days' | 'weeks' | 'months' | 'years';
+	value: number;
+	diff: number;
+}
+
 interface Date {
 	clone(): Date;
 
@@ -268,6 +294,9 @@ interface Date {
 	add(params: DateSetParams, reset?: boolean): Date;
 	set(params: DateSetParams, reset?: boolean): Date;
 	rewind(params: DateSetParams, reset?: boolean): Date;
+
+	relative(): DateRelative;
+	relativeTo(date: DateCreateValue): DateRelative;
 
 	is(date: DateCreateValue, margin?: number): boolean;
 	isAfter(date: DateCreateValue, margin?: number): boolean;

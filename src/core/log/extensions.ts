@@ -51,7 +51,6 @@ const extend = (func: Logger): ExtendedLogger => {
 	}
 
 	res.namespace = namespace;
-
 	return res;
 };
 

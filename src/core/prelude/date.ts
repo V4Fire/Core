@@ -126,6 +126,20 @@ extend(Date.prototype, 'set', createDateModifier());
 /** @see Sugar.Date.rewind */
 extend(Date.prototype, 'rewind', createDateModifier((v, b) => b - v));
 
+/**
+ * Returns a relative value for the current date
+ */
+extend(Date.prototype, 'relative', function (this: Date): DateRelative {
+	return relative(this, new Date());
+});
+
+/**
+ * Returns a relative value for the specified date
+ */
+extend(Date.prototype, 'relativeTo', function (this: Date, date: DateCreateValue): DateRelative {
+	return relative(this, date);
+});
+
 const shortOpts = {
 	month: 'numeric',
 	day: 'numeric',
@@ -238,13 +252,13 @@ extend(Date.prototype, 'toHTMLDateString', function (
 	params: DateHTMLDateStringParams = {}
 ): string {
 	const
-		s = String,
+		s = (v) => String(v).padStart(2, '0'),
 		needMonth = params.month !== false;
 
 	return [
 		this.getFullYear(),
-		needMonth ? s(this.getMonth() + 1).padStart(2, '0') : '01',
-		needMonth && params.date !== false ? s(this.getDate()).padStart(2, '0') : '01'
+		needMonth ? s(this.getMonth() + 1) : '01',
+		needMonth && params.date !== false ? s(this.getDate()) : '01'
 	].join('-');
 });
 
@@ -257,17 +271,18 @@ extend(Date.prototype, 'toHTMLTimeString', function (
 	params: DateHTMLTimeStringParams = {}
 ): string {
 	const
-		res = [this.getHours(), params.minutes ? this.getMinutes() : '00'];
+		s = (v) => String(v).padStart(2, '0'),
+		res = [s(this.getHours()), params.minutes ? s(this.getMinutes()) : '00'];
 
 	if (params.seconds) {
 		const
-			s = this.getSeconds();
+			sec = s(this.getSeconds());
 
 		if (params.milliseconds) {
-			res.push(`${s}.${this.getMilliseconds()}`);
+			res.push(`${sec}.${this.getMilliseconds()}`);
 
 		} else {
-			res.push(s);
+			res.push(sec);
 		}
 	}
 
@@ -319,13 +334,47 @@ extend(Date, 'create', (pattern?: DateCreateValue) => {
 			return aliases[pattern]();
 		}
 
-		return Date.parse(pattern);
+		return new Date(Date.parse(pattern));
 	}
 
 	return new Date(pattern.valueOf());
 });
 
-function createDateModifier(mod: (val: number, base: number) => number = Any): Function {
+function relative(from: DateCreateValue, to: DateCreateValue): DateRelative {
+	const
+		diff = Date.create(to).valueOf() - Date.create(from).valueOf();
+
+	const intervals = [
+		{type: 'milliseconds', bound: 1e3},
+		{type: 'seconds', bound: 1e3 * 60},
+		{type: 'minutes', bound: 1e3 * 60 * 60},
+		{type: 'hours', bound: 1e3 * 60 * 60 * 24},
+		{type: 'days', bound: 1e3 * 60 * 60 * 24 * 7},
+		{type: 'weeks', bound: 1e3 * 60 * 60 * 24 * 30},
+		{type: 'months', bound: 1e3 * 60 * 60 * 24 * 365}
+	];
+
+	for (let i = 0; i < intervals.length; i++) {
+		const
+			{type, bound} = intervals[i];
+
+		if (Math.abs(diff) < bound) {
+			return {
+				type: <DateRelative['type']>type,
+				value: Number((diff / (i ? intervals[i - 1].bound : 1)).toFixed(2)),
+				diff
+			};
+		}
+	}
+
+	return {
+		type: 'years',
+		value: Number((diff / intervals[intervals.length - 1].bound).toFixed(2)),
+		diff
+	};
+}
+
+function createDateModifier(mod: (val: number, base: number) => number = ((Any))): Function {
 	return function modifyDate(this: Date, params: DateSetParams, reset?: boolean): Date {
 		const
 			resetValues = <Record<keyof DateSetParams, boolean>>{};

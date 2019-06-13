@@ -25,7 +25,7 @@ import {
 
 } from 'core/request/interface';
 
-export type json =
+export type JSONLike =
 	string |
 	number |
 	boolean |
@@ -117,7 +117,7 @@ export default class Response {
 	 * Parses .body as .sourceType and returns the result
 	 */
 	@once
-	decode<T = Nullable<string | json | ArrayBuffer | Blob | Document | unknown>>(): Then<T> {
+	decode<T extends Nullable<string | JSONLike | ArrayBuffer | Blob | Document | unknown>>(): Then<T> {
 		let data;
 		switch (this.sourceResponseType) {
 			case 'json':
@@ -193,12 +193,12 @@ export default class Response {
 	/**
 	 * Parses .body as JSON and returns the result
 	 */
-	json<T = json>(): Then<T | null> {
+	json<T extends JSONLike>(): Then<T | null> {
 		if (this.sourceResponseType !== 'json') {
 			throw new TypeError('Invalid data sourceType');
 		}
 
-		type _ = string | json | null;
+		type _ = string | JSONLike | null;
 
 		const
 			body = <_>this.body;

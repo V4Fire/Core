@@ -67,7 +67,7 @@ class Config {
 	 * @param {Object=} [envs] - map of environment variables
 	 * @param {(string|Object)=} [mod] - url for a config modifier or an object modifier (env configs)
 	 * @param {T} opts
-	 * @returns {C<T>}
+	 * @returns {!Object}
 	 */
 	createConfig({dirs, envs, mod}, opts) {
 		const

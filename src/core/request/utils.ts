@@ -22,10 +22,13 @@ export function getStorageKey(key: string): string {
  * @param url
  * @param [params]
  */
-export function getRequestKey(url: string, params?: CreateRequestOpts): string {
+export function getRequestKey<T>(url: string, params?: CreateRequestOpts<T>): string {
 	const
 		p = <NonNullable<typeof params>>(params || {}),
 		plainHeaders = <string[][]>[];
+
+	let
+		bodyKey = '';
 
 	if (params) {
 		for (let o = normalizeHeaders(p.headers), keys = Object.keys(o), i = 0; i < keys.length; i++) {
@@ -44,9 +47,49 @@ export function getRequestKey(url: string, params?: CreateRequestOpts): string {
 
 			return 0;
 		});
+
+		const
+			{body} = params;
+
+		if (body != null) {
+			if (Object.isString(body)) {
+				bodyKey = body;
+
+			} else if (Object.isObject(body)) {
+				bodyKey = JSON.stringify(body);
+
+			} else if (body instanceof FormData) {
+				body.forEach((el, key) => {
+					if (el == null) {
+						el = String(el);
+					}
+
+					if (!Object.isString(el)) {
+						try {
+							// @ts-ignore
+							el = el.toString('base64');
+
+						} catch {
+							el = el.toString();
+						}
+					}
+
+					bodyKey += `${key}=${el}`;
+				});
+
+			} else {
+				try {
+					// @ts-ignore
+					bodyKey = body.toString('base64');
+
+				} catch {
+					bodyKey = body.toString();
+				}
+			}
+		}
 	}
 
-	return JSON.stringify([url, p.method, plainHeaders, p.timeout]);
+	return JSON.stringify([url, p.method, plainHeaders, bodyKey, p.timeout]);
 }
 
 const

@@ -103,5 +103,5 @@ extend(GLOBAL, 'getEnv', (key) => get(key).then((val) => {
 	return val;
 }));
 
-extend(GLOBAL, 'setEnv', () => set);
-extend(GLOBAL, 'removeEnv', () => remove);
+extend(GLOBAL, 'setEnv', set);
+extend(GLOBAL, 'removeEnv', remove);
