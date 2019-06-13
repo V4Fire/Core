@@ -321,7 +321,7 @@ module.exports = config.createConfig(
 				5: 'ES5',
 				6: 'ES6',
 				7: 'ES2016',
-				0: 'ESNext'
+				8: 'ESNext'
 			}
 			return {
 				transpileOnly: true,
@@ -343,7 +343,7 @@ module.exports = config.createConfig(
 						5: true,
 						6: true,
 						7: true,
-						0: true
+						8: true
 					}[v])
 				}
 			});
