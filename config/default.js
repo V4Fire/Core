@@ -331,9 +331,6 @@ module.exports = config.createConfig(
 			};
 		},
 
-		/**
-		 * 0 - for ESNext
-		 */
 		es() {
 			return o('es', {
 				env: true,
