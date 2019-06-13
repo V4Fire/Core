@@ -316,20 +316,36 @@ module.exports = config.createConfig(
 		},
 
 		typescript() {
+			const map = {
+				3: 'ES3',
+				5: 'ES5',
+				6: 'ES6',
+				7: 'ES2016',
+				0: 'ESNext'
+			}
 			return {
 				transpileOnly: true,
-				target: this.es()
+				target: map[this.es()]
 			};
 		},
 
 		/**
-		 * --target option
-		 * @see https://www.typescriptlang.org/docs/handbook/compiler-options.html
+		 * 0 - for ESNext
 		 */
 		es() {
 			return o('es', {
 				env: true,
-				default: 'ES5'
+				default: 5,
+				type: 'number',
+				validate(v) {
+					return Boolean({
+						3: true,
+						5: true,
+						6: true,
+						7: true,
+						0: true
+					}[v])
+				}
 			});
 		},
 
