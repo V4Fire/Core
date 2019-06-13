@@ -325,7 +325,9 @@ module.exports = config.createConfig(
 			}
 			return {
 				transpileOnly: true,
-				target: map[this.es()]
+				compilerOptions: {
+					target: map[this.es()]
+				}
 			};
 		},
 
