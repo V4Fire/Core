@@ -317,8 +317,20 @@ module.exports = config.createConfig(
 
 		typescript() {
 			return {
-				transpileOnly: true
+				transpileOnly: true,
+				target: this.es()
 			};
+		},
+
+		/**
+		 * --target option
+		 * @see https://www.typescriptlang.org/docs/handbook/compiler-options.html
+		 */
+		es() {
+			return o('es', {
+				env: true,
+				default: 'ES5'
+			});
 		},
 
 		src: {
