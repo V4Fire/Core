@@ -28,7 +28,7 @@ export interface Executor<T = unknown> {
 }
 
 function Parent(): any {
-	//#if runtime has es6
+	//#if es > 5
 	return Promise;
 	//#endif
 
