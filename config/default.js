@@ -316,13 +316,6 @@ module.exports = config.createConfig(
 		},
 
 		typescript() {
-			const map = {
-				3: 'ES3',
-				5: 'ES5',
-				6: 'ES6',
-				7: 'ES2016',
-				8: 'ESNext'
-			}
 			return {
 				transpileOnly: true,
 				compilerOptions: {
@@ -334,15 +327,14 @@ module.exports = config.createConfig(
 		es() {
 			return o('es', {
 				env: true,
-				default: 5,
-				type: 'number',
+				default: 'ES5',
 				validate(v) {
 					return Boolean({
-						3: true,
-						5: true,
-						6: true,
-						7: true,
-						8: true
+						'ES3': true,
+						'ES5': true,
+						'ES6': true,
+						'ES2016': true,
+						'ESNext': true
 					}[v])
 				}
 			});
