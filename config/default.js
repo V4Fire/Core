@@ -319,7 +319,7 @@ module.exports = config.createConfig(
 			return {
 				transpileOnly: true,
 				compilerOptions: {
-					target: map[this.es()]
+					target: this.es()
 				}
 			};
 		},
