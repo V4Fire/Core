@@ -334,7 +334,11 @@ extend(Date, 'create', (pattern?: DateCreateValue) => {
 			return aliases[pattern]();
 		}
 
-		return Date.parse(pattern);
+		const
+			normalize = (p) => p.replace(' ', 'T'),
+			timestamp = Date.parse(normalize(pattern));
+
+		return new Date(timestamp);
 	}
 
 	return new Date(pattern.valueOf());
