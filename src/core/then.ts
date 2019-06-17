@@ -28,8 +28,10 @@ export interface Executor<T = unknown> {
 }
 
 function Parent(): any {
-	//#if es > 5
+	//#if es != ES5
+	//#if es != ES3
 	return Promise;
+	//#endif
 	//#endif
 
 	return class Loopback {};
