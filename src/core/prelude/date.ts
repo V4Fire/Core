@@ -334,11 +334,7 @@ extend(Date, 'create', (pattern?: DateCreateValue) => {
 			return aliases[pattern]();
 		}
 
-		const
-			normalize = (p) => p.replace(' ', 'T'),
-			timestamp = Date.parse(normalize(pattern));
-
-		return new Date(timestamp);
+		return new Date(Date.parse(pattern));
 	}
 
 	return new Date(pattern.valueOf());
@@ -378,7 +374,7 @@ function relative(from: DateCreateValue, to: DateCreateValue): DateRelative {
 	};
 }
 
-function createDateModifier(mod: (val: number, base: number) => number = Any): Function {
+function createDateModifier(mod: (val: number, base: number) => number = ((Any))): Function {
 	return function modifyDate(this: Date, params: DateSetParams, reset?: boolean): Date {
 		const
 			resetValues = <Record<keyof DateSetParams, boolean>>{};

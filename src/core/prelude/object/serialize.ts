@@ -8,19 +8,6 @@
 
 import extend from 'core/prelude/extend';
 
-//#if runtime has Object->toSource
-
-import toSource = require('tosource');
-
-/**
- * Object.toSource implementation
- */
-extend(Object.prototype, 'toSource', function (): string {
-	return toSource(this);
-});
-
-//#endif
-
 /**
  * Parses the specified value as a JSON / JS object and returns the result
  * @param value

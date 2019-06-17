@@ -6,36 +6,33 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { GLOBAL } from 'core/env';
 import log from 'core/log';
+import extend from 'core/prelude/extend';
+import { GLOBAL } from 'core/env';
 
 /**
  * Converts the specified unknown value to any
  * @param obj
  */
-GLOBAL.Any = function Any(obj: unknown): any {
-	return obj;
-};
+extend(GLOBAL, 'Any', (obj) => obj);
 
 /**
  * STDERR wrapper
  * @param err
  */
-GLOBAL.stderr = function stderr(err: unknown): void {
+extend(GLOBAL, 'stderr', (err) => {
 	if (err instanceof Object) {
 		if ({clearAsync: true, abort: true}[String((<Dictionary>err).type)]) {
+			log.info('stderr', err);
 			return;
 		}
 
 		log.error('stderr', err);
 	}
-};
+});
 
 /**
  * dev/null wrapper
  * @param obj
  */
-GLOBAL.devNull = function stderr(obj: unknown): void {
-	// tslint:disable-next-line
-	return void obj;
-};
+extend(GLOBAL, 'devNull', () => { /* empty */ });

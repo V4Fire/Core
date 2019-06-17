@@ -24,9 +24,7 @@ const
 export default function log(context: string | LogMessageOpts, ...details: unknown[]): void {
 	let
 		logContext: string,
-		logLevel = DEFAULT_LEVEL,
-		logDetails = prepareDetails(details),
-		logError: CanUndef<Error>;
+		logLevel = DEFAULT_LEVEL;
 
 	if (Object.isString(context)) {
 		logContext = context || DEFAULT_CONTEXT;
@@ -38,16 +36,28 @@ export default function log(context: string | LogMessageOpts, ...details: unknow
 
 	logContext = `${logContext}:${logLevel}`;
 
-	if (details && details.length && details[0] instanceof Error) {
+	let
+		logDetails,
+		logError: CanUndef<Error>;
+
+	if (details[0] instanceof Error) {
 		logError = details[0] as Error;
-		logDetails = logDetails.slice(1);
+		details = details.slice(1);
 	}
 
 	const event: LogEvent = {
 		context: logContext,
+
 		level: logLevel,
-		details: logDetails,
-		error: logError
+		error: logError,
+
+		get details(): unknown[] {
+			if (logDetails) {
+				return logDetails;
+			}
+
+			return logDetails = prepareDetails(details);
+		}
 	};
 
 	for (let i = 0; i < pipelines.length; ++i) {
@@ -62,7 +72,7 @@ export default function log(context: string | LogMessageOpts, ...details: unknow
 }
 
 /**
- * Maps the specified details: executes functions and returns it result.
+ * Maps the specified details: executes functions and returns it result
  * @param details
  */
 function prepareDetails(details: unknown[]): unknown[] {
