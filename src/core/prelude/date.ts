@@ -321,7 +321,7 @@ const aliases = {
 };
 
 const
-	isoRegExp = /^(\d{4}-\d{2}-\d{2})([T ])(\d{2}\:\d{2}\:\d{2})([+-]\d{2}\:\d{2})?$/;
+	isoRegExp = /^(\d{4}-\d{2}-\d{2})([T ])(\d{2}:\d{2}:\d{2}(?:.\d{3})?)([+-]\d{2}:\d{2})?$/;
 
 /**
  * Creates a date from the specified pattern
