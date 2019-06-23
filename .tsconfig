@@ -2,7 +2,6 @@
   "compilerOptions": {
     "baseUrl": ".",
     "target": "es5",
-    "module": "commonjs",
     "downlevelIteration": true,
     "esModuleInterop": true,
     "importHelpers": true,
