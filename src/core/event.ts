@@ -69,7 +69,7 @@ export function onEverythingReady(cb: () => void, ...flags: string[]): (flag: st
 		ready = false;
 
 	return (flag) => {
-		if (ready) {
+		if (ready || flagsStatus[flag]) {
 			return;
 		}
 

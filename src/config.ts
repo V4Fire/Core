@@ -47,7 +47,7 @@ const config: Config = {
 		/**
 		 * Online check url
 		 */
-		checkURL: 'https://www.google.com/favicon.ico',
+		checkURL: '',
 
 		/**
 		 * Online check interval

@@ -47,10 +47,17 @@ export function isOnline(): Promise<{status: boolean; lastOnline?: Date}> {
 			url = online.checkURL,
 			prevStatus = status;
 
+		if (!url) {
+			return {
+				status: true,
+				lastOnline: undefined
+			};
+		}
+
 		let
 			loadFromStorage;
 
-		if (online.persistence && !lastOnline && url) {
+		if (online.persistence && !lastOnline) {
 			if (!storage) {
 				throw new ReferenceError('kv-storage module is not loaded');
 			}
@@ -63,12 +70,6 @@ export function isOnline(): Promise<{status: boolean; lastOnline?: Date}> {
 		}
 
 		status = await new Promise<boolean>((resolve) => {
-			if (!url) {
-				retryCount = 0;
-				resolve(true);
-				return;
-			}
-
 			const retry = () => {
 				if (!online.retryCount || status === undefined || ++retryCount > online.retryCount) {
 					resolve(false);
