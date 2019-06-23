@@ -4,6 +4,7 @@
     "target": "es5",
     "module": "commonjs",
     "downlevelIteration": true,
+    "esModuleInterop": true,
     "importHelpers": true,
     "lib": ["dom", "esnext"],
     "allowJs": false,
