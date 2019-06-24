@@ -320,6 +320,9 @@ const aliases = {
 	}
 };
 
+const
+	isoRegExp = /^(\d{4}-\d{2}-\d{2})([T ])(\d{2}\:\d{2}\:\d{2})([+-]\d{2}\:\d{2})?$/;
+
 /**
  * Creates a date from the specified pattern
  * @param [pattern]
@@ -329,12 +332,28 @@ extend(Date, 'create', (pattern?: DateCreateValue) => {
 		return new Date();
 	}
 
+	const
+		createISOTime = () => {
+			const h = new Date().getTimezoneOffset() / 60;
+			return `${h <= 0 ? '+' : '-'}0${Math.abs(h)}:00`;
+		};
+
 	if (Object.isString(pattern)) {
 		if (pattern in aliases) {
 			return aliases[pattern]();
 		}
 
-		return new Date(Date.parse(pattern.replace(' ', 'T')));
+		if (isoRegExp.test(pattern)) {
+			pattern = pattern.replace(
+				isoRegExp,
+				(str, date, t, time, zone) => `${date}T${time}${zone ? '' : createISOTime()}`
+			);
+
+		} else {
+			return new Date();
+		}
+
+		return new Date(Date.parse(pattern));
 	}
 
 	return new Date(pattern.valueOf());
