@@ -321,7 +321,7 @@ const aliases = {
 };
 
 const
-	isoRegExp = /^(\d{4}-\d{2}-\d{2})([T ])(\d{2}\:\d{2}\:\d{2})([+-]\d{2}\:\d{2})?$/;
+	isoRgxp = /^(\d{4}-\d{2}-\d{2})([T ])(\d{2}\:\d{2}\:\d{2})([+-]\d{2}\:\d{2})?$/;
 
 /**
  * Creates a date from the specified pattern
@@ -332,21 +332,19 @@ extend(Date, 'create', (pattern?: DateCreateValue) => {
 		return new Date();
 	}
 
-	const createISOTime = () => {
-		const h = new Date().getTimezoneOffset() / 60;
-		return `${h <= 0 ? '+' : '-'}0${Math.abs(h)}:00`;
-	};
-
 	if (Object.isString(pattern)) {
 		if (pattern in aliases) {
 			return aliases[pattern]();
 		}
 
-		if (isoRegExp.test(pattern)) {
-			pattern = pattern.replace(
-				isoRegExp,
-				(str, date, t, time, zone) => `${date}T${time}${zone ? '' : createISOTime()}`
-			);
+		if (isoRgxp.test(pattern)) {
+			const createISOTime = () => {
+				const h = new Date().getTimezoneOffset() / 60;
+				return `${h <= 0 ? '+' : '-'}0${Math.abs(h)}:00`;
+			};
+
+			const replace = (str, date, t, time, zone) => `${date}T${time}${zone ? '' : createISOTime()}`;
+			pattern = pattern.replace(isoRgxp, replace);
 
 		} else {
 			return new Date();
