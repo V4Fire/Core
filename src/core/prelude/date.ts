@@ -332,11 +332,10 @@ extend(Date, 'create', (pattern?: DateCreateValue) => {
 		return new Date();
 	}
 
-	const
-		createISOTime = () => {
-			const h = new Date().getTimezoneOffset() / 60;
-			return `${h <= 0 ? '+' : '-'}0${Math.abs(h)}:00`;
-		};
+	const createISOTime = () => {
+		const h = new Date().getTimezoneOffset() / 60;
+		return `${h <= 0 ? '+' : '-'}0${Math.abs(h)}:00`;
+	};
 
 	if (Object.isString(pattern)) {
 		if (pattern in aliases) {
