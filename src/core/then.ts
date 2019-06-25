@@ -28,8 +28,10 @@ export interface Executor<T = unknown> {
 }
 
 function Parent(): any {
-	//#if runtime has es6
+	//#if es != ES5
+	//#if es != ES3
 	return Promise;
+	//#endif
 	//#endif
 
 	return class Loopback {};
@@ -241,7 +243,8 @@ export default class Then<T = unknown> extends Parent() implements PromiseLike<T
 	 * @param [parent] - parent promise
 	 */
 	constructor(executor: Executor<T>, parent?: Then) {
-		super(executor);
+		// tslint:disable-next-line: no-empty
+		super((res, rej) => {});
 		this.promise = new Promise((res, rej) => {
 			const resolve = this.resolve = (val) => {
 				if (!this.isPending) {

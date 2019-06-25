@@ -316,9 +316,33 @@ module.exports = config.createConfig(
 		},
 
 		typescript() {
+			const
+				es = this.es(),
+				importHelpers = Boolean({ES3: true, ES5: true, ES6: true})[es];
+
 			return {
-				transpileOnly: true
+				transpileOnly: true,
+				compilerOptions: {
+					target: es,
+					importHelpers
+				}
 			};
+		},
+
+		es() {
+			return o('es', {
+				env: true,
+				default: 'ES5',
+				validate(v) {
+					return Boolean({
+						'ES3': true,
+						'ES5': true,
+						'ES6': true,
+						'ES2016': true,
+						'ESNext': true
+					}[v])
+				}
+			});
 		},
 
 		src: {
