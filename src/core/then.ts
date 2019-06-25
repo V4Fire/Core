@@ -27,17 +27,7 @@ export interface Executor<T = unknown> {
 	): void;
 }
 
-function Parent(): any {
-	//#if es != ES5
-	//#if es != ES3
-	return Promise;
-	//#endif
-	//#endif
-
-	return class Loopback {};
-}
-
-export default class Then<T = unknown> extends Parent() implements PromiseLike<T> {
+export default class Then<T = unknown> implements PromiseLike<T> {
 	/**
 	 * Promise that never will be resolved
 	 */
@@ -243,8 +233,6 @@ export default class Then<T = unknown> extends Parent() implements PromiseLike<T
 	 * @param [parent] - parent promise
 	 */
 	constructor(executor: Executor<T>, parent?: Then) {
-		// tslint:disable-next-line: no-empty
-		super((res, rej) => {});
 		this.promise = new Promise((res, rej) => {
 			const resolve = this.resolve = (val) => {
 				if (!this.isPending) {
@@ -460,8 +448,4 @@ export default class Then<T = unknown> extends Parent() implements PromiseLike<T
 			reject(err);
 		}
 	}
-}
-
-if (Parent() !== Promise) {
-	Then.prototype = Object.mixin({withAccessors: true}, Object.create(Promise.prototype), Then.prototype);
 }
