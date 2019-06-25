@@ -208,11 +208,11 @@ module.exports = config.createConfig(
 			}
 		}),
 
-		lang: o('lang', {
+		locale: o('locale', {
 			env: true,
 			default: 'en',
 			coerce(value) {
-				global['LANG'] = value;
+				global['LOCALE'] = value;
 				return value;
 			}
 		}),
@@ -300,7 +300,7 @@ module.exports = config.createConfig(
 				vars: {
 					...this.envs,
 					appName: this.appName,
-					lang: this.lang,
+					locale: this.locale,
 					version: include('package.json').version,
 					buildVersion: this.build.id(),
 					isProd
