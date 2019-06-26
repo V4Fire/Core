@@ -21,6 +21,10 @@ export const
  */
 export const IS_NODE: boolean = (() => {
 	try {
+		const
+			// tslint:disable-next-line
+			process = GLOBAL['process'];
+
 		// @ts-ignore
 		return typeof process === 'object' && {}.toString.call(process) === '[object process]';
 
