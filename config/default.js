@@ -210,7 +210,7 @@ module.exports = config.createConfig(
 
 		locale: o('locale', {
 			env: true,
-			default: 'en',
+			default: 'en-US',
 			coerce(value) {
 				global['LOCALE'] = value;
 				return value;
