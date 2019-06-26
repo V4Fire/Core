@@ -8,18 +8,14 @@
 
 import extend from 'core/prelude/extend';
 
-const
-	toString = Object.prototype.toString,
-	baseProto = Object.prototype;
-
 /** @see Sugar.Object.isObject */
 extend(Object, 'isObject', (obj) => {
-	if (!obj || typeof obj !== 'object' || toString.call(obj) !== '[object Object]') {
+	if (!obj || typeof obj !== 'object') {
 		return false;
 	}
 
-	const proto = Object.getPrototypeOf(obj);
-	return proto === null || proto === baseProto;
+	const constr = obj.constructor;
+	return !constr || constr === Object;
 });
 
 /** @see Sugar.Object.isArray */
@@ -104,6 +100,9 @@ extend(Object, 'isIterator', (obj) => {
 	return typeof Symbol === 'function' ? obj[Symbol.iterator] : typeof obj['@@iterator'] === 'function';
 });
 
+const
+	toString = Object.prototype.toString;
+
 /**
  * Returns true if the specified value is a HashTable object
  * @param obj
@@ -116,13 +115,9 @@ extend(Object, 'isSimpleObject', (obj) =>
  * @param obj
  */
 extend(Object, 'isPromise', (obj) => {
-	if (toString.call(obj) === '[object Promise]') {
-		return true;
-	}
-
-	if (obj instanceof Object) {
+	if (obj) {
 		const v = <Dictionary>obj;
-		return Object.isFunction(v.then) && Object.isFunction(v.catch);
+		return typeof v.then === 'function' && typeof v.catch === 'function';
 	}
 
 	return false;
