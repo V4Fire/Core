@@ -338,11 +338,10 @@ extend(Date, 'create', (pattern?: DateCreateValue) => {
 		}
 
 		if (isoRegExp.test(pattern)) {
-			const
-				createISOTime = () => {
-					const h = new Date().getTimezoneOffset() / 60;
-					return `${h <= 0 ? '+' : '-'}0${Math.abs(h)}:00`;
-				};
+			const createISOTime = () => {
+				const h = new Date().getTimezoneOffset() / 60;
+				return `${h <= 0 ? '+' : '-'}0${Math.abs(h)}:00`;
+			};
 
 			pattern = pattern.replace(
 				isoRegExp,
