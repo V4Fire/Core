@@ -6,6 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import { GLOBAL } from 'core/env';
+
 export const enum State {
 	pending,
 	fulfilled,
@@ -27,15 +29,7 @@ export interface Executor<T = unknown> {
 	): void;
 }
 
-function Parent(): any {
-	//#if runtime has es6
-	return Promise;
-	//#endif
-
-	return class Loopback {};
-}
-
-export default class Then<T = unknown> extends Parent() implements PromiseLike<T> {
+export default class Then<T = unknown> implements PromiseLike<T> {
 	/**
 	 * Promise that never will be resolved
 	 */
@@ -61,12 +55,14 @@ export default class Then<T = unknown> extends Parent() implements PromiseLike<T
 	 */
 	static immediate<T = unknown>(value?: ExecValue<T>, parent?: Then): Then<T> {
 		return new Then((res, rej, onAbort) => {
-			const id = setImmediate(() => {
+			// tslint:disable-next-line:no-string-literal
+			const id = GLOBAL['setImmediate'](() => {
 				res(value && Object.isFunction(value) ? (<Function>value)() : value);
 			});
 
 			onAbort((err) => {
-				clearImmediate(id);
+				// tslint:disable-next-line:no-string-literal
+				GLOBAL['clearImmediate'](id);
 				if (value instanceof Then) {
 					value.abort(err);
 				}
@@ -241,7 +237,6 @@ export default class Then<T = unknown> extends Parent() implements PromiseLike<T
 	 * @param [parent] - parent promise
 	 */
 	constructor(executor: Executor<T>, parent?: Then) {
-		super(executor);
 		this.promise = new Promise((res, rej) => {
 			const resolve = this.resolve = (val) => {
 				if (!this.isPending) {
@@ -457,8 +452,4 @@ export default class Then<T = unknown> extends Parent() implements PromiseLike<T
 			reject(err);
 		}
 	}
-}
-
-if (Parent() !== Promise) {
-	Then.prototype = Object.mixin({withAccessors: true}, Object.create(Promise.prototype), Then.prototype);
 }

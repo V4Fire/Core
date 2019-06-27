@@ -6,6 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import { GLOBAL } from 'core/env';
+
 export type Value<V = unknown> = V | PromiseLike<V>;
 export type QueueWorker<T = unknown, V = unknown> = (task: T) => Value<V>;
 export type TaskDict<T = unknown, V = unknown> = Dictionary<{
@@ -90,7 +92,8 @@ export default abstract class Queue<T, V = unknown> {
 			setTimeout(cb, i);
 
 		} else {
-			setImmediate(cb);
+			// tslint:disable-next-line:no-string-literal
+			GLOBAL['setImmediate'](cb);
 		}
 	}
 

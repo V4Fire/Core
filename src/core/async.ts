@@ -8,6 +8,7 @@
 
 /* tslint:disable:max-file-line-count */
 
+import { GLOBAL } from 'core/env';
 import { createSyncPromise } from 'core/event';
 
 export const
@@ -278,18 +279,12 @@ export default class Async<CTX extends object = Async<any>> {
 	 *   *) [onMerge] - merge handler (join: true)
 	 */
 	setImmediate(fn: Function, params?: AsyncCbOpts<CTX>): Nullable<TimerId> {
-		let
-			wrapper,
-			clearFn;
+		const
+			// tslint:disable-next-line
+			wrapper = GLOBAL['setImmediate'],
 
-		if (typeof setImmediate !== 'function') {
-			wrapper = (fn) => setTimeout(fn, 0);
-			clearFn = clearTimeout;
-
-		} else {
-			wrapper = setImmediate;
-			clearFn = clearImmediate;
-		}
+			// tslint:disable-next-line
+			clearFn = GLOBAL['clearImmediate'];
 
 		return this.setAsync({
 			...params,

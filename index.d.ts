@@ -9,7 +9,7 @@
 declare const APP_NAME: string;
 declare const API_URL: CanUndef<string>;
 declare const IS_PROD: boolean;
-declare const LANG: string;
+declare const LOCALE: string;
 
 declare function Any(obj: unknown): any;
 declare function stderr(err: unknown): void;

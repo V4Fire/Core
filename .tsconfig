@@ -3,6 +3,7 @@
     "baseUrl": ".",
     "target": "es5",
     "downlevelIteration": true,
+    "esModuleInterop": true,
     "importHelpers": true,
     "lib": ["dom", "esnext"],
     "allowJs": false,

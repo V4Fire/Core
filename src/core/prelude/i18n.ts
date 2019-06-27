@@ -47,29 +47,29 @@ Object.forEach(dict, (el) => {
  * System language
  */
 export let
-	lang: string,
-	isLangDef: boolean,
+	locale: string,
+	isLocaleDef: boolean,
 	isInitialized: Promise<void> = Promise.resolve();
 
 if (IS_NODE) {
-	setLang(config.lang);
+	setLocale(config.locale);
 
 } else {
 	isInitialized = (async () => {
 		try {
 			const
 				s = await storage,
-				l = await s.get<string>('lang');
+				l = await s.get<string>('locale');
 
 			if (l) {
-				setLang(l, await s.get<boolean>('isLangDef'));
+				setLocale(l, await s.get<boolean>('isLocaleDef'));
 				return;
 			}
 
 			throw new Error('Default language');
 
 		} catch {
-			setLang(config.lang, true);
+			setLocale(config.locale, true);
 		}
 	})();
 }
@@ -79,24 +79,24 @@ if (IS_NODE) {
  *
  * @param [value]
  * @param [def] - if true, then the language is system default
- * @emits setLang(value: string, oldValue?: string)
+ * @emits setLocale(value: string, oldValue?: string)
  */
-export function setLang(value: string, def?: boolean): string {
+export function setLocale(value: string, def?: boolean): string {
 	const
-		oldLang = lang;
+		oldLang = locale;
 
-	lang = value;
-	isLangDef = Boolean(def);
+	locale = value;
+	isLocaleDef = Boolean(def);
 
 	if (!IS_NODE && storage) {
 		storage.then((storage) => Promise.all([
-			storage.set('lang', value),
-			storage.set('isLangDef', isLangDef)
+			storage.set('locale', value),
+			storage.set('isLocaleDef', isLocaleDef)
 		])).catch(stderr);
 	}
 
-	event.emit('setLang', lang, oldLang);
-	return lang;
+	event.emit('setLocale', locale, oldLang);
+	return locale;
 }
 
 extend(GLOBAL, 'i18n', globalI18n);
@@ -163,7 +163,7 @@ function globalI18n(strings: unknown | string[], ...exprs: unknown[]): string {
  */
 function localI18n(val: unknown, defLang?: string): string {
 	const str = String(val);
-	defLang = defLang === undefined ? lang : defLang;
+	defLang = defLang === undefined ? locale : defLang;
 
 	if (defLang) {
 		const w = langs[defLang] && langs[defLang][str];

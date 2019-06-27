@@ -9,6 +9,3 @@
 export * from 'core/helpers/date';
 export * from 'core/helpers/string';
 export * from 'core/helpers/other';
-export * from 'core/json';
-export * from 'core/url';
-export * from 'core/net';

@@ -11,7 +11,7 @@ import { LogConfig } from 'core/log';
 export interface Config {
 	appName?: CanUndef<string>;
 	api?: CanUndef<string>;
-	lang: string;
+	locale: string;
 	log: LogConfig;
 	online: {
 		checkURL?: CanUndef<string>;
@@ -28,7 +28,7 @@ const config: Config = {
 	/**
 	 * Default system language
 	 */
-	lang: LANG,
+	locale: LOCALE,
 
 	/**
 	 * Base API URL
