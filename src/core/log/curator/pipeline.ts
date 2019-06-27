@@ -31,12 +31,23 @@ export class LogPipeline {
 	 */
 	run(events: CanArray<LogEvent>): void {
 		if (Array.isArray(events)) {
-			events = events
-				.filter((e) => cmpLevels(this.minLevel, e.level) >= 0);
+			const
+				filteredEvents = <LogEvent[]>[];
 
-			if (!events.length) {
+			for (let i = 0; i < events.length; i++) {
+				const
+					el = events[i];
+
+				if (cmpLevels(this.minLevel, el.level) >= 0) {
+					filteredEvents.push(el);
+				}
+			}
+
+			if (!filteredEvents.length) {
 				return;
 			}
+
+			events = filteredEvents;
 
 		} else if (cmpLevels(this.minLevel, events.level) < 0) {
 			return;
