@@ -10,6 +10,7 @@ import extend from 'core/prelude/extend';
 import { convertIfDate } from 'core/json';
 
 const
+	simpleCloneLabel = Symbol('Simple clone label'),
 	hasOwnProperty = Object.prototype.hasOwnProperty;
 
 /**
@@ -307,8 +308,41 @@ extend(Object, 'fastClone', (obj, params?: FastCloneParams) => {
 		}
 
 		if (typeof obj === 'object') {
-			if (Array.isArray(obj) && !obj.length) {
-				return [];
+			if (Array.isArray(obj)) {
+				if (!obj.length) {
+					return [];
+				}
+
+				if (obj.length < 10) {
+					const
+						slice = obj.slice();
+
+					let
+						isSimple = true;
+
+					for (let i = 0; i < obj.length; i++) {
+						const
+							el = obj[i];
+
+						if (el && typeof el === 'object') {
+							if (el instanceof Date) {
+								slice[i] = new Date(el);
+
+							} else {
+								isSimple = false;
+								break;
+							}
+						}
+					}
+
+					if (isSimple) {
+						return slice;
+					}
+				}
+			}
+
+			if (obj instanceof Date) {
+				return new Date(obj);
 			}
 
 			const
