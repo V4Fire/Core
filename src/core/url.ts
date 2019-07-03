@@ -60,14 +60,20 @@ export function toQueryString(data: unknown, encode: boolean = true): string {
 
 /**
  * Creates an object from the specified querystring and returns it
+ *
  * @param str
+ * @param [decode] - if true, then for the string will be applied decodeURIComponent
  */
-export function fromQueryString(str: string): Dictionary<string | null> {
+export function fromQueryString(str: string, decode: boolean = true): Dictionary<string | null> {
 	const
 		res = {};
 
 	if (str[0] === '?') {
 		str = str.slice(1);
+	}
+
+	if (decode) {
+		str = decodeURIComponent(str);
 	}
 
 	const
