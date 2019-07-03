@@ -65,8 +65,13 @@ export class ConsoleEngine implements LogEngine {
 			return '';
 		}
 
-		const stringifiedStyle = Object.keys(style)
-			.reduce((res, key) => res + `${key.dasherize()}:${style[key]};`, '');
+		let
+			stringifiedStyle = '';
+
+		for (let keys = Object.keys(style), i = 0; i < keys.length; i++) {
+			const key = keys[i];
+			stringifiedStyle += `${key.dasherize()}:${style[key]};`;
+		}
 
 		if (!stringifiedStyle) {
 			return '';

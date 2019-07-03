@@ -10,6 +10,7 @@ import extend from 'core/prelude/extend';
 import { convertIfDate } from 'core/json';
 
 const
+	simpleCloneLabel = Symbol('Simple clone label'),
 	hasOwnProperty = Object.prototype.hasOwnProperty;
 
 /**
@@ -275,13 +276,13 @@ extend(Object, 'fastClone', (obj, params?: FastCloneParams) => {
 	const
 		p = params || {};
 
-	if (Object.isFunction(obj)) {
+	if (typeof obj === 'function') {
 		return obj;
 	}
 
 	if (obj) {
 		const
-			noJSON = !Object.isFunction((<any>obj).toJSON);
+			noJSON = typeof (<any>obj).toJSON !== 'function';
 
 		if (noJSON && obj instanceof Map) {
 			const
@@ -307,6 +308,50 @@ extend(Object, 'fastClone', (obj, params?: FastCloneParams) => {
 		}
 
 		if (typeof obj === 'object') {
+			if (Array.isArray(obj)) {
+				if (!obj.length) {
+					return [];
+				}
+
+				if (obj.length < 10) {
+					const
+						slice = obj.slice();
+
+					let
+						isSimple = true;
+
+					for (let i = 0; i < obj.length; i++) {
+						const
+							el = obj[i];
+
+						if (el && typeof el === 'object') {
+							if (el instanceof Date) {
+								slice[i] = new Date(el);
+
+							} else {
+								isSimple = false;
+								break;
+							}
+						}
+					}
+
+					if (isSimple) {
+						return slice;
+					}
+				}
+			}
+
+			if (obj instanceof Date) {
+				return new Date(obj);
+			}
+
+			const
+				constr = obj.constructor;
+
+			if ((!constr || constr === Object) && !Object.keys(obj).length) {
+				return {};
+			}
+
 			const
 				funcMap = new Map(),
 				replacer = createReplacer(obj, funcMap, p.replacer),
@@ -336,7 +381,7 @@ extend(Object, 'fastClone', (obj, params?: FastCloneParams) => {
 
 function createReplacer(
 	base: unknown,
-	funcMap: Map<Function | number, Function | number>,
+	funcMap: Map<Function | string, Function | string>,
 	replacer?: JSONCb
 ): JSONCb {
 	let
@@ -352,7 +397,7 @@ function createReplacer(
 		}
 
 		if (Object.isFunction(value)) {
-			const key = funcMap.get(value) || Math.random();
+			const key = funcMap.get(value) || `[[FUNC_REF:${Math.random()}]]`;
 			funcMap.set(value, key);
 			funcMap.set(key, value);
 			return key;
