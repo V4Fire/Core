@@ -29,18 +29,6 @@ module.exports = function (gulp) {
 			.pipe(gulp.dest('./'))
 	);
 
-	gulp.task('lf', () => {
-		const src = [
-			'./@(src|config|build|ts-definitions)/**/*',
-			'./*'
-		];
-
-		return gulp.src(src, {base: './', since: gulp.lastRun('lf')})
-			.pipe($.plumber())
-			.pipe($.convertNewline())
-			.pipe(gulp.dest('./'));
-	});
-
 	gulp.task('head', () => {
 		const
 			through = require('through2'),
