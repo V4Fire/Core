@@ -78,14 +78,7 @@ class Config {
 			this.extend(env, envs, $C.clone(env));
 		}
 
-		if (mod !== undefined && !isActiveConfig) {
-			return {...opts};
-		}
-
-		const
-			proto = Object.getPrototypeOf(opts);
-
-		function setProto(obj, link = []) {
+		function setProto(obj, proto, link = []) {
 			$C(obj).forEach((el, key) => {
 				if (!el || typeof el !== 'object') {
 					return;
@@ -100,18 +93,19 @@ class Config {
 					Object.setPrototypeOf(el, parent);
 				}
 
-				setProto(el, key);
+				setProto(el, proto, key);
 			});
 		}
 
-		setProto(opts);
+		const
+			modObj = mod ? include(mod, activeDir) : undefined,
+			proto = modObj || Object.getPrototypeOf(opts);
 
-		const modObj = $C((Object.isString(mod) ? include(mod, activeDir) : mod) || {})
-			.filter((el, key) => !opts.hasOwnProperty(key))
-			.map();
+		setProto(opts, proto);
+		Object.setPrototypeOf(opts, proto);
 
 		const
-			config = this.extend(Object.create(proto), opts, modObj),
+			config = this.extend(Object.create(proto), opts),
 			p = this.getSrcMap(activeDir);
 
 		$C(['roots'].concat(dirs.slice(1))).forEach((nm, i) => {
