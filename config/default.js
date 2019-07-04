@@ -99,7 +99,7 @@ class Config {
 		}
 
 		const
-			modObj = Boolean(mod) ? include(mod, activeDir) : undefined,
+			modObj = mod ? include(mod, activeDir) : undefined,
 			proto = modObj || Object.getPrototypeOf(opts);
 
 		setProto(opts, proto);
