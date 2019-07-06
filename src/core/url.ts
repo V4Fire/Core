@@ -72,6 +72,10 @@ export function fromQueryString(str: string, decode: boolean = true): Dictionary
 		str = str.slice(1);
 	}
 
+	if (!str) {
+		return res;
+	}
+
 	if (decode) {
 		str = decodeURIComponent(str);
 	}
@@ -81,8 +85,12 @@ export function fromQueryString(str: string, decode: boolean = true): Dictionary
 		chunks = str.split('&');
 
 	for (let i = 0; i < chunks.length; i++) {
-		const [key, val] = chunks[i].split('=');
-		Object.set(res, key, val == null ? null : val, opts);
+		const
+			[key, val] = chunks[i].split('=');
+
+		if (key) {
+			Object.set(res, key, val == null ? null : val, opts);
+		}
 	}
 
 	return res;
