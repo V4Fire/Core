@@ -5,7 +5,7 @@
   "main": "src/core/index.js",
   "typings": "index.d.ts",
   "license": "MIT",
-  "version": "3.0.0-beta.47",
+  "version": "3.0.0-beta.48",
   "author": {
     "name": "kobezzza",
     "email": "kobezzza@gmail.com",
@@ -33,7 +33,7 @@
     "tslib": "^1.10.0"
   },
   "optionalDependencies": {
-    "@pzlr/build-core": "^2.8.13",
+    "@pzlr/build-core": "^2.8.16",
     "@types/fs-extra-promise": "^1.0.8",
     "@types/got": "^9.6.0",
     "@types/gulp": "^4.0.6",
