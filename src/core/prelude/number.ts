@@ -93,6 +93,11 @@ extend(Number.prototype, 'vmin', createPostfixGetter('vmin'));
  */
 extend(Number.prototype, 'vmax', createPostfixGetter('vmax'));
 
+/** @see Sugar.Number.isInteger */
+extend(Number.prototype, 'isInteger', function (): boolean {
+	return this % 1 === 0;
+});
+
 const
 	decPartRgxp = /\.\d+/;
 

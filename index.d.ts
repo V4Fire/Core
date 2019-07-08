@@ -216,6 +216,7 @@ interface Number {
 	week(): number;
 	weeks(): number;
 
+	isInteger(): boolean;
 	pad(place?: number, sign?: boolean, base?: number): string;
 	format(place?: number): string;
 
