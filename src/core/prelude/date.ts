@@ -355,6 +355,10 @@ extend(Date, 'create', (pattern?: DateCreateValue) => {
 		return new Date(Date.parse(pattern));
 	}
 
+	if (Object.isNumber(pattern) && !pattern.isInteger()) {
+		pattern *= 1e3;
+	}
+
 	return new Date(pattern.valueOf());
 });
 
