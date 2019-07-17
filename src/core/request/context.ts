@@ -251,7 +251,7 @@ export default class RequestContext<T = unknown> {
 				res.data
 			);
 
-			if (p.cacheTTL) {
+			if (Object.isNumber(p.cacheTTL)) {
 				this.cacheTimeoutId = <any>setTimeout(() => cache.remove(key), p.cacheTTL);
 			}
 		}
