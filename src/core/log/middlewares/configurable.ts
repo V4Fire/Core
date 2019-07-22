@@ -18,6 +18,7 @@ let
 
 const setConfig = (opts) => {
 	options = {
+		patterns: [':error\\b'],
 		...opts
 	};
 
