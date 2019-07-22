@@ -34,8 +34,8 @@ export class ConsoleEngine implements LogEngine {
 			const
 				details = [...event.details];
 
-			if (Boolean(event.error)) {
-				details.concat(event.error);
+			if (event.error) {
+				details.push(event.error);
 			}
 
 			console.log(`%c${event.context}`, this.getStringifiedStyle(event.level), ...details);
