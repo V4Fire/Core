@@ -5,7 +5,7 @@
   "main": "src/core/index.js",
   "typings": "index.d.ts",
   "license": "MIT",
-  "version": "3.0.0-beta.50",
+  "version": "3.0.0-beta.51",
   "author": {
     "name": "kobezzza",
     "email": "kobezzza@gmail.com",
@@ -35,16 +35,16 @@
   "optionalDependencies": {
     "@pzlr/build-core": "^2.8.16",
     "@types/fs-extra-promise": "^1.0.8",
-    "@types/got": "^9.6.0",
+    "@types/got": "^9.6.2",
     "@types/gulp": "^4.0.6",
     "@types/gulp-load-plugins": "0.0.31",
     "@types/through2": "^2.0.34",
-    "collection.js": "^6.7.9",
+    "collection.js": "^6.7.10",
     "config": "^1.31.0",
     "dotenv": "^8.0.0",
     "find-up": "^4.1.0",
     "gulp": "^4.0.2",
-    "gulp-header": "^2.0.7",
+    "gulp-header": "^2.0.9",
     "gulp-load-plugins": "^2.0.0",
     "gulp-plumber": "^1.2.1",
     "gulp-replace": "^1.0.0",
@@ -52,14 +52,14 @@
     "sugar": "^2.0.6",
     "through2": "^3.0.1",
     "tsconfig": "^7.0.0",
-    "typescript": "^3.5.2",
+    "typescript": "^3.5.3",
     "uniconf": "^2.1.1",
     "upath": "^1.1.2",
     "urlconcat": "0.0.12"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.2",
-    "eslint": "^6.0.1",
+    "eslint": "^6.1.0",
     "tslint": "^5.18.0"
   }
 }
