@@ -283,7 +283,7 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 				}
 
 				localCacheKey = getStorageKey(cacheKey);
-				fromCache = ctx.cache.has(cacheKey);
+				fromCache = ctx.simple.has(cacheKey);
 				fromLocalStorage = Boolean(
 					!fromCache &&
 					p.offlineCache &&
@@ -299,7 +299,7 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 
 			if (fromCache) {
 				cache = 'memory';
-				res = Then.immediate(() => ctx.cache.get(cacheKey), then)
+				res = Then.immediate(() => ctx.simple.get(cacheKey), then)
 					.then(ctx.wrapAsResponse);
 
 			} else if (fromLocalStorage) {

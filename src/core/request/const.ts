@@ -12,7 +12,7 @@ import Range from 'core/range';
 
 import { AsyncFactoryResult } from 'core/kv-storage';
 import { RequestMethods, ResponseTypes, GlobalOpts, CacheStrategy } from 'core/request/interface';
-import { Cache, RestrictedCache, NeverCache } from 'core/cache';
+import { Cache, RestrictedCache, NeverCache, AbstractCache } from 'core/cache';
 
 export let
 	storage: CanUndef<Promise<AsyncFactoryResult>>;
@@ -48,7 +48,7 @@ export const defaultResponseOpts = {
 export const
 	pendingCache = new Cache();
 
-export const cache: Record<CacheStrategy, Cache> = {
+export const cache: Record<CacheStrategy, AbstractCache> = {
 	queue: new RestrictedCache(),
 	forever: new Cache(),
 	never: new NeverCache()

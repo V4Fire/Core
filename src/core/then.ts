@@ -72,7 +72,7 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	}
 
 	/**
-	 * @see {Promise.resolve}
+	 * @see Promise.resolve
 	 * @param value
 	 * @param [parent] - parent promise
 	 */
@@ -97,7 +97,7 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	}
 
 	/**
-	 * @see {Promise.reject}
+	 * @see Promise.reject
 	 * @param reason
 	 * @param [parent] - parent promise
 	 */
@@ -106,7 +106,7 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	}
 
 	/**
-	 * @see {Promise.all}
+	 * @see Promise.all
 	 * @param values
 	 * @param [parent] - parent promise
 	 */
@@ -156,7 +156,7 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	}
 
 	/**
-	 * @see {Promise.race}
+	 * @see Promise.race
 	 * @param values
 	 * @param [parent] - parent promise
 	 */
@@ -287,7 +287,7 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 		});
 	}
 
-	/** @see {Promise.prototype.then} */
+	/** @see Promise.prototype.then */
 	then(
 		onFulfill?: Nullable<(value: T) => Value<T>>,
 		onReject?: Nullable<(reason: unknown) => Value<T>>,
@@ -359,7 +359,7 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 		});
 	}
 
-	/** @see {Promise.prototype.catch} */
+	/** @see Promise.prototype.catch */
 	catch(onReject?: Nullable<(reason: unknown) => Value<T>>): Then<T>;
 	catch<R>(onReject: (reason: unknown) => Value<R>): Then<R>;
 	catch(onReject?: any): Then<any> {
