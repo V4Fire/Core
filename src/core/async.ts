@@ -1810,6 +1810,146 @@ export default class Async<CTX extends object = Async<any>> {
 	}
 
 	/**
+	 * Removes an event handler from the specified emitter
+	 *
+	 * @param params - parameters:
+	 *   *) emitter - event emitter
+	 *   *) event - event name
+	 *   *) handler - event handler
+	 *   *) args - additional arguments for the emitter
+	 */
+	eventListenerDestructor(params: EventLike): void {
+		const
+			e = params.emitter,
+			fn = Object.isFunction(e) ? e : e.removeEventListener || e.removeListener || e.off;
+
+		if (fn && Object.isFunction(fn)) {
+			fn.call(e, params.event, params.handler);
+
+		} else {
+			throw new ReferenceError('Remove event listener function for the event emitter is not defined');
+		}
+	}
+
+	/**
+	 * Terminates the specified worker
+	 *
+	 * @param destructor - name of destructor method
+	 * @param worker
+	 */
+	workerDestructor(destructor: CanUndef<string>, worker: WorkerLikeP): void {
+		const
+			{workerCache} = this;
+
+		if (workerCache.has(worker)) {
+			workerCache.delete(worker);
+
+			if (--worker[asyncCounter] <= 0) {
+				let
+					fn;
+
+				if (destructor) {
+					fn = worker[destructor];
+
+				} else if (Object.isFunction(worker)) {
+					fn = worker;
+
+				} else {
+					fn =
+						worker.terminate ||
+						worker.destroy ||
+						worker.destructor ||
+						worker.close ||
+						worker.abort ||
+						worker.cancel ||
+						worker.disconnect ||
+						worker.unwatch;
+				}
+
+				if (fn && Object.isFunction(fn)) {
+					fn.call(worker);
+
+				} else {
+					throw new ReferenceError('Destructor function for the worker is not defined');
+				}
+			}
+		}
+	}
+
+	/**
+	 * Aborts the specified promise
+	 *
+	 * @param destructor - name of destructor method
+	 * @param promise
+	 */
+	promiseDestructor(
+		destructor: CanUndef<string>,
+		promise: PromiseLike<unknown> | CancelablePromise
+	): void {
+		let
+			fn;
+
+		if (destructor) {
+			fn = promise[destructor];
+
+		} else {
+			fn =
+				(<CancelablePromise>promise).abort ||
+				(<CancelablePromise>promise).cancel;
+		}
+
+		if (fn && Object.isFunction(fn)) {
+			if ('catch' in promise && Object.isFunction(promise.catch)) {
+				promise.catch(() => {
+					// Promise error loopback
+				});
+			}
+
+			fn.call(promise);
+		}
+	}
+
+	/**
+	 * Factory for promise clear handlers
+	 *
+	 * @param resolve
+	 * @param reject
+	 */
+	onPromiseClear(resolve: Function, reject: Function): Function {
+		const
+			MAX_PROMISE_DEPTH = 25;
+
+		return (obj) => {
+			const
+				{replacedBy} = obj;
+
+			if (replacedBy && obj.join === 'replace' && obj.link.onClear.length < MAX_PROMISE_DEPTH) {
+				replacedBy.onComplete.push([resolve, reject]);
+
+				const
+					onClear = (<Function[]>[]).concat(obj.link.onClear, reject);
+
+				for (let i = 0; i < onClear.length; i++) {
+					replacedBy.onClear.push(onClear[i]);
+				}
+
+			} else {
+				reject(obj);
+			}
+		};
+	}
+
+	/**
+	 * Factory for promise merge handlers
+	 *
+	 * @param resolve
+	 * @param reject
+	 */
+	onPromiseMerge(resolve: Function, reject: Function): Function {
+		return (obj) => obj.onComplete.push([resolve, reject]);
+	}
+
+	/**
 	 * Marks a promise operation as a field
 	 *
 	 * @param field
@@ -1874,146 +2014,6 @@ export default class Async<CTX extends object = Async<any>> {
 		}
 
 		return this.markAsync(field, isEvent(p) ? {id: p} : p, this.linkNames.eventListener);
-	}
-
-	/**
-	 * Removes an event handler from the specified emitter
-	 *
-	 * @param params - parameters:
-	 *   *) emitter - event emitter
-	 *   *) event - event name
-	 *   *) handler - event handler
-	 *   *) args - additional arguments for the emitter
-	 */
-	protected eventListenerDestructor(params: EventLike): void {
-		const
-			e = params.emitter,
-			fn = Object.isFunction(e) ? e : e.removeEventListener || e.removeListener || e.off;
-
-		if (fn && Object.isFunction(fn)) {
-			fn.call(e, params.event, params.handler);
-
-		} else {
-			throw new ReferenceError('Remove event listener function for the event emitter is not defined');
-		}
-	}
-
-	/**
-	 * Terminates the specified worker
-	 *
-	 * @param destructor - name of destructor method
-	 * @param worker
-	 */
-	protected workerDestructor(destructor: CanUndef<string>, worker: WorkerLikeP): void {
-		const
-			{workerCache} = this;
-
-		if (workerCache.has(worker)) {
-			workerCache.delete(worker);
-
-			if (--worker[asyncCounter] <= 0) {
-				let
-					fn;
-
-				if (destructor) {
-					fn = worker[destructor];
-
-				} else if (Object.isFunction(worker)) {
-					fn = worker;
-
-				} else {
-					fn =
-						worker.terminate ||
-						worker.destroy ||
-						worker.destructor ||
-						worker.close ||
-						worker.abort ||
-						worker.cancel ||
-						worker.disconnect ||
-						worker.unwatch;
-				}
-
-				if (fn && Object.isFunction(fn)) {
-					fn.call(worker);
-
-				} else {
-					throw new ReferenceError('Destructor function for the worker is not defined');
-				}
-			}
-		}
-	}
-
-	/**
-	 * Aborts the specified promise
-	 *
-	 * @param destructor - name of destructor method
-	 * @param promise
-	 */
-	protected promiseDestructor(
-		destructor: CanUndef<string>,
-		promise: PromiseLike<unknown> | CancelablePromise
-	): void {
-		let
-			fn;
-
-		if (destructor) {
-			fn = promise[destructor];
-
-		} else {
-			fn =
-				(<CancelablePromise>promise).abort ||
-				(<CancelablePromise>promise).cancel;
-		}
-
-		if (fn && Object.isFunction(fn)) {
-			if ('catch' in promise && Object.isFunction(promise.catch)) {
-				promise.catch(() => {
-					// Promise error loopback
-				});
-			}
-
-			fn.call(promise);
-		}
-	}
-
-	/**
-	 * Factory for promise clear handlers
-	 *
-	 * @param resolve
-	 * @param reject
-	 */
-	protected onPromiseClear(resolve: Function, reject: Function): Function {
-		const
-			MAX_PROMISE_DEPTH = 25;
-
-		return (obj) => {
-			const
-				{replacedBy} = obj;
-
-			if (replacedBy && obj.join === 'replace' && obj.link.onClear.length < MAX_PROMISE_DEPTH) {
-				replacedBy.onComplete.push([resolve, reject]);
-
-				const
-					onClear = (<Function[]>[]).concat(obj.link.onClear, reject);
-
-				for (let i = 0; i < onClear.length; i++) {
-					replacedBy.onClear.push(onClear[i]);
-				}
-
-			} else {
-				reject(obj);
-			}
-		};
-	}
-
-	/**
-	 * Factory for promise merge handlers
-	 *
-	 * @param resolve
-	 * @param reject
-	 */
-	protected onPromiseMerge(resolve: Function, reject: Function): Function {
-		return (obj) => obj.onComplete.push([resolve, reject]);
 	}
 
 	/**
