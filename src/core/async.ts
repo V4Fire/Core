@@ -14,7 +14,7 @@ import { createSyncPromise } from 'core/event';
 export const
 	asyncCounter = Symbol('Async counter id');
 
-export interface AsyncLink<T extends object = Async> {
+export interface AsyncLink<CTX extends object = Async> {
 	id: unknown;
 	obj: unknown;
 	objName?: string;
@@ -23,8 +23,8 @@ export interface AsyncLink<T extends object = Async> {
 	muted: boolean;
 	queue: Function[];
 	clearFn?: Function;
-	onComplete: AsyncCompleteCb<T>[][];
-	onClear: AsyncCb<T>[];
+	onComplete: AsyncCompleteCb<CTX>[][];
+	onClear: AsyncCb<CTX>[];
 }
 
 export interface ClearOpts {
@@ -32,11 +32,11 @@ export interface ClearOpts {
 	group?: string | RegExp;
 }
 
-export interface ClearOptsId<T = unknown> extends ClearOpts {
-	id?: T;
+export interface ClearOptsId<ID = unknown> extends ClearOpts {
+	id?: ID;
 }
 
-export interface ClearProxyOpts<T = unknown> extends ClearOptsId<T> {
+export interface ClearProxyOpts<ID = unknown> extends ClearOptsId<ID> {
 	name?: string;
 }
 
@@ -54,32 +54,32 @@ export type ClearReasons =
 	'rgxp' |
 	'all';
 
-export type AsyncCtx<T extends object = Async> = {
+export type AsyncCtx<CTX extends object = Async> = {
 	type: string;
-	link: AsyncLink<T>;
-	replacedBy?: AsyncLink<T>;
+	link: AsyncLink<CTX>;
+	replacedBy?: AsyncLink<CTX>;
 	reason?: ClearReasons;
 } & AsyncOpts & ClearOptsId<unknown>;
 
-export interface AsyncCb<T extends object = Async> {
-	(this: T, ctx: AsyncCtx<T>): void;
+export interface AsyncCb<CTX extends object = Async> {
+	(this: CTX, ctx: AsyncCtx<CTX>): void;
 }
 
-export interface AsyncCompleteCb<T extends object = Async> {
-	(this: T, ...args: unknown[]): void;
+export interface AsyncCompleteCb<CTX extends object = Async> {
+	(this: CTX, ...args: unknown[]): void;
 }
 
-export interface AsyncCbOpts<T extends object = Async> extends AsyncOpts {
+export interface AsyncCbOpts<CTX extends object = Async> extends AsyncOpts {
 	promise?: boolean;
-	onClear?: CanArray<AsyncCb<T>>;
-	onMerge?: CanArray<AsyncCb<T>>;
+	onClear?: CanArray<AsyncCb<CTX>>;
+	onMerge?: CanArray<AsyncCb<CTX>>;
 }
 
-export interface AsyncCbOptsSingle<T extends object = Async> extends AsyncCbOpts<T> {
+export interface AsyncCbOptsSingle<CTX extends object = Async> extends AsyncCbOpts<CTX> {
 	single?: boolean;
 }
 
-export interface AsyncProxyOpts<T extends object = Async> extends AsyncCbOptsSingle<T> {
+export interface AsyncProxyOpts<CTX extends object = Async> extends AsyncCbOptsSingle<CTX> {
 	name?: string;
 }
 
@@ -92,7 +92,7 @@ export interface AsyncRequestOpts extends AsyncOpts {
 	destructor?: string;
 }
 
-export interface AsyncCreateIdleOpts<T extends object = Async> extends AsyncCbOpts<T> {
+export interface AsyncCreateIdleOpts<CTX extends object = Async> extends AsyncCbOpts<CTX> {
 	timeout?: number;
 }
 
@@ -104,7 +104,7 @@ export interface AsyncWaitOpts extends AsyncOpts {
 	delay?: number;
 }
 
-export interface AsyncOnOpts<T extends object = Async> extends AsyncCbOptsSingle<T> {
+export interface AsyncOnOpts<CTX extends object = Async> extends AsyncCbOptsSingle<CTX> {
 	options?: AddEventListenerOptions;
 }
 
@@ -112,7 +112,12 @@ export interface AsyncOnceOpts<T extends object = Async> extends AsyncCbOpts<T> 
 	options?: AddEventListenerOptions;
 }
 
-export interface AsyncWorkerOpts<T extends object = Async> extends AsyncProxyOpts<T> {
+export interface AsyncPromisifyOnceOpts<E = unknown, R = unknown, CTX extends object = Async> extends AsyncOpts {
+	handler: ProxyCb<E, R, CTX>;
+	options?: AddEventListenerOptions;
+}
+
+export interface AsyncWorkerOpts<CTX extends object = Async> extends AsyncProxyOpts<CTX> {
 	destructor?: string;
 }
 
@@ -129,8 +134,8 @@ export interface CacheObject {
 	groups: Dictionary<LocalCacheObject>;
 }
 
-export interface EventLike<T extends EventEmitterLikeP = EventEmitterLikeP> {
-	emitter: T;
+export interface EventLike<E extends EventEmitterLikeP = EventEmitterLikeP> {
+	emitter: E;
 	event: string;
 	handler: ProxyCb;
 	args: unknown[];
@@ -251,7 +256,7 @@ export default class Async<CTX extends object = Async<any>> {
 	/**
 	 * Context for functions
 	 */
-	protected readonly context?: CTX;
+	protected readonly context: CTX;
 
 	/**
 	 * Link for Async.linkNames
@@ -264,7 +269,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @param [ctx] - context for functions
 	 */
 	constructor(ctx?: CTX) {
-		this.context = ctx;
+		this.context = ctx || <any>this;
 	}
 
 	/**
@@ -1555,41 +1560,49 @@ export default class Async<CTX extends object = Async<any>> {
 	 *
 	 * @param [args] - additional arguments for the emitter
 	 */
-	promisifyOnce<T = unknown>(
+	promisifyOnce<R = unknown, E = unknown>(
 		emitter: EventEmitterLikeP,
 		events: CanArray<string>,
-		params: AsyncOpts & {options?: AddEventListenerOptions},
+		params: AsyncPromisifyOnceOpts<E, R, CTX>,
 		...args: unknown[]
-	): Promise<T>;
+	): Promise<R>;
 
 	/**
 	 * @param emitter - event emitter
 	 * @param events - event or a list of events (can also specify multiple events with a space)
 	 * @param [args] - additional arguments for the emitter
 	 */
-	promisifyOnce<T = unknown>(
+	promisifyOnce<R = unknown>(
 		emitter: EventEmitterLikeP,
 		events: CanArray<string>,
 		...args: unknown[]
-	): Promise<T>;
+	): Promise<R>;
 
-	promisifyOnce<T>(
+	promisifyOnce<R, E>(
 		emitter: EventEmitterLikeP,
 		events: CanArray<string>,
 		p: any,
 		...args: unknown[]
-	): Promise<T> {
+	): Promise<R> {
 		if (p !== undefined && !Object.isObject(p)) {
 			args.unshift(p);
 			p = undefined;
 		}
 
 		return new Promise((resolve, reject) => {
-			this.once(emitter, events, resolve, {
+			const handler = (e) => {
+				if (p && Object.isFunction(p.handler)) {
+					return resolve(p.handler.call(this.context, e));
+				}
+
+				resolve(e);
+			};
+
+			this.once(emitter, events, handler, {
 				...p,
 				promise: true,
-				onClear: this.onPromiseClear(resolve, reject),
-				onMerge: this.onPromiseMerge(resolve, reject)
+				onClear: this.onPromiseClear(handler, reject),
+				onMerge: this.onPromiseMerge(handler, reject)
 			}, ...args);
 		});
 	}
@@ -1927,7 +1940,7 @@ export default class Async<CTX extends object = Async<any>> {
 				replacedBy.onComplete.push([resolve, reject]);
 
 				const
-					onClear = (<Function[]>[]).concat(obj.link.onClear, reject);
+					onClear = (<AsyncCb<CTX>[]>[]).concat(obj.link.onClear, <AsyncCb<CTX>>reject);
 
 				for (let i = 0; i < onClear.length; i++) {
 					replacedBy.onClear.push(onClear[i]);
@@ -2044,7 +2057,8 @@ export default class Async<CTX extends object = Async<any>> {
 		}
 
 		const
-			baseCache = this.initCache(p.name, p.promise);
+			baseCache = this.initCache(p.name, p.promise),
+			ctx = this.context;
 
 		let
 			cache;
@@ -2068,22 +2082,19 @@ export default class Async<CTX extends object = Async<any>> {
 		if (labelCache && p.join === true) {
 			const
 				mergeHandlers = <AsyncCb<CTX>[]>[].concat(p.onMerge || []),
-				ctx = links.get(labelCache);
+				link = links.get(labelCache);
 
 			for (let i = 0; i < mergeHandlers.length; i++) {
-				mergeHandlers[i].call(this.context || this, ctx);
+				mergeHandlers[i].call(ctx, link);
 			}
 
 			return labelCache;
 		}
 
-		const
-			ctx = this.context;
-
 		let
 			id,
 			finalObj,
-			wrappedObj = id = finalObj = p.needCall && Object.isFunction(p.obj) ? p.obj.call(ctx || this) : p.obj;
+			wrappedObj = id = finalObj = p.needCall && Object.isFunction(p.obj) ? p.obj.call(ctx) : p.obj;
 
 		if (!p.periodic || Object.isFunction(wrappedObj)) {
 			wrappedObj = function (this: unknown): unknown {
@@ -2288,7 +2299,7 @@ export default class Async<CTX extends object = Async<any>> {
 					clearFn = link.clearFn;
 
 				for (let i = 0; i < clearHandlers.length; i++) {
-					clearHandlers[i].call(this.context || this, ctx);
+					clearHandlers[i].call(this.context, ctx);
 				}
 
 				if (clearFn) {
