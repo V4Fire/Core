@@ -1557,6 +1557,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 *
 	 *   *) [label] - label for the task (previous task with the same label will be canceled)
 	 *   *) [group] - group name for the task
+	 *   *) [handler] - event handler (the result will be provided as a promise result)
 	 *
 	 * @param [args] - additional arguments for the emitter
 	 */
