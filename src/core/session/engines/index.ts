@@ -16,7 +16,7 @@ engine = import('core/kv-storage').then(({asyncLocal}) => asyncLocal.namespace('
 //#endif
 
 //#unless runtime has core/kv-storage
-engine = <any>import('simple.ts').then(({Simple: Cache}) => new Simple());
+engine = <any>import('core/cache').then(({Cache}) => new Cache());
 //#endunless
 
 export default engine;
