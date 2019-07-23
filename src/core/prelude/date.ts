@@ -321,7 +321,8 @@ const aliases = {
 };
 
 const
-	isoRegExp = /^(\d{4}-\d{2}-\d{2})([T ])(\d{2}:\d{2}:\d{2}(?:\.\d{3})?)(\d{0,3})?(Z)?([+-]\d{2}:\d{2})?$/;
+	isoRgxp = /^(\d{4}-\d{2}-\d{2})([T ])(\d{2}:\d{2}:\d{2}(?:\.\d{3})?)(\d{0,3})?(Z)?([+-]\d{2}:\d{2})?$/,
+	isFloatStr = /^\d+\.\d+$/;
 
 /**
  * Creates a date from the specified pattern
@@ -337,7 +338,7 @@ extend(Date, 'create', (pattern?: DateCreateValue) => {
 			return aliases[pattern]();
 		}
 
-		if (isoRegExp.test(pattern)) {
+		if (isoRgxp.test(pattern)) {
 			const createISOTime = () => {
 				const
 					h = new Date().getTimezoneOffset() / 60,
@@ -347,7 +348,7 @@ extend(Date, 'create', (pattern?: DateCreateValue) => {
 			};
 
 			pattern = pattern.replace(
-				isoRegExp,
+				isoRgxp,
 				(str, date, t, time, zone) => `${date}T${time}${zone === 'Z' || !zone ? createISOTime() : ''}`
 			);
 
@@ -358,7 +359,7 @@ extend(Date, 'create', (pattern?: DateCreateValue) => {
 		return new Date(Date.parse(pattern));
 	}
 
-	if (Object.isString(pattern) && /^\d+\.\d+$/.test(pattern)) {
+	if (Object.isString(pattern) && isFloatStr.test(pattern)) {
 		const float = parseFloat(pattern);
 		pattern = float ? float * 1e3 : pattern;
 
