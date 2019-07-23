@@ -6,10 +6,10 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import Simple, { ClearFilter } from 'core/cache/simple';
+import SimpleCache, { ClearFilter } from 'core/cache/simple';
 export * from 'core/cache/simple';
 
-export default class RestrictedCache<V = unknown, K = string> extends Simple<V, K> {
+export default class RestrictedCache<V = unknown, K = string> extends SimpleCache<V, K> {
 	/**
 	 * Queue object
 	 */
