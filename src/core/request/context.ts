@@ -8,8 +8,8 @@
 
 import Then from 'core/then';
 import Response from 'core/request/response';
+import Cache from 'core/cache/interface';
 
-import { Cache } from 'core/cache';
 import { concatUrls, toQueryString } from 'core/url';
 import { normalizeHeaders, applyQueryForStr, getStorageKey, getRequestKey } from 'core/request/utils';
 import { Encoders, Decoders, RequestQuery, CreateRequestOpts, RequestResponseObject } from 'core/request/interface';
