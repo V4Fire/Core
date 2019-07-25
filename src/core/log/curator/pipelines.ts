@@ -13,6 +13,8 @@ import { createPipeline } from 'core/log/config';
 const
 	pipelines: LogPipeline[] = [];
 
+//#if runtime has core/log
+
 if (config && config.log && config.log.pipelines) {
 	for (let i = 0; i < config.log.pipelines.length; ++i) {
 		const
@@ -23,5 +25,7 @@ if (config && config.log && config.log.pipelines) {
 		}
 	}
 }
+
+//#endif
 
 export default pipelines;

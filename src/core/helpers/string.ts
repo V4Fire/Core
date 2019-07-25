@@ -23,6 +23,8 @@ export function getTimeFormattedStr(time: number[]): string {
 	return res.join(':');
 }
 
+//#if runtime has helpers/string/pluralize
+
 const
 	lastNumRgxp = /[05-9]$/;
 
@@ -60,3 +62,5 @@ export function pluralize(n: number, opts: CanArray<string>, ...rest: string[]):
 
 	return two;
 }
+
+//#endif

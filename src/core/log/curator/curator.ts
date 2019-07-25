@@ -22,6 +22,8 @@ const
  * @param details
  */
 export default function log(context: string | LogMessageOpts, ...details: unknown[]): void {
+	//#if runtime has core/log
+
 	let
 		logContext: string,
 		logLevel = DEFAULT_LEVEL;
@@ -69,6 +71,8 @@ export default function log(context: string | LogMessageOpts, ...details: unknow
 			console.error(e);
 		}
 	}
+
+	//#endif
 }
 
 /**

@@ -30,6 +30,8 @@ export class LogPipeline {
 	 * @param events
 	 */
 	run(events: CanArray<LogEvent>): void {
+		//#if runtime has core/log
+
 		if (Array.isArray(events)) {
 			const
 				filteredEvents = <LogEvent[]>[];
@@ -56,9 +58,13 @@ export class LogPipeline {
 		// ++ in next method
 		this.middlewareIndex = -1;
 		this.next(events);
+
+		//#endif
 	}
 
 	protected next(events: CanArray<LogEvent>): void {
+		//#if runtime has core/log
+
 		this.middlewareIndex++;
 		if (this.middlewareIndex < this.middlewares.length) {
 			if (!this.middlewares[this.middlewareIndex]) {
@@ -77,5 +83,7 @@ export class LogPipeline {
 				this.engine.log(events);
 			}
 		}
+
+		//#endif
 	}
 }

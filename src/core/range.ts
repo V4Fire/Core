@@ -57,19 +57,6 @@ export default class Range<T extends string | number | Date> {
 	}
 
 	/**
-	 * Clones the range
-	 */
-	clone(): Range<T> {
-		const
-			range = new Range(<T>this.start, <T>this.end);
-
-		range.type = this.type;
-		range.reverse = this.reverse;
-
-		return range;
-	}
-
-	/**
 	 * Returns true if the specified element is contained inside the range.
 	 * (element may be a value or an another range)
 	 *
@@ -82,6 +69,37 @@ export default class Range<T extends string | number | Date> {
 
 		const val = Object.isString(el) ? charCodeAt(el, 0) : Number(el);
 		return this.start <= val && val <= this.end;
+	}
+
+	/**
+	 * Returns a new range with the latest starting point as its start, and the earliest ending point as its end.
+	 * If the two ranges do not intersect this will effectively produce an invalid range
+	 *
+	 * @param range
+	 */
+	intersect(range: Range<T>): Range<T> {
+		const
+			start = <T>Math.max(this.start, range.start),
+			end = <T>Math.min(this.end, range.end),
+			newRange = start < end ? new Range(start, end) : new Range(<T>NaN, <T>NaN);
+
+		newRange.type = this.type;
+		return newRange;
+	}
+
+	//#if runtime has range/extended
+
+	/**
+	 * Clones the range
+	 */
+	clone(): Range<T> {
+		const
+			range = new Range(<T>this.start, <T>this.end);
+
+		range.type = this.type;
+		range.reverse = this.reverse;
+
+		return range;
 	}
 
 	/**
@@ -122,22 +140,6 @@ export default class Range<T extends string | number | Date> {
 		}
 
 		return this.end - this.start + 1;
-	}
-
-	/**
-	 * Returns a new range with the latest starting point as its start, and the earliest ending point as its end.
-	 * If the two ranges do not intersect this will effectively produce an invalid range
-	 *
-	 * @param range
-	 */
-	intersect(range: Range<T>): Range<T> {
-		const
-			start = <T>Math.max(this.start, range.start),
-			end = <T>Math.min(this.end, range.end),
-			newRange = start < end ? new Range(start, end) : new Range(<T>NaN, <T>NaN);
-
-		newRange.type = this.type;
-		return newRange;
 	}
 
 	/**
@@ -224,6 +226,8 @@ export default class Range<T extends string | number | Date> {
 				return <T>val;
 		}
 	}
+
+	//#endif
 }
 
 function charCodeAt(str: string, pos: number): number {

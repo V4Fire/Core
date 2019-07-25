@@ -117,6 +117,14 @@ extend(Date.prototype, 'endOfYear', function (this: Date): Date {
 	return this;
 });
 
+/**
+ * Returns a list of week days
+ */
+extend(Date, 'getWeekDays', () =>
+	[t`Mn`, t`Ts`, t`Wd`, t`Th`, t`Fr`, t`St`, t`Sn`]);
+
+//#if runtime has prelude/date/modify
+
 /** @see Sugar.Date.add */
 extend(Date.prototype, 'add', createDateModifier((v, b) => b + v));
 
@@ -125,6 +133,9 @@ extend(Date.prototype, 'set', createDateModifier());
 
 /** @see Sugar.Date.rewind */
 extend(Date.prototype, 'rewind', createDateModifier((v, b) => b - v));
+
+//#endif
+//#if runtime has prelude/date/relative
 
 /**
  * Returns a relative value for the current date
@@ -139,6 +150,9 @@ extend(Date.prototype, 'relative', function (this: Date): DateRelative {
 extend(Date.prototype, 'relativeTo', function (this: Date, date: DateCreateValue): DateRelative {
 	return relative(this, date);
 });
+
+//#endif
+//#if runtime has prelude/date/format
 
 const shortOpts = {
 	month: 'numeric',
@@ -297,12 +311,6 @@ extend(Date.prototype, 'toHTMLString', function (this: Date, params: DateHTMLStr
 	return `${this.toHTMLDateString(params)}T${this.toHTMLTimeString(params)}`;
 });
 
-/**
- * Returns a list of week days
- */
-extend(Date, 'getWeekDays', () =>
-	[t`Mn`, t`Ts`, t`Wd`, t`Th`, t`Fr`, t`St`, t`Sn`]);
-
 const aliases = {
 	now: () => new Date(),
 	today: () => new Date().beginningOfDay(),
@@ -319,6 +327,9 @@ const aliases = {
 		return v.beginningOfDay();
 	}
 };
+
+//#endif
+//#if runtime has prelude/date/create
 
 const
 	isoRgxp = /^(\d{4}-\d{2}-\d{2})([T ])(\d{2}:\d{2}:\d{2}(?:\.\d{3})?)(\d{0,3})?(Z)?([+-]\d{2}:\d{2})?$/,
@@ -370,6 +381,9 @@ extend(Date, 'create', (pattern?: DateCreateValue) => {
 	return new Date(pattern.valueOf());
 });
 
+//#endif
+//#if runtime has prelude/date/relative
+
 function relative(from: DateCreateValue, to: DateCreateValue): DateRelative {
 	const
 		diff = Date.create(to).valueOf() - Date.create(from).valueOf();
@@ -403,6 +417,9 @@ function relative(from: DateCreateValue, to: DateCreateValue): DateRelative {
 		diff
 	};
 }
+
+//#endif
+//#if runtime has prelude/date/modify
 
 function createDateModifier(mod: (val: number, base: number) => number = ((Any))): Function {
 	return function modifyDate(this: Date, params: DateSetParams, reset?: boolean): Date {
@@ -499,3 +516,5 @@ function createDateModifier(mod: (val: number, base: number) => number = ((Any))
 		return this;
 	};
 }
+
+//#endif
