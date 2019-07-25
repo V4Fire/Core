@@ -186,7 +186,7 @@ export default class Range<T extends string | number | Date> {
 	 */
 	toString(): string {
 		if (!this.isValid()) {
-			return 'Invalid Range';
+			return 'Invalid range';
 		}
 
 		const
