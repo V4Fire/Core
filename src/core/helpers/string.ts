@@ -8,21 +8,6 @@
 
 export const NBSP = String.fromCharCode(160);
 
-/**
- * Returns formatted time string from the specified time array
- * @param time
- */
-export function getTimeFormattedStr(time: number[]): string {
-	const
-		res = <string[]>[];
-
-	for (let i = 0; i < time.length; i++) {
-		res.push(time[i].pad(2));
-	}
-
-	return res.join(':');
-}
-
 //#if runtime has helpers/string/pluralize
 
 const
