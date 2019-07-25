@@ -7,12 +7,8 @@
  */
 
 import session from 'core/session/engines';
+import { Session } from 'core/session/interface';
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
-
-export interface SetEvent {
-	auth: CanUndef<string>;
-	csrf: CanUndef<string>;
-}
 
 export const
 	event = new EventEmitter({maxListeners: 100, newListener: false});
@@ -20,7 +16,7 @@ export const
 /**
  * Returns current session object
  */
-export async function get(): Promise<{auth: CanUndef<string>; csrf: CanUndef<string>}> {
+export async function get(): Promise<Session> {
 	try {
 		const
 			s = await session;
@@ -43,7 +39,7 @@ export async function get(): Promise<{auth: CanUndef<string>; csrf: CanUndef<str
  *
  * @param [auth]
  * @param [csrf]
- * @emits set({auth?: string, csrf?: string})
+ * @emits set(session: Session)
  */
 export async function set(auth?: string, csrf?: string): Promise<boolean> {
 	try {
