@@ -7,15 +7,9 @@
  */
 
 import config from 'config';
-import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 
-export interface StatusEvent {
-	status: boolean;
-	lastOnline?: Date;
-}
-
-export const
-	event = new EventEmitter({newListener: false});
+import { event } from 'core/net/const';
+import { NetStatus } from 'core/net/interface';
 
 const
 	{online} = config;
@@ -35,9 +29,9 @@ let
  *
  * @emits online()
  * @emits offline(lastOnline: Date)
- * @emits status({status: boolean, lastOnline?: Date})
+ * @emits status(value: NetStatus)
  */
-export function isOnline(): Promise<{status: boolean; lastOnline?: Date}> {
+export function isOnline(): Promise<NetStatus> {
 	if (cache) {
 		return cache;
 	}
