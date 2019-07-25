@@ -9,8 +9,6 @@
 import 'core/prelude/function/shim';
 import extend from 'core/prelude/extend';
 
-//#if runtime has prelude/function/once
-
 /** @see Sugar.Function.once */
 extend(Function.prototype, 'once', function (this: Function): Function {
 	const
@@ -31,7 +29,6 @@ extend(Function.prototype, 'once', function (this: Function): Function {
 	};
 });
 
-//#endif
 //#if runtime has prelude/function/debounce
 
 /** @see Sugar.Function.debounce */
