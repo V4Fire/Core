@@ -7,7 +7,6 @@
  */
 
 import config from 'config';
-import statusCodes from 'core/status-codes';
 import Range from 'core/range';
 
 import { AsyncFactoryResult } from 'core/kv-storage';
@@ -41,7 +40,7 @@ export const defaultRequestOpts = {
 export const defaultResponseOpts = {
 	responseType: <ResponseTypes>'text',
 	okStatuses: new Range(200, 299),
-	status: <number>statusCodes.OK,
+	status: 200,
 	headers: {}
 };
 
