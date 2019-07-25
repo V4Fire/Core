@@ -85,7 +85,7 @@ export default class Range<T extends string | number | Date> {
 	}
 
 	/**
-	 * Clamps an ele,emt to be within the range if it falls outside
+	 * Clamps an element to be within the range if it falls outside
 	 * @param el
 	 */
 	clamp(el: unknown): T {
