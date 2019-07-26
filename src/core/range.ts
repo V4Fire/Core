@@ -87,6 +87,20 @@ export default class Range<T extends string | number | Date> {
 		return newRange;
 	}
 
+	/**
+	 * Returns a new range with the earliest starting point as its start, and the latest ending point as its end.
+	 * If the two ranges do not intersect this will effectively remove the "gap" between them
+	 *
+	 * @param range
+	 */
+	union(range: Range<T>): Range<T> {
+		const
+			newRange = new Range<T>(<T>Math.min(this.start, range.start), <T>Math.max(this.end, range.end));
+
+		newRange.type = this.type;
+		return newRange;
+	}
+
 	//#if runtime has range/extended
 
 	/**
@@ -142,19 +156,7 @@ export default class Range<T extends string | number | Date> {
 		return this.end - this.start + 1;
 	}
 
-	/**
-	 * Returns a new range with the earliest starting point as its start, and the latest ending point as its end.
-	 * If the two ranges do not intersect this will effectively remove the "gap" between them
-	 *
-	 * @param range
-	 */
-	union(range: Range<T>): Range<T> {
-		const
-			newRange = new Range<T>(<T>Math.min(this.start, range.start), <T>Math.max(this.end, range.end));
-
-		newRange.type = this.type;
-		return newRange;
-	}
+	//#endif
 
 	/**
 	 * Creates an array from the range and returns it
@@ -183,6 +185,8 @@ export default class Range<T extends string | number | Date> {
 		return res;
 	}
 
+	//#if runtime has range/extended
+
 	/**
 	 * Creates a string from the range and returns it
 	 */
@@ -210,6 +214,8 @@ export default class Range<T extends string | number | Date> {
 		return res.length === 2 ? res.join('..') : `${res[0]}..`;
 	}
 
+	//#endif
+
 	/**
 	 * Converts a value to a real range type
 	 * @param val
@@ -226,8 +232,6 @@ export default class Range<T extends string | number | Date> {
 				return <T>val;
 		}
 	}
-
-	//#endif
 }
 
 function charCodeAt(str: string, pos: number): number {
