@@ -205,6 +205,11 @@ const defaultFormat = {
 	timeZoneName: 'short'
 };
 
+const convert = {
+	'+': true,
+	'-': false
+};
+
 const
 	formatCache = Object.createDict<Intl.DateTimeFormatOptions>();
 
@@ -250,7 +255,7 @@ extend(Date.prototype, 'format', function (this: Date, format: string, locale: s
 			val = defaultFormat[key];
 		}
 
-		config[key] = val;
+		config[key] = val in convert ? convert[val] : val;
 	}
 
 	formatCache[format] = config;
