@@ -32,7 +32,6 @@ export interface CallbackStructureParams {
 
 	/**
 	 * If true, then a proxy will be used to track changes
-	 *   *) callback will be called using setImmediate (if deffer is not set to false)
 	 *   *) ignore parameters will not be taken into account
 	 *   *) tracking through a proxy makes it possible to track changes in arrays through an index
 	 */
