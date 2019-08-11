@@ -119,7 +119,7 @@ export function wrapStructure<T extends Instance>(
 		object: {is: Object.isObject, proxy}
 	};
 
-	function caller<T>(ctx: unknown, method: Function, name: string, ...args: unknown[]): T {
+	function shim<T>(ctx: unknown, method: Function, name: string, ...args: unknown[]): T {
 		const
 			a = info ? args.concat(name, instance) : [],
 			res = method.call(ctx, ...args);
@@ -152,7 +152,7 @@ export function wrapStructure<T extends Instance>(
 			}
 
 			instance[method] = function (...args: unknown[]): unknown {
-				return caller(this, fn, method, ...args);
+				return shim(this, fn, method, ...args);
 			};
 		}
 
