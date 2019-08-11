@@ -13,7 +13,7 @@ export type Instance = Array<unknown> |
 	Set<unknown> |
 	Dictionary;
 
-export interface CallbackStructureParams {
+export interface Params {
 	/**
 	 * Should provide additional parameters, such as which method called the callback
 	 */
@@ -56,7 +56,7 @@ export interface CallbackStructureParams {
 export function wrapStructure<T extends Instance>(
 	instance: T,
 	cb: Function,
-	params: CallbackStructureParams = {}
+	params: Params = {}
 ): T {
 	const {
 		ignore,
