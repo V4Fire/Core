@@ -1,4 +1,3 @@
-
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -8,11 +7,11 @@
  */
 
 export type Instance = Array<unknown> |
-						WeakMap<object, unknown> |
-						WeakSet<object> |
-						Map<unknown, unknown> |
-						Set<unknown> |
-						Dictionary;
+	WeakMap<object, unknown> |
+	WeakSet<object> |
+	Map<unknown, unknown> |
+	Set<unknown> |
+	Dictionary;
 
 export interface CallbackStructureParams {
 	/**
