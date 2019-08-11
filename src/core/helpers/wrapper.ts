@@ -11,7 +11,8 @@ export type Instance = Array<unknown> |
 						WeakMap<object, unknown> |
 						WeakSet<object> |
 						Map<unknown, unknown> |
-						Set<unknown>;
+						Set<unknown> |
+						Dictionary;
 
 export interface CallbackStructureParams {
 	/**
@@ -21,6 +22,7 @@ export interface CallbackStructureParams {
 
 	/**
 	 * Don't call a callback to the list of specified methods
+	 *   *) works only without proxy
 	 */
 	ignore?: string[];
 
@@ -42,8 +44,16 @@ export interface CallbackStructureParams {
  * Creates a specified data structure which will call a specified callback on every mutation
  *
  * @param instance
+ *    *) If instance is a dictionary, then a proxy will be used to track changes
+ *
  * @param cb
  * @param [params]
+ *
+ * @example
+ * wrapStructure({}, () => console.log(123));
+ * wrapStructure([1, 2], () => console.log(123));
+ * wrapStructure(new Map(), () => console.log(123));
+ * wrapStructure(new Set(), () => console.log(123));
  */
 export function wrapStructure<T extends Instance>(
 	instance: T,
@@ -52,47 +62,62 @@ export function wrapStructure<T extends Instance>(
 ): T {
 	const {
 		ignore,
-		info
-	} = params;
+		info,
+		deffer,
+		proxy: useProxy
+	} = {deffer: true, ...params};
 
 	let immediateId;
 
-	const shimTable = {
-		weakMap: [Object.isWeakMap, ['set', 'delete']],
-		weakSet: [Object.isWeakSet, ['add', 'delete']],
-		array: [Object.isArray, []],
-		map: [Object.isMap, ['set', 'delete', 'clear']],
-		set: [Object.isSet, ['add', 'delete', 'clear']]
+	const wrappedCb = (...args) => {
+		if (!immediateId && deffer) {
+			immediateId = setImmediate(() => {
+				cb(...args);
+				immediateId = undefined;
+			});
+
+		} else if (!deffer) {
+			cb(...args);
+		}
 	};
 
-	const mapProxyHandler = {
-		get: (target, prop, receiver) => {
-			let res = Reflect.get(target, prop, receiver);
+	const structuresMutableMethods = {
+		set: true,
+		add: true,
+		delete: true,
+		clear: true
+	};
 
-			if (Object.isFunction(res)) {
-				res = res.bind(target);
+	const structureProxy = () => new Proxy(instance, {
+		get: (target, prop, receiver) => {
+			const
+				val = Reflect.get(target, prop, receiver),
+				res = Object.isFunction(val) ? val.bind(target) : val;
+
+			if (structuresMutableMethods[prop]) {
+				wrappedCb('set', instance);
 			}
 
 			return res;
 		}
-	}
+	});
 
-	const proxyHandler = {
-		array: (arr: Array<unknown>) => new Proxy(arr, {
-			get: (target, property) => target[property],
-			set: (target, property, value) => {
-				target[property] = value;
+	const proxy = () => new Proxy(instance, {
+		get: (target, prop) => target[prop],
+		set: (target, prop, value) => {
+			target[prop] = value;
+			wrappedCb('set', instance);
+			return true;
+		}
+	});
 
-				if (!immediateId) {
-					immediateId = setImmediate(() => {
-						cb('set', instance);
-						immediateId = undefined;
-					});
-				}
-
-				return true;
-			}
-		})
+	const shimTable = {
+		weakMap: {is: Object.isWeakMap, methods: ['set', 'delete'], proxy: structureProxy},
+		weakSet: {is: Object.isWeakSet, methods: ['add', 'delete'], proxy: structureProxy},
+		map: {is: Object.isMap, methods: ['set', 'delete', 'clear'], proxy: structureProxy},
+		set: {is: Object.isSet, methods: ['add', 'delete', 'clear'], proxy: structureProxy},
+		array: {is: Object.isArray, methods: ['push', 'pop', 'shift', 'unshift', 'sort', 'splice'], proxy},
+		object: {is: Object.isObject, proxy}
 	};
 
 	function caller<T>(ctx: unknown, method: Function, name: string, ...args: unknown[]): T {
@@ -100,18 +125,22 @@ export function wrapStructure<T extends Instance>(
 			a = info ? args.concat(name, instance) : [],
 			res = method.call(ctx, ...args);
 
-		cb(...a);
+		wrappedCb(...a);
 		return res;
 	}
 
 	for (let i = 0, keys = Object.keys(shimTable); i < keys.length; i++) {
 		const
 			k = keys[i],
-			is = shimTable[k][0],
-			methods = shimTable[k][1];
+			{is, methods, proxy} = shimTable[k];
 
 		if (!is(instance)) {
 			continue;
+		}
+
+		if ((!methods && proxy) || useProxy) {
+			instance = proxy();
+			break;
 		}
 
 		for (let j = 0; j < methods.length; j++) {
@@ -126,10 +155,6 @@ export function wrapStructure<T extends Instance>(
 			instance[method] = function (...args: unknown[]): unknown {
 				return caller(this, fn, method, ...args);
 			};
-		}
-
-		if (wrapProxy[k]) {
-			instance = wrapProxy[k](instance);
 		}
 
 		break;
