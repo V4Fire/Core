@@ -79,20 +79,20 @@ export function wrapStructure<T extends Instance>(
 		}
 	};
 
-	const structuresMutableMethods = {
+	const mutableMethodsSetMap = {
 		set: true,
 		add: true,
 		delete: true,
 		clear: true
 	};
 
-	const structureProxy = () => new Proxy(instance, {
+	const proxySetMap = () => new Proxy(instance, {
 		get: (target, prop, receiver) => {
 			const
 				val = Reflect.get(target, prop, receiver),
 				res = Object.isFunction(val) ? val.bind(target) : val;
 
-			if (structuresMutableMethods[prop]) {
+			if (mutableMethodsSetMap[prop]) {
 				wrappedCb('set', instance);
 			}
 
@@ -110,10 +110,10 @@ export function wrapStructure<T extends Instance>(
 	});
 
 	const shimTable = {
-		weakMap: {is: Object.isWeakMap, methods: ['set', 'delete'], proxy: structureProxy},
-		weakSet: {is: Object.isWeakSet, methods: ['add', 'delete'], proxy: structureProxy},
-		map: {is: Object.isMap, methods: ['set', 'delete', 'clear'], proxy: structureProxy},
-		set: {is: Object.isSet, methods: ['add', 'delete', 'clear'], proxy: structureProxy},
+		weakMap: {is: Object.isWeakMap, methods: ['set', 'delete'], proxy: proxySetMap},
+		weakSet: {is: Object.isWeakSet, methods: ['add', 'delete'], proxy: proxySetMap},
+		map: {is: Object.isMap, methods: ['set', 'delete', 'clear'], proxy: proxySetMap},
+		set: {is: Object.isSet, methods: ['add', 'delete', 'clear'], proxy: proxySetMap},
 		array: {is: Object.isArray, methods: ['push', 'pop', 'shift', 'unshift', 'sort', 'splice'], proxy},
 		object: {is: Object.isObject, proxy}
 	};
