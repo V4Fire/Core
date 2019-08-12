@@ -125,14 +125,14 @@ export function wrapStructure<T extends Instance>(
 		object: {is: Object.isObject, proxy}
 	};
 
-	function shim<T>(ctx: unknown, method: Function, name: string, ...args: unknown[]): T {
+	const shim = (ctx: unknown, method: Function, name: string, ...args: unknown[]) => {
 		const
 			a = info ? args.concat(name, instance) : [],
 			res = method.call(ctx, ...args);
 
 		wrappedCb(...a);
 		return res;
-	}
+	};
 
 	for (let i = 0, keys = Object.keys(shimTable); i < keys.length; i++) {
 		const
