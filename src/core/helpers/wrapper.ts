@@ -51,7 +51,10 @@ export interface Params {
  * wrapStructure({}, () => console.log(123));
  * wrapStructure([1, 2], () => console.log(123));
  * wrapStructure(new Map(), () => console.log(123));
- * wrapStructure(new Set(), () => console.log(123));
+ *
+ * const s = wrapStructure(new Set(), () => console.log(123));
+ * s.add(1);
+ * // 123
  */
 export function wrapStructure<T extends Instance>(
 	instance: T,
@@ -101,11 +104,15 @@ export function wrapStructure<T extends Instance>(
 	});
 
 	const proxy = () => new Proxy(instance, {
-		get: (target, prop) => target[prop],
-		set: (target, prop, value) => {
-			target[prop] = value;
+		set: (...args) => {
+			const res = Reflect.set(...args);
 			wrappedCb('set', instance);
-			return true;
+			return res;
+		},
+		deleteProperty: (...args) => {
+			const res = Reflect.deleteProperty(...args);
+			wrappedCb('delete', instance);
+			return res;
 		}
 	});
 
