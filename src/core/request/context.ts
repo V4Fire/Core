@@ -52,7 +52,7 @@ export default class RequestContext<T = unknown> {
 	/**
 	 * Parent operation promise
 	 */
-	readonly then!: Then;
+	readonly parent!: Then;
 
 	/**
 	 * Request parameters
@@ -290,7 +290,7 @@ export default class RequestContext<T = unknown> {
 	 */
 	async wrapAsResponse(obj: Response | ResponseType): Promise<RequestResponseObject<T>> {
 		const response = obj instanceof Response ? obj : new Response(obj, {
-			parent: this.then,
+			parent: this.parent,
 			responseType: 'object'
 		});
 
