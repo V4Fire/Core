@@ -7,12 +7,9 @@
  */
 
 import config from 'config';
-import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 
-export interface StatusEvent {
-	status: boolean;
-	lastOnline?: Date;
-}
+import { NetStatus } from 'core/net/interface';
+import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 
 export const
 	event = new EventEmitter({newListener: false});
@@ -20,24 +17,30 @@ export const
 const
 	{online} = config;
 
-const
-	storage = import('core/kv-storage').then(({asyncLocal}) => asyncLocal.namespace('[[NET]]'));
+let
+	storage,
+	syncTimer,
+	retryCount = 0;
 
 let
 	status,
 	lastOnline,
-	cache,
-	syncTimer,
-	retryCount = 0;
+	cache;
+
+//#if runtime has core/kv-storage
+storage = import('core/kv-storage').then(({asyncLocal}) => asyncLocal.namespace('[[NET]]'));
+//#endif
 
 /**
  * If online returns true
  *
  * @emits online()
  * @emits offline(lastOnline: Date)
- * @emits status({status: boolean, lastOnline?: Date})
+ * @emits status(value: NetStatus)
  */
-export function isOnline(): Promise<{status: boolean; lastOnline?: Date}> {
+export function isOnline(): Promise<NetStatus> {
+	//#if runtime has core/net
+
 	if (cache) {
 		return cache;
 	}
@@ -147,6 +150,13 @@ export function isOnline(): Promise<{status: boolean; lastOnline?: Date}> {
 	}
 
 	return res;
+
+	//#endif
+
+	return Promise.resolve({
+		status: true,
+		lastOnline: new Date()
+	});
 }
 
 async function onlineCheck(): Promise<void> {

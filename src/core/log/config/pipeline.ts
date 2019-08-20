@@ -20,6 +20,8 @@ import engineFactory from 'core/log/engines';
  * @param pipelineConfig
  */
 export function createPipeline(pipelineConfig: LogPipelineConfig): CanUndef<LogPipeline> {
+	//#if runtime has core/log
+
 	const
 		{middlewares, engine, engineOptions, minLevel} = pipelineConfig;
 
@@ -48,4 +50,6 @@ export function createPipeline(pipelineConfig: LogPipelineConfig): CanUndef<LogP
 	}
 
 	return new LogPipeline(engineInstance, middlewareInstances, minLevel || DEFAULT_LEVEL);
+
+	//#endif
 }

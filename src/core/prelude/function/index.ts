@@ -29,6 +29,8 @@ extend(Function.prototype, 'once', function (this: Function): Function {
 	};
 });
 
+//#if runtime has prelude/function/debounce
+
 /** @see Sugar.Function.debounce */
 extend(Function.prototype, 'debounce', function (this: Function, delay: number = 250): Function {
 	const
@@ -42,6 +44,9 @@ extend(Function.prototype, 'debounce', function (this: Function, delay: number =
 		timer = setTimeout(() => that.apply(this, args), delay);
 	};
 });
+
+//#endif
+//#if runtime has prelude/function/throttle
 
 /** @see Sugar.Function.debounce */
 extend(Function.prototype, 'throttle', function (this: Function, delay: number = 250): Function {
@@ -63,3 +68,5 @@ extend(Function.prototype, 'throttle', function (this: Function, delay: number =
 		}
 	};
 });
+
+//#endif

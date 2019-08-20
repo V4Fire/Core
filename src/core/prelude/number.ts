@@ -120,6 +120,8 @@ extend(Number.prototype, 'pad', function (
 	return str;
 });
 
+//#if runtime has prelude/number/rounding
+
 /** @see Sugar.Number.floor */
 extend(Number.prototype, 'floor', createRoundingFunction(Math.floor));
 
@@ -128,6 +130,29 @@ extend(Number.prototype, 'round', createRoundingFunction(Math.round));
 
 /** @see Sugar.Number.ceil */
 extend(Number.prototype, 'ceil', createRoundingFunction(Math.ceil));
+
+function createRoundingFunction(method: Function): Function {
+	return function (this: Number, precision?: number): number {
+		const
+			val = Number(this);
+
+		if (precision) {
+			let
+				multiplier = Math.pow(10, Math.abs(precision));
+
+			if (precision < 0) {
+				multiplier = 1 / multiplier;
+			}
+
+			return method(val * multiplier) / multiplier;
+		}
+
+		return method(val);
+	};
+}
+
+//#endif
+//#if runtime has prelude/number/format
 
 const opts = Object.createDict({
 	decimal: '.',
@@ -165,6 +190,8 @@ extend(Number.prototype, 'format', function (this: Number, place?: number): stri
 	return res;
 });
 
+//#endif
+
 function createPostfixGetter(nm: string): PropertyDescriptor {
 	return {
 		get(): string {
@@ -180,26 +207,6 @@ function createMsFunction(offset: number): Function {
 
 	fn.valueOf = fn;
 	return fn;
-}
-
-function createRoundingFunction(method: Function): Function {
-	return function (this: Number, precision?: number): number {
-		const
-			val = Number(this);
-
-		if (precision) {
-			let
-				multiplier = Math.pow(10, Math.abs(precision));
-
-			if (precision < 0) {
-				multiplier = 1 / multiplier;
-			}
-
-			return method(val * multiplier) / multiplier;
-		}
-
-		return method(val);
-	};
 }
 
 function repeatString(str: string, num: number): string {

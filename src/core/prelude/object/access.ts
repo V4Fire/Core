@@ -47,6 +47,8 @@ extend(Object, 'get', (
 	return res;
 });
 
+//#if runtime has prelude/object/has
+
 /**
  * Returns true if an object has a property by the specified path
  *
@@ -93,6 +95,8 @@ extend(Object, 'has', (
 
 	return key in res;
 });
+
+//#endif
 
 /**
  * Sets a value to an object by the specified path

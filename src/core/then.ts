@@ -72,7 +72,7 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	}
 
 	/**
-	 * @see {Promise.resolve}
+	 * @see Promise.resolve
 	 * @param value
 	 * @param [parent] - parent promise
 	 */
@@ -97,7 +97,7 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	}
 
 	/**
-	 * @see {Promise.reject}
+	 * @see Promise.reject
 	 * @param reason
 	 * @param [parent] - parent promise
 	 */
@@ -106,7 +106,7 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	}
 
 	/**
-	 * @see {Promise.all}
+	 * @see Promise.all
 	 * @param values
 	 * @param [parent] - parent promise
 	 */
@@ -156,7 +156,7 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	}
 
 	/**
-	 * @see {Promise.race}
+	 * @see Promise.race
 	 * @param values
 	 * @param [parent] - parent promise
 	 */
@@ -287,50 +287,50 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 		});
 	}
 
-	/** @see {Promise.prototype.then} */
+	/** @see Promise.prototype.then */
 	then(
-		onFulfilled?: Nullable<(value: T) => Value<T>>,
-		onRejected?: Nullable<(reason: unknown) => Value<T>>,
-		abortCb?: Nullable<OnError>
+		onFulfill?: Nullable<(value: T) => Value<T>>,
+		onReject?: Nullable<(reason: unknown) => Value<T>>,
+		onAbort?: Nullable<OnError>
 	): Then<T>;
 
 	then<R>(
-		onFulfilled: Nullable<(value: T) => Value<T>>,
-		onRejected: (reason: unknown) => Value<R>,
-		abortCb?: Nullable<OnError>
+		onFulfill: Nullable<(value: T) => Value<T>>,
+		onReject: (reason: unknown) => Value<R>,
+		onAbort?: Nullable<OnError>
 	): Then<T | R>;
 
 	then<V>(
-		onFulfilled: (value: T) => Value<V>,
-		onRejected?: Nullable<(reason: unknown) => Value<V>>,
-		abortCb?: Nullable<OnError>
+		onFulfill: (value: T) => Value<V>,
+		onReject?: Nullable<(reason: unknown) => Value<V>>,
+		onAbort?: Nullable<OnError>
 	): Then<V>;
 
 	then<V, R>(
-		onFulfilled: (value: T) => Value<V>,
-		onRejected: (reason: unknown) => Value<R>,
-		abortCb?: Nullable<OnError>
+		onFulfill: (value: T) => Value<V>,
+		onReject: (reason: unknown) => Value<R>,
+		onAbort?: Nullable<OnError>
 	): Then<V | R>;
 
-	then(onFulfilled: any, onRejected: any, abortCb: any): any {
+	then(onFulfill: any, onReject: any, onAbort: any): any {
 		this.pendingChildren++;
-		return new Then((res, rej, onAbort) => {
+		return new Then((res, rej, abort) => {
 			let
 				resolve,
 				reject;
 
-			if (Object.isFunction(onFulfilled)) {
+			if (Object.isFunction(onFulfill)) {
 				resolve = (val) => {
-					this.evaluate(onFulfilled, [val], rej, res);
+					this.evaluate(onFulfill, [val], rej, res);
 				};
 
 			} else {
 				resolve = res;
 			}
 
-			if (Object.isFunction(onRejected)) {
+			if (Object.isFunction(onReject)) {
 				reject = (err) => {
-					this.evaluate(onRejected, [err], rej, res);
+					this.evaluate(onReject, [err], rej, res);
 				};
 
 			} else {
@@ -340,10 +340,10 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 			const
 				that = this;
 
-			onAbort(/** @this {Then} */ function (this: Then, reason: unknown): void {
-				if (Object.isFunction(abortCb)) {
+			abort(/** @this {Then} */ function (this: Then, reason: unknown): void {
+				if (Object.isFunction(onAbort)) {
 					try {
-						abortCb(reason);
+						onAbort(reason);
 
 					} catch {}
 				}
@@ -359,17 +359,17 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 		});
 	}
 
-	/** @see {Promise.prototype.catch} */
-	catch(onRejected?: Nullable<(reason: unknown) => Value<T>>): Then<T>;
-	catch<R>(onRejected: (reason: unknown) => Value<R>): Then<R>;
-	catch(onRejected?: any): Then<any> {
+	/** @see Promise.prototype.catch */
+	catch(onReject?: Nullable<(reason: unknown) => Value<T>>): Then<T>;
+	catch<R>(onReject: (reason: unknown) => Value<R>): Then<R>;
+	catch(onReject?: any): Then<any> {
 		return new Then((res, rej, onAbort) => {
 			let
 				reject;
 
-			if (Object.isFunction(onRejected)) {
+			if (Object.isFunction(onReject)) {
 				reject = (err) => {
-					this.evaluate(onRejected, [err], rej, res);
+					this.evaluate(onReject, [err], rej, res);
 				};
 
 			} else {

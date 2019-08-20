@@ -8,6 +8,8 @@
 
 import extend from 'core/prelude/extend';
 
+//#if runtime has prelude/object/getPrototypeChain
+
 const
 	protoChains = new WeakMap<Function, object[]>();
 
@@ -37,3 +39,5 @@ extend(Object, 'getPrototypeChain', (constructor: Function) => {
 	protoChains.set(constructor, chain.reverse());
 	return chain.slice();
 });
+
+//#endif

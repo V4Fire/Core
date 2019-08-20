@@ -7,12 +7,11 @@
  */
 
 import config from 'config';
-import statusCodes from 'core/status-codes';
 import Range from 'core/range';
 
 import { AsyncFactoryResult } from 'core/kv-storage';
 import { RequestMethods, ResponseTypes, GlobalOpts, CacheStrategy } from 'core/request/interface';
-import { Cache, RestrictedCache, NeverCache } from 'core/cache';
+import { Cache, RestrictedCache, NeverCache, AbstractCache } from 'core/cache';
 
 export let
 	storage: CanUndef<Promise<AsyncFactoryResult>>;
@@ -41,14 +40,14 @@ export const defaultRequestOpts = {
 export const defaultResponseOpts = {
 	responseType: <ResponseTypes>'text',
 	okStatuses: new Range(200, 299),
-	status: <number>statusCodes.OK,
+	status: 200,
 	headers: {}
 };
 
 export const
 	pendingCache = new Cache();
 
-export const cache: Record<CacheStrategy, Cache> = {
+export const cache: Record<CacheStrategy, AbstractCache> = {
 	queue: new RestrictedCache(),
 	forever: new Cache(),
 	never: new NeverCache()

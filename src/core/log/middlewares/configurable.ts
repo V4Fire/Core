@@ -18,6 +18,7 @@ let
 
 const setConfig = (opts) => {
 	options = {
+		patterns: [':error\\b'],
 		...opts
 	};
 
@@ -32,6 +33,8 @@ export class ConfigurableMiddleware implements LogMiddleware {
 	protected queue: LogEvent[] = [];
 
 	exec(events: CanArray<LogEvent>, next: NextCallback): void {
+		//#if runtime has core/log
+
 		if (!options) {
 			if (Array.isArray(events)) {
 				this.queue.push(...events);
@@ -85,6 +88,8 @@ export class ConfigurableMiddleware implements LogMiddleware {
 				next(events);
 			}
 		}
+
+		//#endif
 	}
 
 	/**
@@ -92,6 +97,8 @@ export class ConfigurableMiddleware implements LogMiddleware {
 	 * @param context
 	 */
 	protected filterContext(context: string): boolean {
+		//#if runtime has core/log
+
 		if (options.patterns) {
 			for (let patterns = options.patterns, i = 0; i < patterns.length; i++) {
 				if (patterns[i].test(context)) {
@@ -101,6 +108,8 @@ export class ConfigurableMiddleware implements LogMiddleware {
 
 			return false;
 		}
+
+		//#endif
 
 		return true;
 	}

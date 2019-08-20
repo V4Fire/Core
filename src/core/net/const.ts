@@ -6,5 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-export * from 'core/helpers/string';
-export * from 'core/helpers/other';
+import { EventEmitter2 as EventEmitter } from 'eventemitter2';
+
+export const
+	event = new EventEmitter({newListener: false});

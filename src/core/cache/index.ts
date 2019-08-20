@@ -6,6 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-export { default as Cache } from 'core/cache/cache';
+export { default as AbstractCache, ClearFilter } from 'core/cache/interface';
+export { default as Cache } from 'core/cache/simple';
 export { default as RestrictedCache } from 'core/cache/restricted';
 export { default as NeverCache } from 'core/cache/never';

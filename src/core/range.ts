@@ -57,19 +57,6 @@ export default class Range<T extends string | number | Date> {
 	}
 
 	/**
-	 * Clones the range
-	 */
-	clone(): Range<T> {
-		const
-			range = new Range(<T>this.start, <T>this.end);
-
-		range.type = this.type;
-		range.reverse = this.reverse;
-
-		return range;
-	}
-
-	/**
 	 * Returns true if the specified element is contained inside the range.
 	 * (element may be a value or an another range)
 	 *
@@ -85,7 +72,52 @@ export default class Range<T extends string | number | Date> {
 	}
 
 	/**
-	 * Clamps an ele,emt to be within the range if it falls outside
+	 * Returns a new range with the latest starting point as its start, and the earliest ending point as its end.
+	 * If the two ranges do not intersect this will effectively produce an invalid range
+	 *
+	 * @param range
+	 */
+	intersect(range: Range<T>): Range<T> {
+		const
+			start = <T>Math.max(this.start, range.start),
+			end = <T>Math.min(this.end, range.end),
+			newRange = start < end ? new Range(start, end) : new Range(<T>NaN, <T>NaN);
+
+		newRange.type = this.type;
+		return newRange;
+	}
+
+	/**
+	 * Returns a new range with the earliest starting point as its start, and the latest ending point as its end.
+	 * If the two ranges do not intersect this will effectively remove the "gap" between them
+	 *
+	 * @param range
+	 */
+	union(range: Range<T>): Range<T> {
+		const
+			newRange = new Range<T>(<T>Math.min(this.start, range.start), <T>Math.max(this.end, range.end));
+
+		newRange.type = this.type;
+		return newRange;
+	}
+
+	//#if runtime has range/extended
+
+	/**
+	 * Clones the range
+	 */
+	clone(): Range<T> {
+		const
+			range = new Range(<T>this.start, <T>this.end);
+
+		range.type = this.type;
+		range.reverse = this.reverse;
+
+		return range;
+	}
+
+	/**
+	 * Clamps an element to be within the range if it falls outside
 	 * @param el
 	 */
 	clamp(el: unknown): T {
@@ -124,35 +156,7 @@ export default class Range<T extends string | number | Date> {
 		return this.end - this.start + 1;
 	}
 
-	/**
-	 * Returns a new range with the latest starting point as its start, and the earliest ending point as its end.
-	 * If the two ranges do not intersect this will effectively produce an invalid range
-	 *
-	 * @param range
-	 */
-	intersect(range: Range<T>): Range<T> {
-		const
-			start = <T>Math.max(this.start, range.start),
-			end = <T>Math.min(this.end, range.end),
-			newRange = start < end ? new Range(start, end) : new Range(<T>NaN, <T>NaN);
-
-		newRange.type = this.type;
-		return newRange;
-	}
-
-	/**
-	 * Returns a new range with the earliest starting point as its start, and the latest ending point as its end.
-	 * If the two ranges do not intersect this will effectively remove the "gap" between them
-	 *
-	 * @param range
-	 */
-	union(range: Range<T>): Range<T> {
-		const
-			newRange = new Range<T>(<T>Math.min(this.start, range.start), <T>Math.max(this.end, range.end));
-
-		newRange.type = this.type;
-		return newRange;
-	}
+	//#endif
 
 	/**
 	 * Creates an array from the range and returns it
@@ -181,12 +185,14 @@ export default class Range<T extends string | number | Date> {
 		return res;
 	}
 
+	//#if runtime has range/extended
+
 	/**
 	 * Creates a string from the range and returns it
 	 */
 	toString(): string {
 		if (!this.isValid()) {
-			return 'Invalid Range';
+			return 'Invalid range';
 		}
 
 		const
@@ -207,6 +213,8 @@ export default class Range<T extends string | number | Date> {
 
 		return res.length === 2 ? res.join('..') : `${res[0]}..`;
 	}
+
+	//#endif
 
 	/**
 	 * Converts a value to a real range type

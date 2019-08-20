@@ -14,6 +14,8 @@ const
 	dasherizeCache = Object.createDict<string>(),
 	underscoreCache = Object.createDict<string>();
 
+//#if runtime has prelude/string/capitalize
+
 /** @see Sugar.String.capitalize */
 extend(String.prototype, 'capitalize', function (this: string, lower?: boolean, all?: boolean): string {
 	const
@@ -41,6 +43,8 @@ extend(String.prototype, 'capitalize', function (this: string, lower?: boolean, 
 
 	return capitalizeCache[str] = res;
 });
+
+//#endif
 
 const
 	normalizeRgxp = /(^[\s_-]+)|([\s_-]+$)|([\s_-]+)/g,
@@ -88,6 +92,8 @@ extend(String.prototype, 'dasherize', function (this: string, stable?: boolean):
 	);
 });
 
+//#if runtime has prelude/string/underscore
+
 /**
  * Returns underscore version of the specified string
  * @param [stable] - if true, then the operation can be reverted
@@ -109,6 +115,16 @@ extend(String.prototype, 'underscore', function (this: string, stable?: boolean)
 	);
 });
 
+function toUnderscore(str: string, start: CanUndef<string>, end: CanUndef<string>, middle: CanUndef<string>): string {
+	if (middle) {
+		return '_';
+	}
+
+	return new Array((start || end || '').length + 1).join('_');
+}
+
+//#endif
+
 function toCamelize(str: string, start: CanUndef<string>, end: CanUndef<string>, middle: CanUndef<string>): string {
 	if (middle) {
 		return middle.toUpperCase();
@@ -123,14 +139,6 @@ function toDasherize(str: string, start: CanUndef<string>, end: CanUndef<string>
 	}
 
 	return new Array((start || end || '').length + 1).join('-');
-}
-
-function toUnderscore(str: string, start: CanUndef<string>, end: CanUndef<string>, middle: CanUndef<string>): string {
-	if (middle) {
-		return '_';
-	}
-
-	return new Array((start || end || '').length + 1).join('_');
 }
 
 function isUpper(char: string): boolean {

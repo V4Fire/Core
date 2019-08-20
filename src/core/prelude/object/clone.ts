@@ -10,7 +10,6 @@ import extend from 'core/prelude/extend';
 import { convertIfDate } from 'core/json';
 
 const
-	simpleCloneLabel = Symbol('Simple clone label'),
 	hasOwnProperty = Object.prototype.hasOwnProperty;
 
 /**

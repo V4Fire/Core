@@ -117,6 +117,14 @@ extend(Date.prototype, 'endOfYear', function (this: Date): Date {
 	return this;
 });
 
+/**
+ * Returns a list of week days
+ */
+extend(Date, 'getWeekDays', () =>
+	[t`Mn`, t`Ts`, t`Wd`, t`Th`, t`Fr`, t`St`, t`Sn`]);
+
+//#if runtime has prelude/date/modify
+
 /** @see Sugar.Date.add */
 extend(Date.prototype, 'add', createDateModifier((v, b) => b + v));
 
@@ -125,6 +133,9 @@ extend(Date.prototype, 'set', createDateModifier());
 
 /** @see Sugar.Date.rewind */
 extend(Date.prototype, 'rewind', createDateModifier((v, b) => b - v));
+
+//#endif
+//#if runtime has prelude/date/relative
 
 /**
  * Returns a relative value for the current date
@@ -139,6 +150,9 @@ extend(Date.prototype, 'relative', function (this: Date): DateRelative {
 extend(Date.prototype, 'relativeTo', function (this: Date, date: DateCreateValue): DateRelative {
 	return relative(this, date);
 });
+
+//#endif
+//#if runtime has prelude/date/format
 
 const shortOpts = {
 	month: 'numeric',
@@ -191,6 +205,11 @@ const defaultFormat = {
 	timeZoneName: 'short'
 };
 
+const convert = {
+	'+': true,
+	'-': false
+};
+
 const
 	formatCache = Object.createDict<Intl.DateTimeFormatOptions>();
 
@@ -236,7 +255,7 @@ extend(Date.prototype, 'format', function (this: Date, format: string, locale: s
 			val = defaultFormat[key];
 		}
 
-		config[key] = val;
+		config[key] = val in convert ? convert[val] : val;
 	}
 
 	formatCache[format] = config;
@@ -297,12 +316,6 @@ extend(Date.prototype, 'toHTMLString', function (this: Date, params: DateHTMLStr
 	return `${this.toHTMLDateString(params)}T${this.toHTMLTimeString(params)}`;
 });
 
-/**
- * Returns a list of week days
- */
-extend(Date, 'getWeekDays', () =>
-	[t`Mn`, t`Ts`, t`Wd`, t`Th`, t`Fr`, t`St`, t`Sn`]);
-
 const aliases = {
 	now: () => new Date(),
 	today: () => new Date().beginningOfDay(),
@@ -320,8 +333,12 @@ const aliases = {
 	}
 };
 
+//#endif
+//#if runtime has prelude/date/create
+
 const
-	isoRegExp = /^(\d{4}-\d{2}-\d{2})([T ])(\d{2}:\d{2}:\d{2}(?:\.\d{3})?)(?:\d{0,3})?(Z)?([+-]\d{2}:\d{2})?$/;
+	isoRegExp = /^(\d{4}-\d{2}-\d{2})([T ])(\d{2}:\d{2}:\d{2}(?:\.\d{3})?)(?:\d{0,3})?(Z)?([+-]\d{2}:\d{2})?$/,
+	isFloatStr = /^\d+\.\d+$/;
 
 /**
  * Creates a date from the specified pattern
@@ -337,7 +354,7 @@ extend(Date, 'create', (pattern?: DateCreateValue) => {
 			return aliases[pattern]();
 		}
 
-		if (isoRegExp.test(pattern)) {
+		if (isoRgxp.test(pattern)) {
 			const createISOTime = () => {
 				const
 					h = new Date().getTimezoneOffset() / 60,
@@ -347,7 +364,7 @@ extend(Date, 'create', (pattern?: DateCreateValue) => {
 			};
 
 			pattern = pattern.replace(
-				isoRegExp,
+				isoRgxp,
 				(str, date, t, time, zone) => `${date}T${time}${zone === 'Z' || !zone ? createISOTime() : ''}`
 			);
 
@@ -358,7 +375,7 @@ extend(Date, 'create', (pattern?: DateCreateValue) => {
 		return new Date(Date.parse(pattern));
 	}
 
-	if (Object.isString(pattern) && /^\d+\.\d+$/.test(pattern)) {
+	if (Object.isString(pattern) && isFloatStr.test(pattern)) {
 		const float = parseFloat(pattern);
 		pattern = float ? float * 1e3 : pattern;
 
@@ -368,6 +385,9 @@ extend(Date, 'create', (pattern?: DateCreateValue) => {
 
 	return new Date(pattern.valueOf());
 });
+
+//#endif
+//#if runtime has prelude/date/relative
 
 function relative(from: DateCreateValue, to: DateCreateValue): DateRelative {
 	const
@@ -402,6 +422,9 @@ function relative(from: DateCreateValue, to: DateCreateValue): DateRelative {
 		diff
 	};
 }
+
+//#endif
+//#if runtime has prelude/date/modify
 
 function createDateModifier(mod: (val: number, base: number) => number = ((Any))): Function {
 	return function modifyDate(this: Date, params: DateSetParams, reset?: boolean): Date {
@@ -498,3 +521,5 @@ function createDateModifier(mod: (val: number, base: number) => number = ((Any))
 		return this;
 	};
 }
+
+//#endif

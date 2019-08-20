@@ -27,6 +27,8 @@ export class ConsoleEngine implements LogEngine {
 	 * @param event - log event to print
 	 */
 	log(event: LogEvent): void {
+		//#if runtime has core/log
+
 		if (!event.details && !event.error) {
 			console.log(`%c${event.context}`, this.getStringifiedStyle(event.level));
 
@@ -34,12 +36,14 @@ export class ConsoleEngine implements LogEngine {
 			const
 				details = [...event.details];
 
-			if (Boolean(event.error)) {
-				details.concat(event.error);
+			if (event.error) {
+				details.push(event.error);
 			}
 
 			console.log(`%c${event.context}`, this.getStringifiedStyle(event.level), ...details);
 		}
+
+		//#endif
 	}
 
 	/**
@@ -47,6 +51,8 @@ export class ConsoleEngine implements LogEngine {
 	 * @param logLevel - level of log which needs a style
 	 */
 	protected getStringifiedStyle(logLevel: LogLevel): string {
+		//#if runtime has core/log
+
 		if (!this.stylesCache) {
 			return '';
 		}
@@ -78,5 +84,7 @@ export class ConsoleEngine implements LogEngine {
 		}
 
 		return this.stringifiedStylesCache[logLevel] = stringifiedStyle;
+
+		//#endif
 	}
 }

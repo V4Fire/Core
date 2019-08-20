@@ -6,5 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-export * from 'core/helpers/string';
-export * from 'core/helpers/other';
+export interface NetStatus {
+	status: boolean;
+	lastOnline?: Date;
+}
