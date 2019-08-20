@@ -331,7 +331,7 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 				const reqOpts = {
 					...p,
 					url,
-					parent: parent,
+					parent,
 					decoder: ctx.decoders
 				};
 
