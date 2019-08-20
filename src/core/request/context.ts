@@ -12,8 +12,17 @@ import Cache from 'core/cache/interface';
 
 import { concatUrls, toQueryString } from 'core/url';
 import { normalizeHeaders, applyQueryForStr, getStorageKey, getRequestKey } from 'core/request/utils';
-import { Encoders, Decoders, RequestQuery, CreateRequestOpts, RequestResponseObject } from 'core/request/interface';
 import { cache, pendingCache, storage, globalOpts, defaultRequestOpts } from 'core/request/const';
+import {
+
+	Encoders,
+	Decoders,
+	RequestQuery,
+	CreateRequestOpts,
+	RequestResponseObject,
+	ResponseType
+
+} from 'core/request/interface';
 
 const
 	resolveURLRgxp = /(?:^|(\w+:\/\/)(?:([^./]+)\.)?([^./]+)(?:\.([^./]+))?)(\/.*|$)/,
