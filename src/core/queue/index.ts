@@ -7,3 +7,5 @@
  */
 
 export { default as Merge } from 'core/queue/merge';
+
+export { default as Request } from 'core/queue/request';
