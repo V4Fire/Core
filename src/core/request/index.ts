@@ -185,7 +185,7 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 			}
 		});
 
-		const then = new Then(async (resolve, reject, onAbort) => {
+		const parent = new Then(async (resolve, reject, onAbort) => {
 			onAbort((err) => {
 				reject(err || new RequestError('abort'));
 			});
@@ -195,8 +195,8 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 				GLOBAL['setImmediate'](r);
 			});
 
-			ctx.then = then;
-			ctx.isOnline = (await Then.resolve(isOnline(), then)).status;
+			ctx.parent = parent;
+			ctx.isOnline = (await Then.resolve(isOnline(), parent)).status;
 
 			const
 				tasks = <any[]>[];
@@ -206,11 +206,11 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 			});
 
 			const
-				middlewareResults = await Then.all(tasks, then);
+				middlewareResults = await Then.all(tasks, parent);
 
 			const applyEncoders = (data) => {
 				let
-					res = Then.resolve(data, then);
+					res = Then.resolve(data, parent);
 
 				Object.forEach(ctx.encoders, (fn: Function, i) => {
 					res = res.then((obj) => fn(i ? obj : Object.fastClone(obj)));
@@ -299,13 +299,13 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 
 			if (fromCache) {
 				cache = 'memory';
-				res = Then.immediate(() => ctx.cache.get(cacheKey), then)
+				res = Then.immediate(() => ctx.cache.get(cacheKey), parent)
 					.then(ctx.wrapAsResponse);
 
 			} else if (fromLocalStorage) {
 				cache = 'offline';
 				res = Then.immediate(() => (<NonNullable<typeof storage>>storage)
-					.then((storage) => storage.get(localCacheKey)), then)
+					.then((storage) => storage.get(localCacheKey)), parent)
 					.then(ctx.wrapAsResponse)
 					.then(ctx.saveCache);
 
@@ -331,7 +331,7 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 				const reqOpts = {
 					...p,
 					url,
-					parent: then,
+					parent,
 					decoder: ctx.decoders
 				};
 
@@ -347,7 +347,7 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 			resolve(ctx.wrapRequest(res));
 		});
 
-		return then;
+		return parent;
 	};
 
 	if (Object.isFunction(resolver)) {

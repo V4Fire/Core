@@ -337,7 +337,7 @@ const aliases = {
 //#if runtime has prelude/date/create
 
 const
-	isoRgxp = /^(\d{4}-\d{2}-\d{2})([T ])(\d{2}:\d{2}:\d{2}(?:\.\d{3})?)(\d{0,3})?(Z)?([+-]\d{2}:\d{2})?$/,
+	isDateStr = /^(\d{4}-\d{2}-\d{2})([T ])(\d{2}:\d{2}:\d{2}(?:\.\d{3})?)(?:\d{0,3})?(Z)?([+-]\d{2}:?\d{2})?$/,
 	isFloatStr = /^\d+\.\d+$/;
 
 /**
@@ -354,7 +354,7 @@ extend(Date, 'create', (pattern?: DateCreateValue) => {
 			return aliases[pattern]();
 		}
 
-		if (isoRgxp.test(pattern)) {
+		if (isDateStr.test(pattern)) {
 			const createISOTime = () => {
 				const
 					h = new Date().getTimezoneOffset() / 60,
@@ -364,7 +364,7 @@ extend(Date, 'create', (pattern?: DateCreateValue) => {
 			};
 
 			pattern = pattern.replace(
-				isoRgxp,
+				isDateStr,
 				(str, date, t, time, zone) => `${date}T${time}${zone === 'Z' || !zone ? createISOTime() : ''}`
 			);
 
