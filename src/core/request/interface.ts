@@ -118,6 +118,15 @@ export type Middlewares<T = unknown> =
 	Dictionary<Middleware<T>> |
 	Iterable<Middleware<T>>;
 
+export interface RequestAPI {
+	url?: Nullable<string>;
+	protocol?: Nullable<string>;
+	domain3?: Nullable<string>;
+	domain2?: Nullable<string>;
+	zone?: Nullable<string>;
+	namespace?: Nullable<string>;
+}
+
 export interface CreateRequestOpts<T = unknown> {
 	readonly method?: RequestMethods;
 	readonly cacheStrategy?: CacheStrategy;
@@ -127,6 +136,7 @@ export interface CreateRequestOpts<T = unknown> {
 	okStatuses?: OkStatuses;
 	externalRequest?: boolean;
 
+	api?: RequestAPI;
 	body?: RequestBody;
 	query?: RequestQuery;
 	meta?: Dictionary;
@@ -141,15 +151,6 @@ export interface CreateRequestOpts<T = unknown> {
 	cacheMethods?: RequestMethods[];
 	offlineCacheTTL?: number;
 	offlineCache?: boolean;
-
-	api?: {
-		url?: Nullable<string>;
-		protocol?: Nullable<string>;
-		domain3?: Nullable<string>;
-		domain2?: Nullable<string>;
-		zone?: Nullable<string>;
-		namespace?: Nullable<string>;
-	};
 
 	middlewares?: Middlewares<T>;
 	encoder?: Encoder | Encoders;
