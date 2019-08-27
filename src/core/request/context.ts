@@ -17,6 +17,7 @@ import {
 
 	Encoders,
 	Decoders,
+	RequestAPI,
 	RequestQuery,
 	CreateRequestOpts,
 	RequestResponseObject,
@@ -124,7 +125,7 @@ export default class RequestContext<T = unknown> {
 	 */
 	resolveAPI(api: Nullable<string> = globalOpts.api): string {
 		const
-			a = <NonNullable<CreateRequestOpts['api']>>this.params.api;
+			a = <RequestAPI>(this.params.api || {});
 
 		if (a.url) {
 			return a.url;
