@@ -98,6 +98,65 @@ extend(Number.prototype, 'isInteger', function (): boolean {
 	return this % 1 === 0;
 });
 
+/**
+ * Returns true if the specified number is float
+ */
+extend(Number.prototype, 'isFloat', function (): boolean {
+	return this % 1 !== 0 && Number.isFinite(this);
+});
+
+/** @see Sugar.Number.isEven */
+extend(Number.prototype, 'isEven', function (): boolean {
+	return this % 2 === 0;
+});
+
+/** @see Sugar.Number.isEven */
+extend(Number.prototype, 'isOdd', function (): boolean {
+	return this % 2 !== 0 && Number.isFinite(this);
+});
+
+/**
+ * Returns true if the specified number is natural
+ */
+extend(Number.prototype, 'isNatural', function (): boolean {
+	return this > 0 && this % 1 === 0;
+});
+
+/**
+ * Returns true if the specified number is positive
+ */
+extend(Number.prototype, 'isPositive', function (): boolean {
+	return this > 0;
+});
+
+/**
+ * Returns true if the specified number is negative
+ */
+extend(Number.prototype, 'isNegative', function (): boolean {
+	return this < 0;
+});
+
+/**
+ * Returns true if the specified number is non-negative
+ */
+extend(Number.prototype, 'isNonNegative', function (): boolean {
+	return this >= 0;
+});
+
+/**
+ * Returns true if the specified number is more or equal than 0 and less or equal than 1
+ */
+extend(Number.prototype, 'isBetweenZeroAndOne', function (): boolean {
+	return this >= 0 && this <= 1;
+});
+
+/**
+ * Returns true if the specified number is more than 0 and less or equal than 1
+ */
+extend(Number.prototype, 'isPositiveBetweenZeroAndOne', function (): boolean {
+	return this > 0 && this <= 1;
+});
+
 const
 	decPartRgxp = /\.\d+/;
 

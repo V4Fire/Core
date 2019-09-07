@@ -217,6 +217,16 @@ interface Number {
 	weeks(): number;
 
 	isInteger(): boolean;
+	isFloat(): boolean;
+	isEven(): boolean;
+	isOdd(): boolean;
+	isPositive(): boolean;
+	isNegative(): boolean;
+	isNonNegative(): boolean;
+	isNatural(): boolean;
+	isBetweenZeroAndOne(): boolean;
+	isPositiveBetweenZeroAndOne(): boolean;
+
 	pad(place?: number, sign?: boolean, base?: number): string;
 	format(place?: number): string;
 
