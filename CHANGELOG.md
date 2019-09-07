@@ -16,15 +16,15 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 #### :rocket: New Feature
 
 * Improved number prelude API:
-  * Added `Number.isFloat`
-  * Added `Number.isEven`
-  * Added `Number.isOdd`
-  * Added `Number.isPositive`
-  * Added `Number.isNegative`
-  * Added `Number.isNonNegative`
-  * Added `Number.isNatural`
-  * Added `Number.isBetweenZeroAndOne`
-  * Added `Number.isPositiveBetweenZeroAndOne`
+  * Added `Number.prototype.isFloat`
+  * Added `Number.prototype.isEven`
+  * Added `Number.prototype.isOdd`
+  * Added `Number.prototype.isPositive`
+  * Added `Number.prototype.isNegative`
+  * Added `Number.prototype.isNonNegative`
+  * Added `Number.prototype.isNatural`
+  * Added `Number.prototype.isBetweenZeroAndOne`
+  * Added `Number.prototype.isPositiveBetweenZeroAndOne`
   
 #### :house: Internal
 
