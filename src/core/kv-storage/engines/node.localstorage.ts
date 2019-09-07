@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import fs from 'fs-extra-promise';
+import * as fs from 'fs-extra-promise';
 import Storage from 'node-localstorage';
 import { Cache } from 'core/cache';
 
