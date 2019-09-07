@@ -25,6 +25,10 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
   * Added `Number.isNatural`
   * Added `Number.isBetweenZeroAndOne`
   * Added `Number.isPositiveBetweenZeroAndOne`
+  
+#### :house: Internal
+
+* Updated TypeScript@3.6.2
 
 ## v3.0.0-beta.66 (2019-08-27)
 
