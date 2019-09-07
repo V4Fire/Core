@@ -14,15 +14,15 @@ interface LogOptions {
 }
 
 let
-	options: LogOptions;
+	logOps: LogOptions;
 
 const setConfig = (opts) => {
-	options = {
+	logOps = {
 		patterns: [':error\\b'],
 		...opts
 	};
 
-	options.patterns = (options.patterns || []).map((el) => Object.isRegExp(el) ? el : new RegExp(el));
+	logOps.patterns = (logOps.patterns || []).map((el) => Object.isRegExp(el) ? el : new RegExp(el));
 };
 
 env.get('log').then(setConfig, setConfig);
@@ -35,7 +35,7 @@ export class ConfigurableMiddleware implements LogMiddleware {
 	exec(events: CanArray<LogEvent>, next: NextCallback): void {
 		//#if runtime has core/log
 
-		if (!options) {
+		if (!logOps) {
 			if (Array.isArray(events)) {
 				this.queue.push(...events);
 
@@ -99,8 +99,8 @@ export class ConfigurableMiddleware implements LogMiddleware {
 	protected filterContext(context: string): boolean {
 		//#if runtime has core/log
 
-		if (options.patterns) {
-			for (let patterns = options.patterns, i = 0; i < patterns.length; i++) {
+		if (logOps.patterns) {
+			for (let patterns = logOps.patterns, i = 0; i < patterns.length; i++) {
 				if (patterns[i].test(context)) {
 					return true;
 				}

@@ -342,11 +342,11 @@ declare namespace decoders {
 		readonly encoding: string;
 		readonly fatal: boolean;
 		readonly ignoreBOM: boolean;
-		decode(buffer?: ArrayBufferView, options?: {stream?: boolean}): string;
+		decode(buffer?: ArrayBufferView, opts?: {stream?: boolean}): string;
 	}
 
 	export interface TextDecoderConstructor {
-		new (utfLabel?: string, options?: {fatal?: boolean}): TextDecoder;
+		new (utfLabel?: string, opts?: {fatal?: boolean}): TextDecoder;
 	}
 }
 

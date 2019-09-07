@@ -16,8 +16,8 @@ export * from 'core/log/engines/types';
  * Returns a function that creates engine of specified class
  * @param ctor - a constructor or just a class
  */
-export function creatorFor<T extends LogEngine>(ctor: LogEngineConstructor<T>): (options?: Dictionary) => T {
-	return (options?: Dictionary) => new ctor(options);
+export function creatorFor<T extends LogEngine>(ctor: LogEngineConstructor<T>): (opts?: Dictionary) => T {
+	return (opts?: Dictionary) => new ctor(opts);
 }
 
 const engineFactory = {
