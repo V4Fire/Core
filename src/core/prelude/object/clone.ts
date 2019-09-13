@@ -173,6 +173,8 @@ extend(Object, 'mixin', (params: ObjectMixinParams | boolean, base: any, ...objs
 
 				if (p.withAccessors) {
 					Object.defineProperty(base, key, {
+						configurable: true,
+						enumerable: true,
 						get: el.get,
 						set: el.set
 					});

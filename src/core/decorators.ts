@@ -20,6 +20,7 @@ export function once(target: Object, key: string | symbol, descriptor: PropertyD
 
 	descriptor.value = function (): unknown {
 		Object.defineProperty(this, key, {
+			configurable: true,
 			value: method.once()
 		});
 
@@ -46,6 +47,7 @@ export function debounce(delay?: number): MethodDecorator {
 
 		descriptor.value = function (): unknown {
 			Object.defineProperty(this, key, {
+				configurable: true,
 				value: method.debounce(delay)
 			});
 
@@ -74,6 +76,7 @@ export function throttle(delay?: number): MethodDecorator {
 
 		descriptor.value = function (): unknown {
 			Object.defineProperty(this, key, {
+				configurable: true,
 				value: method.throttle(delay)
 			});
 
