@@ -334,7 +334,7 @@ interface Function {
 	name: string;
 	once(): Function;
 	debounce(delay?: number): Function;
-	throttle(delay?: number): Function;
+	throttle(delay?: number, options?: {leading?: boolean}): Function;
 }
 
 declare namespace decoders {

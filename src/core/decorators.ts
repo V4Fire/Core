@@ -64,8 +64,9 @@ export function debounce(delay?: number): MethodDecorator {
  *
  * @decorator
  * @param [delay]
+ * @param [options]
  */
-export function throttle(delay?: number): MethodDecorator {
+export function throttle(delay?: number, options?: {leading?: boolean}): MethodDecorator {
 	return (target, key, descriptor: PropertyDescriptor) => {
 		const
 			method = descriptor.value;
@@ -77,7 +78,7 @@ export function throttle(delay?: number): MethodDecorator {
 		descriptor.value = function (): unknown {
 			Object.defineProperty(this, key, {
 				configurable: true,
-				value: method.throttle(delay)
+				value: method.throttle(delay, options)
 			});
 
 			return this[key].apply(this, arguments);

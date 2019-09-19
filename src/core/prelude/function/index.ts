@@ -48,25 +48,36 @@ extend(Function.prototype, 'debounce', function (this: Function, delay: number =
 //#endif
 //#if runtime has prelude/function/throttle
 
-/** @see Sugar.Function.debounce */
-extend(Function.prototype, 'throttle', function (this: Function, delay: number = 250): Function {
-	const
-		that = this;
+/** @see Sugar.Function.throttle */
+extend(
+	Function.prototype,
+	'throttle',
+	function (this: Function, delay: number = 250, options?: {leading?: boolean}): Function {
+		const
+			that = this,
+			leading = options ? 'leading' in options ? !!options.leading : false : false;
 
-	let
-		lastArgs,
-		timer;
+		let
+			lastArgs,
+			timer;
 
-	return function (...args: unknown[]): void {
-		lastArgs = args;
+		return function (...args: unknown[]): void {
+			lastArgs = args;
 
-		if (timer !== undefined) {
-			timer = setTimeout(() => {
-				timer = undefined;
-				that.apply(this, lastArgs);
-			}, delay);
-		}
-	};
-});
+			if (timer === undefined) {
+				if (leading) {
+					that(lastArgs);
+				}
+
+				timer = setTimeout(() => {
+					timer = undefined;
+					if (!leading) {
+						that(lastArgs);
+					}
+				}, delay);
+			}
+		};
+	}
+);
 
 //#endif
