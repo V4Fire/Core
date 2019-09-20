@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.0.0-beta.68 (2019-09-20)
+
+#### :bug: Bug Fix
+
+* Fixed `Function.throttle`
+
 ## v3.0.0-beta.67 (2019-09-07)
 
 #### :rocket: New Feature

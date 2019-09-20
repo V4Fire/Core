@@ -5,7 +5,7 @@
   "main": "src/core/index.js",
   "typings": "index.d.ts",
   "license": "MIT",
-  "version": "3.0.0-beta.67",
+  "version": "3.0.0-beta.68",
   "author": {
     "name": "kobezzza",
     "email": "kobezzza@gmail.com",
@@ -52,14 +52,14 @@
     "sugar": "^2.0.6",
     "through2": "^3.0.1",
     "tsconfig": "^7.0.0",
-    "typescript": "^3.6.2",
+    "typescript": "^3.6.3",
     "uniconf": "^2.1.1",
     "upath": "^1.2.0",
     "urlconcat": "0.0.12"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.3",
-    "eslint": "^6.3.0",
-    "tslint": "^5.19.0"
+    "eslint": "^6.4.0",
+    "tslint": "^5.20.0"
   }
 }
