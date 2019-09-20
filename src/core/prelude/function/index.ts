@@ -12,7 +12,8 @@ import extend from 'core/prelude/extend';
 /** @see Sugar.Function.once */
 extend(Function.prototype, 'once', function (this: Function): Function {
 	const
-		that = this;
+		// tslint:disable-next-line:no-this-assignment
+		fn = this;
 
 	let
 		called = false,
@@ -23,7 +24,7 @@ extend(Function.prototype, 'once', function (this: Function): Function {
 			return res;
 		}
 
-		res = that.apply(this, arguments);
+		res = fn.apply(this, arguments);
 		called = true;
 		return res;
 	};
@@ -34,14 +35,15 @@ extend(Function.prototype, 'once', function (this: Function): Function {
 /** @see Sugar.Function.debounce */
 extend(Function.prototype, 'debounce', function (this: Function, delay: number = 250): Function {
 	const
-		that = this;
+		// tslint:disable-next-line:no-this-assignment
+		fn = this;
 
 	let
 		timer;
 
 	return function (...args: unknown[]): void {
 		clearTimeout(timer);
-		timer = setTimeout(() => that.apply(this, args), delay);
+		timer = setTimeout(() => fn.apply(this, args), delay);
 	};
 });
 
@@ -51,7 +53,8 @@ extend(Function.prototype, 'debounce', function (this: Function, delay: number =
 /** @see Sugar.Function.debounce */
 extend(Function.prototype, 'throttle', function (this: Function, delay: number = 250): Function {
 	const
-		that = this;
+		// tslint:disable-next-line:no-this-assignment
+		fn = this;
 
 	let
 		lastArgs,
@@ -60,10 +63,15 @@ extend(Function.prototype, 'throttle', function (this: Function, delay: number =
 	return function (...args: unknown[]): void {
 		lastArgs = args;
 
-		if (timer !== undefined) {
+		if (timer === undefined) {
+			fn.apply(this, lastArgs);
+
 			timer = setTimeout(() => {
 				timer = undefined;
-				that.apply(this, lastArgs);
+
+				if (lastArgs !== args) {
+					fn.apply(this, lastArgs);
+				}
 			}, delay);
 		}
 	};
