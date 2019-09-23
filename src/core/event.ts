@@ -82,7 +82,13 @@ export function onEverythingReady(cb: () => void, ...flags: string[]): (flag: st
 		}
 
 		ready = true;
-		cb();
+
+		const
+			res = cb();
+
+		if (Object.isPromise(res)) {
+			res.catch(stderr);
+		}
 	};
 }
 
