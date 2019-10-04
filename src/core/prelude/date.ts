@@ -7,7 +7,7 @@
  */
 
 import extend from 'core/prelude/extend';
-import { locale as defaultLocale } from 'core/i18n';
+import { data as localeData } from 'core/i18n';
 
 /** @see Sugar.Date.clone */
 extend(Date.prototype, 'clone', function (this: Date): Date {
@@ -212,6 +212,8 @@ const convert = {
 
 const
 	formatCache = Object.createDict<Intl.DateTimeFormatOptions>();
+
+const defaultLocale = localeData.locale;
 
 /**
  * Returns a string representation of a date by the specified format
