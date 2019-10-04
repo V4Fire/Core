@@ -161,7 +161,10 @@ const shortOpts = {
 };
 
 /** @see Sugar.Date.short */
-extend(Date.prototype, 'short', function (this: Date, locale: string = defaultLocale): string {
+extend(Date.prototype, 'short', function (
+	this: Date,
+	locale: string = defaultLocale.value
+): string {
 	return this.toLocaleString(locale, shortOpts);
 });
 
@@ -172,12 +175,18 @@ const mediumOpts = {
 };
 
 /** @see Sugar.Date.medium */
-extend(Date.prototype, 'medium', function (this: Date, locale: string = defaultLocale): string {
+extend(Date.prototype, 'medium', function (
+	this: Date,
+	locale: string = defaultLocale.value
+): string {
 	return this.toLocaleString(locale, mediumOpts);
 });
 
 /** @see Sugar.Date.long */
-extend(Date.prototype, 'long', function (this: Date, locale: string = defaultLocale): string {
+extend(Date.prototype, 'long', function (
+	this: Date,
+	locale: string = defaultLocale.value
+): string {
 	return this.toLocaleString(locale);
 });
 
@@ -219,7 +228,11 @@ const
  * @param format
  * @param [locale]
  */
-extend(Date.prototype, 'format', function (this: Date, format: string, locale: string = defaultLocale): string {
+extend(Date.prototype, 'format', function (
+	this: Date,
+	format: string,
+	locale: string = defaultLocale.value
+): string {
 	const
 		cache = formatCache[format];
 
