@@ -380,6 +380,10 @@ extend(Object, 'fastClone', (obj, params?: FastCloneParams) => {
 	return obj;
 });
 
+const
+	objRef = '[[OBJ_REF:base]]',
+	funcRef = '[[FUNC_REF:';
+
 function createReplacer(
 	base: unknown,
 	funcMap: Map<Function | string, Function | string>,
@@ -390,7 +394,7 @@ function createReplacer(
 
 	return (key, value) => {
 		if (init && value === base) {
-			return '[[OBJ_REF:base]]';
+			return objRef;
 		}
 
 		if (!init) {
@@ -398,7 +402,7 @@ function createReplacer(
 		}
 
 		if (Object.isFunction(value)) {
-			const key = funcMap.get(value) || `[[FUNC_REF:${Math.random()}]]`;
+			const key = funcMap.get(value) || `${funcRef}${Math.random()}]]`;
 			funcMap.set(value, key);
 			funcMap.set(key, value);
 			return key;
@@ -414,16 +418,21 @@ function createReplacer(
 
 function createReviewer(
 	base: unknown,
-	funcMap: Map<Function | number, Function | number>,
+	funcMap: Map<Function | string, Function | string>,
 	reviewer?: JSONCb | false
 ): JSONCb {
 	return (key, value) => {
-		if (value === '[[OBJ_REF:base]]') {
+		if (value === objRef) {
 			return base;
 		}
 
-		if (funcMap && Object.isFunction(value)) {
-			return funcMap.get(value);
+		if (funcMap && Object.isString(value) && value.slice(0, funcRef.length) === funcRef) {
+			const
+				fn = funcMap.get(value);
+
+			if (Object.isFunction(fn)) {
+				return funcMap.get(value);
+			}
 		}
 
 		if (reviewer !== false) {
