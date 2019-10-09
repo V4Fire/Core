@@ -11,6 +11,13 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.0.0-beta.73 (2019-10-09)
+
+#### :rocket: New Feature
+
+* Added `clear` to `core/queue`
+* Marked `interval`, `concurrency`, `activeWorkers` as public `core/queue`
+
 ## v3.0.0-beta.72 (2019-10-09)
 
 #### :boom: Breaking Change
