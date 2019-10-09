@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.0.0-beta.75 (2019-10-09)
+
+#### :house: Internal
+
+* Improved interface `core/queue`
+
 ## v3.0.0-beta.74 (2019-10-09)
 
 #### :boom: Breaking Change
