@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.0.0-beta.77 (2019-10-09)
+
+#### :bug: Bug Fix
+
+* Fixed `clear` within `core/queue`
+
 ## v3.0.0-beta.76 (2019-10-09)
 
 #### :house: Internal
