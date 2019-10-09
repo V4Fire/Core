@@ -27,17 +27,17 @@ export default class MergeQueue<T, V = unknown> extends Queue<T, V> {
 	}
 
 	/** @override */
-	protected readonly tasks!: string[];
+	protected tasks!: string[];
+
+	/**
+	 * Map of tasks
+	 */
+	private tasksMap: Dictionary<Task<T, V>> = Object.createDict();
 
 	/**
 	 * Merge hash function
 	 */
 	private readonly hashFn: HashFn<T>;
-
-	/**
-	 * Map of tasks
-	 */
-	private readonly tasksMap: Dictionary<Task<T, V>> = Object.createDict();
 
 	/**
 	 * @override
@@ -62,6 +62,12 @@ export default class MergeQueue<T, V = unknown> extends Queue<T, V> {
 		this.tasks.shift();
 
 		return head;
+	}
+
+	/** @override */
+	clear(): void {
+		super.clear();
+		this.tasksMap = Object.createDict();
 	}
 
 	/** @override */

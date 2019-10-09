@@ -26,7 +26,22 @@ export default abstract class Queue<T, V = unknown> {
 	/**
 	 * Queue head
 	 */
-	abstract head: CanUndef<Task>;
+	head: CanUndef<Task>;
+
+	/**
+	 * Task status refresh interval
+	 */
+	interval: number;
+
+	/**
+	 * Maximum number of concurrent workers
+	 */
+	concurrency: number;
+
+	/**
+	 * Number of active workers
+	 */
+	activeWorkers: number = 0;
 
 	/**
 	 * Queue length
@@ -41,24 +56,9 @@ export default abstract class Queue<T, V = unknown> {
 	protected worker: QueueWorker<T, V>;
 
 	/**
-	 * Task status refresh interval
-	 */
-	protected interval: number;
-
-	/**
-	 * Maximum number of concurrent workers
-	 */
-	protected concurrency: number;
-
-	/**
-	 * Number of active workers
-	 */
-	protected activeWorkers: number = 0;
-
-	/**
 	 * Task queue
 	 */
-	protected readonly tasks: unknown[] = [];
+	protected tasks: unknown[] = [];
 
 	/**
 	 * @param worker
@@ -84,6 +84,13 @@ export default abstract class Queue<T, V = unknown> {
 		const {head} = this;
 		this.tasks.shift();
 		return head;
+	}
+
+	/**
+	 * Clears the queue
+	 */
+	clear(): void {
+		this.tasks = [];
 	}
 
 	/**
