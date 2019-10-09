@@ -90,6 +90,7 @@ export default abstract class Queue<T, V = unknown> {
 	 */
 	clear(): void {
 		this.tasks = [];
+		this.activeWorkers = 0;
 	}
 
 	/**
