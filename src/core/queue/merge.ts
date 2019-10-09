@@ -116,21 +116,36 @@ export default class MergeQueue<T, V = unknown> extends Queue<T, V> {
 
 		const
 			hash = <string>this.tasks.shift(),
-			taskByHash = this.tasksMap[hash];
+			taskObj = this.tasksMap[hash];
 
-		if (!taskByHash) {
+		if (!taskObj) {
 			return;
 		}
 
 		const
-			{task, promise, resolve} = taskByHash;
+			{task, promise, resolve} = taskObj;
 
 		const cb = () => {
 			delete this.tasksMap[hash];
-			this.deferPerform();
+			return this.deferPerform();
 		};
 
 		promise.then(cb, cb);
 		this.resolveTask(task, resolve);
+	}
+
+	/**
+	 * Provides a task result to a promise resolve function
+	 *
+	 * @param task
+	 * @param resolve
+	 */
+	protected resolveTask(task: T, resolve: Function): void {
+		try {
+			resolve(this.worker(task));
+
+		} catch (error) {
+			resolve(Promise.reject(error));
+		}
 	}
 }

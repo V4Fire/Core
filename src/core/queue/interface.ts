@@ -93,41 +93,30 @@ export default abstract class Queue<T, V = unknown> {
 	}
 
 	/**
-	 * Provides a task result to a promise resolve function
-	 *
-	 * @param task
-	 * @param resolve
-	 */
-	protected resolveTask(task: T, resolve: Function): void {
-		try {
-			resolve(this.worker(task));
-
-		} catch (error) {
-			resolve(Promise.reject(error));
-		}
-	}
-
-	/**
 	 * Executes a chunk of tasks from the queue
 	 */
-	protected abstract perform(): void;
+	protected abstract perform(): unknown;
 
 	/**
 	 * Executes a chunk of tasks from the queue
 	 * (deferred version)
 	 */
-	protected deferPerform(): void {
+	protected deferPerform(): Promise<unknown> {
 		const
-			i = this.interval,
-			cb = () => this.perform();
+			i = this.interval;
 
-		if (i) {
-			setTimeout(cb, i);
+		return new Promise((resolve) => {
+			const
+				cb = () => resolve(this.perform());
 
-		} else {
-			// tslint:disable-next-line:no-string-literal
-			GLOBAL['setImmediate'](cb);
-		}
+			if (i) {
+				setTimeout(cb, i);
+
+			} else {
+				// tslint:disable-next-line:no-string-literal
+				GLOBAL['setImmediate'](cb);
+			}
+		});
 	}
 
 	/**
