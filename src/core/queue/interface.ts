@@ -74,7 +74,7 @@ export default abstract class Queue<T, V = unknown> {
 	 * Adds the specified task to the queue
 	 * @param task
 	 */
-	abstract push(task: T): Promise<V>;
+	abstract push(task: T): unknown;
 
 	/**
 	 * Removes the head task from the queue and returns it
