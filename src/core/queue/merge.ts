@@ -6,32 +6,62 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import Queue, { TaskDict, QueueWorker } from 'core/queue/interface';
+import Queue, { QueueParams, QueueWorker, Task } from 'core/queue/interface';
+
+export interface HashFn<T> {
+	(task: T): string;
+}
+
+export interface MergeQueueParams<T> extends QueueParams {
+	hashFn?: HashFn<T>;
+}
 
 export default class MergeQueue<T, V = unknown> extends Queue<T, V> {
+	/** @override */
+	get head(): CanUndef<Task<T, V>> {
+		if (!this.length) {
+			return undefined;
+		}
+
+		return this.tasksMap[this.tasks[0]];
+	}
+
 	/** @override */
 	protected readonly tasks!: string[];
 
 	/**
 	 * Merge hash function
 	 */
-	private readonly hashFn: (task: T) => string;
+	private readonly hashFn: HashFn<T>;
 
 	/**
 	 * Map of tasks
 	 */
-	private readonly tasksDict: TaskDict<T, V> = Object.createDict();
+	private readonly tasksMap: Dictionary<Task<T, V>> = Object.createDict();
 
 	/**
 	 * @override
 	 * @param worker
-	 * @param [concurrency]
-	 * @param [interval]
-	 * @param [hashFn]
+	 * @param [params]
 	 */
-	constructor(worker: QueueWorker<T, V>, concurrency: number, interval: number, hashFn: (task: T) => string = String) {
-		super(worker, concurrency, interval);
-		this.hashFn = hashFn;
+	constructor(worker: QueueWorker<T, V>, params: MergeQueueParams<T>) {
+		super(worker, params);
+		this.hashFn = params && params.hashFn || String;
+	}
+
+	/** @override */
+	shift(): CanUndef<Task> {
+		if (!this.length) {
+			return undefined;
+		}
+
+		const
+			{head} = this;
+
+		delete this.tasksMap[this.tasks[0]];
+		this.tasks.shift();
+
+		return head;
 	}
 
 	/** @override */
@@ -40,15 +70,17 @@ export default class MergeQueue<T, V = unknown> extends Queue<T, V> {
 			hash = this.hashFn(task);
 
 		let
-			taskObj = this.tasksDict[hash];
+			taskObj = this.tasksMap[hash];
 
 		if (!taskObj) {
-			let resolve;
+			let
+				resolve;
+
 			const promise = new Promise<V>((r) => {
 				resolve = r;
 			});
 
-			taskObj = this.tasksDict[hash] = {task, promise, resolve};
+			taskObj = this.tasksMap[hash] = {task, promise, resolve};
 			this.tasks.push(hash);
 		}
 
@@ -65,7 +97,7 @@ export default class MergeQueue<T, V = unknown> extends Queue<T, V> {
 
 		const
 			hash = <string>this.tasks.shift(),
-			taskByHash = this.tasksDict[hash];
+			taskByHash = this.tasksMap[hash];
 
 		if (!taskByHash) {
 			return;
@@ -75,7 +107,7 @@ export default class MergeQueue<T, V = unknown> extends Queue<T, V> {
 			{task, promise, resolve} = taskByHash;
 
 		const cb = () => {
-			delete this.tasksDict[hash];
+			delete this.tasksMap[hash];
 			this.deferPerform();
 		};
 

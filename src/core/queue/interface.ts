@@ -10,13 +10,31 @@ import { GLOBAL } from 'core/env';
 
 export type Value<V = unknown> = V | PromiseLike<V>;
 export type QueueWorker<T = unknown, V = unknown> = (task: T) => Value<V>;
-export type TaskDict<T = unknown, V = unknown> = Dictionary<{
+
+export interface Task<T = unknown, V = unknown> {
 	task: T;
 	promise: Promise<V>;
 	resolve(res: Value<V>): void;
-}>;
+}
+
+export interface QueueParams {
+	concurrency?: number;
+	interval?: number;
+}
 
 export default abstract class Queue<T, V = unknown> {
+	/**
+	 * Queue head
+	 */
+	abstract head: CanUndef<Task>;
+
+	/**
+	 * Queue length
+	 */
+	get length(): number {
+		return this.tasks.length;
+	}
+
 	/**
 	 * Worker constructor
 	 */
@@ -47,17 +65,26 @@ export default abstract class Queue<T, V = unknown> {
 	 * @param [concurrency]
 	 * @param [interval]
 	 */
-	protected constructor(worker: QueueWorker<T, V>, concurrency: number = 1, interval: number = 0) {
+	protected constructor(worker: QueueWorker<T, V>, {concurrency = 1, interval = 0}: QueueParams = {}) {
 		this.worker = worker;
 		this.concurrency = concurrency;
 		this.interval = interval;
 	}
 
 	/**
-	 * Adds a task to the queue
+	 * Adds the specified task to the queue
 	 * @param task
 	 */
 	abstract push(task: T): Promise<V>;
+
+	/**
+	 * Removes the head task from the queue and returns it
+	 */
+	shift(): CanUndef<Task> {
+		const {head} = this;
+		this.tasks.shift();
+		return head;
+	}
 
 	/**
 	 * Provides a task result to a promise resolve function
@@ -67,7 +94,7 @@ export default abstract class Queue<T, V = unknown> {
 	 */
 	protected resolveTask(task: T, resolve: Function): void {
 		try {
-			resolve(this.worker.call(null, task));
+			resolve(this.worker(task));
 
 		} catch (error) {
 			resolve(Promise.reject(error));
@@ -75,13 +102,13 @@ export default abstract class Queue<T, V = unknown> {
 	}
 
 	/**
-	 * Executes a chunk of tasks in the queue
+	 * Executes a chunk of tasks from the queue
 	 */
 	protected abstract perform(): void;
 
 	/**
-	 * Executes a chunk of tasks in the queue
-	 * (lazy mode)
+	 * Executes a chunk of tasks from the queue
+	 * (deferred version)
 	 */
 	protected deferPerform(): void {
 		const
@@ -98,7 +125,7 @@ export default abstract class Queue<T, V = unknown> {
 	}
 
 	/**
-	 * Start an execution of tasks in the queue
+	 * Starts an execution of tasks from the queue
 	 */
 	protected start(): void {
 		const n = Math.min(
