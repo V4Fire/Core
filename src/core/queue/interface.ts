@@ -8,10 +8,6 @@
 
 import { GLOBAL } from 'core/env';
 
-export interface TaskObject<T = unknown, V = unknown> {
-
-}
-
 export interface QueueWorker<T = unknown, V = unknown> {
 	(task: T): CanPromise<V>;
 }

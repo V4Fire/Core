@@ -6,13 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import Queue, {
-
-	QueueWorker,
-	QueueParams as BaseQueueParams,
-	TaskObject as BaseTaskObject
-
-} from 'core/queue/interface';
+import Queue, { QueueWorker, QueueParams as BaseQueueParams } from 'core/queue/interface';
 
 export interface HashFn<T> {
 	(task: T): string;
@@ -22,7 +16,7 @@ export interface QueueParams<T> extends BaseQueueParams {
 	hashFn?: HashFn<T>;
 }
 
-export interface TaskObject<T = unknown, V = unknown> extends BaseTaskObject<T, V> {
+export interface TaskObject<T = unknown, V = unknown> {
 	task: T;
 	promise: Promise<V>;
 	resolve(res: CanPromise<V>): void;
