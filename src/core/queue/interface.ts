@@ -8,13 +8,12 @@
 
 import { GLOBAL } from 'core/env';
 
-export type Value<V = unknown> = V | PromiseLike<V>;
-export type QueueWorker<T = unknown, V = unknown> = (task: T) => Value<V>;
+export interface TaskObject<T = unknown, V = unknown> {
 
-export interface Task<T = unknown, V = unknown> {
-	task: T;
-	promise: Promise<V>;
-	resolve(res: Value<V>): void;
+}
+
+export interface QueueWorker<T = unknown, V = unknown> {
+	(task: T): CanPromise<V>;
 }
 
 export interface QueueParams {
@@ -26,7 +25,7 @@ export default abstract class Queue<T, V = unknown> {
 	/**
 	 * Queue head
 	 */
-	head: CanUndef<Task>;
+	head: CanUndef<T>;
 
 	/**
 	 * Task status refresh interval
@@ -80,7 +79,7 @@ export default abstract class Queue<T, V = unknown> {
 	/**
 	 * Removes the head task from the queue and returns it
 	 */
-	shift(): CanUndef<Task> {
+	shift(): CanUndef<T> {
 		const {head} = this;
 		this.tasks.shift();
 		return head;

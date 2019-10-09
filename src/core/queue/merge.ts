@@ -6,24 +6,37 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import Queue, { QueueParams, QueueWorker, Task } from 'core/queue/interface';
+import Queue, {
+
+	QueueWorker,
+	QueueParams as BaseQueueParams,
+	TaskObject as BaseTaskObject
+
+} from 'core/queue/interface';
 
 export interface HashFn<T> {
 	(task: T): string;
 }
 
-export interface MergeQueueParams<T> extends QueueParams {
+export interface QueueParams<T> extends BaseQueueParams {
 	hashFn?: HashFn<T>;
+}
+
+export interface TaskObject<T = unknown, V = unknown> extends BaseTaskObject<T, V> {
+	task: T;
+	promise: Promise<V>;
+	resolve(res: CanPromise<V>): void;
 }
 
 export default class MergeQueue<T, V = unknown> extends Queue<T, V> {
 	/** @override */
-	get head(): CanUndef<Task<T, V>> {
+	get head(): CanUndef<T> {
 		if (!this.length) {
 			return undefined;
 		}
 
-		return this.tasksMap[this.tasks[0]];
+		const obj = this.tasksMap[this.tasks[0]];
+		return obj && obj.task;
 	}
 
 	/** @override */
@@ -32,7 +45,7 @@ export default class MergeQueue<T, V = unknown> extends Queue<T, V> {
 	/**
 	 * Map of tasks
 	 */
-	private tasksMap: Dictionary<Task<T, V>> = Object.createDict();
+	private tasksMap: Dictionary<TaskObject<T, V>> = Object.createDict();
 
 	/**
 	 * Merge hash function
@@ -44,13 +57,13 @@ export default class MergeQueue<T, V = unknown> extends Queue<T, V> {
 	 * @param worker
 	 * @param [params]
 	 */
-	constructor(worker: QueueWorker<T, V>, params: MergeQueueParams<T>) {
+	constructor(worker: QueueWorker<T, V>, params: QueueParams<T>) {
 		super(worker, params);
 		this.hashFn = params && params.hashFn || String;
 	}
 
 	/** @override */
-	shift(): CanUndef<Task> {
+	shift(): CanUndef<T> {
 		if (!this.length) {
 			return undefined;
 		}
@@ -96,7 +109,7 @@ export default class MergeQueue<T, V = unknown> extends Queue<T, V> {
 
 	/** @override */
 	protected perform(): void {
-		if (!this.tasks.length) {
+		if (!this.length) {
 			this.activeWorkers--;
 			return;
 		}
