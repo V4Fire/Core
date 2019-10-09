@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.0.0-beta.74 (2019-10-09)
+
+#### :boom: Breaking Change
+
+* New API for `core/queue/interface` and `core/queue/merge`
+
 ## v3.0.0-beta.73 (2019-10-09)
 
 #### :rocket: New Feature
