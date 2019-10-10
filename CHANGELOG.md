@@ -15,6 +15,12 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :bug: Bug Fix
 
+* Fixed stable `String.dasherize` & `String.underscore` with numbers
+
+## v3.0.0-beta.78 (2019-10-10)
+
+#### :bug: Bug Fix
+
 * Fixed `String.dasherize` & `String.underscore` with numbers
 
 ## v3.0.0-beta.77 (2019-10-09)
