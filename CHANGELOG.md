@@ -11,7 +11,13 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-## v3.0.0-beta.78 (2019-10-10)
+## v3.0.0-beta.80 (2019-10-10)
+
+#### :boom: Breaking Change
+
+* New API for `String.capitalize`
+
+## v3.0.0-beta.79 (2019-10-10)
 
 #### :bug: Bug Fix
 
