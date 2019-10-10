@@ -146,6 +146,9 @@ function isUpper(char: string): boolean {
 	return char === up && char.toLowerCase() !== up;
 }
 
+const
+	isDigital = /\d/;
+
 function convertToSeparatedStr(str: string, separator: string, stable?: boolean): string {
 	let
 		res = '';
@@ -177,7 +180,7 @@ function convertToSeparatedStr(str: string, separator: string, stable?: boolean)
 		} else {
 			res += el;
 
-			if (nextChar && isUpper(nextChar)) {
+			if (nextChar && (!isDigital.test(el) && isDigital.test(nextChar) || isUpper(nextChar))) {
 				res += separator;
 			}
 		}
