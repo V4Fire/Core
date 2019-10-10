@@ -16,11 +16,20 @@ const
 
 //#if runtime has prelude/string/capitalize
 
-/** @see Sugar.String.capitalize */
-extend(String.prototype, 'capitalize', function (this: string, lower?: boolean, all?: boolean): string {
+/**
+ * Capitalizes the first character of the string
+ *
+ * @param [lower] - if is true, the remainder of the string will be downcased
+ * @param [all] - if is true, all words in the string will be capitalized.
+ */
+extend(String.prototype, 'capitalize', function (
+	this: string,
+	{lower, all}: StringCapitalizeParams = {}
+): string {
 	const
 		str = this.toString(),
-		val = capitalizeCache[str];
+		key = `${Boolean(lower)}:${Boolean(all)}:${str}`,
+		val = capitalizeCache[key];
 
 	if (val !== undefined) {
 		return val;
@@ -32,7 +41,7 @@ extend(String.prototype, 'capitalize', function (this: string, lower?: boolean, 
 			res = <string[]>[];
 
 		for (let i = 0; i < chunks.length; i++) {
-			res.push(chunks[i].capitalize(lower, all));
+			res.push(chunks[i].capitalize({lower}));
 		}
 
 		return capitalizeCache[str] = res.join(' ');
@@ -41,7 +50,7 @@ extend(String.prototype, 'capitalize', function (this: string, lower?: boolean, 
 	let res = lower ? str.toLowerCase() : str;
 	res = res[0].toUpperCase() + res.slice(1);
 
-	return capitalizeCache[str] = res;
+	return capitalizeCache[key] = res;
 });
 
 //#endif

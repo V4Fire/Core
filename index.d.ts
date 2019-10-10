@@ -178,8 +178,13 @@ interface Array<T> {
 		Array<T | V> : A extends (infer V)[] ? Array<T | V> : T[];
 }
 
+interface StringCapitalizeParams {
+	lower?: boolean;
+	all?: boolean;
+}
+
 interface String {
-	capitalize(lower?: boolean, all?: boolean): string;
+	capitalize(params?: StringCapitalizeParams): string;
 	camelize(upper?: boolean): string;
 	dasherize(stable?: boolean): string;
 	underscore(stable?: boolean): string;
