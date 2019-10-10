@@ -170,8 +170,8 @@ function convertToSeparatedStr(str: string, separator: string, stable?: boolean)
 		const
 			nextChar = str[i + 1];
 
-		if (isUpper(el)) {
-			if (i && (stable || nextChar && !isUpper(nextChar))) {
+		if (isDigital.test(el) || isUpper(el)) {
+			if (i && (stable || nextChar && !isDigital.test(nextChar) && !isUpper(nextChar))) {
 				res += separator;
 			}
 
@@ -180,7 +180,7 @@ function convertToSeparatedStr(str: string, separator: string, stable?: boolean)
 		} else {
 			res += el;
 
-			if (nextChar && (!isDigital.test(el) && isDigital.test(nextChar) || isUpper(nextChar))) {
+			if (nextChar && (isDigital.test(nextChar) || isUpper(nextChar))) {
 				res += separator;
 			}
 		}
