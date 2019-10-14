@@ -6,18 +6,16 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { GLOBAL } from 'core/env';
-
 export let
 	syncLocalStorage,
 	asyncLocalStorage,
-	syncSessionStorage = GLOBAL.sessionStorage,
-	asyncSessionStorage = GLOBAL.sessionStorage;
+	syncSessionStorage = globalThis.sessionStorage,
+	asyncSessionStorage = globalThis.sessionStorage;
 
 try {
-	if (typeof GLOBAL.localStorage !== 'undefined') {
-		syncLocalStorage = GLOBAL.localStorage;
-		asyncLocalStorage = GLOBAL.localStorage;
+	if (typeof globalThis.localStorage !== 'undefined') {
+		syncLocalStorage = globalThis.localStorage;
+		asyncLocalStorage = globalThis.localStorage;
 	}
 
 } catch {

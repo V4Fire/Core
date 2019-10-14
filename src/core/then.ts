@@ -6,8 +6,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { GLOBAL } from 'core/env';
-
 export const enum State {
 	pending,
 	fulfilled,
@@ -56,13 +54,13 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	static immediate<T = unknown>(value?: ExecValue<T>, parent?: Then): Then<T> {
 		return new Then((res, rej, onAbort) => {
 			// tslint:disable-next-line:no-string-literal
-			const id = GLOBAL['setImmediate'](() => {
+			const id = globalThis['setImmediate'](() => {
 				res(value && Object.isFunction(value) ? (<Function>value)() : value);
 			});
 
 			onAbort((err) => {
 				// tslint:disable-next-line:no-string-literal
-				GLOBAL['clearImmediate'](id);
+				globalThis['clearImmediate'](id);
 				if (value instanceof Then) {
 					value.abort(err);
 				}

@@ -7,10 +7,11 @@
  */
 
 import extend from 'core/prelude/extend';
+
 import config from 'config';
 import * as dict from 'lang';
 
-import { GLOBAL, IS_NODE } from 'core/env';
+import { IS_NODE } from 'core/env';
 import { AsyncNamespace } from 'core/kv-storage';
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 
@@ -106,13 +107,13 @@ export function setLocale(value: string, def?: boolean): string {
 	return value;
 }
 
-extend(GLOBAL, 'i18n', globalI18n);
-extend(GLOBAL, 't', globalI18n);
+extend(globalThis, 'i18n', globalI18n);
+extend(globalThis, 't', globalI18n);
 
 /**
  * Global i18n helper function (string tag)
  */
-extend(GLOBAL, 'l', (strings: unknown | string[], ...exprs: unknown[]): string => {
+extend(globalThis, 'l', (strings: unknown | string[], ...exprs: unknown[]): string => {
 	if (strings == null) {
 		return '';
 	}

@@ -23,7 +23,7 @@ export const IS_NODE: boolean = (() => {
 	try {
 		const
 			// tslint:disable-next-line
-			process = GLOBAL['process'];
+			process = globalThis['process'];
 
 		// @ts-ignore
 		return typeof process === 'object' && {}.toString.call(process) === '[object process]';
@@ -32,6 +32,11 @@ export const IS_NODE: boolean = (() => {
 		return false;
 	}
 })();
+
+/**
+ * True if the current runtime has window object
+ */
+export const HAS_WINDOW: boolean = typeof window === 'object';
 
 export const
 	event = new EventEmitter({maxListeners: 1e3, newListener: false});
@@ -90,7 +95,7 @@ export function remove(key: string): void {
 	event.emit(`remove.${key}`);
 }
 
-extend(GLOBAL, 'envs', () => {
+extend(globalThis, 'envs', () => {
 	if (Object.isPromise(storage)) {
 		return storage.then((storage) => {
 			console.log(storage);
@@ -102,10 +107,10 @@ extend(GLOBAL, 'envs', () => {
 	return memoryStorage;
 });
 
-extend(GLOBAL, 'getEnv', (key) => get(key).then((val) => {
+extend(globalThis, 'getEnv', (key) => get(key).then((val) => {
 	console.log(val);
 	return val;
 }));
 
-extend(GLOBAL, 'setEnv', set);
-extend(GLOBAL, 'removeEnv', remove);
+extend(globalThis, 'setEnv', set);
+extend(globalThis, 'removeEnv', remove);

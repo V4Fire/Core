@@ -8,7 +8,6 @@
 
 /* tslint:disable:max-file-line-count */
 
-import { GLOBAL } from 'core/env';
 import { createSyncPromise } from 'core/event';
 
 export const
@@ -286,10 +285,10 @@ export default class Async<CTX extends object = Async<any>> {
 	setImmediate(fn: Function, params?: AsyncCbOpts<CTX>): Nullable<TimerId> {
 		const
 			// tslint:disable-next-line
-			wrapper = GLOBAL['setImmediate'],
+			wrapper = globalThis['setImmediate'],
 
 			// tslint:disable-next-line
-			clearFn = GLOBAL['clearImmediate'];
+			clearFn = globalThis['clearImmediate'];
 
 		return this.setAsync({
 			...params,

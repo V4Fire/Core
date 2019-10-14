@@ -22,6 +22,8 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 #### :rocket: New Feature
 
 * Improved API `core/event/afterEvents`
+* Added `HAS_WINDOW` for `core/env`
+* Added `globalThis` shim
 
 ## v3.0.0-beta.80 (2019-10-10)
 

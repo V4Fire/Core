@@ -6,8 +6,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { GLOBAL } from 'core/env';
-
 export interface QueueWorker<T = unknown, V = unknown> {
 	(task: T): CanPromise<V>;
 }
@@ -111,7 +109,7 @@ export default abstract class Queue<T, V = unknown> {
 
 			} else {
 				// tslint:disable-next-line:no-string-literal
-				GLOBAL['setImmediate'](cb);
+				globalThis['setImmediate'](cb);
 			}
 		});
 	}

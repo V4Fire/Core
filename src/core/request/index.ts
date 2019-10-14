@@ -15,7 +15,6 @@ import Response from 'core/request/response';
 import RequestError from 'core/request/error';
 import RequestContext from 'core/request/context';
 
-import { GLOBAL } from 'core/env';
 import { isOnline } from 'core/net';
 import { getStorageKey } from 'core/request/utils';
 import { concatUrls } from 'core/url';
@@ -206,7 +205,7 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 
 			await new Promise((r) => {
 				// tslint:disable-next-line:no-string-literal
-				GLOBAL['setImmediate'](r);
+				globalThis['setImmediate'](r);
 			});
 
 			ctx.parent = parent;
