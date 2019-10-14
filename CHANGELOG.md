@@ -11,6 +11,16 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.0.0-beta.81 (2019-10-14)
+
+#### :boom: Breaking Change
+
+* Renamed `whenDomLoaded` -> `afterDOMLoaded` `core/event`
+
+#### :rocket: New Feature
+
+* Improved API `core/event/afterEvents`
+
 ## v3.0.0-beta.80 (2019-10-10)
 
 #### :boom: Breaking Change

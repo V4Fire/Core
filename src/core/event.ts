@@ -9,12 +9,25 @@
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 
 /**
- * Returns a promise that will be resolved after the specified events
+ * Returns a promise that will be resolved after the specified events from an event emitter
+ * (optionally can takes a callback function, that will be executed immediately after the event)
  *
- * @param emitter - event emitter
+ * @param emitter
+ * @param cb
  * @param events
  */
-export function afterEvents(emitter: EventEmitter, ...events: string[]): Promise<void> {
+export function afterEvents(emitter: EventEmitter, cb: Function, ...events: string[]): Promise<void>;
+
+/**
+ * @param emitter
+ * @param events
+ */
+export function afterEvents(emitter: EventEmitter, ...events: string[]): Promise<void>;
+export function afterEvents(emitter: EventEmitter, cb: Function | string, ...events: string[]): Promise<void> {
+	if (Object.isString(cb)) {
+		events.unshift(cb);
+	}
+
 	return new Promise((resolve) => {
 		const
 			res = {};
@@ -28,6 +41,10 @@ export function afterEvents(emitter: EventEmitter, ...events: string[]): Promise
 				res[ev] = true;
 
 				if (events.every((e: string) => res[e])) {
+					if (Object.isFunction(cb)) {
+						cb();
+					}
+
 					resolve();
 				}
 			});
@@ -36,10 +53,12 @@ export function afterEvents(emitter: EventEmitter, ...events: string[]): Promise
 }
 
 /**
- * Executes the specified function after DOMContentLoaded and returns a promise
+ * Returns a promise that will be resolved after DOMContentLoaded
+ * (optionally can takes a callback function, that will be executed immediately after the event)
+ *
  * @param [cb]
  */
-export function whenDomLoaded(cb?: () => void): Promise<void> {
+export function afterDOMLoaded(cb?: Function): Promise<void> {
 	return new Promise((resolve) => {
 		const exec = () => {
 			cb && cb();
@@ -56,7 +75,8 @@ export function whenDomLoaded(cb?: () => void): Promise<void> {
 }
 
 /**
- * Returns a function that will execute the specified callback after resolving of all flags
+ * Returns a function that takes a string flag value and resolves it.
+ * After all flags will be resolved, the last function executes the specified callback.
  *
  * @param cb
  * @param flags
