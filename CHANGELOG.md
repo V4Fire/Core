@@ -17,6 +17,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 * Renamed `whenDomLoaded` -> `afterDOMLoaded` `core/event`
 * New API `core/request/create` for `resolver` parameter
+* Removed `core/helpers/string/pluralize`
 
 #### :rocket: New Feature
 
