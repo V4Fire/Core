@@ -21,7 +21,15 @@ import { getStorageKey } from 'core/request/utils';
 import { concatUrls } from 'core/url';
 
 import { storage, globalOpts, defaultRequestOpts, mimeTypes } from 'core/request/const';
-import { RequestFunctionResponse, RequestResponse, CreateRequestOpts, ResolverResult } from 'core/request/interface';
+import {
+
+	RequestFunctionResponse,
+	RequestResponse,
+	CreateRequestOpts,
+	MiddlewareParams,
+	ResolverResult
+
+} from 'core/request/interface';
 
 export * from 'core/request/interface';
 export * from 'core/request/utils';
@@ -51,7 +59,7 @@ export default function create<T = unknown>(opts: CreateRequestOpts<T>): typeof 
  */
 export default function create<T = unknown, A extends unknown[] = unknown[]>(
 	path: string,
-	resolver: (url: string, opts: CreateRequestOpts<T>, ...args: A) => ResolverResult,
+	resolver: (url: string, params: MiddlewareParams<T>, ...args: A) => ResolverResult,
 	opts?: CreateRequestOpts<T>
 ): RequestFunctionResponse<T, A extends (infer V)[] ? V[] : unknown[]>;
 
@@ -100,10 +108,16 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 			p = merge<CreateRequestOpts<T>>(baseCtx.params),
 			ctx = Object.create(baseCtx);
 
+		const middlewareParams = {
+			opts: p,
+			ctx,
+			globalOpts
+		};
+
 		const wrapProcessor = (namespace, fn, key) => (data, ...args) => {
 			const
 				time = Date.now(),
-				res = fn(data, {opts: p, ctx, globalOpts}, ...args);
+				res = fn(data, middlewareParams, ...args);
 
 			const
 				loggingContext = `request:${namespace}:${key}:${path}`,
@@ -171,7 +185,7 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 
 				if (Object.isFunction(resolver)) {
 					const
-						res = resolver(url, p, ...args);
+						res = resolver(url, middlewareParams, ...args);
 
 					if (Object.isArray(res)) {
 						url = <string>res[0];
@@ -202,7 +216,7 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 				tasks = <any[]>[];
 
 			Object.forEach(p.middlewares, (fn: Function) => {
-				tasks.push(fn({opts: p, ctx, globalOpts}));
+				tasks.push(fn(middlewareParams));
 			});
 
 			const

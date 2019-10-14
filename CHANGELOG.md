@@ -16,6 +16,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 #### :boom: Breaking Change
 
 * Renamed `whenDomLoaded` -> `afterDOMLoaded` `core/event`
+* New API `core/request/create` for `resolver` parameter
 
 #### :rocket: New Feature
 
