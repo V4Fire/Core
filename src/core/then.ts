@@ -392,7 +392,7 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	}
 
 	/**
-	 * Aborts current promise
+	 * Aborts the current promise
 	 * @param [reason] - abort reason
 	 */
 	abort(reason?: unknown): boolean {
