@@ -52,16 +52,29 @@ extend(Object, 'createMap', (obj: object) => {
 	return map;
 });
 
+export interface Converters {
+	nameConverter: Function;
+	valueConverter: Function;
+}
+
 /**
  * Creates an object from the specified array
+ *
  * @param arr
+ * @param [params]
  */
-extend(Object, 'fromArray', (arr: unknown[]) => {
+extend(Object, 'fromArray', (
+	arr: unknown[],
+	params: Converters = {
+		nameConverter: String,
+		valueConverter: Boolean
+	}
+) => {
 	const
 		map = {};
 
 	for (let i = 0; i < arr.length; i++) {
-		map[String(arr[i])] = true;
+		map[params.nameConverter(arr[i])] = params.valueConverter(arr[i]);
 	}
 
 	return map;
