@@ -52,7 +52,7 @@ extend(Object, 'createMap', (obj: object) => {
 	return map;
 });
 
-export interface Converters {
+export interface FromArrayConverters {
 	nameConverter: Function;
 	valueConverter: Function;
 }
@@ -65,7 +65,7 @@ export interface Converters {
  */
 extend(Object, 'fromArray', (
 	arr: unknown[],
-	params: Converters = {
+	params: FromArrayConverters = {
 		nameConverter: String,
 		valueConverter: Boolean
 	}
