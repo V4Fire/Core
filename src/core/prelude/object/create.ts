@@ -60,16 +60,19 @@ extend(Object, 'createMap', (obj: object) => {
  */
 extend(Object, 'fromArray', (
 	arr: unknown[],
-	params: ObjectFromArrayParams = {
-		nameConverter: String,
-		valueConverter: Boolean
-	}
+	params?: ObjectFromArrayParams
 ) => {
 	const
 		map = {};
 
+	const p = {
+		keyConverter: String,
+		valueConverter: Boolean,
+		...params
+	};
+
 	for (let i = 0; i < arr.length; i++) {
-		map[params.nameConverter(arr[i])] = params.valueConverter(arr[i]);
+		map[p.keyConverter(arr[i])] = p.valueConverter(arr[i]);
 	}
 
 	return map;
