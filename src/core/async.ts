@@ -258,7 +258,7 @@ export default class Async<CTX extends object = Async<any>> {
 	protected readonly context: CTX;
 
 	/**
-	 * Link for Async.linkNames
+	 * Link for this.linkNames
 	 */
 	protected get linkNames(): LinkNamesList {
 		return (<typeof Async>this.constructor).linkNames;
@@ -1727,7 +1727,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 *   *) [group] - group name for the task
 	 */
 	clearAll(params?: ClearOpts): this {
-		for (let o = Async.linkNames, keys = Object.keys(o), i = 0; i < keys.length; i++) {
+		for (let o = this.linkNames, keys = Object.keys(o), i = 0; i < keys.length; i++) {
 			const
 				alias = `clear-${o[keys[i]]}`.camelize(false);
 
@@ -1750,7 +1750,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 *   *) [group] - group name for the task
 	 */
 	muteAll(params?: ClearOpts): this {
-		for (let o = Async.linkNames, keys = Object.keys(o), i = 0; i < keys.length; i++) {
+		for (let o = this.linkNames, keys = Object.keys(o), i = 0; i < keys.length; i++) {
 			const
 				alias = `mute-${o[keys[i]]}`.camelize(false);
 
@@ -1770,7 +1770,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 *   *) [group] - group name for the task
 	 */
 	unmuteAll(params?: ClearOpts): this {
-		for (let o = Async.linkNames, keys = Object.keys(o), i = 0; i < keys.length; i++) {
+		for (let o = this.linkNames, keys = Object.keys(o), i = 0; i < keys.length; i++) {
 			const
 				alias = `unmute-${o[keys[i]]}`.camelize(false);
 
@@ -1790,7 +1790,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 *   *) [group] - group name for the task
 	 */
 	suspendAll(params?: ClearOpts): this {
-		for (let o = Async.linkNames, keys = Object.keys(o), i = 0; i < keys.length; i++) {
+		for (let o = this.linkNames, keys = Object.keys(o), i = 0; i < keys.length; i++) {
 			const
 				alias = `suspend-${o[keys[i]]}`.camelize(false);
 
@@ -1810,7 +1810,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 *   *) [group] - group name for the task
 	 */
 	unsuspendAll(params?: ClearOpts): this {
-		for (let o = Async.linkNames, keys = Object.keys(o), i = 0; i < keys.length; i++) {
+		for (let o = this.linkNames, keys = Object.keys(o), i = 0; i < keys.length; i++) {
 			const
 				alias = `unsuspend-${o[keys[i]]}`.camelize(false);
 
