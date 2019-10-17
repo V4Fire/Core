@@ -16,6 +16,10 @@ import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 export const
 	GLOBAL = Function('return this')();
 
+if (typeof globalThis === 'undefined') {
+	GLOBAL.globalThis = GLOBAL;
+}
+
 /**
  * True if NodeJS runtime
  */

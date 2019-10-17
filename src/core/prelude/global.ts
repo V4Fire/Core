@@ -8,11 +8,6 @@
 
 import log from 'core/log';
 import extend from 'core/prelude/extend';
-import { GLOBAL } from 'core/prelude/env';
-
-if (typeof globalThis === 'undefined') {
-	GLOBAL.globalThis = GLOBAL;
-}
 
 /**
  * Converts the specified unknown value to any
