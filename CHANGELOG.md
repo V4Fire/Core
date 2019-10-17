@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.0.0-beta.82 (2019-10-17)
+
+#### :bug: Bug Fix
+
+* Fixed `globalThis` shim
+
 ## v3.0.0-beta.81 (2019-10-14)
 
 #### :boom: Breaking Change
