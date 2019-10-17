@@ -54,14 +54,25 @@ extend(Object, 'createMap', (obj: object) => {
 
 /**
  * Creates an object from the specified array
+ *
  * @param arr
+ * @param [params]
  */
-extend(Object, 'fromArray', (arr: unknown[]) => {
+extend(Object, 'fromArray', (
+	arr: unknown[],
+	params?: ObjectFromArrayParams
+) => {
 	const
 		map = {};
 
+	const p = {
+		keyConverter: String,
+		valueConverter: Boolean,
+		...params
+	};
+
 	for (let i = 0; i < arr.length; i++) {
-		map[String(arr[i])] = true;
+		map[p.keyConverter(arr[i])] = p.valueConverter(arr[i]);
 	}
 
 	return map;

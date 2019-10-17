@@ -89,6 +89,11 @@ interface ObjectSetParams extends ObjectGetParams {
 	concat?: boolean;
 }
 
+interface ObjectFromArrayParams<T = boolean> {
+	keyConverter?: Function;
+	valueConverter?(el: unknown): T;
+}
+
 interface ObjectConstructor {
 	get<T = unknown>(obj: unknown, path: string | unknown[], params?: ObjectGetParams): T;
 	has(obj: object, path: string | unknown[], params?: ObjectGetParams): boolean;
@@ -140,7 +145,7 @@ interface ObjectConstructor {
 	createMap<D extends object, K extends keyof D>(obj: D):
 		D extends Array<infer E> ? Dictionary<E | number> : D & {[I: string]: K};
 
-	fromArray(arr: unknown[]): Dictionary<boolean>;
+	fromArray<T = boolean>(arr: unknown[], params?: ObjectFromArrayParams<T>): Dictionary<T>;
 	convertEnumToDict<D extends object>(obj: D): {[K in keyof D]: K};
 
 	select<D extends object>(obj: D, condition: RegExp): {[K in keyof D]?: D[K]};
