@@ -258,7 +258,7 @@ export default class Async<CTX extends object = Async<any>> {
 	protected readonly context: CTX;
 
 	/**
-	 * Link for this.linkNames
+	 * Link for Async.linkNames
 	 */
 	protected get linkNames(): LinkNamesList {
 		return (<typeof Async>this.constructor).linkNames;
