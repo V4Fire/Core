@@ -15,7 +15,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :bug: Bug Fix
 
-* [Fixed `Async.links` not inherited](https://github.com/V4Fire/Core/pull/36)
+* [Fixed `Async.links` override](https://github.com/V4Fire/Core/pull/36)
 
 ## v3.0.0-beta.83 (2019-10-17)
 
