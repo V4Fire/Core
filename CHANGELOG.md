@@ -11,7 +11,7 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-## v3.0.0-beta.84 (2019-10-18)
+## v3.0.0-beta.84 (2019-10-22)
 
 #### :bug: Bug Fix
 
