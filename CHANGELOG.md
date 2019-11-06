@@ -15,7 +15,13 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :rocket: New Feature
 
-* [Added ability to interpolate into query string in provider baseURL](https://github.com/V4Fire/Core/pull/41)
+* [Added query string interpolation within url (core/request)](https://github.com/V4Fire/Core/pull/41)
+
+#### :house: Internal
+
+* Updated dependencies: typescript@3.7.2, dotenv@8.2.0, eslint@6.6.0
+* Improved `core/session` type declarations
+* Fixed `core/event` type declarations
 
 ## v3.0.0-beta.84 (2019-10-22)
 
@@ -145,7 +151,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
   
 #### :house: Internal
 
-* Updated TypeScript@3.6.2
+* Updated dependencies: typescript@3.6.2
 
 ## v3.0.0-beta.66 (2019-08-27)
 
