@@ -27,7 +27,7 @@ import {
 
 const
 	resolveURLRgxp = /(?:^|(\w+:\/\/)(?:([^./]+)\.)?([^./]+)(?:\.([^./]+))?)(\/.*|$)/,
-	queryTplRgxp = /\/:(.+?)(\(.*?\))?(?=[\\/.?#]|$)/g;
+	queryTplRgxp = /\:(.+?)(\(.*?\))?(?=[\\/\&.?#]|$)/g;
 
 export default class RequestContext<T = unknown> {
 	/**
