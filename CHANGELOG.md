@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.0.0-beta.87 (2019-11-06)
+
+#### :bug: Bug Fix
+
+* Fixed querystring interpolation (`core/request`)
+
 ## v3.0.0-beta.86 (2019-11-06)
 
 #### :house: Internal
@@ -21,7 +27,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :rocket: New Feature
 
-* [Added query string interpolation within url (core/request)](https://github.com/V4Fire/Core/pull/41)
+* [Added querystring interpolation within url (core/request)](https://github.com/V4Fire/Core/pull/41)
 
 #### :house: Internal
 
