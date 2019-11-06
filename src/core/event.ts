@@ -81,7 +81,7 @@ export function afterDOMLoaded(cb?: Function): Promise<void> {
  * @param cb
  * @param flags
  */
-export function onEverythingReady(cb: () => void, ...flags: string[]): (flag: string) => void {
+export function onEverythingReady(cb: () => unknown, ...flags: string[]): (flag: string) => void {
 	const
 		flagsStatus = Object.createDict();
 
