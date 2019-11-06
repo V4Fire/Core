@@ -10,6 +10,11 @@ import session from 'core/session/engines';
 import { Session } from 'core/session/interface';
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 
+export type SessionKey = Nullable<
+	string |
+	boolean
+>;
+
 export const
 	event = new EventEmitter({maxListeners: 100, newListener: false});
 
@@ -41,7 +46,7 @@ export async function get(): Promise<Session> {
  * @param [csrf]
  * @emits set(session: Session)
  */
-export async function set(auth?: string, csrf?: string): Promise<boolean> {
+export async function set(auth?: SessionKey, csrf?: SessionKey): Promise<boolean> {
 	try {
 		const
 			s = await session;
@@ -87,7 +92,7 @@ export async function clear(): Promise<boolean> {
  * @param [auth]
  * @param [csrf]
  */
-export async function match(auth?: string, csrf?: string): Promise<boolean> {
+export async function match(auth?: SessionKey, csrf?: SessionKey): Promise<boolean> {
 	try {
 		const s = await get();
 		return auth === s.auth && csrf === s.csrf;
