@@ -7,13 +7,9 @@
  */
 
 import session from 'core/session/engines';
-import { Session } from 'core/session/interface';
+import { Session, SessionKey } from 'core/session/interface';
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
-
-export type SessionKey = Nullable<
-	string |
-	boolean
->;
+export * from 'core/session/interface';
 
 export const
 	event = new EventEmitter({maxListeners: 100, newListener: false});
@@ -27,8 +23,8 @@ export async function get(): Promise<Session> {
 			s = await session;
 
 		return {
-			auth: await s.get<string>('auth'),
-			csrf: await s.get<string>('csrf')
+			auth: await s.get<SessionKey>('auth'),
+			csrf: await s.get<SessionKey>('csrf')
 		};
 
 	} catch {

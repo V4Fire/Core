@@ -6,7 +6,12 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+export type SessionKey = Nullable<
+	string |
+	boolean
+>;
+
 export interface Session {
-	auth: CanUndef<string>;
-	csrf: CanUndef<string>;
+	auth: SessionKey;
+	csrf: SessionKey;
 }
