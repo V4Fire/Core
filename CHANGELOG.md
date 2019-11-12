@@ -11,6 +11,16 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.0.0-beta.89 (2019-11-12)
+
+#### :rocket: New Feature
+
+* Added functional form for `RequestAPI` parameters
+
+#### :bug: Bug Fix
+
+* Fixed `core/request/context/wrapAsResponse` 
+
 ## v3.0.0-beta.88 (2019-11-12)
 
 #### :bug: Bug Fix
