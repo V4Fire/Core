@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.0.0-beta.88 (2019-11-12)
+
+#### :bug: Bug Fix
+
+* Fixed `content-type` header resolving `core/request/response`
+
 ## v3.0.0-beta.87 (2019-11-06)
 
 #### :bug: Bug Fix

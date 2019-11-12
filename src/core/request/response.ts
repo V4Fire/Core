@@ -253,7 +253,7 @@ export default class Response {
 			return Then.resolve<_>(null);
 		}
 
-		return Then.resolve<_>(new Blob([<any>body], {type: this.getHeader('content-sourceType')}), this.parent);
+		return Then.resolve<_>(new Blob([<any>body], {type: this.getHeader('content-type')}), this.parent);
 	}
 
 	/**
@@ -284,7 +284,7 @@ export default class Response {
 		}
 
 		const
-			contentType = this.getHeader('content-sourceType');
+			contentType = this.getHeader('content-type');
 
 		let
 			encoding = 'utf-8';
