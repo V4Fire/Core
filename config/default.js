@@ -326,16 +326,7 @@ module.exports = config.createConfig(
 		es() {
 			return o('es', {
 				env: true,
-				default: 'ES5',
-				validate(v) {
-					return Boolean({
-						ES3: true,
-						ES5: true,
-						ES6: true,
-						ES2016: true,
-						ESNext: true
-					}[v]);
-				}
+				default: 'ES5'
 			});
 		},
 
