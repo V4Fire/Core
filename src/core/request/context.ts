@@ -125,7 +125,13 @@ export default class RequestContext<T = unknown> {
 	 */
 	resolveAPI(api: Nullable<string> = globalOpts.api): string {
 		const
-			a = <RequestAPI>(this.params.api || {});
+			c = (v) => Object.isFunction(v) ? v() : v,
+			a = <{[K in keyof RequestAPI]: Nullable<string>}>({...this.params.api});
+
+		for (let keys = Object.keys(a), i = 0; i < keys.length; i++) {
+			const key = keys[i];
+			a[key] = c(a[key]);
+		}
 
 		if (a.url) {
 			return a.url;
@@ -291,7 +297,8 @@ export default class RequestContext<T = unknown> {
 	 */
 	async wrapAsResponse(obj: Response | ResponseType): Promise<RequestResponseObject<T>> {
 		const response = obj instanceof Response ? obj : new Response(obj, {
-			parent: this.parent
+			parent: this.parent,
+			responseType: 'object'
 		});
 
 		return {

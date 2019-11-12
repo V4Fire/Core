@@ -119,12 +119,12 @@ export type Middlewares<T = unknown> =
 	Iterable<Middleware<T>>;
 
 export interface RequestAPI {
-	url?: Nullable<string>;
-	protocol?: Nullable<string>;
-	domain3?: Nullable<string>;
-	domain2?: Nullable<string>;
-	zone?: Nullable<string>;
-	namespace?: Nullable<string>;
+	url?: Nullable<string> | (() => Nullable<string>);
+	protocol?: Nullable<string> | (() => Nullable<string>);
+	domain3?: Nullable<string> | (() => Nullable<string>);
+	domain2?: Nullable<string> | (() => Nullable<string>);
+	zone?: Nullable<string> | (() => Nullable<string>);
+	namespace?: Nullable<string> | (() => Nullable<string>);
 }
 
 export interface CreateRequestOpts<T = unknown> {
