@@ -94,7 +94,7 @@ export default class Response {
 			s = this.okStatuses = p.okStatuses;
 
 		this.parent = p.parent;
-		this.sourceResponseType = this.responseType = p.responseType;
+		this.sourceResponseType = this.responseType = p.responseType || 'object';
 		this.important = p.important;
 
 		this.status = p.status;

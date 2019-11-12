@@ -291,8 +291,7 @@ export default class RequestContext<T = unknown> {
 	 */
 	async wrapAsResponse(obj: Response | ResponseType): Promise<RequestResponseObject<T>> {
 		const response = obj instanceof Response ? obj : new Response(obj, {
-			parent: this.parent,
-			responseType: 'object'
+			parent: this.parent
 		});
 
 		return {
