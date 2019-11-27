@@ -348,22 +348,3 @@ interface Function {
 	debounce(delay?: number): Function;
 	throttle(delay?: number): Function;
 }
-
-declare namespace decoders {
-	interface TextDecoder {
-		readonly encoding: string;
-		readonly fatal: boolean;
-		readonly ignoreBOM: boolean;
-		decode(buffer?: ArrayBufferView, opts?: {stream?: boolean}): string;
-	}
-
-	export interface TextDecoderConstructor {
-		new (utfLabel?: string, opts?: {fatal?: boolean}): TextDecoder;
-	}
-}
-
-interface Window {
-	TextDecoder: decoders.TextDecoderConstructor;
-}
-
-declare const TextDecoder: decoders.TextDecoderConstructor;
