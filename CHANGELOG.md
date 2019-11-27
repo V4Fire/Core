@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.0.0-beta.91 (2019-11-27)
+
+#### :house: Internal
+
+* Fixed `index.d.ts`
+
 ## v3.0.0-beta.90 (2019-11-12)
 
 #### :house: Internal
