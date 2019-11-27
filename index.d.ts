@@ -6,8 +6,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-declare const globalThis: Window;
-
 declare const APP_NAME: string;
 declare const API_URL: CanUndef<string>;
 declare const IS_PROD: boolean;
