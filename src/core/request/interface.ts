@@ -84,7 +84,7 @@ export interface RequestFunctionResponse<T = unknown, A extends unknown[] = []> 
 	(...args: A extends (infer V)[] ? V[] : unknown[]): RequestResponse<T>;
 }
 
-export interface RequestOpts {
+export interface RequestOptions {
 	readonly url: string;
 	readonly method?: RequestMethods;
 	readonly timeout?: number;
@@ -106,8 +106,8 @@ export type RequestQuery =
 
 export interface MiddlewareParams<T = unknown> {
 	ctx: RequestContext<T>;
-	opts: CreateRequestOpts<T>;
-	globalOpts: GlobalOpts;
+	opts: CreateRequestOptions<T>;
+	globalOpts: GlobalOptions;
 }
 
 export interface Middleware<T = unknown> {
@@ -127,7 +127,7 @@ export interface RequestAPI {
 	namespace?: Nullable<string> | (() => Nullable<string>);
 }
 
-export interface CreateRequestOpts<T = unknown> {
+export interface CreateRequestOptions<T = unknown> {
 	readonly method?: RequestMethods;
 	readonly cacheStrategy?: CacheStrategy;
 
@@ -166,7 +166,7 @@ export interface ResponseHeaders {
 	readonly [name: string]: string;
 }
 
-export interface ResponseOpts {
+export interface ResponseOptions {
 	parent?: Then;
 	important?: boolean;
 	responseType?: ResponseTypes;
@@ -176,7 +176,7 @@ export interface ResponseOpts {
 	decoder?: Decoder | Decoders;
 }
 
-export interface GlobalOpts {
+export interface GlobalOptions {
 	api?: Nullable<string>;
 	meta: Dictionary;
 }

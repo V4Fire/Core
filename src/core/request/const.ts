@@ -10,7 +10,7 @@ import config from 'config';
 import Range from 'core/range';
 
 import { AsyncFactoryResult } from 'core/kv-storage';
-import { RequestMethods, ResponseTypes, GlobalOpts, CacheStrategy } from 'core/request/interface';
+import { RequestMethods, ResponseTypes, GlobalOptions, CacheStrategy } from 'core/request/interface';
 import { Cache, RestrictedCache, NeverCache, AbstractCache } from 'core/cache';
 
 export let
@@ -53,7 +53,7 @@ export const cache: Record<CacheStrategy, AbstractCache> = {
 	never: new NeverCache()
 };
 
-export const globalOpts: GlobalOpts = {
+export const globalOpts: GlobalOptions = {
 	get api(): CanUndef<string> {
 		return config.api;
 	},

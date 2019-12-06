@@ -195,13 +195,13 @@ interface String {
 	underscore(stable?: boolean): string;
 }
 
-type NumberOpts =
+type NumberOptions =
 	'decimal' |
 	'thousands';
 
 interface NumberConstructor {
-	getOption(key: NumberOpts): string;
-	setOption(key: NumberOpts, value: string): string;
+	getOption(key: NumberOptions): string;
+	setOption(key: NumberOptions, value: string): string;
 }
 
 interface Number {

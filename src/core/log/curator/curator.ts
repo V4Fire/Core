@@ -9,7 +9,7 @@
 import pipelines from 'core/log/curator/pipelines';
 
 import { LogEvent } from 'core/log/middlewares';
-import { LogMessageOpts } from 'core/log';
+import { LogMessageOptions } from 'core/log';
 import { DEFAULT_LEVEL } from 'core/log/base';
 
 const
@@ -21,7 +21,7 @@ const
  * @param context
  * @param details
  */
-export default function log(context: string | LogMessageOpts, ...details: unknown[]): void {
+export default function log(context: string | LogMessageOptions, ...details: unknown[]): void {
 	//#if runtime has core/log
 
 	let

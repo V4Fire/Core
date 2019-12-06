@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.0.0-beta.92 (2019-12-06)
+
+#### :boom: Breaking Change
+
+* Renamed interfaces `Opts` -> `Options`
+
 ## v3.0.0-beta.91 (2019-11-27)
 
 #### :house: Internal

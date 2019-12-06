@@ -24,7 +24,7 @@ import {
 
 	RequestFunctionResponse,
 	RequestResponse,
-	CreateRequestOpts,
+	CreateRequestOptions,
 	MiddlewareParams,
 	ResolverResult
 
@@ -43,13 +43,13 @@ export { default as Response } from 'core/request/response';
  * @param path
  * @param opts
  */
-export default function create<T = unknown>(path: string, opts?: CreateRequestOpts<T>): RequestResponse<T>;
+export default function create<T = unknown>(path: string, opts?: CreateRequestOptions<T>): RequestResponse<T>;
 
 /**
  * Creates a request wrapper by the specified options
  * @param opts
  */
-export default function create<T = unknown>(opts: CreateRequestOpts<T>): typeof create;
+export default function create<T = unknown>(opts: CreateRequestOptions<T>): typeof create;
 
 /**
  * @param path
@@ -59,7 +59,7 @@ export default function create<T = unknown>(opts: CreateRequestOpts<T>): typeof 
 export default function create<T = unknown, A extends unknown[] = unknown[]>(
 	path: string,
 	resolver: (url: string, params: MiddlewareParams<T>, ...args: A) => ResolverResult,
-	opts?: CreateRequestOpts<T>
+	opts?: CreateRequestOptions<T>
 ): RequestFunctionResponse<T, A extends (infer V)[] ? V[] : unknown[]>;
 
 export default function create<T = unknown>(path: any, ...args: any[]): unknown {
@@ -76,19 +76,19 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 
 		return (path, resolver, opts) => {
 			if (Object.isObject(path)) {
-				return create(merge<CreateRequestOpts<T>>(defOpts, path));
+				return create(merge<CreateRequestOptions<T>>(defOpts, path));
 			}
 
 			if (Object.isFunction(resolver)) {
-				return create(path, resolver, merge<CreateRequestOpts<T>>(defOpts, opts));
+				return create(path, resolver, merge<CreateRequestOptions<T>>(defOpts, opts));
 			}
 
-			return create(path, merge<CreateRequestOpts<T>>(defOpts, resolver));
+			return create(path, merge<CreateRequestOptions<T>>(defOpts, resolver));
 		};
 	}
 
 	let
-		resolver, opts: CreateRequestOpts<T>;
+		resolver, opts: CreateRequestOptions<T>;
 
 	if (args.length > 1) {
 		([resolver, opts] = args);
@@ -104,7 +104,7 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 
 	const run = (...args) => {
 		const
-			p = merge<CreateRequestOpts<T>>(baseCtx.params),
+			p = merge<CreateRequestOptions<T>>(baseCtx.params),
 			ctx = Object.create(baseCtx);
 
 		const middlewareParams = {

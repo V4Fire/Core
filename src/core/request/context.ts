@@ -19,7 +19,7 @@ import {
 	Decoders,
 	RequestAPI,
 	RequestQuery,
-	CreateRequestOpts,
+	CreateRequestOptions,
 	RequestResponseObject,
 	ResponseType
 
@@ -58,7 +58,7 @@ export default class RequestContext<T = unknown> {
 	/**
 	 * Request parameters
 	 */
-	readonly params!: typeof defaultRequestOpts & CreateRequestOpts<T>;
+	readonly params!: typeof defaultRequestOpts & CreateRequestOptions<T>;
 
 	/**
 	 * Alias for .params.query
@@ -95,7 +95,7 @@ export default class RequestContext<T = unknown> {
 	/**
 	 * @param [params] - request parameters
 	 */
-	constructor(params?: CreateRequestOpts<T>) {
+	constructor(params?: CreateRequestOptions<T>) {
 		const p = this.params = <any>Object.mixin({
 			deep: true,
 			concatArray: true,
