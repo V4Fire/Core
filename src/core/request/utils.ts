@@ -24,7 +24,7 @@ export function getStorageKey(key: string): string {
  */
 export function getRequestKey<T>(url: string, params?: CreateRequestOptions<T>): string {
 	const
-		p = <NonNullable<typeof params>>(params || {}),
+		p = params || {},
 		plainHeaders = <string[][]>[];
 
 	let

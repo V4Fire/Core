@@ -265,7 +265,7 @@ export default class Response {
 
 		const
 			body = this.body,
-			type = <NonNullable<ResponseTypes>>this.sourceResponseType;
+			type = this.sourceResponseType!;
 
 		if (!body || type === 'arrayBuffer' && !(<ArrayBuffer>body).byteLength) {
 			return Then.resolve<_>(null, this.parent);
