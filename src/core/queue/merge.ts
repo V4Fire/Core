@@ -30,7 +30,7 @@ export default class MergeQueue<T, V = unknown> extends Queue<T, V> {
 		}
 
 		const obj = this.tasksMap[this.tasks[0]];
-		return obj && obj.task;
+		return obj?.task;
 	}
 
 	/** @override */
@@ -53,7 +53,7 @@ export default class MergeQueue<T, V = unknown> extends Queue<T, V> {
 	 */
 	constructor(worker: QueueWorker<T, V>, params: QueueParams<T>) {
 		super(worker, params);
-		this.hashFn = params && params.hashFn || String;
+		this.hashFn = params?.hashFn || String;
 	}
 
 	/** @override */

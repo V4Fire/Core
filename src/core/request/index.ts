@@ -282,7 +282,7 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 						const
 							res = await ctx.pendingCache.get(cacheKey);
 
-						if (res && res.response instanceof Response) {
+						if (res?.response instanceof Response) {
 							resolve(res);
 							return;
 						}

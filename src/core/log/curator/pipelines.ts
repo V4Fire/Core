@@ -15,7 +15,7 @@ const
 
 //#if runtime has core/log
 
-if (config && config.log && config.log.pipelines) {
+if (config?.log?.pipelines) {
 	for (let i = 0; i < config.log.pipelines.length; ++i) {
 		const
 			pipeline = createPipeline(config.log.pipelines[i]);

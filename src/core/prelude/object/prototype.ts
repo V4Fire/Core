@@ -31,7 +31,7 @@ extend(Object, 'getPrototypeChain', (constructor: Function) => {
 	let
 		proto = constructor.prototype;
 
-	while (proto && proto.constructor !== Object) {
+	while (proto?.constructor !== Object) {
 		chain.push(proto);
 		proto = Object.getPrototypeOf(proto);
 	}

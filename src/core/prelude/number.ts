@@ -242,7 +242,7 @@ extend(Number.prototype, 'format', function (this: Number, place?: number): stri
 		res = int[i] + res;
 	}
 
-	if (dec && dec.length) {
+	if (dec?.length) {
 		return res + opts.decimal + dec;
 	}
 
