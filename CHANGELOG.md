@@ -11,6 +11,16 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.0.0-beta.93 (2019-12-10)
+
+#### :rocket: New Feature
+
+* Added `preventDefault` parameter to `core/async/ClearOptions`
+
+#### :house: Internal
+
+* Updated dependencies: typescript@3.7.3, got@10.0.3, node-localstorage@2.1.5, eslint@6.7.2
+
 ## v3.0.0-beta.92 (2019-12-06)
 
 #### :boom: Breaking Change
