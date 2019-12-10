@@ -29,6 +29,7 @@ export interface AsyncLink<CTX extends object = Async> {
 export interface ClearOptions {
 	label?: string | symbol;
 	group?: string | RegExp;
+	preventDefault?: boolean;
 }
 
 export interface ClearOptionsId<ID = unknown> extends ClearOptions {
@@ -2306,7 +2307,7 @@ export default class Async<CTX extends object = Async<any>> {
 					clearHandlers[i].call(this.context, ctx);
 				}
 
-				if (clearFn) {
+				if (clearFn && !p.preventDefault) {
 					clearFn.call(null, link.id, ctx);
 				}
 			}
