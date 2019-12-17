@@ -274,18 +274,12 @@ extend(Object, 'mixin', (params: ObjectMixinParams | boolean, base: any, ...objs
  *   *) [freezable] - if false the object freeze state wont be copy
  */
 extend(Object, 'fastClone', (obj, params?: FastCloneParams) => {
-	const
-		p = params || {};
-
-	if (typeof obj === 'function') {
+	if (!obj || typeof obj === 'function') {
 		return obj;
 	}
 
-	if (obj) {
-		const
-			noJSON = typeof (<any>obj).toJSON !== 'function';
-
-		if (noJSON && obj instanceof Map) {
+	if (typeof obj === 'object') {
+		if (obj instanceof Map) {
 			const
 				map = new Map();
 
@@ -297,84 +291,89 @@ extend(Object, 'fastClone', (obj, params?: FastCloneParams) => {
 			return map;
 		}
 
-		if (noJSON && obj instanceof Set) {
+		if (obj instanceof Set) {
 			const
 				set = new Set();
 
 			for (let o = obj.values(), el = o.next(); !el.done; el = o.next()) {
-				set.add(el.value);
+				set.add(Object.fastClone(el.value));
 			}
 
 			return set;
 		}
 
-		if (typeof obj === 'object') {
-			if (Array.isArray(obj)) {
-				if (!obj.length) {
-					return [];
-				}
+		if (Array.isArray(obj)) {
+			if (!obj.length) {
+				return [];
+			}
 
-				if (obj.length < 10) {
+			if (obj.length < 10) {
+				const
+					slice = obj.slice();
+
+				let
+					isSimple = true;
+
+				for (let i = 0; i < obj.length; i++) {
 					const
-						slice = obj.slice();
+						el = obj[i];
 
-					let
-						isSimple = true;
+					if (el && typeof el === 'object') {
+						if (el instanceof Date) {
+							slice[i] = new Date(el);
 
-					for (let i = 0; i < obj.length; i++) {
-						const
-							el = obj[i];
-
-						if (el && typeof el === 'object') {
-							if (el instanceof Date) {
-								slice[i] = new Date(el);
-
-							} else {
-								isSimple = false;
-								break;
-							}
+						} else {
+							isSimple = false;
+							break;
 						}
 					}
-
-					if (isSimple) {
-						return slice;
-					}
-				}
-			}
-
-			if (obj instanceof Date) {
-				return new Date(obj);
-			}
-
-			const
-				constr = obj.constructor;
-
-			if ((!constr || constr === Object) && !Object.keys(obj).length) {
-				return {};
-			}
-
-			const
-				funcMap = new Map(),
-				replacer = createReplacer(obj, funcMap, p.replacer),
-				reviewer = createReviewer(obj, funcMap, p.reviver),
-				clone = JSON.parse(JSON.stringify(obj, replacer), reviewer);
-
-			if (p.freezable !== false) {
-				if (!Object.isExtensible(obj)) {
-					Object.preventExtensions(clone);
 				}
 
-				if (Object.isSealed(obj)) {
-					Object.seal(clone);
-				}
-
-				if (Object.isFrozen(obj)) {
-					Object.freeze(clone);
+				if (isSimple) {
+					return slice;
 				}
 			}
-
-			return clone;
 		}
+
+		if (obj instanceof Date) {
+			return new Date(obj);
+		}
+
+		const
+			constr = obj.constructor;
+
+		if ((!constr || constr === Object) && !Object.keys(obj).length) {
+			return {};
+		}
+
+		const
+			p = params || {},
+			funcMap = new Map();
+
+		const
+			replacer = createReplacer(obj, funcMap, p.replacer),
+			reviewer = createReviewer(obj, funcMap, p.reviver);
+
+		const clone = JSON.parse(
+			JSON.stringify(obj, replacer),
+			reviewer
+		);
+
+		if (p.freezable !== false) {
+			if (!Object.isExtensible(obj)) {
+				Object.preventExtensions(clone);
+			}
+
+			if (Object.isSealed(obj)) {
+				Object.seal(clone);
+			}
+
+			if (Object.isFrozen(obj)) {
+				Object.freeze(clone);
+			}
+		}
+
+		return clone;
 	}
 
 	return obj;
