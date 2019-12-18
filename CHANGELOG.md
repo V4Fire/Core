@@ -11,11 +11,15 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-## v3.0.0-beta.94 (2019-12-17)
+## v3.0.0-beta.94 (2019-12-18)
 
 #### :boom: Breaking Change
 
 * Removed `core/thread`
+
+#### :rocket: New Feature
+
+* Added `Object.fastHash`
 
 #### :bug: Bug Fix
 

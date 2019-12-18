@@ -78,16 +78,34 @@ extend(Object, 'fastCompare', (a, b) => {
 	return JSON.stringify(a, createReplacer(a, b, cache)) === JSON.stringify(b, createReplacer(a, b, cache));
 });
 
+const
+	funcCache = new WeakMap();
+
+/**
+ * Returns a string representation of the specified object
+ * @param obj
+ */
+extend(Object, 'fastHash', (obj) =>
+	JSON.stringify(obj, createReplacer(obj, undefined, funcCache)));
+
 function createReplacer(
 	a: unknown,
 	b: unknown,
-	funcMap: WeakMap<Function, number>
+	funcMap: WeakMap<Function, string>
 ): JSONCb {
 	let
 		init = false;
 
 	return (key, value) => {
-		if (init) {
+		if (!value) {
+			init = true;
+			return value;
+		}
+
+		const
+			isObj = typeof value === 'object';
+
+		if (init && isObj) {
 			if (value === a) {
 				return '[[OBJ_REF:a]]';
 			}
@@ -101,10 +119,14 @@ function createReplacer(
 			init = true;
 		}
 
-		if (Object.isFunction(value)) {
-			const key = funcMap.get(value) || Math.random();
+		if (typeof value === 'function') {
+			const key = funcMap.get(value) || `[[FUNC_REF:${Math.random()}]]`;
 			funcMap.set(value, key);
 			return key;
+		}
+
+		if (isObj && (value instanceof Map || value instanceof Set)) {
+			return [...value.entries()];
 		}
 
 		return value;

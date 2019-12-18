@@ -106,6 +106,7 @@ interface ObjectConstructor {
 
 	fastCompare<T = unknown>(a: unknown, b: T): a is T;
 	fastClone<T = unknown>(obj: T, params?: FastCloneParams): T;
+	fastHash(obj: unknown): string;
 
 	mixin<B = unknown, O1 = unknown>(
 		params: ObjectMixinParams | boolean,
