@@ -28,7 +28,7 @@
   "dependencies": {
     "eventemitter2": "^5.0.1",
     "fs-extra-promise": "^1.0.1",
-    "got": "^10.0.3",
+    "got": "^10.0.4",
     "node-localstorage": "^2.1.5",
     "tslib": "^1.10.0"
   },
