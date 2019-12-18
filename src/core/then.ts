@@ -27,6 +27,9 @@ export interface Executor<T = unknown> {
 	): void;
 }
 
+/**
+ * Wrapper for native promises, which adds some extra functionality, such as cancelable promises
+ */
 export default class Then<T = unknown> implements PromiseLike<T> {
 	/**
 	 * Promise that never will be resolved
@@ -34,7 +37,7 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	static readonly never: Promise<never> = new Promise(() => undefined);
 
 	/**
-	 * Returns true if the specified value is PromiseLike
+	 * Returns true if the specified value is similar to a promise
 	 * @param obj
 	 */
 	static isThenable(obj: unknown): obj is PromiseLike<unknown> {
@@ -46,9 +49,12 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	}
 
 	/**
-	 * Wraps the specified value with Then, that will be resolved after setImmediate
+	 * Takes the specified value and packs it within a Then promise,
+	 * that will be resolved on the next tick
 	 *
-	 * @param [value] - if function, it will be executed
+	 * @param [value] - value for wrapping:
+	 *   if it's a function, the promise will be resolved with the result of its invocation
+	 *
 	 * @param [parent] - parent promise
 	 */
 	static immediate<T = unknown>(value?: ExecValue<T>, parent?: Then): Then<T> {
@@ -61,6 +67,7 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 			onAbort((err) => {
 				// tslint:disable-next-line:no-string-literal
 				globalThis['clearImmediate'](id);
+
 				if (value instanceof Then) {
 					value.abort(err);
 				}
@@ -70,6 +77,8 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	}
 
 	/**
+	 * Takes the specified value and packs it within a resolved Then promise
+	 *
 	 * @see Promise.resolve
 	 * @param value
 	 * @param [parent] - parent promise
@@ -108,7 +117,6 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	 * @param values
 	 * @param [parent] - parent promise
 	 */
-	// @ts-ignore
 	static all<T extends Iterable<Value>>(
 		values: T,
 		parent?: Then

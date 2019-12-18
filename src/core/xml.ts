@@ -11,7 +11,7 @@ const
 	normalizeRgxp = /"|(\s+)|[{}|\\^~\[\]`"<>#%]/g;
 
 /**
- * Converts the specified node to a data:uri string
+ * Converts the specified XML node to a DATA:URI string
  * @param node
  */
 export function toDataURI(node: Node): string {

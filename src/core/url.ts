@@ -10,7 +10,7 @@ const
 	isUrlWithSep = /^(\w+:)?\/?\//;
 
 /**
- * Concatenates the specified parts of URLs, correctly arranging slashes and returns the full url
+ * Concatenates the specified parts of URLs with correctly arranging of slashes and returns a new string
  * @param urls
  */
 export function concatUrls(...urls: Nullable<string>[]): string {
@@ -49,40 +49,40 @@ export function concatUrls(...urls: Nullable<string>[]): string {
 }
 
 /**
- * Creates a querystring from the specified data and returns it
+ * Creates a querystring from the specified data object and returns it
  *
  * @param data
- * @param [encode] - if true, then for data will be applied encodeURIComponent
+ * @param [encode] - if true, then all values from the data will be encoded with encodeURIComponent
  */
 export function toQueryString(data: unknown, encode: boolean = true): string {
 	return chunkToQueryString(data, encode);
 }
 
 /**
- * Creates an object from the specified querystring and returns it
+ * Creates a dictionary from the specified querystring and returns it
  *
- * @param str
- * @param [decode] - if true, then for the string will be applied decodeURIComponent
+ * @param query
+ * @param [decode] - if true, then the querystring will be decoded with decodeURIComponent
  */
-export function fromQueryString(str: string, decode: boolean = true): Dictionary<string | null> {
+export function fromQueryString(query: string, decode: boolean = true): Dictionary<string | null> {
 	const
 		res = {};
 
-	if (str[0] === '?') {
-		str = str.slice(1);
+	if (query[0] === '?') {
+		query = query.slice(1);
 	}
 
-	if (!str) {
+	if (!query) {
 		return res;
 	}
 
 	if (decode) {
-		str = decodeURIComponent(str);
+		query = decodeURIComponent(query);
 	}
 
 	const
 		opts = {separator: '_'},
-		chunks = str.split('&');
+		chunks = query.split('&');
 
 	for (let i = 0; i < chunks.length; i++) {
 		const

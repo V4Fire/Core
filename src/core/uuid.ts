@@ -6,12 +6,12 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-const serializeFilter = {
+const serializeFilter = Object.createDict({
 	3: true,
 	5: true,
 	7: true,
 	9: true
-};
+});
 
 /**
  * Converts the specified binary UUID to a string and returns it
@@ -36,7 +36,7 @@ export function serialize(uuid: Uint8Array): string {
 }
 
 /**
- * Converts the specified string UUID to binary and returns it
+ * Converts the specified UUID string to a binary sequence and returns it
  * @param uuid
  */
 export function parse(uuid: string): Uint8Array {
