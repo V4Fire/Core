@@ -13,6 +13,10 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 ## v3.0.0-beta.94 (2019-12-17)
 
+#### :boom: Breaking Change
+
+* Removed `core/thread`
+
 #### :bug: Bug Fix
 
 * Fixed `Object.fastClone` with Set objects
