@@ -400,7 +400,7 @@ function createReplacer(
 			init = true;
 		}
 
-		if (Object.isFunction(value)) {
+		if (typeof value === 'function') {
 			const key = funcMap.get(value) || `${funcRef}${Math.random()}]]`;
 			funcMap.set(value, key);
 			funcMap.set(key, value);
@@ -425,12 +425,12 @@ function createReviewer(
 			return base;
 		}
 
-		if (funcMap && Object.isString(value) && value.slice(0, funcRef.length) === funcRef) {
+		if (funcMap && typeof value === 'string' && value.slice(0, funcRef.length) === funcRef) {
 			const
 				fn = funcMap.get(value);
 
-			if (Object.isFunction(fn)) {
-				return funcMap.get(value);
+			if (typeof fn === 'function') {
+				return fn;
 			}
 		}
 
