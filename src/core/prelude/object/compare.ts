@@ -86,7 +86,8 @@ const
  * @param obj
  */
 extend(Object, 'fastHash', (obj) =>
-	JSON.stringify(obj, createReplacer(obj, undefined, funcCache)));
+	JSON.stringify(obj, createReplacer(obj, undefined, funcCache)) || 'null'
+);
 
 function createReplacer(
 	a: unknown,
