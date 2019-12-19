@@ -7,8 +7,8 @@
  */
 
 /**
- * Creates a generator for symbols
- * @param fields - array of fields
+ * Returns a factory for flexible creation of unique symbols by the first touch
+ * @param fields - list of predefined fields (it can be useful for shimming the Proxy API)
  */
 export default function generator(fields?: string[]): StrictDictionary<symbol> {
 	const
