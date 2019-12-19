@@ -311,7 +311,7 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	): Then<V>;
 
 	then<V, R>(
-		onFulfill: (value: T) => Value<V>,
+		onFulfill: ThenFulfillHandler<T, V>,
 		onReject: ThenRejectHandler<R>,
 		onAbort?: Nullable<RejectHandler>
 	): Then<V | R>;
