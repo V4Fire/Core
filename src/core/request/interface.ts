@@ -57,7 +57,7 @@ export type OkStatuses =
 	StatusCodes[];
 
 export interface Encoder<I = unknown, O = unknown> {
-	(data: I, params: MiddlewareParams): O;
+	(data: I, params: MiddlewareOptions): O;
 }
 
 export type Encoders<T = unknown> =
@@ -65,7 +65,7 @@ export type Encoders<T = unknown> =
 	Iterable<Encoder<T>>;
 
 export interface Decoder<I = unknown, O = unknown> {
-	(data: I, params: MiddlewareParams, response: Response): O;
+	(data: I, params: MiddlewareOptions, response: Response): O;
 }
 
 export type Decoders<T = unknown> =
@@ -104,14 +104,14 @@ export type RequestQuery =
 	unknown[] |
 	string;
 
-export interface MiddlewareParams<T = unknown> {
+export interface MiddlewareOptions<T = unknown> {
 	ctx: RequestContext<T>;
 	opts: CreateRequestOptions<T>;
 	globalOpts: GlobalOptions;
 }
 
 export interface Middleware<T = unknown> {
-	(params: MiddlewareParams<T>): CanPromise<void | Function>;
+	(params: MiddlewareOptions<T>): CanPromise<void | Function>;
 }
 
 export type Middlewares<T = unknown> =

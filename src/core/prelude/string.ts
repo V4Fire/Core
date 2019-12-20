@@ -24,7 +24,7 @@ const
  */
 extend(String.prototype, 'capitalize', function (
 	this: string,
-	{lower, all}: StringCapitalizeParams = {}
+	{lower, all}: StringCapitalizeOptions = {}
 ): string {
 	const
 		str = this.toString(),

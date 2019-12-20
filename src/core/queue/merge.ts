@@ -6,13 +6,13 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import Queue, { QueueWorker, QueueParams as BaseQueueParams } from 'core/queue/interface';
+import Queue, { QueueWorker, QueueOptions as BaseQueueOptions } from 'core/queue/interface';
 
 export interface HashFn<T> {
 	(task: T): string;
 }
 
-export interface QueueParams<T> extends BaseQueueParams {
+export interface QueueOptions<T> extends BaseQueueOptions {
 	hashFn?: HashFn<T>;
 }
 
@@ -51,7 +51,7 @@ export default class MergeQueue<T, V = unknown> extends Queue<T, V> {
 	 * @param worker
 	 * @param [params]
 	 */
-	constructor(worker: QueueWorker<T, V>, params: QueueParams<T>) {
+	constructor(worker: QueueWorker<T, V>, params: QueueOptions<T>) {
 		super(worker, params);
 		this.hashFn = params?.hashFn || String;
 	}

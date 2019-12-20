@@ -10,7 +10,7 @@ export interface QueueWorker<T = unknown, V = unknown> {
 	(task: T): CanPromise<V>;
 }
 
-export interface QueueParams {
+export interface QueueOptions {
 	concurrency?: number;
 	interval?: number;
 }
@@ -58,7 +58,7 @@ export default abstract class Queue<T, V = unknown> {
 	 * @param [concurrency]
 	 * @param [interval]
 	 */
-	protected constructor(worker: QueueWorker<T, V>, {concurrency = 1, interval = 0}: QueueParams = {}) {
+	protected constructor(worker: QueueWorker<T, V>, {concurrency = 1, interval = 0}: QueueOptions = {}) {
 		this.worker = worker;
 		this.concurrency = concurrency;
 		this.interval = interval;

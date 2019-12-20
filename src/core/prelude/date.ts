@@ -281,7 +281,7 @@ extend(Date.prototype, 'format', function (
  */
 extend(Date.prototype, 'toHTMLDateString', function (
 	this: Date,
-	params: DateHTMLDateStringParams = {}
+	params: DateHTMLDateStringOptions = {}
 ): string {
 	const
 		s = (v) => String(v).padStart(2, '0'),
@@ -300,7 +300,7 @@ extend(Date.prototype, 'toHTMLDateString', function (
  */
 extend(Date.prototype, 'toHTMLTimeString', function (
 	this: Date,
-	params: DateHTMLTimeStringParams = {}
+	params: DateHTMLTimeStringOptions = {}
 ): string {
 	const
 		s = (v) => String(v).padStart(2, '0'),
@@ -325,7 +325,7 @@ extend(Date.prototype, 'toHTMLTimeString', function (
  * Returns a HTML string representation of a datetime
  * @param [params]
  */
-extend(Date.prototype, 'toHTMLString', function (this: Date, params: DateHTMLStringParams): string {
+extend(Date.prototype, 'toHTMLString', function (this: Date, params: DateHTMLStringOptions): string {
 	return `${this.toHTMLDateString(params)}T${this.toHTMLTimeString(params)}`;
 });
 
@@ -440,11 +440,11 @@ function relative(from: DateCreateValue, to: DateCreateValue): DateRelative {
 //#if runtime has prelude/date/modify
 
 function createDateModifier(mod: (val: number, base: number) => number = ((Any))): Function {
-	return function modifyDate(this: Date, params: DateSetParams, reset?: boolean): Date {
+	return function modifyDate(this: Date, params: DateSetOptions, reset?: boolean): Date {
 		const
-			resetValues = <Record<keyof DateSetParams, boolean>>{};
+			resetValues = <Record<keyof DateSetOptions, boolean>>{};
 
-		const setResetValue = (...keys: Array<keyof DateSetParams>) => {
+		const setResetValue = (...keys: Array<keyof DateSetOptions>) => {
 			for (let i = 0; i < keys.length; i++) {
 				const
 					key = keys[i];

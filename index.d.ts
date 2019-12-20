@@ -55,13 +55,13 @@ interface JSONCb {
 	(key: string, value: unknown): unknown;
 }
 
-interface FastCloneParams {
+interface FastCloneOptions {
 	replacer?: JSONCb;
 	reviver?: JSONCb | false;
 	freezable?: boolean;
 }
 
-interface ObjectMixinParams<V = unknown, K = unknown, D = unknown> {
+interface ObjectMixinOptions<V = unknown, K = unknown, D = unknown> {
 	deep?: boolean;
 	traits?: boolean | -1;
 	withUndef?: boolean;
@@ -74,55 +74,55 @@ interface ObjectMixinParams<V = unknown, K = unknown, D = unknown> {
 	filter?(el: V, key: K, data: D): unknown;
 }
 
-interface ObjectForEachParams {
+interface ObjectForEachOptions {
 	withDescriptor?: boolean;
 	notOwn?: boolean | -1;
 }
 
-interface ObjectGetParams {
+interface ObjectGetOptions {
 	separator?: string;
 }
 
-interface ObjectSetParams extends ObjectGetParams {
+interface ObjectSetOptions extends ObjectGetOptions {
 	concat?: boolean;
 }
 
-interface ObjectFromArrayParams<T = boolean> {
+interface ObjectFromArrayOptions<T = boolean> {
 	keyConverter?: Function;
 	valueConverter?(el: unknown): T;
 }
 
 interface ObjectConstructor {
-	get<T = unknown>(obj: unknown, path: string | unknown[], params?: ObjectGetParams): T;
-	has(obj: object, path: string | unknown[], params?: ObjectGetParams): boolean;
-	set<T = unknown>(obj: unknown, path: string | unknown[], value: T, params?: ObjectSetParams): T;
+	get<T = unknown>(obj: unknown, path: string | unknown[], params?: ObjectGetOptions): T;
+	has(obj: object, path: string | unknown[], params?: ObjectGetOptions): boolean;
+	set<T = unknown>(obj: unknown, path: string | unknown[], value: T, params?: ObjectSetOptions): T;
 
 	size(obj: unknown): number;
 	forEach<V = unknown, K = unknown, D = unknown>(
 		obj: D,
 		cb: (el: V, key: K, data: D) => unknown,
-		params?: ObjectForEachParams
+		params?: ObjectForEachOptions
 	): void;
 
 	fastCompare<T = unknown>(a: unknown, b: T): a is T;
-	fastClone<T = unknown>(obj: T, params?: FastCloneParams): T;
+	fastClone<T = unknown>(obj: T, params?: FastCloneOptions): T;
 	fastHash(obj: unknown): string;
 
 	mixin<B = unknown, O1 = unknown>(
-		params: ObjectMixinParams | boolean,
+		params: ObjectMixinOptions | boolean,
 		base?: B,
 		obj1: O1
 	): B & O1;
 
 	mixin<B = unknown, O1 = unknown, O2 = unknown>(
-		params: ObjectMixinParams | boolean,
+		params: ObjectMixinOptions | boolean,
 		base?: B,
 		obj1: O1,
 		obj2: O2
 	): B & O1 & O2;
 
 	mixin<B = unknown, O1 = unknown, O2 = unknown, O3 = unknown>(
-		params: ObjectMixinParams | boolean,
+		params: ObjectMixinOptions | boolean,
 		base?: B,
 		obj1: O1,
 		obj2: O2,
@@ -130,7 +130,7 @@ interface ObjectConstructor {
 	): B & O1 & O2 & O3;
 
 	mixin<R = unknown>(
-		params: ObjectMixinParams | boolean,
+		params: ObjectMixinOptions | boolean,
 		base?: unknown,
 		...objs: unknown[]
 	): R;
@@ -144,7 +144,7 @@ interface ObjectConstructor {
 	createMap<D extends object, K extends keyof D>(obj: D):
 		D extends Array<infer E> ? Dictionary<E | number> : D & {[I: string]: K};
 
-	fromArray<T = boolean>(arr: unknown[], params?: ObjectFromArrayParams<T>): Dictionary<T>;
+	fromArray<T = boolean>(arr: unknown[], params?: ObjectFromArrayOptions<T>): Dictionary<T>;
 	convertEnumToDict<D extends object>(obj: D): {[K in keyof D]: K};
 
 	select<D extends object>(obj: D, condition: RegExp): {[K in keyof D]?: D[K]};
@@ -184,13 +184,13 @@ interface Array<T> {
 		Array<T | V> : A extends (infer V)[] ? Array<T | V> : T[];
 }
 
-interface StringCapitalizeParams {
+interface StringCapitalizeOptions {
 	lower?: boolean;
 	all?: boolean;
 }
 
 interface String {
-	capitalize(params?: StringCapitalizeParams): string;
+	capitalize(params?: StringCapitalizeOptions): string;
 	camelize(upper?: boolean): string;
 	dasherize(stable?: boolean): string;
 	underscore(stable?: boolean): string;
@@ -255,16 +255,16 @@ type DateCreateValue =
 	string |
 	Date;
 
-interface DateCreateParams {
+interface DateCreateOptions {
 
 }
 
 interface DateConstructor {
-	create(pattern?: DateCreateValue, params?: DateCreateParams): Date;
+	create(pattern?: DateCreateValue, params?: DateCreateOptions): Date;
 	getWeekDays(): string[];
 }
 
-interface DateSetParams {
+interface DateSetOptions {
 	millisecond?: number;
 	milliseconds?: number;
 	second?: number;
@@ -281,20 +281,20 @@ interface DateSetParams {
 	years?: number;
 }
 
-interface DateHTMLDateStringParams {
+interface DateHTMLDateStringOptions {
 	month?: boolean;
 	date?: boolean;
 }
 
-interface DateHTMLTimeStringParams {
+interface DateHTMLTimeStringOptions {
 	minutes?: boolean;
 	seconds?: boolean;
 	milliseconds?: boolean;
 }
 
-type DateHTMLStringParams =
-	DateHTMLTimeStringParams &
-	DateHTMLDateStringParams;
+type DateHTMLStringOptions =
+	DateHTMLTimeStringOptions &
+	DateHTMLDateStringOptions;
 
 interface DateRelative {
 	type: 'milliseconds' | 'seconds' | 'minutes' | 'hours' | 'days' | 'weeks' | 'months' | 'years';
@@ -309,13 +309,13 @@ interface Date {
 	medium(local?: string): string;
 	long(local?: string): string;
 	format(format: string, local?: string): string;
-	toHTMLDateString(params?: DateHTMLDateStringParams): string;
-	toHTMLTimeString(params?: DateHTMLTimeStringParams): string;
-	toHTMLString(params?: DateHTMLStringParams): string;
+	toHTMLDateString(params?: DateHTMLDateStringOptions): string;
+	toHTMLTimeString(params?: DateHTMLTimeStringOptions): string;
+	toHTMLString(params?: DateHTMLStringOptions): string;
 
-	add(params: DateSetParams, reset?: boolean): Date;
-	set(params: DateSetParams, reset?: boolean): Date;
-	rewind(params: DateSetParams, reset?: boolean): Date;
+	add(params: DateSetOptions, reset?: boolean): Date;
+	set(params: DateSetOptions, reset?: boolean): Date;
+	rewind(params: DateSetOptions, reset?: boolean): Date;
 
 	relative(): DateRelative;
 	relativeTo(date: DateCreateValue): DateRelative;

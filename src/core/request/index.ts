@@ -25,7 +25,7 @@ import {
 	RequestFunctionResponse,
 	RequestResponse,
 	CreateRequestOptions,
-	MiddlewareParams,
+	MiddlewareOptions,
 	ResolverResult
 
 } from 'core/request/interface';
@@ -58,7 +58,7 @@ export default function create<T = unknown>(opts: CreateRequestOptions<T>): type
  */
 export default function create<T = unknown, A extends unknown[] = unknown[]>(
 	path: string,
-	resolver: (url: string, params: MiddlewareParams<T>, ...args: A) => ResolverResult,
+	resolver: (url: string, params: MiddlewareOptions<T>, ...args: A) => ResolverResult,
 	opts?: CreateRequestOptions<T>
 ): RequestFunctionResponse<T, A extends (infer V)[] ? V[] : unknown[]>;
 

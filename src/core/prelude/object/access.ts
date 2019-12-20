@@ -18,7 +18,7 @@ import extend from 'core/prelude/extend';
 extend(Object, 'get', (
 	obj: any,
 	path: string | any[],
-	params?: ObjectGetParams
+	params?: ObjectGetOptions
 ) => {
 	const
 		p = {separator: '.', ...params},
@@ -59,7 +59,7 @@ extend(Object, 'get', (
 extend(Object, 'has', (
 	obj: any,
 	path: string | any[],
-	params?: ObjectGetParams
+	params?: ObjectGetOptions
 ) => {
 	const
 		p = {separator: '.', ...params},
@@ -110,7 +110,7 @@ extend(Object, 'set', (
 	obj: any,
 	path: string | any[],
 	value: unknown,
-	params?: ObjectSetParams
+	params?: ObjectSetOptions
 ) => {
 	const
 		p = {separator: '.', concat: false, ...params},
@@ -181,7 +181,7 @@ const
  * @param obj
  * @param cb
  */
-extend(Object, 'forEach', (obj: any, cb: Function, params: ObjectForEachParams = {}) => {
+extend(Object, 'forEach', (obj: any, cb: Function, params: ObjectForEachOptions = {}) => {
 	if (!obj) {
 		return;
 	}

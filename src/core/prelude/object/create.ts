@@ -60,7 +60,7 @@ extend(Object, 'createMap', (obj: object) => {
  */
 extend(Object, 'fromArray', (
 	arr: unknown[],
-	params?: ObjectFromArrayParams
+	params?: ObjectFromArrayOptions
 ) => {
 	const
 		map = {};

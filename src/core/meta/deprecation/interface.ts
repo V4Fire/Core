@@ -20,7 +20,7 @@ export interface DeprecatedAlternativeOptions {
 
 export type DeprecatedAlternative = string | DeprecatedAlternativeOptions;
 
-export interface DeprecatedParams {
+export interface DeprecatedOptions {
 	name?: string;
 	type?: DeprecatedExprType;
 	alternative?: DeprecatedAlternative;
@@ -29,7 +29,7 @@ export interface DeprecatedParams {
 	notice?: string;
 }
 
-export interface InlineDeprecatedParams extends DeprecatedParams {
+export interface InlineDeprecatedOptions extends DeprecatedOptions {
 	name: string;
 	type: DeprecatedExprType;
 }

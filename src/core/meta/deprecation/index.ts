@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { DeprecatedParams, InlineDeprecatedParams } from 'core/meta/deprecation/interface';
+import { DeprecatedOptions, InlineDeprecatedOptions } from 'core/meta/deprecation/interface';
 export * from 'core/meta/deprecation/interface';
 
 /**
@@ -47,14 +47,14 @@ export * from 'core/meta/deprecation/interface';
  * );
  */
 export function deprecate<T extends Function>(
-	params: DeprecatedParams,
+	params: DeprecatedOptions,
 	fn: T
 ): T;
 
 /**
  * @param params - additional parameters
  */
-export function deprecate(params: InlineDeprecatedParams): void;
+export function deprecate(params: InlineDeprecatedOptions): void;
 
 /**
  * @param fn - function for wrapping
@@ -62,11 +62,11 @@ export function deprecate(params: InlineDeprecatedParams): void;
 export function deprecate<T extends Function>(fn: T): T;
 
 export function deprecate<T extends Function>(
-	fnOrParams?: DeprecatedParams | InlineDeprecatedParams | T,
+	fnOrParams?: DeprecatedOptions | InlineDeprecatedOptions | T,
 	fn?: T
 ): T | void {
 	let
-		p = <DeprecatedParams>{};
+		p = <DeprecatedOptions>{};
 
 	if (Object.isFunction(fnOrParams)) {
 		fn = fnOrParams;
@@ -158,9 +158,9 @@ export function deprecate<T extends Function>(
  * }
  */
 export function deprecated(target: object, key: string | symbol, descriptor: PropertyDescriptor): void;
-export function deprecated(params?: DeprecatedParams): Function;
+export function deprecated(params?: DeprecatedOptions): Function;
 export function deprecated(
-	params?: DeprecatedParams | object,
+	params?: DeprecatedOptions | object,
 	key?: string | symbol,
 	descriptor?: PropertyDescriptor
 ): Function | void {

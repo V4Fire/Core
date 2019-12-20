@@ -36,9 +36,9 @@ const
  * @param objs - objects for extending
  * @return {(!Object|!Promise)}
  */
-extend(Object, 'mixin', (params: ObjectMixinParams | boolean, base: any, ...objs: any[]) => {
+extend(Object, 'mixin', (params: ObjectMixinOptions | boolean, base: any, ...objs: any[]) => {
 	const
-		p = <ObjectMixinParams>{};
+		p = <ObjectMixinOptions>{};
 
 	if (Object.isBoolean(params)) {
 		p.deep = params;
@@ -273,7 +273,7 @@ extend(Object, 'mixin', (params: ObjectMixinParams | boolean, base: any, ...objs
  *   *) [reviver] - JSON.parse reviver (false for disable defaults)
  *   *) [freezable] - if false the object freeze state wont be copy
  */
-extend(Object, 'fastClone', (obj, params?: FastCloneParams) => {
+extend(Object, 'fastClone', (obj, params?: FastCloneOptions) => {
 	if (!obj || typeof obj === 'function') {
 		return obj;
 	}
