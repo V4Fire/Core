@@ -93,36 +93,36 @@ interface ObjectFromArrayOptions<T = boolean> {
 }
 
 interface ObjectConstructor {
-	get<T = unknown>(obj: unknown, path: string | unknown[], params?: ObjectGetOptions): T;
-	has(obj: object, path: string | unknown[], params?: ObjectGetOptions): boolean;
-	set<T = unknown>(obj: unknown, path: string | unknown[], value: T, params?: ObjectSetOptions): T;
+	get<T = unknown>(obj: unknown, path: string | unknown[], opts?: ObjectGetOptions): T;
+	has(obj: object, path: string | unknown[], opts?: ObjectGetOptions): boolean;
+	set<T = unknown>(obj: unknown, path: string | unknown[], value: T, opts?: ObjectSetOptions): T;
 
 	size(obj: unknown): number;
 	forEach<V = unknown, K = unknown, D = unknown>(
 		obj: D,
 		cb: (el: V, key: K, data: D) => unknown,
-		params?: ObjectForEachOptions
+		opts?: ObjectForEachOptions
 	): void;
 
 	fastCompare<T = unknown>(a: unknown, b: T): a is T;
-	fastClone<T = unknown>(obj: T, params?: FastCloneOptions): T;
+	fastClone<T = unknown>(obj: T, opts?: FastCloneOptions): T;
 	fastHash(obj: unknown): string;
 
 	mixin<B = unknown, O1 = unknown>(
-		params: ObjectMixinOptions | boolean,
+		opts: ObjectMixinOptions | boolean,
 		base?: B,
 		obj1: O1
 	): B & O1;
 
 	mixin<B = unknown, O1 = unknown, O2 = unknown>(
-		params: ObjectMixinOptions | boolean,
+		opts: ObjectMixinOptions | boolean,
 		base?: B,
 		obj1: O1,
 		obj2: O2
 	): B & O1 & O2;
 
 	mixin<B = unknown, O1 = unknown, O2 = unknown, O3 = unknown>(
-		params: ObjectMixinOptions | boolean,
+		opts: ObjectMixinOptions | boolean,
 		base?: B,
 		obj1: O1,
 		obj2: O2,
@@ -130,7 +130,7 @@ interface ObjectConstructor {
 	): B & O1 & O2 & O3;
 
 	mixin<R = unknown>(
-		params: ObjectMixinOptions | boolean,
+		opts: ObjectMixinOptions | boolean,
 		base?: unknown,
 		...objs: unknown[]
 	): R;
@@ -144,7 +144,7 @@ interface ObjectConstructor {
 	createMap<D extends object, K extends keyof D>(obj: D):
 		D extends Array<infer E> ? Dictionary<E | number> : D & {[I: string]: K};
 
-	fromArray<T = boolean>(arr: unknown[], params?: ObjectFromArrayOptions<T>): Dictionary<T>;
+	fromArray<T = boolean>(arr: unknown[], opts?: ObjectFromArrayOptions<T>): Dictionary<T>;
 	convertEnumToDict<D extends object>(obj: D): {[K in keyof D]: K};
 
 	select<D extends object>(obj: D, condition: RegExp): {[K in keyof D]?: D[K]};
@@ -190,7 +190,7 @@ interface StringCapitalizeOptions {
 }
 
 interface String {
-	capitalize(params?: StringCapitalizeOptions): string;
+	capitalize(opts?: StringCapitalizeOptions): string;
 	camelize(upper?: boolean): string;
 	dasherize(stable?: boolean): string;
 	underscore(stable?: boolean): string;
@@ -260,11 +260,11 @@ interface DateCreateOptions {
 }
 
 interface DateConstructor {
-	create(pattern?: DateCreateValue, params?: DateCreateOptions): Date;
+	create(pattern?: DateCreateValue, opts?: DateCreateOptions): Date;
 	getWeekDays(): string[];
 }
 
-interface DateSetOptions {
+interface DateSetParams {
 	millisecond?: number;
 	milliseconds?: number;
 	second?: number;
@@ -309,13 +309,13 @@ interface Date {
 	medium(local?: string): string;
 	long(local?: string): string;
 	format(format: string, local?: string): string;
-	toHTMLDateString(params?: DateHTMLDateStringOptions): string;
-	toHTMLTimeString(params?: DateHTMLTimeStringOptions): string;
-	toHTMLString(params?: DateHTMLStringOptions): string;
+	toHTMLDateString(opts?: DateHTMLDateStringOptions): string;
+	toHTMLTimeString(opts?: DateHTMLTimeStringOptions): string;
+	toHTMLString(opts?: DateHTMLStringOptions): string;
 
-	add(params: DateSetOptions, reset?: boolean): Date;
-	set(params: DateSetOptions, reset?: boolean): Date;
-	rewind(params: DateSetOptions, reset?: boolean): Date;
+	add(params: DateSetParams, reset?: boolean): Date;
+	set(params: DateSetParams, reset?: boolean): Date;
+	rewind(params: DateSetParams, reset?: boolean): Date;
 
 	relative(): DateRelative;
 	relativeTo(date: DateCreateValue): DateRelative;

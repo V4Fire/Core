@@ -440,11 +440,11 @@ function relative(from: DateCreateValue, to: DateCreateValue): DateRelative {
 //#if runtime has prelude/date/modify
 
 function createDateModifier(mod: (val: number, base: number) => number = ((Any))): Function {
-	return function modifyDate(this: Date, params: DateSetOptions, reset?: boolean): Date {
+	return function modifyDate(this: Date, params: DateSetParams, reset?: boolean): Date {
 		const
-			resetValues = <Record<keyof DateSetOptions, boolean>>{};
+			resetValues = <Record<keyof DateSetParams, boolean>>{};
 
-		const setResetValue = (...keys: Array<keyof DateSetOptions>) => {
+		const setResetValue = (...keys: Array<keyof DateSetParams>) => {
 			for (let i = 0; i < keys.length; i++) {
 				const
 					key = keys[i];
