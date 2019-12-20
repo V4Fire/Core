@@ -12,7 +12,7 @@ export * from 'core/then/interface';
 
 export default class Then<T = unknown> implements PromiseLike<T> {
 	/**
-	 * Promise that will be never resolved
+	 * The promise that will be never resolved
 	 */
 	static readonly never: Promise<never> = new Promise(() => undefined);
 
@@ -184,12 +184,12 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	}
 
 	/**
-	 * Number of pending child promises
+	 * The number of pending child promises
 	 */
 	protected pendingChildren: number = 0;
 
 	/**
-	 * State of the current promise
+	 * A value of the current promise state
 	 */
 	protected state: i.State = i.State.pending;
 
@@ -199,22 +199,22 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	protected aborted: boolean = false;
 
 	/**
-	 * Internal native promise instance
+	 * An internal native promise instance
 	 */
 	protected promise: Promise<T>;
 
 	/**
-	 * Resolve handler
+	 * A handler for resolving of the native promise
 	 */
 	protected onResolve!: i.ResolveHandler<T>;
 
 	/**
-	 * Reject handler
+	 * A handler for rejecting of the native promise
 	 */
 	protected onReject!: i.RejectHandler;
 
 	/**
-	 * Abort handler
+	 * A handler for rejecting of the native promise
 	 */
 	protected onAbort!: i.RejectHandler;
 

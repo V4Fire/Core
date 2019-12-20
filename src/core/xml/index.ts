@@ -19,7 +19,7 @@ export function toDataURI(node: Node): string {
 }
 
 /**
- * Normalize helper
+ * The helper for XML string normalizing
  */
 function normalize(str: string, sp?: string): string {
 	if (str === '"') {
