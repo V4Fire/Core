@@ -7,19 +7,7 @@
  */
 
 import { deprecated } from 'core/meta/deprecation';
-import {
-
-	State,
-	Value,
-	ExecutableValue,
-	Executor,
-	ResolveHandler,
-	RejectHandler,
-	ThenFulfillHandler,
-	ThenRejectHandler
-
-} from 'core/then/interface';
-
+import * as i from 'core/then/interface';
 export * from 'core/then/interface';
 
 export default class Then<T = unknown> implements PromiseLike<T> {
@@ -48,9 +36,9 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	 * @param value
 	 * @param [parent] - parent promise
 	 */
-	static resolveAndCall<T = unknown>(value: ExecutableValue<T>, parent?: Then): Then<T>;
+	static resolveAndCall<T = unknown>(value: i.ExecutableValue<T>, parent?: Then): Then<T>;
 	static resolveAndCall(): Then<void>;
-	static resolveAndCall<T = unknown>(value?: ExecutableValue<T>, parent?: Then): Then<T> {
+	static resolveAndCall<T = unknown>(value?: i.ExecutableValue<T>, parent?: Then): Then<T> {
 		return Then.resolve(value, parent).then((obj) => Object.isFunction(obj) ? (<Function>obj)() : obj);
 	}
 
@@ -59,7 +47,7 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	 * @see Then.resolveAndCall
 	 */
 	@deprecated({renamedTo: 'resolveAndCall'})
-	static immediate<T = unknown>(value: ExecutableValue<T>, parent?: Then): Then<T> {
+	static immediate<T = unknown>(value: i.ExecutableValue<T>, parent?: Then): Then<T> {
 		return this.resolveAndCall(value, parent);
 	}
 
@@ -69,9 +57,9 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	 * @param value
 	 * @param [parent] - parent promise
 	 */
-	static resolve<T = unknown>(value: Value<T>, parent?: Then): Then<T>;
+	static resolve<T = unknown>(value: i.Value<T>, parent?: Then): Then<T>;
 	static resolve(): Then<void>;
-	static resolve<T = unknown>(value?: Value<T>, parent?: Then): Then<T> {
+	static resolve<T = unknown>(value?: i.Value<T>, parent?: Then): Then<T> {
 		if (value instanceof Then) {
 			if (parent) {
 				parent.catch((err) => value.abort(err));
@@ -108,10 +96,10 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	 * @param values
 	 * @param [parent] - parent promise
 	 */
-	static all<T extends Iterable<Value>>(
+	static all<T extends Iterable<i.Value>>(
 		values: T,
 		parent?: Then
-	): Then<(T extends Iterable<Value<infer V>> ? V : unknown)[]> {
+	): Then<(T extends Iterable<i.Value<infer V>> ? V : unknown)[]> {
 		return new Then((res, rej, onAbort) => {
 			const
 				promises = <Then[]>[],
@@ -158,10 +146,10 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	 * @param values
 	 * @param [parent] - parent promise
 	 */
-	static race<T extends Iterable<Value>>(
+	static race<T extends Iterable<i.Value>>(
 		values: T,
 		parent?: Then
-	): Then<T extends Iterable<Value<infer V>> ? V : unknown> {
+	): Then<T extends Iterable<i.Value<infer V>> ? V : unknown> {
 		return new Then<any>((res, rej, onAbort) => {
 			const
 				promises = <Then[]>[];
@@ -192,7 +180,7 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	 * Returns true if the current promise is pending
 	 */
 	get isPending(): boolean {
-		return this.state === State.pending;
+		return this.state === i.State.pending;
 	}
 
 	/**
@@ -203,7 +191,7 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	/**
 	 * State of the current promise
 	 */
-	protected state: State = State.pending;
+	protected state: i.State = i.State.pending;
 
 	/**
 	 * If true, then the promise was aborted
@@ -218,30 +206,30 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	/**
 	 * Resolve handler
 	 */
-	protected onResolve!: ResolveHandler<T>;
+	protected onResolve!: i.ResolveHandler<T>;
 
 	/**
 	 * Reject handler
 	 */
-	protected onReject!: RejectHandler;
+	protected onReject!: i.RejectHandler;
 
 	/**
 	 * Abort handler
 	 */
-	protected onAbort!: RejectHandler;
+	protected onAbort!: i.RejectHandler;
 
 	/**
 	 * @param executor - executor function
 	 * @param [parent] - parent promise
 	 */
-	constructor(executor: Executor<T>, parent?: Then) {
+	constructor(executor: i.Executor<T>, parent?: Then) {
 		this.promise = new Promise((res, rej) => {
 			const resolve = this.onResolve = (val) => {
 				if (!this.isPending) {
 					return;
 				}
 
-				this.state = State.fulfilled;
+				this.state = i.State.fulfilled;
 				res(val);
 			};
 
@@ -250,7 +238,7 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 					return;
 				}
 
-				this.state = State.rejected;
+				this.state = i.State.rejected;
 				rej(err);
 			};
 
@@ -279,7 +267,7 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 				};
 			}
 
-			if (this.isPending && (!parent || parent.state !== State.rejected)) {
+			if (this.isPending && (!parent || parent.state !== i.State.rejected)) {
 				this.call(executor, [resolve, reject, setOnAbort], reject);
 			}
 		});
@@ -293,33 +281,33 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	 * @param [onAbort]
 	 */
 	then(
-		onFulfill?: Nullable<ThenFulfillHandler<T>>,
-		onReject?: Nullable<ThenRejectHandler<T>>,
-		onAbort?: Nullable<RejectHandler>
+		onFulfill?: Nullable<i.ThenFulfillHandler<T>>,
+		onReject?: Nullable<i.ThenRejectHandler<T>>,
+		onAbort?: Nullable<i.RejectHandler>
 	): Then<T>;
 
 	then<R>(
-		onFulfill: Nullable<ThenFulfillHandler<T>>,
-		onReject: ThenRejectHandler<R>,
-		onAbort?: Nullable<RejectHandler>
+		onFulfill: Nullable<i.ThenFulfillHandler<T>>,
+		onReject: i.ThenRejectHandler<R>,
+		onAbort?: Nullable<i.RejectHandler>
 	): Then<T | R>;
 
 	then<V>(
-		onFulfill: ThenFulfillHandler<T, V>,
-		onReject?: Nullable<ThenRejectHandler<V>>,
-		onAbort?: Nullable<RejectHandler>
+		onFulfill: i.ThenFulfillHandler<T, V>,
+		onReject?: Nullable<i.ThenRejectHandler<V>>,
+		onAbort?: Nullable<i.RejectHandler>
 	): Then<V>;
 
 	then<V, R>(
-		onFulfill: ThenFulfillHandler<T, V>,
-		onReject: ThenRejectHandler<R>,
-		onAbort?: Nullable<RejectHandler>
+		onFulfill: i.ThenFulfillHandler<T, V>,
+		onReject: i.ThenRejectHandler<R>,
+		onAbort?: Nullable<i.RejectHandler>
 	): Then<V | R>;
 
 	then(
-		onFulfill: Nullable<ThenFulfillHandler<any>>,
-		onReject: Nullable<ThenRejectHandler<any>>,
-		onAbort: Nullable<RejectHandler>
+		onFulfill: Nullable<i.ThenFulfillHandler<any>>,
+		onReject: Nullable<i.ThenRejectHandler<any>>,
+		onAbort: Nullable<i.RejectHandler>
 	): Then<any> {
 		this.pendingChildren++;
 		return new Then((res, rej, abort) => {
@@ -371,9 +359,9 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	 * Attaches a callback for only the rejection of the promise
 	 * @param [onReject]
 	 */
-	catch(onReject?: Nullable<ThenRejectHandler<T>>): Then<T>;
-	catch<R>(onReject: ThenRejectHandler<R>): Then<R>;
-	catch(onReject?: ThenRejectHandler<any>): Then<any> {
+	catch(onReject?: Nullable<i.ThenRejectHandler<T>>): Then<T>;
+	catch<R>(onReject: i.ThenRejectHandler<R>): Then<R>;
+	catch(onReject?: i.ThenRejectHandler<any>): Then<any> {
 		return new Then((res, rej, onAbort) => {
 			let
 				reject;
@@ -440,7 +428,7 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	protected call<A = unknown, V = unknown>(
 		fn: Function,
 		args: A[] = [],
-		onError?: RejectHandler,
+		onError?: i.RejectHandler,
 		onValue?: (value: V) => void
 	): void {
 		const
