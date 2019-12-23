@@ -186,7 +186,7 @@ export interface AsyncPromisifyOnceOptions<
 	R = unknown,
 	CTX extends object = Async
 > extends AsyncOptions {
-	handler: ProxyCb<E, R, CTX>;
+	handler?: ProxyCb<E, R, CTX>;
 	options?: AddEventListenerOptions;
 }
 

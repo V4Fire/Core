@@ -12,21 +12,28 @@ export * from 'core/async/modules/base';
 
 export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	/**
-	 * Wrapper for workers: WebWorker, Socket, etc.
+	 * Wraps the specified worker object.
+	 *
+	 * This method doesn't attach any hook or listeners to the object,
+	 * but every time the same object is registered, Async will increment the number of links that relates to this object.
+	 * And when we try to destroy the worker using one of Async methods, like "terminateWorker",
+	 * it will de-increment the links value. When the number of links is equal to zero,
+	 * Async will try to call a "real" object destructor using one of possible destructor methods from a whitelist
+	 * or by the specified destructor name, also if the worker is a function, it will be interpreted as the destructor.
 	 *
 	 * @param worker
-	 * @param [params] - additional parameters for the operation:
+	 * @param [opts] - additional options for the operation:
 	 *   *) [name] - worker name
-	 *   *) [destructor] - name of destructor method
-	 *   *) [join] - if true, then competitive tasks (with same labels) will be joined to the first
-	 *   *) [label] - label for the task (previous task with the same label will be canceled)
-	 *   *) [group] - group name for the task
-	 *   *) [onClear] - clear handler
-	 *   *) [onMerge] - merge handler (join: true)
+	 *   *) [destructor] - name of the destructor method
+	 *   *) [join] - if true, then all competitive tasks (with the same labels) will be joined to the first task
+	 *   *) [label] - label of the task (the previous task with the same label will be canceled)
+	 *   *) [group] - group name of the task
+	 *   *) [onClear] - handler for clearing (it is called after clearing of the task)
+	 *   *) [onMerge] - handler for merging (it is called after merging of the task with another task (label + join:true))
 	 */
-	worker<T extends i.WorkerLikeP>(worker: T, params?: i.AsyncWorkerOptions<CTX>): T {
+	worker<T extends i.WorkerLikeP>(worker: T, opts?: i.AsyncWorkerOptions<CTX>): T {
 		const
-			p = params || {},
+			p = opts || {},
 			{workerCache} = this;
 
 		if (!workerCache.has(worker)) {
@@ -47,311 +54,364 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Terminates the specified worker
 	 *
 	 * @alias
-	 * @param [id] - operation id (if not defined will be get all operations)
+	 * @param [id] - link to the worker (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	terminateWorker(id?: i.WorkerLikeP): this;
 
 	/**
-	 * @param params - parameters for the operation:
-	 *   *) [id] - link for the worker
-	 *   *) [label] - label for the task
-	 *   *) [label] - label for the task
-	 *   *) [group] - group name for the task
+	 * Terminates the specified worker or a group of workers
+	 *
+	 * @param opts - options for the operation:
+	 *   *) [id] - link to the worker
+	 *   *) [label] - label of the task
+	 *   *) [group] - group name of the task
 	 */
-	terminateWorker(params: i.ClearProxyOptions<i.WorkerLikeP>): this;
-	terminateWorker(p: any): this {
-		return this.clearWorker(p);
+	terminateWorker(opts: i.ClearProxyOptions<i.WorkerLikeP>): this;
+	terminateWorker(task?: i.WorkerLikeP | i.ClearProxyOptions<i.WorkerLikeP>): this {
+		return this.clearWorker(<any>task);
 	}
 
 	/**
 	 * Terminates the specified worker
-	 * @param [id] - operation id (if not defined will be get all operations)
+	 * @param [id] - link to the worker (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	clearWorker(id?: i.WorkerLikeP): this;
 
 	/**
-	 * @param params - parameters for the operation:
-	 *   *) [id] - link for the worker
-	 *   *) [label] - label for the task
-	 *   *) [label] - label for the task
-	 *   *) [group] - group name for the task
-	 */
-	clearWorker(params: i.ClearProxyOptions<i.WorkerLikeP>): this;
-	clearWorker(p: any): this {
-		return this.cancelTask(p, isAsyncOptions<i.ClearProxyOptions>(p) && p.name || this.namespaces.worker);
-	}
-
-	/**
-	 * Wrapper for a remote request
+	 * Terminates the specified worker or a group of workers
 	 *
-	 * @param request
-	 * @param [params] - additional parameters for the operation:
-	 *   *) [join] - strategy for joining competitive tasks (with same labels):
-	 *       *) true - all tasks will be joined to the first;
-	 *       *) 'replace' - all tasks will be joined (replaced) to the last.
-	 *
-	 *   *) [label] - label for the task (previous task with the same label will be canceled)
-	 *   *) [group] - group name for the task
-	 *   *) [destructor] - name of destructor method
+	 * @param opts - options for the operation:
+	 *   *) [id] - link to the worker
+	 *   *) [label] - label of the task
+	 *   *) [group] - group name of the task
 	 */
-	request<T = unknown>(request: (() => PromiseLike<T>) | PromiseLike<T>, params?: i.AsyncRequestOptions): Promise<T> {
-		return this.promise(request, {...params, name: this.namespaces.request}) || new Promise<T>(() => undefined);
+	clearWorker(opts: i.ClearProxyOptions<i.WorkerLikeP>): this;
+	clearWorker(task?: i.WorkerLikeP | i.ClearProxyOptions<i.WorkerLikeP>): this {
+		return this.cancelTask(task, isAsyncOptions<i.ClearProxyOptions>(task) && task.name || this.namespaces.worker);
 	}
 
 	/**
-	 * Cancels the specified request
-	 *
-	 * @alias
-	 * @param [id] - operation id (if not defined will be get all operations)
-	 */
-	cancelRequest(id?: Promise<unknown>): this;
-
-	/**
-	 * @param params - parameters for the operation:
-	 *   *) [id] - link for the request
-	 *   *) [label] - label for the task
-	 *   *) [group] - group name for the task
-	 */
-	cancelRequest(params: i.ClearOptionsId<Promise<unknown>>): this;
-	cancelRequest(p: any): this {
-		return this.clearRequest(p);
-	}
-
-	/**
-	 * Cancels the specified request
-	 * @param [id] - operation id (if not defined will be get all operations)
-	 */
-	clearRequest(id?: Promise<unknown>): this;
-
-	/**
-	 * @param params - parameters for the operation:
-	 *   *) [id] - link for the request
-	 *   *) [label] - label for the task
-	 *   *) [group] - group name for the task
-	 */
-	clearRequest(params: i.ClearOptionsId<Promise<unknown>>): this;
-	clearRequest(p: any): this {
-		return this.cancelTask(p, this.namespaces.request);
-	}
-
-	/**
-	 * Mutes a request operation
-	 * @param [id] - operation id (if not defined will be get all operations)
-	 */
-	muteRequest(id?: Promise<unknown>): this;
-
-	/**
-	 * @param params - parameters for the operation:
-	 *   *) [id] - operation id
-	 *   *) [label] - label for the task
-	 *   *) [group] - group name for the task
-	 */
-	muteRequest(params: i.ClearOptionsId<Promise<unknown>>): this;
-	muteRequest(p: any): this {
-		return this.markTask('muted', p, this.namespaces.request);
-	}
-
-	/**
-	 * Unmutes a request operation
-	 * @param [id] - operation id (if not defined will be get all operations)
-	 */
-	unmuteRequest(id?: Promise<unknown>): this;
-
-	/**
-	 * @param params - parameters for the operation:
-	 *   *) [id] - operation id
-	 *   *) [label] - label for the task
-	 *   *) [group] - group name for the task
-	 */
-	unmuteRequest(params: i.ClearOptionsId<Promise<unknown>>): this;
-	unmuteRequest(p: any): this {
-		return this.markTask('!muted', p, this.namespaces.request);
-	}
-
-	/**
-	 * Suspends a request operation
-	 * @param [id] - operation id (if not defined will be get all operations)
-	 */
-	suspendRequest(id?: Promise<unknown>): this;
-
-	/**
-	 * @param params - parameters for the operation:
-	 *   *) [id] - operation id
-	 *   *) [label] - label for the task
-	 *   *) [group] - group name for the task
-	 */
-	suspendRequest(params: i.ClearOptionsId<Promise<unknown>>): this;
-	suspendRequest(p: any): this {
-		return this.markTask('paused', p, this.namespaces.request);
-	}
-
-	/**
-	 * Unsuspends a request operation
-	 * @param [id] - operation id (if not defined will be get all operations)
-	 */
-	unsuspendRequest(id?: Promise<unknown>): this;
-
-	/**
-	 * @param params - parameters for the operation:
-	 *   *) [id] - operation id
-	 *   *) [label] - label for the task
-	 *   *) [group] - group name for the task
-	 */
-	unsuspendRequest(params: i.ClearOptionsId<Promise<unknown>>): this;
-	unsuspendRequest(p: any): this {
-		return this.markTask('!paused', p, this.namespaces.request);
-	}
-
-	/**
-	 * Wrapper for a callback function
+	 * Wraps the specified function.
+	 * This method doesn't attach any hook or listeners to the object,
+	 * but if we cancel the operation using one of Async methods, like "cancelProxy",
+	 * the target function won't be executed.
 	 *
 	 * @param cb
-	 * @param [params] - additional parameters for the operation:
+	 * @param [opts] - additional options for the operation:
 	 *   *) [name] - operation name
-	 *   *) [join] - if true, then competitive tasks (with same labels) will be joined to the first
-	 *   *) [label] - label for the task (previous task with the same label will be canceled)
-	 *   *) [group] - group name for the task
-	 *   *) [single] - if false, then after first invocation the proxy it won't be removed
-	 *   *) [onClear] - clear handler
-	 *   *) [onMerge] - merge handler (join: true)
+	 *   *) [join] - if true, then all competitive tasks (with the same labels) will be joined to the first task
+	 *   *) [label] - label of the task (previous task with the same label will be canceled)
+	 *   *) [group] - group name of the task
+	 *   *) [single] - if false, then the function will support multiple callings
+	 *   *) [onClear] - handler for clearing (it is called after clearing of the task)
+	 *   *) [onMerge] - handler for merging (it is called after merging of the task with another task (label + join:true))
 	 */
-	proxy<F extends i.WrappedCb, C extends object = CTX>(cb: F, params?: i.AsyncProxyOptions<C>): F {
+	proxy<F extends i.WrappedCb, C extends object = CTX>(cb: F, opts?: i.AsyncProxyOptions<C>): F {
 		return this.registerTask<F, C>({
-			...params,
-			name: params?.name || this.namespaces.proxy,
+			...opts,
+			name: opts?.name || this.namespaces.proxy,
 			obj: cb,
 			wrapper: (fn) => fn,
 			linkByWrapper: true,
-			periodic: params?.single === false
+			periodic: opts?.single === false
 		}) || <any>(() => undefined);
 	}
 
 	/**
-	 * Cancels the specified callback function
+	 * Cancels the specified proxy function
 	 *
 	 * @alias
-	 * @param [id] - operation id (if not defined will be get all operations)
+	 * @param [id] - link to the function (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	cancelProxy(id?: Function): this;
 
 	/**
-	 * @param params - parameters for the operation:
+	 * Cancels the specified proxy function or a group of functions
+	 *
+	 * @param opts - options for the operation:
 	 *   *) [name] - operation name
-	 *   *) [id] - link for the callback
-	 *   *) [label] - label for the task
-	 *   *) [group] - group name for the task
+	 *   *) [id] - link to the function
+	 *   *) [label] - label of the task
+	 *   *) [group] - group name of the task
 	 */
-	cancelProxy(params: i.ClearProxyOptions<Function>): this;
-	cancelProxy(p: any): this {
-		return this.clearProxy(p);
+	cancelProxy(opts: i.ClearProxyOptions<Function>): this;
+	cancelProxy(task?: Function | i.ClearProxyOptions<Function>): this {
+		return this.clearProxy(<any>task);
 	}
 
 	/**
-	 * Cancels the specified callback function
-	 * @param [id] - operation id (if not defined will be get all operations)
+	 * Cancels the specified proxy function
+	 * @param [id] - link to the function (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	clearProxy(id?: Function): this;
 
 	/**
-	 * @param params - parameters for the operation:
+	 * Cancels the specified proxy function or a group of functions
+	 *
+	 * @param opts - options for the operation:
 	 *   *) [name] - operation name
-	 *   *) [id] - link for the callback
-	 *   *) [label] - label for the task
-	 *   *) [group] - group name for the task
+	 *   *) [id] - link to the function
+	 *   *) [label] - label of the task
+	 *   *) [group] - group name of the task
 	 */
-	clearProxy(params: i.ClearProxyOptions<Function>): this;
-	clearProxy(p: any): this {
-		return this.cancelTask(p, isAsyncOptions<i.ClearProxyOptions>(p) && p.name || this.namespaces.proxy);
+	clearProxy(opts: i.ClearProxyOptions<Function>): this;
+	clearProxy(task?: Function | i.ClearProxyOptions<Function>): this {
+		return this.cancelTask(task, isAsyncOptions<i.ClearProxyOptions>(task) && task.name || this.namespaces.proxy);
 	}
 
 	/**
-	 * Mutes a proxy operation
-	 * @param [id] - operation id (if not defined will be get all operations)
+	 * Mutes the specified proxy function
+	 * @param [id] - link to the function (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	muteProxy(id?: Function): this;
 
 	/**
-	 * @param params - parameters for the operation:
+	 * Mutes the specified proxy function or a group of functions
+	 *
+	 * @param opts - options for the operation:
 	 *   *) [name] - operation name
-	 *   *) [id] - operation id
-	 *   *) [label] - label for the task
-	 *   *) [group] - group name for the task
+	 *   *) [id] - link to the function
+	 *   *) [label] - label of the task
+	 *   *) [group] - group name of the task
 	 */
-	muteProxy(params: i.ClearProxyOptions<Function>): this;
-	muteProxy(p: any): this {
-		return this.markTask('muted', p, isAsyncOptions<i.ClearProxyOptions>(p) && p.name || this.namespaces.proxy);
+	muteProxy(opts: i.ClearProxyOptions<Function>): this;
+	muteProxy(task?: Function | i.ClearProxyOptions<Function>): this {
+		return this.markTask(
+			'muted',
+			task,
+			isAsyncOptions<i.ClearProxyOptions>(task) && task.name || this.namespaces.proxy
+		);
 	}
 
 	/**
-	 * Unmutes a proxy operation
-	 * @param [id] - operation id (if not defined will be get all operations)
+	 * Unmutes the specified proxy function
+	 * @param [id] - link to the function (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	unmuteProxy(id?: Function): this;
 
 	/**
-	 * @param params - parameters for the operation:
+	 * Unmutes the specified proxy function or a group of functions
+	 *
+	 * @param opts - options for the operation:
 	 *   *) [name] - operation name
-	 *   *) [id] - operation id
-	 *   *) [label] - label for the task
-	 *   *) [group] - group name for the task
+	 *   *) [id] - link to the function
+	 *   *) [label] - label of the task
+	 *   *) [group] - group name of the task
 	 */
-	unmuteProxy(params: i.ClearProxyOptions<Function>): this;
-	unmuteProxy(p: any): this {
-		return this.markTask('!muted', p, isAsyncOptions<i.ClearProxyOptions>(p) && p.name || this.namespaces.proxy);
+	unmuteProxy(opts: i.ClearProxyOptions<Function>): this;
+	unmuteProxy(task?: Function | i.ClearProxyOptions<Function>): this {
+		return this.markTask(
+			'!muted',
+			task,
+			isAsyncOptions<i.ClearProxyOptions>(task) && task.name || this.namespaces.proxy
+		);
 	}
 
 	/**
-	 * Suspends a proxy operation
-	 * @param [id] - operation id (if not defined will be get all operations)
+	 * Suspends the specified proxy function
+	 * @param [id] - link to the function (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	suspendProxy(id?: Function): this;
 
 	/**
-	 * @param params - parameters for the operation:
+	 * Suspends the specified proxy function or a group of functions
+	 *
+	 * @param opts - options for the operation:
 	 *   *) [name] - operation name
-	 *   *) [id] - operation id
-	 *   *) [label] - label for the task
-	 *   *) [group] - group name for the task
+	 *   *) [id] - link to the function
+	 *   *) [label] - label of the task
+	 *   *) [group] - group name of the task
 	 */
-	suspendProxy(params: i.ClearProxyOptions<Function>): this;
-	suspendProxy(p: any): this {
-		return this.markTask('paused', p, isAsyncOptions<i.ClearProxyOptions>(p) && p.name || this.namespaces.proxy);
+	suspendProxy(opts: i.ClearProxyOptions<Function>): this;
+	suspendProxy(task?: Function | i.ClearProxyOptions<Function>): this {
+		return this.markTask(
+			'paused',
+			task,
+			isAsyncOptions<i.ClearProxyOptions>(task) && task.name || this.namespaces.proxy
+		);
 	}
 
 	/**
-	 * Unsuspends a proxy operation
-	 * @param [id] - operation id (if not defined will be get all operations)
+	 * Unsuspends the specified proxy function
+	 * @param [id] - link to the function (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	unsuspendProxy(id?: Function): this;
 
 	/**
-	 * @param params - parameters for the operation:
+	 * Unsuspends the specified proxy function or a group of functions
+	 *
+	 * @param opts - options for the operation:
 	 *   *) [name] - operation name
-	 *   *) [id] - operation id
-	 *   *) [label] - label for the task
-	 *   *) [group] - group name for the task
+	 *   *) [id] - link to the function
+	 *   *) [label] - label of the task
+	 *   *) [group] - group name of the task
 	 */
-	unsuspendProxy(params: i.ClearProxyOptions<Function>): this;
-	unsuspendProxy(p: any): this {
-		return this.markTask('!paused', p, isAsyncOptions<i.ClearProxyOptions>(p) && p.name || this.namespaces.proxy);
+	unsuspendProxy(opts: i.ClearProxyOptions<Function>): this;
+	unsuspendProxy(task?: Function | i.ClearProxyOptions<Function>): this {
+		return this.markTask(
+			'!paused',
+			task,
+			isAsyncOptions<i.ClearProxyOptions>(task) && task.name || this.namespaces.proxy
+		);
 	}
 
 	/**
-	 * Wrapper for a promise
+	 * Wraps the specified external request.
+	 *
+	 * This method doesn't attach any hook or listeners to the object,
+	 * but if we cancel the operation using one of Async methods, like "cancelRequest", the promise will be rejected.
+	 * The request can be provided as a promise or as a function, that returns a promise.
+	 *
+	 * @param request
+	 * @param [opts] - additional options for the operation:
+	 *   *) [join] - strategy for joining competitive tasks (with the same labels):
+	 *       *) true - all tasks will be joined to the first
+	 *       *) 'replace' - all tasks will be joined (replaced) to the last
+	 *
+	 *   *) [label] - label of the task (previous task with the same label will be canceled)
+	 *   *) [group] - group name of the task
+	 *   *) [destructor] - name of the destructor method
+	 */
+	request<T = unknown>(request: (() => PromiseLike<T>) | PromiseLike<T>, opts?: i.AsyncRequestOptions): Promise<T> {
+		return this.promise(request, {...opts, name: this.namespaces.request}) || new Promise<T>(() => undefined);
+	}
+
+	/**
+	 * Cancels the specified request
+	 *
+	 * @alias
+	 * @param [id] - link to the request (if not specified, then the operation will be applied for all registered tasks)
+	 */
+	cancelRequest(id?: Promise<unknown>): this;
+
+	/**
+	 * Cancels the specified request or a group of requests
+	 *
+	 * @param opts - options for the operation:
+	 *   *) [id] - link to the request
+	 *   *) [label] - label of the task
+	 *   *) [group] - group name of the task
+	 */
+	cancelRequest(opts: i.ClearOptionsId<Promise<unknown>>): this;
+	cancelRequest(task?: Promise<unknown> | i.ClearOptionsId<Promise<unknown>>): this {
+		return this.clearRequest(<any>task);
+	}
+
+	/**
+	 * Cancels the specified request
+	 * @param [id] - link to the request (if not specified, then the operation will be applied for all registered tasks)
+	 */
+	clearRequest(id?: Promise<unknown>): this;
+
+	/**
+	 * Cancels the specified request or a group of requests
+	 *
+	 * @param opts - options for the operation:
+	 *   *) [id] - link to the request
+	 *   *) [label] - label of the task
+	 *   *) [group] - group name of the task
+	 */
+	clearRequest(opts: i.ClearOptionsId<Promise<unknown>>): this;
+	clearRequest(task?: Promise<unknown> | i.ClearOptionsId<Promise<unknown>>): this {
+		return this.cancelTask(task, this.namespaces.request);
+	}
+
+	/**
+	 * Mutes the specified request
+	 * @param [id] - link to the request (if not specified, then the operation will be applied for all registered tasks)
+	 */
+	muteRequest(id?: Promise<unknown>): this;
+
+	/**
+	 * Mutes the specified request or a group of requests
+	 *
+	 * @param opts - options for the operation:
+	 *   *) [id] - link to the request
+	 *   *) [label] - label of the task
+	 *   *) [group] - group name of the task
+	 */
+	muteRequest(opts: i.ClearOptionsId<Promise<unknown>>): this;
+	muteRequest(task?: Promise<unknown> | i.ClearOptionsId<Promise<unknown>>): this {
+		return this.markTask('muted', task, this.namespaces.request);
+	}
+
+	/**
+	 * Unmutes the specified request
+	 * @param [id] - link to the request (if not specified, then the operation will be applied for all registered tasks)
+	 */
+	unmuteRequest(id?: Promise<unknown>): this;
+
+	/**
+	 * Unmutes the specified request or a group of requests
+	 *
+	 * @param opts - options for the operation:
+	 *   *) [id] - link to the request
+	 *   *) [label] - label of the task
+	 *   *) [group] - group name of the task
+	 */
+	unmuteRequest(opts: i.ClearOptionsId<Promise<unknown>>): this;
+	unmuteRequest(task?: Promise<unknown> | i.ClearOptionsId<Promise<unknown>>): this {
+		return this.markTask('!muted', task, this.namespaces.request);
+	}
+
+	/**
+	 * Suspends the specified request
+	 * @param [id] - link to the request (if not specified, then the operation will be applied for all registered tasks)
+	 */
+	suspendRequest(id?: Promise<unknown>): this;
+
+	/**
+	 * Suspends the specified request or a group of requests
+	 *
+	 * @param opts - options for the operation:
+	 *   *) [id] - link to the request
+	 *   *) [label] - label of the task
+	 *   *) [group] - group name of the task
+	 */
+	suspendRequest(opts: i.ClearOptionsId<Promise<unknown>>): this;
+	suspendRequest(task?: Promise<unknown> | i.ClearOptionsId<Promise<unknown>>): this {
+		return this.markTask('paused', task, this.namespaces.request);
+	}
+
+	/**
+	 * Unsuspends the specified request
+	 * @param [id] - link to the request (if not specified, then the operation will be applied for all registered tasks)
+	 */
+	unsuspendRequest(id?: Promise<unknown>): this;
+
+	/**
+	 * Unsuspends the specified request or a group of requests
+	 *
+	 * @param opts - options for the operation:
+	 *   *) [id] - link to the request
+	 *   *) [label] - label of the task
+	 *   *) [group] - group name of the task
+	 */
+	unsuspendRequest(opts: i.ClearOptionsId<Promise<unknown>>): this;
+	unsuspendRequest(task?: Promise<unknown> | i.ClearOptionsId<Promise<unknown>>): this {
+		return this.markTask('!paused', task, this.namespaces.request);
+	}
+
+	/**
+	 * Wraps the specified promise.
+	 *
+	 * This method doesn't attach any hook or listeners to the object,
+	 * but if we cancel the operation using one of Async methods, like "cancelPromise", the promise will be rejected.
+	 * The promise can be provided as it is or as a function, that returns a promise.
 	 *
 	 * @param promise
-	 * @param [params] - additional parameters for the operation:
+	 * @param [opts] - additional options for the operation:
 	 *   *) [join] - strategy for joining competitive tasks (with same labels):
 	 *       *) true - all tasks will be joined to the first;
 	 *       *) 'replace' - all tasks will be joined (replaced) to the last.
 	 *
-	 *   *) [label] - label for the task (previous task with the same label will be canceled)
-	 *   *) [group] - group name for the task
-	 *   *) [destructor] - name of destructor method
+	 *   *) [label] - label of the task (previous task with the same label will be canceled)
+	 *   *) [group] - group name of the task
+	 *   *) [destructor] - name of the destructor method
 	 */
-	promise<T = unknown>(promise: (() => PromiseLike<T>) | PromiseLike<T>, params?: i.AsyncPromiseOptions): Promise<T> {
+	promise<T = unknown>(promise: (() => PromiseLike<T>) | PromiseLike<T>, opts?: i.AsyncPromiseOptions): Promise<T> {
 		const
-			p = <i.AsyncPromiseOptions>({name: this.namespaces.promise, ...params});
+			p = <i.AsyncPromiseOptions>({name: this.namespaces.promise, ...opts});
 
 		return new Promise((resolve, reject) => {
 			let
@@ -396,41 +456,45 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Cancels the specified promise
 	 *
 	 * @alias
-	 * @param [id] - operation id (if not defined will be get all operations)
+	 * @param [id] - link to the promise (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	cancelPromise(id?: Promise<unknown>): this;
 
 	/**
-	 * @param params - parameters for the operation:
-	 *   *) [id] - link for the promise
-	 *   *) [label] - label for the task
-	 *   *) [group] - group name for the task
+	 * Cancels the specified promise or a group of promises
+	 *
+	 * @param opts - options for the operation:
+	 *   *) [id] - link to the promise
+	 *   *) [label] - label of the task
+	 *   *) [group] - group name of the task
 	 */
-	cancelPromise(params: i.ClearProxyOptions<Function>): this;
-	cancelPromise(p: any): this {
-		return this.clearPromise(p);
+	cancelPromise(opts: i.ClearProxyOptions<Promise<unknown>>): this;
+	cancelPromise(task?: Promise<unknown> | i.ClearProxyOptions<Promise<unknown>>): this {
+		return this.clearPromise(<any>task);
 	}
 
 	/**
 	 * Cancels the specified promise
-	 * @param [id] - operation id (if not defined will be get all operations)
+	 * @param [id] - link to the promise (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	clearPromise(id?: Promise<unknown>): this;
 
 	/**
-	 * @param params - parameters for the operation:
-	 *   *) [id] - link for the promise
-	 *   *) [label] - label for the task
-	 *   *) [group] - group name for the task
+	 * Cancels the specified promise or a group of promises
+	 *
+	 * @param opts - options for the operation:
+	 *   *) [id] - link to the promise
+	 *   *) [label] - label of the task
+	 *   *) [group] - group name of the task
 	 */
-	clearPromise(params: i.ClearProxyOptions<Function>): this;
-	clearPromise(p: any): this {
+	clearPromise(opts: i.ClearProxyOptions<Promise<unknown>>): this;
+	clearPromise(task?: Promise<unknown> | i.ClearProxyOptions<Promise<unknown>>): this {
 		const
 			nms = this.namespaces,
-			nm = isAsyncOptions<i.ClearProxyOptions>(p) && p.name;
+			nm = isAsyncOptions<i.ClearProxyOptions>(task) && task.name;
 
 		this
-			.cancelTask(p, nm || nms.promise);
+			.cancelTask(task, nm || nms.promise);
 
 		if (!nm) {
 			for (let keys = Object.keys(nms), i = 0; i < keys.length; i++) {
@@ -439,7 +503,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 					nm = nms[key];
 
 				if (nm && isPromisifyNamespace.test(key)) {
-					this.cancelTask(p, nm);
+					this.cancelTask(task, nm);
 				}
 			}
 		}
@@ -448,71 +512,79 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	}
 
 	/**
-	 * Mutes a promise operation
-	 * @param [id] - operation id (if not defined will be get all operations)
+	 * Mutes the specified promise
+	 * @param [id] - link to the promise (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	mutePromise(id?: Promise<unknown>): this;
 
 	/**
-	 * @param params - parameters for the operation:
-	 *   *) [id] - operation id
-	 *   *) [label] - label for the task
-	 *   *) [group] - group name for the task
+	 * Mutes the specified promise or a group of promises
+	 *
+	 * @param opts - options for the operation:
+	 *   *) [id] - link to the promise
+	 *   *) [label] - label of the task
+	 *   *) [group] - group name of the task
 	 */
-	mutePromise(params: i.ClearOptionsId<Function>): this;
-	mutePromise(p: any): this {
-		return this.markPromise('muted', p);
+	mutePromise(opts: i.ClearOptionsId<Promise<unknown>>): this;
+	mutePromise(task?: Promise<unknown> | i.ClearOptionsId<Promise<unknown>>): this {
+		return this.markPromise('muted', <any>task);
 	}
 
 	/**
-	 * Unmutes a proxy operation
-	 * @param [id] - operation id (if not defined will be get all operations)
+	 * Unmutes the specified promise
+	 * @param [id] - link to the promise (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	unmutePromise(id?: Promise<unknown>): this;
 
 	/**
-	 * @param params - parameters for the operation:
-	 *   *) [id] - operation id
-	 *   *) [label] - label for the task
-	 *   *) [group] - group name for the task
+	 * Unmutes the specified promise or a group of promises
+	 *
+	 * @param opts - options for the operation:
+	 *   *) [id] - link to the promise
+	 *   *) [label] - label of the task
+	 *   *) [group] - group name of the task
 	 */
-	unmutePromise(params: i.ClearOptionsId<Function>): this;
-	unmutePromise(p: any): this {
-		return this.markPromise('!muted', p);
+	unmutePromise(opts: i.ClearOptionsId<Promise<unknown>>): this;
+	unmutePromise(task?: Promise<unknown> | i.ClearOptionsId<Promise<unknown>>): this {
+		return this.markPromise('!muted', <any>task);
 	}
 
 	/**
-	 * Suspends a promise operation
-	 * @param [id] - operation id (if not defined will be get all operations)
+	 * Suspends the specified promise
+	 * @param [id] - link to the promise (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	suspendPromise(id?: Promise<unknown>): this;
 
 	/**
-	 * @param params - parameters for the operation:
-	 *   *) [id] - operation id
-	 *   *) [label] - label for the task
-	 *   *) [group] - group name for the task
+	 * Suspends the specified promise or a group of promises
+	 *
+	 * @param opts - options for the operation:
+	 *   *) [id] - link to the promise
+	 *   *) [label] - label of the task
+	 *   *) [group] - group name of the task
 	 */
-	suspendPromise(params: i.ClearOptionsId<Function>): this;
-	suspendPromise(p: any): this {
-		return this.markPromise('paused', p);
+	suspendPromise(opts: i.ClearOptionsId<Promise<unknown>>): this;
+	suspendPromise(task?: Promise<unknown> | i.ClearOptionsId<Promise<unknown>>): this {
+		return this.markPromise('paused', <any>task);
 	}
 
 	/**
-	 * Unsuspends a promise operation
-	 * @param [id] - operation id (if not defined will be get all operations)
+	 * Unsuspends the specified promise
+	 * @param [id] - link to the promise (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	unsuspendPromise(id?: Promise<unknown>): this;
 
 	/**
-	 * @param params - parameters for the operation:
-	 *   *) [id] - operation id
-	 *   *) [label] - label for the task
-	 *   *) [group] - group name for the task
+	 * Unsuspends the specified promise or a group of promises
+	 *
+	 * @param opts - options for the operation:
+	 *   *) [id] - link to the promise
+	 *   *) [label] - label of the task
+	 *   *) [group] - group name of the task
 	 */
-	unsuspendPromise(params: i.ClearOptionsId<Function>): this;
-	unsuspendPromise(p: any): this {
-		return this.markPromise('!paused', p);
+	unsuspendPromise(opts: i.ClearOptionsId<Promise<unknown>>): this;
+	unsuspendPromise(task?: Promise<unknown> | i.ClearOptionsId<Promise<unknown>>): this {
+		return this.markPromise('!paused', <any>task);
 	}
 
 	/**
@@ -561,7 +633,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	}
 
 	/**
-	 * Aborts the specified promise
+	 * Terminates the specified promise
 	 *
 	 * @param destructor - name of the destructor method
 	 * @param promise
@@ -634,7 +706,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	}
 
 	/**
-	 * Marks a promise task (or a group of tasks) by the specified label
+	 * Marks a promise by the specified label
 	 *
 	 * @param label
 	 * @param [id] - operation id (if not specified, the operation will be extended for all promise namespaces)
@@ -642,14 +714,16 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	protected markPromise(label: string, id?: Promise<unknown>): this;
 
 	/**
+	 * Marks a promise or a group of promises by the specified label
+	 *
 	 * @param label
 	 * @param opts - additional options:
 	 *   *) [id] - operation id
-	 *   *) [label] - label for the task
-	 *   *) [group] - group name for the task
+	 *   *) [label] - label of the task
+	 *   *) [group] - group name of the task
 	 */
-	protected markPromise(label: string, opts: i.ClearOptionsId<Function>): this;
-	protected markPromise(field: string, task?: Promise<unknown> | i.ClearOptionsId<Function>): this {
+	protected markPromise(label: string, opts: i.ClearOptionsId<Promise<any>>): this;
+	protected markPromise(field: string, task?: Promise<any> | i.ClearOptionsId<Promise<unknown>>): this {
 		const
 			nms = this.namespaces,
 			nm = isAsyncOptions<i.ClearProxyOptions>(task) && task.name;

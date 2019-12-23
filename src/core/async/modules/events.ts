@@ -20,7 +20,7 @@ export function isEvent(value: unknown): value is i.EventLike {
 
 export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	/**
-	 * Wrapper for an event emitter add listener
+	 * Wraps an event from the specified event emitter
 	 *
 	 * @param emitter - event emitter
 	 * @param events - event or a list of events (can also specify multiple events with a space)
@@ -38,14 +38,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * @param emitter - event emitter
 	 * @param events - event or a list of events (can also specify multiple events with a space)
 	 * @param handler - event handler
-	 * @param params - parameters for the operation:
-	 *   *) [options] - additional options for addEventListener
-	 *   *) [join] - if true, then competitive tasks (with same labels) will be joined to the first
-	 *   *) [label] - label for the task (previous task with the same label will be canceled)
-	 *   *) [group] - group name for the task
+	 * @param opts - options for the operation:
+	 *   *) [options] - additional options for the emitter
+	 *   *) [join] - if true, then all competitive tasks (with the same labels) will be joined to the first task
+	 *   *) [label] - label of the task (previous task with the same label will be canceled)
+	 *   *) [group] - group name of the task
 	 *   *) [single] - if true, then after first invocation the event listener will be removed
-	 *   *) [onClear] - clear handler
-	 *   *) [onMerge] - merge handler (join: true)
+	 *   *) [onClear] - handler for clearing (it is called after clearing of the task)
+	 *   *) [onMerge] - handler for merging (it is called after merging of the task with another task (label + join:true))
 	 *
 	 * @param [args] - additional arguments for the emitter
 	 */
@@ -53,20 +53,26 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		emitter: i.EventEmitterLikeP,
 		events: CanArray<string>,
 		handler: i.ProxyCb<E, R, CTX>,
-		params: i.AsyncOnOptions<CTX>,
+		opts: i.AsyncOnOptions<CTX>,
 		...args: unknown[]
 	): Nullable<i.EventId>;
 
 	on<E, R>(
 		emitter: i.EventEmitterLikeP,
 		events: CanArray<string>,
-		cb: i.ProxyCb<E, R, CTX>,
-		p: any,
+		handler: i.ProxyCb<E, R, CTX>,
+		opts: i.AsyncOnOptions<CTX> | unknown[],
 		...args: unknown[]
 	): Nullable<i.EventId> {
-		if (p !== undefined && !Object.isObject(p)) {
-			args.unshift(p);
-			p = undefined;
+		let
+			p: i.AsyncOnOptions<CTX>;
+
+		if (opts !== undefined && !Object.isObject(opts)) {
+			args.unshift(opts);
+			p = {};
+
+		} else {
+			p = opts;
 		}
 
 		p = {...p};
@@ -90,7 +96,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			const link = this.registerTask<object>({
 				...p,
 				name: this.namespaces.eventListener,
-				obj: cb,
+				obj: handler,
 				wrapper(cb: Function): unknown {
 					const handler = function (this: unknown): unknown {
 						if (Object.isFunction(emitter) || p.single && (multEvent || !emitter.once)) {
@@ -145,7 +151,8 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	}
 
 	/**
-	 * Wrapper for an event emitter once
+	 * Wraps an event from the specified event emitter.
+	 * The event will be listen only once.
 	 *
 	 * @param emitter - event emitter
 	 * @param events - event or a list of events (can also specify multiple events with a space)
@@ -163,13 +170,13 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * @param emitter - event emitter
 	 * @param events - event or a list of events (can also specify multiple events with a space)
 	 * @param handler - event handler
-	 * @param params - parameters for the operation:
-	 *   *) [options] - additional options for addEventListener
-	 *   *) [join] - if true, then competitive tasks (with same labels) will be joined to the first
-	 *   *) [label] - label for the task (previous task with the same label will be canceled)
-	 *   *) [group] - group name for the task
-	 *   *) [onClear] - clear handler
-	 *   *) [onMerge] - merge handler (join: true)
+	 * @param opts - options for the operation:
+	 *   *) [options] - additional options for the emitter
+	 *   *) [join] - if true, then all competitive tasks (with the same labels) will be joined to the first task
+	 *   *) [label] - label of the task (previous task with the same label will be canceled)
+	 *   *) [group] - group name of the task
+	 *   *) [onClear] - handler for clearing (it is called after clearing of the task)
+	 *   *) [onMerge] - handler for merging (it is called after merging of the task with another task (label + join:true))
 	 *
 	 * @param [args] - additional arguments for the emitter
 	 */
@@ -177,7 +184,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		emitter: i.EventEmitterLikeP,
 		events: CanArray<string>,
 		handler: i.ProxyCb<E, R, CTX>,
-		params: i.AsyncOnceOptions<CTX>,
+		opts: i.AsyncOnceOptions<CTX>,
 		...args: unknown[]
 	): Nullable<i.EventId>;
 
@@ -185,30 +192,36 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		emitter: i.EventEmitterLikeP,
 		events: CanArray<string>,
 		handler: i.ProxyCb<E, R, CTX>,
-		p: any,
+		opts: i.AsyncOnceOptions<CTX> | unknown[],
 		...args: unknown[]
 	): Nullable<i.EventId> {
-		if (p !== undefined && !Object.isObject(p)) {
-			args.unshift(p);
-			p = undefined;
+		let
+			p: i.AsyncOnceOptions<CTX>;
+
+		if (opts !== undefined && !Object.isObject(opts)) {
+			args.unshift(opts);
+			p = {};
+
+		} else {
+			p = opts;
 		}
 
 		return this.on(emitter, events, handler, {...p, single: true}, ...args);
 	}
 
 	/**
-	 * Promise for once
+	 * Returns a promise that will be resolved after the specified event
 	 *
 	 * @param emitter - event emitter
 	 * @param events - event or a list of events (can also specify multiple events with a space)
-	 * @param params - parameters for the operation:
-	 *   *) [options] - additional options for addEventListener
+	 * @param opts - options for the operation:
+	 *   *) [options] - additional options for the emitter
 	 *   *) [join] - strategy for joining competitive tasks (with same labels):
 	 *       *) true - all tasks will be joined to the first;
 	 *       *) 'replace' - all tasks will be joined (replaced) to the last.
 	 *
-	 *   *) [label] - label for the task (previous task with the same label will be canceled)
-	 *   *) [group] - group name for the task
+	 *   *) [label] - label of the task (previous task with the same label will be canceled)
+	 *   *) [group] - group name of the task
 	 *   *) [handler] - event handler (the result will be provided as a promise result)
 	 *
 	 * @param [args] - additional arguments for the emitter
@@ -216,7 +229,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	promisifyOnce<R = unknown, E = unknown>(
 		emitter: i.EventEmitterLikeP,
 		events: CanArray<string>,
-		params: i.AsyncPromisifyOnceOptions<E, R, CTX>,
+		opts: i.AsyncPromisifyOnceOptions<E, R, CTX>,
 		...args: unknown[]
 	): Promise<R>;
 
@@ -234,12 +247,18 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	promisifyOnce<R, E>(
 		emitter: i.EventEmitterLikeP,
 		events: CanArray<string>,
-		p: any,
+		opts: any,
 		...args: unknown[]
 	): Promise<R> {
-		if (p !== undefined && !Object.isObject(p)) {
-			args.unshift(p);
-			p = undefined;
+		let
+			p: i.AsyncPromisifyOnceOptions<E, R, CTX>;
+
+		if (opts !== undefined && !Object.isObject(opts)) {
+			args.unshift(opts);
+			p = {};
+
+		} else {
+			p = opts;
 		}
 
 		return new Promise((resolve, reject) => {
@@ -261,114 +280,126 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	}
 
 	/**
-	 * Wrapper for an event emitter remove listener
+	 * Removes the specified event listener
 	 *
 	 * @alias
-	 * @param [id] - operation id (if not defined will be get all operations)
+	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	off(id?: i.EventId): this;
 
 	/**
-	 * @param params - parameters for the operation:
+	 * Removes the specified event listener or a group of listeners
+	 *
+	 * @param opts - options for the operation:
 	 *   *) [id] - operation id
-	 *   *) [label] - label for the task
-	 *   *) [group] - group name for the task
+	 *   *) [label] - label of the task
+	 *   *) [group] - group name of the task
 	 */
-	off(params: i.ClearOptionsId<i.EventId>): this;
-	off(p: any): this {
-		return this.clearEventListener(p);
+	off(opts: i.ClearOptionsId<i.EventId>): this;
+	off(task?: i.EventId | i.ClearOptionsId<i.EventId>): this {
+		return this.clearEventListener(task);
 	}
 
 	/**
-	 * Wrapper for an event emitter remove listener
-	 * @param [id] - operation id (if not defined will be get all operations)
+	 * Removes the specified event listener
+	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	clearEventListener(id?: i.EventId): this;
 
 	/**
-	 * @param params - parameters for the operation:
+	 * Removes the specified event listener or a group of listeners
+	 *
+	 * @param opts - options for the operation:
 	 *   *) [id] - operation id
-	 *   *) [label] - label for the task
-	 *   *) [group] - group name for the task
+	 *   *) [label] - label of the task
+	 *   *) [group] - group name of the task
 	 */
-	clearEventListener(params: i.ClearOptionsId<i.EventId>): this;
-	clearEventListener(p: any): this {
-		if (Object.isArray(p)) {
-			for (let i = 0; i < p.length; i++) {
-				this.clearEventListener(<i.EventId>p[i]);
+	clearEventListener(opts: i.ClearOptionsId<i.EventId>): this;
+	clearEventListener(task?: i.EventId | i.ClearOptionsId<i.EventId>): this {
+		if (Object.isArray(task)) {
+			for (let i = 0; i < task.length; i++) {
+				this.clearEventListener(<i.EventId>task[i]);
 			}
 
 			return this;
 		}
 
-		return this.cancelTask(isEvent(p) ? {id: p} : p, this.namespaces.eventListener);
+		return this.cancelTask(isEvent(task) ? {id: task} : task, this.namespaces.eventListener);
 	}
 
 	/**
-	 * Mutes an event operation
-	 * @param [id] - operation id (if not defined will be get all operations)
+	 * Mutes the specified event listener
+	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	muteEventListener(id?: i.EventId): this;
 
 	/**
-	 * @param params - parameters for the operation:
+	 * Mutes the specified event listener or a group of listeners
+	 *
+	 * @param opts - options for the operation:
 	 *   *) [id] - operation id
-	 *   *) [label] - label for the task
-	 *   *) [group] - group name for the task
+	 *   *) [label] - label of the task
+	 *   *) [group] - group name of the task
 	 */
-	muteEventListener(params: i.ClearOptionsId<i.EventId>): this;
-	muteEventListener(p: any): this {
-		return this.markEvent('muted', p);
+	muteEventListener(opts: i.ClearOptionsId<i.EventId>): this;
+	muteEventListener(task?: i.EventId | i.ClearOptionsId<i.EventId>): this {
+		return this.markEvent('muted', task);
 	}
 
 	/**
-	 * Unmutes an event operation
-	 * @param [id] - operation id (if not defined will be get all operations)
+	 * Unmutes the specified event listener
+	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	unmuteEventListener(id?: i.EventId): this;
 
 	/**
-	 * @param params - parameters for the operation:
+	 * Unmutes the specified event listener or a group of listeners
+	 *
+	 * @param opts - options for the operation:
 	 *   *) [id] - operation id
-	 *   *) [label] - label for the task
-	 *   *) [group] - group name for the task
+	 *   *) [label] - label of the task
+	 *   *) [group] - group name of the task
 	 */
-	unmuteEventListener(params: i.ClearOptionsId<i.EventId>): this;
-	unmuteEventListener(p: any): this {
-		return this.markEvent('!muted', p);
+	unmuteEventListener(opts: i.ClearOptionsId<i.EventId>): this;
+	unmuteEventListener(task?: i.EventId | i.ClearOptionsId<i.EventId>): this {
+		return this.markEvent('!muted', task);
 	}
 
 	/**
-	 * Suspends an event operation
-	 * @param [id] - operation id (if not defined will be get all operations)
+	 * Suspends the specified event listener
+	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	suspendEventListener(id?: i.EventId): this;
 
 	/**
-	 * @param params - parameters for the operation:
+	 * Suspends the specified event listener or a group of listeners
+	 *
+	 * @param opts - options for the operation:
 	 *   *) [id] - operation id
-	 *   *) [label] - label for the task
-	 *   *) [group] - group name for the task
+	 *   *) [label] - label of the task
+	 *   *) [group] - group name of the task
 	 */
-	suspendEventListener(params: i.ClearOptionsId<i.EventId>): this;
-	suspendEventListener(p: any): this {
-		return this.markEvent('paused', p);
+	suspendEventListener(opts: i.ClearOptionsId<i.EventId>): this;
+	suspendEventListener(task?: i.EventId | i.ClearOptionsId<i.EventId>): this {
+		return this.markEvent('paused', task);
 	}
 
 	/**
-	 * Unsuspends an event operation
-	 * @param [id] - operation id (if not defined will be get all operations)
+	 * Unsuspends the specified event listener
+	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	unsuspendEventListener(id?: i.EventId): this;
 
 	/**
-	 * @param params - parameters for the operation:
+	 * Unsuspends the specified event listener or a group of listeners
+	 *
+	 * @param opts - options for the operation:
 	 *   *) [id] - operation id
-	 *   *) [label] - label for the task
-	 *   *) [group] - group name for the task
+	 *   *) [label] - label of the task
+	 *   *) [group] - group name of the task
 	 */
-	unsuspendEventListener(params: i.ClearOptionsId<i.EventId>): this;
-	unsuspendEventListener(p: any): this {
+	unsuspendEventListener(opts: i.ClearOptionsId<i.EventId>): this;
+	unsuspendEventListener(p: i.EventId | i.ClearOptionsId<i.EventId>): this {
 		return this.markEvent('!paused', p);
 	}
 
@@ -395,7 +426,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	}
 
 	/**
-	 * Marks an event task (or a group of tasks) by the specified label
+	 * Marks an event task by the specified label
 	 *
 	 * @param field
 	 * @param [id] - operation id (if not specified, the operation will be extended for all promise namespaces)
@@ -403,13 +434,15 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	protected markEvent(field: string, id?: i.EventId): this;
 
 	/**
+	 * Marks an event task or a group of tasks by the specified label
+	 *
 	 * @param field
-	 * @param params - additional options:
+	 * @param opts - additional options:
 	 *   *) [id] - operation id
-	 *   *) [label] - label for the task
-	 *   *) [group] - group name for the task
+	 *   *) [label] - label of the task
+	 *   *) [group] - group name of the task
 	 */
-	protected markEvent(field: string, params: i.ClearOptionsId<i.EventId>): this;
+	protected markEvent(field: string, opts: i.ClearOptionsId<i.EventId>): this;
 	protected markEvent(field: string, task: i.EventId | i.ClearOptionsId<i.EventId>): this {
 		if (Object.isArray(task)) {
 			for (let i = 0; i < task.length; i++) {

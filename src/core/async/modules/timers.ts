@@ -14,17 +14,17 @@ export * from 'core/async/modules/proxy';
 
 export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	/**
-	 * Wrapper for setImmediate
+	 * Wrapper for the global.setImmediate
 	 *
 	 * @param fn - callback function
-	 * @param [params] - additional parameters for the operation:
-	 *   *) [join] - if true, then competitive tasks (with same labels) will be joined to the first
-	 *   *) [label] - label for the task (previous task with the same label will be canceled)
-	 *   *) [group] - group name for the task
-	 *   *) [onClear] - clear handler
-	 *   *) [onMerge] - merge handler (join: true)
+	 * @param [opts] - additional options for the operation:
+	 *   *) [join] - if true, then all competitive tasks (with the same labels) will be joined to the first task
+	 *   *) [label] - label of the task (previous task with the same label will be canceled)
+	 *   *) [group] - group name of the task
+	 *   *) [onClear] - handler for clearing (it is called after clearing of the task)
+	 *   *) [onMerge] - handler for merging (it is called after merging of the task with another task (label + join:true))
 	 */
-	setImmediate(fn: Function, params?: i.AsyncCbOptions<CTX>): Nullable<i.TimerId> {
+	setImmediate(fn: Function, opts?: i.AsyncCbOptions<CTX>): Nullable<i.TimerId> {
 		const
 			// tslint:disable-next-line
 			wrapper = globalThis['setImmediate'],
@@ -33,7 +33,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			clearFn = globalThis['clearImmediate'];
 
 		return this.registerTask({
-			...params,
+			...opts,
 			name: this.namespaces.immediate,
 			obj: fn,
 			clearFn,
@@ -43,324 +43,354 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	}
 
 	/**
-	 * Wrapper for clearImmediate
-	 * @param [id] - operation id (if not defined will be get all operations)
+	 * Wrapper for the global.clearImmediate
+	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	clearImmediate(id?: i.TimerId): this;
 
 	/**
-	 * @param params - parameters for the operation:
+	 * Clears the specified "setImmediate" timer or a group of timers
+	 *
+	 * @param opts - options for the operation:
 	 *   *) [id] - operation id
-	 *   *) [label] - label for the task
-	 *   *) [group] - group name for the task
+	 *   *) [label] - label of the task
+	 *   *) [group] - group name of the task
 	 */
-	clearImmediate(params: i.ClearOptionsId<i.TimerId>): this;
-	clearImmediate(p: any): this {
-		return this.cancelTask(p, this.namespaces.immediate);
+	clearImmediate(opts: i.ClearOptionsId<i.TimerId>): this;
+	clearImmediate(task?: i.TimerId | i.ClearOptionsId<i.TimerId>): this {
+		return this.cancelTask(task, this.namespaces.immediate);
 	}
 
 	/**
-	 * Mutes a setImmediate operation
-	 * @param [id] - operation id (if not defined will be get all operations)
+	 * Mutes the specified "setImmediate" timer
+	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	muteImmediate(id?: i.TimerId): this;
 
 	/**
-	 * @param params - parameters for the operation:
+	 * Mutes the specified "setImmediate" timer or a group of timers
+	 *
+	 * @param opts - options for the operation:
 	 *   *) [id] - operation id
-	 *   *) [label] - label for the task
-	 *   *) [group] - group name for the task
+	 *   *) [label] - label of the task
+	 *   *) [group] - group name of the task
 	 */
-	muteImmediate(params: i.ClearOptionsId<i.TimerId>): this;
-	muteImmediate(p: any): this {
-		return this.markTask('muted', p, this.namespaces.immediate);
+	muteImmediate(opts: i.ClearOptionsId<i.TimerId>): this;
+	muteImmediate(task?: i.TimerId | i.ClearOptionsId<i.TimerId>): this {
+		return this.markTask('muted', task, this.namespaces.immediate);
 	}
 
 	/**
-	 * Unmutes a setImmediate operation
+	 * Unmutes the specified "setImmediate" timer
 	 * @param [id] - operation id (if not defined will be get all handlers)
 	 */
 	unmuteImmediate(id?: i.TimerId): this;
 
 	/**
-	 * @param params - parameters for the operation:
+	 * Unmutes the specified "setImmediate" timer or a group of timers
+	 *
+	 * @param opts - options for the operation:
 	 *   *) [id] - operation id
-	 *   *) [label] - label for the task
-	 *   *) [group] - group name for the task
+	 *   *) [label] - label of the task
+	 *   *) [group] - group name of the task
 	 */
-	unmuteImmediate(params: i.ClearOptionsId<i.TimerId>): this;
-	unmuteImmediate(p: any): this {
+	unmuteImmediate(opts: i.ClearOptionsId<i.TimerId>): this;
+	unmuteImmediate(p: i.TimerId | i.ClearOptionsId<i.TimerId>): this {
 		return this.markTask('!muted', p, this.namespaces.immediate);
 	}
 
 	/**
-	 * Suspends a setImmediate operation
-	 * @param [id] - operation id (if not defined will be get all operations)
+	 * Suspends the specified "setImmediate" timer
+	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	suspendImmediate(id?: i.TimerId): this;
 
 	/**
-	 * @param params - parameters for the operation:
+	 * Suspends the specified "setImmediate" timer or a group of timers
+	 *
+	 * @param opts - options for the operation:
 	 *   *) [id] - operation id
-	 *   *) [label] - label for the task
-	 *   *) [group] - group name for the task
+	 *   *) [label] - label of the task
+	 *   *) [group] - group name of the task
 	 */
-	suspendImmediate(params: i.ClearOptionsId<i.TimerId>): this;
-	suspendImmediate(p: any): this {
+	suspendImmediate(opts: i.ClearOptionsId<i.TimerId>): this;
+	suspendImmediate(p: i.TimerId | i.ClearOptionsId<i.TimerId>): this {
 		return this.markTask('paused', p, this.namespaces.immediate);
 	}
 
 	/**
-	 * Unsuspends a setImmediate operation
-	 * @param [id] - operation id (if not defined will be get all operations)
+	 * Unsuspends the specified "setImmediate" timer
+	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	unsuspendImmediate(id?: i.TimerId): this;
 
 	/**
-	 * @param params - parameters for the operation:
+	 * Unsuspends the specified "setImmediate" timer or a group of timers
+	 *
+	 * @param opts - options for the operation:
 	 *   *) [id] - operation id
-	 *   *) [label] - label for the task
-	 *   *) [group] - group name for the task
+	 *   *) [label] - label of the task
+	 *   *) [group] - group name of the task
 	 */
-	unsuspendImmediate(params: i.ClearOptionsId<i.TimerId>): this;
-	unsuspendImmediate(p: any): this {
+	unsuspendImmediate(opts: i.ClearOptionsId<i.TimerId>): this;
+	unsuspendImmediate(p: i.TimerId | i.ClearOptionsId<i.TimerId>): this {
 		return this.markTask('!paused', p, this.namespaces.immediate);
 	}
 
 	/**
-	 * Wrapper for setInterval
+	 * Wrapper for the global.setInterval
 	 *
 	 * @param fn - callback function
-	 * @param interval - interval value
-	 * @param [params] - additional parameters for the operation:
-	 *   *) [join] - if true, then competitive tasks (with same labels) will be joined to the first
-	 *   *) [label] - label for the task (previous task with the same label will be canceled)
-	 *   *) [group] - group name for the task
-	 *   *) [onClear] - clear handler
-	 *   *) [onMerge] - merge handler (join: true)
+	 * @param timeout - timer value
+	 * @param [opts] - additional options for the operation:
+	 *   *) [join] - if true, then all competitive tasks (with the same labels) will be joined to the first task
+	 *   *) [label] - label of the task (previous task with the same label will be canceled)
+	 *   *) [group] - group name of the task
+	 *   *) [onClear] - handler for clearing (it is called after clearing of the task)
+	 *   *) [onMerge] - handler for merging (it is called after merging of the task with another task (label + join:true))
 	 */
-	setInterval(fn: Function, interval: number, params?: i.AsyncCbOptions<CTX>): Nullable<i.TimerId> {
+	setInterval(fn: Function, timeout: number, opts?: i.AsyncCbOptions<CTX>): Nullable<i.TimerId> {
 		return this.registerTask({
-			...params,
+			...opts,
 			name: this.namespaces.interval,
 			obj: fn,
 			clearFn: clearInterval,
 			wrapper: setInterval,
 			linkByWrapper: true,
 			periodic: true,
-			args: [interval]
+			args: [timeout]
 		});
 	}
 
 	/**
-	 * Wrapper for clearInterval
-	 * @param [id] - operation id (if not defined will be get all operations)
+	 * Wrapper for the global.clearInterval
+	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	clearInterval(id?: i.TimerId): this;
 
 	/**
-	 * @param params - parameters for the operation:
+	 * Clears the specified "setInterval" timer or a group of timers
+	 *
+	 * @param opts - options for the operation:
 	 *   *) [id] - operation id
-	 *   *) [label] - label for the task
-	 *   *) [group] - group name for the task
+	 *   *) [label] - label of the task
+	 *   *) [group] - group name of the task
 	 */
-	clearInterval(params: i.ClearOptionsId<i.TimerId>): this;
-	clearInterval(p: any): this {
-		return this.cancelTask(p, this.namespaces.interval);
+	clearInterval(opts: i.ClearOptionsId<i.TimerId>): this;
+	clearInterval(task?: i.TimerId | i.ClearOptionsId<i.TimerId>): this {
+		return this.cancelTask(task, this.namespaces.interval);
 	}
 
 	/**
-	 * Mutes a setInterval operation
-	 * @param [id] - operation id (if not defined will be get all operations)
+	 * Mutes the specified "setInterval" timer
+	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	muteInterval(id?: i.TimerId): this;
 
 	/**
-	 * @param params - parameters for the operation:
+	 * Mutes the specified "setInterval" timer or a group of timers
+	 *
+	 * @param opts - options for the operation:
 	 *   *) [id] - operation id
-	 *   *) [label] - label for the task
-	 *   *) [group] - group name for the task
+	 *   *) [label] - label of the task
+	 *   *) [group] - group name of the task
 	 */
-	muteInterval(params: i.ClearOptionsId<i.TimerId>): this;
-	muteInterval(p: any): this {
-		return this.markTask('!muted', p, this.namespaces.interval);
+	muteInterval(opts: i.ClearOptionsId<i.TimerId>): this;
+	muteInterval(task?: i.TimerId | i.ClearOptionsId<i.TimerId>): this {
+		return this.markTask('!muted', task, this.namespaces.interval);
 	}
 
 	/**
-	 * Unmutes a setInterval operation
-	 * @param [id] - operation id (if not defined will be get all operations)
+	 * Unmutes the specified "setInterval" timer
+	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	unmuteInterval(id?: i.TimerId): this;
 
 	/**
-	 * @param params - parameters for the operation:
+	 * Unmutes the specified "setInterval" timer or a group of timers
+	 *
+	 * @param opts - options for the operation:
 	 *   *) [id] - operation id
-	 *   *) [label] - label for the task
-	 *   *) [group] - group name for the task
+	 *   *) [label] - label of the task
+	 *   *) [group] - group name of the task
 	 */
-	unmuteInterval(params: i.ClearOptionsId<i.TimerId>): this;
-	unmuteInterval(p: any): this {
-		return this.markTask('!muted', p, this.namespaces.interval);
+	unmuteInterval(opts: i.ClearOptionsId<i.TimerId>): this;
+	unmuteInterval(task?: i.TimerId | i.ClearOptionsId<i.TimerId>): this {
+		return this.markTask('!muted', task, this.namespaces.interval);
 	}
 
 	/**
-	 * Suspends a setInterval operation
-	 * @param [id] - operation id (if not defined will be get all operations)
+	 * Suspends the specified "setInterval" timer
+	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	suspendInterval(id?: i.TimerId): this;
 
 	/**
-	 * @param params - parameters for the operation:
+	 * Suspends the specified "setInterval" timer or a group of timers
+	 *
+	 * @param opts - options for the operation:
 	 *   *) [id] - operation id
-	 *   *) [label] - label for the task
-	 *   *) [group] - group name for the task
+	 *   *) [label] - label of the task
+	 *   *) [group] - group name of the task
 	 */
-	suspendInterval(params: i.ClearOptionsId<i.TimerId>): this;
-	suspendInterval(p: any): this {
-		return this.markTask('paused', p, this.namespaces.interval);
+	suspendInterval(opts: i.ClearOptionsId<i.TimerId>): this;
+	suspendInterval(task?: i.TimerId | i.ClearOptionsId<i.TimerId>): this {
+		return this.markTask('paused', task, this.namespaces.interval);
 	}
 
 	/**
-	 * Unsuspends a setImmediate operation
-	 * @param [id] - operation id (if not defined will be get all operations)
+	 * Unsuspends the specified "setImmediate" timer
+	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	unsuspendInterval(id?: i.TimerId): this;
 
 	/**
-	 * @param params - parameters for the operation:
+	 * Unsuspends the specified "setImmediate" timer or a group of timers
+	 *
+	 * @param opts - options for the operation:
 	 *   *) [id] - operation id
-	 *   *) [label] - label for the task
-	 *   *) [group] - group name for the task
+	 *   *) [label] - label of the task
+	 *   *) [group] - group name of the task
 	 */
-	unsuspendInterval(params: i.ClearOptionsId<i.TimerId>): this;
-	unsuspendInterval(p: any): this {
-		return this.markTask('!paused', p, this.namespaces.interval);
+	unsuspendInterval(opts: i.ClearOptionsId<i.TimerId>): this;
+	unsuspendInterval(task?: i.TimerId | i.ClearOptionsId<i.TimerId>): this {
+		return this.markTask('!paused', task, this.namespaces.interval);
 	}
 
 	/**
-	 * Wrapper for setTimeout
+	 * Wrapper for the global.setTimeout
 	 *
 	 * @param fn - callback function
-	 * @param timer - timer value
-	 * @param [params] - additional parameters for the operation:
-	 *   *) [join] - if true, then competitive tasks (with same labels) will be joined to the first
-	 *   *) [label] - label for the task (previous task with the same label will be canceled)
-	 *   *) [group] - group name for the task
-	 *   *) [onClear] - clear handler
-	 *   *) [onMerge] - merge handler (join: true)
+	 * @param timeout - timeout value
+	 * @param [opts] - additional options for the operation:
+	 *   *) [join] - if true, then all competitive tasks (with the same labels) will be joined to the first task
+	 *   *) [label] - label of the task (previous task with the same label will be canceled)
+	 *   *) [group] - group name of the task
+	 *   *) [onClear] - handler for clearing (it is called after clearing of the task)
+	 *   *) [onMerge] - handler for merging (it is called after merging of the task with another task (label + join:true))
 	 */
-	setTimeout(fn: Function, timer: number, params?: i.AsyncCbOptions<CTX>): Nullable<i.TimerId> {
+	setTimeout(fn: Function, timeout: number, opts?: i.AsyncCbOptions<CTX>): Nullable<i.TimerId> {
 		return this.registerTask({
-			...params,
+			...opts,
 			name: this.namespaces.timeout,
 			obj: fn,
 			clearFn: clearTimeout,
 			wrapper: setTimeout,
 			linkByWrapper: true,
-			args: [timer]
+			args: [timeout]
 		});
 	}
 
 	/**
-	 * Wrapper for clearTimeout
-	 * @param [id] - operation id (if not defined will be get all operations)
+	 * Wrapper for the global.clearTimeout
+	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	clearTimeout(id?: i.TimerId): this;
 
 	/**
-	 * @param params - parameters for the operation:
+	 * Clears the specified "setTimeout" timer or a group of timers
+	 *
+	 * @param opts - options for the operation:
 	 *   *) [id] - operation id
-	 *   *) [label] - label for the task
-	 *   *) [group] - group name for the task
+	 *   *) [label] - label of the task
+	 *   *) [group] - group name of the task
 	 */
-	clearTimeout(params: i.ClearOptionsId<i.TimerId>): this;
-	clearTimeout(p: any): this {
-		return this.cancelTask(p, this.namespaces.timeout);
+	clearTimeout(opts: i.ClearOptionsId<i.TimerId>): this;
+	clearTimeout(task?: i.TimerId | i.ClearOptionsId<i.TimerId>): this {
+		return this.cancelTask(task, this.namespaces.timeout);
 	}
 
 	/**
-	 * Mutes a setTimeout operation
-	 * @param [id] - operation id (if not defined will be get all operations)
+	 * Mutes the specified "setTimeout" timer
+	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	muteTimeout(id?: i.TimerId): this;
 
 	/**
-	 * @param params - parameters for the operation:
+	 * Mutes the specified "setTimeout" timer or a group of timers
+	 *
+	 * @param opts - options for the operation:
 	 *   *) [id] - operation id
-	 *   *) [label] - label for the task
-	 *   *) [group] - group name for the task
+	 *   *) [label] - label of the task
+	 *   *) [group] - group name of the task
 	 */
-	muteTimeout(params: i.ClearOptionsId<i.TimerId>): this;
-	muteTimeout(p: any): this {
-		return this.markTask('muted', p, this.namespaces.timeout);
+	muteTimeout(opts: i.ClearOptionsId<i.TimerId>): this;
+	muteTimeout(task?: i.TimerId | i.ClearOptionsId<i.TimerId>): this {
+		return this.markTask('muted', task, this.namespaces.timeout);
 	}
 
 	/**
-	 * Unmutes a setTimeout operation
-	 * @param [id] - operation id (if not defined will be get all operations)
+	 * Unmutes the specified "setTimeout" timer
+	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	unmuteTimeout(id?: i.TimerId): this;
 
 	/**
-	 * @param params - parameters for the operation:
+	 * Unmutes the specified "setTimeout" timer or a group of timers
+	 *
+	 * @param opts - options for the operation:
 	 *   *) [id] - operation id
-	 *   *) [label] - label for the task
-	 *   *) [group] - group name for the task
+	 *   *) [label] - label of the task
+	 *   *) [group] - group name of the task
 	 */
-	unmuteTimeout(params: i.ClearOptionsId<i.TimerId>): this;
-	unmuteTimeout(p: any): this {
-		return this.markTask('!muted', p, this.namespaces.timeout);
+	unmuteTimeout(opts: i.ClearOptionsId<i.TimerId>): this;
+	unmuteTimeout(task?: i.TimerId | i.ClearOptionsId<i.TimerId>): this {
+		return this.markTask('!muted', task, this.namespaces.timeout);
 	}
 
 	/**
-	 * Suspends a setTimeout operation
-	 * @param [id] - operation id (if not defined will be get all operations)
+	 * Suspends the specified "setTimeout" timer
+	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	suspendTimeout(id?: i.TimerId): this;
 
 	/**
-	 * @param params - parameters for the operation:
+	 * Suspends the specified "setTimeout" timer or a group of timers
+	 *
+	 * @param opts - options for the operation:
 	 *   *) [id] - operation id
-	 *   *) [label] - label for the task
-	 *   *) [group] - group name for the task
+	 *   *) [label] - label of the task
+	 *   *) [group] - group name of the task
 	 */
-	suspendTimeout(params: i.ClearOptionsId<i.TimerId>): this;
-	suspendTimeout(p: any): this {
-		return this.markTask('paused', p, this.namespaces.timeout);
+	suspendTimeout(opts: i.ClearOptionsId<i.TimerId>): this;
+	suspendTimeout(task?: i.TimerId | i.ClearOptionsId<i.TimerId>): this {
+		return this.markTask('paused', task, this.namespaces.timeout);
 	}
 
 	/**
-	 * Unsuspends a setTimeout operation
-	 * @param [id] - operation id (if not defined will be get all operations)
+	 * Unsuspends the specified "setTimeout" timer
+	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	unsuspendTimeout(id?: i.TimerId): this;
 
 	/**
-	 * @param params - parameters for the operation:
+	 * Unsuspends the specified "setTimeout" timer or a group of names
+	 *
+	 * @param opts - options for the operation:
 	 *   *) [id] - operation id
-	 *   *) [label] - label for the task
-	 *   *) [group] - group name for the task
+	 *   *) [label] - label of the task
+	 *   *) [group] - group name of the task
 	 */
-	unsuspendTimeout(params: i.ClearOptionsId<i.TimerId>): this;
-	unsuspendTimeout(p: any): this {
-		return this.markTask('!paused', p, this.namespaces.timeout);
+	unsuspendTimeout(opts: i.ClearOptionsId<i.TimerId>): this;
+	unsuspendTimeout(task?: i.TimerId | i.ClearOptionsId<i.TimerId>): this {
+		return this.markTask('!paused', task, this.namespaces.timeout);
 	}
 
 	/**
-	 * Wrapper for requestIdleCallback
+	 * Wrapper for the global.requestIdleCallback
 	 *
 	 * @param fn - callback function
-	 * @param [params] - additional parameters for the operation:
-	 *   *) [timeout] - timeout value for the native requestIdleCallback
-	 *   *) [join] - if true, then competitive tasks (with same labels) will be joined to the first
-	 *   *) [label] - label for the task (previous task with the same label will be canceled)
-	 *   *) [group] - group name for the task
-	 *   *) [onClear] - clear handler
-	 *   *) [onMerge] - merge handler (join: true)
+	 * @param [opts] - additional options for the operation:
+	 *   *) [timeout] - timeout value for the native requestIdleCallback function
+	 *   *) [join] - if true, then all competitive tasks (with the same labels) will be joined to the first task
+	 *   *) [label] - label of the task (previous task with the same label will be canceled)
+	 *   *) [group] - group name of the task
+	 *   *) [onClear] - handler for clearing (it is called after clearing of the task)
+	 *   *) [onMerge] - handler for merging (it is called after merging of the task with another task (label + join:true))
 	 */
 	requestIdleCallback<R = unknown>(
 		fn: i.IdleCb<R, CTX>,
-		params?: i.AsyncCreateIdleOptions<CTX>
+		opts?: i.AsyncCreateIdleOptions<CTX>
 	): Nullable<i.TimerId> {
 		let
 			wrapper,
@@ -376,136 +406,148 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		}
 
 		return this.registerTask({
-			...params && Object.reject(params, 'timeout'),
+			...opts && Object.reject(opts, 'timeout'),
 			name: this.namespaces.idleCallback,
 			obj: fn,
 			clearFn,
 			wrapper,
 			linkByWrapper: true,
-			args: params && Object.select(params, 'timeout')
+			args: opts && Object.select(opts, 'timeout')
 		});
 	}
 
 	/**
-	 * Wrapper for cancelIdleCallback
+	 * Wrapper for the global.cancelIdleCallback
 	 *
 	 * @alias
-	 * @param [id] - operation id (if not defined will be get all operations)
+	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	cancelIdleCallback(id?: i.TimerId): this;
 
 	/**
-	 * @param params - parameters for the operation:
+	 * Clears the specified "requestIdleCallback" timer or a group of timers
+	 *
+	 * @param opts - options for the operation:
 	 *   *) [id] - operation id
-	 *   *) [label] - label for the task
-	 *   *) [group] - group name for the task
+	 *   *) [label] - label of the task
+	 *   *) [group] - group name of the task
 	 */
-	cancelIdleCallback(params: i.ClearOptionsId<i.TimerId>): this;
-	cancelIdleCallback(p: any): this {
-		return this.clearIdleCallback(p);
+	cancelIdleCallback(opts: i.ClearOptionsId<i.TimerId>): this;
+	cancelIdleCallback(task?: i.TimerId | i.ClearOptionsId<i.TimerId>): this {
+		return this.clearIdleCallback(task);
 	}
 
 	/**
-	 * Wrapper for cancelIdleCallback
-	 * @param [id] - operation id (if not defined will be get all operations)
+	 * Wrapper for the global.cancelIdleCallback
+	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	clearIdleCallback(id?: i.TimerId): this;
 
 	/**
-	 * @param params - parameters for the operation:
+	 * Clears the specified "requestIdleCallback" timer or a group of timers
+	 *
+	 * @param opts - options for the operation:
 	 *   *) [id] - operation id
-	 *   *) [label] - label for the task
-	 *   *) [group] - group name for the task
+	 *   *) [label] - label of the task
+	 *   *) [group] - group name of the task
 	 */
-	clearIdleCallback(params: i.ClearOptionsId<i.TimerId>): this;
-	clearIdleCallback(p: any): this {
-		return this.cancelTask(p, this.namespaces.idleCallback);
+	clearIdleCallback(opts: i.ClearOptionsId<i.TimerId>): this;
+	clearIdleCallback(task?: i.TimerId | i.ClearOptionsId<i.TimerId>): this {
+		return this.cancelTask(task, this.namespaces.idleCallback);
 	}
 
 	/**
-	 * Mutes a requestIdleCallback operation
-	 * @param [id] - operation id (if not defined will be get all operations)
+	 * Mutes the specified "requestIdleCallback" timer
+	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	muteIdleCallback(id?: i.TimerId): this;
 
 	/**
-	 * @param params - parameters for the operation:
+	 * Mutes the specified "requestIdleCallback" timer or a group of timers
+	 *
+	 * @param opts - options for the operation:
 	 *   *) [id] - operation id
-	 *   *) [label] - label for the task
-	 *   *) [group] - group name for the task
+	 *   *) [label] - label of the task
+	 *   *) [group] - group name of the task
 	 */
-	muteIdleCallback(params: i.ClearOptionsId<i.TimerId>): this;
-	muteIdleCallback(p: any): this {
-		return this.markTask('muted', p, this.namespaces.idleCallback);
+	muteIdleCallback(opts: i.ClearOptionsId<i.TimerId>): this;
+	muteIdleCallback(task?: i.TimerId | i.ClearOptionsId<i.TimerId>): this {
+		return this.markTask('muted', task, this.namespaces.idleCallback);
 	}
 
 	/**
-	 * Unmutes a requestIdleCallback operation
-	 * @param [id] - operation id (if not defined will be get all operations)
+	 * Unmutes the specified "requestIdleCallback" timer
+	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	unmuteIdleCallback(id?: i.TimerId): this;
 
 	/**
-	 * @param params - parameters for the operation:
+	 * Unmutes the specified "requestIdleCallback" timer or a group of timers
+	 *
+	 * @param opts - options for the operation:
 	 *   *) [id] - operation id
-	 *   *) [label] - label for the task
-	 *   *) [group] - group name for the task
+	 *   *) [label] - label of the task
+	 *   *) [group] - group name of the task
 	 */
-	unmuteIdleCallback(params: i.ClearOptionsId<i.TimerId>): this;
-	unmuteIdleCallback(p: any): this {
-		return this.markTask('!muted', p, this.namespaces.idleCallback);
+	unmuteIdleCallback(opts: i.ClearOptionsId<i.TimerId>): this;
+	unmuteIdleCallback(task?: i.TimerId | i.ClearOptionsId<i.TimerId>): this {
+		return this.markTask('!muted', task, this.namespaces.idleCallback);
 	}
 
 	/**
-	 * Suspends a requestIdleCallback operation
-	 * @param [id] - operation id (if not defined will be get all operations)
+	 * Suspends the specified "requestIdleCallback" timer
+	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	suspendIdleCallback(id?: i.TimerId): this;
 
 	/**
-	 * @param params - parameters for the operation:
+	 * Suspends the specified "requestIdleCallback" timer or a group of timers
+	 *
+	 * @param opts - options for the operation:
 	 *   *) [id] - operation id
-	 *   *) [label] - label for the task
-	 *   *) [group] - group name for the task
+	 *   *) [label] - label of the task
+	 *   *) [group] - group name of the task
 	 */
-	suspendIdleCallback(params: i.ClearOptionsId<i.TimerId>): this;
-	suspendIdleCallback(p: any): this {
-		return this.markTask('paused', p, this.namespaces.idleCallback);
+	suspendIdleCallback(opts: i.ClearOptionsId<i.TimerId>): this;
+	suspendIdleCallback(task?: i.TimerId | i.ClearOptionsId<i.TimerId>): this {
+		return this.markTask('paused', task, this.namespaces.idleCallback);
 	}
 
 	/**
-	 * Unsuspends a requestIdleCallback operation
-	 * @param [id] - operation id (if not defined will be get all operations)
+	 * Unsuspends the specified "requestIdleCallback" timer
+	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	unsuspendIdleCallback(id?: i.TimerId): this;
 
 	/**
-	 * @param params - parameters for the operation:
+	 * Unsuspends the specified "requestIdleCallback" timer or a group of timers
+	 *
+	 * @param opts - options for the operation:
 	 *   *) [id] - operation id
-	 *   *) [label] - label for the task
-	 *   *) [group] - group name for the task
+	 *   *) [label] - label of the task
+	 *   *) [group] - group name of the task
 	 */
-	unsuspendIdleCallback(params: i.ClearOptionsId<i.TimerId>): this;
-	unsuspendIdleCallback(p: any): this {
-		return this.markTask('!paused', p, this.namespaces.idleCallback);
+	unsuspendIdleCallback(opts: i.ClearOptionsId<i.TimerId>): this;
+	unsuspendIdleCallback(task?: i.TimerId | i.ClearOptionsId<i.TimerId>): this {
+		return this.markTask('!paused', task, this.namespaces.idleCallback);
 	}
 
 	/**
-	 * Promise for setTimeout
+	 * Returns a promise that will be resolved after the specified timeout
 	 *
-	 * @param timer
-	 * @param [params] - additional parameters for the operation:
+	 * @param timeout
+	 * @param [opts] - additional options for the operation:
 	 *   *) [join] - strategy for joining competitive tasks (with same labels):
 	 *       *) true - all tasks will be joined to the first;
 	 *       *) 'replace' - all tasks will be joined (replaced) to the last.
 	 *
-	 *   *) [label] - label for the task (previous task with the same label will be canceled)
-	 *   *) [group] - group name for the task
+	 *   *) [label] - label of the task (previous task with the same label will be canceled)
+	 *   *) [group] - group name of the task
 	 */
-	sleep(timer: number, params?: i.AsyncOptions): Promise<void> {
+	sleep(timeout: number, opts?: i.AsyncOptions): Promise<void> {
 		return new Promise((resolve, reject) => {
-			this.setTimeout(resolve, timer, {
-				...<any>params,
+			this.setTimeout(resolve, timeout, {
+				...<any>opts,
 				promise: true,
 				onClear: this.onPromiseClear(resolve, reject),
 				onMerge: this.onPromiseMerge(resolve, reject)
@@ -514,20 +556,20 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	}
 
 	/**
-	 * Promise for setImmediate
+	 * Returns a promise that will be resolved on the next tick of the event loop
 	 *
-	 * @param [params] - additional parameters for the operation:
+	 * @param [opts] - additional options for the operation:
 	 *   *) [join] - strategy for joining competitive tasks (with same labels):
 	 *       *) true - all tasks will be joined to the first;
 	 *       *) 'replace' - all tasks will be joined (replaced) to the last.
 	 *
-	 *   *) [label] - label for the task (previous task with the same label will be canceled)
-	 *   *) [group] - group name for the task
+	 *   *) [label] - label of the task (previous task with the same label will be canceled)
+	 *   *) [group] - group name of the task
 	 */
-	nextTick(params?: i.AsyncOptions): Promise<void> {
+	nextTick(opts?: i.AsyncOptions): Promise<void> {
 		return new Promise((resolve, reject) => {
 			this.setImmediate(resolve, {
-				...<any>params,
+				...<any>opts,
 				promise: true,
 				onClear: this.onPromiseClear(resolve, reject),
 				onMerge: this.onPromiseMerge(resolve, reject)
@@ -536,21 +578,21 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	}
 
 	/**
-	 * Promise for requestIdleCallback
+	 * Returns a promise that will be resolved on the process idle
 	 *
-	 * @param [params] - additional parameters for the operation:
+	 * @param [opts] - additional options for the operation:
 	 *   *) [timeout] - timeout value for the native requestIdleCallback
 	 *   *) [join] - strategy for joining competitive tasks (with same labels):
 	 *       *) true - all tasks will be joined to the first;
 	 *       *) 'replace' - all tasks will be joined (replaced) to the last.
 	 *
-	 *   *) [label] - label for the task (previous task with the same label will be canceled)
-	 *   *) [group] - group name for the task
+	 *   *) [label] - label of the task (previous task with the same label will be canceled)
+	 *   *) [group] - group name of the task
 	 */
-	idle(params?: i.AsyncIdleOptions): Promise<IdleDeadline> {
+	idle(opts?: i.AsyncIdleOptions): Promise<IdleDeadline> {
 		return new Promise((resolve, reject) => {
 			this.requestIdleCallback(resolve, {
-				...<any>params,
+				...<any>opts,
 				promise: true,
 				onClear: this.onPromiseClear(resolve, reject),
 				onMerge: this.onPromiseMerge(resolve, reject)
@@ -559,25 +601,22 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	}
 
 	/**
-	 * Waits until the specified function returns a positive value (== true)
+	 * Returns a promise that will be resolved only when the specified function returns a positive value (== true)
 	 *
 	 * @param fn
-	 * @param [params] - additional parameters for the operation:
+	 * @param [opts] - additional options for the operation:
 	 *   *) [join] - strategy for joining competitive tasks (with same labels):
 	 *       *) true - all tasks will be joined to the first;
 	 *       *) 'replace' - all tasks will be joined (replaced) to the last.
 	 *
-	 *   *) [label] - label for the task (previous task with the same label will be canceled)
-	 *   *) [group] - group name for the task
+	 *   *) [label] - label of the task (previous task with the same label will be canceled)
+	 *   *) [group] - group name of the task
 	 *   *) [delay] - delay in milliseconds
 	 */
-	wait(fn: Function, params?: i.AsyncWaitOptions): Promise<boolean> {
-		const
-			DELAY = params?.delay || 15;
-
+	wait(fn: Function, opts?: i.AsyncWaitOptions): Promise<boolean> {
 		if (fn()) {
-			if (params?.label) {
-				this.clearPromise(params);
+			if (opts?.label) {
+				this.clearPromise(opts);
 			}
 
 			return createSyncPromise(true);
@@ -594,8 +633,8 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 				}
 			};
 
-			id = this.setInterval(cb, DELAY, {
-				...<any>params,
+			id = this.setInterval(cb, opts?.delay || 15, {
+				...<any>opts,
 				promise: true,
 				onClear: this.onPromiseClear(resolve, reject),
 				onMerge: this.onPromiseMerge(resolve, reject)
