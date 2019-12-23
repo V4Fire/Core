@@ -15,24 +15,24 @@ export enum State {
 export type Value<T = unknown> = PromiseLike<T> | T;
 export type ExecutableValue<T = unknown> = (() => T) | Value<T>;
 
-export interface ResolveHandler<T = unknown> {
-	(value?: Value<T>): void;
+export interface ConstrResolveHandler<T = unknown> {
+	(value?: Value<T>): any;
 }
 
-export interface RejectHandler {
-	(reason?: unknown): void;
+export interface ConstrRejectHandler {
+	(reason?: unknown): any;
 }
 
-export interface AbortHandler {
-	(cb: RejectHandler): void;
+export interface ConstrAbortHandler {
+	(cb: ConstrRejectHandler): any;
 }
 
-export interface ThenFulfillHandler<V = unknown, R = V> {
+export interface Executor<T = unknown> {
+	(resolve: ConstrResolveHandler<T>, reject: ConstrRejectHandler, onAbort: ConstrAbortHandler): CanPromise<any>;
+}
+
+export interface ResolveHandler<V = unknown, R = V> {
 	(value: V): Value<R>;
 }
 
-export type ThenRejectHandler<T = unknown> = ThenFulfillHandler<unknown, T>;
-
-export interface Executor<T = unknown> {
-	(resolve: ResolveHandler<T>, reject: RejectHandler, onAbort: AbortHandler): void;
-}
+export type RejectHandler<T = unknown> = ResolveHandler<unknown, T>;

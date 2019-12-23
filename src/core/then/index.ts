@@ -206,17 +206,17 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	/**
 	 * A handler for resolving of the native promise
 	 */
-	protected onResolve!: i.ResolveHandler<T>;
+	protected onResolve!: i.ConstrResolveHandler<T>;
 
 	/**
 	 * A handler for rejecting of the native promise
 	 */
-	protected onReject!: i.RejectHandler;
+	protected onReject!: i.ConstrRejectHandler;
 
 	/**
 	 * A handler for rejecting of the native promise
 	 */
-	protected onAbort!: i.RejectHandler;
+	protected onAbort!: i.ConstrRejectHandler;
 
 	/**
 	 * @param executor - executor function
@@ -281,33 +281,33 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	 * @param [onAbort]
 	 */
 	then(
-		onFulfill?: Nullable<i.ThenFulfillHandler<T>>,
-		onReject?: Nullable<i.ThenRejectHandler<T>>,
-		onAbort?: Nullable<i.RejectHandler>
+		onFulfill?: Nullable<i.ResolveHandler<T>>,
+		onReject?: Nullable<i.RejectHandler<T>>,
+		onAbort?: Nullable<i.ConstrRejectHandler>
 	): Then<T>;
 
 	then<R>(
-		onFulfill: Nullable<i.ThenFulfillHandler<T>>,
-		onReject: i.ThenRejectHandler<R>,
-		onAbort?: Nullable<i.RejectHandler>
+		onFulfill: Nullable<i.ResolveHandler<T>>,
+		onReject: i.RejectHandler<R>,
+		onAbort?: Nullable<i.ConstrRejectHandler>
 	): Then<T | R>;
 
 	then<V>(
-		onFulfill: i.ThenFulfillHandler<T, V>,
-		onReject?: Nullable<i.ThenRejectHandler<V>>,
-		onAbort?: Nullable<i.RejectHandler>
+		onFulfill: i.ResolveHandler<T, V>,
+		onReject?: Nullable<i.RejectHandler<V>>,
+		onAbort?: Nullable<i.ConstrRejectHandler>
 	): Then<V>;
 
 	then<V, R>(
-		onFulfill: i.ThenFulfillHandler<T, V>,
-		onReject: i.ThenRejectHandler<R>,
-		onAbort?: Nullable<i.RejectHandler>
+		onFulfill: i.ResolveHandler<T, V>,
+		onReject: i.RejectHandler<R>,
+		onAbort?: Nullable<i.ConstrRejectHandler>
 	): Then<V | R>;
 
 	then(
-		onFulfill: Nullable<i.ThenFulfillHandler<any>>,
-		onReject: Nullable<i.ThenRejectHandler<any>>,
-		onAbort: Nullable<i.RejectHandler>
+		onFulfill: Nullable<i.ResolveHandler<any>>,
+		onReject: Nullable<i.RejectHandler<any>>,
+		onAbort: Nullable<i.ConstrRejectHandler>
 	): Then<any> {
 		this.pendingChildren++;
 		return new Then((res, rej, abort) => {
@@ -359,9 +359,9 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	 * Attaches a callback for only the rejection of the promise
 	 * @param [onReject]
 	 */
-	catch(onReject?: Nullable<i.ThenRejectHandler<T>>): Then<T>;
-	catch<R>(onReject: i.ThenRejectHandler<R>): Then<R>;
-	catch(onReject?: i.ThenRejectHandler<any>): Then<any> {
+	catch(onReject?: Nullable<i.RejectHandler<T>>): Then<T>;
+	catch<R>(onReject: i.RejectHandler<R>): Then<R>;
+	catch(onReject?: i.RejectHandler<any>): Then<any> {
 		return new Then((res, rej, onAbort) => {
 			let
 				reject;
@@ -428,7 +428,7 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	protected call<A = unknown, V = unknown>(
 		fn: Function,
 		args: A[] = [],
-		onError?: i.RejectHandler,
+		onError?: i.ConstrRejectHandler,
 		onValue?: (value: V) => void
 	): void {
 		const
