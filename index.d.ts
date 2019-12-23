@@ -172,6 +172,7 @@ interface ObjectConstructor {
 	isRegExp(obj: unknown): obj is RegExp;
 	isDate(obj: unknown): obj is Date;
 	isPromise(obj: unknown): obj is Promise<unknown>;
+	isPromiseLike(obj: unknown): obj is PromiseLike<unknown>;
 
 	isMap(obj: unknown): obj is Map<unknown, unknown>;
 	isWeakMap(obj: unknown): obj is WeakMap<object, unknown>;

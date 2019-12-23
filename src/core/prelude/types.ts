@@ -122,3 +122,16 @@ extend(Object, 'isPromise', (obj) => {
 
 	return false;
 });
+
+/**
+ * Returns true if the specified value is looks like a promise
+ * @param obj
+ */
+extend(Object, 'isPromiseLike', (obj) => {
+	if (obj) {
+		const v = <Dictionary>obj;
+		return typeof v.then === 'function';
+	}
+
+	return false;
+});

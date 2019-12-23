@@ -16,6 +16,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 #### :rocket: New Feature
 
 * Added deprecation API `core/meta/deprecation`
+* Added `Object.isPromiseLike`
 
 ## v3.0.0-beta.94 (2019-12-18)
 
