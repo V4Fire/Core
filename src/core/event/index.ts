@@ -61,7 +61,7 @@ export function resolveAfterDOMLoaded(): SyncPromise<void> {
  * @param cb
  * @param flags
  */
-export function createsAsyncSemaphore(cb: () => unknown, ...flags: string[]): (flag: string) => void {
+export function createsAsyncSemaphore<T>(cb: () => T, ...flags: string[]): (flag: string) => CanUndef<T> {
 	const
 		flagsStatus = Object.createDict();
 
@@ -89,6 +89,8 @@ export function createsAsyncSemaphore(cb: () => unknown, ...flags: string[]): (f
 		if (Object.isPromise(res)) {
 			res.catch(stderr);
 		}
+
+		return res;
 	};
 }
 
