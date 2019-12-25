@@ -13,5 +13,5 @@ export type SessionKey = Nullable<
 
 export interface Session {
 	auth: SessionKey;
-	csrf: SessionKey;
+	params?: Nullable<Dictionary>;
 }
