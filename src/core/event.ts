@@ -6,11 +6,13 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import SyncPromise from 'core/promise/sync';
+import { deprecate } from 'core/meta/deprecation';
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 
 /**
- * Returns a promise that will be resolved after the specified events from an event emitter
- * (optionally can takes a callback function, that will be executed immediately after the event)
+ * Returns a promise that will be resolved after emitting all events from the specified emitter
+ * (optionally can takes a callback function, that is invoked immediately after the event)
  *
  * @param emitter
  * @param cb
@@ -54,7 +56,7 @@ export function afterEvents(emitter: EventEmitter, cb: Function | string, ...eve
 
 /**
  * Returns a promise that will be resolved after DOMContentLoaded
- * (optionally can takes a callback function, that will be executed immediately after the event)
+ * (optionally can takes a callback function, that is invoked immediately after the event)
  *
  * @param [cb]
  */
@@ -115,25 +117,24 @@ export function onEverythingReady(cb: () => unknown, ...flags: string[]): (flag:
 /**
  * Creates a synchronous promise wrapper for the specified value
  *
+ * @deprecated
+ * @see SyncPromise
  * @param resolveValue
  * @param rejectValue
  */
-export function createSyncPromise<R = unknown>(resolveValue?: R, rejectValue?: unknown): Promise<R> {
-	return <any>{
-		then: (resolve, reject) => {
-			try {
-				if (rejectValue !== undefined) {
-					return createSyncPromise(undefined, reject ? reject(rejectValue) : rejectValue);
-				}
+export const createSyncPromise = deprecate(
+	{
+		alternative: {
+			name: 'SyncPromise',
+			source: 'core/promise/sync'
+		}
+	},
 
-				return createSyncPromise(resolve ? resolve(resolveValue) : resolveValue);
+	function createSyncPromise<R = unknown>(resolveValue?: R, rejectValue?: unknown): SyncPromise<R> {
+		if (rejectValue !== undefined) {
+			return SyncPromise.reject(rejectValue);
+		}
 
-			} catch (err) {
-				return createSyncPromise(undefined, reject ? reject(err) : err);
-			}
-		},
-
-		catch: (cb) => createSyncPromise(undefined, cb(rejectValue)),
-		finally: (cb) => createSyncPromise(cb())
-	};
-}
+		return SyncPromise.resolve<any>(resolveValue);
+	}
+);
