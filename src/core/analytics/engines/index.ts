@@ -7,7 +7,7 @@
  */
 
 /**
- * Sends an analytic event with the specified parameters
+ * Sends an analytic event with the specified details
  *
  * @abstract
  * @param event - event name

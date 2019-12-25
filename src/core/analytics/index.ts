@@ -9,7 +9,7 @@
 import sendAnalyticsEvent from 'core/analytics/engines';
 
 /**
- * Sends an analytic event with the specified parameters
+ * Sends an analytic event with the specified details
  *
  * @param event - event name
  * @param [details] - event details

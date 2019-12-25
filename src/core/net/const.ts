@@ -9,4 +9,10 @@
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 
 export const
-	event = new EventEmitter({newListener: false});
+	/**
+	 * The event emitter for broadcasting network events
+	 */
+	emitter = new EventEmitter({maxListeners: 100, newListener: false}),
+
+	/** @deprecated */
+	event = emitter;

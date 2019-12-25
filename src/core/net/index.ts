@@ -7,12 +7,8 @@
  */
 
 import config from 'config';
-
+import { emitter } from 'core/net/const';
 import { NetStatus } from 'core/net/interface';
-import { EventEmitter2 as EventEmitter } from 'eventemitter2';
-
-export const
-	event = new EventEmitter({newListener: false});
 
 const
 	{online} = config;
@@ -32,7 +28,7 @@ storage = import('core/kv-storage').then(({asyncLocal}) => asyncLocal.namespace(
 //#endif
 
 /**
- * If online returns true
+ * Returns true if a host has connection to the internet
  *
  * @emits online()
  * @emits offline(lastOnline: Date)
@@ -123,14 +119,14 @@ export function isOnline(): Promise<NetStatus> {
 
 		if (prevStatus === undefined || status !== prevStatus) {
 			if (status) {
-				event.emit('online', lastOnline);
+				emitter.emit('online', lastOnline);
 
 			} else {
-				event.emit('offline');
+				emitter.emit('offline');
 			}
 
 			updateDate();
-			event.emit('status', {status, lastOnline});
+			emitter.emit('status', {status, lastOnline});
 
 		} else if (status && syncTimer != null) {
 			if (online.lastDateSyncInterval) {
