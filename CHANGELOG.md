@@ -19,6 +19,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 * Added `Object.isPromiseLike`
 * Added `Then.prototype.finally`
 * Added `core/promise/sync` API (the function `core/event/createSyncPromise` was marked as deprecated)
+* Reviewed `core/event` API
 
 ## v3.0.0-beta.94 (2019-12-18)
 
@@ -28,7 +29,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 * Promise versions of the `Async` methods now returns a SyncPromise instance
 * Removed hardcode for `document.addEventListener` options within `Async` methods
 * Removed the legacy CSRF header from the session API
-* Added a new header the session API: it's can takes a dictionary with additional parameters  
+* Added a new header the session API: it's can takes a dictionary with additional parameters
 
 #### :rocket: New Feature
 
@@ -74,7 +75,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :bug: Bug Fix
 
-* Fixed `core/request/context/wrapAsResponse` 
+* Fixed `core/request/context/wrapAsResponse`
 
 ## v3.0.0-beta.88 (2019-11-12)
 
@@ -231,7 +232,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
   * Added `Number.prototype.isNatural`
   * Added `Number.prototype.isBetweenZeroAndOne`
   * Added `Number.prototype.isPositiveBetweenZeroAndOne`
-  
+
 #### :house: Internal
 
 * Updated dependencies: typescript@3.6.2
