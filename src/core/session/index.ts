@@ -8,7 +8,7 @@
 
 import session from 'core/session/engines';
 import { emitter } from 'core/session/const';
-import { Session, SessionKey } from 'core/session/interface';
+import { Session, SessionKey, SessionParams } from 'core/session/interface';
 export * from 'core/session/interface';
 
 /**
@@ -43,7 +43,7 @@ export async function get(): Promise<Session> {
  * @param [params] - additional parameters
  * @emits set(session: Session)
  */
-export async function set(auth?: SessionKey, params?: Dictionary): Promise<boolean> {
+export async function set(auth?: SessionKey, params?: SessionParams): Promise<boolean> {
 	try {
 		const
 			s = await session;
@@ -88,7 +88,7 @@ export async function clear(): Promise<boolean> {
  * @param [auth]
  * @param [params]
  */
-export async function match(auth?: SessionKey, params?: Dictionary): Promise<boolean> {
+export async function match(auth?: SessionKey, params?: SessionParams): Promise<boolean> {
 	try {
 		const s = await get();
 		return auth === s.auth && (params === undefined || Object.fastCompare(params, s.params));

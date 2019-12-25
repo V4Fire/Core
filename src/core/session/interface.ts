@@ -11,7 +11,11 @@ export type SessionKey = Nullable<
 	boolean
 >;
 
+export interface SessionParams extends Dictionary {
+	csrf?: string;
+}
+
 export interface Session {
 	auth: SessionKey;
-	params?: Nullable<Dictionary>;
+	params?: Nullable<SessionParams>;
 }
