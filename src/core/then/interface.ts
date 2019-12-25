@@ -36,3 +36,4 @@ export interface ResolveHandler<V = unknown, R = V> {
 }
 
 export type RejectHandler<T = unknown> = ResolveHandler<unknown, T>;
+export type FinallyHandler = () => void;

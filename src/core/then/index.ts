@@ -12,25 +12,25 @@ export * from 'core/then/interface';
 
 export default class Then<T = unknown> implements PromiseLike<T> {
 	/**
-	 * The promise that will be never resolved
+	 * The promise which is never resolved
 	 */
 	static readonly never: Promise<never> = new Promise(() => undefined);
 
 	/**
-	 * Returns true if the specified value is similar to a promise
+	 * Returns true if the specified value is looks like a promise
+	 *
+	 * @deprecated
+	 * @see Object.isPromiseLike
 	 * @param obj
 	 */
+	@deprecated({alternative: {name: 'Object.isPromiseLike', source: 'core/prelude/types'}})
 	static isThenable(obj: unknown): obj is PromiseLike<unknown> {
-		if (obj instanceof Object) {
-			return Object.isFunction((<Dictionary>obj).then);
-		}
-
-		return false;
+		return Object.isPromiseLike(obj);
 	}
 
 	/**
 	 * Creates a new resolved Then promise for the specified value.
-	 * If the resolved value is a function, it will be executed.
+	 * If the resolved value is a function, it will be invoked.
 	 * The result of the call will be provided as a value of the promise.
 	 *
 	 * @param value
@@ -69,7 +69,7 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 		}
 
 		return new Then((res, rej) => {
-			if (Then.isThenable(value)) {
+			if (Object.isPromiseLike(value)) {
 				value.then(res, rej);
 
 			} else {
@@ -96,6 +96,37 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	 * @param values
 	 * @param [parent] - parent promise
 	 */
+	// @ts-ignore
+	static all<T1, T2, T3, T4, T5>(
+		values: [i.Value<T1>, i.Value<T2>, i.Value<T3>, i.Value<T4>, i.Value<T5>],
+		parent?: Then
+	): Then<[T1, T2, T3, T4, T5]>;
+
+	static all<T1, T2, T3, T4>(
+		values: [i.Value<T1>, i.Value<T2>, i.Value<T3>, i.Value<T4>],
+		parent?: Then
+	): Then<[T1, T2, T3, T4]>;
+
+	static all<T1, T2, T3>(
+		values: [i.Value<T1>, i.Value<T2>, i.Value<T3>],
+		parent?: Then
+	): Then<[T1, T2, T3]>;
+
+	static all<T1, T2>(
+		values: [i.Value<T1>, i.Value<T2>],
+		parent?: Then
+	): Then<[T1, T2]>;
+
+	static all<T1>(
+		values: [i.Value<T1>],
+		parent?: Then
+	): Then<[T1]>;
+
+	static all<T extends Iterable<i.Value>>(
+		values: T,
+		parent?: Then
+	): Then<(T extends Iterable<i.Value<infer V>> ? V : unknown)[]>;
+
 	static all<T extends Iterable<i.Value>>(
 		values: T,
 		parent?: Then
@@ -391,6 +422,29 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	}
 
 	/**
+	 * Attaches a callback that is invoked when the promise is settled (fulfilled or rejected).
+	 * The resolved value cannot be modified from the callback.
+	 *
+	 * @param [cb]
+	 */
+	finally(cb?: Nullable<i.FinallyHandler>): Then<T> {
+		return new Then((res, rej, onAbort) => {
+			const
+				that = this;
+
+			onAbort(/** @this {Then} */ function (this: Then, reason: unknown): void {
+				this.aborted = true;
+
+				if (!that.abort(reason)) {
+					rej(reason);
+				}
+			});
+
+			this.promise.finally(cb).then(res, rej);
+		});
+	}
+
+	/**
 	 * Aborts the current promise (the promise will be rejected)
 	 * @param [reason] - abort reason
 	 */
@@ -440,7 +494,7 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 			const
 				v = fn(...args);
 
-			if (Object.isPromise(v)) {
+			if (Object.isPromiseLike(v)) {
 				v.then(<any>resolve, reject);
 
 			} else {
