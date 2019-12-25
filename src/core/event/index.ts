@@ -52,9 +52,7 @@ export function resolveAfterDOMLoaded(): SyncPromise<void> {
 }
 
 /**
- * Wraps a callback function into a new function that never calls
- * the target function until all specified flags are resolved.
- *
+ * Wraps a callback function into a new function that never calls the target until all specified flags are resolved.
  * The function returns a new function that takes a string flag and resolves it.
  * After all flags are resolved, the last function invokes the target function.
  *
