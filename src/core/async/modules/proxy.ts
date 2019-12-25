@@ -94,7 +94,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Wraps the specified function.
 	 * This method doesn't attach any hook or listeners to the object,
 	 * but if we cancel the operation using one of Async methods, like "cancelProxy",
-	 * the target function won't be executed.
+	 * the target function won't be invoked.
 	 *
 	 * @param cb
 	 * @param [opts] - additional options for the operation:

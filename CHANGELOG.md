@@ -25,6 +25,8 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 #### :boom: Breaking Change
 
 * Removed `core/thread`
+* Promise versions of the `Async` methods now returns a SyncPromise instance
+* Removed hardcode for `document.addEventListener` options within `Async` methods
 
 #### :rocket: New Feature
 

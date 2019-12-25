@@ -174,11 +174,11 @@ export interface AsyncWaitOptions extends AsyncOptions {
 }
 
 export interface AsyncOnOptions<CTX extends object = Async> extends AsyncCbOptionsSingle<CTX> {
-	options?: AddEventListenerOptions;
+	options?: Dictionary;
 }
 
 export interface AsyncOnceOptions<T extends object = Async> extends AsyncCbOptions<T> {
-	options?: AddEventListenerOptions;
+	options?: Dictionary;
 }
 
 export interface AsyncPromisifyOnceOptions<
@@ -187,7 +187,7 @@ export interface AsyncPromisifyOnceOptions<
 	CTX extends object = Async
 > extends AsyncOptions {
 	handler?: ProxyCb<E, R, CTX>;
-	options?: AddEventListenerOptions;
+	options?: Dictionary;
 }
 
 export interface AsyncWorkerOptions<CTX extends object = Async> extends AsyncProxyOptions<CTX> {

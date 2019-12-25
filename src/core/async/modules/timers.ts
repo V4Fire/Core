@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { createSyncPromise } from 'core/event';
+import SyncPromise from 'core/promise/sync';
 
 import * as i from 'core/async/interface';
 import Super from 'core/async/modules/proxy';
@@ -544,13 +544,13 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 *   *) [label] - label of the task (previous task with the same label will be canceled)
 	 *   *) [group] - group name of the task
 	 */
-	sleep(timeout: number, opts?: i.AsyncOptions): Promise<void> {
-		return new Promise((resolve, reject) => {
+	sleep(timeout: number, opts?: i.AsyncOptions): SyncPromise<void> {
+		return new SyncPromise((resolve, reject) => {
 			this.setTimeout(resolve, timeout, {
-				...<any>opts,
+				...opts,
 				promise: true,
-				onClear: this.onPromiseClear(resolve, reject),
-				onMerge: this.onPromiseMerge(resolve, reject)
+				onClear: <i.AsyncCb<CTX>>this.onPromiseClear(resolve, reject),
+				onMerge: <i.AsyncCb<CTX>>this.onPromiseMerge(resolve, reject)
 			});
 		});
 	}
@@ -566,13 +566,13 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 *   *) [label] - label of the task (previous task with the same label will be canceled)
 	 *   *) [group] - group name of the task
 	 */
-	nextTick(opts?: i.AsyncOptions): Promise<void> {
-		return new Promise((resolve, reject) => {
+	nextTick(opts?: i.AsyncOptions): SyncPromise<void> {
+		return new SyncPromise((resolve, reject) => {
 			this.setImmediate(resolve, {
-				...<any>opts,
+				...opts,
 				promise: true,
-				onClear: this.onPromiseClear(resolve, reject),
-				onMerge: this.onPromiseMerge(resolve, reject)
+				onClear: <i.AsyncCb<CTX>>this.onPromiseClear(resolve, reject),
+				onMerge: <i.AsyncCb<CTX>>this.onPromiseMerge(resolve, reject)
 			});
 		});
 	}
@@ -589,13 +589,13 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 *   *) [label] - label of the task (previous task with the same label will be canceled)
 	 *   *) [group] - group name of the task
 	 */
-	idle(opts?: i.AsyncIdleOptions): Promise<IdleDeadline> {
-		return new Promise((resolve, reject) => {
+	idle(opts?: i.AsyncIdleOptions): SyncPromise<IdleDeadline> {
+		return new SyncPromise((resolve, reject) => {
 			this.requestIdleCallback(resolve, {
-				...<any>opts,
+				...opts,
 				promise: true,
-				onClear: this.onPromiseClear(resolve, reject),
-				onMerge: this.onPromiseMerge(resolve, reject)
+				onClear: <i.AsyncCb<CTX>>this.onPromiseClear(resolve, reject),
+				onMerge: <i.AsyncCb<CTX>>this.onPromiseMerge(resolve, reject)
 			});
 		});
 	}
@@ -613,16 +613,16 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 *   *) [group] - group name of the task
 	 *   *) [delay] - delay in milliseconds
 	 */
-	wait(fn: Function, opts?: i.AsyncWaitOptions): Promise<boolean> {
+	wait(fn: Function, opts?: i.AsyncWaitOptions): SyncPromise<boolean> {
 		if (fn()) {
 			if (opts?.label) {
 				this.clearPromise(opts);
 			}
 
-			return createSyncPromise(true);
+			return SyncPromise.resolve(true);
 		}
 
-		return new Promise((resolve, reject) => {
+		return new SyncPromise((resolve, reject) => {
 			let
 				id;
 
@@ -634,10 +634,10 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			};
 
 			id = this.setInterval(cb, opts?.delay || 15, {
-				...<any>opts,
+				...opts,
 				promise: true,
-				onClear: this.onPromiseClear(resolve, reject),
-				onMerge: this.onPromiseMerge(resolve, reject)
+				onClear: <i.AsyncCb<CTX>>this.onPromiseClear(resolve, reject),
+				onMerge: <i.AsyncCb<CTX>>this.onPromiseMerge(resolve, reject)
 			});
 		});
 	}

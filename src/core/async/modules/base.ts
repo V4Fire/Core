@@ -423,7 +423,7 @@ export default class Async<CTX extends object = Async<any>> {
 			p = Object.isObject(task) ? {...task, name} : {name, id: task};
 
 		} else {
-			p = <i.FullClearOptions>task;
+			p = task || {};
 		}
 
 		const
@@ -585,7 +585,7 @@ export default class Async<CTX extends object = Async<any>> {
 			p = Object.isObject(task) ? {...task, name} : {name, id: task};
 
 		} else {
-			p = <i.FullClearOptions>task;
+			p = task || {};
 		}
 
 		const

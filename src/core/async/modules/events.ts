@@ -6,6 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import SyncPromise from 'core/promise/sync';
+
 import * as i from 'core/async/interface';
 import Super from 'core/async/modules/timers';
 export * from 'core/async/modules/timers';
@@ -20,10 +22,11 @@ export function isEvent(value: unknown): value is i.EventLike {
 
 export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	/**
-	 * Wraps an event from the specified event emitter
+	 * Wraps an event from the specified event emitter.
+	 * If the emitter is a function, it will be interpreted as a function for attaching events.
 	 *
 	 * @param emitter - event emitter
-	 * @param events - event or a list of events (can also specify multiple events with a space)
+	 * @param events - event or a list of events (can also specify multiple events using spaces)
 	 * @param handler - event handler
 	 * @param [args] - additional arguments for the emitter
 	 */
@@ -36,7 +39,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * @param emitter - event emitter
-	 * @param events - event or a list of events (can also specify multiple events with a space)
+	 * @param events - event or a list of events (can also specify multiple events using spaces)
 	 * @param handler - event handler
 	 * @param opts - options for the operation:
 	 *   *) [options] - additional options for the emitter
@@ -61,7 +64,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		emitter: i.EventEmitterLikeP,
 		events: CanArray<string>,
 		handler: i.ProxyCb<E, R, CTX>,
-		opts: i.AsyncOnOptions<CTX> | unknown[],
+		opts?: i.AsyncOnOptions<CTX> | unknown[],
 		...args: unknown[]
 	): Nullable<i.EventId> {
 		let
@@ -72,14 +75,13 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			p = {};
 
 		} else {
-			p = opts;
+			p = opts || {};
 		}
 
 		p = {...p};
 		events = Object.isArray(events) ? events : events.split(/\s+/);
 
 		if (p.options) {
-			p.single = p.options.once = 'single' in p ? p.single : p.options.once;
 			args.unshift(p.options);
 			p.options = undefined;
 		}
@@ -125,7 +127,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 						fn.call(emitter, event, handler, ...args);
 
 					} else {
-						throw new ReferenceError('Add event listener function for the event emitter is not defined');
+						throw new ReferenceError('A method for attaching events is not defined');
 					}
 
 					return {
@@ -153,9 +155,10 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	/**
 	 * Wraps an event from the specified event emitter.
 	 * The event will be listen only once.
+	 * If the emitter is a function, it will be interpreted as a function for attaching events.
 	 *
 	 * @param emitter - event emitter
-	 * @param events - event or a list of events (can also specify multiple events with a space)
+	 * @param events - event or a list of events (can also specify multiple events using spaces)
 	 * @param handler - event handler
 	 * @param [args] - additional arguments for the emitter
 	 */
@@ -192,7 +195,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		emitter: i.EventEmitterLikeP,
 		events: CanArray<string>,
 		handler: i.ProxyCb<E, R, CTX>,
-		opts: i.AsyncOnceOptions<CTX> | unknown[],
+		opts?: i.AsyncOnceOptions<CTX> | unknown[],
 		...args: unknown[]
 	): Nullable<i.EventId> {
 		let
@@ -203,14 +206,15 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			p = {};
 
 		} else {
-			p = opts;
+			p = opts || {};
 		}
 
 		return this.on(emitter, events, handler, {...p, single: true}, ...args);
 	}
 
 	/**
-	 * Returns a promise that will be resolved after the specified event
+	 * Returns a promise that will is resolved after emitting the specified event.
+	 * If the emitter is a function, it will be interpreted as a function for attaching events.
 	 *
 	 * @param emitter - event emitter
 	 * @param events - event or a list of events (can also specify multiple events with a space)
@@ -231,7 +235,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		events: CanArray<string>,
 		opts: i.AsyncPromisifyOnceOptions<E, R, CTX>,
 		...args: unknown[]
-	): Promise<R>;
+	): SyncPromise<R>;
 
 	/**
 	 * @param emitter - event emitter
@@ -242,14 +246,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		emitter: i.EventEmitterLikeP,
 		events: CanArray<string>,
 		...args: unknown[]
-	): Promise<R>;
+	): SyncPromise<R>;
 
 	promisifyOnce<R, E>(
 		emitter: i.EventEmitterLikeP,
 		events: CanArray<string>,
-		opts: any,
+		opts?: i.AsyncPromisifyOnceOptions<E, R, CTX> | unknown[],
 		...args: unknown[]
-	): Promise<R> {
+	): SyncPromise<R> {
 		let
 			p: i.AsyncPromisifyOnceOptions<E, R, CTX>;
 
@@ -258,10 +262,10 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			p = {};
 
 		} else {
-			p = opts;
+			p = opts || {};
 		}
 
-		return new Promise((resolve, reject) => {
+		return new SyncPromise((resolve, reject) => {
 			const handler = (e) => {
 				if (p && Object.isFunction(p.handler)) {
 					return resolve(p.handler.call(this.ctx, e));
