@@ -138,7 +138,7 @@ export function deprecate<T extends Function>(
 }
 
 /**
- * Decorator for the "deprecate" function.
+ * A decorator for the "deprecate" function.
  * Can be used with providing additional parameters or within their.
  *
  * @decorator
