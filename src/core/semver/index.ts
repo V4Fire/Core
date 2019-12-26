@@ -6,21 +6,10 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-export type Operations =
-	'>' |
-	'>=' |
-	'<' |
-	'<=' |
-	'==' |
-	'^=';
+import { Operation } from 'core/semver/interface';
+export * from 'core/semver/interface';
 
-export type Strategies =
-	'eq' |
-	'fullEq' |
-	'fromEq' |
-	'default';
-
-const compares: Record<Operations, (a: number, b: number) => boolean> = {
+const operations: Record<Operation, (a: number, b: number) => boolean> = {
 	'>': (a, b) => a > b,
 	'>=': (a, b) => a >= b,
 	'<': (a, b) => a < b,
@@ -34,11 +23,11 @@ const
 	inequalityRgxp = /[><]/;
 
 /**
- * Compares version strings via a comparator
+ * Compares two strings with number versions using the semver strategy
  *
  * @param a
  * @param b
- * @param comparator
+ * @param operation - operation type
  *
  * @example
  * console.log(check('1.4.1', '1.5.2', '>'))  // false
@@ -46,9 +35,9 @@ const
  * console.log(check('2.4.1', '2.4', '<='))   // true
  * console.log(check('2.4', '2.4.2', '^='))   // true
  */
-export default function (a: string, b: string, comparator: Operations): boolean {
-	if (!compares[comparator]) {
-		throw new TypeError(`Unknown comparator: ${comparator}. Only ${Object.keys(compares).join(', ')} available`);
+export default function (a: string, b: string, operation: Operation): boolean {
+	if (!operations[operation]) {
+		throw new TypeError(`Unknown comparator: ${operation}. Only ${Object.keys(operations).join(', ')} available`);
 	}
 
 	const
@@ -61,13 +50,13 @@ export default function (a: string, b: string, comparator: Operations): boolean 
 		strategy = 'default';
 
 	const
-		match = comparator.match(compareRgxp);
+		match = operation.match(compareRgxp);
 
 	if (match) {
 		if (match.index === 1) {
 			strategy = 'eq';
 
-		} else if (match[0] === comparator) {
+		} else if (match[0] === operation) {
 			strategy = 'fromEq';
 
 		} else if (match.index === 0) {
@@ -100,12 +89,12 @@ export default function (a: string, b: string, comparator: Operations): boolean 
 			cNum = parseInt(c, 10),
 			tNum = parseInt(t, 10);
 
-		if (inequalityRgxp.test(comparator)) {
+		if (inequalityRgxp.test(operation)) {
 			cNum = c === '*' ? 0 : cNum;
 			tNum = t === '*' ? 0 : tNum;
 		}
 
-		res = compares[comparator](
+		res = operations[operation](
 			cNum,
 			tNum
 		);
