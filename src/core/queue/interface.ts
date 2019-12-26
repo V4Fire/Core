@@ -17,39 +17,40 @@ export interface QueueOptions {
 
 export default abstract class Queue<T, V = unknown> {
 	/**
-	 * Queue head
+	 * The queue head
 	 */
 	head: CanUndef<T>;
 
 	/**
-	 * Task status refresh interval
+	 * A value of the task status refresh interval
+	 * (in milliseconds)
 	 */
 	interval: number;
 
 	/**
-	 * Maximum number of concurrent workers
+	 * The maximum number of concurrent workers
 	 */
 	concurrency: number;
 
 	/**
-	 * Number of active workers
+	 * The number of active workers
 	 */
 	activeWorkers: number = 0;
 
 	/**
-	 * Queue length
+	 * The queue length
 	 */
 	get length(): number {
 		return this.tasks.length;
 	}
 
 	/**
-	 * Worker constructor
+	 * A worker constructor
 	 */
 	protected worker: QueueWorker<T, V>;
 
 	/**
-	 * Task queue
+	 * The task queue
 	 */
 	protected tasks: unknown[] = [];
 
@@ -65,13 +66,13 @@ export default abstract class Queue<T, V = unknown> {
 	}
 
 	/**
-	 * Adds the specified task to the queue
+	 * Adds a task to the queue
 	 * @param task
 	 */
 	abstract push(task: T): unknown;
 
 	/**
-	 * Removes the head task from the queue and returns it
+	 * Removes a head task from the queue and returns it
 	 */
 	shift(): CanUndef<T> {
 		const {head} = this;
@@ -88,12 +89,12 @@ export default abstract class Queue<T, V = unknown> {
 	}
 
 	/**
-	 * Executes a chunk of tasks from the queue
+	 * Executes a task chunk from the queue
 	 */
 	protected abstract perform(): unknown;
 
 	/**
-	 * Executes a chunk of tasks from the queue
+	 * Executes a task chunk from the queue
 	 * (deferred version)
 	 */
 	protected deferPerform(): Promise<unknown> {

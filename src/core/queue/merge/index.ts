@@ -6,21 +6,9 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import Queue, { QueueWorker, QueueOptions as BaseQueueOptions } from 'core/queue/interface';
-
-export interface HashFn<T> {
-	(task: T): string;
-}
-
-export interface QueueOptions<T> extends BaseQueueOptions {
-	hashFn?: HashFn<T>;
-}
-
-export interface TaskObject<T = unknown, V = unknown> {
-	task: T;
-	promise: Promise<V>;
-	resolve(res: CanPromise<V>): void;
-}
+import Queue from 'core/queue/interface';
+import { QueueWorker, QueueOptions, Task, HashFn } from 'core/queue/merge/interface';
+export * from 'core/queue/merge/interface';
 
 export default class MergeQueue<T, V = unknown> extends Queue<T, V> {
 	/** @override */
@@ -37,12 +25,12 @@ export default class MergeQueue<T, V = unknown> extends Queue<T, V> {
 	protected tasks!: string[];
 
 	/**
-	 * Map of tasks
+	 * The map of registered tasks
 	 */
-	private tasksMap: Dictionary<TaskObject<T, V>> = Object.createDict();
+	private tasksMap: Dictionary<Task<T, V>> = Object.createDict();
 
 	/**
-	 * Merge hash function
+	 * The task hash function
 	 */
 	private readonly hashFn: HashFn<T>;
 
@@ -129,7 +117,7 @@ export default class MergeQueue<T, V = unknown> extends Queue<T, V> {
 	}
 
 	/**
-	 * Provides a task result to a promise resolve function
+	 * Provides a task result to the specified promise resolve function
 	 *
 	 * @param task
 	 * @param resolve
