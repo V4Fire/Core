@@ -6,30 +6,33 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-export default class Range<T extends string | number | Date> {
+import { RangeValue, RangeType } from 'core/range/interface';
+export * from 'core/range/interface';
+
+export default class Range<T extends RangeValue> {
 	/**
-	 * Bottom bound
+	 * The bottom bound
 	 */
 	start: number;
 
 	/**
-	 * Top bound
+	 * The top bound
 	 */
 	end: number;
 
 	/**
-	 * Range type
+	 * The range type
 	 */
-	type: 'number' | 'string' | 'date';
+	type: RangeType;
 
 	/**
-	 * Range reverse status
+	 * True if the range is reversed
 	 */
 	reverse: boolean = false;
 
 	/**
-	 * @param start
-	 * @param end
+	 * @param start - start position
+	 * @param end - end position
 	 */
 	constructor(start: T, end: T) {
 		if (Object.isString(start)) {
@@ -57,8 +60,8 @@ export default class Range<T extends string | number | Date> {
 	}
 
 	/**
-	 * Returns true if the specified element is contained inside the range.
-	 * (element may be a value or an another range)
+	 * Returns true if the specified element is contained inside the range
+	 * (the element can be a simple value or another range)
 	 *
 	 * @param el
 	 */
@@ -73,7 +76,7 @@ export default class Range<T extends string | number | Date> {
 
 	/**
 	 * Returns a new range with the latest starting point as its start, and the earliest ending point as its end.
-	 * If the two ranges do not intersect this will effectively produce an invalid range
+	 * If the two ranges do not intersect this will effectively produce an invalid range.
 	 *
 	 * @param range
 	 */
@@ -89,7 +92,7 @@ export default class Range<T extends string | number | Date> {
 
 	/**
 	 * Returns a new range with the earliest starting point as its start, and the latest ending point as its end.
-	 * If the two ranges do not intersect this will effectively remove the "gap" between them
+	 * If the two ranges do not intersect this will effectively remove the "gap" between them.
 	 *
 	 * @param range
 	 */
@@ -142,7 +145,7 @@ export default class Range<T extends string | number | Date> {
 	/**
 	 * Returns a span of the range.
 	 * If the range is a date range, the value is in milliseconds.
-	 * The span includes both the start and the end
+	 * The span includes both the start and the end.
 	 */
 	span(): number {
 		if (!this.isValid()) {
@@ -189,8 +192,9 @@ export default class Range<T extends string | number | Date> {
 
 	/**
 	 * Creates a string from the range and returns it
+	 * @param [step] - iteration step value
 	 */
-	toString(): string {
+	toString(step: number = 1): string {
 		if (!this.isValid()) {
 			return 'Invalid range';
 		}
@@ -203,7 +207,7 @@ export default class Range<T extends string | number | Date> {
 			chunks.push(this.end);
 		}
 
-		for (let i = 0; i < chunks.length; i++) {
+		for (let i = 0; i < chunks.length; i += step) {
 			res.push(this.toType(chunks[i]));
 		}
 
@@ -217,7 +221,7 @@ export default class Range<T extends string | number | Date> {
 	//#endif
 
 	/**
-	 * Converts a value to a real range type
+	 * Converts a value to the real range type
 	 * @param val
 	 */
 	protected toType(val: number): T {
