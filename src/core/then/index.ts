@@ -39,7 +39,7 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	static resolveAndCall<T = unknown>(value: i.ExecutableValue<T>, parent?: Then): Then<T>;
 	static resolveAndCall(): Then<void>;
 	static resolveAndCall<T = unknown>(value?: i.ExecutableValue<T>, parent?: Then): Then<T> {
-		return Then.resolve(value, parent).then((obj) => Object.isFunction(obj) ? (<Function>obj)() : obj);
+		return Then.resolve(value, parent).then<T>((obj) => Object.isFunction(obj) ? obj() : obj);
 	}
 
 	/**
@@ -440,7 +440,7 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 				}
 			});
 
-			this.promise.finally(cb).then(resolve, reject);
+			this.promise.finally(() => cb && cb()).then(resolve, reject);
 		});
 	}
 
