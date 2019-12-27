@@ -11,5 +11,8 @@ import extend from 'core/prelude/extend';
 const
 	escapeRgxp = /([\\\/'*+?|()\[\]{}.^$-])/g;
 
-/** @see Sugar.RegExp.escape */
-extend(RegExp, 'escape', (pattern: unknown) => String(pattern).replace(escapeRgxp, '\\$1'));
+/**
+ * Returns the specified value as a string with escaping of all RegExp specific characters
+ * @param value
+ */
+extend(RegExp, 'escape', (value: unknown) => String(value).replace(escapeRgxp, '\\$1'));

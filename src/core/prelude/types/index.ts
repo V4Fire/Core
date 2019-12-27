@@ -8,7 +8,10 @@
 
 import extend from 'core/prelude/extend';
 
-/** @see Sugar.Object.isObject */
+/**
+ * Returns true if the specified value is an object
+ * @param obj
+ */
 extend(Object, 'isObject', (obj) => {
 	if (!obj || typeof obj !== 'object') {
 		return false;
@@ -18,25 +21,58 @@ extend(Object, 'isObject', (obj) => {
 	return !constr || constr === Object;
 });
 
-/** @see Sugar.Object.isArray */
+/**
+ * Returns true if the specified value is an array
+ * @param obj
+ */
 extend(Object, 'isArray', Array.isArray);
 
-/** @see Sugar.Object.isFunction */
+/**
+ * Returns true if the specified value is looks like an array
+ * @param obj
+ */
+extend(Object, 'isArrayLike', (obj) => {
+	if (!obj) {
+		return false;
+	}
+
+	return Array.isArray(obj) || (obj.length > 0 && 0 in obj) || obj.length === 0;
+});
+
+/**
+ * Returns true if the specified value is a function
+ * @param obj
+ */
 extend(Object, 'isFunction', (obj) => typeof obj === 'function');
 
-/** @see Sugar.Object.isRegExp */
+/**
+ * Returns true if the specified value is a regular expression
+ * @param obj
+ */
 extend(Object, 'isRegExp', (obj) => obj instanceof RegExp);
 
-/** @see Sugar.Object.isDate */
+/**
+ * Returns true if the specified value is a date
+ * @param obj
+ */
 extend(Object, 'isDate', (obj) => obj instanceof Date);
 
-/** @see Sugar.Object.isString */
+/**
+ * Returns true if the specified value is a string
+ * @param obj
+ */
 extend(Object, 'isString', (obj) => typeof obj === 'string');
 
-/** @see Sugar.Object.isNumber */
+/**
+ * Returns true if the specified value is a number
+ * @param obj
+ */
 extend(Object, 'isNumber', (obj) => typeof obj === 'number');
 
-/** @see Sugar.Object.isBoolean */
+/**
+ * Returns true if the specified value is a boolean
+ * @param obj
+ */
 extend(Object, 'isBoolean', (obj) => typeof obj === 'boolean');
 
 /**
@@ -70,18 +106,6 @@ extend(Object, 'isSet', (obj) => obj instanceof Set);
 extend(Object, 'isWeakSet', (obj) => obj instanceof WeakSet);
 
 /**
- * Returns true if the specified value is an array or like an array
- * @param obj
- */
-extend(Object, 'isArrayLike', (obj) => {
-	if (!obj) {
-		return false;
-	}
-
-	return Array.isArray(obj) || (obj.length > 0 && 0 in obj) || obj.length === 0;
-});
-
-/**
  * Returns true if the specified value is a generator
  * @param obj
  */
@@ -104,7 +128,7 @@ const
 	toString = Object.prototype.toString;
 
 /**
- * Returns true if the specified value is a HashTable object
+ * Returns true if the specified value is a hash table object
  * @param obj
  */
 extend(Object, 'isSimpleObject', (obj) =>

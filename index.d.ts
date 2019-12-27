@@ -197,13 +197,34 @@ interface String {
 	underscore(stable?: boolean): string;
 }
 
-type NumberOptions =
+type NumberOption =
 	'decimal' |
 	'thousands';
 
 interface NumberConstructor {
-	getOption(key: NumberOptions): string;
-	setOption(key: NumberOptions, value: string): string;
+	getOption(key: NumberOption): string;
+	setOption(key: NumberOption, value: string): string;
+	isInteger(obj: unknown): boolean;
+	isFloat(obj: unknown): boolean;
+	isEven(obj: unknown): boolean;
+	isOdd(obj: unknown): boolean;
+	isPositive(obj: unknown): boolean;
+	isNegative(obj: unknown): boolean;
+	isNonNegative(obj: unknown): boolean;
+	isNatural(obj: unknown): boolean;
+	isBetweenZeroAndOne(obj: unknown): boolean;
+	isPositiveBetweenZeroAndOne(obj: unknown): boolean;
+}
+
+interface NumberPadOptions {
+	base?: number;
+	sign?: boolean;
+}
+
+interface NumberFormatOptions {
+	decimalLength?: boolean;
+	decimal?: string;
+	thousands?: string;
 }
 
 interface Number {
@@ -239,7 +260,7 @@ interface Number {
 	isBetweenZeroAndOne(): boolean;
 	isPositiveBetweenZeroAndOne(): boolean;
 
-	pad(place?: number, sign?: boolean, base?: number): string;
+	pad(targetLength?: number, opts?: NumberPadOptions): string;
 	format(place?: number): string;
 
 	floor(precision?: number): number;
@@ -248,7 +269,7 @@ interface Number {
 }
 
 interface RegExpConstructor {
-	escape(pattern: string): string;
+	escape(value: string): string;
 }
 
 type DateCreateValue =

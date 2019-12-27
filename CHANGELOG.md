@@ -21,6 +21,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 * Removed the legacy CSRF header from the session API
 * Added a new header the session API: it's can takes a dictionary with additional parameters
 * Removed `json/setJSONToUTC`
+* Changed signature of `Number.prototype.pad`
 
 #### :rocket: New Feature
 
@@ -29,6 +30,8 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 * Added `Then.prototype.finally`
 * Added `core/promise/sync` API (the function `core/event/createSyncPromise` was marked as deprecated)
 * Reviewed `core/event` API
+* Improved `Number.prototype.format`
+* Added a bunch of new functions to `Number` from `Number.prototype`
 
 ## v3.0.0-beta.94 (2019-12-18)
 

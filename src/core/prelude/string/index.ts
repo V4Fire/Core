@@ -17,10 +17,10 @@ const
 //#if runtime has prelude/string/capitalize
 
 /**
- * Capitalizes the first character of the string
+ * Capitalizes the first character of a string and returns it
  *
- * @param [lower] - if is true, the remainder of the string will be downcased
- * @param [all] - if is true, all words in the string will be capitalized.
+ * @param [lower] - if is true, the remainder of the string will be transformed to the lower case
+ * @param [all] - if is true, all words in the string will be capitalized
  */
 extend(String.prototype, 'capitalize', function (
 	this: string,
@@ -59,7 +59,10 @@ const
 	normalizeRgxp = /(^[\s_-]+)|([\s_-]+$)|([\s_-]+)/g,
 	camelizeRgxp = /(^[\s_-]+)|([\s_-]+$)|[\s_-]+([^\s-]|$)/g;
 
-/** @see Sugar.String.camelize */
+/**
+ * Returns a CamelCaseStyle version of the specified string
+ * @param [upper] - if false, then the first character of the string will be transformed to the lower case
+ */
 extend(String.prototype, 'camelize', function (this: string, upper: boolean = true): string {
 	const
 		str = this.toString(),
@@ -81,7 +84,7 @@ extend(String.prototype, 'camelize', function (this: string, upper: boolean = tr
 });
 
 /**
- * Returns dasherize version of the specified string
+ * Returns a dash-style version of the specified string
  * @param [stable] - if true, then the operation can be reverted
  */
 extend(String.prototype, 'dasherize', function (this: string, stable?: boolean): string {
@@ -104,7 +107,7 @@ extend(String.prototype, 'dasherize', function (this: string, stable?: boolean):
 //#if runtime has prelude/string/underscore
 
 /**
- * Returns underscore version of the specified string
+ * Returns an underscore_style version of the specified string
  * @param [stable] - if true, then the operation can be reverted
  */
 extend(String.prototype, 'underscore', function (this: string, stable?: boolean): string {

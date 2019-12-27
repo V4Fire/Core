@@ -25,7 +25,7 @@ const
  *
  *   *) [withProto = false] - if true, then properties will be copied with prototypes
  *   *) [concatArray = false] - if true, then array properties will be concatenated
- *        (only if extending by an another array)
+ *        (only if extending by another array)
  *
  *   *) [concatFn = Array.prototype.concat] - function that will be concatenate arrays
  *   *) [extendFilter] - function that will be filtering values for deep extending

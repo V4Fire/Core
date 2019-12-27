@@ -21,7 +21,12 @@ if (typeof globalThis === 'undefined') {
 }
 
 /**
- * True if NodeJS runtime
+ * True if the current runtime has window object
+ */
+export const HAS_WINDOW: boolean = typeof window === 'object';
+
+/**
+ * True if the current runtime is looks like node.js
  */
 export const IS_NODE: boolean = (() => {
 	try {
@@ -37,11 +42,6 @@ export const IS_NODE: boolean = (() => {
 	}
 })();
 
-/**
- * True if the current runtime has window object
- */
-export const HAS_WINDOW: boolean = typeof window === 'object';
-
 export const
 	event = new EventEmitter({maxListeners: 1e3, newListener: false});
 
@@ -56,7 +56,7 @@ storage = import('core/kv-storage').then(({asyncLocal}) => asyncLocal.namespace(
 //#endif
 
 /**
- * Returns settings from the app environment by the specified key
+ * Returns settings from the application environment by the specified key
  * @param key
  */
 export async function get(key: string): Promise<CanUndef<Dictionary>> {
@@ -68,7 +68,7 @@ export async function get(key: string): Promise<CanUndef<Dictionary>> {
 }
 
 /**
- * Added settings to the app environment by the specified key
+ * Added settings to the application environment by the specified key
  *
  * @param key
  * @param value
@@ -85,7 +85,7 @@ export function set(key: string, value: Dictionary): void {
 }
 
 /**
- * Removes settings from the app environment by the specified key
+ * Removes settings from the application environment by the specified key
  * @param key
  */
 export function remove(key: string): void {
