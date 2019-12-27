@@ -15,7 +15,7 @@ export function isEmptyValue(value: unknown): boolean {
 }
 
 /**
- * Returns a value without translation instead the standard i18n behaviour
+ * Returns a value without internalizing instead the standard i18n behaviour
  * @param value
  */
 export function noi18n(value: string): string {

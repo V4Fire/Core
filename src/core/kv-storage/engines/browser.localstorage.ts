@@ -8,7 +8,9 @@
 
 export let
 	syncLocalStorage,
-	asyncLocalStorage,
+	asyncLocalStorage;
+
+export const
 	syncSessionStorage = globalThis.sessionStorage,
 	asyncSessionStorage = globalThis.sessionStorage;
 
