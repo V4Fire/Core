@@ -12,19 +12,19 @@ export interface ClearFilter<V = unknown, K = string> {
 
 export default interface Cache<V = unknown, K = string> {
 	/**
-	 * Returns true if in a cache exists a value by the specified key
+	 * Returns true if a value by the specified key exists in the cache
 	 * @param key
 	 */
 	has(key: K): boolean;
 
 	/**
-	 * Returns a value from a cache by the specified key
+	 * Returns a value from the cache by the specified key
 	 * @param key
 	 */
 	get(key: K): CanUndef<V>;
 
 	/**
-	 * Saves a value to a cache by the specified key
+	 * Saves a value to the cache by the specified key
 	 *
 	 * @param key
 	 * @param value
@@ -32,19 +32,19 @@ export default interface Cache<V = unknown, K = string> {
 	set(key: K, value: V): V;
 
 	/**
-	 * Removes a value from a cache by the specified key
+	 * Removes a value from the cache by the specified key
 	 * @param key
 	 */
 	remove(key: K): CanUndef<V>;
 
 	/**
-	 * Returns an iterator with cache keys
+	 * Returns an iterator by the cache keys
 	 */
 	keys(): Iterator<K>;
 
 	/**
-	 * Clears a cache by the specified filter and returns a list of the removed keys
-	 * @param [filter] - filter for removing (if not defined, then the cache will be cleared)
+	 * Clears the cache by the specified filter and returns a list of removed keys
+	 * @param [filter] - filter for removing (if not specified, then all cache values will be removed)
 	 */
 	clear(filter?: ClearFilter<V, K>): Set<K>;
 }

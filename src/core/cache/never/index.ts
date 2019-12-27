@@ -11,7 +11,7 @@ export * from 'core/cache/interface';
 
 export default class NeverCache<V = unknown, K = string> implements Cache<V, K> {
 	/**
-	 * Cache object
+	 * The cache object
 	 */
 	protected readonly storage: Map<K, V> = new Map();
 

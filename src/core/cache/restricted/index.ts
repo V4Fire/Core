@@ -11,18 +11,18 @@ export * from 'core/cache/simple';
 
 export default class RestrictedCache<V = unknown, K = string> extends SimpleCache<V, K> {
 	/**
-	 * Queue object
+	 * The queue object
 	 */
 	protected readonly queue: Set<K> = new Set();
 
 	/**
-	 * Number of maximum records in a cache
+	 * The number of maximum records in the cache
 	 */
 	protected max: number = 20;
 
 	/**
 	 * @override
-	 * @param [max] - number of maximum records in a cache
+	 * @param [max] - number of maximum records in the cache
 	 */
 	constructor(max?: number) {
 		super();
