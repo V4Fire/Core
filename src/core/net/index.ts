@@ -10,6 +10,9 @@ import config from 'config';
 import { emitter } from 'core/net/const';
 import { NetStatus } from 'core/net/interface';
 
+export * from 'core/net/const';
+export * from 'core/net/interface';
+
 const
 	{online} = config;
 

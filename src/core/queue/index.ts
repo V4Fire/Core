@@ -6,4 +6,5 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+export * from 'core/queue/interface';
 export { default as Merge } from 'core/queue/merge';

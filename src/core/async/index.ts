@@ -6,5 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+export * from 'core/async/const';
+export * from 'core/async/interface';
 export * from 'core/async/modules/events';
 export { default } from 'core/async/modules/events';

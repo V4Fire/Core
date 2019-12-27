@@ -7,8 +7,11 @@
  */
 
 import session from 'core/session/engines';
+
 import { emitter } from 'core/session/const';
 import { Session, SessionKey, SessionParams } from 'core/session/interface';
+
+export * from 'core/session/const';
 export * from 'core/session/interface';
 
 /**
