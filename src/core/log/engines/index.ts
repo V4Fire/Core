@@ -7,14 +7,14 @@
  */
 
 import { ConsoleEngine } from 'core/log/engines/console';
-import { LogEngine, LogEngineConstructor } from 'core/log/engines/types';
+import { LogEngine, LogEngineConstructor } from 'core/log/engines/interface.js';
 
 export { extend, Extended } from 'core/log/base';
-export * from 'core/log/engines/types';
+export * from 'core/log/engines/interface.js';
 
 /**
- * Returns a function that creates engine of specified class
- * @param ctor - a constructor or just a class
+ * Returns a function that creates an engine of the specified class
+ * @param ctor - constructor or just a class
  */
 export function creatorFor<T extends LogEngine>(ctor: LogEngineConstructor<T>): (opts?: Dictionary) => T {
 	return (opts?: Dictionary) => new ctor(opts);

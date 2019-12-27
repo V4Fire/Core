@@ -26,7 +26,7 @@ export class LogPipeline {
 	}
 
 	/**
-	 * Carries events through the chain of middlewares and passes them to the engine in the end
+	 * Carries events through a chain of middlewares and passes them to the engine in the end
 	 * @param events
 	 */
 	run(events: CanArray<LogEvent>): void {
@@ -68,7 +68,7 @@ export class LogPipeline {
 		this.middlewareIndex++;
 		if (this.middlewareIndex < this.middlewares.length) {
 			if (!this.middlewares[this.middlewareIndex]) {
-				throw new Error(`Can't find middleware at index [${this.middlewareIndex}]`);
+				throw new ReferenceError(`Can't find a middleware at the index [${this.middlewareIndex}]`);
 			}
 
 			this.middlewares[this.middlewareIndex].exec(events, this.nextCallback);

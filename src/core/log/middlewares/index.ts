@@ -7,14 +7,14 @@
  */
 
 import { ConfigurableMiddleware } from 'core/log/middlewares/configurable';
-import { LogMiddleware } from 'core/log/middlewares/types';
+import { LogMiddleware } from 'core/log/middlewares/interface';
 
 export { extend, Extended } from 'core/log/base';
-export * from 'core/log/middlewares/types';
+export * from 'core/log/middlewares/interface';
 
 /**
- * Returns a function that creates middleware of specified class
- * @param ctor - a constructor or just a class
+ * Returns a function that creates a middleware of the specified class
+ * @param ctor - constructor or just a class
  */
 export function creatorFor<T extends LogMiddleware>(ctor: new () => T): () => T {
 	return () => new ctor();

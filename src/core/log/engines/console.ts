@@ -8,7 +8,7 @@
 
 import { createStyleCache } from 'core/log/config/styles';
 import { LogLevel } from 'core/log/interface';
-import { LogEngine } from 'core/log/engines/types';
+import { LogEngine } from 'core/log/engines/interface.js';
 import { LogEvent } from 'core/log/middlewares';
 import { LogStylesConfig, StylesCache } from 'core/log/config';
 
@@ -47,8 +47,8 @@ export class ConsoleEngine implements LogEngine {
 	}
 
 	/**
-	 * Returns a string representing style for the specific logLevel
-	 * @param logLevel - level of log which needs a style
+	 * Returns a string representing of a style for the specified log level
+	 * @param logLevel - level of logging which needs a style
 	 */
 	protected getStringifiedStyle(logLevel: LogLevel): string {
 		//#if runtime has core/log

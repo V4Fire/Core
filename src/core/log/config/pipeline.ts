@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { LogPipelineConfig } from 'core/log/config/types';
+import { LogPipelineConfig } from 'core/log/config/interface.js';
 import { LogPipeline } from 'core/log/curator/pipeline';
 import { DEFAULT_LEVEL } from 'core/log/base';
 
@@ -14,7 +14,7 @@ import middlewareFactory, { LogMiddleware } from 'core/log/middlewares';
 import engineFactory from 'core/log/engines';
 
 /**
- * Creates a pipeline using config
+ * Creates a pipeline using the config
  * (returns undefined if there are not enough data to create one)
  *
  * @param pipelineConfig
@@ -28,14 +28,14 @@ export function createPipeline(pipelineConfig: LogPipelineConfig): CanUndef<LogP
 	if (middlewares) {
 		for (let i = 0; i < middlewares.length; ++i) {
 			if (!middlewareFactory[middlewares[i]]) {
-				console.error(`Can't find middleware '${middlewares[i]}'`);
+				console.error(`Can't find the middleware "${middlewares[i]}"`);
 				return;
 			}
 		}
 	}
 
 	if (!engineFactory[engine]) {
-		console.error(`Can't find engine '${engine}'`);
+		console.error(`Can't find the engine "${engine}"`);
 		return;
 	}
 

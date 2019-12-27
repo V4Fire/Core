@@ -8,4 +8,4 @@
 
 export { default as extend } from 'core/log/base/extend';
 export { cmpLevels, DEFAULT_LEVEL } from 'core/log/base/level';
-export * from 'core/log/base/types';
+export * from 'core/log/base/interface';
