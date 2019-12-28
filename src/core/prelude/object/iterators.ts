@@ -16,8 +16,9 @@ const
  *
  * @param obj
  * @param cb
+ * @param [opts]
  */
-extend(Object, 'forEach', (obj: any, cb: Function, params: ObjectForEachOptions = {}) => {
+extend(Object, 'forEach', (obj: any, cb: Function, opts?: ObjectForEachOptions) => {
 	if (!obj) {
 		return;
 	}
@@ -43,20 +44,25 @@ extend(Object, 'forEach', (obj: any, cb: Function, params: ObjectForEachOptions 
 		return;
 	}
 
-	if (Object.isSimpleObject(obj) || !obj[Symbol.iterator]) {
-		if (params.notOwn) {
+	if (
+		Object.isSimpleObject(obj) ||
+		!obj[Symbol.iterator] ||
+		opts?.notOwn !== undefined ||
+		opts?.withDescriptor !== undefined
+	) {
+		if (opts?.notOwn) {
 			for (const key in obj) {
-				if (params.notOwn === -1 && hasOwnProperty.call(obj, key)) {
+				if (opts?.notOwn === -1 && hasOwnProperty.call(obj, key)) {
 					continue;
 				}
 
-				cb(params.withDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : obj[key], key, obj);
+				cb(opts?.withDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : obj[key], key, obj);
 			}
 
 		} else {
 			for (let keys = Object.keys(obj), i = 0; i < keys.length; i++) {
 				const key = keys[i];
-				cb(params.withDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : obj[key], key, obj);
+				cb(opts?.withDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : obj[key], key, obj);
 			}
 		}
 

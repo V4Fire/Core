@@ -74,17 +74,26 @@ interface ObjectMixinOptions<V = unknown, K = unknown, D = unknown> {
 	filter?(el: V, key: K, data: D): unknown;
 }
 
-interface ObjectForEachOptions {
-	withDescriptor?: boolean;
-	notOwn?: boolean | -1;
-}
-
 interface ObjectGetOptions {
 	separator?: string;
 }
 
 interface ObjectSetOptions extends ObjectGetOptions {
 	concat?: boolean;
+}
+
+interface ObjectForEachOptions {
+	withDescriptor?: boolean;
+	notOwn?: boolean | -1;
+}
+
+interface ObjectForEachPropertyDescriptor<V = unknown> {
+	configurable?: boolean;
+	enumerable?: boolean;
+	value?: V;
+	writable?: boolean;
+	get?(): unknown;
+	set?(v: unknown): void;
 }
 
 interface ObjectFromArrayOptions<T = boolean> {
@@ -98,9 +107,53 @@ interface ObjectConstructor {
 	set<T = unknown>(obj: unknown, path: string | unknown[], value: T, opts?: ObjectSetOptions): T;
 
 	size(obj: unknown): number;
+
+	forEach<V = unknown>(
+		obj: Dictionary<V>,
+		cb: (el: ObjectForEachPropertyDescriptor<V>, key: string, data: Dictionary<V>) => any,
+		opts?: ObjectForEachOptions & {withDescriptor: true}
+	): void;
+
+	forEach<V = unknown>(
+		obj: Dictionary<V>,
+		cb: (el: V, key: string, data: Dictionary<V>) => any,
+		opts?: ObjectForEachOptions & ({notOwn: boolean | -1} | {withDescriptor: false})
+	): void;
+
+	forEach<V = unknown>(
+		obj: V[],
+		cb: (el: V, i: number, data: V[]) => any,
+		opts?: ObjectForEachOptions
+	): void;
+
+	forEach<V = unknown>(
+		obj: Set<V>,
+		cb: (el: V, i: V, data: Set<V>) => any,
+		opts?: ObjectForEachOptions
+	): void;
+
+	forEach<V = unknown, K = unknown>(
+		obj: Map<K, V>,
+		cb: (el: V, key: K, data: Map<K, V>) => any,
+		opts?: ObjectForEachOptions
+	): void;
+
+	forEach<V = unknown>(
+		obj: Iterable<V>,
+		cb: (el: V, key: null, data: Iterable<V>) => any,
+		opts?: ObjectForEachOptions
+	): void;
+
+	forEach<V = unknown>(
+		obj: Dictionary<V>,
+		cb: (el: V, key: string, data: Dictionary<V>) => any,
+		// tslint:disable-next-line:unified-signatures
+		opts?: ObjectForEachOptions
+	): void;
+
 	forEach<V = unknown, K = unknown, D = unknown>(
 		obj: D,
-		cb: (el: V, key: K, data: D) => unknown,
+		cb: (el: V, key: K, data: D) => any,
 		opts?: ObjectForEachOptions
 	): void;
 
