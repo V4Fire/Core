@@ -11,4 +11,3 @@ import 'core/prelude/object/compare';
 import 'core/prelude/object/serialize';
 import 'core/prelude/object/create';
 import 'core/prelude/object/clone';
-import 'core/prelude/object/prototype';

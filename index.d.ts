@@ -136,7 +136,6 @@ interface ObjectConstructor {
 	): R;
 
 	parse<V = unknown, R = unknown>(value: V): CanUndef<R>;
-	getPrototypeChain(constructor: Function): object[];
 
 	createDict<V = unknown>(): Dictionary<V>;
 	createDict<D extends object>(...fields: D[]): Pick<D, keyof D>;

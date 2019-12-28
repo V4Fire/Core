@@ -22,6 +22,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 * Added a new header the session API: it's can takes a dictionary with additional parameters
 * Removed `json/setJSONToUTC`
 * Changed signature of `Number.prototype.pad`
+* Removed `Object.getPrototypeChain`
 
 #### :rocket: New Feature
 
