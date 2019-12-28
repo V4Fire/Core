@@ -9,9 +9,7 @@
 import extend from 'core/prelude/extend';
 
 /**
- * Returns a new array containing elements in all specified arrays with duplicates removed
- * (unlike Sugar.Array.union without deep check)
- *
+ * Returns a new array containing elements from all specified arrays with duplicates removed
  * @param args
  */
 extend(Array.prototype, 'union', function (this: unknown[], ...args: unknown[]): unknown[] {

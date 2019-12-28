@@ -330,7 +330,7 @@ interface Date {
 	short(local?: string): string;
 	medium(local?: string): string;
 	long(local?: string): string;
-	format(format: string, local?: string): string;
+	format(pattern: string, local?: string): string;
 	toHTMLDateString(opts?: DateHTMLDateStringOptions): string;
 	toHTMLTimeString(opts?: DateHTMLTimeStringOptions): string;
 	toHTMLString(opts?: DateHTMLStringOptions): string;
