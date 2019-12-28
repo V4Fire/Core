@@ -9,19 +9,20 @@
 import extend from 'core/prelude/extend';
 
 /**
- * Returns a value from an object by the specified path
+ * Returns a value from the object by the specified path
  *
  * @param obj
  * @param path
- * @param [params] - additional parameters
+ * @param [opts] - additional options:
+ *   *) [separator] - character for declaring the path
  */
 extend(Object, 'get', (
 	obj: any,
 	path: string | any[],
-	params?: ObjectGetOptions
+	opts?: ObjectGetOptions
 ) => {
 	const
-		p = {separator: '.', ...params},
+		p = {separator: '.', ...opts},
 		chunks = Object.isString(path) ? path.split(p.separator) : path;
 
 	let
@@ -50,19 +51,20 @@ extend(Object, 'get', (
 //#if runtime has prelude/object/has
 
 /**
- * Returns true if an object has a property by the specified path
+ * Returns true if the object has a property by the specified path
  *
  * @param obj
  * @param path
- * @param [params] - additional parameters
+ * @param [opts] - additional options:
+ *   *) [separator] - character for declaring the path
  */
 extend(Object, 'has', (
 	obj: any,
 	path: string | any[],
-	params?: ObjectGetOptions
+	opts?: ObjectGetOptions
 ) => {
 	const
-		p = {separator: '.', ...params},
+		p = {separator: '.', ...opts},
 		chunks = Object.isString(path) ? path.split(p.separator) : path;
 
 	let
@@ -99,21 +101,23 @@ extend(Object, 'has', (
 //#endif
 
 /**
- * Sets a value to an object by the specified path
+ * Sets a value to the object by the specified path
  *
  * @param obj
  * @param path
  * @param value
- * @param [params] - additional parameters
+ * @param [opts] - additional options:
+ *   *) [separator] - character for declaring the path
+ *   *) [concat] - if true, then the new value will be concatenated with an old within an array
  */
 extend(Object, 'set', (
 	obj: any,
 	path: string | any[],
 	value: unknown,
-	params?: ObjectSetOptions
+	opts?: ObjectSetOptions
 ) => {
 	const
-		p = {separator: '.', concat: false, ...params},
+		p = {separator: '.', concat: false, ...opts},
 		chunks = Object.isString(path) ? path.split(p.separator) : path;
 
 	let
@@ -170,103 +174,4 @@ extend(Object, 'set', (
 	}
 
 	return value;
-});
-
-const
-	hasOwnProperty = Object.prototype.hasOwnProperty;
-
-/**
- * Iterates over the specified object
- *
- * @param obj
- * @param cb
- */
-extend(Object, 'forEach', (obj: any, cb: Function, params: ObjectForEachOptions = {}) => {
-	if (!obj) {
-		return;
-	}
-
-	if (Object.isArray(obj) || Object.isString(obj)) {
-		for (let i = 0; i < obj.length; i++) {
-			cb(obj[i], i, obj);
-		}
-
-		return;
-	}
-
-	if (typeof obj !== 'object') {
-		return;
-	}
-
-	if (Object.isMap(obj) || Object.isSet(obj)) {
-		for (let o = obj.entries(), i = o.next(); !i.done; i = o.next()) {
-			const [key, el] = i.value;
-			cb(el, key, obj);
-		}
-
-		return;
-	}
-
-	if (Object.isSimpleObject(obj) || !obj[Symbol.iterator]) {
-		if (params.notOwn) {
-			for (const key in obj) {
-				if (params.notOwn === -1 && hasOwnProperty.call(obj, key)) {
-					continue;
-				}
-
-				cb(params.withDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : obj[key], key, obj);
-			}
-
-		} else {
-			for (let keys = Object.keys(obj), i = 0; i < keys.length; i++) {
-				const key = keys[i];
-				cb(params.withDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : obj[key], key, obj);
-			}
-		}
-
-		return;
-	}
-
-	for (const el of obj) {
-		cb(el, null, obj);
-	}
-});
-
-/**
- * Returns length of the specified object
- * @param obj
- */
-extend(Object, 'size', (obj: any) => {
-	if (!obj) {
-		return 0;
-	}
-
-	if (Object.isArray(obj) || Object.isString(obj) || Object.isFunction(obj)) {
-		return obj.length;
-	}
-
-	if (Object.isNumber(obj)) {
-		return obj;
-	}
-
-	if (typeof obj !== 'object') {
-		return 0;
-	}
-
-	if (Object.isMap(obj) || Object.isSet(obj)) {
-		return obj.size;
-	}
-
-	if (Object.isSimpleObject(obj)) {
-		return Object.keys(obj).length;
-	}
-
-	let
-		length = 0;
-
-	for (const _ of obj) {
-		length++;
-	}
-
-	return length;
 });
