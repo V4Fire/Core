@@ -6,13 +6,13 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import 'index.ts';
+import 'core/prelude/types';
 import 'core/prelude/object';
-import 'index.ts';
+import 'core/prelude/number';
 import 'core/prelude/array';
-import 'index.ts';
+import 'core/prelude/regexp';
 import 'core/prelude/function';
-import 'index.ts';
+import 'core/prelude/string';
 import 'core/prelude/global';
 import 'core/prelude/date';
-import 'index.ts';
+import 'core/prelude/i18n';

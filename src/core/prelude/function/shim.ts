@@ -11,7 +11,7 @@ try {
 		fnNameRgxp = /^function\s+([^\s(]+)/;
 
 	/**
-	 * Function.name shim
+	 * The polyfill for support the name property of a function
 	 */
 	Object.defineProperty(Function.prototype, 'name', {
 		get(): CanUndef<string> {
