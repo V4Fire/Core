@@ -9,7 +9,7 @@
 import extend from 'core/prelude/extend';
 
 /**
- * Parses the specified value as a JSON / JS object and returns the result
+ * Parses the specified value as a JSON/JS object and returns the result
  * @param value
  */
 extend(Object, 'parse', (value) => {

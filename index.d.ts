@@ -185,7 +185,7 @@ interface ObjectConstructor {
 	mixin<R = unknown>(
 		opts: ObjectMixinOptions | boolean,
 		base?: unknown,
-		...objs: unknown[]
+		...objects: unknown[]
 	): R;
 
 	parse<V = unknown, R = unknown>(value: V): CanUndef<R>;

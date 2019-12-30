@@ -9,7 +9,7 @@
 import extend from 'core/prelude/extend';
 
 /**
- * Compares two specified objects using JSON.stringify/parse strategy and returns the result
+ * Compares two specified objects using naive but fast "JSON.stringify/parse" strategy and returns the result
  *
  * @param a
  * @param b
@@ -82,7 +82,7 @@ const
 	funcCache = new WeakMap();
 
 /**
- * Returns a string representation of the specified object
+ * Returns a string representation of the specified object naive but fast "JSON.stringify/parse" strategy
  * @param obj
  */
 extend(Object, 'fastHash', (obj) =>
