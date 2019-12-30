@@ -34,6 +34,10 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 * Improved `Number.prototype.format`
 * Added a bunch of new functions to `Number` from `Number.prototype`
 
+#### :house: Internal
+
+* Updated dependencies: eventemitter2@6.0.0
+
 ## v3.0.0-beta.94 (2019-12-18)
 
 #### :boom: Breaking Change

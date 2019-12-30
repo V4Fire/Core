@@ -26,9 +26,9 @@
     "test": "echo \"Error: no test specified\" && exit 0"
   },
   "dependencies": {
-    "eventemitter2": "^5.0.1",
+    "eventemitter2": "^6.0.0",
     "fs-extra-promise": "^1.0.1",
-    "got": "^10.0.4",
+    "got": "^10.2.0",
     "node-localstorage": "^2.1.5",
     "tslib": "^1.10.0"
   },
@@ -52,14 +52,14 @@
     "sugar": "^2.0.6",
     "through2": "^3.0.1",
     "tsconfig": "^7.0.0",
-    "typescript": "^3.7.3",
+    "typescript": "^3.7.4",
     "uniconf": "^2.1.1",
     "upath": "^1.2.0",
     "urlconcat": "0.0.12"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.3",
-    "eslint": "^6.7.2",
+    "eslint": "^6.8.0",
     "tslint": "^5.20.1"
   }
 }
