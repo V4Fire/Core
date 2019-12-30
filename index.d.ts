@@ -97,8 +97,8 @@ interface ObjectForEachPropertyDescriptor<V = unknown> {
 }
 
 interface ObjectFromArrayOptions<T = boolean> {
-	keyConverter?: Function;
-	valueConverter?(el: unknown): T;
+	keyConverter?(i: number, el: unknown): string | symbol;
+	valueConverter?(el: unknown, i: number): T;
 }
 
 interface ObjectConstructor {
@@ -191,8 +191,12 @@ interface ObjectConstructor {
 	parse<V = unknown, R = unknown>(value: V): CanUndef<R>;
 
 	createDict<V = unknown>(): Dictionary<V>;
-	createDict<D extends object>(...fields: D[]): Pick<D, keyof D>;
+	createDict<D extends object>(...objects: D[]): Pick<D, keyof D>;
 
+	createEnumLike<D extends object, K extends keyof D>(obj: D):
+		D extends Array<infer E> ? Dictionary<E | number> : D & {[I: string]: K};
+
+	/** @deprecated */
 	createMap<D extends object, K extends keyof D>(obj: D):
 		D extends Array<infer E> ? Dictionary<E | number> : D & {[I: string]: K};
 

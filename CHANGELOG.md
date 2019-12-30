@@ -33,6 +33,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 * Reviewed `core/event` API
 * Improved `Number.prototype.format`
 * Added a bunch of new functions to `Number` from `Number.prototype`
+* Added `Object.createEnumLike`. The method `Object.createMap` is marked as deprecated.
 
 #### :house: Internal
 

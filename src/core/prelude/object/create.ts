@@ -7,26 +7,43 @@
  */
 
 import extend from 'core/prelude/extend';
+import { deprecate } from 'core/meta/deprecation';
 
 /**
- * Creates a hash table without prototype
- * @param fields
+ * Creates a hash table without any prototype and returns it
+ *
+ * @param objects - extension objects:
+ *   all key from these objects is merged to the target
+ *
+ * @example
+ * Object.createDict({a: 1}, {b: 2}) // {a: 1, b: 2, __proto__: null}
  */
-extend(Object, 'createDict', (...fields) => {
-	if (fields.length) {
-		return Object.assign(Object.create(null), ...fields);
+extend(Object, 'createDict', (...objects) => {
+	if (objects.length) {
+		return Object.assign(Object.create(null), ...objects);
 	}
 
 	return Object.create(null);
 });
 
 /**
- * Creates an object {key: value, value: key} from the specified
- * @param obj
+ * Creates an object which has the similar structure to TS enum objects and returns it
+ *
+ * @param obj - base object: it can be a dictionary or an array
+ * @example
+ *   Object.createEnumLike({a: 1}) // {a: 1, 1: 'a', __proto__: null}
  */
-extend(Object, 'createMap', (obj: object) => {
+extend(Object, 'createEnumLike', createEnumLike);
+
+/**
+ * @deprecated
+ * @see Object.createEnumLike
+ */
+extend(Object, 'createMap', deprecate({renamedTo: 'createEnum'}, createEnumLike));
+
+function createEnumLike(obj: object): Dictionary {
 	const
-		map = {};
+		map = Object.createDict();
 
 	if (Object.isArray(obj)) {
 		for (let i = 0; i < obj.length; i++) {
@@ -50,7 +67,7 @@ extend(Object, 'createMap', (obj: object) => {
 	}
 
 	return map;
-});
+}
 
 /**
  * Creates an object from the specified array
