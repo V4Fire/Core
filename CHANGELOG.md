@@ -34,6 +34,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 * Improved `Number.prototype.format`
 * Added a bunch of new functions to `Number` from `Number.prototype`
 * Added `Object.createEnumLike`. The method `Object.createMap` is marked as deprecated.
+* Improved `Object.fromArray` API
 
 #### :house: Internal
 

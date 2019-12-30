@@ -73,11 +73,13 @@ function createEnumLike(obj: object): Dictionary {
  * Creates an object from the specified array
  *
  * @param arr
- * @param [params]
+ * @param [opts] - additional options:
+ *   *) [keyConverter] - function that returns a key value
+ *   *) [valueConverter] - function that returns an element value
  */
 extend(Object, 'fromArray', (
 	arr: unknown[],
-	params?: ObjectFromArrayOptions
+	opts?: ObjectFromArrayOptions
 ) => {
 	const
 		map = {};
@@ -85,11 +87,11 @@ extend(Object, 'fromArray', (
 	const p = {
 		keyConverter: String,
 		valueConverter: Boolean,
-		...params
+		...opts
 	};
 
 	for (let i = 0; i < arr.length; i++) {
-		map[p.keyConverter(arr[i])] = p.valueConverter(arr[i]);
+		map[p.keyConverter(i, arr[i])] = p.valueConverter(arr[i], i);
 	}
 
 	return map;
