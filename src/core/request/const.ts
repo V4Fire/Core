@@ -20,7 +20,7 @@ export let
 storage = import('core/kv-storage').then(({asyncLocal}) => asyncLocal);
 //#endif
 
-export const mimeTypes: Dictionary<ResponseTypes> = Object.createDict<any>({
+export const mimeTypes: Dictionary<ResponseTypes> = Object.createDict({
 	'application/json': 'json',
 	'application/javascript': 'text',
 	'application/xml': 'document',
