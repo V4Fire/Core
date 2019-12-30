@@ -27,6 +27,31 @@ extend(Object, 'createDict', (...objects) => {
 });
 
 /**
+ * Takes the enum-like object and converts it to a dictionary:
+ * number values from the object is skipped
+ *
+ * @param obj
+ */
+extend(Object, 'convertEnumToDict', (obj: Dictionary) => {
+	const
+		res = {};
+
+	for (let keys = Object.keys(obj), i = 0; i < keys.length; i++) {
+		const
+			key = keys[i],
+			el = obj[key];
+
+		if (isNaN(Number(el))) {
+			continue;
+		}
+
+		res[key] = key;
+	}
+
+	return res;
+});
+
+/**
  * Creates an object which has the similar structure to TS enum objects and returns it
  *
  * @param obj - base object: it can be a dictionary or an array
@@ -98,32 +123,19 @@ extend(Object, 'fromArray', (
 });
 
 /**
- * Returns values only for string fields (for converting enums)
- * @param obj
+ * Returns a new object based on the specified, but only with fields which match to the specified condition
+ *
+ * @param ob
+ * @param condition - whitelist of keys (it can be represented as an array or an object) or a regular expression
  */
-extend(Object, 'convertEnumToDict', (obj: Dictionary) => {
-	const
-		res = {};
-
-	for (let keys = Object.keys(obj), i = 0; i < keys.length; i++) {
-		const
-			key = keys[i],
-			el = obj[key];
-
-		if (isNaN(Number(el))) {
-			continue;
-		}
-
-		res[key] = key;
-	}
-
-	return res;
-});
-
-/** @see Sugar.Object.select */
 extend(Object, 'select', selectReject(true));
 
-/** @see Sugar.Object.reject */
+/**
+ * Returns a new object based on the specified, but without fields which match to the specified condition
+ *
+ * @param ob
+ * @param condition - whitelist of keys (it can be represented as an array or an object) or a regular expression
+ */
 extend(Object, 'reject', selectReject(false));
 
 function selectReject(select: boolean): Function {
