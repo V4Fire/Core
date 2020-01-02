@@ -9,7 +9,7 @@
 import { CreateRequestOptions } from 'core/request/interface';
 
 /**
- * Returns a string key for saving data in a storage
+ * Takes the cache key for data and returns a new key for saving the data in a storage
  * @param key
  */
 export function getStorageKey(key: string): string {
@@ -17,10 +17,10 @@ export function getStorageKey(key: string): string {
 }
 
 /**
- * Generates a cache string by the specified parameters and returns it
+ * Generates a string cache key for specified parameters and returns it
  *
- * @param url
- * @param [params]
+ * @param url - request url
+ * @param [params] - request parameters
  */
 export function getRequestKey<T>(url: string, params?: CreateRequestOptions<T>): string {
 	const
@@ -122,7 +122,7 @@ export function applyQueryForStr(str: string, query?: Dictionary, rgxp: RegExp =
  * Normalizes the specified HTTP header name
  *
  * @param name
- * @param [query] - request query object (for value interpolation)
+ * @param [query] - request query object (for interpolation of value)
  */
 export function normalizeHeaderName(name: string, query?: Dictionary): string {
 	return applyQueryForStr(String(name).trim(), query).toLowerCase();
@@ -132,7 +132,7 @@ export function normalizeHeaderName(name: string, query?: Dictionary): string {
  * Normalizes the specified HTTP header value
  *
  * @param value
- * @param [query] - request query object (for value interpolation)
+ * @param [query] - request query object (for interpolation of value)
  */
 export function normalizeHeaderValue(value: unknown, query?: Dictionary): string {
 	return applyQueryForStr(String(value != null ? value : '').trim(), query);
@@ -142,7 +142,7 @@ export function normalizeHeaderValue(value: unknown, query?: Dictionary): string
  * Normalizes the specified HTTP header object
  *
  * @param headers
- * @param [query] - request query object (for key/value interpolation)
+ * @param [query] - request query object (for interpolation of keys/values)
  */
 export function normalizeHeaders(headers?: Dictionary, query?: Dictionary): Dictionary<CanArray<string>> {
 	const
