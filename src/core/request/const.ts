@@ -10,7 +10,7 @@ import config from 'config';
 import Range from 'core/range';
 
 import { AsyncFactoryResult } from 'core/kv-storage';
-import { RequestMethods, ResponseTypes, GlobalOptions, CacheStrategy } from 'core/request/interface';
+import { RequestMethod, ResponseType, GlobalOptions, CacheStrategy } from 'core/request/interface';
 import { Cache, RestrictedCache, NeverCache, AbstractCache } from 'core/cache';
 
 export let
@@ -20,7 +20,7 @@ export let
 storage = import('core/kv-storage').then(({asyncLocal}) => asyncLocal);
 //#endif
 
-export const mimeTypes: Dictionary<ResponseTypes> = Object.createDict({
+export const mimeTypes: Dictionary<ResponseType> = Object.createDict({
 	'application/json': 'json',
 	'application/javascript': 'text',
 	'application/xml': 'document',
@@ -28,7 +28,7 @@ export const mimeTypes: Dictionary<ResponseTypes> = Object.createDict({
 });
 
 export const defaultRequestOpts = {
-	method: <RequestMethods>'GET',
+	method: <RequestMethod>'GET',
 	cacheStrategy: <CacheStrategy>'never',
 	cacheMethods: ['GET'],
 	offlineCacheTTL: (1).day(),
@@ -38,7 +38,7 @@ export const defaultRequestOpts = {
 };
 
 export const defaultResponseOpts = {
-	responseType: <ResponseTypes>'text',
+	responseType: <ResponseType>'text',
 	okStatuses: new Range(200, 299),
 	status: 200,
 	headers: {}

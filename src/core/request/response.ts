@@ -10,7 +10,7 @@ import Then from 'core/then';
 import Range from 'core/range';
 
 import { IS_NODE } from 'core/env';
-import { once } from 'core/decorators';
+import { once } from 'core/meta';
 import { convertIfDate } from 'core/json';
 import { normalizeHeaderName } from 'core/request/utils';
 import { defaultResponseOpts } from 'core/request/const';
@@ -18,31 +18,24 @@ import {
 
 	ResponseOptions,
 	ResponseHeaders,
-	ResponseTypes,
 	ResponseType,
+	ResponseTypeValue,
 	Decoders,
-	OkStatuses
+	OkStatus,
+	JSONLikeValue
 
 } from 'core/request/interface';
-
-export type JSONLike =
-	string |
-	number |
-	boolean |
-	null |
-	unknown[] |
-	Dictionary;
 
 export default class Response {
 	/**
 	 * Response data type
 	 */
-	responseType?: ResponseTypes;
+	responseType?: ResponseType;
 
 	/**
 	 * Response source data type
 	 */
-	readonly sourceResponseType?: ResponseTypes;
+	readonly sourceResponseType?: ResponseType;
 
 	/**
 	 * Parent operation promise
@@ -62,7 +55,7 @@ export default class Response {
 	/**
 	 * Range of ok status codes
 	 */
-	readonly okStatuses: OkStatuses;
+	readonly okStatuses: OkStatus;
 
 	/**
 	 * True if .okStatuses contains .status
@@ -82,13 +75,13 @@ export default class Response {
 	/**
 	 * Response body
 	 */
-	protected readonly body: ResponseType;
+	protected readonly body: ResponseTypeValue;
 
 	/**
 	 * @param [body]
 	 * @param [params]
 	 */
-	constructor(body?: ResponseType, params?: ResponseOptions) {
+	constructor(body?: ResponseTypeValue, params?: ResponseOptions) {
 		const
 			p = Object.mixin<typeof defaultResponseOpts & ResponseOptions>(false, {}, defaultResponseOpts, params),
 			s = this.okStatuses = p.okStatuses;
@@ -117,7 +110,7 @@ export default class Response {
 	 * Parses .body as .sourceType and returns the result
 	 */
 	@once
-	decode<T extends Nullable<string | JSONLike | ArrayBuffer | Blob | Document | unknown>>(): Then<T> {
+	decode<T extends Nullable<string | JSONLikeValue | ArrayBuffer | Blob | Document | unknown>>(): Then<T> {
 		let data;
 		switch (this.sourceResponseType) {
 			case 'json':
@@ -192,12 +185,12 @@ export default class Response {
 	/**
 	 * Parses .body as JSON and returns the result
 	 */
-	json<T extends JSONLike>(): Then<T | null> {
+	json<T extends JSONLikeValue>(): Then<T | null> {
 		if (this.sourceResponseType !== 'json') {
 			throw new TypeError('Invalid data sourceType');
 		}
 
-		type _ = string | JSONLike | null;
+		type _ = string | JSONLikeValue | null;
 
 		const
 			body = <_>this.body;

@@ -13,17 +13,7 @@ import Cache from 'core/cache/interface';
 import { concatUrls, toQueryString } from 'core/url';
 import { normalizeHeaders, applyQueryForStr, getStorageKey, getRequestKey } from 'core/request/utils';
 import { cache, pendingCache, storage, globalOpts, defaultRequestOpts } from 'core/request/const';
-import {
-
-	Encoders,
-	Decoders,
-	RequestAPI,
-	RequestQuery,
-	CreateRequestOptions,
-	RequestResponseObject,
-	ResponseType
-
-} from 'core/request/interface';
+import * as i from 'core/request/interface';
 
 const
 	resolveURLRgxp = /(?:^|(\w+:\/\/)(?:([^./]+)\.)?([^./]+)(?:\.([^./]+))?)(\/.*|$)/,
@@ -38,12 +28,12 @@ export default class RequestContext<T = unknown> {
 	/**
 	 * List/table of request encoders
 	 */
-	encoders: Encoders;
+	encoders: i.Encoders;
 
 	/**
 	 * List/table of response decoders
 	 */
-	decoders: Decoders;
+	decoders: i.Decoders;
 
 	/**
 	 * Cache key
@@ -58,12 +48,12 @@ export default class RequestContext<T = unknown> {
 	/**
 	 * Request parameters
 	 */
-	readonly params!: typeof defaultRequestOpts & CreateRequestOptions<T>;
+	readonly params!: typeof defaultRequestOpts & i.CreateRequestOptions<T>;
 
 	/**
 	 * Alias for .params.query
 	 */
-	get query(): RequestQuery {
+	get query(): i.RequestQuery {
 		return this.params.query;
 	}
 
@@ -95,7 +85,7 @@ export default class RequestContext<T = unknown> {
 	/**
 	 * @param [params] - request parameters
 	 */
-	constructor(params?: CreateRequestOptions<T>) {
+	constructor(params?: i.CreateRequestOptions<T>) {
 		const p = this.params = <any>Object.mixin({
 			deep: true,
 			concatArray: true,
@@ -126,7 +116,7 @@ export default class RequestContext<T = unknown> {
 	resolveAPI(api: Nullable<string> = globalOpts.api): string {
 		const
 			c = (v) => Object.isFunction(v) ? v() : v,
-			a = <{[K in keyof RequestAPI]: Nullable<string>}>({...this.params.api});
+			a = <{[K in keyof i.RequestAPI]: Nullable<string>}>({...this.params.api});
 
 		for (let keys = Object.keys(a), i = 0; i < keys.length; i++) {
 			const key = keys[i];
@@ -241,7 +231,7 @@ export default class RequestContext<T = unknown> {
 	/**
 	 * Cache middleware for a request
 	 */
-	saveCache(res: RequestResponseObject<T>): RequestResponseObject<T> {
+	saveCache(res: i.RequestResponseObject<T>): i.RequestResponseObject<T> {
 		const
 			p = this.params,
 			key = this.cacheKey,
@@ -295,7 +285,7 @@ export default class RequestContext<T = unknown> {
 	 * Middleware for wrapping an object as RequestResponseObject
 	 * @param obj
 	 */
-	async wrapAsResponse(obj: Response | ResponseType): Promise<RequestResponseObject<T>> {
+	async wrapAsResponse(obj: Response | i.ResponseTypeValue): Promise<i.RequestResponseObject<T>> {
 		const response = obj instanceof Response ? obj : new Response(obj, {
 			parent: this.parent,
 			responseType: 'object'

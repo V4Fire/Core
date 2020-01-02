@@ -20,15 +20,7 @@ import { getStorageKey } from 'core/request/utils';
 import { concatUrls } from 'core/url';
 
 import { storage, globalOpts, defaultRequestOpts, mimeTypes } from 'core/request/const';
-import {
-
-	RequestFunctionResponse,
-	RequestResponse,
-	CreateRequestOptions,
-	MiddlewareOptions,
-	ResolverResult
-
-} from 'core/request/interface';
+import * as i from 'core/request/interface';
 
 export * from 'core/request/interface';
 export * from 'core/request/utils';
@@ -41,26 +33,29 @@ export { default as Response } from 'core/request/response';
  * Creates a new request with the specified options
  *
  * @param path
- * @param opts
+ * @param opts - additional request options
  */
-export default function create<T = unknown>(path: string, opts?: CreateRequestOptions<T>): RequestResponse<T>;
+export default function create<T = unknown>(path: string, opts?: i.CreateRequestOptions<T>): i.RequestResponse<T>;
 
 /**
- * Creates a request wrapper by the specified options
+ * Returns a wrapped request constructor with the specified options
+ *
  * @param opts
+ * @example
+ * request({okStatuses: 200})({query: {bar: true}})('bla/get')
  */
-export default function create<T = unknown>(opts: CreateRequestOptions<T>): typeof create;
+export default function create<T = unknown>(opts: i.CreateRequestOptions<T>): typeof create;
 
 /**
  * @param path
- * @param resolver - request resolve function
+ * @param resolver - request resolve function:
  * @param opts
  */
 export default function create<T = unknown, A extends unknown[] = unknown[]>(
 	path: string,
-	resolver: (url: string, params: MiddlewareOptions<T>, ...args: A) => ResolverResult,
-	opts?: CreateRequestOptions<T>
-): RequestFunctionResponse<T, A extends (infer V)[] ? V[] : unknown[]>;
+	resolver: i.RequestResolver<T, A>,
+	opts?: i.CreateRequestOptions<T>
+): i.RequestFunctionResponse<T, A extends (infer V)[] ? V[] : unknown[]>;
 
 export default function create<T = unknown>(path: any, ...args: any[]): unknown {
 	const merge = <T>(...args: unknown[]) => Object.mixin<T>({
@@ -76,19 +71,19 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 
 		return (path, resolver, opts) => {
 			if (Object.isObject(path)) {
-				return create(merge<CreateRequestOptions<T>>(defOpts, path));
+				return create(merge<i.CreateRequestOptions<T>>(defOpts, path));
 			}
 
 			if (Object.isFunction(resolver)) {
-				return create(path, resolver, merge<CreateRequestOptions<T>>(defOpts, opts));
+				return create(path, resolver, merge<i.CreateRequestOptions<T>>(defOpts, opts));
 			}
 
-			return create(path, merge<CreateRequestOptions<T>>(defOpts, resolver));
+			return create(path, merge<i.CreateRequestOptions<T>>(defOpts, resolver));
 		};
 	}
 
 	let
-		resolver, opts: CreateRequestOptions<T>;
+		resolver, opts: i.CreateRequestOptions<T>;
 
 	if (args.length > 1) {
 		([resolver, opts] = args);
@@ -104,7 +99,7 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 
 	const run = (...args) => {
 		const
-			p = merge<CreateRequestOptions<T>>(baseCtx.params),
+			p = merge<i.CreateRequestOptions<T>>(baseCtx.params),
 			ctx = Object.create(baseCtx);
 
 		const middlewareParams = {

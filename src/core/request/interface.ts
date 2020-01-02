@@ -12,7 +12,7 @@ import Response from 'core/request/response';
 import RequestContext from 'core/request/context';
 import { StatusCodes } from 'core/status-codes';
 
-export type RequestMethods =
+export type RequestMethod =
 	'GET' |
 	'POST' |
 	'PUT' |
@@ -28,7 +28,7 @@ export type CacheStrategy =
 	'forever' |
 	'never';
 
-export type ResponseTypes =
+export type ResponseType =
 	'text' |
 	'json' |
 	'document' |
@@ -36,7 +36,7 @@ export type ResponseTypes =
 	'blob' |
 	'object';
 
-export type ResponseType =
+export type ResponseTypeValue =
 	string |
 	ArrayBuffer |
 	Document |
@@ -51,7 +51,15 @@ export type RequestBody =
 	FormData |
 	ArrayBuffer;
 
-export type OkStatuses =
+export type JSONLikeValue =
+	string |
+	number |
+	boolean |
+	null |
+	unknown[] |
+	Dictionary;
+
+export type OkStatus =
 	Range<number> |
 	StatusCodes |
 	StatusCodes[];
@@ -86,11 +94,11 @@ export interface RequestFunctionResponse<T = unknown, A extends unknown[] = []> 
 
 export interface RequestOptions {
 	readonly url: string;
-	readonly method?: RequestMethods;
+	readonly method?: RequestMethod;
 	readonly timeout?: number;
-	readonly okStatuses?: OkStatuses;
+	readonly okStatuses?: OkStatus;
 	readonly contentType?: string;
-	readonly responseType?: ResponseTypes;
+	readonly responseType?: ResponseType;
 	readonly decoder?: Decoder | Decoder[];
 	readonly headers?: Dictionary<CanArray<string>>;
 	readonly body?: RequestBody;
@@ -126,14 +134,17 @@ export interface RequestAPI {
 	zone?: Nullable<string> | (() => Nullable<string>);
 	namespace?: Nullable<string> | (() => Nullable<string>);
 }
+export interface RequestResolver<T = unknown, ARGS extends unknown[] = unknown[]> {
+	(url: string, opts: MiddlewareOptions<T>, ...args: ARGS): ResolverResult;
+}
 
 export interface CreateRequestOptions<T = unknown> {
-	readonly method?: RequestMethods;
+	readonly method?: RequestMethod;
 	readonly cacheStrategy?: CacheStrategy;
 
 	contentType?: string;
-	responseType?: ResponseTypes;
-	okStatuses?: OkStatuses;
+	responseType?: ResponseType;
+	okStatuses?: OkStatus;
 	externalRequest?: boolean;
 
 	api?: RequestAPI;
@@ -148,7 +159,7 @@ export interface CreateRequestOptions<T = unknown> {
 	timeout?: number;
 	cacheId?: string | symbol;
 	cacheTTL?: number;
-	cacheMethods?: RequestMethods[];
+	cacheMethods?: RequestMethod[];
 	offlineCacheTTL?: number;
 	offlineCache?: boolean;
 
@@ -169,8 +180,8 @@ export interface ResponseHeaders {
 export interface ResponseOptions {
 	parent?: Then;
 	important?: boolean;
-	responseType?: ResponseTypes;
-	okStatuses?: OkStatuses;
+	responseType?: ResponseType;
+	okStatuses?: OkStatus;
 	status?: StatusCodes;
 	headers?: string | Dictionary<string>;
 	decoder?: Decoder | Decoders;
