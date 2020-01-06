@@ -13,7 +13,7 @@ import { IS_NODE } from 'core/env';
 import { once } from 'core/meta';
 import { convertIfDate } from 'core/json';
 import { normalizeHeaderName } from 'core/request/utils';
-import { defaultResponseOpts } from 'core/request/const';
+import { defaultResponseOpts, mimeTypes } from 'core/request/const';
 import {
 
 	ResponseOptions,
@@ -87,12 +87,17 @@ export default class Response {
 			s = this.okStatuses = p.okStatuses;
 
 		this.parent = p.parent;
-		this.sourceResponseType = this.responseType = p.responseType;
 		this.important = p.important;
 
 		this.status = p.status;
 		this.ok = s instanceof Range ? s.contains(this.status) : (<number[]>[]).concat(s || []).includes(this.status);
 		this.headers = this.parseHeaders(p.headers);
+
+		const
+			contentType = this.getHeader('CONTENT_TYPE') || '';
+
+		this.sourceResponseType = this.responseType = p.responseType == null ?
+			mimeTypes[contentType] : p.responseType;
 
 		this.decoders = p.decoder ? Object.isFunction(p.decoder) ? [p.decoder] : p.decoder : [];
 		this.body = body;

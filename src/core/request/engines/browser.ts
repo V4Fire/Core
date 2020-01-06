@@ -24,7 +24,7 @@ export default function createTransport(params: RequestOptions): Then<Response> 
 		data = p.body,
 		{contentType} = p;
 
-	if (data) {
+	if (contentType == null && data) {
 		if (data instanceof FormData) {
 			contentType = '';
 
