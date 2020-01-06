@@ -10,7 +10,7 @@ import 'core/prelude/object/property';
 import 'core/prelude/object/iterators';
 import 'core/prelude/object/metrics';
 import 'core/prelude/object/compare';
-import 'parse.ts';
+import 'core/prelude/object/parse';
 import 'core/prelude/object/create';
 import 'core/prelude/object/mixin';
 import 'core/prelude/object/clone';
