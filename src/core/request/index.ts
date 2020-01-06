@@ -30,10 +30,80 @@ export { default as RequestError } from 'core/request/error';
 export { default as Response } from 'core/request/response';
 
 /**
- * Creates a new request with the specified options
+ * Creates a new remote request with the specified options
  *
- * @param path
- * @param opts - additional request options
+ * @param path - request path URL
+ * @param opts - request options:
+ *   *) [method='GET'] - request method type
+ *   *) [cacheStrategy='never'] - type of caching for requests which supports it:
+ *      1) 'forever' - caches all request and stores the value forever;
+ *      2) 'queue' - caches all requests, but more frequent requests will push less frequent requests;
+ *      3) 'never' - never caches any requests.
+ *
+ *   *) [contentType] - mime type of request data (if not specified, it will be casted dynamically)
+ *   *) [responseType='text'] - type of response data
+ *      (if not specified, it will be casted dynamically from response headers):
+ *
+ *      1) 'text' - result is interpreted as a simple string;
+ *      2) 'json' - result is interpreted as a JSON string;
+ *      2) 'arrayBuffer' - result is interpreted as an array buffer;
+ *      2) 'blob' - result is interpreted as a binary sequence;
+ *      2) 'object' - result is interpreted "as is" without any converting.
+ *
+ *   *) [body] - request body
+ *   *) [query] - URL query parameters
+ *   *) [headers] - additional request headers
+ *   *) [credentials] - enables providing of credentials for cross-domain requests
+ *
+ *   *) [api] - object with API parameters. If the API is specified it will be concatenated with a request path URL.
+ *      It can be useful for creating request factories.
+ *      You can provide a direct URL for the API:
+ *
+ *      *) [url] - base api url, such as 'https://google.com'.
+ *
+ *      Or you can provide a bunch of parameters for mapping on .api parameter from the application config.
+ *      For example, if the config.api is equal to 'https://google.com' and you provide parameters like
+ *      {domain3: 'foo', namespace: 'bar'}, than it builds a string is equal to 'https://foo.google.com/bar'.
+ *
+ *      *) [protocol] - api protocol, like 'http' ot 'https'
+ *      *) [domain3] - value for an API domain level 3 part
+ *      *) [domain2] - value for an API domain level 2 part
+ *      *) [zone] - value for an API domain zone part
+ *      *) [namespace] - value for an API namespace part: it follows after '/' character
+ *
+ *   *) [okStatuses=new Range(200, 299)] - list of status codes (or a single code) with HTTP statuses which is ok
+ *      for response, also can pass a range of codes
+ *
+ *   *) [timeout] - value in milliseconds for the request timeout
+ *
+ *   *) [cacheId] - unique cache id: it can be useful for creating request factories with isolated cache storages
+ *   *) [cacheMethods=['GET']] - list of request methods that supports caching
+ *   *) [cacheTTL] - value in milliseconds that indicates how long a value of the request should keep in the cache
+ *   *) [offlineCache=false] - enables the support of offline caching
+ *   *) [offlineCacheTTL=(1).day()] - value in milliseconds that indicates how long a value of the request
+ *      should keep in the offline cache
+ *
+ *   *) [middlewares] - dictionary or an iterable value with middleware functions:
+ *      functions take an environment of request parameters and can modify theirs.
+ *      Please notice, that the order of middlewares depends of a structure which you use.
+ *      Also, if at least one of middlewares returns a function, than the result of invoking this function
+ *      will be returned as the request result. It can be helpful for organizing mocks of data and
+ *      other similar cases when you don't want to execute a real request.
+ *
+ *   *) [encoder] - function (or list of functions) that takes request data
+ *      (if .body is not specified, it will take .query) and returns a new data for request.
+ *      If you provides a list of functions their will
+ *
+ *   *) [decoder]
+ *
+ *   *) [externalRequest] - special flag which indicates that request will be invoked not directly by a browser,
+ *      but some "external" application, such as a native application in a mobile (it's important for offline requests)
+ *
+ *   *) [important] - meta flag which indicates that the request is important: usually it used with middlewares for
+ *      indicating that the request need execute as soon as possible
+ *
+ *   *) [meta] - dictionary with some extra parameters for the request: usually it used with middlewares for
+ *      providing domain specific information
  */
 export default function create<T = unknown>(path: string, opts?: i.CreateRequestOptions<T>): i.RequestResponse<T>;
 
