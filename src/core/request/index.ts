@@ -53,13 +53,14 @@ export { default as Response } from 'core/request/response';
  *   *) [credentials] - enables providing of credentials for cross-domain requests
  *
  *   *) [api] - object with API parameters. If the API is specified it will be concatenated with a request path URL.
- *      It can be useful for creating request factories.
+ *      It can be useful for creating request factories. In addition, you can provide a function as a key value,
+ *      and it will be invoked.
+ *
  *      You can provide a direct URL for the API:
  *
  *      *) [url] - base API URL, such as 'https://google.com'.
  *
  *      Or you can provide a bunch of parameters for mapping on .api parameter from the application config.
- *      In addition, you can provide a function as a key value, and it will be invoked.
  *      For example, if the config.api is equal to 'https://google.com' and you provide parameters like
  *      {domain3: 'foo', namespace: () => 'bar'}, than it builds a string is equal to 'https://foo.google.com/bar'.
  *
