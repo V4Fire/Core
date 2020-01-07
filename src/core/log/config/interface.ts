@@ -7,8 +7,8 @@
  */
 
 import { LogLevel } from 'core/log/interface';
-import { LogMiddlewares } from 'core/log/middlewares';
-import { LogEngines } from 'core/log/engines';
+import { LogMiddlewares } from 'core/log/middlewares/interface';
+import { LogEngines } from 'core/log/engines/interface';
 
 export interface LogConfig {
 	pipelines: LogPipelineConfig[];

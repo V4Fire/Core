@@ -7,7 +7,7 @@
  */
 
 import engineFactory from 'core/log/engines';
-import { LogEvent } from 'core/log/middlewares';
+import { LogEvent } from 'core/log/middlewares/interface';
 
 export interface LogEngineConstructor<T extends LogEngine> {
 	new (opts?: Dictionary): T

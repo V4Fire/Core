@@ -7,10 +7,10 @@
  */
 
 import { createStyleCache } from 'core/log/config/styles';
-import { LogLevel } from 'core/log/interface';
-import { LogEngine } from 'core/log/engines/interface';
-import { LogEvent } from 'core/log/middlewares';
 import { LogStylesConfig, StylesCache } from 'core/log/config';
+import { LogLevel } from 'core/log/interface';
+import { LogEvent } from 'core/log/middlewares';
+import { LogEngine } from 'core/log/engines/interface';
 
 export class ConsoleEngine implements LogEngine {
 	protected stylesCache?: StylesCache;
