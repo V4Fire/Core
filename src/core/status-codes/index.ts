@@ -9,4 +9,4 @@
 import { StatusCodes } from 'core/status-codes/interface';
 export * from 'core/status-codes/interface';
 
-export default Object.createMap(StatusCodes);
+export default Object.createEnumLike(StatusCodes);
