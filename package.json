@@ -5,7 +5,7 @@
   "main": "src/core/index.js",
   "typings": "index.d.ts",
   "license": "MIT",
-  "version": "3.0.0-beta.94",
+  "version": "3.0.0",
   "author": {
     "name": "kobezzza",
     "email": "kobezzza@gmail.com",
@@ -28,7 +28,7 @@
   "dependencies": {
     "eventemitter2": "^6.0.0",
     "fs-extra-promise": "^1.0.1",
-    "got": "^10.2.0",
+    "got": "^10.2.1",
     "node-localstorage": "^2.1.5",
     "tslib": "^1.10.0"
   },
@@ -45,7 +45,7 @@
     "find-up": "^4.1.0",
     "gulp": "^4.0.2",
     "gulp-header": "^2.0.9",
-    "gulp-load-plugins": "^2.0.1",
+    "gulp-load-plugins": "^2.0.2",
     "gulp-plumber": "^1.2.1",
     "gulp-replace": "^1.0.0",
     "path-equal": "^1.1.1",
