@@ -8,42 +8,8 @@
 
 import extend from 'core/prelude/extend';
 import { AsyncNamespace } from 'core/kv-storage';
-import { EventEmitter2 as EventEmitter } from 'eventemitter2';
-
-/**
- * Link to the global object
- */
-export const
-	GLOBAL = Function('return this')();
-
-if (typeof globalThis === 'undefined') {
-	GLOBAL.globalThis = GLOBAL;
-}
-
-/**
- * True if the current runtime has window object
- */
-export const HAS_WINDOW: boolean = typeof window === 'object';
-
-/**
- * True if the current runtime is looks like node.js
- */
-export const IS_NODE: boolean = (() => {
-	try {
-		const
-			// tslint:disable-next-line
-			process = globalThis['process'];
-
-		// @ts-ignore
-		return typeof process === 'object' && {}.toString.call(process) === '[object process]';
-
-	} catch {
-		return false;
-	}
-})();
-
-export const
-	event = new EventEmitter({maxListeners: 1e3, newListener: false});
+import { emitter } from 'core/prelude/env/const';
+export * from 'core/prelude/env/const';
 
 const
 	memoryStorage = Object.createDict<Dictionary>();
@@ -81,7 +47,7 @@ export function set(key: string, value: Dictionary): void {
 		memoryStorage[key] = value;
 	}
 
-	event.emit(`set.${key}`, value);
+	emitter.emit(`set.${key}`, value);
 }
 
 /**
@@ -96,7 +62,7 @@ export function remove(key: string): void {
 		delete memoryStorage[key];
 	}
 
-	event.emit(`remove.${key}`);
+	emitter.emit(`remove.${key}`);
 }
 
 extend(globalThis, 'envs', () => {
