@@ -16,10 +16,10 @@ import RequestError from 'core/request/error';
 import RequestContext from 'core/request/context';
 
 import { isOnline } from 'core/net';
-import { getStorageKey } from 'core/request/utils';
+import { getStorageKey, getResponseTypeFromURL } from 'core/request/utils';
 import { concatUrls } from 'core/url';
 
-import { storage, globalOpts, defaultRequestOpts, mimeTypes } from 'core/request/const';
+import { storage, globalOpts, defaultRequestOpts } from 'core/request/const';
 import * as i from 'core/request/interface';
 
 export * from 'core/request/interface';
@@ -118,16 +118,29 @@ export default function create<T = unknown>(path: string, opts?: i.CreateRequest
 /**
  * Returns a wrapped request constructor with the specified options
  *
- * @param opts
+ * @param opts - request options
  * @example
  * request({okStatuses: 200})({query: {bar: true}})('bla/get')
  */
 export default function create<T = unknown>(opts: i.CreateRequestOptions<T>): typeof create;
 
 /**
- * @param path
- * @param resolver - request resolve function
- * @param opts
+ * Returns a function for creating a new remote request with the specified options.
+ * This overload is helpful for creating factories for requests.
+ *
+ * @param path - request path URL
+ * @param resolver - function for request resolving:
+ *   this function takes a request URL, request environment and arguments from invoking of the result function and
+ *   can returns a modification chunk for the request URL or fully replace it
+ *
+ * @param opts - request options
+ *
+ * @example
+ * // Modifying of the current URL
+ * create('https://foo.com', (url, env, ...args) => args.join('/'))('bla', 'baz') // https://foo.com/bla/baz
+ *
+ * // Replacing of the current URL
+ * create('https://foo.com', () => ['https://bla.com', 'bla', 'baz'])() // https://bla.com/bla/baz
  */
 export default function create<T = unknown, A extends unknown[] = unknown[]>(
 	path: string,
@@ -135,7 +148,10 @@ export default function create<T = unknown, A extends unknown[] = unknown[]>(
 	opts?: i.CreateRequestOptions<T>
 ): i.RequestFunctionResponse<T, A extends (infer V)[] ? V[] : unknown[]>;
 
-export default function create<T = unknown>(path: any, ...args: any[]): unknown {
+export default function create<T = unknown>(
+	path: string | i.CreateRequestOptions<T>,
+	...args: any[]
+): unknown {
 	const merge = <T>(...args: unknown[]) => Object.mixin<T>({
 		deep: true,
 		concatArray: true,
@@ -232,35 +248,27 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 
 			// Wrap resolve function with .resolver
 			resolveURL(api?: Nullable<string>): string {
-				if (/^\w+:/.test(path)) {
-					const
-						dataURI = /^data:([^;]+);/.exec(path),
-						type = dataURI && dataURI[1];
+				const
+					reqPath = String(path),
+					type = getResponseTypeFromURL(reqPath);
 
-					if (type && !p.responseType) {
-						if (mimeTypes[type]) {
-							p.responseType = mimeTypes[type];
-
-						} else if (/^text(?:\/|$)/.test(type)) {
-							p.responseType = 'text';
-
-						} else {
-							p.responseType = 'arrayBuffer';
-						}
+				if (type) {
+					if (!p.responseType) {
+						p.responseType = type;
 					}
 
-					return path;
+					return reqPath;
 				}
 
 				let
-					url = concatUrls(api ? this.resolveAPI(api) : null, path);
+					url = concatUrls(api ? this.resolveAPI(api) : null, reqPath);
 
 				if (Object.isFunction(resolver)) {
 					const
 						res = resolver(url, middlewareParams, ...args);
 
 					if (Object.isArray(res)) {
-						url = <string>res[0];
+						url = concatUrls(...res.map(String));
 
 					} else if (res) {
 						url = concatUrls(url, res);

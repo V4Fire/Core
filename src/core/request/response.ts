@@ -12,8 +12,8 @@ import Range from 'core/range';
 import { IS_NODE } from 'core/env';
 import { once } from 'core/meta';
 import { convertIfDate } from 'core/json';
-import { normalizeHeaderName } from 'core/request/utils';
-import { defaultResponseOpts, mimeTypes } from 'core/request/const';
+import { normalizeHeaderName, getResponseTypeFromMime } from 'core/request/utils';
+import { defaultResponseOpts } from 'core/request/const';
 import {
 
 	ResponseOptions,
@@ -21,7 +21,7 @@ import {
 	ResponseType,
 	ResponseTypeValue,
 	Decoders,
-	OkStatus,
+	OkStatuses,
 	JSONLikeValue
 
 } from 'core/request/interface';
@@ -55,7 +55,7 @@ export default class Response {
 	/**
 	 * Range of ok status codes
 	 */
-	readonly okStatuses: OkStatus;
+	readonly okStatuses: OkStatuses;
 
 	/**
 	 * True if .okStatuses contains .status
@@ -93,11 +93,8 @@ export default class Response {
 		this.ok = s instanceof Range ? s.contains(this.status) : (<number[]>[]).concat(s || []).includes(this.status);
 		this.headers = this.parseHeaders(p.headers);
 
-		const
-			contentType = this.getHeader('CONTENT_TYPE') || '';
-
 		this.sourceResponseType = this.responseType = p.responseType == null ?
-			mimeTypes[contentType] : p.responseType;
+			getResponseTypeFromMime(this.getHeader('content-type')) : p.responseType;
 
 		this.decoders = p.decoder ? Object.isFunction(p.decoder) ? [p.decoder] : p.decoder : [];
 		this.body = body;
@@ -205,10 +202,10 @@ export default class Response {
 		}
 
 		if (Object.isString(body)) {
-			return Then.immediate(() => JSON.parse(body, convertIfDate), this.parent);
+			return Then.resolveAndCall(() => JSON.parse(body, convertIfDate), this.parent);
 		}
 
-		return Then.immediate<T | null>(
+		return Then.resolveAndCall<T | null>(
 			<() => T>(() => Object.size(this.decoders) && !Object.isFrozen(body) ? Object.fastClone(body) : body),
 			this.parent
 		);
@@ -278,7 +275,7 @@ export default class Response {
 				return Then.resolve<_>(body, this.parent);
 			}
 
-			return Then.immediate<_>(JSON.stringify(body), this.parent);
+			return Then.resolveAndCall<_>(() => JSON.stringify(body), this.parent);
 		}
 
 		const

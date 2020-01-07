@@ -59,7 +59,7 @@ export type JSONLikeValue =
 	unknown[] |
 	Dictionary;
 
-export type OkStatus =
+export type OkStatuses =
 	Range<number> |
 	StatusCodes |
 	StatusCodes[];
@@ -69,7 +69,6 @@ export interface Encoder<I = unknown, O = unknown> {
 }
 
 export type Encoders<T = unknown> =
-	Dictionary<Encoder<T>> |
 	Iterable<Encoder<T>>;
 
 export interface Decoder<I = unknown, O = unknown> {
@@ -77,7 +76,6 @@ export interface Decoder<I = unknown, O = unknown> {
 }
 
 export type Decoders<T = unknown> =
-	Dictionary<Decoder<T>> |
 	Iterable<Decoder<T>>;
 
 export interface RequestResponseObject<T = unknown> {
@@ -96,7 +94,7 @@ export interface RequestOptions {
 	readonly url: string;
 	readonly method?: RequestMethod;
 	readonly timeout?: number;
-	readonly okStatuses?: OkStatus;
+	readonly okStatuses?: OkStatuses;
 	readonly contentType?: string;
 	readonly responseType?: ResponseType;
 	readonly decoder?: Decoder | Decoder[];
@@ -140,32 +138,33 @@ export interface RequestResolver<T = unknown, ARGS extends unknown[] = unknown[]
 
 export interface CreateRequestOptions<T = unknown> {
 	readonly method?: RequestMethod;
-	readonly cacheStrategy?: CacheStrategy;
 
 	contentType?: string;
 	responseType?: ResponseType;
-	okStatuses?: OkStatus;
-	externalRequest?: boolean;
 
-	api?: RequestAPI;
 	body?: RequestBody;
 	query?: RequestQuery;
-	meta?: Dictionary;
 	headers?: Dictionary<CanArray<unknown>>;
-
-	important?: boolean;
 	credentials?: boolean;
 
+	api?: RequestAPI;
+	okStatuses?: OkStatuses;
 	timeout?: number;
+
+	readonly cacheStrategy?: CacheStrategy;
 	cacheId?: string | symbol;
-	cacheTTL?: number;
 	cacheMethods?: RequestMethod[];
-	offlineCacheTTL?: number;
+	cacheTTL?: number;
 	offlineCache?: boolean;
+	offlineCacheTTL?: number;
 
 	middlewares?: Middlewares<T>;
 	encoder?: Encoder | Encoders;
 	decoder?: Decoder | Decoders;
+
+	externalRequest?: boolean;
+	important?: boolean;
+	meta?: Dictionary;
 }
 
 export type ResolverResult =
@@ -181,7 +180,7 @@ export interface ResponseOptions {
 	parent?: Then;
 	important?: boolean;
 	responseType?: ResponseType;
-	okStatuses?: OkStatus;
+	okStatuses?: OkStatuses;
 	status?: StatusCodes;
 	headers?: string | Dictionary<string>;
 	decoder?: Decoder | Decoders;
