@@ -13,6 +13,7 @@ export const
 
 export const
 	namespaces = Object.convertEnumToDict(Namespaces),
+
 	/** @deprecated */
 	linkNamesDictionary = namespaces;
 
