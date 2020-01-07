@@ -35,10 +35,6 @@ export { default as Response } from 'core/request/response';
  * @param path - request path URL
  * @param opts - request options:
  *   *) [method='GET'] - request method type
- *   *) [cacheStrategy='never'] - type of caching for requests which supports it:
- *      1) 'forever' - caches all request and stores the value forever;
- *      2) 'queue' - caches all requests, but more frequent requests will push less frequent requests;
- *      3) 'never' - never caches any requests.
  *
  *   *) [contentType] - mime type of request data (if not specified, it will be casted dynamically)
  *   *) [responseType='text'] - type of response data
@@ -59,7 +55,7 @@ export { default as Response } from 'core/request/response';
  *      It can be useful for creating request factories.
  *      You can provide a direct URL for the API:
  *
- *      *) [url] - base api url, such as 'https://google.com'.
+ *      *) [url] - base API URL, such as 'https://google.com'.
  *
  *      Or you can provide a bunch of parameters for mapping on .api parameter from the application config.
  *      For example, if the config.api is equal to 'https://google.com' and you provide parameters like
@@ -76,9 +72,18 @@ export { default as Response } from 'core/request/response';
  *
  *   *) [timeout] - value in milliseconds for the request timeout
  *
+ *   *) [cacheStrategy='never'] - type of caching for requests which supports it:
+ *      1) 'forever' - caches all requests and stores their values forever within the active session or
+ *         until the cache expires (if .cacheTTL is specified);
+ *
+ *      2) 'queue' - caches all requests, but more frequent requests will push less frequent requests;
+ *      3) 'never' - never caches any requests.
+ *
  *   *) [cacheId] - unique cache id: it can be useful for creating request factories with isolated cache storages
  *   *) [cacheMethods=['GET']] - list of request methods that supports caching
  *   *) [cacheTTL] - value in milliseconds that indicates how long a value of the request should keep in the cache
+ *      (by default, all request is stored within the active session without expiring)
+ *
  *   *) [offlineCache=false] - enables the support of offline caching
  *   *) [offlineCacheTTL=(1).day()] - value in milliseconds that indicates how long a value of the request
  *      should keep in the offline cache
@@ -90,11 +95,14 @@ export { default as Response } from 'core/request/response';
  *      will be returned as the request result. It can be helpful for organizing mocks of data and
  *      other similar cases when you don't want to execute a real request.
  *
- *   *) [encoder] - function (or list of functions) that takes request data
- *      (if .body is not specified, it will take .query) and returns a new data for request.
- *      If you provides a list of functions their will
+ *   *) [encoder] - function (or a sequence of functions) that takes data of the current request
+ *      (if .body is not specified, it will take .query) and returns a new data for requesting.
+ *      If you provides a sequence of functions, then the first function will provide a result to the next function
+ *      from the sequence and etc.
  *
- *   *) [decoder]
+ *   *) [decoder] - function (or a sequence of functions) that takes response data of the current request
+ *      and returns a new data for responsing. If you provides a sequence of functions, then the first function
+ *      will provide a result to the next function from the sequence and etc.
  *
  *   *) [externalRequest] - special flag which indicates that request will be invoked not directly by a browser,
  *      but some "external" application, such as a native application in a mobile (it's important for offline requests)
@@ -118,7 +126,7 @@ export default function create<T = unknown>(opts: i.CreateRequestOptions<T>): ty
 
 /**
  * @param path
- * @param resolver - request resolve function:
+ * @param resolver - request resolve function
  * @param opts
  */
 export default function create<T = unknown, A extends unknown[] = unknown[]>(
@@ -377,12 +385,12 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 
 			if (fromCache) {
 				cache = 'memory';
-				res = Then.immediate(() => ctx.cache.get(cacheKey), parent)
+				res = Then.resolveAndCall(() => ctx.cache.get(cacheKey), parent)
 					.then(ctx.wrapAsResponse);
 
 			} else if (fromLocalStorage) {
 				cache = 'offline';
-				res = Then.immediate(() => storage!
+				res = Then.resolveAndCall(() => storage!
 					.then((storage) => storage.get(localCacheKey)), parent)
 					.then(ctx.wrapAsResponse)
 					.then(ctx.saveCache);
