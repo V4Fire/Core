@@ -7,7 +7,7 @@
  */
 
 import extend from 'core/log/extensions';
-import log from 'core/log';
+import log from 'core/log/curator';
 
 export * from 'core/log/interface';
 export * from 'core/log/config';

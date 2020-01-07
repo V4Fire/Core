@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { LogLevel } from 'core/log';
+import { LogLevel } from 'core/log/interface';
 import { LogMiddlewares } from 'core/log/middlewares';
 import { LogEngines } from 'core/log/engines';
 

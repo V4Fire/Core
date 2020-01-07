@@ -8,7 +8,7 @@
 
 import { LogEvent, LogMiddleware } from 'core/log/middlewares';
 import { LogEngine } from 'core/log/engines';
-import { LogLevel } from 'core/log';
+import { LogLevel } from 'core/log/interface';
 import { cmpLevels } from 'core/log/base';
 
 export class LogPipeline {

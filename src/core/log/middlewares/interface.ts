@@ -7,7 +7,7 @@
  */
 
 import middlewareFactory from 'core/log/middlewares';
-import { LogLevel } from 'core/log';
+import { LogLevel } from 'core/log/interface';
 
 export interface LogEvent {
 	readonly context: string;
