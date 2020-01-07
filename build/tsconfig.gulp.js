@@ -8,6 +8,9 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/**
+ * The task for building .tsconfig file
+ */
 module.exports = function (gulp) {
 	const
 		$ = require('gulp-load-plugins')({scope: ['optionalDependencies']});

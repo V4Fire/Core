@@ -17,10 +17,10 @@ const
 /**
  * Factory for creating require wrappers:
  *
- * 1) If the string has substring ${root}:
- *    substring will be replace to one of roots values (from the end) until the will be find
+ * 1) If the string has a substring ${root}:
+ *    the substring will be replaced by one of root directories (from the end) until the file is found
  *
- * 2) Or, one of roots values will be add to the beginning of the source string
+ * 2) Or, one of root directories will be added to the beginning of the source string
  *
  * @param {Array<string>} roots - list of root directories
  * @returns {function (string, string?): ?}
@@ -43,7 +43,7 @@ module.exports = function (roots) {
 
 		if (superRgxp.test(src)) {
 			if (!ctx) {
-				throw new Error('Context for @super is not defined');
+				throw new ReferenceError('The context for @super is not defined');
 			}
 
 			ctx = path.dirname(findUp.sync('.pzlrrc', {

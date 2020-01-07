@@ -60,7 +60,7 @@ class Config {
 	}
 
 	/**
-	 * Creates config object with the specified options
+	 * Creates a config object with the specified options and returns it
 	 *
 	 * @template T
 	 * @param {!Array<string>} dirs - list of init directories ([0] - dirname, [1+] - src fields)
@@ -163,7 +163,7 @@ class Config {
 	}
 
 	/**
-	 * Returns src map for the specified init directory
+	 * Returns a map with paths for the specified init directory
 	 *
 	 * @param {string} dir - init directory (usually __dirname)
 	 * @returns {{root: string, src: string, pzlr: {blockDir: (string|undefined), serverDir: (string|undefined)}}}

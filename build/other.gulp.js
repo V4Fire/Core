@@ -12,12 +12,18 @@ module.exports = function (gulp) {
 	const
 		$ = require('gulp-load-plugins')();
 
+	/**
+	 * The task for setting NODE_ENV to production
+	 */
 	gulp.task('setProd', (cb) => {
 		process.env.NODE_ENV = 'production';
 		global.isProd = true;
 		cb();
 	});
 
+	/**
+	 * The task for updating copyrights
+	 */
 	gulp.task('copyright', () =>
 		gulp.src('./LICENSE', {since: gulp.lastRun('copyright')})
 			.pipe($.plumber())
@@ -29,6 +35,9 @@ module.exports = function (gulp) {
 			.pipe(gulp.dest('./'))
 	);
 
+	/**
+	 * The task for updating head disclaimers
+	 */
 	gulp.task('head', () => {
 		const
 			through = require('through2'),
@@ -41,7 +50,7 @@ module.exports = function (gulp) {
 		const src = [
 			'./@(src|config|build|ts-definitions)/**/*.@(js|ts|styl|ss)',
 			'./@(index|gulpfile|webpack.config).js',
-			'./predefs.d.ts'
+			'./index.d.ts'
 		];
 
 		return gulp.src(src, {base: './', since: gulp.lastRun('head')})
