@@ -6,7 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { CreateRequestOptions } from 'core/request/interface';
+import { mimeTypes } from 'core/request/const';
+import { CreateRequestOptions, ResponseType } from 'core/request/interface';
 
 /**
  * Takes the cache key for data and returns a new key for saving the data in a storage
@@ -184,4 +185,42 @@ export function normalizeHeaders(headers?: Dictionary, query?: Dictionary): Dict
 	}
 
 	return res;
+}
+
+const
+	isTextType = /^text(?:\/|$)/,
+	isXMLType = /^application\/\w+-xml\b/,
+	dataURIRgxp = /^data:([^;]+);/;
+
+/**
+ * Returns a type of data from the specified DATA:URI string
+ * @param url
+ */
+export function getResponseTypeFromURL(url: string): CanUndef<ResponseType> {
+	return getResponseTypeFromMime(dataURIRgxp.exec(url)?.[1]);
+}
+
+/**
+ * Returns a type of data from the specified mime type
+ * @param mime
+ */
+export function getResponseTypeFromMime(mime: CanUndef<string>): CanUndef<ResponseType> {
+	const
+		type = mime?.toLowerCase();
+
+	if (type) {
+		if (mimeTypes[type]) {
+			return mimeTypes[type];
+		}
+
+		if (isTextType.test(type)) {
+			return 'text';
+		}
+
+		if (isXMLType.test(type)) {
+			return 'document';
+		}
+
+		return 'blob';
+	}
 }

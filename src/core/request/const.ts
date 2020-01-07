@@ -24,7 +24,10 @@ export const mimeTypes: Dictionary<ResponseType> = Object.createDict({
 	'application/json': 'json',
 	'application/javascript': 'text',
 	'application/xml': 'document',
-	'application/x-www-form-urlencoded': 'text'
+	'application/x-www-form-urlencoded': 'text',
+	'application/x-msgpack': 'arrayBuffer',
+	'application/x-protobuf': 'arrayBuffer',
+	'application/vnd.google.protobuf': 'arrayBuffer'
 });
 
 export const defaultRequestOpts = {
