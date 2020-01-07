@@ -16,3 +16,4 @@ import 'core/prelude/string';
 import 'core/prelude/global';
 import 'core/prelude/date';
 import 'core/prelude/i18n';
+import 'core/prelude/i18n/helpers';
