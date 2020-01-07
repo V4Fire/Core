@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { LogPipelineConfig } from 'core/log/config/interface.js';
+import { LogPipelineConfig } from 'core/log/config/interface';
 import { LogPipeline } from 'core/log/curator/pipeline';
 import { DEFAULT_LEVEL } from 'core/log/base';
 

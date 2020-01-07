@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { LogStylesConfig, StylesCache } from 'core/log/config/interface.js';
+import { LogStylesConfig, StylesCache } from 'core/log/config/interface';
 import { LogLevel } from 'core/log';
 
 /**

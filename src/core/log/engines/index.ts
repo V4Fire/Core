@@ -7,10 +7,10 @@
  */
 
 import { ConsoleEngine } from 'core/log/engines/console';
-import { LogEngine, LogEngineConstructor } from 'core/log/engines/interface.js';
+import { LogEngine, LogEngineConstructor } from 'core/log/engines/interface';
 
 export { extend, Extended } from 'core/log/base';
-export * from 'core/log/engines/interface.js';
+export * from 'core/log/engines/interface';
 
 /**
  * Returns a function that creates an engine of the specified class
