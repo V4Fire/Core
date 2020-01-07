@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { mimeTypes } from 'core/request/const';
+import { cache, mimeTypes } from 'core/request/const';
 import { CreateRequestOptions, ResponseType } from 'core/request/interface';
 
 /**
@@ -222,5 +222,14 @@ export function getResponseTypeFromMime(mime: CanUndef<string>): CanUndef<Respon
 		}
 
 		return 'blob';
+	}
+}
+
+/**
+ * Drops all request caches
+ */
+export function dropCache(): void {
+	for (let keys = Object.keys(cache), i = 0; i < keys.length; i++) {
+		cache[keys[i]].clear();
 	}
 }

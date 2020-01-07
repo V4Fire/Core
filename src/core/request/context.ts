@@ -12,38 +12,43 @@ import Cache from 'core/cache/interface';
 
 import { concatUrls, toQueryString } from 'core/url';
 import { normalizeHeaders, applyQueryForStr, getStorageKey, getRequestKey } from 'core/request/utils';
-import { cache, pendingCache, storage, globalOpts, defaultRequestOpts } from 'core/request/const';
+import { cache, pendingCache, storage, globalOpts, defaultRequestOpts, methodsWithoutBody } from 'core/request/const';
 import * as i from 'core/request/interface';
 
 const
-	resolveURLRgxp = /(?:^|(\w+:\/\/)(?:([^./]+)\.)?([^./]+)(?:\.([^./]+))?)(\/.*|$)/,
+	resolveURLRgxp = /(?:^|^(\w+:\/\/\/?)(?:([^:]+:[^@]+)@)?([^:/]+)(?::(\d+))?)(\/.*|$)/,
 	queryTplRgxp = /\/:(.+?)(\(.*?\))?(?=[\\/.?#]|$)/g;
 
 export default class RequestContext<T = unknown> {
 	/**
-	 * True if the client is online
+	 * True if a host has connection to the internet
 	 */
 	isOnline: boolean = false;
 
 	/**
-	 * List/table of request encoders
+	 * True if the request can be cached
 	 */
-	encoders: i.Encoders;
+	readonly canCache: boolean;
 
 	/**
-	 * List/table of response decoders
-	 */
-	decoders: i.Decoders;
-
-	/**
-	 * Cache key
+	 * Cache key of the request
 	 */
 	cacheKey?: string;
 
 	/**
-	 * Parent operation promise
+	 * The cache object
 	 */
-	readonly parent!: Then;
+	readonly cache: Cache;
+
+	/**
+	 * The cache object for pending requests
+	 */
+	readonly pendingCache: Cache = pendingCache;
+
+	/**
+	 * True if the request can provide parameters only as a query string
+	 */
+	readonly withoutBody: boolean;
 
 	/**
 	 * Request parameters
@@ -51,31 +56,26 @@ export default class RequestContext<T = unknown> {
 	readonly params!: typeof defaultRequestOpts & i.CreateRequestOptions<T>;
 
 	/**
-	 * Alias for .params.query
+	 * The sequence of request encoders
+	 */
+	encoders: i.Encoders;
+
+	/**
+	 * The sequence of response decoders
+	 */
+	decoders: i.Decoders;
+
+	/**
+	 * Parent operation promise
+	 */
+	readonly parent!: Then;
+
+	/**
+	 * An alias for query parameters of the request
 	 */
 	get query(): i.RequestQuery {
 		return this.params.query;
 	}
-
-	/**
-	 * True if a request can provide parameters only as an query string
-	 */
-	readonly withoutBody: boolean;
-
-	/**
-	 * True if a request can be cached
-	 */
-	readonly canCache: boolean;
-
-	/**
-	 * Cache object
-	 */
-	readonly cache: Cache;
-
-	/**
-	 * Cache object for pending requests
-	 */
-	readonly pendingCache: Cache = pendingCache;
 
 	/**
 	 * Cache timeout id (for setTimeout)
@@ -93,15 +93,15 @@ export default class RequestContext<T = unknown> {
 			extendFilter: (d, v) => Array.isArray(v) || Object.isObject(v)
 		}, {}, params);
 
-		this.canCache = p.cacheMethods ? p.cacheMethods.includes(p.method) : false;
-		this.withoutBody = Boolean({GET: true, HEAD: true}[p.method]);
+		this.canCache = p.cacheMethods?.includes(p.method) || false;
+		this.withoutBody = Boolean(methodsWithoutBody[p.method]);
 		this.encoders = p.encoder ? Object.isFunction(p.encoder) ? [p.encoder] : p.encoder : [];
 		this.decoders = p.decoder ? Object.isFunction(p.decoder) ? [p.decoder] : p.decoder : [];
 		this.cache = cache[p.cacheStrategy] || cache.never;
 	}
 
 	/**
-	 * Generates a cache string by the specified url and returns it
+	 * Generates a string cache key for specified url and returns it
 	 * @param url
 	 */
 	getRequestKey(url: string): string {
@@ -110,80 +110,92 @@ export default class RequestContext<T = unknown> {
 	}
 
 	/**
-	 * Returns an absolute path to the API for a request
-	 * @param [api] - base api url
+	 * Returns an absolute URL for the request API
+	 * @param [apiURL] - base API URL
 	 */
-	resolveAPI(api: Nullable<string> = globalOpts.api): string {
+	resolveAPI(apiURL: Nullable<string> = globalOpts.api): string {
 		const
-			c = (v) => Object.isFunction(v) ? v() : v,
-			a = <{[K in keyof i.RequestAPI]: Nullable<string>}>({...this.params.api});
+			compute = (v) => Object.isFunction(v) ? v() : v,
+			api = <{[K in keyof i.RequestAPI]: Nullable<string>}>({...this.params.api});
 
-		for (let keys = Object.keys(a), i = 0; i < keys.length; i++) {
+		for (let keys = Object.keys(api), i = 0; i < keys.length; i++) {
 			const key = keys[i];
-			a[key] = c(a[key]);
+			api[key] = compute(api[key]);
 		}
 
-		if (a.url) {
-			return a.url;
+		if (api.url) {
+			return api.url;
 		}
 
-		if (!api) {
-			const def = <any>{
-				namespace: '',
-				...a
-			};
-
+		const resolve = (name, def?) => {
 			const
-				nm = def.namespace;
+				val = api[name] != null ? api[name] : def || '';
 
-			if (!def.protocol) {
+			switch (name) {
+				case 'auth':
+					return val ? `${val}@` : '';
+
+				case 'port':
+					return val ? `:${val}` : '';
+
+				default:
+					return val;
+			}
+		};
+
+		const resolveDomains = ({def = [], slice = 0, join = true} = {}) => {
+			const
+				list = Array.from({length: 6}, (el, i) => i + 1).slice(slice).reverse(),
+				url = <string[]>[];
+
+			for (let i = 0; i < list.length; i++) {
+				const
+					lvl = list[i],
+					domain = (lvl === 1 ? api.zone : api[`domain${lvl}`]) || def[lvl - 1];
+
+				if (domain) {
+					url.push(domain);
+				}
+			}
+
+			return join !== false ? url.join('.') : url;
+		};
+
+		if (!apiURL) {
+			const
+				nm = api.namespace || '';
+
+			if (!api.protocol) {
 				return nm[0] === '/' ? nm : `/${nm}`;
 			}
 
 			return concatUrls(
-				[
-					def.protocol + (def.domain3 ? `${def.domain3}.` : '') + a.domain2,
-					def.zone
-				].join('.'),
+				resolve('protocol') +
+					resolve('auth') +
+					resolveDomains() +
+					resolve('port'),
 
 				nm
 			);
 		}
 
-		const v = (f, def?) => {
-			const
-				v = a[f] != null ? a[f] : def || '';
-
-			if (f === 'domain3') {
-				return v ? `${v}.` : '';
-			}
-
-			return v;
-		};
-
-		if (!resolveURLRgxp.test(api)) {
-			return concatUrls(...v('domain3').split('.'), v('namespace'));
+		if (!resolveURLRgxp.test(apiURL)) {
+			return concatUrls(...resolveDomains({slice: 2, join: false}), resolve('namespace'));
 		}
 
-		return api.replace(resolveURLRgxp, (str, protocol, domain3, domain2, zone, nm) => {
-			if (zone == null && domain3 != null) {
-				zone = domain2;
-				domain2 = domain3;
-				domain3 = undefined;
-			}
-
-			nm = v('namespace', nm);
+		return apiURL.replace(resolveURLRgxp, (str, protocol, auth, domains, port, nm) => {
+			domains = domains?.split('.');
+			nm = resolve('namespace', nm);
 
 			if (!protocol) {
-				return concatUrls(...v('domain3').split('.'), nm);
+				return concatUrls(...resolveDomains({slice: 2, join: false}), nm);
 			}
 
-			zone = v('zone', zone) || [];
-
 			return concatUrls(
-				[
-					v('protocol', protocol) + v('domain3', domain3) + v('domain2', domain2)
-				].concat(zone).join('.'),
+				resolve('protocol', protocol) +
+					resolve('auth', auth) +
+					resolveDomains({def: domains}),
+					resolve('port', port),
 
 				nm
 			);
@@ -191,8 +203,8 @@ export default class RequestContext<T = unknown> {
 	}
 
 	/**
-	 * Returns an absolute path for the request
-	 * @param [url] - base request url
+	 * Returns an absolute URL for the request
+	 * @param [url] - base request URL
 	 */
 	resolveURL(url?: Nullable<string>): string {
 		if (url == null) {
@@ -229,7 +241,56 @@ export default class RequestContext<T = unknown> {
 	}
 
 	/**
-	 * Cache middleware for a request
+	 * Wraps the specified promise (attaches the pending cache, etc.)
+	 * @param promise
+	 */
+	wrapRequest(promise: Then<T>): Then<T> {
+		const
+			key = this.cacheKey,
+			cache = this.pendingCache;
+
+		if (key && !cache.has(key)) {
+			promise = promise.then(
+				(v) => {
+					cache.remove(key);
+					return v;
+				},
+
+				(r) => {
+					cache.remove(key);
+					throw r;
+				},
+
+				() => {
+					cache.remove(key);
+				}
+			);
+
+			cache.set(key, promise);
+		}
+
+		return promise;
+	}
+
+	/**
+	 * Drops a value of the request from the cache
+	 */
+	dropCache(): void {
+		const
+			key = this.cacheKey;
+
+		if (key) {
+			this.cache.remove(key);
+
+			if (this.params.offlineCache && storage) {
+				storage.then((storage) => storage.remove(getStorageKey(key))).catch(stderr);
+			}
+		}
+	}
+
+	/**
+	 * Middleware for saving a request in the cache
+	 * @param res - response object
 	 */
 	saveCache(res: i.RequestResponseObject<T>): i.RequestResponseObject<T> {
 		const
@@ -266,23 +327,7 @@ export default class RequestContext<T = unknown> {
 	}
 
 	/**
-	 * Drops the cache
-	 */
-	dropCache(): void {
-		const
-			key = this.cacheKey;
-
-		if (key) {
-			this.cache.remove(key);
-
-			if (this.params.offlineCache && storage) {
-				storage.then((storage) => storage.remove(getStorageKey(key))).catch(stderr);
-			}
-		}
-	}
-
-	/**
-	 * Middleware for wrapping an object as RequestResponseObject
+	 * Middleware for wrapping the specified object with RequestResponseObject
 	 * @param obj
 	 */
 	async wrapAsResponse(obj: Response | i.ResponseTypeValue): Promise<i.RequestResponseObject<T>> {
@@ -297,37 +342,5 @@ export default class RequestContext<T = unknown> {
 			data: await response.decode<T>(),
 			dropCache: this.dropCache.bind(this)
 		};
-	}
-
-	/**
-	 * Wraps the specified promise (attaches pending cache, etc.)
-	 * @param promise
-	 */
-	wrapRequest(promise: Then<T>): Then<T> {
-		const
-			key = this.cacheKey,
-			cache = this.pendingCache;
-
-		if (key && !cache.has(key)) {
-			promise = promise.then(
-				(v) => {
-					cache.remove(key);
-					return v;
-				},
-
-				(r) => {
-					cache.remove(key);
-					throw r;
-				},
-
-				() => {
-					cache.remove(key);
-				}
-			);
-
-			cache.set(key, promise);
-		}
-
-		return promise;
 	}
 }

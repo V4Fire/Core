@@ -124,13 +124,20 @@ export type Middlewares<T = unknown> =
 	Dictionary<Middleware<T>> |
 	Iterable<Middleware<T>>;
 
+export type RequestAPIValue<T = string> = Nullable<T> | (() => Nullable<T>);
+
 export interface RequestAPI {
-	url?: Nullable<string> | (() => Nullable<string>);
-	protocol?: Nullable<string> | (() => Nullable<string>);
-	domain3?: Nullable<string> | (() => Nullable<string>);
-	domain2?: Nullable<string> | (() => Nullable<string>);
-	zone?: Nullable<string> | (() => Nullable<string>);
-	namespace?: Nullable<string> | (() => Nullable<string>);
+	url?: RequestAPIValue;
+	protocol?: RequestAPIValue;
+	auth?: RequestAPIValue;
+	domain6?: RequestAPIValue;
+	domain5?: RequestAPIValue;
+	domain4?: RequestAPIValue;
+	domain3?: RequestAPIValue;
+	domain2?: RequestAPIValue;
+	zone?: RequestAPIValue;
+	port?: RequestAPIValue<string | number>;
+	namespace?: RequestAPIValue;
 }
 export interface RequestResolver<T = unknown, ARGS extends unknown[] = unknown[]> {
 	(url: string, opts: MiddlewareOptions<T>, ...args: ARGS): ResolverResult;

@@ -68,11 +68,7 @@ export const globalOpts: GlobalOptions = {
 	meta: {}
 };
 
-/**
- * Drops all request caches
- */
-export function dropCache(): void {
-	for (let keys = Object.keys(cache), i = 0; i < keys.length; i++) {
-		cache[keys[i]].clear();
-	}
-}
+export const methodsWithoutBody = Object.createDict({
+	GET: true,
+	HEAD: true
+});

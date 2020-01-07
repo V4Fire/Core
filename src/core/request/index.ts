@@ -25,7 +25,8 @@ import * as i from 'core/request/interface';
 export * from 'core/request/interface';
 export * from 'core/request/utils';
 
-export { globalOpts, cache, pendingCache, dropCache } from 'core/request/const';
+export { dropCache } from 'core/request/utils';
+export { globalOpts, cache, pendingCache } from 'core/request/const';
 export { default as RequestError } from 'core/request/error';
 export { default as Response } from 'core/request/response';
 
@@ -58,13 +59,19 @@ export { default as Response } from 'core/request/response';
  *      *) [url] - base API URL, such as 'https://google.com'.
  *
  *      Or you can provide a bunch of parameters for mapping on .api parameter from the application config.
+ *      In addition, you can provide a function as a key value, and it will be invoked.
  *      For example, if the config.api is equal to 'https://google.com' and you provide parameters like
- *      {domain3: 'foo', namespace: 'bar'}, than it builds a string is equal to 'https://foo.google.com/bar'.
+ *      {domain3: 'foo', namespace: () => 'bar'}, than it builds a string is equal to 'https://foo.google.com/bar'.
  *
  *      *) [protocol] - api protocol, like 'http' ot 'https'
+ *      *) [auth] - value for an API authorization part, like 'login:password'
+ *      *) [domain6] - value for an API domain level 6 part
+ *      *) [domain5] - value for an API domain level 5 part
+ *      *) [domain4] - value for an API domain level 4 part
  *      *) [domain3] - value for an API domain level 3 part
  *      *) [domain2] - value for an API domain level 2 part
  *      *) [zone] - value for an API domain zone part
+ *      *) [port] - value for an API api port
  *      *) [namespace] - value for an API namespace part: it follows after '/' character
  *
  *   *) [okStatuses=new Range(200, 299)] - list of status codes (or a single code) with HTTP statuses which is ok
