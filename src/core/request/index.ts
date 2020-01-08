@@ -92,7 +92,7 @@ export { default as Response } from 'core/request/response';
  *   *) [cacheTTL] - value in milliseconds that indicates how long a value of the request should keep in the cache
  *      (by default, all request is stored within the active session without expiring)
  *
- *   *) [offlineCache=false] - enables the support of offline caching
+ *   *) [offlineCache=false] - enables support of offline caching
  *   *) [offlineCacheTTL=(1).day()] - value in milliseconds that indicates how long a value of the request
  *      should keep in the offline cache
  *
