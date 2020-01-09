@@ -1298,9 +1298,29 @@ interface Date {
 	 */
 	toHTMLString(opts?: DateHTMLStringOptions): string;
 
-	add(params: DateSetParams, reset?: boolean): Date;
-	set(params: DateSetParams, reset?: boolean): Date;
-	rewind(params: DateSetParams, reset?: boolean): Date;
+	/**
+	 * Modifies the date object with adding the specified time units
+	 *
+	 * @param units
+	 * @param reset - is true, then all lower units will be reset to zero
+	 */
+	add(units: DateSetParams, reset?: boolean): Date;
+
+	/**
+	 * Modifies the date object with setting the specified time units
+	 *
+	 * @param units
+	 * @param reset - is true, then all lower units will be reset to zero
+	 */
+	set(units: DateSetParams, reset?: boolean): Date;
+
+	/**
+	 * Modifies the date object with subtracting the specified time units
+	 *
+	 * @param units
+	 * @param reset - is true, then all lower units will be reset to zero
+	 */
+	rewind(units: DateSetParams, reset?: boolean): Date;
 
 	/**
 	 * Returns a relative value of the date for the now date
