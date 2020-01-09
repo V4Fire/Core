@@ -35,30 +35,32 @@ export { default as Response } from 'core/request/response';
  *
  * @param path - request path URL
  * @param opts - request options:
- *   *) [method='GET'] - request method type
+ * @param [opts.method='GET'] - request method type
+ * @param [opts.contentType] - mime type of request data
+ *   <p>(if not specified, it will be casted dynamically)</p>
  *
- *   *) [contentType] - mime type of request data (if not specified, it will be casted dynamically)
- *   *) [responseType='text'] - type of response data
- *      (if not specified, it will be casted dynamically from response headers):
+ * @param [opts.responseType='text'] - type of response data
+ *   <p>(if not specified, it will be casted dynamically from response headers):</p>
+ *   <ul>
+ *     <li>'text' - result is interpreted as a simple string;</li>
+ *     <li>'json' - result is interpreted as a JSON string;</li>
+ *     <li>'arrayBuffer' - result is interpreted as an array buffer;</li>
+ *     <li>'blob' - result is interpreted as a binary sequence;</li>
+ *     <li>'object' - result is interpreted "as is" without any converting.</li>
+ *   </ul>
  *
- *      1) 'text' - result is interpreted as a simple string;
- *      2) 'json' - result is interpreted as a JSON string;
- *      2) 'arrayBuffer' - result is interpreted as an array buffer;
- *      2) 'blob' - result is interpreted as a binary sequence;
- *      2) 'object' - result is interpreted "as is" without any converting.
+ * @param [opts.body] - request body
+ * @param [opts.query] - URL query parameters
+ * @param [opts.headers] - additional request headers
+ * @param [opts.credentials] - enables providing of credentials for cross-domain requests
  *
- *   *) [body] - request body
- *   *) [query] - URL query parameters
- *   *) [headers] - additional request headers
- *   *) [credentials] - enables providing of credentials for cross-domain requests
- *
- *   *) [api] - object with API parameters. If the API is specified it will be concatenated with a request path URL.
- *      It can be useful for creating request factories. In addition, you can provide a function as a key value,
- *      and it will be invoked.
+ * @param [opts.api] - object with API parameters. If the API is specified it will be concatenated with a
+ *      request path URL. It can be useful for creating request factories. In addition, you can provide a function as a
+ *      key value, and it will be invoked.
  *
  *      You can provide a direct URL for the API:
  *
- *      *) [url] - base API URL, such as 'https://google.com'.
+ * @param [opts.api.url] - base API URL, such as 'https://google.com'.
  *
  *      Or you can provide a bunch of parameters for mapping on .api parameter from the application config.
  *      For example, if the config.api is equal to 'https://google.com' and you provide parameters like
