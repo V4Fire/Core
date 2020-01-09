@@ -9,16 +9,10 @@
 import log from 'core/log';
 import extend from 'core/prelude/extend';
 
-/**
- * Converts the specified unknown value to any
- * @param obj
- */
+/** @see Any */
 extend(globalThis, 'Any', (obj) => obj);
 
-/**
- * STDERR wrapper
- * @param err
- */
+/** @see stderr */
 extend(globalThis, 'stderr', (err) => {
 	if (err instanceof Object) {
 		if ({clearAsync: true, abort: true}[String((<Dictionary>err).type)]) {
@@ -30,8 +24,5 @@ extend(globalThis, 'stderr', (err) => {
 	}
 });
 
-/**
- * dev/null wrapper
- * @param obj
- */
+/** @see devNull */
 extend(globalThis, 'devNull', () => { /* empty */ });

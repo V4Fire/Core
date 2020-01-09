@@ -8,10 +8,7 @@
 
 import extend from 'core/prelude/extend';
 
-/**
- * Returns a new array containing elements from all specified arrays with duplicates removed
- * @param args
- */
+/** @see Array.prototype.union */
 extend(Array.prototype, 'union', function (this: unknown[], ...args: unknown[]): unknown[] {
 	return [...new Set(this.concat(...args))];
 });

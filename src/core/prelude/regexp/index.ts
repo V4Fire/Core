@@ -11,8 +11,5 @@ import extend from 'core/prelude/extend';
 const
 	escapeRgxp = /([\\\/'*+?|()\[\]{}.^$-])/g;
 
-/**
- * Returns the specified value as a string with escaping of all RegExp specific characters
- * @param value
- */
+/** @see RegExpConstructor.escape */
 extend(RegExp, 'escape', (value: unknown) => String(value).replace(escapeRgxp, '\\$1'));

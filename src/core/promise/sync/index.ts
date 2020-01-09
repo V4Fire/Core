@@ -15,6 +15,10 @@ export default class SyncPromise<T = unknown> implements PromiseLike<T> {
 	 * @param value
 	 */
 	static resolve<T = unknown>(value: i.Value<T>): SyncPromise<T>;
+
+	/**
+	 * Creates a new resolved promise
+	 */
 	static resolve(): SyncPromise<void>;
 	static resolve<T = unknown>(value?: i.Value<T>): SyncPromise<T> {
 		if (value instanceof SyncPromise) {

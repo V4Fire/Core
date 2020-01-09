@@ -43,7 +43,8 @@ export async function get(): Promise<Session> {
  * Sets a new session with the specified parameters
  *
  * @param [auth]
- * @param [params] - additional parameters
+ * @param [params] - additional parameters:
+ * @param [params.csrf] - value for the CSRF token
  * @emits set(session: Session)
  */
 export async function set(auth?: SessionKey, params?: SessionParams): Promise<boolean> {
@@ -89,7 +90,8 @@ export async function clear(): Promise<boolean> {
  * Matches a session with the current
  *
  * @param [auth]
- * @param [params]
+ * @param [params] - additional parameters:
+ * @param [params.csrf] - value for the CSRF token
  */
 export async function match(auth?: SessionKey, params?: SessionParams): Promise<boolean> {
 	try {

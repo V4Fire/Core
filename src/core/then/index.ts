@@ -37,6 +37,10 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	 * @param [parent] - parent promise
 	 */
 	static resolveAndCall<T = unknown>(value: i.ExecutableValue<T>, parent?: Then): Then<T>;
+
+	/**
+	 * Creates a new resolved Then promise
+	 */
 	static resolveAndCall(): Then<void>;
 	static resolveAndCall<T = unknown>(value?: i.ExecutableValue<T>, parent?: Then): Then<T> {
 		return Then.resolve(value, parent).then<T>((obj) => Object.isFunction(obj) ? obj() : obj);
@@ -58,6 +62,10 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	 * @param [parent] - parent promise
 	 */
 	static resolve<T = unknown>(value: i.Value<T>, parent?: Then): Then<T>;
+
+	/**
+	 * Creates a new resolved Then promise
+	 */
 	static resolve(): Then<void>;
 	static resolve<T = unknown>(value?: i.Value<T>, parent?: Then): Then<T> {
 		if (value instanceof Then) {

@@ -8,12 +8,7 @@
 
 import extend from 'core/prelude/extend';
 
-/**
- * Compares two specified objects using naive but fast "JSON.stringify/parse" strategy and returns the result
- *
- * @param a
- * @param b
- */
+/** @see ObjectConstructor.fastCompare */
 extend(Object, 'fastCompare', (a, b) => {
 	if (a === b) {
 		return true;
@@ -81,10 +76,7 @@ extend(Object, 'fastCompare', (a, b) => {
 const
 	funcCache = new WeakMap();
 
-/**
- * Returns a string representation of the specified object naive but fast "JSON.stringify/parse" strategy
- * @param obj
- */
+/** @see ObjectConstructor.fastHash */
 extend(Object, 'fastHash', (obj) =>
 	JSON.stringify(obj, createReplacer(obj, undefined, funcCache)) || 'null'
 );

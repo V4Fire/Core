@@ -18,241 +18,147 @@ const
 	day = 24 * hour,
 	week = 7 * day;
 
-/**
- * Returns a value of milliseconds from the seconds
- */
+/** @see Number.prototype.second */
 extend(Number.prototype, 'second', createMsFunction(second));
 
-/**
- * Returns a value of milliseconds from the seconds
- */
+/** @see Number.prototype.seconds */
 extend(Number.prototype, 'seconds', Number.prototype.second);
 
-/**
- * Returns a value of milliseconds from the minutes
- */
+/** @see Number.prototype.minute */
 extend(Number.prototype, 'minute', createMsFunction(minute));
 
-/**
- * Returns a value of milliseconds from the minutes
- */
+/** @see Number.prototype.minutes */
 extend(Number.prototype, 'minutes', Number.prototype.minute);
 
-/**
- * Returns a value of milliseconds from the hours
- */
+/** @see Number.prototype.hour */
 extend(Number.prototype, 'hour', createMsFunction(hour));
 
-/**
- * Returns a value of milliseconds from the hours
- */
+/** @see Number.prototype.hours */
 extend(Number.prototype, 'hours', Number.prototype.hour);
 
-/**
- * Returns a value of milliseconds from the days
- */
+/** @see Number.prototype.day */
 extend(Number.prototype, 'day', createMsFunction(day));
 
-/**
- * Returns a value of milliseconds from the days
- */
+/** @see Number.prototype.days */
 extend(Number.prototype, 'days', Number.prototype.day);
 
-/**
- * Returns a value of milliseconds from the weeks
- */
+/** @see Number.prototype.week */
 extend(Number.prototype, 'week', createMsFunction(week));
 
-/**
- * Returns a value of milliseconds from the weeks
- */
+/** @see Number.prototype.weeks */
 extend(Number.prototype, 'weeks', Number.prototype.week);
 
-/**
- * Returns a string: the value + 'em'
- */
+/** @see Number.prototype.em */
 extend(Number.prototype, 'em', createPostfixGetter('em'));
 
-/**
- * Returns a string: the value + 'ex'
- */
+/** @see Number.prototype.ex */
 extend(Number.prototype, 'ex', createPostfixGetter('ex'));
 
-/**
- * Returns a string: the value + 'rem'
- */
+/** @see Number.prototype.rem */
 extend(Number.prototype, 'rem', createPostfixGetter('rem'));
 
-/**
- * Returns a string: the value + 'px'
- */
+/** @see Number.prototype.px */
 extend(Number.prototype, 'px', createPostfixGetter('px'));
 
-/**
- * Returns a string: the value + 'per'
- */
+/** @see Number.prototype.per */
 extend(Number.prototype, 'per', createPostfixGetter('per'));
 
-/**
- * Returns a string: the value + 'vh'
- */
+/** @see Number.prototype.vh */
 extend(Number.prototype, 'vh', createPostfixGetter('vh'));
 
-/**
- * Returns a string: the value + 'vw'
- */
+/** @see Number.prototype.vw */
 extend(Number.prototype, 'vw', createPostfixGetter('vw'));
 
-/**
- * Returns a string: the value + 'vmin'
- */
+/** @see Number.prototype.vmin */
 extend(Number.prototype, 'vmin', createPostfixGetter('vmin'));
 
-/**
- * Returns a string: the value + 'vmax'
- */
+/** @see Number.prototype.vmax */
 extend(Number.prototype, 'vmax', createPostfixGetter('vmax'));
 
-/**
- * Returns true if the number is integer
- */
+/** @see Number.prototype.isInteger */
 extend(Number.prototype, 'isInteger', function (): boolean {
 	return this % 1 === 0;
 });
 
-/**
- * Returns true if the specified value is a integer number
- * @param obj
- */
+/** @see NumberConstructor.isInteger */
 extend(Number, 'isInteger', (obj) => Object.isNumber(obj) && obj.isInteger());
 
-/**
- * Returns true if the number is float
- */
+/** @see Number.prototype.isFloat */
 extend(Number.prototype, 'isFloat', function (): boolean {
 	return this % 1 !== 0 && Number.isFinite(this);
 });
 
-/**
- * Returns true if the specified value is a float number
- * @param obj
- */
+/** @see NumberConstructor.isFloat */
 extend(Number, 'isFloat', (obj) => Object.isNumber(obj) && obj.isFloat());
 
-/**
- * Returns true if the number is even
- */
+/** @see Number.prototype.isEven */
 extend(Number.prototype, 'isEven', function (): boolean {
 	return this % 2 === 0;
 });
 
-/**
- * Returns true if the specified value is a even number
- * @param obj
- */
+/** @see NumberConstructor.isEven */
 extend(Number, 'isEven', (obj) => Object.isNumber(obj) && obj.isEven());
 
-/**
- * Returns true if the number is odd
- */
+/** @see Number.prototype.isOdd */
 extend(Number.prototype, 'isOdd', function (): boolean {
 	return this % 2 !== 0 && Number.isFinite(this);
 });
 
-/**
- * Returns true if the specified value is a odd number
- * @param obj
- */
+/** @see NumberConstructor.isOdd */
 extend(Number, 'isOdd', (obj) => Object.isNumber(obj) && obj.isOdd());
 
-/**
- * Returns true if the number is natural
- */
+/** @see Number.prototype.isNatural */
 extend(Number.prototype, 'isNatural', function (): boolean {
 	return this > 0 && this % 1 === 0;
 });
 
-/**
- * Returns true if the specified value is a natural number
- * @param obj
- */
+/** @see NumberConstructor.isNatural */
 extend(Number, 'isNatural', (obj) => Object.isNumber(obj) && obj.isNatural());
 
-/**
- * Returns true if the number is positive
- */
+/** @see Number.prototype.isPositive */
 extend(Number.prototype, 'isPositive', function (): boolean {
 	return this > 0;
 });
 
-/**
- * Returns true if the specified value is a positive number
- * @param obj
- */
+/** @see NumberConstructor.isPositive */
 extend(Number, 'isPositive', (obj) => Object.isNumber(obj) && obj.isPositive());
 
-/**
- * Returns true if the number is negative
- */
+/** @see Number.prototype.isNegative */
 extend(Number.prototype, 'isNegative', function (): boolean {
 	return this < 0;
 });
 
-/**
- * Returns true if the specified value is a negative number
- * @param obj
- */
+/** @see NumberConstructor.isNegative */
 extend(Number, 'isNegative', (obj) => Object.isNumber(obj) && obj.isNegative());
 
-/**
- * Returns true if the number is non-negative
- */
+/** @see Number.prototype.isNonNegative */
 extend(Number.prototype, 'isNonNegative', function (): boolean {
 	return this >= 0;
 });
 
-/**
- * Returns true if the specified value is a non-negative number
- * @param obj
- */
+/** @see NumberConstructor.isNonNegative */
 extend(Number, 'isNonNegative', (obj) => Object.isNumber(obj) && obj.isNonNegative());
 
-/**
- * Returns true if the number is more or equal than 0 and less or equal than 1
- */
+/** @see Number.prototype.isBetweenZeroAndOne */
 extend(Number.prototype, 'isBetweenZeroAndOne', function (): boolean {
 	return this >= 0 && this <= 1;
 });
 
-/**
- * Returns true if the specified value is a number and is more or equal than 0 and less or equal than 1
- * @param obj
- */
+/** @see NumberConstructor.isBetweenZeroAndOne */
 extend(Number, 'isBetweenZeroAndOne', (obj) => Object.isNumber(obj) && obj.isBetweenZeroAndOne());
 
-/**
- * Returns true if the number is more than 0 and less or equal than 1
- */
+/** @see Number.prototype.isPositiveBetweenZeroAndOne */
 extend(Number.prototype, 'isPositiveBetweenZeroAndOne', function (): boolean {
 	return this > 0 && this <= 1;
 });
 
-/**
- * Returns true if the specified value is a number and is more than 0 and less or equal than 1
- * @param obj
- */
+/** @see NumberConstructor.isPositiveBetweenZeroAndOne */
 extend(Number, 'isPositiveBetweenZeroAndOne', (obj) => Object.isNumber(obj) && obj.isPositiveBetweenZeroAndOne());
 
 const
 	decPartRgxp = /\.\d+/;
 
-/**
- * Returns a string from the number with adding extra zeros to the start, if necessary
- *
- * @param targetLength - length of the resulting string once the current string has been padded
- * @param [sign] - if true, the sign of the number is written anyway
- * @param [base=10] - value of the base to convert in a string
- */
+/** @see NumberConstructor.pad */
 extend(Number.prototype, 'pad', function (
 	this: Number,
 	targetLength: number = 0,
@@ -273,22 +179,13 @@ extend(Number.prototype, 'pad', function (
 
 //#if runtime has prelude/number/rounding
 
-/**
- * Shortcut for the Math.floor method that also allows a precision
- * @param [precision]
- */
+/** @see Number.prototype.floor */
 extend(Number.prototype, 'floor', createRoundingFunction(Math.floor));
 
-/**
- * Shortcut for the Math.round method that also allows a precision
- * @param [precision]
- */
+/** @see Number.prototype.round */
 extend(Number.prototype, 'round', createRoundingFunction(Math.round));
 
-/**
- * Shortcut for the Math.ceil method that also allows a precision
- * @param [precision]
- */
+/** @see Number.prototype.ceil */
 extend(Number.prototype, 'ceil', createRoundingFunction(Math.ceil));
 
 function createRoundingFunction(method: Function): Function {
@@ -319,28 +216,13 @@ const globalOpts = Object.createDict({
 	thousands: ','
 });
 
-/**
- * Returns an option value by the specified key
- * @param key
- */
+/** @see NumberConstructor.getOption */
 extend(Number, 'getOption', (key: string) => globalOpts[key]);
 
-/**
- * Sets a new option value by the specified key
- *
- * @param key
- * @param value
- */
+/** @see NumberConstructor.setOption */
 extend(Number, 'setOption', (key: string, value: string) => globalOpts[key] = value);
 
-/**
- * Returns a string version of the number with adding some extra formatting
- *
- * @param [optsOrLength] - length of the decimal part or additional options:
- *   *) [decimalLength] - length of the decimal part
- *   *) [decimal] - separator for the decimal part
- *   *) [thousands] - separator for the "thousand" chunks
- */
+/** @see Number.prototype.format */
 extend(Number.prototype, 'format', function (
 	this: Number,
 	optsOrLength?: number | NumberFormatOptions

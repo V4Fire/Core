@@ -8,10 +8,7 @@
 
 import extend from 'core/prelude/extend';
 
-/**
- * Returns true if the specified value is an object
- * @param obj
- */
+/** @see ObjectConstructor.isObject */
 extend(Object, 'isObject', (obj) => {
 	if (!obj || typeof obj !== 'object') {
 		return false;
@@ -21,16 +18,17 @@ extend(Object, 'isObject', (obj) => {
 	return !constr || constr === Object;
 });
 
-/**
- * Returns true if the specified value is an array
- * @param obj
- */
+const
+	toString = Object.prototype.toString;
+
+/** @see ObjectConstructor.isSimpleObject */
+extend(Object, 'isSimpleObject', (obj) =>
+	toString.call(obj) === '[object Object]');
+
+/** @see ObjectConstructor.isArray */
 extend(Object, 'isArray', Array.isArray);
 
-/**
- * Returns true if the specified value is looks like an array
- * @param obj
- */
+/** @see ObjectConstructor.isArrayLike */
 extend(Object, 'isArrayLike', (obj) => {
 	if (!obj) {
 		return false;
@@ -39,83 +37,14 @@ extend(Object, 'isArrayLike', (obj) => {
 	return Array.isArray(obj) || (obj.length > 0 && 0 in obj) || obj.length === 0;
 });
 
-/**
- * Returns true if the specified value is a function
- * @param obj
- */
+/** @see ObjectConstructor.isFunction */
 extend(Object, 'isFunction', (obj) => typeof obj === 'function');
 
-/**
- * Returns true if the specified value is a regular expression
- * @param obj
- */
-extend(Object, 'isRegExp', (obj) => obj instanceof RegExp);
-
-/**
- * Returns true if the specified value is a date
- * @param obj
- */
-extend(Object, 'isDate', (obj) => obj instanceof Date);
-
-/**
- * Returns true if the specified value is a string
- * @param obj
- */
-extend(Object, 'isString', (obj) => typeof obj === 'string');
-
-/**
- * Returns true if the specified value is a number
- * @param obj
- */
-extend(Object, 'isNumber', (obj) => typeof obj === 'number');
-
-/**
- * Returns true if the specified value is a boolean
- * @param obj
- */
-extend(Object, 'isBoolean', (obj) => typeof obj === 'boolean');
-
-/**
- * Returns true if the specified value is a symbol
- * @param obj
- */
-extend(Object, 'isSymbol', (obj) => typeof obj === 'symbol');
-
-/**
- * Returns true if the specified value is a map
- * @param obj
- */
-extend(Object, 'isMap', (obj) => obj instanceof Map);
-
-/**
- * Returns true if the specified value is a weak map
- * @param obj
- */
-extend(Object, 'isWeakMap', (obj) => obj instanceof WeakMap);
-
-/**
- * Returns true if the specified value is a set
- * @param obj
- */
-extend(Object, 'isSet', (obj) => obj instanceof Set);
-
-/**
- * Returns true if the specified value is a weak set
- * @param obj
- */
-extend(Object, 'isWeakSet', (obj) => obj instanceof WeakSet);
-
-/**
- * Returns true if the specified value is a generator
- * @param obj
- */
+/** @see ObjectConstructor.isGenerator */
 extend(Object, 'isGenerator', (obj) =>
 	typeof obj === 'function' && obj.constructor.name === 'GeneratorFunction');
 
-/**
- * Returns true if the specified value is an iterator
- * @param obj
- */
+/** @see ObjectConstructor.isIterator */
 extend(Object, 'isIterator', (obj) => {
 	if (!obj) {
 		return false;
@@ -124,20 +53,25 @@ extend(Object, 'isIterator', (obj) => {
 	return typeof Symbol === 'function' ? obj[Symbol.iterator] : typeof obj['@@iterator'] === 'function';
 });
 
-const
-	toString = Object.prototype.toString;
+/** @see ObjectConstructor.isString */
+extend(Object, 'isString', (obj) => typeof obj === 'string');
 
-/**
- * Returns true if the specified value is a hash table object
- * @param obj
- */
-extend(Object, 'isSimpleObject', (obj) =>
-	toString.call(obj) === '[object Object]');
+/** @see ObjectConstructor.isNumber */
+extend(Object, 'isNumber', (obj) => typeof obj === 'number');
 
-/**
- * Returns true if the specified value is a promise
- * @param obj
- */
+/** @see ObjectConstructor.isBoolean */
+extend(Object, 'isBoolean', (obj) => typeof obj === 'boolean');
+
+/** @see ObjectConstructor.isSymbol */
+extend(Object, 'isSymbol', (obj) => typeof obj === 'symbol');
+
+/** @see ObjectConstructor.isRegExp */
+extend(Object, 'isRegExp', (obj) => obj instanceof RegExp);
+
+/** @see ObjectConstructor.isDate */
+extend(Object, 'isDate', (obj) => obj instanceof Date);
+
+/** @see ObjectConstructor.isPromise */
 extend(Object, 'isPromise', (obj) => {
 	if (obj) {
 		const v = <Dictionary>obj;
@@ -147,10 +81,7 @@ extend(Object, 'isPromise', (obj) => {
 	return false;
 });
 
-/**
- * Returns true if the specified value is looks like a promise
- * @param obj
- */
+/** @see ObjectConstructor.isPromiseLike */
 extend(Object, 'isPromiseLike', (obj) => {
 	if (obj) {
 		const v = <Dictionary>obj;
@@ -159,3 +90,15 @@ extend(Object, 'isPromiseLike', (obj) => {
 
 	return false;
 });
+
+/** @see ObjectConstructor.isMap */
+extend(Object, 'isMap', (obj) => obj instanceof Map);
+
+/** @see ObjectConstructor.isWeakMap */
+extend(Object, 'isWeakMap', (obj) => obj instanceof WeakMap);
+
+/** @see ObjectConstructor.isSet */
+extend(Object, 'isSet', (obj) => obj instanceof Set);
+
+/** @see ObjectConstructor.isWeakSet */
+extend(Object, 'isWeakSet', (obj) => obj instanceof WeakSet);

@@ -8,10 +8,7 @@
 
 import extend from 'core/prelude/extend';
 
-/**
- * Returns length of the specified object
- * @param obj
- */
+/** @see ObjectConstructor.size */
 extend(Object, 'size', (obj: any) => {
 	if (!obj) {
 		return 0;

@@ -11,28 +11,7 @@ import extend from 'core/prelude/extend';
 const
 	hasOwnProperty = Object.prototype.hasOwnProperty;
 
-/**
- * Extends the specified object by another objects
- *
- * @param params - if true, then properties will be copied recursively
- *   OR additional options for extending:
- *
- *   *) [withUndef = false] - if true, then the original value can be rewritten to undefined
- *   *) [withDescriptor = false] - if true, then the descriptor of a property will be copied too
- *   *) [withAccessors = false] - if true, then the property accessors will be copied too, but not another
- *        descriptor properties
- *
- *   *) [withProto = false] - if true, then properties is copied with their prototypes
- *   *) [concatArray = false] - if true, then for merging two arrays will be used a concatenation strategy
- *
- *   *) [concatFn = Array.prototype.concat] - function that is concatenate arrays
- *   *) [extendFilter] - function that is filter values for deep extending
- *   *) [traits = false] - if true, then is copied only new properties, or if -1, only old
- *   *) [deep = false] - if true, then properties is copied recursively
- *
- * @param base - base object
- * @param objects - objects for extending
- */
+/** @see ObjectConstructor.mixin */
 extend(Object, 'mixin', (opts: ObjectMixinOptions | boolean, base: any, ...objects: any[]) => {
 	const
 		p = <ObjectMixinOptions>{};

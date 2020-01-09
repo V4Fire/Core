@@ -9,31 +9,17 @@
 import extend from 'core/prelude/extend';
 import { locale as defaultLocale } from 'core/i18n';
 
-/**
- * Clones the date object and returns a new object
- */
+/** @see Date.prototype.clone */
 extend(Date.prototype, 'clone', function (this: Date): Date {
 	return new Date(this);
 });
 
-/**
- * Returns true if the date is equals to another
- *
- * @param date - another date to compare
- * @param [margin] - value of the maximum difference between two dates at which they are considered equal
- *   (in milliseconds)
- */
+/** @see Date.prototype.is */
 extend(Date.prototype, 'is', function (this: Date, date: DateCreateValue, margin: number = 0): boolean {
 	return Math.abs(this.valueOf() - Date.create(date).valueOf()) <= margin;
 });
 
-/**
- * Returns true if the date is greater than another
- *
- * @param date - another date to compare
- * @param [margin] - value of the maximum difference between two dates at which they are considered equal
- *   (in milliseconds)
- */
+/** @see Date.prototype.isAfter */
 extend(Date.prototype, 'isAfter', function (
 	this: Date,
 	date: DateCreateValue,
@@ -42,14 +28,16 @@ extend(Date.prototype, 'isAfter', function (
 	return this.valueOf() > Date.create(date).valueOf() - margin;
 });
 
-/**
- * Returns true if the date is between of two other (including the bounding dates)
- *
- * @param date1 - date of the beginning
- * @param date2 - date of the ending
- * @param [margin] - value of the maximum difference between two dates at which they are considered equal
- *   (in milliseconds)
- */
+/** @see Date.prototype.isBefore */
+extend(Date.prototype, 'isBefore', function (
+	this: Date,
+	date: DateCreateValue,
+	margin: number = 0
+): boolean {
+	return this.valueOf() < Date.create(date).valueOf() + margin;
+});
+
+/** @see Date.prototype.isBetween */
 extend(Date.prototype, 'isBetween', function (
 	this: Date,
 	date1: DateCreateValue,
@@ -60,142 +48,99 @@ extend(Date.prototype, 'isBetween', function (
 	return v >= Date.create(date1).valueOf() - margin && v <= Date.create(date2).valueOf() + margin;
 });
 
-/**
- * Returns true if the date is less than another
- *
- * @param date - another date to compare
- * @param [margin] - value of the maximum difference between two dates at which they are considered equal
- *   (in milliseconds)
- */
-extend(Date.prototype, 'isBefore', function (
-	this: Date,
-	date: DateCreateValue,
-	margin: number = 0
-): boolean {
-	return this.valueOf() < Date.create(date).valueOf() + margin;
-});
-
-/**
- * Returns true if the date is less than the now date
- */
+/** @see Date.prototype.isPast */
 extend(Date.prototype, 'isPast', function (this: Date): boolean {
 	return this.valueOf() < Date.now();
 });
 
-/**
- * Returns true if the date is greater than the now date
- */
+/** @see Date.prototype.isFuture */
 extend(Date.prototype, 'isFuture', function (this: Date): boolean {
 	return this.valueOf() > Date.now();
 });
 
-/**
- * Changes the date time so that it starts at the beginning of a day and returns it
- */
+/** @see Date.prototype.beginningOfDay */
 extend(Date.prototype, 'beginningOfDay', function (this: Date): Date {
 	this.setHours(0, 0, 0, 0);
 	return this;
 });
 
-/**
- * Changes the date time so that it starts at the ending of a day and returns it
- */
+/** @see Date.prototype.endOfDay */
 extend(Date.prototype, 'endOfDay', function (this: Date): Date {
 	this.setHours(23, 59, 59, 999);
 	return this;
 });
 
-/**
- * Changes the date so that it starts at the beginning of a week and returns it
- */
+/** @see Date.prototype.beginningOfWeek */
 extend(Date.prototype, 'beginningOfWeek', function (this: Date): Date {
 	this.setDate(this.getDate() - this.getDay());
 	this.beginningOfDay();
 	return this;
 });
 
-/**
- * Changes the date so that it starts at the ending of a week and returns it
- */
+/** @see Date.prototype.endOfWeek */
 extend(Date.prototype, 'endOfWeek', function (this: Date): Date {
 	this.setDate(this.getDate() + 7 - this.getDay());
 	this.endOfDay();
 	return this;
 });
 
-/**
- * Changes the date so that it starts at the beginning of a month and returns it
- */
+/** @see Date.prototype.beginningOfMonth */
 extend(Date.prototype, 'beginningOfMonth', function (this: Date): Date {
 	this.setDate(1);
 	this.beginningOfDay();
 	return this;
 });
 
-/**
- * Changes the date so that it starts at the ending of a month and returns it
- */
+/** @see Date.prototype.endOfMonth */
 extend(Date.prototype, 'endOfMonth', function (this: Date): Date {
 	this.setMonth(this.getMonth() + 1, 0);
 	this.endOfDay();
 	return this;
 });
 
-/**
- * Returns a number of days in the date month
- */
+/** @see Date.prototype.daysInMonth */
 extend(Date.prototype, 'daysInMonth', function (this: Date): number {
 	return this.clone().endOfMonth().getDate();
 });
 
-/**
- * Changes the date so that it starts at the beginning of a year and returns it
- */
+/** @see Date.prototype.beginningOfYear */
 extend(Date.prototype, 'beginningOfYear', function (this: Date): Date {
 	this.setMonth(0, 1);
 	this.beginningOfDay();
 	return this;
 });
 
-/**
- * Changes the date so that it starts at the ending of a year and returns it
- */
+/** @see Date.prototype.endOfYear */
 extend(Date.prototype, 'endOfYear', function (this: Date): Date {
 	this.setMonth(12, 0);
 	this.endOfDay();
 	return this;
 });
 
-/**
- * Returns a list of week days
- */
+/** @see DateConstructor.getWeekDays */
 extend(Date, 'getWeekDays', () =>
 	[t`Mn`, t`Ts`, t`Wd`, t`Th`, t`Fr`, t`St`, t`Sn`]);
 
 //#if runtime has prelude/date/modify
 
-/** @see Sugar.Date.add */
+/** @see Date.prototype.add */
 extend(Date.prototype, 'add', createDateModifier((v, b) => b + v));
 
-/** @see Sugar.Date.set */
+/** @see Date.prototype.set */
 extend(Date.prototype, 'set', createDateModifier());
 
-/** @see Sugar.Date.rewind */
+/** @see Date.prototype.rewind */
 extend(Date.prototype, 'rewind', createDateModifier((v, b) => b - v));
 
 //#endif
 //#if runtime has prelude/date/relative
 
-/**
- * Returns a relative value of the date for the now date
- */
+/** @see Date.prototype.relative */
 extend(Date.prototype, 'relative', function (this: Date): DateRelative {
 	return relative(this, new Date());
 });
 
-/**
- * Returns a relative value of the date for the specified date
- */
+/** @see Date.prototype.relativeTo */
 extend(Date.prototype, 'relativeTo', function (this: Date, date: DateCreateValue): DateRelative {
 	return relative(this, date);
 });
@@ -209,15 +154,7 @@ const shortOpts = {
 	year: 'numeric'
 };
 
-/**
- * Returns a short string representation of the date.
- * This method is based on the native Intl API.
- *
- * @param [locale] - locale for internalizing
- *
- * @example
- * new Date('12/28/2019').short('en-us') // '12/28/2019'
- */
+/** @see Date.prototype.short */
 extend(Date.prototype, 'short', function (
 	this: Date,
 	locale: string = defaultLocale.value
@@ -231,15 +168,7 @@ const mediumOpts = Object.createDict({
 	year: 'numeric'
 });
 
-/**
- * Returns a medium string representation of the date.
- * This method is based on the native Intl API.
- *
- * @param [locale] - locale for internalizing
- *
- * @example
- * new Date('12/28/2019').medium('en-us') // 'December 28, 2019'
- */
+/** @see Date.prototype.medium */
 extend(Date.prototype, 'medium', function (
 	this: Date,
 	locale: string = defaultLocale.value
@@ -247,15 +176,7 @@ extend(Date.prototype, 'medium', function (
 	return this.toLocaleString(locale, mediumOpts);
 });
 
-/**
- * Returns a long string representation of the date.
- * This method is based on the native Intl API.
- *
- * @param [locale] - locale for internalizing
- *
- * @example
- * new Date('12/28/2019').long('en-us') // '12/28/2019, 12:00:00 A'
- */
+/** @see Date.prototype.long */
 extend(Date.prototype, 'long', function (
 	this: Date,
 	locale: string = defaultLocale.value
@@ -295,48 +216,7 @@ const convert = Object.createDict({
 const
 	formatCache = Object.createDict<Intl.DateTimeFormatOptions>();
 
-/**
- * Returns a string representation of the date by the specified pattern.
- * This method is based on the native Intl API.
- * All pattern directives is bases on native Date Intl options:
- *
- *   *) era
- *   *) year
- *   *) month
- *   *) day
- *   *) weekday
- *   *) hour
- *   *) minute
- *   *) second
- *   *) timeZoneName
- *
- * There are aliases for all directives:
- *
- *   *) e - era
- *   *) Y - year
- *   *) M - month
- *   *) d - day
- *   *) w - weekday
- *   *) h - hour
- *   *) m - minute
- *   *) s - second
- *   *) z - timeZoneName
- *
- * @param pattern - string pattern of the format:
- *   *) the symbol ";" is used as a separator character for pattern directives, for example: year;month
- *   *) the symbol ":" is used for specifying a custom value for a pattern directive, for example:
- *      year:2-digit;month:short
- *
- * @param [locale] - locale for internalizing
- *
- * @example
- * new Date('12/28/2019').format('year', 'en-us') // '2019'
- * new Date('12/28/2019').format('year:2-digit', 'en-us') // '19'
- * new Date('12/28/2019').format('year:2-digit;month', 'en-us') // 'Dec 19'
- *
- * // Formatting a date using short aliases
- * new Date('12/28/2019').format('Y:2-digit;M:long;d', 'en-us') // 'December 28, 19'
- */
+/** @see Date.prototype.format */
 extend(Date.prototype, 'format', function (
 	this: Date,
 	pattern: string,
@@ -384,14 +264,7 @@ extend(Date.prototype, 'format', function (
 	return this.toLocaleString(locale, config);
 });
 
-/**
- * Returns a HTML string representation of a date (without time).
- * This method is useful for providing date values within HTML tag attributes.
- *
- * @param [opts] - additional options:
- *   *) [month] - if false, then the date month is taken from the beginning of the now year
- *   *) [date] - if false, then the date day is taken from the beginning of the now month
- */
+/** @see Date.prototype.toHTMLDateString */
 extend(Date.prototype, 'toHTMLDateString', function (
 	this: Date,
 	opts: DateHTMLDateStringOptions = {}
@@ -407,15 +280,7 @@ extend(Date.prototype, 'toHTMLDateString', function (
 	].join('-');
 });
 
-/**
- * Returns a HTML string representation of a timestamp.
- * This method is useful for providing timestamp values within HTML tag attributes.
- *
- * @param [opts] - additional options:
- *   *) [minutes] - if false, then the date month is taken from the beginning of of the now hour
- *   *) [seconds] - if false, then the date second is taken from the beginning of of the now minute
- *   *) [milliseconds] - if false, then the date millisecond is taken from the beginning of of the now second
- */
+/** @see Date.prototype.toHTMLTimeString */
 extend(Date.prototype, 'toHTMLTimeString', function (
 	this: Date,
 	opts: DateHTMLTimeStringOptions = {}
@@ -439,17 +304,7 @@ extend(Date.prototype, 'toHTMLTimeString', function (
 	return res.join(':');
 });
 
-/**
- * Returns a HTML string representation of a datetime.
- * This method is useful for providing datetime values within HTML tag attributes.
- *
- * @param [opts] - additional options:
- *   *) [month] - if false, then the date month is taken from the beginning of a year
- *   *) [date] - if false, then the date day is taken from the beginning of a month
- *   *) [minutes] - if false, then the date month is taken from the beginning of of the now hour
- *   *) [seconds] - if false, then the date second is taken from the beginning of of the now minute
- *   *) [milliseconds] - if false, then the date millisecond is taken from the beginning of of the now second
- */
+/** @see Date.prototype.toHTMLString */
 extend(Date.prototype, 'toHTMLString', function (this: Date, opts: DateHTMLStringOptions): string {
 	return `${this.toHTMLDateString(opts)}T${this.toHTMLTimeString(opts)}`;
 });
@@ -478,24 +333,7 @@ const
 	isDateStr = /^(\d{4}-\d{2}-\d{2})([T ])(\d{2}:\d{2}:\d{2}(?:\.\d{3})?)(?:\d{0,3})?(Z)?([+-]\d{2}:?\d{2})?$/,
 	isFloatStr = /^\d+\.\d+$/;
 
-/**
- * Creates a date from the specified pattern.
- * This method can create a new date object from:
- *
- *   *) another date object
- *   *) a number of milliseconds (if the number is integer)
- *   *) a number of seconds (if the number is float)
- *   *) a number of seconds (if the number is float)
- *   *) a string pattern using the native Date.parse with some polyfills
- *   *) a string aliases:
- *
- *      *) now - is an alias for the now date
- *      *) today - is an alias for the beginning of the today
- *      *) yesterday - is an alias for the beginning of the yesterday
- *      *) tomorrow - is an alias for the beginning of the tomorrow
- *
- * @param [pattern]
- */
+/** @see Date.prototype.create */
 extend(Date, 'create', (pattern?: DateCreateValue) => {
 	if (pattern == null || pattern === '') {
 		return new Date();

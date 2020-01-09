@@ -9,15 +9,7 @@
 import extend from 'core/prelude/extend';
 import { deprecate } from 'core/meta/deprecation';
 
-/**
- * Creates a hash table without any prototype and returns it
- *
- * @param objects - extension objects:
- *   all key from these objects is merged to the target
- *
- * @example
- * Object.createDict({a: 1}, {b: 2}) // {a: 1, b: 2, __proto__: null}
- */
+/** @see ObjectConstructor.createDict */
 extend(Object, 'createDict', (...objects) => {
 	if (objects.length) {
 		return Object.assign(Object.create(null), ...objects);
@@ -26,12 +18,7 @@ extend(Object, 'createDict', (...objects) => {
 	return Object.create(null);
 });
 
-/**
- * Takes the enum-like object and converts it to a dictionary:
- * number values from the object is skipped
- *
- * @param obj
- */
+/** @see ObjectConstructor.convertEnumToDict */
 extend(Object, 'convertEnumToDict', (obj: Dictionary) => {
 	const
 		res = {};
@@ -51,18 +38,12 @@ extend(Object, 'convertEnumToDict', (obj: Dictionary) => {
 	return res;
 });
 
-/**
- * Creates an object which has the similar structure to TS enum objects and returns it
- *
- * @param obj - base object: it can be a dictionary or an array
- * @example
- *   Object.createEnumLike({a: 1}) // {a: 1, 1: 'a', __proto__: null}
- */
+/** @see ObjectConstructor.createEnumLike */
 extend(Object, 'createEnumLike', createEnumLike);
 
 /**
  * @deprecated
- * @see Object.createEnumLike
+ * @see ObjectConstructor.createEnumLike
  */
 extend(Object, 'createMap', deprecate({renamedTo: 'createEnum'}, createEnumLike));
 
@@ -94,14 +75,7 @@ function createEnumLike(obj: object): Dictionary {
 	return map;
 }
 
-/**
- * Creates an object from the specified array
- *
- * @param arr
- * @param [opts] - additional options:
- *   *) [keyConverter] - function that returns a key value
- *   *) [valueConverter] - function that returns an element value
- */
+/** @see ObjectConstructor.fromArray */
 extend(Object, 'fromArray', (
 	arr: unknown[],
 	opts?: ObjectFromArrayOptions
@@ -122,20 +96,10 @@ extend(Object, 'fromArray', (
 	return map;
 });
 
-/**
- * Returns a new object based on the specified, but only with fields which match to the specified condition
- *
- * @param ob
- * @param condition - whitelist of keys (it can be represented as an array or an object) or a regular expression
- */
+/** @see ObjectConstructor.select */
 extend(Object, 'select', selectReject(true));
 
-/**
- * Returns a new object based on the specified, but without fields which match to the specified condition
- *
- * @param ob
- * @param condition - whitelist of keys (it can be represented as an array or an object) or a regular expression
- */
+/** @see ObjectConstructor.reject */
 extend(Object, 'reject', selectReject(false));
 
 function selectReject(select: boolean): Function {

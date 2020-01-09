@@ -9,9 +9,7 @@
 import 'core/prelude/function/shim';
 import extend from 'core/prelude/extend';
 
-/**
- * Returns a new function that allows to invoke the target function only once
- */
+/** @see Function.prototype.once */
 extend(Function.prototype, 'once', function (this: Function): Function {
 	const
 		// tslint:disable-next-line:no-this-assignment
@@ -34,12 +32,7 @@ extend(Function.prototype, 'once', function (this: Function): Function {
 
 //#if runtime has prelude/function/debounce
 
-/**
- * Returns a new function that allows to invoke the target function only with the specified delay.
- * The next invocation of the function will cancel the previous.
- *
- * @param [delay]
- */
+/** @see Function.prototype.debounce */
 extend(Function.prototype, 'debounce', function (this: Function, delay: number = 250): Function {
 	const
 		// tslint:disable-next-line:no-this-assignment
@@ -57,10 +50,7 @@ extend(Function.prototype, 'debounce', function (this: Function, delay: number =
 //#endif
 //#if runtime has prelude/function/throttle
 
-/**
- * Returns a new function that allows to invoke the target function not more often than the specified delay
- * @param [delay]
- */
+/** @see Function.prototype.throttle */
 extend(Function.prototype, 'throttle', function (this: Function, delay: number = 250): Function {
 	const
 		// tslint:disable-next-line:no-this-assignment

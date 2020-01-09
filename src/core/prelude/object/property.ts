@@ -8,14 +8,7 @@
 
 import extend from 'core/prelude/extend';
 
-/**
- * Returns a value from the object by the specified path
- *
- * @param obj
- * @param path
- * @param [opts] - additional options:
- *   *) [separator] - character for declaring the path
- */
+/** @see ObjectConstructor.get */
 extend(Object, 'get', (
 	obj: any,
 	path: string | any[],
@@ -50,14 +43,7 @@ extend(Object, 'get', (
 
 //#if runtime has prelude/object/has
 
-/**
- * Returns true if the object has a property by the specified path
- *
- * @param obj
- * @param path
- * @param [opts] - additional options:
- *   *) [separator] - character for declaring the path
- */
+/** @see ObjectConstructor.has */
 extend(Object, 'has', (
 	obj: any,
 	path: string | any[],
@@ -100,16 +86,7 @@ extend(Object, 'has', (
 
 //#endif
 
-/**
- * Sets a value to the object by the specified path
- *
- * @param obj
- * @param path
- * @param value
- * @param [opts] - additional options:
- *   *) [separator] - character for declaring the path
- *   *) [concat] - if true, then the new value will be concatenated with an old within an array
- */
+/** @see ObjectConstructor.set */
 extend(Object, 'set', (
 	obj: any,
 	path: string | any[],

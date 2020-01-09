@@ -29,20 +29,13 @@ Object.forEach(langDict, (el) => {
 	});
 });
 
-/**
- * The global i18n function (can be used as a string tag or a simple function)
- */
+/** @see i18n */
 extend(globalThis, 'i18n', globalI18n);
 
-/**
- * @alias
- * @see globalI18n
- */
+/** @see t */
 extend(globalThis, 't', globalI18n);
 
-/**
- * The global i18n loopback (can be used as a string tag or a simple function)
- */
+/** @see l */
 extend(globalThis, 'l', (strings: unknown | string[], ...exprs: unknown[]): string => {
 	if (strings == null) {
 		return '';

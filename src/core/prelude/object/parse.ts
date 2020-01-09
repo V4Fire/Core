@@ -8,10 +8,7 @@
 
 import extend from 'core/prelude/extend';
 
-/**
- * Parses the specified value as a JSON/JS object and returns the result
- * @param value
- */
+/** @see ObjectConstructor.parse */
 extend(Object, 'parse', (value) => {
 	try {
 		return new Function(`return ${value}`)();

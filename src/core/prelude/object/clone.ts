@@ -9,15 +9,7 @@
 import extend from 'core/prelude/extend';
 import { convertIfDate } from 'core/json';
 
-/**
- * Clones the specified object using naive but fast "JSON.stringify/parse" strategy and returns a new object
- *
- * @param obj
- * @param [params] - additional options:
- *   *) [replacer] - JSON.stringify replacer
- *   *) [reviver] - JSON.parse reviver or false for disable defaults
- *   *) [freezable] - if false the object freeze state won't be copy
- */
+/** @see ObjectConstructor.fastClone */
 extend(Object, 'fastClone', (obj, opts?: FastCloneOptions) => {
 	if (!obj || typeof obj === 'function') {
 		return obj;
