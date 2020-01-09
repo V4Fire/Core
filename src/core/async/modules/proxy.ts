@@ -23,13 +23,16 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 *
 	 * @param worker
 	 * @param [opts] - additional options for the operation:
-	 *   *) [name] - worker name
-	 *   *) [destructor] - name of the destructor method
-	 *   *) [join] - if true, then all competitive tasks (with the same labels) will be joined to the first task
-	 *   *) [label] - label of the task (the previous task with the same label will be canceled)
-	 *   *) [group] - group name of the task
-	 *   *) [onClear] - handler for clearing (it is called after clearing of the task)
-	 *   *) [onMerge] - handler for merging (it is called after merging of the task with another task (label + join:true))
+	 * @param [opts.name] - worker name
+	 * @param [opts.destructor] - name of the destructor method
+	 * @param [opts.join=false] - if true, then all competitive tasks (with the same labels) will be joined to
+	 *   the first task
+	 *
+	 * @param [opts.label] - label of the task (the previous task with the same label will be canceled)
+	 * @param [opts.group] - group name of the task
+	 * @param [opts.onClear] - handler for clearing (it is called after clearing of the task)
+	 * @param [opts.onMerge] - handler for merging (it is called after merging of the task with
+	 *   another task (label + join:true))
 	 */
 	worker<T extends i.WorkerLikeP>(worker: T, opts?: i.AsyncWorkerOptions<CTX>): T {
 		const
@@ -62,9 +65,9 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Terminates the specified worker or a group of workers
 	 *
 	 * @param opts - options for the operation:
-	 *   *) [id] - link to the worker
-	 *   *) [label] - label of the task
-	 *   *) [group] - group name of the task
+	 * @param [opts.id] - link to the worker
+	 * @param [opts.label] - label of the task
+	 * @param [opts.group] - group name of the task
 	 */
 	terminateWorker(opts: i.ClearProxyOptions<i.WorkerLikeP>): this;
 	terminateWorker(task?: i.WorkerLikeP | i.ClearProxyOptions<i.WorkerLikeP>): this {
@@ -81,9 +84,9 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Terminates the specified worker or a group of workers
 	 *
 	 * @param opts - options for the operation:
-	 *   *) [id] - link to the worker
-	 *   *) [label] - label of the task
-	 *   *) [group] - group name of the task
+	 * @param [opts.id] - link to the worker
+	 * @param [opts.label] - label of the task
+	 * @param [opts.group] - group name of the task
 	 */
 	clearWorker(opts: i.ClearProxyOptions<i.WorkerLikeP>): this;
 	clearWorker(task?: i.WorkerLikeP | i.ClearProxyOptions<i.WorkerLikeP>): this {
@@ -98,13 +101,16 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 *
 	 * @param cb
 	 * @param [opts] - additional options for the operation:
-	 *   *) [name] - operation name
-	 *   *) [join] - if true, then all competitive tasks (with the same labels) will be joined to the first task
-	 *   *) [label] - label of the task (previous task with the same label will be canceled)
-	 *   *) [group] - group name of the task
-	 *   *) [single] - if false, then the function will support multiple callings
-	 *   *) [onClear] - handler for clearing (it is called after clearing of the task)
-	 *   *) [onMerge] - handler for merging (it is called after merging of the task with another task (label + join:true))
+	 * @param [opts.name] - operation name
+	 * @param [opts.join=false] - if true, then all competitive tasks (with the same labels) will be joined to
+	 *   the first task
+	 *
+	 * @param [opts.label] - label of the task (previous task with the same label will be canceled)
+	 * @param [opts.group] - group name of the task
+	 * @param [opts.single] - if false, then the function will support multiple callings
+	 * @param [opts.onClear] - handler for clearing (it is called after clearing of the task)
+	 * @param [opts.onMerge] - handler for merging (it is called after merging of the task with
+	 *   another task (label + join:true))
 	 */
 	proxy<F extends i.WrappedCb, C extends object = CTX>(cb: F, opts?: i.AsyncProxyOptions<C>): F {
 		return this.registerTask<F, C>({
@@ -129,10 +135,10 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Cancels the specified proxy function or a group of functions
 	 *
 	 * @param opts - options for the operation:
-	 *   *) [name] - operation name
-	 *   *) [id] - link to the function
-	 *   *) [label] - label of the task
-	 *   *) [group] - group name of the task
+	 * @param [opts.name] - operation name
+	 * @param [opts.id] - link to the function
+	 * @param [opts.label] - label of the task
+	 * @param [opts.group] - group name of the task
 	 */
 	cancelProxy(opts: i.ClearProxyOptions<Function>): this;
 	cancelProxy(task?: Function | i.ClearProxyOptions<Function>): this {
@@ -149,10 +155,10 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Cancels the specified proxy function or a group of functions
 	 *
 	 * @param opts - options for the operation:
-	 *   *) [name] - operation name
-	 *   *) [id] - link to the function
-	 *   *) [label] - label of the task
-	 *   *) [group] - group name of the task
+	 * @param [opts.name] - operation name
+	 * @param [opts.id] - link to the function
+	 * @param [opts.label] - label of the task
+	 * @param [opts.group] - group name of the task
 	 */
 	clearProxy(opts: i.ClearProxyOptions<Function>): this;
 	clearProxy(task?: Function | i.ClearProxyOptions<Function>): this {
@@ -169,10 +175,10 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Mutes the specified proxy function or a group of functions
 	 *
 	 * @param opts - options for the operation:
-	 *   *) [name] - operation name
-	 *   *) [id] - link to the function
-	 *   *) [label] - label of the task
-	 *   *) [group] - group name of the task
+	 * @param [opts.name] - operation name
+	 * @param [opts.id] - link to the function
+	 * @param [opts.label] - label of the task
+	 * @param [opts.group] - group name of the task
 	 */
 	muteProxy(opts: i.ClearProxyOptions<Function>): this;
 	muteProxy(task?: Function | i.ClearProxyOptions<Function>): this {
@@ -193,10 +199,10 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Unmutes the specified proxy function or a group of functions
 	 *
 	 * @param opts - options for the operation:
-	 *   *) [name] - operation name
-	 *   *) [id] - link to the function
-	 *   *) [label] - label of the task
-	 *   *) [group] - group name of the task
+	 * @param [opts.name] - operation name
+	 * @param [opts.id] - link to the function
+	 * @param [opts.label] - label of the task
+	 * @param [opts.group] - group name of the task
 	 */
 	unmuteProxy(opts: i.ClearProxyOptions<Function>): this;
 	unmuteProxy(task?: Function | i.ClearProxyOptions<Function>): this {
@@ -217,10 +223,10 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Suspends the specified proxy function or a group of functions
 	 *
 	 * @param opts - options for the operation:
-	 *   *) [name] - operation name
-	 *   *) [id] - link to the function
-	 *   *) [label] - label of the task
-	 *   *) [group] - group name of the task
+	 * @param [opts.name] - operation name
+	 * @param [opts.id] - link to the function
+	 * @param [opts.label] - label of the task
+	 * @param [opts.group] - group name of the task
 	 */
 	suspendProxy(opts: i.ClearProxyOptions<Function>): this;
 	suspendProxy(task?: Function | i.ClearProxyOptions<Function>): this {
@@ -241,10 +247,10 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Unsuspends the specified proxy function or a group of functions
 	 *
 	 * @param opts - options for the operation:
-	 *   *) [name] - operation name
-	 *   *) [id] - link to the function
-	 *   *) [label] - label of the task
-	 *   *) [group] - group name of the task
+	 * @param [opts.name] - operation name
+	 * @param [opts.id] - link to the function
+	 * @param [opts.label] - label of the task
+	 * @param [opts.group] - group name of the task
 	 */
 	unsuspendProxy(opts: i.ClearProxyOptions<Function>): this;
 	unsuspendProxy(task?: Function | i.ClearProxyOptions<Function>): this {
@@ -264,13 +270,15 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 *
 	 * @param request
 	 * @param [opts] - additional options for the operation:
-	 *   *) [join] - strategy for joining competitive tasks (with the same labels):
-	 *       *) true - all tasks will be joined to the first
-	 *       *) 'replace' - all tasks will be joined (replaced) to the last
+	 * @param [opts.join=false] - strategy for joining competitive tasks (with the same labels):
+	 *   <ul>
+	 *     <li> true - all tasks will be joined to the first;</li>
+	 *     <li>'replace' - all tasks will be joined (replaced) to the last.</li>
+	 *   </ul>
 	 *
-	 *   *) [label] - label of the task (previous task with the same label will be canceled)
-	 *   *) [group] - group name of the task
-	 *   *) [destructor] - name of the destructor method
+	 * @param [opts.label] - label of the task (previous task with the same label will be canceled)
+	 * @param [opts.group] - group name of the task
+	 * @param [opts.destructor] - name of the destructor method
 	 */
 	request<T = unknown>(request: (() => PromiseLike<T>) | PromiseLike<T>, opts?: i.AsyncRequestOptions): Promise<T> {
 		return this.promise(request, {...opts, name: this.namespaces.request}) || new Promise<T>(() => undefined);
@@ -288,9 +296,9 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Cancels the specified request or a group of requests
 	 *
 	 * @param opts - options for the operation:
-	 *   *) [id] - link to the request
-	 *   *) [label] - label of the task
-	 *   *) [group] - group name of the task
+	 * @param [opts.id] - link to the request
+	 * @param [opts.label] - label of the task
+	 * @param [opts.group] - group name of the task
 	 */
 	cancelRequest(opts: i.ClearOptionsId<Promise<unknown>>): this;
 	cancelRequest(task?: Promise<unknown> | i.ClearOptionsId<Promise<unknown>>): this {
@@ -307,9 +315,9 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Cancels the specified request or a group of requests
 	 *
 	 * @param opts - options for the operation:
-	 *   *) [id] - link to the request
-	 *   *) [label] - label of the task
-	 *   *) [group] - group name of the task
+	 * @param [opts.id] - link to the request
+	 * @param [opts.label] - label of the task
+	 * @param [opts.group] - group name of the task
 	 */
 	clearRequest(opts: i.ClearOptionsId<Promise<unknown>>): this;
 	clearRequest(task?: Promise<unknown> | i.ClearOptionsId<Promise<unknown>>): this {
@@ -326,9 +334,9 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Mutes the specified request or a group of requests
 	 *
 	 * @param opts - options for the operation:
-	 *   *) [id] - link to the request
-	 *   *) [label] - label of the task
-	 *   *) [group] - group name of the task
+	 * @param [opts.id] - link to the request
+	 * @param [opts.label] - label of the task
+	 * @param [opts.group] - group name of the task
 	 */
 	muteRequest(opts: i.ClearOptionsId<Promise<unknown>>): this;
 	muteRequest(task?: Promise<unknown> | i.ClearOptionsId<Promise<unknown>>): this {
@@ -345,9 +353,9 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Unmutes the specified request or a group of requests
 	 *
 	 * @param opts - options for the operation:
-	 *   *) [id] - link to the request
-	 *   *) [label] - label of the task
-	 *   *) [group] - group name of the task
+	 * @param [opts.id] - link to the request
+	 * @param [opts.label] - label of the task
+	 * @param [opts.group] - group name of the task
 	 */
 	unmuteRequest(opts: i.ClearOptionsId<Promise<unknown>>): this;
 	unmuteRequest(task?: Promise<unknown> | i.ClearOptionsId<Promise<unknown>>): this {
@@ -364,9 +372,9 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Suspends the specified request or a group of requests
 	 *
 	 * @param opts - options for the operation:
-	 *   *) [id] - link to the request
-	 *   *) [label] - label of the task
-	 *   *) [group] - group name of the task
+	 * @param [opts.id] - link to the request
+	 * @param [opts.label] - label of the task
+	 * @param [opts.group] - group name of the task
 	 */
 	suspendRequest(opts: i.ClearOptionsId<Promise<unknown>>): this;
 	suspendRequest(task?: Promise<unknown> | i.ClearOptionsId<Promise<unknown>>): this {
@@ -383,9 +391,9 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Unsuspends the specified request or a group of requests
 	 *
 	 * @param opts - options for the operation:
-	 *   *) [id] - link to the request
-	 *   *) [label] - label of the task
-	 *   *) [group] - group name of the task
+	 * @param [opts.id] - link to the request
+	 * @param [opts.label] - label of the task
+	 * @param [opts.group] - group name of the task
 	 */
 	unsuspendRequest(opts: i.ClearOptionsId<Promise<unknown>>): this;
 	unsuspendRequest(task?: Promise<unknown> | i.ClearOptionsId<Promise<unknown>>): this {
@@ -401,13 +409,15 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 *
 	 * @param promise
 	 * @param [opts] - additional options for the operation:
-	 *   *) [join] - strategy for joining competitive tasks (with same labels):
-	 *       *) true - all tasks will be joined to the first;
-	 *       *) 'replace' - all tasks will be joined (replaced) to the last.
+	 * @param [opts.join=false] - strategy for joining competitive tasks (with same labels):
+	 *   <ul>
+	 *     <li> true - all tasks will be joined to the first;</li>
+	 *     <li>'replace' - all tasks will be joined (replaced) to the last.</li>
+	 *   </ul>
 	 *
-	 *   *) [label] - label of the task (previous task with the same label will be canceled)
-	 *   *) [group] - group name of the task
-	 *   *) [destructor] - name of the destructor method
+	 * @param [opts.label] - label of the task (previous task with the same label will be canceled)
+	 * @param [opts.group] - group name of the task
+	 * @param [opts.destructor] - name of the destructor method
 	 */
 	promise<T = unknown>(promise: (() => PromiseLike<T>) | PromiseLike<T>, opts?: i.AsyncPromiseOptions): Promise<T> {
 		const
@@ -464,9 +474,9 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Cancels the specified promise or a group of promises
 	 *
 	 * @param opts - options for the operation:
-	 *   *) [id] - link to the promise
-	 *   *) [label] - label of the task
-	 *   *) [group] - group name of the task
+	 * @param [opts.id] - link to the promise
+	 * @param [opts.label] - label of the task
+	 * @param [opts.group] - group name of the task
 	 */
 	cancelPromise(opts: i.ClearProxyOptions<Promise<unknown>>): this;
 	cancelPromise(task?: Promise<unknown> | i.ClearProxyOptions<Promise<unknown>>): this {
@@ -483,9 +493,9 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Cancels the specified promise or a group of promises
 	 *
 	 * @param opts - options for the operation:
-	 *   *) [id] - link to the promise
-	 *   *) [label] - label of the task
-	 *   *) [group] - group name of the task
+	 * @param [opts.id] - link to the promise
+	 * @param [opts.label] - label of the task
+	 * @param [opts.group] - group name of the task
 	 */
 	clearPromise(opts: i.ClearProxyOptions<Promise<unknown>>): this;
 	clearPromise(task?: Promise<unknown> | i.ClearProxyOptions<Promise<unknown>>): this {
@@ -521,9 +531,9 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Mutes the specified promise or a group of promises
 	 *
 	 * @param opts - options for the operation:
-	 *   *) [id] - link to the promise
-	 *   *) [label] - label of the task
-	 *   *) [group] - group name of the task
+	 * @param [opts.id] - link to the promise
+	 * @param [opts.label] - label of the task
+	 * @param [opts.group] - group name of the task
 	 */
 	mutePromise(opts: i.ClearOptionsId<Promise<unknown>>): this;
 	mutePromise(task?: Promise<unknown> | i.ClearOptionsId<Promise<unknown>>): this {
@@ -540,9 +550,9 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Unmutes the specified promise or a group of promises
 	 *
 	 * @param opts - options for the operation:
-	 *   *) [id] - link to the promise
-	 *   *) [label] - label of the task
-	 *   *) [group] - group name of the task
+	 * @param [opts.id] - link to the promise
+	 * @param [opts.label] - label of the task
+	 * @param [opts.group] - group name of the task
 	 */
 	unmutePromise(opts: i.ClearOptionsId<Promise<unknown>>): this;
 	unmutePromise(task?: Promise<unknown> | i.ClearOptionsId<Promise<unknown>>): this {
@@ -559,9 +569,9 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Suspends the specified promise or a group of promises
 	 *
 	 * @param opts - options for the operation:
-	 *   *) [id] - link to the promise
-	 *   *) [label] - label of the task
-	 *   *) [group] - group name of the task
+	 * @param [opts.id] - link to the promise
+	 * @param [opts.label] - label of the task
+	 * @param [opts.group] - group name of the task
 	 */
 	suspendPromise(opts: i.ClearOptionsId<Promise<unknown>>): this;
 	suspendPromise(task?: Promise<unknown> | i.ClearOptionsId<Promise<unknown>>): this {
@@ -578,9 +588,9 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Unsuspends the specified promise or a group of promises
 	 *
 	 * @param opts - options for the operation:
-	 *   *) [id] - link to the promise
-	 *   *) [label] - label of the task
-	 *   *) [group] - group name of the task
+	 * @param [opts.id] - link to the promise
+	 * @param [opts.label] - label of the task
+	 * @param [opts.group] - group name of the task
 	 */
 	unsuspendPromise(opts: i.ClearOptionsId<Promise<unknown>>): this;
 	unsuspendPromise(task?: Promise<unknown> | i.ClearOptionsId<Promise<unknown>>): this {
@@ -718,9 +728,9 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 *
 	 * @param label
 	 * @param opts - additional options:
-	 *   *) [id] - operation id
-	 *   *) [label] - label of the task
-	 *   *) [group] - group name of the task
+	 * @param [opts.id] - operation id
+	 * @param [opts.label] - label of the task
+	 * @param [opts.group] - group name of the task
 	 */
 	protected markPromise(label: string, opts: i.ClearOptionsId<Promise<any>>): this;
 	protected markPromise(field: string, task?: Promise<any> | i.ClearOptionsId<Promise<unknown>>): this {

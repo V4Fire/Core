@@ -53,11 +53,13 @@ export function deprecate<T extends Function>(
 ): T;
 
 /**
- * @param params - additional parameters
+ * Emits an obsolescence warning with the specified parameters
+ * @param params
  */
 export function deprecate(params: InlineDeprecatedOptions): void;
 
 /**
+ * Marks the specified function as obsolescence
  * @param fn - function for wrapping
  */
 export function deprecate<T extends Function>(fn: T): T;
