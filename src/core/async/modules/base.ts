@@ -110,8 +110,8 @@ export default class Async<CTX extends object = Async<any>> {
 	 * Clears all async tasks
 	 *
 	 * @param [opts] - additional options for the operation:
-	 *   *) [label] - label of the task
-	 *   *) [group] - group name of the task
+	 * @param [opts.label] - label of the task
+	 * @param [opts.group] - group name of the task
 	 */
 	clearAll(opts?: i.ClearOptions): this {
 		for (let o = this.namespaces, keys = Object.keys(o), i = 0; i < keys.length; i++) {
@@ -133,8 +133,8 @@ export default class Async<CTX extends object = Async<any>> {
 	 * Mutes all async tasks
 	 *
 	 * @param [opts] - additional options for the operation:
-	 *   *) [label] - label of the task
-	 *   *) [group] - group name of the task
+	 * @param [opts.label] - label of the task
+	 * @param [opts.group] - group name of the task
 	 */
 	muteAll(opts?: i.ClearOptions): this {
 		for (let o = this.namespaces, keys = Object.keys(o), i = 0; i < keys.length; i++) {
@@ -153,8 +153,8 @@ export default class Async<CTX extends object = Async<any>> {
 	 * Unmutes all async tasks
 	 *
 	 * @param [opts] - additional options for the operation:
-	 *   *) [label] - label of the task
-	 *   *) [group] - group name of the task
+	 * @param [opts.label] - label of the task
+	 * @param [opts.group] - group name of the task
 	 */
 	unmuteAll(opts?: i.ClearOptions): this {
 		for (let o = this.namespaces, keys = Object.keys(o), i = 0; i < keys.length; i++) {
@@ -173,8 +173,8 @@ export default class Async<CTX extends object = Async<any>> {
 	 * Suspends all async tasks
 	 *
 	 * @param [opts] - additional options for the operation:
-	 *   *) [label] - label of the task
-	 *   *) [group] - group name of the task
+	 * @param [opts.label] - label of the task
+	 * @param [opts.group] - group name of the task
 	 */
 	suspendAll(opts?: i.ClearOptions): this {
 		for (let o = this.namespaces, keys = Object.keys(o), i = 0; i < keys.length; i++) {
@@ -193,8 +193,8 @@ export default class Async<CTX extends object = Async<any>> {
 	 * Unsuspends all async tasks
 	 *
 	 * @param [opts] - additional options for the operation:
-	 *   *) [label] - label of the task
-	 *   *) [group] - group name of the task
+	 * @param [opts.label] - label of the task
+	 * @param [opts.group] - group name of the task
 	 */
 	unsuspendAll(opts?: i.ClearOptions): this {
 		for (let o = this.namespaces, keys = Object.keys(o), i = 0; i < keys.length; i++) {

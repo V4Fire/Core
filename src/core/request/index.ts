@@ -35,12 +35,12 @@ export { default as Response } from 'core/request/response';
  *
  * @param path - request path URL
  * @param opts - request options:
+ *
  * @param [opts.method='GET'] - request method type
- * @param [opts.contentType] - mime type of request data
- *   <p>(if not specified, it will be casted dynamically)</p>
+ * @param [opts.contentType] - mime type of request data (if not specified, it will be casted dynamically)
  *
  * @param [opts.responseType='text'] - type of response data
- *   <p>(if not specified, it will be casted dynamically from response headers):</p>
+ *   (if not specified, it will be casted dynamically from response headers):
  *   <ul>
  *     <li>'text' - result is interpreted as a simple string;</li>
  *     <li>'json' - result is interpreted as a JSON string;</li>
@@ -54,74 +54,75 @@ export { default as Response } from 'core/request/response';
  * @param [opts.headers] - additional request headers
  * @param [opts.credentials] - enables providing of credentials for cross-domain requests
  *
- * @param [opts.api] - object with API parameters. If the API is specified it will be concatenated with a
- *      request path URL. It can be useful for creating request factories. In addition, you can provide a function as a
- *      key value, and it will be invoked.
- *
- *      You can provide a direct URL for the API:
+ * @param [opts.api] - object with API parameters. If the API is specified it will be concatenated with
+ *   a request path URL. It can be useful for creating request factories. In addition, you can provide a function as a
+ *   key value, and it will be invoked.
+ *   <p>You can provide a direct URL for the API:</p>
  *
  * @param [opts.api.url] - base API URL, such as 'https://google.com'.
+ *    <p>Or you can provide a bunch of parameters for mapping on .api parameter from the application config.
+ *    For example, if the config.api is equal to 'https://google.com' and you provide parameters like
+ *    {domain3: 'foo', namespace: () => 'bar'}, than it builds a string is equal to 'https://foo.google.com/bar'.</p>
  *
- *      Or you can provide a bunch of parameters for mapping on .api parameter from the application config.
- *      For example, if the config.api is equal to 'https://google.com' and you provide parameters like
- *      {domain3: 'foo', namespace: () => 'bar'}, than it builds a string is equal to 'https://foo.google.com/bar'.
+ * @param [opts.api.protocol] - api protocol, like 'http' ot 'https'
+ * @param [opts.api.auth] - value for an API authorization part, like 'login:password'
+ * @param [opts.api.domain6] - value for an API domain level 6 part
+ * @param [opts.api.domain5] - value for an API domain level 5 part
+ * @param [opts.api.domain4] - value for an API domain level 4 part
+ * @param [opts.api.domain3] - value for an API domain level 3 part
+ * @param [opts.api.domain2] - value for an API domain level 2 part
+ * @param [opts.api.zone] - value for an API domain zone part
+ * @param [opts.api.port] - value for an API api port
+ * @param [opts.api.namespace] - value for an API namespace part: it follows after '/' character
  *
- *      *) [protocol] - api protocol, like 'http' ot 'https'
- *      *) [auth] - value for an API authorization part, like 'login:password'
- *      *) [domain6] - value for an API domain level 6 part
- *      *) [domain5] - value for an API domain level 5 part
- *      *) [domain4] - value for an API domain level 4 part
- *      *) [domain3] - value for an API domain level 3 part
- *      *) [domain2] - value for an API domain level 2 part
- *      *) [zone] - value for an API domain zone part
- *      *) [port] - value for an API api port
- *      *) [namespace] - value for an API namespace part: it follows after '/' character
+ * @param [opts.okStatuses=new Range(200, 299)] - list of status codes (or a single code) with HTTP statuses which is ok
+ *   for response, also can pass a range of codes
  *
- *   *) [okStatuses=new Range(200, 299)] - list of status codes (or a single code) with HTTP statuses which is ok
- *      for response, also can pass a range of codes
+ * @param [opts.timeout] - value in milliseconds for the request timeout
  *
- *   *) [timeout] - value in milliseconds for the request timeout
+ * @param [opts.cacheStrategy='never'] - type of caching for requests which supports it:
+ *   <ol>
+ *     <li>
+ *       'forever' - caches all requests and stores their values forever within the active session or
+ *       until the cache expires (if .cacheTTL is specified);
+ *     </li>
+ *      <li>'queue' - caches all requests, but more frequent requests will push less frequent requests;</li>
+ *      <li>'never' - never caches any requests.</li>
+ *   </ol>
  *
- *   *) [cacheStrategy='never'] - type of caching for requests which supports it:
- *      1) 'forever' - caches all requests and stores their values forever within the active session or
- *         until the cache expires (if .cacheTTL is specified);
+ * @param [opts.cacheId] - unique cache id: it can be useful for creating request factories with isolated cache storages
+ * @param [opts.cacheMethods=['GET']] - list of request methods that supports caching
+ * @param [opts.cacheTTL] - value in milliseconds that indicates how long a value of the request should keep in
+ *   the cache (by default, all request is stored within the active session without expiring)
  *
- *      2) 'queue' - caches all requests, but more frequent requests will push less frequent requests;
- *      3) 'never' - never caches any requests.
+ * @param [opts.offlineCache=false] - enables support of offline caching
+ * @param [opts.offlineCacheTTL=(1).day()] - value in milliseconds that indicates how long a value of the request
+ *   should keep in the offline cache
  *
- *   *) [cacheId] - unique cache id: it can be useful for creating request factories with isolated cache storages
- *   *) [cacheMethods=['GET']] - list of request methods that supports caching
- *   *) [cacheTTL] - value in milliseconds that indicates how long a value of the request should keep in the cache
- *      (by default, all request is stored within the active session without expiring)
+ * @param [opts.middlewares] - dictionary or an iterable value with middleware functions:
+ *   functions take an environment of request parameters and can modify theirs.
+ *   <p>Please notice, that the order of middlewares depends of a structure which you use.
+ *   Also, if at least one of middlewares returns a function, than the result of invoking this function
+ *   will be returned as the request result. It can be helpful for organizing mocks of data and
+ *   other similar cases when you don't want to execute a real request.</p>
  *
- *   *) [offlineCache=false] - enables support of offline caching
- *   *) [offlineCacheTTL=(1).day()] - value in milliseconds that indicates how long a value of the request
- *      should keep in the offline cache
+ * @param [opts.encoder] - function (or a sequence of functions) that takes data of the current request
+ *   (if .body is not specified, it will take .query) and returns a new data for requesting.
+ *   If you provides a sequence of functions, then the first function will provide a result to the next function
+ *   from the sequence and etc.
  *
- *   *) [middlewares] - dictionary or an iterable value with middleware functions:
- *      functions take an environment of request parameters and can modify theirs.
- *      Please notice, that the order of middlewares depends of a structure which you use.
- *      Also, if at least one of middlewares returns a function, than the result of invoking this function
- *      will be returned as the request result. It can be helpful for organizing mocks of data and
- *      other similar cases when you don't want to execute a real request.
+ * @param [opts.decoder] - function (or a sequence of functions) that takes response data of the current request
+ *   and returns a new data for responsing. If you provides a sequence of functions, then the first function
+ *   will provide a result to the next function from te sequence and etc.
  *
- *   *) [encoder] - function (or a sequence of functions) that takes data of the current request
- *      (if .body is not specified, it will take .query) and returns a new data for requesting.
- *      If you provides a sequence of functions, then the first function will provide a result to the next function
- *      from the sequence and etc.
+ * @param [opts.externalRequest] - special flag which indicates that request will be invoked not directly by a browser,
+ *   but some "external" application, such as a native application in a mobile (it's important for offline requests)
  *
- *   *) [decoder] - function (or a sequence of functions) that takes response data of the current request
- *      and returns a new data for responsing. If you provides a sequence of functions, then the first function
- *      will provide a result to the next function from the sequence and etc.
+ * @param [opts.important] - meta flag which indicates that the request is important: usually it used with middlewares
+ *   for indicating that the request need execute as soon as possible
  *
- *   *) [externalRequest] - special flag which indicates that request will be invoked not directly by a browser,
- *      but some "external" application, such as a native application in a mobile (it's important for offline requests)
- *
- *   *) [important] - meta flag which indicates that the request is important: usually it used with middlewares for
- *      indicating that the request need execute as soon as possible
- *
- *   *) [meta] - dictionary with some extra parameters for the request: usually it used with middlewares for
- *      providing domain specific information
+ * @param [opts.meta] - dictionary with some extra parameters for the request: usually it used with middlewares for
+ *   providing domain specific information
  */
 export default function create<T = unknown>(path: string, opts?: i.CreateRequestOptions<T>): i.RequestResponse<T>;
 

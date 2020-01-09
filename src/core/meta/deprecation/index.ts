@@ -13,20 +13,21 @@ export * from 'core/meta/deprecation/interface';
  * Marks the specified function as obsolescence
  *
  * @param params - additional parameters:
- *   *) [name] - name of the current function
- *   *) [type] - type of the expression for wrapping
  *
- *   *) [renamedTo] - indicates that the function was renamed, but the interface still actual,
- *       the value contains a name after renaming
+ * @param [params.name] - name of the current function
+ * @param [params.type] - type of the expression for wrapping
  *
- *   *) [movedTo] - indicates that the function was moved to a different file, but the interface still actual,
- *      the value contains a source path after moving
+ * @param [params.renamedTo] - indicates that the function was renamed, but the interface still actual,
+ *   the value contains a name after renaming
  *
- *   *) [alternative] - name of the function which should prefer to use instead the current
- *      or an object with the alternative options:
+ * @param [params.movedTo] - indicates that the function was moved to a different file, but the interface still actual,
+ *   the value contains a source path after moving
  *
- *      *) name
- *      *) [source] - source of the alternative
+ * @param [params.alternative] - name of the function which should prefer to use instead the current
+ *   or an object with the alternative options:
+ *
+ * @param params.alternative.name
+ * @param [params.alternative.source] - source of the alternative
  *
  * @param [fn] - function for wrapping
  *
