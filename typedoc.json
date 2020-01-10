@@ -1,0 +1,15 @@
+{
+  "name": "V4Fire Core Library",
+  "tsconfig": "./tsconfig.json",
+  "mode": "modules",
+  "src": ["./src", "./index.d.ts"],
+  "out": "./doc",
+  "readme": "./README.md",
+  "theme": "./node_modules/typedoc-neo-theme/bin/default",
+  "hideGenerator": true,
+  "ignoreCompilerErrors": false,
+  "excludeNotExported": true,
+  "excludePrivate": true,
+  "exclude": ["**/engines/**"],
+  "includes": "./src"
+}
