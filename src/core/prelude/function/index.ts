@@ -9,9 +9,7 @@
 import 'core/prelude/function/shim';
 import extend from 'core/prelude/extend';
 
-/**
- * @see Function.prototype.once
- */
+/** @see Function.prototype.once */
 extend(Function.prototype, 'once', function (this: Function): Function {
 	const
 		// tslint:disable-next-line:no-this-assignment

@@ -461,3 +461,5 @@ export default function create<T = unknown>(
 
 	return run();
 }
+
+create('foo', {responseType: 'arrayBuffer'})

@@ -1,6 +1,6 @@
 # core/then
 
-This module provides a class for wrapping promise-like objects and adds to them some extra functionality, such as possibility of cancelation, etc.
+This module provides a class for wrapping promise-like objects and adds to them some extra functionality, such as possibility of cancellation, etc.
 
 ```js
 import Then from 'core/then';
@@ -13,7 +13,7 @@ const promise = new Then((resolve, reject, onAbort) => {
   onAbort((reason) => {
     console.error(`The promise was aborted by a reason of ${reason}`);
   });
-  
+
 }).catch((err) => console.error(err)); // timeout
 
 promise.abort('timeout');

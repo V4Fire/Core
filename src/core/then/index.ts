@@ -17,7 +17,7 @@ export * from 'core/then/interface';
 
 /**
  * Class for wrapping promise-like objects and adds to them some extra functionality,
- * such as possibility of cancelation, etc.
+ * such as possibility of cancellation, etc.
  *
  * @typeparam T - promise resolved value
  */

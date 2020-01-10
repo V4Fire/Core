@@ -127,16 +127,66 @@ export type Middlewares<T = unknown> =
 export type RequestAPIValue<T = string> = Nullable<T> | (() => Nullable<T>);
 
 export interface RequestAPI {
+	/**
+	 * Direct value for API URL
+	 *
+	 * @example
+	 * `'https://google.com'`
+	 */
 	url?: RequestAPIValue;
+
+	/**
+	 * API protocol
+	 *
+	 * @example
+	 * `'http'`
+	 * `'https'`
+	 */
 	protocol?: RequestAPIValue;
+
+	/**
+	 *
+	 */
 	auth?: RequestAPIValue;
+
+	/**
+	 *
+	 */
 	domain6?: RequestAPIValue;
+
+	/**
+	 *
+	 */
 	domain5?: RequestAPIValue;
+
+	/**
+	 *
+	 */
 	domain4?: RequestAPIValue;
+
+	/**
+	 *
+	 */
 	domain3?: RequestAPIValue;
+
+	/**
+	 *
+	 */
 	domain2?: RequestAPIValue;
+
+	/**
+	 *
+	 */
 	zone?: RequestAPIValue;
+
+	/**
+	 *
+	 */
 	port?: RequestAPIValue<string | number>;
+
+	/**
+	 *
+	 */
 	namespace?: RequestAPIValue;
 }
 export interface RequestResolver<T = unknown, ARGS extends unknown[] = unknown[]> {
@@ -144,16 +194,54 @@ export interface RequestResolver<T = unknown, ARGS extends unknown[] = unknown[]
 }
 
 export interface CreateRequestOptions<T = unknown> {
+	/**
+	 * Request method type
+	 */
 	readonly method?: RequestMethod;
 
+	/**
+	 * Mime type of request data (if not specified, it will be casted dynamically)
+	 */
 	contentType?: string;
+
+	/**
+	 * Type of the response data:
+	 * (if not specified, it will be casted dynamically from response headers):
+	 * * `'text'` - result is interpreted as a simple string;
+	 * * `'json'` - result is interpreted as a JSON string;
+	 * * `'arrayBuffer'` - result is interpreted as an array buffer;
+	 * * `'blob'` - result is interpreted as a binary sequence;
+	 * * `'object'` - result is interpreted "as is" without any converting.
+	 */
 	responseType?: ResponseType;
 
+	/**
+	 * Request body
+	 */
 	body?: RequestBody;
+
+	/**
+	 * URL query parameters
+	 */
 	query?: RequestQuery;
+
+	/**
+	 * Additional request headers
+	 */
 	headers?: Dictionary<CanArray<unknown>>;
+
+	/**
+	 * Enables providing of credentials for cross-domain requests
+	 */
 	credentials?: boolean;
 
+	/**
+	 * Map of API parameters.
+	 *
+	 * If the API is specified it will be concatenated with a request path URL. It can be useful for creating
+	 * request factories. In addition, you can provide a function as a key value, and it will be invoked.
+	 * <p>You can provide a direct URL for the API:</p>
+	 */
 	api?: RequestAPI;
 	okStatuses?: OkStatuses;
 	timeout?: number;

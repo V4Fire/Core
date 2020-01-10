@@ -7,7 +7,18 @@
  */
 
 export interface Locale {
+	/**
+	 * Locale value
+	 */
 	value: string;
+
+	/**
+	 * True if the locale is already defined
+	 */
 	isDefined: boolean;
+
+	/**
+	 * Promise of the locale initializing
+	 */
 	isInitialized: Promise<void>;
 }

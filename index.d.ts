@@ -6,6 +6,11 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/**
+ * [[include:core/prelude/README.md]]
+ * @packageDocumentation
+ */
+
 // tslint:disable:max-file-line-count
 
 declare const APP_NAME: string;
@@ -108,8 +113,11 @@ interface ObjectMixinOptions<V = unknown, K = unknown, D = unknown> {
 	 * @default `false`
 	 * @example
 	 * ```js
-	 * Object.mixin({deep: false}, {a: {b: 1}}, {a: {c: 2}}); // {a: {c: 2}}
-	 * Object.mixin({deep: true}, {a: {b: 1}}, {a: {c: 2}}); // {a: {b: 1, c: 2}}
+	 * // {a: {c: 2}}
+	 * Object.mixin({deep: false}, {a: {b: 1}}, {a: {c: 2}});
+	 *
+	 * // {a: {b: 1, c: 2}}
+	 * Object.mixin({deep: true}, {a: {b: 1}}, {a: {c: 2}});
 	 * ```
 	 */
 	deep?: boolean;
@@ -120,8 +128,11 @@ interface ObjectMixinOptions<V = unknown, K = unknown, D = unknown> {
 	 * @default `false`
 	 * @example
 	 * ```js
-	 * Object.mixin({onlyNew: true}, {a: 1}, {a: 2, b: 3}); // {a: 1, b: 3}
-	 * Object.mixin({onlyNew: -1}, {a: 1}, {a: 2, b: 3}); // {a: 2}
+	 * // {a: 1, b: 3}
+	 * Object.mixin({onlyNew: true}, {a: 1}, {a: 2, b: 3});
+	 *
+	 * // {a: 2}
+	 * Object.mixin({onlyNew: -1}, {a: 1}, {a: 2, b: 3});
 	 * ```
 	 */
 	onlyNew?: boolean | -1;
@@ -138,8 +149,11 @@ interface ObjectMixinOptions<V = unknown, K = unknown, D = unknown> {
 	 * @default `false`
 	 * @example
 	 * ```js
-	 * Object.mixin({withUndef: false}, {a: 1}, {a: undefined}); // {a: 1}
-	 * Object.mixin({withUndef: true}, {a: 1}, {a: undefined}); // {a: undefined}
+	 * // {a: 1}
+	 * Object.mixin({withUndef: false}, {a: 1}, {a: undefined});
+	 *
+	 * // {a: undefined}
+	 * Object.mixin({withUndef: true}, {a: 1}, {a: undefined});
 	 * ```
 	 */
 	withUndef?: boolean;
@@ -213,8 +227,11 @@ interface ObjectMixinOptions<V = unknown, K = unknown, D = unknown> {
 	 * @default `false`
 	 * @example
 	 * ```js
-	 * Object.mixin({deep: true, concatArray: false}, {a: [1]}, {a: [2]}); // {a: [2]}
-	 * Object.mixin({deep: true, concatArray: true}, {a: [1]}, {a: [2]}); // {a: [1, 2]}
+	 * // {a: [2]}
+	 * Object.mixin({deep: true, concatArray: false}, {a: [1]}, {a: [2]});
+	 *
+	 * // {a: [1, 2]}
+	 * Object.mixin({deep: true, concatArray: true}, {a: [1]}, {a: [2]});
 	 * ```
 	 */
 	concatArray?: boolean;
@@ -230,8 +247,11 @@ interface ObjectMixinOptions<V = unknown, K = unknown, D = unknown> {
 	 *
 	 * @example
 	 * ```js
-	 * Object.mixin({deep: true, concatArray: true}, {a: [1]}, {a: [1, 2]}); // {a: [1, 1, 2]}
-	 * Object.mixin({deep: true, concatArray: true, concatFn: [].union}, {a: [1]}, {a: [1, 2]}); // {a: [1, 2]}
+	 * // {a: [1, 1, 2]}
+	 * Object.mixin({deep: true, concatArray: true}, {a: [1]}, {a: [1, 2]});
+	 *
+	 * // {a: [1, 2]}
+	 * Object.mixin({deep: true, concatArray: true, concatFn: [].union}, {a: [1]}, {a: [1, 2]});
 	 * ```
 	 */
 	concatFn?(oldValue: V, newValue: unknown[], key: K): unknown[];
@@ -246,8 +266,11 @@ interface ObjectMixinOptions<V = unknown, K = unknown, D = unknown> {
 	 *
 	 * @example
 	 * ```js
-	 * Object.mixin({deep: true}, {a: {a: 1}}, {a: {b: 2}}); // {a: {a: 1, b: 2}}
-	 * Object.mixin({deep: true, extendFilter: (t, v) => !v.b}, {a: {a: 1}}, {a: {b: 2}}); // {a: {b: 2}}
+	 * // {a: {a: 1, b: 2}}
+	 * Object.mixin({deep: true}, {a: {a: 1}}, {a: {b: 2}});
+	 *
+	 * // {a: {b: 2}}
+	 * Object.mixin({deep: true, extendFilter: (t, v) => !v.b}, {a: {a: 1}}, {a: {b: 2}});
 	 * ```
 	 */
 	extendFilter?(target: V, value: unknown, key: K): unknown;
@@ -262,8 +285,11 @@ interface ObjectMixinOptions<V = unknown, K = unknown, D = unknown> {
 	 *
 	 * @example
 	 * ```js
-	 * Object.mixin({deep: true}, {a: 1}, {b: 2}); // {a: 1, b: 2}
-	 * Object.mixin({deep: true, filter: (el, key) => key !== 'b'}, {a: 1}, {b: 2}); // {a: 1}
+	 * // {a: 1, b: 2}
+	 * Object.mixin({deep: true}, {a: 1}, {b: 2});
+	 *
+	 * // {a: 1}
+	 * Object.mixin({deep: true, filter: (el, key) => key !== 'b'}, {a: 1}, {b: 2});
 	 * ```
 	 */
 	filter?(el: V, key: K, data: D): unknown;
@@ -274,7 +300,9 @@ interface ObjectGetOptions {
 	 * Character for declaring the path
 	 *
 	 * @example
-	 * `Object.get({a: {b: 1}}, 'a:b', {separator: ':'})`
+	 * ```js
+	 * Object.get({a: {b: 1}}, 'a:b', {separator: ':'})
+	 * ```
 	 */
 	separator?: string;
 }
@@ -299,9 +327,9 @@ interface ObjectForEachOptions {
 	 *
 	 * @example
 	 * ```js
-	 * Object.forEach({a: 1}, (el) => {
+	 * Object.forEach({a: 1}, {withDescriptor: true}, (el) => {
 	 *   console.log(el); // {configurable: true, enumerable: true, writable: true, value: 1}
-	 * }, {withDescriptor: true});
+	 * });
 	 * ```
 	 */
 	withDescriptor?: boolean;
@@ -320,13 +348,13 @@ interface ObjectForEachOptions {
 	 *   console.log(el); // 1
 	 * });
 	 *
-	 * Object.forEach(obj, (el) => {
+	 * Object.forEach(obj, {notOwn: true}, (el) => {
 	 *   console.log(el); // 1 2
-	 * }, {notOwn: true});
+	 * });
 	 *
-	 * Object.forEach(obj, (el) => {
+	 * Object.forEach(obj, {notOwn: -1}, (el) => {
 	 *   console.log(el); // 2
-	 * }, {notOwn: -1});
+	 * });
 	 * ```
 	 */
 	notOwn?: boolean | -1;
@@ -342,7 +370,20 @@ interface ObjectForEachPropertyDescriptor<V = unknown> {
 }
 
 interface ObjectFromArrayOptions<T = boolean> {
+	/**
+	 * Function that returns a key value
+	 *
+	 * @param i - element index
+	 * @param el - element value
+	 */
 	keyConverter?(i: number, el: unknown): string | symbol;
+
+	/**
+	 * Function that returns an element value
+	 *
+	 * @param el - element value
+	 * @param i - element index
+	 */
 	valueConverter?(el: unknown, i: number): T;
 }
 
@@ -385,26 +426,39 @@ interface ObjectConstructor {
 	 * Iterates over the specified dictionary
 	 *
 	 * @param obj - object to iterate
+	 * @param opts - additional options
 	 * @param cb - callback function that is called on each of object elements
-	 * @param [opts] - additional options
 	 */
 	forEach<V = unknown>(
 		obj: Dictionary<V>,
-		cb: (el: ObjectForEachPropertyDescriptor<V>, key: string, data: Dictionary<V>) => any,
-		opts?: ObjectForEachOptions & {withDescriptor: true}
+		opts: ObjectForEachOptions & {withDescriptor: true},
+		cb: (el: ObjectForEachPropertyDescriptor<V>, key: string, data: Dictionary<V>) => any
 	): void;
 
 	/**
 	 * Iterates over the specified dictionary
 	 *
 	 * @param obj - object to iterate
+	 * @param opts - additional options
 	 * @param cb - callback function that is called on each of object elements
-	 * @param [opts] - additional options
 	 */
 	forEach<V = unknown>(
 		obj: Dictionary<V>,
-		cb: (el: V, key: string, data: Dictionary<V>) => any,
-		opts?: ObjectForEachOptions & ({notOwn: boolean | -1} | {withDescriptor: false})
+		opts?: ObjectForEachOptions & ({notOwn: boolean | -1} | {withDescriptor: false}),
+		cb: (el: V, key: string, data: Dictionary<V>) => any
+	): void;
+
+	/**
+	 * Iterates over the specified array
+	 *
+	 * @param obj - object to iterate
+	 * @param opts - additional options
+	 * @param cb - callback function that is called on each of object elements
+	 */
+	forEach<V = unknown>(
+		obj: V[],
+		opts: ObjectForEachOptions,
+		cb: (el: V, i: number, data: V[]) => any
 	): void;
 
 	/**
@@ -424,6 +478,19 @@ interface ObjectConstructor {
 	 * Iterates over the specified Set object
 	 *
 	 * @param obj - object to iterate
+	 * @param opts - additional options
+	 * @param cb - callback function that is called on each of object elements
+	 */
+	forEach<V = unknown>(
+		obj: Set<V>,
+		opts: ObjectForEachOptions,
+		cb: (el: V, i: V, data: Set<V>) => any
+	): void;
+
+	/**
+	 * Iterates over the specified Set object
+	 *
+	 * @param obj - object to iterate
 	 * @param cb - callback function that is called on each of object elements
 	 * @param [opts] - additional options
 	 */
@@ -431,6 +498,19 @@ interface ObjectConstructor {
 		obj: Set<V>,
 		cb: (el: V, i: V, data: Set<V>) => any,
 		opts?: ObjectForEachOptions
+	): void;
+
+	/**
+	 * Iterates over the specified Map object
+	 *
+	 * @param obj - object to iterate
+	 * @param opts - additional options
+	 * @param cb - callback function that is called on each of object elements
+	 */
+	forEach<V = unknown, K = unknown>(
+		obj: Map<K, V>,
+		opts: ObjectForEachOptions,
+		cb: (el: V, key: K, data: Map<K, V>) => any
 	): void;
 
 	/**
@@ -450,6 +530,19 @@ interface ObjectConstructor {
 	 * Iterates over the specified iterable object
 	 *
 	 * @param obj - object to iterate
+	 * @param opts - additional options
+	 * @param cb - callback function that is called on each of object elements
+	 */
+	forEach<V = unknown>(
+		obj: Iterable<V>,
+		opts: ObjectForEachOptions,
+		cb: (el: V, key: null, data: Iterable<V>) => any
+	): void;
+
+	/**
+	 * Iterates over the specified iterable object
+	 *
+	 * @param obj - object to iterate
 	 * @param cb - callback function that is called on each of object elements
 	 * @param [opts] - additional options
 	 */
@@ -463,14 +556,39 @@ interface ObjectConstructor {
 	 * Iterates over the specified object
 	 *
 	 * @param obj - object to iterate
+	 * @param opts - additional options
+	 * @param cb - callback function that is called on each of object elements
+	 */
+	forEach<V = unknown>(
+		obj: Dictionary<V>,
+		opts: ObjectForEachOptions,
+		cb: (el: V, key: string, data: Dictionary<V>) => any
+	): void;
+
+	/**
+	 * Iterates over the specified object
+	 *
+	 * @param obj - object to iterate
 	 * @param cb - callback function that is called on each of object elements
 	 * @param [opts] - additional options
 	 */
 	forEach<V = unknown>(
 		obj: Dictionary<V>,
 		cb: (el: V, key: string, data: Dictionary<V>) => any,
-		// tslint:disable-next-line:unified-signatures
 		opts?: ObjectForEachOptions
+	): void;
+
+	/**
+	 * Iterates over the specified object
+	 *
+	 * @param obj - object to iterate
+	 * @param opts - additional options
+	 * @param cb - callback function that is called on each of object elements
+	 */
+	forEach<V = unknown, K = unknown, D = unknown>(
+		obj: D,
+		opts: ObjectForEachOptions,
+		cb: (el: V, key: K, data: D) => any
 	): void;
 
 	/**
@@ -580,7 +698,9 @@ interface ObjectConstructor {
 	 * Creates a hash table without any prototype and returns it
 	 *
 	 * @example
+	 * ```js
 	 * Object.createDict() // {__proto__: null}
+	 * ```
 	 */
 	createDict<V = unknown>(): Dictionary<V>;
 
@@ -591,7 +711,9 @@ interface ObjectConstructor {
 	 *   all key from these objects is merged to the target
 	 *
 	 * @example
+	 * ```js
 	 * Object.createDict({a: 1}, {b: 2}) // {a: 1, b: 2, __proto__: null}
+	 * ```
 	 */
 	createDict<D extends object>(...objects: D[]): Pick<D, keyof D>;
 
@@ -604,11 +726,13 @@ interface ObjectConstructor {
 	convertEnumToDict<D extends object>(obj: D): {[K in keyof D]: K};
 
 	/**
-	 * Creates an object which has the similar structure to TS enum objects and returns it
+	 * Creates an object which has the similar structure to a TS enum object and returns it
 	 *
 	 * @param obj - base object: it can be a dictionary or an array
 	 * @example
-	 *   Object.createEnumLike({a: 1}) // {a: 1, 1: 'a', __proto__: null}
+	 * ```js
+	 * Object.createEnumLike({a: 1}) // {a: 1, 1: 'a', __proto__: null}
+	 * ```
 	 */
 	createEnumLike<D extends object, K extends keyof D>(obj: D):
 		D extends Array<infer E> ? Dictionary<E | number> : D & {[I: string]: K};
@@ -624,9 +748,7 @@ interface ObjectConstructor {
 	 * Creates an object from the specified array
 	 *
 	 * @param arr
-	 * @param [opts] - additional options:
-	 * @param [opts.keyConverter] - function that returns a key value
-	 * @param [opts.valueConverter] - function that returns an element value
+	 * @param [opts] - additional options
 	 */
 	fromArray<T = boolean>(arr: unknown[], opts?: ObjectFromArrayOptions<T>): Dictionary<T>;
 
@@ -775,7 +897,7 @@ interface ObjectConstructor {
 	isMap(obj: unknown): obj is Map<unknown, unknown>;
 
 	/**
-	 * Returns true if the specified value is a promise
+	 * Returns true if the specified value is a weak map
 	 * @param obj
 	 */
 	isWeakMap(obj: unknown): obj is WeakMap<object, unknown>;
@@ -803,17 +925,23 @@ interface Array<T> {
 }
 
 interface StringCapitalizeOptions {
+	/**
+	 * If is true, then remainder of the string will be transformed to lower case
+	 * @default `false`
+	 */
 	lower?: boolean;
+
+	/**
+	 * If is true, all words in the string will be capitalized
+	 * @default `false`
+	 */
 	all?: boolean;
 }
 
 interface String {
 	/**
 	 * Capitalizes the first character of a string and returns it
-	 *
-	 * @param [opts] - additional options:
-	 * @param [opts.lower] - if is true, then remainder of the string will be transformed to the lower case
-	 * @param [opts.all] - if is true, all words in the string will be capitalized
+	 * @param [opts] - additional options
 	 */
 	capitalize(opts?: StringCapitalizeOptions): string;
 
@@ -856,7 +984,7 @@ interface NumberConstructor {
 	setOption(key: NumberOption, value: string): string;
 
 	/**
-	 * Returns true if the specified value is a integer number
+	 * Returns true if the specified value is an integer number
 	 * @param obj
 	 */
 	isInteger(obj: unknown): boolean;
@@ -868,13 +996,13 @@ interface NumberConstructor {
 	isFloat(obj: unknown): boolean;
 
 	/**
-	 * Returns true if the specified value is a even number
+	 * Returns true if the specified value is an even number
 	 * @param obj
 	 */
 	isEven(obj: unknown): boolean;
 
 	/**
-	 * Returns true if the specified value is a odd number
+	 * Returns true if the specified value is an odd number
 	 * @param obj
 	 */
 	isOdd(obj: unknown): boolean;
@@ -917,13 +1045,33 @@ interface NumberConstructor {
 }
 
 interface NumberPadOptions {
+	/**
+	 * If true, then a sign of the number is written anyway
+	 * @default `false`
+	 */
 	base?: number;
+
+	/**
+	 * Value of the base to convert in a string
+	 * @default `10`
+	 */
 	sign?: boolean;
 }
 
 interface NumberFormatOptions {
+	/**
+	 * Length of the decimal part
+	 */
 	decimalLength?: boolean;
+
+	/**
+	 * Separator for the decimal part
+	 */
 	decimal?: string;
+
+	/**
+	 * Separator for the "thousand" chunks
+	 */
 	thousands?: string;
 }
 
@@ -1077,19 +1225,13 @@ interface Number {
 	 * Returns a string from the number with adding extra zeros to the start, if necessary
 	 *
 	 * @param targetLength - length of the resulting string once the current string has been padded
-	 * @param [opts] - additional options:
-	 * @param [opts.sign=false] - if true, the sign of the number is written anyway
-	 * @param [opts.base=10] - value of the base to convert in a string
+	 * @param [opts] - additional options
 	 */
 	pad(targetLength?: number, opts?: NumberPadOptions): string;
 
 	/**
 	 * Returns a string version of the number with adding some extra formatting
-	 *
-	 * @param [opts] - additional options:
-	 * @param [opts.decimalLength] - length of the decimal part
-	 * @param [opts.decimal] - separator for the decimal part
-	 * @param [opts.thousands] - separator for the "thousand" chunks
+	 * @param [opts] - additional options
 	 */
 	format(opts?: NumberFormatOptions): string;
 
@@ -1141,24 +1283,24 @@ interface DateConstructor {
 	 * Creates a date from the specified pattern.
 	 * This method can create a new date object from:
 	 *
-	 *   <ul>
-	 *     <li>another date object</li>
-	 *     <li>a number of milliseconds (if the number is integer)</li>
-	 *     <li>a number of seconds (if the number is float)</li>
-	 *     <li>a number of seconds (if the number is float)</li>
-	 *     <li>a string pattern using the native Date.parse with some polyfills</li>
-	 *     <li>a string aliases:
-	 *        <ul>
-	 *          <li>now - is an alias for the now date</li>
-	 *          <li>today - is an alias for the beginning of the today</li>
-	 *          <li>yesterday - is an alias for the beginning of the yesterday</li>
-	 *          <li>tomorrow - is an alias for the beginning of the tomorrow</li>
-	 *        </ul>
-	 *     </li>
-	 *   </ul>
+	 *  1. another date object
+	 *  1. number of milliseconds (if the number is integer)
+	 *  1. number of seconds (if the number is float)
+	 *  1. string pattern using the native Date.parse with some polyfills
+	 *  1. string aliases:
+	 *     1. `'now'` - is an alias for the now date
+	 *     1. `'today'` - is an alias for the beginning of the today
+	 *     1. `'yesterday'` - is an alias for the beginning of the yesterday
+	 *     1. `'tomorrow'` - is an alias for the beginning of the tomorrow
 	 *
 	 * @param [pattern]
 	 * @param [opts]
+	 *
+	 * @example
+	 * ```js
+	 * Date.create('now'); // new Date(Date.now())
+	 * Date.create(Date.now()); // new Date(Date.now())
+	 * ```
 	 */
 	create(pattern?: DateCreateValue, opts?: DateCreateOptions): Date;
 
@@ -1186,13 +1328,36 @@ interface DateSetParams {
 }
 
 interface DateHTMLDateStringOptions {
+	/**
+	 * If false, then a date month is taken from the beginning of the now year
+	 * @default `true`
+	 */
 	month?: boolean;
+
+	/**
+	 * If false, then a date day is taken from the beginning of the now month
+	 * @default `true`
+	 */
 	date?: boolean;
 }
 
 interface DateHTMLTimeStringOptions {
+	/**
+	 * If false, then a date month is taken from the beginning of the now hour
+	 * @default `true`
+	 */
 	minutes?: boolean;
+
+	/**
+	 * If false, then a date second is taken from the beginning of the now minute
+	 * @default `true`
+	 */
 	seconds?: boolean;
+
+	/**
+	 * If false, then a date millisecond is taken from the beginning of the now second
+	 * @default `true`
+	 */
 	milliseconds?: boolean;
 }
 
@@ -1306,7 +1471,9 @@ interface Date {
 	 * @param [locale] - locale for internalizing
 	 *
 	 * @example
+	 * ```js
 	 * new Date('12/28/2019').short('en-us') // '12/28/2019'
+	 * ```
 	 */
 	short(locale?: string): string;
 
@@ -1317,7 +1484,9 @@ interface Date {
 	 * @param [locale] - locale for internalizing
 	 *
 	 * @example
+	 * ```js
 	 * new Date('12/28/2019').medium('en-us') // 'December 28, 2019'
+	 * ```
 	 */
 	medium(locale?: string): string;
 
@@ -1328,115 +1497,103 @@ interface Date {
 	 * @param [locale] - locale for internalizing
 	 *
 	 * @example
+	 * ```js
 	 * new Date('12/28/2019').long('en-us') // '12/28/2019, 12:00:00 A'
+	 * ```
 	 */
 	long(locale?: string): string;
 
 	/**
 	 * Returns a string representation of the date by the specified pattern.
-	 * This method is based on the native Intl API.
-	 * All pattern directives is bases on native Date Intl options:
+	 * All pattern directives is based on native Date Intl options:
 	 *
-	 *   <ul>
-	 *     <li>era</li>
-	 *     <li>year</li>
-	 *     <li>month</li>
-	 *     <li>day</li>
-	 *     <li>weekday</li>
-	 *     <li>hour</li>
-	 *     <li>minute</li>
-	 *     <li>second</li>
-	 *     <li>timeZoneName</li>
-	 *   </ul>
+	 *   1. `'era'`
+	 *   1. `'year'`
+	 *   1. `'month'`
+	 *   1. `'day'`
+	 *   1. `'weekday'`
+	 *   1. `'hour'`
+	 *   1. `'minute'`
+	 *   1. `'second'`
+	 *   1. `'timeZoneName'`
 	 *
 	 * There are aliases for all directives:
 	 *
-	 *   <ul>
-	 *     <li>e - era</li>
-	 *     <li>Y - year</li>
-	 *     <li>M - month</li>
-	 *     <li>d - day</li>
-	 *     <li>w - weekday</li>
-	 *     <li>h - hour</li>
-	 *     <li>m - minute</li>
-	 *     <li>s - second</li>
-	 *     <li>z - timeZoneName</li>
-	 *   </ul>
+	 *   1. `'e'` - era
+	 *   1. `'Y'` - year
+	 *   1. `'M'` - month
+	 *   1. `'d'` - day
+	 *   1. `'w'` - weekday
+	 *   1. `'h'` - hour
+	 *   1. `'m'` - minute
+	 *   1. `'s'` - second
+	 *   1. `'z'` - timeZoneName
 	 *
 	 * @param pattern - string pattern of the format:
-	 *   <ul>
-	 *     <li>the symbol ";" is used as a separator character for pattern directives, for example: year;month</li>
-	 *     <li>the symbol ":" is used for specifying a custom value for a pattern directive, for example:
-	 *      year:2-digit;month:short</li>
-	 *   </ul>
+	 *
+	 *   1. symbol `';'` is used as a separator character for pattern directives, for example: `'year;month'`
+	 *   1. symbol `':'` is used for specifying a custom value for a pattern directive, for example:
+	 *    '`year:2-digit;month:short'`
 	 *
 	 * @param [locale] - locale for internalizing
 	 *
 	 * @example
+	 * ```js
 	 * new Date('12/28/2019').format('year', 'en-us') // '2019'
 	 * new Date('12/28/2019').format('year:2-digit', 'en-us') // '19'
 	 * new Date('12/28/2019').format('year:2-digit;month', 'en-us') // 'Dec 19'
 	 *
 	 * // Formatting a date using short aliases
 	 * new Date('12/28/2019').format('Y:2-digit;M:long;d', 'en-us') // 'December 28, 19'
+	 * ```
 	 */
 	format(pattern: string, locale?: string): string;
 
 	/**
-	 * Returns a HTML string representation of a date (without time).
+	 * Returns an HTML string representation of the date (without time).
 	 * This method is useful for providing date values within HTML tag attributes.
 	 *
-	 * @param [opts] - additional options:
-	 * @param [opts.month=true] - if false, then the date month is taken from the beginning of the now year
-	 * @param [opts.date=true] - if false, then the date day is taken from the beginning of the now month
+	 * @param [opts] - additional options
 	 */
 	toHTMLDateString(opts?: DateHTMLDateStringOptions): string;
 
 	/**
-	 * Returns a HTML string representation of a timestamp.
+	 * Returns an HTML string representation of a timestamp from the date.
 	 * This method is useful for providing timestamp values within HTML tag attributes.
 	 *
-	 * @param [opts] - additional options:
-	 * @param [opts.minutes=true] - if false, then the date month is taken from the beginning of the now hour
-	 * @param [opts.seconds=true] - if false, then the date second is taken from the beginning of the now minute
-	 * @param [opts.milliseconds=true] - if false, then the date millisecond is taken from the beginning of the now second
+	 * @param [opts] - additional options
 	 */
 	toHTMLTimeString(opts?: DateHTMLTimeStringOptions): string;
 
 	/**
-	 * Returns a HTML string representation of a datetime.
+	 * Returns an HTML string representation of a datetime from the date.
 	 * This method is useful for providing datetime values within HTML tag attributes.
 	 *
-	 * @param [opts] - additional options:
-	 * @param [opts.month=true] - if false, then the date month is taken from the beginning of a year
-	 * @param [opts.date=true] - if false, then the date day is taken from the beginning of a month
-	 * @param [opts.minutes=true] - if false, then the date month is taken from the beginning of the now hour
-	 * @param [opts.seconds=true] - if false, then the date second is taken from the beginning of the now minute
-	 * @param [opts.milliseconds=true] - if false, then the date millisecond is taken from the beginning of the now second
+	 * @param [opts] - additional options
 	 */
 	toHTMLString(opts?: DateHTMLStringOptions): string;
 
 	/**
-	 * Modifies the date object with adding the specified time units
+	 * Modifies the date with adding time units
 	 *
 	 * @param units
-	 * @param reset - is true, then all lower units will be reset to zero
+	 * @param reset - if true, then all lower units will be reset to zero
 	 */
 	add(units: DateSetParams, reset?: boolean): Date;
 
 	/**
-	 * Modifies the date object with setting the specified time units
+	 * Modifies the date with setting time units
 	 *
 	 * @param units
-	 * @param reset - is true, then all lower units will be reset to zero
+	 * @param reset - if true, then all lower units will be reset to zero
 	 */
 	set(units: DateSetParams, reset?: boolean): Date;
 
 	/**
-	 * Modifies the date object with subtracting the specified time units
+	 * Modifies the date with subtracting time units
 	 *
 	 * @param units
-	 * @param reset - is true, then all lower units will be reset to zero
+	 * @param reset - if true, then all lower units will be reset to zero
 	 */
 	rewind(units: DateSetParams, reset?: boolean): Date;
 
@@ -1446,7 +1603,8 @@ interface Date {
 	relative(): DateRelative;
 
 	/**
-	 * Returns a relative value of the date for the specified date
+	 * Returns a relative value of the date for another date
+	 * @param date - another date to compare
 	 */
 	relativeTo(date: DateCreateValue): DateRelative;
 
