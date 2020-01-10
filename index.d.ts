@@ -32,7 +32,7 @@ declare function stderr(err: unknown): void;
 declare function devNull(obj: unknown): void;
 
 /**
- * The global i18n function (can be used as a string tag or a simple function)
+ * Global i18n function (can be used as a string tag or a simple function)
  */
 declare function i18n(strings: unknown | string[], ...expr: unknown[]): string;
 
@@ -43,7 +43,7 @@ declare function i18n(strings: unknown | string[], ...expr: unknown[]): string;
 declare function t(strings: unknown | string[], ...expr: unknown[]): string;
 
 /**
- * The global i18n loopback (can be used as a string tag or a simple function)
+ * Global i18n loopback (can be used as a string tag or a simple function)
  */
 declare function l(strings: unknown | string[], ...expr: unknown[]): string;
 
@@ -84,34 +84,251 @@ interface JSONCb {
 }
 
 interface FastCloneOptions {
+	/**
+	 * JSON.stringify replacer
+	 */
 	replacer?: JSONCb;
+
+	/**
+	 * JSON.parse reviver or false for disable defaults
+	 */
 	reviver?: JSONCb | false;
+
+	/**
+	 * If false the object freeze state won't be copy
+	 * @default `true`
+	 */
 	freezable?: boolean;
 }
 
 interface ObjectMixinOptions<V = unknown, K = unknown, D = unknown> {
+	/**
+	 * If true, then object properties are copied recursively
+	 *
+	 * @default `false`
+	 * @example
+	 * ```js
+	 * Object.mixin({deep: false}, {a: {b: 1}}, {a: {c: 2}}); // {a: {c: 2}}
+	 * Object.mixin({deep: true}, {a: {b: 1}}, {a: {c: 2}}); // {a: {b: 1, c: 2}}
+	 * ```
+	 */
 	deep?: boolean;
+
+	/**
+	 * If true, then only new object properties are copied, or if `-1`, only old
+	 *
+	 * @default `false`
+	 * @example
+	 * ```js
+	 * Object.mixin({onlyNew: true}, {a: 1}, {a: 2, b: 3}); // {a: 1, b: 3}
+	 * Object.mixin({onlyNew: -1}, {a: 1}, {a: 2, b: 3}); // {a: 2}
+	 * ```
+	 */
+	onlyNew?: boolean | -1;
+
+	/**
+	 * @deprecated
+	 * @see [[ObjectMixinOptions.onlyNew]]
+	 */
 	traits?: boolean | -1;
+
+	/**
+	 * If true, then the original value of an object property can be rewritten from another object with undefined value
+	 *
+	 * @default `false`
+	 * @example
+	 * ```js
+	 * Object.mixin({withUndef: false}, {a: 1}, {a: undefined}); // {a: 1}
+	 * Object.mixin({withUndef: true}, {a: 1}, {a: undefined}); // {a: undefined}
+	 * ```
+	 */
 	withUndef?: boolean;
+
+	/**
+	 * If true, then descriptors of object properties is copied too
+	 * @default `false`
+	 */
 	withDescriptor?: boolean;
+
+	/**
+	 * If true, then accessors (but not all descriptors) of object properties is copied too
+	 * @default `false`
+	 */
 	withAccessors?: boolean;
+
+	/**
+	 * If true, then object properties is copied with their prototypes
+	 * (works only with the "deep" mode)
+	 *
+	 * @default `false`
+	 * @example
+	 * ```js
+	 * const proto = {
+	 *   a: {
+	 *     b: 2
+	 *   },
+	 *
+	 *   c: 3
+	 * };
+	 *
+	 * const obj = Object.create(proto);
+	 * Object.mixin({deep: true, withProto: false}, obj, {c: 2, a: {d: 4}});
+	 *
+	 * // 2
+	 * // 4
+	 * // 2
+	 * // true
+	 * // true
+	 * console.log(
+	 *   obj.c,
+	 *   obj.a.d,
+	 *   obj.a.b,
+	 *   obj.a.hasOwnProperty('d'),
+	 *   obj.a.hasOwnProperty('b')
+	 * );
+	 *
+	 * const obj2 = Object.create(proto);
+	 * Object.mixin({deep: true, withProto: false}, obj2, {c: 2, a: {d: 4}});
+	 *
+	 * // 2
+	 * // 4
+	 * // 2
+	 * // true
+	 * // false
+	 * console.log(
+	 *   obj2.c,
+	 *   obj2.a.d,
+	 *   obj2.a.b,
+	 *   obj2.a.hasOwnProperty('d'),
+	 *   obj2.a.hasOwnProperty('b')
+	 * );
+	 * ```
+	 */
 	withProto?: boolean;
+
+	/**
+	 * If true, then for merging two arrays will be used a concatenation strategy
+	 * (works only with the "deep" mode)
+	 *
+	 * @default `false`
+	 * @example
+	 * ```js
+	 * Object.mixin({deep: true, concatArray: false}, {a: [1]}, {a: [2]}); // {a: [2]}
+	 * Object.mixin({deep: true, concatArray: true}, {a: [1]}, {a: [2]}); // {a: [1, 2]}
+	 * ```
+	 */
 	concatArray?: boolean;
-	concatFn?(a: V, b: unknown[], key: K): unknown[];
-	extendFilter?(a: V, b: unknown, key: K): unknown;
+
+	/**
+	 * Function that concatenates arrays
+	 * (works only with the "concatArray" mode)
+	 *
+	 * @param oldValue - old array
+	 * @param newValue - new array
+	 * @param key - target property key
+	 * @default `Array.prototype.concat`
+	 *
+	 * @example
+	 * ```js
+	 * Object.mixin({deep: true, concatArray: true}, {a: [1]}, {a: [1, 2]}); // {a: [1, 1, 2]}
+	 * Object.mixin({deep: true, concatArray: true, concatFn: [].union}, {a: [1]}, {a: [1, 2]}); // {a: [1, 2]}
+	 * ```
+	 */
+	concatFn?(oldValue: V, newValue: unknown[], key: K): unknown[];
+
+	/**
+	 * Function that filters values for deep extending
+	 * (works only with the "deep" mode)
+	 *
+	 * @param target - target object
+	 * @param value - new value to set
+	 * @param key - target property key
+	 *
+	 * @example
+	 * ```js
+	 * Object.mixin({deep: true}, {a: {a: 1}}, {a: {b: 2}}); // {a: {a: 1, b: 2}}
+	 * Object.mixin({deep: true, extendFilter: (t, v) => !v.b}, {a: {a: 1}}, {a: {b: 2}}); // {a: {b: 2}}
+	 * ```
+	 */
+	extendFilter?(target: V, value: unknown, key: K): unknown;
+
+	/**
+	 * Function that filters values which shouldn't be copied
+	 *
+	 * @param el - element value
+	 * @param key - element key
+	 * @param data - element container
+	 * @default `false`
+	 *
+	 * @example
+	 * ```js
+	 * Object.mixin({deep: true}, {a: 1}, {b: 2}); // {a: 1, b: 2}
+	 * Object.mixin({deep: true, filter: (el, key) => key !== 'b'}, {a: 1}, {b: 2}); // {a: 1}
+	 * ```
+	 */
 	filter?(el: V, key: K, data: D): unknown;
 }
 
 interface ObjectGetOptions {
+	/**
+	 * Character for declaring the path
+	 *
+	 * @example
+	 * `Object.get({a: {b: 1}}, 'a:b', {separator: ':'})`
+	 */
 	separator?: string;
 }
 
 interface ObjectSetOptions extends ObjectGetOptions {
+	/**
+	 * If true, then a new value will be concatenated with the old within an array
+	 *
+	 * @example
+	 * ```js
+	 * const obj = {a: {b: 1}};
+	 * Object.set(obj, 'a.b', 2, {concat: true})
+	 * console.log(obj); // [1, 2]
+	 * ```
+	 */
 	concat?: boolean;
 }
 
 interface ObjectForEachOptions {
+	/**
+	 * If true, then the first element of the callback function will be an element descriptor
+	 *
+	 * @example
+	 * ```js
+	 * Object.forEach({a: 1}, (el) => {
+	 *   console.log(el); // {configurable: true, enumerable: true, writable: true, value: 1}
+	 * }, {withDescriptor: true});
+	 * ```
+	 */
 	withDescriptor?: boolean;
+
+	/**
+	 * Strategy for not own properties of an object:
+	 *   1. if `false`, then the `hasOwnProperty` test is enabled and all not own properties will be skipped;
+	 *   1. if `true`, then the `hasOwnProperty` test is disabled;
+	 *   1. if `-1`, then the `hasOwnProperty` test is enabled and all own properties will be skipped.
+	 *
+	 * @example
+	 * ```js
+	 * const obj = {a: 1, __proto__: {b: 2}};
+	 *
+	 * Object.forEach(obj, (el) => {
+	 *   console.log(el); // 1
+	 * });
+	 *
+	 * Object.forEach(obj, (el) => {
+	 *   console.log(el); // 1 2
+	 * }, {notOwn: true});
+	 *
+	 * Object.forEach(obj, (el) => {
+	 *   console.log(el); // 2
+	 * }, {notOwn: -1});
+	 * ```
+	 */
 	notOwn?: boolean | -1;
 }
 
@@ -135,8 +352,7 @@ interface ObjectConstructor {
 	 *
 	 * @param obj
 	 * @param path
-	 * @param [opts] - additional options:
-	 * @param [opts.separator] - character for declaring the path
+	 * @param [opts] - additional options
 	 */
 	get<T = unknown>(obj: unknown, path: string | unknown[], opts?: ObjectGetOptions): T;
 
@@ -145,8 +361,7 @@ interface ObjectConstructor {
 	 *
 	 * @param obj
 	 * @param path
-	 * @param [opts] - additional options:
-	 * @param [opts.separator] - character for declaring the path
+	 * @param [opts] - additional options
 	 */
 	has(obj: object, path: string | unknown[], opts?: ObjectGetOptions): boolean;
 
@@ -156,9 +371,7 @@ interface ObjectConstructor {
 	 * @param obj
 	 * @param path
 	 * @param value
-	 * @param [opts] - additional options:
-	 * @param [opts.separator] - character for declaring the path
-	 * @param [opts.concat] - if true, then the new value will be concatenated with an old within an array
+	 * @param [opts] - additional options
 	 */
 	set<T = unknown>(obj: unknown, path: string | unknown[], value: T, opts?: ObjectSetOptions): T;
 
@@ -173,16 +386,7 @@ interface ObjectConstructor {
 	 *
 	 * @param obj - object to iterate
 	 * @param cb - callback function that is called on each of object elements
-	 * @param [opts] - additional options:
-	 * @param [opts.withDescriptor=false] - if true, then the first element of the callback function will be
-	 *   an element descriptor
-	 *
-	 * @param [opts.notOwn = false] - iteration type:
-	 *   <ol>
-	 *     <li>if false, then the hasOwnProperty test is enabled and all not own properties will be skipped;</li>
-	 *     <li>if true, then the hasOwnProperty test is disabled;</li>
-	 *     <li>if -1, then the hasOwnProperty test is enabled and all own properties will be skipped.</li>
-	 *   </ol>
+	 * @param [opts] - additional options
 	 */
 	forEach<V = unknown>(
 		obj: Dictionary<V>,
@@ -195,16 +399,7 @@ interface ObjectConstructor {
 	 *
 	 * @param obj - object to iterate
 	 * @param cb - callback function that is called on each of object elements
-	 * @param [opts] - additional options:
-	 * @param [opts.withDescriptor=false] - if true, then the first element of the callback function will be
-	 *   an element descriptor
-	 *
-	 * @param [opts.notOwn = false] - iteration type:
-	 *   <ol>
-	 *     <li>if false, then the hasOwnProperty test is enabled and all not own properties will be skipped;</li>
-	 *     <li>if true, then the hasOwnProperty test is disabled;</li>
-	 *     <li>if -1, then the hasOwnProperty test is enabled and all own properties will be skipped.</li>
-	 *   </ol>
+	 * @param [opts] - additional options
 	 */
 	forEach<V = unknown>(
 		obj: Dictionary<V>,
@@ -269,16 +464,7 @@ interface ObjectConstructor {
 	 *
 	 * @param obj - object to iterate
 	 * @param cb - callback function that is called on each of object elements
-	 * @param [opts] - additional options:
-	 * @param [opts.withDescriptor=false] - if true, then the first element of the callback function will be
-	 *   an element descriptor
-	 *
-	 * @param [opts.notOwn = false] - iteration type:
-	 *   <ol>
-	 *     <li>if false, then the hasOwnProperty test is enabled and all not own properties will be skipped;</li>
-	 *     <li>if true, then the hasOwnProperty test is disabled;</li>
-	 *     <li>if -1, then the hasOwnProperty test is enabled and all own properties will be skipped.</li>
-	 *   </ol>
+	 * @param [opts] - additional options
 	 */
 	forEach<V = unknown>(
 		obj: Dictionary<V>,
@@ -292,16 +478,7 @@ interface ObjectConstructor {
 	 *
 	 * @param obj - object to iterate
 	 * @param cb - callback function that is called on each of object elements
-	 * @param [opts] - additional options:
-	 * @param [opts.withDescriptor=false] - if true, then the first element of the callback function will be
-	 *   an element descriptor
-	 *
-	 * @param [opts.notOwn = false] - iteration type:
-	 *   <ol>
-	 *     <li>if false, then the hasOwnProperty test is enabled and all not own properties will be skipped;</li>
-	 *     <li>if true, then the hasOwnProperty test is disabled;</li>
-	 *     <li>if -1, then the hasOwnProperty test is enabled and all own properties will be skipped.</li>
-	 *   </ol>
+	 * @param [opts] - additional options
 	 */
 	forEach<V = unknown, K = unknown, D = unknown>(
 		obj: D,
@@ -321,10 +498,7 @@ interface ObjectConstructor {
 	 * Clones the specified object using naive but fast "JSON.stringify/parse" strategy and returns a new object
 	 *
 	 * @param obj
-	 * @param [opts] - additional options:
-	 * @param [opts.replacer] - JSON.stringify replacer
-	 * @param [opts.reviver] - JSON.parse reviver or false for disable defaults
-	 * @param [opts.freezable] - if false the object freeze state won't be copy
+	 * @param [opts] - additional options
 	 */
 	fastClone<T = unknown>(obj: T, opts?: FastCloneOptions): T;
 
@@ -335,24 +509,10 @@ interface ObjectConstructor {
 	fastHash(obj: unknown): string;
 
 	/**
-	 * Extends the specified object by another objects
+	 * Extends the specified object by another objects.
+	 * If the base value is not an object, a new object will be created with a type similar to the first extension object.
 	 *
-	 * @param opts - if true, then properties will be copied recursively
-	 *   OR additional options for extending:
-	 *
-	 * @param [opts.withUndef=false] - if true, then the original value can be rewritten to undefined
-	 * @param [opts.withDescriptor=false] - if true, then the descriptor of a property will be copied too
-	 * @param [opts.withAccessors=false] - if true, then the property accessors will be copied too, but not another
-	 *        descriptor properties
-	 *
-	 * @param [opts.withProto=false] - if true, then properties is copied with their prototypes
-	 * @param [opts.concatArray=false] - if true, then for merging two arrays will be used a concatenation strategy
-	 *
-	 * @param [opts.concatFn=Array.prototype.concat] - function that is concatenate arrays
-	 * @param [opts.extendFilter] - function that is filter values for deep extending
-	 * @param [opts.traits=false] - if true, then is copied only new properties, or if -1, only old
-	 * @param [opts.deep=false] - if true, then properties is copied recursively
-	 *
+	 * @param opts - if true, then properties will be copied recursively OR additional options for extending
 	 * @param base - base object
 	 * @param obj1 - object for extending
 	 */
@@ -363,24 +523,10 @@ interface ObjectConstructor {
 	): B & O1;
 
 	/**
-	 * Extends the specified object by another objects
+	 * Extends the specified object by another objects.
+	 * If the base value is not an object, a new object will be created with a type similar to the first extension object.
 	 *
-	 * @param opts - if true, then properties will be copied recursively
-	 *   OR additional options for extending:
-	 *
-	 * @param [opts.withUndef=false] - if true, then the original value can be rewritten to undefined
-	 * @param [opts.withDescriptor=false] - if true, then the descriptor of a property will be copied too
-	 * @param [opts.withAccessors=false] - if true, then the property accessors will be copied too, but not another
-	 *        descriptor properties
-	 *
-	 * @param [opts.withProto=false] - if true, then properties is copied with their prototypes
-	 * @param [opts.concatArray=false] - if true, then for merging two arrays will be used a concatenation strategy
-	 *
-	 * @param [opts.concatFn=Array.prototype.concat] - function that is concatenate arrays
-	 * @param [opts.extendFilter] - function that is filter values for deep extending
-	 * @param [opts.traits=false] - if true, then is copied only new properties, or if -1, only old
-	 * @param [opts.deep=false] - if true, then properties is copied recursively
-	 *
+	 * @param opts - if true, then properties will be copied recursively OR additional options for extending
 	 * @param base - base object
 	 * @param obj1 - object for extending
 	 * @param obj2 - object for extending
@@ -393,24 +539,10 @@ interface ObjectConstructor {
 	): B & O1 & O2;
 
 	/**
-	 * Extends the specified object by another objects
+	 * Extends the specified object by another objects.
+	 * If the base value is not an object, a new object will be created with a type similar to the first extension object.
 	 *
-	 * @param opts - if true, then properties will be copied recursively
-	 *   OR additional options for extending:
-	 *
-	 * @param [opts.withUndef=false] - if true, then the original value can be rewritten to undefined
-	 * @param [opts.withDescriptor=false] - if true, then the descriptor of a property will be copied too
-	 * @param [opts.withAccessors=false] - if true, then the property accessors will be copied too, but not another
-	 *        descriptor properties
-	 *
-	 * @param [opts.withProto=false] - if true, then properties is copied with their prototypes
-	 * @param [opts.concatArray=false] - if true, then for merging two arrays will be used a concatenation strategy
-	 *
-	 * @param [opts.concatFn=Array.prototype.concat] - function that is concatenate arrays
-	 * @param [opts.extendFilter] - function that is filter values for deep extending
-	 * @param [opts.traits=false] - if true, then is copied only new properties, or if -1, only old
-	 * @param [opts.deep=false] - if true, then properties is copied recursively
-	 *
+	 * @param opts - if true, then properties will be copied recursively OR additional options for extending
 	 * @param base - base object
 	 * @param obj1 - object for extending
 	 * @param obj2 - object for extending
@@ -425,24 +557,10 @@ interface ObjectConstructor {
 	): B & O1 & O2 & O3;
 
 	/**
-	 * Extends the specified object by another objects
+	 * Extends the specified object by another objects.
+	 * If the base value is not an object, a new object will be created with a type similar to the first extension object.
 	 *
-	 * @param opts - if true, then properties will be copied recursively
-	 *   OR additional options for extending:
-	 *
-	 * @param [opts.withUndef=false] - if true, then the original value can be rewritten to undefined
-	 * @param [opts.withDescriptor=false] - if true, then the descriptor of a property will be copied too
-	 * @param [opts.withAccessors=false] - if true, then the property accessors will be copied too, but not another
-	 *        descriptor properties
-	 *
-	 * @param [opts.withProto=false] - if true, then properties is copied with their prototypes
-	 * @param [opts.concatArray=false] - if true, then for merging two arrays will be used a concatenation strategy
-	 *
-	 * @param [opts.concatFn=Array.prototype.concat] - function that is concatenate arrays
-	 * @param [opts.extendFilter] - function that is filter values for deep extending
-	 * @param [opts.traits=false] - if true, then is copied only new properties, or if -1, only old
-	 * @param [opts.deep=false] - if true, then properties is copied recursively
-	 *
+	 * @param opts - if true, then properties will be copied recursively OR additional options for extending
 	 * @param base - base object
 	 * @param objects - objects for extending
 	 */

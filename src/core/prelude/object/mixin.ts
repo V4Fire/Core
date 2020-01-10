@@ -66,7 +66,8 @@ extend(Object, 'mixin', (opts: ObjectMixinOptions | boolean, base: any, ...objec
 
 	const
 		simpleTypes = {object: true, array: true},
-		dataIsSimple = simpleTypes[type];
+		dataIsSimple = simpleTypes[type],
+		onlyNew = p.onlyNew != null ? p.traits : p.onlyNew;
 
 	if (
 		!p.deep &&
@@ -76,7 +77,7 @@ extend(Object, 'mixin', (opts: ObjectMixinOptions | boolean, base: any, ...objec
 		!p.withProto &&
 		!p.withDescriptor &&
 		!p.withAccessors &&
-		!p.traits &&
+		!onlyNew &&
 		!p.extendFilter &&
 		!p.filter
 	) {
@@ -88,7 +89,7 @@ extend(Object, 'mixin', (opts: ObjectMixinOptions | boolean, base: any, ...objec
 		case 'weakMap':
 		case 'map':
 			setVal = (data, key, val) => {
-				if (p.traits && data.has(key) !== (p.traits === -1)) {
+				if (onlyNew && data.has(key) !== (onlyNew === -1)) {
 					return;
 				}
 
@@ -100,7 +101,7 @@ extend(Object, 'mixin', (opts: ObjectMixinOptions | boolean, base: any, ...objec
 		case 'weakSet':
 		case 'set':
 			setVal = (data, key, val) => {
-				if (p.traits && data.has(val) !== (p.traits === -1)) {
+				if (onlyNew && data.has(val) !== (onlyNew === -1)) {
 					return;
 				}
 
@@ -111,7 +112,7 @@ extend(Object, 'mixin', (opts: ObjectMixinOptions | boolean, base: any, ...objec
 
 		default:
 			setVal = (data, key, val) => {
-				if (p.traits && key in data !== (p.traits === -1)) {
+				if (onlyNew && key in data !== (onlyNew === -1)) {
 					return;
 				}
 
@@ -128,22 +129,22 @@ extend(Object, 'mixin', (opts: ObjectMixinOptions | boolean, base: any, ...objec
 
 	for (let i = 0; i < objects.length; i++) {
 		const
-			arg = objects[i];
+			extObj = objects[i];
 
-		if (!arg) {
+		if (!extObj) {
 			continue;
 		}
 
 		const
-			isSimple = simpleTypes[getType(arg)];
+			isSimple = simpleTypes[getType(extObj)];
 
-		Object.forEach(arg, (el: any, key: any) => {
-			if (p.filter && !p.filter(el, key, arg)) {
+		Object.forEach(extObj, (el: any, key: any) => {
+			if (p.filter && !p.filter(el, key, extObj)) {
 				return;
 			}
 
 			if (dataIsSimple && isSimple && (withDescriptor || p.withAccessors && (el.get || el.set))) {
-				if (p.traits && key in base !== (p.traits === -1)) {
+				if (onlyNew && key in base !== (onlyNew === -1)) {
 					return;
 				}
 
@@ -163,20 +164,20 @@ extend(Object, 'mixin', (opts: ObjectMixinOptions | boolean, base: any, ...objec
 			}
 
 			let
-				src = Object.get(base, [key]);
+				oldVal = Object.get(base, [key]);
 
 			const
-				val = isSimple ? arg[key] : el;
+				newVal = isSimple ? extObj[key] : el;
 
-			if (base === val || val === arg) {
+			if (base === newVal || newVal === extObj) {
 				return;
 			}
 
 			let
-				canExtend = Boolean(val);
+				canExtend = Boolean(newVal);
 
 			if (canExtend && p.extendFilter) {
-				canExtend = Boolean(p.extendFilter(base, val, key));
+				canExtend = Boolean(p.extendFilter(base, newVal, key));
 			}
 
 			let
@@ -184,20 +185,20 @@ extend(Object, 'mixin', (opts: ObjectMixinOptions | boolean, base: any, ...objec
 				struct;
 
 			if (canExtend) {
-				valIsArray = Object.isArray(val);
-				struct = valIsArray ? [] : getSameAs(val);
+				valIsArray = Object.isArray(newVal);
+				struct = valIsArray ? [] : getSameAs(newVal);
 			}
 
 			if (p.deep && canExtend && (valIsArray || struct)) {
 				const
-					isExtProto = p.withProto && dataIsSimple && canExtendProto(src);
+					canExtendSrcProto = p.withProto && dataIsSimple && canExtendProto(oldVal);
 
 				let
-					srcIsArray = Object.isArray(src);
+					srcIsArray = Object.isArray(oldVal);
 
-				if (isExtProto && !hasOwnProperty.call(base, key)) {
-					src = srcIsArray ? (<unknown[]>src).slice() : Object.create(<object>src);
-					Object.set(base, [key], src);
+				if (canExtendSrcProto && !hasOwnProperty.call(base, key)) {
+					oldVal = srcIsArray ? (<unknown[]>oldVal).slice() : Object.create(<object>oldVal);
+					Object.set(base, [key], oldVal);
 				}
 
 				let clone;
@@ -206,32 +207,32 @@ extend(Object, 'mixin', (opts: ObjectMixinOptions | boolean, base: any, ...objec
 						isProto = false,
 						construct;
 
-					if (!srcIsArray && isExtProto && p.concatArray) {
-						construct = Object.getPrototypeOf(src);
+					if (!srcIsArray && canExtendSrcProto && p.concatArray) {
+						construct = Object.getPrototypeOf(oldVal);
 						srcIsArray = isProto = construct && Object.isArray(construct);
 					}
 
 					if (srcIsArray) {
 						if (p.concatArray) {
-							const o = isProto ? construct : src;
-							base[key] = p.concatFn ? p.concatFn(o, val, key) : o.concat(val);
+							const old = isProto ? construct : oldVal;
+							base[key] = p.concatFn ? p.concatFn(old, newVal, key) : old.concat(newVal);
 							return;
 						}
 
-						clone = src;
+						clone = oldVal;
 
 					} else {
 						clone = [];
 					}
 
 				} else {
-					clone = isStructure(src) ? src : struct || {};
+					clone = isStructure(oldVal) ? oldVal : struct || {};
 				}
 
-				Object.set(base, [key], Object.mixin(p, clone, val));
+				Object.set(base, [key], Object.mixin(p, clone, newVal));
 
 			} else {
-				setVal(base, key, val);
+				setVal(base, key, newVal);
 			}
 
 		}, forEachParams);

@@ -11,58 +11,71 @@ export interface QueueWorker<T = unknown, V = unknown> {
 }
 
 export interface QueueOptions {
+	/**
+	 * Maximum number of concurrent workers
+	 */
 	concurrency?: number;
+
+	/**
+	 * Value of a task status refresh interval
+	 * (in milliseconds)
+	 */
 	interval?: number;
 }
 
+/**
+ * Abstract class for a queue data structure
+ *
+ * @typeparam T - task type
+ * @typeparam V - task value
+ */
 export default abstract class Queue<T, V = unknown> {
 	/**
-	 * The queue head
+	 * Queue head
 	 */
 	head: CanUndef<T>;
 
 	/**
-	 * A value of the task status refresh interval
+	 * Value of the task status refresh interval
 	 * (in milliseconds)
 	 */
 	interval: number;
 
 	/**
-	 * The maximum number of concurrent workers
+	 * Maximum number of concurrent workers
 	 */
 	concurrency: number;
 
 	/**
-	 * The number of active workers
+	 * Number of active workers
 	 */
 	activeWorkers: number = 0;
 
 	/**
-	 * The queue length
+	 * Queue length
 	 */
 	get length(): number {
 		return this.tasks.length;
 	}
 
 	/**
-	 * A worker constructor
+	 * Worker constructor
 	 */
 	protected worker: QueueWorker<T, V>;
 
 	/**
-	 * The task queue
+	 * Task queue
 	 */
 	protected tasks: unknown[] = [];
 
 	/**
 	 * @param worker
-	 * @param [concurrency]
-	 * @param [interval]
+	 * @param [opts]
 	 */
-	protected constructor(worker: QueueWorker<T, V>, {concurrency = 1, interval = 0}: QueueOptions = {}) {
+	protected constructor(worker: QueueWorker<T, V>, opts?: QueueOptions) {
 		this.worker = worker;
-		this.concurrency = concurrency;
-		this.interval = interval;
+		this.concurrency = opts?.concurrency || 1;
+		this.interval = opts?.interval || 0;
 	}
 
 	/**

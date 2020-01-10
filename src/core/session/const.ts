@@ -8,11 +8,15 @@
 
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 
+/**
+ * Event emitter for broadcasting session events
+ */
 export const
-	/**
-	 * The event emitter for broadcasting session events
-	 */
-	emitter = new EventEmitter({maxListeners: 100, newListener: false}),
+	emitter = new EventEmitter({maxListeners: 100, newListener: false});
 
-	/** @deprecated */
+/**
+ * @deprecated
+ * @see [[emitter]]
+ */
+export const
 	event = emitter;

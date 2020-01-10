@@ -12,9 +12,26 @@ const
 	hasOwnProperty = Object.prototype.hasOwnProperty;
 
 /** @see ObjectConstructor.forEach */
-extend(Object, 'forEach', (obj: any, cb: Function, opts?: ObjectForEachOptions) => {
+extend(Object, 'forEach', (
+	obj: any,
+	optsOrCb: ObjectForEachOptions | Function,
+	cbOrOpts?: Function | ObjectForEachOptions
+) => {
 	if (!obj) {
 		return;
+	}
+
+	let
+		opts: CanUndef<ObjectForEachOptions>,
+		cb: Function;
+
+	if (Object.isFunction(cbOrOpts)) {
+		cb = cbOrOpts;
+		opts = <ObjectForEachOptions>optsOrCb;
+
+	} else {
+		cb = <Function>optsOrCb;
+		opts = <ObjectForEachOptions>cbOrOpts;
 	}
 
 	if (Object.isArray(obj) || Object.isString(obj)) {

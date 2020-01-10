@@ -38,9 +38,9 @@ storage = import('core/kv-storage').then(({asyncLocal}) => asyncLocal.namespace(
 /**
  * Returns information about internet connection status
  *
- * @emits online()
- * @emits offline(lastOnline: Date)
- * @emits status(value: NetStatus)
+ * @emits `online()`
+ * @emits `offline(lastOnline: Date)`
+ * @emits `status(value:` [[NetStatus]] `)`
  */
 export function isOnline(): Promise<NetStatus> {
 	//#if runtime has core/net

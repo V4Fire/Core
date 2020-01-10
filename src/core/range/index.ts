@@ -6,22 +6,31 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/**
+ * [[include:core/range/README.md]]
+ * @packageDocumentation
+ */
+
 import { RangeValue, RangeType } from 'core/range/interface';
 export * from 'core/range/interface';
 
+/**
+ * Class for working with some range structures
+ * @typeparam T - range type value
+ */
 export default class Range<T extends RangeValue> {
 	/**
-	 * The bottom bound
+	 * Bottom bound
 	 */
 	start: number;
 
 	/**
-	 * The top bound
+	 * Top bound
 	 */
 	end: number;
 
 	/**
-	 * The range type
+	 * Range type
 	 */
 	type: RangeType;
 
@@ -60,7 +69,7 @@ export default class Range<T extends RangeValue> {
 	}
 
 	/**
-	 * Returns true if the specified element is contained inside the range
+	 * Returns true if an element is contained inside the range
 	 * (the element can be a simple value or another range)
 	 *
 	 * @param el
@@ -80,7 +89,7 @@ export default class Range<T extends RangeValue> {
 	 *
 	 * @param range
 	 */
-	intersect(range: Range<T>): Range<T> {
+	intersect(range: Range<T extends string ? string : T>): Range<T> {
 		const
 			start = <T>Math.max(this.start, range.start),
 			end = <T>Math.min(this.end, range.end),
@@ -96,7 +105,7 @@ export default class Range<T extends RangeValue> {
 	 *
 	 * @param range
 	 */
-	union(range: Range<T>): Range<T> {
+	union(range: Range<T extends string ? string : T>): Range<T> {
 		const
 			newRange = new Range<T>(<T>Math.min(this.start, range.start), <T>Math.max(this.end, range.end));
 
@@ -165,7 +174,11 @@ export default class Range<T extends RangeValue> {
 	 * Creates an array from the range and returns it
 	 * @param [step] - iteration step value
 	 */
-	toArray(step: number = 1): T[] {
+	toArray(step?: number): T[] {
+		if (!step) {
+			step = this.type === 'date' ? (this.end - this.start) * 0.01 : 1;
+		}
+
 		const
 			res = <any[]>[];
 

@@ -7,10 +7,14 @@
  */
 
 /**
- * A decorator for the Function.once method
+ * [[include:core/meta/README.md]]
+ */
+
+/**
+ * Decorator for Function.prototype.once
  *
  * @decorator
- * @see Function.once
+ * @see [[Function.prototype.once]]
  */
 export function once(target: Object, key: string | symbol, descriptor: PropertyDescriptor): void {
 	const
@@ -33,10 +37,10 @@ export function once(target: Object, key: string | symbol, descriptor: PropertyD
 //#if runtime has prelude/function/debounce
 
 /**
- * A decorator for the Function.debounce method
+ * Decorator for Function.prototype.debounce
  *
  * @decorator
- * @see Function.debounce
+ * @see [[Function.prototype.debounce]]
  * @param [delay] - delay value (in milliseconds)
  */
 export function debounce(delay?: number): MethodDecorator {
@@ -63,9 +67,10 @@ export function debounce(delay?: number): MethodDecorator {
 //#if runtime has prelude/function/throttle
 
 /**
- * A decorator for the Function.throttle method
+ * A decorator for Function.prototype.throttle
  *
  * @decorator
+ * @see [[Function.prototype.throttle]]
  * @param [delay] - delay value (in milliseconds)
  */
 export function throttle(delay?: number): MethodDecorator {

@@ -14,6 +14,9 @@ export interface HashFn<T> {
 }
 
 export interface QueueOptions<T> extends BaseQueueOptions {
+	/**
+	 * Hash function for a task
+	 */
 	hashFn?: HashFn<T>;
 }
 

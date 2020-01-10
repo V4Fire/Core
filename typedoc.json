@@ -7,8 +7,14 @@
   "readme": "./README.md",
   "hideGenerator": true,
   "ignoreCompilerErrors": false,
-  "excludeNotExported": true,
+  "includes": "./src",
+  "includeDeclarations": true,
   "excludePrivate": true,
-  "exclude": ["**/engines/**"],
-  "includes": "./src"
+  "exclude": [
+    "**/engines/**",
+    "**/node_modules/!(eventemitter2)/**",
+    "src/core/prelude/*.ts",
+    "src/core/prelude/i18n/!(index).ts",
+    "src/core/prelude/!(extend|env|i18n)/**"
+  ]
 }

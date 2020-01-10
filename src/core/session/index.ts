@@ -6,6 +6,11 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/**
+ * [[include:core/session/README.md]]
+ * @packageDocumentation
+ */
+
 import session from 'core/session/engines';
 
 import { emitter } from 'core/session/const';
@@ -43,9 +48,8 @@ export async function get(): Promise<Session> {
  * Sets a new session with the specified parameters
  *
  * @param [auth]
- * @param [params] - additional parameters:
- * @param [params.csrf] - value for the CSRF token
- * @emits set(session: Session)
+ * @param [params] - additional parameters
+ * @emits `set(session:` [[Session]] `)`
  */
 export async function set(auth?: SessionKey, params?: SessionParams): Promise<boolean> {
 	try {
@@ -71,7 +75,7 @@ export async function set(auth?: SessionKey, params?: SessionParams): Promise<bo
 
 /**
  * Clears the current session
- * @emits clear()
+ * @emits `clear()`
  */
 export async function clear(): Promise<boolean> {
 	try {
@@ -90,8 +94,7 @@ export async function clear(): Promise<boolean> {
  * Matches a session with the current
  *
  * @param [auth]
- * @param [params] - additional parameters:
- * @param [params.csrf] - value for the CSRF token
+ * @param [params] - additional parameters
  */
 export async function match(auth?: SessionKey, params?: SessionParams): Promise<boolean> {
 	try {

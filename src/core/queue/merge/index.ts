@@ -10,6 +10,12 @@ import Queue from 'core/queue/interface';
 import { QueueWorker, QueueOptions, Task, HashFn } from 'core/queue/merge/interface';
 export * from 'core/queue/merge/interface';
 
+/**
+ * Implementation of a queue data structure with support of task merging by the specified hash function
+ *
+ * @typeparam T - task type
+ * @typeparam V - task value
+ */
 export default class MergeQueue<T, V = unknown> extends Queue<T, V> {
 	/** @override */
 	get head(): CanUndef<T> {
