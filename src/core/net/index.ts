@@ -36,7 +36,7 @@ storage = import('core/kv-storage').then(({asyncLocal}) => asyncLocal.namespace(
 //#endif
 
 /**
- * Returns true if a host has connection to the internet
+ * Returns information about internet connection status
  *
  * @emits online()
  * @emits offline(lastOnline: Date)
