@@ -6,13 +6,24 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/**
+ * [[include:core/then/README.md]]
+ * @packageDocumentation
+ */
+
 import { deprecated } from 'core/meta/deprecation';
 import * as i from 'core/then/interface';
 export * from 'core/then/interface';
 
+/**
+ * Class for wrapping promise-like objects and adds to them some extra functionality,
+ * such as possibility of cancelation, etc.
+ *
+ * @typeparam T - promise resolved value
+ */
 export default class Then<T = unknown> implements PromiseLike<T> {
 	/**
-	 * The promise which is never resolved
+	 * Promise which is never resolved
 	 */
 	static readonly never: Promise<never> = new Promise(() => undefined);
 
@@ -20,7 +31,7 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	 * Returns true if the specified value is looks like a promise
 	 *
 	 * @deprecated
-	 * @see Object.isPromiseLike
+	 * @see [[ObjectConstructor.isPromiseLike]]
 	 * @param obj
 	 */
 	@deprecated({alternative: {name: 'Object.isPromiseLike', source: 'core/prelude/types'}})
@@ -31,7 +42,7 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	/**
 	 * Creates a new resolved Then promise for the specified value.
 	 * If the resolved value is a function, it will be invoked.
-	 * The result of the call will be provided as a value of the promise.
+	 * The result of the invoking will be provided as a value of the promise.
 	 *
 	 * @param value
 	 * @param [parent] - parent promise
@@ -48,7 +59,7 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 
 	/**
 	 * @deprecated
-	 * @see Then.resolveAndCall
+	 * @see [[Then.resolveAndCall]]
 	 */
 	@deprecated({renamedTo: 'resolveAndCall'})
 	static immediate<T = unknown>(value: i.ExecutableValue<T>, parent?: Then): Then<T> {
@@ -99,7 +110,7 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 
 	/**
 	 * Creates a Then promise that is resolved with an array of results when all of the provided promises
-	 * resolve, or rejected when any promise is rejected
+	 * are resolved, or rejected when any promise is rejected
 	 *
 	 * @param values
 	 * @param [parent] - parent promise
@@ -223,12 +234,12 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	}
 
 	/**
-	 * The number of pending child promises
+	 * Number of pending child promises
 	 */
 	protected pendingChildren: number = 0;
 
 	/**
-	 * A value of the current promise state
+	 * Value of the current promise state
 	 */
 	protected state: i.State = i.State.pending;
 
@@ -238,22 +249,22 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 	protected aborted: boolean = false;
 
 	/**
-	 * An internal native promise instance
+	 * Internal native promise instance
 	 */
 	protected promise: Promise<T>;
 
 	/**
-	 * A handler for resolving of the native promise
+	 * Handler for resolving of the native promise
 	 */
 	protected onResolve!: i.ConstrResolveHandler<T>;
 
 	/**
-	 * A handler for rejecting of the native promise
+	 * Handler for rejecting of the native promise
 	 */
 	protected onReject!: i.ConstrRejectHandler;
 
 	/**
-	 * A handler for rejecting of the native promise
+	 * Handler for rejecting on abort of the native promise
 	 */
 	protected onAbort!: i.ConstrRejectHandler;
 

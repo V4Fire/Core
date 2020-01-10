@@ -6,6 +6,11 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/**
+ * [[include:core/semver/README.md]]
+ * @packageDocumentation
+ */
+
 import { Operation } from 'core/semver/interface';
 export * from 'core/semver/interface';
 
@@ -28,12 +33,6 @@ const
  * @param a
  * @param b
  * @param operation - operation type
- *
- * @example
- * console.log(check('1.4.1', '1.5.2', '>'))  // false
- * console.log(check('1', '1.5.2', '=='))     // true
- * console.log(check('2.4.1', '2.4', '<='))   // true
- * console.log(check('2.4', '2.4.2', '^='))   // true
  */
 export default function (a: string, b: string, operation: Operation): boolean {
 	if (!operations[operation]) {

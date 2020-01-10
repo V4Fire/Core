@@ -6,6 +6,11 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/**
+ * [[include:core/promise/sync/README.md]]
+ * @packageDocumentation
+ */
+
 import * as i from 'core/promise/sync/interface';
 export * from 'core/promise/sync/interface';
 
@@ -45,7 +50,7 @@ export default class SyncPromise<T = unknown> implements PromiseLike<T> {
 
 	/**
 	 * Creates a promise that is resolved with an array of results when all of the provided promises
-	 * resolve, or rejected when any promise is rejected
+	 * are resolved, or rejected when any promise is rejected
 	 *
 	 * @param values
 	 */
@@ -143,27 +148,27 @@ export default class SyncPromise<T = unknown> implements PromiseLike<T> {
 	}
 
 	/**
-	 * A value of the current promise state
+	 * Value of the current promise state
 	 */
 	protected state: i.State = i.State.pending;
 
 	/**
-	 * A value of the promise
+	 * Value of the promise
 	 */
 	protected value: unknown;
 
 	/**
-	 * The list of handler for the "finally" operation
+	 * List of handler for the "finally" operation
 	 */
 	protected finallyHandlers: i.FinallyHandler[] = [];
 
 	/**
-	 * The list of handler for the "resolve" operation
+	 * List of handler for the "resolve" operation
 	 */
 	protected resolveHandlers: i.ConstrResolveHandler[] = [];
 
 	/**
-	 * The list of handler for the "reject" operation
+	 * List of handler for the "reject" operation
 	 */
 	protected rejectHandlers: i.ConstrRejectHandler[] = [];
 
