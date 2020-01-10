@@ -25,7 +25,3 @@ import 'core/prelude/date/format';
 //#if runtime has prelude/date/create
 import 'core/prelude/date/create';
 //#endif
-
-//#if runtime has prelude/date/relative
-import 'core/prelude/date/relative';
-//#endif
