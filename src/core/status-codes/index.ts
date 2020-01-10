@@ -6,7 +6,17 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/**
+ * [[include:core/status-codes/README.md]]
+ * @packageDocumentation
+ */
+
 import { StatusCodes } from 'core/status-codes/interface';
 export * from 'core/status-codes/interface';
 
-export default Object.createEnumLike(StatusCodes);
+/**
+ * Enum-like structure of status codes
+ * @defaultExport
+ */
+export const statusCodes = Object.createEnumLike(StatusCodes);
+export default statusCodes;

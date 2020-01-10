@@ -6,6 +6,11 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/**
+ * [[include:core/net/README.md]]
+ * @packageDocumentation
+ */
+
 import config from 'config';
 import { emitter } from 'core/net/const';
 import { NetStatus } from 'core/net/interface';

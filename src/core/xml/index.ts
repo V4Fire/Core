@@ -6,6 +6,11 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/**
+ * [[include:core/xml/README.md]]
+ * @packageDocumentation
+ */
+
 const
 	xmlSerializer = new XMLSerializer(),
 	normalizeRgxp = /"|(\s+)|[{}|\\^~\[\]`"<>#%]/g;
@@ -19,7 +24,7 @@ export function toDataURI(node: Node): string {
 }
 
 /**
- * The helper for XML string normalizing
+ * Helper for XML string normalizing
  */
 function normalize(str: string, sp?: string): string {
 	if (str === '"') {

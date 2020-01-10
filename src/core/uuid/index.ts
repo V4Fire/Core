@@ -6,6 +6,11 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/**
+ * [[include:core/uuid/README.md]]
+ * @packageDocumentation
+ */
+
 const serializeFilter = Object.createDict({
 	3: true,
 	5: true,
