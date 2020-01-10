@@ -7,6 +7,13 @@
  */
 
 export interface NetStatus {
+	/**
+	 * If true, then a host have connection to the internet
+	 */
 	status: boolean;
+
+	/**
+	 * Date of last online session
+	 */
 	lastOnline?: Date;
 }
