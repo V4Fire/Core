@@ -5,13 +5,16 @@ This module provides a class for wrapping promise-like objects and adds to them 
 ```js
 import Then from 'core/then';
 
-new Then((resolve, reject, onAbort) => {
+const promise = new Then((resolve, reject, onAbort) => {
   setTimeout(() => {
     resolve();
   }, 100);
 
   onAbort((reason) => {
-    console.log(`The promise was aborted by a reason of ${reason}`);
+    console.error(`The promise was aborted by a reason of ${reason}`);
   });
-}).abort('destructor');
+  
+}).catch((err) => console.error(err)); // timeout
+
+promise.abort('timeout');
 ```
