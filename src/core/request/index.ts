@@ -25,7 +25,10 @@ import { getStorageKey, getResponseTypeFromURL } from 'core/request/utils';
 import { concatUrls } from 'core/url';
 
 import { storage, globalOpts, defaultRequestOpts } from 'core/request/const';
+
 import * as i from 'core/request/interface';
+// tslint:disable-next-line:no-duplicate-imports
+import { CreateRequestOptions, RequestResponse, RequestFunctionResponse } from 'core/request/interface';
 
 export * from 'core/request/interface';
 export * from 'core/request/utils';
@@ -41,7 +44,7 @@ export { default as Response } from 'core/request/response';
  * @param path - request path URL
  * @param opts - request options
  */
-export default function request<T = unknown>(path: string, opts?: i.CreateRequestOptions<T>): i.RequestResponse<T>;
+export default function request<T = unknown>(path: string, opts?: CreateRequestOptions<T>): RequestResponse<T>;
 
 /**
  * Returns a wrapped request constructor with the specified options
@@ -52,7 +55,7 @@ export default function request<T = unknown>(path: string, opts?: i.CreateReques
  * request({okStatuses: 200})({query: {bar: true}})('bla/get')
  * ```
  */
-export default function request<T = unknown>(opts: i.CreateRequestOptions<T>): typeof request;
+export default function request<T = unknown>(opts: CreateRequestOptions<T>): typeof request;
 
 /**
  * Returns a function for creating a new remote request with the specified options.
@@ -77,8 +80,8 @@ export default function request<T = unknown>(opts: i.CreateRequestOptions<T>): t
 export default function request<T = unknown, A extends unknown[] = unknown[]>(
 	path: string,
 	resolver: i.RequestResolver<T, A>,
-	opts?: i.CreateRequestOptions<T>
-): i.RequestFunctionResponse<T, A extends (infer V)[] ? V[] : unknown[]>;
+	opts?: CreateRequestOptions<T>
+): RequestFunctionResponse<T, A extends (infer V)[] ? V[] : unknown[]>;
 
 export default function request<T = unknown>(
 	path: string | i.CreateRequestOptions<T>,
