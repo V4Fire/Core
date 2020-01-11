@@ -6,12 +6,17 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/**
+ * [[include:core/cache/simple/README.md]]
+ * @packageDocumentation
+ */
+
 import Cache, { ClearFilter } from 'core/cache/interface';
 export * from 'core/cache/interface';
 
 export default class SimpleCache<V = unknown, K = string> implements Cache<V, K> {
 	/**
-	 * The cache object
+	 * Cache object
 	 */
 	protected readonly storage: Map<K, V> = new Map();
 

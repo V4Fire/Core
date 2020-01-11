@@ -10,9 +10,12 @@
   "includes": "./src",
   "includeDeclarations": true,
   "excludePrivate": true,
+  "externalPattern": ["**/node_modules/**"],
   "exclude": [
     "**/engines/**",
     "**/node_modules/!(eventemitter2)/**",
+    "src/core/log/*/**",
+    "src/core/log/!(index|interface).ts",
     "src/core/prelude/*.ts",
     "src/core/prelude/i18n/!(index).ts",
     "src/core/prelude/!(extend|env|i18n)/**"

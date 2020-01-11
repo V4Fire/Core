@@ -6,6 +6,11 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/**
+ * [[include:core/decorators/README.md]]
+ * @packageDocumentation
+ */
+
 import { deprecate } from 'core/meta/deprecation';
 import * as meta from 'core/meta';
 

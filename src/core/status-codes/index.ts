@@ -18,5 +18,5 @@ export * from 'core/status-codes/interface';
  * Enum-like structure of status codes
  * @defaultExport
  */
-export const statusCodes = Object.createEnumLike(StatusCodes);
+const statusCodes = Object.createEnumLike(StatusCodes);
 export default statusCodes;

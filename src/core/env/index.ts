@@ -6,4 +6,9 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/**
+ * [[include:core/env/README.md]]
+ * @packageDocumentation
+ */
+
 export * from 'core/prelude/env';

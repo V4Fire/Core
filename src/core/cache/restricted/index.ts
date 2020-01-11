@@ -6,17 +6,22 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/**
+ * [[include:core/cache/restricted/README.md]]
+ * @packageDocumentation
+ */
+
 import SimpleCache, { ClearFilter } from 'core/cache/simple';
 export * from 'core/cache/simple';
 
 export default class RestrictedCache<V = unknown, K = string> extends SimpleCache<V, K> {
 	/**
-	 * The queue object
+	 * Queue object
 	 */
 	protected readonly queue: Set<K> = new Set();
 
 	/**
-	 * The number of maximum records in the cache
+	 * Number of maximum records in the cache
 	 */
 	protected max: number = 20;
 

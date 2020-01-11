@@ -6,5 +6,10 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/**
+ * [[include:core/helpers/README.md]]
+ * @packageDocumentation
+ */
+
 export * from 'core/helpers/string';
 export * from 'core/helpers/other';

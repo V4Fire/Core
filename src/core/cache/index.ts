@@ -6,6 +6,11 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/**
+ * [[include:core/cache/README.md]]
+ * @packageDocumentation
+ */
+
 export * from 'core/cache/interface';
 export { default as AbstractCache } from 'core/cache/interface';
 export { default as Cache } from 'core/cache/simple';

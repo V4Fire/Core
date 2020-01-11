@@ -36,6 +36,8 @@ export interface ExtendedLogger extends Logger {
 	warn(context: string, ...details: unknown[]): void;
 
 	/**
+	 * Logs a message with the warn level and the specified context
+	 *
 	 * @param context - log record context
 	 * @param error - thrown error
 	 * @param [details] - additional details
@@ -51,6 +53,8 @@ export interface ExtendedLogger extends Logger {
 	error(context: string, ...details: unknown[]): void;
 
 	/**
+	 * Logs a message with the error level and the specified context
+	 *
 	 * @param context - log record context
 	 * @param error - thrown error
 	 * @param [details] - additional details
@@ -60,17 +64,18 @@ export interface ExtendedLogger extends Logger {
 	/**
 	 * Returns a new logging function with the specified namespace
 	 *
+	 * @param value
+	 *
 	 * @example
+	 * ```js
 	 * const log2 = log.namespace('global');
 	 * log2.info('res', 'hello');
-	 * // prints context 'global:res'
+	 * // Prints context 'global:res'
 	 *
-	 * @example
 	 * const log3 = log.namespace('super').namespace('global');
 	 * log3.info('res', 'hello');
-	 * // prints context 'super:global:res'
-	 *
-	 * @param value
+	 * // Prints context 'super:global:res'
+	 * ```
 	 */
 	namespace(value: string): ExtendedLogger;
 }

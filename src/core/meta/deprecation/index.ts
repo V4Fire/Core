@@ -6,46 +6,19 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/**
+ * [[include:core/meta/deprecation/README.md]]
+ * @packageDocumentation
+ */
+
 import { DeprecatedOptions, InlineDeprecatedOptions } from 'core/meta/deprecation/interface';
 export * from 'core/meta/deprecation/interface';
 
 /**
  * Marks the specified function as obsolescence
  *
- * @param params - additional parameters:
- *
- * @param [params.name] - name of the current function
- * @param [params.type] - type of the expression for wrapping
- *
- * @param [params.renamedTo] - indicates that the function was renamed, but the interface still actual,
- *   the value contains a name after renaming
- *
- * @param [params.movedTo] - indicates that the function was moved to a different file, but the interface still actual,
- *   the value contains a source path after moving
- *
- * @param [params.alternative] - name of the function which should prefer to use instead the current
- *   or an object with the alternative options:
- *
- * @param params.alternative.name
- * @param [params.alternative.source] - source of the alternative
- *
+ * @param params - additional parameters
  * @param [fn] - function for wrapping
- *
- * @example
- * const normalizeEmail = deprecate(function normalizeEmail(phone: string): string {
- *   ...
- * });
- *
- * // Mark the function as deprecated with providing an alternative
- * const normalizeTel = deprecate(
- *  {
- *    alternative: 'normalizePattern'
- *  },
- *
- *  function normalizeTel(phone: string): string {
- *    ...
- *  }
- * );
  */
 export function deprecate<T extends Function>(
 	params: DeprecatedOptions,
@@ -54,7 +27,7 @@ export function deprecate<T extends Function>(
 
 /**
  * Emits an obsolescence warning with the specified parameters
- * @param params
+ * @param params - additional parameters
  */
 export function deprecate(params: InlineDeprecatedOptions): void;
 
@@ -141,24 +114,11 @@ export function deprecate<T extends Function>(
 }
 
 /**
- * A decorator for the "deprecate" function.
+ * Decorator for the "deprecate" function.
  * Can be used with providing additional parameters or within their.
  *
  * @decorator
- * @see deprecate
- *
- * @example
- * class Foo {
- *   @deprecated
- *   bla(): void {
- *
- *   }
- *
- *   @deprecated({alternative: 'foo'})
- *   baz(): void {
- *
- *   }
- * }
+ * @see [[deprecate]]
  */
 export function deprecated(target: object, key: string | symbol, descriptor: PropertyDescriptor): void;
 export function deprecated(params?: DeprecatedOptions): Function;

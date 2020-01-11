@@ -6,12 +6,17 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/**
+ * [[include:core/json/README.md]]
+ * @packageDocumentation
+ */
+
 const
 	minDateLength = '2017-02-03T'.length,
 	isDate = /^\d{4}-\d{2}-\d{2}T[\d:.]+Z/;
 
 /**
- * A reviver for the JSON.parse method: converts all strings which is looks like a date to the Date object
+ * Reviver for the JSON.parse method: converts all strings which is looks like a date to Date
  *
  * @param key
  * @param value

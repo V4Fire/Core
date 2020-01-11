@@ -6,6 +6,11 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/**
+ * [[include:core/kv-storage/README.md]]
+ * @packageDocumentation
+ */
+
 import { convertIfDate } from 'core/json';
 import { syncLocalStorage, asyncLocalStorage, syncSessionStorage, asyncSessionStorage } from 'core/kv-storage/engines';
 import { FactoryResult, Namespace, AsyncFactoryResult, AsyncNamespace, ClearFilter } from 'core/kv-storage/interface';

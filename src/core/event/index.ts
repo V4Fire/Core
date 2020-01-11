@@ -6,6 +6,11 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/**
+ * [[include:core/event/README.md]]
+ * @packageDocumentation
+ */
+
 import SyncPromise from 'core/promise/sync';
 import { deprecate } from 'core/meta/deprecation';
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
@@ -94,7 +99,7 @@ export function createsAsyncSemaphore<T>(cb: () => T, ...flags: string[]): (flag
 
 /**
  * @deprecated
- * @see createsAsyncSemaphore
+ * @see [[createsAsyncSemaphore]]
  */
 export const onEverythingReady = deprecate(
 	{
@@ -108,7 +113,7 @@ export const onEverythingReady = deprecate(
 
 /**
  * @deprecated
- * @see resolveAfterEvents
+ * @see [[resolveAfterEvents]]
  */
 export const afterEvents = deprecate(
 	{
@@ -129,7 +134,7 @@ export const afterEvents = deprecate(
 
 /**
  * @deprecated
- * @see resolveAfterDOMLoaded
+ * @see [[resolveAfterDOMLoaded]]
  */
 export const afterDOMLoaded = deprecate(
 	{
@@ -152,7 +157,7 @@ export const afterDOMLoaded = deprecate(
  * Creates a synchronous promise wrapper for the specified value
  *
  * @deprecated
- * @see SyncPromise
+ * @see [[SyncPromise]]
  * @param resolveValue
  * @param rejectValue
  */

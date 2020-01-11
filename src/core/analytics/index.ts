@@ -6,6 +6,11 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/**
+ * [[include:core/analytics/README.md]]
+ * @packageDocumentation
+ */
+
 import sendAnalyticsEvent from 'core/analytics/engines';
 
 /**

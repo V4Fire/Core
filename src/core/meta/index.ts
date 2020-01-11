@@ -8,6 +8,7 @@
 
 /**
  * [[include:core/meta/README.md]]
+ * @packageDocumentation
  */
 
 /**
@@ -67,7 +68,7 @@ export function debounce(delay?: number): MethodDecorator {
 //#if runtime has prelude/function/throttle
 
 /**
- * A decorator for Function.prototype.throttle
+ * Decorator for Function.prototype.throttle
  *
  * @decorator
  * @see [[Function.prototype.throttle]]
