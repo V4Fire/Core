@@ -17,15 +17,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Wrapper for the global.setImmediate
 	 *
 	 * @param fn - callback function
-	 * @param [opts] - additional options for the operation:
-	 * @param [opts.join=false] - if true, then all competitive tasks (with the same labels) will be joined to
-	 *   the first task
-	 *
-	 * @param [opts.label] - label of the task (previous task with the same label will be canceled)
-	 * @param [opts.group] - group name of the task
-	 * @param [opts.onClear] - handler for clearing (it is called after clearing of the task)
-	 * @param [opts.onMerge] - handler for merging (it is called after merging of the task with
-	 *   another task (label + join:true))
+	 * @param [opts] - additional options for the operation
 	 */
 	setImmediate(fn: Function, opts?: i.AsyncCbOptions<CTX>): Nullable<i.TimerId> {
 		const
@@ -53,11 +45,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Clears the specified "setImmediate" timer or a group of timers
-	 *
-	 * @param opts - options for the operation:
-	 * @param [opts.id] - operation id
-	 * @param [opts.label] - label of the task
-	 * @param [opts.group] - group name of the task
+	 * @param opts - options for the operation
 	 */
 	clearImmediate(opts: i.ClearOptionsId<i.TimerId>): this;
 	clearImmediate(task?: i.TimerId | i.ClearOptionsId<i.TimerId>): this {
@@ -72,11 +60,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Mutes the specified "setImmediate" timer or a group of timers
-	 *
-	 * @param opts - options for the operation:
-	 * @param [opts.id] - operation id
-	 * @param [opts.label] - label of the task
-	 * @param [opts.group] - group name of the task
+	 * @param opts - options for the operation
 	 */
 	muteImmediate(opts: i.ClearOptionsId<i.TimerId>): this;
 	muteImmediate(task?: i.TimerId | i.ClearOptionsId<i.TimerId>): this {
@@ -92,10 +76,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	/**
 	 * Unmutes the specified "setImmediate" timer or a group of timers
 	 *
-	 * @param opts - options for the operation:
-	 * @param [opts.id] - operation id
-	 * @param [opts.label] - label of the task
-	 * @param [opts.group] - group name of the task
+	 * @param opts - options for the operation
 	 */
 	unmuteImmediate(opts: i.ClearOptionsId<i.TimerId>): this;
 	unmuteImmediate(p: i.TimerId | i.ClearOptionsId<i.TimerId>): this {
@@ -110,11 +91,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Suspends the specified "setImmediate" timer or a group of timers
-	 *
-	 * @param opts - options for the operation:
-	 * @param [opts.id] - operation id
-	 * @param [opts.label] - label of the task
-	 * @param [opts.group] - group name of the task
+	 * @param opts - options for the operation
 	 */
 	suspendImmediate(opts: i.ClearOptionsId<i.TimerId>): this;
 	suspendImmediate(p: i.TimerId | i.ClearOptionsId<i.TimerId>): this {
@@ -129,11 +106,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Unsuspends the specified "setImmediate" timer or a group of timers
-	 *
-	 * @param opts - options for the operation:
-	 * @param [opts.id] - operation id
-	 * @param [opts.label] - label of the task
-	 * @param [opts.group] - group name of the task
+	 * @param opts - options for the operation
 	 */
 	unsuspendImmediate(opts: i.ClearOptionsId<i.TimerId>): this;
 	unsuspendImmediate(p: i.TimerId | i.ClearOptionsId<i.TimerId>): this {
@@ -145,16 +118,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 *
 	 * @param fn - callback function
 	 * @param timeout - timer value
-	 *
-	 * @param [opts] - additional options for the operation:
-	 * @param [opts.join=false] - if true, then all competitive tasks (with the same labels) will be joined to
-	 *   the first task
-	 *
-	 * @param [opts.label] - label of the task (previous task with the same label will be canceled)
-	 * @param [opts.group] - group name of the task
-	 * @param [opts.onClear] - handler for clearing (it is called after clearing of the task)
-	 * @param [opts.onMerge] - handler for merging (it is called after merging of the task with
-	 *   another task (label + join:true))
+	 * @param [opts] - additional options for the operation
 	 */
 	setInterval(fn: Function, timeout: number, opts?: i.AsyncCbOptions<CTX>): Nullable<i.TimerId> {
 		return this.registerTask({
@@ -177,11 +141,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Clears the specified "setInterval" timer or a group of timers
-	 *
-	 * @param opts - options for the operation:
-	 * @param [opts.id] - operation id
-	 * @param [opts.label] - label of the task
-	 * @param [opts.group] - group name of the task
+	 * @param opts - options for the operation
 	 */
 	clearInterval(opts: i.ClearOptionsId<i.TimerId>): this;
 	clearInterval(task?: i.TimerId | i.ClearOptionsId<i.TimerId>): this {
@@ -196,11 +156,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Mutes the specified "setInterval" timer or a group of timers
-	 *
-	 * @param opts - options for the operation:
-	 * @param [opts.id] - operation id
-	 * @param [opts.label] - label of the task
-	 * @param [opts.group] - group name of the task
+	 * @param opts - options for the operation
 	 */
 	muteInterval(opts: i.ClearOptionsId<i.TimerId>): this;
 	muteInterval(task?: i.TimerId | i.ClearOptionsId<i.TimerId>): this {
@@ -215,11 +171,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Unmutes the specified "setInterval" timer or a group of timers
-	 *
-	 * @param opts - options for the operation:
-	 * @param [opts.id] - operation id
-	 * @param [opts.label] - label of the task
-	 * @param [opts.group] - group name of the task
+	 * @param opts - options for the operation
 	 */
 	unmuteInterval(opts: i.ClearOptionsId<i.TimerId>): this;
 	unmuteInterval(task?: i.TimerId | i.ClearOptionsId<i.TimerId>): this {
@@ -234,11 +186,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Suspends the specified "setInterval" timer or a group of timers
-	 *
-	 * @param opts - options for the operation:
-	 * @param [opts.id] - operation id
-	 * @param [opts.label] - label of the task
-	 * @param [opts.group] - group name of the task
+	 * @param opts - options for the operation
 	 */
 	suspendInterval(opts: i.ClearOptionsId<i.TimerId>): this;
 	suspendInterval(task?: i.TimerId | i.ClearOptionsId<i.TimerId>): this {
@@ -253,11 +201,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Unsuspends the specified "setImmediate" timer or a group of timers
-	 *
-	 * @param opts - options for the operation:
-	 * @param [opts.id] - operation id
-	 * @param [opts.label] - label of the task
-	 * @param [opts.group] - group name of the task
+	 * @param opts - options for the operation
 	 */
 	unsuspendInterval(opts: i.ClearOptionsId<i.TimerId>): this;
 	unsuspendInterval(task?: i.TimerId | i.ClearOptionsId<i.TimerId>): this {
@@ -269,16 +213,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 *
 	 * @param fn - callback function
 	 * @param timeout - timeout value
-	 *
-	 * @param [opts] - additional options for the operation:
-	 * @param [opts.join=false] - if true, then all competitive tasks (with the same labels) will be joined to
-	 *   the first task
-	 *
-	 * @param [opts.label] - label of the task (previous task with the same label will be canceled)
-	 * @param [opts.group] - group name of the task
-	 * @param [opts.onClear] - handler for clearing (it is called after clearing of the task)
-	 * @param [opts.onMerge] - handler for merging (it is called after merging of the task with
-	 *   another task (label + join:true))
+	 * @param [opts] - additional options for the operation
 	 */
 	setTimeout(fn: Function, timeout: number, opts?: i.AsyncCbOptions<CTX>): Nullable<i.TimerId> {
 		return this.registerTask({
@@ -300,11 +235,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Clears the specified "setTimeout" timer or a group of timers
-	 *
-	 * @param opts - options for the operation:
-	 * @param [opts.id] - operation id
-	 * @param [opts.label] - label of the task
-	 * @param [opts.group] - group name of the task
+	 * @param opts - options for the operation
 	 */
 	clearTimeout(opts: i.ClearOptionsId<i.TimerId>): this;
 	clearTimeout(task?: i.TimerId | i.ClearOptionsId<i.TimerId>): this {
@@ -319,11 +250,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Mutes the specified "setTimeout" timer or a group of timers
-	 *
-	 * @param opts - options for the operation:
-	 * @param [opts.id] - operation id
-	 * @param [opts.label] - label of the task
-	 * @param [opts.group] - group name of the task
+	 * @param opts - options for the operation
 	 */
 	muteTimeout(opts: i.ClearOptionsId<i.TimerId>): this;
 	muteTimeout(task?: i.TimerId | i.ClearOptionsId<i.TimerId>): this {
@@ -338,11 +265,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Unmutes the specified "setTimeout" timer or a group of timers
-	 *
-	 * @param opts - options for the operation:
-	 * @param [opts.id] - operation id
-	 * @param [opts.label] - label of the task
-	 * @param [opts.group] - group name of the task
+	 * @param opts - options for the operation
 	 */
 	unmuteTimeout(opts: i.ClearOptionsId<i.TimerId>): this;
 	unmuteTimeout(task?: i.TimerId | i.ClearOptionsId<i.TimerId>): this {
@@ -357,11 +280,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Suspends the specified "setTimeout" timer or a group of timers
-	 *
-	 * @param opts - options for the operation:
-	 * @param [opts.id] - operation id
-	 * @param [opts.label] - label of the task
-	 * @param [opts.group] - group name of the task
+	 * @param opts - options for the operation
 	 */
 	suspendTimeout(opts: i.ClearOptionsId<i.TimerId>): this;
 	suspendTimeout(task?: i.TimerId | i.ClearOptionsId<i.TimerId>): this {
@@ -376,11 +295,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Unsuspends the specified "setTimeout" timer or a group of names
-	 *
-	 * @param opts - options for the operation:
-	 * @param [opts.id] - operation id
-	 * @param [opts.label] - label of the task
-	 * @param [opts.group] - group name of the task
+	 * @param opts - options for the operation
 	 */
 	unsuspendTimeout(opts: i.ClearOptionsId<i.TimerId>): this;
 	unsuspendTimeout(task?: i.TimerId | i.ClearOptionsId<i.TimerId>): this {
@@ -391,16 +306,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Wrapper for the global.requestIdleCallback
 	 *
 	 * @param fn - callback function
-	 * @param [opts] - additional options for the operation:
-	 * @param [opts.timeout] - timeout value for the native requestIdleCallback function
-	 * @param [opts.join=false] - if true, then all competitive tasks (with the same labels) will be joined to
-	 *   the first task
-	 *
-	 * @param [opts.label] - label of the task (previous task with the same label will be canceled)
-	 * @param [opts.group] - group name of the task
-	 * @param [opts.onClear] - handler for clearing (it is called after clearing of the task)
-	 * @param [opts.onMerge] - handler for merging (it is called after merging of the task with
-	 *   another task (label + join:true))
+	 * @param [opts] - additional options for the operation
 	 */
 	requestIdleCallback<R = unknown>(
 		fn: i.IdleCb<R, CTX>,
@@ -440,11 +346,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Clears the specified "requestIdleCallback" timer or a group of timers
-	 *
-	 * @param opts - options for the operation:
-	 * @param [opts.id] - operation id
-	 * @param [opts.label] - label of the task
-	 * @param [opts.group] - group name of the task
+	 * @param opts - options for the operation
 	 */
 	cancelIdleCallback(opts: i.ClearOptionsId<i.TimerId>): this;
 	cancelIdleCallback(task?: i.TimerId | i.ClearOptionsId<i.TimerId>): this {
@@ -459,11 +361,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Clears the specified "requestIdleCallback" timer or a group of timers
-	 *
-	 * @param opts - options for the operation:
-	 * @param [opts.id] - operation id
-	 * @param [opts.label] - label of the task
-	 * @param [opts.group] - group name of the task
+	 * @param opts - options for the operation
 	 */
 	clearIdleCallback(opts: i.ClearOptionsId<i.TimerId>): this;
 	clearIdleCallback(task?: i.TimerId | i.ClearOptionsId<i.TimerId>): this {
@@ -478,11 +376,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Mutes the specified "requestIdleCallback" timer or a group of timers
-	 *
-	 * @param opts - options for the operation:
-	 * @param [opts.id] - operation id
-	 * @param [opts.label] - label of the task
-	 * @param [opts.group] - group name of the task
+	 * @param opts - options for the operation
 	 */
 	muteIdleCallback(opts: i.ClearOptionsId<i.TimerId>): this;
 	muteIdleCallback(task?: i.TimerId | i.ClearOptionsId<i.TimerId>): this {
@@ -497,11 +391,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Unmutes the specified "requestIdleCallback" timer or a group of timers
-	 *
-	 * @param opts - options for the operation:
-	 * @param [opts.id] - operation id
-	 * @param [opts.label] - label of the task
-	 * @param [opts.group] - group name of the task
+	 * @param opts - options for the operation
 	 */
 	unmuteIdleCallback(opts: i.ClearOptionsId<i.TimerId>): this;
 	unmuteIdleCallback(task?: i.TimerId | i.ClearOptionsId<i.TimerId>): this {
@@ -516,11 +406,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Suspends the specified "requestIdleCallback" timer or a group of timers
-	 *
-	 * @param opts - options for the operation:
-	 * @param [opts.id] - operation id
-	 * @param [opts.label] - label of the task
-	 * @param [opts.group] - group name of the task
+	 * @param opts - options for the operation
 	 */
 	suspendIdleCallback(opts: i.ClearOptionsId<i.TimerId>): this;
 	suspendIdleCallback(task?: i.TimerId | i.ClearOptionsId<i.TimerId>): this {
@@ -535,11 +421,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Unsuspends the specified "requestIdleCallback" timer or a group of timers
-	 *
-	 * @param opts - options for the operation:
-	 * @param [opts.id] - operation id
-	 * @param [opts.label] - label of the task
-	 * @param [opts.group] - group name of the task
+	 * @param opts - options for the operation
 	 */
 	unsuspendIdleCallback(opts: i.ClearOptionsId<i.TimerId>): this;
 	unsuspendIdleCallback(task?: i.TimerId | i.ClearOptionsId<i.TimerId>): this {
@@ -550,15 +432,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Returns a promise that will be resolved after the specified timeout
 	 *
 	 * @param timeout
-	 * @param [opts] - additional options for the operation:
-	 * @param [opts.join=false] - strategy for joining competitive tasks (with same labels):
-	 *   <ul>
-	 *     <li> true - all tasks will be joined to the first;</li>
-	 *     <li>'replace' - all tasks will be joined (replaced) to the last.</li>
-	 *   </ul>
-	 *
-	 * @param [opts.label] - label of the task (previous task with the same label will be canceled)
-	 * @param [opts.group] - group name of the task
+	 * @param [opts] - additional options for the operation
 	 */
 	sleep(timeout: number, opts?: i.AsyncOptions): SyncPromise<void> {
 		return new SyncPromise((resolve, reject) => {
@@ -573,16 +447,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Returns a promise that will be resolved on the next tick of the event loop
-	 *
-	 * @param [opts] - additional options for the operation:
-	 * @param [opts.join=false] - strategy for joining competitive tasks (with same labels):
-	 *   <ul>
-	 *     <li> true - all tasks will be joined to the first;</li>
-	 *     <li>'replace' - all tasks will be joined (replaced) to the last.</li>
-	 *   </ul>
-	 *
-	 * @param [opts.label] - label of the task (previous task with the same label will be canceled)
-	 * @param [opts.group] - group name of the task
+	 * @param [opts] - additional options for the operation
 	 */
 	nextTick(opts?: i.AsyncOptions): SyncPromise<void> {
 		return new SyncPromise((resolve, reject) => {
@@ -597,17 +462,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Returns a promise that will be resolved on the process idle
-	 *
-	 * @param [opts] - additional options for the operation:
-	 * @param [opts.timeout] - timeout value for the native requestIdleCallback
-	 * @param [opts.join=false] - strategy for joining competitive tasks (with same labels):
-	 *   <ul>
-	 *     <li> true - all tasks will be joined to the first;</li>
-	 *     <li>'replace' - all tasks will be joined (replaced) to the last.</li>
-	 *   </ul>
-	 *
-	 * @param [opts.label] - label of the task (previous task with the same label will be canceled)
-	 * @param [opts.group] - group name of the task
+	 * @param [opts] - additional options for the operation
 	 */
 	idle(opts?: i.AsyncIdleOptions): SyncPromise<IdleDeadline> {
 		return new SyncPromise((resolve, reject) => {
@@ -624,16 +479,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Returns a promise that will be resolved only when the specified function returns a positive value (== true)
 	 *
 	 * @param fn
-	 * @param [opts] - additional options for the operation:
-	 * @param [opts.join=false] - strategy for joining competitive tasks (with same labels):
-	 *   <ul>
-	 *     <li> true - all tasks will be joined to the first;</li>
-	 *     <li>'replace' - all tasks will be joined (replaced) to the last.</li>
-	 *   </ul>
-	 *
-	 * @param [opts.label] - label of the task (previous task with the same label will be canceled)
-	 * @param [opts.group] - group name of the task
-	 * @param [opts.delay] - delay in milliseconds
+	 * @param [opts] - additional options for the operation
 	 */
 	wait(fn: Function, opts?: i.AsyncWaitOptions): SyncPromise<boolean> {
 		if (fn()) {

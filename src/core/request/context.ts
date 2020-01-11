@@ -36,12 +36,12 @@ export default class RequestContext<T = unknown> {
 	cacheKey?: string;
 
 	/**
-	 * The cache object
+	 * Cache object
 	 */
 	readonly cache: Cache;
 
 	/**
-	 * The cache object for pending requests
+	 * Cache object for pending requests
 	 */
 	readonly pendingCache: Cache = pendingCache;
 
@@ -56,12 +56,12 @@ export default class RequestContext<T = unknown> {
 	readonly params!: typeof defaultRequestOpts & i.CreateRequestOptions<T>;
 
 	/**
-	 * The sequence of request encoders
+	 * Sequence of request encoders
 	 */
 	encoders: i.Encoders;
 
 	/**
-	 * The sequence of response decoders
+	 * Sequence of response decoders
 	 */
 	decoders: i.Decoders;
 
@@ -71,7 +71,7 @@ export default class RequestContext<T = unknown> {
 	readonly parent!: Then;
 
 	/**
-	 * An alias for query parameters of the request
+	 * Alias for query parameters of the request
 	 */
 	get query(): i.RequestQuery {
 		return this.params.query;

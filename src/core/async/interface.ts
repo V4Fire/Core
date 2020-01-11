@@ -39,8 +39,21 @@ export type TimerId = number | object;
 export type EventId = CanArray<object>;
 
 export interface AsyncOptions {
+	/**
+	 * Label of the task (the previous task with the same label will be canceled)
+	 */
 	label?: Label;
+
+	/**
+	 * Group name of the task
+	 */
 	group?: Group;
+
+	/**
+	 * Strategy for joining competitive tasks (with same labels):
+	 *   1. `true` - all tasks will be joined to the first;
+	 *   1. `'replace'` - all tasks will be joined (replaced) to the last (only for promises).
+	 */
 	join?: Join;
 }
 
@@ -73,16 +86,33 @@ export type ClearReason =
 	'all';
 
 export interface ClearOptions {
+	/**
+	 * Label of the task
+	 */
 	label?: Label;
+
+	/**
+	 * Group name of the task
+	 */
 	group?: Group | RegExp;
+
+	/**
+	 * If true, then the cleanup handler of the task is prevented
+	 */
 	preventDefault?: boolean;
 }
 
 export interface ClearOptionsId<ID = any> extends ClearOptions {
+	/**
+	 * Task identifier
+	 */
 	id?: ID;
 }
 
 export interface ClearProxyOptions<ID = any> extends ClearOptionsId<ID> {
+	/**
+	 * Proxy name
+	 */
 	name?: string;
 }
 
@@ -139,45 +169,89 @@ export type IdleCb<
 > = ProxyCb<IdleDeadline, R, CTX>;
 
 export interface AsyncCbOptions<CTX extends object = Async> extends AsyncOptions {
+	/**
+	 * If true, then the namespace will be marked as promisified
+	 * @default `false`
+	 */
 	promise?: boolean;
+
+	/**
+	 * Handler for clearing (it is called after clearing of a task)
+	 */
 	onClear?: CanArray<AsyncCb<CTX>>;
+
+	/**
+	 * Handler for merging (it is called after merging of a task with another task (label + join:true))
+	 */
 	onMerge?: CanArray<AsyncCb<CTX>>;
 }
 
 export interface AsyncCbOptionsSingle<CTX extends object = Async> extends AsyncCbOptions<CTX> {
+	/**
+	 * If false, then the proxy will support multiple callings
+	 * @default `true`
+	 */
 	single?: boolean;
 }
 
 export interface AsyncProxyOptions<CTX extends object = Async> extends AsyncCbOptionsSingle<CTX> {
+	/**
+	 * Proxy name
+	 */
 	name?: string;
 }
 
 export interface AsyncPromiseOptions extends AsyncOptions {
+	/**
+	 * Proxy name
+	 */
 	name?: string;
+
+	/**
+	 * Name of the destructor method
+	 */
 	destructor?: string;
 }
 
 export interface AsyncRequestOptions extends AsyncOptions {
+	/**
+	 * Name of the destructor method
+	 */
 	destructor?: string;
 }
 
 export interface AsyncCreateIdleOptions<CTX extends object = Async> extends AsyncCbOptions<CTX> {
+	/**
+	 * Timeout value for the native requestIdleCallback function
+	 */
 	timeout?: number;
 }
 
 export interface AsyncIdleOptions extends AsyncOptions {
+	/**
+	 * Timeout value for the native requestIdleCallback function
+	 */
 	timeout?: number;
 }
 
 export interface AsyncWaitOptions extends AsyncOptions {
+	/**
+	 * Delay value in milliseconds
+	 */
 	delay?: number;
 }
 
 export interface AsyncOnOptions<CTX extends object = Async> extends AsyncCbOptionsSingle<CTX> {
+	/**
+	 * Additional options for the emitter
+	 */
 	options?: Dictionary;
 }
 
 export interface AsyncOnceOptions<T extends object = Async> extends AsyncCbOptions<T> {
+	/**
+	 * Additional options for the emitter
+	 */
 	options?: Dictionary;
 }
 
@@ -186,11 +260,21 @@ export interface AsyncPromisifyOnceOptions<
 	R = unknown,
 	CTX extends object = Async
 > extends AsyncOptions {
+	/**
+	 * Event handler (the result will be provided as a promise result)
+	 */
 	handler?: ProxyCb<E, R, CTX>;
+
+	/**
+	 * Additional options for the emitter
+	 */
 	options?: Dictionary;
 }
 
 export interface AsyncWorkerOptions<CTX extends object = Async> extends AsyncProxyOptions<CTX> {
+	/**
+	 * Name of the destructor method
+	 */
 	destructor?: string;
 }
 
@@ -206,9 +290,24 @@ export interface WorkerLike {
 }
 
 export interface EventLike<E extends EventEmitterLikeP = EventEmitterLikeP> {
+	/**
+	 * Event emitter
+	 */
 	emitter: E;
+
+	/**
+	 * Event name
+	 */
 	event: string;
+
+	/**
+	 * Event handler
+	 */
 	handler: ProxyCb;
+
+	/**
+	 * Additional arguments for the emitter
+	 */
 	args: unknown[];
 }
 

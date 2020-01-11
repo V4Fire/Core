@@ -46,7 +46,7 @@ export const isParams = deprecate(
 
 export default class Async<CTX extends object = Async<any>> {
 	/**
-	 * The map of namespaces for async operations
+	 * Map of namespaces for async operations
 	 */
 	static namespaces: NamespacesDictionary = namespaces;
 
@@ -57,23 +57,23 @@ export default class Async<CTX extends object = Async<any>> {
 	static linkNames: NamespacesDictionary = namespaces;
 
 	/**
-	 * The lock status.
+	 * Lock status.
 	 * If true, then all new task won't be registered.
 	 */
 	locked: boolean = false;
 
 	/**
-	 * The cache for async operations
+	 * Cache for async operations
 	 */
 	protected readonly cache: Dictionary<i.GlobalCache> = Object.createDict();
 
 	/**
-	 * The cache for initialized workers
+	 * Cache for initialized workers
 	 */
 	protected readonly workerCache: WeakMap<object, boolean> = new WeakMap();
 
 	/**
-	 * The context of applying for all async handlers
+	 * Context of applying for all async handlers
 	 */
 	protected readonly ctx: CTX;
 
@@ -84,7 +84,7 @@ export default class Async<CTX extends object = Async<any>> {
 	protected readonly context: CTX;
 
 	/**
-	 * A link to the Async.namespaces
+	 * Link to Async.namespaces
 	 */
 	protected get namespaces(): NamespacesDictionary {
 		return (<typeof Async>this.constructor).namespaces;
@@ -108,10 +108,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	/**
 	 * Clears all async tasks
-	 *
-	 * @param [opts] - additional options for the operation:
-	 * @param [opts.label] - label of the task
-	 * @param [opts.group] - group name of the task
+	 * @param [opts] - additional options for the operation
 	 */
 	clearAll(opts?: i.ClearOptions): this {
 		for (let o = this.namespaces, keys = Object.keys(o), i = 0; i < keys.length; i++) {
@@ -131,10 +128,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	/**
 	 * Mutes all async tasks
-	 *
-	 * @param [opts] - additional options for the operation:
-	 * @param [opts.label] - label of the task
-	 * @param [opts.group] - group name of the task
+	 * @param [opts] - additional options for the operation
 	 */
 	muteAll(opts?: i.ClearOptions): this {
 		for (let o = this.namespaces, keys = Object.keys(o), i = 0; i < keys.length; i++) {
@@ -151,10 +145,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	/**
 	 * Unmutes all async tasks
-	 *
-	 * @param [opts] - additional options for the operation:
-	 * @param [opts.label] - label of the task
-	 * @param [opts.group] - group name of the task
+	 * @param [opts] - additional options for the operation
 	 */
 	unmuteAll(opts?: i.ClearOptions): this {
 		for (let o = this.namespaces, keys = Object.keys(o), i = 0; i < keys.length; i++) {
@@ -171,10 +162,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	/**
 	 * Suspends all async tasks
-	 *
-	 * @param [opts] - additional options for the operation:
-	 * @param [opts.label] - label of the task
-	 * @param [opts.group] - group name of the task
+	 * @param [opts] - additional options for the operation
 	 */
 	suspendAll(opts?: i.ClearOptions): this {
 		for (let o = this.namespaces, keys = Object.keys(o), i = 0; i < keys.length; i++) {
@@ -191,10 +179,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	/**
 	 * Unsuspends all async tasks
-	 *
-	 * @param [opts] - additional options for the operation:
-	 * @param [opts.label] - label of the task
-	 * @param [opts.group] - group name of the task
+	 * @param [opts] - additional options for the operation
 	 */
 	unsuspendAll(opts?: i.ClearOptions): this {
 		for (let o = this.namespaces, keys = Object.keys(o), i = 0; i < keys.length; i++) {

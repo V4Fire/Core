@@ -19,17 +19,17 @@ import * as i from 'core/request/interface';
 
 export default class Response {
 	/**
-	 * A value of the response data type
+	 * Value of the response data type
 	 */
 	responseType?: i.ResponseType;
 
 	/**
-	 * An original value of the response data type
+	 * Original value of the response data type
 	 */
 	readonly sourceResponseType?: i.ResponseType;
 
 	/**
-	 * A value of the response status code
+	 * Value of the response status code
 	 */
 	readonly status: number;
 
@@ -39,18 +39,18 @@ export default class Response {
 	readonly ok: boolean;
 
 	/**
-	 * A list of status codes (or a single code) with HTTP statuses which is ok for response,
+	 * List of status codes (or a single code) with HTTP statuses which is ok for response,
 	 * also can pass a range of codes
 	 */
 	readonly okStatuses: i.OkStatuses;
 
 	/**
-	 * A table of response headers
+	 * Table of response headers
 	 */
 	readonly headers: i.ResponseHeaders;
 
 	/**
-	 * A sequence of response decoders
+	 * Sequence of response decoders
 	 */
 	readonly decoders: i.Decoders;
 
@@ -65,7 +65,7 @@ export default class Response {
 	readonly parent?: Then;
 
 	/**
-	 * A value of the response body
+	 * Value of the response body
 	 */
 	protected readonly body: i.ResponseTypeValue;
 
