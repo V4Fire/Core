@@ -20,32 +20,32 @@ export default class NeverCache<V = unknown, K = string> implements Cache<V, K> 
 	 */
 	protected readonly storage: Map<K, V> = new Map();
 
-	/** @see Cache.has */
+	/** @see [[Cache.has]] */
 	has(key: K): boolean {
 		return false;
 	}
 
-	/** @see Cache.get */
+	/** @see [[Cache.get]] */
 	get(key: K): undefined {
 		return undefined;
 	}
 
-	/** @see Cache.set */
+	/** @see [[Cache.set]] */
 	set(key: K, value: V): V {
 		return value;
 	}
 
-	/** @see Cache.remove */
+	/** @see [[Cache.remove]] */
 	remove(key: K): CanUndef<V> {
 		return undefined;
 	}
 
-	/** @see Cache.keys */
+	/** @see [[Cache.keys]] */
 	keys(): Iterator<K> {
 		return this.storage.keys();
 	}
 
-	/** @see Cache.clear */
+	/** @see [[Cache.clear]] */
 	clear(filter?: ClearFilter<V, K>): Set<K> {
 		return new Set();
 	}

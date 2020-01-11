@@ -20,23 +20,23 @@ export default class SimpleCache<V = unknown, K = string> implements Cache<V, K>
 	 */
 	protected readonly storage: Map<K, V> = new Map();
 
-	/** @see Cache.has */
+	/** @see [[Cache.has]] */
 	has(key: K): boolean {
 		return this.storage.has(key);
 	}
 
-	/** @see Cache.get */
+	/** @see [[Cache.get]] */
 	get(key: K): CanUndef<V> {
 		return this.storage.get(key);
 	}
 
-	/** @see Cache.set */
+	/** @see [[Cache.set]] */
 	set(key: K, value: V): V {
 		this.storage.set(key, value);
 		return value;
 	}
 
-	/** @see Cache.remove */
+	/** @see [[Cache.remove]] */
 	remove(key: K): CanUndef<V> {
 		if (this.has(key)) {
 			const val = this.storage.get(key);
@@ -45,12 +45,12 @@ export default class SimpleCache<V = unknown, K = string> implements Cache<V, K>
 		}
 	}
 
-	/** @see Cache.keys */
+	/** @see [[Cache.keys]] */
 	keys(): Iterator<K> {
 		return this.storage.keys();
 	}
 
-	/** @see Cache.clear */
+	/** @see [[Cache.clear]] */
 	clear(filter?: ClearFilter<V, K>): Set<K> {
 		if (filter) {
 			const
