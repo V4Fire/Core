@@ -25,10 +25,14 @@ import { getStorageKey, getResponseTypeFromURL } from 'core/request/utils';
 import { concatUrls } from 'core/url';
 
 import { storage, globalOpts, defaultRequestOpts } from 'core/request/const';
+import {
 
-import * as i from 'core/request/interface';
-// tslint:disable-next-line:no-duplicate-imports
-import { CreateRequestOptions, RequestResponse, RequestFunctionResponse } from 'core/request/interface';
+	CreateRequestOptions,
+	RequestResolver,
+	RequestResponse,
+	RequestFunctionResponse
+
+} from 'core/request/interface';
 
 export * from 'core/request/interface';
 export * from 'core/request/utils';
@@ -79,12 +83,12 @@ export default function request<T = unknown>(opts: CreateRequestOptions<T>): typ
  */
 export default function request<T = unknown, A extends unknown[] = unknown[]>(
 	path: string,
-	resolver: i.RequestResolver<T, A>,
+	resolver: RequestResolver<T, A>,
 	opts?: CreateRequestOptions<T>
 ): RequestFunctionResponse<T, A extends (infer V)[] ? V[] : unknown[]>;
 
 export default function request<T = unknown>(
-	path: string | i.CreateRequestOptions<T>,
+	path: string | CreateRequestOptions<T>,
 	...args: any[]
 ): unknown {
 	const merge = <T>(...args: unknown[]) => Object.mixin<T>({
@@ -100,19 +104,19 @@ export default function request<T = unknown>(
 
 		return (path, resolver, opts) => {
 			if (Object.isObject(path)) {
-				return request(merge<i.CreateRequestOptions<T>>(defOpts, path));
+				return request(merge<CreateRequestOptions<T>>(defOpts, path));
 			}
 
 			if (Object.isFunction(resolver)) {
-				return request(path, resolver, merge<i.CreateRequestOptions<T>>(defOpts, opts));
+				return request(path, resolver, merge<CreateRequestOptions<T>>(defOpts, opts));
 			}
 
-			return request(path, merge<i.CreateRequestOptions<T>>(defOpts, resolver));
+			return request(path, merge<CreateRequestOptions<T>>(defOpts, resolver));
 		};
 	}
 
 	let
-		resolver, opts: i.CreateRequestOptions<T>;
+		resolver, opts: CreateRequestOptions<T>;
 
 	if (args.length > 1) {
 		([resolver, opts] = args);
@@ -128,7 +132,7 @@ export default function request<T = unknown>(
 
 	const run = (...args) => {
 		const
-			p = merge<i.CreateRequestOptions<T>>(baseCtx.params),
+			p = merge<CreateRequestOptions<T>>(baseCtx.params),
 			ctx = Object.create(baseCtx);
 
 		const middlewareParams = {

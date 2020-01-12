@@ -6,8 +6,24 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import * as i from 'core/async/interface';
 import Super, { asyncCounter, isPromisifyNamespace, isAsyncOptions } from 'core/async/modules/base';
+import {
+
+	AsyncWorkerOptions,
+	AsyncProxyOptions,
+	AsyncRequestOptions,
+	AsyncPromiseOptions,
+	ClearProxyOptions,
+
+	ClearOptionsId,
+	WorkerLikeP,
+	CancelablePromise,
+
+	AsyncCb,
+	WrappedCb
+
+} from 'core/async/interface';
+
 export * from 'core/async/modules/base';
 
 export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
@@ -24,7 +40,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * @param worker
 	 * @param [opts] - additional options for the operation
 	 */
-	worker<T extends i.WorkerLikeP>(worker: T, opts?: i.AsyncWorkerOptions<CTX>): T {
+	worker<T extends WorkerLikeP>(worker: T, opts?: AsyncWorkerOptions<CTX>): T {
 		const
 			p = opts || {},
 			{workerCache} = this;
@@ -49,14 +65,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * @alias
 	 * @param [id] - link to the worker (if not specified, then the operation will be applied for all registered tasks)
 	 */
-	terminateWorker(id?: i.WorkerLikeP): this;
+	terminateWorker(id?: WorkerLikeP): this;
 
 	/**
 	 * Terminates the specified worker or a group of workers
 	 * @param opts - options for the operation
 	 */
-	terminateWorker(opts: i.ClearProxyOptions<i.WorkerLikeP>): this;
-	terminateWorker(task?: i.WorkerLikeP | i.ClearProxyOptions<i.WorkerLikeP>): this {
+	terminateWorker(opts: ClearProxyOptions<WorkerLikeP>): this;
+	terminateWorker(task?: WorkerLikeP | ClearProxyOptions<WorkerLikeP>): this {
 		return this.clearWorker(<any>task);
 	}
 
@@ -64,15 +80,15 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Terminates the specified worker
 	 * @param [id] - link to the worker (if not specified, then the operation will be applied for all registered tasks)
 	 */
-	clearWorker(id?: i.WorkerLikeP): this;
+	clearWorker(id?: WorkerLikeP): this;
 
 	/**
 	 * Terminates the specified worker or a group of workers
 	 * @param opts - options for the operation
 	 */
-	clearWorker(opts: i.ClearProxyOptions<i.WorkerLikeP>): this;
-	clearWorker(task?: i.WorkerLikeP | i.ClearProxyOptions<i.WorkerLikeP>): this {
-		return this.cancelTask(task, isAsyncOptions<i.ClearProxyOptions>(task) && task.name || this.namespaces.worker);
+	clearWorker(opts: ClearProxyOptions<WorkerLikeP>): this;
+	clearWorker(task?: WorkerLikeP | ClearProxyOptions<WorkerLikeP>): this {
+		return this.cancelTask(task, isAsyncOptions<ClearProxyOptions>(task) && task.name || this.namespaces.worker);
 	}
 
 	/**
@@ -84,7 +100,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * @param cb
 	 * @param [opts] - additional options for the operation
 	 */
-	proxy<F extends i.WrappedCb, C extends object = CTX>(cb: F, opts?: i.AsyncProxyOptions<C>): F {
+	proxy<F extends WrappedCb, C extends object = CTX>(cb: F, opts?: AsyncProxyOptions<C>): F {
 		return this.registerTask<F, C>({
 			...opts,
 			name: opts?.name || this.namespaces.proxy,
@@ -107,8 +123,8 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Cancels the specified proxy function or a group of functions
 	 * @param opts - options for the operation
 	 */
-	cancelProxy(opts: i.ClearProxyOptions<Function>): this;
-	cancelProxy(task?: Function | i.ClearProxyOptions<Function>): this {
+	cancelProxy(opts: ClearProxyOptions<Function>): this;
+	cancelProxy(task?: Function | ClearProxyOptions<Function>): this {
 		return this.clearProxy(<any>task);
 	}
 
@@ -122,9 +138,9 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Cancels the specified proxy function or a group of functions
 	 * @param opts - options for the operation
 	 */
-	clearProxy(opts: i.ClearProxyOptions<Function>): this;
-	clearProxy(task?: Function | i.ClearProxyOptions<Function>): this {
-		return this.cancelTask(task, isAsyncOptions<i.ClearProxyOptions>(task) && task.name || this.namespaces.proxy);
+	clearProxy(opts: ClearProxyOptions<Function>): this;
+	clearProxy(task?: Function | ClearProxyOptions<Function>): this {
+		return this.cancelTask(task, isAsyncOptions<ClearProxyOptions>(task) && task.name || this.namespaces.proxy);
 	}
 
 	/**
@@ -137,12 +153,12 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Mutes the specified proxy function or a group of functions
 	 * @param opts - options for the operation
 	 */
-	muteProxy(opts: i.ClearProxyOptions<Function>): this;
-	muteProxy(task?: Function | i.ClearProxyOptions<Function>): this {
+	muteProxy(opts: ClearProxyOptions<Function>): this;
+	muteProxy(task?: Function | ClearProxyOptions<Function>): this {
 		return this.markTask(
 			'muted',
 			task,
-			isAsyncOptions<i.ClearProxyOptions>(task) && task.name || this.namespaces.proxy
+			isAsyncOptions<ClearProxyOptions>(task) && task.name || this.namespaces.proxy
 		);
 	}
 
@@ -156,12 +172,12 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Unmutes the specified proxy function or a group of functions
 	 * @param opts - options for the operation
 	 */
-	unmuteProxy(opts: i.ClearProxyOptions<Function>): this;
-	unmuteProxy(task?: Function | i.ClearProxyOptions<Function>): this {
+	unmuteProxy(opts: ClearProxyOptions<Function>): this;
+	unmuteProxy(task?: Function | ClearProxyOptions<Function>): this {
 		return this.markTask(
 			'!muted',
 			task,
-			isAsyncOptions<i.ClearProxyOptions>(task) && task.name || this.namespaces.proxy
+			isAsyncOptions<ClearProxyOptions>(task) && task.name || this.namespaces.proxy
 		);
 	}
 
@@ -175,12 +191,12 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Suspends the specified proxy function or a group of functions
 	 * @param opts - options for the operation
 	 */
-	suspendProxy(opts: i.ClearProxyOptions<Function>): this;
-	suspendProxy(task?: Function | i.ClearProxyOptions<Function>): this {
+	suspendProxy(opts: ClearProxyOptions<Function>): this;
+	suspendProxy(task?: Function | ClearProxyOptions<Function>): this {
 		return this.markTask(
 			'paused',
 			task,
-			isAsyncOptions<i.ClearProxyOptions>(task) && task.name || this.namespaces.proxy
+			isAsyncOptions<ClearProxyOptions>(task) && task.name || this.namespaces.proxy
 		);
 	}
 
@@ -194,12 +210,12 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Unsuspends the specified proxy function or a group of functions
 	 * @param opts - options for the operation
 	 */
-	unsuspendProxy(opts: i.ClearProxyOptions<Function>): this;
-	unsuspendProxy(task?: Function | i.ClearProxyOptions<Function>): this {
+	unsuspendProxy(opts: ClearProxyOptions<Function>): this;
+	unsuspendProxy(task?: Function | ClearProxyOptions<Function>): this {
 		return this.markTask(
 			'!paused',
 			task,
-			isAsyncOptions<i.ClearProxyOptions>(task) && task.name || this.namespaces.proxy
+			isAsyncOptions<ClearProxyOptions>(task) && task.name || this.namespaces.proxy
 		);
 	}
 
@@ -213,7 +229,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * @param request
 	 * @param [opts] - additional options for the operation
 	 */
-	request<T = unknown>(request: (() => PromiseLike<T>) | PromiseLike<T>, opts?: i.AsyncRequestOptions): Promise<T> {
+	request<T = unknown>(request: (() => PromiseLike<T>) | PromiseLike<T>, opts?: AsyncRequestOptions): Promise<T> {
 		return this.promise(request, {...opts, name: this.namespaces.request}) || new Promise<T>(() => undefined);
 	}
 
@@ -229,8 +245,8 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Cancels the specified request or a group of requests
 	 * @param opts - options for the operation
 	 */
-	cancelRequest(opts: i.ClearOptionsId<Promise<unknown>>): this;
-	cancelRequest(task?: Promise<unknown> | i.ClearOptionsId<Promise<unknown>>): this {
+	cancelRequest(opts: ClearOptionsId<Promise<unknown>>): this;
+	cancelRequest(task?: Promise<unknown> | ClearOptionsId<Promise<unknown>>): this {
 		return this.clearRequest(<any>task);
 	}
 
@@ -244,8 +260,8 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Cancels the specified request or a group of requests
 	 * @param opts - options for the operation
 	 */
-	clearRequest(opts: i.ClearOptionsId<Promise<unknown>>): this;
-	clearRequest(task?: Promise<unknown> | i.ClearOptionsId<Promise<unknown>>): this {
+	clearRequest(opts: ClearOptionsId<Promise<unknown>>): this;
+	clearRequest(task?: Promise<unknown> | ClearOptionsId<Promise<unknown>>): this {
 		return this.cancelTask(task, this.namespaces.request);
 	}
 
@@ -259,8 +275,8 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Mutes the specified request or a group of requests
 	 * @param opts - options for the operation
 	 */
-	muteRequest(opts: i.ClearOptionsId<Promise<unknown>>): this;
-	muteRequest(task?: Promise<unknown> | i.ClearOptionsId<Promise<unknown>>): this {
+	muteRequest(opts: ClearOptionsId<Promise<unknown>>): this;
+	muteRequest(task?: Promise<unknown> | ClearOptionsId<Promise<unknown>>): this {
 		return this.markTask('muted', task, this.namespaces.request);
 	}
 
@@ -274,8 +290,8 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Unmutes the specified request or a group of requests
 	 * @param opts - options for the operation
 	 */
-	unmuteRequest(opts: i.ClearOptionsId<Promise<unknown>>): this;
-	unmuteRequest(task?: Promise<unknown> | i.ClearOptionsId<Promise<unknown>>): this {
+	unmuteRequest(opts: ClearOptionsId<Promise<unknown>>): this;
+	unmuteRequest(task?: Promise<unknown> | ClearOptionsId<Promise<unknown>>): this {
 		return this.markTask('!muted', task, this.namespaces.request);
 	}
 
@@ -289,8 +305,8 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Suspends the specified request or a group of requests
 	 * @param opts - options for the operation
 	 */
-	suspendRequest(opts: i.ClearOptionsId<Promise<unknown>>): this;
-	suspendRequest(task?: Promise<unknown> | i.ClearOptionsId<Promise<unknown>>): this {
+	suspendRequest(opts: ClearOptionsId<Promise<unknown>>): this;
+	suspendRequest(task?: Promise<unknown> | ClearOptionsId<Promise<unknown>>): this {
 		return this.markTask('paused', task, this.namespaces.request);
 	}
 
@@ -304,8 +320,8 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Unsuspends the specified request or a group of requests
 	 * @param opts - options for the operation
 	 */
-	unsuspendRequest(opts: i.ClearOptionsId<Promise<unknown>>): this;
-	unsuspendRequest(task?: Promise<unknown> | i.ClearOptionsId<Promise<unknown>>): this {
+	unsuspendRequest(opts: ClearOptionsId<Promise<unknown>>): this;
+	unsuspendRequest(task?: Promise<unknown> | ClearOptionsId<Promise<unknown>>): this {
 		return this.markTask('!paused', task, this.namespaces.request);
 	}
 
@@ -319,9 +335,9 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * @param promise
 	 * @param [opts] - additional options for the operation
 	 */
-	promise<T = unknown>(promise: (() => PromiseLike<T>) | PromiseLike<T>, opts?: i.AsyncPromiseOptions): Promise<T> {
+	promise<T = unknown>(promise: (() => PromiseLike<T>) | PromiseLike<T>, opts?: AsyncPromiseOptions): Promise<T> {
 		const
-			p = <i.AsyncPromiseOptions>({name: this.namespaces.promise, ...opts});
+			p = <AsyncPromiseOptions>({name: this.namespaces.promise, ...opts});
 
 		return new Promise((resolve, reject) => {
 			let
@@ -374,8 +390,8 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Cancels the specified promise or a group of promises
 	 * @param opts - options for the operation
 	 */
-	cancelPromise(opts: i.ClearProxyOptions<Promise<unknown>>): this;
-	cancelPromise(task?: Promise<unknown> | i.ClearProxyOptions<Promise<unknown>>): this {
+	cancelPromise(opts: ClearProxyOptions<Promise<unknown>>): this;
+	cancelPromise(task?: Promise<unknown> | ClearProxyOptions<Promise<unknown>>): this {
 		return this.clearPromise(<any>task);
 	}
 
@@ -389,11 +405,11 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Cancels the specified promise or a group of promises
 	 * @param opts - options for the operation
 	 */
-	clearPromise(opts: i.ClearProxyOptions<Promise<unknown>>): this;
-	clearPromise(task?: Promise<unknown> | i.ClearProxyOptions<Promise<unknown>>): this {
+	clearPromise(opts: ClearProxyOptions<Promise<unknown>>): this;
+	clearPromise(task?: Promise<unknown> | ClearProxyOptions<Promise<unknown>>): this {
 		const
 			nms = this.namespaces,
-			nm = isAsyncOptions<i.ClearProxyOptions>(task) && task.name;
+			nm = isAsyncOptions<ClearProxyOptions>(task) && task.name;
 
 		this
 			.cancelTask(task, nm || nms.promise);
@@ -423,8 +439,8 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Mutes the specified promise or a group of promises
 	 * @param opts - options for the operation
 	 */
-	mutePromise(opts: i.ClearOptionsId<Promise<unknown>>): this;
-	mutePromise(task?: Promise<unknown> | i.ClearOptionsId<Promise<unknown>>): this {
+	mutePromise(opts: ClearOptionsId<Promise<unknown>>): this;
+	mutePromise(task?: Promise<unknown> | ClearOptionsId<Promise<unknown>>): this {
 		return this.markPromise('muted', <any>task);
 	}
 
@@ -438,8 +454,8 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Unmutes the specified promise or a group of promises
 	 * @param opts - options for the operation
 	 */
-	unmutePromise(opts: i.ClearOptionsId<Promise<unknown>>): this;
-	unmutePromise(task?: Promise<unknown> | i.ClearOptionsId<Promise<unknown>>): this {
+	unmutePromise(opts: ClearOptionsId<Promise<unknown>>): this;
+	unmutePromise(task?: Promise<unknown> | ClearOptionsId<Promise<unknown>>): this {
 		return this.markPromise('!muted', <any>task);
 	}
 
@@ -453,8 +469,8 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Suspends the specified promise or a group of promises
 	 * @param opts - options for the operation
 	 */
-	suspendPromise(opts: i.ClearOptionsId<Promise<unknown>>): this;
-	suspendPromise(task?: Promise<unknown> | i.ClearOptionsId<Promise<unknown>>): this {
+	suspendPromise(opts: ClearOptionsId<Promise<unknown>>): this;
+	suspendPromise(task?: Promise<unknown> | ClearOptionsId<Promise<unknown>>): this {
 		return this.markPromise('paused', <any>task);
 	}
 
@@ -468,8 +484,8 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Unsuspends the specified promise or a group of promises
 	 * @param opts - options for the operation
 	 */
-	unsuspendPromise(opts: i.ClearOptionsId<Promise<unknown>>): this;
-	unsuspendPromise(task?: Promise<unknown> | i.ClearOptionsId<Promise<unknown>>): this {
+	unsuspendPromise(opts: ClearOptionsId<Promise<unknown>>): this;
+	unsuspendPromise(task?: Promise<unknown> | ClearOptionsId<Promise<unknown>>): this {
 		return this.markPromise('!paused', <any>task);
 	}
 
@@ -479,7 +495,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * @param destructor - name of the destructor method
 	 * @param worker
 	 */
-	workerDestructor(destructor: CanUndef<string>, worker: i.WorkerLikeP): void {
+	workerDestructor(destructor: CanUndef<string>, worker: WorkerLikeP): void {
 		const
 			{workerCache} = this;
 
@@ -526,7 +542,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	promiseDestructor(
 		destructor: CanUndef<string>,
-		promise: PromiseLike<unknown> | i.CancelablePromise
+		promise: PromiseLike<unknown> | CancelablePromise
 	): void {
 		let
 			fn;
@@ -536,8 +552,8 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 		} else {
 			fn =
-				(<i.CancelablePromise>promise).abort ||
-				(<i.CancelablePromise>promise).cancel;
+				(<CancelablePromise>promise).abort ||
+				(<CancelablePromise>promise).cancel;
 		}
 
 		if (fn && Object.isFunction(fn)) {
@@ -569,7 +585,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 				replacedBy.onComplete.push([resolve, reject]);
 
 				const
-					onClear = (<i.AsyncCb<CTX>[]>[]).concat(obj.link.onClear, <i.AsyncCb<CTX>>reject);
+					onClear = (<AsyncCb<CTX>[]>[]).concat(obj.link.onClear, <AsyncCb<CTX>>reject);
 
 				for (let i = 0; i < onClear.length; i++) {
 					replacedBy.onClear.push(onClear[i]);
@@ -605,11 +621,11 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * @param label
 	 * @param opts - additional options
 	 */
-	protected markPromise(label: string, opts: i.ClearOptionsId<Promise<any>>): this;
-	protected markPromise(field: string, task?: Promise<any> | i.ClearOptionsId<Promise<unknown>>): this {
+	protected markPromise(label: string, opts: ClearOptionsId<Promise<any>>): this;
+	protected markPromise(field: string, task?: Promise<any> | ClearOptionsId<Promise<unknown>>): this {
 		const
 			nms = this.namespaces,
-			nm = isAsyncOptions<i.ClearProxyOptions>(task) && task.name;
+			nm = isAsyncOptions<ClearProxyOptions>(task) && task.name;
 
 		this
 			.markTask(field, task, nm || nms.promise);

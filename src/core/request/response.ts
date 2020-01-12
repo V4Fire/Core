@@ -15,18 +15,28 @@ import { convertIfDate } from 'core/json';
 
 import { normalizeHeaderName, getResponseTypeFromMime } from 'core/request/utils';
 import { defaultResponseOpts } from 'core/request/const';
-import * as i from 'core/request/interface';
+import {
+
+	OkStatuses,
+	ResponseType,
+	ResponseTypeValue,
+	ResponseHeaders,
+	ResponseOptions,
+	Decoders,
+	JSONLikeValue
+
+} from 'core/request/interface';
 
 export default class Response {
 	/**
 	 * Value of the response data type
 	 */
-	responseType?: i.ResponseType;
+	responseType?: ResponseType;
 
 	/**
 	 * Original value of the response data type
 	 */
-	readonly sourceResponseType?: i.ResponseType;
+	readonly sourceResponseType?: ResponseType;
 
 	/**
 	 * Value of the response status code
@@ -42,17 +52,17 @@ export default class Response {
 	 * List of status codes (or a single code) with HTTP statuses which is ok for response,
 	 * also can pass a range of codes
 	 */
-	readonly okStatuses: i.OkStatuses;
+	readonly okStatuses: OkStatuses;
 
 	/**
 	 * Table of response headers
 	 */
-	readonly headers: i.ResponseHeaders;
+	readonly headers: ResponseHeaders;
 
 	/**
 	 * Sequence of response decoders
 	 */
-	readonly decoders: i.Decoders;
+	readonly decoders: Decoders;
 
 	/**
 	 * True, if the request is important
@@ -67,15 +77,15 @@ export default class Response {
 	/**
 	 * Value of the response body
 	 */
-	protected readonly body: i.ResponseTypeValue;
+	protected readonly body: ResponseTypeValue;
 
 	/**
 	 * @param [body]
 	 * @param [params]
 	 */
-	constructor(body?: i.ResponseTypeValue, params?: i.ResponseOptions) {
+	constructor(body?: ResponseTypeValue, params?: ResponseOptions) {
 		const
-			p = Object.mixin<typeof defaultResponseOpts & i.ResponseOptions>(false, {}, defaultResponseOpts, params),
+			p = Object.mixin<typeof defaultResponseOpts & ResponseOptions>(false, {}, defaultResponseOpts, params),
 			s = this.okStatuses = p.okStatuses;
 
 		this.parent = p.parent;
@@ -104,7 +114,7 @@ export default class Response {
 	 * Parses the response body and returns a final value
 	 */
 	@once
-	decode<T extends Nullable<string | i.JSONLikeValue | ArrayBuffer | Blob | Document | unknown>>(): Then<T> {
+	decode<T extends Nullable<string | JSONLikeValue | ArrayBuffer | Blob | Document | unknown>>(): Then<T> {
 		let data;
 		switch (this.sourceResponseType) {
 			case 'json':
@@ -179,12 +189,12 @@ export default class Response {
 	/**
 	 * Parses the response body as a JSON object and returns it
 	 */
-	json<T extends i.JSONLikeValue>(): Then<T | null> {
+	json<T extends JSONLikeValue>(): Then<T | null> {
 		if (this.sourceResponseType !== 'json') {
 			throw new TypeError('Invalid data sourceType');
 		}
 
-		type _ = string | i.JSONLikeValue | null;
+		type _ = string | JSONLikeValue | null;
 
 		const
 			body = <_>this.body;
@@ -316,7 +326,7 @@ export default class Response {
 	 * Returns a normalized object of HTTP headers from the specified string or object
 	 * @param headers
 	 */
-	protected parseHeaders(headers: string | Dictionary<string>): i.ResponseHeaders {
+	protected parseHeaders(headers: string | Dictionary<string>): ResponseHeaders {
 		const
 			res = {};
 

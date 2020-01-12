@@ -11,7 +11,21 @@
  * @packageDocumentation
  */
 
-import * as i from 'core/promise/sync/interface';
+import {
+
+	Value,
+	State,
+	Executor,
+
+	ResolveHandler,
+	RejectHandler,
+	FinallyHandler,
+
+	ConstrRejectHandler,
+	ConstrResolveHandler
+
+} from 'core/promise/sync/interface';
+
 export * from 'core/promise/sync/interface';
 
 export default class SyncPromise<T = unknown> implements PromiseLike<T> {
@@ -19,13 +33,13 @@ export default class SyncPromise<T = unknown> implements PromiseLike<T> {
 	 * Creates a new resolved promise for the specified value
 	 * @param value
 	 */
-	static resolve<T = unknown>(value: i.Value<T>): SyncPromise<T>;
+	static resolve<T = unknown>(value: Value<T>): SyncPromise<T>;
 
 	/**
 	 * Creates a new resolved promise
 	 */
 	static resolve(): SyncPromise<void>;
-	static resolve<T = unknown>(value?: i.Value<T>): SyncPromise<T> {
+	static resolve<T = unknown>(value?: Value<T>): SyncPromise<T> {
 		if (value instanceof SyncPromise) {
 			return value;
 		}
@@ -55,32 +69,32 @@ export default class SyncPromise<T = unknown> implements PromiseLike<T> {
 	 * @param values
 	 */
 	static all<T1, T2, T3, T4, T5>(
-		values: [i.Value<T1>, i.Value<T2>, i.Value<T3>, i.Value<T4>, i.Value<T5>]
+		values: [Value<T1>, Value<T2>, Value<T3>, Value<T4>, Value<T5>]
 	): SyncPromise<[T1, T2, T3, T4, T5]>;
 
 	static all<T1, T2, T3, T4>(
-		values: [i.Value<T1>, i.Value<T2>, i.Value<T3>, i.Value<T4>]
+		values: [Value<T1>, Value<T2>, Value<T3>, Value<T4>]
 	): SyncPromise<[T1, T2, T3, T4]>;
 
 	static all<T1, T2, T3>(
-		values: [i.Value<T1>, i.Value<T2>, i.Value<T3>]
+		values: [Value<T1>, Value<T2>, Value<T3>]
 	): SyncPromise<[T1, T2, T3]>;
 
 	static all<T1, T2>(
-		values: [i.Value<T1>, i.Value<T2>]
+		values: [Value<T1>, Value<T2>]
 	): SyncPromise<[T1, T2]>;
 
 	static all<T1>(
-		values: [i.Value<T1>]
+		values: [Value<T1>]
 	): SyncPromise<[T1]>;
 
-	static all<T extends Iterable<i.Value>>(
+	static all<T extends Iterable<Value>>(
 		values: T
-	): SyncPromise<(T extends Iterable<i.Value<infer V>> ? V : unknown)[]>;
+	): SyncPromise<(T extends Iterable<Value<infer V>> ? V : unknown)[]>;
 
-	static all<T extends Iterable<i.Value>>(
+	static all<T extends Iterable<Value>>(
 		values: T
-	): SyncPromise<(T extends Iterable<i.Value<infer V>> ? V : unknown)[]> {
+	): SyncPromise<(T extends Iterable<Value<infer V>> ? V : unknown)[]> {
 		return new SyncPromise((resolve, reject) => {
 			const
 				promises = <SyncPromise[]>[],
@@ -118,9 +132,9 @@ export default class SyncPromise<T = unknown> implements PromiseLike<T> {
 	 * Creates a promise that is resolved or rejected when any of the provided promises are resolved or rejected
 	 * @param values
 	 */
-	static race<T extends Iterable<i.Value>>(
+	static race<T extends Iterable<Value>>(
 		values: T
-	): SyncPromise<T extends Iterable<i.Value<infer V>> ? V : unknown> {
+	): SyncPromise<T extends Iterable<Value<infer V>> ? V : unknown> {
 		return new SyncPromise((resolve, reject) => {
 			const
 				promises = <SyncPromise[]>[];
@@ -144,13 +158,13 @@ export default class SyncPromise<T = unknown> implements PromiseLike<T> {
 	 * Returns true if the current promise is pending
 	 */
 	get isPending(): boolean {
-		return this.state === i.State.pending;
+		return this.state === State.pending;
 	}
 
 	/**
 	 * Value of the current promise state
 	 */
-	protected state: i.State = i.State.pending;
+	protected state: State = State.pending;
 
 	/**
 	 * Value of the promise
@@ -160,19 +174,19 @@ export default class SyncPromise<T = unknown> implements PromiseLike<T> {
 	/**
 	 * List of handler for the "finally" operation
 	 */
-	protected finallyHandlers: i.FinallyHandler[] = [];
+	protected finallyHandlers: FinallyHandler[] = [];
 
 	/**
 	 * List of handler for the "resolve" operation
 	 */
-	protected resolveHandlers: i.ConstrResolveHandler[] = [];
+	protected resolveHandlers: ConstrResolveHandler[] = [];
 
 	/**
 	 * List of handler for the "reject" operation
 	 */
-	protected rejectHandlers: i.ConstrRejectHandler[] = [];
+	protected rejectHandlers: ConstrRejectHandler[] = [];
 
-	constructor(executor: i.Executor) {
+	constructor(executor: Executor) {
 		const clear = () => {
 			this.resolveHandlers = [];
 			this.rejectHandlers = [];
@@ -185,7 +199,7 @@ export default class SyncPromise<T = unknown> implements PromiseLike<T> {
 			}
 
 			this.value = value;
-			this.state = i.State.fulfilled;
+			this.state = State.fulfilled;
 
 			this.resolveHandlers.forEach((fn) => fn(this.value));
 			this.finallyHandlers.forEach((fn) => fn());
@@ -199,7 +213,7 @@ export default class SyncPromise<T = unknown> implements PromiseLike<T> {
 			}
 
 			this.value = err;
-			this.state = i.State.rejected;
+			this.state = State.rejected;
 
 			this.rejectHandlers.forEach((fn) => fn(this.value));
 			this.finallyHandlers.forEach((fn) => fn());
@@ -217,28 +231,28 @@ export default class SyncPromise<T = unknown> implements PromiseLike<T> {
 	 * @param [onReject]
 	 */
 	then(
-		onFulfill?: Nullable<i.ResolveHandler<T>>,
-		onReject?: Nullable<i.RejectHandler<T>>
+		onFulfill?: Nullable<ResolveHandler<T>>,
+		onReject?: Nullable<RejectHandler<T>>
 	): SyncPromise<T>;
 
 	then<R>(
-		onFulfill: Nullable<i.ResolveHandler<T>>,
-		onReject: i.RejectHandler<R>
+		onFulfill: Nullable<ResolveHandler<T>>,
+		onReject: RejectHandler<R>
 	): SyncPromise<T | R>;
 
 	then<V>(
-		onFulfill: i.ResolveHandler<T, V>,
-		onReject?: Nullable<i.RejectHandler<V>>
+		onFulfill: ResolveHandler<T, V>,
+		onReject?: Nullable<RejectHandler<V>>
 	): SyncPromise<V>;
 
 	then<V, R>(
-		onFulfill: i.ResolveHandler<T, V>,
-		onReject: i.RejectHandler<R>
+		onFulfill: ResolveHandler<T, V>,
+		onReject: RejectHandler<R>
 	): SyncPromise<V | R>;
 
 	then(
-		onFulfill: Nullable<i.ResolveHandler<any>>,
-		onReject: Nullable<i.RejectHandler<any>>
+		onFulfill: Nullable<ResolveHandler<any>>,
+		onReject: Nullable<RejectHandler<any>>
 	): SyncPromise<any> {
 		return new SyncPromise((resolve, reject) => {
 			const
@@ -250,7 +264,7 @@ export default class SyncPromise<T = unknown> implements PromiseLike<T> {
 				this.rejectHandlers.push(rejectWrapper);
 
 			} else {
-				(this.state === i.State.fulfilled ? resolveWrapper : rejectWrapper)(this.value);
+				(this.state === State.fulfilled ? resolveWrapper : rejectWrapper)(this.value);
 			}
 		});
 	}
@@ -259,9 +273,9 @@ export default class SyncPromise<T = unknown> implements PromiseLike<T> {
 	 * Attaches a callback for only the rejection of the promise
 	 * @param [onReject]
 	 */
-	catch(onReject?: Nullable<i.RejectHandler<T>>): SyncPromise<T>;
-	catch<R>(onReject: i.RejectHandler<R>): SyncPromise<R>;
-	catch(onReject?: i.RejectHandler<any>): SyncPromise<any> {
+	catch(onReject?: Nullable<RejectHandler<T>>): SyncPromise<T>;
+	catch<R>(onReject: RejectHandler<R>): SyncPromise<R>;
+	catch(onReject?: RejectHandler<any>): SyncPromise<any> {
 		return new SyncPromise((resolve, reject) => {
 			const
 				rejectWrapper = (v) => this.call(onReject || reject, [v], reject, resolve);
@@ -269,7 +283,7 @@ export default class SyncPromise<T = unknown> implements PromiseLike<T> {
 			if (this.isPending) {
 				this.rejectHandlers.push(rejectWrapper);
 
-			} else if (this.state === i.State.rejected) {
+			} else if (this.state === State.rejected) {
 				rejectWrapper(this.value);
 			}
 		});
@@ -281,7 +295,7 @@ export default class SyncPromise<T = unknown> implements PromiseLike<T> {
 	 *
 	 * @param [cb]
 	 */
-	finally(cb?: Nullable<i.FinallyHandler>): SyncPromise<T> {
+	finally(cb?: Nullable<FinallyHandler>): SyncPromise<T> {
 		return new SyncPromise((resolve, reject) => {
 			if (this.isPending) {
 				if (cb) {
@@ -292,7 +306,7 @@ export default class SyncPromise<T = unknown> implements PromiseLike<T> {
 				this.rejectHandlers.push(reject);
 
 			} else {
-				(this.state === i.State.fulfilled ? resolve : reject)(this.value);
+				(this.state === State.fulfilled ? resolve : reject)(this.value);
 
 				if (cb) {
 					cb();
@@ -312,7 +326,7 @@ export default class SyncPromise<T = unknown> implements PromiseLike<T> {
 	protected call<A = unknown, V = unknown>(
 		fn: Nullable<Function>,
 		args: A[] = [],
-		onError?: i.ConstrRejectHandler,
+		onError?: ConstrRejectHandler,
 		onValue?: (value: V) => void
 	): void {
 		const

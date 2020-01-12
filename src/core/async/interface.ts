@@ -220,7 +220,7 @@ export interface AsyncRequestOptions extends AsyncOptions {
 	destructor?: string;
 }
 
-export interface AsyncCreateIdleOptions<CTX extends object = Async> extends AsyncCbOptions<CTX> {
+export interface AsyncRequestIdleCallbackOptions<CTX extends object = Async> extends AsyncCbOptions<CTX> {
 	/**
 	 * Timeout value for the native requestIdleCallback function
 	 */

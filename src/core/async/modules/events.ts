@@ -7,16 +7,30 @@
  */
 
 import SyncPromise from 'core/promise/sync';
-
-import * as i from 'core/async/interface';
 import Super from 'core/async/modules/timers';
+
+import {
+
+	AsyncOnOptions,
+	AsyncOnceOptions,
+	AsyncPromisifyOnceOptions,
+
+	EventId,
+	ClearOptionsId,
+
+	ProxyCb,
+	EventLike,
+	EventEmitterLikeP
+
+} from 'core/async/interface';
+
 export * from 'core/async/modules/timers';
 
 /**
  * Returns true if the specified value is looks like an event object
  * @param value
  */
-export function isEvent(value: unknown): value is i.EventLike {
+export function isEvent(value: unknown): value is EventLike {
 	return Object.isObject(value) && Object.isString((<any>value).event);
 }
 
@@ -31,11 +45,11 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * @param [args] - additional arguments for the emitter
 	 */
 	on<E = unknown, R = unknown>(
-		emitter: i.EventEmitterLikeP,
+		emitter: EventEmitterLikeP,
 		events: CanArray<string>,
-		handler: i.ProxyCb<E, R, CTX>,
+		handler: ProxyCb<E, R, CTX>,
 		...args: unknown[]
-	): Nullable<i.EventId>;
+	): Nullable<EventId>;
 
 	/**
 	 * Wraps an event from the specified event emitter.
@@ -48,22 +62,22 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * @param [args] - additional arguments for the emitter
 	 */
 	on<E = unknown, R = unknown>(
-		emitter: i.EventEmitterLikeP,
+		emitter: EventEmitterLikeP,
 		events: CanArray<string>,
-		handler: i.ProxyCb<E, R, CTX>,
-		opts: i.AsyncOnOptions<CTX>,
+		handler: ProxyCb<E, R, CTX>,
+		opts: AsyncOnOptions<CTX>,
 		...args: unknown[]
-	): Nullable<i.EventId>;
+	): Nullable<EventId>;
 
 	on<E, R>(
-		emitter: i.EventEmitterLikeP,
+		emitter: EventEmitterLikeP,
 		events: CanArray<string>,
-		handler: i.ProxyCb<E, R, CTX>,
-		opts?: i.AsyncOnOptions<CTX> | unknown[],
+		handler: ProxyCb<E, R, CTX>,
+		opts?: AsyncOnOptions<CTX> | unknown[],
 		...args: unknown[]
-	): Nullable<i.EventId> {
+	): Nullable<EventId> {
 		let
-			p: i.AsyncOnOptions<CTX>;
+			p: AsyncOnOptions<CTX>;
 
 		if (opts !== undefined && !Object.isObject(opts)) {
 			args.unshift(opts);
@@ -158,11 +172,11 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * @param [args] - additional arguments for the emitter
 	 */
 	once<E = unknown, R = unknown>(
-		emitter: i.EventEmitterLikeP,
+		emitter: EventEmitterLikeP,
 		events: CanArray<string>,
-		handler: i.ProxyCb<E, R, CTX>,
+		handler: ProxyCb<E, R, CTX>,
 		...args: unknown[]
-	): Nullable<i.EventId>;
+	): Nullable<EventId>;
 
 	/**
 	 * Wraps an event from the specified event emitter.
@@ -176,22 +190,22 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * @param [args] - additional arguments for the emitter
 	 */
 	once<E = unknown, R = unknown>(
-		emitter: i.EventEmitterLikeP,
+		emitter: EventEmitterLikeP,
 		events: CanArray<string>,
-		handler: i.ProxyCb<E, R, CTX>,
-		opts: i.AsyncOnceOptions<CTX>,
+		handler: ProxyCb<E, R, CTX>,
+		opts: AsyncOnceOptions<CTX>,
 		...args: unknown[]
-	): Nullable<i.EventId>;
+	): Nullable<EventId>;
 
 	once<E, R>(
-		emitter: i.EventEmitterLikeP,
+		emitter: EventEmitterLikeP,
 		events: CanArray<string>,
-		handler: i.ProxyCb<E, R, CTX>,
-		opts?: i.AsyncOnceOptions<CTX> | unknown[],
+		handler: ProxyCb<E, R, CTX>,
+		opts?: AsyncOnceOptions<CTX> | unknown[],
 		...args: unknown[]
-	): Nullable<i.EventId> {
+	): Nullable<EventId> {
 		let
-			p: i.AsyncOnceOptions<CTX>;
+			p: AsyncOnceOptions<CTX>;
 
 		if (opts !== undefined && !Object.isObject(opts)) {
 			args.unshift(opts);
@@ -214,9 +228,9 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * @param [args] - additional arguments for the emitter
 	 */
 	promisifyOnce<R = unknown, E = unknown>(
-		emitter: i.EventEmitterLikeP,
+		emitter: EventEmitterLikeP,
 		events: CanArray<string>,
-		opts: i.AsyncPromisifyOnceOptions<E, R, CTX>,
+		opts: AsyncPromisifyOnceOptions<E, R, CTX>,
 		...args: unknown[]
 	): SyncPromise<R>;
 
@@ -229,19 +243,19 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * @param [args] - additional arguments for the emitter
 	 */
 	promisifyOnce<R = unknown>(
-		emitter: i.EventEmitterLikeP,
+		emitter: EventEmitterLikeP,
 		events: CanArray<string>,
 		...args: unknown[]
 	): SyncPromise<R>;
 
 	promisifyOnce<R, E>(
-		emitter: i.EventEmitterLikeP,
+		emitter: EventEmitterLikeP,
 		events: CanArray<string>,
-		opts?: i.AsyncPromisifyOnceOptions<E, R, CTX> | unknown[],
+		opts?: AsyncPromisifyOnceOptions<E, R, CTX> | unknown[],
 		...args: unknown[]
 	): SyncPromise<R> {
 		let
-			p: i.AsyncPromisifyOnceOptions<E, R, CTX>;
+			p: AsyncPromisifyOnceOptions<E, R, CTX>;
 
 		if (opts !== undefined && !Object.isObject(opts)) {
 			args.unshift(opts);
@@ -275,14 +289,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * @alias
 	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
-	off(id?: i.EventId): this;
+	off(id?: EventId): this;
 
 	/**
 	 * Removes the specified event listener or a group of listeners
 	 * @param opts - options for the operation
 	 */
-	off(opts: i.ClearOptionsId<i.EventId>): this;
-	off(task?: i.EventId | i.ClearOptionsId<i.EventId>): this {
+	off(opts: ClearOptionsId<EventId>): this;
+	off(task?: EventId | ClearOptionsId<EventId>): this {
 		return this.clearEventListener(task);
 	}
 
@@ -290,17 +304,17 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Removes the specified event listener
 	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
-	clearEventListener(id?: i.EventId): this;
+	clearEventListener(id?: EventId): this;
 
 	/**
 	 * Removes the specified event listener or a group of listeners
 	 * @param opts - options for the operation
 	 */
-	clearEventListener(opts: i.ClearOptionsId<i.EventId>): this;
-	clearEventListener(task?: i.EventId | i.ClearOptionsId<i.EventId>): this {
+	clearEventListener(opts: ClearOptionsId<EventId>): this;
+	clearEventListener(task?: EventId | ClearOptionsId<EventId>): this {
 		if (Object.isArray(task)) {
 			for (let i = 0; i < task.length; i++) {
-				this.clearEventListener(<i.EventId>task[i]);
+				this.clearEventListener(<EventId>task[i]);
 			}
 
 			return this;
@@ -313,14 +327,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Mutes the specified event listener
 	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
-	muteEventListener(id?: i.EventId): this;
+	muteEventListener(id?: EventId): this;
 
 	/**
 	 * Mutes the specified event listener or a group of listeners
 	 * @param opts - options for the operation
 	 */
-	muteEventListener(opts: i.ClearOptionsId<i.EventId>): this;
-	muteEventListener(task?: i.EventId | i.ClearOptionsId<i.EventId>): this {
+	muteEventListener(opts: ClearOptionsId<EventId>): this;
+	muteEventListener(task?: EventId | ClearOptionsId<EventId>): this {
 		return this.markEvent('muted', task);
 	}
 
@@ -328,14 +342,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Unmutes the specified event listener
 	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
-	unmuteEventListener(id?: i.EventId): this;
+	unmuteEventListener(id?: EventId): this;
 
 	/**
 	 * Unmutes the specified event listener or a group of listeners
 	 * @param opts - options for the operation
 	 */
-	unmuteEventListener(opts: i.ClearOptionsId<i.EventId>): this;
-	unmuteEventListener(task?: i.EventId | i.ClearOptionsId<i.EventId>): this {
+	unmuteEventListener(opts: ClearOptionsId<EventId>): this;
+	unmuteEventListener(task?: EventId | ClearOptionsId<EventId>): this {
 		return this.markEvent('!muted', task);
 	}
 
@@ -343,14 +357,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Suspends the specified event listener
 	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
-	suspendEventListener(id?: i.EventId): this;
+	suspendEventListener(id?: EventId): this;
 
 	/**
 	 * Suspends the specified event listener or a group of listeners
 	 * @param opts - options for the operation
 	 */
-	suspendEventListener(opts: i.ClearOptionsId<i.EventId>): this;
-	suspendEventListener(task?: i.EventId | i.ClearOptionsId<i.EventId>): this {
+	suspendEventListener(opts: ClearOptionsId<EventId>): this;
+	suspendEventListener(task?: EventId | ClearOptionsId<EventId>): this {
 		return this.markEvent('paused', task);
 	}
 
@@ -358,14 +372,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Unsuspends the specified event listener
 	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
-	unsuspendEventListener(id?: i.EventId): this;
+	unsuspendEventListener(id?: EventId): this;
 
 	/**
 	 * Unsuspends the specified event listener or a group of listeners
 	 * @param opts - options for the operation
 	 */
-	unsuspendEventListener(opts: i.ClearOptionsId<i.EventId>): this;
-	unsuspendEventListener(p: i.EventId | i.ClearOptionsId<i.EventId>): this {
+	unsuspendEventListener(opts: ClearOptionsId<EventId>): this;
+	unsuspendEventListener(p: EventId | ClearOptionsId<EventId>): this {
 		return this.markEvent('!paused', p);
 	}
 
@@ -373,7 +387,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Removes an event handler from the specified emitter
 	 * @param event - event object
 	 */
-	eventListenerDestructor(event: i.EventLike): void {
+	eventListenerDestructor(event: EventLike): void {
 		const
 			e = event.emitter,
 			fn = Object.isFunction(e) ? e : e.removeEventListener || e.removeListener || e.off;
@@ -392,7 +406,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * @param field
 	 * @param [id] - operation id (if not specified, the operation will be extended for all promise namespaces)
 	 */
-	protected markEvent(field: string, id?: i.EventId): this;
+	protected markEvent(field: string, id?: EventId): this;
 
 	/**
 	 * Marks an event task or a group of tasks by the specified label
@@ -400,11 +414,11 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * @param field
 	 * @param opts - additional options
 	 */
-	protected markEvent(field: string, opts: i.ClearOptionsId<i.EventId>): this;
-	protected markEvent(field: string, task: i.EventId | i.ClearOptionsId<i.EventId>): this {
+	protected markEvent(field: string, opts: ClearOptionsId<EventId>): this;
+	protected markEvent(field: string, task: EventId | ClearOptionsId<EventId>): this {
 		if (Object.isArray(task)) {
 			for (let i = 0; i < task.length; i++) {
-				this.markEvent(field, <i.EventId>task[i]);
+				this.markEvent(field, <EventId>task[i]);
 			}
 
 			return this;

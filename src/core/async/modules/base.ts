@@ -8,7 +8,17 @@
 
 import { deprecate, deprecated } from 'core/meta/deprecation';
 import { namespaces, NamespacesDictionary } from 'core/async/const';
-import * as i from 'core/async/interface';
+import {
+
+	AsyncOptions,
+	FullAsyncOptions,
+	ClearOptions,
+	FullClearOptions,
+	ClearProxyOptions,
+	GlobalCache,
+	AsyncCb
+
+} from 'core/async/interface';
 
 export * from 'core/async/interface';
 export * from 'core/async/const';
@@ -26,7 +36,7 @@ export const
  * Returns true if the specified value is looks like an instance of AsyncOptions
  * @param value
  */
-export function isAsyncOptions<T = i.AsyncOptions>(value: unknown): value is T {
+export function isAsyncOptions<T = AsyncOptions>(value: unknown): value is T {
 	return Object.isObject(value);
 }
 
@@ -39,7 +49,7 @@ export const isParams = deprecate(
 		renamedTo: 'isAsyncOptions'
 	},
 
-	function isParams<T = i.AsyncOptions>(value: unknown): value is T {
+	function isParams<T = AsyncOptions>(value: unknown): value is T {
 		return isAsyncOptions(value);
 	}
 );
@@ -65,7 +75,7 @@ export default class Async<CTX extends object = Async<any>> {
 	/**
 	 * Cache for async operations
 	 */
-	protected readonly cache: Dictionary<i.GlobalCache> = Object.createDict();
+	protected readonly cache: Dictionary<GlobalCache> = Object.createDict();
 
 	/**
 	 * Cache for initialized workers
@@ -110,7 +120,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 * Clears all async tasks
 	 * @param [opts] - additional options for the operation
 	 */
-	clearAll(opts?: i.ClearOptions): this {
+	clearAll(opts?: ClearOptions): this {
 		for (let o = this.namespaces, keys = Object.keys(o), i = 0; i < keys.length; i++) {
 			const
 				alias = `clear-${o[keys[i]]}`.camelize(false);
@@ -130,7 +140,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 * Mutes all async tasks
 	 * @param [opts] - additional options for the operation
 	 */
-	muteAll(opts?: i.ClearOptions): this {
+	muteAll(opts?: ClearOptions): this {
 		for (let o = this.namespaces, keys = Object.keys(o), i = 0; i < keys.length; i++) {
 			const
 				alias = `mute-${o[keys[i]]}`.camelize(false);
@@ -147,7 +157,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 * Unmutes all async tasks
 	 * @param [opts] - additional options for the operation
 	 */
-	unmuteAll(opts?: i.ClearOptions): this {
+	unmuteAll(opts?: ClearOptions): this {
 		for (let o = this.namespaces, keys = Object.keys(o), i = 0; i < keys.length; i++) {
 			const
 				alias = `unmute-${o[keys[i]]}`.camelize(false);
@@ -164,7 +174,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 * Suspends all async tasks
 	 * @param [opts] - additional options for the operation
 	 */
-	suspendAll(opts?: i.ClearOptions): this {
+	suspendAll(opts?: ClearOptions): this {
 		for (let o = this.namespaces, keys = Object.keys(o), i = 0; i < keys.length; i++) {
 			const
 				alias = `suspend-${o[keys[i]]}`.camelize(false);
@@ -181,7 +191,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 * Unsuspends all async tasks
 	 * @param [opts] - additional options for the operation
 	 */
-	unsuspendAll(opts?: i.ClearOptions): this {
+	unsuspendAll(opts?: ClearOptions): this {
 		for (let o = this.namespaces, keys = Object.keys(o), i = 0; i < keys.length; i++) {
 			const
 				alias = `unsuspend-${o[keys[i]]}`.camelize(false);
@@ -200,7 +210,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @param name
 	 * @param [promise] - if true, the the namespace will be marked as promisified
 	 */
-	protected getCache(name: string, promise?: boolean): i.GlobalCache {
+	protected getCache(name: string, promise?: boolean): GlobalCache {
 		name = promise
 			? `${name}Promise` : name;
 
@@ -219,7 +229,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @see Async.prototype.getCache
 	 */
 	@deprecated({renamedTo: 'getCache'})
-	protected initCache(name: string, promise?: boolean): i.GlobalCache {
+	protected initCache(name: string, promise?: boolean): GlobalCache {
 		return this.getCache(name, promise);
 	}
 
@@ -227,7 +237,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 * Registers the specified async task
 	 * @param task
 	 */
-	protected registerTask<R = unknown, C extends object = CTX>(task: i.FullAsyncOptions<C>): R | null {
+	protected registerTask<R = unknown, C extends object = CTX>(task: FullAsyncOptions<C>): R | null {
 		if (this.locked) {
 			return null;
 		}
@@ -257,7 +267,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 		if (labelCache && task.join === true) {
 			const
-				mergeHandlers = (<i.AsyncCb<C>[]>[]).concat(task.onMerge || []),
+				mergeHandlers = (<AsyncCb<C>[]>[]).concat(task.onMerge || []),
 				link = links.get(labelCache);
 
 			for (let i = 0; i < mergeHandlers.length; i++) {
@@ -365,7 +375,7 @@ export default class Async<CTX extends object = Async<any>> {
 			queue: [],
 			clearFn: task.clearFn,
 			onComplete: [],
-			onClear: (<i.AsyncCb<C>[]>[]).concat(task.onClear || [])
+			onClear: (<AsyncCb<C>[]>[]).concat(task.onClear || [])
 		};
 
 		if (labelCache) {
@@ -386,7 +396,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @see Async.prototype.registerTask
 	 */
 	@deprecated({renamedTo: 'registerTask'})
-	protected setAsync(task: i.FullAsyncOptions<CTX>): object | null {
+	protected setAsync(task: FullAsyncOptions<CTX>): object | null {
 		return this.registerTask(task);
 	}
 
@@ -396,9 +406,9 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @param task - operation options or a task link
 	 * @param [name] - namespace of the operation
 	 */
-	protected cancelTask(task: CanUndef<i.FullClearOptions | any>, name?: string): this {
+	protected cancelTask(task: CanUndef<FullClearOptions | any>, name?: string): this {
 		let
-			p: i.FullClearOptions;
+			p: FullClearOptions;
 
 		if (name) {
 			if (task === undefined) {
@@ -515,7 +525,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @see Async.prototype.cancelTask
 	 */
 	@deprecated({renamedTo: 'cancelTask'})
-	protected clearAsync(opts: CanUndef<i.FullClearOptions | any>, name?: string): this {
+	protected clearAsync(opts: CanUndef<FullClearOptions | any>, name?: string): this {
 		return this.cancelTask(opts, name);
 	}
 
@@ -523,7 +533,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 * Cancels all async tasks from the specified namespace
 	 * @param opts - operation options
 	 */
-	protected cancelAllTasks(opts: i.FullClearOptions): this {
+	protected cancelAllTasks(opts: FullClearOptions): this {
 		this.cancelTask(opts);
 
 		const
@@ -547,7 +557,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @see Async.prototype.cancelAllTasks
 	 */
 	@deprecated({renamedTo: 'cancelAllTasks'})
-	protected clearAllAsync(opts: CanUndef<i.ClearProxyOptions | any>): this {
+	protected clearAllAsync(opts: CanUndef<ClearProxyOptions | any>): this {
 		return this.cancelAllTasks(opts);
 	}
 
@@ -558,9 +568,9 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @param task - operation options or a link to the task
 	 * @param [name] - namespace of the operation
 	 */
-	protected markTask(label: string, task: CanUndef<i.ClearProxyOptions | any>, name?: string): this {
+	protected markTask(label: string, task: CanUndef<ClearProxyOptions | any>, name?: string): this {
 		let
-			p: i.FullClearOptions;
+			p: FullClearOptions;
 
 		if (name) {
 			if (task === undefined) {
@@ -660,7 +670,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @see Async.prototype.markTask
 	 */
 	@deprecated({renamedTo: 'markTask'})
-	protected markAsync(label: string, opts: CanUndef<i.ClearProxyOptions | any>, name?: string): this {
+	protected markAsync(label: string, opts: CanUndef<ClearProxyOptions | any>, name?: string): this {
 		return this.markTask(label, opts, name);
 	}
 
@@ -670,7 +680,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @param label
 	 * @param opts - operation options
 	 */
-	protected markAllTasks(label: string, opts: i.FullClearOptions): this {
+	protected markAllTasks(label: string, opts: FullClearOptions): this {
 		this.markTask(label, opts);
 
 		const
@@ -694,7 +704,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @see Async.prototype.markAllTasks
 	 */
 	@deprecated({renamedTo: 'markAllTasks'})
-	protected markAllAsync(label: string, opts: i.FullClearOptions): this {
+	protected markAllAsync(label: string, opts: FullClearOptions): this {
 		return this.markAllTasks(label, opts);
 	}
 }
