@@ -45,7 +45,7 @@ export interface Config {
 		checkInterval?: number;
 
 		/**
-		 * Value that represents how long the last cache check is relevant
+		 * Value that represents how long last cache check is relevant
 		 * (in milliseconds)
 		 */
 		checkTimeout?: number;
@@ -68,7 +68,7 @@ export interface Config {
 		retryCount?: number;
 
 		/**
-		 * Value in milliseconds after which there will be a synchronization of the last online date to the current date
+		 * Value in milliseconds after which there will be a synchronization of last online date to the current date
 		 */
 		persistence?: boolean;
 	}
