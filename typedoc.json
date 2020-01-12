@@ -3,7 +3,7 @@
   "tsconfig": "./tsconfig.json",
   "mode": "modules",
   "src": ["./src", "./index.d.ts"],
-  "out": "./doc",
+  "out": "./docs",
   "readme": "./README.md",
   "hideGenerator": true,
   "ignoreCompilerErrors": false,
