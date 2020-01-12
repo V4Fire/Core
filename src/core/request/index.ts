@@ -6,58 +6,92 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import $C = require('collection.js');
+/**
+ * [[include:core/request/README.md]]
+ * @packageDocumentation
+ */
+
 import Then from 'core/then';
 
 import log from 'core/log';
-
-import request from 'core/request/engines';
+import requestEngine from 'core/request/engines';
 
 import Response from 'core/request/response';
 import RequestError from 'core/request/error';
 import RequestContext from 'core/request/context';
 
 import { isOnline } from 'core/net';
-import { getStorageKey } from 'core/request/utils';
+import { getStorageKey, getResponseTypeFromURL } from 'core/request/utils';
 import { concatUrls } from 'core/url';
 
-import { storage, globalOpts, defaultRequestOpts, mimeTypes } from 'core/request/const';
-import { RequestFunctionResponse, RequestResponse, CreateRequestOptions, ResolverResult } from 'core/request/interface';
+import { storage, globalOpts, defaultRequestOpts } from 'core/request/const';
+import {
+
+	CreateRequestOptions,
+	RequestResolver,
+	RequestResponse,
+	RequestFunctionResponse
+
+} from 'core/request/interface';
 
 export * from 'core/request/interface';
 export * from 'core/request/utils';
 
-export { globalOpts, cache, pendingCache, dropCache } from 'core/request/const';
+export { dropCache } from 'core/request/utils';
+export { globalOpts, cache, pendingCache } from 'core/request/const';
 export { default as RequestError } from 'core/request/error';
 export { default as Response } from 'core/request/response';
 
 /**
- * Creates a new request with the specified options
+ * Creates a new remote request with the specified options
  *
- * @param path
- * @param opts
+ * @param path - request path URL
+ * @param opts - request options
  */
-export default function create<T = unknown>(path: string, opts?: CreateRequestOptions<T>): RequestResponse<T>;
+export default function request<T = unknown>(path: string, opts?: CreateRequestOptions<T>): RequestResponse<T>;
 
 /**
- * Creates a request wrapper by the specified options
- * @param opts
+ * Returns a wrapped request constructor with the specified options
+ *
+ * @param opts - request options
+ * @example
+ * ```js
+ * request({okStatuses: 200})({query: {bar: true}})('bla/get')
+ * ```
  */
-export default function create<T = unknown>(opts: CreateRequestOptions<T>): typeof create;
+export default function request<T = unknown>(opts: CreateRequestOptions<T>): typeof request;
 
 /**
- * @param path
- * @param resolver - request resolve function
- * @param opts
+ * Returns a function for creating a new remote request with the specified options.
+ * This overload is helpful for creating factories for requests.
+ *
+ * @param path - request path URL
+ * @param resolver - function for request resolving:
+ *   this function takes a request URL, request environment and arguments from invoking of the result function and
+ *   can returns a modification chunk for the request URL or fully replace it
+ *
+ * @param opts - request options
+ *
+ * @example
+ * ```js
+ * // Modifying of the current URL
+ * request('https://foo.com', (url, env, ...args) => args.join('/'))('bla', 'baz') // https://foo.com/bla/baz
+ *
+ * // Replacing of the current URL
+ * request('https://foo.com', () => ['https://bla.com', 'bla', 'baz'])() // https://bla.com/bla/baz
+ * ```
  */
-export default function create<T = unknown, A extends unknown[] = unknown[]>(
+export default function request<T = unknown, A extends unknown[] = unknown[]>(
 	path: string,
-	resolver: (url: string, opts: CreateRequestOptions<T>, ...args: A) => ResolverResult,
+	resolver: RequestResolver<T, A>,
 	opts?: CreateRequestOptions<T>
 ): RequestFunctionResponse<T, A extends (infer V)[] ? V[] : unknown[]>;
 
-export default function create<T = unknown>(path: any, ...args: any[]): unknown {
-	const merge = (...args: unknown[]) => Object.mixin({
+export default function request<T = unknown>(
+	path: string | CreateRequestOptions<T>,
+	...args: any[]
+): unknown {
+	const merge = <T>(...args: unknown[]) => Object.mixin<T>({
 		deep: true,
 		concatArray: true,
 		concatFn: (a: unknown[], b: unknown[]) => a.union(b),
@@ -70,14 +104,14 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 
 		return (path, resolver, opts) => {
 			if (Object.isObject(path)) {
-				return create(merge(defOpts, path));
+				return request(merge<CreateRequestOptions<T>>(defOpts, path));
 			}
 
 			if (Object.isFunction(resolver)) {
-				return create(path, resolver, merge(defOpts, opts));
+				return request(path, resolver, merge<CreateRequestOptions<T>>(defOpts, opts));
 			}
 
-			return create(path, merge(defOpts, resolver));
+			return request(path, merge<CreateRequestOptions<T>>(defOpts, resolver));
 		};
 	}
 
@@ -94,17 +128,23 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 	opts = opts || {};
 
 	const
-		baseCtx: RequestContext<T> = new RequestContext<T>(opts);
+		baseCtx: RequestContext<T> = new RequestContext<T>(merge(defaultRequestOpts, opts));
 
 	const run = (...args) => {
 		const
-			p: CreateRequestOptions<T> = merge(defaultRequestOpts, baseCtx.params),
+			p = merge<CreateRequestOptions<T>>(baseCtx.params),
 			ctx = Object.create(baseCtx);
 
-		const wrapProcessor = (namespace) => (fn, key) => (data, ...args) => {
+		const middlewareParams = {
+			opts: p,
+			ctx,
+			globalOpts
+		};
+
+		const wrapProcessor = (namespace, fn, key) => (data, ...args) => {
 			const
 				time = Date.now(),
-				res = fn(data, {opts: p, ctx, globalOpts}, ...args);
+				res = fn(data, middlewareParams, ...args);
 
 			const
 				loggingContext = `request:${namespace}:${key}:${path}`,
@@ -121,11 +161,23 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 			return res;
 		};
 
+		const
+			encoders = <Function[]>[],
+			decoders = <Function[]>[];
+
+		Object.forEach(merge(ctx.encoders), (el, key) => {
+			encoders.push(wrapProcessor('encoders', el, key));
+		});
+
+		Object.forEach(merge(ctx.decoders), (el, key) => {
+			decoders.push(wrapProcessor('decoders', el, key));
+		});
+
 		Object.assign(ctx, {
 			// Merge request options
 			params: p,
-			encoders: $C(merge(ctx.encoders)).map(wrapProcessor('encoders')),
-			decoders: $C(merge(ctx.decoders)).map(wrapProcessor('decoders')),
+			encoders,
+			decoders,
 
 			// Bind middlewares to new context
 			saveCache: ctx.saveCache.bind(ctx),
@@ -135,35 +187,27 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 
 			// Wrap resolve function with .resolver
 			resolveURL(api?: Nullable<string>): string {
-				if (/^\w+:/.test(path)) {
-					const
-						dataURI = /^data:([^;]+);/.exec(path),
-						type = dataURI && dataURI[1];
+				const
+					reqPath = String(path),
+					type = getResponseTypeFromURL(reqPath);
 
-					if (type && !p.responseType) {
-						if (mimeTypes[type]) {
-							p.responseType = mimeTypes[type];
-
-						} else if (/^text(?:\/|$)/.test(type)) {
-							p.responseType = 'text';
-
-						} else {
-							p.responseType = 'arrayBuffer';
-						}
+				if (type) {
+					if (!p.responseType) {
+						p.responseType = type;
 					}
 
-					return path;
+					return reqPath;
 				}
 
 				let
-					url = concatUrls(api ? this.resolveAPI(api) : null, path);
+					url = concatUrls(api ? this.resolveAPI(api) : null, reqPath);
 
 				if (Object.isFunction(resolver)) {
 					const
-						res = resolver(url, p, ...args);
+						res = resolver(url, middlewareParams, ...args);
 
 					if (Object.isArray(res)) {
-						url = <string>res[0];
+						url = concatUrls(...res.map(String));
 
 					} else if (res) {
 						url = concatUrls(url, res);
@@ -174,26 +218,39 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 			}
 		});
 
-		const then = new Then(async (resolve, reject, onAbort) => {
+		const parent = new Then(async (resolve, reject, onAbort) => {
 			onAbort((err) => {
 				reject(err || new RequestError('abort'));
 			});
 
 			await new Promise((r) => {
-				setImmediate(r);
+				// tslint:disable-next-line:no-string-literal
+				globalThis['setImmediate'](r);
 			});
 
-			ctx.then = then;
-			ctx.isOnline = (await Then.resolve(isOnline(), then)).status;
+			ctx.parent = parent;
+			ctx.isOnline = (await Then.resolve(isOnline(), parent)).status;
 
-			const arr = await Then.all($C(p.middlewares).reduce((arr, fn) => {
-				arr.push(fn({opts: p, ctx, globalOpts}));
-				return arr;
-			}, [] as unknown[]), then);
+			const
+				tasks = <any[]>[];
 
-			const applyEncoders = (data) => $C(ctx.encoders)
-				.to(Then.resolve(data, then))
-				.reduce((res, fn, i) => res.then((obj) => fn(i ? obj : Object.fastClone(obj))));
+			Object.forEach(p.middlewares, (fn: Function) => {
+				tasks.push(fn(middlewareParams));
+			});
+
+			const
+				middlewareResults = await Then.all(tasks, parent);
+
+			const applyEncoders = (data) => {
+				let
+					res = Then.resolve(data, parent);
+
+				Object.forEach(ctx.encoders, (fn: Function, i) => {
+					res = res.then((obj) => fn(i ? obj : Object.fastClone(obj)));
+				});
+
+				return res;
+			};
 
 			if (ctx.withoutBody) {
 				p.query = await applyEncoders(p.query);
@@ -202,12 +259,25 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 				p.body = await applyEncoders(p.body);
 			}
 
-			if ($C(arr).some(Object.isFunction)) {
+			for (let i = 0; i < middlewareResults.length; i++) {
+				if (!Object.isFunction(middlewareResults[i])) {
+					continue;
+				}
+
 				resolve((() => {
 					const
-						res = $C(arr).filter(Object.isFunction).map((fn) => (<Function>fn)());
+						res = <any[]>[];
 
-					if (res.length <= 1) {
+					for (let j = i; j < middlewareResults.length; j++) {
+						const
+							el = middlewareResults[j];
+
+						if (Object.isFunction(el)) {
+							res.push(el());
+						}
+					}
+
+					if (res.length === 1) {
 						return res[0];
 					}
 
@@ -232,7 +302,7 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 						const
 							res = await ctx.pendingCache.get(cacheKey);
 
-						if (res && res.response instanceof Response) {
+						if (res?.response instanceof Response) {
 							resolve(res);
 							return;
 						}
@@ -251,6 +321,7 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 					!fromCache &&
 					p.offlineCache &&
 					!ctx.isOnline &&
+					storage &&
 					await (await storage).has(localCacheKey)
 				);
 			}
@@ -261,12 +332,13 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 
 			if (fromCache) {
 				cache = 'memory';
-				res = Then.immediate(() => ctx.cache.get(cacheKey), then)
+				res = Then.resolveAndCall(() => ctx.cache.get(cacheKey), parent)
 					.then(ctx.wrapAsResponse);
 
 			} else if (fromLocalStorage) {
 				cache = 'offline';
-				res = Then.immediate(() => storage.then((storage) => storage.get(localCacheKey)), then)
+				res = Then.resolveAndCall(() => storage!
+					.then((storage) => storage.get(localCacheKey)), parent)
 					.then(ctx.wrapAsResponse)
 					.then(ctx.saveCache);
 
@@ -292,11 +364,11 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 				const reqOpts = {
 					...p,
 					url,
-					parent: then,
+					parent,
 					decoder: ctx.decoders
 				};
 
-				res = request(reqOpts).then(success).then(ctx.saveCache);
+				res = requestEngine(reqOpts).then(success).then(ctx.saveCache);
 			}
 
 			res.then((response) => log(`response:${path}`, response.data, {
@@ -308,7 +380,7 @@ export default function create<T = unknown>(path: any, ...args: any[]): unknown 
 			resolve(ctx.wrapRequest(res));
 		});
 
-		return then;
+		return parent;
 	};
 
 	if (Object.isFunction(resolver)) {

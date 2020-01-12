@@ -6,10 +6,20 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/**
+ * [[include:core/log/README.md]]
+ * @packageDocumentation
+ */
+
 import extend from 'core/log/extensions';
 import log from 'core/log/curator';
 
 export * from 'core/log/interface';
 export * from 'core/log/config';
 
-export default extend(log);
+/**
+ * API for logging
+ * @defaultExport
+ */
+const logger = extend(log);
+export default logger;

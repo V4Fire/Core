@@ -20,7 +20,7 @@ module.exports = function (gulp = require('gulp')) {
 	};
 
 	const
-		{wrapGulp} = include('build/utils.gulp');
+		{wrapGulp} = include('build/wrap.gulp');
 
 	wrapGulp(gulp);
 	include('build/tsconfig.gulp')(gulp);

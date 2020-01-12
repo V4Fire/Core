@@ -13,7 +13,6 @@ require('dotenv').config();
 const
 	$C = require('collection.js'),
 	Sugar = require('sugar').extend(),
-	concatUrls = require('urlconcat').concat,
 	o = require('uniconf/options').option;
 
 const
@@ -61,14 +60,14 @@ class Config {
 	}
 
 	/**
-	 * Creates config object with the specified options
+	 * Creates a config object with the specified options and returns it
 	 *
 	 * @template T
 	 * @param {!Array<string>} dirs - list of init directories ([0] - dirname, [1+] - src fields)
 	 * @param {Object=} [envs] - map of environment variables
 	 * @param {(string|Object)=} [mod] - url for a config modifier or an object modifier (env configs)
 	 * @param {T} opts
-	 * @returns {C<T>}
+	 * @returns {!Object}
 	 */
 	createConfig({dirs, envs, mod}, opts) {
 		const
@@ -164,7 +163,7 @@ class Config {
 	}
 
 	/**
-	 * Returns src map for the specified init directory
+	 * Returns a map with paths for the specified init directory
 	 *
 	 * @param {string} dir - init directory (usually __dirname)
 	 * @returns {{root: string, src: string, pzlr: {blockDir: (string|undefined), serverDir: (string|undefined)}}}
@@ -203,11 +202,11 @@ module.exports = config.createConfig(
 			}
 		}),
 
-		lang: o('lang', {
+		locale: o('locale', {
 			env: true,
-			default: 'en',
+			default: 'en-US',
 			coerce(value) {
-				global['LANG'] = value;
+				global['LOCALE'] = value;
 				return value;
 			}
 		}),
@@ -224,6 +223,7 @@ module.exports = config.createConfig(
 		}),
 
 		apiURL() {
+			const concatUrls = require('urlconcat').concat;
 			return this.api.proxy ? concatUrls(this.api.pathname(), 'api') : this.api.url;
 		},
 
@@ -294,7 +294,7 @@ module.exports = config.createConfig(
 				vars: {
 					...this.envs,
 					appName: this.appName,
-					lang: this.lang,
+					locale: this.locale,
 					version: include('package.json').version,
 					buildVersion: this.build.id(),
 					isProd
@@ -310,9 +310,24 @@ module.exports = config.createConfig(
 		},
 
 		typescript() {
+			const
+				es = this.es(),
+				importHelpers = Boolean({ES3: true, ES5: true, ES6: true})[es];
+
 			return {
-				transpileOnly: true
+				transpileOnly: true,
+				compilerOptions: {
+					target: es,
+					importHelpers
+				}
 			};
+		},
+
+		es() {
+			return o('es', {
+				env: true,
+				default: 'ES5'
+			});
 		},
 
 		src: {

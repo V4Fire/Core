@@ -7,11 +7,12 @@
  */
 
 import Then from 'core/then';
+import Range from 'core/range';
 import Response from 'core/request/response';
 import RequestContext from 'core/request/context';
 import { StatusCodes } from 'core/status-codes';
 
-export type RequestMethods =
+export type RequestMethod =
 	'GET' |
 	'POST' |
 	'PUT' |
@@ -27,7 +28,7 @@ export type CacheStrategy =
 	'forever' |
 	'never';
 
-export type ResponseTypes =
+export type ResponseType =
 	'text' |
 	'json' |
 	'document' |
@@ -35,7 +36,7 @@ export type ResponseTypes =
 	'blob' |
 	'object';
 
-export type ResponseType =
+export type ResponseTypeValue =
 	string |
 	ArrayBuffer |
 	Document |
@@ -50,25 +51,31 @@ export type RequestBody =
 	FormData |
 	ArrayBuffer;
 
+export type JSONLikeValue =
+	string |
+	number |
+	boolean |
+	null |
+	unknown[] |
+	Dictionary;
+
 export type OkStatuses =
-	sugarjs.Range |
+	Range<number> |
 	StatusCodes |
 	StatusCodes[];
 
 export interface Encoder<I = unknown, O = unknown> {
-	(data: I, params: MiddlewareParams): O;
+	(data: I, params: MiddlewareOptions): O;
 }
 
 export type Encoders<T = unknown> =
-	Dictionary<Encoder<T>> |
 	Iterable<Encoder<T>>;
 
 export interface Decoder<I = unknown, O = unknown> {
-	(data: I, params: MiddlewareParams, response: Response): O;
+	(data: I, params: MiddlewareOptions, response: Response): O;
 }
 
 export type Decoders<T = unknown> =
-	Dictionary<Decoder<T>> |
 	Iterable<Decoder<T>>;
 
 export interface RequestResponseObject<T = unknown> {
@@ -85,11 +92,11 @@ export interface RequestFunctionResponse<T = unknown, A extends unknown[] = []> 
 
 export interface RequestOptions {
 	readonly url: string;
-	readonly method?: RequestMethods;
+	readonly method?: RequestMethod;
 	readonly timeout?: number;
 	readonly okStatuses?: OkStatuses;
 	readonly contentType?: string;
-	readonly responseType?: ResponseTypes;
+	readonly responseType?: ResponseType;
 	readonly decoder?: Decoder | Decoder[];
 	readonly headers?: Dictionary<CanArray<string>>;
 	readonly body?: RequestBody;
@@ -103,55 +110,254 @@ export type RequestQuery =
 	unknown[] |
 	string;
 
-export interface MiddlewareParams<T = unknown> {
+export interface MiddlewareOptions<T = unknown> {
 	ctx: RequestContext<T>;
 	opts: CreateRequestOptions<T>;
 	globalOpts: GlobalOptions;
 }
 
 export interface Middleware<T = unknown> {
-	(params: MiddlewareParams<T>): CanPromise<void | Function>;
+	(params: MiddlewareOptions<T>): CanPromise<void | Function>;
 }
 
 export type Middlewares<T = unknown> =
 	Dictionary<Middleware<T>> |
 	Iterable<Middleware<T>>;
 
+export type RequestAPIValue<T = string> = Nullable<T> | (() => Nullable<T>);
+
+/**
+ * Object with API parameters. If the API is specified it will be concatenated with
+ * a request path URL. It can be useful for creating request factories. In addition, you can provide a function as a
+ * key value, and it will be invoked.
+ *
+ * You can provide a direct URL for the API, such as `'https://google.com'`.
+ * Or you can provide a bunch of parameters for mapping on .api parameter from the application config.
+ * For example, if the config.api is equal to `'https://google.com'` and you provide parameters like
+ *
+ * ```
+ *   {
+ *     domain3: 'foo',
+ *     namespace: () => 'bar'
+ *   }
+ * ```
+ *
+ * than it builds a string is equal to `'https://foo.google.com/bar'.`
+ *
+ */
+export interface RequestAPI {
+	/**
+	 * Direct value an API URL
+	 *
+	 * @example
+	 * `'https://google.com'`
+	 */
+	url?: RequestAPIValue;
+
+	/**
+	 * API protocol
+	 *
+	 * @example
+	 * `'http'`
+	 * `'https'`
+	 */
+	protocol?: RequestAPIValue;
+
+	/**
+	 * Value for an API authorization part
+	 *
+	 * @example
+	 * `'login:password'`
+	 */
+	auth?: RequestAPIValue;
+
+	/**
+	 * Value for an API domain level 6 part
+	 */
+	domain6?: RequestAPIValue;
+
+	/**
+	 * Value for an API domain level 5 part
+	 */
+	domain5?: RequestAPIValue;
+
+	/**
+	 * Value for an API domain level 4 part
+	 */
+	domain4?: RequestAPIValue;
+
+	/**
+	 * Value for an API domain level 3 part
+	 */
+	domain3?: RequestAPIValue;
+
+	/**
+	 * Value for an API domain level 2 part
+	 */
+	domain2?: RequestAPIValue;
+
+	/**
+	 * Value for an API domain zone part
+	 */
+	zone?: RequestAPIValue;
+
+	/**
+	 * Value for an API api port
+	 */
+	port?: RequestAPIValue<string | number>;
+
+	/**
+	 * Value for an API namespace part: it follows after '/' character
+	 */
+	namespace?: RequestAPIValue;
+}
+export interface RequestResolver<T = unknown, ARGS extends unknown[] = unknown[]> {
+	(url: string, opts: MiddlewareOptions<T>, ...args: ARGS): ResolverResult;
+}
+
 export interface CreateRequestOptions<T = unknown> {
-	readonly method?: RequestMethods;
-	readonly cacheStrategy?: CacheStrategy;
+	/**
+	 * Request method type
+	 */
+	readonly method?: RequestMethod;
 
+	/**
+	 * Mime type of request data (if not specified, it will be casted dynamically)
+	 */
 	contentType?: string;
-	responseType?: ResponseTypes;
-	okStatuses?: OkStatuses;
-	externalRequest?: boolean;
 
+	/**
+	 * Type of the response data:
+	 * (if not specified, it will be casted dynamically from response headers):
+	 *
+	 * 1. `'text'` - result is interpreted as a simple string;
+	 * 1. `'json'` - result is interpreted as a JSON string;
+	 * 1. `'arrayBuffer'` - result is interpreted as an array buffer;
+	 * 1. `'blob'` - result is interpreted as a binary sequence;
+	 * 1. `'object'` - result is interpreted "as is" without any converting.
+	 */
+	responseType?: ResponseType;
+
+	/**
+	 * Request body
+	 */
 	body?: RequestBody;
+
+	/**
+	 * URL query parameters
+	 */
 	query?: RequestQuery;
-	meta?: Dictionary;
+
+	/**
+	 * Additional request headers
+	 */
 	headers?: Dictionary<CanArray<unknown>>;
 
-	important?: boolean;
+	/**
+	 * Enables providing of credentials for cross-domain requests
+	 */
 	credentials?: boolean;
 
+	/**
+	 * Map of API parameters.
+	 *
+	 * If the API is specified it will be concatenated with a request path URL. It can be useful for creating
+	 * request factories. In addition, you can provide a function as a key value, and it will be invoked.
+	 */
+	api?: RequestAPI;
+
+	/**
+	 * List of status codes (or a single code) with HTTP statuses which is ok for response, also can pass a range of codes
+	 * @default `new Range(200, 299)`
+	 */
+	okStatuses?: OkStatuses;
+
+	/**
+	 * Value in milliseconds for the request timeout
+	 */
 	timeout?: number;
+
+	/**
+	 * Type of caching for requests which supports it:
+	 *
+	 * 1. `'forever'` - caches all requests and stores their values forever within the active session or
+	 * until the cache expires (if .cacheTTL is specified);
+	 * 1. `'queue'` - caches all requests, but more frequent requests will push less frequent requests;
+	 * 1. `'never'` - never caches any requests.
+	 */
+	readonly cacheStrategy?: CacheStrategy;
+
+	/**
+	 * Unique cache identifier: it can be useful for creating request factories with isolated cache storages
+	 */
 	cacheId?: string | symbol;
+
+	/**
+	 * List of request methods that supports caching
+	 * @default `['GET']`
+	 */
+	cacheMethods?: RequestMethod[];
+
+	/**
+	 * Value in milliseconds that indicates how long a value of the request should keep in
+	 * the cache (by default, all request is stored within the active session without expiring)
+	 */
 	cacheTTL?: number;
-	offlineCacheTTL?: number;
+
+	/**
+	 * Enables support of offline caching
+	 * @default `false`
+	 */
 	offlineCache?: boolean;
 
-	api?: {
-		url?: Nullable<string>;
-		protocol?: Nullable<string>;
-		domain3?: Nullable<string>;
-		domain2?: Nullable<string>;
-		zone?: Nullable<string>;
-		namespace?: Nullable<string>;
-	};
+	/**
+	 * Value in milliseconds that indicates how long a value of the request should keep in the offline cache
+	 * @default `(1).day()`
+	 */
+	offlineCacheTTL?: number;
 
+	/**
+	 * Dictionary or an iterable value with middleware functions:
+	 * functions take an environment of request parameters and can modify theirs.
+	 *
+	 * Please notice, that the order of middlewares depends of a structure which you use.
+	 * Also, if at least one of middlewares returns a function, than the result of invoking this function
+	 * will be returned as the request result. It can be helpful for organizing mocks of data and
+	 * other similar cases when you don't want to execute a real request.
+	 */
 	middlewares?: Middlewares<T>;
+
+	/**
+	 * Function (or a sequence of functions) that takes response data of the current request
+	 * and returns a new data for responsing. If you provides a sequence of functions, then the first function
+	 * will provide a result to the next function from te sequence and etc.
+	 */
 	encoder?: Encoder | Encoders;
+
+	/**
+	 * Function (or a sequence of functions) that takes response data of the current request
+	 * and returns a new data for responsing. If you provides a sequence of functions, then the first function
+	 * will provide a result to the next function from te sequence and etc.
+	 */
 	decoder?: Decoder | Decoders;
+
+	/**
+	 * Special flag which indicates that request will be invoked not directly by a browser,
+	 * but some "external" application, such as a native application in a mobile (it's important for offline requests
+	 */
+	externalRequest?: boolean;
+
+	/**
+	 * Meta flag which indicates that the request is important: usually it used with middlewares
+	 * for indicating that the request need execute as soon as possible
+	 */
+	important?: boolean;
+
+	/**
+	 * Dictionary with some extra parameters for the request: usually it used with middlewares for
+	 * providing domain specific information
+	 */
+	meta?: Dictionary;
 }
 
 export type ResolverResult =
@@ -166,7 +372,7 @@ export interface ResponseHeaders {
 export interface ResponseOptions {
 	parent?: Then;
 	important?: boolean;
-	responseType?: ResponseTypes;
+	responseType?: ResponseType;
 	okStatuses?: OkStatuses;
 	status?: StatusCodes;
 	headers?: string | Dictionary<string>;

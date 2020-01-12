@@ -6,11 +6,11 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import $C = require('collection.js');
-import { CreateRequestOptions } from 'core/request/interface';
+import { cache, mimeTypes } from 'core/request/const';
+import { CreateRequestOptions, ResponseType } from 'core/request/interface';
 
 /**
- * Returns a string key for saving data in a storage
+ * Takes the cache key for data and returns a new key for saving the data in a storage
  * @param key
  */
 export function getStorageKey(key: string): string {
@@ -18,34 +18,79 @@ export function getStorageKey(key: string): string {
 }
 
 /**
- * Generates a cache string by the specified parameters and returns it
+ * Generates a string cache key for specified parameters and returns it
  *
- * @param url
- * @param [params]
+ * @param url - request url
+ * @param [params] - request parameters
  */
-export function getRequestKey(url: string, params?: CreateRequestOptions): string {
+export function getRequestKey<T>(url: string, params?: CreateRequestOptions<T>): string {
 	const
-		p = <NonNullable<typeof params>>(params || {}),
+		p = params || {},
 		plainHeaders = <string[][]>[];
 
+	let
+		bodyKey = '';
+
 	if (params) {
-		$C(normalizeHeaders(p.headers))
-			.to(plainHeaders)
-			.reduce((res, value, name) => (res.push([name, String(value)]), res))
-			.sort(([name1], [name2]) => {
-				if (name1 < name2) {
-					return -1;
-				}
+		for (let o = normalizeHeaders(p.headers), keys = Object.keys(o), i = 0; i < keys.length; i++) {
+			const name = keys[i];
+			plainHeaders.push([name, String(o[name])]);
+		}
 
-				if (name1 > name2) {
-					return 1;
-				}
+		plainHeaders.sort(([name1], [name2]) => {
+			if (name1 < name2) {
+				return -1;
+			}
 
-				return 0;
-			});
+			if (name1 > name2) {
+				return 1;
+			}
+
+			return 0;
+		});
+
+		const
+			{body} = params;
+
+		if (body != null) {
+			if (Object.isString(body)) {
+				bodyKey = body;
+
+			} else if (Object.isObject(body)) {
+				bodyKey = JSON.stringify(body);
+
+			} else if (body instanceof FormData) {
+				body.forEach((el, key) => {
+					if (el == null) {
+						el = String(el);
+					}
+
+					if (!Object.isString(el)) {
+						try {
+							// @ts-ignore
+							el = el.toString('base64');
+
+						} catch {
+							el = el.toString();
+						}
+					}
+
+					bodyKey += `${key}=${el}`;
+				});
+
+			} else {
+				try {
+					// @ts-ignore
+					bodyKey = body.toString('base64');
+
+				} catch {
+					bodyKey = body.toString();
+				}
+			}
+		}
 	}
 
-	return JSON.stringify([url, p.method, plainHeaders, p.timeout]);
+	return JSON.stringify([url, p.method, plainHeaders, bodyKey, p.timeout]);
 }
 
 const
@@ -65,7 +110,7 @@ export function applyQueryForStr(str: string, query?: Dictionary, rgxp: RegExp =
 	}
 
 	return str.replace(rgxp, (str, param, adv = '') => {
-		if (query[param]) {
+		if (query[param] != null) {
 			const val = [query[param], delete query[param]][0];
 			return (str[0] === '/' ? '/' : '') + val + (Object.isNumber(adv) ? '' : adv);
 		}
@@ -78,7 +123,7 @@ export function applyQueryForStr(str: string, query?: Dictionary, rgxp: RegExp =
  * Normalizes the specified HTTP header name
  *
  * @param name
- * @param [query] - request query object (for value interpolation)
+ * @param [query] - request query object (for interpolation of value)
  */
 export function normalizeHeaderName(name: string, query?: Dictionary): string {
 	return applyQueryForStr(String(name).trim(), query).toLowerCase();
@@ -88,7 +133,7 @@ export function normalizeHeaderName(name: string, query?: Dictionary): string {
  * Normalizes the specified HTTP header value
  *
  * @param value
- * @param [query] - request query object (for value interpolation)
+ * @param [query] - request query object (for interpolation of value)
  */
 export function normalizeHeaderValue(value: unknown, query?: Dictionary): string {
 	return applyQueryForStr(String(value != null ? value : '').trim(), query);
@@ -98,33 +143,93 @@ export function normalizeHeaderValue(value: unknown, query?: Dictionary): string
  * Normalizes the specified HTTP header object
  *
  * @param headers
- * @param [query] - request query object (for key/value interpolation)
+ * @param [query] - request query object (for interpolation of keys/values)
  */
 export function normalizeHeaders(headers?: Dictionary, query?: Dictionary): Dictionary<CanArray<string>> {
-	return $C(headers).to({}).reduce((res, val, name) => {
-		if (Object.isArray(val)) {
-			val = $C(val).to([]).reduce((arr, val) => {
-				val = normalizeHeaderValue(val, query);
+	const
+		res = {};
 
-				if (val) {
-					arr.push(val);
+	if (headers) {
+		for (let keys = Object.keys(headers), i = 0; i < keys.length; i++) {
+			let
+				name = keys[i],
+				val = <CanArray<string>>headers[name];
+
+			if (Object.isArray(val)) {
+				const
+					arr = <string[]>[];
+
+				for (let i = 0; i < val.length; i++) {
+					const
+						el = normalizeHeaderValue(val[i], query);
+
+					if (el) {
+						arr.push(el);
+					}
 				}
 
-				return arr;
-			});
+				val = arr;
 
-		} else {
-			val = normalizeHeaderValue(val, query);
-		}
+			} else {
+				val = normalizeHeaderValue(val, query);
+			}
 
-		if (val.length) {
-			name = normalizeHeaderName(name, query);
+			if (val.length) {
+				name = normalizeHeaderName(name, query);
 
-			if (name) {
-				res[name] = val;
+				if (name) {
+					res[name] = val;
+				}
 			}
 		}
+	}
 
-		return res;
-	});
+	return res;
+}
+
+const
+	isTextType = /^text(?:\/|$)/,
+	isXMLType = /^application\/\w+-xml\b/,
+	dataURIRgxp = /^data:([^;]+);/;
+
+/**
+ * Returns a type of data from the specified DATA:URI string
+ * @param url
+ */
+export function getResponseTypeFromURL(url: string): CanUndef<ResponseType> {
+	return getResponseTypeFromMime(dataURIRgxp.exec(url)?.[1]);
+}
+
+/**
+ * Returns a type of data from the specified mime type
+ * @param mime
+ */
+export function getResponseTypeFromMime(mime: CanUndef<string>): CanUndef<ResponseType> {
+	const
+		type = mime?.toLowerCase();
+
+	if (type) {
+		if (mimeTypes[type]) {
+			return mimeTypes[type];
+		}
+
+		if (isTextType.test(type)) {
+			return 'text';
+		}
+
+		if (isXMLType.test(type)) {
+			return 'document';
+		}
+
+		return 'blob';
+	}
+}
+
+/**
+ * Drops all request caches
+ */
+export function dropCache(): void {
+	for (let keys = Object.keys(cache), i = 0; i < keys.length; i++) {
+		cache[keys[i]].clear();
+	}
 }

@@ -15,17 +15,9 @@ export function isEmptyValue(value: unknown): boolean {
 }
 
 /**
- * Returns a value without translation instead the standard i18n behaviour
+ * Returns a value without internalizing instead the standard i18n behaviour
  * @param value
  */
 export function noi18n(value: string): string {
 	return value;
-}
-
-/**
- * Returns values only for string fields. For converting enums
- * @param names
- */
-export function convertEnumToDict(names: Dictionary): Dictionary<string> {
-	return $C(names).filter((el) => !isNaN(Number(el))).map((value, key) => key);
 }

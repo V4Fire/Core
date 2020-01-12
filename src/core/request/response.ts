@@ -6,43 +6,68 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import $C = require('collection.js');
 import Then from 'core/then';
+import Range from 'core/range';
 
-import { IS_NODE } from 'core/const/links';
-import { once } from 'core/decorators';
+import { IS_NODE } from 'core/env';
+import { once } from 'core/meta';
 import { convertIfDate } from 'core/json';
-import { normalizeHeaderName } from 'core/request/utils';
+
+import { normalizeHeaderName, getResponseTypeFromMime } from 'core/request/utils';
 import { defaultResponseOpts } from 'core/request/const';
 import {
 
-	ResponseOptions,
-	ResponseHeaders,
-	ResponseTypes,
+	OkStatuses,
 	ResponseType,
+	ResponseTypeValue,
+	ResponseHeaders,
+	ResponseOptions,
 	Decoders,
-	OkStatuses
+	JSONLikeValue
 
 } from 'core/request/interface';
 
-export type json =
-	string |
-	number |
-	boolean |
-	null |
-	unknown[] |
-	Dictionary;
-
 export default class Response {
 	/**
-	 * Response data type
+	 * Value of the response data type
 	 */
-	responseType?: ResponseTypes;
+	responseType?: ResponseType;
 
 	/**
-	 * Response source data type
+	 * Original value of the response data type
 	 */
-	readonly sourceResponseType?: ResponseTypes;
+	readonly sourceResponseType?: ResponseType;
+
+	/**
+	 * Value of the response status code
+	 */
+	readonly status: number;
+
+	/**
+	 * True if the response is valid
+	 */
+	readonly ok: boolean;
+
+	/**
+	 * List of status codes (or a single code) with HTTP statuses which is ok for response,
+	 * also can pass a range of codes
+	 */
+	readonly okStatuses: OkStatuses;
+
+	/**
+	 * Table of response headers
+	 */
+	readonly headers: ResponseHeaders;
+
+	/**
+	 * Sequence of response decoders
+	 */
+	readonly decoders: Decoders;
+
+	/**
+	 * True, if the request is important
+	 */
+	readonly important?: boolean;
 
 	/**
 	 * Parent operation promise
@@ -50,69 +75,35 @@ export default class Response {
 	readonly parent?: Then;
 
 	/**
-	 * Important flag
+	 * Value of the response body
 	 */
-	readonly important?: boolean;
-
-	/**
-	 * Response status code
-	 */
-	readonly status: number;
-
-	/**
-	 * Range of ok status codes
-	 */
-	readonly okStatuses: OkStatuses;
-
-	/**
-	 * True if .okStatuses contains .status
-	 */
-	readonly ok: boolean;
-
-	/**
-	 * Response headers
-	 */
-	readonly headers: ResponseHeaders;
-
-	/**
-	 * Response decoders
-	 */
-	readonly decoders: Decoders;
-
-	/**
-	 * Response body
-	 */
-	protected readonly body: ResponseType;
+	protected readonly body: ResponseTypeValue;
 
 	/**
 	 * @param [body]
 	 * @param [params]
 	 */
-	constructor(body?: ResponseType, params?: ResponseOptions) {
+	constructor(body?: ResponseTypeValue, params?: ResponseOptions) {
 		const
-			p = <typeof defaultResponseOpts & ResponseOptions>$C.extend(false, {}, defaultResponseOpts, params),
+			p = Object.mixin<typeof defaultResponseOpts & ResponseOptions>(false, {}, defaultResponseOpts, params),
 			s = this.okStatuses = p.okStatuses;
 
 		this.parent = p.parent;
 		this.important = p.important;
+
 		this.status = p.status;
+		this.ok = s instanceof Range ? s.contains(this.status) : (<number[]>[]).concat(s || []).includes(this.status);
 		this.headers = this.parseHeaders(p.headers);
-		this.sourceResponseType = this.responseType = p.responseType;
 
-		// tslint:disable-next-line:prefer-conditional-expression
-		if (typeof s === 'object' && !Object.isArray(s)) {
-			this.ok = s.contains(this.status);
-
-		} else {
-			this.ok = (<any[]>[]).concat(s || []).includes(this.status);
-		}
+		this.sourceResponseType = this.responseType = p.responseType == null ?
+			getResponseTypeFromMime(this.getHeader('content-type')) : p.responseType;
 
 		this.decoders = p.decoder ? Object.isFunction(p.decoder) ? [p.decoder] : p.decoder : [];
 		this.body = body;
 	}
 
 	/**
-	 * Returns HTTP header by the specified name from the response
+	 * Returns a HTTP header value by the specified name
 	 * @param name
 	 */
 	getHeader(name: string): CanUndef<string> {
@@ -120,10 +111,10 @@ export default class Response {
 	}
 
 	/**
-	 * Parses .body as .sourceType and returns the result
+	 * Parses the response body and returns a final value
 	 */
 	@once
-	decode<T = Nullable<string | json | ArrayBuffer | Blob | Document | unknown>>(): Then<T> {
+	decode<T extends Nullable<string | JSONLikeValue | ArrayBuffer | Blob | Document | unknown>>(): Then<T> {
 		let data;
 		switch (this.sourceResponseType) {
 			case 'json':
@@ -150,31 +141,32 @@ export default class Response {
 				data = this.text();
 		}
 
-		return (<Then<T>>data)
-			.then((obj) => $C(this.decoders)
-				.to(Then.resolve(obj, this.parent))
-				.reduce((res: Then, fn) => res.then((data) => fn(data, this))))
+		let
+			decoders = data.then((obj) => Then.resolve(obj, this.parent));
 
-			.then((res) => {
-				if (Object.isFrozen(res)) {
-					return res;
-				}
+		Object.forEach(this.decoders, (fn: Function) => {
+			decoders = decoders.then((data) => fn(data, this));
+		});
 
-				if (Object.isArray(res) || Object.isObject(res)) {
-					Object.defineProperty(res, 'valueOf', {
-						enumerable: false,
-						value: () => Object.fastClone(res, {freezable: false})
-					});
-
-					Object.freeze(res);
-				}
-
+		return decoders.then((res) => {
+			if (Object.isFrozen(res)) {
 				return res;
-			});
+			}
+
+			if (Object.isArray(res) || Object.isObject(res)) {
+				Object.defineProperty(res, 'valueOf', {
+					value: () => Object.fastClone(res, {freezable: false})
+				});
+
+				Object.freeze(res);
+			}
+
+			return res;
+		});
 	}
 
 	/**
-	 * Parses .body as Document and returns the result
+	 * Parses the response body as a Document instance and returns it
 	 */
 	@once
 	document(): Then<Document | null> {
@@ -195,14 +187,14 @@ export default class Response {
 	}
 
 	/**
-	 * Parses .body as JSON and returns the result
+	 * Parses the response body as a JSON object and returns it
 	 */
-	json<T = json>(): Then<T | null> {
+	json<T extends JSONLikeValue>(): Then<T | null> {
 		if (this.sourceResponseType !== 'json') {
 			throw new TypeError('Invalid data sourceType');
 		}
 
-		type _ = string | json | null;
+		type _ = string | JSONLikeValue | null;
 
 		const
 			body = <_>this.body;
@@ -212,17 +204,17 @@ export default class Response {
 		}
 
 		if (Object.isString(body)) {
-			return Then.immediate(() => JSON.parse(body, convertIfDate), this.parent);
+			return Then.resolveAndCall(() => JSON.parse(body, convertIfDate), this.parent);
 		}
 
-		return Then.immediate<T | null>(
-			<() => T>(() => $C(this.decoders).length() && !Object.isFrozen(body) ? Object.fastClone(body) : body),
+		return Then.resolveAndCall<T | null>(
+			<() => T>(() => Object.size(this.decoders) && !Object.isFrozen(body) ? Object.fastClone(body) : body),
 			this.parent
 		);
 	}
 
 	/**
-	 * Parses .body as ArrayBuffer and returns the result
+	 * Parses the response body as an ArrayBuffer object and returns it
 	 */
 	arrayBuffer(): Then<ArrayBuffer | null> {
 		if (this.sourceResponseType !== 'arrayBuffer') {
@@ -242,7 +234,7 @@ export default class Response {
 	}
 
 	/**
-	 * Parses .body as Blob and returns the result
+	 * Parses the response body as a Blob structure and returns it
 	 */
 	blob(): Then<Blob | null> {
 		if (this.sourceResponseType !== 'blob') {
@@ -258,11 +250,11 @@ export default class Response {
 			return Then.resolve<_>(null);
 		}
 
-		return Then.resolve<_>(new Blob([<any>body], {type: this.getHeader('content-sourceType')}), this.parent);
+		return Then.resolve<_>(new Blob([<any>body], {type: this.getHeader('content-type')}), this.parent);
 	}
 
 	/**
-	 * Parses .body as string and returns the result
+	 * Parses the response body as a string and returns it
 	 */
 	@once
 	text(): Then<string | null> {
@@ -270,7 +262,7 @@ export default class Response {
 
 		const
 			body = this.body,
-			type = <NonNullable<ResponseTypes>>this.sourceResponseType;
+			type = this.sourceResponseType!;
 
 		if (!body || type === 'arrayBuffer' && !(<ArrayBuffer>body).byteLength) {
 			return Then.resolve<_>(null, this.parent);
@@ -285,11 +277,11 @@ export default class Response {
 				return Then.resolve<_>(body, this.parent);
 			}
 
-			return Then.immediate<_>(JSON.stringify(body), this.parent);
+			return Then.resolve<_>(JSON.stringify(body), this.parent);
 		}
 
 		const
-			contentType = this.getHeader('content-sourceType');
+			contentType = this.getHeader('content-type');
 
 		let
 			encoding = 'utf-8';
@@ -306,7 +298,7 @@ export default class Response {
 		if (IS_NODE) {
 			//#if node_js
 			// @ts-ignore
-			return Then.resolve<_>(Buffer.from(<any>body).toString(encoding));
+			return Then.resolve<_>(Buffer.from(body).toString(encoding));
 			//#endif
 		}
 
@@ -331,7 +323,7 @@ export default class Response {
 	}
 
 	/**
-	 * Returns normalized object of HTTP headers by the specified string/object
+	 * Returns a normalized object of HTTP headers from the specified string or object
 	 * @param headers
 	 */
 	protected parseHeaders(headers: string | Dictionary<string>): ResponseHeaders {
@@ -339,23 +331,30 @@ export default class Response {
 			res = {};
 
 		if (Object.isString(headers)) {
-			$C(headers.split(/[\r\n]+/)).forEach((header: string) => {
+			for (let o = headers.split(/[\r\n]+/), i = 0; i < o.length; i++) {
+				const
+					header = o[i];
+
 				if (!header) {
-					return;
+					continue;
 				}
 
 				const [name, value] = header.split(':', 2);
 				res[normalizeHeaderName(name)] = value.trim();
-			});
+			}
 
-		} else {
-			$C(headers).reduce((value, name) => {
+		} else if (headers) {
+			for (let keys = Object.keys(headers), i = 0; i < keys.length; i++) {
+				const
+					name = keys[i],
+					value = headers[name];
+
 				if (!value || !name) {
-					return;
+					continue;
 				}
 
 				res[normalizeHeaderName(name)] = value.trim();
-			});
+			}
 		}
 
 		return Object.freeze(res);

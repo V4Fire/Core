@@ -6,46 +6,52 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/**
+ * [[include:core/session/README.md]]
+ * @packageDocumentation
+ */
+
 import session from 'core/session/engines';
-import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 
-export interface SetEvent {
-	auth: CanUndef<string>;
-	csrf: CanUndef<string>;
-}
+import { emitter } from 'core/session/const';
+import { Session, SessionKey, SessionParams } from 'core/session/interface';
 
-export const
-	event = new EventEmitter({maxListeners: 100});
+export * from 'core/session/const';
+export * from 'core/session/interface';
 
 /**
- * Returns current session object
+ * Returns information about the current session
  */
-export async function get(): Promise<{auth: CanUndef<string>; csrf: CanUndef<string>}> {
+export async function get(): Promise<Session> {
 	try {
 		const
 			s = await session;
 
+		const [auth, params] = await Promise.all([
+			s.get<SessionKey>('auth'),
+			s.get<Dictionary>('params')
+		]);
+
 		return {
-			auth: await s.get<string>('auth'),
-			csrf: await s.get<string>('csrf')
+			auth,
+			params
 		};
 
 	} catch {
 		return {
-			auth: undefined,
-			csrf: undefined
+			auth: undefined
 		};
 	}
 }
 
 /**
- * Sets a new session
+ * Sets a new session with the specified parameters
  *
  * @param [auth]
- * @param [csrf]
- * @emits set({auth?: string, csrf?: string})
+ * @param [params] - additional parameters
+ * @emits `set(session:` [[Session]] `)`
  */
-export async function set(auth?: string, csrf?: string): Promise<boolean> {
+export async function set(auth?: SessionKey, params?: SessionParams): Promise<boolean> {
 	try {
 		const
 			s = await session;
@@ -54,11 +60,11 @@ export async function set(auth?: string, csrf?: string): Promise<boolean> {
 			await s.set('auth', auth);
 		}
 
-		if (csrf) {
-			await s.set('csrf', csrf);
+		if (params) {
+			await s.set('params', params);
 		}
 
-		event.emit('set', {auth, csrf});
+		emitter.emit('set', {auth, params});
 
 	} catch {
 		return false;
@@ -68,15 +74,14 @@ export async function set(auth?: string, csrf?: string): Promise<boolean> {
 }
 
 /**
- * Clears current session
- * @emits clear()
+ * Clears the current session
+ * @emits `clear()`
  */
 export async function clear(): Promise<boolean> {
 	try {
 		const s = await session;
-		await s.remove('auth');
-		await s.remove('csrf');
-		event.emit('clear');
+		await Promise.all([s.remove('auth'), s.remove('params')]);
+		emitter.emit('clear');
 
 	} catch {
 		return false;
@@ -86,15 +91,15 @@ export async function clear(): Promise<boolean> {
 }
 
 /**
- * Matches the specified session and current
+ * Matches a session with the current
  *
  * @param [auth]
- * @param [csrf]
+ * @param [params] - additional parameters
  */
-export async function match(auth?: string, csrf?: string): Promise<boolean> {
+export async function match(auth?: SessionKey, params?: SessionParams): Promise<boolean> {
 	try {
 		const s = await get();
-		return auth === s.auth && csrf === s.csrf;
+		return auth === s.auth && (params === undefined || Object.fastCompare(params, s.params));
 
 	} catch {
 		return false;
@@ -102,12 +107,11 @@ export async function match(auth?: string, csrf?: string): Promise<boolean> {
 }
 
 /**
- * Returns true if the session object is exists
+ * Returns true if a session is already exists
  */
 export async function isExists(): Promise<boolean> {
 	try {
-		const s = await get();
-		return Boolean(s.auth && (!await (await session).has('csrf') || s.csrf));
+		return Boolean((await get()).auth);
 
 	} catch {
 		return false;

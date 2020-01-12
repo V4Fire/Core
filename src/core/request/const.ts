@@ -6,26 +6,34 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import $C = require('collection.js');
-import statusCodes from 'core/status-codes';
 import config from 'config';
+import Range from 'core/range';
 
-import { RequestMethods, ResponseTypes, GlobalOptions, CacheStrategy } from 'core/request/interface';
-import { Cache, RestrictedCache, NeverCache } from 'core/cache';
+import { AsyncFactoryResult } from 'core/kv-storage';
+import { RequestMethod, ResponseType, GlobalOptions, CacheStrategy } from 'core/request/interface';
+import { Cache, RestrictedCache, NeverCache, AbstractCache } from 'core/cache';
 
-export const
-	storage = import('core/kv-storage').then(({asyncLocal}) => asyncLocal);
+export let
+	storage: CanUndef<Promise<AsyncFactoryResult>>;
 
-export const mimeTypes: Dictionary<ResponseTypes> = Object.createDict<any>({
+//#if runtime has core/kv-storage
+storage = import('core/kv-storage').then(({asyncLocal}) => asyncLocal);
+//#endif
+
+export const mimeTypes: Dictionary<ResponseType> = Object.createDict({
 	'application/json': 'json',
 	'application/javascript': 'text',
 	'application/xml': 'document',
-	'application/x-www-form-urlencoded': 'text'
+	'application/x-www-form-urlencoded': 'text',
+	'application/x-msgpack': 'arrayBuffer',
+	'application/x-protobuf': 'arrayBuffer',
+	'application/vnd.google.protobuf': 'arrayBuffer'
 });
 
 export const defaultRequestOpts = {
-	method: <RequestMethods>'GET',
+	method: <RequestMethod>'GET',
 	cacheStrategy: <CacheStrategy>'never',
+	cacheMethods: ['GET'],
 	offlineCacheTTL: (1).day(),
 	headers: {},
 	query: {},
@@ -33,16 +41,16 @@ export const defaultRequestOpts = {
 };
 
 export const defaultResponseOpts = {
-	responseType: <ResponseTypes>'text',
-	okStatuses: <sugarjs.Range>Number.range(200, 299),
-	status: statusCodes.OK,
+	responseType: <ResponseType>'text',
+	okStatuses: new Range(200, 299),
+	status: 200,
 	headers: {}
 };
 
 export const
 	pendingCache = new Cache();
 
-export const cache: Record<CacheStrategy, Cache> = {
+export const cache: Record<CacheStrategy, AbstractCache> = {
 	queue: new RestrictedCache(),
 	forever: new Cache(),
 	never: new NeverCache()
@@ -60,9 +68,7 @@ export const globalOpts: GlobalOptions = {
 	meta: {}
 };
 
-/**
- * Drops all request caches
- */
-export function dropCache(): void {
-	$C(cache).forEach((cache) => cache.clear());
-}
+export const methodsWithoutBody = Object.createDict({
+	GET: true,
+	HEAD: true
+});

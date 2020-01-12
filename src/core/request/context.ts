@@ -6,67 +6,46 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import $C = require('collection.js');
 import Then from 'core/then';
 import Response from 'core/request/response';
+import Cache from 'core/cache/interface';
 
-import { Cache } from 'core/cache';
 import { concatUrls, toQueryString } from 'core/url';
 import { normalizeHeaders, applyQueryForStr, getStorageKey, getRequestKey } from 'core/request/utils';
-import { Encoders, Decoders, RequestQuery, CreateRequestOptions, RequestResponseObject } from 'core/request/interface';
-import { cache, pendingCache, storage, globalOpts, defaultRequestOpts } from 'core/request/const';
+import { cache, pendingCache, storage, globalOpts, defaultRequestOpts, methodsWithoutBody } from 'core/request/const';
+import {
+
+	CreateRequestOptions,
+	RequestQuery,
+	RequestAPI,
+
+	Encoders,
+	Decoders,
+
+	ResponseTypeValue,
+	RequestResponseObject
+
+} from 'core/request/interface';
 
 const
-	resolveURLRgxp = /(?:^|(\w+:\/\/)(?:([^./]+)\.)?([^./]+)(?:\.([^./]+))?)(\/.*|$)/,
+	resolveURLRgxp = /(?:^|^(\w+:\/\/\/?)(?:([^:]+:[^@]+)@)?([^:/]+)(?::(\d+))?)(\/.*|$)/,
 	queryTplRgxp = /\/:(.+?)(\(.*?\))?(?=[\\/.?#]|$)/g;
 
 export default class RequestContext<T = unknown> {
 	/**
-	 * True if the client is online
+	 * True if a host has connection to the internet
 	 */
 	isOnline: boolean = false;
 
 	/**
-	 * List/table of request encoders
-	 */
-	encoders: Encoders;
-
-	/**
-	 * List/table of response decoders
-	 */
-	decoders: Decoders;
-
-	/**
-	 * Cache key
-	 */
-	cacheKey?: string;
-
-	/**
-	 * Parent operation promise
-	 */
-	readonly then!: Then;
-
-	/**
-	 * Request parameters
-	 */
-	readonly params!: typeof defaultRequestOpts & CreateRequestOptions<T>;
-
-	/**
-	 * Alias for .params.query
-	 */
-	get query(): RequestQuery {
-		return this.params.query;
-	}
-
-	/**
-	 * True if a request can provide parameters only as an query string
-	 */
-	readonly withoutBody: boolean;
-
-	/**
-	 * True if a request can be cached
+	 * True if the request can be cached
 	 */
 	readonly canCache: boolean;
+
+	/**
+	 * Cache key of the request
+	 */
+	cacheKey?: string;
 
 	/**
 	 * Cache object
@@ -77,6 +56,38 @@ export default class RequestContext<T = unknown> {
 	 * Cache object for pending requests
 	 */
 	readonly pendingCache: Cache = pendingCache;
+
+	/**
+	 * True if the request can provide parameters only as a query string
+	 */
+	readonly withoutBody: boolean;
+
+	/**
+	 * Request parameters
+	 */
+	readonly params!: typeof defaultRequestOpts & CreateRequestOptions<T>;
+
+	/**
+	 * Sequence of request encoders
+	 */
+	encoders: Encoders;
+
+	/**
+	 * Sequence of response decoders
+	 */
+	decoders: Decoders;
+
+	/**
+	 * Parent operation promise
+	 */
+	readonly parent!: Then;
+
+	/**
+	 * Alias for query parameters of the request
+	 */
+	get query(): RequestQuery {
+		return this.params.query;
+	}
 
 	/**
 	 * Cache timeout id (for setTimeout)
@@ -94,15 +105,15 @@ export default class RequestContext<T = unknown> {
 			extendFilter: (d, v) => Array.isArray(v) || Object.isObject(v)
 		}, {}, params);
 
-		this.canCache = p.method === 'GET';
-		this.withoutBody = Boolean({GET: true, HEAD: true}[p.method]);
+		this.canCache = p.cacheMethods?.includes(p.method) || false;
+		this.withoutBody = Boolean(methodsWithoutBody[p.method]);
 		this.encoders = p.encoder ? Object.isFunction(p.encoder) ? [p.encoder] : p.encoder : [];
 		this.decoders = p.decoder ? Object.isFunction(p.decoder) ? [p.decoder] : p.decoder : [];
 		this.cache = cache[p.cacheStrategy] || cache.never;
 	}
 
 	/**
-	 * Generates a cache string by the specified url and returns it
+	 * Generates a string cache key for specified url and returns it
 	 * @param url
 	 */
 	getRequestKey(url: string): string {
@@ -111,74 +122,92 @@ export default class RequestContext<T = unknown> {
 	}
 
 	/**
-	 * Returns an absolute path to the API for a request
-	 * @param [api] - base api url
+	 * Returns an absolute URL for the request API
+	 * @param [apiURL] - base API URL
 	 */
-	resolveAPI(api: Nullable<string> = globalOpts.api): string {
+	resolveAPI(apiURL: Nullable<string> = globalOpts.api): string {
 		const
-			a = <NonNullable<CreateRequestOptions['api']>>this.params.api;
+			compute = (v) => Object.isFunction(v) ? v() : v,
+			api = <{[K in keyof RequestAPI]: Nullable<string>}>({...this.params.api});
 
-		if (a.url) {
-			return a.url;
+		for (let keys = Object.keys(api), i = 0; i < keys.length; i++) {
+			const key = keys[i];
+			api[key] = compute(api[key]);
 		}
 
-		if (!api) {
-			const def = <any>{
-				namespace: '',
-				...a
-			};
+		if (api.url) {
+			return api.url;
+		}
 
+		const resolve = (name, def?) => {
 			const
-				nm = def.namespace;
+				val = api[name] != null ? api[name] : def || '';
 
-			if (!def.protocol) {
+			switch (name) {
+				case 'auth':
+					return val ? `${val}@` : '';
+
+				case 'port':
+					return val ? `:${val}` : '';
+
+				default:
+					return val;
+			}
+		};
+
+		const resolveDomains = ({def = [], slice = 0, join = true} = {}) => {
+			const
+				list = Array.from({length: 6}, (el, i) => i + 1).slice(slice).reverse(),
+				url = <string[]>[];
+
+			for (let i = 0; i < list.length; i++) {
+				const
+					lvl = list[i],
+					domain = (lvl === 1 ? api.zone : api[`domain${lvl}`]) || def[lvl - 1];
+
+				if (domain) {
+					url.push(domain);
+				}
+			}
+
+			return join !== false ? url.join('.') : url;
+		};
+
+		if (!apiURL) {
+			const
+				nm = api.namespace || '';
+
+			if (!api.protocol) {
 				return nm[0] === '/' ? nm : `/${nm}`;
 			}
 
 			return concatUrls(
-				[
-					def.protocol + (def.domain3 ? `${def.domain3}.` : '') + a.domain2,
-					def.zone
-				].join('.'),
+				resolve('protocol') +
+					resolve('auth') +
+					resolveDomains() +
+					resolve('port'),
 
 				nm
 			);
 		}
 
-		const v = (f, def?) => {
-			const
-				v = a[f] != null ? a[f] : def || '';
-
-			if (f === 'domain3') {
-				return v ? `${v}.` : '';
-			}
-
-			return v;
-		};
-
-		if (!resolveURLRgxp.test(api)) {
-			return concatUrls(...v('domain3').split('.'), v('namespace'));
+		if (!resolveURLRgxp.test(apiURL)) {
+			return concatUrls(...resolveDomains({slice: 2, join: false}), resolve('namespace'));
 		}
 
-		return api.replace(resolveURLRgxp, (str, protocol, domain3, domain2, zone, nm) => {
-			if (zone == null && domain3 != null) {
-				zone = domain2;
-				domain2 = domain3;
-				domain3 = undefined;
-			}
-
-			nm = v('namespace', nm);
+		return apiURL.replace(resolveURLRgxp, (str, protocol, auth, domains, port, nm) => {
+			domains = domains?.split('.');
+			nm = resolve('namespace', nm);
 
 			if (!protocol) {
-				return concatUrls(...v('domain3').split('.'), nm);
+				return concatUrls(...resolveDomains({slice: 2, join: false}), nm);
 			}
 
-			zone = v('zone', zone) || [];
-
 			return concatUrls(
-				[
-					v('protocol', protocol) + v('domain3', domain3) + v('domain2', domain2)
-				].concat(zone).join('.'),
+				resolve('protocol', protocol) +
+					resolve('auth', auth) +
+					resolveDomains({def: domains}),
+					resolve('port', port),
 
 				nm
 			);
@@ -186,8 +215,8 @@ export default class RequestContext<T = unknown> {
 	}
 
 	/**
-	 * Returns an absolute path for the request
-	 * @param [url] - base request url
+	 * Returns an absolute URL for the request
+	 * @param [url] - base request URL
 	 */
 	resolveURL(url?: Nullable<string>): string {
 		if (url == null) {
@@ -212,7 +241,7 @@ export default class RequestContext<T = unknown> {
 			p.headers = normalizeHeaders(p.headers);
 		}
 
-		if ($C(q).length()) {
+		if (Object.size(q)) {
 			url = `${url}?${toQueryString(q)}`;
 		}
 
@@ -224,74 +253,7 @@ export default class RequestContext<T = unknown> {
 	}
 
 	/**
-	 * Cache middleware for a request
-	 */
-	saveCache(res: RequestResponseObject<T>): RequestResponseObject<T> {
-		const
-			p = this.params,
-			key = this.cacheKey,
-			cache = this.cache;
-
-		if (key) {
-			if (p.offlineCache) {
-				storage
-					.then((storage) => storage.set(getStorageKey(key), res.data, p.offlineCacheTTL))
-					.catch(stderr);
-			}
-
-			if (this.cacheTimeoutId) {
-				clearTimeout(this.cacheTimeoutId);
-			}
-
-			cache.set(
-				key,
-				res.data
-			);
-
-			if (p.cacheTTL) {
-				this.cacheTimeoutId = setTimeout(() => cache.remove(key), p.cacheTTL);
-			}
-		}
-
-		return res;
-	}
-
-	/**
-	 * Drops the cache
-	 */
-	dropCache(): void {
-		const
-			key = this.cacheKey;
-
-		if (key) {
-			this.cache.remove(key);
-
-			if (this.params.offlineCache) {
-				storage.then((storage) => storage.remove(getStorageKey(key))).catch(stderr);
-			}
-		}
-	}
-
-	/**
-	 * Middleware for wrapping an object as RequestResponseObject
-	 * @param obj
-	 */
-	async wrapAsResponse(obj: Response | ResponseType): Promise<RequestResponseObject<T>> {
-		const response = obj instanceof Response ? obj : new Response(obj, {
-			parent: this.then,
-			responseType: 'object'
-		});
-
-		return {
-			response,
-			ctx: this,
-			data: await response.decode<T>(),
-			dropCache: this.dropCache.bind(this)
-		};
-	}
-
-	/**
-	 * Wraps the specified promise (attaches pending cache, etc.)
+	 * Wraps the specified promise (attaches the pending cache, etc.)
 	 * @param promise
 	 */
 	wrapRequest(promise: Then<T>): Then<T> {
@@ -320,5 +282,77 @@ export default class RequestContext<T = unknown> {
 		}
 
 		return promise;
+	}
+
+	/**
+	 * Drops a value of the request from the cache
+	 */
+	dropCache(): void {
+		const
+			key = this.cacheKey;
+
+		if (key) {
+			this.cache.remove(key);
+
+			if (this.params.offlineCache && storage) {
+				storage.then((storage) => storage.remove(getStorageKey(key))).catch(stderr);
+			}
+		}
+	}
+
+	/**
+	 * Middleware for saving a request in the cache
+	 * @param res - response object
+	 */
+	saveCache(res: RequestResponseObject<T>): RequestResponseObject<T> {
+		const
+			p = this.params,
+			key = this.cacheKey,
+			cache = this.cache;
+
+		if (key) {
+			if (p.offlineCache) {
+				if (!storage) {
+					throw new ReferenceError('kv-storage module is not loaded');
+				}
+
+				storage
+					.then((storage) => storage.set(getStorageKey(key), res.data, p.offlineCacheTTL))
+					.catch(stderr);
+			}
+
+			if (this.cacheTimeoutId) {
+				clearTimeout(this.cacheTimeoutId);
+			}
+
+			cache.set(
+				key,
+				res.data
+			);
+
+			if (Object.isNumber(p.cacheTTL)) {
+				this.cacheTimeoutId = <any>setTimeout(() => cache.remove(key), p.cacheTTL);
+			}
+		}
+
+		return res;
+	}
+
+	/**
+	 * Middleware for wrapping the specified object with RequestResponseObject
+	 * @param obj
+	 */
+	async wrapAsResponse(obj: Response | ResponseTypeValue): Promise<RequestResponseObject<T>> {
+		const response = obj instanceof Response ? obj : new Response(obj, {
+			parent: this.parent,
+			responseType: 'object'
+		});
+
+		return {
+			response,
+			ctx: this,
+			data: await response.decode<T>(),
+			dropCache: this.dropCache.bind(this)
+		};
 	}
 }

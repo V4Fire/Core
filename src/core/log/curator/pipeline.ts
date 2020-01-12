@@ -8,7 +8,7 @@
 
 import { LogEvent, LogMiddleware } from 'core/log/middlewares';
 import { LogEngine } from 'core/log/engines';
-import { LogLevel } from 'core/log';
+import { LogLevel } from 'core/log/interface';
 import { cmpLevels } from 'core/log/base';
 
 export class LogPipeline {
@@ -26,17 +26,30 @@ export class LogPipeline {
 	}
 
 	/**
-	 * Carries events through the chain of middlewares and passes them to the engine in the end
+	 * Carries events through a chain of middlewares and passes them to the engine in the end
 	 * @param events
 	 */
 	run(events: CanArray<LogEvent>): void {
-		if (Array.isArray(events)) {
-			events = events
-				.filter((e) => cmpLevels(this.minLevel, e.level) >= 0);
+		//#if runtime has core/log
 
-			if (!events.length) {
+		if (Array.isArray(events)) {
+			const
+				filteredEvents = <LogEvent[]>[];
+
+			for (let i = 0; i < events.length; i++) {
+				const
+					el = events[i];
+
+				if (cmpLevels(this.minLevel, el.level) >= 0) {
+					filteredEvents.push(el);
+				}
+			}
+
+			if (!filteredEvents.length) {
 				return;
 			}
+
+			events = filteredEvents;
 
 		} else if (cmpLevels(this.minLevel, events.level) < 0) {
 			return;
@@ -45,13 +58,17 @@ export class LogPipeline {
 		// ++ in next method
 		this.middlewareIndex = -1;
 		this.next(events);
+
+		//#endif
 	}
 
 	protected next(events: CanArray<LogEvent>): void {
+		//#if runtime has core/log
+
 		this.middlewareIndex++;
 		if (this.middlewareIndex < this.middlewares.length) {
 			if (!this.middlewares[this.middlewareIndex]) {
-				throw new Error(`Can't find middleware at index [${this.middlewareIndex}]`);
+				throw new ReferenceError(`Can't find a middleware at the index [${this.middlewareIndex}]`);
 			}
 
 			this.middlewares[this.middlewareIndex].exec(events, this.nextCallback);
@@ -66,5 +83,7 @@ export class LogPipeline {
 				this.engine.log(events);
 			}
 		}
+
+		//#endif
 	}
 }

@@ -6,4 +6,9 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/**
+ * [[include:lang/README.md]]
+ * @packageDocumentation
+ */
+
 export default {};

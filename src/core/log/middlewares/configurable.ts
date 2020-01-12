@@ -7,21 +7,22 @@
  */
 
 import * as env from 'core/env';
-import { LogEvent, LogMiddleware, NextCallback } from 'core/log/middlewares/types';
+import { LogEvent, LogMiddleware, NextCallback } from 'core/log/middlewares/interface';
 
 interface LogOptions {
-	patterns?: RegExp[];
+	patterns: RegExp[];
 }
 
 let
-	options: LogOptions;
+	logOps: LogOptions;
 
 const setConfig = (opts) => {
-	options = {
+	logOps = {
+		patterns: [':error\\b'],
 		...opts
 	};
 
-	options.patterns = (options.patterns || []).map((el) => Object.isRegExp(el) ? el : new RegExp(el));
+	logOps.patterns = (logOps.patterns || []).map((el) => Object.isRegExp(el) ? el : new RegExp(el));
 };
 
 env.get('log').then(setConfig, setConfig);
@@ -32,7 +33,9 @@ export class ConfigurableMiddleware implements LogMiddleware {
 	protected queue: LogEvent[] = [];
 
 	exec(events: CanArray<LogEvent>, next: NextCallback): void {
-		if (!options) {
+		//#if runtime has core/log
+
+		if (!logOps) {
 			if (Array.isArray(events)) {
 				this.queue.push(...events);
 
@@ -45,7 +48,16 @@ export class ConfigurableMiddleware implements LogMiddleware {
 
 		if (this.queue.length) {
 			const
-				queuedEvents = this.queue.filter((e) => this.filterContext(e.context));
+				queuedEvents = <LogEvent[]>[];
+
+			for (let o = this.queue, i = 0; i < o.length; i++) {
+				const
+					el = o[i];
+
+				if (this.filterContext(el.context)) {
+					queuedEvents.push(el);
+				}
+			}
 
 			if (queuedEvents.length) {
 				next(queuedEvents);
@@ -56,7 +68,16 @@ export class ConfigurableMiddleware implements LogMiddleware {
 
 		if (Array.isArray(events)) {
 			const
-				filteredEvents = events.filter((e) => this.filterContext(e.context));
+				filteredEvents = <LogEvent[]>[];
+
+			for (let o = this.filterContext, i = 0; i < o.length; i++) {
+				const
+					el = o[i];
+
+				if (this.filterContext(el.context)) {
+					filteredEvents.push(el);
+				}
+			}
 
 			if (filteredEvents.length) {
 				next(filteredEvents);
@@ -67,15 +88,19 @@ export class ConfigurableMiddleware implements LogMiddleware {
 				next(events);
 			}
 		}
+
+		//#endif
 	}
 
 	/**
-	 * Returns true if patterns allow to log a record with the specified context
+	 * Returns true if config patterns allow to log a record with the specified context
 	 * @param context
 	 */
 	protected filterContext(context: string): boolean {
-		if (options.patterns) {
-			for (let patterns = options.patterns, i = 0; i < patterns.length; i++) {
+		//#if runtime has core/log
+
+		if (logOps.patterns) {
+			for (let patterns = logOps.patterns, i = 0; i < patterns.length; i++) {
 				if (patterns[i].test(context)) {
 					return true;
 				}
@@ -83,6 +108,8 @@ export class ConfigurableMiddleware implements LogMiddleware {
 
 			return false;
 		}
+
+		//#endif
 
 		return true;
 	}

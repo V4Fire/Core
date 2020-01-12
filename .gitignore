@@ -44,13 +44,12 @@ Icon
 # Build && test
 /coverage
 /dist
+/tsconfig.json
 .env
-tsconfig.json
 
 # Log
 *.log
-stats.json
-Makefile
+/stats.json
 
 # Temporary
 *.tmp
@@ -61,4 +60,3 @@ Makefile
 /app-std-cache
 /src/entries/tmp
 /db
-/synmaster.txt

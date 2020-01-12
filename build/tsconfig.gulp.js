@@ -8,6 +8,9 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/**
+ * The task for building .tsconfig file
+ */
 module.exports = function (gulp) {
 	const
 		$ = require('gulp-load-plugins')({scope: ['optionalDependencies']});
@@ -92,7 +95,7 @@ module.exports = function (gulp) {
 							find(path.join('node_modules', config.extends)) : require.resolve(config.extends);
 
 						if (!parentSrc) {
-							throw new ReferenceError(`Parent config for inheritance "${config.extends}" is not find`);
+							throw new ReferenceError(`Parent config for inheritance "${config.extends}" is not found`);
 						}
 
 						const
