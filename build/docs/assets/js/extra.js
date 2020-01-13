@@ -7,5 +7,3 @@
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
-
-console.log(121);
