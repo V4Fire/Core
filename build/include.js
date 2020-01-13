@@ -12,6 +12,7 @@ const
 	{config: {superRgxp}} = require('@pzlr/build-core');
 
 const
+	fs = require('fs'),
 	path = require('upath'),
 	findUp = require('find-up'),
 	{pathEqual} = require('path-equal');
@@ -29,6 +30,14 @@ const
  */
 module.exports = function (roots) {
 	return function (src, ctx) {
+		const
+			opts = {};
+
+		if (Object.isObject(ctx)) {
+			Object.assign(opts, ctx);
+			ctx = undefined;
+		}
+
 		function resolve(root) {
 			const
 				r = /\${root}/g;
@@ -69,14 +78,22 @@ module.exports = function (roots) {
 				layerSRC = resolve(r[i]);
 
 			try {
+				if (opts.source) {
+					return fs.readFileSync(layerSRC).toString();
+				}
+
 				return require(layerSRC);
 
 			} catch (err) {
-				if (err.code !== 'MODULE_NOT_FOUND') {
+				if (!{MODULE_NOT_FOUND: true, ENOENT: true}[err.code]) {
 					console.error(`Failed to load ${layerSRC}`);
 					throw err;
 				}
 			}
+		}
+
+		if (opts.source) {
+			return fs.readFileSync(src).toString();
 		}
 
 		require(src);
