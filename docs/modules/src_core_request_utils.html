@@ -7,8 +7,81 @@
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
+<style>/*!
+ * V4Fire Core
+ * https://github.com/V4Fire/Core
+ *
+ * Released under the MIT license
+ * https://github.com/V4Fire/Core/blob/master/LICENSE
+ */
+
+.tsd-panel {
+	border: 1px solid #DDD;
+	border-radius: 10px;
+	box-shadow: none;
+}
+
+.tsd-page-title {
+	color: #EEE;
+
+	background: #232526;  /* fallback for old browsers */
+	background: -webkit-linear-gradient(to right, #414345, #232526);  /* Chrome 10-25, Safari 5.1-6 */
+	background: linear-gradient(to right, #414345, #232526); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+.tsd-page-toolbar {
+	height: 43px;
+}
+
+.title {
+	display: inline-flex;
+	align-items: center;
+}
+
+.title::before {
+	content: "";
+
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	margin-right: 10px;
+
+	border-radius: 5px;
+	background-image: url("https://avatars0.githubusercontent.com/u/29952525?s=200&v=4");
+	background-size: contain;
+}
+
+#tsd-search .tsd-widget.search.no-caption {
+	bottom: 0;
+}
+
+#tsd-search .field {
+	height: 100%;
+}
+</style>
 </head>
 <body>
+<script>'use strict';
+
+/*!
+ * V4Fire Core
+ * https://github.com/V4Fire/Core
+ *
+ * Released under the MIT license
+ * https://github.com/V4Fire/Core/blob/master/LICENSE
+ */
+
+/* eslint-disable prefer-arrow-callback, no-var */
+
+(function () {
+	if (localStorage.getItem('visibility') == null) {
+		localStorage.setItem('visibility', 'public');
+	}
+
+	document.title = document.title.replace(/['"]+|src\//g, '');
+	document.body.style.display = 'none';
+})();
+</script>
 <header>
 	<div class="tsd-page-toolbar">
 		<div class="container">
@@ -104,7 +177,7 @@
 					<div class="tsd-signature tsd-kind-icon">dataURIRgxp<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RegExp</span><span class="tsd-signature-symbol"> =&nbsp;/^data:([^;]+);/</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/request/utils.ts#L193">src/core/request/utils.ts:193</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/request/utils.ts#L193">src/core/request/utils.ts:193</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -114,7 +187,7 @@
 					<div class="tsd-signature tsd-kind-icon">is<wbr>Text<wbr>Type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RegExp</span><span class="tsd-signature-symbol"> =&nbsp;/^text(?:\/|$)/</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/request/utils.ts#L191">src/core/request/utils.ts:191</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/request/utils.ts#L191">src/core/request/utils.ts:191</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -124,7 +197,7 @@
 					<div class="tsd-signature tsd-kind-icon">isXMLType<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RegExp</span><span class="tsd-signature-symbol"> =&nbsp;/^application\/\w+-xml\b/</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/request/utils.ts#L192">src/core/request/utils.ts:192</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/request/utils.ts#L192">src/core/request/utils.ts:192</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -134,7 +207,7 @@
 					<div class="tsd-signature tsd-kind-icon">tpl<wbr>Rgxp<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RegExp</span><span class="tsd-signature-symbol"> =&nbsp;/\${([^}]+)}/g</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/request/utils.ts#L97">src/core/request/utils.ts:97</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/request/utils.ts#L97">src/core/request/utils.ts:97</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -151,7 +224,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/request/utils.ts#L107">src/core/request/utils.ts:107</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/request/utils.ts#L107">src/core/request/utils.ts:107</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -186,7 +259,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/request/utils.ts#L231">src/core/request/utils.ts:231</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/request/utils.ts#L231">src/core/request/utils.ts:231</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -208,7 +281,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/request/utils.ts#L26">src/core/request/utils.ts:26</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/request/utils.ts#L26">src/core/request/utils.ts:26</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -242,13 +315,13 @@
 					<a name="getresponsetypefrommime" class="tsd-anchor"></a>
 					<h3>get<wbr>Response<wbr>Type<wbr>From<wbr>Mime</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Response<wbr>Type<wbr>From<wbr>Mime<span class="tsd-signature-symbol">(</span>mime<span class="tsd-signature-symbol">: </span><a href="index_d.html#canundef" class="tsd-signature-type">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_index_d_.html#canundef" class="tsd-signature-type">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><a href="src_core_request_interface.html#responsetype" class="tsd-signature-type">ResponseType</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Response<wbr>Type<wbr>From<wbr>Mime<span class="tsd-signature-symbol">(</span>mime<span class="tsd-signature-symbol">: </span><a href="index_d.html#canundef" class="tsd-signature-type">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="index_d.html#canundef" class="tsd-signature-type">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><a href="src_core_request_interface.html#responsetype" class="tsd-signature-type">ResponseType</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/request/utils.ts#L207">src/core/request/utils.ts:207</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/request/utils.ts#L207">src/core/request/utils.ts:207</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -264,7 +337,7 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="index_d.html#canundef" class="tsd-signature-type">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><a href="_src_core_request_interface_.html#responsetype" class="tsd-signature-type">ResponseType</a><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="index_d.html#canundef" class="tsd-signature-type">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><a href="src_core_request_interface.html#responsetype" class="tsd-signature-type">ResponseType</a><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -272,13 +345,13 @@
 					<a name="getresponsetypefromurl" class="tsd-anchor"></a>
 					<h3>get<wbr>Response<wbr>Type<wbr>FromURL</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Response<wbr>Type<wbr>FromURL<span class="tsd-signature-symbol">(</span>url<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="index_d.html#canundef" class="tsd-signature-type">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><a href="_src_core_request_interface_.html#responsetype" class="tsd-signature-type">ResponseType</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Response<wbr>Type<wbr>FromURL<span class="tsd-signature-symbol">(</span>url<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="index_d.html#canundef" class="tsd-signature-type">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><a href="src_core_request_interface.html#responsetype" class="tsd-signature-type">ResponseType</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/request/utils.ts#L199">src/core/request/utils.ts:199</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/request/utils.ts#L199">src/core/request/utils.ts:199</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -294,7 +367,7 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="index_d.html#canundef" class="tsd-signature-type">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><a href="_src_core_request_interface_.html#responsetype" class="tsd-signature-type">ResponseType</a><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="index_d.html#canundef" class="tsd-signature-type">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><a href="src_core_request_interface.html#responsetype" class="tsd-signature-type">ResponseType</a><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -308,7 +381,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/request/utils.ts#L16">src/core/request/utils.ts:16</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/request/utils.ts#L16">src/core/request/utils.ts:16</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -338,7 +411,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/request/utils.ts#L128">src/core/request/utils.ts:128</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/request/utils.ts#L128">src/core/request/utils.ts:128</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -369,7 +442,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/request/utils.ts#L138">src/core/request/utils.ts:138</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/request/utils.ts#L138">src/core/request/utils.ts:138</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -400,7 +473,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/request/utils.ts#L148">src/core/request/utils.ts:148</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/request/utils.ts#L148">src/core/request/utils.ts:148</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -543,5 +616,75 @@
 <div class="overlay"></div>
 <script src="../assets/js/main.js"></script>
 <script>if (location.protocol == 'file:') document.write('<script src="../assets/js/search.js"><' + '/script>');</script>
+<script>'use strict';
+
+/*!
+ * V4Fire Core
+ * https://github.com/V4Fire/Core
+ *
+ * Released under the MIT license
+ * https://github.com/V4Fire/Core/blob/master/LICENSE
+ */
+
+/* eslint-disable prefer-arrow-callback, no-var */
+
+(function () {
+	document.body.style.display = 'block';
+
+	var
+		isDTS = /([^/.]+)\.d/,
+		isIndex = /\/index|\.d/,
+		isNode = /(?:^|\b)node_modules(?:\b|$)/;
+
+	var
+		trimRgxp = /^\s+|[\n\v"']+|\s+$/g,
+		normalizeRgxp = /(?:^|\b)src\//;
+
+	var
+		breadcrumbs = Array.from(document.querySelectorAll('.tsd-breadcrumb a')),
+		headers = Array.from(document.querySelectorAll('h1'));
+
+	breadcrumbs.forEach(function (el) {
+		el.textContent = el.textContent.replace(trimRgxp, '').replace(normalizeRgxp, '');
+	});
+
+	headers.forEach(function (el) {
+		el.textContent = el.textContent.replace(trimRgxp, '').replace(normalizeRgxp, '');
+	});
+
+	var
+		navigation = Array.from(document.querySelectorAll('.tsd-navigation.primary .tsd-kind-external-module a')),
+		globalIndex = Array.from(document.querySelectorAll('.tsd-index-list a'));
+
+	[].concat(navigation, breadcrumbs.length <= 1 ? globalIndex : []).forEach(function (el) {
+		var
+			wrapper = el.parentNode,
+			linkText = el.textContent.replace(trimRgxp, '');
+
+		if (isIndex.test(linkText)) {
+			if (isDTS.test(linkText)) {
+				var
+					nm = RegExp.$1;
+
+				if (linkText === 'index.d') {
+					el.innerHTML = '<b>prelude</b>';
+
+				} else if (isNode.test(linkText)) {
+					el.textContent = nm;
+
+				} else {
+					wrapper.parentNode.removeChild(wrapper);
+				}
+
+			} else {
+				el.textContent = linkText.replace(isIndex, '').replace(normalizeRgxp, '');
+			}
+
+		} else {
+			wrapper.parentNode.removeChild(wrapper);
+		}
+	});
+})();
+</script>
 </body>
 </html>

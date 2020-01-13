@@ -1,0 +1,51 @@
+/*!
+ * V4Fire Core
+ * https://github.com/V4Fire/Core
+ *
+ * Released under the MIT license
+ * https://github.com/V4Fire/Core/blob/master/LICENSE
+ */
+
+.tsd-panel {
+	border: 1px solid #DDD;
+	border-radius: 10px;
+	box-shadow: none;
+}
+
+.tsd-page-title {
+	color: #EEE;
+
+	background: #232526;  /* fallback for old browsers */
+	background: -webkit-linear-gradient(to right, #414345, #232526);  /* Chrome 10-25, Safari 5.1-6 */
+	background: linear-gradient(to right, #414345, #232526); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+.tsd-page-toolbar {
+	height: 43px;
+}
+
+.title {
+	display: inline-flex;
+	align-items: center;
+}
+
+.title::before {
+	content: "";
+
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	margin-right: 10px;
+
+	border-radius: 5px;
+	background-image: url("https://avatars0.githubusercontent.com/u/29952525?s=200&v=4");
+	background-size: contain;
+}
+
+#tsd-search .tsd-widget.search.no-caption {
+	bottom: 0;
+}
+
+#tsd-search .field {
+	height: 100%;
+}

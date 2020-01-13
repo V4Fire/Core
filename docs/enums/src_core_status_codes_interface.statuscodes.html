@@ -7,8 +7,81 @@
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
+<style>/*!
+ * V4Fire Core
+ * https://github.com/V4Fire/Core
+ *
+ * Released under the MIT license
+ * https://github.com/V4Fire/Core/blob/master/LICENSE
+ */
+
+.tsd-panel {
+	border: 1px solid #DDD;
+	border-radius: 10px;
+	box-shadow: none;
+}
+
+.tsd-page-title {
+	color: #EEE;
+
+	background: #232526;  /* fallback for old browsers */
+	background: -webkit-linear-gradient(to right, #414345, #232526);  /* Chrome 10-25, Safari 5.1-6 */
+	background: linear-gradient(to right, #414345, #232526); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+.tsd-page-toolbar {
+	height: 43px;
+}
+
+.title {
+	display: inline-flex;
+	align-items: center;
+}
+
+.title::before {
+	content: "";
+
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	margin-right: 10px;
+
+	border-radius: 5px;
+	background-image: url("https://avatars0.githubusercontent.com/u/29952525?s=200&v=4");
+	background-size: contain;
+}
+
+#tsd-search .tsd-widget.search.no-caption {
+	bottom: 0;
+}
+
+#tsd-search .field {
+	height: 100%;
+}
+</style>
 </head>
 <body>
+<script>'use strict';
+
+/*!
+ * V4Fire Core
+ * https://github.com/V4Fire/Core
+ *
+ * Released under the MIT license
+ * https://github.com/V4Fire/Core/blob/master/LICENSE
+ */
+
+/* eslint-disable prefer-arrow-callback, no-var */
+
+(function () {
+	if (localStorage.getItem('visibility') == null) {
+		localStorage.setItem('visibility', 'public');
+	}
+
+	document.title = document.title.replace(/['"]+|src\//g, '');
+	document.body.style.display = 'none';
+})();
+</script>
 <header>
 	<div class="tsd-page-toolbar">
 		<div class="container">
@@ -149,7 +222,7 @@
 					<div class="tsd-signature tsd-kind-icon">ACCEPTED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;202</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L15">src/core/status-codes/interface.ts:15</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L15">src/core/status-codes/interface.ts:15</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -159,7 +232,7 @@
 					<div class="tsd-signature tsd-kind-icon">ALREADY_<wbr>REPORTED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;208</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L21">src/core/status-codes/interface.ts:21</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L21">src/core/status-codes/interface.ts:21</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -169,7 +242,7 @@
 					<div class="tsd-signature tsd-kind-icon">BAD_<wbr>GATEWAY<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;502</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L65">src/core/status-codes/interface.ts:65</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L65">src/core/status-codes/interface.ts:65</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -179,7 +252,7 @@
 					<div class="tsd-signature tsd-kind-icon">BAD_<wbr>REQUEST<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;400</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L34">src/core/status-codes/interface.ts:34</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L34">src/core/status-codes/interface.ts:34</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -189,7 +262,7 @@
 					<div class="tsd-signature tsd-kind-icon">CONFLICT<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;409</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L43">src/core/status-codes/interface.ts:43</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L43">src/core/status-codes/interface.ts:43</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -199,7 +272,7 @@
 					<div class="tsd-signature tsd-kind-icon">CONTINUE<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;100</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L10">src/core/status-codes/interface.ts:10</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L10">src/core/status-codes/interface.ts:10</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -209,7 +282,7 @@
 					<div class="tsd-signature tsd-kind-icon">CREATED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;201</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L14">src/core/status-codes/interface.ts:14</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L14">src/core/status-codes/interface.ts:14</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -219,7 +292,7 @@
 					<div class="tsd-signature tsd-kind-icon">EXPECTATION_<wbr>FAILED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;417</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L51">src/core/status-codes/interface.ts:51</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L51">src/core/status-codes/interface.ts:51</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -229,7 +302,7 @@
 					<div class="tsd-signature tsd-kind-icon">FAILED_<wbr>DEPENDENCY<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;424</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L58">src/core/status-codes/interface.ts:58</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L58">src/core/status-codes/interface.ts:58</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -239,7 +312,7 @@
 					<div class="tsd-signature tsd-kind-icon">FORBIDDEN<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;403</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L37">src/core/status-codes/interface.ts:37</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L37">src/core/status-codes/interface.ts:37</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -249,7 +322,7 @@
 					<div class="tsd-signature tsd-kind-icon">FOUND<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;302</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L26">src/core/status-codes/interface.ts:26</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L26">src/core/status-codes/interface.ts:26</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -259,7 +332,7 @@
 					<div class="tsd-signature tsd-kind-icon">GATEWAY_<wbr>TIMEOUT<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;504</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L67">src/core/status-codes/interface.ts:67</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L67">src/core/status-codes/interface.ts:67</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -269,7 +342,7 @@
 					<div class="tsd-signature tsd-kind-icon">GONE<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;410</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L44">src/core/status-codes/interface.ts:44</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L44">src/core/status-codes/interface.ts:44</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -279,7 +352,7 @@
 					<div class="tsd-signature tsd-kind-icon">HTTP_<wbr>VERSION_<wbr>NOT_<wbr>SUPPORTED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;505</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L68">src/core/status-codes/interface.ts:68</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L68">src/core/status-codes/interface.ts:68</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -289,7 +362,7 @@
 					<div class="tsd-signature tsd-kind-icon">IM_<wbr><wbr>A_TEAPOT<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;418</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L52">src/core/status-codes/interface.ts:52</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L52">src/core/status-codes/interface.ts:52</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -299,7 +372,7 @@
 					<div class="tsd-signature tsd-kind-icon">IM_<wbr>USED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;226</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L22">src/core/status-codes/interface.ts:22</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L22">src/core/status-codes/interface.ts:22</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -309,7 +382,7 @@
 					<div class="tsd-signature tsd-kind-icon">INSUFFICIENT_<wbr>STORAGE<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;507</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L70">src/core/status-codes/interface.ts:70</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L70">src/core/status-codes/interface.ts:70</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -319,7 +392,7 @@
 					<div class="tsd-signature tsd-kind-icon">INTERNAL_<wbr>SERVER_<wbr>ERROR<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;500</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L63">src/core/status-codes/interface.ts:63</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L63">src/core/status-codes/interface.ts:63</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -329,7 +402,7 @@
 					<div class="tsd-signature tsd-kind-icon">LENGTH_<wbr>REQUIRED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;411</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L45">src/core/status-codes/interface.ts:45</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L45">src/core/status-codes/interface.ts:45</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -339,7 +412,7 @@
 					<div class="tsd-signature tsd-kind-icon">LOCKED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;423</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L57">src/core/status-codes/interface.ts:57</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L57">src/core/status-codes/interface.ts:57</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -349,7 +422,7 @@
 					<div class="tsd-signature tsd-kind-icon">LOOP_<wbr>DETECTED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;508</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L71">src/core/status-codes/interface.ts:71</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L71">src/core/status-codes/interface.ts:71</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -359,7 +432,7 @@
 					<div class="tsd-signature tsd-kind-icon">METHOD_<wbr>NOT_<wbr>ALLOWED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;405</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L39">src/core/status-codes/interface.ts:39</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L39">src/core/status-codes/interface.ts:39</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -369,7 +442,7 @@
 					<div class="tsd-signature tsd-kind-icon">MISDIRECTED_<wbr>REQUEST<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;421</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L53">src/core/status-codes/interface.ts:53</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L53">src/core/status-codes/interface.ts:53</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -379,7 +452,7 @@
 					<div class="tsd-signature tsd-kind-icon">MOVED_<wbr>PERMANENTLY<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;301</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L25">src/core/status-codes/interface.ts:25</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L25">src/core/status-codes/interface.ts:25</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -389,7 +462,7 @@
 					<div class="tsd-signature tsd-kind-icon">MULTIPLE_<wbr>CHOICES<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;300</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L24">src/core/status-codes/interface.ts:24</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L24">src/core/status-codes/interface.ts:24</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -399,7 +472,7 @@
 					<div class="tsd-signature tsd-kind-icon">MULTI_<wbr>STATUS<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;207</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L20">src/core/status-codes/interface.ts:20</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L20">src/core/status-codes/interface.ts:20</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -409,7 +482,7 @@
 					<div class="tsd-signature tsd-kind-icon">NETWORK_<wbr>AUTHENTICATION_<wbr>REQUIRED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;511</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L73">src/core/status-codes/interface.ts:73</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L73">src/core/status-codes/interface.ts:73</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -419,7 +492,7 @@
 					<div class="tsd-signature tsd-kind-icon">NON_<wbr>AUTHORITATIVE_<wbr>INFORMATION<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;203</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L16">src/core/status-codes/interface.ts:16</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L16">src/core/status-codes/interface.ts:16</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -429,7 +502,7 @@
 					<div class="tsd-signature tsd-kind-icon">NOT_<wbr>ACCEPTABLE<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;406</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L40">src/core/status-codes/interface.ts:40</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L40">src/core/status-codes/interface.ts:40</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -439,7 +512,7 @@
 					<div class="tsd-signature tsd-kind-icon">NOT_<wbr>EXTENDED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;510</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L72">src/core/status-codes/interface.ts:72</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L72">src/core/status-codes/interface.ts:72</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -449,7 +522,7 @@
 					<div class="tsd-signature tsd-kind-icon">NOT_<wbr>FOUND<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;404</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L38">src/core/status-codes/interface.ts:38</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L38">src/core/status-codes/interface.ts:38</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -459,7 +532,7 @@
 					<div class="tsd-signature tsd-kind-icon">NOT_<wbr>IMPLEMENTED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;501</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L64">src/core/status-codes/interface.ts:64</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L64">src/core/status-codes/interface.ts:64</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -469,7 +542,7 @@
 					<div class="tsd-signature tsd-kind-icon">NOT_<wbr>MODIFIED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;304</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L28">src/core/status-codes/interface.ts:28</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L28">src/core/status-codes/interface.ts:28</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -479,7 +552,7 @@
 					<div class="tsd-signature tsd-kind-icon">NO_<wbr>CONTENT<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;204</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L17">src/core/status-codes/interface.ts:17</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L17">src/core/status-codes/interface.ts:17</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -489,7 +562,7 @@
 					<div class="tsd-signature tsd-kind-icon">OK<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;200</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L13">src/core/status-codes/interface.ts:13</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L13">src/core/status-codes/interface.ts:13</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -499,7 +572,7 @@
 					<div class="tsd-signature tsd-kind-icon">PARTIAL_<wbr>CONTENT<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;206</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L19">src/core/status-codes/interface.ts:19</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L19">src/core/status-codes/interface.ts:19</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -509,7 +582,7 @@
 					<div class="tsd-signature tsd-kind-icon">PAYMENT_<wbr>REQUIRED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;402</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L36">src/core/status-codes/interface.ts:36</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L36">src/core/status-codes/interface.ts:36</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -519,7 +592,7 @@
 					<div class="tsd-signature tsd-kind-icon">PERMANENT_<wbr>REDIRECT<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;308</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L32">src/core/status-codes/interface.ts:32</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L32">src/core/status-codes/interface.ts:32</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -529,7 +602,7 @@
 					<div class="tsd-signature tsd-kind-icon">PRECONDITION_<wbr>FAILED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;412</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L46">src/core/status-codes/interface.ts:46</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L46">src/core/status-codes/interface.ts:46</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -539,7 +612,7 @@
 					<div class="tsd-signature tsd-kind-icon">PRECONDITION_<wbr>REQUIRED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;428</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L56">src/core/status-codes/interface.ts:56</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L56">src/core/status-codes/interface.ts:56</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -549,7 +622,7 @@
 					<div class="tsd-signature tsd-kind-icon">PROXY_<wbr>AUTHENTICATION_<wbr>REQUIRED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;407</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L41">src/core/status-codes/interface.ts:41</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L41">src/core/status-codes/interface.ts:41</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -559,7 +632,7 @@
 					<div class="tsd-signature tsd-kind-icon">REQUESTED_<wbr>RANGE_<wbr>NOT_<wbr>SATISFIABLE<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;416</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L50">src/core/status-codes/interface.ts:50</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L50">src/core/status-codes/interface.ts:50</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -569,7 +642,7 @@
 					<div class="tsd-signature tsd-kind-icon">REQUEST_<wbr>ENTITY_<wbr>TOO_<wbr>LARGE<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;413</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L47">src/core/status-codes/interface.ts:47</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L47">src/core/status-codes/interface.ts:47</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -579,7 +652,7 @@
 					<div class="tsd-signature tsd-kind-icon">REQUEST_<wbr>HEADER_<wbr>FIELDS_<wbr>TOO_<wbr>LARGE<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;431</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L60">src/core/status-codes/interface.ts:60</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L60">src/core/status-codes/interface.ts:60</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -589,7 +662,7 @@
 					<div class="tsd-signature tsd-kind-icon">REQUEST_<wbr>TIMEOUT<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;408</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L42">src/core/status-codes/interface.ts:42</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L42">src/core/status-codes/interface.ts:42</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -599,7 +672,7 @@
 					<div class="tsd-signature tsd-kind-icon">REQUEST_<wbr>URI_<wbr>TOO_<wbr>LONG<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;414</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L48">src/core/status-codes/interface.ts:48</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L48">src/core/status-codes/interface.ts:48</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -609,7 +682,7 @@
 					<div class="tsd-signature tsd-kind-icon">RESET_<wbr>CONTENT<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;205</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L18">src/core/status-codes/interface.ts:18</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L18">src/core/status-codes/interface.ts:18</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -619,7 +692,7 @@
 					<div class="tsd-signature tsd-kind-icon">SEE_<wbr>OTHER<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;303</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L27">src/core/status-codes/interface.ts:27</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L27">src/core/status-codes/interface.ts:27</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -629,7 +702,7 @@
 					<div class="tsd-signature tsd-kind-icon">SERVICE_<wbr>UNAVAILABLE<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;503</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L66">src/core/status-codes/interface.ts:66</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L66">src/core/status-codes/interface.ts:66</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -639,7 +712,7 @@
 					<div class="tsd-signature tsd-kind-icon">SWITCHING_<wbr>PROTOCOLS<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;101</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L11">src/core/status-codes/interface.ts:11</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L11">src/core/status-codes/interface.ts:11</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -649,7 +722,7 @@
 					<div class="tsd-signature tsd-kind-icon">SWITCH_<wbr>PROXY<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;306</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L30">src/core/status-codes/interface.ts:30</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L30">src/core/status-codes/interface.ts:30</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -659,7 +732,7 @@
 					<div class="tsd-signature tsd-kind-icon">TEMPORARY_<wbr>REDIRECT<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;307</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L31">src/core/status-codes/interface.ts:31</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L31">src/core/status-codes/interface.ts:31</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -669,7 +742,7 @@
 					<div class="tsd-signature tsd-kind-icon">TOO_<wbr>MANY_<wbr>REQUESTS<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;429</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L59">src/core/status-codes/interface.ts:59</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L59">src/core/status-codes/interface.ts:59</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -679,7 +752,7 @@
 					<div class="tsd-signature tsd-kind-icon">UNAUTHORIZED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;401</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L35">src/core/status-codes/interface.ts:35</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L35">src/core/status-codes/interface.ts:35</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -689,7 +762,7 @@
 					<div class="tsd-signature tsd-kind-icon">UNAVAILABLE_<wbr>FOR_<wbr>LEGAL_<wbr>REASONS<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;451</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L61">src/core/status-codes/interface.ts:61</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L61">src/core/status-codes/interface.ts:61</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -699,7 +772,7 @@
 					<div class="tsd-signature tsd-kind-icon">UNPROCESSABLE_<wbr>ENTITY<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;422</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L54">src/core/status-codes/interface.ts:54</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L54">src/core/status-codes/interface.ts:54</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -709,7 +782,7 @@
 					<div class="tsd-signature tsd-kind-icon">UNSUPPORTED_<wbr>MEDIA_<wbr>TYPE<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;415</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L49">src/core/status-codes/interface.ts:49</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L49">src/core/status-codes/interface.ts:49</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -719,7 +792,7 @@
 					<div class="tsd-signature tsd-kind-icon">UPGRADE_<wbr>REQUIRED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;426</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L55">src/core/status-codes/interface.ts:55</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L55">src/core/status-codes/interface.ts:55</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -729,7 +802,7 @@
 					<div class="tsd-signature tsd-kind-icon">USE_<wbr>PROXY<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;305</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L29">src/core/status-codes/interface.ts:29</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L29">src/core/status-codes/interface.ts:29</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -739,7 +812,7 @@
 					<div class="tsd-signature tsd-kind-icon">VARIANT_<wbr>ALSO_<wbr>NEGOTIATES<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;506</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/status-codes/interface.ts#L69">src/core/status-codes/interface.ts:69</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/status-codes/interface.ts#L69">src/core/status-codes/interface.ts:69</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -1015,5 +1088,75 @@
 <div class="overlay"></div>
 <script src="../assets/js/main.js"></script>
 <script>if (location.protocol == 'file:') document.write('<script src="../assets/js/search.js"><' + '/script>');</script>
+<script>'use strict';
+
+/*!
+ * V4Fire Core
+ * https://github.com/V4Fire/Core
+ *
+ * Released under the MIT license
+ * https://github.com/V4Fire/Core/blob/master/LICENSE
+ */
+
+/* eslint-disable prefer-arrow-callback, no-var */
+
+(function () {
+	document.body.style.display = 'block';
+
+	var
+		isDTS = /([^/.]+)\.d/,
+		isIndex = /\/index|\.d/,
+		isNode = /(?:^|\b)node_modules(?:\b|$)/;
+
+	var
+		trimRgxp = /^\s+|[\n\v"']+|\s+$/g,
+		normalizeRgxp = /(?:^|\b)src\//;
+
+	var
+		breadcrumbs = Array.from(document.querySelectorAll('.tsd-breadcrumb a')),
+		headers = Array.from(document.querySelectorAll('h1'));
+
+	breadcrumbs.forEach(function (el) {
+		el.textContent = el.textContent.replace(trimRgxp, '').replace(normalizeRgxp, '');
+	});
+
+	headers.forEach(function (el) {
+		el.textContent = el.textContent.replace(trimRgxp, '').replace(normalizeRgxp, '');
+	});
+
+	var
+		navigation = Array.from(document.querySelectorAll('.tsd-navigation.primary .tsd-kind-external-module a')),
+		globalIndex = Array.from(document.querySelectorAll('.tsd-index-list a'));
+
+	[].concat(navigation, breadcrumbs.length <= 1 ? globalIndex : []).forEach(function (el) {
+		var
+			wrapper = el.parentNode,
+			linkText = el.textContent.replace(trimRgxp, '');
+
+		if (isIndex.test(linkText)) {
+			if (isDTS.test(linkText)) {
+				var
+					nm = RegExp.$1;
+
+				if (linkText === 'index.d') {
+					el.innerHTML = '<b>prelude</b>';
+
+				} else if (isNode.test(linkText)) {
+					el.textContent = nm;
+
+				} else {
+					wrapper.parentNode.removeChild(wrapper);
+				}
+
+			} else {
+				el.textContent = linkText.replace(isIndex, '').replace(normalizeRgxp, '');
+			}
+
+		} else {
+			wrapper.parentNode.removeChild(wrapper);
+		}
+	});
+})();
+</script>
 </body>
 </html>

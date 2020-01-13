@@ -7,8 +7,81 @@
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
+<style>/*!
+ * V4Fire Core
+ * https://github.com/V4Fire/Core
+ *
+ * Released under the MIT license
+ * https://github.com/V4Fire/Core/blob/master/LICENSE
+ */
+
+.tsd-panel {
+	border: 1px solid #DDD;
+	border-radius: 10px;
+	box-shadow: none;
+}
+
+.tsd-page-title {
+	color: #EEE;
+
+	background: #232526;  /* fallback for old browsers */
+	background: -webkit-linear-gradient(to right, #414345, #232526);  /* Chrome 10-25, Safari 5.1-6 */
+	background: linear-gradient(to right, #414345, #232526); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+.tsd-page-toolbar {
+	height: 43px;
+}
+
+.title {
+	display: inline-flex;
+	align-items: center;
+}
+
+.title::before {
+	content: "";
+
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	margin-right: 10px;
+
+	border-radius: 5px;
+	background-image: url("https://avatars0.githubusercontent.com/u/29952525?s=200&v=4");
+	background-size: contain;
+}
+
+#tsd-search .tsd-widget.search.no-caption {
+	bottom: 0;
+}
+
+#tsd-search .field {
+	height: 100%;
+}
+</style>
 </head>
 <body>
+<script>'use strict';
+
+/*!
+ * V4Fire Core
+ * https://github.com/V4Fire/Core
+ *
+ * Released under the MIT license
+ * https://github.com/V4Fire/Core/blob/master/LICENSE
+ */
+
+/* eslint-disable prefer-arrow-callback, no-var */
+
+(function () {
+	if (localStorage.getItem('visibility') == null) {
+		localStorage.setItem('visibility', 'public');
+	}
+
+	document.title = document.title.replace(/['"]+|src\//g, '');
+	document.body.style.display = 'none';
+})();
+</script>
 <header>
 	<div class="tsd-page-toolbar">
 		<div class="container">
@@ -118,7 +191,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_async_interface.asyncoptions.html">AsyncOptions</a>.<a href="src_core_async_interface.asyncoptions.html#group">group</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/async/interface.ts#L50">src/core/async/interface.ts:50</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/async/interface.ts#L50">src/core/async/interface.ts:50</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -134,7 +207,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_async_interface.asyncoptions.html">AsyncOptions</a>.<a href="src_core_async_interface.asyncoptions.html#join">join</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/async/interface.ts#L57">src/core/async/interface.ts:57</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/async/interface.ts#L57">src/core/async/interface.ts:57</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -154,7 +227,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_async_interface.asyncoptions.html">AsyncOptions</a>.<a href="src_core_async_interface.asyncoptions.html#label">label</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/async/interface.ts#L45">src/core/async/interface.ts:45</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/async/interface.ts#L45">src/core/async/interface.ts:45</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -166,11 +239,11 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 					<a name="onclear" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> on<wbr>Clear</h3>
-					<div class="tsd-signature tsd-kind-icon">on<wbr>Clear<span class="tsd-signature-symbol">:</span> <a href="../modules/index_d.html#canarray" class="tsd-signature-type">CanArray</a><span class="tsd-signature-symbol">&lt;</span><a href="_src_core_async_interface_.asynccb.html" class="tsd-signature-type">AsyncCb</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<div class="tsd-signature tsd-kind-icon">on<wbr>Clear<span class="tsd-signature-symbol">:</span> <a href="../modules/index_d.html#canarray" class="tsd-signature-type">CanArray</a><span class="tsd-signature-symbol">&lt;</span><a href="src_core_async_interface.asynccb.html" class="tsd-signature-type">AsyncCb</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_async_interface.asynccboptions.html">AsyncCbOptions</a>.<a href="src_core_async_interface.asynccboptions.html#onclear">onClear</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/async/interface.ts#L181">src/core/async/interface.ts:181</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/async/interface.ts#L181">src/core/async/interface.ts:181</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -182,11 +255,11 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 					<a name="onmerge" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> on<wbr>Merge</h3>
-					<div class="tsd-signature tsd-kind-icon">on<wbr>Merge<span class="tsd-signature-symbol">:</span> <a href="../modules/index_d.html#canarray" class="tsd-signature-type">CanArray</a><span class="tsd-signature-symbol">&lt;</span><a href="_src_core_async_interface_.asynccb.html" class="tsd-signature-type">AsyncCb</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<div class="tsd-signature tsd-kind-icon">on<wbr>Merge<span class="tsd-signature-symbol">:</span> <a href="../modules/index_d.html#canarray" class="tsd-signature-type">CanArray</a><span class="tsd-signature-symbol">&lt;</span><a href="src_core_async_interface.asynccb.html" class="tsd-signature-type">AsyncCb</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_async_interface.asynccboptions.html">AsyncCbOptions</a>.<a href="src_core_async_interface.asynccboptions.html#onmerge">onMerge</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/async/interface.ts#L186">src/core/async/interface.ts:186</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/async/interface.ts#L186">src/core/async/interface.ts:186</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -201,7 +274,7 @@
 					<div class="tsd-signature tsd-kind-icon">options<span class="tsd-signature-symbol">:</span> <a href="index_d.dictionary.html" class="tsd-signature-type">Dictionary</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/async/interface.ts#L255">src/core/async/interface.ts:255</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/async/interface.ts#L255">src/core/async/interface.ts:255</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -217,7 +290,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_async_interface.asynccboptions.html">AsyncCbOptions</a>.<a href="src_core_async_interface.asynccboptions.html#promise">promise</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/a283f89/src/core/async/interface.ts#L176">src/core/async/interface.ts:176</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/async/interface.ts#L176">src/core/async/interface.ts:176</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -344,5 +417,75 @@
 <div class="overlay"></div>
 <script src="../assets/js/main.js"></script>
 <script>if (location.protocol == 'file:') document.write('<script src="../assets/js/search.js"><' + '/script>');</script>
+<script>'use strict';
+
+/*!
+ * V4Fire Core
+ * https://github.com/V4Fire/Core
+ *
+ * Released under the MIT license
+ * https://github.com/V4Fire/Core/blob/master/LICENSE
+ */
+
+/* eslint-disable prefer-arrow-callback, no-var */
+
+(function () {
+	document.body.style.display = 'block';
+
+	var
+		isDTS = /([^/.]+)\.d/,
+		isIndex = /\/index|\.d/,
+		isNode = /(?:^|\b)node_modules(?:\b|$)/;
+
+	var
+		trimRgxp = /^\s+|[\n\v"']+|\s+$/g,
+		normalizeRgxp = /(?:^|\b)src\//;
+
+	var
+		breadcrumbs = Array.from(document.querySelectorAll('.tsd-breadcrumb a')),
+		headers = Array.from(document.querySelectorAll('h1'));
+
+	breadcrumbs.forEach(function (el) {
+		el.textContent = el.textContent.replace(trimRgxp, '').replace(normalizeRgxp, '');
+	});
+
+	headers.forEach(function (el) {
+		el.textContent = el.textContent.replace(trimRgxp, '').replace(normalizeRgxp, '');
+	});
+
+	var
+		navigation = Array.from(document.querySelectorAll('.tsd-navigation.primary .tsd-kind-external-module a')),
+		globalIndex = Array.from(document.querySelectorAll('.tsd-index-list a'));
+
+	[].concat(navigation, breadcrumbs.length <= 1 ? globalIndex : []).forEach(function (el) {
+		var
+			wrapper = el.parentNode,
+			linkText = el.textContent.replace(trimRgxp, '');
+
+		if (isIndex.test(linkText)) {
+			if (isDTS.test(linkText)) {
+				var
+					nm = RegExp.$1;
+
+				if (linkText === 'index.d') {
+					el.innerHTML = '<b>prelude</b>';
+
+				} else if (isNode.test(linkText)) {
+					el.textContent = nm;
+
+				} else {
+					wrapper.parentNode.removeChild(wrapper);
+				}
+
+			} else {
+				el.textContent = linkText.replace(isIndex, '').replace(normalizeRgxp, '');
+			}
+
+		} else {
+			wrapper.parentNode.removeChild(wrapper);
+		}
+	});
+})();
+</script>
 </body>
 </html>
