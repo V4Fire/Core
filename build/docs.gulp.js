@@ -18,8 +18,8 @@ module.exports = function (gulp) {
 	);
 
 	gulp.task('build:docs:normalise', gulp.series([
-		() => gulp.src('./docs/**/*.html')
-			.pipe($.replace(/_+(.*?)_+(\.(?:.*?\.)?)html/g, '$1$2html'))
+		() => gulp.src('./docs/**/*.+(html|js)')
+			.pipe($.replace(/\b_+(.*?)_+(\.(?:[^\s'"/<>#]*?\.)?)html/g, '$1$2html'))
 			.pipe(gulp.dest('./docs')),
 
 		() => gulp.src('./docs/**/*.html')
