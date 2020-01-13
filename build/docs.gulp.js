@@ -22,10 +22,10 @@ module.exports = function (gulp) {
 			.pipe($.replace(/_+(.*?)_+(\.(?:.*?\.)?)html/g, '$1$2html'))
 			.pipe(gulp.dest('./docs')),
 
-		() => gulp.src('./docs/*.html')
-			.pipe($.replace(/<\/head>/, [
-				`<style>${include('build/docs/assets/css/extra.css', {source: true})}</style>`,
-				`<script>${include('build/docs/assets/js/extra.js', {source: true})}</script>`
+		() => gulp.src('./docs/**/*.html')
+			.pipe($.replace(/<\/body>/, [
+				`<style>${include('assets/css/docs.css', {source: true})}</style>`,
+				`<script>${include('assets/js/docs.js', {source: true})}</script>`
 			].join('\n')))
 
 			.pipe(gulp.dest('./docs')),

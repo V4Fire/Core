@@ -8,6 +8,7 @@
   "hideGenerator": true,
   "ignoreCompilerErrors": false,
   "includes": "./src",
+  "media": "./assets",
   "includeDeclarations": true,
   "excludePrivate": true,
   "externalPattern": ["**/node_modules/**"],
