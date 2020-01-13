@@ -66,14 +66,14 @@ module.exports = function (roots) {
 
 		for (let i = r.length; i--;) {
 			const
-				url = resolve(r[i]);
+				layerSRC = resolve(r[i]);
 
 			try {
-				return require(url);
+				return require(layerSRC);
 
 			} catch (err) {
 				if (err.code !== 'MODULE_NOT_FOUND') {
-					console.error(`Failed to load ${url}`);
+					console.error(`Failed to load ${layerSRC}`);
 					throw err;
 				}
 			}
