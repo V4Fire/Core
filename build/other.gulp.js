@@ -10,7 +10,7 @@
 
 module.exports = function (gulp) {
 	const
-		$ = require('gulp-load-plugins')();
+		$ = require('gulp-load-plugins')({scope: ['optionalDependencies']});
 
 	/**
 	 * The task for setting NODE_ENV to production
