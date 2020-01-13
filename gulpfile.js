@@ -24,6 +24,7 @@ module.exports = function (gulp = require('gulp')) {
 
 	wrapGulp(gulp);
 	include('build/tsconfig.gulp')(gulp);
+	include('build/docs.gulp')(gulp);
 	include('build/other.gulp')(gulp);
 	global.callGulp(module);
 };
