@@ -23,9 +23,19 @@ module.exports = function (gulp) {
 			.pipe(gulp.dest('./docs')),
 
 		() => gulp.src('./docs/**/*.html')
-			.pipe($.replace(/<\/body>/, [
+			.pipe($.replace(/<\/head>/, [
 				`<style>${include('assets/css/docs.css', {source: true})}</style>`,
-				`<script>${include('assets/js/docs.js', {source: true})}</script>`
+				'</head>'
+			].join('\n')))
+
+			.pipe($.replace(/<body>/, [
+				'<body>',
+				`<script>${include('assets/js/config.js', {source: true})}</script>`,
+			].join('\n')))
+
+			.pipe($.replace(/<\/body>/, [
+				`<script>${include('assets/js/docs.js', {source: true})}</script>`,
+				'</body>'
 			].join('\n')))
 
 			.pipe(gulp.dest('./docs')),

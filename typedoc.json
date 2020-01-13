@@ -15,6 +15,7 @@
   "exclude": [
     "**/engines/**",
     "**/node_modules/!(eventemitter2)/**",
+    "src/core/index.ts",
     "src/core/log/*/**",
     "src/core/log/!(index|interface).ts",
     "src/core/prelude/*.ts",
