@@ -202,7 +202,7 @@ interface ObjectMixinOptions<V = unknown, K = unknown, D = unknown> {
 	 * );
 	 *
 	 * const obj2 = Object.create(proto);
-	 * Object.mixin({deep: true, withProto: false}, obj2, {c: 2, a: {d: 4}});
+	 * Object.mixin({deep: true, withProto: true}, obj2, {c: 2, a: {d: 4}});
 	 *
 	 * // 2
 	 * // 4
