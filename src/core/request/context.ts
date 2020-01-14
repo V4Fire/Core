@@ -102,7 +102,7 @@ export default class RequestContext<T = unknown> {
 			deep: true,
 			concatArray: true,
 			concatFn: (a: unknown[], b: unknown[]) => a.union(b),
-			extendFilter: (d, v) => Array.isArray(v) || Object.isObject(v)
+			extendFilter: (d, v) => Array.isArray(v) || Object.isPlainObject(v)
 		}, {}, params);
 
 		this.canCache = p.cacheMethods?.includes(p.method) || false;
@@ -228,9 +228,9 @@ export default class RequestContext<T = unknown> {
 			q = this.query;
 
 		const data = this.withoutBody ?
-			q : Object.isObject(p.body) ? p.body : q;
+			q : Object.isPlainObject(p.body) ? p.body : q;
 
-		if (Object.isObject(data)) {
+		if (Object.isPlainObject(data)) {
 			if (p.headers) {
 				p.headers = normalizeHeaders(p.headers, data);
 			}

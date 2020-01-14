@@ -56,7 +56,7 @@ extend(Object, 'forEach', (
 	}
 
 	if (
-		Object.isSimpleObject(obj) ||
+		Object.isCustomObject(obj) ||
 		!obj[Symbol.iterator] ||
 		opts?.notOwn !== undefined ||
 		opts?.withDescriptor !== undefined

@@ -37,7 +37,7 @@ export const
  * @param value
  */
 export function isAsyncOptions<T = AsyncOptions>(value: unknown): value is T {
-	return Object.isObject(value);
+	return Object.isPlainObject(value);
 }
 
 /**
@@ -415,7 +415,7 @@ export default class Async<CTX extends object = Async<any>> {
 				return this.cancelAllTasks({name, reason: 'all'});
 			}
 
-			p = Object.isObject(task) ? {...task, name} : {name, id: task};
+			p = Object.isPlainObject(task) ? {...task, name} : {name, id: task};
 
 		} else {
 			p = task || {};
@@ -577,7 +577,7 @@ export default class Async<CTX extends object = Async<any>> {
 				return this.markAllTasks(label, {name});
 			}
 
-			p = Object.isObject(task) ? {...task, name} : {name, id: task};
+			p = Object.isPlainObject(task) ? {...task, name} : {name, id: task};
 
 		} else {
 			p = task || {};

@@ -122,7 +122,7 @@ function selectReject(select: boolean): Function {
 		}
 
 		const
-			map = Object.isObject(condition) ? condition : Object.createDict();
+			map = Object.isPlainObject(condition) ? condition : Object.createDict();
 
 		if (Object.isString(condition)) {
 			map[condition] = true;

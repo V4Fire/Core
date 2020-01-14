@@ -30,7 +30,7 @@ extend(Object, 'size', (obj: any) => {
 		return obj.size;
 	}
 
-	if (Object.isSimpleObject(obj)) {
+	if (Object.isCustomObject(obj)) {
 		return Object.keys(obj).length;
 	}
 

@@ -28,7 +28,7 @@ export default function createTransport(params: RequestOptions): Then<Response> 
 		if (data instanceof FormData) {
 			contentType = '';
 
-		} else if (Object.isObject(data)) {
+		} else if (Object.isPlainObject(data)) {
 			data = JSON.stringify(data);
 			contentType = 'application/json;charset=UTF-8';
 		}

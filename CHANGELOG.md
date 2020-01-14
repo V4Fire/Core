@@ -30,11 +30,13 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 * Added deprecation API `core/meta/deprecation`
 * Added `Object.isPromiseLike`
 * Added `Then.prototype.finally`
-* Added `core/promise/sync` API (the function `core/event/createSyncPromise` was marked as deprecated)
+* Added `core/promise/sync` API (`core/event/createSyncPromise` was marked as deprecated)
 * Reviewed `core/event` API
 * Improved `Number.prototype.format`
 * Added a bunch of new functions to `Number` from `Number.prototype`
-* Added `Object.createEnumLike`. The method `Object.createMap` is marked as deprecated.
+* Added `Object.createEnumLike` (`Object.createMap` was marked as deprecated)
+* Added `Object.isPlainObject` (`Object.isObject` was marked as deprecated)
+* Added `Object.isCustomObject` (`Object.isSimpleObject` was marked as deprecated)
 * Improved `Object.fromArray` API
 * Added new parameters for `core/request/interface/RequestAPI`
 * Improved date/number formatting API

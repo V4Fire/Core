@@ -56,7 +56,7 @@ export function getRequestKey<T>(url: string, params?: CreateRequestOptions<T>):
 			if (Object.isString(body)) {
 				bodyKey = body;
 
-			} else if (Object.isObject(body)) {
+			} else if (Object.isPlainObject(body)) {
 				bodyKey = JSON.stringify(body);
 
 			} else if (body instanceof FormData) {

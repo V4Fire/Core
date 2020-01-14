@@ -7,23 +7,13 @@
  */
 
 import extend from 'core/prelude/extend';
+import { deprecate } from 'core/meta/deprecation';
 
-/** @see ObjectConstructor.isObject */
-extend(Object, 'isObject', (obj) => {
-	if (!obj || typeof obj !== 'object') {
-		return false;
-	}
+/** @see ObjectConstructor.isPlainObject */
+extend(Object, 'isPlainObject', isPlainObject);
 
-	const constr = obj.constructor;
-	return !constr || constr === Object;
-});
-
-const
-	toString = Object.prototype.toString;
-
-/** @see ObjectConstructor.isSimpleObject */
-extend(Object, 'isSimpleObject', (obj) =>
-	toString.call(obj) === '[object Object]');
+/** @see ObjectConstructor.isCustomObject */
+extend(Object, 'isCustomObject', isCustomObject);
 
 /** @see ObjectConstructor.isArray */
 extend(Object, 'isArray', Array.isArray);
@@ -102,3 +92,37 @@ extend(Object, 'isSet', (obj) => obj instanceof Set);
 
 /** @see ObjectConstructor.isWeakSet */
 extend(Object, 'isWeakSet', (obj) => obj instanceof WeakSet);
+
+/**
+ * @deprecated
+ * @see ObjectConstructor.isPlainObject
+ */
+extend(Object, 'isObject', deprecate({
+	name: 'isObject',
+	renamedTo: 'isPlainObject'
+}, isPlainObject));
+
+/**
+ * @deprecated
+ * @see ObjectConstructor.isCustomObject
+ */
+extend(Object, 'isSimpleObject', deprecate({
+	name: 'isSimpleObject',
+	renamedTo: 'isCustomObject'
+}, isCustomObject));
+
+function isPlainObject(obj: unknown): boolean {
+	if (!obj || typeof obj !== 'object') {
+		return false;
+	}
+
+	const constr = obj!.constructor;
+	return !constr || constr === Object;
+}
+
+const
+	toString = Object.prototype.toString;
+
+function isCustomObject(obj: unknown): boolean {
+	return toString.call(obj) === '[object Object]';
+}

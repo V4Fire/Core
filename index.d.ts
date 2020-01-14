@@ -801,14 +801,26 @@ interface ObjectConstructor {
 	reject<D extends object, C extends object>(obj: D, condition: C): Omit<D, keyof C>;
 
 	/**
-	 * Returns true if the specified value is an object
+	 * Returns true if the specified value is a plain object
 	 * @param obj
+	 */
+	isPlainObject(obj: unknown): obj is Dictionary;
+
+	/**
+	 * @deprecated
+	 * @see [[ObjectConstructor.isPlainObject]]
 	 */
 	isObject(obj: unknown): obj is Dictionary;
 
 	/**
-	 * Returns true if the specified value is a hash table object
+	 * Returns true if the specified value is a custom (not builtin) object
 	 * @param obj
+	 */
+	isCustomObject(obj: unknown): obj is object;
+
+	/**
+	 * @deprecated
+	 * @see [[ObjectConstructor.isCustomObject]]
 	 */
 	isSimpleObject(obj: unknown): obj is object;
 

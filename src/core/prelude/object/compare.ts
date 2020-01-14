@@ -27,8 +27,8 @@ extend(Object, 'fastCompare', (a, b) => {
 		bIsSet = !bIsMap && Object.isSet(b);
 
 	if (
-		!aIsArr && !Object.isObject(a) && !Object.isDate(a) && !Object.isRegExp(a) && !Object.isFunction(a.toJSON) ||
-		!bIsArr && !Object.isObject(b) && !Object.isDate(b) && !Object.isRegExp(b) && !Object.isFunction(b.toJSON)
+		!aIsArr && !Object.isPlainObject(a) && !Object.isDate(a) && !Object.isRegExp(a) && !Object.isFunction(a.toJSON) ||
+		!bIsArr && !Object.isPlainObject(b) && !Object.isDate(b) && !Object.isRegExp(b) && !Object.isFunction(b.toJSON)
 	) {
 		if ((aIsMap && bIsMap || aIsSet && bIsSet) && a.size === 0 && b.size === 0) {
 			return true;
