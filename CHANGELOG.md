@@ -23,6 +23,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 * Removed `json/setJSONToUTC`
 * Changed signature of `Number.prototype.pad`
 * Removed `Object.getPrototypeChain`
+* Marked `Date.getWeekDays` as deprecated
 
 #### :rocket: New Feature
 
@@ -36,6 +37,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 * Added `Object.createEnumLike`. The method `Object.createMap` is marked as deprecated.
 * Improved `Object.fromArray` API
 * Added new parameters for `core/request/interface/RequestAPI`
+* Improved date/number formatting API
 
 #### :house: Internal
 

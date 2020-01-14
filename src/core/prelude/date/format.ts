@@ -9,40 +9,28 @@
 import extend from 'core/prelude/extend';
 import { locale as defaultLocale } from 'core/prelude/i18n';
 
-const shortOpts = {
-	month: 'numeric',
-	day: 'numeric',
-	year: 'numeric'
-};
-
 /** @see Date.prototype.short */
 extend(Date.prototype, 'short', function (
 	this: Date,
-	locale: string = defaultLocale.value
+	locale: CanArray<string> = defaultLocale.value
 ): string {
-	return this.toLocaleString(locale, shortOpts);
-});
-
-const mediumOpts = Object.createDict({
-	month: 'long',
-	day: 'numeric',
-	year: 'numeric'
+	return this.format('d:numeric;M:numeric;Y:numeric', locale);
 });
 
 /** @see Date.prototype.medium */
 extend(Date.prototype, 'medium', function (
 	this: Date,
-	locale: string = defaultLocale.value
+	locale: CanArray<string> = defaultLocale.value
 ): string {
-	return this.toLocaleString(locale, mediumOpts);
+	return this.format('d:numeric;M:long;Y:numeric', locale);
 });
 
 /** @see Date.prototype.long */
 extend(Date.prototype, 'long', function (
 	this: Date,
-	locale: string = defaultLocale.value
+	locale: CanArray<string> = defaultLocale.value
 ): string {
-	return this.toLocaleString(locale);
+	return this.format('', locale);
 });
 
 const formatAliases = Object.createDict({
@@ -57,7 +45,7 @@ const formatAliases = Object.createDict({
 	z: 'timeZoneName'
 });
 
-const defaultFormat = Object.createDict({
+const defaultFormat = Object.createDict(<Intl.DateTimeFormatOptions>{
 	era: 'short',
 	year: 'numeric',
 	month: 'short',
@@ -69,30 +57,36 @@ const defaultFormat = Object.createDict({
 	timeZoneName: 'short'
 });
 
-const convert = Object.createDict({
+const boolAliases = Object.createDict({
 	'+': true,
 	'-': false
 });
 
 const
-	formatCache = Object.createDict<Intl.DateTimeFormatOptions>();
+	formatCache = Object.createDict<Intl.DateTimeFormat>();
 
 /** @see Date.prototype.format */
 extend(Date.prototype, 'format', function (
 	this: Date,
-	pattern: string,
-	locale: string = defaultLocale.value
+	patternOrOpts: string | Intl.DateTimeFormatOptions,
+	locale: CanArray<string> = defaultLocale.value
 ): string {
+	if (Object.isObject(patternOrOpts)) {
+		return this.toLocaleString(locale, patternOrOpts);
+	}
+
 	const
-		cache = formatCache[pattern];
+		pattern = String(patternOrOpts),
+		cacheKey = [locale, pattern].join(),
+		cache = formatCache[cacheKey];
 
 	if (cache) {
-		return this.toLocaleString(locale, cache);
+		return cache.format(this);
 	}
 
 	const
 		chunks = pattern.split(';'),
-		config = {};
+		opts = {};
 
 	for (let i = 0; i < chunks.length; i++) {
 		const
@@ -118,11 +112,11 @@ extend(Date.prototype, 'format', function (
 			val = defaultFormat[key];
 		}
 
-		config[key] = val in convert ? convert[val] : val;
+		opts[key] = val in boolAliases ? boolAliases[val] : val;
 	}
 
-	formatCache[pattern] = config;
-	return this.toLocaleString(locale, config);
+	const formatter = formatCache[cacheKey] = new Intl.DateTimeFormat(locale, opts);
+	return formatter.format(this);
 });
 
 /** @see Date.prototype.toHTMLDateString */
