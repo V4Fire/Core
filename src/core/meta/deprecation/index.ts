@@ -15,7 +15,7 @@ import { DeprecatedOptions, InlineDeprecatedOptions } from 'core/meta/deprecatio
 export * from 'core/meta/deprecation/interface';
 
 const
-	consoleCache = Object.createDict();
+	consoleCache = Object.create(null);
 
 /**
  * Marks the specified function as obsolescence
