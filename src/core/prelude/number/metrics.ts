@@ -6,9 +6,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-// tslint:disable:binary-expression-operand-order
-// tslint:disable:no-bitwise
-
 import extend from 'core/prelude/extend';
 
 /** @see Number.prototype.isInteger */
