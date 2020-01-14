@@ -43,7 +43,7 @@ export default class Range<T extends RangeValue> {
 	 * @param start - start position
 	 * @param end - end position
 	 */
-	constructor(start: T, end: T) {
+	constructor(start: T, end: Nullable<T>) {
 		if (Object.isString(start)) {
 			this.type = 'string';
 			this.start = charCodeAt(start, 0);
@@ -58,6 +58,10 @@ export default class Range<T extends RangeValue> {
 		if (this.start > this.end) {
 			[this.start, this.end] = [this.end, this.start];
 			this.reverse = true;
+		}
+
+		if (this.reverse && !Number.isFinite(this.end)) {
+			throw new Error('Can\'t reverse a range without ending');
 		}
 	}
 
@@ -113,8 +117,6 @@ export default class Range<T extends RangeValue> {
 		return newRange;
 	}
 
-	//#if runtime has range/extended
-
 	/**
 	 * Clones the range
 	 */
@@ -168,46 +170,55 @@ export default class Range<T extends RangeValue> {
 		return this.end - this.start + 1;
 	}
 
-	//#endif
+	/**
+	 * Returns an iterable object from the range
+	 * @param step
+	 */
+	*values(step?: number): Iterable<T> {
+		if (!this.isValid()) {
+			return;
+		}
+
+		if (!Number.isNatural(step)) {
+			throw new TypeError('Step value can be only natural');
+		}
+
+		if (!step) {
+			step = this.type === 'date' ? (this.end - this.start) * 0.01 : 1;
+		}
+
+		if (this.reverse) {
+			for (let i = this.end; i >= this.start; i -= step) {
+				yield this.toType(i);
+
+				if (i >= Number.MAX_SAFE_INTEGER) {
+					break;
+				}
+			}
+
+		} else {
+			for (let i = this.start; i <= this.end; i += step) {
+				yield this.toType(i);
+
+				if (i >= Number.MAX_SAFE_INTEGER) {
+					break;
+				}
+			}
+		}
+	}
 
 	/**
 	 * Creates an array from the range and returns it
 	 * @param [step] - iteration step value
 	 */
 	toArray(step?: number): T[] {
-		if (!step) {
-			step = this.type === 'date' ? (this.end - this.start) * 0.01 : 1;
-		}
-
-		const
-			res = <any[]>[];
-
-		if (!this.isValid()) {
-			return res;
-		}
-
-		for (let i = this.start; i <= this.end; i += step) {
-			res.push(this.toType(i));
-
-			if (i >= Number.MAX_SAFE_INTEGER) {
-				break;
-			}
-		}
-
-		if (this.reverse) {
-			res.reverse();
-		}
-
-		return res;
+		return [...this.values(step)];
 	}
-
-	//#if runtime has range/extended
 
 	/**
 	 * Creates a string from the range and returns it
-	 * @param [step] - iteration step value
 	 */
-	toString(step: number = 1): string {
+	toString(): string {
 		if (!this.isValid()) {
 			return 'Invalid range';
 		}
@@ -220,7 +231,7 @@ export default class Range<T extends RangeValue> {
 			chunks.push(this.end);
 		}
 
-		for (let i = 0; i < chunks.length; i += step) {
+		for (let i = 0; i < chunks.length; i++) {
 			res.push(this.toType(chunks[i]));
 		}
 
@@ -230,8 +241,6 @@ export default class Range<T extends RangeValue> {
 
 		return res.length === 2 ? res.join('..') : `${res[0]}..`;
 	}
-
-	//#endif
 
 	/**
 	 * Converts a value to the real range type

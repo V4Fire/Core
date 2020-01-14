@@ -39,6 +39,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 * Added new parameters for `core/request/interface/RequestAPI`
 * Improved date/number formatting API
 * Improved API of `prelude/string`
+* Added `Range.prototype.values`
 
 #### :house: Internal
 
