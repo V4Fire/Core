@@ -6,13 +6,10 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import 'core/prelude/date/create';
 import 'core/prelude/date/compare';
-import 'core/prelude/date/metrics';
-import 'core/prelude/date/other';
-
-//#if runtime has prelude/date/modify
 import 'core/prelude/date/modify';
-//#endif
+import 'core/prelude/date/other';
 
 //#if runtime has prelude/date/relative
 import 'core/prelude/date/relative';
@@ -20,8 +17,4 @@ import 'core/prelude/date/relative';
 
 //#if runtime has prelude/date/format
 import 'core/prelude/date/format';
-//#endif
-
-//#if runtime has prelude/date/create
-import 'core/prelude/date/create';
 //#endif

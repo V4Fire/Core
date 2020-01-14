@@ -8,6 +8,11 @@
 
 import extend from 'core/prelude/extend';
 
+/** @see Date.prototype.clone */
+extend(Date.prototype, 'clone', function (this: Date): Date {
+	return new Date(this);
+});
+
 const
 	isDateStr = /^(\d{4}-\d{2}-\d{2})([T ])(\d{2}:\d{2}:\d{2}(?:\.\d{3})?)(?:\d{0,3})?(Z)?([+-]\d{2}:?\d{2})?$/,
 	isFloatStr = /^\d+\.\d+$/;

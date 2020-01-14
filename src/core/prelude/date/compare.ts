@@ -13,6 +13,16 @@ extend(Date.prototype, 'is', function (this: Date, date: DateCreateValue, margin
 	return Math.abs(this.valueOf() - Date.create(date).valueOf()) <= margin;
 });
 
+/** @see Date.prototype.isPast */
+extend(Date.prototype, 'isPast', function (this: Date): boolean {
+	return this.valueOf() < Date.now();
+});
+
+/** @see Date.prototype.isFuture */
+extend(Date.prototype, 'isFuture', function (this: Date): boolean {
+	return this.valueOf() > Date.now();
+});
+
 /** @see Date.prototype.isAfter */
 extend(Date.prototype, 'isAfter', function (
 	this: Date,
