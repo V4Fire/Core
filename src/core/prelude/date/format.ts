@@ -18,7 +18,7 @@ const shortOpts = {
 /** @see Date.prototype.short */
 extend(Date.prototype, 'short', function (
 	this: Date,
-	locale: string = defaultLocale.value
+	locale: CanArray<string> = defaultLocale.value
 ): string {
 	return this.toLocaleString(locale, shortOpts);
 });
@@ -32,7 +32,7 @@ const mediumOpts = Object.createDict({
 /** @see Date.prototype.medium */
 extend(Date.prototype, 'medium', function (
 	this: Date,
-	locale: string = defaultLocale.value
+	locale: CanArray<string> = defaultLocale.value
 ): string {
 	return this.toLocaleString(locale, mediumOpts);
 });
@@ -40,7 +40,7 @@ extend(Date.prototype, 'medium', function (
 /** @see Date.prototype.long */
 extend(Date.prototype, 'long', function (
 	this: Date,
-	locale: string = defaultLocale.value
+	locale: CanArray<string> = defaultLocale.value
 ): string {
 	return this.toLocaleString(locale);
 });
@@ -80,10 +80,15 @@ const
 /** @see Date.prototype.format */
 extend(Date.prototype, 'format', function (
 	this: Date,
-	pattern: string,
-	locale: string = defaultLocale.value
+	patternOrOpts: string | Intl.DateTimeFormatOptions,
+	locale: CanArray<string> = defaultLocale.value
 ): string {
+	if (Object.isObject(patternOrOpts)) {
+		return this.toLocaleString(locale, patternOrOpts);
+	}
+
 	const
+		pattern = String(patternOrOpts),
 		cache = formatCache[pattern];
 
 	if (cache) {

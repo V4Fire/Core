@@ -37,6 +37,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 * Added `Object.createEnumLike`. The method `Object.createMap` is marked as deprecated.
 * Improved `Object.fromArray` API
 * Added new parameters for `core/request/interface/RequestAPI`
+* Improved date formatting API
 
 #### :house: Internal
 

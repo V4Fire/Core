@@ -11,7 +11,7 @@
  * @packageDocumentation
  */
 
-// tslint:disable:max-file-line-count
+// tslint:disable:max-file-line-count unified-signatures
 
 declare const APP_NAME: string;
 declare const API_URL: CanUndef<string>;
@@ -1476,7 +1476,7 @@ interface Date {
 	 * new Date('12/28/2019').short('en-us') // '12/28/2019'
 	 * ```
 	 */
-	short(locale?: string): string;
+	short(locale?: CanArray<string>): string;
 
 	/**
 	 * Returns a medium string representation of the date.
@@ -1489,7 +1489,7 @@ interface Date {
 	 * new Date('12/28/2019').medium('en-us') // 'December 28, 2019'
 	 * ```
 	 */
-	medium(locale?: string): string;
+	medium(locale?: CanArray<string>): string;
 
 	/**
 	 * Returns a long string representation of the date.
@@ -1502,7 +1502,7 @@ interface Date {
 	 * new Date('12/28/2019').long('en-us') // '12/28/2019, 12:00:00 A'
 	 * ```
 	 */
-	long(locale?: string): string;
+	long(locale?: CanArray<string>): string;
 
 	/**
 	 * Returns a string representation of the date by the specified pattern.
@@ -1548,7 +1548,15 @@ interface Date {
 	 * new Date('12/28/2019').format('Y:2-digit;M:long;d', 'en-us') // 'December 28, 19'
 	 * ```
 	 */
-	format(pattern: string, locale?: string): string;
+	format(pattern: string, locale?: CanArray<string>): string;
+
+	/**
+	 * Returns a string representation of the date by the specified pattern
+	 *
+	 * @param opts - options for internalizing
+	 * @param [locale] - locale for internalizing
+	 */
+	format(opts: Intl.DateTimeFormatOptions, locale?: CanArray<string>): string;
 
 	/**
 	 * Returns an HTML string representation of the date (without time).
