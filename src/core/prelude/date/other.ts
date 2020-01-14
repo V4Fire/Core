@@ -9,7 +9,10 @@
 import extend from 'core/prelude/extend';
 import { deprecate } from 'core/meta/deprecation';
 
-/** @see DateConstructor.getWeekDays */
+/**
+ * @deprecated
+ * @see DateConstructor.getWeekDays
+ */
 extend(Date, 'getWeekDays', deprecate(function getWeekDays(): string[] {
 	return [t`Mn`, t`Ts`, t`Wd`, t`Th`, t`Fr`, t`St`, t`Sn`];
 }));
