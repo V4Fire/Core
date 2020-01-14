@@ -926,16 +926,54 @@ interface Array<T> {
 
 interface StringCapitalizeOptions {
 	/**
-	 * If is true, then remainder of the string will be transformed to lower case
+	 * If true, then remainder of the string will be transformed to lower case
 	 * @default `false`
 	 */
 	lower?: boolean;
 
 	/**
-	 * If is true, all words in the string will be capitalized
+	 * If true, all words in the string will be capitalized
 	 * @default `false`
 	 */
 	all?: boolean;
+
+	/**
+	 * If false, then the operation isn't cached
+	 * @default `true`
+	 */
+	cache?: boolean;
+}
+
+interface StringCamelizeOptions {
+	/**
+	 * If false, then the first character of the string will be transformed to the lower case
+	 * @default `true`
+	 */
+	upper?: boolean;
+
+	/**
+	 * If false, then the result string won't be cached
+	 * @default `true`
+	 */
+	cache?: boolean;
+}
+
+interface StringDasherizeOptions {
+	/**
+	 * If true, then the operation can be reverted
+	 * @default `false`
+	 */
+	stable?: boolean;
+
+	/**
+	 * If false, then the operation isn't cached
+	 * @default `true`
+	 */
+	cache?: boolean;
+}
+
+interface StringUnderscoreOptions extends StringDasherizeOptions {
+
 }
 
 interface String {
@@ -952,16 +990,34 @@ interface String {
 	camelize(upper?: boolean): string;
 
 	/**
+	 * Returns a CamelCaseStyle version of the specified string
+	 * @param [opts] - additional options
+	 */
+	camelize(opts?: StringCamelizeOptions): string;
+
+	/**
 	 * Returns a dash-style version of the specified string
 	 * @param [stable] - if true, then the operation can be reverted
 	 */
 	dasherize(stable?: boolean): string;
 
 	/**
+	 * Returns a dash-style version of the specified string
+	 * @param [opts] - additional options
+	 */
+	dasherize(opts?: StringDasherizeOptions): string;
+
+	/**
 	 * Returns an underscore_style version of the specified string
 	 * @param [stable] - if true, then the operation can be reverted
 	 */
 	underscore(stable?: boolean): string;
+
+	/**
+	 * Returns an underscore_style version of the specified string
+	 * @param [opts] - additional options
+	 */
+	underscore(opts?: StringUnderscoreOptions): string;
 }
 
 type NumberOption =
