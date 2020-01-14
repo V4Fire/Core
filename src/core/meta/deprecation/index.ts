@@ -14,6 +14,9 @@
 import { DeprecatedOptions, InlineDeprecatedOptions } from 'core/meta/deprecation/interface';
 export * from 'core/meta/deprecation/interface';
 
+const
+	consoleCache = Object.createDict();
+
 /**
  * Marks the specified function as obsolescence
  *
@@ -104,7 +107,14 @@ export function deprecate<T extends Function>(
 			msg.join(p.notice);
 		}
 
-		console.warn(msg.join(' '));
+		const
+			str = msg.join(' ');
+
+		if (!consoleCache[str]) {
+			console.warn(str);
+			consoleCache[str] = true;
+		}
+
 		//#endunless
 
 		return fn?.apply(this, arguments);
