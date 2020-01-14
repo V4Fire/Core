@@ -80,7 +80,7 @@ extend(Number.prototype, 'format', function (
 		return this.toLocaleString(locale);
 	}
 
-	if (Object.isPlainObject(patternOrOpts)) {
+	if (Object.isObject(patternOrOpts)) {
 		return this.toLocaleString(locale, patternOrOpts);
 	}
 
@@ -102,9 +102,7 @@ extend(Number.prototype, 'format', function (
 			const
 				el = chunks[i].trim();
 
-			let
-				[key, val] = el.split(':');
-
+			let [key, val] = el.split(':');
 			key = key.trim();
 
 			if (val) {
@@ -122,12 +120,7 @@ extend(Number.prototype, 'format', function (
 
 				if (alias === 'currency') {
 					opts.style = 'currency';
-
-					if (val) {
-						opts.currency = val || defaultFormat.currency;
-					}
-
-					opts.style = 'currency';
+					opts.currency = val || defaultFormat.currency;
 					brk = true;
 				}
 			}
@@ -141,6 +134,7 @@ extend(Number.prototype, 'format', function (
 			}
 		}
 
+		console.log(opts);
 		const formatter = formatCache[cacheKey] = new Intl.NumberFormat(locale, opts);
 		return formatter.format(this);
 	}
