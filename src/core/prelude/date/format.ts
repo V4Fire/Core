@@ -9,24 +9,12 @@
 import extend from 'core/prelude/extend';
 import { locale as defaultLocale } from 'core/prelude/i18n';
 
-const shortOpts = {
-	month: 'numeric',
-	day: 'numeric',
-	year: 'numeric'
-};
-
 /** @see Date.prototype.short */
 extend(Date.prototype, 'short', function (
 	this: Date,
 	locale: CanArray<string> = defaultLocale.value
 ): string {
-	return this.toLocaleString(locale, shortOpts);
-});
-
-const mediumOpts = Object.createDict({
-	month: 'long',
-	day: 'numeric',
-	year: 'numeric'
+	return this.format('d:numeric;M:numeric;Y:numeric', locale);
 });
 
 /** @see Date.prototype.medium */
@@ -34,7 +22,7 @@ extend(Date.prototype, 'medium', function (
 	this: Date,
 	locale: CanArray<string> = defaultLocale.value
 ): string {
-	return this.toLocaleString(locale, mediumOpts);
+	return this.format('d:numeric;M:long;Y:numeric', locale);
 });
 
 /** @see Date.prototype.long */
@@ -42,7 +30,7 @@ extend(Date.prototype, 'long', function (
 	this: Date,
 	locale: CanArray<string> = defaultLocale.value
 ): string {
-	return this.toLocaleString(locale);
+	return this.format('', locale);
 });
 
 const formatAliases = Object.createDict({
