@@ -1306,6 +1306,7 @@ interface DateConstructor {
 
 	/**
 	 * Returns a list of week days
+	 * @deprecated
 	 */
 	getWeekDays(): string[];
 }

@@ -23,6 +23,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 * Removed `json/setJSONToUTC`
 * Changed signature of `Number.prototype.pad`
 * Removed `Object.getPrototypeChain`
+* Marked `Date.getWeekDays` as deprecated
 
 #### :rocket: New Feature
 
