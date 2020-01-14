@@ -971,6 +971,8 @@ type NumberOption =
 interface NumberConstructor {
 	/**
 	 * Returns an option value by the specified key
+	 *
+	 * @deprecated
 	 * @param key
 	 */
 	getOption(key: NumberOption): string;
@@ -978,6 +980,7 @@ interface NumberConstructor {
 	/**
 	 * Sets a new option value by the specified key
 	 *
+	 * @deprecated
 	 * @param key
 	 * @param value
 	 */
@@ -1056,23 +1059,6 @@ interface NumberPadOptions {
 	 * @default `10`
 	 */
 	sign?: boolean;
-}
-
-interface NumberFormatOptions {
-	/**
-	 * Length of the decimal part
-	 */
-	decimalLength?: boolean;
-
-	/**
-	 * Separator for the decimal part
-	 */
-	decimal?: string;
-
-	/**
-	 * Separator for the "thousand" chunks
-	 */
-	thousands?: string;
 }
 
 interface Number {
@@ -1230,16 +1216,43 @@ interface Number {
 	pad(targetLength?: number, opts?: NumberPadOptions): string;
 
 	/**
-	 * Returns a string version of the number with adding some extra formatting
-	 * @param [opts] - additional options
+	 * Returns a string representation of the number by the specified pattern.
+	 * All pattern directives is based on native Intl.NumberFormat options:
+	 *
+	 *   1. `'style'`
+	 *   1. `'currency'`
+	 *   1. `'currencyDisplay'`
+	 *
+	 * There are aliases for all directives:
+	 *
+	 *   1. `'$'` - `{style: 'currency', currency: 'USD'}`
+	 *   1. `'$:${currency}'` - `{style: 'currency', currency}`
+	 *   1. `'$d:${currencyDisplay}'` - `{currencyDisplay}`
+	 *   1. `'%'` - `{style: 'percent'}`
+	 *   1. `'.'` - `{style: 'decimal'}`
+	 *
+	 * @param pattern - string pattern of the format:
+	 *
+	 *   1. symbol `';'` is used as a separator character for pattern directives, for example: `'$;$d:code'`
+	 *   1. symbol `':'` is used for specifying a custom value for a pattern directive, for example:
+	 *    `'$:RUB;$d:code'`
+	 *
+	 * @param [locale] - locale for internalizing
 	 */
-	format(opts?: NumberFormatOptions): string;
+	format(pattern: string, locale?: CanArray<string>): string;
 
 	/**
-	 * Returns a string version of the number with adding some extra formatting
+	 * Returns a string representation of the number by the specified options
+	 *
+	 * @param opts - formatting options
+	 * @param [locale] - locale for internalizing
+	 */
+	format(opts: Intl.NumberFormatOptions, locale?: CanArray<string>): string;
+
+	/**
+	 * Returns a string representation of the number with adding some extra formatting
 	 * @param [length] - length of the decimal part
 	 */
-	// tslint:disable-next-line:unified-signatures
 	format(length?: number): string;
 
 	/**
@@ -1506,7 +1519,7 @@ interface Date {
 
 	/**
 	 * Returns a string representation of the date by the specified pattern.
-	 * All pattern directives is based on native Date Intl options:
+	 * All pattern directives is based on native Intl.DateTimeFormat options:
 	 *
 	 *   1. `'era'`
 	 *   1. `'year'`
@@ -1534,7 +1547,7 @@ interface Date {
 	 *
 	 *   1. symbol `';'` is used as a separator character for pattern directives, for example: `'year;month'`
 	 *   1. symbol `':'` is used for specifying a custom value for a pattern directive, for example:
-	 *    '`year:2-digit;month:short'`
+	 *    `'year:2-digit;month:short'`
 	 *
 	 * @param [locale] - locale for internalizing
 	 *
@@ -1551,9 +1564,9 @@ interface Date {
 	format(pattern: string, locale?: CanArray<string>): string;
 
 	/**
-	 * Returns a string representation of the date by the specified pattern
+	 * Returns a string representation of the date by the specified options
 	 *
-	 * @param opts - options for internalizing
+	 * @param opts - formatting options
 	 * @param [locale] - locale for internalizing
 	 */
 	format(opts: Intl.DateTimeFormatOptions, locale?: CanArray<string>): string;

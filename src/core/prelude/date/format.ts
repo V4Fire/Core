@@ -57,7 +57,7 @@ const formatAliases = Object.createDict({
 	z: 'timeZoneName'
 });
 
-const defaultFormat = Object.createDict({
+const defaultFormat = Object.createDict(<Intl.DateTimeFormatOptions>{
 	era: 'short',
 	year: 'numeric',
 	month: 'short',
@@ -69,13 +69,13 @@ const defaultFormat = Object.createDict({
 	timeZoneName: 'short'
 });
 
-const convert = Object.createDict({
+const boolAliases = Object.createDict({
 	'+': true,
 	'-': false
 });
 
 const
-	formatCache = Object.createDict<Intl.DateTimeFormatOptions>();
+	formatCache = Object.createDict<Intl.DateTimeFormat>();
 
 /** @see Date.prototype.format */
 extend(Date.prototype, 'format', function (
@@ -89,15 +89,16 @@ extend(Date.prototype, 'format', function (
 
 	const
 		pattern = String(patternOrOpts),
-		cache = formatCache[pattern];
+		cacheKey = [locale, pattern].join(),
+		cache = formatCache[cacheKey];
 
 	if (cache) {
-		return this.toLocaleString(locale, cache);
+		return cache.format(this);
 	}
 
 	const
 		chunks = pattern.split(';'),
-		config = {};
+		opts = {};
 
 	for (let i = 0; i < chunks.length; i++) {
 		const
@@ -123,11 +124,11 @@ extend(Date.prototype, 'format', function (
 			val = defaultFormat[key];
 		}
 
-		config[key] = val in convert ? convert[val] : val;
+		opts[key] = val in boolAliases ? boolAliases[val] : val;
 	}
 
-	formatCache[pattern] = config;
-	return this.toLocaleString(locale, config);
+	const formatter = formatCache[cacheKey] = new Intl.DateTimeFormat(locale, opts);
+	return formatter.format(this);
 });
 
 /** @see Date.prototype.toHTMLDateString */
