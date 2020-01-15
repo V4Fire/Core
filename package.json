@@ -30,7 +30,8 @@
     "fs-extra-promise": "^1.0.1",
     "got": "^10.2.2",
     "node-localstorage": "^2.1.5",
-    "tslib": "^1.10.0"
+    "tslib": "^1.10.0",
+    "set-value": ">=2.0.1"
   },
   "optionalDependencies": {
     "@pzlr/build-core": "^2.8.17",
