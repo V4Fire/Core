@@ -15,7 +15,7 @@ import Cache, { ClearFilter } from 'core/cache/interface';
 export * from 'core/cache/interface';
 
 /**
- * Implementation for a simple in-memory data structure
+ * Implementation for a simple in-memory cache data structure
  */
 export default class SimpleCache<V = unknown, K = string> implements Cache<V, K> {
 	/**
