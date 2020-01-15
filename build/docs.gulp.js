@@ -19,7 +19,7 @@ module.exports = function (gulp) {
 
 	gulp.task('build:docs:normalise', gulp.series([
 		() => gulp.src('./docs/**/*.+(html|js)')
-			.pipe($.replace(/\b_+(.*?)_+(\.(?:[^\s'"/<>#]*?\.)?)html/g, '$1$2html'))
+			.pipe($.replace(/(['"/\\])_+(.+?)_+(\.(?:[^\s'"/\\<>#.]+\.)?html\b)/g, (...str) => str.slice(1, 4).join('')))
 			.pipe(gulp.dest('./docs')),
 
 		() => gulp.src('./docs/**/*.html')
