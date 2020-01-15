@@ -118,10 +118,21 @@ extend(Number.prototype, 'format', function (
 			if (alias) {
 				key = alias;
 
-				if (alias === 'currency') {
-					opts.style = 'currency';
-					opts.currency = val || defaultFormat.currency;
-					brk = true;
+				switch (alias) {
+					case 'currency':
+						opts.style = 'currency';
+						opts.currency = val || defaultFormat.currency;
+						brk = true;
+						break;
+
+					case 'percent':
+						opts.style = 'percent';
+						brk = true;
+						break;
+
+					case 'decimal':
+						opts.style = 'decimal';
+						brk = true;
 				}
 			}
 

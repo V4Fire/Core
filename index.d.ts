@@ -1306,6 +1306,12 @@ interface Number {
 	 *    `'$:RUB;$d:code'`
 	 *
 	 * @param [locale] - locale for internalizing
+	 *
+	 * @example
+	 * ```js
+	 *  100.50.format('$', 'en-us') // '$100.50'
+	 *  100.50.format('$:EUR;$d:code', 'en-us') // 'EUR 100.50'
+	 * ```
 	 */
 	format(pattern: string, locale?: CanArray<string>): string;
 
