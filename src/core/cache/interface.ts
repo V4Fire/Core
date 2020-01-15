@@ -12,6 +12,9 @@ export interface ClearFilter<V = unknown, K = string> {
 
 /**
  * Base interface for a cache data structure
+ *
+ * @typeparam V - value type
+ * @typeparam K - key type (by default, `string`)
  */
 export default interface Cache<V = unknown, K = string> {
 	/**

@@ -16,6 +16,9 @@ export * from 'core/cache/interface';
 
 /**
  * Implementation for a simple in-memory cache data structure
+ *
+ * @typeparam V - value type
+ * @typeparam K - key type (by default, `string`)
  */
 export default class SimpleCache<V = unknown, K = string> implements Cache<V, K> {
 	/**
