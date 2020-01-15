@@ -396,7 +396,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @see Async.prototype.registerTask
 	 */
 	@deprecated({renamedTo: 'registerTask'})
-	protected setAsync(task: FullAsyncOptions<CTX>): object | null {
+	protected setAsync<R = unknown, C extends object = CTX>(task: FullAsyncOptions<C>): R | null {
 		return this.registerTask(task);
 	}
 
