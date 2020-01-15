@@ -33,6 +33,14 @@ module.exports = function (gulp = require('gulp')) {
 module.exports();
 ```
 
+## docs.gulp.js
+
+This file provides a bunch of gulp tasks for generation of documentation.
+
+```bash
+npx gulp build:docs
+```
+
 ## other.gulp.js
 
 This file provides a bunch of helper gulp tasks.
