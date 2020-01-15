@@ -10,6 +10,9 @@ export interface ClearFilter<V = unknown, K = string> {
 	(el: V, key: K): unknown;
 }
 
+/**
+ * Base interface for a cache data structure
+ */
 export default interface Cache<V = unknown, K = string> {
 	/**
 	 * Returns true if a value by the specified key exists in the cache

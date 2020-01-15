@@ -14,6 +14,9 @@
 import SimpleCache, { ClearFilter } from 'core/cache/simple';
 export * from 'core/cache/simple';
 
+/**
+ * Implementation for a in-memory data structure with support for limiting of values in a cache
+ */
 export default class RestrictedCache<V = unknown, K = string> extends SimpleCache<V, K> {
 	/**
 	 * Queue object

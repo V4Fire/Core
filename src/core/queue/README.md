@@ -4,4 +4,4 @@ This module provides a base interface for the [[Queue]] data structure. The subm
 
 Implementations:
 
-* [[MergeQueue]]
+* [MergeQueue](src_core_queue_merge_index.html)

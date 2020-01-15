@@ -16,23 +16,103 @@ import { syncLocalStorage, asyncLocalStorage, syncSessionStorage, asyncSessionSt
 import { FactoryResult, Namespace, AsyncFactoryResult, AsyncNamespace, ClearFilter } from 'core/kv-storage/interface';
 export * from 'core/kv-storage/interface';
 
-export const
-	local = factory(syncLocalStorage),
-	asyncLocal = factory(asyncLocalStorage, true),
-	session = factory(syncSessionStorage),
-	asyncSession = factory(asyncSessionStorage, true);
+/**
+ * API for synchronous local storage
+ * @example
+ * ```js
+ * local.set('foo', 'bar');
+ * local.get('foo'); // 'foo'
+ * ```
+ */
+export const local = factory(syncLocalStorage);
 
-export const
-	{get, set, remove, namespace} = local;
+/**
+ * API for asynchronous local storage
+ * @example
+ * ```js
+ * asyncLocal.set('foo', 'bar').then(async () => {
+ *   console.log(await asyncLocal.get('foo')); // 'foo'
+ * });
+ * ```
+ */
+export const asyncLocal = factory(asyncLocalStorage, true);
+
+/**
+ * API for synchronous session storage
+ * @example
+ * ```js
+ * session.set('foo', 'bar');
+ * session.get('foo'); // 'foo'
+ * ```
+ */
+export const session = factory(syncSessionStorage);
+
+/**
+ * API for asynchronous session storage
+ * @example
+ * ```js
+ * asyncSession.set('foo', 'bar').then(async () => {
+ *   console.log(await asyncSession.get('foo')); // 'foo'
+ * });
+ * ```
+ */
+export const asyncSession = factory(asyncSessionStorage, true);
+
+/**
+ * Alias for a get method of the synchronous local storage API
+ *
+ * @alias
+ * @see [[local]]
+ */
+export const get = local.get;
+
+/**
+ * Alias for a set method of the synchronous local storage API
+ *
+ * @alias
+ * @see [[local]]
+ */
+export const set = local.set;
+
+/**
+ * Alias for a remove method of the synchronous local storage API
+ *
+ * @alias
+ * @see [[local]]
+ */
+export const remove = local.remove;
+
+/**
+ * Alias for a namespace method of the synchronous local storage API
+ *
+ * @alias
+ * @see [[local]]
+ *
+ * @example
+ * ```js
+ * const storage = namespace('REQUEST_STORAGE');
+ * storage.set('foo', 'bar');
+ * storage.get('foo'); // 'foo'
+ * local.get('foo'); // undefined
+ * ```
+ */
+export const namespace = local.namespace;
 
 export const
 	canParse = /^[[{"]|^(?:true|false|null|undefined|\d+)$/;
 
 /**
- * Creates a new kv-storage object with the specified engine
+ * Creates a new kv-storage API with the specified engine
  *
  * @param engine
  * @param async - if true, then the storage is implemented async interface
+ *
+ * @example
+ * ```js
+ * const storage = factory(window.localStorage);
+ * storage.set('foo', 'bar');
+ * storage.get('foo'); // 'foo'
+ * ```
  */
 export function factory(engine: Dictionary, async: true): AsyncFactoryResult;
 export function factory(engine: Dictionary, async?: false): FactoryResult;

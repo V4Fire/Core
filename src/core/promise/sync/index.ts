@@ -28,6 +28,9 @@ import {
 
 export * from 'core/promise/sync/interface';
 
+/**
+ * Class which is similar with the native promises, but works synchronously
+ */
 export default class SyncPromise<T = unknown> implements PromiseLike<T> {
 	/**
 	 * Creates a new resolved promise for the specified value

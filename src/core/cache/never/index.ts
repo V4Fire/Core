@@ -14,6 +14,9 @@
 import Cache, { ClearFilter } from 'core/cache/interface';
 export * from 'core/cache/interface';
 
+/**
+ * Loopback class for a cache data structure
+ */
 export default class NeverCache<V = unknown, K = string> implements Cache<V, K> {
 	/**
 	 * Cache object
