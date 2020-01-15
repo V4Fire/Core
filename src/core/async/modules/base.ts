@@ -64,7 +64,9 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @deprecated
 	 * @see Async.namespaces
 	 */
-	static linkNames: NamespacesDictionary = namespaces;
+	static get linkNames(): NamespacesDictionary {
+		return this.namespaces;
+	}
 
 	/**
 	 * Lock status.
