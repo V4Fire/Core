@@ -166,7 +166,7 @@ extend(String.prototype, 'underscore', function (
 	);
 
 	if (p.cache !== false) {
-		underscoreCache[key] = str;
+		underscoreCache[key] = res;
 	}
 
 	return res;
