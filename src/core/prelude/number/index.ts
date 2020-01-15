@@ -9,7 +9,7 @@
 export * from 'core/prelude/number/converters';
 export * from 'core/prelude/number/metrics';
 
-//#if runtime has prelude/number/format
+//#if runtime has prelude/number/rounding
 export * from 'core/prelude/number/rounding';
 //#endif
 
