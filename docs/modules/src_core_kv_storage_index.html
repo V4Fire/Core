@@ -184,9 +184,21 @@
 					<div class="tsd-signature tsd-kind-icon">async<wbr>Local<span class="tsd-signature-symbol">:</span> <a href="../interfaces/src_core_kv_storage_interface.asyncfactoryresult.html" class="tsd-signature-type">AsyncFactoryResult</a><span class="tsd-signature-symbol"> =&nbsp;factory(asyncLocalStorage, true)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/kv-storage/index.ts#L21">src/core/kv-storage/index.ts:21</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/639c48f/src/core/kv-storage/index.ts#L38">src/core/kv-storage/index.ts:38</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>API for asynchronous local storage</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>example</dt>
+							<dd><pre><code class="language-js">asyncLocal.set(<span class="hljs-string">'foo'</span>, <span class="hljs-string">'bar'</span>).then(<span class="hljs-keyword">async</span> () =&gt; {
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">await</span> asyncLocal.get(<span class="hljs-string">'foo'</span>)); <span class="hljs-comment">// 'foo'</span>
+});</code></pre>
+							</dd>
+						</dl>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module">
 					<a name="asyncsession" class="tsd-anchor"></a>
@@ -194,9 +206,21 @@
 					<div class="tsd-signature tsd-kind-icon">async<wbr>Session<span class="tsd-signature-symbol">:</span> <a href="../interfaces/src_core_kv_storage_interface.asyncfactoryresult.html" class="tsd-signature-type">AsyncFactoryResult</a><span class="tsd-signature-symbol"> =&nbsp;factory(asyncSessionStorage, true)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/kv-storage/index.ts#L23">src/core/kv-storage/index.ts:23</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/639c48f/src/core/kv-storage/index.ts#L59">src/core/kv-storage/index.ts:59</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>API for asynchronous session storage</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>example</dt>
+							<dd><pre><code class="language-js">asyncSession.set(<span class="hljs-string">'foo'</span>, <span class="hljs-string">'bar'</span>).then(<span class="hljs-keyword">async</span> () =&gt; {
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">await</span> asyncSession.get(<span class="hljs-string">'foo'</span>)); <span class="hljs-comment">// 'foo'</span>
+});</code></pre>
+							</dd>
+						</dl>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module">
 					<a name="canparse" class="tsd-anchor"></a>
@@ -204,19 +228,31 @@
 					<div class="tsd-signature tsd-kind-icon">can<wbr>Parse<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RegExp</span><span class="tsd-signature-symbol"> =&nbsp;/^[[{&quot;]|^(?:true|false|null|undefined|\d+)$/</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/kv-storage/index.ts#L29">src/core/kv-storage/index.ts:29</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/639c48f/src/core/kv-storage/index.ts#L102">src/core/kv-storage/index.ts:102</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module">
 					<a name="get" class="tsd-anchor"></a>
-					<h3>get</h3>
-					<div class="tsd-signature tsd-kind-icon">get<span class="tsd-signature-symbol">:</span> <a href="../interfaces/src_core_kv_storage_interface.namespace.html#get" class="tsd-signature-type">get</a></div>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> get</h3>
+					<div class="tsd-signature tsd-kind-icon">get<span class="tsd-signature-symbol">:</span> <a href="../interfaces/src_core_kv_storage_interface.namespace.html#get" class="tsd-signature-type">get</a><span class="tsd-signature-symbol"> =&nbsp;local.get</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/kv-storage/index.ts#L26">src/core/kv-storage/index.ts:26</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/639c48f/src/core/kv-storage/index.ts#L67">src/core/kv-storage/index.ts:67</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Alias for a get method of the synchronous local storage API</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>alias</dt>
+							<dd></dd>
+							<dt>see</dt>
+							<dd><p><a href="src_core_kv_storage_index.html#local">local</a></p>
+							</dd>
+						</dl>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module">
 					<a name="local" class="tsd-anchor"></a>
@@ -224,29 +260,70 @@
 					<div class="tsd-signature tsd-kind-icon">local<span class="tsd-signature-symbol">:</span> <a href="../interfaces/src_core_kv_storage_interface.factoryresult.html" class="tsd-signature-type">FactoryResult</a><span class="tsd-signature-symbol"> =&nbsp;factory(syncLocalStorage)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/kv-storage/index.ts#L20">src/core/kv-storage/index.ts:20</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/639c48f/src/core/kv-storage/index.ts#L27">src/core/kv-storage/index.ts:27</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>API for synchronous local storage</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>example</dt>
+							<dd><pre><code class="language-js">local.set(<span class="hljs-string">'foo'</span>, <span class="hljs-string">'bar'</span>);
+local.get(<span class="hljs-string">'foo'</span>); <span class="hljs-comment">// 'foo'</span></code></pre>
+							</dd>
+						</dl>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module">
 					<a name="namespace" class="tsd-anchor"></a>
-					<h3>namespace</h3>
-					<div class="tsd-signature tsd-kind-icon">namespace<span class="tsd-signature-symbol">:</span> <a href="../interfaces/src_core_kv_storage_interface.factoryresult.html#namespace" class="tsd-signature-type">namespace</a></div>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> namespace</h3>
+					<div class="tsd-signature tsd-kind-icon">namespace<span class="tsd-signature-symbol">:</span> <a href="../interfaces/src_core_kv_storage_interface.factoryresult.html#namespace" class="tsd-signature-type">namespace</a><span class="tsd-signature-symbol"> =&nbsp;local.namespace</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/kv-storage/index.ts#L26">src/core/kv-storage/index.ts:26</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/639c48f/src/core/kv-storage/index.ts#L99">src/core/kv-storage/index.ts:99</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Alias for a namespace method of the synchronous local storage API</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>alias</dt>
+							<dd></dd>
+							<dt>see</dt>
+							<dd><p><a href="src_core_kv_storage_index.html#local">local</a></p>
+							</dd>
+							<dt>example</dt>
+							<dd><pre><code class="language-js"><span class="hljs-keyword">const</span> storage = namespace(<span class="hljs-string">'REQUEST_STORAGE'</span>);
+storage.set(<span class="hljs-string">'foo'</span>, <span class="hljs-string">'bar'</span>);
+storage.get(<span class="hljs-string">'foo'</span>); <span class="hljs-comment">// 'foo'</span>
+local.get(<span class="hljs-string">'foo'</span>); <span class="hljs-comment">// undefined</span></code></pre>
+							</dd>
+						</dl>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module">
 					<a name="remove" class="tsd-anchor"></a>
-					<h3>remove</h3>
-					<div class="tsd-signature tsd-kind-icon">remove<span class="tsd-signature-symbol">:</span> <a href="../interfaces/src_core_kv_storage_interface.namespace.html#remove" class="tsd-signature-type">remove</a></div>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> remove</h3>
+					<div class="tsd-signature tsd-kind-icon">remove<span class="tsd-signature-symbol">:</span> <a href="../interfaces/src_core_kv_storage_interface.namespace.html#remove" class="tsd-signature-type">remove</a><span class="tsd-signature-symbol"> =&nbsp;local.remove</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/kv-storage/index.ts#L26">src/core/kv-storage/index.ts:26</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/639c48f/src/core/kv-storage/index.ts#L83">src/core/kv-storage/index.ts:83</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Alias for a remove method of the synchronous local storage API</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>alias</dt>
+							<dd></dd>
+							<dt>see</dt>
+							<dd><p><a href="src_core_kv_storage_index.html#local">local</a></p>
+							</dd>
+						</dl>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module">
 					<a name="session" class="tsd-anchor"></a>
@@ -254,19 +331,42 @@
 					<div class="tsd-signature tsd-kind-icon">session<span class="tsd-signature-symbol">:</span> <a href="../interfaces/src_core_kv_storage_interface.factoryresult.html" class="tsd-signature-type">FactoryResult</a><span class="tsd-signature-symbol"> =&nbsp;factory(syncSessionStorage)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/kv-storage/index.ts#L22">src/core/kv-storage/index.ts:22</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/639c48f/src/core/kv-storage/index.ts#L48">src/core/kv-storage/index.ts:48</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>API for synchronous session storage</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>example</dt>
+							<dd><pre><code class="language-js">session.set(<span class="hljs-string">'foo'</span>, <span class="hljs-string">'bar'</span>);
+session.get(<span class="hljs-string">'foo'</span>); <span class="hljs-comment">// 'foo'</span></code></pre>
+							</dd>
+						</dl>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module">
 					<a name="set" class="tsd-anchor"></a>
-					<h3>set</h3>
-					<div class="tsd-signature tsd-kind-icon">set<span class="tsd-signature-symbol">:</span> <a href="../interfaces/src_core_kv_storage_interface.namespace.html#set" class="tsd-signature-type">set</a></div>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> set</h3>
+					<div class="tsd-signature tsd-kind-icon">set<span class="tsd-signature-symbol">:</span> <a href="../interfaces/src_core_kv_storage_interface.namespace.html#set" class="tsd-signature-type">set</a><span class="tsd-signature-symbol"> =&nbsp;local.set</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/kv-storage/index.ts#L26">src/core/kv-storage/index.ts:26</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/639c48f/src/core/kv-storage/index.ts#L75">src/core/kv-storage/index.ts:75</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Alias for a set method of the synchronous local storage API</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>alias</dt>
+							<dd></dd>
+							<dt>see</dt>
+							<dd><p><a href="src_core_kv_storage_index.html#local">local</a></p>
+							</dd>
+						</dl>
+					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
@@ -282,13 +382,20 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/kv-storage/index.ts#L37">src/core/kv-storage/index.ts:37</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/639c48f/src/core/kv-storage/index.ts#L117">src/core/kv-storage/index.ts:117</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Creates a new kv-storage object with the specified engine</p>
+									<p>Creates a new kv-storage API with the specified engine</p>
 								</div>
+								<dl class="tsd-comment-tags">
+									<dt>example</dt>
+									<dd><pre><code class="language-js"><span class="hljs-keyword">const</span> storage = factory(<span class="hljs-built_in">window</span>.localStorage);
+storage.set(<span class="hljs-string">'foo'</span>, <span class="hljs-string">'bar'</span>);
+storage.get(<span class="hljs-string">'foo'</span>); <span class="hljs-comment">// 'foo'</span></code></pre>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -307,7 +414,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/0d3d68f/src/core/kv-storage/index.ts#L38">src/core/kv-storage/index.ts:38</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/639c48f/src/core/kv-storage/index.ts#L118">src/core/kv-storage/index.ts:118</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
