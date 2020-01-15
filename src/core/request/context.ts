@@ -196,7 +196,7 @@ export default class RequestContext<T = unknown> {
 		}
 
 		return apiURL.replace(resolveURLRgxp, (str, protocol, auth, domains, port, nm) => {
-			domains = domains?.split('.');
+			domains = domains?.split('.').reverse();
 			nm = resolve('namespace', nm);
 
 			if (!protocol) {
@@ -206,7 +206,7 @@ export default class RequestContext<T = unknown> {
 			return concatUrls(
 				resolve('protocol', protocol) +
 					resolve('auth', auth) +
-					resolveDomains({def: domains}),
+					resolveDomains({def: domains}) +
 					resolve('port', port),
 
 				nm
