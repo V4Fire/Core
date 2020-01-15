@@ -179,12 +179,12 @@ export default class Range<T extends RangeValue> {
 			return;
 		}
 
-		if (!Number.isNatural(step)) {
-			throw new TypeError('Step value can be only natural');
-		}
-
 		if (!step) {
 			step = this.type === 'date' ? (this.end - this.start) * 0.01 : 1;
+		}
+
+		if (!Number.isNatural(step)) {
+			throw new TypeError('Step value can be only natural');
 		}
 
 		if (this.reverse) {

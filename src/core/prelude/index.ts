@@ -8,8 +8,8 @@
 
 import 'core/prelude/types';
 import 'core/prelude/object';
-import 'core/prelude/number';
 import 'core/prelude/array';
+import 'core/prelude/number';
 import 'core/prelude/regexp';
 import 'core/prelude/function';
 import 'core/prelude/string';
