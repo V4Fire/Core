@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.0.5
+
+#### :house: Internal
+
+* Improved TS types
+
 ## v3.0.4
 
 #### :bug: Bug Fix
