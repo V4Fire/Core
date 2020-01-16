@@ -805,48 +805,55 @@ interface ObjectConstructor {
 	 * @param obj
 	 */
 	isDictionary<T>(obj: T): obj is
-		T extends any | unknown ? Dictionary :
 		T extends Dictionary ? T :
-		T extends
-			unknown[] |
-			Int8Array |
-			Int16Array |
-			Int32Array |
-			Uint8Array |
-			Uint8ClampedArray |
-			Uint16Array |
-			Uint32Array |
-			Float32Array |
-			Float64Array |
-			ArrayBuffer |
-			SharedArrayBuffer |
-			DataView |
 
-			Date |
-			RegExp |
-			Map<any, any> |
-			WeakMap<any, any> |
-			Set<any> |
-			WeakSet<any> |
-			Promise<any> |
+			T extends
+				unknown[] |
 
-			Generator |
-			Function |
+				Int8Array |
+				Int16Array |
+				Int32Array |
 
-			Number |
-			String |
-			Symbol |
-			Boolean |
+				Uint8Array |
+				Uint8ClampedArray |
+				Uint16Array |
+				Uint32Array |
 
-			Node |
-			Document |
-			Window |
-			Navigator |
-			Error |
+				Float32Array |
+				Float64Array |
 
-			Intl.Collator |
-			Intl.DateTimeFormat |
-			Intl.NumberFormat ? Dictionary : T extends object ? T : Dictionary;
+				ArrayBuffer |
+				SharedArrayBuffer |
+				DataView |
+				FormData |
+
+				Date |
+				RegExp |
+				Map<any, any> |
+				WeakMap<any, any> |
+				Set<any> |
+				WeakSet<any> |
+				Promise<any> |
+
+				Generator |
+				Function |
+
+				Number |
+				String |
+				Symbol |
+				Boolean |
+
+				Node |
+				Document |
+				Window |
+				Navigator |
+				Error |
+
+				Intl.Collator |
+				Intl.DateTimeFormat |
+				Intl.NumberFormat
+
+		? Dictionary : T extends object ? T : Dictionary;
 
 	/**
 	 * @deprecated
