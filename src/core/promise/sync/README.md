@@ -1,6 +1,6 @@
 # core/promise/sync
 
-This module provides a class which is similar with the native promises, but works synchronously.
+This module provides a class that is similar with the native promises, but works synchronously.
 
 ```js
 import SyncPromise from 'core/promise/sync';

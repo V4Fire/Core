@@ -267,7 +267,9 @@ export interface CreateRequestOptions<T = unknown> {
 	api?: RequestAPI;
 
 	/**
-	 * List of status codes (or a single code) with HTTP statuses which is ok for response, also can pass a range of codes
+	 * List of status codes (or a single code) with HTTP statuses that is ok for response,
+	 * also can pass a range of codes
+	 *
 	 * @default `new Range(200, 299)`
 	 */
 	okStatuses?: OkStatuses;
@@ -278,7 +280,7 @@ export interface CreateRequestOptions<T = unknown> {
 	timeout?: number;
 
 	/**
-	 * Type of caching for requests which supports it:
+	 * Type of caching for requests that supports it:
 	 *
 	 * 1. `'forever'` - caches all requests and stores their values forever within the active session or
 	 * until the cache expires (if .cacheTTL is specified);
@@ -320,7 +322,7 @@ export interface CreateRequestOptions<T = unknown> {
 	 * Dictionary or an iterable value with middleware functions:
 	 * functions take an environment of request parameters and can modify theirs.
 	 *
-	 * Please notice, that the order of middlewares depends of a structure which you use.
+	 * Please notice, that the order of middlewares depends of a structure that you use.
 	 * Also, if at least one of middlewares returns a function, than the result of invoking this function
 	 * will be returned as the request result. It can be helpful for organizing mocks of data and
 	 * other similar cases when you don't want to execute a real request.
@@ -342,13 +344,13 @@ export interface CreateRequestOptions<T = unknown> {
 	decoder?: Decoder | Decoders;
 
 	/**
-	 * Special flag which indicates that request will be invoked not directly by a browser,
+	 * Special flag that indicates that request will be invoked not directly by a browser,
 	 * but some "external" application, such as a native application in a mobile (it's important for offline requests
 	 */
 	externalRequest?: boolean;
 
 	/**
-	 * Meta flag which indicates that the request is important: usually it used with middlewares
+	 * Meta flag that indicates that the request is important: usually it used with middlewares
 	 * for indicating that the request need execute as soon as possible
 	 */
 	important?: boolean;

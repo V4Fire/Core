@@ -67,8 +67,8 @@ export default class Async<CTX extends object = Async<any>> {
 	static linkNames: NamespacesDictionary = namespaces;
 
 	/**
-	 * Lock status.
-	 * If true, then all new task won't be registered.
+	 * The lock status.
+	 * If true, then all new tasks won't be registered.
 	 */
 	locked: boolean = false;
 

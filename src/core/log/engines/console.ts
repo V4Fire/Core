@@ -48,7 +48,7 @@ export class ConsoleEngine implements LogEngine {
 
 	/**
 	 * Returns a string representing of a style for the specified log level
-	 * @param logLevel - level of logging which needs a style
+	 * @param logLevel - level of logging that needs a style
 	 */
 	protected getStringifiedStyle(logLevel: LogLevel): string {
 		//#if runtime has core/log

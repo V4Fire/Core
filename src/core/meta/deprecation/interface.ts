@@ -51,7 +51,7 @@ export interface DeprecatedOptions {
 	movedTo?: string;
 
 	/**
-	 * Name of an expression/function which should prefer to use instead the current
+	 * Name of an expression/function that should prefer to use instead the current
 	 * or an object with additional options:
 	 */
 	alternative?: DeprecatedAlternative;

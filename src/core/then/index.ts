@@ -38,7 +38,7 @@ export * from 'core/then/interface';
  */
 export default class Then<T = unknown> implements PromiseLike<T> {
 	/**
-	 * Promise which is never resolved
+	 * The promise that is never resolved
 	 */
 	static readonly never: Promise<never> = new Promise(() => undefined);
 

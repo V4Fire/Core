@@ -26,8 +26,8 @@ const setConfig = (opts) => {
 };
 
 env.get('log').then(setConfig, setConfig);
-env.event.on('set.log', setConfig);
-env.event.on('remove.log', setConfig);
+env.emitter.on('set.log', setConfig);
+env.emitter.on('remove.log', setConfig);
 
 export class ConfigurableMiddleware implements LogMiddleware {
 	protected queue: LogEvent[] = [];

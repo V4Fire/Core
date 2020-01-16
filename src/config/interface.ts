@@ -35,7 +35,7 @@ export interface Config {
 	 */
 	online: {
 		/**
-		 * URL which is used for online checking
+		 * URL that is used for online checking
 		 */
 		checkURL?: CanUndef<string>;
 

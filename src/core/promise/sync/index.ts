@@ -29,7 +29,7 @@ import {
 export * from 'core/promise/sync/interface';
 
 /**
- * Class which is similar with the native promises, but works synchronously
+ * Class that is similar with the native promises, but works synchronously
  */
 export default class SyncPromise<T = unknown> implements PromiseLike<T> {
 	/**

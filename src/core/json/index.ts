@@ -16,7 +16,7 @@ const
 	isDate = /^\d{4}-\d{2}-\d{2}T[\d:.]+Z/;
 
 /**
- * Reviver for the JSON.parse method: converts all strings which is looks like a date to Date
+ * Reviver for the JSON.parse method: converts all strings that is looks like a date to Date
  *
  * @param key
  * @param value

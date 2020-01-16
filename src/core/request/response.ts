@@ -49,7 +49,7 @@ export default class Response {
 	readonly ok: boolean;
 
 	/**
-	 * List of status codes (or a single code) with HTTP statuses which is ok for response,
+	 * List of status codes (or a single code) with HTTP statuses that is ok for response,
 	 * also can pass a range of codes
 	 */
 	readonly okStatuses: OkStatuses;
