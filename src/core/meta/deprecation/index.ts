@@ -20,19 +20,19 @@ const
 /**
  * Marks the specified function as obsolescence
  *
- * @param params - additional parameters
+ * @param opts - additional options
  * @param [fn] - function for wrapping
  */
 export function deprecate<T extends Function>(
-	params: DeprecatedOptions,
+	opts: DeprecatedOptions,
 	fn: T
 ): T;
 
 /**
  * Emits an obsolescence warning with the specified parameters
- * @param params - additional parameters
+ * @param opts - additional options
  */
-export function deprecate(params: InlineDeprecatedOptions): void;
+export function deprecate(opts: InlineDeprecatedOptions): void;
 
 /**
  * Marks the specified function as obsolescence
@@ -124,20 +124,48 @@ export function deprecate<T extends Function>(
 }
 
 /**
- * Decorator for the "deprecate" function.
- * Can be used with providing additional parameters or within their.
+ * Decorator for the "deprecate" function
  *
  * @decorator
  * @see [[deprecate]]
+ *
+ * @example
+ * ```js
+ * class Foo {
+ *   @deprecated
+ *   bar() {
+ *
+ *   }
+ * }
+ * ```
  */
 export function deprecated(target: object, key: string | symbol, descriptor: PropertyDescriptor): void;
-export function deprecated(params?: DeprecatedOptions): Function;
+
+/**
+ * Decorator for the "deprecate" function.
+ * This overload add a feature for providing additional options.
+ *
+ * @see [[deprecate]]
+ * @param [opts] - additional options
+ *
+ * @example
+ * ```js
+ * class Foo {
+ *   @deprecated({renamedTo: 'baz'}})
+ *   bar() {
+ *
+ *   }
+ * }
+ * ```
+ */
+export function deprecated(opts?: DeprecatedOptions): Function;
+
 export function deprecated(
-	params?: DeprecatedOptions | object,
+	opts?: DeprecatedOptions | object,
 	key?: string | symbol,
 	descriptor?: PropertyDescriptor
 ): Function | void {
-	const f = (name, descriptor, params?) => {
+	const f = (name, descriptor, opts?) => {
 		const
 			method = descriptor.value;
 
@@ -145,12 +173,12 @@ export function deprecated(
 			throw new TypeError(`descriptor.value is not a function: ${method}`);
 		}
 
-		descriptor.value = deprecate({type: 'method', ...params, name}, method);
+		descriptor.value = deprecate({type: 'method', ...opts, name}, method);
 	};
 
 	if (arguments.length > 1) {
 		return f(key, descriptor);
 	}
 
-	return (target, key, descriptor) => f(key, descriptor, params);
+	return (target, key, descriptor) => f(key, descriptor, opts);
 }

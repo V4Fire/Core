@@ -96,7 +96,7 @@ export async function clear(): Promise<boolean> {
  * @param [auth]
  * @param [params] - additional parameters
  */
-export async function match(auth?: SessionKey, params?: SessionParams): Promise<boolean> {
+export async function match(auth?: SessionKey, params?: Nullable<SessionParams>): Promise<boolean> {
 	try {
 		const s = await get();
 		return auth === s.auth && (params === undefined || Object.fastCompare(params, s.params));

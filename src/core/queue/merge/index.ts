@@ -43,11 +43,11 @@ export default class MergeQueue<T, V = unknown> extends Queue<T, V> {
 	/**
 	 * @override
 	 * @param worker
-	 * @param [params]
+	 * @param [opts]
 	 */
-	constructor(worker: QueueWorker<T, V>, params: QueueOptions<T>) {
-		super(worker, params);
-		this.hashFn = params?.hashFn || String;
+	constructor(worker: QueueWorker<T, V>, opts: QueueOptions<T>) {
+		super(worker, opts);
+		this.hashFn = opts?.hashFn || String;
 	}
 
 	/** @override */

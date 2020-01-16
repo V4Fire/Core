@@ -31,7 +31,7 @@ export interface Session {
 	auth: SessionKey;
 
 	/**
-	 * Additional parameters
+	 * Additional session parameters
 	 */
 	params?: Nullable<SessionParams>;
 }
