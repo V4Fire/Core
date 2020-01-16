@@ -64,9 +64,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @deprecated
 	 * @see Async.namespaces
 	 */
-	static get linkNames(): NamespacesDictionary {
-		return this.namespaces;
-	}
+	static linkNames: NamespacesDictionary = namespaces;
 
 	/**
 	 * The lock status.
@@ -99,7 +97,14 @@ export default class Async<CTX extends object = Async<any>> {
 	 * Link to Async.namespaces
 	 */
 	protected get namespaces(): NamespacesDictionary {
-		return (<typeof Async>this.constructor).namespaces;
+		const
+			constr = (<typeof Async>this.constructor);
+
+		if (constr.namespaces !== constr.linkNames) {
+			return constr.linkNames;
+		}
+
+		return constr.namespaces;
 	}
 
 	/**
