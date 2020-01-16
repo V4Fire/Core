@@ -28,7 +28,7 @@ export interface ConstrAbortHandler {
 }
 
 export interface Executor<T = unknown> {
-	(resolve: ConstrResolveHandler<T>, reject: ConstrRejectHandler, onAbort: ConstrAbortHandler): CanPromise<any>;
+	(resolve: ConstrResolveHandler<T>, reject: ConstrRejectHandler, onAbort: ConstrAbortHandler): any;
 }
 
 export type ResolveHandler<V = unknown, R = V> = Function | ((value: V) => Value<R>);

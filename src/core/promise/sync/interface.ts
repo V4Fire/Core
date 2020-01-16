@@ -15,15 +15,15 @@ export enum State {
 export type Value<T = unknown> = PromiseLike<T> | T;
 
 export interface ConstrResolveHandler<T = unknown> {
-	(value?: Value<T>): void;
+	(value?: Value<T>): any;
 }
 
 export interface ConstrRejectHandler {
-	(reason?: unknown): void;
+	(reason?: unknown): any;
 }
 
 export interface Executor<T = unknown> {
-	(resolve: ConstrResolveHandler<T>, reject: ConstrRejectHandler): CanPromise<void>;
+	(resolve: ConstrResolveHandler<T>, reject: ConstrRejectHandler): any;
 }
 
 export type ResolveHandler<V = unknown, R = V> = Function | ((value: V) => Value<R>);

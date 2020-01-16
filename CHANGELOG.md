@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.0.3
+
+#### :house: Internal
+
+* Improved interfaces for promises
+
 ## v3.0.2
 
 #### :rocket: New Feature
