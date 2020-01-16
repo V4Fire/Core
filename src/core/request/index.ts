@@ -95,15 +95,15 @@ export default function request<T = unknown>(
 		deep: true,
 		concatArray: true,
 		concatFn: (a: unknown[], b: unknown[]) => a.union(b),
-		extendFilter: (d, v) => Array.isArray(v) || Object.isPlainObject(v)
+		extendFilter: (d, v) => Array.isArray(v) || Object.isDictionary(v)
 	}, undefined, ...args);
 
-	if (Object.isPlainObject(path)) {
+	if (Object.isDictionary(path)) {
 		const
 			defOpts = path;
 
 		return (path, resolver, opts) => {
-			if (Object.isPlainObject(path)) {
+			if (Object.isDictionary(path)) {
 				return request(merge<CreateRequestOptions<T>>(defOpts, path));
 			}
 
@@ -149,7 +149,7 @@ export default function request<T = unknown>(
 			const
 				loggingContext = `request:${namespace}:${key}:${path}`,
 				getTime = () => `Finished at ${Date.now() - time}ms`,
-				clone = (data) => () => Object.isPlainObject(data) || Object.isArray(data) ? Object.fastClone(data) : data;
+				clone = (data) => () => Object.isDictionary(data) || Object.isArray(data) ? Object.fastClone(data) : data;
 
 			if (Object.isPromise(res)) {
 				res.then((data) => log(loggingContext, getTime(), clone(data)));

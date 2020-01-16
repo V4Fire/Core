@@ -71,7 +71,7 @@ extend(Date.prototype, 'format', function (
 	patternOrOpts: string | Intl.DateTimeFormatOptions,
 	locale: CanArray<string> = defaultLocale.value
 ): string {
-	if (Object.isPlainObject(patternOrOpts)) {
+	if (Object.isDictionary(patternOrOpts)) {
 		return this.toLocaleString(locale, patternOrOpts);
 	}
 

@@ -153,7 +153,7 @@ export default class Response {
 				return res;
 			}
 
-			if (Object.isArray(res) || Object.isPlainObject(res)) {
+			if (Object.isArray(res) || Object.isDictionary(res)) {
 				Object.defineProperty(res, 'valueOf', {
 					value: () => Object.fastClone(res, {freezable: false})
 				});

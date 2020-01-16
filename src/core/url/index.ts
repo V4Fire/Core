@@ -129,7 +129,7 @@ function chunkToQueryString(data: unknown, encode: boolean, prfx: string = ''): 
 
 			key = isArr ? prfx : prfx ? `${prfx}_${key}` : key;
 
-			const str = valIsArr || Object.isPlainObject(val) ?
+			const str = valIsArr || Object.isDictionary(val) ?
 				chunkToQueryString(val, encode, key) : `${key}=${chunkToQueryString(val, encode)}`;
 
 			if (res) {
@@ -147,7 +147,7 @@ function chunkToQueryString(data: unknown, encode: boolean, prfx: string = ''): 
 		return reduce(data);
 	}
 
-	if (Object.isPlainObject(data)) {
+	if (Object.isDictionary(data)) {
 		return reduce(Object.keys(data));
 	}
 

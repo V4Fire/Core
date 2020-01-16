@@ -249,7 +249,7 @@ function isStructure(obj: unknown): boolean {
 		return false;
 	}
 
-	if (Object.isArray(obj) || Object.isPlainObject(obj) || Object.isMap(obj) || Object.isSet(obj)) {
+	if (Object.isArray(obj) || Object.isDictionary(obj) || Object.isMap(obj) || Object.isSet(obj)) {
 		return true;
 	}
 
@@ -261,7 +261,7 @@ function canExtendProto(obj: unknown): boolean {
 		return false;
 	}
 
-	if (Object.isArray(obj) || Object.isPlainObject(obj)) {
+	if (Object.isArray(obj) || Object.isDictionary(obj)) {
 		return true;
 	}
 
@@ -313,7 +313,7 @@ function getSameAs<T = unknown>(obj: T): T | boolean {
 		return <any>[];
 	}
 
-	if (Object.isPlainObject(obj)) {
+	if (Object.isDictionary(obj)) {
 		return <any>{};
 	}
 

@@ -31,7 +31,7 @@ export * from 'core/async/modules/timers';
  * @param value
  */
 export function isEvent(value: unknown): value is EventLike {
-	return Object.isPlainObject(value) && Object.isString((<any>value).event);
+	return Object.isDictionary(value) && Object.isString((<any>value).event);
 }
 
 export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
@@ -79,7 +79,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		let
 			p: AsyncOnOptions<CTX>;
 
-		if (opts !== undefined && !Object.isPlainObject(opts)) {
+		if (opts !== undefined && !Object.isDictionary(opts)) {
 			args.unshift(opts);
 			p = {};
 
@@ -207,7 +207,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		let
 			p: AsyncOnceOptions<CTX>;
 
-		if (opts !== undefined && !Object.isPlainObject(opts)) {
+		if (opts !== undefined && !Object.isDictionary(opts)) {
 			args.unshift(opts);
 			p = {};
 
@@ -257,7 +257,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		let
 			p: AsyncPromisifyOnceOptions<E, R, CTX>;
 
-		if (opts !== undefined && !Object.isPlainObject(opts)) {
+		if (opts !== undefined && !Object.isDictionary(opts)) {
 			args.unshift(opts);
 			p = {};
 

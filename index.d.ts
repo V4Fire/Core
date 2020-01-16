@@ -610,7 +610,7 @@ interface ObjectConstructor {
 	 * @param a
 	 * @param b
 	 */
-	fastCompare<T = unknown>(a: unknown, b: T): a is T;
+	fastCompare<T>(a: unknown, b: T): a is T;
 
 	/**
 	 * Clones the specified object using naive but fast "JSON.stringify/parse" strategy and returns a new object
@@ -618,7 +618,7 @@ interface ObjectConstructor {
 	 * @param obj
 	 * @param [opts] - additional options
 	 */
-	fastClone<T = unknown>(obj: T, opts?: FastCloneOptions): T;
+	fastClone<T>(obj: T, opts?: FastCloneOptions): T;
 
 	/**
 	 * Returns a string representation of the specified object naive but fast "JSON.stringify/parse" strategy
@@ -801,14 +801,62 @@ interface ObjectConstructor {
 	reject<D extends object, C extends object>(obj: D, condition: C): Omit<D, keyof C>;
 
 	/**
-	 * Returns true if the specified value is a plain object
+	 * Returns true if the specified value is a dictionary
 	 * @param obj
+	 */
+	isDictionary<T>(obj: T): obj is
+		T extends any | unknown ? Dictionary :
+		T extends Dictionary ? T :
+		T extends
+			unknown[] |
+			Int8Array |
+			Int16Array |
+			Int32Array |
+			Uint8Array |
+			Uint8ClampedArray |
+			Uint16Array |
+			Uint32Array |
+			Float32Array |
+			Float64Array |
+			ArrayBuffer |
+			SharedArrayBuffer |
+			DataView |
+
+			Date |
+			RegExp |
+			Map<any, any> |
+			WeakMap<any, any> |
+			Set<any> |
+			WeakSet<any> |
+			Promise<any> |
+
+			Generator |
+			Function |
+
+			Number |
+			String |
+			Symbol |
+			Boolean |
+
+			Node |
+			Document |
+			Window |
+			Navigator |
+			Error |
+
+			Intl.Collator |
+			Intl.DateTimeFormat |
+			Intl.NumberFormat ? Dictionary : T extends object ? T : Dictionary;
+
+	/**
+	 * @deprecated
+	 * @see [[ObjectConstructor.isDictionary]]
 	 */
 	isPlainObject(obj: unknown): obj is Dictionary;
 
 	/**
 	 * @deprecated
-	 * @see [[ObjectConstructor.isPlainObject]]
+	 * @see [[ObjectConstructor.isDictionary]]
 	 */
 	isObject(obj: unknown): obj is Dictionary;
 
@@ -816,25 +864,25 @@ interface ObjectConstructor {
 	 * Returns true if the specified value is a custom (not builtin) object
 	 * @param obj
 	 */
-	isCustomObject(obj: unknown): obj is object;
+	isCustomObject<T extends object = object>(obj: unknown): obj is T;
 
 	/**
 	 * @deprecated
 	 * @see [[ObjectConstructor.isCustomObject]]
 	 */
-	isSimpleObject(obj: unknown): obj is object;
+	isSimpleObject<T extends object = object>(obj: unknown): obj is T;
 
 	/**
 	 * Returns true if the specified value is an array
 	 * @param obj
 	 */
-	isArray(obj: unknown): obj is unknown[];
+	isArray<T>(obj: T): obj is T extends Array<infer V> ? V[] : unknown[];
 
 	/**
 	 * Returns true if the specified value is looks like an array
 	 * @param obj
 	 */
-	isArrayLike(obj: unknown): obj is ArrayLike;
+	isArrayLike<T>(obj: T): obj is T extends ArrayLike<infer V> ? ArrayLike<V> : ArrayLike;
 
 	/**
 	 * Returns true if the specified value is a function
@@ -932,8 +980,8 @@ interface Array<T> {
 	 * Returns a new array containing elements from all specified arrays with duplicates removed
 	 * @param args
 	 */
-	union<A extends unknown[]>(...args: A): A extends (infer V)[][] ?
-		Array<T | V> : A extends (infer V)[] ? Array<T | V> : T[];
+	union<A extends unknown[]>(...args: A): A extends Array<infer V>[] ?
+		Array<T | V> : A extends Array<infer V>[] ? Array<T | V> : T[];
 }
 
 interface StringCapitalizeOptions {

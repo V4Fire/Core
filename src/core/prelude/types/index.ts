@@ -9,8 +9,8 @@
 import extend from 'core/prelude/extend';
 import { deprecate } from 'core/meta/deprecation';
 
-/** @see ObjectConstructor.isPlainObject */
-extend(Object, 'isPlainObject', isPlainObject);
+/** @see ObjectConstructor.isDictionary */
+extend(Object, 'isDictionary', isDictionary);
 
 /** @see ObjectConstructor.isCustomObject */
 extend(Object, 'isCustomObject', isCustomObject);
@@ -95,12 +95,21 @@ extend(Object, 'isWeakSet', (obj) => obj instanceof WeakSet);
 
 /**
  * @deprecated
- * @see ObjectConstructor.isPlainObject
+ * @see ObjectConstructor.isDictionary
+ */
+extend(Object, 'isPlainObject', deprecate({
+	name: 'isPlainObject',
+	renamedTo: 'isDictionary'
+}, isDictionary));
+
+/**
+ * @deprecated
+ * @see ObjectConstructor.isDictionary
  */
 extend(Object, 'isObject', deprecate({
 	name: 'isObject',
-	renamedTo: 'isPlainObject'
-}, isPlainObject));
+	renamedTo: 'isDictionary'
+}, isDictionary));
 
 /**
  * @deprecated
@@ -111,7 +120,7 @@ extend(Object, 'isSimpleObject', deprecate({
 	renamedTo: 'isCustomObject'
 }, isCustomObject));
 
-function isPlainObject(obj: unknown): boolean {
+function isDictionary(obj: unknown): boolean {
 	if (!obj || typeof obj !== 'object') {
 		return false;
 	}

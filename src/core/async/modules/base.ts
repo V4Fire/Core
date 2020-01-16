@@ -36,8 +36,8 @@ export const
  * Returns true if the specified value is looks like an instance of AsyncOptions
  * @param value
  */
-export function isAsyncOptions<T = AsyncOptions>(value: unknown): value is T {
-	return Object.isPlainObject(value);
+export function isAsyncOptions<T extends object = AsyncOptions>(value: unknown): value is T {
+	return Object.isDictionary(value);
 }
 
 /**
@@ -417,7 +417,7 @@ export default class Async<CTX extends object = Async<any>> {
 				return this.cancelAllTasks({name, reason: 'all'});
 			}
 
-			p = Object.isPlainObject(task) ? {...task, name} : {name, id: task};
+			p = Object.isDictionary(task) ? {...task, name} : {name, id: task};
 
 		} else {
 			p = task || {};
@@ -579,7 +579,7 @@ export default class Async<CTX extends object = Async<any>> {
 				return this.markAllTasks(label, {name});
 			}
 
-			p = Object.isPlainObject(task) ? {...task, name} : {name, id: task};
+			p = Object.isDictionary(task) ? {...task, name} : {name, id: task};
 
 		} else {
 			p = task || {};
