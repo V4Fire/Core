@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.0.6
+
+#### :house: Internal
+
+* Improved `Then` and `SyncPromise` interfaces
+
 ## v3.0.5
 
 #### :house: Internal

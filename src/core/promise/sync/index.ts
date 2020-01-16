@@ -31,7 +31,7 @@ export * from 'core/promise/sync/interface';
 /**
  * Class that is similar with the native promises, but works synchronously
  */
-export default class SyncPromise<T = unknown> implements PromiseLike<T> {
+export default class SyncPromise<T = unknown> implements Promise<T> {
 	/**
 	 * Creates a new resolved promise for the specified value
 	 * @param value
@@ -156,6 +156,9 @@ export default class SyncPromise<T = unknown> implements PromiseLike<T> {
 			}
 		});
 	}
+
+	/** @override */
+	readonly [Symbol.toStringTag]: 'Promise';
 
 	/**
 	 * Returns true if the current promise is pending

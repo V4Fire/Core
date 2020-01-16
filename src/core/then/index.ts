@@ -36,7 +36,7 @@ export * from 'core/then/interface';
  *
  * @typeparam T - promise resolved value
  */
-export default class Then<T = unknown> implements PromiseLike<T> {
+export default class Then<T = unknown> implements Promise<T> {
 	/**
 	 * The promise that is never resolved
 	 */
@@ -240,6 +240,9 @@ export default class Then<T = unknown> implements PromiseLike<T> {
 
 		}, parent);
 	}
+
+	/** @override */
+	readonly [Symbol.toStringTag]: 'Promise';
 
 	/**
 	 * Returns true if the current promise is pending
