@@ -65,14 +65,14 @@ export type OkStatuses =
 	StatusCodes[];
 
 export interface Encoder<I = unknown, O = unknown> {
-	(data: I, params: MiddlewareOptions): O;
+	(data: I, params: MiddlewareParams): O;
 }
 
 export type Encoders<T = unknown> =
 	Iterable<Encoder<T>>;
 
 export interface Decoder<I = unknown, O = unknown> {
-	(data: I, params: MiddlewareOptions, response: Response): O;
+	(data: I, params: MiddlewareParams, response: Response): O;
 }
 
 export type Decoders<T = unknown> =
@@ -110,14 +110,14 @@ export type RequestQuery =
 	unknown[] |
 	string;
 
-export interface MiddlewareOptions<T = unknown> {
+export interface MiddlewareParams<T = unknown> {
 	ctx: RequestContext<T>;
 	opts: CreateRequestOptions<T>;
 	globalOpts: GlobalOptions;
 }
 
 export interface Middleware<T = unknown> {
-	(params: MiddlewareOptions<T>): CanPromise<void | Function>;
+	(params: MiddlewareParams<T>): CanPromise<void | Function>;
 }
 
 export type Middlewares<T = unknown> =
@@ -143,7 +143,6 @@ export type RequestAPIValue<T = string> = Nullable<T> | (() => Nullable<T>);
  * ```
  *
  * than it builds a string is equal to `'https://foo.google.com/bar'.`
- *
  */
 export interface RequestAPI {
 	/**
@@ -212,7 +211,7 @@ export interface RequestAPI {
 	namespace?: RequestAPIValue;
 }
 export interface RequestResolver<T = unknown, ARGS extends unknown[] = unknown[]> {
-	(url: string, opts: MiddlewareOptions<T>, ...args: ARGS): ResolverResult;
+	(url: string, opts: MiddlewareParams<T>, ...args: ARGS): ResolverResult;
 }
 
 export interface CreateRequestOptions<T = unknown> {
@@ -331,14 +330,14 @@ export interface CreateRequestOptions<T = unknown> {
 
 	/**
 	 * Function (or a sequence of functions) that takes response data of the current request
-	 * and returns a new data for responsing. If you provides a sequence of functions, then the first function
+	 * and returns a new data for responding. If you provides a sequence of functions, then the first function
 	 * will provide a result to the next function from te sequence and etc.
 	 */
 	encoder?: Encoder | Encoders;
 
 	/**
 	 * Function (or a sequence of functions) that takes response data of the current request
-	 * and returns a new data for responsing. If you provides a sequence of functions, then the first function
+	 * and returns a new data for responding. If you provides a sequence of functions, then the first function
 	 * will provide a result to the next function from te sequence and etc.
 	 */
 	decoder?: Decoder | Decoders;

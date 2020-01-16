@@ -81,11 +81,11 @@ export default class Response {
 
 	/**
 	 * @param [body]
-	 * @param [params]
+	 * @param [opts] - additional options
 	 */
-	constructor(body?: ResponseTypeValue, params?: ResponseOptions) {
+	constructor(body?: ResponseTypeValue, opts?: ResponseOptions) {
 		const
-			p = Object.mixin<typeof defaultResponseOpts & ResponseOptions>(false, {}, defaultResponseOpts, params),
+			p = Object.mixin<typeof defaultResponseOpts & ResponseOptions>(false, {}, defaultResponseOpts, opts),
 			s = this.okStatuses = p.okStatuses;
 
 		this.parent = p.parent;
