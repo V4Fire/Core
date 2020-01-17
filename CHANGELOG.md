@@ -11,6 +11,23 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.1.0
+
+#### :rocket: [New Feature]
+
+* Added `Object.isIterable`
+* Unmarked deprecation flag from `Object.isPlainObject`
+* Unmarked deprecation flag from `Object.isSimpleObject`
+
+#### :bug: [Bug Fix]
+
+* Added native check for `Object.isCustomObject`
+
+#### :house: [Internal]
+
+* TS type refactoring
+* Some optimizations
+
 ## v3.0.6
 
 #### :house: Internal

@@ -12,8 +12,27 @@ import { deprecate } from 'core/meta/deprecation';
 /** @see ObjectConstructor.isDictionary */
 extend(Object, 'isDictionary', isDictionary);
 
+/** @see ObjectConstructor.isPlainObject */
+extend(Object, 'isPlainObject', isDictionary);
+
+const
+	isNative = /\[native code]/;
+
 /** @see ObjectConstructor.isCustomObject */
-extend(Object, 'isCustomObject', isCustomObject);
+extend(Object, 'isCustomObject', (obj) => {
+	if (typeof obj === 'function') {
+		return !isNative.test(obj.toString());
+	}
+
+	if (!isSimpleObject(obj)) {
+		return false;
+	}
+
+	return obj.constructor === Object || !isNative.test(obj.constructor.toString());
+});
+
+/**  @see ObjectConstructor.isSimpleObject */
+extend(Object, 'isSimpleObject', isSimpleObject);
 
 /** @see ObjectConstructor.isArray */
 extend(Object, 'isArray', Array.isArray);
@@ -36,11 +55,20 @@ extend(Object, 'isGenerator', (obj) =>
 
 /** @see ObjectConstructor.isIterator */
 extend(Object, 'isIterator', (obj) => {
-	if (!obj) {
+	if (!obj || typeof obj !== 'object') {
 		return false;
 	}
 
-	return typeof Symbol === 'function' ? obj[Symbol.iterator] : typeof obj['@@iterator'] === 'function';
+	return typeof obj.next === 'function';
+});
+
+/** @see ObjectConstructor.isIterable */
+extend(Object, 'isIterable', (obj) => {
+	if (!obj || typeof obj !== 'object') {
+		return false;
+	}
+
+	return typeof Symbol === 'function' ? obj![Symbol.iterator] : typeof obj!['@@iterator'] === 'function';
 });
 
 /** @see ObjectConstructor.isString */
@@ -97,28 +125,10 @@ extend(Object, 'isWeakSet', (obj) => obj instanceof WeakSet);
  * @deprecated
  * @see ObjectConstructor.isDictionary
  */
-extend(Object, 'isPlainObject', deprecate({
-	name: 'isPlainObject',
-	renamedTo: 'isDictionary'
-}, isDictionary));
-
-/**
- * @deprecated
- * @see ObjectConstructor.isDictionary
- */
 extend(Object, 'isObject', deprecate({
 	name: 'isObject',
 	renamedTo: 'isDictionary'
 }, isDictionary));
-
-/**
- * @deprecated
- * @see ObjectConstructor.isCustomObject
- */
-extend(Object, 'isSimpleObject', deprecate({
-	name: 'isSimpleObject',
-	renamedTo: 'isCustomObject'
-}, isCustomObject));
 
 function isDictionary(obj: unknown): boolean {
 	if (!obj || typeof obj !== 'object') {
@@ -132,6 +142,10 @@ function isDictionary(obj: unknown): boolean {
 const
 	toString = Object.prototype.toString;
 
-function isCustomObject(obj: unknown): boolean {
+function isSimpleObject(obj: unknown): boolean {
+	if (!obj || typeof obj !== 'object') {
+		return false;
+	}
+
 	return toString.call(obj) === '[object Object]';
 }

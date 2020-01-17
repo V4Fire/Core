@@ -9,7 +9,7 @@
 import extend from 'core/prelude/extend';
 
 /** @see ObjectConstructor.size */
-extend(Object, 'size', (obj: any) => {
+extend(Object, 'size', (obj: unknown) => {
 	if (!obj) {
 		return 0;
 	}
@@ -30,15 +30,19 @@ extend(Object, 'size', (obj: any) => {
 		return obj.size;
 	}
 
-	if (Object.isCustomObject(obj)) {
-		return Object.keys(obj).length;
-	}
-
 	let
 		length = 0;
 
-	for (const _ of obj) {
-		length++;
+	if (Object.isIterable(obj)) {
+		for (const _ of obj) {
+			length++;
+		}
+
+		return length;
+	}
+
+	if (Object.isSimpleObject(obj)) {
+		return Object.keys(obj).length;
 	}
 
 	return length;

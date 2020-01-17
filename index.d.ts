@@ -853,29 +853,50 @@ interface ObjectConstructor {
 				Intl.DateTimeFormat |
 				Intl.NumberFormat
 
-		? Dictionary : T extends object ? T : Dictionary;
+		? Dictionary : T extends object ? NonNullable<T> : Dictionary;
 
 	/**
-	 * @deprecated
-	 * @see [[ObjectConstructor.isDictionary]]
+	 * Returns true if the specified value is a plain object.
+	 * This method is similar to isDictionary, but it has another output TS type:
+	 * instead of inferring of an output type the method always cast the type to a dictionary.
+	 *
+	 * @param obj
+	 *
+	 * @example
+	 * ```ts
+	 * interface Foo {
+	 *   bar(): number;
+	 * }
+	 *
+	 * function foo(val: number | Foo) {
+	 *   if (Object.isDictionary(val)) {
+	 *     val.bar(); // All fine
+	 *   }
+	 *
+	 *   if (Object.isPlainObject(val)) {
+	 *     val.bar(); // Warning: object is of type unknown
+	 *   }
+	 * }
+	 * ```
 	 */
-	isPlainObject(obj: unknown): obj is Dictionary;
+	isPlainObject<T>(obj: T): obj is T extends Dictionary ? T : Dictionary;
 
 	/**
 	 * @deprecated
 	 * @see [[ObjectConstructor.isDictionary]]
+	 * @see [[ObjectConstructor.isPlainObject]]
 	 */
 	isObject(obj: unknown): obj is Dictionary;
 
 	/**
-	 * Returns true if the specified value is a custom (not builtin) object
+	 * Returns true if the specified value is a custom (not native) object or a function
 	 * @param obj
 	 */
-	isCustomObject<T extends object = object>(obj: unknown): obj is T;
+	isCustomObject(obj: unknown): boolean;
 
 	/**
-	 * @deprecated
-	 * @see [[ObjectConstructor.isCustomObject]]
+	 * Returns true if the specified value is a simple object (without a string type tag)
+	 * @param obj
 	 */
 	isSimpleObject<T extends object = object>(obj: unknown): obj is T;
 
@@ -883,13 +904,13 @@ interface ObjectConstructor {
 	 * Returns true if the specified value is an array
 	 * @param obj
 	 */
-	isArray<T>(obj: T): obj is T extends Array<infer V> ? V[] : unknown[];
+	isArray(obj: unknown): obj is unknown[];
 
 	/**
 	 * Returns true if the specified value is looks like an array
 	 * @param obj
 	 */
-	isArrayLike<T>(obj: T): obj is T extends ArrayLike<infer V> ? ArrayLike<V> : ArrayLike;
+	isArrayLike(obj: unknown): obj is ArrayLike;
 
 	/**
 	 * Returns true if the specified value is a function
@@ -904,10 +925,16 @@ interface ObjectConstructor {
 	isGenerator(obj: unknown): obj is GeneratorFunction;
 
 	/**
+	 * Returns true if the specified value is an iterable structure
+	 * @param obj
+	 */
+	isIterable(obj: unknown): obj is Iterable<unknown>;
+
+	/**
 	 * Returns true if the specified value is an iterator
 	 * @param obj
 	 */
-	isIterator(obj: unknown): obj is Iterator;
+	isIterator(obj: unknown): obj is Iterator<unknown>;
 
 	/**
 	 * Returns true if the specified value is a string

@@ -126,7 +126,7 @@ extend(Object, 'set', (
 
 		} else {
 			let
-				val = ref[key];
+				val = <any>ref[key];
 
 			if (!val || typeof val !== 'object') {
 				ref[key] = (val = nextChunkIsObj ? {} : []);

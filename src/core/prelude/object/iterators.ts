@@ -13,7 +13,7 @@ const
 
 /** @see ObjectConstructor.forEach */
 extend(Object, 'forEach', (
-	obj: any,
+	obj: unknown,
 	optsOrCb: ObjectForEachOptions | Function,
 	cbOrOpts?: Function | ObjectForEachOptions
 ) => {
@@ -55,32 +55,26 @@ extend(Object, 'forEach', (
 		return;
 	}
 
-	if (
-		Object.isCustomObject(obj) ||
-		!obj[Symbol.iterator] ||
-		opts?.notOwn !== undefined ||
-		opts?.withDescriptor !== undefined
-	) {
-		if (opts?.notOwn) {
-			for (const key in obj) {
-				if (opts?.notOwn === -1 && hasOwnProperty.call(obj, key)) {
-					continue;
-				}
+	if (Object.isIterable(obj) && opts?.notOwn !== undefined && opts?.withDescriptor !== undefined) {
+		for (const el of obj) {
+			cb(el, null, obj);
+		}
+	}
 
-				cb(opts?.withDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : obj[key], key, obj);
+	if (opts?.notOwn) {
+		for (const key in obj) {
+			if (opts?.notOwn === -1 && hasOwnProperty.call(obj, key)) {
+				continue;
 			}
 
-		} else {
-			for (let keys = Object.keys(obj), i = 0; i < keys.length; i++) {
-				const key = keys[i];
-				cb(opts?.withDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : obj[key], key, obj);
-			}
+			cb(opts?.withDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : obj[key], key, obj);
 		}
 
 		return;
 	}
 
-	for (const el of obj) {
-		cb(el, null, obj);
+	for (let keys = Object.keys(obj!), i = 0; i < keys.length; i++) {
+		const key = keys[i];
+		cb(opts?.withDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : obj![key], key, obj);
 	}
 });

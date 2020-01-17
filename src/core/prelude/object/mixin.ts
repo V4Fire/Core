@@ -241,11 +241,8 @@ extend(Object, 'mixin', (opts: ObjectMixinOptions | boolean, base: any, ...objec
 	return base;
 });
 
-const
-	isNative = /\[native code]/;
-
 function isStructure(obj: unknown): boolean {
-	if (!obj) {
+	if (!obj || typeof obj !== 'object') {
 		return false;
 	}
 
@@ -253,11 +250,11 @@ function isStructure(obj: unknown): boolean {
 		return true;
 	}
 
-	return Object.isFunction((<object>obj).constructor) && !isNative.test((<object>obj).constructor.toString());
+	return Object.isCustomObject((<object>obj!).constructor);
 }
 
 function canExtendProto(obj: unknown): boolean {
-	if (!obj) {
+	if (!obj || typeof obj !== 'object') {
 		return false;
 	}
 
@@ -265,7 +262,7 @@ function canExtendProto(obj: unknown): boolean {
 		return true;
 	}
 
-	return Object.isFunction((<object>obj).constructor) && !isNative.test((<object>obj).constructor.toString());
+	return Object.isCustomObject((<object>obj!).constructor);
 }
 
 function getType(obj: unknown): string {
@@ -304,8 +301,8 @@ function getType(obj: unknown): string {
 	return 'object';
 }
 
-function getSameAs<T = unknown>(obj: T): T | boolean {
-	if (!obj) {
+function getSameAs<T>(obj: T): T | boolean {
+	if (!obj || typeof obj !== 'object') {
 		return false;
 	}
 
@@ -325,7 +322,9 @@ function getSameAs<T = unknown>(obj: T): T | boolean {
 		return <any>new Set();
 	}
 
-	return <any>(
-		Object.isFunction((<any>obj).constructor) && !isNative.test((<any>obj).constructor.toString()) ? {} : false
-	);
+	if (Object.isCustomObject((<object><unknown>obj!).constructor)) {
+		return <any>{};
+	}
+
+	return false;
 }
