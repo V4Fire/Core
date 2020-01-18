@@ -26,7 +26,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 #### :house: [Internal]
 
 * TS type refactoring
-* Some optimizations
+* Some optimizations and refactoring
 
 ## v3.0.6
 
