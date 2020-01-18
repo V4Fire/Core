@@ -246,7 +246,7 @@ function isStructure(obj: unknown): boolean {
 		return false;
 	}
 
-	if (Object.isArray(obj) || Object.isDictionary(obj) || Object.isMap(obj) || Object.isSet(obj)) {
+	if (Object.isArray(obj) || Object.isPlainObject(obj) || Object.isMap(obj) || Object.isSet(obj)) {
 		return true;
 	}
 
@@ -258,7 +258,7 @@ function canExtendProto(obj: unknown): boolean {
 		return false;
 	}
 
-	if (Object.isArray(obj) || Object.isDictionary(obj)) {
+	if (Object.isArray(obj) || Object.isPlainObject(obj)) {
 		return true;
 	}
 
@@ -294,7 +294,7 @@ function getType(obj: unknown): string {
 		return 'array';
 	}
 
-	if (Object.isIterator(obj)) {
+	if (Object.isIterator(obj) || Object.isIterable(obj)) {
 		return 'iterator';
 	}
 
@@ -310,7 +310,7 @@ function getSameAs<T>(obj: T): T | boolean {
 		return <any>[];
 	}
 
-	if (Object.isDictionary(obj)) {
+	if (Object.isPlainObject(obj)) {
 		return <any>{};
 	}
 

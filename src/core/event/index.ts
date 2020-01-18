@@ -199,6 +199,6 @@ export const createSyncPromise = deprecate(
 			return SyncPromise.reject(rejectValue);
 		}
 
-		return SyncPromise.resolve<any>(resolveValue);
+		return SyncPromise.resolve(resolveValue);
 	}
 );

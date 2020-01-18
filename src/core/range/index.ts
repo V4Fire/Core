@@ -225,7 +225,7 @@ export default class Range<T extends RangeValue> {
 
 		const
 			chunks = [this.start],
-			res = <any[]>[];
+			res = <T[]>[];
 
 		if (isFinite(this.end)) {
 			chunks.push(this.end);
@@ -262,7 +262,7 @@ export default class Range<T extends RangeValue> {
 
 function charCodeAt(str: string, pos: number): number {
 	const v = Object.isFunction(str.codePointAt) ? str.codePointAt(pos) : str.charCodeAt(pos);
-	return isNaN(<any>v) ? NaN : <number>v;
+	return !v || isNaN(v) ? NaN : v;
 }
 
 function fromCharCode(code: number): string {

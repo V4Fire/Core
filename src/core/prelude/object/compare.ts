@@ -28,16 +28,18 @@ extend(Object, 'fastCompare', (a, b) => {
 
 	if (
 		!aIsArr &&
-		!Object.isDictionary(a) &&
+		!Object.isPlainObject(a) &&
 		!Object.isDate(a) &&
 		!Object.isRegExp(a) &&
-		!Object.isFunction((<any>a).toJSON) ||
+		// tslint:disable-next-line:no-string-literal
+		!Object.isFunction(a['toJSON']) ||
 
 		!bIsArr &&
-		!Object.isDictionary(b) &&
+		!Object.isPlainObject(b) &&
 		!Object.isDate(b) &&
 		!Object.isRegExp(b) &&
-		!Object.isFunction((<any>b).toJSON)
+		// tslint:disable-next-line:no-string-literal
+		!Object.isFunction(b['toJSON'])
 	) {
 		if ((aIsMap && bIsMap || aIsSet && bIsSet) && a.size === 0 && b.size === 0) {
 			return true;

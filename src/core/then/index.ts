@@ -215,7 +215,7 @@ export default class Then<T = unknown> implements Promise<T> {
 		values: T,
 		parent?: Then
 	): Then<T extends Iterable<Value<infer V>> ? V : unknown> {
-		return new Then<any>((resolve, reject, onAbort) => {
+		return new Then((resolve, reject, onAbort) => {
 			const
 				promises = <Then[]>[];
 
@@ -373,8 +373,8 @@ export default class Then<T = unknown> implements Promise<T> {
 	): Then<V | R>;
 
 	then(
-		onFulfill: Nullable<ResolveHandler<any>>,
-		onReject: Nullable<RejectHandler<any>>,
+		onFulfill: Nullable<ResolveHandler>,
+		onReject: Nullable<RejectHandler>,
 		onAbort: Nullable<ConstrRejectHandler>
 	): Then<any> {
 		this.pendingChildren++;
@@ -404,7 +404,7 @@ export default class Then<T = unknown> implements Promise<T> {
 			const
 				that = this;
 
-			abort(/** @this {Then} */ function (this: Then, reason: unknown): void {
+			abort(function (this: Then, reason: unknown): void {
 				if (Object.isFunction(onAbort)) {
 					try {
 						onAbort(reason);
@@ -429,7 +429,7 @@ export default class Then<T = unknown> implements Promise<T> {
 	 */
 	catch(onReject?: Nullable<RejectHandler<T>>): Then<T>;
 	catch<R>(onReject: RejectHandler<R>): Then<R>;
-	catch(onReject?: RejectHandler<any>): Then<any> {
+	catch(onReject?: RejectHandler): Then<any> {
 		return new Then((resolve, reject, onAbort) => {
 			let
 				rejectWrapper;
@@ -446,7 +446,7 @@ export default class Then<T = unknown> implements Promise<T> {
 			const
 				that = this;
 
-			onAbort(/** @this {Then} */ function (this: Then, reason: unknown): void {
+			onAbort(function (this: Then, reason: unknown): void {
 				this.aborted = true;
 
 				if (!that.abort(reason)) {
@@ -469,7 +469,7 @@ export default class Then<T = unknown> implements Promise<T> {
 			const
 				that = this;
 
-			onAbort(/** @this {Then} */ function (this: Then, reason: unknown): void {
+			onAbort(function (this: Then, reason: unknown): void {
 				this.aborted = true;
 
 				if (!that.abort(reason)) {
@@ -532,7 +532,7 @@ export default class Then<T = unknown> implements Promise<T> {
 				v = fn ? fn(...args) : undefined;
 
 			if (Object.isPromiseLike(v)) {
-				v.then(<any>resolve, reject);
+				(<PromiseLike<V>>v).then(resolve, reject);
 
 			} else {
 				resolve(v);

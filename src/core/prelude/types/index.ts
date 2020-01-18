@@ -10,22 +10,22 @@ import extend from 'core/prelude/extend';
 import { deprecate } from 'core/meta/deprecation';
 
 /** @see ObjectConstructor.isDictionary */
-extend(Object, 'isDictionary', isDictionary);
+extend(Object, 'isDictionary', isPlainObject);
 
 /** @see ObjectConstructor.isPlainObject */
-extend(Object, 'isPlainObject', isDictionary);
+extend(Object, 'isPlainObject', isPlainObject);
 
 const
 	isNative = /\[native code]/;
 
 /** @see ObjectConstructor.isCustomObject */
 extend(Object, 'isCustomObject', (obj) => {
-	if (typeof obj === 'function') {
-		return !isNative.test(obj.toString());
+	if (!obj || typeof obj !== 'object') {
+		return false;
 	}
 
-	if (!isSimpleObject(obj)) {
-		return false;
+	if (typeof obj === 'function') {
+		return !isNative.test(obj.toString());
 	}
 
 	return obj.constructor === Object || !isNative.test(obj.constructor.toString());
@@ -128,9 +128,9 @@ extend(Object, 'isWeakSet', (obj) => obj instanceof WeakSet);
 extend(Object, 'isObject', deprecate({
 	name: 'isObject',
 	renamedTo: 'isDictionary'
-}, isDictionary));
+}, isPlainObject));
 
-function isDictionary(obj: unknown): boolean {
+function isPlainObject(obj: unknown): boolean {
 	if (!obj || typeof obj !== 'object') {
 		return false;
 	}

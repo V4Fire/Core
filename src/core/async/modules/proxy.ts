@@ -344,7 +344,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 				canceled = false;
 
 			const proxyResolve = <(value: unknown) => unknown>this.proxy(resolve, {
-				...<any>p,
+				...p,
 
 				clearFn: () => {
 					this.promiseDestructor(p.destructor, <Promise<unknown>>promise);

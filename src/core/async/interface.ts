@@ -199,6 +199,11 @@ export interface AsyncProxyOptions<CTX extends object = Async> extends AsyncCbOp
 	 * Proxy name
 	 */
 	name?: string;
+
+	/**
+	 * Function for memory clearing
+	 */
+	clearFn?: ClearFn<CTX>;
 }
 
 export interface AsyncPromiseOptions extends AsyncOptions {

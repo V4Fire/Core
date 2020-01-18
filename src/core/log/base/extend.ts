@@ -15,5 +15,5 @@ import { Extended } from 'core/log/base/interface';
  * @param records
  */
 export default function extend<S extends Dictionary, T extends Dictionary>(factory: S, records: T): Extended<S, T> {
-	return <any>Object.mixin(false, factory, records);
+	return Object.mixin<Extended<S, T>>(false, factory, records);
 }

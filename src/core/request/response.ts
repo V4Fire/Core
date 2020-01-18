@@ -22,7 +22,7 @@ import {
 	ResponseTypeValue,
 	ResponseHeaders,
 	ResponseOptions,
-	Decoders,
+	WrappedDecoders,
 	JSONLikeValue
 
 } from 'core/request/interface';
@@ -62,7 +62,7 @@ export default class Response {
 	/**
 	 * Sequence of response decoders
 	 */
-	readonly decoders: Decoders;
+	readonly decoders: WrappedDecoders;
 
 	/**
 	 * True, if the request is important
@@ -85,7 +85,7 @@ export default class Response {
 	 */
 	constructor(body?: ResponseTypeValue, opts?: ResponseOptions) {
 		const
-			p = Object.mixin<typeof defaultResponseOpts & ResponseOptions>(false, {}, defaultResponseOpts, opts),
+			p = Object.mixin(false, {}, defaultResponseOpts, opts),
 			s = this.okStatuses = p.okStatuses;
 
 		this.parent = p.parent;
@@ -144,7 +144,7 @@ export default class Response {
 		let
 			decoders = data.then((obj) => Then.resolve(obj, this.parent));
 
-		Object.forEach(this.decoders, (fn: Function) => {
+		Object.forEach(this.decoders, (fn) => {
 			decoders = decoders.then((data) => fn(data, this));
 		});
 
@@ -153,7 +153,7 @@ export default class Response {
 				return res;
 			}
 
-			if (Object.isArray(res) || Object.isDictionary(res)) {
+			if (Object.isArray(res) || Object.isPlainObject(res)) {
 				Object.defineProperty(res, 'valueOf', {
 					value: () => Object.fastClone(res, {freezable: false})
 				});
@@ -170,45 +170,39 @@ export default class Response {
 	 */
 	@once
 	document(): Then<Document | null> {
-		if (this.sourceResponseType !== 'document') {
-			throw new TypeError('Invalid data sourceType');
-		}
-
-		type _ = Document | null;
-
 		const
-			body = <_>this.body;
+			{body} = this;
 
-		if (!body) {
-			return Then.resolve<_>(null, this.parent);
+		if (!(body instanceof Document)) {
+			throw new TypeError('Invalid data type');
 		}
 
-		return Then.resolve<_>(body, this.parent);
+		return Then.resolve<Document | null>(body || null, this.parent);
 	}
 
 	/**
 	 * Parses the response body as a JSON object and returns it
 	 */
 	json<T extends JSONLikeValue>(): Then<T | null> {
-		if (this.sourceResponseType !== 'json') {
-			throw new TypeError('Invalid data sourceType');
-		}
-
-		type _ = string | JSONLikeValue | null;
+		type _ = T | null;
 
 		const
-			body = <_>this.body;
+			{body} = this;
+
+		if (body instanceof Document || body instanceof ArrayBuffer) {
+			throw new TypeError('Invalid data type');
+		}
 
 		if (body == null || body === '') {
-			return Then.resolve<T | null>(null, this.parent);
+			return Then.resolve<_>(null, this.parent);
 		}
 
 		if (Object.isString(body)) {
 			return Then.resolveAndCall(() => JSON.parse(body, convertIfDate), this.parent);
 		}
 
-		return Then.resolveAndCall<T | null>(
-			<() => T>(() => Object.size(this.decoders) && !Object.isFrozen(body) ? Object.fastClone(body) : body),
+		return Then.resolveAndCall<_>(
+			(() => Object.size(this.decoders) && !Object.isFrozen(body) ? Object.fastClone(body) : body),
 			this.parent
 		);
 	}
@@ -217,14 +211,14 @@ export default class Response {
 	 * Parses the response body as an ArrayBuffer object and returns it
 	 */
 	arrayBuffer(): Then<ArrayBuffer | null> {
-		if (this.sourceResponseType !== 'arrayBuffer') {
-			throw new TypeError('Invalid data sourceType');
-		}
-
 		type _ = ArrayBuffer | null;
 
 		const
-			body = <_>this.body;
+			{body} = this;
+
+		if (!(body instanceof ArrayBuffer)) {
+			throw new TypeError('Invalid data type');
+		}
 
 		if (!body || !body.byteLength) {
 			return Then.resolve<_>(null, this.parent);
@@ -237,20 +231,20 @@ export default class Response {
 	 * Parses the response body as a Blob structure and returns it
 	 */
 	blob(): Then<Blob | null> {
-		if (this.sourceResponseType !== 'blob') {
-			throw new TypeError('Invalid data sourceType');
-		}
-
 		type _ = Blob | null;
 
 		const
 			{body} = this;
 
-		if (!body) {
+		if (body instanceof Document) {
+			throw new TypeError('Invalid data type');
+		}
+
+		if (!body || body instanceof Document) {
 			return Then.resolve<_>(null);
 		}
 
-		return Then.resolve<_>(new Blob([<any>body], {type: this.getHeader('content-type')}), this.parent);
+		return Then.resolve<_>(new Blob([body], {type: this.getHeader('content-type')}), this.parent);
 	}
 
 	/**
@@ -261,22 +255,17 @@ export default class Response {
 		type _ = string | null;
 
 		const
-			body = this.body,
-			type = this.sourceResponseType!;
+			{body} = this;
 
-		if (!body || type === 'arrayBuffer' && !(<ArrayBuffer>body).byteLength) {
+		if (!body || body instanceof ArrayBuffer && !body.byteLength) {
 			return Then.resolve<_>(null, this.parent);
 		}
 
-		if ({text: true, document: true}[type]) {
+		if (Object.isString(body) || body instanceof Document) {
 			return Then.resolve<_>(String(body), this.parent);
 		}
 
-		if ({json: true, object: true}[type]) {
-			if (Object.isString(body)) {
-				return Then.resolve<_>(body, this.parent);
-			}
-
+		if (Object.isDictionary(body)) {
 			return Then.resolve<_>(JSON.stringify(body), this.parent);
 		}
 
@@ -304,7 +293,7 @@ export default class Response {
 
 		if (typeof TextDecoder !== 'undefined') {
 			const decoder = new TextDecoder(encoding, {fatal: true});
-			return Then.resolve<_>(decoder.decode(new DataView(<any>body)), this.parent);
+			return Then.resolve<_>(decoder.decode(new DataView(body)), this.parent);
 		}
 
 		return new Then((resolve, reject, onAbort) => {

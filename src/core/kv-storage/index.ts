@@ -166,17 +166,17 @@ export function factory(engine: Dictionary, async?: boolean): AsyncFactoryResult
 		throw new TypeError('Invalid storage driver');
 	}
 
-	type WrapFn<T> =
+	type WrappedFn<T> =
 		(val?: T) => any;
 
 	function wrap(val?: undefined): CanPromise<undefined>;
 	function wrap<T>(val: T): CanPromise<T>;
-	function wrap<T, R extends WrapFn<T>>(
+	function wrap<T, R extends WrappedFn<T>>(
 		val: CanUndef<T>,
 		action: R
 	): CanPromise<R extends (val: CanUndef<T>) => infer R ? R extends Promise<infer RV> ? RV : R : unknown>;
 
-	function wrap<T, R extends WrapFn<T>>(val?: T, action?: R): CanUndef<CanPromise<T | ReturnType<R>>> {
+	function wrap<T, R extends WrappedFn<T>>(val?: T, action?: R): CanUndef<CanPromise<T | ReturnType<R>>> {
 		if (async) {
 			return (async () => {
 				val = await val;

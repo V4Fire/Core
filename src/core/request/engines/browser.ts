@@ -21,20 +21,31 @@ export default function createTransport(params: RequestOptions): Then<Response> 
 		xhr = new XMLHttpRequest();
 
 	let
-		data = p.body,
+		data,
 		{contentType} = p;
 
-	if (contentType == null && data) {
-		if (data instanceof FormData) {
+	if (contentType == null && p.body != null) {
+		if (p.body instanceof FormData) {
 			contentType = '';
+			data = p.body;
 
-		} else if (Object.isDictionary(data)) {
-			data = JSON.stringify(data);
+		} else if (Object.isPlainObject(p.body)) {
+			data = JSON.stringify(p.body);
 			contentType = 'application/json;charset=UTF-8';
+
+		} else if (Object.isNumber(p.body) || Object.isBoolean(p.body)) {
+			data = String(p.body);
+
+		} else {
+			data = p.body;
 		}
 	}
 
-	xhr.open(<string>p.method, p.url, true);
+	xhr.open(
+		p.method,
+		p.url,
+		true
+	);
 
 	if (p.timeout != null) {
 		xhr.timeout = p.timeout;
@@ -89,7 +100,7 @@ export default function createTransport(params: RequestOptions): Then<Response> 
 				okStatuses: p.okStatuses,
 				status: xhr.status,
 				headers: xhr.getAllResponseHeaders(),
-				decoder: p.decoder
+				decoder: p.decoders
 			}));
 		});
 
@@ -101,6 +112,6 @@ export default function createTransport(params: RequestOptions): Then<Response> 
 			reject(new RequestError('timeout'));
 		});
 
-		xhr.send(<any>data);
+		xhr.send(data);
 	}, p.parent);
 }

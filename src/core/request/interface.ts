@@ -8,8 +8,11 @@
 
 import Then from 'core/then';
 import Range from 'core/range';
+
 import Response from 'core/request/response';
 import RequestContext from 'core/request/context';
+
+import { defaultRequestOpts, defaultResponseOpts } from 'core/request/const';
 import { StatusCodes } from 'core/status-codes';
 
 export type RequestMethod =
@@ -68,15 +71,23 @@ export interface Encoder<I = unknown, O = unknown> {
 	(data: I, params: MiddlewareParams): O;
 }
 
-export type Encoders<T = unknown> =
-	Iterable<Encoder<T>>;
+export interface WrappedEncoder<I = unknown, O = unknown> {
+	(data: I): O;
+}
+
+export type Encoders<T = unknown> = Iterable<Encoder<T>>;
+export type WrappedEncoders<T = unknown> = Iterable<WrappedEncoder<T>>;
 
 export interface Decoder<I = unknown, O = unknown> {
 	(data: I, params: MiddlewareParams, response: Response): O;
 }
 
-export type Decoders<T = unknown> =
-	Iterable<Decoder<T>>;
+export interface WrappedDecoder<I = unknown, O = unknown> {
+	(data: I, response: Response): O;
+}
+
+export type Decoders<T = unknown> = Iterable<Decoder<T>>;
+export type WrappedDecoders<T = unknown> = Iterable<WrappedDecoder<T>>;
 
 export interface RequestResponseObject<T = unknown> {
 	data: T | null;
@@ -92,12 +103,12 @@ export interface RequestFunctionResponse<T = unknown, A extends unknown[] = []> 
 
 export interface RequestOptions {
 	readonly url: string;
-	readonly method?: RequestMethod;
+	readonly method: RequestMethod;
 	readonly timeout?: number;
 	readonly okStatuses?: OkStatuses;
 	readonly contentType?: string;
 	readonly responseType?: ResponseType;
-	readonly decoder?: Decoder | Decoder[];
+	readonly decoders?: WrappedDecoder[];
 	readonly headers?: Dictionary<CanArray<string>>;
 	readonly body?: RequestBody;
 	readonly important?: boolean;
@@ -361,6 +372,8 @@ export interface CreateRequestOptions<T = unknown> {
 	meta?: Dictionary;
 }
 
+export type NormalizedCreateRequestOptions<T = unknown> = typeof defaultRequestOpts & CreateRequestOptions<T>;
+
 export type ResolverResult =
 	string |
 	string[] |
@@ -377,8 +390,10 @@ export interface ResponseOptions {
 	okStatuses?: OkStatuses;
 	status?: StatusCodes;
 	headers?: string | Dictionary<string>;
-	decoder?: Decoder | Decoders;
+	decoder?: WrappedDecoder | WrappedDecoders;
 }
+
+export type NormalizedResponseOptions = typeof defaultResponseOpts & ResponseOptions;
 
 export interface GlobalOptions {
 	api?: Nullable<string>;

@@ -101,7 +101,7 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 		return new SyncPromise((resolve, reject) => {
 			const
 				promises = <SyncPromise[]>[],
-				resolved = <any[]>[];
+				resolved = <unknown[]>[];
 
 			Object.forEach(values, (el) => {
 				promises.push(SyncPromise.resolve(el));
@@ -257,9 +257,9 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 	): SyncPromise<V | R>;
 
 	then(
-		onFulfill: Nullable<ResolveHandler<any>>,
-		onReject: Nullable<RejectHandler<any>>
-	): SyncPromise<any> {
+		onFulfill: Nullable<ResolveHandler>,
+		onReject: Nullable<RejectHandler>
+	): SyncPromise {
 		return new SyncPromise((resolve, reject) => {
 			const
 				resolveWrapper = (v) => this.call(onFulfill || resolve, [v], reject, resolve),
@@ -281,7 +281,7 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 	 */
 	catch(onReject?: Nullable<RejectHandler<T>>): SyncPromise<T>;
 	catch<R>(onReject: RejectHandler<R>): SyncPromise<R>;
-	catch(onReject?: RejectHandler<any>): SyncPromise<any> {
+	catch(onReject?: RejectHandler): SyncPromise {
 		return new SyncPromise((resolve, reject) => {
 			const
 				rejectWrapper = (v) => this.call(onReject || reject, [v], reject, resolve);
@@ -333,7 +333,7 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 		fn: Nullable<Function>,
 		args: A[] = [],
 		onError?: ConstrRejectHandler,
-		onValue?: (value: V) => void
+		onValue?: (value: V) => any
 	): void {
 		const
 			loopback = () => undefined,
@@ -344,8 +344,8 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 			const
 				v = fn ? fn(...args) : undefined;
 
-			if (Object.isPromise(v)) {
-				v.then(<any>resolve, reject);
+			if (Object.isPromiseLike(v)) {
+				(<PromiseLike<V>>v).then(resolve, reject);
 
 			} else {
 				resolve(v);

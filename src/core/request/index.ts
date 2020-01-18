@@ -30,7 +30,10 @@ import {
 	CreateRequestOptions,
 	RequestResolver,
 	RequestResponse,
-	RequestFunctionResponse
+	RequestFunctionResponse,
+	Middleware,
+	WrappedEncoder,
+	WrappedDecoder
 
 } from 'core/request/interface';
 
@@ -95,15 +98,15 @@ export default function request<T = unknown>(
 		deep: true,
 		concatArray: true,
 		concatFn: (a: unknown[], b: unknown[]) => a.union(b),
-		extendFilter: (d, v) => Array.isArray(v) || Object.isDictionary(v)
+		extendFilter: (d, v) => Array.isArray(v) || Object.isPlainObject(v)
 	}, undefined, ...args);
 
-	if (Object.isDictionary(path)) {
+	if (Object.isPlainObject(path)) {
 		const
 			defOpts = path;
 
 		return (path, resolver, opts) => {
-			if (Object.isDictionary(path)) {
+			if (Object.isPlainObject(path)) {
 				return request(merge<CreateRequestOptions<T>>(defOpts, path));
 			}
 
@@ -149,7 +152,7 @@ export default function request<T = unknown>(
 			const
 				loggingContext = `request:${namespace}:${key}:${path}`,
 				getTime = () => `Finished at ${Date.now() - time}ms`,
-				clone = (data) => () => Object.isDictionary(data) || Object.isArray(data) ? Object.fastClone(data) : data;
+				clone = (data) => () => Object.isPlainObject(data) || Object.isArray(data) ? Object.fastClone(data) : data;
 
 			if (Object.isPromise(res)) {
 				res.then((data) => log(loggingContext, getTime(), clone(data)));
@@ -162,8 +165,8 @@ export default function request<T = unknown>(
 		};
 
 		const
-			encoders = <Function[]>[],
-			decoders = <Function[]>[];
+			encoders = <WrappedEncoder[]>[],
+			decoders = <WrappedDecoder[]>[];
 
 		Object.forEach(merge(ctx.encoders), (el, key) => {
 			encoders.push(wrapProcessor('encoders', el, key));
@@ -232,9 +235,9 @@ export default function request<T = unknown>(
 			ctx.isOnline = (await Then.resolve(isOnline(), parent)).status;
 
 			const
-				tasks = <any[]>[];
+				tasks = <CanPromise<unknown>[]>[];
 
-			Object.forEach(p.middlewares, (fn: Function) => {
+			Object.forEach(p.middlewares, (fn: Middleware<T>) => {
 				tasks.push(fn(middlewareParams));
 			});
 
@@ -245,7 +248,7 @@ export default function request<T = unknown>(
 				let
 					res = Then.resolve(data, parent);
 
-				Object.forEach(ctx.encoders, (fn: Function, i) => {
+				Object.forEach(<typeof encoders>ctx.encoders, (fn, i) => {
 					res = res.then((obj) => fn(i ? obj : Object.fastClone(obj)));
 				});
 
@@ -266,7 +269,7 @@ export default function request<T = unknown>(
 
 				resolve((() => {
 					const
-						res = <any[]>[];
+						res = <unknown[]>[];
 
 					for (let j = i; j < middlewareResults.length; j++) {
 						const
@@ -365,7 +368,7 @@ export default function request<T = unknown>(
 					...p,
 					url,
 					parent,
-					decoder: ctx.decoders
+					decoders: ctx.decoders
 				};
 
 				res = requestEngine(reqOpts).then(success).then(ctx.saveCache);

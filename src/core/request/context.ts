@@ -12,15 +12,12 @@ import Cache from 'core/cache/interface';
 
 import { concatUrls, toQueryString } from 'core/url';
 import { normalizeHeaders, applyQueryForStr, getStorageKey, getRequestKey } from 'core/request/utils';
-import { cache, pendingCache, storage, globalOpts, defaultRequestOpts, methodsWithoutBody } from 'core/request/const';
+import { cache, pendingCache, storage, globalOpts, methodsWithoutBody } from 'core/request/const';
 import {
 
-	CreateRequestOptions,
+	NormalizedCreateRequestOptions,
 	RequestQuery,
 	RequestAPI,
-
-	Encoders,
-	Decoders,
 
 	ResponseTypeValue,
 	RequestResponseObject
@@ -65,17 +62,17 @@ export default class RequestContext<T = unknown> {
 	/**
 	 * Request parameters
 	 */
-	readonly params!: typeof defaultRequestOpts & CreateRequestOptions<T>;
+	readonly params!: NormalizedCreateRequestOptions<T>;
 
 	/**
 	 * Sequence of request encoders
 	 */
-	encoders: Encoders;
+	encoders: Iterable<Function>;
 
 	/**
 	 * Sequence of response decoders
 	 */
-	decoders: Decoders;
+	decoders: Iterable<Function>;
 
 	/**
 	 * Parent operation promise
@@ -97,12 +94,12 @@ export default class RequestContext<T = unknown> {
 	/**
 	 * @param [params] - request parameters
 	 */
-	constructor(params?: CreateRequestOptions<T>) {
-		const p = this.params = <any>Object.mixin({
+	constructor(params?: NormalizedCreateRequestOptions<T>) {
+		const p = this.params = Object.mixin({
 			deep: true,
 			concatArray: true,
 			concatFn: (a: unknown[], b: unknown[]) => a.union(b),
-			extendFilter: (d, v) => Array.isArray(v) || Object.isDictionary(v)
+			extendFilter: (d, v) => Array.isArray(v) || Object.isPlainObject(v)
 		}, {}, params);
 
 		this.canCache = p.cacheMethods?.includes(p.method) || false;
@@ -228,9 +225,9 @@ export default class RequestContext<T = unknown> {
 			q = this.query;
 
 		const data = this.withoutBody ?
-			q : Object.isDictionary(p.body) ? p.body : q;
+			q : Object.isPlainObject(p.body) ? p.body : q;
 
-		if (Object.isDictionary(data)) {
+		if (Object.isPlainObject(data)) {
 			if (p.headers) {
 				p.headers = normalizeHeaders(p.headers, data);
 			}

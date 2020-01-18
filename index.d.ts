@@ -801,63 +801,61 @@ interface ObjectConstructor {
 	reject<D extends object, C extends object>(obj: D, condition: C): Omit<D, keyof C>;
 
 	/**
-	 * Returns true if the specified value is a dictionary
+	 * Returns true if the specified value is a plain object
 	 * @param obj
 	 */
-	isDictionary<T>(obj: T): obj is
-		T extends Dictionary ? T :
+	isPlainObject<T>(obj: T): obj is
+		T extends
+			unknown[] |
 
-			T extends
-				unknown[] |
+			Int8Array |
+			Int16Array |
+			Int32Array |
 
-				Int8Array |
-				Int16Array |
-				Int32Array |
+			Uint8Array |
+			Uint8ClampedArray |
+			Uint16Array |
+			Uint32Array |
 
-				Uint8Array |
-				Uint8ClampedArray |
-				Uint16Array |
-				Uint32Array |
+			Float32Array |
+			Float64Array |
 
-				Float32Array |
-				Float64Array |
+			ArrayBuffer |
+			SharedArrayBuffer |
+			DataView |
+			FormData |
 
-				ArrayBuffer |
-				SharedArrayBuffer |
-				DataView |
-				FormData |
+			Date |
+			RegExp |
+			Map<any, any> |
+			WeakMap<any, any> |
+			Set<any> |
+			WeakSet<any> |
+			Promise<any> |
 
-				Date |
-				RegExp |
-				Map<any, any> |
-				WeakMap<any, any> |
-				Set<any> |
-				WeakSet<any> |
-				Promise<any> |
+			Generator |
+			Function |
 
-				Generator |
-				Function |
+			Number |
+			String |
+			Symbol |
+			Boolean |
 
-				Number |
-				String |
-				Symbol |
-				Boolean |
+			Node |
+			Document |
+			Window |
+			Navigator |
+			Error |
 
-				Node |
-				Document |
-				Window |
-				Navigator |
-				Error |
-
-				Intl.Collator |
-				Intl.DateTimeFormat |
-				Intl.NumberFormat
+			Intl.Collator |
+			Intl.DateTimeFormat |
+			Intl.NumberFormat
 
 		? Dictionary : T extends object ? NonNullable<T> : Dictionary;
 
 	/**
-	 * Returns true if the specified value is a plain object.
-	 * This method is similar to isDictionary, but it has another output TS type:
+	 * Returns true if the specified value is a dictionary.
+	 * This method is similar to isPlainObject, but it has another output TS type:
 	 * instead of inferring of an output type the method always cast the type to a dictionary.
 	 *
 	 * @param obj
@@ -869,22 +867,22 @@ interface ObjectConstructor {
 	 * }
 	 *
 	 * function foo(val: number | Foo) {
-	 *   if (Object.isDictionary(val)) {
+	 *   if (Object.isPlainObject(val)) {
 	 *     val.bar(); // All fine
 	 *   }
 	 *
-	 *   if (Object.isPlainObject(val)) {
+	 *   if (Object.isDictionary(val)) {
 	 *     val.bar(); // Warning: object is of type unknown
 	 *   }
 	 * }
 	 * ```
 	 */
-	isPlainObject<T>(obj: T): obj is T extends Dictionary ? T : Dictionary;
+	isDictionary(obj: unknown): obj is Dictionary;
 
 	/**
 	 * @deprecated
-	 * @see [[ObjectConstructor.isDictionary]]
 	 * @see [[ObjectConstructor.isPlainObject]]
+	 * @see [[ObjectConstructor.isDictionary]]
 	 */
 	isObject(obj: unknown): obj is Dictionary;
 
