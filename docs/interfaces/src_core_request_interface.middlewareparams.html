@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Array | V4Fire</title>
+	<title>MiddlewareParams | V4Fire</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -129,13 +129,13 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/index_d.html">&quot;index.d&quot;</a>
+					<a href="../modules/src_core_request_interface.html">&quot;src/core/request/interface&quot;</a>
 				</li>
 				<li>
-					<a href="index_d.array.html">Array</a>
+					<a href="src_core_request_interface.middlewareparams.html">MiddlewareParams</a>
 				</li>
 			</ul>
-			<h1>Interface Array&lt;T&gt;</h1>
+			<h1>Interface MiddlewareParams&lt;T&gt;</h1>
 		</div>
 	</div>
 </header>
@@ -154,7 +154,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">Array</span>
+						<span class="target">MiddlewareParams</span>
 					</li>
 				</ul>
 			</section>
@@ -162,52 +162,48 @@
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
-						<section class="tsd-index-section tsd-is-not-exported">
-							<h3>Methods</h3>
+						<section class="tsd-index-section ">
+							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-not-exported"><a href="index_d.array.html#union" class="tsd-kind-icon">union</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="src_core_request_interface.middlewareparams.html#ctx" class="tsd-kind-icon">ctx</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="src_core_request_interface.middlewareparams.html#globalopts" class="tsd-kind-icon">global<wbr>Opts</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="src_core_request_interface.middlewareparams.html#opts" class="tsd-kind-icon">opts</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
-				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-not-exported">
-					<a name="union" class="tsd-anchor"></a>
-					<h3>union</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">union&lt;A&gt;<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">A extends Array&lt;infer V&gt;[] ? Array&lt;T | V&gt; : A extends Array&lt;infer V&gt;[] ? Array&lt;T | V&gt; : T[]</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L1015">index.d.ts:1015</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Returns a new array containing elements from all specified arrays with duplicates removed</p>
-								</div>
-							</div>
-							<h4 class="tsd-type-parameters-title">Type parameters</h4>
-							<ul class="tsd-type-parameters">
-								<li>
-									<h4>A<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">[]</span></h4>
-								</li>
-							</ul>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>args: <span class="tsd-signature-type">A</span></h5>
-									<div class="tsd-comment tsd-typography">
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">A extends Array&lt;infer V&gt;[] ? Array&lt;T | V&gt; : A extends Array&lt;infer V&gt;[] ? Array&lt;T | V&gt; : T[]</span></h4>
-						</li>
-					</ul>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="ctx" class="tsd-anchor"></a>
+					<h3>ctx</h3>
+					<div class="tsd-signature tsd-kind-icon">ctx<span class="tsd-signature-symbol">:</span> <a href="../classes/src_core_request_context.requestcontext.html" class="tsd-signature-type">RequestContext</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L125">src/core/request/interface.ts:125</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="globalopts" class="tsd-anchor"></a>
+					<h3>global<wbr>Opts</h3>
+					<div class="tsd-signature tsd-kind-icon">global<wbr>Opts<span class="tsd-signature-symbol">:</span> <a href="src_core_request_interface.globaloptions.html" class="tsd-signature-type">GlobalOptions</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L127">src/core/request/interface.ts:127</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="opts" class="tsd-anchor"></a>
+					<h3>opts</h3>
+					<div class="tsd-signature tsd-kind-icon">opts<span class="tsd-signature-symbol">:</span> <a href="src_core_request_interface.createrequestoptions.html" class="tsd-signature-type">CreateRequestOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L126">src/core/request/interface.ts:126</a></li>
+						</ul>
+					</aside>
 				</section>
 			</section>
 		</div>
@@ -218,24 +214,126 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class="current tsd-kind-external-module">
-						<a href="../modules/index_d.html">&quot;index.d&quot;</a>
+						<a href="../modules/src_core_request_interface.html">&quot;src/core/request/interface&quot;</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter">
+						<a href="src_core_request_interface.createrequestoptions.html" class="tsd-kind-icon">Create<wbr>Request<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter">
+						<a href="src_core_request_interface.decoder.html" class="tsd-kind-icon">Decoder</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter">
+						<a href="src_core_request_interface.encoder.html" class="tsd-kind-icon">Encoder</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="src_core_request_interface.globaloptions.html" class="tsd-kind-icon">Global<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter">
+						<a href="src_core_request_interface.middleware.html" class="tsd-kind-icon">Middleware</a>
+					</li>
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="index_d.array.html" class="tsd-kind-icon">Array</a>
+					<li class="current tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter">
+						<a href="src_core_request_interface.middlewareparams.html" class="tsd-kind-icon">Middleware<wbr>Params</a>
 						<ul>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-not-exported">
-								<a href="index_d.array.html#union" class="tsd-kind-icon">union</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="src_core_request_interface.middlewareparams.html#ctx" class="tsd-kind-icon">ctx</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="src_core_request_interface.middlewareparams.html#globalopts" class="tsd-kind-icon">global<wbr>Opts</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="src_core_request_interface.middlewareparams.html#opts" class="tsd-kind-icon">opts</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="src_core_request_interface.requestapi.html" class="tsd-kind-icon">RequestAPI</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter">
+						<a href="src_core_request_interface.requestfunctionresponse.html" class="tsd-kind-icon">Request<wbr>Function<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="src_core_request_interface.requestoptions.html" class="tsd-kind-icon">Request<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter">
+						<a href="src_core_request_interface.requestresolver.html" class="tsd-kind-icon">Request<wbr>Resolver</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter">
+						<a href="src_core_request_interface.requestresponseobject.html" class="tsd-kind-icon">Request<wbr>Response<wbr>Object</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="src_core_request_interface.responseheaders.html" class="tsd-kind-icon">Response<wbr>Headers</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="src_core_request_interface.responseoptions.html" class="tsd-kind-icon">Response<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter">
+						<a href="src_core_request_interface.wrappeddecoder.html" class="tsd-kind-icon">Wrapped<wbr>Decoder</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter">
+						<a href="src_core_request_interface.wrappedencoder.html" class="tsd-kind-icon">Wrapped<wbr>Encoder</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module">
+						<a href="../modules/src_core_request_interface.html#cachestrategy" class="tsd-kind-icon">Cache<wbr>Strategy</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module tsd-has-type-parameter">
+						<a href="../modules/src_core_request_interface.html#decoders" class="tsd-kind-icon">Decoders</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module tsd-has-type-parameter">
+						<a href="../modules/src_core_request_interface.html#encoders" class="tsd-kind-icon">Encoders</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module">
+						<a href="../modules/src_core_request_interface.html#jsonlikevalue" class="tsd-kind-icon">JSONLike<wbr>Value</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module tsd-has-type-parameter">
+						<a href="../modules/src_core_request_interface.html#middlewares" class="tsd-kind-icon">Middlewares</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module tsd-has-type-parameter">
+						<a href="../modules/src_core_request_interface.html#normalizedcreaterequestoptions" class="tsd-kind-icon">Normalized<wbr>Create<wbr>Request<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module">
+						<a href="../modules/src_core_request_interface.html#normalizedresponseoptions" class="tsd-kind-icon">Normalized<wbr>Response<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module">
+						<a href="../modules/src_core_request_interface.html#okstatuses" class="tsd-kind-icon">Ok<wbr>Statuses</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module tsd-has-type-parameter">
+						<a href="../modules/src_core_request_interface.html#requestapivalue" class="tsd-kind-icon">RequestAPIValue</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module">
+						<a href="../modules/src_core_request_interface.html#requestbody" class="tsd-kind-icon">Request<wbr>Body</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module">
+						<a href="../modules/src_core_request_interface.html#requestmethod" class="tsd-kind-icon">Request<wbr>Method</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module">
+						<a href="../modules/src_core_request_interface.html#requestquery" class="tsd-kind-icon">Request<wbr>Query</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module tsd-has-type-parameter">
+						<a href="../modules/src_core_request_interface.html#requestresponse" class="tsd-kind-icon">Request<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module">
+						<a href="../modules/src_core_request_interface.html#resolverresult" class="tsd-kind-icon">Resolver<wbr>Result</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module">
+						<a href="../modules/src_core_request_interface.html#responsetype" class="tsd-kind-icon">Response<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module">
+						<a href="../modules/src_core_request_interface.html#responsetypevalue" class="tsd-kind-icon">Response<wbr>Type<wbr>Value</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module tsd-has-type-parameter">
+						<a href="../modules/src_core_request_interface.html#wrappeddecoders" class="tsd-kind-icon">Wrapped<wbr>Decoders</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module tsd-has-type-parameter">
+						<a href="../modules/src_core_request_interface.html#wrappedencoders" class="tsd-kind-icon">Wrapped<wbr>Encoders</a>
+					</li>
 				</ul>
 			</nav>
 		</div>
