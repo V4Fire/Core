@@ -181,7 +181,7 @@
 					<div class="tsd-signature tsd-kind-icon">afterDOMLoaded<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">afterDOMLoaded</span><span class="tsd-signature-symbol"> =&nbsp;deprecate({alternative: &#x27;resolveAfterDOMLoaded&#x27;},function afterDOMLoaded(cb?: Function): SyncPromise&lt;void&gt; {constpromise &#x3D; resolveAfterDOMLoaded();if (cb) {promise.then(cb);}return promise;})</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/47424b1/src/core/event/index.ts#L164">src/core/event/index.ts:164</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/event/index.ts#L164">src/core/event/index.ts:164</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -200,7 +200,7 @@
 					<div class="tsd-signature tsd-kind-icon">after<wbr>Events<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">afterEvents</span><span class="tsd-signature-symbol"> =&nbsp;deprecate({alternative: &#x27;resolveAfterEvents&#x27;},function afterEvents(emitter: EventEmitterLike, cb: Function | string, ...events: string[]): SyncPromise&lt;void&gt; {constpromise &#x3D; resolveAfterEvents(emitter, ...(&lt;string[]&gt;[]).concat(Object.isString(cb) ? cb : [], events));if (Object.isFunction(cb)) {promise.then(cb);}return promise;})</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/47424b1/src/core/event/index.ts#L143">src/core/event/index.ts:143</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/event/index.ts#L143">src/core/event/index.ts:143</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -216,10 +216,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module">
 					<a name="createsyncpromise" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> create<wbr>Sync<wbr>Promise</h3>
-					<div class="tsd-signature tsd-kind-icon">create<wbr>Sync<wbr>Promise<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">createSyncPromise</span><span class="tsd-signature-symbol"> =&nbsp;deprecate({alternative: {name: &#x27;SyncPromise&#x27;,source: &#x27;core/promise/sync&#x27;}},function createSyncPromise&lt;R &#x3D; unknown&gt;(resolveValue?: R, rejectValue?: unknown): SyncPromise&lt;R&gt; {if (rejectValue !&#x3D;&#x3D; undefined) {return SyncPromise.reject(rejectValue);}return SyncPromise.resolve&lt;any&gt;(resolveValue);})</span></div>
+					<div class="tsd-signature tsd-kind-icon">create<wbr>Sync<wbr>Promise<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">createSyncPromise</span><span class="tsd-signature-symbol"> =&nbsp;deprecate({alternative: {name: &#x27;SyncPromise&#x27;,source: &#x27;core/promise/sync&#x27;}},function createSyncPromise&lt;R &#x3D; unknown&gt;(resolveValue?: R, rejectValue?: unknown): SyncPromise&lt;R&gt; {if (rejectValue !&#x3D;&#x3D; undefined) {return SyncPromise.reject(rejectValue);}return SyncPromise.resolve(resolveValue);})</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/47424b1/src/core/event/index.ts#L189">src/core/event/index.ts:189</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/event/index.ts#L189">src/core/event/index.ts:189</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -245,7 +245,7 @@
 					<div class="tsd-signature tsd-kind-icon">on<wbr>Everything<wbr>Ready<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">onEverythingReady</span><span class="tsd-signature-symbol"> =&nbsp;deprecate({renamedTo: &#x27;createsAsyncSemaphore&#x27;},function onEverythingReady(cb: () &#x3D;&gt; unknown, ...flags: string[]): (flag: string) &#x3D;&gt; void {return createsAsyncSemaphore(cb, ...flags);})</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/47424b1/src/core/event/index.ts#L129">src/core/event/index.ts:129</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/event/index.ts#L129">src/core/event/index.ts:129</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -271,7 +271,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/47424b1/src/core/event/index.ts#L92">src/core/event/index.ts:92</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/event/index.ts#L92">src/core/event/index.ts:92</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -360,7 +360,7 @@ semaphore();</code></pre>
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/47424b1/src/core/event/index.ts#L59">src/core/event/index.ts:59</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/event/index.ts#L59">src/core/event/index.ts:59</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -382,7 +382,7 @@ semaphore();</code></pre>
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/47424b1/src/core/event/index.ts#L32">src/core/event/index.ts:32</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/event/index.ts#L32">src/core/event/index.ts:32</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
