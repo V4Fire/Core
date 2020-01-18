@@ -31,8 +31,17 @@ extend(Object, 'isCustomObject', (obj) => {
 	return obj.constructor === Object || !isNative.test(obj.constructor.toString());
 });
 
+const
+	toString = Object.prototype.toString;
+
 /**  @see ObjectConstructor.isSimpleObject */
-extend(Object, 'isSimpleObject', isSimpleObject);
+extend(Object, 'isSimpleObject', (obj) =>  {
+	if (!obj || typeof obj !== 'object') {
+		return false;
+	}
+
+	return toString.call(obj) === '[object Object]';
+});
 
 /** @see ObjectConstructor.isArray */
 extend(Object, 'isArray', Array.isArray);
@@ -137,15 +146,4 @@ function isPlainObject(obj: unknown): boolean {
 
 	const constr = obj!.constructor;
 	return !constr || constr === Object;
-}
-
-const
-	toString = Object.prototype.toString;
-
-function isSimpleObject(obj: unknown): boolean {
-	if (!obj || typeof obj !== 'object') {
-		return false;
-	}
-
-	return toString.call(obj) === '[object Object]';
 }
