@@ -1,3 +1,3 @@
 # core/prelude/object
 
-This modules extends the Object constructor with extra functions, like `Object.mixin`, etc.
+This modules extends the Object constructor with extra methods, like `Object.mixin`, etc.

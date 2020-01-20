@@ -1,6 +1,6 @@
 # core/prelude/types
 
-This modules extends the Object constructor with extra functions for checking types.
+This modules extends the Object constructor with extra methods for checking types.
 
 ```
 Object.isPlainObject({}); // true
