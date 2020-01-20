@@ -1,6 +1,6 @@
 # core/log
 
-This module provides the API for logging.
+This module provides API for logging.
 
 ```js
 import log from 'core/log';
