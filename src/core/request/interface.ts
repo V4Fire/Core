@@ -342,14 +342,14 @@ export interface CreateRequestOptions<T = unknown> {
 	/**
 	 * Function (or a sequence of functions) that takes response data of the current request
 	 * and returns a new data for responding. If you provides a sequence of functions, then the first function
-	 * will provide a result to the next function from te sequence and etc.
+	 * will provide a result to the next function from te sequence, etc.
 	 */
 	encoder?: Encoder | Encoders;
 
 	/**
 	 * Function (or a sequence of functions) that takes response data of the current request
 	 * and returns a new data for responding. If you provides a sequence of functions, then the first function
-	 * will provide a result to the next function from te sequence and etc.
+	 * will provide a result to the next function from te sequence, etc.
 	 */
 	decoder?: Decoder | Decoders;
 
