@@ -20,7 +20,10 @@ import {
 	RequestAPI,
 
 	ResponseTypeValue,
-	RequestResponseObject
+	RequestResponseObject,
+
+	WrappedDecoders,
+	WrappedEncoders
 
 } from 'core/request/interface';
 
@@ -67,12 +70,12 @@ export default class RequestContext<T = unknown> {
 	/**
 	 * Sequence of request encoders
 	 */
-	encoders: Iterable<Function>;
+	encoders: WrappedEncoders;
 
 	/**
 	 * Sequence of response decoders
 	 */
-	decoders: Iterable<Function>;
+	decoders: WrappedDecoders;
 
 	/**
 	 * Parent operation promise

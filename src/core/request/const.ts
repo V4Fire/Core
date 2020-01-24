@@ -10,7 +10,7 @@ import config from 'config';
 import Range from 'core/range';
 
 import { AsyncFactoryResult } from 'core/kv-storage';
-import { RequestMethod, ResponseType, GlobalOptions, CacheStrategy } from 'core/request/interface';
+import { RequestQuery, RequestMethod, ResponseType, GlobalOptions, CacheStrategy } from 'core/request/interface';
 import { Cache, RestrictedCache, NeverCache, AbstractCache } from 'core/cache';
 
 export let
@@ -33,11 +33,11 @@ export const mimeTypes: Dictionary<ResponseType> = Object.createDict({
 export const defaultRequestOpts = {
 	method: <RequestMethod>'GET',
 	cacheStrategy: <CacheStrategy>'never',
-	cacheMethods: ['GET'],
+	cacheMethods: <RequestMethod[]>['GET'],
 	offlineCacheTTL: (1).day(),
-	headers: {},
-	query: {},
-	meta: {}
+	headers: <Dictionary<CanArray<string>>>{},
+	query: <RequestQuery>{},
+	meta: <Dictionary>{}
 };
 
 export const defaultResponseOpts = {

@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.1.3
+
+#### :house: [Internal]
+
+* Improved TS types `core/request`
+
 ## v3.1.2
 
 #### :bug: [Bug Fix]

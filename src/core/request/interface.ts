@@ -372,7 +372,13 @@ export interface CreateRequestOptions<T = unknown> {
 	meta?: Dictionary;
 }
 
-export type NormalizedCreateRequestOptions<T = unknown> = typeof defaultRequestOpts & CreateRequestOptions<T>;
+// @ts-ignore
+export interface WrappedCreateRequestOptions<T = unknown> extends CreateRequestOptions<T> {
+	encoder?: WrappedEncoder | WrappedEncoders;
+	decoder?: WrappedDecoder | WrappedDecoders;
+}
+
+export type NormalizedCreateRequestOptions<T = unknown> = typeof defaultRequestOpts & WrappedCreateRequestOptions<T>;
 
 export type ResolverResult =
 	string |
