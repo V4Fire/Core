@@ -222,7 +222,7 @@ export interface RequestAPI {
 	namespace?: RequestAPIValue;
 }
 export interface RequestResolver<T = unknown, ARGS extends unknown[] = unknown[]> {
-	(url: string, opts: MiddlewareParams<T>, ...args: ARGS): ResolverResult;
+	(url: string, params: MiddlewareParams<T>, ...args: ARGS): ResolverResult;
 }
 
 export interface CreateRequestOptions<T = unknown> {
