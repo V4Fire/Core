@@ -99,7 +99,7 @@ export const remove = local.remove;
 export const namespace = local.namespace;
 
 export const
-	canParse = /^[[{"]|^(?:true|false|null|undefined|\d+)$/;
+	canParse = /^[[{"]|^(?:true|false|null|\d+)$/;
 
 /**
  * Creates a new kv-storage API with the specified engine
@@ -207,7 +207,7 @@ export function factory(engine: Dictionary, async?: boolean): AsyncFactoryResult
 
 		get<T>(key: string, ...args: unknown[]): CanPromise<T> {
 			return wrap(get(key, ...args), (v) => {
-				if (v === null) {
+				if (v === null || v === 'undefined' || v === undefined) {
 					return undefined;
 				}
 
