@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.1.1
+
+#### :bug: [Bug Fix]
+
+* [Fixed JSON parsing `core/kv-storage`](https://github.com/V4Fire/Core/pull/43)
+
 ## v3.1.0
 
 #### :rocket: [New Feature]
