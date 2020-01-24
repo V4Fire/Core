@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.1.2
+
+#### :bug: [Bug Fix]
+
+* Fixed JSON parsing `core/kv-storage`
+
 ## v3.1.1
 
 #### :bug: [Bug Fix]

@@ -212,7 +212,12 @@ export function factory(engine: Dictionary, async?: boolean): AsyncFactoryResult
 				}
 
 				if (Object.isString(v) && canParse.test(v)) {
-					return JSON.parse(v, convertIfDate);
+					try {
+						return JSON.parse(v, convertIfDate);
+
+					} catch {
+						return v;
+					}
 				}
 
 				return v;
@@ -220,7 +225,22 @@ export function factory(engine: Dictionary, async?: boolean): AsyncFactoryResult
 		},
 
 		set(key: string, value: unknown, ...args: unknown[]): CanPromise<void> {
-			return wrap(set(key, JSON.stringify(value), ...args), () => undefined);
+			let
+				encodedValue;
+
+			if (Object.isArray(encodedValue) || Object.isPlainObject(encodedValue)) {
+				try {
+					encodedValue = JSON.stringify(value);
+
+				} catch {
+					encodedValue = value;
+				}
+
+			} else {
+				encodedValue = value;
+			}
+
+			return wrap(set(key, encodedValue, ...args), () => undefined);
 		},
 
 		remove(key: string, ...args: unknown[]): CanPromise<void> {
