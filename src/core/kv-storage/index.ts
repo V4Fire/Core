@@ -207,7 +207,7 @@ export function factory(engine: Dictionary, async?: boolean): AsyncFactoryResult
 
 		get<T>(key: string, ...args: unknown[]): CanPromise<T> {
 			return wrap(get(key, ...args), (v) => {
-				if (v === null || v === 'undefined' || v === undefined) {
+				if (v == null || v === 'undefined') {
 					return undefined;
 				}
 
