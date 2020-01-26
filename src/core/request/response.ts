@@ -86,7 +86,7 @@ export default class Response {
 	constructor(body?: ResponseTypeValue, opts?: ResponseOptions) {
 		const
 			p = Object.mixin(false, {}, defaultResponseOpts, opts),
-			s = this.okStatuses = p.okStatuses || new Range(200, 299);
+			s = this.okStatuses = p.okStatuses;
 
 		this.parent = p.parent;
 		this.important = p.important;

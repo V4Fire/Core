@@ -11,12 +11,6 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-## v3.1.4
-
-#### :rocket: [New Feature]
-
-* Added a default value for `Response.okStatuses`
-
 ## v3.1.3
 
 #### :house: [Internal]
