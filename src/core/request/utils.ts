@@ -7,7 +7,7 @@
  */
 
 import { cache, mimeTypes } from 'core/request/const';
-import { CreateRequestOptions, NormalizedCreateRequestOptions, ResponseType } from 'core/request/interface';
+import { CreateRequestOptions, ResponseType } from 'core/request/interface';
 
 /**
  * Takes the cache key for data and returns a new key for saving the data in a storage
