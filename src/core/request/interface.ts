@@ -68,22 +68,22 @@ export type OkStatuses =
 	StatusCodes[];
 
 export interface Encoder<I = unknown, O = unknown> {
-	(data: I, params: MiddlewareParams): O;
+	(data: I, params: MiddlewareParams): CanPromise<O>;
 }
 
 export interface WrappedEncoder<I = unknown, O = unknown> {
-	(data: I): O;
+	(data: I): CanPromise<O>;
 }
 
 export type Encoders<T = unknown> = Iterable<Encoder<T>>;
 export type WrappedEncoders<T = unknown> = Iterable<WrappedEncoder<T>>;
 
 export interface Decoder<I = unknown, O = unknown> {
-	(data: I, params: MiddlewareParams, response: Response): O;
+	(data: I, params: MiddlewareParams, response: Response): CanPromise<O>;
 }
 
 export interface WrappedDecoder<I = unknown, O = unknown> {
-	(data: I, response: Response): O;
+	(data: I, response: Response): CanPromise<O>;
 }
 
 export type Decoders<T = unknown> = Iterable<Decoder<T>>;
@@ -128,7 +128,7 @@ export interface MiddlewareParams<T = unknown> {
 }
 
 export interface Middleware<T = unknown> {
-	(params: MiddlewareParams<T>): CanPromise<void | Function>;
+	(params: MiddlewareParams<T>): CanPromise<any | Function>;
 }
 
 export type Middlewares<T = unknown> =
