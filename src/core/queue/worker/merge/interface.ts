@@ -6,14 +6,14 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { QueueOptions as BaseQueueOptions } from 'core/queue/interface';
-export * from 'core/queue/interface';
+import { QueueOptions as WorkerQueueOptions } from 'core/queue/worker/interface';
+export * from 'core/queue/worker/interface';
 
 export interface HashFn<T> {
 	(task: T): string;
 }
 
-export interface QueueOptions<T> extends BaseQueueOptions {
+export interface QueueOptions<T> extends WorkerQueueOptions {
 	/**
 	 * Hash function for a task
 	 */

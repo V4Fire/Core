@@ -6,17 +6,22 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import Queue from 'core/queue/interface';
-import { QueueWorker, QueueOptions, Task, HashFn } from 'core/queue/merge/interface';
-export * from 'core/queue/merge/interface';
+/**
+ * [[include:core/queue/worker/merge/README.md]]
+ * @packageDocumentation
+ */
+
+import WorkerQueue from 'core/queue/worker/interface';
+import { QueueWorker, QueueOptions, Task, HashFn } from 'core/queue/worker/merge/interface';
+export * from 'core/queue/worker/merge/interface';
 
 /**
- * Implementation of a queue data structure with support of task merging by the specified hash function
+ * Implementation of a worker queue data structure with support of task merging by the specified hash function
  *
- * @typeparam T - task type
- * @typeparam V - task value
+ * @typeparam T - task element
+ * @typeparam V - worker value
  */
-export default class MergeQueue<T, V = unknown> extends Queue<T, V> {
+export default class MergeWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> {
 	/** @override */
 	get head(): CanUndef<T> {
 		if (!this.length) {
@@ -47,7 +52,7 @@ export default class MergeQueue<T, V = unknown> extends Queue<T, V> {
 	 */
 	constructor(worker: QueueWorker<T, V>, opts: QueueOptions<T>) {
 		super(worker, opts);
-		this.hashFn = opts?.hashFn || String;
+		this.hashFn = opts?.hashFn || Object.fastHash;
 	}
 
 	/** @override */
