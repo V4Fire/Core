@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.2.0
+
+#### :rocket: New Feature
+
+* Added `core/functools`, `core/meta` marked as deprecated
+
 ## v3.1.4
 
 #### :house: [Internal]

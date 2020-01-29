@@ -7,7 +7,7 @@
  */
 
 import extend from 'core/prelude/extend';
-import { deprecate } from 'core/meta/deprecation';
+import { deprecate } from 'core/functools/deprecation';
 import { locale as defaultLocale } from 'core/prelude/i18n';
 
 const

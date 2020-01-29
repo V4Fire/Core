@@ -1,19 +1,3 @@
-# core/meta
+# core/meta (deprecated)
 
-This module provides a bunch of functions for annotation another functions with additional meta information, such as obsolescence, etc.
-
-```js
-import { once, debounce } from 'core/meta';
-
-class Foo {
-  @once
-  bar() {
-    return Math.random();
-  }
-
-  @debounce(500)
-  bla() {
-    console.log('Bang!');
-  }
-}
-```
+This module provides a bunch of helper decorators for functions. Please notice, that this module is deprecated and will be removed from the next major release of the library. You can use modules from [core/functools](src_core_functools_index.html) instead of this.

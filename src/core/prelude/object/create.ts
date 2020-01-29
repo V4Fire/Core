@@ -7,7 +7,7 @@
  */
 
 import extend from 'core/prelude/extend';
-import { deprecate } from 'core/meta/deprecation';
+import { deprecate } from 'core/functools/deprecation';
 
 /** @see ObjectConstructor.createDict */
 extend(Object, 'createDict', (...objects) => {

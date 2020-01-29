@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { deprecate, deprecated } from 'core/meta/deprecation';
+import { deprecate, deprecated } from 'core/functools/deprecation';
 import { namespaces, NamespacesDictionary } from 'core/async/const';
 import {
 

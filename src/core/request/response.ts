@@ -10,7 +10,7 @@ import Then from 'core/then';
 import Range from 'core/range';
 
 import { IS_NODE } from 'core/env';
-import { once } from 'core/meta';
+import { once } from 'core/functools';
 import { convertIfDate } from 'core/json';
 
 import { normalizeHeaderName, getResponseTypeFromMime } from 'core/request/utils';
