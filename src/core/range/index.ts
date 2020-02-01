@@ -15,7 +15,7 @@ import { RangeValue, RangeType } from 'core/range/interface';
 export * from 'core/range/interface';
 
 /**
- * Class for working with some range structures
+ * Class to create a range with the specified type
  * @typeparam T - range type value
  */
 export default class Range<T extends RangeValue> {

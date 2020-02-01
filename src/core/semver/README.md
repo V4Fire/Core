@@ -1,6 +1,6 @@
 # core/semver
 
-This module provides a function for comparing string versions using semver strategy.
+This module provides a function that compare string versions using semver strategy.
 
 ```js
 import check from 'core/semver';

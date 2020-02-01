@@ -18,7 +18,7 @@ export * from 'core/async/interface';
 export * from 'core/async/modules/events';
 
 /**
- * Class for controlling asynchronous operations
+ * Class to control asynchronous operations
  */
 export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 

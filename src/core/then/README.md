@@ -1,6 +1,6 @@
 # core/then
 
-This module provides a class for wrapping promise-like objects and adds to them some extra functionality, such as possibility of cancellation, etc.
+This module provides a class that wraps promise-like objects and adds to them some extra functionality, such as possibility of cancellation, etc.
 
 ```js
 import Then from 'core/then';

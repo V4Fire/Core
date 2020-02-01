@@ -29,7 +29,7 @@ import {
 export * from 'core/promise/sync/interface';
 
 /**
- * Class that is similar with the native promises, but works synchronously
+ * Class that is similar with the native promise class, but works synchronously
  */
 export default class SyncPromise<T = unknown> implements Promise<T> {
 	/**
@@ -325,7 +325,7 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 	 * Executes a function with the specified parameters
 	 *
 	 * @param fn
-	 * @param args - arguments
+	 * @param args - arguments of the function
 	 * @param [onError] - error handler
 	 * @param [onValue] - success handler
 	 */

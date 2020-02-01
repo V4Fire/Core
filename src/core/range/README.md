@@ -1,6 +1,6 @@
 # core/range
 
-This module provides a class for working with some range structures, like date ranges or char ranges, etc.
+This module provides a class to create a range structure. The ranges can be different: numbers, characters, dates.
 
 ```js
 import Range from 'core/range';
@@ -21,7 +21,7 @@ const
 console.log(dateRange.contains(new Date(2019, 8))); // true
 console.log(
   dateRange.intersect(
-    new Range(new Date(2017, 9), 
+    new Range(new Date(2017, 9),
     new Date(2019, 9))
   ).toString()
 ); // Sat Jun 01 2019 00:00:00 GMT+0300..Tue Oct 01 2019 00:00:00 GMT+0300

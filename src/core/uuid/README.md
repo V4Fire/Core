@@ -1,3 +1,3 @@
 # core/uuid
 
-This module provides functions for parsing and serializing UUID strings and binary sequences.
+This module provides API to parse and serialize UUID strings and binary sequences.

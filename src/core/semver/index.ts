@@ -11,21 +11,11 @@
  * @packageDocumentation
  */
 
+import { operations, compareRgxp, inequalityRgxp } from 'core/semver/const';
 import { Operation } from 'core/semver/interface';
+
+export * from 'core/semver/const';
 export * from 'core/semver/interface';
-
-const operations: Record<Operation, (a: number, b: number) => boolean> = {
-	'>': (a, b) => a > b,
-	'>=': (a, b) => a >= b,
-	'<': (a, b) => a < b,
-	'<=': (a, b) => a <= b,
-	'==': (a, b) => a === b,
-	'^=': (a, b) => a === b
-};
-
-const
-	compareRgxp = /((^|\^|)=)/,
-	inequalityRgxp = /[><]/;
 
 /**
  * Compares two strings with number versions using the semver strategy

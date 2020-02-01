@@ -1,6 +1,6 @@
 # core/symbol
 
-This module provides a function for more flexible creation a unique symbol.
+This module provides a function to create unique symbols in a more flexible way.
 
 ```js
 import symbolGenerator from 'core/symbol';

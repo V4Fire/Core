@@ -40,19 +40,19 @@ export type EventId = CanArray<object>;
 
 export interface AsyncOptions {
 	/**
-	 * Label of the task (the previous task with the same label will be canceled)
+	 * Label of a task (the previous task with the same label will be canceled)
 	 */
 	label?: Label;
 
 	/**
-	 * Group name of the task
+	 * Group name of a task
 	 */
 	group?: Group;
 
 	/**
-	 * Strategy for joining competitive tasks (with same labels):
-	 *   1. `true` - all tasks will be joined to the first;
-	 *   1. `'replace'` - all tasks will be joined (replaced) to the last (only for promises).
+	 * Strategy for joining competitive tasks (with the same labels):
+	 *   1. `true` - all tasks is joined to the first;
+	 *   1. `'replace'` - all tasks is joined (replaced) to the last (only for promises).
 	 */
 	join?: Join;
 }
@@ -87,17 +87,17 @@ export type ClearReason =
 
 export interface ClearOptions {
 	/**
-	 * Label of the task
+	 * Label of a task
 	 */
 	label?: Label;
 
 	/**
-	 * Group name of the task
+	 * Group name of a task
 	 */
 	group?: Group | RegExp;
 
 	/**
-	 * If true, then the cleanup handler of the task is prevented
+	 * If true, then a cleanup handler of a task is prevented
 	 */
 	preventDefault?: boolean;
 }
@@ -170,25 +170,25 @@ export type IdleCb<
 
 export interface AsyncCbOptions<CTX extends object = Async> extends AsyncOptions {
 	/**
-	 * If true, then the namespace will be marked as promisified
+	 * If true, then a task namespace is marked as promisified
 	 * @default `false`
 	 */
 	promise?: boolean;
 
 	/**
-	 * Handler for clearing (it is called after clearing of a task)
+	 * Handler for clearing a task
 	 */
 	onClear?: CanArray<AsyncCb<CTX>>;
 
 	/**
-	 * Handler for merging (it is called after merging of a task with another task (label + join:true))
+	 * Handler for merging a task to another (label + join:true)
 	 */
 	onMerge?: CanArray<AsyncCb<CTX>>;
 }
 
 export interface AsyncCbOptionsSingle<CTX extends object = Async> extends AsyncCbOptions<CTX> {
 	/**
-	 * If false, then the proxy will support multiple callings
+	 * If false, then a proxy supports multiple callings
 	 * @default `true`
 	 */
 	single?: boolean;
@@ -213,14 +213,14 @@ export interface AsyncPromiseOptions extends AsyncOptions {
 	name?: string;
 
 	/**
-	 * Name of the destructor method
+	 * Name of a destructor method
 	 */
 	destructor?: string;
 }
 
 export interface AsyncRequestOptions extends AsyncOptions {
 	/**
-	 * Name of the destructor method
+	 * Name of a destructor method
 	 */
 	destructor?: string;
 }
@@ -248,14 +248,14 @@ export interface AsyncWaitOptions extends AsyncOptions {
 
 export interface AsyncOnOptions<CTX extends object = Async> extends AsyncCbOptionsSingle<CTX> {
 	/**
-	 * Additional options for the emitter
+	 * Additional options for an emitter
 	 */
 	options?: Dictionary;
 }
 
 export interface AsyncOnceOptions<T extends object = Async> extends AsyncCbOptions<T> {
 	/**
-	 * Additional options for the emitter
+	 * Additional options for an emitter
 	 */
 	options?: Dictionary;
 }
@@ -266,19 +266,19 @@ export interface AsyncPromisifyOnceOptions<
 	CTX extends object = Async
 > extends AsyncOptions {
 	/**
-	 * Event handler (the result will be provided as a promise result)
+	 * Event handler (a result of the invoking is provided as a promise result)
 	 */
 	handler?: ProxyCb<E, R, CTX>;
 
 	/**
-	 * Additional options for the emitter
+	 * Additional options for an emitter
 	 */
 	options?: Dictionary;
 }
 
 export interface AsyncWorkerOptions<CTX extends object = Async> extends AsyncProxyOptions<CTX> {
 	/**
-	 * Name of the destructor method
+	 * Name of a destructor method
 	 */
 	destructor?: string;
 }

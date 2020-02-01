@@ -56,16 +56,16 @@ const config = <Config>{
 };
 
 /**
- * Extends the config object with additional parameters
- * @param args
+ * Extends the config object with additional objects
+ * @param objects
  */
-export function extend<T extends Config>(...args: CanUndef<Dictionary>[]): T {
+export function extend<T extends Config>(...objects: CanUndef<Dictionary>[]): T {
 	return Object.mixin({
 		deep: true,
 		concatArray: true,
 		concatFn: (a: unknown[], b: unknown[]) => a.union(b),
 		withUndef: true
-	}, config, ...args);
+	}, config, ...objects);
 }
 
 export default config;

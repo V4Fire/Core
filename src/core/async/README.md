@@ -1,6 +1,6 @@
 # core/async
 
-This module provides a class for controlling asynchronous operations.
+This module provides a class to control asynchronous operations.
 
 ```js
 import Async from 'core/async';

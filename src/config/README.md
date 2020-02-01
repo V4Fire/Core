@@ -1,3 +1,3 @@
 # config
 
-This module is represent the root of an application runtime configuration.
+This module provides options to configure an application.

@@ -21,54 +21,52 @@ export interface Config {
 	locale: string;
 
 	/**
-	 * Base API URL: the main domain of a service
+	 * Base API URL: primary service domain
 	 */
 	api?: CanUndef<string>;
 
 	/**
-	 * Options for the logging module
+	 * Options for "core/log" module
 	 */
 	log: LogConfig;
 
 	/**
-	 * Options for the online checking module
+	 * Options for a module that checks online connection
 	 */
 	online: {
 		/**
-		 * URL that is used for online checking
+		 * URL that is used to check online connection
 		 */
 		checkURL?: CanUndef<string>;
 
 		/**
-		 * Value in milliseconds after which the online check will be repeated
+		 * Value in milliseconds after which the online connection will be checked again
 		 */
 		checkInterval?: number;
 
 		/**
-		 * Value that represents how long last cache check is relevant
-		 * (in milliseconds)
+		 * Value in milliseconds that represents how long last cache check is relevant
 		 */
 		checkTimeout?: number;
 
 		/**
-		 * Timeout value for the single online check
-		 * (in milliseconds)
-		 */
-		cacheTTL?: number;
-
-		/**
-		 * Number of acceptable retries (if the check was canceled by a timeout)
+		 * Value in milliseconds after which there will be a synchronization of last online date to the current date
 		 */
 		lastDateSyncInterval?: number;
 
 		/**
-		 * If true, then the checking results will be periodically saved to a storage.
-		 * It can be helpful for realizing how long an application lives without connection.
+		 * Number of acceptable retries (if the check was canceled by timeout)
 		 */
 		retryCount?: number;
 
 		/**
-		 * Value in milliseconds after which there will be a synchronization of last online date to the current date
+		 * Timeout value in milliseconds for one online check
+		 */
+		cacheTTL?: number;
+
+		/**
+		 * If true, then a check result will be periodically saved to a storage.
+		 * It can be helpful to realize how long an application lives without connection.
 		 */
 		persistence?: boolean;
 	}
