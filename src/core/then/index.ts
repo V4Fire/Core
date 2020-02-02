@@ -11,7 +11,7 @@
  * @packageDocumentation
  */
 
-import { deprecated } from 'core/functools/deprecation';
+import { deprecated } from 'core/functools';
 import {
 
 	Value,

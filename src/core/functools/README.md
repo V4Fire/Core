@@ -3,7 +3,7 @@
 This module provides a bunch of functions and decorators to wrap another functions with adding some extra functionality.
 
 ```js
-import { once, debounce } from 'core/meta';
+import { once, debounce } from 'core/functools';
 
 class Foo {
   @once

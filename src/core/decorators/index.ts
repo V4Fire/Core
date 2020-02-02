@@ -11,21 +11,20 @@
  * @packageDocumentation
  */
 
-import { deprecate } from 'core/functools/deprecation';
-import * as meta from 'core/functools';
+import * as tools from 'core/functools';
 
 /**
  * @deprecated
  * @see core/functools
  * @decorator
  */
-export const once = deprecate(
+export const once = tools.deprecate(
 	{
 		movedTo: 'core/functools'
 	},
 
 	function once(target: Object, key: string | symbol, descriptor: PropertyDescriptor): void {
-		return meta.once.apply(this, arguments);
+		return tools.once.apply(this, arguments);
 	}
 );
 
@@ -34,13 +33,13 @@ export const once = deprecate(
  * @see core/functools
  * @decorator
  */
-export const debounce = deprecate(
+export const debounce = tools.deprecate(
 	{
 		movedTo: 'core/functools'
 	},
 
 	function debounce(delay?: number): MethodDecorator {
-		return meta.debounce.apply(this, arguments);
+		return tools.debounce.apply(this, arguments);
 	}
 );
 
@@ -49,12 +48,12 @@ export const debounce = deprecate(
  * @see core/functools
  * @decorator
  */
-export const throttle = deprecate(
+export const throttle = tools.deprecate(
 	{
 		movedTo: 'core/functools'
 	},
 
 	function throttle(delay?: number): MethodDecorator {
-		return meta.throttle.apply(this, arguments);
+		return tools.throttle.apply(this, arguments);
 	}
 );
