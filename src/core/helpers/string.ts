@@ -6,4 +6,4 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-export const NBSP = String.fromCharCode(160);
+export * from 'core/const/string';

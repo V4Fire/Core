@@ -11,6 +11,8 @@
  * @packageDocumentation
  */
 
+export * from 'core/functools/deprecation';
+
 /**
  * Decorator for Function.prototype.once
  *

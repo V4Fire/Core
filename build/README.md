@@ -1,6 +1,6 @@
 # build
 
-This folder contains files with Gulp/Webpack/helper scripts for compiling an application.
+This folder contains files with Gulp/Webpack/helper scripts to compile an application.
 
 ## tsconfig.gulp.js
 
@@ -16,7 +16,7 @@ This file provides a wrapper over node.js `require` function with adding support
 
 ## wrap.gulp.js
 
-This file provides a special function for wrapping an instance of Gulp with adding support of task overriding.
+This file provides a special function to wrap an instance of Gulp with adding support of task overriding.
 You should use this function in child projects.
 
 ```js
@@ -35,7 +35,7 @@ module.exports();
 
 ## docs.gulp.js
 
-This file provides a bunch of gulp tasks for generation of documentation.
+This file provides a bunch of gulp tasks to generate a documentation.
 
 ```bash
 npx gulp build:docs
@@ -47,4 +47,4 @@ This file provides a bunch of helper gulp tasks.
 
 ## helpers.js
 
-This file provides a bunch of helper functions for building.
+This file provides a bunch of helper functions to build an application.

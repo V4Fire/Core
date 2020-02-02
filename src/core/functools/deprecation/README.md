@@ -1,6 +1,6 @@
 # core/functools/deprecation
 
-This module provides a bunch of functions and decorators for marking deprecated functions with the special flag.
+This module provides a bunch of functions and decorators to mark deprecated functions with the special flag.
 
 ```js
 import { deprecate, deprecated } from 'core/meta/deprecation';

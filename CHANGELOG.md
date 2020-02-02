@@ -13,9 +13,14 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 ## v3.2.0
 
+#### :boom: Breaking Change
+
+* Renamed `core/meta` to `core/functools`
+* Review `core/queue` API
+
 #### :rocket: New Feature
 
-* Added `core/functools`, `core/meta` marked as deprecated
+* Added `core/queu/simple`
 
 ## v3.1.4
 

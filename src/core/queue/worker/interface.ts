@@ -23,7 +23,7 @@ export interface QueueOptions {
 	 * Value of a task status refresh interval
 	 * (in milliseconds)
 	 */
-	interval?: number;
+	refreshInterval?: number;
 }
 
 /**
@@ -36,11 +36,16 @@ export default abstract class WorkerQueue<T, V = unknown> implements Queue<T> {
 	/** @inheritDoc */
 	head: CanUndef<T>;
 
+	/** @inheritDoc */
+	get length(): number {
+		return this.tasks.length;
+	}
+
 	/**
 	 * Value of the task status refresh interval
 	 * (in milliseconds)
 	 */
-	interval: number;
+	refreshInterval: number;
 
 	/**
 	 * Maximum number of concurrent workers
@@ -51,13 +56,6 @@ export default abstract class WorkerQueue<T, V = unknown> implements Queue<T> {
 	 * Number of active workers
 	 */
 	activeWorkers: number = 0;
-
-	/**
-	 * Queue length
-	 */
-	get length(): number {
-		return this.tasks.length;
-	}
 
 	/**
 	 * Worker constructor
@@ -76,14 +74,14 @@ export default abstract class WorkerQueue<T, V = unknown> implements Queue<T> {
 	protected constructor(worker: QueueWorker<T, V>, opts?: QueueOptions) {
 		this.worker = worker;
 		this.concurrency = opts?.concurrency || 1;
-		this.interval = opts?.interval || 0;
+		this.refreshInterval = opts?.refreshInterval || 0;
 	}
 
 	/** @inheritDoc */
 	abstract push(task: T): unknown;
 
 	/** @inheritDoc */
-	shift(): CanUndef<T> {
+	pop(): CanUndef<T> {
 		const {head} = this;
 		this.tasks.shift();
 		return head;
@@ -91,8 +89,10 @@ export default abstract class WorkerQueue<T, V = unknown> implements Queue<T> {
 
 	/** @inheritDoc */
 	clear(): void {
-		this.tasks = [];
-		this.activeWorkers = 0;
+		if (this.tasks.length > 0) {
+			this.tasks = [];
+			this.activeWorkers = 0;
+		}
 	}
 
 	/**
@@ -106,7 +106,7 @@ export default abstract class WorkerQueue<T, V = unknown> implements Queue<T> {
 	 */
 	protected deferPerform(): Promise<unknown> {
 		const
-			i = this.interval;
+			i = this.refreshInterval;
 
 		return new Promise((resolve) => {
 			const

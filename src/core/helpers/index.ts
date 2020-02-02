@@ -12,4 +12,3 @@
  */
 
 export * from 'core/helpers/string';
-export * from 'core/helpers/other';

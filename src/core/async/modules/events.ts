@@ -37,7 +37,7 @@ export function isEvent(value: unknown): value is EventLike {
 export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	/**
 	 * Wraps an event from the specified event emitter.
-	 * If the emitter is a function, it will be interpreted as a function for attaching events.
+	 * If the emitter is a function, it is interpreted as a function for attaching events.
 	 *
 	 * @param emitter - event emitter
 	 * @param events - event or a list of events (can also specify multiple events using spaces)
@@ -53,7 +53,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Wraps an event from the specified event emitter.
-	 * If the emitter is a function, it will be interpreted as a function for attaching events.
+	 * If the emitter is a function, it is interpreted as a function for attaching events.
 	 *
 	 * @param emitter - event emitter
 	 * @param events - event or a list of events (can also specify multiple events using spaces)
@@ -163,8 +163,8 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Wraps an event from the specified event emitter.
-	 * The event will be listen only once.
-	 * If the emitter is a function, it will be interpreted as a function for attaching events.
+	 * The event is listened only once.
+	 * If the emitter is a function, it is interpreted as a function for attaching events.
 	 *
 	 * @param emitter - event emitter
 	 * @param events - event or a list of events (can also specify multiple events using spaces)
@@ -180,8 +180,8 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Wraps an event from the specified event emitter.
-	 * The event will be listen only once.
-	 * If the emitter is a function, it will be interpreted as a function for attaching events.
+	 * The event is listened only once.
+	 * If the emitter is a function, it is interpreted as a function for attaching events.
 	 *
 	 * @param emitter - event emitter
 	 * @param events - event or a list of events (can also specify multiple events with a space)
@@ -219,8 +219,8 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	}
 
 	/**
-	 * Returns a promise that will is resolved after emitting the specified event.
-	 * If the emitter is a function, it will be interpreted as a function for attaching events.
+	 * Returns a promise that is resolved after emitting the specified event.
+	 * If the emitter is a function, it is interpreted as a function for attaching events.
 	 *
 	 * @param emitter - event emitter
 	 * @param events - event or a list of events (can also specify multiple events with a space)
@@ -235,8 +235,8 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	): SyncPromise<R>;
 
 	/**
-	 * Returns a promise that will is resolved after emitting the specified event.
-	 * If the emitter is a function, it will be interpreted as a function for attaching events.
+	 * Returns a promise that is resolved after emitting the specified event.
+	 * If the emitter is a function, it is interpreted as a function for attaching events.
 	 *
 	 * @param emitter - event emitter
 	 * @param events - event or a list of events (can also specify multiple events with a space)

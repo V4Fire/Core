@@ -1,10 +1,10 @@
 # config
 
-This folder contains config files for compiling an application and running a server. File names are tied with a value of the `NODE_ENV` environment variable.
+This folder contains config files to compile an application and run a server. File names are tied with a value of the `NODE_ENV` environment variable.
 
 ## Inheritance
 
-The config API is support inheritance of configs from another project.
+The config API supports inheritance of configs from another project.
 
 ```js
 'use strict';

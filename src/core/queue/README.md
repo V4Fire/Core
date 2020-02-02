@@ -1,6 +1,13 @@
 # core/queue
 
-This module provides a base interface for the [[Queue]] data structure. The submodules contains different classes and interfaces that extends or implements this interface.
+This module provides a base interface for a [[Queue]] data structure. The submodules contains different classes and interfaces that extends or implements this interface.
+
+The main module re-exports these implementations:
+
+* `AbstractQueue` — an alias for [`core/queue/interface/Queue`]((src_core_queue_interface.html));
+* `AbstractWorkerQueue` — an alias for [`core/queue/worker/interface/WorkerQueue`](src_core_queue_worker_interface.html);
+* `Queue` — an alias for [`core/queue/simple`](src_core_queue_simple_index.html);
+* `MergeWorkerQueue` — an alias for [`core/queue/worker/merge`](src_core_queue_worker_merge_index.html).
 
 ```js
 import { AbstractQueue } from 'core/queue';
@@ -20,7 +27,7 @@ export default class Queue extends AbstractQueue {
     return this.internalQueue.push(el);
   }
 
-  shift() {
+  pop() {
     return this.internalQueue.shift();
   }
 
@@ -29,11 +36,3 @@ export default class Queue extends AbstractQueue {
   }
 }
 ```
-
-## Extensions:
-
-* [WorkerQueue](src_core_queue_worker_index.html) — an abstract class that adds support of execution workers to the queue interface.
-
-## Implementations:
-
-* [MergeWorkerQueue](src_core_queue_worker_merge_index.html) — an class that implements a [[WorkerQueue]] data structure.

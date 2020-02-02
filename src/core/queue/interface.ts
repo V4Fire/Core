@@ -14,7 +14,7 @@ export default interface Queue<T> {
 	/**
 	 * Queue head
 	 */
-	head: CanUndef<T>;
+	readonly head: CanUndef<T>;
 
 	/**
 	 * Queue length
@@ -30,7 +30,7 @@ export default interface Queue<T> {
 	/**
 	 * Removes a head element from the queue and returns it
 	 */
-	shift(): CanUndef<T>;
+	pop(): CanUndef<T>;
 
 	/**
 	 * Clears the queue

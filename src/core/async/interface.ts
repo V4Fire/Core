@@ -176,12 +176,12 @@ export interface AsyncCbOptions<CTX extends object = Async> extends AsyncOptions
 	promise?: boolean;
 
 	/**
-	 * Handler for clearing a task
+	 * Handler of task clearing
 	 */
 	onClear?: CanArray<AsyncCb<CTX>>;
 
 	/**
-	 * Handler for merging a task to another (label + join:true)
+	 * Handler of task merging: the task should merge to another task with the same label and with "join: true" strategy
 	 */
 	onMerge?: CanArray<AsyncCb<CTX>>;
 }

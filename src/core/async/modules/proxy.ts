@@ -35,7 +35,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * And when we try to destroy the worker using one of Async methods, like "terminateWorker",
 	 * it will de-increment the links value. When the number of links is equal to zero,
 	 * Async will try to call a "real" object destructor using one of possible destructor methods from a whitelist
-	 * or by the specified destructor name, also if the worker is a function, it will be interpreted as the destructor.
+	 * or by the specified destructor name, also if the worker is a function, it is interpreted as the destructor.
 	 *
 	 * @param worker
 	 * @param [opts] - additional options for the operation

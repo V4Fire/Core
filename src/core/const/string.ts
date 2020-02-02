@@ -6,9 +6,4 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-/**
- * [[include:core/queue/worker/README.md]]
- * @packageDocumentation
- */
-
-export * from 'core/queue/worker/interface';
+export const NBSP = String.fromCharCode(160);

@@ -16,11 +16,7 @@ export * from 'core/queue/worker/interface';
 export { QueueOptions as WorkerQueueOptions } from 'core/queue/worker/interface';
 
 export { default as AbstractQueue } from 'core/queue/interface';
-export { default as WorkerQueue } from 'core/queue/worker/interface';
+export { default as AbstractWorkerQueue } from 'core/queue/worker/interface';
+
+export { default as Queue } from 'core/queue/simple';
 export { default as MergeWorkerQueue } from 'core/queue/worker/merge';
-
-/** @deprecated */
-export { default as Queue } from 'core/queue/worker/interface';
-
-/** @deprecated */
-export { default as Merge } from 'core/queue/worker/merge';

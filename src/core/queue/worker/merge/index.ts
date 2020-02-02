@@ -56,27 +56,6 @@ export default class MergeWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> 
 	}
 
 	/** @override */
-	shift(): CanUndef<T> {
-		if (!this.length) {
-			return undefined;
-		}
-
-		const
-			{head} = this;
-
-		delete this.tasksMap[this.tasks[0]];
-		this.tasks.shift();
-
-		return head;
-	}
-
-	/** @override */
-	clear(): void {
-		super.clear();
-		this.tasksMap = Object.createDict();
-	}
-
-	/** @override */
 	push(task: T): Promise<V> {
 		const
 			hash = this.hashFn(task);
@@ -98,6 +77,27 @@ export default class MergeWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> 
 
 		this.start();
 		return taskObj.promise;
+	}
+
+	/** @override */
+	pop(): CanUndef<T> {
+		if (!this.length) {
+			return undefined;
+		}
+
+		const
+			{head} = this;
+
+		delete this.tasksMap[this.tasks[0]];
+		this.tasks.shift();
+
+		return head;
+	}
+
+	/** @override */
+	clear(): void {
+		super.clear();
+		this.tasksMap = Object.createDict();
 	}
 
 	/** @override */
