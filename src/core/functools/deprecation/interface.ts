@@ -29,12 +29,12 @@ export type DeprecatedAlternative = string | DeprecatedAlternativeOptions;
 
 export interface DeprecatedOptions {
 	/**
-	 * Name of an expression for wrapping
+	 * Name of an expression to wrap
 	 */
 	name?: string;
 
 	/**
-	 * Type of an expression for wrapping
+	 * Type of an expression to wrap
 	 */
 	type?: DeprecatedExprType;
 
@@ -64,12 +64,12 @@ export interface DeprecatedOptions {
 
 export interface InlineDeprecatedOptions extends DeprecatedOptions {
 	/**
-	 * Name of an expression for wrapping
+	 * Name of an expression to wrap
 	 */
 	name: string;
 
 	/**
-	 * Type of an expression for wrapping
+	 * Type of an expression to wrap
 	 */
 	type: DeprecatedExprType;
 }

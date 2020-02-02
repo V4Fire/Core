@@ -10,7 +10,7 @@ import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 import { Locale } from 'core/prelude/i18n/interface';
 
 /**
- * Event emitter for broadcasting localization events
+ * Event emitter to broadcast localization events
  */
 export const
 	emitter = new EventEmitter({maxListeners: 100, newListener: false});

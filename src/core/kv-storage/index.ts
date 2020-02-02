@@ -132,7 +132,7 @@ export function factory(engine: Dictionary, async?: boolean): AsyncFactoryResult
 			get = get.bind(engine);
 
 		} else {
-			throw new ReferenceError('The method for getting values from a storage is not defined');
+			throw new ReferenceError('A method to get a value from the storage is not defined');
 		}
 
 		set = engine.setItem || engine.set;
@@ -141,7 +141,7 @@ export function factory(engine: Dictionary, async?: boolean): AsyncFactoryResult
 			set = set.bind(engine);
 
 		} else {
-			throw new ReferenceError('The method for setting values to a storage is not defined');
+			throw new ReferenceError('A method to set a value to the storage is not defined');
 		}
 
 		remove = engine.removeItem || engine.remove || engine.delete;
@@ -150,7 +150,7 @@ export function factory(engine: Dictionary, async?: boolean): AsyncFactoryResult
 			remove = remove.bind(engine);
 
 		} else {
-			throw new ReferenceError('The method for removing values from a storage is not defined');
+			throw new ReferenceError('A method to remove a value from the storage is not defined');
 		}
 
 		const _has = engine.exists || engine.exist || engine.includes || engine.has;

@@ -139,11 +139,11 @@ export type RequestAPIValue<T = string> = Nullable<T> | (() => Nullable<T>);
 
 /**
  * Object with API parameters. If the API is specified it will be concatenated with
- * a request path URL. It can be useful for creating request factories. In addition, you can provide a function as a
+ * a request path URL. It can be useful to create request factories. In addition, you can provide a function as a
  * key value, and it will be invoked.
  *
  * You can provide a direct URL for the API, such as `'https://google.com'`.
- * Or you can provide a bunch of parameters for mapping on .api parameter from the application config.
+ * Or you can provide a bunch of parameters to map on .api parameter from the application config.
  * For example, if the config.api is equal to `'https://google.com'` and you provide parameters like
  *
  * ```
@@ -271,7 +271,7 @@ export interface CreateRequestOptions<T = unknown> {
 	/**
 	 * Map of API parameters.
 	 *
-	 * If the API is specified it will be concatenated with a request path URL. It can be useful for creating
+	 * If the API is specified it will be concatenated with a request path URL. It can be useful to create
 	 * request factories. In addition, you can provide a function as a key value, and it will be invoked.
 	 */
 	api?: RequestAPI;
@@ -300,7 +300,7 @@ export interface CreateRequestOptions<T = unknown> {
 	readonly cacheStrategy?: CacheStrategy;
 
 	/**
-	 * Unique cache identifier: it can be useful for creating request factories with isolated cache storages
+	 * Unique cache identifier: it can be useful to create request factories with isolated cache storages
 	 */
 	cacheId?: string | symbol;
 
@@ -334,21 +334,21 @@ export interface CreateRequestOptions<T = unknown> {
 	 *
 	 * Please notice, that the order of middlewares depends of a structure that you use.
 	 * Also, if at least one of middlewares returns a function, than the result of invoking this function
-	 * will be returned as the request result. It can be helpful for organizing mocks of data and
+	 * will be returned as the request result. It can be helpful to organize mocks of data and
 	 * other similar cases when you don't want to execute a real request.
 	 */
 	middlewares?: Middlewares<T>;
 
 	/**
 	 * Function (or a sequence of functions) that takes response data of the current request
-	 * and returns a new data for responding. If you provides a sequence of functions, then the first function
+	 * and returns a new data to respond. If you provides a sequence of functions, then the first function
 	 * will provide a result to the next function from te sequence, etc.
 	 */
 	encoder?: Encoder | Encoders;
 
 	/**
 	 * Function (or a sequence of functions) that takes response data of the current request
-	 * and returns a new data for responding. If you provides a sequence of functions, then the first function
+	 * and returns a new data to respond. If you provides a sequence of functions, then the first function
 	 * will provide a result to the next function from te sequence, etc.
 	 */
 	decoder?: Decoder | Decoders;
@@ -361,7 +361,7 @@ export interface CreateRequestOptions<T = unknown> {
 
 	/**
 	 * Meta flag that indicates that the request is important: usually it used with middlewares
-	 * for indicating that the request need execute as soon as possible
+	 * to indicate that the request need execute as soon as possible
 	 */
 	important?: boolean;
 

@@ -6,11 +6,11 @@ V4Fire Core Library
 [![NPM optionalDependencies](http://img.shields.io/david/optional/v4fire/core.svg?style=flat)](https://david-dm.org/v4fire/core?type=optional)
 [![NPM devDependencies](http://img.shields.io/david/dev/v4fire/core.svg?style=flat)](https://david-dm.org/v4fire/core?type=dev)
 
-This library provides a bunch of isomorphic modules and configurations for working as foundation for another V4 libraries and contents many base classes and structures, such as queue, persistent key-value storage, subclasses for working with promises, etc.
+This library provides a bunch of isomorphic modules and configurations to work as a foundation for another V4 libraries and contents many base classes and structures, such as queue, persistent key-value storage, subclasses to work with promises, etc.
 
 [GitHub](https://github.com/V4Fire/Core)
 
-## Prepare for building and developing
+## Prepare to build and develop
 
 At first you should install dependencies using `npm`:
 

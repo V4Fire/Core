@@ -65,8 +65,8 @@ export default function request<T = unknown>(path: string, opts?: CreateRequestO
 export default function request<T = unknown>(opts: CreateRequestOptions<T>): typeof request;
 
 /**
- * Returns a function for creating a new remote request with the specified options.
- * This overload is helpful for creating factories for requests.
+ * Returns a function to create a new remote request with the specified options.
+ * This overload is helpful to create factories for requests.
  *
  * @param path - request path URL
  * @param resolver - function for request resolving:

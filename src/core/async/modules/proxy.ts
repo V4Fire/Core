@@ -528,7 +528,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 					fn.call(worker);
 
 				} else {
-					throw new ReferenceError('A function for destructing the worker is not defined');
+					throw new ReferenceError('A function to destroy the worker is not defined');
 				}
 			}
 		}

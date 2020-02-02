@@ -143,7 +143,7 @@ export function deprecated(target: object, key: string | symbol, descriptor: Pro
 
 /**
  * Decorator for the "deprecate" function.
- * This overload add a feature for providing additional options.
+ * This overload add a feature to provide additional options.
  *
  * @see [[deprecate]]
  * @param [opts] - additional options

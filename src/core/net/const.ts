@@ -9,7 +9,7 @@
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 
 /**
- * Event emitter for broadcasting network events
+ * Event emitter to broadcast network events
  */
 export const
 	emitter = new EventEmitter({maxListeners: 100, newListener: false});

@@ -10,7 +10,7 @@ import { cache, mimeTypes } from 'core/request/const';
 import { CreateRequestOptions, ResponseType } from 'core/request/interface';
 
 /**
- * Takes the cache key for data and returns a new key for saving the data in a storage
+ * Takes a key for data and returns a new key to save the data in a storage
  * @param key
  */
 export function getStorageKey(key: string): string {

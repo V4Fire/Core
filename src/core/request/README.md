@@ -1,6 +1,6 @@
 # core/request
 
-This module provides API for executing asynchronous remote request using AJAX and similar techniques.
+This module provides API to request/submit data using AJAX and similar techniques.
 
 ```js
 import request from 'core/request';

@@ -301,7 +301,7 @@ export default class RequestContext<T = unknown> {
 	}
 
 	/**
-	 * Middleware for saving a request in the cache
+	 * Middleware to save a request in the cache
 	 * @param res - response object
 	 */
 	saveCache(res: RequestResponseObject<T>): RequestResponseObject<T> {
@@ -339,7 +339,7 @@ export default class RequestContext<T = unknown> {
 	}
 
 	/**
-	 * Middleware for wrapping the specified object with RequestResponseObject
+	 * Middleware to wrap the specified object with RequestResponseObject
 	 * @param obj
 	 */
 	async wrapAsResponse(obj: Response | ResponseTypeValue): Promise<RequestResponseObject<T>> {

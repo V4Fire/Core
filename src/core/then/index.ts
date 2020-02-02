@@ -272,17 +272,17 @@ export default class Then<T = unknown> implements Promise<T> {
 	protected promise: Promise<T>;
 
 	/**
-	 * Handler for resolving of the native promise
+	 * Handler of the native promise resolving
 	 */
 	protected onResolve!: ConstrResolveHandler<T>;
 
 	/**
-	 * Handler for rejecting of the native promise
+	 * Handler of the native promise rejection
 	 */
 	protected onReject!: ConstrRejectHandler;
 
 	/**
-	 * Handler for rejecting on abort of the native promise
+	 * Handler of the native promise rejection that was raised by a reason of abort
 	 */
 	protected onAbort!: ConstrRejectHandler;
 
