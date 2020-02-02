@@ -145,11 +145,39 @@
 						<a href="#corequeue" id="corequeue" style="color: inherit; text-decoration: none;">
 							<h1>core/queue</h1>
 						</a>
-						<p>This module provides a base interface for the <a href="../classes/src_core_queue_interface.queue.html">Queue</a> data structure. The submodules contains different implementations for that interface.</p>
-						<p>Implementations:</p>
+						<p>This module provides a base interface for a <a href="../interfaces/src_core_queue_interface.queue.html">Queue</a> data structure. The submodules contains different classes and interfaces that extends or implements this interface.</p>
+						<p>The main module re-exports these implementations:</p>
 						<ul>
-							<li><a href="src_core_queue_merge_index.html">MergeQueue</a></li>
+							<li><code>AbstractQueue</code> — an alias for <a href="(src_core_queue_interface.html)"><code>core/queue/interface/Queue</code></a>;</li>
+							<li><code>AbstractWorkerQueue</code> — an alias for <a href="src_core_queue_worker_interface.html"><code>core/queue/worker/interface/WorkerQueue</code></a>;</li>
+							<li><code>Queue</code> — an alias for <a href="src_core_queue_simple_index.html"><code>core/queue/simple</code></a>;</li>
+							<li><code>MergeWorkerQueue</code> — an alias for <a href="src_core_queue_worker_merge_index.html"><code>core/queue/worker/merge</code></a>.</li>
 						</ul>
+						<pre><code class="language-js"><span class="hljs-keyword">import</span> { AbstractQueue } <span class="hljs-keyword">from</span> <span class="hljs-string">'core/queue'</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Queue</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">AbstractQueue</span> </span>{
+  internalQueue = [];
+
+  <span class="hljs-keyword">get</span> head() {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.internalQueue[<span class="hljs-number">0</span>];
+  }
+
+  <span class="hljs-keyword">get</span> length() {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.internalQueue.length;
+  }
+
+  push(el) {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.internalQueue.push(el);
+  }
+
+  pop() {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.internalQueue.shift();
+  }
+
+  clear() {
+    <span class="hljs-keyword">this</span>.internalQueue = [];
+  }
+}</code></pre>
 					</div>
 				</div>
 			</section>

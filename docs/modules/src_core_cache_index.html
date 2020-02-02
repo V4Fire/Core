@@ -145,13 +145,28 @@
 						<a href="#corecache" id="corecache" style="color: inherit; text-decoration: none;">
 							<h1>core/cache</h1>
 						</a>
-						<p>This module provides a base interface for the <a href="../interfaces/src_core_cache_interface.cache.html">Cache</a> data structure. The submodules contains different implementations for that interface.</p>
-						<p>Implementations:</p>
+						<p>This module provides a base interface for a <a href="../interfaces/src_core_cache_interface.cache.html">Cache</a> data structure: a simple in-memory key-value storage, which can be useful to organize cache data structures.
+						The submodules contains different implementations for that interface. The main module re-exports these implementations:</p>
 						<ul>
-							<li><a href="src_core_cache_simple_index.html">SimpleCache</a></li>
-							<li><a href="src_core_cache_restricted_index.html">RestrictedCache</a></li>
-							<li><a href="src_core_cache_never_index.html">NeverCache</a></li>
+							<li><code>AbstractCache</code> — an alias for <a href="(src_core_cache_interface.html)"><code>core/cache/interface/Cache</code></a>;</li>
+							<li><code>Cache</code> — an alias for <a href="src_core_cache_simple_index.html"><code>core/cache/simple</code></a>;</li>
+							<li><code>RestrictedCache</code> — an alias for <a href="src_core_cache_restricted_index.html"><code>core/cache/restricted</code></a>;</li>
+							<li><code>NeverCache</code> — an alias for <a href="src_core_cache_never_index.html"><code>core/cache/never</code></a>.</li>
 						</ul>
+						<pre><code class="language-js"><span class="hljs-keyword">import</span> SimpleCache <span class="hljs-keyword">from</span> <span class="hljs-string">'core/cache/simple'</span>;
+
+<span class="hljs-keyword">const</span>
+  cache = <span class="hljs-keyword">new</span> SimpleCache();
+
+cache.add(<span class="hljs-string">'foo'</span>, <span class="hljs-string">'bar1'</span>);
+cache.add(<span class="hljs-string">'foo2'</span>, <span class="hljs-string">'bar2'</span>);
+cache.add(<span class="hljs-string">'baz'</span>, <span class="hljs-string">'bar3'</span>);
+
+<span class="hljs-built_in">console</span>.log(cache.keys().length); <span class="hljs-comment">// 3</span>
+
+cache.clear(<span class="hljs-function">(<span class="hljs-params">val, key</span>) =&gt;</span> <span class="hljs-regexp">/foo/</span>.test(key));
+
+<span class="hljs-built_in">console</span>.log(cache.keys().length); <span class="hljs-comment">// 1</span></code></pre>
 					</div>
 				</div>
 			</section>

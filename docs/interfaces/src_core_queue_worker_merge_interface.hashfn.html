@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>QueueOptions | V4Fire</title>
+	<title>HashFn | V4Fire</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -129,13 +129,13 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/src_core_queue_merge_interface.html">&quot;src/core/queue/merge/interface&quot;</a>
+					<a href="../modules/src_core_queue_worker_merge_interface.html">&quot;src/core/queue/worker/merge/interface&quot;</a>
 				</li>
 				<li>
-					<a href="src_core_queue_merge_interface.queueoptions.html">QueueOptions</a>
+					<a href="src_core_queue_worker_merge_interface.hashfn.html">HashFn</a>
 				</li>
 			</ul>
-			<h1>Interface QueueOptions&lt;T&gt;</h1>
+			<h1>Interface HashFn&lt;T&gt;</h1>
 		</div>
 	</div>
 </header>
@@ -154,80 +154,31 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<a href="src_core_queue_interface.queueoptions.html" class="tsd-signature-type">QueueOptions</a>
-						<ul class="tsd-hierarchy">
-							<li>
-								<span class="target">QueueOptions</span>
-							</li>
-						</ul>
+						<span class="target">HashFn</span>
 					</li>
 				</ul>
 			</section>
-			<section class="tsd-panel-group tsd-index-group">
-				<h2>Index</h2>
-				<section class="tsd-panel tsd-index-panel">
-					<div class="tsd-index-content">
-						<section class="tsd-index-section ">
-							<h3>Properties</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="src_core_queue_merge_interface.queueoptions.html#concurrency" class="tsd-kind-icon">concurrency</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="src_core_queue_merge_interface.queueoptions.html#hashfn" class="tsd-kind-icon">hash<wbr>Fn</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="src_core_queue_merge_interface.queueoptions.html#interval" class="tsd-kind-icon">interval</a></li>
+			<section class="tsd-panel">
+				<h3 class="tsd-before-signature">Callable</h3>
+				<ul class="tsd-signatures tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter">
+					<li class="tsd-signature tsd-kind-icon">__call<span class="tsd-signature-symbol">(</span>task<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/queue/worker/merge/interface.ts#L12">src/core/queue/worker/merge/interface.ts:12</a></li>
 							</ul>
-						</section>
-					</div>
-				</section>
-			</section>
-			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-					<a name="concurrency" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> concurrency</h3>
-					<div class="tsd-signature tsd-kind-icon">concurrency<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
-					<aside class="tsd-sources">
-						<p>Inherited from <a href="src_core_queue_interface.queueoptions.html">QueueOptions</a>.<a href="src_core_queue_interface.queueoptions.html#concurrency">concurrency</a></p>
-						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/queue/interface.ts#L17">src/core/queue/interface.ts:17</a></li>
+						</aside>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>task: <span class="tsd-signature-type">T</span></h5>
+							</li>
 						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Maximum number of concurrent workers</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="hashfn" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> hash<wbr>Fn</h3>
-					<div class="tsd-signature tsd-kind-icon">hash<wbr>Fn<span class="tsd-signature-symbol">:</span> <a href="src_core_queue_merge_interface.hashfn.html" class="tsd-signature-type">HashFn</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/queue/merge/interface.ts#L20">src/core/queue/merge/interface.ts:20</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Hash function for a task</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-					<a name="interval" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> interval</h3>
-					<div class="tsd-signature tsd-kind-icon">interval<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
-					<aside class="tsd-sources">
-						<p>Inherited from <a href="src_core_queue_interface.queueoptions.html">QueueOptions</a>.<a href="src_core_queue_interface.queueoptions.html#interval">interval</a></p>
-						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/queue/interface.ts#L23">src/core/queue/interface.ts:23</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Value of a task status refresh interval
-							(in milliseconds)</p>
-						</div>
-					</div>
-				</section>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+					</li>
+				</ul>
 			</section>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
@@ -237,35 +188,24 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class="current tsd-kind-external-module">
-						<a href="../modules/src_core_queue_merge_interface.html">&quot;src/core/queue/merge/interface&quot;</a>
+						<a href="../modules/src_core_queue_worker_merge_interface.html">&quot;src/core/queue/worker/merge/interface&quot;</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter">
-						<a href="src_core_queue_merge_interface.hashfn.html" class="tsd-kind-icon">Hash<wbr>Fn</a>
-					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter">
-						<a href="src_core_queue_merge_interface.queueoptions.html" class="tsd-kind-icon">Queue<wbr>Options</a>
-						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-								<a href="src_core_queue_merge_interface.queueoptions.html#concurrency" class="tsd-kind-icon">concurrency</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="src_core_queue_merge_interface.queueoptions.html#hashfn" class="tsd-kind-icon">hash<wbr>Fn</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-								<a href="src_core_queue_merge_interface.queueoptions.html#interval" class="tsd-kind-icon">interval</a>
-							</li>
-						</ul>
+						<a href="src_core_queue_worker_merge_interface.hashfn.html" class="tsd-kind-icon">Hash<wbr>Fn</a>
 					</li>
 				</ul>
 				<ul class="after-current">
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter">
-						<a href="src_core_queue_merge_interface.task.html" class="tsd-kind-icon">Task</a>
+						<a href="src_core_queue_worker_merge_interface.queueoptions.html" class="tsd-kind-icon">Queue<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter">
+						<a href="src_core_queue_worker_merge_interface.task.html" class="tsd-kind-icon">Task</a>
 					</li>
 				</ul>
 			</nav>

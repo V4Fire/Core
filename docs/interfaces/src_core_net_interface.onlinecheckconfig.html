@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>&quot;src/core/request/response&quot; | V4Fire</title>
+	<title>OnlineCheckConfig | V4Fire</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -129,26 +129,152 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="src_core_request_response.html">&quot;src/core/request/response&quot;</a>
+					<a href="../modules/src_core_net_interface.html">&quot;src/core/net/interface&quot;</a>
+				</li>
+				<li>
+					<a href="src_core_net_interface.onlinecheckconfig.html">OnlineCheckConfig</a>
 				</li>
 			</ul>
-			<h1>External module &quot;src/core/request/response&quot;</h1>
+			<h1>Interface OnlineCheckConfig</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-hierarchy">
+				<h3>Hierarchy</h3>
+				<ul class="tsd-hierarchy">
+					<li>
+						<span class="target">OnlineCheckConfig</span>
+					</li>
+				</ul>
+			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Classes</h3>
+							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-class tsd-parent-kind-external-module"><a href="../classes/src_core_request_response.response.html" class="tsd-kind-icon">Response</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="src_core_net_interface.onlinecheckconfig.html#cachettl" class="tsd-kind-icon">cacheTTL</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="src_core_net_interface.onlinecheckconfig.html#checkinterval" class="tsd-kind-icon">check<wbr>Interval</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="src_core_net_interface.onlinecheckconfig.html#checktimeout" class="tsd-kind-icon">check<wbr>Timeout</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="src_core_net_interface.onlinecheckconfig.html#checkurl" class="tsd-kind-icon">checkURL</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="src_core_net_interface.onlinecheckconfig.html#lastdatesyncinterval" class="tsd-kind-icon">last<wbr>Date<wbr>Sync<wbr>Interval</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="src_core_net_interface.onlinecheckconfig.html#persistence" class="tsd-kind-icon">persistence</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="src_core_net_interface.onlinecheckconfig.html#retrycount" class="tsd-kind-icon">retry<wbr>Count</a></li>
 							</ul>
 						</section>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="cachettl" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> cacheTTL</h3>
+					<div class="tsd-signature tsd-kind-icon">cacheTTL<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/net/interface.ts#L50">src/core/net/interface.ts:50</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Timeout value in milliseconds for one online check</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="checkinterval" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> check<wbr>Interval</h3>
+					<div class="tsd-signature tsd-kind-icon">check<wbr>Interval<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/net/interface.ts#L30">src/core/net/interface.ts:30</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Value in milliseconds after which the online connection will be checked again</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="checktimeout" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> check<wbr>Timeout</h3>
+					<div class="tsd-signature tsd-kind-icon">check<wbr>Timeout<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/net/interface.ts#L35">src/core/net/interface.ts:35</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Value in milliseconds that represents how long last cache check is relevant</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="checkurl" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> checkURL</h3>
+					<div class="tsd-signature tsd-kind-icon">checkURL<span class="tsd-signature-symbol">:</span> <a href="../modules/index_d.html#canundef" class="tsd-signature-type">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/net/interface.ts#L25">src/core/net/interface.ts:25</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>URL that is used to check online connection</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="lastdatesyncinterval" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> last<wbr>Date<wbr>Sync<wbr>Interval</h3>
+					<div class="tsd-signature tsd-kind-icon">last<wbr>Date<wbr>Sync<wbr>Interval<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/net/interface.ts#L40">src/core/net/interface.ts:40</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Value in milliseconds after which there will be a synchronization of last online date to the current date</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="persistence" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> persistence</h3>
+					<div class="tsd-signature tsd-kind-icon">persistence<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/net/interface.ts#L56">src/core/net/interface.ts:56</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>If true, then a check result will be periodically saved to a storage.
+							It can be helpful to realize how long an application lives without connection.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="retrycount" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> retry<wbr>Count</h3>
+					<div class="tsd-signature tsd-kind-icon">retry<wbr>Count<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/net/interface.ts#L45">src/core/net/interface.ts:45</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Number of acceptable retries (if the check was canceled by timeout)</p>
+						</div>
 					</div>
 				</section>
 			</section>
@@ -160,15 +286,45 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class="current tsd-kind-external-module">
-						<a href="src_core_request_response.html">&quot;src/core/request/response&quot;</a>
+						<a href="../modules/src_core_net_interface.html">&quot;src/core/net/interface&quot;</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-class tsd-parent-kind-external-module">
-						<a href="../classes/src_core_request_response.response.html" class="tsd-kind-icon">Response</a>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="src_core_net_interface.netstatus.html" class="tsd-kind-icon">Net<wbr>Status</a>
 					</li>
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="src_core_net_interface.onlinecheckconfig.html" class="tsd-kind-icon">Online<wbr>Check<wbr>Config</a>
+						<ul>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="src_core_net_interface.onlinecheckconfig.html#cachettl" class="tsd-kind-icon">cacheTTL</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="src_core_net_interface.onlinecheckconfig.html#checkinterval" class="tsd-kind-icon">check<wbr>Interval</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="src_core_net_interface.onlinecheckconfig.html#checktimeout" class="tsd-kind-icon">check<wbr>Timeout</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="src_core_net_interface.onlinecheckconfig.html#checkurl" class="tsd-kind-icon">checkURL</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="src_core_net_interface.onlinecheckconfig.html#lastdatesyncinterval" class="tsd-kind-icon">last<wbr>Date<wbr>Sync<wbr>Interval</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="src_core_net_interface.onlinecheckconfig.html#persistence" class="tsd-kind-icon">persistence</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="src_core_net_interface.onlinecheckconfig.html#retrycount" class="tsd-kind-icon">retry<wbr>Count</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<ul class="after-current">
 				</ul>
 			</nav>
 		</div>

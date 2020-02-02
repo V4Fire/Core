@@ -145,7 +145,21 @@
 						<a href="#corecachesimple" id="corecachesimple" style="color: inherit; text-decoration: none;">
 							<h1>core/cache/simple</h1>
 						</a>
-						<p>This module provides a class for the simple in-memory <a href="../interfaces/src_core_cache_interface.cache.html">Cache</a> data structure.</p>
+						<p>This module provides a class for a simple in-memory <a href="../interfaces/src_core_cache_interface.cache.html">Cache</a> data structure.</p>
+						<pre><code class="language-js"><span class="hljs-keyword">import</span> SimpleCache <span class="hljs-keyword">from</span> <span class="hljs-string">'core/cache/simple'</span>;
+
+<span class="hljs-keyword">const</span>
+  cache = <span class="hljs-keyword">new</span> SimpleCache();
+
+cache.add(<span class="hljs-string">'foo'</span>, <span class="hljs-string">'bar1'</span>);
+cache.add(<span class="hljs-string">'foo2'</span>, <span class="hljs-string">'bar2'</span>);
+cache.add(<span class="hljs-string">'baz'</span>, <span class="hljs-string">'bar3'</span>);
+
+<span class="hljs-built_in">console</span>.log(cache.keys().length); <span class="hljs-comment">// 3</span>
+
+cache.clear(<span class="hljs-function">(<span class="hljs-params">val, key</span>) =&gt;</span> <span class="hljs-regexp">/foo/</span>.test(key));
+
+<span class="hljs-built_in">console</span>.log(cache.keys().length); <span class="hljs-comment">// 1</span></code></pre>
 					</div>
 				</div>
 			</section>

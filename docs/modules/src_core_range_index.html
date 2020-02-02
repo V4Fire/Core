@@ -145,7 +145,7 @@
 						<a href="#corerange" id="corerange" style="color: inherit; text-decoration: none;">
 							<h1>core/range</h1>
 						</a>
-						<p>This module provides a class for working with some range structures, like date ranges or char ranges, etc.</p>
+						<p>This module provides a class to create a range structure. The ranges can be different: numbers, characters, dates.</p>
 						<pre><code class="language-js"><span class="hljs-keyword">import</span> Range <span class="hljs-keyword">from</span> <span class="hljs-string">'core/range'</span>;
 
 <span class="hljs-comment">// Using number range</span>
@@ -164,7 +164,7 @@
 <span class="hljs-built_in">console</span>.log(dateRange.contains(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-number">2019</span>, <span class="hljs-number">8</span>))); <span class="hljs-comment">// true</span>
 <span class="hljs-built_in">console</span>.log(
   dateRange.intersect(
-    <span class="hljs-keyword">new</span> Range(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-number">2017</span>, <span class="hljs-number">9</span>), 
+    <span class="hljs-keyword">new</span> Range(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-number">2017</span>, <span class="hljs-number">9</span>),
     <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-number">2019</span>, <span class="hljs-number">9</span>))
   ).toString()
 ); <span class="hljs-comment">// Sat Jun 01 2019 00:00:00 GMT+0300..Tue Oct 01 2019 00:00:00 GMT+0300</span>
