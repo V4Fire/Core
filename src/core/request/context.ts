@@ -342,8 +342,8 @@ export default class RequestContext<T = unknown> {
 	 * Middleware to wrap the specified object with RequestResponseObject
 	 * @param obj
 	 */
-	async wrapAsResponse(obj: Response | ResponseTypeValue): Promise<RequestResponseObject<T>> {
-		const response = obj instanceof Response ? obj : new Response(obj, {
+	async wrapAsResponse(obj: Response<T> | ResponseTypeValue): Promise<RequestResponseObject<T>> {
+		const response = obj instanceof Response ? obj : new Response<T>(obj, {
 			parent: this.parent,
 			responseType: 'object'
 		});
@@ -351,7 +351,7 @@ export default class RequestContext<T = unknown> {
 		return {
 			response,
 			ctx: this,
-			data: await response.decode<T>(),
+			data: await response.decode(),
 			dropCache: this.dropCache.bind(this)
 		};
 	}

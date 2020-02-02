@@ -27,7 +27,9 @@ import {
 
 } from 'core/request/interface';
 
-export default class Response {
+export default class Response<
+	D extends Nullable<string | JSONLikeValue | ArrayBuffer | Blob | Document | unknown
+> = unknown> {
 	/**
 	 * Value of the response data type
 	 */
@@ -114,7 +116,7 @@ export default class Response {
 	 * Parses the response body and returns a final value
 	 */
 	@once
-	decode<T extends Nullable<string | JSONLikeValue | ArrayBuffer | Blob | Document | unknown>>(): Then<T> {
+	decode(): Then<D> {
 		let data;
 		switch (this.sourceResponseType) {
 			case 'json':
@@ -183,8 +185,8 @@ export default class Response {
 	/**
 	 * Parses the response body as a JSON object and returns it
 	 */
-	json<T extends JSONLikeValue>(): Then<T | null> {
-		type _ = T | null;
+	json(): Then<D | null> {
+		type _ = D | null;
 
 		const
 			{body} = this;
