@@ -217,7 +217,7 @@ export default class RequestContext<T = unknown> {
 	}
 
 	/**
-	 * Resolves the request parameters and returns an absolute URL for the request
+	 * Resolves request parameters and returns an absolute URL for the request
 	 * @param [url] - base request URL
 	 */
 	resolveRequest(url?: Nullable<string>): string {
