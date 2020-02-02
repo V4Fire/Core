@@ -7,11 +7,12 @@
  */
 
 import config from 'config';
-import Range from 'core/range';
 
 import { AsyncFactoryResult } from 'core/kv-storage';
-import { RequestQuery, RequestMethod, ResponseType, GlobalOptions, CacheStrategy } from 'core/request/interface';
 import { Cache, RestrictedCache, NeverCache, AbstractCache } from 'core/cache';
+
+import { ResponseType } from 'core/request/response/interface';
+import { RequestQuery, RequestMethod, GlobalOptions, CacheStrategy } from 'core/request/interface';
 
 export let
 	storage: CanUndef<Promise<AsyncFactoryResult>>;
@@ -19,6 +20,9 @@ export let
 //#if runtime has core/kv-storage
 storage = import('core/kv-storage').then(({asyncLocal}) => asyncLocal);
 //#endif
+
+export const
+	isAbsoluteURL = /^\w+:\/\//;
 
 export const mimeTypes: Dictionary<ResponseType> = Object.createDict({
 	'application/json': 'json',
@@ -30,6 +34,11 @@ export const mimeTypes: Dictionary<ResponseType> = Object.createDict({
 	'application/vnd.google.protobuf': 'arrayBuffer'
 });
 
+export const methodsWithoutBody = Object.createDict({
+	GET: true,
+	HEAD: true
+});
+
 export const defaultRequestOpts = {
 	method: <RequestMethod>'GET',
 	cacheStrategy: <CacheStrategy>'never',
@@ -38,13 +47,6 @@ export const defaultRequestOpts = {
 	headers: <Dictionary<CanArray<string>>>{},
 	query: <RequestQuery>{},
 	meta: <Dictionary>{}
-};
-
-export const defaultResponseOpts = {
-	responseType: <ResponseType>'text',
-	okStatuses: new Range(200, 299),
-	status: 200,
-	headers: {}
 };
 
 export const
@@ -67,8 +69,3 @@ export const globalOpts: GlobalOptions = {
 
 	meta: {}
 };
-
-export const methodsWithoutBody = Object.createDict({
-	GET: true,
-	HEAD: true
-});

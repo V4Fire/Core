@@ -6,6 +6,11 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/**
+ * [[include:core/request/response/README.md]]
+ * @packageDocumentation
+ */
+
 import Then from 'core/then';
 import Range from 'core/range';
 
@@ -14,18 +19,21 @@ import { once } from 'core/functools';
 import { convertIfDate } from 'core/json';
 
 import { normalizeHeaderName, getResponseTypeFromMime } from 'core/request/utils';
-import { defaultResponseOpts } from 'core/request/const';
+import { defaultResponseOpts } from 'core/request/response/const';
+
+import { OkStatuses, WrappedDecoders } from 'core/request/interface';
 import {
 
-	OkStatuses,
 	ResponseType,
 	ResponseTypeValue,
 	ResponseHeaders,
 	ResponseOptions,
-	WrappedDecoders,
 	JSONLikeValue
 
-} from 'core/request/interface';
+} from 'core/request/response/interface';
+
+export * from 'core/request/response/const';
+export * from 'core/request/response/interface';
 
 export default class Response<
 	D extends Nullable<string | JSONLikeValue | ArrayBuffer | Blob | Document | unknown

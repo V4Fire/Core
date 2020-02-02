@@ -9,10 +9,10 @@
 import Then from 'core/then';
 import Range from 'core/range';
 
-import Response from 'core/request/response';
+import Response, { ResponseType } from 'core/request/response';
 import RequestContext from 'core/request/context';
 
-import { defaultRequestOpts, defaultResponseOpts } from 'core/request/const';
+import { defaultRequestOpts } from 'core/request/const';
 import { StatusCodes } from 'core/status-codes';
 
 export type RequestMethod =
@@ -31,21 +31,6 @@ export type CacheStrategy =
 	'forever' |
 	'never';
 
-export type ResponseType =
-	'text' |
-	'json' |
-	'document' |
-	'arrayBuffer' |
-	'blob' |
-	'object';
-
-export type ResponseTypeValue =
-	string |
-	ArrayBuffer |
-	Document |
-	null |
-	undefined;
-
 export type RequestBody =
 	string |
 	number |
@@ -53,14 +38,6 @@ export type RequestBody =
 	Dictionary |
 	FormData |
 	ArrayBuffer;
-
-export type JSONLikeValue =
-	string |
-	number |
-	boolean |
-	null |
-	unknown[] |
-	Dictionary;
 
 export type OkStatuses =
 	Range<number> |
@@ -384,22 +361,6 @@ export type ResolverResult =
 	string |
 	string[] |
 	undefined;
-
-export interface ResponseHeaders {
-	readonly [name: string]: string;
-}
-
-export interface ResponseOptions {
-	parent?: Then;
-	important?: boolean;
-	responseType?: ResponseType;
-	okStatuses?: OkStatuses;
-	status?: StatusCodes;
-	headers?: string | Dictionary<string>;
-	decoder?: WrappedDecoder | WrappedDecoders;
-}
-
-export type NormalizedResponseOptions = typeof defaultResponseOpts & ResponseOptions;
 
 export interface GlobalOptions {
 	api?: Nullable<string>;

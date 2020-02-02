@@ -22,6 +22,14 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 * Added `core/queu/simple`
 
+#### :bug: [Bug Fix]
+
+* Fixed `core/request` with absolute URL-s
+
+#### :house: [Internal]
+
+* Improved TS types `core/request`
+
 ## v3.1.4
 
 #### :house: [Internal]

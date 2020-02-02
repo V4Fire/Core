@@ -12,19 +12,19 @@
  */
 
 import Then from 'core/then';
-
 import log from 'core/log';
-import requestEngine from 'core/request/engines';
+
+import { isOnline } from 'core/net';
+import { concatUrls } from 'core/url';
 
 import Response from 'core/request/response';
 import RequestError from 'core/request/error';
 import RequestContext from 'core/request/context';
+import requestEngine from 'core/request/engines';
 
-import { isOnline } from 'core/net';
 import { getStorageKey, getResponseTypeFromURL } from 'core/request/utils';
-import { concatUrls } from 'core/url';
+import { storage, globalOpts, defaultRequestOpts, isAbsoluteURL } from 'core/request/const';
 
-import { storage, globalOpts, defaultRequestOpts } from 'core/request/const';
 import {
 
 	CreateRequestOptions,
@@ -37,8 +37,9 @@ import {
 
 } from 'core/request/interface';
 
-export * from 'core/request/interface';
 export * from 'core/request/utils';
+export * from 'core/request/interface';
+export * from 'core/request/response/interface';
 
 export { dropCache } from 'core/request/utils';
 export { globalOpts, cache, pendingCache } from 'core/request/const';
@@ -189,7 +190,7 @@ export default function request<T = unknown>(
 			wrapRequest: ctx.wrapRequest.bind(ctx),
 
 			// Wrap resolve function with .resolver
-			resolveURL(api?: Nullable<string>): string {
+			resolveRequest(api?: Nullable<string>): string {
 				const
 					reqPath = String(path),
 					type = getResponseTypeFromURL(reqPath);
@@ -203,7 +204,7 @@ export default function request<T = unknown>(
 				}
 
 				let
-					url = concatUrls(api ? this.resolveAPI(api) : null, reqPath);
+					url = isAbsoluteURL.test(reqPath) ? reqPath : concatUrls(api ? this.resolveAPI(api) : null, reqPath);
 
 				if (Object.isFunction(resolver)) {
 					const
@@ -217,7 +218,7 @@ export default function request<T = unknown>(
 					}
 				}
 
-				return baseCtx.resolveURL.call(this, url);
+				return baseCtx.resolveRequest.call(this, url);
 			}
 		});
 
@@ -291,7 +292,7 @@ export default function request<T = unknown>(
 			}
 
 			const
-				url = ctx.resolveURL(globalOpts.api),
+				url = ctx.resolveRequest(globalOpts.api),
 				cacheKey = ctx.cacheKey;
 
 			let

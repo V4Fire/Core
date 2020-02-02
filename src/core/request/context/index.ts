@@ -6,30 +6,32 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/**
+ * [[include:core/request/context/README.md]]
+ * @packageDocumentation
+ */
+
 import Then from 'core/then';
-import Response from 'core/request/response';
 import Cache from 'core/cache/interface';
 
+import { deprecated } from 'core/functools';
 import { concatUrls, toQueryString } from 'core/url';
+
+import Response, { ResponseTypeValue } from 'core/request/response';
 import { normalizeHeaders, applyQueryForStr, getStorageKey, getRequestKey } from 'core/request/utils';
 import { cache, pendingCache, storage, globalOpts, methodsWithoutBody } from 'core/request/const';
+import { queryTplRgxp, resolveURLRgxp } from 'core/request/context/const';
+
 import {
 
 	NormalizedCreateRequestOptions,
 	RequestQuery,
 	RequestAPI,
-
-	ResponseTypeValue,
 	RequestResponseObject,
-
 	WrappedDecoders,
 	WrappedEncoders
 
 } from 'core/request/interface';
-
-const
-	resolveURLRgxp = /(?:^|^(\w+:\/\/\/?)(?:([^:]+:[^@]+)@)?([^:/]+)(?::(\d+))?)(\/.*|$)/,
-	queryTplRgxp = /\/:(.+?)(\(.*?\))?(?=[\\/.?#]|$)/g;
 
 export default class RequestContext<T = unknown> {
 	/**
@@ -215,10 +217,10 @@ export default class RequestContext<T = unknown> {
 	}
 
 	/**
-	 * Returns an absolute URL for the request
+	 * Resolves the request parameters and returns an absolute URL for the request
 	 * @param [url] - base request URL
 	 */
-	resolveURL(url?: Nullable<string>): string {
+	resolveRequest(url?: Nullable<string>): string {
 		if (url == null) {
 			return '';
 		}
@@ -250,6 +252,17 @@ export default class RequestContext<T = unknown> {
 		}
 
 		return url;
+	}
+
+	/**
+	 * Returns an absolute URL for the request
+	 *
+	 * @see [[RequestContext.prototype.resolveRequest]]
+	 * @param [url] - base request URL
+	 */
+	@deprecated({renamedTo: 'resolveRequest'})
+	resolveURL(url?: Nullable<string>): string {
+		return this.resolveRequest(url);
 	}
 
 	/**

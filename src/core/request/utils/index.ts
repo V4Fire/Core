@@ -6,8 +6,16 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/**
+ * [[include:core/request/utils/README.md]]
+ * @packageDocumentation
+ */
+
 import { cache, mimeTypes } from 'core/request/const';
-import { CreateRequestOptions, ResponseType } from 'core/request/interface';
+import { CreateRequestOptions } from 'core/request/interface';
+import { ResponseType } from 'core/request/response/interface';
+import { tplRgxp, dataURIRgxp, isTextType, isXMLType } from 'core/request/utils/const';
+export * from 'core/request/utils/const';
 
 /**
  * Takes a key for data and returns a new key to save the data in a storage
@@ -92,9 +100,6 @@ export function getRequestKey<T>(url: string, params?: CreateRequestOptions<T>):
 
 	return JSON.stringify([url, p.method, plainHeaders, bodyKey, p.timeout]);
 }
-
-const
-	tplRgxp = /\${([^}]+)}/g;
 
 /**
  * Applies a query object fot the specified string
@@ -186,11 +191,6 @@ export function normalizeHeaders(headers?: Dictionary, query?: Dictionary): Dict
 
 	return res;
 }
-
-const
-	isTextType = /^text(?:\/|$)/,
-	isXMLType = /^application\/\w+-xml\b/,
-	dataURIRgxp = /^data:([^;]+);/;
 
 /**
  * Returns a type of data from the specified DATA:URI string

@@ -6,14 +6,17 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-//#if runtime has core/request/response
-import Response from 'core/request/response';
-//#endif
+/**
+ * [[include:core/request/error/README.md]]
+ * @packageDocumentation
+ */
 
-export interface Details extends Dictionary {
-	response?: Response;
-}
+import { Details } from 'core/request/error/interface';
+export * from 'core/request/error/interface';
 
+/**
+ * Class to wrap a request error
+ */
 export default class RequestError implements Error {
 	/**
 	 * Error name
