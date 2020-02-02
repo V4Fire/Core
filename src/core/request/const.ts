@@ -22,7 +22,7 @@ storage = import('core/kv-storage').then(({asyncLocal}) => asyncLocal);
 //#endif
 
 export const
-	isAbsoluteURL = /^\w+:\/\//;
+	isAbsoluteURL = /^\w*:?\/\//;
 
 export const mimeTypes: Dictionary<ResponseType> = Object.createDict({
 	'application/json': 'json',
