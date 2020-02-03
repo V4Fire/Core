@@ -8,23 +8,6 @@
 
 import extend from 'core/prelude/extend';
 
-/** @see ObjectConstructor.hasOwnProperty */
-extend(Object, 'hasOwnProperty', (obj: any, key?: string) => {
-	if (!obj || typeof obj !== 'object') {
-		if (key === undefined) {
-			return () => false;
-		}
-
-		return false;
-	}
-
-	if (key === undefined) {
-		return (key) => obj.hasOwnProperty(key);
-	}
-
-	return obj.hasOwnProperty(key);
-});
-
 /** @see ObjectConstructor.get */
 extend(Object, 'get', (
 	obj: any,
@@ -107,6 +90,23 @@ extend(Object, 'has', (
 	}
 
 	return has;
+});
+
+/** @see ObjectConstructor.hasOwnProperty */
+extend(Object, 'hasOwnProperty', (obj: any, key?: string) => {
+	if (!obj || typeof obj !== 'object') {
+		if (key === undefined) {
+			return () => false;
+		}
+
+		return false;
+	}
+
+	if (key === undefined) {
+		return (key) => obj.hasOwnProperty(key);
+	}
+
+	return obj.hasOwnProperty(key);
 });
 
 /** @see ObjectConstructor.set */
