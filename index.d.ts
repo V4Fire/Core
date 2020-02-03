@@ -398,6 +398,14 @@ interface ObjectConstructor {
 	get<T = unknown>(obj: unknown, path: string | unknown[], opts?: ObjectGetOptions): T;
 
 	/**
+	 * Returns a function that returns true if the object has a property by the specified path
+	 *
+	 * @param obj
+	 * @param [opts] - additional options
+	 */
+	has(obj: object, opts?: ObjectGetOptions): (path: string | unknown[]) => boolean;
+
+	/**
 	 * Returns true if the object has a property by the specified path
 	 *
 	 * @param obj
@@ -405,6 +413,22 @@ interface ObjectConstructor {
 	 * @param [opts] - additional options
 	 */
 	has(obj: object, path: string | unknown[], opts?: ObjectGetOptions): boolean;
+
+	/**
+	 * Returns a function that returns true if the specified property exists directly in the object
+	 *
+	 * @param obj
+	 * @param key
+	 */
+	hasOwnProperty(obj: unknown, key?: undefined): (key: string) => boolean;
+
+	/**
+	 * Returns true if the specified property exists directly in the object
+	 *
+	 * @param obj
+	 * @param key - property key
+	 */
+	hasOwnProperty(obj: unknown, key: string): boolean;
 
 	/**
 	 * Sets a value to the object by the specified path

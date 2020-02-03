@@ -21,6 +21,8 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 #### :rocket: New Feature
 
 * Added `core/queu/simple`
+* Added `Object.hasOwnProperty` to `prelude/object`
+* Added a new overload to `Object.has` from `prelude/object`
 
 #### :bug: [Bug Fix]
 

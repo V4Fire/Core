@@ -8,6 +8,23 @@
 
 import extend from 'core/prelude/extend';
 
+/** @see ObjectConstructor.hasOwnProperty */
+extend(Object, 'hasOwnProperty', (obj: any, key?: string) => {
+	if (!obj || typeof obj !== 'object') {
+		if (key === undefined) {
+			return () => false;
+		}
+
+		return false;
+	}
+
+	if (key === undefined) {
+		return (key) => obj.hasOwnProperty(key);
+	}
+
+	return obj.hasOwnProperty(key);
+});
+
 /** @see ObjectConstructor.get */
 extend(Object, 'get', (
 	obj: any,
@@ -46,42 +63,52 @@ extend(Object, 'get', (
 /** @see ObjectConstructor.has */
 extend(Object, 'has', (
 	obj: any,
-	path: string | any[],
+	path?: string | any[] | ObjectGetOptions,
 	opts?: ObjectGetOptions
 ) => {
 	const
-		p = {separator: '.', ...opts},
-		chunks = Object.isString(path) ? path.split(p.separator) : path;
+		p = {separator: '.', ...(Object.isPlainObject(path) ? path : opts)};
 
-	let
-		res = obj,
-		i = 0;
+	const has = (path) => {
+		const
+			chunks = Object.isString(path) ? path.split(p.separator) : path;
 
-	for (; i < chunks.length - 1; i++) {
-		if (res == null) {
-			return false;
+		let
+			res = obj,
+			i = 0;
+
+		for (; i < chunks.length - 1; i++) {
+			if (res == null) {
+				return false;
+			}
+
+			const
+				key = chunks[i];
+
+			// tslint:disable:prefer-conditional-expression
+			if (Object.isMap(res) || Object.isWeakMap(res)) {
+				res = res.get(key);
+
+			} else {
+				res = res[key];
+			}
 		}
 
 		const
 			key = chunks[i];
 
-		// tslint:disable:prefer-conditional-expression
 		if (Object.isMap(res) || Object.isWeakMap(res)) {
-			res = res.get(key);
-
-		} else {
-			res = res[key];
+			return res.has(key);
 		}
+
+		return key in res;
+	};
+
+	if (Object.isArray(path) || Object.isString(path)) {
+		return has(path);
 	}
 
-	const
-		key = chunks[i];
-
-	if (Object.isMap(res) || Object.isWeakMap(res)) {
-		return res.has(key);
-	}
-
-	return key in res;
+	return has;
 });
 
 //#endif
