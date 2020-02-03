@@ -309,7 +309,7 @@ export interface CreateRequestOptions<T = unknown> {
 	 * Dictionary or an iterable value with middleware functions:
 	 * functions take an environment of request parameters and can modify theirs.
 	 *
-	 * Please notice, that the order of middlewares depends of a structure that you use.
+	 * Please notice, that the order of middlewares depends on the structure that you use.
 	 * Also, if at least one of middlewares returns a function, than the result of invoking this function
 	 * will be returned as the request result. It can be helpful to organize mocks of data and
 	 * other similar cases when you don't want to execute a real request.
