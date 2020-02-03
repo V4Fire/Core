@@ -289,7 +289,7 @@ export interface CreateRequestOptions<T = unknown> {
 
 	/**
 	 * Value in milliseconds that indicates how long a value of the request should keep in
-	 * the cache (by default, all request is stored within the active session without expiring)
+	 * the cache (all request is stored within the active session without expiring by default)
 	 */
 	cacheTTL?: number;
 
