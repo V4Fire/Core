@@ -11,7 +11,7 @@
  * @packageDocumentation
  */
 
-import Queue from 'core/queue/interface';
+import { Queue } from 'core/queue/interface';
 export * from 'core/queue/interface';
 
 /**
