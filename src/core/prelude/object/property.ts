@@ -58,8 +58,6 @@ extend(Object, 'get', (
 	return res;
 });
 
-//#if runtime has prelude/object/has
-
 /** @see ObjectConstructor.has */
 extend(Object, 'has', (
 	obj: any,
@@ -110,8 +108,6 @@ extend(Object, 'has', (
 
 	return has;
 });
-
-//#endif
 
 /** @see ObjectConstructor.set */
 extend(Object, 'set', (
