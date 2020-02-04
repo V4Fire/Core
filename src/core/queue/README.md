@@ -4,7 +4,7 @@ This module provides a base interface for a [[Queue]] data structure. The submod
 
 The main module re-exports these implementations:
 
-* `AbstractQueue` — an alias for [`core/queue/interface/Queue`]((src_core_queue_interface.html));
+* `AbstractQueue` — an alias for [`core/queue/interface/Queue`](src_core_queue_interface.html);
 * `AbstractWorkerQueue` — an alias for [`core/queue/worker/interface/WorkerQueue`](src_core_queue_worker_interface.html);
 * `Queue` — an alias for [`core/queue/simple`](src_core_queue_simple_index.html);
 * `MergeWorkerQueue` — an alias for [`core/queue/worker/merge`](src_core_queue_worker_merge_index.html).
