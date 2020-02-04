@@ -22,7 +22,11 @@ export * from 'core/analytics/interface';
  * @param [details] - event details
  * @param [engine] - engine to send the event
  */
-export function send(event: string, details: Dictionary = {}, engine: AnalyticEngine = sendAnalyticsEvent): void {
+export function send(
+	event: string,
+	details: Dictionary = {},
+	engine: AnalyticEngine = sendAnalyticsEvent
+): void {
 	const
 		finalDetails = {};
 
