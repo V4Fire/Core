@@ -23,4 +23,4 @@ if (IS_NODE) {
 	transport = require('core/request/engines/browser').default;
 }
 
-export default request;
+export default transport;
