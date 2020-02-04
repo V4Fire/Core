@@ -11,6 +11,17 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.3.0
+
+#### :rocket: New Feature
+
+* Added support for a custom engine with `core/request`
+* Added support for a custom engine with `core/analytics`
+
+#### :house: Internal
+
+* Improved TS types `core/kv-storage`
+
 ## v3.2.0
 
 #### :boom: Breaking Change
@@ -24,51 +35,51 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 * Added `Object.hasOwnProperty` to `prelude/object`
 * Added a new overload to `Object.has` from `prelude/object`
 
-#### :bug: [Bug Fix]
+#### :bug: Bug Fix
 
 * Fixed `core/request` with absolute URL-s
 
-#### :house: [Internal]
+#### :house: Internal
 
 * Improved TS types `core/request`
 
 ## v3.1.4
 
-#### :house: [Internal]
+#### :house: Internal
 
 * Improved TS types `core/request`
 
 ## v3.1.3
 
-#### :house: [Internal]
+#### :house: Internal
 
 * Improved TS types `core/request`
 
 ## v3.1.2
 
-#### :bug: [Bug Fix]
+#### :bug: Bug Fix
 
 * Fixed JSON parsing `core/kv-storage`
 
 ## v3.1.1
 
-#### :bug: [Bug Fix]
+#### :bug: Bug Fix
 
 * [Fixed JSON parsing `core/kv-storage`](https://github.com/V4Fire/Core/pull/43)
 
 ## v3.1.0
 
-#### :rocket: [New Feature]
+#### :rocket: New Feature
 
 * Added `Object.isIterable`
 * Unmarked deprecation flag from `Object.isPlainObject`
 * Unmarked deprecation flag from `Object.isSimpleObject`
 
-#### :bug: [Bug Fix]
+#### :bug: Bug Fix
 
 * Added native check for `Object.isCustomObject`
 
-#### :house: [Internal]
+#### :house: Internal
 
 * TS type refactoring
 * Some optimizations and refactoring

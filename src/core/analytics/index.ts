@@ -12,14 +12,17 @@
  */
 
 import sendAnalyticsEvent from 'core/analytics/engines';
+import { AnalyticEngine } from 'core/analytics/interface';
+export * from 'core/analytics/interface';
 
 /**
  * Sends an analytic event with the specified details
  *
  * @param event - event name
  * @param [details] - event details
+ * @param [engine] - engine to send the event
  */
-export function send(event: string, details: Dictionary = {}): void {
+export function send(event: string, details: Dictionary = {}, engine: AnalyticEngine = sendAnalyticsEvent): void {
 	const
 		finalDetails = {};
 
@@ -33,5 +36,5 @@ export function send(event: string, details: Dictionary = {}): void {
 		}
 	}
 
-	sendAnalyticsEvent(event, finalDetails);
+	engine(event, finalDetails);
 }

@@ -202,6 +202,13 @@ export interface RequestResolver<T = unknown, ARGS extends unknown[] = unknown[]
 	(url: string, params: MiddlewareParams<T>, ...args: ARGS): ResolverResult;
 }
 
+/**
+ * Request engine
+ */
+export interface RequestEngine {
+	(params: RequestOptions): Then<Response>;
+}
+
 export interface CreateRequestOptions<T = unknown> {
 	/**
 	 * Request method type
@@ -347,6 +354,11 @@ export interface CreateRequestOptions<T = unknown> {
 	 * providing domain specific information
 	 */
 	meta?: Dictionary;
+
+	/**
+	 * Custom request engine
+	 */
+	engine?: RequestEngine;
 }
 
 // @ts-ignore

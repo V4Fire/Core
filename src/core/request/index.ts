@@ -20,7 +20,6 @@ import { concatUrls } from 'core/url';
 import Response from 'core/request/response';
 import RequestError from 'core/request/error';
 import RequestContext from 'core/request/context';
-import requestEngine from 'core/request/engines';
 
 import { getStorageKey, getResponseTypeFromURL } from 'core/request/utils';
 import { storage, globalOpts, defaultRequestOpts, isAbsoluteURL } from 'core/request/const';
@@ -28,9 +27,12 @@ import { storage, globalOpts, defaultRequestOpts, isAbsoluteURL } from 'core/req
 import {
 
 	CreateRequestOptions,
+	NormalizedCreateRequestOptions,
+
 	RequestResolver,
 	RequestResponse,
 	RequestFunctionResponse,
+
 	Middleware,
 	WrappedEncoder,
 	WrappedDecoder
@@ -136,7 +138,7 @@ export default function request<T = unknown>(
 
 	const run = (...args) => {
 		const
-			p = merge<CreateRequestOptions<T>>(baseCtx.params),
+			p = merge<NormalizedCreateRequestOptions<T>>(baseCtx.params),
 			ctx = Object.create(baseCtx);
 
 		const middlewareParams = {
@@ -372,7 +374,7 @@ export default function request<T = unknown>(
 					decoders: ctx.decoders
 				};
 
-				res = requestEngine(reqOpts).then(success).then(ctx.saveCache);
+				res = p.engine(reqOpts).then(success).then(ctx.saveCache);
 			}
 
 			res.then((response) => log(`response:${path}`, response.data, {

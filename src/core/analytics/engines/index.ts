@@ -6,6 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import { AnalyticEngine } from 'core/analytics/interface';
+
 /**
  * Sends an analytic event with the specified details
  *
@@ -13,6 +15,8 @@
  * @param event - event name
  * @param [details] - event details
  */
-export default function sendAnalyticsEvent(event: string, details: Dictionary = {}): void {
+const sendAnalyticsEvent: AnalyticEngine = (event, details) => {
 	// Need some implementation
-}
+};
+
+export default sendAnalyticsEvent;

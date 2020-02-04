@@ -12,8 +12,26 @@
  */
 
 import { convertIfDate } from 'core/json';
-import { syncLocalStorage, asyncLocalStorage, syncSessionStorage, asyncSessionStorage } from 'core/kv-storage/engines';
-import { FactoryResult, Namespace, AsyncFactoryResult, AsyncNamespace, ClearFilter } from 'core/kv-storage/interface';
+import {
+
+	syncLocalStorage,
+	asyncLocalStorage,
+	syncSessionStorage,
+	asyncSessionStorage
+
+} from 'core/kv-storage/engines';
+
+import {
+
+	FactoryResult,
+	Namespace,
+	AsyncFactoryResult,
+	AsyncNamespace,
+	ClearFilter,
+	StorageEngine
+
+} from 'core/kv-storage/interface';
+
 export * from 'core/kv-storage/interface';
 
 /**
@@ -114,9 +132,9 @@ export const
  * storage.get('foo'); // 'foo'
  * ```
  */
-export function factory(engine: Dictionary, async: true): AsyncFactoryResult;
-export function factory(engine: Dictionary, async?: false): FactoryResult;
-export function factory(engine: Dictionary, async?: boolean): AsyncFactoryResult | FactoryResult {
+export function factory(engine: StorageEngine, async: true): AsyncFactoryResult;
+export function factory(engine: StorageEngine, async?: false): FactoryResult;
+export function factory(engine: StorageEngine, async?: boolean): AsyncFactoryResult | FactoryResult {
 	let
 		has,
 		get,

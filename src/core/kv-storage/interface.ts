@@ -107,3 +107,24 @@ export interface AsyncNamespace {
 export interface AsyncFactoryResult extends AsyncNamespace {
 	namespace(name: string): AsyncNamespace;
 }
+
+/**
+ * KV-storage engine
+ */
+export interface StorageEngine {
+	get?(key: unknown): unknown;
+	getItem?(key: unknown): unknown;
+	set?(key: unknown, value: unknown): unknown;
+	setItem?(key: unknown, value: unknown): unknown;
+	remove?(key: unknown): unknown;
+	removeItem?(key: unknown): unknown;
+	delete?(key: unknown): unknown;
+	exist?(key: unknown): unknown;
+	exists?(key: unknown): unknown;
+	includes?(key: unknown): unknown;
+	has?(key: unknown): unknown;
+	keys?(): Iterable<unknown>;
+	clear?(): unknown;
+	clearAll?(): unknown;
+	truncate?(): unknown;
+}

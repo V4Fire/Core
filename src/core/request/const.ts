@@ -7,12 +7,13 @@
  */
 
 import config from 'config';
+import engine from 'core/request/engines';
 
 import { AsyncFactoryResult } from 'core/kv-storage';
 import { Cache, RestrictedCache, NeverCache, AbstractCache } from 'core/cache';
 
 import { ResponseType } from 'core/request/response/interface';
-import { RequestQuery, RequestMethod, GlobalOptions, CacheStrategy } from 'core/request/interface';
+import { RequestQuery, RequestMethod, GlobalOptions, CacheStrategy, RequestEngine } from 'core/request/interface';
 
 export let
 	storage: CanUndef<Promise<AsyncFactoryResult>>;
@@ -46,7 +47,8 @@ export const defaultRequestOpts = {
 	offlineCacheTTL: (1).day(),
 	headers: <Dictionary<CanArray<string>>>{},
 	query: <RequestQuery>{},
-	meta: <Dictionary>{}
+	meta: <Dictionary>{},
+	engine: <RequestEngine>engine
 };
 
 export const

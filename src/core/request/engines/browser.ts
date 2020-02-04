@@ -9,13 +9,13 @@
 import Then from 'core/then';
 import Response from 'core/request/response';
 import RequestError from 'core/request/error';
-import { RequestOptions } from 'core/request/interface';
+import { RequestEngine } from 'core/request/interface';
 
 /**
  * Creates request using XMLHttpRequest with the specified parameters and returns a promise
  * @param params
  */
-export default function createTransport(params: RequestOptions): Then<Response> {
+const request: RequestEngine = (params) => {
 	const
 		p = params,
 		xhr = new XMLHttpRequest();
@@ -114,4 +114,6 @@ export default function createTransport(params: RequestOptions): Then<Response> 
 
 		xhr.send(data);
 	}, p.parent);
-}
+};
+
+export default request;

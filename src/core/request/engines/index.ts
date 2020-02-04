@@ -22,7 +22,7 @@ if (IS_NODE) {
 
 } else {
 	// @ts-ignore
-	transport = require('core/request/engines/browser').default;
+	transport = require('core/request/engines/browser').request;
 }
 
-export default transport;
+export default request;
