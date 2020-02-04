@@ -296,7 +296,6 @@ export default class Response<
 
 		if (IS_NODE) {
 			//#if node_js
-			// @ts-ignore
 			return Then.resolve<_>(Buffer.from(body).toString(encoding));
 			//#endif
 		}

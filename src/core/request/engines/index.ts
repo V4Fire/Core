@@ -16,13 +16,11 @@ let
 // tslint:disable-next-line
 if (IS_NODE) {
 	//#if node_js
-	// @ts-ignore
-	transport = require('core/request/engines/node');
+	transport = require('core/request/engines/node').default;
 	//#endif
 
 } else {
-	// @ts-ignore
-	transport = require('core/request/engines/browser').request;
+	transport = require('core/request/engines/browser').default;
 }
 
 export default request;
