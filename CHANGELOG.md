@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.3.3
+
+#### :bug: Bug Fix
+
+* Fixed `core/request/engines/browser` with specified contentType value
+
 ## v3.3.2
 
 #### :bug: Bug Fix

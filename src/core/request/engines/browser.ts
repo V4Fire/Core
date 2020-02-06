@@ -24,21 +24,25 @@ const request: RequestEngine = (params) => {
 		data,
 		{contentType} = p;
 
-	if (contentType == null && p.body != null) {
-		if (p.body instanceof FormData) {
+	if (p.body instanceof FormData) {
+		data = p.body;
+
+		if (!contentType) {
 			contentType = '';
-			data = p.body;
-
-		} else if (Object.isPlainObject(p.body)) {
-			data = JSON.stringify(p.body);
-			contentType = 'application/json;charset=UTF-8';
-
-		} else if (Object.isNumber(p.body) || Object.isBoolean(p.body)) {
-			data = String(p.body);
-
-		} else {
-			data = p.body;
 		}
+
+	} else if (Object.isPlainObject(p.body)) {
+		data = JSON.stringify(p.body);
+
+		if (!contentType) {
+			contentType = 'application/json;charset=UTF-8';
+		}
+
+	} else if (Object.isNumber(p.body) || Object.isBoolean(p.body)) {
+		data = String(p.body);
+
+	} else {
+		data = p.body;
 	}
 
 	xhr.open(
