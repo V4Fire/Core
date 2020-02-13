@@ -26,7 +26,7 @@ export * from 'core/semver/interface';
  */
 export default function (a: string, b: string, operation: Operation): boolean {
 	if (!operations[operation]) {
-		throw new TypeError(`Unknown comparator "${operation}". Only "${Object.keys(operations).join(', ')}" are available.`);
+		throw new TypeError(`Unknown comparator "${operation}". Only "${Object.keys(operations).join(', ')}" available.`);
 	}
 
 	const
