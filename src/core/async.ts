@@ -253,7 +253,7 @@ export default class Async<CTX extends object = Async<any>> {
 	setImmediate(fn: Function, params?: AsyncCbOpts<CTX>): Nullable<TimerId> {
 		return this.setAsync({
 			...params,
-			name: Async.linkNames.idleCallback,
+			name: Async.linkNames.immediate,
 			obj: fn,
 			clearFn: clearImmediate,
 			wrapper: setImmediate,
