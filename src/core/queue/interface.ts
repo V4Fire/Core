@@ -7,7 +7,7 @@
  */
 
 /** @deprecated */
-export { default } from 'core/queue/worker';
+export { default } from 'core/queue/worker/merge';
 
 /**
  * Base interface for a queue data structure
