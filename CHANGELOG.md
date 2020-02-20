@@ -11,6 +11,16 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.3.4
+
+#### :bug: Bug Fix
+
+* Fixed default import `core/queue/merge`
+
+#### :house: Internal
+
+* Updated dependencies: typescript@3.8.1
+
 ## v3.3.3
 
 #### :bug: Bug Fix
