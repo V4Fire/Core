@@ -6,14 +6,11 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-/** @deprecated */
-export { default } from 'core/queue/worker/merge';
-
 /**
  * Base interface for a queue data structure
  * @typeparam T - queue element
  */
-export interface Queue<T> {
+export default interface Queue<T> {
 	/**
 	 * Queue head
 	 */

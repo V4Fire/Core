@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { Queue } from 'core/queue/interface';
+import Queue from 'core/queue/interface';
 export * from 'core/queue/interface';
 
 export interface QueueWorker<T = unknown, V = unknown> {
