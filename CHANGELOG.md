@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.3.8 (2020-02-25)
+
+#### :bug: Bug Fix
+
+* Fixed prelude initializing
+
 ## v3.3.7 (2020-02-25)
 
 #### :bug: Bug Fix

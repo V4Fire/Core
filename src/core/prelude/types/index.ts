@@ -17,7 +17,7 @@ extend(Object, 'isPlainObject', isPlainObject);
 
 const
 	isNative = /\[native code]/,
-	nonPrimitiveTypes = Object.createDict({object: true, function: true});
+	nonPrimitiveTypes = {object: true, function: true};
 
 /** @see ObjectConstructor.isCustomObject */
 extend(Object, 'isCustomObject', (obj) => {
