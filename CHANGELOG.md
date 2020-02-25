@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.3.7 (2020-02-25)
+
+#### :bug: Bug Fix
+
+* Fixed `Object.isCustomObject` with functions
+
 ## v3.3.6 (2020-02-21)
 
 #### :bug: Bug Fix

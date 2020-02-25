@@ -16,15 +16,19 @@ extend(Object, 'isDictionary', isPlainObject);
 extend(Object, 'isPlainObject', isPlainObject);
 
 const
-	isNative = /\[native code]/;
+	isNative = /\[native code]/,
+	nonPrimitiveTypes = Object.createDict({object: true, function: true});
 
 /** @see ObjectConstructor.isCustomObject */
 extend(Object, 'isCustomObject', (obj) => {
-	if (!obj || typeof obj !== 'object') {
+	const
+		type = typeof obj;
+
+	if (!obj || !nonPrimitiveTypes[type]) {
 		return false;
 	}
 
-	if (typeof obj === 'function') {
+	if (type === 'function') {
 		return !isNative.test(obj.toString());
 	}
 
