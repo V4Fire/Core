@@ -5,7 +5,7 @@
   "main": "src/core/index.js",
   "typings": "index.d.ts",
   "license": "MIT",
-  "version": "3.3.8",
+  "version": "3.3.9",
   "author": {
     "name": "kobezzza",
     "email": "kobezzza@gmail.com",
@@ -31,7 +31,7 @@
     "got": "^10.6.0",
     "node-localstorage": "^2.1.5",
     "set-value": ">=2.0.1",
-    "tslib": "^1.11.0"
+    "tslib": "^1.11.1"
   },
   "optionalDependencies": {
     "@pzlr/build-core": "^2.8.17",
@@ -63,7 +63,7 @@
     "urlconcat": "0.0.12"
   },
   "devDependencies": {
-    "babel-eslint": "^10.0.3",
+    "babel-eslint": "^10.1.0",
     "eslint": "^6.8.0",
     "tslint": "^5.20.1"
   }

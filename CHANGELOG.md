@@ -11,6 +11,16 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.3.9 (2020-02-28)
+
+#### :bug: Bug Fix
+
+* Fixed invalid object converting `core/kv-storage`
+
+#### :house: Internal
+
+* Updated dependencies: tslib@1.11.1
+
 ## v3.3.8 (2020-02-25)
 
 #### :bug: Bug Fix
