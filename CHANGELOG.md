@@ -11,6 +11,44 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.3.8 (2020-02-25)
+
+#### :bug: Bug Fix
+
+* Fixed prelude initializing
+
+## v3.3.7 (2020-02-25)
+
+#### :bug: Bug Fix
+
+* Fixed `Object.isCustomObject` with functions
+
+## v3.3.6 (2020-02-21)
+
+#### :bug: Bug Fix
+
+* Fixed default import `core/queue/worker`
+
+## v3.3.5
+
+#### :bug: Bug Fix
+
+* Fixed default import `core/queue/interface`
+
+#### :house: Internal
+
+* Updated dependencies: typescript@3.8.2
+
+## v3.3.4
+
+#### :bug: Bug Fix
+
+* Fixed default import `core/queue/merge`
+
+#### :house: Internal
+
+* Updated dependencies: typescript@3.8.1
+
 ## v3.3.3
 
 #### :bug: Bug Fix
