@@ -246,7 +246,7 @@ export function factory(engine: StorageEngine, async?: boolean): AsyncFactoryRes
 			let
 				encodedValue;
 
-			if (Object.isArray(encodedValue) || Object.isPlainObject(encodedValue)) {
+			if (Object.isArray(value) || Object.isDictionary(value)) {
 				try {
 					encodedValue = JSON.stringify(value);
 
@@ -255,7 +255,7 @@ export function factory(engine: StorageEngine, async?: boolean): AsyncFactoryRes
 				}
 
 			} else {
-				encodedValue = value;
+				encodedValue = Object.isString(value) ? JSON.stringify(value) : value;
 			}
 
 			return wrap(set(key, encodedValue, ...args), () => undefined);
