@@ -73,9 +73,11 @@ extend(String.prototype, 'camelize', function (
 		Object.assign(p, upperOrOpts);
 	}
 
+	p.upper = p.upper !== false;
+
 	const
 		str = this.toString(),
-		key = `${Boolean(p.upper)}:${str}`,
+		key = `${p.upper}:${str}`,
 		val = p.cache !== false ? camelizeCache[key] : undefined;
 
 	if (val !== undefined) {
@@ -111,9 +113,11 @@ extend(String.prototype, 'dasherize', function (
 		Object.assign(p, stableOrOpts);
 	}
 
+	p.stable = p.stable === true;
+
 	const
 		str = this.toString(),
-		key = `${Boolean(p.stable)}:${str}`,
+		key = `${p.stable}:${str}`,
 		val = p.cache !== false ? dasherizeCache[key] : undefined;
 
 	if (val !== undefined) {
@@ -150,9 +154,11 @@ extend(String.prototype, 'underscore', function (
 		Object.assign(p, stableOrOpts);
 	}
 
+	p.stable = p.stable === true;
+
 	const
 		str = this.toString(),
-		key = `${Boolean(p.stable)}:${str}`,
+		key = `${p.stable}:${str}`,
 		val = p.cache !== false ? underscoreCache[key] : undefined;
 
 	if (val !== undefined) {

@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.3.10 (2020-03-02)
+
+#### :bug: Bug Fix
+
+* Fixed `String.prototype.camelize` default behaviour
+
 ## v3.3.9 (2020-02-28)
 
 #### :bug: Bug Fix
