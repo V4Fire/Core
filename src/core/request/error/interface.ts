@@ -10,6 +10,9 @@
 import Response from 'core/request/response';
 //#endif
 
+import { NormalizedCreateRequestOptions } from 'core/request/interface';
+
 export interface Details extends Dictionary {
+	request?: NormalizedCreateRequestOptions;
 	response?: Response;
 }

@@ -226,7 +226,7 @@ export default function request<T = unknown>(
 
 		const parent = new Then(async (resolve, reject, onAbort) => {
 			onAbort((err) => {
-				reject(err || new RequestError('abort'));
+				reject(err || new RequestError('abort', {request: ctx.params}));
 			});
 
 			await new Promise((r) => {
@@ -349,19 +349,19 @@ export default function request<T = unknown>(
 					.then(ctx.saveCache);
 
 			} else if (!ctx.isOnline && !p.externalRequest) {
-				res = Then.reject(new RequestError('offline'));
+				res = Then.reject(new RequestError('offline', {request: ctx.params}));
 
 			} else {
 				const success = async (response) => {
 					if (!response.ok) {
-						throw new RequestError('invalidStatus', {response});
+						throw new RequestError('invalidStatus', {request: ctx.params, response});
 					}
 
 					const
 						data = await response.decode();
 
 					if (p.externalRequest && !ctx.isOnline && !data) {
-						throw new RequestError('offline');
+						throw new RequestError('offline', {request: ctx.params, response});
 					}
 
 					return {data, response, ctx, dropCache: ctx.dropCache};
