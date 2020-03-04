@@ -17,7 +17,7 @@ export * from 'core/request/error/interface';
 /**
  * Class to wrap a request error
  */
-export default class RequestError<T> implements Error {
+export default class RequestError<D> implements Error {
 	/**
 	 * Error name
 	 */
@@ -36,13 +36,13 @@ export default class RequestError<T> implements Error {
 	/**
 	 * Error details
 	 */
-	readonly details: Details<T> = {};
+	readonly details: Details<D> = {};
 
 	/**
 	 * @param type - error type
 	 * @param details - error details
 	 */
-	constructor(type: string, details?: Details<T>) {
+	constructor(type: string, details?: Details<D>) {
 		this.type = type;
 		this.message = `API error, type: ${type}`;
 

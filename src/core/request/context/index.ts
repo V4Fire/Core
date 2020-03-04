@@ -33,7 +33,7 @@ import {
 
 } from 'core/request/interface';
 
-export default class RequestContext<T = unknown> {
+export default class RequestContext<D = unknown> {
 	/**
 	 * True if a host has connection to the internet
 	 */
@@ -67,7 +67,7 @@ export default class RequestContext<T = unknown> {
 	/**
 	 * Request parameters
 	 */
-	readonly params!: NormalizedCreateRequestOptions<T>;
+	readonly params!: NormalizedCreateRequestOptions<D>;
 
 	/**
 	 * Sequence of request encoders
@@ -99,7 +99,7 @@ export default class RequestContext<T = unknown> {
 	/**
 	 * @param [params] - request parameters
 	 */
-	constructor(params?: NormalizedCreateRequestOptions<T>) {
+	constructor(params?: NormalizedCreateRequestOptions<D>) {
 		const p = this.params = Object.mixin({
 			deep: true,
 			concatArray: true,
@@ -270,7 +270,7 @@ export default class RequestContext<T = unknown> {
 	 * Wraps the specified promise (attaches the pending cache, etc.)
 	 * @param promise
 	 */
-	wrapRequest(promise: Then<T>): Then<T> {
+	wrapRequest(promise: Then<D>): Then<D> {
 		const
 			key = this.cacheKey,
 			cache = this.pendingCache;
@@ -318,7 +318,7 @@ export default class RequestContext<T = unknown> {
 	 * Middleware to save a request in the cache
 	 * @param res - response object
 	 */
-	saveCache(res: RequestResponseObject<T>): RequestResponseObject<T> {
+	saveCache(res: RequestResponseObject<D>): RequestResponseObject<D> {
 		const
 			p = this.params,
 			key = this.cacheKey,
@@ -356,8 +356,8 @@ export default class RequestContext<T = unknown> {
 	 * Middleware to wrap the specified object with RequestResponseObject
 	 * @param obj
 	 */
-	async wrapAsResponse(obj: Response<T> | ResponseTypeValue): Promise<RequestResponseObject<T>> {
-		const response = obj instanceof Response ? obj : new Response<T>(obj, {
+	async wrapAsResponse(obj: Response<D> | ResponseTypeValue): Promise<RequestResponseObject<D>> {
+		const response = obj instanceof Response ? obj : new Response<D>(obj, {
 			parent: this.parent,
 			responseType: 'object'
 		});

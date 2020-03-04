@@ -12,7 +12,7 @@ import Response from 'core/request/response';
 
 import { NormalizedCreateRequestOptions } from 'core/request/interface';
 
-export interface Details<T = unknown> extends Dictionary {
-	request?: NormalizedCreateRequestOptions<T>;
-	response?: Response<T>;
+export interface Details<D = unknown> extends Dictionary {
+	request?: NormalizedCreateRequestOptions<D>;
+	response?: Response<D>;
 }

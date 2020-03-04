@@ -52,8 +52,8 @@ export interface WrappedEncoder<I = unknown, O = unknown> {
 	(data: I): CanPromise<O>;
 }
 
-export type Encoders<T = unknown> = Iterable<Encoder<T>>;
-export type WrappedEncoders<T = unknown> = Iterable<WrappedEncoder<T>>;
+export type Encoders = Iterable<Encoder>;
+export type WrappedEncoders = Iterable<WrappedEncoder>;
 
 export interface Decoder<I = unknown, O = unknown> {
 	(data: I, params: MiddlewareParams, response: Response<any>): CanPromise<O>;
@@ -63,19 +63,24 @@ export interface WrappedDecoder<I = unknown, O = unknown> {
 	(data: I, response: Response<any>): CanPromise<O>;
 }
 
-export type Decoders<T = unknown> = Iterable<Decoder<T>>;
-export type WrappedDecoders<T = unknown> = Iterable<WrappedDecoder<T>>;
+export type Decoders = Iterable<Decoder>;
+export type WrappedDecoders = Iterable<WrappedDecoder>;
 
-export interface RequestResponseObject<T = unknown> {
-	data: T | null;
-	response: Response<T>;
-	ctx: Readonly<RequestContext<T>>;
+export interface RequestResponseObject<D = unknown> {
+	data: Nullable<D>;
+	response: Response<D>;
+	ctx: Readonly<RequestContext<D>>;
 	dropCache(): void;
 }
 
-export type RequestResponse<T = unknown> = Then<RequestResponseObject<T>>;
-export interface RequestFunctionResponse<T = unknown, A extends unknown[] = []> {
-	(...args: A extends (infer V)[] ? V[] : unknown[]): RequestResponse<T>;
+export type RequestResponse<D = unknown> = Then<RequestResponseObject<D>>;
+
+export interface RequestFunctionResponse<D = unknown, ARGS extends unknown[] = []> {
+	(...args: ARGS extends (infer V)[] ? V[] : unknown[]): RequestResponse<D>;
+}
+
+export interface RequestResolver<D = unknown, ARGS extends unknown[] = unknown[]> {
+	(url: string, params: MiddlewareParams<D>, ...args: ARGS): ResolverResult;
 }
 
 export interface RequestOptions {
@@ -98,19 +103,19 @@ export type RequestQuery =
 	unknown[] |
 	string;
 
-export interface MiddlewareParams<T = unknown> {
-	ctx: RequestContext<T>;
-	opts: CreateRequestOptions<T>;
+export interface MiddlewareParams<D = unknown> {
+	ctx: RequestContext<D>;
+	opts: CreateRequestOptions<D>;
 	globalOpts: GlobalOptions;
 }
 
-export interface Middleware<T = unknown> {
-	(params: MiddlewareParams<T>): CanPromise<any | Function>;
+export interface Middleware<D = unknown> {
+	(params: MiddlewareParams<D>): CanPromise<any | Function>;
 }
 
-export type Middlewares<T = unknown> =
-	Dictionary<Middleware<T>> |
-	Iterable<Middleware<T>>;
+export type Middlewares<D = unknown> =
+	Dictionary<Middleware<D>> |
+	Iterable<Middleware<D>>;
 
 export type RequestAPIValue<T = string> = Nullable<T> | (() => Nullable<T>);
 
@@ -198,9 +203,6 @@ export interface RequestAPI {
 	 */
 	namespace?: RequestAPIValue;
 }
-export interface RequestResolver<T = unknown, ARGS extends unknown[] = unknown[]> {
-	(url: string, params: MiddlewareParams<T>, ...args: ARGS): ResolverResult;
-}
 
 /**
  * Request engine
@@ -209,7 +211,7 @@ export interface RequestEngine {
 	(params: RequestOptions): Then<Response>;
 }
 
-export interface CreateRequestOptions<T = unknown> {
+export interface CreateRequestOptions<D = unknown> {
 	/**
 	 * Request method type
 	 */
@@ -321,7 +323,7 @@ export interface CreateRequestOptions<T = unknown> {
 	 * will be returned as the request result. It can be helpful to organize mocks of data and
 	 * other similar cases when you don't want to execute a real request.
 	 */
-	middlewares?: Middlewares<T>;
+	middlewares?: Middlewares<D>;
 
 	/**
 	 * Function (or a sequence of functions) that takes response data of the current request
@@ -362,13 +364,15 @@ export interface CreateRequestOptions<T = unknown> {
 }
 
 // @ts-ignore
-export interface WrappedCreateRequestOptions<T = unknown> extends CreateRequestOptions<T> {
+export interface WrappedCreateRequestOptions<D = unknown> extends CreateRequestOptions<D> {
 	url: CanUndef<string>;
 	encoder?: WrappedEncoder | WrappedEncoders;
 	decoder?: WrappedDecoder | WrappedDecoders;
 }
 
-export type NormalizedCreateRequestOptions<T = unknown> = typeof defaultRequestOpts & WrappedCreateRequestOptions<T>;
+export type NormalizedCreateRequestOptions<D = unknown> =
+	typeof defaultRequestOpts &
+	WrappedCreateRequestOptions<D>;
 
 export type ResolverResult =
 	string |
