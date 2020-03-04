@@ -230,7 +230,7 @@ export default function request<T = unknown>(
 			};
 
 			onAbort((err) => {
-				reject(err || new RequestError('abort', {details: errDetails}));
+				reject(err || new RequestError('abort', errDetails));
 			});
 
 			await new Promise((r) => {
@@ -353,19 +353,19 @@ export default function request<T = unknown>(
 					.then(ctx.saveCache);
 
 			} else if (!ctx.isOnline && !requestParams.externalRequest) {
-				res = Then.reject(new RequestError('offline', {details: errDetails}));
+				res = Then.reject(new RequestError('offline', errDetails));
 
 			} else {
 				const success = async (response) => {
 					if (!response.ok) {
-						throw new RequestError('invalidStatus', {details: {response, ...errDetails}});
+						throw new RequestError('invalidStatus', {response, ...errDetails});
 					}
 
 					const
 						data = await response.decode();
 
 					if (requestParams.externalRequest && !ctx.isOnline && !data) {
-						throw new RequestError('offline', {details: {response, ...errDetails}});
+						throw new RequestError('offline', {response, ...errDetails});
 					}
 
 					return {data, response, ctx, dropCache: ctx.dropCache};
