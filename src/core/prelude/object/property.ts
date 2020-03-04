@@ -78,11 +78,15 @@ extend(Object, 'has', (
 		const
 			key = chunks[i];
 
+		if (res == null) {
+			return false;
+		}
+
 		if (Object.isMap(res) || Object.isWeakMap(res)) {
 			return res.has(key);
 		}
 
-		return key in res;
+		return typeof res === 'object' ? key in res : res[key] !== undefined;
 	};
 
 	if (Object.isArray(path) || Object.isString(path)) {
