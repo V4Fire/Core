@@ -6,6 +6,11 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/**
+ * [[include:core/object/watch/README.md]]
+ * @packageDocumentation
+ */
+
 import { watchTargetLabel } from 'core/object/watch/const';
 
 import * as proxyEngine from 'core/object/watch/engines/proxy';
