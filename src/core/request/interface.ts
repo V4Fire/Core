@@ -363,6 +363,7 @@ export interface CreateRequestOptions<T = unknown> {
 
 // @ts-ignore
 export interface WrappedCreateRequestOptions<T = unknown> extends CreateRequestOptions<T> {
+	url: CanUndef<string>;
 	encoder?: WrappedEncoder | WrappedEncoders;
 	decoder?: WrappedDecoder | WrappedDecoders;
 }

@@ -222,36 +222,37 @@ export default class RequestContext<T = unknown> {
 	 */
 	resolveRequest(url?: Nullable<string>): string {
 		if (url == null) {
-			return '';
-		}
+			url = '';
 
-		const
-			p = this.params,
-			q = this.query;
+		} else {
+			const
+				p = this.params,
+				q = this.query;
 
-		const data = this.withoutBody ?
-			q : Object.isPlainObject(p.body) ? p.body : q;
+			const data = this.withoutBody ?
+				q : Object.isPlainObject(p.body) ? p.body : q;
 
-		if (Object.isPlainObject(data)) {
-			if (p.headers) {
-				p.headers = normalizeHeaders(p.headers, data);
+			if (Object.isPlainObject(data)) {
+				if (p.headers) {
+					p.headers = normalizeHeaders(p.headers, data);
+				}
+
+				url = applyQueryForStr(url, data, queryTplRgxp);
+
+			} else if (p.headers) {
+				p.headers = normalizeHeaders(p.headers);
 			}
 
-			url = applyQueryForStr(url, data, queryTplRgxp);
+			if (Object.size(q)) {
+				url = `${url}?${toQueryString(q)}`;
+			}
 
-		} else if (p.headers) {
-			p.headers = normalizeHeaders(p.headers);
+			if (this.canCache) {
+				this.cacheKey = this.getRequestKey(url);
+			}
 		}
 
-		if (Object.size(q)) {
-			url = `${url}?${toQueryString(q)}`;
-		}
-
-		if (this.canCache) {
-			this.cacheKey = this.getRequestKey(url);
-		}
-
-		return url;
+		return this.params.url = url;
 	}
 
 	/**

@@ -138,11 +138,11 @@ export default function request<T = unknown>(
 
 	const run = (...args) => {
 		const
-			p = merge<NormalizedCreateRequestOptions<T>>(baseCtx.params),
+			requestParams = merge<NormalizedCreateRequestOptions<T>>(baseCtx.params),
 			ctx = Object.create(baseCtx);
 
 		const middlewareParams = {
-			opts: p,
+			opts: requestParams,
 			ctx,
 			globalOpts
 		};
@@ -181,7 +181,7 @@ export default function request<T = unknown>(
 
 		Object.assign(ctx, {
 			// Merge request options
-			params: p,
+			params: requestParams,
 			encoders,
 			decoders,
 
@@ -198,11 +198,11 @@ export default function request<T = unknown>(
 					type = getResponseTypeFromURL(reqPath);
 
 				if (type) {
-					if (!p.responseType) {
-						p.responseType = type;
+					if (!requestParams.responseType) {
+						requestParams.responseType = type;
 					}
 
-					return reqPath;
+					return requestParams.url = reqPath;
 				}
 
 				let
@@ -225,8 +225,12 @@ export default function request<T = unknown>(
 		});
 
 		const parent = new Then(async (resolve, reject, onAbort) => {
+			const errDetails = {
+				request: requestParams
+			};
+
 			onAbort((err) => {
-				reject(err || new RequestError('abort', {request: ctx.params}));
+				reject(err || new RequestError('abort', {details: errDetails}));
 			});
 
 			await new Promise((r) => {
@@ -240,7 +244,7 @@ export default function request<T = unknown>(
 			const
 				tasks = <CanPromise<unknown>[]>[];
 
-			Object.forEach(p.middlewares, (fn: Middleware<T>) => {
+			Object.forEach(requestParams.middlewares, (fn: Middleware<T>) => {
 				tasks.push(fn(middlewareParams));
 			});
 
@@ -259,10 +263,10 @@ export default function request<T = unknown>(
 			};
 
 			if (ctx.withoutBody) {
-				p.query = await applyEncoders(p.query);
+				requestParams.query = await applyEncoders(requestParams.query);
 
 			} else {
-				p.body = await applyEncoders(p.body);
+				requestParams.body = await applyEncoders(requestParams.body);
 			}
 
 			for (let i = 0; i < middlewareResults.length; i++) {
@@ -295,7 +299,7 @@ export default function request<T = unknown>(
 
 			const
 				url = ctx.resolveRequest(globalOpts.api),
-				cacheKey = ctx.cacheKey;
+				{cacheKey} = ctx;
 
 			let
 				localCacheKey,
@@ -325,7 +329,7 @@ export default function request<T = unknown>(
 				fromCache = ctx.cache.has(cacheKey);
 				fromLocalStorage = Boolean(
 					!fromCache &&
-					p.offlineCache &&
+					requestParams.offlineCache &&
 					!ctx.isOnline &&
 					storage &&
 					await (await storage).has(localCacheKey)
@@ -348,39 +352,39 @@ export default function request<T = unknown>(
 					.then(ctx.wrapAsResponse)
 					.then(ctx.saveCache);
 
-			} else if (!ctx.isOnline && !p.externalRequest) {
-				res = Then.reject(new RequestError('offline', {request: ctx.params}));
+			} else if (!ctx.isOnline && !requestParams.externalRequest) {
+				res = Then.reject(new RequestError('offline', {details: errDetails}));
 
 			} else {
 				const success = async (response) => {
 					if (!response.ok) {
-						throw new RequestError('invalidStatus', {request: ctx.params, response});
+						throw new RequestError('invalidStatus', {details: {response, ...errDetails}});
 					}
 
 					const
 						data = await response.decode();
 
-					if (p.externalRequest && !ctx.isOnline && !data) {
-						throw new RequestError('offline', {request: ctx.params, response});
+					if (requestParams.externalRequest && !ctx.isOnline && !data) {
+						throw new RequestError('offline', {details: {response, ...errDetails}});
 					}
 
 					return {data, response, ctx, dropCache: ctx.dropCache};
 				};
 
 				const reqOpts = {
-					...p,
+					...requestParams,
 					url,
 					parent,
 					decoders: ctx.decoders
 				};
 
-				res = p.engine(reqOpts).then(success).then(ctx.saveCache);
+				res = requestParams.engine(reqOpts).then(success).then(ctx.saveCache);
 			}
 
 			res.then((response) => log(`response:${path}`, response.data, {
 				cache,
-				externalRequest: opts.externalRequest,
-				request: opts
+				externalRequest: requestParams.externalRequest,
+				request: requestParams
 			}));
 
 			resolve(ctx.wrapRequest(res));
