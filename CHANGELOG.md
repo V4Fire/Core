@@ -16,6 +16,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 #### :rocket: New Feature
 
 * Added `core/object/select`
+* Added `core/object/watch`
 
 ## v3.4.2 (2020-03-04)
 
