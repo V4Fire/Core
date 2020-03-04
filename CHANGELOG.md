@@ -11,11 +11,19 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.4.1 (2020-03-04)
+
+#### :bug: Bug Fix
+
+* Fixed `Object.has` with primitive values
+* Fixed `toQueryString/fromQueryString` from `core/url`
+* Added URL to a request error `core/request/error`
+
 ## v3.4.0 (2020-03-03)
 
 #### :rocket: New Feature
 
-* Added information about request `core/request/error`
+* Added request information to a request error `core/request/error`
 
 ## v3.3.10 (2020-03-02)
 
