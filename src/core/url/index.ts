@@ -94,7 +94,15 @@ export function fromQueryString(query: string, decode: boolean = true): Dictiona
 			[key, val] = chunks[i].split('=');
 
 		if (key) {
-			Object.set(res, key, val == null ? null : val, opts);
+			const
+				oldVal = Object.get(res, key, opts);
+
+			Object.set(
+				res,
+				key,
+				oldVal ? (<unknown[]>[]).concat(oldVal, val == null ? [] : val) : val == null ? null : val,
+				opts
+			);
 		}
 	}
 
@@ -117,7 +125,7 @@ function chunkToQueryString(data: unknown, encode: boolean, prfx: string = ''): 
 
 		for (let i = 0; i < arr.length; i++) {
 			let
-				key = arr[i];
+				key = isArr ? i : arr[i];
 
 			const
 				val = (<Extract<typeof data, unknown[] | Dictionary>>data)[key],
