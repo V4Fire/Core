@@ -54,20 +54,6 @@ export function resolveAfterEvents(emitter: EventEmitterLike, ...events: string[
 }
 
 /**
- * Returns a promise that will be resolved after the DOMContentLoaded event
- */
-export function resolveAfterDOMLoaded(): SyncPromise<void> {
-	return new SyncPromise((resolve) => {
-		if (document.readyState === 'loading') {
-			document.addEventListener('DOMContentLoaded', resolve);
-
-		} else {
-			resolve();
-		}
-	});
-}
-
-/**
  * Wraps a callback function into a new function that never calls the target until all specified flags are resolved.
  * The function returns a new function that takes a string flag and resolves it.
  * After all flags are resolved, the last function invokes the target function.
@@ -150,27 +136,6 @@ export const afterEvents = deprecate(
 			promise = resolveAfterEvents(emitter, ...(<string[]>[]).concat(Object.isString(cb) ? cb : [], events));
 
 		if (Object.isFunction(cb)) {
-			promise.then(cb);
-		}
-
-		return promise;
-	}
-);
-
-/**
- * @deprecated
- * @see [[resolveAfterDOMLoaded]]
- */
-export const afterDOMLoaded = deprecate(
-	{
-		alternative: 'resolveAfterDOMLoaded'
-	},
-
-	function afterDOMLoaded(cb?: Function): SyncPromise<void> {
-		const
-			promise = resolveAfterDOMLoaded();
-
-		if (cb) {
 			promise.then(cb);
 		}
 
