@@ -18,6 +18,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 * Added `core/object/select`
 * Added `core/object/watch`
 * Added `core/data`
+* Added `core/socket`
 
 ## v3.4.2 (2020-03-04)
 
