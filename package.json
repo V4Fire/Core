@@ -57,7 +57,7 @@
     "through2": "^3.0.1",
     "tsconfig": "^7.0.0",
     "typedoc": "^0.15.8",
-    "typescript": "^3.8.2",
+    "typescript": "^3.8.3",
     "uniconf": "^2.1.1",
     "upath": "^1.2.0",
     "urlconcat": "0.0.12"
