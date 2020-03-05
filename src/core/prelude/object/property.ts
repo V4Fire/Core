@@ -146,7 +146,7 @@ extend(Object, 'set', (
 				val = ref.get(key);
 
 			if (!val || typeof val !== 'object') {
-				ref.set(key, (val = nextChunkIsObj ? {} : []));
+				ref.set(key, (val = nextChunkIsObj ? new Map() : []));
 			}
 
 			ref = val;
