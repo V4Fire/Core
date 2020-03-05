@@ -121,7 +121,7 @@ export interface WatchOptions {
 	 * });
 	 * ```
 	 */
-	dependencies?: WatchPath[] | [WatchPath, WatchPath[]];
+	dependencies?: WatchPath[] | [WatchPath, CanArray<WatchPath>];
 }
 
 export interface WrapOptions {

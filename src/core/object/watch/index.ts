@@ -141,14 +141,30 @@ export function watch<T extends object>(
 			let
 				dep = deps[i];
 
-			if (Object.isArray(dep)) {
-				dep = deps[i] = dep.slice();
-
-				dep[0] = convert(dep[0]);
-				dep[1] = convert(dep[1]);
+			if (normalizedPath) {
+				deps[i] = convert(dep);
 
 			} else {
-				deps[i] = convert(dep);
+				if (!Object.isArray(dep)) {
+					throw new TypeError('Invalid format of dependencies');
+				}
+
+				dep = deps[i] = dep.slice();
+				dep[0] = convert(dep[0]);
+
+				{
+					const
+						deps = dep[1];
+
+					if (Object.isArray(deps)) {
+						for (let i = 0; i < deps.length; i++) {
+							deps[i] = convert(deps[i]);
+						}
+
+					} else {
+						dep[1] = [convert(deps)];
+					}
+				}
 			}
 		}
 	}
@@ -180,16 +196,24 @@ export function watch<T extends object>(
 			argsQueue = <unknown[][]>[];
 
 		handler = (val, oldVal, p) => {
-			let
-				dynamic = false;
-
 			if (!deep && p.path.length > 1) {
 				return;
 			}
 
-			const fireMutationEvent = (tiedPath?) => {
+			const
+				cache = new Map();
+
+			const fireMutationEvent = (tiedPath?, needGetVal = false) => {
+				if (tiedPath) {
+					if (Object.get(cache, tiedPath)) {
+						return;
+					}
+
+					Object.set(cache, tiedPath, true);
+				}
+
 				const getArgs = () => {
-					if (dynamic) {
+					if (needGetVal) {
 						val = Object.get(obj, collapse ? tiedPath[0] : tiedPath);
 
 						if (original.length < 2) {
@@ -248,28 +272,34 @@ export function watch<T extends object>(
 				const
 					path = p.path.length > tiedPath.length ? p.path.slice(0, tiedPath.length) : p.path;
 
+				let
+					dynamic = false;
+
 				path: for (let i = 0; i < path.length; i++) {
 					const
 						pathVal = path[i],
-						normalizedPathVal = tiedPath[i];
+						tiedPathVal = tiedPath[i];
 
-					if (pathVal === normalizedPathVal) {
+					if (pathVal === tiedPathVal) {
 						continue;
 					}
 
-					if (pref) {
-						for (let i = 0; i < pref.length; i++) {
-							if (pathVal === pref[i] + normalizedPathVal) {
-								dynamic = true;
-								continue path;
+					if (Object.isString(pathVal)) {
+						if (pref) {
+							for (let i = 0; i < pref.length; i++) {
+								if (pathVal === pref[i] + tiedPathVal) {
+									dynamic = true;
+									continue path;
+								}
 							}
 						}
 
-					} else if (post) {
-						for (let i = 0; i < post.length; i++) {
-							if (pathVal === normalizedPathVal + post[i]) {
-								dynamic = true;
-								continue path;
+						if (post) {
+							for (let i = 0; i < post.length; i++) {
+								if (pathVal === tiedPathVal + post[i]) {
+									dynamic = true;
+									continue path;
+								}
 							}
 						}
 					}
@@ -302,7 +332,7 @@ export function watch<T extends object>(
 					return;
 				}
 
-				fireMutationEvent(tiedPath);
+				fireMutationEvent(tiedPath, dynamic);
 			};
 
 			if (normalizedPath) {
@@ -311,6 +341,53 @@ export function watch<T extends object>(
 			}
 
 			fireMutationEvent();
+
+			if (pref || post) {
+				const
+					tiedPath = <unknown[]>[];
+
+				let
+					dynamic = false;
+
+				path: for (let i = 0; i < p.path.length; i++) {
+					const
+						pathVal = p.path[i];
+
+					if (Object.isString(pathVal)) {
+						if (pref) {
+							for (let i = 0; i < pref.length; i++) {
+								const
+									prefVal = pref[i];
+
+								if (pathVal.slice(0, prefVal.length) === prefVal) {
+									dynamic = true;
+									tiedPath.push(pathVal.slice(prefVal.length));
+									continue path;
+								}
+							}
+						}
+
+						if (post) {
+							for (let i = 0; i < post.length; i++) {
+								const
+									postVal = post[i];
+
+								if (pathVal.slice(-postVal.length) === postVal) {
+									dynamic = true;
+									tiedPath.push(pathVal.slice(0, -postVal.length));
+									continue path;
+								}
+							}
+						}
+
+						tiedPath.push(pathVal);
+					}
+				}
+
+				if (dynamic) {
+					fireMutationEvent(tiedPath, true);
+				}
+			}
 
 			if (deps) {
 				for (let i = 0; i < deps.length; i++) {
