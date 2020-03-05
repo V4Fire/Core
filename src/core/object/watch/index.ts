@@ -403,6 +403,9 @@ export function watch<T extends object>(
 		res = (typeof Proxy === 'function' ? proxyEngine : accEngine).watch(obj, undefined, handler, opts),
 		proxy = res.proxy;
 
+	const
+		{hasOwnProperty} = Object.prototype;
+
 	if (tiedWith && Object.isSimpleObject(proxy)) {
 		tiedWith[watchTargetLabel] = proxy[watchTargetLabel];
 
@@ -410,7 +413,7 @@ export function watch<T extends object>(
 			const
 				key = keys[i];
 
-			if (tiedWith.hasOwnProperty(key)) {
+			if (hasOwnProperty.call(tiedWith, key)) {
 				continue;
 			}
 
