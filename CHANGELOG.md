@@ -20,6 +20,11 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 * Added `core/data`
 * Added `core/socket`
 
+#### :house: Internal
+
+* Moved `core/session` to `@v4fire/client`
+* Moved `core/event/resolveAfterDOMLoaded` to `@v4fire/client`
+
 ## v3.4.2 (2020-03-04)
 
 #### :bug: Bug Fix
