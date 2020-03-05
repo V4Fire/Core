@@ -110,7 +110,8 @@ export function watch<T>(
 	return returnProxy(obj, obj[watchProxyLabel] = new Proxy(<any>obj, {
 		get: (target, key, receiver) => {
 			const
-				val = Reflect.get(target, key, receiver);
+				isCustomObj = Object.isCustomObject(target),
+				val = Reflect.get(target, key, isCustomObj ? receiver : target);
 
 			if (Object.isSymbol(key)) {
 				return val;
@@ -125,12 +126,16 @@ export function watch<T>(
 				return val;
 			}
 
-			return Object.isFunction(val) ? val.bind(target) : val;
+			return !isCustomObj && Object.isFunction(val) ? val.bind(target) : val;
 		},
 
 		set: (target, key, val, receiver) => {
+			const
+				isCustomObj = Object.isCustomObject(target),
+				set = () => Reflect.set(target, key, val, isCustomObj ? receiver : target);
+
 			if (Object.isSymbol(key)) {
-				return Reflect.set(target, key, val, receiver);
+				return set();
 			}
 
 			if (Object.isArray(target) && String(Number(key)) === key) {
@@ -138,9 +143,9 @@ export function watch<T>(
 			}
 
 			const
-				oldVal = Reflect.get(target, key, receiver);
+				oldVal = Reflect.get(target, key, isCustomObj ? receiver : target);
 
-			if (oldVal !== val && Reflect.set(target, key, val, receiver)) {
+			if (oldVal !== val && set()) {
 				for (let o = handlers.entries(), el = o.next(); !el.done; el = o.next()) {
 					const
 						[handler, state] = el.value;
