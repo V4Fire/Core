@@ -211,6 +211,10 @@ export interface RequestEngine {
 	(params: RequestOptions): Then<Response>;
 }
 
+/**
+ * Options for request
+ * @typeparam D - response data type
+ */
 export interface CreateRequestOptions<D = unknown> {
 	/**
 	 * Request method type

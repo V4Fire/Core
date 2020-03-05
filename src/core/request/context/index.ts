@@ -258,7 +258,7 @@ export default class RequestContext<D = unknown> {
 	/**
 	 * Returns an absolute URL for the request
 	 *
-	 * @see [[RequestContext.prototype.resolveRequest]]
+	 * @see [[RequestContext.resolveRequest]]
 	 * @param [url] - base request URL
 	 */
 	@deprecated({renamedTo: 'resolveRequest'})

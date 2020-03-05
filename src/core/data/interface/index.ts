@@ -37,7 +37,7 @@ export default interface Provider {
 
 	/**
 	 * @deprecated
-	 * @see [[Provider.prototype.emitter]]
+	 * @see [[Provider.emitter]]
 	 */
 	readonly event: EventEmitterLike
 

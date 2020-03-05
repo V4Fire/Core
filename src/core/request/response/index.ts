@@ -35,6 +35,10 @@ import {
 export * from 'core/request/response/const';
 export * from 'core/request/response/interface';
 
+/**
+ * Class for a remote response
+ * @typeparam D - response data type
+ */
 export default class Response<
 	D extends Nullable<string | JSONLikeValue | ArrayBuffer | Blob | Document | unknown
 > = unknown> {

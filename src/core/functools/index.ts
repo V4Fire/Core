@@ -17,7 +17,7 @@ export * from 'core/functools/deprecation';
  * Decorator for Function.prototype.once
  *
  * @decorator
- * @see [[Function.prototype.once]]
+ * @see [[FunctionConstructor.once]]
  */
 export function once(target: Object, key: string | symbol, descriptor: PropertyDescriptor): void {
 	const
@@ -43,7 +43,7 @@ export function once(target: Object, key: string | symbol, descriptor: PropertyD
  * Decorator for Function.prototype.debounce
  *
  * @decorator
- * @see [[Function.prototype.debounce]]
+ * @see [[FunctionConstructor.debounce]]
  * @param [delay] - delay value (in milliseconds)
  */
 export function debounce(delay?: number): MethodDecorator {
@@ -73,7 +73,7 @@ export function debounce(delay?: number): MethodDecorator {
  * Decorator for Function.prototype.throttle
  *
  * @decorator
- * @see [[Function.prototype.throttle]]
+ * @see [[FunctionConstructor.throttle]]
  * @param [delay] - delay value (in milliseconds)
  */
 export function throttle(delay?: number): MethodDecorator {

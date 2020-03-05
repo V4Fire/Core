@@ -369,7 +369,7 @@ export default abstract class Provider {
 
 	/**
 	 * @deprecated
-	 * @see [[Provider.prototype.globalEmitter]]
+	 * @see [[Provider.globalEmitter]]
 	 */
 	get globalEvent(): EventEmitter {
 		deprecate({name: 'globalEvent', type: 'accessor', renamedTo: 'globalEmitter'});
