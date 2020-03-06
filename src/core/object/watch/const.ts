@@ -7,7 +7,7 @@
  */
 
 export const
-	watchProxyLabel = Symbol('Watch proxy label'),
-	watchTargetLabel = Symbol('Watch target label'),
-	watchOptionsLabel = Symbol('Watch options label'),
-	watchHandlersLabel = Symbol('Watch handlers label');
+	toProxyObject = Symbol('Link to a proxy object'),
+	toOriginalObject = Symbol('Link to original object'),
+	watchOptions = Symbol('Watch options'),
+	watchHandlers = Symbol('Watch handlers');

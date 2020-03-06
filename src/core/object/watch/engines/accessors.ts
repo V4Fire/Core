@@ -6,9 +6,9 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { watchProxyLabel, watchTargetLabel, watchOptionsLabel, watchHandlersLabel } from 'core/object/watch/const';
+import { toProxyObject, toOriginalObject, watchOptions, watchHandlers } from 'core/object/watch/const';
 import { bindMutationHooks } from 'core/object/watch/wrap';
-import { proxyType } from 'core/object/watch/engines/helpers';
+import { unwrap, proxyType } from 'core/object/watch/engines/helpers';
 import { WatchPath, WatchHandler, WatchOptions, Watcher } from 'core/object/watch/interface';
 
 /**
@@ -51,15 +51,43 @@ export function watch<T>(
 	cb: Nullable<WatchHandler>,
 	opts?: WatchOptions,
 	top?: object,
-	handlers: Map<WatchHandler, boolean> = !top && obj[watchHandlersLabel] || new Map()
+	handlers?: Map<WatchHandler, boolean>
 ): Watcher<T> | T {
-	obj = obj && typeof obj === 'object' && obj[watchTargetLabel] || obj;
+	const
+		unwrappedObj = unwrap(obj);
+
+	if (unwrappedObj) {
+		handlers = handlers || unwrappedObj[watchHandlers] || new Map();
+	}
+
+	const returnProxy = (obj, proxy?) => {
+		if (proxy && cb && handlers && (!top || !handlers.has(cb))) {
+			handlers.set(cb, true);
+		}
+
+		if (top) {
+			return proxy || obj;
+		}
+
+		return {
+			proxy: proxy || obj,
+			unwatch(): void {
+				if (cb && handlers) {
+					handlers.set(cb, false);
+				}
+			}
+		};
+	};
+
+	if (!unwrappedObj) {
+		return returnProxy(obj);
+	}
 
 	if (!top) {
-		handlers = obj[watchHandlersLabel] = handlers;
+		handlers = unwrappedObj[watchHandlers] = handlers;
 
 		const
-			tmpOpts = obj[watchOptionsLabel] = obj[watchOptionsLabel] || {...opts};
+			tmpOpts = unwrappedObj[watchOptions] = unwrappedObj[watchOptions] || {...opts};
 
 		if (opts?.deep) {
 			tmpOpts.deep = true;
@@ -68,49 +96,28 @@ export function watch<T>(
 		opts = tmpOpts;
 	}
 
-	const returnProxy = (obj, proxy?) => {
-		if (cb && proxy && (!top || !handlers.has(cb))) {
-			handlers.set(cb, true);
-		}
-
-		if (!top) {
-			return {
-				proxy: proxy || obj,
-				unwatch(): void {
-					cb && handlers.set(cb, false);
-				}
-			};
-		}
-
-		return proxy || obj;
-	};
-
-	if (!obj || typeof obj !== 'object' || Object.isFrozen(obj)) {
-		return returnProxy(obj);
-	}
-
 	let
-		proxy = obj[watchProxyLabel];
+		proxy = unwrappedObj[toProxyObject];
 
 	if (proxy) {
-		return returnProxy(obj, proxy);
+		return returnProxy(unwrappedObj, proxy);
 	}
 
-	if (!proxyType(obj)) {
-		return returnProxy(obj);
+	if (!proxyType(unwrappedObj)) {
+		return returnProxy(unwrappedObj);
 	}
 
-	if (!Object.isDictionary(obj)) {
-		bindMutationHooks(<any>obj, {top, path, isRoot: path === undefined}, handlers!);
-		return returnProxy(obj, obj);
+	if (!Object.isDictionary(unwrappedObj)) {
+		bindMutationHooks(unwrappedObj, {top, path, isRoot: path === undefined}, handlers!);
+		return returnProxy(unwrappedObj, unwrappedObj);
 	}
 
-	for (let keys = Object.keys(obj), i = 0; i < keys.length; i++) {
-		proxy = setWatchAccessors(obj, keys[i], path, handlers, top, opts);
+	for (let keys = Object.keys(unwrappedObj), i = 0; i < keys.length; i++) {
+		proxy = setWatchAccessors(unwrappedObj, keys[i], path, handlers!, top, opts);
 	}
 
-	proxy[watchTargetLabel] = obj;
-	return returnProxy(obj, proxy);
+	proxy[toOriginalObject] = unwrappedObj;
+	return returnProxy(unwrappedObj, proxy);
 }
 
 /**
@@ -121,18 +128,21 @@ export function watch<T>(
  * @param value
  */
 export function set(obj: object, path: WatchPath, value: unknown): void {
-	obj = obj && typeof obj === 'object' && obj[watchTargetLabel] || obj;
+	const
+		rObj = unwrap(obj);
+
+	if (!rObj) {
+		return;
+	}
 
 	const
-		normalizedPath = Object.isArray(path) ? path : path.split('.');
-
-	const
+		normalizedPath = Object.isArray(path) ? path : path.split('.'),
 		prop = normalizedPath[normalizedPath.length - 1],
 		refPath = normalizedPath.slice(0, -1);
 
 	const
-		handlers = obj[watchHandlersLabel],
-		ref = Object.get(obj[watchProxyLabel] || obj, refPath);
+		handlers = rObj[watchHandlers],
+		ref = Object.get(rObj[toProxyObject] || rObj, refPath);
 
 	if (!Object.isDictionary(ref)) {
 		const
@@ -155,7 +165,7 @@ export function set(obj: object, path: WatchPath, value: unknown): void {
 		top = refPath.length ? ref : undefined;
 
 	if (!handlers) {
-		obj[key] = value;
+		rObj[key] = value;
 		return;
 	}
 
@@ -169,7 +179,12 @@ export function set(obj: object, path: WatchPath, value: unknown): void {
  * @param path
  */
 export function unset(obj: object, path: WatchPath): void {
-	obj = obj && typeof obj === 'object' && obj[watchTargetLabel] || obj;
+	const
+		unwrappedObj = unwrap(obj);
+
+	if (!unwrappedObj) {
+		return;
+	}
 
 	const
 		normalizedPath = Object.isArray(path) ? path : path.split('.');
@@ -179,8 +194,8 @@ export function unset(obj: object, path: WatchPath): void {
 		refPath = normalizedPath.slice(0, -1);
 
 	const
-		handlers = obj[watchHandlersLabel],
-		ref = Object.get(obj[watchProxyLabel] || obj, refPath);
+		handlers = unwrappedObj[watchHandlers],
+		ref = Object.get(unwrappedObj[toProxyObject] || unwrappedObj, refPath);
 
 	if (!Object.isDictionary(ref)) {
 		const
@@ -204,7 +219,7 @@ export function unset(obj: object, path: WatchPath): void {
 		top = refPath.length ? ref : undefined;
 
 	if (!handlers) {
-		delete obj[key];
+		delete unwrappedObj[key];
 		return;
 	}
 
@@ -230,11 +245,8 @@ export function setWatchAccessors(
 	top?: object,
 	opts?: WatchOptions
 ): Dictionary {
-	obj = obj && typeof obj === 'object' && obj[watchTargetLabel] || obj;
-
 	const
-		// @ts-ignore (symbol)
-		proxy = obj[watchProxyLabel] = obj[watchProxyLabel] || Object.create(obj);
+		proxy = obj[toProxyObject] = obj[toProxyObject] || Object.create(obj);
 
 	const
 		isRoot = path === undefined,
@@ -251,7 +263,7 @@ export function setWatchAccessors(
 
 				if (opts?.deep && proxyType(val)) {
 					const fullPath = (<unknown[]>[]).concat(path ?? [], key);
-					return watch(val, fullPath, null, opts, <any>top || val, handlers);
+					return watch(val, fullPath, null, opts, top || val, handlers);
 				}
 
 				return val;
@@ -275,7 +287,7 @@ export function setWatchAccessors(
 
 						if (state) {
 							handler(val, oldVal, {
-								obj: <any>obj,
+								obj,
 								top,
 								isRoot,
 								path: (<unknown[]>[]).concat(path ?? [], key)

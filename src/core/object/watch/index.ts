@@ -11,8 +11,9 @@
  * @packageDocumentation
  */
 
-import { watchTargetLabel } from 'core/object/watch/const';
+import { toOriginalObject } from 'core/object/watch/const';
 
+import { unwrap } from 'core/object/watch/engines/helpers';
 import * as proxyEngine from 'core/object/watch/engines/proxy';
 import * as accEngine from 'core/object/watch/engines/accessors';
 
@@ -101,6 +102,9 @@ export function watch<T extends object>(
 	handlerOrOpts?: WatchHandler | MultipleWatchHandler | WatchOptions,
 	optsOrHandler?: WatchOptions | WatchHandler | MultipleWatchHandler
 ): Watcher<T> {
+	const
+		unwrappedObj = unwrap(obj);
+
 	let
 		handler,
 		opts: CanUndef<WatchOptions>;
@@ -131,7 +135,7 @@ export function watch<T extends object>(
 	let
 		deps = opts?.dependencies;
 
-	if (deps) {
+	if (deps && unwrappedObj) {
 		deps = deps.slice();
 
 		const
@@ -179,6 +183,8 @@ export function watch<T extends object>(
 		post = opts?.postfixes;
 
 	const needWrapHandler =
+		Boolean(unwrappedObj) ||
+
 		!deep ||
 		!immediate ||
 
@@ -200,21 +206,24 @@ export function watch<T extends object>(
 				return;
 			}
 
-			const
-				cache = new Map();
+			let
+				cache;
 
 			const fireMutationEvent = (tiedPath?, needGetVal = false) => {
 				if (tiedPath) {
+					cache = cache || new Map();
+
 					if (Object.get(cache, tiedPath)) {
 						return;
 					}
 
 					Object.set(cache, tiedPath, true);
+					p = {...p, path: tiedPath};
 				}
 
 				const getArgs = () => {
 					if (needGetVal) {
-						val = Object.get(obj, collapse ? tiedPath[0] : tiedPath);
+						val = Object.get(unwrappedObj, collapse ? tiedPath[0] : tiedPath);
 
 						if (original.length < 2) {
 							return [val, undefined, p];
@@ -400,14 +409,14 @@ export function watch<T extends object>(
 
 	const
 		tiedWith = opts?.tiedWith,
-		res = (typeof Proxy === 'function' ? proxyEngine : accEngine).watch(obj, undefined, handler, opts),
-		proxy = res.proxy;
+		res = (typeof Proxy === 'function' ? proxyEngine : accEngine).watch(obj, undefined, handler, opts);
 
 	const
+		proxy = res.proxy,
 		{hasOwnProperty} = Object.prototype;
 
 	if (tiedWith && Object.isSimpleObject(proxy)) {
-		tiedWith[watchTargetLabel] = proxy[watchTargetLabel];
+		tiedWith[toOriginalObject] = proxy[toOriginalObject];
 
 		for (let keys = Object.keys(proxy), i = 0; i < keys.length; i++) {
 			const
@@ -420,6 +429,7 @@ export function watch<T extends object>(
 			Object.defineProperty(tiedWith, key, {
 				enumerable: true,
 				configurable: true,
+
 				get(): unknown {
 					return proxy[key];
 				},
@@ -442,7 +452,7 @@ export function watch<T extends object>(
  * @param value
  */
 export function set(obj: object, path: WatchPath, value: unknown): void {
-	return (typeof Proxy === 'function' ? proxyEngine : accEngine).set(obj, path, value);
+	(typeof Proxy === 'function' ? proxyEngine : accEngine).set(obj, path, value);
 }
 
 /**
@@ -452,5 +462,5 @@ export function set(obj: object, path: WatchPath, value: unknown): void {
  * @param path
  */
 export function unset(obj: object, path: WatchPath): void {
-	return (typeof Proxy === 'function' ? proxyEngine : accEngine).unset(obj, path);
+	(typeof Proxy === 'function' ? proxyEngine : accEngine).unset(obj, path);
 }
