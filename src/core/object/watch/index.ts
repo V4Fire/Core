@@ -132,42 +132,78 @@ export function watch<T extends object>(
 		handler = handlerOrOpts;
 	}
 
+	const
+		rawDeps = opts?.dependencies;
+
 	let
-		deps = opts?.dependencies;
+		localDeps: unknown[],
+		deps: unknown[][][];
 
-	if (deps && unwrappedObj) {
-		deps = deps.slice();
-
+	if (rawDeps && unwrappedObj) {
 		const
 			convert = (dep) => Object.isArray(dep) ? dep : dep.split('.');
 
-		for (let i = 0; i < deps.length; i++) {
-			let
-				dep = deps[i];
+		if (Object.isArray(rawDeps)) {
+			localDeps = [];
 
 			if (normalizedPath) {
-				deps[i] = convert(dep);
+				for (let i = 0; i < rawDeps.length; i++) {
+					localDeps.push(convert(rawDeps[i]));
+				}
+			}
 
-			} else {
+		} else {
+			deps = [];
+
+			const
+				map = new Map();
+
+			Object.forEach(rawDeps, (dep, key) => {
 				if (!Object.isArray(dep)) {
 					throw new TypeError('Invalid format of dependencies');
 				}
 
-				dep = deps[i] = dep.slice();
-				dep[0] = convert(dep[0]);
+				let
+					localDeps;
 
-				{
-					const
-						deps = dep[1];
+				if (Object.isArray(dep)) {
+					localDeps = dep.slice();
 
-					if (Object.isArray(deps)) {
-						for (let i = 0; i < deps.length; i++) {
-							deps[i] = convert(deps[i]);
-						}
-
-					} else {
-						dep[1] = [convert(deps)];
+					for (let i = 0; i < localDeps.length; i++) {
+						localDeps[i] = convert(localDeps[i]);
 					}
+
+				} else {
+					localDeps = [convert(dep)];
+				}
+
+				const
+					path = convert(key);
+
+				deps.push([path, localDeps]);
+				Object.set(map, path, localDeps);
+			});
+
+			if (map.size) {
+				const expandDeps = (deps) => {
+					for (let i = 0; i < deps.length; i++) {
+						const
+							dep = Object.get(map, deps[i]);
+
+						if (dep) {
+							deps.splice(i, 1, ...expandDeps(dep));
+						}
+					}
+
+					return deps;
+				};
+
+				for (let i = 0; i < deps.length; i++) {
+					expandDeps(deps[i][1]);
+				}
+
+				if (normalizedPath) {
+					localDeps = Object.get(map, normalizedPath);
 				}
 			}
 		}
@@ -182,27 +218,27 @@ export function watch<T extends object>(
 		pref = opts?.prefixes,
 		post = opts?.postfixes;
 
-	const needWrapHandler =
-		Boolean(unwrappedObj) ||
+	const needWrapHandler = Boolean(
+		unwrappedObj ||
 
 		!deep ||
 		!immediate ||
 
-		deps ||
+		rawDeps ||
 		collapse ||
-		normalizedPath;
+		normalizedPath
+	);
 
 	if (needWrapHandler) {
 		const
-			original = handler,
-			NULL = {};
+			original = handler;
 
 		let
-			dynamicOldVal = NULL,
+			dynamicOldVal,
 			argsQueue = <unknown[][]>[];
 
-		handler = (val, oldVal, p) => {
-			if (!deep && p.path.length > 1) {
+		handler = (val, oldVal, info) => {
+			if (!deep && info.path.length > 1) {
 				return;
 			}
 
@@ -210,6 +246,9 @@ export function watch<T extends object>(
 				cache;
 
 			const fireMutationEvent = (tiedPath?, needGetVal = false) => {
+				let
+					resolvedInfo = info;
+
 				if (tiedPath) {
 					cache = cache || new Map();
 
@@ -218,7 +257,7 @@ export function watch<T extends object>(
 					}
 
 					Object.set(cache, tiedPath, true);
-					p = {...p, path: tiedPath};
+					resolvedInfo = {...info, path: tiedPath};
 				}
 
 				const getArgs = () => {
@@ -226,20 +265,30 @@ export function watch<T extends object>(
 						val = Object.get(unwrappedObj, collapse ? tiedPath[0] : tiedPath);
 
 						if (original.length < 2) {
-							return [val, undefined, p];
+							return [val, undefined, resolvedInfo];
 						}
 
-						const args = [val, dynamicOldVal === NULL ? undefined : dynamicOldVal, p];
-						dynamicOldVal = val;
+						dynamicOldVal = dynamicOldVal || new Map();
 
+						const args = [
+							val,
+							Object.get(dynamicOldVal, resolvedInfo.path, val),
+							resolvedInfo
+						];
+
+						Object.set(dynamicOldVal, resolvedInfo.path, val);
 						return args;
 					}
 
 					if (collapse) {
-						return [p.isRoot ? val : p.top, p.isRoot ? oldVal : p.top, p];
+						return [
+							resolvedInfo.isRoot ? val : resolvedInfo.top,
+							resolvedInfo.isRoot ? oldVal : resolvedInfo.top,
+							resolvedInfo
+						];
 					}
 
-					return [val, oldVal, p];
+					return [val, oldVal, resolvedInfo];
 				};
 
 				if (immediate) {
@@ -279,7 +328,7 @@ export function watch<T extends object>(
 
 			const checkTiedPath = (tiedPath, deps) => {
 				const
-					path = p.path.length > tiedPath.length ? p.path.slice(0, tiedPath.length) : p.path;
+					path = info.path.length > tiedPath.length ? info.path.slice(0, tiedPath.length) : info.path;
 
 				let
 					dynamic = false;
@@ -313,7 +362,7 @@ export function watch<T extends object>(
 						}
 					}
 
-					if (Object.isArray(deps)) {
+					if (deps) {
 						deps: for (let i = 0; i < deps.length; i++) {
 							const
 								depPath = deps[i];
@@ -323,7 +372,7 @@ export function watch<T extends object>(
 							}
 
 							const
-								path = p.path.length > depPath.length ? p.path.slice(0, depPath.length) : p.path;
+								path = info.path.length > depPath.length ? info.path.slice(0, depPath.length) : info.path;
 
 							for (let i = 0; i < path.length; i++) {
 								if (path[i] === depPath[i]) {
@@ -345,7 +394,7 @@ export function watch<T extends object>(
 			};
 
 			if (normalizedPath) {
-				checkTiedPath(normalizedPath, deps);
+				checkTiedPath(normalizedPath, localDeps);
 				return;
 			}
 
@@ -358,9 +407,9 @@ export function watch<T extends object>(
 				let
 					dynamic = false;
 
-				path: for (let i = 0; i < p.path.length; i++) {
+				path: for (let i = 0; i < info.path.length; i++) {
 					const
-						pathVal = p.path[i];
+						pathVal = info.path[i];
 
 					if (Object.isString(pathVal)) {
 						if (pref) {

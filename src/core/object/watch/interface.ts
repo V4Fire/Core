@@ -8,6 +8,11 @@
 
 export type WatchPath = string | unknown[];
 
+export type WatchDependencies =
+	WatchPath[] |
+	Dictionary<WatchPath[]> |
+	Map<WatchPath, CanArray<WatchPath>>;
+
 export interface Watcher<T = unknown> {
 	proxy: T;
 	unwatch(): void;
@@ -121,7 +126,7 @@ export interface WatchOptions {
 	 * });
 	 * ```
 	 */
-	dependencies?: WatchPath[] | [WatchPath, CanArray<WatchPath>];
+	dependencies?: WatchDependencies;
 }
 
 export interface WrapOptions {
