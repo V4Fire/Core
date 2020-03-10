@@ -473,28 +473,28 @@ interface ObjectConstructor {
 	): void;
 
 	/**
-	 * Iterates over the specified array
+	 * Iterates over the specified Map object
 	 *
 	 * @param obj - object to iterate
 	 * @param opts - additional options
 	 * @param cb - callback function that is called on each of object elements
 	 */
-	forEach<V = unknown>(
-		obj: V[],
+	forEach<V = unknown, K = unknown>(
+		obj: Map<K, V>,
 		opts: ObjectForEachOptions,
-		cb: (el: V, i: number, data: V[]) => any
+		cb: (el: V, key: K, data: Map<K, V>) => any
 	): void;
 
 	/**
-	 * Iterates over the specified array
+	 * Iterates over the specified Map object
 	 *
 	 * @param obj - object to iterate
 	 * @param cb - callback function that is called on each of object elements
 	 * @param [opts] - additional options
 	 */
-	forEach<V = unknown>(
-		obj: V[],
-		cb: (el: V, i: number, data: V[]) => any,
+	forEach<V = unknown, K = unknown>(
+		obj: Map<K, V>,
+		cb: (el: V, key: K, data: Map<K, V>) => any,
 		opts?: ObjectForEachOptions
 	): void;
 
@@ -525,28 +525,28 @@ interface ObjectConstructor {
 	): void;
 
 	/**
-	 * Iterates over the specified Map object
+	 * Iterates over the specified array
 	 *
 	 * @param obj - object to iterate
 	 * @param opts - additional options
 	 * @param cb - callback function that is called on each of object elements
 	 */
-	forEach<V = unknown, K = unknown>(
-		obj: Map<K, V>,
+	forEach<V = unknown>(
+		obj: V[],
 		opts: ObjectForEachOptions,
-		cb: (el: V, key: K, data: Map<K, V>) => any
+		cb: (el: V, i: number, data: V[]) => any
 	): void;
 
 	/**
-	 * Iterates over the specified Map object
+	 * Iterates over the specified array
 	 *
 	 * @param obj - object to iterate
 	 * @param cb - callback function that is called on each of object elements
 	 * @param [opts] - additional options
 	 */
-	forEach<V = unknown, K = unknown>(
-		obj: Map<K, V>,
-		cb: (el: V, key: K, data: Map<K, V>) => any,
+	forEach<V = unknown>(
+		obj: V[],
+		cb: (el: V, i: number, data: V[]) => any,
 		opts?: ObjectForEachOptions
 	): void;
 
