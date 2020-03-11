@@ -61,8 +61,9 @@ extend(Date, 'create', (pattern?: DateCreateValue) => {
 					return date;
 				}
 
-				let year = res[1].length === 4 ? res[1] : res[4];
-				const day = res[1].length === 2 ? res[1] : res[4];
+				const
+					year = res[1].length === 4 ? res[1] : res[4],
+					day = res[1].length === 2 ? res[1] : res[4];
 
 				return `${year}-${res[3]}-${day}`;
 			};
