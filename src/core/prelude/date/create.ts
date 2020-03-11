@@ -14,7 +14,7 @@ extend(Date.prototype, 'clone', function (this: Date): Date {
 });
 
 const
-	isDateStr = /^(\d{4}-\d{2}-\d{2})([T ])(\d{2}:\d{2}:\d{2}(?:\.\d{3})?)(?:\d{0,3})?(Z)?([+-]\d{2}:?\d{2})?$/,
+	isDateStr = /^(?<date>\d{2,4}(?<ds>[-.\/])\d{2}\k<ds>\d{2,4})(?<t>[T ])?(?<time>\d{2}:\d{2}:\d{2}(?:\.\d{3})?)?(?:\d{0,3})?(?<zone>Z)?([+-]\d{2}:?\d{2})?$/,
 	isFloatStr = /^\d+\.\d+$/;
 
 const aliases = Object.createDict({
@@ -54,10 +54,25 @@ extend(Date, 'create', (pattern?: DateCreateValue) => {
 				return `${h <= 0 ? '+' : '-'}${abs > 9 ? abs : `0${abs}`}:00`;
 			};
 
-			pattern = pattern.replace(
-				isDateStr,
-				(str, date, t, time, zone) => `${date}T${time}${zone === 'Z' || !zone ? createISOTime() : ''}`
-			);
+			const normalizeDate = (date: string): string => {
+				const res = /(\d{2,4})(?<ds>[-.\/])(\d{2})\k<ds>(\d{2,4})/.exec(date);
+
+				if (!res) {
+					return date;
+				}
+
+				let year = res[1].length === 4 ? res[1] : res[4];
+				const day = res[1].length === 2 ? res[1] : res[4];
+
+				return `${year}-${res[3]}-${day}`;
+			};
+
+			const result = isDateStr.exec(pattern),
+				groups = result?.groups;
+
+			if (groups) {
+				pattern = `${normalizeDate(groups.date)}T${groups.time || '00:00:01'}${groups.zone === 'Z' || !groups.zone ? createISOTime() : ''}`
+			}
 
 		} else {
 			return new Date(pattern);
