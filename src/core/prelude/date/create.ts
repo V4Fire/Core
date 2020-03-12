@@ -13,10 +13,6 @@ extend(Date.prototype, 'clone', function (this: Date): Date {
 	return new Date(this);
 });
 
-const
-	isDateStr = /^(\d{2,4}[-.\/]\d{2}[-.\/]\d{2,4})([T ])?(\d{2}:\d{2}:\d{2}(?:\.\d{3})?)?(?:\d{0,3})?(Z)?([+-]\d{2}:?\d{2})?$/,
-	isFloatStr = /^\d+\.\d+$/;
-
 const aliases = Object.createDict({
 	now: () => new Date(),
 	today: () => new Date().beginningOfDay(),
@@ -33,6 +29,11 @@ const aliases = Object.createDict({
 		return v.beginningOfDay();
 	}
 });
+
+const
+	isDateStr = /^(\d{2,4}[-.\/]\d{2}[-.\/]\d{2,4})([T ])?(\d{2}:\d{2}:\d{2}(?:\.\d{3})?)?(?:\d{0,3})?(Z)?([+-]\d{2}:?\d{2})?$/,
+	dateNormalizeRgxp = /(\d{2,4})[-.\/](\d{2})[-.\/](\d{2,4})/,
+	isFloatStr = /^\d+\.\d+$/;
 
 /** @see Date.prototype.create */
 extend(Date, 'create', (pattern?: DateCreateValue) => {
@@ -54,23 +55,25 @@ extend(Date, 'create', (pattern?: DateCreateValue) => {
 				return `${h <= 0 ? '+' : '-'}${abs > 9 ? abs : `0${abs}`}:00`;
 			};
 
-			const normalizeDate = (date: string): string => {
-				const res = /(\d{2,4})[-.\/](\d{2})[-.\/](\d{2,4})/.exec(date);
+			const normalizeDate = (date) => {
+				const
+					chunks = dateNormalizeRgxp.exec(date);
 
-				if (!res) {
+				if (!chunks) {
 					return date;
 				}
 
 				const
-					year = res[1].length === 4 ? res[1] : res[3],
-					day = res[1].length === 2 ? res[1] : res[3];
+					year = chunks[1].length === 4 ? chunks[1] : chunks[3],
+					day = chunks[1].length === 2 ? chunks[1] : chunks[3];
 
-				return `${year}-${res[2]}-${day}`;
+				return `${year}-${chunks[2]}-${day}`;
 			};
 
 			pattern = pattern.replace(
 				isDateStr,
-				(str, date, t, time, zone) => `${normalizeDate(date)}T${time || '00:00:01'}${zone === 'Z' || !zone ? createISOTime() : ''}`
+				(str, date, t, time, zone) =>
+					`${normalizeDate(date)}T${time || '00:00:01'}${zone === 'Z' || !zone ? createISOTime() : ''}`
 			);
 
 		} else {
