@@ -75,6 +75,7 @@ export function bindMutationHooks<T extends object>(
 						obj,
 						top: opts.top,
 						isRoot: Boolean(opts.isRoot),
+						fromProto: Boolean(opts.fromProto),
 						path: a[2]
 					});
 				}

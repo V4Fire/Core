@@ -9,7 +9,16 @@
 import { toProxyObject, toOriginalObject, watchOptions, watchHandlers } from 'core/object/watch/const';
 import { bindMutationHooks } from 'core/object/watch/wrap';
 import { unwrap, proxyType, getProxyValue } from 'core/object/watch/engines/helpers';
-import { WatchPath, WatchHandler, WatchHandlersMap, WatchOptions, Watcher } from 'core/object/watch/interface';
+import {
+
+	WatchPath,
+	WatchHandler,
+	WatchHandlersMap,
+	WatchOptions,
+	InternalWatchOptions,
+	Watcher
+
+} from 'core/object/watch/interface';
 
 /**
  * Watches for changes of the specified object by using accessors
@@ -40,7 +49,7 @@ export function watch<T>(
 	obj: T,
 	path: CanUndef<unknown[]>,
 	cb: Nullable<WatchHandler>,
-	opts: CanUndef<WatchOptions>,
+	opts: CanUndef<InternalWatchOptions>,
 	top: object,
 	handlers: WatchHandlersMap
 ): T;
@@ -49,7 +58,7 @@ export function watch<T>(
 	obj: T,
 	path: CanUndef<unknown[]>,
 	cb: Nullable<WatchHandler>,
-	opts?: WatchOptions,
+	opts?: InternalWatchOptions,
 	top?: object,
 	handlers?: WatchHandlersMap
 ): Watcher<T> | T {
@@ -96,6 +105,10 @@ export function watch<T>(
 		opts = tmpOpts;
 	}
 
+	if (opts?.fromProto === 1) {
+		opts.fromProto = true;
+	}
+
 	let
 		proxy = unwrappedObj[toProxyObject];
 
@@ -107,10 +120,15 @@ export function watch<T>(
 		return returnProxy(unwrappedObj);
 	}
 
+	const
+		isRoot = path === undefined,
+		fromProto = Boolean(opts?.fromProto);
+
 	const wrapOpts = {
 		top,
 		path,
-		isRoot: path === undefined,
+		isRoot,
+		fromProto,
 		watchOpts: opts
 	};
 
@@ -131,8 +149,19 @@ export function watch<T>(
 			(<object>unwrappedObj)[toProxyObject] ||
 			Object.create(unwrappedObj);
 
-		for (let keys = Object.keys(unwrappedObj), i = 0; i < keys.length; i++) {
-			setWatchAccessors(unwrappedObj, keys[i], path, handlers!, top, opts);
+		for (const key in unwrappedObj) {
+			let
+				propFromProto: boolean | 1 = fromProto;
+
+			if (!Object.hasOwnProperty(unwrappedObj, key)) {
+				propFromProto = !propFromProto ? 1 : true;
+
+				if (opts?.fromProto && !opts?.withProto) {
+					continue;
+				}
+			}
+
+			setWatchAccessors(unwrappedObj, key, path, handlers!, top, {...opts, fromProto: propFromProto});
 		}
 
 		proxy[toOriginalObject] = unwrappedObj;
@@ -266,7 +295,7 @@ export function setWatchAccessors(
 	path: CanUndef<unknown[]>,
 	handlers: WatchHandlersMap,
 	top?: object,
-	opts?: WatchOptions
+	opts?: InternalWatchOptions
 ): Dictionary {
 	const
 		proxy = obj[toProxyObject] = obj[toProxyObject] || Object.create(obj);
@@ -285,12 +314,19 @@ export function setWatchAccessors(
 			},
 
 			set(val: unknown): void {
+				let
+					fromProto = opts?.fromProto || false;
+
 				const
 					oldVal = obj[key];
 
 				if (oldVal !== val) {
 					try {
 						obj[key] = val;
+
+						if (fromProto === 1) {
+							fromProto = opts!.fromProto = false;
+						}
 
 					} catch {
 						return;
@@ -305,6 +341,7 @@ export function setWatchAccessors(
 								obj,
 								top,
 								isRoot,
+								fromProto,
 								path: (<unknown[]>[]).concat(path ?? [], key)
 							});
 						}

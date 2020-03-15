@@ -27,6 +27,12 @@ export interface WrapOptions {
 	isRoot?: boolean;
 
 	/**
+	 * True if the property to watch is taken from a prototype
+	 * @default `false`
+	 */
+	fromProto?: boolean;
+
+	/**
 	 * Watch options
 	 */
 	watchOpts?: WatchOptions;

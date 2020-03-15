@@ -219,6 +219,7 @@ export function watch<T extends object>(
 
 	const
 		deep = opts?.deep,
+		withProto = opts?.withProto,
 		immediate = opts?.immediate,
 		collapse = normalizedPath ? opts?.collapse !== false : opts?.collapse;
 
@@ -246,7 +247,7 @@ export function watch<T extends object>(
 			argsQueue = <unknown[][]>[];
 
 		handler = (val, oldVal, info) => {
-			if (!deep && info.path.length > 1) {
+			if (!deep && info.path.length > (Object.isDictionary(info.obj) ? 1 : 2) || !withProto && info.fromProto) {
 				return;
 			}
 
@@ -469,8 +470,7 @@ export function watch<T extends object>(
 		res = (typeof Proxy === 'function' ? proxyEngine : accEngine).watch(obj, undefined, handler, opts);
 
 	const
-		proxy = res.proxy,
-		{hasOwnProperty} = Object.prototype;
+		proxy = res.proxy;
 
 	if (tiedWith && Object.isSimpleObject(proxy)) {
 		tiedWith[toOriginalObject] = proxy[toOriginalObject];
@@ -479,7 +479,7 @@ export function watch<T extends object>(
 			const
 				key = keys[i];
 
-			if (hasOwnProperty.call(tiedWith, key)) {
+			if (Object.hasOwnProperty(tiedWith, key)) {
 				continue;
 			}
 

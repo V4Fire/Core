@@ -9,7 +9,16 @@
 import { toProxyObject, toOriginalObject, watchOptions, watchHandlers } from 'core/object/watch/const';
 import { bindMutationHooks } from 'core/object/watch/wrap';
 import { unwrap, proxyType, getProxyValue } from 'core/object/watch/engines/helpers';
-import { WatchPath, WatchHandler, WatchHandlersMap, WatchOptions, Watcher } from 'core/object/watch/interface';
+import {
+
+	WatchPath,
+	WatchHandler,
+	WatchHandlersMap,
+	WatchOptions,
+	InternalWatchOptions,
+	Watcher
+
+} from 'core/object/watch/interface';
 
 /**
  * Watches for changes of the specified object by using Proxy objects
@@ -40,7 +49,7 @@ export function watch<T>(
 	obj: T,
 	path: CanUndef<unknown[]>,
 	cb: Nullable<WatchHandler>,
-	opts: CanUndef<WatchOptions>,
+	opts: CanUndef<InternalWatchOptions>,
 	top: object,
 	handlers: WatchHandlersMap
 ): T;
@@ -49,7 +58,7 @@ export function watch<T>(
 	obj: T,
 	path: CanUndef<unknown[]>,
 	cb: Nullable<WatchHandler>,
-	opts?: WatchOptions,
+	opts?: InternalWatchOptions,
 	top?: object,
 	handlers?: WatchHandlersMap
 ): Watcher<T> | T {
@@ -108,10 +117,19 @@ export function watch<T>(
 	}
 
 	const
-		isRoot = path === undefined;
+		isRoot = path === undefined,
+		fromProto = Boolean(opts?.fromProto);
 
 	if (!Object.isDictionary(unwrappedObj) && !Object.isArray(unwrappedObj)) {
-		bindMutationHooks(unwrappedObj, {top, path, isRoot, watchOpts: opts}, handlers!);
+		const wrapOpts = {
+			top,
+			path,
+			isRoot,
+			fromProto,
+			watchOpts: opts
+		};
+
+		bindMutationHooks(unwrappedObj, wrapOpts, handlers!);
 	}
 
 	proxy = new Proxy(unwrappedObj, {
@@ -130,11 +148,18 @@ export function watch<T>(
 			}
 
 			if (isCustomObj) {
+				let
+					propFromProto = fromProto;
+
 				if (isArray && String(Number(key)) === key) {
 					key = Number(key);
 				}
 
-				return getProxyValue(val, key, path, handlers!, top, opts);
+				if (propFromProto || !isArray && !Object.hasOwnProperty(target, <string>key)) {
+					propFromProto = true;
+				}
+
+				return getProxyValue(val, key, path, handlers!, top, {...opts, fromProto: propFromProto});
 			}
 
 			return Object.isFunction(val) ? val.bind(target) : val;
@@ -146,14 +171,15 @@ export function watch<T>(
 			}
 
 			const
-				isCustomObj = Object.isCustomObject(target),
+				isArray = Object.isArray(target),
+				isCustomObj = isArray || Object.isCustomObject(target),
 				set = () => Reflect.set(target, key, val, isCustomObj ? receiver : target);
 
 			if (Object.isSymbol(key)) {
 				return set();
 			}
 
-			if (Object.isArray(target) && String(Number(key)) === key) {
+			if (isArray && String(Number(key)) === key) {
 				key = Number(key);
 			}
 
@@ -161,6 +187,10 @@ export function watch<T>(
 				oldVal = Reflect.get(target, key, isCustomObj ? receiver : target);
 
 			if (oldVal !== val && set()) {
+				if (!opts?.withProto && (fromProto || !isArray && !Object.hasOwnProperty(target, <string>key))) {
+					return true;
+				}
+
 				for (let o = handlers!.entries(), el = o.next(); !el.done; el = o.next()) {
 					const
 						[handler, state] = el.value;
@@ -170,6 +200,7 @@ export function watch<T>(
 							obj: unwrappedObj,
 							top,
 							isRoot,
+							fromProto,
 							path: (<unknown[]>[]).concat(path ?? [], key)
 						});
 					}

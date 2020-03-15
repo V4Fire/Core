@@ -11,7 +11,7 @@ import { toOriginalObject } from 'core/object/watch/const';
 import * as proxyEngine from 'core/object/watch/engines/proxy';
 import * as accEngine from 'core/object/watch/engines/accessors';
 
-import { WatchHandlersMap, WatchOptions } from 'core/object/watch/interface';
+import { WatchHandlersMap, InternalWatchOptions } from 'core/object/watch/interface';
 
 /**
  * Unwraps the specified value to watch and returns a raw object to watch
@@ -62,8 +62,12 @@ export function getProxyValue(
 	path: CanUndef<unknown[]>,
 	handlers: WatchHandlersMap,
 	top?: object,
-	opts?: WatchOptions
+	opts?: InternalWatchOptions
 ): unknown {
+	if (opts?.fromProto && !opts.withProto) {
+		return rawValue;
+	}
+
 	if (opts?.deep && proxyType(rawValue)) {
 		const fullPath = (<unknown[]>[]).concat(path ?? [], key);
 		return (typeof Proxy === 'function' ? proxyEngine : accEngine)

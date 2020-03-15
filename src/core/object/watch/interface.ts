@@ -26,6 +26,12 @@ export interface WatchOptions {
 	deep?: boolean;
 
 	/**
+	 * If true, then the callback of changing is also fired on mutation of objects from a prototype
+	 * @default `false`
+	 */
+	withProto?: boolean;
+
+	/**
 	 * If true, then all mutation events will be fired immediately
 	 * @default `false`
 	 */
@@ -129,6 +135,10 @@ export interface WatchOptions {
 	dependencies?: WatchDependencies;
 }
 
+export interface InternalWatchOptions extends WatchOptions {
+	fromProto?: boolean | 1;
+}
+
 /**
  * Parameters of a mutation event
  */
@@ -152,6 +162,8 @@ export interface WatchHandlerParams {
 	 * Path to a property that was changed
 	 */
 	path: unknown[];
+
+	fromProto: boolean;
 }
 
 export interface WatchHandler<NEW = unknown, OLD = NEW> {
