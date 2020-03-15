@@ -6,10 +6,13 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import { getProxyValue } from 'core/object/watch/engines/helpers';
+import { WrapParams } from 'core/object/watch/wrap/interface';
+
 export const deleteMethods = {
-	delete: (target: Map<any, any> | Set<any>, path, key) => {
+	delete: (target: Map<any, any> | Set<any>, opts: WrapParams, key) => {
 		if (target.has(key)) {
-			return [[undefined, [].concat(path ?? [], key), 'get' in target ? target.get(key) : key]];
+			return [[undefined, (<unknown[]>[]).concat(opts.path ?? [], key), 'get' in target ? target.get(key) : key]];
 		}
 
 		return null;
@@ -17,26 +20,32 @@ export const deleteMethods = {
 };
 
 export const clearMethods = {
-	clear: (target: Set<any>, path) => target.size !== 0 ? [[
-		undefined, undefined, [].concat(path ?? [])
+	clear: (target: Set<any>, opts: WrapParams) => target.size !== 0 ? [[
+		undefined, undefined, (<unknown[]>[]).concat(opts.path ?? [])
 	]] : null
 };
 
 export const weakMapMethods = {
 	...deleteMethods,
 
-	set: (target: WeakMap<any, any>, path, key, val) => {
+	get: {
+		type: 'get',
+		value: (target: WeakMap<any, any>, opts: WrapParams, key) =>
+			getProxyValue(opts.original.call(target, key), key, opts.path, opts.handlers, top, opts.watchOpts)
+	},
+
+	set: (target: WeakMap<any, any>, opts: WrapParams, key, val) => {
 		const oldVal = target.get(key);
-		return oldVal !== val ? [[val, oldVal, [].concat(path ?? [], key)]] : null;
+		return oldVal !== val ? [[val, oldVal, (<unknown[]>[]).concat(opts.path ?? [], key)]] : null;
 	}
 };
 
 export const weakSetMethods = {
 	...deleteMethods,
 
-	add: (target: WeakMap<any, any>, path, val) => {
+	add: (target: WeakMap<any, any>, opts: WrapParams, val) => {
 		if (!target.has(val)) {
-			return [[val, undefined, [].concat(path ?? [], val)]];
+			return [[val, undefined, (<unknown[]>[]).concat(opts.path ?? [], val)]];
 		}
 
 		return null;
@@ -74,37 +83,37 @@ export const structureWrappers = Object.createDict({
 	array: {
 		is: Object.isArray,
 		methods: {
-			push: (target: unknown[], path, ...val) => {
+			push: (target: unknown[], opts: WrapParams, ...val) => {
 				const
 					res = <unknown[][]>[];
 
 				for (let i = 0; i < val.length; i++) {
-					res.push([val[i], undefined, (<number[]>[]).concat(path ?? [], target.length)]);
+					res.push([val[i], undefined, (<unknown[]>[]).concat(opts.path ?? [], target.length)]);
 				}
 
 				return res;
 			},
 
-			pop: (target: unknown[], path) => {
+			pop: (target: unknown[], opts: WrapParams) => {
 				const l = target.length - 1;
-				return l >= 0 ? [undefined, target[l], (<any[]>[]).concat(path ?? [], l)] : null;
+				return l >= 0 ? [undefined, target[l], (<unknown[]>[]).concat(opts.path ?? [], l)] : null;
 			},
 
-			unshift: (target: unknown[], path, val) => {
+			unshift: (target: unknown[], opts: WrapParams, val) => {
 				const
 					res = <unknown[][]>[];
 
 				for (let i = 0; i < val.length; i++) {
-					res.push([val[i], i ? val[i - 1] : target[0], (<number[]>[]).concat(path ?? [], 0)]);
+					res.push([val[i], i ? val[i - 1] : target[0], (<unknown[]>[]).concat(opts.path ?? [], 0)]);
 				}
 
 				return res;
 			},
 
-			shift: (target: unknown[], path) =>
-				target.length ? [target[1], target[0], (<number[]>[]).concat(path ?? [], 0)] : null,
+			shift: (target: unknown[], opts: WrapParams) =>
+				target.length ? [target[1], target[0], (<unknown[]>[]).concat(opts.path ?? [], 0)] : null,
 
-			splice: (target: unknown[], path, start, deleteCount, ...args) => {
+			splice: (target: unknown[], opts: WrapParams, start, deleteCount, ...args) => {
 				if (deleteCount <= 0 && !args.length) {
 					return null;
 				}
@@ -125,15 +134,15 @@ export const structureWrappers = Object.createDict({
 						break;
 					}
 
-					res.push([args[i], range[i], (<number[]>[]).concat(path ?? [], i)]);
+					res.push([args[i], range[i], (<unknown[]>[]).concat(opts.path ?? [], i)]);
 				}
 
 				if (i < range.length) {
-					res.push([target.length - delLength, target.length, (<string[]>[]).concat(path ?? [], 'length')]);
+					res.push([target.length - delLength, target.length, (<unknown[]>[]).concat(opts.path ?? [], 'length')]);
 
 				} else if (i < args.length) {
 					for (; i < args.length; i++) {
-						res.push([args[i], undefined, (<number[]>[]).concat(path ?? [], i)]);
+						res.push([args[i], undefined, (<unknown[]>[]).concat(opts.path ?? [], i)]);
 					}
 				}
 

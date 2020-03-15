@@ -129,25 +129,6 @@ export interface WatchOptions {
 	dependencies?: WatchDependencies;
 }
 
-export interface WrapOptions {
-	/**
-	 * Link a top property of watching
-	 */
-	top?: object;
-
-	/**
-	 * Base path to object properties:
-	 * it is provided to a watch handler with parameters
-	 */
-	path?: unknown[];
-
-	/**
-	 * True if an object that is wrapped is the root of watching
-	 * @default `false`
-	 */
-	isRoot?: boolean;
-}
-
 /**
  * Parameters of a mutation event
  */
@@ -180,3 +161,5 @@ export interface WatchHandler<NEW = unknown, OLD = NEW> {
 export interface MultipleWatchHandler<NEW = unknown, OLD = NEW> {
 	(mutations: [CanUndef<NEW>, CanUndef<OLD>, WatchHandlerParams]): any;
 }
+
+export type WatchHandlersMap = Map<WatchHandler, boolean>;

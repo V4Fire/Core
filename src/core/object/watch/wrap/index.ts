@@ -7,7 +7,10 @@
  */
 
 import { structureWrappers } from 'core/object/watch/wrap/const';
-import { WrapOptions, WatchHandler } from 'core/object/watch/interface';
+import { WatchHandlersMap } from 'core/object/watch/interface';
+
+import { WrapOptions } from 'core/object/watch/wrap/interface';
+export * from 'core/object/watch/wrap/interface';
 
 /**
  * Wraps mutation methods of the specified object that they be able to emit events about mutations
@@ -27,7 +30,7 @@ import { WrapOptions, WatchHandler } from 'core/object/watch/interface';
  * arr.push(3);
  * ```
  */
-export function bindMutationHooks<T extends object>(obj: T, opts: WrapOptions, handlers: Map<WatchHandler, boolean>): T;
+export function bindMutationHooks<T extends object>(obj: T, opts: WrapOptions, handlers: WatchHandlersMap): T;
 
 /**
  * Wraps mutation methods of the specified object that they be able to emit events about mutations
@@ -35,14 +38,14 @@ export function bindMutationHooks<T extends object>(obj: T, opts: WrapOptions, h
  * @param obj
  * @param handlers - set of callbacks that are invoked on every mutation hooks
  */
-export function bindMutationHooks<T extends object>(obj: T, handlers: Map<WatchHandler, boolean>): T;
+export function bindMutationHooks<T extends object>(obj: T, handlers: WatchHandlersMap): T;
 export function bindMutationHooks<T extends object>(
 	obj: T,
-	optsOrHandlers: Map<WatchHandler, boolean> | WrapOptions,
-	handlersOrOpts?: WrapOptions | Map<WatchHandler, boolean>
+	optsOrHandlers: WatchHandlersMap | WrapOptions,
+	handlersOrOpts?: WrapOptions | WatchHandlersMap
 ): T {
 	let
-		handlers: Map<WatchHandler, boolean>,
+		handlers: WatchHandlersMap,
 		opts;
 
 	if (Object.isMap(handlersOrOpts)) {
@@ -90,19 +93,31 @@ export function bindMutationHooks<T extends object>(
 
 		for (let keys = Object.keys(el.methods), i = 0; i < keys.length; i++) {
 			const
-				method = keys[i],
-				getArgs = el.methods[method],
-				original = obj[method];
+				methodName = keys[i],
+				method = el.methods[methodName],
+				original = obj[methodName];
 
-			if (!getArgs) {
+			if (!method) {
 				continue;
 			}
 
-			Object.defineProperty(obj, method, {
+			Object.defineProperty(obj, methodName, {
 				writable: true,
 				configurable: true,
 				value: (...args) => {
-					wrappedCb(getArgs(obj, opts.path, ...args));
+					const wrapperOpts = {
+						...opts,
+						handlers,
+						original
+					};
+
+					if (Object.isFunction(method)) {
+						wrappedCb(method(obj, wrapperOpts, ...args));
+
+					} else if (method.type === 'get') {
+						return method.value(obj, wrapperOpts, ...args);
+					}
+
 					return original.apply(obj, args);
 				}
 			});

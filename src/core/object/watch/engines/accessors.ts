@@ -9,7 +9,7 @@
 import { toProxyObject, toOriginalObject, watchOptions, watchHandlers } from 'core/object/watch/const';
 import { bindMutationHooks } from 'core/object/watch/wrap';
 import { unwrap, proxyType, getProxyValue } from 'core/object/watch/engines/helpers';
-import { WatchPath, WatchHandler, WatchOptions, Watcher } from 'core/object/watch/interface';
+import { WatchPath, WatchHandler, WatchHandlersMap, WatchOptions, Watcher } from 'core/object/watch/interface';
 
 /**
  * Watches for changes of the specified object by using accessors
@@ -42,7 +42,7 @@ export function watch<T>(
 	cb: Nullable<WatchHandler>,
 	opts: CanUndef<WatchOptions>,
 	top: object,
-	handlers: Map<WatchHandler, boolean>
+	handlers: WatchHandlersMap
 ): T;
 
 export function watch<T>(
@@ -51,7 +51,7 @@ export function watch<T>(
 	cb: Nullable<WatchHandler>,
 	opts?: WatchOptions,
 	top?: object,
-	handlers?: Map<WatchHandler, boolean>
+	handlers?: WatchHandlersMap
 ): Watcher<T> | T {
 	const
 		unwrappedObj = unwrap(obj);
@@ -107,9 +107,16 @@ export function watch<T>(
 		return returnProxy(unwrappedObj);
 	}
 
+	const wrapOpts = {
+		top,
+		path,
+		isRoot: path === undefined,
+		watchOpts: opts
+	};
+
 	if (Object.isArray(unwrappedObj)) {
 		const proxy = unwrappedObj[toProxyObject] = unwrappedObj[toProxyObject] || unwrappedObj.slice();
-		bindMutationHooks(proxy, {top, path, isRoot: path === undefined}, handlers!);
+		bindMutationHooks(proxy, wrapOpts, handlers!);
 
 		for (let i = 0; i < proxy.length; i++) {
 			proxy[i] = getProxyValue(proxy[i], i, path, handlers!, top, opts);
@@ -128,7 +135,7 @@ export function watch<T>(
 		return returnProxy(unwrappedObj, proxy);
 	}
 
-	bindMutationHooks(unwrappedObj, {top, path, isRoot: path === undefined}, handlers!);
+	bindMutationHooks(unwrappedObj, wrapOpts, handlers!);
 	return returnProxy(unwrappedObj, unwrappedObj);
 }
 
@@ -253,7 +260,7 @@ export function setWatchAccessors(
 	obj: object,
 	key: string,
 	path: CanUndef<unknown[]>,
-	handlers: Map<WatchHandler, boolean>,
+	handlers: WatchHandlersMap,
 	top?: object,
 	opts?: WatchOptions
 ): Dictionary {

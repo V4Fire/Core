@@ -12,12 +12,20 @@
  */
 
 import { toOriginalObject } from 'core/object/watch/const';
-
 import { unwrap } from 'core/object/watch/engines/helpers';
+
 import * as proxyEngine from 'core/object/watch/engines/proxy';
 import * as accEngine from 'core/object/watch/engines/accessors';
 
-import { WatchPath, WatchOptions, WatchHandler, MultipleWatchHandler, Watcher } from 'core/object/watch/interface';
+import {
+
+	WatchPath,
+	WatchOptions,
+	WatchHandler,
+	MultipleWatchHandler,
+	Watcher
+
+} from 'core/object/watch/interface';
 
 export * from 'core/object/watch/const';
 export * from 'core/object/watch/interface';
