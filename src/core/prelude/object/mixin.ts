@@ -8,9 +8,6 @@
 
 import extend from 'core/prelude/extend';
 
-const
-	hasOwnProperty = Object.prototype.hasOwnProperty;
-
 /** @see ObjectConstructor.mixin */
 extend(Object, 'mixin', (opts: ObjectMixinOptions | boolean, base: any, ...objects: any[]) => {
 	const
@@ -196,7 +193,7 @@ extend(Object, 'mixin', (opts: ObjectMixinOptions | boolean, base: any, ...objec
 				let
 					srcIsArray = Object.isArray(oldVal);
 
-				if (canExtendSrcProto && !hasOwnProperty.call(base, key)) {
+				if (canExtendSrcProto && !Object.hasOwnProperty(base, key)) {
 					oldVal = srcIsArray ? (<unknown[]>oldVal).slice() : Object.create(<object>oldVal);
 					Object.set(base, [key], oldVal);
 				}

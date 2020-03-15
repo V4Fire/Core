@@ -96,6 +96,9 @@ extend(Object, 'has', (
 	return has;
 });
 
+const
+	{hasOwnProperty} = {};
+
 /** @see ObjectConstructor.hasOwnProperty */
 extend(Object, 'hasOwnProperty', (obj: any, key?: string) => {
 	if (!obj || typeof obj !== 'object') {
@@ -107,10 +110,10 @@ extend(Object, 'hasOwnProperty', (obj: any, key?: string) => {
 	}
 
 	if (key === undefined) {
-		return (key) => obj.hasOwnProperty(key);
+		return (key) => hasOwnProperty.call(obj, key);
 	}
 
-	return obj.hasOwnProperty(key);
+	return hasOwnProperty.call(obj, key);
 });
 
 /** @see ObjectConstructor.set */

@@ -8,9 +8,6 @@
 
 import extend from 'core/prelude/extend';
 
-const
-	hasOwnProperty = Object.prototype.hasOwnProperty;
-
 /** @see ObjectConstructor.forEach */
 extend(Object, 'forEach', (
 	obj: unknown,
@@ -63,7 +60,7 @@ extend(Object, 'forEach', (
 
 	if (opts?.notOwn) {
 		for (const key in obj) {
-			if (opts?.notOwn === -1 && hasOwnProperty.call(obj, key)) {
+			if (opts?.notOwn === -1 && Object.hasOwnProperty(obj, key)) {
 				continue;
 			}
 
