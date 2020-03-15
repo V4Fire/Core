@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { toProxyObject, toOriginalObject, watchOptions, watchHandlers } from 'core/object/watch/const';
+import { toProxyObject, toOriginalObject, watchOptions, watchHandlers, blackList } from 'core/object/watch/const';
 import { bindMutationHooks } from 'core/object/watch/wrap';
 import { unwrap, proxyType, getProxyValue } from 'core/object/watch/engines/helpers';
 import {
@@ -132,6 +132,9 @@ export function watch<T>(
 		bindMutationHooks(unwrappedObj, wrapOpts, handlers!);
 	}
 
+	const
+		blackListStore = new Set();
+
 	proxy = new Proxy(unwrappedObj, {
 		get: (target, key, receiver) => {
 			if (key === toOriginalObject) {
@@ -143,7 +146,7 @@ export function watch<T>(
 				isCustomObj = isArray || Object.isCustomObject(target),
 				val = Reflect.get(target, key, isCustomObj ? receiver : target);
 
-			if (Object.isSymbol(key)) {
+			if (Object.isSymbol(key) || blackListStore.has(key)) {
 				return val;
 			}
 
@@ -175,7 +178,7 @@ export function watch<T>(
 				isCustomObj = isArray || Object.isCustomObject(target),
 				set = () => Reflect.set(target, key, val, isCustomObj ? receiver : target);
 
-			if (Object.isSymbol(key)) {
+			if (Object.isSymbol(key) || blackListStore.has(key)) {
 				return set();
 			}
 
@@ -208,10 +211,24 @@ export function watch<T>(
 			}
 
 			return true;
+		},
+
+		deleteProperty: (target, key) => {
+			if (Reflect.deleteProperty(target, key)) {
+				if (Object.isDictionary(target) || Object.isMap(target) || Object.isWeakMap(target)) {
+					blackListStore.add(key);
+				}
+
+				return true;
+			}
+
+			return false;
 		}
 	});
 
+	unwrappedObj[blackList] = blackListStore;
 	unwrappedObj[toProxyObject] = proxy;
+
 	return returnProxy(unwrappedObj, proxy);
 }
 
@@ -238,7 +255,8 @@ export function set(obj: object, path: WatchPath, value: unknown): void {
 		refPath = normalizedPath.slice(0, -1);
 
 	const
-		ref = Object.get(unwrappedObj[toProxyObject] || unwrappedObj, refPath);
+		ref = Object.get(unwrappedObj[toProxyObject] || unwrappedObj, refPath),
+		blackListStore = (<CanUndef<Set<unknown>>>(<object>ref)[blackList]);
 
 	if (!Object.isDictionary(ref)) {
 		const
@@ -250,13 +268,16 @@ export function set(obj: object, path: WatchPath, value: unknown): void {
 				break;
 
 			case 'map':
+				blackListStore?.delete(prop);
 				(<Map<unknown, unknown>>ref).set(prop, value);
 		}
 
 		return;
 	}
 
-	ref[String(prop)] = value;
+	const key = String(prop);
+	blackListStore?.delete(key);
+	ref[key] = value;
 }
 
 /**
@@ -281,7 +302,8 @@ export function unset(obj: object, path: WatchPath): void {
 		refPath = normalizedPath.slice(0, -1);
 
 	const
-		ref = Object.get(unwrappedObj[toProxyObject] || unwrappedObj, refPath);
+		ref = Object.get(unwrappedObj[toProxyObject] || unwrappedObj, refPath),
+		blackListStore = (<CanUndef<Set<unknown>>>(<object>ref)[blackList]);
 
 	if (!Object.isDictionary(ref)) {
 		const
@@ -294,11 +316,14 @@ export function unset(obj: object, path: WatchPath): void {
 
 			case 'map':
 			case 'set':
+				blackListStore?.delete(prop);
 				(<Map<unknown, unknown>>ref).delete(prop);
 		}
 
 		return;
 	}
 
-	ref[String(prop)] = undefined;
+	const key = String(prop);
+	blackListStore?.delete(key);
+	ref[key] = undefined;
 }

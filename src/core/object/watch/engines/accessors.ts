@@ -181,9 +181,9 @@ export function watch<T>(
  */
 export function set(obj: object, path: WatchPath, value: unknown): void {
 	const
-		rObj = unwrap(obj);
+	unwrappedObj = unwrap(obj);
 
-	if (!rObj) {
+	if (!unwrappedObj) {
 		return;
 	}
 
@@ -193,8 +193,8 @@ export function set(obj: object, path: WatchPath, value: unknown): void {
 		refPath = normalizedPath.slice(0, -1);
 
 	const
-		handlers = rObj[watchHandlers],
-		ref = Object.get(rObj[toProxyObject] || rObj, refPath);
+		handlers = unwrappedObj[watchHandlers],
+		ref = Object.get(unwrappedObj[toProxyObject] || unwrappedObj, refPath);
 
 	if (!Object.isDictionary(ref)) {
 		const
@@ -217,11 +217,11 @@ export function set(obj: object, path: WatchPath, value: unknown): void {
 		top = refPath.length ? ref : undefined;
 
 	if (!handlers) {
-		rObj[key] = value;
+		unwrappedObj[key] = value;
 		return;
 	}
 
-	setWatchAccessors(ref, key, top && refPath, handlers, top, {deep: true})[key] = value;
+	setWatchAccessors(unwrappedObj, key, top && refPath, handlers, top, {deep: true})[key] = value;
 }
 
 /**
@@ -275,7 +275,7 @@ export function unset(obj: object, path: WatchPath): void {
 		return;
 	}
 
-	const proxy = setWatchAccessors(ref, key, top && refPath, handlers, top, {deep: true});
+	const proxy = setWatchAccessors(unwrappedObj, key, top && refPath, handlers, top, {deep: true});
 	proxy[key] = undefined;
 }
 

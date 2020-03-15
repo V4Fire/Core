@@ -10,4 +10,5 @@ export const
 	toProxyObject = Symbol('Link to a proxy object'),
 	toOriginalObject = Symbol('Link to original object'),
 	watchOptions = Symbol('Watch options'),
-	watchHandlers = Symbol('Watch handlers');
+	watchHandlers = Symbol('Watch handlers'),
+	blackList = Symbol('Black list to watch');
