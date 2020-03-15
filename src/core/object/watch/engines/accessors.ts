@@ -127,8 +127,12 @@ export function watch<T>(
 	}
 
 	if (Object.isDictionary(unwrappedObj)) {
+		proxy = (<object>unwrappedObj)[toProxyObject] =
+			(<object>unwrappedObj)[toProxyObject] ||
+			Object.create(unwrappedObj);
+
 		for (let keys = Object.keys(unwrappedObj), i = 0; i < keys.length; i++) {
-			proxy = setWatchAccessors(unwrappedObj, keys[i], path, handlers!, top, opts);
+			setWatchAccessors(unwrappedObj, keys[i], path, handlers!, top, opts);
 		}
 
 		proxy[toOriginalObject] = unwrappedObj;
