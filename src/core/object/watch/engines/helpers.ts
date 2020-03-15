@@ -8,6 +8,11 @@
 
 import { toOriginalObject } from 'core/object/watch/const';
 
+import * as proxyEngine from 'core/object/watch/engines/proxy';
+import * as accEngine from 'core/object/watch/engines/accessors';
+
+import { WatchHandler, WatchOptions } from 'core/object/watch/interface';
+
 /**
  * Unwraps the specified value to watch and returns a raw object to watch
  * @param value
@@ -39,4 +44,31 @@ export function proxyType(obj: unknown): string | false {
 	}
 
 	return false;
+}
+
+/**
+ * Returns a value to poxy from the specified raw value
+ *
+ * @param rawValue
+ * @param key - property key for a value
+ * @param path - base path to object properties: it is provided to a watch handler with parameters
+ * @param handlers - map of registered handlers
+ * @param [top] - link a top property of watching
+ * @param [opts] - additional options
+ */
+export function getProxyValue(
+	rawValue: object,
+	key: unknown,
+	path: CanUndef<unknown[]>,
+	handlers: Map<WatchHandler, boolean>,
+	top?: object,
+	opts?: WatchOptions
+): unknown {
+	if (opts?.deep && proxyType(rawValue)) {
+		const fullPath = (<unknown[]>[]).concat(path ?? [], key);
+		return (typeof Proxy === 'function' ? proxyEngine : accEngine)
+			.watch(rawValue, fullPath, null, opts, top || rawValue, handlers);
+	}
+
+	return rawValue;
 }

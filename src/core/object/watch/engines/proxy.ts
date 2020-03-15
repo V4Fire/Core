@@ -8,7 +8,7 @@
 
 import { toProxyObject, toOriginalObject, watchOptions, watchHandlers } from 'core/object/watch/const';
 import { bindMutationHooks } from 'core/object/watch/wrap';
-import { unwrap, proxyType } from 'core/object/watch/engines/helpers';
+import { unwrap, proxyType, getProxyValue } from 'core/object/watch/engines/helpers';
 import { WatchPath, WatchHandler, WatchOptions, Watcher } from 'core/object/watch/interface';
 
 /**
@@ -121,23 +121,23 @@ export function watch<T>(
 			}
 
 			const
-				isCustomObj = Object.isCustomObject(target),
+				isArray = Object.isArray(target),
+				isCustomObj = isArray || Object.isCustomObject(target),
 				val = Reflect.get(target, key, isCustomObj ? receiver : target);
 
 			if (Object.isSymbol(key)) {
 				return val;
 			}
 
-			if (opts?.deep && proxyType(val)) {
-				const fullPath = (<unknown[]>[]).concat(path ?? [], key);
-				return watch(val, fullPath, null, opts, top || val, handlers!);
+			if (isCustomObj) {
+				if (isArray && String(Number(key)) === key) {
+					key = Number(key);
+				}
+
+				return getProxyValue(val, key, path, handlers!, top, opts);
 			}
 
-			if (Object.isPlainObject(target) || Object.isArray(target)) {
-				return val;
-			}
-
-			return !isCustomObj && Object.isFunction(val) ? val.bind(target) : val;
+			return Object.isFunction(val) ? val.bind(target) : val;
 		},
 
 		set: (target, key, val, receiver) => {

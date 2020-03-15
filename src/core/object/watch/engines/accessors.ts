@@ -8,7 +8,7 @@
 
 import { toProxyObject, toOriginalObject, watchOptions, watchHandlers } from 'core/object/watch/const';
 import { bindMutationHooks } from 'core/object/watch/wrap';
-import { unwrap, proxyType } from 'core/object/watch/engines/helpers';
+import { unwrap, proxyType, getProxyValue } from 'core/object/watch/engines/helpers';
 import { WatchPath, WatchHandler, WatchOptions, Watcher } from 'core/object/watch/interface';
 
 /**
@@ -107,17 +107,29 @@ export function watch<T>(
 		return returnProxy(unwrappedObj);
 	}
 
-	if (!Object.isDictionary(unwrappedObj)) {
-		bindMutationHooks(unwrappedObj, {top, path, isRoot: path === undefined}, handlers!);
-		return returnProxy(unwrappedObj, unwrappedObj);
+	if (Object.isArray(unwrappedObj)) {
+		const proxy = unwrappedObj[toProxyObject] = unwrappedObj[toProxyObject] || unwrappedObj.slice();
+		bindMutationHooks(proxy, {top, path, isRoot: path === undefined}, handlers!);
+
+		for (let i = 0; i < proxy.length; i++) {
+			proxy[i] = getProxyValue(proxy[i], i, path, handlers!, top, opts);
+		}
+
+		proxy[toOriginalObject] = unwrappedObj;
+		return returnProxy(unwrappedObj, proxy);
 	}
 
-	for (let keys = Object.keys(unwrappedObj), i = 0; i < keys.length; i++) {
-		proxy = setWatchAccessors(unwrappedObj, keys[i], path, handlers!, top, opts);
+	if (Object.isDictionary(unwrappedObj)) {
+		for (let keys = Object.keys(unwrappedObj), i = 0; i < keys.length; i++) {
+			proxy = setWatchAccessors(unwrappedObj, keys[i], path, handlers!, top, opts);
+		}
+
+		proxy[toOriginalObject] = unwrappedObj;
+		return returnProxy(unwrappedObj, proxy);
 	}
 
-	proxy[toOriginalObject] = unwrappedObj;
-	return returnProxy(unwrappedObj, proxy);
+	bindMutationHooks(unwrappedObj, {top, path, isRoot: path === undefined}, handlers!);
+	return returnProxy(unwrappedObj, unwrappedObj);
 }
 
 /**
@@ -258,15 +270,7 @@ export function setWatchAccessors(
 			configurable: true,
 
 			get(): unknown {
-				const
-					val = obj[key];
-
-				if (opts?.deep && proxyType(val)) {
-					const fullPath = (<unknown[]>[]).concat(path ?? [], key);
-					return watch(val, fullPath, null, opts, top || val, handlers);
-				}
-
-				return val;
+				return getProxyValue(obj[key], key, path, handlers, top, opts);
 			},
 
 			set(val: unknown): void {
