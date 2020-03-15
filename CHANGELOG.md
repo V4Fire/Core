@@ -11,6 +11,16 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.6.0 (2020-03-15)
+
+#### :rocket: New Feature
+
+* Added `withProto` parameter for `core/object/watch`
+
+#### :bug: Bug Fix
+
+* Fixed `core/object/watch` with nested objects
+
 ## v3.5.3 (2020-03-12)
 
 #### :bug: Bug Fix
