@@ -158,14 +158,14 @@
 					<a name="bindmutationhooks" class="tsd-anchor"></a>
 					<h3>bind<wbr>Mutation<wbr>Hooks</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">bind<wbr>Mutation<wbr>Hooks&lt;T&gt;<span class="tsd-signature-symbol">(</span>obj<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_object_watch_interface.wrapoptions.html" class="tsd-signature-type">WrapOptions</a>, handlers<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Map</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/src_core_object_watch_interface.watchhandler.html" class="tsd-signature-type">WatchHandler</a><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span></li>
-						<li class="tsd-signature tsd-kind-icon">bind<wbr>Mutation<wbr>Hooks&lt;T&gt;<span class="tsd-signature-symbol">(</span>obj<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, handlers<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Map</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/src_core_object_watch_interface.watchhandler.html" class="tsd-signature-type">WatchHandler</a><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span></li>
+						<li class="tsd-signature tsd-kind-icon">bind<wbr>Mutation<wbr>Hooks&lt;T&gt;<span class="tsd-signature-symbol">(</span>obj<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_object_watch_wrap_interface.wrapoptions.html" class="tsd-signature-type">WrapOptions</a>, handlers<span class="tsd-signature-symbol">: </span><a href="src_core_object_watch_interface.html#watchhandlersset" class="tsd-signature-type">WatchHandlersSet</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span></li>
+						<li class="tsd-signature tsd-kind-icon">bind<wbr>Mutation<wbr>Hooks&lt;T&gt;<span class="tsd-signature-symbol">(</span>obj<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, handlers<span class="tsd-signature-symbol">: </span><a href="src_core_object_watch_interface.html#watchhandlersset" class="tsd-signature-type">WatchHandlersSet</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/object/watch/wrap/index.ts#L30">src/core/object/watch/wrap/index.ts:30</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/object/watch/wrap/index.ts#L33">src/core/object/watch/wrap/index.ts:33</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -196,13 +196,13 @@ arr.push(<span class="hljs-number">3</span>);</code></pre>
 									<h5>obj: <span class="tsd-signature-type">T</span></h5>
 								</li>
 								<li>
-									<h5>opts: <a href="../interfaces/src_core_object_watch_interface.wrapoptions.html" class="tsd-signature-type">WrapOptions</a></h5>
+									<h5>opts: <a href="../interfaces/src_core_object_watch_wrap_interface.wrapoptions.html" class="tsd-signature-type">WrapOptions</a></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>additional options</p>
 									</div>
 								</li>
 								<li>
-									<h5>handlers: <span class="tsd-signature-type">Map</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/src_core_object_watch_interface.watchhandler.html" class="tsd-signature-type">WatchHandler</a><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>handlers: <a href="src_core_object_watch_interface.html#watchhandlersset" class="tsd-signature-type">WatchHandlersSet</a></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>set of callbacks that are invoked on every mutation hooks</p>
 									</div>
@@ -213,7 +213,7 @@ arr.push(<span class="hljs-number">3</span>);</code></pre>
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/object/watch/wrap/index.ts#L38">src/core/object/watch/wrap/index.ts:38</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/object/watch/wrap/index.ts#L41">src/core/object/watch/wrap/index.ts:41</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -233,7 +233,7 @@ arr.push(<span class="hljs-number">3</span>);</code></pre>
 									<h5>obj: <span class="tsd-signature-type">T</span></h5>
 								</li>
 								<li>
-									<h5>handlers: <span class="tsd-signature-type">Map</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/src_core_object_watch_interface.watchhandler.html" class="tsd-signature-type">WatchHandler</a><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>handlers: <a href="src_core_object_watch_interface.html#watchhandlersset" class="tsd-signature-type">WatchHandlersSet</a></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>set of callbacks that are invoked on every mutation hooks</p>
 									</div>
