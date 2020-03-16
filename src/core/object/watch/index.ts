@@ -36,7 +36,7 @@ export * from 'core/object/watch/interface';
  * @param obj
  * @param handler - callback that is invoked on every mutation hook
  */
-export function watch<T extends object>(obj: T, handler: MultipleWatchHandler): Watcher<T>;
+export default function watch<T extends object>(obj: T, handler: MultipleWatchHandler): Watcher<T>;
 
 /**
  * Watches for changes of the specified object
@@ -45,7 +45,7 @@ export function watch<T extends object>(obj: T, handler: MultipleWatchHandler): 
  * @param opts - additional options
  * @param handler - callback that is invoked on every mutation hook
  */
-export function watch<T extends object>(
+export default function watch<T extends object>(
 	obj: T,
 	opts: WatchOptions & ({immediate: true} | {collapse: true}),
 	handler: WatchHandler
@@ -58,7 +58,7 @@ export function watch<T extends object>(
  * @param opts - additional options
  * @param handler - callback that is invoked on every mutation hook
  */
-export function watch<T extends object>(obj: T, opts: WatchOptions, handler: MultipleWatchHandler): Watcher<T>;
+export default function watch<T extends object>(obj: T, opts: WatchOptions, handler: MultipleWatchHandler): Watcher<T>;
 
 /**
  * Watches for changes of the specified object
@@ -67,7 +67,7 @@ export function watch<T extends object>(obj: T, opts: WatchOptions, handler: Mul
  * @param path - path to a property to watch
  * @param handler - callback that is invoked on every mutation hook
  */
-export function watch<T extends object>(
+export default function watch<T extends object>(
 	obj: T,
 	// tslint:disable-next-line:unified-signatures
 	path: WatchPath,
@@ -82,7 +82,7 @@ export function watch<T extends object>(
  * @param opts - additional options
  * @param handler - callback that is invoked on every mutation hook
  */
-export function watch<T extends object>(
+export default function watch<T extends object>(
 	obj: T,
 	path: WatchPath,
 	opts: WatchOptions & ({immediate: true} | {collapse: true}),
@@ -97,14 +97,14 @@ export function watch<T extends object>(
  * @param opts - additional options
  * @param handler - callback that is invoked on every mutation hook
  */
-export function watch<T extends object>(
+export default function watch<T extends object>(
 	obj: T,
 	path: WatchPath,
 	opts: WatchOptions,
 	handler: MultipleWatchHandler
 ): Watcher<T>;
 
-export function watch<T extends object>(
+export default function watch<T extends object>(
 	obj: T,
 	pathOptsOrHandler: WatchPath | WatchHandler | MultipleWatchHandler | WatchOptions,
 	handlerOrOpts?: WatchHandler | MultipleWatchHandler | WatchOptions,

@@ -12,4 +12,4 @@
  */
 
 export { default as select } from 'core/object/select';
-export { watch, set, unset } from 'core/object/watch';
+export { default as watch } from 'core/object/watch';
