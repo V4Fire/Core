@@ -14,7 +14,28 @@ export type WatchDependencies =
 	Map<WatchPath, CanArray<WatchPath>>;
 
 export interface Watcher<T = unknown> {
+	/**
+	 * Proxy object to watch
+	 */
 	proxy: T;
+
+	/**
+	 * Sets a new watchable value for an object by the specified path
+	 *
+	 * @param path
+	 * @param value
+	 */
+	set(path: WatchPath, value: unknown): void;
+
+	/**
+	 * Deletes a watchable value from an object by the specified path
+	 * @param path
+	 */
+	delete(path: WatchPath): void;
+
+	/**
+	 * Cancels watching for an object
+	 */
 	unwatch(): void;
 }
 
@@ -159,11 +180,14 @@ export interface WatchHandlerParams {
 	isRoot: boolean;
 
 	/**
+	 * True if a mutation has occurred on an object from a prototype of the watched object
+	 */
+	fromProto: boolean;
+
+	/**
 	 * Path to a property that was changed
 	 */
 	path: unknown[];
-
-	fromProto: boolean;
 }
 
 export interface WatchHandler<NEW = unknown, OLD = NEW> {
@@ -174,4 +198,4 @@ export interface MultipleWatchHandler<NEW = unknown, OLD = NEW> {
 	(mutations: [CanUndef<NEW>, CanUndef<OLD>, WatchHandlerParams]): any;
 }
 
-export type WatchHandlersMap = Map<WatchHandler, boolean>;
+export type WatchHandlersSet = Set<WatchHandler>;

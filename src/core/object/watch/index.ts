@@ -467,9 +467,10 @@ export function watch<T extends object>(
 
 	const
 		tiedWith = opts?.tiedWith,
-		res = (typeof Proxy === 'function' ? proxyEngine : accEngine).watch(obj, undefined, handler, opts);
+		engine = typeof Proxy === 'function' ? proxyEngine : accEngine;
 
 	const
+		res = engine.watch(obj, undefined, handler, new Set(), opts),
 		proxy = res.proxy;
 
 	if (tiedWith && Object.isSimpleObject(proxy)) {
@@ -499,25 +500,4 @@ export function watch<T extends object>(
 	}
 
 	return res;
-}
-
-/**
- * Sets a new watchable value for an object by the specified path
- *
- * @param obj
- * @param path
- * @param value
- */
-export function set(obj: object, path: WatchPath, value: unknown): void {
-	(typeof Proxy === 'function' ? proxyEngine : accEngine).set(obj, path, value);
-}
-
-/**
- * Unsets a watchable value for an object by the specified path
- *
- * @param obj
- * @param path
- */
-export function unset(obj: object, path: WatchPath): void {
-	(typeof Proxy === 'function' ? proxyEngine : accEngine).unset(obj, path);
 }

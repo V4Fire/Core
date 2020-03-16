@@ -7,7 +7,7 @@
  */
 
 import { structureWrappers } from 'core/object/watch/wrap/const';
-import { WatchHandlersMap } from 'core/object/watch/interface';
+import { WatchHandlersSet } from 'core/object/watch/interface';
 
 import { WrapOptions } from 'core/object/watch/wrap/interface';
 export * from 'core/object/watch/wrap/interface';
@@ -30,7 +30,7 @@ export * from 'core/object/watch/wrap/interface';
  * arr.push(3);
  * ```
  */
-export function bindMutationHooks<T extends object>(obj: T, opts: WrapOptions, handlers: WatchHandlersMap): T;
+export function bindMutationHooks<T extends object>(obj: T, opts: WrapOptions, handlers: WatchHandlersSet): T;
 
 /**
  * Wraps mutation methods of the specified object that they be able to emit events about mutations
@@ -38,22 +38,22 @@ export function bindMutationHooks<T extends object>(obj: T, opts: WrapOptions, h
  * @param obj
  * @param handlers - set of callbacks that are invoked on every mutation hooks
  */
-export function bindMutationHooks<T extends object>(obj: T, handlers: WatchHandlersMap): T;
+export function bindMutationHooks<T extends object>(obj: T, handlers: WatchHandlersSet): T;
 export function bindMutationHooks<T extends object>(
 	obj: T,
-	optsOrHandlers: WatchHandlersMap | WrapOptions,
-	handlersOrOpts?: WrapOptions | WatchHandlersMap
+	optsOrHandlers: WatchHandlersSet | WrapOptions,
+	handlersOrOpts?: WrapOptions | WatchHandlersSet
 ): T {
 	let
-		handlers: WatchHandlersMap,
+		handlers: WatchHandlersSet,
 		opts;
 
-	if (Object.isMap(handlersOrOpts)) {
+	if (Object.isSet(handlersOrOpts)) {
 		handlers = handlersOrOpts;
 		opts = Object.isPlainObject(optsOrHandlers) ? optsOrHandlers : {};
 
 	} else {
-		handlers = Object.isMap(optsOrHandlers) ? optsOrHandlers : new Map();
+		handlers = Object.isSet(optsOrHandlers) ? optsOrHandlers : new Set();
 		opts = {};
 	}
 
@@ -66,19 +66,14 @@ export function bindMutationHooks<T extends object>(
 			const
 				a = args[i];
 
-			for (let o = handlers.entries(), el = o.next(); !el.done; el = o.next()) {
-				const
-					[handler, state] = el.value;
-
-				if (state) {
-					handler(a[0], a[1], {
-						obj,
-						top: opts.top,
-						isRoot: Boolean(opts.isRoot),
-						fromProto: Boolean(opts.fromProto),
-						path: a[2]
-					});
-				}
+			for (let o = handlers.values(), el = o.next(); !el.done; el = o.next()) {
+				el.value(a[0], a[1], {
+					obj,
+					top: opts.top,
+					isRoot: Boolean(opts.isRoot),
+					fromProto: Boolean(opts.fromProto),
+					path: a[2]
+				});
 			}
 		}
 	};
@@ -106,6 +101,10 @@ export function bindMutationHooks<T extends object>(
 				writable: true,
 				configurable: true,
 				value: (...args) => {
+					if (!handlers.size) {
+						return original.apply(obj, args);
+					}
+
 					const wrapperOpts = {
 						...opts,
 						handlers,

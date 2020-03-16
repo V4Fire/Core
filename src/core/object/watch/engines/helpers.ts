@@ -11,7 +11,7 @@ import { toOriginalObject } from 'core/object/watch/const';
 import * as proxyEngine from 'core/object/watch/engines/proxy';
 import * as accEngine from 'core/object/watch/engines/accessors';
 
-import { WatchHandlersMap, InternalWatchOptions } from 'core/object/watch/interface';
+import { WatchHandlersSet, InternalWatchOptions } from 'core/object/watch/interface';
 
 /**
  * Unwraps the specified value to watch and returns a raw object to watch
@@ -52,15 +52,15 @@ export function proxyType(obj: unknown): string | false {
  * @param rawValue
  * @param key - property key for a value
  * @param path - base path to object properties: it is provided to a watch handler with parameters
- * @param handlers - map of registered handlers
+ * @param handlers - set of registered handlers
  * @param [top] - link a top property of watching
  * @param [opts] - additional options
  */
 export function getProxyValue(
-	rawValue: object,
+	rawValue: unknown,
 	key: unknown,
 	path: CanUndef<unknown[]>,
-	handlers: WatchHandlersMap,
+	handlers: WatchHandlersSet,
 	top?: object,
 	opts?: InternalWatchOptions
 ): unknown {
@@ -71,8 +71,56 @@ export function getProxyValue(
 	if (opts?.deep && proxyType(rawValue)) {
 		const fullPath = (<unknown[]>[]).concat(path ?? [], key);
 		return (typeof Proxy === 'function' ? proxyEngine : accEngine)
-			.watch(rawValue, fullPath, null, opts, top || rawValue, handlers);
+			.watch(rawValue, fullPath, null, handlers, opts, top || <object>rawValue);
 	}
 
 	return rawValue;
+}
+
+/**
+ * Returns a value from an object by the specified label and handlers
+ *
+ * @param obj
+ * @param label
+ * @param handlers
+ */
+export function getOrCreateLabelValueByHandlers<T = unknown>(
+	obj: object,
+	label: symbol | string,
+	handlers: WatchHandlersSet
+): CanUndef<T>;
+
+/**
+ * Returns a value from an object by the specified label and handlers
+ *
+ * @param obj
+ * @param label
+ * @param handlers
+ * @param def - default value (can be declared as a function that will be invoked)
+ */
+export function getOrCreateLabelValueByHandlers<T = unknown>(
+	obj: object,
+	label: symbol | string,
+	handlers: WatchHandlersSet,
+	def: unknown
+): T;
+
+export function getOrCreateLabelValueByHandlers<T = unknown>(
+	obj: object,
+	label: symbol | string,
+	handlers: WatchHandlersSet,
+	def?: unknown
+): T {
+	const
+		box = obj[label] = obj[label] || new WeakMap();
+
+	let
+		val = box.get(handlers);
+
+	if (val === undefined && def !== undefined) {
+		val = Object.isFunction(def) ? def() : def;
+		box.set(handlers, val);
+	}
+
+	return val;
 }

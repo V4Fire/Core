@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { WatchOptions, WatchHandlersMap } from 'core/object/watch/interface';
+import { WatchOptions, WatchHandlersSet } from 'core/object/watch/interface';
 
 export interface WrapOptions {
 	/**
@@ -40,5 +40,5 @@ export interface WrapOptions {
 
 export interface WrapParams extends WrapOptions {
 	original: Function;
-	handlers: WatchHandlersMap;
+	handlers: WatchHandlersSet;
 }
