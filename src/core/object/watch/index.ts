@@ -11,7 +11,7 @@
  * @packageDocumentation
  */
 
-import { toOriginalObject } from 'core/object/watch/const';
+import { toOriginalObject, watchHandlers } from 'core/object/watch/const';
 import { unwrap } from 'core/object/watch/engines/helpers';
 
 import * as proxyEngine from 'core/object/watch/engines/proxy';
@@ -470,10 +470,11 @@ export default function watch<T extends object>(
 		engine = typeof Proxy === 'function' ? proxyEngine : accEngine;
 
 	const
-		res = engine.watch(obj, undefined, handler, new Set(), opts),
+		res = engine.watch(obj, undefined, handler, obj[watchHandlers] || new Set(), opts),
 		proxy = res.proxy;
 
 	if (tiedWith && Object.isSimpleObject(proxy)) {
+		tiedWith[watchHandlers] = proxy[watchHandlers];
 		tiedWith[toOriginalObject] = proxy[toOriginalObject];
 
 		for (let keys = Object.keys(proxy), i = 0; i < keys.length; i++) {

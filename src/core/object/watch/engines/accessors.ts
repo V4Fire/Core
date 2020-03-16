@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { toProxyObject, toOriginalObject, watchOptions } from 'core/object/watch/const';
+import { toProxyObject, toOriginalObject, watchOptions, watchHandlers } from 'core/object/watch/const';
 import { bindMutationHooks } from 'core/object/watch/wrap';
 import { unwrap, proxyType, getProxyValue, getOrCreateLabelValueByHandlers } from 'core/object/watch/engines/helpers';
 import {
@@ -111,19 +111,19 @@ export function watch<T>(
 			{...opts}
 		);
 
-		if (tmpOpts?.deep) {
+		if (opts?.deep) {
 			tmpOpts.deep = true;
+		}
+
+		if (opts?.withProto) {
+			tmpOpts.withProto = true;
 		}
 
 		opts = tmpOpts;
 	}
 
-	if (opts?.fromProto === 1) {
-		opts.fromProto = true;
-	}
-
-	const
-		proxy = getOrCreateLabelValueByHandlers(unwrappedObj, toProxyObject, handlers);
+	let
+		proxy = getOrCreateLabelValueByHandlers<object>(unwrappedObj, toProxyObject, handlers);
 
 	if (proxy) {
 		return returnProxy(unwrappedObj, proxy);
@@ -146,7 +146,7 @@ export function watch<T>(
 	};
 
 	if (Object.isArray(unwrappedObj)) {
-		const proxy = getOrCreateLabelValueByHandlers<unknown[]>(
+		proxy = getOrCreateLabelValueByHandlers<unknown[]>(
 			unwrappedObj,
 			toProxyObject,
 			handlers,
@@ -155,16 +155,12 @@ export function watch<T>(
 
 		bindMutationHooks(proxy, wrapOpts, handlers);
 
-		for (let i = 0; i < proxy.length; i++) {
+		for (let i = 0; i < (<unknown[]>proxy).length; i++) {
 			proxy[i] = getProxyValue(proxy[i], i, path, handlers, top, opts);
 		}
 
-		proxy[toOriginalObject] = unwrappedObj;
-		return returnProxy(unwrappedObj, proxy);
-	}
-
-	if (Object.isDictionary(unwrappedObj)) {
-		const proxy = getOrCreateLabelValueByHandlers<object>(
+	} else if (Object.isDictionary(unwrappedObj)) {
+		proxy = getOrCreateLabelValueByHandlers<object>(
 			unwrappedObj,
 			toProxyObject,
 			handlers,
@@ -183,15 +179,18 @@ export function watch<T>(
 				}
 			}
 
-			setWatchAccessors(unwrappedObj, key, path, handlers, top, {...opts, fromProto: propFromProto});
+			const watchOpts = Object.assign(Object.create(opts!), {fromProto: propFromProto});
+			setWatchAccessors(unwrappedObj, key, path, handlers, top, watchOpts);
 		}
 
-		proxy[toOriginalObject] = unwrappedObj;
-		return returnProxy(unwrappedObj, proxy);
+	} else {
+		proxy = bindMutationHooks(unwrappedObj, wrapOpts, handlers);
 	}
 
-	bindMutationHooks(unwrappedObj, wrapOpts, handlers);
-	return returnProxy(unwrappedObj, unwrappedObj);
+	proxy[watchHandlers] = handlers;
+	proxy[toOriginalObject] = unwrappedObj;
+
+	return returnProxy(unwrappedObj, proxy);
 }
 
 /**

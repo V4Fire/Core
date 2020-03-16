@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { toProxyObject, toOriginalObject, watchOptions, blackList } from 'core/object/watch/const';
+import { toProxyObject, toOriginalObject, watchOptions, watchHandlers, blackList } from 'core/object/watch/const';
 import { bindMutationHooks } from 'core/object/watch/wrap';
 import { unwrap, proxyType, getProxyValue, getOrCreateLabelValueByHandlers } from 'core/object/watch/engines/helpers';
 import {
@@ -111,8 +111,12 @@ export function watch<T>(
 			{...opts}
 		);
 
-		if (tmpOpts?.deep) {
+		if (opts?.deep) {
 			tmpOpts.deep = true;
+		}
+
+		if (opts?.withProto) {
+			tmpOpts.withProto = true;
 		}
 
 		opts = tmpOpts;
@@ -154,6 +158,10 @@ export function watch<T>(
 				return target;
 			}
 
+			if (key === watchHandlers) {
+				return handlers;
+			}
+
 			const
 				isArray = Object.isArray(target),
 				isCustomObj = isArray || Object.isCustomObject(target),
@@ -175,14 +183,15 @@ export function watch<T>(
 					propFromProto = true;
 				}
 
-				return getProxyValue(val, key, path, handlers, top, {...opts, fromProto: propFromProto});
+				const watchOpts = Object.assign(Object.create(opts!), {fromProto: propFromProto});
+				return getProxyValue(val, key, path, handlers, top, watchOpts);
 			}
 
 			return Object.isFunction(val) ? val.bind(target) : val;
 		},
 
 		set: (target, key, val, receiver) => {
-			if (key === toOriginalObject) {
+			if (key === toOriginalObject || key === watchHandlers) {
 				return false;
 			}
 
