@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.6.1 (2020-03-16)
+
+#### :bug: Bug Fix
+
+* Fixed `core/object/watch` with another watchers
+
 ## v3.6.0 (2020-03-15)
 
 #### :rocket: New Feature
