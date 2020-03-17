@@ -243,10 +243,10 @@ export default function watch<T extends object>(
 			original = handler;
 
 		let
-			dynamicOldVal,
+			dynamicValStore,
 			argsQueue = <unknown[][]>[];
 
-		handler = (val, oldVal, info) => {
+		handler = (value, oldValue, info) => {
 			if (!deep && info.path.length > (Object.isDictionary(info.obj) ? 1 : 2) || !withProto && info.fromProto) {
 				return;
 			}
@@ -266,38 +266,39 @@ export default function watch<T extends object>(
 					}
 
 					Object.set(cache, tiedPath, true);
-					resolvedInfo = {...info, path: tiedPath};
+					resolvedInfo = {...info, path: tiedPath, parent: {value, oldValue, info}};
 				}
 
 				const getArgs = () => {
 					if (needGetVal) {
-						val = Object.get(unwrappedObj, collapse ? tiedPath[0] : tiedPath);
+						const
+							dynamicVal = Object.get(unwrappedObj, collapse ? tiedPath[0] : tiedPath);
 
 						if (original.length < 2) {
-							return [val, undefined, resolvedInfo];
+							return [dynamicVal, undefined, resolvedInfo];
 						}
 
-						dynamicOldVal = dynamicOldVal || new Map();
+						dynamicValStore = dynamicValStore || new Map();
 
 						const args = [
-							val,
-							Object.get(dynamicOldVal, resolvedInfo.path, val),
+							dynamicVal,
+							Object.get(dynamicValStore, resolvedInfo.path),
 							resolvedInfo
 						];
 
-						Object.set(dynamicOldVal, resolvedInfo.path, val);
+						Object.set(dynamicValStore, resolvedInfo.path, dynamicVal);
 						return args;
 					}
 
 					if (collapse) {
 						return [
-							resolvedInfo.isRoot ? val : resolvedInfo.top,
-							resolvedInfo.isRoot ? oldVal : resolvedInfo.top,
+							resolvedInfo.isRoot ? value : resolvedInfo.top,
+							resolvedInfo.isRoot ? oldValue : resolvedInfo.top,
 							resolvedInfo
 						];
 					}
 
-					return [val, oldVal, resolvedInfo];
+					return [value, oldValue, resolvedInfo];
 				};
 
 				if (immediate) {
@@ -305,7 +306,7 @@ export default function watch<T extends object>(
 
 				} else {
 					const
-						needEventQueue = !tiedPath || !collapse;
+						needEventQueue = !normalizedPath && !collapse;
 
 					if (needEventQueue) {
 						argsQueue.push(getArgs());

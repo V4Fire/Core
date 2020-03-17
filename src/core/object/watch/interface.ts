@@ -160,6 +160,12 @@ export interface InternalWatchOptions extends WatchOptions {
 	fromProto?: boolean | 1;
 }
 
+export interface WatchHandlerParentParams {
+	value: unknown;
+	oldValue: unknown;
+	info: WatchHandlerParams;
+}
+
 /**
  * Parameters of a mutation event
  */
@@ -188,6 +194,11 @@ export interface WatchHandlerParams {
 	 * Path to a property that was changed
 	 */
 	path: unknown[];
+
+	/**
+	 * Information about a parent mutation event
+	 */
+	parent?: WatchHandlerParentParams;
 }
 
 export interface WatchHandler<NEW = unknown, OLD = NEW> {
