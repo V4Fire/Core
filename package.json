@@ -5,7 +5,7 @@
   "main": "src/core/index.js",
   "typings": "index.d.ts",
   "license": "MIT",
-  "version": "3.7.0",
+  "version": "3.7.1",
   "author": {
     "name": "kobezzza",
     "email": "kobezzza@gmail.com",
@@ -26,7 +26,7 @@
     "test": "echo \"Error: no test specified\" && exit 0"
   },
   "dependencies": {
-    "eventemitter2": "^6.0.0",
+    "eventemitter2": "^6.1.0",
     "fs-extra-promise": "^1.0.1",
     "got": "^10.6.0",
     "node-localstorage": "^2.1.5",

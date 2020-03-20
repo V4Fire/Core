@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.7.1 (2020-03-20)
+
+#### :bug: Bug Fix
+
+* Fixed `core/object/watch` collapsing of events
+
 ## v3.7.0 (2020-03-17)
 
 #### :rocket: New Feature
