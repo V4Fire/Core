@@ -206,7 +206,7 @@ export interface WatchHandler<NEW = unknown, OLD = NEW> {
 }
 
 export interface MultipleWatchHandler<NEW = unknown, OLD = NEW> {
-	(mutations: [CanUndef<NEW>, CanUndef<OLD>, WatchHandlerParams]): any;
+	(mutations: [CanUndef<NEW>, CanUndef<OLD>, WatchHandlerParams][]): any;
 }
 
 export type WatchHandlersSet = Set<WatchHandler>;

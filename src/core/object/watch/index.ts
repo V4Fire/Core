@@ -306,7 +306,7 @@ export default function watch<T extends object>(
 
 				} else {
 					const
-						needEventQueue = !normalizedPath && !collapse;
+						needEventQueue = !normalizedPath;
 
 					if (needEventQueue) {
 						argsQueue.push(getArgs());
