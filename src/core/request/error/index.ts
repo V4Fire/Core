@@ -17,7 +17,7 @@ export * from 'core/request/error/interface';
 /**
  * Class to wrap a request error
  */
-export default class RequestError<D> implements Error {
+export default class RequestError<D = undefined> implements Error {
 	/**
 	 * Error name
 	 */

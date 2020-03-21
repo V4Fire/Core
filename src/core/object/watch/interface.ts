@@ -13,7 +13,7 @@ export type WatchDependencies =
 	Dictionary<WatchPath[]> |
 	Map<WatchPath, CanArray<WatchPath>>;
 
-export interface Watcher<T = unknown> {
+export interface Watcher<T extends object = object> {
 	/**
 	 * Proxy object to watch
 	 */

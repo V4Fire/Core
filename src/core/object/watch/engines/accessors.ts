@@ -29,7 +29,7 @@ import {
  * @param handlers - set of registered handlers
  * @param [opts] - additional options
  */
-export function watch<T>(
+export function watch<T extends object>(
 	obj: T,
 	path: CanUndef<unknown[]>,
 	cb: Nullable<WatchHandler>,
@@ -47,7 +47,7 @@ export function watch<T>(
  * @param [opts] - additional options
  * @param [top] - link a top property of watching
  */
-export function watch<T>(
+export function watch<T extends object>(
 	obj: T,
 	path: CanUndef<unknown[]>,
 	cb: Nullable<WatchHandler>,
@@ -56,7 +56,7 @@ export function watch<T>(
 	top: object
 ): T;
 
-export function watch<T>(
+export function watch<T extends object>(
 	obj: T,
 	path: CanUndef<unknown[]>,
 	cb: Nullable<WatchHandler>,
