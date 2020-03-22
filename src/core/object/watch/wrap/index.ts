@@ -112,9 +112,15 @@ export function bindMutationHooks<T extends object>(
 					};
 
 					if (Object.isFunction(method)) {
-						wrappedCb(method(obj, wrapperOpts, ...args));
+						const
+							newArgs = method(obj, wrapperOpts, ...args),
+							res = original.apply(obj, args);
 
-					} else if (method.type === 'get') {
+						wrappedCb(newArgs);
+						return res;
+					}
+
+					if (method.type === 'get') {
 						return method.value(obj, wrapperOpts, ...args);
 					}
 
