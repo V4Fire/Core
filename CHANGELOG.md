@@ -11,6 +11,16 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.7.2 (2020-03-22)
+
+#### :bug: Bug Fix
+
+* Fixed `core/object/watch` with Map/Set structures
+
+#### :house: Internal
+
+* Updated dependencies: eventemitter2@6.2.1
+
 ## v3.7.1 (2020-03-20)
 
 #### :bug: Bug Fix
