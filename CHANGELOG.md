@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.7.3 (2020-03-23)
+
+#### :house: Internal
+
+* Exported some helpful helpers from `core/object/watch`
+
 ## v3.7.2 (2020-03-22)
 
 #### :bug: Bug Fix
