@@ -26,7 +26,7 @@ export function unwrap(value: unknown): CanUndef<object> {
  * Returns a type of data to watch or false
  * @param obj
  */
-export function proxyType(obj: unknown): string | false {
+export function getProxyType(obj: unknown): Nullable<string> {
 	if (Object.isDictionary(obj)) {
 		return 'dictionary';
 	}
@@ -43,7 +43,7 @@ export function proxyType(obj: unknown): string | false {
 		return 'set';
 	}
 
-	return false;
+	return null;
 }
 
 /**
@@ -68,7 +68,7 @@ export function getProxyValue(
 		return rawValue;
 	}
 
-	if (opts?.deep && proxyType(rawValue)) {
+	if (opts?.deep && getProxyType(rawValue)) {
 		const fullPath = (<unknown[]>[]).concat(path ?? [], key);
 		return (typeof Proxy === 'function' ? proxyEngine : accEngine)
 			.watch(<object>rawValue, fullPath, null, handlers, opts, top || <object>rawValue);

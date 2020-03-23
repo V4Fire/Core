@@ -8,7 +8,15 @@
 
 import { toProxyObject, toOriginalObject, watchOptions, watchHandlers } from 'core/object/watch/const';
 import { bindMutationHooks } from 'core/object/watch/wrap';
-import { unwrap, proxyType, getProxyValue, getOrCreateLabelValueByHandlers } from 'core/object/watch/engines/helpers';
+import {
+
+	unwrap,
+	getProxyType,
+	getProxyValue,
+	getOrCreateLabelValueByHandlers
+
+} from 'core/object/watch/engines/helpers';
+
 import {
 
 	WatchPath,
@@ -129,7 +137,7 @@ export function watch<T extends object>(
 		return returnProxy(unwrappedObj, proxy);
 	}
 
-	if (!proxyType(unwrappedObj)) {
+	if (!getProxyType(unwrappedObj)) {
 		return returnProxy(unwrappedObj);
 	}
 
@@ -221,7 +229,7 @@ export function set(obj: object, path: WatchPath, value: unknown, handlers: Watc
 
 	if (!Object.isDictionary(ref)) {
 		const
-			type = proxyType(ref);
+			type = getProxyType(ref);
 
 		switch (type) {
 			case 'array':
@@ -277,7 +285,7 @@ export function unset(obj: object, path: WatchPath, handlers: WatchHandlersSet):
 
 	if (!Object.isDictionary(ref)) {
 		const
-			type = proxyType(ref);
+			type = getProxyType(ref);
 
 		switch (type) {
 			case 'array':
