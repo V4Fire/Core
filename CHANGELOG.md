@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.7.4 (2020-03-23)
+
+#### :bug: Bug Fix
+
+* Fixed getting a property by a symbol from a proxy `core/object/watch`
+
 ## v3.7.3 (2020-03-23)
 
 #### :house: Internal
