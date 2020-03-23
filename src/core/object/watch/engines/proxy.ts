@@ -176,10 +176,11 @@ export function watch<T extends object>(
 				val = Reflect.get(target, key, isCustomObj ? receiver : target);
 
 			if (Object.isSymbol(key) || blackListStore.has(key)) {
-				return val;
-			}
+				if (isCustomObj) {
+					return val;
+				}
 
-			if (isCustomObj) {
+			} else if (isCustomObj) {
 				let
 					propFromProto = fromProto;
 
