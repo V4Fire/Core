@@ -154,14 +154,14 @@ export function watch<T extends object>(
 	};
 
 	if (Object.isArray(unwrappedObj)) {
+		bindMutationHooks(unwrappedObj, wrapOpts, handlers);
+
 		proxy = getOrCreateLabelValueByHandlers<unknown[]>(
 			unwrappedObj,
 			toProxyObject,
 			handlers,
-			unwrappedObj.slice()
+			() => unwrappedObj.slice()
 		);
-
-		bindMutationHooks(proxy, wrapOpts, handlers);
 
 		for (let i = 0; i < (<unknown[]>proxy).length; i++) {
 			proxy[i] = getProxyValue(proxy[i], i, path, handlers, top, opts);
@@ -172,7 +172,7 @@ export function watch<T extends object>(
 			unwrappedObj,
 			toProxyObject,
 			handlers,
-			Object.create(unwrappedObj)
+			() => Object.create(unwrappedObj)
 		);
 
 		for (const key in unwrappedObj) {
@@ -192,7 +192,14 @@ export function watch<T extends object>(
 		}
 
 	} else {
-		proxy = bindMutationHooks(unwrappedObj, wrapOpts, handlers);
+		bindMutationHooks(unwrappedObj, wrapOpts, handlers);
+
+		proxy = getOrCreateLabelValueByHandlers<unknown[]>(
+			unwrappedObj,
+			toProxyObject,
+			handlers,
+			unwrappedObj
+		);
 	}
 
 	proxy[watchHandlers] = handlers;

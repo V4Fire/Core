@@ -228,16 +228,14 @@ export default function watch<T extends object>(
 		pref = opts?.prefixes,
 		post = opts?.postfixes;
 
-	const needWrapHandler = Boolean(
-		unwrappedObj ||
-
+	const needWrapHandler = Boolean(unwrappedObj && (
 		!deep ||
 		!immediate ||
 
 		rawDeps ||
 		collapse ||
 		normalizedPath
-	);
+	));
 
 	if (needWrapHandler) {
 		const

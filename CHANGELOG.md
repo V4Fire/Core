@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.7.5 (2020-03-24)
+
+#### :bug: Bug Fix
+
+* Fixed watching for Map/Set by using the engine `core/object/watch/engines/accessors`
+
 ## v3.7.4 (2020-03-23)
 
 #### :bug: Bug Fix
