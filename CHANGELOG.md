@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.8.0 (2020-03-24)
+
+#### :rocket: New Feature
+
+* Added set/unset methods `core/object/watch`
+
 ## v3.7.5 (2020-03-24)
 
 #### :bug: Bug Fix

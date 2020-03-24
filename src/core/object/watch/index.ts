@@ -12,7 +12,7 @@
  */
 
 import { toOriginalObject, watchHandlers } from 'core/object/watch/const';
-import { unwrap } from 'core/object/watch/engines/helpers';
+import { getProxyType, unwrap } from 'core/object/watch/engines/helpers';
 
 import * as proxyEngine from 'core/object/watch/engines/proxy';
 import * as accEngine from 'core/object/watch/engines/accessors';
@@ -21,9 +21,12 @@ import {
 
 	WatchPath,
 	WatchOptions,
+
 	WatchHandler,
 	MultipleWatchHandler,
-	Watcher
+
+	Watcher,
+	WatchHandlersSet
 
 } from 'core/object/watch/interface';
 
@@ -501,4 +504,27 @@ export default function watch<T extends object>(
 	}
 
 	return res;
+}
+
+/**
+ * Sets a new watchable value for an object by the specified path
+ *
+ * @param obj
+ * @param path
+ * @param value
+ * @param handlers - set of registered handlers
+ */
+export function set(obj: object, path: WatchPath, value: unknown, handlers: WatchHandlersSet): void {
+	(typeof Proxy === 'function' ? proxyEngine : accEngine).set(obj, path, value, handlers);
+}
+
+/**
+ * Deletes a watchable value for an object by the specified path
+ *
+ * @param obj
+ * @param path
+ * @param handlers - set of registered handlers
+ */
+export function unset(obj: object, path: WatchPath, handlers: WatchHandlersSet): void {
+	(typeof Proxy === 'function' ? proxyEngine : accEngine).unset(obj, path, handlers);
 }

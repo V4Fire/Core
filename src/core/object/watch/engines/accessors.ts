@@ -214,7 +214,7 @@ export function watch<T extends object>(
  * @param obj
  * @param path
  * @param value
- * @param handlers
+ * @param handlers - set of registered handlers
  */
 export function set(obj: object, path: WatchPath, value: unknown, handlers: WatchHandlersSet): void {
 	const
@@ -268,7 +268,7 @@ export function set(obj: object, path: WatchPath, value: unknown, handlers: Watc
  *
  * @param obj
  * @param path
- * @param handlers
+ * @param handlers - set of registered handlers
  */
 export function unset(obj: object, path: WatchPath, handlers: WatchHandlersSet): void {
 	const
