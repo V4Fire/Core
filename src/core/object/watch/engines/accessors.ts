@@ -6,8 +6,20 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { toProxyObject, toOriginalObject, watchOptions, watchHandlers } from 'core/object/watch/const';
+import {
+
+	toProxyObject,
+	toTopProxyObject,
+	toOriginalObject,
+
+	watchPath,
+	watchOptions,
+	watchHandlers
+
+} from 'core/object/watch/const';
+
 import { bindMutationHooks } from 'core/object/watch/wrap';
+
 import {
 
 	unwrap,
@@ -202,7 +214,9 @@ export function watch<T extends object>(
 		);
 	}
 
+	proxy[watchPath] = path;
 	proxy[watchHandlers] = handlers;
+	proxy[toTopProxyObject] = top;
 	proxy[toOriginalObject] = unwrappedObj;
 
 	return returnProxy(unwrappedObj, proxy);
@@ -225,14 +239,20 @@ export function set(obj: object, path: WatchPath, value: unknown, handlers: Watc
 	}
 
 	const
-		normalizedPath = Object.isArray(path) ? path : path.split('.'),
-		prop = normalizedPath[normalizedPath.length - 1],
-		refPath = normalizedPath.slice(0, -1);
+		normalizedPath = <string[]>(Object.isArray(path) ? path : path.split('.')),
+		prop = normalizedPath[normalizedPath.length - 1];
 
-	const ref = Object.get(
-		getOrCreateLabelValueByHandlers(unwrappedObj, toProxyObject, handlers) || unwrappedObj,
-		refPath
-	);
+	const
+		ctxPath = obj[watchPath] || [],
+		refPath = (<string[]>[]).concat(ctxPath.slice(1), normalizedPath.slice(0, -1)),
+		fullRefPath = (<string[]>[]).concat(ctxPath.slice(0, 1), refPath);
+
+	const top =
+		getOrCreateLabelValueByHandlers<object>(unwrappedObj, toProxyObject, handlers)?.[toTopProxyObject] ||
+		unwrappedObj;
+
+	const
+		ref = Object.get(top, refPath);
 
 	if (!Object.isDictionary(ref)) {
 		const
@@ -251,15 +271,19 @@ export function set(obj: object, path: WatchPath, value: unknown, handlers: Watc
 	}
 
 	const
-		key = String(prop),
-		top = refPath.length ? ref : undefined;
+		key = String(prop);
 
 	if (!handlers) {
 		unwrappedObj[key] = value;
 		return;
 	}
 
-	const proxy = setWatchAccessors(unwrappedObj, key, top && refPath, handlers, top, {deep: true});
+	const
+		hasPath = fullRefPath.length > 0,
+		resolvedPath = hasPath ? fullRefPath : undefined,
+		resolvedTop = hasPath ? top : undefined;
+
+	const proxy = setWatchAccessors(unwrappedObj, key, resolvedPath, handlers, resolvedTop, {deep: true});
 	proxy[key] = value;
 }
 
@@ -279,16 +303,20 @@ export function unset(obj: object, path: WatchPath, handlers: WatchHandlersSet):
 	}
 
 	const
-		normalizedPath = Object.isArray(path) ? path : path.split('.');
+		normalizedPath = <string[]>(Object.isArray(path) ? path : path.split('.')),
+		prop = normalizedPath[normalizedPath.length - 1];
 
 	const
-		prop = normalizedPath[normalizedPath.length - 1],
-		refPath = normalizedPath.slice(0, -1);
+		ctxPath = obj[watchPath] || [],
+		refPath = (<string[]>[]).concat(ctxPath.slice(1), normalizedPath.slice(0, -1)),
+		fullRefPath = (<string[]>[]).concat(ctxPath.slice(0, 1), refPath);
 
-	const ref = Object.get(
-		getOrCreateLabelValueByHandlers(unwrappedObj, toProxyObject, handlers) || unwrappedObj,
-		refPath
-	);
+	const top =
+		getOrCreateLabelValueByHandlers<object>(unwrappedObj, toProxyObject, handlers)?.[toTopProxyObject] ||
+		unwrappedObj;
+
+	const
+		ref = Object.get(top, refPath);
 
 	if (!Object.isDictionary(ref)) {
 		const
@@ -308,15 +336,19 @@ export function unset(obj: object, path: WatchPath, handlers: WatchHandlersSet):
 	}
 
 	const
-		key = String(prop),
-		top = refPath.length ? ref : undefined;
+		key = String(prop);
 
 	if (!handlers) {
 		delete unwrappedObj[key];
 		return;
 	}
 
-	const proxy = setWatchAccessors(unwrappedObj, key, top && refPath, handlers, top, {deep: true});
+	const
+		hasPath = fullRefPath.length > 0,
+		resolvedPath = hasPath ? fullRefPath : undefined,
+		resolvedTop = hasPath ? top : undefined;
+
+	const proxy = setWatchAccessors(unwrappedObj, key, resolvedPath, handlers, resolvedTop, {deep: true});
 	proxy[key] = undefined;
 }
 

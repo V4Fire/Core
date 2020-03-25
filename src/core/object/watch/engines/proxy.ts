@@ -6,8 +6,21 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { toProxyObject, toOriginalObject, watchOptions, watchHandlers, blackList } from 'core/object/watch/const';
+import {
+
+	toProxyObject,
+	toTopProxyObject,
+	toOriginalObject,
+
+	watchPath,
+	watchOptions,
+	watchHandlers,
+	blackList
+
+} from 'core/object/watch/const';
+
 import { bindMutationHooks } from 'core/object/watch/wrap';
+
 import {
 
 	unwrap,
@@ -162,12 +175,18 @@ export function watch<T extends object>(
 
 	proxy = new Proxy(unwrappedObj, {
 		get: (target, key, receiver) => {
-			if (key === toOriginalObject) {
-				return target;
-			}
+			switch (key) {
+				case toOriginalObject:
+					return target;
 
-			if (key === watchHandlers) {
-				return handlers;
+				case toTopProxyObject:
+					return top;
+
+				case watchHandlers:
+					return handlers;
+
+				case watchPath:
+					return path;
 			}
 
 			const
@@ -200,7 +219,13 @@ export function watch<T extends object>(
 		},
 
 		set: (target, key, val, receiver) => {
-			if (key === toOriginalObject || key === watchHandlers) {
+			if (
+				// tslint:disable-next-line:prefer-switch
+				key === toOriginalObject ||
+				key === toTopProxyObject ||
+				key === watchHandlers ||
+				key === watchPath
+			) {
 				return false;
 			}
 

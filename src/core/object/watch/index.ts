@@ -512,9 +512,14 @@ export default function watch<T extends object>(
  * @param obj
  * @param path
  * @param value
- * @param handlers - set of registered handlers
+ * @param [handlers] - set of registered handlers
  */
-export function set(obj: object, path: WatchPath, value: unknown, handlers: WatchHandlersSet): void {
+export function set(
+	obj: object,
+	path: WatchPath,
+	value: unknown,
+	handlers: WatchHandlersSet = obj[watchHandlers]
+): void {
 	(typeof Proxy === 'function' ? proxyEngine : accEngine).set(obj, path, value, handlers);
 }
 
@@ -523,8 +528,8 @@ export function set(obj: object, path: WatchPath, value: unknown, handlers: Watc
  *
  * @param obj
  * @param path
- * @param handlers - set of registered handlers
+ * @param [handlers] - set of registered handlers
  */
-export function unset(obj: object, path: WatchPath, handlers: WatchHandlersSet): void {
+export function unset(obj: object, path: WatchPath, handlers: WatchHandlersSet = obj[watchHandlers]): void {
 	(typeof Proxy === 'function' ? proxyEngine : accEngine).unset(obj, path, handlers);
 }
