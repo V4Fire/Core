@@ -222,7 +222,7 @@ export default function watch<T extends object>(
 	}
 
 	const
-		deep = opts?.deep,
+		deep = normalizedPath?.length > 1 || opts?.deep,
 		withProto = opts?.withProto,
 		immediate = opts?.immediate,
 		collapse = normalizedPath ? opts?.collapse !== false : opts?.collapse;
