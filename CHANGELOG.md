@@ -11,7 +11,7 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-## v3.8.0 (2020-03-24)
+## v3.8.0 (2020-03-25)
 
 #### :rocket: New Feature
 
