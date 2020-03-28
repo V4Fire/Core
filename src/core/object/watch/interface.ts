@@ -39,6 +39,10 @@ export interface Watcher<T extends object = object> {
 	unwatch(): void;
 }
 
+export interface PathModifier {
+	(path: unknown[]): unknown[];
+}
+
 export interface WatchOptions {
 	/**
 	 * If true, then the callback of changing is also fired on mutation of nested objects
@@ -65,6 +69,16 @@ export interface WatchOptions {
 	 * @default `false`
 	 */
 	collapse?: boolean;
+
+	/**
+	 * Function that takes a path of the mutation event and returns a new path
+	 */
+	pathModifier?: PathModifier;
+
+	/**
+	 * Filter function for mutation events
+	 */
+	eventFilter?: WatchHandler;
 
 	/**
 	 * Link to an object that has connection with the watched object
@@ -169,21 +183,22 @@ export interface WatchHandlerParentParams {
 /**
  * Parameters of a mutation event
  */
-export interface WatchHandlerParams {
+export interface RawWatchHandlerParams {
 	/**
 	 * Link to an object that is watched
 	 */
 	obj: object;
 
 	/**
-	 * Link a top property of watching
+	 * Link to the root object of watching
 	 */
-	top?: object;
+	root: object;
 
 	/**
-	 * True if a mutation has occurred on the root object
+	 * Link to the top object of watching
+	 * (the first level property of the root)
 	 */
-	isRoot: boolean;
+	top?: object;
 
 	/**
 	 * True if a mutation has occurred on an object from a prototype of the watched object
@@ -194,6 +209,16 @@ export interface WatchHandlerParams {
 	 * Path to a property that was changed
 	 */
 	path: unknown[];
+}
+
+/**
+ * Extended parameters of a mutation event
+ */
+export interface WatchHandlerParams extends RawWatchHandlerParams {
+	/**
+	 * Original path to a property that was changed
+	 */
+	originalPath: unknown[];
 
 	/**
 	 * Information about a parent mutation event
@@ -201,7 +226,11 @@ export interface WatchHandlerParams {
 	parent?: WatchHandlerParentParams;
 }
 
-export interface WatchHandler<NEW = unknown, OLD = NEW> {
+export interface RawWatchHandler<NEW = unknown, OLD = NEW> {
+	(newValue: CanUndef<NEW>, oldValue: CanUndef<OLD>, params: RawWatchHandlerParams): any;
+}
+
+export interface WatchHandler<NEW = unknown, OLD = NEW> extends RawWatchHandler {
 	(newValue: CanUndef<NEW>, oldValue: CanUndef<OLD>, params: WatchHandlerParams): any;
 }
 
@@ -209,4 +238,4 @@ export interface MultipleWatchHandler<NEW = unknown, OLD = NEW> {
 	(mutations: [CanUndef<NEW>, CanUndef<OLD>, WatchHandlerParams][]): any;
 }
 
-export type WatchHandlersSet = Set<WatchHandler>;
+export type WatchHandlersSet = Set<RawWatchHandler>;

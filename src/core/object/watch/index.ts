@@ -38,21 +38,21 @@ export * from 'core/object/watch/interface';
  * Watches for changes of the specified object
  *
  * @param obj
- * @param handler - callback that is invoked on every mutation hook
+ * @param [handler] - callback that is invoked on every mutation hook
  */
-export default function watch<T extends object>(obj: T, handler: MultipleWatchHandler): Watcher<T>;
+export default function watch<T extends object>(obj: T, handler?: MultipleWatchHandler): Watcher<T>;
 
 /**
  * Watches for changes of the specified object
  *
  * @param obj
  * @param opts - additional options
- * @param handler - callback that is invoked on every mutation hook
+ * @param [handler] - callback that is invoked on every mutation hook
  */
 export default function watch<T extends object>(
 	obj: T,
 	opts: WatchOptions & ({immediate: true} | {collapse: true}),
-	handler: WatchHandler
+	handler?: WatchHandler
 ): Watcher<T>;
 
 /**
@@ -60,22 +60,22 @@ export default function watch<T extends object>(
  *
  * @param obj
  * @param opts - additional options
- * @param handler - callback that is invoked on every mutation hook
+ * @param [handler] - callback that is invoked on every mutation hook
  */
-export default function watch<T extends object>(obj: T, opts: WatchOptions, handler: MultipleWatchHandler): Watcher<T>;
+export default function watch<T extends object>(obj: T, opts: WatchOptions, handler?: MultipleWatchHandler): Watcher<T>;
 
 /**
  * Watches for changes of the specified object
  *
  * @param obj
  * @param path - path to a property to watch
- * @param handler - callback that is invoked on every mutation hook
+ * @param [handler] - callback that is invoked on every mutation hook
  */
 export default function watch<T extends object>(
 	obj: T,
 	// tslint:disable-next-line:unified-signatures
 	path: WatchPath,
-	handler: MultipleWatchHandler
+	handler?: MultipleWatchHandler
 ): Watcher<T>;
 
 /**
@@ -84,13 +84,13 @@ export default function watch<T extends object>(
  * @param obj
  * @param path - path to a property to watch
  * @param opts - additional options
- * @param handler - callback that is invoked on every mutation hook
+ * @param [handler] - callback that is invoked on every mutation hook
  */
 export default function watch<T extends object>(
 	obj: T,
 	path: WatchPath,
 	opts: WatchOptions & ({immediate: true} | {collapse: true}),
-	handler: WatchHandler
+	handler?: WatchHandler
 ): Watcher<T>;
 
 /**
@@ -99,18 +99,18 @@ export default function watch<T extends object>(
  * @param obj
  * @param path - path to a property to watch
  * @param opts - additional options
- * @param handler - callback that is invoked on every mutation hook
+ * @param [handler] - callback that is invoked on every mutation hook
  */
 export default function watch<T extends object>(
 	obj: T,
 	path: WatchPath,
 	opts: WatchOptions,
-	handler: MultipleWatchHandler
+	handler?: MultipleWatchHandler
 ): Watcher<T>;
 
 export default function watch<T extends object>(
 	obj: T,
-	pathOptsOrHandler: WatchPath | WatchHandler | MultipleWatchHandler | WatchOptions,
+	pathOptsOrHandler?: WatchPath | WatchHandler | MultipleWatchHandler | WatchOptions,
 	handlerOrOpts?: WatchHandler | MultipleWatchHandler | WatchOptions,
 	optsOrHandler?: WatchOptions | WatchHandler | MultipleWatchHandler
 ): Watcher<T> {
@@ -231,16 +231,11 @@ export default function watch<T extends object>(
 		pref = opts?.prefixes,
 		post = opts?.postfixes;
 
-	const needWrapHandler = Boolean(unwrappedObj && (
-		!deep ||
-		!immediate ||
+	const
+		pathModifier = opts?.pathModifier,
+		eventFilter = opts?.eventFilter;
 
-		rawDeps ||
-		collapse ||
-		normalizedPath
-	));
-
-	if (needWrapHandler) {
+	if (handler && unwrappedObj) {
 		const
 			original = handler;
 
@@ -249,7 +244,20 @@ export default function watch<T extends object>(
 			argsQueue = <unknown[][]>[];
 
 		handler = (value, oldValue, info) => {
-			if (!deep && info.path.length > (Object.isDictionary(info.obj) ? 1 : 2) || !withProto && info.fromProto) {
+			const
+				originalPath = info.path;
+
+			if (pathModifier) {
+				info = {...info, path: pathModifier(info.path)};
+			}
+
+			info.originalPath = originalPath;
+
+			if (
+				!deep && info.path.length > (Object.isDictionary(info.obj) ? 1 : 2) ||
+				!withProto && info.fromProto ||
+				eventFilter && !eventFilter(value, oldValue, info)
+			) {
 				return;
 			}
 
@@ -293,9 +301,12 @@ export default function watch<T extends object>(
 					}
 
 					if (collapse) {
+						const
+							isRoot = resolvedInfo.obj === resolvedInfo.root;
+
 						return [
-							resolvedInfo.isRoot ? value : resolvedInfo.top,
-							resolvedInfo.isRoot ? oldValue : resolvedInfo.top,
+							isRoot ? value : resolvedInfo.top,
+							isRoot ? oldValue : resolvedInfo.top,
 							resolvedInfo
 						];
 					}

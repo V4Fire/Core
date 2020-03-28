@@ -10,7 +10,13 @@ import { WatchOptions, WatchHandlersSet } from 'core/object/watch/interface';
 
 export interface WrapOptions {
 	/**
-	 * Link a top property of watching
+	 * Link to the root object of watching
+	 */
+	root: object;
+
+	/**
+	 * Link to the top object of watching
+	 * (the first level property of the root)
 	 */
 	top?: object;
 
@@ -19,12 +25,6 @@ export interface WrapOptions {
 	 * it is provided to a watch handler with parameters
 	 */
 	path?: unknown[];
-
-	/**
-	 * True if an object that is wrapped is the root of watching
-	 * @default `false`
-	 */
-	isRoot?: boolean;
 
 	/**
 	 * True if the property to watch is taken from a prototype

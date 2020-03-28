@@ -53,7 +53,8 @@ export function getProxyType(obj: unknown): Nullable<string> {
  * @param key - property key for a value
  * @param path - base path to object properties: it is provided to a watch handler with parameters
  * @param handlers - set of registered handlers
- * @param [top] - link a top property of watching
+ * @param root - link to the root object of watching
+ * @param [top] - link to the top object of watching
  * @param [opts] - additional options
  */
 export function getProxyValue(
@@ -61,6 +62,7 @@ export function getProxyValue(
 	key: unknown,
 	path: CanUndef<unknown[]>,
 	handlers: WatchHandlersSet,
+	root: object,
 	top?: object,
 	opts?: InternalWatchOptions
 ): unknown {
@@ -71,7 +73,7 @@ export function getProxyValue(
 	if (opts?.deep && getProxyType(rawValue)) {
 		const fullPath = (<unknown[]>[]).concat(path ?? [], key);
 		return (typeof Proxy === 'function' ? proxyEngine : accEngine)
-			.watch(<object>rawValue, fullPath, null, handlers, opts, top || <object>rawValue);
+			.watch(<object>rawValue, fullPath, null, handlers, opts, root, top || <object>rawValue);
 	}
 
 	return rawValue;

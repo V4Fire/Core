@@ -69,8 +69,8 @@ export function bindMutationHooks<T extends object>(
 			for (let o = handlers.values(), el = o.next(); !el.done; el = o.next()) {
 				el.value(a[0], a[1], {
 					obj,
+					root: opts.root,
 					top: opts.top,
-					isRoot: Boolean(opts.isRoot),
 					fromProto: Boolean(opts.fromProto),
 					path: a[2]
 				});
