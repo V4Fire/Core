@@ -66,11 +66,15 @@ export function getProxyValue(
 	top?: object,
 	opts?: InternalWatchOptions
 ): unknown {
-	if (opts?.fromProto && !opts.withProto) {
+	if (!opts) {
 		return rawValue;
 	}
 
-	if (opts?.deep && getProxyType(rawValue)) {
+	if (opts.fromProto && !opts.withProto) {
+		return rawValue;
+	}
+
+	if (opts.deep && getProxyType(rawValue)) {
 		const fullPath = (<unknown[]>[]).concat(path ?? [], key);
 		return (typeof Proxy === 'function' ? proxyEngine : accEngine)
 			.watch(<object>rawValue, fullPath, null, handlers, opts, root, top || <object>rawValue);

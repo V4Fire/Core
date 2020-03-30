@@ -145,7 +145,7 @@ export default function watch<T extends object>(
 	}
 
 	const
-		rawDeps = opts?.dependencies;
+		rawDeps = Object.size(opts?.dependencies) ? opts!.dependencies : undefined;
 
 	let
 		localDeps: unknown[],
@@ -235,7 +235,19 @@ export default function watch<T extends object>(
 		pathModifier = opts?.pathModifier,
 		eventFilter = opts?.eventFilter;
 
-	if (handler && unwrappedObj) {
+	const needWrapHandler = Boolean(unwrappedObj && (
+		!deep ||
+		!immediate ||
+
+		pref ||
+		post ||
+		rawDeps ||
+
+		collapse ||
+		normalizedPath
+	));
+
+	if (needWrapHandler) {
 		const
 			original = handler;
 

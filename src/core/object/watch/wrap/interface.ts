@@ -21,10 +21,14 @@ export interface WrapOptions {
 	top?: object;
 
 	/**
-	 * Base path to object properties:
-	 * it is provided to a watch handler with parameters
+	 * Base path to object properties
 	 */
-	path?: unknown[];
+	path: unknown[];
+
+	/**
+	 * Original path to a property that was changed
+	 */
+	originalPath: unknown[];
 
 	/**
 	 * True if the property to watch is taken from a prototype

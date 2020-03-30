@@ -159,13 +159,15 @@ export function watch<T extends object>(
 	}
 
 	const
-		fromProto = Boolean(opts?.fromProto);
+		fromProto = Boolean(opts?.fromProto),
+		resolvedPath = path || [];
 
 	if (!Object.isDictionary(unwrappedObj) && !Object.isArray(unwrappedObj)) {
 		const wrapOpts = {
 			root: root!,
 			top,
-			path,
+			path: resolvedPath,
+			originalPath: resolvedPath,
 			fromProto,
 			watchOpts: opts
 		};
@@ -177,7 +179,7 @@ export function watch<T extends object>(
 		blackListStore = new Set();
 
 	proxy = new Proxy(unwrappedObj, {
-		get: (target, key, receiver) => {
+		get: (target, key) => {
 			switch (key) {
 				case toOriginalObject:
 					return target;
@@ -196,16 +198,21 @@ export function watch<T extends object>(
 			}
 
 			const
-				isArray = Object.isArray(target),
-				isCustomObj = isArray || Object.isCustomObject(target),
-				val = Reflect.get(target, key, isCustomObj ? receiver : target);
+				val = target[key];
+
+			if (Object.isPrimitive(val)) {
+				return val;
+			}
 
 			if (Object.isSymbol(key) || blackListStore.has(key)) {
-				if (isCustomObj) {
+				if (Object.isCustomObject(target)) {
 					return val;
 				}
 
-			} else if (isCustomObj) {
+			} else if (Object.isCustomObject(target)) {
+				const
+					isArray = Object.isArray(target);
+
 				let
 					propFromProto = fromProto;
 
@@ -258,12 +265,16 @@ export function watch<T extends object>(
 				}
 
 				for (let o = handlers.values(), el = o.next(); !el.done; el = o.next()) {
+					const
+						path = resolvedPath.concat(key);
+
 					el.value(val, oldVal, {
 						obj: unwrappedObj,
 						root: root!,
 						top,
 						fromProto,
-						path: (<unknown[]>[]).concat(path ?? [], key)
+						path,
+						originalPath: path
 					});
 				}
 			}

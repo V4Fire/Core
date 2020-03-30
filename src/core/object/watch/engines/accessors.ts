@@ -158,12 +158,14 @@ export function watch<T extends object>(
 	}
 
 	const
-		fromProto = Boolean(opts?.fromProto);
+		fromProto = Boolean(opts?.fromProto),
+		resolvedPath = path || [];
 
 	const wrapOpts = {
 		root: root!,
 		top,
-		path,
+		path: resolvedPath,
+		originalPath: resolvedPath,
 		fromProto,
 		watchOpts: opts
 	};
@@ -437,12 +439,16 @@ export function setWatchAccessors(
 					}
 
 					for (let o = handlers.values(), el = o.next(); !el.done; el = o.next()) {
+						const
+							resolvedPath = (<unknown[]>[]).concat(path ?? [], key);
+
 						el.value(val, oldVal, {
 							obj,
 							root,
 							top,
 							fromProto,
-							path: (<unknown[]>[]).concat(path ?? [], key)
+							path: resolvedPath,
+							originalPath: resolvedPath
 						});
 					}
 				}

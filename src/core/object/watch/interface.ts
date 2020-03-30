@@ -209,17 +209,17 @@ export interface RawWatchHandlerParams {
 	 * Path to a property that was changed
 	 */
 	path: unknown[];
+
+	/**
+	 * Original path to a property that was changed
+	 */
+	originalPath: unknown[];
 }
 
 /**
  * Extended parameters of a mutation event
  */
 export interface WatchHandlerParams extends RawWatchHandlerParams {
-	/**
-	 * Original path to a property that was changed
-	 */
-	originalPath: unknown[];
-
 	/**
 	 * Information about a parent mutation event
 	 */
