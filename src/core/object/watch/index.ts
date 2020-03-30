@@ -11,7 +11,7 @@
  * @packageDocumentation
  */
 
-import { toOriginalObject, watchHandlers } from 'core/object/watch/const';
+import { muteLabel, toOriginalObject, watchHandlers } from 'core/object/watch/const';
 import { getProxyType, unwrap } from 'core/object/watch/engines/helpers';
 
 import * as proxyEngine from 'core/object/watch/engines/proxy';
@@ -235,19 +235,7 @@ export default function watch<T extends object>(
 		pathModifier = opts?.pathModifier,
 		eventFilter = opts?.eventFilter;
 
-	const needWrapHandler = Boolean(unwrappedObj && (
-		!deep ||
-		!immediate ||
-
-		pref ||
-		post ||
-		rawDeps ||
-
-		collapse ||
-		normalizedPath
-	));
-
-	if (needWrapHandler) {
+	if (unwrappedObj && handler) {
 		const
 			original = handler;
 
@@ -499,7 +487,7 @@ export default function watch<T extends object>(
 		res = engine.watch(obj, undefined, handler, obj[watchHandlers] || new Set(), opts),
 		proxy = res.proxy;
 
-	if (tiedWith && Object.isSimpleObject(proxy)) {
+	if (tiedWith && Object.isSimpleObject(unwrappedObj)) {
 		tiedWith[watchHandlers] = proxy[watchHandlers];
 		tiedWith[toOriginalObject] = proxy[toOriginalObject];
 
@@ -527,6 +515,38 @@ export default function watch<T extends object>(
 	}
 
 	return res;
+}
+
+/**
+ * Mutes watching of changes from the specified object
+ * @param obj
+ */
+export function mute(obj: object): boolean {
+	const
+		unwrappedObj = unwrap(obj);
+
+	if (unwrappedObj) {
+		unwrappedObj[muteLabel] = true;
+		return true;
+	}
+
+	return false;
+}
+
+/**
+ * Unmutes watching of changes from the specified object
+ * @param obj
+ */
+export function unmute(obj: object): boolean {
+	const
+		unwrappedObj = unwrap(obj);
+
+	if (unwrappedObj) {
+		unwrappedObj[muteLabel] = false;
+		return true;
+	}
+
+	return false;
 }
 
 /**

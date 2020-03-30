@@ -26,11 +26,6 @@ export interface WrapOptions {
 	path: unknown[];
 
 	/**
-	 * Original path to a property that was changed
-	 */
-	originalPath: unknown[];
-
-	/**
 	 * True if the property to watch is taken from a prototype
 	 * @default `false`
 	 */

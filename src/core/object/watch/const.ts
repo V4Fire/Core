@@ -13,6 +13,7 @@ export const
 	toOriginalObject = Symbol('Link to an original object');
 
 export const
+	muteLabel = Symbol('Watcher mute label'),
 	watchPath = Symbol('Watch path'),
 	watchOptions = Symbol('Watch options'),
 	watchHandlers = Symbol('Watch handlers'),

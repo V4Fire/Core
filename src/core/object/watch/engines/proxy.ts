@@ -8,6 +8,9 @@
 
 import {
 
+	muteLabel,
+	blackList,
+
 	toProxyObject,
 	toRootProxyObject,
 	toTopProxyObject,
@@ -15,8 +18,7 @@ import {
 
 	watchPath,
 	watchOptions,
-	watchHandlers,
-	blackList
+	watchHandlers
 
 } from 'core/object/watch/const';
 
@@ -200,7 +202,7 @@ export function watch<T extends object>(
 			const
 				val = target[key];
 
-			if (Object.isPrimitive(val)) {
+			if (Object.isPrimitive(val) || root![muteLabel]) {
 				return val;
 			}
 
@@ -248,7 +250,7 @@ export function watch<T extends object>(
 				isCustomObj = isArray || Object.isCustomObject(target),
 				set = () => Reflect.set(target, key, val, isCustomObj ? receiver : target);
 
-			if (Object.isSymbol(key) || blackListStore.has(key)) {
+			if (Object.isSymbol(key) || root![muteLabel] || blackListStore.has(key)) {
 				return set();
 			}
 
@@ -273,8 +275,7 @@ export function watch<T extends object>(
 						root: root!,
 						top,
 						fromProto,
-						path,
-						originalPath: path
+						path
 					});
 				}
 			}
@@ -284,6 +285,10 @@ export function watch<T extends object>(
 
 		deleteProperty: (target, key) => {
 			if (Reflect.deleteProperty(target, key)) {
+				if (root![muteLabel]) {
+					return true;
+				}
+
 				if (Object.isDictionary(target) || Object.isMap(target) || Object.isWeakMap(target)) {
 					blackListStore.add(key);
 				}

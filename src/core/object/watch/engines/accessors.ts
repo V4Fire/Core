@@ -8,6 +8,8 @@
 
 import {
 
+	muteLabel,
+
 	toProxyObject,
 	toRootProxyObject,
 	toTopProxyObject,
@@ -411,12 +413,19 @@ export function setWatchAccessors(
 		descriptors = Object.getOwnPropertyDescriptor(obj, key);
 
 	if (!descriptors || descriptors.configurable) {
-		Object.defineProperty(proxy, key, {
+			Object.defineProperty(proxy, key, {
 			enumerable: true,
 			configurable: true,
 
 			get(): unknown {
-				return getProxyValue(obj[key], key, path, handlers, root, top, opts);
+				const
+					val = obj[key];
+
+				if (root[muteLabel]) {
+					return val;
+				}
+
+				return getProxyValue(val, key, path, handlers, root, top, opts);
 			},
 
 			set(val: unknown): void {
@@ -429,6 +438,10 @@ export function setWatchAccessors(
 				if (oldVal !== val) {
 					try {
 						obj[key] = val;
+
+						if (root[muteLabel]) {
+							return;
+						}
 
 						if (fromProto === 1) {
 							fromProto = opts!.fromProto = false;
@@ -447,8 +460,7 @@ export function setWatchAccessors(
 							root,
 							top,
 							fromProto,
-							path: resolvedPath,
-							originalPath: resolvedPath
+							path: resolvedPath
 						});
 					}
 				}
