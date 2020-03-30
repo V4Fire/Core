@@ -15,6 +15,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :rocket: New Feature
 
+* Added `Object.isPrimitive`
 * Added `pathModifier` to `core/object/watch`
 * Added `eventFilter` to `core/object/watch`
 * Added `root` to `core/object/watch/interface/WatchHandlerParentParams`
