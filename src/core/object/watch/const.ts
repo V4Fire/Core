@@ -8,8 +8,8 @@
 
 export const
 	toProxyObject = Symbol('Link to a proxy object'),
-	toRootProxyObject = Symbol('Link to the root proxy object'),
-	toTopProxyObject = Symbol('Link to the top proxy object'),
+	toRootObject = Symbol('Link to the root object of watching'),
+	toTopObject = Symbol('Link to the top object of watching'),
 	toOriginalObject = Symbol('Link to an original object');
 
 export const

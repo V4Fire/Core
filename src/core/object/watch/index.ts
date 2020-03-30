@@ -11,7 +11,7 @@
  * @packageDocumentation
  */
 
-import { muteLabel, toOriginalObject, watchHandlers } from 'core/object/watch/const';
+import { muteLabel, toOriginalObject, toRootObject, watchHandlers } from 'core/object/watch/const';
 import { getProxyType, unwrap } from 'core/object/watch/engines/helpers';
 
 import * as proxyEngine from 'core/object/watch/engines/proxy';
@@ -523,10 +523,10 @@ export default function watch<T extends object>(
  */
 export function mute(obj: object): boolean {
 	const
-		unwrappedObj = unwrap(obj);
+		root = unwrap(obj[toRootObject] || obj);
 
-	if (unwrappedObj) {
-		unwrappedObj[muteLabel] = true;
+	if (root) {
+		root[muteLabel] = true;
 		return true;
 	}
 
@@ -539,10 +539,10 @@ export function mute(obj: object): boolean {
  */
 export function unmute(obj: object): boolean {
 	const
-		unwrappedObj = unwrap(obj);
+		root = unwrap(obj[toRootObject] || obj);
 
-	if (unwrappedObj) {
-		unwrappedObj[muteLabel] = false;
+	if (root) {
+		root[muteLabel] = false;
 		return true;
 	}
 

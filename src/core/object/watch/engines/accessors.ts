@@ -11,8 +11,8 @@ import {
 	muteLabel,
 
 	toProxyObject,
-	toRootProxyObject,
-	toTopProxyObject,
+	toRootObject,
+	toTopObject,
 	toOriginalObject,
 
 	watchPath,
@@ -223,8 +223,8 @@ export function watch<T extends object>(
 
 	proxy[watchPath] = path;
 	proxy[watchHandlers] = handlers;
-	proxy[toRootProxyObject] = root;
-	proxy[toTopProxyObject] = top;
+	proxy[toRootObject] = root;
+	proxy[toTopObject] = top;
 	proxy[toOriginalObject] = unwrappedObj;
 
 	return returnProxy(unwrappedObj, proxy);
@@ -257,8 +257,8 @@ export function set(obj: object, path: WatchPath, value: unknown, handlers: Watc
 
 	const
 		proxy = getOrCreateLabelValueByHandlers<object>(unwrappedObj, toProxyObject, handlers),
-		root = proxy?.[toTopProxyObject] || unwrappedObj,
-		top = proxy?.[toTopProxyObject] || unwrappedObj;
+		root = proxy?.[toTopObject] || unwrappedObj,
+		top = proxy?.[toTopObject] || unwrappedObj;
 
 	const
 		ref = Object.get(top, refPath);
@@ -332,8 +332,8 @@ export function unset(obj: object, path: WatchPath, handlers: WatchHandlersSet):
 
 	const
 		proxy = getOrCreateLabelValueByHandlers<object>(unwrappedObj, toProxyObject, handlers),
-		root = proxy?.[toTopProxyObject] || unwrappedObj,
-		top = proxy?.[toTopProxyObject] || unwrappedObj;
+		root = proxy?.[toTopObject] || unwrappedObj,
+		top = proxy?.[toTopObject] || unwrappedObj;
 
 	const
 		ref = Object.get(top, refPath);

@@ -12,8 +12,8 @@ import {
 	blackList,
 
 	toProxyObject,
-	toRootProxyObject,
-	toTopProxyObject,
+	toRootObject,
+	toTopObject,
 	toOriginalObject,
 
 	watchPath,
@@ -186,10 +186,10 @@ export function watch<T extends object>(
 				case toOriginalObject:
 					return target;
 
-				case toRootProxyObject:
+				case toRootObject:
 					return root;
 
-				case toTopProxyObject:
+				case toTopObject:
 					return top;
 
 				case watchHandlers:
@@ -237,8 +237,8 @@ export function watch<T extends object>(
 			if (
 				// tslint:disable-next-line:prefer-switch
 				key === toOriginalObject ||
-				key === toRootProxyObject ||
-				key === toTopProxyObject ||
+				key === toRootObject ||
+				key === toTopObject ||
 				key === watchHandlers ||
 				key === watchPath
 			) {
