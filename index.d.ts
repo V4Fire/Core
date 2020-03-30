@@ -911,6 +911,12 @@ interface ObjectConstructor {
 	isObject(obj: unknown): obj is Dictionary;
 
 	/**
+	 * Returns true if the specified value has a primitive type
+	 * @param obj
+	 */
+	isPrimitive(obj: unknown): boolean;
+
+	/**
 	 * Returns true if the specified value is a custom (not native) object or a function
 	 * @param obj
 	 */

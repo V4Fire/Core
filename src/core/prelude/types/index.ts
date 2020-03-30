@@ -19,12 +19,15 @@ const
 	isNative = /\[native code]/,
 	nonPrimitiveTypes = {object: true, function: true};
 
+/** @see ObjectConstructor.isPrimitive */
+extend(Object, 'isPrimitive', (obj) => !obj || !nonPrimitiveTypes[typeof obj]);
+
 /** @see ObjectConstructor.isCustomObject */
 extend(Object, 'isCustomObject', (obj) => {
-	const
-		type = typeof obj;
+	let
+		type;
 
-	if (!obj || !nonPrimitiveTypes[type]) {
+	if (!obj || !nonPrimitiveTypes[type = typeof obj]) {
 		return false;
 	}
 
