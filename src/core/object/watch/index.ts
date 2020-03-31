@@ -125,6 +125,7 @@ export default function watch<T extends object>(
 		timer,
 		normalizedPath;
 
+	// Support for overloads of the function
 	if (Object.isString(pathOptsOrHandler) || Object.isArray(pathOptsOrHandler)) {
 		normalizedPath = Object.isArray(pathOptsOrHandler) ? pathOptsOrHandler : pathOptsOrHandler.split('.');
 
@@ -148,9 +149,11 @@ export default function watch<T extends object>(
 		rawDeps = Object.size(opts?.dependencies) ? opts!.dependencies : undefined;
 
 	let
+		depsMap: Map<unknown[], unknown[][]>,
 		localDeps: unknown[],
 		deps: unknown[][][];
 
+	// Normalize dependencies
 	if (rawDeps && unwrappedObj) {
 		const
 			convert = (dep) => Object.isArray(dep) ? dep : dep.split('.');
@@ -166,9 +169,7 @@ export default function watch<T extends object>(
 
 		} else {
 			deps = [];
-
-			const
-				map = new Map();
+			depsMap = new Map();
 
 			Object.forEach(rawDeps, (dep, key) => {
 				if (!Object.isArray(dep)) {
@@ -193,14 +194,14 @@ export default function watch<T extends object>(
 					path = convert(key);
 
 				deps.push([path, localDeps]);
-				Object.set(map, path, localDeps);
+				Object.set(depsMap, path, localDeps);
 			});
 
-			if (map.size) {
+			if (depsMap.size) {
 				const expandDeps = (deps) => {
 					for (let i = 0; i < deps.length; i++) {
 						const
-							dep = Object.get(map, deps[i]);
+							dep = Object.get(depsMap, deps[i]);
 
 						if (dep) {
 							deps.splice(i, 1, ...expandDeps(dep));
@@ -215,7 +216,7 @@ export default function watch<T extends object>(
 				}
 
 				if (normalizedPath) {
-					localDeps = Object.get(map, normalizedPath);
+					localDeps = Object.get(depsMap, normalizedPath);
 				}
 			}
 		}
@@ -235,7 +236,9 @@ export default function watch<T extends object>(
 		pathModifier = opts?.pathModifier,
 		eventFilter = opts?.eventFilter;
 
-	if (unwrappedObj && handler) {
+	// If we have a handler and valid object to watch,
+	// we need to wrap this handler to provide all features of watching
+	if (handler && unwrappedObj) {
 		const
 			original = handler;
 
@@ -254,8 +257,13 @@ export default function watch<T extends object>(
 			info.originalPath = originalPath;
 
 			if (
+				// We don't watch deep mutations
 				!deep && info.path.length > (Object.isDictionary(info.obj) ? 1 : 2) ||
+
+				// We don't watch prototype mutations
 				!withProto && info.fromProto ||
+
+				// The mutation was already fired
 				eventFilter && !eventFilter(value, oldValue, info)
 			) {
 				return;
@@ -268,6 +276,8 @@ export default function watch<T extends object>(
 				let
 					resolvedInfo = info;
 
+				// If we have a tied property with the property that have a mutation,
+				// we need to register ir
 				if (tiedPath) {
 					cache = cache || new Map();
 
@@ -279,6 +289,7 @@ export default function watch<T extends object>(
 					resolvedInfo = {...info, path: tiedPath, parent: {value, oldValue, info}};
 				}
 
+				// Returns a list of attributes to the mutation handler
 				const getArgs = () => {
 					if (needGetVal) {
 						const
@@ -317,6 +328,7 @@ export default function watch<T extends object>(
 				if (immediate) {
 					original(...getArgs());
 
+				// Deferred events
 				} else {
 					const
 						needEventQueue = !normalizedPath;
@@ -349,12 +361,14 @@ export default function watch<T extends object>(
 				}
 			};
 
+			// Takes a tied path and checks if it matches with the actual path
 			const checkTiedPath = (tiedPath, deps) => {
 				const
 					path = info.path.length > tiedPath.length ? info.path.slice(0, tiedPath.length) : info.path;
 
-				let
-					dynamic = false;
+				// The flag that indicates that we need to get a real property value from the original object.
+				// It make sense for getters.
+				let dynamic = false;
 
 				path: for (let i = 0; i < path.length; i++) {
 					const
@@ -397,10 +411,34 @@ export default function watch<T extends object>(
 							const
 								path = info.path.length > depPath.length ? info.path.slice(0, depPath.length) : info.path;
 
-							for (let i = 0; i < path.length; i++) {
-								if (path[i] === depPath[i]) {
+							depsPath: for (let i = 0; i < path.length; i++) {
+								const
+									pathVal = path[i],
+									depPathVal = depPath[i];
+
+								if (pathVal === depPathVal) {
 									dynamic = true;
 									continue;
+								}
+
+								if (Object.isString(pathVal)) {
+									if (pref) {
+										for (let i = 0; i < pref.length; i++) {
+											if (pathVal === pref[i] + depPathVal) {
+												dynamic = true;
+												continue depsPath;
+											}
+										}
+									}
+
+									if (post) {
+										for (let i = 0; i < post.length; i++) {
+											if (pathVal === depPathVal + post[i]) {
+												dynamic = true;
+												continue depsPath;
+											}
+										}
+									}
 								}
 
 								continue deps;
@@ -410,12 +448,14 @@ export default function watch<T extends object>(
 						}
 					}
 
+					// The path doesn't match with a tied path
 					return;
 				}
 
 				fireMutationEvent(tiedPath, dynamic);
 			};
 
+			// We watch only the one specified property
 			if (normalizedPath) {
 				checkTiedPath(normalizedPath, localDeps);
 				return;
@@ -423,6 +463,7 @@ export default function watch<T extends object>(
 
 			fireMutationEvent();
 
+			// Check if the mutation matches by prefixes/postfixes with another properties
 			if (pref || post) {
 				const
 					tiedPath = <unknown[]>[];
@@ -470,6 +511,7 @@ export default function watch<T extends object>(
 				}
 			}
 
+			// Check if the mutation matches by dependencies with another properties
 			if (deps) {
 				for (let i = 0; i < deps.length; i++) {
 					const dep = deps[i];
