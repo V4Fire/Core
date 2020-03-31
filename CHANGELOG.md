@@ -11,12 +11,7 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-## v3.9.1 ()
-
-#### :bug: Bug Fix
-* Fixed network connection status' checking algorithm
-
-## v3.9.0 (2020-03-28)
+## v3.9.0 (2020-03-31)
 
 #### :rocket: New Feature
 
@@ -25,6 +20,10 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 * Added `pathModifier` to `core/object/watch`
 * Added `eventFilter` to `core/object/watch`
 * Added `root` to `core/object/watch/interface/WatchHandlerParentParams`
+
+#### :bug: Bug Fix
+
+* Fixed network connection status' checking algorithm
 
 ## v3.8.0 (2020-03-25)
 
