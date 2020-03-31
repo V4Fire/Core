@@ -11,6 +11,11 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.9.1 ()
+
+#### :bug: Bug Fix
+* Fixed network connection status' checking algorithm
+
 ## v3.9.0 (2020-03-28)
 
 #### :rocket: New Feature

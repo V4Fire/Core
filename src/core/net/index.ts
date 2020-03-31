@@ -23,8 +23,7 @@ const
 
 let
 	storage,
-	syncTimer,
-	retryCount = 0;
+	syncTimer;
 
 let
 	status,
@@ -62,7 +61,8 @@ export function isOnline(): Promise<NetStatus> {
 		}
 
 		let
-			loadFromStorage;
+			loadFromStorage,
+			retriesCount = 0;
 
 		if (online.persistence && !lastOnline) {
 			if (!storage) {
@@ -78,7 +78,7 @@ export function isOnline(): Promise<NetStatus> {
 
 		status = await new Promise<boolean>((resolve) => {
 			const retry = () => {
-				if (!online.retryCount || status === undefined || ++retryCount > online.retryCount) {
+				if (!online.retryCount || status === undefined || ++retriesCount > online.retryCount) {
 					resolve(false);
 
 				} else {
@@ -93,7 +93,6 @@ export function isOnline(): Promise<NetStatus> {
 
 				img.onload = () => {
 					clearTimeout(timer);
-					retryCount = 0;
 					resolve(true);
 				};
 
