@@ -297,6 +297,14 @@ export function watch<T extends object>(
 			}
 
 			return false;
+		},
+
+		has: (target, key) => {
+			if (blackListStore.has(key)) {
+				return false;
+			}
+
+			return Reflect.has(target, key);
 		}
 	});
 
