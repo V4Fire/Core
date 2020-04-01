@@ -57,7 +57,7 @@ export function concatUrls(...urls: Nullable<string>[]): string {
  * Creates a querystring from the specified data and returns it
  *
  * @param data
- * @param [encode] - if true, then all values from the data will be encoded using encodeURIComponent
+ * @param [encode] - if true, then all values from the data will be encoded by using encodeURIComponent
  */
 export function toQueryString(data: unknown, encode: boolean = true): string {
 	return chunkToQueryString(data, encode);
@@ -67,7 +67,7 @@ export function toQueryString(data: unknown, encode: boolean = true): string {
  * Creates a dictionary from the specified querystring and returns it
  *
  * @param query
- * @param [decode] - if true, then the querystring will be decoded using decodeURIComponent
+ * @param [decode] - if true, then the querystring will be decoded by using decodeURIComponent
  */
 export function fromQueryString(query: string, decode: boolean = true): Dictionary<string | null> {
 	const

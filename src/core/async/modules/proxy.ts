@@ -32,9 +32,9 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 *
 	 * This method doesn't attach any hook or listeners to the object,
 	 * but every time the same object is registered, Async will increment the number of links that relates to this object.
-	 * And when we try to destroy the worker using one of Async methods, like "terminateWorker",
+	 * And when we try to destroy the worker by using one of Async methods, like "terminateWorker",
 	 * it will de-increment the links value. When the number of links is equal to zero,
-	 * Async will try to call a "real" object destructor using one of possible destructor methods from a whitelist
+	 * Async will try to call a "real" object destructor by using one of possible destructor methods from a whitelist
 	 * or by the specified destructor name, also if the worker is a function, it is interpreted as the destructor.
 	 *
 	 * @param worker
@@ -94,7 +94,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	/**
 	 * Wraps the specified function.
 	 * This method doesn't attach any hook or listeners to the object,
-	 * but if we cancel the operation using one of Async methods, like "cancelProxy",
+	 * but if we cancel the operation by using one of Async methods, like "cancelProxy",
 	 * the target function won't be invoked.
 	 *
 	 * @param cb
@@ -223,7 +223,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Wraps the specified external request.
 	 *
 	 * This method doesn't attach any hook or listeners to the object,
-	 * but if we cancel the operation using one of Async methods, like "cancelRequest", the promise will be rejected.
+	 * but if we cancel the operation by using one of Async methods, like "cancelRequest", the promise will be rejected.
 	 * The request can be provided as a promise or as a function, that returns a promise.
 	 *
 	 * @param request
@@ -329,7 +329,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Wraps the specified promise.
 	 *
 	 * This method doesn't attach any hook or listeners to the object,
-	 * but if we cancel the operation using one of Async methods, like "cancelPromise", the promise will be rejected.
+	 * but if we cancel the operation by using one of Async methods, like "cancelPromise", the promise will be rejected.
 	 * The promise can be provided as it is or as a function, that returns a promise.
 	 *
 	 * @param promise

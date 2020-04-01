@@ -18,7 +18,7 @@ export * from 'core/semver/const';
 export * from 'core/semver/interface';
 
 /**
- * Compares two strings with number versions using the semver strategy
+ * Compares two strings with number versions by using the semver strategy
  *
  * @param a
  * @param b

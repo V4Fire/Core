@@ -12,7 +12,7 @@ import RequestError from 'core/request/error';
 import { RequestEngine } from 'core/request/interface';
 
 /**
- * Creates request using XMLHttpRequest with the specified parameters and returns a promise
+ * Creates request by using XMLHttpRequest with the specified parameters and returns a promise
  * @param params
  */
 const request: RequestEngine = (params) => {

@@ -14,7 +14,7 @@ import middlewareFactory, { LogMiddleware } from 'core/log/middlewares';
 import engineFactory from 'core/log/engines';
 
 /**
- * Creates a pipeline using the config
+ * Creates a pipeline by using the config
  * (returns undefined if there are not enough data to create one)
  *
  * @param pipelineConfig

@@ -629,7 +629,7 @@ interface ObjectConstructor {
 	): void;
 
 	/**
-	 * Compares two specified objects using naive but fast "JSON.stringify/parse" strategy and returns the result
+	 * Compares two specified objects by using naive but fast "JSON.stringify/parse" strategy and returns the result
 	 *
 	 * @param a
 	 * @param b
@@ -637,7 +637,7 @@ interface ObjectConstructor {
 	fastCompare<T>(a: unknown, b: T): a is T;
 
 	/**
-	 * Clones the specified object using naive but fast "JSON.stringify/parse" strategy and returns a new object
+	 * Clones the specified object by using naive but fast "JSON.stringify/parse" strategy and returns a new object
 	 *
 	 * @param obj
 	 * @param [opts] - additional options
@@ -1483,7 +1483,7 @@ interface DateConstructor {
 	 *  1. another date object
 	 *  1. number of milliseconds (if the number is integer)
 	 *  1. number of seconds (if the number is float)
-	 *  1. string pattern using the native Date.parse with some polyfills
+	 *  1. string pattern by using the native Date.parse with some polyfills
 	 *  1. string aliases:
 	 *     1. `'now'` - is an alias for the now date
 	 *     1. `'today'` - is an alias for the beginning of the today
@@ -1741,7 +1741,7 @@ interface Date {
 	 * new Date('12/28/2019').format('year:2-digit', 'en-us') // '19'
 	 * new Date('12/28/2019').format('year:2-digit;month', 'en-us') // 'Dec 19'
 	 *
-	 * // Formatting a date using short aliases
+	 * // Formatting a date by using short aliases
 	 * new Date('12/28/2019').format('Y:2-digit;M:long;d', 'en-us') // 'December 28, 19'
 	 * ```
 	 */

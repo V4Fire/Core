@@ -11,7 +11,7 @@ import Response from 'core/request/response';
 import { RequestEngine } from 'core/request/interface';
 
 /**
- * Creates request using node.js with the specified parameters and returns a promise
+ * Creates request by using node.js with the specified parameters and returns a promise
  * @param params
  */
 // tslint:disable-next-line

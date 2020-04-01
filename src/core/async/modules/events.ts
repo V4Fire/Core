@@ -40,7 +40,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * If the emitter is a function, it is interpreted as a function to attach events.
 	 *
 	 * @param emitter - event emitter
-	 * @param events - event or a list of events (can also specify multiple events using spaces)
+	 * @param events - event or a list of events (can also specify multiple events by using spaces)
 	 * @param handler - event handler
 	 * @param [args] - additional arguments for the emitter
 	 */
@@ -56,7 +56,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * If the emitter is a function, it is interpreted as a function to attach events.
 	 *
 	 * @param emitter - event emitter
-	 * @param events - event or a list of events (can also specify multiple events using spaces)
+	 * @param events - event or a list of events (can also specify multiple events by using spaces)
 	 * @param handler - event handler
 	 * @param opts - options for the operation
 	 * @param [args] - additional arguments for the emitter
@@ -167,7 +167,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * If the emitter is a function, it is interpreted as a function to attach events.
 	 *
 	 * @param emitter - event emitter
-	 * @param events - event or a list of events (can also specify multiple events using spaces)
+	 * @param events - event or a list of events (can also specify multiple events by using spaces)
 	 * @param handler - event handler
 	 * @param [args] - additional arguments for the emitter
 	 */
