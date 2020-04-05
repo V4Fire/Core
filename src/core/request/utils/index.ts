@@ -18,6 +18,19 @@ import { tplRgxp } from 'core/request/utils/const';
 export * from 'core/request/utils/const';
 
 /**
+ * Merges the specified arguments and returns a new object
+ * @param args
+ */
+export function merge<T>(...args: unknown[]): T {
+	return Object.mixin({
+		deep: true,
+		concatArray: true,
+		concatFn: (a: unknown[], b: unknown[]) => a.union(b),
+		extendFilter: (d, v) => Array.isArray(v) || Object.isDictionary(v)
+	}, undefined, ...args);
+}
+
+/**
  * Takes a key for data and returns a new key to save the data in a storage
  * @param key
  */
