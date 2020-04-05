@@ -6,13 +6,11 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import Then from 'core/then';
-
 import Response, { ResponseTypeValue } from 'core/request/response';
 import { getStorageKey } from 'core/request/utils';
 
 import { storage } from 'core/request/const';
-import { RequestResponseObject } from 'core/request/interface';
+import { RequestResponse, RequestResponseObject } from 'core/request/interface';
 
 import Super from 'core/request/context/modules/methods';
 
@@ -21,7 +19,7 @@ export default class RequestContext<D = unknown> extends Super<D> {
 	 * Wraps the specified promise: attaches the pending cache, etc.
 	 * @param promise
 	 */
-	wrapRequest(promise: Then<D>): Then<D> {
+	wrapRequest(promise: RequestResponse<D>): RequestResponse<D> {
 		const
 			key = this.cacheKey,
 			cache = this.pendingCache;

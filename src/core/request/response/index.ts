@@ -64,7 +64,7 @@ export default class Response<
 	readonly ok: boolean;
 
 	/**
-	 * List of status codes (or a single code) with HTTP statuses that is ok for the response,
+	 * List of status codes (or a single code) that is ok for the response,
 	 * also can pass a range of codes
 	 */
 	readonly okStatuses: OkStatuses;
@@ -95,7 +95,7 @@ export default class Response<
 	protected readonly body: ResponseTypeValue;
 
 	/**
-	 * @param [body]
+	 * @param [body] - response body
 	 * @param [opts] - additional options
 	 */
 	constructor(body?: ResponseTypeValue, opts?: ResponseOptions) {

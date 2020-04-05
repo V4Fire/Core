@@ -16,6 +16,7 @@ import {
 
 	NormalizedCreateRequestOptions,
 	RequestQuery,
+	RequestResponse,
 	WrappedDecoders,
 	WrappedEncoders
 
@@ -40,12 +41,12 @@ export default class RequestContext<D = unknown> {
 	/**
 	 * Storage to cache the request
 	 */
-	readonly cache: Cache;
+	readonly cache: Cache<Nullable<D>>;
 
 	/**
 	 * Storage to cache the pending request
 	 */
-	readonly pendingCache: Cache = pendingCache;
+	readonly pendingCache: Cache<RequestResponse<D>> = pendingCache;
 
 	/**
 	 * True if the request can provide parameters only as a query string
