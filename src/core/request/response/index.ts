@@ -37,7 +37,7 @@ export * from 'core/request/response/const';
 export * from 'core/request/response/interface';
 
 /**
- * Class for a remote response
+ * Class of a remote response
  * @typeparam D - response data type
  */
 export default class Response<
@@ -64,13 +64,13 @@ export default class Response<
 	readonly ok: boolean;
 
 	/**
-	 * List of status codes (or a single code) with HTTP statuses that is ok for response,
+	 * List of status codes (or a single code) with HTTP statuses that is ok for the response,
 	 * also can pass a range of codes
 	 */
 	readonly okStatuses: OkStatuses;
 
 	/**
-	 * Table of response headers
+	 * Map of response headers
 	 */
 	readonly headers: ResponseHeaders;
 
@@ -101,36 +101,25 @@ export default class Response<
 	constructor(body?: ResponseTypeValue, opts?: ResponseOptions) {
 		const
 			p = Object.mixin(false, {}, defaultResponseOpts, opts),
-			s = this.okStatuses = p.okStatuses;
+			ok = this.okStatuses = p.okStatuses;
 
 		this.parent = p.parent;
 		this.important = p.important;
 
 		this.status = p.status;
-		this.ok = s instanceof Range ? s.contains(this.status) : (<number[]>[]).concat(s || []).includes(this.status);
+		this.ok = ok instanceof Range ? ok.contains(this.status) : (<number[]>[]).concat(ok || []).includes(this.status);
 		this.headers = this.parseHeaders(p.headers);
 
 		const
 			contentType = this.getHeader('content-type');
 
-		let
-			responseType;
-
-		// tslint:disable-next-line:prefer-conditional-expression
-		if (p.responseType == null) {
-			responseType = contentType ? getDataType(contentType) : undefined;
-
-		} else {
-			responseType = p.responseType;
-		}
-
-		this.sourceResponseType = this.responseType = responseType;
+		this.sourceResponseType = this.responseType = contentType ? getDataType(contentType) : p.responseType;
 		this.decoders = p.decoder ? Object.isFunction(p.decoder) ? [p.decoder] : p.decoder : [];
 		this.body = body;
 	}
 
 	/**
-	 * Returns a HTTP header value by the specified name
+	 * Returns an HTTP header value by the specified name
 	 * @param name
 	 */
 	getHeader(name: string): CanUndef<string> {
@@ -138,7 +127,7 @@ export default class Response<
 	}
 
 	/**
-	 * Parses the response body and returns a final value
+	 * Parses a body of the response and returns the result
 	 */
 	@once
 	decode(): Then<D> {
