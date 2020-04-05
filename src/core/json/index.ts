@@ -11,9 +11,10 @@
  * @packageDocumentation
  */
 
+import { isDateStr } from 'core/prelude/date/const';
+
 const
-	minDateLength = '2017-02-03T'.length,
-	isDate = /^\d{4}-\d{2}-\d{2}T[\d:.]+Z/;
+	minDateLength = '2017-02-03'.length;
 
 /**
  * Reviver for the JSON.parse method: converts all strings that is looks like a date to Date
@@ -22,9 +23,9 @@ const
  * @param value
  */
 export function convertIfDate(key: string, value: unknown): unknown {
-	if (Object.isString(value) && (value.length > minDateLength) && isDate.test(value)) {
-		const utc = Date.parse(value);
-		return isNaN(utc) ? value : new Date(utc);
+	if (Object.isString(value) && (value.length > minDateLength) && isDateStr.test(value)) {
+		const date = Date.create(value);
+		return isNaN(date.valueOf()) ? value : date;
 	}
 
 	return value;
