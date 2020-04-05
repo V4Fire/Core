@@ -9,9 +9,18 @@
 import extend from 'core/prelude/extend';
 import { deprecate } from 'core/functools';
 import { locale as defaultLocale } from 'core/prelude/i18n';
+import {
 
-const
-	decPartRgxp = /\.\d+/;
+	globalOpts,
+
+	formatCache,
+	formatAliases,
+	boolAliases,
+
+	defaultFormats,
+	decPartRgxp
+
+} from 'core/prelude/number/const';
 
 /** @see NumberConstructor.pad */
 extend(Number.prototype, 'pad', function (
@@ -32,12 +41,6 @@ extend(Number.prototype, 'pad', function (
 	return str;
 });
 
-const globalOpts = Object.createDict({
-	init: false,
-	decimal: '.',
-	thousands: ','
-});
-
 /** @see NumberConstructor.getOption */
 extend(Number, 'getOption', deprecate(function getOption(key: string): string {
 	return globalOpts[key];
@@ -48,27 +51,6 @@ extend(Number, 'setOption', deprecate(function setOption(key: string, value: str
 	globalOpts.init = true;
 	globalOpts[key] = value;
 }));
-
-const formatAliases = Object.createDict({
-	'$': 'currency',
-	'$d': 'currencyDisplay',
-	'%': 'percent',
-	'.': 'decimal'
-});
-
-const defaultFormat = Object.createDict(<Intl.NumberFormatOptions>{
-	style: 'decimal',
-	currency: 'USD',
-	currencyDisplay: 'symbol'
-});
-
-const boolAliases = Object.createDict({
-	'+': true,
-	'-': false
-});
-
-const
-	formatCache = Object.createDict<Intl.NumberFormat>();
 
 /** @see Number.prototype.format */
 extend(Number.prototype, 'format', function (
@@ -121,7 +103,7 @@ extend(Number.prototype, 'format', function (
 				switch (alias) {
 					case 'currency':
 						opts.style = 'currency';
-						opts.currency = val || defaultFormat.currency;
+						opts.currency = val || defaultFormats.currency;
 						brk = true;
 						break;
 
@@ -138,7 +120,7 @@ extend(Number.prototype, 'format', function (
 
 			if (!brk) {
 				if (!val) {
-					val = defaultFormat[key];
+					val = defaultFormats[key];
 				}
 
 				opts[key] = val in boolAliases ? boolAliases[val] : val;

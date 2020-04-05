@@ -7,12 +7,18 @@
  */
 
 import extend from 'core/prelude/extend';
+import {
 
-const
-	capitalizeCache = Object.createDict<string>(),
-	camelizeCache = Object.createDict<string>(),
-	dasherizeCache = Object.createDict<string>(),
-	underscoreCache = Object.createDict<string>();
+	capitalizeCache,
+	camelizeCache,
+	dasherizeCache,
+	underscoreCache,
+
+	isDigital,
+	camelizeRgxp,
+	normalizeRgxp
+
+} from 'core/prelude/string/const';
 
 //#if runtime has prelude/string/capitalize
 
@@ -53,10 +59,6 @@ extend(String.prototype, 'capitalize', function (
 });
 
 //#endif
-
-const
-	normalizeRgxp = /(^[\s_-]+)|([\s_-]+$)|([\s_-]+)/g,
-	camelizeRgxp = /(^[\s_-]+)|([\s_-]+$)|[\s_-]+([^\s-]|$)/g;
 
 /** @see String.prototype.camelize */
 extend(String.prototype, 'camelize', function (
@@ -208,9 +210,6 @@ function isUpper(char: string): boolean {
 	const up = char.toUpperCase();
 	return char === up && char.toLowerCase() !== up;
 }
-
-const
-	isDigital = /\d/;
 
 function convertToSeparatedStr(str: string, separator: string, stable?: boolean): string {
 	let

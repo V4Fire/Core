@@ -7,33 +7,12 @@
  */
 
 import extend from 'core/prelude/extend';
+import { isDateStr, isFloatStr, dateNormalizeRgxp, createAliases } from 'core/prelude/date/const';
 
 /** @see Date.prototype.clone */
 extend(Date.prototype, 'clone', function (this: Date): Date {
 	return new Date(this);
 });
-
-const aliases = Object.createDict({
-	now: () => new Date(),
-	today: () => new Date().beginningOfDay(),
-
-	yesterday: () => {
-		const v = new Date();
-		v.setDate(v.getDate() - 1);
-		return v.beginningOfDay();
-	},
-
-	tomorrow: () => {
-		const v = new Date();
-		v.setDate(v.getDate() + 1);
-		return v.beginningOfDay();
-	}
-});
-
-const
-	isDateStr = /^(\d{2,4}[-.\/]\d{2}[-.\/]\d{2,4})([T ])?(\d{2}:\d{2}:\d{2}(?:\.\d{3})?)?(?:\d{0,3})?(Z)?([+-]\d{2}:?\d{2})?$/,
-	dateNormalizeRgxp = /(\d{2,4})[-.\/](\d{2})[-.\/](\d{2,4})/,
-	isFloatStr = /^\d+\.\d+$/;
 
 /** @see Date.prototype.create */
 extend(Date, 'create', (pattern?: DateCreateValue) => {
@@ -42,8 +21,8 @@ extend(Date, 'create', (pattern?: DateCreateValue) => {
 	}
 
 	if (Object.isString(pattern)) {
-		if (pattern in aliases) {
-			return aliases[pattern]();
+		if (pattern in createAliases) {
+			return createAliases[pattern]();
 		}
 
 		if (isDateStr.test(pattern)) {

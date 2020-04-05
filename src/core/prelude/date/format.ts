@@ -8,6 +8,7 @@
 
 import extend from 'core/prelude/extend';
 import { locale as defaultLocale } from 'core/prelude/i18n';
+import { formatCache, formatAliases, boolAliases, defaultFormats } from 'core/prelude/date/const';
 
 /** @see Date.prototype.short */
 extend(Date.prototype, 'short', function (
@@ -32,38 +33,6 @@ extend(Date.prototype, 'long', function (
 ): string {
 	return this.format('', locale);
 });
-
-const formatAliases = Object.createDict({
-	e: 'era',
-	Y: 'year',
-	M: 'month',
-	d: 'day',
-	w: 'weekday',
-	h: 'hour',
-	m: 'minute',
-	s: 'second',
-	z: 'timeZoneName'
-});
-
-const defaultFormat = Object.createDict(<Intl.DateTimeFormatOptions>{
-	era: 'short',
-	year: 'numeric',
-	month: 'short',
-	day: '2-digit',
-	weekday: 'short',
-	hour: '2-digit',
-	minute: '2-digit',
-	second: '2-digit',
-	timeZoneName: 'short'
-});
-
-const boolAliases = Object.createDict({
-	'+': true,
-	'-': false
-});
-
-const
-	formatCache = Object.createDict<Intl.DateTimeFormat>();
 
 /** @see Date.prototype.format */
 extend(Date.prototype, 'format', function (
@@ -109,7 +78,7 @@ extend(Date.prototype, 'format', function (
 		}
 
 		if (!val) {
-			val = defaultFormat[key];
+			val = defaultFormats[key];
 		}
 
 		opts[key] = val in boolAliases ? boolAliases[val] : val;

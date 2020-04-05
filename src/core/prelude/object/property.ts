@@ -97,7 +97,7 @@ extend(Object, 'has', (
 });
 
 const
-	{hasOwnProperty} = {};
+	{hasOwnProperty} = Object.prototype;
 
 /** @see ObjectConstructor.hasOwnProperty */
 extend(Object, 'hasOwnProperty', (obj: any, key?: string) => {

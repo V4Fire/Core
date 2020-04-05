@@ -13,9 +13,18 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 ## v3.10.0
 
+#### :boom: Breaking Change
+
+* [Switched the priority of a response type `core/request/response`](https://github.com/V4Fire/Core/pull/63)
+
 #### :rocket: New Feature
 
 * [Added `core/mime-type`](https://github.com/V4Fire/Core/pull/62)
+
+#### :house: Internal
+
+* Improved type inference `core/json/convertIfDate`
+* Extracted constants to separated files `core/prelude`
 
 ## v3.9.0 (2020-03-31)
 

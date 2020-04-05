@@ -7,6 +7,7 @@
  */
 
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
+import { toString } from 'core/prelude/types/const';
 
 /**
  * Event emitter to broadcast environment events
@@ -46,7 +47,7 @@ export const IS_NODE: boolean = (() => {
 			process = globalThis['process'];
 
 		// @ts-ignore
-		return typeof process === 'object' && {}.toString.call(process) === '[object process]';
+		return typeof process === 'object' && toString.call(process) === '[object process]';
 
 	} catch {
 		return false;
