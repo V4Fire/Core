@@ -20,7 +20,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 #### :rocket: New Feature
 
 * [Added `core/mime-type`](https://github.com/V4Fire/Core/pull/62)
-* Added support for custom cache strategies
+* [Added support for custom cache strategies](https://github.com/V4Fire/Core/pull/65)
 
 #### :house: Internal
 
