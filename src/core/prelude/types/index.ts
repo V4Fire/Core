@@ -8,16 +8,13 @@
 
 import extend from 'core/prelude/extend';
 import { deprecate } from 'core/functools';
+import { isNative, toString, nonPrimitiveTypes } from 'core/prelude/types/const';
 
 /** @see ObjectConstructor.isDictionary */
 extend(Object, 'isDictionary', isPlainObject);
 
 /** @see ObjectConstructor.isPlainObject */
 extend(Object, 'isPlainObject', isPlainObject);
-
-const
-	isNative = /\[native code]/,
-	nonPrimitiveTypes = {object: true, function: true};
 
 /** @see ObjectConstructor.isPrimitive */
 extend(Object, 'isPrimitive', (obj) => !obj || !nonPrimitiveTypes[typeof obj]);
@@ -37,9 +34,6 @@ extend(Object, 'isCustomObject', (obj) => {
 
 	return obj.constructor === Object || !isNative.test(obj.constructor.toString());
 });
-
-const
-	toString = Object.prototype.toString;
 
 /**  @see ObjectConstructor.isSimpleObject */
 extend(Object, 'isSimpleObject', (obj) =>  {
