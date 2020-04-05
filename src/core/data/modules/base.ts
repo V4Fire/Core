@@ -19,12 +19,15 @@ import IO, { Socket } from 'core/socket';
 import {
 
 	globalOpts,
+
 	CreateRequestOptions,
 	MiddlewareParams,
+
 	RequestQuery,
 	RequestMethod,
 	RequestResponse,
 	RequestBody,
+
 	ResolverResult,
 	RequestFunctionResponse,
 	RequestResponseObject
@@ -118,7 +121,7 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 	}
 
 	/**
-	 * Returns a key to cache a class instance
+	 * Returns a key to cache the class instance
 	 * @param [paramsForCache]
 	 */
 	getCacheKey(paramsForCache: ProviderOptions = {}): string {
@@ -134,9 +137,11 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 	}
 
 	/**
-	 * Function for request resolving:
-	 * this function takes a request URL, request environment and arguments from invoking of the result function and
-	 * can returns a modification chunk for the request URL or fully replace it.
+	 * Function to resolve a request: it takes a request URL and request environment
+	 * and can modify some request parameters.
+	 *
+	 * Also, if the function returns a new string, the string will be appended to the request URL, or
+	 * if the function returns a string that wrapped with an array, the string fully override the original URL.
 	 *
 	 * @see [[RequestResolver]]
 	 * @param url - request URL
@@ -147,7 +152,7 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 	}
 
 	/**
-	 * Connects to a socket server and returns connection
+	 * Connects to a socket server and returns the connection
 	 * @param [opts] - additional options for the server
 	 */
 	async connect(opts?: Dictionary): Promise<Socket | void> {
