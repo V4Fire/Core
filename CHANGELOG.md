@@ -15,7 +15,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :rocket: New Feature
 
-* Added `core/mime-type`
+* [Added `core/mime-type`](https://github.com/V4Fire/Core/pull/62)
 
 ## v3.9.0 (2020-03-31)
 
