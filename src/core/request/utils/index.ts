@@ -13,8 +13,22 @@
 
 import { cache } from 'core/request/const';
 import { CreateRequestOptions } from 'core/request/interface';
+
 import { tplRgxp } from 'core/request/utils/const';
 export * from 'core/request/utils/const';
+
+/**
+ * Merges the specified arguments and returns a new object
+ * @param args
+ */
+export function merge<T>(...args: unknown[]): T {
+	return Object.mixin({
+		deep: true,
+		concatArray: true,
+		concatFn: (a: unknown[], b: unknown[]) => a.union(b),
+		extendFilter: (d, v) => Array.isArray(v) || Object.isDictionary(v)
+	}, undefined, ...args);
+}
 
 /**
  * Takes a key for data and returns a new key to save the data in a storage
@@ -25,7 +39,7 @@ export function getStorageKey(key: string): string {
 }
 
 /**
- * Generates a string cache key for specified parameters and returns it
+ * Generates a string cache key for the specified parameters and returns it
  *
  * @param url - request url
  * @param [params] - request parameters
@@ -101,8 +115,8 @@ export function getRequestKey<T>(url: string, params?: CreateRequestOptions<T>):
 }
 
 /**
- * Applies a query object fot the specified string
- * (used keys will be removed from the query)
+ * Applies a query object for the specified string
+ * (used keys is removed from the query)
  *
  * @param str
  * @param [query]
@@ -147,7 +161,7 @@ export function normalizeHeaderValue(value: unknown, query?: Dictionary): string
  * Normalizes the specified HTTP header object
  *
  * @param headers
- * @param [query] - request query object (for interpolation of keys/values)
+ * @param [query] - request query object (to interpolate keys/values)
  */
 export function normalizeHeaders(headers?: Dictionary, query?: Dictionary): Dictionary<CanArray<string>> {
 	const
@@ -192,7 +206,7 @@ export function normalizeHeaders(headers?: Dictionary, query?: Dictionary): Dict
 }
 
 /**
- * Drops all request caches
+ * Truncates all static cache storages
  */
 export function dropCache(): void {
 	for (let keys = Object.keys(cache), i = 0; i < keys.length; i++) {

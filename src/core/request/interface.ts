@@ -92,7 +92,7 @@ export interface RequestOptions {
 	readonly okStatuses?: OkStatuses;
 	readonly contentType?: string;
 	readonly responseType?: ResponseType;
-	readonly decoders?: WrappedDecoder[];
+	readonly decoders?: WrappedDecoders;
 	readonly headers?: Dictionary<CanArray<string>>;
 	readonly body?: RequestBody;
 	readonly important?: boolean;
@@ -269,7 +269,7 @@ export interface CreateRequestOptions<D = unknown> {
 	api?: RequestAPI;
 
 	/**
-	 * List of status codes (or a single code) with HTTP statuses that is ok for response,
+	 * List of status codes (or a single code) that is ok for response,
 	 * also can pass a range of codes
 	 *
 	 * @default `new Range(200, 299)`

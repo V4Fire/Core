@@ -11,32 +11,24 @@
  * @packageDocumentation
  */
 
-import Then from 'core/then';
 import log from 'core/log';
-
+import Then from 'core/then';
 import { isOnline } from 'core/net';
-import { concatUrls } from 'core/url';
-import { getDataTypeFromURL } from 'core/mime-type';
 
 import Response from 'core/request/response';
 import RequestError from 'core/request/error';
 import RequestContext from 'core/request/context';
 
-import { getStorageKey } from 'core/request/utils';
-import { storage, globalOpts, defaultRequestOpts, isAbsoluteURL } from 'core/request/const';
+import { merge, getStorageKey } from 'core/request/utils';
+import { storage, globalOpts, defaultRequestOpts } from 'core/request/const';
 
 import {
 
 	CreateRequestOptions,
-	NormalizedCreateRequestOptions,
-
 	RequestResolver,
 	RequestResponse,
 	RequestFunctionResponse,
-
-	Middleware,
-	WrappedEncoder,
-	WrappedDecoder
+	Middleware
 
 } from 'core/request/interface';
 
@@ -44,7 +36,6 @@ export * from 'core/request/utils';
 export * from 'core/request/interface';
 export * from 'core/request/response/interface';
 
-export { dropCache } from 'core/request/utils';
 export { globalOpts, cache, pendingCache } from 'core/request/const';
 export { default as RequestError } from 'core/request/error';
 export { default as Response } from 'core/request/response';
@@ -54,37 +45,48 @@ export { default as Response } from 'core/request/response';
  *
  * @param path - request path URL
  * @param opts - request options
+ *
+ * @example
+ * ```js
+ * request('bla/get').then(({data, response}) => {
+ *   console.log(data, response.status);
+ * });
+ * ```
  */
 export default function request<T = unknown>(path: string, opts?: CreateRequestOptions<T>): RequestResponse<T>;
 
 /**
- * Returns a wrapped request constructor with the specified options
+ * Returns a wrapped request constructor with the specified options.
+ * This overload helps to organize the "builder" pattern.
  *
  * @param opts - request options
  * @example
  * ```js
- * request({okStatuses: 200})({query: {bar: true}})('bla/get')
+ * request({okStatuses: 200})({method: 'POST'})('bla/get').then(({data, response}) => {
+ *   console.log(data, response.status);
+ * });
  * ```
  */
 export default function request<T = unknown>(opts: CreateRequestOptions<T>): typeof request;
 
 /**
  * Returns a function to create a new remote request with the specified options.
- * This overload is helpful to create factories for requests.
+ * This overload helps to create a factory of requests.
  *
  * @param path - request path URL
- * @param resolver - function for request resolving:
- *   this function takes a request URL, request environment and arguments from invoking of the result function and
- *   can returns a modification chunk for the request URL or fully replace it
+ * @param resolver - function to resolve a request: it takes a request URL, request environment and arguments
+ *   from invoking of the outer function and can modify some request parameters.
+ *   Also, if the function returns a new string, the string will be appended to the request URL, or
+ *   if the function returns a string that wrapped with an array, the string fully override the original URL.
  *
  * @param opts - request options
  *
  * @example
  * ```js
- * // Modifying of the current URL
+ * // Modifying the current URL
  * request('https://foo.com', (url, env, ...args) => args.join('/'))('bla', 'baz') // https://foo.com/bla/baz
  *
- * // Replacing of the current URL
+ * // Replacing the current URL
  * request('https://foo.com', () => ['https://bla.com', 'bla', 'baz'])() // https://bla.com/bla/baz
  * ```
  */
@@ -98,13 +100,6 @@ export default function request<T = unknown>(
 	path: string | CreateRequestOptions<T>,
 	...args: any[]
 ): unknown {
-	const merge = <T>(...args: unknown[]) => Object.mixin<T>({
-		deep: true,
-		concatArray: true,
-		concatFn: (a: unknown[], b: unknown[]) => a.union(b),
-		extendFilter: (d, v) => Array.isArray(v) || Object.isPlainObject(v)
-	}, undefined, ...args);
-
 	if (Object.isPlainObject(path)) {
 		const
 			defOpts = path;
@@ -135,95 +130,18 @@ export default function request<T = unknown>(
 	opts = opts || {};
 
 	const
-		baseCtx: RequestContext<T> = new RequestContext<T>(merge(defaultRequestOpts, opts));
+		baseCtx = new RequestContext<T>(merge(defaultRequestOpts, opts));
 
 	const run = (...args) => {
 		const
-			requestParams = merge<NormalizedCreateRequestOptions<T>>(baseCtx.params),
-			ctx = Object.create(baseCtx);
+			ctx = RequestContext.decorateContext(baseCtx, path, resolver, ...args),
+			requestParams = ctx.params;
 
 		const middlewareParams = {
 			opts: requestParams,
 			ctx,
 			globalOpts
 		};
-
-		const wrapProcessor = (namespace, fn, key) => (data, ...args) => {
-			const
-				time = Date.now(),
-				res = fn(data, middlewareParams, ...args);
-
-			const
-				loggingContext = `request:${namespace}:${key}:${path}`,
-				getTime = () => `Finished at ${Date.now() - time}ms`,
-				clone = (data) => () => Object.isPlainObject(data) || Object.isArray(data) ? Object.fastClone(data) : data;
-
-			if (Object.isPromise(res)) {
-				res.then((data) => log(loggingContext, getTime(), clone(data)));
-
-			} else {
-				log(loggingContext, getTime(), clone(res));
-			}
-
-			return res;
-		};
-
-		const
-			encoders = <WrappedEncoder[]>[],
-			decoders = <WrappedDecoder[]>[];
-
-		Object.forEach(merge(ctx.encoders), (el, key) => {
-			encoders.push(wrapProcessor('encoders', el, key));
-		});
-
-		Object.forEach(merge(ctx.decoders), (el, key) => {
-			decoders.push(wrapProcessor('decoders', el, key));
-		});
-
-		Object.assign(ctx, {
-			// Merge request options
-			params: requestParams,
-			encoders,
-			decoders,
-
-			// Bind middlewares to new context
-			saveCache: ctx.saveCache.bind(ctx),
-			dropCache: ctx.dropCache.bind(ctx),
-			wrapAsResponse: ctx.wrapAsResponse.bind(ctx),
-			wrapRequest: ctx.wrapRequest.bind(ctx),
-
-			// Wrap resolve function with .resolver
-			resolveRequest(api?: Nullable<string>): string {
-				const
-					reqPath = String(path),
-					type = getDataTypeFromURL(reqPath);
-
-				if (type) {
-					if (!requestParams.responseType) {
-						requestParams.responseType = type;
-					}
-
-					return requestParams.url = reqPath;
-				}
-
-				let
-					url = isAbsoluteURL.test(reqPath) ? reqPath : concatUrls(api ? this.resolveAPI(api) : null, reqPath);
-
-				if (Object.isFunction(resolver)) {
-					const
-						res = resolver(url, middlewareParams, ...args);
-
-					if (Object.isArray(res)) {
-						url = concatUrls(...res.map(String));
-
-					} else if (res) {
-						url = concatUrls(url, res);
-					}
-				}
-
-				return baseCtx.resolveRequest.call(this, url);
-			}
-		});
 
 		const parent = new Then(async (resolve, reject, onAbort) => {
 			const errDetails = {
@@ -256,19 +174,15 @@ export default function request<T = unknown>(
 				let
 					res = Then.resolve(data, parent);
 
-				Object.forEach(<typeof encoders>ctx.encoders, (fn, i) => {
+				Object.forEach(ctx.encoders, (fn, i) => {
 					res = res.then((obj) => fn(i ? obj : Object.fastClone(obj)));
 				});
 
 				return res;
 			};
 
-			if (ctx.withoutBody) {
-				requestParams.query = await applyEncoders(requestParams.query);
-
-			} else {
-				requestParams.body = await applyEncoders(requestParams.body);
-			}
+			const keyToEncode = ctx.withoutBody ? 'query' : 'body';
+			requestParams[keyToEncode] = await applyEncoders(requestParams[keyToEncode]);
 
 			for (let i = 0; i < middlewareResults.length; i++) {
 				if (!Object.isFunction(middlewareResults[i])) {
@@ -299,7 +213,9 @@ export default function request<T = unknown>(
 			}
 
 			const
-				url = ctx.resolveRequest(globalOpts.api),
+				url = ctx.resolveRequest(globalOpts.api);
+
+			const
 				{cacheKey} = ctx;
 
 			let
@@ -307,7 +223,7 @@ export default function request<T = unknown>(
 				fromCache = false,
 				fromLocalStorage = false;
 
-			if (ctx.canCache) {
+			if (cacheKey && ctx.canCache) {
 				if (ctx.pendingCache.has(cacheKey)) {
 					try {
 						const
@@ -343,7 +259,7 @@ export default function request<T = unknown>(
 
 			if (fromCache) {
 				cache = 'memory';
-				res = Then.resolveAndCall(() => ctx.cache.get(cacheKey), parent)
+				res = Then.resolveAndCall(() => ctx.cache.get(cacheKey!), parent)
 					.then(ctx.wrapAsResponse);
 
 			} else if (fromLocalStorage) {

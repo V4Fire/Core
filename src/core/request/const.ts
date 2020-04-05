@@ -7,13 +7,23 @@
  */
 
 import config from 'config';
-import engine from 'core/request/engines';
 
 import { AsyncFactoryResult } from 'core/kv-storage';
 import { Cache, RestrictedCache, NeverCache, AbstractCache } from 'core/cache';
 
-import { ResponseType } from 'core/request/response/interface';
-import { RequestQuery, RequestMethod, GlobalOptions, CacheStrategy, RequestEngine } from 'core/request/interface';
+import engine from 'core/request/engines';
+
+import {
+
+	RequestQuery,
+	RequestMethod,
+	RequestEngine,
+	RequestResponse,
+
+	GlobalOptions,
+	CacheStrategy
+
+} from 'core/request/interface';
 
 export let
 	storage: CanUndef<Promise<AsyncFactoryResult>>;
@@ -23,17 +33,28 @@ storage = import('core/kv-storage').then(({asyncLocal}) => asyncLocal);
 //#endif
 
 export const
+	pendingCache = new Cache<RequestResponse<any>>();
+
+export const cache: Record<Exclude<CacheStrategy, AbstractCache>, AbstractCache> = {
+	queue: new RestrictedCache(),
+	forever: new Cache(),
+	never: new NeverCache()
+};
+
+export const
 	isAbsoluteURL = /^\w*:?\/\//;
 
-export const mimeTypes: Dictionary<ResponseType> = Object.createDict({
-	'application/json': 'json',
-	'application/javascript': 'text',
-	'application/xml': 'document',
-	'application/x-www-form-urlencoded': 'text',
-	'application/x-msgpack': 'arrayBuffer',
-	'application/x-protobuf': 'arrayBuffer',
-	'application/vnd.google.protobuf': 'arrayBuffer'
-});
+export const globalOpts: GlobalOptions = {
+	get api(): CanUndef<string> {
+		return config.api;
+	},
+
+	set api(value: CanUndef<string>) {
+		config.api = value;
+	},
+
+	meta: {}
+};
 
 export const methodsWithoutBody = Object.createDict({
 	GET: true,
@@ -49,25 +70,4 @@ export const defaultRequestOpts = {
 	query: <RequestQuery>{},
 	meta: <Dictionary>{},
 	engine: <RequestEngine>engine
-};
-
-export const
-	pendingCache = new Cache();
-
-export const cache: Record<CacheStrategy, AbstractCache> = {
-	queue: new RestrictedCache(),
-	forever: new Cache(),
-	never: new NeverCache()
-};
-
-export const globalOpts: GlobalOptions = {
-	get api(): CanUndef<string> {
-		return config.api;
-	},
-
-	set api(value: CanUndef<string>) {
-		config.api = value;
-	},
-
-	meta: {}
 };
