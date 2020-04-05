@@ -14,7 +14,7 @@ import { DataType } from 'core/mime-type';
 import { OkStatuses, WrappedDecoders, WrappedDecoder } from 'core/request/interface';
 import { defaultResponseOpts } from 'core/request/response/const';
 
-export type ResponseType = DataType;
+export type ResponseType = DataType | 'object';
 export type ResponseTypeValue =
 	string |
 	ArrayBuffer |

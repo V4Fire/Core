@@ -11,5 +11,4 @@ export type DataType =
 	'json' |
 	'document' |
 	'arrayBuffer' |
-	'blob' |
-	'object';
+	'blob';
