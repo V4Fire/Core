@@ -16,12 +16,13 @@ import log from 'core/log';
 
 import { isOnline } from 'core/net';
 import { concatUrls } from 'core/url';
+import { getDataTypeFromURL } from 'core/mime-type';
 
 import Response from 'core/request/response';
 import RequestError from 'core/request/error';
 import RequestContext from 'core/request/context';
 
-import { getStorageKey, getResponseTypeFromURL } from 'core/request/utils';
+import { getStorageKey } from 'core/request/utils';
 import { storage, globalOpts, defaultRequestOpts, isAbsoluteURL } from 'core/request/const';
 
 import {
@@ -195,7 +196,7 @@ export default function request<T = unknown>(
 			resolveRequest(api?: Nullable<string>): string {
 				const
 					reqPath = String(path),
-					type = getResponseTypeFromURL(reqPath);
+					type = getDataTypeFromURL(reqPath);
 
 				if (type) {
 					if (!requestParams.responseType) {

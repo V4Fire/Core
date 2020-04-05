@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.10.0
+
+#### :rocket: New Feature
+
+* Added `core/mime-type`
+
 ## v3.9.0 (2020-03-31)
 
 #### :rocket: New Feature

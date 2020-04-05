@@ -7,9 +7,4 @@
  */
 
 export const
-	tplRgxp = /\${([^}]+)}/g,
-	dataURIRgxp = /^data:([^;]+);/;
-
-export const
-	isTextType = /^text(?:\/|$)/,
-	isXMLType = /^application\/\w+-xml\b/;
+	tplRgxp = /\${([^}]+)}/g;
