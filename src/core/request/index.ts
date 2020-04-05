@@ -54,37 +54,48 @@ export { default as Response } from 'core/request/response';
  *
  * @param path - request path URL
  * @param opts - request options
+ *
+ * @example
+ * ```js
+ * request('bla/get').then(({data, response}) => {
+ *   console.log(data, response.status);
+ * });
+ * ```
  */
 export default function request<T = unknown>(path: string, opts?: CreateRequestOptions<T>): RequestResponse<T>;
 
 /**
- * Returns a wrapped request constructor with the specified options
+ * Returns a wrapped request constructor with the specified options.
+ * This overload helps to organize the "builder" pattern.
  *
  * @param opts - request options
  * @example
  * ```js
- * request({okStatuses: 200})({query: {bar: true}})('bla/get')
+ * request({okStatuses: 200})({method: 'POST'})('bla/get').then(({data, response}) => {
+ *   console.log(data, response.status);
+ * });
  * ```
  */
 export default function request<T = unknown>(opts: CreateRequestOptions<T>): typeof request;
 
 /**
  * Returns a function to create a new remote request with the specified options.
- * This overload is helpful to create factories for requests.
+ * This overload helps to create a factory of requests.
  *
  * @param path - request path URL
- * @param resolver - function for request resolving:
- *   this function takes a request URL, request environment and arguments from invoking of the result function and
- *   can returns a modification chunk for the request URL or fully replace it
+ * @param resolver - function to resolve a request: it takes a request URL, request environment and arguments
+ *   from invoking of the outer function and can modify some request parameters.
+ *   Also, if the function returns a new string, the string will be appended to the request URL, or
+ *   if the function returns a string that wrapped with an array, the string fully override the original URL.
  *
  * @param opts - request options
  *
  * @example
  * ```js
- * // Modifying of the current URL
+ * // Modifying the current URL
  * request('https://foo.com', (url, env, ...args) => args.join('/'))('bla', 'baz') // https://foo.com/bla/baz
  *
- * // Replacing of the current URL
+ * // Replacing the current URL
  * request('https://foo.com', () => ['https://bla.com', 'bla', 'baz'])() // https://bla.com/bla/baz
  * ```
  */
