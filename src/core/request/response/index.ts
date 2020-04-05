@@ -17,8 +17,9 @@ import Range from 'core/range';
 import { IS_NODE } from 'core/env';
 import { once } from 'core/functools';
 import { convertIfDate } from 'core/json';
+import { getDataType } from 'core/mime-type';
 
-import { normalizeHeaderName, getResponseTypeFromMime } from 'core/request/utils';
+import { normalizeHeaderName } from 'core/request/utils';
 import { defaultResponseOpts } from 'core/request/response/const';
 
 import { OkStatuses, WrappedDecoders } from 'core/request/interface';
@@ -109,9 +110,21 @@ export default class Response<
 		this.ok = s instanceof Range ? s.contains(this.status) : (<number[]>[]).concat(s || []).includes(this.status);
 		this.headers = this.parseHeaders(p.headers);
 
-		this.sourceResponseType = this.responseType = p.responseType == null ?
-			getResponseTypeFromMime(this.getHeader('content-type')) : p.responseType;
+		const
+			contentType = this.getHeader('content-type');
 
+		let
+			responseType;
+
+		// tslint:disable-next-line:prefer-conditional-expression
+		if (p.responseType == null) {
+			responseType = contentType ? getDataType(contentType) : undefined;
+
+		} else {
+			responseType = p.responseType;
+		}
+
+		this.sourceResponseType = this.responseType = responseType;
 		this.decoders = p.decoder ? Object.isFunction(p.decoder) ? [p.decoder] : p.decoder : [];
 		this.body = body;
 	}

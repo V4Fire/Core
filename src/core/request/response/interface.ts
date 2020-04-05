@@ -7,18 +7,14 @@
  */
 
 import Then from 'core/then';
+
 import { StatusCodes } from 'core/status-codes';
+import { DataType } from 'core/mime-type';
+
 import { OkStatuses, WrappedDecoders, WrappedDecoder } from 'core/request/interface';
 import { defaultResponseOpts } from 'core/request/response/const';
 
-export type ResponseType =
-	'text' |
-	'json' |
-	'document' |
-	'arrayBuffer' |
-	'blob' |
-	'object';
-
+export type ResponseType = DataType | 'object';
 export type ResponseTypeValue =
 	string |
 	ArrayBuffer |
