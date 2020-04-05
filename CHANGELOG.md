@@ -26,6 +26,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 * Improved type inference `core/json/convertIfDate`
 * Extracted constants to separated files `core/prelude`
+* [Review `core/request`](https://github.com/V4Fire/Core/pull/68)
 
 ## v3.9.0 (2020-03-31)
 
