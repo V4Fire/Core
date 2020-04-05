@@ -107,11 +107,12 @@ export default class RequestContext<D = unknown> {
 			extendFilter: (d, v) => Array.isArray(v) || Object.isPlainObject(v)
 		}, {}, params);
 
-		this.canCache = p.cacheMethods?.includes(p.method) || false;
-		this.withoutBody = Boolean(methodsWithoutBody[p.method]);
 		this.encoders = p.encoder ? Object.isFunction(p.encoder) ? [p.encoder] : p.encoder : [];
 		this.decoders = p.decoder ? Object.isFunction(p.decoder) ? [p.decoder] : p.decoder : [];
-		this.cache = cache[p.cacheStrategy] || cache.never;
+		this.withoutBody = Boolean(methodsWithoutBody[p.method]);
+
+		this.cache = (Object.isString(p.cacheStrategy) ? cache[p.cacheStrategy] : p.cacheStrategy) || cache.never;
+		this.canCache = p.cacheMethods?.includes(p.method) || false;
 	}
 
 	/**

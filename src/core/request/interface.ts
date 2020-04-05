@@ -8,6 +8,7 @@
 
 import Then from 'core/then';
 import Range from 'core/range';
+import Cache from 'core/cache/interface';
 
 import Response, { ResponseType } from 'core/request/response';
 import RequestContext from 'core/request/context';
@@ -29,7 +30,8 @@ export type RequestMethod =
 export type CacheStrategy =
 	'queue' |
 	'forever' |
-	'never';
+	'never' |
+	Cache;
 
 export type RequestBody =
 	string |
@@ -280,12 +282,13 @@ export interface CreateRequestOptions<D = unknown> {
 	timeout?: number;
 
 	/**
-	 * Type of caching for requests that supports it:
+	 * Strategy of caching for requests that supports it:
 	 *
 	 * 1. `'forever'` - caches all requests and stores their values forever within the active session or
 	 * until the cache expires (if .cacheTTL is specified);
 	 * 1. `'queue'` - caches all requests, but more frequent requests will push less frequent requests;
-	 * 1. `'never'` - never caches any requests.
+	 * 1. `'never'` - never caches any requests;
+	 * 1. custom cache object.
 	 */
 	readonly cacheStrategy?: CacheStrategy;
 
