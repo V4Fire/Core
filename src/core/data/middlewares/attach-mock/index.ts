@@ -6,15 +6,19 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/**
+ * [[include:core/data/middlewares/attach-mock/README.md]]
+ * @packageDocumentation
+ */
+
 import Then from 'core/then';
 import * as env from 'core/env';
 
 import Provider, { RequestError } from 'core/data';
 import { Response, MiddlewareParams } from 'core/request';
 
-interface MockOptions {
-	patterns: RegExp[];
-}
+import { MockOptions } from 'core/data/middlewares/attach-mock/interface';
+export * from 'core/data/middlewares/attach-mock/interface';
 
 let
 	mockOpts: MockOptions;

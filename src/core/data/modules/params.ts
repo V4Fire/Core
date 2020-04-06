@@ -313,7 +313,7 @@ export default abstract class Provider {
 	 * }
 	 * ```
 	 */
-	extraProviders?: FunctionalExtraProviders;
+	extraProviders?: FunctionalExtraProviders<any>;
 
 	/**
 	 * Default HTTP request method for the "get" method
@@ -360,12 +360,6 @@ export default abstract class Provider {
 
 	/** @see [[CreateRequestOptions.externalRequest]] */
 	readonly externalRequest: boolean = false;
-
-	/**
-	 * If true, then all emitting events, which is emitted by the provider,
-	 * that have a similar hash wil be collapsed to one
-	 */
-	readonly collapseEvents: boolean = false;
 
 	/**
 	 * @deprecated

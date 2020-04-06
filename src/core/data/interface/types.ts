@@ -40,21 +40,21 @@ export interface MockCustomResponse {
 	decoders?: Decoders;
 }
 
-export interface MockResponseFunction {
-	(params: MiddlewareParams, response: MockCustomResponse): CanPromise<MockResponseType>;
+export interface MockResponseFunction<D = unknown> {
+	(params: MiddlewareParams<D>, response: MockCustomResponse): CanPromise<MockResponseType>;
 }
 
-export type MockResponse =
+export type MockResponse<D = unknown> =
 	CanPromise<MockResponseType> |
-	MockResponseFunction;
+	MockResponseFunction<D>;
 
-export interface Mock {
+export interface Mock<D = unknown> {
 	status?: number;
 	query?: RequestQuery;
 	body?: RequestBody;
 	headers?: Dictionary<CanArray<unknown>>;
 	decoders?: boolean;
-	response: MockResponse;
+	response: MockResponse<D>;
 }
 
 export type Mocks = CanPromise<
@@ -70,19 +70,6 @@ export type ModelMethod =
 	'upd' |
 	'del';
 
-export interface DataEvent {
-	event: string;
-	data: EventData;
-}
-
-export interface EventDataObject<T = unknown> extends Dictionary {
-	data: Dictionary<T>;
-}
-
-export type EventData<T = unknown> =
-	(() => Dictionary<T>) |
-	EventDataObject<T>;
-
 export interface ProviderOptions {
 	/**
 	 * @see [[CreateRequestOptions.externalRequest]]
@@ -95,18 +82,10 @@ export interface ProviderOptions {
 	 * @default `false`
 	 */
 	socket?: boolean;
-
-	/**
-	 * If true, then all emitting events, which is emitted by the provider,
-	 * that have a similar hash wil be collapsed to one
-	 *
-	 * @default `false`
-	 */
-	collapseEvents?: boolean;
 }
 
-export interface ExtraProviderParams<T = unknown> {
-	opts: CreateRequestOptions<T>;
+export interface ExtraProviderParams<D = unknown> {
+	opts: CreateRequestOptions<D>;
 	globalOpts: GlobalOptions;
 }
 
@@ -115,16 +94,21 @@ export type ExtraProviderConstructor =
 	Provider |
 	{new(opts?: ProviderOptions): Provider};
 
-export interface ExtraProvider {
+export interface ExtraProvider<D = unknown> {
 	provider?: ExtraProviderConstructor;
 	providerOptions?: ProviderOptions;
 	query?: RequestQuery;
-	request?: CreateRequestOptions;
+	request?: CreateRequestOptions<D>;
 	alias?: string;
 }
 
-export type ExtraProviders = Dictionary<Nullable<ExtraProvider>>;
-export type FunctionalExtraProviders = ExtraProviders | ((params: ExtraProviderParams) => CanUndef<ExtraProviders>);
+export type ExtraProviders<D = unknown> = Dictionary<
+	Nullable<ExtraProvider<D>>
+>;
+
+export type FunctionalExtraProviders<D = unknown> =
+	ExtraProviders<D> |
+	((params: ExtraProviderParams<D>) => CanUndef<ExtraProviders<D>>);
 
 export type EncodersMap = Record<ModelMethod | 'def', Encoders> | {};
 export type DecodersMap = Record<ModelMethod | 'def', Decoders> | {};

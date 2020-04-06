@@ -53,7 +53,7 @@ export { default as Response } from 'core/request/response';
  * });
  * ```
  */
-export default function request<T = unknown>(path: string, opts?: CreateRequestOptions<T>): RequestResponse<T>;
+export default function request<D = unknown>(path: string, opts?: CreateRequestOptions<D>): RequestResponse<D>;
 
 /**
  * Returns a wrapped request constructor with the specified options.
@@ -67,7 +67,7 @@ export default function request<T = unknown>(path: string, opts?: CreateRequestO
  * });
  * ```
  */
-export default function request<T = unknown>(opts: CreateRequestOptions<T>): typeof request;
+export default function request<D = unknown>(opts: CreateRequestOptions<D>): typeof request;
 
 /**
  * Returns a function to create a new remote request with the specified options.
@@ -90,14 +90,14 @@ export default function request<T = unknown>(opts: CreateRequestOptions<T>): typ
  * request('https://foo.com', () => ['https://bla.com', 'bla', 'baz'])() // https://bla.com/bla/baz
  * ```
  */
-export default function request<T = unknown, A extends unknown[] = unknown[]>(
+export default function request<D = unknown, A extends unknown[] = unknown[]>(
 	path: string,
-	resolver: RequestResolver<T, A>,
-	opts?: CreateRequestOptions<T>
-): RequestFunctionResponse<T, A extends (infer V)[] ? V[] : unknown[]>;
+	resolver: RequestResolver<D, A>,
+	opts?: CreateRequestOptions<D>
+): RequestFunctionResponse<D, A extends (infer V)[] ? V[] : unknown[]>;
 
-export default function request<T = unknown>(
-	path: string | CreateRequestOptions<T>,
+export default function request<D = unknown>(
+	path: string | CreateRequestOptions<D>,
 	...args: any[]
 ): unknown {
 	if (Object.isPlainObject(path)) {
@@ -106,19 +106,19 @@ export default function request<T = unknown>(
 
 		return (path, resolver, opts) => {
 			if (Object.isPlainObject(path)) {
-				return request(merge<CreateRequestOptions<T>>(defOpts, path));
+				return request(merge<CreateRequestOptions<D>>(defOpts, path));
 			}
 
 			if (Object.isFunction(resolver)) {
-				return request(path, resolver, merge<CreateRequestOptions<T>>(defOpts, opts));
+				return request(path, resolver, merge<CreateRequestOptions<D>>(defOpts, opts));
 			}
 
-			return request(path, merge<CreateRequestOptions<T>>(defOpts, resolver));
+			return request(path, merge<CreateRequestOptions<D>>(defOpts, resolver));
 		};
 	}
 
 	let
-		resolver, opts: CreateRequestOptions<T>;
+		resolver, opts: CreateRequestOptions<D>;
 
 	if (args.length > 1) {
 		([resolver, opts] = args);
@@ -130,7 +130,7 @@ export default function request<T = unknown>(
 	opts = opts || {};
 
 	const
-		baseCtx = new RequestContext<T>(merge(defaultRequestOpts, opts));
+		baseCtx = new RequestContext<D>(merge(defaultRequestOpts, opts));
 
 	const run = (...args) => {
 		const
@@ -163,7 +163,7 @@ export default function request<T = unknown>(
 			const
 				tasks = <CanPromise<unknown>[]>[];
 
-			Object.forEach(requestParams.middlewares, (fn: Middleware<T>) => {
+			Object.forEach(requestParams.middlewares, (fn: Middleware<D>) => {
 				tasks.push(fn(middlewareParams));
 			});
 

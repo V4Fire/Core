@@ -19,19 +19,22 @@ import IO, { Socket } from 'core/socket';
 import {
 
 	globalOpts,
+
 	CreateRequestOptions,
 	MiddlewareParams,
+
 	RequestQuery,
 	RequestMethod,
 	RequestResponse,
 	RequestBody,
+
 	ResolverResult,
 	RequestFunctionResponse,
 	RequestResponseObject
 
 } from 'core/request';
 
-import iProvider, { ProviderOptions, ModelMethod, DataEvent, EventData } from 'core/data/interface';
+import iProvider, { ProviderOptions, ModelMethod } from 'core/data/interface';
 import { providers, requestCache, queryMethods, instanceCache, namespace, connectCache } from 'core/data/const';
 
 import ParamsProvider from 'core/data/modules/params';
@@ -64,11 +67,6 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 	}
 
 	/**
-	 * Map of data events
-	 */
-	protected readonly eventMap!: Map<unknown, DataEvent>;
-
-	/**
 	 * API for async operations
 	 */
 	protected readonly async!: Async<this>;
@@ -97,14 +95,9 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 
 		this.async = new Async(this);
 		this.emitter = new EventEmitter({maxListeners: 1e3, newListener: false});
-		this.eventMap = new Map();
 
 		if (Object.isBoolean(opts.externalRequest)) {
 			this.setReadonlyParam('externalRequest', opts.externalRequest);
-		}
-
-		if (Object.isBoolean(opts.collapseEvents)) {
-			this.setReadonlyParam('collapseEvents', opts.collapseEvents);
 		}
 
 		if (opts.socket || this.socketURL) {
@@ -118,11 +111,11 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 	}
 
 	/**
-	 * Returns a key to cache a class instance
+	 * Returns a key to the class instance cache
 	 * @param [paramsForCache]
 	 */
 	getCacheKey(paramsForCache: ProviderOptions = {}): string {
-		return `${this.providerName}:${JSON.stringify(paramsForCache)}`;
+		return `${this.providerName}:${Object.fastHash(paramsForCache)}`;
 	}
 
 	/**
@@ -134,9 +127,11 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 	}
 
 	/**
-	 * Function for request resolving:
-	 * this function takes a request URL, request environment and arguments from invoking of the result function and
-	 * can returns a modification chunk for the request URL or fully replace it.
+	 * Function to resolve a request: it takes a request URL and request environment
+	 * and can modify some request parameters.
+	 *
+	 * Also, if the function returns a new string, the string will be appended to the request URL, or
+	 * if the function returns a string that wrapped with an array, the string fully override the original URL.
 	 *
 	 * @see [[RequestResolver]]
 	 * @param url - request URL
@@ -147,15 +142,15 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 	}
 
 	/**
-	 * Connects to a socket server and returns connection
+	 * Connects to a socket server and returns the connection
 	 * @param [opts] - additional options for the server
 	 */
-	async connect(opts?: Dictionary): Promise<Socket | void> {
+	async connect(opts?: Dictionary): Promise<Socket> {
 		await this.async.wait(() => this.socketURL);
 
 		const
 			{socketURL: url} = this,
-			key = JSON.stringify(opts);
+			key = Object.fastHash(opts);
 
 		if (!connectCache[key]) {
 			connectCache[key] = new Promise((resolve, reject) => {
@@ -182,6 +177,8 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 				this.async.once(socket, 'connect', () => resolve(socket), asyncParams);
 			});
 		}
+
+		return connectCache[key]!;
 	}
 
 	/** @inheritDoc */
@@ -272,7 +269,7 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 	}
 
 	/** @inheritDoc */
-	get<T = unknown>(query?: RequestQuery, opts?: CreateRequestOptions<T>): RequestResponse {
+	get<D = unknown>(query?: RequestQuery, opts?: CreateRequestOptions<D>): RequestResponse<D> {
 		const
 			url = this.resolveURL(this.baseGetURL),
 			alias = this.alias || this.providerName;
@@ -281,7 +278,7 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 			eventName = this.name(),
 			method = this.method() || this.getMethod;
 
-		const mergedOpts = this.mixWithOpts('get', {
+		const mergedOpts = this.getRequestOptions('get', {
 			externalRequest: this.externalRequest,
 			...opts,
 			[queryMethods[method] ? 'query' : 'body']: query,
@@ -297,7 +294,7 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 
 		if (extraProviders) {
 			const
-				composition = {},
+				composition = <D & object>{},
 				tasks = <Then<RequestResponseObject>[]>[],
 				cloneTasks = <Function[]>[];
 
@@ -332,7 +329,7 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 
 				tasks.push(
 					providerInstance.get(el.query || query, el.request).then(({data}) => {
-						cloneTasks.push((composition) => Object.set(composition, alias, data && (<object>data).valueOf()));
+						cloneTasks.push((composition) => Object.set(composition, alias, data?.valueOf()));
 						return Object.set(composition, alias, data);
 					})
 				);
@@ -341,9 +338,9 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 			return res.then(
 				(res) => Promise.all(tasks).then(() => {
 					const
-						data = res.data;
+						data = <Nullable<D & object>>res.data;
 
-					cloneTasks.push((composition) => Object.set(composition, alias, data && (<object>data).valueOf()));
+					cloneTasks.push((composition) => Object.set(composition, alias, data?.valueOf()));
 					Object.set(composition, alias, data);
 
 					composition.valueOf = () => {
@@ -375,13 +372,13 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 	}
 
 	/** @inheritDoc */
-	peek<T = unknown>(query?: RequestQuery, opts?: CreateRequestOptions<T>): RequestResponse {
+	peek<D = unknown>(query?: RequestQuery, opts?: CreateRequestOptions<D>): RequestResponse<D> {
 		const
 			url = this.resolveURL(this.basePeekURL),
 			eventName = this.name(),
 			method = this.method() || this.peekMethod;
 
-		const req = this.request(url, this.resolver, this.mixWithOpts('peek', {
+		const req = this.request(url, this.resolver, this.getRequestOptions('peek', {
 			...opts,
 			[queryMethods[method] ? 'query' : 'body']: query,
 			method
@@ -395,13 +392,13 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 	}
 
 	/** @inheritDoc */
-	post<T = unknown>(body?: RequestBody, opts?: CreateRequestOptions<T>): RequestResponse {
+	post<D = unknown>(body?: RequestBody, opts?: CreateRequestOptions<D>): RequestResponse<D> {
 		const
 			url = this.resolveURL(),
 			eventName = this.name(),
 			method = this.method() || 'POST';
 
-		const req = this.request(url, this.resolver, this.mixWithOpts(eventName || 'post', {
+		const req = this.request(url, this.resolver, this.getRequestOptions(eventName || 'post', {
 			...opts,
 			body,
 			method
@@ -415,13 +412,13 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 	}
 
 	/** @inheritDoc */
-	add<T = unknown>(body?: RequestBody, opts?: CreateRequestOptions<T>): RequestResponse {
+	add<D = unknown>(body?: RequestBody, opts?: CreateRequestOptions<D>): RequestResponse<D> {
 		const
 			url = this.resolveURL(this.baseAddURL),
 			eventName = this.name() || 'add',
 			method = this.method() || this.addMethod;
 
-		return this.updateRequest(url, eventName, this.request(url, this.resolver, this.mixWithOpts('add', {
+		return this.updateRequest(url, eventName, this.request(url, this.resolver, this.getRequestOptions('add', {
 			...opts,
 			body,
 			method
@@ -429,13 +426,13 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 	}
 
 	/** @inheritDoc */
-	upd<T = unknown>(body?: RequestBody, opts?: CreateRequestOptions<T>): RequestResponse {
+	upd<D = unknown>(body?: RequestBody, opts?: CreateRequestOptions<D>): RequestResponse<D> {
 		const
 			url = this.resolveURL(this.baseUpdURL),
 			eventName = this.name() || 'upd',
 			method = this.method() || this.updMethod;
 
-		return this.updateRequest(url, eventName, this.request(url, this.resolver, this.mixWithOpts('upd', {
+		return this.updateRequest(url, eventName, this.request(url, this.resolver, this.getRequestOptions('upd', {
 			...opts,
 			body,
 			method
@@ -443,13 +440,13 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 	}
 
 	/** @inheritDoc */
-	del<T = unknown>(body?: RequestBody, opts?: CreateRequestOptions<T>): RequestResponse {
+	del<D = unknown>(body?: RequestBody, opts?: CreateRequestOptions<D>): RequestResponse<D> {
 		const
 			url = this.resolveURL(this.baseDelURL),
 			eventName = this.name() || 'del',
 			method = this.method() || this.delMethod;
 
-		return this.updateRequest(url, eventName, this.request(url, this.resolver, this.mixWithOpts('del', {
+		return this.updateRequest(url, eventName, this.request(url, this.resolver, this.getRequestOptions('del', {
 			...opts,
 			body,
 			method
@@ -457,7 +454,7 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 	}
 
 	/**
-	 * Returns the full URL of any request with support of patching the specified chunks of URL
+	 * Returns full URL of a request by the specified URL chunks
 	 *
 	 * @param [baseURL]
 	 * @param [advURL]
@@ -467,7 +464,7 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 	}
 
 	/**
-	 * Sets a value by the specified key to the provider as readonly
+	 * Sets a readonly value by the specified key to the current provider
 	 */
 	protected setReadonlyParam(key: string, val: unknown): void {
 		Object.defineProperty(this, key, {
@@ -492,50 +489,15 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 	}
 
 	/**
-	 * Sets a provider event to a queue by the specified key
-	 *
-	 * @param key - event cache key
-	 * @param event - event name
-	 * @param data - event data
-	 *
-	 * @emits `drain()`
-	 */
-	protected setEventToQueue(key: unknown, event: string, data: EventData): void {
-		const {
-			async: $a,
-			event: $e,
-			eventMap: $m
-		} = this;
-
-		$m.set(key, {event, data});
-		$a.setTimeout(() => {
-			for (let o = $m.values(), val = o.next(); !val.done; val = o.next()) {
-				const el = val.value;
-				$e.emit(el.event, el.data);
-			}
-
-			$m.clear();
-			$e.emit('drain');
-
-		}, 0.1.second(), {
-			group: 'eventQueue',
-			label: $$.setEventToQueue
-		});
-	}
-
-	/**
-	 * Mixes options from class fields and the specified object and returns a new object.
-	 * This method takes a name of the model method that have associated options.
+	 * Returns an object with request options by the specified model name and object with additional parameters
 	 *
 	 * @param method - model method
-	 * @param obj - object to mix
+	 * @param [params] - additional parameters
 	 */
-	protected mixWithOpts<A = unknown, B = unknown>(
+	protected getRequestOptions<D = unknown>(
 		method: ModelMethod,
-		obj: CreateRequestOptions<A>
-	): CreateRequestOptions<B> {
-		obj = obj || {};
-
+		params?: CreateRequestOptions<D>
+	): CreateRequestOptions<D> {
 		const
 			{middlewares, encoders, decoders} = <typeof Provider>this.constructor;
 
@@ -546,7 +508,7 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 		};
 
 		const
-			mappedMiddlewares = merge(middlewares, obj.middlewares);
+			mappedMiddlewares = merge(middlewares, params?.middlewares);
 
 		for (let keys = Object.keys(mappedMiddlewares), i = 0; i < keys.length; i++) {
 			const key = keys[i];
@@ -554,15 +516,16 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 		}
 
 		return {
-			...obj,
+			...params,
+
 			cacheId: this.cacheId,
 			middlewares: mappedMiddlewares,
 
 			// tslint:disable-next-line:no-string-literal
-			encoder: merge(encoders[method] || encoders['def'], obj.encoder),
+			encoder: merge(encoders[method] || encoders['def'], params?.encoder),
 
 			// tslint:disable-next-line:no-string-literal
-			decoder: merge(decoders[method] || decoders['def'], obj.decoder)
+			decoder: merge(decoders[method] || decoders['def'], params?.decoder)
 		};
 	}
 
@@ -572,26 +535,26 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 	 * @param url - request url
 	 * @param factory - request factory
 	 */
-	protected updateRequest<T = unknown>(url: string, factory: RequestFunctionResponse<T>): RequestResponse<T>;
+	protected updateRequest<D = unknown>(url: string, factory: RequestFunctionResponse<D>): RequestResponse<D>;
 
 	/**
 	 * Updates the specified request with adding caching, etc.
 	 *
 	 * @param url - request url
-	 * @param event - event name that is fires after resolving of the request
+	 * @param event - event name that is fired after resolving of the request
 	 * @param factory - request factory
 	 */
-	protected updateRequest<T = unknown>(
+	protected updateRequest<D = unknown>(
 		url: string,
 		event: string,
-		factory: RequestFunctionResponse<T>
-	): RequestResponse<T>;
+		factory: RequestFunctionResponse<D>
+	): RequestResponse<D>;
 
-	protected updateRequest(
+	protected updateRequest<D = unknown>(
 		url: string,
 		event: string | RequestFunctionResponse,
 		factory?: RequestFunctionResponse
-	): RequestResponse {
+	): RequestResponse<D> {
 		if (Object.isFunction(event)) {
 			factory = event;
 			event = '';
@@ -613,12 +576,7 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 					cache[res.cacheKey] = res;
 				}
 
-				if (this.collapseEvents) {
-					this.setEventToQueue(this.getEventKey(e, res.data), e, () => res.data);
-
-				} else {
-					this.emitter.emit(e, () => res.data);
-				}
+				this.emitter.emit(e, () => res.data);
 			});
 		}
 
