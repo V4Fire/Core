@@ -48,7 +48,7 @@ export interface FromQueryStringOptions {
 	decode?: boolean;
 
 	/**
-	 * If false, then all parsed values won't be parsed from a string
+	 * If false, then all parsed values won't be converted from a string
 	 *
 	 * @default `true`
 	 *
