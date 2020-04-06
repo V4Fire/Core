@@ -155,7 +155,7 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 	 * Connects to a socket server and returns the connection
 	 * @param [opts] - additional options for the server
 	 */
-	async connect(opts?: Dictionary): Promise<Socket | void> {
+	async connect(opts?: Dictionary): Promise<Socket> {
 		await this.async.wait(() => this.socketURL);
 
 		const
@@ -187,6 +187,8 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 				this.async.once(socket, 'connect', () => resolve(socket), asyncParams);
 			});
 		}
+
+		return connectCache[key]!;
 	}
 
 	/** @inheritDoc */
