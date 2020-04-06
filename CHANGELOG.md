@@ -24,6 +24,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 * [Added support for custom cache strategies](https://github.com/V4Fire/Core/pull/65)
 * [Added a new reviver parameter to `Object.parse`](https://github.com/V4Fire/Core/pull/72)
 * [Added new overloads with options for `toQueryString/fromQueryString` `core/url`](https://github.com/V4Fire/Core/pull/72)
+* Added `core/data/middlewares/attach-status`
 
 #### :house: Internal
 
