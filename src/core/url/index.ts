@@ -96,7 +96,7 @@ const
  * Creates a dictionary from the specified querystring and returns it
  *
  * @param query
- * @param [decode] - if false, then a passed value won't be decoded by using decodeURIComponent
+ * @param [decode] - if false, then the passed string won't be decoded by using decodeURIComponent
  */
 export function fromQueryString(query: string, decode?: boolean): Dictionary<string | null>;
 
