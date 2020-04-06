@@ -11,6 +11,10 @@
  * @packageDocumentation
  */
 
+import { convertIfDate } from 'core/json';
+import { ToQueryStringOptions, FromQueryStringOptions } from 'core/url/interface';
+export * from 'core/url/interface';
+
 const
 	isUrlWithSep = /^(\w+:)?\/?\//;
 
@@ -57,65 +61,155 @@ export function concatUrls(...urls: Nullable<string>[]): string {
  * Creates a querystring from the specified data and returns it
  *
  * @param data
- * @param [encode] - if true, then all values from the data will be encoded by using encodeURIComponent
+ * @param [encode] - if false, then the result string won't be encoded by using encodeURIComponent
  */
-export function toQueryString(data: unknown, encode: boolean = true): string {
-	return chunkToQueryString(data, encode);
+export function toQueryString(data: unknown, encode?: boolean): string;
+
+/**
+ * Creates a querystring from the specified data and returns it
+ *
+ * @param data
+ * @param opts - additional options
+ */
+export function toQueryString(data: unknown, opts: ToQueryStringOptions): string;
+export function toQueryString(data: unknown, optsOrEncode?: ToQueryStringOptions | boolean): string {
+	let
+		opts;
+
+	// tslint:disable-next-line:prefer-conditional-expression
+	if (Object.isPlainObject(optsOrEncode)) {
+		opts = optsOrEncode;
+
+	} else {
+		opts = {encode: optsOrEncode};
+	}
+
+	const querystring = chunkToQueryString(data, opts);
+	return opts.encode !== false ? encodeURIComponent(querystring) : querystring;
 }
+
+const
+	arraySyntax = /\[([^\]]*)]/g,
+	normalizeURLRgxp = /[^?]*\?/;
 
 /**
  * Creates a dictionary from the specified querystring and returns it
  *
  * @param query
- * @param [decode] - if true, then the querystring will be decoded by using decodeURIComponent
+ * @param [decode] - if false, then a passed value won't be decoded by using decodeURIComponent
  */
-export function fromQueryString(query: string, decode: boolean = true): Dictionary<string | null> {
-	const
-		res = {};
+export function fromQueryString(query: string, decode?: boolean): Dictionary<string | null>;
 
-	if (query[0] === '?') {
-		query = query.slice(1);
-	}
+/**
+ * Creates a dictionary from the specified querystring and returns it
+ *
+ * @param query
+ * @param opts - additional options
+ */
+export function fromQueryString(query: string, opts: FromQueryStringOptions): Dictionary<string | null>;
+export function fromQueryString(
+	query: string,
+	optsOrDecode?: FromQueryStringOptions | boolean
+): Dictionary<string | null> {
+	query = query.replace(normalizeURLRgxp, '');
+
+	const
+		queryObj = {};
 
 	if (!query) {
-		return res;
+		return queryObj;
 	}
 
-	if (decode) {
+	let
+		opts;
+
+	// tslint:disable-next-line:prefer-conditional-expression
+	if (Object.isPlainObject(optsOrDecode)) {
+		opts = optsOrDecode;
+
+	} else {
+		opts = {decode: optsOrDecode};
+	}
+
+	if (opts.decode !== false) {
 		query = decodeURIComponent(query);
 	}
 
 	const
-		opts = {separator: '_'},
-		chunks = query.split('&');
+		indexes = Object.createDict<number>(),
+		objOpts = {separator: opts.arraySyntax ? ']' : opts.separator},
+		variables = query.split('&');
 
-	for (let i = 0; i < chunks.length; i++) {
+	for (let i = 0; i < variables.length; i++) {
+		let
+			// tslint:disable-next-line:prefer-const
+			[key, val = null] = variables[i].split('=');
+
+		if (opts.arraySyntax) {
+			let
+				path = '',
+				nestedArray = false;
+
+			key = key.replace(arraySyntax, (str, prop, lastIndex) => {
+				if (!path) {
+					path += key.slice(0, lastIndex);
+				}
+
+				path += str;
+
+				if (!prop) {
+					if (nestedArray) {
+						prop = 0;
+
+					} else {
+						prop = indexes[path] || 0;
+						indexes[path] = prop + 1;
+					}
+
+					nestedArray = true;
+				}
+
+				return `]${prop}`;
+			});
+		}
+
 		const
-			[key, val] = chunks[i].split('=');
+			oldVal = objOpts.separator ? Object.get(queryObj, key, objOpts) : queryObj[key];
 
-		if (key) {
-			const
-				oldVal = Object.get(res, key, opts);
+		let
+			normalizedVal = opts.convert !== false ? Object.parse(val, convertIfDate) : val;
 
-			Object.set(
-				res,
-				key,
-				oldVal ? (<unknown[]>[]).concat(oldVal, val == null ? [] : val) : val == null ? null : val,
-				opts
+		if (oldVal !== undefined) {
+			normalizedVal = (<unknown[]>[]).concat(
+				oldVal == null ? [] : oldVal,
+
+				normalizedVal == null ?
+					[] :
+
+					Object.isArray(normalizedVal) ?
+						[normalizedVal] : normalizedVal
 			);
+		}
+
+		if (objOpts.separator) {
+			Object.set(queryObj, key, normalizedVal, objOpts);
+
+		} else {
+			queryObj[key] = normalizedVal;
 		}
 	}
 
-	return res;
+	return queryObj;
 }
 
-function chunkToQueryString(data: unknown, encode: boolean, prfx: string = ''): string {
+function chunkToQueryString(data: unknown, opts: ToQueryStringOptions, prfx: string = ''): string {
 	if (data == null || data === '') {
 		return '';
 	}
 
 	const
-		isArr = Object.isArray(data);
+		separator = opts.separator || '_',
+		dataIsArray = Object.isArray(data);
 
 	const reduce = (arr) => {
 		arr.sort();
@@ -125,7 +219,7 @@ function chunkToQueryString(data: unknown, encode: boolean, prfx: string = ''): 
 
 		for (let i = 0; i < arr.length; i++) {
 			let
-				key = isArr ? i : arr[i];
+				key = dataIsArray ? i : arr[i];
 
 			const
 				val = (<Extract<typeof data, unknown[] | Dictionary>>data)[key],
@@ -135,10 +229,25 @@ function chunkToQueryString(data: unknown, encode: boolean, prfx: string = ''): 
 				continue;
 			}
 
-			key = isArr ? prfx : prfx ? `${prfx}_${key}` : key;
+			if (opts.arraySyntax) {
+				if (dataIsArray) {
+					key = `${prfx}[]`;
 
-			const str = valIsArr || Object.isPlainObject(val) ?
-				chunkToQueryString(val, encode, key) : `${key}=${chunkToQueryString(val, encode)}`;
+				} else if (prfx) {
+					key = `${prfx}[${key}]`;
+				}
+
+			} else {
+				if (dataIsArray) {
+					key = prfx;
+
+				} else {
+					key = prfx ? prfx + separator + key : key;
+				}
+			}
+
+			const str = valIsArr || Object.isDictionary(val) ?
+				chunkToQueryString(val, opts, key) : `${key}=${chunkToQueryString(val, opts)}`;
 
 			if (res) {
 				res += `&${str}`;
@@ -151,13 +260,13 @@ function chunkToQueryString(data: unknown, encode: boolean, prfx: string = ''): 
 		return res;
 	};
 
-	if (isArr) {
+	if (dataIsArray) {
 		return reduce(data);
 	}
 
-	if (Object.isPlainObject(data)) {
+	if (Object.isDictionary(data)) {
 		return reduce(Object.keys(data));
 	}
 
-	return encode ? encodeURIComponent(String(data)) : String(data);
+	return String(data);
 }
