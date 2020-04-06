@@ -95,7 +95,7 @@ interface FastCloneOptions {
 	replacer?: JSONCb;
 
 	/**
-	 * JSON.parse reviver or false for disable defaults
+	 * Reviver function for JSON.parse or false to disable defaults
 	 */
 	reviver?: JSONCb | false;
 
@@ -714,9 +714,11 @@ interface ObjectConstructor {
 
 	/**
 	 * Parses the specified value as a JSON/JS object and returns the result
+	 *
 	 * @param value
+	 * @param [reviver] - reviver function for JSON.parse
 	 */
-	parse<V = unknown, R = unknown>(value: V): CanUndef<R>;
+	parse<V = unknown, R = unknown>(value: V, reviver?: JSONCb): V extends string ? R : V;
 
 	/**
 	 * Creates a hash table without any prototype and returns it
