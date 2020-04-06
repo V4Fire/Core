@@ -8,11 +8,22 @@
 
 import extend from 'core/prelude/extend';
 
-/** @see ObjectConstructor.parse */
-extend(Object, 'parse', (value) => {
-	try {
-		return new Function(`return ${value}`)();
-	} catch {}
+const
+	canParse = /^[[{"]|^(?:true|false|null|\d+)$/;
 
-	return undefined;
+/** @see ObjectConstructor.parse */
+extend(Object, 'parse', (value, reviver?: JSONCb) => {
+	if (Object.isString(value)) {
+		if (value === 'undefined') {
+			return undefined;
+		}
+
+		if (canParse.test(value)) {
+			try {
+				return JSON.parse(value, reviver);
+			} catch {}
+		}
+	}
+
+	return value;
 });
