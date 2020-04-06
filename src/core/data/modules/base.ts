@@ -125,7 +125,7 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 	 * @param [paramsForCache]
 	 */
 	getCacheKey(paramsForCache: ProviderOptions = {}): string {
-		return `${this.providerName}:${JSON.stringify(paramsForCache)}`;
+		return `${this.providerName}:${Object.fastHash(paramsForCache)}`;
 	}
 
 	/**
@@ -160,7 +160,7 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 
 		const
 			{socketURL: url} = this,
-			key = JSON.stringify(opts);
+			key = Object.fastHash(opts);
 
 		if (!connectCache[key]) {
 			connectCache[key] = new Promise((resolve, reject) => {
