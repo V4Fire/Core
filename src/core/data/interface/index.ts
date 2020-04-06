@@ -96,7 +96,7 @@ export default interface Provider {
 	url(value: string): Provider;
 
 	/**
-	 * Drops the cache of requests for this provider
+	 * Drops the request cache of the current provider
 	 */
 	dropCache(): void;
 
