@@ -16,12 +16,14 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 #### :boom: Breaking Change
 
 * [Switched the priority of a response type `core/request/response`](https://github.com/V4Fire/Core/pull/63)
+* `core/url/fromQueryString` doesn't parse nested properties by default
 
 #### :rocket: New Feature
 
 * [Added `core/mime-type`](https://github.com/V4Fire/Core/pull/62)
 * [Added support for custom cache strategies](https://github.com/V4Fire/Core/pull/65)
 * Added a new reviver parameter to `Object.parse`
+* Added new overloads with options for `toQueryString/fromQueryString` `core/url`
 
 #### :house: Internal
 
