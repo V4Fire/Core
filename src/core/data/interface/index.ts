@@ -83,7 +83,7 @@ export default interface Provider {
 	base(value: string): Provider;
 
 	/**
-	 * Returns the full URL of any request
+	 * Returns full URL of any request
 	 */
 	url(): string;
 
@@ -101,13 +101,13 @@ export default interface Provider {
 	dropCache(): void;
 
 	/**
-	 * Requests the provider for a data by a query.
+	 * Requests the provider for data by a query.
 	 * This method is similar for a GET request.
 	 *
 	 * @param [query] - request query
 	 * @param [opts] - additional request options
 	 */
-	get<T = unknown>(query?: RequestQuery, opts?: CreateRequestOptions<T>): RequestResponse;
+	get<D = unknown>(query?: RequestQuery, opts?: CreateRequestOptions<D>): RequestResponse<D>;
 
 	/**
 	 * Checks accessibility of the provider by a query.
@@ -116,7 +116,7 @@ export default interface Provider {
 	 * @param [query] - request query
 	 * @param [opts] - additional request options
 	 */
-	peek<T = unknown>(query?: RequestQuery, opts?: CreateRequestOptions<T>): RequestResponse;
+	peek<D = unknown>(query?: RequestQuery, opts?: CreateRequestOptions<D>): RequestResponse<D>;
 
 	/**
 	 * Sends custom data to the provider without any logically effect.
@@ -125,7 +125,7 @@ export default interface Provider {
 	 * @param [body] - request body
 	 * @param [opts] - additional request options
 	 */
-	post<T = unknown>(body?: RequestBody, opts?: CreateRequestOptions<T>): RequestResponse;
+	post<D = unknown>(body?: RequestBody, opts?: CreateRequestOptions<D>): RequestResponse<D>;
 
 	/**
 	 * Add new data to the provider.
@@ -135,7 +135,7 @@ export default interface Provider {
 	 * @param [opts] - additional request options
 	 * @emits `add<T>(data: () => T)`
 	 */
-	add<T = unknown>(body?: RequestBody, opts?: CreateRequestOptions<T>): RequestResponse;
+	add<D = unknown>(body?: RequestBody, opts?: CreateRequestOptions<D>): RequestResponse<D>;
 
 	/**
 	 * Updates data of the provider by a query.
@@ -145,7 +145,7 @@ export default interface Provider {
 	 * @param [opts] - additional request options
 	 * @emits `upd<T>(data: () => T)`
 	 */
-	upd<T = unknown>(body?: RequestBody, opts?: CreateRequestOptions<T>): RequestResponse ;
+	upd<D = unknown>(body?: RequestBody, opts?: CreateRequestOptions<D>): RequestResponse<D>;
 
 	/**
 	 * Deletes data of the provider by a query.
@@ -155,5 +155,5 @@ export default interface Provider {
 	 * @param [opts] - additional request options
 	 * @emits `del<T>(data: () => T)`
 	 */
-	del<T = unknown>(body?: RequestBody, opts?: CreateRequestOptions<T>): RequestResponse;
+	del<D = unknown>(body?: RequestBody, opts?: CreateRequestOptions<D>): RequestResponse<D>;
 }
