@@ -12,13 +12,21 @@
  */
 
 import Queue from 'core/queue/interface';
+import { Tasks } from 'core/queue/simple/interface';
+
 export * from 'core/queue/interface';
+export * from 'core/queue/simple/interface';
 
 /**
  * Simple implementation of a queue data structure
  * @typeparam T - queue element
  */
 export default class SimpleQueue<T> implements Queue<T> {
+	/**
+	 * Type: list of tasks
+	 */
+	readonly Tasks!: Tasks<T>;
+
 	/** @inheritDoc */
 	get head(): CanUndef<T> {
 		return this.tasks[0];
@@ -30,9 +38,9 @@ export default class SimpleQueue<T> implements Queue<T> {
 	}
 
 	/**
-	 * Task queue
+	 * List of tasks
 	 */
-	protected tasks: T[] = [];
+	protected tasks: this['Tasks'] = this.createTasks();
 
 	/** @inheritDoc */
 	push(task: T): number {
@@ -49,7 +57,14 @@ export default class SimpleQueue<T> implements Queue<T> {
 	/** @inheritDoc */
 	clear(): void {
 		if (this.tasks.length > 0) {
-			this.tasks = [];
+			this.tasks = this.createTasks();
 		}
+	}
+
+	/**
+	 * Return a new blank list of tasks
+	 */
+	protected createTasks(): this['Tasks'] {
+		return [];
 	}
 }

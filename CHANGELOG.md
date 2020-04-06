@@ -28,6 +28,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 * Extracted constants to separated files `core/prelude`
 * [Review `core/request`](https://github.com/V4Fire/Core/pull/68)
 * [Review `core/data`](https://github.com/V4Fire/Core/pull/69)
+* [Review `core/queue`](https://github.com/V4Fire/Core/pull/71)
 
 ## v3.9.0 (2020-03-31)
 
