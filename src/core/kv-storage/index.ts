@@ -12,6 +12,7 @@
  */
 
 import { convertIfDate } from 'core/json';
+
 import {
 
 	syncLocalStorage,
@@ -115,9 +116,6 @@ export const remove = local.remove;
  * ```
  */
 export const namespace = local.namespace;
-
-export const
-	canParse = /^[[{"]|^(?:true|false|null|\d+)$/;
 
 /**
  * Creates a new kv-storage API with the specified engine
@@ -229,16 +227,7 @@ export function factory(engine: StorageEngine, async?: boolean): AsyncFactoryRes
 					return undefined;
 				}
 
-				if (Object.isString(v) && canParse.test(v)) {
-					try {
-						return JSON.parse(v, convertIfDate);
-
-					} catch {
-						return v;
-					}
-				}
-
-				return v;
+				return Object.parse(v, convertIfDate);
 			});
 		},
 
