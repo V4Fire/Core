@@ -65,6 +65,10 @@ export default class Range<T extends RangeValue> {
 		}
 	}
 
+	[Symbol.iterator](): IterableIterator<T> {
+		return this.values();
+	}
+
 	/**
 	 * Returns true if the range is valid
 	 */
@@ -174,7 +178,7 @@ export default class Range<T extends RangeValue> {
 	 * Returns an iterable object from the range
 	 * @param step
 	 */
-	*values(step?: number): Iterable<T> {
+	*values(step?: number): IterableIterator<T> {
 		if (!this.isValid()) {
 			return;
 		}

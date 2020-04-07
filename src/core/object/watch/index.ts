@@ -277,7 +277,7 @@ export default function watch<T extends object>(
 					resolvedInfo = info;
 
 				// If we have a tied property with the property that have a mutation,
-				// we need to register ir
+				// we need to register it
 				if (tiedPath) {
 					cache = cache || new Map();
 

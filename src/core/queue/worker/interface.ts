@@ -9,6 +9,8 @@
 import Queue from 'core/queue/interface';
 export * from 'core/queue/interface';
 
+export interface Tasks<T> extends Array<T> {}
+
 export interface QueueWorker<T = unknown, V = unknown> {
 	(task: T): CanPromise<V>;
 }
@@ -33,6 +35,11 @@ export interface QueueOptions {
  * @typeparam V - worker value
  */
 export default abstract class WorkerQueue<T, V = unknown> implements Queue<T> {
+	/**
+	 * Type: list of tasks
+	 */
+	readonly Tasks!: Tasks<unknown>;
+
 	/** @inheritDoc */
 	head: CanUndef<T>;
 
@@ -63,9 +70,9 @@ export default abstract class WorkerQueue<T, V = unknown> implements Queue<T> {
 	protected worker: QueueWorker<T, V>;
 
 	/**
-	 * Task queue
+	 * List of tasks
 	 */
-	protected tasks: unknown[] = [];
+	protected tasks: this['Tasks'] = this.createTasks();
 
 	/**
 	 * @param worker
@@ -90,7 +97,7 @@ export default abstract class WorkerQueue<T, V = unknown> implements Queue<T> {
 	/** @inheritDoc */
 	clear(): void {
 		if (this.tasks.length > 0) {
-			this.tasks = [];
+			this.tasks = this.createTasks();
 			this.activeWorkers = 0;
 		}
 	}
@@ -99,6 +106,13 @@ export default abstract class WorkerQueue<T, V = unknown> implements Queue<T> {
 	 * Executes a task chunk from the queue
 	 */
 	protected abstract perform(): unknown;
+
+	/**
+	 * Return a new blank list of tasks
+	 */
+	protected createTasks(): this['Tasks'] {
+		return [];
+	}
 
 	/**
 	 * Executes a task chunk from the queue

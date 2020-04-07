@@ -16,11 +16,16 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 #### :boom: Breaking Change
 
 * [Switched the priority of a response type `core/request/response`](https://github.com/V4Fire/Core/pull/63)
+* [`core/url/fromQueryString` doesn't parse nested properties by default](https://github.com/V4Fire/Core/pull/72)
 
 #### :rocket: New Feature
 
 * [Added `core/mime-type`](https://github.com/V4Fire/Core/pull/62)
 * [Added support for custom cache strategies](https://github.com/V4Fire/Core/pull/65)
+* [Added a new reviver parameter to `Object.parse`](https://github.com/V4Fire/Core/pull/72)
+* [Added new overloads with options for `toQueryString/fromQueryString` `core/url`](https://github.com/V4Fire/Core/pull/72)
+* [Added `core/data/middlewares/attach-status`](https://github.com/V4Fire/Core/pull/73)
+* Added `Symbol.iterator` to `core/range`
 
 #### :house: Internal
 
@@ -28,6 +33,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 * Extracted constants to separated files `core/prelude`
 * [Review `core/request`](https://github.com/V4Fire/Core/pull/68)
 * [Review `core/data`](https://github.com/V4Fire/Core/pull/69)
+* [Review `core/queue`](https://github.com/V4Fire/Core/pull/71)
 * [Extracted `core/net` logic to an engine](https://github.com/V4Fire/Core/pull/74)
 
 ## v3.9.0 (2020-03-31)

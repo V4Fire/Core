@@ -11,7 +11,7 @@
  * @packageDocumentation
  */
 
-import WorkerQueue from 'core/queue/worker/interface';
+import WorkerQueue, { Tasks } from 'core/queue/worker/interface';
 import { QueueWorker, QueueOptions, Task, HashFn } from 'core/queue/worker/merge/interface';
 export * from 'core/queue/worker/merge/interface';
 
@@ -23,6 +23,9 @@ export * from 'core/queue/worker/merge/interface';
  */
 export default class MergeWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> {
 	/** @override */
+	readonly Tasks!: Tasks<string>;
+
+	/** @override */
 	get head(): CanUndef<T> {
 		if (!this.length) {
 			return undefined;
@@ -31,9 +34,6 @@ export default class MergeWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> 
 		const obj = this.tasksMap[this.tasks[0]];
 		return obj?.task;
 	}
-
-	/** @override */
-	protected tasks!: string[];
 
 	/**
 	 * The map of registered tasks
@@ -108,7 +108,13 @@ export default class MergeWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> 
 		}
 
 		const
-			hash = <string>this.tasks.shift(),
+			hash = this.tasks.shift();
+
+		if (hash === undefined) {
+			return;
+		}
+
+		const
 			taskObj = this.tasksMap[hash];
 
 		if (!taskObj) {
