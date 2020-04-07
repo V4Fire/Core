@@ -63,13 +63,9 @@ export interface DeprecatedOptions {
 }
 
 export interface InlineDeprecatedOptions extends DeprecatedOptions {
-	/**
-	 * Name of an expression to wrap
-	 */
+	/** @see [[DeprecatedOptions.name]] */
 	name: string;
 
-	/**
-	 * Type of an expression to wrap
-	 */
+	/** @see [[DeprecatedOptions.type]] */
 	type: DeprecatedExprType;
 }

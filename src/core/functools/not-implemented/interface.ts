@@ -49,13 +49,9 @@ export interface NotImplementedOptions {
 }
 
 export interface InlineNotImplementedOptions extends NotImplementedOptions {
-	/**
-	 * Name of an expression to wrap
-	 */
+	/** @see [[NotImplementedOptions.name]] */
 	name: string;
 
-	/**
-	 * Type of an expression to wrap
-	 */
+	/** @see [[NotImplementedOptions.type]] */
 	type: NotImplementedExprType;
 }
