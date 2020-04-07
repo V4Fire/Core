@@ -114,13 +114,11 @@ let
  * Synchronizes the online status with a local storage
  */
 export async function syncStatusWithStorage(): Promise<void> {
-	if (!status || !online.persistence) {
+	if (!status) {
 		return;
 	}
 
-	if (!storage) {
-		throw new ReferenceError('kv-storage module is not loaded');
-	}
+	lastOnline = new Date();
 
 	const clear = () => {
 		if (storageSyncTimer != null) {
@@ -131,12 +129,17 @@ export async function syncStatusWithStorage(): Promise<void> {
 
 	clear();
 
-	try {
-		(await storage).
-			set('lastOnline', lastOnline = new Date());
+	if (online.persistence) {
+		if (!storage) {
+			throw new ReferenceError('kv-storage module is not loaded');
+		}
 
-	} catch (err) {
-		stderr(err);
+		try {
+			await (await storage).set('lastOnline', lastOnline);
+
+		} catch (err) {
+			stderr(err);
+		}
 	}
 
 	if (online.lastDateSyncInterval) {
@@ -170,15 +173,15 @@ export async function updateStatus(): Promise<void> {
 
 	} catch (err) {
 		stderr(err);
+	}
 
-	} finally {
-		if (online.checkInterval) {
-			clear();
-			checkTimer = setTimeout(() => {
-				checkTimer = undefined;
-				updateStatus();
-			}, online.checkInterval);
-		}
+	if (online.checkInterval) {
+		clear();
+
+		checkTimer = setTimeout(() => {
+			checkTimer = undefined;
+			updateStatus();
+		}, online.checkInterval);
 	}
 }
 
