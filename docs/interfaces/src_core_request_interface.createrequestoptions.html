@@ -218,7 +218,7 @@
 					<div class="tsd-signature tsd-kind-icon">api<span class="tsd-signature-symbol">:</span> <a href="src_core_request_interface.requestapi.html" class="tsd-signature-type">RequestAPI</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L267">src/core/request/interface.ts:267</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L269">src/core/request/interface.ts:269</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -235,7 +235,7 @@
 					<div class="tsd-signature tsd-kind-icon">body<span class="tsd-signature-symbol">:</span> <a href="../modules/src_core_request_interface.html#requestbody" class="tsd-signature-type">RequestBody</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L244">src/core/request/interface.ts:244</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L246">src/core/request/interface.ts:246</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -250,7 +250,7 @@
 					<div class="tsd-signature tsd-kind-icon">cache<wbr>Id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">symbol</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L295">src/core/request/interface.ts:295</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L298">src/core/request/interface.ts:298</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -265,7 +265,7 @@
 					<div class="tsd-signature tsd-kind-icon">cache<wbr>Methods<span class="tsd-signature-symbol">:</span> <a href="../modules/src_core_request_interface.html#requestmethod" class="tsd-signature-type">RequestMethod</a><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L301">src/core/request/interface.ts:301</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L304">src/core/request/interface.ts:304</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -285,18 +285,19 @@
 					<div class="tsd-signature tsd-kind-icon">cache<wbr>Strategy<span class="tsd-signature-symbol">:</span> <a href="../modules/src_core_request_interface.html#cachestrategy" class="tsd-signature-type">CacheStrategy</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L290">src/core/request/interface.ts:290</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L293">src/core/request/interface.ts:293</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Type of caching for requests that supports it:</p>
+							<p>Strategy of caching for requests that supports it:</p>
 						</div>
 						<ol>
 							<li><code>&#39;forever&#39;</code> - caches all requests and stores their values forever within the active session or
 							until the cache expires (if .cacheTTL is specified);</li>
 							<li><code>&#39;queue&#39;</code> - caches all requests, but more frequent requests will push less frequent requests;</li>
-							<li><code>&#39;never&#39;</code> - never caches any requests.</li>
+							<li><code>&#39;never&#39;</code> - never caches any requests;</li>
+							<li>custom cache object.</li>
 						</ol>
 					</div>
 				</section>
@@ -306,7 +307,7 @@
 					<div class="tsd-signature tsd-kind-icon">cacheTTL<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L307">src/core/request/interface.ts:307</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L310">src/core/request/interface.ts:310</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -322,7 +323,7 @@
 					<div class="tsd-signature tsd-kind-icon">content<wbr>Type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L227">src/core/request/interface.ts:227</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L229">src/core/request/interface.ts:229</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -337,7 +338,7 @@
 					<div class="tsd-signature tsd-kind-icon">credentials<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L259">src/core/request/interface.ts:259</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L261">src/core/request/interface.ts:261</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -352,7 +353,7 @@
 					<div class="tsd-signature tsd-kind-icon">decoder<span class="tsd-signature-symbol">:</span> <a href="src_core_request_interface.decoder.html" class="tsd-signature-type">Decoder</a><span class="tsd-signature-symbol"> | </span><a href="../modules/src_core_request_interface.html#decoders" class="tsd-signature-type">Decoders</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L344">src/core/request/interface.ts:344</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L347">src/core/request/interface.ts:347</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -369,7 +370,7 @@
 					<div class="tsd-signature tsd-kind-icon">encoder<span class="tsd-signature-symbol">:</span> <a href="src_core_request_interface.encoder.html" class="tsd-signature-type">Encoder</a><span class="tsd-signature-symbol"> | </span><a href="../modules/src_core_request_interface.html#encoders" class="tsd-signature-type">Encoders</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L337">src/core/request/interface.ts:337</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L340">src/core/request/interface.ts:340</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -386,7 +387,7 @@
 					<div class="tsd-signature tsd-kind-icon">engine<span class="tsd-signature-symbol">:</span> <a href="src_core_request_interface.requestengine.html" class="tsd-signature-type">RequestEngine</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L367">src/core/request/interface.ts:367</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L370">src/core/request/interface.ts:370</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -401,7 +402,7 @@
 					<div class="tsd-signature tsd-kind-icon">external<wbr>Request<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L350">src/core/request/interface.ts:350</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L353">src/core/request/interface.ts:353</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -417,7 +418,7 @@
 					<div class="tsd-signature tsd-kind-icon">headers<span class="tsd-signature-symbol">:</span> <a href="index_d.dictionary.html" class="tsd-signature-type">Dictionary</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/index_d.html#canarray" class="tsd-signature-type">CanArray</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L254">src/core/request/interface.ts:254</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L256">src/core/request/interface.ts:256</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -432,7 +433,7 @@
 					<div class="tsd-signature tsd-kind-icon">important<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L356">src/core/request/interface.ts:356</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L359">src/core/request/interface.ts:359</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -448,7 +449,7 @@
 					<div class="tsd-signature tsd-kind-icon">meta<span class="tsd-signature-symbol">:</span> <a href="index_d.dictionary.html" class="tsd-signature-type">Dictionary</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L362">src/core/request/interface.ts:362</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L365">src/core/request/interface.ts:365</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -464,7 +465,7 @@
 					<div class="tsd-signature tsd-kind-icon">method<span class="tsd-signature-symbol">:</span> <a href="../modules/src_core_request_interface.html#requestmethod" class="tsd-signature-type">RequestMethod</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L222">src/core/request/interface.ts:222</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L224">src/core/request/interface.ts:224</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -479,7 +480,7 @@
 					<div class="tsd-signature tsd-kind-icon">middlewares<span class="tsd-signature-symbol">:</span> <a href="../modules/src_core_request_interface.html#middlewares" class="tsd-signature-type">Middlewares</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L330">src/core/request/interface.ts:330</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L333">src/core/request/interface.ts:333</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -499,7 +500,7 @@
 					<div class="tsd-signature tsd-kind-icon">offline<wbr>Cache<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L313">src/core/request/interface.ts:313</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L316">src/core/request/interface.ts:316</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -519,7 +520,7 @@
 					<div class="tsd-signature tsd-kind-icon">offline<wbr>CacheTTL<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L319">src/core/request/interface.ts:319</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L322">src/core/request/interface.ts:322</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -539,12 +540,12 @@
 					<div class="tsd-signature tsd-kind-icon">ok<wbr>Statuses<span class="tsd-signature-symbol">:</span> <a href="../modules/src_core_request_interface.html#okstatuses" class="tsd-signature-type">OkStatuses</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L275">src/core/request/interface.ts:275</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L277">src/core/request/interface.ts:277</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>List of status codes (or a single code) with HTTP statuses that is ok for response,
+							<p>List of status codes (or a single code) that is ok for response,
 							also can pass a range of codes</p>
 						</div>
 						<dl class="tsd-comment-tags">
@@ -560,7 +561,7 @@
 					<div class="tsd-signature tsd-kind-icon">query<span class="tsd-signature-symbol">:</span> <a href="../modules/src_core_request_interface.html#requestquery" class="tsd-signature-type">RequestQuery</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L249">src/core/request/interface.ts:249</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L251">src/core/request/interface.ts:251</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -575,7 +576,7 @@
 					<div class="tsd-signature tsd-kind-icon">response<wbr>Type<span class="tsd-signature-symbol">:</span> <a href="../modules/src_core_request_response_interface.html#responsetype" class="tsd-signature-type">ResponseType</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L239">src/core/request/interface.ts:239</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L241">src/core/request/interface.ts:241</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -598,7 +599,7 @@
 					<div class="tsd-signature tsd-kind-icon">timeout<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L280">src/core/request/interface.ts:280</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L282">src/core/request/interface.ts:282</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">

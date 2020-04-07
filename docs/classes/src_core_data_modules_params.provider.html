@@ -170,7 +170,6 @@
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="src_core_data_modules_params.provider.html#basepeekurl" class="tsd-kind-icon">base<wbr>PeekURL</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="src_core_data_modules_params.provider.html#baseurl" class="tsd-kind-icon">baseURL</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="src_core_data_modules_params.provider.html#baseupdurl" class="tsd-kind-icon">base<wbr>UpdURL</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="src_core_data_modules_params.provider.html#collapseevents" class="tsd-kind-icon">collapse<wbr>Events</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="src_core_data_modules_params.provider.html#custommethod" class="tsd-kind-icon">custom<wbr>Method</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="src_core_data_modules_params.provider.html#delmethod" class="tsd-kind-icon">del<wbr>Method</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="src_core_data_modules_params.provider.html#eventname" class="tsd-kind-icon">event<wbr>Name</a></li>
@@ -381,22 +380,6 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="collapseevents" class="tsd-anchor"></a>
-					<h3>collapse<wbr>Events</h3>
-					<div class="tsd-signature tsd-kind-icon">collapse<wbr>Events<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L368">src/core/data/modules/params.ts:368</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>If true, then all emitting events, which is emitted by the provider,
-							that have a similar hash wil be collapsed to one</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="custommethod" class="tsd-anchor"></a>
 					<h3>custom<wbr>Method</h3>
 					<div class="tsd-signature tsd-kind-icon">custom<wbr>Method<span class="tsd-signature-symbol">:</span> <a href="../modules/index_d.html#canundef" class="tsd-signature-type">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_request_interface.html#requestmethod" class="tsd-signature-type">RequestMethod</a><span class="tsd-signature-symbol">&gt;</span></div>
@@ -463,7 +446,7 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="extraproviders" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> extra<wbr>Providers</h3>
-					<div class="tsd-signature tsd-kind-icon">extra<wbr>Providers<span class="tsd-signature-symbol">:</span> <a href="../modules/src_core_data_interface_types.html#functionalextraproviders" class="tsd-signature-type">FunctionalExtraProviders</a></div>
+					<div class="tsd-signature tsd-kind-icon">extra<wbr>Providers<span class="tsd-signature-symbol">:</span> <a href="../modules/src_core_data_interface_types.html#functionalextraproviders" class="tsd-signature-type">FunctionalExtraProviders</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
 							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L316">src/core/data/modules/params.ts:316</a></li>
@@ -699,7 +682,7 @@
 						<div class="lead">
 							<p>Map of data mocks.
 								This object can be used with a middleware that implements API for data mocking,
-							for example <a href="../modules/src_core_data_middlewares_attach_mock.html#attachmock">attachMock</a> from <code>&#39;core/data/middlewares&#39;</code>.</p>
+							for example <a href="../modules/src_core_data_middlewares_attach_mock_index.html#attachmock">attachMock</a> from <code>&#39;core/data/middlewares&#39;</code>.</p>
 						</div>
 						<p>The key of a map element is represents a type of a request method: &#39;GET&#39;, &#39;POST&#39;, etc.
 						The value of a map element is represents a list of parameters to match.</p>
@@ -807,7 +790,7 @@ class MyProvider extends Provider {
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L374">src/core/data/modules/params.ts:374</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L368">src/core/data/modules/params.ts:368</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -833,7 +816,7 @@ class MyProvider extends Provider {
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L382">src/core/data/modules/params.ts:382</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L376">src/core/data/modules/params.ts:376</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -940,9 +923,6 @@ MyProvider.select([{<span class="hljs-attr">test</span>: <span class="hljs-numbe
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="src_core_data_modules_params.provider.html#baseupdurl" class="tsd-kind-icon">base<wbr>UpdURL</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="src_core_data_modules_params.provider.html#collapseevents" class="tsd-kind-icon">collapse<wbr>Events</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="src_core_data_modules_params.provider.html#custommethod" class="tsd-kind-icon">custom<wbr>Method</a>

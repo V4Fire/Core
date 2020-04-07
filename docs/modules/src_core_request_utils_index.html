@@ -145,7 +145,7 @@
 						<a href="#corerequestutils" id="corerequestutils" style="color: inherit; text-decoration: none;">
 							<h1>core/request/utils</h1>
 						</a>
-						<p>This module provides a bunch of helper function to work with a request.</p>
+						<p>This module provides a bunch of helper functions to work with a request.</p>
 					</div>
 				</div>
 			</section>
@@ -159,9 +159,8 @@
 								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="src_core_request_utils_index.html#applyqueryforstr" class="tsd-kind-icon">apply<wbr>Query<wbr>For<wbr>Str</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="src_core_request_utils_index.html#dropcache" class="tsd-kind-icon">drop<wbr>Cache</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter"><a href="src_core_request_utils_index.html#getrequestkey" class="tsd-kind-icon">get<wbr>Request<wbr>Key</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="src_core_request_utils_index.html#getresponsetypefrommime" class="tsd-kind-icon">get<wbr>Response<wbr>Type<wbr>From<wbr>Mime</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="src_core_request_utils_index.html#getresponsetypefromurl" class="tsd-kind-icon">get<wbr>Response<wbr>Type<wbr>FromURL</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="src_core_request_utils_index.html#getstoragekey" class="tsd-kind-icon">get<wbr>Storage<wbr>Key</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter"><a href="src_core_request_utils_index.html#merge" class="tsd-kind-icon">merge</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="src_core_request_utils_index.html#normalizeheadername" class="tsd-kind-icon">normalize<wbr>Header<wbr>Name</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="src_core_request_utils_index.html#normalizeheadervalue" class="tsd-kind-icon">normalize<wbr>Header<wbr>Value</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="src_core_request_utils_index.html#normalizeheaders" class="tsd-kind-icon">normalize<wbr>Headers</a></li>
@@ -182,13 +181,13 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/utils/index.ts#L112">src/core/request/utils/index.ts:112</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/utils/index.ts#L125">src/core/request/utils/index.ts:125</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Applies a query object fot the specified string
-									(used keys will be removed from the query)</p>
+									<p>Applies a query object for the specified string
+									(used keys is removed from the query)</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -217,12 +216,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/utils/index.ts#L231">src/core/request/utils/index.ts:231</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/utils/index.ts#L211">src/core/request/utils/index.ts:211</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Drops all request caches</p>
+									<p>Truncates all static cache storages</p>
 								</div>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -239,12 +238,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/utils/index.ts#L34">src/core/request/utils/index.ts:34</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/utils/index.ts#L47">src/core/request/utils/index.ts:47</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Generates a string cache key for specified parameters and returns it</p>
+									<p>Generates a string cache key for the specified parameters and returns it</p>
 								</div>
 							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -270,66 +269,6 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module">
-					<a name="getresponsetypefrommime" class="tsd-anchor"></a>
-					<h3>get<wbr>Response<wbr>Type<wbr>From<wbr>Mime</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Response<wbr>Type<wbr>From<wbr>Mime<span class="tsd-signature-symbol">(</span>mime<span class="tsd-signature-symbol">: </span><a href="index_d.html#canundef" class="tsd-signature-type">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="index_d.html#canundef" class="tsd-signature-type">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><a href="src_core_request_response_interface.html#responsetype" class="tsd-signature-type">ResponseType</a><span class="tsd-signature-symbol">&gt;</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/utils/index.ts#L207">src/core/request/utils/index.ts:207</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Returns a type of data from the specified mime type</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>mime: <a href="index_d.html#canundef" class="tsd-signature-type">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h5>
-									<div class="tsd-comment tsd-typography">
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="index_d.html#canundef" class="tsd-signature-type">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><a href="src_core_request_response_interface.html#responsetype" class="tsd-signature-type">ResponseType</a><span class="tsd-signature-symbol">&gt;</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module">
-					<a name="getresponsetypefromurl" class="tsd-anchor"></a>
-					<h3>get<wbr>Response<wbr>Type<wbr>FromURL</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Response<wbr>Type<wbr>FromURL<span class="tsd-signature-symbol">(</span>url<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="index_d.html#canundef" class="tsd-signature-type">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><a href="src_core_request_response_interface.html#responsetype" class="tsd-signature-type">ResponseType</a><span class="tsd-signature-symbol">&gt;</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/utils/index.ts#L199">src/core/request/utils/index.ts:199</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Returns a type of data from the specified DATA:URI string</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>url: <span class="tsd-signature-type">string</span></h5>
-									<div class="tsd-comment tsd-typography">
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="index_d.html#canundef" class="tsd-signature-type">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><a href="src_core_request_response_interface.html#responsetype" class="tsd-signature-type">ResponseType</a><span class="tsd-signature-symbol">&gt;</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module">
 					<a name="getstoragekey" class="tsd-anchor"></a>
 					<h3>get<wbr>Storage<wbr>Key</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
@@ -339,7 +278,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/utils/index.ts#L24">src/core/request/utils/index.ts:24</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/utils/index.ts#L37">src/core/request/utils/index.ts:37</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -359,6 +298,42 @@
 						</li>
 					</ul>
 				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter">
+					<a name="merge" class="tsd-anchor"></a>
+					<h3>merge</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter">
+						<li class="tsd-signature tsd-kind-icon">merge&lt;T&gt;<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/utils/index.ts#L24">src/core/request/utils/index.ts:24</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Merges the specified arguments and returns a new object</p>
+								</div>
+							</div>
+							<h4 class="tsd-type-parameters-title">Type parameters</h4>
+							<ul class="tsd-type-parameters">
+								<li>
+									<h4>T</h4>
+								</li>
+							</ul>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>args: <span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">T</span></h4>
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module">
 					<a name="normalizeheadername" class="tsd-anchor"></a>
 					<h3>normalize<wbr>Header<wbr>Name</h3>
@@ -369,7 +344,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/utils/index.ts#L133">src/core/request/utils/index.ts:133</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/utils/index.ts#L146">src/core/request/utils/index.ts:146</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -400,7 +375,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/utils/index.ts#L143">src/core/request/utils/index.ts:143</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/utils/index.ts#L156">src/core/request/utils/index.ts:156</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -431,7 +406,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/utils/index.ts#L153">src/core/request/utils/index.ts:153</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/utils/index.ts#L166">src/core/request/utils/index.ts:166</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -477,13 +452,10 @@
 						<a href="src_core_request_utils_index.html#getrequestkey" class="tsd-kind-icon">get<wbr>Request<wbr>Key</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module">
-						<a href="src_core_request_utils_index.html#getresponsetypefrommime" class="tsd-kind-icon">get<wbr>Response<wbr>Type<wbr>From<wbr>Mime</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-external-module">
-						<a href="src_core_request_utils_index.html#getresponsetypefromurl" class="tsd-kind-icon">get<wbr>Response<wbr>Type<wbr>FromURL</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-external-module">
 						<a href="src_core_request_utils_index.html#getstoragekey" class="tsd-kind-icon">get<wbr>Storage<wbr>Key</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter">
+						<a href="src_core_request_utils_index.html#merge" class="tsd-kind-icon">merge</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module">
 						<a href="src_core_request_utils_index.html#normalizeheadername" class="tsd-kind-icon">normalize<wbr>Header<wbr>Name</a>

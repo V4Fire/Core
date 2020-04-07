@@ -178,26 +178,33 @@ request(<span class="hljs-string">'https://foo.com'</span>, {
 					<a name="request" class="tsd-anchor"></a>
 					<h3>request</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">request&lt;T&gt;<span class="tsd-signature-symbol">(</span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/src_core_request_interface.createrequestoptions.html" class="tsd-signature-type">CreateRequestOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_request_interface.html#requestresponse" class="tsd-signature-type">RequestResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
-						<li class="tsd-signature tsd-kind-icon">request&lt;T&gt;<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_request_interface.createrequestoptions.html" class="tsd-signature-type">CreateRequestOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_request_index.html#request" class="tsd-signature-type">request</a></li>
-						<li class="tsd-signature tsd-kind-icon">request&lt;T, A&gt;<span class="tsd-signature-symbol">(</span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, resolver<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_request_interface.requestresolver.html" class="tsd-signature-type">RequestResolver</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">&gt;</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/src_core_request_interface.createrequestoptions.html" class="tsd-signature-type">CreateRequestOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_request_interface.requestfunctionresponse.html" class="tsd-signature-type">RequestFunctionResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">request&lt;D&gt;<span class="tsd-signature-symbol">(</span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/src_core_request_interface.createrequestoptions.html" class="tsd-signature-type">CreateRequestOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_request_interface.html#requestresponse" class="tsd-signature-type">RequestResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">request&lt;D&gt;<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_request_interface.createrequestoptions.html" class="tsd-signature-type">CreateRequestOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_request_index.html#request" class="tsd-signature-type">request</a></li>
+						<li class="tsd-signature tsd-kind-icon">request&lt;D, A&gt;<span class="tsd-signature-symbol">(</span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, resolver<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_request_interface.requestresolver.html" class="tsd-signature-type">RequestResolver</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">&gt;</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/src_core_request_interface.createrequestoptions.html" class="tsd-signature-type">CreateRequestOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_request_interface.requestfunctionresponse.html" class="tsd-signature-type">RequestFunctionResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/index.ts#L57">src/core/request/index.ts:57</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/index.ts#L56">src/core/request/index.ts:56</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>Creates a new remote request with the specified options</p>
 								</div>
+								<dl class="tsd-comment-tags">
+									<dt>example</dt>
+									<dd><pre><code class="language-js">request(<span class="hljs-string">'bla/get'</span>).then(<span class="hljs-function">(<span class="hljs-params">{data, response}</span>) =&gt;</span> {
+  <span class="hljs-built_in">console</span>.log(data, response.status);
+});</code></pre>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
-									<h4>T</h4>
+									<h4>D</h4>
 								</li>
 							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -209,40 +216,43 @@ request(<span class="hljs-string">'https://foo.com'</span>, {
 									</div>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/src_core_request_interface.createrequestoptions.html" class="tsd-signature-type">CreateRequestOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/src_core_request_interface.createrequestoptions.html" class="tsd-signature-type">CreateRequestOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>request options</p>
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="src_core_request_interface.html#requestresponse" class="tsd-signature-type">RequestResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="src_core_request_interface.html#requestresponse" class="tsd-signature-type">RequestResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/index.ts#L68">src/core/request/index.ts:68</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/index.ts#L70">src/core/request/index.ts:70</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Returns a wrapped request constructor with the specified options</p>
+									<p>Returns a wrapped request constructor with the specified options.
+									This overload helps to organize the &quot;builder&quot; pattern.</p>
 								</div>
 								<dl class="tsd-comment-tags">
 									<dt>example</dt>
-									<dd><pre><code class="language-js">request({<span class="hljs-attr">okStatuses</span>: <span class="hljs-number">200</span>})({<span class="hljs-attr">query</span>: {<span class="hljs-attr">bar</span>: <span class="hljs-literal">true</span>}})(<span class="hljs-string">'bla/get'</span>)</code></pre>
+									<dd><pre><code class="language-js">request({<span class="hljs-attr">okStatuses</span>: <span class="hljs-number">200</span>})({<span class="hljs-attr">method</span>: <span class="hljs-string">'POST'</span>})(<span class="hljs-string">'bla/get'</span>).then(<span class="hljs-function">(<span class="hljs-params">{data, response}</span>) =&gt;</span> {
+  <span class="hljs-built_in">console</span>.log(data, response.status);
+});</code></pre>
 									</dd>
 								</dl>
 							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
-									<h4>T</h4>
+									<h4>D</h4>
 								</li>
 							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>opts: <a href="../interfaces/src_core_request_interface.createrequestoptions.html" class="tsd-signature-type">CreateRequestOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>opts: <a href="../interfaces/src_core_request_interface.createrequestoptions.html" class="tsd-signature-type">CreateRequestOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>request options</p>
 									</div>
@@ -253,20 +263,20 @@ request(<span class="hljs-string">'https://foo.com'</span>, {
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/index.ts#L90">src/core/request/index.ts:90</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/index.ts#L93">src/core/request/index.ts:93</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>Returns a function to create a new remote request with the specified options.
-									This overload is helpful to create factories for requests.</p>
+									This overload helps to create a factory of requests.</p>
 								</div>
 								<dl class="tsd-comment-tags">
 									<dt>example</dt>
-									<dd><pre><code class="language-js"><span class="hljs-comment">// Modifying of the current URL</span>
+									<dd><pre><code class="language-js"><span class="hljs-comment">// Modifying the current URL</span>
 request(<span class="hljs-string">'https://foo.com'</span>, (url, env, ...args) =&gt; args.join(<span class="hljs-string">'/'</span>))(<span class="hljs-string">'bla'</span>, <span class="hljs-string">'baz'</span>) <span class="hljs-comment">// https://foo.com/bla/baz</span>
 
-<span class="hljs-comment">// Replacing of the current URL</span>
+<span class="hljs-comment">// Replacing the current URL</span>
 request(<span class="hljs-string">'https://foo.com'</span>, () =&gt; [<span class="hljs-string">'https://bla.com'</span>, <span class="hljs-string">'bla'</span>, <span class="hljs-string">'baz'</span>])() <span class="hljs-comment">// https://bla.com/bla/baz</span></code></pre>
 									</dd>
 								</dl>
@@ -274,7 +284,7 @@ request(<span class="hljs-string">'https://foo.com'</span>, () =&gt; [<span clas
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
-									<h4>T</h4>
+									<h4>D</h4>
 								</li>
 								<li>
 									<h4>A<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">[]</span></h4>
@@ -289,21 +299,22 @@ request(<span class="hljs-string">'https://foo.com'</span>, () =&gt; [<span clas
 									</div>
 								</li>
 								<li>
-									<h5>resolver: <a href="../interfaces/src_core_request_interface.requestresolver.html" class="tsd-signature-type">RequestResolver</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>resolver: <a href="../interfaces/src_core_request_interface.requestresolver.html" class="tsd-signature-type">RequestResolver</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">&gt;</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>function for request resolving:
-											this function takes a request URL, request environment and arguments from invoking of the result function and
-										can returns a modification chunk for the request URL or fully replace it</p>
+										<p>function to resolve a request: it takes a request URL, request environment and arguments
+											from invoking of the outer function and can modify some request parameters.
+											Also, if the function returns a new string, the string will be appended to the request URL, or
+										if the function returns a string that wrapped with an array, the string fully override the original URL.</p>
 									</div>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/src_core_request_interface.createrequestoptions.html" class="tsd-signature-type">CreateRequestOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/src_core_request_interface.createrequestoptions.html" class="tsd-signature-type">CreateRequestOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>request options</p>
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="../interfaces/src_core_request_interface.requestfunctionresponse.html" class="tsd-signature-type">RequestFunctionResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/src_core_request_interface.requestfunctionresponse.html" class="tsd-signature-type">RequestFunctionResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
