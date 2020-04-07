@@ -58,19 +58,20 @@ export function isOnline(): Promise<NetStatus> {
 			};
 		}
 
-		let
-			loadFromStorage;
-
 		if (online.persistence && lastOnline == null) {
 			if (!storage) {
 				throw new ReferenceError('kv-storage module is not loaded');
 			}
 
-			loadFromStorage = storage.then((storage) => storage.get('lastOnline').then((v) => {
-				if (v) {
-					lastOnline = v;
+			try {
+				const
+					lastStoredOnline = await (await storage).get('lastOnline');
+
+				if (lastStoredOnline) {
+					lastOnline = lastStoredOnline;
 				}
-			})).catch(stderr);
+
+			} catch {}
 		}
 
 		if (online.cacheTTL) {
@@ -88,10 +89,6 @@ export function isOnline(): Promise<NetStatus> {
 			syncStatusWithStorage().catch(stderr);
 			emitter.emit('status', {status, lastOnline});
 		}
-
-		try {
-			await loadFromStorage;
-		} catch {}
 
 		return {status, lastOnline};
 	})();
