@@ -12,6 +12,8 @@
  */
 
 import config from 'config';
+import * as engine from 'core/net/engines';
+
 import { emitter } from 'core/net/const';
 import { NetStatus } from 'core/net/interface';
 
@@ -23,9 +25,6 @@ const
 
 let
 	storage,
-	syncTimer;
-
-let
 	status,
 	lastOnline,
 	cache;
@@ -49,11 +48,10 @@ export function isOnline(): Promise<NetStatus> {
 	}
 
 	const res = (async () => {
-		const
-			url = online.checkURL,
-			prevStatus = status;
+		const prevStatus = status;
+		status = await engine.isOnline();
 
-		if (!url) {
+		if (status === null) {
 			return {
 				status: true,
 				lastOnline: undefined
@@ -61,10 +59,9 @@ export function isOnline(): Promise<NetStatus> {
 		}
 
 		let
-			loadFromStorage,
-			retriesCount = 0;
+			loadFromStorage;
 
-		if (online.persistence && !lastOnline) {
+		if (online.persistence && lastOnline == null) {
 			if (!storage) {
 				throw new ReferenceError('kv-storage module is not loaded');
 			}
@@ -76,53 +73,9 @@ export function isOnline(): Promise<NetStatus> {
 			})).catch(stderr);
 		}
 
-		status = await new Promise<boolean>((resolve) => {
-			const retry = () => {
-				if (!online.retryCount || status === undefined || ++retriesCount > online.retryCount) {
-					resolve(false);
-
-				} else {
-					checkOnline();
-				}
-			};
-
-			const checkOnline = () => {
-				const
-					img = new Image(),
-					timer = setTimeout(retry, online.checkTimeout || 0);
-
-				img.onload = () => {
-					clearTimeout(timer);
-					resolve(true);
-				};
-
-				img.onerror = () => {
-					clearTimeout(timer);
-					retry();
-				};
-
-				img.src = `${url}?d=${Date.now()}`;
-			};
-
-			checkOnline();
-		});
-
 		if (online.cacheTTL) {
 			setTimeout(() => cache = undefined, online.cacheTTL);
 		}
-
-		const updateDate = () => {
-			clearTimeout(syncTimer);
-			syncTimer = undefined;
-
-			if (online.persistence && url) {
-				if (!storage) {
-					throw new ReferenceError('kv-storage module is not loaded');
-				}
-
-				storage.then((storage) => storage.set('lastOnline', lastOnline = new Date())).catch(stderr);
-			}
-		};
 
 		if (prevStatus === undefined || status !== prevStatus) {
 			if (status) {
@@ -132,13 +85,8 @@ export function isOnline(): Promise<NetStatus> {
 				emitter.emit('offline');
 			}
 
-			updateDate();
+			syncStatusWithStorage().catch(stderr);
 			emitter.emit('status', {status, lastOnline});
-
-		} else if (status && syncTimer != null) {
-			if (online.lastDateSyncInterval) {
-				syncTimer = setTimeout(updateDate, online.lastDateSyncInterval);
-			}
 		}
 
 		try {
@@ -162,11 +110,80 @@ export function isOnline(): Promise<NetStatus> {
 	});
 }
 
-async function onlineCheck(): Promise<void> {
-	if (online.checkInterval) {
-		await isOnline();
-		setTimeout(onlineCheck, online.checkInterval);
+let
+	storageSyncTimer;
+
+/**
+ * Synchronizes the online status with a local storage
+ */
+export async function syncStatusWithStorage(): Promise<void> {
+	if (!status || !online.persistence) {
+		return;
+	}
+
+	if (!storage) {
+		throw new ReferenceError('kv-storage module is not loaded');
+	}
+
+	const clear = () => {
+		if (storageSyncTimer != null) {
+			clearTimeout(storageSyncTimer);
+			storageSyncTimer = undefined;
+		}
+	};
+
+	clear();
+
+	try {
+		(await storage).
+			set('lastOnline', lastOnline = new Date());
+
+	} catch (err) {
+		stderr(err);
+	}
+
+	if (online.lastDateSyncInterval) {
+		clear();
+
+		storageSyncTimer = setTimeout(() => {
+			storageSyncTimer = undefined;
+			syncStatusWithStorage().catch(stderr);
+		}, online.lastDateSyncInterval);
 	}
 }
 
-onlineCheck().catch(stderr);
+let
+	checkTimer;
+
+/**
+ * Updates the online status
+ */
+export async function updateStatus(): Promise<void> {
+	const clear = () => {
+		if (checkTimer != null) {
+			clearTimeout(checkTimer);
+			checkTimer = undefined;
+		}
+	};
+
+	clear();
+
+	try {
+		await isOnline();
+
+	} catch (err) {
+		stderr(err);
+
+	} finally {
+		if (online.checkInterval) {
+			clear();
+			checkTimer = setTimeout(() => {
+				checkTimer = undefined;
+				updateStatus();
+			}, online.checkInterval);
+		}
+	}
+}
+
+emitter.on('sync', updateStatus);
+updateStatus().catch(stderr);
