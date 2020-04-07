@@ -12,6 +12,7 @@
  */
 
 export * from 'core/functools/deprecation';
+export * from 'core/functools/not-implemented';
 
 /**
  * Decorator for Function.prototype.once
