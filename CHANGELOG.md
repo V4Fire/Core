@@ -26,6 +26,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 * [Added new overloads with options for `toQueryString/fromQueryString` `core/url`](https://github.com/V4Fire/Core/pull/72)
 * [Added `core/data/middlewares/attach-status`](https://github.com/V4Fire/Core/pull/73)
 * Added `Symbol.iterator` to `core/range`
+* [Added `core/functools/not-implemented`](https://github.com/V4Fire/Core/pull/75)
 
 #### :house: Internal
 

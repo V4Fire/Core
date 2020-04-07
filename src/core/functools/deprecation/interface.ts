@@ -15,7 +15,7 @@ export type DeprecatedExprType =
 
 export interface DeprecatedAlternativeOptions {
 	/**
-	 * Name of an alternative expression/function
+	 * Name of an alternative function/method/etc.
 	 */
 	name: string;
 
@@ -39,20 +39,20 @@ export interface DeprecatedOptions {
 	type?: DeprecatedExprType;
 
 	/**
-	 * Indicates that an expression/function was renamed, but it interface still actual,
+	 * Indicates that an function/method/etc. was renamed, but its interface still actual,
 	 * the value contains a name after renaming
 	 */
 	renamedTo?: string;
 
 	/**
-	 * Indicates that an expression/function was moved to a different file, but it interface still actual,
+	 * Indicates that an function/method/etc. was moved to a different file, but its interface still actual,
 	 * the value contains a source path after moving
 	 */
 	movedTo?: string;
 
 	/**
-	 * Name of an expression/function that should prefer to use instead the current
-	 * or an object with additional options:
+	 * Name of an function/method/etc. that should prefer to use instead of the current
+	 * or an object with additional options of the alternative
 	 */
 	alternative?: DeprecatedAlternative;
 
@@ -63,13 +63,9 @@ export interface DeprecatedOptions {
 }
 
 export interface InlineDeprecatedOptions extends DeprecatedOptions {
-	/**
-	 * Name of an expression to wrap
-	 */
+	/** @see [[DeprecatedOptions.name]] */
 	name: string;
 
-	/**
-	 * Type of an expression to wrap
-	 */
+	/** @see [[DeprecatedOptions.type]] */
 	type: DeprecatedExprType;
 }
