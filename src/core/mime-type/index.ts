@@ -32,7 +32,7 @@ export function getDataTypeFromURL(url: string): CanUndef<DataType> {
  */
 export function getDataType(str: string): DataType {
 	const
-		type = str.toLowerCase().replace(normalizeMimeStrRgxp, ''),
+		type = str.toLowerCase().replace(normalizeMimeStrRgxp, '').trim(),
 		predefinedType = mimeTypes[type];
 
 	if (predefinedType) {
