@@ -84,8 +84,7 @@ export function toQueryString(data: unknown, optsOrEncode?: ToQueryStringOptions
 		opts = {encode: optsOrEncode};
 	}
 
-	const querystring = chunkToQueryString(data, opts);
-	return opts.encode !== false ? encodeURIComponent(querystring) : querystring;
+	return chunkToQueryString(data, opts);
 }
 
 const
@@ -268,5 +267,5 @@ function chunkToQueryString(data: unknown, opts: ToQueryStringOptions, prfx: str
 		return reduce(Object.keys(data));
 	}
 
-	return String(data);
+	return opts.encode !== false ? encodeURIComponent(String(data)) : String(data);
 }

@@ -16,6 +16,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 #### :bug: Bug Fix
 
 * Added normalizing of input data `core/mime-type/getDataType`
+* Fixed URL encoding `core/url/toQueryString`
 
 ## v3.10.1 (2020-04-07)
 
