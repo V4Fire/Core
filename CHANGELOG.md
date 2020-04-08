@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.10.2 (2020-04-07)
+
+#### :bug: Bug Fix
+
+* Added normalizing of input data `core/mime-type/getDataType`
+
 ## v3.10.1 (2020-04-07)
 
 #### :bug: Bug Fix
