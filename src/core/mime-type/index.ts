@@ -11,7 +11,7 @@
  * @packageDocumentation
  */
 
-import { mimeTypes, normalizeTypeRgxp, dataURIRgxp, isTextType, isXMLType } from 'core/mime-type/const';
+import { mimeTypes, normalizeMimeStrRgxp, dataURIRgxp, isTextType, isXMLType } from 'core/mime-type/const';
 import { DataType } from 'core/mime-type/interface';
 
 export * from 'core/mime-type/const';
@@ -27,12 +27,12 @@ export function getDataTypeFromURL(url: string): CanUndef<DataType> {
 }
 
 /**
- * Returns a type of data from the specified mime type
- * @param mime
+ * Returns a type of data from the specified mime type string
+ * @param str
  */
-export function getDataType(mime: string): DataType {
+export function getDataType(str: string): DataType {
 	const
-		type = mime.toLowerCase().replace(normalizeTypeRgxp, ''),
+		type = str.toLowerCase().replace(normalizeMimeStrRgxp, ''),
 		predefinedType = mimeTypes[type];
 
 	if (predefinedType) {

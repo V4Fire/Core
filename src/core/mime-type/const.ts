@@ -9,7 +9,7 @@
 import { DataType } from 'core/mime-type/interface';
 
 export const
-	normalizeTypeRgxp = /;.*/,
+	normalizeMimeStrRgxp = /;.*/,
 	dataURIRgxp = /^data:([^;]+);/;
 
 export const
