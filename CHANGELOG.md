@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.10.3 (2020-04-10)
+
+#### :bug: Bug Fix
+
+* Fixed `deprecated/notImplemented` with accessors
+
 ## v3.10.2 (2020-04-08)
 
 #### :bug: Bug Fix

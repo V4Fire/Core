@@ -146,7 +146,19 @@ export function notImplemented(
 ): Function | void {
 	const f = (name, descriptor, opts?) => {
 		const
-			method = descriptor.value;
+			{get, set, value: method} = descriptor;
+
+		if (get) {
+			descriptor.get = notImplement({type: 'accessor', ...opts, name}, get);
+		}
+
+		if (set) {
+			descriptor.set = notImplement({type: 'accessor', ...opts, name}, set);
+		}
+
+		if (get || set) {
+			return;
+		}
 
 		if (!Object.isFunction(method)) {
 			throw new TypeError(`descriptor.value is not a function: ${method}`);
