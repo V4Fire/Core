@@ -7,6 +7,8 @@
  */
 
 import Then from 'core/then';
+import { notImplement } from 'core/functools/not-implemented';
+
 import Response from 'core/request/response';
 import { RequestEngine } from 'core/request/interface';
 
@@ -16,7 +18,7 @@ import { RequestEngine } from 'core/request/interface';
  */
 // tslint:disable-next-line
 const request: RequestEngine = (params) => {
-	// TODO: implement for node.js
+	notImplement({type: 'function', name: 'Request engine for Node.js'});
 	return Then.resolve(new Response());
 };
 
