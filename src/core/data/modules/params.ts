@@ -82,8 +82,8 @@ export default abstract class Provider {
 
 	/**
 	 * Map of data encoder sequences.
-	 * The key of a map element is represents a name of the provider method: 'get', 'post', etc.
-	 * The value of a map element is represents a sequence of encoders for the specified provider method.
+	 * The key of a map element represent a name of the provider method: 'get', 'post', etc.
+	 * The value of a map element represent a sequence of encoders for the specified provider method.
 	 *
 	 * @see [[Encoders]]
 	 * @example
@@ -100,8 +100,8 @@ export default abstract class Provider {
 
 	/**
 	 * Map of data decoder sequences.
-	 * The key of a map element is represents a name of the provider method: 'get', 'post', etc.
-	 * The value of a map element is represents a sequence of decoders for the specified provider method.
+	 * The key of a map element represent a name of the provider method: 'get', 'post', etc.
+	 * The value of a map element represent a sequence of decoders for the specified provider method.
 	 *
 	 * @see [[Decoders]]
 	 * @example
@@ -121,8 +121,8 @@ export default abstract class Provider {
 	 * This object can be used with a middleware that implements API for data mocking,
 	 * for example [[attachMock]] from `'core/data/middlewares'`.
 	 *
-	 * The key of a map element is represents a type of a request method: 'GET', 'POST', etc.
-	 * The value of a map element is represents a list of parameters to match.
+	 * The key of a map element represent a type of a request method: 'GET', 'POST', etc.
+	 * The value of a map element represent a list of parameters to match.
 	 *
 	 * @see [[Middlewares]]
 	 * @example
