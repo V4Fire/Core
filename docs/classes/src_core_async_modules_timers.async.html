@@ -2296,7 +2296,7 @@
 					<a name="requestidlecallback" class="tsd-anchor"></a>
 					<h3>request<wbr>Idle<wbr>Callback</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">request<wbr>Idle<wbr>Callback&lt;R&gt;<span class="tsd-signature-symbol">(</span>fn<span class="tsd-signature-symbol">: </span><a href="../modules/src_core_async_interface.html#idlecb" class="tsd-signature-type">IdleCb</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">CTX</span><span class="tsd-signature-symbol">&gt;</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/src_core_async_interface.asyncrequestidlecallbackoptions.html" class="tsd-signature-type">AsyncRequestIdleCallbackOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">CTX</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_async_interface.html#timerid" class="tsd-signature-type">TimerId</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">request<wbr>Idle<wbr>Callback&lt;R&gt;<span class="tsd-signature-symbol">(</span>cb<span class="tsd-signature-symbol">: </span><a href="../modules/src_core_async_interface.html#idlecb" class="tsd-signature-type">IdleCb</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">CTX</span><span class="tsd-signature-symbol">&gt;</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/src_core_async_interface.asyncrequestidlecallbackoptions.html" class="tsd-signature-type">AsyncRequestIdleCallbackOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">CTX</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_async_interface.html#timerid" class="tsd-signature-type">TimerId</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -2319,7 +2319,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>fn: <a href="../modules/src_core_async_interface.html#idlecb" class="tsd-signature-type">IdleCb</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">CTX</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>cb: <a href="../modules/src_core_async_interface.html#idlecb" class="tsd-signature-type">IdleCb</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">CTX</span><span class="tsd-signature-symbol">&gt;</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>callback function</p>
 									</div>
@@ -2381,7 +2381,7 @@
 					<a name="setimmediate" class="tsd-anchor"></a>
 					<h3>set<wbr>Immediate</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">set<wbr>Immediate<span class="tsd-signature-symbol">(</span>fn<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Function</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/src_core_async_interface.asynccboptions.html" class="tsd-signature-type">AsyncCbOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">CTX</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_async_interface.html#timerid" class="tsd-signature-type">TimerId</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">set<wbr>Immediate<span class="tsd-signature-symbol">(</span>cb<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Function</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/src_core_async_interface.asynccboptions.html" class="tsd-signature-type">AsyncCbOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">CTX</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_async_interface.html#timerid" class="tsd-signature-type">TimerId</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -2398,7 +2398,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>fn: <span class="tsd-signature-type">Function</span></h5>
+									<h5>cb: <span class="tsd-signature-type">Function</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>callback function</p>
 									</div>
@@ -2415,7 +2415,7 @@
 					<a name="setinterval" class="tsd-anchor"></a>
 					<h3>set<wbr>Interval</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">set<wbr>Interval<span class="tsd-signature-symbol">(</span>fn<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Function</span>, timeout<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/src_core_async_interface.asynccboptions.html" class="tsd-signature-type">AsyncCbOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">CTX</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_async_interface.html#timerid" class="tsd-signature-type">TimerId</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">set<wbr>Interval<span class="tsd-signature-symbol">(</span>cb<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Function</span>, timeout<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/src_core_async_interface.asynccboptions.html" class="tsd-signature-type">AsyncCbOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">CTX</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_async_interface.html#timerid" class="tsd-signature-type">TimerId</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -2432,7 +2432,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>fn: <span class="tsd-signature-type">Function</span></h5>
+									<h5>cb: <span class="tsd-signature-type">Function</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>callback function</p>
 									</div>
@@ -2455,7 +2455,7 @@
 					<a name="settimeout" class="tsd-anchor"></a>
 					<h3>set<wbr>Timeout</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">set<wbr>Timeout<span class="tsd-signature-symbol">(</span>fn<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Function</span>, timeout<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/src_core_async_interface.asynccboptions.html" class="tsd-signature-type">AsyncCbOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">CTX</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_async_interface.html#timerid" class="tsd-signature-type">TimerId</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">set<wbr>Timeout<span class="tsd-signature-symbol">(</span>cb<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Function</span>, timeout<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/src_core_async_interface.asynccboptions.html" class="tsd-signature-type">AsyncCbOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">CTX</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_async_interface.html#timerid" class="tsd-signature-type">TimerId</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -2472,7 +2472,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>fn: <span class="tsd-signature-type">Function</span></h5>
+									<h5>cb: <span class="tsd-signature-type">Function</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>callback function</p>
 									</div>
