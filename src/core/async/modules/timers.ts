@@ -31,10 +31,10 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	/**
 	 * Wrapper for global.setImmediate
 	 *
-	 * @param fn - callback function
+	 * @param cb - callback function
 	 * @param [opts] - additional options for the operation
 	 */
-	setImmediate(fn: Function, opts?: AsyncCbOptions<CTX>): Nullable<TimerId> {
+	setImmediate(cb: Function, opts?: AsyncCbOptions<CTX>): Nullable<TimerId> {
 		const
 			// tslint:disable-next-line
 			wrapper = globalThis['setImmediate'],
@@ -45,7 +45,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		return this.registerTask({
 			...opts,
 			name: this.namespaces.immediate,
-			obj: fn,
+			obj: cb,
 			clearFn,
 			wrapper,
 			linkByWrapper: true
@@ -131,15 +131,15 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	/**
 	 * Wrapper for global.setInterval
 	 *
-	 * @param fn - callback function
+	 * @param cb - callback function
 	 * @param timeout - timer value
 	 * @param [opts] - additional options for the operation
 	 */
-	setInterval(fn: Function, timeout: number, opts?: AsyncCbOptions<CTX>): Nullable<TimerId> {
+	setInterval(cb: Function, timeout: number, opts?: AsyncCbOptions<CTX>): Nullable<TimerId> {
 		return this.registerTask({
 			...opts,
 			name: this.namespaces.interval,
-			obj: fn,
+			obj: cb,
 			clearFn: clearInterval,
 			wrapper: setInterval,
 			linkByWrapper: true,
@@ -226,15 +226,15 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	/**
 	 * Wrapper for global.setTimeout
 	 *
-	 * @param fn - callback function
+	 * @param cb - callback function
 	 * @param timeout - timeout value
 	 * @param [opts] - additional options for the operation
 	 */
-	setTimeout(fn: Function, timeout: number, opts?: AsyncCbOptions<CTX>): Nullable<TimerId> {
+	setTimeout(cb: Function, timeout: number, opts?: AsyncCbOptions<CTX>): Nullable<TimerId> {
 		return this.registerTask({
 			...opts,
 			name: this.namespaces.timeout,
-			obj: fn,
+			obj: cb,
 			clearFn: clearTimeout,
 			wrapper: setTimeout,
 			linkByWrapper: true,
@@ -320,11 +320,11 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	/**
 	 * Wrapper for global.requestIdleCallback
 	 *
-	 * @param fn - callback function
+	 * @param cb - callback function
 	 * @param [opts] - additional options for the operation
 	 */
 	requestIdleCallback<R = unknown>(
-		fn: IdleCb<R, CTX>,
+		cb: IdleCb<R, CTX>,
 		opts?: AsyncRequestIdleCallbackOptions<CTX>
 	): Nullable<TimerId> {
 		let
@@ -343,7 +343,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		return this.registerTask({
 			...opts && Object.reject(opts, 'timeout'),
 			name: this.namespaces.idleCallback,
-			obj: fn,
+			obj: cb,
 			clearFn,
 			wrapper,
 			linkByWrapper: true,
