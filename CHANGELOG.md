@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.10.4 (2020-04-13)
+
+#### :house: Internal
+
+* Fixed types `core/object/watch`
+
 ## v3.10.3 (2020-04-10)
 
 #### :bug: Bug Fix
