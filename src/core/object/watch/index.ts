@@ -51,7 +51,7 @@ export default function watch<T extends object>(obj: T, handler?: MultipleWatchH
  */
 export default function watch<T extends object>(
 	obj: T,
-	opts: WatchOptions & ({immediate: true} | {collapse: true}),
+	opts: WatchOptions & {immediate: true},
 	handler?: WatchHandler
 ): Watcher<T>;
 
