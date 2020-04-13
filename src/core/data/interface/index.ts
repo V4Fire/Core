@@ -43,13 +43,13 @@ export default interface Provider {
 
 	/**
 	 * Returns a custom logical name of any request.
-	 * If a request have the name, then it will fires an event with the same name after successful receiving.
+	 * If a request has the name, then it will fires an event with the same name after successful receiving.
 	 */
 	name(): CanUndef<ModelMethod>;
 
 	/**
 	 * Sets a custom logical name for any request.
-	 * If a request have the name, then it will fires an event with the same name after successful receiving.
+	 * If a request has the name, then it will fires an event with the same name after successful receiving.
 	 * This method returns a new provider object with context.
 	 *
 	 * @param [value]

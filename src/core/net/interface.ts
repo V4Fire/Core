@@ -8,7 +8,7 @@
 
 export interface NetStatus {
 	/**
-	 * If true, then a host have connection to the internet
+	 * If true, then a host has connection to the internet
 	 */
 	status: boolean;
 
