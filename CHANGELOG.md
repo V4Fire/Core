@@ -378,7 +378,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 * Promise versions of the `Async` methods now returns a SyncPromise instance
 * Removed hardcode for `document.addEventListener` options within `Async` methods
 * Removed the legacy CSRF header from the session API
-* Added a new header the session API: it's can takes a dictionary with additional parameters
+* Added a new header to the session API: it can take a dictionary with additional parameters
 * Removed `json/setJSONToUTC`
 * Changed signature of `Number.prototype.pad`
 * Removed `Object.getPrototypeChain`
