@@ -116,7 +116,7 @@ export function getRequestKey<T>(url: string, params?: CreateRequestOptions<T>):
 
 /**
  * Applies a query object for the specified string
- * (used keys is removed from the query)
+ * (used keys are removed from the query)
  *
  * @param str
  * @param [query]

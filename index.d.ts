@@ -159,19 +159,19 @@ interface ObjectMixinOptions<V = unknown, K = unknown, D = unknown> {
 	withUndef?: boolean;
 
 	/**
-	 * If true, then descriptors of object properties is copied too
+	 * If true, then descriptors of object properties are copied too
 	 * @default `false`
 	 */
 	withDescriptor?: boolean;
 
 	/**
-	 * If true, then accessors (but not all descriptors) of object properties is copied too
+	 * If true, then accessors (but not all descriptors) of object properties are copied too
 	 * @default `false`
 	 */
 	withAccessors?: boolean;
 
 	/**
-	 * If true, then object properties is copied with their prototypes
+	 * If true, then object properties are copied with their prototypes
 	 * (works only with the "deep" mode)
 	 *
 	 * @default `false`
@@ -734,7 +734,7 @@ interface ObjectConstructor {
 	 * Creates a hash table without any prototype and returns it
 	 *
 	 * @param objects - extension objects:
-	 *   all key from these objects is merged to the target
+	 *   all keys from these objects are merged to the target
 	 *
 	 * @example
 	 * ```js
@@ -745,7 +745,7 @@ interface ObjectConstructor {
 
 	/**
 	 * Takes the enum-like object and converts it to a dictionary:
-	 * number values from the object is skipped
+	 * number values from the object are skipped
 	 *
 	 * @param obj
 	 */
@@ -1397,7 +1397,7 @@ interface Number {
 
 	/**
 	 * Returns a string representation of the number by the specified pattern.
-	 * All pattern directives is based on native Intl.NumberFormat options:
+	 * All pattern directives are based on native Intl.NumberFormat options:
 	 *
 	 *   1. `'style'`
 	 *   1. `'currency'`
@@ -1705,7 +1705,7 @@ interface Date {
 
 	/**
 	 * Returns a string representation of the date by the specified pattern.
-	 * All pattern directives is based on native Intl.DateTimeFormat options:
+	 * All pattern directives are based on native Intl.DateTimeFormat options:
 	 *
 	 *   1. `'era'`
 	 *   1. `'year'`
