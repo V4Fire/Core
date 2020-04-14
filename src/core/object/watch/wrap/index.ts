@@ -18,17 +18,6 @@ export * from 'core/object/watch/wrap/interface';
  * @param obj
  * @param opts - additional options
  * @param handlers - set of callbacks that are invoked on every mutation hooks
- *
- * @example
- * ```js
- * const arr = bindMutationHooks([], (value, oldValue, path) => {
- *   console.log(value, oldValue, path);
- * });
- *
- * arr.push(1);
- * arr.push(2);
- * arr.push(3);
- * ```
  */
 export function bindMutationHooks<T extends object>(obj: T, opts: WrapOptions, handlers: WatchHandlersSet): T;
 
