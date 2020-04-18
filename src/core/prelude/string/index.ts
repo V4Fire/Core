@@ -7,6 +7,7 @@
  */
 
 import extend from 'core/prelude/extend';
+
 import {
 
 	capitalizeCache,
@@ -14,15 +15,21 @@ import {
 	dasherizeCache,
 	underscoreCache,
 
-	isDigital,
 	camelizeRgxp,
 	normalizeRgxp
 
 } from 'core/prelude/string/const';
 
-//#if runtime has prelude/string/capitalize
+import {
 
-/** @see String.prototype.capitalize */
+	toCamelize,
+	toDasherize,
+	toUnderscore,
+	convertToSeparatedStr
+
+} from 'core/prelude/string/helpers';
+
+/** @see String.capitalize */
 extend(String.prototype, 'capitalize', function (
 	this: string,
 	{lower, all, cache}: StringCapitalizeOptions = {}
@@ -58,9 +65,7 @@ extend(String.prototype, 'capitalize', function (
 	return res;
 });
 
-//#endif
-
-/** @see String.prototype.camelize */
+/** @see String.camelize */
 extend(String.prototype, 'camelize', function (
 	this: string,
 	upperOrOpts: boolean | StringCamelizeOptions
@@ -100,7 +105,7 @@ extend(String.prototype, 'camelize', function (
 	return res;
 });
 
-/** @see String.prototype.dasherize */
+/** @see String.dasherize */
 extend(String.prototype, 'dasherize', function (
 	this: string,
 	stableOrOpts?: boolean | StringDasherizeOptions
@@ -139,9 +144,7 @@ extend(String.prototype, 'dasherize', function (
 	return res;
 });
 
-//#if runtime has prelude/string/underscore
-
-/** @see String.prototype.underscore */
+/** @see String.underscore */
 extend(String.prototype, 'underscore', function (
 	this: string,
 	stableOrOpts?: boolean | StringUnderscoreOptions
@@ -179,74 +182,3 @@ extend(String.prototype, 'underscore', function (
 
 	return res;
 });
-
-function toUnderscore(str: string, start: CanUndef<string>, end: CanUndef<string>, middle: CanUndef<string>): string {
-	if (middle) {
-		return '_';
-	}
-
-	return new Array((start || end || '').length + 1).join('_');
-}
-
-//#endif
-
-function toCamelize(str: string, start: CanUndef<string>, end: CanUndef<string>, middle: CanUndef<string>): string {
-	if (middle) {
-		return middle.toUpperCase();
-	}
-
-	return start || end || '';
-}
-
-function toDasherize(str: string, start: CanUndef<string>, end: CanUndef<string>, middle: CanUndef<string>): string {
-	if (middle) {
-		return '-';
-	}
-
-	return new Array((start || end || '').length + 1).join('-');
-}
-
-function isUpper(char: string): boolean {
-	const up = char.toUpperCase();
-	return char === up && char.toLowerCase() !== up;
-}
-
-function convertToSeparatedStr(str: string, separator: string, stable?: boolean): string {
-	let
-		res = '';
-
-	for (let i = 0; i < str.length; i++) {
-		const
-			el = str[i];
-
-		if (el === separator) {
-			res += separator;
-			continue;
-		}
-
-		if (res[res.length - 1] === separator) {
-			res += el.toLowerCase();
-			continue;
-		}
-
-		const
-			nextChar = str[i + 1];
-
-		if (isDigital.test(el) || isUpper(el)) {
-			if (i && (stable || nextChar && !isDigital.test(nextChar) && !isUpper(nextChar))) {
-				res += separator;
-			}
-
-			res += el.toLowerCase();
-
-		} else {
-			res += el;
-
-			if (nextChar && (isDigital.test(nextChar) || isUpper(nextChar))) {
-				res += separator;
-			}
-		}
-	}
-
-	return res;
-}
