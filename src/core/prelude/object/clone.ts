@@ -92,8 +92,8 @@ extend(Object, 'fastClone', (obj, opts?: FastCloneOptions) => {
 			funcMap = new Map();
 
 		const
-			replacer = createReplacer(obj, funcMap, p.replacer),
-			reviewer = createReviewer(obj, funcMap, p.reviver);
+			replacer = createSerializer(obj, funcMap, p.replacer),
+			reviewer = createParser(obj, funcMap, p.reviver);
 
 		const clone = JSON.parse(
 			JSON.stringify(obj, replacer),
@@ -124,7 +124,14 @@ const
 	objRef = '[[OBJ_REF:base]]',
 	funcRef = '[[FUNC_REF:';
 
-function createReplacer(
+/**
+ * Returns a function to serialize object values into strings
+ *
+ * @param base - base object
+ * @param funcMap - map to store functions
+ * @param replacer - additional replacer
+ */
+export function createSerializer(
 	base: unknown,
 	funcMap: Map<Function | string, Function | string>,
 	replacer?: JSONCb
@@ -156,7 +163,14 @@ function createReplacer(
 	};
 }
 
-function createReviewer(
+/**
+ * Returns a function to parse object values from strings
+ *
+ * @param base - base object
+ * @param funcMap - map that stores functions
+ * @param reviewer - additional reviewer
+ */
+export function createParser(
 	base: unknown,
 	funcMap: Map<Function | string, Function | string>,
 	reviewer?: JSONCb | false

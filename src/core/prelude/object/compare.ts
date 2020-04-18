@@ -7,6 +7,7 @@
  */
 
 import extend from 'core/prelude/extend';
+import { funcCache } from 'core/prelude/object/const';
 
 /** @see ObjectConstructor.fastCompare */
 // tslint:disable-next-line:only-arrow-functions
@@ -86,18 +87,22 @@ extend(Object, 'fastCompare', function (a: any, b: any): boolean | Function {
 	}
 
 	const cache = new WeakMap();
-	return JSON.stringify(a, createReplacer(a, b, cache)) === JSON.stringify(b, createReplacer(a, b, cache));
+	return JSON.stringify(a, createSerializer(a, b, cache)) === JSON.stringify(b, createSerializer(a, b, cache));
 });
-
-const
-	funcCache = new WeakMap();
 
 /** @see ObjectConstructor.fastHash */
 extend(Object, 'fastHash', (obj) =>
-	JSON.stringify(obj, createReplacer(obj, undefined, funcCache)) || 'null'
+	JSON.stringify(obj, createSerializer(obj, undefined, funcCache)) || 'null'
 );
 
-function createReplacer(
+/**
+ * Returns a function to serialize object values into strings
+ *
+ * @param a - first object to serialize
+ * @param b - second object to serialize
+ * @param funcMap - map to store functions
+ */
+export function createSerializer(
 	a: unknown,
 	b: unknown,
 	funcMap: WeakMap<Function, string>

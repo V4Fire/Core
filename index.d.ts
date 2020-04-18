@@ -682,7 +682,7 @@ interface ObjectConstructor {
 	): void;
 
 	/**
-	 * Returns a curried version of fastCompare for one argument
+	 * Returns a curried version of Object.fastCompare for one argument
 	 * @param a
 	 */
 	fastCompare<T>(a: unknown): (b: T) => a is T;

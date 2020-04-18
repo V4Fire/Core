@@ -7,9 +7,7 @@
  */
 
 import extend from 'core/prelude/extend';
-
-const
-	canParse = /^[[{"]|^(?:true|false|null|\d+)$/;
+import { canParse } from 'core/prelude/object/const';
 
 /** @see ObjectConstructor.parse */
 extend(Object, 'parse', (value, reviver?: JSONCb) => {
