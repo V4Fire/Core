@@ -11,34 +11,52 @@ import extend from 'core/prelude/extend';
 /** @see ObjectConstructor.get */
 extend(Object, 'get', (
 	obj: any,
-	path: string | any[],
+	path: string | any[] | ObjectGetOptions,
 	opts?: ObjectGetOptions
 ) => {
-	const
-		p = {separator: '.', ...opts},
-		chunks = Object.isString(path) ? path.split(p.separator) : path;
-
-	let
-		res = obj;
-
-	for (let i = 0; i < chunks.length; i++) {
-		if (res == null) {
-			return undefined;
-		}
-
+	if (needCurriedOverload(obj, path)) {
 		const
-			key = chunks[i];
+			curriedPath = obj,
+			curriedOpts = <ObjectGetOptions>path;
 
-		// tslint:disable:prefer-conditional-expression
-		if (Object.isMap(res) || Object.isWeakMap(res)) {
-			res = res.get(key);
-
-		} else {
-			res = res[key];
-		}
+		return (obj) => Object.get(obj, curriedPath, curriedOpts);
 	}
 
-	return res;
+	const
+		p = {separator: '.', ...(Object.isPlainObject(path) ? path : opts)};
+
+	const get = (path) => {
+		const
+			chunks = Object.isString(path) ? path.split(p.separator) : path;
+
+		let
+			res = obj;
+
+		for (let i = 0; i < chunks.length; i++) {
+			if (res == null) {
+				return undefined;
+			}
+
+			const
+				key = chunks[i];
+
+			// tslint:disable:prefer-conditional-expression
+			if (Object.isMap(res) || Object.isWeakMap(res)) {
+				res = res.get(key);
+
+			} else {
+				res = res[key];
+			}
+		}
+
+		return res;
+	};
+
+	if (Object.isArray(path) || Object.isString(path)) {
+		return get(path);
+	}
+
+	return get;
 });
 
 /** @see ObjectConstructor.has */
@@ -47,6 +65,14 @@ extend(Object, 'has', (
 	path?: string | any[] | ObjectGetOptions,
 	opts?: ObjectGetOptions
 ) => {
+	if (needCurriedOverload(obj, path)) {
+		const
+			curriedPath = obj,
+			curriedOpts = <ObjectGetOptions>path;
+
+		return (obj) => Object.has(obj, curriedPath, curriedOpts);
+	}
+
 	const
 		p = {separator: '.', ...(Object.isPlainObject(path) ? path : opts)};
 
@@ -100,85 +126,126 @@ const
 	{hasOwnProperty} = Object.prototype;
 
 /** @see ObjectConstructor.hasOwnProperty */
-extend(Object, 'hasOwnProperty', (obj: any, key?: string) => {
-	if (!obj || typeof obj !== 'object') {
-		if (key === undefined) {
-			return () => false;
+// tslint:disable-next-line:only-arrow-functions
+extend(Object, 'hasOwnProperty', function (obj: any, key?: string): boolean | Function {
+	if (arguments.length > 1) {
+		if (obj == null) {
+			return false;
 		}
 
-		return false;
+		return hasOwnProperty.call(obj, key);
 	}
 
-	if (key === undefined) {
-		return (key) => hasOwnProperty.call(obj, key);
+	if (Object.isString(obj)) {
+		key = obj;
+		return (obj) => Object.hasOwnProperty(obj, key!);
 	}
 
-	return hasOwnProperty.call(obj, key);
+	return (key) => Object.hasOwnProperty(obj, key);
 });
 
 /** @see ObjectConstructor.set */
-extend(Object, 'set', (
+// tslint:disable-next-line:only-arrow-functions
+extend(Object, 'set', function (
 	obj: any,
-	path: string | any[],
+	path: string | any[] | ObjectGetOptions,
 	value: unknown,
 	opts?: ObjectSetOptions
-) => {
+): unknown | Function {
+	if (needCurriedOverload(obj, path)) {
+		const
+			curriedPath = obj,
+			curriedOpts = <ObjectGetOptions>path;
+
+		// tslint:disable-next-line:only-arrow-functions
+		return function (obj: any, newValue: unknown): unknown {
+			Object.set(obj, curriedPath, arguments.length > 1 ? newValue : value, curriedOpts);
+			return obj;
+		};
+	}
+
 	const
-		p = {separator: '.', concat: false, ...opts},
-		chunks = Object.isString(path) ? path.split(p.separator) : path;
+		p = {separator: '.', concat: false, ...(Object.isPlainObject(path) ? path : opts)};
 
-	let
-		ref = obj,
-		cursor: any;
-
-	for (let i = 0; i < chunks.length; i++) {
+	// tslint:disable-next-line:only-arrow-functions
+	const set = function (path: string | any[], newValue?: unknown): unknown {
 		const
-			key = chunks[i];
+			finalValue = arguments.length > 1 ? newValue : value,
+			chunks = Object.isString(path) ? path.split(p.separator) : path;
 
-		if (chunks.length === i + 1) {
-			cursor = key;
-			continue;
+		let
+			ref = obj,
+			cursor: any;
+
+		for (let i = 0; i < chunks.length; i++) {
+			const
+				key = chunks[i];
+
+			if (chunks.length === i + 1) {
+				cursor = key;
+				continue;
+			}
+
+			const
+				nextChunkIsObj = isNaN(Number(chunks[i + 1]));
+
+			// tslint:disable:prefer-conditional-expression
+			if (Object.isMap(ref) || Object.isWeakMap(ref)) {
+				let
+					val = ref.get(key);
+
+				if (!val || typeof val !== 'object') {
+					ref.set(key, (val = nextChunkIsObj ? new Map() : []));
+				}
+
+				ref = val;
+
+			} else {
+				let
+					val = <any>ref[key];
+
+				if (!val || typeof val !== 'object') {
+					ref[key] = (val = nextChunkIsObj ? {} : []);
+				}
+
+				ref = val;
+			}
 		}
-
-		const
-			nextChunkIsObj = isNaN(Number(chunks[i + 1]));
 
 		// tslint:disable:prefer-conditional-expression
 		if (Object.isMap(ref) || Object.isWeakMap(ref)) {
-			let
-				val = ref.get(key);
+			if (ref.has(cursor) && p.concat) {
+				ref.set(cursor, (<unknown[]>[]).concat(ref[cursor], finalValue));
 
-			if (!val || typeof val !== 'object') {
-				ref.set(key, (val = nextChunkIsObj ? new Map() : []));
+			} else {
+				ref.set(cursor, finalValue);
 			}
 
-			ref = val;
-
 		} else {
-			let
-				val = <any>ref[key];
-
-			if (!val || typeof val !== 'object') {
-				ref[key] = (val = nextChunkIsObj ? {} : []);
-			}
-
-			ref = val;
-		}
-	}
-
-	// tslint:disable:prefer-conditional-expression
-	if (Object.isMap(ref) || Object.isWeakMap(ref)) {
-		if (ref.has(cursor) && p.concat) {
-			ref.set(cursor, (<unknown[]>[]).concat(ref[cursor], value));
-
-		} else {
-			ref.set(cursor, value);
+			ref[cursor] = cursor in ref && p.concat ?
+				(<unknown[]>[]).concat(ref[cursor], finalValue) : finalValue;
 		}
 
-	} else {
-		ref[cursor] = cursor in ref && p.concat ?
-			(<unknown[]>[]).concat(ref[cursor], value) : value;
+		return finalValue;
+	};
+
+	if (Object.isArray(path) || Object.isString(path)) {
+		if (arguments.length > 2) {
+			return (value) => {
+				set(path, value);
+				return obj;
+			};
+		}
+
+		return set(path, value);
 	}
 
-	return value;
+	return (path, ...args) => {
+		set(path, ...args);
+		return obj;
+	};
 });
+
+function needCurriedOverload(obj: unknown, path: unknown): boolean {
+	return (Object.isString(obj) || Object.isArray(obj)) && (path == null || Object.isDictionary(path));
+}

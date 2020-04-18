@@ -387,58 +387,111 @@ interface ObjectFromArrayOptions<T = boolean> {
 	valueConverter?(el: unknown, i: number): T;
 }
 
+type ObjectPropertyPath =
+	string |
+	unknown[];
+
 interface ObjectConstructor {
 	/**
-	 * Returns a value from the object by the specified path
+	 * Returns a function that returns a value from an object, which the function takes, by the specified path
+	 *
+	 * @param path
+	 * @param [opts] - additional options
+	 */
+	get<T = unknown>(path: ObjectPropertyPath, opts?: ObjectGetOptions): (obj: unknown) => T;
+
+	/**
+	 * Returns a function that returns a value from the specified object by a path that the function takes
+	 *
+	 * @param obj
+	 * @param [opts] - additional options
+	 */
+	get<T = unknown>(obj: unknown, opts?: ObjectGetOptions): (path: ObjectPropertyPath) => T;
+
+	/**
+	 * Returns a value from an object by the specified path
 	 *
 	 * @param obj
 	 * @param path
 	 * @param [opts] - additional options
 	 */
-	get<T = unknown>(obj: unknown, path: string | unknown[], opts?: ObjectGetOptions): T;
+	get<T = unknown>(obj: unknown, path: ObjectPropertyPath, opts?: ObjectGetOptions): T;
 
 	/**
-	 * Returns a function that returns true if the object has a property by the specified path
+	 * Returns a function that returns true if an object, which the function takes, has a value by the specified path
+	 *
+	 * @param path
+	 * @param [opts] - additional options
+	 */
+	has(path: ObjectPropertyPath, opts?: ObjectGetOptions): (obj: unknown) => boolean;
+
+	/**
+	 * Returns a function that returns true if the specified object has a value by a path that the function takes
 	 *
 	 * @param obj
 	 * @param [opts] - additional options
 	 */
-	has(obj: object, opts?: ObjectGetOptions): (path: string | unknown[]) => boolean;
+	has(obj: object, opts?: ObjectGetOptions): (path: ObjectPropertyPath) => boolean;
 
 	/**
-	 * Returns true if the object has a property by the specified path
+	 * Returns true if an object has a property by the specified path
 	 *
 	 * @param obj
 	 * @param path
 	 * @param [opts] - additional options
 	 */
-	has(obj: object, path: string | unknown[], opts?: ObjectGetOptions): boolean;
+	has(obj: object, path: ObjectPropertyPath, opts?: ObjectGetOptions): boolean;
 
 	/**
-	 * Returns a function that returns true if the specified property exists directly in the object
+	 * Returns a function that returns true if an object, which the function takes, has own property by the specified key
+	 * @param key
+	 */
+	hasOwnProperty(key: string): (obj: unknown) => boolean;
+
+	/**
+	 * Returns a function that returns true if the specified object has own property by a key the the function takes
+	 * @param obj
+	 */
+	hasOwnProperty(obj: unknown): (key: string) => boolean;
+
+	/**
+	 * Returns true if an object has an own property by the specified key
 	 *
 	 * @param obj
 	 * @param key
 	 */
-	hasOwnProperty(obj: unknown, key?: undefined): (key: string) => boolean;
-
-	/**
-	 * Returns true if the specified property exists directly in the object
-	 *
-	 * @param obj
-	 * @param key - property key
-	 */
 	hasOwnProperty(obj: unknown, key: string): boolean;
 
 	/**
-	 * Sets a value to the object by the specified path
+	 * Returns a function that sets a value to an object, which the function takes, by the specified path.
+	 * The final function returns a link to the object.
+	 *
+	 * @param path
+	 * @param [opts] - additional options
+	 * @param [value]
+	 */
+	set<T>(path: ObjectPropertyPath, opts?: ObjectSetOptions, value?: unknown): (obj: T, value?: unknown) => T;
+
+	/**
+	 * Returns a function that sets a value to the specified object by a path that the function takes.
+	 * The final function returns a link to the object.
+	 *
+	 * @param obj
+	 * @param [opts] - additional options
+	 * @param [value]
+	 */
+	set<T>(obj: T, opts?: ObjectSetOptions, value?: unknown): (path: ObjectPropertyPath, value?: unknown) => T;
+
+	/**
+	 * Sets a value to an object by the specified path.
+	 * The final function returns a value that was added.
 	 *
 	 * @param obj
 	 * @param path
 	 * @param value
 	 * @param [opts] - additional options
 	 */
-	set<T = unknown>(obj: unknown, path: string | unknown[], value: T, opts?: ObjectSetOptions): T;
+	set<T>(obj: unknown, path: ObjectPropertyPath, value: T, opts?: ObjectSetOptions): T;
 
 	/**
 	 * Returns length of the specified object
