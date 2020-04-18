@@ -1634,8 +1634,18 @@ type DateHTMLStringOptions =
 	DateHTMLTimeStringOptions &
 	DateHTMLDateStringOptions;
 
+type DateRelativeType =
+	'milliseconds' |
+	'seconds' |
+	'minutes' |
+	'hours' |
+	'days' |
+	'weeks' |
+	'months' |
+	'years';
+
 interface DateRelative {
-	type: 'milliseconds' | 'seconds' | 'minutes' | 'hours' | 'days' | 'weeks' | 'months' | 'years';
+	type: DateRelativeType;
 	value: number;
 	diff: number;
 }
