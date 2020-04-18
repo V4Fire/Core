@@ -818,7 +818,16 @@ interface ObjectConstructor {
 	): R;
 
 	/**
-	 * Parses the specified value as a JSON/JS object and returns the result
+	 * Returns a function that parse a value, which it takes, as a JSON/JS object and returns the result of parsing.
+	 * If the value isn't a string or can't be parsed, the function returns an original value.
+	 *
+	 * @param reviver - reviver function for JSON.parse
+	 */
+	parse<V = unknown, R = unknown>(reviver?: JSONCb): (value: V) => V extends string ? R : V;
+
+	/**
+	 * Parses the specified value as a JSON/JS object and returns the result of parsing.
+	 * If the value isn't a string or can't be parsed, the function returns an original value.
 	 *
 	 * @param value
 	 * @param [reviver] - reviver function for JSON.parse

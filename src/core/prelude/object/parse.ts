@@ -11,6 +11,11 @@ import { canParse } from 'core/prelude/object/const';
 
 /** @see ObjectConstructor.parse */
 extend(Object, 'parse', (value, reviver?: JSONCb) => {
+	if (Object.isFunction(value)) {
+		reviver = value;
+		return (value) => Object.parse(value, reviver);
+	}
+
 	if (Object.isString(value)) {
 		if (value === 'undefined') {
 			return undefined;
