@@ -47,7 +47,9 @@ extend(Object, 'createEnumLike', createEnumLike);
  */
 extend(Object, 'createMap', deprecate({renamedTo: 'createEnum'}, createEnumLike));
 
-function createEnumLike(obj: object): Dictionary {
+/** @see ObjectConstructor.createEnumLike */
+// tslint:disable-next-line:completed-docs
+export function createEnumLike(obj: object): Dictionary {
 	const
 		map = Object.createDict();
 
@@ -102,8 +104,18 @@ extend(Object, 'select', selectReject(true));
 /** @see ObjectConstructor.reject */
 extend(Object, 'reject', selectReject(false));
 
-function selectReject(select: boolean): Function {
-	return (obj: Dictionary, condition: CanArray<string> | Dictionary | RegExp) => {
+/**
+ * Factory to create Object.select/reject functions
+ * @param select
+ */
+export function selectReject(select: boolean): Function {
+	// tslint:disable-next-line:only-arrow-functions
+	return function wrapper(obj: Dictionary, condition: CanArray<string> | Dictionary | RegExp): unknown {
+		if (arguments.length === 1) {
+			condition = obj;
+			return (obj) => wrapper(obj, condition);
+		}
+
 		const
 			res = {};
 
@@ -131,6 +143,11 @@ function selectReject(select: boolean): Function {
 			for (let i = 0; i < condition.length; i++) {
 				map[condition[i]] = true;
 			}
+
+		} else if (Object.isIterable(condition)) {
+			Object.forEach(condition, (key) => {
+				map[String(key)] = true;
+			});
 		}
 
 		for (let keys = Object.keys(obj), i = 0; i < keys.length; i++) {

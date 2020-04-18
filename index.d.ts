@@ -893,10 +893,42 @@ interface ObjectConstructor {
 	fromArray<T = boolean>(arr: unknown[], opts?: ObjectFromArrayOptions<T>): Dictionary<T>;
 
 	/**
+	 * Returns a function that returns a new object based on an object that the function takes,
+	 * but only with fields which match to the specified condition
+	 *
+	 * @param condition - whitelist of keys to filter
+	 */
+	select<D extends object, C extends string>(condition: CanArray<C>): (obj: D) => Pick<D, Extract<keyof D, C>>;
+
+	/**
+	 * Returns a function that returns a new object based on an object that the function takes,
+	 * but only with fields which match to the specified condition
+	 *
+	 * @param condition - whitelist of keys to filter
+	 */
+	select<D extends object, C extends string>(condition: CanArray<C>): (obj: D) => Pick<D, Extract<keyof D, C>>;
+
+	/**
+	 * Returns a function that returns a new object based on an object that the function takes,
+	 * but only with fields which match to the specified condition
+	 *
+	 * @param condition - whitelist of keys to filter
+	 */
+	select<D extends object, C extends string>(condition: Iterable<C>): (obj: D) => {[K in keyof D]?: D[K]};
+
+	/**
+	 * Returns a function that returns a new object based on an object that the function takes,
+	 * but only with fields which match to the specified condition
+	 *
+	 * @param condition - map of keys to filter
+	 */
+	select<D extends object, C extends object>(condition: C): (obj: D) => Pick<D, Extract<keyof D, keyof C>>;
+
+	/**
 	 * Returns a new object based on the specified, but only with fields which match to the specified condition
 	 *
 	 * @param obj
-	 * @param condition - regular expression for filtering
+	 * @param condition - regular expression to filter
 	 */
 	select<D extends object>(obj: D, condition: RegExp): {[K in keyof D]?: D[K]};
 
@@ -904,7 +936,7 @@ interface ObjectConstructor {
 	 * Returns a new object based on the specified, but only with fields which match to the specified condition
 	 *
 	 * @param obj
-	 * @param condition - whitelist of keys (it can be represented as an array or an object)
+	 * @param condition - whitelist of keys to filter
 	 */
 	select<D extends object, C extends string>(obj: D, condition: CanArray<C>): Pick<D, Extract<keyof D, C>>;
 
@@ -912,15 +944,55 @@ interface ObjectConstructor {
 	 * Returns a new object based on the specified, but only with fields which match to the specified condition
 	 *
 	 * @param obj
-	 * @param condition - whitelist of keys (it can be represented as an array or an object) or a regular expression
+	 * @param condition - whitelist of keys to filter
+	 */
+	select<D extends object, C extends string>(obj: D, condition: Iterable<C>): {[K in keyof D]?: D[K]};
+
+	/**
+	 * Returns a new object based on the specified, but only with fields which match to the specified condition
+	 *
+	 * @param obj
+	 * @param condition - map of keys to filter
 	 */
 	select<D extends object, C extends object>(obj: D, condition: C): Pick<D, Extract<keyof D, keyof C>>;
+
+	/**
+	 * Returns a function that returns a new object based on an object that the function takes,
+	 * but without fields which match to the specified condition
+	 *
+	 * @param condition - regular expression to filter
+	 */
+	reject<D extends object>(condition: RegExp): (obj: D) => {[K in keyof D]?: D[K]};
+
+	/**
+	 * Returns a function that returns a new object based on an object that the function takes,
+	 * but without fields which match to the specified condition
+	 *
+	 * @param condition - whitelist of keys to filter
+	 */
+	reject<D extends object, C extends string>(condition: CanArray<C>): (obj: D) => Omit<D, C>;
+
+	/**
+	 * Returns a function that returns a new object based on an object that the function takes,
+	 * but without fields which match to the specified condition
+	 *
+	 * @param condition - whitelist of keys to filter
+	 */
+	reject<D extends object, C extends string>(condition: Iterable<C>): (obj: D) => {[K in keyof D]?: D[K]};
+
+	/**
+	 * Returns a function that returns a new object based on an object that the function takes,
+	 * but without fields which match to the specified condition
+	 *
+	 * @param condition - map of keys to filter
+	 */
+	reject<D extends object, C extends object>(condition: C): (obj: D) => Omit<D, keyof C>;
 
 	/**
 	 * Returns a new object based on the specified, but without fields which match to the specified condition
 	 *
 	 * @param obj
-	 * @param condition - regular expression for filtering
+	 * @param condition - regular expression to filter
 	 */
 	reject<D extends object>(obj: D, condition: RegExp): {[K in keyof D]?: D[K]};
 
@@ -928,7 +1000,7 @@ interface ObjectConstructor {
 	 * Returns a new object based on the specified, but without fields which match to the specified condition
 	 *
 	 * @param obj
-	 * @param condition - whitelist of keys (it can be represented as an array or an object)
+	 * @param condition - whitelist of keys to filter
 	 */
 	reject<D extends object, C extends string>(obj: D, condition: CanArray<C>): Omit<D, C>;
 
@@ -936,7 +1008,15 @@ interface ObjectConstructor {
 	 * Returns a new object based on the specified, but without fields which match to the specified condition
 	 *
 	 * @param obj
-	 * @param condition - whitelist of keys (it can be represented as an array or an object) or a regular expression
+	 * @param condition - whitelist of keys to filter
+	 */
+	reject<D extends object, C extends string>(obj: D, condition: Iterable<C>): {[K in keyof D]?: D[K]};
+
+	/**
+	 * Returns a new object based on the specified, but without fields which match to the specified condition
+	 *
+	 * @param obj
+	 * @param condition - map of keys to filter
 	 */
 	reject<D extends object, C extends object>(obj: D, condition: C): Omit<D, keyof C>;
 
