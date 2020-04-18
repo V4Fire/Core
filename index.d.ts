@@ -720,6 +720,42 @@ interface ObjectConstructor {
 	fastHash(obj: unknown): string;
 
 	/**
+	 * Returns a curried version of Object.mixin for one argument
+	 * @param opts - if true, then properties will be copied recursively OR additional options for extending
+	 */
+	mixin<B = unknown, O1 = unknown>(
+		opts: ObjectMixinOptions | boolean
+	): (base: B, obj1: O1) => B & O1;
+
+	/**
+	 * Returns a curried version of Object.mixin for one argument
+	 * @param opts - if true, then properties will be copied recursively OR additional options for extending
+	 */
+	mixin<R = unknown>(opts: ObjectMixinOptions | boolean): (...objects: unknown[]) => R;
+
+	/**
+	 * Returns a curried version of Object.mixin for two arguments
+	 *
+	 * @param opts - if true, then properties will be copied recursively OR additional options for extending
+	 * @param base - base object
+	 */
+	mixin<B = unknown, O1 = unknown>(
+		opts: ObjectMixinOptions | boolean,
+		base: B
+	): (obj1: O1) => B & O1;
+
+	/**
+	 * Returns a curried version of Object.mixin for two arguments
+	 *
+	 * @param opts - if true, then properties will be copied recursively OR additional options for extending
+	 * @param base - base object
+	 */
+	mixin<R = unknown>(
+		opts: ObjectMixinOptions | boolean,
+		base: unknown
+	): (...objects: unknown[]) => R;
+
+	/**
 	 * Extends the specified object by another objects.
 	 * If the base value is not an object, a new object will be created with a type similar to the first extension object.
 	 *

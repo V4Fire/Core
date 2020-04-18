@@ -9,7 +9,20 @@
 import extend from 'core/prelude/extend';
 
 /** @see ObjectConstructor.mixin */
-extend(Object, 'mixin', (opts: ObjectMixinOptions | boolean, base: any, ...objects: any[]) => {
+// tslint:disable-next-line:only-arrow-functions
+extend(Object, 'mixin', function (
+	opts: ObjectMixinOptions | boolean,
+	base: any,
+	...objects: any[]
+): unknown | Function {
+	if (arguments.length < 3) {
+		if (arguments.length === 2) {
+			return (...args) => Object.mixin(opts, base, ...args);
+		}
+
+		return (base, ...args) => Object.mixin(opts, base, ...args);
+	}
+
 	const
 		p = <ObjectMixinOptions>{};
 
