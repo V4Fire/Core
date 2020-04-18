@@ -12,6 +12,10 @@ import { convertIfDate } from 'core/json';
 /** @see ObjectConstructor.fastClone */
 extend(Object, 'fastClone', (obj, opts?: FastCloneOptions) => {
 	if (!obj || typeof obj === 'function') {
+		if (opts !== undefined) {
+			return (obj) => Object.fastClone(obj, opts);
+		}
+
 		return obj;
 	}
 

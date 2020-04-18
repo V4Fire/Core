@@ -682,7 +682,14 @@ interface ObjectConstructor {
 	): void;
 
 	/**
-	 * Compares two specified objects by using naive but fast "JSON.stringify/parse" strategy and returns the result
+	 * Returns a curried version of fastCompare for one argument
+	 * @param a
+	 */
+	fastCompare<T>(a: unknown): (b: T) => a is T;
+
+	/**
+	 * Compares two specified objects by using a naive but fast "JSON.stringify/parse" strategy and
+	 * returns true if their are equal
 	 *
 	 * @param a
 	 * @param b
@@ -690,7 +697,16 @@ interface ObjectConstructor {
 	fastCompare<T>(a: unknown, b: T): a is T;
 
 	/**
-	 * Clones the specified object by using naive but fast "JSON.stringify/parse" strategy and returns a new object
+	 * Returns a function that clones an object, which the function takes,
+	 * by using a naive but fast "JSON.stringify/parse" strategy and returns a new object
+	 *
+	 * @param obj
+	 * @param opts - additional options
+	 */
+	fastClone<T>(obj: undefined, opts: FastCloneOptions): (obj: T) => T;
+
+	/**
+	 * Clones the specified object by using a naive but fast "JSON.stringify/parse" strategy and returns a new object
 	 *
 	 * @param obj
 	 * @param [opts] - additional options
@@ -698,7 +714,7 @@ interface ObjectConstructor {
 	fastClone<T>(obj: T, opts?: FastCloneOptions): T;
 
 	/**
-	 * Returns a string representation of the specified object naive but fast "JSON.stringify/parse" strategy
+	 * Returns a string representation of the specified object by using a naive but fast "JSON.stringify/parse" strategy
 	 * @param obj
 	 */
 	fastHash(obj: unknown): string;

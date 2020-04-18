@@ -9,7 +9,12 @@
 import extend from 'core/prelude/extend';
 
 /** @see ObjectConstructor.fastCompare */
-extend(Object, 'fastCompare', (a, b) => {
+// tslint:disable-next-line:only-arrow-functions
+extend(Object, 'fastCompare', function (a: any, b: any): boolean | Function {
+	if (arguments.length < 2) {
+		return (b) => Object.fastCompare(a, b);
+	}
+
 	if (a === b) {
 		return true;
 	}
