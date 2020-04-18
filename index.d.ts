@@ -521,7 +521,7 @@ interface ObjectConstructor {
 	 */
 	forEach<V = unknown>(
 		obj: Dictionary<V>,
-		opts?: ObjectForEachOptions & ({notOwn: boolean | -1} | {withDescriptor: false}),
+		opts: ObjectForEachOptions & ({notOwn: boolean | -1} | {withDescriptor: false}),
 		cb: (el: V, key: string, data: Dictionary<V>) => any
 	): void;
 
