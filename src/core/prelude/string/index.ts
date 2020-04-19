@@ -65,6 +65,21 @@ extend(String.prototype, 'capitalize', function (
 	return res;
 });
 
+/** @see StringConstructor.capitalize */
+// tslint:disable-next-line:only-arrow-functions
+extend(String, 'capitalize', (value: unknown, opts?: StringCapitalizeOptions) => {
+	if (value == null) {
+		return undefined;
+	}
+
+	if (Object.isDictionary(value)) {
+		opts = value;
+		return (value) => String(value).capitalize(opts);
+	}
+
+	return String(value).capitalize(opts);
+});
+
 /** @see String.camelize */
 extend(String.prototype, 'camelize', function (
 	this: string,
@@ -103,6 +118,21 @@ extend(String.prototype, 'camelize', function (
 	}
 
 	return res;
+});
+
+/** @see StringConstructor.camelize */
+// tslint:disable-next-line:only-arrow-functions
+extend(String, 'camelize', (value: unknown, upperOrOpts: boolean | StringCamelizeOptions) => {
+	if (value == null) {
+		return undefined;
+	}
+
+	if (Object.isBoolean(value) || Object.isDictionary(value)) {
+		upperOrOpts = value;
+		return (value) => String(value).camelize(<any>upperOrOpts);
+	}
+
+	return String(value).camelize(<any>upperOrOpts);
 });
 
 /** @see String.dasherize */
@@ -144,6 +174,21 @@ extend(String.prototype, 'dasherize', function (
 	return res;
 });
 
+/** @see StringConstructor.dasherize */
+// tslint:disable-next-line:only-arrow-functions
+extend(String, 'dasherize', (value: unknown, stableOrOpts: boolean | StringDasherizeOptions) => {
+	if (value == null) {
+		return undefined;
+	}
+
+	if (Object.isBoolean(value) || Object.isDictionary(value)) {
+		stableOrOpts = value;
+		return (value) => String(value).dasherize(<any>stableOrOpts);
+	}
+
+	return String(value).dasherize(<any>stableOrOpts);
+});
+
 /** @see String.underscore */
 extend(String.prototype, 'underscore', function (
 	this: string,
@@ -181,4 +226,19 @@ extend(String.prototype, 'underscore', function (
 	}
 
 	return res;
+});
+
+/** @see StringConstructor.underscore */
+// tslint:disable-next-line:only-arrow-functions
+extend(String, 'underscore', (value: unknown, stableOrOpts: boolean | StringUnderscoreOptions) => {
+	if (value == null) {
+		return undefined;
+	}
+
+	if (Object.isBoolean(value) || Object.isDictionary(value)) {
+		stableOrOpts = value;
+		return (value) => String(value).underscore(<any>stableOrOpts);
+	}
+
+	return String(value).underscore(<any>stableOrOpts);
 });

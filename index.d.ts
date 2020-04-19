@@ -393,6 +393,15 @@ type ObjectPropertyPath =
 
 interface ObjectConstructor {
 	/**
+	 * Returns a value from an object by the specified path
+	 *
+	 * @param obj
+	 * @param path
+	 * @param [opts] - additional options
+	 */
+	get<T = unknown>(obj: unknown, path: ObjectPropertyPath, opts?: ObjectGetOptions): T;
+
+	/**
 	 * Returns a function that returns a value from an object, which the function takes, by the specified path
 	 *
 	 * @param path
@@ -409,13 +418,13 @@ interface ObjectConstructor {
 	get<T = unknown>(obj: unknown, opts?: ObjectGetOptions): (path: ObjectPropertyPath) => T;
 
 	/**
-	 * Returns a value from an object by the specified path
+	 * Returns true if an object has a property by the specified path
 	 *
 	 * @param obj
 	 * @param path
 	 * @param [opts] - additional options
 	 */
-	get<T = unknown>(obj: unknown, path: ObjectPropertyPath, opts?: ObjectGetOptions): T;
+	has(obj: object, path: ObjectPropertyPath, opts?: ObjectGetOptions): boolean;
 
 	/**
 	 * Returns a function that returns true if an object, which the function takes, has a value by the specified path
@@ -432,15 +441,6 @@ interface ObjectConstructor {
 	 * @param [opts] - additional options
 	 */
 	has(obj: object, opts?: ObjectGetOptions): (path: ObjectPropertyPath) => boolean;
-
-	/**
-	 * Returns true if an object has a property by the specified path
-	 *
-	 * @param obj
-	 * @param path
-	 * @param [opts] - additional options
-	 */
-	has(obj: object, path: ObjectPropertyPath, opts?: ObjectGetOptions): boolean;
 
 	/**
 	 * Returns a function that returns true if an object, which the function takes, has own property by the specified key
@@ -463,6 +463,17 @@ interface ObjectConstructor {
 	hasOwnProperty(obj: unknown, key: string): boolean;
 
 	/**
+	 * Sets a value to an object by the specified path.
+	 * The final function returns a value that was added.
+	 *
+	 * @param obj
+	 * @param path
+	 * @param value
+	 * @param [opts] - additional options
+	 */
+	set<T>(obj: unknown, path: ObjectPropertyPath, value: T, opts?: ObjectSetOptions): T;
+
+	/**
 	 * Returns a function that sets a value to an object, which the function takes, by the specified path.
 	 * The final function returns a link to the object.
 	 *
@@ -481,17 +492,6 @@ interface ObjectConstructor {
 	 * @param [value]
 	 */
 	set<T>(obj: T, opts?: ObjectSetOptions, value?: unknown): (path: ObjectPropertyPath, value?: unknown) => T;
-
-	/**
-	 * Sets a value to an object by the specified path.
-	 * The final function returns a value that was added.
-	 *
-	 * @param obj
-	 * @param path
-	 * @param value
-	 * @param [opts] - additional options
-	 */
-	set<T>(obj: unknown, path: ObjectPropertyPath, value: T, opts?: ObjectSetOptions): T;
 
 	/**
 	 * Returns length of the specified object
@@ -1294,6 +1294,141 @@ interface StringUnderscoreOptions extends StringDasherizeOptions {
 
 }
 
+interface StringConstructor {
+	/**
+	 * Returns a function that capitalizes the first character of a value, which it takes, and returns it.
+	 * If the value is equal to null or undefined, the function returns undefined,
+	 * otherwise, the value will be converted to a string.
+	 *
+	 * @param opts - additional options
+	 */
+	capitalize(opts: StringCapitalizeOptions): (value: unknown) => CanUndef<string>;
+
+	/**
+	 * Capitalizes the first character of a value and returns it.
+	 * If the value is equal to null or undefined, the function returns undefined,
+	 * otherwise, the value will be converted to a string.
+	 *
+	 * @param value
+	 * @param [opts] - additional options
+	 */
+	capitalize(value: unknown, opts?: StringCapitalizeOptions): CanUndef<string>;
+
+	/**
+	 * Returns a function that transforms a value that it takes to a CamelCaseStyle version.
+	 * If the value is equal to null or undefined, the function returns undefined,
+	 * otherwise, the value will be converted to a string.
+	 *
+	 * @param upper - if false, then the first character of a value is transformed to the lower case
+	 */
+	camelize(upper: boolean): (value: unknown) => CanUndef<string>;
+
+	/**
+	 * Returns a function that transforms a value that it takes to a CamelCaseStyle version.
+	 * If the value is equal to null or undefined, the function returns undefined,
+	 * otherwise, the value will be converted to a string.
+	 *
+	 * @param opts - additional options
+	 */
+	camelize(opts: StringCamelizeOptions): (value: unknown) => CanUndef<string>;
+
+	/**
+	 * Returns a CamelCaseStyle version of the specified value.
+	 * If the value is equal to null or undefined, the function returns undefined,
+	 * otherwise, the value will be converted to a string.
+	 *
+	 * @param value
+	 * @param [upper] - if false, then the first character of a value is transformed to the lower case
+	 */
+	camelize(value: unknown, upper?: boolean): CanUndef<string>;
+
+	/**
+	 * Returns a CamelCaseStyle version of the specified value.
+	 * If the value is equal to null or undefined, the function returns undefined,
+	 * otherwise, the value will be converted to a string.
+	 *
+	 * @param value
+	 * @param [opts] - additional options
+	 */
+	camelize(value: unknown, opts?: StringCamelizeOptions): CanUndef<string>;
+
+	/**
+	 * Returns a function that transforms a value that it takes to a dash-style version.
+	 * If the value is equal to null or undefined, the function returns undefined,
+	 * otherwise, the value will be converted to a string.
+	 *
+	 * @param stable - if true, then the operation can be reverted
+	 */
+	dasherize(stable: boolean): (value: unknown) => CanUndef<string>;
+
+	/**
+	 * Returns a function that transforms a value that it takes to a dash-style version.
+	 * If the value is equal to null or undefined, the function returns undefined,
+	 * otherwise, the value will be converted to a string.
+	 *
+	 * @param opts - additional options
+	 */
+	dasherize(opts: StringDasherizeOptions): (value: unknown) => CanUndef<string>;
+
+	/**
+	 * Returns a dash-style version of the specified value.
+	 * If the value is equal to null or undefined, the function returns undefined,
+	 * otherwise, the value will be converted to a string.
+	 *
+	 * @param value
+	 * @param [stable] - if true, then the operation can be reverted
+	 */
+	dasherize(value: unknown, stable?: boolean): CanUndef<string>;
+
+	/**
+	 * Returns a dash-style version of the specified value.
+	 * If the value is equal to null or undefined, the function returns undefined,
+	 * otherwise, the value will be converted to a string.
+	 *
+	 * @param value
+	 * @param [opts] - additional options
+	 */
+	dasherize(value: unknown, opts?: StringDasherizeOptions): CanUndef<string>;
+
+	/**
+	 * Returns a function that transforms a value that it takes to a underscore_style version.
+	 * If the value is equal to null or undefined, the function returns undefined,
+	 * otherwise, the value will be converted to a string.
+	 *
+	 * @param stable - if true, then the operation can be reverted
+	 */
+	underscore(stable: boolean): (value: unknown) => CanUndef<string>;
+
+	/**
+	 * Returns a function that transforms a value that it takes to a underscore_style version.
+	 * If the value is equal to null or undefined, the function returns undefined,
+	 * otherwise, the value will be converted to a string.
+	 *
+	 * @param opts - additional options
+	 */
+	underscore(opts: StringUnderscoreOptions): (value: unknown) => CanUndef<string>;
+
+	/**
+	 * Returns an underscore_style version of the specified value.
+	 * If the value is equal to null or undefined, the function returns undefined,
+	 * otherwise, the value will be converted to a string.
+	 *
+	 * @param value
+	 * @param [stable] - if true, then the operation can be reverted
+	 */
+	underscore(value: unknown, stable?: boolean): CanUndef<string>;
+
+	/**
+	 * Returns an underscore_style version of the specified value.
+	 * If the value is equal to null or undefined, the function returns undefined,
+	 * otherwise, the value will be converted to a string.
+	 *
+	 * @param value
+	 * @param [opts] - additional options
+	 */
+	underscore(value: unknown, opts?: StringUnderscoreOptions): CanUndef<string>;
+}
+
 interface String {
 	/**
 	 * Capitalizes the first character of a string and returns it
@@ -1303,7 +1438,7 @@ interface String {
 
 	/**
 	 * Returns a CamelCaseStyle version of the specified string
-	 * @param [upper] - if false, then the first character of the string will be transformed to the lower case
+	 * @param [upper] - if false, then the first character of the string is transformed to the lower case
 	 */
 	camelize(upper?: boolean): string;
 
