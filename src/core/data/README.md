@@ -83,7 +83,7 @@ class User {
 }
 ```
 
-This might seem naive, but it works. Also, we need to create some API to submit events of the provider that allows to notificate an application if data was changed.
+This might seem naive, but it works. Also, we need to create some API to submit events of the provider that allows notifying an application if data was changed.
 
 ```js
 import request from 'core/request';
@@ -117,11 +117,11 @@ class User {
 }
 ```
 
-Still looks fine and useful, but if we want to create more classes for other data instances we need to create some kind of a superclass to avoide "copy-pasting" code lines. Also, the super class may improve our API with added extra functionality, such as support for socket events, middlewares, etc. And this is exactly what "core/data" module does.
+Still looks fine and useful, but if we want to create more classes for other data instances we need to create some kind of a superclass to avoid "copy-pasting" code lines. Also, the superclass may improve our API with added extra functionality, such as support for socket events, middlewares, etc. And this is exactly what "core/data" module does.
 
 ## Default interface
 
-The "core/data" module provides a default interface for any data providers. If your class implements this interface, then you can use it as a data provider with any V4Fire modules. This interface is pretty similar to the above-mentioned example of a data class, but realizes more common API. Let's take a look at it.
+The "core/data" module provides a default interface for any data providers. If your class implements this interface, then you can use it as a data provider with any V4Fire modules. This interface is pretty similar to the above-mentioned example of a data class but realizes more common API. Let's take a look at it.
 
 **core/data/interface**
 
@@ -268,7 +268,7 @@ interface ProviderOptions {
 
   /**
    * If true, then all emitting events, which is emitted by the provider,
-   * that have a similar hash wil be collapsed to one
+   * that have a similar hash will be collapsed to one
    *
    * @default `false`
    */
@@ -290,7 +290,7 @@ interface ProviderOptions {
 
 ### Registering a data provider as multiton
 
-You can register your data provider by a name in the global storage. For that case you should use the special decorator "provider".
+You can register your data provider by a name in the global storage. For that case, you should use the special decorator "provider".
 
 ```js
 import Provider, { provider, providers } from 'core/provider';
@@ -303,7 +303,7 @@ export default class User extends Provider {
 console.log(providers['User']);
 ```
 
-The name to register is taken from a class name of the provider. Also, you can declare a namespace that is concatenated with the name.
+The name to register is taken from the class name of the provider. Also, you can declare a namespace that is concatenated with the name.
 
 ```js
 import Provider, { provider, providers } from 'core/provider';
@@ -370,7 +370,7 @@ export default class User extends Provider {
 
 #### Base URL for requests
 
-Base URL is the starting point for URLs of each request. You can provide one universal URL by using `baseURL` parameter, but also,
+The base URL is the starting point for URLs of each request. You can provide one universal URL by using `baseURL` parameter, but also,
 you can specify a base URL for each particular method.
 
 ```js
@@ -387,8 +387,8 @@ export default class User extends Provider {
 ##### URL interpolation
 
 You can specify dynamically values within a URL string. For this case just add a variable with `:` character before the name.
-The values for interpolations are taken from a query object or a request body (if it's represented as simple JS object).
-After interpolation all values that were used will be dropped from a source object.
+The values for interpolations are taken from a query object or a request body (if it's represented as a simple JS object).
+After interpolation, all values that were used will be dropped from a source object.
 
 #### Middlewares
 
@@ -424,7 +424,7 @@ export default class User extends Provider {
 
 Basically, the result of a middleware function is ignoring, with the exceptions of promises and functions.
 If some middleware returns a promise, it will be awaited.
-And if at least one of middlewares returns a function, then the result of invoking this function will be returned as the request result.
+And if at least one of the middlewares returns a function, then the result of invoking this function will be returned as the request result.
 It can be helpful to organize mocks of data and other similar cases when you don't want to execute a real request.
 
 ```js
@@ -447,10 +447,10 @@ export default class User extends Provider {
 
 #### Encoders
 
-Encoder is a subtype of a middleware function, but unlike the simple middleware the encoder must return a value and provide it
+The encoder is a subtype of a middleware function, but unlike the simple middleware, the encoder must return a value and provide it
 to another encoder or a request, which means that a sequence of encoders are tied with an order of following.
 Encoders are using to convert data to another format before submitting it to a request.
-For example, you server demands that all request data must be represented as a protobuf value.
+For example, your server demands that all request data must be represented as a protobuf value.
 
 ```js
 import Provider, { provider } from 'core/provider';
@@ -466,7 +466,7 @@ export default class User extends Provider {
 ```
 
 Note that unlike "middlewares" parameter the encoders are separated between provider methods, which means
-that you should declare encoders for all you method pipelines.
+that you should declare encoders for all your method pipelines.
 
 The encoder function has the signature:
 
@@ -485,7 +485,7 @@ If some encoder returns a promise, it will be awaited.
 
 #### Decoders
 
-Decoder is another subtype of a middleware function, which is pretty similar to "encoder", but unlike the encoder,
+The decoder is another subtype of a middleware function, which is pretty similar to "encoder", but unlike the encoder,
 it converts data from a server to the provider format.
 
 The decoder function has the signature:
@@ -515,7 +515,7 @@ If some encoder returns a promise, it will be awaited.
 
 #### Custom request function
 
-To create a request all providers use the `core/request` module. And if you need to provide some extra parameters of request, such as "contentType", you can specify a factory to make these requests using the special overload of the request function.
+To create a request all providers use the `core/request` module. And if you need to provide some extra parameters of the request, such as "contentType", you can specify a factory to make these requests using the special overload of the request function.
 
 ```js
 import request from 'core/request';
@@ -555,8 +555,8 @@ export default class User extends Provider {
 
 ##### Providing an API URL
 
-You can specify a base URL for your server. It can be useful if you have different URLs for development, staging and production.
-The API URL is concatenated with base URL of a provider.
+You can specify a base URL for your server. It can be useful if you have different URLs for development, staging, and production.
+The API URL is concatenated with the base URL of a provider.
 
 ```js
 import Provider, { provider } from 'core/provider';
@@ -606,7 +606,7 @@ export default class User extends Provider {
 
 ### Composition of providers
 
-You can create a composition of multiple providers that are fetching in parallel and merging to one data. This mechanism is called "extraProviders". Mind that API work only for get request.
+You can create a composition of multiple providers that are fetching in parallel and merging to one data. This mechanism is called "extraProviders". Mind that API work only for a get request.
 
 ```js
 import Provider, { provider } from 'core/provider';
@@ -680,7 +680,7 @@ export default class User extends Provider {
 
 ### Extending one data provider from another provider
 
-The data provider is a simple class that implements the special interface. That's why to create a new provider that is extended parameters from another provider you should create a simple subclass.
+The data provider is a simple class that implements a special interface. That's why to create a new provider that is extended parameters from another provider you should create a simple subclass.
 
 ```js
 import Provider, { provider } from 'core/provider';
@@ -752,7 +752,7 @@ export default class User extends Provider {
 }
 ```
 
-Mind that root keys of mocks are represent HTTP methods, but not provider methods. Values are contain arrays of request objects to match: the algorithm finds the most suitable option and returns it response. Also, the middleware supports dynamically casting responses:
+Mind that root keys of mocks represent HTTP methods, but not provider methods. The values contain arrays of request objects to match: the algorithm finds the most suitable option and returns its response. Also, the middleware supports dynamically casting responses:
 
 ```js
 import Provider, { provider } from 'core/provider';
@@ -806,4 +806,4 @@ setEnv('mock', {patterns: ['.*']});
 ```
 
 The values of patterns are converted to RegExp objects and applied to provider names (including namespaces).
-Config settings is stored within a browser local storage.
+Config settings are stored within a browser local storage.
