@@ -69,6 +69,10 @@ type CanUndef<T> = T | undefined;
 type CanVoid<T> = T | void;
 type CanArray<T> = T | T[];
 
+type AnyFunction<ARGS extends any[] = any[], R = any> =
+	((...args: ARGS) => R) |
+	Function;
+
 interface ClassConstructor<T = unknown> {new: T}
 interface StrictDictionary<T = unknown> {[key: string]: T}
 interface Dictionary<T> {[key: string]: CanUndef<T>}
