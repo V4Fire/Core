@@ -38,8 +38,6 @@ export function once(target: Object, key: string | symbol, descriptor: PropertyD
 	};
 }
 
-//#if runtime has prelude/function/debounce
-
 /**
  * Decorator for Function.prototype.debounce
  *
@@ -67,9 +65,6 @@ export function debounce(delay?: number): MethodDecorator {
 	};
 }
 
-//#endif
-//#if runtime has prelude/function/throttle
-
 /**
  * Decorator for Function.prototype.throttle
  *
@@ -96,5 +91,3 @@ export function throttle(delay?: number): MethodDecorator {
 		};
 	};
 }
-
-//#endif

@@ -9,7 +9,7 @@
 import 'core/prelude/function/shim';
 import extend from 'core/prelude/extend';
 
-/** @see Function.prototype.once */
+/** @see Function.once */
 extend(Function.prototype, 'once', function (this: Function): Function {
 	const
 		// tslint:disable-next-line:no-this-assignment
@@ -30,9 +30,7 @@ extend(Function.prototype, 'once', function (this: Function): Function {
 	};
 });
 
-//#if runtime has prelude/function/debounce
-
-/** @see Function.prototype.debounce */
+/** @see Function.debounce */
 extend(Function.prototype, 'debounce', function (this: Function, delay: number = 250): Function {
 	const
 		// tslint:disable-next-line:no-this-assignment
@@ -47,10 +45,7 @@ extend(Function.prototype, 'debounce', function (this: Function, delay: number =
 	};
 });
 
-//#endif
-//#if runtime has prelude/function/throttle
-
-/** @see Function.prototype.throttle */
+/** @see Function.throttle */
 extend(Function.prototype, 'throttle', function (this: Function, delay: number = 250): Function {
 	const
 		// tslint:disable-next-line:no-this-assignment
@@ -76,5 +71,3 @@ extend(Function.prototype, 'throttle', function (this: Function, delay: number =
 		}
 	};
 });
-
-//#endif
