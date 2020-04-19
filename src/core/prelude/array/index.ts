@@ -9,7 +9,10 @@
 import extend from 'core/prelude/extend';
 
 /** @see Array.union */
-extend(Array.prototype, 'union', function (this: unknown[], ...args: Iterable<unknown>[]): unknown[] {
+extend(Array.prototype, 'union', function (
+	this: unknown[],
+	...args: Array<Iterable<unknown> | unknown>
+): unknown[] {
 	const
 		that = this;
 
@@ -37,7 +40,7 @@ extend(Array.prototype, 'union', function (this: unknown[], ...args: Iterable<un
 });
 
 /** @see ArrayConstructor.union */
-extend(Array, 'union', (arr: unknown[], ...args: unknown[][]) => {
+extend(Array, 'union', (arr: unknown[], ...args: Array<Iterable<unknown> | unknown>) => {
 	if (!args.length) {
 		return (...args) => Array.union(arr, ...args);
 	}
