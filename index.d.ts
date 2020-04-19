@@ -63,6 +63,9 @@ declare function cancelIdleCallback(id: number): void;
 declare function setImmediate(fn: Function): number;
 declare function clearImmediate(id: number): void;
 
+type Optional<T = unknown, TVAL = T, SAFE = TVAL> = T extends null | undefined ?
+	undefined : T extends SAFE ? TVAL : CanUndef<TVAL>;
+
 type Nullable<T> = T | null | undefined;
 type CanPromise<T> = T | Promise<T>;
 type CanUndef<T> = T | undefined;
