@@ -2226,8 +2226,7 @@ interface Date {
 interface FunctionConstructor {
 	/**
 	 * Returns a new function that allows to invoke the specified function only once.
-	 * If the value is equal to null or undefined, the function returns undefined,
-	 * otherwise, the value will be converted to a number.
+	 * If the value is equal to null or undefined, the function returns undefined.
 	 *
 	 * @param fn
 	 */
@@ -2247,9 +2246,7 @@ interface FunctionConstructor {
 	/**
 	 * Returns a new function that allows to invoke a function only with the specified delay.
 	 * The next invocation of the function will cancel the previous.
-	 *
-	 * If the value is equal to null or undefined, the function returns undefined,
-	 * otherwise, the value will be converted to a number.
+	 * If the value is equal to null or undefined, the function returns undefined.
 	 *
 	 * @param fn
 	 * @param [delay]
@@ -2258,15 +2255,15 @@ interface FunctionConstructor {
 
 	/**
 	 * Returns a new function that allows to to invoke a function, which it takes, not more often than the specified delay.
-	 * If the value is equal to null or undefined, the function returns undefined,
-	 * otherwise, the value will be converted to a number.
+	 * If the value is equal to null or undefined, the function returns undefined.
 	 *
 	 * @param delay
 	 */
 	throttle(delay: number): <T extends Nullable<AnyFunction>>(fn: T) => Optional<T, AnyFunction<Parameters<T>, void>>;
 
 	/**
-	 * Returns a new function that allows to invoke the target function not more often than the specified delay
+	 * Returns a new function that allows to invoke the target function not more often than the specified delay.
+	 * If the value is equal to null or undefined, the function returns undefined.
 	 *
 	 * @param fn
 	 * @param [delay]
