@@ -1223,12 +1223,34 @@ interface ArrayConstructor {
 	/**
 	 * Returns a new array containing elements from all specified iterable values with duplicates removed.
 	 * You can also pass non-iterable values and they will be added to the final array,
-	 * except values with null and undefined. If the value is equal to null or undefined, the function returns undefined.
+	 * except values with null and undefined. If the first parameter of the function is equal to null or undefined,
+	 * the function returns undefined.
 	 *
 	 * @param arr
 	 * @param args
 	 */
 	union<T extends Nullable<unknown[]>, A extends Iterable<unknown> | unknown>(
+		arr: T,
+		...args: A[]
+	): Optional<T, Array<IterableType<T> | A extends Iterable<infer V> ? V : NonNullable<A>>>;
+
+	/**
+	 * Returns a curried version of Array.concat
+	 * @param arr
+	 */
+	concat<T extends Nullable<unknown[]>>(arr: T): <A extends Iterable<unknown> | unknown>(...args: A[]) =>
+		Optional<T, Array<IterableType<T> | A extends Iterable<infer V> ? V : NonNullable<A>>>;
+
+	/**
+	 * Returns a new array containing elements from all specified iterable values.
+	 * You can also pass non-iterable values and they will be added to the final array,
+	 * except values with null and undefined. If the first parameter of the function is equal to null or undefined,
+	 * the function returns undefined.
+	 *
+	 * @param arr
+	 * @param args
+	 */
+	concat<T extends Nullable<unknown[]>, A extends Iterable<unknown> | unknown>(
 		arr: T,
 		...args: A[]
 	): Optional<T, Array<IterableType<T> | A extends Iterable<infer V> ? V : NonNullable<A>>>;

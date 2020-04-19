@@ -51,3 +51,16 @@ extend(Array, 'union', (arr: unknown[], ...args: Array<Iterable<unknown> | unkno
 
 	return arr.union(...args);
 });
+
+/** @see ArrayConstructor.concat */
+extend(Array, 'concat', (arr: unknown[], ...args: Array<Iterable<unknown> | unknown>) => {
+	if (!args.length) {
+		return (...args) => Array.concat(arr, ...args);
+	}
+
+	if (arr == null) {
+		return undefined;
+	}
+
+	return arr.concat(...args);
+});
