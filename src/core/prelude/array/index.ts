@@ -53,7 +53,7 @@ extend(Array, 'union', (arr: unknown[], ...args: Array<Iterable<unknown> | unkno
 });
 
 /** @see ArrayConstructor.concat */
-extend(Array, 'concat', (arr: unknown[], ...args: Array<Iterable<unknown> | unknown>) => {
+extend(Array, 'concat', (arr: unknown[], ...args: CanArray<unknown>[]) => {
 	if (!args.length) {
 		return (...args) => Array.concat(arr, ...args);
 	}
@@ -62,5 +62,23 @@ extend(Array, 'concat', (arr: unknown[], ...args: Array<Iterable<unknown> | unkn
 		return undefined;
 	}
 
-	return arr.concat(...args);
+	function* makeIterator(): Iterable<unknown> {
+		for (let i = 0; i < args.length; i++) {
+			const
+				val = args[i];
+
+			if (val == null) {
+				continue;
+			}
+
+			if (Object.isIterable(val)) {
+				yield* val[Symbol.iterator]();
+
+			} else {
+				yield val;
+			}
+		}
+	}
+
+	return arr.concat(...makeIterator());
 });

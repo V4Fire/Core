@@ -1218,7 +1218,8 @@ interface ArrayConstructor {
 	 * @param arr
 	 */
 	union<T extends Nullable<unknown[]>>(arr: T): <A extends Iterable<unknown> | unknown>(...args: A[]) =>
-		Optional<T, Array<IterableType<T> | A extends Iterable<infer V> ? V : NonNullable<A>>>;
+		A extends Iterable<infer V> ?
+			Optional<T, Array<IterableType<T> | V>> : Optional<T, Array<IterableType<T> | NonNullable<A>>>;
 
 	/**
 	 * Returns a new array containing elements from all specified iterable values with duplicates removed.
@@ -1232,14 +1233,16 @@ interface ArrayConstructor {
 	union<T extends Nullable<unknown[]>, A extends Iterable<unknown> | unknown>(
 		arr: T,
 		...args: A[]
-	): Optional<T, Array<IterableType<T> | A extends Iterable<infer V> ? V : NonNullable<A>>>;
+	): A extends Iterable<infer V> ?
+		Optional<T, Array<IterableType<T> | V>> : Optional<T, Array<IterableType<T> | NonNullable<A>>>;
 
 	/**
 	 * Returns a curried version of Array.concat
 	 * @param arr
 	 */
 	concat<T extends Nullable<unknown[]>>(arr: T): <A extends Iterable<unknown> | unknown>(...args: A[]) =>
-		Optional<T, Array<IterableType<T> | A extends Iterable<infer V> ? V : NonNullable<A>>>;
+		A extends Iterable<infer V> ?
+			Optional<T, Array<IterableType<T> | V>> : Optional<T, Array<IterableType<T> | NonNullable<A>>>;
 
 	/**
 	 * Returns a new array containing elements from all specified iterable values.
@@ -1253,7 +1256,8 @@ interface ArrayConstructor {
 	concat<T extends Nullable<unknown[]>, A extends Iterable<unknown> | unknown>(
 		arr: T,
 		...args: A[]
-	): Optional<T, Array<IterableType<T> | A extends Iterable<infer V> ? V : NonNullable<A>>>;
+	): A extends Iterable<infer V> ?
+		Optional<T, Array<IterableType<T> | V>> : Optional<T, Array<IterableType<T> | NonNullable<A>>>;
 }
 
 interface Array<T> {
@@ -1266,7 +1270,7 @@ interface Array<T> {
 	 */
 	union<A extends Iterable<unknown> | unknown>(
 		...args: A[]
-	): Array<T | A extends Iterable<infer V> ? V : NonNullable<A>>;
+	): A extends Iterable<infer V> ? Array<T | V> : Array<T | NonNullable<A>>;
 }
 
 interface StringCapitalizeOptions {
