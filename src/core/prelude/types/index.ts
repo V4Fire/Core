@@ -78,7 +78,7 @@ extend(Object, 'isIterable', (obj) => {
 		return false;
 	}
 
-	return typeof Symbol === 'function' ? obj![Symbol.iterator] : typeof obj!['@@iterator'] === 'function';
+	return Boolean(typeof Symbol === 'function' ? obj![Symbol.iterator] : typeof obj!['@@iterator'] === 'function');
 });
 
 /** @see ObjectConstructor.isString */
