@@ -8,12 +8,12 @@
 
 import extend from 'core/prelude/extend';
 
-/** @see Date.prototype.relative */
+/** @see Date.relative */
 extend(Date.prototype, 'relative', function (this: Date): DateRelative {
 	return relative(this, new Date());
 });
 
-/** @see Date.prototype.relativeTo */
+/** @see Date.relativeTo */
 extend(Date.prototype, 'relativeTo', function (this: Date, date: DateCreateValue): DateRelative {
 	return relative(this, date);
 });

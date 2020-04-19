@@ -9,12 +9,12 @@
 import extend from 'core/prelude/extend';
 import { isDateStr, isFloatStr, dateNormalizeRgxp, createAliases } from 'core/prelude/date/const';
 
-/** @see Date.prototype.clone */
+/** @see Date.clone */
 extend(Date.prototype, 'clone', function (this: Date): Date {
 	return new Date(this);
 });
 
-/** @see Date.prototype.create */
+/** @see Date.create */
 extend(Date, 'create', (pattern?: DateCreateValue) => {
 	if (pattern == null || pattern === '') {
 		return new Date();

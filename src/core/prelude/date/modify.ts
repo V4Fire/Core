@@ -8,72 +8,72 @@
 
 import extend from 'core/prelude/extend';
 
-/** @see Date.prototype.beginningOfDay */
+/** @see Date.beginningOfDay */
 extend(Date.prototype, 'beginningOfDay', function (this: Date): Date {
 	this.setHours(0, 0, 0, 0);
 	return this;
 });
 
-/** @see Date.prototype.endOfDay */
+/** @see Date.endOfDay */
 extend(Date.prototype, 'endOfDay', function (this: Date): Date {
 	this.setHours(23, 59, 59, 999);
 	return this;
 });
 
-/** @see Date.prototype.beginningOfWeek */
+/** @see Date.beginningOfWeek */
 extend(Date.prototype, 'beginningOfWeek', function (this: Date): Date {
 	this.setDate(this.getDate() - this.getDay());
 	this.beginningOfDay();
 	return this;
 });
 
-/** @see Date.prototype.endOfWeek */
+/** @see Date.endOfWeek */
 extend(Date.prototype, 'endOfWeek', function (this: Date): Date {
 	this.setDate(this.getDate() + 7 - this.getDay());
 	this.endOfDay();
 	return this;
 });
 
-/** @see Date.prototype.beginningOfMonth */
+/** @see Date.beginningOfMonth */
 extend(Date.prototype, 'beginningOfMonth', function (this: Date): Date {
 	this.setDate(1);
 	this.beginningOfDay();
 	return this;
 });
 
-/** @see Date.prototype.endOfMonth */
+/** @see Date.endOfMonth */
 extend(Date.prototype, 'endOfMonth', function (this: Date): Date {
 	this.setMonth(this.getMonth() + 1, 0);
 	this.endOfDay();
 	return this;
 });
 
-/** @see Date.prototype.daysInMonth */
+/** @see Date.daysInMonth */
 extend(Date.prototype, 'daysInMonth', function (this: Date): number {
 	return this.clone().endOfMonth().getDate();
 });
 
-/** @see Date.prototype.beginningOfYear */
+/** @see Date.beginningOfYear */
 extend(Date.prototype, 'beginningOfYear', function (this: Date): Date {
 	this.setMonth(0, 1);
 	this.beginningOfDay();
 	return this;
 });
 
-/** @see Date.prototype.endOfYear */
+/** @see Date.endOfYear */
 extend(Date.prototype, 'endOfYear', function (this: Date): Date {
 	this.setMonth(12, 0);
 	this.endOfDay();
 	return this;
 });
 
-/** @see Date.prototype.add */
+/** @see Date.add */
 extend(Date.prototype, 'add', createDateModifier((v, b) => b + v));
 
-/** @see Date.prototype.set */
+/** @see Date.set */
 extend(Date.prototype, 'set', createDateModifier());
 
-/** @see Date.prototype.rewind */
+/** @see Date.rewind */
 extend(Date.prototype, 'rewind', createDateModifier((v, b) => b - v));
 
 function createDateModifier(mod: (val: number, base: number) => number = ((Any))): Function {

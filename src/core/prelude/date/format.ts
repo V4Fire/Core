@@ -10,7 +10,7 @@ import extend from 'core/prelude/extend';
 import { locale as defaultLocale } from 'core/prelude/i18n';
 import { formatCache, formatAliases, boolAliases, defaultFormats } from 'core/prelude/date/const';
 
-/** @see Date.prototype.short */
+/** @see Date.short */
 extend(Date.prototype, 'short', function (
 	this: Date,
 	locale: CanArray<string> = defaultLocale.value
@@ -18,7 +18,7 @@ extend(Date.prototype, 'short', function (
 	return this.format('d:numeric;M:numeric;Y:numeric', locale);
 });
 
-/** @see Date.prototype.medium */
+/** @see Date.medium */
 extend(Date.prototype, 'medium', function (
 	this: Date,
 	locale: CanArray<string> = defaultLocale.value
@@ -26,7 +26,7 @@ extend(Date.prototype, 'medium', function (
 	return this.format('d:numeric;M:long;Y:numeric', locale);
 });
 
-/** @see Date.prototype.long */
+/** @see Date.long */
 extend(Date.prototype, 'long', function (
 	this: Date,
 	locale: CanArray<string> = defaultLocale.value
@@ -34,7 +34,7 @@ extend(Date.prototype, 'long', function (
 	return this.format('', locale);
 });
 
-/** @see Date.prototype.format */
+/** @see Date.format */
 extend(Date.prototype, 'format', function (
 	this: Date,
 	patternOrOpts: string | Intl.DateTimeFormatOptions,
@@ -88,7 +88,7 @@ extend(Date.prototype, 'format', function (
 	return formatter.format(this);
 });
 
-/** @see Date.prototype.toHTMLDateString */
+/** @see Date.toHTMLDateString */
 extend(Date.prototype, 'toHTMLDateString', function (
 	this: Date,
 	opts: DateHTMLDateStringOptions = {}
@@ -104,7 +104,7 @@ extend(Date.prototype, 'toHTMLDateString', function (
 	].join('-');
 });
 
-/** @see Date.prototype.toHTMLTimeString */
+/** @see Date.toHTMLTimeString */
 extend(Date.prototype, 'toHTMLTimeString', function (
 	this: Date,
 	opts: DateHTMLTimeStringOptions = {}
@@ -128,7 +128,7 @@ extend(Date.prototype, 'toHTMLTimeString', function (
 	return res.join(':');
 });
 
-/** @see Date.prototype.toHTMLString */
+/** @see Date.toHTMLString */
 extend(Date.prototype, 'toHTMLString', function (this: Date, opts: DateHTMLStringOptions): string {
 	return `${this.toHTMLDateString(opts)}T${this.toHTMLTimeString(opts)}`;
 });
