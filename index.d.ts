@@ -1556,6 +1556,41 @@ interface NumberConstructor {
 	isPositiveBetweenZeroAndOne(obj: unknown): boolean;
 
 	/**
+	 * Returns a value of milliseconds from the seconds.
+	 * If the value is equal to null or undefined, the function returns undefined,
+	 * otherwise, the value will be converted to a number.
+	 */
+	seconds(value: unknown): number;
+
+	/**
+	 * Returns a value of milliseconds from the minutes.
+	 * If the value is equal to null or undefined, the function returns undefined,
+	 * otherwise, the value will be converted to a number.
+	 */
+	minutes(value: unknown): number;
+
+	/**
+	 * Returns a value of milliseconds from the hours.
+	 * If the value is equal to null or undefined, the function returns undefined,
+	 * otherwise, the value will be converted to a number.
+	 */
+	hours(value: unknown): number;
+
+	/**
+	 * Returns a value of milliseconds from the days.
+	 * If the value is equal to null or undefined, the function returns undefined,
+	 * otherwise, the value will be converted to a number.
+	 */
+	days(value: unknown): number;
+
+	/**
+	 * Returns a value of milliseconds from the weeks.
+	 * If the value is equal to null or undefined, the function returns undefined,
+	 * otherwise, the value will be converted to a number.
+	 */
+	weeks(value: unknown): number;
+
+	/**
 	 * Returns a curried version of Number.floor
 	 * @param precision
 	 */
