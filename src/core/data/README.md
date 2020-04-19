@@ -186,7 +186,7 @@ myProvider.name('init').get('foo');
 Mind that the default V4Fire implementation of a data provider by default sends events for "upd", "add", "del" requests.
 These events have the same name with methods that produce them.
 
-3. `method` — a pair of get/set methods to provide a type of a HTTP request:
+3. `method` — a pair of get/set methods to provide a type of an HTTP request:
 
 ```js
 // The request uses POST method to get data
