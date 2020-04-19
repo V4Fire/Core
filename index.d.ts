@@ -63,7 +63,6 @@ declare function cancelIdleCallback(id: number): void;
 declare function setImmediate(fn: Function): number;
 declare function clearImmediate(id: number): void;
 
-type Wrap<T> = T & any;
 type Nullable<T> = T | null | undefined;
 type CanPromise<T> = T | Promise<T>;
 type CanUndef<T> = T | undefined;
