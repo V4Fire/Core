@@ -7,8 +7,10 @@
  */
 
 import extend from 'core/prelude/extend';
+
 import { deprecate } from 'core/functools';
 import { locale as defaultLocale } from 'core/prelude/i18n';
+
 import {
 
 	globalOpts,
@@ -21,6 +23,8 @@ import {
 	decPartRgxp
 
 } from 'core/prelude/number/const';
+
+import { repeatString } from 'core/prelude/number/helpers';
 
 /** @see NumberConstructor.pad */
 extend(Number.prototype, 'pad', function (
@@ -41,18 +45,7 @@ extend(Number.prototype, 'pad', function (
 	return str;
 });
 
-/** @see NumberConstructor.getOption */
-extend(Number, 'getOption', deprecate(function getOption(key: string): string {
-	return globalOpts[key];
-}));
-
-/** @see NumberConstructor.setOption */
-extend(Number, 'setOption', deprecate(function setOption(key: string, value: string): void {
-	globalOpts.init = true;
-	globalOpts[key] = value;
-}));
-
-/** @see Number.prototype.format */
+/** @see Number.format */
 extend(Number.prototype, 'format', function (
 	this: number,
 	patternOrOpts?: number | string | Intl.NumberFormatOptions,
@@ -160,25 +153,13 @@ extend(Number.prototype, 'format', function (
 	return res;
 });
 
-function repeatString(str: string, num: number): string {
-	str = String(str);
+/** @see NumberConstructor.getOption */
+extend(Number, 'getOption', deprecate(function getOption(key: string): string {
+	return globalOpts[key];
+}));
 
-	let
-		res = '';
-
-	while (num > 0) {
-		// tslint:disable-next-line:no-bitwise
-		if (num & 1) {
-			res += str;
-		}
-
-		// tslint:disable-next-line:no-bitwise
-		num >>= 1;
-
-		if (num) {
-			str += str;
-		}
-	}
-
-	return res;
-}
+/** @see NumberConstructor.setOption */
+extend(Number, 'setOption', deprecate(function setOption(key: string, value: string): void {
+	globalOpts.init = true;
+	globalOpts[key] = value;
+}));

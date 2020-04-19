@@ -88,3 +88,32 @@ export function createStaticMsFunction(offset: number): Function {
 		return Number(value) * offset;
 	};
 }
+
+/**
+ * Repeats a string with the specified number of repetitions and returns a new string
+ *
+ * @param str
+ * @param num
+ */
+export function repeatString(str: string, num: number): string {
+	str = String(str);
+
+	let
+		res = '';
+
+	while (num > 0) {
+		// tslint:disable-next-line:no-bitwise
+		if (num & 1) {
+			res += str;
+		}
+
+		// tslint:disable-next-line:no-bitwise
+		num >>= 1;
+
+		if (num) {
+			str += str;
+		}
+	}
+
+	return res;
+}
