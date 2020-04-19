@@ -10,7 +10,26 @@ import extend from 'core/prelude/extend';
 
 /** @see Array.union */
 extend(Array.prototype, 'union', function (this: unknown[], ...args: unknown[][]): unknown[] {
-	return [...new Set(this.concat(...args))];
+	function* makeIterator(): Iterable<unknown> {
+		yield* this.values();
+
+		for (let i = 0; i < args.length; i++) {
+			const
+				val = args[i];
+
+			if (val == null) {
+				continue;
+			}
+
+			if (Object.isArray(val)) {
+				yield* val.values();
+			}
+
+			yield val;
+		}
+	}
+
+	return [...new Set(makeIterator())];
 });
 
 /** @see ArrayConstructor.union */
