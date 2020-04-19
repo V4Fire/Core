@@ -81,7 +81,6 @@ interface StrictDictionary<T = unknown> {[key: string]: T}
 interface Dictionary<T> {[key: string]: CanUndef<T>}
 interface Dictionary<T extends unknown = unknown> {[key: string]: T}
 
-type ArrayType<T extends unknown[]> = T extends Array<infer V> ? V : unknown;
 type DictionaryType<T extends Dictionary> = T extends Dictionary<infer V> ? NonNullable<V> : T;
 type IterableType<T extends Iterable<unknown>> = T extends Iterable<infer V> ? V : T;
 type PromiseType<T extends Promise<unknown>> = T extends Promise<infer V> ? V : T;
@@ -1132,7 +1131,7 @@ interface ObjectConstructor {
 	 * Returns true if the specified value is an iterable structure
 	 * @param obj
 	 */
-	isIterable(obj: unknown): obj is Iterable<unknown>;
+	isIterable(obj: unknown): obj is IterableIterator<unknown>;
 
 	/**
 	 * Returns true if the specified value is an iterator
@@ -1218,28 +1217,34 @@ interface ArrayConstructor {
 	 * Returns a curried version of Array.union
 	 * @param arr
 	 */
-	union<T extends Nullable<unknown[]>>(arr: T): <A extends unknown[]>(...args: A[]) =>
-		Optional<T, ARGS extends Array<infer V>[] ? Array<ArrayType<T> | V> : T[]>;
+	union<T extends Nullable<unknown[]>>(arr: T): <A extends Iterable<unknown> | unknown>(...args: A[]) =>
+		Optional<T, Array<IterableType<T> | A extends Iterable<infer V> ? V : NonNullable<A>>>;
 
 	/**
-	 * Returns a new array containing elements from all specified arrays with duplicates removed.
-	 * If the value is equal to null or undefined, the function returns undefined.
+	 * Returns a new array containing elements from all specified iterable values with duplicates removed.
+	 * You can also pass non-iterable values and they will be added to the final array,
+	 * except values with null and undefined. If the value is equal to null or undefined, the function returns undefined.
 	 *
 	 * @param arr
 	 * @param args
 	 */
-	union<T extends Nullable<unknown[]>, A extends unknown[]>(
+	union<T extends Nullable<unknown[]>, A extends Iterable<unknown> | unknown>(
 		arr: T,
 		...args: A[]
-	): Optional<T, A extends Array<infer V> ? Array<ArrayType<T> | V> : T[]>;
+	): Optional<T, Array<IterableType<T> | A extends Iterable<infer V> ? V : NonNullable<A>>>;
 }
 
 interface Array<T> {
 	/**
-	 * Returns a new array containing elements from all specified arrays with duplicates removed
+	 * Returns a new array containing elements from all specified iterable values with duplicates removed.
+	 * You can also pass non-iterable values and they will be added to the final array,
+	 * except values with null and undefined.
+	 *
 	 * @param args
 	 */
-	union<A extends unknown[]>(...args: A[]): A extends Array<infer V> ? Array<T | V> : T[];
+	union<A extends Iterable<unknown> | unknown>(
+		...args: A[]
+	): Array<T | A extends Iterable<infer V> ? V : NonNullable<A>>;
 }
 
 interface StringCapitalizeOptions {

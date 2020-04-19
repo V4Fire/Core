@@ -9,9 +9,12 @@
 import extend from 'core/prelude/extend';
 
 /** @see Array.union */
-extend(Array.prototype, 'union', function (this: unknown[], ...args: unknown[][]): unknown[] {
+extend(Array.prototype, 'union', function (this: unknown[], ...args: Iterable<unknown>[]): unknown[] {
+	const
+		that = this;
+
 	function* makeIterator(): Iterable<unknown> {
-		yield* this.values();
+		yield* that.values();
 
 		for (let i = 0; i < args.length; i++) {
 			const
@@ -21,11 +24,12 @@ extend(Array.prototype, 'union', function (this: unknown[], ...args: unknown[][]
 				continue;
 			}
 
-			if (Object.isArray(val)) {
-				yield* val.values();
-			}
+			if (Object.isIterable(val)) {
+				yield* val[Symbol.iterator]();
 
-			yield val;
+			} else {
+				yield val;
+			}
 		}
 	}
 
@@ -33,7 +37,7 @@ extend(Array.prototype, 'union', function (this: unknown[], ...args: unknown[][]
 });
 
 /** @see ArrayConstructor.union */
-extend(Array, 'union', (arr: Nullable<unknown[]>, ...args: unknown[][]) => {
+extend(Array, 'union', (arr: unknown[], ...args: unknown[][]) => {
 	if (!args.length) {
 		return (...args) => Array.union(arr, ...args);
 	}
