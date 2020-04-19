@@ -1554,6 +1554,54 @@ interface NumberConstructor {
 	 * @param obj
 	 */
 	isPositiveBetweenZeroAndOne(obj: unknown): boolean;
+
+	/**
+	 * Returns a curried version of Number.floor
+	 * @param precision
+	 */
+	floor(precision: number): (value: unknown) => CanUndef<number>;
+
+	/**
+	 * Shortcut for Math.floor that also allows a precision.
+	 * If the value is equal to null or undefined, the function returns undefined,
+	 * otherwise, the value will be converted to a number.
+	 *
+	 * @param value
+	 * @param precision
+	 */
+	floor(value: unknown, precision: number): CanUndef<number>;
+
+	/**
+	 * Returns a curried version of Number.round
+	 * @param precision
+	 */
+	round(precision: number): (value: unknown) => CanUndef<number>;
+
+	/**
+	 * Shortcut for Math.round that also allows a precision.
+	 * If the value is equal to null or undefined, the function returns undefined,
+	 * otherwise, the value will be converted to a number.
+	 *
+	 * @param value
+	 * @param precision
+	 */
+	round(value: unknown, precision: number): CanUndef<number>;
+
+	/**
+	 * Returns a curried version of Number.ceil
+	 * @param precision
+	 */
+	ceil(precision: number): (value: unknown) => CanUndef<number>;
+
+	/**
+	 * Shortcut for Math.ceil that also allows a precision.
+	 * If the value is equal to null or undefined, the function returns undefined,
+	 * otherwise, the value will be converted to a number.
+	 *
+	 * @param value
+	 * @param precision
+	 */
+	ceil(value: unknown, precision: number): CanUndef<number>;
 }
 
 interface NumberPadOptions {
@@ -1771,19 +1819,19 @@ interface Number {
 	format(length?: number): string;
 
 	/**
-	 * Shortcut for the Math.floor method that also allows a precision
+	 * Shortcut for Math.floor that also allows a precision
 	 * @param [precision]
 	 */
 	floor(precision?: number): number;
 
 	/**
-	 * Shortcut for the Math.round method that also allows a precision
+	 * Shortcut for Math.round that also allows a precision
 	 * @param [precision]
 	 */
 	round(precision?: number): number;
 
 	/**
-	 * Shortcut for the Math.ceil method that also allows a precision
+	 * Shortcut for Math.ceil that also allows a precision
 	 * @param [precision]
 	 */
 	ceil(precision?: number): number;

@@ -62,7 +62,7 @@ extend(Number.prototype, 'format', function (
 		return this.toLocaleString(locale);
 	}
 
-	if (Object.isObject(patternOrOpts)) {
+	if (Object.isPlainObject(patternOrOpts)) {
 		return this.toLocaleString(locale, patternOrOpts);
 	}
 
