@@ -30,6 +30,15 @@ extend(Function.prototype, 'once', function (this: Function): Function {
 	};
 });
 
+/** @see FunctionConstructor.once */
+extend(Function, 'once', (fn: Nullable<Function>) => {
+	if (fn == null) {
+		return undefined;
+	}
+
+	return fn.once();
+});
+
 /** @see Function.debounce */
 extend(Function.prototype, 'debounce', function (this: Function, delay: number = 250): Function {
 	const
@@ -43,6 +52,20 @@ extend(Function.prototype, 'debounce', function (this: Function, delay: number =
 		clearTimeout(timer);
 		timer = setTimeout(() => fn.apply(this, args), delay);
 	};
+});
+
+/** @see FunctionConstructor.debounce */
+extend(Function, 'debounce', (fn: Nullable<Function | number>, delay?: number) => {
+	if (Object.isNumber(fn)) {
+		delay = fn;
+		return (fn) => Function.debounce(fn, delay);
+	}
+
+	if (fn == null) {
+		return undefined;
+	}
+
+	return fn.debounce(delay);
 });
 
 /** @see Function.throttle */
@@ -70,4 +93,18 @@ extend(Function.prototype, 'throttle', function (this: Function, delay: number =
 			}, delay);
 		}
 	};
+});
+
+/** @see FunctionConstructor.throttle */
+extend(Function, 'throttle', (fn: Nullable<Function | number>, delay?: number) => {
+	if (Object.isNumber(fn)) {
+		delay = fn;
+		return (fn) => Function.throttle(fn, delay);
+	}
+
+	if (fn == null) {
+		return undefined;
+	}
+
+	return fn.throttle(delay);
 });

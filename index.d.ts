@@ -2223,6 +2223,57 @@ interface Date {
 	daysInMonth(): number;
 }
 
+interface FunctionConstructor {
+	/**
+	 * Returns a new function that allows to invoke the specified function only once.
+	 * If the value is equal to null or undefined, the function returns undefined,
+	 * otherwise, the value will be converted to a number.
+	 *
+	 * @param fn
+	 */
+	once<T extends Nullable<AnyFunction>>(fn: T): Optional<T>;
+
+	/**
+	 * Returns a new function that allows to invoke a function, which it takes, only with the specified delay.
+	 * The next invocation of the function will cancel the previous.
+	 *
+	 * If the value is equal to null or undefined, the function returns undefined,
+	 * otherwise, the value will be converted to a number.
+	 *
+	 * @param delay
+	 */
+	debounce(delay: number): <T extends Nullable<AnyFunction>>(fn: T) => Optional<T, AnyFunction<Parameters<T>, void>>;
+
+	/**
+	 * Returns a new function that allows to invoke a function only with the specified delay.
+	 * The next invocation of the function will cancel the previous.
+	 *
+	 * If the value is equal to null or undefined, the function returns undefined,
+	 * otherwise, the value will be converted to a number.
+	 *
+	 * @param fn
+	 * @param [delay]
+	 */
+	debounce<T extends Nullable<AnyFunction>>(fn: T, delay?: number): Optional<T, AnyFunction<Parameters<T>, void>>;
+
+	/**
+	 * Returns a new function that allows to to invoke a function, which it takes, not more often than the specified delay.
+	 * If the value is equal to null or undefined, the function returns undefined,
+	 * otherwise, the value will be converted to a number.
+	 *
+	 * @param delay
+	 */
+	throttle(delay: number): <T extends Nullable<AnyFunction>>(fn: T) => Optional<T, AnyFunction<Parameters<T>, void>>;
+
+	/**
+	 * Returns a new function that allows to invoke the target function not more often than the specified delay
+	 *
+	 * @param fn
+	 * @param [delay]
+	 */
+	throttle<T extends Nullable<AnyFunction>>(fn: T, delay?: number): Optional<T, AnyFunction<Parameters<T>, void>>;
+}
+
 interface Function {
 	name: string;
 
