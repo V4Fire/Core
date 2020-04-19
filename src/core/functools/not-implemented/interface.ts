@@ -37,7 +37,7 @@ export interface NotImplementedOptions {
 	type?: NotImplementedExprType;
 
 	/**
-	 * Name of an function/method/etc. that need to use instead of the current
+	 * Name of a function/method/etc. that need to use instead of the current
 	 * or an object with additional options of the alternative
 	 */
 	alternative?: NotImplementedAlternative;
