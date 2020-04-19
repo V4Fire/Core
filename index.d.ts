@@ -81,6 +81,7 @@ interface StrictDictionary<T = unknown> {[key: string]: T}
 interface Dictionary<T> {[key: string]: CanUndef<T>}
 interface Dictionary<T extends unknown = unknown> {[key: string]: T}
 
+type ArrayType<T extends unknown[]> = T extends Array<infer V> ? V : unknown;
 type DictionaryType<T extends Dictionary> = T extends Dictionary<infer V> ? NonNullable<V> : T;
 type IterableType<T extends Iterable<unknown>> = T extends Iterable<infer V> ? V : T;
 type PromiseType<T extends Promise<unknown>> = T extends Promise<infer V> ? V : T;
@@ -1212,13 +1213,33 @@ interface ObjectConstructor {
 	isWeakSet(obj: unknown): obj is WeakSet<object>;
 }
 
+interface ArrayConstructor {
+	/**
+	 * Returns a curried version of Array.union
+	 * @param arr
+	 */
+	union<T extends Nullable<unknown[]>>(arr: T): <A extends unknown[]>(...args: A[]) =>
+		Optional<T, ARGS extends Array<infer V>[] ? Array<ArrayType<T> | V> : T[]>;
+
+	/**
+	 * Returns a new array containing elements from all specified arrays with duplicates removed.
+	 * If the value is equal to null or undefined, the function returns undefined.
+	 *
+	 * @param arr
+	 * @param args
+	 */
+	union<T extends Nullable<unknown[]>, A extends unknown[]>(
+		arr: T,
+		...args: A[]
+	): Optional<T, A extends Array<infer V> ? Array<ArrayType<T> | V> : T[]>;
+}
+
 interface Array<T> {
 	/**
 	 * Returns a new array containing elements from all specified arrays with duplicates removed
 	 * @param args
 	 */
-	union<A extends unknown[]>(...args: A): A extends Array<infer V>[] ?
-		Array<T | V> : A extends Array<infer V>[] ? Array<T | V> : T[];
+	union<A extends unknown[]>(...args: A[]): A extends Array<infer V> ? Array<T | V> : T[];
 }
 
 interface StringCapitalizeOptions {
