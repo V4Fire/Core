@@ -248,18 +248,18 @@ export default class Range<T extends RangeValue> {
 
 	/**
 	 * Converts a value to the real range type
-	 * @param val
+	 * @param value
 	 */
-	protected toType(val: number): T {
+	protected toType(value: number): T {
 		switch (this.type) {
 			case 'string':
-				return <T>fromCharCode(val);
+				return <T>fromCharCode(value);
 
 			case 'date':
-				return <T>new Date(val);
+				return <T>new Date(value);
 
 			default:
-				return <T>val;
+				return <T>value;
 		}
 	}
 }
