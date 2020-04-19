@@ -487,7 +487,7 @@ interface ObjectConstructor {
 	 * @param [opts] - additional options
 	 * @param [value]
 	 */
-	set<T>(path: ObjectPropertyPath, opts?: ObjectSetOptions, value?: unknown): (obj: T, value?: unknown) => T;
+	set(path: ObjectPropertyPath, opts?: ObjectSetOptions, value?: unknown): <T>(obj: T, value?: unknown) => T;
 
 	/**
 	 * Returns a function that sets a value to the specified object by a path that the function takes.
@@ -512,7 +512,7 @@ interface ObjectConstructor {
 	 * @param opts - additional options
 	 * @param cb - callback function that is called on each of object elements
 	 */
-	forEach<V = unknown>(
+	forEach<V>(
 		obj: Dictionary<V>,
 		opts: ObjectForEachOptions & {withDescriptor: true},
 		cb: (el: ObjectForEachPropertyDescriptor<V>, key: string, data: Dictionary<V>) => any
@@ -525,7 +525,7 @@ interface ObjectConstructor {
 	 * @param opts - additional options
 	 * @param cb - callback function that is called on each of object elements
 	 */
-	forEach<V = unknown>(
+	forEach<V>(
 		obj: Dictionary<V>,
 		opts: ObjectForEachOptions & ({notOwn: boolean | -1} | {withDescriptor: false}),
 		cb: (el: V, key: string, data: Dictionary<V>) => any
@@ -538,7 +538,7 @@ interface ObjectConstructor {
 	 * @param opts - additional options
 	 * @param cb - callback function that is called on each of object elements
 	 */
-	forEach<V = unknown, K = unknown>(
+	forEach<V, K>(
 		obj: Map<K, V>,
 		opts: ObjectForEachOptions,
 		cb: (el: V, key: K, data: Map<K, V>) => any
@@ -551,7 +551,7 @@ interface ObjectConstructor {
 	 * @param cb - callback function that is called on each of object elements
 	 * @param [opts] - additional options
 	 */
-	forEach<V = unknown, K = unknown>(
+	forEach<V, K>(
 		obj: Map<K, V>,
 		cb: (el: V, key: K, data: Map<K, V>) => any,
 		opts?: ObjectForEachOptions
@@ -564,7 +564,7 @@ interface ObjectConstructor {
 	 * @param opts - additional options
 	 * @param cb - callback function that is called on each of object elements
 	 */
-	forEach<V = unknown>(
+	forEach<V>(
 		obj: Set<V>,
 		opts: ObjectForEachOptions,
 		cb: (el: V, i: V, data: Set<V>) => any
@@ -577,7 +577,7 @@ interface ObjectConstructor {
 	 * @param cb - callback function that is called on each of object elements
 	 * @param [opts] - additional options
 	 */
-	forEach<V = unknown>(
+	forEach<V>(
 		obj: Set<V>,
 		cb: (el: V, i: V, data: Set<V>) => any,
 		opts?: ObjectForEachOptions
@@ -590,7 +590,7 @@ interface ObjectConstructor {
 	 * @param opts - additional options
 	 * @param cb - callback function that is called on each of object elements
 	 */
-	forEach<V = unknown>(
+	forEach<V>(
 		obj: V[],
 		opts: ObjectForEachOptions,
 		cb: (el: V, i: number, data: V[]) => any
@@ -603,7 +603,7 @@ interface ObjectConstructor {
 	 * @param cb - callback function that is called on each of object elements
 	 * @param [opts] - additional options
 	 */
-	forEach<V = unknown>(
+	forEach<V>(
 		obj: V[],
 		cb: (el: V, i: number, data: V[]) => any,
 		opts?: ObjectForEachOptions
@@ -616,7 +616,7 @@ interface ObjectConstructor {
 	 * @param opts - additional options
 	 * @param cb - callback function that is called on each of object elements
 	 */
-	forEach<V = unknown>(
+	forEach<V>(
 		obj: Iterable<V>,
 		opts: ObjectForEachOptions,
 		cb: (el: V, key: null, data: Iterable<V>) => any
@@ -629,7 +629,7 @@ interface ObjectConstructor {
 	 * @param cb - callback function that is called on each of object elements
 	 * @param [opts] - additional options
 	 */
-	forEach<V = unknown>(
+	forEach<V>(
 		obj: Iterable<V>,
 		cb: (el: V, key: null, data: Iterable<V>) => any,
 		opts?: ObjectForEachOptions
@@ -642,7 +642,7 @@ interface ObjectConstructor {
 	 * @param opts - additional options
 	 * @param cb - callback function that is called on each of object elements
 	 */
-	forEach<V = unknown>(
+	forEach<V>(
 		obj: Dictionary<V>,
 		opts: ObjectForEachOptions,
 		cb: (el: V, key: string, data: Dictionary<V>) => any
@@ -655,7 +655,7 @@ interface ObjectConstructor {
 	 * @param cb - callback function that is called on each of object elements
 	 * @param [opts] - additional options
 	 */
-	forEach<V = unknown>(
+	forEach<V>(
 		obj: Dictionary<V>,
 		cb: (el: V, key: string, data: Dictionary<V>) => any,
 		opts?: ObjectForEachOptions
@@ -691,7 +691,7 @@ interface ObjectConstructor {
 	 * Returns a curried version of Object.fastCompare for one argument
 	 * @param a
 	 */
-	fastCompare<T>(a: unknown): (b: T) => a is T;
+	fastCompare(a: unknown): <T>(b: T) => a is T;
 
 	/**
 	 * Compares two specified objects by using a naive but fast "JSON.stringify/parse" strategy and
@@ -709,7 +709,7 @@ interface ObjectConstructor {
 	 * @param obj
 	 * @param opts - additional options
 	 */
-	fastClone<T>(obj: undefined, opts: FastCloneOptions): (obj: T) => T;
+	fastClone(obj: undefined, opts: FastCloneOptions): <T>(obj: T) => T;
 
 	/**
 	 * Clones the specified object by using a naive but fast "JSON.stringify/parse" strategy and returns a new object
@@ -729,15 +729,13 @@ interface ObjectConstructor {
 	 * Returns a curried version of Object.mixin for one argument
 	 * @param opts - if true, then properties will be copied recursively OR additional options for extending
 	 */
-	mixin<B = unknown, O1 = unknown>(
-		opts: ObjectMixinOptions | boolean
-	): (base: B, obj1: O1) => B & O1;
+	mixin(opts: ObjectMixinOptions | boolean): <B, O1>(base: B, obj1: O1) => B & O1;
 
 	/**
 	 * Returns a curried version of Object.mixin for one argument
 	 * @param opts - if true, then properties will be copied recursively OR additional options for extending
 	 */
-	mixin<R = unknown>(opts: ObjectMixinOptions | boolean): (...objects: unknown[]) => R;
+	mixin(opts: ObjectMixinOptions | boolean): <R = unknown>(...objects: unknown[]) => R;
 
 	/**
 	 * Returns a curried version of Object.mixin for two arguments
@@ -745,10 +743,7 @@ interface ObjectConstructor {
 	 * @param opts - if true, then properties will be copied recursively OR additional options for extending
 	 * @param base - base object
 	 */
-	mixin<B = unknown, O1 = unknown>(
-		opts: ObjectMixinOptions | boolean,
-		base: B
-	): (obj1: O1) => B & O1;
+	mixin<B>(opts: ObjectMixinOptions | boolean, base: B): <O1>(obj1: O1) => B & O1;
 
 	/**
 	 * Returns a curried version of Object.mixin for two arguments
@@ -756,10 +751,7 @@ interface ObjectConstructor {
 	 * @param opts - if true, then properties will be copied recursively OR additional options for extending
 	 * @param base - base object
 	 */
-	mixin<R = unknown>(
-		opts: ObjectMixinOptions | boolean,
-		base: unknown
-	): (...objects: unknown[]) => R;
+	mixin(opts: ObjectMixinOptions | boolean, base: unknown): <R = unknown>(...objects: unknown[]) => R;
 
 	/**
 	 * Extends the specified object by another objects.
@@ -769,11 +761,7 @@ interface ObjectConstructor {
 	 * @param base - base object
 	 * @param obj1 - object for extending
 	 */
-	mixin<B = unknown, O1 = unknown>(
-		opts: ObjectMixinOptions | boolean,
-		base?: B,
-		obj1: O1
-	): B & O1;
+	mixin<B, O1>(opts: ObjectMixinOptions | boolean, base?: B, obj1: O1): B & O1;
 
 	/**
 	 * Extends the specified object by another objects.
@@ -784,12 +772,7 @@ interface ObjectConstructor {
 	 * @param obj1 - object for extending
 	 * @param obj2 - object for extending
 	 */
-	mixin<B = unknown, O1 = unknown, O2 = unknown>(
-		opts: ObjectMixinOptions | boolean,
-		base?: B,
-		obj1: O1,
-		obj2: O2
-	): B & O1 & O2;
+	mixin<B, O1, O2>(opts: ObjectMixinOptions | boolean, base?: B, obj1: O1, obj2: O2): B & O1 & O2;
 
 	/**
 	 * Extends the specified object by another objects.
@@ -801,13 +784,7 @@ interface ObjectConstructor {
 	 * @param obj2 - object for extending
 	 * @param obj3 - object for extending
 	 */
-	mixin<B = unknown, O1 = unknown, O2 = unknown, O3 = unknown>(
-		opts: ObjectMixinOptions | boolean,
-		base?: B,
-		obj1: O1,
-		obj2: O2,
-		obj3: O3
-	): B & O1 & O2 & O3;
+	mixin<B, O1, O2, O3>(opts: ObjectMixinOptions | boolean, base?: B, obj1: O1, obj2: O2, obj3: O3): B & O1 & O2 & O3;
 
 	/**
 	 * Extends the specified object by another objects.
@@ -817,11 +794,7 @@ interface ObjectConstructor {
 	 * @param base - base object
 	 * @param objects - objects for extending
 	 */
-	mixin<R = unknown>(
-		opts: ObjectMixinOptions | boolean,
-		base?: unknown,
-		...objects: unknown[]
-	): R;
+	mixin<R = unknown>(opts: ObjectMixinOptions | boolean, base?: unknown, ...objects: unknown[]): R;
 
 	/**
 	 * Returns a function that parse a value, which it takes, as a JSON/JS object and returns the result of parsing.
@@ -829,7 +802,7 @@ interface ObjectConstructor {
 	 *
 	 * @param reviver - reviver function for JSON.parse
 	 */
-	parse<V = unknown, R = unknown>(reviver?: JSONCb): (value: V) => V extends string ? R : V;
+	parse(reviver?: JSONCb): <V, R = unknown>(value: V) => V extends string ? R : V;
 
 	/**
 	 * Parses the specified value as a JSON/JS object and returns the result of parsing.
@@ -838,7 +811,7 @@ interface ObjectConstructor {
 	 * @param value
 	 * @param [reviver] - reviver function for JSON.parse
 	 */
-	parse<V = unknown, R = unknown>(value: V, reviver?: JSONCb): V extends string ? R : V;
+	parse<V, R = unknown>(value: V, reviver?: JSONCb): V extends string ? R : V;
 
 	/**
 	 * Creates a hash table without any prototype and returns it
@@ -896,42 +869,42 @@ interface ObjectConstructor {
 	 * @param arr
 	 * @param [opts] - additional options
 	 */
-	fromArray<T = boolean>(arr: unknown[], opts?: ObjectFromArrayOptions<T>): Dictionary<T>;
+	fromArray<T>(arr: unknown[], opts?: ObjectFromArrayOptions<T>): Dictionary<T>;
 
 	/**
 	 * Returns a function that returns a new object based on an object that the function takes,
-	 * but only with fields which match to the specified condition
+	 * but only with fields that match to the specified condition
+	 *
+	 * @param condition - regular expression to filter
+	 */
+	select(condition: RegExp): <D extends object>(obj: D) => {[K in keyof D]?: D[K]};
+
+	/**
+	 * Returns a function that returns a new object based on an object that the function takes,
+	 * but only with fields that match to the specified condition
 	 *
 	 * @param condition - whitelist of keys to filter
 	 */
-	select<D extends object, C extends string>(condition: CanArray<C>): (obj: D) => Pick<D, Extract<keyof D, C>>;
+	select<C extends string>(condition: CanArray<C>): <D extends object>(obj: D) => Pick<D, Extract<keyof D, C>>;
 
 	/**
 	 * Returns a function that returns a new object based on an object that the function takes,
-	 * but only with fields which match to the specified condition
+	 * but only with fields that match to the specified condition
 	 *
 	 * @param condition - whitelist of keys to filter
 	 */
-	select<D extends object, C extends string>(condition: CanArray<C>): (obj: D) => Pick<D, Extract<keyof D, C>>;
+	select<C extends string>(condition: Iterable<C>): <D extends object>(obj: D) => {[K in keyof D]?: D[K]};
 
 	/**
 	 * Returns a function that returns a new object based on an object that the function takes,
-	 * but only with fields which match to the specified condition
-	 *
-	 * @param condition - whitelist of keys to filter
-	 */
-	select<D extends object, C extends string>(condition: Iterable<C>): (obj: D) => {[K in keyof D]?: D[K]};
-
-	/**
-	 * Returns a function that returns a new object based on an object that the function takes,
-	 * but only with fields which match to the specified condition
+	 * but only with fields that match to the specified condition
 	 *
 	 * @param condition - map of keys to filter
 	 */
-	select<D extends object, C extends object>(condition: C): (obj: D) => Pick<D, Extract<keyof D, keyof C>>;
+	select<C extends object>(condition: C): <D extends object>(obj: D) => Pick<D, Extract<keyof D, keyof C>>;
 
 	/**
-	 * Returns a new object based on the specified, but only with fields which match to the specified condition
+	 * Returns a new object based on the specified, but only with fields that match to the specified condition
 	 *
 	 * @param obj
 	 * @param condition - regular expression to filter
@@ -939,7 +912,7 @@ interface ObjectConstructor {
 	select<D extends object>(obj: D, condition: RegExp): {[K in keyof D]?: D[K]};
 
 	/**
-	 * Returns a new object based on the specified, but only with fields which match to the specified condition
+	 * Returns a new object based on the specified, but only with fields that match to the specified condition
 	 *
 	 * @param obj
 	 * @param condition - whitelist of keys to filter
@@ -947,7 +920,7 @@ interface ObjectConstructor {
 	select<D extends object, C extends string>(obj: D, condition: CanArray<C>): Pick<D, Extract<keyof D, C>>;
 
 	/**
-	 * Returns a new object based on the specified, but only with fields which match to the specified condition
+	 * Returns a new object based on the specified, but only with fields that match to the specified condition
 	 *
 	 * @param obj
 	 * @param condition - whitelist of keys to filter
@@ -955,7 +928,7 @@ interface ObjectConstructor {
 	select<D extends object, C extends string>(obj: D, condition: Iterable<C>): {[K in keyof D]?: D[K]};
 
 	/**
-	 * Returns a new object based on the specified, but only with fields which match to the specified condition
+	 * Returns a new object based on the specified, but only with fields that match to the specified condition
 	 *
 	 * @param obj
 	 * @param condition - map of keys to filter
@@ -964,38 +937,38 @@ interface ObjectConstructor {
 
 	/**
 	 * Returns a function that returns a new object based on an object that the function takes,
-	 * but without fields which match to the specified condition
+	 * but without fields that match to the specified condition
 	 *
 	 * @param condition - regular expression to filter
 	 */
-	reject<D extends object>(condition: RegExp): (obj: D) => {[K in keyof D]?: D[K]};
+	reject(condition: RegExp): <D extends object>(obj: D) => {[K in keyof D]?: D[K]};
 
 	/**
 	 * Returns a function that returns a new object based on an object that the function takes,
-	 * but without fields which match to the specified condition
+	 * but without fields that match to the specified condition
 	 *
 	 * @param condition - whitelist of keys to filter
 	 */
-	reject<D extends object, C extends string>(condition: CanArray<C>): (obj: D) => Omit<D, C>;
+	reject<C extends string>(condition: CanArray<C>): <D extends object>(obj: D) => Omit<D, C>;
 
 	/**
 	 * Returns a function that returns a new object based on an object that the function takes,
-	 * but without fields which match to the specified condition
+	 * but without fields that match to the specified condition
 	 *
 	 * @param condition - whitelist of keys to filter
 	 */
-	reject<D extends object, C extends string>(condition: Iterable<C>): (obj: D) => {[K in keyof D]?: D[K]};
+	reject<C extends string>(condition: Iterable<C>): <D extends object>(obj: D) => {[K in keyof D]?: D[K]};
 
 	/**
 	 * Returns a function that returns a new object based on an object that the function takes,
-	 * but without fields which match to the specified condition
+	 * but without fields that match to the specified condition
 	 *
 	 * @param condition - map of keys to filter
 	 */
-	reject<D extends object, C extends object>(condition: C): (obj: D) => Omit<D, keyof C>;
+	reject<C extends object>(condition: C): <D extends object>(obj: D) => Omit<D, keyof C>;
 
 	/**
-	 * Returns a new object based on the specified, but without fields which match to the specified condition
+	 * Returns a new object based on the specified, but without fields that match to the specified condition
 	 *
 	 * @param obj
 	 * @param condition - regular expression to filter
@@ -1003,7 +976,7 @@ interface ObjectConstructor {
 	reject<D extends object>(obj: D, condition: RegExp): {[K in keyof D]?: D[K]};
 
 	/**
-	 * Returns a new object based on the specified, but without fields which match to the specified condition
+	 * Returns a new object based on the specified, but without fields that match to the specified condition
 	 *
 	 * @param obj
 	 * @param condition - whitelist of keys to filter
@@ -1011,7 +984,7 @@ interface ObjectConstructor {
 	reject<D extends object, C extends string>(obj: D, condition: CanArray<C>): Omit<D, C>;
 
 	/**
-	 * Returns a new object based on the specified, but without fields which match to the specified condition
+	 * Returns a new object based on the specified, but without fields that match to the specified condition
 	 *
 	 * @param obj
 	 * @param condition - whitelist of keys to filter
@@ -1019,7 +992,7 @@ interface ObjectConstructor {
 	reject<D extends object, C extends string>(obj: D, condition: Iterable<C>): {[K in keyof D]?: D[K]};
 
 	/**
-	 * Returns a new object based on the specified, but without fields which match to the specified condition
+	 * Returns a new object based on the specified, but without fields that match to the specified condition
 	 *
 	 * @param obj
 	 * @param condition - map of keys to filter
@@ -1308,7 +1281,7 @@ interface StringConstructor {
 	 *
 	 * @param opts - additional options
 	 */
-	capitalize(opts: StringCapitalizeOptions): (value: unknown) => CanUndef<string>;
+	capitalize(opts: StringCapitalizeOptions): <T>(value: T) => Optional<T, string>;
 
 	/**
 	 * Capitalizes the first character of a value and returns it.
@@ -1318,7 +1291,7 @@ interface StringConstructor {
 	 * @param value
 	 * @param [opts] - additional options
 	 */
-	capitalize(value: unknown, opts?: StringCapitalizeOptions): CanUndef<string>;
+	capitalize<T>(value: T, opts?: StringCapitalizeOptions): Optional<T, string>;
 
 	/**
 	 * Returns a function that transforms a value that it takes to a CamelCaseStyle version.
@@ -1327,7 +1300,7 @@ interface StringConstructor {
 	 *
 	 * @param upper - if false, then the first character of a value is transformed to the lower case
 	 */
-	camelize(upper: boolean): (value: unknown) => CanUndef<string>;
+	camelize(upper: boolean): <T>(value: T) => Optional<T, string>;
 
 	/**
 	 * Returns a function that transforms a value that it takes to a CamelCaseStyle version.
@@ -1336,7 +1309,7 @@ interface StringConstructor {
 	 *
 	 * @param opts - additional options
 	 */
-	camelize(opts: StringCamelizeOptions): (value: unknown) => CanUndef<string>;
+	camelize(opts: StringCamelizeOptions): <T>(value: T) => Optional<T, string>;
 
 	/**
 	 * Returns a CamelCaseStyle version of the specified value.
@@ -1346,7 +1319,7 @@ interface StringConstructor {
 	 * @param value
 	 * @param [upper] - if false, then the first character of a value is transformed to the lower case
 	 */
-	camelize(value: unknown, upper?: boolean): CanUndef<string>;
+	camelize<T>(value: T, upper?: boolean): Optional<T, string>;
 
 	/**
 	 * Returns a CamelCaseStyle version of the specified value.
@@ -1356,7 +1329,7 @@ interface StringConstructor {
 	 * @param value
 	 * @param [opts] - additional options
 	 */
-	camelize(value: unknown, opts?: StringCamelizeOptions): CanUndef<string>;
+	camelize<T>(value: T, opts?: StringCamelizeOptions): Optional<T, string>;
 
 	/**
 	 * Returns a function that transforms a value that it takes to a dash-style version.
@@ -1365,7 +1338,7 @@ interface StringConstructor {
 	 *
 	 * @param stable - if true, then the operation can be reverted
 	 */
-	dasherize(stable: boolean): (value: unknown) => CanUndef<string>;
+	dasherize(stable: boolean): <T>(value: T) => Optional<T, string>;
 
 	/**
 	 * Returns a function that transforms a value that it takes to a dash-style version.
@@ -1374,7 +1347,7 @@ interface StringConstructor {
 	 *
 	 * @param opts - additional options
 	 */
-	dasherize(opts: StringDasherizeOptions): (value: unknown) => CanUndef<string>;
+	dasherize(opts: StringDasherizeOptions): <T>(value: T) => Optional<T, string>;
 
 	/**
 	 * Returns a dash-style version of the specified value.
@@ -1384,7 +1357,7 @@ interface StringConstructor {
 	 * @param value
 	 * @param [stable] - if true, then the operation can be reverted
 	 */
-	dasherize(value: unknown, stable?: boolean): CanUndef<string>;
+	dasherize<T>(value: T, stable?: boolean): Optional<T, string>;
 
 	/**
 	 * Returns a dash-style version of the specified value.
@@ -1394,7 +1367,7 @@ interface StringConstructor {
 	 * @param value
 	 * @param [opts] - additional options
 	 */
-	dasherize(value: unknown, opts?: StringDasherizeOptions): CanUndef<string>;
+	dasherize<T>(value: T, opts?: StringDasherizeOptions): Optional<T, string>;
 
 	/**
 	 * Returns a function that transforms a value that it takes to a underscore_style version.
@@ -1403,7 +1376,7 @@ interface StringConstructor {
 	 *
 	 * @param stable - if true, then the operation can be reverted
 	 */
-	underscore(stable: boolean): (value: unknown) => CanUndef<string>;
+	underscore(stable: boolean): <T>(value: T) => Optional<T, string>;
 
 	/**
 	 * Returns a function that transforms a value that it takes to a underscore_style version.
@@ -1412,7 +1385,7 @@ interface StringConstructor {
 	 *
 	 * @param opts - additional options
 	 */
-	underscore(opts: StringUnderscoreOptions): (value: unknown) => CanUndef<string>;
+	underscore(opts: StringUnderscoreOptions): <T>(value: T) => Optional<T, string>;
 
 	/**
 	 * Returns an underscore_style version of the specified value.
@@ -1422,7 +1395,7 @@ interface StringConstructor {
 	 * @param value
 	 * @param [stable] - if true, then the operation can be reverted
 	 */
-	underscore(value: unknown, stable?: boolean): CanUndef<string>;
+	underscore<T>(value: unknown, stable?: boolean): Optional<T, string>;
 
 	/**
 	 * Returns an underscore_style version of the specified value.
@@ -1432,7 +1405,7 @@ interface StringConstructor {
 	 * @param value
 	 * @param [opts] - additional options
 	 */
-	underscore(value: unknown, opts?: StringUnderscoreOptions): CanUndef<string>;
+	underscore<T>(value: unknown, opts?: StringUnderscoreOptions): Optional<T, string>;
 }
 
 interface String {
@@ -1566,41 +1539,41 @@ interface NumberConstructor {
 	 * If the value is equal to null or undefined, the function returns undefined,
 	 * otherwise, the value will be converted to a number.
 	 */
-	seconds(value: unknown): number;
+	seconds<T>(value: T): Optional<T, number>;
 
 	/**
 	 * Returns a value of milliseconds from the minutes.
 	 * If the value is equal to null or undefined, the function returns undefined,
 	 * otherwise, the value will be converted to a number.
 	 */
-	minutes(value: unknown): number;
+	minutes<T>(value: T): Optional<T, number>;
 
 	/**
 	 * Returns a value of milliseconds from the hours.
 	 * If the value is equal to null or undefined, the function returns undefined,
 	 * otherwise, the value will be converted to a number.
 	 */
-	hours(value: unknown): number;
+	hours<T>(value: T): Optional<T, number>;
 
 	/**
 	 * Returns a value of milliseconds from the days.
 	 * If the value is equal to null or undefined, the function returns undefined,
 	 * otherwise, the value will be converted to a number.
 	 */
-	days(value: unknown): number;
+	days<T>(value: T): Optional<T, number>;
 
 	/**
 	 * Returns a value of milliseconds from the weeks.
 	 * If the value is equal to null or undefined, the function returns undefined,
 	 * otherwise, the value will be converted to a number.
 	 */
-	weeks(value: unknown): number;
+	weeks<T>(value: T): Optional<T, number>;
 
 	/**
 	 * Returns a curried version of Number.floor
 	 * @param precision
 	 */
-	floor(precision: number): (value: unknown) => CanUndef<number>;
+	floor(precision: number): <T>(value: T) => Optional<T, number>;
 
 	/**
 	 * Shortcut for Math.floor that also allows a precision.
@@ -1610,13 +1583,13 @@ interface NumberConstructor {
 	 * @param value
 	 * @param precision
 	 */
-	floor(value: unknown, precision: number): CanUndef<number>;
+	floor<T>(value: T, precision: number): Optional<T, number>;
 
 	/**
 	 * Returns a curried version of Number.round
 	 * @param precision
 	 */
-	round(precision: number): (value: unknown) => CanUndef<number>;
+	round(precision: number): <T>(value: T) => Optional<T, number>;
 
 	/**
 	 * Shortcut for Math.round that also allows a precision.
@@ -1626,13 +1599,13 @@ interface NumberConstructor {
 	 * @param value
 	 * @param precision
 	 */
-	round(value: unknown, precision: number): CanUndef<number>;
+	round<T>(value: unknown, precision: number): Optional<T, number>;
 
 	/**
 	 * Returns a curried version of Number.ceil
 	 * @param precision
 	 */
-	ceil(precision: number): (value: unknown) => CanUndef<number>;
+	ceil(precision: number): <T>(value: T) => Optional<T, number>;
 
 	/**
 	 * Shortcut for Math.ceil that also allows a precision.
@@ -1642,7 +1615,7 @@ interface NumberConstructor {
 	 * @param value
 	 * @param precision
 	 */
-	ceil(value: unknown, precision: number): CanUndef<number>;
+	ceil<T>(value: unknown, precision: number): Optional<T, number>;
 }
 
 interface NumberPadOptions {
@@ -2256,7 +2229,7 @@ interface Function {
 	/**
 	 * Returns a new function that allows to invoke the target function only once
 	 */
-	once(): Function;
+	once<T extends AnyFunction>(this: T): T;
 
 	/**
 	 * Returns a new function that allows to invoke the target function only with the specified delay.
@@ -2264,11 +2237,11 @@ interface Function {
 	 *
 	 * @param [delay]
 	 */
-	debounce(delay?: number): Function;
+	debounce<T extends AnyFunction>(this: T, delay?: number): AnyFunction<Parameters<T>, void>;
 
 	/**
 	 * Returns a new function that allows to invoke the target function not more often than the specified delay
 	 * @param [delay]
 	 */
-	throttle(delay?: number): Function;
+	throttle<T extends AnyFunction>(this: T, delay?: number): AnyFunction<Parameters<T>, void>;
 }
