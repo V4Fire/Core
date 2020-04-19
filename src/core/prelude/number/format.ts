@@ -120,7 +120,6 @@ extend(Number.prototype, 'format', function (
 			}
 		}
 
-		console.log(opts);
 		const formatter = formatCache[cacheKey] = new Intl.NumberFormat(locale, opts);
 		return formatter.format(this);
 	}
