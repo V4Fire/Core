@@ -25,7 +25,8 @@ import {
 	toCamelize,
 	toDasherize,
 	toUnderscore,
-	convertToSeparatedStr
+	convertToSeparatedStr,
+	createStaticTransformFunction
 
 } from 'core/prelude/string/helpers';
 
@@ -194,22 +195,3 @@ extend(String.prototype, 'underscore', function (
 
 /** @see StringConstructor.underscore */
 extend(String, 'underscore', createStaticTransformFunction('underscore'));
-
-/**
- * Factory to create static string transform methods
- * @param method
- */
-export function createStaticTransformFunction(method: string): Function {
-	return (value: unknown, opts: boolean | Dictionary) => {
-		if (value == null) {
-			return undefined;
-		}
-
-		if (Object.isBoolean(value) || Object.isDictionary(value)) {
-			opts = value;
-			return (value) => String[method](value, opts);
-		}
-
-		return String(value)[method](opts);
-	};
-}
