@@ -2411,7 +2411,7 @@ interface FunctionConstructor {
 	): Optional<T, AnyFunction<Parameters<T>, void>>;
 
 	/**
-	 * Returns a new function that allows to to invoke a function, which it takes, not more often than the specified delay.
+	 * Returns a new function that allows to invoke a function, which it takes, not more often than the specified delay.
 	 * If the value is equal to null or undefined, the function returns undefined.
 	 *
 	 * @param delay
