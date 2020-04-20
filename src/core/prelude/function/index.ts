@@ -9,3 +9,4 @@
 import 'core/prelude/function/shim';
 import 'core/prelude/function/memoize';
 import 'core/prelude/function/lazy';
+import 'core/prelude/function/compose';

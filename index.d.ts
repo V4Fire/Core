@@ -76,6 +76,10 @@ type AnyFunction<ARGS extends any[] = any[], R = any> =
 	((...args: ARGS) => R) |
 	Function;
 
+type AnyOneArgFunction<ARG extends any = any, R = any> =
+	((arg: ARG) => R) |
+	Function;
+
 interface ClassConstructor<T = unknown> {new: T}
 interface StrictDictionary<T = unknown> {[key: string]: T}
 interface Dictionary<T> {[key: string]: CanUndef<T>}
@@ -2322,6 +2326,49 @@ interface FunctionConstructor {
 	 * @param [delay]
 	 */
 	throttle<T extends Nullable<AnyFunction>>(fn: T, delay?: number): Optional<T, AnyFunction<Parameters<T>, void>>;
+
+	/**
+	 * Performs right-to-left function composition.
+	 * The last argument may have any arity; the remaining arguments must be unary.
+	 *
+	 * @param fn0
+	 */
+	compose<V extends unknown[], T1>(fn0: AnyFunction<V, T1>): AnyFunction<V, T1>;
+
+	compose<V extends unknown[], T1, T2>(
+		fn1: AnyOneArgFunction<T1, T2>,
+		fn0: AnyFunction<V, T1>
+	): AnyFunction<V, T2>;
+
+	compose<V extends unknown[], T1, T2, T3>(
+		fn2: AnyOneArgFunction<T2, T3>,
+		fn1: AnyOneArgFunction<T1, T2>,
+		fn0: AnyFunction<V, T1>
+	): AnyFunction<V, T3>;
+
+	compose<V extends unknown[], T1, T2, T3, T4>(
+		fn3: AnyOneArgFunction<T3, T4>,
+		fn2: AnyOneArgFunction<T2, T3>,
+		fn1: AnyOneArgFunction<T1, T2>,
+		fn0: AnyFunction<V, T1>
+	): AnyFunction<V, T4>;
+
+	compose<V extends unknown[], T1, T2, T3, T4, T5>(
+		fn4: AnyOneArgFunction<T4, T5>,
+		fn3: AnyOneArgFunction<T3, T4>,
+		fn2: AnyOneArgFunction<T2, T3>,
+		fn1: AnyOneArgFunction<T1, T2>,
+		fn0: AnyFunction<V, T1>
+	): AnyFunction<V, T5>;
+
+	compose<V extends unknown[], T1, T2, T3, T4, T5, T6>(
+		fn5: AnyOneArgFunction<T5, T6>,
+		fn4: AnyOneArgFunction<T4, T5>,
+		fn3: AnyOneArgFunction<T3, T4>,
+		fn2: AnyOneArgFunction<T2, T3>,
+		fn1: AnyOneArgFunction<T1, T2>,
+		fn0: AnyFunction<V, T1>
+	): AnyFunction<V, T6>;
 }
 
 interface Function {
@@ -2345,4 +2392,45 @@ interface Function {
 	 * @param [delay]
 	 */
 	throttle<T extends AnyFunction>(this: T, delay?: number): AnyFunction<Parameters<T>, void>;
+
+	/**
+	 * Performs left-to-right function composition.
+	 * The first argument may have any arity; the remaining arguments must be unary.
+	 */
+	compose<T extends AnyFunction>(this: T): T;
+
+	compose<V extends unknown[], T1, T2>(
+		this: AnyFunction<V, T1>,
+		fn1: AnyOneArgFunction<T1, T2>
+	): AnyFunction<V, T2>;
+
+	compose<V extends unknown[], T1, T2, T3>(
+		this: AnyFunction<V, T1>,
+		fn1: AnyOneArgFunction<T1, T2>,
+		fn2: AnyOneArgFunction<T2, T3>
+	): AnyFunction<V, T3>;
+
+	compose<V extends unknown[], T1, T2, T3, T4>(
+		this: AnyFunction<V, T1>,
+		fn1: AnyOneArgFunction<T1, T2>,
+		fn2: AnyOneArgFunction<T2, T3>,
+		fn3: AnyOneArgFunction<T3, T4>
+	): AnyFunction<V, T4>;
+
+	compose<V extends unknown[], T1, T2, T3, T4, T5>(
+		this: AnyFunction<V, T1>,
+		fn1: AnyOneArgFunction<T1, T2>,
+		fn2: AnyOneArgFunction<T2, T3>,
+		fn3: AnyOneArgFunction<T3, T4>,
+		fn4: AnyOneArgFunction<T4, T5>
+	): AnyFunction<V, T5>;
+
+	compose<V extends unknown[], T1, T2, T3, T4, T5, T6>(
+		this: AnyFunction<V, T1>,
+		fn1: AnyOneArgFunction<T1, T2>,
+		fn2: AnyOneArgFunction<T2, T3>,
+		fn3: AnyOneArgFunction<T3, T4>,
+		fn4: AnyOneArgFunction<T4, T5>,
+		fn5: AnyOneArgFunction<T5, T6>
+	): AnyFunction<V, T6>;
 }
