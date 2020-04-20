@@ -1217,9 +1217,10 @@ interface ArrayConstructor {
 	 * Returns a curried version of Array.union
 	 * @param arr
 	 */
-	union<T extends Nullable<unknown[]>>(arr: T): <A extends Iterable<unknown> | unknown>(...args: A[]) =>
-		A extends Iterable<infer V> ?
-			Optional<T, Array<IterableType<T> | V>> : Optional<T, Array<IterableType<T> | NonNullable<A>>>;
+	union<T extends Nullable<unknown[]>>(arr: T): <A extends Iterable<unknown> | unknown>(
+		...args: Array<Iterable<A> | A>
+	) => A extends Iterable<infer V> ?
+		Optional<T, Array<IterableType<T> | V>> : Optional<T, Array<IterableType<T> | NonNullable<A>>>;
 
 	/**
 	 * Returns a new array containing elements from all specified iterable values with duplicates removed.
@@ -1232,7 +1233,7 @@ interface ArrayConstructor {
 	 */
 	union<T extends Nullable<unknown[]>, A extends Iterable<unknown> | unknown>(
 		arr: T,
-		...args: A[]
+		...args: Array<Iterable<A> | A>
 	): A extends Iterable<infer V> ?
 		Optional<T, Array<IterableType<T> | V>> : Optional<T, Array<IterableType<T> | NonNullable<A>>>;
 
@@ -1240,12 +1241,12 @@ interface ArrayConstructor {
 	 * Returns a curried version of Array.concat
 	 * @param arr
 	 */
-	concat<T extends Nullable<unknown[]>>(arr: T): <A extends Iterable<unknown> | unknown>(...args: A[]) =>
-		A extends Iterable<infer V> ?
+	concat<T extends Nullable<unknown[]>>(arr: T): <A extends CanArray<unknown>>(...args: CanArray<A>[]) =>
+		A extends Array<infer V> ?
 			Optional<T, Array<IterableType<T> | V>> : Optional<T, Array<IterableType<T> | NonNullable<A>>>;
 
 	/**
-	 * Returns a new array containing elements from all specified iterable values.
+	 * Returns a new array containing elements from all specified arrays.
 	 * You can also pass non-iterable values and they will be added to the final array,
 	 * except values with null and undefined. If the first parameter of the function is equal to null or undefined,
 	 * the function returns undefined.
@@ -1253,10 +1254,10 @@ interface ArrayConstructor {
 	 * @param arr
 	 * @param args
 	 */
-	concat<T extends Nullable<unknown[]>, A extends Iterable<unknown> | unknown>(
+	concat<T extends Nullable<unknown[]>, A extends CanArray<unknown>>(
 		arr: T,
-		...args: A[]
-	): A extends Iterable<infer V> ?
+		...args: CanArray<A>[]
+	): A extends Array<infer V> ?
 		Optional<T, Array<IterableType<T> | V>> : Optional<T, Array<IterableType<T> | NonNullable<A>>>;
 }
 
@@ -1269,7 +1270,7 @@ interface Array<T> {
 	 * @param args
 	 */
 	union<A extends Iterable<unknown> | unknown>(
-		...args: A[]
+		...args: Array<Iterable<A> | A>
 	): A extends Iterable<infer V> ? Array<T | V> : Array<T | NonNullable<A>>;
 }
 

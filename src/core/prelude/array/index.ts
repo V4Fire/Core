@@ -7,6 +7,7 @@
  */
 
 import extend from 'core/prelude/extend';
+import { emptyArray } from 'core/prelude/array/const';
 
 /** @see Array.union */
 extend(Array.prototype, 'union', function (
@@ -62,23 +63,47 @@ extend(Array, 'concat', (arr: unknown[], ...args: CanArray<unknown>[]) => {
 		return undefined;
 	}
 
-	function* makeIterator(): Iterable<unknown> {
-		for (let i = 0; i < args.length; i++) {
-			const
-				val = args[i];
+	// Optimization for simple cases
+	switch (args.length) {
+		case 0:
+			return arr.slice();
 
-			if (val == null) {
-				continue;
-			}
+		case 1:
+			return arr.concat(args[0] != null ? args[0] : emptyArray);
 
-			if (Object.isIterable(val)) {
-				yield* val[Symbol.iterator]();
+		case 2:
+			return arr.concat(
+				args[0] != null ? args[0] : emptyArray,
+				args[1] != null ? args[1] : emptyArray
+			);
 
-			} else {
-				yield val;
-			}
+		case 3:
+			return arr.concat(
+				args[0] != null ? args[0] : emptyArray,
+				args[1] != null ? args[1] : emptyArray,
+				args[2] != null ? args[2] : emptyArray
+			);
+
+		case 4:
+			return arr.concat(
+				args[0] != null ? args[0] : emptyArray,
+				args[1] != null ? args[1] : emptyArray,
+				args[2] != null ? args[2] : emptyArray,
+				args[3] != null ? args[3] : emptyArray
+			);
+	}
+
+	const
+		filteredArgs = <typeof args>[];
+
+	for (let i = 0; i < args.length; i++) {
+		const
+			el = args[i];
+
+		if (el != null) {
+			filteredArgs.push(el);
 		}
 	}
 
-	return arr.concat(...makeIterator());
+	return arr.concat(...filteredArgs);
 });
