@@ -1770,14 +1770,14 @@ interface NumberPadOptions {
 	length?: number;
 
 	/**
-	 * If true, then a sign of the number will be written anyway
-	 * @default `false`
+	 * Value of the base to convert in a string
+	 * @default `10`
 	 */
 	base?: number;
 
 	/**
-	 * Value of the base to convert in a string
-	 * @default `10`
+	 * If true, then a sign of the number will be written anyway
+	 * @default `false`
 	 */
 	sign?: boolean;
 }
