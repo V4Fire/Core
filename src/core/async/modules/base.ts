@@ -274,7 +274,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 		if (labelCache && task.join === true) {
 			const
-				mergeHandlers = (<AsyncCb<C>[]>[]).concat(task.onMerge || []),
+				mergeHandlers = Array.concat([], task.onMerge),
 				link = links.get(labelCache);
 
 			for (let i = 0; i < mergeHandlers.length; i++) {
@@ -382,7 +382,7 @@ export default class Async<CTX extends object = Async<any>> {
 			queue: [],
 			clearFn: task.clearFn,
 			onComplete: [],
-			onClear: (<AsyncCb<C>[]>[]).concat(task.onClear || [])
+			onClear: Array.concat([], task.onClear)
 		};
 
 		if (labelCache) {

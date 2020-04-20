@@ -215,7 +215,7 @@ extend(Object, 'set', function (
 		// tslint:disable:prefer-conditional-expression
 		if (Object.isMap(ref) || Object.isWeakMap(ref)) {
 			if (ref.has(cursor) && p.concat) {
-				ref.set(cursor, (<unknown[]>[]).concat(ref[cursor], finalValue));
+				ref.set(cursor, Array.concat([], ref[cursor], finalValue));
 
 			} else {
 				ref.set(cursor, finalValue);
@@ -223,7 +223,7 @@ extend(Object, 'set', function (
 
 		} else {
 			ref[cursor] = cursor in ref && p.concat ?
-				(<unknown[]>[]).concat(ref[cursor], finalValue) : finalValue;
+				Array.concat([], ref[cursor], finalValue) : finalValue;
 		}
 
 		return finalValue;

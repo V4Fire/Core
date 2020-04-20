@@ -585,7 +585,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 				replacedBy.onComplete.push([resolve, reject]);
 
 				const
-					onClear = (<AsyncCb<CTX>[]>[]).concat(obj.link.onClear, <AsyncCb<CTX>>reject);
+					onClear = Array.concat([], obj.link.onClear, reject);
 
 				for (let i = 0; i < onClear.length; i++) {
 					replacedBy.onClear.push(onClear[i]);

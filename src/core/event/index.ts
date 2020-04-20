@@ -133,7 +133,7 @@ export const afterEvents = deprecate(
 
 	function afterEvents(emitter: EventEmitterLike, cb: Function | string, ...events: string[]): SyncPromise<void> {
 		const
-			promise = resolveAfterEvents(emitter, ...(<string[]>[]).concat(Object.isString(cb) ? cb : [], events));
+			promise = resolveAfterEvents(emitter, ...Array.concat([], Object.isString(cb) ? cb : null, events));
 
 		if (Object.isFunction(cb)) {
 			promise.then(cb);

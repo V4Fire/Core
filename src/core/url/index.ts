@@ -179,15 +179,7 @@ export function fromQueryString(
 			normalizedVal = opts.convert !== false ? Object.parse(val, convertIfDate) : val;
 
 		if (oldVal !== undefined) {
-			normalizedVal = (<unknown[]>[]).concat(
-				oldVal == null ? [] : oldVal,
-
-				normalizedVal == null ?
-					[] :
-
-					Object.isArray(normalizedVal) ?
-						[normalizedVal] : normalizedVal
-			);
+			normalizedVal = Array.concat([], oldVal, Object.isArray(normalizedVal) ? [normalizedVal] : normalizedVal);
 		}
 
 		if (objOpts.separator) {

@@ -252,8 +252,8 @@ export function set(obj: object, path: WatchPath, value: unknown, handlers: Watc
 
 	const
 		ctxPath = obj[watchPath] || [],
-		refPath = (<string[]>[]).concat(ctxPath.slice(1), normalizedPath.slice(0, -1)),
-		fullRefPath = (<string[]>[]).concat(ctxPath.slice(0, 1), refPath);
+		refPath = Array.concat([], ctxPath.slice(1), normalizedPath.slice(0, -1)),
+		fullRefPath = Array.concat([], ctxPath.slice(0, 1), refPath);
 
 	const
 		proxy = getOrCreateLabelValueByHandlers<object>(unwrappedObj, toProxyObject, handlers),
@@ -327,8 +327,8 @@ export function unset(obj: object, path: WatchPath, handlers: WatchHandlersSet):
 
 	const
 		ctxPath = obj[watchPath] || [],
-		refPath = (<string[]>[]).concat(ctxPath.slice(1), normalizedPath.slice(0, -1)),
-		fullRefPath = (<string[]>[]).concat(ctxPath.slice(0, 1), refPath);
+		refPath = Array.concat([], ctxPath.slice(1), normalizedPath.slice(0, -1)),
+		fullRefPath = Array.concat([], ctxPath.slice(0, 1), refPath);
 
 	const
 		proxy = getOrCreateLabelValueByHandlers<object>(unwrappedObj, toProxyObject, handlers),
@@ -453,7 +453,7 @@ export function setWatchAccessors(
 
 					for (let o = handlers.values(), el = o.next(); !el.done; el = o.next()) {
 						const
-							resolvedPath = (<unknown[]>[]).concat(path ?? [], key);
+							resolvedPath = Array.concat([], path ?? [], key);
 
 						el.value(val, oldVal, {
 							obj,
