@@ -53,13 +53,13 @@ extend(Number.prototype, 'pad', function (
 
 /** @see NumberConstructor.pad */
 extend(Number, 'pad', (value: unknown, lengthOrOpts: number | NumberPadOptions) => {
+	if (value == null) {
+		return;
+	}
+
 	if (Object.isDictionary(value)) {
 		const opts = value;
 		return (value) => Number.pad(value, opts);
-	}
-
-	if (value == null) {
-		return;
 	}
 
 	return Number(value).pad(<any>lengthOrOpts);
@@ -178,14 +178,14 @@ extend(Number, 'format', (
 	patternOrOpts?: string | Intl.NumberFormatOptions,
 	locale?: CanArray<string>
 ) => {
+	if (value == null) {
+		return;
+	}
+
 	if (Object.isString(value) || Object.isDictionary(value)) {
 		locale = <any>patternOrOpts;
 		patternOrOpts = value;
 		return (value: unknown) => Number.format(value, <any>patternOrOpts, locale);
-	}
-
-	if (value == null) {
-		return;
 	}
 
 	return Number(value).format(<any>patternOrOpts, locale);
