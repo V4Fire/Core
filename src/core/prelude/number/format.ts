@@ -26,23 +26,43 @@ import {
 
 import { repeatString } from 'core/prelude/number/helpers';
 
-/** @see NumberConstructor.pad */
+/** @see Number.pad */
 extend(Number.prototype, 'pad', function (
 	this: number,
-	targetLength: number = 0,
+	lengthOrOpts: number | NumberPadOptions = 0,
 	opts?: NumberPadOptions
 ): string {
+	opts = {...Object.isPlainObject(lengthOrOpts) ? lengthOrOpts : opts};
+
+	if (!opts.length) {
+		opts.length = Object.isNumber(lengthOrOpts) ? lengthOrOpts : 0;
+	}
+
 	const
 		val = Number(this);
 
-	let str = Math.abs(val).toString(opts?.base || 10);
-	str = repeatString('0', targetLength - str.replace(decPartRgxp, '').length) + str;
+	let str = Math.abs(val).toString(opts.base || 10);
+	str = repeatString('0', opts.length - str.replace(decPartRgxp, '').length) + str;
 
-	if (opts?.sign || val < 0) {
+	if (opts.sign || val < 0) {
 		str = (val < 0 ? '-' : '+') + str;
 	}
 
 	return str;
+});
+
+/** @see NumberConstructor.pad */
+extend(Number, 'pad', (value: unknown, lengthOrOpts: number | NumberPadOptions) => {
+	if (Object.isDictionary(value)) {
+		const opts = value;
+		return (value) => Number.pad(value, opts);
+	}
+
+	if (value == null) {
+		return;
+	}
+
+	return Number(value).pad(<any>lengthOrOpts);
 });
 
 /** @see Number.format */
@@ -150,6 +170,25 @@ extend(Number.prototype, 'format', function (
 	}
 
 	return res;
+});
+
+/** @see NumberConstructor.format */
+extend(Number, 'format', (
+	value: unknown,
+	patternOrOpts?: string | Intl.NumberFormatOptions,
+	locale?: CanArray<string>
+) => {
+	if (Object.isString(value) || Object.isDictionary(value)) {
+		locale = <any>patternOrOpts;
+		patternOrOpts = value;
+		return (value: unknown) => Number.format(value, <any>patternOrOpts, locale);
+	}
+
+	if (value == null) {
+		return;
+	}
+
+	return Number(value).format(<any>patternOrOpts, locale);
 });
 
 /** @see NumberConstructor.getOption */

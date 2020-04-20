@@ -1656,7 +1656,7 @@ interface NumberConstructor {
 	 * @param value
 	 * @param precision
 	 */
-	round<T>(value: unknown, precision: number): Optional<T, number>;
+	round<T>(value: T, precision: number): Optional<T, number>;
 
 	/**
 	 * Returns a curried version of Number.ceil
@@ -1672,12 +1672,105 @@ interface NumberConstructor {
 	 * @param value
 	 * @param precision
 	 */
-	ceil<T>(value: unknown, precision: number): Optional<T, number>;
+	ceil<T>(value: T, precision: number): Optional<T, number>;
+
+	/**
+	 * Returns a curried version of Number.pad
+	 * @param opts - additional options
+	 */
+	pad(opts: NumberPadOptions): <T>(value: T) => Optional<T, string>;
+
+	/**
+	 * Returns a string from a number with adding extra zeros to the start, if necessary.
+	 * If the number value is equal to null or undefined, the function returns undefined,
+	 * otherwise, the value will be converted to a number.
+	 *
+	 * @param value
+	 * @param targetLength - length of the resulting string once the current string has been padded
+	 */
+	pad<T>(value: T, targetLength?: number): Optional<T, string>;
+
+	/**
+	 * Returns a string from a number with adding extra zeros to the start, if necessary.
+	 * If the number value is equal to null or undefined, the function returns undefined,
+	 * otherwise, the value will be converted to a number.
+	 *
+	 * @param value
+	 * @param opts - additional options
+	 */
+	pad<T>(value: T, opts: NumberPadOptions): Optional<T, string>;
+
+	/**
+	 * Returns a curried version of Number.format
+	 *
+	 * @param pattern
+	 * @param locale
+	 */
+	format(pattern: string, locale?: CanArray<string>): <T>(value: T) => Optional<T, string>;
+
+	/**
+	 * Returns a curried version of Number.format
+	 *
+	 * @param opts
+	 * @param locale
+	 */
+	format(opts: Intl.NumberFormatOptions, locale?: CanArray<string>): <T>(value: T) => Optional<T, string>;
+
+	/**
+	 * Returns a string representation of a number by the specified pattern.
+	 * All pattern directives are based on native Intl.NumberFormat options:
+	 *
+	 *   1. `'style'`
+	 *   1. `'currency'`
+	 *   1. `'currencyDisplay'`
+	 *
+	 * There are aliases for all directives:
+	 *
+	 *   1. `'$'` - `{style: 'currency', currency: 'USD'}`
+	 *   1. `'$:${currency}'` - `{style: 'currency', currency}`
+	 *   1. `'$d:${currencyDisplay}'` - `{currencyDisplay}`
+	 *   1. `'%'` - `{style: 'percent'}`
+	 *   1. `'.'` - `{style: 'decimal'}`
+	 *
+	 * If the number value is equal to null or undefined, the function returns undefined,
+	 * otherwise, the value will be converted to a number.
+	 *
+	 * @param value
+	 * @param pattern - string pattern of the format:
+	 *   1. symbol `';'` is used as a separator character for pattern directives, for example: `'$;$d:code'`
+	 *   1. symbol `':'` is used for specifying a custom value for a pattern directive, for example:
+	 *    `'$:RUB;$d:code'`
+	 *
+	 * @param [locale] - locale for internalizing
+	 *
+	 * @example
+	 * ```js
+	 *  100.50.format('$', 'en-us') // '$100.50'
+	 *  100.50.format('$:EUR;$d:code', 'en-us') // 'EUR 100.50'
+	 * ```
+	 */
+	format<T>(value: T, pattern?: string, locale?: CanArray<string>): Optional<T, string>;
+
+	/**
+	 * Returns a string representation of a number by the specified options.
+	 * If the number value is equal to null or undefined, the function returns undefined,
+	 * otherwise, the value will be converted to a number.
+	 *
+	 * @param value
+	 * @param opts - formatting options
+	 * @param [locale] - locale for internalizing
+	 */
+	format<T>(value: T, opts: Intl.NumberFormatOptions, locale?: CanArray<string>): Optional<T, string>;
 }
 
 interface NumberPadOptions {
 	/**
-	 * If true, then a sign of the number is written anyway
+	 * Length of the resulting string once the current string has been padded
+	 */
+	length?: number;
+
+	/**
+	 * If true, then a sign of the number will be written anyway
 	 * @default `false`
 	 */
 	base?: number;
@@ -1860,7 +1953,6 @@ interface Number {
 	 *   1. `'.'` - `{style: 'decimal'}`
 	 *
 	 * @param pattern - string pattern of the format:
-	 *
 	 *   1. symbol `';'` is used as a separator character for pattern directives, for example: `'$;$d:code'`
 	 *   1. symbol `':'` is used for specifying a custom value for a pattern directive, for example:
 	 *    `'$:RUB;$d:code'`
@@ -1873,7 +1965,7 @@ interface Number {
 	 *  100.50.format('$:EUR;$d:code', 'en-us') // 'EUR 100.50'
 	 * ```
 	 */
-	format(pattern: string, locale?: CanArray<string>): string;
+	format(pattern?: string, locale?: CanArray<string>): string;
 
 	/**
 	 * Returns a string representation of the number by the specified options
@@ -1887,7 +1979,7 @@ interface Number {
 	 * Returns a string representation of the number with adding some extra formatting
 	 * @param [length] - length of the decimal part
 	 */
-	format(length?: number): string;
+	format(length: number): string;
 
 	/**
 	 * Shortcut for Math.floor that also allows a precision
