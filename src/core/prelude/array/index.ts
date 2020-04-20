@@ -47,7 +47,7 @@ extend(Array, 'union', (arr: unknown[], ...args: Array<Iterable<unknown> | unkno
 	}
 
 	if (arr == null) {
-		return undefined;
+		return;
 	}
 
 	return arr.union(...args);
@@ -60,7 +60,7 @@ extend(Array, 'concat', (arr: unknown[], ...args: CanArray<unknown>[]) => {
 	}
 
 	if (arr == null) {
-		return undefined;
+		return;
 	}
 
 	// Optimization for simple cases

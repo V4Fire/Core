@@ -134,7 +134,7 @@ export function convertToSeparatedStr(str: string, separator: string, stable?: b
 export function createStaticTransformFunction(method: string): Function {
 	return (value: unknown, opts: boolean | Dictionary) => {
 		if (value == null) {
-			return undefined;
+			return;
 		}
 
 		if (Object.isBoolean(value) || Object.isDictionary(value)) {

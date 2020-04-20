@@ -31,7 +31,7 @@ extend(Function, 'debounce', (fn: Nullable<Function | number>, delay?: number) =
 	}
 
 	if (fn == null) {
-		return undefined;
+		return;
 	}
 
 	return fn.debounce(delay);
@@ -72,7 +72,7 @@ extend(Function, 'throttle', (fn: Nullable<Function | number>, delay?: number) =
 	}
 
 	if (fn == null) {
-		return undefined;
+		return;
 	}
 
 	return fn.throttle(delay);

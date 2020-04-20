@@ -43,7 +43,7 @@ export function createStaticRoundingFunction(method: string): Function {
 		}
 
 		if (value == null) {
-			return undefined;
+			return;
 		}
 
 		return Number(value)[method](value, precision);
@@ -82,7 +82,7 @@ export function createMsFunction(offset: number): Function {
 export function createStaticMsFunction(offset: number): Function {
 	return (value) => {
 		if (value == null) {
-			return undefined;
+			return;
 		}
 
 		return Number(value) * offset;

@@ -18,7 +18,7 @@ extend(Object, 'parse', (value, reviver?: JSONCb) => {
 
 	if (Object.isString(value)) {
 		if (value === 'undefined') {
-			return undefined;
+			return;
 		}
 
 		if (canParse.test(value)) {

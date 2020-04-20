@@ -34,7 +34,7 @@ extend(Object, 'get', (
 
 		for (let i = 0; i < chunks.length; i++) {
 			if (res == null) {
-				return undefined;
+				return;
 			}
 
 			const
