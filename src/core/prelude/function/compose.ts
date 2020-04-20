@@ -33,7 +33,13 @@ extend(Function, 'compose', (...fns: Nullable<Function>[]) => function (): unkno
 			fn = fns[i];
 
 		if (fn != null) {
-			res = fn.call(this, res);
+			// tslint:disable-next-line:prefer-conditional-expression
+			if (Object.isPromise(res)) {
+				res = res.then((res) => fn.call(this, res));
+
+			} else {
+				res = fn.call(this, res);
+			}
 		}
 	}
 
@@ -54,7 +60,13 @@ extend(Function.prototype, 'compose', function (this: Function, ...fns: Nullable
 				fn = fns[i];
 
 			if (fn != null) {
-				res = fn.call(this, res);
+				// tslint:disable-next-line:prefer-conditional-expression
+				if (Object.isPromise(res)) {
+					res = res.then((res) => fn.call(this, res));
+
+				} else {
+					res = fn.call(this, res);
+				}
 			}
 		}
 

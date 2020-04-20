@@ -66,19 +66,22 @@ declare function clearImmediate(id: number): void;
 type Optional<T = unknown, TVAL = T, SAFE = TVAL> = T extends null | undefined ?
 	undefined : T extends SAFE ? TVAL : CanUndef<TVAL>;
 
+type OptionalPromise<T = unknown, TVAL = T, SAFE = TVAL> = T extends Promise<infer V> ?
+	Promise<Optional<V, TVAL, SAFE>> : Optional<T, TVAL, SAFE>;
+
 type Nullable<T> = T | null | undefined;
 type CanPromise<T> = T | Promise<T>;
 type CanUndef<T> = T | undefined;
 type CanVoid<T> = T | void;
 type CanArray<T> = T | T[];
 
-type AnyFunction<ARGS extends any[] = any[], R = any> =
-	((...args: ARGS) => R) |
-	Function;
+interface AnyFunction<ARGS = any[], R = any> extends Function {
+	(...args: ARGS): R;
+}
 
-type AnyOneArgFunction<ARG extends any = any, R = any> =
-	((arg: ARG) => R) |
-	Function;
+interface AnyOneArgFunction<ARG = any, R = any> extends Function {
+	(arg: ARG): R;
+}
 
 interface ClassConstructor<T = unknown> {new: T}
 interface StrictDictionary<T = unknown> {[key: string]: T}
@@ -2390,7 +2393,9 @@ interface FunctionConstructor {
 	 *
 	 * @param delay
 	 */
-	debounce(delay: number): <T extends Nullable<AnyFunction>>(fn: T) => Optional<T, AnyFunction<Parameters<T>, void>>;
+	debounce(
+		delay: number
+	): <T extends Nullable<AnyFunction>>(fn: T) => Optional<T, AnyFunction<Parameters<T>, void>>;
 
 	/**
 	 * Returns a new function that allows to invoke a function only with the specified delay.
@@ -2400,7 +2405,10 @@ interface FunctionConstructor {
 	 * @param fn
 	 * @param [delay]
 	 */
-	debounce<T extends Nullable<AnyFunction>>(fn: T, delay?: number): Optional<T, AnyFunction<Parameters<T>, void>>;
+	debounce<T extends Nullable<AnyFunction>>(
+		fn: T,
+		delay?: number
+	): Optional<T, AnyFunction<Parameters<T>, void>>;
 
 	/**
 	 * Returns a new function that allows to to invoke a function, which it takes, not more often than the specified delay.
@@ -2408,7 +2416,9 @@ interface FunctionConstructor {
 	 *
 	 * @param delay
 	 */
-	throttle(delay: number): <T extends Nullable<AnyFunction>>(fn: T) => Optional<T, AnyFunction<Parameters<T>, void>>;
+	throttle(delay: number): <T extends Nullable<AnyFunction>>(
+		fn: T
+	) => Optional<T, AnyFunction<Parameters<T>, void>>;
 
 	/**
 	 * Returns a new function that allows to invoke the target function not more often than the specified delay.
@@ -2417,50 +2427,78 @@ interface FunctionConstructor {
 	 * @param fn
 	 * @param [delay]
 	 */
-	throttle<T extends Nullable<AnyFunction>>(fn: T, delay?: number): Optional<T, AnyFunction<Parameters<T>, void>>;
+	throttle<T extends Nullable<AnyFunction>>(
+		fn: T,
+		delay?: number
+	): Optional<T, AnyFunction<Parameters<T>, void>>;
 
 	/**
 	 * Performs right-to-left function composition.
 	 * The last argument may have any arity; the remaining arguments must be unary.
+	 *
+	 * If any function from parameters returns a Promise, the next function from the parameters
+	 * will take the resolved value of that promise,
+	 * the final result of calling the composition function is also a promise.
 	 *
 	 * @param fn0
 	 */
 	compose<V extends unknown[], T1>(fn0: AnyFunction<V, T1>): AnyFunction<V, T1>;
 
 	compose<V extends unknown[], T1, T2>(
-		fn1: AnyOneArgFunction<T1, T2>,
+		fn1: AnyOneArgFunction<PromiseType<T1>, T2>,
 		fn0: AnyFunction<V, T1>
-	): AnyFunction<V, T2>;
+	): AnyFunction<V, T1 extends Promise<any> ? Promise<T2> : T2>;
 
 	compose<V extends unknown[], T1, T2, T3>(
-		fn2: AnyOneArgFunction<T2, T3>,
-		fn1: AnyOneArgFunction<T1, T2>,
+		fn2: AnyOneArgFunction<PromiseType<T2>, T3>,
+		fn1: AnyOneArgFunction<PromiseType<T1>, T2>,
 		fn0: AnyFunction<V, T1>
-	): AnyFunction<V, T3>;
+	): AnyFunction<V, T2 extends Promise<any> ? Promise<T3> : T1 extends Promise<any> ? Promise<T3> : T3>;
 
 	compose<V extends unknown[], T1, T2, T3, T4>(
-		fn3: AnyOneArgFunction<T3, T4>,
-		fn2: AnyOneArgFunction<T2, T3>,
-		fn1: AnyOneArgFunction<T1, T2>,
+		fn3: AnyOneArgFunction<PromiseType<T3>, T4>,
+		fn2: AnyOneArgFunction<PromiseType<T2>, T3>,
+		fn1: AnyOneArgFunction<PromiseType<T1>, T2>,
 		fn0: AnyFunction<V, T1>
-	): AnyFunction<V, T4>;
+	): AnyFunction<
+		V,
+		T3 extends Promise<any> ?
+			Promise<T4> : T2 extends Promise<any> ?
+				Promise<T4> : T1 extends Promise<any> ?
+					Promise<T4> : T4
+	>;
 
 	compose<V extends unknown[], T1, T2, T3, T4, T5>(
-		fn4: AnyOneArgFunction<T4, T5>,
-		fn3: AnyOneArgFunction<T3, T4>,
-		fn2: AnyOneArgFunction<T2, T3>,
-		fn1: AnyOneArgFunction<T1, T2>,
+		fn4: AnyOneArgFunction<PromiseType<T4>, T5>,
+		fn3: AnyOneArgFunction<PromiseType<T3>, T4>,
+		fn2: AnyOneArgFunction<PromiseType<T2>, T3>,
+		fn1: AnyOneArgFunction<PromiseType<T1>, T2>,
 		fn0: AnyFunction<V, T1>
-	): AnyFunction<V, T5>;
+	): AnyFunction<
+		V,
+		T4 extends Promise<any> ?
+			Promise<T5> : T3 extends Promise<any> ?
+				Promise<T5> : T2 extends Promise<any> ?
+					Promise<T5> : T1 extends Promise<any> ?
+						Promise<T5> : T5
+	>;
 
 	compose<V extends unknown[], T1, T2, T3, T4, T5, T6>(
-		fn5: AnyOneArgFunction<T5, T6>,
-		fn4: AnyOneArgFunction<T4, T5>,
-		fn3: AnyOneArgFunction<T3, T4>,
-		fn2: AnyOneArgFunction<T2, T3>,
-		fn1: AnyOneArgFunction<T1, T2>,
+		fn5: AnyOneArgFunction<PromiseType<T5>, T6>,
+		fn4: AnyOneArgFunction<PromiseType<T4>, T5>,
+		fn3: AnyOneArgFunction<PromiseType<T3>, T4>,
+		fn2: AnyOneArgFunction<PromiseType<T2>, T3>,
+		fn1: AnyOneArgFunction<PromiseType<T1>, T2>,
 		fn0: AnyFunction<V, T1>
-	): AnyFunction<V, T6>;
+	): AnyFunction<
+		V,
+		T5 extends Promise<any> ?
+			Promise<T6> : T4 extends Promise<any> ?
+				Promise<T6> : T3 extends Promise<any> ?
+					Promise<T6> : T2 extends Promise<any> ?
+						Promise<T6> : T1 extends Promise<any> ?
+							Promise<T6> : T6
+		>;
 }
 
 interface Function {
@@ -2488,26 +2526,36 @@ interface Function {
 	/**
 	 * Performs left-to-right function composition.
 	 * The first argument may have any arity; the remaining arguments must be unary.
+	 *
+	 * If any function from parameters returns a Promise, the next function from the parameters
+	 * will take the resolved value of that promise,
+	 * the final result of calling the composition function is also a promise.
 	 */
 	compose<T extends AnyFunction>(this: T): T;
 
 	compose<V extends unknown[], T1, T2>(
 		this: AnyFunction<V, T1>,
 		fn1: AnyOneArgFunction<T1, T2>
-	): AnyFunction<V, T2>;
+	): AnyFunction<V, T1 extends Promise<any> ? Promise<T2> : T2>;
 
 	compose<V extends unknown[], T1, T2, T3>(
 		this: AnyFunction<V, T1>,
 		fn1: AnyOneArgFunction<T1, T2>,
 		fn2: AnyOneArgFunction<T2, T3>
-	): AnyFunction<V, T3>;
+	): AnyFunction<V, T2 extends Promise<any> ? Promise<T3> : T1 extends Promise<any> ? Promise<T3> : T3>;
 
 	compose<V extends unknown[], T1, T2, T3, T4>(
 		this: AnyFunction<V, T1>,
 		fn1: AnyOneArgFunction<T1, T2>,
 		fn2: AnyOneArgFunction<T2, T3>,
 		fn3: AnyOneArgFunction<T3, T4>
-	): AnyFunction<V, T4>;
+	): AnyFunction<
+		V,
+		T3 extends Promise<any> ?
+			Promise<T4> : T2 extends Promise<any> ?
+				Promise<T4> : T1 extends Promise<any> ?
+					Promise<T4> : T4
+	>;
 
 	compose<V extends unknown[], T1, T2, T3, T4, T5>(
 		this: AnyFunction<V, T1>,
@@ -2515,7 +2563,14 @@ interface Function {
 		fn2: AnyOneArgFunction<T2, T3>,
 		fn3: AnyOneArgFunction<T3, T4>,
 		fn4: AnyOneArgFunction<T4, T5>
-	): AnyFunction<V, T5>;
+	): AnyFunction<
+		V,
+		T4 extends Promise<any> ?
+			Promise<T5> : T3 extends Promise<any> ?
+				Promise<T5> : T2 extends Promise<any> ?
+					Promise<T5> : T1 extends Promise<any> ?
+						Promise<T5> : T5
+	>;
 
 	compose<V extends unknown[], T1, T2, T3, T4, T5, T6>(
 		this: AnyFunction<V, T1>,
@@ -2524,5 +2579,13 @@ interface Function {
 		fn3: AnyOneArgFunction<T3, T4>,
 		fn4: AnyOneArgFunction<T4, T5>,
 		fn5: AnyOneArgFunction<T5, T6>
-	): AnyFunction<V, T6>;
+	): AnyFunction<
+		V,
+		T5 extends Promise<any> ?
+			Promise<T6> : T4 extends Promise<any> ?
+				Promise<T6> : T3 extends Promise<any> ?
+					Promise<T6> : T2 extends Promise<any> ?
+						Promise<T6> : T1 extends Promise<any> ?
+							Promise<T6> : T6
+		>;
 }
