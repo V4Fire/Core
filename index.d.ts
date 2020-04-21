@@ -1167,6 +1167,12 @@ interface ObjectConstructor {
 	isFunction(obj: unknown): obj is AnyFunction;
 
 	/**
+	 * Returns true if the specified value is a constructor function
+	 * @param obj
+	 */
+	isConstructor(obj: unknown): obj is Function;
+
+	/**
 	 * Returns true if the specified value is a generator
 	 * @param obj
 	 */

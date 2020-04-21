@@ -59,6 +59,9 @@ extend(Object, 'isArrayLike', (obj) => {
 /** @see ObjectConstructor.isFunction */
 extend(Object, 'isFunction', (obj) => typeof obj === 'function');
 
+/** @see ObjectConstructor.isConstructor */
+extend(Object, 'isConstructor', (obj) => typeof obj === 'function');
+
 /** @see ObjectConstructor.isGenerator */
 extend(Object, 'isGenerator', (obj) =>
 	typeof obj === 'function' && obj.constructor.name === 'GeneratorFunction');
@@ -145,6 +148,9 @@ function isPlainObject(obj: unknown): boolean {
 		return false;
 	}
 
-	const constr = obj!.constructor;
+	const
+		constr = obj!.constructor;
+
+	// @ts-ignore
 	return !constr || constr === Object;
 }
