@@ -11,7 +11,7 @@ import { funcCache } from 'core/prelude/object/const';
 
 /** @see ObjectConstructor.fastCompare */
 // tslint:disable-next-line:only-arrow-functions
-extend(Object, 'fastCompare', function (a: any, b: any): boolean | Function {
+extend(Object, 'fastCompare', function (a: any, b: any): boolean | AnyFunction {
 	if (arguments.length < 2) {
 		return (b) => Object.fastCompare(a, b);
 	}

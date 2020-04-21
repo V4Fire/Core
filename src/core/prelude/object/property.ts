@@ -127,7 +127,7 @@ const
 
 /** @see ObjectConstructor.hasOwnProperty */
 // tslint:disable-next-line:only-arrow-functions
-extend(Object, 'hasOwnProperty', function (obj: any, key?: string): boolean | Function {
+extend(Object, 'hasOwnProperty', function (obj: any, key?: string): boolean | AnyFunction {
 	if (arguments.length > 1) {
 		if (obj == null) {
 			return false;
@@ -151,7 +151,7 @@ extend(Object, 'set', function (
 	path: string | any[] | ObjectGetOptions,
 	value: unknown,
 	opts?: ObjectSetOptions
-): unknown | Function {
+): unknown | AnyFunction {
 	if (needCurriedOverload(obj, path)) {
 		const
 			curriedPath = obj,

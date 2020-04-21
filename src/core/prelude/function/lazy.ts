@@ -9,7 +9,7 @@
 import extend from 'core/prelude/extend';
 
 /** @see Function.debounce */
-extend(Function.prototype, 'debounce', function (this: Function, delay: number = 250): Function {
+extend(Function.prototype, 'debounce', function (this: AnyFunction, delay: number = 250): AnyFunction {
 	const
 		// tslint:disable-next-line:no-this-assignment
 		fn = this;
@@ -38,7 +38,7 @@ extend(Function, 'debounce', (fn: Nullable<AnyFunction | number>, delay?: number
 });
 
 /** @see Function.throttle */
-extend(Function.prototype, 'throttle', function (this: Function, delay: number = 250): Function {
+extend(Function.prototype, 'throttle', function (this: AnyFunction, delay: number = 250): AnyFunction {
 	const
 		// tslint:disable-next-line:no-this-assignment
 		fn = this;

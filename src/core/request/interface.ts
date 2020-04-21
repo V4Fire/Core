@@ -112,7 +112,7 @@ export interface MiddlewareParams<D = unknown> {
 }
 
 export interface Middleware<D = unknown> {
-	(params: MiddlewareParams<D>): CanPromise<any | Function>;
+	(params: MiddlewareParams<D>): CanPromise<any | AnyFunction>;
 }
 
 export type Middlewares<D = unknown> =

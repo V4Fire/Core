@@ -15,7 +15,7 @@ extend(Object, 'mixin', function (
 	opts: ObjectMixinOptions | boolean,
 	base: any,
 	...objects: any[]
-): unknown | Function {
+): unknown | AnyFunction {
 	if (arguments.length < 3) {
 		if (arguments.length === 2) {
 			return (...args) => Object.mixin(opts, base, ...args);

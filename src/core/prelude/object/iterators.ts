@@ -11,8 +11,8 @@ import extend from 'core/prelude/extend';
 /** @see ObjectConstructor.forEach */
 extend(Object, 'forEach', (
 	obj: unknown,
-	optsOrCb: ObjectForEachOptions | Function,
-	cbOrOpts?: Function | ObjectForEachOptions
+	optsOrCb: ObjectForEachOptions | AnyFunction,
+	cbOrOpts?: AnyFunction | ObjectForEachOptions
 ) => {
 	if (!obj) {
 		return;
@@ -20,14 +20,14 @@ extend(Object, 'forEach', (
 
 	let
 		opts: CanUndef<ObjectForEachOptions>,
-		cb: Function;
+		cb: AnyFunction;
 
 	if (Object.isFunction(cbOrOpts)) {
 		cb = cbOrOpts;
 		opts = <ObjectForEachOptions>optsOrCb;
 
 	} else {
-		cb = <Function>optsOrCb;
+		cb = <AnyFunction>optsOrCb;
 		opts = <ObjectForEachOptions>cbOrOpts;
 	}
 

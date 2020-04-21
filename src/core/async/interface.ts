@@ -130,7 +130,7 @@ export interface Task<CTX extends object = Async> {
 	label?: Label;
 	paused: boolean;
 	muted: boolean;
-	queue: Function[];
+	queue: AnyFunction[];
 	onComplete: WrappedCb<CTX>[][];
 	onClear: AsyncCb<CTX>[];
 	clearFn?: ClearFn;
@@ -161,7 +161,7 @@ export type ProxyCb<
 	CTX extends object = Async
 > = A extends never ?
 	((this: CTX) => R) : A extends unknown[] ?
-		((this: CTX, ...args: A) => R) : ((this: CTX, e: A) => R) | Function;
+		((this: CTX, ...args: A) => R) : ((this: CTX, e: A) => R) | AnyFunction;
 
 export type IdleCb<
 	R = unknown,
@@ -284,14 +284,14 @@ export interface AsyncWorkerOptions<CTX extends object = Async> extends AsyncPro
 }
 
 export interface WorkerLike {
-	terminate?: Function;
-	destroy?: Function;
-	destructor?: Function;
-	close?: Function;
-	abort?: Function;
-	cancel?: Function;
-	disconnect?: Function;
-	unwatch?: Function;
+	terminate?: AnyFunction;
+	destroy?: AnyFunction;
+	destructor?: AnyFunction;
+	close?: AnyFunction;
+	abort?: AnyFunction;
+	cancel?: AnyFunction;
+	disconnect?: AnyFunction;
+	unwatch?: AnyFunction;
 }
 
 export interface EventLike<E extends EventEmitterLikeP = EventEmitterLikeP> {
@@ -317,21 +317,21 @@ export interface EventLike<E extends EventEmitterLikeP = EventEmitterLikeP> {
 }
 
 export interface EventEmitterLike {
-	on?: Function;
-	addListener?: Function;
-	addEventListener?: Function;
-	once?: Function;
-	off?: Function;
-	removeListener?: Function;
-	removeEventListener?: Function;
+	on?: AnyFunction;
+	addListener?: AnyFunction;
+	addEventListener?: AnyFunction;
+	once?: AnyFunction;
+	off?: AnyFunction;
+	removeListener?: AnyFunction;
+	removeEventListener?: AnyFunction;
 }
 
-export type WorkerLikeP = Function | WorkerLike;
-export type EventEmitterLikeP = Function | EventEmitterLike;
+export type WorkerLikeP = AnyFunction | WorkerLike;
+export type EventEmitterLikeP = AnyFunction | EventEmitterLike;
 
 export interface CancelablePromise<T = unknown> extends Promise<T> {
-	abort?: Function;
-	cancel?: Function;
+	abort?: AnyFunction;
+	cancel?: AnyFunction;
 }
 
 export interface LocalCache {

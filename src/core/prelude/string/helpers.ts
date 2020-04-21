@@ -131,7 +131,7 @@ export function convertToSeparatedStr(str: string, separator: string, stable?: b
  * Factory to create static string transform methods
  * @param method
  */
-export function createStaticTransformFunction(method: string): Function {
+export function createStaticTransformFunction(method: string): AnyFunction {
 	return (value: unknown, opts: boolean | Dictionary) => {
 		if (value == null) {
 			return;

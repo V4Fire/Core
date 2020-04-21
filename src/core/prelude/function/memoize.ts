@@ -9,7 +9,7 @@
 import extend from 'core/prelude/extend';
 
 /** @see Function.once */
-extend(Function.prototype, 'once', function (this: Function): Function {
+extend(Function.prototype, 'once', function (this: Function): AnyFunction {
 	const
 		// tslint:disable-next-line:no-this-assignment
 		fn = this;

@@ -325,7 +325,7 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 	 * @param [onValue] - success handler
 	 */
 	protected call<A = unknown, V = unknown>(
-		fn: Nullable<Function>,
+		fn: Nullable<AnyFunction>,
 		args: A[] = [],
 		onError?: ConstrRejectHandler,
 		onValue?: (value: V) => any

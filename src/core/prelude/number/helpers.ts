@@ -10,7 +10,7 @@
  * Factory to create rounding methods
  * @param method
  */
-export function createRoundingFunction(method: Function): Function {
+export function createRoundingFunction(method: AnyFunction): AnyFunction {
 	return function (this: number, precision?: number): number {
 		const
 			val = Number(this);
@@ -34,9 +34,9 @@ export function createRoundingFunction(method: Function): Function {
  * Factory to create static rounding methods
  * @param method
  */
-export function createStaticRoundingFunction(method: string): Function {
+export function createStaticRoundingFunction(method: string): AnyFunction {
 	// tslint:disable-next-line:only-arrow-functions
-	return function (value: unknown, precision: number): CanUndef<number> | Function {
+	return function (value: unknown, precision: number): CanUndef<number> | AnyFunction {
 		if (arguments.length < 2) {
 			precision = <number>value;
 			return (value) => Number[method](value, precision);
@@ -66,7 +66,7 @@ export function createStringTypeGetter(type: string): PropertyDescriptor {
  * Factory for functions that converts milliseconds by the specified offset
  * @param offset
  */
-export function createMsFunction(offset: number): Function {
+export function createMsFunction(offset: number): AnyFunction {
 	const fn = function (this: number): number {
 		return Number(this) * offset;
 	};
@@ -79,7 +79,7 @@ export function createMsFunction(offset: number): Function {
  * Factory for static functions that converts milliseconds by the specified offset
  * @param offset
  */
-export function createStaticMsFunction(offset: number): Function {
+export function createStaticMsFunction(offset: number): AnyFunction {
 	return (value) => {
 		if (value == null) {
 			return;

@@ -108,7 +108,7 @@ extend(Object, 'reject', selectReject(false));
  * Factory to create Object.select/reject functions
  * @param select
  */
-export function selectReject(select: boolean): Function {
+export function selectReject(select: boolean): AnyFunction {
 	// tslint:disable-next-line:only-arrow-functions
 	return function wrapper(obj: Dictionary, condition: CanArray<string> | Dictionary | RegExp): unknown {
 		if (arguments.length === 1) {

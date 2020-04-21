@@ -9,7 +9,7 @@
 import extend from 'core/prelude/extend';
 
 /** @see FunctionConstructor.compose */
-extend(Function, 'compose', (...fns: Nullable<Function>[]) => function (): unknown {
+extend(Function, 'compose', (...fns: Nullable<AnyFunction>[]) => function (): unknown {
 	if (!fns.length) {
 		return;
 	}
@@ -47,7 +47,10 @@ extend(Function, 'compose', (...fns: Nullable<Function>[]) => function (): unkno
 });
 
 /** @see Function.compose */
-extend(Function.prototype, 'compose', function (this: Function, ...fns: Nullable<Function>[]): Function {
+extend(Function.prototype, 'compose', function (
+	this: AnyFunction,
+	...fns: Nullable<AnyFunction>[]
+): AnyFunction {
 	const
 		that = this;
 
