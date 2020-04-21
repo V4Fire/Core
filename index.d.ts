@@ -31,12 +31,6 @@ declare function Any(obj: unknown): any;
 declare function stderr(err: unknown): void;
 
 /**
- * dev/null wrapper
- * @param obj
- */
-declare function devNull(obj: unknown): void;
-
-/**
  * Global i18n function (can be used as a string tag or a simple function)
  */
 declare function i18n(strings: unknown | string[], ...expr: unknown[]): string;
@@ -705,8 +699,7 @@ interface ObjectConstructor {
 	fastCompare<T>(a: unknown, b: T): a is T;
 
 	/**
-	 * Returns a function that clones an object, which the function takes,
-	 * by using a naive but fast "JSON.stringify/parse" strategy and returns a new object
+	 * Returns a curried version of Object.fastClone
 	 *
 	 * @param obj
 	 * @param opts - additional options
@@ -799,9 +792,7 @@ interface ObjectConstructor {
 	mixin<R = unknown>(opts: ObjectMixinOptions | boolean, base?: unknown, ...objects: unknown[]): R;
 
 	/**
-	 * Returns a function that parse a value, which it takes, as a JSON/JS object and returns the result of parsing.
-	 * If the value isn't a string or can't be parsed, the function returns an original value.
-	 *
+	 * Returns a curried version of Object.parse
 	 * @param reviver - reviver function for JSON.parse
 	 */
 	parse(reviver?: JSONCb): <V, R = unknown>(value: V) => V extends string ? R : V;
@@ -874,33 +865,25 @@ interface ObjectConstructor {
 	fromArray<T>(arr: unknown[], opts?: ObjectFromArrayOptions<T>): Dictionary<T>;
 
 	/**
-	 * Returns a function that returns a new object based on an object that the function takes,
-	 * but only with fields that match to the specified condition
-	 *
+	 * Returns a curried version of Object.select
 	 * @param condition - regular expression to filter
 	 */
 	select(condition: RegExp): <D extends object>(obj: D) => {[K in keyof D]?: D[K]};
 
 	/**
-	 * Returns a function that returns a new object based on an object that the function takes,
-	 * but only with fields that match to the specified condition
-	 *
+	 * Returns a curried version of Object.select
 	 * @param condition - whitelist of keys to filter
 	 */
 	select<C extends string>(condition: CanArray<C>): <D extends object>(obj: D) => Pick<D, Extract<keyof D, C>>;
 
 	/**
-	 * Returns a function that returns a new object based on an object that the function takes,
-	 * but only with fields that match to the specified condition
-	 *
+	 * Returns a curried version of Object.select
 	 * @param condition - whitelist of keys to filter
 	 */
 	select<C extends string>(condition: Iterable<C>): <D extends object>(obj: D) => {[K in keyof D]?: D[K]};
 
 	/**
-	 * Returns a function that returns a new object based on an object that the function takes,
-	 * but only with fields that match to the specified condition
-	 *
+	 * Returns a curried version of Object.select
 	 * @param condition - map of keys to filter
 	 */
 	select<C extends object>(condition: C): <D extends object>(obj: D) => Pick<D, Extract<keyof D, keyof C>>;
@@ -938,33 +921,25 @@ interface ObjectConstructor {
 	select<D extends object, C extends object>(obj: D, condition: C): Pick<D, Extract<keyof D, keyof C>>;
 
 	/**
-	 * Returns a function that returns a new object based on an object that the function takes,
-	 * but without fields that match to the specified condition
-	 *
+	 * Returns a curried version of Object.reject
 	 * @param condition - regular expression to filter
 	 */
 	reject(condition: RegExp): <D extends object>(obj: D) => {[K in keyof D]?: D[K]};
 
 	/**
-	 * Returns a function that returns a new object based on an object that the function takes,
-	 * but without fields that match to the specified condition
-	 *
+	 * Returns a curried version of Object.reject
 	 * @param condition - whitelist of keys to filter
 	 */
 	reject<C extends string>(condition: CanArray<C>): <D extends object>(obj: D) => Omit<D, C>;
 
 	/**
-	 * Returns a function that returns a new object based on an object that the function takes,
-	 * but without fields that match to the specified condition
-	 *
+	 * Returns a curried version of Object.reject
 	 * @param condition - whitelist of keys to filter
 	 */
 	reject<C extends string>(condition: Iterable<C>): <D extends object>(obj: D) => {[K in keyof D]?: D[K]};
 
 	/**
-	 * Returns a function that returns a new object based on an object that the function takes,
-	 * but without fields that match to the specified condition
-	 *
+	 * Returns a curried version of Object.reject
 	 * @param condition - map of keys to filter
 	 */
 	reject<C extends object>(condition: C): <D extends object>(obj: D) => Omit<D, keyof C>;
@@ -1096,7 +1071,7 @@ interface ObjectConstructor {
 	 * This method is similar to isPlainObject, but it has another output TS type:
 	 * instead of inferring of an output type the method always cast the type to a dictionary.
 	 *
-	 * @param obj
+	 * @param value
 	 *
 	 * @example
 	 * ```ts
@@ -1115,146 +1090,146 @@ interface ObjectConstructor {
 	 * }
 	 * ```
 	 */
-	isDictionary(obj: unknown): obj is Dictionary;
+	isDictionary(value: unknown): value is Dictionary;
 
 	/**
 	 * @deprecated
 	 * @see [[ObjectConstructor.isPlainObject]]
 	 * @see [[ObjectConstructor.isDictionary]]
 	 */
-	isObject(obj: unknown): obj is Dictionary;
+	isObject(value: unknown): value is Dictionary;
 
 	/**
 	 * Returns true if the specified value has a primitive type
-	 * @param obj
+	 * @param value
 	 */
-	isPrimitive(obj: unknown): boolean;
+	isPrimitive(value: unknown): boolean;
 
 	/**
 	 * Returns true if the specified value is a custom (not native) object or a function
-	 * @param obj
+	 * @param value
 	 */
-	isCustomObject(obj: unknown): boolean;
+	isCustomObject(value: unknown): boolean;
 
 	/**
 	 * Returns true if the specified value is a simple object (without a string type tag)
-	 * @param obj
+	 * @param value
 	 */
-	isSimpleObject<T extends object = object>(obj: unknown): obj is T;
+	isSimpleObject<T extends object = object>(value: unknown): value is T;
 
 	/**
 	 * Returns true if the specified value is an array
-	 * @param obj
+	 * @param value
 	 */
-	isArray(obj: unknown): obj is unknown[];
+	isArray(value: unknown): value is unknown[];
 
 	/**
 	 * Returns true if the specified value is looks like an array
-	 * @param obj
+	 * @param value
 	 */
-	isArrayLike(obj: unknown): obj is ArrayLike;
+	isArrayLike(value: unknown): value is ArrayLike;
 
 	/**
 	 * Returns true if the specified value is a function
-	 * @param obj
+	 * @param value
 	 */
-	isFunction(obj: unknown): obj is AnyFunction;
+	isFunction(value: unknown): value is AnyFunction;
 
 	/**
 	 * Returns true if the specified value is a constructor function
-	 * @param obj
+	 * @param value
 	 */
-	isConstructor(obj: unknown): obj is Function;
+	isConstructor(value: unknown): value is Function;
 
 	/**
 	 * Returns true if the specified value is a generator
-	 * @param obj
+	 * @param value
 	 */
-	isGenerator(obj: unknown): obj is GeneratorFunction;
+	isGenerator(value: unknown): value is GeneratorFunction;
 
 	/**
 	 * Returns true if the specified value is an iterable structure
-	 * @param obj
+	 * @param value
 	 */
-	isIterable(obj: unknown): obj is IterableIterator<unknown>;
+	isIterable(value: unknown): value is IterableIterator<unknown>;
 
 	/**
 	 * Returns true if the specified value is an iterator
-	 * @param obj
+	 * @param value
 	 */
-	isIterator(obj: unknown): obj is Iterator<unknown>;
+	isIterator(value: unknown): value is Iterator<unknown>;
 
 	/**
 	 * Returns true if the specified value is a string
-	 * @param obj
+	 * @param value
 	 */
-	isString(obj: unknown): obj is string;
+	isString(value: unknown): value is string;
 
 	/**
 	 * Returns true if the specified value is a number
-	 * @param obj
+	 * @param value
 	 */
-	isNumber(obj: unknown): obj is number;
+	isNumber(value: unknown): value is number;
 
 	/**
 	 * Returns true if the specified value is a boolean
-	 * @param obj
+	 * @param value
 	 */
-	isBoolean(obj: unknown): obj is boolean;
+	isBoolean(value: unknown): value is boolean;
 
 	/**
 	 * Returns true if the specified value is a symbol
-	 * @param obj
+	 * @param value
 	 */
-	isSymbol(obj: unknown): obj is symbol;
+	isSymbol(value: unknown): value is symbol;
 
 	/**
 	 * Returns true if the specified value is a regular expression
-	 * @param obj
+	 * @param value
 	 */
-	isRegExp(obj: unknown): obj is RegExp;
+	isRegExp(value: unknown): value is RegExp;
 
 	/**
 	 * Returns true if the specified value is a date
-	 * @param obj
+	 * @param value
 	 */
-	isDate(obj: unknown): obj is Date;
+	isDate(value: unknown): value is Date;
 
 	/**
 	 * Returns true if the specified value is a promise
-	 * @param obj
+	 * @param value
 	 */
-	isPromise(obj: unknown): obj is Promise<unknown>;
+	isPromise(value: unknown): value is Promise<unknown>;
 
 	/**
 	 * Returns true if the specified value is looks like a promise
-	 * @param obj
+	 * @param value
 	 */
-	isPromiseLike(obj: unknown): obj is PromiseLike<unknown>;
+	isPromiseLike(value: unknown): value is PromiseLike<unknown>;
 
 	/**
 	 * Returns true if the specified value is a map
-	 * @param obj
+	 * @param value
 	 */
-	isMap(obj: unknown): obj is Map<unknown, unknown>;
+	isMap(value: unknown): value is Map<unknown, unknown>;
 
 	/**
 	 * Returns true if the specified value is a weak map
-	 * @param obj
+	 * @param value
 	 */
-	isWeakMap(obj: unknown): obj is WeakMap<object, unknown>;
+	isWeakMap(value: unknown): value is WeakMap<object, unknown>;
 
 	/**
 	 * Returns true if the specified value is a set
-	 * @param obj
+	 * @param value
 	 */
-	isSet(obj: unknown): obj is Set<unknown>;
+	isSet(value: unknown): value is Set<unknown>;
 
 	/**
 	 * Returns true if the specified value is a weak set
-	 * @param obj
+	 * @param value
 	 */
-	isWeakSet(obj: unknown): obj is WeakSet<object>;
+	isWeakSet(value: unknown): value is WeakSet<object>;
 }
 
 interface ArrayConstructor {
@@ -1367,104 +1342,102 @@ interface StringUnderscoreOptions extends StringDasherizeOptions {
 
 interface StringConstructor {
 	/**
-	 * Returns a function that capitalizes the first character of a value, which it takes, and returns it
+	 * Returns a curried version of String.capitalize
 	 * @param opts - additional options
 	 */
-	capitalize(opts: StringCapitalizeOptions): (value: string) => string;
+	capitalize(opts: StringCapitalizeOptions): (str: string) => string;
 
 	/**
-	 * Capitalizes the first character of a value and returns it
+	 * Capitalizes the first character of the string and returns it
 	 *
-	 * @param value
+	 * @param str
 	 * @param [opts] - additional options
 	 */
-	capitalize(value: string, opts?: StringCapitalizeOptions): string;
+	capitalize(str: string, opts?: StringCapitalizeOptions): string;
 
 	/**
-	 * Returns a function that transforms a value that it takes to a CamelCaseStyle version
+	 * Returns a curried version of String.camelize
 	 * @param upper - if false, then the first character of a value is transformed to the lower case
 	 */
-	camelize(upper: boolean): (value: string) => string;
+	camelize(upper: boolean): (str: string) => string;
 
 	/**
-	 * Returns a function that transforms a value that it takes to a CamelCaseStyle version
+	 * Returns a curried version of String.camelize
 	 * @param opts - additional options
 	 */
-	camelize(opts: StringCamelizeOptions): (value: string) => string;
+	camelize(opts: StringCamelizeOptions): (str: string) => string;
 
 	/**
-	 * Returns a CamelCaseStyle version of the specified value
+	 * Returns a CamelCaseStyle version of the specified string
 	 *
-	 * @param value
+	 * @param str
 	 * @param [upper] - if false, then the first character of a value is transformed to the lower case
 	 */
-	camelize(value: string, upper?: boolean): string;
+	camelize(str: string, upper?: boolean): string;
 
 	/**
-	 * Returns a CamelCaseStyle version of the specified value
+	 * Returns a CamelCaseStyle version of the specified string
 	 *
-	 * @param value
+	 * @param str
 	 * @param [opts] - additional options
 	 */
-	camelize(value: string, opts?: StringCamelizeOptions): string;
+	camelize(str: string, opts?: StringCamelizeOptions): string;
 
 	/**
-	 * Returns a function that transforms a value that it takes to a dash-style version
-	 *
+	 * Returns a curried version of String.dasherize
 	 * @param stable - if true, then the operation can be reverted
 	 */
-	dasherize(stable: boolean): (value: string) => string;
+	dasherize(stable: boolean): (str: string) => string;
 
 	/**
-	 * Returns a function that transforms a value that it takes to a dash-style version
-	 *
+	 * Returns a curried version of String.dasherize
 	 * @param opts - additional options
 	 */
-	dasherize(opts: StringDasherizeOptions): (value: string) => string;
+	dasherize(opts: StringDasherizeOptions): (str: string) => string;
 
 	/**
-	 * Returns a dash-style version of the specified value
+	 * Returns a dash-style version of the specified string
 	 *
-	 * @param value
+	 * @param str
 	 * @param [stable] - if true, then the operation can be reverted
 	 */
-	dasherize(value: string, stable?: boolean): string;
+	dasherize(str: string, stable?: boolean): string;
 
 	/**
-	 * Returns a dash-style version of the specified value
+	 * Returns a dash-style version of the specified string
 	 *
-	 * @param value
+	 * @param str
 	 * @param [opts] - additional options
 	 */
-	dasherize(value: string, opts?: StringDasherizeOptions): string;
+	dasherize(str: string, opts?: StringDasherizeOptions): string;
 
 	/**
-	 * Returns a function that transforms a value that it takes to a underscore_style version
+	 * Returns a curried version of String.underscore
 	 * @param stable - if true, then the operation can be reverted
 	 */
-	underscore(stable: boolean): (value: string) => string;
+	underscore(stable: boolean): (str: string) => string;
 
 	/**
-	 * Returns a function that transforms a value that it takes to a underscore_style version
+	 * Returns a curried version of String.underscore
 	 * @param opts - additional options
 	 */
-	underscore(opts: StringUnderscoreOptions): (value: string) => string;
+	underscore(opts: StringUnderscoreOptions): (str: string) => string;
 
 	/**
-	 * Returns an underscore_style version of the specified value
+	 * Returns an underscore_style version of the specified string
 	 *
-	 * @param value
+	 * @param str
 	 * @param [stable] - if true, then the operation can be reverted
 	 */
-	underscore(value: string, stable?: boolean): string;
+	underscore(str: string, stable?: boolean): string;
 
 	/**
-	 * Returns an underscore_style version of the specified value
+	 * Returns an underscore_style version of the specified string
 	 *
-	 * @param value
+	 * @param str
 	 * @param [opts] - additional options
 	 */
-	underscore(value: string, opts?: StringUnderscoreOptions): string;
+	underscore(str: string, opts?: StringUnderscoreOptions): string;
 }
 
 interface String {
@@ -1535,63 +1508,63 @@ interface NumberConstructor {
 
 	/**
 	 * Returns true if the specified value is an integer number
-	 * @param obj
+	 * @param value
 	 */
-	isInteger(obj: unknown): boolean;
+	isInteger(value: unknown): boolean;
 
 	/**
 	 * Returns true if the specified value is a float number
-	 * @param obj
+	 * @param value
 	 */
-	isFloat(obj: unknown): boolean;
+	isFloat(value: unknown): boolean;
 
 	/**
 	 * Returns true if the specified value is an even number
-	 * @param obj
+	 * @param value
 	 */
-	isEven(obj: unknown): boolean;
+	isEven(value: unknown): boolean;
 
 	/**
 	 * Returns true if the specified value is an odd number
-	 * @param obj
+	 * @param value
 	 */
-	isOdd(obj: unknown): boolean;
+	isOdd(value: unknown): boolean;
 
 	/**
 	 * Returns true if the specified value is a natural number
-	 * @param obj
+	 * @param value
 	 */
-	isNatural(obj: unknown): boolean;
+	isNatural(value: unknown): boolean;
 
 	/**
 	 * Returns true if the specified value is a positive number
-	 * @param obj
+	 * @param value
 	 */
-	isPositive(obj: unknown): boolean;
+	isPositive(value: unknown): boolean;
 
 	/**
 	 * Returns true if the specified value is a negative number
-	 * @param obj
+	 * @param value
 	 */
-	isNegative(obj: unknown): boolean;
+	isNegative(value: unknown): boolean;
 
 	/**
 	 * Returns true if the specified value is a non-negative number
-	 * @param obj
+	 * @param value
 	 */
-	isNonNegative(obj: unknown): boolean;
+	isNonNegative(value: unknown): boolean;
 
 	/**
 	 * Returns true if the specified value is a number and is more or equal than 0 and less or equal than 1
-	 * @param obj
+	 * @param value
 	 */
-	isBetweenZeroAndOne(obj: unknown): boolean;
+	isBetweenZeroAndOne(value: unknown): boolean;
 
 	/**
 	 * Returns true if the specified value is a number and is more than 0 and less or equal than 1
-	 * @param obj
+	 * @param value
 	 */
-	isPositiveBetweenZeroAndOne(obj: unknown): boolean;
+	isPositiveBetweenZeroAndOne(value: unknown): boolean;
 
 	/**
 	 * Returns a value of milliseconds from the seconds
@@ -1669,18 +1642,18 @@ interface NumberConstructor {
 	/**
 	 * Returns a string from a number with adding extra zeros to the start, if necessary
 	 *
-	 * @param value
+	 * @param num
 	 * @param targetLength - length of the resulting string once the current string has been padded
 	 */
-	pad(value: string, targetLength?: number): string;
+	pad(num: number, targetLength?: number): string;
 
 	/**
 	 * Returns a string from a number with adding extra zeros to the start, if necessary
 	 *
-	 * @param value
+	 * @param num
 	 * @param opts - additional options
 	 */
-	pad(value: string, opts: NumberPadOptions): string;
+	pad(num: number, opts: NumberPadOptions): string;
 
 	/**
 	 * Returns a curried version of Number.format
@@ -1714,7 +1687,7 @@ interface NumberConstructor {
 	 *   1. `'%'` - `{style: 'percent'}`
 	 *   1. `'.'` - `{style: 'decimal'}`
 	 *
-	 * @param value
+	 * @param num
 	 * @param pattern - string pattern of the format:
 	 *   1. symbol `';'` is used as a separator character for pattern directives, for example: `'$;$d:code'`
 	 *   1. symbol `':'` is used for specifying a custom value for a pattern directive, for example:
@@ -1728,16 +1701,16 @@ interface NumberConstructor {
 	 *  100.50.format('$:EUR;$d:code', 'en-us') // 'EUR 100.50'
 	 * ```
 	 */
-	format(value: number, pattern?: string, locale?: CanArray<string>): string;
+	format(num: number, pattern?: string, locale?: CanArray<string>): string;
 
 	/**
 	 * Returns a string representation of a number by the specified options
 	 *
-	 * @param value
+	 * @param num
 	 * @param opts - formatting options
 	 * @param [locale] - locale for internalizing
 	 */
-	format(value: number, opts: Intl.NumberFormatOptions, locale?: CanArray<string>): string;
+	format(num: number, opts: Intl.NumberFormatOptions, locale?: CanArray<string>): string;
 }
 
 interface NumberPadOptions {
