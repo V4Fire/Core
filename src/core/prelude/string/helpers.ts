@@ -132,16 +132,12 @@ export function convertToSeparatedStr(str: string, separator: string, stable?: b
  * @param method
  */
 export function createStaticTransformFunction(method: string): AnyFunction {
-	return (value: unknown, opts: boolean | Dictionary) => {
-		if (value == null) {
-			return;
-		}
-
+	return (value: string | boolean | Dictionary, opts: boolean | Dictionary) => {
 		if (Object.isBoolean(value) || Object.isDictionary(value)) {
 			opts = value;
 			return (value) => String[method](value, opts);
 		}
 
-		return String(value)[method](opts);
+		return value[method](opts);
 	};
 }

@@ -63,12 +63,6 @@ declare function cancelIdleCallback(id: number): void;
 declare function setImmediate(fn: AnyFunction): number;
 declare function clearImmediate(id: number): void;
 
-type Optional<T = unknown, TVAL = T, SAFE = TVAL> = T extends null | undefined ?
-	undefined : T extends SAFE ? TVAL : CanUndef<TVAL>;
-
-type OptionalPromise<T = unknown, TVAL = T, SAFE = TVAL> = T extends Promise<infer V> ?
-	Promise<Optional<V, TVAL, SAFE>> : Optional<T, TVAL, SAFE>;
-
 type Nullable<T> = T | null | undefined;
 type CanPromise<T> = T | Promise<T>;
 type CanUndef<T> = T | undefined;
@@ -1270,14 +1264,12 @@ interface ArrayConstructor {
 	 */
 	union<T extends Nullable<unknown[]>>(arr: T): <A extends Iterable<unknown> | unknown>(
 		...args: Array<Iterable<A> | A>
-	) => A extends Iterable<infer V> ?
-		Optional<T, Array<IterableType<T> | V>> : Optional<T, Array<IterableType<T> | NonNullable<A>>>;
+	) => A extends Iterable<infer V> ? Array<IterableType<T> | V> : Array<IterableType<T> | NonNullable<A>>;
 
 	/**
 	 * Returns a new array containing elements from all specified iterable values with duplicates removed.
 	 * You can also pass non-iterable values and they will be added to the final array,
-	 * except values with null and undefined. If the first parameter of the function is equal to null or undefined,
-	 * the function returns undefined.
+	 * except values with null and undefined.
 	 *
 	 * @param arr
 	 * @param args
@@ -1285,22 +1277,19 @@ interface ArrayConstructor {
 	union<T extends Nullable<unknown[]>, A extends Iterable<unknown> | unknown>(
 		arr: T,
 		...args: Array<Iterable<A> | A>
-	): A extends Iterable<infer V> ?
-		Optional<T, Array<IterableType<T> | V>> : Optional<T, Array<IterableType<T> | NonNullable<A>>>;
+	): A extends Iterable<infer V> ? Array<IterableType<T> | V> : Array<IterableType<T> | NonNullable<A>>;
 
 	/**
 	 * Returns a curried version of Array.concat
 	 * @param arr
 	 */
 	concat<T extends Nullable<unknown[]>>(arr: T): <A extends CanArray<unknown>>(...args: CanArray<A>[]) =>
-		A extends Array<infer V> ?
-			Optional<T, Array<IterableType<T> | V>> : Optional<T, Array<IterableType<T> | NonNullable<A>>>;
+		A extends Array<infer V> ? Array<IterableType<T> | V> : Array<IterableType<T> | NonNullable<A>>;
 
 	/**
 	 * Returns a new array containing elements from all specified arrays.
 	 * You can also pass non-iterable values and they will be added to the final array,
-	 * except values with null and undefined. If the first parameter of the function is equal to null or undefined,
-	 * the function returns undefined.
+	 * except values with null and undefined.
 	 *
 	 * @param arr
 	 * @param args
@@ -1308,8 +1297,7 @@ interface ArrayConstructor {
 	concat<T extends Nullable<unknown[]>, A extends CanArray<unknown>>(
 		arr: T,
 		...args: CanArray<A>[]
-	): A extends Array<infer V> ?
-		Optional<T, Array<IterableType<T> | V>> : Optional<T, Array<IterableType<T> | NonNullable<A>>>;
+	): A extends Array<infer V> ? Array<IterableType<T> | V> : Array<IterableType<T> | NonNullable<A>>;
 }
 
 interface Array<T> {
@@ -1379,137 +1367,104 @@ interface StringUnderscoreOptions extends StringDasherizeOptions {
 
 interface StringConstructor {
 	/**
-	 * Returns a function that capitalizes the first character of a value, which it takes, and returns it.
-	 * If the value is equal to null or undefined, the function returns undefined,
-	 * otherwise, the value will be converted to a string.
-	 *
+	 * Returns a function that capitalizes the first character of a value, which it takes, and returns it
 	 * @param opts - additional options
 	 */
-	capitalize(opts: StringCapitalizeOptions): <T>(value: T) => Optional<T, string>;
+	capitalize(opts: StringCapitalizeOptions): (value: string) => string;
 
 	/**
-	 * Capitalizes the first character of a value and returns it.
-	 * If the value is equal to null or undefined, the function returns undefined,
-	 * otherwise, the value will be converted to a string.
+	 * Capitalizes the first character of a value and returns it
 	 *
 	 * @param value
 	 * @param [opts] - additional options
 	 */
-	capitalize<T>(value: T, opts?: StringCapitalizeOptions): Optional<T, string>;
+	capitalize(value: string, opts?: StringCapitalizeOptions): string;
 
 	/**
-	 * Returns a function that transforms a value that it takes to a CamelCaseStyle version.
-	 * If the value is equal to null or undefined, the function returns undefined,
-	 * otherwise, the value will be converted to a string.
-	 *
+	 * Returns a function that transforms a value that it takes to a CamelCaseStyle version
 	 * @param upper - if false, then the first character of a value is transformed to the lower case
 	 */
-	camelize(upper: boolean): <T>(value: T) => Optional<T, string>;
+	camelize(upper: boolean): (value: string) => string;
 
 	/**
-	 * Returns a function that transforms a value that it takes to a CamelCaseStyle version.
-	 * If the value is equal to null or undefined, the function returns undefined,
-	 * otherwise, the value will be converted to a string.
-	 *
+	 * Returns a function that transforms a value that it takes to a CamelCaseStyle version
 	 * @param opts - additional options
 	 */
-	camelize(opts: StringCamelizeOptions): <T>(value: T) => Optional<T, string>;
+	camelize(opts: StringCamelizeOptions): (value: string) => string;
 
 	/**
-	 * Returns a CamelCaseStyle version of the specified value.
-	 * If the value is equal to null or undefined, the function returns undefined,
-	 * otherwise, the value will be converted to a string.
+	 * Returns a CamelCaseStyle version of the specified value
 	 *
 	 * @param value
 	 * @param [upper] - if false, then the first character of a value is transformed to the lower case
 	 */
-	camelize<T>(value: T, upper?: boolean): Optional<T, string>;
+	camelize(value: string, upper?: boolean): string;
 
 	/**
-	 * Returns a CamelCaseStyle version of the specified value.
-	 * If the value is equal to null or undefined, the function returns undefined,
-	 * otherwise, the value will be converted to a string.
+	 * Returns a CamelCaseStyle version of the specified value
 	 *
 	 * @param value
 	 * @param [opts] - additional options
 	 */
-	camelize<T>(value: T, opts?: StringCamelizeOptions): Optional<T, string>;
+	camelize(value: string, opts?: StringCamelizeOptions): string;
 
 	/**
-	 * Returns a function that transforms a value that it takes to a dash-style version.
-	 * If the value is equal to null or undefined, the function returns undefined,
-	 * otherwise, the value will be converted to a string.
+	 * Returns a function that transforms a value that it takes to a dash-style version
 	 *
 	 * @param stable - if true, then the operation can be reverted
 	 */
-	dasherize(stable: boolean): <T>(value: T) => Optional<T, string>;
+	dasherize(stable: boolean): (value: string) => string;
 
 	/**
-	 * Returns a function that transforms a value that it takes to a dash-style version.
-	 * If the value is equal to null or undefined, the function returns undefined,
-	 * otherwise, the value will be converted to a string.
+	 * Returns a function that transforms a value that it takes to a dash-style version
 	 *
 	 * @param opts - additional options
 	 */
-	dasherize(opts: StringDasherizeOptions): <T>(value: T) => Optional<T, string>;
+	dasherize(opts: StringDasherizeOptions): (value: string) => string;
 
 	/**
-	 * Returns a dash-style version of the specified value.
-	 * If the value is equal to null or undefined, the function returns undefined,
-	 * otherwise, the value will be converted to a string.
+	 * Returns a dash-style version of the specified value
 	 *
 	 * @param value
 	 * @param [stable] - if true, then the operation can be reverted
 	 */
-	dasherize<T>(value: T, stable?: boolean): Optional<T, string>;
+	dasherize(value: string, stable?: boolean): string;
 
 	/**
-	 * Returns a dash-style version of the specified value.
-	 * If the value is equal to null or undefined, the function returns undefined,
-	 * otherwise, the value will be converted to a string.
+	 * Returns a dash-style version of the specified value
 	 *
 	 * @param value
 	 * @param [opts] - additional options
 	 */
-	dasherize<T>(value: T, opts?: StringDasherizeOptions): Optional<T, string>;
+	dasherize(value: string, opts?: StringDasherizeOptions): string;
 
 	/**
-	 * Returns a function that transforms a value that it takes to a underscore_style version.
-	 * If the value is equal to null or undefined, the function returns undefined,
-	 * otherwise, the value will be converted to a string.
-	 *
+	 * Returns a function that transforms a value that it takes to a underscore_style version
 	 * @param stable - if true, then the operation can be reverted
 	 */
-	underscore(stable: boolean): <T>(value: T) => Optional<T, string>;
+	underscore(stable: boolean): (value: string) => string;
 
 	/**
-	 * Returns a function that transforms a value that it takes to a underscore_style version.
-	 * If the value is equal to null or undefined, the function returns undefined,
-	 * otherwise, the value will be converted to a string.
-	 *
+	 * Returns a function that transforms a value that it takes to a underscore_style version
 	 * @param opts - additional options
 	 */
-	underscore(opts: StringUnderscoreOptions): <T>(value: T) => Optional<T, string>;
+	underscore(opts: StringUnderscoreOptions): (value: string) => string;
 
 	/**
-	 * Returns an underscore_style version of the specified value.
-	 * If the value is equal to null or undefined, the function returns undefined,
-	 * otherwise, the value will be converted to a string.
+	 * Returns an underscore_style version of the specified value
 	 *
 	 * @param value
 	 * @param [stable] - if true, then the operation can be reverted
 	 */
-	underscore<T>(value: unknown, stable?: boolean): Optional<T, string>;
+	underscore(value: string, stable?: boolean): string;
 
 	/**
-	 * Returns an underscore_style version of the specified value.
-	 * If the value is equal to null or undefined, the function returns undefined,
-	 * otherwise, the value will be converted to a string.
+	 * Returns an underscore_style version of the specified value
 	 *
 	 * @param value
 	 * @param [opts] - additional options
 	 */
-	underscore<T>(value: unknown, opts?: StringUnderscoreOptions): Optional<T, string>;
+	underscore(value: string, opts?: StringUnderscoreOptions): string;
 }
 
 interface String {
@@ -1639,113 +1594,93 @@ interface NumberConstructor {
 	isPositiveBetweenZeroAndOne(obj: unknown): boolean;
 
 	/**
-	 * Returns a value of milliseconds from the seconds.
-	 * If the value is equal to null or undefined, the function returns undefined,
-	 * otherwise, the value will be converted to a number.
+	 * Returns a value of milliseconds from the seconds
 	 */
-	seconds<T>(value: T): Optional<T, number>;
+	seconds(value: number): number;
 
 	/**
-	 * Returns a value of milliseconds from the minutes.
-	 * If the value is equal to null or undefined, the function returns undefined,
-	 * otherwise, the value will be converted to a number.
+	 * Returns a value of milliseconds from the minutes
 	 */
-	minutes<T>(value: T): Optional<T, number>;
+	minutes(value: number): number;
 
 	/**
-	 * Returns a value of milliseconds from the hours.
-	 * If the value is equal to null or undefined, the function returns undefined,
-	 * otherwise, the value will be converted to a number.
+	 * Returns a value of milliseconds from the hours
 	 */
-	hours<T>(value: T): Optional<T, number>;
+	hours(value: number): number;
 
 	/**
-	 * Returns a value of milliseconds from the days.
-	 * If the value is equal to null or undefined, the function returns undefined,
-	 * otherwise, the value will be converted to a number.
+	 * Returns a value of milliseconds from the days
 	 */
-	days<T>(value: T): Optional<T, number>;
+	days(value: number): number;
 
 	/**
-	 * Returns a value of milliseconds from the weeks.
-	 * If the value is equal to null or undefined, the function returns undefined,
-	 * otherwise, the value will be converted to a number.
+	 * Returns a value of milliseconds from the weeks
 	 */
-	weeks<T>(value: T): Optional<T, number>;
+	weeks(value: number): number;
 
 	/**
 	 * Returns a curried version of Number.floor
 	 * @param precision
 	 */
-	floor(precision: number): <T>(value: T) => Optional<T, number>;
+	floor(precision: number): (value: number) => number;
 
 	/**
-	 * Shortcut for Math.floor that also allows a precision.
-	 * If the value is equal to null or undefined, the function returns undefined,
-	 * otherwise, the value will be converted to a number.
+	 * Shortcut for Math.floor that also allows a precision
 	 *
 	 * @param value
 	 * @param precision
 	 */
-	floor<T>(value: T, precision: number): Optional<T, number>;
+	floor(value: number, precision: number): number;
 
 	/**
 	 * Returns a curried version of Number.round
 	 * @param precision
 	 */
-	round(precision: number): <T>(value: T) => Optional<T, number>;
+	round(precision: number): (value: number) => number;
 
 	/**
-	 * Shortcut for Math.round that also allows a precision.
-	 * If the value is equal to null or undefined, the function returns undefined,
-	 * otherwise, the value will be converted to a number.
+	 * Shortcut for Math.round that also allows a precision
 	 *
 	 * @param value
 	 * @param precision
 	 */
-	round<T>(value: T, precision: number): Optional<T, number>;
+	round(value: number, precision: number): number;
 
 	/**
 	 * Returns a curried version of Number.ceil
 	 * @param precision
 	 */
-	ceil(precision: number): <T>(value: T) => Optional<T, number>;
+	ceil(precision: number): (value: number) => number;
 
 	/**
-	 * Shortcut for Math.ceil that also allows a precision.
-	 * If the value is equal to null or undefined, the function returns undefined,
-	 * otherwise, the value will be converted to a number.
+	 * Shortcut for Math.ceil that also allows a precision
 	 *
 	 * @param value
 	 * @param precision
 	 */
-	ceil<T>(value: T, precision: number): Optional<T, number>;
+	ceil(value: number, precision: number): number;
 
 	/**
 	 * Returns a curried version of Number.pad
 	 * @param opts - additional options
 	 */
-	pad(opts: NumberPadOptions): <T>(value: T) => Optional<T, string>;
+	pad(opts: NumberPadOptions): (value: string) => string;
 
 	/**
-	 * Returns a string from a number with adding extra zeros to the start, if necessary.
-	 * If the number value is equal to null or undefined, the function returns undefined,
-	 * otherwise, the value will be converted to a number.
+	 * Returns a string from a number with adding extra zeros to the start, if necessary
 	 *
 	 * @param value
 	 * @param targetLength - length of the resulting string once the current string has been padded
 	 */
-	pad<T>(value: T, targetLength?: number): Optional<T, string>;
+	pad(value: string, targetLength?: number): string;
 
 	/**
-	 * Returns a string from a number with adding extra zeros to the start, if necessary.
-	 * If the number value is equal to null or undefined, the function returns undefined,
-	 * otherwise, the value will be converted to a number.
+	 * Returns a string from a number with adding extra zeros to the start, if necessary
 	 *
 	 * @param value
 	 * @param opts - additional options
 	 */
-	pad<T>(value: T, opts: NumberPadOptions): Optional<T, string>;
+	pad(value: string, opts: NumberPadOptions): string;
 
 	/**
 	 * Returns a curried version of Number.format
@@ -1753,7 +1688,7 @@ interface NumberConstructor {
 	 * @param pattern
 	 * @param locale
 	 */
-	format(pattern: string, locale?: CanArray<string>): <T>(value: T) => Optional<T, string>;
+	format(pattern: string, locale?: CanArray<string>): (value: string) => string;
 
 	/**
 	 * Returns a curried version of Number.format
@@ -1761,7 +1696,7 @@ interface NumberConstructor {
 	 * @param opts
 	 * @param locale
 	 */
-	format(opts: Intl.NumberFormatOptions, locale?: CanArray<string>): <T>(value: T) => Optional<T, string>;
+	format(opts: Intl.NumberFormatOptions, locale?: CanArray<string>): (value: string) => string;
 
 	/**
 	 * Returns a string representation of a number by the specified pattern.
@@ -1779,9 +1714,6 @@ interface NumberConstructor {
 	 *   1. `'%'` - `{style: 'percent'}`
 	 *   1. `'.'` - `{style: 'decimal'}`
 	 *
-	 * If the number value is equal to null or undefined, the function returns undefined,
-	 * otherwise, the value will be converted to a number.
-	 *
 	 * @param value
 	 * @param pattern - string pattern of the format:
 	 *   1. symbol `';'` is used as a separator character for pattern directives, for example: `'$;$d:code'`
@@ -1796,18 +1728,16 @@ interface NumberConstructor {
 	 *  100.50.format('$:EUR;$d:code', 'en-us') // 'EUR 100.50'
 	 * ```
 	 */
-	format<T>(value: T, pattern?: string, locale?: CanArray<string>): Optional<T, string>;
+	format(value: string, pattern?: string, locale?: CanArray<string>): string;
 
 	/**
-	 * Returns a string representation of a number by the specified options.
-	 * If the number value is equal to null or undefined, the function returns undefined,
-	 * otherwise, the value will be converted to a number.
+	 * Returns a string representation of a number by the specified options
 	 *
 	 * @param value
 	 * @param opts - formatting options
 	 * @param [locale] - locale for internalizing
 	 */
-	format<T>(value: T, opts: Intl.NumberFormatOptions, locale?: CanArray<string>): Optional<T, string>;
+	format(value: string, opts: Intl.NumberFormatOptions, locale?: CanArray<string>): string;
 }
 
 interface NumberPadOptions {
@@ -2421,60 +2351,41 @@ interface Date {
 
 interface FunctionConstructor {
 	/**
-	 * Returns a new function that allows to invoke the specified function only once.
-	 * If the value is equal to null or undefined, the function returns undefined.
-	 *
+	 * Returns a new function that allows to invoke the specified function only once
 	 * @param fn
 	 */
-	once<T extends Nullable<AnyFunction>>(fn: T): Optional<T>;
+	once<T extends AnyFunction>(fn: T): T;
 
 	/**
 	 * Returns a new function that allows to invoke a function, which it takes, only with the specified delay.
 	 * The next invocation of the function will cancel the previous.
 	 *
-	 * If the value is equal to null or undefined, the function returns undefined,
-	 * otherwise, the value will be converted to a number.
-	 *
 	 * @param delay
 	 */
-	debounce(
-		delay: number
-	): <T extends Nullable<AnyFunction>>(fn: T) => Optional<T, AnyFunction<Parameters<T>, void>>;
+	debounce(delay: number): <A extends unknown[]>(fn: AnyFunction<A>) => AnyFunction<A, void>;
 
 	/**
 	 * Returns a new function that allows to invoke a function only with the specified delay.
 	 * The next invocation of the function will cancel the previous.
-	 * If the value is equal to null or undefined, the function returns undefined.
 	 *
 	 * @param fn
 	 * @param [delay]
 	 */
-	debounce<T extends Nullable<AnyFunction>>(
-		fn: T,
-		delay?: number
-	): Optional<T, AnyFunction<Parameters<T>, void>>;
+	debounce<A extends unknown[]>(fn: AnyFunction<A>, delay?: number): AnyFunction<A, void>;
 
 	/**
-	 * Returns a new function that allows to invoke a function, which it takes, not more often than the specified delay.
-	 * If the value is equal to null or undefined, the function returns undefined.
-	 *
+	 * Returns a new function that allows to invoke a function, which it takes, not more often than the specified delay
 	 * @param delay
 	 */
-	throttle(delay: number): <T extends Nullable<AnyFunction>>(
-		fn: T
-	) => Optional<T, AnyFunction<Parameters<T>, void>>;
+	throttle(delay: number): <A extends unknown[]>(fn: AnyFunction<A>) => AnyFunction<A, void>;
 
 	/**
-	 * Returns a new function that allows to invoke the target function not more often than the specified delay.
-	 * If the value is equal to null or undefined, the function returns undefined.
+	 * Returns a new function that allows to invoke the target function not more often than the specified delay
 	 *
 	 * @param fn
 	 * @param [delay]
 	 */
-	throttle<T extends Nullable<AnyFunction>>(
-		fn: T,
-		delay?: number
-	): Optional<T, AnyFunction<Parameters<T>, void>>;
+	throttle<A extends unknown[]>(fn: AnyFunction<A>, delay?: number): AnyFunction<A, void>;
 
 	/**
 	 * Performs right-to-left function composition.

@@ -36,17 +36,13 @@ export function createRoundingFunction(method: AnyFunction): AnyFunction {
  */
 export function createStaticRoundingFunction(method: string): AnyFunction {
 	// tslint:disable-next-line:only-arrow-functions
-	return function (value: unknown, precision: number): CanUndef<number> | AnyFunction {
+	return function (value: number, precision: number): CanUndef<number> | AnyFunction {
 		if (arguments.length < 2) {
-			precision = <number>value;
+			precision = value;
 			return (value) => Number[method](value, precision);
 		}
 
-		if (value == null) {
-			return;
-		}
-
-		return Number(value)[method](value, precision);
+		return value[method](value, precision);
 	};
 }
 
@@ -80,13 +76,7 @@ export function createMsFunction(offset: number): AnyFunction {
  * @param offset
  */
 export function createStaticMsFunction(offset: number): AnyFunction {
-	return (value) => {
-		if (value == null) {
-			return;
-		}
-
-		return Number(value) * offset;
-	};
+	return (value: number) => value * offset;
 }
 
 /**

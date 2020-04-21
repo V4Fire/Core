@@ -9,7 +9,7 @@
 import extend from 'core/prelude/extend';
 
 /** @see Function.once */
-extend(Function.prototype, 'once', function (this: Function): AnyFunction {
+extend(Function.prototype, 'once', function (this: AnyFunction): AnyFunction {
 	const
 		// tslint:disable-next-line:no-this-assignment
 		fn = this;
@@ -30,10 +30,4 @@ extend(Function.prototype, 'once', function (this: Function): AnyFunction {
 });
 
 /** @see FunctionConstructor.once */
-extend(Function, 'once', (fn: Nullable<AnyFunction>) => {
-	if (fn == null) {
-		return undefined;
-	}
-
-	return fn.once();
-});
+extend(Function, 'once', (fn: AnyFunction) => fn.once());

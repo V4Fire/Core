@@ -52,17 +52,13 @@ extend(Number.prototype, 'pad', function (
 });
 
 /** @see NumberConstructor.pad */
-extend(Number, 'pad', (value: unknown, lengthOrOpts: number | NumberPadOptions) => {
-	if (value == null) {
-		return;
-	}
-
-	if (Object.isDictionary(value)) {
+extend(Number, 'pad', (value: number | NumberPadOptions, lengthOrOpts: number | NumberPadOptions) => {
+	if (Object.isPlainObject(value)) {
 		const opts = value;
 		return (value) => Number.pad(value, opts);
 	}
 
-	return Number(value).pad(<any>lengthOrOpts);
+	return value.pad(<any>lengthOrOpts);
 });
 
 /** @see Number.format */
@@ -174,21 +170,17 @@ extend(Number.prototype, 'format', function (
 
 /** @see NumberConstructor.format */
 extend(Number, 'format', (
-	value: unknown,
+	value: number | string | Intl.NumberFormatOptions,
 	patternOrOpts?: string | Intl.NumberFormatOptions,
 	locale?: CanArray<string>
 ) => {
-	if (value == null) {
-		return;
-	}
-
-	if (Object.isString(value) || Object.isDictionary(value)) {
+	if (Object.isString(value) || Object.isPlainObject(value)) {
 		locale = <any>patternOrOpts;
 		patternOrOpts = value;
-		return (value: unknown) => Number.format(value, <any>patternOrOpts, locale);
+		return (value) => Number.format(value, <any>patternOrOpts, locale);
 	}
 
-	return Number(value).format(<any>patternOrOpts, locale);
+	return value.format(<any>patternOrOpts, locale);
 });
 
 /** @see NumberConstructor.getOption */
