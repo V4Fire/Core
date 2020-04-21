@@ -14,10 +14,14 @@ extend(Date.prototype, 'clone', function (this: Date): Date {
 	return new Date(this);
 });
 
-/** @see Date.create */
+/** @see DateConstructor.create */
 extend(Date, 'create', (pattern?: DateCreateValue) => {
 	if (pattern == null || pattern === '') {
 		return new Date();
+	}
+
+	if (pattern instanceof Date) {
+		return new Date(pattern);
 	}
 
 	if (Object.isString(pattern)) {
