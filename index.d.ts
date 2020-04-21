@@ -2027,7 +2027,107 @@ interface DateConstructor {
 	getWeekDays(): string[];
 
 	/**
+	 * Changes the date time so that it starts at the beginning of a day and returns it
+	 * @param date
+	 */
+	beginningOfDay(date: Date): Date;
+
+	/**
+	 * Changes the date time so that it starts at the ending of a day and returns it
+	 * @param date
+	 */
+	endOfDay(date: Date): Date;
+
+	/**
+	 * Changes the date so that it starts at the beginning of a week and returns it
+	 * @param date
+	 */
+	beginningOfWeek(date: Date): Date;
+
+	/**
+	 * Changes the date so that it starts at the ending of a week and returns it
+	 * @param date
+	 */
+	endOfWeek(date: Date): Date;
+
+	/**
+	 * Changes the date so that it starts at the beginning of a month and returns it
+	 * @param date
+	 */
+	beginningOfMonth(date: Date): Date;
+
+	/**
+	 * Changes the date so that it starts at the ending of a month and returns it
+	 * @param date
+	 */
+	endOfMonth(date: Date): Date;
+
+	/**
+	 * Changes the date so that it starts at the beginning of a year and returns it
+	 * @param date
+	 */
+	beginningOfYear(date: Date): Date;
+
+	/**
+	 * Changes the date so that it starts at the ending of a year and returns it
+	 * @param date
+	 */
+	endOfYear(date: Date): Date;
+
+	/**
+	 * Returns a curried version of Date.add
+	 *
+	 * @param units
+	 * @param reset - if true, then all lower units will be reset to zero
+	 */
+	add(units: DateSetParams, reset?: boolean): (date: Date) => Date;
+
+	/**
+	 * Modifies the date with adding time units
+	 *
+	 * @param date
+	 * @param units
+	 * @param reset - if true, then all lower units will be reset to zero
+	 */
+	add(date: Date, units: DateSetParams, reset?: boolean): Date;
+
+	/**
+	 * Returns a curried version of Date.set
+	 *
+	 * @param units
+	 * @param reset - if true, then all lower units will be reset to zero
+	 */
+	set(units: DateSetParams, reset?: boolean): (date: Date) => Date;
+
+	/**
+	 * Modifies the date with setting time units
+	 *
+	 * @param date
+	 * @param units
+	 * @param reset - if true, then all lower units will be reset to zero
+	 */
+	set(date: Date, units: DateSetParams, reset?: boolean): Date;
+
+	/**
+	 * Returns a curried version of Date.rewind
+	 *
+	 * @param units
+	 * @param reset - if true, then all lower units will be reset to zero
+	 */
+	rewind(units: DateSetParams, reset?: boolean): (date: Date) => Date;
+
+	/**
+	 * Modifies the date with subtracting time units
+	 *
+	 * @param date
+	 * @param units
+	 * @param reset - if true, then all lower units will be reset to zero
+	 */
+	rewind(date: Date, units: DateSetParams, reset?: boolean): Date;
+
+	/**
 	 * Returns a relative value of the date for the now date
+	 * @param date
 	 */
 	relative(date: DateCreateValue): DateRelative;
 
