@@ -12,6 +12,12 @@
  */
 
 // tslint:disable:max-file-line-count unified-signatures
+/// <reference types="ts-toolbelt"/>
+
+declare namespace globalThis {
+	import * as TS from 'ts-toolbelt';
+	export type { TS };
+}
 
 declare const APP_NAME: string;
 declare const API_URL: CanUndef<string>;
