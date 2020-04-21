@@ -2025,6 +2025,25 @@ interface DateConstructor {
 	 * @deprecated
 	 */
 	getWeekDays(): string[];
+
+	/**
+	 * Returns a relative value of the date for the now date
+	 */
+	relative(date: DateCreateValue): DateRelative;
+
+	/**
+	 * Returns a curried version of Date.relativeTo
+	 * @param from - original date to compare
+	 */
+	relativeTo(from: DateCreateValue): (to: DateCreateValue) => DateRelative;
+
+	/**
+	 * Returns a relative value of the date for another date
+	 *
+	 * @param from - original date to compare
+	 * @param to - another date to compare
+	 */
+	relativeTo(from: DateCreateValue, to: DateCreateValue): DateRelative;
 }
 
 interface DateSetParams {

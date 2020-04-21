@@ -13,12 +13,32 @@ extend(Date.prototype, 'relative', function (this: Date): DateRelative {
 	return relative(this, new Date());
 });
 
+/** @see DateConstructor.relative */
+extend(Date, 'relative', (date: DateCreateValue) => Date.create(date).relative());
+
 /** @see Date.relativeTo */
 extend(Date.prototype, 'relativeTo', function (this: Date, date: DateCreateValue): DateRelative {
 	return relative(this, date);
 });
 
-function relative(from: DateCreateValue, to: DateCreateValue): DateRelative {
+/** @see DateConstructor.relative */
+// tslint:disable-next-line:only-arrow-functions
+extend(Date, 'relativeTo', function (from: DateCreateValue, to: DateCreateValue): DateRelative | AnyFunction {
+	if (arguments.length === 1) {
+		const d = Date.create(from);
+		return (date2) => d.relativeTo(date2);
+	}
+
+	return Date.create(from).relativeTo(to);
+});
+
+/**
+ * Returns a relative value of the date for another date
+ *
+ * @param from
+ * @param to
+ */
+export function relative(from: DateCreateValue, to: DateCreateValue): DateRelative {
 	const
 		diff = Date.create(to).valueOf() - Date.create(from).valueOf();
 
