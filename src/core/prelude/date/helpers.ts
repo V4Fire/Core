@@ -121,3 +121,23 @@ export function createStaticDateModifier(method: string): AnyFunction {
 		return date[method](units, reset);
 	};
 }
+
+/**
+ * Factory to create static functions to compare date values
+ * @param method
+ */
+export function createStaticDateComparator(method: string): AnyFunction {
+	// tslint:disable-next-line:only-arrow-functions
+	return function (date1: DateCreateValue | number, date2: DateCreateValue, margin?: number): boolean | AnyFunction {
+		if (arguments.length < 2 || arguments.length < 3 && Object.isNumber(date1)) {
+			if (Object.isNumber(date1)) {
+				margin = date1;
+				date1 = date2;
+			}
+
+			return (date2, m) => Date[method](date1, date2, margin || m);
+		}
+
+		return Date.create(date1)[method](date2, margin);
+	};
+}
