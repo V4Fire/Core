@@ -141,3 +141,18 @@ export function createStaticDateComparator(method: string): AnyFunction {
 		return Date.create(date1)[method](date2, margin);
 	};
 }
+
+/**
+ * Factory to create static functions to format date values
+ * @param method
+ */
+export function createStaticDateFormatter(method: string): AnyFunction {
+	return (date: Date | string | DateHTMLTimeStringOptions, opts?: string | DateHTMLTimeStringOptions) => {
+		if (Object.isString(date) || Object.isPlainObject(date)) {
+			opts = date;
+			return (date) => Date[method](date, opts);
+		}
+
+		return date[method](opts);
+	};
+}
