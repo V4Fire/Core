@@ -30,7 +30,7 @@ extend(Function.prototype, 'once', function (this: Function): Function {
 });
 
 /** @see FunctionConstructor.once */
-extend(Function, 'once', (fn: Nullable<Function>) => {
+extend(Function, 'once', (fn: Nullable<AnyFunction>) => {
 	if (fn == null) {
 		return undefined;
 	}

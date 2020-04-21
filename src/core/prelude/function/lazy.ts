@@ -24,7 +24,7 @@ extend(Function.prototype, 'debounce', function (this: Function, delay: number =
 });
 
 /** @see FunctionConstructor.debounce */
-extend(Function, 'debounce', (fn: Nullable<Function | number>, delay?: number) => {
+extend(Function, 'debounce', (fn: Nullable<AnyFunction | number>, delay?: number) => {
 	if (Object.isNumber(fn)) {
 		delay = fn;
 		return (fn) => Function.debounce(fn, delay);
@@ -65,7 +65,7 @@ extend(Function.prototype, 'throttle', function (this: Function, delay: number =
 });
 
 /** @see FunctionConstructor.throttle */
-extend(Function, 'throttle', (fn: Nullable<Function | number>, delay?: number) => {
+extend(Function, 'throttle', (fn: Nullable<AnyFunction | number>, delay?: number) => {
 	if (Object.isNumber(fn)) {
 		delay = fn;
 		return (fn) => Function.throttle(fn, delay);

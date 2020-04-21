@@ -1007,6 +1007,43 @@ interface ObjectConstructor {
 	reject<D extends object, C extends object>(obj: D, condition: C): Omit<D, keyof C>;
 
 	/**
+	 * Wraps the specified value into the Either structure.
+	 * If the value is equal to null or undefined, the value is rejected.
+	 *
+	 * @example
+	 * ```typescript
+	 * function toLowerCase(str: string): string {
+	 *   return str.toLowerCase();
+	 * }
+	 *
+	 * Object.optional(toLowerCase)(null).catch((err) => err === null);
+	 * Object.optional(null).catch((err) => err === null);
+	 *
+	 * Object.optional(toLowerCase)('FOO').then((value) => value === 'foo');
+	 * Object.optional('foo').then((value) => value === 'foo');
+	 * ```
+	 */
+	optional<T = unknown>(value: T): T extends AnyFunction ? AnyFunction<Parameters<T>, Either<ReturnType<T>>> : Either<T>;
+
+	/**
+	 * Wraps the specified value into the Either structure
+	 *
+	 * @example
+	 * ```typescript
+	 * function toLowerCase(str: string): string {
+	 *   return str.toLowerCase();
+	 * }
+	 *
+	 * Object.result(toLowerCase)(null).catch((err) => err.message === 'str is null');
+	 * Object.result(Object.result(toLowerCase)(null)).catch((err) => err.message === 'str is null');
+	 *
+	 * Object.result(toLowerCase)('FOO').then((value) => value === 'foo');
+	 * Object.result('foo').then((value) => value === 'foo');
+	 * ```
+	 */
+	result<T = unknown>(value: T): T extends AnyFunction ? AnyFunction<Parameters<T>, Either<ReturnType<T>>> : Either<T>;
+
+	/**
 	 * Returns true if the specified value is a plain object
 	 * @param obj
 	 */
@@ -2522,6 +2559,41 @@ interface Function {
 	 * @param [delay]
 	 */
 	throttle<T extends AnyFunction>(this: T, delay?: number): AnyFunction<Parameters<T>, void>;
+
+	/**
+	 * Returns a new function based on the target that wraps the returning value into the Either structure.
+	 * If the first argument of the created function is taken null or undefined, the function returns the rejected value.
+	 *
+	 * @example
+	 * ```typescript
+	 * function toLowerCase(str: string): string {
+	 *   return str.toLowerCase();
+	 * }
+	 *
+	 * toLowerCase.optional()(null).catch((err) => err === null);
+	 * toLowerCase.optional()(1).catch((err) => err.message === 'str.toLowerCase is not a function');
+	 *
+	 * toLowerCase.optional()('FOO').then((value) => value === 'foo');
+	 * toLowerCase.optional()(toLowerCase.optional()('FOO')).then((value) => value === 'foo');
+	 * ```
+	 */
+	optional<A extends unknown[], R>(this: AnyFunction<A, R>): AnyFunction<A, Either<R>>;
+
+	/**
+	 * Returns a new function based on the target that wraps the returning value into the Either structure
+	 *
+	 * @example
+	 * ```typescript
+	 * function toLowerCase(str: string): string {
+	 *   return str.toLowerCase();
+	 * }
+	 *
+	 * toLowerCase.result()(1).catch((err) => err.message === 'str.toLowerCase is not a function');
+	 * toLowerCase.result()('FOO').then((value) => value === 'foo');
+	 * toLowerCase.result()(toLowerCase.result()('FOO')).then((value) => value === 'foo');
+	 * ```
+	 */
+	result<A extends unknown[], R>(this: AnyFunction<A, R>): AnyFunction<A, Either<R>>;
 
 	/**
 	 * Performs left-to-right function composition.
