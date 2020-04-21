@@ -60,7 +60,7 @@ declare class IdleDeadline {
 declare function requestIdleCallback(fn: (deadline: IdleDeadline) => void, opts?: {timer?: number}): number;
 declare function cancelIdleCallback(id: number): void;
 
-declare function setImmediate(fn: Function): number;
+declare function setImmediate(fn: AnyFunction): number;
 declare function clearImmediate(id: number): void;
 
 type Optional<T = unknown, TVAL = T, SAFE = TVAL> = T extends null | undefined ?
@@ -87,6 +87,7 @@ interface ClassConstructor<T = unknown> {new: T}
 interface StrictDictionary<T = unknown> {[key: string]: T}
 interface Dictionary<T> {[key: string]: CanUndef<T>}
 interface Dictionary<T extends unknown = unknown> {[key: string]: T}
+interface Either<T = unknown> extends Promise<T> {}
 
 type DictionaryType<T extends Dictionary> = T extends Dictionary<infer V> ? NonNullable<V> : T;
 type IterableType<T extends Iterable<unknown>> = T extends Iterable<infer V> ? V : T;
@@ -1077,7 +1078,7 @@ interface ObjectConstructor {
 			Promise<any> |
 
 			Generator |
-			Function |
+			AnyFunction |
 
 			Number |
 			String |
@@ -1163,7 +1164,7 @@ interface ObjectConstructor {
 	 * Returns true if the specified value is a function
 	 * @param obj
 	 */
-	isFunction(obj: unknown): obj is Function;
+	isFunction(obj: unknown): obj is AnyFunction;
 
 	/**
 	 * Returns true if the specified value is a generator
@@ -2479,40 +2480,40 @@ interface FunctionConstructor {
 	 *
 	 * @param fn0
 	 */
-	compose<V extends unknown[], T1>(fn0: AnyFunction<V, T1>): AnyFunction<V, T1>;
+	compose<A extends unknown[], T1>(fn0: AnyFunction<A, T1>): AnyFunction<A, T1>;
 
-	compose<V extends unknown[], T1, T2>(
+	compose<A extends unknown[], T1, T2>(
 		fn1: AnyOneArgFunction<PromiseType<T1>, T2>,
-		fn0: AnyFunction<V, T1>
-	): AnyFunction<V, T1 extends Promise<any> ? Promise<T2> : T2>;
+		fn0: AnyFunction<A, T1>
+	): AnyFunction<A, T1 extends Promise<any> ? Promise<T2> : T2>;
 
-	compose<V extends unknown[], T1, T2, T3>(
+	compose<A extends unknown[], T1, T2, T3>(
 		fn2: AnyOneArgFunction<PromiseType<T2>, T3>,
 		fn1: AnyOneArgFunction<PromiseType<T1>, T2>,
-		fn0: AnyFunction<V, T1>
-	): AnyFunction<V, T2 extends Promise<any> ? Promise<T3> : T1 extends Promise<any> ? Promise<T3> : T3>;
+		fn0: AnyFunction<A, T1>
+	): AnyFunction<A, T2 extends Promise<any> ? Promise<T3> : T1 extends Promise<any> ? Promise<T3> : T3>;
 
-	compose<V extends unknown[], T1, T2, T3, T4>(
+	compose<A extends unknown[], T1, T2, T3, T4>(
 		fn3: AnyOneArgFunction<PromiseType<T3>, T4>,
 		fn2: AnyOneArgFunction<PromiseType<T2>, T3>,
 		fn1: AnyOneArgFunction<PromiseType<T1>, T2>,
-		fn0: AnyFunction<V, T1>
+		fn0: AnyFunction<A, T1>
 	): AnyFunction<
-		V,
+		A,
 		T3 extends Promise<any> ?
 			Promise<T4> : T2 extends Promise<any> ?
 				Promise<T4> : T1 extends Promise<any> ?
 					Promise<T4> : T4
 	>;
 
-	compose<V extends unknown[], T1, T2, T3, T4, T5>(
+	compose<A extends unknown[], T1, T2, T3, T4, T5>(
 		fn4: AnyOneArgFunction<PromiseType<T4>, T5>,
 		fn3: AnyOneArgFunction<PromiseType<T3>, T4>,
 		fn2: AnyOneArgFunction<PromiseType<T2>, T3>,
 		fn1: AnyOneArgFunction<PromiseType<T1>, T2>,
-		fn0: AnyFunction<V, T1>
+		fn0: AnyFunction<A, T1>
 	): AnyFunction<
-		V,
+		A,
 		T4 extends Promise<any> ?
 			Promise<T5> : T3 extends Promise<any> ?
 				Promise<T5> : T2 extends Promise<any> ?
@@ -2520,15 +2521,15 @@ interface FunctionConstructor {
 						Promise<T5> : T5
 	>;
 
-	compose<V extends unknown[], T1, T2, T3, T4, T5, T6>(
+	compose<A extends unknown[], T1, T2, T3, T4, T5, T6>(
 		fn5: AnyOneArgFunction<PromiseType<T5>, T6>,
 		fn4: AnyOneArgFunction<PromiseType<T4>, T5>,
 		fn3: AnyOneArgFunction<PromiseType<T3>, T4>,
 		fn2: AnyOneArgFunction<PromiseType<T2>, T3>,
 		fn1: AnyOneArgFunction<PromiseType<T1>, T2>,
-		fn0: AnyFunction<V, T1>
+		fn0: AnyFunction<A, T1>
 	): AnyFunction<
-		V,
+		A,
 		T5 extends Promise<any> ?
 			Promise<T6> : T4 extends Promise<any> ?
 				Promise<T6> : T3 extends Promise<any> ?
@@ -2544,7 +2545,7 @@ interface Function {
 	/**
 	 * Returns a new function that allows to invoke the target function only once
 	 */
-	once<T extends AnyFunction>(this: T): T;
+	once<T>(this: T): T;
 
 	/**
 	 * Returns a new function that allows to invoke the target function only with the specified delay.
@@ -2603,40 +2604,40 @@ interface Function {
 	 * will take the resolved value of that promise,
 	 * the final result of calling the composition function is also a promise.
 	 */
-	compose<T extends AnyFunction>(this: T): T;
+	compose<T>(this: T): T;
 
-	compose<V extends unknown[], T1, T2>(
-		this: AnyFunction<V, T1>,
+	compose<A extends unknown[], T1, T2>(
+		this: AnyFunction<A, T1>,
 		fn1: AnyOneArgFunction<T1, T2>
-	): AnyFunction<V, T1 extends Promise<any> ? Promise<T2> : T2>;
+	): AnyFunction<A, T1 extends Promise<any> ? Promise<T2> : T2>;
 
-	compose<V extends unknown[], T1, T2, T3>(
-		this: AnyFunction<V, T1>,
+	compose<A extends unknown[], T1, T2, T3>(
+		this: AnyFunction<A, T1>,
 		fn1: AnyOneArgFunction<T1, T2>,
 		fn2: AnyOneArgFunction<T2, T3>
-	): AnyFunction<V, T2 extends Promise<any> ? Promise<T3> : T1 extends Promise<any> ? Promise<T3> : T3>;
+	): AnyFunction<A, T2 extends Promise<any> ? Promise<T3> : T1 extends Promise<any> ? Promise<T3> : T3>;
 
-	compose<V extends unknown[], T1, T2, T3, T4>(
-		this: AnyFunction<V, T1>,
+	compose<A extends unknown[], T1, T2, T3, T4>(
+		this: AnyFunction<A, T1>,
 		fn1: AnyOneArgFunction<T1, T2>,
 		fn2: AnyOneArgFunction<T2, T3>,
 		fn3: AnyOneArgFunction<T3, T4>
 	): AnyFunction<
-		V,
+		A,
 		T3 extends Promise<any> ?
 			Promise<T4> : T2 extends Promise<any> ?
 				Promise<T4> : T1 extends Promise<any> ?
 					Promise<T4> : T4
 	>;
 
-	compose<V extends unknown[], T1, T2, T3, T4, T5>(
-		this: AnyFunction<V, T1>,
+	compose<A extends unknown[], T1, T2, T3, T4, T5>(
+		this: AnyFunction<A, T1>,
 		fn1: AnyOneArgFunction<T1, T2>,
 		fn2: AnyOneArgFunction<T2, T3>,
 		fn3: AnyOneArgFunction<T3, T4>,
 		fn4: AnyOneArgFunction<T4, T5>
 	): AnyFunction<
-		V,
+		A,
 		T4 extends Promise<any> ?
 			Promise<T5> : T3 extends Promise<any> ?
 				Promise<T5> : T2 extends Promise<any> ?
@@ -2644,15 +2645,15 @@ interface Function {
 						Promise<T5> : T5
 	>;
 
-	compose<V extends unknown[], T1, T2, T3, T4, T5, T6>(
-		this: AnyFunction<V, T1>,
+	compose<A extends unknown[], T1, T2, T3, T4, T5, T6>(
+		this: AnyFunction<A, T1>,
 		fn1: AnyOneArgFunction<T1, T2>,
 		fn2: AnyOneArgFunction<T2, T3>,
 		fn3: AnyOneArgFunction<T3, T4>,
 		fn4: AnyOneArgFunction<T4, T5>,
 		fn5: AnyOneArgFunction<T5, T6>
 	): AnyFunction<
-		V,
+		A,
 		T5 extends Promise<any> ?
 			Promise<T6> : T4 extends Promise<any> ?
 				Promise<T6> : T3 extends Promise<any> ?
