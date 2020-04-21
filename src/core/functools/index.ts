@@ -15,3 +15,4 @@ export * from 'core/functools/deprecation';
 export * from 'core/functools/not-implemented';
 export * from 'core/functools/memoize';
 export * from 'core/functools/lazy';
+export * from 'core/functools/helpers';
