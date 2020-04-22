@@ -78,7 +78,7 @@ export default abstract class WorkerQueue<T, V = unknown> implements Queue<T> {
 	 * @param worker
 	 * @param [opts]
 	 */
-	protected constructor(worker: QueueWorker<T, V>, opts?: QueueOptions) {
+	constructor(worker: QueueWorker<T, V>, opts?: QueueOptions) {
 		this.worker = worker;
 		this.concurrency = opts?.concurrency || 1;
 		this.refreshInterval = opts?.refreshInterval || 0;

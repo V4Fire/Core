@@ -56,7 +56,7 @@ export default class SimpleQueue<T> implements Queue<T> {
 
 	/** @inheritDoc */
 	clear(): void {
-		if (this.tasks.length > 0) {
+		if (this.length > 0) {
 			this.tasks = this.createTasks();
 		}
 	}
