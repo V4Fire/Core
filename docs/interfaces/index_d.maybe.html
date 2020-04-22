@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>ObjectForEachPropertyDescriptor | V4Fire</title>
+	<title>Maybe | V4Fire</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -132,10 +132,10 @@
 					<a href="../modules/index_d.html">&quot;index.d&quot;</a>
 				</li>
 				<li>
-					<a href="index_d.objectforeachpropertydescriptor.html">ObjectForEachPropertyDescriptor</a>
+					<a href="index_d.maybe.html">Maybe</a>
 				</li>
 			</ul>
-			<h1>Interface ObjectForEachPropertyDescriptor&lt;V&gt;</h1>
+			<h1>Interface Maybe&lt;T&gt;</h1>
 		</div>
 	</div>
 </header>
@@ -146,7 +146,7 @@
 				<h3>Type parameters</h3>
 				<ul class="tsd-type-parameters">
 					<li>
-						<h4>V</h4>
+						<h4>T</h4>
 					</li>
 				</ul>
 			</section>
@@ -154,7 +154,12 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">ObjectForEachPropertyDescriptor</span>
+						<span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>
+						<ul class="tsd-hierarchy">
+							<li>
+								<span class="target">Maybe</span>
+							</li>
+						</ul>
 					</li>
 				</ul>
 			</section>
@@ -165,17 +170,17 @@
 						<section class="tsd-index-section tsd-is-not-exported">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.objectforeachpropertydescriptor.html#configurable" class="tsd-kind-icon">configurable</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.objectforeachpropertydescriptor.html#enumerable" class="tsd-kind-icon">enumerable</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.objectforeachpropertydescriptor.html#value" class="tsd-kind-icon">value</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.objectforeachpropertydescriptor.html#writable" class="tsd-kind-icon">writable</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.maybe.html#promise" class="tsd-kind-icon">Promise</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported"><a href="index_d.maybe.html#_symbol_tostringtag_" class="tsd-kind-icon">[<wbr>Symbol.to<wbr>String<wbr>Tag]</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.maybe.html#type" class="tsd-kind-icon">type</a></li>
 							</ul>
 						</section>
-						<section class="tsd-index-section tsd-is-not-exported">
+						<section class="tsd-index-section tsd-is-inherited tsd-is-not-exported">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.objectforeachpropertydescriptor.html#get" class="tsd-kind-icon">get</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.objectforeachpropertydescriptor.html#set" class="tsd-kind-icon">set</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-inherited tsd-is-not-exported"><a href="index_d.maybe.html#catch" class="tsd-kind-icon">catch</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported"><a href="index_d.maybe.html#finally" class="tsd-kind-icon">finally</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-inherited tsd-is-not-exported"><a href="index_d.maybe.html#then" class="tsd-kind-icon">then</a></li>
 							</ul>
 						</section>
 					</div>
@@ -184,85 +189,157 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-					<a name="configurable" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> configurable</h3>
-					<div class="tsd-signature tsd-kind-icon">configurable<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
+					<a name="promise" class="tsd-anchor"></a>
+					<h3>Promise</h3>
+					<div class="tsd-signature tsd-kind-icon">Promise<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">PromiseConstructor</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L380">index.d.ts:380</a></li>
+							<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es2015.promise.d.ts:152</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported">
+					<a name="_symbol_tostringtag_" class="tsd-anchor"></a>
+					<h3>[<wbr>Symbol.to<wbr>String<wbr>Tag]</h3>
+					<div class="tsd-signature tsd-kind-icon">[<wbr>Symbol.to<wbr>String<wbr>Tag]<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from Promise.[Symbol.toStringTag]</p>
+						<ul>
+							<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts:169</li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-					<a name="enumerable" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> enumerable</h3>
-					<div class="tsd-signature tsd-kind-icon">enumerable<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
+					<a name="type" class="tsd-anchor"></a>
+					<h3>type</h3>
+					<div class="tsd-signature tsd-kind-icon">type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"Maybe"</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L381">index.d.ts:381</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-					<a name="value" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> value</h3>
-					<div class="tsd-signature tsd-kind-icon">value<span class="tsd-signature-symbol">:</span> <a href="" class="tsd-signature-type">V</a></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L382">index.d.ts:382</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-					<a name="writable" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> writable</h3>
-					<div class="tsd-signature tsd-kind-icon">writable<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L383">index.d.ts:383</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L80">index.d.ts:80</a></li>
 						</ul>
 					</aside>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
+			<section class="tsd-panel-group tsd-member-group tsd-is-inherited tsd-is-not-exported">
 				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
-					<a name="get" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> get</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">get<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span></li>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-inherited tsd-is-not-exported">
+					<a name="catch" class="tsd-anchor"></a>
+					<h3>catch</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-inherited tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">catch&lt;TResult&gt;<span class="tsd-signature-symbol">(</span>onrejected<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">TResult</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
+								<p>Inherited from Promise.catch</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L384">index.d.ts:384</a></li>
+									<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts:1430</li>
 								</ul>
 							</aside>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">unknown</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
-					<a name="set" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> set</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">set<span class="tsd-signature-symbol">(</span>v<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L385">index.d.ts:385</a></li>
-								</ul>
-							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Attaches a callback for only the rejection of the Promise.</p>
+								</div>
+							</div>
+							<h4 class="tsd-type-parameters-title">Type parameters</h4>
+							<ul class="tsd-type-parameters">
+								<li>
+									<h4>TResult</h4>
+								</li>
+							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>v: <span class="tsd-signature-type">unknown</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> onrejected: <span class="tsd-signature-type">function</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The callback to execute when the Promise is rejected.</p>
+									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">TResult</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>A Promise for the completion of the callback.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported">
+					<a name="finally" class="tsd-anchor"></a>
+					<h3>finally</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">finally<span class="tsd-signature-symbol">(</span>onfinally<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from Promise.finally</p>
+								<ul>
+									<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es2018.promise.d.ts:31</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+									resolved value cannot be modified from the callback.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> onfinally: <span class="tsd-signature-type">function</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The callback to execute when the Promise is settled (fulfilled or rejected).</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>A Promise for the completion of the callback.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-inherited tsd-is-not-exported">
+					<a name="then" class="tsd-anchor"></a>
+					<h3>then</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-inherited tsd-is-not-exported">
+						<li class="tsd-signature tsd-kind-icon">then&lt;TResult1, TResult2&gt;<span class="tsd-signature-symbol">(</span>onfulfilled<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span>, onrejected<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TResult1</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">TResult2</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from Promise.then</p>
+								<ul>
+									<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts:1423</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Attaches callbacks for the resolution and/or rejection of the Promise.</p>
+								</div>
+							</div>
+							<h4 class="tsd-type-parameters-title">Type parameters</h4>
+							<ul class="tsd-type-parameters">
+								<li>
+									<h4>TResult1</h4>
+								</li>
+								<li>
+									<h4>TResult2</h4>
+								</li>
+							</ul>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> onfulfilled: <span class="tsd-signature-type">function</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The callback to execute when the Promise is resolved.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> onrejected: <span class="tsd-signature-type">function</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The callback to execute when the Promise is rejected.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TResult1</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">TResult2</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>A Promise for the completion of which ever callback is executed.</p>
 						</li>
 					</ul>
 				</section>
@@ -284,25 +361,25 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="index_d.objectforeachpropertydescriptor.html" class="tsd-kind-icon">Object<wbr>For<wbr>Each<wbr>Property<wbr>Descriptor</a>
+						<a href="index_d.maybe.html" class="tsd-kind-icon">Maybe</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-								<a href="index_d.objectforeachpropertydescriptor.html#configurable" class="tsd-kind-icon">configurable</a>
+								<a href="index_d.maybe.html#promise" class="tsd-kind-icon">Promise</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported">
+								<a href="index_d.maybe.html#_symbol_tostringtag_" class="tsd-kind-icon">[<wbr>Symbol.to<wbr>String<wbr>Tag]</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-								<a href="index_d.objectforeachpropertydescriptor.html#enumerable" class="tsd-kind-icon">enumerable</a>
+								<a href="index_d.maybe.html#type" class="tsd-kind-icon">type</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-								<a href="index_d.objectforeachpropertydescriptor.html#value" class="tsd-kind-icon">value</a>
+							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-inherited tsd-is-not-exported">
+								<a href="index_d.maybe.html#catch" class="tsd-kind-icon">catch</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
-								<a href="index_d.objectforeachpropertydescriptor.html#writable" class="tsd-kind-icon">writable</a>
+							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported">
+								<a href="index_d.maybe.html#finally" class="tsd-kind-icon">finally</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
-								<a href="index_d.objectforeachpropertydescriptor.html#get" class="tsd-kind-icon">get</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
-								<a href="index_d.objectforeachpropertydescriptor.html#set" class="tsd-kind-icon">set</a>
+							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-inherited tsd-is-not-exported">
+								<a href="index_d.maybe.html#then" class="tsd-kind-icon">then</a>
 							</li>
 						</ul>
 					</li>

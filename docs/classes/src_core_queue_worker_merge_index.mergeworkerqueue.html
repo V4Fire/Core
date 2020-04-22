@@ -183,12 +183,6 @@
 					</li>
 				</ul>
 			</section>
-			<section class="tsd-panel">
-				<h3>Implements</h3>
-				<ul class="tsd-hierarchy">
-					<li><a href="../interfaces/src_core_queue_interface.queue.html" class="tsd-signature-type">Queue</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
-				</ul>
-			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
@@ -214,7 +208,7 @@
 							<h3>Accessors</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-overwrite"><a href="src_core_queue_worker_merge_index.mergeworkerqueue.html#head" class="tsd-kind-icon">head</a></li>
-								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited"><a href="src_core_queue_worker_merge_index.mergeworkerqueue.html#length" class="tsd-kind-icon">length</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited"><a href="src_core_queue_worker_merge_index.mergeworkerqueue.html#length" class="tsd-kind-icon">length</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
@@ -227,7 +221,9 @@
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="src_core_queue_worker_merge_index.mergeworkerqueue.html#pop" class="tsd-kind-icon">pop</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="src_core_queue_worker_merge_index.mergeworkerqueue.html#push" class="tsd-kind-icon">push</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><a href="src_core_queue_worker_merge_index.mergeworkerqueue.html#resolvetask" class="tsd-kind-icon">resolve<wbr>Task</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="src_core_queue_worker_merge_index.mergeworkerqueue.html#shift" class="tsd-kind-icon">shift</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="src_core_queue_worker_merge_index.mergeworkerqueue.html#start" class="tsd-kind-icon">start</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="src_core_queue_worker_merge_index.mergeworkerqueue.html#unshift" class="tsd-kind-icon">unshift</a></li>
 							</ul>
 						</section>
 					</div>
@@ -274,7 +270,7 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-overwrite">
 					<a name="tasks" class="tsd-anchor"></a>
 					<h3>Tasks</h3>
-					<div class="tsd-signature tsd-kind-icon">Tasks<span class="tsd-signature-symbol">:</span> <a href="../interfaces/src_core_queue_worker_interface.tasks.html" class="tsd-signature-type">Tasks</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<div class="tsd-signature tsd-kind-icon">Tasks<span class="tsd-signature-symbol">:</span> <a href="../interfaces/src_core_queue_interface.tasks.html" class="tsd-signature-type">Tasks</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<p>Overrides <a href="src_core_queue_worker_interface.workerqueue.html">WorkerQueue</a>.<a href="src_core_queue_worker_interface.workerqueue.html#tasks">Tasks</a></p>
 						<ul>
@@ -295,7 +291,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_queue_worker_interface.workerqueue.html">WorkerQueue</a>.<a href="src_core_queue_worker_interface.workerqueue.html#activeworkers">activeWorkers</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/queue/worker/interface.ts#L65">src/core/queue/worker/interface.ts:65</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/queue/worker/interface.ts#L63">src/core/queue/worker/interface.ts:63</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -311,7 +307,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_queue_worker_interface.workerqueue.html">WorkerQueue</a>.<a href="src_core_queue_worker_interface.workerqueue.html#concurrency">concurrency</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/queue/worker/interface.ts#L60">src/core/queue/worker/interface.ts:60</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/queue/worker/interface.ts#L58">src/core/queue/worker/interface.ts:58</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -327,7 +323,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_queue_worker_interface.workerqueue.html">WorkerQueue</a>.<a href="src_core_queue_worker_interface.workerqueue.html#refreshinterval">refreshInterval</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/queue/worker/interface.ts#L55">src/core/queue/worker/interface.ts:55</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/queue/worker/interface.ts#L53">src/core/queue/worker/interface.ts:53</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -340,11 +336,11 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
 					<a name="tasks-1" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> tasks</h3>
-					<div class="tsd-signature tsd-kind-icon">tasks<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">this[&quot;Tasks&quot;]</span><span class="tsd-signature-symbol"> =&nbsp;this.createTasks()</span></div>
+					<div class="tsd-signature tsd-kind-icon">tasks<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">this[&quot;Tasks&quot;]</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_queue_worker_interface.workerqueue.html">WorkerQueue</a>.<a href="src_core_queue_worker_interface.workerqueue.html#tasks-1">tasks</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/queue/worker/interface.ts#L75">src/core/queue/worker/interface.ts:75</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/queue/worker/interface.ts#L73">src/core/queue/worker/interface.ts:73</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -360,7 +356,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_queue_worker_interface.workerqueue.html">WorkerQueue</a>.<a href="src_core_queue_worker_interface.workerqueue.html#worker">worker</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/queue/worker/interface.ts#L70">src/core/queue/worker/interface.ts:70</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/queue/worker/interface.ts#L68">src/core/queue/worker/interface.ts:68</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -396,24 +392,22 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited">
+				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
 					<a name="length" class="tsd-anchor"></a>
 					<h3>length</h3>
-					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited">
+					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
 						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> length<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="src_core_queue_worker_interface.workerqueue.html">WorkerQueue</a>.<a href="src_core_queue_worker_interface.workerqueue.html#length">length</a></p>
+								<p>Overrides <a href="src_core_queue_interface.queue.html">Queue</a>.<a href="src_core_queue_interface.queue.html#length">length</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/queue/worker/interface.ts#L47">src/core/queue/worker/interface.ts:47</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/queue/worker/interface.ts#L45">src/core/queue/worker/interface.ts:45</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Queue length</p>
-								</div>
 								<dl class="tsd-comment-tags">
 									<dt>inheritdoc</dt>
 									<dd></dd>
@@ -435,7 +429,6 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Implementation of <a href="../interfaces/src_core_queue_interface.queue.html">Queue</a>.<a href="../interfaces/src_core_queue_interface.queue.html#clear">clear</a></p>
 								<p>Overrides <a href="src_core_queue_worker_interface.workerqueue.html">WorkerQueue</a>.<a href="src_core_queue_worker_interface.workerqueue.html#clear">clear</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/queue/worker/merge/index.ts#L98">src/core/queue/worker/merge/index.ts:98</a></li>
@@ -455,22 +448,22 @@
 					<a name="createtasks" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> create<wbr>Tasks</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
-						<li class="tsd-signature tsd-kind-icon">create<wbr>Tasks<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this[&quot;Tasks&quot;]</span></li>
+						<li class="tsd-signature tsd-kind-icon">create<wbr>Tasks<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">never</span><span class="tsd-signature-symbol">[]</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="src_core_queue_worker_interface.workerqueue.html">WorkerQueue</a>.<a href="src_core_queue_worker_interface.workerqueue.html#createtasks">createTasks</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/queue/worker/interface.ts#L113">src/core/queue/worker/interface.ts:113</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/queue/worker/interface.ts#L114">src/core/queue/worker/interface.ts:114</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Return a new blank list of tasks</p>
+									<p>Returns a new blank list of tasks</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this[&quot;Tasks&quot;]</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">never</span><span class="tsd-signature-symbol">[]</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -485,7 +478,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="src_core_queue_worker_interface.workerqueue.html">WorkerQueue</a>.<a href="src_core_queue_worker_interface.workerqueue.html#deferperform">deferPerform</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/queue/worker/interface.ts#L121">src/core/queue/worker/interface.ts:121</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/queue/worker/interface.ts#L125">src/core/queue/worker/interface.ts:125</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -531,7 +524,6 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Implementation of <a href="../interfaces/src_core_queue_interface.queue.html">Queue</a>.<a href="../interfaces/src_core_queue_interface.queue.html#pop">pop</a></p>
 								<p>Overrides <a href="src_core_queue_worker_interface.workerqueue.html">WorkerQueue</a>.<a href="src_core_queue_worker_interface.workerqueue.html#pop">pop</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/queue/worker/merge/index.ts#L83">src/core/queue/worker/merge/index.ts:83</a></li>
@@ -556,7 +548,6 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Implementation of <a href="../interfaces/src_core_queue_interface.queue.html">Queue</a>.<a href="../interfaces/src_core_queue_interface.queue.html#push">push</a></p>
 								<p>Overrides <a href="src_core_queue_worker_interface.workerqueue.html">WorkerQueue</a>.<a href="src_core_queue_worker_interface.workerqueue.html#push">push</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/queue/worker/merge/index.ts#L59">src/core/queue/worker/merge/index.ts:59</a></li>
@@ -611,6 +602,34 @@
 						</li>
 					</ul>
 				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+					<a name="shift" class="tsd-anchor"></a>
+					<h3>shift</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+						<li class="tsd-signature tsd-kind-icon">shift<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReturnType</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">this[&quot;pop&quot;]</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from <a href="src_core_queue_interface.queue.html">Queue</a>.<a href="src_core_queue_interface.queue.html#shift">shift</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/queue/interface.ts#L66">src/core/queue/interface.ts:66</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Alias to .pop</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>see</dt>
+									<dd><p><a href="src_core_queue_interface.queue.html#pop">Queue.pop</a></p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">ReturnType</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">this[&quot;pop&quot;]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
 					<a name="start" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> start</h3>
@@ -622,7 +641,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="src_core_queue_worker_interface.workerqueue.html">WorkerQueue</a>.<a href="src_core_queue_worker_interface.workerqueue.html#start">start</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/queue/worker/interface.ts#L142">src/core/queue/worker/interface.ts:142</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/queue/worker/interface.ts#L146">src/core/queue/worker/interface.ts:146</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -631,6 +650,40 @@
 								</div>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+					<a name="unshift" class="tsd-anchor"></a>
+					<h3>unshift</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+						<li class="tsd-signature tsd-kind-icon">unshift<span class="tsd-signature-symbol">(</span>el<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReturnType</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">this[&quot;push&quot;]</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from <a href="src_core_queue_interface.queue.html">Queue</a>.<a href="src_core_queue_interface.queue.html#unshift">unshift</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/queue/interface.ts#L58">src/core/queue/interface.ts:58</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Alias to .push</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>see</dt>
+									<dd><p><a href="src_core_queue_interface.queue.html#push">Queue.push</a></p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>el: <span class="tsd-signature-type">T</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">ReturnType</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">this[&quot;push&quot;]</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -678,7 +731,7 @@
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-overwrite">
 								<a href="src_core_queue_worker_merge_index.mergeworkerqueue.html#head" class="tsd-kind-icon">head</a>
 							</li>
-							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited">
+							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
 								<a href="src_core_queue_worker_merge_index.mergeworkerqueue.html#length" class="tsd-kind-icon">length</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
@@ -702,8 +755,14 @@
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-protected">
 								<a href="src_core_queue_worker_merge_index.mergeworkerqueue.html#resolvetask" class="tsd-kind-icon">resolve<wbr>Task</a>
 							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="src_core_queue_worker_merge_index.mergeworkerqueue.html#shift" class="tsd-kind-icon">shift</a>
+							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
 								<a href="src_core_queue_worker_merge_index.mergeworkerqueue.html#start" class="tsd-kind-icon">start</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="src_core_queue_worker_merge_index.mergeworkerqueue.html#unshift" class="tsd-kind-icon">unshift</a>
 							</li>
 						</ul>
 					</li>

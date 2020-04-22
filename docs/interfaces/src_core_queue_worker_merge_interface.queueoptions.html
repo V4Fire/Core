@@ -154,7 +154,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<a href="src_core_queue_worker_interface.queueoptions.html" class="tsd-signature-type">QueueOptions</a>
+						<a href="src_core_queue_interface.queueoptions.html" class="tsd-signature-type">QueueOptions</a>
 						<ul class="tsd-hierarchy">
 							<li>
 								<span class="target">QueueOptions</span>
@@ -170,9 +170,8 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="src_core_queue_worker_merge_interface.queueoptions.html#concurrency" class="tsd-kind-icon">concurrency</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="src_core_queue_worker_merge_interface.queueoptions.html#hashfn" class="tsd-kind-icon">hash<wbr>Fn</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="src_core_queue_worker_merge_interface.queueoptions.html#refreshinterval" class="tsd-kind-icon">refresh<wbr>Interval</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="src_core_queue_worker_merge_interface.queueoptions.html#tasksfactory" class="tsd-kind-icon">tasks<wbr>Factory</a></li>
 							</ul>
 						</section>
 					</div>
@@ -180,22 +179,6 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-					<a name="concurrency" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> concurrency</h3>
-					<div class="tsd-signature tsd-kind-icon">concurrency<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
-					<aside class="tsd-sources">
-						<p>Inherited from <a href="src_core_queue_worker_interface.queueoptions.html">QueueOptions</a>.<a href="src_core_queue_worker_interface.queueoptions.html#concurrency">concurrency</a></p>
-						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/queue/worker/interface.ts#L22">src/core/queue/worker/interface.ts:22</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Maximum number of concurrent workers</p>
-						</div>
-					</div>
-				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="hashfn" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> hash<wbr>Fn</h3>
@@ -212,19 +195,18 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-					<a name="refreshinterval" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> refresh<wbr>Interval</h3>
-					<div class="tsd-signature tsd-kind-icon">refresh<wbr>Interval<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
+					<a name="tasksfactory" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> tasks<wbr>Factory</h3>
+					<div class="tsd-signature tsd-kind-icon">tasks<wbr>Factory<span class="tsd-signature-symbol">:</span> <a href="src_core_queue_interface.createtasks.html" class="tsd-signature-type">CreateTasks</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from <a href="src_core_queue_worker_interface.queueoptions.html">QueueOptions</a>.<a href="src_core_queue_worker_interface.queueoptions.html#refreshinterval">refreshInterval</a></p>
+						<p>Inherited from <a href="src_core_queue_interface.queueoptions.html">QueueOptions</a>.<a href="src_core_queue_interface.queueoptions.html#tasksfactory">tasksFactory</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/queue/worker/interface.ts#L28">src/core/queue/worker/interface.ts:28</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/queue/interface.ts#L25">src/core/queue/interface.ts:25</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Value of a task status refresh interval
-							(in milliseconds)</p>
+							<p>Factory to create a task container</p>
 						</div>
 					</div>
 				</section>
@@ -251,14 +233,11 @@
 					<li class="current tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter">
 						<a href="src_core_queue_worker_merge_interface.queueoptions.html" class="tsd-kind-icon">Queue<wbr>Options</a>
 						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-								<a href="src_core_queue_worker_merge_interface.queueoptions.html#concurrency" class="tsd-kind-icon">concurrency</a>
-							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="src_core_queue_worker_merge_interface.queueoptions.html#hashfn" class="tsd-kind-icon">hash<wbr>Fn</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-								<a href="src_core_queue_worker_merge_interface.queueoptions.html#refreshinterval" class="tsd-kind-icon">refresh<wbr>Interval</a>
+								<a href="src_core_queue_worker_merge_interface.queueoptions.html#tasksfactory" class="tsd-kind-icon">tasks<wbr>Factory</a>
 							</li>
 						</ul>
 					</li>

@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>QueueOptions | V4Fire</title>
+	<title>&quot;src/core/functools/lazy&quot; | V4Fire</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -129,78 +129,101 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/src_core_queue_worker_interface.html">&quot;src/core/queue/worker/interface&quot;</a>
-				</li>
-				<li>
-					<a href="src_core_queue_worker_interface.queueoptions.html">QueueOptions</a>
+					<a href="src_core_functools_lazy.html">&quot;src/core/functools/lazy&quot;</a>
 				</li>
 			</ul>
-			<h1>Interface QueueOptions</h1>
+			<h1>External module &quot;src/core/functools/lazy&quot;</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
-			<section class="tsd-panel tsd-hierarchy">
-				<h3>Hierarchy</h3>
-				<ul class="tsd-hierarchy">
-					<li>
-						<span class="target">QueueOptions</span>
-						<ul class="tsd-hierarchy">
-							<li>
-								<a href="src_core_queue_worker_merge_interface.queueoptions.html" class="tsd-signature-type">QueueOptions</a>
-							</li>
-						</ul>
-					</li>
-				</ul>
-			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Properties</h3>
+							<h3>Functions</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="src_core_queue_worker_interface.queueoptions.html#concurrency" class="tsd-kind-icon">concurrency</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="src_core_queue_worker_interface.queueoptions.html#refreshinterval" class="tsd-kind-icon">refresh<wbr>Interval</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="src_core_functools_lazy.html#debounce" class="tsd-kind-icon">debounce</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="src_core_functools_lazy.html#throttle" class="tsd-kind-icon">throttle</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="concurrency" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> concurrency</h3>
-					<div class="tsd-signature tsd-kind-icon">concurrency<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/queue/worker/interface.ts#L22">src/core/queue/worker/interface.ts:22</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Maximum number of concurrent workers</p>
-						</div>
-					</div>
+				<h2>Functions</h2>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module">
+					<a name="debounce" class="tsd-anchor"></a>
+					<h3>debounce</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
+						<li class="tsd-signature tsd-kind-icon">debounce<span class="tsd-signature-symbol">(</span>delay<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MethodDecorator</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/functools/lazy.ts#L16">src/core/functools/lazy.ts:16</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Decorator for Function.prototype.debounce</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>decorator</dt>
+									<dd></dd>
+									<dt>see</dt>
+									<dd><p><a href="../interfaces/index_d.function.html#debounce">Function.debounce</a></p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> delay: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">MethodDecorator</span></h4>
+						</li>
+					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="refreshinterval" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> refresh<wbr>Interval</h3>
-					<div class="tsd-signature tsd-kind-icon">refresh<wbr>Interval<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/queue/worker/interface.ts#L28">src/core/queue/worker/interface.ts:28</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Value of a task status refresh interval
-							(in milliseconds)</p>
-						</div>
-					</div>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module">
+					<a name="throttle" class="tsd-anchor"></a>
+					<h3>throttle</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
+						<li class="tsd-signature tsd-kind-icon">throttle<span class="tsd-signature-symbol">(</span>delay<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MethodDecorator</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/functools/lazy.ts#L43">src/core/functools/lazy.ts:43</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Decorator for Function.prototype.throttle</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>decorator</dt>
+									<dd></dd>
+									<dt>see</dt>
+									<dd><p><a href="../interfaces/index_d.function.html#throttle">Function.throttle</a></p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> delay: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">MethodDecorator</span></h4>
+						</li>
+					</ul>
 				</section>
 			</section>
 		</div>
@@ -211,35 +234,17 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class="current tsd-kind-external-module">
-						<a href="../modules/src_core_queue_worker_interface.html">&quot;src/core/queue/worker/interface&quot;</a>
+						<a href="src_core_functools_lazy.html">&quot;src/core/functools/lazy&quot;</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-class tsd-parent-kind-external-module tsd-has-type-parameter">
-						<a href="../classes/src_core_queue_worker_interface.workerqueue.html" class="tsd-kind-icon">Worker<wbr>Queue</a>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module">
+						<a href="src_core_functools_lazy.html#debounce" class="tsd-kind-icon">debounce</a>
 					</li>
-				</ul>
-				<ul class="current">
-					<li class="current tsd-kind-interface tsd-parent-kind-external-module">
-						<a href="src_core_queue_worker_interface.queueoptions.html" class="tsd-kind-icon">Queue<wbr>Options</a>
-						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="src_core_queue_worker_interface.queueoptions.html#concurrency" class="tsd-kind-icon">concurrency</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="src_core_queue_worker_interface.queueoptions.html#refreshinterval" class="tsd-kind-icon">refresh<wbr>Interval</a>
-							</li>
-						</ul>
-					</li>
-				</ul>
-				<ul class="after-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter">
-						<a href="src_core_queue_worker_interface.queueworker.html" class="tsd-kind-icon">Queue<wbr>Worker</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter">
-						<a href="src_core_queue_worker_interface.tasks.html" class="tsd-kind-icon">Tasks</a>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module">
+						<a href="src_core_functools_lazy.html#throttle" class="tsd-kind-icon">throttle</a>
 					</li>
 				</ul>
 			</nav>
