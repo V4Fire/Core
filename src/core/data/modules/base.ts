@@ -320,7 +320,7 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 
 					providerInstance = new ProviderConstructor(el.providerOptions);
 
-				} else if (Object.isConstructor(providerLink)) {
+				} else if (Object.isSimpleFunction(providerLink)) {
 					providerInstance = new providerLink(el.providerOptions);
 
 				} else {

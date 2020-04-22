@@ -547,7 +547,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 				if (destructor) {
 					fn = worker[destructor];
 
-				} else if (Object.isFunction(worker)) {
+				} else if (Object.isSimpleFunction(worker)) {
 					fn = worker;
 
 				} else {

@@ -6,14 +6,14 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import Queue, { Tasks, CreateTasks, QueueOptions as SimpleQueueOptions } from 'core/queue/interface';
+import Queue, { Tasks, CreateTasks, QueueOptions } from 'core/queue/interface';
 export * from 'core/queue/interface';
 
 export interface QueueWorker<T = unknown, V = unknown> {
 	(task: T): CanPromise<V>;
 }
 
-export interface QueueOptions extends SimpleQueueOptions {
+export interface WorkerQueueOptions extends QueueOptions {
 	/**
 	 * Maximum number of concurrent workers
 	 */
@@ -76,7 +76,7 @@ export default abstract class WorkerQueue<T, V = unknown> extends Queue<T> {
 	 * @param worker
 	 * @param [opts]
 	 */
-	constructor(worker: QueueWorker<T, V>, opts?: QueueOptions) {
+	constructor(worker: QueueWorker<T, V>, opts?: WorkerQueueOptions) {
 		super();
 
 		this.worker = worker;

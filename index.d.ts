@@ -1232,10 +1232,10 @@ interface ObjectConstructor {
 	isFunction(value: unknown): value is AnyFunction;
 
 	/**
-	 * Returns true if the specified value is a constructor function
+	 * Returns true if the specified value is a simple function
 	 * @param value
 	 */
-	isConstructor(value: unknown): value is Function;
+	isSimpleFunction(value: unknown): value is Function;
 
 	/**
 	 * Returns true if the specified value is a generator

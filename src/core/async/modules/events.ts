@@ -129,7 +129,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 						return res;
 					};
 
-					const fn = Object.isFunction(emitter) ?
+					const fn = Object.isSimpleFunction(emitter) ?
 						emitter : p.single && emitter.once || emitter.addEventListener || emitter.addListener || emitter.on;
 
 					if (Object.isFunction(fn)) {
@@ -390,7 +390,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	eventListenerDestructor(event: EventLike): void {
 		const
 			e = event.emitter,
-			fn = Object.isFunction(e) ? e : e.removeEventListener || e.removeListener || e.off;
+			fn = Object.isSimpleFunction(e) ? e : e.removeEventListener || e.removeListener || e.off;
 
 		if (fn && Object.isFunction(fn)) {
 			fn.call(e, event.event, event.handler);

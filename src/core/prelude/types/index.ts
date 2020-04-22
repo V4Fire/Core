@@ -59,8 +59,8 @@ extend(Object, 'isArrayLike', (value) => {
 /** @see ObjectConstructor.isFunction */
 extend(Object, 'isFunction', (value) => typeof value === 'function');
 
-/** @see ObjectConstructor.isConstructor */
-extend(Object, 'isConstructor', (value) => typeof value === 'function');
+/** @see ObjectConstructor.isSimpleFunction */
+extend(Object, 'isSimpleFunction', (value) => typeof value === 'function');
 
 /** @see ObjectConstructor.isGenerator */
 extend(Object, 'isGenerator', (value) =>
