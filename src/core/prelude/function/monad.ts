@@ -70,8 +70,8 @@ extend(Function.prototype, 'result', function (this: AnyFunction): AnyFunction {
 
 /** @see ObjectConstructor.Result */
 extend(Object, 'Result', (value: unknown) => {
-	if (value == null) {
-		return Result.reject(null);
+	if (value instanceof Error) {
+		return Result.reject(value);
 	}
 
 	if (Object.isFunction(value)) {

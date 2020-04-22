@@ -19,7 +19,7 @@ extend(Function, '__', {
 /** @see Function.curry */
 extend(Function.prototype, 'curry', function (this: AnyFunction): AnyFunction {
 	let
-		length = this.length - arguments.length;
+		{length} = this;
 
 	const
 		// tslint:disable-next-line:no-this-assignment
@@ -31,8 +31,6 @@ extend(Function.prototype, 'curry', function (this: AnyFunction): AnyFunction {
 
 	// tslint:disable-next-line:only-arrow-functions
 	const wrapper = function (): unknown {
-		length -= arguments.length;
-
 		let
 			i = 0;
 
@@ -40,7 +38,7 @@ extend(Function.prototype, 'curry', function (this: AnyFunction): AnyFunction {
 			const
 				tmp = gaps.slice();
 
-			for (let j = arguments.length; i < tmp.length; i++) {
+			for (let j = arguments.length, d = 0; i < tmp.length; i++) {
 				if (!j--) {
 					break;
 				}
@@ -50,7 +48,8 @@ extend(Function.prototype, 'curry', function (this: AnyFunction): AnyFunction {
 
 				if (el !== __) {
 					args[tmp[i]] = el;
-					gaps.splice(i, 1);
+					gaps.splice(i - d, 1);
+					d++;
 				}
 			}
 		}
@@ -65,6 +64,8 @@ extend(Function.prototype, 'curry', function (this: AnyFunction): AnyFunction {
 
 			args.push(el);
 		}
+
+		length -= arguments.length - gaps.length;
 
 		if (length <= 0 && !gaps.length) {
 			return fn.apply(null, args);
