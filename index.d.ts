@@ -81,11 +81,25 @@ interface ClassConstructor<T = unknown> {new: T}
 interface StrictDictionary<T = unknown> {[key: string]: T}
 interface Dictionary<T> {[key: string]: CanUndef<T>}
 interface Dictionary<T extends unknown = unknown> {[key: string]: T}
-interface Either<T = unknown> extends Promise<T> {}
+
+interface Maybe<T = unknown> extends Promise<T> {
+	readonly type: 'Maybe';
+}
+
+interface Either<T = unknown> extends Promise<T> {
+	readonly type: 'Either';
+}
+
+type NewPromise<K, V> = K extends Maybe ?
+	Maybe<V> : K extends Either ?
+		Either<V> : Promise<V>;
+
+type PromiseType<T extends Promise<any>> =
+	T extends Maybe<infer V> ?
+		NonNullable<V> : T extends Promise<infer V> ? V : T;
 
 type DictionaryType<T extends Dictionary> = T extends Dictionary<infer V> ? NonNullable<V> : T;
 type IterableType<T extends Iterable<unknown>> = T extends Iterable<infer V> ? V : T;
-type PromiseType<T extends Promise<unknown>> = T extends Promise<infer V> ? V : T;
 
 interface ArrayLike<T = unknown> {
 	[i: number]: T;
@@ -992,14 +1006,53 @@ interface ObjectConstructor {
 	 *   return str.toLowerCase();
 	 * }
 	 *
-	 * Object.optional(toLowerCase)(null).catch((err) => err === null);
-	 * Object.optional(null).catch((err) => err === null);
+	 * Object.Option(toLowerCase)(null).catch((err) => err === null);
+	 * Object.Option(null).catch((err) => err === null);
 	 *
-	 * Object.optional(toLowerCase)('FOO').then((value) => value === 'foo');
-	 * Object.optional('foo').then((value) => value === 'foo');
+	 * Object.Option(toLowerCase)('FOO').then((value) => value === 'foo');
+	 * Object.Option('foo').then((value) => value === 'foo');
 	 * ```
 	 */
-	optional<T = unknown>(value: T): T extends AnyFunction ? AnyFunction<Parameters<T>, Either<ReturnType<T>>> : Either<T>;
+	Option<R>(value: () => R): AnyFunction<any[], Maybe<R>>;
+
+	/**
+	 * Wraps the specified value into the Either structure.
+	 * If the value is equal to null or undefined, the value is rejected.
+	 *
+	 * @example
+	 * ```typescript
+	 * function toLowerCase(str: string): string {
+	 *   return str.toLowerCase();
+	 * }
+	 *
+	 * Object.Option(toLowerCase)(null).catch((err) => err === null);
+	 * Object.Option(null).catch((err) => err === null);
+	 *
+	 * Object.Option(toLowerCase)('FOO').then((value) => value === 'foo');
+	 * Object.Option('foo').then((value) => value === 'foo');
+	 * ```
+	 */
+	Option<A1, A extends unknown[], R>(value: (a1: A1, a: A) => R):
+		AnyFunction<[Maybe<Nullable<A1>> | Either<A1> | Nullable<A1>, ...A], Maybe<R>>;
+
+	/**
+	 * Wraps the specified value into the Either structure.
+	 * If the value is equal to null or undefined, the value is rejected.
+	 *
+	 * @example
+	 * ```typescript
+	 * function toLowerCase(str: string): string {
+	 *   return str.toLowerCase();
+	 * }
+	 *
+	 * Object.Option(toLowerCase)(null).catch((err) => err === null);
+	 * Object.Option(null).catch((err) => err === null);
+	 *
+	 * Object.Option(toLowerCase)('FOO').then((value) => value === 'foo');
+	 * Object.Option('foo').then((value) => value === 'foo');
+	 * ```
+	 */
+	Option<T = unknown>(value: T): Maybe<T>;
 
 	/**
 	 * Wraps the specified value into the Either structure
@@ -1010,14 +1063,51 @@ interface ObjectConstructor {
 	 *   return str.toLowerCase();
 	 * }
 	 *
-	 * Object.result(toLowerCase)(null).catch((err) => err.message === 'str is null');
-	 * Object.result(Object.result(toLowerCase)(null)).catch((err) => err.message === 'str is null');
+	 * Object.Result(toLowerCase)(null).catch((err) => err.message === 'str is null');
+	 * Object.Result(Object.result(toLowerCase)(null)).catch((err) => err.message === 'str is null');
 	 *
-	 * Object.result(toLowerCase)('FOO').then((value) => value === 'foo');
-	 * Object.result('foo').then((value) => value === 'foo');
+	 * Object.Result(toLowerCase)('FOO').then((value) => value === 'foo');
+	 * Object.Result('foo').then((value) => value === 'foo');
 	 * ```
 	 */
-	result<T = unknown>(value: T): T extends AnyFunction ? AnyFunction<Parameters<T>, Either<ReturnType<T>>> : Either<T>;
+	Result<R>(value: () => R): AnyFunction<any[], Either<R>>;
+
+	/**
+	 * Wraps the specified value into the Either structure
+	 *
+	 * @example
+	 * ```typescript
+	 * function toLowerCase(str: string): string {
+	 *   return str.toLowerCase();
+	 * }
+	 *
+	 * Object.Result(toLowerCase)(null).catch((err) => err.message === 'str is null');
+	 * Object.Result(Object.result(toLowerCase)(null)).catch((err) => err.message === 'str is null');
+	 *
+	 * Object.Result(toLowerCase)('FOO').then((value) => value === 'foo');
+	 * Object.Result('foo').then((value) => value === 'foo');
+	 * ```
+	 */
+	Result<A1, A extends unknown[], R>(value: (a1: A1, a: A) => R):
+		AnyFunction<[Maybe<A1> | Either<A1> | Nullable<A1>, ...A], Either<R>>;
+
+	/**
+	 * Wraps the specified value into the Either structure
+	 *
+	 * @example
+	 * ```typescript
+	 * function toLowerCase(str: string): string {
+	 *   return str.toLowerCase();
+	 * }
+	 *
+	 * Object.Result(toLowerCase)(null).catch((err) => err.message === 'str is null');
+	 * Object.Result(Object.result(toLowerCase)(null)).catch((err) => err.message === 'str is null');
+	 *
+	 * Object.Result(toLowerCase)('FOO').then((value) => value === 'foo');
+	 * Object.Result('foo').then((value) => value === 'foo');
+	 * ```
+	 */
+	Result<T = unknown>(value: T): Either<T>;
 
 	/**
 	 * Returns true if the specified value is a plain object
@@ -2831,7 +2921,7 @@ interface FunctionConstructor {
 	compose<A extends unknown[], T1, T2>(
 		fn1: AnyOneArgFunction<PromiseType<T1>, T2>,
 		fn0: AnyFunction<A, T1>
-	): AnyFunction<A, T1 extends Promise<any> ? Promise<T2> : T2>;
+	): AnyFunction<A, T1 extends Promise<any> ? NewPromise<T1, T2> : T2>;
 
 	compose<A extends unknown[], T1, T2, T3>(
 		fn2: AnyOneArgFunction<PromiseType<T2>, T3>,
@@ -2917,14 +3007,34 @@ interface Function {
 	 *   return str.toLowerCase();
 	 * }
 	 *
-	 * toLowerCase.optional()(null).catch((err) => err === null);
-	 * toLowerCase.optional()(1).catch((err) => err.message === 'str.toLowerCase is not a function');
+	 * toLowerCase.option()(null).catch((err) => err === null);
+	 * toLowerCase.option()(1).catch((err) => err.message === 'str.toLowerCase is not a function');
 	 *
-	 * toLowerCase.optional()('FOO').then((value) => value === 'foo');
-	 * toLowerCase.optional()(toLowerCase.optional()('FOO')).then((value) => value === 'foo');
+	 * toLowerCase.option()('FOO').then((value) => value === 'foo');
+	 * toLowerCase.option()(toLowerCase.option()('FOO')).then((value) => value === 'foo');
 	 * ```
 	 */
-	optional<A extends unknown[], R>(this: AnyFunction<A, R>): AnyFunction<A, Either<R>>;
+	option<R>(this: () => R): AnyFunction<any[], Maybe<R>>;
+
+	/**
+	 * Returns a new function based on the target that wraps the returning value into the Either structure.
+	 * If the first argument of the created function is taken null or undefined, the function returns the rejected value.
+	 *
+	 * @example
+	 * ```typescript
+	 * function toLowerCase(str: string): string {
+	 *   return str.toLowerCase();
+	 * }
+	 *
+	 * toLowerCase.option()(null).catch((err) => err === null);
+	 * toLowerCase.option()(1).catch((err) => err.message === 'str.toLowerCase is not a function');
+	 *
+	 * toLowerCase.option()('FOO').then((value) => value === 'foo');
+	 * toLowerCase.option()(toLowerCase.option()('FOO')).then((value) => value === 'foo');
+	 * ```
+	 */
+	option<A1, A extends unknown[], R>(this: (a1: A1, a: A) => R):
+		AnyFunction<[Maybe<Nullable<A1>> | Either<A1> | Nullable<A1>, ...A], Maybe<R>>;
 
 	/**
 	 * Returns a new function based on the target that wraps the returning value into the Either structure
@@ -2940,7 +3050,23 @@ interface Function {
 	 * toLowerCase.result()(toLowerCase.result()('FOO')).then((value) => value === 'foo');
 	 * ```
 	 */
-	result<A extends unknown[], R>(this: AnyFunction<A, R>): AnyFunction<A, Either<R>>;
+	result<R>(this: () => R): AnyFunction<any[], Either<R>>;
+
+	/**
+	 * Returns a new function based on the target that wraps the returning value into the Either structure
+	 *
+	 * @example
+	 * ```typescript
+	 * function toLowerCase(str: string): string {
+	 *   return str.toLowerCase();
+	 * }
+	 *
+	 * toLowerCase.result()(1).catch((err) => err.message === 'str.toLowerCase is not a function');
+	 * toLowerCase.result()('FOO').then((value) => value === 'foo');
+	 * toLowerCase.result()(toLowerCase.result()('FOO')).then((value) => value === 'foo');
+	 * ```
+	 */
+	result<A1, A extends unknown[], R>(this: (a1: A1, a: A) => R): AnyFunction<[Maybe<A1> | Either<A1>, ...A], Maybe<R>>;
 
 	/**
 	 * Returns a curried equivalent of the function.

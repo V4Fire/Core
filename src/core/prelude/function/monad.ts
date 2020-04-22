@@ -7,10 +7,10 @@
  */
 
 import extend from 'core/prelude/extend';
-import { Result } from 'core/prelude/structures';
+import { Option, Result } from 'core/prelude/structures';
 
-/** @see Function.optional */
-extend(Function.prototype, 'optional', function (this: AnyFunction): AnyFunction {
+/** @see Function.option */
+extend(Function.prototype, 'option', function (this: AnyFunction): AnyFunction {
 	const wrapper = (...args) => {
 		const
 			fst = args[0];
@@ -19,7 +19,7 @@ extend(Function.prototype, 'optional', function (this: AnyFunction): AnyFunction
 			return Result.reject(null);
 		}
 
-		if (fst instanceof Result) {
+		if (fst instanceof Option || fst instanceof Result) {
 			return fst.then((value) => wrapper(value, ...args.slice(1)));
 		}
 
@@ -34,14 +34,14 @@ extend(Function.prototype, 'optional', function (this: AnyFunction): AnyFunction
 	return wrapper;
 });
 
-/** @see ObjectConstructor.optional */
-extend(Object, 'optional', (value: unknown) => {
+/** @see ObjectConstructor.Option */
+extend(Object, 'Option', (value: unknown) => {
 	if (value == null) {
 		return Result.reject(null);
 	}
 
 	if (Object.isFunction(value)) {
-		return value.optional();
+		return value.option();
 	}
 
 	return Result.resolve(value);
@@ -53,7 +53,7 @@ extend(Function.prototype, 'result', function (this: AnyFunction): AnyFunction {
 		const
 			fst = args[0];
 
-		if (fst instanceof Result) {
+		if (fst instanceof Option || fst instanceof Result) {
 			return fst.then((value) => wrapper(value, ...args.slice(1)));
 		}
 
@@ -68,8 +68,8 @@ extend(Function.prototype, 'result', function (this: AnyFunction): AnyFunction {
 	return wrapper;
 });
 
-/** @see ObjectConstructor.result */
-extend(Object, 'result', (value: unknown) => {
+/** @see ObjectConstructor.Result */
+extend(Object, 'Result', (value: unknown) => {
 	if (value == null) {
 		return Result.reject(null);
 	}
