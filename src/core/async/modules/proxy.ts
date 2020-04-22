@@ -6,7 +6,13 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import Super, { asyncCounter, isPromisifyNamespace, isAsyncOptions } from 'core/async/modules/base';
+import Super, {
+	asyncCounter,
+	isPromisifyNamespace,
+	isAsyncOptions,
+	AsyncOptions,
+	AsyncCbOptions
+} from 'core/async/modules/base';
 import {
 
 	AsyncWorkerOptions,
@@ -23,6 +29,7 @@ import {
 	WrappedCb
 
 } from 'core/async/interface';
+import SyncPromise from 'core/prelude/structures/sync-promise';
 
 export * from 'core/async/modules/base';
 
@@ -97,18 +104,49 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * but if we cancel the operation by using one of Async methods, like "cancelProxy",
 	 * the target function won't be invoked.
 	 *
-	 * @param cb
+	 * @param fn
 	 * @param [opts] - additional options for the operation
 	 */
-	proxy<F extends WrappedCb, C extends object = CTX>(cb: F, opts?: AsyncProxyOptions<C>): F {
+	proxy<F extends WrappedCb, C extends object = CTX>(fn: F, opts?: AsyncProxyOptions<C>): F {
 		return this.registerTask<F, C>({
 			...opts,
 			name: opts?.name || this.namespaces.proxy,
-			obj: cb,
+			obj: fn,
 			wrapper: (fn) => fn,
 			linkByWrapper: true,
 			periodic: opts?.single === false
 		}) || <any>(() => undefined);
+	}
+
+	/**
+	 * Returns a new function that allows to invoke a function only with the specified delay.
+	 * The next invocation of the function will cancel the previous.
+	 *
+	 * @param fn
+	 * @param delay
+	 * @param [opts] - additional options for the operation
+	 */
+	debounce<F extends WrappedCb, C extends object = CTX>(
+		fn: F,
+		delay: number,
+		opts?: AsyncCbOptions<C>
+	): AnyFunction<Parameters<F>, void> {
+		return this.proxy(fn, {...opts, single: false}).debounce(delay);
+	}
+
+	/**
+	 * Returns a new function that allows to invoke the function not more often than the specified delay
+	 *
+	 * @param fn
+	 * @param delay
+	 * @param [opts] - additional options for the operation
+	 */
+	throttle<F extends WrappedCb, C extends object = CTX>(
+		fn: F,
+		delay: number,
+		opts?: AsyncCbOptions<C>
+	): AnyFunction<Parameters<F>, void> {
+		return this.proxy(fn, {...opts, single: false}).throttle(delay);
 	}
 
 	/**

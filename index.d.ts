@@ -2854,7 +2854,7 @@ interface FunctionConstructor {
 	debounce(delay: number): <A extends unknown[]>(fn: AnyFunction<A>) => AnyFunction<A, void>;
 
 	/**
-	 * Returns a new function that allows to invoke a function only with the specified delay.
+	 * Returns a new function that allows to invoke the function only with the specified delay.
 	 * The next invocation of the function will cancel the previous.
 	 *
 	 * @param fn
@@ -2869,7 +2869,7 @@ interface FunctionConstructor {
 	throttle(delay: number): <A extends unknown[]>(fn: AnyFunction<A>) => AnyFunction<A, void>;
 
 	/**
-	 * Returns a new function that allows to invoke the target function not more often than the specified delay
+	 * Returns a new function that allows to invoke the function not more often than the specified delay
 	 *
 	 * @param fn
 	 * @param [delay]
