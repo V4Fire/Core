@@ -15,8 +15,7 @@ import {
 	ClearOptions,
 	FullClearOptions,
 	ClearProxyOptions,
-	GlobalCache,
-	AsyncCb
+	GlobalCache
 
 } from 'core/async/interface';
 
