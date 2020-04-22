@@ -96,7 +96,7 @@ export default abstract class WorkerQueue<T, V = unknown> implements Queue<T> {
 
 	/** @inheritDoc */
 	clear(): void {
-		if (this.tasks.length > 0) {
+		if (this.length > 0) {
 			this.tasks = this.createTasks();
 			this.activeWorkers = 0;
 		}
@@ -142,7 +142,7 @@ export default abstract class WorkerQueue<T, V = unknown> implements Queue<T> {
 	protected start(): void {
 		const n = Math.min(
 			this.concurrency - this.activeWorkers,
-			this.tasks.length
+			this.length
 		);
 
 		for (let i = 0; i < n; i++) {
