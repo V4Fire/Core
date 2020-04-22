@@ -18,8 +18,17 @@ extend(Function.prototype, 'debounce', function (this: AnyFunction, delay: numbe
 		timer;
 
 	return function (...args: unknown[]): void {
-		clearTimeout(timer);
-		timer = setTimeout(() => fn.apply(this, args), delay);
+		if (delay === 0) {
+			// tslint:disable-next-line:no-string-literal
+			globalThis['clearImmediate'](timer);
+
+			// tslint:disable-next-line:no-string-literal
+			timer = globalThis['setImmediate'](() => fn.apply(this, args));
+
+		} else {
+			clearTimeout(timer);
+			timer = setTimeout(() => fn.apply(this, args), delay);
+		}
 	};
 });
 
