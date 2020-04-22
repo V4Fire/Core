@@ -94,6 +94,8 @@ Array.union([], 1, null, [1, 2].values()) // [1, 2];
 * Added `ts-toolbelt`
 * [Added `debounce/throttle` to `core/async`](https://github.com/V4Fire/Core/pull/82)
 * Added an overload for the zero delay `core/prelude/function/lazy/debounce`
+* [Added `core/queue/order`](https://github.com/V4Fire/Core/pull/83)
+* [Improved `core/queue/worker` API](https://github.com/V4Fire/Core/pull/83)
 
 #### :house: Internal
 

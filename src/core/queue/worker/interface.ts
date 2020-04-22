@@ -6,16 +6,14 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import Queue from 'core/queue/interface';
+import Queue, { Tasks, CreateTasks, QueueOptions as SimpleQueueOptions } from 'core/queue/interface';
 export * from 'core/queue/interface';
-
-export interface Tasks<T> extends Array<T> {}
 
 export interface QueueWorker<T = unknown, V = unknown> {
 	(task: T): CanPromise<V>;
 }
 
-export interface QueueOptions {
+export interface QueueOptions extends SimpleQueueOptions {
 	/**
 	 * Maximum number of concurrent workers
 	 */
@@ -34,7 +32,7 @@ export interface QueueOptions {
  * @typeparam T - task element
  * @typeparam V - worker value
  */
-export default abstract class WorkerQueue<T, V = unknown> implements Queue<T> {
+export default abstract class WorkerQueue<T, V = unknown> extends Queue<T> {
 	/**
 	 * Type: list of tasks
 	 */
@@ -72,16 +70,24 @@ export default abstract class WorkerQueue<T, V = unknown> implements Queue<T> {
 	/**
 	 * List of tasks
 	 */
-	protected tasks: this['Tasks'] = this.createTasks();
+	protected tasks: this['Tasks'];
 
 	/**
 	 * @param worker
 	 * @param [opts]
 	 */
-	protected constructor(worker: QueueWorker<T, V>, opts?: QueueOptions) {
+	constructor(worker: QueueWorker<T, V>, opts?: QueueOptions) {
+		super();
+
 		this.worker = worker;
 		this.concurrency = opts?.concurrency || 1;
 		this.refreshInterval = opts?.refreshInterval || 0;
+
+		if (opts?.tasksFactory) {
+			this.createTasks = opts.tasksFactory;
+		}
+
+		this.tasks = this.createTasks();
 	}
 
 	/** @inheritDoc */
@@ -96,23 +102,21 @@ export default abstract class WorkerQueue<T, V = unknown> implements Queue<T> {
 
 	/** @inheritDoc */
 	clear(): void {
-		if (this.tasks.length > 0) {
+		if (this.length > 0) {
 			this.tasks = this.createTasks();
 			this.activeWorkers = 0;
 		}
 	}
 
 	/**
+	 * Returns a new blank list of tasks
+	 */
+	protected createTasks: CreateTasks<this['Tasks']> = () => [];
+
+	/**
 	 * Executes a task chunk from the queue
 	 */
 	protected abstract perform(): unknown;
-
-	/**
-	 * Return a new blank list of tasks
-	 */
-	protected createTasks(): this['Tasks'] {
-		return [];
-	}
 
 	/**
 	 * Executes a task chunk from the queue
@@ -142,7 +146,7 @@ export default abstract class WorkerQueue<T, V = unknown> implements Queue<T> {
 	protected start(): void {
 		const n = Math.min(
 			this.concurrency - this.activeWorkers,
-			this.tasks.length
+			this.length
 		);
 
 		for (let i = 0; i < n; i++) {

@@ -6,34 +6,69 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+export interface Tasks<T> {
+	readonly length: number;
+	push(task: T): number;
+	unshift(task: T): number;
+	pop(): CanUndef<T>;
+	shift(): CanUndef<T>;
+}
+
+export interface CreateTasks<T> {
+	(): T;
+}
+
+export interface QueueOptions {
+	/**
+	 * Factory to create a task container
+	 */
+	tasksFactory?: CreateTasks<any>;
+}
+
 /**
- * Base interface for a queue data structure
+ * Abstract class for a queue data structure
  * @typeparam T - queue element
  */
-export default interface Queue<T> {
+export default abstract class Queue<T> {
 	/**
 	 * Queue head
 	 */
-	readonly head: CanUndef<T>;
+	abstract readonly head: CanUndef<T>;
 
 	/**
 	 * Queue length
 	 */
-	readonly length: number;
+	abstract readonly length: number;
 
 	/**
 	 * Adds an element to the queue
 	 * @param el
 	 */
-	push(el: T): unknown;
+	abstract push(el: T): unknown;
 
 	/**
 	 * Removes a head element from the queue and returns it
 	 */
-	pop(): CanUndef<T>;
+	abstract pop(): CanUndef<T>;
+
+	/**
+	 * Alias to .push
+	 * @see [[Queue.push]]
+	 */
+	unshift(el: T): ReturnType<this['push']> {
+		return <any>this.push(el);
+	}
+
+	/**
+	 * Alias to .pop
+	 * @see [[Queue.pop]]
+	 */
+	shift(): ReturnType<this['pop']> {
+		return <any>this.pop();
+	}
 
 	/**
 	 * Clears the queue
 	 */
-	clear(): void;
+	abstract clear(): void;
 }
