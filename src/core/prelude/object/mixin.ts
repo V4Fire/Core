@@ -7,9 +7,23 @@
  */
 
 import extend from 'core/prelude/extend';
+import { isContainerStructure, canExtendProto, getType, getSameAs } from 'core/prelude/object/helpers';
 
 /** @see ObjectConstructor.mixin */
-extend(Object, 'mixin', (opts: ObjectMixinOptions | boolean, base: any, ...objects: any[]) => {
+// tslint:disable-next-line:only-arrow-functions
+extend(Object, 'mixin', function (
+	opts: ObjectMixinOptions | boolean,
+	base: any,
+	...objects: any[]
+): unknown | AnyFunction {
+	if (arguments.length < 3) {
+		if (arguments.length === 2) {
+			return (...args) => Object.mixin(opts, base, ...args);
+		}
+
+		return (base, ...args) => Object.mixin(opts, base, ...args);
+	}
+
 	const
 		p = <ObjectMixinOptions>{};
 
@@ -223,7 +237,7 @@ extend(Object, 'mixin', (opts: ObjectMixinOptions | boolean, base: any, ...objec
 					}
 
 				} else {
-					clone = isStructure(oldVal) ? oldVal : struct || {};
+					clone = isContainerStructure(oldVal) ? oldVal : struct || {};
 				}
 
 				Object.set(base, [key], Object.mixin(p, clone, newVal));
@@ -237,91 +251,3 @@ extend(Object, 'mixin', (opts: ObjectMixinOptions | boolean, base: any, ...objec
 
 	return base;
 });
-
-function isStructure(obj: unknown): boolean {
-	if (!obj || typeof obj !== 'object') {
-		return false;
-	}
-
-	if (Object.isArray(obj) || Object.isPlainObject(obj) || Object.isMap(obj) || Object.isSet(obj)) {
-		return true;
-	}
-
-	return Object.isCustomObject((<object>obj!).constructor);
-}
-
-function canExtendProto(obj: unknown): boolean {
-	if (!obj || typeof obj !== 'object') {
-		return false;
-	}
-
-	if (Object.isArray(obj) || Object.isPlainObject(obj)) {
-		return true;
-	}
-
-	return Object.isCustomObject((<object>obj!).constructor);
-}
-
-function getType(obj: unknown): string {
-	if (!obj || typeof obj !== 'object') {
-		return '';
-	}
-
-	if (Object.isMap(obj)) {
-		return 'map';
-	}
-
-	if (Object.isWeakMap(obj)) {
-		return 'weakMap';
-	}
-
-	if (Object.isSet(obj)) {
-		return 'set';
-	}
-
-	if (Object.isWeakSet(obj)) {
-		return 'weakSet';
-	}
-
-	if (Object.isGenerator(obj)) {
-		return 'generator';
-	}
-
-	if (Object.isArrayLike(obj)) {
-		return 'array';
-	}
-
-	if (Object.isIterator(obj) || Object.isIterable(obj)) {
-		return 'iterator';
-	}
-
-	return 'object';
-}
-
-function getSameAs<T>(obj: T): T | boolean {
-	if (!obj || typeof obj !== 'object') {
-		return false;
-	}
-
-	if (Object.isArray(obj)) {
-		return <any>[];
-	}
-
-	if (Object.isPlainObject(obj)) {
-		return <any>{};
-	}
-
-	if (Object.isMap(obj)) {
-		return <any>new Map();
-	}
-
-	if (Object.isSet(obj)) {
-		return <any>new Set();
-	}
-
-	if (Object.isCustomObject((<object><unknown>obj!).constructor)) {
-		return <any>{};
-	}
-
-	return false;
-}

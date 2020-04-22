@@ -23,6 +23,3 @@ extend(globalThis, 'stderr', (err) => {
 		log.error('stderr', err);
 	}
 });
-
-/** @see devNull */
-extend(globalThis, 'devNull', () => { /* empty */ });

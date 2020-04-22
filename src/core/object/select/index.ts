@@ -64,7 +64,7 @@ export default function select<T = unknown>(obj: unknown, params: SelectParams):
 	};
 
 	if (where) {
-		for (let obj = (<SelectParams['where'][]>[]).concat(where || []), i = 0; i < obj.length; i++) {
+		for (let obj = Array.concat([], where), i = 0; i < obj.length; i++) {
 			const
 				where = obj[i];
 

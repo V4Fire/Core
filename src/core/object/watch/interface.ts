@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-export type WatchPath = string | unknown[];
+export type WatchPath = ObjectPropertyPath;
 
 export type WatchDependencies =
 	WatchPath[] |

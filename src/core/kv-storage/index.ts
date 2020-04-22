@@ -224,7 +224,7 @@ export function factory(engine: StorageEngine, async?: boolean): AsyncFactoryRes
 		get<T>(key: string, ...args: unknown[]): CanPromise<T> {
 			return wrap(get(key, ...args), (v) => {
 				if (v == null || v === 'undefined') {
-					return undefined;
+					return;
 				}
 
 				return Object.parse(v, convertIfDate);

@@ -12,6 +12,12 @@
  */
 
 // tslint:disable:max-file-line-count unified-signatures
+/// <reference types="ts-toolbelt"/>
+
+declare namespace TB {
+	export { Any, Boolean, Class, Function, Iteration, List, Number, Object, String, Union } from 'ts-toolbelt';
+	export { A, B, C, F, I, L, N, O, S, U } from 'ts-toolbelt';
+}
 
 declare const APP_NAME: string;
 declare const API_URL: CanUndef<string>;
@@ -29,12 +35,6 @@ declare function Any(obj: unknown): any;
  * @param err
  */
 declare function stderr(err: unknown): void;
-
-/**
- * dev/null wrapper
- * @param obj
- */
-declare function devNull(obj: unknown): void;
 
 /**
  * Global i18n function (can be used as a string tag or a simple function)
@@ -60,24 +60,46 @@ declare class IdleDeadline {
 declare function requestIdleCallback(fn: (deadline: IdleDeadline) => void, opts?: {timer?: number}): number;
 declare function cancelIdleCallback(id: number): void;
 
-declare function setImmediate(fn: Function): number;
+declare function setImmediate(fn: AnyFunction): number;
 declare function clearImmediate(id: number): void;
 
-type Wrap<T> = T & any;
 type Nullable<T> = T | null | undefined;
 type CanPromise<T> = T | Promise<T>;
 type CanUndef<T> = T | undefined;
 type CanVoid<T> = T | void;
 type CanArray<T> = T | T[];
 
+interface AnyFunction<ARGS = any[], R = any> extends Function {
+	(...args: ARGS): R;
+}
+
+interface AnyOneArgFunction<ARG = any, R = any> extends Function {
+	(arg: ARG): R;
+}
+
 interface ClassConstructor<T = unknown> {new: T}
 interface StrictDictionary<T = unknown> {[key: string]: T}
 interface Dictionary<T> {[key: string]: CanUndef<T>}
 interface Dictionary<T extends unknown = unknown> {[key: string]: T}
 
+interface Maybe<T = unknown> extends Promise<T> {
+	readonly type: 'Maybe';
+}
+
+interface Either<T = unknown> extends Promise<T> {
+	readonly type: 'Either';
+}
+
+type NewPromise<K, V> = K extends Maybe ?
+	Maybe<V> : K extends Either ?
+		Either<V> : Promise<V>;
+
+type PromiseType<T extends Promise<any>> =
+	T extends Maybe<infer V> ?
+		NonNullable<V> : T extends Promise<infer V> ? V : T;
+
 type DictionaryType<T extends Dictionary> = T extends Dictionary<infer V> ? NonNullable<V> : T;
 type IterableType<T extends Iterable<unknown>> = T extends Iterable<infer V> ? V : T;
-type PromiseType<T extends Promise<unknown>> = T extends Promise<infer V> ? V : T;
 
 interface ArrayLike<T = unknown> {
 	[i: number]: T;
@@ -387,58 +409,111 @@ interface ObjectFromArrayOptions<T = boolean> {
 	valueConverter?(el: unknown, i: number): T;
 }
 
+type ObjectPropertyPath =
+	string |
+	unknown[];
+
 interface ObjectConstructor {
 	/**
-	 * Returns a value from the object by the specified path
+	 * Returns a value from an object by the specified path
 	 *
 	 * @param obj
 	 * @param path
 	 * @param [opts] - additional options
 	 */
-	get<T = unknown>(obj: unknown, path: string | unknown[], opts?: ObjectGetOptions): T;
+	get<T = unknown>(obj: unknown, path: ObjectPropertyPath, opts?: ObjectGetOptions): T;
 
 	/**
-	 * Returns a function that returns true if the object has a property by the specified path
+	 * Returns a function that returns a value from an object, which the function takes, by the specified path
+	 *
+	 * @param path
+	 * @param [opts] - additional options
+	 */
+	get<T = unknown>(path: ObjectPropertyPath, opts?: ObjectGetOptions): (obj: unknown) => T;
+
+	/**
+	 * Returns a function that returns a value from the specified object by a path that the function takes
 	 *
 	 * @param obj
 	 * @param [opts] - additional options
 	 */
-	has(obj: object, opts?: ObjectGetOptions): (path: string | unknown[]) => boolean;
+	get<T = unknown>(obj: unknown, opts?: ObjectGetOptions): (path: ObjectPropertyPath) => T;
 
 	/**
-	 * Returns true if the object has a property by the specified path
+	 * Returns true if an object has a property by the specified path
 	 *
 	 * @param obj
 	 * @param path
 	 * @param [opts] - additional options
 	 */
-	has(obj: object, path: string | unknown[], opts?: ObjectGetOptions): boolean;
+	has(obj: object, path: ObjectPropertyPath, opts?: ObjectGetOptions): boolean;
 
 	/**
-	 * Returns a function that returns true if the specified property exists directly in the object
+	 * Returns a function that returns true if an object, which the function takes, has a value by the specified path
+	 *
+	 * @param path
+	 * @param [opts] - additional options
+	 */
+	has(path: ObjectPropertyPath, opts?: ObjectGetOptions): (obj: unknown) => boolean;
+
+	/**
+	 * Returns a function that returns true if the specified object has a value by a path that the function takes
+	 *
+	 * @param obj
+	 * @param [opts] - additional options
+	 */
+	has(obj: object, opts?: ObjectGetOptions): (path: ObjectPropertyPath) => boolean;
+
+	/**
+	 * Returns a function that returns true if an object, which the function takes, has own property by the specified key
+	 * @param key
+	 */
+	hasOwnProperty(key: string): (obj: unknown) => boolean;
+
+	/**
+	 * Returns a function that returns true if the specified object has own property by a key the the function takes
+	 * @param obj
+	 */
+	hasOwnProperty(obj: unknown): (key: string) => boolean;
+
+	/**
+	 * Returns true if an object has an own property by the specified key
 	 *
 	 * @param obj
 	 * @param key
 	 */
-	hasOwnProperty(obj: unknown, key?: undefined): (key: string) => boolean;
-
-	/**
-	 * Returns true if the specified property exists directly in the object
-	 *
-	 * @param obj
-	 * @param key - property key
-	 */
 	hasOwnProperty(obj: unknown, key: string): boolean;
 
 	/**
-	 * Sets a value to the object by the specified path
+	 * Sets a value to an object by the specified path.
+	 * The final function returns a value that was added.
 	 *
 	 * @param obj
 	 * @param path
 	 * @param value
 	 * @param [opts] - additional options
 	 */
-	set<T = unknown>(obj: unknown, path: string | unknown[], value: T, opts?: ObjectSetOptions): T;
+	set<T>(obj: unknown, path: ObjectPropertyPath, value: T, opts?: ObjectSetOptions): T;
+
+	/**
+	 * Returns a function that sets a value to an object, which the function takes, by the specified path.
+	 * The final function returns a link to the object.
+	 *
+	 * @param path
+	 * @param [opts] - additional options
+	 * @param [value]
+	 */
+	set(path: ObjectPropertyPath, opts?: ObjectSetOptions, value?: unknown): <T>(obj: T, value?: unknown) => T;
+
+	/**
+	 * Returns a function that sets a value to the specified object by a path that the function takes.
+	 * The final function returns a link to the object.
+	 *
+	 * @param obj
+	 * @param [opts] - additional options
+	 * @param [value]
+	 */
+	set<T>(obj: T, opts?: ObjectSetOptions, value?: unknown): (path: ObjectPropertyPath, value?: unknown) => T;
 
 	/**
 	 * Returns length of the specified object
@@ -453,7 +528,7 @@ interface ObjectConstructor {
 	 * @param opts - additional options
 	 * @param cb - callback function that is called on each of object elements
 	 */
-	forEach<V = unknown>(
+	forEach<V>(
 		obj: Dictionary<V>,
 		opts: ObjectForEachOptions & {withDescriptor: true},
 		cb: (el: ObjectForEachPropertyDescriptor<V>, key: string, data: Dictionary<V>) => any
@@ -466,9 +541,9 @@ interface ObjectConstructor {
 	 * @param opts - additional options
 	 * @param cb - callback function that is called on each of object elements
 	 */
-	forEach<V = unknown>(
+	forEach<V>(
 		obj: Dictionary<V>,
-		opts?: ObjectForEachOptions & ({notOwn: boolean | -1} | {withDescriptor: false}),
+		opts: ObjectForEachOptions & ({notOwn: boolean | -1} | {withDescriptor: false}),
 		cb: (el: V, key: string, data: Dictionary<V>) => any
 	): void;
 
@@ -479,7 +554,7 @@ interface ObjectConstructor {
 	 * @param opts - additional options
 	 * @param cb - callback function that is called on each of object elements
 	 */
-	forEach<V = unknown, K = unknown>(
+	forEach<V, K>(
 		obj: Map<K, V>,
 		opts: ObjectForEachOptions,
 		cb: (el: V, key: K, data: Map<K, V>) => any
@@ -492,7 +567,7 @@ interface ObjectConstructor {
 	 * @param cb - callback function that is called on each of object elements
 	 * @param [opts] - additional options
 	 */
-	forEach<V = unknown, K = unknown>(
+	forEach<V, K>(
 		obj: Map<K, V>,
 		cb: (el: V, key: K, data: Map<K, V>) => any,
 		opts?: ObjectForEachOptions
@@ -505,7 +580,7 @@ interface ObjectConstructor {
 	 * @param opts - additional options
 	 * @param cb - callback function that is called on each of object elements
 	 */
-	forEach<V = unknown>(
+	forEach<V>(
 		obj: Set<V>,
 		opts: ObjectForEachOptions,
 		cb: (el: V, i: V, data: Set<V>) => any
@@ -518,7 +593,7 @@ interface ObjectConstructor {
 	 * @param cb - callback function that is called on each of object elements
 	 * @param [opts] - additional options
 	 */
-	forEach<V = unknown>(
+	forEach<V>(
 		obj: Set<V>,
 		cb: (el: V, i: V, data: Set<V>) => any,
 		opts?: ObjectForEachOptions
@@ -531,7 +606,7 @@ interface ObjectConstructor {
 	 * @param opts - additional options
 	 * @param cb - callback function that is called on each of object elements
 	 */
-	forEach<V = unknown>(
+	forEach<V>(
 		obj: V[],
 		opts: ObjectForEachOptions,
 		cb: (el: V, i: number, data: V[]) => any
@@ -544,7 +619,7 @@ interface ObjectConstructor {
 	 * @param cb - callback function that is called on each of object elements
 	 * @param [opts] - additional options
 	 */
-	forEach<V = unknown>(
+	forEach<V>(
 		obj: V[],
 		cb: (el: V, i: number, data: V[]) => any,
 		opts?: ObjectForEachOptions
@@ -557,7 +632,7 @@ interface ObjectConstructor {
 	 * @param opts - additional options
 	 * @param cb - callback function that is called on each of object elements
 	 */
-	forEach<V = unknown>(
+	forEach<V>(
 		obj: Iterable<V>,
 		opts: ObjectForEachOptions,
 		cb: (el: V, key: null, data: Iterable<V>) => any
@@ -570,7 +645,7 @@ interface ObjectConstructor {
 	 * @param cb - callback function that is called on each of object elements
 	 * @param [opts] - additional options
 	 */
-	forEach<V = unknown>(
+	forEach<V>(
 		obj: Iterable<V>,
 		cb: (el: V, key: null, data: Iterable<V>) => any,
 		opts?: ObjectForEachOptions
@@ -583,7 +658,7 @@ interface ObjectConstructor {
 	 * @param opts - additional options
 	 * @param cb - callback function that is called on each of object elements
 	 */
-	forEach<V = unknown>(
+	forEach<V>(
 		obj: Dictionary<V>,
 		opts: ObjectForEachOptions,
 		cb: (el: V, key: string, data: Dictionary<V>) => any
@@ -596,7 +671,7 @@ interface ObjectConstructor {
 	 * @param cb - callback function that is called on each of object elements
 	 * @param [opts] - additional options
 	 */
-	forEach<V = unknown>(
+	forEach<V>(
 		obj: Dictionary<V>,
 		cb: (el: V, key: string, data: Dictionary<V>) => any,
 		opts?: ObjectForEachOptions
@@ -629,7 +704,14 @@ interface ObjectConstructor {
 	): void;
 
 	/**
-	 * Compares two specified objects by using naive but fast "JSON.stringify/parse" strategy and returns the result
+	 * Returns a curried version of Object.fastCompare for one argument
+	 * @param a
+	 */
+	fastCompare(a: unknown): <T>(b: T) => a is T;
+
+	/**
+	 * Compares two specified objects by using a naive but fast "JSON.stringify/parse" strategy and
+	 * returns true if their are equal
 	 *
 	 * @param a
 	 * @param b
@@ -637,7 +719,15 @@ interface ObjectConstructor {
 	fastCompare<T>(a: unknown, b: T): a is T;
 
 	/**
-	 * Clones the specified object by using naive but fast "JSON.stringify/parse" strategy and returns a new object
+	 * Returns a curried version of Object.fastClone
+	 *
+	 * @param obj
+	 * @param opts - additional options
+	 */
+	fastClone(obj: undefined, opts: FastCloneOptions): <T>(obj: T) => T;
+
+	/**
+	 * Clones the specified object by using a naive but fast "JSON.stringify/parse" strategy and returns a new object
 	 *
 	 * @param obj
 	 * @param [opts] - additional options
@@ -645,10 +735,38 @@ interface ObjectConstructor {
 	fastClone<T>(obj: T, opts?: FastCloneOptions): T;
 
 	/**
-	 * Returns a string representation of the specified object naive but fast "JSON.stringify/parse" strategy
+	 * Returns a string representation of the specified object by using a naive but fast "JSON.stringify/parse" strategy
 	 * @param obj
 	 */
 	fastHash(obj: unknown): string;
+
+	/**
+	 * Returns a curried version of Object.mixin for one argument
+	 * @param opts - if true, then properties will be copied recursively OR additional options for extending
+	 */
+	mixin(opts: ObjectMixinOptions | boolean): <B, O1>(base: B, obj1: O1) => B & O1;
+
+	/**
+	 * Returns a curried version of Object.mixin for one argument
+	 * @param opts - if true, then properties will be copied recursively OR additional options for extending
+	 */
+	mixin(opts: ObjectMixinOptions | boolean): <R = unknown>(...objects: unknown[]) => R;
+
+	/**
+	 * Returns a curried version of Object.mixin for two arguments
+	 *
+	 * @param opts - if true, then properties will be copied recursively OR additional options for extending
+	 * @param base - base object
+	 */
+	mixin<B>(opts: ObjectMixinOptions | boolean, base: B): <O1>(obj1: O1) => B & O1;
+
+	/**
+	 * Returns a curried version of Object.mixin for two arguments
+	 *
+	 * @param opts - if true, then properties will be copied recursively OR additional options for extending
+	 * @param base - base object
+	 */
+	mixin(opts: ObjectMixinOptions | boolean, base: unknown): <R = unknown>(...objects: unknown[]) => R;
 
 	/**
 	 * Extends the specified object by another objects.
@@ -658,11 +776,7 @@ interface ObjectConstructor {
 	 * @param base - base object
 	 * @param obj1 - object for extending
 	 */
-	mixin<B = unknown, O1 = unknown>(
-		opts: ObjectMixinOptions | boolean,
-		base?: B,
-		obj1: O1
-	): B & O1;
+	mixin<B, O1>(opts: ObjectMixinOptions | boolean, base?: B, obj1: O1): B & O1;
 
 	/**
 	 * Extends the specified object by another objects.
@@ -673,12 +787,7 @@ interface ObjectConstructor {
 	 * @param obj1 - object for extending
 	 * @param obj2 - object for extending
 	 */
-	mixin<B = unknown, O1 = unknown, O2 = unknown>(
-		opts: ObjectMixinOptions | boolean,
-		base?: B,
-		obj1: O1,
-		obj2: O2
-	): B & O1 & O2;
+	mixin<B, O1, O2>(opts: ObjectMixinOptions | boolean, base?: B, obj1: O1, obj2: O2): B & O1 & O2;
 
 	/**
 	 * Extends the specified object by another objects.
@@ -690,13 +799,7 @@ interface ObjectConstructor {
 	 * @param obj2 - object for extending
 	 * @param obj3 - object for extending
 	 */
-	mixin<B = unknown, O1 = unknown, O2 = unknown, O3 = unknown>(
-		opts: ObjectMixinOptions | boolean,
-		base?: B,
-		obj1: O1,
-		obj2: O2,
-		obj3: O3
-	): B & O1 & O2 & O3;
+	mixin<B, O1, O2, O3>(opts: ObjectMixinOptions | boolean, base?: B, obj1: O1, obj2: O2, obj3: O3): B & O1 & O2 & O3;
 
 	/**
 	 * Extends the specified object by another objects.
@@ -706,19 +809,22 @@ interface ObjectConstructor {
 	 * @param base - base object
 	 * @param objects - objects for extending
 	 */
-	mixin<R = unknown>(
-		opts: ObjectMixinOptions | boolean,
-		base?: unknown,
-		...objects: unknown[]
-	): R;
+	mixin<R = unknown>(opts: ObjectMixinOptions | boolean, base?: unknown, ...objects: unknown[]): R;
 
 	/**
-	 * Parses the specified value as a JSON/JS object and returns the result
+	 * Returns a curried version of Object.parse
+	 * @param reviver - reviver function for JSON.parse
+	 */
+	parse(reviver?: JSONCb): <V, R = unknown>(value: V) => V extends string ? R : V;
+
+	/**
+	 * Parses the specified value as a JSON/JS object and returns the result of parsing.
+	 * If the value isn't a string or can't be parsed, the function returns an original value.
 	 *
 	 * @param value
 	 * @param [reviver] - reviver function for JSON.parse
 	 */
-	parse<V = unknown, R = unknown>(value: V, reviver?: JSONCb): V extends string ? R : V;
+	parse<V, R = unknown>(value: V, reviver?: JSONCb): V extends string ? R : V;
 
 	/**
 	 * Creates a hash table without any prototype and returns it
@@ -776,55 +882,232 @@ interface ObjectConstructor {
 	 * @param arr
 	 * @param [opts] - additional options
 	 */
-	fromArray<T = boolean>(arr: unknown[], opts?: ObjectFromArrayOptions<T>): Dictionary<T>;
+	fromArray<T>(arr: unknown[], opts?: ObjectFromArrayOptions<T>): Dictionary<T>;
 
 	/**
-	 * Returns a new object based on the specified, but only with fields which match to the specified condition
+	 * Returns a curried version of Object.select
+	 * @param condition - regular expression to filter
+	 */
+	select(condition: RegExp): <D extends object>(obj: D) => {[K in keyof D]?: D[K]};
+
+	/**
+	 * Returns a curried version of Object.select
+	 * @param condition - whitelist of keys to filter
+	 */
+	select<C extends string>(condition: CanArray<C>): <D extends object>(obj: D) => Pick<D, Extract<keyof D, C>>;
+
+	/**
+	 * Returns a curried version of Object.select
+	 * @param condition - whitelist of keys to filter
+	 */
+	select<C extends string>(condition: Iterable<C>): <D extends object>(obj: D) => {[K in keyof D]?: D[K]};
+
+	/**
+	 * Returns a curried version of Object.select
+	 * @param condition - map of keys to filter
+	 */
+	select<C extends object>(condition: C): <D extends object>(obj: D) => Pick<D, Extract<keyof D, keyof C>>;
+
+	/**
+	 * Returns a new object based on the specified, but only with fields that match to the specified condition
 	 *
 	 * @param obj
-	 * @param condition - regular expression for filtering
+	 * @param condition - regular expression to filter
 	 */
 	select<D extends object>(obj: D, condition: RegExp): {[K in keyof D]?: D[K]};
 
 	/**
-	 * Returns a new object based on the specified, but only with fields which match to the specified condition
+	 * Returns a new object based on the specified, but only with fields that match to the specified condition
 	 *
 	 * @param obj
-	 * @param condition - whitelist of keys (it can be represented as an array or an object)
+	 * @param condition - whitelist of keys to filter
 	 */
 	select<D extends object, C extends string>(obj: D, condition: CanArray<C>): Pick<D, Extract<keyof D, C>>;
 
 	/**
-	 * Returns a new object based on the specified, but only with fields which match to the specified condition
+	 * Returns a new object based on the specified, but only with fields that match to the specified condition
 	 *
 	 * @param obj
-	 * @param condition - whitelist of keys (it can be represented as an array or an object) or a regular expression
+	 * @param condition - whitelist of keys to filter
+	 */
+	select<D extends object, C extends string>(obj: D, condition: Iterable<C>): {[K in keyof D]?: D[K]};
+
+	/**
+	 * Returns a new object based on the specified, but only with fields that match to the specified condition
+	 *
+	 * @param obj
+	 * @param condition - map of keys to filter
 	 */
 	select<D extends object, C extends object>(obj: D, condition: C): Pick<D, Extract<keyof D, keyof C>>;
 
 	/**
-	 * Returns a new object based on the specified, but without fields which match to the specified condition
+	 * Returns a curried version of Object.reject
+	 * @param condition - regular expression to filter
+	 */
+	reject(condition: RegExp): <D extends object>(obj: D) => {[K in keyof D]?: D[K]};
+
+	/**
+	 * Returns a curried version of Object.reject
+	 * @param condition - whitelist of keys to filter
+	 */
+	reject<C extends string>(condition: CanArray<C>): <D extends object>(obj: D) => Omit<D, C>;
+
+	/**
+	 * Returns a curried version of Object.reject
+	 * @param condition - whitelist of keys to filter
+	 */
+	reject<C extends string>(condition: Iterable<C>): <D extends object>(obj: D) => {[K in keyof D]?: D[K]};
+
+	/**
+	 * Returns a curried version of Object.reject
+	 * @param condition - map of keys to filter
+	 */
+	reject<C extends object>(condition: C): <D extends object>(obj: D) => Omit<D, keyof C>;
+
+	/**
+	 * Returns a new object based on the specified, but without fields that match to the specified condition
 	 *
 	 * @param obj
-	 * @param condition - regular expression for filtering
+	 * @param condition - regular expression to filter
 	 */
 	reject<D extends object>(obj: D, condition: RegExp): {[K in keyof D]?: D[K]};
 
 	/**
-	 * Returns a new object based on the specified, but without fields which match to the specified condition
+	 * Returns a new object based on the specified, but without fields that match to the specified condition
 	 *
 	 * @param obj
-	 * @param condition - whitelist of keys (it can be represented as an array or an object)
+	 * @param condition - whitelist of keys to filter
 	 */
 	reject<D extends object, C extends string>(obj: D, condition: CanArray<C>): Omit<D, C>;
 
 	/**
-	 * Returns a new object based on the specified, but without fields which match to the specified condition
+	 * Returns a new object based on the specified, but without fields that match to the specified condition
 	 *
 	 * @param obj
-	 * @param condition - whitelist of keys (it can be represented as an array or an object) or a regular expression
+	 * @param condition - whitelist of keys to filter
+	 */
+	reject<D extends object, C extends string>(obj: D, condition: Iterable<C>): {[K in keyof D]?: D[K]};
+
+	/**
+	 * Returns a new object based on the specified, but without fields that match to the specified condition
+	 *
+	 * @param obj
+	 * @param condition - map of keys to filter
 	 */
 	reject<D extends object, C extends object>(obj: D, condition: C): Omit<D, keyof C>;
+
+	/**
+	 * Wraps the specified value into the Either structure.
+	 * If the value is equal to null or undefined, the value is rejected.
+	 *
+	 * @example
+	 * ```typescript
+	 * function toLowerCase(str: string): string {
+	 *   return str.toLowerCase();
+	 * }
+	 *
+	 * Object.Option(toLowerCase)(null).catch((err) => err === null);
+	 * Object.Option(null).catch((err) => err === null);
+	 *
+	 * Object.Option(toLowerCase)('FOO').then((value) => value === 'foo');
+	 * Object.Option('foo').then((value) => value === 'foo');
+	 * ```
+	 */
+	Option<R>(value: () => R): AnyFunction<any[], Maybe<R>>;
+
+	/**
+	 * Wraps the specified value into the Either structure.
+	 * If the value is equal to null or undefined, the value is rejected.
+	 *
+	 * @example
+	 * ```typescript
+	 * function toLowerCase(str: string): string {
+	 *   return str.toLowerCase();
+	 * }
+	 *
+	 * Object.Option(toLowerCase)(null).catch((err) => err === null);
+	 * Object.Option(null).catch((err) => err === null);
+	 *
+	 * Object.Option(toLowerCase)('FOO').then((value) => value === 'foo');
+	 * Object.Option('foo').then((value) => value === 'foo');
+	 * ```
+	 */
+	Option<A1, A extends unknown[], R>(value: (a1: A1, a: A) => R):
+		AnyFunction<[Maybe<Nullable<A1>> | Either<A1> | Nullable<A1>, ...A], Maybe<R>>;
+
+	/**
+	 * Wraps the specified value into the Either structure.
+	 * If the value is equal to null or undefined, the value is rejected.
+	 *
+	 * @example
+	 * ```typescript
+	 * function toLowerCase(str: string): string {
+	 *   return str.toLowerCase();
+	 * }
+	 *
+	 * Object.Option(toLowerCase)(null).catch((err) => err === null);
+	 * Object.Option(null).catch((err) => err === null);
+	 *
+	 * Object.Option(toLowerCase)('FOO').then((value) => value === 'foo');
+	 * Object.Option('foo').then((value) => value === 'foo');
+	 * ```
+	 */
+	Option<T = unknown>(value: T): Maybe<T>;
+
+	/**
+	 * Wraps the specified value into the Either structure
+	 *
+	 * @example
+	 * ```typescript
+	 * function toLowerCase(str: string): string {
+	 *   return str.toLowerCase();
+	 * }
+	 *
+	 * Object.Result(toLowerCase)(null).catch((err) => err.message === 'str is null');
+	 * Object.Result(Object.result(toLowerCase)(null)).catch((err) => err.message === 'str is null');
+	 *
+	 * Object.Result(toLowerCase)('FOO').then((value) => value === 'foo');
+	 * Object.Result('foo').then((value) => value === 'foo');
+	 * ```
+	 */
+	Result<R>(value: () => R): AnyFunction<any[], Either<R>>;
+
+	/**
+	 * Wraps the specified value into the Either structure
+	 *
+	 * @example
+	 * ```typescript
+	 * function toLowerCase(str: string): string {
+	 *   return str.toLowerCase();
+	 * }
+	 *
+	 * Object.Result(toLowerCase)(null).catch((err) => err.message === 'str is null');
+	 * Object.Result(Object.result(toLowerCase)(null)).catch((err) => err.message === 'str is null');
+	 *
+	 * Object.Result(toLowerCase)('FOO').then((value) => value === 'foo');
+	 * Object.Result('foo').then((value) => value === 'foo');
+	 * ```
+	 */
+	Result<A1, A extends unknown[], R>(value: (a1: A1, a: A) => R):
+		AnyFunction<[Maybe<A1> | Either<A1> | Nullable<A1>, ...A], Either<R>>;
+
+	/**
+	 * Wraps the specified value into the Either structure
+	 *
+	 * @example
+	 * ```typescript
+	 * function toLowerCase(str: string): string {
+	 *   return str.toLowerCase();
+	 * }
+	 *
+	 * Object.Result(toLowerCase)(null).catch((err) => err.message === 'str is null');
+	 * Object.Result(Object.result(toLowerCase)(null)).catch((err) => err.message === 'str is null');
+	 *
+	 * Object.Result(toLowerCase)('FOO').then((value) => value === 'foo');
+	 * Object.Result('foo').then((value) => value === 'foo');
+	 * ```
+	 */
+	Result<T = unknown>(value: T): Either<T>;
 
 	/**
 	 * Returns true if the specified value is a plain object
@@ -860,7 +1143,7 @@ interface ObjectConstructor {
 			Promise<any> |
 
 			Generator |
-			Function |
+			AnyFunction |
 
 			Number |
 			String |
@@ -884,7 +1167,7 @@ interface ObjectConstructor {
 	 * This method is similar to isPlainObject, but it has another output TS type:
 	 * instead of inferring of an output type the method always cast the type to a dictionary.
 	 *
-	 * @param obj
+	 * @param value
 	 *
 	 * @example
 	 * ```ts
@@ -903,149 +1186,202 @@ interface ObjectConstructor {
 	 * }
 	 * ```
 	 */
-	isDictionary(obj: unknown): obj is Dictionary;
+	isDictionary(value: unknown): value is Dictionary;
 
 	/**
 	 * @deprecated
 	 * @see [[ObjectConstructor.isPlainObject]]
 	 * @see [[ObjectConstructor.isDictionary]]
 	 */
-	isObject(obj: unknown): obj is Dictionary;
+	isObject(value: unknown): value is Dictionary;
 
 	/**
 	 * Returns true if the specified value has a primitive type
-	 * @param obj
+	 * @param value
 	 */
-	isPrimitive(obj: unknown): boolean;
+	isPrimitive(value: unknown): boolean;
 
 	/**
 	 * Returns true if the specified value is a custom (not native) object or a function
-	 * @param obj
+	 * @param value
 	 */
-	isCustomObject(obj: unknown): boolean;
+	isCustomObject(value: unknown): boolean;
 
 	/**
 	 * Returns true if the specified value is a simple object (without a string type tag)
-	 * @param obj
+	 * @param value
 	 */
-	isSimpleObject<T extends object = object>(obj: unknown): obj is T;
+	isSimpleObject<T extends object = object>(value: unknown): value is T;
 
 	/**
 	 * Returns true if the specified value is an array
-	 * @param obj
+	 * @param value
 	 */
-	isArray(obj: unknown): obj is unknown[];
+	isArray(value: unknown): value is unknown[];
 
 	/**
 	 * Returns true if the specified value is looks like an array
-	 * @param obj
+	 * @param value
 	 */
-	isArrayLike(obj: unknown): obj is ArrayLike;
+	isArrayLike(value: unknown): value is ArrayLike;
 
 	/**
 	 * Returns true if the specified value is a function
-	 * @param obj
+	 * @param value
 	 */
-	isFunction(obj: unknown): obj is Function;
+	isFunction(value: unknown): value is AnyFunction;
+
+	/**
+	 * Returns true if the specified value is a constructor function
+	 * @param value
+	 */
+	isConstructor(value: unknown): value is Function;
 
 	/**
 	 * Returns true if the specified value is a generator
-	 * @param obj
+	 * @param value
 	 */
-	isGenerator(obj: unknown): obj is GeneratorFunction;
+	isGenerator(value: unknown): value is GeneratorFunction;
 
 	/**
 	 * Returns true if the specified value is an iterable structure
-	 * @param obj
+	 * @param value
 	 */
-	isIterable(obj: unknown): obj is Iterable<unknown>;
+	isIterable(value: unknown): value is IterableIterator<unknown>;
 
 	/**
 	 * Returns true if the specified value is an iterator
-	 * @param obj
+	 * @param value
 	 */
-	isIterator(obj: unknown): obj is Iterator<unknown>;
+	isIterator(value: unknown): value is Iterator<unknown>;
 
 	/**
 	 * Returns true if the specified value is a string
-	 * @param obj
+	 * @param value
 	 */
-	isString(obj: unknown): obj is string;
+	isString(value: unknown): value is string;
 
 	/**
 	 * Returns true if the specified value is a number
-	 * @param obj
+	 * @param value
 	 */
-	isNumber(obj: unknown): obj is number;
+	isNumber(value: unknown): value is number;
 
 	/**
 	 * Returns true if the specified value is a boolean
-	 * @param obj
+	 * @param value
 	 */
-	isBoolean(obj: unknown): obj is boolean;
+	isBoolean(value: unknown): value is boolean;
 
 	/**
 	 * Returns true if the specified value is a symbol
-	 * @param obj
+	 * @param value
 	 */
-	isSymbol(obj: unknown): obj is symbol;
+	isSymbol(value: unknown): value is symbol;
 
 	/**
 	 * Returns true if the specified value is a regular expression
-	 * @param obj
+	 * @param value
 	 */
-	isRegExp(obj: unknown): obj is RegExp;
+	isRegExp(value: unknown): value is RegExp;
 
 	/**
 	 * Returns true if the specified value is a date
-	 * @param obj
+	 * @param value
 	 */
-	isDate(obj: unknown): obj is Date;
+	isDate(value: unknown): value is Date;
 
 	/**
 	 * Returns true if the specified value is a promise
-	 * @param obj
+	 * @param value
 	 */
-	isPromise(obj: unknown): obj is Promise<unknown>;
+	isPromise(value: unknown): value is Promise<unknown>;
 
 	/**
 	 * Returns true if the specified value is looks like a promise
-	 * @param obj
+	 * @param value
 	 */
-	isPromiseLike(obj: unknown): obj is PromiseLike<unknown>;
+	isPromiseLike(value: unknown): value is PromiseLike<unknown>;
 
 	/**
 	 * Returns true if the specified value is a map
-	 * @param obj
+	 * @param value
 	 */
-	isMap(obj: unknown): obj is Map<unknown, unknown>;
+	isMap(value: unknown): value is Map<unknown, unknown>;
 
 	/**
 	 * Returns true if the specified value is a weak map
-	 * @param obj
+	 * @param value
 	 */
-	isWeakMap(obj: unknown): obj is WeakMap<object, unknown>;
+	isWeakMap(value: unknown): value is WeakMap<object, unknown>;
 
 	/**
 	 * Returns true if the specified value is a set
-	 * @param obj
+	 * @param value
 	 */
-	isSet(obj: unknown): obj is Set<unknown>;
+	isSet(value: unknown): value is Set<unknown>;
 
 	/**
 	 * Returns true if the specified value is a weak set
-	 * @param obj
+	 * @param value
 	 */
-	isWeakSet(obj: unknown): obj is WeakSet<object>;
+	isWeakSet(value: unknown): value is WeakSet<object>;
+}
+
+interface ArrayConstructor {
+	/**
+	 * Returns a curried version of Array.union
+	 * @param arr
+	 */
+	union<T extends Nullable<unknown[]>>(arr: T): <A extends Iterable<unknown> | unknown>(
+		...args: Array<Iterable<A> | A>
+	) => A extends Iterable<infer V> ? Array<IterableType<T> | V> : Array<IterableType<T> | NonNullable<A>>;
+
+	/**
+	 * Returns a new array containing elements from all specified iterable values with duplicates removed.
+	 * You can also pass non-iterable values and they will be added to the final array,
+	 * except values with null and undefined.
+	 *
+	 * @param arr
+	 * @param args
+	 */
+	union<T extends Nullable<unknown[]>, A extends Iterable<unknown> | unknown>(
+		arr: T,
+		...args: Array<Iterable<A> | A>
+	): A extends Iterable<infer V> ? Array<IterableType<T> | V> : Array<IterableType<T> | NonNullable<A>>;
+
+	/**
+	 * Returns a curried version of Array.concat
+	 * @param arr
+	 */
+	concat<T extends Nullable<unknown[]>>(arr: T): <A extends CanArray<unknown>>(...args: CanArray<A>[]) =>
+		A extends Array<infer V> ? Array<IterableType<T> | V> : Array<IterableType<T> | NonNullable<A>>;
+
+	/**
+	 * Returns a new array containing elements from all specified arrays.
+	 * You can also pass non-iterable values and they will be added to the final array,
+	 * except values with null and undefined.
+	 *
+	 * @param arr
+	 * @param args
+	 */
+	concat<T extends Nullable<unknown[]>, A extends CanArray<unknown>>(
+		arr: T,
+		...args: CanArray<A>[]
+	): A extends Array<infer V> ? Array<IterableType<T> | V> : Array<IterableType<T> | NonNullable<A>>;
 }
 
 interface Array<T> {
 	/**
-	 * Returns a new array containing elements from all specified arrays with duplicates removed
+	 * Returns a new array containing elements from all specified iterable values with duplicates removed.
+	 * You can also pass non-iterable values and they will be added to the final array,
+	 * except values with null and undefined.
+	 *
 	 * @param args
 	 */
-	union<A extends unknown[]>(...args: A): A extends Array<infer V>[] ?
-		Array<T | V> : A extends Array<infer V>[] ? Array<T | V> : T[];
+	union<A extends Iterable<unknown> | unknown>(
+		...args: Array<Iterable<A> | A>
+	): A extends Iterable<infer V> ? Array<T | V> : Array<T | NonNullable<A>>;
 }
 
 interface StringCapitalizeOptions {
@@ -1100,6 +1436,106 @@ interface StringUnderscoreOptions extends StringDasherizeOptions {
 
 }
 
+interface StringConstructor {
+	/**
+	 * Returns a curried version of String.capitalize
+	 * @param opts - additional options
+	 */
+	capitalize(opts: StringCapitalizeOptions): (str: string) => string;
+
+	/**
+	 * Capitalizes the first character of the string and returns it
+	 *
+	 * @param str
+	 * @param [opts] - additional options
+	 */
+	capitalize(str: string, opts?: StringCapitalizeOptions): string;
+
+	/**
+	 * Returns a curried version of String.camelize
+	 * @param upper - if false, then the first character of a value is transformed to the lower case
+	 */
+	camelize(upper: boolean): (str: string) => string;
+
+	/**
+	 * Returns a curried version of String.camelize
+	 * @param opts - additional options
+	 */
+	camelize(opts: StringCamelizeOptions): (str: string) => string;
+
+	/**
+	 * Returns a CamelCaseStyle version of the specified string
+	 *
+	 * @param str
+	 * @param [upper] - if false, then the first character of a value is transformed to the lower case
+	 */
+	camelize(str: string, upper?: boolean): string;
+
+	/**
+	 * Returns a CamelCaseStyle version of the specified string
+	 *
+	 * @param str
+	 * @param [opts] - additional options
+	 */
+	camelize(str: string, opts?: StringCamelizeOptions): string;
+
+	/**
+	 * Returns a curried version of String.dasherize
+	 * @param stable - if true, then the operation can be reverted
+	 */
+	dasherize(stable: boolean): (str: string) => string;
+
+	/**
+	 * Returns a curried version of String.dasherize
+	 * @param opts - additional options
+	 */
+	dasherize(opts: StringDasherizeOptions): (str: string) => string;
+
+	/**
+	 * Returns a dash-style version of the specified string
+	 *
+	 * @param str
+	 * @param [stable] - if true, then the operation can be reverted
+	 */
+	dasherize(str: string, stable?: boolean): string;
+
+	/**
+	 * Returns a dash-style version of the specified string
+	 *
+	 * @param str
+	 * @param [opts] - additional options
+	 */
+	dasherize(str: string, opts?: StringDasherizeOptions): string;
+
+	/**
+	 * Returns a curried version of String.underscore
+	 * @param stable - if true, then the operation can be reverted
+	 */
+	underscore(stable: boolean): (str: string) => string;
+
+	/**
+	 * Returns a curried version of String.underscore
+	 * @param opts - additional options
+	 */
+	underscore(opts: StringUnderscoreOptions): (str: string) => string;
+
+	/**
+	 * Returns an underscore_style version of the specified string
+	 *
+	 * @param str
+	 * @param [stable] - if true, then the operation can be reverted
+	 */
+	underscore(str: string, stable?: boolean): string;
+
+	/**
+	 * Returns an underscore_style version of the specified string
+	 *
+	 * @param str
+	 * @param [opts] - additional options
+	 */
+	underscore(str: string, opts?: StringUnderscoreOptions): string;
+}
+
 interface String {
 	/**
 	 * Capitalizes the first character of a string and returns it
@@ -1109,7 +1545,7 @@ interface String {
 
 	/**
 	 * Returns a CamelCaseStyle version of the specified string
-	 * @param [upper] - if false, then the first character of the string will be transformed to the lower case
+	 * @param [upper] - if false, then the first character of the string is transformed to the lower case
 	 */
 	camelize(upper?: boolean): string;
 
@@ -1168,75 +1604,226 @@ interface NumberConstructor {
 
 	/**
 	 * Returns true if the specified value is an integer number
-	 * @param obj
+	 * @param value
 	 */
-	isInteger(obj: unknown): boolean;
+	isInteger(value: unknown): boolean;
 
 	/**
 	 * Returns true if the specified value is a float number
-	 * @param obj
+	 * @param value
 	 */
-	isFloat(obj: unknown): boolean;
+	isFloat(value: unknown): boolean;
 
 	/**
 	 * Returns true if the specified value is an even number
-	 * @param obj
+	 * @param value
 	 */
-	isEven(obj: unknown): boolean;
+	isEven(value: unknown): boolean;
 
 	/**
 	 * Returns true if the specified value is an odd number
-	 * @param obj
+	 * @param value
 	 */
-	isOdd(obj: unknown): boolean;
+	isOdd(value: unknown): boolean;
 
 	/**
 	 * Returns true if the specified value is a natural number
-	 * @param obj
+	 * @param value
 	 */
-	isNatural(obj: unknown): boolean;
+	isNatural(value: unknown): boolean;
 
 	/**
 	 * Returns true if the specified value is a positive number
-	 * @param obj
+	 * @param value
 	 */
-	isPositive(obj: unknown): boolean;
+	isPositive(value: unknown): boolean;
 
 	/**
 	 * Returns true if the specified value is a negative number
-	 * @param obj
+	 * @param value
 	 */
-	isNegative(obj: unknown): boolean;
+	isNegative(value: unknown): boolean;
 
 	/**
 	 * Returns true if the specified value is a non-negative number
-	 * @param obj
+	 * @param value
 	 */
-	isNonNegative(obj: unknown): boolean;
+	isNonNegative(value: unknown): boolean;
 
 	/**
 	 * Returns true if the specified value is a number and is more or equal than 0 and less or equal than 1
-	 * @param obj
+	 * @param value
 	 */
-	isBetweenZeroAndOne(obj: unknown): boolean;
+	isBetweenZeroAndOne(value: unknown): boolean;
 
 	/**
 	 * Returns true if the specified value is a number and is more than 0 and less or equal than 1
-	 * @param obj
+	 * @param value
 	 */
-	isPositiveBetweenZeroAndOne(obj: unknown): boolean;
+	isPositiveBetweenZeroAndOne(value: unknown): boolean;
+
+	/**
+	 * Returns a value of milliseconds from the seconds
+	 */
+	seconds(value: number): number;
+
+	/**
+	 * Returns a value of milliseconds from the minutes
+	 */
+	minutes(value: number): number;
+
+	/**
+	 * Returns a value of milliseconds from the hours
+	 */
+	hours(value: number): number;
+
+	/**
+	 * Returns a value of milliseconds from the days
+	 */
+	days(value: number): number;
+
+	/**
+	 * Returns a value of milliseconds from the weeks
+	 */
+	weeks(value: number): number;
+
+	/**
+	 * Returns a curried version of Number.floor
+	 * @param precision
+	 */
+	floor(precision: number): (value: number) => number;
+
+	/**
+	 * Shortcut for Math.floor that also allows a precision
+	 *
+	 * @param value
+	 * @param precision
+	 */
+	floor(value: number, precision: number): number;
+
+	/**
+	 * Returns a curried version of Number.round
+	 * @param precision
+	 */
+	round(precision: number): (value: number) => number;
+
+	/**
+	 * Shortcut for Math.round that also allows a precision
+	 *
+	 * @param value
+	 * @param precision
+	 */
+	round(value: number, precision: number): number;
+
+	/**
+	 * Returns a curried version of Number.ceil
+	 * @param precision
+	 */
+	ceil(precision: number): (value: number) => number;
+
+	/**
+	 * Shortcut for Math.ceil that also allows a precision
+	 *
+	 * @param value
+	 * @param precision
+	 */
+	ceil(value: number, precision: number): number;
+
+	/**
+	 * Returns a curried version of Number.pad
+	 * @param opts - additional options
+	 */
+	pad(opts: NumberPadOptions): (value: string) => string;
+
+	/**
+	 * Returns a string from a number with adding extra zeros to the start, if necessary
+	 *
+	 * @param num
+	 * @param targetLength - length of the resulting string once the current string has been padded
+	 */
+	pad(num: number, targetLength?: number): string;
+
+	/**
+	 * Returns a string from a number with adding extra zeros to the start, if necessary
+	 *
+	 * @param num
+	 * @param opts - additional options
+	 */
+	pad(num: number, opts: NumberPadOptions): string;
+
+	/**
+	 * Returns a curried version of Number.format
+	 *
+	 * @param pattern
+	 * @param locale
+	 */
+	format(pattern: string, locale?: CanArray<string>): (value: number) => string;
+
+	/**
+	 * Returns a curried version of Number.format
+	 *
+	 * @param opts
+	 * @param locale
+	 */
+	format(opts: Intl.NumberFormatOptions, locale?: CanArray<string>): (value: number) => string;
+
+	/**
+	 * Returns a string representation of a number by the specified pattern.
+	 * All pattern directives are based on native Intl.NumberFormat options:
+	 *
+	 *   1. `'style'`
+	 *   1. `'currency'`
+	 *   1. `'currencyDisplay'`
+	 *
+	 * There are aliases for all directives:
+	 *
+	 *   1. `'$'` - `{style: 'currency', currency: 'USD'}`
+	 *   1. `'$:${currency}'` - `{style: 'currency', currency}`
+	 *   1. `'$d:${currencyDisplay}'` - `{currencyDisplay}`
+	 *   1. `'%'` - `{style: 'percent'}`
+	 *   1. `'.'` - `{style: 'decimal'}`
+	 *
+	 * @param num
+	 * @param pattern - string pattern of the format:
+	 *   1. symbol `';'` is used as a separator character for pattern directives, for example: `'$;$d:code'`
+	 *   1. symbol `':'` is used for specifying a custom value for a pattern directive, for example:
+	 *    `'$:RUB;$d:code'`
+	 *
+	 * @param [locale] - locale for internalizing
+	 *
+	 * @example
+	 * ```js
+	 *  100.50.format('$', 'en-us') // '$100.50'
+	 *  100.50.format('$:EUR;$d:code', 'en-us') // 'EUR 100.50'
+	 * ```
+	 */
+	format(num: number, pattern?: string, locale?: CanArray<string>): string;
+
+	/**
+	 * Returns a string representation of a number by the specified options
+	 *
+	 * @param num
+	 * @param opts - formatting options
+	 * @param [locale] - locale for internalizing
+	 */
+	format(num: number, opts: Intl.NumberFormatOptions, locale?: CanArray<string>): string;
 }
 
 interface NumberPadOptions {
 	/**
-	 * If true, then a sign of the number is written anyway
-	 * @default `false`
+	 * Length of the resulting string once the current string has been padded
 	 */
-	base?: number;
+	length?: number;
 
 	/**
 	 * Value of the base to convert in a string
 	 * @default `10`
+	 */
+	base?: number;
+
+	/**
+	 * If true, then a sign of the number will be written anyway
+	 * @default `false`
 	 */
 	sign?: boolean;
 }
@@ -1412,7 +1999,6 @@ interface Number {
 	 *   1. `'.'` - `{style: 'decimal'}`
 	 *
 	 * @param pattern - string pattern of the format:
-	 *
 	 *   1. symbol `';'` is used as a separator character for pattern directives, for example: `'$;$d:code'`
 	 *   1. symbol `':'` is used for specifying a custom value for a pattern directive, for example:
 	 *    `'$:RUB;$d:code'`
@@ -1425,7 +2011,7 @@ interface Number {
 	 *  100.50.format('$:EUR;$d:code', 'en-us') // 'EUR 100.50'
 	 * ```
 	 */
-	format(pattern: string, locale?: CanArray<string>): string;
+	format(pattern?: string, locale?: CanArray<string>): string;
 
 	/**
 	 * Returns a string representation of the number by the specified options
@@ -1439,22 +2025,22 @@ interface Number {
 	 * Returns a string representation of the number with adding some extra formatting
 	 * @param [length] - length of the decimal part
 	 */
-	format(length?: number): string;
+	format(length: number): string;
 
 	/**
-	 * Shortcut for the Math.floor method that also allows a precision
+	 * Shortcut for Math.floor that also allows a precision
 	 * @param [precision]
 	 */
 	floor(precision?: number): number;
 
 	/**
-	 * Shortcut for the Math.round method that also allows a precision
+	 * Shortcut for Math.round that also allows a precision
 	 * @param [precision]
 	 */
 	round(precision?: number): number;
 
 	/**
-	 * Shortcut for the Math.ceil method that also allows a precision
+	 * Shortcut for Math.ceil that also allows a precision
 	 * @param [precision]
 	 */
 	ceil(precision?: number): number;
@@ -1508,6 +2094,412 @@ interface DateConstructor {
 	 * @deprecated
 	 */
 	getWeekDays(): string[];
+
+	/**
+	 * Returns a curried version of Date.is
+	 *
+	 * @param margin - value of the maximum difference between two dates at which they are considered equal
+	 *   (in milliseconds)
+	 *
+	 * @param date1 - date to compare
+	 */
+	is(margin: number, date1: DateCreateValue): (date2: DateCreateValue) => boolean;
+
+	/**
+	 * Returns a curried version of Date.is
+	 * @param date1 - date to compare
+	 */
+	is(date1: DateCreateValue): (date2: DateCreateValue, margin?: number) => boolean;
+
+	/**
+	 * Returns true if the one date is equals to another
+	 *
+	 * @param date1 - date to compare
+	 * @param date2 - another date to compare
+	 * @param [margin] - value of the maximum difference between two dates at which they are considered equal
+	 *   (in milliseconds)
+	 */
+	is(date1: DateCreateValue, date2: DateCreateValue, margin?: number): boolean;
+
+	/**
+	 * Returns a curried version of Date.isAfter
+	 *
+	 * @param margin - value of the maximum difference between two dates at which they are considered equal
+	 *   (in milliseconds)
+	 *
+	 * @param date1 - date to compare
+	 */
+	isAfter(margin: number, date1: DateCreateValue): (date2: DateCreateValue) => boolean;
+
+	/**
+	 * Returns a curried version of Date.isAfter
+	 * @param date1 - date to compare
+	 */
+	isAfter(date1: DateCreateValue): (date2: DateCreateValue, margin?: number) => boolean;
+
+	/**
+	 * Returns true if the one date is greater than another
+	 *
+	 * @param date1 - date to compare
+	 * @param date2 - another date to compare
+	 * @param [margin] - value of the maximum difference between two dates at which they are considered equal
+	 *   (in milliseconds)
+	 */
+	isAfter(date1: DateCreateValue, date2: DateCreateValue, margin?: number): boolean;
+
+	/**
+	 * Returns a curried version of Date.isBefore
+	 *
+	 * @param margin - value of the maximum difference between two dates at which they are considered equal
+	 *   (in milliseconds)
+	 *
+	 * @param date1 - date to compare
+	 */
+	isBefore(margin: number, date1: DateCreateValue): (date2: DateCreateValue) => boolean;
+
+	/**
+	 * Returns a curried version of Date.isBefore
+	 * @param date1 - date to compare
+	 */
+	isBefore(date1: DateCreateValue): (date2: DateCreateValue, margin?: number) => boolean;
+
+	/**
+	 * Returns true if the one date is less than another
+	 *
+	 * @param date1 - date to compare
+	 * @param date2 - another date to compare
+	 * @param [margin] - value of the maximum difference between two dates at which they are considered equal
+	 *   (in milliseconds)
+	 */
+	isBefore(date1: DateCreateValue, date2: DateCreateValue, margin?: number): boolean;
+
+	/**
+	 * Returns a curried version of Date.isBetween
+	 *
+	 * @param margin - value of the maximum difference between two dates at which they are considered equal
+	 *   (in milliseconds)
+	 *
+	 * @param [left] - date of the beginning
+	 * @param [right] - date of the ending
+	 */
+	isBetween(margin: number, left?: DateCreateValue, right?: DateCreateValue):
+		(date: Date, left?: Date, right?: Date) => boolean;
+
+	/**
+	 * Returns a curried version of Date.isBetween
+	 *
+	 * @param [left] - date of the beginning
+	 * @param [right] - date of the ending
+	 */
+	isBetween(left?: DateCreateValue, right?: DateCreateValue):
+		(date: Date, left?: Date, right?: Date, margin?: number) => boolean;
+
+	/**
+	 * Returns true if the date is between of two other (including the bounding dates)
+	 *
+	 * @param date - date to check
+	 * @param left - date of the beginning
+	 * @param right - date of the ending
+	 * @param [margin] - value of the maximum difference between two dates at which they are considered equal
+	 *   (in milliseconds)
+	 */
+	isBetween(date: Date, left: DateCreateValue, right: DateCreateValue, margin?: number): boolean;
+
+	/**
+	 * Changes the date time so that it starts at the beginning of a day and returns it
+	 * @param date
+	 */
+	beginningOfDay(date: Date): Date;
+
+	/**
+	 * Changes the date time so that it starts at the ending of a day and returns it
+	 * @param date
+	 */
+	endOfDay(date: Date): Date;
+
+	/**
+	 * Changes the date so that it starts at the beginning of a week and returns it
+	 * @param date
+	 */
+	beginningOfWeek(date: Date): Date;
+
+	/**
+	 * Changes the date so that it starts at the ending of a week and returns it
+	 * @param date
+	 */
+	endOfWeek(date: Date): Date;
+
+	/**
+	 * Changes the date so that it starts at the beginning of a month and returns it
+	 * @param date
+	 */
+	beginningOfMonth(date: Date): Date;
+
+	/**
+	 * Changes the date so that it starts at the ending of a month and returns it
+	 * @param date
+	 */
+	endOfMonth(date: Date): Date;
+
+	/**
+	 * Changes the date so that it starts at the beginning of a year and returns it
+	 * @param date
+	 */
+	beginningOfYear(date: Date): Date;
+
+	/**
+	 * Changes the date so that it starts at the ending of a year and returns it
+	 * @param date
+	 */
+	endOfYear(date: Date): Date;
+
+	/**
+	 * Returns a curried version of Date.short
+	 * @param locale - locale for internalizing
+	 */
+	short(locale: CanArray<string>): (date: Date) => string;
+
+	/**
+	 * Returns a short string representation of the date.
+	 * This method is based on the native Intl API.
+	 *
+	 * @param date
+	 * @param [locale] - locale for internalizing
+	 *
+	 * @example
+	 * ```js
+	 * new Date('12/28/2019').short('en-us') // '12/28/2019'
+	 * ```
+	 */
+	short(date: Date, locale?: CanArray<string>): string;
+
+	/**
+	 * Returns a curried version of Date.medium
+	 * @param locale - locale for internalizing
+	 */
+	medium(locale: CanArray<string>): (date: Date) => string;
+
+	/**
+	 * Returns a medium string representation of the date.
+	 * This method is based on the native Intl API.
+	 *
+	 * @param date
+	 * @param [locale] - locale for internalizing
+	 *
+	 * @example
+	 * ```js
+	 * new Date('12/28/2019').medium('en-us') // 'December 28, 2019'
+	 * ```
+	 */
+	medium(date: Date, locale?: CanArray<string>): string;
+
+	/**
+	 * Returns a curried version of Date.long
+	 * @param locale - locale for internalizing
+	 */
+	long(locale: CanArray<string>): (date: Date) => string;
+
+	/**
+	 * Returns a long string representation of the date.
+	 * This method is based on the native Intl API.
+	 *
+	 * @param date
+	 * @param [locale] - locale for internalizing
+	 *
+	 * @example
+	 * ```js
+	 * new Date('12/28/2019').long('en-us') // '12/28/2019, 12:00:00 A'
+	 * ```
+	 */
+	long(date: Date, locale?: CanArray<string>): string;
+
+	/**
+	 * Returns a curried version of Date.format
+	 *
+	 * @param pattern
+	 * @param locale
+	 */
+	format(pattern: string, locale?: CanArray<string>): (date: Date) => string;
+
+	/**
+	 * Returns a curried version of Date.format
+	 *
+	 * @param opts
+	 * @param locale
+	 */
+	format(opts: Intl.NumberFormatOptions, locale?: CanArray<string>): (date: Date) => string;
+
+	/**
+	 * Returns a string representation of the date by the specified pattern.
+	 * All pattern directives are based on native Intl.DateTimeFormat options:
+	 *
+	 *   1. `'era'`
+	 *   1. `'year'`
+	 *   1. `'month'`
+	 *   1. `'day'`
+	 *   1. `'weekday'`
+	 *   1. `'hour'`
+	 *   1. `'minute'`
+	 *   1. `'second'`
+	 *   1. `'timeZoneName'`
+	 *
+	 * There are aliases for all directives:
+	 *
+	 *   1. `'e'` - era
+	 *   1. `'Y'` - year
+	 *   1. `'M'` - month
+	 *   1. `'d'` - day
+	 *   1. `'w'` - weekday
+	 *   1. `'h'` - hour
+	 *   1. `'m'` - minute
+	 *   1. `'s'` - second
+	 *   1. `'z'` - timeZoneName
+	 *
+	 * @param date
+	 * @param pattern - string pattern of the format:
+	 *
+	 *   1. symbol `';'` is used as a separator character for pattern directives, for example: `'year;month'`
+	 *   1. symbol `':'` is used for specifying a custom value for a pattern directive, for example:
+	 *    `'year:2-digit;month:short'`
+	 *
+	 * @param [locale] - locale for internalizing
+	 *
+	 * @example
+	 * ```js
+	 * new Date('12/28/2019').format('year', 'en-us') // '2019'
+	 * new Date('12/28/2019').format('year:2-digit', 'en-us') // '19'
+	 * new Date('12/28/2019').format('year:2-digit;month', 'en-us') // 'Dec 19'
+	 *
+	 * // Formatting a date by using short aliases
+	 * new Date('12/28/2019').format('Y:2-digit;M:long;d', 'en-us') // 'December 28, 19'
+	 * ```
+	 */
+	format(date: Date, pattern: string, locale?: CanArray<string>): string;
+
+	/**
+	 * Returns a string representation of the date by the specified options
+	 *
+	 * @param date
+	 * @param opts - formatting options
+	 * @param [locale] - locale for internalizing
+	 */
+	format(date: Date, opts: Intl.DateTimeFormatOptions, locale?: CanArray<string>): string;
+
+	/**
+	 * Returns a curried version of Date.toHTMLDateString
+	 * @param opts - additional options
+	 */
+	toHTMLDateString(opts: DateHTMLDateStringOptions): (date: Date) => string;
+
+	/**
+	 * Returns an HTML string representation of the date (without time).
+	 * This method is useful for providing date values within HTML tag attributes.
+	 *
+	 * @param date
+	 * @param [opts] - additional options
+	 */
+	toHTMLDateString(date: Date, opts?: DateHTMLDateStringOptions): string;
+
+	/**
+	 * Returns a curried version of Date.toHTMLTimeString
+	 * @param opts - additional options
+	 */
+	toHTMLTimeString(opts: DateHTMLDateStringOptions): (date: Date) => string;
+
+	/**
+	 * Returns an HTML string representation of a timestamp from the date.
+	 * This method is useful for providing timestamp values within HTML tag attributes.
+	 *
+	 * @param date
+	 * @param [opts] - additional options
+	 */
+	toHTMLTimeString(date: Date, opts?: DateHTMLTimeStringOptions): string;
+
+	/**
+	 * Returns a curried version of Date.toHTMLString
+	 * @param opts - additional options
+	 */
+	toHTMLString(opts: DateHTMLDateStringOptions): (date: Date) => string;
+
+	/**
+	 * Returns an HTML string representation of a datetime from the date.
+	 * This method is useful for providing datetime values within HTML tag attributes.
+	 *
+	 * @param date
+	 * @param [opts] - additional options
+	 */
+	toHTMLString(date: Date, opts?: DateHTMLStringOptions): string;
+
+	/**
+	 * Returns a curried version of Date.add
+	 *
+	 * @param units
+	 * @param reset - if true, then all lower units will be reset to zero
+	 */
+	add(units: DateSetParams, reset?: boolean): (date: Date) => Date;
+
+	/**
+	 * Modifies the date with adding time units
+	 *
+	 * @param date
+	 * @param units
+	 * @param reset - if true, then all lower units will be reset to zero
+	 */
+	add(date: Date, units: DateSetParams, reset?: boolean): Date;
+
+	/**
+	 * Returns a curried version of Date.set
+	 *
+	 * @param units
+	 * @param reset - if true, then all lower units will be reset to zero
+	 */
+	set(units: DateSetParams, reset?: boolean): (date: Date) => Date;
+
+	/**
+	 * Modifies the date with setting time units
+	 *
+	 * @param date
+	 * @param units
+	 * @param reset - if true, then all lower units will be reset to zero
+	 */
+	set(date: Date, units: DateSetParams, reset?: boolean): Date;
+
+	/**
+	 * Returns a curried version of Date.rewind
+	 *
+	 * @param units
+	 * @param reset - if true, then all lower units will be reset to zero
+	 */
+	rewind(units: DateSetParams, reset?: boolean): (date: Date) => Date;
+
+	/**
+	 * Modifies the date with subtracting time units
+	 *
+	 * @param date
+	 * @param units
+	 * @param reset - if true, then all lower units will be reset to zero
+	 */
+	rewind(date: Date, units: DateSetParams, reset?: boolean): Date;
+
+	/**
+	 * Returns a relative value of the date for the now date
+	 * @param date
+	 */
+	relative(date: DateCreateValue): DateRelative;
+
+	/**
+	 * Returns a curried version of Date.relativeTo
+	 * @param from - original date to compare
+	 */
+	relativeTo(from: DateCreateValue): (to: DateCreateValue) => DateRelative;
+
+	/**
+	 * Returns a relative value of the date for another date
+	 *
+	 * @param from - original date to compare
+	 * @param to - another date to compare
+	 */
+	relativeTo(from: DateCreateValue, to: DateCreateValue): DateRelative;
 }
 
 interface DateSetParams {
@@ -1565,8 +2557,18 @@ type DateHTMLStringOptions =
 	DateHTMLTimeStringOptions &
 	DateHTMLDateStringOptions;
 
+type DateRelativeType =
+	'milliseconds' |
+	'seconds' |
+	'minutes' |
+	'hours' |
+	'days' |
+	'weeks' |
+	'months' |
+	'years';
+
 interface DateRelative {
-	type: 'milliseconds' | 'seconds' | 'minutes' | 'hours' | 'days' | 'weeks' | 'months' | 'years';
+	type: DateRelativeType;
 	value: number;
 	diff: number;
 }
@@ -1607,12 +2609,12 @@ interface Date {
 	/**
 	 * Returns true if the date is between of two other (including the bounding dates)
 	 *
-	 * @param start - date of the beginning
-	 * @param end - date of the ending
+	 * @param left - date of the beginning
+	 * @param right - date of the ending
 	 * @param [margin] - value of the maximum difference between two dates at which they are considered equal
 	 *   (in milliseconds)
 	 */
-	isBetween(start: DateCreateValue, end: DateCreateValue, margin?: number): boolean;
+	isBetween(left: DateCreateValue, right: DateCreateValue, margin?: number): boolean;
 
 	/**
 	 * Returns true if the date is less than the now date
@@ -1822,13 +2824,164 @@ interface Date {
 	daysInMonth(): number;
 }
 
+interface FunctionConstructor {
+	/**
+	 * Link to the special functional placeholder that can be used with curried functions
+	 *
+	 * @example
+	 * ```js
+	 * function sum(a, b) {
+	 *   return a + b;
+	 * }
+	 *
+	 * sum.curry()(Function.__, 2)(5)
+	 * ```
+	 */
+	__: TB.A.x;
+
+	/**
+	 * Returns a new function that allows to invoke the specified function only once
+	 * @param fn
+	 */
+	once<T extends AnyFunction>(fn: T): T;
+
+	/**
+	 * Returns a new function that allows to invoke a function, which it takes, only with the specified delay.
+	 * The next invocation of the function will cancel the previous.
+	 *
+	 * @param delay
+	 */
+	debounce(delay: number): <A extends unknown[]>(fn: AnyFunction<A>) => AnyFunction<A, void>;
+
+	/**
+	 * Returns a new function that allows to invoke a function only with the specified delay.
+	 * The next invocation of the function will cancel the previous.
+	 *
+	 * @param fn
+	 * @param [delay]
+	 */
+	debounce<A extends unknown[]>(fn: AnyFunction<A>, delay?: number): AnyFunction<A, void>;
+
+	/**
+	 * Returns a new function that allows to invoke a function, which it takes, not more often than the specified delay
+	 * @param delay
+	 */
+	throttle(delay: number): <A extends unknown[]>(fn: AnyFunction<A>) => AnyFunction<A, void>;
+
+	/**
+	 * Returns a new function that allows to invoke the target function not more often than the specified delay
+	 *
+	 * @param fn
+	 * @param [delay]
+	 */
+	throttle<A extends unknown[]>(fn: AnyFunction<A>, delay?: number): AnyFunction<A, void>;
+
+	/**
+	 * Returns a curried equivalent of the provided function.
+	 *
+	 * The curried function has two unusual capabilities.
+	 * First, its arguments needn't be provided one at a time.
+	 * If f is a ternary function and g is Function.curry(f), the following are equivalent:
+	 *
+	 * ```js
+	 * g(1)(2)(3)
+	 * g(1)(2, 3)
+	 * g(1, 2)(3)
+	 * g(1, 2, 3)
+	 * ```
+	 *
+	 * Secondly, the special placeholder value Function.__ may be used to specify "gaps", allowing partial application
+	 * of any combination of arguments, regardless of their positions. If g is as above and _ is Function.__,
+	 * the following are equivalent:
+	 *
+	 * ```js
+	 * g(1, 2, 3)
+	 * g(_, 2, 3)(1)
+	 * g(_, _, 3)(1)(2)
+	 * g(_, _, 3)(1, 2)
+	 * g(_, 2)(1)(3)
+	 * g(_, 2)(1, 3)
+	 * g(_, 2)(_, 3)(1)
+	 * ```
+	 */
+	curry<T extends AnyFunction>(f: T): TB.F.Curry<T>;
+
+	/**
+	 * Performs right-to-left function composition.
+	 * The last argument may have any arity; the remaining arguments must be unary.
+	 *
+	 * If any function from parameters returns a Promise, the next function from the parameters
+	 * will take the resolved value of that promise,
+	 * the final result of calling the composition function is also a promise.
+	 *
+	 * @param fn0
+	 */
+	compose<A extends unknown[], T1>(fn0: AnyFunction<A, T1>): AnyFunction<A, T1>;
+
+	compose<A extends unknown[], T1, T2>(
+		fn1: AnyOneArgFunction<PromiseType<T1>, T2>,
+		fn0: AnyFunction<A, T1>
+	): AnyFunction<A, T1 extends Promise<any> ? NewPromise<T1, T2> : T2>;
+
+	compose<A extends unknown[], T1, T2, T3>(
+		fn2: AnyOneArgFunction<PromiseType<T2>, T3>,
+		fn1: AnyOneArgFunction<PromiseType<T1>, T2>,
+		fn0: AnyFunction<A, T1>
+	): AnyFunction<A, T2 extends Promise<any> ? Promise<T3> : T1 extends Promise<any> ? Promise<T3> : T3>;
+
+	compose<A extends unknown[], T1, T2, T3, T4>(
+		fn3: AnyOneArgFunction<PromiseType<T3>, T4>,
+		fn2: AnyOneArgFunction<PromiseType<T2>, T3>,
+		fn1: AnyOneArgFunction<PromiseType<T1>, T2>,
+		fn0: AnyFunction<A, T1>
+	): AnyFunction<
+		A,
+		T3 extends Promise<any> ?
+			Promise<T4> : T2 extends Promise<any> ?
+				Promise<T4> : T1 extends Promise<any> ?
+					Promise<T4> : T4
+	>;
+
+	compose<A extends unknown[], T1, T2, T3, T4, T5>(
+		fn4: AnyOneArgFunction<PromiseType<T4>, T5>,
+		fn3: AnyOneArgFunction<PromiseType<T3>, T4>,
+		fn2: AnyOneArgFunction<PromiseType<T2>, T3>,
+		fn1: AnyOneArgFunction<PromiseType<T1>, T2>,
+		fn0: AnyFunction<A, T1>
+	): AnyFunction<
+		A,
+		T4 extends Promise<any> ?
+			Promise<T5> : T3 extends Promise<any> ?
+				Promise<T5> : T2 extends Promise<any> ?
+					Promise<T5> : T1 extends Promise<any> ?
+						Promise<T5> : T5
+	>;
+
+	compose<A extends unknown[], T1, T2, T3, T4, T5, T6>(
+		fn5: AnyOneArgFunction<PromiseType<T5>, T6>,
+		fn4: AnyOneArgFunction<PromiseType<T4>, T5>,
+		fn3: AnyOneArgFunction<PromiseType<T3>, T4>,
+		fn2: AnyOneArgFunction<PromiseType<T2>, T3>,
+		fn1: AnyOneArgFunction<PromiseType<T1>, T2>,
+		fn0: AnyFunction<A, T1>
+	): AnyFunction<
+		A,
+		T5 extends Promise<any> ?
+			Promise<T6> : T4 extends Promise<any> ?
+				Promise<T6> : T3 extends Promise<any> ?
+					Promise<T6> : T2 extends Promise<any> ?
+						Promise<T6> : T1 extends Promise<any> ?
+							Promise<T6> : T6
+		>;
+}
+
 interface Function {
 	name: string;
 
 	/**
 	 * Returns a new function that allows to invoke the target function only once
 	 */
-	once(): Function;
+	once<T>(this: T): T;
 
 	/**
 	 * Returns a new function that allows to invoke the target function only with the specified delay.
@@ -1836,11 +2989,178 @@ interface Function {
 	 *
 	 * @param [delay]
 	 */
-	debounce(delay?: number): Function;
+	debounce<T extends AnyFunction>(this: T, delay?: number): AnyFunction<Parameters<T>, void>;
 
 	/**
 	 * Returns a new function that allows to invoke the target function not more often than the specified delay
 	 * @param [delay]
 	 */
-	throttle(delay?: number): Function;
+	throttle<T extends AnyFunction>(this: T, delay?: number): AnyFunction<Parameters<T>, void>;
+
+	/**
+	 * Returns a new function based on the target that wraps the returning value into the Either structure.
+	 * If the first argument of the created function is taken null or undefined, the function returns the rejected value.
+	 *
+	 * @example
+	 * ```typescript
+	 * function toLowerCase(str: string): string {
+	 *   return str.toLowerCase();
+	 * }
+	 *
+	 * toLowerCase.option()(null).catch((err) => err === null);
+	 * toLowerCase.option()(1).catch((err) => err.message === 'str.toLowerCase is not a function');
+	 *
+	 * toLowerCase.option()('FOO').then((value) => value === 'foo');
+	 * toLowerCase.option()(toLowerCase.option()('FOO')).then((value) => value === 'foo');
+	 * ```
+	 */
+	option<R>(this: () => R): AnyFunction<any[], Maybe<R>>;
+
+	/**
+	 * Returns a new function based on the target that wraps the returning value into the Either structure.
+	 * If the first argument of the created function is taken null or undefined, the function returns the rejected value.
+	 *
+	 * @example
+	 * ```typescript
+	 * function toLowerCase(str: string): string {
+	 *   return str.toLowerCase();
+	 * }
+	 *
+	 * toLowerCase.option()(null).catch((err) => err === null);
+	 * toLowerCase.option()(1).catch((err) => err.message === 'str.toLowerCase is not a function');
+	 *
+	 * toLowerCase.option()('FOO').then((value) => value === 'foo');
+	 * toLowerCase.option()(toLowerCase.option()('FOO')).then((value) => value === 'foo');
+	 * ```
+	 */
+	option<A1, A extends unknown[], R>(this: (a1: A1, a: A) => R):
+		AnyFunction<[Maybe<Nullable<A1>> | Either<A1> | Nullable<A1>, ...A], Maybe<R>>;
+
+	/**
+	 * Returns a new function based on the target that wraps the returning value into the Either structure
+	 *
+	 * @example
+	 * ```typescript
+	 * function toLowerCase(str: string): string {
+	 *   return str.toLowerCase();
+	 * }
+	 *
+	 * toLowerCase.result()(1).catch((err) => err.message === 'str.toLowerCase is not a function');
+	 * toLowerCase.result()('FOO').then((value) => value === 'foo');
+	 * toLowerCase.result()(toLowerCase.result()('FOO')).then((value) => value === 'foo');
+	 * ```
+	 */
+	result<R>(this: () => R): AnyFunction<any[], Either<R>>;
+
+	/**
+	 * Returns a new function based on the target that wraps the returning value into the Either structure
+	 *
+	 * @example
+	 * ```typescript
+	 * function toLowerCase(str: string): string {
+	 *   return str.toLowerCase();
+	 * }
+	 *
+	 * toLowerCase.result()(1).catch((err) => err.message === 'str.toLowerCase is not a function');
+	 * toLowerCase.result()('FOO').then((value) => value === 'foo');
+	 * toLowerCase.result()(toLowerCase.result()('FOO')).then((value) => value === 'foo');
+	 * ```
+	 */
+	result<A1, A extends unknown[], R>(this: (a1: A1, a: A) => R): AnyFunction<[Maybe<A1> | Either<A1>, ...A], Maybe<R>>;
+
+	/**
+	 * Returns a curried equivalent of the function.
+	 *
+	 * The curried function has two unusual capabilities.
+	 * First, its arguments needn't be provided one at a time.
+	 * If f is a ternary function and g is f.curry(), the following are equivalent:
+	 *
+	 * ```js
+	 * g(1)(2)(3)
+	 * g(1)(2, 3)
+	 * g(1, 2)(3)
+	 * g(1, 2, 3)
+	 * ```
+	 *
+	 * Secondly, the special placeholder value Function.__ may be used to specify "gaps", allowing partial application
+	 * of any combination of arguments, regardless of their positions. If g is as above and _ is Function.__,
+	 * the following are equivalent:
+	 *
+	 * ```js
+	 * g(1, 2, 3)
+	 * g(_, 2, 3)(1)
+	 * g(_, _, 3)(1)(2)
+	 * g(_, _, 3)(1, 2)
+	 * g(_, 2)(1)(3)
+	 * g(_, 2)(1, 3)
+	 * g(_, 2)(_, 3)(1)
+	 * ```
+	 */
+	curry<T extends AnyFunction>(this: T): TB.F.Curry<T>;
+
+	/**
+	 * Performs left-to-right function composition.
+	 * The first argument may have any arity; the remaining arguments must be unary.
+	 *
+	 * If any function from parameters returns a Promise, the next function from the parameters
+	 * will take the resolved value of that promise,
+	 * the final result of calling the composition function is also a promise.
+	 */
+	compose<T>(this: T): T;
+
+	compose<A extends unknown[], T1, T2>(
+		this: AnyFunction<A, T1>,
+		fn1: AnyOneArgFunction<T1, T2>
+	): AnyFunction<A, T1 extends Promise<any> ? Promise<T2> : T2>;
+
+	compose<A extends unknown[], T1, T2, T3>(
+		this: AnyFunction<A, T1>,
+		fn1: AnyOneArgFunction<T1, T2>,
+		fn2: AnyOneArgFunction<T2, T3>
+	): AnyFunction<A, T2 extends Promise<any> ? Promise<T3> : T1 extends Promise<any> ? Promise<T3> : T3>;
+
+	compose<A extends unknown[], T1, T2, T3, T4>(
+		this: AnyFunction<A, T1>,
+		fn1: AnyOneArgFunction<T1, T2>,
+		fn2: AnyOneArgFunction<T2, T3>,
+		fn3: AnyOneArgFunction<T3, T4>
+	): AnyFunction<
+		A,
+		T3 extends Promise<any> ?
+			Promise<T4> : T2 extends Promise<any> ?
+				Promise<T4> : T1 extends Promise<any> ?
+					Promise<T4> : T4
+	>;
+
+	compose<A extends unknown[], T1, T2, T3, T4, T5>(
+		this: AnyFunction<A, T1>,
+		fn1: AnyOneArgFunction<T1, T2>,
+		fn2: AnyOneArgFunction<T2, T3>,
+		fn3: AnyOneArgFunction<T3, T4>,
+		fn4: AnyOneArgFunction<T4, T5>
+	): AnyFunction<
+		A,
+		T4 extends Promise<any> ?
+			Promise<T5> : T3 extends Promise<any> ?
+				Promise<T5> : T2 extends Promise<any> ?
+					Promise<T5> : T1 extends Promise<any> ?
+						Promise<T5> : T5
+	>;
+
+	compose<A extends unknown[], T1, T2, T3, T4, T5, T6>(
+		this: AnyFunction<A, T1>,
+		fn1: AnyOneArgFunction<T1, T2>,
+		fn2: AnyOneArgFunction<T2, T3>,
+		fn3: AnyOneArgFunction<T3, T4>,
+		fn4: AnyOneArgFunction<T4, T5>,
+		fn5: AnyOneArgFunction<T5, T6>
+	): AnyFunction<
+		A,
+		T5 extends Promise<any> ?
+			Promise<T6> : T4 extends Promise<any> ?
+				Promise<T6> : T3 extends Promise<any> ?
+					Promise<T6> : T2 extends Promise<any> ?
+						Promise<T6> : T1 extends Promise<any> ?
+							Promise<T6> : T6
+		>;
 }

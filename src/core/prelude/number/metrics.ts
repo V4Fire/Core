@@ -8,82 +8,82 @@
 
 import extend from 'core/prelude/extend';
 
-/** @see Number.prototype.isInteger */
+/** @see Number.isInteger */
 extend(Number.prototype, 'isInteger', function (): boolean {
 	return this % 1 === 0;
 });
 
 /** @see NumberConstructor.isInteger */
-extend(Number, 'isInteger', (obj) => Object.isNumber(obj) && obj.isInteger());
+extend(Number, 'isInteger', (value) => Object.isNumber(value) && value.isInteger());
 
-/** @see Number.prototype.isFloat */
+/** @see Number.isFloat */
 extend(Number.prototype, 'isFloat', function (): boolean {
 	return this % 1 !== 0 && Number.isFinite(this);
 });
 
 /** @see NumberConstructor.isFloat */
-extend(Number, 'isFloat', (obj) => Object.isNumber(obj) && obj.isFloat());
+extend(Number, 'isFloat', (value) => Object.isNumber(value) && value.isFloat());
 
-/** @see Number.prototype.isEven */
+/** @see Number.isEven */
 extend(Number.prototype, 'isEven', function (): boolean {
 	return this % 2 === 0;
 });
 
 /** @see NumberConstructor.isEven */
-extend(Number, 'isEven', (obj) => Object.isNumber(obj) && obj.isEven());
+extend(Number, 'isEven', (value) => Object.isNumber(value) && value.isEven());
 
-/** @see Number.prototype.isOdd */
+/** @see Number.isOdd */
 extend(Number.prototype, 'isOdd', function (): boolean {
 	return this % 2 !== 0 && Number.isFinite(this);
 });
 
 /** @see NumberConstructor.isOdd */
-extend(Number, 'isOdd', (obj) => Object.isNumber(obj) && obj.isOdd());
+extend(Number, 'isOdd', (value) => Object.isNumber(value) && value.isOdd());
 
-/** @see Number.prototype.isNatural */
+/** @see Number.isNatural */
 extend(Number.prototype, 'isNatural', function (): boolean {
 	return this > 0 && this % 1 === 0;
 });
 
 /** @see NumberConstructor.isNatural */
-extend(Number, 'isNatural', (obj) => Object.isNumber(obj) && obj.isNatural());
+extend(Number, 'isNatural', (value) => Object.isNumber(value) && value.isNatural());
 
-/** @see Number.prototype.isPositive */
+/** @see Number.isPositive */
 extend(Number.prototype, 'isPositive', function (): boolean {
 	return this > 0;
 });
 
 /** @see NumberConstructor.isPositive */
-extend(Number, 'isPositive', (obj) => Object.isNumber(obj) && obj.isPositive());
+extend(Number, 'isPositive', (value) => Object.isNumber(value) && value.isPositive());
 
-/** @see Number.prototype.isNegative */
+/** @see Number.isNegative */
 extend(Number.prototype, 'isNegative', function (): boolean {
 	return this < 0;
 });
 
 /** @see NumberConstructor.isNegative */
-extend(Number, 'isNegative', (obj) => Object.isNumber(obj) && obj.isNegative());
+extend(Number, 'isNegative', (value) => Object.isNumber(value) && value.isNegative());
 
-/** @see Number.prototype.isNonNegative */
+/** @see Number.isNonNegative */
 extend(Number.prototype, 'isNonNegative', function (): boolean {
 	return this >= 0;
 });
 
 /** @see NumberConstructor.isNonNegative */
-extend(Number, 'isNonNegative', (obj) => Object.isNumber(obj) && obj.isNonNegative());
+extend(Number, 'isNonNegative', (value) => Object.isNumber(value) && value.isNonNegative());
 
-/** @see Number.prototype.isBetweenZeroAndOne */
+/** @see Number.isBetweenZeroAndOne */
 extend(Number.prototype, 'isBetweenZeroAndOne', function (): boolean {
 	return this >= 0 && this <= 1;
 });
 
 /** @see NumberConstructor.isBetweenZeroAndOne */
-extend(Number, 'isBetweenZeroAndOne', (obj) => Object.isNumber(obj) && obj.isBetweenZeroAndOne());
+extend(Number, 'isBetweenZeroAndOne', (value) => Object.isNumber(value) && value.isBetweenZeroAndOne());
 
-/** @see Number.prototype.isPositiveBetweenZeroAndOne */
+/** @see Number.isPositiveBetweenZeroAndOne */
 extend(Number.prototype, 'isPositiveBetweenZeroAndOne', function (): boolean {
 	return this > 0 && this <= 1;
 });
 
 /** @see NumberConstructor.isPositiveBetweenZeroAndOne */
-extend(Number, 'isPositiveBetweenZeroAndOne', (obj) => Object.isNumber(obj) && obj.isPositiveBetweenZeroAndOne());
+extend(Number, 'isPositiveBetweenZeroAndOne', (value) => Object.isNumber(value) && value.isPositiveBetweenZeroAndOne());

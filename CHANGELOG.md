@@ -11,6 +11,91 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.11.0
+
+#### :rocket: New Feature
+
+* Added functional overloads to Prelude API:
+
+```js
+Object.get('foo')({foo: 1});
+String.camelize({upper: true})('foo-bar');
+/// etc.
+```
+
+* Added `Function.compose` to right-to-left composing of functions:
+
+```js
+Function.compose(String.camelize, Object.get('foo'))({foo: 'foo-bar'});
+Function.compose(String.camelize, Object.get('foo'), () => Promise.resolve({foo: 'foo-bar'}))().then((res) => {
+  console.log(res);
+});
+```
+
+* Added `Function.prototype.compose` to left-to-right composing of functions:
+
+```js
+Object.get('foo').compose(String.camelize)({foo: 'foo-bar'});
+```
+
+* Added `Function.curry` and `Function.prototype.curry` to create curried functions:
+
+```js
+function calc(a, b, c, d) {
+  return a * (b + c + d);
+}
+
+calc.curry()(10)(1, 2)(0); // 30
+calc.curry()(Function.__, 1)(10, 2)(0); // 30
+```
+
+* Added `Object.Option` wrapper, that can contain some value beside null or undefined:
+
+```js
+Object.Option(1).then((v) => v === 1);
+Object.Option(null).catch((v) => v === null);
+Object.Option((s) => s.camelize())(null).catch((v) => v === null);
+```
+
+* Added `Function.prototype.option` helper, that can wrap a function to `Option` structure
+
+```js
+((s) => s.camelize()).option()(null).catch((v) => v === null);
+```
+
+* Added `Object.Result` wrapper, that can contain some value or error:
+
+```js
+Object.Result(1).then((v) => v === 1);
+Object.Result(new Error('Boom!')).catch((err) => err.message === 'Boom!');
+Object.Result(Promise.reject('Boom!')).catch((err) => err === 'Boom!');
+Object.Result((s) => s.camelize())(null).catch((err) => err.message === 's is null');
+```
+
+* Added `Function.prototype.result` helper, that can wrap a function to `Result` structure
+
+```js
+((s) => s.camelize()).result()(null).catch((err) => err.message === 's is null');
+```
+
+* Added `Array.concat`
+
+```js
+Array.concat([], 1, null, [2, 3, 4]) // [1, 2, 3, 4];
+```
+
+* Added support of iterables `Array.union`
+
+```js
+Array.union([], 1, null, [1, 2].values()) // [1, 2];
+```
+
+* Added new prelude types: `AnyFunction`, `AnyOneArgFunction`, `Maybe`, `Either`
+
+#### :house: Internal
+
+* Refactoring
+
 ## v3.10.4 (2020-04-13)
 
 #### :house: Internal

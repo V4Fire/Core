@@ -17,92 +17,95 @@ extend(Object, 'isDictionary', isPlainObject);
 extend(Object, 'isPlainObject', isPlainObject);
 
 /** @see ObjectConstructor.isPrimitive */
-extend(Object, 'isPrimitive', (obj) => !obj || !nonPrimitiveTypes[typeof obj]);
+extend(Object, 'isPrimitive', (value) => !value || !nonPrimitiveTypes[typeof value]);
 
 /** @see ObjectConstructor.isCustomObject */
-extend(Object, 'isCustomObject', (obj) => {
+extend(Object, 'isCustomObject', (value) => {
 	let
 		type;
 
-	if (!obj || !nonPrimitiveTypes[type = typeof obj]) {
+	if (!value || !nonPrimitiveTypes[type = typeof value]) {
 		return false;
 	}
 
 	if (type === 'function') {
-		return !isNative.test(obj.toString());
+		return !isNative.test(value.toString());
 	}
 
-	return obj.constructor === Object || !isNative.test(obj.constructor.toString());
+	return value.constructor === Object || !isNative.test(value.constructor.toString());
 });
 
 /**  @see ObjectConstructor.isSimpleObject */
-extend(Object, 'isSimpleObject', (obj) =>  {
-	if (!obj || typeof obj !== 'object') {
+extend(Object, 'isSimpleObject', (value) =>  {
+	if (!value || typeof value !== 'object') {
 		return false;
 	}
 
-	return toString.call(obj) === '[object Object]';
+	return toString.call(value) === '[object Object]';
 });
 
 /** @see ObjectConstructor.isArray */
 extend(Object, 'isArray', Array.isArray);
 
 /** @see ObjectConstructor.isArrayLike */
-extend(Object, 'isArrayLike', (obj) => {
-	if (!obj) {
+extend(Object, 'isArrayLike', (value) => {
+	if (!value) {
 		return false;
 	}
 
-	return Array.isArray(obj) || (obj.length > 0 && 0 in obj) || obj.length === 0;
+	return Array.isArray(value) || (value.length > 0 && 0 in value) || value.length === 0;
 });
 
 /** @see ObjectConstructor.isFunction */
-extend(Object, 'isFunction', (obj) => typeof obj === 'function');
+extend(Object, 'isFunction', (value) => typeof value === 'function');
+
+/** @see ObjectConstructor.isConstructor */
+extend(Object, 'isConstructor', (value) => typeof value === 'function');
 
 /** @see ObjectConstructor.isGenerator */
-extend(Object, 'isGenerator', (obj) =>
-	typeof obj === 'function' && obj.constructor.name === 'GeneratorFunction');
+extend(Object, 'isGenerator', (value) =>
+	typeof value === 'function' && value.constructor.name === 'GeneratorFunction');
 
 /** @see ObjectConstructor.isIterator */
-extend(Object, 'isIterator', (obj) => {
-	if (!obj || typeof obj !== 'object') {
+extend(Object, 'isIterator', (value) => {
+	if (!value || typeof value !== 'object') {
 		return false;
 	}
 
-	return typeof obj.next === 'function';
+	return typeof value.next === 'function';
 });
 
 /** @see ObjectConstructor.isIterable */
-extend(Object, 'isIterable', (obj) => {
-	if (!obj || typeof obj !== 'object') {
+extend(Object, 'isIterable', (value) => {
+	if (!value || typeof value !== 'object') {
 		return false;
 	}
 
-	return typeof Symbol === 'function' ? obj![Symbol.iterator] : typeof obj!['@@iterator'] === 'function';
+	return Boolean(typeof Symbol === 'function' ? value![Symbol.iterator] : typeof value!['@@iterator'] === 'function');
 });
 
 /** @see ObjectConstructor.isString */
-extend(Object, 'isString', (obj) => typeof obj === 'string');
+extend(Object, 'isString', (value) => typeof value === 'string');
 
 /** @see ObjectConstructor.isNumber */
-extend(Object, 'isNumber', (obj) => typeof obj === 'number');
+extend(Object, 'isNumber', (value) => typeof value === 'number');
 
 /** @see ObjectConstructor.isBoolean */
-extend(Object, 'isBoolean', (obj) => typeof obj === 'boolean');
+extend(Object, 'isBoolean', (value) => typeof value === 'boolean');
 
 /** @see ObjectConstructor.isSymbol */
-extend(Object, 'isSymbol', (obj) => typeof obj === 'symbol');
+extend(Object, 'isSymbol', (value) => typeof value === 'symbol');
 
 /** @see ObjectConstructor.isRegExp */
-extend(Object, 'isRegExp', (obj) => obj instanceof RegExp);
+extend(Object, 'isRegExp', (value) => value instanceof RegExp);
 
 /** @see ObjectConstructor.isDate */
-extend(Object, 'isDate', (obj) => obj instanceof Date);
+extend(Object, 'isDate', (value) => value instanceof Date);
 
 /** @see ObjectConstructor.isPromise */
-extend(Object, 'isPromise', (obj) => {
-	if (obj) {
-		const v = <Dictionary>obj;
+extend(Object, 'isPromise', (value) => {
+	if (value) {
+		const v = <Dictionary>value;
 		return typeof v.then === 'function' && typeof v.catch === 'function';
 	}
 
@@ -110,9 +113,9 @@ extend(Object, 'isPromise', (obj) => {
 });
 
 /** @see ObjectConstructor.isPromiseLike */
-extend(Object, 'isPromiseLike', (obj) => {
-	if (obj) {
-		const v = <Dictionary>obj;
+extend(Object, 'isPromiseLike', (value) => {
+	if (value) {
+		const v = <Dictionary>value;
 		return typeof v.then === 'function';
 	}
 
@@ -120,16 +123,16 @@ extend(Object, 'isPromiseLike', (obj) => {
 });
 
 /** @see ObjectConstructor.isMap */
-extend(Object, 'isMap', (obj) => obj instanceof Map);
+extend(Object, 'isMap', (value) => value instanceof Map);
 
 /** @see ObjectConstructor.isWeakMap */
-extend(Object, 'isWeakMap', (obj) => obj instanceof WeakMap);
+extend(Object, 'isWeakMap', (value) => value instanceof WeakMap);
 
 /** @see ObjectConstructor.isSet */
-extend(Object, 'isSet', (obj) => obj instanceof Set);
+extend(Object, 'isSet', (value) => value instanceof Set);
 
 /** @see ObjectConstructor.isWeakSet */
-extend(Object, 'isWeakSet', (obj) => obj instanceof WeakSet);
+extend(Object, 'isWeakSet', (value) => value instanceof WeakSet);
 
 /**
  * @deprecated
@@ -140,11 +143,14 @@ extend(Object, 'isObject', deprecate({
 	renamedTo: 'isDictionary'
 }, isPlainObject));
 
-function isPlainObject(obj: unknown): boolean {
-	if (!obj || typeof obj !== 'object') {
+function isPlainObject(value: unknown): boolean {
+	if (!value || typeof value !== 'object') {
 		return false;
 	}
 
-	const constr = obj!.constructor;
+	const
+		constr = value!.constructor;
+
+	// @ts-ignore
 	return !constr || constr === Object;
 }

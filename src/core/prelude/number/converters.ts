@@ -9,6 +9,7 @@
 // tslint:disable:binary-expression-operand-order
 
 import extend from 'core/prelude/extend';
+import { createMsFunction, createStaticMsFunction, createStringTypeGetter } from 'core/prelude/number/helpers';
 
 const
 	second = 1e3,
@@ -17,76 +18,74 @@ const
 	day = 24 * hour,
 	week = 7 * day;
 
-/** @see Number.prototype.second */
+/** @see Number.second */
 extend(Number.prototype, 'second', createMsFunction(second));
 
-/** @see Number.prototype.seconds */
+/** @see Number.seconds */
 extend(Number.prototype, 'seconds', Number.prototype.second);
 
-/** @see Number.prototype.minute */
+/** @see NumberConstructor.second */
+extend(Number, 'seconds', createStaticMsFunction(second));
+
+/** @see Number.minute */
 extend(Number.prototype, 'minute', createMsFunction(minute));
 
-/** @see Number.prototype.minutes */
+/** @see Number.minutes */
 extend(Number.prototype, 'minutes', Number.prototype.minute);
 
-/** @see Number.prototype.hour */
+/** @see NumberConstructor.minutes */
+extend(Number, 'minutes', createStaticMsFunction(minute));
+
+/** @see Number.hour */
 extend(Number.prototype, 'hour', createMsFunction(hour));
 
-/** @see Number.prototype.hours */
+/** @see Number.hours */
 extend(Number.prototype, 'hours', Number.prototype.hour);
 
-/** @see Number.prototype.day */
+/** @see NumberConstructor.hours */
+extend(Number, 'hours', createStaticMsFunction(hour));
+
+/** @see Number.day */
 extend(Number.prototype, 'day', createMsFunction(day));
 
-/** @see Number.prototype.days */
+/** @see Number.days */
 extend(Number.prototype, 'days', Number.prototype.day);
 
-/** @see Number.prototype.week */
+/** @see NumberConstructor.days */
+extend(Number, 'days', createStaticMsFunction(day));
+
+/** @see Number.week */
 extend(Number.prototype, 'week', createMsFunction(week));
 
-/** @see Number.prototype.weeks */
+/** @see Number.weeks */
 extend(Number.prototype, 'weeks', Number.prototype.week);
 
-/** @see Number.prototype.em */
-extend(Number.prototype, 'em', createPostfixConverter('em'));
+/** @see NumberConstructor.weeks */
+extend(Number, 'weeks', createStaticMsFunction(week));
 
-/** @see Number.prototype.ex */
-extend(Number.prototype, 'ex', createPostfixConverter('ex'));
+/** @see Number.em */
+extend(Number.prototype, 'em', createStringTypeGetter('em'));
 
-/** @see Number.prototype.rem */
-extend(Number.prototype, 'rem', createPostfixConverter('rem'));
+/** @see Number.ex */
+extend(Number.prototype, 'ex', createStringTypeGetter('ex'));
 
-/** @see Number.prototype.px */
-extend(Number.prototype, 'px', createPostfixConverter('px'));
+/** @see Number.rem */
+extend(Number.prototype, 'rem', createStringTypeGetter('rem'));
 
-/** @see Number.prototype.per */
-extend(Number.prototype, 'per', createPostfixConverter('per'));
+/** @see Number.px */
+extend(Number.prototype, 'px', createStringTypeGetter('px'));
 
-/** @see Number.prototype.vh */
-extend(Number.prototype, 'vh', createPostfixConverter('vh'));
+/** @see Number.per */
+extend(Number.prototype, 'per', createStringTypeGetter('per'));
 
-/** @see Number.prototype.vw */
-extend(Number.prototype, 'vw', createPostfixConverter('vw'));
+/** @see Number.vh */
+extend(Number.prototype, 'vh', createStringTypeGetter('vh'));
 
-/** @see Number.prototype.vmin */
-extend(Number.prototype, 'vmin', createPostfixConverter('vmin'));
+/** @see Number.vw */
+extend(Number.prototype, 'vw', createStringTypeGetter('vw'));
 
-/** @see Number.prototype.vmax */
-extend(Number.prototype, 'vmax', createPostfixConverter('vmax'));
+/** @see Number.vmin */
+extend(Number.prototype, 'vmin', createStringTypeGetter('vmin'));
 
-function createPostfixConverter(nm: string): PropertyDescriptor {
-	return {
-		get(): string {
-			return Number(this) + nm;
-		}
-	};
-}
-
-function createMsFunction(offset: number): Function {
-	const fn = function (this: number): number {
-		return Number(this) * offset;
-	};
-
-	fn.valueOf = fn;
-	return fn;
-}
+/** @see Number.vmax */
+extend(Number.prototype, 'vmax', createStringTypeGetter('vmax'));

@@ -13,7 +13,7 @@
  * @param name - method name
  * @param method
  */
-export default function extend(obj: Function | object, name: string, method: Function | PropertyDescriptor): void {
+export default function extend(obj: AnyFunction | object, name: string, method: AnyFunction | PropertyDescriptor): void {
 	const descriptor = <PropertyDescriptor>{
 		configurable: true
 	};

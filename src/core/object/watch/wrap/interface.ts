@@ -38,6 +38,6 @@ export interface WrapOptions {
 }
 
 export interface WrapParams extends WrapOptions {
-	original: Function;
+	original: AnyFunction;
 	handlers: WatchHandlersSet;
 }

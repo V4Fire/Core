@@ -7,32 +7,22 @@
  */
 
 import extend from 'core/prelude/extend';
+import { createRoundingFunction, createStaticRoundingFunction } from 'core/prelude/number/helpers';
 
-/** @see Number.prototype.floor */
+/** @see Number.floor */
 extend(Number.prototype, 'floor', createRoundingFunction(Math.floor));
 
-/** @see Number.prototype.round */
+/** @see NumberConstructor.floor */
+extend(Number, 'floor', createStaticRoundingFunction('floor'));
+
+/** @see Number.round */
 extend(Number.prototype, 'round', createRoundingFunction(Math.round));
 
-/** @see Number.prototype.ceil */
+/** @see NumberConstructor.round */
+extend(Number, 'round', createStaticRoundingFunction('round'));
+
+/** @see Number.ceil */
 extend(Number.prototype, 'ceil', createRoundingFunction(Math.ceil));
 
-function createRoundingFunction(method: Function): Function {
-	return function (this: number, precision?: number): number {
-		const
-			val = Number(this);
-
-		if (precision) {
-			let
-				multiplier = Math.pow(10, Math.abs(precision));
-
-			if (precision < 0) {
-				multiplier = 1 / multiplier;
-			}
-
-			return method(val * multiplier) / multiplier;
-		}
-
-		return method(val);
-	};
-}
+/** @see NumberConstructor.round */
+extend(Number, 'ceil', createStaticRoundingFunction('ceil'));

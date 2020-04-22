@@ -107,7 +107,7 @@ export default class Response<
 		this.important = p.important;
 
 		this.status = p.status;
-		this.ok = ok instanceof Range ? ok.contains(this.status) : (<number[]>[]).concat(ok || []).includes(this.status);
+		this.ok = ok instanceof Range ? ok.contains(this.status) : Array.concat([], <number>ok).includes(this.status);
 		this.headers = this.parseHeaders(p.headers);
 
 		const

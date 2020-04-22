@@ -7,8 +7,10 @@
  */
 
 import extend from 'core/prelude/extend';
+
 import { deprecate } from 'core/functools';
 import { locale as defaultLocale } from 'core/prelude/i18n';
+
 import {
 
 	globalOpts,
@@ -22,37 +24,44 @@ import {
 
 } from 'core/prelude/number/const';
 
-/** @see NumberConstructor.pad */
+import { repeatString } from 'core/prelude/number/helpers';
+
+/** @see Number.pad */
 extend(Number.prototype, 'pad', function (
 	this: number,
-	targetLength: number = 0,
+	lengthOrOpts: number | NumberPadOptions = 0,
 	opts?: NumberPadOptions
 ): string {
+	opts = {...Object.isPlainObject(lengthOrOpts) ? lengthOrOpts : opts};
+
+	if (!opts.length) {
+		opts.length = Object.isNumber(lengthOrOpts) ? lengthOrOpts : 0;
+	}
+
 	const
 		val = Number(this);
 
-	let str = Math.abs(val).toString(opts?.base || 10);
-	str = repeatString('0', targetLength - str.replace(decPartRgxp, '').length) + str;
+	let str = Math.abs(val).toString(opts.base || 10);
+	str = repeatString('0', opts.length - str.replace(decPartRgxp, '').length) + str;
 
-	if (opts?.sign || val < 0) {
+	if (opts.sign || val < 0) {
 		str = (val < 0 ? '-' : '+') + str;
 	}
 
 	return str;
 });
 
-/** @see NumberConstructor.getOption */
-extend(Number, 'getOption', deprecate(function getOption(key: string): string {
-	return globalOpts[key];
-}));
+/** @see NumberConstructor.pad */
+extend(Number, 'pad', (value: number | NumberPadOptions, lengthOrOpts: number | NumberPadOptions) => {
+	if (Object.isPlainObject(value)) {
+		const opts = value;
+		return (value) => Number.pad(value, opts);
+	}
 
-/** @see NumberConstructor.setOption */
-extend(Number, 'setOption', deprecate(function setOption(key: string, value: string): void {
-	globalOpts.init = true;
-	globalOpts[key] = value;
-}));
+	return value.pad(<any>lengthOrOpts);
+});
 
-/** @see Number.prototype.format */
+/** @see Number.format */
 extend(Number.prototype, 'format', function (
 	this: number,
 	patternOrOpts?: number | string | Intl.NumberFormatOptions,
@@ -62,7 +71,7 @@ extend(Number.prototype, 'format', function (
 		return this.toLocaleString(locale);
 	}
 
-	if (Object.isObject(patternOrOpts)) {
+	if (Object.isPlainObject(patternOrOpts)) {
 		return this.toLocaleString(locale, patternOrOpts);
 	}
 
@@ -127,7 +136,6 @@ extend(Number.prototype, 'format', function (
 			}
 		}
 
-		console.log(opts);
 		const formatter = formatCache[cacheKey] = new Intl.NumberFormat(locale, opts);
 		return formatter.format(this);
 	}
@@ -160,25 +168,28 @@ extend(Number.prototype, 'format', function (
 	return res;
 });
 
-function repeatString(str: string, num: number): string {
-	str = String(str);
-
-	let
-		res = '';
-
-	while (num > 0) {
-		// tslint:disable-next-line:no-bitwise
-		if (num & 1) {
-			res += str;
-		}
-
-		// tslint:disable-next-line:no-bitwise
-		num >>= 1;
-
-		if (num) {
-			str += str;
-		}
+/** @see NumberConstructor.format */
+extend(Number, 'format', (
+	value: number | string | Intl.NumberFormatOptions,
+	patternOrOpts?: string | Intl.NumberFormatOptions,
+	locale?: CanArray<string>
+) => {
+	if (Object.isString(value) || Object.isPlainObject(value)) {
+		locale = <any>patternOrOpts;
+		patternOrOpts = value;
+		return (value) => Number.format(value, <any>patternOrOpts, locale);
 	}
 
-	return res;
-}
+	return value.format(<any>patternOrOpts, locale);
+});
+
+/** @see NumberConstructor.getOption */
+extend(Number, 'getOption', deprecate(function getOption(key: string): string {
+	return globalOpts[key];
+}));
+
+/** @see NumberConstructor.setOption */
+extend(Number, 'setOption', deprecate(function setOption(key: string, value: string): void {
+	globalOpts.init = true;
+	globalOpts[key] = value;
+}));

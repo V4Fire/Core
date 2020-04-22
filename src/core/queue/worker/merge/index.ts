@@ -28,7 +28,7 @@ export default class MergeWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> 
 	/** @override */
 	get head(): CanUndef<T> {
 		if (!this.length) {
-			return undefined;
+			return;
 		}
 
 		const obj = this.tasksMap[this.tasks[0]];
@@ -82,7 +82,7 @@ export default class MergeWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> 
 	/** @override */
 	pop(): CanUndef<T> {
 		if (!this.length) {
-			return undefined;
+			return;
 		}
 
 		const
@@ -139,7 +139,7 @@ export default class MergeWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> 
 	 * @param task
 	 * @param resolve
 	 */
-	protected resolveTask(task: T, resolve: Function): void {
+	protected resolveTask(task: T, resolve: AnyFunction): void {
 		try {
 			resolve(this.worker(task));
 

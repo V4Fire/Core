@@ -33,8 +33,8 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * This method doesn't attach any hook or listeners to the object,
 	 * but every time the same object is registered, Async will increment the number of links that relates to this object.
 	 * And when we try to destroy the worker by using one of Async methods, like "terminateWorker",
-	 * it will de-increment the links value. When the number of links is equal to zero,
-	 * Async will try to call a "real" object destructor by using one of possible destructor methods from a whitelist
+	 * it will de-increment values of links. When the number of links is equal to zero,
+	 * Async will try to call a "real" object destructor by using one of the possible destructor methods from a whitelist
 	 * or by the specified destructor name, also if the worker is a function, it is interpreted as the destructor.
 	 *
 	 * @param worker
@@ -117,14 +117,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * @alias
 	 * @param [id] - link to the function (if not specified, then the operation will be applied for all registered tasks)
 	 */
-	cancelProxy(id?: Function): this;
+	cancelProxy(id?: AnyFunction): this;
 
 	/**
 	 * Cancels the specified proxy function or a group of functions
 	 * @param opts - options for the operation
 	 */
-	cancelProxy(opts: ClearProxyOptions<Function>): this;
-	cancelProxy(task?: Function | ClearProxyOptions<Function>): this {
+	cancelProxy(opts: ClearProxyOptions<AnyFunction>): this;
+	cancelProxy(task?: AnyFunction | ClearProxyOptions<AnyFunction>): this {
 		return this.clearProxy(<any>task);
 	}
 
@@ -132,14 +132,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Cancels the specified proxy function
 	 * @param [id] - link to the function (if not specified, then the operation will be applied for all registered tasks)
 	 */
-	clearProxy(id?: Function): this;
+	clearProxy(id?: AnyFunction): this;
 
 	/**
 	 * Cancels the specified proxy function or a group of functions
 	 * @param opts - options for the operation
 	 */
-	clearProxy(opts: ClearProxyOptions<Function>): this;
-	clearProxy(task?: Function | ClearProxyOptions<Function>): this {
+	clearProxy(opts: ClearProxyOptions<AnyFunction>): this;
+	clearProxy(task?: AnyFunction | ClearProxyOptions<AnyFunction>): this {
 		return this.cancelTask(task, isAsyncOptions<ClearProxyOptions>(task) && task.name || this.namespaces.proxy);
 	}
 
@@ -147,14 +147,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Mutes the specified proxy function
 	 * @param [id] - link to the function (if not specified, then the operation will be applied for all registered tasks)
 	 */
-	muteProxy(id?: Function): this;
+	muteProxy(id?: AnyFunction): this;
 
 	/**
 	 * Mutes the specified proxy function or a group of functions
 	 * @param opts - options for the operation
 	 */
-	muteProxy(opts: ClearProxyOptions<Function>): this;
-	muteProxy(task?: Function | ClearProxyOptions<Function>): this {
+	muteProxy(opts: ClearProxyOptions<AnyFunction>): this;
+	muteProxy(task?: AnyFunction | ClearProxyOptions<AnyFunction>): this {
 		return this.markTask(
 			'muted',
 			task,
@@ -166,14 +166,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Unmutes the specified proxy function
 	 * @param [id] - link to the function (if not specified, then the operation will be applied for all registered tasks)
 	 */
-	unmuteProxy(id?: Function): this;
+	unmuteProxy(id?: AnyFunction): this;
 
 	/**
 	 * Unmutes the specified proxy function or a group of functions
 	 * @param opts - options for the operation
 	 */
-	unmuteProxy(opts: ClearProxyOptions<Function>): this;
-	unmuteProxy(task?: Function | ClearProxyOptions<Function>): this {
+	unmuteProxy(opts: ClearProxyOptions<AnyFunction>): this;
+	unmuteProxy(task?: AnyFunction | ClearProxyOptions<AnyFunction>): this {
 		return this.markTask(
 			'!muted',
 			task,
@@ -185,14 +185,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Suspends the specified proxy function
 	 * @param [id] - link to the function (if not specified, then the operation will be applied for all registered tasks)
 	 */
-	suspendProxy(id?: Function): this;
+	suspendProxy(id?: AnyFunction): this;
 
 	/**
 	 * Suspends the specified proxy function or a group of functions
 	 * @param opts - options for the operation
 	 */
-	suspendProxy(opts: ClearProxyOptions<Function>): this;
-	suspendProxy(task?: Function | ClearProxyOptions<Function>): this {
+	suspendProxy(opts: ClearProxyOptions<AnyFunction>): this;
+	suspendProxy(task?: AnyFunction | ClearProxyOptions<AnyFunction>): this {
 		return this.markTask(
 			'paused',
 			task,
@@ -204,14 +204,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Unsuspends the specified proxy function
 	 * @param [id] - link to the function (if not specified, then the operation will be applied for all registered tasks)
 	 */
-	unsuspendProxy(id?: Function): this;
+	unsuspendProxy(id?: AnyFunction): this;
 
 	/**
 	 * Unsuspends the specified proxy function or a group of functions
 	 * @param opts - options for the operation
 	 */
-	unsuspendProxy(opts: ClearProxyOptions<Function>): this;
-	unsuspendProxy(task?: Function | ClearProxyOptions<Function>): this {
+	unsuspendProxy(opts: ClearProxyOptions<AnyFunction>): this;
+	unsuspendProxy(task?: AnyFunction | ClearProxyOptions<AnyFunction>): this {
 		return this.markTask(
 			'!paused',
 			task,
@@ -573,7 +573,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * @param resolve
 	 * @param reject
 	 */
-	onPromiseClear(resolve: Function, reject: Function): Function {
+	onPromiseClear(resolve: AnyFunction, reject: AnyFunction): AnyFunction {
 		const
 			MAX_PROMISE_DEPTH = 25;
 
@@ -585,7 +585,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 				replacedBy.onComplete.push([resolve, reject]);
 
 				const
-					onClear = (<AsyncCb<CTX>[]>[]).concat(obj.link.onClear, <AsyncCb<CTX>>reject);
+					onClear = Array.concat([], obj.link.onClear, reject);
 
 				for (let i = 0; i < onClear.length; i++) {
 					replacedBy.onClear.push(onClear[i]);
@@ -603,7 +603,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * @param resolve
 	 * @param reject
 	 */
-	onPromiseMerge(resolve: Function, reject: Function): Function {
+	onPromiseMerge(resolve: AnyFunction, reject: AnyFunction): AnyFunction {
 		return (obj) => obj.onComplete.push([resolve, reject]);
 	}
 

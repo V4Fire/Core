@@ -108,7 +108,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 				...p,
 				name: this.namespaces.eventListener,
 				obj: handler,
-				wrapper(cb: Function): unknown {
+				wrapper(cb: AnyFunction): unknown {
 					const handler = function (this: unknown): unknown {
 						if (Object.isFunction(emitter) || p.single && (multEvent || !emitter.once)) {
 							if (multEvent) {
