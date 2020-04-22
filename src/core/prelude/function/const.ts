@@ -6,4 +6,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-export const __ = <TS.Any.x>Object.freeze({});
+import { A } from 'ts-toolbelt';
+
+export const __ = <A.x>Object.freeze({});

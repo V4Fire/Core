@@ -14,9 +14,9 @@
 // tslint:disable:max-file-line-count unified-signatures
 /// <reference types="ts-toolbelt"/>
 
-declare namespace globalThis {
-	import * as TS from 'ts-toolbelt';
-	export type { TS };
+declare namespace TB {
+	export { Any, Boolean, Class, Function, Iteration, List, Number, Object, String, Union } from 'ts-toolbelt';
+	export { A, B, C, F, I, L, N, O, S, U } from 'ts-toolbelt';
 }
 
 declare const APP_NAME: string;
@@ -2747,7 +2747,7 @@ interface FunctionConstructor {
 	 * sum.curry()(Function.__, 2)(5)
 	 * ```
 	 */
-	__: TS.Any.x;
+	__: TB.A.x;
 
 	/**
 	 * Returns a new function that allows to invoke the specified function only once
@@ -2814,7 +2814,7 @@ interface FunctionConstructor {
 	 * g(_, 2)(_, 3)(1)
 	 * ```
 	 */
-	curry<T extends AnyFunction>(f: T): TS.F.Curry<T>;
+	curry<T extends AnyFunction>(f: T): TB.F.Curry<T>;
 
 	/**
 	 * Performs right-to-left function composition.
@@ -2970,7 +2970,7 @@ interface Function {
 	 * g(_, 2)(_, 3)(1)
 	 * ```
 	 */
-	curry<T extends AnyFunction>(this: T): TS.F.Curry<T>;
+	curry<T extends AnyFunction>(this: T): TB.F.Curry<T>;
 
 	/**
 	 * Performs left-to-right function composition.
