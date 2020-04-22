@@ -20,3 +20,4 @@ export { default as AbstractWorkerQueue } from 'core/queue/worker/interface';
 
 export { default as Queue } from 'core/queue/simple';
 export { default as MergeWorkerQueue } from 'core/queue/worker/merge';
+export { default as OrderedQueue } from 'core/queue/order';
