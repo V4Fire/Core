@@ -16,7 +16,7 @@ extend(Function.prototype, 'option', function (this: AnyFunction): AnyFunction {
 			fst = args[0];
 
 		if (fst == null) {
-			return Result.reject(null);
+			return Option.reject(null);
 		}
 
 		if (fst instanceof Option || fst instanceof Result) {
@@ -24,10 +24,10 @@ extend(Function.prototype, 'option', function (this: AnyFunction): AnyFunction {
 		}
 
 		try {
-			return Result.resolve(this(...args));
+			return Option.resolve(this(...args));
 
 		} catch (err) {
-			return Result.reject(err);
+			return Option.reject(err);
 		}
 	};
 
@@ -37,14 +37,14 @@ extend(Function.prototype, 'option', function (this: AnyFunction): AnyFunction {
 /** @see ObjectConstructor.Option */
 extend(Object, 'Option', (value: unknown) => {
 	if (value == null) {
-		return Result.reject(null);
+		return Option.reject(null);
 	}
 
 	if (Object.isFunction(value)) {
 		return value.option();
 	}
 
-	return Result.resolve(value);
+	return Option.resolve(value);
 });
 
 /** @see Function.result */
