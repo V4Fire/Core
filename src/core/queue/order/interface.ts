@@ -6,8 +6,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-export interface Tasks<T> extends Array<T> {}
-
 export interface TaskComparator<T> {
 	(a: T, b: T): number;
 }

@@ -11,17 +11,14 @@
  * @packageDocumentation
  */
 
-import Queue from 'core/queue/interface';
-import { Tasks } from 'core/queue/simple/interface';
-
+import Queue, { Tasks, CreateTasks } from 'core/queue/interface';
 export * from 'core/queue/interface';
-export * from 'core/queue/simple/interface';
 
 /**
  * Simple implementation of a queue data structure
  * @typeparam T - queue element
  */
-export default class SimpleQueue<T> implements Queue<T> {
+export default class SimpleQueue<T> extends Queue<T> {
 	/**
 	 * Type: list of tasks
 	 */
@@ -40,7 +37,13 @@ export default class SimpleQueue<T> implements Queue<T> {
 	/**
 	 * List of tasks
 	 */
-	protected tasks: this['Tasks'] = this.createTasks();
+	protected tasks: this['Tasks'];
+
+	/** @override */
+	constructor() {
+		super();
+		this.tasks = this.createTasks();
+	}
 
 	/** @inheritDoc */
 	push(task: T): number {
@@ -62,9 +65,7 @@ export default class SimpleQueue<T> implements Queue<T> {
 	}
 
 	/**
-	 * Return a new blank list of tasks
+	 * Returns a new blank list of tasks
 	 */
-	protected createTasks(): this['Tasks'] {
-		return [];
-	}
+	protected createTasks: CreateTasks<this['Tasks']> = () => [];
 }

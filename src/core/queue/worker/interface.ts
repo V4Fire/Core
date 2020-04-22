@@ -6,16 +6,14 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import Queue from 'core/queue/interface';
+import Queue, { Tasks, CreateTasks, QueueOptions as SimpleQueueOptions } from 'core/queue/interface';
 export * from 'core/queue/interface';
-
-export interface Tasks<T> extends Array<T> {}
 
 export interface QueueWorker<T = unknown, V = unknown> {
 	(task: T): CanPromise<V>;
 }
 
-export interface QueueOptions {
+export interface QueueOptions extends SimpleQueueOptions {
 	/**
 	 * Maximum number of concurrent workers
 	 */
@@ -34,7 +32,7 @@ export interface QueueOptions {
  * @typeparam T - task element
  * @typeparam V - worker value
  */
-export default abstract class WorkerQueue<T, V = unknown> implements Queue<T> {
+export default abstract class WorkerQueue<T, V = unknown> extends Queue<T> {
 	/**
 	 * Type: list of tasks
 	 */
@@ -72,16 +70,24 @@ export default abstract class WorkerQueue<T, V = unknown> implements Queue<T> {
 	/**
 	 * List of tasks
 	 */
-	protected tasks: this['Tasks'] = this.createTasks();
+	protected tasks: this['Tasks'];
 
 	/**
 	 * @param worker
 	 * @param [opts]
 	 */
 	constructor(worker: QueueWorker<T, V>, opts?: QueueOptions) {
+		super();
+
 		this.worker = worker;
 		this.concurrency = opts?.concurrency || 1;
 		this.refreshInterval = opts?.refreshInterval || 0;
+
+		if (opts?.tasksFactory) {
+			this.createTasks = opts.tasksFactory;
+		}
+
+		this.tasks = this.createTasks();
 	}
 
 	/** @inheritDoc */
@@ -103,16 +109,14 @@ export default abstract class WorkerQueue<T, V = unknown> implements Queue<T> {
 	}
 
 	/**
+	 * Returns a new blank list of tasks
+	 */
+	protected createTasks: CreateTasks<this['Tasks']> = () => [];
+
+	/**
 	 * Executes a task chunk from the queue
 	 */
 	protected abstract perform(): unknown;
-
-	/**
-	 * Return a new blank list of tasks
-	 */
-	protected createTasks(): this['Tasks'] {
-		return [];
-	}
 
 	/**
 	 * Executes a task chunk from the queue

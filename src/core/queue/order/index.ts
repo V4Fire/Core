@@ -11,8 +11,8 @@
  * @packageDocumentation
  */
 
-import Queue from 'core/queue/interface';
-import { Tasks, TaskComparator } from 'core/queue/order/interface';
+import Queue, { CreateTasks, Tasks } from 'core/queue/interface';
+import { TaskComparator } from 'core/queue/order/interface';
 
 export * from 'core/queue/interface';
 export * from 'core/queue/order/interface';
@@ -21,7 +21,7 @@ export * from 'core/queue/order/interface';
  * Implementation of an ordered queue data structure
  * @typeparam T - queue element
  */
-export default class OrderedQueue<T> implements Queue<T> {
+export default class OrderedQueue<T> extends Queue<T> {
 	/**
 	 * Type: list of tasks
 	 */
@@ -45,7 +45,7 @@ export default class OrderedQueue<T> implements Queue<T> {
 	/**
 	 * List of tasks
 	 */
-	protected tasks: this['Tasks'] = this.createTasks();
+	protected tasks: this['Tasks'];
 
 	/**
 	 * Function to compare tasks
@@ -56,6 +56,8 @@ export default class OrderedQueue<T> implements Queue<T> {
 	 * @param comparator
 	 */
 	constructor(comparator: TaskComparator<T>) {
+		super();
+		this.tasks = this.createTasks();
 		this.comparator = comparator;
 	}
 
@@ -93,11 +95,9 @@ export default class OrderedQueue<T> implements Queue<T> {
 	}
 
 	/**
-	 * Return a new blank list of tasks
+	 * Returns a new blank list of tasks
 	 */
-	protected createTasks(): this['Tasks'] {
-		return new Array(100);
-	}
+	protected createTasks: CreateTasks<this['Tasks']> = () => [];
 
 	/**
 	 * Raises the last queue element of the queue up
