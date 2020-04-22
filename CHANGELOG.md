@@ -92,7 +92,7 @@ Array.union([], 1, null, [1, 2].values()) // [1, 2];
 
 * Added new prelude types: `AnyFunction`, `AnyOneArgFunction`, `Maybe`, `Either`
 * Added `ts-toolbelt`
-* Added `debounce/throttle` to `core/async`
+* [Added `debounce/throttle` to `core/async`](https://github.com/V4Fire/Core/pull/82)
 
 #### :house: Internal
 
