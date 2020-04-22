@@ -23,7 +23,7 @@ import { providers, namespace } from 'core/data/const';
  * class List extends Provider {}
  * ```
  */
-export function provider(namespace: string): (target: AnyFunction) => void;
+export function provider(namespace: string): (target: Function) => void;
 
 /**
  * Registers a data provider class to the global store by a name of the provider class

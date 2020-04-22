@@ -155,14 +155,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * @alias
 	 * @param [id] - link to the function (if not specified, then the operation will be applied for all registered tasks)
 	 */
-	cancelProxy(id?: AnyFunction): this;
+	cancelProxy(id?: Function): this;
 
 	/**
 	 * Cancels the specified proxy function or a group of functions
 	 * @param opts - options for the operation
 	 */
-	cancelProxy(opts: ClearProxyOptions<AnyFunction>): this;
-	cancelProxy(task?: AnyFunction | ClearProxyOptions<AnyFunction>): this {
+	cancelProxy(opts: ClearProxyOptions<Function>): this;
+	cancelProxy(task?: Function | ClearProxyOptions<Function>): this {
 		return this.clearProxy(<any>task);
 	}
 
@@ -170,14 +170,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Cancels the specified proxy function
 	 * @param [id] - link to the function (if not specified, then the operation will be applied for all registered tasks)
 	 */
-	clearProxy(id?: AnyFunction): this;
+	clearProxy(id?: Function): this;
 
 	/**
 	 * Cancels the specified proxy function or a group of functions
 	 * @param opts - options for the operation
 	 */
-	clearProxy(opts: ClearProxyOptions<AnyFunction>): this;
-	clearProxy(task?: AnyFunction | ClearProxyOptions<AnyFunction>): this {
+	clearProxy(opts: ClearProxyOptions<Function>): this;
+	clearProxy(task?: Function | ClearProxyOptions<Function>): this {
 		return this.cancelTask(task, isAsyncOptions<ClearProxyOptions>(task) && task.name || this.namespaces.proxy);
 	}
 
@@ -185,14 +185,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Mutes the specified proxy function
 	 * @param [id] - link to the function (if not specified, then the operation will be applied for all registered tasks)
 	 */
-	muteProxy(id?: AnyFunction): this;
+	muteProxy(id?: Function): this;
 
 	/**
 	 * Mutes the specified proxy function or a group of functions
 	 * @param opts - options for the operation
 	 */
-	muteProxy(opts: ClearProxyOptions<AnyFunction>): this;
-	muteProxy(task?: AnyFunction | ClearProxyOptions<AnyFunction>): this {
+	muteProxy(opts: ClearProxyOptions<Function>): this;
+	muteProxy(task?: Function | ClearProxyOptions<Function>): this {
 		return this.markTask(
 			'muted',
 			task,
@@ -204,14 +204,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Unmutes the specified proxy function
 	 * @param [id] - link to the function (if not specified, then the operation will be applied for all registered tasks)
 	 */
-	unmuteProxy(id?: AnyFunction): this;
+	unmuteProxy(id?: Function): this;
 
 	/**
 	 * Unmutes the specified proxy function or a group of functions
 	 * @param opts - options for the operation
 	 */
-	unmuteProxy(opts: ClearProxyOptions<AnyFunction>): this;
-	unmuteProxy(task?: AnyFunction | ClearProxyOptions<AnyFunction>): this {
+	unmuteProxy(opts: ClearProxyOptions<Function>): this;
+	unmuteProxy(task?: Function | ClearProxyOptions<Function>): this {
 		return this.markTask(
 			'!muted',
 			task,
@@ -223,14 +223,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Suspends the specified proxy function
 	 * @param [id] - link to the function (if not specified, then the operation will be applied for all registered tasks)
 	 */
-	suspendProxy(id?: AnyFunction): this;
+	suspendProxy(id?: Function): this;
 
 	/**
 	 * Suspends the specified proxy function or a group of functions
 	 * @param opts - options for the operation
 	 */
-	suspendProxy(opts: ClearProxyOptions<AnyFunction>): this;
-	suspendProxy(task?: AnyFunction | ClearProxyOptions<AnyFunction>): this {
+	suspendProxy(opts: ClearProxyOptions<Function>): this;
+	suspendProxy(task?: Function | ClearProxyOptions<Function>): this {
 		return this.markTask(
 			'paused',
 			task,
@@ -242,14 +242,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Unsuspends the specified proxy function
 	 * @param [id] - link to the function (if not specified, then the operation will be applied for all registered tasks)
 	 */
-	unsuspendProxy(id?: AnyFunction): this;
+	unsuspendProxy(id?: Function): this;
 
 	/**
 	 * Unsuspends the specified proxy function or a group of functions
 	 * @param opts - options for the operation
 	 */
-	unsuspendProxy(opts: ClearProxyOptions<AnyFunction>): this;
-	unsuspendProxy(task?: AnyFunction | ClearProxyOptions<AnyFunction>): this {
+	unsuspendProxy(opts: ClearProxyOptions<Function>): this;
+	unsuspendProxy(task?: Function | ClearProxyOptions<Function>): this {
 		return this.markTask(
 			'!paused',
 			task,
@@ -611,7 +611,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * @param resolve
 	 * @param reject
 	 */
-	onPromiseClear(resolve: AnyFunction, reject: AnyFunction): AnyFunction {
+	onPromiseClear(resolve: Function, reject: Function): AnyFunction {
 		const
 			MAX_PROMISE_DEPTH = 25;
 

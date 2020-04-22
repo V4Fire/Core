@@ -7,13 +7,13 @@
  */
 
 /**
- * Extends an object or a function by the specified method
+ * Extends an object or function by the specified method
  *
  * @param obj
  * @param name - method name
  * @param method
  */
-export default function extend(obj: AnyFunction | object, name: string, method: AnyFunction | PropertyDescriptor): void {
+export default function extend(obj: Function | object, name: string, method: Function | PropertyDescriptor): void {
 	const descriptor = <PropertyDescriptor>{
 		configurable: true
 	};

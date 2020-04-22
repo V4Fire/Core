@@ -130,7 +130,7 @@ export interface Task<CTX extends object = Async> {
 	label?: Label;
 	paused: boolean;
 	muted: boolean;
-	queue: AnyFunction[];
+	queue: Function[];
 	onComplete: WrappedCb<CTX>[][];
 	onClear: AsyncCb<CTX>[];
 	clearFn?: ClearFn;
@@ -284,14 +284,14 @@ export interface AsyncWorkerOptions<CTX extends object = Async> extends AsyncPro
 }
 
 export interface WorkerLike {
-	terminate?: AnyFunction;
-	destroy?: AnyFunction;
-	destructor?: AnyFunction;
-	close?: AnyFunction;
-	abort?: AnyFunction;
-	cancel?: AnyFunction;
-	disconnect?: AnyFunction;
-	unwatch?: AnyFunction;
+	terminate?: Function;
+	destroy?: Function;
+	destructor?: Function;
+	close?: Function;
+	abort?: Function;
+	cancel?: Function;
+	disconnect?: Function;
+	unwatch?: Function;
 }
 
 export interface EventLike<E extends EventEmitterLikeP = EventEmitterLikeP> {
@@ -317,21 +317,21 @@ export interface EventLike<E extends EventEmitterLikeP = EventEmitterLikeP> {
 }
 
 export interface EventEmitterLike {
-	on?: AnyFunction;
-	addListener?: AnyFunction;
-	addEventListener?: AnyFunction;
-	once?: AnyFunction;
-	off?: AnyFunction;
-	removeListener?: AnyFunction;
-	removeEventListener?: AnyFunction;
+	on?: Function;
+	addListener?: Function;
+	addEventListener?: Function;
+	once?: Function;
+	off?: Function;
+	removeListener?: Function;
+	removeEventListener?: Function;
 }
 
-export type WorkerLikeP = AnyFunction | WorkerLike;
-export type EventEmitterLikeP = AnyFunction | EventEmitterLike;
+export type WorkerLikeP = Function | WorkerLike;
+export type EventEmitterLikeP = Function | EventEmitterLike;
 
 export interface CancelablePromise<T = unknown> extends Promise<T> {
-	abort?: AnyFunction;
-	cancel?: AnyFunction;
+	abort?: Function;
+	cancel?: Function;
 }
 
 export interface LocalCache {

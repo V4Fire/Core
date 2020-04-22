@@ -34,7 +34,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * @param cb - callback function
 	 * @param [opts] - additional options for the operation
 	 */
-	setImmediate(cb: AnyFunction, opts?: AsyncCbOptions<CTX>): Nullable<TimerId> {
+	setImmediate(cb: Function, opts?: AsyncCbOptions<CTX>): Nullable<TimerId> {
 		const
 			// tslint:disable-next-line
 			wrapper = globalThis['setImmediate'],
@@ -135,7 +135,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * @param timeout - timer value
 	 * @param [opts] - additional options for the operation
 	 */
-	setInterval(cb: AnyFunction, timeout: number, opts?: AsyncCbOptions<CTX>): Nullable<TimerId> {
+	setInterval(cb: Function, timeout: number, opts?: AsyncCbOptions<CTX>): Nullable<TimerId> {
 		return this.registerTask({
 			...opts,
 			name: this.namespaces.interval,
@@ -230,7 +230,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * @param timeout - timeout value
 	 * @param [opts] - additional options for the operation
 	 */
-	setTimeout(cb: AnyFunction, timeout: number, opts?: AsyncCbOptions<CTX>): Nullable<TimerId> {
+	setTimeout(cb: Function, timeout: number, opts?: AsyncCbOptions<CTX>): Nullable<TimerId> {
 		return this.registerTask({
 			...opts,
 			name: this.namespaces.timeout,
@@ -496,7 +496,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * @param fn
 	 * @param [opts] - additional options for the operation
 	 */
-	wait(fn: AnyFunction, opts?: AsyncWaitOptions): SyncPromise<boolean> {
+	wait(fn: Function, opts?: AsyncWaitOptions): SyncPromise<boolean> {
 		if (fn()) {
 			if (opts?.label) {
 				this.clearPromise(opts);
