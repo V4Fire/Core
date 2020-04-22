@@ -7,29 +7,29 @@
  */
 
 import Super, {
+
 	asyncCounter,
 	isPromisifyNamespace,
 	isAsyncOptions,
-	AsyncOptions,
 	AsyncCbOptions
+
 } from 'core/async/modules/base';
+
 import {
 
 	AsyncWorkerOptions,
 	AsyncProxyOptions,
 	AsyncRequestOptions,
 	AsyncPromiseOptions,
-	ClearProxyOptions,
 
+	ClearProxyOptions,
 	ClearOptionsId,
+
 	WorkerLikeP,
 	CancelablePromise,
-
-	AsyncCb,
 	WrappedCb
 
 } from 'core/async/interface';
-import SyncPromise from 'core/prelude/structures/sync-promise';
 
 export * from 'core/async/modules/base';
 
