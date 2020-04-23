@@ -161,7 +161,7 @@ export type ProxyCb<
 	CTX extends object = Async
 > = A extends never ?
 	((this: CTX) => R) : A extends unknown[] ?
-		((this: CTX, ...args: A) => R) : ((this: CTX, e: A) => R) | AnyFunction;
+		((this: CTX, ...args: A) => R) : ((this: CTX, e: A) => R) | Function;
 
 export type IdleCb<
 	R = unknown,
