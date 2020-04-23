@@ -230,7 +230,7 @@ extend(Object, 'set', function (
 	};
 
 	if (Object.isArray(path) || Object.isString(path)) {
-		if (arguments.length > 2) {
+		if (arguments.length < 2) {
 			return (value) => {
 				set(path, value);
 				return obj;
