@@ -517,10 +517,10 @@ export default class Then<T = unknown> implements Promise<T> {
 	 * @param [onValue] - success handler
 	 */
 	protected call<A = unknown, V = unknown>(
-		fn: Nullable<AnyFunction>,
+		fn: Nullable<Function>,
 		args: A[] = [],
 		onError?: ConstrRejectHandler,
-		onValue?: (value: V) => void
+		onValue?: AnyOneArgFunction<V>
 	): void {
 		const
 			loopback = () => undefined,

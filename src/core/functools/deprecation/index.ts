@@ -23,7 +23,7 @@ const
  * @param opts - additional options
  * @param [fn] - function for wrapping
  */
-export function deprecate<T extends AnyFunction>(
+export function deprecate<T extends Function>(
 	opts: DeprecatedOptions,
 	fn: T
 ): T;
@@ -38,9 +38,9 @@ export function deprecate(opts: InlineDeprecatedOptions): void;
  * Marks the specified function as obsolescence
  * @param fn - function for wrapping
  */
-export function deprecate<T extends AnyFunction>(fn: T): T;
+export function deprecate<T extends Function>(fn: T): T;
 
-export function deprecate<T extends AnyFunction>(
+export function deprecate<T extends Function>(
 	fnOrParams: DeprecatedOptions | InlineDeprecatedOptions | T,
 	fn?: T
 ): T | void {
@@ -158,13 +158,13 @@ export function deprecated(target: object, key: string | symbol, descriptor: Pro
  * }
  * ```
  */
-export function deprecated(opts?: DeprecatedOptions): AnyFunction;
+export function deprecated(opts?: DeprecatedOptions): Function;
 
 export function deprecated(
 	opts?: DeprecatedOptions | object,
 	key?: string | symbol,
 	descriptor?: PropertyDescriptor
-): AnyFunction | void {
+): Function | void {
 	const f = (name, descriptor, opts?) => {
 		const
 			{get, set, value: method} = descriptor;

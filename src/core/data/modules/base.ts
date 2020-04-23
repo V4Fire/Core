@@ -296,7 +296,7 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 			const
 				composition = <D & object>{},
 				tasks = <Then<RequestResponseObject>[]>[],
-				cloneTasks = <AnyFunction[]>[];
+				cloneTasks = <Function[]>[];
 
 			for (let keys = Object.keys(extraProviders), i = 0; i < keys.length; i++) {
 				const
@@ -561,7 +561,7 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 		}
 
 		const
-			req = (<AnyFunction>factory)();
+			req = factory();
 
 		if (event) {
 			const

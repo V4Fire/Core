@@ -40,7 +40,7 @@ env.emitter.on('remove.mock', setConfig);
  * Middleware: attaches mock data from .mocks
  * @param params
  */
-export async function attachMock(this: Provider, params: MiddlewareParams): Promise<CanUndef<AnyFunction>> {
+export async function attachMock(this: Provider, params: MiddlewareParams): Promise<CanUndef<Function>> {
 	if (!mockOpts) {
 		await optionsInitializer;
 	}

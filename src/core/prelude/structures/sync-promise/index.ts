@@ -325,10 +325,10 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 	 * @param [onValue] - success handler
 	 */
 	protected call<A = unknown, V = unknown>(
-		fn: Nullable<AnyFunction>,
+		fn: Nullable<Function>,
 		args: A[] = [],
 		onError?: ConstrRejectHandler,
-		onValue?: (value: V) => any
+		onValue?: AnyOneArgFunction<V>
 	): void {
 		const
 			loopback = () => undefined,

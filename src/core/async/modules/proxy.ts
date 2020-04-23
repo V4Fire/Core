@@ -611,7 +611,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * @param resolve
 	 * @param reject
 	 */
-	onPromiseClear(resolve: Function, reject: Function): AnyFunction {
+	onPromiseClear(resolve: Function, reject: Function): Function {
 		const
 			MAX_PROMISE_DEPTH = 25;
 
@@ -641,7 +641,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * @param resolve
 	 * @param reject
 	 */
-	onPromiseMerge(resolve: AnyFunction, reject: AnyFunction): AnyFunction {
+	onPromiseMerge(resolve: Function, reject: Function): Function {
 		return (obj) => obj.onComplete.push([resolve, reject]);
 	}
 

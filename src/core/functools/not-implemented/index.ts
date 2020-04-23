@@ -23,7 +23,7 @@ const
  * @param opts - additional options
  * @param [fn] - function for wrapping
  */
-export function notImplement<T extends AnyFunction>(
+export function notImplement<T extends Function>(
 	opts: NotImplementedOptions,
 	fn: T
 ): T;
@@ -38,16 +38,16 @@ export function notImplement(opts: InlineNotImplementedOptions): void;
  * Marks the specified function as not implemented
  * @param fn - function for wrapping
  */
-export function notImplement<T extends AnyFunction>(fn: T): T;
+export function notImplement<T extends Function>(fn: T): T;
 
-export function notImplement<T extends AnyFunction>(
+export function notImplement<T extends Function>(
 	fnOrParams: NotImplementedOptions | InlineNotImplementedOptions | T,
 	fn?: T
 ): T | void {
 	let
 		p = <NotImplementedOptions>{};
 
-	if (Object.isFunction(fnOrParams)) {
+	if (Object.isSimpleFunction(fnOrParams)) {
 		fn = fnOrParams;
 
 	} else {
@@ -137,13 +137,13 @@ export function notImplemented(target: object, key: string | symbol, descriptor:
  * }
  * ```
  */
-export function notImplemented(opts?: NotImplementedOptions): AnyFunction;
+export function notImplemented(opts?: NotImplementedOptions): Function;
 
 export function notImplemented(
 	opts?: NotImplementedOptions | object,
 	key?: string | symbol,
 	descriptor?: PropertyDescriptor
-): AnyFunction | void {
+): Function | void {
 	const f = (name, descriptor, opts?) => {
 		const
 			{get, set, value: method} = descriptor;
