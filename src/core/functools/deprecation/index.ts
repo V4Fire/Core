@@ -47,7 +47,7 @@ export function deprecate<T extends Function>(
 	let
 		p = <DeprecatedOptions>{};
 
-	if (Object.isFunction(fnOrParams)) {
+	if (Object.isSimpleFunction(fnOrParams)) {
 		fn = fnOrParams;
 
 	} else {
