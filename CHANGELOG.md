@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.11.2 (2020-04-23)
+
+#### :house: Internal
+
+* Improved TS types
+
 ## v3.11.1 (2020-04-22)
 
 #### :bug: Bug Fix
