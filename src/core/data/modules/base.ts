@@ -552,8 +552,8 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 
 	protected updateRequest<D = unknown>(
 		url: string,
-		event: string | RequestFunctionResponse,
-		factory?: RequestFunctionResponse
+		event: string | RequestFunctionResponse<D>,
+		factory?: RequestFunctionResponse<D>
 	): RequestResponse<D> {
 		if (Object.isFunction(event)) {
 			factory = event;
@@ -561,7 +561,7 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 		}
 
 		const
-			req = factory();
+			req = factory!();
 
 		if (event) {
 			const
@@ -569,11 +569,13 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 
 			req.then((res) => {
 				const
-					{ctx} = res,
+					{ctx: {canCache, cacheKey}} = res;
+
+				const
 					cache = requestCache[this.cacheId];
 
-				if (ctx.canCache && cache) {
-					cache[res.cacheKey] = res;
+				if (canCache && cacheKey && cache) {
+					cache[cacheKey] = res;
 				}
 
 				this.emitter.emit(e, () => res.data);
