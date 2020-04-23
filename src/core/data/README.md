@@ -117,7 +117,7 @@ class User {
 }
 ```
 
-Still looks fine and useful, but if we want to create more classes for other data instances we need to create some kind of a superclass to avoid "copy-pasting" code lines. Also, the superclass may improve our API with added extra functionality, such as support for socket events, middlewares, etc. And this is exactly what "core/data" module does.
+Still looks fine and useful, but if we want to create more classes for other data instances we need to create some kind of superclass to avoid "copy-pasting" code lines. Also, the superclass may improve our API with added extra functionality, such as support for socket events, middlewares, etc. And this is exactly what "core/data" module does.
 
 ## Default interface
 
@@ -186,7 +186,7 @@ myProvider.name('init').get('foo');
 Mind that the default V4Fire implementation of a data provider by default sends events for "upd", "add", "del" requests.
 These events have the same name with methods that produce them.
 
-3. `method` — a pair of get/set methods to provide a type of an HTTP request:
+3. `method` — a pair of get/set methods to provide a type of HTTP request:
 
 ```js
 // The request uses POST method to get data
@@ -356,7 +356,7 @@ The default implementation of a data provider has association between HTTP reque
 }
 ```
 
-But you allow to rewrite it in your subclass.
+You allow to rewrite it in your subclass.
 
 ```js
 import Provider, { provider } from 'core/provider';
@@ -387,7 +387,7 @@ export default class User extends Provider {
 ##### URL interpolation
 
 You can specify dynamically values within a URL string. For this case just add a variable with `:` character before the name.
-The values for interpolations are taken from a query object or a request body (if it's represented as a simple JS object).
+The values for interpolations are taken from a query object or request body (if it's represented as a simple JS object).
 After interpolation, all values that were used will be dropped from a source object.
 
 #### Middlewares
@@ -424,7 +424,7 @@ export default class User extends Provider {
 
 Basically, the result of a middleware function is ignoring, with the exceptions of promises and functions.
 If some middleware returns a promise, it will be awaited.
-And if at least one of the middlewares returns a function, then the result of invoking this function will be returned as the request result.
+If at least one of the middlewares returns a function, then the result of invoking this function will be returned as the request result.
 It can be helpful to organize mocks of data and other similar cases when you don't want to execute a real request.
 
 ```js
@@ -515,7 +515,7 @@ If some encoder returns a promise, it will be awaited.
 
 #### Custom request function
 
-To create a request all providers use the `core/request` module. And if you need to provide some extra parameters of the request, such as "contentType", you can specify a factory to make these requests using the special overload of the request function.
+To create a request all providers use the `core/request` module. If you need to provide some extra parameters of the request, such as "contentType", you can specify a factory to make these requests using the special overload of the request function.
 
 ```js
 import request from 'core/request';
@@ -586,7 +586,7 @@ export default class User extends Provider {
 }
 ```
 
-And finally, if you specify the default API URL within `core/config/api`, you can provide some chunks of an API URL that are applied to the base.
+Finally, if you specify the default API URL within `core/config/api`, you can provide some chunks of an API URL that are applied to the base.
 
 ```js
 import Provider, { provider } from 'core/provider';
@@ -680,7 +680,7 @@ export default class User extends Provider {
 
 ### Extending one data provider from another provider
 
-The data provider is a simple class that implements a special interface. That's why to create a new provider that is extended parameters from another provider you should create a simple subclass.
+The data provider is a simple class implements a special interface. That's why to create a new provider that is extended parameters from another provider you should create a simple subclass.
 
 ```js
 import Provider, { provider } from 'core/provider';
@@ -781,7 +781,7 @@ export default class User extends Provider {
 }
 ```
 
-And finally, you can use dynamic importing with mocks:
+Finally, you can use dynamic importing with mocks:
 
 ```js
 import Provider, { provider } from 'core/provider';
@@ -795,7 +795,7 @@ export default class User extends Provider {
 
 #### Enabling data mocks for a provider
 
-By default all data mocks is disabled, but you can enable it just type to a console of a browser:
+By default, all data mocks is disabled, but you can enable it just type to a console of a browser:
 
 ```js
 // Enables mocks for the User provider

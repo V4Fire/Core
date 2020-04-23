@@ -31,7 +31,7 @@ import {
 export * from 'core/then/interface';
 
 /**
- * Class that wraps promise-like objects and adds to them some extra functionality,
+ * Class wraps promise-like objects and adds to them some extra functionality,
  * such as possibility of cancellation, etc.
  *
  * @typeparam T - promise resolved value
@@ -124,7 +124,7 @@ export default class Then<T = unknown> implements Promise<T> {
 	}
 
 	/**
-	 * Creates a Then promise that is resolved with an array of results when all of the provided promises
+	 * Creates a Then promise that is resolved with an array of results when all the provided promises
 	 * are resolved, or rejected when any promise is rejected
 	 *
 	 * @param values

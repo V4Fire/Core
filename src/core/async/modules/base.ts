@@ -214,7 +214,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 * Returns a cache object by the specified name
 	 *
 	 * @param name
-	 * @param [promise] - if true, the the namespace will be marked as promisified
+	 * @param [promise] - if true, the namespace will be marked as promisified
 	 */
 	protected getCache(name: string, promise?: boolean): GlobalCache {
 		name = promise
@@ -409,7 +409,7 @@ export default class Async<CTX extends object = Async<any>> {
 	/**
 	 * Cancels a task (or a group of tasks) from the specified namespace
 	 *
-	 * @param task - operation options or a task link
+	 * @param task - operation options or task link
 	 * @param [name] - namespace of the operation
 	 */
 	protected cancelTask(task: CanUndef<FullClearOptions | any>, name?: string): this {

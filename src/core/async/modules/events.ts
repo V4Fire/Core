@@ -98,7 +98,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		const
 			that = this,
 			links: object[] = [],
-			multEvent = events.length > 1;
+			multipleEvent = events.length > 1;
 
 		for (let i = 0; i < events.length; i++) {
 			const
@@ -110,8 +110,8 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 				obj: handler,
 				wrapper(cb: AnyFunction): unknown {
 					const handler = function (this: unknown): unknown {
-						if (Object.isFunction(emitter) || p.single && (multEvent || !emitter.once)) {
-							if (multEvent) {
+						if (Object.isFunction(emitter) || p.single && (multipleEvent || !emitter.once)) {
+							if (multipleEvent) {
 								that.clearEventListener(links);
 
 							} else {
@@ -409,7 +409,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	protected markEvent(field: string, id?: EventId): this;
 
 	/**
-	 * Marks an event task or a group of tasks by the specified label
+	 * Marks an event task or group of tasks by the specified label
 	 *
 	 * @param field
 	 * @param opts - additional options

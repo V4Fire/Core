@@ -367,7 +367,7 @@ export default function watch<T extends object>(
 					path = info.path.length > tiedPath.length ? info.path.slice(0, tiedPath.length) : info.path;
 
 				// The flag that indicates that we need to get a real property value from the original object.
-				// It make sense for getters.
+				// It makes sense for getters.
 				let dynamic = false;
 
 				path: for (let i = 0; i < path.length; i++) {

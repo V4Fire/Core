@@ -1,6 +1,6 @@
 # core/prelude/structures/sync-promise
 
-This module provides a class that is similar to the native promise class but works synchronously.
+This module provides a class is similar to the native promise class but works synchronously.
 
 ```js
 import SyncPromise from 'core/prelude/structures/sync-promise';

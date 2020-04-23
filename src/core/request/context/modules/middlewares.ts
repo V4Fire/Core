@@ -60,7 +60,7 @@ export default class RequestContext<D = unknown> extends Super<D> {
 		if (key) {
 			if (p.offlineCache) {
 				if (!storage) {
-					throw new ReferenceError('kv-storage module is not loaded');
+					throw new ReferenceError("kv-storage module isn't loaded");
 				}
 
 				storage

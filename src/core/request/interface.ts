@@ -128,7 +128,7 @@ export type RequestAPIValue<T = string> = Nullable<T> | (() => Nullable<T>);
  *
  * You can provide a direct URL for the API, such as `'https://google.com'`.
  * Or you can provide a bunch of parameters to map on .api parameter from the application config.
- * For example, if the config.api is equal to `'https://google.com'` and you provide parameters like
+ * For example, if the config.api is equal to `'https://google.com'`, and you provide parameters, like,
  *
  * ```
  *   {
@@ -137,7 +137,7 @@ export type RequestAPIValue<T = string> = Nullable<T> | (() => Nullable<T>);
  *   }
  * ```
  *
- * than it builds a string is equal to `'https://foo.google.com/bar'.`
+ * then it builds a string is equal to `'https://foo.google.com/bar'.`
  */
 export interface RequestAPI {
 	/**
@@ -334,26 +334,26 @@ export interface CreateRequestOptions<D = unknown> {
 
 	/**
 	 * Function (or a sequence of functions) that takes response data of the current request
-	 * and returns a new data to respond. If you provides a sequence of functions, then the first function
+	 * and returns a new data to respond. If you provide a sequence of functions, then the first function
 	 * will provide a result to the next function from te sequence, etc.
 	 */
 	encoder?: Encoder | Encoders;
 
 	/**
 	 * Function (or a sequence of functions) that takes response data of the current request
-	 * and returns a new data to respond. If you provides a sequence of functions, then the first function
+	 * and returns a new data to respond. If you provide a sequence of functions, then the first function
 	 * will provide a result to the next function from te sequence, etc.
 	 */
 	decoder?: Decoder | Decoders;
 
 	/**
-	 * Special flag that indicates that request will be invoked not directly by a browser,
+	 * The special flag that indicates that request will be invoked not directly by a browser,
 	 * but some "external" application, such as a native application in a mobile (it's important for offline requests
 	 */
 	externalRequest?: boolean;
 
 	/**
-	 * Meta flag that indicates that the request is important: usually it used with middlewares
+	 * The meta flag that indicates that the request is important: usually it used with middlewares
 	 * to indicate that the request need execute as soon as possible
 	 */
 	important?: boolean;

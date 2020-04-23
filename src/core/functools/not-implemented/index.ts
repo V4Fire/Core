@@ -29,7 +29,7 @@ export function notImplement<T extends Function>(
 ): T;
 
 /**
- * Emits an "not implemented" warning with the specified parameters
+ * Emits a "not implemented" warning with the specified parameters
  * @param opts - additional options
  */
 export function notImplement(opts: InlineNotImplementedOptions): void;
@@ -122,7 +122,7 @@ export function notImplemented(target: object, key: string | symbol, descriptor:
 
 /**
  * Decorator for the "notImplement" function.
- * This overload add a feature to provide additional options.
+ * This overload adds a feature to provide additional options.
  *
  * @see [[notImplement]]
  * @param [opts] - additional options

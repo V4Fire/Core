@@ -39,7 +39,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 *
 	 * This method doesn't attach any hook or listeners to the object,
 	 * but every time the same object is registered, Async will increment the number of links that relates to this object.
-	 * And when we try to destroy the worker by using one of Async methods, like "terminateWorker",
+	 * After, when we try to destroy the worker by using one of Async methods, like "terminateWorker",
 	 * it will de-increment values of links. When the number of links is equal to zero,
 	 * Async will try to call a "real" object destructor by using one of the possible destructor methods from a whitelist
 	 * or by the specified destructor name, also if the worker is a function, it is interpreted as the destructor.

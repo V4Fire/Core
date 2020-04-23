@@ -38,7 +38,7 @@ if (typeof globalThis === 'undefined') {
 export const HAS_WINDOW: boolean = typeof window === 'object';
 
 /**
- * True if the current runtime is looks like node.js
+ * True if the current runtime is looks like Node.js
  */
 export const IS_NODE: boolean = (() => {
 	try {

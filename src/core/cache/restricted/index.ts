@@ -15,7 +15,7 @@ import SimpleCache, { ClearFilter } from 'core/cache/simple';
 export * from 'core/cache/simple';
 
 /**
- * Implementation for a in-memory data structure with support for limiting of values in the cache
+ * Implementation for an in-memory data structure with support for limiting of values in the cache
  *
  * @typeparam V - value type
  * @typeparam K - key type (`string` by default)

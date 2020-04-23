@@ -32,7 +32,7 @@ export interface NotImplementedOptions {
 	name?: string;
 
 	/**
-	 * Type of an expression to wrap
+	 * Type of expression to wrap
 	 */
 	type?: NotImplementedExprType;
 

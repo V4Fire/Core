@@ -20,7 +20,7 @@ export interface Logger {
 
 export interface ExtendedLogger extends Logger {
 	/**
-	 * Logs a message with the info level and the specified context
+	 * Logs a message with the info level and specified context
 	 *
 	 * @param context - log record context
 	 * @param [details] - additional details
@@ -28,7 +28,7 @@ export interface ExtendedLogger extends Logger {
 	info(context: string, ...details: unknown[]): void;
 
 	/**
-	 * Logs a message with the warn level and the specified context
+	 * Logs a message with the warning level and specified context
 	 *
 	 * @param context - log record context
 	 * @param [details] - additional details
@@ -36,7 +36,7 @@ export interface ExtendedLogger extends Logger {
 	warn(context: string, ...details: unknown[]): void;
 
 	/**
-	 * Logs a message with the warn level and the specified context
+	 * Logs a message with the warning level and specified context
 	 *
 	 * @param context - log record context
 	 * @param error - thrown error
@@ -45,7 +45,7 @@ export interface ExtendedLogger extends Logger {
 	warn(context: string, error: Error, ...details: unknown[]): void;
 
 	/**
-	 * Logs a message with the error level and the specified context
+	 * Logs a message with the error level and specified context
 	 *
 	 * @param context - log record context
 	 * @param [details] - additional details
@@ -53,7 +53,7 @@ export interface ExtendedLogger extends Logger {
 	error(context: string, ...details: unknown[]): void;
 
 	/**
-	 * Logs a message with the error level and the specified context
+	 * Logs a message with the error level and specified context
 	 *
 	 * @param context - log record context
 	 * @param error - thrown error

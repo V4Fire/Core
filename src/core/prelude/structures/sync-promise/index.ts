@@ -24,7 +24,7 @@ import {
 export * from 'core/prelude/structures/sync-promise/interface';
 
 /**
- * Class that is similar to the native promise class but works synchronously
+ * Class is similar to the native promise class but works synchronously
  */
 export default class SyncPromise<T = unknown> implements Promise<T> {
 	/**
@@ -61,7 +61,7 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 	}
 
 	/**
-	 * Creates a promise that is resolved with an array of results when all of the provided promises
+	 * Creates a promise that is resolved with an array of results when all the provided promises
 	 * are resolved, or rejected when any promise is rejected
 	 *
 	 * @param values

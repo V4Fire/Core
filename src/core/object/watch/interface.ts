@@ -15,7 +15,7 @@ export type WatchDependencies =
 
 export interface Watcher<T extends object = object> {
 	/**
-	 * Proxy object to watch
+	 * A proxy object to watch
 	 */
 	proxy: T;
 
@@ -221,7 +221,7 @@ export interface WatchHandlerParams extends RawWatchHandlerParams {
 	parent?: WatchHandlerParentParams;
 
 	/**
-	 * Original path to a property that was changed
+	 * An original path to a property that was changed
 	 */
 	originalPath: unknown[];
 }

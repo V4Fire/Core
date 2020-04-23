@@ -60,7 +60,7 @@ export function isOnline(): Promise<NetStatus> {
 
 		if (online.persistence && lastOnline == null) {
 			if (!storage) {
-				throw new ReferenceError('kv-storage module is not loaded');
+				throw new ReferenceError("kv-storage module isn't loaded");
 			}
 
 			try {
@@ -131,7 +131,7 @@ export async function syncStatusWithStorage(): Promise<void> {
 
 	if (online.persistence) {
 		if (!storage) {
-			throw new ReferenceError('kv-storage module is not loaded');
+			throw new ReferenceError("kv-storage module isn't loaded");
 		}
 
 		try {

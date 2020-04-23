@@ -40,7 +40,7 @@ export interface OnlineCheckConfig {
 	lastDateSyncInterval?: number;
 
 	/**
-	 * Number of acceptable retries (if the check was canceled by timeout)
+	 * Number of acceptable retries (if the check was canceled by a timeout)
 	 */
 	retryCount?: number;
 
