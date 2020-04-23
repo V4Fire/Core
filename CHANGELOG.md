@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.11.3 (2020-04-23)
+
+#### :bug: Bug Fix
+
+* Fixed `Object.set` invalid overload
+
 ## v3.11.2 (2020-04-23)
 
 #### :bug: Bug Fix
