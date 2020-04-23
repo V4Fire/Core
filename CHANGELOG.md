@@ -13,6 +13,10 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 ## v3.11.2 (2020-04-23)
 
+#### :bug: Bug Fix
+
+* Fixed request caching `core/data`
+
 #### :house: Internal
 
 * Improved TS types
