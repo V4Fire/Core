@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.13.0 (2020-04-27)
+
+#### :rocket: New Feature
+
+* [Added `core/data/middlewares/wait`](https://github.com/V4Fire/Core/pull/87)
+
 ## v3.12.0 (2020-04-27)
 
 #### :boom: Breaking Change
