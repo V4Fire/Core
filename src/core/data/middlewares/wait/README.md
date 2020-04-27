@@ -27,7 +27,7 @@ export default class bExample extends iData {
   dataProvider: string = 'MyProvider';
 
   /** @override */
-  @system((o) => o.sync.object('get', ['canLoadData']))
+  @system((o) => o.sync.object('get', ['wait', 'canLoadData']))
   requestParams!: RequestParams;
 
   async canLoadData(): Promise<boolean> {
