@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>&quot;src/core/cache/index&quot; | V4Fire</title>
+	<title>&quot;src/core/data/middlewares/wait/index&quot; | V4Fire</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -129,10 +129,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="src_core_cache_index.html">&quot;src/core/cache/index&quot;</a>
+					<a href="src_core_data_middlewares_wait_index.html">&quot;src/core/data/middlewares/wait/index&quot;</a>
 				</li>
 			</ul>
-			<h1>External module &quot;src/core/cache/index&quot;</h1>
+			<h1>External module &quot;src/core/data/middlewares/wait/index&quot;</h1>
 		</div>
 	</div>
 </header>
@@ -142,33 +142,86 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<a href="#corecache" id="corecache" style="color: inherit; text-decoration: none;">
-							<h1>core/cache</h1>
+						<a href="#coredatamiddlewareswait" id="coredatamiddlewareswait" style="color: inherit; text-decoration: none;">
+							<h1>core/data/middlewares/wait</h1>
 						</a>
-						<p>This module provides a base interface for a <a href="../interfaces/src_core_cache_interface.cache.html">Cache</a> data structure: a simple in-memory key-value storage, which can be useful to organize cache data structures.
-						The submodules contain different implementations for that interface. The main module re-exports these implementations:</p>
-						<ul>
-							<li><code>AbstractCache</code> — an alias for <a href="src_core_cache_interface.html"><code>core/cache/interface/Cache</code></a>;</li>
-							<li><code>Cache</code> — an alias for <a href="src_core_cache_simple_index.html"><code>core/cache/simple</code></a>;</li>
-							<li><code>RestrictedCache</code> — an alias for <a href="src_core_cache_restricted_index.html"><code>core/cache/restricted</code></a>;</li>
-							<li><code>NeverCache</code> — an alias for <a href="src_core_cache_never_index.html"><code>core/cache/never</code></a>.</li>
-						</ul>
-						<pre><code class="language-js"><span class="hljs-keyword">import</span> SimpleCache <span class="hljs-keyword">from</span> <span class="hljs-string">'core/cache/simple'</span>;
+						<p>This module provides a middleware to freeze a request until will be resolved the specified value to wait.
+							The middleware can be used as encoder: the value to wait will be taken from input data (<code>.wait</code>),
+						otherwise, it will be taken from <code>.meta.wait</code>.</p>
+						<p><em>models/my-provider</em></p>
+						<pre><code class="language-typescript"><span class="hljs-keyword">import</span> Provider, { provider, EncodersMap } <span class="hljs-keyword">from</span> <span class="hljs-string">'core/data'</span>;
+<span class="hljs-keyword">import</span> { wait } <span class="hljs-keyword">from</span> <span class="hljs-string">'core/data/middlewares'</span>;
 
-<span class="hljs-keyword">const</span>
-  cache = <span class="hljs-keyword">new</span> SimpleCache();
+<span class="hljs-meta">@provider</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-keyword">class</span> MyProvider <span class="hljs-keyword">extends</span> Provider {
+  encoders: EncodersMap = [wait];
+}</code></pre>
+						<p><em>base/b-example</em></p>
+						<pre><code class="language-typescript"><span class="hljs-keyword">import</span> <span class="hljs-string">'models/my-provider'</span>;
+<span class="hljs-keyword">import</span> iData, { system, RequestParams } <span class="hljs-keyword">from</span> <span class="hljs-string">'super/i-data/i-data'</span>;
 
-cache.add(<span class="hljs-string">'foo'</span>, <span class="hljs-string">'bar1'</span>);
-cache.add(<span class="hljs-string">'foo2'</span>, <span class="hljs-string">'bar2'</span>);
-cache.add(<span class="hljs-string">'baz'</span>, <span class="hljs-string">'bar3'</span>);
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-keyword">class</span> bExample <span class="hljs-keyword">extends</span> iData {
+  <span class="hljs-comment">/** @override */</span>
+  dataProvider: <span class="hljs-built_in">string</span> = <span class="hljs-string">'MyProvider'</span>;
 
-<span class="hljs-built_in">console</span>.log(cache.keys().length); <span class="hljs-comment">// 3</span>
+  <span class="hljs-comment">/** @override */</span>
+  <span class="hljs-meta">@system</span>(<span class="hljs-function">(<span class="hljs-params">o</span>) =&gt;</span> o.sync.object(<span class="hljs-string">'get'</span>, [<span class="hljs-string">'wait'</span>, <span class="hljs-string">'canLoadData'</span>]))
+  requestParams!: RequestParams;
 
-cache.clear(<span class="hljs-function">(<span class="hljs-params">val, key</span>) =&gt;</span> <span class="hljs-regexp">/foo/</span>.test(key));
-
-<span class="hljs-built_in">console</span>.log(cache.keys().length); <span class="hljs-comment">// 1</span></code></pre>
+  <span class="hljs-keyword">async</span> canLoadData(): <span class="hljs-built_in">Promise</span>&lt;<span class="hljs-built_in">boolean</span>&gt; {
+    <span class="hljs-keyword">await</span> <span class="hljs-keyword">this</span>.async.sleep((<span class="hljs-number">3</span>).seconds());
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+  }
+}</code></pre>
 					</div>
 				</div>
+			</section>
+			<section class="tsd-panel-group tsd-index-group">
+				<h2>Index</h2>
+				<section class="tsd-panel tsd-index-panel">
+					<div class="tsd-index-content">
+						<section class="tsd-index-section ">
+							<h3>Functions</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="src_core_data_middlewares_wait_index.html#wait" class="tsd-kind-icon">wait</a></li>
+							</ul>
+						</section>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Functions</h2>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module">
+					<a name="wait" class="tsd-anchor"></a>
+					<h3>wait</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
+						<li class="tsd-signature tsd-kind-icon">wait<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/middlewares/wait/index.ts#L24">src/core/data/middlewares/wait/index.ts:24</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Middleware: if the request has some parameter to wait,
+									then the middleware won&#39;t be resolved until this parameter isn&#39;t resolved.</p>
+								</div>
+								<p>This middleware can be used as encoder: the value to wait will be taken from input data (<code>.wait</code>),
+								otherwise, it will be taken from <code>.meta.wait</code>.</p>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>args: <span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
 			</section>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
@@ -178,12 +231,15 @@ cache.clear(<span class="hljs-function">(<span class="hljs-params">val, key</spa
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class="current tsd-kind-external-module">
-						<a href="src_core_cache_index.html">&quot;src/core/cache/index&quot;</a>
+						<a href="src_core_data_middlewares_wait_index.html">&quot;src/core/data/middlewares/wait/index&quot;</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-function tsd-parent-kind-external-module">
+						<a href="src_core_data_middlewares_wait_index.html#wait" class="tsd-kind-icon">wait</a>
+					</li>
 				</ul>
 			</nav>
 		</div>
