@@ -13,3 +13,4 @@
 
 export * from 'core/data/middlewares/attach-mock';
 export * from 'core/data/middlewares/attach-status';
+export * from 'core/data/middlewares/wait';
