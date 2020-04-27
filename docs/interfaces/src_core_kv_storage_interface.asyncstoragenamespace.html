@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>AsyncFactoryResult | V4Fire</title>
+	<title>AsyncStorageNamespace | V4Fire</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -132,10 +132,10 @@
 					<a href="../modules/src_core_kv_storage_interface.html">&quot;src/core/kv-storage/interface&quot;</a>
 				</li>
 				<li>
-					<a href="src_core_kv_storage_interface.asyncfactoryresult.html">AsyncFactoryResult</a>
+					<a href="src_core_kv_storage_interface.asyncstoragenamespace.html">AsyncStorageNamespace</a>
 				</li>
 			</ul>
-			<h1>Interface AsyncFactoryResult</h1>
+			<h1>Interface AsyncStorageNamespace</h1>
 		</div>
 	</div>
 </header>
@@ -146,10 +146,10 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<a href="src_core_kv_storage_interface.asyncnamespace.html" class="tsd-signature-type">AsyncNamespace</a>
+						<span class="target">AsyncStorageNamespace</span>
 						<ul class="tsd-hierarchy">
 							<li>
-								<span class="target">AsyncFactoryResult</span>
+								<a href="src_core_kv_storage_interface.asyncstorage.html" class="tsd-signature-type">AsyncStorage</a>
 							</li>
 						</ul>
 					</li>
@@ -162,12 +162,11 @@
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-inherited"><a href="src_core_kv_storage_interface.asyncfactoryresult.html#clear" class="tsd-kind-icon">clear</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-inherited"><a href="src_core_kv_storage_interface.asyncfactoryresult.html#get" class="tsd-kind-icon">get</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-inherited"><a href="src_core_kv_storage_interface.asyncfactoryresult.html#has" class="tsd-kind-icon">has</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="src_core_kv_storage_interface.asyncfactoryresult.html#namespace" class="tsd-kind-icon">namespace</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-inherited"><a href="src_core_kv_storage_interface.asyncfactoryresult.html#remove" class="tsd-kind-icon">remove</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-inherited"><a href="src_core_kv_storage_interface.asyncfactoryresult.html#set" class="tsd-kind-icon">set</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter"><a href="src_core_kv_storage_interface.asyncstoragenamespace.html#clear" class="tsd-kind-icon">clear</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter"><a href="src_core_kv_storage_interface.asyncstoragenamespace.html#get" class="tsd-kind-icon">get</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="src_core_kv_storage_interface.asyncstoragenamespace.html#has" class="tsd-kind-icon">has</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="src_core_kv_storage_interface.asyncstoragenamespace.html#remove" class="tsd-kind-icon">remove</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="src_core_kv_storage_interface.asyncstoragenamespace.html#set" class="tsd-kind-icon">set</a></li>
 							</ul>
 						</section>
 					</div>
@@ -175,18 +174,17 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-inherited">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter">
 					<a name="clear" class="tsd-anchor"></a>
 					<h3>clear</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-inherited">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter">
 						<li class="tsd-signature tsd-kind-icon">clear&lt;T&gt;<span class="tsd-signature-symbol">(</span>filter<span class="tsd-signature-symbol">?: </span><a href="src_core_kv_storage_interface.clearfilter.html" class="tsd-signature-type">ClearFilter</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>, <span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from <a href="src_core_kv_storage_interface.asyncnamespace.html">AsyncNamespace</a>.<a href="src_core_kv_storage_interface.asyncnamespace.html#clear">clear</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/kv-storage/interface.ts#L104">src/core/kv-storage/interface.ts:104</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/kv-storage/interface.ts#L107">src/core/kv-storage/interface.ts:107</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -213,18 +211,17 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-inherited">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter">
 					<a name="get" class="tsd-anchor"></a>
 					<h3>get</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-inherited">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter">
 						<li class="tsd-signature tsd-kind-icon">get&lt;T&gt;<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, <span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../modules/index_d.html#canundef" class="tsd-signature-type">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from <a href="src_core_kv_storage_interface.asyncnamespace.html">AsyncNamespace</a>.<a href="src_core_kv_storage_interface.asyncnamespace.html#get">get</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/kv-storage/interface.ts#L79">src/core/kv-storage/interface.ts:79</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/kv-storage/interface.ts#L82">src/core/kv-storage/interface.ts:82</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -251,18 +248,17 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="has" class="tsd-anchor"></a>
 					<h3>has</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
 						<li class="tsd-signature tsd-kind-icon">has<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, <span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from <a href="src_core_kv_storage_interface.asyncnamespace.html">AsyncNamespace</a>.<a href="src_core_kv_storage_interface.asyncnamespace.html#has">has</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/kv-storage/interface.ts#L71">src/core/kv-storage/interface.ts:71</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/kv-storage/interface.ts#L74">src/core/kv-storage/interface.ts:74</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -284,40 +280,16 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
-					<a name="namespace" class="tsd-anchor"></a>
-					<h3>namespace</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
-						<li class="tsd-signature tsd-kind-icon">namespace<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_kv_storage_interface.asyncnamespace.html" class="tsd-signature-type">AsyncNamespace</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/kv-storage/interface.ts#L108">src/core/kv-storage/interface.ts:108</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>name: <span class="tsd-signature-type">string</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="src_core_kv_storage_interface.asyncnamespace.html" class="tsd-signature-type">AsyncNamespace</a></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
 					<a name="remove" class="tsd-anchor"></a>
 					<h3>remove</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
 						<li class="tsd-signature tsd-kind-icon">remove<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, <span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from <a href="src_core_kv_storage_interface.asyncnamespace.html">AsyncNamespace</a>.<a href="src_core_kv_storage_interface.asyncnamespace.html#remove">remove</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/kv-storage/interface.ts#L96">src/core/kv-storage/interface.ts:96</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/kv-storage/interface.ts#L99">src/core/kv-storage/interface.ts:99</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -338,18 +310,17 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="set" class="tsd-anchor"></a>
 					<h3>set</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
 						<li class="tsd-signature tsd-kind-icon">set<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span>, <span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from <a href="src_core_kv_storage_interface.asyncnamespace.html">AsyncNamespace</a>.<a href="src_core_kv_storage_interface.asyncnamespace.html#set">set</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/kv-storage/interface.ts#L88">src/core/kv-storage/interface.ts:88</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/kv-storage/interface.ts#L91">src/core/kv-storage/interface.ts:91</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -388,47 +359,44 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="src_core_kv_storage_interface.asyncstorage.html" class="tsd-kind-icon">Async<wbr>Storage</a>
+					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-external-module">
-						<a href="src_core_kv_storage_interface.asyncfactoryresult.html" class="tsd-kind-icon">Async<wbr>Factory<wbr>Result</a>
+						<a href="src_core_kv_storage_interface.asyncstoragenamespace.html" class="tsd-kind-icon">Async<wbr>Storage<wbr>Namespace</a>
 						<ul>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-inherited">
-								<a href="src_core_kv_storage_interface.asyncfactoryresult.html#clear" class="tsd-kind-icon">clear</a>
+							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter">
+								<a href="src_core_kv_storage_interface.asyncstoragenamespace.html#clear" class="tsd-kind-icon">clear</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-inherited">
-								<a href="src_core_kv_storage_interface.asyncfactoryresult.html#get" class="tsd-kind-icon">get</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
-								<a href="src_core_kv_storage_interface.asyncfactoryresult.html#has" class="tsd-kind-icon">has</a>
+							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter">
+								<a href="src_core_kv_storage_interface.asyncstoragenamespace.html#get" class="tsd-kind-icon">get</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-interface">
-								<a href="src_core_kv_storage_interface.asyncfactoryresult.html#namespace" class="tsd-kind-icon">namespace</a>
+								<a href="src_core_kv_storage_interface.asyncstoragenamespace.html#has" class="tsd-kind-icon">has</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
-								<a href="src_core_kv_storage_interface.asyncfactoryresult.html#remove" class="tsd-kind-icon">remove</a>
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
+								<a href="src_core_kv_storage_interface.asyncstoragenamespace.html#remove" class="tsd-kind-icon">remove</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
-								<a href="src_core_kv_storage_interface.asyncfactoryresult.html#set" class="tsd-kind-icon">set</a>
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
+								<a href="src_core_kv_storage_interface.asyncstoragenamespace.html#set" class="tsd-kind-icon">set</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
-						<a href="src_core_kv_storage_interface.asyncnamespace.html" class="tsd-kind-icon">Async<wbr>Namespace</a>
-					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter">
 						<a href="src_core_kv_storage_interface.clearfilter.html" class="tsd-kind-icon">Clear<wbr>Filter</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
-						<a href="src_core_kv_storage_interface.factoryresult.html" class="tsd-kind-icon">Factory<wbr>Result</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
-						<a href="src_core_kv_storage_interface.namespace.html" class="tsd-kind-icon">Namespace</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
 						<a href="src_core_kv_storage_interface.storageengine.html" class="tsd-kind-icon">Storage<wbr>Engine</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="src_core_kv_storage_interface.syncstorage.html" class="tsd-kind-icon">Sync<wbr>Storage</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="src_core_kv_storage_interface.syncstoragenamespace.html" class="tsd-kind-icon">Sync<wbr>Storage<wbr>Namespace</a>
 					</li>
 				</ul>
 			</nav>

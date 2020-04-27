@@ -146,6 +146,28 @@
 							<h1>core/queue/simple</h1>
 						</a>
 						<p>This module provides a class to organize a simple queue data structure.</p>
+						<pre><code class="language-js"><span class="hljs-keyword">import</span> Queue <span class="hljs-keyword">from</span> <span class="hljs-string">'core/queue/simple'</span>;
+
+<span class="hljs-keyword">const</span>
+  queue = <span class="hljs-keyword">new</span> Queue&lt;number&gt;();
+
+queue.push(<span class="hljs-number">1</span>);
+queue.push(<span class="hljs-number">5</span>);
+queue.push(<span class="hljs-number">2</span>);
+queue.push(<span class="hljs-number">-1</span>);
+queue.push(<span class="hljs-number">5</span>);
+queue.push(<span class="hljs-number">2</span>);
+queue.push(<span class="hljs-number">-1</span>);
+queue.push(<span class="hljs-number">5</span>);
+
+<span class="hljs-built_in">console</span>.log(a.pop()); <span class="hljs-comment">// 1</span>
+<span class="hljs-built_in">console</span>.log(a.pop()); <span class="hljs-comment">// 5</span>
+<span class="hljs-built_in">console</span>.log(a.pop()); <span class="hljs-comment">// 2</span>
+<span class="hljs-built_in">console</span>.log(a.pop()); <span class="hljs-comment">// -1</span>
+<span class="hljs-built_in">console</span>.log(a.pop()); <span class="hljs-comment">// 5</span>
+<span class="hljs-built_in">console</span>.log(a.pop()); <span class="hljs-comment">// 2</span>
+<span class="hljs-built_in">console</span>.log(a.pop()); <span class="hljs-comment">// -1</span>
+<span class="hljs-built_in">console</span>.log(a.pop()); <span class="hljs-comment">// 5</span></code></pre>
 					</div>
 				</div>
 			</section>

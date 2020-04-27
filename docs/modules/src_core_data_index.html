@@ -235,7 +235,7 @@ request(<span class="hljs-string">'user'</span>, {<span class="hljs-attr">method
     <span class="hljs-keyword">return</span> data;
   }
 }</code></pre>
-						<p>Still looks fine and useful, but if we want to create more classes for other data instances we need to create some kind of a superclass to avoid &quot;copy-pasting&quot; code lines. Also, the superclass may improve our API with added extra functionality, such as support for socket events, middlewares, etc. And this is exactly what &quot;core/data&quot; module does.</p>
+						<p>Still looks fine and useful, but if we want to create more classes for other data instances we need to create some kind of superclass to avoid &quot;copy-pasting&quot; code lines. Also, the superclass may improve our API with added extra functionality, such as support for socket events, middlewares, etc. And this is exactly what &quot;core/data&quot; module does.</p>
 						<a href="#default-interface" id="default-interface" style="color: inherit; text-decoration: none;">
 							<h2>Default interface</h2>
 						</a>
@@ -296,7 +296,7 @@ myProvider.name(<span class="hljs-string">'init'</span>).get(<span class="hljs-s
 						<p>Mind that the default V4Fire implementation of a data provider by default sends events for &quot;upd&quot;, &quot;add&quot;, &quot;del&quot; requests.
 						These events have the same name with methods that produce them.</p>
 						<ol start="3">
-							<li><code>method</code> — a pair of get/set methods to provide a type of an HTTP request:</li>
+							<li><code>method</code> — a pair of get/set methods to provide a type of HTTP request:</li>
 						</ol>
 						<pre><code class="language-js"><span class="hljs-comment">// The request uses POST method to get data</span>
 myProvider.method(<span class="hljs-string">'POST'</span>).get(<span class="hljs-string">'foo'</span>);</code></pre>
@@ -439,7 +439,7 @@ user.get({<span class="hljs-attr">id</span>: <span class="hljs-number">1</span>}
    */</span>
   delMethod: RequestMethod = <span class="hljs-string">'DELETE'</span>;
 }</code></pre>
-						<p>But you allow to rewrite it in your subclass.</p>
+						<p>You allow to rewrite it in your subclass.</p>
 						<pre><code class="language-js"><span class="hljs-keyword">import</span> Provider, { provider } <span class="hljs-keyword">from</span> <span class="hljs-string">'core/provider'</span>;
 
 @provider
@@ -464,7 +464,7 @@ user.get({<span class="hljs-attr">id</span>: <span class="hljs-number">1</span>}
 							<h5>URL interpolation</h5>
 						</a>
 						<p>You can specify dynamically values within a URL string. For this case just add a variable with <code>:</code> character before the name.
-							The values for interpolations are taken from a query object or a request body (if it&#39;s represented as a simple JS object).
+							The values for interpolations are taken from a query object or request body (if it&#39;s represented as a simple JS object).
 						After interpolation, all values that were used will be dropped from a source object.</p>
 						<a href="#middlewares" id="middlewares" style="color: inherit; text-decoration: none;">
 							<h4>Middlewares</h4>
@@ -492,7 +492,7 @@ user.get({<span class="hljs-attr">id</span>: <span class="hljs-number">1</span>}
 }</code></pre>
 						<p>Basically, the result of a middleware function is ignoring, with the exceptions of promises and functions.
 							If some middleware returns a promise, it will be awaited.
-							And if at least one of the middlewares returns a function, then the result of invoking this function will be returned as the request result.
+							If at least one of the middlewares returns a function, then the result of invoking this function will be returned as the request result.
 						It can be helpful to organize mocks of data and other similar cases when you don&#39;t want to execute a real request.</p>
 						<pre><code class="language-js"><span class="hljs-keyword">import</span> Provider, { provider, Response } <span class="hljs-keyword">from</span> <span class="hljs-string">'core/provider'</span>;
 
@@ -562,7 +562,7 @@ user.get({<span class="hljs-attr">id</span>: <span class="hljs-number">1</span>}
 						<a href="#custom-request-function" id="custom-request-function" style="color: inherit; text-decoration: none;">
 							<h4>Custom request function</h4>
 						</a>
-						<p>To create a request all providers use the <code>core/request</code> module. And if you need to provide some extra parameters of the request, such as &quot;contentType&quot;, you can specify a factory to make these requests using the special overload of the request function.</p>
+						<p>To create a request all providers use the <code>core/request</code> module. If you need to provide some extra parameters of the request, such as &quot;contentType&quot;, you can specify a factory to make these requests using the special overload of the request function.</p>
 						<pre><code class="language-js"><span class="hljs-keyword">import</span> request <span class="hljs-keyword">from</span> <span class="hljs-string">'core/request'</span>;
 <span class="hljs-keyword">import</span> Provider, { provider } <span class="hljs-keyword">from</span> <span class="hljs-string">'core/provider'</span>;
 
@@ -619,7 +619,7 @@ user.get({<span class="hljs-attr">id</span>: <span class="hljs-number">1</span>}
 
   baseURL = <span class="hljs-string">'user/:id'</span>;
 }</code></pre>
-						<p>And finally, if you specify the default API URL within <code>core/config/api</code>, you can provide some chunks of an API URL that are applied to the base.</p>
+						<p>Finally, if you specify the default API URL within <code>core/config/api</code>, you can provide some chunks of an API URL that are applied to the base.</p>
 						<pre><code class="language-js"><span class="hljs-keyword">import</span> Provider, { provider } <span class="hljs-keyword">from</span> <span class="hljs-string">'core/provider'</span>;
 
 @provider
@@ -702,7 +702,7 @@ user.get({<span class="hljs-attr">id</span>: <span class="hljs-number">1</span>}
 						<a href="#extending-one-data-provider-from-another-provider" id="extending-one-data-provider-from-another-provider" style="color: inherit; text-decoration: none;">
 							<h3>Extending one data provider from another provider</h3>
 						</a>
-						<p>The data provider is a simple class that implements a special interface. That&#39;s why to create a new provider that is extended parameters from another provider you should create a simple subclass.</p>
+						<p>The data provider is a simple class implements a special interface. That&#39;s why to create a new provider that is extended parameters from another provider you should create a simple subclass.</p>
 						<pre><code class="language-js"><span class="hljs-keyword">import</span> Provider, { provider } <span class="hljs-keyword">from</span> <span class="hljs-string">'core/provider'</span>;
 
 @provider
@@ -792,7 +792,7 @@ user.get({<span class="hljs-attr">id</span>: <span class="hljs-number">1</span>}
 
   baseURL = <span class="hljs-string">'user/:id'</span>;
 }</code></pre>
-						<p>And finally, you can use dynamic importing with mocks:</p>
+						<p>Finally, you can use dynamic importing with mocks:</p>
 						<pre><code class="language-js"><span class="hljs-keyword">import</span> Provider, { provider } <span class="hljs-keyword">from</span> <span class="hljs-string">'core/provider'</span>;
 
 @provider
@@ -803,7 +803,7 @@ user.get({<span class="hljs-attr">id</span>: <span class="hljs-number">1</span>}
 						<a href="#enabling-data-mocks-for-a-provider" id="enabling-data-mocks-for-a-provider" style="color: inherit; text-decoration: none;">
 							<h4>Enabling data mocks for a provider</h4>
 						</a>
-						<p>By default all data mocks is disabled, but you can enable it just type to a console of a browser:</p>
+						<p>By default, all data mocks is disabled, but you can enable it just type to a console of a browser:</p>
 						<pre><code class="language-js"><span class="hljs-comment">// Enables mocks for the User provider</span>
 setEnv(<span class="hljs-string">'mock'</span>, {<span class="hljs-attr">patterns</span>: [<span class="hljs-string">'User'</span>]});
 

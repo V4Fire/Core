@@ -11,6 +11,28 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.12.0 (2020-04-27)
+
+#### :boom: Breaking Change
+
+* Renamed interfaces from `core/kv-storage`:
+  * `Namespace` -> `SyncStorageNamespace`
+  * `AsyncNamespace` -> `AsyncStorageNamespace`
+  * `FactoryResult` -> `SyncStorage`
+  * `AsyncFactoryResult` -> `AsyncStorage`
+
+#### :rocket: New Feature
+
+* Added `has`, `clear` methods `core/kv-storage`
+
+#### :bug: Bug Fix
+
+* Fixed clearing within a namespace `core/kv-storage`
+
+#### :house: Internal
+
+* Improved documentation `core/kv-storage`
+
 ## v3.11.3 (2020-04-23)
 
 #### :bug: Bug Fix
