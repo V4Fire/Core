@@ -24,10 +24,10 @@ import {
 
 import {
 
-	FactoryResult,
-	Namespace,
-	AsyncFactoryResult,
-	AsyncNamespace,
+	SyncStorage,
+	SyncStorageNamespace,
+	AsyncStorage,
+	AsyncStorageNamespace,
 	ClearFilter,
 	StorageEngine
 
@@ -37,6 +37,7 @@ export * from 'core/kv-storage/interface';
 
 /**
  * API for synchronous local storage
+ *
  * @example
  * ```js
  * local.set('foo', 'bar');
@@ -47,6 +48,7 @@ export const local = factory(syncLocalStorage);
 
 /**
  * API for asynchronous local storage
+ *
  * @example
  * ```js
  * asyncLocal.set('foo', 'bar').then(async () => {
@@ -58,6 +60,7 @@ export const asyncLocal = factory(asyncLocalStorage, true);
 
 /**
  * API for synchronous session storage
+ *
  * @example
  * ```js
  * session.set('foo', 'bar');
@@ -68,6 +71,7 @@ export const session = factory(syncSessionStorage);
 
 /**
  * API for asynchronous session storage
+ *
  * @example
  * ```js
  * asyncSession.set('foo', 'bar').then(async () => {
@@ -76,6 +80,14 @@ export const session = factory(syncSessionStorage);
  * ```
  */
 export const asyncSession = factory(asyncSessionStorage, true);
+
+/**
+ * Alias for a has method of the synchronous local storage API
+ *
+ * @alias
+ * @see [[local]]
+ */
+export const has = local.has;
 
 /**
  * Alias for a get method of the synchronous local storage API
@@ -100,6 +112,14 @@ export const set = local.set;
  * @see [[local]]
  */
 export const remove = local.remove;
+
+/**
+ * Alias for a clear method of the synchronous local storage API
+ *
+ * @alias
+ * @see [[local]]
+ */
+export const clear = local.clear;
 
 /**
  * Alias for a namespace method of the synchronous local storage API
@@ -130,9 +150,9 @@ export const namespace = local.namespace;
  * storage.get('foo'); // 'foo'
  * ```
  */
-export function factory(engine: StorageEngine, async: true): AsyncFactoryResult;
-export function factory(engine: StorageEngine, async?: false): FactoryResult;
-export function factory(engine: StorageEngine, async?: boolean): AsyncFactoryResult | FactoryResult {
+export function factory(engine: StorageEngine, async: true): AsyncStorage;
+export function factory(engine: StorageEngine, async?: false): SyncStorage;
+export function factory(engine: StorageEngine, async?: boolean): AsyncStorage | SyncStorage {
 	let
 		has,
 		get,
@@ -271,7 +291,7 @@ export function factory(engine: StorageEngine, async?: boolean): AsyncFactoryRes
 			return wrap(clear(...args), () => undefined);
 		},
 
-		namespace(name: string): AsyncNamespace | Namespace {
+		namespace(name: string): AsyncStorageNamespace | SyncStorageNamespace {
 			const
 				k = (key) => `${name}.${key}`;
 
@@ -296,7 +316,7 @@ export function factory(engine: StorageEngine, async?: boolean): AsyncFactoryRes
 					return wrap(keys(), async (keys) => {
 						for (const key of keys) {
 							if (key.split('.')[0] !== name) {
-								return;
+								continue;
 							}
 
 							const
@@ -312,5 +332,5 @@ export function factory(engine: StorageEngine, async?: boolean): AsyncFactoryRes
 		}
 	};
 
-	return <AsyncFactoryResult | FactoryResult>obj;
+	return <AsyncStorage | SyncStorage>obj;
 }

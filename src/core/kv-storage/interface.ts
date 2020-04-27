@@ -10,7 +10,7 @@ export interface ClearFilter<T = unknown> {
 	(el: T, key: string): unknown;
 }
 
-export interface Namespace {
+export interface SyncStorageNamespace {
 	/**
 	 * Returns true if a value by the specified key exists in the storage
 	 *
@@ -53,15 +53,18 @@ export interface Namespace {
 	clear<T = unknown>(filter?: ClearFilter<T>, ...args: unknown[]): void;
 }
 
-export interface FactoryResult extends Namespace {
+/**
+ * API for a synchronous storage
+ */
+export interface SyncStorage extends SyncStorageNamespace {
 	/**
 	 * Returns a storage object by the specified namespace
 	 * @param name
 	 */
-	namespace(name: string): Namespace;
+	namespace(name: string): SyncStorageNamespace;
 }
 
-export interface AsyncNamespace {
+export interface AsyncStorageNamespace {
 	/**
 	 * Returns true if a value by the specified key exists in the storage
 	 *
@@ -104,8 +107,15 @@ export interface AsyncNamespace {
 	clear<T = unknown>(filter?: ClearFilter<T>, ...args: unknown[]): Promise<void>;
 }
 
-export interface AsyncFactoryResult extends AsyncNamespace {
-	namespace(name: string): AsyncNamespace;
+/**
+ * API for an asynchronous storage
+ */
+export interface AsyncStorage extends AsyncStorageNamespace {
+	/**
+	 * Returns an async storage object by the specified namespace
+	 * @param name
+	 */
+	namespace(name: string): AsyncStorageNamespace;
 }
 
 /**
