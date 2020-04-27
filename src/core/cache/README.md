@@ -1,7 +1,7 @@
 # core/cache
 
 This module provides a base interface for a [[Cache]] data structure: a simple in-memory key-value storage, which can be useful to organize cache data structures.
-The submodules contains different implementations for that interface. The main module re-exports these implementations:
+The submodules contain different implementations for that interface. The main module re-exports these implementations:
 
 * `AbstractCache` — an alias for [`core/cache/interface/Cache`](src_core_cache_interface.html);
 * `Cache` — an alias for [`core/cache/simple`](src_core_cache_simple_index.html);
