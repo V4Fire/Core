@@ -9,14 +9,14 @@
 import config from 'config';
 
 import { IS_NODE } from 'core/env';
-import { AsyncNamespace } from 'core/kv-storage';
+import { AsyncStorageNamespace } from 'core/kv-storage';
 import { emitter, locale } from 'core/prelude/i18n/const';
 
 export * from 'core/prelude/i18n/const';
 export * from 'core/prelude/i18n/interface';
 
 let
-	storage: CanUndef<Promise<AsyncNamespace>>;
+	storage: CanUndef<Promise<AsyncStorageNamespace>>;
 
 //#if runtime has core/kv-storage
 storage = import('core/kv-storage').then(({asyncLocal}) => asyncLocal.namespace('[[I18N]]'));

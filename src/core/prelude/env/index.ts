@@ -7,7 +7,7 @@
  */
 
 import extend from 'core/prelude/extend';
-import { AsyncNamespace } from 'core/kv-storage';
+import { AsyncStorageNamespace } from 'core/kv-storage';
 import { emitter } from 'core/prelude/env/const';
 export * from 'core/prelude/env/const';
 
@@ -15,7 +15,7 @@ const
 	memoryStorage = Object.createDict<Dictionary>();
 
 let
-	storage: CanUndef<Promise<AsyncNamespace>>;
+	storage: CanUndef<Promise<AsyncStorageNamespace>>;
 
 //#if runtime has core/kv-storage
 storage = import('core/kv-storage').then(({asyncLocal}) => asyncLocal.namespace('[[ENV]]'));

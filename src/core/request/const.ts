@@ -8,7 +8,7 @@
 
 import config from 'config';
 
-import { AsyncFactoryResult } from 'core/kv-storage';
+import { AsyncStorage } from 'core/kv-storage';
 import { Cache, RestrictedCache, NeverCache, AbstractCache } from 'core/cache';
 
 import engine from 'core/request/engines';
@@ -26,7 +26,7 @@ import {
 } from 'core/request/interface';
 
 export let
-	storage: CanUndef<Promise<AsyncFactoryResult>>;
+	storage: CanUndef<Promise<AsyncStorage>>;
 
 //#if runtime has core/kv-storage
 storage = import('core/kv-storage').then(({asyncLocal}) => asyncLocal);
