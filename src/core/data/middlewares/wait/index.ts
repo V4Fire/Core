@@ -40,6 +40,6 @@ export async function wait(...args: unknown[]): Promise<void> {
 	}
 
 	if (wait !== undefined) {
-		await wait;
+		await (Object.isFunction(wait) ? wait(...args) : wait);
 	}
 }

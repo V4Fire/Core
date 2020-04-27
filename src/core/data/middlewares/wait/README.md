@@ -31,7 +31,8 @@ export default class bExample extends iData {
   requestParams!: RequestParams;
 
   async canLoadData(): Promise<boolean> {
-    return this.waitStatus('ready');
+    await this.async.sleep((3).seconds());
+    return true;
   }
 }
 ```
