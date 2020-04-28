@@ -127,13 +127,19 @@ export interface Task<CTX extends object = Async> {
 	id: unknown;
 	obj: unknown;
 	objName?: string;
+
+	group?: string;
 	label?: Label;
+
 	paused: boolean;
 	muted: boolean;
 	queue: Function[];
+
 	onComplete: WrappedCb<CTX>[][];
 	onClear: AsyncCb<CTX>[];
 	clearFn?: ClearFn;
+
+	destroy: Function;
 }
 
 export type TaskCtx<CTX extends object = Async> = {
