@@ -59,13 +59,169 @@ export interface AsyncOptions {
 
 export type FullAsyncOptions<CTX extends object = Async> =
 	{
+		/**
+		 * Namespace of the task
+		 *
+		 * @example
+		 * ```typescript
+		 * setImmediate(cb: Function, opts?: AsyncCbOptions<CTX>): Nullable<TimerId> {
+		 *   return this.registerTask({
+		 *     ...opts,
+		 *
+		 *     // This operation has a namespace from this.namespaces.immediate
+		 *     name: this.namespaces.immediate,
+		 *
+		 *     obj: cb,
+		 *     clearFn: clearImmediate,
+		 *     wrapper: setImmediate,
+		 *     linkByWrapper: true
+		 *   });
+		 * }
+		 * ```
+		 */
 		name: string;
+
+		/**
+		 * Object to wrap with Async
+		 *
+		 * @example
+		 * ```typescript
+		 * setImmediate(cb: Function, opts?: AsyncCbOptions<CTX>): Nullable<TimerId> {
+		 *   return this.registerTask({
+		 *     ...opts,
+		 *     name: this.namespaces.immediate,
+		 *
+		 *     // We need to pack cb with setImmediate
+		 *     obj: cb,
+		 *
+		 *     clearFn: clearImmediate,
+		 *     wrapper: setImmediate,
+		 *     linkByWrapper: true
+		 *   });
+		 * }
+		 * ```
+		 */
 		obj: object & {name?: string};
+
+		/**
+		 * True, if the task can fire multiple times
+		 *
+		 * @example
+		 * ```typescript
+		 * setInterval(cb: Function, opts?: AsyncCbOptions<CTX>): Nullable<TimerId> {
+		 *   return this.registerTask({
+		 *     ...opts,
+		 *     name: this.namespaces.interval,
+		 *     obj: cb,
+		 *     clearFn: clearInterval,
+		 *     wrapper: setInterval,
+		 *     linkByWrapper: true,
+		 *
+		 *     // setInterval doesn't stop automatically
+		 *     periodic: true
+		 *   });
+		 * }
+		 * ```
+		 */
 		periodic?: boolean;
+
+		/**
+		 * If true, then the passed object can be executed as a function if it possible
+		 */
+		callable?: boolean;
+
+		/**
+		 * @deprecated
+		 * @see [[FullAsyncOptions.needCall]]
+		 */
 		needCall?: boolean;
-		args?: CanArray<unknown>;
+
+		/**
+		 * Function that wraps the original object
+		 *
+		 * @example
+		 * ```typescript
+		 * setImmediate(cb: Function, opts?: AsyncCbOptions<CTX>): Nullable<TimerId> {
+		 *   return this.registerTask({
+		 *     ...opts,
+		 *     name: this.namespaces.immediate,
+		 *     obj: cb,
+		 *     clearFn: clearImmediate,
+		 *
+		 *     // Wrap cb by using setImmediate
+		 *     wrapper: setImmediate,
+		 *
+		 *     linkByWrapper: true
+		 *   });
+		 * }
+		 * ```
+		 */
 		wrapper?: WrappedCb<CTX>;
+
+		/**
+		 * Additional arguments to a task wrapper
+		 *
+		 * @example
+		 * ```typescript
+		 * setInterval(cb: Function, opts?: AsyncCbOptions<CTX>): Nullable<TimerId> {
+		 *   return this.registerTask({
+		 *     ...opts,
+		 *     name: this.namespaces.interval,
+		 *     obj: cb,
+		 *     clearFn: clearInterval,
+		 *     wrapper: setInterval,
+		 *     linkByWrapper: true,
+		 *     periodic: true,
+		 *
+		 *     // We need to provide a timeout value
+		 *     args: [timeout]
+		 *   });
+		 * }
+		 * ```
+		 */
+		args?: CanArray<unknown>;
+
+		/**
+		 * If true, then a value that returns the wrapper will be interpreted as the unique operation identifier
+		 *
+		 * @example
+		 * ```typescript
+		 * setImmediate(cb: Function, opts?: AsyncCbOptions<CTX>): Nullable<TimerId> {
+		 *   return this.registerTask({
+		 *     ...opts,
+		 *     name: this.namespaces.immediate,
+		 *     obj: cb,
+		 *     clearFn: clearImmediate,
+		 *     wrapper: setImmediate,
+		 *
+		 *     // setImmediate returns the unique identifier
+		 *     linkByWrapper: true
+		 *   });
+		 * }
+		 * ```
+		 */
 		linkByWrapper?: boolean;
+
+		/**
+		 * Function to clear the operation
+		 *
+		 * @example
+		 * ```typescript
+		 * setImmediate(cb: Function, opts?: AsyncCbOptions<CTX>): Nullable<TimerId> {
+		 *   return this.registerTask({
+		 *     ...opts,
+		 *     name: this.namespaces.immediate,
+		 *     obj: cb,
+		 *
+		 *     // Clear the operation
+		 *     clearFn: clearImmediate,
+		 *
+		 *     wrapper: setImmediate,
+		 *     linkByWrapper: true
+		 *   });
+		 * }
+		 * ```
+		 */
 		clearFn?: ClearFn<CTX>;
 	} &
 
@@ -77,6 +233,9 @@ export type FullAsyncOptions<CTX extends object = Async> =
 		AsyncPromisifyOnceOptions<unknown, unknown, CTX>
 	);
 
+/**
+ * Reason why a task can be killed (cleared)
+ */
 export type ClearReason =
 	'id' |
 	'label' |
@@ -87,65 +246,148 @@ export type ClearReason =
 
 export interface ClearOptions {
 	/**
-	 * Label of a task
+	 * Label of the task to clear
 	 */
 	label?: Label;
 
 	/**
-	 * Group name of a task
+	 * Group name of the task to clear
 	 */
 	group?: Group | RegExp;
 
 	/**
-	 * If true, then a cleanup handler of a task is prevented
+	 * If true, then a cleanup handler of the task is prevented
 	 */
 	preventDefault?: boolean;
 }
 
 export interface ClearOptionsId<ID = any> extends ClearOptions {
 	/**
-	 * Task identifier
+	 * Identifier of the task to clear
 	 */
 	id?: ID;
 }
 
 export interface ClearProxyOptions<ID = any> extends ClearOptionsId<ID> {
 	/**
-	 * Proxy name
+	 * Namespace of the proxy to clear
 	 */
 	name?: string;
 }
 
 export interface FullClearOptions<ID = any> extends ClearProxyOptions<ID> {
+	/**
+	 * Namespace of the task to clear
+	 */
 	name: string;
+
+	/**
+	 * Reason to clear the task
+	 */
 	reason?: ClearReason;
+
+	/**
+	 * If true, the operation was registered as a promise
+	 */
 	promise?: boolean;
+
+	/**
+	 * Link to a task that replaces the current
+	 */
 	replacedBy?: Task;
 }
 
+/**
+ * Registered task object
+ */
 export interface Task<CTX extends object = Async> {
+	/**
+	 * Task unique identifier
+	 */
 	id: unknown;
+
+	/**
+	 * Raw task object
+	 */
 	obj: unknown;
+
+	/**
+	 * Name of the raw task object
+	 */
 	objName?: string;
 
+	/**
+	 * Group name the task
+	 */
 	group?: string;
+
+	/**
+	 * Label of the task
+	 */
 	label?: Label;
 
+	/**
+	 * True if the task is paused
+	 */
 	paused: boolean;
+
+	/**
+	 * True if the task is muted
+	 */
 	muted: boolean;
+
+	/**
+	 * Queue of pending handlers
+	 * (if the task is paused)
+	 */
 	queue: Function[];
 
+	/**
+	 * List of complete handlers:
+	 *
+	 * [0] - onFulfilled
+	 * [1] - onRejected
+	 */
 	onComplete: WrappedCb<CTX>[][];
-	onClear: AsyncCb<CTX>[];
-	clearFn?: ClearFn;
 
-	destroy: Function;
+	/**
+	 * List of clear handlers
+	 */
+	onClear: AsyncCb<CTX>[];
+
+	/**
+	 * Unregisters the task
+	 */
+	unregister: Function;
+
+	/**
+	 * Function to clear the task
+	 */
+	clearFn?: ClearFn;
 }
 
+/**
+ * Context of a task
+ */
 export type TaskCtx<CTX extends object = Async> = {
+	/**
+	 * Task type
+	 */
 	type: string;
+
+	/**
+	 * Link to the registered task
+	 */
 	link: Task<CTX>;
+
+	/**
+	 * Link to a new task that replaces the current
+	 */
 	replacedBy?: Task<CTX>;
+
+	/**
+	 * Reason to clear the task
+	 */
 	reason?: ClearReason;
 } & AsyncOptions & ClearOptionsId<unknown>;
 
@@ -182,19 +424,19 @@ export interface AsyncCbOptions<CTX extends object = Async> extends AsyncOptions
 	promise?: boolean;
 
 	/**
-	 * Handler of task clearing
+	 * Handler/s of task clearing
 	 */
 	onClear?: CanArray<AsyncCb<CTX>>;
 
 	/**
-	 * Handler of task merging: the task should merge to another task with the same label and with "join: true" strategy
+	 * Handler/s of task merging: the task should merge to another task with the same label and with "join: true" strategy
 	 */
 	onMerge?: CanArray<AsyncCb<CTX>>;
 }
 
 export interface AsyncCbOptionsSingle<CTX extends object = Async> extends AsyncCbOptions<CTX> {
 	/**
-	 * If false, then a proxy supports multiple callings
+	 * If false, then the proxy supports multiple callings
 	 * @default `true`
 	 */
 	single?: boolean;
@@ -207,7 +449,7 @@ export interface AsyncProxyOptions<CTX extends object = Async> extends AsyncCbOp
 	name?: string;
 
 	/**
-	 * Function for memory clearing
+	 * Function to clear memory of the proxy
 	 */
 	clearFn?: ClearFn<CTX>;
 }
@@ -254,14 +496,14 @@ export interface AsyncWaitOptions extends AsyncOptions {
 
 export interface AsyncOnOptions<CTX extends object = Async> extends AsyncCbOptionsSingle<CTX> {
 	/**
-	 * Additional options for an emitter
+	 * Additional options for the emitter
 	 */
 	options?: Dictionary;
 }
 
 export interface AsyncOnceOptions<T extends object = Async> extends AsyncCbOptions<T> {
 	/**
-	 * Additional options for an emitter
+	 * Additional options for the emitter
 	 */
 	options?: Dictionary;
 }
@@ -272,12 +514,12 @@ export interface AsyncPromisifyOnceOptions<
 	CTX extends object = Async
 > extends AsyncOptions {
 	/**
-	 * Event handler (a result of the invoking is provided as a promise result)
+	 * Event handler (the result of invoking is provided to a promise)
 	 */
 	handler?: ProxyCb<E, R, CTX>;
 
 	/**
-	 * Additional options for an emitter
+	 * Additional options for the emitter
 	 */
 	options?: Dictionary;
 }
@@ -289,6 +531,9 @@ export interface AsyncWorkerOptions<CTX extends object = Async> extends AsyncPro
 	destructor?: string;
 }
 
+/**
+ * Something that looks like a worker
+ */
 export interface WorkerLike {
 	terminate?: Function;
 	destroy?: Function;
@@ -300,7 +545,41 @@ export interface WorkerLike {
 	unwatch?: Function;
 }
 
-export interface EventLike<E extends EventEmitterLikeP = EventEmitterLikeP> {
+/**
+ * Extended type of a worker
+ */
+export type WorkerLikeP = Function | WorkerLike;
+
+/**
+ * Promise that supports canceling
+ */
+export interface CancelablePromise<T = unknown> extends Promise<T> {
+	abort?: Function;
+	cancel?: Function;
+}
+
+/**
+ * Something that looks like an event emitter
+ */
+export interface EventEmitterLike {
+	on?: Function;
+	addListener?: Function;
+	addEventListener?: Function;
+	once?: Function;
+	off?: Function;
+	removeListener?: Function;
+	removeEventListener?: Function;
+}
+
+/**
+ * Extended type of an event emitter
+ */
+export type EventEmitterLikeP = Function | EventEmitterLike;
+
+/**
+ * Event object
+ */
+export interface Event<E extends EventEmitterLikeP = EventEmitterLikeP> {
 	/**
 	 * Event emitter
 	 */
@@ -322,27 +601,9 @@ export interface EventLike<E extends EventEmitterLikeP = EventEmitterLikeP> {
 	args: unknown[];
 }
 
-export interface EventEmitterLike {
-	on?: Function;
-	addListener?: Function;
-	addEventListener?: Function;
-	once?: Function;
-	off?: Function;
-	removeListener?: Function;
-	removeEventListener?: Function;
-}
-
-export type WorkerLikeP = Function | WorkerLike;
-export type EventEmitterLikeP = Function | EventEmitterLike;
-
-export interface CancelablePromise<T = unknown> extends Promise<T> {
-	abort?: Function;
-	cancel?: Function;
-}
-
 export interface LocalCache {
-	labels: Dictionary<Label>;
-	links: Map<object, Task>;
+	labels: Record<Label, unknown>;
+	links: Map<object, Task<any>>;
 }
 
 export interface GlobalCache {

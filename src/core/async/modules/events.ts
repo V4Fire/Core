@@ -7,7 +7,7 @@
  */
 
 import SyncPromise from 'core/promise/sync';
-import Super from 'core/async/modules/timers';
+import Super, { isEvent } from 'core/async/modules/timers';
 
 import {
 
@@ -19,20 +19,12 @@ import {
 	ClearOptionsId,
 
 	ProxyCb,
-	EventLike,
+	Event,
 	EventEmitterLikeP
 
 } from 'core/async/interface';
 
 export * from 'core/async/modules/timers';
-
-/**
- * Returns true if the specified value is looks like an event object
- * @param value
- */
-export function isEvent(value: unknown): value is EventLike {
-	return Object.isPlainObject(value) && Object.isString((<any>value).event);
-}
 
 export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	/**
@@ -387,7 +379,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Removes an event handler from the specified emitter
 	 * @param event - event object
 	 */
-	eventListenerDestructor(event: EventLike): void {
+	eventListenerDestructor(event: Event): void {
 		const
 			e = event.emitter,
 			fn = Object.isSimpleFunction(e) ? e : e.removeEventListener || e.removeListener || e.off;

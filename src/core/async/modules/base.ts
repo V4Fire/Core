@@ -7,10 +7,18 @@
  */
 
 import { deprecate, deprecated } from 'core/functools';
-import { namespaces, NamespacesDictionary } from 'core/async/const';
+
 import {
 
-	AsyncOptions,
+	namespaces,
+	isZombieGroup,
+	isPromisifyNamespace,
+	NamespacesDictionary
+
+} from 'core/async/const';
+
+import {
+
 	FullAsyncOptions,
 	ClearOptions,
 	FullClearOptions,
@@ -19,39 +27,9 @@ import {
 
 } from 'core/async/interface';
 
-export * from 'core/async/interface';
 export * from 'core/async/const';
-
-export const
-	isZombieGroup = /:zombie\b/;
-
-export const
-	isPromisifyNamespace = /Promise$/,
-
-	/** @deprecated */
-	isPromisifyLinkName = isPromisifyNamespace;
-
-/**
- * Returns true if the specified value is looks like an instance of AsyncOptions
- * @param value
- */
-export function isAsyncOptions<T extends object = AsyncOptions>(value: unknown): value is T {
-	return Object.isPlainObject(value);
-}
-
-/**
- * @deprecated
- * @see isAsyncOptions
- */
-export const isParams = deprecate(
-	{
-		renamedTo: 'isAsyncOptions'
-	},
-
-	function isParams<T = AsyncOptions>(value: unknown): value is T {
-		return isAsyncOptions(value);
-	}
-);
+export * from 'core/async/helpers';
+export * from 'core/async/interface';
 
 export default class Async<CTX extends object = Async<any>> {
 	/**
@@ -82,13 +60,13 @@ export default class Async<CTX extends object = Async<any>> {
 	protected readonly workerCache: WeakMap<object, boolean> = new WeakMap();
 
 	/**
-	 * Context of applying for all async handlers
+	 * Context of applying for async handlers
 	 */
 	protected readonly ctx: CTX;
 
 	/**
 	 * @deprecated
-	 * @see Async.ctx
+	 * @see [[Async.ctx]]
 	 */
 	protected readonly context: CTX;
 
@@ -108,7 +86,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	/**
 	 * @deprecated
-	 * @see Async.prototype.namespaces
+	 * @see [[Async.namespaces]]
 	 */
 	protected get linkNames(): NamespacesDictionary {
 		deprecate({name: 'linkNames', type: 'accessor', renamedTo: 'namespaces'});
@@ -116,7 +94,7 @@ export default class Async<CTX extends object = Async<any>> {
 	}
 
 	/**
-	 * @param [ctx] - context of applying for all async handlers
+	 * @param [ctx] - context of applying for async handlers
 	 */
 	constructor(ctx?: CTX) {
 		this.ctx = this.context = ctx || <any>this;
@@ -214,7 +192,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 * Returns a cache object by the specified name
 	 *
 	 * @param name
-	 * @param [promise] - if true, the namespace will be marked as promisified
+	 * @param [promise] - if true, the namespace is marked as promisified
 	 */
 	protected getCache(name: string, promise?: boolean): GlobalCache {
 		name = promise
@@ -243,13 +221,16 @@ export default class Async<CTX extends object = Async<any>> {
 	 * Registers the specified async task
 	 * @param task
 	 */
-	protected registerTask<R = unknown, C extends object = CTX>(task: FullAsyncOptions<C>): R | null {
+	protected registerTask<R = unknown>(task: FullAsyncOptions<any>): R | null {
 		if (this.locked) {
 			return null;
 		}
 
 		const
 			baseCache = this.getCache(task.name, task.promise),
+			callable = task.callable || task.needCall;
+
+		const
 			{ctx} = this;
 
 		let
@@ -287,9 +268,22 @@ export default class Async<CTX extends object = Async<any>> {
 		}
 
 		let
+			// Thread identifier
 			id,
-			finalObj,
-			wrappedObj = id = finalObj = task.needCall && Object.isFunction(task.obj) ? task.obj.call(ctx) : task.obj;
+
+			// Normalized object to wrap
+			normalizedObj,
+
+			// Wrapped object
+			wrappedObj;
+
+		// tslint:disable-next-line:prefer-conditional-expression
+		if (callable && Object.isFunction(task.obj)) {
+			wrappedObj = id = normalizedObj = task.obj.call(ctx);
+
+		} else {
+			wrappedObj = id = normalizedObj = task.obj;
+		}
 
 		if (!task.periodic || Object.isFunction(wrappedObj)) {
 			wrappedObj = function (this: unknown): unknown {
@@ -307,7 +301,7 @@ export default class Async<CTX extends object = Async<any>> {
 						link.muted = true;
 
 					} else {
-						link.destroy();
+						link.unregister();
 					}
 				}
 
@@ -328,14 +322,14 @@ export default class Async<CTX extends object = Async<any>> {
 
 				const exec = () => {
 					if (needDelete) {
-						link.destroy();
+						link.unregister();
 					}
 
 					let
-						res = finalObj;
+						res = normalizedObj;
 
-					if (Object.isFunction(finalObj)) {
-						res = finalObj.apply(fnCtx, args);
+					if (Object.isFunction(normalizedObj)) {
+						res = normalizedObj.apply(fnCtx, args);
 					}
 
 					if (Object.isPromise(res)) {
@@ -359,7 +353,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 		if (task.wrapper) {
 			const
-				link = task.wrapper.apply(null, [wrappedObj].concat(task.needCall ? id : [], task.args));
+				link = task.wrapper.apply(null, [wrappedObj].concat(callable ? id : [], task.args));
 
 			if (task.linkByWrapper) {
 				id = link;
@@ -368,6 +362,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 		const link = {
 			id,
+
 			obj: task.obj,
 			objName: task.obj.name,
 
@@ -382,7 +377,7 @@ export default class Async<CTX extends object = Async<any>> {
 			onComplete: [],
 			onClear: Array.concat([], task.onClear),
 
-			destroy: () => {
+			unregister: () => {
 				links.delete(id);
 				baseCache.root.links.delete(id);
 
@@ -504,7 +499,7 @@ export default class Async<CTX extends object = Async<any>> {
 				link = links.get(p.id);
 
 			if (link) {
-				link.destroy();
+				link.unregister();
 
 				const ctx = {
 					...p,

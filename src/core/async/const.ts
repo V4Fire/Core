@@ -18,3 +18,12 @@ export const
 	linkNamesDictionary = namespaces;
 
 export type NamespacesDictionary = typeof namespaces;
+
+export const
+	isZombieGroup = /:zombie\b/;
+
+export const
+	isPromisifyNamespace = /Promise$/,
+
+	/** @deprecated */
+	isPromisifyLinkName = isPromisifyNamespace;
