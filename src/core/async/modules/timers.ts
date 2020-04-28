@@ -498,7 +498,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	wait(fn: Function, opts?: AsyncWaitOptions): SyncPromise<boolean> {
 		if (fn()) {
-			if (opts?.label) {
+			if (opts?.label != null) {
 				this.clearPromise(opts);
 			}
 

@@ -150,7 +150,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 				clearFn: this.eventListenerDestructor,
 				linkByWrapper: true,
 				periodic: !p.single,
-				group: p.group || event
+				group: p.group ?? event
 			});
 
 			if (link) {
