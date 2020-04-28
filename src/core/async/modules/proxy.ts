@@ -108,7 +108,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * @param [opts] - additional options for the operation
 	 */
 	proxy<F extends WrappedCb, C extends object = CTX>(fn: F, opts?: AsyncProxyOptions<C>): F {
-		return this.registerTask<F, C>({
+		return this.registerTask<F>({
 			...opts,
 			name: opts?.name || this.namespaces.proxy,
 			obj: fn,
@@ -375,17 +375,26 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	promise<T = unknown>(promise: (() => PromiseLike<T>) | PromiseLike<T>, opts?: AsyncPromiseOptions): Promise<T> {
 		const
+			that = this,
 			p = <AsyncPromiseOptions>({name: this.namespaces.promise, ...opts});
+
+		const
+			{ctx} = this;
 
 		return new Promise((resolve, reject) => {
 			let
-				canceled = false;
+				canceled = false,
+				proxyReject;
 
-			const proxyResolve = <(value: unknown) => unknown>this.proxy(resolve, {
+			const proxyResolve = this.proxy(resolve, {
 				...p,
 
 				clearFn: () => {
 					this.promiseDestructor(p.destructor, <Promise<unknown>>promise);
+
+					if (proxyReject) {
+						this.clearProxy({id: proxyReject, name: p.name});
+					}
 				},
 
 				onClear: (...args) => {
@@ -401,17 +410,47 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 			if (!canceled) {
 				if (Object.isFunction(promise)) {
-					promise = <any>promise();
+					promise = promise();
 				}
 
-				(<Promise<unknown>>promise).then(proxyResolve, (err) => {
+				proxyReject = this.proxy(function (err: unknown): void {
 					if (canceled) {
 						return;
 					}
 
-					reject(err);
-					this.clearProxy({id: proxyResolve, name: p.name});
-				});
+					const
+						cache = that.cache[p.name!],
+						links = p.group ? cache?.groups[p.group]?.links : cache?.root.links,
+						task = links?.get(proxyResolve),
+						handlers = links?.get(proxyResolve)?.onComplete;
+
+					if (task && handlers) {
+						if (task.muted) {
+							return;
+						}
+
+						const exec = () => {
+							reject(err);
+
+							for (let i = 0; i < handlers.length; i++) {
+								handlers[i][1].call(ctx || this, err);
+							}
+						};
+
+						if (task.paused) {
+							task.queue.push(exec);
+							return;
+						}
+
+						exec();
+
+					} else {
+						reject(err);
+					}
+
+				}, Object.select(p, ['name', 'group']));
+
+				return promise.then(proxyResolve, proxyReject);
 			}
 		});
 	}
