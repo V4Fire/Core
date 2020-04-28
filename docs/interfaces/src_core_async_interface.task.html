@@ -142,6 +142,13 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Registered task object</p>
+					</div>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-type-parameters">
 				<h3>Type parameters</h3>
 				<ul class="tsd-type-parameters">
@@ -166,6 +173,7 @@
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="src_core_async_interface.task.html#clearfn" class="tsd-kind-icon">clear<wbr>Fn</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="src_core_async_interface.task.html#group" class="tsd-kind-icon">group</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="src_core_async_interface.task.html#id" class="tsd-kind-icon">id</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="src_core_async_interface.task.html#label" class="tsd-kind-icon">label</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="src_core_async_interface.task.html#muted" class="tsd-kind-icon">muted</a></li>
@@ -175,6 +183,7 @@
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="src_core_async_interface.task.html#oncomplete" class="tsd-kind-icon">on<wbr>Complete</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="src_core_async_interface.task.html#paused" class="tsd-kind-icon">paused</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="src_core_async_interface.task.html#queue" class="tsd-kind-icon">queue</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="src_core_async_interface.task.html#unregister" class="tsd-kind-icon">unregister</a></li>
 							</ul>
 						</section>
 					</div>
@@ -188,9 +197,29 @@
 					<div class="tsd-signature tsd-kind-icon">clear<wbr>Fn<span class="tsd-signature-symbol">:</span> <a href="src_core_async_interface.clearfn.html" class="tsd-signature-type">ClearFn</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/interface.ts#L136">src/core/async/interface.ts:136</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/interface.ts#L366">src/core/async/interface.ts:366</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Function to clear the task</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="group" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> group</h3>
+					<div class="tsd-signature tsd-kind-icon">group<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/interface.ts#L322">src/core/async/interface.ts:322</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Group name the task</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="id" class="tsd-anchor"></a>
@@ -198,9 +227,14 @@
 					<div class="tsd-signature tsd-kind-icon">id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">unknown</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/interface.ts#L127">src/core/async/interface.ts:127</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/interface.ts#L307">src/core/async/interface.ts:307</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Task unique identifier</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="label" class="tsd-anchor"></a>
@@ -208,9 +242,14 @@
 					<div class="tsd-signature tsd-kind-icon">label<span class="tsd-signature-symbol">:</span> <a href="../modules/src_core_async_interface.html#label" class="tsd-signature-type">Label</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/interface.ts#L130">src/core/async/interface.ts:130</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/interface.ts#L327">src/core/async/interface.ts:327</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Label of the task</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="muted" class="tsd-anchor"></a>
@@ -218,9 +257,14 @@
 					<div class="tsd-signature tsd-kind-icon">muted<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/interface.ts#L132">src/core/async/interface.ts:132</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/interface.ts#L337">src/core/async/interface.ts:337</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>True if the task is muted</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="obj" class="tsd-anchor"></a>
@@ -228,9 +272,14 @@
 					<div class="tsd-signature tsd-kind-icon">obj<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">unknown</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/interface.ts#L128">src/core/async/interface.ts:128</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/interface.ts#L312">src/core/async/interface.ts:312</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Raw task object</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="objname" class="tsd-anchor"></a>
@@ -238,9 +287,14 @@
 					<div class="tsd-signature tsd-kind-icon">obj<wbr>Name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/interface.ts#L129">src/core/async/interface.ts:129</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/interface.ts#L317">src/core/async/interface.ts:317</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Name of the raw task object</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="onclear" class="tsd-anchor"></a>
@@ -248,9 +302,14 @@
 					<div class="tsd-signature tsd-kind-icon">on<wbr>Clear<span class="tsd-signature-symbol">:</span> <a href="src_core_async_interface.asynccb.html" class="tsd-signature-type">AsyncCb</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">CTX</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/interface.ts#L135">src/core/async/interface.ts:135</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/interface.ts#L356">src/core/async/interface.ts:356</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>List of clear handlers</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="oncomplete" class="tsd-anchor"></a>
@@ -258,9 +317,16 @@
 					<div class="tsd-signature tsd-kind-icon">on<wbr>Complete<span class="tsd-signature-symbol">:</span> <a href="src_core_async_interface.wrappedcb.html" class="tsd-signature-type">WrappedCb</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">CTX</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/interface.ts#L134">src/core/async/interface.ts:134</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/interface.ts#L351">src/core/async/interface.ts:351</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>List of complete handlers:</p>
+						</div>
+						<p>[0] - onFulfilled
+						[1] - onRejected</p>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="paused" class="tsd-anchor"></a>
@@ -268,9 +334,14 @@
 					<div class="tsd-signature tsd-kind-icon">paused<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/interface.ts#L131">src/core/async/interface.ts:131</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/interface.ts#L332">src/core/async/interface.ts:332</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>True if the task is paused</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="queue" class="tsd-anchor"></a>
@@ -278,9 +349,30 @@
 					<div class="tsd-signature tsd-kind-icon">queue<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Function</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/interface.ts#L133">src/core/async/interface.ts:133</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/interface.ts#L343">src/core/async/interface.ts:343</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Queue of pending handlers
+							(if the task is paused)</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="unregister" class="tsd-anchor"></a>
+					<h3>unregister</h3>
+					<div class="tsd-signature tsd-kind-icon">unregister<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Function</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/interface.ts#L361">src/core/async/interface.ts:361</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Unregisters the task</p>
+						</div>
+					</div>
 				</section>
 			</section>
 		</div>
@@ -304,6 +396,9 @@
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="src_core_async_interface.task.html#clearfn" class="tsd-kind-icon">clear<wbr>Fn</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="src_core_async_interface.task.html#group" class="tsd-kind-icon">group</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="src_core_async_interface.task.html#id" class="tsd-kind-icon">id</a>
@@ -331,6 +426,9 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="src_core_async_interface.task.html#queue" class="tsd-kind-icon">queue</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="src_core_async_interface.task.html#unregister" class="tsd-kind-icon">unregister</a>
 							</li>
 						</ul>
 					</li>

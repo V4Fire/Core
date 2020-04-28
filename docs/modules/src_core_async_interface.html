@@ -171,8 +171,8 @@
 								<li class="tsd-kind-interface tsd-parent-kind-external-module"><a href="../interfaces/src_core_async_interface.clearoptions.html" class="tsd-kind-icon">Clear<wbr>Options</a></li>
 								<li class="tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter"><a href="../interfaces/src_core_async_interface.clearoptionsid.html" class="tsd-kind-icon">Clear<wbr>Options<wbr>Id</a></li>
 								<li class="tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter"><a href="../interfaces/src_core_async_interface.clearproxyoptions.html" class="tsd-kind-icon">Clear<wbr>Proxy<wbr>Options</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter"><a href="../interfaces/src_core_async_interface.event.html" class="tsd-kind-icon">Event</a></li>
 								<li class="tsd-kind-interface tsd-parent-kind-external-module"><a href="../interfaces/src_core_async_interface.eventemitterlike.html" class="tsd-kind-icon">Event<wbr>Emitter<wbr>Like</a></li>
-								<li class="tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter"><a href="../interfaces/src_core_async_interface.eventlike.html" class="tsd-kind-icon">Event<wbr>Like</a></li>
 								<li class="tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter"><a href="../interfaces/src_core_async_interface.fullclearoptions.html" class="tsd-kind-icon">Full<wbr>Clear<wbr>Options</a></li>
 								<li class="tsd-kind-interface tsd-parent-kind-external-module"><a href="../interfaces/src_core_async_interface.globalcache.html" class="tsd-kind-icon">Global<wbr>Cache</a></li>
 								<li class="tsd-kind-interface tsd-parent-kind-external-module"><a href="../interfaces/src_core_async_interface.localcache.html" class="tsd-kind-icon">Local<wbr>Cache</a></li>
@@ -210,9 +210,14 @@
 					<div class="tsd-signature tsd-kind-icon">Clear<wbr>Reason<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"id"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"label"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"collision"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"group"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"rgxp"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"all"</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/interface.ts#L80">src/core/async/interface.ts:80</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/interface.ts#L239">src/core/async/interface.ts:239</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Reason why a task can be killed (cleared)</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-external-module">
 					<a name="eventemitterlikep" class="tsd-anchor"></a>
@@ -220,9 +225,14 @@
 					<div class="tsd-signature tsd-kind-icon">Event<wbr>Emitter<wbr>LikeP<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Function</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/src_core_async_interface.eventemitterlike.html" class="tsd-signature-type">EventEmitterLike</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/interface.ts#L330">src/core/async/interface.ts:330</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/interface.ts#L577">src/core/async/interface.ts:577</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Extended type of an event emitter</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-external-module">
 					<a name="eventid" class="tsd-anchor"></a>
@@ -266,7 +276,7 @@
 					<div class="tsd-signature tsd-kind-icon">Idle<wbr>Cb&lt;R, CTX&gt;<span class="tsd-signature-symbol">:</span> <a href="src_core_async_interface.html#proxycb" class="tsd-signature-type">ProxyCb</a><span class="tsd-signature-symbol">&lt;</span><a href="../classes/index_d.idledeadline.html" class="tsd-signature-type">IdleDeadline</a><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">CTX</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/interface.ts#L166">src/core/async/interface.ts:166</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/interface.ts#L414">src/core/async/interface.ts:414</a></li>
 						</ul>
 					</aside>
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -315,7 +325,7 @@
 					<div class="tsd-signature tsd-kind-icon">Proxy<wbr>Cb&lt;A, R, CTX&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">A extends never ? function : A extends unknown[] ? function : function | Function</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/interface.ts#L158">src/core/async/interface.ts:158</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/interface.ts#L406">src/core/async/interface.ts:406</a></li>
 						</ul>
 					</aside>
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -337,9 +347,14 @@
 					<div class="tsd-signature tsd-kind-icon">Task<wbr>Ctx&lt;CTX&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/src_core_async_interface.asyncoptions.html" class="tsd-signature-type">AsyncOptions</a><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/src_core_async_interface.clearoptionsid.html" class="tsd-signature-type">ClearOptionsId</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/interface.ts#L139">src/core/async/interface.ts:139</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/interface.ts#L372">src/core/async/interface.ts:372</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Context of a task</p>
+						</div>
+					</div>
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
 					<ul class="tsd-type-parameters">
 						<li>
@@ -363,9 +378,14 @@
 					<div class="tsd-signature tsd-kind-icon">Worker<wbr>LikeP<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Function</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/src_core_async_interface.workerlike.html" class="tsd-signature-type">WorkerLike</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/interface.ts#L329">src/core/async/interface.ts:329</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/interface.ts#L551">src/core/async/interface.ts:551</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Extended type of a worker</p>
+						</div>
+					</div>
 				</section>
 			</section>
 		</div>
@@ -442,11 +462,11 @@
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter">
 						<a href="../interfaces/src_core_async_interface.clearproxyoptions.html" class="tsd-kind-icon">Clear<wbr>Proxy<wbr>Options</a>
 					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter">
+						<a href="../interfaces/src_core_async_interface.event.html" class="tsd-kind-icon">Event</a>
+					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
 						<a href="../interfaces/src_core_async_interface.eventemitterlike.html" class="tsd-kind-icon">Event<wbr>Emitter<wbr>Like</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter">
-						<a href="../interfaces/src_core_async_interface.eventlike.html" class="tsd-kind-icon">Event<wbr>Like</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter">
 						<a href="../interfaces/src_core_async_interface.fullclearoptions.html" class="tsd-kind-icon">Full<wbr>Clear<wbr>Options</a>

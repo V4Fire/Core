@@ -11,6 +11,13 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.13.1 (2020-04-28)
+
+#### :bug: Bug Fix
+
+* Fixed promise rejecting `core/async`
+* Fixed clearing by id `core/async`
+
 ## v3.13.0 (2020-04-27)
 
 #### :rocket: New Feature
