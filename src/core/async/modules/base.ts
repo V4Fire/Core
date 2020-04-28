@@ -255,7 +255,7 @@ export default class Async<CTX extends object = Async<any>> {
 		let
 			cache;
 
-		if (task.group) {
+		if (task.group != null) {
 			baseCache.groups[task.group] = baseCache.groups[task.group] || {
 				labels: Object.createDict(),
 				links: new Map()
@@ -269,6 +269,9 @@ export default class Async<CTX extends object = Async<any>> {
 
 		const
 			{labels, links} = cache,
+			{links: baseLinks} = baseCache.root;
+
+		const
 			labelCache = task.label != null && labels[task.label];
 
 		if (labelCache && task.join === true) {
@@ -304,15 +307,11 @@ export default class Async<CTX extends object = Async<any>> {
 						link.muted = true;
 
 					} else {
-						links.delete(id);
-
-						if (task.label != null && labels[task.label]) {
-							labels[task.label] = undefined;
-						}
+						link.destroy();
 					}
 				}
 
-				const execTasks = (i = 0) => (...args) => {
+				const invokeHandlers = (i = 0) => (...args) => {
 					const
 						fns = link.onComplete;
 
@@ -329,11 +328,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 				const exec = () => {
 					if (needDelete) {
-						links.delete(id);
-
-						if (task.label != null) {
-							labels[task.label] = undefined;
-						}
+						link.destroy();
 					}
 
 					let
@@ -344,10 +339,10 @@ export default class Async<CTX extends object = Async<any>> {
 					}
 
 					if (Object.isPromise(res)) {
-						res.then(execTasks(), execTasks(1));
+						res.then(invokeHandlers(), invokeHandlers(1));
 
 					} else {
-						execTasks().apply(null, args);
+						invokeHandlers().apply(null, args);
 					}
 
 					return res;
@@ -375,13 +370,26 @@ export default class Async<CTX extends object = Async<any>> {
 			id,
 			obj: task.obj,
 			objName: task.obj.name,
+
+			group: task.group,
 			label: task.label,
+
 			paused: false,
 			muted: false,
 			queue: [],
+
 			clearFn: task.clearFn,
 			onComplete: [],
-			onClear: Array.concat([], task.onClear)
+			onClear: Array.concat([], task.onClear),
+
+			destroy: () => {
+				links.delete(id);
+				baseCache.root.links.delete(id);
+
+				if (task.label != null && labels[task.label]) {
+					labels[task.label] = undefined;
+				}
+			}
 		};
 
 		if (labelCache) {
@@ -390,7 +398,11 @@ export default class Async<CTX extends object = Async<any>> {
 
 		links.set(id, link);
 
-		if (task.label) {
+		if (links !== baseLinks) {
+			baseLinks.set(id, link);
+		}
+
+		if (task.label != null) {
 			labels[task.label] = id;
 		}
 
@@ -433,7 +445,7 @@ export default class Async<CTX extends object = Async<any>> {
 		let
 			cache;
 
-		if (p.group) {
+		if (p.group != null) {
 			if (Object.isRegExp(p.group)) {
 				const
 					obj = baseCache.groups,
@@ -468,7 +480,7 @@ export default class Async<CTX extends object = Async<any>> {
 		const
 			{labels, links} = cache;
 
-		if (p.label) {
+		if (p.label != null) {
 			const
 				tmp = labels[p.label];
 
@@ -492,11 +504,7 @@ export default class Async<CTX extends object = Async<any>> {
 				link = links.get(p.id);
 
 			if (link) {
-				links.delete(link.id);
-
-				if (link.label) {
-					labels[link.label] = undefined;
-				}
+				link.destroy();
 
 				const ctx = {
 					...p,
@@ -595,7 +603,7 @@ export default class Async<CTX extends object = Async<any>> {
 		let
 			cache;
 
-		if (p.group) {
+		if (p.group != null) {
 			if (Object.isRegExp(p.group)) {
 				const
 					obj = baseCache.groups,
@@ -626,7 +634,7 @@ export default class Async<CTX extends object = Async<any>> {
 		const
 			{labels, links} = cache;
 
-		if (p.label) {
+		if (p.label != null) {
 			const
 				tmp = labels[p.label];
 
