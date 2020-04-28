@@ -444,7 +444,7 @@ export interface AsyncCbOptionsSingle<CTX extends object = Async> extends AsyncC
 
 export interface AsyncProxyOptions<CTX extends object = Async> extends AsyncCbOptionsSingle<CTX> {
 	/**
-	 * Proxy name
+	 * Namespace of the proxy
 	 */
 	name?: string;
 
@@ -456,7 +456,7 @@ export interface AsyncProxyOptions<CTX extends object = Async> extends AsyncCbOp
 
 export interface AsyncPromiseOptions extends AsyncOptions {
 	/**
-	 * Proxy name
+	 * Namespace of the proxy
 	 */
 	name?: string;
 
