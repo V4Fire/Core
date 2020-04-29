@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.13.2 (2020-04-29)
+
+#### :bug: Bug Fix
+
+* Fixed watching for "spread" objects `core/object/watch`
+
 ## v3.13.1 (2020-04-28)
 
 #### :bug: Bug Fix
