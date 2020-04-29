@@ -221,11 +221,30 @@ export function watch<T extends object>(
 		);
 	}
 
-	proxy[watchPath] = path;
-	proxy[watchHandlers] = handlers;
-	proxy[toRootObject] = root;
-	proxy[toTopObject] = top;
-	proxy[toOriginalObject] = unwrappedObj;
+	Object.defineProperty(proxy, watchPath, {
+		configurable: true,
+		value: path
+	});
+
+	Object.defineProperty(proxy, watchHandlers, {
+		configurable: true,
+		value: handlers
+	});
+
+	Object.defineProperty(proxy, toRootObject, {
+		configurable: true,
+		value: root
+	});
+
+	Object.defineProperty(proxy, toTopObject, {
+		configurable: true,
+		value: top
+	});
+
+	Object.defineProperty(proxy, toOriginalObject, {
+		configurable: true,
+		value: unwrappedObj
+	});
 
 	return returnProxy(unwrappedObj, proxy);
 }

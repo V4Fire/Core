@@ -117,8 +117,16 @@ export function getOrCreateLabelValueByHandlers<T = unknown>(
 	handlers: WatchHandlersSet,
 	def?: unknown
 ): T {
-	const
-		box = obj[label] = obj[label] || new WeakMap();
+	let
+		box = obj[label];
+
+	if (!box) {
+		box = new WeakMap();
+		Object.defineProperty(obj, label, {
+			configurable: true,
+			value: box
+		});
+	}
 
 	let
 		val = box.get(handlers);
