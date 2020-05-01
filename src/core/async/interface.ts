@@ -234,15 +234,21 @@ export type FullAsyncOptions<CTX extends object = Async> =
 	);
 
 /**
- * Reason why a task can be killed (cleared)
+ * Reason why a task can be marked
  */
-export type ClearReason =
+export type MarkReason =
 	'id' |
 	'label' |
-	'collision' |
 	'group' |
 	'rgxp' |
 	'all';
+
+/**
+ * Reason why a task can be killed (cleared)
+ */
+export type ClearReason =
+	MarkReason |
+	'collision';
 
 export interface ClearOptions {
 	/**
@@ -282,9 +288,9 @@ export interface FullClearOptions<ID = any> extends ClearProxyOptions<ID> {
 	name: string;
 
 	/**
-	 * Reason to clear the task
+	 * Reason to clear or mark the task
 	 */
-	reason?: ClearReason;
+	reason?: MarkReason | ClearReason;
 
 	/**
 	 * If true, the operation was registered as a promise

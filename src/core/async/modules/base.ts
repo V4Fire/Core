@@ -210,7 +210,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	/**
 	 * @deprecated
-	 * @see Async.prototype.getCache
+	 * @see [[Async.getCache]]
 	 */
 	@deprecated({renamedTo: 'getCache'})
 	protected initCache(name: string, promise?: boolean): GlobalCache {
@@ -406,7 +406,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	/**
 	 * @deprecated
-	 * @see Async.prototype.registerTask
+	 * @see [[Async.registerTask]]
 	 */
 	@deprecated({renamedTo: 'registerTask'})
 	protected setAsync<R = unknown, C extends object = CTX>(task: FullAsyncOptions<C>): R | null {
@@ -425,7 +425,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 		if (name) {
 			if (task === undefined) {
-				return this.cancelAllTasks({name, reason: 'all'});
+				return this.cancelTask({name, reason: 'all'});
 			}
 
 			p = Object.isPlainObject(task) ? {...task, name} : {name, id: task};
@@ -499,6 +499,15 @@ export default class Async<CTX extends object = Async<any>> {
 				link = links.get(p.id);
 
 			if (link) {
+				const skipZombie =
+					link.group &&
+					p.reason === 'all' &&
+					isZombieGroup.test(link.group);
+
+				if (skipZombie) {
+					return this;
+				}
+
 				link.unregister();
 
 				const ctx = {
@@ -531,43 +540,11 @@ export default class Async<CTX extends object = Async<any>> {
 
 	/**
 	 * @deprecated
-	 * @see Async.prototype.cancelTask
+	 * @see [[Async.cancelTask]]
 	 */
 	@deprecated({renamedTo: 'cancelTask'})
 	protected clearAsync(opts: CanUndef<FullClearOptions | any>, name?: string): this {
 		return this.cancelTask(opts, name);
-	}
-
-	/**
-	 * Cancels all async tasks from the specified namespace
-	 * @param opts - operation options
-	 */
-	protected cancelAllTasks(opts: FullClearOptions): this {
-		this.cancelTask(opts);
-
-		const
-			obj = this.getCache(opts.name, opts.promise).groups,
-			keys = Object.keys(obj);
-
-		for (let i = 0; i < keys.length; i++) {
-			const
-				group = keys[i];
-
-			if (!isZombieGroup.test(group)) {
-				this.cancelTask({...opts, group});
-			}
-		}
-
-		return this;
-	}
-
-	/**
-	 * @deprecated
-	 * @see Async.prototype.cancelAllTasks
-	 */
-	@deprecated({renamedTo: 'cancelAllTasks'})
-	protected clearAllAsync(opts: CanUndef<ClearProxyOptions | any>): this {
-		return this.cancelAllTasks(opts);
 	}
 
 	/**
@@ -583,7 +560,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 		if (name) {
 			if (task === undefined) {
-				return this.markAllTasks(label, {name});
+				return this.markTask(label, {name, reason: 'all'});
 			}
 
 			p = Object.isPlainObject(task) ? {...task, name} : {name, id: task};
@@ -609,7 +586,7 @@ export default class Async<CTX extends object = Async<any>> {
 						group = keys[i];
 
 					if (p.group.test(group)) {
-						this.markTask(label, {...p, group});
+						this.markTask(label, {...p, group, reason: 'rgxp'});
 					}
 				}
 
@@ -638,6 +615,14 @@ export default class Async<CTX extends object = Async<any>> {
 			}
 
 			p.id = tmp;
+
+			if (!p.reason) {
+				p.reason = 'label';
+			}
+		}
+
+		if (!p.reason) {
+			p.reason = 'id';
 		}
 
 		if (p.id != null) {
@@ -645,6 +630,15 @@ export default class Async<CTX extends object = Async<any>> {
 				link = links.get(p.id);
 
 			if (link) {
+				const skipZombie =
+					link.group &&
+					p.reason === 'all' &&
+					isZombieGroup.test(link.group);
+
+				if (skipZombie) {
+					return this;
+				}
+
 				if (label === '!paused') {
 					for (let o = link.queue, i = 0; i < o.length; i++) {
 						o[i]();
@@ -676,7 +670,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 	/**
 	 * @deprecated
-	 * @see Async.prototype.markTask
+	 * @see [[Async.markTask]]
 	 */
 	@deprecated({renamedTo: 'markTask'})
 	protected markAsync(label: string, opts: CanUndef<ClearProxyOptions | any>, name?: string): this {
@@ -691,29 +685,6 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	protected markAllTasks(label: string, opts: FullClearOptions): this {
 		this.markTask(label, opts);
-
-		const
-			obj = this.getCache(opts.name).groups,
-			keys = Object.keys(obj);
-
-		for (let i = 0; i < keys.length; i++) {
-			const
-				group = keys[i];
-
-			if (!isZombieGroup.test(group)) {
-				this.markTask(label, {...opts, group});
-			}
-		}
-
 		return this;
-	}
-
-	/**
-	 * @deprecated
-	 * @see Async.prototype.markAllTasks
-	 */
-	@deprecated({renamedTo: 'markAllTasks'})
-	protected markAllAsync(label: string, opts: FullClearOptions): this {
-		return this.markAllTasks(label, opts);
 	}
 }
