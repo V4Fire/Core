@@ -11,11 +11,10 @@
  * @packageDocumentation
  */
 
+import watchEngine from 'core/object/watch/engines';
+
 import { muteLabel, toOriginalObject, toRootObject, watchHandlers } from 'core/object/watch/const';
 import { getProxyType, unwrap } from 'core/object/watch/engines/helpers';
-
-import * as proxyEngine from 'core/object/watch/engines/proxy';
-import * as accEngine from 'core/object/watch/engines/accessors';
 
 import {
 
@@ -523,10 +522,7 @@ export default function watch<T extends object>(
 
 	const
 		tiedWith = opts?.tiedWith,
-		engine = typeof Proxy === 'function' ? proxyEngine : accEngine;
-
-	const
-		res = engine.watch(obj, undefined, handler, obj[watchHandlers] || new Set(), opts),
+		res = watchEngine.watch(obj, undefined, handler, obj[watchHandlers] || new Set(), opts),
 		proxy = res.proxy;
 
 	if (tiedWith && Object.isSimpleObject(unwrappedObj)) {
@@ -605,7 +601,7 @@ export function set(
 	value: unknown,
 	handlers: WatchHandlersSet = obj[watchHandlers]
 ): void {
-	(typeof Proxy === 'function' ? proxyEngine : accEngine).set(obj, path, value, handlers);
+	watchEngine.set(obj, path, value, handlers);
 }
 
 /**
@@ -616,5 +612,5 @@ export function set(
  * @param [handlers] - set of registered handlers
  */
 export function unset(obj: object, path: WatchPath, handlers: WatchHandlersSet = obj[watchHandlers]): void {
-	(typeof Proxy === 'function' ? proxyEngine : accEngine).unset(obj, path, handlers);
+	watchEngine.unset(obj, path, handlers);
 }

@@ -6,11 +6,9 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import watchEngine from 'core/object/watch/engines';
+
 import { toOriginalObject } from 'core/object/watch/const';
-
-import * as proxyEngine from 'core/object/watch/engines/proxy';
-import * as accEngine from 'core/object/watch/engines/accessors';
-
 import { WatchHandlersSet, InternalWatchOptions } from 'core/object/watch/interface';
 
 /**
@@ -76,8 +74,7 @@ export function getProxyValue(
 
 	if (opts.deep && getProxyType(rawValue)) {
 		const fullPath = Array.concat([], path ?? [], key);
-		return (typeof Proxy === 'function' ? proxyEngine : accEngine)
-			.watch(<object>rawValue, fullPath, null, handlers, opts, root, top || <object>rawValue);
+		return watchEngine.watch(<object>rawValue, fullPath, null, handlers, opts, root, top || <object>rawValue);
 	}
 
 	return rawValue;
