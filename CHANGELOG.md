@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.14.0 (2020-05-05)
+
+#### :rocket: New Feature
+
+* Added `core/prelude/test`
+
 ## v3.13.3 (2020-05-01)
 
 #### :bug: Bug Fix

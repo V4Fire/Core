@@ -19,9 +19,11 @@ declare namespace TB {
 	export { A, B, C, F, I, L, N, O, S, U } from 'ts-toolbelt';
 }
 
+declare const DEBUG: boolean;
+declare const IS_PROD: boolean;
+
 declare const APP_NAME: string;
 declare const API_URL: CanUndef<string>;
-declare const IS_PROD: boolean;
 declare const LOCALE: string;
 
 /**
@@ -51,6 +53,30 @@ declare function t(strings: unknown | string[], ...expr: unknown[]): string;
  * Global i18n loopback (can be used as a string tag or a simple function)
  */
 declare function l(strings: unknown | string[], ...expr: unknown[]): string;
+
+interface TestContext {
+	name: string;
+	module?: string;
+	context?: CanArray<string>;
+}
+
+interface TestAPI {
+	expect: typeof expect;
+	expectAsync: typeof expectAsync;
+	fail: typeof fail;
+	spyOn: typeof spyOn;
+	spyOnProperty: typeof spyOnProperty;
+	spyOnAllFunctions: typeof spyOnAllFunctions;
+	runs: typeof runs;
+	waitsFor: typeof waitsFor;
+	waits: typeof waits;
+}
+
+interface TestFn {
+	(api: TestAPI, done: Function): void;
+}
+
+declare function test(ctx: TestContext | string, fn: TestFn): void;
 
 declare class IdleDeadline {
 	readonly didTimeout: boolean;

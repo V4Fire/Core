@@ -6,6 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import 'core/prelude/test';
 import 'core/prelude/types';
 import 'core/prelude/object';
 import 'core/prelude/array';
