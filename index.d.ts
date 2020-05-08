@@ -12,16 +12,12 @@
  */
 
 // tslint:disable:max-file-line-count unified-signatures
-/// <reference types="ts-toolbelt"/>
 
-declare namespace TB {
-	export { Any, Boolean, Class, Function, Iteration, List, Number, Object, String, Union } from 'ts-toolbelt';
-	export { A, B, C, F, I, L, N, O, S, U } from 'ts-toolbelt';
-}
+declare const DEBUG: boolean;
+declare const IS_PROD: boolean;
 
 declare const APP_NAME: string;
 declare const API_URL: CanUndef<string>;
-declare const IS_PROD: boolean;
 declare const LOCALE: string;
 
 /**

@@ -5,7 +5,7 @@
   "main": "src/core/index.js",
   "typings": "index.d.ts",
   "license": "MIT",
-  "version": "3.13.3",
+  "version": "3.15.0",
   "author": {
     "name": "kobezzza",
     "email": "kobezzza@gmail.com",
@@ -26,17 +26,19 @@
     "test": "echo \"Error: no test specified\" && exit 0"
   },
   "dependencies": {
-    "eventemitter2": "^6.3.1",
+    "@types/got": "^9.6.10",
+    "@types/jasmine": "^3.5.10",
+    "eventemitter2": "^6.4.0",
     "fs-extra-promise": "^1.0.1",
     "got": "^10.7.0",
+    "jasmine": "^3.5.0",
     "node-localstorage": "^2.1.6",
     "set-value": "^3.0.2",
-    "tslib": "^1.11.1"
+    "tslib": "^1.11.2"
   },
   "optionalDependencies": {
     "@pzlr/build-core": "^2.8.17",
     "@types/fs-extra-promise": "^1.0.8",
-    "@types/got": "^9.6.9",
     "@types/gulp": "^4.0.6",
     "@types/gulp-load-plugins": "0.0.31",
     "@types/through2": "^2.0.34",
