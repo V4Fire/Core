@@ -11,6 +11,13 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.15.0 (2020-05-08)
+
+#### :rocket: New Feature
+
+* Added jasmine@3.5.0
+* Added spec `core/url`
+
 ## v3.14.0 (2020-05-05)
 
 #### :rocket: New Feature

@@ -192,6 +192,7 @@
 								<li class="tsd-kind-type-alias tsd-parent-kind-external-module tsd-has-type-parameter"><a href="src_core_async_interface.html#idlecb" class="tsd-kind-icon">Idle<wbr>Cb</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-external-module"><a href="src_core_async_interface.html#join" class="tsd-kind-icon">Join</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-external-module"><a href="src_core_async_interface.html#label" class="tsd-kind-icon">Label</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-external-module"><a href="src_core_async_interface.html#markreason" class="tsd-kind-icon">Mark<wbr>Reason</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-external-module"><a href="src_core_async_interface.html#namespace" class="tsd-kind-icon">Namespace</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-external-module tsd-has-type-parameter"><a href="src_core_async_interface.html#proxycb" class="tsd-kind-icon">Proxy<wbr>Cb</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-external-module tsd-has-type-parameter"><a href="src_core_async_interface.html#taskctx" class="tsd-kind-icon">Task<wbr>Ctx</a></li>
@@ -207,10 +208,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-external-module">
 					<a name="clearreason" class="tsd-anchor"></a>
 					<h3>Clear<wbr>Reason</h3>
-					<div class="tsd-signature tsd-kind-icon">Clear<wbr>Reason<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"id"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"label"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"collision"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"group"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"rgxp"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"all"</span></div>
+					<div class="tsd-signature tsd-kind-icon">Clear<wbr>Reason<span class="tsd-signature-symbol">:</span> <a href="src_core_async_interface.html#markreason" class="tsd-signature-type">MarkReason</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"collision"</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/interface.ts#L239">src/core/async/interface.ts:239</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/interface.ts#L249">src/core/async/interface.ts:249</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -225,7 +226,7 @@
 					<div class="tsd-signature tsd-kind-icon">Event<wbr>Emitter<wbr>LikeP<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Function</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/src_core_async_interface.eventemitterlike.html" class="tsd-signature-type">EventEmitterLike</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/interface.ts#L577">src/core/async/interface.ts:577</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/interface.ts#L583">src/core/async/interface.ts:583</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -276,7 +277,7 @@
 					<div class="tsd-signature tsd-kind-icon">Idle<wbr>Cb&lt;R, CTX&gt;<span class="tsd-signature-symbol">:</span> <a href="src_core_async_interface.html#proxycb" class="tsd-signature-type">ProxyCb</a><span class="tsd-signature-symbol">&lt;</span><a href="../classes/index_d.idledeadline.html" class="tsd-signature-type">IdleDeadline</a><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">CTX</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/interface.ts#L414">src/core/async/interface.ts:414</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/interface.ts#L420">src/core/async/interface.ts:420</a></li>
 						</ul>
 					</aside>
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -310,6 +311,21 @@
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-external-module">
+					<a name="markreason" class="tsd-anchor"></a>
+					<h3>Mark<wbr>Reason</h3>
+					<div class="tsd-signature tsd-kind-icon">Mark<wbr>Reason<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"id"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"label"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"group"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"rgxp"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"all"</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/interface.ts#L239">src/core/async/interface.ts:239</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Reason why a task can be marked</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-external-module">
 					<a name="namespace" class="tsd-anchor"></a>
 					<h3>Namespace</h3>
 					<div class="tsd-signature tsd-kind-icon">Namespace<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">keyof Namespaces</span></div>
@@ -325,7 +341,7 @@
 					<div class="tsd-signature tsd-kind-icon">Proxy<wbr>Cb&lt;A, R, CTX&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">A extends never ? function : A extends unknown[] ? function : function | Function</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/interface.ts#L406">src/core/async/interface.ts:406</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/interface.ts#L412">src/core/async/interface.ts:412</a></li>
 						</ul>
 					</aside>
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -347,7 +363,7 @@
 					<div class="tsd-signature tsd-kind-icon">Task<wbr>Ctx&lt;CTX&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/src_core_async_interface.asyncoptions.html" class="tsd-signature-type">AsyncOptions</a><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/src_core_async_interface.clearoptionsid.html" class="tsd-signature-type">ClearOptionsId</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/interface.ts#L372">src/core/async/interface.ts:372</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/interface.ts#L378">src/core/async/interface.ts:378</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -378,7 +394,7 @@
 					<div class="tsd-signature tsd-kind-icon">Worker<wbr>LikeP<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Function</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/src_core_async_interface.workerlike.html" class="tsd-signature-type">WorkerLike</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/interface.ts#L551">src/core/async/interface.ts:551</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/interface.ts#L557">src/core/async/interface.ts:557</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -509,6 +525,9 @@
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module">
 						<a href="src_core_async_interface.html#label" class="tsd-kind-icon">Label</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module">
+						<a href="src_core_async_interface.html#markreason" class="tsd-kind-icon">Mark<wbr>Reason</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module">
 						<a href="src_core_async_interface.html#namespace" class="tsd-kind-icon">Namespace</a>
