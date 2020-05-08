@@ -32,6 +32,7 @@
     "fs-extra-promise": "^1.0.1",
     "got": "^10.7.0",
     "jasmine": "^3.5.0",
+    "jasmine-console-reporter": "^3.1.0",
     "node-localstorage": "^2.1.6",
     "set-value": "^3.0.2",
     "tslib": "^1.11.1"
