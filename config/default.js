@@ -378,16 +378,16 @@ module.exports = config.createConfig(
 					default: 'client'
 				});
 
-				return path.resolve(this.output(), v, ...arguments);
+				return this.output(v, ...arguments);
 			},
 
 			serverOutput() {
-				const v = o('client-output', {
+				const v = o('server-output', {
 					env: true,
 					default: 'server'
 				});
 
-				return path.resolve(this.output(), v, ...arguments);
+				return this.output(v, ...arguments);
 			}
 		}
 	}
