@@ -73,7 +73,7 @@ exports.wrapGulp = function (gulp) {
 
 		gulpInitialized = true;
 		$C(cache).forEach((tasks, name) => {
-			addTask(name, Object.isFunction(tasks) ? tasks : tasks.init());
+			addTask(name, typeof tasks === 'function' ? tasks : tasks.init());
 		});
 	};
 };
