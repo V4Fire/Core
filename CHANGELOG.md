@@ -11,7 +11,11 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-## v3.14.1
+## v3.15.0 (2020-05-09)
+
+#### :rocket: New Feature
+
+* Added new build parameters `--client-output`, `--server-output`, `--output`
 
 #### :bug: Bug Fix
 
