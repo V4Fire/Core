@@ -11,6 +11,16 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.14.1
+
+#### :bug: Bug Fix
+
+* Fixed range validation `core/range`
+
+#### :house: Internal
+
+* Added spec `core/range`
+
 ## v3.14.0 (2020-05-08)
 
 #### :rocket: New Feature
