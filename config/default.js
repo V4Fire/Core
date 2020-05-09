@@ -16,10 +16,13 @@ const
 	o = require('uniconf/options').option;
 
 const
-	fs = require('fs-extra-promise'),
 	path = require('path'),
-	url = require('url'),
+	upath = require('upath'),
 	isPathEqual = require('path-equal').pathEqual;
+
+const
+	fs = require('fs-extra-promise'),
+	url = require('url');
 
 const
 	{config: pzlr, resolve} = require('@pzlr/build-core'),
@@ -163,7 +166,7 @@ class Config {
 	}
 
 	/**
-	 * Returns a map with paths for the specified init directory
+	 * Returns a map with paths of the specified init directory
 	 *
 	 * @param {string} dir - init directory (usually __dirname)
 	 * @returns {{root: string, src: string, pzlr: {blockDir: (string|undefined), serverDir: (string|undefined)}}}
@@ -184,7 +187,12 @@ class Config {
 const config = new Config();
 module.exports = config.createConfig(
 	{
-		dirs: [__dirname, 'client', 'server'],
+		dirs: [
+			__dirname,
+			'client',
+			'server'
+		],
+
 		envs: {
 			NODE_ENV: 'development'
 		}
@@ -340,8 +348,7 @@ module.exports = config.createConfig(
 			},
 
 			rel(field, ...args) {
-				const path = require('upath');
-				return path.join(path.relative(this.cwd(), this[field] ? this[field]() : field), ...args);
+				return upath.join(upath.relative(this.cwd(), this[field] ? this[field]() : field), ...args);
 			},
 
 			lib() {
@@ -357,15 +364,30 @@ module.exports = config.createConfig(
 			},
 
 			output() {
-				return path.resolve(this.cwd(), 'dist', ...arguments);
+				const v = o('output', {
+					env: true,
+					default: 'dist'
+				});
+
+				return path.resolve(this.cwd(), v, ...arguments);
 			},
 
 			clientOutput() {
-				return path.resolve(this.output(), 'client', ...arguments);
+				const v = o('client-output', {
+					env: true,
+					default: 'client'
+				});
+
+				return path.resolve(this.output(), v, ...arguments);
 			},
 
 			serverOutput() {
-				return path.resolve(this.output(), 'server', ...arguments);
+				const v = o('client-output', {
+					env: true,
+					default: 'server'
+				});
+
+				return path.resolve(this.output(), v, ...arguments);
 			}
 		}
 	}
