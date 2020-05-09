@@ -73,7 +73,7 @@ export default class Range<T extends RangeValue> {
 	 * Returns true if the range is valid
 	 */
 	isValid(): boolean {
-		return !isNaN(this.start);
+		return !isNaN(this.start) && !isNaN(this.end);
 	}
 
 	/**
