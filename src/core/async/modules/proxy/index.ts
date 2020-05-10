@@ -6,6 +6,11 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/**
+ * [[include:core/async/modules/proxy/README.md]]
+ * @packageDeclaration
+ */
+
 import Super, {
 
 	asyncCounter,
