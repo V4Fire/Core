@@ -16,6 +16,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 #### :bug: Bug Fix
 
 * Fixed `core/data/middlewares/wait` within `encoder` mode
+* Fixed TS warnings
 
 ## v3.15.0 (2020-05-09)
 

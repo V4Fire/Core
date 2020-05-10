@@ -449,7 +449,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * @param timeout
 	 * @param [opts] - additional options for the operation
 	 */
-	sleep(timeout: number, opts?: AsyncOptions): SyncPromise<void> {
+	sleep(timeout: number, opts?: AsyncOptions): Promise<void> {
 		return new SyncPromise((resolve, reject) => {
 			this.setTimeout(resolve, timeout, {
 				...opts,
@@ -464,7 +464,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Returns a promise that will be resolved on the next tick of the event loop
 	 * @param [opts] - additional options for the operation
 	 */
-	nextTick(opts?: AsyncOptions): SyncPromise<void> {
+	nextTick(opts?: AsyncOptions): Promise<void> {
 		return new SyncPromise((resolve, reject) => {
 			this.setImmediate(resolve, {
 				...opts,
@@ -479,7 +479,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Returns a promise that will be resolved on the process idle
 	 * @param [opts] - additional options for the operation
 	 */
-	idle(opts?: AsyncIdleOptions): SyncPromise<IdleDeadline> {
+	idle(opts?: AsyncIdleOptions): Promise<IdleDeadline> {
 		return new SyncPromise((resolve, reject) => {
 			this.requestIdleCallback(resolve, {
 				...opts,
@@ -496,7 +496,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * @param fn
 	 * @param [opts] - additional options for the operation
 	 */
-	wait(fn: Function, opts?: AsyncWaitOptions): SyncPromise<boolean> {
+	wait(fn: Function, opts?: AsyncWaitOptions): Promise<boolean> {
 		if (fn()) {
 			if (opts?.label != null) {
 				this.clearPromise(opts);

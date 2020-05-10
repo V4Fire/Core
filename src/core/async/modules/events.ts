@@ -224,7 +224,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		events: CanArray<string>,
 		opts: AsyncPromisifyOnceOptions<E, R, CTX>,
 		...args: unknown[]
-	): SyncPromise<R>;
+	): Promise<R>;
 
 	/**
 	 * Returns a promise that is resolved after emitting the specified event.
@@ -238,14 +238,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		emitter: EventEmitterLikeP,
 		events: CanArray<string>,
 		...args: unknown[]
-	): SyncPromise<R>;
+	): Promise<R>;
 
 	promisifyOnce<R, E>(
 		emitter: EventEmitterLikeP,
 		events: CanArray<string>,
 		opts?: AsyncPromisifyOnceOptions<E, R, CTX> | unknown[],
 		...args: unknown[]
-	): SyncPromise<R> {
+	): Promise<R> {
 		let
 			p: AsyncPromisifyOnceOptions<E, R, CTX>;
 

@@ -29,7 +29,7 @@ import { deprecate } from 'core/functools';
  * });
  * ```
  */
-export function resolveAfterEvents(emitter: EventEmitterLike, ...events: string[]): SyncPromise<void> {
+export function resolveAfterEvents(emitter: EventEmitterLike, ...events: string[]): Promise<void> {
 	const
 		$a = new Async();
 
@@ -131,7 +131,7 @@ export const afterEvents = deprecate(
 		alternative: 'resolveAfterEvents'
 	},
 
-	function afterEvents(emitter: EventEmitterLike, cb: Function | string, ...events: string[]): SyncPromise<void> {
+	function afterEvents(emitter: EventEmitterLike, cb: Function | string, ...events: string[]): Promise<void> {
 		const
 			promise = resolveAfterEvents(emitter, ...Array.concat([], Object.isString(cb) ? cb : null, events));
 
@@ -159,7 +159,7 @@ export const createSyncPromise = deprecate(
 		}
 	},
 
-	function createSyncPromise<R = unknown>(resolveValue?: R, rejectValue?: unknown): SyncPromise<R> {
+	function createSyncPromise<R = unknown>(resolveValue?: R, rejectValue?: unknown): Promise<R> {
 		if (rejectValue !== undefined) {
 			return SyncPromise.reject(rejectValue);
 		}
