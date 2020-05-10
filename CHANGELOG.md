@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.15.1 (2020-05-10)
+
+#### :bug: Bug Fix
+
+* Fixed `core/data/middlewares/wait` within `encoder` mode
+
 ## v3.15.0 (2020-05-09)
 
 #### :rocket: New Feature
