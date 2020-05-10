@@ -17,11 +17,7 @@ describe('core/async/modules/proxy/promise', () => {
 
 	it('chained promise wrapper with the resolved promise', async () => {
 		await $a.promise(Promise.resolve('All fine'))
-			.catch((err) => {
-				expect(err).toBe('Boom!');
-				return 'All fine';
-			})
-
+			.catch(() => 'Boom!')
 			.then((msg) => expect(msg).toBe('All fine'));
 	});
 
