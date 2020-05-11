@@ -66,6 +66,7 @@ describe('core/semver', () => {
 		expect(check('1.2.9', '1.2.9', '==')).toBeTrue();
 		expect(check('1.0.0', '1.2.7', '==')).toBeFalse();
 
+		expect(check('1', '1.2.7', '==')).toBeTrue();
 		expect(check('1.*', '1.2.7', '==')).toBeTrue();
 		expect(check('1.2.7', '1.*', '==')).toBeTrue();
 		expect(check('1.2.4', '1.2.*', '==')).toBeTrue();

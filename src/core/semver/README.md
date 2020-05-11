@@ -2,6 +2,18 @@
 
 This module provides a function that compare string versions using semver strategy.
 
+### Supported Comparisons
+> Note:
+> Module currently supports only a numeric comparison with x-ranges. Without `beta`, `alpha` or `rc` postfixes.
+
+- `==` equal
+- `^=` caret range
+- `>` greater than
+- `<` less than
+- `>=` greater than or equal to
+- `<=` less than or equal to
+
+### Examples
 ```js
 import check from 'core/semver';
 
