@@ -11,107 +11,107 @@
  * @packageDocumentation
  */
 
-import { operations, compareRgxp, inequalityRgxp } from 'core/semver/const';
-import { Operation } from 'core/semver/interface';
+import { operations, compareRgxp, operandLengthErrorText } from 'core/semver/const';
+import { Operation, Strategy, ComparisonOptions } from 'core/semver/interface';
 
 export * from 'core/semver/const';
 export * from 'core/semver/interface';
 
 /**
- * Compares two strings with number versions by using the semver strategy
+ * Compares two strings with number versions (a <op> b)
+ * by using the semver strategy
  *
  * @param a
  * @param b
- * @param operation - operation type
+ * @param op - operation type
+ * @param opts - additional options for the specified operation
  */
-export default function (a: string, b: string, operation: Operation): boolean {
-	if (!operations[operation]) {
-		throw new TypeError(`Unknown comparator "${operation}". Only "${Object.keys(operations).join(', ')}" available.`);
+export default function (a: string, b: string, op: Operation, opts: ComparisonOptions = {x: '*'}): boolean {
+	if (!a.trim() || !b.trim()) {
+		throw new Error(operandLengthErrorText);
+	}
+
+	if (!operations[op]) {
+		throw new TypeError(`Unknown comparator "${op}". Only "${Object.keys(operations).join(', ')}" available.`);
 	}
 
 	const
-		aArr = a.split('.'),
-		bArr = b.split('.');
+		left = a.split('.'),
+		right = b.split('.'),
+		{x} = opts;
+
+	const
+		strategyMatch = op.match(compareRgxp);
 
 	let
-		target = bArr.map((el) => el),
-		candidate = aArr.map((el) => el),
-		strategy = 'default';
+		strategy: Strategy = 'ord';
 
-	const
-		match = operation.match(compareRgxp);
+	if (strategyMatch?.[0] === op) {
+		// Using for the caret range ^=
+		strategy = 'caret';
 
-	if (match) {
-		if (match.index === 1) {
-			strategy = 'eq';
-
-		} else if (match[0] === operation) {
-			strategy = 'fromEq';
-
-		} else if (match.index === 0) {
-			strategy = 'fullEq';
-		}
+	} else if (strategyMatch?.index === 0) {
+		// Using for the equal ==
+		strategy = 'eq';
 	}
 
 	const
-		lengthDiff = Math.abs(aArr.length - bArr.length),
-		filledDiff = Array(lengthDiff).fill('*');
-
-	if (lengthDiff) {
-		if (candidate.length > target.length) {
-			target = target.concat(filledDiff);
-
-		} else {
-			candidate = candidate.concat(filledDiff);
-		}
-	}
+		max = Math.max(left.length, right.length);
 
 	let
+		preRes,
 		res = false;
 
-	for (let i = 0; i < target.length; i++) {
+	for (let i = 0; i < max; i++) {
 		const
-			t = target[i],
-			c = candidate[i];
+			l = left[i] || x,
+			r = right[i] || x;
 
-		let
-			cNum = parseInt(c, 10),
-			tNum = parseInt(t, 10);
+		const
+			rVal = parseInt(r, 10),
+			lVal = parseInt(l, 10);
 
-		if (inequalityRgxp.test(operation)) {
-			cNum = c === '*' ? 0 : cNum;
-			tNum = t === '*' ? 0 : tNum;
+		if (i) {
+			preRes = res;
 		}
 
-		res = operations[operation](
-			cNum,
-			tNum
+		res = operations[op](
+			lVal,
+			rVal
 		);
 
 		switch (strategy) {
-			case 'fromEq':
+			case 'caret':
 				if (!res) {
-					return i > 0 && cNum < tNum;
-				}
-
-				break;
-
-			case 'fullEq':
-				if (!res) {
-					return c === '*' || t === '*';
+					return (i > 0 && right[i - 1] !== '0' && rVal < lVal) || l === x || r === x;
 				}
 
 				break;
 
 			case 'eq':
-				if (cNum !== tNum || i === target.length - 1) {
-					return c === '*' || t === '*' || res;
+				if (!res) {
+					return l === x || r === x;
 				}
 
 				break;
 
-			case 'default':
-				if (res) {
+			case 'ord':
+				if (!res && (r === x || l === x)) {
+					// 1.3.0 <= >= 1.2.*
+					if (op.length === 2 && !preRes) {
+						return false;
+					}
+
+					// 1.2.4 >< 1.*
+					// 1.2.4 >< 1.2.*
+					// 1.* >< 1.2.4
+					// 1.2.* >< 1.2.4
+					return op.length !== 1;
+				}
+
+				// 1.1.2 > 1.1.1
+				// 1.3.0 > 1.2.*
+				if (res && op.length === 1) {
 					return res;
 				}
 		}

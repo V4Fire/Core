@@ -15,7 +15,10 @@ export type Operation =
 	'^=';
 
 export type Strategy =
-	'eq' |
-	'fullEq' |
-	'fromEq' |
-	'default';
+	'eq' | // ==
+	'ord' | // > < >= <=
+	'caret'; // ^=
+
+export interface ComparisonOptions {
+	x: string
+}
