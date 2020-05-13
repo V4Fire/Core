@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.15.2 (2020-05-13)
+
+#### :bug: Bug Fix
+
+* Fixed TS compile flags
+
 ## v3.15.1 (2020-05-10)
 
 #### :bug: Bug Fix
