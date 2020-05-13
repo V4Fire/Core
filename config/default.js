@@ -320,7 +320,7 @@ module.exports = config.createConfig(
 		typescript() {
 			const
 				es = this.es(),
-				importHelpers = Boolean({ES3: true, ES5: true, ES6: true})[es];
+				importHelpers = Boolean({ES3: true, ES5: true, ES6: true}[es]);
 
 			return {
 				transpileOnly: true,
