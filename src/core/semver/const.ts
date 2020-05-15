@@ -18,5 +18,7 @@ export const operations: Record<Operation, (a: number, b: number) => boolean> = 
 };
 
 export const
-	compareRgxp = /((^|\^|)=)/,
-	inequalityRgxp = /[><]/;
+	compareRgxp = /((^|\^|)=)/;
+
+export const
+	operandLengthErrorText = 'Cannot compare versions. Operand have empty value';
