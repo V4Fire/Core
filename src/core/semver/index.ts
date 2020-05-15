@@ -24,7 +24,7 @@ export * from 'core/semver/interface';
  * @param a
  * @param b
  * @param op - operation type
- * @param opts - additional options for the specified operation
+ * @param [opts] - additional options for the specified operation
  */
 export default function (a: string, b: string, op: Operation, opts: ComparisonOptions = {x: '*'}): boolean {
 	if (!a.trim() || !b.trim()) {

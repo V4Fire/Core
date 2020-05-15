@@ -21,4 +21,4 @@ export const
 	compareRgxp = /((^|\^|)=)/;
 
 export const
-	operandLengthErrorText = 'Cannot compare versions. Operand have empty value';
+	operandLengthErrorText = 'Can\'t compare versions. The operand has an empty value.';
