@@ -16,6 +16,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 #### :bug: Bug Fix
 
 * Fixed `Object.reject/select` type inferring
+* [Fixed `core/semver`](https://github.com/V4Fire/Core/pull/91)
 
 ## v3.15.2 (2020-05-13)
 
