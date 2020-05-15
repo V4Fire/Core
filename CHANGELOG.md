@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.15.3 (2020-05-15)
+
+#### :bug: Bug Fix
+
+* Fixed `Object.reject/select` type inferring
+
 ## v3.15.2 (2020-05-13)
 
 #### :bug: Bug Fix

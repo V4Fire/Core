@@ -896,7 +896,55 @@ interface ObjectConstructor {
 	 * Returns a curried version of Object.select
 	 * @param condition - whitelist of keys to filter
 	 */
-	select<C extends string>(condition: CanArray<C>): <D extends object>(obj: D) => Pick<D, Extract<keyof D, C>>;
+	select(condition: []): <D extends object>(obj: D) => D;
+
+	/**
+	 * Returns a curried version of Object.select
+	 * @param condition - whitelist of keys to filter
+	 */
+	select<C extends string>(condition: C | [C]): <D extends object>(obj: D) => Pick<D, Extract<keyof D, C>>;
+
+	/**
+	 * Returns a curried version of Object.select
+	 * @param condition - whitelist of keys to filter
+	 */
+	select<
+		C1 extends string,
+		C2 extends string
+	>(condition: [C1, C2]): <D extends object>(obj: D) => Pick<D, Extract<keyof D, C1 | C2>>;
+
+	/**
+	 * Returns a curried version of Object.select
+	 * @param condition - whitelist of keys to filter
+	 */
+	select<
+		C1 extends string,
+		C2 extends string,
+		C3 extends string,
+	>(condition: [C1, C2, C3]): <D extends object>(obj: D) => Pick<D, Extract<keyof D, C1 | C2 | C3>>;
+
+	/**
+	 * Returns a curried version of Object.select
+	 * @param condition - whitelist of keys to filter
+	 */
+	select<
+		C1 extends string,
+		C2 extends string,
+		C3 extends string,
+		C4 extends string
+	>(condition: [C1, C2, C3, C4]): <D extends object>(obj: D) => Pick<D, Extract<keyof D, C1 | C2 | C3 | C4>>;
+
+	/**
+	 * Returns a curried version of Object.select
+	 * @param condition - whitelist of keys to filter
+	 */
+	select<
+		C1 extends string,
+		C2 extends string,
+		C3 extends string,
+		C4 extends string,
+		C5 extends string
+	>(condition: [C1, C2, C3, C4, C5]): <D extends object>(obj: D) => Pick<D, Extract<keyof D, C1 | C2 | C3 | C4 | C5>>;
 
 	/**
 	 * Returns a curried version of Object.select
@@ -924,7 +972,69 @@ interface ObjectConstructor {
 	 * @param obj
 	 * @param condition - whitelist of keys to filter
 	 */
-	select<D extends object, C extends string>(obj: D, condition: CanArray<C>): Pick<D, Extract<keyof D, C>>;
+	select<D extends object>(obj: D, condition: []): D;
+
+	/**
+	 * Returns a new object based on the specified, but only with fields that match to the specified condition
+	 *
+	 * @param obj
+	 * @param condition - whitelist of keys to filter
+	 */
+	select<D extends object, C extends string>(obj: D, condition: C | [C]): Pick<D, Extract<keyof D, C>>;
+
+	/**
+	 * Returns a new object based on the specified, but only with fields that match to the specified condition
+	 *
+	 * @param obj
+	 * @param condition - whitelist of keys to filter
+	 */
+	select<
+		D extends object,
+		C1 extends string,
+		C2 extends string
+	>(obj: D, condition: [C1, C2]): Pick<D, Extract<keyof D, C1 | C2>>;
+
+	/**
+	 * Returns a new object based on the specified, but only with fields that match to the specified condition
+	 *
+	 * @param obj
+	 * @param condition - whitelist of keys to filter
+	 */
+	select<
+		D extends object,
+		C1 extends string,
+		C2 extends string,
+		C3 extends string
+	>(obj: D, condition: [C1, C2, C3]): Pick<D, Extract<keyof D, C1 | C2 | C3>>;
+
+	/**
+	 * Returns a new object based on the specified, but only with fields that match to the specified condition
+	 *
+	 * @param obj
+	 * @param condition - whitelist of keys to filter
+	 */
+	select<
+		D extends object,
+		C1 extends string,
+		C2 extends string,
+		C3 extends string,
+		C4 extends string
+	>(obj: D, condition: [C1, C2, C3, C4]): Pick<D, Extract<keyof D, C1 | C2 | C3 | C4>>;
+
+	/**
+	 * Returns a new object based on the specified, but only with fields that match to the specified condition
+	 *
+	 * @param obj
+	 * @param condition - whitelist of keys to filter
+	 */
+	select<
+		D extends object,
+		C1 extends string,
+		C2 extends string,
+		C3 extends string,
+		C4 extends string,
+		C5 extends string,
+	>(obj: D, condition: [C1, C2, C3, C4, C5]): Pick<D, Extract<keyof D, C1 | C2 | C3 | C4 | C5>>;
 
 	/**
 	 * Returns a new object based on the specified, but only with fields that match to the specified condition
@@ -952,7 +1062,55 @@ interface ObjectConstructor {
 	 * Returns a curried version of Object.reject
 	 * @param condition - whitelist of keys to filter
 	 */
-	reject<C extends string>(condition: CanArray<C>): <D extends object>(obj: D) => Omit<D, C>;
+	reject<C>(condition: []): <D extends object>(obj: D) => D;
+
+	/**
+	 * Returns a curried version of Object.reject
+	 * @param condition - whitelist of keys to filter
+	 */
+	reject<C extends string>(condition: C | [C]): <D extends object>(obj: D) => Omit<D, C>;
+
+	/**
+	 * Returns a curried version of Object.reject
+	 * @param condition - whitelist of keys to filter
+	 */
+	reject<
+		C1 extends string,
+		C2 extends string
+	>(condition: [C1, C2]): <D extends object>(obj: D) => Omit<D, C1 | C2>;
+
+	/**
+	 * Returns a curried version of Object.reject
+	 * @param condition - whitelist of keys to filter
+	 */
+	reject<
+		C1 extends string,
+		C2 extends string,
+		C3 extends string
+	>(condition: [C1, C2, C3]): <D extends object>(obj: D) => Omit<D, C1 | C2 | C3>;
+
+	/**
+	 * Returns a curried version of Object.reject
+	 * @param condition - whitelist of keys to filter
+	 */
+	reject<
+		C1 extends string,
+		C2 extends string,
+		C3 extends string,
+		C4 extends string
+	>(condition: [C1, C2, C3, C4]): <D extends object>(obj: D) => Omit<D, C1 | C2 | C3 | C4>;
+
+	/**
+	 * Returns a curried version of Object.reject
+	 * @param condition - whitelist of keys to filter
+	 */
+	reject<
+		C1 extends string,
+		C2 extends string,
+		C3 extends string,
+		C4 extends string,
+		C5 extends string
+	>(condition: [C1, C2, C3, C4, C5]): <D extends object>(obj: D) => Omit<D, C1 | C2 | C3 | C4 | C5>;
 
 	/**
 	 * Returns a curried version of Object.reject
@@ -980,7 +1138,69 @@ interface ObjectConstructor {
 	 * @param obj
 	 * @param condition - whitelist of keys to filter
 	 */
-	reject<D extends object, C extends string>(obj: D, condition: CanArray<C>): Omit<D, C>;
+	reject<D extends object>(obj: D, condition: []): D;
+
+	/**
+	 * Returns a new object based on the specified, but without fields that match to the specified condition
+	 *
+	 * @param obj
+	 * @param condition - whitelist of keys to filter
+	 */
+	reject<D extends object, C extends string>(obj: D, condition: C | [C]): Omit<D, C>;
+
+	/**
+	 * Returns a new object based on the specified, but without fields that match to the specified condition
+	 *
+	 * @param obj
+	 * @param condition - whitelist of keys to filter
+	 */
+	reject<
+		D extends object,
+		C1 extends string,
+		C2 extends string
+	>(obj: D, condition: [C1, C2]): Omit<D, C1 | C2>;
+
+	/**
+	 * Returns a new object based on the specified, but without fields that match to the specified condition
+	 *
+	 * @param obj
+	 * @param condition - whitelist of keys to filter
+	 */
+	reject<
+		D extends object,
+		C1 extends string,
+		C2 extends string,
+		C3 extends string
+	>(obj: D, condition: [C1, C2, C3]): Omit<D, C1 | C2 | C3>;
+
+	/**
+	 * Returns a new object based on the specified, but without fields that match to the specified condition
+	 *
+	 * @param obj
+	 * @param condition - whitelist of keys to filter
+	 */
+	reject<
+		D extends object,
+		C1 extends string,
+		C2 extends string,
+		C3 extends string,
+		C4 extends string
+	>(obj: D, condition: [C1, C2, C3, C4]): Omit<D, C1 | C2 | C3 | C4>;
+
+	/**
+	 * Returns a new object based on the specified, but without fields that match to the specified condition
+	 *
+	 * @param obj
+	 * @param condition - whitelist of keys to filter
+	 */
+	reject<
+		D extends object,
+		C1 extends string,
+		C2 extends string,
+		C3 extends string,
+		C4 extends string,
+		C5 extends string
+	>(obj: D, condition: [C1, C2, C3, C4, C5]): Omit<D, C1 | C2 | C3 | C4 | C5>;
 
 	/**
 	 * Returns a new object based on the specified, but without fields that match to the specified condition
