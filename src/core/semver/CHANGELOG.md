@@ -13,7 +13,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 ## (2020-05-11)
 
-#### :nail_care: Refactoring
+#### :nail_care: Polish
 
 * Module refactoring
 
