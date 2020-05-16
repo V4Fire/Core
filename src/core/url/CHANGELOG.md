@@ -11,7 +11,7 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-## (2020-05-16)
+## v3.15.4 (2020-05-16)
 
 #### :bug: Bug Fix
 
