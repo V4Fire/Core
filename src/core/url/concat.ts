@@ -7,7 +7,8 @@
  */
 
 const
-	isUrlWithSep = /^(\w+:)?\/?\//;
+	isAbsURL = /^\w+:?\/\//,
+	isUrlWithSlash = /^(\w+:)?\/?\//;
 
 /**
  * Concatenates the specified parts of URLs with correctly arranging of slashes and returns a new string
@@ -25,24 +26,21 @@ export function concatUrls(...urls: Nullable<string>[]): string {
 			continue;
 		}
 
-		res = String(res);
-		url = String(url);
+		if (isAbsURL.test(url)) {
+			res = url;
+			continue;
+		}
 
 		if (url[0] === '/') {
 			url = url.slice(1);
 		}
 
 		if (res) {
-			if (res[res.length - 1] === '/') {
-				res += url;
-				continue;
-			}
-
-			res += `/${url}`;
+			res += res[res.length - 1] === '/' ? url : `/${url}`;
 			continue;
 		}
 
-		res = isUrlWithSep.test(url) ? url : `/${url}`;
+		res = isUrlWithSlash.test(url) ? url : `/${url}`;
 	}
 
 	return res;
