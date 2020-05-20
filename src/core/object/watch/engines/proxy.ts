@@ -229,12 +229,20 @@ export function watch<T extends object>(
 					propFromProto = true;
 				}
 
+				if (Object.isArray(target[key])) {
+					target[key][Symbol.isConcatSpreadable] = true;
+				}
+
 				const watchOpts = Object.assign(Object.create(opts!), {fromProto: propFromProto});
 				return getProxyValue(val, key, path, handlers, root!, top, watchOpts);
 			}
 
 			if (Object.isFunction(val) && (!isCustomObject && !Object.isArray(target))) {
 				return val.bind(target);
+			}
+
+			if (Object.isArray(target)) {
+				target[Symbol.isConcatSpreadable] = true;
 			}
 
 			return val;
