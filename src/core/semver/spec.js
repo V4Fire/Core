@@ -85,6 +85,16 @@ describe('core/semver', () => {
 		expect(check('5', '6', '^=')).toBeFalse();
 	});
 
+	it('tilda range', () => {
+		expect(check('0.8.3', '0.9.0', '~=')).toBeFalse();
+		expect(check('0.0.1', '0.0.2', '~=')).toBeFalse();
+		expect(check('2.0.2', '1.0.1', '~=')).toBeFalse();
+
+		expect(check('0.0.2', '0.0.1', '~=')).toBeTrue();
+		expect(check('1.2.4', '1.2.3', '~=')).toBeTrue();
+		expect(check('1.5.2', '1', '~=')).toBeTrue();
+	});
+
 	it('caret range with x-range', () => {
 		expect(check('*', '0.0.2', '^=')).toBeTrue();
 		expect(check('1.*', '0.0.5', '^=')).toBeFalse();

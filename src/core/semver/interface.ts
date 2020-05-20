@@ -12,12 +12,13 @@ export type Operation =
 	'<' |
 	'<=' |
 	'==' |
+	'~=' |
 	'^=';
 
 export type Strategy =
 	'eq' | // ==
-	'ord' | // > < >= <=
-	'caret'; // ^=
+	'range' | // ^= ~=
+	'ord'; // < > >= <=
 
 export interface ComparisonOptions {
 	x: string

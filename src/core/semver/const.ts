@@ -14,11 +14,12 @@ export const operations: Record<Operation, (a: number, b: number) => boolean> = 
 	'<': (a, b) => a < b,
 	'<=': (a, b) => a <= b,
 	'==': (a, b) => a === b,
+	'~=': (a, b) => a === b,
 	'^=': (a, b) => a === b
 };
 
 export const
-	compareRgxp = /((^|\^|)=)/;
+	compareRgxp = /^(\^|~|)=/;
 
 export const
 	operandLengthErrorText = 'Can\'t compare versions. The operand has an empty value.';

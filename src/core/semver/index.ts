@@ -47,8 +47,7 @@ export default function (a: string, b: string, op: Operation, opts: ComparisonOp
 		strategy: Strategy = 'ord';
 
 	if (strategyMatch?.[0] === op) {
-		// Using for the caret range ^=
-		strategy = 'caret';
+		strategy = 'range';
 
 	} else if (strategyMatch?.index === 0) {
 		// Using for the equal ==
@@ -81,8 +80,12 @@ export default function (a: string, b: string, op: Operation, opts: ComparisonOp
 		);
 
 		switch (strategy) {
-			case 'caret':
+			case 'range':
 				if (!res) {
+					if (op.startsWith('~')) {
+						return l === x || r === x || i > 0 && rVal < lVal;
+					}
+
 					return (i > 0 && right[i - 1] !== '0' && rVal < lVal) || l === x || r === x;
 				}
 
