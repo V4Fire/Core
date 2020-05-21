@@ -108,13 +108,13 @@ export function watch<T extends object>(
 
 			set: (path, value) => {
 				if (handlers) {
-					set.call(opts?.engine)(obj, path, value, handlers);
+					set(obj, path, value, handlers);
 				}
 			},
 
 			delete: (path) => {
 				if (handlers) {
-					unset.call(opts?.engine)(obj, path, handlers);
+					unset(obj, path, handlers);
 				}
 			},
 
