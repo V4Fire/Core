@@ -621,7 +621,7 @@ export function set(
 	obj: object,
 	path: WatchPath,
 	value: unknown,
-	handlers?: WatchHandlersSet | WatchEngine,
+	handlers: WatchHandlersSet,
 	engine?: WatchEngine
 ): void;
 
@@ -673,7 +673,7 @@ export function unset(
 	this: CanUndef<WatchEngine>,
 	obj: object,
 	path: WatchPath,
-	handlers?: WatchHandlersSet | WatchEngine,
+	handlers: WatchHandlersSet,
 	engine?: WatchEngine
 ): void;
 
