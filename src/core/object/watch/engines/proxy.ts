@@ -206,12 +206,15 @@ export function watch<T extends object>(
 				return val;
 			}
 
+			const
+				isCustomObject = Object.isCustomObject(target);
+
 			if (Object.isSymbol(key) || blackListStore.has(key)) {
-				if (Object.isCustomObject(target)) {
+				if (isCustomObject) {
 					return val;
 				}
 
-			} else if (Object.isCustomObject(target)) {
+			} else if (isCustomObject) {
 				const
 					isArray = Object.isArray(target);
 
@@ -230,7 +233,18 @@ export function watch<T extends object>(
 				return getProxyValue(val, key, path, handlers, root!, top, watchOpts);
 			}
 
-			return Object.isFunction(val) ? val.bind(target) : val;
+			if (Object.isArray(target)) {
+				target[Symbol.isConcatSpreadable] = true;
+
+			} else if (Object.isFunction(val) && !isCustomObject) {
+				return val.bind(target);
+			}
+
+			if (Object.isFunction(val) && (!isCustomObject && !Object.isArray(target))) {
+				return val.bind(target);
+			}
+
+			return val;
 		},
 
 		set: (target, key, val, receiver) => {

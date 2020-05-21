@@ -73,8 +73,11 @@ export function getProxyValue(
 	}
 
 	if (opts.deep && getProxyType(rawValue)) {
-		const fullPath = Array.concat([], path ?? [], key);
-		return watchEngine.watch(<object>rawValue, fullPath, null, handlers, opts, root, top || <object>rawValue);
+		const
+			fullPath = Array.concat([], path ?? [], key),
+			obj = <object>rawValue;
+
+		return (opts.engine || watchEngine).watch(obj, fullPath, null, handlers, opts, root, top || obj);
 	}
 
 	return rawValue;

@@ -11,6 +11,16 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.16.0 (2020-05-21)
+
+#### :rocket: New Feature
+
+* Added a feature to provide a custom watch engine `core/object/watch`
+
+#### :bug: Bug Fix
+
+* Fixed watching of arrays `core/object/watch`
+
 ## v3.15.4 (2020-05-15)
 
 #### :bug: Bug Fix

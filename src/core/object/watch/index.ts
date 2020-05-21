@@ -25,7 +25,8 @@ import {
 	MultipleWatchHandler,
 
 	Watcher,
-	WatchHandlersSet
+	WatchHandlersSet,
+	WatchEngine
 
 } from 'core/object/watch/interface';
 
@@ -144,8 +145,11 @@ export default function watch<T extends object>(
 		handler = handlerOrOpts;
 	}
 
+	opts = opts || {};
+	opts.engine = opts.engine || watchEngine;
+
 	const
-		rawDeps = Object.size(opts?.dependencies) ? opts!.dependencies : undefined;
+		rawDeps = Object.size(opts.dependencies) ? opts.dependencies : undefined;
 
 	let
 		depsMap: Map<unknown[], unknown[][]>,
@@ -222,18 +226,18 @@ export default function watch<T extends object>(
 	}
 
 	const
-		deep = normalizedPath?.length > 1 || opts?.deep,
-		withProto = opts?.withProto,
-		immediate = opts?.immediate,
-		collapse = normalizedPath ? opts?.collapse !== false : opts?.collapse;
+		deep = normalizedPath?.length > 1 || opts.deep,
+		withProto = opts.withProto,
+		immediate = opts.immediate,
+		collapse = normalizedPath ? opts.collapse !== false : opts.collapse;
 
 	const
-		pref = opts?.prefixes,
-		post = opts?.postfixes;
+		pref = opts.prefixes,
+		post = opts.postfixes;
 
 	const
-		pathModifier = opts?.pathModifier,
-		eventFilter = opts?.eventFilter;
+		pathModifier = opts.pathModifier,
+		eventFilter = opts.eventFilter;
 
 	// If we have a handler and valid object to watch,
 	// we need to wrap this handler to provide all features of watching
@@ -521,8 +525,8 @@ export default function watch<T extends object>(
 	}
 
 	const
-		tiedWith = opts?.tiedWith,
-		res = watchEngine.watch(obj, undefined, handler, obj[watchHandlers] || new Set(), opts),
+		tiedWith = opts.tiedWith,
+		res = opts.engine.watch(obj, undefined, handler, obj[watchHandlers] || new Set(), opts),
 		proxy = res.proxy;
 
 	if (tiedWith && Object.isSimpleObject(unwrappedObj)) {
@@ -593,24 +597,97 @@ export function unmute(obj: object): boolean {
  * @param obj
  * @param path
  * @param value
- * @param [handlers] - set of registered handlers
+ * @param [engine] - watch engine to use
  */
 export function set(
 	obj: object,
 	path: WatchPath,
 	value: unknown,
-	handlers: WatchHandlersSet = obj[watchHandlers]
+	engine?: WatchEngine
+): void;
+
+/**
+ * Sets a new watchable value for an object by the specified path
+ *
+ * @param obj
+ * @param path
+ * @param value
+ * @param [handlers] - set of registered handlers
+ * @param [engine] - watch engine to use
+ */
+export function set(
+	obj: object,
+	path: WatchPath,
+	value: unknown,
+	handlers: WatchHandlersSet,
+	engine?: WatchEngine
+): void;
+
+export function set(
+	obj: object,
+	path: WatchPath,
+	value: unknown,
+	handlersOrEngine?: WatchHandlersSet | WatchEngine,
+	engine: WatchEngine = watchEngine
 ): void {
-	watchEngine.set(obj, path, value, handlers);
+	let
+		handlers;
+
+	if (Object.isSet(handlersOrEngine)) {
+		handlers = handlersOrEngine;
+
+	} else {
+		engine = handlersOrEngine || engine;
+		handlers = obj[watchHandlers];
+	}
+
+	engine.set(obj, path, value, handlers);
 }
 
 /**
- * Deletes a watchable value for an object by the specified path
+ * Deletes a watchable value from an object by the specified path
+ *
+ * @param obj
+ * @param path
+ * @param [engine] - watch engine to use
+ */
+export function unset(
+	obj: object,
+	path: WatchPath,
+	engine?: WatchEngine
+): void;
+
+/**
+ * Deletes a watchable value from an object by the specified path
  *
  * @param obj
  * @param path
  * @param [handlers] - set of registered handlers
+ * @param [engine] - watch engine to use
  */
-export function unset(obj: object, path: WatchPath, handlers: WatchHandlersSet = obj[watchHandlers]): void {
-	watchEngine.unset(obj, path, handlers);
+export function unset(
+	obj: object,
+	path: WatchPath,
+	handlers: WatchHandlersSet,
+	engine?: WatchEngine
+): void;
+
+export function unset(
+	obj: object,
+	path: WatchPath,
+	handlersOrEngine: WatchHandlersSet | WatchEngine = obj[watchHandlers],
+	engine: WatchEngine = watchEngine
+): void {
+	let
+		handlers;
+
+	if (Object.isSet(handlersOrEngine)) {
+		handlers = handlersOrEngine;
+
+	} else {
+		engine = handlersOrEngine || engine;
+		handlers = obj[watchHandlers];
+	}
+
+	engine.unset(obj, path, handlers);
 }
