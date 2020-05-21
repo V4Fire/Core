@@ -233,6 +233,13 @@ export function watch<T extends object>(
 				return getProxyValue(val, key, path, handlers, root!, top, watchOpts);
 			}
 
+			if (Object.isArray(target)) {
+				target[Symbol.isConcatSpreadable] = true;
+
+			} else if (Object.isFunction(val) && !isCustomObject) {
+				return val.bind(target);
+			}
+
 			if (Object.isFunction(val) && (!isCustomObject && !Object.isArray(target))) {
 				return val.bind(target);
 			}

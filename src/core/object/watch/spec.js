@@ -35,5 +35,20 @@ describe('core/object/watch', () => {
 			expect(spy).toHaveBeenCalledWith(2, undefined);
 			expect(spy).toHaveBeenCalledWith(3, undefined);
 		});
+
+		it(`array concatenation with proxy (${type})`, () => {
+			const
+				arrOne = [1, 2, 3],
+				arrTwo = ['foo', 'bar'];
+
+			const
+				{proxy: proxyOne} = watch(arrOne, {immediate: true, engine}),
+				{proxy: proxyTwo} = watch(arrTwo, {immediate: true, engine});
+
+			const
+				result = proxyOne.concat(proxyTwo);
+
+			expect(result).toEqual([1, 2, 3, 'foo', 'bar']);
+		});
 	});
 });

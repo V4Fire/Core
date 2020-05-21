@@ -20,3 +20,8 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 #### :bug: Bug Fix
 
 * Fixed watching of arrays
+* Fixed proxy arrays concatenation
+
+#### :house: Tests
+
+* Added `spec.js` with some test cases for arrays
