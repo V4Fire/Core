@@ -168,6 +168,35 @@ export interface WatchOptions {
 	 * ```
 	 */
 	dependencies?: WatchDependencies;
+
+	/**
+	 * Watch engine to use.
+	 * By default will be used proxy if supported, otherwise accessors.
+	 */
+	engine?: WatchEngine;
+}
+
+export interface WatchEngine {
+	watch<T extends object>(
+		obj: T,
+		path: CanUndef<unknown[]>,
+		handler: Nullable<WatchHandler>,
+		handlers: WatchHandlersSet,
+		opts?: WatchOptions
+	): Watcher<T>;
+
+	watch<T extends object>(
+		obj: T,
+		path: CanUndef<unknown[]>,
+		handler: Nullable<WatchHandler>,
+		handlers: WatchHandlersSet,
+		opts: CanUndef<InternalWatchOptions>,
+		root: object,
+		top: object
+	): T;
+
+	set(obj: object, path: WatchPath, value: unknown, handlers: WatchHandlersSet): void;
+	unset(obj: object, path: WatchPath, handlers: WatchHandlersSet): void;
 }
 
 export interface InternalWatchOptions extends WatchOptions {

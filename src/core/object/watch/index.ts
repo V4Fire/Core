@@ -25,7 +25,8 @@ import {
 	MultipleWatchHandler,
 
 	Watcher,
-	WatchHandlersSet
+	WatchHandlersSet,
+	WatchEngine
 
 } from 'core/object/watch/interface';
 
@@ -144,8 +145,11 @@ export default function watch<T extends object>(
 		handler = handlerOrOpts;
 	}
 
+	opts = opts || {};
+	opts.engine = opts.engine || watchEngine;
+
 	const
-		rawDeps = Object.size(opts?.dependencies) ? opts!.dependencies : undefined;
+		rawDeps = Object.size(opts.dependencies) ? opts.dependencies : undefined;
 
 	let
 		depsMap: Map<unknown[], unknown[][]>,
@@ -222,18 +226,18 @@ export default function watch<T extends object>(
 	}
 
 	const
-		deep = normalizedPath?.length > 1 || opts?.deep,
-		withProto = opts?.withProto,
-		immediate = opts?.immediate,
-		collapse = normalizedPath ? opts?.collapse !== false : opts?.collapse;
+		deep = normalizedPath?.length > 1 || opts.deep,
+		withProto = opts.withProto,
+		immediate = opts.immediate,
+		collapse = normalizedPath ? opts.collapse !== false : opts.collapse;
 
 	const
-		pref = opts?.prefixes,
-		post = opts?.postfixes;
+		pref = opts.prefixes,
+		post = opts.postfixes;
 
 	const
-		pathModifier = opts?.pathModifier,
-		eventFilter = opts?.eventFilter;
+		pathModifier = opts.pathModifier,
+		eventFilter = opts.eventFilter;
 
 	// If we have a handler and valid object to watch,
 	// we need to wrap this handler to provide all features of watching
@@ -521,8 +525,8 @@ export default function watch<T extends object>(
 	}
 
 	const
-		tiedWith = opts?.tiedWith,
-		res = watchEngine.watch(obj, undefined, handler, obj[watchHandlers] || new Set(), opts),
+		tiedWith = opts.tiedWith,
+		res = opts.engine.watch(obj, undefined, handler, obj[watchHandlers] || new Set(), opts),
 		proxy = res.proxy;
 
 	if (tiedWith && Object.isSimpleObject(unwrappedObj)) {
@@ -596,12 +600,13 @@ export function unmute(obj: object): boolean {
  * @param [handlers] - set of registered handlers
  */
 export function set(
+	this: CanUndef<WatchEngine>,
 	obj: object,
 	path: WatchPath,
 	value: unknown,
 	handlers: WatchHandlersSet = obj[watchHandlers]
 ): void {
-	watchEngine.set(obj, path, value, handlers);
+	(this || watchEngine).set(obj, path, value, handlers);
 }
 
 /**
@@ -611,6 +616,11 @@ export function set(
  * @param path
  * @param [handlers] - set of registered handlers
  */
-export function unset(obj: object, path: WatchPath, handlers: WatchHandlersSet = obj[watchHandlers]): void {
-	watchEngine.unset(obj, path, handlers);
+export function unset(
+	this: CanUndef<WatchEngine>,
+	obj: object,
+	path: WatchPath,
+	handlers: WatchHandlersSet = obj[watchHandlers]
+): void {
+	(this || watchEngine).unset(obj, path, handlers);
 }
