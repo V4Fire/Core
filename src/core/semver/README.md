@@ -9,6 +9,7 @@ This module provides a function to compare string versions by using semver strat
 
 - `==` equal
 - `^=` caret range
+- `~=` tilda range
 - `>` greater than
 - `<` less than
 - `>=` greater than or equal to
