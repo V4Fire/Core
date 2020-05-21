@@ -597,30 +597,102 @@ export function unmute(obj: object): boolean {
  * @param obj
  * @param path
  * @param value
- * @param [handlers] - set of registered handlers
+ * @param [engine] - watch engine to use
  */
 export function set(
 	this: CanUndef<WatchEngine>,
 	obj: object,
 	path: WatchPath,
 	value: unknown,
-	handlers: WatchHandlersSet = obj[watchHandlers]
-): void {
-	(this || watchEngine).set(obj, path, value, handlers);
-}
+	engine?: WatchEngine
+): void;
 
 /**
- * Deletes a watchable value for an object by the specified path
+ * Sets a new watchable value for an object by the specified path
  *
  * @param obj
  * @param path
+ * @param value
  * @param [handlers] - set of registered handlers
+ * @param [engine] - watch engine to use
+ */
+export function set(
+	this: CanUndef<WatchEngine>,
+	obj: object,
+	path: WatchPath,
+	value: unknown,
+	handlers?: WatchHandlersSet | WatchEngine,
+	engine?: WatchEngine
+): void;
+
+export function set(
+	this: CanUndef<WatchEngine>,
+	obj: object,
+	path: WatchPath,
+	value: unknown,
+	handlersOrEngine?: WatchHandlersSet | WatchEngine,
+	engine: WatchEngine = watchEngine
+): void {
+	let
+		handlers;
+
+	if (Object.isSet(handlersOrEngine)) {
+		handlers = handlersOrEngine;
+
+	} else {
+		engine = handlersOrEngine || engine;
+		handlers = obj[watchHandlers];
+	}
+
+	engine.set(obj, path, value, handlers);
+}
+
+/**
+ * Deletes a watchable value from an object by the specified path
+ *
+ * @param obj
+ * @param path
+ * @param [engine] - watch engine to use
  */
 export function unset(
 	this: CanUndef<WatchEngine>,
 	obj: object,
 	path: WatchPath,
-	handlers: WatchHandlersSet = obj[watchHandlers]
+	engine?: WatchEngine
+): void;
+
+/**
+ * Deletes a watchable value from an object by the specified path
+ *
+ * @param obj
+ * @param path
+ * @param [handlers] - set of registered handlers
+ * @param [engine] - watch engine to use
+ */
+export function unset(
+	this: CanUndef<WatchEngine>,
+	obj: object,
+	path: WatchPath,
+	handlers?: WatchHandlersSet | WatchEngine,
+	engine?: WatchEngine
+): void;
+
+export function unset(
+	obj: object,
+	path: WatchPath,
+	handlersOrEngine: WatchHandlersSet | WatchEngine = obj[watchHandlers],
+	engine: WatchEngine = watchEngine
 ): void {
-	(this || watchEngine).unset(obj, path, handlers);
+	let
+		handlers;
+
+	if (Object.isSet(handlersOrEngine)) {
+		handlers = handlersOrEngine;
+
+	} else {
+		engine = handlersOrEngine || engine;
+		handlers = obj[watchHandlers];
+	}
+
+	engine.unset(obj, path, handlers);
 }
