@@ -600,7 +600,6 @@ export function unmute(obj: object): boolean {
  * @param [engine] - watch engine to use
  */
 export function set(
-	this: CanUndef<WatchEngine>,
 	obj: object,
 	path: WatchPath,
 	value: unknown,
@@ -617,7 +616,6 @@ export function set(
  * @param [engine] - watch engine to use
  */
 export function set(
-	this: CanUndef<WatchEngine>,
 	obj: object,
 	path: WatchPath,
 	value: unknown,
@@ -626,7 +624,6 @@ export function set(
 ): void;
 
 export function set(
-	this: CanUndef<WatchEngine>,
 	obj: object,
 	path: WatchPath,
 	value: unknown,
@@ -655,7 +652,6 @@ export function set(
  * @param [engine] - watch engine to use
  */
 export function unset(
-	this: CanUndef<WatchEngine>,
 	obj: object,
 	path: WatchPath,
 	engine?: WatchEngine
@@ -670,7 +666,6 @@ export function unset(
  * @param [engine] - watch engine to use
  */
 export function unset(
-	this: CanUndef<WatchEngine>,
 	obj: object,
 	path: WatchPath,
 	handlers: WatchHandlersSet,
