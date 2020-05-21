@@ -20,6 +20,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 #### :bug: Bug Fix
 
 * Fixed watching of arrays `core/object/watch`
+* Fixed proxy arrays concatenation `core/object/watch`
 
 ## v3.15.4 (2020-05-15)
 
