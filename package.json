@@ -5,7 +5,7 @@
   "main": "src/core/index.js",
   "typings": "index.d.ts",
   "license": "MIT",
-  "version": "3.16.1",
+  "version": "3.16.2",
   "author": {
     "name": "kobezzza",
     "email": "kobezzza@gmail.com",
@@ -57,7 +57,6 @@
     "path-equal": "^1.1.1",
     "sugar": "^2.0.6",
     "through2": "^3.0.1",
-    "ts-toolbelt": "^6.5.1",
     "tsconfig": "^7.0.0",
     "typedoc": "^0.15.8",
     "typescript": "^3.8.3",
