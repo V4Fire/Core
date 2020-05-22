@@ -11,11 +11,15 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-## v3.16.2 (2020-05-22)
+## v3.17.0 (2020-05-22)
 
 #### :boom: Breaking Change
 
 * [Removed `ts-toolbelt`](https://github.com/V4Fire/Core/pull/99)
+
+#### :rocket: New Feature
+
+* Added tilda ranges `core/semver`
 
 ## v3.16.1 (2020-05-22)
 
