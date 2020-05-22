@@ -147,7 +147,7 @@
 							<h3>Variables</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-variable tsd-parent-kind-external-module"><a href="src_core_semver_const.html#comparergxp" class="tsd-kind-icon">compare<wbr>Rgxp</a></li>
-								<li class="tsd-kind-variable tsd-parent-kind-external-module"><a href="src_core_semver_const.html#inequalityrgxp" class="tsd-kind-icon">inequality<wbr>Rgxp</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-external-module"><a href="src_core_semver_const.html#operandlengtherrortext" class="tsd-kind-icon">operand<wbr>Length<wbr>Error<wbr>Text</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
@@ -164,20 +164,20 @@
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module">
 					<a name="comparergxp" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> compare<wbr>Rgxp</h3>
-					<div class="tsd-signature tsd-kind-icon">compare<wbr>Rgxp<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RegExp</span><span class="tsd-signature-symbol"> =&nbsp;/((^|\^|)&#x3D;)/</span></div>
+					<div class="tsd-signature tsd-kind-icon">compare<wbr>Rgxp<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RegExp</span><span class="tsd-signature-symbol"> =&nbsp;/^(\^|~|)&#x3D;/</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/semver/const.ts#L21">src/core/semver/const.ts:21</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/semver/const.ts#L22">src/core/semver/const.ts:22</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module">
-					<a name="inequalityrgxp" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagConst">Const</span> inequality<wbr>Rgxp</h3>
-					<div class="tsd-signature tsd-kind-icon">inequality<wbr>Rgxp<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RegExp</span><span class="tsd-signature-symbol"> =&nbsp;/[&gt;&lt;]/</span></div>
+					<a name="operandlengtherrortext" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> operand<wbr>Length<wbr>Error<wbr>Text</h3>
+					<div class="tsd-signature tsd-kind-icon">operand<wbr>Length<wbr>Error<wbr>Text<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"Can&#x27;t compare versions. The operand has an empty value."</span><span class="tsd-signature-symbol"> =&nbsp;&quot;Can&#x27;t compare versions. The operand has an empty value.&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/semver/const.ts#L22">src/core/semver/const.ts:22</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/semver/const.ts#L25">src/core/semver/const.ts:25</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -333,6 +333,32 @@
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
+										<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/semver/const.ts#L18">src/core/semver/const.ts:18</a></li>
+									</ul>
+								</aside>
+								<h4 class="tsd-parameters-title">Parameters</h4>
+								<ul class="tsd-parameters">
+									<li>
+										<h5>a: <span class="tsd-signature-type">number</span></h5>
+									</li>
+									<li>
+										<h5>b: <span class="tsd-signature-type">number</span></h5>
+									</li>
+								</ul>
+								<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+							</li>
+						</ul>
+					</section>
+					<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal">
+						<a name="operations.__-4" class="tsd-anchor"></a>
+						<h3>~&#61;</h3>
+						<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-object-literal">
+							<li class="tsd-signature tsd-kind-icon">~&#61;<span class="tsd-signature-symbol">(</span>a<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, b<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+						</ul>
+						<ul class="tsd-descriptions">
+							<li class="tsd-description">
+								<aside class="tsd-sources">
+									<ul>
 										<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/semver/const.ts#L17">src/core/semver/const.ts:17</a></li>
 									</ul>
 								</aside>
@@ -369,7 +395,7 @@
 						<a href="src_core_semver_const.html#comparergxp" class="tsd-kind-icon">compare<wbr>Rgxp</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-parent-kind-external-module">
-						<a href="src_core_semver_const.html#inequalityrgxp" class="tsd-kind-icon">inequality<wbr>Rgxp</a>
+						<a href="src_core_semver_const.html#operandlengtherrortext" class="tsd-kind-icon">operand<wbr>Length<wbr>Error<wbr>Text</a>
 					</li>
 					<li class=" tsd-kind-object-literal tsd-parent-kind-external-module">
 						<a href="src_core_semver_const.html#operations" class="tsd-kind-icon">operations</a>

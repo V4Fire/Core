@@ -145,7 +145,26 @@
 						<a href="#coresemver" id="coresemver" style="color: inherit; text-decoration: none;">
 							<h1>core/semver</h1>
 						</a>
-						<p>This module provides a function that compare string versions using semver strategy.</p>
+						<p>This module provides a function to compare string versions by using semver strategy.</p>
+						<a href="#supported-comparisons" id="supported-comparisons" style="color: inherit; text-decoration: none;">
+							<h3>Supported Comparisons</h3>
+						</a>
+						<blockquote>
+							<p>Note:
+							The module currently supports only a numeric comparison with x-ranges. Without <code>beta</code>, <code>alpha</code> or <code>rc</code> postfixes.</p>
+						</blockquote>
+						<ul>
+							<li><code>==</code> equal</li>
+							<li><code>^=</code> caret range</li>
+							<li><code>~=</code> tilda range</li>
+							<li><code>&gt;</code> greater than</li>
+							<li><code>&lt;</code> less than</li>
+							<li><code>&gt;=</code> greater than or equal to</li>
+							<li><code>&lt;=</code> less than or equal to</li>
+						</ul>
+						<a href="#examples" id="examples" style="color: inherit; text-decoration: none;">
+							<h3>Examples</h3>
+						</a>
 						<pre><code class="language-js"><span class="hljs-keyword">import</span> check <span class="hljs-keyword">from</span> <span class="hljs-string">'core/semver'</span>;
 
 <span class="hljs-built_in">console</span>.log(check(<span class="hljs-string">'1.4.1'</span>, <span class="hljs-string">'1.5.2'</span>, <span class="hljs-string">'&gt;'</span>));  <span class="hljs-comment">// false</span>
@@ -174,7 +193,7 @@
 					<a name="default" class="tsd-anchor"></a>
 					<h3>default</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
-						<li class="tsd-signature tsd-kind-icon">default<span class="tsd-signature-symbol">(</span>a<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, b<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, operation<span class="tsd-signature-symbol">: </span><a href="src_core_semver_interface.html#operation" class="tsd-signature-type">Operation</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+						<li class="tsd-signature tsd-kind-icon">default<span class="tsd-signature-symbol">(</span>a<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, b<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, op<span class="tsd-signature-symbol">: </span><a href="src_core_semver_interface.html#operation" class="tsd-signature-type">Operation</a>, opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/src_core_semver_interface.comparisonoptions.html" class="tsd-signature-type">ComparisonOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -185,7 +204,8 @@
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Compares two strings with number versions by using the semver strategy</p>
+									<p>Compares two strings with number versions (a <op> b)
+									by using the semver strategy</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -197,10 +217,13 @@
 									<h5>b: <span class="tsd-signature-type">string</span></h5>
 								</li>
 								<li>
-									<h5>operation: <a href="src_core_semver_interface.html#operation" class="tsd-signature-type">Operation</a></h5>
+									<h5>op: <a href="src_core_semver_interface.html#operation" class="tsd-signature-type">Operation</a></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>operation type</p>
 									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> opts: <a href="../interfaces/src_core_semver_interface.comparisonoptions.html" class="tsd-signature-type">ComparisonOptions</a><span class="tsd-signature-symbol"> =&nbsp;{x: &#x27;*&#x27;}</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
