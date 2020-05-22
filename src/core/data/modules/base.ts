@@ -563,22 +563,21 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 		const
 			req = factory!();
 
-		if (event) {
+		req.then((res) => {
 			const
-				e = <string>event;
+				{ctx: {canCache, cacheKey}} = res;
 
+			const
+				cache = requestCache[this.cacheId];
+
+			if (canCache && cacheKey && cache) {
+				cache[cacheKey] = res;
+			}
+		});
+
+		if (event) {
 			req.then((res) => {
-				const
-					{ctx: {canCache, cacheKey}} = res;
-
-				const
-					cache = requestCache[this.cacheId];
-
-				if (canCache && cacheKey && cache) {
-					cache[cacheKey] = res;
-				}
-
-				this.emitter.emit(e, () => res.data);
+				this.emitter.emit(<string>event, () => res.data);
 			});
 		}
 

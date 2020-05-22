@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.16.1 (2020-05-22)
+
+#### :bug: Bug Fix
+
+* Fixed `dropCache` `core/data`
+
 ## v3.16.0 (2020-05-21)
 
 #### :rocket: New Feature
