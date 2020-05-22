@@ -15,7 +15,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :boom: Breaking Change
 
-* Removed `ts-toolbelt`
+* [Removed `ts-toolbelt`](https://github.com/V4Fire/Core/pull/99)
 
 ## v3.16.1 (2020-05-22)
 
