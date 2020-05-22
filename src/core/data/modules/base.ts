@@ -573,13 +573,11 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 			if (canCache && cacheKey && cache) {
 				cache[cacheKey] = res;
 			}
-		});
 
-		if (event) {
-			req.then((res) => {
+			if (event) {
 				this.emitter.emit(<string>event, () => res.data);
-			});
-		}
+			}
+		});
 
 		return req;
 	}
