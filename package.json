@@ -37,6 +37,7 @@
     "tslib": "2.0.0"
   },
   "optionalDependencies": {
+    "@v4fire/typescript-check": "^1.0.1",
     "@pzlr/build-core": "^2.8.17",
     "@types/fs-extra-promise": "^1.0.8",
     "@types/gulp": "^4.0.6",
