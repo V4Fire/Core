@@ -94,7 +94,7 @@ class Config {
 			});
 		}
 
-		return config;
+		return expand(config, obj);
 	}
 
 	/**
