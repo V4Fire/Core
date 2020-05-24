@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.17.1 (2020-05-24)
+
+#### :house: Internal
+
+* :up: typesctipt@3.9.3, tslib@2.0.0
+
 ## v3.17.0 (2020-05-22)
 
 #### :boom: Breaking Change
