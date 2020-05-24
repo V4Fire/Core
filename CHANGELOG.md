@@ -11,6 +11,13 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.17.2 (2020-05-25)
+
+#### :house: Internal
+
+* Added `@v4fire/typescript-check`
+* Added `[Typescript check]` action
+
 ## v3.17.1 (2020-05-24)
 
 #### :house: Internal
