@@ -15,8 +15,8 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :house: Internal
 
-* Added `@v4fire/typescript-check`
-* Added `[Typescript check]` action
+* [Added `@v4fire/typescript-check`](https://github.com/V4Fire/Core/pull/104)
+* [Added `[Typescript check]` action](https://github.com/V4Fire/Core/pull/104)
 
 ## v3.17.1 (2020-05-24)
 
