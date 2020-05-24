@@ -1,4 +1,4 @@
-name: \[Typescript check\]
+name: Typescript check
 
 on: [push, pull_request]
 
