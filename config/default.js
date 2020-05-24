@@ -63,6 +63,39 @@ class Config {
 	}
 
 	/**
+	 * Expands the specified config
+	 *
+	 * @param {!Object} config
+	 * @param {!Object} obj
+	 * @returns {!Object}
+	 */
+	expand(config, obj) {
+		$C(obj).forEach((el, key) => {
+			if (Object.isFunction(el)) {
+				if (!el.length) {
+					try {
+						config[key] = el.call(obj);
+	
+					} catch {}
+				}
+	
+			} else if (Object.isObject(el)) {
+				config[key] = {};
+				config[key] = expandConfig(config[key], el);
+	
+			} else if (Object.isArray(el)) {
+				config[key] = [];
+				config[key] = expandConfig(config[key], el);
+	
+			} else {
+				config[key] = el;
+			}
+		});
+	
+		return config;
+	}
+
+	/**
 	 * Creates a config object with the specified options and returns it
 	 *
 	 * @template T
@@ -162,6 +195,7 @@ class Config {
 		}
 
 		config.extend = this.extend;
+		config.expand = this.expand;
 		return config;
 	}
 
