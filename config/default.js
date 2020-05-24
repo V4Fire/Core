@@ -70,28 +70,30 @@ class Config {
 	 * @returns {!Object}
 	 */
 	expand(config, obj) {
-		$C(obj).forEach((el, key) => {
-			if (Object.isFunction(el)) {
-				if (!el.length) {
-					try {
-						config[key] = el.call(obj);
-	
-					} catch {}
+		const expand = (config, obj) => {
+			$C(obj).forEach((el, key) => {
+				if (Object.isFunction(el)) {
+					if (!el.length) {
+						try {
+							config[key] = el.call(obj);
+		
+						} catch {}
+					}
+		
+				} else if (Object.isObject(el)) {
+					config[key] = {};
+					config[key] = expand(config[key], el);
+		
+				} else if (Object.isArray(el)) {
+					config[key] = [];
+					config[key] = expand(config[key], el);
+		
+				} else {
+					config[key] = el;
 				}
-	
-			} else if (Object.isObject(el)) {
-				config[key] = {};
-				config[key] = expandConfig(config[key], el);
-	
-			} else if (Object.isArray(el)) {
-				config[key] = [];
-				config[key] = expandConfig(config[key], el);
-	
-			} else {
-				config[key] = el;
-			}
-		});
-	
+			});
+		}
+
 		return config;
 	}
 
