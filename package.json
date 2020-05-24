@@ -5,7 +5,7 @@
   "main": "src/core/index.js",
   "typings": "index.d.ts",
   "license": "MIT",
-  "version": "3.17.0",
+  "version": "3.17.1",
   "author": {
     "name": "kobezzza",
     "email": "kobezzza@gmail.com",
@@ -34,7 +34,7 @@
     "jasmine": "^3.5.0",
     "node-localstorage": "^2.1.6",
     "set-value": "^3.0.2",
-    "tslib": "1.13.0"
+    "tslib": "2.0.0"
   },
   "optionalDependencies": {
     "@pzlr/build-core": "^2.8.17",
@@ -59,7 +59,7 @@
     "through2": "^3.0.1",
     "tsconfig": "^7.0.0",
     "typedoc": "^0.15.8",
-    "typescript": "^3.8.3",
+    "typescript": "3.9.3",
     "uniconf": "^2.1.1",
     "upath": "^1.2.0",
     "urlconcat": "0.0.12"
