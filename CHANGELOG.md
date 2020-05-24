@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.17.2 (2020-05-25)
+
+#### :house: Internal
+
+* [Added `config.expand` method](https://github.com/V4Fire/Core/pull/103)
+
 ## v3.17.1 (2020-05-24)
 
 #### :house: Internal
