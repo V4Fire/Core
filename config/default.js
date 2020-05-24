@@ -92,6 +92,8 @@ class Config {
 					config[key] = el;
 				}
 			});
+
+			return config;
 		}
 
 		return expand(config, obj);
