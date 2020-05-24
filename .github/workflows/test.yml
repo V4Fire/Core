@@ -1,6 +1,11 @@
 name: Typescript check
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [master]
+
+  pull_request:
+    branches: []
 
 jobs:
   # Run typescript check
