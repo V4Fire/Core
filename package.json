@@ -23,8 +23,9 @@
   ],
   "scripts": {
     "build": "npx gulp build:tsconfig",
-    "test": "npm run test:typescript",
-    "test:typescript": "node node_modules/@v4fire/typescript-check"
+    "test": "npm run test:typescript && npm run test:eslint",
+    "test:typescript": "node node_modules/@v4fire/typescript-check",
+    "test:eslint": "npx eslint ./config/**/*.js ./build/**/*.js ./src/**/*.js"
   },
   "dependencies": {
     "@types/got": "9.6.11",
