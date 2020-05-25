@@ -105,9 +105,30 @@ export type RequestQuery =
 	unknown[] |
 	string;
 
+// @ts-ignore
+export interface WrappedCreateRequestOptions<D = unknown> extends CreateRequestOptions<D> {
+	url: CanUndef<string>;
+	encoder?: WrappedEncoder | WrappedEncoders;
+	decoder?: WrappedDecoder | WrappedDecoders;
+}
+
+export type NormalizedCreateRequestOptions<D = unknown> =
+	typeof defaultRequestOpts &
+	WrappedCreateRequestOptions<D>;
+
+export type ResolverResult =
+	string |
+	string[] |
+	undefined;
+
+export interface GlobalOptions {
+	api?: Nullable<string>;
+	meta: Dictionary;
+}
+
 export interface MiddlewareParams<D = unknown> {
 	ctx: RequestContext<D>;
-	opts: CreateRequestOptions<D>;
+	opts: NormalizedCreateRequestOptions<D>;
 	globalOpts: GlobalOptions;
 }
 
@@ -368,25 +389,4 @@ export interface CreateRequestOptions<D = unknown> {
 	 * Custom request engine
 	 */
 	engine?: RequestEngine;
-}
-
-// @ts-ignore
-export interface WrappedCreateRequestOptions<D = unknown> extends CreateRequestOptions<D> {
-	url: CanUndef<string>;
-	encoder?: WrappedEncoder | WrappedEncoders;
-	decoder?: WrappedDecoder | WrappedDecoders;
-}
-
-export type NormalizedCreateRequestOptions<D = unknown> =
-	typeof defaultRequestOpts &
-	WrappedCreateRequestOptions<D>;
-
-export type ResolverResult =
-	string |
-	string[] |
-	undefined;
-
-export interface GlobalOptions {
-	api?: Nullable<string>;
-	meta: Dictionary;
 }

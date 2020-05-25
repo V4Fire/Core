@@ -12,7 +12,7 @@
  */
 
 import { cache } from 'core/request/const';
-import { CreateRequestOptions } from 'core/request/interface';
+import { NormalizedCreateRequestOptions } from 'core/request/interface';
 
 import { tplRgxp } from 'core/request/utils/const';
 export * from 'core/request/utils/const';
@@ -44,16 +44,15 @@ export function getStorageKey(key: string): string {
  * @param url - request url
  * @param [params] - request parameters
  */
-export function getRequestKey<T>(url: string, params?: CreateRequestOptions<T>): string {
+export function getRequestKey<T>(url: string, params?: NormalizedCreateRequestOptions<T>): string {
 	const
-		p = params || {},
 		plainHeaders = <string[][]>[];
 
 	let
 		bodyKey = '';
 
 	if (params) {
-		for (let o = normalizeHeaders(p.headers), keys = Object.keys(o), i = 0; i < keys.length; i++) {
+		for (let o = normalizeHeaders(params.headers), keys = Object.keys(o), i = 0; i < keys.length; i++) {
 			const name = keys[i];
 			plainHeaders.push([name, String(o[name])]);
 		}
@@ -111,7 +110,13 @@ export function getRequestKey<T>(url: string, params?: CreateRequestOptions<T>):
 		}
 	}
 
-	return JSON.stringify([url, p.method, plainHeaders, bodyKey, p.timeout]);
+	return JSON.stringify([
+		url,
+		params?.method,
+		plainHeaders,
+		bodyKey,
+		params?.timeout
+	]);
 }
 
 /**

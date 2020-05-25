@@ -117,7 +117,7 @@ class User {
 }
 ```
 
-Still looks fine and useful, but if we want to create more classes for other data instances we need to create some kind of superclass to avoid "copy-pasting" code lines. Also, the superclass may improve our API with added extra functionality, such as support for socket events, middlewares, etc. And this is exactly what "core/data" module does.
+Still looks fine and useful, but if we want to create more classes for other data instances we need to create some kind of superclass to avoid "copy-pasting" code lines. Also, the superclass may improve our API with added extra functionality, such as support for socket events, middlewares, etc., and this is exactly what "core/data" module does.
 
 ## Default interface
 
@@ -125,7 +125,7 @@ The "core/data" module provides a default interface for any data providers. If y
 
 **core/data/interface**
 
-```ts
+```typescript
 import { EventEmitterLike } from 'core/async';
 import {
 
@@ -253,7 +253,7 @@ const user = new User({
 
 The entire list of parameters:
 
-```ts
+```typescript
 interface ProviderOptions {
   /**
    * List of additional data providers for the "get" method.
@@ -395,7 +395,7 @@ After interpolation, all values that were used will be dropped from a source obj
 Middleware is a simple function that is invoked before each request and can modify some request parameters, like adding/removing HTTP headers, etc.
 The function takes a request environment:
 
-```ts
+```typescript
 {
   ctx: RequestContext<T>;
   opts: CreateRequestOptions<T>;
@@ -470,7 +470,7 @@ that you should declare encoders for all your method pipelines.
 
 The encoder function has the signature:
 
-```ts
+```typescript
 export interface Encoder<I = unknown, O = unknown> {
   (data: I, params: MiddlewareParams): O;
 }
@@ -490,7 +490,7 @@ it converts data from a server to the provider format.
 
 The decoder function has the signature:
 
-```ts
+```typescript
 export interface Encoder<I = unknown, O = unknown> {
   (data: I, params: MiddlewareParams, response: Response): O;
 }
@@ -637,7 +637,7 @@ new User().get({id: 1}).then((data) => {
 
 The declaration object of an extra provider has a standard interface:
 
-```ts
+```typescript
 type ExtraProviderConstructor =
   string |
   Provider |

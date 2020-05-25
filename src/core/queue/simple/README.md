@@ -6,7 +6,7 @@ This module provides a class to organize a simple queue data structure.
 import Queue from 'core/queue/simple';
 
 const
-  queue = new Queue<number>();
+  queue = new Queue();
 
 queue.push(1);
 queue.push(5);

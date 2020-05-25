@@ -1456,7 +1456,7 @@ interface ObjectConstructor {
 	 * @param value
 	 *
 	 * @example
-	 * ```ts
+	 * ```typescript
 	 * interface Foo {
 	 *   bar(): number;
 	 * }
