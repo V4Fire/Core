@@ -63,40 +63,50 @@ class Config {
 	}
 
 	/**
-	 * Expands the specified config
+	 * Expands the specified config to a plain object.
+	 * Usually, this method is used to hash the config object.
 	 *
-	 * @param {!Object} config
-	 * @param {!Object} obj
+	 * @param {Object=} [config]
 	 * @returns {!Object}
 	 */
-	expand(config, obj) {
-		const expand = (config, obj) => {
-			$C(obj).forEach((el, key) => {
+	expand(config = this) {
+		const blacklist = Object.assign(Object.create(null), {
+			extend: true,
+			expand: true,
+			createConfig: true
+		});
+
+		const reduce = (from, to) => {
+			$C(from).forEach((el, key) => {
+				if (blacklist[key]) {
+					return;
+				}
+
 				if (Object.isFunction(el)) {
 					if (!el.length) {
 						try {
-							config[key] = el.call(obj);
-		
+							to[key] = el.call(from);
+
 						} catch {}
 					}
-		
+
 				} else if (Object.isObject(el)) {
-					config[key] = {};
-					config[key] = expand(config[key], el);
-		
+					to[key] = {};
+					to[key] = reduce(el, to[key]);
+
 				} else if (Object.isArray(el)) {
-					config[key] = [];
-					config[key] = expand(config[key], el);
-		
+					to[key] = [];
+					to[key] = reduce(el, to[key]);
+
 				} else {
-					config[key] = el;
+					to[key] = el;
 				}
 			});
 
-			return config;
-		}
+			return to;
+		};
 
-		return expand(config, obj);
+		return reduce(config, {});
 	}
 
 	/**
