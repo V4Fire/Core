@@ -2,7 +2,7 @@ V4Fire Core Library
 ===================
 
 [![npm version](https://badge.fury.io/js/%40v4fire%2Fcore.svg)](https://badge.fury.io/js/%40v4fire%2Fcore)
-[![build status](https://github.com/v4fire/Core/workflows/Tests/badge.svg)](https://github.com/V4Fire/Core/actions?query=workflow%3ATests)
+[![build status](https://github.com/v4fire/Core/workflows/build/badge.svg)](https://github.com/V4Fire/Core/actions?query=workflow%3Abuild)
 [![NPM dependencies](http://img.shields.io/david/v4fire/core.svg?style=flat)](https://david-dm.org/v4fire/core)
 [![NPM optionalDependencies](http://img.shields.io/david/optional/v4fire/core.svg?style=flat)](https://david-dm.org/v4fire/core?type=optional)
 [![NPM devDependencies](http://img.shields.io/david/dev/v4fire/core.svg?style=flat)](https://david-dm.org/v4fire/core?type=dev)
