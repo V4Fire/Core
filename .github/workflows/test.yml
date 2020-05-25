@@ -1,4 +1,4 @@
-name: Typescript check
+name: Project tests
 
 on:
   push:
@@ -8,8 +8,7 @@ on:
     branches: [master]
 
 jobs:
-  # Run typescript check
-  typescript:
+  linters:
     runs-on: windows-latest
 
     strategy:
@@ -30,5 +29,5 @@ jobs:
       - name: Build tsconfig
         run: npx gulp build:tsconfig
 
-      - name: Run typescript check
-        run: node node_modules/@v4fire/typescript-check/index.js
+      - name: Run tests
+        run: npm test
