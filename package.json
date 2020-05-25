@@ -23,7 +23,7 @@
   ],
   "scripts": {
     "build": "npx gulp build:tsconfig",
-    "test": "echo \"Error: no test specified\" && exit 0",
+    "test": "npm run test:typescript",
     "test:typescript": "node node_modules/@v4fire/typescript-check"
   },
   "dependencies": {
@@ -69,6 +69,12 @@
   "devDependencies": {
     "babel-eslint": "^10.1.0",
     "eslint": "^6.8.0",
+    "husky": "^4.2.5",
     "tslint": "^5.20.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "npm test"
+    }
   }
 }
