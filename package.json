@@ -5,7 +5,7 @@
   "main": "src/core/index.js",
   "typings": "index.d.ts",
   "license": "MIT",
-  "version": "3.17.1",
+  "version": "3.17.2",
   "author": {
     "name": "kobezzza",
     "email": "kobezzza@gmail.com",
@@ -25,7 +25,13 @@
     "build": "npx gulp build:tsconfig",
     "test": "npm run test:typescript && npm run test:eslint",
     "test:typescript": "node node_modules/@v4fire/typescript-check",
-    "test:eslint": "npx eslint ./config/**/*.js ./build/**/*.js ./src/**/*.js"
+    "test:eslint": "npx eslint ./config/**/*.js ./build/**/*.js ./src/**/*.js",
+    "up": "npm i && npm up && npm audit fix"
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "npm test"
+    }
   },
   "dependencies": {
     "@types/got": "9.6.11",
@@ -72,10 +78,5 @@
     "eslint": "^6.8.0",
     "husky": "^4.2.5",
     "tslint": "^5.20.1"
-  },
-  "husky": {
-    "hooks": {
-      "pre-push": "npm test"
-    }
   }
 }
