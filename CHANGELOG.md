@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.17.3 (2020-05-26)
+
+#### :house: Internal
+
+* Fixed TS types
+
 ## v3.17.2 (2020-05-25)
 
 #### :house: Internal
