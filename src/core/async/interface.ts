@@ -156,7 +156,7 @@ export type FullAsyncOptions<CTX extends object = Async> =
 		 * }
 		 * ```
 		 */
-		wrapper?: WrappedCb<CTX>;
+		wrapper?: BoundFn<CTX>;
 
 		/**
 		 * Additional arguments to a task wrapper
@@ -354,7 +354,7 @@ export interface Task<CTX extends object = Async> {
 	 * [0] - onFulfilled
 	 * [1] - onRejected
 	 */
-	onComplete: WrappedCb<CTX>[][];
+	onComplete: BoundFn<CTX>[][];
 
 	/**
 	 * List of clear handlers
@@ -397,15 +397,11 @@ export type TaskCtx<CTX extends object = Async> = {
 	reason?: ClearReason;
 } & AsyncOptions & ClearOptionsId<unknown>;
 
-export interface AsyncCb<CTX extends object = Async> {
-	(this: CTX, ctx: TaskCtx<CTX>): void;
-}
-
 export interface ClearFn<CTX extends object = Async> extends Function {
 	(id: any, ctx: CTX): any;
 }
 
-export interface WrappedCb<CTX extends object = Async> extends Function {
+export interface BoundFn<CTX extends object = Async> extends Function {
 	(this: CTX, ...args: any[]): any;
 }
 
@@ -416,6 +412,9 @@ export type ProxyCb<
 > = A extends never ?
 	((this: CTX) => R) : A extends unknown[] ?
 		((this: CTX, ...args: A) => R) : ((this: CTX, e: A) => R) | Function;
+
+export type AsyncCb<CTX extends object = Async> =
+	ProxyCb<TaskCtx<CTX>, void, CTX>;
 
 export type IdleCb<
 	R = unknown,

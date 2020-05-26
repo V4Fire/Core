@@ -32,7 +32,7 @@ import {
 
 	WorkerLikeP,
 	CancelablePromise,
-	WrappedCb
+	BoundFn
 
 } from 'core/async/interface';
 
@@ -112,7 +112,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * @param fn
 	 * @param [opts] - additional options for the operation
 	 */
-	proxy<F extends WrappedCb, C extends object = CTX>(fn: F, opts?: AsyncProxyOptions<C>): F {
+	proxy<F extends BoundFn<C>, C extends object = CTX>(fn: F, opts?: AsyncProxyOptions<C>): F {
 		return this.registerTask<F>({
 			...opts,
 			name: opts?.name || this.namespaces.proxy,
@@ -131,7 +131,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * @param delay
 	 * @param [opts] - additional options for the operation
 	 */
-	debounce<F extends WrappedCb, C extends object = CTX>(
+	debounce<F extends BoundFn<C>, C extends object = CTX>(
 		fn: F,
 		delay: number,
 		opts?: AsyncCbOptions<C>
@@ -146,7 +146,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * @param delay
 	 * @param [opts] - additional options for the operation
 	 */
-	throttle<F extends WrappedCb, C extends object = CTX>(
+	throttle<F extends BoundFn<C>, C extends object = CTX>(
 		fn: F,
 		delay: number,
 		opts?: AsyncCbOptions<C>
