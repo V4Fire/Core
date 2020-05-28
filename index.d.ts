@@ -793,7 +793,9 @@ interface ObjectConstructor {
 	fastClone(obj: undefined, opts: FastCloneOptions): <T>(obj: T) => T;
 
 	/**
-	 * Clones the specified object by using a naive but fast "JSON.stringify/parse" strategy and returns a new object
+	 * Clones the specified object by using a naive but fast "JSON.stringify/parse" strategy and returns a new object.
+	 * Mind, that this method uses non-stable version JSON.stringify, i.e.,
+	 * it can work incorrectly with object like {a: 1, b: 2} and {b: 2, a: 1}.
 	 *
 	 * @param obj
 	 * @param [opts] - additional options
@@ -801,7 +803,10 @@ interface ObjectConstructor {
 	fastClone<T>(obj: T, opts?: FastCloneOptions): T;
 
 	/**
-	 * Returns a string representation of the specified object by using a naive but fast "JSON.stringify/parse" strategy
+	 * Returns a string representation of the specified object by using a naive but fast "JSON.stringify/parse" strategy.
+	 * Mind, that this method uses non-stable version JSON.stringify, i.e.,
+	 * it can work incorrectly with object like {a: 1, b: 2} and {b: 2, a: 1}.
+	 *
 	 * @param obj
 	 */
 	fastHash(obj: unknown): string;
