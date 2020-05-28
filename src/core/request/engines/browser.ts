@@ -9,7 +9,7 @@
 import Then from 'core/then';
 import Response from 'core/request/response';
 import RequestError from 'core/request/error';
-import { RequestEngine } from 'core/request/interface';
+import { RequestEngine, RequestOptions } from 'core/request/interface';
 
 /**
  * Creates request by using XMLHttpRequest with the specified parameters and returns a promise
@@ -97,19 +97,13 @@ const request: RequestEngine = (params) => {
 		});
 
 		xhr.addEventListener('load', () => {
-			resolve(new Response(xhr.response, {
-				parent: p.parent,
-				important: p.important,
-				responseType: p.responseType,
-				okStatuses: p.okStatuses,
-				status: xhr.status,
-				headers: xhr.getAllResponseHeaders(),
-				decoder: p.decoders
-			}));
+			resolve(generateResponse(xhr, p));
 		});
 
 		xhr.addEventListener('error', (err) => {
-			reject(err);
+			reject(new RequestError('invalidStatus', {
+				response: generateResponse(xhr, p)
+			}));
 		});
 
 		xhr.addEventListener('timeout', () => {
@@ -119,5 +113,23 @@ const request: RequestEngine = (params) => {
 		xhr.send(data);
 	}, p.parent);
 };
+
+/**
+ * Generates response object based on passed arguments
+ *
+ * @param xhr
+ * @param opts
+ */
+function generateResponse(xhr: XMLHttpRequest, opts: RequestOptions): Response {
+	return new Response(xhr.response, {
+		parent: opts.parent,
+		important: opts.important,
+		responseType: opts.responseType,
+		okStatuses: opts.okStatuses,
+		status: xhr.status,
+		headers: xhr.getAllResponseHeaders(),
+		decoder: opts.decoders
+	});
+}
 
 export default request;
