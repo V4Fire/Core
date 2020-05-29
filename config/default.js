@@ -73,7 +73,8 @@ class Config {
 		const blacklist = Object.assign(Object.create(null), {
 			extend: true,
 			expand: true,
-			createConfig: true
+			createConfig: true,
+			hash: true
 		});
 
 		const reduce = (from, to) => {
@@ -107,6 +108,25 @@ class Config {
 		};
 
 		return reduce(config, {});
+	}
+
+	/**
+	 * Returns a hash string of the config
+	 *
+	 * @param [alg] - hash algorithm
+	 * @param [length] - hash length
+	 * @returns {string}
+	 */
+	hash({alg = 'md5', length} = {}) {
+		const
+			objectHash = require('node-object-hash'),
+			val = objectHash().hash({config: this.expand()}, {alg});
+
+		if (length) {
+			return val.slice(0, length);
+		}
+
+		return val;
 	}
 
 	/**
@@ -208,8 +228,10 @@ class Config {
 			});
 		}
 
+		config.hash = this.hash;
 		config.extend = this.extend;
 		config.expand = this.expand;
+
 		return config;
 	}
 
@@ -249,6 +271,9 @@ module.exports = config.createConfig(
 	{
 		__proto__: config,
 
+		/**
+		 * Application name
+		 */
 		appName: o('app-name', {
 			env: true,
 			default: 'Default app',
@@ -258,6 +283,9 @@ module.exports = config.createConfig(
 			}
 		}),
 
+		/**
+		 * Default application language
+		 */
 		locale: o('locale', {
 			env: true,
 			default: 'en-US',
@@ -267,6 +295,9 @@ module.exports = config.createConfig(
 			}
 		}),
 
+		/**
+		 * Application environment (prod, stage, etc.)
+		 */
 		environment: o('environment', {
 			env: true,
 			short: 'e',
@@ -278,23 +309,40 @@ module.exports = config.createConfig(
 			}
 		}),
 
+		/**
+		 * Resolved URL for server API
+		 * @returns {?string}
+		 */
 		apiURL() {
 			const concatUrls = require('urlconcat').concat;
 			return this.api.proxy ? concatUrls(this.api.pathname(), 'api') : this.api.url;
 		},
 
+		/**
+		 * Options to manage server API.
+		 * Usually, it's used with a develop server.
+		 */
 		api: {
+			/**
+			 * True, if the application should use proxy to connect to a server
+			 */
 			proxy: o('api-proxy', {
 				env: true,
 				type: 'boolean',
 				default: true
 			}),
 
+			/**
+			 * Base server API URL
+			 */
 			url: o('api-url', {
 				env: true,
 				default: ''
 			}),
 
+			/**
+			 * Server port to launch
+			 */
 			port: o('port', {
 				env: true,
 				type: 'number',
@@ -304,6 +352,10 @@ module.exports = config.createConfig(
 				}
 			}),
 
+			/**
+			 * Returns URL of the launched server
+			 * @returns {string}
+			 */
 			host() {
 				return o('host-url', {
 					env: true,
@@ -311,6 +363,10 @@ module.exports = config.createConfig(
 				});
 			},
 
+			/**
+			 * Returns a pathname of the launched server
+			 * @returns {string}
+			 */
 			pathname() {
 				return o('base-path', {
 					env: true,
@@ -323,7 +379,14 @@ module.exports = config.createConfig(
 			}
 		},
 
+		/**
+		 * Options to build the application
+		 */
 		build: {
+			/**
+			 * Returns the build identifier
+			 * @returns {?string}
+			 */
 			id() {
 				return o('build-id', {
 					env: true,
@@ -336,9 +399,31 @@ module.exports = config.createConfig(
 						return null;
 					})()
 				});
+			},
+
+			/**
+			 * Default hash algorithm to use
+			 */
+			hashAlg: 'md5',
+
+			/**
+			 * Length of a hashed string
+			 */
+			hashLength: 8,
+
+			/**
+			 * Returns a hash string of the build
+			 * @returns {*}
+			 */
+			hash() {
+				return this.config.hash({alg: this.hashAlg, length: this.hashLength});
 			}
 		},
 
+		/**
+		 * Returns parameters for Snakeskin
+		 * @returns {!Object}
+		 */
 		snakeskin() {
 			return {
 				pack: false,
@@ -358,6 +443,21 @@ module.exports = config.createConfig(
 			};
 		},
 
+		/**
+		 * Returns a version of the used ECMAScript specification
+		 * @returns {string}
+		 */
+		es() {
+			return o('es', {
+				env: true,
+				default: 'ES5'
+			});
+		},
+
+		/**
+		 * Returns parameters for Babel
+		 * @returns {!Object}
+		 */
 		babel() {
 			return {
 				plugins: [],
@@ -365,6 +465,10 @@ module.exports = config.createConfig(
 			};
 		},
 
+		/**
+		 * Returns parameters for TypeScript
+		 * @returns {!Object}
+		 */
 		typescript() {
 			const
 				es = this.es(),
@@ -379,38 +483,64 @@ module.exports = config.createConfig(
 			};
 		},
 
-		es() {
-			return o('es', {
-				env: true,
-				default: 'ES5'
-			});
-		},
-
+		/**
+		 * Map with application URL-s
+		 */
 		src: {
-			cwd() {
-				return this.roots[this.roots.length - 1] || resolve.cwd;
-			},
-
+			/**
+			 * Initialized version of the include function
+			 */
 			include() {
 				return require('../build/include')(this.roots);
 			},
 
-			rel(field, ...args) {
-				return upath.join(upath.relative(this.cwd(), this[field] ? this[field]() : field), ...args);
+			/**
+			 * Returns the application working directory
+			 * @returns {string}
+			 */
+			cwd() {
+				return this.roots[this.roots.length - 1] || resolve.cwd;
 			},
 
+			/**
+			 * Returns the relative path to the working directory
+			 *
+			 * @param path - path or a property from "src"
+			 * @param args - extra path-s to join
+			 * @returns {string}
+			 */
+			rel(path, ...args) {
+				return upath.join(upath.relative(this.cwd(), this[path] ? this[path]() : path), ...args);
+			},
+
+			/**
+			 * Returns a path to the application node_modules directory
+			 * @returns {string}
+			 */
 			lib() {
 				return path.resolve(resolve.lib, ...arguments);
 			},
 
+			/**
+			 * Returns a path to the application source directory
+			 * @returns {string}
+			 */
 			src() {
 				return path.resolve(resolve.sourceDir, ...arguments);
 			},
 
+			/**
+			 * Returns a path to the application asset directory
+			 * @returns {string}
+			 */
 			assets() {
 				return path.resolve(this.src(), pzlr.assets.dir, ...arguments);
 			},
 
+			/**
+			 * Returns a path to the application dist directory
+			 * @returns {string}
+			 */
 			output() {
 				const v = o('output', {
 					env: true,
@@ -420,6 +550,10 @@ module.exports = config.createConfig(
 				return path.resolve(this.cwd(), v, ...arguments);
 			},
 
+			/**
+			 * Returns a path to the application dist directory for client scripts
+			 * @returns {string}
+			 */
 			clientOutput() {
 				const v = o('client-output', {
 					env: true,
@@ -429,6 +563,10 @@ module.exports = config.createConfig(
 				return this.output(v, ...arguments);
 			},
 
+			/**
+			 * Returns a path to the application dist directory for server scripts
+			 * @returns {string}
+			 */
 			serverOutput() {
 				const v = o('server-output', {
 					env: true,
@@ -440,6 +578,8 @@ module.exports = config.createConfig(
 		}
 	}
 );
+
+// Some global helpers and flags
 
 global.isProd = false;
 global.include = require;
