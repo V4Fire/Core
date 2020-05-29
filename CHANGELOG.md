@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.17.4 (2020-05-29)
+
+#### :bug: Bug Fix
+
+* `browser` engine of `request` module now rejects with `RequestError` on `error` event
+
 ## v3.17.3 (2020-05-26)
 
 #### :house: Internal
