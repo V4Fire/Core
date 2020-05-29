@@ -9,7 +9,7 @@
  */
 
 /**
- * The task for building .tsconfig file
+ * The task to build .tsconfig file
  */
 module.exports = function (gulp) {
 	const

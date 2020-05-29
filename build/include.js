@@ -18,7 +18,7 @@ const
 	{pathEqual} = require('path-equal');
 
 /**
- * Factory for creating require wrappers:
+ * Factory to create require wrappers:
  *
  * 1) If the string has a substring ${root}:
  *    the substring will be replaced by one of root directories (from the end) until the file is found
@@ -27,6 +27,13 @@ const
  *
  * @param {Array<string>} roots - list of root directories
  * @returns {function (string, string?): ?}
+ *
+ * @example
+ * ```js
+ * global.include = include(roots);
+ * include('build/i18n');
+ * include('@super/build/i18n', __dirname);
+ * ```
  */
 module.exports = function (roots) {
 	return function (src, ctx) {

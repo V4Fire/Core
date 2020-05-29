@@ -9,11 +9,8 @@
  */
 
 module.exports = function (gulp) {
-	const
-		$ = require('gulp-load-plugins')({scope: ['optionalDependencies']});
-
 	/**
-	 * The task for setting NODE_ENV to production
+	 * The task to set NODE_ENV to production
 	 */
 	gulp.task('setProd', (cb) => {
 		process.env.NODE_ENV = 'production';
@@ -22,21 +19,7 @@ module.exports = function (gulp) {
 	});
 
 	/**
-	 * The task for updating copyrights
-	 */
-	gulp.task('copyright', () =>
-		gulp.src('./LICENSE', {since: gulp.lastRun('copyright')})
-			.pipe($.plumber())
-			.pipe($.replace(/(Copyright \(c\) )(\d+)-?(\d*)/, (str, intro, from, to) => {
-				const year = new Date().getFullYear();
-				return intro + from + (to || from !== year ? `-${year}` : '');
-			}))
-
-			.pipe(gulp.dest('./'))
-	);
-
-	/**
-	 * The task for updating head disclaimers
+	 * The task to update head disclaimers
 	 */
 	gulp.task('head', () => {
 		const

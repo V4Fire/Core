@@ -14,8 +14,10 @@ const
 let gulpInitialized;
 
 /**
- * Wraps all base gulp methods for inheritance
- * @param gulp
+ * Wraps all base gulp methods for inheritance.
+ * This function is needed, because since gulp@4.0.0 you can't override already defined tasks.
+ *
+ * @param gulp - link to the gulp module
  */
 exports.wrapGulp = function (gulp) {
 	const

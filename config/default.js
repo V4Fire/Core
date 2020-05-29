@@ -113,14 +113,15 @@ class Config {
 	/**
 	 * Returns a hash string of the config
 	 *
-	 * @param [alg] - hash algorithm
-	 * @param [length] - hash length
+	 * @param {Object=} [data] - extra data to hash
+	 * @param {string=} [alg] - hash algorithm
+	 * @param {number} [length] - hash length
 	 * @returns {string}
 	 */
-	hash({alg = 'md5', length} = {}) {
+	hash({data, alg = 'md5', length} = {}) {
 		const
 			objectHash = require('node-object-hash'),
-			val = objectHash().hash({config: this.expand()}, {alg});
+			val = objectHash().hash({config: this.expand(), ...data}, {alg});
 
 		if (length) {
 			return val.slice(0, length);
@@ -413,10 +414,14 @@ module.exports = config.createConfig(
 
 			/**
 			 * Returns a hash string of the build
-			 * @returns {*}
+			 *
+			 * @param {Object=} [data] - extra data to hash
+			 * @param {string=} [alg] - hash algorithm
+			 * @param {number} [length] - hash length
+			 * @returns {string}
 			 */
-			hash() {
-				return this.config.hash({alg: this.hashAlg, length: this.hashLength});
+			hash({data, alg = this.hashAlg, length = this.hashLength} = {}) {
+				return this.config.hash({alg, length, data});
 			}
 		},
 

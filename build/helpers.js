@@ -13,14 +13,14 @@ const
 	path = require('upath');
 
 /**
- * Returns a project version
+ * Returns the project version
  */
 exports.getVersion = function () {
 	return include('package.json').version;
 };
 
 /**
- * Returns a project disclaimer
+ * Returns the project disclaimer
  * @param {boolean=} [withVersion]
  */
 exports.getHead = function (withVersion) {
