@@ -11,6 +11,17 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.18.0 (2020-05-29)
+
+#### :rocket: New Feature
+
+* Added config hash
+
+#### :house: Internal
+
+* :new: node-object-hash@2.0.0
+* Review config files
+
 ## v3.17.3 (2020-05-26)
 
 #### :house: Internal

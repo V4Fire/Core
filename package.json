@@ -5,7 +5,7 @@
   "main": "src/core/index.js",
   "typings": "index.d.ts",
   "license": "MIT",
-  "version": "3.17.3",
+  "version": "3.18.0",
   "author": {
     "name": "kobezzza",
     "email": "kobezzza@gmail.com",
@@ -45,12 +45,12 @@
     "tslib": "2.0.0"
   },
   "optionalDependencies": {
-    "@v4fire/typescript-check": "^1.0.1",
     "@pzlr/build-core": "^2.8.17",
     "@types/fs-extra-promise": "^1.0.8",
     "@types/gulp": "^4.0.6",
     "@types/gulp-load-plugins": "0.0.32",
     "@types/through2": "^2.0.34",
+    "@v4fire/typescript-check": "^1.0.1",
     "collection.js": "^6.7.10",
     "config": "^1.31.0",
     "del": "^5.1.0",
@@ -63,6 +63,7 @@
     "gulp-rename": "^2.0.0",
     "gulp-replace": "^1.0.0",
     "gulp-run": "^1.7.1",
+    "node-object-hash": "^2.0.0",
     "path-equal": "^1.1.1",
     "sugar": "^2.0.6",
     "through2": "^3.0.1",

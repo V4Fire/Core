@@ -235,13 +235,13 @@ request(<span class="hljs-string">'user'</span>, {<span class="hljs-attr">method
     <span class="hljs-keyword">return</span> data;
   }
 }</code></pre>
-						<p>Still looks fine and useful, but if we want to create more classes for other data instances we need to create some kind of superclass to avoid &quot;copy-pasting&quot; code lines. Also, the superclass may improve our API with added extra functionality, such as support for socket events, middlewares, etc. And this is exactly what &quot;core/data&quot; module does.</p>
+						<p>Still looks fine and useful, but if we want to create more classes for other data instances we need to create some kind of superclass to avoid &quot;copy-pasting&quot; code lines. Also, the superclass may improve our API with added extra functionality, such as support for socket events, middlewares, etc., and this is exactly what &quot;core/data&quot; module does.</p>
 						<a href="#default-interface" id="default-interface" style="color: inherit; text-decoration: none;">
 							<h2>Default interface</h2>
 						</a>
 						<p>The &quot;core/data&quot; module provides a default interface for any data providers. If your class implements this interface, then you can use it as a data provider with any V4Fire modules. This interface is pretty similar to the above-mentioned example of a data class but realizes more common API. Let&#39;s take a look at it.</p>
 						<p><strong>core/data/interface</strong></p>
-						<pre><code class="language-ts"><span class="hljs-keyword">import</span> { EventEmitterLike } <span class="hljs-keyword">from</span> <span class="hljs-string">'core/async'</span>;
+						<pre><code class="language-typescript"><span class="hljs-keyword">import</span> { EventEmitterLike } <span class="hljs-keyword">from</span> <span class="hljs-string">'core/async'</span>;
 <span class="hljs-keyword">import</span> {
 
   CreateRequestOptions,
@@ -351,7 +351,7 @@ user.get({<span class="hljs-attr">id</span>: <span class="hljs-number">1</span>}
   <span class="hljs-attr">socket</span>: <span class="hljs-literal">true</span>
 });</code></pre>
 						<p>The entire list of parameters:</p>
-						<pre><code class="language-ts"><span class="hljs-keyword">interface</span> ProviderOptions {
+						<pre><code class="language-typescript"><span class="hljs-keyword">interface</span> ProviderOptions {
   <span class="hljs-comment">/**
    * List of additional data providers for the "get" method.
    * It can be useful if you have some providers that you want combine to one.
@@ -471,7 +471,7 @@ user.get({<span class="hljs-attr">id</span>: <span class="hljs-number">1</span>}
 						</a>
 						<p>Middleware is a simple function that is invoked before each request and can modify some request parameters, like adding/removing HTTP headers, etc.
 						The function takes a request environment:</p>
-						<pre><code class="language-ts">{
+						<pre><code class="language-typescript">{
   ctx: RequestContext&lt;T&gt;;
   opts: CreateRequestOptions&lt;T&gt;;
   globalOpts: GlobalOptions;
@@ -529,7 +529,7 @@ user.get({<span class="hljs-attr">id</span>: <span class="hljs-number">1</span>}
 						<p>Note that unlike &quot;middlewares&quot; parameter the encoders are separated between provider methods, which means
 						that you should declare encoders for all your method pipelines.</p>
 						<p>The encoder function has the signature:</p>
-						<pre><code class="language-ts"><span class="hljs-keyword">export</span> <span class="hljs-keyword">interface</span> Encoder&lt;I = unknown, O = unknown&gt; {
+						<pre><code class="language-typescript"><span class="hljs-keyword">export</span> <span class="hljs-keyword">interface</span> Encoder&lt;I = unknown, O = unknown&gt; {
   (data: I, params: MiddlewareParams): O;
 }</code></pre>
 						<p>Where:</p>
@@ -544,7 +544,7 @@ user.get({<span class="hljs-attr">id</span>: <span class="hljs-number">1</span>}
 						<p>The decoder is another subtype of a middleware function, which is pretty similar to &quot;encoder&quot;, but unlike the encoder,
 						it converts data from a server to the provider format.</p>
 						<p>The decoder function has the signature:</p>
-						<pre><code class="language-ts"><span class="hljs-keyword">export</span> <span class="hljs-keyword">interface</span> Encoder&lt;I = unknown, O = unknown&gt; {
+						<pre><code class="language-typescript"><span class="hljs-keyword">export</span> <span class="hljs-keyword">interface</span> Encoder&lt;I = unknown, O = unknown&gt; {
   (data: I, params: MiddlewareParams, response: Response): O;
 }</code></pre>
 						<p>The first parameters are equal to the encoder function. The last parameter contains a link to a response object.</p>
@@ -663,7 +663,7 @@ user.get({<span class="hljs-attr">id</span>: <span class="hljs-number">1</span>}
 							<h4>Extra provider</h4>
 						</a>
 						<p>The declaration object of an extra provider has a standard interface:</p>
-						<pre><code class="language-ts"><span class="hljs-keyword">type</span> ExtraProviderConstructor =
+						<pre><code class="language-typescript"><span class="hljs-keyword">type</span> ExtraProviderConstructor =
   <span class="hljs-built_in">string</span> |
   Provider |
   {<span class="hljs-keyword">new</span>(opts?: ProviderOptions): Provider};
