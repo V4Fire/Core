@@ -80,7 +80,7 @@
     "max-statements": "off",
     "max-nested-callbacks": ["warn", {"max": 5}],
     "max-lines-per-function": ["warn", {"max": 400, "skipComments": true}],
-    "max-lines": ["error", {"max": 500, "skipComments": true}],
+    "max-lines": ["error", {"max": 800, "skipComments": true}],
     "max-len": ["error", {
       "code": 120,
       "tabWidth": 2,
@@ -99,7 +99,7 @@
     "no-unsafe-finally": "error",
     "no-unsafe-negation": "error",
 
-    "consistent-return": "error",
+    "consistent-return": "off",
 
     "no-console": "off",
     "no-alert": "warn",
@@ -110,14 +110,7 @@
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/no-misused-new": "error",
     "@typescript-eslint/no-invalid-void-type": "error",
-
-    "@typescript-eslint/no-type-alias": ["error", {
-      "allowAliases": "always",
-      "allowConditionalTypes": "always",
-      "allowLiterals": "in-unions-and-intersections",
-      "allowMappedTypes": "always",
-      "allowTupleTypes": "always"
-    }],
+    "@typescript-eslint/no-type-alias": "off",
 
     "@typescript-eslint/no-unnecessary-type-arguments": "error",
     "@typescript-eslint/no-unnecessary-type-assertion": "error",
@@ -145,7 +138,7 @@
     "@typescript-eslint/consistent-type-definitions": ["error", "interface"],
     "@typescript-eslint/member-delimiter-style": "error",
 
-    "@typescript-eslint/prefer-function-type": "error",
+    "@typescript-eslint/prefer-function-type": "off",
     "@typescript-eslint/adjacent-overload-signatures": "error",
     "@typescript-eslint/unified-signatures": "warn",
 
@@ -210,7 +203,8 @@
     "@typescript-eslint/no-unnecessary-boolean-literal-compare": "off",
     "@typescript-eslint/strict-boolean-expressions": ["error", {
       "allowString": false,
-      "allowNumber": false
+      "allowNumber": false,
+      "allowNullableBoolean": true
     }],
 
     "@typescript-eslint/no-floating-promises": ["warn", {"ignoreIIFE": true}],
@@ -321,6 +315,14 @@
 
     "no-magic-numbers": "off",
     "@typescript-eslint/no-magic-numbers": ["error", {
+      "enforceConst": true,
+      "ignore": [
+        0.1, 0.2, 0.3, 0.5, 0.7,
+        0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+        16, 32, 64, 128, 256, 512, 1024,
+        200, 300, 400, 401, 402, 403, 404, 500, 501, 502, 503
+      ],
+      "ignoreArrayIndexes": true,
       "ignoreEnums": true,
       "ignoreNumericLiteralTypes": true,
       "ignoreReadonlyClassProperties": true
@@ -330,7 +332,9 @@
     "@typescript-eslint/no-unused-expressions": ["error", {"allowShortCircuit": true}],
 
     "no-unused-vars": "off",
-    "@typescript-eslint/no-unused-vars-experimental": "error",
+    "@typescript-eslint/no-unused-vars-experimental": ["error", {
+      "ignoreArgsIfArgsAfterAreUsed": true
+    }],
 
     "no-useless-constructor": "off",
     "@typescript-eslint/no-useless-constructor": ["error"],
