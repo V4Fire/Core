@@ -144,9 +144,9 @@ interface AnyOneArgFunction<ARG = any, R = any> extends Function {
 }
 
 interface ClassConstructor<T = unknown> {new: T}
-interface StrictDictionary<T = unknown> {[key: string]: T}
-interface Dictionary<T> {[key: string]: CanUndef<T>}
-interface Dictionary<T extends unknown = unknown> {[key: string]: T}
+interface StrictDictionary<T = unknown> {[key: string | symbol]: T}
+interface Dictionary<T> {[key: string | symbol]: CanUndef<T>}
+interface Dictionary<T extends unknown = unknown> {[key: string | symbol]: T}
 
 interface Maybe<T = unknown> extends Promise<T> {
 	readonly type: 'Maybe';
