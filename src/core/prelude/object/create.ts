@@ -83,16 +83,30 @@ extend(Object, 'fromArray', (
 	opts?: ObjectFromArrayOptions
 ) => {
 	const
-		map = Object.createDict();
+		map = Object.createDict<any>();
 
-	const p = {
+	const p = <ObjectFromArrayOptions>{
 		key: String,
 		value: Boolean,
 		...opts
 	};
 
+	if (p.keyConverter) {
+		p.key = (el, i) => {
+			deprecate({type: 'property', name: 'keyConverter', renamedTo: 'key'});
+			return p.keyConverter!(i, el);
+		};
+	}
+
+	if (p.valueConverter) {
+		p.key = (el, i) => {
+			deprecate({type: 'property', name: 'valueConverter', renamedTo: 'value'});
+			return <any>p?.valueConverter!(el, i);
+		};
+	}
+
 	for (let i = 0; i < arr.length; i++) {
-		map[<string>p.key(arr[i], i)] = p.value(arr[i], i);
+		map[<string>p.key!(arr[i], i)] = p.value!(arr[i], i);
 	}
 
 	return map;

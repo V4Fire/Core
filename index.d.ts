@@ -467,12 +467,30 @@ interface ObjectFromArrayOptions<T = boolean> {
 	key?(el: unknown, i: number): string | symbol;
 
 	/**
+	 * @deprecated
+	 * @see [[ObjectFromArrayOptions.key]]
+	 *
+	 * @param i
+	 * @param el
+	 */
+	keyConverter?(i: number, el: unknown): string | symbol;
+
+	/**
 	 * Function that returns an element value
 	 *
 	 * @param el - element value
 	 * @param i - element index
 	 */
 	value?(el: unknown, i: number): T;
+
+	/**
+	 * @deprecated
+	 * @see [[ObjectFromArrayOptions.value]]
+	 *
+	 * @param el
+	 * @param i
+	 */
+	valueConverter?(el: unknown, i: number): T;
 }
 
 type ObjectPropertyPath =
