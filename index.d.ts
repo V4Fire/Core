@@ -461,10 +461,10 @@ interface ObjectFromArrayOptions<T = boolean> {
 	/**
 	 * Function that returns a key value
 	 *
-	 * @param i - element index
 	 * @param el - element value
+	 * @param i - element index
 	 */
-	keyConverter?(i: number, el: unknown): string | symbol;
+	key?(el: unknown, i: number): string | symbol;
 
 	/**
 	 * Function that returns an element value
@@ -472,7 +472,7 @@ interface ObjectFromArrayOptions<T = boolean> {
 	 * @param el - element value
 	 * @param i - element index
 	 */
-	valueConverter?(el: unknown, i: number): T;
+	value?(el: unknown, i: number): T;
 }
 
 type ObjectPropertyPath =
@@ -952,6 +952,15 @@ interface ObjectConstructor {
 	 *
 	 * @param arr
 	 * @param [opts] - additional options
+	 *
+	 * @example
+	 * ```js
+	 * // {foo: true, bar: true}
+	 * Object.fromArray(['foo', 'bar']);
+	 *
+	 * // {foo: 0, bar: 1}
+	 * Object.fromArray(['foo', 'bar'], {value: (val, i) => i});
+	 * ```
 	 */
 	fromArray<T>(arr: unknown[], opts?: ObjectFromArrayOptions<T>): Dictionary<T>;
 
