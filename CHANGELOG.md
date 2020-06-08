@@ -16,7 +16,6 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 #### :boom: Breaking Change
 
 * Review `Object.fromArray` API
-* Added support of symbols `Dictionary/StrictDictionary`
 
 ## v3.18.0 (2020-05-29)
 
