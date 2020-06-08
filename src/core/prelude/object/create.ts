@@ -92,7 +92,7 @@ extend(Object, 'fromArray', (
 	};
 
 	for (let i = 0; i < arr.length; i++) {
-		map[p.key(arr[i], i)] = p.value(arr[i], i);
+		map[<string>p.key(arr[i], i)] = p.value(arr[i], i);
 	}
 
 	return map;
