@@ -101,7 +101,7 @@ extend(Object, 'fromArray', (
 	if (p.valueConverter) {
 		p.value = (el, i) => {
 			deprecate({type: 'property', name: 'valueConverter', renamedTo: 'value'});
-			return <any>p?.valueConverter!(el, i);
+			return <any>p.valueConverter!(el, i);
 		};
 	}
 
