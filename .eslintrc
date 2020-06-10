@@ -13,7 +13,11 @@
     "es2017": true
   },
 
-  "plugins": ["@typescript-eslint"],
+  "plugins": [
+    "@typescript-eslint",
+    "enchanted-curly",
+    "import"
+  ],
 
   "rules": {
     "strict": "error",
@@ -35,6 +39,7 @@
     "no-implicit-coercion": "error",
 
     "no-cond-assign": ["error", "except-parens"],
+    "no-multi-assign": "error",
     "no-return-assign": "off",
     "no-ex-assign": "error",
     "no-func-assign": "error",
@@ -43,6 +48,26 @@
 
     "no-self-assign": "error",
     "no-self-compare": "error",
+
+    "operator-assignment": "error",
+    "prefer-exponentiation-operator": "error",
+    "prefer-object-spread": "error",
+
+    "operator-linebreak": ["error", "after"],
+    "padded-blocks": "off",
+    "padding-line-between-statements": [
+      "error",
+      {"blankLine": "always", "prev": "block-like", "next": "*"},
+      {"blankLine": "always", "prev": "case", "next": "*"},
+      {"blankLine": "always", "prev": "class", "next": "*"},
+      {"blankLine": "always", "prev": "function", "next": "*"},
+      {"blankLine": "always", "prev": "iife", "next": "*"},
+      {"blankLine": "always", "prev": "multiline-block-like", "next": "*"},
+      {"blankLine": "always", "prev": "multiline-expression", "next": "*"},
+      {"blankLine": "always", "prev": "directive", "next": "*"},
+      {"blankLine": "always", "prev": "import", "next": "export"},
+      {"blankLine": "always", "prev": "cjs-import", "next": "cjs-export"}
+    ],
 
     "no-unexpected-multiline": "error",
     "semi-spacing": "error",
@@ -58,6 +83,7 @@
     "yoda": "error",
 
     "no-lonely-if": "warn",
+    "no-negated-condition": "error",
     "no-dupe-else-if": "warn",
     "no-duplicate-case": "error",
     "no-dupe-keys": "error",
@@ -119,6 +145,11 @@
       }
     ],
 
+    "no-ternary": "off",
+    "no-nested-ternary": "error",
+    "no-unneeded-ternary": "error",
+    "multiline-ternary": ["error", "always-multiline"],
+
     "no-multi-str": "error",
     "no-template-curly-in-string": "warn",
     "no-octal-escape": "error",
@@ -128,11 +159,25 @@
     "no-empty-pattern": "error",
 
     "no-new": "error",
-    "no-new-func": "error",
-    "no-new-wrappers": "error",
     "no-useless-call": "error",
 
+    "no-new-func": "error",
+    "no-new-object": "error",
+    "no-new-wrappers": "error",
+
+    "new-parens": "error",
+    "new-cap": ["error", {
+      "newIsCap": true,
+      "capIsNew": true,
+      "newIsCapExceptionPattern": "^[bpg][A-Z]"
+    }],
+
     "no-warning-comments": "off",
+    "no-inline-comments": "error",
+    "multiline-comment-style": "off",
+
+    "line-comment-position": ["error", "above"],
+    "lines-around-comment": "error",
     "capitalized-comments": ["error", "always", {
       "ignorePattern": "#",
       "ignoreConsecutiveComments": true
@@ -143,6 +188,8 @@
     "no-useless-backreference": "error",
     "no-useless-escape": "error",
 
+    "one-var": "off",
+    "one-var-declaration-per-line": "error",
     "vars-on-top": "error",
     "block-scoped-var": "error",
     "no-inner-declarations": "error",
@@ -154,9 +201,17 @@
     "no-iterator": "warn",
     "no-proto": "off",
 
-    "no-caller": "error",
     "no-with": "error",
+    "no-caller": "error",
     "no-delete-var": "error",
+
+    "no-bitwise": "error",
+    "no-plusplus": "off",
+    "no-continue": "off",
+
+    "no-mixed-operators": "off",
+    "no-mixed-spaces-and-tabs": ["error", "smart-tabs"],
+    "no-tabs": ["error", {"allowIndentationTabs": true}],
 
     "no-undef-init": "off",
     "no-use-before-define": ["error", {"functions": false}],
@@ -186,29 +241,52 @@
     "radix": "error",
 
     "camelcase": "error",
+    "no-underscore-dangle": ["error", {
+      "allowAfterThis": true,
+      "allowAfterSuper": true,
+      "allowAfterThisConstructor": true
+    }],
 
     "comma-dangle": "error",
     "comma-style": "error",
 
     "eol-last": "error",
+    "linebreak-style": "error",
+    "no-multiple-empty-lines": ["error", {"max": 1}],
 
     "no-multi-spaces": "error",
+    "no-trailing-spaces": "error",
+
     "space-infix-ops": "error",
     "space-unary-ops": "error",
-    "key-spacing": "error",
-    "computed-property-spacing": "error",
+
     "space-in-parens": "error",
+    "no-whitespace-before-property": "error",
 
     "array-bracket-newline": "error",
     "array-bracket-spacing": "error",
     "array-element-newline": ["error", {"multiline": true}],
 
-    "object-curly-spacing": "error",
     "block-spacing": "error",
+    "nonblock-statement-body-position": "error",
+
+    "key-spacing": "error",
+    "computed-property-spacing": "error",
+
+    "object-curly-spacing": "off",
+    "object-curly-newline": ["error", {"multiline": true}],
+    "object-property-newline": ["error", {"allowAllPropertiesOnSameLine": true}],
+
+    "enchanted-curly/object-curly-spacing": ["error", "never", {
+      "multiline": true,
+      "import": true,
+      "export": true
+    }],
 
     "func-name-matching": "error",
     "func-names": ["error", "as-needed"],
     "func-style": ["error", "declaration", {"allowArrowFunctions": true}],
+    "newline-per-chained-call": ["error", {"ignoreChainWithDepth": 3}],
     "function-call-argument-newline": ["error", "consistent"],
     "function-paren-newline": "error",
     "wrap-iife": "error",
@@ -217,6 +295,12 @@
     "arrow-spacing": "error",
     "arrow-body-style": "error",
     "implicit-arrow-linebreak": "error",
+
+    "jsx-quotes": "error",
+
+    "id-blacklist": "off",
+    "id-length": "off",
+    "id-match": "off",
 
     "complexity": ["error", {"max": 50}],
 
@@ -355,10 +439,6 @@
     }],
 
     "@typescript-eslint/no-throw-literal": "error",
-    "@typescript-eslint/no-this-alias": ["error", {
-      "allowDestructuring": true,
-      "allowedNames": ["self", "that"]
-    }],
 
     "@typescript-eslint/ban-ts-comment": ["error", {
       "ts-ignore": "allow-with-description",
@@ -493,6 +573,12 @@
       "anonymous": "always",
       "named": "never",
       "asyncArrow": "always"
+    }],
+
+    "consistent-this": "off",
+    "@typescript-eslint/no-this-alias": ["error", {
+      "allowDestructuring": true,
+      "allowedNames": ["self", "that"]
     }]
   }
 }
