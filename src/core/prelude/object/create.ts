@@ -21,7 +21,7 @@ extend(Object, 'createDict', (...objects) => {
 /** @see ObjectConstructor.convertEnumToDict */
 extend(Object, 'convertEnumToDict', (obj: Dictionary) => {
 	const
-		res = {};
+		res = Object.createDict();
 
 	for (let keys = Object.keys(obj), i = 0; i < keys.length; i++) {
 		const
@@ -83,16 +83,30 @@ extend(Object, 'fromArray', (
 	opts?: ObjectFromArrayOptions
 ) => {
 	const
-		map = {};
+		map = Object.createDict<any>();
 
-	const p = {
-		keyConverter: String,
-		valueConverter: Boolean,
+	const p = <ObjectFromArrayOptions>{
+		key: String,
+		value: Boolean,
 		...opts
 	};
 
+	if (p.keyConverter) {
+		p.key = (el, i) => {
+			deprecate({type: 'property', name: 'keyConverter', renamedTo: 'key'});
+			return p.keyConverter!(i, el);
+		};
+	}
+
+	if (p.valueConverter) {
+		p.value = (el, i) => {
+			deprecate({type: 'property', name: 'valueConverter', renamedTo: 'value'});
+			return <any>p.valueConverter!(el, i);
+		};
+	}
+
 	for (let i = 0; i < arr.length; i++) {
-		map[p.keyConverter(i, arr[i])] = p.valueConverter(arr[i], i);
+		map[<string>p.key!(arr[i], i)] = p.value!(arr[i], i);
 	}
 
 	return map;
@@ -117,7 +131,7 @@ export function selectReject(select: boolean): AnyFunction {
 		}
 
 		const
-			res = {};
+			res = Object.createDict();
 
 		if (Object.isRegExp(condition)) {
 			for (let keys = Object.keys(obj), i = 0; i < keys.length; i++) {
@@ -141,7 +155,7 @@ export function selectReject(select: boolean): AnyFunction {
 
 		} else if (Object.isArray(condition)) {
 			for (let i = 0; i < condition.length; i++) {
-				map[condition[i]] = true;
+				map[String(condition[i])] = true;
 			}
 
 		} else if (Object.isIterable(condition)) {

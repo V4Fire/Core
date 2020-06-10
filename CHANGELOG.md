@@ -11,6 +11,18 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.19.1 (2020-06-08)
+
+#### :bug: Bug Fix
+
+* Restored deprecated API `Object.fromArray`
+
+## v3.19.0 (2020-06-08)
+
+#### :boom: Breaking Change
+
+* Review `Object.fromArray` API
+
 ## v3.18.0 (2020-05-29)
 
 #### :rocket: New Feature

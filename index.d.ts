@@ -461,8 +461,17 @@ interface ObjectFromArrayOptions<T = boolean> {
 	/**
 	 * Function that returns a key value
 	 *
-	 * @param i - element index
 	 * @param el - element value
+	 * @param i - element index
+	 */
+	key?(el: unknown, i: number): string | symbol;
+
+	/**
+	 * @deprecated
+	 * @see [[ObjectFromArrayOptions.key]]
+	 *
+	 * @param i
+	 * @param el
 	 */
 	keyConverter?(i: number, el: unknown): string | symbol;
 
@@ -471,6 +480,15 @@ interface ObjectFromArrayOptions<T = boolean> {
 	 *
 	 * @param el - element value
 	 * @param i - element index
+	 */
+	value?(el: unknown, i: number): T;
+
+	/**
+	 * @deprecated
+	 * @see [[ObjectFromArrayOptions.value]]
+	 *
+	 * @param el
+	 * @param i
 	 */
 	valueConverter?(el: unknown, i: number): T;
 }
@@ -952,6 +970,15 @@ interface ObjectConstructor {
 	 *
 	 * @param arr
 	 * @param [opts] - additional options
+	 *
+	 * @example
+	 * ```js
+	 * // {foo: true, bar: true}
+	 * Object.fromArray(['foo', 'bar']);
+	 *
+	 * // {foo: 0, bar: 1}
+	 * Object.fromArray(['foo', 'bar'], {value: (val, i) => i});
+	 * ```
 	 */
 	fromArray<T>(arr: unknown[], opts?: ObjectFromArrayOptions<T>): Dictionary<T>;
 
