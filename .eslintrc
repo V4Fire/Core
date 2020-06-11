@@ -398,6 +398,70 @@
       "ignoreRegExpLiterals": true
     }],
 
+    // [Import]
+
+    "import/no-unresolved": "error",
+    "import/no-cycle": "warn",
+
+    "import/no-absolute-path": "error",
+    "import/no-relative-parent-imports": "error",
+    "import/no-extraneous-dependencies": "off",
+    "import/no-useless-path-segments": "error",
+    "import/no-self-import": "error",
+    "import/no-internal-modules": "off",
+    "import/no-nodejs-modules": "warn",
+
+    "import/no-commonjs": "off",
+    "import/no-dynamic-require": "off",
+    "import/no-webpack-loader-syntax": "off",
+    "import/no-amd": "error",
+
+    "import/named": "error",
+    "import/default": "error",
+    "import/namespace": "error",
+    "import/no-unassigned-import": "off",
+
+    "import/export": "error",
+    "import/no-mutable-exports": "warn",
+    "import/no-named-export": "off",
+    "import/group-exports": "off",
+
+    "import/no-named-as-default": "error",
+    "import/no-named-as-default-member": "error",
+    "import/no-named-default": "error",
+
+    "import/no-anonymous-default-export": ["error", {
+      "allowArray": true,
+      "allowArrowFunction": true,
+      "allowAnonymousClass": true,
+      "allowAnonymousFunction": true,
+      "allowCallExpression": true,
+      "allowLiteral": true,
+      "allowObject": true
+    }],
+
+    "import/no-deprecated": "warn",
+    "import/no-unused-modules": "warn",
+    "import/unambiguous": "error",
+
+    "import/first": "error",
+    "import/newline-after-import": "error",
+    "import/exports-last": "off",
+
+    "import/order": "warn",
+    "import/prefer-default-export": "off",
+
+    "import/no-duplicates": "error",
+    "import/no-namespace": "off",
+    "import/max-dependencies": "off",
+
+    "import/extensions": ["error", "always", {
+      "js": "never",
+      "jsx": "never",
+      "ts": "never",
+      "tsx": "never"
+    }],
+
     // [TSLint]
 
     "@typescript-eslint/no-explicit-any": "off",
@@ -544,6 +608,34 @@
           "fixWith": "object"
         }
       }
+    }],
+
+    "@typescript-eslint/member-ordering": ["error", {
+      "default": [
+        "signature",
+
+        "public-static-field",
+        "public-static-method",
+
+        "protected-static-field",
+        "protected-static-method",
+
+        "public-instance-field",
+        "protected-instance-field",
+        "private-instance-field",
+
+        "public-constructor",
+        "protected-constructor",
+
+        "public-instance-method",
+        "protected-instance-method",
+
+        "private-static-field",
+        "private-static-method",
+
+        "private-constructor",
+        "private-instance-method"
+      ]
     }],
 
     // [TSLint & ESLint]
