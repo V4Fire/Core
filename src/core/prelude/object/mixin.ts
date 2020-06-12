@@ -128,7 +128,9 @@ extend(Object, 'mixin', function (
 				}
 
 				if (p.withUndef || val !== undefined) {
-					data[key] = val;
+					try {
+						data[key] = val;
+					} catch {}
 				}
 			};
 	}
