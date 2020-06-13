@@ -6,8 +6,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-// tslint:disable:no-var-requires comment-format
-
 import { IS_NODE } from 'core/env';
 
 export let
@@ -16,7 +14,6 @@ export let
 	syncSessionStorage,
 	asyncSessionStorage;
 
-// tslint:disable-next-line
 if (IS_NODE) {
 	//#if node_js
 	({syncLocalStorage, asyncLocalStorage, syncSessionStorage, asyncSessionStorage} =

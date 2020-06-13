@@ -23,7 +23,7 @@ const
  * @param value
  */
 export function convertIfDate(key: string, value: unknown): unknown {
-	if (Object.isString(value) && (value.length > minDateLength) && isDateStr.test(value)) {
+	if (Object.isString(value) && value.length > minDateLength && isDateStr.test(value)) {
 		const date = Date.create(value);
 		return isNaN(date.valueOf()) ? value : date;
 	}

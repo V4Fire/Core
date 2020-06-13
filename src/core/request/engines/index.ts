@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -6,14 +8,11 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-// tslint:disable:no-var-requires comment-format
-
 import { IS_NODE } from 'core/env';
 
 let
 	transport;
 
-// tslint:disable-next-line
 if (IS_NODE) {
 	//#if node_js
 	transport = require('core/request/engines/node').default;

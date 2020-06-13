@@ -12,6 +12,7 @@
  */
 
 import { Details } from 'core/request/error/interface';
+
 export * from 'core/request/error/interface';
 
 /**

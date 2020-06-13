@@ -12,6 +12,7 @@
  */
 
 import { DeprecatedOptions, InlineDeprecatedOptions } from 'core/functools/deprecation/interface';
+
 export * from 'core/functools/deprecation/interface';
 
 const

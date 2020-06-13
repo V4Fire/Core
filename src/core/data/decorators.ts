@@ -42,7 +42,10 @@ export function provider(provider: Function): void;
 export function provider(nmsOrFn: Function | string): Function | void {
 	if (Object.isString(nmsOrFn)) {
 		return (target) => {
-			const nms = target[namespace] = `${nmsOrFn}.${target.name}`;
+			const
+				nms = `${nmsOrFn}.${target.name}`;
+
+			target[namespace] = nms;
 			providers[nms] = target;
 		};
 	}

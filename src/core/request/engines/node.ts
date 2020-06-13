@@ -16,7 +16,7 @@ import { RequestEngine } from 'core/request/interface';
  * Creates request by using node.js with the specified parameters and returns a promise
  * @param params
  */
-// tslint:disable-next-line
+// eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
 const request: RequestEngine = (params) => {
 	notImplement({type: 'function', name: 'Request engine for Node.js'});
 	return Then.resolve(new Response());

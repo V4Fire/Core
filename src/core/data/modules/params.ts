@@ -9,15 +9,9 @@
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 import { deprecate } from 'core/functools';
 
-import request, {
-
-	CreateRequestOptions,
-	Middlewares,
-	RequestMethod
-
-} from 'core/request';
-
+import request, { Middlewares, RequestMethod } from 'core/request';
 import select, { SelectParams } from 'core/object/select';
+
 import { emitter } from 'core/data/const';
 
 import {
@@ -371,7 +365,7 @@ export default abstract class Provider {
 	}
 
 	/**
-	 * Alias for a request function
+	 * Alias for the request function
 	 */
 	get request(): typeof request {
 		return (<typeof Provider>this.constructor).request;

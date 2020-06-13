@@ -78,7 +78,7 @@ export interface RequestResponseObject<D = unknown> {
 export type RequestResponse<D = unknown> = Then<RequestResponseObject<D>>;
 
 export interface RequestFunctionResponse<D = unknown, ARGS extends unknown[] = []> {
-	(...args: ARGS extends (infer V)[] ? V[] : unknown[]): RequestResponse<D>;
+	(...args: ARGS extends Array<infer V> ? V[] : unknown[]): RequestResponse<D>;
 }
 
 export interface RequestResolver<D = unknown, ARGS extends unknown[] = unknown[]> {
@@ -105,7 +105,7 @@ export type RequestQuery =
 	unknown[] |
 	string;
 
-// @ts-ignore
+// @ts-ignore (extend)
 export interface WrappedCreateRequestOptions<D = unknown> extends CreateRequestOptions<D> {
 	url: CanUndef<string>;
 	encoder?: WrappedEncoder | WrappedEncoders;

@@ -36,10 +36,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	setImmediate(cb: Function, opts?: AsyncCbOptions<CTX>): Nullable<TimerId> {
 		const
-			// eslint-disable-next-line @typescript-eslint/dot-notation
 			wrapper = globalThis['setImmediate'],
-
-			// eslint-disable-next-line @typescript-eslint/dot-notation
 			clearFn = globalThis['clearImmediate'];
 
 		return this.registerTask({

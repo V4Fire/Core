@@ -18,6 +18,7 @@ import Provider, { RequestError } from 'core/data';
 import { Response, MiddlewareParams } from 'core/request';
 
 import { MockOptions } from 'core/data/middlewares/attach-mock/interface';
+
 export * from 'core/data/middlewares/attach-mock/interface';
 
 let
@@ -29,7 +30,8 @@ const setConfig = (opts) => {
 		...opts
 	};
 
-	mockOpts.patterns = (mockOpts.patterns || []).map((el) => Object.isRegExp(el) ? el : new RegExp(el));
+	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+	mockOpts.patterns = (mockOpts.patterns ?? []).map((el) => Object.isRegExp(el) ? el : new RegExp(el));
 };
 
 const optionsInitializer = env.get('mock').then(setConfig, setConfig);
@@ -41,7 +43,8 @@ env.emitter.on('remove.mock', setConfig);
  * @param params
  */
 export async function attachMock(this: Provider, params: MiddlewareParams): Promise<CanUndef<Function>> {
-	if (!mockOpts) {
+	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+	if (mockOpts == null) {
 		await optionsInitializer;
 	}
 
@@ -49,17 +52,18 @@ export async function attachMock(this: Provider, params: MiddlewareParams): Prom
 		{opts, ctx} = params;
 
 	const
-		mocksDecl = (<typeof Provider>this.constructor).mocks || this.mocks,
-		id = opts.cacheId;
+		id = opts.cacheId,
+		mocksDecl = (<typeof Provider>this.constructor).mocks ?? this.mocks;
 
-	if (!mocksDecl || !Object.isString(id) || mockOpts.patterns.every((rgxp) => !rgxp.test(id))) {
+	if (mocksDecl == null || !Object.isString(id) || mockOpts.patterns.every((rgxp) => !rgxp.test(id))) {
 		return;
 	}
 
 	let
 		mocks = await mocksDecl;
 
-	if (!mocks) {
+	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+	if (mocks == null) {
 		return;
 	}
 
@@ -70,7 +74,7 @@ export async function attachMock(this: Provider, params: MiddlewareParams): Prom
 	const
 		requests = mocks[String(opts.method)];
 
-	if (!requests) {
+	if (requests == null) {
 		return;
 	}
 
@@ -87,7 +91,7 @@ export async function attachMock(this: Provider, params: MiddlewareParams): Prom
 		const
 			request = requests[i];
 
-		if (!request) {
+		if (request == null) {
 			continue;
 		}
 
@@ -109,7 +113,7 @@ export async function attachMock(this: Provider, params: MiddlewareParams): Prom
 					const
 						key = keys[i];
 
-					if (!Object.fastCompare(val[key], baseVal && baseVal[key])) {
+					if (!Object.fastCompare(val[key], baseVal?.[key])) {
 						currentRequest = undefined;
 						break requestKeys;
 					}
@@ -127,7 +131,7 @@ export async function attachMock(this: Provider, params: MiddlewareParams): Prom
 			currentRequest = undefined;
 		}
 
-		if (currentRequest) {
+		if (currentRequest != null) {
 			break;
 		}
 	}
@@ -136,7 +140,7 @@ export async function attachMock(this: Provider, params: MiddlewareParams): Prom
 		return;
 	}
 
-	const customResponse = {
+	const customResponse = <typeof currentRequest>{
 		status: undefined,
 		responseType: undefined,
 		decoders: undefined
@@ -152,10 +156,10 @@ export async function attachMock(this: Provider, params: MiddlewareParams): Prom
 	return () => Then.resolve(response, ctx.parent)
 		.then((data) => {
 			const response = new Response(data, {
-				status: customResponse.status || currentRequest.status || 200,
-				responseType: customResponse.responseType || currentRequest.responseType || opts.responseType,
+				status: customResponse.status ?? currentRequest.status ?? 200,
+				responseType: customResponse.responseType ?? currentRequest.responseType ?? opts.responseType,
 				okStatuses: opts.okStatuses,
-				decoder: currentRequest.decoders === false ? undefined : customResponse.decoders || ctx.decoders
+				decoder: currentRequest.decoders === false ? undefined : customResponse.decoders ?? ctx.decoders
 			});
 
 			if (!response.ok) {
@@ -165,5 +169,5 @@ export async function attachMock(this: Provider, params: MiddlewareParams): Prom
 			return response;
 		})
 
-		.then(ctx.wrapAsResponse);
+		.then(ctx.wrapAsResponse.bind(ctx));
 }

@@ -13,8 +13,8 @@
 
 import { cache } from 'core/request/const';
 import { NormalizedCreateRequestOptions } from 'core/request/interface';
-
 import { tplRgxp } from 'core/request/utils/const';
+
 export * from 'core/request/utils/const';
 
 /**
@@ -81,13 +81,14 @@ export function getRequestKey<T>(url: string, params?: NormalizedCreateRequestOp
 
 			} else if (body instanceof FormData) {
 				body.forEach((el, key) => {
+					// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 					if (el == null) {
 						el = String(el);
 					}
 
 					if (!Object.isString(el)) {
 						try {
-							// @ts-ignore
+							// @ts-ignore (nodejs)
 							el = el.toString('base64');
 
 						} catch {
@@ -100,7 +101,7 @@ export function getRequestKey<T>(url: string, params?: NormalizedCreateRequestOp
 
 			} else {
 				try {
-					// @ts-ignore
+					// @ts-ignore (nodejs)
 					bodyKey = body.toString('base64');
 
 				} catch {
@@ -138,7 +139,7 @@ export function applyQueryForStr(str: string, query?: Dictionary, rgxp: RegExp =
 
 		if (val != null) {
 			delete query[param];
-			return (str[0] === '/' ? '/' : '') + val + (Object.isNumber(adv) ? '' : adv);
+			return (str.startsWith('/') ? '/' : '') + String(val) + String(Object.isNumber(adv) ? '' : adv);
 		}
 
 		return '';
@@ -189,7 +190,7 @@ export function normalizeHeaders(headers?: Dictionary, query?: Dictionary): Dict
 					const
 						el = normalizeHeaderValue(val[i], query);
 
-					if (el) {
+					if (el !== '') {
 						arr.push(el);
 					}
 				}
@@ -200,10 +201,10 @@ export function normalizeHeaders(headers?: Dictionary, query?: Dictionary): Dict
 				val = normalizeHeaderValue(val, query);
 			}
 
-			if (val.length) {
+			if (val.length > 0) {
 				name = normalizeHeaderName(name, query);
 
-				if (name) {
+				if (name !== '') {
 					res[name] = val;
 				}
 			}
@@ -214,7 +215,7 @@ export function normalizeHeaders(headers?: Dictionary, query?: Dictionary): Dict
 }
 
 /**
- * Truncates all static cache storages
+ * Truncates all static cache storage-s
  */
 export function dropCache(): void {
 	for (let keys = Object.keys(cache), i = 0; i < keys.length; i++) {

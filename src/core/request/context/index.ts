@@ -109,8 +109,8 @@ export default class RequestContext<D = unknown> extends Super<D> {
 					type = getDataTypeFromURL(reqPath);
 
 				// Support for "mime string" requests
-				if (type) {
-					if (!params.responseType) {
+				if (type != null) {
+					if (params.responseType == null) {
 						params.responseType = type;
 					}
 
@@ -119,8 +119,9 @@ export default class RequestContext<D = unknown> extends Super<D> {
 
 				// Append resolver
 
-				let
-					url = isAbsoluteURL.test(reqPath) ? reqPath : concatUrls(api ? this.resolveAPI(api) : null, reqPath);
+				let url = isAbsoluteURL.test(reqPath) ?
+					reqPath :
+					concatUrls(api != null ? this.resolveAPI(api) : null, reqPath);
 
 				if (Object.isFunction(resolver)) {
 					const
@@ -129,7 +130,7 @@ export default class RequestContext<D = unknown> extends Super<D> {
 					if (Object.isArray(res)) {
 						url = concatUrls(...res.map(String));
 
-					} else if (res) {
+					} else if (res != null) {
 						url = concatUrls(url, res);
 					}
 				}
