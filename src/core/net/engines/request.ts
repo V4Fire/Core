@@ -7,7 +7,8 @@
  */
 
 import config from 'config';
-import { emitter } from 'core/net/const';
+
+import { state, emitter } from 'core/net/const';
 import { IS_NODE } from 'core/prelude/env';
 
 const
@@ -19,7 +20,7 @@ if (!IS_NODE) {
 }
 
 /**
- * Returns true if the current host has connection to the internet or null
+ * Returns true if the current host has a connection to the internet or null
  * if the connection status can't be checked.
  *
  * This engine checks the connection by using a request for some data from the internet.
@@ -32,7 +33,7 @@ export async function isOnline(): Promise<boolean | null> {
 	const
 		url = online.checkURL;
 
-	if (!url) {
+	if (url == null || url === '') {
 		return null;
 	}
 
@@ -41,7 +42,11 @@ export async function isOnline(): Promise<boolean | null> {
 
 	return new Promise((resolve) => {
 		const retry = () => {
-			if (!online.retryCount || status === undefined || ++retriesCount > online.retryCount) {
+			if (
+				state.status == null ||
+				online.retryCount == null ||
+				++retriesCount > online.retryCount
+			) {
 				resolve(false);
 
 			} else {
@@ -49,10 +54,12 @@ export async function isOnline(): Promise<boolean | null> {
 			}
 		};
 
-		const checkOnline = () => {
+		checkOnline();
+
+		function checkOnline(): void {
 			const
 				img = new Image(),
-				timer = setTimeout(retry, online.checkTimeout || 0);
+				timer = setTimeout(retry, online.checkTimeout ?? 0);
 
 			img.onload = () => {
 				clearTimeout(timer);
@@ -65,8 +72,6 @@ export async function isOnline(): Promise<boolean | null> {
 			};
 
 			img.src = `${url}?d=${Date.now()}`;
-		};
-
-		checkOnline();
+		}
 	});
 }

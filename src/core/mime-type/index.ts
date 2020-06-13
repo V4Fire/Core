@@ -35,7 +35,7 @@ export function getDataType(str: string): DataType {
 		type = str.toLowerCase().replace(normalizeMimeStrRgxp, '').trim(),
 		predefinedType = mimeTypes[type];
 
-	if (predefinedType) {
+	if (predefinedType != null) {
 		return predefinedType;
 	}
 

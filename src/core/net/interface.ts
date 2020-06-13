@@ -6,9 +6,14 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+export interface State {
+	status?: Nullable<boolean>;
+	lastOnline?: Nullable<Date>;
+}
+
 export interface NetStatus {
 	/**
-	 * If true, then a host has connection to the internet
+	 * If true, then a host has a connection to the internet
 	 */
 	status: boolean;
 

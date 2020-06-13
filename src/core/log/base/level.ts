@@ -33,14 +33,17 @@ const order: LogLevelOrder = {
  * @param right
  */
 export function cmpLevels(left: LogLevel, right: LogLevel): number {
+	// eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
 	if (!order[left] && !order[right]) {
 		return 0;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
 	if (!order[left]) {
 		return -1;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
 	if (!order[right]) {
 		return 1;
 	}

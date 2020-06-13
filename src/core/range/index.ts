@@ -12,6 +12,7 @@
  */
 
 import { RangeValue, RangeType } from 'core/range/interface';
+
 export * from 'core/range/interface';
 
 /**

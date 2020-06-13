@@ -29,11 +29,11 @@ export default function log(context: string | LogMessageOptions, ...details: unk
 		logLevel = DEFAULT_LEVEL;
 
 	if (Object.isString(context)) {
-		logContext = context || DEFAULT_CONTEXT;
+		logContext = context !== '' ? context : DEFAULT_CONTEXT;
 
 	} else {
-		logLevel = context.logLevel || DEFAULT_LEVEL;
-		logContext = context.context || DEFAULT_CONTEXT;
+		logLevel = context.logLevel ?? DEFAULT_LEVEL;
+		logContext = context.context !== '' ? context.context : DEFAULT_CONTEXT;
 	}
 
 	logContext = `${logContext}:${logLevel}`;
@@ -43,7 +43,7 @@ export default function log(context: string | LogMessageOptions, ...details: unk
 		logError: CanUndef<Error>;
 
 	if (details[0] instanceof Error) {
-		logError = details[0] as Error;
+		logError = details[0];
 		details = details.slice(1);
 	}
 
@@ -54,7 +54,7 @@ export default function log(context: string | LogMessageOptions, ...details: unk
 		error: logError,
 
 		get details(): unknown[] {
-			if (logDetails) {
+			if (logDetails != null) {
 				return logDetails;
 			}
 

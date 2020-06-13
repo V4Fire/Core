@@ -16,10 +16,15 @@ export type Operation =
 	'^=';
 
 export type Strategy =
-	'eq' | // ==
-	'range' | // ^= ~=
-	'ord'; // < > >= <=
+	// ==
+	'eq' |
+
+	// ^= ~=
+	'range' |
+
+	// < > >= <=
+	'ord';
 
 export interface ComparisonOptions {
-	x: string
+	x: string;
 }

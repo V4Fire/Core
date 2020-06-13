@@ -12,6 +12,7 @@
  */
 
 import SimpleCache, { ClearFilter } from 'core/cache/simple';
+
 export * from 'core/cache/simple';
 
 /**
@@ -38,7 +39,7 @@ export default class RestrictedCache<V = unknown, K = string> extends SimpleCach
 	constructor(max?: number) {
 		super();
 
-		if (max) {
+		if (max != null) {
 			this.max = max;
 		}
 	}

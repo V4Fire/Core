@@ -14,7 +14,7 @@
 import config from 'config';
 import * as engine from 'core/net/engines';
 
-import { emitter } from 'core/net/const';
+import { state, emitter } from 'core/net/const';
 import { NetStatus } from 'core/net/interface';
 
 export * from 'core/net/const';
@@ -25,11 +25,10 @@ const
 
 let
 	storage,
-	status,
-	lastOnline,
 	cache;
 
 //#if runtime has core/kv-storage
+// eslint-disable-next-line prefer-const
 storage = import('core/kv-storage').then(({asyncLocal}) => asyncLocal.namespace('[[NET]]'));
 //#endif
 
@@ -43,23 +42,25 @@ storage = import('core/kv-storage').then(({asyncLocal}) => asyncLocal.namespace(
 export function isOnline(): Promise<NetStatus> {
 	//#if runtime has core/net
 
-	if (cache) {
+	if (cache != null) {
 		return cache;
 	}
 
 	const res = (async () => {
-		const prevStatus = status;
-		status = await engine.isOnline();
+		const prevStatus = state.status;
 
-		if (status === null) {
+		// eslint-disable-next-line require-atomic-updates
+		state.status = await engine.isOnline();
+
+		if (state.status == null) {
 			return {
 				status: true,
 				lastOnline: undefined
 			};
 		}
 
-		if (online.persistence && lastOnline == null) {
-			if (!storage) {
+		if (online.persistence && state.lastOnline == null) {
+			if (storage == null) {
 				throw new ReferenceError("kv-storage module isn't loaded");
 			}
 
@@ -67,33 +68,34 @@ export function isOnline(): Promise<NetStatus> {
 				const
 					lastStoredOnline = await (await storage).get('lastOnline');
 
-				if (lastStoredOnline) {
-					lastOnline = lastStoredOnline;
+				if (lastStoredOnline != null) {
+					// eslint-disable-next-line require-atomic-updates
+					state.lastOnline = lastStoredOnline;
 				}
 
 			} catch {}
 		}
 
-		if (online.cacheTTL) {
+		if (online.cacheTTL != null) {
 			setTimeout(() => cache = undefined, online.cacheTTL);
 		}
 
-		if (prevStatus === undefined || status !== prevStatus) {
-			if (status) {
-				emitter.emit('online', lastOnline);
+		if (prevStatus === undefined || state.status !== prevStatus) {
+			if (state.status) {
+				emitter.emit('online', state.lastOnline);
 
 			} else {
 				emitter.emit('offline');
 			}
 
 			syncStatusWithStorage().catch(stderr);
-			emitter.emit('status', {status, lastOnline});
+			emitter.emit('status', {...<NetStatus>state});
 		}
 
-		return {status, lastOnline};
+		return {...<NetStatus>state};
 	})();
 
-	if (online.cacheTTL) {
+	if (online.cacheTTL != null) {
 		cache = res;
 	}
 
@@ -114,11 +116,11 @@ let
  * Synchronizes the online status with a local storage
  */
 export async function syncStatusWithStorage(): Promise<void> {
-	if (!status) {
+	if (state.status !== true) {
 		return;
 	}
 
-	lastOnline = new Date();
+	state.lastOnline = new Date();
 
 	const clear = () => {
 		if (storageSyncTimer != null) {
@@ -130,19 +132,19 @@ export async function syncStatusWithStorage(): Promise<void> {
 	clear();
 
 	if (online.persistence) {
-		if (!storage) {
+		if (storage == null) {
 			throw new ReferenceError("kv-storage module isn't loaded");
 		}
 
 		try {
-			await (await storage).set('lastOnline', lastOnline);
+			await (await storage).set('lastOnline', state.lastOnline);
 
 		} catch (err) {
 			stderr(err);
 		}
 	}
 
-	if (online.lastDateSyncInterval) {
+	if (online.lastDateSyncInterval != null) {
 		clear();
 
 		storageSyncTimer = setTimeout(() => {
@@ -175,7 +177,7 @@ export async function updateStatus(): Promise<void> {
 		stderr(err);
 	}
 
-	if (online.checkInterval) {
+	if (online.checkInterval != null) {
 		clear();
 
 		checkTimer = setTimeout(() => {

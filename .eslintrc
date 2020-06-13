@@ -168,7 +168,7 @@
       "enforceForClassMembers": true
     }],
 
-    "no-empty": "warn",
+    "no-empty": ["warn", {"allowEmptyCatch": true}],
     "no-empty-pattern": "error",
     "no-unreachable": "warn",
 
@@ -181,7 +181,7 @@
     "no-await-in-loop": "off",
     "no-async-promise-executor": "off",
     "require-atomic-updates": "warn",
-    "prefer-promise-reject-errors": "error",
+    "prefer-promise-reject-errors": "off",
 
     // Modern syntax
 
@@ -278,7 +278,7 @@
 
     "array-bracket-newline": "error",
     "array-bracket-spacing": "error",
-    "array-element-newline": ["error", {"multiline": true}],
+    "array-element-newline": ["error", "consistent"],
 
     "block-spacing": "error",
     "nonblock-statement-body-position": "error",
@@ -320,7 +320,7 @@
     // Labels
 
     "no-labels": ["error", {"allowLoop": true}],
-    "no-label-var": "error",
+    "no-label-var": "off",
     "no-extra-label": "error",
 
     // Imports
@@ -336,7 +336,7 @@
 
     "newline-per-chained-call": ["error", {"ignoreChainWithDepth": 3}],
     "function-call-argument-newline": ["error", "consistent"],
-    "function-paren-newline": "error",
+    "function-paren-newline": ["error", "consistent"],
     "wrap-iife": "error",
 
     "arrow-parens": "error",
@@ -344,7 +344,7 @@
     "arrow-body-style": "error",
 
     "array-callback-return": "error",
-    "no-confusing-arrow": ["error", {"allowParens": true}],
+    "no-confusing-arrow": "off",
 
     "implicit-arrow-linebreak": "error",
 
@@ -369,8 +369,17 @@
 
     "spaced-comment": ["error", "always", {
       "line": {
-        "markers": ["/"],
-        "exceptions": ["-", "#"]
+        "exceptions": ["-"],
+        "markers": [
+          "/",
+          "#set",
+          "#if",
+          "#endif",
+          "#unless",
+          "#endunless",
+          "#include",
+          "#without"
+        ]
       },
 
       "block": {
@@ -397,7 +406,7 @@
 
     "new-cap": ["error", {
       "newIsCap": true,
-      "capIsNew": true,
+      "capIsNew": false,
       "newIsCapExceptionPattern": "^[bpg][A-Z]"
     }],
 
@@ -623,8 +632,8 @@
     "@typescript-eslint/prefer-reduce-type-parameter": "warn",
     "@typescript-eslint/prefer-regexp-exec": "warn",
 
-    "@typescript-eslint/no-base-to-string": "error",
-    "@typescript-eslint/no-dynamic-delete": "warn",
+    "@typescript-eslint/no-base-to-string": "off",
+    "@typescript-eslint/no-dynamic-delete": "off",
     "@typescript-eslint/no-implied-eval": "off",
 
     "@typescript-eslint/restrict-plus-operands": "error",
@@ -650,7 +659,7 @@
       "allowConstantLoopConditions": true
     }],
 
-    "@typescript-eslint/no-throw-literal": "error",
+    "@typescript-eslint/no-throw-literal": "off",
 
     "@typescript-eslint/ban-ts-comment": ["error", {
       "ts-ignore": "allow-with-description",
@@ -724,7 +733,7 @@
     "@typescript-eslint/default-param-last": ["error"],
 
     "dot-notation": "off",
-    "@typescript-eslint/dot-notation": ["error"],
+    "@typescript-eslint/dot-notation": "off",
 
     "func-call-spacing": "off",
     "@typescript-eslint/func-call-spacing": ["error"],
@@ -776,19 +785,7 @@
     "@typescript-eslint/no-invalid-this": ["error"],
 
     "no-magic-numbers": "off",
-    "@typescript-eslint/no-magic-numbers": ["error", {
-      "enforceConst": true,
-      "ignore": [
-        0.1, 0.2, 0.3, 0.5, 0.7,
-        -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-        16, 32, 64, 128, 256, 512, 1024,
-        15, 25, 50, 100, 200, 300, 400, 401, 402, 403, 404, 500, 501, 502, 503
-      ],
-      "ignoreArrayIndexes": true,
-      "ignoreEnums": true,
-      "ignoreNumericLiteralTypes": true,
-      "ignoreReadonlyClassProperties": true
-    }],
+    "@typescript-eslint/no-magic-numbers": "off",
 
     "no-unused-expressions": "off",
     "@typescript-eslint/no-unused-expressions": ["error", {"allowShortCircuit": true}],

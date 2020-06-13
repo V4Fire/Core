@@ -20,8 +20,6 @@ import DefaultProvider from 'core/data/modules/base';
 import { provider } from 'core/data/decorators';
 import { attachMock } from 'core/data/middlewares';
 
-import { ProviderOptions } from 'core/data/interface';
-
 export * from 'core/data/const';
 export * from 'core/data/decorators';
 export * from 'core/data/middlewares';
@@ -60,9 +58,4 @@ export default class Provider extends DefaultProvider {
 	static readonly middlewares: Middlewares = {
 		attachMock
 	};
-
-	/** @override */
-	constructor(opts?: ProviderOptions) {
-		super(...arguments);
-	}
 }

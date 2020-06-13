@@ -87,7 +87,7 @@ export const asyncSession = factory(asyncSessionStorage, true);
  * @alias
  * @see [[local]]
  */
-export const has = local.has;
+export const has = local.has.bind(local);
 
 /**
  * Alias for a get method of the synchronous local storage API
@@ -95,7 +95,7 @@ export const has = local.has;
  * @alias
  * @see [[local]]
  */
-export const get = local.get;
+export const get = local.get.bind(local);
 
 /**
  * Alias for a set method of the synchronous local storage API
@@ -103,7 +103,7 @@ export const get = local.get;
  * @alias
  * @see [[local]]
  */
-export const set = local.set;
+export const set = local.set.bind(local);
 
 /**
  * Alias for a remove method of the synchronous local storage API
@@ -111,7 +111,7 @@ export const set = local.set;
  * @alias
  * @see [[local]]
  */
-export const remove = local.remove;
+export const remove = local.remove.bind(local);
 
 /**
  * Alias for a clear method of the synchronous local storage API
@@ -119,7 +119,7 @@ export const remove = local.remove;
  * @alias
  * @see [[local]]
  */
-export const clear = local.clear;
+export const clear = local.clear.bind(local);
 
 /**
  * Alias for a namespace method of the synchronous local storage API
@@ -135,7 +135,7 @@ export const clear = local.clear;
  * local.get('foo'); // undefined
  * ```
  */
-export const namespace = local.namespace;
+export const namespace = local.namespace.bind(local);
 
 /**
  * Creates a new kv-storage API with the specified engine
@@ -162,7 +162,8 @@ export function factory(engine: StorageEngine, async?: boolean): AsyncStorage | 
 		keys;
 
 	try {
-		get = engine.getItem || engine.get;
+		// eslint-disable-next-line @typescript-eslint/unbound-method
+		get = engine.getItem ?? engine.get;
 
 		if (Object.isFunction(get)) {
 			get = get.bind(engine);
@@ -171,7 +172,8 @@ export function factory(engine: StorageEngine, async?: boolean): AsyncStorage | 
 			throw new ReferenceError('A method to get a value from the storage is not defined');
 		}
 
-		set = engine.setItem || engine.set;
+		// eslint-disable-next-line @typescript-eslint/unbound-method
+		set = engine.setItem ?? engine.set;
 
 		if (Object.isFunction(set)) {
 			set = set.bind(engine);
@@ -180,7 +182,8 @@ export function factory(engine: StorageEngine, async?: boolean): AsyncStorage | 
 			throw new ReferenceError('A method to set a value to the storage is not defined');
 		}
 
-		remove = engine.removeItem || engine.remove || engine.delete;
+		// eslint-disable-next-line @typescript-eslint/unbound-method
+		remove = engine.removeItem ?? engine.remove ?? engine.delete;
 
 		if (Object.isFunction(remove)) {
 			remove = remove.bind(engine);
@@ -189,14 +192,23 @@ export function factory(engine: StorageEngine, async?: boolean): AsyncStorage | 
 			throw new ReferenceError('A method to remove a value from the storage is not defined');
 		}
 
-		const _has = engine.exists || engine.exist || engine.includes || engine.has;
-		has = Object.isFunction(_has) ? _has.bind(engine) : undefined;
+		{
+			// eslint-disable-next-line @typescript-eslint/unbound-method
+			const _ = engine.exists ?? engine.exist ?? engine.includes ?? engine.has;
+			has = Object.isFunction(_) ? _.bind(engine) : undefined;
+		}
 
-		const _clear = engine.clear || engine.clearAll || engine.truncate;
-		clear = Object.isFunction(_clear) ? _clear.bind(engine) : undefined;
+		{
+			// eslint-disable-next-line @typescript-eslint/unbound-method
+			const _ = engine.clear ?? engine.clearAll ?? engine.truncate;
+			clear = Object.isFunction(_) ? _.bind(engine) : undefined;
+		}
 
-		const _keys = engine.keys;
-		keys = Object.isFunction(_keys) ? _keys.bind(engine) : () => Object.keys(engine);
+		{
+			// eslint-disable-next-line @typescript-eslint/unbound-method
+			const _ = engine.keys;
+			keys = Object.isFunction(_) ? _.bind(engine) : () => Object.keys(engine);
+		}
 
 	} catch {
 		throw new TypeError('Invalid storage driver');
@@ -215,6 +227,7 @@ export function factory(engine: StorageEngine, async?: boolean): AsyncStorage | 
 	function wrap<T, R extends WrappedFn<T>>(val?: T, action?: R): CanUndef<CanPromise<T | ReturnType<R>>> {
 		if (async) {
 			return (async () => {
+				// eslint-disable-next-line require-atomic-updates
 				val = await val;
 
 				if (action) {
@@ -234,11 +247,11 @@ export function factory(engine: StorageEngine, async?: boolean): AsyncStorage | 
 
 	const obj = {
 		has(key: string, ...args: unknown[]): CanPromise<boolean> {
-			if (has) {
+			if (has != null) {
 				return wrap(has(key, ...args));
 			}
 
-			return wrap(get(key, ...args), (v) => v !== null);
+			return wrap(get(key, ...args), (v) => v != null);
 		},
 
 		get<T>(key: string, ...args: unknown[]): CanPromise<T> {
@@ -275,12 +288,13 @@ export function factory(engine: StorageEngine, async?: boolean): AsyncStorage | 
 		},
 
 		clear<T>(filter?: ClearFilter<T>, ...args: unknown[]): CanPromise<void> {
-			if (filter || !clear) {
+			if (filter || clear == null) {
 				return wrap(keys(), async (keys) => {
 					for (const key of keys) {
 						const
 							el = await obj.get<T>(key);
 
+						// eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
 						if (!filter || filter(el, key)) {
 							await remove(key, ...args);
 						}
@@ -322,6 +336,7 @@ export function factory(engine: StorageEngine, async?: boolean): AsyncStorage | 
 							const
 								el = await obj.get<T>(key);
 
+							// eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
 							if (!filter || filter(el, key)) {
 								await remove(key, ...args);
 							}

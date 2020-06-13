@@ -12,6 +12,7 @@
  */
 
 import { StatusCodes } from 'core/status-codes/interface';
+
 export * from 'core/status-codes/interface';
 
 /**

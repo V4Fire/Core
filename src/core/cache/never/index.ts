@@ -12,6 +12,7 @@
  */
 
 import Cache, { ClearFilter } from 'core/cache/interface';
+
 export * from 'core/cache/interface';
 
 /**
@@ -24,11 +25,13 @@ export default class NeverCache<V = any, K = any> implements Cache<V, K> {
 	protected readonly storage: Map<K, V> = new Map();
 
 	/** @see [[Cache.has]] */
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
 	has(key: K): boolean {
 		return false;
 	}
 
 	/** @see [[Cache.get]] */
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
 	get(key: K): undefined {
 		return undefined;
 	}
@@ -39,6 +42,7 @@ export default class NeverCache<V = any, K = any> implements Cache<V, K> {
 	}
 
 	/** @see [[Cache.remove]] */
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
 	remove(key: K): CanUndef<V> {
 		return undefined;
 	}

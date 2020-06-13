@@ -45,7 +45,7 @@ export class LogPipeline {
 				}
 			}
 
-			if (!filteredEvents.length) {
+			if (filteredEvents.length === 0) {
 				return;
 			}
 

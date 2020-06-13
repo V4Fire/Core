@@ -151,15 +151,15 @@ interface ClassConstructor<T = unknown> {
 }
 
 interface StrictDictionary<T = unknown> {
-	[key: string | symbol]: T;
+	[key: string]: T;
 }
 
 interface Dictionary<T> {
-	[key: string | symbol]: CanUndef<T>;
+	[key: string]: CanUndef<T>;
 }
 
 interface Dictionary<T extends unknown = unknown> {
-	[key: string | symbol]: T;
+	[key: string]: T;
 }
 
 interface Maybe<T = unknown> extends Promise<T> {

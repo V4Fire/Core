@@ -11,10 +11,9 @@ import Storage from 'node-localstorage';
 import { Cache } from 'core/cache';
 
 const
-	LocalStorage = Storage.LocalStorage,
+	{LocalStorage} = Storage,
 	tmpDir = './tmp/local';
 
-// @ts-ignore
 if (!fs.existsSync(tmpDir)) {
 	fs.mkdirpSync(tmpDir);
 }
@@ -23,7 +22,7 @@ const
 	localStorage = new LocalStorage(tmpDir),
 	sessionStorage = new Cache();
 
-export let
+export const
 	syncLocalStorage = localStorage,
 	asyncLocalStorage = localStorage,
 	syncSessionStorage = sessionStorage,

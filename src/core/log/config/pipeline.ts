@@ -27,14 +27,16 @@ export function createPipeline(pipelineConfig: LogPipelineConfig): CanUndef<LogP
 
 	if (middlewares) {
 		for (let i = 0; i < middlewares.length; ++i) {
-			if (!middlewareFactory[middlewares[i]]) {
+			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+			if (middlewareFactory[middlewares[i]] == null) {
 				console.error(`Can't find the middleware "${middlewares[i]}"`);
 				return;
 			}
 		}
 	}
 
-	if (!engineFactory[engine]) {
+	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+	if (engineFactory[engine] == null) {
 		console.error(`Can't find the engine "${engine}"`);
 		return;
 	}
@@ -49,7 +51,7 @@ export function createPipeline(pipelineConfig: LogPipelineConfig): CanUndef<LogP
 		}
 	}
 
-	return new LogPipeline(engineInstance, middlewareInstances, minLevel || DEFAULT_LEVEL);
+	return new LogPipeline(engineInstance, middlewareInstances, minLevel ?? DEFAULT_LEVEL);
 
 	//#endif
 }

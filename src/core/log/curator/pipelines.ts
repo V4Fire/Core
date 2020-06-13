@@ -15,7 +15,8 @@ const
 
 //#if runtime has core/log
 
-if (config?.log?.pipelines) {
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+if (config.log?.pipelines != null) {
 	for (let i = 0; i < config.log.pipelines.length; ++i) {
 		const
 			pipeline = createPipeline(config.log.pipelines[i]);

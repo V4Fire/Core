@@ -14,15 +14,21 @@ interface LogOptions {
 }
 
 let
-	logOps: LogOptions;
+	logOps: CanUndef<LogOptions>;
 
 const setConfig = (opts) => {
-	logOps = {
+	const p = {
 		patterns: [':error\\b'],
 		...opts
 	};
 
-	logOps.patterns = (logOps.patterns || []).map((el) => Object.isRegExp(el) ? el : new RegExp(el));
+	logOps = p;
+
+	if (logOps == null) {
+		return;
+	}
+
+	p.patterns = (p.patterns ?? []).map((el) => Object.isRegExp(el) ? el : new RegExp(el));
 };
 
 env.get('log').then(setConfig, setConfig);
@@ -35,7 +41,7 @@ export class ConfigurableMiddleware implements LogMiddleware {
 	exec(events: CanArray<LogEvent>, next: NextCallback): void {
 		//#if runtime has core/log
 
-		if (!logOps) {
+		if (logOps == null) {
 			if (Array.isArray(events)) {
 				this.queue.push(...events);
 
@@ -46,7 +52,7 @@ export class ConfigurableMiddleware implements LogMiddleware {
 			return;
 		}
 
-		if (this.queue.length) {
+		if (this.queue.length > 0) {
 			const
 				queuedEvents = <LogEvent[]>[];
 
@@ -59,7 +65,7 @@ export class ConfigurableMiddleware implements LogMiddleware {
 				}
 			}
 
-			if (queuedEvents.length) {
+			if (queuedEvents.length > 0) {
 				next(queuedEvents);
 			}
 
@@ -70,7 +76,7 @@ export class ConfigurableMiddleware implements LogMiddleware {
 			const
 				filteredEvents = <LogEvent[]>[];
 
-			for (let o = this.filterContext, i = 0; i < o.length; i++) {
+			for (let o = events, i = 0; i < o.length; i++) {
 				const
 					el = o[i];
 
@@ -79,14 +85,12 @@ export class ConfigurableMiddleware implements LogMiddleware {
 				}
 			}
 
-			if (filteredEvents.length) {
+			if (filteredEvents.length > 0) {
 				next(filteredEvents);
 			}
 
-		} else {
-			if (this.filterContext(events.context)) {
-				next(events);
-			}
+		} else if (this.filterContext(events.context)) {
+			next(events);
 		}
 
 		//#endif
@@ -99,8 +103,8 @@ export class ConfigurableMiddleware implements LogMiddleware {
 	protected filterContext(context: string): boolean {
 		//#if runtime has core/log
 
-		if (logOps.patterns) {
-			for (let patterns = logOps.patterns, i = 0; i < patterns.length; i++) {
+		if (logOps?.patterns) {
+			for (let {patterns} = logOps, i = 0; i < patterns.length; i++) {
 				if (patterns[i].test(context)) {
 					return true;
 				}

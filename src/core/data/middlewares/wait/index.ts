@@ -12,6 +12,7 @@
  */
 
 import { MiddlewareParams } from 'core/request';
+
 export * from 'core/data/middlewares/attach-status/interface';
 
 /**
@@ -31,15 +32,15 @@ export async function wait(...args: unknown[]): Promise<unknown> {
 
 	// Middleware mode
 	if (args.length === 1) {
-		wait = (<CanUndef<MiddlewareParams>>fst)?.opts.meta?.wait;
+		wait = (<CanUndef<MiddlewareParams>>fst)?.opts.meta['wait'];
 
 	// Encoder mode
 	} else if (Object.isDictionary(fst)) {
 		res = fst;
-		wait = fst.wait;
+		wait = fst['wait'];
 
 		if (wait !== undefined) {
-			delete fst.wait;
+			delete fst['wait'];
 		}
 	}
 
