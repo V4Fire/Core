@@ -32,7 +32,7 @@
 
     "use-isnan": "error",
     "valid-typeof": "error",
-    "no-undef": ["error", {"typeof": true}],
+    "no-undef": "off",
 
     "no-eq-null": "off",
     "eqeqeq": ["error", "always", {"null": "never"}],
@@ -117,7 +117,7 @@
     "yoda": "error",
 
     "no-lonely-if": "warn",
-    "no-negated-condition": "error",
+    "no-negated-condition": "off",
     "no-dupe-else-if": "warn",
     "no-else-return": ["error", {"allowElseIf": false}],
 
@@ -141,7 +141,7 @@
 
     "no-invalid-regexp": "error",
     "no-control-regex": "warn",
-    "require-unicode-regexp": "error",
+    "require-unicode-regexp": "off",
 
     "prefer-regex-literals": "error",
     "prefer-named-capture-group": "off",
@@ -222,7 +222,7 @@
     "for-direction": "off",
     "guard-for-in": "warn",
 
-    "no-loop-func": "error",
+    "no-loop-func": "off",
     "no-unmodified-loop-condition": "error",
 
     "no-iterator": "warn",
@@ -288,7 +288,7 @@
     "computed-property-spacing": "error",
 
     "object-curly-spacing": "off",
-    "object-curly-newline": ["error", {"multiline": true}],
+    "object-curly-newline": ["error", {"consistent": true}],
     "object-property-newline": ["error", {"allowAllPropertiesOnSameLine": true}],
 
     "enchanted-curly/object-curly-spacing": ["error", "never", {
@@ -365,7 +365,7 @@
     "multiline-comment-style": "off",
 
     "line-comment-position": ["error", "above"],
-    "lines-around-comment": "error",
+    "lines-around-comment": "off",
 
     "spaced-comment": ["error", "always", {
       "line": {
@@ -476,7 +476,7 @@
 
     // [Import]
 
-    "import/no-unresolved": "error",
+    "import/no-unresolved": "off",
     "import/no-cycle": "warn",
 
     "import/no-absolute-path": "error",
@@ -518,7 +518,7 @@
 
     "import/no-deprecated": "warn",
     "import/no-unused-modules": "warn",
-    "import/unambiguous": "error",
+    "import/unambiguous": "off",
 
     "import/first": "error",
     "import/newline-after-import": "error",
@@ -531,7 +531,7 @@
     "import/no-namespace": "off",
     "import/max-dependencies": "off",
 
-    "import/extensions": ["error", "always", {
+    "import/extensions": ["error", {
       "js": "never",
       "jsx": "never",
       "ts": "never",
@@ -560,7 +560,10 @@
       "ignoreProperties": true
     }],
 
-    "@typescript-eslint/array-type": ["error", {"array-simple": true}],
+    "@typescript-eslint/array-type": ["error", {
+      "default": "array-simple"
+    }],
+
     "@typescript-eslint/consistent-type-assertions": ["error", {
       "assertionStyle": "angle-bracket",
       "objectLiteralTypeAssertions": "allow"
@@ -677,11 +680,6 @@
         "Symbol": {
           "message": "Use symbol instead",
           "fixWith": "symbol"
-        },
-
-        "{}": {
-          "message": "Use object instead",
-          "fixWith": "object"
         }
       }
     }],
@@ -735,7 +733,14 @@
     "@typescript-eslint/init-declarations": "off",
 
     "keyword-spacing": "off",
-    "@typescript-eslint/keyword-spacing": ["error"],
+    "@typescript-eslint/keyword-spacing": ["error", {
+      "overrides": {
+        "this": {
+          "before": false,
+          "after": false
+        }
+      }
+    }],
 
     // note you must disable the base rule as it can report incorrect errors
     "lines-between-class-members": "off",
@@ -775,9 +780,9 @@
       "enforceConst": true,
       "ignore": [
         0.1, 0.2, 0.3, 0.5, 0.7,
-        0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+        -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
         16, 32, 64, 128, 256, 512, 1024,
-        200, 300, 400, 401, 402, 403, 404, 500, 501, 502, 503
+        15, 25, 50, 100, 200, 300, 400, 401, 402, 403, 404, 500, 501, 502, 503
       ],
       "ignoreArrayIndexes": true,
       "ignoreEnums": true,
