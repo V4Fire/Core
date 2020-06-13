@@ -31,6 +31,7 @@ import {
 	ClearOptionsId,
 
 	WorkerLikeP,
+	PromiseLikeP,
 	CancelablePromise,
 	BoundFn
 
@@ -39,27 +40,48 @@ import {
 export * from 'core/async/modules/base';
 
 export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
-	/**
-	 * Wraps the specified worker object.
-	 *
-	 * This method doesn't attach any hook or listeners to the object,
-	 * but every time the same object is registered, Async will increment the number of links that relates to this object.
-	 * After, when we try to destroy the worker by using one of Async methods, like "terminateWorker",
-	 * it will de-increment values of links. When the number of links is equal to zero,
-	 * Async will try to call a "real" object destructor by using one of the possible destructor methods from a whitelist
-	 * or by the specified destructor name, also if the worker is a function, it is interpreted as the destructor.
-	 *
-	 * @param worker
-	 * @param [opts] - additional options for the operation
-	 */
+/**
+ * Wraps the specified worker object.
+ *
+ * This method doesn't attach any hook or listeners to the object,
+ * but every time the same object is registered, Async will increment the number of links that relate to this object.
+ * After, when we try to destroy the worker by using one of Async's methods, like, "terminateWorker",
+ * it will de-increment values of links. When the number of links is equal to zero,
+ * Async will try to call a "real" object destructor by using one of the possible destructor methods from the whitelist
+ * or by the specified destructor name, also if the worker is a function, it is interpreted as the destructor.
+ *
+ * @param worker
+ * @param [opts] - additional options for the operation
+ *
+ * @example
+ * ```js
+ * const
+ *   async = new Async(),
+ *   el = document.createElement('div');
+ *
+ * $el.appendChild(el);
+ *
+ * // This function will work as the worker destructor
+ * async.worker(() => el.remove());
+ *
+ * const
+ *   myWorker = new Worker('my-worker.js');
+ *
+ * async.worker(myWorker);
+ *
+ * async.clearAll();
+ * ```
+ */
 	worker<T extends WorkerLikeP>(worker: T, opts?: AsyncWorkerOptions<CTX>): T {
 		const
-			p = opts || {},
+			p = opts ?? {};
+
+		const
 			{workerCache} = this;
 
 		if (!workerCache.has(worker)) {
 			workerCache.set(worker, true);
-			worker[asyncCounter] = (worker[asyncCounter] || 0) + 1;
+			worker[asyncCounter] = Number(worker[asyncCounter] ?? 0) + 1;
 		}
 
 		return this.registerTask({
@@ -68,7 +90,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			obj: worker,
 			clearFn: this.workerDestructor.bind(this, p.destructor),
 			periodic: p.single !== true
-		}) || worker;
+		}) ?? worker;
 	}
 
 	/**
@@ -106,25 +128,35 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	/**
 	 * Wraps the specified function.
 	 * This method doesn't attach any hook or listeners to the object,
-	 * but if we cancel the operation by using one of Async methods, like "cancelProxy",
+	 * but if we cancel the operation by using one of Async's methods, like, "cancelProxy",
 	 * the target function won't be invoked.
 	 *
 	 * @param fn
 	 * @param [opts] - additional options for the operation
+	 *
+	 * @example
+	 * ```js
+	 * const
+	 *   async = new Async();
+	 *
+	 * myImage.onload = async.proxy(() => {
+	 *   // ...
+	 * });
+	 * ```
 	 */
 	proxy<F extends BoundFn<C>, C extends object = CTX>(fn: F, opts?: AsyncProxyOptions<C>): F {
 		return this.registerTask<F>({
 			...opts,
-			name: opts?.name || this.namespaces.proxy,
+			name: opts?.name ?? this.namespaces.proxy,
 			obj: fn,
 			wrapper: (fn) => fn,
 			linkByWrapper: true,
 			periodic: opts?.single === false
-		}) || <any>(() => undefined);
+		}) ?? <any>(() => undefined);
 	}
 
 	/**
-	 * Returns a new function that allows to invoke a function only with the specified delay.
+	 * Returns a new function that allows invoking the passed function only with the specified delay.
 	 * The next invocation of the function will cancel the previous.
 	 *
 	 * @param fn
@@ -140,7 +172,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	}
 
 	/**
-	 * Returns a new function that allows to invoke the function not more often than the specified delay
+	 * Returns a new function that allows invoking the passed function not more often than the specified delay
 	 *
 	 * @param fn
 	 * @param delay
@@ -266,14 +298,22 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Wraps the specified external request.
 	 *
 	 * This method doesn't attach any hook or listeners to the object,
-	 * but if we cancel the operation by using one of Async methods, like "cancelRequest", the promise will be rejected.
-	 * The request can be provided as a promise or as a function, that returns a promise.
+	 * but if we cancel the operation by using one of Async's methods, like, "cancelRequest",
+	 * the promise will be rejected.
+	 *
+	 * The request can be provided as a promise or function, that returns a promise.
 	 *
 	 * @param request
 	 * @param [opts] - additional options for the operation
+	 *
+	 * @example
+	 * ```js
+	 * const async = new Async();
+	 * async.request(fetch('foo/bla'));
+	 * ```
 	 */
 	request<T = unknown>(request: (() => PromiseLike<T>) | PromiseLike<T>, opts?: AsyncRequestOptions): Promise<T> {
-		return this.promise(request, {...opts, name: this.namespaces.request}) || new Promise<T>(() => undefined);
+		return this.promise(request, {...opts, name: this.namespaces.request});
 	}
 
 	/**
@@ -372,13 +412,25 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Wraps the specified promise.
 	 *
 	 * This method doesn't attach any hook or listeners to the object,
-	 * but if we cancel the operation by using one of Async methods, like "cancelPromise", the promise will be rejected.
+	 * but if we cancel the operation by using one of Async's methods, like, "cancelPromise",
+	 * the promise will be rejected.
+	 *
 	 * The promise can be provided as it is or as a function, that returns a promise.
 	 *
 	 * @param promise
 	 * @param [opts] - additional options for the operation
+	 *
+	 * @example
+	 * ```js
+	 * const
+	 *   async = new Async();
+	 *
+	 * async.promise(new Promise(() => {
+	 *   // ...
+	 * }))
+	 * ```
 	 */
-	promise<T = unknown>(promise: (() => PromiseLike<T>) | PromiseLike<T>, opts?: AsyncPromiseOptions): Promise<T> {
+	promise<T = unknown>(promise: PromiseLikeP<T>, opts?: AsyncPromiseOptions): Promise<T> {
 		const
 			that = this,
 			p = <AsyncPromiseOptions>({name: this.namespaces.promise, ...opts});
@@ -397,7 +449,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 				clearFn: () => {
 					this.promiseDestructor(p.destructor, <Promise<unknown>>promise);
 
-					if (proxyReject) {
+					if (proxyReject != null) {
 						this.clearProxy({id: proxyReject, name: p.name});
 					}
 				},
@@ -413,24 +465,25 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 				}
 			});
 
+			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 			if (!canceled) {
 				if (Object.isFunction(promise)) {
 					promise = promise();
 				}
 
-				proxyReject = this.proxy(function (err: unknown): void {
-					if (canceled) {
+				proxyReject = this.proxy((err) => {
+					if (canceled || p.name == null) {
 						return;
 					}
 
 					const
-						cache = that.cache[p.name!],
-						links = p.group ? cache?.groups[p.group]?.links : cache?.root.links,
+						cache = that.cache[p.name],
+						links = p.group != null ? cache?.groups[p.group]?.links : cache?.root.links,
 						task = links?.get(proxyResolve),
 						handlers = links?.get(proxyResolve)?.onComplete;
 
-					if (task && handlers) {
-						if (task.muted) {
+					if (task != null && handlers != null) {
+						if (task.muted === true) {
 							return;
 						}
 
@@ -438,11 +491,11 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 							reject(err);
 
 							for (let i = 0; i < handlers.length; i++) {
-								handlers[i][1].call(ctx || this, err);
+								handlers[i][1].call(ctx, err);
 							}
 						};
 
-						if (task.paused) {
+						if (task.paused === true) {
 							task.queue.push(exec);
 							return;
 						}
@@ -491,18 +544,18 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	clearPromise(task?: Promise<unknown> | ClearProxyOptions<Promise<unknown>>): this {
 		const
 			nms = this.namespaces,
-			nm = isAsyncOptions<ClearProxyOptions>(task) && task.name;
+			nm = isAsyncOptions<ClearProxyOptions>(task) ? task.name : null;
 
 		this
-			.cancelTask(task, nm || nms.promise);
+			.cancelTask(task, nm ?? nms.promise);
 
-		if (!nm) {
+		if (nm == null) {
 			for (let keys = Object.keys(nms), i = 0; i < keys.length; i++) {
 				const
 					key = keys[i],
 					nm = nms[key];
 
-				if (nm && isPromisifyNamespace.test(key)) {
+				if (nm != null && isPromisifyNamespace.test(key)) {
 					this.cancelTask(task, nm);
 				}
 			}
@@ -588,7 +641,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 				let
 					fn;
 
-				if (destructor) {
+				if (destructor != null) {
 					fn = worker[destructor];
 
 				} else if (Object.isSimpleFunction(worker)) {
@@ -596,17 +649,17 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 				} else {
 					fn =
-						worker.terminate ||
-						worker.destroy ||
-						worker.destructor ||
-						worker.close ||
-						worker.abort ||
-						worker.cancel ||
-						worker.disconnect ||
+						worker.terminate ??
+						worker.destroy ??
+						worker.destructor ??
+						worker.close ??
+						worker.abort ??
+						worker.cancel ??
+						worker.disconnect ??
 						worker.unwatch;
 				}
 
-				if (fn && Object.isFunction(fn)) {
+				if (Object.isFunction(fn)) {
 					fn.call(worker);
 
 				} else {
@@ -629,16 +682,16 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		let
 			fn;
 
-		if (destructor) {
+		if (destructor != null) {
 			fn = promise[destructor];
 
 		} else {
-			fn =
-				(<CancelablePromise>promise).abort ||
-				(<CancelablePromise>promise).cancel;
+			const p = <CancelablePromise>promise;
+			fn = p.abort ?? p.cancel;
 		}
 
-		if (fn && Object.isFunction(fn)) {
+		if (Object.isFunction(fn)) {
+			// eslint-disable-next-line @typescript-eslint/unbound-method
 			if ('catch' in promise && Object.isFunction(promise.catch)) {
 				promise.catch(() => {
 					// Promise error loopback
@@ -650,7 +703,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	}
 
 	/**
-	 * Factory for promise clear handlers
+	 * Factory to create promise clear handlers
 	 *
 	 * @param resolve
 	 * @param reject
@@ -663,7 +716,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			const
 				{replacedBy} = obj;
 
-			if (replacedBy && obj.join === 'replace' && obj.link.onClear.length < MAX_PROMISE_DEPTH) {
+			if (replacedBy != null && obj.join === 'replace' && obj.link.onClear.length < MAX_PROMISE_DEPTH) {
 				replacedBy.onComplete.push([resolve, reject]);
 
 				const
@@ -680,7 +733,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	}
 
 	/**
-	 * Factory for promise merge handlers
+	 * Factory to create promise merge handlers
 	 *
 	 * @param resolve
 	 * @param reject
@@ -690,7 +743,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	}
 
 	/**
-	 * Marks a promise by the specified label
+	 * Marks a promise with the specified label
 	 *
 	 * @param label
 	 * @param [id] - operation id (if not specified, the operation will be extended for all promise namespaces)
@@ -698,28 +751,28 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	protected markPromise(label: string, id?: Promise<unknown>): this;
 
 	/**
-	 * Marks a promise or a group of promises by the specified label
+	 * Marks a promise or group of promises with the specified label
 	 *
 	 * @param label
 	 * @param opts - additional options
 	 */
 	protected markPromise(label: string, opts: ClearOptionsId<Promise<any>>): this;
-	protected markPromise(field: string, task?: Promise<any> | ClearOptionsId<Promise<unknown>>): this {
+	protected markPromise(label: string, task?: Promise<any> | ClearOptionsId<Promise<unknown>>): this {
 		const
 			nms = this.namespaces,
-			nm = isAsyncOptions<ClearProxyOptions>(task) && task.name;
+			nm = isAsyncOptions<ClearProxyOptions>(task) ? task.name : null;
 
 		this
-			.markTask(field, task, nm || nms.promise);
+			.markTask(label, task, nm ?? nms.promise);
 
-		if (!nm) {
+		if (nm == null) {
 			for (let keys = Object.keys(nms), i = 0; i < keys.length; i++) {
 				const
 					key = keys[i],
 					nm = nms[key];
 
-				if (nm && isPromisifyNamespace.test(key)) {
-					this.markTask(field, task, nm);
+				if (nm != null && isPromisifyNamespace.test(key)) {
+					this.markTask(label, task, nm);
 				}
 			}
 		}

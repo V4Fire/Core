@@ -23,7 +23,8 @@ import {
 	ClearOptions,
 	FullClearOptions,
 	ClearProxyOptions,
-	GlobalCache
+	GlobalCache,
+	TaskCtx
 
 } from 'core/async/interface';
 
@@ -75,7 +76,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 */
 	protected get namespaces(): NamespacesDictionary {
 		const
-			constr = (<typeof Async>this.constructor);
+			constr = <typeof Async>this.constructor;
 
 		if (constr.namespaces !== constr.linkNames) {
 			return constr.linkNames;
@@ -97,7 +98,8 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @param [ctx] - context of applying for async handlers
 	 */
 	constructor(ctx?: CTX) {
-		this.ctx = this.context = ctx || <any>this;
+		this.ctx = ctx ?? <any>this;
+		this.context = this.ctx;
 	}
 
 	/**
@@ -195,10 +197,9 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @param [promise] - if true, the namespace is marked as promisified
 	 */
 	protected getCache(name: string, promise?: boolean): GlobalCache {
-		name = promise
-			? `${name}Promise` : name;
+		name = promise ? `${name}Promise` : name;
 
-		return this.cache[name] = this.cache[name] || {
+		return this.cache[name] = this.cache[name] ?? {
 			root: {
 				labels: Object.createDict(),
 				links: new Map()
@@ -228,7 +229,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 		const
 			baseCache = this.getCache(task.name, task.promise),
-			callable = task.callable || task.needCall;
+			callable = Boolean(task.callable === true || task.needCall);
 
 		const
 			{ctx} = this;
@@ -237,7 +238,7 @@ export default class Async<CTX extends object = Async<any>> {
 			cache;
 
 		if (task.group != null) {
-			baseCache.groups[task.group] = baseCache.groups[task.group] || {
+			baseCache.groups[task.group] = baseCache.groups[task.group] ?? {
 				labels: Object.createDict(),
 				links: new Map()
 			};
@@ -255,7 +256,7 @@ export default class Async<CTX extends object = Async<any>> {
 		const
 			labelCache = task.label != null && labels[task.label];
 
-		if (labelCache && task.join === true) {
+		if (labelCache != null && task.join === true) {
 			const
 				mergeHandlers = Array.concat([], task.onMerge),
 				link = links.get(labelCache);
@@ -267,37 +268,25 @@ export default class Async<CTX extends object = Async<any>> {
 			return labelCache;
 		}
 
+		const normalizedObj = callable && Object.isFunction(task.obj) ?
+			task.obj.call(ctx) :
+			task.obj;
+
 		let
-			// Thread identifier
-			id,
-
-			// Normalized object to wrap
-			normalizedObj,
-
-			// Wrapped object
-			wrappedObj;
-
-		// tslint:disable-next-line:prefer-conditional-expression
-		if (callable && Object.isFunction(task.obj)) {
-			wrappedObj = id = normalizedObj = task.obj.call(ctx);
-
-		} else {
-			wrappedObj = id = normalizedObj = task.obj;
-		}
+			wrappedObj = normalizedObj,
+			taskId = normalizedObj;
 
 		if (!task.periodic || Object.isFunction(wrappedObj)) {
-			wrappedObj = function (this: unknown): unknown {
+			wrappedObj = (...args) => {
 				const
-					args = arguments,
-					link = links.get(id),
-					fnCtx = ctx || this;
+					link = links.get(taskId);
 
-				if (!link || link.muted) {
+				if (link?.muted == null) {
 					return;
 				}
 
 				if (!task.periodic) {
-					if (link.paused) {
+					if (link.paused === true) {
 						link.muted = true;
 
 					} else {
@@ -309,16 +298,16 @@ export default class Async<CTX extends object = Async<any>> {
 					const
 						fns = link.onComplete;
 
-					if (fns) {
+					if (fns != null) {
 						for (let j = 0; j < fns.length; j++) {
 							const fn = fns[j];
-							(fn[i] || fn).apply(fnCtx, args);
+							(Object.isFunction(fn[i]) ? fn[i] : fn).apply(ctx, args);
 						}
 					}
 				};
 
 				const
-					needDelete = !task.periodic && link.paused;
+					needDelete = Boolean(!task.periodic && link.paused);
 
 				const exec = () => {
 					if (needDelete) {
@@ -329,20 +318,20 @@ export default class Async<CTX extends object = Async<any>> {
 						res = normalizedObj;
 
 					if (Object.isFunction(normalizedObj)) {
-						res = normalizedObj.apply(fnCtx, args);
+						res = normalizedObj.apply(ctx, args);
 					}
 
 					if (Object.isPromise(res)) {
 						res.then(invokeHandlers(), invokeHandlers(1));
 
 					} else {
-						invokeHandlers().apply(null, args);
+						invokeHandlers(...args);
 					}
 
 					return res;
 				};
 
-				if (link.paused) {
+				if (link.paused === true) {
 					link.queue.push(exec);
 					return;
 				}
@@ -353,15 +342,15 @@ export default class Async<CTX extends object = Async<any>> {
 
 		if (task.wrapper) {
 			const
-				link = task.wrapper.apply(null, [wrappedObj].concat(callable ? id : [], task.args));
+				link = task.wrapper(wrappedObj, ...Array.concat([], callable ? taskId : null, task.args));
 
 			if (task.linkByWrapper) {
-				id = link;
+				taskId = link;
 			}
 		}
 
 		const link = {
-			id,
+			id: taskId,
 
 			obj: task.obj,
 			objName: task.obj.name,
@@ -378,30 +367,30 @@ export default class Async<CTX extends object = Async<any>> {
 			onClear: Array.concat([], task.onClear),
 
 			unregister: () => {
-				links.delete(id);
-				baseCache.root.links.delete(id);
+				links.delete(taskId);
+				baseCache.root.links.delete(taskId);
 
-				if (task.label != null && labels[task.label]) {
+				if (task.label != null && labels[task.label] != null) {
 					labels[task.label] = undefined;
 				}
 			}
 		};
 
-		if (labelCache) {
+		if (labelCache != null) {
 			this.cancelTask({...task, replacedBy: link, reason: 'collision'});
 		}
 
-		links.set(id, link);
+		links.set(taskId, link);
 
 		if (links !== baseLinks) {
-			baseLinks.set(id, link);
+			baseLinks.set(taskId, link);
 		}
 
 		if (task.label != null) {
-			labels[task.label] = id;
+			labels[task.label] = taskId;
 		}
 
-		return id;
+		return taskId;
 	}
 
 	/**
@@ -423,7 +412,7 @@ export default class Async<CTX extends object = Async<any>> {
 		let
 			p: FullClearOptions;
 
-		if (name) {
+		if (name != null) {
 			if (task === undefined) {
 				return this.cancelTask({name, reason: 'all'});
 			}
@@ -431,14 +420,14 @@ export default class Async<CTX extends object = Async<any>> {
 			p = Object.isPlainObject(task) ? {...task, name} : {name, id: task};
 
 		} else {
-			p = task || {};
+			p = task ?? {};
 		}
 
 		const
 			baseCache = this.getCache(p.name, p.promise);
 
 		let
-			cache;
+			cache: typeof baseCache.root;
 
 		if (p.group != null) {
 			if (Object.isRegExp(p.group)) {
@@ -458,13 +447,16 @@ export default class Async<CTX extends object = Async<any>> {
 				return this;
 			}
 
-			if (!baseCache.groups[p.group]) {
+			const
+				groupCache = baseCache.groups[p.group];
+
+			if (groupCache == null) {
 				return this;
 			}
 
-			cache = baseCache.groups[p.group];
+			cache = groupCache;
 
-			if (!p.reason) {
+			if (p.reason == null) {
 				p.reason = 'group';
 			}
 
@@ -477,6 +469,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 		if (p.label != null) {
 			const
+				// @ts-ignore (symbol index)
 				tmp = labels[p.label];
 
 			if (p.id != null && p.id !== tmp) {
@@ -485,12 +478,12 @@ export default class Async<CTX extends object = Async<any>> {
 
 			p.id = tmp;
 
-			if (!p.reason) {
+			if (p.reason == null) {
 				p.reason = 'label';
 			}
 		}
 
-		if (!p.reason) {
+		if (p.reason == null) {
 			p.reason = 'id';
 		}
 
@@ -498,9 +491,9 @@ export default class Async<CTX extends object = Async<any>> {
 			const
 				link = links.get(p.id);
 
-			if (link) {
+			if (link != null) {
 				const skipZombie =
-					link.group &&
+					link.group != null &&
 					p.reason === 'all' &&
 					isZombieGroup.test(link.group);
 
@@ -510,7 +503,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 				link.unregister();
 
-				const ctx = {
+				const ctx = <TaskCtx>{
 					...p,
 					link,
 					type: 'clearAsync'
@@ -518,14 +511,14 @@ export default class Async<CTX extends object = Async<any>> {
 
 				const
 					clearHandlers = link.onClear,
-					clearFn = link.clearFn;
+					{clearFn} = link;
 
 				for (let i = 0; i < clearHandlers.length; i++) {
 					clearHandlers[i].call(this.ctx, ctx);
 				}
 
-				if (clearFn && !p.preventDefault) {
-					clearFn.call(null, link.id, ctx);
+				if (clearFn != null && !p.preventDefault) {
+					clearFn(link.id, ctx);
 				}
 			}
 
@@ -548,17 +541,17 @@ export default class Async<CTX extends object = Async<any>> {
 	}
 
 	/**
-	 * Marks a task (or a group of tasks) from the namespace by the specified label
+	 * Marks a task (or a group of tasks) from the namespace with the specified label
 	 *
 	 * @param label
-	 * @param task - operation options or a link to the task
+	 * @param task - operation options or link to the task
 	 * @param [name] - namespace of the operation
 	 */
 	protected markTask(label: string, task: CanUndef<ClearProxyOptions | any>, name?: string): this {
 		let
 			p: FullClearOptions;
 
-		if (name) {
+		if (name != null) {
 			if (task === undefined) {
 				return this.markTask(label, {name, reason: 'all'});
 			}
@@ -566,14 +559,14 @@ export default class Async<CTX extends object = Async<any>> {
 			p = Object.isPlainObject(task) ? {...task, name} : {name, id: task};
 
 		} else {
-			p = task || {};
+			p = task ?? {};
 		}
 
 		const
 			baseCache = this.getCache(p.name);
 
 		let
-			cache;
+			cache: typeof baseCache.root;
 
 		if (p.group != null) {
 			if (Object.isRegExp(p.group)) {
@@ -593,11 +586,14 @@ export default class Async<CTX extends object = Async<any>> {
 				return this;
 			}
 
-			if (!baseCache.groups[p.group]) {
+			const
+				groupCache = baseCache.groups[p.group];
+
+			if (groupCache == null) {
 				return this;
 			}
 
-			cache = baseCache.groups[p.group];
+			cache = groupCache;
 
 		} else {
 			cache = baseCache.root;
@@ -608,6 +604,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 		if (p.label != null) {
 			const
+				// @ts-ignore (symbol index)
 				tmp = labels[p.label];
 
 			if (p.id != null && p.id !== tmp) {
@@ -616,12 +613,12 @@ export default class Async<CTX extends object = Async<any>> {
 
 			p.id = tmp;
 
-			if (!p.reason) {
+			if (p.reason == null) {
 				p.reason = 'label';
 			}
 		}
 
-		if (!p.reason) {
+		if (p.reason == null) {
 			p.reason = 'id';
 		}
 
@@ -631,7 +628,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 			if (link) {
 				const skipZombie =
-					link.group &&
+					link.group != null &&
 					p.reason === 'all' &&
 					isZombieGroup.test(link.group);
 
@@ -648,7 +645,7 @@ export default class Async<CTX extends object = Async<any>> {
 					link.paused = false;
 					link.queue = [];
 
-				} else if (label[0] === '!') {
+				} else if (label.startsWith('!')) {
 					link[label.slice(1)] = false;
 
 				} else {

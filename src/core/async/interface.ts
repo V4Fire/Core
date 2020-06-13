@@ -398,7 +398,7 @@ export type TaskCtx<CTX extends object = Async> = {
 } & AsyncOptions & ClearOptionsId<unknown>;
 
 export interface ClearFn<CTX extends object = Async> extends Function {
-	(id: any, ctx: CTX): any;
+	(id: any, ctx: TaskCtx<CTX>): any;
 }
 
 export interface BoundFn<CTX extends object = Async> extends Function {
@@ -562,6 +562,11 @@ export interface CancelablePromise<T = unknown> extends Promise<T> {
 	abort?: Function;
 	cancel?: Function;
 }
+
+/**
+ * Extended type of a promise
+ */
+export type PromiseLikeP<T = unknown> = (() => PromiseLike<T>) | PromiseLike<T>;
 
 /**
  * Something that looks like an event emitter

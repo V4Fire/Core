@@ -1,3 +1,5 @@
+/* eslint-disable max-lines */
+
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -10,8 +12,6 @@
  * [[include:core/prelude/README.md]]
  * @packageDocumentation
  */
-
-// tslint:disable:max-file-line-count unified-signatures
 
 declare namespace TB {
 	type Cast<X, Y> = X extends Y ? X : Y;
@@ -103,7 +103,7 @@ declare function Any(obj: unknown): any;
 declare function stderr(err: unknown): void;
 
 /**
- * Global i18n function (can be used as a string tag or a simple function)
+ * Global i18n function (can be used as a string tag or simple function)
  */
 declare function i18n(strings: unknown | string[], ...expr: unknown[]): string;
 
@@ -114,7 +114,7 @@ declare function i18n(strings: unknown | string[], ...expr: unknown[]): string;
 declare function t(strings: unknown | string[], ...expr: unknown[]): string;
 
 /**
- * Global i18n loopback (can be used as a string tag or a simple function)
+ * Global i18n loopback (can be used as a string tag or simple function)
  */
 declare function l(strings: unknown | string[], ...expr: unknown[]): string;
 
@@ -129,11 +129,14 @@ declare function cancelIdleCallback(id: number): void;
 declare function setImmediate(fn: AnyFunction): number;
 declare function clearImmediate(id: number): void;
 
-type Nullable<T> = T | null | undefined;
 type CanPromise<T> = T | Promise<T>;
-type CanUndef<T> = T | undefined;
-type CanVoid<T> = T | void;
 type CanArray<T> = T | T[];
+
+type CanUndef<T> = T | undefined;
+type Nullable<T> = T | null | undefined;
+
+// eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+type CanVoid<T> = T | void;
 
 interface AnyFunction<ARGS = any[], R = any> extends Function {
 	(...args: ARGS): R;
@@ -143,10 +146,21 @@ interface AnyOneArgFunction<ARG = any, R = any> extends Function {
 	(arg: ARG): R;
 }
 
-interface ClassConstructor<T = unknown> {new: T}
-interface StrictDictionary<T = unknown> {[key: string]: T}
-interface Dictionary<T> {[key: string]: CanUndef<T>}
-interface Dictionary<T extends unknown = unknown> {[key: string]: T}
+interface ClassConstructor<T = unknown> {
+	new: T;
+}
+
+interface StrictDictionary<T = unknown> {
+	[key: string | symbol]: T;
+}
+
+interface Dictionary<T> {
+	[key: string | symbol]: CanUndef<T>;
+}
+
+interface Dictionary<T extends unknown = unknown> {
+	[key: string | symbol]: T;
+}
 
 interface Maybe<T = unknown> extends Promise<T> {
 	readonly type: 'Maybe';
@@ -247,13 +261,13 @@ interface ObjectMixinOptions<V = unknown, K = unknown, D = unknown> {
 	withUndef?: boolean;
 
 	/**
-	 * If true, then descriptors of object properties are copied too
+	 * If true, then an object property descriptor is copied too
 	 * @default `false`
 	 */
 	withDescriptor?: boolean;
 
 	/**
-	 * If true, then accessors (but not all descriptors) of object properties are copied too
+	 * If true, then accessors (but not the whole descriptor) of an object property are copied too
 	 * @default `false`
 	 */
 	withAccessors?: boolean;
@@ -309,7 +323,7 @@ interface ObjectMixinOptions<V = unknown, K = unknown, D = unknown> {
 	withProto?: boolean;
 
 	/**
-	 * If true, then for merging two arrays will be used a concatenation strategy
+	 * If true, then to merge two arrays will be used a concatenation strategy
 	 * (works only with the "deep" mode)
 	 *
 	 * @default `false`
@@ -385,7 +399,7 @@ interface ObjectMixinOptions<V = unknown, K = unknown, D = unknown> {
 
 interface ObjectGetOptions {
 	/**
-	 * Character for declaring the path
+	 * Character to declare the path
 	 *
 	 * @example
 	 * ```js
@@ -397,7 +411,7 @@ interface ObjectGetOptions {
 
 interface ObjectSetOptions extends ObjectGetOptions {
 	/**
-	 * If true, then a new value will be concatenated with the old within an array
+	 * If true, then a new value will be concatenated with the old
 	 *
 	 * @example
 	 * ```js
@@ -423,7 +437,7 @@ interface ObjectForEachOptions {
 	withDescriptor?: boolean;
 
 	/**
-	 * Strategy for not own properties of an object:
+	 * Strategy for not own properties of the iterated object:
 	 *   1. if `false`, then the `hasOwnProperty` test is enabled and all not own properties will be skipped;
 	 *   1. if `true`, then the `hasOwnProperty` test is disabled;
 	 *   1. if `-1`, then the `hasOwnProperty` test is enabled and all own properties will be skipped.
@@ -499,7 +513,7 @@ type ObjectPropertyPath =
 
 interface ObjectConstructor {
 	/**
-	 * Returns a value from an object by the specified path
+	 * Returns a value from the passed object by the specified path
 	 *
 	 * @param obj
 	 * @param path
@@ -508,7 +522,7 @@ interface ObjectConstructor {
 	get<T = unknown>(obj: unknown, path: ObjectPropertyPath, opts?: ObjectGetOptions): T;
 
 	/**
-	 * Returns a function that returns a value from an object, which the function takes, by the specified path
+	 * Returns a function that returns a value from the passed object, which the function takes, by the specified path
 	 *
 	 * @param path
 	 * @param [opts] - additional options
@@ -549,7 +563,9 @@ interface ObjectConstructor {
 	has(obj: object, opts?: ObjectGetOptions): (path: ObjectPropertyPath) => boolean;
 
 	/**
-	 * Returns a function that returns true if an object, which the function takes, has own property by the specified key
+	 * Returns a function that returns true if the passed object, which the function takes,
+	 * has own property by the specified key
+	 *
 	 * @param key
 	 */
 	hasOwnProperty(key: string): (obj: unknown) => boolean;
@@ -561,7 +577,7 @@ interface ObjectConstructor {
 	hasOwnProperty(obj: unknown): (key: string) => boolean;
 
 	/**
-	 * Returns true if an object has an own property by the specified key
+	 * Returns true if the passed object has an own property by the specified key
 	 *
 	 * @param obj
 	 * @param key
@@ -569,7 +585,7 @@ interface ObjectConstructor {
 	hasOwnProperty(obj: unknown, key: string): boolean;
 
 	/**
-	 * Sets a value to an object by the specified path.
+	 * Sets a value to the passed object by the specified path.
 	 * The final function returns a value that was added.
 	 *
 	 * @param obj
@@ -812,6 +828,7 @@ interface ObjectConstructor {
 
 	/**
 	 * Clones the specified object by using a naive but fast "JSON.stringify/parse" strategy and returns a new object.
+	 *
 	 * Mind, that this method uses non-stable version JSON.stringify, i.e.,
 	 * it can work incorrectly with object like {a: 1, b: 2} and {b: 2, a: 1}.
 	 *
@@ -822,6 +839,7 @@ interface ObjectConstructor {
 
 	/**
 	 * Returns a string representation of the specified object by using a naive but fast "JSON.stringify/parse" strategy.
+	 *
 	 * Mind, that this method uses non-stable version JSON.stringify, i.e.,
 	 * it can work incorrectly with object like {a: 1, b: 2} and {b: 2, a: 1}.
 	 *
@@ -831,20 +849,20 @@ interface ObjectConstructor {
 
 	/**
 	 * Returns a curried version of Object.mixin for one argument
-	 * @param opts - if true, then properties will be copied recursively OR additional options for extending
+	 * @param opts - if true, then properties will be copied recursively, or additional options to extend
 	 */
 	mixin(opts: ObjectMixinOptions | boolean): <B, O1>(base: B, obj1: O1) => B & O1;
 
 	/**
 	 * Returns a curried version of Object.mixin for one argument
-	 * @param opts - if true, then properties will be copied recursively OR additional options for extending
+	 * @param opts - if true, then properties will be copied recursively, or additional options to extend
 	 */
 	mixin(opts: ObjectMixinOptions | boolean): <R = unknown>(...objects: unknown[]) => R;
 
 	/**
 	 * Returns a curried version of Object.mixin for two arguments
 	 *
-	 * @param opts - if true, then properties will be copied recursively OR additional options for extending
+	 * @param opts - if true, then properties will be copied recursively, or additional options to extend
 	 * @param base - base object
 	 */
 	mixin<B>(opts: ObjectMixinOptions | boolean, base: B): <O1>(obj1: O1) => B & O1;
@@ -852,7 +870,7 @@ interface ObjectConstructor {
 	/**
 	 * Returns a curried version of Object.mixin for two arguments
 	 *
-	 * @param opts - if true, then properties will be copied recursively OR additional options for extending
+	 * @param opts - if true, then properties will be copied recursively, or additional options to extend
 	 * @param base - base object
 	 */
 	mixin(opts: ObjectMixinOptions | boolean, base: unknown): <R = unknown>(...objects: unknown[]) => R;
@@ -861,7 +879,7 @@ interface ObjectConstructor {
 	 * Extends the specified object by another objects.
 	 * If the base value is not an object, a new object will be created with a type similar to the first extension object.
 	 *
-	 * @param opts - if true, then properties will be copied recursively OR additional options for extending
+	 * @param opts - if true, then properties will be copied recursively, or additional options to extend
 	 * @param base - base object
 	 * @param obj1 - object for extending
 	 */
@@ -871,7 +889,7 @@ interface ObjectConstructor {
 	 * Extends the specified object by another objects.
 	 * If the base value is not an object, a new object will be created with a type similar to the first extension object.
 	 *
-	 * @param opts - if true, then properties will be copied recursively OR additional options for extending
+	 * @param opts - if true, then properties will be copied recursively, or additional options to extend
 	 * @param base - base object
 	 * @param obj1 - object for extending
 	 * @param obj2 - object for extending
@@ -882,7 +900,7 @@ interface ObjectConstructor {
 	 * Extends the specified object by another objects.
 	 * If the base value is not an object, a new object will be created with a type similar to the first extension object.
 	 *
-	 * @param opts - if true, then properties will be copied recursively OR additional options for extending
+	 * @param opts - if true, then properties will be copied recursively, or additional options to extend
 	 * @param base - base object
 	 * @param obj1 - object for extending
 	 * @param obj2 - object for extending
@@ -894,7 +912,7 @@ interface ObjectConstructor {
 	 * Extends the specified object by another objects.
 	 * If the base value is not an object, a new object will be created with a type similar to the first extension object.
 	 *
-	 * @param opts - if true, then properties will be copied recursively OR additional options for extending
+	 * @param opts - if true, then properties will be copied recursively, or additional options to extend
 	 * @param base - base object
 	 * @param objects - objects for extending
 	 */
@@ -908,7 +926,7 @@ interface ObjectConstructor {
 
 	/**
 	 * Parses the specified value as a JSON/JS object and returns the result of parsing.
-	 * If the value isn't a string or can't be parsed, the function returns an original value.
+	 * If the value isn't a string or can't be parsed, the function returns the original value.
 	 *
 	 * @param value
 	 * @param [reviver] - reviver function for JSON.parse
@@ -947,7 +965,7 @@ interface ObjectConstructor {
 	convertEnumToDict<D extends object>(obj: D): {[K in keyof D]: K};
 
 	/**
-	 * Creates an object which has the similar structure to a TS enum object and returns it
+	 * Creates an object which has the similar structure to the TS enum and returns it
 	 *
 	 * @param obj - base object: it can be a dictionary or an array
 	 * @example
@@ -1463,10 +1481,14 @@ interface ObjectConstructor {
 			Generator |
 			AnyFunction |
 
+			/* eslint-disable @typescript-eslint/ban-types */
+
 			Number |
 			String |
 			Symbol |
 			Boolean |
+
+			/* eslint-enable @typescript-eslint/ban-types */
 
 			Node |
 			Document |
@@ -1482,7 +1504,7 @@ interface ObjectConstructor {
 
 	/**
 	 * Returns true if the specified value is a dictionary.
-	 * This method is similar to isPlainObject, but it has another output TS type:
+	 * This method is similar to "isPlainObject", but it has another output TS type:
 	 * instead of inferring of an output type the method always cast the type to a dictionary.
 	 *
 	 * @param value
@@ -1520,7 +1542,7 @@ interface ObjectConstructor {
 	isPrimitive(value: unknown): boolean;
 
 	/**
-	 * Returns true if the specified value is a custom (not native) object or a function
+	 * Returns true if the specified value is a custom (not native) object or function
 	 * @param value
 	 */
 	isCustomObject(value: unknown): boolean;
@@ -1672,7 +1694,7 @@ interface ArrayConstructor {
 	 * Returns a curried version of Array.concat
 	 * @param arr
 	 */
-	concat<T extends Nullable<unknown[]>>(arr: T): <A extends CanArray<unknown>>(...args: CanArray<A>[]) =>
+	concat<T extends Nullable<unknown[]>>(arr: T): <A extends CanArray<unknown>>(...args: Array<CanArray<A>>) =>
 		A extends Array<infer V> ? Array<IterableType<T> | V> : Array<IterableType<T> | NonNullable<A>>;
 
 	/**
@@ -1685,7 +1707,7 @@ interface ArrayConstructor {
 	 */
 	concat<T extends Nullable<unknown[]>, A extends CanArray<unknown>>(
 		arr: T,
-		...args: CanArray<A>[]
+		...args: Array<CanArray<A>>
 	): A extends Array<infer V> ? Array<IterableType<T> | V> : Array<IterableType<T> | NonNullable<A>>;
 }
 

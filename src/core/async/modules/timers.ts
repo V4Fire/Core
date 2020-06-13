@@ -36,10 +36,10 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	setImmediate(cb: Function, opts?: AsyncCbOptions<CTX>): Nullable<TimerId> {
 		const
-			// tslint:disable-next-line
+			// eslint-disable-next-line @typescript-eslint/dot-notation
 			wrapper = globalThis['setImmediate'],
 
-			// tslint:disable-next-line
+			// eslint-disable-next-line @typescript-eslint/dot-notation
 			clearFn = globalThis['clearImmediate'];
 
 		return this.registerTask({
@@ -497,6 +497,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * @param [opts] - additional options for the operation
 	 */
 	wait(fn: Function, opts?: AsyncWaitOptions): Promise<boolean> {
+		// eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
 		if (fn()) {
 			if (opts?.label != null) {
 				this.clearPromise(opts);
@@ -507,16 +508,18 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 		return new SyncPromise((resolve, reject) => {
 			let
+				// eslint-disable-next-line prefer-const
 				id;
 
 			const cb = () => {
+				// eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
 				if (fn()) {
 					resolve(true);
 					this.clearPromise(id);
 				}
 			};
 
-			id = this.setInterval(cb, opts?.delay || 15, {
+			id = this.setInterval(cb, opts?.delay ?? 15, {
 				...opts,
 				promise: true,
 				onClear: <AsyncCb<CTX>>this.onPromiseClear(resolve, reject),

@@ -28,11 +28,11 @@ export * from 'core/async/modules/timers';
 
 export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	/**
-	 * Wraps an event from the specified event emitter.
-	 * If the emitter is a function, it is interpreted as a function to attach events.
+	 * Attaches an event listener from the specified event emitter.
+	 * If the emitter is a function, it is interpreted as the function to attach events.
 	 *
 	 * @param emitter - event emitter
-	 * @param events - event or a list of events (can also specify multiple events by using spaces)
+	 * @param events - event or list of events (can also specify multiple events by using spaces)
 	 * @param handler - event handler
 	 * @param [args] - additional arguments for the emitter
 	 */
@@ -44,11 +44,11 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	): Nullable<EventId>;
 
 	/**
-	 * Wraps an event from the specified event emitter.
-	 * If the emitter is a function, it is interpreted as a function to attach events.
+	 * Attaches an event listener from the specified event emitter.
+	 * If the emitter is a function, it is interpreted as the function to attach events.
 	 *
 	 * @param emitter - event emitter
-	 * @param events - event or a list of events (can also specify multiple events by using spaces)
+	 * @param events - event or list of events (can also specify multiple events by using spaces)
 	 * @param handler - event handler
 	 * @param opts - options for the operation
 	 * @param [args] - additional arguments for the emitter
@@ -71,12 +71,12 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		let
 			p: AsyncOnOptions<CTX>;
 
-		if (opts !== undefined && !Object.isPlainObject(opts)) {
+		if (Object.isArray(opts)) {
 			args.unshift(opts);
 			p = {};
 
 		} else {
-			p = opts || {};
+			p = opts ?? {};
 		}
 
 		p = {...p};
@@ -98,10 +98,41 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 			const link = this.registerTask<object>({
 				...p,
+
 				name: this.namespaces.eventListener,
 				obj: handler,
+
+				group: p.group ?? event,
+				periodic: !p.single,
+				linkByWrapper: true,
+
+				clearFn: this.eventListenerDestructor
+					.bind(this),
+
 				wrapper(cb: AnyFunction): unknown {
-					const handler = function (this: unknown): unknown {
+					const fn = Object.isSimpleFunction(emitter) ?
+						emitter :
+						p.single &&
+							emitter.once ||
+							emitter.addEventListener ||
+							emitter.addListener ||
+							emitter.on;
+
+					if (Object.isFunction(fn)) {
+						fn.call(emitter, event, handler, ...args);
+
+					} else {
+						throw new ReferenceError('A method to attach events is not defined');
+					}
+
+					return {
+						event,
+						emitter,
+						handler,
+						args
+					};
+
+					function handler(this: unknown): unknown {
 						if (Object.isFunction(emitter) || p.single && (multipleEvent || !emitter.once)) {
 							if (multipleEvent) {
 								that.clearEventListener(links);
@@ -119,30 +150,8 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 						}
 
 						return res;
-					};
-
-					const fn = Object.isSimpleFunction(emitter) ?
-						emitter : p.single && emitter.once || emitter.addEventListener || emitter.addListener || emitter.on;
-
-					if (Object.isFunction(fn)) {
-						fn.call(emitter, event, handler, ...args);
-
-					} else {
-						throw new ReferenceError('A method to attach events is not defined');
 					}
-
-					return {
-						event,
-						emitter,
-						handler,
-						args
-					};
-				},
-
-				clearFn: this.eventListenerDestructor,
-				linkByWrapper: true,
-				periodic: !p.single,
-				group: p.group ?? event
+				}
 			});
 
 			if (link) {
@@ -150,16 +159,15 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			}
 		}
 
-		return events.length <= 1 ? links[0] || null : links;
+		return events.length <= 1 ? links[0] ?? null : links;
 	}
 
 	/**
-	 * Wraps an event from the specified event emitter.
-	 * The event is listened only once.
-	 * If the emitter is a function, it is interpreted as a function to attach events.
+	 * Attaches an event listener from the specified event emitter, but the event is listened only once.
+	 * If the emitter is a function, it is interpreted as the function to attach events.
 	 *
 	 * @param emitter - event emitter
-	 * @param events - event or a list of events (can also specify multiple events by using spaces)
+	 * @param events - event or list of events (can also specify multiple events by using spaces)
 	 * @param handler - event handler
 	 * @param [args] - additional arguments for the emitter
 	 */
@@ -171,12 +179,11 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	): Nullable<EventId>;
 
 	/**
-	 * Wraps an event from the specified event emitter.
-	 * The event is listened only once.
-	 * If the emitter is a function, it is interpreted as a function to attach events.
+	 * Attaches an event listener from the specified event emitter, but the event is listened only once.
+	 * If the emitter is a function, it is interpreted as the function to attach events.
 	 *
 	 * @param emitter - event emitter
-	 * @param events - event or a list of events (can also specify multiple events with a space)
+	 * @param events - event or list of events (can also specify multiple events with a space)
 	 * @param handler - event handler
 	 * @param opts - options for the operation
 	 * @param [args] - additional arguments for the emitter
@@ -199,12 +206,12 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		let
 			p: AsyncOnceOptions<CTX>;
 
-		if (opts !== undefined && !Object.isPlainObject(opts)) {
+		if (Object.isArray(opts)) {
 			args.unshift(opts);
 			p = {};
 
 		} else {
-			p = opts || {};
+			p = opts ?? {};
 		}
 
 		return this.on(emitter, events, handler, {...p, single: true}, ...args);
@@ -212,10 +219,10 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Returns a promise that is resolved after emitting the specified event.
-	 * If the emitter is a function, it is interpreted as a function to attach events.
+	 * If the emitter is a function, it is interpreted as the function to attach events.
 	 *
 	 * @param emitter - event emitter
-	 * @param events - event or a list of events (can also specify multiple events with a space)
+	 * @param events - event or list of events (can also specify multiple events with a space)
 	 * @param opts - options for the operation
 	 * @param [args] - additional arguments for the emitter
 	 */
@@ -228,10 +235,10 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Returns a promise that is resolved after emitting the specified event.
-	 * If the emitter is a function, it is interpreted as a function to attach events.
+	 * If the emitter is a function, it is interpreted as the function to attach events.
 	 *
 	 * @param emitter - event emitter
-	 * @param events - event or a list of events (can also specify multiple events with a space)
+	 * @param events - event or list of events (can also specify multiple events with a space)
 	 * @param [args] - additional arguments for the emitter
 	 */
 	promisifyOnce<R = unknown>(
@@ -249,17 +256,17 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		let
 			p: AsyncPromisifyOnceOptions<E, R, CTX>;
 
-		if (opts !== undefined && !Object.isPlainObject(opts)) {
+		if (Object.isArray(opts)) {
 			args.unshift(opts);
 			p = {};
 
 		} else {
-			p = opts || {};
+			p = opts ?? {};
 		}
 
 		return new SyncPromise((resolve, reject) => {
 			const handler = (e) => {
-				if (p && Object.isFunction(p.handler)) {
+				if (Object.isFunction(p.handler)) {
 					return resolve(p.handler.call(this.ctx, e));
 				}
 
@@ -376,15 +383,15 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	}
 
 	/**
-	 * Removes an event handler from the specified emitter
+	 * Removes the passed event listener from the specified emitter
 	 * @param event - event object
 	 */
 	eventListenerDestructor(event: Event): void {
 		const
 			e = event.emitter,
-			fn = Object.isSimpleFunction(e) ? e : e.removeEventListener || e.removeListener || e.off;
+			fn = Object.isSimpleFunction(e) ? e : e.removeEventListener ?? e.removeListener ?? e.off;
 
-		if (fn && Object.isFunction(fn)) {
+		if (Object.isFunction(fn)) {
 			fn.call(e, event.event, event.handler);
 
 		} else {
@@ -393,29 +400,29 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	}
 
 	/**
-	 * Marks an event task by the specified label
+	 * Marks an event task with the specified label
 	 *
-	 * @param field
+	 * @param label
 	 * @param [id] - operation id (if not specified, the operation will be extended for all promise namespaces)
 	 */
-	protected markEvent(field: string, id?: EventId): this;
+	protected markEvent(label: string, id?: EventId): this;
 
 	/**
-	 * Marks an event task or group of tasks by the specified label
+	 * Marks an event task or group of tasks with the specified label
 	 *
-	 * @param field
+	 * @param label
 	 * @param opts - additional options
 	 */
-	protected markEvent(field: string, opts: ClearOptionsId<EventId>): this;
-	protected markEvent(field: string, task: EventId | ClearOptionsId<EventId>): this {
+	protected markEvent(label: string, opts: ClearOptionsId<EventId>): this;
+	protected markEvent(label: string, task: EventId | ClearOptionsId<EventId>): this {
 		if (Object.isArray(task)) {
 			for (let i = 0; i < task.length; i++) {
-				this.markEvent(field, <EventId>task[i]);
+				this.markEvent(label, <EventId>task[i]);
 			}
 
 			return this;
 		}
 
-		return this.markTask(field, isEvent(task) ? {id: task} : task, this.namespaces.eventListener);
+		return this.markTask(label, isEvent(task) ? {id: task} : task, this.namespaces.eventListener);
 	}
 }
