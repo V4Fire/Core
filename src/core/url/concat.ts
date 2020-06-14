@@ -14,7 +14,7 @@ const
  * Concatenates the specified parts of URLs with correctly arranging of slashes and returns a new string
  * @param urls
  */
-export function concatUrls(...urls: Nullable<string>[]): string {
+export function concatUrls(...urls: Array<Nullable<string>>): string {
 	let
 		res = '';
 
@@ -31,12 +31,12 @@ export function concatUrls(...urls: Nullable<string>[]): string {
 			continue;
 		}
 
-		if (url[0] === '/') {
+		if (url.startsWith('/')) {
 			url = url.slice(1);
 		}
 
-		if (res) {
-			res += res[res.length - 1] === '/' ? url : `/${url}`;
+		if (res !== '') {
+			res += res.endsWith('/') ? url : `/${url}`;
 			continue;
 		}
 

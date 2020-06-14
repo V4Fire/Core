@@ -34,7 +34,7 @@ export function serialize(uuid: Uint8Array): string {
 			chunk = `0${chunk}`;
 		}
 
-		res += chunk + (serializeFilter[i] ? '-' : '');
+		res += chunk + (serializeFilter[i] === true ? '-' : '');
 	}
 
 	return res;

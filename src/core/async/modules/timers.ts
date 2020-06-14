@@ -494,8 +494,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * @param [opts] - additional options for the operation
 	 */
 	wait(fn: Function, opts?: AsyncWaitOptions): Promise<boolean> {
-		// eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-		if (fn()) {
+		if (Object.isTruly(fn())) {
 			if (opts?.label != null) {
 				this.clearPromise(opts);
 			}
@@ -509,8 +508,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 				id;
 
 			const cb = () => {
-				// eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-				if (fn()) {
+				if (Object.isTruly(fn())) {
 					resolve(true);
 					this.clearPromise(id);
 				}

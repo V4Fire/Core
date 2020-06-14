@@ -11,7 +11,7 @@ import { deprecate } from 'core/functools';
 
 /** @see ObjectConstructor.createDict */
 extend(Object, 'createDict', (...objects) => {
-	if (objects.length) {
+	if (objects.length > 0) {
 		return Object.assign(Object.create(null), ...objects);
 	}
 
@@ -123,7 +123,6 @@ extend(Object, 'reject', selectReject(false));
  * @param select
  */
 export function selectReject(select: boolean): AnyFunction {
-	// tslint:disable-next-line:only-arrow-functions
 	return function wrapper(obj: Dictionary, condition: CanArray<string> | Dictionary | RegExp): unknown {
 		if (arguments.length === 1) {
 			condition = obj;
@@ -167,7 +166,7 @@ export function selectReject(select: boolean): AnyFunction {
 		for (let keys = Object.keys(obj), i = 0; i < keys.length; i++) {
 			const
 				key = keys[i],
-				test = map[key];
+				test = Object.isTruly(map[key]);
 
 			if (select ? test : !test) {
 				res[key] = obj[key];

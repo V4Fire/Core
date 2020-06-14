@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
+
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -19,7 +21,7 @@ export function isContainerStructure(value: unknown): boolean {
 		return true;
 	}
 
-	return Object.isCustomObject((<object>value!).constructor);
+	return Object.isCustomObject((<any>value).constructor);
 }
 
 /**
@@ -35,7 +37,7 @@ export function canExtendProto(value: unknown): boolean {
 		return true;
 	}
 
-	return Object.isCustomObject((<object>value!).constructor);
+	return Object.isCustomObject((<any>value).constructor);
 }
 
 /**
@@ -82,9 +84,9 @@ export function getType(value: unknown): string {
  * Returns a new instance of the specified value or false
  * @param value
  */
-export function getSameAs<T>(value: T): T | boolean {
+export function getSameAs<T>(value: T): Nullable<T> {
 	if (!value || typeof value !== 'object') {
-		return false;
+		return null;
 	}
 
 	if (Object.isArray(value)) {
@@ -103,9 +105,9 @@ export function getSameAs<T>(value: T): T | boolean {
 		return <any>new Set();
 	}
 
-	if (Object.isCustomObject((<object><unknown>value!).constructor)) {
+	if (Object.isCustomObject((<any>value).constructor)) {
 		return <any>{};
 	}
 
-	return false;
+	return null;
 }

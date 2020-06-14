@@ -13,7 +13,7 @@
 
 const
 	xmlSerializer = new XMLSerializer(),
-	normalizeRgxp = /"|(\s+)|[{}|\\^~\[\]`"<>#%]/g;
+	normalizeRgxp = /"|(\s+)|[{}|\\^~[\]`"<>#%]/g;
 
 /**
  * Converts the specified XML node to a DATA:URI string
@@ -31,7 +31,7 @@ function normalize(str: string, sp?: string): string {
 		return "'";
 	}
 
-	if (sp) {
+	if (sp != null) {
 		return ' ';
 	}
 

@@ -10,8 +10,7 @@ import extend from 'core/prelude/extend';
 import { funcCache } from 'core/prelude/object/const';
 
 /** @see ObjectConstructor.fastCompare */
-// tslint:disable-next-line:only-arrow-functions
-extend(Object, 'fastCompare', function (a: any, b: any): boolean | AnyFunction {
+extend(Object, 'fastCompare', function fastCompare(a: any, b: any): boolean | AnyFunction {
 	if (arguments.length < 2) {
 		return (b) => Object.fastCompare(a, b);
 	}
@@ -20,6 +19,7 @@ extend(Object, 'fastCompare', function (a: any, b: any): boolean | AnyFunction {
 		return true;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
 	if (!a || typeof a !== 'object' || !b || typeof b !== 'object') {
 		return a === b;
 	}
@@ -37,14 +37,12 @@ extend(Object, 'fastCompare', function (a: any, b: any): boolean | AnyFunction {
 		!Object.isPlainObject(a) &&
 		!Object.isDate(a) &&
 		!Object.isRegExp(a) &&
-		// tslint:disable-next-line:no-string-literal
 		!Object.isFunction(a['toJSON']) ||
 
 		!bIsArr &&
 		!Object.isPlainObject(b) &&
 		!Object.isDate(b) &&
 		!Object.isRegExp(b) &&
-		// tslint:disable-next-line:no-string-literal
 		!Object.isFunction(b['toJSON'])
 	) {
 		if ((aIsMap && bIsMap || aIsSet && bIsSet) && a.size === 0 && b.size === 0) {
@@ -91,9 +89,10 @@ extend(Object, 'fastCompare', function (a: any, b: any): boolean | AnyFunction {
 });
 
 /** @see ObjectConstructor.fastHash */
-extend(Object, 'fastHash', (obj) =>
-	JSON.stringify(obj, createSerializer(obj, undefined, funcCache)) || 'null'
-);
+extend(Object, 'fastHash', (obj) => {
+	const res = JSON.stringify(obj, createSerializer(obj, undefined, funcCache));
+	return res !== '' ? res : 'null';
+});
 
 /**
  * Returns a function to serialize object values into strings
@@ -111,7 +110,7 @@ export function createSerializer(
 		init = false;
 
 	return (key, value) => {
-		if (!value) {
+		if (value == null) {
 			init = true;
 			return value;
 		}
@@ -134,7 +133,7 @@ export function createSerializer(
 		}
 
 		if (typeof value === 'function') {
-			const key = funcMap.get(value) || `[[FUNC_REF:${Math.random()}]]`;
+			const key = funcMap.get(value) ?? `[[FUNC_REF:${Math.random()}]]`;
 			funcMap.set(value, key);
 			return key;
 		}

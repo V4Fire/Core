@@ -12,6 +12,7 @@
  */
 
 import Queue, { Tasks, CreateTasks } from 'core/queue/interface';
+
 export * from 'core/queue/interface';
 
 /**

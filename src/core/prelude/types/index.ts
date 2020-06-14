@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
+
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -9,6 +11,8 @@
 import extend from 'core/prelude/extend';
 import { deprecate } from 'core/functools';
 import { isNative, toString, nonPrimitiveTypes } from 'core/prelude/types/const';
+
+extend(Object, 'isPositive', (value) => Boolean(value));
 
 /** @see ObjectConstructor.isDictionary */
 extend(Object, 'isDictionary', isPlainObject);
@@ -36,7 +40,7 @@ extend(Object, 'isCustomObject', (value) => {
 });
 
 /**  @see ObjectConstructor.isSimpleObject */
-extend(Object, 'isSimpleObject', (value) =>  {
+extend(Object, 'isSimpleObject', (value) => {
 	if (!value || typeof value !== 'object') {
 		return false;
 	}
@@ -53,7 +57,7 @@ extend(Object, 'isArrayLike', (value) => {
 		return false;
 	}
 
-	return Array.isArray(value) || (value.length > 0 && 0 in value) || value.length === 0;
+	return Array.isArray(value) || value.length > 0 && 0 in value || value.length === 0;
 });
 
 /** @see ObjectConstructor.isFunction */
@@ -63,8 +67,7 @@ extend(Object, 'isFunction', (value) => typeof value === 'function');
 extend(Object, 'isSimpleFunction', (value) => typeof value === 'function');
 
 /** @see ObjectConstructor.isGenerator */
-extend(Object, 'isGenerator', (value) =>
-	typeof value === 'function' && value.constructor.name === 'GeneratorFunction');
+extend(Object, 'isGenerator', (value) => typeof value === 'function' && value.constructor.name === 'GeneratorFunction');
 
 /** @see ObjectConstructor.isIterator */
 extend(Object, 'isIterator', (value) => {
@@ -81,7 +84,7 @@ extend(Object, 'isIterable', (value) => {
 		return false;
 	}
 
-	return Boolean(typeof Symbol === 'function' ? value![Symbol.iterator] : typeof value!['@@iterator'] === 'function');
+	return Boolean(typeof Symbol === 'function' ? value[Symbol.iterator] : typeof value['@@iterator'] === 'function');
 });
 
 /** @see ObjectConstructor.isString */
@@ -148,9 +151,7 @@ function isPlainObject(value: unknown): boolean {
 		return false;
 	}
 
-	const
-		constr = value!.constructor;
-
-	// @ts-ignore
+	const constr = value!.constructor;
+	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 	return !constr || constr === Object;
 }

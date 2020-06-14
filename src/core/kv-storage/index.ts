@@ -294,8 +294,7 @@ export function factory(engine: StorageEngine, async?: boolean): AsyncStorage | 
 						const
 							el = await obj.get<T>(key);
 
-						// eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-						if (!filter || filter(el, key)) {
+						if (!filter || Object.isTruly(filter(el, key))) {
 							await remove(key, ...args);
 						}
 					}
@@ -336,8 +335,7 @@ export function factory(engine: StorageEngine, async?: boolean): AsyncStorage | 
 							const
 								el = await obj.get<T>(key);
 
-							// eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-							if (!filter || filter(el, key)) {
+							if (!filter || Object.isTruly(filter(el, key))) {
 								await remove(key, ...args);
 							}
 						}

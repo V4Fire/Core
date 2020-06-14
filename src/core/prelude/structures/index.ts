@@ -7,6 +7,7 @@
  */
 
 import SyncPromise from 'core/prelude/structures/sync-promise';
+
 export { default as SyncPromise } from 'core/prelude/structures/sync-promise';
 
 export class Option<T = unknown> extends SyncPromise<T> implements Maybe<T> {

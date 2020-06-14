@@ -44,15 +44,16 @@ export function deprecate<T extends Function>(fn: T): T;
 export function deprecate<T extends Function>(
 	fnOrParams: DeprecatedOptions | InlineDeprecatedOptions | T,
 	fn?: T
-): T | void {
+): T | undefined {
 	let
-		p = <DeprecatedOptions>{};
+		p: DeprecatedOptions;
 
 	if (Object.isSimpleFunction(fnOrParams)) {
 		fn = fnOrParams;
+		p = {};
 
 	} else {
-		p = fnOrParams || p;
+		p = fnOrParams;
 	}
 
 	if (!fn) {
@@ -60,22 +61,22 @@ export function deprecate<T extends Function>(
 		return;
 	}
 
-	function wrapper(): unknown {
+	function wrapper(this: unknown): unknown {
 		//#unless isProd
 
 		const
-			name = p.name || fn?.name,
-			type = p.type || 'function',
+			name = p.name ?? fn?.name,
+			type = p.type ?? 'function',
 			msg = <string[]>[];
 
-		if (p.movedTo || p.renamedTo) {
-			if (!p.movedTo) {
+		if (p.movedTo != null || p.renamedTo != null) {
+			if (p.movedTo == null) {
 				msg.push(
 					`The ${type} "${name}" was renamed to "${p.renamedTo}".`,
 					'Please use the renamed version instead of the current, because it will be removed from the next major release.'
 				);
 
-			} else if (!p.renamedTo) {
+			} else if (p.renamedTo == null) {
 				msg.push(
 					`The ${type} "${name}" was moved to a new location "${p.movedTo}".`,
 					'Please use the moved version instead of the current, because it will be removed from the next major release.'
@@ -91,11 +92,11 @@ export function deprecate<T extends Function>(
 		} else {
 			msg.push(`The ${type} "${name}" was deprecated and will be removed from the next major release.`);
 
-			if (p.alternative) {
+			if (p.alternative != null) {
 				if (Object.isString(p.alternative)) {
 					msg.push(`Please use "${p.alternative}" instead.`);
 
-				} else if (p.alternative.source) {
+				} else if (p.alternative.source != null) {
 					msg.push(`Please use "${p.alternative.name}" from "${p.alternative.source}" instead.`);
 
 				} else {
@@ -104,14 +105,14 @@ export function deprecate<T extends Function>(
 			}
 		}
 
-		if (p.notice) {
+		if (p.notice != null) {
 			msg.join(p.notice);
 		}
 
 		const
 			str = msg.join(' ');
 
-		if (!consoleCache[str]) {
+		if (consoleCache[str] == null) {
 			console.warn(str);
 			consoleCache[str] = true;
 		}
@@ -165,20 +166,20 @@ export function deprecated(
 	opts?: DeprecatedOptions | object,
 	key?: string | symbol,
 	descriptor?: PropertyDescriptor
-): Function | void {
+): Function | undefined {
 	const f = (name, descriptor, opts?) => {
 		const
 			{get, set, value: method} = descriptor;
 
-		if (get) {
+		if (get != null) {
 			descriptor.get = deprecate({type: 'accessor', ...opts, name}, get);
 		}
 
-		if (set) {
+		if (set != null) {
 			descriptor.set = deprecate({type: 'accessor', ...opts, name}, set);
 		}
 
-		if (get || set) {
+		if (get != null || set != null) {
 			return;
 		}
 
@@ -190,7 +191,8 @@ export function deprecated(
 	};
 
 	if (arguments.length > 1) {
-		return f(key, descriptor);
+		f(key, descriptor);
+		return;
 	}
 
 	return (target, key, descriptor) => f(key, descriptor, opts);

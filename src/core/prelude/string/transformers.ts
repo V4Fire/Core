@@ -31,7 +31,7 @@ import {
 } from 'core/prelude/string/helpers';
 
 /** @see String.capitalize */
-extend(String.prototype, 'capitalize', function (
+extend(String.prototype, 'capitalize', function capitalize(
 	this: string,
 	{lower, all, cache}: StringCapitalizeOptions = {}
 ): string {
@@ -70,7 +70,7 @@ extend(String.prototype, 'capitalize', function (
 extend(String, 'capitalize', createStaticTransformFunction('capitalize'));
 
 /** @see String.camelize */
-extend(String.prototype, 'camelize', function (
+extend(String.prototype, 'camelize', function camelize(
 	this: string,
 	upperOrOpts: boolean | StringCamelizeOptions
 ): string {
@@ -113,7 +113,7 @@ extend(String.prototype, 'camelize', function (
 extend(String, 'camelize', createStaticTransformFunction('camelize'));
 
 /** @see String.dasherize */
-extend(String.prototype, 'dasherize', function (
+extend(String.prototype, 'dasherize', function dasherize(
 	this: string,
 	stableOrOpts?: boolean | StringDasherizeOptions
 ): string {
@@ -155,7 +155,7 @@ extend(String.prototype, 'dasherize', function (
 extend(String, 'dasherize', createStaticTransformFunction('dasherize'));
 
 /** @see String.underscore */
-extend(String.prototype, 'underscore', function (
+extend(String.prototype, 'underscore', function underscore(
 	this: string,
 	stableOrOpts?: boolean | StringUnderscoreOptions
 ): string {

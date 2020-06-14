@@ -1446,6 +1446,12 @@ interface ObjectConstructor {
 	Result<T = unknown>(value: T): Either<T>;
 
 	/**
+	 * Returns true if the specified value can be interpreted as true
+	 * @param value
+	 */
+	isTruly(value: unknown): boolean;
+
+	/**
 	 * Returns true if the specified value is a plain object
 	 * @param obj
 	 */

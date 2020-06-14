@@ -14,6 +14,7 @@ extend(Object, 'forEach', (
 	optsOrCb: ObjectForEachOptions | AnyFunction,
 	cbOrOpts?: AnyFunction | ObjectForEachOptions
 ) => {
+	// eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
 	if (!obj) {
 		return;
 	}
@@ -52,19 +53,19 @@ extend(Object, 'forEach', (
 		return;
 	}
 
-	if (Object.isIterable(obj) && opts?.notOwn !== undefined && opts?.withDescriptor !== undefined) {
+	if (Object.isIterable(obj) && opts.notOwn != null && opts.withDescriptor != null) {
 		for (const el of obj) {
 			cb(el, null, obj);
 		}
 	}
 
-	if (opts?.notOwn) {
+	if (Object.isTruly(opts.notOwn)) {
 		for (const key in obj) {
-			if (opts?.notOwn === -1 && Object.hasOwnProperty(obj, key)) {
+			if (opts.notOwn === -1 && Object.hasOwnProperty(obj, key)) {
 				continue;
 			}
 
-			cb(opts?.withDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : obj[key], key, obj);
+			cb(opts.withDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : obj[key], key, obj);
 		}
 
 		return;
@@ -72,6 +73,6 @@ extend(Object, 'forEach', (
 
 	for (let keys = Object.keys(obj!), i = 0; i < keys.length; i++) {
 		const key = keys[i];
-		cb(opts?.withDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : obj![key], key, obj);
+		cb(opts.withDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : obj![key], key, obj);
 	}
 });

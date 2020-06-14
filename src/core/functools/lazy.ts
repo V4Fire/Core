@@ -22,7 +22,7 @@ export function debounce(delay?: number): MethodDecorator {
 			throw new TypeError(`descriptor.value is not a function: ${method}`);
 		}
 
-		descriptor.value = function (): unknown {
+		descriptor.value = function value(this: object): unknown {
 			Object.defineProperty(this, key, {
 				configurable: true,
 				value: method.debounce(delay)
@@ -49,7 +49,7 @@ export function throttle(delay?: number): MethodDecorator {
 			throw new TypeError(`descriptor.value is not a function: ${method}`);
 		}
 
-		descriptor.value = function (): unknown {
+		descriptor.value = function value(this: object): unknown {
 			Object.defineProperty(this, key, {
 				configurable: true,
 				value: method.throttle(delay)

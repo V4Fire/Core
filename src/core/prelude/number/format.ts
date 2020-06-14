@@ -27,22 +27,22 @@ import {
 import { repeatString } from 'core/prelude/number/helpers';
 
 /** @see Number.pad */
-extend(Number.prototype, 'pad', function (
+extend(Number.prototype, 'pad', function pad(
 	this: number,
 	lengthOrOpts: number | NumberPadOptions = 0,
 	opts?: NumberPadOptions
 ): string {
 	opts = {...Object.isPlainObject(lengthOrOpts) ? lengthOrOpts : opts};
 
-	if (!opts.length) {
+	if (opts.length === 0) {
 		opts.length = Object.isNumber(lengthOrOpts) ? lengthOrOpts : 0;
 	}
 
 	const
 		val = Number(this);
 
-	let str = Math.abs(val).toString(opts.base || 10);
-	str = repeatString('0', opts.length - str.replace(decPartRgxp, '').length) + str;
+	let str = Math.abs(val).toString(opts.base ?? 10);
+	str = repeatString('0', opts.length! - str.replace(decPartRgxp, '').length) + str;
 
 	if (opts.sign || val < 0) {
 		str = (val < 0 ? '-' : '+') + str;
@@ -62,7 +62,7 @@ extend(Number, 'pad', (value: number | NumberPadOptions, lengthOrOpts: number | 
 });
 
 /** @see Number.format */
-extend(Number.prototype, 'format', function (
+extend(Number.prototype, 'format', function format(
 	this: number,
 	patternOrOpts?: number | string | Intl.NumberFormatOptions,
 	locale: CanArray<string> = defaultLocale.value
@@ -93,10 +93,10 @@ extend(Number.prototype, 'format', function (
 			const
 				el = chunks[i].trim();
 
-			let [key, val] = el.split(':');
+			let [key, val = null] = el.split(':');
 			key = key.trim();
 
-			if (val) {
+			if (val != null) {
 				val = val.trim();
 			}
 
@@ -106,13 +106,13 @@ extend(Number.prototype, 'format', function (
 			let
 				brk = false;
 
-			if (alias) {
+			if (alias != null) {
 				key = alias;
 
 				switch (alias) {
 					case 'currency':
 						opts.style = 'currency';
-						opts.currency = val || defaultFormats.currency;
+						opts.currency = val ?? defaultFormats.currency;
 						brk = true;
 						break;
 
@@ -124,19 +124,25 @@ extend(Number.prototype, 'format', function (
 					case 'decimal':
 						opts.style = 'decimal';
 						brk = true;
+						break;
+
+					default:
+						throw new TypeError('Unknown alias');
 				}
 			}
 
 			if (!brk) {
-				if (!val) {
+				if (val == null) {
 					val = defaultFormats[key];
 				}
 
-				opts[key] = val in boolAliases ? boolAliases[val] : val;
+				opts[key] = val! in boolAliases ? boolAliases[val!] : val;
 			}
 		}
 
-		const formatter = formatCache[cacheKey] = new Intl.NumberFormat(locale, opts);
+		const formatter = new Intl.NumberFormat(locale, opts);
+		formatCache[cacheKey] = formatter;
+
 		return formatter.format(this);
 	}
 
@@ -145,13 +151,13 @@ extend(Number.prototype, 'format', function (
 
 	const
 		val = Number(this),
-		str = decimalLength !== undefined ? val.toFixed(decimalLength) : val.toString(),
-		[int, dec] = str.split('.');
+		str = patternOrOpts != null ? val.toFixed(decimalLength) : val.toString(),
+		[int, dec = null] = str.split('.');
 
 	let
 		res = '';
 
-	for (let j = 0, i = int.length; i--;) {
+	for (let j = 0, i = int.length; i-- > 0;) {
 		if (j === 3) {
 			j = 0;
 			res = globalOpts.thousands + res;
@@ -161,8 +167,8 @@ extend(Number.prototype, 'format', function (
 		res = int[i] + res;
 	}
 
-	if (dec?.length) {
-		return res + globalOpts.decimal + dec;
+	if (Object.isTruly(dec?.length)) {
+		return res + globalOpts.decimal + dec!;
 	}
 
 	return res;

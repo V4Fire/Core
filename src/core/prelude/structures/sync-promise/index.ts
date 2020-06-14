@@ -88,11 +88,11 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 
 	static all<T extends Iterable<Value>>(
 		values: T
-	): SyncPromise<(T extends Iterable<Value<infer V>> ? V : unknown)[]>;
+	): SyncPromise<Array<T extends Iterable<Value<infer V>> ? V : unknown>>;
 
 	static all<T extends Iterable<Value>>(
 		values: T
-	): SyncPromise<(T extends Iterable<Value<infer V>> ? V : unknown)[]> {
+	): SyncPromise<Array<T extends Iterable<Value<infer V>> ? V : unknown>> {
 		return new SyncPromise((resolve, reject) => {
 			const
 				promises = <SyncPromise[]>[],
@@ -102,7 +102,7 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 				promises.push(SyncPromise.resolve(el));
 			});
 
-			if (!promises.length) {
+			if (promises.length === 0) {
 				resolve(resolved);
 				return;
 			}
@@ -141,7 +141,7 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 				promises.push(SyncPromise.resolve(el));
 			});
 
-			if (!promises.length) {
+			if (promises.length === 0) {
 				resolve();
 				return;
 			}
@@ -257,8 +257,8 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 	): SyncPromise {
 		return new SyncPromise((resolve, reject) => {
 			const
-				resolveWrapper = (v) => this.call(onFulfill || resolve, [v], reject, resolve),
-				rejectWrapper = (v) => this.call(onReject || reject, [v], reject, resolve);
+				resolveWrapper = (v) => this.call(onFulfill ?? resolve, [v], reject, resolve),
+				rejectWrapper = (v) => this.call(onReject ?? reject, [v], reject, resolve);
 
 			if (this.isPending) {
 				this.resolveHandlers.push(resolveWrapper);
@@ -279,7 +279,7 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 	catch(onReject?: RejectHandler): SyncPromise {
 		return new SyncPromise((resolve, reject) => {
 			const
-				rejectWrapper = (v) => this.call(onReject || reject, [v], reject, resolve);
+				rejectWrapper = (v) => this.call(onReject ?? reject, [v], reject, resolve);
 
 			if (this.isPending) {
 				this.rejectHandlers.push(rejectWrapper);
@@ -332,8 +332,8 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 	): void {
 		const
 			loopback = () => undefined,
-			reject = onError || loopback,
-			resolve = onValue || loopback;
+			reject = onError ?? loopback,
+			resolve = onValue ?? loopback;
 
 		try {
 			const

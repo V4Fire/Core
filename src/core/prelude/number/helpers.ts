@@ -11,13 +11,13 @@
  * @param method
  */
 export function createRoundingFunction(method: AnyFunction): AnyFunction {
-	return function (this: number, precision?: number): number {
+	return function wrapper(this: number, precision?: number): number {
 		const
 			val = Number(this);
 
-		if (precision) {
+		if (precision != null) {
 			let
-				multiplier = Math.pow(10, Math.abs(precision));
+				multiplier = 10 ** Math.abs(precision);
 
 			if (precision < 0) {
 				multiplier = 1 / multiplier;
@@ -35,8 +35,7 @@ export function createRoundingFunction(method: AnyFunction): AnyFunction {
  * @param method
  */
 export function createStaticRoundingFunction(method: string): AnyFunction {
-	// tslint:disable-next-line:only-arrow-functions
-	return function (value: number, precision: number): CanUndef<number> | AnyFunction {
+	return function wrapper(value: number, precision: number): CanUndef<number> | AnyFunction {
 		if (arguments.length < 2) {
 			precision = value;
 			return (value) => Number[method](value, precision);
@@ -53,7 +52,7 @@ export function createStaticRoundingFunction(method: string): AnyFunction {
 export function createStringTypeGetter(type: string): PropertyDescriptor {
 	return {
 		get(): string {
-			return Number(this) + type;
+			return Number(this).toString() + type;
 		}
 	};
 }
@@ -63,12 +62,12 @@ export function createStringTypeGetter(type: string): PropertyDescriptor {
  * @param offset
  */
 export function createMsFunction(offset: number): AnyFunction {
-	const fn = function (this: number): number {
-		return Number(this) * offset;
-	};
-
 	fn.valueOf = fn;
 	return fn;
+
+	function fn(this: number): number {
+		return Number(this) * offset;
+	}
 }
 
 /**
@@ -92,15 +91,15 @@ export function repeatString(str: string, num: number): string {
 		res = '';
 
 	while (num > 0) {
-		// tslint:disable-next-line:no-bitwise
-		if (num & 1) {
+		// eslint-disable-next-line no-bitwise
+		if ((num & 1) > 0) {
 			res += str;
 		}
 
-		// tslint:disable-next-line:no-bitwise
+		// eslint-disable-next-line no-bitwise
 		num >>= 1;
 
-		if (num) {
+		if (num > 0) {
 			str += str;
 		}
 	}

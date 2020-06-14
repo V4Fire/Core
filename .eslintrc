@@ -243,7 +243,6 @@
     "padding-line-between-statements": [
       "error",
       {"blankLine": "always", "prev": "block-like", "next": "*"},
-      {"blankLine": "always", "prev": "case", "next": "*"},
       {"blankLine": "always", "prev": "class", "next": "*"},
       {"blankLine": "always", "prev": "function", "next": "*"},
       {"blankLine": "always", "prev": "iife", "next": "*"},
@@ -273,8 +272,12 @@
     "no-whitespace-before-property": "error",
 
     "rest-spread-spacing": "error",
-    "generator-star-spacing": ["error", "after"],
     "yield-star-spacing": ["error", "after"],
+    "generator-star-spacing": ["error", {
+      "before": false,
+      "after": true,
+      "method": {"before": false, "after": false}
+    }],
 
     "array-bracket-newline": "error",
     "array-bracket-spacing": "error",
@@ -480,7 +483,9 @@
       "code": 120,
       "tabWidth": 2,
       "ignoreUrls": true,
-      "ignoreRegExpLiterals": true
+      "ignoreRegExpLiterals": true,
+      "ignoreStrings": true,
+      "ignoreTemplateLiterals": true
     }],
 
     // [Import]
@@ -554,7 +559,7 @@
     "@typescript-eslint/no-invalid-void-type": "error",
     "@typescript-eslint/no-type-alias": "off",
 
-    "@typescript-eslint/no-unnecessary-type-arguments": "error",
+    "@typescript-eslint/no-unnecessary-type-arguments": "off",
     "@typescript-eslint/no-unnecessary-type-assertion": "error",
 
     "@typescript-eslint/no-non-null-assertion": "off",
@@ -742,14 +747,7 @@
     "@typescript-eslint/init-declarations": "off",
 
     "keyword-spacing": "off",
-    "@typescript-eslint/keyword-spacing": ["error", {
-      "overrides": {
-        "this": {
-          "before": false,
-          "after": false
-        }
-      }
-    }],
+    "@typescript-eslint/keyword-spacing": "off",
 
     // note you must disable the base rule as it can report incorrect errors
     "lines-between-class-members": "off",

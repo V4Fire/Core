@@ -67,8 +67,7 @@ export default class SimpleCache<V = unknown, K = string> implements Cache<V, K>
 				const
 					[key, el] = i.value;
 
-				// eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-				if (filter(el, key)) {
+				if (Object.isTruly(filter(el, key))) {
 					removed.add(key);
 					this.storage.delete(key);
 				}

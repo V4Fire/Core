@@ -10,6 +10,7 @@ import extend from 'core/prelude/extend';
 
 /** @see ObjectConstructor.size */
 extend(Object, 'size', (obj: unknown) => {
+	// eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
 	if (!obj) {
 		return 0;
 	}

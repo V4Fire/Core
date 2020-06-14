@@ -11,6 +11,7 @@ import { convertIfDate } from 'core/json';
 
 /** @see ObjectConstructor.fastClone */
 extend(Object, 'fastClone', (obj, opts?: FastCloneOptions) => {
+	// eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
 	if (!obj || typeof obj === 'function') {
 		if (opts !== undefined) {
 			return (obj) => Object.fastClone(obj, opts);
@@ -44,7 +45,7 @@ extend(Object, 'fastClone', (obj, opts?: FastCloneOptions) => {
 		}
 
 		if (Array.isArray(obj)) {
-			if (!obj.length) {
+			if (obj.length === 0) {
 				return [];
 			}
 
@@ -59,7 +60,7 @@ extend(Object, 'fastClone', (obj, opts?: FastCloneOptions) => {
 					const
 						el = obj[i];
 
-					if (el && typeof el === 'object') {
+					if (typeof el === 'object') {
 						if (el instanceof Date) {
 							slice[i] = new Date(el);
 
@@ -83,12 +84,12 @@ extend(Object, 'fastClone', (obj, opts?: FastCloneOptions) => {
 		const
 			constr = obj.constructor;
 
-		if ((!constr || constr === Object) && !Object.keys(obj).length) {
+		if ((constr == null || constr === Object) && Object.keys(obj).length === 0) {
 			return {};
 		}
 
 		const
-			p = opts || {},
+			p = opts ?? {},
 			funcMap = new Map();
 
 		const
@@ -149,7 +150,7 @@ export function createSerializer(
 		}
 
 		if (typeof value === 'function') {
-			const key = funcMap.get(value) || `${funcRef}${Math.random()}]]`;
+			const key = funcMap.get(value) ?? `${funcRef}${Math.random()}]]`;
 			funcMap.set(value, key);
 			funcMap.set(key, value);
 			return key;
@@ -180,7 +181,7 @@ export function createParser(
 			return base;
 		}
 
-		if (funcMap && typeof value === 'string' && value.slice(0, funcRef.length) === funcRef) {
+		if (typeof value === 'string' && value.startsWith(funcRef)) {
 			const
 				fn = funcMap.get(value);
 
@@ -193,7 +194,7 @@ export function createParser(
 			value = convertIfDate(key, value);
 		}
 
-		if (reviewer) {
+		if (Object.isFunction(reviewer)) {
 			return reviewer(key, value);
 		}
 

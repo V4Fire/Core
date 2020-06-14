@@ -20,7 +20,7 @@ export function once(target: Object, key: string | symbol, descriptor: PropertyD
 		throw new TypeError(`descriptor.value is not a function: ${method}`);
 	}
 
-	descriptor.value = function (): unknown {
+	descriptor.value = function value(this: object): unknown {
 		Object.defineProperty(this, key, {
 			configurable: true,
 			value: method.once()

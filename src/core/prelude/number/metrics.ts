@@ -9,7 +9,7 @@
 import extend from 'core/prelude/extend';
 
 /** @see Number.isInteger */
-extend(Number.prototype, 'isInteger', function (): boolean {
+extend(Number.prototype, 'isInteger', function isInteger(this: number): boolean {
 	return this % 1 === 0;
 });
 
@@ -17,7 +17,7 @@ extend(Number.prototype, 'isInteger', function (): boolean {
 extend(Number, 'isInteger', (value) => Object.isNumber(value) && value.isInteger());
 
 /** @see Number.isFloat */
-extend(Number.prototype, 'isFloat', function (): boolean {
+extend(Number.prototype, 'isFloat', function isFloat(this: number): boolean {
 	return this % 1 !== 0 && Number.isFinite(this);
 });
 
@@ -25,7 +25,7 @@ extend(Number.prototype, 'isFloat', function (): boolean {
 extend(Number, 'isFloat', (value) => Object.isNumber(value) && value.isFloat());
 
 /** @see Number.isEven */
-extend(Number.prototype, 'isEven', function (): boolean {
+extend(Number.prototype, 'isEven', function isEven(this: number): boolean {
 	return this % 2 === 0;
 });
 
@@ -33,7 +33,7 @@ extend(Number.prototype, 'isEven', function (): boolean {
 extend(Number, 'isEven', (value) => Object.isNumber(value) && value.isEven());
 
 /** @see Number.isOdd */
-extend(Number.prototype, 'isOdd', function (): boolean {
+extend(Number.prototype, 'isOdd', function isOdd(this: number): boolean {
 	return this % 2 !== 0 && Number.isFinite(this);
 });
 
@@ -41,7 +41,7 @@ extend(Number.prototype, 'isOdd', function (): boolean {
 extend(Number, 'isOdd', (value) => Object.isNumber(value) && value.isOdd());
 
 /** @see Number.isNatural */
-extend(Number.prototype, 'isNatural', function (): boolean {
+extend(Number.prototype, 'isNatural', function isNatural(this: number): boolean {
 	return this > 0 && this % 1 === 0;
 });
 
@@ -49,7 +49,7 @@ extend(Number.prototype, 'isNatural', function (): boolean {
 extend(Number, 'isNatural', (value) => Object.isNumber(value) && value.isNatural());
 
 /** @see Number.isPositive */
-extend(Number.prototype, 'isPositive', function (): boolean {
+extend(Number.prototype, 'isPositive', function isPositive(this: number): boolean {
 	return this > 0;
 });
 
@@ -57,7 +57,7 @@ extend(Number.prototype, 'isPositive', function (): boolean {
 extend(Number, 'isPositive', (value) => Object.isNumber(value) && value.isPositive());
 
 /** @see Number.isNegative */
-extend(Number.prototype, 'isNegative', function (): boolean {
+extend(Number.prototype, 'isNegative', function isNegative(this: number): boolean {
 	return this < 0;
 });
 
@@ -65,7 +65,7 @@ extend(Number.prototype, 'isNegative', function (): boolean {
 extend(Number, 'isNegative', (value) => Object.isNumber(value) && value.isNegative());
 
 /** @see Number.isNonNegative */
-extend(Number.prototype, 'isNonNegative', function (): boolean {
+extend(Number.prototype, 'isNonNegative', function isNonNegative(this: number): boolean {
 	return this >= 0;
 });
 
@@ -73,7 +73,7 @@ extend(Number.prototype, 'isNonNegative', function (): boolean {
 extend(Number, 'isNonNegative', (value) => Object.isNumber(value) && value.isNonNegative());
 
 /** @see Number.isBetweenZeroAndOne */
-extend(Number.prototype, 'isBetweenZeroAndOne', function (): boolean {
+extend(Number.prototype, 'isBetweenZeroAndOne', function isBetweenZeroAndOne(this: number): boolean {
 	return this >= 0 && this <= 1;
 });
 
@@ -81,7 +81,7 @@ extend(Number.prototype, 'isBetweenZeroAndOne', function (): boolean {
 extend(Number, 'isBetweenZeroAndOne', (value) => Object.isNumber(value) && value.isBetweenZeroAndOne());
 
 /** @see Number.isPositiveBetweenZeroAndOne */
-extend(Number.prototype, 'isPositiveBetweenZeroAndOne', function (): boolean {
+extend(Number.prototype, 'isPositiveBetweenZeroAndOne', function isPositiveBetweenZeroAndOne(this: number): boolean {
 	return this > 0 && this <= 1;
 });
 

@@ -7,6 +7,7 @@
  */
 
 import Queue, { Tasks, CreateTasks, QueueOptions } from 'core/queue/interface';
+
 export * from 'core/queue/interface';
 
 export interface QueueWorker<T = unknown, V = unknown> {
@@ -76,14 +77,14 @@ export default abstract class WorkerQueue<T, V = unknown> extends Queue<T> {
 	 * @param worker
 	 * @param [opts]
 	 */
-	protected constructor(worker: QueueWorker<T, V>, opts?: WorkerQueueOptions) {
+	protected constructor(worker: QueueWorker<T, V>, opts: WorkerQueueOptions = {}) {
 		super();
 
 		this.worker = worker;
-		this.concurrency = opts?.concurrency || 1;
-		this.refreshInterval = opts?.refreshInterval || 0;
+		this.concurrency = opts.concurrency ?? 1;
+		this.refreshInterval = opts.refreshInterval ?? 0;
 
-		if (opts?.tasksFactory) {
+		if (opts.tasksFactory) {
 			this.createTasks = opts.tasksFactory;
 		}
 
@@ -130,11 +131,10 @@ export default abstract class WorkerQueue<T, V = unknown> extends Queue<T> {
 			const
 				cb = () => resolve(this.perform());
 
-			if (i) {
+			if (i > 0) {
 				setTimeout(cb, i);
 
 			} else {
-				// tslint:disable-next-line:no-string-literal
 				globalThis['setImmediate'](cb);
 			}
 		});

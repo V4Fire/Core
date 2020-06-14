@@ -31,11 +31,11 @@ export function toUnderscore(
 	end: CanUndef<string>,
 	middle: CanUndef<string>
 ): string {
-	if (middle) {
+	if (middle != null) {
 		return '_';
 	}
 
-	return new Array((start || end || '').length + 1).join('_');
+	return new Array((start ?? end ?? '').length + 1).join('_');
 }
 
 /**
@@ -52,11 +52,11 @@ export function toCamelize(
 	end: CanUndef<string>,
 	middle: CanUndef<string>
 ): string {
-	if (middle) {
+	if (middle != null) {
 		return middle.toUpperCase();
 	}
 
-	return start || end || '';
+	return start ?? end ?? '';
 }
 
 /**
@@ -73,11 +73,11 @@ export function toDasherize(
 	end: CanUndef<string>,
 	middle: CanUndef<string>
 ): string {
-	if (middle) {
+	if (middle != null) {
 		return '-';
 	}
 
-	return new Array((start || end || '').length + 1).join('-');
+	return new Array((start ?? end ?? '').length + 1).join('-');
 }
 
 /**
@@ -100,7 +100,7 @@ export function convertToSeparatedStr(str: string, separator: string, stable?: b
 			continue;
 		}
 
-		if (res[res.length - 1] === separator) {
+		if (res.endsWith(separator)) {
 			res += el.toLowerCase();
 			continue;
 		}
@@ -109,7 +109,12 @@ export function convertToSeparatedStr(str: string, separator: string, stable?: b
 			nextChar = str[i + 1];
 
 		if (isDigital.test(el) || isUpper(el)) {
-			if (i && (stable || nextChar && !isDigital.test(nextChar) && !isUpper(nextChar))) {
+			const needSeparator = i > 0 && (
+				stable ||
+				Object.isTruly(nextChar) && !isDigital.test(nextChar) && !isUpper(nextChar)
+			);
+
+			if (needSeparator) {
 				res += separator;
 			}
 
@@ -118,7 +123,10 @@ export function convertToSeparatedStr(str: string, separator: string, stable?: b
 		} else {
 			res += el;
 
-			if (nextChar && (isDigital.test(nextChar) || isUpper(nextChar))) {
+			const
+				needSeparator = Object.isTruly(nextChar) && (isDigital.test(nextChar) || isUpper(nextChar));
+
+			if (needSeparator) {
 				res += separator;
 			}
 		}

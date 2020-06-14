@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/unbound-method */
+
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -5,8 +7,6 @@
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
-
-// tslint:disable:binary-expression-operand-order
 
 import extend from 'core/prelude/extend';
 import { createMsFunction, createStaticMsFunction, createStringTypeGetter } from 'core/prelude/number/helpers';

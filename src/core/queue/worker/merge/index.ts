@@ -13,6 +13,7 @@
 
 import WorkerQueue, { Tasks } from 'core/queue/worker/interface';
 import { QueueWorker, QueueOptions, Task, HashFn } from 'core/queue/worker/merge/interface';
+
 export * from 'core/queue/worker/merge/interface';
 
 /**
@@ -27,8 +28,8 @@ export default class MergeWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> 
 
 	/** @override */
 	get head(): CanUndef<T> {
-		if (!this.length) {
-			return;
+		if (this.length === 0) {
+			return undefined;
 		}
 
 		const obj = this.tasksMap[this.tasks[0]];
@@ -52,7 +53,7 @@ export default class MergeWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> 
 	 */
 	constructor(worker: QueueWorker<T, V>, opts: QueueOptions<T>) {
 		super(worker, opts);
-		this.hashFn = opts?.hashFn || Object.fastHash;
+		this.hashFn = opts.hashFn ?? Object.fastHash.bind(Object);
 	}
 
 	/** @override */
@@ -71,7 +72,8 @@ export default class MergeWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> 
 				resolve = r;
 			});
 
-			taskObj = this.tasksMap[hash] = {task, promise, resolve};
+			taskObj = {task, promise, resolve};
+			this.tasksMap[hash] = taskObj;
 			this.tasks.push(hash);
 		}
 
@@ -81,7 +83,7 @@ export default class MergeWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> 
 
 	/** @override */
 	pop(): CanUndef<T> {
-		if (!this.length) {
+		if (this.length === 0) {
 			return;
 		}
 
@@ -102,7 +104,7 @@ export default class MergeWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> 
 
 	/** @override */
 	protected perform(): void {
-		if (!this.length) {
+		if (this.length === 0) {
 			this.activeWorkers--;
 			return;
 		}

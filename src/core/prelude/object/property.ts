@@ -23,7 +23,7 @@ extend(Object, 'get', (
 	}
 
 	const
-		p = {separator: '.', ...(Object.isPlainObject(path) ? path : opts)};
+		p = {separator: '.', ...Object.isPlainObject(path) ? path : opts};
 
 	const get = (path) => {
 		const
@@ -40,7 +40,6 @@ extend(Object, 'get', (
 			const
 				key = chunks[i];
 
-			// tslint:disable:prefer-conditional-expression
 			if (Object.isMap(res) || Object.isWeakMap(res)) {
 				res = res.get(key);
 
@@ -74,7 +73,7 @@ extend(Object, 'has', (
 	}
 
 	const
-		p = {separator: '.', ...(Object.isPlainObject(path) ? path : opts)};
+		p = {separator: '.', ...Object.isPlainObject(path) ? path : opts};
 
 	const has = (path) => {
 		const
@@ -92,7 +91,6 @@ extend(Object, 'has', (
 			const
 				key = chunks[i];
 
-			// tslint:disable:prefer-conditional-expression
 			if (Object.isMap(res) || Object.isWeakMap(res)) {
 				res = res.get(key);
 
@@ -123,17 +121,17 @@ extend(Object, 'has', (
 });
 
 const
-	{hasOwnProperty} = Object.prototype;
+	{hasOwnProperty: nativeHasOwnProperty} = Object.prototype;
 
 /** @see ObjectConstructor.hasOwnProperty */
 // tslint:disable-next-line:only-arrow-functions
-extend(Object, 'hasOwnProperty', function (obj: any, key?: string): boolean | AnyFunction {
+extend(Object, 'hasOwnProperty', function hasOwnProperty(obj: any, key?: string): boolean | AnyFunction {
 	if (arguments.length > 1) {
 		if (obj == null) {
 			return false;
 		}
 
-		return hasOwnProperty.call(obj, key);
+		return nativeHasOwnProperty.call(obj, key);
 	}
 
 	if (Object.isString(obj)) {
@@ -146,7 +144,7 @@ extend(Object, 'hasOwnProperty', function (obj: any, key?: string): boolean | An
 
 /** @see ObjectConstructor.set */
 // tslint:disable-next-line:only-arrow-functions
-extend(Object, 'set', function (
+extend(Object, 'set', function set(
 	obj: any,
 	path: string | any[] | ObjectGetOptions,
 	value: unknown,
@@ -157,18 +155,32 @@ extend(Object, 'set', function (
 			curriedPath = obj,
 			curriedOpts = <ObjectGetOptions>path;
 
-		// tslint:disable-next-line:only-arrow-functions
-		return function (obj: any, newValue: unknown): unknown {
+		return function wrapper(obj: any, newValue: unknown): unknown {
 			Object.set(obj, curriedPath, arguments.length > 1 ? newValue : value, curriedOpts);
 			return obj;
 		};
 	}
 
 	const
-		p = {separator: '.', concat: false, ...(Object.isPlainObject(path) ? path : opts)};
+		p = {separator: '.', concat: false, ...Object.isPlainObject(path) ? path : opts};
 
-	// tslint:disable-next-line:only-arrow-functions
-	const set = function (path: string | any[], newValue?: unknown): unknown {
+	if (Object.isArray(path) || Object.isString(path)) {
+		if (arguments.length < 2) {
+			return (value) => {
+				set(path, value);
+				return obj;
+			};
+		}
+
+		return set(path, value);
+	}
+
+	return (path, ...args) => {
+		set(path, ...args);
+		return obj;
+	};
+
+	function set(path: string | any[], newValue?: unknown): unknown {
 		const
 			finalValue = arguments.length > 1 ? newValue : value,
 			chunks = Object.isString(path) ? path.split(p.separator) : path;
@@ -189,30 +201,29 @@ extend(Object, 'set', function (
 			const
 				nextChunkIsObj = isNaN(Number(chunks[i + 1]));
 
-			// tslint:disable:prefer-conditional-expression
 			if (Object.isMap(ref) || Object.isWeakMap(ref)) {
 				let
 					val = ref.get(key);
 
-				if (!val || typeof val !== 'object') {
-					ref.set(key, (val = nextChunkIsObj ? new Map() : []));
+				if (val == null || typeof val !== 'object') {
+					ref.set(key, val = nextChunkIsObj ? new Map() : []);
 				}
 
 				ref = val;
 
 			} else {
 				let
-					val = <any>ref[key];
+					val = ref[key];
 
-				if (!val || typeof val !== 'object') {
-					ref[key] = (val = nextChunkIsObj ? {} : []);
+				if (val == null || typeof val !== 'object') {
+					val = nextChunkIsObj ? {} : [];
+					ref[key] = val;
 				}
 
 				ref = val;
 			}
 		}
 
-		// tslint:disable:prefer-conditional-expression
 		if (Object.isMap(ref) || Object.isWeakMap(ref)) {
 			if (ref.has(cursor) && p.concat) {
 				ref.set(cursor, Array.concat([], ref[cursor], finalValue));
@@ -222,28 +233,11 @@ extend(Object, 'set', function (
 			}
 
 		} else {
-			ref[cursor] = cursor in ref && p.concat ?
-				Array.concat([], ref[cursor], finalValue) : finalValue;
+			ref[cursor] = cursor in ref && p.concat ? Array.concat([], ref[cursor], finalValue) : finalValue;
 		}
 
 		return finalValue;
-	};
-
-	if (Object.isArray(path) || Object.isString(path)) {
-		if (arguments.length < 2) {
-			return (value) => {
-				set(path, value);
-				return obj;
-			};
-		}
-
-		return set(path, value);
 	}
-
-	return (path, ...args) => {
-		set(path, ...args);
-		return obj;
-	};
 });
 
 function needCurriedOverload(obj: unknown, path: unknown): boolean {
