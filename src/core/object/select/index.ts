@@ -12,6 +12,7 @@
  */
 
 import { SelectParams } from 'core/object/select/interface';
+
 export * from 'core/object/select/interface';
 
 /**
@@ -29,26 +30,52 @@ export default function select<T = unknown>(obj: unknown, params: SelectParams):
 		res;
 
 	if ((Object.isPlainObject(target) || Object.isArray(target)) && from != null) {
-		res = target = Object.get(target, String(from));
+		target = Object.get(target, String(from));
+		res = target;
 	}
 
-	const getMatch = (obj, where) => {
-		if (!obj) {
-			return false;
-		}
+	const
+		NULL = {};
 
-		if (!where || obj === where) {
+	if (where) {
+		for (let conditions = Array.concat([], where), i = 0; i < conditions.length; i++) {
+			const
+				where = conditions[i];
+
+			if (Object.isPlainObject(target)) {
+				const
+					match = getMatch(target, where);
+
+				if (match !== NULL) {
+					res = match;
+					break;
+				}
+			}
+
+			const some = (el) => {
+				if (getMatch(el, where) !== NULL) {
+					res = el;
+					return true;
+				}
+
+				return false;
+			};
+
+			if (Object.isArray(target) && target.some(some)) {
+				break;
+			}
+		}
+	}
+
+	function getMatch(obj: Dictionary | unknown[], where: Nullable<Dictionary>): unknown {
+		if (where == null || obj === where) {
 			return obj;
-		}
-
-		if (!Object.isPlainObject(where) && !Object.isArray(where)) {
-			return false;
 		}
 
 		let
 			res;
 
-		Object.forEach<string, string>(where, (v, k) => {
+		Object.forEach(where, (v, k) => {
 			if (Object.isPlainObject(obj) && !(k in obj)) {
 				return;
 			}
@@ -61,27 +88,6 @@ export default function select<T = unknown>(obj: unknown, params: SelectParams):
 		});
 
 		return res;
-	};
-
-	if (where) {
-		for (let obj = Array.concat([], where), i = 0; i < obj.length; i++) {
-			const
-				where = obj[i];
-
-			if (Object.isPlainObject(target)) {
-				const
-					match = getMatch(target, where);
-
-				if (match) {
-					res = match;
-					break;
-				}
-			}
-
-			if (Object.isArray(target) && target.some((el) => (getMatch(el, where) ? (res = el, true) : false))) {
-				break;
-			}
-		}
 	}
 
 	return res;

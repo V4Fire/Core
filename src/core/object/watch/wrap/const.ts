@@ -7,10 +7,15 @@
  */
 
 import { getProxyValue } from 'core/object/watch/engines/helpers';
+import { MultipleWatchHandler } from 'core/object/watch/interface';
 import { WrapParams } from 'core/object/watch/wrap/interface';
 
 export const deleteMethods = {
-	delete: (target: Map<any, any> | Set<any>, opts: WrapParams, key) => {
+	delete: (
+		target: Map<any, any> | Set<any>,
+		opts: WrapParams,
+		key: unknown
+	): Nullable<Parameters<MultipleWatchHandler>> => {
 		if (target.has(key)) {
 			return [[undefined, Array.concat([], opts.path ?? [], key), 'get' in target ? target.get(key) : key]];
 		}
@@ -20,9 +25,9 @@ export const deleteMethods = {
 };
 
 export const clearMethods = {
-	clear: (target: Set<any>, opts: WrapParams) => target.size !== 0 ? [[
-		undefined, undefined, Array.concat([], opts.path)
-	]] : null
+	clear: (target: Set<any>, opts: WrapParams) => target.size !== 0 ?
+		[[undefined, undefined, Array.concat([], opts.path)]] :
+		null
 };
 
 export const weakMapMethods = {

@@ -14,7 +14,7 @@
 import watchEngine from 'core/object/watch/engines';
 
 import { muteLabel, toOriginalObject, toRootObject, watchHandlers } from 'core/object/watch/const';
-import { getProxyType, unwrap } from 'core/object/watch/engines/helpers';
+import { unwrap } from 'core/object/watch/engines/helpers';
 
 import {
 
@@ -34,13 +34,15 @@ export * from 'core/object/watch/const';
 export { unwrap, getProxyType } from 'core/object/watch/engines/helpers';
 export * from 'core/object/watch/interface';
 
+export default watch;
+
 /**
  * Watches for changes of the specified object
  *
  * @param obj
  * @param [handler] - callback that is invoked on every mutation hook
  */
-export default function watch<T extends object>(obj: T, handler?: MultipleWatchHandler): Watcher<T>;
+function watch<T extends object>(obj: T, handler?: MultipleWatchHandler): Watcher<T>;
 
 /**
  * Watches for changes of the specified object
@@ -49,7 +51,7 @@ export default function watch<T extends object>(obj: T, handler?: MultipleWatchH
  * @param opts - additional options
  * @param [handler] - callback that is invoked on every mutation hook
  */
-export default function watch<T extends object>(
+function watch<T extends object>(
 	obj: T,
 	opts: WatchOptions & {immediate: true},
 	handler?: WatchHandler
@@ -62,7 +64,7 @@ export default function watch<T extends object>(
  * @param opts - additional options
  * @param [handler] - callback that is invoked on every mutation hook
  */
-export default function watch<T extends object>(obj: T, opts: WatchOptions, handler?: MultipleWatchHandler): Watcher<T>;
+function watch<T extends object>(obj: T, opts: WatchOptions, handler?: MultipleWatchHandler): Watcher<T>;
 
 /**
  * Watches for changes of the specified object
@@ -71,9 +73,8 @@ export default function watch<T extends object>(obj: T, opts: WatchOptions, hand
  * @param path - path to a property to watch
  * @param [handler] - callback that is invoked on every mutation hook
  */
-export default function watch<T extends object>(
+function watch<T extends object>(
 	obj: T,
-	// tslint:disable-next-line:unified-signatures
 	path: WatchPath,
 	handler?: MultipleWatchHandler
 ): Watcher<T>;
@@ -86,7 +87,7 @@ export default function watch<T extends object>(
  * @param opts - additional options
  * @param [handler] - callback that is invoked on every mutation hook
  */
-export default function watch<T extends object>(
+function watch<T extends object>(
 	obj: T,
 	path: WatchPath,
 	opts: WatchOptions & ({immediate: true} | {collapse: true}),
@@ -101,14 +102,14 @@ export default function watch<T extends object>(
  * @param opts - additional options
  * @param [handler] - callback that is invoked on every mutation hook
  */
-export default function watch<T extends object>(
+function watch<T extends object>(
 	obj: T,
 	path: WatchPath,
 	opts: WatchOptions,
 	handler?: MultipleWatchHandler
 ): Watcher<T>;
 
-export default function watch<T extends object>(
+function watch<T extends object>(
 	obj: T,
 	pathOptsOrHandler?: WatchPath | WatchHandler | MultipleWatchHandler | WatchOptions,
 	handlerOrOpts?: WatchHandler | MultipleWatchHandler | WatchOptions,
@@ -118,12 +119,13 @@ export default function watch<T extends object>(
 		unwrappedObj = unwrap(obj);
 
 	let
-		handler,
+		wrappedHandler: CanUndef<WatchHandler>,
+		handler: CanUndef<WatchHandler | MultipleWatchHandler>,
 		opts: CanUndef<WatchOptions>;
 
 	let
 		timer,
-		normalizedPath;
+		normalizedPath: CanUndef<unknown[]>;
 
 	// Support for overloads of the function
 	if (Object.isString(pathOptsOrHandler) || Object.isArray(pathOptsOrHandler)) {
@@ -134,7 +136,10 @@ export default function watch<T extends object>(
 
 		} else {
 			opts = handlerOrOpts;
-			handler = optsOrHandler;
+
+			if (Object.isFunction(optsOrHandler)) {
+				handler = optsOrHandler;
+			}
 		}
 
 	} else if (Object.isFunction(pathOptsOrHandler)) {
@@ -142,29 +147,32 @@ export default function watch<T extends object>(
 
 	} else {
 		opts = pathOptsOrHandler;
-		handler = handlerOrOpts;
+
+		if (Object.isFunction(handlerOrOpts)) {
+			handler = handlerOrOpts;
+		}
 	}
 
-	opts = opts || {};
-	opts.engine = opts.engine || watchEngine;
+	opts = opts ?? {};
+	opts.engine = opts.engine ?? watchEngine;
 
 	const
-		rawDeps = Object.size(opts.dependencies) ? opts.dependencies : undefined;
+		rawDeps = Object.size(opts.dependencies) > 0 ? opts.dependencies : undefined;
 
 	let
-		depsMap: Map<unknown[], unknown[][]>,
-		localDeps: unknown[],
-		deps: unknown[][][];
+		depsMap: CanUndef<Map<unknown[], unknown[][]>>,
+		localDeps: CanUndef<unknown[]>,
+		deps: CanUndef<unknown[][][]>;
 
 	// Normalize dependencies
-	if (rawDeps && unwrappedObj) {
+	if (rawDeps != null && unwrappedObj != null) {
 		const
 			convert = (dep) => Object.isArray(dep) ? dep : dep.split('.');
 
 		if (Object.isArray(rawDeps)) {
 			localDeps = [];
 
-			if (normalizedPath) {
+			if (normalizedPath != null) {
 				for (let i = 0; i < rawDeps.length; i++) {
 					localDeps.push(convert(rawDeps[i]));
 				}
@@ -196,17 +204,17 @@ export default function watch<T extends object>(
 				const
 					path = convert(key);
 
-				deps.push([path, localDeps]);
+				deps!.push([path, localDeps]);
 				Object.set(depsMap, path, localDeps);
 			});
 
-			if (depsMap.size) {
+			if (depsMap.size > 0) {
 				const expandDeps = (deps) => {
 					for (let i = 0; i < deps.length; i++) {
 						const
 							dep = Object.get(depsMap, deps[i]);
 
-						if (dep) {
+						if (dep != null) {
 							deps.splice(i, 1, ...expandDeps(dep));
 						}
 					}
@@ -218,7 +226,7 @@ export default function watch<T extends object>(
 					expandDeps(deps[i][1]);
 				}
 
-				if (normalizedPath) {
+				if (normalizedPath != null) {
 					localDeps = Object.get(depsMap, normalizedPath);
 				}
 			}
@@ -226,30 +234,30 @@ export default function watch<T extends object>(
 	}
 
 	const
-		deep = normalizedPath?.length > 1 || opts.deep,
-		withProto = opts.withProto,
-		immediate = opts.immediate,
-		collapse = normalizedPath ? opts.collapse !== false : opts.collapse;
+		deep = normalizedPath != null && normalizedPath.length > 1 || opts.deep,
+		collapse = normalizedPath != null ? opts.collapse !== false : opts.collapse;
 
 	const
 		pref = opts.prefixes,
 		post = opts.postfixes;
 
-	const
-		pathModifier = opts.pathModifier,
-		eventFilter = opts.eventFilter;
+	const {
+		immediate,
+		withProto,
+		tiedWith,
+
+		pathModifier,
+		eventFilter
+	} = opts;
 
 	// If we have a handler and valid object to watch,
 	// we need to wrap this handler to provide all features of watching
-	if (handler && unwrappedObj) {
-		const
-			original = handler;
-
+	if (handler != null && unwrappedObj != null) {
 		let
 			dynamicValStore,
-			argsQueue = <unknown[][]>[];
+			argsQueue = <any[]>[];
 
-		handler = (value, oldValue, info) => {
+		wrappedHandler = (value, oldValue, info) => {
 			const
 				originalPath = info.path;
 
@@ -267,7 +275,7 @@ export default function watch<T extends object>(
 				!withProto && info.fromProto ||
 
 				// The mutation was already fired
-				eventFilter && !eventFilter(value, oldValue, info)
+				eventFilter && !Object.isTruly(eventFilter(value, oldValue, info))
 			) {
 				return;
 			}
@@ -281,10 +289,10 @@ export default function watch<T extends object>(
 
 				// If we have a tied property with the property that have a mutation,
 				// we need to register it
-				if (tiedPath) {
-					cache = cache || new Map();
+				if (tiedPath != null) {
+					cache = cache ?? new Map();
 
-					if (Object.get(cache, tiedPath)) {
+					if (Object.get(cache, tiedPath) === true) {
 						return;
 					}
 
@@ -298,11 +306,11 @@ export default function watch<T extends object>(
 						const
 							dynamicVal = Object.get(unwrappedObj, collapse ? tiedPath[0] : tiedPath);
 
-						if (original.length < 2) {
+						if (handler!.length < 2) {
 							return [dynamicVal, undefined, resolvedInfo];
 						}
 
-						dynamicValStore = dynamicValStore || new Map();
+						dynamicValStore = dynamicValStore ?? new Map();
 
 						const args = [
 							dynamicVal,
@@ -329,12 +337,13 @@ export default function watch<T extends object>(
 				};
 
 				if (immediate) {
-					original(...getArgs());
+					// eslint-disable-next-line prefer-spread
+					handler!.apply(null, getArgs());
 
 				// Deferred events
 				} else {
 					const
-						needEventQueue = !normalizedPath;
+						needEventQueue = normalizedPath == null;
 
 					if (needEventQueue) {
 						argsQueue.push(getArgs());
@@ -343,17 +352,18 @@ export default function watch<T extends object>(
 						argsQueue = getArgs();
 					}
 
-					if (!timer) {
-						// tslint:disable-next-line:no-string-literal
+					if (timer == null) {
+						// Tslint:disable-next-line:no-string-literal
 						timer = globalThis['setImmediate'](() => {
 							timer = undefined;
 
 							try {
 								if (needEventQueue) {
-									original(argsQueue);
+									(<MultipleWatchHandler>handler)(argsQueue);
 
 								} else {
-									original(...argsQueue);
+									// eslint-disable-next-line prefer-spread
+									(<WatchHandler>handler).apply(null, argsQueue);
 								}
 
 							} finally {
@@ -365,7 +375,7 @@ export default function watch<T extends object>(
 			};
 
 			// Takes a tied path and checks if it matches with the actual path
-			const checkTiedPath = (tiedPath, deps) => {
+			const checkTiedPath = (tiedPath: unknown[], deps: CanUndef<unknown[]>) => {
 				const
 					path = info.path.length > tiedPath.length ? info.path.slice(0, tiedPath.length) : info.path;
 
@@ -383,9 +393,12 @@ export default function watch<T extends object>(
 					}
 
 					if (Object.isString(pathVal)) {
+						const
+							normalizedTiedPathVal = String(tiedPathVal);
+
 						if (pref) {
 							for (let i = 0; i < pref.length; i++) {
-								if (pathVal === pref[i] + tiedPathVal) {
+								if (pathVal === pref[i] + normalizedTiedPathVal) {
 									dynamic = true;
 									continue path;
 								}
@@ -394,7 +407,7 @@ export default function watch<T extends object>(
 
 						if (post) {
 							for (let i = 0; i < post.length; i++) {
-								if (pathVal === tiedPathVal + post[i]) {
+								if (pathVal === normalizedTiedPathVal + post[i]) {
 									dynamic = true;
 									continue path;
 								}
@@ -402,7 +415,7 @@ export default function watch<T extends object>(
 						}
 					}
 
-					if (deps) {
+					if (deps != null) {
 						deps: for (let i = 0; i < deps.length; i++) {
 							const
 								depPath = deps[i];
@@ -425,9 +438,12 @@ export default function watch<T extends object>(
 								}
 
 								if (Object.isString(pathVal)) {
+									const
+										normalizedDepPathVal = String(depPathVal);
+
 									if (pref) {
 										for (let i = 0; i < pref.length; i++) {
-											if (pathVal === pref[i] + depPathVal) {
+											if (pathVal === pref[i] + normalizedDepPathVal) {
 												dynamic = true;
 												continue depsPath;
 											}
@@ -436,7 +452,7 @@ export default function watch<T extends object>(
 
 									if (post) {
 										for (let i = 0; i < post.length; i++) {
-											if (pathVal === depPathVal + post[i]) {
+											if (pathVal === normalizedDepPathVal + post[i]) {
 												dynamic = true;
 												continue depsPath;
 											}
@@ -484,7 +500,7 @@ export default function watch<T extends object>(
 								const
 									prefVal = pref[i];
 
-								if (pathVal.slice(0, prefVal.length) === prefVal) {
+								if (pathVal.startsWith(prefVal)) {
 									dynamic = true;
 									tiedPath.push(pathVal.slice(prefVal.length));
 									continue path;
@@ -497,7 +513,7 @@ export default function watch<T extends object>(
 								const
 									postVal = post[i];
 
-								if (pathVal.slice(-postVal.length) === postVal) {
+								if (pathVal.endsWith(postVal)) {
 									dynamic = true;
 									tiedPath.push(pathVal.slice(0, -postVal.length));
 									continue path;
@@ -525,9 +541,10 @@ export default function watch<T extends object>(
 	}
 
 	const
-		tiedWith = opts.tiedWith,
-		res = opts.engine.watch(obj, undefined, handler, obj[watchHandlers] || new Set(), opts),
-		proxy = res.proxy;
+		watcher = opts.engine.watch(obj, undefined, wrappedHandler, obj[watchHandlers] ?? new Set(), opts);
+
+	const
+		{proxy} = watcher;
 
 	if (tiedWith && Object.isSimpleObject(unwrappedObj)) {
 		tiedWith[watchHandlers] = proxy[watchHandlers];
@@ -556,7 +573,7 @@ export default function watch<T extends object>(
 		}
 	}
 
-	return res;
+	return watcher;
 }
 
 /**
@@ -565,7 +582,7 @@ export default function watch<T extends object>(
  */
 export function mute(obj: object): boolean {
 	const
-		root = unwrap(obj[toRootObject] || obj);
+		root = unwrap(obj[toRootObject] ?? obj);
 
 	if (root) {
 		root[muteLabel] = true;
@@ -581,7 +598,7 @@ export function mute(obj: object): boolean {
  */
 export function unmute(obj: object): boolean {
 	const
-		root = unwrap(obj[toRootObject] || obj);
+		root = unwrap(obj[toRootObject] ?? obj);
 
 	if (root) {
 		root[muteLabel] = false;
@@ -637,7 +654,7 @@ export function set(
 		handlers = handlersOrEngine;
 
 	} else {
-		engine = handlersOrEngine || engine;
+		engine = handlersOrEngine ?? engine;
 		handlers = obj[watchHandlers];
 	}
 
@@ -675,7 +692,7 @@ export function unset(
 export function unset(
 	obj: object,
 	path: WatchPath,
-	handlersOrEngine: WatchHandlersSet | WatchEngine = obj[watchHandlers],
+	handlersOrEngine?: WatchHandlersSet | WatchEngine,
 	engine: WatchEngine = watchEngine
 ): void {
 	let
@@ -685,7 +702,7 @@ export function unset(
 		handlers = handlersOrEngine;
 
 	} else {
-		engine = handlersOrEngine || engine;
+		engine = handlersOrEngine ?? engine;
 		handlers = obj[watchHandlers];
 	}
 

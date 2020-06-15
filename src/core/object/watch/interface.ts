@@ -259,12 +259,12 @@ export interface RawWatchHandler<NEW = unknown, OLD = NEW> {
 	(newValue: CanUndef<NEW>, oldValue: CanUndef<OLD>, params: RawWatchHandlerParams): any;
 }
 
-export interface WatchHandler<NEW = unknown, OLD = NEW> extends RawWatchHandler {
+export interface WatchHandler<NEW = unknown, OLD = NEW> {
 	(newValue: CanUndef<NEW>, oldValue: CanUndef<OLD>, params: WatchHandlerParams): any;
 }
 
 export interface MultipleWatchHandler<NEW = unknown, OLD = NEW> {
-	(mutations: [CanUndef<NEW>, CanUndef<OLD>, WatchHandlerParams][]): any;
+	(mutations: Array<[CanUndef<NEW>, CanUndef<OLD>, WatchHandlerParams]>): any;
 }
 
 export type WatchHandlersSet = Set<RawWatchHandler>;

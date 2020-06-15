@@ -462,12 +462,12 @@
 
     "complexity": ["error", {"max": 50}],
 
+    "max-params": "off",
     "max-statements": "off",
-    "max-params": ["warn", {"max": 3}],
-    "max-classes-per-file": ["warn", 3],
+    "max-classes-per-file": "off",
 
-    "max-depth": ["warn", {"max": 5}],
-    "max-nested-callbacks": ["warn", {"max": 5}],
+    "max-depth": ["warn", {"max": 10}],
+    "max-nested-callbacks": ["warn", {"max": 10}],
 
     "max-lines-per-function": ["warn", {
       "max": 400,

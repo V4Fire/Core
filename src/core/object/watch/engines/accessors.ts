@@ -91,7 +91,7 @@ export function watch<T extends object>(
 	top?: object
 ): Watcher<T> | T {
 	const unwrappedObj = unwrap(obj);
-	root = root || unwrappedObj;
+	root = root ?? unwrappedObj;
 
 	const returnProxy = (obj, proxy?) => {
 		if (proxy && handler && handlers && (!top || !handlers.has(handler))) {
