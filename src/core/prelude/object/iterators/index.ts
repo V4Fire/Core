@@ -8,33 +8,49 @@
 
 import extend from 'core/prelude/extend';
 
-/** @see ObjectConstructor.forEach */
+/** @see [[ObjectConstructor.forEach]] */
 extend(Object, 'forEach', (
 	obj: unknown,
 	optsOrCb: ObjectForEachOptions | AnyFunction,
 	cbOrOpts?: AnyFunction | ObjectForEachOptions
 ) => {
-	// eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-	if (!obj) {
+	if (!Object.isTruly(obj)) {
 		return;
 	}
 
 	let
-		opts: CanUndef<ObjectForEachOptions>,
+		opts: ObjectForEachOptions,
 		cb: AnyFunction;
 
 	if (Object.isFunction(cbOrOpts)) {
 		cb = cbOrOpts;
-		opts = <ObjectForEachOptions>optsOrCb;
+		opts = Object.isPlainObject(optsOrCb) ? optsOrCb : {};
 
 	} else {
-		cb = <AnyFunction>optsOrCb;
-		opts = <ObjectForEachOptions>cbOrOpts;
+		if (Object.isFunction(optsOrCb)) {
+			cb = optsOrCb;
+
+		} else {
+			throw new ReferenceError('A callback to iterate is not specified');
+		}
+
+		opts = Object.isPlainObject(cbOrOpts) ? cbOrOpts : {};
 	}
 
-	if (Object.isArray(obj) || Object.isString(obj)) {
+	if (Object.isArray(obj)) {
 		for (let i = 0; i < obj.length; i++) {
 			cb(obj[i], i, obj);
+		}
+
+		return;
+	}
+
+	if (Object.isString(obj)) {
+		let
+			i = 0;
+
+		for (const el of obj) {
+			cb(el, i++, obj);
 		}
 
 		return;
@@ -53,10 +69,16 @@ extend(Object, 'forEach', (
 		return;
 	}
 
-	if (Object.isIterable(obj) && opts.notOwn != null && opts.withDescriptor != null) {
+	if (
+		Object.isIterable(obj) &&
+		opts.notOwn == null &&
+		opts.withDescriptor == null
+	) {
 		for (const el of obj) {
 			cb(el, null, obj);
 		}
+
+		return;
 	}
 
 	if (Object.isTruly(opts.notOwn)) {
