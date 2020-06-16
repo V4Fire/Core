@@ -1578,13 +1578,15 @@ interface ObjectConstructor {
 	isFunction(value: unknown): value is AnyFunction;
 
 	/**
-	 * Returns true if the specified value is a simple function
+	 * Returns true if the specified value is a simple function.
+	 * This method is similar to "isFunction", but it has another output TS type.
+	 *
 	 * @param value
 	 */
 	isSimpleFunction(value: unknown): value is Function;
 
 	/**
-	 * Returns true if the specified value is a generator
+	 * Returns true if the specified value is a generator function
 	 * @param value
 	 */
 	isGenerator(value: unknown): value is GeneratorFunction;
