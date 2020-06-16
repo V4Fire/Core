@@ -8,7 +8,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-describe('prelude/types', () => {
+describe('core/prelude/types', () => {
 	it('Object.isTruly', () => {
 		expect(Object.isTruly(false)).toBeFalse();
 		expect(Object.isTruly(0)).toBeFalse();
