@@ -95,8 +95,6 @@ describe('prelude/object/iterators', () => {
 			scan.push(args);
 		});
 
-		console.log(scan);
-
 		expect(scan).toEqual([
 			[1, null, data],
 			[2, null, data],
