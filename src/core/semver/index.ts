@@ -18,8 +18,7 @@ export * from 'core/semver/const';
 export * from 'core/semver/interface';
 
 /**
- * Compares two strings with number versions (a <op> b)
- * by using the semver strategy
+ * Compares two strings with number versions (a <op> b) by using the semver strategy
  *
  * @param a
  * @param b
@@ -31,8 +30,7 @@ export default function compare(a: string, b: string, op: Operation, opts: Compa
 		throw new Error(operandLengthErrorText);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-	if (operations[op] == null) {
+	if (!(op in operations)) {
 		throw new TypeError(`Unknown comparator "${op}". Only "${Object.keys(operations).join(', ')}" available.`);
 	}
 
@@ -122,7 +120,7 @@ export default function compare(a: string, b: string, op: Operation, opts: Compa
 				break;
 
 			default:
-				throw new Error('Invalid operation');
+				throw new TypeError('Unsupported operation');
 		}
 	}
 
