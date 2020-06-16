@@ -12,7 +12,7 @@ const
 	isURLWithSlash = /^(?:\w+:)?\/+/;
 
 /**
- * Concatenates the specified parts of URLs with correctly arranging of slashes and returns a new string
+ * Concatenates the specified parts of URL-s with correctly arranging of slashes and returns a new string
  *
  * @param urls
  *

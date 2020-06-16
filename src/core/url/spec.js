@@ -17,7 +17,7 @@ describe('core/url/concatUrls', () => {
 		expect(concatUrls('foo/baz', '/bar/', 'bla/')).toBe('/foo/baz/bar/bla/');
 	});
 
-	it('concatenation of URLs with an absolute path', () => {
+	it('concatenation of URL-s with an absolute path', () => {
 		expect(concatUrls('http://foo.bar', 'bla')).toBe('http://foo.bar/bla');
 		expect(concatUrls('file:///C://foo.bla', 'bla')).toBe('file:///C://foo.bla/bla');
 		expect(concatUrls('/foo', 'http://google.com', 'bla')).toBe('http://google.com/bla');
