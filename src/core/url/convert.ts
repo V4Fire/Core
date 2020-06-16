@@ -16,6 +16,12 @@ export * from 'core/url/interface';
  *
  * @param data
  * @param [encode] - if false, then the result string won't be encoded by using encodeURIComponent
+ *
+ * @example
+ * ```js
+ * // '?a=1'
+ * toQueryString({a: 1});
+ * ```
  */
 export function toQueryString(data: unknown, encode?: boolean): string;
 
@@ -24,6 +30,12 @@ export function toQueryString(data: unknown, encode?: boolean): string;
  *
  * @param data
  * @param opts - additional options
+ *
+ * @example
+ * ```js
+ * // '?a[]=1&a[]=2'
+ * toQueryString({a: [1, 2]}, {arraySyntax: true});
+ * ```
  */
 export function toQueryString(data: unknown, opts: ToQueryStringOptions): string;
 export function toQueryString(data: unknown, optsOrEncode?: ToQueryStringOptions | boolean): string {
@@ -49,6 +61,12 @@ const
  *
  * @param query
  * @param [decode] - if false, then the passed string won't be decoded by using decodeURIComponent
+ *
+ * @example
+ * ```js
+ * // {a: 1}
+ * toQueryString('?a=1');
+ * ```
  */
 export function fromQueryString(query: string, decode?: boolean): Dictionary<string | null>;
 
@@ -57,6 +75,12 @@ export function fromQueryString(query: string, decode?: boolean): Dictionary<str
  *
  * @param query
  * @param opts - additional options
+ *
+ * @example
+ * ```js
+ * // {a: [1, 2]}
+ * toQueryString('?a[]=1&a[]=2', {arraySyntax: true});
+ * ```
  */
 export function fromQueryString(query: string, opts: FromQueryStringOptions): Dictionary<string | null>;
 export function fromQueryString(
@@ -107,25 +131,19 @@ export function fromQueryString(
 
 				path += str;
 
-				let
-					val: number;
-
-				if (prop == null) {
+				if (prop === '') {
 					if (nestedArray) {
-						val = 0;
+						prop = '0';
 
 					} else {
-						val = indexes[path] ?? 0;
-						indexes[path] = val + 1;
+						prop = indexes[path] ?? '0';
+						indexes[path] = Number(prop) + 1;
 					}
 
 					nestedArray = true;
-
-				} else {
-					val = Number(prop);
 				}
 
-				return `]${val}`;
+				return `]${prop}`;
 			});
 		}
 
@@ -183,7 +201,7 @@ function chunkToQueryString(data: unknown, opts: ToQueryStringOptions, prfx: str
 					key = `${prfx}[]`;
 
 				} else if (prfx !== '') {
-					key = `${prfx}[${pt}]`;
+					key = `${prfx}[${key}]`;
 				}
 
 			} else if (dataIsArray) {
@@ -195,7 +213,7 @@ function chunkToQueryString(data: unknown, opts: ToQueryStringOptions, prfx: str
 
 			const str = valIsArr || Object.isDictionary(val) ?
 				chunkToQueryString(val, opts, key) :
-				`${pt}=${chunkToQueryString(val, opts)}`;
+				`${key}=${chunkToQueryString(val, opts)}`;
 
 			if (res !== '') {
 				res += `&${str}`;

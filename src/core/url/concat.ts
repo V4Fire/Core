@@ -6,13 +6,24 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import { isAbsURL } from 'core/url/const';
+
 const
-	isAbsURL = /^\w+:?\/\//,
-	isUrlWithSlash = /^(\w+:)?\/?\//;
+	isURLWithSlash = /^(?:\w+:)?\/+/;
 
 /**
  * Concatenates the specified parts of URLs with correctly arranging of slashes and returns a new string
+ *
  * @param urls
+ *
+ * @example
+ * ```js
+ * // '/foo/baz/bar/bla'
+ * concatUrls('foo/baz', '/bar', 'bla');
+ *
+ * // 'http://foo.bar/bla'
+ * concatUrls('http://foo.bar', 'bla');
+ * ```
  */
 export function concatUrls(...urls: Array<Nullable<string>>): string {
 	let
@@ -40,7 +51,7 @@ export function concatUrls(...urls: Array<Nullable<string>>): string {
 			continue;
 		}
 
-		res = isUrlWithSlash.test(url) ? url : `/${url}`;
+		res = isURLWithSlash.test(url) ? url : `/${url}`;
 	}
 
 	return res;

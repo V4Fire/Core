@@ -4,14 +4,14 @@ This module provides a bunch of functions to work with URL strings, such as pars
 
 ## Concatenation of URL-s
 
-```javascript
+```js
 import { concatUrls } from 'core/url';
 concatUrls('foo/baz', '/bar', 'bla') === '/foo/baz/bar/bla';
 ```
 
 ## Parsing/Serialization
 
-```javascript
+```js
 import { fromQueryString, toQueryString } from 'core/url';
 
 const data = {
