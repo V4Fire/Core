@@ -159,7 +159,7 @@ describe('core/prelude/structures/sync-promise', () => {
 		expect(i).toBe(6);
 	});
 
-	it('static resolve', () => {
+	it('SyncPromise.resolve', () => {
 		let
 			i = 0,
 			j = 0;
@@ -176,7 +176,7 @@ describe('core/prelude/structures/sync-promise', () => {
 		expect(j).toBe(6);
 	});
 
-	it('static reject', () => {
+	it('SyncPromise.reject', () => {
 		let
 			i = 1;
 
@@ -189,7 +189,7 @@ describe('core/prelude/structures/sync-promise', () => {
 		expect(i).toBe(3);
 	});
 
-	it('static all', () => {
+	it('SyncPromise.all', () => {
 		let res;
 
 		SyncPromise.all([
@@ -201,7 +201,7 @@ describe('core/prelude/structures/sync-promise', () => {
 		expect(res).toEqual([1, null, 2]);
 	});
 
-	it('static race', () => {
+	it('SyncPromise.race', () => {
 		let res;
 
 		SyncPromise.race([
