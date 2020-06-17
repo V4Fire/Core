@@ -53,7 +53,7 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 	}
 
 	/**
-	 * Creates a new rejected promise for the specified reason
+	 * Creates a new rejected promise with the specified reason
 	 * @param [reason]
 	 */
 	static reject<T = never>(reason?: unknown): SyncPromise<T> {
