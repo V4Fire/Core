@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-describe('core/prelude/object/clone', () => {
+describe('core/prelude/object/clone/fastClone', () => {
 	it('simple object cloning', () => {
 		const
 			obj1 = {};

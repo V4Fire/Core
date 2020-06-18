@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-describe('core/prelude/object/iterators', () => {
+describe('core/prelude/object/iterators/forEach', () => {
 	it('iteration of an array', () => {
 		const
 			data = [1, 2, 3],
