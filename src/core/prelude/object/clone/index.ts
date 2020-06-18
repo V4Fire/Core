@@ -9,14 +9,17 @@
 import extend from 'core/prelude/extend';
 import { convertIfDate } from 'core/json';
 
-/** @see ObjectConstructor.fastClone */
+/** @see [[ObjectConstructor.fastClone]] */
 extend(Object, 'fastClone', (obj, opts?: FastCloneOptions) => {
-	// eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-	if (!obj || typeof obj === 'function') {
+	if (!Object.isTruly(obj)) {
 		if (opts !== undefined) {
 			return (obj) => Object.fastClone(obj, opts);
 		}
 
+		return obj;
+	}
+
+	if (typeof obj === 'function') {
 		return obj;
 	}
 
@@ -27,7 +30,7 @@ extend(Object, 'fastClone', (obj, opts?: FastCloneOptions) => {
 
 			for (let o = obj.entries(), el = o.next(); !el.done; el = o.next()) {
 				const val = el.value;
-				map.set(val[0], Object.fastClone(val[1]));
+				map.set(val[0], Object.fastClone(val[1], opts));
 			}
 
 			return map;
@@ -38,7 +41,7 @@ extend(Object, 'fastClone', (obj, opts?: FastCloneOptions) => {
 				set = new Set();
 
 			for (let o = obj.values(), el = o.next(); !el.done; el = o.next()) {
-				set.add(Object.fastClone(el.value));
+				set.add(Object.fastClone(el.value, opts));
 			}
 
 			return set;
