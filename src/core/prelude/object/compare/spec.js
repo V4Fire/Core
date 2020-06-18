@@ -8,7 +8,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-describe('core/prelude/object/compare', () => {
+describe('core/prelude/object/compare/fastCompare', () => {
 	it('comparing of primitives', () => {
 		expect(Object.fastCompare(1, 1)).toBeTrue();
 		expect(Object.fastCompare(0, null)).toBeFalse();
@@ -28,7 +28,7 @@ describe('core/prelude/object/compare', () => {
 
 	it('comparing of arrays', () => {
 		expect(Object.fastCompare([], [])).toBeTrue();
-		expect(Object.fastCompare([], [1])).toBeTrue();
+		expect(Object.fastCompare([], [1])).toBeFalse();
 		expect(Object.fastCompare([0], {0: 0, length: 1})).toBeFalse();
 	});
 
@@ -36,19 +36,22 @@ describe('core/prelude/object/compare', () => {
 		expect(Object.fastCompare({}, {})).toBeTrue();
 		expect(Object.fastCompare({length: 0}, {length: 0})).toBeTrue();
 		expect(Object.fastCompare({a: {b: 2}}, {a: {b: 2}})).toBeTrue();
+		expect(Object.fastCompare({a: {b: 2}}, {a: {b: 3}})).toBeFalse();
 	});
 
 	it('comparing of dates', () => {
 		expect(Object.fastCompare(new Date(), new Date())).toBeTrue();
+		expect(Object.fastCompare(new Date(), new Date(2015, 10, 14))).toBeFalse();
 	});
 
 	it('comparing of regexps', () => {
 		expect(Object.fastCompare(/\d/, /\d/)).toBeTrue();
+		expect(Object.fastCompare(/\d/, /\d+/)).toBeFalse();
 	});
 
 	it('comparing of map-s', () => {
 		expect(Object.fastCompare(new Map(), new Map())).toBeTrue();
-		expect(Object.fastCompare(new Map([[1, 0]]), new Map([[1, 0]]))).toBeTrue();
+		expect(Object.fastCompare(new Map([[1, 0]]), new Map([[1, 0]]))).toBeFalse();
 
 		const map1 = Object.assign(new Map([[1, 0]]), {
 			toJSON() {
@@ -67,7 +70,7 @@ describe('core/prelude/object/compare', () => {
 
 	it('comparing of set-s', () => {
 		expect(Object.fastCompare(new Set(), new Set())).toBeTrue();
-		expect(Object.fastCompare(new Set([1]), new Set([1]))).toBeTrue();
+		expect(Object.fastCompare(new Set([1]), new Set([1]))).toBeFalse();
 
 		const set1 = Object.assign(new Set([1]), {
 			toJSON() {
@@ -82,5 +85,25 @@ describe('core/prelude/object/compare', () => {
 		});
 
 		expect(Object.fastCompare(set1, set2)).toBeTrue();
+	});
+
+	it('compare overload', () => {
+		expect(Object.fastCompare({a: {b: 2}})({a: {b: 2}})).toBeTrue();
+		expect(Object.fastCompare({a: {b: 2}})({a: {b: 3}})).toBeFalse();
+	});
+});
+
+describe('core/prelude/object/compare/fastHash', () => {
+	it('object hashes', () => {
+		expect(Object.fastHash({a: 1})).toBe('{"a":1}');
+		expect(Object.fastHash([1, 2])).toBe('[1,2]');
+		expect(Object.fastHash(new Date())).toBe(JSON.stringify(new Date()));
+	});
+
+	it('primitive hashes', () => {
+		expect(Object.fastHash('')).toBe('""');
+		expect(Object.fastHash(null)).toBe('null');
+		expect(Object.fastHash(undefined)).toBe('null');
+		expect(Object.fastHash(0)).toBe('0');
 	});
 });

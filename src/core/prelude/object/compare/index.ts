@@ -38,19 +38,23 @@ extend(Object, 'fastCompare', function fastCompare(a: any, b: any): boolean | An
 		return false;
 	}
 
+	if (Object.isRegExp(a)) {
+		return a.toString() === b.toString();
+	}
+
+	if (Object.isDate(a)) {
+		return a.valueOf() === b.valueOf();
+	}
+
 	const
 		isArr = Object.isArray(a),
 		isMap = !isArr && Object.isMap(a),
 		isSet = !isMap && Object.isSet(a);
 
-	const cantJSONCompare =
-		!isArr &&
-
-		!Object.isDictionary(a) &&
-		!Object.isDate(a) &&
-		!Object.isRegExp(a) &&
-
-		(!Object.isFunction(a['toJSON']) || !Object.isFunction(b['toJSON']));
+	const cantJSONCompare = !isArr && !Object.isDictionary(a) && (
+		!Object.isFunction(a['toJSON']) ||
+		!Object.isFunction(b['toJSON'])
+	);
 
 	if (cantJSONCompare) {
 		if ((isMap || isSet) && a.size === 0 && b.size === 0) {
@@ -62,9 +66,7 @@ extend(Object, 'fastCompare', function fastCompare(a: any, b: any): boolean | An
 
 	let
 		length1,
-		keys1,
-		length2,
-		keys2;
+		length2;
 
 	if (isArr) {
 		length1 = a.length;
@@ -75,15 +77,15 @@ extend(Object, 'fastCompare', function fastCompare(a: any, b: any): boolean | An
 		length2 = b.size;
 
 	} else {
-		length1 = a.length ?? (keys1 = Object.keys(a).length);
-		length2 = b.length ?? (keys2 = Object.keys(b).length);
+		length1 = a.length ?? Object.keys(a).length;
+		length2 = b.length ?? Object.keys(b).length;
 	}
 
 	if (length1 !== length2) {
 		return false;
 	}
 
-	if ((isArr || isMap || isSet) && length1 === 0 || keys1 === 0 && keys2 === 0) {
+	if ((isArr || isMap || isSet) && length1 === 0) {
 		return true;
 	}
 
@@ -94,7 +96,7 @@ extend(Object, 'fastCompare', function fastCompare(a: any, b: any): boolean | An
 /** @see [[ObjectConstructor.fastHash]] */
 extend(Object, 'fastHash', (obj) => {
 	const res = JSON.stringify(obj, createSerializer(obj, undefined, funcCache));
-	return res !== '' ? res : 'null';
+	return Object.isTruly(res) ? res : 'null';
 });
 
 /**
