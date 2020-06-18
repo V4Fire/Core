@@ -8,10 +8,9 @@
 
 import extend from 'core/prelude/extend';
 
-/** @see ObjectConstructor.size */
+/** @see [[ObjectConstructor.size]] */
 extend(Object, 'size', (obj: unknown) => {
-	// eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-	if (!obj) {
+	if (!Object.isTruly(obj)) {
 		return 0;
 	}
 
@@ -20,7 +19,7 @@ extend(Object, 'size', (obj: unknown) => {
 	}
 
 	if (Object.isNumber(obj)) {
-		return obj;
+		return isNaN(obj) ? 0 : obj;
 	}
 
 	if (typeof obj !== 'object') {
@@ -42,9 +41,9 @@ extend(Object, 'size', (obj: unknown) => {
 		return length;
 	}
 
-	if (Object.isSimpleObject(obj)) {
+	if (Object.isDictionary(obj)) {
 		return Object.keys(obj).length;
 	}
 
-	return length;
+	return 0;
 });
