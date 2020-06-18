@@ -9,78 +9,81 @@
 import extend from 'core/prelude/extend';
 import { funcCache } from 'core/prelude/object/const';
 
-/** @see ObjectConstructor.fastCompare */
+/** @see [[ObjectConstructor.fastCompare]] */
 extend(Object, 'fastCompare', function fastCompare(a: any, b: any): boolean | AnyFunction {
 	if (arguments.length < 2) {
 		return (b) => Object.fastCompare(a, b);
 	}
 
-	if (a === b) {
+	const
+		isEqual = a === b;
+
+	if (isEqual) {
 		return true;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-	if (!a || typeof a !== 'object' || !b || typeof b !== 'object') {
-		return a === b;
+	const
+		typeA = typeof a,
+		typeB = typeof b;
+
+	if (typeA !== typeB) {
+		return false;
+	}
+
+	if (typeA !== 'object' || typeB !== 'object' || !Object.isTruly(a) || !Object.isTruly(b)) {
+		return isEqual;
+	}
+
+	if (a.constructor !== b.constructor) {
+		return false;
 	}
 
 	const
-		aIsArr = Object.isArray(a),
-		aIsMap = !aIsArr && Object.isMap(a),
-		aIsSet = !aIsMap && Object.isSet(a),
-		bIsArr = Object.isArray(b),
-		bIsMap = !bIsArr && Object.isMap(b),
-		bIsSet = !bIsMap && Object.isSet(b);
+		isArr = Object.isArray(a),
+		isMap = !isArr && Object.isMap(a),
+		isSet = !isMap && Object.isSet(a);
 
-	if (
-		!aIsArr &&
-		!Object.isPlainObject(a) &&
+	const cantJSONCompare =
+		!isArr &&
+
+		!Object.isDictionary(a) &&
 		!Object.isDate(a) &&
 		!Object.isRegExp(a) &&
-		!Object.isFunction(a['toJSON']) ||
 
-		!bIsArr &&
-		!Object.isPlainObject(b) &&
-		!Object.isDate(b) &&
-		!Object.isRegExp(b) &&
-		!Object.isFunction(b['toJSON'])
-	) {
-		if ((aIsMap && bIsMap || aIsSet && bIsSet) && a.size === 0 && b.size === 0) {
+		(!Object.isFunction(a['toJSON']) || !Object.isFunction(b['toJSON']));
+
+	if (cantJSONCompare) {
+		if ((isMap || isSet) && a.size === 0 && b.size === 0) {
 			return true;
 		}
 
-		return a === b;
+		return isEqual;
 	}
 
 	let
 		length1,
-		length2;
+		keys1,
+		length2,
+		keys2;
 
-	if (aIsArr) {
+	if (isArr) {
 		length1 = a.length;
-
-	} else if (aIsMap || aIsSet) {
-		length1 = a.size;
-
-	} else {
-		length1 = typeof a.length === 'number' ? a.length : Object.keys(a).length;
-	}
-
-	if (bIsArr) {
 		length2 = b.length;
 
-	} else if (bIsMap || bIsSet) {
+	} else if (isMap || isSet) {
+		length1 = a.size;
 		length2 = b.size;
 
 	} else {
-		length2 = typeof b.length === 'number' ? b.length : Object.keys(b).length;
+		length1 = a.length ?? (keys1 = Object.keys(a).length);
+		length2 = b.length ?? (keys2 = Object.keys(b).length);
 	}
 
 	if (length1 !== length2) {
 		return false;
 	}
 
-	if ((aIsArr && bIsArr || aIsMap && bIsMap || aIsSet && bIsSet) && length1 === 0) {
+	if ((isArr || isMap || isSet) && length1 === 0 || keys1 === 0 && keys2 === 0) {
 		return true;
 	}
 
@@ -88,7 +91,7 @@ extend(Object, 'fastCompare', function fastCompare(a: any, b: any): boolean | An
 	return JSON.stringify(a, createSerializer(a, b, cache)) === JSON.stringify(b, createSerializer(a, b, cache));
 });
 
-/** @see ObjectConstructor.fastHash */
+/** @see [[ObjectConstructor.fastHash]] */
 extend(Object, 'fastHash', (obj) => {
 	const res = JSON.stringify(obj, createSerializer(obj, undefined, funcCache));
 	return res !== '' ? res : 'null';
