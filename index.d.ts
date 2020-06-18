@@ -202,7 +202,7 @@ interface FastCloneOptions {
 	reviver?: JSONCb | false;
 
 	/**
-	 * If false the object freeze state won't be copy
+	 * If false the object freeze/seal state won't be copy
 	 * @default `true`
 	 */
 	freezable?: boolean;
@@ -811,7 +811,10 @@ interface ObjectConstructor {
 
 	/**
 	 * Compares two specified objects by using a naive but fast "JSON.stringify/parse" strategy and
-	 * returns true if their are equal
+	 * returns true if their are equal.
+	 *
+	 * Mind, that this method uses non-stable version JSON.stringify, i.e.,
+	 * it can work incorrectly with object like {a: 1, b: 2} and {b: 2, a: 1}.
 	 *
 	 * @param a
 	 * @param b
@@ -828,9 +831,6 @@ interface ObjectConstructor {
 
 	/**
 	 * Clones the specified object by using a naive but fast "JSON.stringify/parse" strategy and returns a new object.
-	 *
-	 * Mind, that this method uses non-stable version JSON.stringify, i.e.,
-	 * it can work incorrectly with object like {a: 1, b: 2} and {b: 2, a: 1}.
 	 *
 	 * @param obj
 	 * @param [opts] - additional options
