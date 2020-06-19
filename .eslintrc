@@ -401,11 +401,7 @@
 
     "camelcase": "error",
 
-    "no-underscore-dangle": ["error", {
-      "allowAfterThis": true,
-      "allowAfterSuper": true,
-      "allowAfterThisConstructor": true
-    }],
+    "no-underscore-dangle": "off",
 
     "new-cap": ["error", {
       "newIsCap": true,

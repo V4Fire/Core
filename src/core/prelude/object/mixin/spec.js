@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/typedef, no-underscore-dangle */
+/* eslint-disable @typescript-eslint/typedef */
 
 /*!
  * V4Fire Core
