@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/strict-boolean-expressions */
-
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -13,7 +11,7 @@
  * @param value
  */
 export function isContainerStructure(value: unknown): boolean {
-	if (!value || typeof value !== 'object') {
+	if (!Object.isTruly(value) || typeof value !== 'object') {
 		return false;
 	}
 
@@ -29,7 +27,7 @@ export function isContainerStructure(value: unknown): boolean {
  * @param value
  */
 export function canExtendProto(value: unknown): boolean {
-	if (!value || typeof value !== 'object') {
+	if (!Object.isTruly(value) || typeof value !== 'object') {
 		return false;
 	}
 
@@ -45,7 +43,7 @@ export function canExtendProto(value: unknown): boolean {
  * @param value
  */
 export function getType(value: unknown): string {
-	if (!value || typeof value !== 'object') {
+	if (!Object.isTruly(value) || typeof value !== 'object') {
 		return '';
 	}
 
@@ -85,7 +83,7 @@ export function getType(value: unknown): string {
  * @param value
  */
 export function getSameAs<T>(value: T): Nullable<T> {
-	if (!value || typeof value !== 'object') {
+	if (!Object.isTruly(value) || typeof value !== 'object') {
 		return null;
 	}
 
