@@ -3219,6 +3219,22 @@ interface Date {
 	daysInMonth(): number;
 }
 
+interface ThrottleOptions {
+	/**
+	 * Delay to wait in milliseconds
+	 * @default `250`
+	 */
+	delay?: number;
+
+	/**
+	 * If true, then all rest invokes that caught in the sleep span are ignored.
+	 * This behavior is closer to "classic" throttle algorithm.
+	 *
+	 * @default `false`
+	 */
+	skipRest?: boolean;
+}
+
 interface FunctionConstructor {
 	/**
 	 * Link to the special functional placeholder that can be used with curried functions
@@ -3258,18 +3274,42 @@ interface FunctionConstructor {
 	debounce<A extends unknown[]>(fn: AnyFunction<A>, delay?: number): AnyFunction<A, void>;
 
 	/**
-	 * Returns a new function that allows to invoke a function, which it takes, not more often than the specified delay
+	 * Returns a new function that allows to invoke a function, which it takes, not more often than the specified delay.
+	 * The first invoking of a function will run immediately, but all rest invokes will be merged to one and
+	 * executes after the specified delay.
+	 *
 	 * @param delay
 	 */
 	throttle(delay: number): <A extends unknown[]>(fn: AnyFunction<A>) => AnyFunction<A, void>;
 
 	/**
-	 * Returns a new function that allows to invoke the function not more often than the specified delay
+	 * Returns a new function that allows to invoke a function, which it takes, not more often than the specified delay.
+	 * The first invoking of a function will run immediately, but all rest invokes will be merged to one and
+	 * executes after the specified delay.
+	 *
+	 * @param opts - options for the operation
+	 */
+	throttle(opts: ThrottleOptions): <A extends unknown[]>(fn: AnyFunction<A>) => AnyFunction<A, void>;
+
+	/**
+	 * Returns a new function that allows to invoke the function not more often than the specified delay.
+	 * The first invoking of a function will run immediately, but all rest invokes will be merged to one and
+	 * executes after the specified delay.
 	 *
 	 * @param fn
 	 * @param [delay]
 	 */
 	throttle<A extends unknown[]>(fn: AnyFunction<A>, delay?: number): AnyFunction<A, void>;
+
+	/**
+	 * Returns a new function that allows to invoke the function not more often than the specified delay.
+	 * The first invoking of a function will run immediately, but all rest invokes will be merged to one and
+	 * executes after the specified delay.
+	 *
+	 * @param fn
+	 * @param opts - options for the operation
+	 */
+	throttle<A extends unknown[]>(fn: AnyFunction<A>, opts: ThrottleOptions): AnyFunction<A, void>;
 
 	/**
 	 * Returns a curried equivalent of the provided function.
@@ -3387,10 +3427,22 @@ interface Function {
 	debounce<T extends AnyFunction>(this: T, delay?: number): AnyFunction<Parameters<T>, void>;
 
 	/**
-	 * Returns a new function that allows to invoke the target function not more often than the specified delay
+	 * Returns a new function that allows to invoke the target function not more often than the specified delay.
+	 * The first invoking of a function will run immediately, but all rest invokes will be merged to one and
+	 * executes after the specified delay.
+	 *
 	 * @param [delay]
 	 */
 	throttle<T extends AnyFunction>(this: T, delay?: number): AnyFunction<Parameters<T>, void>;
+
+	/**
+	 * Returns a new function that allows to invoke the target function not more often than the specified delay.
+	 * The first invoking of a function will run immediately, but all rest invokes will be merged to one and
+	 * executes after the specified delay.
+	 *
+	 * @param opts - options for the operation
+	 */
+	throttle<T extends AnyFunction>(this: T, opts: ThrottleOptions): AnyFunction<Parameters<T>, void>;
 
 	/**
 	 * Returns a new function based on the target that wraps the returning value into the Either structure.
