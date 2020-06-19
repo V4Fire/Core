@@ -1,3 +1,3 @@
 # core/prelude/object/create
 
-This module provides methods to create new objects.
+This module extends the Object constructor with methods to create new objects.

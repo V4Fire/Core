@@ -1,3 +1,3 @@
 # core/prelude/object/mixin
 
-This module provides methods to create mixins of passed objects.
+This module extends the Object constructor with methods to create mixins of passed objects.

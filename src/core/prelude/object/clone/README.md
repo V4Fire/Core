@@ -1,3 +1,3 @@
 # core/prelude/object/clone
 
-This module provides methods to clone data structures.
+This module extends the Object constructor with methods to clone data structures.

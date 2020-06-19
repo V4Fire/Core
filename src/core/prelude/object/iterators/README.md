@@ -1,3 +1,3 @@
 # core/prelude/object/iterators
 
-This module provides methods to iterate data structures.
+This module extends the Object constructor with methods to iterate data structures.

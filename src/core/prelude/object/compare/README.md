@@ -1,3 +1,3 @@
 # core/prelude/object/compare
 
-This module provides methods to compare data structures.
+This module extends the Object constructor with methods to compare data structures.
