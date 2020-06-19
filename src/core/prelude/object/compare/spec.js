@@ -40,8 +40,12 @@ describe('core/prelude/object/compare/fastCompare', () => {
 	});
 
 	it('comparing of dates', () => {
-		expect(Object.fastCompare(new Date(), new Date())).toBeTrue();
-		expect(Object.fastCompare(new Date(), new Date(2015, 10, 14))).toBeFalse();
+		const
+			date1 = new Date(),
+			date2 = new Date(date1.valueOf());
+
+		expect(Object.fastCompare(date1, date2)).toBeTrue();
+		expect(Object.fastCompare(date1, new Date(2015, 10, 14))).toBeFalse();
 	});
 
 	it('comparing of regexps', () => {
@@ -97,7 +101,11 @@ describe('core/prelude/object/compare/fastHash', () => {
 	it('object hashes', () => {
 		expect(Object.fastHash({a: 1})).toBe('{"a":1}');
 		expect(Object.fastHash([1, 2])).toBe('[1,2]');
-		expect(Object.fastHash(new Date())).toBe(JSON.stringify(new Date()));
+
+		const
+			date = new Date();
+
+		expect(Object.fastHash(date)).toBe(JSON.stringify(date));
 	});
 
 	it('primitive hashes', () => {
