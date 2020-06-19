@@ -8,7 +8,7 @@
 
 import extend from 'core/prelude/extend';
 
-/** @see ObjectConstructor.get */
+/** @see [[ObjectConstructor.get]] */
 extend(Object, 'get', (
 	obj: any,
 	path: string | any[] | ObjectGetOptions,
@@ -58,7 +58,7 @@ extend(Object, 'get', (
 	return get;
 });
 
-/** @see ObjectConstructor.has */
+/** @see [[ObjectConstructor.has]] */
 extend(Object, 'has', (
 	obj: any,
 	path?: string | any[] | ObjectGetOptions,
@@ -123,8 +123,7 @@ extend(Object, 'has', (
 const
 	{hasOwnProperty: nativeHasOwnProperty} = Object.prototype;
 
-/** @see ObjectConstructor.hasOwnProperty */
-// tslint:disable-next-line:only-arrow-functions
+/** @see [[ObjectConstructor.hasOwnProperty]] */
 extend(Object, 'hasOwnProperty', function hasOwnProperty(obj: any, key?: string): boolean | AnyFunction {
 	if (arguments.length > 1) {
 		if (obj == null) {
@@ -142,8 +141,7 @@ extend(Object, 'hasOwnProperty', function hasOwnProperty(obj: any, key?: string)
 	return (key) => Object.hasOwnProperty(obj, key);
 });
 
-/** @see ObjectConstructor.set */
-// tslint:disable-next-line:only-arrow-functions
+/** @see [[ObjectConstructor.set]] */
 extend(Object, 'set', function set(
 	obj: any,
 	path: string | any[] | ObjectGetOptions,
@@ -201,11 +199,18 @@ extend(Object, 'set', function set(
 			const
 				nextChunkIsObj = isNaN(Number(chunks[i + 1]));
 
-			if (Object.isMap(ref) || Object.isWeakMap(ref)) {
+			let
+				isWeakMap;
+
+			if (Object.isMap(ref) || (isWeakMap = Object.isWeakMap(ref))) {
 				let
 					val = ref.get(key);
 
 				if (val == null || typeof val !== 'object') {
+					if (isWeakMap === true && (key == null || typeof key !== 'object')) {
+						return undefined;
+					}
+
 					ref.set(key, val = nextChunkIsObj ? new Map() : []);
 				}
 
@@ -224,7 +229,14 @@ extend(Object, 'set', function set(
 			}
 		}
 
-		if (Object.isMap(ref) || Object.isWeakMap(ref)) {
+		let
+			isWeakMap;
+
+		if (Object.isMap(ref) || (isWeakMap = Object.isWeakMap(ref))) {
+			if (isWeakMap === true && (cursor == null || typeof cursor !== 'object')) {
+				return undefined;
+			}
+
 			if (ref.has(cursor) && p.concat) {
 				ref.set(cursor, Array.concat([], ref[cursor], finalValue));
 
