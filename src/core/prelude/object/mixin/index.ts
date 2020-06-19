@@ -7,10 +7,9 @@
  */
 
 import extend from 'core/prelude/extend';
-import { isContainerStructure, canExtendProto, getType, getSameAs } from 'core/prelude/object/helpers';
+import { isContainer, canExtendProto, getType, getSameAs } from 'core/prelude/object/helpers';
 
-/** @see ObjectConstructor.mixin */
-// tslint:disable-next-line:only-arrow-functions
+/** @see [[ObjectConstructor.mixin]] */
 extend(Object, 'mixin', function mixin(
 	opts: ObjectMixinOptions | boolean,
 	base: any,
@@ -35,7 +34,8 @@ extend(Object, 'mixin', function mixin(
 	}
 
 	const
-		withDescriptor = p.withDescriptor && !p.withAccessors;
+		withDescriptor = p.withDescriptor && !p.withAccessors,
+		onlyNew = p.onlyNew != null ? p.onlyNew : p.traits;
 
 	let
 		type = getType(base);
@@ -77,8 +77,7 @@ extend(Object, 'mixin', function mixin(
 
 	const
 		simpleTypes = {object: true, array: true},
-		dataIsSimple = simpleTypes[type] != null,
-		onlyNew = p.onlyNew != null ? p.traits : p.onlyNew;
+		dataIsSimple = simpleTypes[type] === true;
 
 	if (
 		!p.deep &&
@@ -134,31 +133,31 @@ extend(Object, 'mixin', function mixin(
 	}
 
 	const forEachParams = {
-		withDescriptor: Object.isTruly(p.withAccessors) || Object.isTruly(p.withDescriptor),
-		notOwn: Object.isTruly(p.withProto)
+		withDescriptor: Object.isTruly(p.withAccessors) || Object.isTruly(p.withDescriptor)
 	};
 
 	for (let i = 0; i < objects.length; i++) {
 		const
-			extObj = objects[i];
+			extender = objects[i];
 
-		if (extObj == null) {
+		if (extender == null) {
 			continue;
 		}
 
 		const
-			isSimple = simpleTypes[getType(extObj)] != null;
+			isSimple = simpleTypes[getType(extender)] === true;
 
-		Object.forEach(extObj, (el: any, key: any) => {
-			if (p.filter && !Object.isTruly(p.filter(el, key, extObj))) {
+		Object.forEach(extender, (el: any, key: any) => {
+			if (p.filter && !Object.isTruly(p.filter(el, key, extender))) {
 				return;
 			}
 
-			const needExtendsDescriptor = dataIsSimple && isSimple && (
-				withDescriptor || p.withAccessors && (el.get != null || el.set != null)
+			const needExtendDescriptor = dataIsSimple && isSimple && (
+				withDescriptor ||
+				p.withAccessors && (el.get != null || el.set != null)
 			);
 
-			if (needExtendsDescriptor) {
+			if (needExtendDescriptor) {
 				if (Object.isTruly(onlyNew) && key in base !== (onlyNew === -1)) {
 					return;
 				}
@@ -182,32 +181,30 @@ extend(Object, 'mixin', function mixin(
 				oldVal = Object.get(base, [key]);
 
 			const
-				newVal = isSimple ? extObj[key] : el;
+				extVal = isSimple ? extender[key] : el;
 
-			if (base === newVal || newVal === extObj) {
+			if (extVal === base || extVal === extender) {
 				return;
 			}
 
 			let
-				canExtend = Boolean(newVal);
+				canDeepExtend = Boolean(extVal);
 
-			if (canExtend && p.extendFilter) {
-				canExtend = Boolean(p.extendFilter(base, newVal, key));
+			if (canDeepExtend && p.extendFilter != null) {
+				canDeepExtend = Boolean(p.extendFilter(base, extVal, key));
 			}
 
 			let
 				valIsArray = false,
 				struct;
 
-			if (canExtend) {
-				valIsArray = Object.isArray(newVal);
-				struct = valIsArray ? [] : getSameAs(newVal);
+			if (canDeepExtend) {
+				valIsArray = Object.isArray(extVal);
+				struct = valIsArray ? [] : getSameAs(extVal);
+				canDeepExtend = struct != null;
 			}
 
-			const
-				needDeepExtend = p.deep && canExtend && (valIsArray || struct != null);
-
-			if (needDeepExtend) {
+			if (p.deep && canDeepExtend) {
 				const
 					canExtendSrcProto = p.withProto && dataIsSimple && canExtendProto(oldVal);
 
@@ -219,7 +216,9 @@ extend(Object, 'mixin', function mixin(
 					Object.set(base, [key], oldVal);
 				}
 
-				let clone;
+				let
+					clone;
+
 				if (valIsArray) {
 					let
 						isProto = false,
@@ -234,7 +233,7 @@ extend(Object, 'mixin', function mixin(
 					if (srcIsArray) {
 						if (p.concatArray) {
 							const old = isProto ? construct : oldVal;
-							base[key] = p.concatFn ? p.concatFn(old, newVal, key) : old.concat(newVal);
+							base[key] = p.concatFn ? p.concatFn(old, extVal, key) : old.concat(extVal);
 							return;
 						}
 
@@ -245,13 +244,13 @@ extend(Object, 'mixin', function mixin(
 					}
 
 				} else {
-					clone = isContainerStructure(oldVal) ? oldVal : struct ?? {};
+					clone = isContainer(oldVal) ? oldVal : struct ?? {};
 				}
 
-				Object.set(base, [key], Object.mixin(p, clone, newVal));
+				Object.set(base, [key], Object.mixin(p, clone, extVal));
 
 			} else {
-				setVal(base, key, newVal);
+				setVal(base, key, extVal);
 			}
 
 		}, forEachParams);
