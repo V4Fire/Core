@@ -571,7 +571,7 @@ interface ObjectConstructor {
 	hasOwnProperty(key: string): (obj: unknown) => boolean;
 
 	/**
-	 * Returns a function that returns true if the specified object has own property by a key the the function takes
+	 * Returns a function that returns true if the specified object has own property by a key that the function takes
 	 * @param obj
 	 */
 	hasOwnProperty(obj: unknown): (key: string) => boolean;
@@ -593,7 +593,7 @@ interface ObjectConstructor {
 	 * @param value
 	 * @param [opts] - additional options
 	 */
-	set<T>(obj: unknown, path: ObjectPropertyPath, value: T, opts?: ObjectSetOptions): T;
+	set<T>(obj: unknown, path: ObjectPropertyPath, value: T, opts?: ObjectSetOptions): CaunUndef<T>;
 
 	/**
 	 * Returns a function that sets a value to an object, which the function takes, by the specified path.
@@ -603,7 +603,7 @@ interface ObjectConstructor {
 	 * @param [opts] - additional options
 	 * @param [value]
 	 */
-	set(path: ObjectPropertyPath, opts?: ObjectSetOptions, value?: unknown): <T>(obj: T, value?: unknown) => T;
+	set(path: ObjectPropertyPath, opts?: ObjectSetOptions, value?: unknown): <T>(obj: T, value?: unknown) => CaunUndef<T>;
 
 	/**
 	 * Returns a function that sets a value to the specified object by a path that the function takes.
@@ -613,7 +613,7 @@ interface ObjectConstructor {
 	 * @param [opts] - additional options
 	 * @param [value]
 	 */
-	set<T>(obj: T, opts?: ObjectSetOptions, value?: unknown): (path: ObjectPropertyPath, value?: unknown) => T;
+	set<T>(obj: T, opts?: ObjectSetOptions, value?: unknown): (path: ObjectPropertyPath, value?: unknown) => CaunUndef<T>;
 
 	/**
 	 * Returns size/length of the specified object
