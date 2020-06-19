@@ -8,9 +8,9 @@
 
 import extend from 'core/prelude/extend';
 
-/** @see FunctionConstructor.compose */
-extend(Function, 'compose', (...fns: Nullable<AnyFunction>[]) => function (): unknown {
-	if (!fns.length) {
+/** @see [[FunctionConstructor.compose]] */
+extend(Function, 'compose', (...fns: Array<Nullable<AnyFunction>>) => function wrapper(this: unknown): unknown {
+	if (fns.length === 0) {
 		return;
 	}
 
@@ -18,7 +18,7 @@ extend(Function, 'compose', (...fns: Nullable<AnyFunction>[]) => function (): un
 		i = fns.length,
 		res;
 
-	while (i--) {
+	while (i-- > 0) {
 		const
 			fn = fns[i];
 
@@ -28,12 +28,11 @@ extend(Function, 'compose', (...fns: Nullable<AnyFunction>[]) => function (): un
 		}
 	}
 
-	while (i--) {
+	while (i-- > 0) {
 		const
 			fn = fns[i];
 
 		if (fn != null) {
-			// tslint:disable-next-line:prefer-conditional-expression
 			if (Object.isPromise(res)) {
 				res = res.then((res) => fn.call(this, res));
 
@@ -46,15 +45,15 @@ extend(Function, 'compose', (...fns: Nullable<AnyFunction>[]) => function (): un
 	return res;
 });
 
-/** @see Function.compose */
-extend(Function.prototype, 'compose', function (
+/** @see [[Function.compose]] */
+extend(Function.prototype, 'compose', function compose(
 	this: AnyFunction,
-	...fns: Nullable<AnyFunction>[]
+	...fns: Array<Nullable<AnyFunction>>
 ): AnyFunction {
 	const
 		that = this;
 
-	return function (): unknown {
+	return function wrapper(this: unknown): unknown {
 		let
 			res = that.apply(this, arguments);
 
@@ -63,7 +62,6 @@ extend(Function.prototype, 'compose', function (
 				fn = fns[i];
 
 			if (fn != null) {
-				// tslint:disable-next-line:prefer-conditional-expression
 				if (Object.isPromise(res)) {
 					res = res.then((res) => fn.call(this, res));
 
