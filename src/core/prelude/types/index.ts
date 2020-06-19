@@ -19,7 +19,7 @@ extend(Object, 'isPlainObject', isPlainObject);
 /** @see ObjectConstructor.isPrimitive */
 extend(Object, 'isPrimitive', (value) => !value || !nonPrimitiveTypes[typeof value]);
 
-/** @see ObjectConstructor.isCustomObject */
+/** @see [[ObjectConstructor.isCustomObject]] */
 extend(Object, 'isCustomObject', (value) => {
 	let
 		type;
@@ -32,7 +32,8 @@ extend(Object, 'isCustomObject', (value) => {
 		return !isNative.test(value.toString());
 	}
 
-	return value.constructor === Object || !isNative.test(value.constructor.toString());
+	const constr = value.constructor;
+	return !constr || constr === Object || !isNative.test(constr.toString());
 });
 
 /**  @see ObjectConstructor.isSimpleObject */
