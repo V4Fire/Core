@@ -9,37 +9,38 @@
 import extend from 'core/prelude/extend';
 import { __ } from 'core/prelude/function/const';
 
-/** @see FunctionConstructor.__ */
+/** @see [[FunctionConstructor.__]] */
 extend(Function, '__', {
 	get(): typeof __ {
 		return __;
 	}
 });
 
-/** @see Function.curry */
-extend(Function.prototype, 'curry', function (this: AnyFunction): AnyFunction {
+/** @see [[Function.curry]] */
+extend(Function.prototype, 'curry', function curry(this: AnyFunction): AnyFunction {
 	let
 		{length} = this;
 
 	const
-		// tslint:disable-next-line:no-this-assignment
+		// eslint-disable-next-line @typescript-eslint/no-this-alias
 		fn = this;
 
 	const
 		args = <unknown[]>[],
 		gaps = <number[]>[];
 
-	// tslint:disable-next-line:only-arrow-functions
-	const wrapper = function (): unknown {
+	return wrapper;
+
+	function wrapper(): unknown {
 		let
 			i = 0;
 
-		if (gaps.length && arguments.length) {
+		if (gaps.length > 0 && arguments.length > 0) {
 			const
 				tmp = gaps.slice();
 
 			for (let j = arguments.length, d = 0; i < tmp.length; i++) {
-				if (!j--) {
+				if (j-- === 0) {
 					break;
 				}
 
@@ -67,15 +68,13 @@ extend(Function.prototype, 'curry', function (this: AnyFunction): AnyFunction {
 
 		length -= arguments.length - gaps.length;
 
-		if (length <= 0 && !gaps.length) {
+		if (length <= 0 && gaps.length === 0) {
 			return fn.apply(null, args);
 		}
 
 		return wrapper;
-	};
-
-	return wrapper;
+	}
 });
 
-/** @see FunctionConstructor.curry */
+/** @see [[FunctionConstructor.curry]] */
 extend(Function, 'curry', (fn: AnyFunction) => fn.curry());
