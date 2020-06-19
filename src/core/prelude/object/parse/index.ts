@@ -9,7 +9,7 @@
 import extend from 'core/prelude/extend';
 import { canParse } from 'core/prelude/object/const';
 
-/** @see ObjectConstructor.parse */
+/** @see [[ObjectConstructor.parse]] */
 extend(Object, 'parse', (value, reviver?: JSONCb) => {
 	if (Object.isFunction(value)) {
 		reviver = value;
