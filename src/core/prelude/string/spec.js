@@ -10,8 +10,8 @@ import { capitalizeCache, camelizeCache, dasherizeCache, underscoreCache } from 
 
 describe('core/prelude/string', () => {
 	it('capitalize', () => {
-		expect('hello world'.capitalize()).toBe('Hello world');
-		expect('HELLO WORLD'.capitalize()).toBe('HELLO WORLD');
+		expect('hello world😃😡'.capitalize()).toBe('Hello world😃😡');
+		expect('HELLO WORLD😃😡'.capitalize()).toBe('HELLO WORLD😃😡');
 	});
 
 	it('capitalize with lowering', () => {
@@ -46,7 +46,7 @@ describe('core/prelude/string', () => {
 	});
 
 	it('camelize', () => {
-		expect('foo_bar_b-l aBaz'.camelize()).toBe('FooBarBLABaz');
+		expect('foo_bar_b-l aBaz😃😡'.camelize()).toBe('FooBarBLABaz😃😡');
 	});
 
 	it('camelize without capitalizing', () => {
@@ -73,7 +73,7 @@ describe('core/prelude/string', () => {
 	});
 
 	it('dasherize', () => {
-		expect('foo_bar_b-l aBaz'.dasherize()).toBe('foo-bar-b-l-a-baz');
+		expect('foo_bar_b-l aBaz😃😡'.dasherize()).toBe('foo-bar-b-l-a-baz😃😡');
 		expect('FooBarBAZ'.dasherize()).toBe('foo-bar-baz');
 		expect('FOOBarBAZ'.dasherize()).toBe('foo-bar-baz');
 	});
@@ -103,7 +103,7 @@ describe('core/prelude/string', () => {
 	});
 
 	it('underscore', () => {
-		expect('foo_bar_b-l aBaz'.underscore()).toBe('foo_bar_b_l_a_baz');
+		expect('foo_bar_b-l aBaz😃😡'.underscore()).toBe('foo_bar_b_l_a_baz😃😡');
 		expect('FooBarBAZ'.underscore()).toBe('foo_bar_baz');
 		expect('FOOBarBAZ'.underscore()).toBe('foo_bar_baz');
 	});
