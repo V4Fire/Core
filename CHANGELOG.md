@@ -15,7 +15,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :bug: Bug Fix
 
-* [Fixed `Object.isCustomObject` checking for objects without a constructor](https://github.com/V4Fire/Core/issues/112)
+* [Fixed `Object.isCustomObject` for objects without prototypes](https://github.com/V4Fire/Core/issues/112)
 
 ## v3.19.1 (2020-06-08)
 
