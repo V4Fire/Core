@@ -511,6 +511,10 @@ type ObjectPropertyPath =
 	string |
 	unknown[];
 
+interface ObjectPropertyFilter<K = string, V = unknown> {
+	(key: K, el: V): any;
+}
+
 interface ObjectConstructor {
 	/**
 	 * Returns a value from the passed object by the specified path
@@ -1028,7 +1032,7 @@ interface ObjectConstructor {
 	 * Returns a curried version of Object.select
 	 * @param condition - regular expression to filter
 	 */
-	select(condition: RegExp): <D extends object>(obj: D) => {[K in keyof D]?: D[K]};
+	select(condition: RegExp | ObjectPropertyFilter): <D extends object>(obj: D) => {[K in keyof D]?: D[K]};
 
 	/**
 	 * Returns a curried version of Object.select
@@ -1102,7 +1106,7 @@ interface ObjectConstructor {
 	 * @param obj
 	 * @param condition - regular expression to filter
 	 */
-	select<D extends object>(obj: D, condition: RegExp): {[K in keyof D]?: D[K]};
+	select<D extends object>(obj: D, condition: RegExp | ObjectPropertyFilter): {[K in keyof D]?: D[K]};
 
 	/**
 	 * Returns a new object based on the specified, but only with fields that match to the specified condition
@@ -1194,7 +1198,7 @@ interface ObjectConstructor {
 	 * Returns a curried version of Object.reject
 	 * @param condition - regular expression to filter
 	 */
-	reject(condition: RegExp): <D extends object>(obj: D) => {[K in keyof D]?: D[K]};
+	reject(condition: RegExp | ObjectPropertyFilter): <D extends object>(obj: D) => {[K in keyof D]?: D[K]};
 
 	/**
 	 * Returns a curried version of Object.reject
@@ -1268,7 +1272,7 @@ interface ObjectConstructor {
 	 * @param obj
 	 * @param condition - regular expression to filter
 	 */
-	reject<D extends object>(obj: D, condition: RegExp): {[K in keyof D]?: D[K]};
+	reject<D extends object>(obj: D, condition: RegExp | ObjectPropertyFilter): {[K in keyof D]?: D[K]};
 
 	/**
 	 * Returns a new object based on the specified, but without fields that match to the specified condition

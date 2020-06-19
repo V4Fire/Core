@@ -9,7 +9,7 @@
 import extend from 'core/prelude/extend';
 import { deprecate } from 'core/functools';
 
-/** @see ObjectConstructor.createDict */
+/** @see [[ObjectConstructor.createDict]] */
 extend(Object, 'createDict', (...objects) => {
 	if (objects.length > 0) {
 		return Object.assign(Object.create(null), ...objects);
@@ -18,7 +18,7 @@ extend(Object, 'createDict', (...objects) => {
 	return Object.create(null);
 });
 
-/** @see ObjectConstructor.convertEnumToDict */
+/** @see [[ObjectConstructor.convertEnumToDict]] */
 extend(Object, 'convertEnumToDict', (obj: Dictionary) => {
 	const
 		res = Object.createDict();
@@ -38,17 +38,16 @@ extend(Object, 'convertEnumToDict', (obj: Dictionary) => {
 	return res;
 });
 
-/** @see ObjectConstructor.createEnumLike */
+/** @see [[ObjectConstructor.createEnumLike]] */
 extend(Object, 'createEnumLike', createEnumLike);
 
 /**
  * @deprecated
- * @see ObjectConstructor.createEnumLike
+ * @see [[ObjectConstructor.createEnumLike]]
  */
 extend(Object, 'createMap', deprecate({renamedTo: 'createEnum'}, createEnumLike));
 
-/** @see ObjectConstructor.createEnumLike */
-// tslint:disable-next-line:completed-docs
+/** @see [[ObjectConstructor.createEnumLike]] */
 export function createEnumLike(obj: object): Dictionary {
 	const
 		map = Object.createDict();
@@ -77,7 +76,7 @@ export function createEnumLike(obj: object): Dictionary {
 	return map;
 }
 
-/** @see ObjectConstructor.fromArray */
+/** @see [[ObjectConstructor.fromArray]] */
 extend(Object, 'fromArray', (
 	arr: unknown[],
 	opts?: ObjectFromArrayOptions
@@ -87,7 +86,7 @@ extend(Object, 'fromArray', (
 
 	const p = <ObjectFromArrayOptions>{
 		key: String,
-		value: Boolean,
+		value: () => true,
 		...opts
 	};
 
@@ -112,10 +111,10 @@ extend(Object, 'fromArray', (
 	return map;
 });
 
-/** @see ObjectConstructor.select */
+/** @see [[ObjectConstructor.select]] */
 extend(Object, 'select', selectReject(true));
 
-/** @see ObjectConstructor.reject */
+/** @see [[ObjectConstructor.reject]] */
 extend(Object, 'reject', selectReject(false));
 
 /**
@@ -123,7 +122,7 @@ extend(Object, 'reject', selectReject(false));
  * @param select
  */
 export function selectReject(select: boolean): AnyFunction {
-	return function wrapper(obj: Dictionary, condition: CanArray<string> | Dictionary | RegExp): unknown {
+	return function wrapper(obj: Dictionary, condition: CanArray<string> | Dictionary | RegExp | Function): unknown {
 		if (arguments.length === 1) {
 			condition = obj;
 			return (obj) => wrapper(obj, condition);
@@ -131,6 +130,20 @@ export function selectReject(select: boolean): AnyFunction {
 
 		const
 			res = Object.createDict();
+
+		if (Object.isFunction(condition)) {
+			for (let keys = Object.keys(obj), i = 0; i < keys.length; i++) {
+				const
+					key = keys[i],
+					test = Object.isTruly(condition(key, obj[key]));
+
+				if (select ? test : !test) {
+					res[key] = obj[key];
+				}
+			}
+
+			return res;
+		}
 
 		if (Object.isRegExp(condition)) {
 			for (let keys = Object.keys(obj), i = 0; i < keys.length; i++) {
