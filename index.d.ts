@@ -1101,7 +1101,8 @@ interface ObjectConstructor {
 	select<C extends object>(condition: C): <D extends object>(obj: D) => Pick<D, Extract<keyof D, keyof C>>;
 
 	/**
-	 * Returns a new object based on the specified, but only with fields that match to the specified condition
+	 * Returns a new object based on the specified, but only with fields that match to the specified condition.
+	 * Mind that all passed objects are interpreted as dictionaries, i.e., you can't pass Map or Set structures.
 	 *
 	 * @param obj
 	 * @param condition - regular expression to filter
@@ -1109,7 +1110,8 @@ interface ObjectConstructor {
 	select<D extends object>(obj: D, condition: RegExp | ObjectPropertyFilter): {[K in keyof D]?: D[K]};
 
 	/**
-	 * Returns a new object based on the specified, but only with fields that match to the specified condition
+	 * Returns a new object based on the specified, but only with fields that match to the specified condition.
+	 * Mind that all passed objects are interpreted as dictionaries, i.e., you can't pass Map or Set structures.
 	 *
 	 * @param obj
 	 * @param condition - whitelist of keys to filter
@@ -1117,7 +1119,8 @@ interface ObjectConstructor {
 	select<D extends object>(obj: D, condition: []): D;
 
 	/**
-	 * Returns a new object based on the specified, but only with fields that match to the specified condition
+	 * Returns a new object based on the specified, but only with fields that match to the specified condition.
+	 * Mind that all passed objects are interpreted as dictionaries, i.e., you can't pass Map or Set structures.
 	 *
 	 * @param obj
 	 * @param condition - whitelist of keys to filter
@@ -1125,7 +1128,8 @@ interface ObjectConstructor {
 	select<D extends object, C extends string>(obj: D, condition: C | [C]): Pick<D, Extract<keyof D, C>>;
 
 	/**
-	 * Returns a new object based on the specified, but only with fields that match to the specified condition
+	 * Returns a new object based on the specified, but only with fields that match to the specified condition.
+	 * Mind that all passed objects are interpreted as dictionaries, i.e., you can't pass Map or Set structures.
 	 *
 	 * @param obj
 	 * @param condition - whitelist of keys to filter
@@ -1137,7 +1141,8 @@ interface ObjectConstructor {
 	>(obj: D, condition: [C1, C2]): Pick<D, Extract<keyof D, C1 | C2>>;
 
 	/**
-	 * Returns a new object based on the specified, but only with fields that match to the specified condition
+	 * Returns a new object based on the specified, but only with fields that match to the specified condition.
+	 * Mind that all passed objects are interpreted as dictionaries, i.e., you can't pass Map or Set structures.
 	 *
 	 * @param obj
 	 * @param condition - whitelist of keys to filter
@@ -1150,7 +1155,8 @@ interface ObjectConstructor {
 	>(obj: D, condition: [C1, C2, C3]): Pick<D, Extract<keyof D, C1 | C2 | C3>>;
 
 	/**
-	 * Returns a new object based on the specified, but only with fields that match to the specified condition
+	 * Returns a new object based on the specified, but only with fields that match to the specified condition.
+	 * Mind that all passed objects are interpreted as dictionaries, i.e., you can't pass Map or Set structures.
 	 *
 	 * @param obj
 	 * @param condition - whitelist of keys to filter
@@ -1164,7 +1170,8 @@ interface ObjectConstructor {
 	>(obj: D, condition: [C1, C2, C3, C4]): Pick<D, Extract<keyof D, C1 | C2 | C3 | C4>>;
 
 	/**
-	 * Returns a new object based on the specified, but only with fields that match to the specified condition
+	 * Returns a new object based on the specified, but only with fields that match to the specified condition.
+	 * Mind that all passed objects are interpreted as dictionaries, i.e., you can't pass Map or Set structures.
 	 *
 	 * @param obj
 	 * @param condition - whitelist of keys to filter
@@ -1179,7 +1186,8 @@ interface ObjectConstructor {
 	>(obj: D, condition: [C1, C2, C3, C4, C5]): Pick<D, Extract<keyof D, C1 | C2 | C3 | C4 | C5>>;
 
 	/**
-	 * Returns a new object based on the specified, but only with fields that match to the specified condition
+	 * Returns a new object based on the specified, but only with fields that match to the specified condition.
+	 * Mind that all passed objects are interpreted as dictionaries, i.e., you can't pass Map or Set structures.
 	 *
 	 * @param obj
 	 * @param condition - whitelist of keys to filter
@@ -1187,7 +1195,8 @@ interface ObjectConstructor {
 	select<D extends object, C extends string>(obj: D, condition: Iterable<C>): {[K in keyof D]?: D[K]};
 
 	/**
-	 * Returns a new object based on the specified, but only with fields that match to the specified condition
+	 * Returns a new object based on the specified, but only with fields that match to the specified condition.
+	 * Mind that all passed objects are interpreted as dictionaries, i.e., you can't pass Map or Set structures.
 	 *
 	 * @param obj
 	 * @param condition - map of keys to filter
@@ -1267,7 +1276,8 @@ interface ObjectConstructor {
 	reject<C extends object>(condition: C): <D extends object>(obj: D) => Omit<D, keyof C>;
 
 	/**
-	 * Returns a new object based on the specified, but without fields that match to the specified condition
+	 * Returns a new object based on the specified, but without fields that match to the specified condition.
+	 * Mind that all passed objects are interpreted as dictionaries, i.e., you can't pass Map or Set structures.
 	 *
 	 * @param obj
 	 * @param condition - regular expression to filter
@@ -1275,7 +1285,8 @@ interface ObjectConstructor {
 	reject<D extends object>(obj: D, condition: RegExp | ObjectPropertyFilter): {[K in keyof D]?: D[K]};
 
 	/**
-	 * Returns a new object based on the specified, but without fields that match to the specified condition
+	 * Returns a new object based on the specified, but without fields that match to the specified condition.
+	 * Mind that all passed objects are interpreted as dictionaries, i.e., you can't pass Map or Set structures.
 	 *
 	 * @param obj
 	 * @param condition - whitelist of keys to filter
@@ -1283,7 +1294,8 @@ interface ObjectConstructor {
 	reject<D extends object>(obj: D, condition: []): D;
 
 	/**
-	 * Returns a new object based on the specified, but without fields that match to the specified condition
+	 * Returns a new object based on the specified, but without fields that match to the specified condition.
+	 * Mind that all passed objects are interpreted as dictionaries, i.e., you can't pass Map or Set structures.
 	 *
 	 * @param obj
 	 * @param condition - whitelist of keys to filter
@@ -1291,7 +1303,8 @@ interface ObjectConstructor {
 	reject<D extends object, C extends string>(obj: D, condition: C | [C]): Omit<D, C>;
 
 	/**
-	 * Returns a new object based on the specified, but without fields that match to the specified condition
+	 * Returns a new object based on the specified, but without fields that match to the specified condition.
+	 * Mind that all passed objects are interpreted as dictionaries, i.e., you can't pass Map or Set structures.
 	 *
 	 * @param obj
 	 * @param condition - whitelist of keys to filter
@@ -1303,7 +1316,8 @@ interface ObjectConstructor {
 	>(obj: D, condition: [C1, C2]): Omit<D, C1 | C2>;
 
 	/**
-	 * Returns a new object based on the specified, but without fields that match to the specified condition
+	 * Returns a new object based on the specified, but without fields that match to the specified condition.
+	 * Mind that all passed objects are interpreted as dictionaries, i.e., you can't pass Map or Set structures.
 	 *
 	 * @param obj
 	 * @param condition - whitelist of keys to filter
@@ -1316,7 +1330,8 @@ interface ObjectConstructor {
 	>(obj: D, condition: [C1, C2, C3]): Omit<D, C1 | C2 | C3>;
 
 	/**
-	 * Returns a new object based on the specified, but without fields that match to the specified condition
+	 * Returns a new object based on the specified, but without fields that match to the specified condition.
+	 * Mind that all passed objects are interpreted as dictionaries, i.e., you can't pass Map or Set structures.
 	 *
 	 * @param obj
 	 * @param condition - whitelist of keys to filter
@@ -1330,7 +1345,8 @@ interface ObjectConstructor {
 	>(obj: D, condition: [C1, C2, C3, C4]): Omit<D, C1 | C2 | C3 | C4>;
 
 	/**
-	 * Returns a new object based on the specified, but without fields that match to the specified condition
+	 * Returns a new object based on the specified, but without fields that match to the specified condition.
+	 * Mind that all passed objects are interpreted as dictionaries, i.e., you can't pass Map or Set structures.
 	 *
 	 * @param obj
 	 * @param condition - whitelist of keys to filter
@@ -1345,7 +1361,8 @@ interface ObjectConstructor {
 	>(obj: D, condition: [C1, C2, C3, C4, C5]): Omit<D, C1 | C2 | C3 | C4 | C5>;
 
 	/**
-	 * Returns a new object based on the specified, but without fields that match to the specified condition
+	 * Returns a new object based on the specified, but without fields that match to the specified condition.
+	 * Mind that all passed objects are interpreted as dictionaries, i.e., you can't pass Map or Set structures.
 	 *
 	 * @param obj
 	 * @param condition - whitelist of keys to filter
@@ -1353,7 +1370,8 @@ interface ObjectConstructor {
 	reject<D extends object, C extends string>(obj: D, condition: Iterable<C>): {[K in keyof D]?: D[K]};
 
 	/**
-	 * Returns a new object based on the specified, but without fields that match to the specified condition
+	 * Returns a new object based on the specified, but without fields that match to the specified condition.
+	 * Mind that all passed objects are interpreted as dictionaries, i.e., you can't pass Map or Set structures.
 	 *
 	 * @param obj
 	 * @param condition - map of keys to filter
