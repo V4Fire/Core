@@ -246,7 +246,8 @@ interface ObjectMixinOptions<V = unknown, K = unknown, D = unknown> {
 	traits?: boolean | -1;
 
 	/**
-	 * If true, then the original value of an object property can be rewritten from another object with undefined value
+	 * If true, then the original value of an object property can be rewritten
+	 * from another object even with undefined value
 	 *
 	 * @default `false`
 	 * @example
@@ -267,13 +268,13 @@ interface ObjectMixinOptions<V = unknown, K = unknown, D = unknown> {
 	withDescriptor?: boolean;
 
 	/**
-	 * If true, then accessors (but not the whole descriptor) of an object property are copied too
+	 * If true, then property accessors (but not the whole property descriptor) are copied too
 	 * @default `false`
 	 */
 	withAccessors?: boolean;
 
 	/**
-	 * If true, then object properties are copied with their prototypes
+	 * If true, then object properties from a prototype are copied recursively
 	 * (works only with the "deep" mode)
 	 *
 	 * @default `false`
@@ -359,7 +360,7 @@ interface ObjectMixinOptions<V = unknown, K = unknown, D = unknown> {
 	concatFn?(oldValue: V, newValue: unknown[], key: K): unknown[];
 
 	/**
-	 * Function that filters values for deep extending
+	 * Function that filters values that support deep extending
 	 * (works only with the "deep" mode)
 	 *
 	 * @param target - target object
