@@ -2573,12 +2573,8 @@ interface DateConstructor {
 	 *
 	 * @param margin - value of the maximum difference between two dates at which they are considered equal
 	 *   (in milliseconds)
-	 *
-	 * @param [left] - date of the beginning
-	 * @param [right] - date of the ending
 	 */
-	isBetween(margin: number, left?: DateCreateValue, right?: DateCreateValue):
-		(date: Date, left?: Date, right?: Date) => boolean;
+	isBetween(margin: number): (date: Date, left?: Date, right?: Date) => boolean;
 
 	/**
 	 * Returns a curried version of Date.isBetween
