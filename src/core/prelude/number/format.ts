@@ -26,7 +26,7 @@ import {
 
 import { repeatString } from 'core/prelude/number/helpers';
 
-/** @see Number.pad */
+/** @see [[Number.pad]] */
 extend(Number.prototype, 'pad', function pad(
 	this: number,
 	lengthOrOpts: number | NumberPadOptions = 0,
@@ -51,7 +51,7 @@ extend(Number.prototype, 'pad', function pad(
 	return str;
 });
 
-/** @see NumberConstructor.pad */
+/** @see [[NumberConstructor.pad]] */
 extend(Number, 'pad', (value: number | NumberPadOptions, lengthOrOpts: number | NumberPadOptions) => {
 	if (Object.isPlainObject(value)) {
 		const opts = value;
@@ -61,7 +61,7 @@ extend(Number, 'pad', (value: number | NumberPadOptions, lengthOrOpts: number | 
 	return value.pad(<any>lengthOrOpts);
 });
 
-/** @see Number.format */
+/** @see [[Number.format]] */
 extend(Number.prototype, 'format', function format(
 	this: number,
 	patternOrOpts?: number | string | Intl.NumberFormatOptions,
@@ -174,7 +174,7 @@ extend(Number.prototype, 'format', function format(
 	return res;
 });
 
-/** @see NumberConstructor.format */
+/** @see [[NumberConstructor.format]] */
 extend(Number, 'format', (
 	value: number | string | Intl.NumberFormatOptions,
 	patternOrOpts?: string | Intl.NumberFormatOptions,
@@ -189,12 +189,12 @@ extend(Number, 'format', (
 	return value.format(<any>patternOrOpts, locale);
 });
 
-/** @see NumberConstructor.getOption */
+/** @see [[NumberConstructor.getOption]] */
 extend(Number, 'getOption', deprecate(function getOption(key: string): string {
 	return globalOpts[key];
 }));
 
-/** @see NumberConstructor.setOption */
+/** @see [[NumberConstructor.setOption]] */
 extend(Number, 'setOption', deprecate(function setOption(key: string, value: string): void {
 	globalOpts.init = true;
 	globalOpts[key] = value;

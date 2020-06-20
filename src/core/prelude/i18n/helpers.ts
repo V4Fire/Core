@@ -29,13 +29,13 @@ Object.forEach(langDict, (el) => {
 	});
 });
 
-/** @see i18n */
+/** @see [[i18n]] */
 extend(globalThis, 'i18n', globalI18n);
 
-/** @see t */
+/** @see [[t]] */
 extend(globalThis, 't', globalI18n);
 
-/** @see l */
+/** @see [[l]] */
 extend(globalThis, 'l', (strings: unknown | string[], ...exprs: unknown[]): string => {
 	if (strings == null) {
 		return '';
@@ -50,7 +50,7 @@ extend(globalThis, 'l', (strings: unknown | string[], ...exprs: unknown[]): stri
 			str = '';
 
 		for (let i = 0; i < strings.length; i++) {
-			str += strings[i] + (i in exprs ? String(exprs[i]) : '');
+			str += String(strings[i]) + (i in exprs ? String(exprs[i]) : '');
 		}
 
 		return str;
@@ -76,7 +76,7 @@ function globalI18n(strings: unknown | string[], ...exprs: unknown[]): string {
 
 	} else {
 		for (let i = 0; i < strings.length; i++) {
-			str += localI18n(strings[i]) + (i in exprs ? exprs[i] : '');
+			str += localI18n(strings[i]) + (i in exprs ? String(exprs[i]) : '');
 		}
 	}
 
@@ -86,10 +86,10 @@ function globalI18n(strings: unknown | string[], ...exprs: unknown[]): string {
 function localI18n(val: unknown, customLocale?: string): string {
 	const
 		str = String(val),
-		localeName = customLocale === undefined ? locale.value : customLocale;
+		localeName = customLocale == null ? locale.value : customLocale;
 
-	if (localeName) {
-		const w = langDict?.[localeName]?.[str];
+	if (Object.isTruly(localeName)) {
+		const w = langDict[localeName]?.[str];
 		return w != null ? String(w) : str;
 	}
 
