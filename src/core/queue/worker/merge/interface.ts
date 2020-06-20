@@ -7,6 +7,7 @@
  */
 
 import { QueueOptions as WorkerQueueOptions } from 'core/queue/worker/interface';
+
 export * from 'core/queue/worker/interface';
 
 export interface HashFn<T> {
