@@ -30,7 +30,7 @@ export function createDateModifier(mod: (val: number, base: number) => number = 
 			const
 				key = keys[i];
 
-			if (key.slice(-1) !== 's') {
+			if (!key.endsWith('s')) {
 				params[`${key}s`] = params[key];
 			}
 		}
@@ -52,25 +52,25 @@ export function createDateModifier(mod: (val: number, base: number) => number = 
 			this.setMinutes(mod(params.minutes, this.getMinutes()));
 		}
 
-		if (params.hours) {
+		if (params.hours != null) {
 			resetValues.hours = false;
 			setResetValue('milliseconds', 'seconds', 'minutes');
 			this.setHours(mod(params.hours, this.getHours()));
 		}
 
-		if (params.days) {
+		if (params.days != null) {
 			resetValues.days = false;
 			setResetValue('milliseconds', 'seconds', 'minutes', 'hours');
 			this.setDate(mod(params.days, this.getDate()));
 		}
 
-		if (params.months) {
+		if (params.months != null) {
 			resetValues.months = false;
 			setResetValue('milliseconds', 'seconds', 'minutes', 'hours', 'days');
 			this.setMonth(mod(params.months, this.getMonth()));
 		}
 
-		if (params.years) {
+		if (params.years != null) {
 			resetValues.years = false;
 			setResetValue('milliseconds', 'seconds', 'minutes', 'hours', 'days', 'months');
 			this.setFullYear(params.years);
@@ -127,15 +127,18 @@ export function createStaticDateModifier(method: string): AnyFunction {
  * @param method
  */
 export function createStaticDateComparator(method: string): AnyFunction {
-	// tslint:disable-next-line:only-arrow-functions
-	return function (date1: DateCreateValue | number, date2: DateCreateValue, margin?: number): boolean | AnyFunction {
+	return function comparator(
+		date1: DateCreateValue | number,
+		date2: DateCreateValue,
+		margin?: number
+	): boolean | AnyFunction {
 		if (arguments.length < 2 || arguments.length < 3 && Object.isNumber(date1)) {
 			if (Object.isNumber(date1)) {
 				margin = date1;
 				date1 = date2;
 			}
 
-			return (date2, m) => Date[method](date1, date2, margin || m);
+			return (date2, m) => Date[method](date1, date2, margin ?? m);
 		}
 
 		return Date.create(date1)[method](date2, margin);

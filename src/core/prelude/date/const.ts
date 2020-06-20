@@ -10,8 +10,8 @@ export const
 	formatCache = Object.createDict<Intl.DateTimeFormat>();
 
 export const
-	isDateStr = /^(\d{2,4}[-.\/]\d{2}[-.\/]\d{2,4})([T ])?(\d{2}:\d{2}:\d{2}(?:\.\d{3})?)?(?:\d{0,3})?(Z)?([+-]\d{2}:?\d{2})?$/,
-	dateNormalizeRgxp = /(\d{2,4})[-.\/](\d{2})[-.\/](\d{2,4})/,
+	isDateStr = /^(\d{2,4}[-./]\d{2}[-./]\d{2,4})([T ])?(\d{2}:\d{2}:\d{2}(?:\.\d{3})?)?(?:\d{0,3})?(Z)?([+-]\d{2}:?\d{2})?$/,
+	dateNormalizeRgxp = /(\d{2,4})[-./](\d{2})[-./](\d{2,4})/,
 	isFloatStr = /^\d+\.\d+$/;
 
 export const createAliases = Object.createDict({

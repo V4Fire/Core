@@ -9,12 +9,12 @@
 import extend from 'core/prelude/extend';
 import { isDateStr, isFloatStr, dateNormalizeRgxp, createAliases } from 'core/prelude/date/const';
 
-/** @see Date.clone */
-extend(Date.prototype, 'clone', function (this: Date): Date {
+/** @see [[Date.clone]] */
+extend(Date.prototype, 'clone', function clone(this: Date): Date {
 	return new Date(this);
 });
 
-/** @see DateConstructor.create */
+/** @see [[DateConstructor.create]] */
 extend(Date, 'create', (pattern?: DateCreateValue) => {
 	if (pattern == null || pattern === '') {
 		return new Date();
@@ -53,11 +53,13 @@ extend(Date, 'create', (pattern?: DateCreateValue) => {
 				return `${year}-${chunks[2]}-${day}`;
 			};
 
-			pattern = pattern.replace(
-				isDateStr,
-				(str, date, t, time, zone) =>
-					`${normalizeDate(date)}T${time || '00:00:01'}${zone === 'Z' || !zone ? createISOTime() : ''}`
-			);
+			const replacer = (str, date, t, time, zone) => {
+				time = time !== '' ? time : '00:00:01';
+				zone = zone === 'Z' || zone === '' ? createISOTime() : '';
+				return `${normalizeDate(date)}T${time}${zone}`;
+			};
+
+			pattern = pattern.replace(isDateStr, replacer);
 
 		} else {
 			return new Date(pattern);
@@ -68,7 +70,7 @@ extend(Date, 'create', (pattern?: DateCreateValue) => {
 
 	if (Object.isString(pattern) && isFloatStr.test(pattern)) {
 		const float = parseFloat(pattern);
-		pattern = float ? float * 1e3 : pattern;
+		pattern = float > 0 ? float * 1e3 : pattern;
 
 	} else if (Object.isNumber(pattern) && !pattern.isInteger()) {
 		pattern *= 1e3;

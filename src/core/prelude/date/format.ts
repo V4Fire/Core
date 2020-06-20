@@ -11,41 +11,41 @@ import { locale as defaultLocale } from 'core/prelude/i18n';
 import { formatCache, formatAliases, boolAliases, defaultFormats } from 'core/prelude/date/const';
 import { createStaticDateFormatter } from 'core/prelude/date/helpers';
 
-/** @see Date.short */
-extend(Date.prototype, 'short', function (
+/** @see [[Date.short]] */
+extend(Date.prototype, 'short', function short(
 	this: Date,
 	locale: CanArray<string> = defaultLocale.value
 ): string {
 	return this.format('d:numeric;M:numeric;Y:numeric', locale);
 });
 
-/** @see DateConstructor.short */
+/** @see [[DateConstructor.short]] */
 extend(Date, 'short', createStaticDateFormatter('short'));
 
-/** @see Date.medium */
-extend(Date.prototype, 'medium', function (
+/** @see [[Date.medium]] */
+extend(Date.prototype, 'medium', function medium(
 	this: Date,
 	locale: CanArray<string> = defaultLocale.value
 ): string {
 	return this.format('d:numeric;M:long;Y:numeric', locale);
 });
 
-/** @see DateConstructor.medium */
+/** @see [[DateConstructor.medium]] */
 extend(Date, 'medium', createStaticDateFormatter('medium'));
 
-/** @see Date.long */
-extend(Date.prototype, 'long', function (
+/** @see [[Date.long]] */
+extend(Date.prototype, 'long', function long(
 	this: Date,
 	locale: CanArray<string> = defaultLocale.value
 ): string {
 	return this.format('', locale);
 });
 
-/** @see DateConstructor.long */
+/** @see [[DateConstructor.long]] */
 extend(Date, 'long', createStaticDateFormatter('long'));
 
-/** @see Date.format */
-extend(Date.prototype, 'format', function (
+/** @see [[Date.format]] */
+extend(Date.prototype, 'format', function format(
 	this: Date,
 	patternOrOpts: string | Intl.DateTimeFormatOptions,
 	locale: CanArray<string> = defaultLocale.value
@@ -72,33 +72,35 @@ extend(Date.prototype, 'format', function (
 			el = chunks[i].trim();
 
 		let
-			[key, val] = el.split(':');
+			[key, val = ''] = el.split(':');
 
 		key = key.trim();
 
-		if (val) {
+		if (val !== '') {
 			val = val.trim();
 		}
 
 		const
 			alias = formatAliases[key];
 
-		if (alias) {
+		if (alias != null) {
 			key = alias;
 		}
 
-		if (!val) {
+		if (val === '') {
 			val = defaultFormats[key];
 		}
 
 		opts[key] = val in boolAliases ? boolAliases[val] : val;
 	}
 
-	const formatter = formatCache[cacheKey] = new Intl.DateTimeFormat(locale, opts);
+	const formatter = new Intl.DateTimeFormat(locale, opts);
+	formatCache[cacheKey] = formatter;
+
 	return formatter.format(this);
 });
 
-/** @see DateConstructor.format */
+/** @see [[DateConstructor.format]] */
 extend(Date, 'format', (
 	date: Date | string | Intl.NumberFormatOptions,
 	patternOrOpts?: string | Intl.NumberFormatOptions,
@@ -113,8 +115,8 @@ extend(Date, 'format', (
 	return date.format(<any>patternOrOpts, locale);
 });
 
-/** @see Date.toHTMLDateString */
-extend(Date.prototype, 'toHTMLDateString', function (
+/** @see [[Date.toHTMLDateString]] */
+extend(Date.prototype, 'toHTMLDateString', function toHTMLDateString(
 	this: Date,
 	opts: DateHTMLDateStringOptions = {}
 ): string {
@@ -129,11 +131,11 @@ extend(Date.prototype, 'toHTMLDateString', function (
 	].join('-');
 });
 
-/** @see DateConstructor.toHTMLDateString */
+/** @see [[DateConstructor.toHTMLDateString]] */
 extend(Date, 'toHTMLDateString', createStaticDateFormatter('toHTMLDateString'));
 
-/** @see Date.toHTMLTimeString */
-extend(Date.prototype, 'toHTMLTimeString', function (
+/** @see [[Date.toHTMLTimeString]] */
+extend(Date.prototype, 'toHTMLTimeString', function toHTMLTimeString(
 	this: Date,
 	opts: DateHTMLTimeStringOptions = {}
 ): string {
@@ -156,13 +158,13 @@ extend(Date.prototype, 'toHTMLTimeString', function (
 	return res.join(':');
 });
 
-/** @see DateConstructor.toHTMLTimeString */
+/** @see [[DateConstructor.toHTMLTimeString]] */
 extend(Date, 'toHTMLTimeString', createStaticDateFormatter('toHTMLTimeString'));
 
-/** @see Date.toHTMLString */
-extend(Date.prototype, 'toHTMLString', function (this: Date, opts: DateHTMLStringOptions): string {
+/** @see [[Date.toHTMLString]] */
+extend(Date.prototype, 'toHTMLString', function toHTMLString(this: Date, opts: DateHTMLStringOptions): string {
 	return `${this.toHTMLDateString(opts)}T${this.toHTMLTimeString(opts)}`;
 });
 
-/** @see DateConstructor.toHTMLString */
+/** @see [[DateConstructor.toHTMLString]] */
 extend(Date, 'toHTMLString', createStaticDateFormatter('toHTMLString'));

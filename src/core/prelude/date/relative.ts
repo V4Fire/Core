@@ -8,22 +8,21 @@
 
 import extend from 'core/prelude/extend';
 
-/** @see Date.relative */
-extend(Date.prototype, 'relative', function (this: Date): DateRelative {
-	return relative(this, new Date());
+/** @see [[Date.relative]] */
+extend(Date.prototype, 'relative', function relative(this: Date): DateRelative {
+	return getRelative(this, new Date());
 });
 
-/** @see DateConstructor.relative */
+/** @see [[DateConstructor.relative]] */
 extend(Date, 'relative', (date: DateCreateValue) => Date.create(date).relative());
 
-/** @see Date.relativeTo */
-extend(Date.prototype, 'relativeTo', function (this: Date, date: DateCreateValue): DateRelative {
-	return relative(this, date);
+/** @see [[Date.relativeTo]] */
+extend(Date.prototype, 'relativeTo', function relativeTo(this: Date, date: DateCreateValue): DateRelative {
+	return getRelative(this, date);
 });
 
-/** @see DateConstructor.relative */
-// tslint:disable-next-line:only-arrow-functions
-extend(Date, 'relativeTo', function (from: DateCreateValue, to: DateCreateValue): DateRelative | AnyFunction {
+/** @see [[DateConstructor.relativeTo]] */
+extend(Date, 'relativeTo', function relativeTo(from: DateCreateValue, to: DateCreateValue): DateRelative | AnyFunction {
 	if (arguments.length === 1) {
 		const d = Date.create(from);
 		return (date2) => d.relativeTo(date2);
@@ -38,7 +37,7 @@ extend(Date, 'relativeTo', function (from: DateCreateValue, to: DateCreateValue)
  * @param from
  * @param to
  */
-export function relative(from: DateCreateValue, to: DateCreateValue): DateRelative {
+export function getRelative(from: DateCreateValue, to: DateCreateValue): DateRelative {
 	const
 		diff = Date.create(to).valueOf() - Date.create(from).valueOf();
 
@@ -59,7 +58,7 @@ export function relative(from: DateCreateValue, to: DateCreateValue): DateRelati
 		if (Math.abs(diff) < bound) {
 			return {
 				type: <DateRelative['type']>type,
-				value: Number((diff / (i ? intervals[i - 1].bound : 1)).toFixed(2)),
+				value: Number((diff / (i > 0 ? intervals[i - 1].bound : 1)).toFixed(2)),
 				diff
 			};
 		}
