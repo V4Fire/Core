@@ -38,11 +38,14 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 	 */
 	static resolve(): SyncPromise<void>;
 	static resolve<T = unknown>(value?: Value<T>): SyncPromise<T> {
-		if (value instanceof SyncPromise) {
+		const
+			Constr = Object.isTruly(this) ? this : SyncPromise;
+
+		if (value instanceof Constr) {
 			return value;
 		}
 
-		return new SyncPromise((resolve, reject) => {
+		return new Constr((resolve, reject) => {
 			if (Object.isPromiseLike(value)) {
 				value.then(resolve, reject);
 
@@ -57,7 +60,8 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 	 * @param [reason]
 	 */
 	static reject<T = never>(reason?: unknown): SyncPromise<T> {
-		return new SyncPromise((_, reject) => reject(reason));
+		const Constr = Object.isTruly(this) ? this : SyncPromise;
+		return new Constr((_, reject) => reject(reason));
 	}
 
 	/**

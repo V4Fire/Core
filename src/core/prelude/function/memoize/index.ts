@@ -8,17 +8,17 @@
 
 import extend from 'core/prelude/extend';
 
-/** @see Function.once */
-extend(Function.prototype, 'once', function (this: AnyFunction): AnyFunction {
+/** @see [[Function.once]] */
+extend(Function.prototype, 'once', function once(this: AnyFunction): AnyFunction {
 	const
-		// tslint:disable-next-line:no-this-assignment
+		// eslint-disable-next-line @typescript-eslint/no-this-alias
 		fn = this;
 
 	let
 		called = false,
 		res;
 
-	return function (): unknown {
+	return function wrapper(this: unknown): unknown {
 		if (called) {
 			return res;
 		}
@@ -29,5 +29,5 @@ extend(Function.prototype, 'once', function (this: AnyFunction): AnyFunction {
 	};
 });
 
-/** @see FunctionConstructor.once */
+/** @see [[FunctionConstructor.once]] */
 extend(Function, 'once', (fn: AnyFunction) => fn.once());

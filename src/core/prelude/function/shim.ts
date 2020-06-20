@@ -16,7 +16,7 @@ try {
 	Object.defineProperty(Function.prototype, 'name', {
 		get(): CanUndef<string> {
 			const v = fnNameRgxp.exec(this.toString());
-			return v && v[1] || undefined;
+			return v?.[1] ?? undefined;
 		}
 	});
 
