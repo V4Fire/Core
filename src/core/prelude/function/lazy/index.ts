@@ -76,7 +76,7 @@ extend(Function.prototype, 'throttle', function throttle(
 			const cb = () => {
 				timer = undefined;
 
-				if (!opts.skipRest && lastArgs !== args) {
+				if (!opts.single && lastArgs !== args) {
 					fn.apply(this, lastArgs);
 				}
 			};

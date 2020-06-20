@@ -3227,12 +3227,10 @@ interface ThrottleOptions {
 	delay?: number;
 
 	/**
-	 * If true, then all rest invokes that caught in the sleep span are ignored.
-	 * This behavior is closer to "classic" throttle algorithm.
-	 *
+	 * If true, then all rest invokes that caught in the sleep span are ignored
 	 * @default `false`
 	 */
-	skipRest?: boolean;
+	single?: boolean;
 }
 
 interface FunctionConstructor {

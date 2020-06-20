@@ -16,4 +16,4 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 #### :rocket: New Feature
 
 * Added tests
-* Added `skipRest` parameter to `throttle`
+* Added `single` parameter to `throttle`

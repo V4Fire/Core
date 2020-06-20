@@ -90,7 +90,7 @@ describe('core/prelude/function/lazy', () => {
 
 		const foo = (() => {
 			i++;
-		}).throttle({delay: 10, skipRest: true});
+		}).throttle({delay: 10, single: true});
 
 		foo();
 		foo();
@@ -151,7 +151,7 @@ describe('core/prelude/function/lazy', () => {
 	it('Function.throttle overload #2', (done) => {
 		let i = 0;
 
-		const foo = Function.throttle({delay: 10, skipRest: true})(() => {
+		const foo = Function.throttle({delay: 10, single: true})(() => {
 			i++;
 		});
 
