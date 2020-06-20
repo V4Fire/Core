@@ -354,12 +354,12 @@ export interface Task<CTX extends object = Async> {
 	 * [0] - onFulfilled
 	 * [1] - onRejected
 	 */
-	onComplete: BoundFn<CTX>[][];
+	onComplete: Array<Array<BoundFn<CTX>>>;
 
 	/**
 	 * List of clear handlers
 	 */
-	onClear: AsyncCb<CTX>[];
+	onClear: Array<AsyncCb<CTX>>;
 
 	/**
 	 * Unregisters the task
