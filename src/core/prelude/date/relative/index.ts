@@ -58,7 +58,7 @@ export function getRelative(from: DateCreateValue, to: DateCreateValue): DateRel
 		if (Math.abs(diff) < bound) {
 			return {
 				type: <DateRelative['type']>type,
-				value: Number((diff / (i > 0 ? intervals[i - 1].bound : 1)).toFixed(2)),
+				value: Math.floor(diff / (i > 0 ? intervals[i - 1].bound : 1)),
 				diff
 			};
 		}
@@ -66,7 +66,7 @@ export function getRelative(from: DateCreateValue, to: DateCreateValue): DateRel
 
 	return {
 		type: 'years',
-		value: Number((diff / intervals[intervals.length - 1].bound).toFixed(2)),
+		value: Math.floor(diff / intervals[intervals.length - 1].bound),
 		diff
 	};
 }
