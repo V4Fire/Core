@@ -2873,22 +2873,22 @@ interface DateConstructor {
 	rewind(date: Date, units: DateSetParams, reset?: boolean): Date;
 
 	/**
-	 * Returns a relative value of the date for the now date
+	 * Maps the specified date to the current (Date.now()) date and returns difference
 	 * @param date
 	 */
 	relative(date: DateCreateValue): DateRelative;
 
 	/**
 	 * Returns a curried version of Date.relativeTo
-	 * @param from - original date to compare
+	 * @param from
 	 */
 	relativeTo(from: DateCreateValue): (to: DateCreateValue) => DateRelative;
 
 	/**
-	 * Returns a relative value of the date for another date
+	 * Maps the one date to another and returns difference
 	 *
-	 * @param from - original date to compare
-	 * @param to - another date to compare
+	 * @param from
+	 * @param to
 	 */
 	relativeTo(from: DateCreateValue, to: DateCreateValue): DateRelative;
 }
