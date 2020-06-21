@@ -7,4 +7,5 @@
  */
 
 type IntersectProps<L, R> = {[K in keyof L & keyof R]: undefined extends R[K] ? NonNullable<L[K]> : R[K]};
+
 export type Extended<L, R> = Omit<L, keyof R> & Omit<R, keyof L> & IntersectProps<L, R>;
