@@ -73,7 +73,7 @@ export function createDateModifier(mod: (val: number, base: number) => number = 
 		if (params.years != null) {
 			resetValues.years = false;
 			setResetValue('milliseconds', 'seconds', 'minutes', 'hours', 'days', 'months');
-			this.setFullYear(params.years);
+			this.setFullYear(mod(params.years, this.getFullYear()));
 		}
 
 		if (reset) {

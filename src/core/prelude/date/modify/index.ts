@@ -39,7 +39,7 @@ extend(Date, 'beginningOfWeek', (date: Date) => date.beginningOfWeek());
 
 /** @see [[Date.endOfWeek]] */
 extend(Date.prototype, 'endOfWeek', function endOfWeek(this: Date): Date {
-	this.setDate(this.getDate() + 7 - this.getDay());
+	this.setDate(this.getDate() + 6 - this.getDay());
 	this.endOfDay();
 	return this;
 });
