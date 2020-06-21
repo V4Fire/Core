@@ -38,7 +38,7 @@ export function createStaticRoundingFunction(method: string): AnyFunction {
 	return function wrapper(value: number, precision: number): CanUndef<number> | AnyFunction {
 		if (arguments.length < 2) {
 			precision = value;
-			return (value) => Number[method](value, precision);
+			return (value) => Number[Symbol.for('[[V4_EXTEND_API]]')][method](value, precision);
 		}
 
 		return value[method](value, precision);
