@@ -10,8 +10,13 @@ export const
 	formatCache = Object.createDict<Intl.DateTimeFormat>();
 
 export const
-	isDateStr = /^(\d{2,4}[-./]\d{2}[-./]\d{2,4})([T ])?(\d{2}:\d{2}:\d{2}(?:\.\d{3})?)?(?:\d{0,3})?(Z)?([+-]\d{2}:?\d{2})?$/,
-	dateNormalizeRgxp = /(\d{2,4})[-./](\d{2})[-./](\d{2,4})/,
+	dateChunkNormalizeRgxp = /(\d{2,4})[-./](\d{2})[-./](\d{2,4})/,
+	dateChunkRgxp = /(\d{2,4}[-./]\d{2}[-./]\d{2,4})/,
+	timeChunkRgxp = /[T ]*(\d{2}:\d{2}:\d{2}(?:\.\d{3})?)?(?:\d{0,3})?/,
+	zoneChunkRgxp = /(Z?([+-]\d{2}:?\d{2})?)/;
+
+export const
+	isDateStr = new RegExp(`^${dateChunkRgxp.source}${timeChunkRgxp.source}${zoneChunkRgxp.source}$`),
 	isFloatStr = /^\d+\.\d+$/;
 
 export const createAliases = Object.createDict({
