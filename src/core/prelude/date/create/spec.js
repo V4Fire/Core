@@ -70,14 +70,12 @@ describe('core/prelude/date/create', () => {
 	it('new date based on non-standard templates', () => {
 		const
 			date = new Date(2015, 9, 11, 10),
-			tz = date.getTimezoneOffset() * 60 * 1e3,
-			utcDate = new Date(date.valueOf() - tz);
+			utcDate = new Date(date.valueOf() - date.getTimezoneOffset() * 60 * 1e3);
 
 		expect(Date.create('2015.10.11 10:00:00')).toEqual(date);
 		expect(Date.create('2015.10.11 10:00:00.100')).toEqual(new Date(date.valueOf() + 100));
 		expect(Date.create('2015/10/11T10:00:00')).toEqual(date);
 		expect(Date.create('2015-10-11 T10:00:00')).toEqual(date);
 		expect(Date.create('2015-10-11 10:00:00Z')).toEqual(utcDate);
-		expect(Date.create('2015-10-11 10:00:00+05:00')).toEqual(new Date(date.valueOf() + tz - (5).hours()));
 	});
 });
