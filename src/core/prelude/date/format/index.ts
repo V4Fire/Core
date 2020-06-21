@@ -38,7 +38,7 @@ extend(Date.prototype, 'long', function long(
 	this: Date,
 	locale: CanArray<string> = defaultLocale.value
 ): string {
-	return this.format('', locale);
+	return this.format('d:numeric;M:long;Y:numeric;h:2-digit;m:2-digit;s:2-digit', locale);
 });
 
 /** @see [[DateConstructor.long]] */
@@ -71,9 +71,7 @@ extend(Date.prototype, 'format', function format(
 		const
 			el = chunks[i].trim();
 
-		let
-			[key, val = ''] = el.split(':');
-
+		let [key, val = ''] = el.split(':');
 		key = key.trim();
 
 		if (val !== '') {
@@ -141,13 +139,18 @@ extend(Date.prototype, 'toHTMLTimeString', function toHTMLTimeString(
 ): string {
 	const
 		s = (v) => String(v).padStart(2, '0'),
-		res = [s(this.getHours()), opts.minutes ? s(this.getMinutes()) : '00'];
+		needMinutes = opts.minutes !== false;
 
-	if (opts.seconds) {
+	const res = [
+		s(this.getHours()),
+		needMinutes ? s(this.getMinutes()) : '00'
+	];
+
+	if (needMinutes && opts.seconds !== false) {
 		const
 			sec = s(this.getSeconds());
 
-		if (opts.milliseconds) {
+		if (opts.milliseconds !== false) {
 			res.push(`${sec}.${this.getMilliseconds()}`);
 
 		} else {

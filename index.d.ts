@@ -2699,7 +2699,7 @@ interface DateConstructor {
 	 *
 	 * @example
 	 * ```js
-	 * new Date('12/28/2019').long('en-us') // '12/28/2019, 12:00:00 A'
+	 * new Date('12/28/2019').long('en-us') // '12/28/2019, 12:00:00 AM'
 	 * ```
 	 */
 	long(date: Date, locale?: CanArray<string>): string;
