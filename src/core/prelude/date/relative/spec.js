@@ -8,132 +8,216 @@
 
 describe('core/prelude/date/relative', () => {
 	it('relative', () => {
-		expect(new Date().rewind({seconds: 10}).relative()).toEqual({
-			type: 'seconds',
-			value: 10,
-			diff: (10).seconds()
-		});
-
-		expect(new Date().rewind({minutes: 10}).relative()).toEqual({
-			type: 'minutes',
-			value: 10,
-			diff: (10).minutes()
-		});
-
-		expect(new Date().rewind({hours: 10}).relative()).toEqual({
-			type: 'hours',
-			value: 10,
-			diff: (10).hours()
-		});
-
-		expect(new Date().rewind({days: 4}).relative()).toEqual({
-			type: 'days',
-			value: 4,
-			diff: (4).days()
-		});
-
-		expect(new Date(Date.now() - (2).weeks()).relative()).toEqual({
-			type: 'weeks',
-			value: 2,
-			diff: (2).weeks()
-		});
-
 		{
 			const
-				date = new Date().rewind({months: 2});
+				res = new Date().rewind({seconds: 10}).relative();
 
-			expect(date.relative()).toEqual({
-				type: 'months',
-				value: 2,
-				diff: Date.now().valueOf() - date.valueOf()
+			expect(Object.reject(res, 'diff')).toEqual({
+				type: 'seconds',
+				value: 10
 			});
+
+			expect(res.diff).toBeGreaterThanOrEqual((10).seconds() - 5);
 		}
 
 		{
 			const
-				date = new Date().rewind({years: 2});
+				res = new Date().rewind({minutes: 10}).relative();
 
-			expect(date.relative()).toEqual({
-				type: 'years',
-				value: 2,
-				diff: Date.now().valueOf() - date.valueOf()
+			expect(Object.reject(res, 'diff')).toEqual({
+				type: 'minutes',
+				value: 10
 			});
+
+			expect(res.diff).toBeGreaterThanOrEqual((10).minutes() - 5);
+		}
+
+		{
+			const
+				res = new Date().rewind({hours: 10}).relative();
+
+			expect(Object.reject(res, 'diff')).toEqual({
+				type: 'hours',
+				value: 10
+			});
+
+			expect(res.diff).toBeGreaterThanOrEqual((10).hours() - 5);
+		}
+
+		{
+			const
+				res = new Date().rewind({days: 4}).relative();
+
+			expect(Object.reject(res, 'diff')).toEqual({
+				type: 'days',
+				value: 4
+			});
+
+			expect(res.diff).toBeGreaterThanOrEqual((4).days() - 5);
+		}
+
+		{
+			const
+				res = new Date(Date.now() - (2).weeks()).relative();
+
+			expect(Object.reject(res, 'diff')).toEqual({
+				type: 'weeks',
+				value: 2
+			});
+
+			expect(res.diff).toBeGreaterThanOrEqual((2).weeks() - 5);
+		}
+
+		{
+			const
+				date = new Date().rewind({months: 2}),
+				res = date.relative();
+
+			expect(Object.reject(res, 'diff')).toEqual({
+				type: 'months',
+				value: 2
+			});
+
+			expect(res.diff).toBeGreaterThanOrEqual(Date.now().valueOf() - date.valueOf() - 5);
+		}
+
+		{
+			const
+				date = new Date().rewind({years: 2}),
+				res = date.relative();
+
+			expect(Object.reject(res, 'diff')).toEqual({
+				type: 'years',
+				value: 2
+			});
+
+			expect(res.diff).toBeGreaterThanOrEqual(Date.now().valueOf() - date.valueOf() - 5);
 		}
 	});
 
 	it('Date.relative', () => {
-		expect(Date.relative(new Date().rewind({minutes: 10}))).toEqual({
+		const
+			res = Date.relative(new Date().rewind({minutes: 10}));
+
+		expect(Object.reject(res, 'diff')).toEqual({
 			type: 'minutes',
-			value: 10,
-			diff: (10).minutes()
+			value: 10
 		});
+
+		expect(res.diff).toBeGreaterThanOrEqual((10).minutes() - 5);
 	});
 
 	it('relativeTo', () => {
-		expect(new Date().rewind({seconds: 10}).relativeTo(new Date())).toEqual({
-			type: 'seconds',
-			value: 10,
-			diff: (10).seconds()
-		});
-
-		expect(new Date().rewind({minutes: 10}).relativeTo(new Date())).toEqual({
-			type: 'minutes',
-			value: 10,
-			diff: (10).minutes()
-		});
-
-		expect(new Date().rewind({hours: 10}).relativeTo(new Date())).toEqual({
-			type: 'hours',
-			value: 10,
-			diff: (10).hours()
-		});
-
-		expect(new Date().rewind({days: 4}).relativeTo(new Date())).toEqual({
-			type: 'days',
-			value: 4,
-			diff: (4).days()
-		});
-
-		expect(new Date(Date.now() - (2).weeks()).relativeTo(new Date())).toEqual({
-			type: 'weeks',
-			value: 2,
-			diff: (2).weeks()
-		});
-
 		{
 			const
-				date = new Date().rewind({months: 2});
+				res = new Date().rewind({seconds: 10}).relativeTo(new Date());
 
-			expect(date.relativeTo(new Date())).toEqual({
-				type: 'months',
-				value: 2,
-				diff: Date.now().valueOf() - date.valueOf()
+			expect(Object.reject(res, 'diff')).toEqual({
+				type: 'seconds',
+				value: 10
 			});
+
+			expect(res.diff).toBeGreaterThanOrEqual((10).seconds() - 5);
 		}
 
 		{
 			const
-				date = new Date().rewind({years: 2});
+				res = new Date().rewind({minutes: 10}).relativeTo(new Date());
 
-			expect(date.relativeTo(new Date())).toEqual({
-				type: 'years',
-				value: 2,
-				diff: Date.now().valueOf() - date.valueOf()
+			expect(Object.reject(res, 'diff')).toEqual({
+				type: 'minutes',
+				value: 10
 			});
+
+			expect(res.diff).toBeGreaterThanOrEqual((10).minutes() - 5);
+		}
+
+		{
+			const
+				res = new Date().rewind({hours: 10}).relativeTo(new Date());
+
+			expect(Object.reject(res, 'diff')).toEqual({
+				type: 'hours',
+				value: 10
+			});
+
+			expect(res.diff).toBeGreaterThanOrEqual((10).hours() - 5);
+		}
+
+		{
+			const
+				res = new Date().rewind({days: 4}).relativeTo(new Date());
+
+			expect(Object.reject(res, 'diff')).toEqual({
+				type: 'days',
+				value: 4
+			});
+
+			expect(res.diff).toBeGreaterThanOrEqual((4).days() - 5);
+		}
+
+		{
+			const
+				res = new Date(Date.now() - (2).weeks()).relativeTo(new Date());
+
+			expect(Object.reject(res, 'diff')).toEqual({
+				type: 'weeks',
+				value: 2
+			});
+
+			expect(res.diff).toBeGreaterThanOrEqual((2).weeks() - 5);
+		}
+
+		{
+			const
+				date = new Date().rewind({months: 2}),
+				res = date.relativeTo(new Date());
+
+			expect(Object.reject(res, 'diff')).toEqual({
+				type: 'months',
+				value: 2
+			});
+
+			expect(res.diff).toBeGreaterThanOrEqual(Date.now().valueOf() - date.valueOf() - 5);
+		}
+
+		{
+			const
+				date = new Date().rewind({years: 2}),
+				res = date.relativeTo(new Date());
+
+			expect(Object.reject(res, 'diff')).toEqual({
+				type: 'years',
+				value: 2
+			});
+
+			expect(res.diff).toBeGreaterThanOrEqual(Date.now().valueOf() - date.valueOf() - 5);
 		}
 	});
 
 	it('Date.relativeTo', () => {
-		expect(Date.relativeTo(new Date().rewind({minutes: 10}), new Date())).toEqual({
-			type: 'minutes',
-			value: 10,
-			diff: (10).minutes()
-		});
+		{
+			const
+				res = Date.relativeTo(new Date().rewind({minutes: 10}), new Date());
 
-		expect(Date.relativeTo(new Date().rewind({minutes: 10}))(new Date())).toEqual({
-			type: 'minutes',
-			value: 10,
-			diff: (10).minutes()
-		});
+			expect(Object.reject(res, 'diff')).toEqual({
+				type: 'minutes',
+				value: 10
+			});
+
+			expect(res.diff).toBeGreaterThanOrEqual((10).minutes() - 5);
+		}
+
+		{
+			const
+				res = Date.relativeTo(new Date().rewind({minutes: 10}))(new Date());
+
+			expect(Object.reject(res, 'diff')).toEqual({
+				type: 'minutes',
+				value: 10
+			});
+
+			expect(res.diff).toBeGreaterThanOrEqual((10).minutes() - 5);
+		}
 	});
 });
