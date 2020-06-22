@@ -109,10 +109,7 @@ extend(Object, 'isIterable', (value) => {
 extend(Object, 'isString', (value) => typeof value === 'string');
 
 /** @see [[ObjectConstructor.isNumber]] */
-extend(Object, 'isNumber', (value) => {
-	const t = typeof value;
-	return t === 'number' || t === 'bigint';
-});
+extend(Object, 'isNumber', (value) => typeof value === 'number');
 
 /** @see [[ObjectConstructor.isBoolean]] */
 extend(Object, 'isBoolean', (value) => typeof value === 'boolean');

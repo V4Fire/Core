@@ -161,7 +161,7 @@ describe('core/prelude/types', () => {
 		expect(Object.isNumber(null)).toBeFalse();
 
 		if (typeof BigInt !== 'undefined') {
-			expect(Object.isNumber(1n)).toBeTrue();
+			expect(Object.isNumber(1n)).toBeFalse();
 		}
 	});
 
