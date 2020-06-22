@@ -20,7 +20,7 @@ const
  * @param node
  */
 export function toDataURI(node: Node): string {
-	return `data:image/svg+xml,${xmlSerializer.serializeToString(node).replace(normalizeRgxp, normalize)}`;
+	return `data:image/svg+xml;${xmlSerializer.serializeToString(node).replace(normalizeRgxp, normalize)}`;
 }
 
 /**
