@@ -18,7 +18,7 @@ extend(Number, 'isInteger', (value) => Object.isNumber(value) && value.isInteger
 
 /** @see [[Number.isFloat]] */
 extend(Number.prototype, 'isFloat', function isFloat(this: number): boolean {
-	return this % 1 !== 0 && Number.isFinite(this);
+	return Number.isFinite(this) && this % 1 !== 0;
 });
 
 /** @see [[NumberConstructor.isFloat]] */
@@ -34,7 +34,7 @@ extend(Number, 'isEven', (value) => Object.isNumber(value) && value.isEven());
 
 /** @see [[Number.isOdd]] */
 extend(Number.prototype, 'isOdd', function isOdd(this: number): boolean {
-	return this % 2 !== 0 && Number.isFinite(this);
+	return Number.isFinite(this) && this % 2 !== 0;
 });
 
 /** @see [[NumberConstructor.isOdd]] */
