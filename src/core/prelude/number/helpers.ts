@@ -15,7 +15,7 @@ export function createRoundingFunction(method: AnyFunction): AnyFunction {
 		const
 			val = Number(this);
 
-		if (precision != null) {
+		if (precision != null && precision > 0) {
 			let
 				multiplier = 10 ** Math.abs(precision);
 
@@ -41,7 +41,7 @@ export function createStaticRoundingFunction(method: string): AnyFunction {
 			return (value) => Number[Symbol.for('[[V4_EXTEND_API]]')][method](value, precision);
 		}
 
-		return value[method](value, precision);
+		return value[method](precision);
 	};
 }
 
