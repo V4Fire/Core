@@ -7,7 +7,7 @@
  */
 
 import extend from 'core/prelude/extend';
-import { isDateStr, isFloatStr, dateChunkNormalizeRgxp, createAliases } from 'core/prelude/date/const';
+import { isDateStr, isFloatStr, normalizeDateChunkRgxp, createAliases } from 'core/prelude/date/const';
 
 /** @see [[Date.clone]] */
 extend(Date.prototype, 'clone', function clone(this: Date): Date {
@@ -40,7 +40,7 @@ extend(Date, 'create', (pattern?: DateCreateValue) => {
 
 		const normalizeDate = (date) => {
 			const
-				chunks = dateChunkNormalizeRgxp.exec(date);
+				chunks = normalizeDateChunkRgxp.exec(date);
 
 			if (!chunks) {
 				return date;
