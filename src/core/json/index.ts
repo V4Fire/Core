@@ -11,7 +11,7 @@
  * @packageDocumentation
  */
 
-import { isDateStr } from 'core/prelude/date/const';
+import { normalizeDateChunkRgxp } from 'core/prelude/date/const';
 
 const
 	minDateLength = '2017-02-03'.length;
@@ -21,9 +21,14 @@ const
  *
  * @param key
  * @param value
+ *
+ * @example
+ * ```js
+ * JSON.parse('"2015-10-12"', convertIfDate) instanceof Date // true
+ * ```
  */
 export function convertIfDate(key: string, value: unknown): unknown {
-	if (Object.isString(value) && value.length > minDateLength && isDateStr.test(value)) {
+	if (Object.isString(value) && value.length >= minDateLength && normalizeDateChunkRgxp.test(value)) {
 		const date = Date.create(value);
 		return isNaN(date.valueOf()) ? value : date;
 	}
