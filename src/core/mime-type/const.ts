@@ -14,7 +14,7 @@ export const
 
 export const
 	isTextType = /^text(?:\/|$)/,
-	isXMLType = /^application\/\w+-xml\b/;
+	isXMLType = /^\w+\/\w+[-+]xml\b/;
 
 export const mimeTypes: Dictionary<DataType> = Object.createDict({
 	'application/json': 'json',
