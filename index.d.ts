@@ -2397,8 +2397,8 @@ interface Number {
 	 *
 	 * @example
 	 * ```js
-	 *  100.50.format('$', 'en-us') // '$100.50'
-	 *  100.50.format('$:EUR;$d:code', 'en-us') // 'EUR 100.50'
+	 * 100.50.format('$', 'en-us') // '$100.50'
+	 * 100.50.format('$:EUR;$d:code', 'en-us') // 'EUR 100.50'
 	 * ```
 	 */
 	format(pattern?: string, locale?: CanArray<string>): string;
@@ -2413,6 +2413,8 @@ interface Number {
 
 	/**
 	 * Returns a string representation of the number with adding some extra formatting
+	 *
+	 * @deprecated
 	 * @param [length] - length of the decimal part
 	 */
 	format(length: number): string;
