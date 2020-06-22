@@ -34,7 +34,7 @@ extend(Number.prototype, 'pad', function pad(
 ): string {
 	opts = {...Object.isPlainObject(lengthOrOpts) ? lengthOrOpts : opts};
 
-	if (opts.length === 0) {
+	if (opts.length == null) {
 		opts.length = Object.isNumber(lengthOrOpts) ? lengthOrOpts : 0;
 	}
 
@@ -42,7 +42,7 @@ extend(Number.prototype, 'pad', function pad(
 		val = Number(this);
 
 	let str = Math.abs(val).toString(opts.base ?? 10);
-	str = repeatString('0', opts.length! - str.replace(decPartRgxp, '').length) + str;
+	str = repeatString('0', opts.length - str.replace(decPartRgxp, '').length) + str;
 
 	if (opts.sign || val < 0) {
 		str = (val < 0 ? '-' : '+') + str;
@@ -116,6 +116,11 @@ extend(Number.prototype, 'format', function format(
 						brk = true;
 						break;
 
+					case 'currencyDisplay':
+						opts.currencyDisplay = val ?? defaultFormats.currencyDisplay;
+						brk = true;
+						break;
+
 					case 'percent':
 						opts.style = 'percent';
 						brk = true;
@@ -127,12 +132,12 @@ extend(Number.prototype, 'format', function format(
 						break;
 
 					default:
-						throw new TypeError('Unknown alias');
+						throw new TypeError(`Unknown alias "${alias}"`);
 				}
 			}
 
 			if (!brk) {
-				if (val == null) {
+				if (val == null || val === '') {
 					val = defaultFormats[key];
 				}
 
@@ -151,8 +156,10 @@ extend(Number.prototype, 'format', function format(
 
 	const
 		val = Number(this),
-		str = patternOrOpts != null ? val.toFixed(decimalLength) : val.toString(),
-		[int, dec = null] = str.split('.');
+		str = patternOrOpts != null ? val.toFixed(decimalLength) : val.toString();
+
+	const
+		[int, dec = ''] = str.split('.');
 
 	let
 		res = '';
@@ -167,8 +174,8 @@ extend(Number.prototype, 'format', function format(
 		res = int[i] + res;
 	}
 
-	if (Object.isTruly(dec?.length)) {
-		return res + globalOpts.decimal + dec!;
+	if (dec.length > 0) {
+		return res + globalOpts.decimal + dec;
 	}
 
 	return res;
