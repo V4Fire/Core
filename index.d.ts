@@ -2230,11 +2230,6 @@ interface Number {
 	em: string;
 
 	/**
-	 * Returns a string: the value + 'ex'
-	 */
-	ex: string;
-
-	/**
 	 * Returns a string: the value + 'rem'
 	 */
 	rem: string;

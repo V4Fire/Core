@@ -66,9 +66,6 @@ extend(Number, 'weeks', createStaticMsFunction(week));
 /** @see [[Number.em]] */
 extend(Number.prototype, 'em', createStringTypeGetter('em'));
 
-/** @see [[Number.ex]] */
-extend(Number.prototype, 'ex', createStringTypeGetter('ex'));
-
 /** @see [[Number.rem]] */
 extend(Number.prototype, 'rem', createStringTypeGetter('rem'));
 
