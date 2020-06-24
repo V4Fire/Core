@@ -40,38 +40,39 @@ import {
 export * from 'core/async/modules/base';
 
 export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
-/**
- * Wraps the specified worker object.
- *
- * This method doesn't attach any hook or listeners to the object,
- * but every time the same object is registered, Async will increment the number of links that relate to this object.
- * After, when we try to destroy the worker by using one of Async's methods, like, "terminateWorker",
- * it will de-increment values of links. When the number of links is equal to zero,
- * Async will try to call a "real" object destructor by using one of the possible destructor methods from the whitelist
- * or by the specified destructor name, also if the worker is a function, it is interpreted as the destructor.
- *
- * @param worker
- * @param [opts] - additional options for the operation
- *
- * @example
- * ```js
- * const
- *   async = new Async(),
- *   el = document.createElement('div');
- *
- * $el.appendChild(el);
- *
- * // This function will work as the worker destructor
- * async.worker(() => el.remove());
- *
- * const
- *   myWorker = new Worker('my-worker.js');
- *
- * async.worker(myWorker);
- *
- * async.clearAll();
- * ```
- */
+	/**
+	 * Wraps the specified worker object.
+	 *
+	 * This method doesn't attach any hook or listeners to the object,
+	 * but every time the same object is registered, Async will increment the number of links that relate to this object.
+	 * After, when we try to destroy the worker by using one of Async's methods, like, "terminateWorker",
+	 * it will de-increment values of links. When the number of links is equal to zero,
+	 * Async will try to call a "real" object destructor by using one of the possible destructor methods from
+	 * the whitelist or by the specified destructor name, also if the worker is a function,
+	 * it is interpreted as the destructor.
+	 *
+	 * @param worker
+	 * @param [opts] - additional options for the operation
+	 *
+	 * @example
+	 * ```js
+	 * const
+	 *   async = new Async(),
+	 *   el = document.createElement('div');
+	 *
+	 * $el.appendChild(el);
+	 *
+	 * // This function will work as the worker destructor
+	 * async.worker(() => el.remove());
+	 *
+	 * const
+	 *   myWorker = new Worker('my-worker.js');
+	 *
+	 * async.worker(myWorker);
+	 *
+	 * async.clearAll();
+	 * ```
+	 */
 	worker<T extends WorkerLikeP>(worker: T, opts?: AsyncWorkerOptions<CTX>): T {
 		const
 			p = opts ?? {};
