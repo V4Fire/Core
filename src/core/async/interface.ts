@@ -612,7 +612,7 @@ export interface Event<E extends EventEmitterLikeP = EventEmitterLikeP> {
 }
 
 export interface LocalCache {
-	labels: Record<Label, unknown>;
+	labels: Record<Label, any>;
 	links: Map<object, Task<any>>;
 }
 

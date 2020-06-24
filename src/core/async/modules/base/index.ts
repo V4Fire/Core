@@ -20,10 +20,14 @@ import {
 import {
 
 	FullAsyncOptions,
-	ClearOptions,
 	FullClearOptions,
+
+	ClearOptions,
 	ClearProxyOptions,
+
+	LocalCache,
 	GlobalCache,
+
 	TaskCtx
 
 } from 'core/async/interface';
@@ -229,13 +233,13 @@ export default class Async<CTX extends object = Async<any>> {
 
 		const
 			baseCache = this.getCache(task.name, task.promise),
-			callable = Boolean(task.callable === true || task.needCall);
+			callable = task.callable ?? task.needCall;
 
 		const
 			{ctx} = this;
 
 		let
-			cache;
+			cache: LocalCache;
 
 		if (task.group != null) {
 			baseCache.groups[task.group] = baseCache.groups[task.group] ?? {
@@ -243,7 +247,7 @@ export default class Async<CTX extends object = Async<any>> {
 				links: new Map()
 			};
 
-			cache = baseCache.groups[task.group];
+			cache = baseCache.groups[task.group]!;
 
 		} else {
 			cache = baseCache.root;
@@ -254,7 +258,8 @@ export default class Async<CTX extends object = Async<any>> {
 			{links: baseLinks} = baseCache.root;
 
 		const
-			labelCache = task.label != null && labels[task.label];
+			label = <CanUndef<string>>task.label,
+			labelCache = label != null ? labels[label] : null;
 
 		if (labelCache != null && task.join === true) {
 			const
@@ -281,12 +286,12 @@ export default class Async<CTX extends object = Async<any>> {
 				const
 					link = links.get(taskId);
 
-				if (link?.muted == null) {
+				if (!link || link.muted) {
 					return;
 				}
 
 				if (!task.periodic) {
-					if (link.paused === true) {
+					if (link.paused) {
 						link.muted = true;
 
 					} else {
@@ -298,16 +303,23 @@ export default class Async<CTX extends object = Async<any>> {
 					const
 						fns = link.onComplete;
 
-					if (fns != null) {
+					if (Object.isArray(fns)) {
 						for (let j = 0; j < fns.length; j++) {
-							const fn = fns[j];
-							(Object.isFunction(fn[i]) ? fn[i] : fn).apply(ctx, args);
+							const
+								fn = fns[j];
+
+							if (Object.isFunction(fn)) {
+								fn.apply(ctx, args);
+
+							} else {
+								fn[i].apply(ctx, args);
+							}
 						}
 					}
 				};
 
 				const
-					needDelete = Boolean(!task.periodic && link.paused);
+					needDelete = !task.periodic && link.paused;
 
 				const exec = () => {
 					if (needDelete) {
@@ -331,7 +343,7 @@ export default class Async<CTX extends object = Async<any>> {
 					return res;
 				};
 
-				if (link.paused === true) {
+				if (link.paused) {
 					link.queue.push(exec);
 					return;
 				}
@@ -342,7 +354,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 		if (task.wrapper) {
 			const
-				link = task.wrapper(wrappedObj, ...Array.concat([], callable ? taskId : null, task.args));
+				link = task.wrapper.apply(null, [wrappedObj].concat(callable ? taskId : [], task.args));
 
 			if (task.linkByWrapper) {
 				taskId = link;
@@ -370,8 +382,8 @@ export default class Async<CTX extends object = Async<any>> {
 				links.delete(taskId);
 				baseCache.root.links.delete(taskId);
 
-				if (task.label != null && labels[task.label] != null) {
-					labels[task.label] = undefined;
+				if (label != null && labels[label] != null) {
+					labels[label] = undefined;
 				}
 			}
 		};
@@ -386,8 +398,8 @@ export default class Async<CTX extends object = Async<any>> {
 			baseLinks.set(taskId, link);
 		}
 
-		if (task.label != null) {
-			labels[task.label] = taskId;
+		if (label != null) {
+			labels[label] = taskId;
 		}
 
 		return taskId;
@@ -427,7 +439,7 @@ export default class Async<CTX extends object = Async<any>> {
 			baseCache = this.getCache(p.name, p.promise);
 
 		let
-			cache: typeof baseCache.root;
+			cache: LocalCache;
 
 		if (p.group != null) {
 			if (Object.isRegExp(p.group)) {
@@ -447,14 +459,11 @@ export default class Async<CTX extends object = Async<any>> {
 				return this;
 			}
 
-			const
-				groupCache = baseCache.groups[p.group];
-
-			if (groupCache == null) {
+			if (!baseCache.groups[p.group]) {
 				return this;
 			}
 
-			cache = groupCache;
+			cache = baseCache.groups[p.group]!;
 
 			if (p.reason == null) {
 				p.reason = 'group';
@@ -469,8 +478,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 		if (p.label != null) {
 			const
-				// @ts-ignore (symbol index)
-				tmp = labels[p.label];
+				tmp = labels[<string>p.label];
 
 			if (p.id != null && p.id !== tmp) {
 				return this;
@@ -541,10 +549,10 @@ export default class Async<CTX extends object = Async<any>> {
 	}
 
 	/**
-	 * Marks a task (or a group of tasks) from the namespace with the specified label
+	 * Marks a task (or a group of tasks) from the namespace by the specified label
 	 *
 	 * @param label
-	 * @param task - operation options or link to the task
+	 * @param task - operation options or a link to the task
 	 * @param [name] - namespace of the operation
 	 */
 	protected markTask(label: string, task: CanUndef<ClearProxyOptions | any>, name?: string): this {
@@ -566,7 +574,7 @@ export default class Async<CTX extends object = Async<any>> {
 			baseCache = this.getCache(p.name);
 
 		let
-			cache: typeof baseCache.root;
+			cache: LocalCache;
 
 		if (p.group != null) {
 			if (Object.isRegExp(p.group)) {
@@ -604,8 +612,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 		if (p.label != null) {
 			const
-				// @ts-ignore (symbol index)
-				tmp = labels[p.label];
+				tmp = labels[<string>p.label];
 
 			if (p.id != null && p.id !== tmp) {
 				return this;
