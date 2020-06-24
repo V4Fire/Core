@@ -6,6 +6,11 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/**
+ * [[include:core/async/modules/base/README.md]]
+ * @packageDocumentation
+ */
+
 import { deprecate, deprecated } from 'core/functools';
 
 import {
@@ -113,12 +118,13 @@ export default class Async<CTX extends object = Async<any>> {
 	clearAll(opts?: ClearOptions): this {
 		for (let o = this.namespaces, keys = Object.keys(o), i = 0; i < keys.length; i++) {
 			const
-				alias = `clear-${o[keys[i]]}`.camelize(false);
+				key = keys[i],
+				alias = `clear-${o[key]}`.camelize(false);
 
 			if (Object.isFunction(this[alias])) {
 				this[alias](opts);
 
-			} else if (!isPromisifyNamespace.test(alias)) {
+			} else if (!isPromisifyNamespace.test(key)) {
 				throw new ReferenceError(`The method "${alias}" is not defined`);
 			}
 		}
@@ -133,9 +139,10 @@ export default class Async<CTX extends object = Async<any>> {
 	muteAll(opts?: ClearOptions): this {
 		for (let o = this.namespaces, keys = Object.keys(o), i = 0; i < keys.length; i++) {
 			const
-				alias = `mute-${o[keys[i]]}`.camelize(false);
+				key = keys[i],
+				alias = `mute-${o[key]}`.camelize(false);
 
-			if (!isPromisifyNamespace.test(alias) && Object.isFunction(this[alias])) {
+			if (!isPromisifyNamespace.test(key) && Object.isFunction(this[alias])) {
 				this[alias](opts);
 			}
 		}
@@ -150,9 +157,10 @@ export default class Async<CTX extends object = Async<any>> {
 	unmuteAll(opts?: ClearOptions): this {
 		for (let o = this.namespaces, keys = Object.keys(o), i = 0; i < keys.length; i++) {
 			const
+				key = keys[i],
 				alias = `unmute-${o[keys[i]]}`.camelize(false);
 
-			if (!isPromisifyNamespace.test(alias) && Object.isFunction(this[alias])) {
+			if (!isPromisifyNamespace.test(key) && Object.isFunction(this[alias])) {
 				this[alias](opts);
 			}
 		}
@@ -167,9 +175,10 @@ export default class Async<CTX extends object = Async<any>> {
 	suspendAll(opts?: ClearOptions): this {
 		for (let o = this.namespaces, keys = Object.keys(o), i = 0; i < keys.length; i++) {
 			const
+				key = keys[i],
 				alias = `suspend-${o[keys[i]]}`.camelize(false);
 
-			if (!isPromisifyNamespace.test(alias) && Object.isFunction(this[alias])) {
+			if (!isPromisifyNamespace.test(key) && Object.isFunction(this[alias])) {
 				this[alias](opts);
 			}
 		}
@@ -184,9 +193,10 @@ export default class Async<CTX extends object = Async<any>> {
 	unsuspendAll(opts?: ClearOptions): this {
 		for (let o = this.namespaces, keys = Object.keys(o), i = 0; i < keys.length; i++) {
 			const
+				key = keys[i],
 				alias = `unsuspend-${o[keys[i]]}`.camelize(false);
 
-			if (!isPromisifyNamespace.test(alias) && Object.isFunction(this[alias])) {
+			if (!isPromisifyNamespace.test(key) && Object.isFunction(this[alias])) {
 				this[alias](opts);
 			}
 		}
