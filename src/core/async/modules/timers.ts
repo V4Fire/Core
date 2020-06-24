@@ -172,7 +172,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	muteInterval(opts: ClearOptionsId<TimerId>): this;
 	muteInterval(task?: TimerId | ClearOptionsId<TimerId>): this {
-		return this.markTask('!muted', task, this.namespaces.interval);
+		return this.markTask('muted', task, this.namespaces.interval);
 	}
 
 	/**
