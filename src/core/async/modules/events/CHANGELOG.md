@@ -16,7 +16,3 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 #### :rocket: New Feature
 
 * Added tests
-
-#### :bug: Bug Fix
-
-* Fixed bugs
