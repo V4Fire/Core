@@ -25,6 +25,13 @@ describe('core/async/modules/timers', () => {
 		clear = clear || `clear-${method}`.camelize(false);
 
 		const
+			args = [];
+
+		if (method === 'timeout' || method === 'interval') {
+			args.push(10);
+		}
+
+		const
 			mute = `mute-${method}`.camelize(false),
 			unmute = `un${mute}`;
 
@@ -39,8 +46,8 @@ describe('core/async/modules/timers', () => {
 			let
 				i = 0;
 
-			$a[reg](() => i++, 10);
-			$a[clear]($a[reg](() => i++, 10));
+			$a[reg](() => i++, ...args);
+			$a[clear]($a[reg](() => i++, ...args));
 
 			setTimeout(() => {
 				const cb = () => {
@@ -65,8 +72,8 @@ describe('core/async/modules/timers', () => {
 			let
 				i = 0;
 
-			$a[reg](() => i++, 10);
-			$a[mute]($a[reg](() => i++, 10));
+			$a[reg](() => i++, ...args);
+			$a[mute]($a[reg](() => i++, ...args));
 
 			setTimeout(() => {
 				const cb = () => {
@@ -92,8 +99,8 @@ describe('core/async/modules/timers', () => {
 			let
 				i = 0;
 
-			$a[reg](() => i++, 10);
-			$a[suspend]($a[reg](() => i++, 10));
+			$a[reg](() => i++, ...args);
+			$a[suspend]($a[reg](() => i++, ...args));
 
 			setTimeout(() => {
 				const cb = () => {
@@ -110,6 +117,106 @@ describe('core/async/modules/timers', () => {
 					cb();
 				}
 			}, 15);
+		});
+
+		const onResolve = (res, label) => () => {
+			res.push(label);
+			return label;
+		};
+
+		const
+			onReject = (spy) => (err) => spy(Object.select(err, ['type', 'reason'])),
+			onMerge = (spy, label) => () => spy(label);
+
+		it(`${method} with labels`, (done) => {
+			const
+				$a = new Async(),
+				spy = jasmine.createSpy(),
+				res = [];
+
+			$a[reg](onResolve(res, 'first'), ...args, {label: $$.foo, onClear: onReject(spy)});
+			$a[reg](onResolve(res, 'second'), ...args, {label: $$.foo, onClear: onReject(spy)});
+
+			setTimeout(() => {
+				const cb = () => {
+					expect(res).toEqual(['second']);
+					expect(spy).toHaveBeenCalledWith({type: 'clearAsync', reason: 'collision'});
+					$a.clearAll();
+					done();
+				};
+
+				if (method === 'idleCallback') {
+					requestIdleCallback(cb);
+
+				} else {
+					cb();
+				}
+			}, 15);
+		});
+
+		it(`${method} with labels and joining`, (done) => {
+			const
+				$a = new Async(),
+				spy = jasmine.createSpy(),
+				res = [];
+
+			$a[reg](onResolve(res, 'first'), ...args, {label: $$.foo, join: true, onMerge: onMerge(spy, 'first')});
+			$a[reg](onResolve(res, 'second'), ...args, {label: $$.foo, join: true, onMerge: onMerge(spy, 'second')});
+
+			setTimeout(() => {
+				const cb = () => {
+					expect(res).toEqual(['first']);
+					expect(spy).toHaveBeenCalledWith('second');
+					$a.clearAll();
+					done();
+				};
+
+				if (method === 'idleCallback') {
+					requestIdleCallback(cb);
+
+				} else {
+					cb();
+				}
+			}, 15);
+		});
+
+		it(`${method} with labels and replacing`, (done) => {
+			const
+				$a = new Async(),
+				spy = jasmine.createSpy(),
+				res = [];
+
+			$a[reg](onResolve(res, 'first'), ...args, {label: $$.foo, join: 'replace', onClear: onReject(spy)});
+			$a[reg](onResolve(res, 'second'), ...args, {label: $$.foo, join: 'replace', onClear: onReject(spy)});
+
+			setTimeout(() => {
+				const cb = () => {
+					expect(res).toEqual(['second']);
+					expect(spy).toHaveBeenCalledWith({type: 'clearAsync', reason: 'collision'});
+					$a.clearAll();
+					done();
+				};
+
+				if (method === 'idleCallback') {
+					requestIdleCallback(cb);
+
+				} else {
+					cb();
+				}
+			}, 15);
+		});
+	});
+
+	it('requestIdleCallback', (done) => {
+		const
+			$a = new Async(),
+			spy = jasmine.createSpy();
+
+		$a.requestIdleCallback((info) => spy(info instanceof IdleDeadline));
+
+		requestIdleCallback(() => {
+			expect(spy).toHaveBeenCalledWith(true);
+			done();
 		});
 	});
 });

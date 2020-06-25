@@ -88,7 +88,7 @@ describe('core/async/modules/proxy/worker', () => {
 	it('workers with labels', () => {
 		const onResolve = (res, label) => (v = label) => {
 			res.push(v);
-			return label;
+			return v;
 		};
 
 		const

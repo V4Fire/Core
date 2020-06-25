@@ -102,7 +102,7 @@ describe('core/async/modules/proxy/proxy', () => {
 	it('proxies with labels', () => {
 		const onResolve = (res, label) => (v = label) => {
 			res.push(v);
-			return label;
+			return v;
 		};
 
 		const
