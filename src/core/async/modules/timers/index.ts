@@ -6,6 +6,11 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/**
+ * [[include:core/async/modules/timers/README.md]]
+ * @packageDocumentation
+ */
+
 import SyncPromise from 'core/promise/sync';
 import Super from 'core/async/modules/proxy';
 
