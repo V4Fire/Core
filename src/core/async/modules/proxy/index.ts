@@ -75,9 +75,6 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	worker<T extends WorkerLikeP>(worker: T, opts?: AsyncWorkerOptions<CTX>): T {
 		const
-			p = opts ?? {};
-
-		const
 			{workerCache} = this;
 
 		if (!workerCache.has(worker)) {
@@ -85,12 +82,28 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			worker[asyncCounter] = Number(worker[asyncCounter] ?? 0) + 1;
 		}
 
+		const
+			clearFn = this.workerDestructor.bind(this, opts?.destructor);
+
 		return this.registerTask({
-			...p,
+			...opts,
+
 			name: this.namespaces.worker,
 			obj: worker,
-			clearFn: this.workerDestructor.bind(this, p.destructor),
-			periodic: p.single !== true
+
+			clearFn,
+			periodic: opts?.single === false,
+
+			onMerge() {
+				const
+					handlers = Array.concat([], opts?.onMerge);
+
+				for (let i = 0; i < handlers.length; i++) {
+					handlers[i].apply(this, arguments);
+				}
+
+				clearFn(worker);
+			}
 		}) ?? worker;
 	}
 
