@@ -207,6 +207,53 @@ describe('core/async/modules/timers', () => {
 		});
 	});
 
+	[
+		'sleep',
+		'nextTick',
+		'idle',
+		'wait'
+	].forEach((method) => {
+		it(method, (done) => {
+			const
+				$a = new Async(),
+				args = [];
+
+			let
+				i = 0;
+
+			if (method === 'sleep') {
+				args.push(10);
+
+			} else if (method === 'wait') {
+				let j = 0;
+				args.push(() => j > 0);
+				setTimeout(() => j++, 10);
+			}
+
+			$a[method](...args).then(() => i++);
+			$a[method](...args, {group: 'foo'}).then(() => i++);
+			$a[method](...args, {group: 'bar'}).then(() => i++);
+
+			$a.clearPromise({group: 'foo'});
+			$a.suspendPromise({group: 'foo'});
+
+			setTimeout(() => {
+				const cb = () => {
+					$a.unsuspendPromise();
+					expect(i).toBe(2);
+					done();
+				};
+
+				if (method === 'idle') {
+					requestIdleCallback(cb);
+
+				} else {
+					cb();
+				}
+			}, 15);
+		});
+	});
+
 	it('requestIdleCallback', (done) => {
 		const
 			$a = new Async(),
@@ -218,5 +265,15 @@ describe('core/async/modules/timers', () => {
 			expect(spy).toHaveBeenCalledWith(true);
 			done();
 		});
+	});
+
+	it('promise value of idle', async () => {
+		const $a = new Async();
+		expect(await $a.idle()).toBeInstanceOf(IdleDeadline);
+	});
+
+	it('promise value of wait', async () => {
+		const $a = new Async();
+		expect(await $a.wait(() => 1)).toBeTrue();
 	});
 });
