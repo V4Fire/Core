@@ -347,7 +347,7 @@ export default class Async<CTX extends object = Async<any>> {
 						res.then(invokeHandlers(), invokeHandlers(1));
 
 					} else {
-						invokeHandlers(...args);
+						invokeHandlers()(...args);
 					}
 
 					return res;
