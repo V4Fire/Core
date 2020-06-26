@@ -14,3 +14,4 @@ Changelog
 #### :rocket: New Feature
 
 * Added tests
+* Added `SimpleWorkerQueue`

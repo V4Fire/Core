@@ -11,8 +11,8 @@
  * @packageDocumentation
  */
 
-import WorkerQueue, { Tasks } from 'core/queue/worker/interface';
-import { QueueWorker, QueueOptions, Task, HashFn } from 'core/queue/worker/merge/interface';
+import WorkerQueue from 'core/queue/worker/interface';
+import { Task, Tasks, QueueWorker, QueueOptions, HashFn } from 'core/queue/worker/merge/interface';
 
 export * from 'core/queue/worker/merge/interface';
 
@@ -135,20 +135,5 @@ export default class MergeWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> 
 
 		promise.then(cb, cb);
 		this.resolveTask(task, resolve);
-	}
-
-	/**
-	 * Provides a task result to the specified promise resolve function
-	 *
-	 * @param task
-	 * @param resolve
-	 */
-	protected resolveTask(task: T, resolve: Function): void {
-		try {
-			resolve(this.worker(task));
-
-		} catch (error) {
-			resolve(Promise.reject(error));
-		}
 	}
 }

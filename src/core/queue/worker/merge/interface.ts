@@ -18,9 +18,3 @@ export interface QueueOptions<T> extends WorkerQueueOptions {
 	 */
 	hashFn?: HashFn<T>;
 }
-
-export interface Task<T = unknown, V = unknown> {
-	task: T;
-	promise: Promise<V>;
-	resolve(res: CanPromise<V>): void;
-}

@@ -11,15 +11,6 @@ Changelog
 
 ## v3.20.0 ()
 
-#### :boom: Breaking Change
-
-* New API and logic `core/queue/merge`
-
 #### :rocket: New Feature
 
-* Added tests
-* Added `SimpleWorkerQueue`
-
-#### :bug: Bug Fix
-
-* Fixed bugs
+* Added the first implementation
