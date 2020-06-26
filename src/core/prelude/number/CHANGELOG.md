@@ -11,6 +11,10 @@ Changelog
 
 ## v3.20.0 ()
 
+#### :boom: Breaking Change
+
+* Removed `converters/ex`
+
 #### :rocket: New Feature
 
 * Added tests

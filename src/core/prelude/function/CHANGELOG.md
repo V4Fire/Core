@@ -14,6 +14,7 @@ Changelog
 #### :rocket: New Feature
 
 * Added tests
+* Added `single` parameter to `lazy/throttle`
 
 #### :bug: Bug Fix
 
