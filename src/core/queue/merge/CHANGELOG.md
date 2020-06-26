@@ -13,12 +13,8 @@ Changelog
 
 #### :boom: Breaking Change
 
-* New API and logic `core/queue/merge`
+* New API and logic
 
 #### :rocket: New Feature
 
 * Added tests
-
-#### :bug: Bug Fix
-
-* Fixed bugs
