@@ -11,8 +11,8 @@
  * @packageDocumentation
  */
 
-import Queue, { Tasks, CreateTasks } from 'core/queue/interface';
-import { HashFn } from 'core/queue/merge/interface';
+import Queue from 'core/queue/interface';
+import { HashFn, Tasks, CreateTasks } from 'core/queue/merge/interface';
 
 export * from 'core/queue/merge/interface';
 

@@ -11,8 +11,8 @@
  * @packageDocumentation
  */
 
-import Queue, { CreateTasks, Tasks } from 'core/queue/interface';
-import { TaskComparator } from 'core/queue/order/interface';
+import Queue from 'core/queue/interface';
+import { Tasks, CreateTasks, TaskComparator } from 'core/queue/order/interface';
 
 export * from 'core/queue/interface';
 export * from 'core/queue/order/interface';
