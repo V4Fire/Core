@@ -46,7 +46,7 @@ describe('core/range', () => {
 		expect(new Range(0).span()).toBe(Infinity);
 		expect(new Range(3, 0).span()).toBe(4);
 		expect(new Range('a', 'd').span()).toBe(4);
-		expect(new Range(new Date(), new Date().add({milliseconds: 3})).span()).toBe(4);
+		expect(new Range(new Date(), new Date().add({milliseconds: 3})).span()).toBeGreaterThanOrEqual(4);
 	});
 
 	it('clamped element', () => {
