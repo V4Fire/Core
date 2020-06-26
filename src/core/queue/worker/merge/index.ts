@@ -39,12 +39,12 @@ export default class MergeWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> 
 	/**
 	 * The map of registered tasks
 	 */
-	private tasksMap: Dictionary<Task<T, V>> = Object.createDict();
+	protected tasksMap: Dictionary<Task<T, V>> = Object.createDict();
 
 	/**
 	 * The task hash function
 	 */
-	private readonly hashFn: HashFn<T>;
+	protected readonly hashFn: HashFn<T>;
 
 	/**
 	 * @override
@@ -64,7 +64,7 @@ export default class MergeWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> 
 		let
 			taskObj = this.tasksMap[hash];
 
-		if (!taskObj) {
+		if (taskObj == null) {
 			let
 				resolve;
 
@@ -98,8 +98,10 @@ export default class MergeWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> 
 
 	/** @override */
 	clear(): void {
-		super.clear();
-		this.tasksMap = Object.createDict();
+		if (this.length > 0) {
+			super.clear();
+			this.tasksMap = Object.createDict();
+		}
 	}
 
 	/** @override */

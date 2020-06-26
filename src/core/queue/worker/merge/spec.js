@@ -81,10 +81,7 @@ describe('core/queue/worker/merge', () => {
 			res.push(task.a);
 			return Promise.resolve();
 
-		}, {
-			concurrency: 1,
-			hashFn: (task) => JSON.stringify(task)
-		});
+		}, {concurrency: 1});
 
 		queue.unshift({a: 1});
 		queue.unshift({a: 2});
