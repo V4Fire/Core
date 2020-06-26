@@ -289,16 +289,29 @@ export function factory(engine: StorageEngine, async?: boolean): AsyncStorage | 
 
 		clear<T>(filter?: ClearFilter<T>, ...args: unknown[]): CanPromise<void> {
 			if (filter || clear == null) {
-				return wrap(keys(), async (keys) => {
-					for (const key of keys) {
-						const
-							el = await obj.get<T>(key);
+				if (async) {
+					return (async () => {
+						for (const key of await keys()) {
+							const
+								el = await obj.get<T>(key);
 
-						if (!filter || Object.isTruly(filter(el, key))) {
-							await remove(key, ...args);
+							if (filter == null || Object.isTruly(filter(el, key))) {
+								await remove(key, ...args);
+							}
 						}
+					})();
+				}
+
+				for (const key of keys()) {
+					const
+						el = <T>obj.get(key);
+
+					if (filter == null || Object.isTruly(filter(el, key))) {
+						remove(key, ...args);
 					}
-				});
+				}
+
+				return;
 			}
 
 			return wrap(clear(...args), () => undefined);
@@ -326,20 +339,38 @@ export function factory(engine: StorageEngine, async?: boolean): AsyncStorage | 
 				},
 
 				clear<T>(filter?: ClearFilter<T>, ...args: unknown[]): CanPromise<void> {
-					return wrap(keys(), async (keys) => {
-						for (const key of keys) {
-							if (key.split('.')[0] !== name) {
-								continue;
-							}
+					const
+						prfx = `${name}.`;
 
-							const
-								el = await obj.get<T>(key);
+					if (async) {
+						return (async () => {
+							for (const key of await keys()) {
+								if (!String(key).startsWith(prfx)) {
+									continue;
+								}
 
-							if (!filter || Object.isTruly(filter(el, key))) {
-								await remove(key, ...args);
+								const
+									el = await obj.get<T>(key);
+
+								if (filter == null || Object.isTruly(filter(el, key))) {
+									await remove(key, ...args);
+								}
 							}
+						})();
+					}
+
+					for (const key of keys()) {
+						if (!String(key).startsWith(prfx)) {
+							continue;
 						}
-					});
+
+						const
+							el = <T>obj.get(key);
+
+						if (filter == null || Object.isTruly(filter!(el, key))) {
+							remove(key, ...args);
+						}
+					}
 				}
 			};
 		}
