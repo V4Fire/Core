@@ -80,7 +80,7 @@ export default class RestrictedCache<V = unknown, K = string> extends SimpleCach
 	}
 
 	/** @override */
-	clear(filter?: ClearFilter<V, K>): Set<K> {
+	clear(filter?: ClearFilter<V, K>): Map<K, V> {
 		const
 			removed = super.clear(filter);
 
