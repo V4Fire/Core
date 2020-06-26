@@ -65,7 +65,7 @@ export default class OrderedQueue<T> extends Queue<T> {
 	push(task: T): number {
 		this.tasks[++this.last] = task;
 		this.fromBottom();
-		return this.last;
+		return this.length;
 	}
 
 	/** @inheritDoc */
