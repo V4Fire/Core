@@ -164,7 +164,7 @@ extend(Number.prototype, 'format', function format(
 	let
 		res = '';
 
-	for (let j = 0, i = int.length; i-- > 0;) {
+	for (let i = int.length - 1, j = 0; i >= 0; i--) {
 		if (j === 3) {
 			j = 0;
 			res = globalOpts.thousands + res;
