@@ -9,7 +9,7 @@
 import extend from 'core/prelude/extend';
 
 /** @see [[Function.once]] */
-extend(Function.prototype, 'once', function once(this: AnyFunction): AnyFunction {
+extend(Function.prototype, 'once', function once(this: AnyFunction, ...args: unknown[]): AnyFunction {
 	const
 		// eslint-disable-next-line @typescript-eslint/no-this-alias
 		fn = this;
@@ -23,7 +23,7 @@ extend(Function.prototype, 'once', function once(this: AnyFunction): AnyFunction
 			return res;
 		}
 
-		res = fn.apply(this, arguments);
+		res = fn.apply(this, args);
 		called = true;
 		return res;
 	};

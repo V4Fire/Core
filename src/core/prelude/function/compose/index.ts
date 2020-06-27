@@ -9,7 +9,7 @@
 import extend from 'core/prelude/extend';
 
 /** @see [[FunctionConstructor.compose]] */
-extend(Function, 'compose', (...fns: Array<Nullable<AnyFunction>>) => function wrapper(this: unknown): unknown {
+extend(Function, 'compose', (...fns: Array<Nullable<AnyFunction>>) => function wrapper(this: unknown, ...args: unknown[]): unknown {
 	if (fns.length === 0) {
 		return;
 	}
@@ -23,7 +23,7 @@ extend(Function, 'compose', (...fns: Array<Nullable<AnyFunction>>) => function w
 			fn = fns[i];
 
 		if (fn != null) {
-			res = fn.apply(this, arguments);
+			res = fn.apply(this, args);
 			break;
 		}
 	}
@@ -53,9 +53,9 @@ extend(Function.prototype, 'compose', function compose(
 	const
 		that = this;
 
-	return function wrapper(this: unknown): unknown {
+	return function wrapper(this: unknown, ...args: unknown[]): unknown {
 		let
-			res = that.apply(this, arguments);
+			res = that.apply(this, args);
 
 		for (let i = 0; i < fns.length; i++) {
 			const

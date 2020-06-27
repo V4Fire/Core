@@ -17,7 +17,7 @@ extend(Function, '__', {
 });
 
 /** @see [[Function.curry]] */
-extend(Function.prototype, 'curry', function curry(this: AnyFunction): AnyFunction {
+extend(Function.prototype, 'curry', function curry(this: AnyFunction, ...args: unknown[]): AnyFunction {
 	let
 		{length} = this;
 
@@ -26,12 +26,12 @@ extend(Function.prototype, 'curry', function curry(this: AnyFunction): AnyFuncti
 		fn = this;
 
 	const
-		args = <unknown[]>[],
+		filteredArgs = <unknown[]>[],
 		gaps = <number[]>[];
 
 	return wrapper;
 
-	function wrapper(): unknown {
+	function wrapper(this: unknown): unknown {
 		let
 			i = 0;
 
@@ -45,10 +45,10 @@ extend(Function.prototype, 'curry', function curry(this: AnyFunction): AnyFuncti
 				}
 
 				const
-					el = arguments[i];
+					el = args[i];
 
 				if (el !== __) {
-					args[tmp[i]] = el;
+					filteredArgs[tmp[i]] = el;
 					gaps.splice(i - d, 1);
 					d++;
 				}
@@ -57,19 +57,19 @@ extend(Function.prototype, 'curry', function curry(this: AnyFunction): AnyFuncti
 
 		for (; i < arguments.length; i++) {
 			const
-				el = arguments[i];
+				el = args[i];
 
 			if (el === __) {
 				gaps.push(i);
 			}
 
-			args.push(el);
+			filteredArgs.push(el);
 		}
 
 		length -= arguments.length - gaps.length;
 
 		if (length <= 0 && gaps.length === 0) {
-			return fn.apply(null, args);
+			return fn.apply(this, filteredArgs);
 		}
 
 		return wrapper;
