@@ -353,7 +353,6 @@ function watch<T extends object>(
 					}
 
 					if (timer == null) {
-						// Tslint:disable-next-line:no-string-literal
 						timer = globalThis['setImmediate'](() => {
 							timer = undefined;
 

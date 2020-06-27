@@ -41,3 +41,21 @@ export interface WrapParams extends WrapOptions {
 	original: Function;
 	handlers: WatchHandlersSet;
 }
+
+export type WrapResult = Array<[unknown, unknown, unknown[]]>;
+
+export interface WrapMethod {
+	(target: any, opts: WrapParams, ...args: any[]): any;
+}
+
+export interface WrapMethodObject {
+	type: string;
+	value: WrapMethod;
+}
+
+export interface StructureWrapper {
+	is(obj: unknown): boolean;
+	methods: Dictionary<WrapMethod | WrapMethodObject>;
+}
+
+export type StructureWrappers = Dictionary<StructureWrapper>;

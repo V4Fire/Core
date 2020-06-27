@@ -7,17 +7,16 @@
  */
 
 import { getProxyValue } from 'core/object/watch/engines/helpers';
-import { MultipleWatchHandler } from 'core/object/watch/interface';
-import { WrapParams } from 'core/object/watch/wrap/interface';
+import { WrapParams, WrapResult, StructureWrappers } from 'core/object/watch/wrap/interface';
 
 export const deleteMethods = {
 	delete: (
 		target: Map<any, any> | Set<any>,
 		opts: WrapParams,
 		key: unknown
-	): Nullable<Parameters<MultipleWatchHandler>> => {
+	): Nullable<WrapResult> => {
 		if (target.has(key)) {
-			return [[undefined, Array.concat([], opts.path ?? [], key), 'get' in target ? target.get(key) : key]];
+			return [[undefined, 'get' in target ? target.get(key) : key, [...opts.path, key]]];
 		}
 
 		return null;
@@ -25,9 +24,13 @@ export const deleteMethods = {
 };
 
 export const clearMethods = {
-	clear: (target: Set<any>, opts: WrapParams) => target.size !== 0 ?
-		[[undefined, undefined, Array.concat([], opts.path)]] :
-		null
+	clear: (target: Set<any>, opts: WrapParams): Nullable<WrapResult> => {
+		if (target.size !== 0) {
+			return [[undefined, undefined, opts.path]];
+		}
+
+		return null;
+	}
 };
 
 export const weakMapMethods = {
@@ -35,44 +38,43 @@ export const weakMapMethods = {
 
 	get: {
 		type: 'get',
-		value: (target: WeakMap<any, any>, opts: WrapParams, key) => {
+		value: (target: WeakMap<any, any>, opts: WrapParams, key: unknown): unknown => {
 			const val = opts.original.call(target, key);
 			return getProxyValue(val, key, opts.path, opts.handlers, top, opts.watchOpts);
 		}
 	},
 
-	set: (target: WeakMap<any, any>, opts: WrapParams, key, val) => {
+	set: (target: WeakMap<any, any>, opts: WrapParams, key: unknown, value: unknown): Nullable<WrapResult> => {
 		const oldVal = target.get(key);
-		return oldVal !== val ? [[val, oldVal, Array.concat([], opts.path, key)]] : null;
+		return oldVal !== value ? [[value, oldVal, [...opts.path, key]]] : null;
 	}
 };
 
 export const weakSetMethods = {
 	...deleteMethods,
 
-	add: (target: WeakMap<any, any>, opts: WrapParams, val) => {
-		if (!target.has(val)) {
-			return [[val, undefined, Array.concat([], opts.path, val)]];
+	add: (target: WeakMap<any, any>, opts: WrapParams, value: unknown): Nullable<WrapResult> => {
+		if (!target.has(value)) {
+			return [[value, undefined, [...opts.path, value]]];
 		}
 
 		return null;
 	}
 };
 
-export const structureWrappers = Object.createDict({
+export const structureWrappers = Object.createDict<StructureWrappers>({
 	weakMap: {
-		is: Object.isWeakMap,
+		is: Object.isWeakMap.bind(Object),
 		methods: weakMapMethods
 	},
 
 	weakSet: {
-		is: Object.isWeakSet,
-		args: weakSetMethods,
+		is: Object.isWeakSet.bind(Object),
 		methods: weakSetMethods
 	},
 
 	map: {
-		is: Object.isMap,
+		is: Object.isMap.bind(Object),
 		methods: {
 			...weakMapMethods,
 			...clearMethods
@@ -80,7 +82,7 @@ export const structureWrappers = Object.createDict({
 	},
 
 	set: {
-		is: Object.isSet,
+		is: Object.isSet.bind(Object),
 		methods: {
 			...weakSetMethods,
 			...clearMethods
@@ -88,69 +90,107 @@ export const structureWrappers = Object.createDict({
 	},
 
 	array: {
-		is: Object.isArray,
+		is: Object.isArray.bind(Object),
 		methods: {
-			push: (target: unknown[], opts: WrapParams, ...val) => {
+			push: (target: unknown[], opts: WrapParams, ...value: unknown[]): Nullable<WrapResult> => {
 				const
-					res = <unknown[][]>[];
+					res = <WrapResult>[];
 
-				for (let i = 0; i < val.length; i++) {
-					res.push([val[i], undefined, Array.concat([], opts.path, target.length)]);
+				for (let i = 0; i < value.length; i++) {
+					res.push([value[i], undefined, [...opts.path, target.length + i]]);
 				}
 
 				return res;
 			},
 
-			pop: (target: unknown[], opts: WrapParams) => {
-				const l = target.length - 1;
-				return l >= 0 ? [undefined, target[l], Array.concat([], opts.path, l)] : null;
+			pop: (target: unknown[], opts: WrapParams): Nullable<WrapResult> => {
+				const l = target.length;
+				return l > 0 ? [[l - 1, l, [...opts.path, 'length']]] : null;
 			},
 
-			unshift: (target: unknown[], opts: WrapParams, val) => {
+			unshift: (target: unknown[], opts: WrapParams, ...value: unknown[]): Nullable<WrapResult> => {
 				const
-					res = <unknown[][]>[];
+					res = <WrapResult>[];
 
-				for (let i = 0; i < val.length; i++) {
-					res.push([val[i], i ? val[i - 1] : target[0], Array.concat([], opts.path, 0)]);
+				for (let i = target.length - 1; i >= 0; i--) {
+					res.push([target[i], target[i + value.length], [...opts.path, i + value.length]]);
+				}
+
+				for (let i = 0; i < value.length; i++) {
+					res.push([value[i], target[i], [...opts.path, i]]);
 				}
 
 				return res;
 			},
 
-			shift: (target: unknown[], opts: WrapParams) =>
-				target.length ? [target[1], target[0], Array.concat([], opts.path, 0)] : null,
+			shift: (target: unknown[], opts: WrapParams): Nullable<WrapResult> => {
+				if (target.length > 0) {
+					const
+						l = target.length,
+						res = <WrapResult>[];
 
-			splice: (target: unknown[], opts: WrapParams, start, deleteCount, ...args) => {
-				if (deleteCount <= 0 && !args.length) {
+					for (let i = 1; i < l; i++) {
+						res.push([target[i], target[i - 1], [...opts.path, i - 1]]);
+					}
+
+					res.push([l - 1, l, [...opts.path, 'length']]);
+					return res;
+				}
+
+				return null;
+			},
+
+			splice: (
+				target: unknown[],
+				opts: WrapParams,
+				start?: number,
+				deleteNumber?: number,
+				...newEls: unknown[]
+			): Nullable<WrapResult> => {
+				const
+					targetLength = target.length;
+
+				if (start == null || start >= targetLength) {
 					return null;
 				}
 
-				start = start || 0;
-				deleteCount = deleteCount || target.length;
+				deleteNumber = deleteNumber ?? target.length;
 
-				const
-					range = target.slice(start, start + deleteCount),
-					delLength = range.length - args.length,
-					res = <unknown[][]>[];
-
-				let
-					i = 0;
-
-				for (; i < range.length; i++) {
-					if (i >= args.length) {
-						break;
-					}
-
-					res.push([args[i], range[i], Array.concat([], opts.path, i)]);
+				if (deleteNumber <= 0 && newEls.length === 0) {
+					return null;
 				}
 
-				if (i < range.length) {
-					res.push([target.length - delLength, target.length, Array.concat([], opts.path, 'length')]);
+				const
+					newLength = targetLength + newEls.length - deleteNumber;
 
-				} else if (i < args.length) {
-					for (; i < args.length; i++) {
-						res.push([args[i], undefined, Array.concat([], opts.path, i)]);
+				const
+					res = <WrapResult>[];
+
+				const rightBorder = start + deleteNumber >= targetLength ?
+					target.length - 1 :
+					start + deleteNumber;
+
+				if (newLength > targetLength) {
+					const
+						diff = newLength - targetLength;
+
+					for (let i = targetLength - 1; i >= rightBorder; i--) {
+						res.push([target[i], undefined, [...opts.path, i + diff]]);
 					}
+
+				} else {
+					for (let i = rightBorder; i < targetLength; i++) {
+						const newI = i - deleteNumber + 1;
+						res.push([target[i], target[newI], [...opts.path, newI]]);
+					}
+				}
+
+				for (let i = start, j = 0; j < newEls.length; i++, j++) {
+					res.push([newEls[j], target[i], [...opts.path, i]]);
+				}
+
+				if (newLength < targetLength) {
+					res.push([newLength, targetLength, [...opts.path, 'length']]);
 				}
 
 				return res;
