@@ -10,8 +10,8 @@
 
 import { IS_NODE } from 'core/env';
 
-let
-	transport;
+// eslint-disable-next-line import/no-mutable-exports
+let transport;
 
 if (IS_NODE) {
 	//#if node_js

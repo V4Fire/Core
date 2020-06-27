@@ -103,6 +103,7 @@ export function isOnline(): Promise<NetStatus> {
 
 	//#endif
 
+	// eslint-disable-next-line no-unreachable
 	return Promise.resolve({
 		status: true,
 		lastOnline: new Date()
@@ -182,7 +183,7 @@ export async function updateStatus(): Promise<void> {
 
 		checkTimer = setTimeout(() => {
 			checkTimer = undefined;
-			updateStatus();
+			updateStatus().catch(stderr);
 		}, online.checkInterval);
 	}
 }

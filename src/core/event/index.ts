@@ -136,7 +136,7 @@ export const afterEvents = deprecate(
 			promise = resolveAfterEvents(emitter, ...Array.concat([], Object.isString(cb) ? cb : null, events));
 
 		if (Object.isFunction(cb)) {
-			promise.then(cb);
+			promise.then(cb, stderr);
 		}
 
 		return promise;

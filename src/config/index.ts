@@ -12,6 +12,7 @@
  */
 
 import { Config } from 'config/interface';
+
 export * from 'config/interface';
 
 const config = <Config>{
@@ -59,7 +60,7 @@ const config = <Config>{
  * Extends the config object with additional objects
  * @param objects
  */
-export function extend<T extends Config>(...objects: CanUndef<Dictionary>[]): T {
+export function extend<T extends Config>(...objects: Array<CanUndef<Dictionary>>): T {
 	return Object.mixin({
 		deep: true,
 		concatArray: true,

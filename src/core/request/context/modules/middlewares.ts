@@ -27,21 +27,21 @@ export default class RequestContext<D = unknown> extends Super<D> {
 		if (key != null && !cache.has(key)) {
 			promise = promise.then(
 				(v) => {
-					cache.remove(key);
+					void cache.remove(key);
 					return v;
 				},
 
 				(r) => {
-					cache.remove(key);
+					void cache.remove(key);
 					throw r;
 				},
 
 				() => {
-					cache.remove(key);
+					void cache.remove(key);
 				}
 			);
 
-			cache.set(key, promise);
+			void cache.set(key, promise);
 		}
 
 		return promise;

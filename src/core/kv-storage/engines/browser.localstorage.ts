@@ -6,6 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+// eslint-disable-next-line import/no-mutable-exports
 export let
 	syncLocalStorage,
 	asyncLocalStorage;

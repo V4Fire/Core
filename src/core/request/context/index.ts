@@ -70,7 +70,7 @@ export default class RequestContext<D = unknown> extends Super<D> {
 				clone = (data) => () => Object.isPlainObject(data) || Object.isArray(data) ? Object.fastClone(data) : data;
 
 			if (Object.isPromise(res)) {
-				res.then((data) => log(loggingContext, getTime(), clone(data)));
+				res.then((data) => log(loggingContext, getTime(), clone(data)), stderr);
 
 			} else {
 				log(loggingContext, getTime(), clone(res));

@@ -34,5 +34,5 @@ export interface Config {
 	/**
 	 * Options for a module that checks online connection
 	 */
-	online: OnlineCheckConfig
+	online: OnlineCheckConfig;
 }

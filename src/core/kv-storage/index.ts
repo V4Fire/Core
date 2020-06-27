@@ -367,7 +367,7 @@ export function factory(engine: StorageEngine, async?: boolean): AsyncStorage | 
 						const
 							el = <T>obj.get(key);
 
-						if (filter == null || Object.isTruly(filter!(el, key))) {
+						if (filter == null || Object.isTruly(filter(el, key))) {
 							remove(key, ...args);
 						}
 					}

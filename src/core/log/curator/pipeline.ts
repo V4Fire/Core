@@ -67,21 +67,20 @@ export class LogPipeline {
 
 		this.middlewareIndex++;
 		if (this.middlewareIndex < this.middlewares.length) {
-			if (!this.middlewares[this.middlewareIndex]) {
+			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+			if (this.middlewares[this.middlewareIndex] == null) {
 				throw new ReferenceError(`Can't find a middleware at the index [${this.middlewareIndex}]`);
 			}
 
 			this.middlewares[this.middlewareIndex].exec(events, this.nextCallback);
 
-		} else {
-			if (Array.isArray(events)) {
-				for (let i = 0; i < events.length; ++i) {
-					this.engine.log(events[i]);
-				}
-
-			} else {
-				this.engine.log(events);
+		} else if (Array.isArray(events)) {
+			for (let i = 0; i < events.length; ++i) {
+				this.engine.log(events[i]);
 			}
+
+		} else {
+			this.engine.log(events);
 		}
 
 		//#endif
