@@ -608,6 +608,11 @@
         "node": true,
         "es6": true,
         "es2017": true
+      },
+
+      "rules": {
+        "import/no-nodejs-modules": "off",
+        "import/order": "off"
       }
     },
 
