@@ -8,14 +8,13 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-module.exports = function (gulp) {
+module.exports = function init(gulp) {
 	const
 		$ = require('gulp-load-plugins')({scope: ['optionalDependencies']});
 
 	gulp.task('build:docs:typedoc', () => $.run('typedoc')
 		.exec()
-		.on('error', console.error)
-	);
+		.on('error', console.error));
 
 	gulp.task('build:docs:normalise', gulp.series([
 		() => gulp.src('./docs/**/*.+(html|js)')
@@ -30,7 +29,7 @@ module.exports = function (gulp) {
 
 			.pipe($.replace(/<body>/, [
 				'<body>',
-				`<script>${include('assets/js/config.js', {source: true})}</script>`,
+				`<script>${include('assets/js/config.js', {source: true})}</script>`
 			].join('\n')))
 
 			.pipe($.replace(/<\/body>/, [

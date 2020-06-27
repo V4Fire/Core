@@ -11,7 +11,7 @@
 /**
  * The task to build .tsconfig file
  */
-module.exports = function (gulp) {
+module.exports = function init(gulp) {
 	const
 		$ = require('gulp-load-plugins')({scope: ['optionalDependencies']});
 
@@ -92,7 +92,8 @@ module.exports = function (gulp) {
 				function resolveExtends(config) {
 					if (config.extends) {
 						const parentSrc = isNodeModule(config.extends) ?
-							find(path.join('node_modules', config.extends)) : require.resolve(config.extends);
+							find(path.join('node_modules', config.extends)) :
+							require.resolve(config.extends);
 
 						if (!parentSrc) {
 							throw new ReferenceError(`Parent config for inheritance "${config.extends}" is not found`);
@@ -101,7 +102,7 @@ module.exports = function (gulp) {
 						const
 							parent = resolveExtends(tsconfig.parse(fs.readFileSync(parentSrc, 'utf-8'), parentSrc));
 
-						config = $C.extend(/** @type {?} */ {
+						config = $C.extend({
 							deep: true,
 							concatArray: true,
 							concatFn: (a, b) => b

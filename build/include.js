@@ -35,8 +35,8 @@ const
  * include('@super/build/i18n', __dirname);
  * ```
  */
-module.exports = function (roots) {
-	return function (src, ctx) {
+module.exports = function init(roots) {
+	return function include(src, ctx) {
 		const
 			opts = {};
 

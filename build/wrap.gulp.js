@@ -19,7 +19,7 @@ let gulpInitialized;
  *
  * @param gulp - link to the gulp module
  */
-exports.wrapGulp = function (gulp) {
+exports.wrapGulp = function wrapGulp(gulp) {
 	const
 		addTask = gulp.task.bind(gulp),
 		series = gulp.series.bind(gulp),

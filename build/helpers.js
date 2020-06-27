@@ -15,7 +15,7 @@ const
 /**
  * Returns the project version
  */
-exports.getVersion = function () {
+exports.getVersion = function getVersion() {
 	return include('package.json').version;
 };
 
@@ -23,7 +23,7 @@ exports.getVersion = function () {
  * Returns the project disclaimer
  * @param {boolean=} [withVersion]
  */
-exports.getHead = function (withVersion) {
+exports.getHead = function getHead(withVersion) {
 	return fs
 		.readFileSync(path.join(process.cwd(), 'disclaimer.txt'), 'utf-8')
 		.replace(/\* (\w.*?)(?=\n)/, (str) => str + (withVersion ? ` v${exports.getVersion()}` : ''));

@@ -8,4 +8,4 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-global.i18n = (str) => str;
+globalThis.i18n = (str) => str;

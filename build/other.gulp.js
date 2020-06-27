@@ -8,13 +8,13 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-module.exports = function (gulp) {
+module.exports = function init(gulp) {
 	/**
 	 * The task to set NODE_ENV to production
 	 */
 	gulp.task('setProd', (cb) => {
 		process.env.NODE_ENV = 'production';
-		global.isProd = true;
+		globalThis.isProd = true;
 		cb();
 	});
 
@@ -37,7 +37,7 @@ module.exports = function (gulp) {
 		];
 
 		return gulp.src(src, {base: './', since: gulp.lastRun('head')})
-			.pipe(through.obj(function (file, enc, cb) {
+			.pipe(through.obj(function thread(file, enc, cb) {
 				const
 					contents = file.contents.toString(),
 					header = headRgxp.exec(contents);
