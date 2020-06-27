@@ -203,9 +203,10 @@ class Config {
 				if (Object.isFunction(el)) {
 					if (isPathEqual(path.join(process.cwd(), 'config'), activeDir)) {
 						const
-							o = el[origin] = el[origin] || el,
+							o = el[origin] || el,
 							ctx = Object.assign(Object.create({config}), obj);
 
+						el[origin] = o;
 						obj[key] = Object.assign(o.bind(ctx), {[origin]: o});
 					}
 
@@ -245,7 +246,7 @@ class Config {
 	getSrcMap(dir) {
 		const
 			root = path.join(dir, '../'),
-			pzlr = /** @type {{sourceDir: string}} */ fs.readJSONSync(path.join(root, '.pzlrrc'));
+			pzlr = fs.readJSONSync(path.join(root, '.pzlrrc'));
 
 		return {
 			pzlr,
@@ -279,7 +280,7 @@ module.exports = config.createConfig(
 			env: true,
 			default: 'Default app',
 			coerce(value) {
-				global['APP_NAME'] = value;
+				globalThis['APP_NAME'] = value;
 				return value;
 			}
 		}),
@@ -291,7 +292,7 @@ module.exports = config.createConfig(
 			env: true,
 			default: 'en-US',
 			coerce(value) {
-				global['LOCALE'] = value;
+				globalThis['LOCALE'] = value;
 				return value;
 			}
 		}),
@@ -349,7 +350,7 @@ module.exports = config.createConfig(
 				type: 'number',
 				default: 3333,
 				validate(value) {
-					return Number.isFinite(value) && (value > 0) && (value < 65536);
+					return Number.isFinite(value) && value > 0 && value < 65536;
 				}
 			}),
 
@@ -522,63 +523,63 @@ module.exports = config.createConfig(
 			 * Returns a path to the application node_modules directory
 			 * @returns {string}
 			 */
-			lib() {
-				return path.resolve(resolve.lib, ...arguments);
+			lib(...args) {
+				return path.resolve(resolve.lib, ...args);
 			},
 
 			/**
 			 * Returns a path to the application source directory
 			 * @returns {string}
 			 */
-			src() {
-				return path.resolve(resolve.sourceDir, ...arguments);
+			src(...args) {
+				return path.resolve(resolve.sourceDir, ...args);
 			},
 
 			/**
 			 * Returns a path to the application asset directory
 			 * @returns {string}
 			 */
-			assets() {
-				return path.resolve(this.src(), pzlr.assets.dir, ...arguments);
+			assets(...args) {
+				return path.resolve(this.src(), pzlr.assets.dir, ...args);
 			},
 
 			/**
 			 * Returns a path to the application dist directory
 			 * @returns {string}
 			 */
-			output() {
+			output(...args) {
 				const v = o('output', {
 					env: true,
 					default: 'dist'
 				});
 
-				return path.resolve(this.cwd(), v, ...arguments);
+				return path.resolve(this.cwd(), v, ...args);
 			},
 
 			/**
 			 * Returns a path to the application dist directory for client scripts
 			 * @returns {string}
 			 */
-			clientOutput() {
+			clientOutput(...args) {
 				const v = o('client-output', {
 					env: true,
 					default: 'client'
 				});
 
-				return this.output(v, ...arguments);
+				return this.output(v, ...args);
 			},
 
 			/**
 			 * Returns a path to the application dist directory for server scripts
 			 * @returns {string}
 			 */
-			serverOutput() {
+			serverOutput(...args) {
 				const v = o('server-output', {
 					env: true,
 					default: 'server'
 				});
 
-				return this.output(v, ...arguments);
+				return this.output(v, ...args);
 			}
 		}
 	}
@@ -586,10 +587,10 @@ module.exports = config.createConfig(
 
 // Some global helpers and flags
 
-global.isProd = false;
-global.include = require;
+globalThis.isProd = false;
+globalThis.include = require;
 
-Object.defineProperties(global, {
+Object.defineProperties(globalThis, {
 	include: {
 		get() {
 			return require(path.join(process.cwd(), 'config/default')).src.include();
