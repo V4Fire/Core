@@ -31,7 +31,8 @@ const config = <Config>{
 	},
 
 	log: {
-		pipelines: [{
+		pipelines: [
+			{
 				middlewares: ['configurable'],
 				engine: 'console',
 				engineOptions: {

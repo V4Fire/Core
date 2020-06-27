@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-extraneous-class, @typescript-eslint/no-empty-function */
+/* eslint-disable no-empty-function */
 
 /*!
  * V4Fire Core
