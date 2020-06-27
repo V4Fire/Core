@@ -126,6 +126,7 @@ export default class MergeWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> 
 		}
 
 		const
+			// eslint-disable-next-line @typescript-eslint/unbound-method
 			{task, promise, resolve} = taskObj;
 
 		const cb = () => {

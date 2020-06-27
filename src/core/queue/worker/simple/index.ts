@@ -71,6 +71,7 @@ export default class SimpleWorkerQueue<T, V = unknown> extends WorkerQueue<T, V>
 		}
 
 		const
+			// eslint-disable-next-line @typescript-eslint/unbound-method
 			{task, promise, resolve} = taskObj;
 
 		const cb = this.deferPerform.bind(this);
