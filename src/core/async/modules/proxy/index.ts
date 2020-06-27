@@ -94,12 +94,12 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			clearFn,
 			periodic: opts?.single === false,
 
-			onMerge() {
+			onMerge(...args: unknown[]): void {
 				const
 					handlers = Array.concat([], opts?.onMerge);
 
 				for (let i = 0; i < handlers.length; i++) {
-					handlers[i].apply(this, arguments);
+					handlers[i].apply(this, args);
 				}
 
 				clearFn(worker);

@@ -1,3 +1,5 @@
+/* eslint-disable prefer-rest-params, @typescript-eslint/no-unused-vars-experimental */
+
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -23,7 +25,6 @@ export const once = tools.deprecate(
 		movedTo: 'core/functools'
 	},
 
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
 	function once(this: unknown, target: object, key: string | symbol, descriptor: PropertyDescriptor): void {
 		return tools.once.apply(this, arguments);
 	}
@@ -39,7 +40,6 @@ export const debounce = tools.deprecate(
 		movedTo: 'core/functools'
 	},
 
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
 	function debounce(this: unknown, delay?: number): MethodDecorator {
 		return tools.debounce.apply(this, arguments);
 	}
@@ -55,7 +55,6 @@ export const throttle = tools.deprecate(
 		movedTo: 'core/functools'
 	},
 
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
 	function throttle(this: unknown, delay?: number): MethodDecorator {
 		return tools.throttle.apply(this, arguments);
 	}

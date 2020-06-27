@@ -22,13 +22,13 @@ export function debounce(delay?: number): MethodDecorator {
 			throw new TypeError(`descriptor.value is not a function: ${method}`);
 		}
 
-		descriptor.value = function value(this: object): unknown {
+		descriptor.value = function value(this: object, ...args: unknown[]): unknown {
 			Object.defineProperty(this, key, {
 				configurable: true,
 				value: method.debounce(delay)
 			});
 
-			return this[key].apply(this, arguments);
+			return this[key](...args);
 		};
 	};
 }
@@ -49,13 +49,13 @@ export function throttle(delay?: number): MethodDecorator {
 			throw new TypeError(`descriptor.value is not a function: ${method}`);
 		}
 
-		descriptor.value = function value(this: object): unknown {
+		descriptor.value = function value(this: object, ...args: unknown[]): unknown {
 			Object.defineProperty(this, key, {
 				configurable: true,
 				value: method.throttle(delay)
 			});
 
-			return this[key].apply(this, arguments);
+			return this[key](...args);
 		};
 	};
 }

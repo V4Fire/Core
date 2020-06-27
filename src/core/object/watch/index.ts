@@ -76,6 +76,7 @@ function watch<T extends object>(obj: T, opts: WatchOptions, handler?: MultipleW
  */
 function watch<T extends object>(
 	obj: T,
+	// eslint-disable-next-line @typescript-eslint/unified-signatures
 	path: WatchPath,
 	handler?: MultipleWatchHandler
 ): Watcher<T>;
@@ -110,6 +111,7 @@ function watch<T extends object>(
 	handler?: MultipleWatchHandler
 ): Watcher<T>;
 
+// eslint-disable-next-line max-lines-per-function
 function watch<T extends object>(
 	obj: T,
 	pathOptsOrHandler?: WatchPath | WatchHandler | MultipleWatchHandler | WatchOptions,

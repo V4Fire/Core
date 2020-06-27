@@ -61,7 +61,7 @@ export function deprecate<T extends Function>(
 		return;
 	}
 
-	function wrapper(this: unknown): unknown {
+	function wrapper(this: unknown, ...args: unknown[]): unknown {
 		//#unless isProd
 
 		const
@@ -119,7 +119,7 @@ export function deprecate<T extends Function>(
 
 		//#endunless
 
-		return fn?.apply(this, arguments);
+		return fn?.apply(this, args);
 	}
 
 	return <any>wrapper;

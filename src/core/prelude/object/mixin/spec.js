@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/typedef */
+/* eslint-disable max-lines-per-function, max-lines */
 
 /*!
  * V4Fire Core
