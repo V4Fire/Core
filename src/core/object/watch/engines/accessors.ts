@@ -42,7 +42,6 @@ import {
 	Watcher
 
 } from 'core/object/watch/interface';
-import {Type} from "typedoc/dist/lib/models";
 
 /**
  * Watches for changes of the specified object by using accessors
