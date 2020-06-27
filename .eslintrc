@@ -461,7 +461,8 @@
     "no-unused-expressions": ["error", {"allowShortCircuit": true}],
 
     "no-unused-vars": ["error", {
-      "ignoreArgsIfArgsAfterAreUsed": true
+      "vars": "all",
+      "args": "after-used"
     }],
 
     // Style
