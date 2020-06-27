@@ -9,7 +9,7 @@
 import extend from 'core/prelude/extend';
 
 /** @see [[Function.once]] */
-extend(Function.prototype, 'once', function once(this: AnyFunction, ...args: unknown[]): AnyFunction {
+extend(Function.prototype, 'once', function once(this: AnyFunction): AnyFunction {
 	const
 		// eslint-disable-next-line @typescript-eslint/no-this-alias
 		fn = this;
@@ -18,7 +18,7 @@ extend(Function.prototype, 'once', function once(this: AnyFunction, ...args: unk
 		called = false,
 		res;
 
-	return function wrapper(this: unknown): unknown {
+	return function wrapper(this: unknown, ...args: unknown[]): unknown {
 		if (called) {
 			return res;
 		}
