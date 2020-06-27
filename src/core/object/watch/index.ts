@@ -22,6 +22,7 @@ import {
 	WatchOptions,
 
 	WatchHandler,
+	RawWatchHandler,
 	MultipleWatchHandler,
 
 	Watcher,
@@ -540,7 +541,7 @@ function watch<T extends object>(
 	}
 
 	const
-		watcher = opts.engine.watch(obj, undefined, wrappedHandler, obj[watchHandlers] ?? new Set(), opts);
+		watcher = opts.engine.watch(obj, undefined, <RawWatchHandler>wrappedHandler, obj[watchHandlers] ?? new Set(), opts);
 
 	const
 		{proxy} = watcher;

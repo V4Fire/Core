@@ -180,7 +180,7 @@ export interface WatchEngine {
 	watch<T extends object>(
 		obj: T,
 		path: CanUndef<unknown[]>,
-		handler: Nullable<WatchHandler>,
+		handler: Nullable<RawWatchHandler>,
 		handlers: WatchHandlersSet,
 		opts?: WatchOptions
 	): Watcher<T>;
@@ -188,7 +188,7 @@ export interface WatchEngine {
 	watch<T extends object>(
 		obj: T,
 		path: CanUndef<unknown[]>,
-		handler: Nullable<WatchHandler>,
+		handler: Nullable<RawWatchHandler>,
 		handlers: WatchHandlersSet,
 		opts: CanUndef<InternalWatchOptions>,
 		root: object,

@@ -35,13 +35,14 @@ import {
 import {
 
 	WatchPath,
-	WatchHandler,
+	RawWatchHandler,
 	WatchHandlersSet,
 	WatchOptions,
 	InternalWatchOptions,
 	Watcher
 
 } from 'core/object/watch/interface';
+import {Type} from "typedoc/dist/lib/models";
 
 /**
  * Watches for changes of the specified object by using accessors
@@ -55,7 +56,7 @@ import {
 export function watch<T extends object>(
 	obj: T,
 	path: CanUndef<unknown[]>,
-	handler: Nullable<WatchHandler>,
+	handler: Nullable<RawWatchHandler>,
 	handlers: WatchHandlersSet,
 	opts?: WatchOptions
 ): Watcher<T>;
@@ -74,7 +75,7 @@ export function watch<T extends object>(
 export function watch<T extends object>(
 	obj: T,
 	path: CanUndef<unknown[]>,
-	handler: Nullable<WatchHandler>,
+	handler: Nullable<RawWatchHandler>,
 	handlers: WatchHandlersSet,
 	opts: CanUndef<InternalWatchOptions>,
 	root: object,
@@ -84,48 +85,47 @@ export function watch<T extends object>(
 export function watch<T extends object>(
 	obj: T,
 	path: CanUndef<unknown[]>,
-	handler: Nullable<WatchHandler>,
+	handler: Nullable<RawWatchHandler>,
 	handlers: WatchHandlersSet,
 	opts?: InternalWatchOptions,
 	root?: object,
 	top?: object
 ): Watcher<T> | T {
-	const unwrappedObj = unwrap(obj);
-	root = root ?? unwrappedObj;
+	opts = opts ?? {};
+
+	const
+		unwrappedObj = unwrap(obj),
+		resolvedRoot = root ?? unwrappedObj;
 
 	const returnProxy = (obj, proxy?) => {
-		if (proxy && handler && handlers && (!top || !handlers.has(handler))) {
+		if (proxy != null && handler != null && (!top || !handlers.has(handler))) {
 			handlers.add(handler);
 		}
 
 		if (top) {
-			return proxy || obj;
+			return proxy ?? obj;
 		}
 
 		return {
-			proxy: proxy || obj,
+			proxy: proxy ?? obj,
 
 			set: (path, value) => {
-				if (handlers) {
-					set.call(opts?.engine)(obj, path, value, handlers);
-				}
+				set.call(opts!.engine)(obj, path, value, handlers);
 			},
 
 			delete: (path) => {
-				if (handlers) {
-					unset(obj, path, handlers);
-				}
+				unset(obj, path, handlers);
 			},
 
 			unwatch(): void {
-				if (handler && handlers) {
+				if (handler != null) {
 					handlers.delete(handler);
 				}
 			}
 		};
 	};
 
-	if (!unwrappedObj) {
+	if (unwrappedObj == null || resolvedRoot == null) {
 		return returnProxy(obj);
 	}
 
@@ -137,11 +137,11 @@ export function watch<T extends object>(
 			{...opts}
 		);
 
-		if (opts?.deep) {
+		if (opts.deep) {
 			tmpOpts.deep = true;
 		}
 
-		if (opts?.withProto) {
+		if (opts.withProto) {
 			tmpOpts.withProto = true;
 		}
 
@@ -155,16 +155,16 @@ export function watch<T extends object>(
 		return returnProxy(unwrappedObj, proxy);
 	}
 
-	if (!getProxyType(unwrappedObj)) {
+	if (getProxyType(unwrappedObj) == null) {
 		return returnProxy(unwrappedObj);
 	}
 
 	const
-		fromProto = Boolean(opts?.fromProto),
-		resolvedPath = path || [];
+		fromProto = Boolean(opts.fromProto),
+		resolvedPath = path ?? [];
 
 	const wrapOpts = {
-		root: root!,
+		root: resolvedRoot,
 		top,
 		path: resolvedPath,
 		originalPath: resolvedPath,
@@ -183,7 +183,7 @@ export function watch<T extends object>(
 		);
 
 		for (let i = 0; i < (<unknown[]>proxy).length; i++) {
-			proxy[i] = getProxyValue(proxy[i], i, path, handlers, root!, top, opts);
+			proxy[i] = getProxyValue(proxy[i], i, path, handlers, resolvedRoot, top, opts);
 		}
 
 	} else if (Object.isDictionary(unwrappedObj)) {
@@ -194,6 +194,7 @@ export function watch<T extends object>(
 			() => Object.create(unwrappedObj)
 		);
 
+		// eslint-disable-next-line guard-for-in
 		for (const key in unwrappedObj) {
 			let
 				propFromProto: boolean | 1 = fromProto;
@@ -201,13 +202,13 @@ export function watch<T extends object>(
 			if (!Object.hasOwnProperty(unwrappedObj, key)) {
 				propFromProto = !propFromProto ? 1 : true;
 
-				if (opts?.fromProto && !opts?.withProto) {
+				if (Object.isTruly(opts.fromProto) && !opts.withProto) {
 					continue;
 				}
 			}
 
-			const watchOpts = Object.assign(Object.create(opts!), {fromProto: propFromProto});
-			setWatchAccessors(unwrappedObj, key, path, handlers, root!, top, watchOpts);
+			const watchOpts = Object.assign(Object.create(opts), {fromProto: propFromProto});
+			setWatchAccessors(unwrappedObj, key, path, handlers, resolvedRoot, top, watchOpts);
 		}
 
 	} else {
@@ -233,7 +234,7 @@ export function watch<T extends object>(
 
 	Object.defineProperty(proxy, toRootObject, {
 		configurable: true,
-		value: root
+		value: resolvedRoot
 	});
 
 	Object.defineProperty(proxy, toTopObject, {
@@ -270,14 +271,14 @@ export function set(obj: object, path: WatchPath, value: unknown, handlers: Watc
 		prop = normalizedPath[normalizedPath.length - 1];
 
 	const
-		ctxPath = obj[watchPath] || [],
+		ctxPath = obj[watchPath] ?? [],
 		refPath = Array.concat([], ctxPath.slice(1), normalizedPath.slice(0, -1)),
 		fullRefPath = Array.concat([], ctxPath.slice(0, 1), refPath);
 
 	const
 		proxy = getOrCreateLabelValueByHandlers<object>(unwrappedObj, toProxyObject, handlers),
-		root = proxy?.[toTopObject] || unwrappedObj,
-		top = proxy?.[toTopObject] || unwrappedObj;
+		root = proxy?.[toTopObject] ?? unwrappedObj,
+		top = proxy?.[toTopObject] ?? unwrappedObj;
 
 	const
 		ref = Object.get(top, refPath);
@@ -293,6 +294,10 @@ export function set(obj: object, path: WatchPath, value: unknown, handlers: Watc
 
 			case 'map':
 				(<Map<unknown, unknown>>ref).set(prop, value);
+				break;
+
+			default:
+				throw new TypeError('Invalid data type');
 		}
 
 		return;
@@ -300,11 +305,6 @@ export function set(obj: object, path: WatchPath, value: unknown, handlers: Watc
 
 	const
 		key = String(prop);
-
-	if (!handlers) {
-		unwrappedObj[key] = value;
-		return;
-	}
 
 	const
 		hasPath = fullRefPath.length > 0,
@@ -345,14 +345,14 @@ export function unset(obj: object, path: WatchPath, handlers: WatchHandlersSet):
 		prop = normalizedPath[normalizedPath.length - 1];
 
 	const
-		ctxPath = obj[watchPath] || [],
+		ctxPath = obj[watchPath] ?? [],
 		refPath = Array.concat([], ctxPath.slice(1), normalizedPath.slice(0, -1)),
 		fullRefPath = Array.concat([], ctxPath.slice(0, 1), refPath);
 
 	const
 		proxy = getOrCreateLabelValueByHandlers<object>(unwrappedObj, toProxyObject, handlers),
-		root = proxy?.[toTopObject] || unwrappedObj,
-		top = proxy?.[toTopObject] || unwrappedObj;
+		root = proxy?.[toTopObject] ?? unwrappedObj,
+		top = proxy?.[toTopObject] ?? unwrappedObj;
 
 	const
 		ref = Object.get(top, refPath);
@@ -369,6 +369,10 @@ export function unset(obj: object, path: WatchPath, handlers: WatchHandlersSet):
 			case 'map':
 			case 'set':
 				(<Map<unknown, unknown>>ref).delete(prop);
+				break;
+
+			default:
+				throw new TypeError('Invalid data type');
 		}
 
 		return;
@@ -376,11 +380,6 @@ export function unset(obj: object, path: WatchPath, handlers: WatchHandlersSet):
 
 	const
 		key = String(prop);
-
-	if (!handlers) {
-		delete unwrappedObj[key];
-		return;
-	}
 
 	const
 		hasPath = fullRefPath.length > 0,
@@ -440,7 +439,7 @@ export function setWatchAccessors(
 				const
 					val = obj[key];
 
-				if (root[muteLabel]) {
+				if (root[muteLabel] === true) {
 					return val;
 				}
 
@@ -449,7 +448,7 @@ export function setWatchAccessors(
 
 			set(val: unknown): void {
 				let
-					fromProto = opts?.fromProto || false;
+					fromProto = opts?.fromProto ?? false;
 
 				const
 					oldVal = obj[key];
@@ -458,12 +457,13 @@ export function setWatchAccessors(
 					try {
 						obj[key] = val;
 
-						if (root[muteLabel]) {
+						if (root[muteLabel] === true) {
 							return;
 						}
 
 						if (fromProto === 1) {
-							fromProto = opts!.fromProto = false;
+							fromProto = false;
+							opts!.fromProto = fromProto;
 						}
 
 					} catch {
