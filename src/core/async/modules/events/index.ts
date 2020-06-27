@@ -114,7 +114,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 				clearFn: this.eventListenerDestructor
 					.bind(this),
 
-				wrapper(cb: AnyFunction, ...args: unknown[]): unknown {
+				wrapper(cb: AnyFunction): unknown {
 					const fn = Object.isSimpleFunction(emitter) ?
 						emitter :
 						p.single &&
@@ -137,7 +137,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 						args
 					};
 
-					function handler(this: unknown): unknown {
+					function handler(this: unknown, ...handlerArgs: unknown[]): unknown {
 						if (Object.isFunction(emitter) || p.single && (multipleEvent || !emitter.once)) {
 							if (multipleEvent) {
 								that.clearEventListener(links);
@@ -148,7 +148,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 						}
 
 						const
-							res = cb.apply(this, args);
+							res = cb.apply(this, handlerArgs);
 
 						if (Object.isPromise(res)) {
 							res.catch(stderr);
