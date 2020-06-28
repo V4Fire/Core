@@ -109,7 +109,7 @@ export function watch<T extends object>(
 			proxy: proxy ?? obj,
 
 			set: (path, value) => {
-				set.call(opts!.engine)(obj, path, value, handlers);
+				set(obj, path, value, handlers);
 			},
 
 			delete: (path) => {
