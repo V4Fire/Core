@@ -67,13 +67,19 @@ export default function select<T = unknown>(obj: unknown, params: SelectParams):
 		}
 	}
 
+	return res;
+
 	function getMatch(obj: Dictionary | unknown[], where: Nullable<Dictionary>): unknown {
 		if (where == null || obj === where) {
 			return obj;
 		}
 
+		if (!Object.isPlainObject(where) && !Object.isArray(where)) {
+			return NULL;
+		}
+
 		let
-			res;
+			res = NULL;
 
 		Object.forEach(where, (v, k) => {
 			if (Object.isPlainObject(obj) && !(k in obj)) {
@@ -89,6 +95,4 @@ export default function select<T = unknown>(obj: unknown, params: SelectParams):
 
 		return res;
 	}
-
-	return res;
 }
