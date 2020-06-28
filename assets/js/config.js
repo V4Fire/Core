@@ -8,8 +8,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-/* eslint-disable prefer-arrow-callback, no-var */
-
 (function () {
 	if (localStorage.getItem('visibility') == null) {
 		localStorage.setItem('visibility', 'public');
