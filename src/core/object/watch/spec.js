@@ -708,7 +708,7 @@ describe('core/object/watch', () => {
 					spy = jasmine.createSpy();
 
 				const {proxy} = watch(obj, {immediate: true, engine}, (value, oldValue, info) => {
-					spy(value, oldValue, info.path);
+					spy(value, info.path);
 				});
 
 				delete proxy.a;
@@ -718,7 +718,7 @@ describe('core/object/watch', () => {
 				expect(spy).not.toHaveBeenCalled();
 
 				set(proxy, 'a', 1, engine);
-				expect(spy).toHaveBeenCalledWith(1, 2, ['a']);
+				expect(spy).toHaveBeenCalledWith(1, ['a']);
 			}
 
 			{
