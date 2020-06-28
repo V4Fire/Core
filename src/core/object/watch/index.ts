@@ -238,7 +238,7 @@ function watch<T extends object>(
 
 	const
 		deep = normalizedPath != null && normalizedPath.length > 1 || opts.deep,
-		collapse = normalizedPath != null ? opts.collapse !== false : opts.collapse;
+		{collapse} = opts;
 
 	const
 		pref = opts.prefixes,
