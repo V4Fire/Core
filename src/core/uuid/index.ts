@@ -11,12 +11,7 @@
  * @packageDocumentation
  */
 
-const serializeFilter = Object.createDict({
-	3: true,
-	5: true,
-	7: true,
-	9: true
-});
+import { serializeFilter } from 'core/uuid/const';
 
 /**
  * Converts the specified binary UUID to a string and returns it
