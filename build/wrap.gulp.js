@@ -14,8 +14,21 @@ const
 let gulpInitialized;
 
 /**
- * Wraps all base gulp methods for inheritance.
- * This function is needed, because since gulp@4.0.0 you can't override already defined tasks.
+ * Wraps all gulp methods to enable overriding of tasks.
+ *
+ * ```js
+ * // Since gulp@4 we can't do this,
+ * // but this feature can be very useful, if we need to override some tasks,
+ * // that are defined at the parent layer, i.e, from the external library
+ *
+ * gulp.task('foo', () => {
+ *   // ...
+ * });
+ *
+ * gulp.task('foo', () => {
+ *   // ...
+ * });
+ * ```
  *
  * @param gulp - link to the gulp module
  */

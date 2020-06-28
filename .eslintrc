@@ -599,7 +599,11 @@
 
   "overrides": [
     {
-      "files": ["build/**/*.js", "config/**/*.js"],
+      "files": [
+        "./*.js",
+        "./build/**/*.js",
+        "./config/**/*.js"
+      ],
 
       "parserOptions": {
         "sourceType": "script"

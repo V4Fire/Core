@@ -18,24 +18,28 @@ const
 	{pathEqual} = require('path-equal');
 
 /**
- * Factory to create require wrappers:
+ * Returns a function to attach modules withing node.js process with the support of WebPack "layers".
+ * The returned function takes a path to require, and, also, can take a directory of the caller file
+ * (to enable "@super" alias).
  *
- * 1) If the string has a substring ${root}:
- *    the substring will be replaced by one of root directories (from the end) until the file is found
- *
- * 2) Or, one of root directories will be added to the beginning of the source string
- *
- * @param {Array<string>} roots - list of root directories
+ * @param {Array<string>} layers - list of layers
  * @returns {function (string, string?): ?}
  *
  * @example
  * ```js
- * global.include = include(roots);
+ * global.include = include(['./', './node_modules/bla']);
+ *
+ * // Searches the first existed file from a list:
+ * // ./build/i18n
+ * // ./node_modules/bla/build/i18n
  * include('build/i18n');
+ *
+ * // Searches the first existed file from a list:
+ * // ./node_modules/bla/build/i18n
  * include('@super/build/i18n', __dirname);
  * ```
  */
-module.exports = function init(roots) {
+module.exports = function init(layers) {
 	return function include(src, ctx) {
 		const
 			opts = {};
@@ -47,17 +51,17 @@ module.exports = function init(roots) {
 
 		function resolve(root) {
 			const
-				r = /\${root}/g;
+				rootAlias = /\${root}/g;
 
-			if (r.test(src)) {
-				return src.replace(r, root);
+			if (rootAlias.test(src)) {
+				return src.replace(rootAlias, root);
 			}
 
 			return path.join(root, src);
 		}
 
 		let
-			r = roots;
+			resolvedLayers = layers;
 
 		if (superRgxp.test(src)) {
 			if (!ctx) {
@@ -68,11 +72,11 @@ module.exports = function init(roots) {
 				cwd: ctx
 			}));
 
-			r = r.slice(0, -1);
+			resolvedLayers = resolvedLayers.slice(0, -1);
 
-			for (let i = r.length; i--;) {
-				if (pathEqual(ctx, r[i])) {
-					r = r.slice(0, i);
+			for (let i = resolvedLayers.length; i--;) {
+				if (pathEqual(ctx, resolvedLayers[i])) {
+					resolvedLayers = resolvedLayers.slice(0, i);
 					break;
 				}
 			}
@@ -80,9 +84,9 @@ module.exports = function init(roots) {
 			src = src.replace(superRgxp, '');
 		}
 
-		for (let i = r.length; i--;) {
+		for (let i = resolvedLayers.length; i--;) {
 			const
-				layerSRC = resolve(r[i]);
+				layerSRC = resolve(resolvedLayers[i]);
 
 			try {
 				if (opts.source) {

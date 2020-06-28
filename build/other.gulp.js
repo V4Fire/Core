@@ -8,9 +8,21 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/**
+ * Registers some helper gulp tasks
+ *
+ * @example
+ * ```bash
+ * # The task sets NODE_ENV environment variable to "production"
+ * npx gulp setProd
+ *
+ * # Updates or adds head disclaimers to all files from the project
+ * npx gulp head
+ * ```
+ */
 module.exports = function init(gulp) {
 	/**
-	 * The task to set NODE_ENV to production
+	 * Sets NODE_ENV to production
 	 */
 	gulp.task('setProd', (cb) => {
 		process.env.NODE_ENV = 'production';
@@ -19,7 +31,7 @@ module.exports = function init(gulp) {
 	});
 
 	/**
-	 * The task to update head disclaimers
+	 * Updates or adds head disclaimers to all files from the project
 	 */
 	gulp.task('head', () => {
 		const

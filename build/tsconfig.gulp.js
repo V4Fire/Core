@@ -9,7 +9,15 @@
  */
 
 /**
- * The task to build .tsconfig file
+ * Registers a gulp task to generate tsconfig.json based on .tsconfig.
+ * The task brings a feature to extend one tsconfig.json from another from a different project.
+ * Also, this task generates URL-s for the "paths" options of the config.
+ * Be sure that you run this task before trying to compile TS files.
+ *
+ * @example
+ * ```bash
+ * npx gulp build:tsconfig
+ * ```
  */
 module.exports = function init(gulp) {
 	const
