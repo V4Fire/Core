@@ -183,6 +183,110 @@ describe('core/object/watch', () => {
 			expect(localSpy).toHaveBeenCalledWith(9, undefined, ['b', 'foo']);
 		});
 
+		it(`watching for getters with dependencies (${type})`, () => {
+			const fork = () => ({
+				_a: 1,
+
+				get a() {
+					return this._a * 2;
+				},
+
+				b: {
+					$foo: {
+						a: {
+							b: 1
+						}
+					},
+
+					get fooStore() {
+						return this.$foo;
+					},
+
+					get foo() {
+						return this.fooStore.a.b * 3;
+					}
+				}
+			});
+
+			const deps = [
+				{
+					a: ['_a'],
+					'b.foo': [['b', 'fooStore']],
+					fooStore: ['b.$foo']
+				},
+
+				new Map([
+					['a', ['_a']],
+					[['b', 'foo'], [['b', 'fooStore']]],
+					['fooStore', ['b.$foo']]
+				])
+			];
+
+			for (let i = 0; i < deps.length; i++) {
+				const
+					obj = fork(),
+					spy = jasmine.createSpy('global'),
+					localSpy = jasmine.createSpy('local');
+
+				const opts = {
+					immediate: true,
+					deep: true,
+					dependencies: deps[i],
+					engine
+				};
+
+				const {proxy} = watch(obj, opts, (value, oldValue, info) => {
+					spy(value, oldValue, info.path, info.parent && Object.select(info.parent, /value/i));
+				});
+
+				proxy._a = 2;
+				expect(spy).toHaveBeenCalledWith(2, 1, ['_a'], undefined);
+				expect(spy).toHaveBeenCalledWith(4, undefined, ['a'], {value: 2, oldValue: 1});
+
+				proxy._a = 3;
+				expect(spy).toHaveBeenCalledWith(3, 2, ['_a'], undefined);
+				expect(spy).toHaveBeenCalledWith(6, 4, ['a'], {value: 3, oldValue: 2});
+
+				watch(proxy, 'b.foo', opts, (value, oldValue, info) => {
+					localSpy(value, oldValue, info.path);
+				});
+
+				proxy.b.fooStore.a.b = 3;
+				expect(spy).toHaveBeenCalledWith(3, 1, ['b', 'fooStore', 'a', 'b'], undefined);
+				expect(spy).toHaveBeenCalledWith(9, undefined, ['b', 'foo'], {value: 3, oldValue: 1});
+				expect(localSpy).toHaveBeenCalledWith(9, undefined, ['b', 'foo']);
+			}
+		});
+
+		it(`watching for the particular getter with dependencies (${type})`, () => {
+			const obj = {
+				_a: 1,
+
+				get a() {
+					return this._a * 2;
+				}
+			};
+
+			const
+				spy = jasmine.createSpy('global');
+
+			const opts = {
+				immediate: true,
+				dependencies: ['_a'],
+				engine
+			};
+
+			const {proxy} = watch(obj, 'a', opts, (value, oldValue, info) => {
+				spy(value, oldValue, info.path, info.parent && Object.select(info.parent, /value/i));
+			});
+
+			proxy._a = 2;
+			expect(spy).toHaveBeenCalledWith(4, undefined, ['a'], {value: 2, oldValue: 1});
+
+			proxy._a = 5;
+			expect(spy).toHaveBeenCalledWith(10, 4, ['a'], {value: 5, oldValue: 2});
+		});
+
 		it(`watching for an array (${type})`, () => {
 			const
 				arr = [],
