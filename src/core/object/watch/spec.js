@@ -51,6 +51,138 @@ describe('core/object/watch', () => {
 			expect(spy).toHaveBeenCalledWith(4, 1);
 		});
 
+		it(`isolated watchers (${type})`, () => {
+			const
+				obj = {a: {b: [], c: {e: 1}}},
+				spy1 = jasmine.createSpy('spy1'),
+				spy2 = jasmine.createSpy('spy2');
+
+			const handler = (spy) => (value, oldValue) => {
+				spy(value, oldValue);
+			};
+
+			const
+				{proxy: proxy1} = watch(obj, {immediate: true, deep: true, engine}, handler(spy1)),
+				{proxy: proxy2} = watch(obj, {immediate: true, deep: true, engine}, handler(spy2));
+
+			proxy1.a.b = [1, 2, 3];
+			expect(spy1).toHaveBeenCalledWith([1, 2, 3], []);
+			expect(spy2).not.toHaveBeenCalled();
+
+			proxy2.a.c.e = 4;
+			expect(spy1).toHaveBeenCalledTimes(1);
+			expect(spy2).toHaveBeenCalledWith(4, 1);
+		});
+
+		it(`shared watchers (${type})`, () => {
+			const
+				obj = {a: {b: [], c: {e: 1}}},
+				spy1 = jasmine.createSpy('spy1'),
+				spy2 = jasmine.createSpy('spy2');
+
+			const handler = (spy) => (value, oldValue) => {
+				spy(value, oldValue);
+			};
+
+			const
+				{proxy: proxy1} = watch(obj, {immediate: true, deep: true, engine}, handler(spy1)),
+				{proxy: proxy2} = watch(proxy1, {immediate: true, deep: true, engine}, handler(spy2));
+
+			proxy1.a.b = [1, 2, 3];
+			expect(spy1).toHaveBeenCalledWith([1, 2, 3], []);
+			expect(spy2).toHaveBeenCalledWith([1, 2, 3], []);
+
+			proxy2.a.c.e = 4;
+			expect(spy1).toHaveBeenCalledWith(4, 1);
+			expect(spy2).toHaveBeenCalledWith(4, 1);
+		});
+
+		it(`deep watching for an object with the prototype (${type})`, () => {
+			const
+				obj = {a: {b: [], __proto__: {c: {e: 1}}}},
+				protoSpy = jasmine.createSpy('with the prototype'),
+				nonProtoSpy = jasmine.createSpy('without the prototype');
+
+			const handler = (spy) => (value, oldValue, info) => {
+				spy(value, oldValue, info.fromProto);
+			};
+
+			const
+				{proxy: protoProxy} = watch(obj, {immediate: true, deep: true, withProto: true, engine}, handler(protoSpy)),
+				{proxy: nonProtoProxy} = watch(protoProxy, {immediate: true, deep: true, engine}, handler(nonProtoSpy));
+
+			protoProxy.a.b = [1, 2, 3];
+			expect(protoSpy).toHaveBeenCalledWith([1, 2, 3], [], false);
+			expect(nonProtoSpy).toHaveBeenCalledWith([1, 2, 3], [], false);
+
+			nonProtoProxy.a.c.e = 4;
+			expect(protoSpy).toHaveBeenCalledWith(4, 1, true);
+			expect(nonProtoSpy).toHaveBeenCalledTimes(1);
+		});
+
+		it(`watching for getters with prefixes and postfixes (${type})`, () => {
+			const obj = {
+				_a: 1,
+
+				get a() {
+					return this._a * 2;
+				},
+
+				b: {
+					$foo: {
+						a: {
+							b: 1
+						}
+					},
+
+					get fooStore() {
+						return this.$foo;
+					},
+
+					get foo() {
+						return this.fooStore.a.b * 3;
+					}
+				}
+			};
+
+			const
+				spy = jasmine.createSpy('global'),
+				localSpy = jasmine.createSpy('local');
+
+			const opts = {
+				immediate: true,
+				deep: true,
+				prefixes: ['_', '$'],
+				postfixes: ['Store'],
+				engine
+			};
+
+			const {proxy} = watch(obj, opts, (value, oldValue, info) => {
+				spy(value, oldValue, info.path, info.parent && Object.select(info.parent, /value/i));
+			});
+
+			proxy._a = 2;
+			expect(spy).toHaveBeenCalledWith(2, 1, ['_a'], undefined);
+			expect(spy).toHaveBeenCalledWith(4, undefined, ['a'], {value: 2, oldValue: 1});
+
+			proxy._a = 3;
+			expect(spy).toHaveBeenCalledWith(3, 2, ['_a'], undefined);
+			expect(spy).toHaveBeenCalledWith(6, 4, ['a'], {value: 3, oldValue: 2});
+
+			proxy._a = 2;
+			expect(spy).toHaveBeenCalledWith(2, 1, ['_a'], undefined);
+			expect(spy).toHaveBeenCalledWith(4, undefined, ['a'], {value: 2, oldValue: 1});
+
+			watch(proxy, 'b.foo', opts, (value, oldValue, info) => {
+				localSpy(value, oldValue, info.path);
+			});
+
+			proxy.b.fooStore.a.b = 3;
+			expect(spy).toHaveBeenCalledWith(3, 1, ['b', 'fooStore', 'a', 'b'], undefined);
+			expect(spy).toHaveBeenCalledWith(undefined, undefined, ['b', 'foo', 'a', 'b'], {value: 3, oldValue: 1});
+			expect(localSpy).toHaveBeenCalledWith(9, undefined, ['b', 'foo']);
+		});
+
 		it(`watching for an array (${type})`, () => {
 			const
 				arr = [],
