@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import watch from 'core/object/watch';
+import watch, { mute, unmute, set, unset } from 'core/object/watch';
 
 import * as proxyEngine from 'core/object/watch/engines/proxy';
 import * as accEngine from 'core/object/watch/engines/accessors';
@@ -33,6 +33,54 @@ describe('core/object/watch', () => {
 
 			proxy.b = 4;
 			expect(spy).toHaveBeenCalledWith(4, 2);
+		});
+
+		it(`lazy watching for an object (${type})`, (done) => {
+			const
+				obj = {a: 1, b: 2},
+				spy = jasmine.createSpy();
+
+			const {proxy} = watch(obj, {engine}, (mutations) => {
+				spy(mutations.map((el) => el.slice(0, 2).concat(el[2].path)));
+			});
+
+			proxy.a = 2;
+			expect(spy).not.toHaveBeenCalled();
+
+			proxy.a = 3;
+			expect(spy).not.toHaveBeenCalled();
+
+			proxy.b = 4;
+			expect(spy).not.toHaveBeenCalled();
+
+			setTimeout(() => {
+				expect(spy).toHaveBeenCalledWith([[2, 1, 'a'], [3, 2, 'a'], [4, 2, 'b']]);
+				done();
+			}, 15);
+		});
+
+		it(`lazy watching for an object with collapsing (${type})`, (done) => {
+			const
+				obj = {a: 1, b: 2},
+				spy = jasmine.createSpy();
+
+			const {proxy} = watch(obj, {collapse: true, engine}, (mutations) => {
+				spy(mutations.map((el) => el.slice(0, 2).concat(el[2].path)));
+			});
+
+			proxy.a = 2;
+			expect(spy).not.toHaveBeenCalled();
+
+			proxy.a = 3;
+			expect(spy).not.toHaveBeenCalled();
+
+			proxy.b = 4;
+			expect(spy).not.toHaveBeenCalled();
+
+			setTimeout(() => {
+				expect(spy).toHaveBeenCalledWith([[2, 1, 'a'], [3, 2, 'a'], [4, 2, 'b']]);
+				done();
+			}, 15);
 		});
 
 		it(`deep watching for an object (${type})`, () => {
@@ -118,6 +166,67 @@ describe('core/object/watch', () => {
 			nonProtoProxy.a.c.e = 4;
 			expect(protoSpy).toHaveBeenCalledWith(4, 1, true);
 			expect(nonProtoSpy).toHaveBeenCalledTimes(1);
+		});
+
+		it(`deep watching with collapsing (${type})`, () => {
+			const
+				obj = {a: {b: [], c: {e: 1}}, c: []},
+				spy = jasmine.createSpy();
+
+			const opts = {
+				immediate: true,
+				deep: true,
+				collapse: true,
+				engine
+			};
+
+			const {proxy} = watch(obj, opts, (value, oldValue) => {
+				spy(value, oldValue);
+			});
+
+			proxy.c.push(1);
+			expect(spy).toHaveBeenCalledWith([1], [1]);
+
+			proxy.a.b.push(1);
+			expect(spy).toHaveBeenCalledWith({b: [1], c: {e: 1}}, {b: [1], c: {e: 1}});
+
+			proxy.a.c.e = 2;
+			expect(spy).toHaveBeenCalledWith({b: [1], c: {e: 2}}, {b: [1], c: {e: 2}});
+		});
+
+		it(`lazy deep watching with collapsing (${type})`, (done) => {
+			const
+				obj = {a: {b: [], c: {e: 1}}, c: []},
+				spy = jasmine.createSpy();
+
+			const opts = {
+				deep: true,
+				collapse: true,
+				engine
+			};
+
+			const {proxy} = watch(obj, opts, (mutations) => {
+				spy(mutations.map((el) => el.slice(0, 2).concat(el[2].path)));
+			});
+
+			proxy.c.push(1);
+			expect(spy).not.toHaveBeenCalled();
+
+			proxy.a.b.push(1);
+			expect(spy).not.toHaveBeenCalled();
+
+			proxy.a.c.e = 2;
+			expect(spy).not.toHaveBeenCalled();
+
+			setTimeout(() => {
+				expect(spy).toHaveBeenCalledWith([
+					[[1], [1], 'c', 0],
+					[{b: [1], c: {e: 2}}, {b: [1], c: {e: 2}}, 'a', 'b', 0],
+					[{b: [1], c: {e: 2}}, {b: [1], c: {e: 2}}, 'a', 'c', 'e']
+				]);
+
+				done();
+			}, 15);
 		});
 
 		it(`watching for getters with prefixes and postfixes (${type})`, () => {
@@ -466,6 +575,183 @@ describe('core/object/watch', () => {
 			expect(proxy.delete(key2)).toBeTrue();
 			expect(spy).toHaveBeenCalledWith(undefined, 23, [key2]);
 			expect(map.has(key2)).toBeFalse();
+		});
+
+		it(`ties watcher with another object (${type})`, () => {
+			const
+				another = {},
+				obj = {a: 1, b: 2},
+				spy = jasmine.createSpy();
+
+			watch(obj, {immediate: true, tiedWith: another, engine}, (value, oldValue) => {
+				spy(value, oldValue);
+			});
+
+			another.a = 2;
+			expect(spy).toHaveBeenCalledWith(2, 1);
+
+			another.b = 4;
+			expect(spy).toHaveBeenCalledWith(4, 2);
+		});
+
+		it(`filtering of mutations ${type})`, () => {
+			const
+				obj = {a: 1, b: 2},
+				spy = jasmine.createSpy();
+
+			const
+				eventFilter = (value, oldValue, info) => info.path.join('.') === 'a';
+
+			const {proxy} = watch(obj, {immediate: true, eventFilter, engine}, (value, oldValue) => {
+				spy(value, oldValue);
+			});
+
+			proxy.b = 4;
+			expect(spy).not.toHaveBeenCalled();
+
+			proxy.a = 2;
+			expect(spy).toHaveBeenCalledWith(2, 1);
+		});
+
+		it(`modifying of mutations ${type})`, () => {
+			const
+				obj = {a: 1, b: 2},
+				spy = jasmine.createSpy();
+
+			const
+				pathModifier = (path) => path.join('.') === 'a' ? ['b'] : path;
+
+			const {proxy} = watch(obj, {immediate: true, pathModifier, engine}, (value, oldValue, info) => {
+				spy(value, oldValue, info.path);
+			});
+
+			proxy.a = 2;
+			expect(spy).toHaveBeenCalledWith(2, 1, ['b']);
+
+			proxy.b = 4;
+			expect(spy).toHaveBeenCalledWith(4, 2, ['b']);
+		});
+
+		it(`muting of mutations ${type})`, () => {
+			const
+				obj = {a: 1, b: 2},
+				spy = jasmine.createSpy();
+
+			const {proxy} = watch(obj, {immediate: true, engine}, (value, oldValue, info) => {
+				spy(value, oldValue, info.path);
+			});
+
+			mute(proxy);
+
+			proxy.a = 2;
+			expect(spy).not.toHaveBeenCalled();
+
+			unmute(proxy);
+
+			proxy.b = 4;
+			expect(spy).toHaveBeenCalledWith(4, 2, ['b']);
+		});
+
+		it(`cancels watching ${type})`, () => {
+			const
+				obj = {a: 1, b: 2},
+				spy = jasmine.createSpy();
+
+			const {proxy, unwatch} = watch(obj, {immediate: true, engine}, (value, oldValue, info) => {
+				spy(value, oldValue, info.path);
+			});
+
+			unwatch();
+
+			proxy.a = 2;
+			expect(spy).not.toHaveBeenCalled();
+		});
+
+		it(`setting of new properties ${type})`, () => {
+			{
+				const
+					obj = {},
+					spy = jasmine.createSpy();
+
+				const {proxy, set} = watch(obj, {immediate: true, engine}, (value, oldValue, info) => {
+					spy(value, oldValue, info.path);
+				});
+
+				set('a', 1);
+				expect(spy).toHaveBeenCalledWith(1, undefined, ['a']);
+
+				proxy.a = 2;
+				expect(spy).toHaveBeenCalledWith(2, 1, ['a']);
+			}
+
+			{
+				const
+					obj = {},
+					spy = jasmine.createSpy();
+
+				const {proxy} = watch(obj, {immediate: true, engine}, (value, oldValue, info) => {
+					spy(value, oldValue, info.path);
+				});
+
+				set(proxy, 'a', 1, engine);
+				expect(spy).toHaveBeenCalledWith(1, undefined, ['a']);
+
+				proxy.a = 2;
+				expect(spy).toHaveBeenCalledWith(2, 1, ['a']);
+			}
+		});
+
+		it(`deleting of properties ${type})`, () => {
+			{
+				const
+					obj = {},
+					spy = jasmine.createSpy();
+
+				const {proxy} = watch(obj, {immediate: true, engine}, (value, oldValue, info) => {
+					spy(value, oldValue, info.path);
+				});
+
+				delete proxy.a;
+				expect(spy).not.toHaveBeenCalled();
+
+				proxy.a = 2;
+				expect(spy).not.toHaveBeenCalled();
+
+				set(proxy, 'a', 1, engine);
+				expect(spy).toHaveBeenCalledWith(1, 2, ['a']);
+			}
+
+			{
+				const
+					obj = {},
+					spy = jasmine.createSpy();
+
+				const watcher = watch(obj, {immediate: true, engine}, (value, oldValue, info) => {
+					spy(value, oldValue, info.path);
+				});
+
+				watcher.delete('a');
+				expect(spy).not.toHaveBeenCalled();
+
+				watcher.proxy.a = 2;
+				expect(spy).toHaveBeenCalledWith(2, undefined, ['a']);
+			}
+
+			{
+				const
+					obj = {},
+					spy = jasmine.createSpy();
+
+				const {proxy} = watch(obj, {immediate: true, engine}, (value, oldValue, info) => {
+					spy(value, oldValue, info.path);
+				});
+
+				unset(proxy, 'a', engine);
+				expect(spy).not.toHaveBeenCalled();
+
+				proxy.a = 2;
+				expect(spy).toHaveBeenCalledWith(2, undefined, ['a']);
+			}
 		});
 	});
 });
