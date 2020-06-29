@@ -37,6 +37,9 @@ module.exports = function init(gulp) {
 	let tsProject;
 	function buildTS() {
 		const
+			$C = require('collection.js');
+
+		const
 			fs = require('fs-extra-promise'),
 			isPathInside = require('is-path-inside');
 
@@ -48,10 +51,10 @@ module.exports = function init(gulp) {
 			{resolve} = require('@pzlr/build-core'),
 			{depsRgxpStr} = include('build/const');
 
-		tsProject = tsProject || $.typescript.createProject('./server.tsconfig.json', {noEmitOnError: false});
+		tsProject = tsProject || $.typescript.createProject('./server.tsconfig.json');
 
 		const
-			files = [...tsConfig.include || [], ...resolve.rootDependencies.map((el) => `${el}/**/*.ts`)],
+			files = [...tsConfig.include || [], ...resolve.rootDependencies.map((el) => `${el}/**/*.@(ts|js)`)],
 			isDep = new RegExp(`(^.*?(?:^|[\\/])(${depsRgxpStr}))(?:$|[\\/])`);
 
 		const
@@ -73,16 +76,14 @@ module.exports = function init(gulp) {
 		return gulp.src(files, {base: './', since: gulp.lastRun('build:ts')})
 			.pipe($.plumber())
 
-			.pipe($.monic({
+			.pipe($.monic($C.extend(true, {}, monic().typescript, {
 				flags: {
-					...monic().typescript,
-
 					// eslint-disable-next-line camelcase
 					node_js: true
 				},
 
 				replacers: [(text) => requireInitializer + text]
-			}))
+			})))
 
 			.pipe(tsProject())
 			.js

@@ -36,7 +36,7 @@ exports.getHead = function getHead(withVersion) {
  */
 exports.redefineRequire = function redefineRequire() {
 	const
-		path = require('path');
+		path = require('upath');
 
 	const
 		{src} = require('config'),
@@ -60,8 +60,9 @@ exports.redefineRequire = function redefineRequire() {
 			return staticRequire(cache[url]);
 		}
 
-		cache[url] = require.resolve(url);
-		return staticRequire(url);
+		const resolvedURL = require.resolve(url);
+		cache[url] = resolvedURL;
+		return staticRequire(resolvedURL);
 	};
 
 	require.cache = staticRequire.cache;
@@ -76,11 +77,11 @@ exports.redefineRequire = function redefineRequire() {
 
 			for (let i = 0; i < deps.length + 1; i++) {
 				try {
-					if (i) {
-						resolveUrl = staticRequire.resolve(path.join(lib, deps[i - 1], url), opts);
+					if (i === 0) {
+						resolveUrl = staticRequire.resolve(path.join(outputDest, url), opts);
 
 					} else {
-						resolveUrl = staticRequire.resolve(path.join(outputDest, url), opts);
+						resolveUrl = staticRequire.resolve(path.join(lib, deps[i - 1], url), opts);
 					}
 
 					break;
@@ -95,4 +96,6 @@ exports.redefineRequire = function redefineRequire() {
 
 		return staticRequire.resolve(url, opts);
 	};
+
+	require('core/prelude');
 };
