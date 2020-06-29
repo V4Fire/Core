@@ -13,10 +13,12 @@ const
 	path = require('upath');
 
 /**
- * Returns the project version
+ * Returns the project meta information
+ * @returns {{name: string, version: string}}
  */
-exports.getVersion = function getVersion() {
-	return include('package.json').version;
+exports.getProjectInfo = function getProjectInfo() {
+	const info = include('package.json');
+	return Object.select(info, ['name', 'version']);
 };
 
 /**
@@ -26,5 +28,5 @@ exports.getVersion = function getVersion() {
 exports.getHead = function getHead(withVersion) {
 	return fs
 		.readFileSync(path.join(process.cwd(), 'disclaimer.txt'), 'utf-8')
-		.replace(/\* (\w.*?)(?=\n)/, (str) => str + (withVersion ? ` v${exports.getVersion()}` : ''));
+		.replace(/\* (\w.*?)(?=\n)/, (str) => str + (withVersion ? ` v${exports.getProjectInfo().version}` : ''));
 };

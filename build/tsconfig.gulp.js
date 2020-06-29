@@ -40,7 +40,16 @@ module.exports = function init(gulp) {
 			{src, extend} = require('config'),
 			{config: pzlr, resolve} = require('@pzlr/build-core');
 
-		return gulp.src(['./**/*.tsconfig', './**/.tsconfig', '!./node_modules/**'], {since: gulp.lastRun('build:tsconfig')})
+		const
+			h = include('build/helpers');
+
+		const files = [
+			'./**/*.tsconfig',
+			'./**/.tsconfig',
+			'!./node_modules/**'
+		];
+
+		return gulp.src(files, {since: gulp.lastRun('build:tsconfig')})
 			.pipe($.plumber())
 			.pipe(through((file, enc, cb) => {
 				const
@@ -99,16 +108,29 @@ module.exports = function init(gulp) {
 
 				function resolveExtends(config) {
 					if (config.extends) {
-						const parentSrc = isNodeModule(config.extends) ?
-							find(path.join('node_modules', config.extends)) :
-							require.resolve(config.extends);
+						const
+							{name: projectName} = h.getProjectInfo();
 
-						if (!parentSrc) {
-							throw new ReferenceError(`Parent config for inheritance "${config.extends}" is not found`);
+						let
+							parentConfig = config.extends;
+
+						if (parentConfig.startsWith(projectName)) {
+							parentConfig = path.join(src.cwd(), parentConfig.replace(h.getProjectInfo().name, ''));
+
+						} else if (!isNodeModule(parentConfig)) {
+							parentConfig = path.join(src.cwd(), parentConfig);
+						}
+
+						parentConfig = isNodeModule(parentConfig) ?
+							find(path.join('node_modules', parentConfig)) :
+							require.resolve(parentConfig);
+
+						if (!parentConfig) {
+							throw new ReferenceError(`Parent config for inheritance "${parentConfig}" is not found`);
 						}
 
 						const
-							parent = resolveExtends(tsconfig.parse(fs.readFileSync(parentSrc, 'utf-8'), parentSrc));
+							parent = resolveExtends(tsconfig.parse(fs.readFileSync(parentConfig, 'utf-8'), parentConfig));
 
 						config = $C.extend({
 							deep: true,
