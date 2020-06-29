@@ -86,18 +86,18 @@ module.exports = function init(layers) {
 
 		for (let i = resolvedLayers.length; i--;) {
 			const
-				layerSRC = resolve(resolvedLayers[i]);
+				layerSrc = resolve(resolvedLayers[i]);
 
 			try {
 				if (opts.source) {
-					return fs.readFileSync(layerSRC).toString();
+					return fs.readFileSync(layerSrc).toString();
 				}
 
-				return require(layerSRC);
+				return require(layerSrc);
 
 			} catch (err) {
 				if (!{MODULE_NOT_FOUND: true, ENOENT: true}[err.code]) {
-					console.error(`Failed to load ${layerSRC}`);
+					console.error(`Failed to load ${layerSrc}`);
 					throw err;
 				}
 			}

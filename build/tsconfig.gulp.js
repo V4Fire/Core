@@ -82,7 +82,7 @@ module.exports = function init(gulp) {
 
 				$C(config.compilerOptions.paths).forEach((list) => {
 					$C(list).forEach((url, i) => {
-						if (isNodeModule(url)) {
+						if (resolve.isNodeModule(url)) {
 							const
 								parts = url.split(':');
 
@@ -91,7 +91,7 @@ module.exports = function init(gulp) {
 							}
 
 							list[i] = path.join(
-								path.dirname(find(path.join('node_modules', parts[0], 'package.json'))),
+								path.dirname(src.lib(parts[0], 'package.json')),
 								parts[1]
 							);
 						}
@@ -101,10 +101,6 @@ module.exports = function init(gulp) {
 				file.path = file.path.replace(/([^/\\]*?)\.tsconfig$/, (str, nm) => `${nm ? `${nm}.tsconfig` : 'tsconfig'}.json`);
 				file.contents = new Buffer(JSON.stringify(config, null, 2));
 				cb(null, file);
-
-				function isNodeModule(url) {
-					return /^[^.]/.test(url) && !path.isAbsolute(url);
-				}
 
 				function resolveExtends(config) {
 					if (config.extends) {
@@ -117,12 +113,12 @@ module.exports = function init(gulp) {
 						if (parentConfig.startsWith(projectName)) {
 							parentConfig = path.join(src.cwd(), parentConfig.replace(h.getProjectInfo().name, ''));
 
-						} else if (!isNodeModule(parentConfig)) {
+						} else if (!resolve.isNodeModule(parentConfig)) {
 							parentConfig = path.join(src.cwd(), parentConfig);
 						}
 
-						parentConfig = isNodeModule(parentConfig) ?
-							find(path.join('node_modules', parentConfig)) :
+						parentConfig = resolve.isNodeModule(parentConfig) ?
+							find(src.lib(parentConfig)) :
 							require.resolve(parentConfig);
 
 						if (!parentConfig) {
