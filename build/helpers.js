@@ -36,6 +36,10 @@ exports.getHead = function getHead(withVersion) {
  */
 exports.redefineRequire = function redefineRequire() {
 	const
+		path = require('path');
+
+	const
+		{src} = require('config'),
 		{config: pzlr, resolve} = require('@pzlr/build-core');
 
 	const
@@ -43,16 +47,29 @@ exports.redefineRequire = function redefineRequire() {
 		cache = Object.create(null);
 
 	const
-		outputDest = require('config').src.serverOutput(),
+		outputDest = src.serverOutput();
+
+	const
 		lib = path.join(outputDest, 'node_modules'),
 		deps = pzlr.dependencies;
 
+	// @ts-ignore
 	// eslint-disable-next-line no-global-assign
 	require = (url) => {
 		if (url in cache) {
 			return staticRequire(cache[url]);
 		}
 
+		cache[url] = require.resolve(url);
+		return staticRequire(url);
+	};
+
+	require.cache = staticRequire.cache;
+	require.extensions = staticRequire.extensions;
+	require.main = staticRequire.main;
+
+	// @ts-ignore
+	require.resolve = (url, opts) => {
 		if (resolve.isNodeModule(url)) {
 			let
 				resolveUrl;
@@ -60,10 +77,10 @@ exports.redefineRequire = function redefineRequire() {
 			for (let i = 0; i < deps.length + 1; i++) {
 				try {
 					if (i) {
-						resolveUrl = staticRequire.resolve(path.join(lib, deps[i - 1], url));
+						resolveUrl = staticRequire.resolve(path.join(lib, deps[i - 1], url), opts);
 
 					} else {
-						resolveUrl = staticRequire.resolve(path.join(outputDest, url));
+						resolveUrl = staticRequire.resolve(path.join(outputDest, url), opts);
 					}
 
 					break;
@@ -72,12 +89,10 @@ exports.redefineRequire = function redefineRequire() {
 			}
 
 			if (resolveUrl) {
-				cache[url] = `./${path.relative(__dirname, resolveUrl)}`;
-				return staticRequire(cache[url]);
+				return resolveUrl;
 			}
 		}
 
-		cache[url] = url;
-		return staticRequire(url);
+		return staticRequire.resolve(url, opts);
 	};
 };

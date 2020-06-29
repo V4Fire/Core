@@ -489,6 +489,51 @@ module.exports = config.createConfig(
 			};
 		},
 
+		monic() {
+			const
+				runtime = this.runtime(),
+				es = this.es();
+
+			return {
+				typescript: {
+					flags: {
+						runtime,
+						es
+					}
+				},
+
+				javascript: {
+					flags: {
+						runtime,
+						es
+					}
+				}
+			};
+		},
+
+		runtime() {
+			return {
+				prod: IS_PROD,
+				debug: !IS_PROD,
+				env: process.env.NODE_ENV,
+
+				'core/helpers': true,
+
+				'core/analytics': true,
+				'core/log': true,
+
+				'core/kv-storage': true,
+				'core/session': true,
+				'core/net': false,
+
+				'prelude/date/relative': true,
+				'prelude/date/format': true,
+
+				'prelude/number/rounding': true,
+				'prelude/number/format': true
+			};
+		},
+
 		/**
 		 * Map with application URL-s
 		 */
