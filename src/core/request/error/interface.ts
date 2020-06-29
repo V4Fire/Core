@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-//#if runtime has core/request/response
+//#if node_js
 import Response from 'core/request/response';
 //#endif
 
