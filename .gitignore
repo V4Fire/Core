@@ -47,6 +47,7 @@ Icon
 /coverage
 /dist
 /tsconfig.json
+/*.tsconfig.json
 .env
 
 # Log
