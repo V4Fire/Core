@@ -51,23 +51,29 @@ describe('core/then', () => {
 	});
 
 	it('providing of a parent promise', async () => {
-		{
+		try {
 			const
 				parentPromise = new Then(() => undefined),
 				promise = new Then(() => undefined, parentPromise).catch((err) => err);
 
 			parentPromise.abort('boom');
-			expect(await promise).toBe('boom');
-		}
+			expect(await promise)
+				.toBe('boom');
 
-		{
+			await parentPromise;
+
+		} catch {}
+
+		try {
 			const
 				parentPromise = new Then(() => undefined).catch((err) => err),
 				promise = new Then(() => undefined, parentPromise);
 
 			promise.abort('boom');
 			expect(await parentPromise).toBe('boom');
-		}
+
+			await promise;
+		} catch {}
 	});
 
 	it('rejected then', async () => {
