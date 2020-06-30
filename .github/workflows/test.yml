@@ -55,3 +55,6 @@ jobs:
 
       - name: Run tests
         run: npm run test:jasmine
+
+      - name: Coverals
+        run: cat ./coverage/lcov.info | npx coveralls

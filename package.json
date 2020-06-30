@@ -27,7 +27,7 @@
     "test:linters": "npm run test:typescript && npm run test:eslint",
     "test:typescript": "node node_modules/@v4fire/typescript-check",
     "test:eslint": "npx eslint ./config/**/*.js ./build/**/*.js ./src/**/*.js ./src/**/*.ts",
-    "test:jasmine": "npx jasmine",
+    "test:jasmine": "nyc --reporter=lcov --reporter=text npm run test:jasmine",
     "up": "npm i && npm up && npm audit fix"
   },
   "husky": {
@@ -56,6 +56,7 @@
     "@v4fire/typescript-check": "^1.0.1",
     "collection.js": "^6.7.10",
     "config": "^1.31.0",
+    "coveralls": "^3.1.0",
     "del": "^5.1.0",
     "dotenv": "^8.2.0",
     "find-up": "^4.1.0",
@@ -71,6 +72,7 @@
     "is-path-inside": "^3.0.2",
     "monic": "^2.6.0",
     "node-object-hash": "^2.0.0",
+    "nyc": "^15.1.0",
     "path-equal": "^1.1.1",
     "sugar": "^2.0.6",
     "tsconfig": "^7.0.0",
