@@ -84,6 +84,8 @@ module.exports = function init(gulp) {
 			const
 				depDecl = isDep.exec(file.path);
 
+			console.log(1, depDecl);
+
 			if (depDecl) {
 				file.base = $C(resolve.rootDependencies).one.get((el) => isPathInside(el, depDecl[1]));
 				return src.lib(depDecl[2]);
@@ -91,7 +93,7 @@ module.exports = function init(gulp) {
 
 			file.base = src.src();
 
-			console.log(file.base, src.serverOutput());
+			console.log(2, file.base, src.serverOutput());
 
 			return src.serverOutput();
 		}
@@ -113,6 +115,6 @@ module.exports = function init(gulp) {
 			.pipe(tsProject())
 			.js
 
-			.pipe(gulp.dest('dist/server'));
+			.pipe(dest);
 	}
 };
