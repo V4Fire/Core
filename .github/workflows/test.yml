@@ -9,7 +9,7 @@ on:
 
 jobs:
   linters:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     strategy:
       matrix:
@@ -30,4 +30,28 @@ jobs:
         run: npx gulp build:tsconfig
 
       - name: Run tests
-        run: npm test
+        run: npm run test:linters
+
+  tests:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.1]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build tsconfig
+        run: npx gulp build:tsconfig
+
+      - name: Run tests
+        run: npm run test:jasmine
