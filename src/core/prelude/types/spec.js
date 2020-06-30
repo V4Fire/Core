@@ -1,4 +1,4 @@
-/* eslint-disable no-empty-function */
+/* eslint-disable no-empty-function, no-new-func */
 
 /*!
  * V4Fire Core
@@ -120,9 +120,8 @@ describe('core/prelude/types', () => {
 		function foo() {}
 
 		const
-			bar = () => {};
-
-		function* baz() {}
+			bar = new Function('return () => {}')(),
+			baz = new Function('return function* baz() {}')();
 
 		expect(Object.isGenerator(baz)).toBeTrue();
 		expect(Object.isGenerator(foo)).toBeFalse();
