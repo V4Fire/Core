@@ -18,3 +18,4 @@ Changelog
 #### :bug: Bug Fix
 
 * Fixed bugs
+* Fixed node.js support

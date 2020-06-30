@@ -36,13 +36,14 @@
   "dependencies": {
     "@types/got": "^9.6.11",
     "@types/jasmine": "^3.5.11",
+    "dom-storage": "^2.1.0",
     "eventemitter2": "6.4.1",
     "fs-extra-promise": "^1.0.1",
     "got": "^11.3.0",
     "jasmine": "^3.5.0",
-    "node-localstorage": "^2.1.6",
     "set-value": "^3.0.2",
-    "tslib": "2.0.0"
+    "tslib": "2.0.0",
+    "w3c-xmlserializer": "^2.0.0"
   },
   "optionalDependencies": {
     "@pzlr/build-core": "^2.8.17",
@@ -86,6 +87,7 @@
     "eslint-plugin-enchanted-curly": "1.0.1",
     "eslint-plugin-import": "2.20.2",
     "husky": "^4.2.5",
+    "jsdom": "^16.2.2",
     "tslint": "^5.20.1"
   }
 }
