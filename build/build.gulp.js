@@ -115,6 +115,6 @@ module.exports = function init(gulp) {
 			.pipe(tsProject())
 			.js
 
-			.pipe(dest);
+			.pipe(gulp.dest(dest));
 	}
 };
