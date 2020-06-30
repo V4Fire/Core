@@ -40,7 +40,7 @@ export const weakMapMethods = {
 		type: 'get',
 		value: (target: WeakMap<any, any>, opts: WrapParams, key: unknown): unknown => {
 			const val = opts.original.call(target, key);
-			return getProxyValue(val, key, opts.path, opts.handlers, top, opts.watchOpts);
+			return getProxyValue(val, key, opts.path, opts.handlers, opts.top ?? opts.root, opts.watchOpts);
 		}
 	},
 
