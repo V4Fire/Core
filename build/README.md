@@ -1,6 +1,6 @@
 # build
 
-This folder contains files with Gulp/Webpack/helper scripts to compile the project.
+This folder contains files with Gulp/Webpack/helper scripts to build/validate/etc. the project.
 
 ## tsconfig.gulp.js
 
@@ -32,6 +32,21 @@ module.exports = function (gulp = require('gulp')) {
 
 module.exports();
 ```
+
+## build.gulp.js
+
+This file provides a bunch of gulp tasks to build the project.
+
+```bash
+ * # Builds the application as a node.js package
+ * npx gulp build:server
+ *
+ * # Builds the application as a node.js package and watches for changes
+ * npx gulp watch:server
+ *
+ * # Cleans the dist directory of a node.js package
+ * npx gulp clean:server
+ * ```
 
 ## docs.gulp.js
 

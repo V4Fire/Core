@@ -9,55 +9,71 @@
  */
 
 /**
- * Registers gulp tasks to build the application
+ * Registers gulp tasks to build the project
  *
  * @example
  * ```bash
- * # Compiles TS files
- * npx gulp build:ts
+ * # Builds the application as a node.js package
+ * npx gulp build:server
+ *
+ * # Builds the application as a node.js package and watches for changes
+ * npx gulp watch:server
+ *
+ * # Cleans the dist directory of a node.js package
+ * npx gulp clean:server
  * ```
  */
 module.exports = function init(gulp) {
 	const
-		{src, monic} = require('config');
+		fs = require('fs-extra-promise');
 
 	const
+		{src, monic} = require('config'),
+		{resolve} = require('@pzlr/build-core'),
+		{depsRgxpStr} = include('build/const');
+
+	const
+		h = include('build/helpers'),
 		$ = require('gulp-load-plugins')({scope: ['optionalDependencies']});
 
-	/**
-	 * Cleans the dist directory
-	 */
-	gulp.task('build:ts:clean', () => require('del')(src.serverOutput()));
+	const
+		tsProject = $.typescript.createProject('./server.tsconfig.json', {noEmitOnError: false}),
+		tsConfig = fs.readJSONSync('./server.tsconfig.json'),
+		filesToBuild = [...tsConfig.include || [], ...resolve.rootDependencies.map((el) => `${el}/**/*.@(ts|js)`)];
 
 	/**
-	 * Compiles TS files
+	 * Cleans the dist directory of a node.js package
 	 */
-	gulp.task('build:ts', gulp.series([gulp.parallel(['build:tsconfig', 'build:ts:clean']), buildTS]));
+	gulp.task('clean:server', () => require('del')(src.serverOutput()));
 
-	let tsProject;
-	function buildTS() {
-		const
-			$C = require('collection.js');
+	/**
+	 * Builds the project as a node.js package
+	 */
+	gulp.task('build:server', gulp.series([gulp.parallel(['build:tsconfig', 'clean:server']), build]));
 
+	/**
+	 * Rebuilds the project as a node.js package
+	 */
+	gulp.task('build:server:rebuild', build);
+
+	/**
+	 * Builds the project as a node.js package and watches for changes
+	 */
+	gulp.task('watch:server', gulp.series([
+		'build:server',
+
+		() => {
+			gulp.watch(filesToBuild, gulp.series(['build:server:rebuild']));
+		}
+	]));
+
+	function build() {
 		const
-			fs = require('fs-extra-promise'),
+			$C = require('collection.js'),
 			isPathInside = require('is-path-inside');
 
 		const
-			h = include('build/helpers'),
-			tsConfig = fs.readJSONSync('./server.tsconfig.json');
-
-		const
-			{resolve} = require('@pzlr/build-core'),
-			{depsRgxpStr} = include('build/const');
-
-		tsProject = tsProject || $.typescript.createProject('./server.tsconfig.json');
-
-		const
-			files = [...tsConfig.include || [], ...resolve.rootDependencies.map((el) => `${el}/**/*.@(ts|js)`)],
-			isDep = new RegExp(`(^.*?(?:^|[\\/])(${depsRgxpStr}))(?:$|[\\/])`);
-
-		const
+			isDep = new RegExp(`(^.*?(?:^|[\\/])(${depsRgxpStr}))(?:$|[\\/])`),
 			requireInitializer = `(${h.redefineRequire.toString()})();\n`;
 
 		function dest(file) {
@@ -73,7 +89,7 @@ module.exports = function init(gulp) {
 			return src.serverOutput();
 		}
 
-		return gulp.src(files, {base: './', since: gulp.lastRun('build:ts')})
+		return gulp.src(filesToBuild, {base: './', since: gulp.lastRun('build:server')})
 			.pipe($.plumber())
 
 			.pipe($.monic($C.extend(true, {}, monic().typescript, {
