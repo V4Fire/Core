@@ -87,6 +87,7 @@
     "eslint-plugin-import": "2.20.2",
     "husky": "^4.2.5",
     "jsdom": "^16.2.2",
+    "requestidlecallback": "^0.3.0",
     "tslint": "^5.20.1"
   }
 }

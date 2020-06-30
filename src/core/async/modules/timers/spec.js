@@ -15,6 +15,10 @@ const
 	$$ = symbolGenerator();
 
 describe('core/async/modules/timers', () => {
+	//#if node_js
+	require('requestidlecallback');
+	//#endif
+
 	[
 		['timeout'],
 		['interval'],
@@ -259,7 +263,7 @@ describe('core/async/modules/timers', () => {
 			$a = new Async(),
 			spy = jasmine.createSpy();
 
-		$a.requestIdleCallback((info) => spy(info instanceof IdleDeadline));
+		$a.requestIdleCallback((info) => spy(Object.isNumber(info.timeRemaining())));
 
 		requestIdleCallback(() => {
 			expect(spy).toHaveBeenCalledWith(true);
@@ -269,7 +273,7 @@ describe('core/async/modules/timers', () => {
 
 	it('promise value of idle', async () => {
 		const $a = new Async();
-		expect(await $a.idle()).toBeInstanceOf(IdleDeadline);
+		expect(Object.isNumber((await $a.idle()).timeRemaining())).toBeTrue();
 	});
 
 	it('promise value of wait', async () => {
