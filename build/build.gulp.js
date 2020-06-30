@@ -84,7 +84,7 @@ module.exports = function init(gulp) {
 			const
 				depDecl = isDep.exec(file.path);
 
-			console.log(1, depDecl);
+			console.log(1, file.path, isDep, depDecl);
 
 			if (depDecl) {
 				file.base = $C(resolve.rootDependencies).one.get((el) => isPathInside(el, depDecl[1]));
