@@ -37,8 +37,8 @@ module.exports = function init(gulp) {
 		$ = require('gulp-load-plugins')({scope: ['optionalDependencies']});
 
 	const
-		tsProject = $.typescript.createProject('./server.tsconfig.json', {noEmitOnError: false}),
-		tsConfig = fs.readJSONSync('./server.tsconfig.json'),
+		tsProject = $.typescript.createProject(src.rel('./server.tsconfig.json'), {noEmitOnError: false}),
+		tsConfig = fs.readJSONSync(src.rel('./server.tsconfig.json')),
 		filesToBuild = [...tsConfig.include || [], ...resolve.rootDependencies.map((el) => `${el}/**/*.@(ts|js)`)];
 
 	/**
