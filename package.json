@@ -27,7 +27,7 @@
     "test:linters": "npm run test:typescript && npm run test:eslint",
     "test:typescript": "node node_modules/@v4fire/typescript-check",
     "test:eslint": "npx eslint ./config/**/*.js ./build/**/*.js ./src/**/*.js ./src/**/*.ts",
-    "test:jasmine": "npx jasmine",
+    "test:jasmine": "npx jasmine ./dist/**/*[spec].js",
     "up": "npm i && npm up && npm audit fix"
   },
   "husky": {
