@@ -15,5 +15,5 @@ let
  */
 export function serialize(node: Node): string {
 	xmlSerializer = xmlSerializer ?? require('w3c-xmlserializer');
-	return serialize(node);
+	return xmlSerializer(node);
 }

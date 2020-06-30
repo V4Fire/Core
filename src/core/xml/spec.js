@@ -8,6 +8,7 @@
 
 import { toDataURI } from 'core/xml';
 import { getDataTypeFromURL } from 'core/mime-type';
+import { IS_NODE } from 'core/env';
 
 describe('core/xml', () => {
 	it('toDataURI', () => {
