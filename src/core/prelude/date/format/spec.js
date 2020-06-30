@@ -11,43 +11,35 @@ describe('core/prelude/date/format', () => {
 		date = Date.create('18.10.1989 10:10:10');
 
 	it('short', () => {
-		expect(date.short('ru')).toBe('18.10.1989');
 		expect(date.short('en')).toBe('10/18/1989');
 	});
 
 	it('Date.short', () => {
-		expect(Date.short(date, 'ru')).toBe('18.10.1989');
 		expect(Date.short('en')(date)).toBe('10/18/1989');
 	});
 
 	it('medium', () => {
-		expect(date.medium('ru')).toBe('18 октября 1989 г.');
 		expect(date.medium('en')).toBe('October 18, 1989');
 	});
 
 	it('Date.medium', () => {
-		expect(Date.medium(date, 'ru')).toBe('18 октября 1989 г.');
 		expect(Date.medium('en')(date)).toBe('October 18, 1989');
 	});
 
 	it('long', () => {
-		expect(date.long('ru')).toBe('18 октября 1989 г., 10:10:10');
 		expect(date.long('en')).toBe('October 18, 1989, 10:10:10 AM');
 	});
 
 	it('Date.long', () => {
-		expect(Date.long(date, 'ru')).toBe('18 октября 1989 г., 10:10:10');
 		expect(Date.long('en')(date)).toBe('October 18, 1989, 10:10:10 AM');
 	});
 
 	it('format', () => {
-		expect(date.format('Y;M:2-digit', 'ru')).toBe('10.1989');
 		expect(date.format('Y;M:2-digit', 'en')).toBe('10/1989');
 		expect(date.format({year: 'numeric'})).toBe('1989');
 	});
 
 	it('Date.format', () => {
-		expect(Date.format(date, 'Y;M:2-digit', 'ru')).toBe('10.1989');
 		expect(Date.format('Y;M:2-digit', 'en')(date)).toBe('10/1989');
 		expect(Date.format({year: 'numeric'})(date)).toBe('1989');
 	});
