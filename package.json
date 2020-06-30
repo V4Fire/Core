@@ -22,7 +22,7 @@
     "V4Fire"
   ],
   "scripts": {
-    "build": "npx gulp build:tsconfig",
+    "build": "npx gulp build:server",
     "test": "npm run test:typescript && npm run test:eslint && npx jasmine",
     "test:linters": "npm run test:typescript && npm run test:eslint",
     "test:typescript": "node node_modules/@v4fire/typescript-check",
