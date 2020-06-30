@@ -11,29 +11,25 @@
  * @packageDocumentation
  */
 
-const
-	xmlSerializer = new XMLSerializer(),
-	normalizeRgxp = /"|(\s+)|[{}|\\^~[\]`"<>#%]/g;
+import { normalizeRgxp } from 'core/xml/const';
+import { serialize } from 'core/xml/engines';
 
 /**
  * Converts the specified XML node to a DATA:URI string
  * @param node
  */
 export function toDataURI(node: Node): string {
-	return `data:image/svg+xml;${xmlSerializer.serializeToString(node).replace(normalizeRgxp, normalize)}`;
-}
+	return `data:image/svg+xml;${serialize(node).replace(normalizeRgxp, normalize)}`;
 
-/**
- * Helper for XML string normalizing
- */
-function normalize(str: string, sp?: string): string {
-	if (str === '"') {
-		return "'";
+	function normalize(str: string, sp?: string): string {
+		if (str === '"') {
+			return "'";
+		}
+
+		if (sp != null) {
+			return ' ';
+		}
+
+		return `%${str[0].charCodeAt(0).toString(16).toUpperCase()}`;
 	}
-
-	if (sp != null) {
-		return ' ';
-	}
-
-	return `%${str[0].charCodeAt(0).toString(16).toUpperCase()}`;
 }

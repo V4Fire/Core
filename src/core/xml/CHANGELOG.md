@@ -14,7 +14,12 @@ Changelog
 #### :rocket: New Feature
 
 * Added tests
+* Added node.js support
 
 #### :bug: Bug Fix
 
 * Fixed bugs
+
+#### :house: Internal
+
+* Refactoring
