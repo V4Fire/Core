@@ -54,4 +54,4 @@ jobs:
         run: npm run build
 
       - name: Run tests
-        run: npm run test:jasmine
+        run: pwd ; ls -1 ; npm run test:jasmine
