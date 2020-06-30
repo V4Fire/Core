@@ -84,21 +84,14 @@ module.exports = function init(gulp) {
 			const
 				depDecl = isDep.exec(file.path);
 
-			console.log(1, file.path, isDep, depDecl);
-
 			if (depDecl) {
 				file.base = $C(resolve.rootDependencies).one.get((el) => isPathInside(el, depDecl[1]));
 				return src.lib(depDecl[2]);
 			}
 
 			file.base = src.src();
-
-			console.log(2, file.base, src.serverOutput());
-
 			return src.serverOutput();
 		}
-
-		console.log(filesToBuild);
 
 		return gulp.src(filesToBuild, {base: './', since: gulp.lastRun('build:server')})
 			.pipe($.plumber())
