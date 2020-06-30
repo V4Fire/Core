@@ -36,11 +36,6 @@ module.exports = function init(gulp) {
 		h = include('build/helpers'),
 		$ = require('gulp-load-plugins')({scope: ['optionalDependencies']});
 
-	const
-		tsProject = $.typescript.createProject(src.rel('./server.tsconfig.json'), {noEmitOnError: false}),
-		tsConfig = fs.readJSONSync(src.rel('./server.tsconfig.json')),
-		filesToBuild = [...tsConfig.include || [], ...resolve.rootDependencies.map((el) => `${el}/**/*.@(ts|js)`)];
-
 	/**
 	 * Cleans the dist directory of a node.js package
 	 */
@@ -67,10 +62,19 @@ module.exports = function init(gulp) {
 		}
 	]));
 
+	let
+		tsProject;
+
 	function build() {
 		const
 			$C = require('collection.js'),
 			isPathInside = require('is-path-inside');
+
+		tsProject = tsProject || $.typescript.createProject(src.rel('./server.tsconfig.json'), {noEmitOnError: false});
+
+		const
+			tsConfig = fs.readJSONSync(src.rel('./server.tsconfig.json')),
+			filesToBuild = [...tsConfig.include || [], ...resolve.rootDependencies.map((el) => `${el}/**/*.@(ts|js)`)];
 
 		const
 			isDep = new RegExp(`(^.*?(?:^|[\\/])(${depsRgxpStr}))(?:$|[\\/])`),
