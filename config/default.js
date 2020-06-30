@@ -456,7 +456,7 @@ module.exports = config.createConfig(
 		es() {
 			return o('es', {
 				env: true,
-				default: 'ES5'
+				default: 'ES6'
 			});
 		},
 
