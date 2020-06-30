@@ -93,6 +93,8 @@ module.exports = function init(gulp) {
 			return src.serverOutput();
 		}
 
+		console.log(dest);
+
 		return gulp.src(filesToBuild, {base: './', since: gulp.lastRun('build:server')})
 			.pipe($.plumber())
 
