@@ -22,12 +22,13 @@
     "V4Fire"
   ],
   "scripts": {
-    "build": "npx gulp build:server",
+    "dev": "npx gulp watch:server",
+    "build": "npx gulp build:server && npm run test:jasmine",
     "test": "npm run test:typescript && npm run test:eslint && npx jasmine",
     "test:linters": "npm run test:typescript && npm run test:eslint",
     "test:typescript": "node node_modules/@v4fire/typescript-check",
     "test:eslint": "npx eslint ./config/**/*.js ./build/**/*.js ./src/**/*.js ./src/**/*.ts",
-    "test:jasmine": "nyc --reporter=lcov --reporter=text npm run test:jasmine",
+    "test:jasmine": "nyc --reporter=lcov --reporter=text npx jasmine",
     "up": "npm i && npm up && npm audit fix"
   },
   "husky": {
