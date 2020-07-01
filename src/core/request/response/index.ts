@@ -396,7 +396,9 @@ export default class Response<
 	 * Returns a normalized object of HTTP headers from the specified string or object
 	 * @param headers
 	 */
-	protected parseHeaders(headers: CanUndef<string | Dictionary<CanArray<string>>>): ResponseHeaders {
+	protected parseHeaders(
+		headers: CanUndef<string | Dictionary<CanArray<string>>>
+	): ResponseHeaders {
 		const
 			res = {};
 
