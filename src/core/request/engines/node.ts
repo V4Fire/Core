@@ -62,6 +62,7 @@ const request: RequestEngine = (params) => {
 
 		switch (p.responseType) {
 			case 'json':
+			case 'document':
 				v = 'text';
 				break;
 

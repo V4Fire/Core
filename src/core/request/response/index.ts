@@ -201,9 +201,19 @@ export default class Response<
 		const
 			{body} = this;
 
+		//#if node_js
+		if (Object.isString(body)) {
+			// eslint-disable-next-line @typescript-eslint/no-var-requires
+			const {JSDOM} = require('jsdom');
+			return Then.resolve<Document | null>(new JSDOM(body), this.parent);
+		}
+		//#endif
+
+		//#unless node_js
 		if (!(body instanceof Document)) {
 			throw new TypeError('Invalid data type');
 		}
+		//#endunless
 
 		return Then.resolve<Document | null>(body, this.parent);
 	}
@@ -217,7 +227,19 @@ export default class Response<
 		const
 			{body} = this;
 
-		if (body instanceof Document || body instanceof ArrayBuffer) {
+		//#unless node_js
+		if (body instanceof Document) {
+			throw new TypeError('Invalid data type');
+		}
+		//#endunless
+
+		//#if node_js
+		if (body instanceof Buffer) {
+			throw new TypeError('Invalid data type');
+		}
+		//#endif
+
+		if (body instanceof ArrayBuffer) {
 			throw new TypeError('Invalid data type');
 		}
 
@@ -244,9 +266,17 @@ export default class Response<
 		const
 			{body} = this;
 
+		//#unless node_js
 		if (!(body instanceof ArrayBuffer)) {
 			throw new TypeError('Invalid data type');
 		}
+		//#endunless
+
+		//#if node_js
+		if (!(body instanceof Buffer) && !(body instanceof ArrayBuffer)) {
+			throw new TypeError('Invalid data type');
+		}
+		//#endif
 
 		if (body.byteLength === 0) {
 			return Then.resolve<_>(null, this.parent);
@@ -264,12 +294,23 @@ export default class Response<
 		const
 			{body} = this;
 
+		//#unless node_js
 		if (body instanceof Document) {
 			throw new TypeError('Invalid data type');
 		}
+		//#endunless
 
 		if (body == null) {
 			return Then.resolve<_>(null);
+		}
+
+		let
+			{Blob} = globalThis;
+
+		if (IS_NODE) {
+			//#if node_js
+			Blob = require('node-blob');
+			//#endif
 		}
 
 		return Then.resolve<_>(new Blob([body], {type: this.getHeader('content-type')}), this.parent);
@@ -289,7 +330,19 @@ export default class Response<
 			return Then.resolve<_>(null, this.parent);
 		}
 
-		if (Object.isString(body) || body instanceof Document) {
+		//#if node_js
+		if (body instanceof Buffer && body.byteLength === 0) {
+			throw new TypeError('Invalid data type');
+		}
+		//#endif
+
+		//#unless node_js
+		if (body instanceof Document) {
+			return Then.resolve<_>(String(body), this.parent);
+		}
+		//#endunless
+
+		if (Object.isString(body)) {
 			return Then.resolve<_>(String(body), this.parent);
 		}
 
@@ -329,6 +382,7 @@ export default class Response<
 
 			reader.onload = () => resolve(<string>reader.result);
 			reader.onerror = reject;
+			reader.onerror = reject;
 
 			this.blob().then((blob) => {
 				onAbort(() => reader.abort());
@@ -342,7 +396,7 @@ export default class Response<
 	 * Returns a normalized object of HTTP headers from the specified string or object
 	 * @param headers
 	 */
-	protected parseHeaders(headers: CanUndef<string | Dictionary<string>>): ResponseHeaders {
+	protected parseHeaders(headers: CanUndef<string | Dictionary<CanArray<string>>>): ResponseHeaders {
 		const
 			res = {};
 
@@ -369,7 +423,8 @@ export default class Response<
 					continue;
 				}
 
-				res[normalizeHeaderName(name)] = value.trim();
+				res[normalizeHeaderName(name)] =
+					(Object.isArray(value) ? value.join(';') : value).trim();
 			}
 		}
 
