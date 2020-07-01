@@ -11,7 +11,6 @@
     "allowJs": false,
     "skipLibCheck": true,
     "strictNullChecks": true,
-    "strictBindCallApply": true,
     "strictFunctionTypes": true,
     "strictPropertyInitialization": true,
     "experimentalDecorators": true
