@@ -71,6 +71,7 @@
     "is-path-inside": "^3.0.2",
     "jsdom": "^16.2.2",
     "monic": "^2.6.0",
+    "node-blob": "0.0.2",
     "node-object-hash": "^2.0.0",
     "path-equal": "^1.1.1",
     "requestidlecallback": "^0.3.0",
