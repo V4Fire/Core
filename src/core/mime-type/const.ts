@@ -20,6 +20,7 @@ export const mimeTypes: Dictionary<DataType> = Object.createDict({
 	'application/json': 'json',
 	'application/javascript': 'text',
 	'application/xml': 'document',
+	'text/xml': 'document',
 	'application/x-www-form-urlencoded': 'text',
 	'application/x-msgpack': 'arrayBuffer',
 	'application/x-protobuf': 'arrayBuffer',
