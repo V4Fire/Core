@@ -12,7 +12,7 @@
  * @decorator
  * @see [[Function.once]]
  */
-export function once(target: Object, key: string | symbol, descriptor: PropertyDescriptor): void {
+export function once(target: object, key: string | symbol, descriptor: PropertyDescriptor): void {
 	const
 		method = descriptor.value;
 
