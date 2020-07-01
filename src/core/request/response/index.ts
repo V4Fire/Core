@@ -216,7 +216,7 @@ export default class Response<
 		}
 		//#endunless
 
-		return Then.resolve<Document | null>(body, this.parent);
+		return Then.resolve<Document | null>(<any>body, this.parent);
 	}
 
 	/**
@@ -253,7 +253,10 @@ export default class Response<
 		}
 
 		return Then.resolveAndCall<_>(
-			() => Object.size(this.decoders) > 0 && !Object.isFrozen(body) ? Object.fastClone(body) : body,
+			() => Object.size(this.decoders) > 0 && !Object.isFrozen(body) ?
+				Object.fastClone(body) :
+				<any>body,
+
 			this.parent
 		);
 	}
@@ -314,7 +317,7 @@ export default class Response<
 			//#endif
 		}
 
-		return Then.resolve<_>(new Blob([body], {type: this.getHeader('content-type')}), this.parent);
+		return Then.resolve<_>(new Blob([<any>body], {type: this.getHeader('content-type')}), this.parent);
 	}
 
 	/**
@@ -368,13 +371,13 @@ export default class Response<
 
 		if (IS_NODE) {
 			//#if node_js
-			return Then.resolve<_>(Buffer.from(body).toString(encoding));
+			return Then.resolve<_>(Buffer.from(<any>body).toString(encoding));
 			//#endif
 		}
 
 		if (typeof TextDecoder !== 'undefined') {
 			const decoder = new TextDecoder(encoding, {fatal: true});
-			return Then.resolve<_>(decoder.decode(new DataView(body)), this.parent);
+			return Then.resolve<_>(decoder.decode(new DataView(<any>body)), this.parent);
 		}
 
 		return new Then((resolve, reject, onAbort) => {
