@@ -46,6 +46,10 @@ module.exports = function init(gulp) {
 	 */
 	gulp.task('build:server', gulp.series([gulp.parallel(['build:tsconfig', 'clean:server']), build]));
 
+	let
+		tsProject,
+		filesToBuild;
+
 	/**
 	 * Rebuilds the project as a node.js package
 	 */
@@ -62,19 +66,18 @@ module.exports = function init(gulp) {
 		}
 	]));
 
-	let
-		tsProject;
-
 	function build() {
 		const
 			$C = require('collection.js'),
 			isPathInside = require('is-path-inside');
 
-		tsProject = tsProject || $.typescript.createProject(src.rel('./server.tsconfig.json'), {noEmitOnError: false});
+		if (!tsProject) {
+			const
+				tsConfig = fs.readJSONSync(src.rel('./server.tsconfig.json'));
 
-		const
-			tsConfig = fs.readJSONSync(src.rel('./server.tsconfig.json')),
+			tsProject = $.typescript.createProject(src.rel('./server.tsconfig.json'), {noEmitOnError: false});
 			filesToBuild = [...tsConfig.include || [], ...resolve.rootDependencies.map((el) => `${el}/**/*.@(ts|js)`)];
+		}
 
 		const
 			isDep = new RegExp(`(^.*?(?:^|[\\/])(${depsRgxpStr}))(?:$|[\\/])`),
