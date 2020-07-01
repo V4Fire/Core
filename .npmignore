@@ -1,0 +1,70 @@
+# IDE
+.idea
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN
+
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# =========================
+# Operating System Files
+# =========================
+# OSX
+# =========================
+.DS_Store
+.AppleDouble
+.LSOverride
+.vscode
+
+# Icon must ends with two \r.
+Icon
+
+# Thumbnails
+._*
+
+# Files that might appear on external disk
+.Spotlight-V100
+.Trashes
+
+# Dependencies
+/bower_components
+/node_modules
+/.yalc
+/yalc.lock
+
+# Build && test
+/coverage
+/.nyc_output
+/dist
+/tsconfig.json
+/*.tsconfig.json
+.env
+
+# Log
+*.log
+/stats.json
+
+# Temporary
+*.tmp
+*.gz
+/Releases-js
+/tmp
+/app-cache
+/app-std-cache
+/src/entries/tmp
+/db
+
+# NPM ignore list
+/.docs
+/.github
