@@ -75,6 +75,7 @@
     "path-equal": "^1.1.1",
     "requestidlecallback": "^0.3.0",
     "sugar": "^2.0.6",
+    "through2": "^4.0.2",
     "tsconfig": "^7.0.0",
     "typedoc": "^0.15.8",
     "typescript": "3.9.3",
