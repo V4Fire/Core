@@ -205,7 +205,8 @@ export default class Response<
 		if (Object.isString(body)) {
 			// eslint-disable-next-line @typescript-eslint/no-var-requires
 			const {JSDOM} = require('jsdom');
-			return Then.resolve<Document | null>(new JSDOM(body), this.parent);
+			return Then.resolve<Document | null>(new JSDOM(body), this.parent)
+				.then((res) => Object.get(res, 'window.document'));
 		}
 		//#endif
 
