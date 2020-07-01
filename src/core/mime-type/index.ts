@@ -39,12 +39,12 @@ export function getDataType(str: string): DataType {
 		return predefinedType;
 	}
 
-	if (isTextType.test(type)) {
-		return 'text';
-	}
-
 	if (isXMLType.test(type)) {
 		return 'document';
+	}
+
+	if (isTextType.test(type)) {
+		return 'text';
 	}
 
 	return 'blob';

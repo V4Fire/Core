@@ -14,8 +14,9 @@ Changelog
 #### :rocket: New Feature
 
 * Added tests
-* Added a new predefined type "text/xml"
+* Added new predefined types "text/xml", "text/html"
 
 #### :bug: Bug Fix
 
 * Fixed bugs
+* Fixed XML support

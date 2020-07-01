@@ -21,6 +21,7 @@ export const mimeTypes: Dictionary<DataType> = Object.createDict({
 	'application/javascript': 'text',
 	'application/xml': 'document',
 	'text/xml': 'document',
+	'text/html': 'document',
 	'application/x-www-form-urlencoded': 'text',
 	'application/x-msgpack': 'arrayBuffer',
 	'application/x-protobuf': 'arrayBuffer',
