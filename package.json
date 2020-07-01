@@ -23,8 +23,8 @@
   ],
   "scripts": {
     "dev": "npx gulp watch:server",
-    "build": "npx gulp build:server && npm run test:jasmine",
-    "test": "npm run test:typescript && npm run test:eslint && npm run test:jasmine",
+    "build": "npx gulp build:server",
+    "test": "npm run build && npm run test:typescript && npm run test:eslint && npm run test:jasmine",
     "test:linters": "npm run test:typescript && npm run test:eslint",
     "test:typescript": "node node_modules/@v4fire/typescript-check",
     "test:eslint": "npx eslint ./config/**/*.js ./build/**/*.js ./src/**/*.js ./src/**/*.ts",
