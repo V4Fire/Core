@@ -1,0 +1,6 @@
+.nyc_output
+coverage
+dist
+tmp
+assets
+docs
