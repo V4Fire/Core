@@ -109,8 +109,8 @@ const request: RequestEngine = (params) => {
 			}));
 		});
 
-		xhr.addEventListener('error', (err) => {
-			reject(err);
+		xhr.addEventListener('error', (error) => {
+			reject(new RequestError('engine', {error}));
 		});
 
 		xhr.addEventListener('timeout', () => {

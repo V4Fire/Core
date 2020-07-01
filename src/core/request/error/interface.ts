@@ -15,4 +15,5 @@ import { NormalizedCreateRequestOptions } from 'core/request/interface';
 export interface Details<D = unknown> extends Dictionary {
 	request?: NormalizedCreateRequestOptions<D>;
 	response?: Response<D>;
+	error?: object;
 }
