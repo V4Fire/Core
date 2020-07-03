@@ -15,4 +15,3 @@ Changelog
 
 * Added tests
 * Added `generate`
-* Added `validate`

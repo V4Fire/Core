@@ -12,15 +12,7 @@
  */
 
 import { IS_NODE } from 'core/env';
-import { separatorIndexes, uuidPattern } from 'core/uuid/const';
-
-/***
- * Validates the specified uuid
- * @param uuid
- */
-export function validate(uuid: string | Uint8Array): boolean {
-	return uuidPattern.test(Object.isString(uuid) ? uuid : serialize(uuid));
-}
+import { separatorIndexes } from 'core/uuid/const';
 
 /**
  * Generates UUID v4 and returns it
