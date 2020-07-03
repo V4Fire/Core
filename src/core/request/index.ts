@@ -300,11 +300,17 @@ function request<D = unknown>(
 				res = requestParams.engine(reqOpts).then(success).then(ctx.saveCache.bind(ctx));
 			}
 
-			res.then((response) => log(`response:${path}`, response.data, {
-				cache,
-				externalRequest: requestParams.externalRequest,
-				request: requestParams
-			}));
+			res
+				.then((response) => log(`request:response:${path}`, response.data, {
+					cache,
+					externalRequest: requestParams.externalRequest,
+					request: requestParams
+				}))
+
+				.catch((err) => log.error(`request:${path}`, err, {
+					externalRequest: requestParams.externalRequest,
+					request: requestParams
+				}));
 
 			resolve(ctx.wrapRequest(res));
 		});
