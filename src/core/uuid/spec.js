@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { generate, serialize, parse, validate } from 'core/uuid';
+import { generate, serialize, parse } from 'core/uuid';
 
 describe('core/uuid', () => {
 	const
