@@ -68,10 +68,13 @@ export interface WrappedDecoder<I = unknown, O = unknown> {
 export type Decoders = Iterable<Decoder>;
 export type WrappedDecoders = Iterable<WrappedDecoder>;
 
+export type CacheType = 'memory' | 'offline';
+
 export interface RequestResponseObject<D = unknown> {
 	data: Nullable<D>;
 	response: Response<D>;
 	ctx: Readonly<RequestContext<D>>;
+	cache?: CacheType;
 	dropCache(): void;
 }
 

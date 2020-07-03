@@ -262,14 +262,15 @@ function request<D = unknown>(
 			if (fromCache) {
 				cache = 'memory';
 				res = Then.resolveAndCall(() => ctx.cache.get(cacheKey!), parent)
-					.then(ctx.wrapAsResponse.bind(ctx));
+					.then(ctx.wrapAsResponse.bind(ctx))
+					.then((res) => Object.assign(res, {cache}));
 
 			} else if (fromLocalStorage) {
 				cache = 'offline';
 				res = Then.resolveAndCall(() => storage!
 					.then((storage) => storage.get(localCacheKey)), parent)
 					.then(ctx.wrapAsResponse.bind(ctx))
-					.then(ctx.saveCache.bind(ctx));
+					.then((res) => Object.assign(res, {cache}));
 
 			} else if (!ctx.isOnline && !requestParams.externalRequest) {
 				res = Then.reject(new RequestError('offline', errDetails));
@@ -287,7 +288,12 @@ function request<D = unknown>(
 						throw new RequestError('offline', {response, ...errDetails});
 					}
 
-					return {data, response, ctx, dropCache: ctx.dropCache.bind(ctx)};
+					return {
+						data,
+						response,
+						ctx,
+						dropCache: ctx.dropCache.bind(ctx)
+					};
 				};
 
 				const reqOpts = {

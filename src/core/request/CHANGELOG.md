@@ -15,6 +15,7 @@ Changelog
 
 * Added tests
 * Added node.js support
+* Added `cache` to `RequestResponseObject`
 
 #### :bug: Bug Fix
 
