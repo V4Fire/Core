@@ -50,6 +50,7 @@ const request: RequestEngine = (params) => {
 	}
 
 	const normalizedOpts = <Options>{
+		throwHttpErrors: false,
 		method: p.method,
 		timeout: p.timeout,
 		headers,
