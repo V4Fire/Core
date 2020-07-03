@@ -55,6 +55,9 @@ export default class RequestContext<D = unknown> extends Super<D> {
 				case 'port':
 					return val !== '' ? `:${val}` : '';
 
+				case 'protocol':
+					return val !== '' ? `${val.replace(/:\/+$/, '')}://` : '';
+
 				default:
 					return val;
 			}
