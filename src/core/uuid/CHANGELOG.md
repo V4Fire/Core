@@ -14,3 +14,5 @@ Changelog
 #### :rocket: New Feature
 
 * Added tests
+* Added `generate`
+* Added `validate`

@@ -11,7 +11,62 @@
  * @packageDocumentation
  */
 
-import { serializeFilter } from 'core/uuid/const';
+import { IS_NODE } from 'core/env';
+import { separatorIndexes, uuidPattern } from 'core/uuid/const';
+
+/***
+ * Validates the specified uuid
+ * @param uuid
+ */
+export function validate(uuid: string | Uint8Array): boolean {
+	return uuidPattern.test(Object.isString(uuid) ? uuid : serialize(uuid));
+}
+
+/**
+ * Generates UUID v4 and returns it
+ */
+export function generate(): Uint8Array {
+	if (IS_NODE) {
+		//#if node_js
+
+		// eslint-disable-next-line @typescript-eslint/no-var-requires
+		const crypto = require('crypto');
+
+		const uuid = crypto.randomBytes(16);
+
+		// eslint-disable-next-line no-bitwise
+		uuid[6] = uuid[6] & 0x0f | 0x40;
+
+		// eslint-disable-next-line no-bitwise
+		uuid[8] = uuid[8] & 0x3f | 0x80;
+
+		const
+			{toString} = uuid;
+
+		uuid.toString = (...args) => {
+			if (args.length === 0) {
+				return serialize(uuid);
+			}
+
+			return toString.apply(uuid, args);
+		};
+
+		return uuid;
+
+		//#endif
+	}
+
+	const tmpUrl = URL.createObjectURL(new Blob());
+	URL.revokeObjectURL(tmpUrl);
+
+	let uuidStr = tmpUrl.toString();
+	uuidStr = uuidStr.split(/[:/]/g).pop()!.toLowerCase();
+
+	const uuid = parse(uuidStr);
+	uuid.toString = () => uuidStr;
+
+	return uuid;
+}
 
 /**
  * Converts the specified binary UUID to a string and returns it
@@ -29,7 +84,7 @@ export function serialize(uuid: Uint8Array): string {
 			chunk = `0${chunk}`;
 		}
 
-		res += chunk + (serializeFilter[i] === true ? '-' : '');
+		res += chunk + (separatorIndexes[i] === true ? '-' : '');
 	}
 
 	return res;
