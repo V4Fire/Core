@@ -21,7 +21,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :rocket: New Feature
 
-* Migration to from TSLient to ESlint
+* Migration to from TSLint to ESlint
 * Added tasks to build core as a standalone library
 * Added the code coverage tool
 * Added more tests
