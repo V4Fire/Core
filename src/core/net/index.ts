@@ -12,10 +12,10 @@
  */
 
 import config from 'config';
-import * as engine from 'core/net/engines';
+import * as netEngine from 'core/net/engines';
 
 import { state, emitter } from 'core/net/const';
-import { NetStatus } from 'core/net/interface';
+import { NetStatus, NetEngine } from 'core/net/interface';
 
 export * from 'core/net/const';
 export * from 'core/net/interface';
@@ -35,11 +35,15 @@ storage = import('core/kv-storage').then(({asyncLocal}) => asyncLocal.namespace(
 /**
  * Returns information about the internet connection status
  *
+ * @param [engine] - engine to test online connection
+ *
  * @emits `online()`
  * @emits `offline(lastOnline: Date)`
  * @emits `status(value:` [[NetStatus]] `)`
  */
-export function isOnline(): Promise<NetStatus> {
+export function isOnline(
+	engine: NetEngine = netEngine
+): Promise<NetStatus> {
 	//#if runtime has core/net
 
 	if (cache != null) {

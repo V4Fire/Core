@@ -6,6 +6,10 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+export interface NetEngine {
+	isOnline(): CanPromise<Nullable<boolean>>;
+}
+
 export interface State {
 	status?: Nullable<boolean>;
 	lastOnline?: Nullable<Date>;
@@ -25,38 +29,38 @@ export interface NetStatus {
 
 export interface OnlineCheckConfig {
 	/**
-	 * URL that is used to check online connection
+	 * URL to check online connection
+	 * (with the "browser.request" engine can be used only image URL-s)
 	 */
 	checkURL?: CanUndef<string>;
 
 	/**
-	 * Value in milliseconds after which the online connection will be checked again
+	 * How often need to check online connection (ms)
 	 */
 	checkInterval?: number;
 
 	/**
-	 * Value in milliseconds that represents how long last cache check is relevant
+	 * The timeout of downloading the check URL
 	 */
 	checkTimeout?: number;
 
 	/**
-	 * Value in milliseconds after which there will be a synchronization of last online date to the current date
+	 * How often to update the time of the last online connection
 	 */
 	lastDateSyncInterval?: number;
 
 	/**
-	 * Number of acceptable retries (if the check was canceled by a timeout)
+	 * The number of retries of downloading the check URL
 	 */
 	retryCount?: number;
 
 	/**
-	 * Timeout value in milliseconds for one online check
+	 * How long to store the result of checking in the local cache
 	 */
 	cacheTTL?: number;
 
 	/**
-	 * If true, then a check result will be periodically saved to a storage.
-	 * It can be helpful to realize how long an application lives without connection.
+	 * True, if we need to save the time of the last online connection in a local storage
 	 */
 	persistence?: boolean;
 }

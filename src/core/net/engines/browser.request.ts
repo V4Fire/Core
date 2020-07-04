@@ -7,17 +7,13 @@
  */
 
 import config from 'config';
-
 import { state, emitter } from 'core/net/const';
-import { IS_NODE } from 'core/prelude/env';
 
 const
 	{online} = config;
 
-if (!IS_NODE) {
-	globalThis.addEventListener('online', () => emitter.emit('sync'));
-	globalThis.addEventListener('offline', () => emitter.emit('sync'));
-}
+globalThis.addEventListener('online', () => emitter.emit('sync'));
+globalThis.addEventListener('offline', () => emitter.emit('sync'));
 
 /**
  * Returns true if the current host has a connection to the internet or null
@@ -26,7 +22,7 @@ if (!IS_NODE) {
  * This engine checks the connection by using a request for some data from the internet.
  */
 export async function isOnline(): Promise<boolean | null> {
-	if (!IS_NODE && navigator.onLine === false) {
+	if (navigator.onLine === false) {
 		return false;
 	}
 
@@ -58,16 +54,28 @@ export async function isOnline(): Promise<boolean | null> {
 
 		function checkOnline(): void {
 			const
-				img = new Image(),
-				timer = setTimeout(retry, online.checkTimeout ?? 0);
+				img = new Image();
+
+			let
+				timer;
+
+			if (online.checkTimeout != null) {
+				timer = setTimeout(retry, online.checkTimeout);
+			}
 
 			img.onload = () => {
-				clearTimeout(timer);
+				if (timer != null) {
+					clearTimeout(timer);
+				}
+
 				resolve(true);
 			};
 
 			img.onerror = () => {
-				clearTimeout(timer);
+				if (timer != null) {
+					clearTimeout(timer);
+				}
+
 				retry();
 			};
 
