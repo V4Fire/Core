@@ -7,4 +7,3 @@
  */
 
 import 'core/prelude';
-// @requireTests
