@@ -7,7 +7,14 @@
  */
 
 import Queue, { Tasks, CreateTasks, QueueOptions } from 'core/queue/interface';
+
 export * from 'core/queue/interface';
+
+export interface Task<T = unknown, V = unknown> {
+	task: T;
+	promise: Promise<V>;
+	resolve(res: CanPromise<V>): void;
+}
 
 export interface QueueWorker<T = unknown, V = unknown> {
 	(task: T): CanPromise<V>;
@@ -76,14 +83,14 @@ export default abstract class WorkerQueue<T, V = unknown> extends Queue<T> {
 	 * @param worker
 	 * @param [opts]
 	 */
-	protected constructor(worker: QueueWorker<T, V>, opts?: WorkerQueueOptions) {
+	protected constructor(worker: QueueWorker<T, V>, opts: WorkerQueueOptions = {}) {
 		super();
 
 		this.worker = worker;
-		this.concurrency = opts?.concurrency || 1;
-		this.refreshInterval = opts?.refreshInterval || 0;
+		this.concurrency = opts.concurrency ?? 1;
+		this.refreshInterval = opts.refreshInterval ?? 0;
 
-		if (opts?.tasksFactory) {
+		if (opts.tasksFactory) {
 			this.createTasks = opts.tasksFactory;
 		}
 
@@ -130,11 +137,10 @@ export default abstract class WorkerQueue<T, V = unknown> extends Queue<T> {
 			const
 				cb = () => resolve(this.perform());
 
-			if (i) {
+			if (i > 0) {
 				setTimeout(cb, i);
 
 			} else {
-				// tslint:disable-next-line:no-string-literal
 				globalThis['setImmediate'](cb);
 			}
 		});
@@ -152,6 +158,21 @@ export default abstract class WorkerQueue<T, V = unknown> extends Queue<T> {
 		for (let i = 0; i < n; i++) {
 			this.activeWorkers++;
 			this.perform();
+		}
+	}
+
+	/**
+	 * Provides a task result to the specified promise resolve function
+	 *
+	 * @param task
+	 * @param resolve
+	 */
+	protected resolveTask(task: T, resolve: Function): void {
+		try {
+			resolve(this.worker(task));
+
+		} catch (error) {
+			resolve(Promise.reject(error));
 		}
 	}
 }

@@ -8,6 +8,7 @@
 
 import log from 'core/log';
 import extend from 'core/prelude/extend';
+import { errorsToIgnore } from 'core/prelude/global/const';
 
 /** @see Any */
 extend(globalThis, 'Any', (obj) => obj);
@@ -15,7 +16,7 @@ extend(globalThis, 'Any', (obj) => obj);
 /** @see stderr */
 extend(globalThis, 'stderr', (err) => {
 	if (err instanceof Object) {
-		if ({clearAsync: true, abort: true}[String((<Dictionary>err).type)]) {
+		if (errorsToIgnore[err.type] === true) {
 			log.info('stderr', err);
 			return;
 		}

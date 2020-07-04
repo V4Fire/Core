@@ -30,7 +30,7 @@ export function createDateModifier(mod: (val: number, base: number) => number = 
 			const
 				key = keys[i];
 
-			if (key.slice(-1) !== 's') {
+			if (!key.endsWith('s')) {
 				params[`${key}s`] = params[key];
 			}
 		}
@@ -52,28 +52,28 @@ export function createDateModifier(mod: (val: number, base: number) => number = 
 			this.setMinutes(mod(params.minutes, this.getMinutes()));
 		}
 
-		if (params.hours) {
+		if (params.hours != null) {
 			resetValues.hours = false;
 			setResetValue('milliseconds', 'seconds', 'minutes');
 			this.setHours(mod(params.hours, this.getHours()));
 		}
 
-		if (params.days) {
+		if (params.days != null) {
 			resetValues.days = false;
 			setResetValue('milliseconds', 'seconds', 'minutes', 'hours');
 			this.setDate(mod(params.days, this.getDate()));
 		}
 
-		if (params.months) {
+		if (params.months != null) {
 			resetValues.months = false;
 			setResetValue('milliseconds', 'seconds', 'minutes', 'hours', 'days');
 			this.setMonth(mod(params.months, this.getMonth()));
 		}
 
-		if (params.years) {
+		if (params.years != null) {
 			resetValues.years = false;
 			setResetValue('milliseconds', 'seconds', 'minutes', 'hours', 'days', 'months');
-			this.setFullYear(params.years);
+			this.setFullYear(mod(params.years, this.getFullYear()));
 		}
 
 		if (reset) {
@@ -115,7 +115,7 @@ export function createStaticDateModifier(method: string): AnyFunction {
 		if (Object.isPlainObject(date) || Object.isBoolean(units)) {
 			reset = Boolean(units);
 			units = <DateSetParams>date;
-			return (date) => Date[method](date, units, reset);
+			return (date) => Date[Symbol.for('[[V4_EXTEND_API]]')][method](date, units, reset);
 		}
 
 		return date[method](units, reset);
@@ -127,15 +127,18 @@ export function createStaticDateModifier(method: string): AnyFunction {
  * @param method
  */
 export function createStaticDateComparator(method: string): AnyFunction {
-	// tslint:disable-next-line:only-arrow-functions
-	return function (date1: DateCreateValue | number, date2: DateCreateValue, margin?: number): boolean | AnyFunction {
+	return function comparator(
+		date1: DateCreateValue | number,
+		date2: DateCreateValue,
+		margin?: number
+	): boolean | AnyFunction {
 		if (arguments.length < 2 || arguments.length < 3 && Object.isNumber(date1)) {
 			if (Object.isNumber(date1)) {
 				margin = date1;
 				date1 = date2;
 			}
 
-			return (date2, m) => Date[method](date1, date2, margin || m);
+			return (date2, m) => Date[Symbol.for('[[V4_EXTEND_API]]')][method](date1, date2, margin ?? m);
 		}
 
 		return Date.create(date1)[method](date2, margin);
@@ -150,7 +153,7 @@ export function createStaticDateFormatter(method: string): AnyFunction {
 	return (date: Date | string | DateHTMLTimeStringOptions, opts?: string | DateHTMLTimeStringOptions) => {
 		if (Object.isString(date) || Object.isPlainObject(date)) {
 			opts = date;
-			return (date) => Date[method](date, opts);
+			return (date) => Date[Symbol.for('[[V4_EXTEND_API]]')][method](date, opts);
 		}
 
 		return date[method](opts);

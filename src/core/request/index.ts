@@ -40,6 +40,8 @@ export { globalOpts, cache, pendingCache } from 'core/request/const';
 export { default as RequestError } from 'core/request/error';
 export { default as Response } from 'core/request/response';
 
+export default request;
+
 /**
  * Creates a new remote request with the specified options
  *
@@ -53,7 +55,7 @@ export { default as Response } from 'core/request/response';
  * });
  * ```
  */
-export default function request<D = unknown>(path: string, opts?: CreateRequestOptions<D>): RequestResponse<D>;
+function request<D = unknown>(path: string, opts?: CreateRequestOptions<D>): RequestResponse<D>;
 
 /**
  * Returns a wrapped request constructor with the specified options.
@@ -67,7 +69,7 @@ export default function request<D = unknown>(path: string, opts?: CreateRequestO
  * });
  * ```
  */
-export default function request<D = unknown>(opts: CreateRequestOptions<D>): typeof request;
+function request<D = unknown>(opts: CreateRequestOptions<D>): typeof request;
 
 /**
  * Returns a function to create a new remote request with the specified options.
@@ -90,13 +92,13 @@ export default function request<D = unknown>(opts: CreateRequestOptions<D>): typ
  * request('https://foo.com', () => ['https://bla.com', 'bla', 'baz'])() // https://bla.com/bla/baz
  * ```
  */
-export default function request<D = unknown, A extends unknown[] = unknown[]>(
+function request<D = unknown, A extends unknown[] = unknown[]>(
 	path: string,
 	resolver: RequestResolver<D, A>,
 	opts?: CreateRequestOptions<D>
-): RequestFunctionResponse<D, A extends (infer V)[] ? V[] : unknown[]>;
+): RequestFunctionResponse<D, A extends Array<infer V> ? V[] : unknown[]>;
 
-export default function request<D = unknown>(
+function request<D = unknown>(
 	path: string | CreateRequestOptions<D>,
 	...args: any[]
 ): unknown {
@@ -118,16 +120,19 @@ export default function request<D = unknown>(
 	}
 
 	let
-		resolver, opts: CreateRequestOptions<D>;
+		resolver, opts: CanUndef<CreateRequestOptions<D>>;
 
 	if (args.length > 1) {
-		([resolver, opts] = args);
+		[resolver, opts] = args;
 
-	} else {
+	} else if (Object.isDictionary(args[0])) {
 		opts = args[0];
+
+	} else if (Object.isFunction(args[0])) {
+		resolver = args[0];
 	}
 
-	opts = opts || {};
+	opts = opts ?? {};
 
 	const
 		baseCtx = new RequestContext<D>(merge(defaultRequestOpts, opts));
@@ -149,11 +154,10 @@ export default function request<D = unknown>(
 			};
 
 			onAbort((err) => {
-				reject(err || new RequestError('abort', errDetails));
+				reject(err ?? new RequestError('abort', errDetails));
 			});
 
 			await new Promise((r) => {
-				// tslint:disable-next-line:no-string-literal
 				globalThis['setImmediate'](r);
 			});
 
@@ -161,7 +165,7 @@ export default function request<D = unknown>(
 			ctx.isOnline = (await Then.resolve(isOnline(), parent)).status;
 
 			const
-				tasks = <CanPromise<unknown>[]>[];
+				tasks = <Array<CanPromise<unknown>>>[];
 
 			Object.forEach(requestParams.middlewares, (fn: Middleware<D>) => {
 				tasks.push(fn(middlewareParams));
@@ -174,14 +178,15 @@ export default function request<D = unknown>(
 				let
 					res = Then.resolve(data, parent);
 
-				Object.forEach(ctx.encoders, (fn, i) => {
-					res = res.then((obj) => fn(i ? obj : Object.fastClone(obj)));
+				Object.forEach(ctx.encoders, (fn, i: number) => {
+					res = res.then((obj) => fn(i > 0 ? obj : Object.fastClone(obj)));
 				});
 
 				return res;
 			};
 
 			const keyToEncode = ctx.withoutBody ? 'query' : 'body';
+			// eslint-disable-next-line require-atomic-updates
 			requestParams[keyToEncode] = await applyEncoders(requestParams[keyToEncode]);
 
 			for (let i = 0; i < middlewareResults.length; i++) {
@@ -223,7 +228,7 @@ export default function request<D = unknown>(
 				fromCache = false,
 				fromLocalStorage = false;
 
-			if (cacheKey && ctx.canCache) {
+			if (cacheKey != null && ctx.canCache) {
 				if (ctx.pendingCache.has(cacheKey)) {
 					try {
 						const
@@ -235,7 +240,7 @@ export default function request<D = unknown>(
 						}
 
 					} catch (err) {
-						if (err && !{clearAsync: true, abort: true}[err.type]) {
+						if (err != null && {clearAsync: true, abort: true}[err.type] != null) {
 							reject(err);
 							return;
 						}
@@ -260,32 +265,38 @@ export default function request<D = unknown>(
 			if (fromCache) {
 				cache = 'memory';
 				res = Then.resolveAndCall(() => ctx.cache.get(cacheKey!), parent)
-					.then(ctx.wrapAsResponse);
+					.then(ctx.wrapAsResponse.bind(ctx))
+					.then((res) => Object.assign(res, {cache}));
 
 			} else if (fromLocalStorage) {
 				cache = 'offline';
 				res = Then.resolveAndCall(() => storage!
 					.then((storage) => storage.get(localCacheKey)), parent)
-					.then(ctx.wrapAsResponse)
-					.then(ctx.saveCache);
+					.then(ctx.wrapAsResponse.bind(ctx))
+					.then((res) => Object.assign(res, {cache}));
 
 			} else if (!ctx.isOnline && !requestParams.externalRequest) {
 				res = Then.reject(new RequestError('offline', errDetails));
 
 			} else {
 				const success = async (response) => {
-					if (!response.ok) {
+					if (response.ok !== true) {
 						throw new RequestError('invalidStatus', {response, ...errDetails});
 					}
 
 					const
 						data = await response.decode();
 
-					if (requestParams.externalRequest && !ctx.isOnline && !data) {
+					if (requestParams.externalRequest && !ctx.isOnline && data == null) {
 						throw new RequestError('offline', {response, ...errDetails});
 					}
 
-					return {data, response, ctx, dropCache: ctx.dropCache};
+					return {
+						data,
+						response,
+						ctx,
+						dropCache: ctx.dropCache.bind(ctx)
+					};
 				};
 
 				const reqOpts = {
@@ -295,14 +306,20 @@ export default function request<D = unknown>(
 					decoders: ctx.decoders
 				};
 
-				res = requestParams.engine(reqOpts).then(success).then(ctx.saveCache);
+				res = requestParams.engine(reqOpts).then(success).then(ctx.saveCache.bind(ctx));
 			}
 
-			res.then((response) => log(`response:${path}`, response.data, {
-				cache,
-				externalRequest: requestParams.externalRequest,
-				request: requestParams
-			}));
+			res
+				.then((response) => log(`request:response:${path}`, response.data, {
+					cache,
+					externalRequest: requestParams.externalRequest,
+					request: requestParams
+				}))
+
+				.catch((err) => log.error(`request:${path}`, err, {
+					externalRequest: requestParams.externalRequest,
+					request: requestParams
+				}));
 
 			resolve(ctx.wrapRequest(res));
 		});

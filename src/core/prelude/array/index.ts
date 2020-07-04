@@ -9,8 +9,8 @@
 import extend from 'core/prelude/extend';
 import { emptyArray } from 'core/prelude/array/const';
 
-/** @see Array.union */
-extend(Array.prototype, 'union', function (
+/** @see [[Array.union]] */
+extend(Array.prototype, 'union', function union(
 	this: unknown[],
 	...args: Array<Iterable<unknown> | unknown>
 ): unknown[] {
@@ -40,26 +40,23 @@ extend(Array.prototype, 'union', function (
 	return [...new Set(makeIterator())];
 });
 
-/** @see ArrayConstructor.union */
+/** @see [[ArrayConstructor.union]] */
 extend(Array, 'union', (arr: unknown[], ...args: Array<Iterable<unknown> | unknown>) => {
-	if (!args.length) {
+	if (args.length === 0) {
 		return (...args) => Array.union(arr, ...args);
 	}
 
 	return arr.union(...args);
 });
 
-/** @see ArrayConstructor.concat */
-extend(Array, 'concat', (arr: unknown[], ...args: CanArray<unknown>[]) => {
-	if (!args.length) {
+/** @see [[ArrayConstructor.concat]] */
+extend(Array, 'concat', (arr: unknown[], ...args: Array<CanArray<unknown>>) => {
+	if (args.length === 0) {
 		return (...args) => Array.concat(arr, ...args);
 	}
 
 	// Optimization for simple cases
 	switch (args.length) {
-		case 0:
-			return arr.slice();
-
 		case 1:
 			return arr.concat(args[0] != null ? args[0] : emptyArray);
 
@@ -83,19 +80,21 @@ extend(Array, 'concat', (arr: unknown[], ...args: CanArray<unknown>[]) => {
 				args[2] != null ? args[2] : emptyArray,
 				args[3] != null ? args[3] : emptyArray
 			);
-	}
 
-	const
-		filteredArgs = <typeof args>[];
+		default: {
+			const
+				filteredArgs = <typeof args>[];
 
-	for (let i = 0; i < args.length; i++) {
-		const
-			el = args[i];
+			for (let i = 0; i < args.length; i++) {
+				const
+					el = args[i];
 
-		if (el != null) {
-			filteredArgs.push(el);
+				if (el != null) {
+					filteredArgs.push(el);
+				}
+			}
+
+			return arr.concat(...filteredArgs);
 		}
 	}
-
-	return arr.concat(...filteredArgs);
 });

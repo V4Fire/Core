@@ -12,6 +12,7 @@
  */
 
 import SimpleCache, { ClearFilter } from 'core/cache/simple';
+
 export * from 'core/cache/simple';
 
 /**
@@ -38,7 +39,7 @@ export default class RestrictedCache<V = unknown, K = string> extends SimpleCach
 	constructor(max?: number) {
 		super();
 
-		if (max) {
+		if (max != null) {
 			this.max = max;
 		}
 	}
@@ -79,7 +80,7 @@ export default class RestrictedCache<V = unknown, K = string> extends SimpleCach
 	}
 
 	/** @override */
-	clear(filter?: ClearFilter<V, K>): Set<K> {
+	clear(filter?: ClearFilter<V, K>): Map<K, V> {
 		const
 			removed = super.clear(filter);
 

@@ -130,7 +130,7 @@ export default class Then<T = unknown> implements Promise<T> {
 	 * @param values
 	 * @param [parent] - parent promise
 	 */
-	// @ts-ignore
+	// @ts-ignore (invalid implementation)
 	static all<T1, T2, T3, T4, T5>(
 		values: [Value<T1>, Value<T2>, Value<T3>, Value<T4>, Value<T5>],
 		parent?: Then
@@ -159,12 +159,12 @@ export default class Then<T = unknown> implements Promise<T> {
 	static all<T extends Iterable<Value>>(
 		values: T,
 		parent?: Then
-	): Then<(T extends Iterable<Value<infer V>> ? V : unknown)[]>;
+	): Then<Array<T extends Iterable<Value<infer V>> ? V : unknown>>;
 
 	static all<T extends Iterable<Value>>(
 		values: T,
 		parent?: Then
-	): Then<(T extends Iterable<Value<infer V>> ? V : unknown)[]> {
+	): Then<Array<T extends Iterable<Value<infer V>> ? V : unknown>> {
 		return new Then((resolve, reject, onAbort) => {
 			const
 				promises = <Then[]>[],
@@ -174,7 +174,7 @@ export default class Then<T = unknown> implements Promise<T> {
 				promises.push(Then.resolve(el));
 			});
 
-			if (!promises.length) {
+			if (promises.length === 0) {
 				resolve(resolved);
 				return;
 			}
@@ -223,7 +223,7 @@ export default class Then<T = unknown> implements Promise<T> {
 				promises.push(Then.resolve(el));
 			});
 
-			if (!promises.length) {
+			if (promises.length === 0) {
 				resolve();
 				return;
 			}
@@ -292,7 +292,7 @@ export default class Then<T = unknown> implements Promise<T> {
 	 */
 	constructor(executor: Executor<T>, parent?: Then) {
 		this.promise = new Promise((resolve, reject) => {
-			const resolveWrapper = this.onResolve = (val) => {
+			const resolveWrapper = (val) => {
 				if (!this.isPending) {
 					return;
 				}
@@ -301,7 +301,7 @@ export default class Then<T = unknown> implements Promise<T> {
 				resolve(val);
 			};
 
-			const rejectWrapper = this.onReject = (err) => {
+			const rejectWrapper = (err) => {
 				if (!this.isPending) {
 					return;
 				}
@@ -310,13 +310,18 @@ export default class Then<T = unknown> implements Promise<T> {
 				reject(err);
 			};
 
+			this.onResolve = resolveWrapper;
+			this.onReject = rejectWrapper;
+
 			let
 				setOnAbort;
 
 			if (parent) {
-				const abortParent = this.onAbort = (reason) => {
+				const abortParent = (reason) => {
 					parent.abort(reason);
 				};
+
+				this.onAbort = abortParent;
 
 				parent.catch((err) => {
 					this.abort(err);
@@ -404,7 +409,7 @@ export default class Then<T = unknown> implements Promise<T> {
 			const
 				that = this;
 
-			abort(function (this: Then, reason: unknown): void {
+			abort(function abortHandler(this: Then, reason: unknown): void {
 				if (Object.isFunction(onAbort)) {
 					try {
 						onAbort(reason);
@@ -446,7 +451,7 @@ export default class Then<T = unknown> implements Promise<T> {
 			const
 				that = this;
 
-			onAbort(function (this: Then, reason: unknown): void {
+			onAbort(function abortHandler(this: Then, reason: unknown): void {
 				this.aborted = true;
 
 				if (!that.abort(reason)) {
@@ -469,7 +474,7 @@ export default class Then<T = unknown> implements Promise<T> {
 			const
 				that = this;
 
-			onAbort(function (this: Then, reason: unknown): void {
+			onAbort(function abortHandler(this: Then, reason: unknown): void {
 				this.aborted = true;
 
 				if (!that.abort(reason)) {
@@ -477,7 +482,7 @@ export default class Then<T = unknown> implements Promise<T> {
 				}
 			});
 
-			this.promise.finally(() => cb && cb()).then(resolve, reject);
+			this.promise.finally(() => cb?.()).then(resolve, reject);
 		});
 	}
 
@@ -490,13 +495,14 @@ export default class Then<T = unknown> implements Promise<T> {
 			return false;
 		}
 
-		if (this.pendingChildren) {
+		if (this.pendingChildren > 0) {
 			this.pendingChildren--;
 		}
 
-		if (!this.pendingChildren) {
+		if (this.pendingChildren === 0) {
 			this.call(this.onAbort, [reason]);
 
+			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 			if (!this.aborted) {
 				this.onReject(reason);
 				this.aborted = true;
@@ -524,8 +530,8 @@ export default class Then<T = unknown> implements Promise<T> {
 	): void {
 		const
 			loopback = () => undefined,
-			reject = onError || loopback,
-			resolve = onValue || loopback;
+			reject = onError ?? loopback,
+			resolve = onValue ?? loopback;
 
 		try {
 			const

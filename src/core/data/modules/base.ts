@@ -38,6 +38,7 @@ import iProvider, { ProviderOptions, ModelMethod } from 'core/data/interface';
 import { providers, requestCache, queryMethods, instanceCache, namespace, connectCache } from 'core/data/const';
 
 import ParamsProvider from 'core/data/modules/params';
+
 export * from 'core/data/modules/params';
 
 export const
@@ -83,16 +84,17 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 		super();
 
 		const
-			id = this.cacheId = this.getCacheKey(Object.select(opts, 'externalRequest')),
+			id = this.getCacheKey(Object.select(opts, 'externalRequest')),
 			cacheVal = instanceCache[id];
 
-		if (cacheVal) {
+		if (cacheVal != null) {
 			return <this>cacheVal;
 		}
 
 		instanceCache[id] = this;
 		requestCache[id] = Object.createDict();
 
+		this.cacheId = id;
 		this.async = new Async(this);
 		this.emitter = new EventEmitter({maxListeners: 1e3, newListener: false});
 
@@ -100,13 +102,8 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 			this.setReadonlyParam('externalRequest', opts.externalRequest);
 		}
 
-		if (opts.socket || this.socketURL) {
-			const
-				c = this.connect();
-
-			if (c) {
-				c.then(this.initSocketBehaviour.bind(this), stderr);
-			}
+		if (opts.socket || this.socketURL != null) {
+			this.connect().then(this.initSocketBehaviour.bind(this), stderr);
 		}
 	}
 
@@ -122,8 +119,9 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 	 * Returns an object with authentication parameters
 	 * @param params - additional parameters
 	 */
-	async getAuthParams(params?: Dictionary): Promise<Dictionary> {
-		return {};
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
+	getAuthParams(params?: Dictionary): Promise<Dictionary> {
+		return Promise.resolve({});
 	}
 
 	/**
@@ -137,6 +135,7 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 	 * @param url - request URL
 	 * @param params - request parameters
 	 */
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
 	resolver<T = unknown>(url: string, params: MiddlewareParams<T>): ResolverResult {
 		return undefined;
 	}
@@ -152,7 +151,7 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 			{socketURL: url} = this,
 			key = Object.fastHash(opts);
 
-		if (!connectCache[key]) {
+		if (connectCache[key] == null) {
 			connectCache[key] = new Promise((resolve, reject) => {
 				const
 					socket = IO(url);
@@ -199,7 +198,7 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 	/** @inheritDoc */
 	method(): CanUndef<RequestMethod>;
 
-	//** @inheritDoc */
+	/** @inheritDoc */
 	method(value: RequestMethod): Provider;
 	method(value?: RequestMethod): CanUndef<RequestMethod | Provider> {
 		if (value == null) {
@@ -272,67 +271,66 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 	get<D = unknown>(query?: RequestQuery, opts?: CreateRequestOptions<D>): RequestResponse<D> {
 		const
 			url = this.resolveURL(this.baseGetURL),
-			alias = this.alias || this.providerName;
+			alias = this.alias ?? this.providerName;
 
 		const
 			eventName = this.name(),
-			method = this.method() || this.getMethod;
+			method = this.method() ?? this.getMethod;
 
 		const mergedOpts = this.getRequestOptions('get', {
 			externalRequest: this.externalRequest,
 			...opts,
-			[queryMethods[method] ? 'query' : 'body']: query,
+			[queryMethods[method] != null ? 'query' : 'body']: query,
 			method
 		});
 
 		const
-			req = this.request(url, this.resolver, mergedOpts),
-			res = eventName ? this.updateRequest(url, eventName, req) : this.updateRequest(url, req);
+			req = this.request(url, this.resolver.bind(this), mergedOpts),
+			res = eventName != null ? this.updateRequest(url, eventName, req) : this.updateRequest(url, req);
 
 		const extraProviders = Object.isFunction(this.extraProviders) ?
-			this.extraProviders({opts: mergedOpts, globalOpts}) : this.extraProviders;
+			this.extraProviders({opts: mergedOpts, globalOpts}) :
+			this.extraProviders;
 
 		if (extraProviders) {
 			const
 				composition = <D & object>{},
-				tasks = <Then<RequestResponseObject>[]>[],
+				tasks = <Array<Then<RequestResponseObject>>>[],
 				cloneTasks = <Function[]>[];
 
 			for (let keys = Object.keys(extraProviders), i = 0; i < keys.length; i++) {
 				const
 					key = keys[i],
-					el = extraProviders[key] || {};
+					el = extraProviders[key] ?? {};
 
 				const
-					providerLink = el.provider || key,
-					alias = el.alias || key;
+					ProviderLink = el.provider ?? key,
+					alias = el.alias ?? key;
 
 				let
 					ProviderConstructor,
 					providerInstance;
 
-				if (Object.isString(providerLink)) {
-					ProviderConstructor = <Dictionary & typeof Provider>providers[providerLink];
+				if (Object.isString(ProviderLink)) {
+					ProviderConstructor = <CanUndef<Dictionary & typeof Provider>>providers[ProviderLink];
 
-					if (!ProviderConstructor) {
-						throw new Error(`Provider "${providerLink}" is not defined`);
+					if (ProviderConstructor == null) {
+						throw new Error(`Provider "${ProviderLink}" is not defined`);
 					}
 
 					providerInstance = new ProviderConstructor(el.providerOptions);
 
-				} else if (Object.isSimpleFunction(providerLink)) {
-					providerInstance = new providerLink(el.providerOptions);
+				} else if (Object.isSimpleFunction(ProviderLink)) {
+					providerInstance = new ProviderLink(el.providerOptions);
 
 				} else {
-					providerInstance = providerLink;
+					providerInstance = ProviderLink;
 				}
 
-				tasks.push(
-					providerInstance.get(el.query || query, el.request).then(({data}) => {
-						cloneTasks.push((composition) => Object.set(composition, alias, data?.valueOf()));
-						return Object.set(composition, alias, data);
-					})
-				);
+				tasks.push(providerInstance.get(el.query ?? query, el.request).then(({data}) => {
+					cloneTasks.push((composition) => Object.set(composition, alias, data?.valueOf()));
+					return Object.set(composition, alias, data);
+				}));
 			}
 
 			return res.then(
@@ -343,16 +341,20 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 					cloneTasks.push((composition) => Object.set(composition, alias, data?.valueOf()));
 					Object.set(composition, alias, data);
 
-					composition.valueOf = () => {
-						const
-							clone = {};
+					Object.defineProperty(composition, 'valueOf', {
+						writable: true,
+						configurable: true,
+						value: () => {
+							const
+								clone = {};
 
-						for (let i = 0; i < cloneTasks.length; i++) {
-							cloneTasks[i](clone);
+							for (let i = 0; i < cloneTasks.length; i++) {
+								cloneTasks[i](clone);
+							}
+
+							return clone;
 						}
-
-						return clone;
-					};
+					});
 
 					res.data = Object.freeze(composition);
 					return res;
@@ -376,15 +378,15 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 		const
 			url = this.resolveURL(this.basePeekURL),
 			eventName = this.name(),
-			method = this.method() || this.peekMethod;
+			method = this.method() ?? this.peekMethod;
 
-		const req = this.request(url, this.resolver, this.getRequestOptions('peek', {
+		const req = this.request(url, this.resolver.bind(this), this.getRequestOptions('peek', {
 			...opts,
-			[queryMethods[method] ? 'query' : 'body']: query,
+			[queryMethods[method] != null ? 'query' : 'body']: query,
 			method
 		}));
 
-		if (eventName) {
+		if (eventName != null) {
 			return this.updateRequest(url, eventName, req);
 		}
 
@@ -396,15 +398,15 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 		const
 			url = this.resolveURL(),
 			eventName = this.name(),
-			method = this.method() || 'POST';
+			method = this.method() ?? 'POST';
 
-		const req = this.request(url, this.resolver, this.getRequestOptions(eventName || 'post', {
+		const req = this.request(url, this.resolver.bind(this), this.getRequestOptions(eventName ?? 'post', {
 			...opts,
 			body,
 			method
 		}));
 
-		if (eventName) {
+		if (eventName != null) {
 			return this.updateRequest(url, eventName, req);
 		}
 
@@ -415,46 +417,52 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 	add<D = unknown>(body?: RequestBody, opts?: CreateRequestOptions<D>): RequestResponse<D> {
 		const
 			url = this.resolveURL(this.baseAddURL),
-			eventName = this.name() || 'add',
-			method = this.method() || this.addMethod;
+			eventName = this.name() ?? 'add',
+			method = this.method() ?? this.addMethod;
 
-		return this.updateRequest(url, eventName, this.request(url, this.resolver, this.getRequestOptions('add', {
+		const req = this.request(url, this.resolver.bind(this), this.getRequestOptions('add', {
 			...opts,
 			body,
 			method
-		})));
+		}));
+
+		return this.updateRequest(url, eventName, req);
 	}
 
 	/** @inheritDoc */
 	upd<D = unknown>(body?: RequestBody, opts?: CreateRequestOptions<D>): RequestResponse<D> {
 		const
 			url = this.resolveURL(this.baseUpdURL),
-			eventName = this.name() || 'upd',
-			method = this.method() || this.updMethod;
+			eventName = this.name() ?? 'upd',
+			method = this.method() ?? this.updMethod;
 
-		return this.updateRequest(url, eventName, this.request(url, this.resolver, this.getRequestOptions('upd', {
+		const req = this.request(url, this.resolver.bind(this), this.getRequestOptions('upd', {
 			...opts,
 			body,
 			method
-		})));
+		}));
+
+		return this.updateRequest(url, eventName, req);
 	}
 
 	/** @inheritDoc */
 	del<D = unknown>(body?: RequestBody, opts?: CreateRequestOptions<D>): RequestResponse<D> {
 		const
 			url = this.resolveURL(this.baseDelURL),
-			eventName = this.name() || 'del',
-			method = this.method() || this.delMethod;
+			eventName = this.name() ?? 'del',
+			method = this.method() ?? this.delMethod;
 
-		return this.updateRequest(url, eventName, this.request(url, this.resolver, this.getRequestOptions('del', {
+		const req = this.request(url, this.resolver.bind(this), this.getRequestOptions('del', {
 			...opts,
 			body,
 			method
-		})));
+		}));
+
+		return this.updateRequest(url, eventName, req);
 	}
 
 	/**
-	 * Returns full URL of a request by the specified URL chunks
+	 * Returns full request URL by the specified URL chunks
 	 *
 	 * @param [baseURL]
 	 * @param [advURL]
@@ -470,7 +478,9 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 		Object.defineProperty(this, key, {
 			configurable: true,
 			get: () => val,
-			set: (v) => v
+			set: () => {
+				// Loopback
+			}
 		});
 	}
 
@@ -517,15 +527,10 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 
 		return {
 			...params,
-
 			cacheId: this.cacheId,
 			middlewares: mappedMiddlewares,
-
-			// tslint:disable-next-line:no-string-literal
-			encoder: merge(encoders[method] || encoders['def'], params?.encoder),
-
-			// tslint:disable-next-line:no-string-literal
-			decoder: merge(decoders[method] || decoders['def'], params?.decoder)
+			encoder: merge(encoders[method] ?? encoders['def'], params?.encoder),
+			decoder: merge(decoders[method] ?? decoders['def'], params?.decoder)
 		};
 	}
 
@@ -552,16 +557,25 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 
 	protected updateRequest<D = unknown>(
 		url: string,
-		event: string | RequestFunctionResponse<D>,
+		eventOrFactory: string | RequestFunctionResponse<D>,
 		factory?: RequestFunctionResponse<D>
 	): RequestResponse<D> {
-		if (Object.isFunction(event)) {
-			factory = event;
-			event = '';
+		let
+			event;
+
+		if (Object.isFunction(eventOrFactory)) {
+			factory = eventOrFactory;
+
+		} else {
+			event = eventOrFactory;
+		}
+
+		if (factory == null) {
+			throw new ReferenceError('A factory function to create the requests is not specified');
 		}
 
 		const
-			req = factory!();
+			req = factory();
 
 		req.then((res) => {
 			const
@@ -570,22 +584,22 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 			const
 				cache = requestCache[this.cacheId];
 
-			if (canCache && cacheKey && cache) {
+			if (canCache && cacheKey != null && cache) {
 				cache[cacheKey] = res;
 			}
 
-			if (event) {
-				this.emitter.emit(<string>event, () => res.data);
+			if (event != null) {
+				this.emitter.emit(event, () => res.data);
 			}
-		});
+		}).catch(stderr);
 
 		return req;
 	}
 
 	/**
-	 * Initializes socket behaviour after successful connecting
+	 * Initializes the socket behaviour after successful connecting
 	 */
-	protected async initSocketBehaviour(): Promise<void> {
-		return undefined;
+	protected initSocketBehaviour(): Promise<void> {
+		return Promise.resolve();
 	}
 }

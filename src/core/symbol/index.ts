@@ -32,11 +32,8 @@ export default function generator(fields?: string[]): StrictDictionary<symbol> {
 
 	return new Proxy(obj, {
 		get(target: typeof obj, prop: string): symbol {
-			const
-				val = target[prop];
-
-			if (val) {
-				return val;
+			if (prop in target) {
+				return target[prop];
 			}
 
 			return target[prop] = typeof prop === 'symbol' ? prop : Symbol(prop);

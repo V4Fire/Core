@@ -5,7 +5,7 @@
   "main": "src/core/index.js",
   "typings": "index.d.ts",
   "license": "MIT",
-  "version": "3.19.2",
+  "version": "3.20.0",
   "author": {
     "name": "kobezzza",
     "email": "kobezzza@gmail.com",
@@ -22,10 +22,13 @@
     "V4Fire"
   ],
   "scripts": {
-    "build": "npx gulp build:tsconfig",
-    "test": "npm run test:typescript && npm run test:eslint",
+    "dev": "npx gulp watch:server",
+    "build": "npx gulp build:server",
+    "test": "npm run build && npm run test:typescript && npm run test:eslint && npm run test:jasmine",
+    "test:linters": "npm run test:typescript && npm run test:eslint",
     "test:typescript": "node node_modules/@v4fire/typescript-check",
-    "test:eslint": "npx eslint ./config/**/*.js ./build/**/*.js ./src/**/*.js",
+    "test:eslint": "npx eslint ./config/**/*.js ./build/**/*.js ./src/**/*.js ./src/**/*.ts",
+    "test:jasmine": "nyc --reporter=lcov --reporter=text npx jasmine",
     "up": "npm i && npm up && npm audit fix"
   },
   "husky": {
@@ -35,14 +38,15 @@
   },
   "dependencies": {
     "@types/got": "^9.6.11",
-    "@types/jasmine": "^3.5.10",
-    "eventemitter2": "6.4.1",
+    "@types/jasmine": "^3.5.11",
+    "dom-storage": "^2.1.0",
+    "eventemitter2": "^6.4.3",
     "fs-extra-promise": "^1.0.1",
-    "got": "^11.1.4",
+    "got": "^11.3.0",
     "jasmine": "^3.5.0",
-    "node-localstorage": "^2.1.6",
     "set-value": "^3.0.2",
-    "tslib": "2.0.0"
+    "tslib": "2.0.0",
+    "w3c-xmlserializer": "^2.0.0"
   },
   "optionalDependencies": {
     "@pzlr/build-core": "^2.8.17",
@@ -50,7 +54,6 @@
     "@types/gulp": "^4.0.6",
     "@types/gulp-load-plugins": "0.0.32",
     "@types/through2": "^2.0.34",
-    "@v4fire/typescript-check": "^1.0.1",
     "collection.js": "^6.7.10",
     "config": "^1.31.0",
     "del": "^5.1.0",
@@ -59,14 +62,21 @@
     "gulp": "^4.0.2",
     "gulp-header": "^2.0.9",
     "gulp-load-plugins": "^2.0.2",
+    "gulp-monic": "^2.0.14",
     "gulp-plumber": "^1.2.1",
     "gulp-rename": "^2.0.0",
     "gulp-replace": "^1.0.0",
     "gulp-run": "^1.7.1",
+    "gulp-typescript": "^6.0.0-alpha.1",
+    "is-path-inside": "^3.0.2",
+    "jsdom": "^16.2.2",
+    "monic": "^2.6.0",
+    "node-blob": "0.0.2",
     "node-object-hash": "^2.0.0",
     "path-equal": "^1.1.1",
+    "requestidlecallback": "^0.3.0",
     "sugar": "^2.0.6",
-    "through2": "^3.0.1",
+    "through2": "^4.0.2",
     "tsconfig": "^7.0.0",
     "typedoc": "^0.15.8",
     "typescript": "3.9.3",
@@ -75,9 +85,16 @@
     "urlconcat": "0.0.12"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^3.5.0",
+    "@typescript-eslint/parser": "^3.5.0",
+    "@v4fire/typescript-check": "^1.1.0",
     "babel-eslint": "^10.1.0",
-    "eslint": "^6.8.0",
+    "eslint": "^7.3.1",
+    "eslint-plugin-enchanted-curly": "1.0.1",
+    "eslint-plugin-import": "2.20.2",
     "husky": "^4.2.5",
+    "nyc": "^15.1.0",
+    "prettier": "^2.0.5",
     "tslint": "^5.20.1"
   }
 }

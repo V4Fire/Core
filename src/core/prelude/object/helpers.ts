@@ -7,35 +7,35 @@
  */
 
 /**
- * Returns true if the specified value is a container data structure
+ * Returns true if the specified value is a container structure
  * @param value
  */
-export function isContainerStructure(value: unknown): boolean {
-	if (!value || typeof value !== 'object') {
+export function isContainer(value: unknown): boolean {
+	if (!Object.isTruly(value) || typeof value !== 'object') {
 		return false;
 	}
 
-	if (Object.isArray(value) || Object.isPlainObject(value) || Object.isMap(value) || Object.isSet(value)) {
+	if (Object.isArray(value) || Object.isDictionary(value) || Object.isMap(value) || Object.isSet(value)) {
 		return true;
 	}
 
-	return Object.isCustomObject((<object>value!).constructor);
+	return Object.isCustomObject((<any>value).constructor);
 }
 
 /**
- * Returns true if the specified value can be extended with own prototype
+ * Returns true if the specified value has a prototype that can be extended
  * @param value
  */
 export function canExtendProto(value: unknown): boolean {
-	if (!value || typeof value !== 'object') {
+	if (!Object.isTruly(value) || typeof value !== 'object') {
 		return false;
 	}
 
-	if (Object.isArray(value) || Object.isPlainObject(value)) {
+	if (Object.isArray(value) || Object.isDictionary(value)) {
 		return true;
 	}
 
-	return Object.isCustomObject((<object>value!).constructor);
+	return Object.isCustomObject((<any>value).constructor);
 }
 
 /**
@@ -43,7 +43,7 @@ export function canExtendProto(value: unknown): boolean {
  * @param value
  */
 export function getType(value: unknown): string {
-	if (!value || typeof value !== 'object') {
+	if (!Object.isTruly(value) || typeof value !== 'object') {
 		return '';
 	}
 
@@ -79,12 +79,12 @@ export function getType(value: unknown): string {
 }
 
 /**
- * Returns a new instance of the specified value or false
+ * Returns a new instance of the specified value or null
  * @param value
  */
-export function getSameAs<T>(value: T): T | boolean {
-	if (!value || typeof value !== 'object') {
-		return false;
+export function getSameAs<T>(value: T): Nullable<T> {
+	if (!Object.isTruly(value) || typeof value !== 'object') {
+		return null;
 	}
 
 	if (Object.isArray(value)) {
@@ -103,9 +103,9 @@ export function getSameAs<T>(value: T): T | boolean {
 		return <any>new Set();
 	}
 
-	if (Object.isCustomObject((<object><unknown>value!).constructor)) {
+	if (Object.isCustomObject((<any>value).constructor)) {
 		return <any>{};
 	}
 
-	return false;
+	return null;
 }

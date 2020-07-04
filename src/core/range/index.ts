@@ -12,6 +12,7 @@
  */
 
 import { RangeValue, RangeType } from 'core/range/interface';
+
 export * from 'core/range/interface';
 
 /**
@@ -183,7 +184,7 @@ export default class Range<T extends RangeValue> {
 			return;
 		}
 
-		if (!step) {
+		if (step == null || step === 0) {
 			step = this.type === 'date' ? (this.end - this.start) * 0.01 : 1;
 		}
 
@@ -243,7 +244,7 @@ export default class Range<T extends RangeValue> {
 			res.reverse();
 		}
 
-		return res.length === 2 ? res.join('..') : `${res[0]}..`;
+		return res.length === 2 ? res.join('..') : `${String(res[0])}..`;
 	}
 
 	/**
@@ -265,8 +266,9 @@ export default class Range<T extends RangeValue> {
 }
 
 function charCodeAt(str: string, pos: number): number {
+	// eslint-disable-next-line @typescript-eslint/unbound-method
 	const v = Object.isFunction(str.codePointAt) ? str.codePointAt(pos) : str.charCodeAt(pos);
-	return !v || isNaN(v) ? NaN : v;
+	return v == null || isNaN(v) ? NaN : v;
 }
 
 function fromCharCode(code: number): string {

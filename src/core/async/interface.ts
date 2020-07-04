@@ -354,12 +354,12 @@ export interface Task<CTX extends object = Async> {
 	 * [0] - onFulfilled
 	 * [1] - onRejected
 	 */
-	onComplete: BoundFn<CTX>[][];
+	onComplete: Array<Array<BoundFn<CTX>>>;
 
 	/**
 	 * List of clear handlers
 	 */
-	onClear: AsyncCb<CTX>[];
+	onClear: Array<AsyncCb<CTX>>;
 
 	/**
 	 * Unregisters the task
@@ -398,7 +398,7 @@ export type TaskCtx<CTX extends object = Async> = {
 } & AsyncOptions & ClearOptionsId<unknown>;
 
 export interface ClearFn<CTX extends object = Async> extends Function {
-	(id: any, ctx: CTX): any;
+	(id: any, ctx: TaskCtx<CTX>): any;
 }
 
 export interface BoundFn<CTX extends object = Async> extends Function {
@@ -564,6 +564,11 @@ export interface CancelablePromise<T = unknown> extends Promise<T> {
 }
 
 /**
+ * Extended type of a promise
+ */
+export type PromiseLikeP<T = unknown> = (() => PromiseLike<T>) | PromiseLike<T>;
+
+/**
  * Something that looks like an event emitter
  */
 export interface EventEmitterLike {
@@ -607,7 +612,7 @@ export interface Event<E extends EventEmitterLikeP = EventEmitterLikeP> {
 }
 
 export interface LocalCache {
-	labels: Record<Label, unknown>;
+	labels: Record<Label, any>;
 	links: Map<object, Task<any>>;
 }
 

@@ -6,10 +6,14 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { structureWrappers } from 'core/object/watch/wrap/const';
-import { WatchHandlersSet } from 'core/object/watch/interface';
+import { getOrCreateLabelValueByHandlers } from 'core/object/watch/engines/helpers';
 
-import { WrapOptions } from 'core/object/watch/wrap/interface';
+import { toProxyObject } from 'core/object/watch/const';
+import { structureWrappers } from 'core/object/watch/wrap/const';
+
+import { WatchHandlersSet } from 'core/object/watch/interface';
+import { WrapOptions, WrapResult } from 'core/object/watch/wrap/interface';
+
 export * from 'core/object/watch/wrap/interface';
 
 /**
@@ -46,8 +50,8 @@ export function bindMutationHooks<T extends object>(
 		opts = {};
 	}
 
-	const wrappedCb = (args) => {
-		if (!args) {
+	const wrappedCb = (args: Nullable<WrapResult>) => {
+		if (args == null) {
 			return;
 		}
 
@@ -72,7 +76,7 @@ export function bindMutationHooks<T extends object>(
 			key = keys[i],
 			el = structureWrappers[key];
 
-		if (!el.is(obj)) {
+		if (el == null || !el.is(obj)) {
 			continue;
 		}
 
@@ -82,7 +86,7 @@ export function bindMutationHooks<T extends object>(
 				method = el.methods[methodName],
 				original = obj[methodName];
 
-			if (!method) {
+			if (method == null) {
 				continue;
 			}
 
@@ -90,7 +94,7 @@ export function bindMutationHooks<T extends object>(
 				writable: true,
 				configurable: true,
 				value: (...args) => {
-					if (!handlers.size) {
+					if (handlers.size === 0) {
 						return original.apply(obj, args);
 					}
 
@@ -106,6 +110,11 @@ export function bindMutationHooks<T extends object>(
 							res = original.apply(obj, args);
 
 						wrappedCb(newArgs);
+
+						if (res === obj) {
+							return getOrCreateLabelValueByHandlers<object>(obj, toProxyObject, handlers);
+						}
+
 						return res;
 					}
 
@@ -113,7 +122,14 @@ export function bindMutationHooks<T extends object>(
 						return method.value(obj, wrapperOpts, ...args);
 					}
 
-					return original.apply(obj, args);
+					const
+						res = original.apply(obj, args);
+
+					if (res === obj) {
+						return getOrCreateLabelValueByHandlers<object>(obj, toProxyObject, handlers);
+					}
+
+					return res;
 				}
 			});
 		}

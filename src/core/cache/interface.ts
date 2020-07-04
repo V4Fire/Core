@@ -49,8 +49,8 @@ export default interface Cache<V = unknown, K = string> {
 	keys(): Iterator<K>;
 
 	/**
-	 * Clears the cache by the specified filter and returns a list of removed keys
+	 * Clears the cache by the specified filter and returns a map of removed keys
 	 * @param [filter] - filter for removing (if not specified, then all cache values will be removed)
 	 */
-	clear(filter?: ClearFilter<V, K>): Set<K>;
+	clear(filter?: ClearFilter<V, K>): Map<K, V>;
 }

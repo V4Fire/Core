@@ -6,13 +6,5 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import SyncPromise from 'core/prelude/structures/sync-promise';
+export * from 'core/prelude/structures/helpers';
 export { default as SyncPromise } from 'core/prelude/structures/sync-promise';
-
-export class Option<T = unknown> extends SyncPromise<T> implements Maybe<T> {
-	readonly type: Maybe['type'] = 'Maybe';
-}
-
-export class Result<T = unknown> extends SyncPromise<T> implements Either<T> {
-	readonly type: Either['type'] = 'Either';
-}

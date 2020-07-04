@@ -68,17 +68,20 @@ export interface WrappedDecoder<I = unknown, O = unknown> {
 export type Decoders = Iterable<Decoder>;
 export type WrappedDecoders = Iterable<WrappedDecoder>;
 
+export type CacheType = 'memory' | 'offline';
+
 export interface RequestResponseObject<D = unknown> {
 	data: Nullable<D>;
 	response: Response<D>;
 	ctx: Readonly<RequestContext<D>>;
+	cache?: CacheType;
 	dropCache(): void;
 }
 
 export type RequestResponse<D = unknown> = Then<RequestResponseObject<D>>;
 
 export interface RequestFunctionResponse<D = unknown, ARGS extends unknown[] = []> {
-	(...args: ARGS extends (infer V)[] ? V[] : unknown[]): RequestResponse<D>;
+	(...args: ARGS extends Array<infer V> ? V[] : unknown[]): RequestResponse<D>;
 }
 
 export interface RequestResolver<D = unknown, ARGS extends unknown[] = unknown[]> {
@@ -105,7 +108,7 @@ export type RequestQuery =
 	unknown[] |
 	string;
 
-// @ts-ignore
+// @ts-ignore (extend)
 export interface WrappedCreateRequestOptions<D = unknown> extends CreateRequestOptions<D> {
 	url: CanUndef<string>;
 	encoder?: WrappedEncoder | WrappedEncoders;

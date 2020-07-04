@@ -14,6 +14,7 @@
 import { EventEmitterLike } from 'core/async';
 import { CreateRequestOptions, RequestQuery, RequestMethod, RequestResponse, RequestBody } from 'core/request';
 import { ModelMethod } from 'core/data/interface';
+
 export * from 'core/data/interface/types';
 
 /**
@@ -39,7 +40,7 @@ export default interface Provider {
 	 * @deprecated
 	 * @see [[Provider.emitter]]
 	 */
-	readonly event: EventEmitterLike
+	readonly event: EventEmitterLike;
 
 	/**
 	 * Returns a custom logical name of any request.

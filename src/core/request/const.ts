@@ -25,10 +25,11 @@ import {
 
 } from 'core/request/interface';
 
-export let
-	storage: CanUndef<Promise<AsyncStorage>>;
+// eslint-disable-next-line import/no-mutable-exports
+export let storage: CanUndef<Promise<AsyncStorage>>;
 
 //#if runtime has core/kv-storage
+// eslint-disable-next-line prefer-const
 storage = import('core/kv-storage').then(({asyncLocal}) => asyncLocal);
 //#endif
 

@@ -23,7 +23,7 @@ export default class RequestContext<D = unknown> extends Super<D> {
 	 */
 	getRequestKey(url: string): string {
 		const p = this.params;
-		return [getRequestKey(url, this.params), p.cacheStrategy, p.cacheId || ''].join();
+		return [getRequestKey(url, this.params), p.cacheStrategy, p.cacheId ?? ''].join();
 	}
 
 	/**
@@ -40,20 +40,23 @@ export default class RequestContext<D = unknown> extends Super<D> {
 			api[key] = compute(api[key]);
 		}
 
-		if (api.url) {
+		if (api.url != null) {
 			return api.url;
 		}
 
 		const resolve = (name, def?) => {
 			const
-				val = api[name] != null ? api[name] : def || '';
+				val = String((api[name] != null ? api[name] : def) ?? '');
 
 			switch (name) {
 				case 'auth':
-					return val ? `${val}@` : '';
+					return val !== '' ? `${val}@` : '';
 
 				case 'port':
-					return val ? `:${val}` : '';
+					return val !== '' ? `:${val}` : '';
+
+				case 'protocol':
+					return val !== '' ? `${val.replace(/:\/+$/, '')}://` : '';
 
 				default:
 					return val;
@@ -68,9 +71,9 @@ export default class RequestContext<D = unknown> extends Super<D> {
 			for (let i = 0; i < list.length; i++) {
 				const
 					lvl = list[i],
-					domain = (lvl === 1 ? api.zone : api[`domain${lvl}`]) || def[lvl - 1];
+					domain = (lvl === 1 ? api.zone : api[`domain${lvl}`]) ?? def[lvl - 1];
 
-				if (domain) {
+				if (domain != null) {
 					url.push(domain);
 				}
 			}
@@ -78,18 +81,18 @@ export default class RequestContext<D = unknown> extends Super<D> {
 			return join !== false ? url.join('.') : url;
 		};
 
-		if (!apiURL) {
+		if (apiURL == null) {
 			const
-				nm = api.namespace || '';
+				nm = api.namespace ?? '';
 
-			if (!api.protocol) {
-				return nm[0] === '/' ? nm : `/${nm}`;
+			if (api.protocol == null) {
+				return nm.startsWith('/') ? nm : `/${nm}`;
 			}
 
 			return concatUrls(
 				resolve('protocol') +
 				resolve('auth') +
-				resolveDomains() +
+				resolveDomains().toString() +
 				resolve('port'),
 
 				nm
@@ -104,14 +107,14 @@ export default class RequestContext<D = unknown> extends Super<D> {
 			domains = domains?.split('.').reverse();
 			nm = resolve('namespace', nm);
 
-			if (!protocol) {
+			if (protocol == null) {
 				return concatUrls(...resolveDomains({slice: 2, join: false}), nm);
 			}
 
 			return concatUrls(
 				resolve('protocol', protocol) +
 				resolve('auth', auth) +
-				resolveDomains({def: domains}) +
+				resolveDomains({def: domains}).toString() +
 				resolve('port', port),
 
 				nm
@@ -132,21 +135,25 @@ export default class RequestContext<D = unknown> extends Super<D> {
 				p = this.params,
 				q = this.query;
 
-			const data = this.withoutBody ?
-				q : Object.isPlainObject(p.body) ? p.body : q;
+			let
+				data;
+
+			if (this.withoutBody) {
+				data = q;
+
+			} else {
+				data = Object.isPlainObject(p.body) ? p.body : q;
+			}
 
 			if (Object.isPlainObject(data)) {
-				if (p.headers) {
-					p.headers = normalizeHeaders(p.headers, data);
-				}
-
+				p.headers = normalizeHeaders(p.headers, data);
 				url = applyQueryForStr(url, data, queryTplRgxp);
 
-			} else if (p.headers) {
+			} else {
 				p.headers = normalizeHeaders(p.headers);
 			}
 
-			if (Object.size(q)) {
+			if (Object.size(q) > 0) {
 				url = `${url}?${toQueryString(q)}`;
 			}
 
@@ -176,7 +183,7 @@ export default class RequestContext<D = unknown> extends Super<D> {
 		const
 			key = this.cacheKey;
 
-		if (key) {
+		if (key != null) {
 			this.cache.remove(key);
 
 			if (this.params.offlineCache && storage) {

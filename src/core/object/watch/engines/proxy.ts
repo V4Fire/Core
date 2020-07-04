@@ -36,7 +36,7 @@ import {
 import {
 
 	WatchPath,
-	WatchHandler,
+	RawWatchHandler,
 	WatchHandlersSet,
 	WatchOptions,
 	InternalWatchOptions,
@@ -56,7 +56,7 @@ import {
 export function watch<T extends object>(
 	obj: T,
 	path: CanUndef<unknown[]>,
-	handler: Nullable<WatchHandler>,
+	handler: Nullable<RawWatchHandler>,
 	handlers: WatchHandlersSet,
 	opts?: WatchOptions
 ): Watcher<T>;
@@ -75,7 +75,7 @@ export function watch<T extends object>(
 export function watch<T extends object>(
 	obj: T,
 	path: CanUndef<unknown[]>,
-	handler: Nullable<WatchHandler>,
+	handler: Nullable<RawWatchHandler>,
 	handlers: WatchHandlersSet,
 	opts: CanUndef<InternalWatchOptions>,
 	root: object,
@@ -85,48 +85,47 @@ export function watch<T extends object>(
 export function watch<T extends object>(
 	obj: T,
 	path: CanUndef<unknown[]>,
-	handler: Nullable<WatchHandler>,
+	handler: Nullable<RawWatchHandler>,
 	handlers: WatchHandlersSet,
 	opts?: InternalWatchOptions,
 	root?: object,
 	top?: object
 ): Watcher<T> | T {
-	const unwrappedObj = unwrap(obj);
-	root = root || unwrappedObj;
+	opts = opts ?? {};
+
+	const
+		unwrappedObj = unwrap(obj),
+		resolvedRoot = root ?? unwrappedObj;
 
 	const returnProxy = (obj, proxy?) => {
-		if (proxy && handler && handlers && (!top || !handlers.has(handler))) {
+		if (proxy != null && handler != null && (!top || !handlers.has(handler))) {
 			handlers.add(handler);
 		}
 
 		if (top) {
-			return proxy || obj;
+			return proxy ?? obj;
 		}
 
 		return {
-			proxy: proxy || obj,
+			proxy: proxy ?? obj,
 
 			set: (path, value) => {
-				if (handlers) {
-					set(obj, path, value, handlers);
-				}
+				set(obj, path, value, handlers);
 			},
 
 			delete: (path) => {
-				if (handlers) {
-					unset(obj, path, handlers);
-				}
+				unset(obj, path, handlers);
 			},
 
 			unwatch: () => {
-				if (handler && handlers) {
+				if (handler != null) {
 					handlers.delete(handler);
 				}
 			}
 		};
 	};
 
-	if (!unwrappedObj) {
+	if (unwrappedObj == null || resolvedRoot == null) {
 		return returnProxy(obj);
 	}
 
@@ -138,11 +137,11 @@ export function watch<T extends object>(
 			{...opts}
 		);
 
-		if (opts?.deep) {
+		if (opts.deep) {
 			tmpOpts.deep = true;
 		}
 
-		if (opts?.withProto) {
+		if (opts.withProto) {
 			tmpOpts.withProto = true;
 		}
 
@@ -152,21 +151,21 @@ export function watch<T extends object>(
 	let
 		proxy = getOrCreateLabelValueByHandlers(unwrappedObj, toProxyObject, handlers);
 
-	if (proxy) {
+	if (proxy != null) {
 		return returnProxy(unwrappedObj, proxy);
 	}
 
-	if (!getProxyType(unwrappedObj)) {
+	if (getProxyType(unwrappedObj) == null) {
 		return returnProxy(unwrappedObj);
 	}
 
 	const
-		fromProto = Boolean(opts?.fromProto),
-		resolvedPath = path || [];
+		fromProto = Boolean(opts.fromProto),
+		resolvedPath = path ?? [];
 
 	if (!Object.isDictionary(unwrappedObj) && !Object.isArray(unwrappedObj)) {
 		const wrapOpts = {
-			root: root!,
+			root: resolvedRoot,
 			top,
 			path: resolvedPath,
 			originalPath: resolvedPath,
@@ -187,7 +186,7 @@ export function watch<T extends object>(
 					return target;
 
 				case toRootObject:
-					return root;
+					return resolvedRoot;
 
 				case toTopObject:
 					return top;
@@ -197,12 +196,15 @@ export function watch<T extends object>(
 
 				case watchPath:
 					return path;
+
+				default:
+					// Do nothing
 			}
 
 			const
 				val = target[key];
 
-			if (Object.isPrimitive(val) || root![muteLabel]) {
+			if (Object.isPrimitive(val) || resolvedRoot[muteLabel] === true) {
 				return val;
 			}
 
@@ -230,17 +232,19 @@ export function watch<T extends object>(
 				}
 
 				const watchOpts = Object.assign(Object.create(opts!), {fromProto: propFromProto});
-				return getProxyValue(val, key, path, handlers, root!, top, watchOpts);
+				return getProxyValue(val, key, path, handlers, resolvedRoot, top, watchOpts);
 			}
 
 			if (Object.isArray(target)) {
 				target[Symbol.isConcatSpreadable] = true;
 
+			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 			} else if (Object.isFunction(val) && !isCustomObject) {
 				return val.bind(target);
 			}
 
-			if (Object.isFunction(val) && (!isCustomObject && !Object.isArray(target))) {
+			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+			if (Object.isFunction(val) && !isCustomObject && !Object.isArray(target)) {
 				return val.bind(target);
 			}
 
@@ -249,7 +253,6 @@ export function watch<T extends object>(
 
 		set: (target, key, val, receiver) => {
 			if (
-				// tslint:disable-next-line:prefer-switch
 				key === toOriginalObject ||
 				key === toRootObject ||
 				key === toTopObject ||
@@ -264,7 +267,7 @@ export function watch<T extends object>(
 				isCustomObj = isArray || Object.isCustomObject(target),
 				set = () => Reflect.set(target, key, val, isCustomObj ? receiver : target);
 
-			if (Object.isSymbol(key) || root![muteLabel] || blackListStore.has(key)) {
+			if (Object.isSymbol(key) || resolvedRoot[muteLabel] === true || blackListStore.has(key)) {
 				return set();
 			}
 
@@ -276,7 +279,7 @@ export function watch<T extends object>(
 				oldVal = Reflect.get(target, key, isCustomObj ? receiver : target);
 
 			if (oldVal !== val && set()) {
-				if (!opts?.withProto && (fromProto || !isArray && !Object.hasOwnProperty(target, <string>key))) {
+				if (!opts!.withProto && (fromProto || !isArray && !Object.hasOwnProperty(target, <string>key))) {
 					return true;
 				}
 
@@ -286,7 +289,7 @@ export function watch<T extends object>(
 
 					el.value(val, oldVal, {
 						obj: unwrappedObj,
-						root: root!,
+						root: resolvedRoot,
 						top,
 						fromProto,
 						path
@@ -299,7 +302,7 @@ export function watch<T extends object>(
 
 		deleteProperty: (target, key) => {
 			if (Reflect.deleteProperty(target, key)) {
-				if (root![muteLabel]) {
+				if (resolvedRoot[muteLabel] === true) {
 					return true;
 				}
 
@@ -352,7 +355,7 @@ export function set(obj: object, path: WatchPath, value: unknown, handlers: Watc
 		refPath = normalizedPath.slice(0, -1);
 
 	const ref = Object.get(
-		getOrCreateLabelValueByHandlers(unwrappedObj, toProxyObject, handlers) || unwrappedObj,
+		getOrCreateLabelValueByHandlers(unwrappedObj, toProxyObject, handlers) ?? unwrappedObj,
 		refPath
 	);
 
@@ -371,6 +374,10 @@ export function set(obj: object, path: WatchPath, value: unknown, handlers: Watc
 			case 'map':
 				blackListStore?.delete(prop);
 				(<Map<unknown, unknown>>ref).set(prop, value);
+				break;
+
+			default:
+				throw new TypeError('Invalid data type');
 		}
 
 		return;
@@ -404,7 +411,7 @@ export function unset(obj: object, path: WatchPath, handlers: WatchHandlersSet):
 		refPath = normalizedPath.slice(0, -1);
 
 	const ref = Object.get(
-		getOrCreateLabelValueByHandlers(unwrappedObj, toProxyObject, handlers) || unwrappedObj,
+		getOrCreateLabelValueByHandlers(unwrappedObj, toProxyObject, handlers) ?? unwrappedObj,
 		refPath
 	);
 
@@ -424,6 +431,10 @@ export function unset(obj: object, path: WatchPath, handlers: WatchHandlersSet):
 			case 'set':
 				blackListStore?.delete(prop);
 				(<Map<unknown, unknown>>ref).delete(prop);
+				break;
+
+			default:
+				throw new TypeError('Invalid data type');
 		}
 
 		return;

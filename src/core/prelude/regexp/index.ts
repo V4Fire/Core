@@ -9,5 +9,5 @@
 import extend from 'core/prelude/extend';
 import { escapeRgxp } from 'core/prelude/regexp/const';
 
-/** @see RegExpConstructor.escape */
+/** @see [[RegExpConstructor.escape]] */
 extend(RegExp, 'escape', (value: unknown) => String(value).replace(escapeRgxp, '\\$1'));

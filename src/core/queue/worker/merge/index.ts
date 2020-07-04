@@ -11,8 +11,9 @@
  * @packageDocumentation
  */
 
-import WorkerQueue, { Tasks } from 'core/queue/worker/interface';
-import { QueueWorker, QueueOptions, Task, HashFn } from 'core/queue/worker/merge/interface';
+import WorkerQueue from 'core/queue/worker/interface';
+import { Task, Tasks, QueueWorker, QueueOptions, HashFn } from 'core/queue/worker/merge/interface';
+
 export * from 'core/queue/worker/merge/interface';
 
 /**
@@ -27,8 +28,8 @@ export default class MergeWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> 
 
 	/** @override */
 	get head(): CanUndef<T> {
-		if (!this.length) {
-			return;
+		if (this.length === 0) {
+			return undefined;
 		}
 
 		const obj = this.tasksMap[this.tasks[0]];
@@ -38,12 +39,12 @@ export default class MergeWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> 
 	/**
 	 * The map of registered tasks
 	 */
-	private tasksMap: Dictionary<Task<T, V>> = Object.createDict();
+	protected tasksMap: Dictionary<Task<T, V>> = Object.createDict();
 
 	/**
 	 * The task hash function
 	 */
-	private readonly hashFn: HashFn<T>;
+	protected readonly hashFn: HashFn<T>;
 
 	/**
 	 * @override
@@ -52,7 +53,7 @@ export default class MergeWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> 
 	 */
 	constructor(worker: QueueWorker<T, V>, opts: QueueOptions<T>) {
 		super(worker, opts);
-		this.hashFn = opts?.hashFn || Object.fastHash;
+		this.hashFn = opts.hashFn ?? Object.fastHash.bind(Object);
 	}
 
 	/** @override */
@@ -63,7 +64,7 @@ export default class MergeWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> 
 		let
 			taskObj = this.tasksMap[hash];
 
-		if (!taskObj) {
+		if (taskObj == null) {
 			let
 				resolve;
 
@@ -71,7 +72,8 @@ export default class MergeWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> 
 				resolve = r;
 			});
 
-			taskObj = this.tasksMap[hash] = {task, promise, resolve};
+			taskObj = {task, promise, resolve};
+			this.tasksMap[hash] = taskObj;
 			this.tasks.push(hash);
 		}
 
@@ -81,7 +83,7 @@ export default class MergeWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> 
 
 	/** @override */
 	pop(): CanUndef<T> {
-		if (!this.length) {
+		if (this.length === 0) {
 			return;
 		}
 
@@ -96,13 +98,15 @@ export default class MergeWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> 
 
 	/** @override */
 	clear(): void {
-		super.clear();
-		this.tasksMap = Object.createDict();
+		if (this.length > 0) {
+			super.clear();
+			this.tasksMap = Object.createDict();
+		}
 	}
 
 	/** @override */
 	protected perform(): void {
-		if (!this.length) {
+		if (this.length === 0) {
 			this.activeWorkers--;
 			return;
 		}
@@ -122,6 +126,7 @@ export default class MergeWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> 
 		}
 
 		const
+			// eslint-disable-next-line @typescript-eslint/unbound-method
 			{task, promise, resolve} = taskObj;
 
 		const cb = () => {
@@ -131,20 +136,5 @@ export default class MergeWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> 
 
 		promise.then(cb, cb);
 		this.resolveTask(task, resolve);
-	}
-
-	/**
-	 * Provides a task result to the specified promise resolve function
-	 *
-	 * @param task
-	 * @param resolve
-	 */
-	protected resolveTask(task: T, resolve: Function): void {
-		try {
-			resolve(this.worker(task));
-
-		} catch (error) {
-			resolve(Promise.reject(error));
-		}
 	}
 }

@@ -6,24 +6,23 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import * as fs from 'fs-extra-promise';
-import Storage from 'node-localstorage';
 import { Cache } from 'core/cache';
 
+import Storage from 'dom-storage';
+import * as fs from 'fs-extra-promise';
+
 const
-	LocalStorage = Storage.LocalStorage,
 	tmpDir = './tmp/local';
 
-// @ts-ignore
 if (!fs.existsSync(tmpDir)) {
 	fs.mkdirpSync(tmpDir);
 }
 
 const
-	localStorage = new LocalStorage(tmpDir),
+	localStorage = new Storage(`${tmpDir}/storage.json`, {strict: true, ws: ''}),
 	sessionStorage = new Cache();
 
-export let
+export const
 	syncLocalStorage = localStorage,
 	asyncLocalStorage = localStorage,
 	syncSessionStorage = sessionStorage,

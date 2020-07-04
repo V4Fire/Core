@@ -18,6 +18,7 @@ export type ResponseType = DataType | 'object';
 export type ResponseTypeValue =
 	string |
 	ArrayBuffer |
+	Buffer |
 	Document |
 	null |
 	undefined;

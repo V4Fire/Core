@@ -38,11 +38,14 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 	 */
 	static resolve(): SyncPromise<void>;
 	static resolve<T = unknown>(value?: Value<T>): SyncPromise<T> {
-		if (value instanceof SyncPromise) {
+		const
+			Constr = Object.isTruly(this) ? this : SyncPromise;
+
+		if (value instanceof Constr) {
 			return value;
 		}
 
-		return new SyncPromise((resolve, reject) => {
+		return new Constr((resolve, reject) => {
 			if (Object.isPromiseLike(value)) {
 				value.then(resolve, reject);
 
@@ -53,11 +56,12 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 	}
 
 	/**
-	 * Creates a new rejected promise for the specified reason
+	 * Creates a new rejected promise with the specified reason
 	 * @param [reason]
 	 */
 	static reject<T = never>(reason?: unknown): SyncPromise<T> {
-		return new SyncPromise((_, reject) => reject(reason));
+		const Constr = Object.isTruly(this) ? this : SyncPromise;
+		return new Constr((_, reject) => reject(reason));
 	}
 
 	/**
@@ -88,11 +92,11 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 
 	static all<T extends Iterable<Value>>(
 		values: T
-	): SyncPromise<(T extends Iterable<Value<infer V>> ? V : unknown)[]>;
+	): SyncPromise<Array<T extends Iterable<Value<infer V>> ? V : unknown>>;
 
 	static all<T extends Iterable<Value>>(
 		values: T
-	): SyncPromise<(T extends Iterable<Value<infer V>> ? V : unknown)[]> {
+	): SyncPromise<Array<T extends Iterable<Value<infer V>> ? V : unknown>> {
 		return new SyncPromise((resolve, reject) => {
 			const
 				promises = <SyncPromise[]>[],
@@ -102,7 +106,7 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 				promises.push(SyncPromise.resolve(el));
 			});
 
-			if (!promises.length) {
+			if (promises.length === 0) {
 				resolve(resolved);
 				return;
 			}
@@ -141,7 +145,7 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 				promises.push(SyncPromise.resolve(el));
 			});
 
-			if (!promises.length) {
+			if (promises.length === 0) {
 				resolve();
 				return;
 			}
@@ -257,8 +261,8 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 	): SyncPromise {
 		return new SyncPromise((resolve, reject) => {
 			const
-				resolveWrapper = (v) => this.call(onFulfill || resolve, [v], reject, resolve),
-				rejectWrapper = (v) => this.call(onReject || reject, [v], reject, resolve);
+				resolveWrapper = (v) => this.call(onFulfill ?? resolve, [v], reject, resolve),
+				rejectWrapper = (v) => this.call(onReject ?? reject, [v], reject, resolve);
 
 			if (this.isPending) {
 				this.resolveHandlers.push(resolveWrapper);
@@ -279,7 +283,7 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 	catch(onReject?: RejectHandler): SyncPromise {
 		return new SyncPromise((resolve, reject) => {
 			const
-				rejectWrapper = (v) => this.call(onReject || reject, [v], reject, resolve);
+				rejectWrapper = (v) => this.call(onReject ?? reject, [v], reject, resolve);
 
 			if (this.isPending) {
 				this.rejectHandlers.push(rejectWrapper);
@@ -332,8 +336,8 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 	): void {
 		const
 			loopback = () => undefined,
-			reject = onError || loopback,
-			resolve = onValue || loopback;
+			reject = onError ?? loopback,
+			resolve = onValue ?? loopback;
 
 		try {
 			const

@@ -35,16 +35,16 @@ export function getDataType(str: string): DataType {
 		type = str.toLowerCase().replace(normalizeMimeStrRgxp, '').trim(),
 		predefinedType = mimeTypes[type];
 
-	if (predefinedType) {
+	if (predefinedType != null) {
 		return predefinedType;
-	}
-
-	if (isTextType.test(type)) {
-		return 'text';
 	}
 
 	if (isXMLType.test(type)) {
 		return 'document';
+	}
+
+	if (isTextType.test(type)) {
+		return 'text';
 	}
 
 	return 'blob';

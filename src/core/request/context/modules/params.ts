@@ -89,14 +89,25 @@ export default class RequestContext<D = unknown> {
 	 * @param [params] - request parameters
 	 */
 	constructor(params?: NormalizedCreateRequestOptions<D>) {
-		const
-			p = this.params = merge({}, params);
+		const p = merge<NormalizedCreateRequestOptions<D>>({}, params);
+		this.params = p;
 
-		this.encoders = p.encoder ? Object.isFunction(p.encoder) ? [p.encoder] : p.encoder : [];
-		this.decoders = p.decoder ? Object.isFunction(p.decoder) ? [p.decoder] : p.decoder : [];
+		if (p.encoder == null) {
+			this.encoders = [];
+
+		} else {
+			this.encoders = Object.isFunction(p.encoder) ? [p.encoder] : p.encoder;
+		}
+
+		if (p.decoder == null) {
+			this.decoders = [];
+
+		} else {
+			this.decoders = Object.isFunction(p.decoder) ? [p.decoder] : p.decoder;
+		}
+
 		this.withoutBody = Boolean(methodsWithoutBody[p.method]);
-
-		this.cache = (Object.isString(p.cacheStrategy) ? cache[p.cacheStrategy] : p.cacheStrategy) || cache.never;
-		this.canCache = p.cacheMethods?.includes(p.method) || false;
+		this.cache = (Object.isString(p.cacheStrategy) ? cache[p.cacheStrategy] : p.cacheStrategy) ?? cache.never;
+		this.canCache = p.cacheMethods.includes(p.method) || false;
 	}
 }

@@ -9,6 +9,7 @@
 import extend from 'core/prelude/extend';
 import { AsyncStorageNamespace } from 'core/kv-storage';
 import { emitter } from 'core/prelude/env/const';
+
 export * from 'core/prelude/env/const';
 
 const
@@ -18,6 +19,7 @@ let
 	storage: CanUndef<Promise<AsyncStorageNamespace>>;
 
 //#if runtime has core/kv-storage
+// eslint-disable-next-line prefer-const
 storage = import('core/kv-storage').then(({asyncLocal}) => asyncLocal.namespace('[[ENV]]'));
 //#endif
 

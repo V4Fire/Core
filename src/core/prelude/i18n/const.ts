@@ -17,7 +17,7 @@ export const
 
 /**
  * @deprecated
- * @see emitter
+ * @see [[emitter]]
  */
 export const
 	event = emitter;

@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-//#if runtime has core/request/response
+//#if node_js
 import Response from 'core/request/response';
 //#endif
 
@@ -15,4 +15,5 @@ import { NormalizedCreateRequestOptions } from 'core/request/interface';
 export interface Details<D = unknown> extends Dictionary {
 	request?: NormalizedCreateRequestOptions<D>;
 	response?: Response<D>;
+	error?: object;
 }

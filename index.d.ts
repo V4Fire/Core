@@ -1,3 +1,5 @@
+/* eslint-disable max-lines */
+
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -10,8 +12,6 @@
  * [[include:core/prelude/README.md]]
  * @packageDocumentation
  */
-
-// tslint:disable:max-file-line-count unified-signatures
 
 declare namespace TB {
 	type Cast<X, Y> = X extends Y ? X : Y;
@@ -103,7 +103,7 @@ declare function Any(obj: unknown): any;
 declare function stderr(err: unknown): void;
 
 /**
- * Global i18n function (can be used as a string tag or a simple function)
+ * Global i18n function (can be used as a string tag or simple function)
  */
 declare function i18n(strings: unknown | string[], ...expr: unknown[]): string;
 
@@ -114,7 +114,7 @@ declare function i18n(strings: unknown | string[], ...expr: unknown[]): string;
 declare function t(strings: unknown | string[], ...expr: unknown[]): string;
 
 /**
- * Global i18n loopback (can be used as a string tag or a simple function)
+ * Global i18n loopback (can be used as a string tag or simple function)
  */
 declare function l(strings: unknown | string[], ...expr: unknown[]): string;
 
@@ -129,11 +129,14 @@ declare function cancelIdleCallback(id: number): void;
 declare function setImmediate(fn: AnyFunction): number;
 declare function clearImmediate(id: number): void;
 
-type Nullable<T> = T | null | undefined;
 type CanPromise<T> = T | Promise<T>;
-type CanUndef<T> = T | undefined;
-type CanVoid<T> = T | void;
 type CanArray<T> = T | T[];
+
+type CanUndef<T> = T | undefined;
+type Nullable<T> = T | null | undefined;
+
+// eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+type CanVoid<T> = T | void;
 
 interface AnyFunction<ARGS = any[], R = any> extends Function {
 	(...args: ARGS): R;
@@ -143,10 +146,21 @@ interface AnyOneArgFunction<ARG = any, R = any> extends Function {
 	(arg: ARG): R;
 }
 
-interface ClassConstructor<T = unknown> {new: T}
-interface StrictDictionary<T = unknown> {[key: string]: T}
-interface Dictionary<T> {[key: string]: CanUndef<T>}
-interface Dictionary<T extends unknown = unknown> {[key: string]: T}
+interface ClassConstructor<T = unknown> {
+	new: T;
+}
+
+interface StrictDictionary<T = unknown> {
+	[key: string]: T;
+}
+
+interface Dictionary<T> {
+	[key: string]: CanUndef<T>;
+}
+
+interface Dictionary<T extends unknown = unknown> {
+	[key: string]: T;
+}
 
 interface Maybe<T = unknown> extends Promise<T> {
 	readonly type: 'Maybe';
@@ -188,7 +202,7 @@ interface FastCloneOptions {
 	reviver?: JSONCb | false;
 
 	/**
-	 * If false the object freeze state won't be copy
+	 * If false the object freeze/seal state won't be copy
 	 * @default `true`
 	 */
 	freezable?: boolean;
@@ -232,7 +246,8 @@ interface ObjectMixinOptions<V = unknown, K = unknown, D = unknown> {
 	traits?: boolean | -1;
 
 	/**
-	 * If true, then the original value of an object property can be rewritten from another object with undefined value
+	 * If true, then the original value of an object property can be rewritten
+	 * from another object even with undefined value
 	 *
 	 * @default `false`
 	 * @example
@@ -247,19 +262,19 @@ interface ObjectMixinOptions<V = unknown, K = unknown, D = unknown> {
 	withUndef?: boolean;
 
 	/**
-	 * If true, then descriptors of object properties are copied too
+	 * If true, then an object property descriptor is copied too
 	 * @default `false`
 	 */
 	withDescriptor?: boolean;
 
 	/**
-	 * If true, then accessors (but not all descriptors) of object properties are copied too
+	 * If true, then property accessors (but not the whole property descriptor) are copied too
 	 * @default `false`
 	 */
 	withAccessors?: boolean;
 
 	/**
-	 * If true, then object properties are copied with their prototypes
+	 * If true, then object properties from a prototype are copied recursively
 	 * (works only with the "deep" mode)
 	 *
 	 * @default `false`
@@ -309,7 +324,7 @@ interface ObjectMixinOptions<V = unknown, K = unknown, D = unknown> {
 	withProto?: boolean;
 
 	/**
-	 * If true, then for merging two arrays will be used a concatenation strategy
+	 * If true, then to merge two arrays will be used a concatenation strategy
 	 * (works only with the "deep" mode)
 	 *
 	 * @default `false`
@@ -345,7 +360,7 @@ interface ObjectMixinOptions<V = unknown, K = unknown, D = unknown> {
 	concatFn?(oldValue: V, newValue: unknown[], key: K): unknown[];
 
 	/**
-	 * Function that filters values for deep extending
+	 * Function that filters values that support deep extending
 	 * (works only with the "deep" mode)
 	 *
 	 * @param target - target object
@@ -385,7 +400,7 @@ interface ObjectMixinOptions<V = unknown, K = unknown, D = unknown> {
 
 interface ObjectGetOptions {
 	/**
-	 * Character for declaring the path
+	 * Character to declare the path
 	 *
 	 * @example
 	 * ```js
@@ -397,7 +412,7 @@ interface ObjectGetOptions {
 
 interface ObjectSetOptions extends ObjectGetOptions {
 	/**
-	 * If true, then a new value will be concatenated with the old within an array
+	 * If true, then a new value will be concatenated with the old
 	 *
 	 * @example
 	 * ```js
@@ -423,7 +438,7 @@ interface ObjectForEachOptions {
 	withDescriptor?: boolean;
 
 	/**
-	 * Strategy for not own properties of an object:
+	 * Strategy for not own properties of the iterated object:
 	 *   1. if `false`, then the `hasOwnProperty` test is enabled and all not own properties will be skipped;
 	 *   1. if `true`, then the `hasOwnProperty` test is disabled;
 	 *   1. if `-1`, then the `hasOwnProperty` test is enabled and all own properties will be skipped.
@@ -497,9 +512,13 @@ type ObjectPropertyPath =
 	string |
 	unknown[];
 
+interface ObjectPropertyFilter<K = string, V = unknown> {
+	(key: K, el: V): any;
+}
+
 interface ObjectConstructor {
 	/**
-	 * Returns a value from an object by the specified path
+	 * Returns a value from the passed object by the specified path
 	 *
 	 * @param obj
 	 * @param path
@@ -508,7 +527,7 @@ interface ObjectConstructor {
 	get<T = unknown>(obj: unknown, path: ObjectPropertyPath, opts?: ObjectGetOptions): T;
 
 	/**
-	 * Returns a function that returns a value from an object, which the function takes, by the specified path
+	 * Returns a function that returns a value from the passed object, which the function takes, by the specified path
 	 *
 	 * @param path
 	 * @param [opts] - additional options
@@ -549,19 +568,21 @@ interface ObjectConstructor {
 	has(obj: object, opts?: ObjectGetOptions): (path: ObjectPropertyPath) => boolean;
 
 	/**
-	 * Returns a function that returns true if an object, which the function takes, has own property by the specified key
+	 * Returns a function that returns true if the passed object, which the function takes,
+	 * has own property by the specified key
+	 *
 	 * @param key
 	 */
 	hasOwnProperty(key: string): (obj: unknown) => boolean;
 
 	/**
-	 * Returns a function that returns true if the specified object has own property by a key the the function takes
+	 * Returns a function that returns true if the specified object has own property by a key that the function takes
 	 * @param obj
 	 */
 	hasOwnProperty(obj: unknown): (key: string) => boolean;
 
 	/**
-	 * Returns true if an object has an own property by the specified key
+	 * Returns true if the passed object has an own property by the specified key
 	 *
 	 * @param obj
 	 * @param key
@@ -569,7 +590,7 @@ interface ObjectConstructor {
 	hasOwnProperty(obj: unknown, key: string): boolean;
 
 	/**
-	 * Sets a value to an object by the specified path.
+	 * Sets a value to the passed object by the specified path.
 	 * The final function returns a value that was added.
 	 *
 	 * @param obj
@@ -577,7 +598,7 @@ interface ObjectConstructor {
 	 * @param value
 	 * @param [opts] - additional options
 	 */
-	set<T>(obj: unknown, path: ObjectPropertyPath, value: T, opts?: ObjectSetOptions): T;
+	set<T>(obj: unknown, path: ObjectPropertyPath, value: T, opts?: ObjectSetOptions): CaunUndef<T>;
 
 	/**
 	 * Returns a function that sets a value to an object, which the function takes, by the specified path.
@@ -587,7 +608,7 @@ interface ObjectConstructor {
 	 * @param [opts] - additional options
 	 * @param [value]
 	 */
-	set(path: ObjectPropertyPath, opts?: ObjectSetOptions, value?: unknown): <T>(obj: T, value?: unknown) => T;
+	set(path: ObjectPropertyPath, opts?: ObjectSetOptions, value?: unknown): <T>(obj: T, value?: unknown) => CaunUndef<T>;
 
 	/**
 	 * Returns a function that sets a value to the specified object by a path that the function takes.
@@ -597,11 +618,35 @@ interface ObjectConstructor {
 	 * @param [opts] - additional options
 	 * @param [value]
 	 */
-	set<T>(obj: T, opts?: ObjectSetOptions, value?: unknown): (path: ObjectPropertyPath, value?: unknown) => T;
+	set<T>(obj: T, opts?: ObjectSetOptions, value?: unknown): (path: ObjectPropertyPath, value?: unknown) => CaunUndef<T>;
 
 	/**
-	 * Returns length of the specified object
+	 * Returns size/length of the specified object
+	 *
 	 * @param obj
+	 *
+	 * @example
+	 * ```js
+	 * // 1
+	 * Object.size({a: 1});
+	 *
+	 * // 2
+	 * Object.size([1, 2]);
+	 *
+	 * // 2
+	 * Object.size(new Set([1, 2]));
+	 *
+	 * // 2
+	 * Object.size((a, b) => a + b));
+	 *
+	 * // 1
+	 * Object.size(1);
+	 *
+	 * // 0
+	 * Object.size(NaN);
+	 * Object.size(null);
+	 * Object.size(undefined);
+	 * ```
 	 */
 	size(obj: unknown): number;
 
@@ -795,7 +840,10 @@ interface ObjectConstructor {
 
 	/**
 	 * Compares two specified objects by using a naive but fast "JSON.stringify/parse" strategy and
-	 * returns true if their are equal
+	 * returns true if their are equal.
+	 *
+	 * Mind, that this method uses non-stable version JSON.stringify, i.e.,
+	 * it can work incorrectly with object like {a: 1, b: 2} and {b: 2, a: 1}.
 	 *
 	 * @param a
 	 * @param b
@@ -812,8 +860,6 @@ interface ObjectConstructor {
 
 	/**
 	 * Clones the specified object by using a naive but fast "JSON.stringify/parse" strategy and returns a new object.
-	 * Mind, that this method uses non-stable version JSON.stringify, i.e.,
-	 * it can work incorrectly with object like {a: 1, b: 2} and {b: 2, a: 1}.
 	 *
 	 * @param obj
 	 * @param [opts] - additional options
@@ -822,6 +868,7 @@ interface ObjectConstructor {
 
 	/**
 	 * Returns a string representation of the specified object by using a naive but fast "JSON.stringify/parse" strategy.
+	 *
 	 * Mind, that this method uses non-stable version JSON.stringify, i.e.,
 	 * it can work incorrectly with object like {a: 1, b: 2} and {b: 2, a: 1}.
 	 *
@@ -831,20 +878,20 @@ interface ObjectConstructor {
 
 	/**
 	 * Returns a curried version of Object.mixin for one argument
-	 * @param opts - if true, then properties will be copied recursively OR additional options for extending
+	 * @param opts - if true, then properties will be copied recursively, or additional options to extend
 	 */
 	mixin(opts: ObjectMixinOptions | boolean): <B, O1>(base: B, obj1: O1) => B & O1;
 
 	/**
 	 * Returns a curried version of Object.mixin for one argument
-	 * @param opts - if true, then properties will be copied recursively OR additional options for extending
+	 * @param opts - if true, then properties will be copied recursively, or additional options to extend
 	 */
 	mixin(opts: ObjectMixinOptions | boolean): <R = unknown>(...objects: unknown[]) => R;
 
 	/**
 	 * Returns a curried version of Object.mixin for two arguments
 	 *
-	 * @param opts - if true, then properties will be copied recursively OR additional options for extending
+	 * @param opts - if true, then properties will be copied recursively, or additional options to extend
 	 * @param base - base object
 	 */
 	mixin<B>(opts: ObjectMixinOptions | boolean, base: B): <O1>(obj1: O1) => B & O1;
@@ -852,7 +899,7 @@ interface ObjectConstructor {
 	/**
 	 * Returns a curried version of Object.mixin for two arguments
 	 *
-	 * @param opts - if true, then properties will be copied recursively OR additional options for extending
+	 * @param opts - if true, then properties will be copied recursively, or additional options to extend
 	 * @param base - base object
 	 */
 	mixin(opts: ObjectMixinOptions | boolean, base: unknown): <R = unknown>(...objects: unknown[]) => R;
@@ -861,7 +908,7 @@ interface ObjectConstructor {
 	 * Extends the specified object by another objects.
 	 * If the base value is not an object, a new object will be created with a type similar to the first extension object.
 	 *
-	 * @param opts - if true, then properties will be copied recursively OR additional options for extending
+	 * @param opts - if true, then properties will be copied recursively, or additional options to extend
 	 * @param base - base object
 	 * @param obj1 - object for extending
 	 */
@@ -871,7 +918,7 @@ interface ObjectConstructor {
 	 * Extends the specified object by another objects.
 	 * If the base value is not an object, a new object will be created with a type similar to the first extension object.
 	 *
-	 * @param opts - if true, then properties will be copied recursively OR additional options for extending
+	 * @param opts - if true, then properties will be copied recursively, or additional options to extend
 	 * @param base - base object
 	 * @param obj1 - object for extending
 	 * @param obj2 - object for extending
@@ -882,7 +929,7 @@ interface ObjectConstructor {
 	 * Extends the specified object by another objects.
 	 * If the base value is not an object, a new object will be created with a type similar to the first extension object.
 	 *
-	 * @param opts - if true, then properties will be copied recursively OR additional options for extending
+	 * @param opts - if true, then properties will be copied recursively, or additional options to extend
 	 * @param base - base object
 	 * @param obj1 - object for extending
 	 * @param obj2 - object for extending
@@ -894,7 +941,7 @@ interface ObjectConstructor {
 	 * Extends the specified object by another objects.
 	 * If the base value is not an object, a new object will be created with a type similar to the first extension object.
 	 *
-	 * @param opts - if true, then properties will be copied recursively OR additional options for extending
+	 * @param opts - if true, then properties will be copied recursively, or additional options to extend
 	 * @param base - base object
 	 * @param objects - objects for extending
 	 */
@@ -908,7 +955,7 @@ interface ObjectConstructor {
 
 	/**
 	 * Parses the specified value as a JSON/JS object and returns the result of parsing.
-	 * If the value isn't a string or can't be parsed, the function returns an original value.
+	 * If the value isn't a string or can't be parsed, the function returns the original value.
 	 *
 	 * @param value
 	 * @param [reviver] - reviver function for JSON.parse
@@ -947,7 +994,7 @@ interface ObjectConstructor {
 	convertEnumToDict<D extends object>(obj: D): {[K in keyof D]: K};
 
 	/**
-	 * Creates an object which has the similar structure to a TS enum object and returns it
+	 * Creates an object which has the similar structure to the TS enum and returns it
 	 *
 	 * @param obj - base object: it can be a dictionary or an array
 	 * @example
@@ -986,7 +1033,7 @@ interface ObjectConstructor {
 	 * Returns a curried version of Object.select
 	 * @param condition - regular expression to filter
 	 */
-	select(condition: RegExp): <D extends object>(obj: D) => {[K in keyof D]?: D[K]};
+	select(condition: RegExp | ObjectPropertyFilter): <D extends object>(obj: D) => {[K in keyof D]?: D[K]};
 
 	/**
 	 * Returns a curried version of Object.select
@@ -1055,15 +1102,17 @@ interface ObjectConstructor {
 	select<C extends object>(condition: C): <D extends object>(obj: D) => Pick<D, Extract<keyof D, keyof C>>;
 
 	/**
-	 * Returns a new object based on the specified, but only with fields that match to the specified condition
+	 * Returns a new object based on the specified, but only with fields that match to the specified condition.
+	 * Mind that all passed objects are interpreted as dictionaries, i.e., you can't pass Map or Set structures.
 	 *
 	 * @param obj
 	 * @param condition - regular expression to filter
 	 */
-	select<D extends object>(obj: D, condition: RegExp): {[K in keyof D]?: D[K]};
+	select<D extends object>(obj: D, condition: RegExp | ObjectPropertyFilter): {[K in keyof D]?: D[K]};
 
 	/**
-	 * Returns a new object based on the specified, but only with fields that match to the specified condition
+	 * Returns a new object based on the specified, but only with fields that match to the specified condition.
+	 * Mind that all passed objects are interpreted as dictionaries, i.e., you can't pass Map or Set structures.
 	 *
 	 * @param obj
 	 * @param condition - whitelist of keys to filter
@@ -1071,7 +1120,8 @@ interface ObjectConstructor {
 	select<D extends object>(obj: D, condition: []): D;
 
 	/**
-	 * Returns a new object based on the specified, but only with fields that match to the specified condition
+	 * Returns a new object based on the specified, but only with fields that match to the specified condition.
+	 * Mind that all passed objects are interpreted as dictionaries, i.e., you can't pass Map or Set structures.
 	 *
 	 * @param obj
 	 * @param condition - whitelist of keys to filter
@@ -1079,7 +1129,8 @@ interface ObjectConstructor {
 	select<D extends object, C extends string>(obj: D, condition: C | [C]): Pick<D, Extract<keyof D, C>>;
 
 	/**
-	 * Returns a new object based on the specified, but only with fields that match to the specified condition
+	 * Returns a new object based on the specified, but only with fields that match to the specified condition.
+	 * Mind that all passed objects are interpreted as dictionaries, i.e., you can't pass Map or Set structures.
 	 *
 	 * @param obj
 	 * @param condition - whitelist of keys to filter
@@ -1091,7 +1142,8 @@ interface ObjectConstructor {
 	>(obj: D, condition: [C1, C2]): Pick<D, Extract<keyof D, C1 | C2>>;
 
 	/**
-	 * Returns a new object based on the specified, but only with fields that match to the specified condition
+	 * Returns a new object based on the specified, but only with fields that match to the specified condition.
+	 * Mind that all passed objects are interpreted as dictionaries, i.e., you can't pass Map or Set structures.
 	 *
 	 * @param obj
 	 * @param condition - whitelist of keys to filter
@@ -1104,7 +1156,8 @@ interface ObjectConstructor {
 	>(obj: D, condition: [C1, C2, C3]): Pick<D, Extract<keyof D, C1 | C2 | C3>>;
 
 	/**
-	 * Returns a new object based on the specified, but only with fields that match to the specified condition
+	 * Returns a new object based on the specified, but only with fields that match to the specified condition.
+	 * Mind that all passed objects are interpreted as dictionaries, i.e., you can't pass Map or Set structures.
 	 *
 	 * @param obj
 	 * @param condition - whitelist of keys to filter
@@ -1118,7 +1171,8 @@ interface ObjectConstructor {
 	>(obj: D, condition: [C1, C2, C3, C4]): Pick<D, Extract<keyof D, C1 | C2 | C3 | C4>>;
 
 	/**
-	 * Returns a new object based on the specified, but only with fields that match to the specified condition
+	 * Returns a new object based on the specified, but only with fields that match to the specified condition.
+	 * Mind that all passed objects are interpreted as dictionaries, i.e., you can't pass Map or Set structures.
 	 *
 	 * @param obj
 	 * @param condition - whitelist of keys to filter
@@ -1133,7 +1187,8 @@ interface ObjectConstructor {
 	>(obj: D, condition: [C1, C2, C3, C4, C5]): Pick<D, Extract<keyof D, C1 | C2 | C3 | C4 | C5>>;
 
 	/**
-	 * Returns a new object based on the specified, but only with fields that match to the specified condition
+	 * Returns a new object based on the specified, but only with fields that match to the specified condition.
+	 * Mind that all passed objects are interpreted as dictionaries, i.e., you can't pass Map or Set structures.
 	 *
 	 * @param obj
 	 * @param condition - whitelist of keys to filter
@@ -1141,7 +1196,8 @@ interface ObjectConstructor {
 	select<D extends object, C extends string>(obj: D, condition: Iterable<C>): {[K in keyof D]?: D[K]};
 
 	/**
-	 * Returns a new object based on the specified, but only with fields that match to the specified condition
+	 * Returns a new object based on the specified, but only with fields that match to the specified condition.
+	 * Mind that all passed objects are interpreted as dictionaries, i.e., you can't pass Map or Set structures.
 	 *
 	 * @param obj
 	 * @param condition - map of keys to filter
@@ -1152,7 +1208,7 @@ interface ObjectConstructor {
 	 * Returns a curried version of Object.reject
 	 * @param condition - regular expression to filter
 	 */
-	reject(condition: RegExp): <D extends object>(obj: D) => {[K in keyof D]?: D[K]};
+	reject(condition: RegExp | ObjectPropertyFilter): <D extends object>(obj: D) => {[K in keyof D]?: D[K]};
 
 	/**
 	 * Returns a curried version of Object.reject
@@ -1221,15 +1277,17 @@ interface ObjectConstructor {
 	reject<C extends object>(condition: C): <D extends object>(obj: D) => Omit<D, keyof C>;
 
 	/**
-	 * Returns a new object based on the specified, but without fields that match to the specified condition
+	 * Returns a new object based on the specified, but without fields that match to the specified condition.
+	 * Mind that all passed objects are interpreted as dictionaries, i.e., you can't pass Map or Set structures.
 	 *
 	 * @param obj
 	 * @param condition - regular expression to filter
 	 */
-	reject<D extends object>(obj: D, condition: RegExp): {[K in keyof D]?: D[K]};
+	reject<D extends object>(obj: D, condition: RegExp | ObjectPropertyFilter): {[K in keyof D]?: D[K]};
 
 	/**
-	 * Returns a new object based on the specified, but without fields that match to the specified condition
+	 * Returns a new object based on the specified, but without fields that match to the specified condition.
+	 * Mind that all passed objects are interpreted as dictionaries, i.e., you can't pass Map or Set structures.
 	 *
 	 * @param obj
 	 * @param condition - whitelist of keys to filter
@@ -1237,7 +1295,8 @@ interface ObjectConstructor {
 	reject<D extends object>(obj: D, condition: []): D;
 
 	/**
-	 * Returns a new object based on the specified, but without fields that match to the specified condition
+	 * Returns a new object based on the specified, but without fields that match to the specified condition.
+	 * Mind that all passed objects are interpreted as dictionaries, i.e., you can't pass Map or Set structures.
 	 *
 	 * @param obj
 	 * @param condition - whitelist of keys to filter
@@ -1245,7 +1304,8 @@ interface ObjectConstructor {
 	reject<D extends object, C extends string>(obj: D, condition: C | [C]): Omit<D, C>;
 
 	/**
-	 * Returns a new object based on the specified, but without fields that match to the specified condition
+	 * Returns a new object based on the specified, but without fields that match to the specified condition.
+	 * Mind that all passed objects are interpreted as dictionaries, i.e., you can't pass Map or Set structures.
 	 *
 	 * @param obj
 	 * @param condition - whitelist of keys to filter
@@ -1257,7 +1317,8 @@ interface ObjectConstructor {
 	>(obj: D, condition: [C1, C2]): Omit<D, C1 | C2>;
 
 	/**
-	 * Returns a new object based on the specified, but without fields that match to the specified condition
+	 * Returns a new object based on the specified, but without fields that match to the specified condition.
+	 * Mind that all passed objects are interpreted as dictionaries, i.e., you can't pass Map or Set structures.
 	 *
 	 * @param obj
 	 * @param condition - whitelist of keys to filter
@@ -1270,7 +1331,8 @@ interface ObjectConstructor {
 	>(obj: D, condition: [C1, C2, C3]): Omit<D, C1 | C2 | C3>;
 
 	/**
-	 * Returns a new object based on the specified, but without fields that match to the specified condition
+	 * Returns a new object based on the specified, but without fields that match to the specified condition.
+	 * Mind that all passed objects are interpreted as dictionaries, i.e., you can't pass Map or Set structures.
 	 *
 	 * @param obj
 	 * @param condition - whitelist of keys to filter
@@ -1284,7 +1346,8 @@ interface ObjectConstructor {
 	>(obj: D, condition: [C1, C2, C3, C4]): Omit<D, C1 | C2 | C3 | C4>;
 
 	/**
-	 * Returns a new object based on the specified, but without fields that match to the specified condition
+	 * Returns a new object based on the specified, but without fields that match to the specified condition.
+	 * Mind that all passed objects are interpreted as dictionaries, i.e., you can't pass Map or Set structures.
 	 *
 	 * @param obj
 	 * @param condition - whitelist of keys to filter
@@ -1299,7 +1362,8 @@ interface ObjectConstructor {
 	>(obj: D, condition: [C1, C2, C3, C4, C5]): Omit<D, C1 | C2 | C3 | C4 | C5>;
 
 	/**
-	 * Returns a new object based on the specified, but without fields that match to the specified condition
+	 * Returns a new object based on the specified, but without fields that match to the specified condition.
+	 * Mind that all passed objects are interpreted as dictionaries, i.e., you can't pass Map or Set structures.
 	 *
 	 * @param obj
 	 * @param condition - whitelist of keys to filter
@@ -1307,7 +1371,8 @@ interface ObjectConstructor {
 	reject<D extends object, C extends string>(obj: D, condition: Iterable<C>): {[K in keyof D]?: D[K]};
 
 	/**
-	 * Returns a new object based on the specified, but without fields that match to the specified condition
+	 * Returns a new object based on the specified, but without fields that match to the specified condition.
+	 * Mind that all passed objects are interpreted as dictionaries, i.e., you can't pass Map or Set structures.
 	 *
 	 * @param obj
 	 * @param condition - map of keys to filter
@@ -1428,6 +1493,12 @@ interface ObjectConstructor {
 	Result<T = unknown>(value: T): Either<T>;
 
 	/**
+	 * Returns true if the specified value can be interpreted as true
+	 * @param value
+	 */
+	isTruly(value: unknown): boolean;
+
+	/**
 	 * Returns true if the specified value is a plain object
 	 * @param obj
 	 */
@@ -1463,10 +1534,14 @@ interface ObjectConstructor {
 			Generator |
 			AnyFunction |
 
+			/* eslint-disable @typescript-eslint/ban-types */
+
 			Number |
 			String |
 			Symbol |
 			Boolean |
+
+			/* eslint-enable @typescript-eslint/ban-types */
 
 			Node |
 			Document |
@@ -1482,7 +1557,7 @@ interface ObjectConstructor {
 
 	/**
 	 * Returns true if the specified value is a dictionary.
-	 * This method is similar to isPlainObject, but it has another output TS type:
+	 * This method is similar to "isPlainObject", but it has another output TS type:
 	 * instead of inferring of an output type the method always cast the type to a dictionary.
 	 *
 	 * @param value
@@ -1520,7 +1595,7 @@ interface ObjectConstructor {
 	isPrimitive(value: unknown): boolean;
 
 	/**
-	 * Returns true if the specified value is a custom (not native) object or a function
+	 * Returns true if the specified value is a custom (not native) object or function
 	 * @param value
 	 */
 	isCustomObject(value: unknown): boolean;
@@ -1550,13 +1625,15 @@ interface ObjectConstructor {
 	isFunction(value: unknown): value is AnyFunction;
 
 	/**
-	 * Returns true if the specified value is a simple function
+	 * Returns true if the specified value is a simple function.
+	 * This method is similar to "isFunction", but it has another output TS type.
+	 *
 	 * @param value
 	 */
 	isSimpleFunction(value: unknown): value is Function;
 
 	/**
-	 * Returns true if the specified value is a generator
+	 * Returns true if the specified value is a generator function
 	 * @param value
 	 */
 	isGenerator(value: unknown): value is GeneratorFunction;
@@ -1658,7 +1735,7 @@ interface ArrayConstructor {
 	/**
 	 * Returns a new array containing elements from all specified iterable values with duplicates removed.
 	 * You can also pass non-iterable values and they will be added to the final array,
-	 * except values with null and undefined.
+	 * except values with null or undefined.
 	 *
 	 * @param arr
 	 * @param args
@@ -1672,20 +1749,20 @@ interface ArrayConstructor {
 	 * Returns a curried version of Array.concat
 	 * @param arr
 	 */
-	concat<T extends Nullable<unknown[]>>(arr: T): <A extends CanArray<unknown>>(...args: CanArray<A>[]) =>
+	concat<T extends Nullable<unknown[]>>(arr: T): <A extends CanArray<unknown>>(...args: Array<CanArray<A>>) =>
 		A extends Array<infer V> ? Array<IterableType<T> | V> : Array<IterableType<T> | NonNullable<A>>;
 
 	/**
 	 * Returns a new array containing elements from all specified arrays.
 	 * You can also pass non-iterable values and they will be added to the final array,
-	 * except values with null and undefined.
+	 * except values with null or undefined.
 	 *
 	 * @param arr
 	 * @param args
 	 */
 	concat<T extends Nullable<unknown[]>, A extends CanArray<unknown>>(
 		arr: T,
-		...args: CanArray<A>[]
+		...args: Array<CanArray<A>>
 	): A extends Array<infer V> ? Array<IterableType<T> | V> : Array<IterableType<T> | NonNullable<A>>;
 }
 
@@ -1693,7 +1770,7 @@ interface Array<T> {
 	/**
 	 * Returns a new array containing elements from all specified iterable values with duplicates removed.
 	 * You can also pass non-iterable values and they will be added to the final array,
-	 * except values with null and undefined.
+	 * except values with null or undefined.
 	 *
 	 * @param args
 	 */
@@ -2153,11 +2230,6 @@ interface Number {
 	em: string;
 
 	/**
-	 * Returns a string: the value + 'ex'
-	 */
-	ex: string;
-
-	/**
 	 * Returns a string: the value + 'rem'
 	 */
 	rem: string;
@@ -2325,8 +2397,8 @@ interface Number {
 	 *
 	 * @example
 	 * ```js
-	 *  100.50.format('$', 'en-us') // '$100.50'
-	 *  100.50.format('$:EUR;$d:code', 'en-us') // 'EUR 100.50'
+	 * 100.50.format('$', 'en-us') // '$100.50'
+	 * 100.50.format('$:EUR;$d:code', 'en-us') // 'EUR 100.50'
 	 * ```
 	 */
 	format(pattern?: string, locale?: CanArray<string>): string;
@@ -2341,6 +2413,8 @@ interface Number {
 
 	/**
 	 * Returns a string representation of the number with adding some extra formatting
+	 *
+	 * @deprecated
 	 * @param [length] - length of the decimal part
 	 */
 	format(length: number): string;
@@ -2496,12 +2570,8 @@ interface DateConstructor {
 	 *
 	 * @param margin - value of the maximum difference between two dates at which they are considered equal
 	 *   (in milliseconds)
-	 *
-	 * @param [left] - date of the beginning
-	 * @param [right] - date of the ending
 	 */
-	isBetween(margin: number, left?: DateCreateValue, right?: DateCreateValue):
-		(date: Date, left?: Date, right?: Date) => boolean;
+	isBetween(margin: number): (date: Date, left?: Date, right?: Date) => boolean;
 
 	/**
 	 * Returns a curried version of Date.isBetween
@@ -2626,7 +2696,7 @@ interface DateConstructor {
 	 *
 	 * @example
 	 * ```js
-	 * new Date('12/28/2019').long('en-us') // '12/28/2019, 12:00:00 A'
+	 * new Date('12/28/2019').long('en-us') // '12/28/2019, 12:00:00 AM'
 	 * ```
 	 */
 	long(date: Date, locale?: CanArray<string>): string;
@@ -2800,22 +2870,22 @@ interface DateConstructor {
 	rewind(date: Date, units: DateSetParams, reset?: boolean): Date;
 
 	/**
-	 * Returns a relative value of the date for the now date
+	 * Maps the specified date to the current (Date.now()) date and returns difference
 	 * @param date
 	 */
 	relative(date: DateCreateValue): DateRelative;
 
 	/**
 	 * Returns a curried version of Date.relativeTo
-	 * @param from - original date to compare
+	 * @param from
 	 */
 	relativeTo(from: DateCreateValue): (to: DateCreateValue) => DateRelative;
 
 	/**
-	 * Returns a relative value of the date for another date
+	 * Maps the one date to another and returns difference
 	 *
-	 * @param from - original date to compare
-	 * @param to - another date to compare
+	 * @param from
+	 * @param to
 	 */
 	relativeTo(from: DateCreateValue, to: DateCreateValue): DateRelative;
 }
@@ -3142,6 +3212,20 @@ interface Date {
 	daysInMonth(): number;
 }
 
+interface ThrottleOptions {
+	/**
+	 * Delay to wait in milliseconds
+	 * @default `250`
+	 */
+	delay?: number;
+
+	/**
+	 * If true, then all rest invokes that caught in the sleep span are ignored
+	 * @default `false`
+	 */
+	single?: boolean;
+}
+
 interface FunctionConstructor {
 	/**
 	 * Link to the special functional placeholder that can be used with curried functions
@@ -3181,18 +3265,42 @@ interface FunctionConstructor {
 	debounce<A extends unknown[]>(fn: AnyFunction<A>, delay?: number): AnyFunction<A, void>;
 
 	/**
-	 * Returns a new function that allows to invoke a function, which it takes, not more often than the specified delay
+	 * Returns a new function that allows to invoke a function, which it takes, not more often than the specified delay.
+	 * The first invoking of a function will run immediately, but all rest invokes will be merged to one and
+	 * executes after the specified delay.
+	 *
 	 * @param delay
 	 */
 	throttle(delay: number): <A extends unknown[]>(fn: AnyFunction<A>) => AnyFunction<A, void>;
 
 	/**
-	 * Returns a new function that allows to invoke the function not more often than the specified delay
+	 * Returns a new function that allows to invoke a function, which it takes, not more often than the specified delay.
+	 * The first invoking of a function will run immediately, but all rest invokes will be merged to one and
+	 * executes after the specified delay.
+	 *
+	 * @param opts - options for the operation
+	 */
+	throttle(opts: ThrottleOptions): <A extends unknown[]>(fn: AnyFunction<A>) => AnyFunction<A, void>;
+
+	/**
+	 * Returns a new function that allows to invoke the function not more often than the specified delay.
+	 * The first invoking of a function will run immediately, but all rest invokes will be merged to one and
+	 * executes after the specified delay.
 	 *
 	 * @param fn
 	 * @param [delay]
 	 */
 	throttle<A extends unknown[]>(fn: AnyFunction<A>, delay?: number): AnyFunction<A, void>;
+
+	/**
+	 * Returns a new function that allows to invoke the function not more often than the specified delay.
+	 * The first invoking of a function will run immediately, but all rest invokes will be merged to one and
+	 * executes after the specified delay.
+	 *
+	 * @param fn
+	 * @param opts - options for the operation
+	 */
+	throttle<A extends unknown[]>(fn: AnyFunction<A>, opts: ThrottleOptions): AnyFunction<A, void>;
 
 	/**
 	 * Returns a curried equivalent of the provided function.
@@ -3310,10 +3418,22 @@ interface Function {
 	debounce<T extends AnyFunction>(this: T, delay?: number): AnyFunction<Parameters<T>, void>;
 
 	/**
-	 * Returns a new function that allows to invoke the target function not more often than the specified delay
+	 * Returns a new function that allows to invoke the target function not more often than the specified delay.
+	 * The first invoking of a function will run immediately, but all rest invokes will be merged to one and
+	 * executes after the specified delay.
+	 *
 	 * @param [delay]
 	 */
 	throttle<T extends AnyFunction>(this: T, delay?: number): AnyFunction<Parameters<T>, void>;
+
+	/**
+	 * Returns a new function that allows to invoke the target function not more often than the specified delay.
+	 * The first invoking of a function will run immediately, but all rest invokes will be merged to one and
+	 * executes after the specified delay.
+	 *
+	 * @param opts - options for the operation
+	 */
+	throttle<T extends AnyFunction>(this: T, opts: ThrottleOptions): AnyFunction<Parameters<T>, void>;
 
 	/**
 	 * Returns a new function based on the target that wraps the returning value into the Either structure.

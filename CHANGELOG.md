@@ -11,6 +11,32 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.20.0 ()
+
+#### :boom: Breaking Change
+
+* Changed the returning value of `clear` from `Set` to `Map` `core/kv-storage`
+* New API and logic `core/queue/merge`
+* Removed `core/prelude/number/converters/ex`
+
+#### :rocket: New Feature
+
+* Migration to from TSLint to ESlint
+* Added tasks to build core as a standalone library
+* Added the code coverage tool
+* Added more tests
+* Added node.js support for all modules
+* Added `SimpleWorkerQueue`
+
+#### :bug: Bug Fix
+
+* Fixed bugs
+
+#### :house: Internal
+
+* Improved doc
+* Refactoring
+
 ## v3.19.2 (2020-06-19)
 
 #### :bug: Bug Fix

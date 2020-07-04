@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars-experimental */
+
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -12,6 +14,7 @@
  */
 
 import Cache, { ClearFilter } from 'core/cache/interface';
+
 export * from 'core/cache/interface';
 
 /**
@@ -49,7 +52,7 @@ export default class NeverCache<V = any, K = any> implements Cache<V, K> {
 	}
 
 	/** @see [[Cache.clear]] */
-	clear(filter?: ClearFilter<V, K>): Set<K> {
-		return new Set();
+	clear(filter?: ClearFilter<V, K>): Map<K, V> {
+		return new Map();
 	}
 }

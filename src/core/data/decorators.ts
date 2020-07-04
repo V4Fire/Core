@@ -39,10 +39,13 @@ export function provider(namespace: string): (target: Function) => void;
  * ```
  */
 export function provider(provider: Function): void;
-export function provider(nmsOrFn: Function | string): Function | void {
+export function provider(nmsOrFn: Function | string): CanVoid<Function> {
 	if (Object.isString(nmsOrFn)) {
 		return (target) => {
-			const nms = target[namespace] = `${nmsOrFn}.${target.name}`;
+			const
+				nms = `${nmsOrFn}.${target.name}`;
+
+			target[namespace] = nms;
 			providers[nms] = target;
 		};
 	}

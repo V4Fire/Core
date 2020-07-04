@@ -101,20 +101,32 @@ export default class Response<
 	constructor(body?: ResponseTypeValue, opts?: ResponseOptions) {
 		const
 			p = Object.mixin(false, {}, defaultResponseOpts, opts),
-			ok = this.okStatuses = p.okStatuses;
+			ok = p.okStatuses;
 
 		this.parent = p.parent;
 		this.important = p.important;
 
 		this.status = p.status;
-		this.ok = ok instanceof Range ? ok.contains(this.status) : Array.concat([], <number>ok).includes(this.status);
+		this.okStatuses = ok;
+		this.ok = ok instanceof Range ?
+			ok.contains(this.status) :
+			Array.concat([], <number>ok).includes(this.status);
+
 		this.headers = this.parseHeaders(p.headers);
 
 		const
 			contentType = this.getHeader('content-type');
 
-		this.sourceResponseType = this.responseType = contentType ? getDataType(contentType) : p.responseType;
-		this.decoders = p.decoder ? Object.isFunction(p.decoder) ? [p.decoder] : p.decoder : [];
+		this.responseType = contentType != null ? getDataType(contentType) : p.responseType;
+		this.sourceResponseType = this.responseType;
+
+		if (p.decoder == null) {
+			this.decoders = [];
+
+		} else {
+			this.decoders = Object.isFunction(p.decoder) ? [p.decoder] : p.decoder;
+		}
+
 		this.body = body;
 	}
 
@@ -189,11 +201,22 @@ export default class Response<
 		const
 			{body} = this;
 
+		//#if node_js
+		if (Object.isString(body)) {
+			// eslint-disable-next-line @typescript-eslint/no-var-requires
+			const {JSDOM} = require('jsdom');
+			return Then.resolve<Document | null>(new JSDOM(body), this.parent)
+				.then((res) => Object.get(res, 'window.document'));
+		}
+		//#endif
+
+		//#unless node_js
 		if (!(body instanceof Document)) {
 			throw new TypeError('Invalid data type');
 		}
+		//#endunless
 
-		return Then.resolve<Document | null>(body || null, this.parent);
+		return Then.resolve<Document | null>(<any>body, this.parent);
 	}
 
 	/**
@@ -205,7 +228,19 @@ export default class Response<
 		const
 			{body} = this;
 
-		if (body instanceof Document || body instanceof ArrayBuffer) {
+		//#unless node_js
+		if (body instanceof Document) {
+			throw new TypeError('Invalid data type');
+		}
+		//#endunless
+
+		//#if node_js
+		if (body instanceof Buffer) {
+			throw new TypeError('Invalid data type');
+		}
+		//#endif
+
+		if (body instanceof ArrayBuffer) {
 			throw new TypeError('Invalid data type');
 		}
 
@@ -218,7 +253,10 @@ export default class Response<
 		}
 
 		return Then.resolveAndCall<_>(
-			(() => Object.size(this.decoders) && !Object.isFrozen(body) ? Object.fastClone(body) : body),
+			() => Object.size(this.decoders) > 0 && !Object.isFrozen(body) ?
+				Object.fastClone(body) :
+				<any>body,
+
 			this.parent
 		);
 	}
@@ -232,11 +270,19 @@ export default class Response<
 		const
 			{body} = this;
 
+		//#unless node_js
 		if (!(body instanceof ArrayBuffer)) {
 			throw new TypeError('Invalid data type');
 		}
+		//#endunless
 
-		if (!body || !body.byteLength) {
+		//#if node_js
+		if (!(body instanceof Buffer) && !(body instanceof ArrayBuffer)) {
+			throw new TypeError('Invalid data type');
+		}
+		//#endif
+
+		if (body.byteLength === 0) {
 			return Then.resolve<_>(null, this.parent);
 		}
 
@@ -252,15 +298,26 @@ export default class Response<
 		const
 			{body} = this;
 
+		//#unless node_js
 		if (body instanceof Document) {
 			throw new TypeError('Invalid data type');
 		}
+		//#endunless
 
-		if (!body || body instanceof Document) {
+		if (body == null) {
 			return Then.resolve<_>(null);
 		}
 
-		return Then.resolve<_>(new Blob([body], {type: this.getHeader('content-type')}), this.parent);
+		let
+			{Blob} = globalThis;
+
+		if (IS_NODE) {
+			//#if node_js
+			Blob = require('node-blob');
+			//#endif
+		}
+
+		return Then.resolve<_>(new Blob([<any>body], {type: this.getHeader('content-type')}), this.parent);
 	}
 
 	/**
@@ -273,11 +330,23 @@ export default class Response<
 		const
 			{body} = this;
 
-		if (!body || body instanceof ArrayBuffer && !body.byteLength) {
+		if (body == null || body instanceof ArrayBuffer && body.byteLength === 0) {
 			return Then.resolve<_>(null, this.parent);
 		}
 
-		if (Object.isString(body) || body instanceof Document) {
+		//#if node_js
+		if (body instanceof Buffer && body.byteLength === 0) {
+			throw new TypeError('Invalid data type');
+		}
+		//#endif
+
+		//#unless node_js
+		if (body instanceof Document) {
+			return Then.resolve<_>(String(body), this.parent);
+		}
+		//#endunless
+
+		if (Object.isString(body)) {
 			return Then.resolve<_>(String(body), this.parent);
 		}
 
@@ -291,7 +360,7 @@ export default class Response<
 		let
 			encoding = 'utf-8';
 
-		if (contentType) {
+		if (contentType != null) {
 			const
 				search = /charset=(\S+)/.exec(contentType);
 
@@ -302,13 +371,13 @@ export default class Response<
 
 		if (IS_NODE) {
 			//#if node_js
-			return Then.resolve<_>(Buffer.from(body).toString(encoding));
+			return Then.resolve<_>(Buffer.from(<any>body).toString(encoding));
 			//#endif
 		}
 
 		if (typeof TextDecoder !== 'undefined') {
 			const decoder = new TextDecoder(encoding, {fatal: true});
-			return Then.resolve<_>(decoder.decode(new DataView(body)), this.parent);
+			return Then.resolve<_>(decoder.decode(new DataView(<any>body)), this.parent);
 		}
 
 		return new Then((resolve, reject, onAbort) => {
@@ -317,11 +386,12 @@ export default class Response<
 
 			reader.onload = () => resolve(<string>reader.result);
 			reader.onerror = reject;
+			reader.onerror = reject;
 
 			this.blob().then((blob) => {
 				onAbort(() => reader.abort());
 				reader.readAsText(<Blob>blob, encoding);
-			});
+			}).catch(stderr);
 
 		}, this.parent);
 	}
@@ -330,7 +400,9 @@ export default class Response<
 	 * Returns a normalized object of HTTP headers from the specified string or object
 	 * @param headers
 	 */
-	protected parseHeaders(headers: string | Dictionary<string>): ResponseHeaders {
+	protected parseHeaders(
+		headers: CanUndef<string | Dictionary<CanArray<string>>>
+	): ResponseHeaders {
 		const
 			res = {};
 
@@ -339,7 +411,7 @@ export default class Response<
 				const
 					header = o[i];
 
-				if (!header) {
+				if (header === '') {
 					continue;
 				}
 
@@ -347,17 +419,18 @@ export default class Response<
 				res[normalizeHeaderName(name)] = value.trim();
 			}
 
-		} else if (headers) {
+		} else if (headers != null) {
 			for (let keys = Object.keys(headers), i = 0; i < keys.length; i++) {
 				const
 					name = keys[i],
 					value = headers[name];
 
-				if (!value || !name) {
+				if (value == null || name === '') {
 					continue;
 				}
 
-				res[normalizeHeaderName(name)] = value.trim();
+				res[normalizeHeaderName(name)] =
+					(Object.isArray(value) ? value.join(';') : value).trim();
 			}
 		}
 

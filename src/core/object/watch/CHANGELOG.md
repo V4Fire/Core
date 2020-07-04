@@ -9,7 +9,15 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
-_Note: Gaps between patch versions are faulty, broken or test releases._
+## v3.20.0 ()
+
+#### :rocket: New Feature
+
+* Added tests
+
+#### :bug: Bug Fix
+
+* Fixed bugs
 
 ## v3.16.0 (2020-05-21)
 

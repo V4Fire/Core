@@ -11,8 +11,8 @@
  * @packageDocumentation
  */
 
-import Queue, { CreateTasks, Tasks } from 'core/queue/interface';
-import { TaskComparator } from 'core/queue/order/interface';
+import Queue from 'core/queue/interface';
+import { Tasks, CreateTasks, TaskComparator } from 'core/queue/order/interface';
 
 export * from 'core/queue/interface';
 export * from 'core/queue/order/interface';
@@ -65,7 +65,7 @@ export default class OrderedQueue<T> extends Queue<T> {
 	push(task: T): number {
 		this.tasks[++this.last] = task;
 		this.fromBottom();
-		return this.last;
+		return this.length;
 	}
 
 	/** @inheritDoc */
@@ -114,7 +114,7 @@ export default class OrderedQueue<T> extends Queue<T> {
 			const
 				parentVal = this.tasks[parent];
 
-			if (this.comparator(val!, parentVal!) <= 0) {
+			if (this.comparator(val, parentVal) <= 0) {
 				break;
 			}
 
@@ -139,14 +139,20 @@ export default class OrderedQueue<T> extends Queue<T> {
 			val = this.tasks[pos];
 
 		while (child1 <= this.last) {
-			const child = child2 <= this.last ?
-				this.comparator(this.tasks[child1]!, this.tasks[child2]!) > 0 ?
-					child1 : child2 : child1;
+			let
+				child;
+
+			if (child2 <= this.last) {
+				child = this.comparator(this.tasks[child1]!, this.tasks[child2]!) > 0 ? child1 : child2;
+
+			} else {
+				child = child1;
+			}
 
 			const
 				childVal = this.tasks[child];
 
-			if (child == null || this.comparator(val!, childVal!) > 0) {
+			if (child == null || this.comparator(val, childVal) > 0) {
 				break;
 			}
 

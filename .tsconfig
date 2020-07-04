@@ -15,6 +15,9 @@
     "strictPropertyInitialization": true,
     "experimentalDecorators": true
   },
+  "typeAcquisition": {
+    "exclude": ["node"]
+  },
   "exclude": [
     "dist",
     "build",

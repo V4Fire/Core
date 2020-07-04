@@ -11,4 +11,5 @@ export const
 	nonPrimitiveTypes = {object: true, function: true};
 
 export const
+	// eslint-disable-next-line @typescript-eslint/unbound-method
 	{toString} = Object.prototype;

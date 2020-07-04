@@ -26,6 +26,17 @@ export default function extend(obj: Function | object, name: string, method: Fun
 		Object.assign(descriptor, method);
 	}
 
+	const
+		dictKey = Symbol.for('[[V4_EXTEND_API]]');
+
+	if (!(dictKey in obj)) {
+		Object.defineProperty(obj, dictKey, {
+			value: Object.create(null)
+		});
+	}
+
+	Object.defineProperty(obj[dictKey], name, descriptor);
+
 	//#if runtime has noGlobals
 
 	const key = Symbol.for(`[[V4_PROP_TRAP:${name}]]`);

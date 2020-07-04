@@ -13,6 +13,7 @@
 
 import sendAnalyticsEvent from 'core/analytics/engines';
 import { AnalyticEngine } from 'core/analytics/interface';
+
 export * from 'core/analytics/interface';
 
 /**
@@ -35,7 +36,7 @@ export function send(
 			key = keys[i],
 			el = details[key];
 
-		if (el != null && el !== '' && (typeof el === 'object' ? Object.size(el) : true)) {
+		if (el != null && el !== '' && (typeof el === 'object' ? Object.size(el) > 0 : true)) {
 			finalDetails[key] = el;
 		}
 	}

@@ -9,9 +9,17 @@
  */
 
 /**
- * The task to build .tsconfig file
+ * Registers a gulp task to generate tsconfig.json based on .tsconfig.
+ * The task brings a feature to extend one tsconfig.json from another from a different project.
+ * Also, this task generates URL-s for the "paths" options of the config.
+ * Be sure that you run this task before trying to compile TS files.
+ *
+ * @example
+ * ```bash
+ * npx gulp build:tsconfig
+ * ```
  */
-module.exports = function (gulp) {
+module.exports = function init(gulp) {
 	const
 		$ = require('gulp-load-plugins')({scope: ['optionalDependencies']});
 
@@ -32,7 +40,16 @@ module.exports = function (gulp) {
 			{src, extend} = require('config'),
 			{config: pzlr, resolve} = require('@pzlr/build-core');
 
-		return gulp.src(['./**/*.tsconfig', './**/.tsconfig', '!./node_modules/**'], {since: gulp.lastRun('build:tsconfig')})
+		const
+			h = include('build/helpers');
+
+		const files = [
+			'./**/*.tsconfig',
+			'./**/.tsconfig',
+			'!./node_modules/**'
+		];
+
+		return gulp.src(files, {since: gulp.lastRun('build:tsconfig')})
 			.pipe($.plumber())
 			.pipe(through((file, enc, cb) => {
 				const
@@ -65,7 +82,7 @@ module.exports = function (gulp) {
 
 				$C(config.compilerOptions.paths).forEach((list) => {
 					$C(list).forEach((url, i) => {
-						if (isNodeModule(url)) {
+						if (resolve.isNodeModule(url)) {
 							const
 								parts = url.split(':');
 
@@ -74,7 +91,7 @@ module.exports = function (gulp) {
 							}
 
 							list[i] = path.join(
-								path.dirname(find(path.join('node_modules', parts[0], 'package.json'))),
+								path.dirname(src.lib(parts[0], 'package.json')),
 								parts[1]
 							);
 						}
@@ -85,23 +102,33 @@ module.exports = function (gulp) {
 				file.contents = new Buffer(JSON.stringify(config, null, 2));
 				cb(null, file);
 
-				function isNodeModule(url) {
-					return /^[^.]/.test(url) && !path.isAbsolute(url);
-				}
-
 				function resolveExtends(config) {
 					if (config.extends) {
-						const parentSrc = isNodeModule(config.extends) ?
-							find(path.join('node_modules', config.extends)) : require.resolve(config.extends);
+						const
+							{name: projectName} = h.getProjectInfo();
 
-						if (!parentSrc) {
-							throw new ReferenceError(`Parent config for inheritance "${config.extends}" is not found`);
+						let
+							parentConfig = config.extends;
+
+						if (parentConfig.startsWith(projectName)) {
+							parentConfig = path.join(src.cwd(), parentConfig.replace(h.getProjectInfo().name, ''));
+
+						} else if (!resolve.isNodeModule(parentConfig)) {
+							parentConfig = path.join(src.cwd(), parentConfig);
+						}
+
+						parentConfig = resolve.isNodeModule(parentConfig) ?
+							find(src.lib(parentConfig)) :
+							require.resolve(parentConfig);
+
+						if (!parentConfig) {
+							throw new ReferenceError(`Parent config for inheritance "${parentConfig}" is not found`);
 						}
 
 						const
-							parent = resolveExtends(tsconfig.parse(fs.readFileSync(parentSrc, 'utf-8'), parentSrc));
+							parent = resolveExtends(tsconfig.parse(fs.readFileSync(parentConfig, 'utf-8'), parentConfig));
 
-						config = $C.extend(/** @type {?} */ {
+						config = $C.extend({
 							deep: true,
 							concatArray: true,
 							concatFn: (a, b) => b

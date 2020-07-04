@@ -12,6 +12,7 @@
  */
 
 import Cache, { ClearFilter } from 'core/cache/interface';
+
 export * from 'core/cache/interface';
 
 /**
@@ -57,17 +58,17 @@ export default class SimpleCache<V = unknown, K = string> implements Cache<V, K>
 	}
 
 	/** @see [[Cache.clear]] */
-	clear(filter?: ClearFilter<V, K>): Set<K> {
+	clear(filter?: ClearFilter<V, K>): Map<K, V> {
 		if (filter) {
 			const
-				removed = new Set<K>();
+				removed = new Map<K, V>();
 
 			for (let o = this.storage.entries(), i = o.next(); !i.done; i = o.next()) {
 				const
 					[key, el] = i.value;
 
-				if (filter(el, key)) {
-					removed.add(key);
+				if (Object.isTruly(filter(el, key))) {
+					removed.set(key, el);
 					this.storage.delete(key);
 				}
 			}
@@ -76,7 +77,7 @@ export default class SimpleCache<V = unknown, K = string> implements Cache<V, K>
 		}
 
 		const
-			removed = new Set(this.storage.keys());
+			removed = new Map(this.storage.entries());
 
 		this.storage.clear();
 		return removed;

@@ -12,12 +12,12 @@ import { toOriginalObject } from 'core/object/watch/const';
 import { WatchHandlersSet, InternalWatchOptions } from 'core/object/watch/interface';
 
 /**
- * Unwraps the specified value to watch and returns a raw object to watch
+ * Unwraps the specified value to watch and returns the raw object
  * @param value
  */
 export function unwrap(value: unknown): CanUndef<object> {
-	value = value && typeof value === 'object' && value![toOriginalObject] || value;
-	return value && typeof value === 'object' && !Object.isFrozen(value) ? value! : undefined;
+	value = value != null && typeof value === 'object' && value![toOriginalObject] || value;
+	return value != null && typeof value === 'object' && !Object.isFrozen(value) ? value! : undefined;
 }
 
 /**
@@ -68,16 +68,16 @@ export function getProxyValue(
 		return rawValue;
 	}
 
-	if (opts.fromProto && !opts.withProto) {
+	if (Object.isTruly(opts.fromProto) && !opts.withProto) {
 		return rawValue;
 	}
 
-	if (opts.deep && getProxyType(rawValue)) {
+	if (opts.deep && getProxyType(rawValue) != null) {
 		const
 			fullPath = Array.concat([], path ?? [], key),
 			obj = <object>rawValue;
 
-		return (opts.engine || watchEngine).watch(obj, fullPath, null, handlers, opts, root, top || obj);
+		return (opts.engine ?? watchEngine).watch(obj, fullPath, null, handlers, opts, root, top ?? obj);
 	}
 
 	return rawValue;
@@ -120,7 +120,7 @@ export function getOrCreateLabelValueByHandlers<T = unknown>(
 	let
 		box = obj[label];
 
-	if (!box) {
+	if (box == null) {
 		box = new WeakMap();
 		Object.defineProperty(obj, label, {
 			configurable: true,

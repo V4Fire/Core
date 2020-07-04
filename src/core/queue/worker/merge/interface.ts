@@ -7,21 +7,14 @@
  */
 
 import { QueueOptions as WorkerQueueOptions } from 'core/queue/worker/interface';
-export * from 'core/queue/worker/interface';
+import { HashFn } from 'core/queue/merge/interface';
 
-export interface HashFn<T> {
-	(task: T): string;
-}
+export * from 'core/queue/worker/interface';
+export * from 'core/queue/merge/interface';
 
 export interface QueueOptions<T> extends WorkerQueueOptions {
 	/**
 	 * Hash function for a task
 	 */
 	hashFn?: HashFn<T>;
-}
-
-export interface Task<T = unknown, V = unknown> {
-	task: T;
-	promise: Promise<V>;
-	resolve(res: CanPromise<V>): void;
 }

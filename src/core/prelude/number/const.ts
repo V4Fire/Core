@@ -19,8 +19,8 @@ export const globalOpts = Object.createDict({
 });
 
 export const formatAliases = Object.createDict({
-	'$': 'currency',
-	'$d': 'currencyDisplay',
+	$: 'currency',
+	$d: 'currencyDisplay',
 	'%': 'percent',
 	'.': 'decimal'
 });

@@ -26,6 +26,7 @@ export const
  * Link to the global object
  */
 export const
+	// eslint-disable-next-line no-new-func
 	GLOBAL = Function('return this')();
 
 if (typeof globalThis === 'undefined') {
@@ -35,6 +36,7 @@ if (typeof globalThis === 'undefined') {
 /**
  * True if the current runtime has window object
  */
+// eslint-disable-next-line no-restricted-globals
 export const HAS_WINDOW: boolean = typeof window === 'object';
 
 /**
@@ -42,11 +44,8 @@ export const HAS_WINDOW: boolean = typeof window === 'object';
  */
 export const IS_NODE: boolean = (() => {
 	try {
-		const
-			// tslint:disable-next-line
-			process = globalThis['process'];
-
-		// @ts-ignore
+		// eslint-disable-next-line prefer-destructuring
+		const process = globalThis['process'];
 		return typeof process === 'object' && toString.call(process) === '[object process]';
 
 	} catch {

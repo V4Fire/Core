@@ -8,15 +8,28 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-module.exports = function (gulp) {
+/**
+ * Registers gulp tasks to generate HTML documentation based on the project
+ *
+ * @example
+ * ```bash
+ * npx gulp build:docs
+ * ```
+ */
+module.exports = function init(gulp) {
 	const
 		$ = require('gulp-load-plugins')({scope: ['optionalDependencies']});
 
+	/**
+	 * Builds an HTML files by using typedoc
+	 */
 	gulp.task('build:docs:typedoc', () => $.run('typedoc')
 		.exec()
-		.on('error', console.error)
-	);
+		.on('error', console.error));
 
+	/**
+	 * Normalizes generated HTML files: attaches extra styles and js, removes some trash
+	 */
 	gulp.task('build:docs:normalise', gulp.series([
 		() => gulp.src('./docs/**/*.+(html|js)')
 			.pipe($.replace(/(['"/\\])_+(.+?)_+(\.(?:[^\s'"/\\<>#.]+\.)?html\b)/g, (...str) => str.slice(1, 4).join('')))
@@ -30,7 +43,7 @@ module.exports = function (gulp) {
 
 			.pipe($.replace(/<body>/, [
 				'<body>',
-				`<script>${include('assets/js/config.js', {source: true})}</script>`,
+				`<script>${include('assets/js/config.js', {source: true})}</script>`
 			].join('\n')))
 
 			.pipe($.replace(/<\/body>/, [
@@ -50,5 +63,8 @@ module.exports = function (gulp) {
 		() => require('del')('./docs/**/_*.html')
 	]));
 
+	/**
+	 * The main task to generate documentation
+	 */
 	gulp.task('build:docs', gulp.series(['build:tsconfig', 'build:docs:typedoc', 'build:docs:normalise']));
 };

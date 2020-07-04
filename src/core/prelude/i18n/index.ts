@@ -19,6 +19,7 @@ let
 	storage: CanUndef<Promise<AsyncStorageNamespace>>;
 
 //#if runtime has core/kv-storage
+// eslint-disable-next-line prefer-const
 storage = import('core/kv-storage').then(({asyncLocal}) => asyncLocal.namespace('[[I18N]]'));
 //#endif
 
@@ -32,7 +33,7 @@ if (IS_NODE) {
 				s = await storage,
 				l = await s.get<string>('locale');
 
-			if (l) {
+			if (l != null) {
 				setLocale(l, await s.get<boolean>('isLocaleDef'));
 				return;
 			}

@@ -7,4 +7,4 @@
  */
 
 export const
-	escapeRgxp = /([\\\/'*+?|()\[\]{}.^$-])/g;
+	escapeRgxp = /([\\/'*+?|()[\]{}.^$-])/g;

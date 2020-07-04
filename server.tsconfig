@@ -1,0 +1,12 @@
+{
+  "extends": "@v4fire/core/.tsconfig",
+
+  "compilerOptions": {
+    "allowJs": true
+  },
+
+  "include": [
+    "./index.d.ts",
+    "./src/**/*.@(ts|js)"
+  ]
+}

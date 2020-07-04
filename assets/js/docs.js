@@ -8,8 +8,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-/* eslint-disable prefer-arrow-callback, no-var */
-
 (function () {
 	document.body.style.display = 'block';
 

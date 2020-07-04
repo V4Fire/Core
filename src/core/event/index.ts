@@ -83,14 +83,14 @@ export function createsAsyncSemaphore<T>(cb: () => T, ...flags: string[]): (flag
 		ready = false;
 
 	return (flag) => {
-		if (ready || flagsStatus[flag]) {
+		if (ready || flagsStatus[flag] != null) {
 			return;
 		}
 
 		flagsStatus[flag] = true;
 
 		for (let i = 0; i < flags.length; i++) {
-			if (!flagsStatus[flags[i]]) {
+			if (flagsStatus[flags[i]] == null) {
 				return;
 			}
 		}
@@ -136,7 +136,7 @@ export const afterEvents = deprecate(
 			promise = resolveAfterEvents(emitter, ...Array.concat([], Object.isString(cb) ? cb : null, events));
 
 		if (Object.isFunction(cb)) {
-			promise.then(cb);
+			promise.then(cb, stderr);
 		}
 
 		return promise;

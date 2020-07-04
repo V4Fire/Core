@@ -27,14 +27,14 @@ const request: RequestEngine = (params) => {
 	if (p.body instanceof FormData) {
 		data = p.body;
 
-		if (!contentType) {
+		if (contentType == null) {
 			contentType = '';
 		}
 
 	} else if (Object.isPlainObject(p.body)) {
 		data = JSON.stringify(p.body);
 
-		if (!contentType) {
+		if (contentType == null) {
 			contentType = 'application/json;charset=UTF-8';
 		}
 
@@ -55,7 +55,7 @@ const request: RequestEngine = (params) => {
 		xhr.timeout = p.timeout;
 	}
 
-	if (p.responseType) {
+	if (p.responseType != null) {
 		xhr.responseType = p.responseType === 'json' ?
 			'text' :
 			<XMLHttpRequestResponseType>p.responseType.toLowerCase();
@@ -76,6 +76,7 @@ const request: RequestEngine = (params) => {
 					const
 						el = val[i];
 
+					// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 					if (el != null) {
 						xhr.setRequestHeader(name, el);
 					}
@@ -87,7 +88,7 @@ const request: RequestEngine = (params) => {
 		}
 	}
 
-	if (contentType) {
+	if (contentType != null) {
 		xhr.setRequestHeader('Content-Type', contentType);
 	}
 
@@ -108,8 +109,8 @@ const request: RequestEngine = (params) => {
 			}));
 		});
 
-		xhr.addEventListener('error', (err) => {
-			reject(err);
+		xhr.addEventListener('error', (error) => {
+			reject(new RequestError('engine', {error}));
 		});
 
 		xhr.addEventListener('timeout', () => {

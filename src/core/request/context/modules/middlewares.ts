@@ -24,24 +24,24 @@ export default class RequestContext<D = unknown> extends Super<D> {
 			key = this.cacheKey,
 			cache = this.pendingCache;
 
-		if (key && !cache.has(key)) {
+		if (key != null && !cache.has(key)) {
 			promise = promise.then(
 				(v) => {
-					cache.remove(key);
+					void cache.remove(key);
 					return v;
 				},
 
 				(r) => {
-					cache.remove(key);
+					void cache.remove(key);
 					throw r;
 				},
 
 				() => {
-					cache.remove(key);
+					void cache.remove(key);
 				}
 			);
 
-			cache.set(key, promise);
+			void cache.set(key, promise);
 		}
 
 		return promise;
@@ -54,10 +54,12 @@ export default class RequestContext<D = unknown> extends Super<D> {
 	saveCache(res: RequestResponseObject<D>): RequestResponseObject<D> {
 		const
 			p = this.params,
-			key = this.cacheKey,
-			cache = this.cache;
+			key = this.cacheKey;
 
-		if (key) {
+		const
+			{cache} = this;
+
+		if (key != null) {
 			if (p.offlineCache) {
 				if (!storage) {
 					throw new ReferenceError("kv-storage module isn't loaded");
@@ -68,7 +70,7 @@ export default class RequestContext<D = unknown> extends Super<D> {
 					.catch(stderr);
 			}
 
-			if (this.cacheTimeoutId) {
+			if (this.cacheTimeoutId != null) {
 				clearTimeout(this.cacheTimeoutId);
 			}
 
@@ -90,10 +92,13 @@ export default class RequestContext<D = unknown> extends Super<D> {
 	 * @param value
 	 */
 	async wrapAsResponse(value: Response<D> | ResponseTypeValue): Promise<RequestResponseObject<D>> {
-		const response = value instanceof Response ? value : new Response<D>(value, {
-			parent: this.parent,
-			responseType: 'object'
-		});
+		const response = value instanceof Response ?
+			value :
+
+			new Response<D>(value, {
+				parent: this.parent,
+				responseType: 'object'
+			});
 
 		return {
 			response,

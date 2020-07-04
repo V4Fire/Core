@@ -30,168 +30,171 @@ import {
 
 } from 'core/prelude/string/helpers';
 
-/** @see String.capitalize */
-extend(String.prototype, 'capitalize', function (
+/** @see [[String.capitalize]] */
+extend(String.prototype, 'capitalize', function capitalize(
 	this: string,
 	{lower, all, cache}: StringCapitalizeOptions = {}
 ): string {
 	const
 		str = this.toString(),
-		key = `${Boolean(lower)}:${Boolean(all)}:${str}`,
-		val = cache !== false ? capitalizeCache[key] : undefined;
+		cacheKey = cache !== false ? `${Boolean(lower)}:${Boolean(all)}:${str}` : null,
+		valFromCache = cacheKey != null ? capitalizeCache[cacheKey] : null;
 
-	if (val !== undefined) {
-		return val;
+	if (valFromCache != null) {
+		return valFromCache;
 	}
+
+	let
+		res: string;
 
 	if (all) {
 		const
-			chunks = str.split(' '),
-			res = <string[]>[];
+			chunks = str.split(' ');
 
 		for (let i = 0; i < chunks.length; i++) {
-			res.push(chunks[i].capitalize({lower}));
+			chunks[i] = chunks[i].capitalize({lower});
 		}
 
-		return capitalizeCache[str] = res.join(' ');
+		res = chunks.join(' ');
+
+	} else {
+		res = lower ? str.toLowerCase() : str;
+		res = res[0].toUpperCase() + res.slice(1);
 	}
 
-	let res = lower ? str.toLowerCase() : str;
-	res = res[0].toUpperCase() + res.slice(1);
-
-	if (cache !== false) {
-		capitalizeCache[key] = res;
+	if (cacheKey != null) {
+		capitalizeCache[cacheKey] = res;
 	}
 
 	return res;
 });
 
-/** @see StringConstructor.capitalize */
+/** @see [[StringConstructor.capitalize]] */
 extend(String, 'capitalize', createStaticTransformFunction('capitalize'));
 
-/** @see String.camelize */
-extend(String.prototype, 'camelize', function (
+/** @see [[String.camelize]] */
+extend(String.prototype, 'camelize', function camelize(
 	this: string,
 	upperOrOpts: boolean | StringCamelizeOptions
 ): string {
 	const
-		p = <StringCamelizeOptions>{};
+		opts = <StringCamelizeOptions>{};
 
 	if (Object.isBoolean(upperOrOpts)) {
-		p.upper = upperOrOpts;
+		opts.upper = upperOrOpts;
 
 	} else {
-		Object.assign(p, upperOrOpts);
+		Object.assign(opts, upperOrOpts);
 	}
 
-	p.upper = p.upper !== false;
+	opts.upper = opts.upper !== false;
 
 	const
 		str = this.toString(),
-		key = `${p.upper}:${str}`,
-		val = p.cache !== false ? camelizeCache[key] : undefined;
+		cacheKey = opts.cache !== false ? `${opts.upper}:${str}` : null,
+		valFromCache = cacheKey != null ? camelizeCache[cacheKey] : null;
 
-	if (val !== undefined) {
-		return val;
+	if (valFromCache != null) {
+		return valFromCache;
 	}
 
 	let
 		res = str.trim().replace(camelizeRgxp, toCamelize);
 
-	if (p.upper) {
+	if (opts.upper) {
 		res = res[0].toUpperCase() + res.slice(1);
 	}
 
-	if (p.cache !== false) {
-		camelizeCache[key] = res;
+	if (cacheKey != null) {
+		camelizeCache[cacheKey] = res;
 	}
 
 	return res;
 });
 
-/** @see StringConstructor.camelize */
+/** @see [[StringConstructor.camelize]] */
 extend(String, 'camelize', createStaticTransformFunction('camelize'));
 
-/** @see String.dasherize */
-extend(String.prototype, 'dasherize', function (
+/** @see [[String.dasherize]] */
+extend(String.prototype, 'dasherize', function dasherize(
 	this: string,
 	stableOrOpts?: boolean | StringDasherizeOptions
 ): string {
 	const
-		p = <StringDasherizeOptions>{};
+		opts = <StringDasherizeOptions>{};
 
 	if (Object.isBoolean(stableOrOpts)) {
-		p.stable = stableOrOpts;
+		opts.stable = stableOrOpts;
 
 	} else {
-		Object.assign(p, stableOrOpts);
+		Object.assign(opts, stableOrOpts);
 	}
 
-	p.stable = p.stable === true;
+	opts.stable = opts.stable === true;
 
 	const
 		str = this.toString(),
-		key = `${p.stable}:${str}`,
-		val = p.cache !== false ? dasherizeCache[key] : undefined;
+		cacheKey = opts.cache !== false ? `${opts.stable}:${str}` : null,
+		valFromCache = cacheKey != null ? dasherizeCache[cacheKey] : null;
 
-	if (val !== undefined) {
-		return val;
+	if (valFromCache != null) {
+		return valFromCache;
 	}
 
 	const res = convertToSeparatedStr(
 		str.trim().replace(normalizeRgxp, toDasherize),
 		'-',
-		p.stable
+		opts.stable
 	);
 
-	if (p.cache !== false) {
-		dasherizeCache[key] = res;
+	if (cacheKey != null) {
+		dasherizeCache[cacheKey] = res;
 	}
 
 	return res;
 });
 
-/** @see StringConstructor.dasherize */
+/** @see [[StringConstructor.dasherize]] */
 extend(String, 'dasherize', createStaticTransformFunction('dasherize'));
 
-/** @see String.underscore */
-extend(String.prototype, 'underscore', function (
+/** @see [[String.underscore]] */
+extend(String.prototype, 'underscore', function underscore(
 	this: string,
 	stableOrOpts?: boolean | StringUnderscoreOptions
 ): string {
 	const
-		p = <StringUnderscoreOptions>{};
+		opts = <StringUnderscoreOptions>{};
 
 	if (Object.isBoolean(stableOrOpts)) {
-		p.stable = stableOrOpts;
+		opts.stable = stableOrOpts;
 
 	} else {
-		Object.assign(p, stableOrOpts);
+		Object.assign(opts, stableOrOpts);
 	}
 
-	p.stable = p.stable === true;
+	opts.stable = opts.stable === true;
 
 	const
 		str = this.toString(),
-		key = `${p.stable}:${str}`,
-		val = p.cache !== false ? underscoreCache[key] : undefined;
+		cacheKey = opts.cache !== false ? `${opts.stable}:${str}` : null,
+		valFromCache = cacheKey != null ? underscoreCache[cacheKey] : null;
 
-	if (val !== undefined) {
-		return val;
+	if (valFromCache != null) {
+		return valFromCache;
 	}
 
 	const res = convertToSeparatedStr(
 		str.trim().replace(normalizeRgxp, toUnderscore),
 		'_',
-		p.stable
+		opts.stable
 	);
 
-	if (p.cache !== false) {
-		underscoreCache[key] = res;
+	if (cacheKey != null) {
+		underscoreCache[cacheKey] = res;
 	}
 
 	return res;
 });
 
-/** @see StringConstructor.underscore */
+/** @see [[StringConstructor.underscore]] */
 extend(String, 'underscore', createStaticTransformFunction('underscore'));
