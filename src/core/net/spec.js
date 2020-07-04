@@ -12,6 +12,5 @@ describe('core/net', () => {
 	it('isOnline', async () => {
 		const res = await isOnline();
 		expect(res.status).toBeTrue();
-		expect(res.lastOnline.is(new Date(), (1).minute())).toBeTrue();
 	});
 });

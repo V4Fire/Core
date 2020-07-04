@@ -109,8 +109,7 @@ export function isOnline(
 
 	// eslint-disable-next-line no-unreachable
 	return Promise.resolve({
-		status: true,
-		lastOnline: new Date()
+		status: true
 	});
 }
 
