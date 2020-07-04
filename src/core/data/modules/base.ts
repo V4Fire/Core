@@ -341,16 +341,20 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 					cloneTasks.push((composition) => Object.set(composition, alias, data?.valueOf()));
 					Object.set(composition, alias, data);
 
-					composition.valueOf = () => {
-						const
-							clone = {};
+					Object.defineProperty(composition, 'valueOf', {
+						writable: true,
+						configurable: true,
+						value: () => {
+							const
+								clone = {};
 
-						for (let i = 0; i < cloneTasks.length; i++) {
-							cloneTasks[i](clone);
+							for (let i = 0; i < cloneTasks.length; i++) {
+								cloneTasks[i](clone);
+							}
+
+							return clone;
 						}
-
-						return clone;
-					};
+					});
 
 					res.data = Object.freeze(composition);
 					return res;
