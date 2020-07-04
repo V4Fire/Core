@@ -262,6 +262,30 @@ describe('core/request', () => {
 		expect(req.response.status).toBe(200);
 	});
 
+	it('request factory', async () => {
+		const
+			resolver = (url, params, type) => type === 'get' ? '/json/1' : '',
+			get = request('http://3878g.mocklab.io', resolver),
+			req = await get('get');
+
+		expect(req.data).toEqual({
+			id: 1,
+			value: 'things'
+		});
+
+		expect(req.response.status).toBe(200);
+	});
+
+	it('request factory with rewriting of URL', async () => {
+		const
+			resolver = () => ['https://run.mocky.io/v3/', 'bc04b660-5e52-4c10-a58c-539fb854516b'],
+			get = request('http://3878g.mocklab.io', resolver),
+			req = await get();
+
+		expect(req.data).toEqual({hello: 'world'});
+		expect(req.response.status).toBe(200);
+	});
+
 	it('404', async () => {
 		let err;
 

@@ -125,8 +125,11 @@ function request<D = unknown>(
 	if (args.length > 1) {
 		[resolver, opts] = args;
 
-	} else {
+	} else if (Object.isDictionary(args[0])) {
 		opts = args[0];
+
+	} else if (Object.isFunction(args[0])) {
+		resolver = args[0];
 	}
 
 	opts = opts ?? {};
