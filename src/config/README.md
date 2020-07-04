@@ -1,3 +1,3 @@
 # config
 
-This module provides options to configure an application.
+This module provides options to configure the application.

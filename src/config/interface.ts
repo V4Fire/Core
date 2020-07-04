@@ -16,7 +16,7 @@ export interface Config {
 	appName?: CanUndef<string>;
 
 	/**
-	 * Default system language
+	 * Default system locale
 	 * (used for internalizing)
 	 */
 	locale: string;
