@@ -71,8 +71,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-/* eslint-disable prefer-arrow-callback, no-var */
-
 (function () {
 	if (localStorage.getItem('visibility') == null) {
 		localStorage.setItem('visibility', 'public');
@@ -145,12 +143,15 @@
 						<a href="#corequeueworker" id="corequeueworker" style="color: inherit; text-decoration: none;">
 							<h1>core/queue/worker</h1>
 						</a>
-						<p>This module provides an abstract class for a <a href="../classes/src_core_queue_worker_interface.workerqueue.html">WorkerQueue</a> data structure. The submodules contains different implementations for that class.</p>
+						<p>This module provides an abstract class for the <a href="../classes/src_core_queue_worker_interface.workerqueue.html">WorkerQueue</a> data structure. The submodules contains different implementations of that class.</p>
 						<a href="#implementations" id="implementations" style="color: inherit; text-decoration: none;">
 							<h2>Implementations:</h2>
 						</a>
 						<ul>
-							<li><a href="src_core_queue_worker_merge_index.html">MergeWorkerQueue</a></li>
+							<li><p><a href="src_core_queue_worker_simple_index.html">SimpleWorkerQueue</a></p>
+							</li>
+							<li><p><a href="src_core_queue_worker_merge_index.html">MergeWorkerQueue</a></p>
+							</li>
 						</ul>
 					</div>
 				</div>
@@ -246,8 +247,6 @@
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
-
-/* eslint-disable prefer-arrow-callback, no-var */
 
 (function () {
 	document.body.style.display = 'block';

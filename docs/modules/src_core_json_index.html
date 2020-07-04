@@ -71,8 +71,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-/* eslint-disable prefer-arrow-callback, no-var */
-
 (function () {
 	if (localStorage.getItem('visibility') == null) {
 		localStorage.setItem('visibility', 'public');
@@ -146,6 +144,10 @@
 							<h1>core/json</h1>
 						</a>
 						<p>This module provides a bunch of helper functions to serialize/parse JSON data.</p>
+						<pre><code class="language-js"><span class="hljs-keyword">import</span> { convertIfDate } <span class="hljs-keyword">from</span> <span class="hljs-string">'core/json'</span>;
+
+<span class="hljs-comment">// true</span>
+<span class="hljs-built_in">console</span>.log(<span class="hljs-built_in">JSON</span>.parse(<span class="hljs-string">'"2015-10-12"'</span>, convertIfDate).is(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-number">2015</span>, <span class="hljs-number">9</span>, <span class="hljs-number">12</span>)));</code></pre>
 					</div>
 				</div>
 			</section>
@@ -193,13 +195,18 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/json/index.ts#L25">src/core/json/index.ts:25</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/json/index.ts#L30">src/core/json/index.ts:30</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>Reviver for the JSON.parse method: converts all strings that is looks like a date to Date</p>
 								</div>
+								<dl class="tsd-comment-tags">
+									<dt>example</dt>
+									<dd><pre><code class="language-js"><span class="hljs-built_in">JSON</span>.parse(<span class="hljs-string">'"2015-10-12"'</span>, convertIfDate) <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Date</span> <span class="hljs-comment">// true</span></code></pre>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -314,8 +321,6 @@
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
-
-/* eslint-disable prefer-arrow-callback, no-var */
 
 (function () {
 	document.body.style.display = 'block';

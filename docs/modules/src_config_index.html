@@ -71,8 +71,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-/* eslint-disable prefer-arrow-callback, no-var */
-
 (function () {
 	if (localStorage.getItem('visibility') == null) {
 		localStorage.setItem('visibility', 'public');
@@ -145,7 +143,7 @@
 						<a href="#config" id="config" style="color: inherit; text-decoration: none;">
 							<h1>config</h1>
 						</a>
-						<p>This module provides options to configure an application.</p>
+						<p>This module provides options to configure the application.</p>
 					</div>
 				</div>
 			</section>
@@ -176,7 +174,7 @@
 					<div class="tsd-signature tsd-kind-icon">config<span class="tsd-signature-symbol">:</span> <a href="../interfaces/src_config_interface.config.html" class="tsd-signature-type">Config</a><span class="tsd-signature-symbol"> =&nbsp;&lt;Config&gt;{appName: APP_NAME,locale: LOCALE,api: API_URL,online: {checkURL: &#x27;&#x27;,checkInterval: (5).seconds(),cacheTTL: 0.3.second(),checkTimeout: (2).seconds(),retryCount: 3,persistence: true,lastDateSyncInterval: (1).minute()},log: {pipelines: [{middlewares: [&#x27;configurable&#x27;],engine: &#x27;console&#x27;,engineOptions: {default: {fontSize: &#x27;13px&#x27;,padding: &#x27;3px&#x27;,marginBottom: &#x27;3px&#x27;},warn: {backgroundColor: &#x27;#FFCE00&#x27;,color: &#x27;#FFF&#x27;},error: {backgroundColor: &#x27;#FF3B5B&#x27;,color: &#x27;#FFF&#x27;}}}]}}</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/config/index.ts#L17">src/config/index.ts:17</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/config/index.ts#L18">src/config/index.ts:18</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -187,13 +185,13 @@
 					<a name="extend" class="tsd-anchor"></a>
 					<h3>extend</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">extend&lt;T&gt;<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>objects<span class="tsd-signature-symbol">: </span><a href="index_d.html#canundef" class="tsd-signature-type">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.dictionary.html" class="tsd-signature-type">Dictionary</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span></li>
+						<li class="tsd-signature tsd-kind-icon">extend&lt;T&gt;<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>objects<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><a href="index_d.html#canundef" class="tsd-signature-type">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.dictionary.html" class="tsd-signature-type">Dictionary</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/config/index.ts#L62">src/config/index.ts:62</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/config/index.ts#L64">src/config/index.ts:64</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -210,7 +208,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>objects: <a href="index_d.html#canundef" class="tsd-signature-type">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.dictionary.html" class="tsd-signature-type">Dictionary</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span></h5>
+									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>objects: <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><a href="index_d.html#canundef" class="tsd-signature-type">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.dictionary.html" class="tsd-signature-type">Dictionary</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
 									<div class="tsd-comment tsd-typography">
 									</div>
 								</li>
@@ -317,8 +315,6 @@
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
-
-/* eslint-disable prefer-arrow-callback, no-var */
 
 (function () {
 	document.body.style.display = 'block';

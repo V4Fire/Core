@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>HashFn | V4Fire</title>
+	<title>NetEngine | V4Fire</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -71,8 +71,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-/* eslint-disable prefer-arrow-callback, no-var */
-
 (function () {
 	if (localStorage.getItem('visibility') == null) {
 		localStorage.setItem('visibility', 'public');
@@ -129,56 +127,59 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/src_core_queue_worker_merge_interface.html">&quot;src/core/queue/worker/merge/interface&quot;</a>
+					<a href="../modules/src_core_net_interface.html">&quot;src/core/net/interface&quot;</a>
 				</li>
 				<li>
-					<a href="src_core_queue_worker_merge_interface.hashfn.html">HashFn</a>
+					<a href="src_core_net_interface.netengine.html">NetEngine</a>
 				</li>
 			</ul>
-			<h1>Interface HashFn&lt;T&gt;</h1>
+			<h1>Interface NetEngine</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
-			<section class="tsd-panel tsd-type-parameters">
-				<h3>Type parameters</h3>
-				<ul class="tsd-type-parameters">
-					<li>
-						<h4>T</h4>
-					</li>
-				</ul>
-			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">HashFn</span>
+						<span class="target">NetEngine</span>
 					</li>
 				</ul>
 			</section>
-			<section class="tsd-panel">
-				<h3 class="tsd-before-signature">Callable</h3>
-				<ul class="tsd-signatures tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter">
-					<li class="tsd-signature tsd-kind-icon">__call<span class="tsd-signature-symbol">(</span>task<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
-				</ul>
-				<ul class="tsd-descriptions">
-					<li class="tsd-description">
-						<aside class="tsd-sources">
-							<ul>
-								<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/queue/worker/merge/interface.ts#L12">src/core/queue/worker/merge/interface.ts:12</a></li>
+			<section class="tsd-panel-group tsd-index-group">
+				<h2>Index</h2>
+				<section class="tsd-panel tsd-index-panel">
+					<div class="tsd-index-content">
+						<section class="tsd-index-section ">
+							<h3>Methods</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="src_core_net_interface.netengine.html#isonline" class="tsd-kind-icon">is<wbr>Online</a></li>
 							</ul>
-						</aside>
-						<h4 class="tsd-parameters-title">Parameters</h4>
-						<ul class="tsd-parameters">
-							<li>
-								<h5>task: <span class="tsd-signature-type">T</span></h5>
-							</li>
-						</ul>
-						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
-					</li>
-				</ul>
+						</section>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
+					<a name="isonline" class="tsd-anchor"></a>
+					<h3>is<wbr>Online</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">is<wbr>Online<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/index_d.html#canpromise" class="tsd-signature-type">CanPromise</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/net/interface.ts#L10">src/core/net/interface.ts:10</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <a href="../modules/index_d.html#canpromise" class="tsd-signature-type">CanPromise</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
 			</section>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
@@ -188,7 +189,7 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class="current tsd-kind-external-module">
-						<a href="../modules/src_core_queue_worker_merge_interface.html">&quot;src/core/queue/worker/merge/interface&quot;</a>
+						<a href="../modules/src_core_net_interface.html">&quot;src/core/net/interface&quot;</a>
 					</li>
 				</ul>
 			</nav>
@@ -196,16 +197,24 @@
 				<ul class="before-current">
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter">
-						<a href="src_core_queue_worker_merge_interface.hashfn.html" class="tsd-kind-icon">Hash<wbr>Fn</a>
+					<li class="current tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="src_core_net_interface.netengine.html" class="tsd-kind-icon">Net<wbr>Engine</a>
+						<ul>
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
+								<a href="src_core_net_interface.netengine.html#isonline" class="tsd-kind-icon">is<wbr>Online</a>
+							</li>
+						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter">
-						<a href="src_core_queue_worker_merge_interface.queueoptions.html" class="tsd-kind-icon">Queue<wbr>Options</a>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="src_core_net_interface.netstatus.html" class="tsd-kind-icon">Net<wbr>Status</a>
 					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter">
-						<a href="src_core_queue_worker_merge_interface.task.html" class="tsd-kind-icon">Task</a>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="src_core_net_interface.onlinecheckconfig.html" class="tsd-kind-icon">Online<wbr>Check<wbr>Config</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="src_core_net_interface.state.html" class="tsd-kind-icon">State</a>
 					</li>
 				</ul>
 			</nav>
@@ -284,8 +293,6 @@
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
-
-/* eslint-disable prefer-arrow-callback, no-var */
 
 (function () {
 	document.body.style.display = 'block';

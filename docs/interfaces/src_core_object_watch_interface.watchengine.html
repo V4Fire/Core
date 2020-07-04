@@ -71,8 +71,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-/* eslint-disable prefer-arrow-callback, no-var */
-
 (function () {
 	if (localStorage.getItem('visibility') == null) {
 		localStorage.setItem('visibility', 'public');
@@ -232,8 +230,8 @@
 					<a name="watch" class="tsd-anchor"></a>
 					<h3>watch</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">watch&lt;T&gt;<span class="tsd-signature-symbol">(</span>obj<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, path<span class="tsd-signature-symbol">: </span><a href="../modules/index_d.html#canundef" class="tsd-signature-type">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span>, handler<span class="tsd-signature-symbol">: </span><a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="src_core_object_watch_interface.watchhandler.html" class="tsd-signature-type">WatchHandler</a><span class="tsd-signature-symbol">&gt;</span>, handlers<span class="tsd-signature-symbol">: </span><a href="../modules/src_core_object_watch_interface.html#watchhandlersset" class="tsd-signature-type">WatchHandlersSet</a>, opts<span class="tsd-signature-symbol">?: </span><a href="src_core_object_watch_interface.watchoptions.html" class="tsd-signature-type">WatchOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_object_watch_interface.watcher.html" class="tsd-signature-type">Watcher</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
-						<li class="tsd-signature tsd-kind-icon">watch&lt;T&gt;<span class="tsd-signature-symbol">(</span>obj<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, path<span class="tsd-signature-symbol">: </span><a href="../modules/index_d.html#canundef" class="tsd-signature-type">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span>, handler<span class="tsd-signature-symbol">: </span><a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="src_core_object_watch_interface.watchhandler.html" class="tsd-signature-type">WatchHandler</a><span class="tsd-signature-symbol">&gt;</span>, handlers<span class="tsd-signature-symbol">: </span><a href="../modules/src_core_object_watch_interface.html#watchhandlersset" class="tsd-signature-type">WatchHandlersSet</a>, opts<span class="tsd-signature-symbol">: </span><a href="../modules/index_d.html#canundef" class="tsd-signature-type">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><a href="src_core_object_watch_interface.internalwatchoptions.html" class="tsd-signature-type">InternalWatchOptions</a><span class="tsd-signature-symbol">&gt;</span>, root<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span>, top<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span></li>
+						<li class="tsd-signature tsd-kind-icon">watch&lt;T&gt;<span class="tsd-signature-symbol">(</span>obj<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, path<span class="tsd-signature-symbol">: </span><a href="../modules/index_d.html#canundef" class="tsd-signature-type">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span>, handler<span class="tsd-signature-symbol">: </span><a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="src_core_object_watch_interface.rawwatchhandler.html" class="tsd-signature-type">RawWatchHandler</a><span class="tsd-signature-symbol">&gt;</span>, handlers<span class="tsd-signature-symbol">: </span><a href="../modules/src_core_object_watch_interface.html#watchhandlersset" class="tsd-signature-type">WatchHandlersSet</a>, opts<span class="tsd-signature-symbol">?: </span><a href="src_core_object_watch_interface.watchoptions.html" class="tsd-signature-type">WatchOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_object_watch_interface.watcher.html" class="tsd-signature-type">Watcher</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">watch&lt;T&gt;<span class="tsd-signature-symbol">(</span>obj<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, path<span class="tsd-signature-symbol">: </span><a href="../modules/index_d.html#canundef" class="tsd-signature-type">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span>, handler<span class="tsd-signature-symbol">: </span><a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="src_core_object_watch_interface.rawwatchhandler.html" class="tsd-signature-type">RawWatchHandler</a><span class="tsd-signature-symbol">&gt;</span>, handlers<span class="tsd-signature-symbol">: </span><a href="../modules/src_core_object_watch_interface.html#watchhandlersset" class="tsd-signature-type">WatchHandlersSet</a>, opts<span class="tsd-signature-symbol">: </span><a href="../modules/index_d.html#canundef" class="tsd-signature-type">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><a href="src_core_object_watch_interface.internalwatchoptions.html" class="tsd-signature-type">InternalWatchOptions</a><span class="tsd-signature-symbol">&gt;</span>, root<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span>, top<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -257,7 +255,7 @@
 									<h5>path: <a href="../modules/index_d.html#canundef" class="tsd-signature-type">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 								<li>
-									<h5>handler: <a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="src_core_object_watch_interface.watchhandler.html" class="tsd-signature-type">WatchHandler</a><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>handler: <a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="src_core_object_watch_interface.rawwatchhandler.html" class="tsd-signature-type">RawWatchHandler</a><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 								<li>
 									<h5>handlers: <a href="../modules/src_core_object_watch_interface.html#watchhandlersset" class="tsd-signature-type">WatchHandlersSet</a></h5>
@@ -289,7 +287,7 @@
 									<h5>path: <a href="../modules/index_d.html#canundef" class="tsd-signature-type">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 								<li>
-									<h5>handler: <a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="src_core_object_watch_interface.watchhandler.html" class="tsd-signature-type">WatchHandler</a><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>handler: <a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="src_core_object_watch_interface.rawwatchhandler.html" class="tsd-signature-type">RawWatchHandler</a><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 								<li>
 									<h5>handlers: <a href="../modules/src_core_object_watch_interface.html#watchhandlersset" class="tsd-signature-type">WatchHandlersSet</a></h5>
@@ -457,8 +455,6 @@
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
-
-/* eslint-disable prefer-arrow-callback, no-var */
 
 (function () {
 	document.body.style.display = 'block';

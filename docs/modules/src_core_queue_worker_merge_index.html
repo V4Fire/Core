@@ -71,8 +71,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-/* eslint-disable prefer-arrow-callback, no-var */
-
 (function () {
 	if (localStorage.getItem('visibility') == null) {
 		localStorage.setItem('visibility', 'public');
@@ -151,16 +149,27 @@
 <span class="hljs-keyword">const</span> queue = <span class="hljs-keyword">new</span> MergeQueue(<span class="hljs-function">(<span class="hljs-params">task</span>) =&gt;</span> {
   <span class="hljs-built_in">console</span>.log(task);
 }, {
-  <span class="hljs-attr">concurrency</span>: <span class="hljs-number">3</span>,
+  <span class="hljs-attr">concurrency</span>: <span class="hljs-number">2</span>,
   <span class="hljs-attr">refreshInterval</span>: <span class="hljs-number">50</span>,
   <span class="hljs-attr">hashFn</span>: <span class="hljs-function">(<span class="hljs-params">task</span>) =&gt;</span> <span class="hljs-built_in">JSON</span>.stringify(task)
 });
 
 queue.push({<span class="hljs-attr">a</span>: <span class="hljs-number">1</span>});
 queue.push({<span class="hljs-attr">a</span>: <span class="hljs-number">1</span>});
+
+<span class="hljs-built_in">console</span>.log(queue.length); <span class="hljs-comment">// 0</span>
+
 queue.push({<span class="hljs-attr">a</span>: <span class="hljs-number">2</span>});
+
+<span class="hljs-built_in">console</span>.log(queue.length); <span class="hljs-comment">// 0</span>
+
 queue.push({<span class="hljs-attr">a</span>: <span class="hljs-number">3</span>});
-queue.push({<span class="hljs-attr">a</span>: <span class="hljs-number">4</span>});</code></pre>
+
+<span class="hljs-built_in">console</span>.log(queue.length); <span class="hljs-comment">// 1</span>
+
+queue.push({<span class="hljs-attr">a</span>: <span class="hljs-number">4</span>});
+
+<span class="hljs-built_in">console</span>.log(queue.length); <span class="hljs-comment">// 2</span></code></pre>
 					</div>
 				</div>
 			</section>
@@ -271,8 +280,6 @@ queue.push({<span class="hljs-attr">a</span>: <span class="hljs-number">4</span>
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
-
-/* eslint-disable prefer-arrow-callback, no-var */
 
 (function () {
 	document.body.style.display = 'block';

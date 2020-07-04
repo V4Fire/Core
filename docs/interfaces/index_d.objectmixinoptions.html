@@ -71,8 +71,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-/* eslint-disable prefer-arrow-callback, no-var */
-
 (function () {
 	if (localStorage.getItem('visibility') == null) {
 		localStorage.setItem('visibility', 'public');
@@ -200,12 +198,12 @@
 					<div class="tsd-signature tsd-kind-icon">concat<wbr>Array<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L325">index.d.ts:325</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L340">index.d.ts:340</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>If true, then for merging two arrays will be used a concatenation strategy
+							<p>If true, then to merge two arrays will be used a concatenation strategy
 							(works only with the &quot;deep&quot; mode)</p>
 						</div>
 						<dl class="tsd-comment-tags">
@@ -228,7 +226,7 @@
 					<div class="tsd-signature tsd-kind-icon">deep<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L211">index.d.ts:211</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L225">index.d.ts:225</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -255,7 +253,7 @@
 					<div class="tsd-signature tsd-kind-icon">only<wbr>New<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">-1</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L226">index.d.ts:226</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L240">index.d.ts:240</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -282,7 +280,7 @@
 					<div class="tsd-signature tsd-kind-icon">traits<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">-1</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L232">index.d.ts:232</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L246">index.d.ts:246</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -301,12 +299,12 @@
 					<div class="tsd-signature tsd-kind-icon">with<wbr>Accessors<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L259">index.d.ts:259</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L274">index.d.ts:274</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>If true, then accessors (but not all descriptors) of object properties are copied too</p>
+							<p>If true, then property accessors (but not the whole property descriptor) are copied too</p>
 						</div>
 						<dl class="tsd-comment-tags">
 							<dt>default</dt>
@@ -321,12 +319,12 @@
 					<div class="tsd-signature tsd-kind-icon">with<wbr>Descriptor<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L253">index.d.ts:253</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L268">index.d.ts:268</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>If true, then descriptors of object properties are copied too</p>
+							<p>If true, then an object property descriptor is copied too</p>
 						</div>
 						<dl class="tsd-comment-tags">
 							<dt>default</dt>
@@ -341,12 +339,12 @@
 					<div class="tsd-signature tsd-kind-icon">with<wbr>Proto<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L309">index.d.ts:309</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L324">index.d.ts:324</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>If true, then object properties are copied with their prototypes
+							<p>If true, then object properties from a prototype are copied recursively
 							(works only with the &quot;deep&quot; mode)</p>
 						</div>
 						<dl class="tsd-comment-tags">
@@ -403,12 +401,13 @@
 					<div class="tsd-signature tsd-kind-icon">with<wbr>Undef<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L247">index.d.ts:247</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L262">index.d.ts:262</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>If true, then the original value of an object property can be rewritten from another object with undefined value</p>
+							<p>If true, then the original value of an object property can be rewritten
+							from another object even with undefined value</p>
 						</div>
 						<dl class="tsd-comment-tags">
 							<dt>default</dt>
@@ -437,7 +436,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L345">index.d.ts:345</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L360">index.d.ts:360</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -493,12 +492,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L364">index.d.ts:364</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L379">index.d.ts:379</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Function that filters values for deep extending
+									<p>Function that filters values that support deep extending
 									(works only with the &quot;deep&quot; mode)</p>
 								</div>
 								<dl class="tsd-comment-tags">
@@ -546,7 +545,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L383">index.d.ts:383</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L398">index.d.ts:398</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -730,8 +729,6 @@
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
-
-/* eslint-disable prefer-arrow-callback, no-var */
 
 (function () {
 	document.body.style.display = 'block';

@@ -71,8 +71,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-/* eslint-disable prefer-arrow-callback, no-var */
-
 (function () {
 	if (localStorage.getItem('visibility') == null) {
 		localStorage.setItem('visibility', 'public');
@@ -164,7 +162,7 @@
 					<div class="tsd-signature tsd-kind-icon">GLOBAL<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> =&nbsp;Function(&#x27;return this&#x27;)()</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/env/const.ts#L29">src/core/prelude/env/const.ts:29</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/env/const.ts#L30">src/core/prelude/env/const.ts:30</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -179,7 +177,7 @@
 					<div class="tsd-signature tsd-kind-icon">HAS_<wbr>WINDOW<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;typeof window &#x3D;&#x3D;&#x3D; &#x27;object&#x27;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/env/const.ts#L38">src/core/prelude/env/const.ts:38</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/env/const.ts#L40">src/core/prelude/env/const.ts:40</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -191,10 +189,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module">
 					<a name="is_node" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> IS_<wbr>NODE</h3>
-					<div class="tsd-signature tsd-kind-icon">IS_<wbr>NODE<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;(() &#x3D;&gt; {try {const// tslint:disable-next-lineprocess &#x3D; globalThis[&#x27;process&#x27;];// @ts-ignorereturn typeof process &#x3D;&#x3D;&#x3D; &#x27;object&#x27; &amp;&amp; toString.call(process) &#x3D;&#x3D;&#x3D; &#x27;[object process]&#x27;;} catch {return false;}})()</span></div>
+					<div class="tsd-signature tsd-kind-icon">IS_<wbr>NODE<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;(() &#x3D;&gt; {try {// eslint-disable-next-line prefer-destructuringconst process &#x3D; globalThis[&#x27;process&#x27;];return typeof process &#x3D;&#x3D;&#x3D; &#x27;object&#x27; &amp;&amp; toString.call(process) &#x3D;&#x3D;&#x3D; &#x27;[object process]&#x27;;} catch {return false;}})()</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/env/const.ts#L43">src/core/prelude/env/const.ts:43</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/env/const.ts#L45">src/core/prelude/env/const.ts:45</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -344,8 +342,6 @@
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
-
-/* eslint-disable prefer-arrow-callback, no-var */
 
 (function () {
 	document.body.style.display = 'block';

@@ -71,8 +71,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-/* eslint-disable prefer-arrow-callback, no-var */
-
 (function () {
 	if (localStorage.getItem('visibility') == null) {
 		localStorage.setItem('visibility', 'public');
@@ -169,7 +167,7 @@
 					<div class="tsd-signature tsd-kind-icon">array<wbr>Syntax<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RegExp</span><span class="tsd-signature-symbol"> =&nbsp;/\[([^\]]*)]/g</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/url/convert.ts#L44">src/core/url/convert.ts:44</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/url/convert.ts#L56">src/core/url/convert.ts:56</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -179,7 +177,7 @@
 					<div class="tsd-signature tsd-kind-icon">normalizeURLRgxp<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RegExp</span><span class="tsd-signature-symbol"> =&nbsp;/[^?]*\?/</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/url/convert.ts#L45">src/core/url/convert.ts:45</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/url/convert.ts#L57">src/core/url/convert.ts:57</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -196,7 +194,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/url/convert.ts#L149">src/core/url/convert.ts:149</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/url/convert.ts#L171">src/core/url/convert.ts:171</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -226,13 +224,19 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/url/convert.ts#L53">src/core/url/convert.ts:53</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/url/convert.ts#L71">src/core/url/convert.ts:71</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>Creates a dictionary from the specified querystring and returns it</p>
 								</div>
+								<dl class="tsd-comment-tags">
+									<dt>example</dt>
+									<dd><pre><code class="language-js"><span class="hljs-comment">// {a: 1}</span>
+toQueryString(<span class="hljs-string">'?a=1'</span>);</code></pre>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -248,13 +252,19 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/url/convert.ts#L61">src/core/url/convert.ts:61</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/url/convert.ts#L85">src/core/url/convert.ts:85</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>Creates a dictionary from the specified querystring and returns it</p>
 								</div>
+								<dl class="tsd-comment-tags">
+									<dt>example</dt>
+									<dd><pre><code class="language-js"><span class="hljs-comment">// {a: [1, 2]}</span>
+toQueryString(<span class="hljs-string">'?a[]=1&amp;a[]=2'</span>, {<span class="hljs-attr">arraySyntax</span>: <span class="hljs-literal">true</span>});</code></pre>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -283,13 +293,19 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/url/convert.ts#L19">src/core/url/convert.ts:19</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/url/convert.ts#L26">src/core/url/convert.ts:26</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>Creates a querystring from the specified data and returns it</p>
 								</div>
+								<dl class="tsd-comment-tags">
+									<dt>example</dt>
+									<dd><pre><code class="language-js"><span class="hljs-comment">// '?a=1'</span>
+toQueryString({<span class="hljs-attr">a</span>: <span class="hljs-number">1</span>});</code></pre>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -305,13 +321,19 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/url/convert.ts#L27">src/core/url/convert.ts:27</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/url/convert.ts#L40">src/core/url/convert.ts:40</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>Creates a querystring from the specified data and returns it</p>
 								</div>
+								<dl class="tsd-comment-tags">
+									<dt>example</dt>
+									<dd><pre><code class="language-js"><span class="hljs-comment">// '?a[]=1&amp;a[]=2'</span>
+toQueryString({<span class="hljs-attr">a</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>]}, {<span class="hljs-attr">arraySyntax</span>: <span class="hljs-literal">true</span>});</code></pre>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -436,8 +458,6 @@
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
-
-/* eslint-disable prefer-arrow-callback, no-var */
 
 (function () {
 	document.body.style.display = 'block';

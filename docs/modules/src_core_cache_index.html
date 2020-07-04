@@ -71,8 +71,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-/* eslint-disable prefer-arrow-callback, no-var */
-
 (function () {
 	if (localStorage.getItem('visibility') == null) {
 		localStorage.setItem('visibility', 'public');
@@ -145,7 +143,7 @@
 						<a href="#corecache" id="corecache" style="color: inherit; text-decoration: none;">
 							<h1>core/cache</h1>
 						</a>
-						<p>This module provides a base interface for a <a href="../interfaces/src_core_cache_interface.cache.html">Cache</a> data structure: a simple in-memory key-value storage, which can be useful to organize cache data structures.
+						<p>This module provides the base interface for a <a href="../interfaces/src_core_cache_interface.cache.html">Cache</a> data structure: a simple in-memory key-value storage, which can be useful to organize cache data structures.
 						The submodules contain different implementations for that interface. The main module re-exports these implementations:</p>
 						<ul>
 							<li><code>AbstractCache</code> — an alias for <a href="src_core_cache_interface.html"><code>core/cache/interface/Cache</code></a>;</li>
@@ -261,8 +259,6 @@ cache.clear(<span class="hljs-function">(<span class="hljs-params">val, key</spa
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
-
-/* eslint-disable prefer-arrow-callback, no-var */
 
 (function () {
 	document.body.style.display = 'block';

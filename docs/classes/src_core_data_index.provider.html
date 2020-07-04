@@ -71,8 +71,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-/* eslint-disable prefer-arrow-callback, no-var */
-
 (function () {
 	if (localStorage.getItem('visibility') == null) {
 		localStorage.setItem('visibility', 'public');
@@ -172,10 +170,10 @@
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
-						<section class="tsd-index-section ">
+						<section class="tsd-index-section tsd-is-inherited tsd-is-private-protected">
 							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite"><a href="src_core_data_index.provider.html#constructor" class="tsd-kind-icon">constructor</a></li>
+								<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="src_core_data_index.provider.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section tsd-is-inherited">
@@ -256,32 +254,28 @@
 					</div>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group ">
+			<section class="tsd-panel-group tsd-member-group tsd-is-inherited tsd-is-private-protected">
 				<h2>Constructors</h2>
-				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
+				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
 					<a name="constructor" class="tsd-anchor"></a>
-					<h3>constructor</h3>
-					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> constructor</h3>
+					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
 						<li class="tsd-signature tsd-kind-icon">new <wbr>Provider<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/src_core_data_interface_types.provideroptions.html" class="tsd-signature-type">ProviderOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_data_index.provider.html" class="tsd-signature-type">Provider</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Overrides <a href="src_core_data_modules_base.provider.html">Provider</a>.<a href="src_core_data_modules_base.provider.html#constructor">constructor</a></p>
+								<p>Inherited from <a href="src_core_data_modules_base.provider.html">Provider</a>.<a href="src_core_data_modules_base.provider.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/index.ts#L62">src/core/data/index.ts:62</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L78">src/core/data/modules/base.ts:78</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
-								<dl class="tsd-comment-tags">
-									<dt>override</dt>
-									<dd></dd>
-								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/src_core_data_interface_types.provideroptions.html" class="tsd-signature-type">ProviderOptions</a></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> opts: <a href="../interfaces/src_core_data_interface_types.provideroptions.html" class="tsd-signature-type">ProviderOptions</a><span class="tsd-signature-symbol"> =&nbsp;{}</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="src_core_data_index.provider.html" class="tsd-signature-type">Provider</a></h4>
@@ -298,7 +292,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_data_modules_params.provider.html">Provider</a>.<a href="src_core_data_modules_params.provider.html#addmethod">addMethod</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L331">src/core/data/modules/params.ts:331</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L325">src/core/data/modules/params.ts:325</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -314,7 +308,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_data_modules_params.provider.html">Provider</a>.<a href="src_core_data_modules_params.provider.html#advurl">advURL</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L218">src/core/data/modules/params.ts:218</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L212">src/core/data/modules/params.ts:212</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -332,7 +326,7 @@
 						<p>Implementation of <a href="../interfaces/src_core_data_interface_index.provider.html">Provider</a>.<a href="../interfaces/src_core_data_interface_index.provider.html#alias">alias</a></p>
 						<p>Inherited from <a href="src_core_data_modules_base.provider.html">Provider</a>.<a href="src_core_data_modules_base.provider.html#alias">alias</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L53">src/core/data/modules/base.ts:53</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L54">src/core/data/modules/base.ts:54</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -348,7 +342,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_data_modules_base.provider.html">Provider</a>.<a href="src_core_data_modules_base.provider.html#async">async</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L72">src/core/data/modules/base.ts:72</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L73">src/core/data/modules/base.ts:73</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -364,7 +358,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_data_modules_params.provider.html">Provider</a>.<a href="src_core_data_modules_params.provider.html#baseaddurl">baseAddURL</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L265">src/core/data/modules/params.ts:265</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L259">src/core/data/modules/params.ts:259</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -389,7 +383,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_data_modules_params.provider.html">Provider</a>.<a href="src_core_data_modules_params.provider.html#basedelurl">baseDelURL</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L293">src/core/data/modules/params.ts:293</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L287">src/core/data/modules/params.ts:287</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -414,7 +408,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_data_modules_params.provider.html">Provider</a>.<a href="src_core_data_modules_params.provider.html#basegeturl">baseGetURL</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L237">src/core/data/modules/params.ts:237</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L231">src/core/data/modules/params.ts:231</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -439,7 +433,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_data_modules_params.provider.html">Provider</a>.<a href="src_core_data_modules_params.provider.html#basepeekurl">basePeekURL</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L251">src/core/data/modules/params.ts:251</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L245">src/core/data/modules/params.ts:245</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -464,7 +458,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_data_modules_params.provider.html">Provider</a>.<a href="src_core_data_modules_params.provider.html#baseurl">baseURL</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L212">src/core/data/modules/params.ts:212</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L206">src/core/data/modules/params.ts:206</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -487,7 +481,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_data_modules_params.provider.html">Provider</a>.<a href="src_core_data_modules_params.provider.html#baseupdurl">baseUpdURL</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L279">src/core/data/modules/params.ts:279</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L273">src/core/data/modules/params.ts:273</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -512,7 +506,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_data_modules_base.provider.html">Provider</a>.<a href="src_core_data_modules_base.provider.html#cacheid">cacheId</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L50">src/core/data/modules/base.ts:50</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L51">src/core/data/modules/base.ts:51</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -528,7 +522,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_data_modules_base.provider.html">Provider</a>.<a href="src_core_data_modules_base.provider.html#connection">connection</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L77">src/core/data/modules/base.ts:77</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L78">src/core/data/modules/base.ts:78</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -544,7 +538,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_data_modules_params.provider.html">Provider</a>.<a href="src_core_data_modules_params.provider.html#custommethod">customMethod</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L347">src/core/data/modules/params.ts:347</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L341">src/core/data/modules/params.ts:341</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -561,7 +555,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_data_modules_params.provider.html">Provider</a>.<a href="src_core_data_modules_params.provider.html#delmethod">delMethod</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L341">src/core/data/modules/params.ts:341</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L335">src/core/data/modules/params.ts:335</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -578,7 +572,7 @@
 						<p>Implementation of <a href="../interfaces/src_core_data_interface_index.provider.html">Provider</a>.<a href="../interfaces/src_core_data_interface_index.provider.html#emitter">emitter</a></p>
 						<p>Inherited from <a href="src_core_data_modules_base.provider.html">Provider</a>.<a href="src_core_data_modules_base.provider.html#emitter">emitter</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L56">src/core/data/modules/base.ts:56</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L57">src/core/data/modules/base.ts:57</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -594,7 +588,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_data_modules_params.provider.html">Provider</a>.<a href="src_core_data_modules_params.provider.html#eventname">eventName</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L353">src/core/data/modules/params.ts:353</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L347">src/core/data/modules/params.ts:347</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -611,7 +605,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_data_modules_params.provider.html">Provider</a>.<a href="src_core_data_modules_params.provider.html#externalrequest">externalRequest</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L362">src/core/data/modules/params.ts:362</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L356">src/core/data/modules/params.ts:356</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -629,7 +623,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_data_modules_params.provider.html">Provider</a>.<a href="src_core_data_modules_params.provider.html#extraproviders">extraProviders</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L316">src/core/data/modules/params.ts:316</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L310">src/core/data/modules/params.ts:310</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -663,7 +657,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_data_modules_params.provider.html">Provider</a>.<a href="src_core_data_modules_params.provider.html#getmethod">getMethod</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L321">src/core/data/modules/params.ts:321</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L315">src/core/data/modules/params.ts:315</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -679,7 +673,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_data_modules_params.provider.html">Provider</a>.<a href="src_core_data_modules_params.provider.html#globalemitter">globalEmitter</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L200">src/core/data/modules/params.ts:200</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L194">src/core/data/modules/params.ts:194</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -695,7 +689,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_data_modules_params.provider.html">Provider</a>.<a href="src_core_data_modules_params.provider.html#mocks">mocks</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L359">src/core/data/modules/params.ts:359</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L353">src/core/data/modules/params.ts:353</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -715,7 +709,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_data_modules_params.provider.html">Provider</a>.<a href="src_core_data_modules_params.provider.html#peekmethod">peekMethod</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L326">src/core/data/modules/params.ts:326</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L320">src/core/data/modules/params.ts:320</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -731,7 +725,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_data_modules_params.provider.html">Provider</a>.<a href="src_core_data_modules_params.provider.html#socketurl">socketURL</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L223">src/core/data/modules/params.ts:223</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L217">src/core/data/modules/params.ts:217</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -747,7 +741,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_data_modules_params.provider.html">Provider</a>.<a href="src_core_data_modules_params.provider.html#updmethod">updMethod</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L336">src/core/data/modules/params.ts:336</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L330">src/core/data/modules/params.ts:330</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -763,7 +757,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_data_modules_params.provider.html">Provider</a>.<a href="src_core_data_modules_params.provider.html#decoders">decoders</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L117">src/core/data/modules/params.ts:117</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L111">src/core/data/modules/params.ts:111</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -794,7 +788,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_data_modules_params.provider.html">Provider</a>.<a href="src_core_data_modules_params.provider.html#encoders">encoders</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L99">src/core/data/modules/params.ts:99</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L93">src/core/data/modules/params.ts:93</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -825,7 +819,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_data_modules_params.provider.html">Provider</a>.<a href="src_core_data_modules_params.provider.html#mocks-1">mocks</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L179">src/core/data/modules/params.ts:179</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L173">src/core/data/modules/params.ts:173</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -899,7 +893,7 @@ class MyProvider extends Provider {
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_data_modules_params.provider.html">Provider</a>.<a href="src_core_data_modules_params.provider.html#request">request</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L54">src/core/data/modules/params.ts:54</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L48">src/core/data/modules/params.ts:48</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -942,7 +936,7 @@ class MyProvider extends Provider {
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="src_core_data_modules_base.provider.html">Provider</a>.<a href="src_core_data_modules_base.provider.html#event">event</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L64">src/core/data/modules/base.ts:64</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L65">src/core/data/modules/base.ts:65</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -966,7 +960,7 @@ class MyProvider extends Provider {
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="src_core_data_modules_params.provider.html">Provider</a>.<a href="src_core_data_modules_params.provider.html#globalevent">globalEvent</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L368">src/core/data/modules/params.ts:368</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L362">src/core/data/modules/params.ts:362</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -993,7 +987,7 @@ class MyProvider extends Provider {
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="src_core_data_modules_base.provider.html">Provider</a>.<a href="src_core_data_modules_base.provider.html#providername">providerName</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L59">src/core/data/modules/base.ts:59</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L60">src/core/data/modules/base.ts:60</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1020,12 +1014,12 @@ class MyProvider extends Provider {
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="src_core_data_modules_params.provider.html">Provider</a>.<a href="src_core_data_modules_params.provider.html#request-1">request</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L376">src/core/data/modules/params.ts:376</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L370">src/core/data/modules/params.ts:370</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Alias for a request function</p>
+									<p>Alias for the request function</p>
 								</div>
 							</div>
 							<h4 class="tsd-returns-title">Returns <a href="../modules/src_core_request_index.html#request" class="tsd-signature-type">request</a></h4>
@@ -1047,7 +1041,7 @@ class MyProvider extends Provider {
 								<p>Implementation of <a href="../interfaces/src_core_data_interface_index.provider.html">Provider</a>.<a href="../interfaces/src_core_data_interface_index.provider.html#add">add</a></p>
 								<p>Inherited from <a href="src_core_data_modules_base.provider.html">Provider</a>.<a href="src_core_data_modules_base.provider.html#add">add</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L415">src/core/data/modules/base.ts:415</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L417">src/core/data/modules/base.ts:417</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1093,7 +1087,7 @@ class MyProvider extends Provider {
 								<p>Implementation of <a href="../interfaces/src_core_data_interface_index.provider.html">Provider</a>.<a href="../interfaces/src_core_data_interface_index.provider.html#base">base</a></p>
 								<p>Inherited from <a href="src_core_data_modules_base.provider.html">Provider</a>.<a href="src_core_data_modules_base.provider.html#base">base</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L215">src/core/data/modules/base.ts:215</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L214">src/core/data/modules/base.ts:214</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1108,7 +1102,7 @@ class MyProvider extends Provider {
 								<p>Implementation of <a href="../interfaces/src_core_data_interface_index.provider.html">Provider</a>.<a href="../interfaces/src_core_data_interface_index.provider.html#base">base</a></p>
 								<p>Inherited from <a href="src_core_data_modules_base.provider.html">Provider</a>.<a href="src_core_data_modules_base.provider.html#base">base</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L218">src/core/data/modules/base.ts:218</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L217">src/core/data/modules/base.ts:217</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1138,7 +1132,7 @@ class MyProvider extends Provider {
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="src_core_data_modules_base.provider.html">Provider</a>.<a href="src_core_data_modules_base.provider.html#connect">connect</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L148">src/core/data/modules/base.ts:148</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L147">src/core/data/modules/base.ts:147</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1168,7 +1162,7 @@ class MyProvider extends Provider {
 								<p>Implementation of <a href="../interfaces/src_core_data_interface_index.provider.html">Provider</a>.<a href="../interfaces/src_core_data_interface_index.provider.html#del">del</a></p>
 								<p>Inherited from <a href="src_core_data_modules_base.provider.html">Provider</a>.<a href="src_core_data_modules_base.provider.html#del">del</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L443">src/core/data/modules/base.ts:443</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L449">src/core/data/modules/base.ts:449</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1213,7 +1207,7 @@ class MyProvider extends Provider {
 								<p>Implementation of <a href="../interfaces/src_core_data_interface_index.provider.html">Provider</a>.<a href="../interfaces/src_core_data_interface_index.provider.html#dropcache">dropCache</a></p>
 								<p>Inherited from <a href="src_core_data_modules_base.provider.html">Provider</a>.<a href="src_core_data_modules_base.provider.html#dropcache">dropCache</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L253">src/core/data/modules/base.ts:253</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L252">src/core/data/modules/base.ts:252</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1237,7 +1231,7 @@ class MyProvider extends Provider {
 								<p>Implementation of <a href="../interfaces/src_core_data_interface_index.provider.html">Provider</a>.<a href="../interfaces/src_core_data_interface_index.provider.html#get">get</a></p>
 								<p>Inherited from <a href="src_core_data_modules_base.provider.html">Provider</a>.<a href="src_core_data_modules_base.provider.html#get">get</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L272">src/core/data/modules/base.ts:272</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L271">src/core/data/modules/base.ts:271</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1276,7 +1270,7 @@ class MyProvider extends Provider {
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="src_core_data_modules_base.provider.html">Provider</a>.<a href="src_core_data_modules_base.provider.html#getauthparams">getAuthParams</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L125">src/core/data/modules/base.ts:125</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L123">src/core/data/modules/base.ts:123</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1308,7 +1302,7 @@ class MyProvider extends Provider {
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="src_core_data_modules_base.provider.html">Provider</a>.<a href="src_core_data_modules_base.provider.html#getcachekey">getCacheKey</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L117">src/core/data/modules/base.ts:117</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L114">src/core/data/modules/base.ts:114</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1337,7 +1331,7 @@ class MyProvider extends Provider {
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="src_core_data_modules_base.provider.html">Provider</a>.<a href="src_core_data_modules_base.provider.html#geteventkey">getEventKey</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L483">src/core/data/modules/base.ts:483</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L493">src/core/data/modules/base.ts:493</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1375,7 +1369,7 @@ class MyProvider extends Provider {
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="src_core_data_modules_base.provider.html">Provider</a>.<a href="src_core_data_modules_base.provider.html#getrequestoptions">getRequestOptions</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L497">src/core/data/modules/base.ts:497</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L507">src/core/data/modules/base.ts:507</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1416,12 +1410,12 @@ class MyProvider extends Provider {
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="src_core_data_modules_base.provider.html">Provider</a>.<a href="src_core_data_modules_base.provider.html#initsocketbehaviour">initSocketBehaviour</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L588">src/core/data/modules/base.ts:588</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L602">src/core/data/modules/base.ts:602</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Initializes socket behaviour after successful connecting</p>
+									<p>Initializes the socket behaviour after successful connecting</p>
 								</div>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -1441,7 +1435,7 @@ class MyProvider extends Provider {
 								<p>Implementation of <a href="../interfaces/src_core_data_interface_index.provider.html">Provider</a>.<a href="../interfaces/src_core_data_interface_index.provider.html#method">method</a></p>
 								<p>Inherited from <a href="src_core_data_modules_base.provider.html">Provider</a>.<a href="src_core_data_modules_base.provider.html#method">method</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L200">src/core/data/modules/base.ts:200</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L199">src/core/data/modules/base.ts:199</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1456,9 +1450,15 @@ class MyProvider extends Provider {
 								<p>Implementation of <a href="../interfaces/src_core_data_interface_index.provider.html">Provider</a>.<a href="../interfaces/src_core_data_interface_index.provider.html#method">method</a></p>
 								<p>Inherited from <a href="src_core_data_modules_base.provider.html">Provider</a>.<a href="src_core_data_modules_base.provider.html#method">method</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L203">src/core/data/modules/base.ts:203</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L202">src/core/data/modules/base.ts:202</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Sets a custom HTTP request method for any request.
+									This method returns a new provider object with context.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -1482,7 +1482,7 @@ class MyProvider extends Provider {
 								<p>Implementation of <a href="../interfaces/src_core_data_interface_index.provider.html">Provider</a>.<a href="../interfaces/src_core_data_interface_index.provider.html#name">name</a></p>
 								<p>Inherited from <a href="src_core_data_modules_base.provider.html">Provider</a>.<a href="src_core_data_modules_base.provider.html#name">name</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L185">src/core/data/modules/base.ts:185</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L184">src/core/data/modules/base.ts:184</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1498,7 +1498,7 @@ class MyProvider extends Provider {
 								<p>Implementation of <a href="../interfaces/src_core_data_interface_index.provider.html">Provider</a>.<a href="../interfaces/src_core_data_interface_index.provider.html#name">name</a></p>
 								<p>Inherited from <a href="src_core_data_modules_base.provider.html">Provider</a>.<a href="src_core_data_modules_base.provider.html#name">name</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L188">src/core/data/modules/base.ts:188</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L187">src/core/data/modules/base.ts:187</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1530,7 +1530,7 @@ class MyProvider extends Provider {
 								<p>Implementation of <a href="../interfaces/src_core_data_interface_index.provider.html">Provider</a>.<a href="../interfaces/src_core_data_interface_index.provider.html#peek">peek</a></p>
 								<p>Inherited from <a href="src_core_data_modules_base.provider.html">Provider</a>.<a href="src_core_data_modules_base.provider.html#peek">peek</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L375">src/core/data/modules/base.ts:375</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L377">src/core/data/modules/base.ts:377</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1570,7 +1570,7 @@ class MyProvider extends Provider {
 								<p>Implementation of <a href="../interfaces/src_core_data_interface_index.provider.html">Provider</a>.<a href="../interfaces/src_core_data_interface_index.provider.html#post">post</a></p>
 								<p>Inherited from <a href="src_core_data_modules_base.provider.html">Provider</a>.<a href="src_core_data_modules_base.provider.html#post">post</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L395">src/core/data/modules/base.ts:395</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L397">src/core/data/modules/base.ts:397</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1609,12 +1609,12 @@ class MyProvider extends Provider {
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="src_core_data_modules_base.provider.html">Provider</a>.<a href="src_core_data_modules_base.provider.html#resolveurl">resolveURL</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L462">src/core/data/modules/base.ts:462</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L470">src/core/data/modules/base.ts:470</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Returns full URL of a request by the specified URL chunks</p>
+									<p>Returns full request URL by the specified URL chunks</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1641,7 +1641,7 @@ class MyProvider extends Provider {
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="src_core_data_modules_base.provider.html">Provider</a>.<a href="src_core_data_modules_base.provider.html#resolver">resolver</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L140">src/core/data/modules/base.ts:140</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L139">src/core/data/modules/base.ts:139</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1693,7 +1693,7 @@ class MyProvider extends Provider {
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="src_core_data_modules_base.provider.html">Provider</a>.<a href="src_core_data_modules_base.provider.html#setreadonlyparam">setReadonlyParam</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L469">src/core/data/modules/base.ts:469</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L477">src/core/data/modules/base.ts:477</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1726,7 +1726,7 @@ class MyProvider extends Provider {
 								<p>Implementation of <a href="../interfaces/src_core_data_interface_index.provider.html">Provider</a>.<a href="../interfaces/src_core_data_interface_index.provider.html#upd">upd</a></p>
 								<p>Inherited from <a href="src_core_data_modules_base.provider.html">Provider</a>.<a href="src_core_data_modules_base.provider.html#upd">upd</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L429">src/core/data/modules/base.ts:429</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L433">src/core/data/modules/base.ts:433</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1771,7 +1771,7 @@ class MyProvider extends Provider {
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="src_core_data_modules_base.provider.html">Provider</a>.<a href="src_core_data_modules_base.provider.html#updaterequest">updateRequest</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L538">src/core/data/modules/base.ts:538</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L543">src/core/data/modules/base.ts:543</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1806,7 +1806,7 @@ class MyProvider extends Provider {
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="src_core_data_modules_base.provider.html">Provider</a>.<a href="src_core_data_modules_base.provider.html#updaterequest">updateRequest</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L547">src/core/data/modules/base.ts:547</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L552">src/core/data/modules/base.ts:552</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1858,7 +1858,7 @@ class MyProvider extends Provider {
 								<p>Implementation of <a href="../interfaces/src_core_data_interface_index.provider.html">Provider</a>.<a href="../interfaces/src_core_data_interface_index.provider.html#url">url</a></p>
 								<p>Inherited from <a href="src_core_data_modules_base.provider.html">Provider</a>.<a href="src_core_data_modules_base.provider.html#url">url</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L238">src/core/data/modules/base.ts:238</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L237">src/core/data/modules/base.ts:237</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1873,7 +1873,7 @@ class MyProvider extends Provider {
 								<p>Implementation of <a href="../interfaces/src_core_data_interface_index.provider.html">Provider</a>.<a href="../interfaces/src_core_data_interface_index.provider.html#url">url</a></p>
 								<p>Inherited from <a href="src_core_data_modules_base.provider.html">Provider</a>.<a href="src_core_data_modules_base.provider.html#url">url</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L241">src/core/data/modules/base.ts:241</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L240">src/core/data/modules/base.ts:240</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1903,7 +1903,7 @@ class MyProvider extends Provider {
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="src_core_data_modules_params.provider.html">Provider</a>.<a href="src_core_data_modules_params.provider.html#select">select</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L193">src/core/data/modules/params.ts:193</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L187">src/core/data/modules/params.ts:187</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1952,7 +1952,7 @@ MyProvider.select([{<span class="hljs-attr">test</span>: <span class="hljs-numbe
 					<aside class="tsd-sources">
 						<p>Overrides <a href="src_core_data_modules_params.provider.html">Provider</a>.<a href="src_core_data_modules_params.provider.html#middlewares">middlewares</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/index.ts#L60">src/core/data/index.ts:60</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/index.ts#L58">src/core/data/index.ts:58</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -1967,7 +1967,7 @@ MyProvider.select([{<span class="hljs-attr">test</span>: <span class="hljs-numbe
 						<div class="tsd-signature tsd-kind-icon">attach<wbr>Mock<span class="tsd-signature-symbol">:</span> <a href="../modules/src_core_data_middlewares_attach_mock_index.html#attachmock" class="tsd-signature-type">attachMock</a></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/index.ts#L61">src/core/data/index.ts:61</a></li>
+								<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/index.ts#L59">src/core/data/index.ts:59</a></li>
 							</ul>
 						</aside>
 					</section>
@@ -1992,7 +1992,7 @@ MyProvider.select([{<span class="hljs-attr">test</span>: <span class="hljs-numbe
 					<li class="current tsd-kind-class tsd-parent-kind-external-module">
 						<a href="src_core_data_index.provider.html" class="tsd-kind-icon">Provider</a>
 						<ul>
-							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
+							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
 								<a href="src_core_data_index.provider.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
@@ -2241,8 +2241,6 @@ MyProvider.select([{<span class="hljs-attr">test</span>: <span class="hljs-numbe
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
-
-/* eslint-disable prefer-arrow-callback, no-var */
 
 (function () {
 	document.body.style.display = 'block';

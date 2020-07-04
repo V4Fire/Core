@@ -71,8 +71,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-/* eslint-disable prefer-arrow-callback, no-var */
-
 (function () {
 	if (localStorage.getItem('visibility') == null) {
 		localStorage.setItem('visibility', 'public');
@@ -146,6 +144,30 @@
 							<h1>core/event</h1>
 						</a>
 						<p>This module provides a bunch of helper functions to observe events in more flexibly way.</p>
+						<pre><code class="language-js"><span class="hljs-comment">/*!
+ * V4Fire Core
+ * https://github.com/V4Fire/Core
+ *
+ * Released under the MIT license
+ * https://github.com/V4Fire/Core/blob/master/LICENSE
+ */</span>
+
+<span class="hljs-keyword">import</span> { EventEmitter2 <span class="hljs-keyword">as</span> EventEmitter } <span class="hljs-keyword">from</span> <span class="hljs-string">'eventemitter2'</span>;
+<span class="hljs-keyword">import</span> { resolveAfterEvents, createsAsyncSemaphore } <span class="hljs-keyword">from</span> <span class="hljs-string">'core/event'</span>;
+
+<span class="hljs-keyword">const</span>
+  emitter = <span class="hljs-keyword">new</span> EventEmitter();
+
+resolveAfterEvents(emitter, <span class="hljs-string">'foo'</span>, <span class="hljs-string">'bar'</span>).then(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Bang!'</span>));
+emitter.emit(<span class="hljs-string">'foo'</span>);
+emitter.emit(<span class="hljs-string">'bar'</span>);
+
+<span class="hljs-keyword">const</span> semaphore = createsAsyncSemaphore(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Boom!'</span>);
+}, <span class="hljs-string">'foo'</span>, <span class="hljs-string">'bar'</span>);
+
+semaphore(<span class="hljs-string">'foo'</span>);
+semaphore(<span class="hljs-string">'bar'</span>) <span class="hljs-comment">// Boom!</span></code></pre>
 					</div>
 				</div>
 			</section>
@@ -176,7 +198,7 @@
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module">
 					<a name="afterevents" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> after<wbr>Events</h3>
-					<div class="tsd-signature tsd-kind-icon">after<wbr>Events<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">afterEvents</span><span class="tsd-signature-symbol"> =&nbsp;deprecate({alternative: &#x27;resolveAfterEvents&#x27;},function afterEvents(emitter: EventEmitterLike, cb: Function | string, ...events: string[]): Promise&lt;void&gt; {constpromise &#x3D; resolveAfterEvents(emitter, ...Array.concat([], Object.isString(cb) ? cb : null, events));if (Object.isFunction(cb)) {promise.then(cb);}return promise;})</span></div>
+					<div class="tsd-signature tsd-kind-icon">after<wbr>Events<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">afterEvents</span><span class="tsd-signature-symbol"> =&nbsp;deprecate({alternative: &#x27;resolveAfterEvents&#x27;},function afterEvents(emitter: EventEmitterLike, cb: Function | string, ...events: string[]): Promise&lt;void&gt; {constpromise &#x3D; resolveAfterEvents(emitter, ...Array.concat([], Object.isString(cb) ? cb : null, events));if (Object.isFunction(cb)) {promise.then(cb, stderr);}return promise;})</span></div>
 					<aside class="tsd-sources">
 						<ul>
 							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/event/index.ts#L129">src/core/event/index.ts:129</a></li>
@@ -478,8 +500,6 @@ resolveAfterEvents(<span class="hljs-built_in">window</span>, <span class="hljs-
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
-
-/* eslint-disable prefer-arrow-callback, no-var */
 
 (function () {
 	document.body.style.display = 'block';

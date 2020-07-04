@@ -71,8 +71,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-/* eslint-disable prefer-arrow-callback, no-var */
-
 (function () {
 	if (localStorage.getItem('visibility') == null) {
 		localStorage.setItem('visibility', 'public');
@@ -153,10 +151,10 @@
 								<li class="tsd-kind-external-module"><a href="modules/src_core_async_helpers.html" class="tsd-kind-icon">&quot;src/core/async/helpers&quot;</a></li>
 								<li class="tsd-kind-external-module"><a href="modules/src_core_async_index.html" class="tsd-kind-icon">&quot;src/core/async/index&quot;</a></li>
 								<li class="tsd-kind-external-module"><a href="modules/src_core_async_interface.html" class="tsd-kind-icon">&quot;src/core/async/interface&quot;</a></li>
-								<li class="tsd-kind-external-module"><a href="modules/src_core_async_modules_base.html" class="tsd-kind-icon">&quot;src/core/async/modules/base&quot;</a></li>
-								<li class="tsd-kind-external-module"><a href="modules/src_core_async_modules_events.html" class="tsd-kind-icon">&quot;src/core/async/modules/events&quot;</a></li>
+								<li class="tsd-kind-external-module"><a href="modules/src_core_async_modules_base_index.html" class="tsd-kind-icon">&quot;src/core/async/modules/base/index&quot;</a></li>
+								<li class="tsd-kind-external-module"><a href="modules/src_core_async_modules_events_index.html" class="tsd-kind-icon">&quot;src/core/async/modules/events/index&quot;</a></li>
 								<li class="tsd-kind-external-module"><a href="modules/src_core_async_modules_proxy_index.html" class="tsd-kind-icon">&quot;src/core/async/modules/proxy/index&quot;</a></li>
-								<li class="tsd-kind-external-module"><a href="modules/src_core_async_modules_timers.html" class="tsd-kind-icon">&quot;src/core/async/modules/timers&quot;</a></li>
+								<li class="tsd-kind-external-module"><a href="modules/src_core_async_modules_timers_index.html" class="tsd-kind-icon">&quot;src/core/async/modules/timers/index&quot;</a></li>
 								<li class="tsd-kind-external-module"><a href="modules/src_core_cache_index.html" class="tsd-kind-icon">&quot;src/core/cache/index&quot;</a></li>
 								<li class="tsd-kind-external-module"><a href="modules/src_core_cache_interface.html" class="tsd-kind-icon">&quot;src/core/cache/interface&quot;</a></li>
 								<li class="tsd-kind-external-module"><a href="modules/src_core_cache_never_index.html" class="tsd-kind-icon">&quot;src/core/cache/never/index&quot;</a></li>
@@ -223,13 +221,17 @@
 								<li class="tsd-kind-external-module"><a href="modules/src_core_queue_index.html" class="tsd-kind-icon">&quot;src/core/queue/index&quot;</a></li>
 								<li class="tsd-kind-external-module"><a href="modules/src_core_queue_interface.html" class="tsd-kind-icon">&quot;src/core/queue/interface&quot;</a></li>
 								<li class="tsd-kind-external-module"><a href="modules/src_core_queue_merge_index.html" class="tsd-kind-icon">&quot;src/core/queue/merge/index&quot;</a></li>
+								<li class="tsd-kind-external-module"><a href="modules/src_core_queue_merge_interface.html" class="tsd-kind-icon">&quot;src/core/queue/merge/interface&quot;</a></li>
 								<li class="tsd-kind-external-module"><a href="modules/src_core_queue_order_index.html" class="tsd-kind-icon">&quot;src/core/queue/order/index&quot;</a></li>
 								<li class="tsd-kind-external-module"><a href="modules/src_core_queue_order_interface.html" class="tsd-kind-icon">&quot;src/core/queue/order/interface&quot;</a></li>
 								<li class="tsd-kind-external-module"><a href="modules/src_core_queue_simple_index.html" class="tsd-kind-icon">&quot;src/core/queue/simple/index&quot;</a></li>
+								<li class="tsd-kind-external-module"><a href="modules/src_core_queue_simple_interface.html" class="tsd-kind-icon">&quot;src/core/queue/simple/interface&quot;</a></li>
 								<li class="tsd-kind-external-module"><a href="modules/src_core_queue_worker_index.html" class="tsd-kind-icon">&quot;src/core/queue/worker/index&quot;</a></li>
 								<li class="tsd-kind-external-module"><a href="modules/src_core_queue_worker_interface.html" class="tsd-kind-icon">&quot;src/core/queue/worker/interface&quot;</a></li>
 								<li class="tsd-kind-external-module"><a href="modules/src_core_queue_worker_merge_index.html" class="tsd-kind-icon">&quot;src/core/queue/worker/merge/index&quot;</a></li>
 								<li class="tsd-kind-external-module"><a href="modules/src_core_queue_worker_merge_interface.html" class="tsd-kind-icon">&quot;src/core/queue/worker/merge/interface&quot;</a></li>
+								<li class="tsd-kind-external-module"><a href="modules/src_core_queue_worker_simple_index.html" class="tsd-kind-icon">&quot;src/core/queue/worker/simple/index&quot;</a></li>
+								<li class="tsd-kind-external-module"><a href="modules/src_core_queue_worker_simple_interface.html" class="tsd-kind-icon">&quot;src/core/queue/worker/simple/interface&quot;</a></li>
 								<li class="tsd-kind-external-module"><a href="modules/src_core_range_index.html" class="tsd-kind-icon">&quot;src/core/range/index&quot;</a></li>
 								<li class="tsd-kind-external-module"><a href="modules/src_core_range_interface.html" class="tsd-kind-icon">&quot;src/core/range/interface&quot;</a></li>
 								<li class="tsd-kind-external-module"><a href="modules/src_core_request_const.html" class="tsd-kind-icon">&quot;src/core/request/const&quot;</a></li>
@@ -259,10 +261,13 @@
 								<li class="tsd-kind-external-module"><a href="modules/src_core_then_index.html" class="tsd-kind-icon">&quot;src/core/then/index&quot;</a></li>
 								<li class="tsd-kind-external-module"><a href="modules/src_core_then_interface.html" class="tsd-kind-icon">&quot;src/core/then/interface&quot;</a></li>
 								<li class="tsd-kind-external-module"><a href="modules/src_core_url_concat.html" class="tsd-kind-icon">&quot;src/core/url/concat&quot;</a></li>
+								<li class="tsd-kind-external-module"><a href="modules/src_core_url_const.html" class="tsd-kind-icon">&quot;src/core/url/const&quot;</a></li>
 								<li class="tsd-kind-external-module"><a href="modules/src_core_url_convert.html" class="tsd-kind-icon">&quot;src/core/url/convert&quot;</a></li>
 								<li class="tsd-kind-external-module"><a href="modules/src_core_url_index.html" class="tsd-kind-icon">&quot;src/core/url/index&quot;</a></li>
 								<li class="tsd-kind-external-module"><a href="modules/src_core_url_interface.html" class="tsd-kind-icon">&quot;src/core/url/interface&quot;</a></li>
+								<li class="tsd-kind-external-module"><a href="modules/src_core_uuid_const.html" class="tsd-kind-icon">&quot;src/core/uuid/const&quot;</a></li>
 								<li class="tsd-kind-external-module"><a href="modules/src_core_uuid_index.html" class="tsd-kind-icon">&quot;src/core/uuid/index&quot;</a></li>
+								<li class="tsd-kind-external-module"><a href="modules/src_core_xml_const.html" class="tsd-kind-icon">&quot;src/core/xml/const&quot;</a></li>
 								<li class="tsd-kind-external-module"><a href="modules/src_core_xml_index.html" class="tsd-kind-icon">&quot;src/core/xml/index&quot;</a></li>
 								<li class="tsd-kind-external-module"><a href="modules/src_lang_index.html" class="tsd-kind-icon">&quot;src/lang/index&quot;</a></li>
 							</ul>
@@ -308,16 +313,16 @@
 						<a href="modules/src_core_async_interface.html">&quot;src/core/async/interface&quot;</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="modules/src_core_async_modules_base.html">&quot;src/core/async/modules/base&quot;</a>
+						<a href="modules/src_core_async_modules_base_index.html">&quot;src/core/async/modules/base/index&quot;</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="modules/src_core_async_modules_events.html">&quot;src/core/async/modules/events&quot;</a>
+						<a href="modules/src_core_async_modules_events_index.html">&quot;src/core/async/modules/events/index&quot;</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="modules/src_core_async_modules_proxy_index.html">&quot;src/core/async/modules/proxy/index&quot;</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="modules/src_core_async_modules_timers.html">&quot;src/core/async/modules/timers&quot;</a>
+						<a href="modules/src_core_async_modules_timers_index.html">&quot;src/core/async/modules/timers/index&quot;</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="modules/src_core_cache_index.html">&quot;src/core/cache/index&quot;</a>
@@ -518,6 +523,9 @@
 						<a href="modules/src_core_queue_merge_index.html">&quot;src/core/queue/merge/index&quot;</a>
 					</li>
 					<li class=" tsd-kind-external-module">
+						<a href="modules/src_core_queue_merge_interface.html">&quot;src/core/queue/merge/interface&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
 						<a href="modules/src_core_queue_order_index.html">&quot;src/core/queue/order/index&quot;</a>
 					</li>
 					<li class=" tsd-kind-external-module">
@@ -525,6 +533,9 @@
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="modules/src_core_queue_simple_index.html">&quot;src/core/queue/simple/index&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/src_core_queue_simple_interface.html">&quot;src/core/queue/simple/interface&quot;</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="modules/src_core_queue_worker_index.html">&quot;src/core/queue/worker/index&quot;</a>
@@ -537,6 +548,12 @@
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="modules/src_core_queue_worker_merge_interface.html">&quot;src/core/queue/worker/merge/interface&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/src_core_queue_worker_simple_index.html">&quot;src/core/queue/worker/simple/index&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/src_core_queue_worker_simple_interface.html">&quot;src/core/queue/worker/simple/interface&quot;</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="modules/src_core_range_index.html">&quot;src/core/range/index&quot;</a>
@@ -626,6 +643,9 @@
 						<a href="modules/src_core_url_concat.html">&quot;src/core/url/concat&quot;</a>
 					</li>
 					<li class=" tsd-kind-external-module">
+						<a href="modules/src_core_url_const.html">&quot;src/core/url/const&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
 						<a href="modules/src_core_url_convert.html">&quot;src/core/url/convert&quot;</a>
 					</li>
 					<li class=" tsd-kind-external-module">
@@ -635,7 +655,13 @@
 						<a href="modules/src_core_url_interface.html">&quot;src/core/url/interface&quot;</a>
 					</li>
 					<li class=" tsd-kind-external-module">
+						<a href="modules/src_core_uuid_const.html">&quot;src/core/uuid/const&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
 						<a href="modules/src_core_uuid_index.html">&quot;src/core/uuid/index&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/src_core_xml_const.html">&quot;src/core/xml/const&quot;</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="modules/src_core_xml_index.html">&quot;src/core/xml/index&quot;</a>
@@ -730,8 +756,6 @@
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
-
-/* eslint-disable prefer-arrow-callback, no-var */
 
 (function () {
 	document.body.style.display = 'block';

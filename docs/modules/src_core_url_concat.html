@@ -71,8 +71,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-/* eslint-disable prefer-arrow-callback, no-var */
-
 (function () {
 	if (localStorage.getItem('visibility') == null) {
 		localStorage.setItem('visibility', 'public');
@@ -146,8 +144,7 @@
 						<section class="tsd-index-section tsd-is-not-exported">
 							<h3>Variables</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported"><a href="src_core_url_concat.html#isabsurl" class="tsd-kind-icon">is<wbr>AbsURL</a></li>
-								<li class="tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported"><a href="src_core_url_concat.html#isurlwithslash" class="tsd-kind-icon">is<wbr>Url<wbr>With<wbr>Slash</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported"><a href="src_core_url_concat.html#isurlwithslash" class="tsd-kind-icon">isURLWith<wbr>Slash</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
@@ -162,22 +159,12 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
 				<h2>Variables</h2>
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
-					<a name="isabsurl" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagConst">Const</span> is<wbr>AbsURL</h3>
-					<div class="tsd-signature tsd-kind-icon">is<wbr>AbsURL<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RegExp</span><span class="tsd-signature-symbol"> =&nbsp;/^\w+:?\/\//</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/url/concat.ts#L10">src/core/url/concat.ts:10</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
 					<a name="isurlwithslash" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagConst">Const</span> is<wbr>Url<wbr>With<wbr>Slash</h3>
-					<div class="tsd-signature tsd-kind-icon">is<wbr>Url<wbr>With<wbr>Slash<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RegExp</span><span class="tsd-signature-symbol"> =&nbsp;/^(\w+:)?\/?\//</span></div>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> isURLWith<wbr>Slash</h3>
+					<div class="tsd-signature tsd-kind-icon">isURLWith<wbr>Slash<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RegExp</span><span class="tsd-signature-symbol"> =&nbsp;/^(?:\w+:)?\/+/</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/url/concat.ts#L11">src/core/url/concat.ts:11</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/url/concat.ts#L12">src/core/url/concat.ts:12</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -188,24 +175,33 @@
 					<a name="concaturls" class="tsd-anchor"></a>
 					<h3>concat<wbr>Urls</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
-						<li class="tsd-signature tsd-kind-icon">concat<wbr>Urls<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>urls<span class="tsd-signature-symbol">: </span><a href="index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+						<li class="tsd-signature tsd-kind-icon">concat<wbr>Urls<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>urls<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><a href="index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/url/concat.ts#L17">src/core/url/concat.ts:17</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/url/concat.ts#L28">src/core/url/concat.ts:28</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Concatenates the specified parts of URLs with correctly arranging of slashes and returns a new string</p>
+									<p>Concatenates the specified parts of URL-s with correctly arranging of slashes and returns a new string</p>
 								</div>
+								<dl class="tsd-comment-tags">
+									<dt>example</dt>
+									<dd><pre><code class="language-js"><span class="hljs-comment">// '/foo/baz/bar/bla'</span>
+concatUrls(<span class="hljs-string">'foo/baz'</span>, <span class="hljs-string">'/bar'</span>, <span class="hljs-string">'bla'</span>);
+
+<span class="hljs-comment">// 'http://foo.bar/bla'</span>
+concatUrls(<span class="hljs-string">'http://foo.bar'</span>, <span class="hljs-string">'bla'</span>);</code></pre>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>urls: <a href="index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span></h5>
+									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>urls: <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><a href="index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
 									<div class="tsd-comment tsd-typography">
 									</div>
 								</li>
@@ -230,10 +226,7 @@
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
-						<a href="src_core_url_concat.html#isabsurl" class="tsd-kind-icon">is<wbr>AbsURL</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
-						<a href="src_core_url_concat.html#isurlwithslash" class="tsd-kind-icon">is<wbr>Url<wbr>With<wbr>Slash</a>
+						<a href="src_core_url_concat.html#isurlwithslash" class="tsd-kind-icon">isURLWith<wbr>Slash</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module">
 						<a href="src_core_url_concat.html#concaturls" class="tsd-kind-icon">concat<wbr>Urls</a>
@@ -315,8 +308,6 @@
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
-
-/* eslint-disable prefer-arrow-callback, no-var */
 
 (function () {
 	document.body.style.display = 'block';

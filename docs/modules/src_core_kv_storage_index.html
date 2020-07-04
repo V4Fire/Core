@@ -71,8 +71,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-/* eslint-disable prefer-arrow-callback, no-var */
-
 (function () {
 	if (localStorage.getItem('visibility') == null) {
 		localStorage.setItem('visibility', 'public');
@@ -343,7 +341,7 @@ blaStore.set(<span class="hljs-string">'bla'</span>, <span class="hljs-number">1
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module">
 					<a name="clear" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> clear</h3>
-					<div class="tsd-signature tsd-kind-icon">clear<span class="tsd-signature-symbol">:</span> <a href="../interfaces/src_core_kv_storage_interface.syncstoragenamespace.html#clear" class="tsd-signature-type">clear</a><span class="tsd-signature-symbol"> =&nbsp;local.clear</span></div>
+					<div class="tsd-signature tsd-kind-icon">clear<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> =&nbsp;local.clear.bind(local)</span></div>
 					<aside class="tsd-sources">
 						<ul>
 							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/kv-storage/index.ts#L122">src/core/kv-storage/index.ts:122</a></li>
@@ -365,7 +363,7 @@ blaStore.set(<span class="hljs-string">'bla'</span>, <span class="hljs-number">1
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module">
 					<a name="get" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> get</h3>
-					<div class="tsd-signature tsd-kind-icon">get<span class="tsd-signature-symbol">:</span> <a href="../interfaces/src_core_kv_storage_interface.syncstoragenamespace.html#get" class="tsd-signature-type">get</a><span class="tsd-signature-symbol"> =&nbsp;local.get</span></div>
+					<div class="tsd-signature tsd-kind-icon">get<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> =&nbsp;local.get.bind(local)</span></div>
 					<aside class="tsd-sources">
 						<ul>
 							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/kv-storage/index.ts#L98">src/core/kv-storage/index.ts:98</a></li>
@@ -387,7 +385,7 @@ blaStore.set(<span class="hljs-string">'bla'</span>, <span class="hljs-number">1
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module">
 					<a name="has" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> has</h3>
-					<div class="tsd-signature tsd-kind-icon">has<span class="tsd-signature-symbol">:</span> <a href="../interfaces/src_core_kv_storage_interface.syncstoragenamespace.html#has" class="tsd-signature-type">has</a><span class="tsd-signature-symbol"> =&nbsp;local.has</span></div>
+					<div class="tsd-signature tsd-kind-icon">has<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> =&nbsp;local.has.bind(local)</span></div>
 					<aside class="tsd-sources">
 						<ul>
 							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/kv-storage/index.ts#L90">src/core/kv-storage/index.ts:90</a></li>
@@ -430,7 +428,7 @@ local.get(<span class="hljs-string">'foo'</span>); <span class="hljs-comment">//
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module">
 					<a name="namespace" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> namespace</h3>
-					<div class="tsd-signature tsd-kind-icon">namespace<span class="tsd-signature-symbol">:</span> <a href="../interfaces/src_core_kv_storage_interface.syncstorage.html#namespace" class="tsd-signature-type">namespace</a><span class="tsd-signature-symbol"> =&nbsp;local.namespace</span></div>
+					<div class="tsd-signature tsd-kind-icon">namespace<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> =&nbsp;local.namespace.bind(local)</span></div>
 					<aside class="tsd-sources">
 						<ul>
 							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/kv-storage/index.ts#L138">src/core/kv-storage/index.ts:138</a></li>
@@ -458,7 +456,7 @@ local.get(<span class="hljs-string">'foo'</span>); <span class="hljs-comment">//
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module">
 					<a name="remove" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> remove</h3>
-					<div class="tsd-signature tsd-kind-icon">remove<span class="tsd-signature-symbol">:</span> <a href="../interfaces/src_core_kv_storage_interface.syncstoragenamespace.html#remove" class="tsd-signature-type">remove</a><span class="tsd-signature-symbol"> =&nbsp;local.remove</span></div>
+					<div class="tsd-signature tsd-kind-icon">remove<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> =&nbsp;local.remove.bind(local)</span></div>
 					<aside class="tsd-sources">
 						<ul>
 							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/kv-storage/index.ts#L114">src/core/kv-storage/index.ts:114</a></li>
@@ -501,7 +499,7 @@ session.get(<span class="hljs-string">'foo'</span>); <span class="hljs-comment">
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module">
 					<a name="set" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> set</h3>
-					<div class="tsd-signature tsd-kind-icon">set<span class="tsd-signature-symbol">:</span> <a href="../interfaces/src_core_kv_storage_interface.syncstoragenamespace.html#set" class="tsd-signature-type">set</a><span class="tsd-signature-symbol"> =&nbsp;local.set</span></div>
+					<div class="tsd-signature tsd-kind-icon">set<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> =&nbsp;local.set.bind(local)</span></div>
 					<aside class="tsd-sources">
 						<ul>
 							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/kv-storage/index.ts#L106">src/core/kv-storage/index.ts:106</a></li>
@@ -707,8 +705,6 @@ storage.get(<span class="hljs-string">'foo'</span>); <span class="hljs-comment">
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
-
-/* eslint-disable prefer-arrow-callback, no-var */
 
 (function () {
 	document.body.style.display = 'block';

@@ -71,8 +71,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-/* eslint-disable prefer-arrow-callback, no-var */
-
 (function () {
 	if (localStorage.getItem('visibility') == null) {
 		localStorage.setItem('visibility', 'public');
@@ -149,12 +147,12 @@
 						<a href="#concatenation-of-url-s" id="concatenation-of-url-s" style="color: inherit; text-decoration: none;">
 							<h2>Concatenation of URL-s</h2>
 						</a>
-						<pre><code class="language-javascript"><span class="hljs-keyword">import</span> { concatUrls } <span class="hljs-keyword">from</span> <span class="hljs-string">'core/url'</span>;
+						<pre><code class="language-js"><span class="hljs-keyword">import</span> { concatUrls } <span class="hljs-keyword">from</span> <span class="hljs-string">'core/url'</span>;
 concatUrls(<span class="hljs-string">'foo/baz'</span>, <span class="hljs-string">'/bar'</span>, <span class="hljs-string">'bla'</span>) === <span class="hljs-string">'/foo/baz/bar/bla'</span>;</code></pre>
 						<a href="#parsingserialization" id="parsingserialization" style="color: inherit; text-decoration: none;">
 							<h2>Parsing/Serialization</h2>
 						</a>
-						<pre><code class="language-javascript"><span class="hljs-keyword">import</span> { fromQueryString, toQueryString } <span class="hljs-keyword">from</span> <span class="hljs-string">'core/url'</span>;
+						<pre><code class="language-js"><span class="hljs-keyword">import</span> { fromQueryString, toQueryString } <span class="hljs-keyword">from</span> <span class="hljs-string">'core/url'</span>;
 
 <span class="hljs-keyword">const</span> data = {
   <span class="hljs-attr">foo</span>: <span class="hljs-number">1</span>,
@@ -261,8 +259,6 @@ fromQueryString(toQueryString(data), {<span class="hljs-attr">separator</span>: 
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
-
-/* eslint-disable prefer-arrow-callback, no-var */
 
 (function () {
 	document.body.style.display = 'block';

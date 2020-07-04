@@ -71,8 +71,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-/* eslint-disable prefer-arrow-callback, no-var */
-
 (function () {
 	if (localStorage.getItem('visibility') == null) {
 		localStorage.setItem('visibility', 'public');
@@ -206,7 +204,7 @@
 					<div class="tsd-signature tsd-kind-icon">storage<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Map</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;new Map()</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/cache/never/index.ts#L24">src/core/cache/never/index.ts:24</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/cache/never/index.ts#L27">src/core/cache/never/index.ts:27</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -222,14 +220,14 @@
 					<a name="clear" class="tsd-anchor"></a>
 					<h3>clear</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">clear<span class="tsd-signature-symbol">(</span>filter<span class="tsd-signature-symbol">?: </span><a href="../interfaces/src_core_kv_storage_interface.clearfilter.html" class="tsd-signature-type">ClearFilter</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Set</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">clear<span class="tsd-signature-symbol">(</span>filter<span class="tsd-signature-symbol">?: </span><a href="../interfaces/src_core_kv_storage_interface.clearfilter.html" class="tsd-signature-type">ClearFilter</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Map</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/src_core_cache_interface.cache.html">Cache</a>.<a href="../interfaces/src_core_cache_interface.cache.html#clear">clear</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/cache/never/index.ts#L52">src/core/cache/never/index.ts:52</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/cache/never/index.ts#L55">src/core/cache/never/index.ts:55</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -245,7 +243,7 @@
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> filter: <a href="../interfaces/src_core_kv_storage_interface.clearfilter.html" class="tsd-signature-type">ClearFilter</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Set</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Map</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -260,7 +258,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/src_core_cache_interface.cache.html">Cache</a>.<a href="../interfaces/src_core_cache_interface.cache.html#get">get</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/cache/never/index.ts#L32">src/core/cache/never/index.ts:32</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/cache/never/index.ts#L35">src/core/cache/never/index.ts:35</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -291,7 +289,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/src_core_cache_interface.cache.html">Cache</a>.<a href="../interfaces/src_core_cache_interface.cache.html#has">has</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/cache/never/index.ts#L27">src/core/cache/never/index.ts:27</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/cache/never/index.ts#L30">src/core/cache/never/index.ts:30</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -322,7 +320,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/src_core_cache_interface.cache.html">Cache</a>.<a href="../interfaces/src_core_cache_interface.cache.html#keys">keys</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/cache/never/index.ts#L47">src/core/cache/never/index.ts:47</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/cache/never/index.ts#L50">src/core/cache/never/index.ts:50</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -347,7 +345,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/src_core_cache_interface.cache.html">Cache</a>.<a href="../interfaces/src_core_cache_interface.cache.html#remove">remove</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/cache/never/index.ts#L42">src/core/cache/never/index.ts:42</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/cache/never/index.ts#L45">src/core/cache/never/index.ts:45</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -378,7 +376,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/src_core_cache_interface.cache.html">Cache</a>.<a href="../interfaces/src_core_cache_interface.cache.html#set">set</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/cache/never/index.ts#L37">src/core/cache/never/index.ts:37</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/cache/never/index.ts#L40">src/core/cache/never/index.ts:40</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -523,8 +521,6 @@
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
-
-/* eslint-disable prefer-arrow-callback, no-var */
 
 (function () {
 	document.body.style.display = 'block';

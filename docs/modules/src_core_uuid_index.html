@@ -71,8 +71,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-/* eslint-disable prefer-arrow-callback, no-var */
-
 (function () {
 	if (localStorage.getItem('visibility') == null) {
 		localStorage.setItem('visibility', 'public');
@@ -145,7 +143,17 @@
 						<a href="#coreuuid" id="coreuuid" style="color: inherit; text-decoration: none;">
 							<h1>core/uuid</h1>
 						</a>
-						<p>This module provides API to parse and serialize UUID strings and binary sequences.</p>
+						<p>This module provides API to generate, parse and serialize UUID strings and binary sequences.</p>
+						<pre><code class="language-js"><span class="hljs-keyword">import</span> { generate, serialize, parse } <span class="hljs-keyword">from</span> <span class="hljs-string">'core/uuid'</span>;
+
+<span class="hljs-comment">// Generates UUID v4</span>
+<span class="hljs-built_in">console</span>.log(generate());
+
+<span class="hljs-keyword">const</span>
+  uuid = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Uint8Array</span>([<span class="hljs-number">174</span>, <span class="hljs-number">42</span>, <span class="hljs-number">253</span>, <span class="hljs-number">26</span>, <span class="hljs-number">185</span>, <span class="hljs-number">60</span>, <span class="hljs-number">17</span>, <span class="hljs-number">234</span>, <span class="hljs-number">179</span>, <span class="hljs-number">222</span>, <span class="hljs-number">2</span>, <span class="hljs-number">66</span>, <span class="hljs-number">172</span>, <span class="hljs-number">19</span>, <span class="hljs-number">0</span>, <span class="hljs-number">4</span>]);
+
+<span class="hljs-built_in">console</span>.log(parse(<span class="hljs-string">'ae2afd1a-b93c-11ea-b3de-0242ac130004'</span>)) <span class="hljs-comment">// = uuid</span>
+<span class="hljs-built_in">console</span>.log(serialize(uuid)) <span class="hljs-comment">// 'ae2afd1a-b93c-11ea-b3de-0242ac130004'</span></code></pre>
 					</div>
 				</div>
 			</section>
@@ -153,15 +161,10 @@
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
-						<section class="tsd-index-section tsd-is-not-exported">
-							<h3>Variables</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported"><a href="src_core_uuid_index.html#serializefilter" class="tsd-kind-icon">serialize<wbr>Filter</a></li>
-							</ul>
-						</section>
 						<section class="tsd-index-section ">
 							<h3>Functions</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="src_core_uuid_index.html#generate" class="tsd-kind-icon">generate</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="src_core_uuid_index.html#parse" class="tsd-kind-icon">parse</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="src_core_uuid_index.html#serialize" class="tsd-kind-icon">serialize</a></li>
 							</ul>
@@ -169,26 +172,30 @@
 					</div>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
-				<h2>Variables</h2>
-				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
-					<a name="serializefilter" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagConst">Const</span> serialize<wbr>Filter</h3>
-					<div class="tsd-signature tsd-kind-icon">serialize<wbr>Filter<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> =&nbsp;Object.createDict({3: true,5: true,7: true,9: true})</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/uuid/index.ts#L14">src/core/uuid/index.ts:14</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-type-declaration">
-						<h4>Type declaration</h4>
-						<ul class="tsd-parameters">
-						</ul>
-					</div>
-				</section>
-			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Functions</h2>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module">
+					<a name="generate" class="tsd-anchor"></a>
+					<h3>generate</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
+						<li class="tsd-signature tsd-kind-icon">generate<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Uint8Array</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/uuid/index.ts#L20">src/core/uuid/index.ts:20</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Generates UUID v4 and returns it</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Uint8Array</span></h4>
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module">
 					<a name="parse" class="tsd-anchor"></a>
 					<h3>parse</h3>
@@ -199,7 +206,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/uuid/index.ts#L47">src/core/uuid/index.ts:47</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/uuid/index.ts#L89">src/core/uuid/index.ts:89</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -229,7 +236,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/uuid/index.ts#L25">src/core/uuid/index.ts:25</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/uuid/index.ts#L67">src/core/uuid/index.ts:67</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -264,8 +271,8 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
-						<a href="src_core_uuid_index.html#serializefilter" class="tsd-kind-icon">serialize<wbr>Filter</a>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module">
+						<a href="src_core_uuid_index.html#generate" class="tsd-kind-icon">generate</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module">
 						<a href="src_core_uuid_index.html#parse" class="tsd-kind-icon">parse</a>
@@ -350,8 +357,6 @@
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
-
-/* eslint-disable prefer-arrow-callback, no-var */
 
 (function () {
 	document.body.style.display = 'block';

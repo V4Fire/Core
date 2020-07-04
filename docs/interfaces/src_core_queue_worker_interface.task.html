@@ -71,8 +71,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-/* eslint-disable prefer-arrow-callback, no-var */
-
 (function () {
 	if (localStorage.getItem('visibility') == null) {
 		localStorage.setItem('visibility', 'public');
@@ -129,10 +127,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/src_core_queue_worker_merge_interface.html">&quot;src/core/queue/worker/merge/interface&quot;</a>
+					<a href="../modules/src_core_queue_worker_interface.html">&quot;src/core/queue/worker/interface&quot;</a>
 				</li>
 				<li>
-					<a href="src_core_queue_worker_merge_interface.task.html">Task</a>
+					<a href="src_core_queue_worker_interface.task.html">Task</a>
 				</li>
 			</ul>
 			<h1>Interface Task&lt;T, V&gt;</h1>
@@ -168,14 +166,14 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="src_core_queue_worker_merge_interface.task.html#promise" class="tsd-kind-icon">promise</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="src_core_queue_worker_merge_interface.task.html#task" class="tsd-kind-icon">task</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="src_core_queue_worker_interface.task.html#promise" class="tsd-kind-icon">promise</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="src_core_queue_worker_interface.task.html#task" class="tsd-kind-icon">task</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="src_core_queue_worker_merge_interface.task.html#resolve" class="tsd-kind-icon">resolve</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="src_core_queue_worker_interface.task.html#resolve" class="tsd-kind-icon">resolve</a></li>
 							</ul>
 						</section>
 					</div>
@@ -189,7 +187,7 @@
 					<div class="tsd-signature tsd-kind-icon">promise<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/queue/worker/merge/interface.ts#L25">src/core/queue/worker/merge/interface.ts:25</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/queue/worker/interface.ts#L15">src/core/queue/worker/interface.ts:15</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -199,7 +197,7 @@
 					<div class="tsd-signature tsd-kind-icon">task<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">T</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/queue/worker/merge/interface.ts#L24">src/core/queue/worker/merge/interface.ts:24</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/queue/worker/interface.ts#L14">src/core/queue/worker/interface.ts:14</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -216,7 +214,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/queue/worker/merge/interface.ts#L26">src/core/queue/worker/merge/interface.ts:26</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/queue/worker/interface.ts#L16">src/core/queue/worker/interface.ts:16</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -238,36 +236,39 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class="current tsd-kind-external-module">
-						<a href="../modules/src_core_queue_worker_merge_interface.html">&quot;src/core/queue/worker/merge/interface&quot;</a>
+						<a href="../modules/src_core_queue_worker_interface.html">&quot;src/core/queue/worker/interface&quot;</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter">
-						<a href="src_core_queue_worker_merge_interface.hashfn.html" class="tsd-kind-icon">Hash<wbr>Fn</a>
+					<li class=" tsd-kind-class tsd-parent-kind-external-module tsd-has-type-parameter">
+						<a href="../classes/src_core_queue_worker_interface.workerqueue.html" class="tsd-kind-icon">Worker<wbr>Queue</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter">
-						<a href="src_core_queue_worker_merge_interface.queueoptions.html" class="tsd-kind-icon">Queue<wbr>Options</a>
+						<a href="src_core_queue_worker_interface.queueworker.html" class="tsd-kind-icon">Queue<wbr>Worker</a>
 					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter">
-						<a href="src_core_queue_worker_merge_interface.task.html" class="tsd-kind-icon">Task</a>
+						<a href="src_core_queue_worker_interface.task.html" class="tsd-kind-icon">Task</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="src_core_queue_worker_merge_interface.task.html#promise" class="tsd-kind-icon">promise</a>
+								<a href="src_core_queue_worker_interface.task.html#promise" class="tsd-kind-icon">promise</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="src_core_queue_worker_merge_interface.task.html#task" class="tsd-kind-icon">task</a>
+								<a href="src_core_queue_worker_interface.task.html#task" class="tsd-kind-icon">task</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-interface">
-								<a href="src_core_queue_worker_merge_interface.task.html#resolve" class="tsd-kind-icon">resolve</a>
+								<a href="src_core_queue_worker_interface.task.html#resolve" class="tsd-kind-icon">resolve</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="src_core_queue_worker_interface.workerqueueoptions.html" class="tsd-kind-icon">Worker<wbr>Queue<wbr>Options</a>
+					</li>
 				</ul>
 			</nav>
 		</div>
@@ -345,8 +346,6 @@
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
-
-/* eslint-disable prefer-arrow-callback, no-var */
 
 (function () {
 	document.body.style.display = 'block';

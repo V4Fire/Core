@@ -71,8 +71,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-/* eslint-disable prefer-arrow-callback, no-var */
-
 (function () {
 	if (localStorage.getItem('visibility') == null) {
 		localStorage.setItem('visibility', 'public');
@@ -198,6 +196,7 @@
 								<li class="tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter tsd-is-not-exported"><a href="../interfaces/index_d.objectfromarrayoptions.html" class="tsd-kind-icon">Object<wbr>From<wbr>Array<wbr>Options</a></li>
 								<li class="tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported"><a href="../interfaces/index_d.objectgetoptions.html" class="tsd-kind-icon">Object<wbr>Get<wbr>Options</a></li>
 								<li class="tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter tsd-is-not-exported"><a href="../interfaces/index_d.objectmixinoptions.html" class="tsd-kind-icon">Object<wbr>Mixin<wbr>Options</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter tsd-is-not-exported"><a href="../interfaces/index_d.objectpropertyfilter.html" class="tsd-kind-icon">Object<wbr>Property<wbr>Filter</a></li>
 								<li class="tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported"><a href="../interfaces/index_d.objectsetoptions.html" class="tsd-kind-icon">Object<wbr>Set<wbr>Options</a></li>
 								<li class="tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported"><a href="../interfaces/index_d.regexpconstructor.html" class="tsd-kind-icon">Reg<wbr>Exp<wbr>Constructor</a></li>
 								<li class="tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter tsd-is-not-exported"><a href="../interfaces/index_d.strictdictionary.html" class="tsd-kind-icon">Strict<wbr>Dictionary</a></li>
@@ -207,6 +206,7 @@
 								<li class="tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported"><a href="../interfaces/index_d.stringconstructor.html" class="tsd-kind-icon">String<wbr>Constructor</a></li>
 								<li class="tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported"><a href="../interfaces/index_d.stringdasherizeoptions.html" class="tsd-kind-icon">String<wbr>Dasherize<wbr>Options</a></li>
 								<li class="tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported"><a href="../interfaces/index_d.stringunderscoreoptions.html" class="tsd-kind-icon">String<wbr>Underscore<wbr>Options</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported"><a href="../interfaces/index_d.throttleoptions.html" class="tsd-kind-icon">Throttle<wbr>Options</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section tsd-is-not-exported">
@@ -263,7 +263,7 @@
 					<div class="tsd-signature tsd-kind-icon">Can<wbr>Array&lt;T&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L136">index.d.ts:136</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L133">index.d.ts:133</a></li>
 						</ul>
 					</aside>
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -279,7 +279,7 @@
 					<div class="tsd-signature tsd-kind-icon">Can<wbr>Promise&lt;T&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L133">index.d.ts:133</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L132">index.d.ts:132</a></li>
 						</ul>
 					</aside>
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -295,7 +295,7 @@
 					<div class="tsd-signature tsd-kind-icon">Can<wbr>Undef&lt;T&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L134">index.d.ts:134</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L135">index.d.ts:135</a></li>
 						</ul>
 					</aside>
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -311,7 +311,7 @@
 					<div class="tsd-signature tsd-kind-icon">Can<wbr>Void&lt;T&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">void</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L135">index.d.ts:135</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L139">index.d.ts:139</a></li>
 						</ul>
 					</aside>
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -327,7 +327,7 @@
 					<div class="tsd-signature tsd-kind-icon">Date<wbr>Create<wbr>Value<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Date</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2348">index.d.ts:2348</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2449">index.d.ts:2449</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -337,7 +337,7 @@
 					<div class="tsd-signature tsd-kind-icon">DateHTMLString<wbr>Options<span class="tsd-signature-symbol">:</span> <a href="../interfaces/index_d.datehtmltimestringoptions.html" class="tsd-signature-type">DateHTMLTimeStringOptions</a><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/index_d.datehtmldatestringoptions.html" class="tsd-signature-type">DateHTMLDateStringOptions</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2847">index.d.ts:2847</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2944">index.d.ts:2944</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -347,7 +347,7 @@
 					<div class="tsd-signature tsd-kind-icon">Date<wbr>Relative<wbr>Type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"milliseconds"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"seconds"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"minutes"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"hours"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"days"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"weeks"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"months"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"years"</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2851">index.d.ts:2851</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2948">index.d.ts:2948</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -357,7 +357,7 @@
 					<div class="tsd-signature tsd-kind-icon">Dictionary<wbr>Type&lt;T&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">T extends Dictionary&lt;infer V&gt; ? NonNullable&lt;V&gt; : T</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L167">index.d.ts:167</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L181">index.d.ts:181</a></li>
 						</ul>
 					</aside>
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -373,7 +373,7 @@
 					<div class="tsd-signature tsd-kind-icon">Iterable<wbr>Type&lt;T&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">T extends Iterable&lt;infer V&gt; ? V : T</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L168">index.d.ts:168</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L182">index.d.ts:182</a></li>
 						</ul>
 					</aside>
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -389,7 +389,7 @@
 					<div class="tsd-signature tsd-kind-icon">New<wbr>Promise&lt;K, V&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">K extends Maybe ? Maybe&lt;V&gt; : K extends Either ? Either&lt;V&gt; : Promise&lt;V&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L159">index.d.ts:159</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L173">index.d.ts:173</a></li>
 						</ul>
 					</aside>
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -408,7 +408,7 @@
 					<div class="tsd-signature tsd-kind-icon">Nullable&lt;T&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L132">index.d.ts:132</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L136">index.d.ts:136</a></li>
 						</ul>
 					</aside>
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -424,7 +424,7 @@
 					<div class="tsd-signature tsd-kind-icon">Number<wbr>Option<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"decimal"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"thousands"</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L1874">index.d.ts:1874</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L1978">index.d.ts:1978</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -434,7 +434,7 @@
 					<div class="tsd-signature tsd-kind-icon">Object<wbr>Property<wbr>Path<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L478">index.d.ts:478</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L511">index.d.ts:511</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -444,7 +444,7 @@
 					<div class="tsd-signature tsd-kind-icon">Promise<wbr>Type&lt;T&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">T extends Maybe&lt;infer V&gt; ? NonNullable&lt;V&gt; : T extends Promise&lt;infer V&gt; ? V : T</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L163">index.d.ts:163</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L177">index.d.ts:177</a></li>
 						</ul>
 					</aside>
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -601,7 +601,7 @@
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Global i18n function (can be used as a string tag or a simple function)</p>
+									<p>Global i18n function (can be used as a string tag or simple function)</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -632,7 +632,7 @@
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Global i18n loopback (can be used as a string tag or a simple function)</p>
+									<p>Global i18n loopback (can be used as a string tag or simple function)</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -890,6 +890,9 @@
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter tsd-is-not-exported">
 						<a href="../interfaces/index_d.objectmixinoptions.html" class="tsd-kind-icon">Object<wbr>Mixin<wbr>Options</a>
 					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter tsd-is-not-exported">
+						<a href="../interfaces/index_d.objectpropertyfilter.html" class="tsd-kind-icon">Object<wbr>Property<wbr>Filter</a>
+					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported">
 						<a href="../interfaces/index_d.objectsetoptions.html" class="tsd-kind-icon">Object<wbr>Set<wbr>Options</a>
 					</li>
@@ -916,6 +919,9 @@
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported">
 						<a href="../interfaces/index_d.stringunderscoreoptions.html" class="tsd-kind-icon">String<wbr>Underscore<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="../interfaces/index_d.throttleoptions.html" class="tsd-kind-icon">Throttle<wbr>Options</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module tsd-has-type-parameter tsd-is-not-exported">
 						<a href="index_d.html#canarray" class="tsd-kind-icon">Can<wbr>Array</a>
@@ -1078,8 +1084,6 @@
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
-
-/* eslint-disable prefer-arrow-callback, no-var */
 
 (function () {
 	document.body.style.display = 'block';

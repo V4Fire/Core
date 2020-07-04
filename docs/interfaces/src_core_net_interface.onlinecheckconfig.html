@@ -71,8 +71,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-/* eslint-disable prefer-arrow-callback, no-var */
-
 (function () {
 	if (localStorage.getItem('visibility') == null) {
 		localStorage.setItem('visibility', 'public');
@@ -177,12 +175,12 @@
 					<div class="tsd-signature tsd-kind-icon">cacheTTL<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/net/interface.ts#L50">src/core/net/interface.ts:50</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/net/interface.ts#L60">src/core/net/interface.ts:60</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Timeout value in milliseconds for one online check</p>
+							<p>How long to store the result of checking in the local cache</p>
 						</div>
 					</div>
 				</section>
@@ -192,12 +190,12 @@
 					<div class="tsd-signature tsd-kind-icon">check<wbr>Interval<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/net/interface.ts#L30">src/core/net/interface.ts:30</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/net/interface.ts#L40">src/core/net/interface.ts:40</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Value in milliseconds after which the online connection will be checked again</p>
+							<p>How often need to check online connection (ms)</p>
 						</div>
 					</div>
 				</section>
@@ -207,12 +205,12 @@
 					<div class="tsd-signature tsd-kind-icon">check<wbr>Timeout<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/net/interface.ts#L35">src/core/net/interface.ts:35</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/net/interface.ts#L45">src/core/net/interface.ts:45</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Value in milliseconds that represents how long last cache check is relevant</p>
+							<p>The timeout of downloading the check URL</p>
 						</div>
 					</div>
 				</section>
@@ -222,12 +220,13 @@
 					<div class="tsd-signature tsd-kind-icon">checkURL<span class="tsd-signature-symbol">:</span> <a href="../modules/index_d.html#canundef" class="tsd-signature-type">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/net/interface.ts#L25">src/core/net/interface.ts:25</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/net/interface.ts#L35">src/core/net/interface.ts:35</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>URL that is used to check online connection</p>
+							<p>URL to check online connection
+							(with the &quot;browser.request&quot; engine can be used only image URL-s)</p>
 						</div>
 					</div>
 				</section>
@@ -237,12 +236,12 @@
 					<div class="tsd-signature tsd-kind-icon">last<wbr>Date<wbr>Sync<wbr>Interval<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/net/interface.ts#L40">src/core/net/interface.ts:40</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/net/interface.ts#L50">src/core/net/interface.ts:50</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Value in milliseconds after which there will be a synchronization of last online date to the current date</p>
+							<p>How often to update the time of the last online connection</p>
 						</div>
 					</div>
 				</section>
@@ -252,13 +251,12 @@
 					<div class="tsd-signature tsd-kind-icon">persistence<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/net/interface.ts#L56">src/core/net/interface.ts:56</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/net/interface.ts#L65">src/core/net/interface.ts:65</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>If true, then a check result will be periodically saved to a storage.
-							It can be helpful to realize how long an application lives without connection.</p>
+							<p>True, if we need to save the time of the last online connection in a local storage</p>
 						</div>
 					</div>
 				</section>
@@ -268,12 +266,12 @@
 					<div class="tsd-signature tsd-kind-icon">retry<wbr>Count<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/net/interface.ts#L45">src/core/net/interface.ts:45</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/net/interface.ts#L55">src/core/net/interface.ts:55</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Number of acceptable retries (if the check was canceled by a timeout)</p>
+							<p>The number of retries of downloading the check URL</p>
 						</div>
 					</div>
 				</section>
@@ -292,6 +290,9 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="src_core_net_interface.netengine.html" class="tsd-kind-icon">Net<wbr>Engine</a>
+					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
 						<a href="src_core_net_interface.netstatus.html" class="tsd-kind-icon">Net<wbr>Status</a>
 					</li>
@@ -325,6 +326,9 @@
 					</li>
 				</ul>
 				<ul class="after-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
+						<a href="src_core_net_interface.state.html" class="tsd-kind-icon">State</a>
+					</li>
 				</ul>
 			</nav>
 		</div>
@@ -402,8 +406,6 @@
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
-
-/* eslint-disable prefer-arrow-callback, no-var */
 
 (function () {
 	document.body.style.display = 'block';

@@ -71,8 +71,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-/* eslint-disable prefer-arrow-callback, no-var */
-
 (function () {
 	if (localStorage.getItem('visibility') == null) {
 		localStorage.setItem('visibility', 'public');
@@ -146,6 +144,11 @@
 							<h1>core/mime-type</h1>
 						</a>
 						<p>This module provides API to extract data types from mime-type/DATA:URI strings.</p>
+						<pre><code class="language-js"><span class="hljs-keyword">import</span> { getDataType, getDataTypeFromURL } <span class="hljs-keyword">from</span> <span class="hljs-string">'core/mine-type'</span>;
+
+<span class="hljs-built_in">console</span>.log(getDataType(<span class="hljs-string">'application/json'</span>)); <span class="hljs-comment">// json</span>
+
+<span class="hljs-built_in">console</span>.log(getDataTypeFromURL(<span class="hljs-string">'data:application/javascript;...'</span>)); <span class="hljs-comment">// text</span></code></pre>
 					</div>
 				</div>
 			</section>
@@ -323,8 +326,6 @@
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
-
-/* eslint-disable prefer-arrow-callback, no-var */
 
 (function () {
 	document.body.style.display = 'block';

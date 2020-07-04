@@ -71,8 +71,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-/* eslint-disable prefer-arrow-callback, no-var */
-
 (function () {
 	if (localStorage.getItem('visibility') == null) {
 		localStorage.setItem('visibility', 'public');
@@ -181,7 +179,7 @@
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module">
 					<a name="isxmltype" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> isXMLType</h3>
-					<div class="tsd-signature tsd-kind-icon">isXMLType<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RegExp</span><span class="tsd-signature-symbol"> =&nbsp;/^application\/\w+-xml\b/</span></div>
+					<div class="tsd-signature tsd-kind-icon">isXMLType<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RegExp</span><span class="tsd-signature-symbol"> =&nbsp;/^\w+\/\w+[-+]xml\b/</span></div>
 					<aside class="tsd-sources">
 						<ul>
 							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/mime-type/const.ts#L17">src/core/mime-type/const.ts:17</a></li>
@@ -191,7 +189,7 @@
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module">
 					<a name="mimetypes" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> mime<wbr>Types</h3>
-					<div class="tsd-signature tsd-kind-icon">mime<wbr>Types<span class="tsd-signature-symbol">:</span> <a href="../interfaces/index_d.dictionary.html" class="tsd-signature-type">Dictionary</a><span class="tsd-signature-symbol">&lt;</span><a href="src_core_mime_type_interface.html#datatype" class="tsd-signature-type">DataType</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;Object.createDict({&#x27;application/json&#x27;: &#x27;json&#x27;,&#x27;application/javascript&#x27;: &#x27;text&#x27;,&#x27;application/xml&#x27;: &#x27;document&#x27;,&#x27;application/x-www-form-urlencoded&#x27;: &#x27;text&#x27;,&#x27;application/x-msgpack&#x27;: &#x27;arrayBuffer&#x27;,&#x27;application/x-protobuf&#x27;: &#x27;arrayBuffer&#x27;,&#x27;application/vnd.google.protobuf&#x27;: &#x27;arrayBuffer&#x27;})</span></div>
+					<div class="tsd-signature tsd-kind-icon">mime<wbr>Types<span class="tsd-signature-symbol">:</span> <a href="../interfaces/index_d.dictionary.html" class="tsd-signature-type">Dictionary</a><span class="tsd-signature-symbol">&lt;</span><a href="src_core_mime_type_interface.html#datatype" class="tsd-signature-type">DataType</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;Object.createDict({&#x27;application/json&#x27;: &#x27;json&#x27;,&#x27;application/javascript&#x27;: &#x27;text&#x27;,&#x27;application/xml&#x27;: &#x27;document&#x27;,&#x27;text/xml&#x27;: &#x27;document&#x27;,&#x27;text/html&#x27;: &#x27;document&#x27;,&#x27;application/x-www-form-urlencoded&#x27;: &#x27;text&#x27;,&#x27;application/x-msgpack&#x27;: &#x27;arrayBuffer&#x27;,&#x27;application/x-protobuf&#x27;: &#x27;arrayBuffer&#x27;,&#x27;application/vnd.google.protobuf&#x27;: &#x27;arrayBuffer&#x27;})</span></div>
 					<aside class="tsd-sources">
 						<ul>
 							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/mime-type/const.ts#L19">src/core/mime-type/const.ts:19</a></li>
@@ -315,8 +313,6 @@
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
-
-/* eslint-disable prefer-arrow-callback, no-var */
 
 (function () {
 	document.body.style.display = 'block';
