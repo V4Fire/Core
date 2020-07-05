@@ -31,7 +31,7 @@ module.exports = function init(gulp) {
 	 * Normalizes generated HTML files: attaches extra styles and js, removes some trash
 	 */
 	gulp.task('build:docs:normalise', gulp.series([
-		() => gulp.src('./docs/**/*.+(html|js)')
+		() => gulp.src('./docs/**/*.+(html|js|json)')
 			.pipe($.replace(/(['"/\\])_+(.+?)_+(\.(?:[^\s'"/\\<>#.]+\.)?html\b)/g, (...str) => str.slice(1, 4).join('')))
 			.pipe(gulp.dest('./docs')),
 
