@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>Function | V4Fire</title>
-	<meta name="description" content="">
+	<meta name="description" content="Documentation for V4Fire">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
 <style>/*!
@@ -15,7 +15,26 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+body {
+	font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+}
+
+code, pre, tt {
+	font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+}
+
+.tsd-typography h1,
+.tsd-typography h2,
+.tsd-typography h3,
+.tsd-typography h4,
+.tsd-typography h5,
+.tsd-typography h6 {
+	margin: 1em 0;
+	font-family: -apple-system, BlinkMacSystemFont, UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+}
+
 .tsd-panel {
+	padding: 20px 40px;
 	border: 1px solid #DDD;
 	border-radius: 10px;
 	box-shadow: none;
@@ -24,8 +43,8 @@
 .tsd-page-title {
 	color: #EEE;
 
-	background: #232526;  /* fallback for old browsers */
-	background: -webkit-linear-gradient(to right, #414345, #232526);  /* Chrome 10-25, Safari 5.1-6 */
+	background: #232526; /* fallback for old browsers */
+	background: -webkit-linear-gradient(to right, #414345, #232526); /* Chrome 10-25, Safari 5.1-6 */
 	background: linear-gradient(to right, #414345, #232526); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
@@ -58,6 +77,90 @@
 #tsd-search .field {
 	height: 100%;
 }
+
+pre {
+	background-color: rgba(7, 7, 7, 0.01);
+}
+
+/**
+ * GitHub Gist Theme
+ * Author : Anthony Attard - https://github.com/AnthonyAttard
+ * Author : Louis Barranqueiro - https://github.com/LouisBarranqueiro
+ */
+
+.hljs {
+	display: block;
+	background: white;
+	padding: 0.5em;
+	color: #333333;
+	overflow-x: auto;
+}
+
+.hljs-comment,
+.hljs-meta {
+	color: #969896;
+}
+
+.hljs-variable,
+.hljs-template-variable,
+.hljs-strong,
+.hljs-emphasis,
+.hljs-quote {
+	color: #df5000;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-type {
+	color: #d73a49;
+}
+
+.hljs-literal,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-attribute {
+	color: #0086b3;
+}
+
+.hljs-section,
+.hljs-name {
+	color: #63a35c;
+}
+
+.hljs-tag {
+	color: #333333;
+}
+
+.hljs-title,
+.hljs-attr,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-selector-attr,
+.hljs-selector-pseudo {
+	color: #6f42c1;
+}
+
+.hljs-addition {
+	color: #55a532;
+	background-color: #eaffea;
+}
+
+.hljs-deletion {
+	color: #bd2c00;
+	background-color: #ffecec;
+}
+
+.hljs-link {
+	text-decoration: underline;
+}
+
+.hljs-number {
+	color: #005cc5;
+}
+
+.hljs-string {
+	color: #032f62;
+}
 </style>
 </head>
 <body>
@@ -84,7 +187,7 @@
 	<div class="tsd-page-toolbar">
 		<div class="container">
 			<div class="table-wrap">
-				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.js" data-base="..">
+				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.json" data-base="..">
 					<div class="field">
 						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
 						<input id="tsd-search-field" type="text" />
@@ -109,10 +212,6 @@
 							</div>
 							<input type="checkbox" id="tsd-filter-inherited" checked />
 							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
-							<input type="checkbox" id="tsd-filter-externals" checked />
-							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
-							<input type="checkbox" id="tsd-filter-only-exported" />
-							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
 						</div>
 					</div>
 					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
@@ -152,58 +251,58 @@
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
-						<section class="tsd-index-section tsd-is-not-exported">
+						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.function.html#name" class="tsd-kind-icon">name</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="index_d.function.html#name" class="tsd-kind-icon">name</a></li>
 							</ul>
 						</section>
-						<section class="tsd-index-section tsd-is-not-exported">
+						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-not-exported"><a href="index_d.function.html#compose" class="tsd-kind-icon">compose</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-not-exported"><a href="index_d.function.html#curry" class="tsd-kind-icon">curry</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-not-exported"><a href="index_d.function.html#debounce" class="tsd-kind-icon">debounce</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-not-exported"><a href="index_d.function.html#once" class="tsd-kind-icon">once</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-not-exported"><a href="index_d.function.html#option" class="tsd-kind-icon">option</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-not-exported"><a href="index_d.function.html#result" class="tsd-kind-icon">result</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-not-exported"><a href="index_d.function.html#throttle" class="tsd-kind-icon">throttle</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter"><a href="index_d.function.html#compose" class="tsd-kind-icon">compose</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter"><a href="index_d.function.html#curry" class="tsd-kind-icon">curry</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter"><a href="index_d.function.html#debounce" class="tsd-kind-icon">debounce</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter"><a href="index_d.function.html#once" class="tsd-kind-icon">once</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter"><a href="index_d.function.html#option" class="tsd-kind-icon">option</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter"><a href="index_d.function.html#result" class="tsd-kind-icon">result</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter"><a href="index_d.function.html#throttle" class="tsd-kind-icon">throttle</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
+			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="name" class="tsd-anchor"></a>
 					<h3>name</h3>
 					<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3405">index.d.ts:3405</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3409">index.d.ts:3409</a></li>
 						</ul>
 					</aside>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
+			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter">
 					<a name="compose" class="tsd-anchor"></a>
 					<h3>compose</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-not-exported">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter">
 						<li class="tsd-signature tsd-kind-icon">compose&lt;T&gt;<span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span></li>
-						<li class="tsd-signature tsd-kind-icon">compose&lt;A, T1, T2&gt;<span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><a href="index_d.anyfunction.html" class="tsd-signature-type">AnyFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol">&gt;</span>, fn1<span class="tsd-signature-symbol">: </span><a href="index_d.anyoneargfunction.html" class="tsd-signature-type">AnyOneArgFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="index_d.anyfunction.html" class="tsd-signature-type">AnyFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T1 extends Promise&lt;any&gt; ? Promise&lt;T2&gt; : T2</span><span class="tsd-signature-symbol">&gt;</span></li>
-						<li class="tsd-signature tsd-kind-icon">compose&lt;A, T1, T2, T3&gt;<span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><a href="index_d.anyfunction.html" class="tsd-signature-type">AnyFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol">&gt;</span>, fn1<span class="tsd-signature-symbol">: </span><a href="index_d.anyoneargfunction.html" class="tsd-signature-type">AnyOneArgFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol">&gt;</span>, fn2<span class="tsd-signature-symbol">: </span><a href="index_d.anyoneargfunction.html" class="tsd-signature-type">AnyOneArgFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T3</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="index_d.anyfunction.html" class="tsd-signature-type">AnyFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T2 extends Promise&lt;any&gt; ? Promise&lt;T3&gt; : T1 extends Promise&lt;any&gt; ? Promise&lt;T3&gt; : T3</span><span class="tsd-signature-symbol">&gt;</span></li>
-						<li class="tsd-signature tsd-kind-icon">compose&lt;A, T1, T2, T3, T4&gt;<span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><a href="index_d.anyfunction.html" class="tsd-signature-type">AnyFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol">&gt;</span>, fn1<span class="tsd-signature-symbol">: </span><a href="index_d.anyoneargfunction.html" class="tsd-signature-type">AnyOneArgFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol">&gt;</span>, fn2<span class="tsd-signature-symbol">: </span><a href="index_d.anyoneargfunction.html" class="tsd-signature-type">AnyOneArgFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T3</span><span class="tsd-signature-symbol">&gt;</span>, fn3<span class="tsd-signature-symbol">: </span><a href="index_d.anyoneargfunction.html" class="tsd-signature-type">AnyOneArgFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T3</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T4</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="index_d.anyfunction.html" class="tsd-signature-type">AnyFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T3 extends Promise&lt;any&gt; ? Promise&lt;T4&gt; : T2 extends Promise&lt;any&gt; ? Promise&lt;T4&gt; : T1 extends Promise&lt;any&gt; ? Promise&lt;T4&gt; : T4</span><span class="tsd-signature-symbol">&gt;</span></li>
-						<li class="tsd-signature tsd-kind-icon">compose&lt;A, T1, T2, T3, T4, T5&gt;<span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><a href="index_d.anyfunction.html" class="tsd-signature-type">AnyFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol">&gt;</span>, fn1<span class="tsd-signature-symbol">: </span><a href="index_d.anyoneargfunction.html" class="tsd-signature-type">AnyOneArgFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol">&gt;</span>, fn2<span class="tsd-signature-symbol">: </span><a href="index_d.anyoneargfunction.html" class="tsd-signature-type">AnyOneArgFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T3</span><span class="tsd-signature-symbol">&gt;</span>, fn3<span class="tsd-signature-symbol">: </span><a href="index_d.anyoneargfunction.html" class="tsd-signature-type">AnyOneArgFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T3</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T4</span><span class="tsd-signature-symbol">&gt;</span>, fn4<span class="tsd-signature-symbol">: </span><a href="index_d.anyoneargfunction.html" class="tsd-signature-type">AnyOneArgFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T4</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T5</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="index_d.anyfunction.html" class="tsd-signature-type">AnyFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T4 extends Promise&lt;any&gt; ? Promise&lt;T5&gt; : T3 extends Promise&lt;any&gt; ? Promise&lt;T5&gt; : T2 extends Promise&lt;any&gt; ? Promise&lt;T5&gt; : T1 extends Promise&lt;any&gt; ? Promise&lt;T5&gt; : T5</span><span class="tsd-signature-symbol">&gt;</span></li>
-						<li class="tsd-signature tsd-kind-icon">compose&lt;A, T1, T2, T3, T4, T5, T6&gt;<span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><a href="index_d.anyfunction.html" class="tsd-signature-type">AnyFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol">&gt;</span>, fn1<span class="tsd-signature-symbol">: </span><a href="index_d.anyoneargfunction.html" class="tsd-signature-type">AnyOneArgFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol">&gt;</span>, fn2<span class="tsd-signature-symbol">: </span><a href="index_d.anyoneargfunction.html" class="tsd-signature-type">AnyOneArgFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T3</span><span class="tsd-signature-symbol">&gt;</span>, fn3<span class="tsd-signature-symbol">: </span><a href="index_d.anyoneargfunction.html" class="tsd-signature-type">AnyOneArgFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T3</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T4</span><span class="tsd-signature-symbol">&gt;</span>, fn4<span class="tsd-signature-symbol">: </span><a href="index_d.anyoneargfunction.html" class="tsd-signature-type">AnyOneArgFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T4</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T5</span><span class="tsd-signature-symbol">&gt;</span>, fn5<span class="tsd-signature-symbol">: </span><a href="index_d.anyoneargfunction.html" class="tsd-signature-type">AnyOneArgFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T5</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T6</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="index_d.anyfunction.html" class="tsd-signature-type">AnyFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T5 extends Promise&lt;any&gt; ? Promise&lt;T6&gt; : T4 extends Promise&lt;any&gt; ? Promise&lt;T6&gt; : T3 extends Promise&lt;any&gt; ? Promise&lt;T6&gt; : T2 extends Promise&lt;any&gt; ? Promise&lt;T6&gt; : T1 extends Promise&lt;any&gt; ? Promise&lt;T6&gt; : T6</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">compose&lt;A, T1, T2&gt;<span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><a href="index_d.anyfunction.html" class="tsd-signature-type">AnyFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol">&gt;</span>, fn1<span class="tsd-signature-symbol">: </span><a href="index_d.anyoneargfunction.html" class="tsd-signature-type">AnyOneArgFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="index_d.anyfunction.html" class="tsd-signature-type">AnyFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">compose&lt;A, T1, T2, T3&gt;<span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><a href="index_d.anyfunction.html" class="tsd-signature-type">AnyFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol">&gt;</span>, fn1<span class="tsd-signature-symbol">: </span><a href="index_d.anyoneargfunction.html" class="tsd-signature-type">AnyOneArgFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol">&gt;</span>, fn2<span class="tsd-signature-symbol">: </span><a href="index_d.anyoneargfunction.html" class="tsd-signature-type">AnyOneArgFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T3</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="index_d.anyfunction.html" class="tsd-signature-type">AnyFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T3</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T3</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">T3</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">compose&lt;A, T1, T2, T3, T4&gt;<span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><a href="index_d.anyfunction.html" class="tsd-signature-type">AnyFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol">&gt;</span>, fn1<span class="tsd-signature-symbol">: </span><a href="index_d.anyoneargfunction.html" class="tsd-signature-type">AnyOneArgFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol">&gt;</span>, fn2<span class="tsd-signature-symbol">: </span><a href="index_d.anyoneargfunction.html" class="tsd-signature-type">AnyOneArgFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T3</span><span class="tsd-signature-symbol">&gt;</span>, fn3<span class="tsd-signature-symbol">: </span><a href="index_d.anyoneargfunction.html" class="tsd-signature-type">AnyOneArgFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T3</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T4</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="index_d.anyfunction.html" class="tsd-signature-type">AnyFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T3</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T4</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T4</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T4</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">T4</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">compose&lt;A, T1, T2, T3, T4, T5&gt;<span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><a href="index_d.anyfunction.html" class="tsd-signature-type">AnyFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol">&gt;</span>, fn1<span class="tsd-signature-symbol">: </span><a href="index_d.anyoneargfunction.html" class="tsd-signature-type">AnyOneArgFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol">&gt;</span>, fn2<span class="tsd-signature-symbol">: </span><a href="index_d.anyoneargfunction.html" class="tsd-signature-type">AnyOneArgFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T3</span><span class="tsd-signature-symbol">&gt;</span>, fn3<span class="tsd-signature-symbol">: </span><a href="index_d.anyoneargfunction.html" class="tsd-signature-type">AnyOneArgFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T3</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T4</span><span class="tsd-signature-symbol">&gt;</span>, fn4<span class="tsd-signature-symbol">: </span><a href="index_d.anyoneargfunction.html" class="tsd-signature-type">AnyOneArgFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T4</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T5</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="index_d.anyfunction.html" class="tsd-signature-type">AnyFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T4</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T5</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">T3</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T5</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T5</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T5</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">T5</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">compose&lt;A, T1, T2, T3, T4, T5, T6&gt;<span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><a href="index_d.anyfunction.html" class="tsd-signature-type">AnyFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol">&gt;</span>, fn1<span class="tsd-signature-symbol">: </span><a href="index_d.anyoneargfunction.html" class="tsd-signature-type">AnyOneArgFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol">&gt;</span>, fn2<span class="tsd-signature-symbol">: </span><a href="index_d.anyoneargfunction.html" class="tsd-signature-type">AnyOneArgFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T3</span><span class="tsd-signature-symbol">&gt;</span>, fn3<span class="tsd-signature-symbol">: </span><a href="index_d.anyoneargfunction.html" class="tsd-signature-type">AnyOneArgFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T3</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T4</span><span class="tsd-signature-symbol">&gt;</span>, fn4<span class="tsd-signature-symbol">: </span><a href="index_d.anyoneargfunction.html" class="tsd-signature-type">AnyOneArgFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T4</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T5</span><span class="tsd-signature-symbol">&gt;</span>, fn5<span class="tsd-signature-symbol">: </span><a href="index_d.anyoneargfunction.html" class="tsd-signature-type">AnyOneArgFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T5</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T6</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="index_d.anyfunction.html" class="tsd-signature-type">AnyFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T5</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T6</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">T4</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T6</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">T3</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T6</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T6</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T6</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">T6</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3547">index.d.ts:3547</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3551">index.d.ts:3551</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -232,7 +331,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3549">index.d.ts:3549</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3553">index.d.ts:3553</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -256,12 +355,12 @@
 									<h5>fn1: <a href="index_d.anyoneargfunction.html" class="tsd-signature-type">AnyOneArgFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="index_d.anyfunction.html" class="tsd-signature-type">AnyFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T1 extends Promise&lt;any&gt; ? Promise&lt;T2&gt; : T2</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="index_d.anyfunction.html" class="tsd-signature-type">AnyFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3554">index.d.ts:3554</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3558">index.d.ts:3558</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -291,12 +390,12 @@
 									<h5>fn2: <a href="index_d.anyoneargfunction.html" class="tsd-signature-type">AnyOneArgFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T3</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="index_d.anyfunction.html" class="tsd-signature-type">AnyFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T2 extends Promise&lt;any&gt; ? Promise&lt;T3&gt; : T1 extends Promise&lt;any&gt; ? Promise&lt;T3&gt; : T3</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="index_d.anyfunction.html" class="tsd-signature-type">AnyFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T3</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T3</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">T3</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3560">index.d.ts:3560</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3564">index.d.ts:3564</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -332,12 +431,12 @@
 									<h5>fn3: <a href="index_d.anyoneargfunction.html" class="tsd-signature-type">AnyOneArgFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T3</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T4</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="index_d.anyfunction.html" class="tsd-signature-type">AnyFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T3 extends Promise&lt;any&gt; ? Promise&lt;T4&gt; : T2 extends Promise&lt;any&gt; ? Promise&lt;T4&gt; : T1 extends Promise&lt;any&gt; ? Promise&lt;T4&gt; : T4</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="index_d.anyfunction.html" class="tsd-signature-type">AnyFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T3</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T4</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T4</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T4</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">T4</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3573">index.d.ts:3573</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3577">index.d.ts:3577</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -379,12 +478,12 @@
 									<h5>fn4: <a href="index_d.anyoneargfunction.html" class="tsd-signature-type">AnyOneArgFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T4</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T5</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="index_d.anyfunction.html" class="tsd-signature-type">AnyFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T4 extends Promise&lt;any&gt; ? Promise&lt;T5&gt; : T3 extends Promise&lt;any&gt; ? Promise&lt;T5&gt; : T2 extends Promise&lt;any&gt; ? Promise&lt;T5&gt; : T1 extends Promise&lt;any&gt; ? Promise&lt;T5&gt; : T5</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="index_d.anyfunction.html" class="tsd-signature-type">AnyFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T4</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T5</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">T3</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T5</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T5</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T5</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">T5</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3588">index.d.ts:3588</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3592">index.d.ts:3592</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -432,21 +531,21 @@
 									<h5>fn5: <a href="index_d.anyoneargfunction.html" class="tsd-signature-type">AnyOneArgFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T5</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T6</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="index_d.anyfunction.html" class="tsd-signature-type">AnyFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T5 extends Promise&lt;any&gt; ? Promise&lt;T6&gt; : T4 extends Promise&lt;any&gt; ? Promise&lt;T6&gt; : T3 extends Promise&lt;any&gt; ? Promise&lt;T6&gt; : T2 extends Promise&lt;any&gt; ? Promise&lt;T6&gt; : T1 extends Promise&lt;any&gt; ? Promise&lt;T6&gt; : T6</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="index_d.anyfunction.html" class="tsd-signature-type">AnyFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T5</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T6</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">T4</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T6</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">T3</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T6</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T6</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T6</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">T6</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter">
 					<a name="curry" class="tsd-anchor"></a>
 					<h3>curry</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-not-exported">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter">
 						<li class="tsd-signature tsd-kind-icon">curry&lt;T&gt;<span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/index_d.tb.html#curry" class="tsd-signature-type">Curry</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3537">index.d.ts:3537</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3541">index.d.ts:3541</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -487,17 +586,17 @@ g(_, <span class="hljs-number">2</span>)(_, <span class="hljs-number">3</span>)(
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter">
 					<a name="debounce" class="tsd-anchor"></a>
 					<h3>debounce</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-not-exported">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter">
 						<li class="tsd-signature tsd-kind-icon">debounce&lt;T&gt;<span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, delay<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="index_d.anyfunction.html" class="tsd-signature-type">AnyFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Parameters</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3418">index.d.ts:3418</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3422">index.d.ts:3422</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -525,17 +624,17 @@ g(_, <span class="hljs-number">2</span>)(_, <span class="hljs-number">3</span>)(
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter">
 					<a name="once" class="tsd-anchor"></a>
 					<h3>once</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-not-exported">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter">
 						<li class="tsd-signature tsd-kind-icon">once&lt;T&gt;<span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3410">index.d.ts:3410</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3414">index.d.ts:3414</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -559,18 +658,18 @@ g(_, <span class="hljs-number">2</span>)(_, <span class="hljs-number">3</span>)(
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter">
 					<a name="option" class="tsd-anchor"></a>
 					<h3>option</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">option&lt;R&gt;<span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="index_d.anyfunction.html" class="tsd-signature-type">AnyFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">, </span><a href="index_d.maybe.html" class="tsd-signature-type">Maybe</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
-						<li class="tsd-signature tsd-kind-icon">option&lt;A1, A, R&gt;<span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="index_d.anyfunction.html" class="tsd-signature-type">AnyFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><a href="index_d.maybe.html" class="tsd-signature-type">Maybe</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A1</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><a href="index_d.either.html" class="tsd-signature-type">Either</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A1</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A1</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">, </span><a href="index_d.maybe.html" class="tsd-signature-type">Maybe</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter">
+						<li class="tsd-signature tsd-kind-icon">option&lt;R&gt;<span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="index_d.anyfunction.html" class="tsd-signature-type">AnyFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">, </span><a href="index_d.maybe.html" class="tsd-signature-type">Maybe</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">option&lt;A1, A, R&gt;<span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>a1<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">A1</span>, a<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="index_d.anyfunction.html" class="tsd-signature-type">AnyFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><a href="index_d.maybe.html" class="tsd-signature-type">Maybe</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A1</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><a href="index_d.either.html" class="tsd-signature-type">Either</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A1</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A1</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">, </span><a href="index_d.maybe.html" class="tsd-signature-type">Maybe</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3455">index.d.ts:3455</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3459">index.d.ts:3459</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -585,10 +684,10 @@ g(_, <span class="hljs-number">2</span>)(_, <span class="hljs-number">3</span>)(
 }
 
 toLowerCase.option()(<span class="hljs-literal">null</span>).catch(<span class="hljs-function">(<span class="hljs-params">err</span>) =&gt;</span> err === <span class="hljs-literal">null</span>);
-toLowerCase.option()(<span class="hljs-number">1</span>).catch(<span class="hljs-function">(<span class="hljs-params">err</span>) =&gt;</span> err.message === <span class="hljs-string">'str.toLowerCase is not a function'</span>);
+toLowerCase.option()(<span class="hljs-number">1</span>).catch(<span class="hljs-function">(<span class="hljs-params">err</span>) =&gt;</span> err.message === <span class="hljs-string">&#x27;str.toLowerCase is not a function&#x27;</span>);
 
-toLowerCase.option()(<span class="hljs-string">'FOO'</span>).then(<span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> value === <span class="hljs-string">'foo'</span>);
-toLowerCase.option()(toLowerCase.option()(<span class="hljs-string">'FOO'</span>)).then(<span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> value === <span class="hljs-string">'foo'</span>);</code></pre>
+toLowerCase.option()(<span class="hljs-string">&#x27;FOO&#x27;</span>).then(<span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> value === <span class="hljs-string">&#x27;foo&#x27;</span>);
+toLowerCase.option()(toLowerCase.option()(<span class="hljs-string">&#x27;FOO&#x27;</span>)).then(<span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> value === <span class="hljs-string">&#x27;foo&#x27;</span>);</code></pre>
 									</dd>
 								</dl>
 							</div>
@@ -601,10 +700,10 @@ toLowerCase.option()(toLowerCase.option()(<span class="hljs-string">'FOO'</span>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>this: <span class="tsd-signature-type">function</span></h5>
+									<h5>this: <span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">R</span></h5>
 									<ul class="tsd-parameters">
-										<li class="tsd-parameter-siganture">
-											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
+										<li class="tsd-parameter-signature">
+											<ul class="tsd-signatures tsd-kind-type-literal">
 												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">R</span></li>
 											</ul>
 											<ul class="tsd-descriptions">
@@ -621,7 +720,7 @@ toLowerCase.option()(toLowerCase.option()(<span class="hljs-string">'FOO'</span>
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3474">index.d.ts:3474</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3478">index.d.ts:3478</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -636,10 +735,10 @@ toLowerCase.option()(toLowerCase.option()(<span class="hljs-string">'FOO'</span>
 }
 
 toLowerCase.option()(<span class="hljs-literal">null</span>).catch(<span class="hljs-function">(<span class="hljs-params">err</span>) =&gt;</span> err === <span class="hljs-literal">null</span>);
-toLowerCase.option()(<span class="hljs-number">1</span>).catch(<span class="hljs-function">(<span class="hljs-params">err</span>) =&gt;</span> err.message === <span class="hljs-string">'str.toLowerCase is not a function'</span>);
+toLowerCase.option()(<span class="hljs-number">1</span>).catch(<span class="hljs-function">(<span class="hljs-params">err</span>) =&gt;</span> err.message === <span class="hljs-string">&#x27;str.toLowerCase is not a function&#x27;</span>);
 
-toLowerCase.option()(<span class="hljs-string">'FOO'</span>).then(<span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> value === <span class="hljs-string">'foo'</span>);
-toLowerCase.option()(toLowerCase.option()(<span class="hljs-string">'FOO'</span>)).then(<span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> value === <span class="hljs-string">'foo'</span>);</code></pre>
+toLowerCase.option()(<span class="hljs-string">&#x27;FOO&#x27;</span>).then(<span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> value === <span class="hljs-string">&#x27;foo&#x27;</span>);
+toLowerCase.option()(toLowerCase.option()(<span class="hljs-string">&#x27;FOO&#x27;</span>)).then(<span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> value === <span class="hljs-string">&#x27;foo&#x27;</span>);</code></pre>
 									</dd>
 								</dl>
 							</div>
@@ -658,10 +757,10 @@ toLowerCase.option()(toLowerCase.option()(<span class="hljs-string">'FOO'</span>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>this: <span class="tsd-signature-type">function</span></h5>
+									<h5>this: <span class="tsd-signature-symbol">(</span>a1<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">A1</span>, a<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">R</span></h5>
 									<ul class="tsd-parameters">
-										<li class="tsd-parameter-siganture">
-											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
+										<li class="tsd-parameter-signature">
+											<ul class="tsd-signatures tsd-kind-type-literal">
 												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>a1<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">A1</span>, a<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">R</span></li>
 											</ul>
 											<ul class="tsd-descriptions">
@@ -686,18 +785,18 @@ toLowerCase.option()(toLowerCase.option()(<span class="hljs-string">'FOO'</span>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter">
 					<a name="result" class="tsd-anchor"></a>
 					<h3>result</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">result&lt;R&gt;<span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="index_d.anyfunction.html" class="tsd-signature-type">AnyFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">, </span><a href="index_d.either.html" class="tsd-signature-type">Either</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
-						<li class="tsd-signature tsd-kind-icon">result&lt;A1, A, R&gt;<span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="index_d.anyfunction.html" class="tsd-signature-type">AnyFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><a href="index_d.maybe.html" class="tsd-signature-type">Maybe</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A1</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><a href="index_d.either.html" class="tsd-signature-type">Either</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A1</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">, </span><a href="index_d.maybe.html" class="tsd-signature-type">Maybe</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter">
+						<li class="tsd-signature tsd-kind-icon">result&lt;R&gt;<span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="index_d.anyfunction.html" class="tsd-signature-type">AnyFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">, </span><a href="index_d.either.html" class="tsd-signature-type">Either</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">result&lt;A1, A, R&gt;<span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>a1<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">A1</span>, a<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="index_d.anyfunction.html" class="tsd-signature-type">AnyFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><a href="index_d.maybe.html" class="tsd-signature-type">Maybe</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A1</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><a href="index_d.either.html" class="tsd-signature-type">Either</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A1</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">, </span><a href="index_d.maybe.html" class="tsd-signature-type">Maybe</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3491">index.d.ts:3491</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3495">index.d.ts:3495</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -710,9 +809,9 @@ toLowerCase.option()(toLowerCase.option()(<span class="hljs-string">'FOO'</span>
   <span class="hljs-keyword">return</span> str.toLowerCase();
 }
 
-toLowerCase.result()(<span class="hljs-number">1</span>).catch(<span class="hljs-function">(<span class="hljs-params">err</span>) =&gt;</span> err.message === <span class="hljs-string">'str.toLowerCase is not a function'</span>);
-toLowerCase.result()(<span class="hljs-string">'FOO'</span>).then(<span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> value === <span class="hljs-string">'foo'</span>);
-toLowerCase.result()(toLowerCase.result()(<span class="hljs-string">'FOO'</span>)).then(<span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> value === <span class="hljs-string">'foo'</span>);</code></pre>
+toLowerCase.result()(<span class="hljs-number">1</span>).catch(<span class="hljs-function">(<span class="hljs-params">err</span>) =&gt;</span> err.message === <span class="hljs-string">&#x27;str.toLowerCase is not a function&#x27;</span>);
+toLowerCase.result()(<span class="hljs-string">&#x27;FOO&#x27;</span>).then(<span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> value === <span class="hljs-string">&#x27;foo&#x27;</span>);
+toLowerCase.result()(toLowerCase.result()(<span class="hljs-string">&#x27;FOO&#x27;</span>)).then(<span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> value === <span class="hljs-string">&#x27;foo&#x27;</span>);</code></pre>
 									</dd>
 								</dl>
 							</div>
@@ -725,10 +824,10 @@ toLowerCase.result()(toLowerCase.result()(<span class="hljs-string">'FOO'</span>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>this: <span class="tsd-signature-type">function</span></h5>
+									<h5>this: <span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">R</span></h5>
 									<ul class="tsd-parameters">
-										<li class="tsd-parameter-siganture">
-											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
+										<li class="tsd-parameter-signature">
+											<ul class="tsd-signatures tsd-kind-type-literal">
 												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">R</span></li>
 											</ul>
 											<ul class="tsd-descriptions">
@@ -745,7 +844,7 @@ toLowerCase.result()(toLowerCase.result()(<span class="hljs-string">'FOO'</span>
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3507">index.d.ts:3507</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3511">index.d.ts:3511</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -758,9 +857,9 @@ toLowerCase.result()(toLowerCase.result()(<span class="hljs-string">'FOO'</span>
   <span class="hljs-keyword">return</span> str.toLowerCase();
 }
 
-toLowerCase.result()(<span class="hljs-number">1</span>).catch(<span class="hljs-function">(<span class="hljs-params">err</span>) =&gt;</span> err.message === <span class="hljs-string">'str.toLowerCase is not a function'</span>);
-toLowerCase.result()(<span class="hljs-string">'FOO'</span>).then(<span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> value === <span class="hljs-string">'foo'</span>);
-toLowerCase.result()(toLowerCase.result()(<span class="hljs-string">'FOO'</span>)).then(<span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> value === <span class="hljs-string">'foo'</span>);</code></pre>
+toLowerCase.result()(<span class="hljs-number">1</span>).catch(<span class="hljs-function">(<span class="hljs-params">err</span>) =&gt;</span> err.message === <span class="hljs-string">&#x27;str.toLowerCase is not a function&#x27;</span>);
+toLowerCase.result()(<span class="hljs-string">&#x27;FOO&#x27;</span>).then(<span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> value === <span class="hljs-string">&#x27;foo&#x27;</span>);
+toLowerCase.result()(toLowerCase.result()(<span class="hljs-string">&#x27;FOO&#x27;</span>)).then(<span class="hljs-function">(<span class="hljs-params">value</span>) =&gt;</span> value === <span class="hljs-string">&#x27;foo&#x27;</span>);</code></pre>
 									</dd>
 								</dl>
 							</div>
@@ -779,10 +878,10 @@ toLowerCase.result()(toLowerCase.result()(<span class="hljs-string">'FOO'</span>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>this: <span class="tsd-signature-type">function</span></h5>
+									<h5>this: <span class="tsd-signature-symbol">(</span>a1<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">A1</span>, a<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">R</span></h5>
 									<ul class="tsd-parameters">
-										<li class="tsd-parameter-siganture">
-											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
+										<li class="tsd-parameter-signature">
+											<ul class="tsd-signatures tsd-kind-type-literal">
 												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>a1<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">A1</span>, a<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">R</span></li>
 											</ul>
 											<ul class="tsd-descriptions">
@@ -807,10 +906,10 @@ toLowerCase.result()(toLowerCase.result()(<span class="hljs-string">'FOO'</span>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter">
 					<a name="throttle" class="tsd-anchor"></a>
 					<h3>throttle</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-not-exported">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter">
 						<li class="tsd-signature tsd-kind-icon">throttle&lt;T&gt;<span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, delay<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="index_d.anyfunction.html" class="tsd-signature-type">AnyFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Parameters</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
 						<li class="tsd-signature tsd-kind-icon">throttle&lt;T&gt;<span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, opts<span class="tsd-signature-symbol">: </span><a href="index_d.throttleoptions.html" class="tsd-signature-type">ThrottleOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="index_d.anyfunction.html" class="tsd-signature-type">AnyFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Parameters</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
@@ -818,7 +917,7 @@ toLowerCase.result()(toLowerCase.result()(<span class="hljs-string">'FOO'</span>
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3427">index.d.ts:3427</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3431">index.d.ts:3431</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -848,7 +947,7 @@ toLowerCase.result()(toLowerCase.result()(<span class="hljs-string">'FOO'</span>
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3436">index.d.ts:3436</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3440">index.d.ts:3440</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -888,10 +987,10 @@ toLowerCase.result()(toLowerCase.result()(<span class="hljs-string">'FOO'</span>
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
-					<li class="current tsd-kind-external-module">
+					<li class="current tsd-kind-module">
 						<a href="../modules/index_d.html">&quot;index.d&quot;</a>
 						<ul>
-							<li class=" tsd-kind-module tsd-parent-kind-external-module tsd-is-not-exported">
+							<li class=" tsd-kind-namespace tsd-parent-kind-module">
 								<a href="../modules/index_d.tb.html">TB</a>
 							</li>
 						</ul>
@@ -902,31 +1001,31 @@ toLowerCase.result()(toLowerCase.result()(<span class="hljs-string">'FOO'</span>
 				<ul class="before-current">
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported">
+					<li class="current tsd-kind-interface tsd-parent-kind-module">
 						<a href="index_d.function.html" class="tsd-kind-icon">Function</a>
 						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-not-exported">
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="index_d.function.html#name" class="tsd-kind-icon">name</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter">
 								<a href="index_d.function.html#compose" class="tsd-kind-icon">compose</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter">
 								<a href="index_d.function.html#curry" class="tsd-kind-icon">curry</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter">
 								<a href="index_d.function.html#debounce" class="tsd-kind-icon">debounce</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter">
 								<a href="index_d.function.html#once" class="tsd-kind-icon">once</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter">
 								<a href="index_d.function.html#option" class="tsd-kind-icon">option</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter">
 								<a href="index_d.function.html#result" class="tsd-kind-icon">result</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-has-type-parameter">
 								<a href="index_d.function.html#throttle" class="tsd-kind-icon">throttle</a>
 							</li>
 						</ul>
@@ -943,64 +1042,31 @@ toLowerCase.result()(toLowerCase.result()(<span class="hljs-string">'FOO'</span>
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
-				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
+				<li class="tsd-kind-namespace"><span class="tsd-kind-icon">Namespace</span></li>
 				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
 				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
 				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
 				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
-				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
 				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
 				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
-				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
-			</ul>
-			<ul class="tsd-legend">
 				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
 				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
-				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
 				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
-				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
 				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
-				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
-				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
 			</ul>
 		</div>
 	</div>
 </footer>
 <div class="overlay"></div>
 <script src="../assets/js/main.js"></script>
-<script>if (location.protocol == 'file:') document.write('<script src="../assets/js/search.js"><' + '/script>');</script>
 <script>'use strict';
 
 /*!
@@ -1015,13 +1081,13 @@ toLowerCase.result()(toLowerCase.result()(<span class="hljs-string">'FOO'</span>
 	document.body.style.display = 'block';
 
 	var
-		isDTS = /([^/.]+)\.d/,
-		isIndex = /\/index|\.d/,
-		isNode = /(?:^|\b)node_modules(?:\b|$)/;
+		isDTS = /\.d$/,
+		isIndex = /^(?:(?!(?:^|\/)(?:interface|modules|prelude|engines)\/).)*?(?:^|\/)index$/,
+		isNode = /(?:^|\/)node_modules(?:\/|$)/;
 
 	var
 		trimRgxp = /^\s+|[\n\v"']+|\s+$/g,
-		normalizeRgxp = /(?:^|\b)src\//;
+		normalizeRgxp = /(?:^|\b)src\/|\/index$/g;
 
 	var
 		breadcrumbs = Array.from(document.querySelectorAll('.tsd-breadcrumb a')),
@@ -1036,32 +1102,30 @@ toLowerCase.result()(toLowerCase.result()(<span class="hljs-string">'FOO'</span>
 	});
 
 	var
-		navigation = Array.from(document.querySelectorAll('.tsd-navigation.primary .tsd-kind-external-module a')),
-		globalIndex = Array.from(document.querySelectorAll('.tsd-index-list a'));
+		navigation = Array.from(document.querySelectorAll('.tsd-navigation.primary .tsd-kind-module a')),
+		globalIndex = Array.from(document.querySelectorAll('.tsd-kind-module a'));
 
-	[].concat(navigation, breadcrumbs.length <= 1 ? globalIndex : []).forEach(function (el) {
+	[].concat(breadcrumbs.length <= 1 ? globalIndex : navigation).forEach(function (el) {
 		var
 			wrapper = el.parentNode,
 			linkText = el.textContent.replace(trimRgxp, '');
 
-		if (isIndex.test(linkText)) {
-			if (isDTS.test(linkText)) {
-				var
-					nm = RegExp.$1;
+		if (isDTS.test(linkText)) {
+			var
+				nm = RegExp.$1;
 
-				if (linkText === 'index.d') {
-					el.innerHTML = '<b>prelude</b>';
+			if (linkText === 'index.d') {
+				el.innerHTML = '<b>prelude</b>';
 
-				} else if (isNode.test(linkText)) {
-					el.textContent = nm;
-
-				} else {
-					wrapper.parentNode.removeChild(wrapper);
-				}
+			} else if (isNode.test(linkText)) {
+				el.textContent = nm;
 
 			} else {
-				el.textContent = linkText.replace(isIndex, '').replace(normalizeRgxp, '');
+				wrapper.parentNode.removeChild(wrapper);
 			}
+
+		} else if (isIndex.test(linkText)) {
+			el.textContent = linkText.replace(normalizeRgxp, '');
 
 		} else {
 			wrapper.parentNode.removeChild(wrapper);

@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>Date | V4Fire</title>
-	<meta name="description" content="">
+	<meta name="description" content="Documentation for V4Fire">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
 <style>/*!
@@ -15,7 +15,26 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+body {
+	font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+}
+
+code, pre, tt {
+	font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+}
+
+.tsd-typography h1,
+.tsd-typography h2,
+.tsd-typography h3,
+.tsd-typography h4,
+.tsd-typography h5,
+.tsd-typography h6 {
+	margin: 1em 0;
+	font-family: -apple-system, BlinkMacSystemFont, UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+}
+
 .tsd-panel {
+	padding: 20px 40px;
 	border: 1px solid #DDD;
 	border-radius: 10px;
 	box-shadow: none;
@@ -24,8 +43,8 @@
 .tsd-page-title {
 	color: #EEE;
 
-	background: #232526;  /* fallback for old browsers */
-	background: -webkit-linear-gradient(to right, #414345, #232526);  /* Chrome 10-25, Safari 5.1-6 */
+	background: #232526; /* fallback for old browsers */
+	background: -webkit-linear-gradient(to right, #414345, #232526); /* Chrome 10-25, Safari 5.1-6 */
 	background: linear-gradient(to right, #414345, #232526); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
@@ -58,6 +77,90 @@
 #tsd-search .field {
 	height: 100%;
 }
+
+pre {
+	background-color: rgba(7, 7, 7, 0.01);
+}
+
+/**
+ * GitHub Gist Theme
+ * Author : Anthony Attard - https://github.com/AnthonyAttard
+ * Author : Louis Barranqueiro - https://github.com/LouisBarranqueiro
+ */
+
+.hljs {
+	display: block;
+	background: white;
+	padding: 0.5em;
+	color: #333333;
+	overflow-x: auto;
+}
+
+.hljs-comment,
+.hljs-meta {
+	color: #969896;
+}
+
+.hljs-variable,
+.hljs-template-variable,
+.hljs-strong,
+.hljs-emphasis,
+.hljs-quote {
+	color: #df5000;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-type {
+	color: #d73a49;
+}
+
+.hljs-literal,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-attribute {
+	color: #0086b3;
+}
+
+.hljs-section,
+.hljs-name {
+	color: #63a35c;
+}
+
+.hljs-tag {
+	color: #333333;
+}
+
+.hljs-title,
+.hljs-attr,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-selector-attr,
+.hljs-selector-pseudo {
+	color: #6f42c1;
+}
+
+.hljs-addition {
+	color: #55a532;
+	background-color: #eaffea;
+}
+
+.hljs-deletion {
+	color: #bd2c00;
+	background-color: #ffecec;
+}
+
+.hljs-link {
+	text-decoration: underline;
+}
+
+.hljs-number {
+	color: #005cc5;
+}
+
+.hljs-string {
+	color: #032f62;
+}
 </style>
 </head>
 <body>
@@ -84,7 +187,7 @@
 	<div class="tsd-page-toolbar">
 		<div class="container">
 			<div class="table-wrap">
-				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.js" data-base="..">
+				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.json" data-base="..">
 					<div class="field">
 						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
 						<input id="tsd-search-field" type="text" />
@@ -109,10 +212,6 @@
 							</div>
 							<input type="checkbox" id="tsd-filter-inherited" checked />
 							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
-							<input type="checkbox" id="tsd-filter-externals" checked />
-							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
-							<input type="checkbox" id="tsd-filter-only-exported" />
-							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
 						</div>
 					</div>
 					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
@@ -152,55 +251,55 @@
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
-						<section class="tsd-index-section tsd-is-not-exported">
+						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.date.html#add" class="tsd-kind-icon">add</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.date.html#beginningofday" class="tsd-kind-icon">beginning<wbr>OfDay</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.date.html#beginningofmonth" class="tsd-kind-icon">beginning<wbr>OfMonth</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.date.html#beginningofweek" class="tsd-kind-icon">beginning<wbr>OfWeek</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.date.html#beginningofyear" class="tsd-kind-icon">beginning<wbr>OfYear</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.date.html#clone" class="tsd-kind-icon">clone</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.date.html#daysinmonth" class="tsd-kind-icon">days<wbr>InMonth</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.date.html#endofday" class="tsd-kind-icon">end<wbr>OfDay</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.date.html#endofmonth" class="tsd-kind-icon">end<wbr>OfMonth</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.date.html#endofweek" class="tsd-kind-icon">end<wbr>OfWeek</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.date.html#endofyear" class="tsd-kind-icon">end<wbr>OfYear</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.date.html#format" class="tsd-kind-icon">format</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.date.html#is" class="tsd-kind-icon">is</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.date.html#isafter" class="tsd-kind-icon">is<wbr>After</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.date.html#isbefore" class="tsd-kind-icon">is<wbr>Before</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.date.html#isbetween" class="tsd-kind-icon">is<wbr>Between</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.date.html#isfuture" class="tsd-kind-icon">is<wbr>Future</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.date.html#ispast" class="tsd-kind-icon">is<wbr>Past</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.date.html#long" class="tsd-kind-icon">long</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.date.html#medium" class="tsd-kind-icon">medium</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.date.html#relative" class="tsd-kind-icon">relative</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.date.html#relativeto" class="tsd-kind-icon">relative<wbr>To</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.date.html#rewind" class="tsd-kind-icon">rewind</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.date.html#set" class="tsd-kind-icon">set</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.date.html#short" class="tsd-kind-icon">short</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.date.html#tohtmldatestring" class="tsd-kind-icon">toHTMLDate<wbr>String</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.date.html#tohtmlstring" class="tsd-kind-icon">toHTMLString</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.date.html#tohtmltimestring" class="tsd-kind-icon">toHTMLTime<wbr>String</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="index_d.date.html#add" class="tsd-kind-icon">add</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="index_d.date.html#beginningofday" class="tsd-kind-icon">beginning<wbr>OfDay</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="index_d.date.html#beginningofmonth" class="tsd-kind-icon">beginning<wbr>OfMonth</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="index_d.date.html#beginningofweek" class="tsd-kind-icon">beginning<wbr>OfWeek</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="index_d.date.html#beginningofyear" class="tsd-kind-icon">beginning<wbr>OfYear</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="index_d.date.html#clone" class="tsd-kind-icon">clone</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="index_d.date.html#daysinmonth" class="tsd-kind-icon">days<wbr>InMonth</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="index_d.date.html#endofday" class="tsd-kind-icon">end<wbr>OfDay</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="index_d.date.html#endofmonth" class="tsd-kind-icon">end<wbr>OfMonth</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="index_d.date.html#endofweek" class="tsd-kind-icon">end<wbr>OfWeek</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="index_d.date.html#endofyear" class="tsd-kind-icon">end<wbr>OfYear</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="index_d.date.html#format" class="tsd-kind-icon">format</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="index_d.date.html#is" class="tsd-kind-icon">is</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="index_d.date.html#isafter" class="tsd-kind-icon">is<wbr>After</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="index_d.date.html#isbefore" class="tsd-kind-icon">is<wbr>Before</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="index_d.date.html#isbetween" class="tsd-kind-icon">is<wbr>Between</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="index_d.date.html#isfuture" class="tsd-kind-icon">is<wbr>Future</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="index_d.date.html#ispast" class="tsd-kind-icon">is<wbr>Past</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="index_d.date.html#long" class="tsd-kind-icon">long</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="index_d.date.html#medium" class="tsd-kind-icon">medium</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="index_d.date.html#relative" class="tsd-kind-icon">relative</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="index_d.date.html#relativeto" class="tsd-kind-icon">relative<wbr>To</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="index_d.date.html#rewind" class="tsd-kind-icon">rewind</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="index_d.date.html#set" class="tsd-kind-icon">set</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="index_d.date.html#short" class="tsd-kind-icon">short</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="index_d.date.html#tohtmldatestring" class="tsd-kind-icon">toHTMLDate<wbr>String</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="index_d.date.html#tohtmlstring" class="tsd-kind-icon">toHTMLString</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="index_d.date.html#tohtmltimestring" class="tsd-kind-icon">toHTMLTime<wbr>String</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
+			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="add" class="tsd-anchor"></a>
 					<h3>add</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">add<span class="tsd-signature-symbol">(</span>units<span class="tsd-signature-symbol">: </span><a href="index_d.datesetparams.html" class="tsd-signature-type">DateSetParams</a>, reset<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Date</span></li>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">add<span class="tsd-signature-symbol">(</span>units<span class="tsd-signature-symbol">: </span><a href="index_d.datesetparams.html" class="tsd-signature-type">DateSetParams</a>, reset<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="index_d.date.html" class="tsd-signature-type">Date</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3180">index.d.ts:3180</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3184">index.d.ts:3184</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -220,21 +319,21 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Date</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="index_d.date.html" class="tsd-signature-type">Date</a></h4>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="beginningofday" class="tsd-anchor"></a>
 					<h3>beginning<wbr>OfDay</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">beginning<wbr>OfDay<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Date</span></li>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">beginning<wbr>OfDay<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="index_d.date.html" class="tsd-signature-type">Date</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3020">index.d.ts:3020</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3024">index.d.ts:3024</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -242,21 +341,21 @@
 									<p>Changes the date time so that it starts at the beginning of a day and returns it</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Date</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="index_d.date.html" class="tsd-signature-type">Date</a></h4>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="beginningofmonth" class="tsd-anchor"></a>
 					<h3>beginning<wbr>OfMonth</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">beginning<wbr>OfMonth<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Date</span></li>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">beginning<wbr>OfMonth<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="index_d.date.html" class="tsd-signature-type">Date</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3040">index.d.ts:3040</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3044">index.d.ts:3044</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -264,21 +363,21 @@
 									<p>Changes the date so that it starts at the beginning of a month and returns it</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Date</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="index_d.date.html" class="tsd-signature-type">Date</a></h4>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="beginningofweek" class="tsd-anchor"></a>
 					<h3>beginning<wbr>OfWeek</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">beginning<wbr>OfWeek<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Date</span></li>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">beginning<wbr>OfWeek<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="index_d.date.html" class="tsd-signature-type">Date</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3030">index.d.ts:3030</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3034">index.d.ts:3034</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -286,21 +385,21 @@
 									<p>Changes the date so that it starts at the beginning of a week and returns it</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Date</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="index_d.date.html" class="tsd-signature-type">Date</a></h4>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="beginningofyear" class="tsd-anchor"></a>
 					<h3>beginning<wbr>OfYear</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">beginning<wbr>OfYear<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Date</span></li>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">beginning<wbr>OfYear<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="index_d.date.html" class="tsd-signature-type">Date</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3050">index.d.ts:3050</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3054">index.d.ts:3054</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -308,21 +407,21 @@
 									<p>Changes the date so that it starts at the beginning of a year and returns it</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Date</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="index_d.date.html" class="tsd-signature-type">Date</a></h4>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="clone" class="tsd-anchor"></a>
 					<h3>clone</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">clone<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Date</span></li>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">clone<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="index_d.date.html" class="tsd-signature-type">Date</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2968">index.d.ts:2968</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2972">index.d.ts:2972</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -330,21 +429,21 @@
 									<p>Clones the date object and returns a new object</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Date</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="index_d.date.html" class="tsd-signature-type">Date</a></h4>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="daysinmonth" class="tsd-anchor"></a>
 					<h3>days<wbr>InMonth</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
 						<li class="tsd-signature tsd-kind-icon">days<wbr>InMonth<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3212">index.d.ts:3212</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3216">index.d.ts:3216</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -356,17 +455,17 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="endofday" class="tsd-anchor"></a>
 					<h3>end<wbr>OfDay</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">end<wbr>OfDay<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Date</span></li>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">end<wbr>OfDay<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="index_d.date.html" class="tsd-signature-type">Date</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3025">index.d.ts:3025</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3029">index.d.ts:3029</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -374,21 +473,21 @@
 									<p>Changes the date time so that it starts at the ending of a day and returns it</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Date</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="index_d.date.html" class="tsd-signature-type">Date</a></h4>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="endofmonth" class="tsd-anchor"></a>
 					<h3>end<wbr>OfMonth</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">end<wbr>OfMonth<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Date</span></li>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">end<wbr>OfMonth<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="index_d.date.html" class="tsd-signature-type">Date</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3045">index.d.ts:3045</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3049">index.d.ts:3049</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -396,21 +495,21 @@
 									<p>Changes the date so that it starts at the ending of a month and returns it</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Date</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="index_d.date.html" class="tsd-signature-type">Date</a></h4>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="endofweek" class="tsd-anchor"></a>
 					<h3>end<wbr>OfWeek</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">end<wbr>OfWeek<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Date</span></li>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">end<wbr>OfWeek<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="index_d.date.html" class="tsd-signature-type">Date</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3035">index.d.ts:3035</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3039">index.d.ts:3039</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -418,21 +517,21 @@
 									<p>Changes the date so that it starts at the ending of a week and returns it</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Date</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="index_d.date.html" class="tsd-signature-type">Date</a></h4>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="endofyear" class="tsd-anchor"></a>
 					<h3>end<wbr>OfYear</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">end<wbr>OfYear<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Date</span></li>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">end<wbr>OfYear<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="index_d.date.html" class="tsd-signature-type">Date</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3055">index.d.ts:3055</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3059">index.d.ts:3059</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -440,14 +539,14 @@
 									<p>Changes the date so that it starts at the ending of a year and returns it</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Date</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="index_d.date.html" class="tsd-signature-type">Date</a></h4>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="format" class="tsd-anchor"></a>
 					<h3>format</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
 						<li class="tsd-signature tsd-kind-icon">format<span class="tsd-signature-symbol">(</span>pattern<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, locale<span class="tsd-signature-symbol">?: </span><a href="../modules/index_d.html#canarray" class="tsd-signature-type">CanArray</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
 						<li class="tsd-signature tsd-kind-icon">format<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">DateTimeFormatOptions</span>, locale<span class="tsd-signature-symbol">?: </span><a href="../modules/index_d.html#canarray" class="tsd-signature-type">CanArray</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
 					</ul>
@@ -455,7 +554,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3140">index.d.ts:3140</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3144">index.d.ts:3144</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -488,12 +587,12 @@
 								</ol>
 								<dl class="tsd-comment-tags">
 									<dt>example</dt>
-									<dd><pre><code class="language-js"><span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-string">'12/28/2019'</span>).format(<span class="hljs-string">'year'</span>, <span class="hljs-string">'en-us'</span>) <span class="hljs-comment">// '2019'</span>
-<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-string">'12/28/2019'</span>).format(<span class="hljs-string">'year:2-digit'</span>, <span class="hljs-string">'en-us'</span>) <span class="hljs-comment">// '19'</span>
-<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-string">'12/28/2019'</span>).format(<span class="hljs-string">'year:2-digit;month'</span>, <span class="hljs-string">'en-us'</span>) <span class="hljs-comment">// 'Dec 19'</span>
+									<dd><pre><code class="language-js"><span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-string">&#x27;12/28/2019&#x27;</span>).format(<span class="hljs-string">&#x27;year&#x27;</span>, <span class="hljs-string">&#x27;en-us&#x27;</span>) <span class="hljs-comment">// &#x27;2019&#x27;</span>
+<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-string">&#x27;12/28/2019&#x27;</span>).format(<span class="hljs-string">&#x27;year:2-digit&#x27;</span>, <span class="hljs-string">&#x27;en-us&#x27;</span>) <span class="hljs-comment">// &#x27;19&#x27;</span>
+<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-string">&#x27;12/28/2019&#x27;</span>).format(<span class="hljs-string">&#x27;year:2-digit;month&#x27;</span>, <span class="hljs-string">&#x27;en-us&#x27;</span>) <span class="hljs-comment">// &#x27;Dec 19&#x27;</span>
 
 <span class="hljs-comment">// Formatting a date by using short aliases</span>
-<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-string">'12/28/2019'</span>).format(<span class="hljs-string">'Y:2-digit;M:long;d'</span>, <span class="hljs-string">'en-us'</span>) <span class="hljs-comment">// 'December 28, 19'</span></code></pre>
+<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-string">&#x27;12/28/2019&#x27;</span>).format(<span class="hljs-string">&#x27;Y:2-digit;M:long;d&#x27;</span>, <span class="hljs-string">&#x27;en-us&#x27;</span>) <span class="hljs-comment">// &#x27;December 28, 19&#x27;</span></code></pre>
 									</dd>
 								</dl>
 							</div>
@@ -519,7 +618,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3148">index.d.ts:3148</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3152">index.d.ts:3152</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -543,17 +642,17 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="is" class="tsd-anchor"></a>
 					<h3>is</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
 						<li class="tsd-signature tsd-kind-icon">is<span class="tsd-signature-symbol">(</span>date<span class="tsd-signature-symbol">: </span><a href="../modules/index_d.html#datecreatevalue" class="tsd-signature-type">DateCreateValue</a>, margin<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2977">index.d.ts:2977</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2981">index.d.ts:2981</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -577,17 +676,17 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="isafter" class="tsd-anchor"></a>
 					<h3>is<wbr>After</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
 						<li class="tsd-signature tsd-kind-icon">is<wbr>After<span class="tsd-signature-symbol">(</span>date<span class="tsd-signature-symbol">: </span><a href="../modules/index_d.html#datecreatevalue" class="tsd-signature-type">DateCreateValue</a>, margin<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2986">index.d.ts:2986</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2990">index.d.ts:2990</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -611,17 +710,17 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="isbefore" class="tsd-anchor"></a>
 					<h3>is<wbr>Before</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
 						<li class="tsd-signature tsd-kind-icon">is<wbr>Before<span class="tsd-signature-symbol">(</span>date<span class="tsd-signature-symbol">: </span><a href="../modules/index_d.html#datecreatevalue" class="tsd-signature-type">DateCreateValue</a>, margin<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2995">index.d.ts:2995</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2999">index.d.ts:2999</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -645,17 +744,17 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="isbetween" class="tsd-anchor"></a>
 					<h3>is<wbr>Between</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
 						<li class="tsd-signature tsd-kind-icon">is<wbr>Between<span class="tsd-signature-symbol">(</span>left<span class="tsd-signature-symbol">: </span><a href="../modules/index_d.html#datecreatevalue" class="tsd-signature-type">DateCreateValue</a>, right<span class="tsd-signature-symbol">: </span><a href="../modules/index_d.html#datecreatevalue" class="tsd-signature-type">DateCreateValue</a>, margin<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3005">index.d.ts:3005</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3009">index.d.ts:3009</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -685,17 +784,17 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="isfuture" class="tsd-anchor"></a>
 					<h3>is<wbr>Future</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
 						<li class="tsd-signature tsd-kind-icon">is<wbr>Future<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3015">index.d.ts:3015</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3019">index.d.ts:3019</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -707,17 +806,17 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="ispast" class="tsd-anchor"></a>
 					<h3>is<wbr>Past</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
 						<li class="tsd-signature tsd-kind-icon">is<wbr>Past<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3010">index.d.ts:3010</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3014">index.d.ts:3014</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -729,17 +828,17 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="long" class="tsd-anchor"></a>
 					<h3>long</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
 						<li class="tsd-signature tsd-kind-icon">long<span class="tsd-signature-symbol">(</span>locale<span class="tsd-signature-symbol">?: </span><a href="../modules/index_d.html#canarray" class="tsd-signature-type">CanArray</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3094">index.d.ts:3094</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3098">index.d.ts:3098</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -749,7 +848,7 @@
 								</div>
 								<dl class="tsd-comment-tags">
 									<dt>example</dt>
-									<dd><pre><code class="language-js"><span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-string">'12/28/2019'</span>).long(<span class="hljs-string">'en-us'</span>) <span class="hljs-comment">// '12/28/2019, 12:00:00 A'</span></code></pre>
+									<dd><pre><code class="language-js"><span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-string">&#x27;12/28/2019&#x27;</span>).long(<span class="hljs-string">&#x27;en-us&#x27;</span>) <span class="hljs-comment">// &#x27;12/28/2019, 12:00:00 A&#x27;</span></code></pre>
 									</dd>
 								</dl>
 							</div>
@@ -763,17 +862,17 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="medium" class="tsd-anchor"></a>
 					<h3>medium</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
 						<li class="tsd-signature tsd-kind-icon">medium<span class="tsd-signature-symbol">(</span>locale<span class="tsd-signature-symbol">?: </span><a href="../modules/index_d.html#canarray" class="tsd-signature-type">CanArray</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3081">index.d.ts:3081</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3085">index.d.ts:3085</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -783,7 +882,7 @@
 								</div>
 								<dl class="tsd-comment-tags">
 									<dt>example</dt>
-									<dd><pre><code class="language-js"><span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-string">'12/28/2019'</span>).medium(<span class="hljs-string">'en-us'</span>) <span class="hljs-comment">// 'December 28, 2019'</span></code></pre>
+									<dd><pre><code class="language-js"><span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-string">&#x27;12/28/2019&#x27;</span>).medium(<span class="hljs-string">&#x27;en-us&#x27;</span>) <span class="hljs-comment">// &#x27;December 28, 2019&#x27;</span></code></pre>
 									</dd>
 								</dl>
 							</div>
@@ -797,17 +896,17 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="relative" class="tsd-anchor"></a>
 					<h3>relative</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
 						<li class="tsd-signature tsd-kind-icon">relative<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="index_d.daterelative.html" class="tsd-signature-type">DateRelative</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3201">index.d.ts:3201</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3205">index.d.ts:3205</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -819,17 +918,17 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="relativeto" class="tsd-anchor"></a>
 					<h3>relative<wbr>To</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
 						<li class="tsd-signature tsd-kind-icon">relative<wbr>To<span class="tsd-signature-symbol">(</span>date<span class="tsd-signature-symbol">: </span><a href="../modules/index_d.html#datecreatevalue" class="tsd-signature-type">DateCreateValue</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="index_d.daterelative.html" class="tsd-signature-type">DateRelative</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3207">index.d.ts:3207</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3211">index.d.ts:3211</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -850,17 +949,17 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="rewind" class="tsd-anchor"></a>
 					<h3>rewind</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">rewind<span class="tsd-signature-symbol">(</span>units<span class="tsd-signature-symbol">: </span><a href="index_d.datesetparams.html" class="tsd-signature-type">DateSetParams</a>, reset<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Date</span></li>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">rewind<span class="tsd-signature-symbol">(</span>units<span class="tsd-signature-symbol">: </span><a href="index_d.datesetparams.html" class="tsd-signature-type">DateSetParams</a>, reset<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="index_d.date.html" class="tsd-signature-type">Date</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3196">index.d.ts:3196</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3200">index.d.ts:3200</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -880,21 +979,21 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Date</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="index_d.date.html" class="tsd-signature-type">Date</a></h4>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="set" class="tsd-anchor"></a>
 					<h3>set</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">set<span class="tsd-signature-symbol">(</span>units<span class="tsd-signature-symbol">: </span><a href="index_d.datesetparams.html" class="tsd-signature-type">DateSetParams</a>, reset<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Date</span></li>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">set<span class="tsd-signature-symbol">(</span>units<span class="tsd-signature-symbol">: </span><a href="index_d.datesetparams.html" class="tsd-signature-type">DateSetParams</a>, reset<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="index_d.date.html" class="tsd-signature-type">Date</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3188">index.d.ts:3188</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3192">index.d.ts:3192</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -914,21 +1013,21 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Date</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="index_d.date.html" class="tsd-signature-type">Date</a></h4>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="short" class="tsd-anchor"></a>
 					<h3>short</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
 						<li class="tsd-signature tsd-kind-icon">short<span class="tsd-signature-symbol">(</span>locale<span class="tsd-signature-symbol">?: </span><a href="../modules/index_d.html#canarray" class="tsd-signature-type">CanArray</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3068">index.d.ts:3068</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3072">index.d.ts:3072</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -938,7 +1037,7 @@
 								</div>
 								<dl class="tsd-comment-tags">
 									<dt>example</dt>
-									<dd><pre><code class="language-js"><span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-string">'12/28/2019'</span>).short(<span class="hljs-string">'en-us'</span>) <span class="hljs-comment">// '12/28/2019'</span></code></pre>
+									<dd><pre><code class="language-js"><span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-string">&#x27;12/28/2019&#x27;</span>).short(<span class="hljs-string">&#x27;en-us&#x27;</span>) <span class="hljs-comment">// &#x27;12/28/2019&#x27;</span></code></pre>
 									</dd>
 								</dl>
 							</div>
@@ -952,17 +1051,17 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="tohtmldatestring" class="tsd-anchor"></a>
 					<h3>toHTMLDate<wbr>String</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
 						<li class="tsd-signature tsd-kind-icon">toHTMLDate<wbr>String<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">?: </span><a href="index_d.datehtmldatestringoptions.html" class="tsd-signature-type">DateHTMLDateStringOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3156">index.d.ts:3156</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3160">index.d.ts:3160</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -981,17 +1080,17 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="tohtmlstring" class="tsd-anchor"></a>
 					<h3>toHTMLString</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
 						<li class="tsd-signature tsd-kind-icon">toHTMLString<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">?: </span><a href="../modules/index_d.html#datehtmlstringoptions" class="tsd-signature-type">DateHTMLStringOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3172">index.d.ts:3172</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3176">index.d.ts:3176</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1010,17 +1109,17 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="tohtmltimestring" class="tsd-anchor"></a>
 					<h3>toHTMLTime<wbr>String</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
 						<li class="tsd-signature tsd-kind-icon">toHTMLTime<wbr>String<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">?: </span><a href="index_d.datehtmltimestringoptions.html" class="tsd-signature-type">DateHTMLTimeStringOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3164">index.d.ts:3164</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3168">index.d.ts:3168</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1047,10 +1146,10 @@
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
-					<li class="current tsd-kind-external-module">
+					<li class="current tsd-kind-module">
 						<a href="../modules/index_d.html">&quot;index.d&quot;</a>
 						<ul>
-							<li class=" tsd-kind-module tsd-parent-kind-external-module tsd-is-not-exported">
+							<li class=" tsd-kind-namespace tsd-parent-kind-module">
 								<a href="../modules/index_d.tb.html">TB</a>
 							</li>
 						</ul>
@@ -1061,91 +1160,91 @@
 				<ul class="before-current">
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported">
+					<li class="current tsd-kind-interface tsd-parent-kind-module">
 						<a href="index_d.date.html" class="tsd-kind-icon">Date</a>
 						<ul>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="index_d.date.html#add" class="tsd-kind-icon">add</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="index_d.date.html#beginningofday" class="tsd-kind-icon">beginning<wbr>OfDay</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="index_d.date.html#beginningofmonth" class="tsd-kind-icon">beginning<wbr>OfMonth</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="index_d.date.html#beginningofweek" class="tsd-kind-icon">beginning<wbr>OfWeek</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="index_d.date.html#beginningofyear" class="tsd-kind-icon">beginning<wbr>OfYear</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="index_d.date.html#clone" class="tsd-kind-icon">clone</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="index_d.date.html#daysinmonth" class="tsd-kind-icon">days<wbr>InMonth</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="index_d.date.html#endofday" class="tsd-kind-icon">end<wbr>OfDay</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="index_d.date.html#endofmonth" class="tsd-kind-icon">end<wbr>OfMonth</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="index_d.date.html#endofweek" class="tsd-kind-icon">end<wbr>OfWeek</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="index_d.date.html#endofyear" class="tsd-kind-icon">end<wbr>OfYear</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="index_d.date.html#format" class="tsd-kind-icon">format</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="index_d.date.html#is" class="tsd-kind-icon">is</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="index_d.date.html#isafter" class="tsd-kind-icon">is<wbr>After</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="index_d.date.html#isbefore" class="tsd-kind-icon">is<wbr>Before</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="index_d.date.html#isbetween" class="tsd-kind-icon">is<wbr>Between</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="index_d.date.html#isfuture" class="tsd-kind-icon">is<wbr>Future</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="index_d.date.html#ispast" class="tsd-kind-icon">is<wbr>Past</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="index_d.date.html#long" class="tsd-kind-icon">long</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="index_d.date.html#medium" class="tsd-kind-icon">medium</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="index_d.date.html#relative" class="tsd-kind-icon">relative</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="index_d.date.html#relativeto" class="tsd-kind-icon">relative<wbr>To</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="index_d.date.html#rewind" class="tsd-kind-icon">rewind</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="index_d.date.html#set" class="tsd-kind-icon">set</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="index_d.date.html#short" class="tsd-kind-icon">short</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="index_d.date.html#tohtmldatestring" class="tsd-kind-icon">toHTMLDate<wbr>String</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="index_d.date.html#tohtmlstring" class="tsd-kind-icon">toHTMLString</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="index_d.date.html#tohtmltimestring" class="tsd-kind-icon">toHTMLTime<wbr>String</a>
 							</li>
 						</ul>
@@ -1162,64 +1261,31 @@
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
-				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
+				<li class="tsd-kind-namespace"><span class="tsd-kind-icon">Namespace</span></li>
 				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
 				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
 				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
 				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
-				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
 				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
 				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
-				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
-			</ul>
-			<ul class="tsd-legend">
 				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
 				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
-				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
 				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
-				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
 				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
-				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
-				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
 			</ul>
 		</div>
 	</div>
 </footer>
 <div class="overlay"></div>
 <script src="../assets/js/main.js"></script>
-<script>if (location.protocol == 'file:') document.write('<script src="../assets/js/search.js"><' + '/script>');</script>
 <script>'use strict';
 
 /*!
@@ -1234,13 +1300,13 @@
 	document.body.style.display = 'block';
 
 	var
-		isDTS = /([^/.]+)\.d/,
-		isIndex = /\/index|\.d/,
-		isNode = /(?:^|\b)node_modules(?:\b|$)/;
+		isDTS = /\.d$/,
+		isIndex = /^(?:(?!(?:^|\/)(?:interface|modules|prelude|engines)\/).)*?(?:^|\/)index$/,
+		isNode = /(?:^|\/)node_modules(?:\/|$)/;
 
 	var
 		trimRgxp = /^\s+|[\n\v"']+|\s+$/g,
-		normalizeRgxp = /(?:^|\b)src\//;
+		normalizeRgxp = /(?:^|\b)src\/|\/index$/g;
 
 	var
 		breadcrumbs = Array.from(document.querySelectorAll('.tsd-breadcrumb a')),
@@ -1255,32 +1321,30 @@
 	});
 
 	var
-		navigation = Array.from(document.querySelectorAll('.tsd-navigation.primary .tsd-kind-external-module a')),
-		globalIndex = Array.from(document.querySelectorAll('.tsd-index-list a'));
+		navigation = Array.from(document.querySelectorAll('.tsd-navigation.primary .tsd-kind-module a')),
+		globalIndex = Array.from(document.querySelectorAll('.tsd-kind-module a'));
 
-	[].concat(navigation, breadcrumbs.length <= 1 ? globalIndex : []).forEach(function (el) {
+	[].concat(breadcrumbs.length <= 1 ? globalIndex : navigation).forEach(function (el) {
 		var
 			wrapper = el.parentNode,
 			linkText = el.textContent.replace(trimRgxp, '');
 
-		if (isIndex.test(linkText)) {
-			if (isDTS.test(linkText)) {
-				var
-					nm = RegExp.$1;
+		if (isDTS.test(linkText)) {
+			var
+				nm = RegExp.$1;
 
-				if (linkText === 'index.d') {
-					el.innerHTML = '<b>prelude</b>';
+			if (linkText === 'index.d') {
+				el.innerHTML = '<b>prelude</b>';
 
-				} else if (isNode.test(linkText)) {
-					el.textContent = nm;
-
-				} else {
-					wrapper.parentNode.removeChild(wrapper);
-				}
+			} else if (isNode.test(linkText)) {
+				el.textContent = nm;
 
 			} else {
-				el.textContent = linkText.replace(isIndex, '').replace(normalizeRgxp, '');
+				wrapper.parentNode.removeChild(wrapper);
 			}
+
+		} else if (isIndex.test(linkText)) {
+			el.textContent = linkText.replace(normalizeRgxp, '');
 
 		} else {
 			wrapper.parentNode.removeChild(wrapper);

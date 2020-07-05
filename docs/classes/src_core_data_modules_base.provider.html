@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>Provider | V4Fire</title>
-	<meta name="description" content="">
+	<meta name="description" content="Documentation for V4Fire">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
 <style>/*!
@@ -15,7 +15,26 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+body {
+	font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+}
+
+code, pre, tt {
+	font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+}
+
+.tsd-typography h1,
+.tsd-typography h2,
+.tsd-typography h3,
+.tsd-typography h4,
+.tsd-typography h5,
+.tsd-typography h6 {
+	margin: 1em 0;
+	font-family: -apple-system, BlinkMacSystemFont, UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+}
+
 .tsd-panel {
+	padding: 20px 40px;
 	border: 1px solid #DDD;
 	border-radius: 10px;
 	box-shadow: none;
@@ -24,8 +43,8 @@
 .tsd-page-title {
 	color: #EEE;
 
-	background: #232526;  /* fallback for old browsers */
-	background: -webkit-linear-gradient(to right, #414345, #232526);  /* Chrome 10-25, Safari 5.1-6 */
+	background: #232526; /* fallback for old browsers */
+	background: -webkit-linear-gradient(to right, #414345, #232526); /* Chrome 10-25, Safari 5.1-6 */
 	background: linear-gradient(to right, #414345, #232526); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
@@ -58,6 +77,90 @@
 #tsd-search .field {
 	height: 100%;
 }
+
+pre {
+	background-color: rgba(7, 7, 7, 0.01);
+}
+
+/**
+ * GitHub Gist Theme
+ * Author : Anthony Attard - https://github.com/AnthonyAttard
+ * Author : Louis Barranqueiro - https://github.com/LouisBarranqueiro
+ */
+
+.hljs {
+	display: block;
+	background: white;
+	padding: 0.5em;
+	color: #333333;
+	overflow-x: auto;
+}
+
+.hljs-comment,
+.hljs-meta {
+	color: #969896;
+}
+
+.hljs-variable,
+.hljs-template-variable,
+.hljs-strong,
+.hljs-emphasis,
+.hljs-quote {
+	color: #df5000;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-type {
+	color: #d73a49;
+}
+
+.hljs-literal,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-attribute {
+	color: #0086b3;
+}
+
+.hljs-section,
+.hljs-name {
+	color: #63a35c;
+}
+
+.hljs-tag {
+	color: #333333;
+}
+
+.hljs-title,
+.hljs-attr,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-selector-attr,
+.hljs-selector-pseudo {
+	color: #6f42c1;
+}
+
+.hljs-addition {
+	color: #55a532;
+	background-color: #eaffea;
+}
+
+.hljs-deletion {
+	color: #bd2c00;
+	background-color: #ffecec;
+}
+
+.hljs-link {
+	text-decoration: underline;
+}
+
+.hljs-number {
+	color: #005cc5;
+}
+
+.hljs-string {
+	color: #032f62;
+}
 </style>
 </head>
 <body>
@@ -84,7 +187,7 @@
 	<div class="tsd-page-toolbar">
 		<div class="container">
 			<div class="table-wrap">
-				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.js" data-base="..">
+				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.json" data-base="..">
 					<div class="field">
 						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
 						<input id="tsd-search-field" type="text" />
@@ -109,10 +212,6 @@
 							</div>
 							<input type="checkbox" id="tsd-filter-inherited" checked />
 							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
-							<input type="checkbox" id="tsd-filter-externals" checked />
-							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
-							<input type="checkbox" id="tsd-filter-only-exported" />
-							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
 						</div>
 					</div>
 					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
@@ -150,7 +249,7 @@
 								<span class="target">Provider</span>
 								<ul class="tsd-hierarchy">
 									<li>
-										<a href="src_core_data_index.provider.html" class="tsd-signature-type">Provider</a>
+										<a href="src_core_data_index.provider-1.html" class="tsd-signature-type">Provider</a>
 									</li>
 								</ul>
 							</li>
@@ -267,7 +366,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> opts: <a href="../interfaces/src_core_data_interface_types.provideroptions.html" class="tsd-signature-type">ProviderOptions</a><span class="tsd-signature-symbol"> =&nbsp;{}</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> opts: <a href="../interfaces/src_core_data_interface_types.provideroptions.html" class="tsd-signature-type">ProviderOptions</a><span class="tsd-signature-symbol"> = {}</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="src_core_data_modules_base.provider.html" class="tsd-signature-type">Provider</a></h4>
@@ -280,7 +379,7 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 					<a name="addmethod" class="tsd-anchor"></a>
 					<h3>add<wbr>Method</h3>
-					<div class="tsd-signature tsd-kind-icon">add<wbr>Method<span class="tsd-signature-symbol">:</span> <a href="../modules/src_core_request_interface.html#requestmethod" class="tsd-signature-type">RequestMethod</a><span class="tsd-signature-symbol"> =&nbsp;&quot;POST&quot;</span></div>
+					<div class="tsd-signature tsd-kind-icon">add<wbr>Method<span class="tsd-signature-symbol">:</span> <a href="../modules/src_core_request_interface.html#requestmethod" class="tsd-signature-type">RequestMethod</a><span class="tsd-signature-symbol"> = &quot;POST&quot;</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_data_modules_params.provider.html">Provider</a>.<a href="src_core_data_modules_params.provider.html#addmethod">addMethod</a></p>
 						<ul>
@@ -296,7 +395,7 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 					<a name="advurl" class="tsd-anchor"></a>
 					<h3>advURL</h3>
-					<div class="tsd-signature tsd-kind-icon">advURL<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;&quot;</span></div>
+					<div class="tsd-signature tsd-kind-icon">advURL<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = &quot;&quot;</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_data_modules_params.provider.html">Provider</a>.<a href="src_core_data_modules_params.provider.html#advurl">advURL</a></p>
 						<ul>
@@ -312,7 +411,7 @@
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="alias" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> alias</h3>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> alias</h3>
 					<div class="tsd-signature tsd-kind-icon">alias<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<p>Implementation of <a href="../interfaces/src_core_data_interface_index.provider.html">Provider</a>.<a href="../interfaces/src_core_data_interface_index.provider.html#alias">alias</a></p>
@@ -328,7 +427,7 @@
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
 					<a name="async" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagProtected">Protected</span> async</h3>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> async</h3>
 					<div class="tsd-signature tsd-kind-icon">async<span class="tsd-signature-symbol">:</span> <a href="src_core_async_index.async.html" class="tsd-signature-type">Async</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
@@ -358,9 +457,9 @@
 						<dl class="tsd-comment-tags">
 							<dt>example</dt>
 							<dd><pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Profile</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Provider</span> </span>{
-  <span class="hljs-comment">// baseURL request methods despite the "add" is used this URL</span>
-  <span class="hljs-attr">basePeekURL</span>: <span class="hljs-string">'profile/info'</span>
-  <span class="hljs-attr">baseAddURL</span>: <span class="hljs-string">'profile/info/add'</span>
+  <span class="hljs-comment">// baseURL request methods despite the &quot;add&quot; is used this URL</span>
+  <span class="hljs-attr">basePeekURL</span>: <span class="hljs-string">&#x27;profile/info&#x27;</span>
+  <span class="hljs-attr">baseAddURL</span>: <span class="hljs-string">&#x27;profile/info/add&#x27;</span>
 }</code></pre>
 							</dd>
 						</dl>
@@ -383,9 +482,9 @@
 						<dl class="tsd-comment-tags">
 							<dt>example</dt>
 							<dd><pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Profile</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Provider</span> </span>{
-  <span class="hljs-comment">// baseURL request methods despite the "del" is used this URL</span>
-  <span class="hljs-attr">basePeekURL</span>: <span class="hljs-string">'profile/info'</span>
-  <span class="hljs-attr">baseDelURL</span>: <span class="hljs-string">'profile/info/del'</span>
+  <span class="hljs-comment">// baseURL request methods despite the &quot;del&quot; is used this URL</span>
+  <span class="hljs-attr">basePeekURL</span>: <span class="hljs-string">&#x27;profile/info&#x27;</span>
+  <span class="hljs-attr">baseDelURL</span>: <span class="hljs-string">&#x27;profile/info/del&#x27;</span>
 }</code></pre>
 							</dd>
 						</dl>
@@ -408,9 +507,9 @@
 						<dl class="tsd-comment-tags">
 							<dt>example</dt>
 							<dd><pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Profile</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Provider</span> </span>{
-  <span class="hljs-comment">// For all request methods despite the "get" is used this URL</span>
-  <span class="hljs-attr">baseURL</span>: <span class="hljs-string">'profile/info'</span>
-  <span class="hljs-attr">baseGetURL</span>: <span class="hljs-string">'profile/info/get'</span>
+  <span class="hljs-comment">// For all request methods despite the &quot;get&quot; is used this URL</span>
+  <span class="hljs-attr">baseURL</span>: <span class="hljs-string">&#x27;profile/info&#x27;</span>
+  <span class="hljs-attr">baseGetURL</span>: <span class="hljs-string">&#x27;profile/info/get&#x27;</span>
 }</code></pre>
 							</dd>
 						</dl>
@@ -433,9 +532,9 @@
 						<dl class="tsd-comment-tags">
 							<dt>example</dt>
 							<dd><pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Profile</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Provider</span> </span>{
-  <span class="hljs-comment">// For all request methods despite the "peek" is used this URL</span>
-  <span class="hljs-attr">baseURL</span>: <span class="hljs-string">'profile/info'</span>
-  <span class="hljs-attr">basePeekURL</span>: <span class="hljs-string">'profile/info/peek'</span>
+  <span class="hljs-comment">// For all request methods despite the &quot;peek&quot; is used this URL</span>
+  <span class="hljs-attr">baseURL</span>: <span class="hljs-string">&#x27;profile/info&#x27;</span>
+  <span class="hljs-attr">basePeekURL</span>: <span class="hljs-string">&#x27;profile/info/peek&#x27;</span>
 }</code></pre>
 							</dd>
 						</dl>
@@ -444,7 +543,7 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 					<a name="baseurl" class="tsd-anchor"></a>
 					<h3>baseURL</h3>
-					<div class="tsd-signature tsd-kind-icon">baseURL<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;&quot;</span></div>
+					<div class="tsd-signature tsd-kind-icon">baseURL<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = &quot;&quot;</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_data_modules_params.provider.html">Provider</a>.<a href="src_core_data_modules_params.provider.html#baseurl">baseURL</a></p>
 						<ul>
@@ -458,7 +557,7 @@
 						<dl class="tsd-comment-tags">
 							<dt>example</dt>
 							<dd><pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Profile</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Provider</span> </span>{
-  <span class="hljs-attr">baseURL</span>: <span class="hljs-string">'profile/info'</span>
+  <span class="hljs-attr">baseURL</span>: <span class="hljs-string">&#x27;profile/info&#x27;</span>
 }</code></pre>
 							</dd>
 						</dl>
@@ -481,9 +580,9 @@
 						<dl class="tsd-comment-tags">
 							<dt>example</dt>
 							<dd><pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Profile</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Provider</span> </span>{
-  <span class="hljs-comment">// baseURL request methods despite the "upd" is used this URL</span>
-  <span class="hljs-attr">basePeekURL</span>: <span class="hljs-string">'profile/info'</span>
-  <span class="hljs-attr">baseUpdURL</span>: <span class="hljs-string">'profile/info/upd'</span>
+  <span class="hljs-comment">// baseURL request methods despite the &quot;upd&quot; is used this URL</span>
+  <span class="hljs-attr">basePeekURL</span>: <span class="hljs-string">&#x27;profile/info&#x27;</span>
+  <span class="hljs-attr">baseUpdURL</span>: <span class="hljs-string">&#x27;profile/info/upd&#x27;</span>
 }</code></pre>
 							</dd>
 						</dl>
@@ -491,7 +590,7 @@
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="cacheid" class="tsd-anchor"></a>
-					<h3>cache<wbr>Id</h3>
+					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> cache<wbr>Id</h3>
 					<div class="tsd-signature tsd-kind-icon">cache<wbr>Id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
@@ -507,7 +606,7 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
 					<a name="connection" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> <span class="tsd-flag ts-flagOptional">Optional</span> connection</h3>
-					<div class="tsd-signature tsd-kind-icon">connection<span class="tsd-signature-symbol">:</span> <a href="../interfaces/node_modules_eventemitter2_eventemitter2_d.waitforoptions.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_socket_interface.html#socket" class="tsd-signature-type">Socket</a><span class="tsd-signature-symbol">&gt;</span></div>
+					<div class="tsd-signature tsd-kind-icon">connection<span class="tsd-signature-symbol">:</span> <a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_socket_interface.html#socket" class="tsd-signature-type">Socket</a><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
 							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L78">src/core/data/modules/base.ts:78</a></li>
@@ -539,7 +638,7 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 					<a name="delmethod" class="tsd-anchor"></a>
 					<h3>del<wbr>Method</h3>
-					<div class="tsd-signature tsd-kind-icon">del<wbr>Method<span class="tsd-signature-symbol">:</span> <a href="../modules/src_core_request_interface.html#requestmethod" class="tsd-signature-type">RequestMethod</a><span class="tsd-signature-symbol"> =&nbsp;&quot;DELETE&quot;</span></div>
+					<div class="tsd-signature tsd-kind-icon">del<wbr>Method<span class="tsd-signature-symbol">:</span> <a href="../modules/src_core_request_interface.html#requestmethod" class="tsd-signature-type">RequestMethod</a><span class="tsd-signature-symbol"> = &quot;DELETE&quot;</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_data_modules_params.provider.html">Provider</a>.<a href="src_core_data_modules_params.provider.html#delmethod">delMethod</a></p>
 						<ul>
@@ -554,7 +653,7 @@
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="emitter" class="tsd-anchor"></a>
-					<h3>emitter</h3>
+					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> emitter</h3>
 					<div class="tsd-signature tsd-kind-icon">emitter<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">EventEmitter</span></div>
 					<aside class="tsd-sources">
 						<p>Implementation of <a href="../interfaces/src_core_data_interface_index.provider.html">Provider</a>.<a href="../interfaces/src_core_data_interface_index.provider.html#emitter">emitter</a></p>
@@ -587,8 +686,8 @@
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 					<a name="externalrequest" class="tsd-anchor"></a>
-					<h3>external<wbr>Request</h3>
-					<div class="tsd-signature tsd-kind-icon">external<wbr>Request<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></div>
+					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> external<wbr>Request</h3>
+					<div class="tsd-signature tsd-kind-icon">external<wbr>Request<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = false</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_data_modules_params.provider.html">Provider</a>.<a href="src_core_data_modules_params.provider.html#externalrequest">externalRequest</a></p>
 						<ul>
@@ -621,15 +720,15 @@
 						<dl class="tsd-comment-tags">
 							<dt>example</dt>
 							<dd><pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Provider</span> </span>{
-  <span class="hljs-attr">baseURL</span>: <span class="hljs-string">'user/info'</span>,
+  <span class="hljs-attr">baseURL</span>: <span class="hljs-string">&#x27;user/info&#x27;</span>,
 
   <span class="hljs-attr">extraProviders</span>: {
     <span class="hljs-attr">balance</span>: {
-      <span class="hljs-attr">provider</span>: <span class="hljs-string">'UserBalance'</span>
+      <span class="hljs-attr">provider</span>: <span class="hljs-string">&#x27;UserBalance&#x27;</span>
     },
 
     <span class="hljs-attr">hobby</span>: {
-      <span class="hljs-attr">provider</span>: <span class="hljs-string">'UserHobby'</span>
+      <span class="hljs-attr">provider</span>: <span class="hljs-string">&#x27;UserHobby&#x27;</span>
     },
   }
 }</code></pre>
@@ -640,7 +739,7 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 					<a name="getmethod" class="tsd-anchor"></a>
 					<h3>get<wbr>Method</h3>
-					<div class="tsd-signature tsd-kind-icon">get<wbr>Method<span class="tsd-signature-symbol">:</span> <a href="../modules/src_core_request_interface.html#requestmethod" class="tsd-signature-type">RequestMethod</a><span class="tsd-signature-symbol"> =&nbsp;&quot;GET&quot;</span></div>
+					<div class="tsd-signature tsd-kind-icon">get<wbr>Method<span class="tsd-signature-symbol">:</span> <a href="../modules/src_core_request_interface.html#requestmethod" class="tsd-signature-type">RequestMethod</a><span class="tsd-signature-symbol"> = &quot;GET&quot;</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_data_modules_params.provider.html">Provider</a>.<a href="src_core_data_modules_params.provider.html#getmethod">getMethod</a></p>
 						<ul>
@@ -655,8 +754,8 @@
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 					<a name="globalemitter" class="tsd-anchor"></a>
-					<h3>global<wbr>Emitter</h3>
-					<div class="tsd-signature tsd-kind-icon">global<wbr>Emitter<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">EventEmitter</span><span class="tsd-signature-symbol"> =&nbsp;emitter</span></div>
+					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> global<wbr>Emitter</h3>
+					<div class="tsd-signature tsd-kind-icon">global<wbr>Emitter<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">EventEmitter</span><span class="tsd-signature-symbol"> = emitter</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_data_modules_params.provider.html">Provider</a>.<a href="src_core_data_modules_params.provider.html#globalemitter">globalEmitter</a></p>
 						<ul>
@@ -674,7 +773,7 @@
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> mocks</h3>
 					<div class="tsd-signature tsd-kind-icon">mocks<span class="tsd-signature-symbol">:</span> <a href="../modules/src_core_data_interface_types.html#mocks" class="tsd-signature-type">Mocks</a></div>
 					<aside class="tsd-sources">
-						<p>Inherited from <a href="src_core_data_modules_params.provider.html">Provider</a>.<a href="src_core_data_modules_params.provider.html#mocks">mocks</a></p>
+						<p>Inherited from <a href="src_core_data_modules_params.provider.html">Provider</a>.<a href="src_core_data_modules_params.provider.html#mocks-1">mocks</a></p>
 						<ul>
 							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L353">src/core/data/modules/params.ts:353</a></li>
 						</ul>
@@ -692,7 +791,7 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 					<a name="peekmethod" class="tsd-anchor"></a>
 					<h3>peek<wbr>Method</h3>
-					<div class="tsd-signature tsd-kind-icon">peek<wbr>Method<span class="tsd-signature-symbol">:</span> <a href="../modules/src_core_request_interface.html#requestmethod" class="tsd-signature-type">RequestMethod</a><span class="tsd-signature-symbol"> =&nbsp;&quot;HEAD&quot;</span></div>
+					<div class="tsd-signature tsd-kind-icon">peek<wbr>Method<span class="tsd-signature-symbol">:</span> <a href="../modules/src_core_request_interface.html#requestmethod" class="tsd-signature-type">RequestMethod</a><span class="tsd-signature-symbol"> = &quot;HEAD&quot;</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_data_modules_params.provider.html">Provider</a>.<a href="src_core_data_modules_params.provider.html#peekmethod">peekMethod</a></p>
 						<ul>
@@ -724,7 +823,7 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 					<a name="updmethod" class="tsd-anchor"></a>
 					<h3>upd<wbr>Method</h3>
-					<div class="tsd-signature tsd-kind-icon">upd<wbr>Method<span class="tsd-signature-symbol">:</span> <a href="../modules/src_core_request_interface.html#requestmethod" class="tsd-signature-type">RequestMethod</a><span class="tsd-signature-symbol"> =&nbsp;&quot;PUT&quot;</span></div>
+					<div class="tsd-signature tsd-kind-icon">upd<wbr>Method<span class="tsd-signature-symbol">:</span> <a href="../modules/src_core_request_interface.html#requestmethod" class="tsd-signature-type">RequestMethod</a><span class="tsd-signature-symbol"> = &quot;PUT&quot;</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_data_modules_params.provider.html">Provider</a>.<a href="src_core_data_modules_params.provider.html#updmethod">updMethod</a></p>
 						<ul>
@@ -739,7 +838,7 @@
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static">
 					<a name="decoders" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> decoders</h3>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> decoders</h3>
 					<div class="tsd-signature tsd-kind-icon">decoders<span class="tsd-signature-symbol">:</span> <a href="../modules/src_core_data_interface_types.html#decodersmap" class="tsd-signature-type">DecodersMap</a></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_data_modules_params.provider.html">Provider</a>.<a href="src_core_data_modules_params.provider.html#decoders">decoders</a></p>
@@ -770,7 +869,7 @@
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static">
 					<a name="encoders" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> encoders</h3>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> encoders</h3>
 					<div class="tsd-signature tsd-kind-icon">encoders<span class="tsd-signature-symbol">:</span> <a href="../modules/src_core_data_interface_types.html#encodersmap" class="tsd-signature-type">EncodersMap</a></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_data_modules_params.provider.html">Provider</a>.<a href="src_core_data_modules_params.provider.html#encoders">encoders</a></p>
@@ -801,7 +900,7 @@
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static">
 					<a name="middlewares" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> middlewares</h3>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> middlewares</h3>
 					<div class="tsd-signature tsd-kind-icon">middlewares<span class="tsd-signature-symbol">:</span> <a href="../modules/src_core_request_interface.html#middlewares" class="tsd-signature-type">Middlewares</a></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_data_modules_params.provider.html">Provider</a>.<a href="src_core_data_modules_params.provider.html#middlewares">middlewares</a></p>
@@ -819,7 +918,7 @@
 							<dd><p><a href="../modules/src_core_request_interface.html#middlewares">Middlewares</a></p>
 							</dd>
 							<dt>example</dt>
-							<dd><pre><code class="language-js"><span class="hljs-keyword">import</span> request <span class="hljs-keyword">from</span> <span class="hljs-string">'core/request'</span>;
+							<dd><pre><code class="language-js"><span class="hljs-keyword">import</span> request <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;core/request&#x27;</span>;
 
 <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Parent</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Provider</span> </span>{
   <span class="hljs-keyword">static</span> middlewares = {
@@ -862,7 +961,7 @@
 							<dd><p><a href="../modules/src_core_request_interface.html#middlewares">Middlewares</a></p>
 							</dd>
 							<dt>example</dt>
-							<dd><pre><code class="language-js">import { attachMock } from &#39;core/data/middlewares&#39;;
+							<dd><pre><code class="language-js">import { attachMock } from &#x27;core/data/middlewares&#x27;;
 
 class MyProvider extends Provider {
   static mocks = {
@@ -872,19 +971,19 @@ class MyProvider extends Provider {
       {
         status: 200,
 
-        // For the mock response won&#39;t be applied decoders
+        // For the mock response won&#x27;t be applied decoders
         // (by default, `true`)
         decoders: false,
 
         query: {
-          search: &#39;foo&#39;
+          search: &#x27;foo&#x27;
         },
 
         // The response
         response: {
           data: [
-            &#39;bla&#39;,
-            &#39;baz
+            &#x27;bla&#x27;,
+            &#x27;baz
           ]
         }
       }
@@ -900,8 +999,8 @@ class MyProvider extends Provider {
           }
 
           response.status = 200;
-          response.responseType = &#39;string&#39;;
-          return &#39;ok&#39;;
+          response.responseType = &#x27;string&#x27;;
+          return &#x27;ok&#x27;;
         }
       }
     ]
@@ -915,8 +1014,8 @@ class MyProvider extends Provider {
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static">
 					<a name="request" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> request</h3>
-					<div class="tsd-signature tsd-kind-icon">request<span class="tsd-signature-symbol">:</span> <a href="../modules/src_core_request_index.html#request" class="tsd-signature-type">request</a><span class="tsd-signature-symbol"> =&nbsp;request</span></div>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> request</h3>
+					<div class="tsd-signature tsd-kind-icon">request<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">typeof </span><span class="tsd-signature-type">request</span><span class="tsd-signature-symbol"> = request</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_data_modules_params.provider.html">Provider</a>.<a href="src_core_data_modules_params.provider.html#request">request</a></p>
 						<ul>
@@ -936,10 +1035,10 @@ class MyProvider extends Provider {
 							<dd><p><a href="../interfaces/src_core_request_interface.createrequestoptions.html">CreateRequestOptions</a></p>
 							</dd>
 							<dt>example</dt>
-							<dd><pre><code class="language-js"><span class="hljs-keyword">import</span> request <span class="hljs-keyword">from</span> <span class="hljs-string">'core/request'</span>;
+							<dd><pre><code class="language-js"><span class="hljs-keyword">import</span> request <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;core/request&#x27;</span>;
 
 <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Parent</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Provider</span> </span>{
-  <span class="hljs-keyword">static</span> request = request({<span class="hljs-attr">responseType</span>: <span class="hljs-string">'json'</span>})
+  <span class="hljs-keyword">static</span> request = request({<span class="hljs-attr">responseType</span>: <span class="hljs-string">&#x27;json&#x27;</span>})
 }
 
 <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Children</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Parent</span> </span>{
@@ -1032,12 +1131,12 @@ class MyProvider extends Provider {
 					<a name="request-1" class="tsd-anchor"></a>
 					<h3>request</h3>
 					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> request<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/src_core_request_index.html#request" class="tsd-signature-type">request</a></li>
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> request<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">typeof </span><span class="tsd-signature-type">request</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from <a href="src_core_data_modules_params.provider.html">Provider</a>.<a href="src_core_data_modules_params.provider.html#request-1">request</a></p>
+								<p>Inherited from <a href="src_core_data_modules_params.provider.html">Provider</a>.<a href="src_core_data_modules_params.provider.html#request">request</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L370">src/core/data/modules/params.ts:370</a></li>
 								</ul>
@@ -1047,7 +1146,7 @@ class MyProvider extends Provider {
 									<p>Alias for the request function</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns <a href="../modules/src_core_request_index.html#request" class="tsd-signature-type">request</a></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">typeof </span><span class="tsd-signature-type">request</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -1147,7 +1246,7 @@ class MyProvider extends Provider {
 					<a name="connect" class="tsd-anchor"></a>
 					<h3>connect</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">connect<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/index_d.dictionary.html" class="tsd-signature-type">Dictionary</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_socket_interface.html#socket" class="tsd-signature-type">Socket</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">connect<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/index_d.dictionary.html" class="tsd-signature-type">Dictionary</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_socket_interface.html#socket" class="tsd-signature-type">Socket</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -1167,7 +1266,7 @@ class MyProvider extends Provider {
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/index_d.dictionary.html" class="tsd-signature-type">Dictionary</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_socket_interface.html#socket" class="tsd-signature-type">Socket</a><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_socket_interface.html#socket" class="tsd-signature-type">Socket</a><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -1281,7 +1380,7 @@ class MyProvider extends Provider {
 					<a name="getauthparams" class="tsd-anchor"></a>
 					<h3>get<wbr>Auth<wbr>Params</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Auth<wbr>Params<span class="tsd-signature-symbol">(</span>params<span class="tsd-signature-symbol">?: </span><a href="../interfaces/index_d.dictionary.html" class="tsd-signature-type">Dictionary</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.dictionary.html" class="tsd-signature-type">Dictionary</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Auth<wbr>Params<span class="tsd-signature-symbol">(</span>params<span class="tsd-signature-symbol">?: </span><a href="../interfaces/index_d.dictionary.html" class="tsd-signature-type">Dictionary</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.dictionary.html" class="tsd-signature-type">Dictionary</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -1304,7 +1403,7 @@ class MyProvider extends Provider {
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.dictionary.html" class="tsd-signature-type">Dictionary</a><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.dictionary.html" class="tsd-signature-type">Dictionary</a><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -1329,7 +1428,7 @@ class MyProvider extends Provider {
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> paramsForCache: <a href="../interfaces/src_core_data_interface_types.provideroptions.html" class="tsd-signature-type">ProviderOptions</a><span class="tsd-signature-symbol"> =&nbsp;{}</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> paramsForCache: <a href="../interfaces/src_core_data_interface_types.provideroptions.html" class="tsd-signature-type">ProviderOptions</a><span class="tsd-signature-symbol"> = {}</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -1417,7 +1516,7 @@ class MyProvider extends Provider {
 					<a name="initsocketbehaviour" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> init<wbr>Socket<wbr>Behaviour</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-protected">
-						<li class="tsd-signature tsd-kind-icon">init<wbr>Socket<wbr>Behaviour<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">init<wbr>Socket<wbr>Behaviour<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -1431,7 +1530,7 @@ class MyProvider extends Provider {
 									<p>Initializes the socket behaviour after successful connecting</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -1949,7 +2048,7 @@ MyProvider.select([{<span class="hljs-attr">test</span>: <span class="hljs-numbe
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
-					<li class="current tsd-kind-external-module">
+					<li class="current tsd-kind-module">
 						<a href="../modules/src_core_data_modules_base.html">&quot;src/core/data/modules/base&quot;</a>
 					</li>
 				</ul>
@@ -1958,7 +2057,7 @@ MyProvider.select([{<span class="hljs-attr">test</span>: <span class="hljs-numbe
 				<ul class="before-current">
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-class tsd-parent-kind-external-module">
+					<li class="current tsd-kind-class tsd-parent-kind-module">
 						<a href="src_core_data_modules_base.provider.html" class="tsd-kind-icon">Provider</a>
 						<ul>
 							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-protected">
@@ -2133,7 +2232,7 @@ MyProvider.select([{<span class="hljs-attr">test</span>: <span class="hljs-numbe
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-variable tsd-parent-kind-external-module">
+					<li class=" tsd-kind-variable tsd-parent-kind-module">
 						<a href="../modules/src_core_data_modules_base.html#__" class="tsd-kind-icon">$$</a>
 					</li>
 				</ul>
@@ -2146,64 +2245,39 @@ MyProvider.select([{<span class="hljs-attr">test</span>: <span class="hljs-numbe
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
-				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
+				<li class="tsd-kind-namespace"><span class="tsd-kind-icon">Namespace</span></li>
 				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
 				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
 				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
 				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
-				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
 				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
 				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
-				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
 				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
-				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
-				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
-				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
-				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
-				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
 				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
 			</ul>
 		</div>
 	</div>
 </footer>
 <div class="overlay"></div>
 <script src="../assets/js/main.js"></script>
-<script>if (location.protocol == 'file:') document.write('<script src="../assets/js/search.js"><' + '/script>');</script>
 <script>'use strict';
 
 /*!
@@ -2218,13 +2292,13 @@ MyProvider.select([{<span class="hljs-attr">test</span>: <span class="hljs-numbe
 	document.body.style.display = 'block';
 
 	var
-		isDTS = /([^/.]+)\.d/,
-		isIndex = /\/index|\.d/,
-		isNode = /(?:^|\b)node_modules(?:\b|$)/;
+		isDTS = /\.d$/,
+		isIndex = /^(?:(?!(?:^|\/)(?:interface|modules|prelude|engines)\/).)*?(?:^|\/)index$/,
+		isNode = /(?:^|\/)node_modules(?:\/|$)/;
 
 	var
 		trimRgxp = /^\s+|[\n\v"']+|\s+$/g,
-		normalizeRgxp = /(?:^|\b)src\//;
+		normalizeRgxp = /(?:^|\b)src\/|\/index$/g;
 
 	var
 		breadcrumbs = Array.from(document.querySelectorAll('.tsd-breadcrumb a')),
@@ -2239,32 +2313,30 @@ MyProvider.select([{<span class="hljs-attr">test</span>: <span class="hljs-numbe
 	});
 
 	var
-		navigation = Array.from(document.querySelectorAll('.tsd-navigation.primary .tsd-kind-external-module a')),
-		globalIndex = Array.from(document.querySelectorAll('.tsd-index-list a'));
+		navigation = Array.from(document.querySelectorAll('.tsd-navigation.primary .tsd-kind-module a')),
+		globalIndex = Array.from(document.querySelectorAll('.tsd-kind-module a'));
 
-	[].concat(navigation, breadcrumbs.length <= 1 ? globalIndex : []).forEach(function (el) {
+	[].concat(breadcrumbs.length <= 1 ? globalIndex : navigation).forEach(function (el) {
 		var
 			wrapper = el.parentNode,
 			linkText = el.textContent.replace(trimRgxp, '');
 
-		if (isIndex.test(linkText)) {
-			if (isDTS.test(linkText)) {
-				var
-					nm = RegExp.$1;
+		if (isDTS.test(linkText)) {
+			var
+				nm = RegExp.$1;
 
-				if (linkText === 'index.d') {
-					el.innerHTML = '<b>prelude</b>';
+			if (linkText === 'index.d') {
+				el.innerHTML = '<b>prelude</b>';
 
-				} else if (isNode.test(linkText)) {
-					el.textContent = nm;
-
-				} else {
-					wrapper.parentNode.removeChild(wrapper);
-				}
+			} else if (isNode.test(linkText)) {
+				el.textContent = nm;
 
 			} else {
-				el.textContent = linkText.replace(isIndex, '').replace(normalizeRgxp, '');
+				wrapper.parentNode.removeChild(wrapper);
 			}
+
+		} else if (isIndex.test(linkText)) {
+			el.textContent = linkText.replace(normalizeRgxp, '');
 
 		} else {
 			wrapper.parentNode.removeChild(wrapper);

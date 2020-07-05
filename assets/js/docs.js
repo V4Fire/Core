@@ -12,13 +12,13 @@
 	document.body.style.display = 'block';
 
 	var
-		isDTS = /([^/.]+)\.d/,
-		isIndex = /\/index|\.d/,
-		isNode = /(?:^|\b)node_modules(?:\b|$)/;
+		isDTS = /\.d$/,
+		isIndex = /^(?:(?!(?:^|\/)(?:interface|modules|prelude|engines)\/).)*?(?:^|\/)index$/,
+		isNode = /(?:^|\/)node_modules(?:\/|$)/;
 
 	var
 		trimRgxp = /^\s+|[\n\v"']+|\s+$/g,
-		normalizeRgxp = /(?:^|\b)src\//;
+		normalizeRgxp = /(?:^|\b)src\/|\/index$/g;
 
 	var
 		breadcrumbs = Array.from(document.querySelectorAll('.tsd-breadcrumb a')),
@@ -33,32 +33,30 @@
 	});
 
 	var
-		navigation = Array.from(document.querySelectorAll('.tsd-navigation.primary .tsd-kind-external-module a')),
-		globalIndex = Array.from(document.querySelectorAll('.tsd-index-list a'));
+		navigation = Array.from(document.querySelectorAll('.tsd-navigation.primary .tsd-kind-module a')),
+		globalIndex = Array.from(document.querySelectorAll('.tsd-kind-module a'));
 
-	[].concat(navigation, breadcrumbs.length <= 1 ? globalIndex : []).forEach(function (el) {
+	[].concat(breadcrumbs.length <= 1 ? globalIndex : navigation).forEach(function (el) {
 		var
 			wrapper = el.parentNode,
 			linkText = el.textContent.replace(trimRgxp, '');
 
-		if (isIndex.test(linkText)) {
-			if (isDTS.test(linkText)) {
-				var
-					nm = RegExp.$1;
+		if (isDTS.test(linkText)) {
+			var
+				nm = RegExp.$1;
 
-				if (linkText === 'index.d') {
-					el.innerHTML = '<b>prelude</b>';
+			if (linkText === 'index.d') {
+				el.innerHTML = '<b>prelude</b>';
 
-				} else if (isNode.test(linkText)) {
-					el.textContent = nm;
-
-				} else {
-					wrapper.parentNode.removeChild(wrapper);
-				}
+			} else if (isNode.test(linkText)) {
+				el.textContent = nm;
 
 			} else {
-				el.textContent = linkText.replace(isIndex, '').replace(normalizeRgxp, '');
+				wrapper.parentNode.removeChild(wrapper);
 			}
+
+		} else if (isIndex.test(linkText)) {
+			el.textContent = linkText.replace(normalizeRgxp, '');
 
 		} else {
 			wrapper.parentNode.removeChild(wrapper);

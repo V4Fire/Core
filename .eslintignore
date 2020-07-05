@@ -3,4 +3,5 @@ src/*/**/*.index.js
 src/**/*_es5.js
 dist/**
 assets/**
+docs/**
 node_modules/**

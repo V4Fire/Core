@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>Async | V4Fire</title>
-	<meta name="description" content="">
+	<meta name="description" content="Documentation for V4Fire">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
 <style>/*!
@@ -15,7 +15,26 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+body {
+	font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+}
+
+code, pre, tt {
+	font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+}
+
+.tsd-typography h1,
+.tsd-typography h2,
+.tsd-typography h3,
+.tsd-typography h4,
+.tsd-typography h5,
+.tsd-typography h6 {
+	margin: 1em 0;
+	font-family: -apple-system, BlinkMacSystemFont, UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+}
+
 .tsd-panel {
+	padding: 20px 40px;
 	border: 1px solid #DDD;
 	border-radius: 10px;
 	box-shadow: none;
@@ -24,8 +43,8 @@
 .tsd-page-title {
 	color: #EEE;
 
-	background: #232526;  /* fallback for old browsers */
-	background: -webkit-linear-gradient(to right, #414345, #232526);  /* Chrome 10-25, Safari 5.1-6 */
+	background: #232526; /* fallback for old browsers */
+	background: -webkit-linear-gradient(to right, #414345, #232526); /* Chrome 10-25, Safari 5.1-6 */
 	background: linear-gradient(to right, #414345, #232526); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
@@ -58,6 +77,90 @@
 #tsd-search .field {
 	height: 100%;
 }
+
+pre {
+	background-color: rgba(7, 7, 7, 0.01);
+}
+
+/**
+ * GitHub Gist Theme
+ * Author : Anthony Attard - https://github.com/AnthonyAttard
+ * Author : Louis Barranqueiro - https://github.com/LouisBarranqueiro
+ */
+
+.hljs {
+	display: block;
+	background: white;
+	padding: 0.5em;
+	color: #333333;
+	overflow-x: auto;
+}
+
+.hljs-comment,
+.hljs-meta {
+	color: #969896;
+}
+
+.hljs-variable,
+.hljs-template-variable,
+.hljs-strong,
+.hljs-emphasis,
+.hljs-quote {
+	color: #df5000;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-type {
+	color: #d73a49;
+}
+
+.hljs-literal,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-attribute {
+	color: #0086b3;
+}
+
+.hljs-section,
+.hljs-name {
+	color: #63a35c;
+}
+
+.hljs-tag {
+	color: #333333;
+}
+
+.hljs-title,
+.hljs-attr,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-selector-attr,
+.hljs-selector-pseudo {
+	color: #6f42c1;
+}
+
+.hljs-addition {
+	color: #55a532;
+	background-color: #eaffea;
+}
+
+.hljs-deletion {
+	color: #bd2c00;
+	background-color: #ffecec;
+}
+
+.hljs-link {
+	text-decoration: underline;
+}
+
+.hljs-number {
+	color: #005cc5;
+}
+
+.hljs-string {
+	color: #032f62;
+}
 </style>
 </head>
 <body>
@@ -84,7 +187,7 @@
 	<div class="tsd-page-toolbar">
 		<div class="container">
 			<div class="table-wrap">
-				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.js" data-base="..">
+				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.json" data-base="..">
 					<div class="field">
 						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
 						<input id="tsd-search-field" type="text" />
@@ -109,10 +212,6 @@
 							</div>
 							<input type="checkbox" id="tsd-filter-inherited" checked />
 							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
-							<input type="checkbox" id="tsd-filter-externals" checked />
-							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
-							<input type="checkbox" id="tsd-filter-only-exported" />
-							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
 						</div>
 					</div>
 					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
@@ -281,8 +380,8 @@
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
 					<a name="cache" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagProtected">Protected</span> cache</h3>
-					<div class="tsd-signature tsd-kind-icon">cache<span class="tsd-signature-symbol">:</span> <a href="../interfaces/index_d.dictionary.html" class="tsd-signature-type">Dictionary</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/src_core_async_interface.globalcache.html" class="tsd-signature-type">GlobalCache</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;Object.createDict()</span></div>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> cache</h3>
+					<div class="tsd-signature tsd-kind-icon">cache<span class="tsd-signature-symbol">:</span> <a href="../interfaces/index_d.dictionary.html" class="tsd-signature-type">Dictionary</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/src_core_async_interface.globalcache.html" class="tsd-signature-type">GlobalCache</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = Object.createDict()</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_async_modules_base_index.async.html">Async</a>.<a href="src_core_async_modules_base_index.async.html#cache">cache</a></p>
 						<ul>
@@ -297,7 +396,7 @@
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
 					<a name="context" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagProtected">Protected</span> context</h3>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> context</h3>
 					<div class="tsd-signature tsd-kind-icon">context<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">CTX</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_async_modules_base_index.async.html">Async</a>.<a href="src_core_async_modules_base_index.async.html#context">context</a></p>
@@ -317,7 +416,7 @@
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
 					<a name="ctx" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagProtected">Protected</span> ctx</h3>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> ctx</h3>
 					<div class="tsd-signature tsd-kind-icon">ctx<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">CTX</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_async_modules_base_index.async.html">Async</a>.<a href="src_core_async_modules_base_index.async.html#ctx">ctx</a></p>
@@ -334,7 +433,7 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 					<a name="locked" class="tsd-anchor"></a>
 					<h3>locked</h3>
-					<div class="tsd-signature tsd-kind-icon">locked<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></div>
+					<div class="tsd-signature tsd-kind-icon">locked<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = false</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_async_modules_base_index.async.html">Async</a>.<a href="src_core_async_modules_base_index.async.html#locked">locked</a></p>
 						<ul>
@@ -350,8 +449,8 @@
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
 					<a name="workercache" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagProtected">Protected</span> worker<wbr>Cache</h3>
-					<div class="tsd-signature tsd-kind-icon">worker<wbr>Cache<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">WeakMap</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;new WeakMap()</span></div>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> worker<wbr>Cache</h3>
+					<div class="tsd-signature tsd-kind-icon">worker<wbr>Cache<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">WeakMap</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = new WeakMap()</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_async_modules_base_index.async.html">Async</a>.<a href="src_core_async_modules_base_index.async.html#workercache">workerCache</a></p>
 						<ul>
@@ -367,7 +466,7 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static">
 					<a name="linknames" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> link<wbr>Names</h3>
-					<div class="tsd-signature tsd-kind-icon">link<wbr>Names<span class="tsd-signature-symbol">:</span> <a href="../modules/src_core_async_const.html#namespacesdictionary" class="tsd-signature-type">NamespacesDictionary</a><span class="tsd-signature-symbol"> =&nbsp;namespaces</span></div>
+					<div class="tsd-signature tsd-kind-icon">link<wbr>Names<span class="tsd-signature-symbol">:</span> <a href="../modules/src_core_async_modules_proxy_index.html#namespacesdictionary" class="tsd-signature-type">NamespacesDictionary</a><span class="tsd-signature-symbol"> = namespaces</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_async_modules_base_index.async.html">Async</a>.<a href="src_core_async_modules_base_index.async.html#linknames">linkNames</a></p>
 						<ul>
@@ -387,7 +486,7 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static">
 					<a name="namespaces" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> namespaces</h3>
-					<div class="tsd-signature tsd-kind-icon">namespaces<span class="tsd-signature-symbol">:</span> <a href="../modules/src_core_async_const.html#namespacesdictionary" class="tsd-signature-type">NamespacesDictionary</a><span class="tsd-signature-symbol"> =&nbsp;namespaces</span></div>
+					<div class="tsd-signature tsd-kind-icon">namespaces<span class="tsd-signature-symbol">:</span> <a href="../modules/src_core_async_modules_proxy_index.html#namespacesdictionary" class="tsd-signature-type">NamespacesDictionary</a><span class="tsd-signature-symbol"> = namespaces</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_async_modules_base_index.async.html">Async</a>.<a href="src_core_async_modules_base_index.async.html#namespaces">namespaces</a></p>
 						<ul>
@@ -407,12 +506,12 @@
 					<a name="linknames-1" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> link<wbr>Names</h3>
 					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> linkNames<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/src_core_async_const.html#namespacesdictionary" class="tsd-signature-type">NamespacesDictionary</a></li>
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> linkNames<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/src_core_async_modules_proxy_index.html#namespacesdictionary" class="tsd-signature-type">NamespacesDictionary</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from <a href="src_core_async_modules_base_index.async.html">Async</a>.<a href="src_core_async_modules_base_index.async.html#linknames-1">linkNames</a></p>
+								<p>Inherited from <a href="src_core_async_modules_base_index.async.html">Async</a>.<a href="src_core_async_modules_base_index.async.html#linknames">linkNames</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/modules/base/index.ts#L101">src/core/async/modules/base/index.ts:101</a></li>
 								</ul>
@@ -426,7 +525,7 @@
 									</dd>
 								</dl>
 							</div>
-							<h4 class="tsd-returns-title">Returns <a href="../modules/src_core_async_const.html#namespacesdictionary" class="tsd-signature-type">NamespacesDictionary</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="../modules/src_core_async_modules_proxy_index.html#namespacesdictionary" class="tsd-signature-type">NamespacesDictionary</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -434,12 +533,12 @@
 					<a name="namespaces-1" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> namespaces</h3>
 					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> namespaces<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/src_core_async_const.html#namespacesdictionary" class="tsd-signature-type">NamespacesDictionary</a></li>
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> namespaces<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/src_core_async_modules_proxy_index.html#namespacesdictionary" class="tsd-signature-type">NamespacesDictionary</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from <a href="src_core_async_modules_base_index.async.html">Async</a>.<a href="src_core_async_modules_base_index.async.html#namespaces-1">namespaces</a></p>
+								<p>Inherited from <a href="src_core_async_modules_base_index.async.html">Async</a>.<a href="src_core_async_modules_base_index.async.html#namespaces">namespaces</a></p>
 								<ul>
 									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/modules/base/index.ts#L86">src/core/async/modules/base/index.ts:86</a></li>
 								</ul>
@@ -449,7 +548,7 @@
 									<p>Link to Async.namespaces</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns <a href="../modules/src_core_async_const.html#namespacesdictionary" class="tsd-signature-type">NamespacesDictionary</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="../modules/src_core_async_modules_proxy_index.html#namespacesdictionary" class="tsd-signature-type">NamespacesDictionary</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -460,8 +559,8 @@
 					<a name="cancelpromise" class="tsd-anchor"></a>
 					<h3>cancel<wbr>Promise</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">cancel<wbr>Promise<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">?: </span><a href="../interfaces/node_modules_eventemitter2_eventemitter2_d.waitforoptions.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
-						<li class="tsd-signature tsd-kind-icon">cancel<wbr>Promise<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_async_interface.clearproxyoptions.html" class="tsd-signature-type">ClearProxyOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">cancel<wbr>Promise<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">?: </span><a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">cancel<wbr>Promise<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_async_interface.clearproxyoptions.html" class="tsd-signature-type">ClearProxyOptions</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -482,7 +581,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> id: <a href="../interfaces/node_modules_eventemitter2_eventemitter2_d.waitforoptions.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> id: <a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -501,7 +600,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>opts: <a href="../interfaces/src_core_async_interface.clearproxyoptions.html" class="tsd-signature-type">ClearProxyOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>opts: <a href="../interfaces/src_core_async_interface.clearproxyoptions.html" class="tsd-signature-type">ClearProxyOptions</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>options for the operation</p>
 									</div>
@@ -515,8 +614,8 @@
 					<a name="cancelproxy" class="tsd-anchor"></a>
 					<h3>cancel<wbr>Proxy</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">cancel<wbr>Proxy<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">?: </span><a href="../interfaces/src_core_async_interface.clearfn.html#function" class="tsd-signature-type">Function</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
-						<li class="tsd-signature tsd-kind-icon">cancel<wbr>Proxy<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_async_interface.clearproxyoptions.html" class="tsd-signature-type">ClearProxyOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Function</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">cancel<wbr>Proxy<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">?: </span><a href="../interfaces/index_d.anyfunction.html#function" class="tsd-signature-type">Function</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">cancel<wbr>Proxy<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_async_interface.clearproxyoptions.html" class="tsd-signature-type">ClearProxyOptions</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.anyfunction.html#function" class="tsd-signature-type">Function</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -537,7 +636,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> id: <a href="../interfaces/src_core_async_interface.clearfn.html#function" class="tsd-signature-type">Function</a></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> id: <a href="../interfaces/index_d.anyfunction.html#function" class="tsd-signature-type">Function</a></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -556,7 +655,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>opts: <a href="../interfaces/src_core_async_interface.clearproxyoptions.html" class="tsd-signature-type">ClearProxyOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Function</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>opts: <a href="../interfaces/src_core_async_interface.clearproxyoptions.html" class="tsd-signature-type">ClearProxyOptions</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.anyfunction.html#function" class="tsd-signature-type">Function</a><span class="tsd-signature-symbol">&gt;</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>options for the operation</p>
 									</div>
@@ -570,8 +669,8 @@
 					<a name="cancelrequest" class="tsd-anchor"></a>
 					<h3>cancel<wbr>Request</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">cancel<wbr>Request<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">?: </span><a href="../interfaces/node_modules_eventemitter2_eventemitter2_d.waitforoptions.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
-						<li class="tsd-signature tsd-kind-icon">cancel<wbr>Request<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_async_interface.clearoptionsid.html" class="tsd-signature-type">ClearOptionsId</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">cancel<wbr>Request<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">?: </span><a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">cancel<wbr>Request<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_async_interface.clearoptionsid.html" class="tsd-signature-type">ClearOptionsId</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -592,7 +691,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> id: <a href="../interfaces/node_modules_eventemitter2_eventemitter2_d.waitforoptions.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> id: <a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -611,7 +710,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>opts: <a href="../interfaces/src_core_async_interface.clearoptionsid.html" class="tsd-signature-type">ClearOptionsId</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>opts: <a href="../interfaces/src_core_async_interface.clearoptionsid.html" class="tsd-signature-type">ClearOptionsId</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>options for the operation</p>
 									</div>
@@ -660,7 +759,7 @@
 					<a name="clearall" class="tsd-anchor"></a>
 					<h3>clear<wbr>All</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">clear<wbr>All<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/src_core_async_interface.clearoptions.html" class="tsd-signature-type">ClearOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">clear<wbr>All<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">?: </span><a href="../modules/src_core_async_modules_proxy_index.html#clearoptions" class="tsd-signature-type">ClearOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -678,7 +777,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/src_core_async_interface.clearoptions.html" class="tsd-signature-type">ClearOptions</a></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../modules/src_core_async_modules_proxy_index.html#clearoptions" class="tsd-signature-type">ClearOptions</a></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -725,8 +824,8 @@
 					<a name="clearpromise" class="tsd-anchor"></a>
 					<h3>clear<wbr>Promise</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">clear<wbr>Promise<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">?: </span><a href="../interfaces/node_modules_eventemitter2_eventemitter2_d.waitforoptions.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
-						<li class="tsd-signature tsd-kind-icon">clear<wbr>Promise<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_async_interface.clearproxyoptions.html" class="tsd-signature-type">ClearProxyOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">clear<wbr>Promise<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">?: </span><a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">clear<wbr>Promise<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_async_interface.clearproxyoptions.html" class="tsd-signature-type">ClearProxyOptions</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -743,7 +842,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> id: <a href="../interfaces/node_modules_eventemitter2_eventemitter2_d.waitforoptions.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> id: <a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -762,7 +861,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>opts: <a href="../interfaces/src_core_async_interface.clearproxyoptions.html" class="tsd-signature-type">ClearProxyOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>opts: <a href="../interfaces/src_core_async_interface.clearproxyoptions.html" class="tsd-signature-type">ClearProxyOptions</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>options for the operation</p>
 									</div>
@@ -776,8 +875,8 @@
 					<a name="clearproxy" class="tsd-anchor"></a>
 					<h3>clear<wbr>Proxy</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">clear<wbr>Proxy<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">?: </span><a href="../interfaces/src_core_async_interface.clearfn.html#function" class="tsd-signature-type">Function</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
-						<li class="tsd-signature tsd-kind-icon">clear<wbr>Proxy<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_async_interface.clearproxyoptions.html" class="tsd-signature-type">ClearProxyOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Function</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">clear<wbr>Proxy<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">?: </span><a href="../interfaces/index_d.anyfunction.html#function" class="tsd-signature-type">Function</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">clear<wbr>Proxy<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_async_interface.clearproxyoptions.html" class="tsd-signature-type">ClearProxyOptions</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.anyfunction.html#function" class="tsd-signature-type">Function</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -794,7 +893,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> id: <a href="../interfaces/src_core_async_interface.clearfn.html#function" class="tsd-signature-type">Function</a></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> id: <a href="../interfaces/index_d.anyfunction.html#function" class="tsd-signature-type">Function</a></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -813,7 +912,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>opts: <a href="../interfaces/src_core_async_interface.clearproxyoptions.html" class="tsd-signature-type">ClearProxyOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Function</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>opts: <a href="../interfaces/src_core_async_interface.clearproxyoptions.html" class="tsd-signature-type">ClearProxyOptions</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.anyfunction.html#function" class="tsd-signature-type">Function</a><span class="tsd-signature-symbol">&gt;</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>options for the operation</p>
 									</div>
@@ -827,8 +926,8 @@
 					<a name="clearrequest" class="tsd-anchor"></a>
 					<h3>clear<wbr>Request</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">clear<wbr>Request<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">?: </span><a href="../interfaces/node_modules_eventemitter2_eventemitter2_d.waitforoptions.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
-						<li class="tsd-signature tsd-kind-icon">clear<wbr>Request<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_async_interface.clearoptionsid.html" class="tsd-signature-type">ClearOptionsId</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">clear<wbr>Request<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">?: </span><a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">clear<wbr>Request<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_async_interface.clearoptionsid.html" class="tsd-signature-type">ClearOptionsId</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -845,7 +944,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> id: <a href="../interfaces/node_modules_eventemitter2_eventemitter2_d.waitforoptions.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> id: <a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -864,7 +963,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>opts: <a href="../interfaces/src_core_async_interface.clearoptionsid.html" class="tsd-signature-type">ClearOptionsId</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>opts: <a href="../interfaces/src_core_async_interface.clearoptionsid.html" class="tsd-signature-type">ClearOptionsId</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>options for the operation</p>
 									</div>
@@ -878,8 +977,8 @@
 					<a name="clearworker" class="tsd-anchor"></a>
 					<h3>clear<wbr>Worker</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">clear<wbr>Worker<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">?: </span><a href="../modules/src_core_async_interface.html#workerlikep" class="tsd-signature-type">WorkerLikeP</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
-						<li class="tsd-signature tsd-kind-icon">clear<wbr>Worker<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_async_interface.clearproxyoptions.html" class="tsd-signature-type">ClearProxyOptions</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_async_interface.html#workerlikep" class="tsd-signature-type">WorkerLikeP</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">clear<wbr>Worker<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">?: </span><a href="../modules/src_core_async_modules_proxy_index.html#workerlikep" class="tsd-signature-type">WorkerLikeP</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">clear<wbr>Worker<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_async_interface.clearproxyoptions.html" class="tsd-signature-type">ClearProxyOptions</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_async_modules_proxy_index.html#workerlikep" class="tsd-signature-type">WorkerLikeP</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -896,7 +995,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> id: <a href="../modules/src_core_async_interface.html#workerlikep" class="tsd-signature-type">WorkerLikeP</a></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> id: <a href="../modules/src_core_async_modules_proxy_index.html#workerlikep" class="tsd-signature-type">WorkerLikeP</a></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -915,7 +1014,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>opts: <a href="../interfaces/src_core_async_interface.clearproxyoptions.html" class="tsd-signature-type">ClearProxyOptions</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_async_interface.html#workerlikep" class="tsd-signature-type">WorkerLikeP</a><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>opts: <a href="../interfaces/src_core_async_interface.clearproxyoptions.html" class="tsd-signature-type">ClearProxyOptions</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_async_modules_proxy_index.html#workerlikep" class="tsd-signature-type">WorkerLikeP</a><span class="tsd-signature-symbol">&gt;</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>options for the operation</p>
 									</div>
@@ -929,7 +1028,7 @@
 					<a name="debounce" class="tsd-anchor"></a>
 					<h3>debounce</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">debounce&lt;F, C&gt;<span class="tsd-signature-symbol">(</span>fn<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">F</span>, delay<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/src_core_async_interface.asynccboptions.html" class="tsd-signature-type">AsyncCbOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/index_d.anyfunction.html" class="tsd-signature-type">AnyFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Parameters</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">F</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">debounce&lt;F, C&gt;<span class="tsd-signature-symbol">(</span>fn<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">F</span>, delay<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../modules/src_core_async_modules_proxy_index.html#asynccboptions" class="tsd-signature-type">AsyncCbOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/index_d.anyfunction.html" class="tsd-signature-type">AnyFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Parameters</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">F</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -962,7 +1061,7 @@
 									<h5>delay: <span class="tsd-signature-type">number</span></h5>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/src_core_async_interface.asynccboptions.html" class="tsd-signature-type">AsyncCbOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../modules/src_core_async_modules_proxy_index.html#asynccboptions" class="tsd-signature-type">AsyncCbOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="../interfaces/index_d.anyfunction.html" class="tsd-signature-type">AnyFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Parameters</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">F</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -1115,8 +1214,8 @@
 					<a name="markpromise" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> mark<wbr>Promise</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-protected">
-						<li class="tsd-signature tsd-kind-icon">mark<wbr>Promise<span class="tsd-signature-symbol">(</span>label<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, id<span class="tsd-signature-symbol">?: </span><a href="../interfaces/node_modules_eventemitter2_eventemitter2_d.waitforoptions.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
-						<li class="tsd-signature tsd-kind-icon">mark<wbr>Promise<span class="tsd-signature-symbol">(</span>label<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_async_interface.clearoptionsid.html" class="tsd-signature-type">ClearOptionsId</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">mark<wbr>Promise<span class="tsd-signature-symbol">(</span>label<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, id<span class="tsd-signature-symbol">?: </span><a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">mark<wbr>Promise<span class="tsd-signature-symbol">(</span>label<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_async_interface.clearoptionsid.html" class="tsd-signature-type">ClearOptionsId</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -1136,7 +1235,7 @@
 									<h5>label: <span class="tsd-signature-type">string</span></h5>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> id: <a href="../interfaces/node_modules_eventemitter2_eventemitter2_d.waitforoptions.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> id: <a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -1158,7 +1257,7 @@
 									<h5>label: <span class="tsd-signature-type">string</span></h5>
 								</li>
 								<li>
-									<h5>opts: <a href="../interfaces/src_core_async_interface.clearoptionsid.html" class="tsd-signature-type">ClearOptionsId</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>opts: <a href="../interfaces/src_core_async_interface.clearoptionsid.html" class="tsd-signature-type">ClearOptionsId</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>additional options</p>
 									</div>
@@ -1210,7 +1309,7 @@
 					<a name="muteall" class="tsd-anchor"></a>
 					<h3>mute<wbr>All</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">mute<wbr>All<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/src_core_async_interface.clearoptions.html" class="tsd-signature-type">ClearOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">mute<wbr>All<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">?: </span><a href="../modules/src_core_async_modules_proxy_index.html#clearoptions" class="tsd-signature-type">ClearOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -1228,7 +1327,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/src_core_async_interface.clearoptions.html" class="tsd-signature-type">ClearOptions</a></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../modules/src_core_async_modules_proxy_index.html#clearoptions" class="tsd-signature-type">ClearOptions</a></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -1239,8 +1338,8 @@
 					<a name="mutepromise" class="tsd-anchor"></a>
 					<h3>mute<wbr>Promise</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">mute<wbr>Promise<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">?: </span><a href="../interfaces/node_modules_eventemitter2_eventemitter2_d.waitforoptions.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
-						<li class="tsd-signature tsd-kind-icon">mute<wbr>Promise<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_async_interface.clearoptionsid.html" class="tsd-signature-type">ClearOptionsId</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">mute<wbr>Promise<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">?: </span><a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">mute<wbr>Promise<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_async_interface.clearoptionsid.html" class="tsd-signature-type">ClearOptionsId</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -1257,7 +1356,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> id: <a href="../interfaces/node_modules_eventemitter2_eventemitter2_d.waitforoptions.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> id: <a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -1276,7 +1375,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>opts: <a href="../interfaces/src_core_async_interface.clearoptionsid.html" class="tsd-signature-type">ClearOptionsId</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>opts: <a href="../interfaces/src_core_async_interface.clearoptionsid.html" class="tsd-signature-type">ClearOptionsId</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>options for the operation</p>
 									</div>
@@ -1290,8 +1389,8 @@
 					<a name="muteproxy" class="tsd-anchor"></a>
 					<h3>mute<wbr>Proxy</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">mute<wbr>Proxy<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">?: </span><a href="../interfaces/src_core_async_interface.clearfn.html#function" class="tsd-signature-type">Function</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
-						<li class="tsd-signature tsd-kind-icon">mute<wbr>Proxy<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_async_interface.clearproxyoptions.html" class="tsd-signature-type">ClearProxyOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Function</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">mute<wbr>Proxy<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">?: </span><a href="../interfaces/index_d.anyfunction.html#function" class="tsd-signature-type">Function</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">mute<wbr>Proxy<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_async_interface.clearproxyoptions.html" class="tsd-signature-type">ClearProxyOptions</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.anyfunction.html#function" class="tsd-signature-type">Function</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -1308,7 +1407,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> id: <a href="../interfaces/src_core_async_interface.clearfn.html#function" class="tsd-signature-type">Function</a></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> id: <a href="../interfaces/index_d.anyfunction.html#function" class="tsd-signature-type">Function</a></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -1327,7 +1426,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>opts: <a href="../interfaces/src_core_async_interface.clearproxyoptions.html" class="tsd-signature-type">ClearProxyOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Function</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>opts: <a href="../interfaces/src_core_async_interface.clearproxyoptions.html" class="tsd-signature-type">ClearProxyOptions</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.anyfunction.html#function" class="tsd-signature-type">Function</a><span class="tsd-signature-symbol">&gt;</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>options for the operation</p>
 									</div>
@@ -1341,8 +1440,8 @@
 					<a name="muterequest" class="tsd-anchor"></a>
 					<h3>mute<wbr>Request</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">mute<wbr>Request<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">?: </span><a href="../interfaces/node_modules_eventemitter2_eventemitter2_d.waitforoptions.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
-						<li class="tsd-signature tsd-kind-icon">mute<wbr>Request<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_async_interface.clearoptionsid.html" class="tsd-signature-type">ClearOptionsId</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">mute<wbr>Request<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">?: </span><a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">mute<wbr>Request<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_async_interface.clearoptionsid.html" class="tsd-signature-type">ClearOptionsId</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -1359,7 +1458,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> id: <a href="../interfaces/node_modules_eventemitter2_eventemitter2_d.waitforoptions.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> id: <a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -1378,7 +1477,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>opts: <a href="../interfaces/src_core_async_interface.clearoptionsid.html" class="tsd-signature-type">ClearOptionsId</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>opts: <a href="../interfaces/src_core_async_interface.clearoptionsid.html" class="tsd-signature-type">ClearOptionsId</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>options for the operation</p>
 									</div>
@@ -1392,7 +1491,7 @@
 					<a name="onpromiseclear" class="tsd-anchor"></a>
 					<h3>on<wbr>Promise<wbr>Clear</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">on<wbr>Promise<wbr>Clear<span class="tsd-signature-symbol">(</span>resolve<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Function</span>, reject<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Function</span></li>
+						<li class="tsd-signature tsd-kind-icon">on<wbr>Promise<wbr>Clear<span class="tsd-signature-symbol">(</span>resolve<span class="tsd-signature-symbol">: </span><a href="../interfaces/index_d.anyfunction.html#function" class="tsd-signature-type">Function</a>, reject<span class="tsd-signature-symbol">: </span><a href="../interfaces/index_d.anyfunction.html#function" class="tsd-signature-type">Function</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/index_d.anyfunction.html#function" class="tsd-signature-type">Function</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -1409,15 +1508,15 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>resolve: <span class="tsd-signature-type">Function</span></h5>
+									<h5>resolve: <a href="../interfaces/index_d.anyfunction.html#function" class="tsd-signature-type">Function</a></h5>
 								</li>
 								<li>
-									<h5>reject: <span class="tsd-signature-type">Function</span></h5>
+									<h5>reject: <a href="../interfaces/index_d.anyfunction.html#function" class="tsd-signature-type">Function</a></h5>
 									<div class="tsd-comment tsd-typography">
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Function</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/index_d.anyfunction.html#function" class="tsd-signature-type">Function</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -1425,7 +1524,7 @@
 					<a name="onpromisemerge" class="tsd-anchor"></a>
 					<h3>on<wbr>Promise<wbr>Merge</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">on<wbr>Promise<wbr>Merge<span class="tsd-signature-symbol">(</span>resolve<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Function</span>, reject<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Function</span></li>
+						<li class="tsd-signature tsd-kind-icon">on<wbr>Promise<wbr>Merge<span class="tsd-signature-symbol">(</span>resolve<span class="tsd-signature-symbol">: </span><a href="../interfaces/index_d.anyfunction.html#function" class="tsd-signature-type">Function</a>, reject<span class="tsd-signature-symbol">: </span><a href="../interfaces/index_d.anyfunction.html#function" class="tsd-signature-type">Function</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/index_d.anyfunction.html#function" class="tsd-signature-type">Function</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -1442,15 +1541,15 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>resolve: <span class="tsd-signature-type">Function</span></h5>
+									<h5>resolve: <a href="../interfaces/index_d.anyfunction.html#function" class="tsd-signature-type">Function</a></h5>
 								</li>
 								<li>
-									<h5>reject: <span class="tsd-signature-type">Function</span></h5>
+									<h5>reject: <a href="../interfaces/index_d.anyfunction.html#function" class="tsd-signature-type">Function</a></h5>
 									<div class="tsd-comment tsd-typography">
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Function</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/index_d.anyfunction.html#function" class="tsd-signature-type">Function</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -1458,7 +1557,7 @@
 					<a name="promise" class="tsd-anchor"></a>
 					<h3>promise</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">promise&lt;T&gt;<span class="tsd-signature-symbol">(</span>promise<span class="tsd-signature-symbol">: </span><a href="../modules/src_core_async_interface.html#promiselikep" class="tsd-signature-type">PromiseLikeP</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/src_core_async_interface.asyncpromiseoptions.html" class="tsd-signature-type">AsyncPromiseOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">promise&lt;T&gt;<span class="tsd-signature-symbol">(</span>promise<span class="tsd-signature-symbol">: </span><a href="../modules/src_core_async_modules_proxy_index.html#promiselikep" class="tsd-signature-type">PromiseLikeP</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../modules/src_core_async_modules_proxy_index.html#asyncpromiseoptions" class="tsd-signature-type">AsyncPromiseOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -1480,7 +1579,7 @@
 									<dd><pre><code class="language-js"><span class="hljs-keyword">const</span>
   <span class="hljs-keyword">async</span> = <span class="hljs-keyword">new</span> Async();
 
-<span class="hljs-keyword">async</span>.promise(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+<span class="hljs-keyword">async</span>.promise(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">() =&gt;</span> {
   <span class="hljs-comment">// ...</span>
 }))</code></pre>
 									</dd>
@@ -1495,13 +1594,13 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>promise: <a href="../modules/src_core_async_interface.html#promiselikep" class="tsd-signature-type">PromiseLikeP</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>promise: <a href="../modules/src_core_async_modules_proxy_index.html#promiselikep" class="tsd-signature-type">PromiseLikeP</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/src_core_async_interface.asyncpromiseoptions.html" class="tsd-signature-type">AsyncPromiseOptions</a></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../modules/src_core_async_modules_proxy_index.html#asyncpromiseoptions" class="tsd-signature-type">AsyncPromiseOptions</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -1545,7 +1644,7 @@
 					<a name="proxy" class="tsd-anchor"></a>
 					<h3>proxy</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">proxy&lt;F, C&gt;<span class="tsd-signature-symbol">(</span>fn<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">F</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/src_core_async_interface.asyncproxyoptions.html" class="tsd-signature-type">AsyncProxyOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">F</span></li>
+						<li class="tsd-signature tsd-kind-icon">proxy&lt;F, C&gt;<span class="tsd-signature-symbol">(</span>fn<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">F</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../modules/src_core_async_modules_proxy_index.html#asyncproxyoptions" class="tsd-signature-type">AsyncProxyOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">F</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -1566,7 +1665,7 @@
 									<dd><pre><code class="language-js"><span class="hljs-keyword">const</span>
   <span class="hljs-keyword">async</span> = <span class="hljs-keyword">new</span> Async();
 
-myImage.onload = <span class="hljs-keyword">async</span>.proxy(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+myImage.onload = <span class="hljs-keyword">async</span>.proxy(<span class="hljs-function">() =&gt;</span> {
   <span class="hljs-comment">// ...</span>
 });</code></pre>
 									</dd>
@@ -1587,7 +1686,7 @@ myImage.onload = <span class="hljs-keyword">async</span>.proxy(<span class="hljs
 									<h5>fn: <span class="tsd-signature-type">F</span></h5>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/src_core_async_interface.asyncproxyoptions.html" class="tsd-signature-type">AsyncProxyOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../modules/src_core_async_modules_proxy_index.html#asyncproxyoptions" class="tsd-signature-type">AsyncProxyOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">F</span></h4>
@@ -1598,7 +1697,7 @@ myImage.onload = <span class="hljs-keyword">async</span>.proxy(<span class="hljs
 					<a name="registertask" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> register<wbr>Task</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-protected">
-						<li class="tsd-signature tsd-kind-icon">register<wbr>Task&lt;R&gt;<span class="tsd-signature-symbol">(</span>task<span class="tsd-signature-symbol">: </span><a href="../modules/src_core_async_interface.html#fullasyncoptions" class="tsd-signature-type">FullAsyncOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></li>
+						<li class="tsd-signature tsd-kind-icon">register<wbr>Task&lt;R&gt;<span class="tsd-signature-symbol">(</span>task<span class="tsd-signature-symbol">: </span><a href="../modules/src_core_async_modules_proxy_index.html#fullasyncoptions" class="tsd-signature-type">FullAsyncOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -1622,15 +1721,12 @@ myImage.onload = <span class="hljs-keyword">async</span>.proxy(<span class="hljs
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>task: <a href="../modules/src_core_async_interface.html#fullasyncoptions" class="tsd-signature-type">FullAsyncOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>task: <a href="../modules/src_core_async_modules_proxy_index.html#fullasyncoptions" class="tsd-signature-type">FullAsyncOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h5>
 									<div class="tsd-comment tsd-typography">
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">R</span>
-								<span class="tsd-signature-symbol"> | </span>
-								<span class="tsd-signature-type">null</span>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">R</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -1638,7 +1734,7 @@ myImage.onload = <span class="hljs-keyword">async</span>.proxy(<span class="hljs
 					<a name="request" class="tsd-anchor"></a>
 					<h3>request</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">request&lt;T&gt;<span class="tsd-signature-symbol">(</span>request<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">PromiseLike</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/src_core_async_interface.asyncrequestoptions.html" class="tsd-signature-type">AsyncRequestOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">request&lt;T&gt;<span class="tsd-signature-symbol">(</span>request<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">PromiseLike</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">PromiseLike</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../modules/src_core_async_modules_proxy_index.html#asyncrequestoptions" class="tsd-signature-type">AsyncRequestOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -1658,7 +1754,7 @@ myImage.onload = <span class="hljs-keyword">async</span>.proxy(<span class="hljs
 								<dl class="tsd-comment-tags">
 									<dt>example</dt>
 									<dd><pre><code class="language-js"><span class="hljs-keyword">const</span> <span class="hljs-keyword">async</span> = <span class="hljs-keyword">new</span> Async();
-<span class="hljs-keyword">async</span>.request(fetch(<span class="hljs-string">'foo/bla'</span>));</code></pre>
+<span class="hljs-keyword">async</span>.request(fetch(<span class="hljs-string">&#x27;foo/bla&#x27;</span>));</code></pre>
 									</dd>
 								</dl>
 							</div>
@@ -1671,13 +1767,13 @@ myImage.onload = <span class="hljs-keyword">async</span>.proxy(<span class="hljs
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>request: <span class="tsd-signature-type">function</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">PromiseLike</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>request: <span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">PromiseLike</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">PromiseLike</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/src_core_async_interface.asyncrequestoptions.html" class="tsd-signature-type">AsyncRequestOptions</a></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../modules/src_core_async_modules_proxy_index.html#asyncrequestoptions" class="tsd-signature-type">AsyncRequestOptions</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -1685,7 +1781,7 @@ myImage.onload = <span class="hljs-keyword">async</span>.proxy(<span class="hljs
 					<a name="setasync" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> set<wbr>Async</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-inherited tsd-is-protected">
-						<li class="tsd-signature tsd-kind-icon">set<wbr>Async&lt;R, C&gt;<span class="tsd-signature-symbol">(</span>task<span class="tsd-signature-symbol">: </span><a href="../modules/src_core_async_interface.html#fullasyncoptions" class="tsd-signature-type">FullAsyncOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></li>
+						<li class="tsd-signature tsd-kind-icon">set<wbr>Async&lt;R, C&gt;<span class="tsd-signature-symbol">(</span>task<span class="tsd-signature-symbol">: </span><a href="../modules/src_core_async_modules_proxy_index.html#fullasyncoptions" class="tsd-signature-type">FullAsyncOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -1716,13 +1812,10 @@ myImage.onload = <span class="hljs-keyword">async</span>.proxy(<span class="hljs
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>task: <a href="../modules/src_core_async_interface.html#fullasyncoptions" class="tsd-signature-type">FullAsyncOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>task: <a href="../modules/src_core_async_modules_proxy_index.html#fullasyncoptions" class="tsd-signature-type">FullAsyncOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">R</span>
-								<span class="tsd-signature-symbol"> | </span>
-								<span class="tsd-signature-type">null</span>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">R</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -1730,7 +1823,7 @@ myImage.onload = <span class="hljs-keyword">async</span>.proxy(<span class="hljs
 					<a name="suspendall" class="tsd-anchor"></a>
 					<h3>suspend<wbr>All</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">suspend<wbr>All<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/src_core_async_interface.clearoptions.html" class="tsd-signature-type">ClearOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">suspend<wbr>All<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">?: </span><a href="../modules/src_core_async_modules_proxy_index.html#clearoptions" class="tsd-signature-type">ClearOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -1748,7 +1841,7 @@ myImage.onload = <span class="hljs-keyword">async</span>.proxy(<span class="hljs
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/src_core_async_interface.clearoptions.html" class="tsd-signature-type">ClearOptions</a></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../modules/src_core_async_modules_proxy_index.html#clearoptions" class="tsd-signature-type">ClearOptions</a></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -1759,8 +1852,8 @@ myImage.onload = <span class="hljs-keyword">async</span>.proxy(<span class="hljs
 					<a name="suspendpromise" class="tsd-anchor"></a>
 					<h3>suspend<wbr>Promise</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">suspend<wbr>Promise<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">?: </span><a href="../interfaces/node_modules_eventemitter2_eventemitter2_d.waitforoptions.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
-						<li class="tsd-signature tsd-kind-icon">suspend<wbr>Promise<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_async_interface.clearoptionsid.html" class="tsd-signature-type">ClearOptionsId</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">suspend<wbr>Promise<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">?: </span><a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">suspend<wbr>Promise<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_async_interface.clearoptionsid.html" class="tsd-signature-type">ClearOptionsId</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -1777,7 +1870,7 @@ myImage.onload = <span class="hljs-keyword">async</span>.proxy(<span class="hljs
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> id: <a href="../interfaces/node_modules_eventemitter2_eventemitter2_d.waitforoptions.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> id: <a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -1796,7 +1889,7 @@ myImage.onload = <span class="hljs-keyword">async</span>.proxy(<span class="hljs
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>opts: <a href="../interfaces/src_core_async_interface.clearoptionsid.html" class="tsd-signature-type">ClearOptionsId</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>opts: <a href="../interfaces/src_core_async_interface.clearoptionsid.html" class="tsd-signature-type">ClearOptionsId</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>options for the operation</p>
 									</div>
@@ -1810,8 +1903,8 @@ myImage.onload = <span class="hljs-keyword">async</span>.proxy(<span class="hljs
 					<a name="suspendproxy" class="tsd-anchor"></a>
 					<h3>suspend<wbr>Proxy</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">suspend<wbr>Proxy<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">?: </span><a href="../interfaces/src_core_async_interface.clearfn.html#function" class="tsd-signature-type">Function</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
-						<li class="tsd-signature tsd-kind-icon">suspend<wbr>Proxy<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_async_interface.clearproxyoptions.html" class="tsd-signature-type">ClearProxyOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Function</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">suspend<wbr>Proxy<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">?: </span><a href="../interfaces/index_d.anyfunction.html#function" class="tsd-signature-type">Function</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">suspend<wbr>Proxy<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_async_interface.clearproxyoptions.html" class="tsd-signature-type">ClearProxyOptions</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.anyfunction.html#function" class="tsd-signature-type">Function</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -1828,7 +1921,7 @@ myImage.onload = <span class="hljs-keyword">async</span>.proxy(<span class="hljs
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> id: <a href="../interfaces/src_core_async_interface.clearfn.html#function" class="tsd-signature-type">Function</a></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> id: <a href="../interfaces/index_d.anyfunction.html#function" class="tsd-signature-type">Function</a></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -1847,7 +1940,7 @@ myImage.onload = <span class="hljs-keyword">async</span>.proxy(<span class="hljs
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>opts: <a href="../interfaces/src_core_async_interface.clearproxyoptions.html" class="tsd-signature-type">ClearProxyOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Function</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>opts: <a href="../interfaces/src_core_async_interface.clearproxyoptions.html" class="tsd-signature-type">ClearProxyOptions</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.anyfunction.html#function" class="tsd-signature-type">Function</a><span class="tsd-signature-symbol">&gt;</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>options for the operation</p>
 									</div>
@@ -1861,8 +1954,8 @@ myImage.onload = <span class="hljs-keyword">async</span>.proxy(<span class="hljs
 					<a name="suspendrequest" class="tsd-anchor"></a>
 					<h3>suspend<wbr>Request</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">suspend<wbr>Request<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">?: </span><a href="../interfaces/node_modules_eventemitter2_eventemitter2_d.waitforoptions.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
-						<li class="tsd-signature tsd-kind-icon">suspend<wbr>Request<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_async_interface.clearoptionsid.html" class="tsd-signature-type">ClearOptionsId</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">suspend<wbr>Request<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">?: </span><a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">suspend<wbr>Request<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_async_interface.clearoptionsid.html" class="tsd-signature-type">ClearOptionsId</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -1879,7 +1972,7 @@ myImage.onload = <span class="hljs-keyword">async</span>.proxy(<span class="hljs
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> id: <a href="../interfaces/node_modules_eventemitter2_eventemitter2_d.waitforoptions.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> id: <a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -1898,7 +1991,7 @@ myImage.onload = <span class="hljs-keyword">async</span>.proxy(<span class="hljs
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>opts: <a href="../interfaces/src_core_async_interface.clearoptionsid.html" class="tsd-signature-type">ClearOptionsId</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>opts: <a href="../interfaces/src_core_async_interface.clearoptionsid.html" class="tsd-signature-type">ClearOptionsId</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>options for the operation</p>
 									</div>
@@ -1912,8 +2005,8 @@ myImage.onload = <span class="hljs-keyword">async</span>.proxy(<span class="hljs
 					<a name="terminateworker" class="tsd-anchor"></a>
 					<h3>terminate<wbr>Worker</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">terminate<wbr>Worker<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">?: </span><a href="../modules/src_core_async_interface.html#workerlikep" class="tsd-signature-type">WorkerLikeP</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
-						<li class="tsd-signature tsd-kind-icon">terminate<wbr>Worker<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_async_interface.clearproxyoptions.html" class="tsd-signature-type">ClearProxyOptions</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_async_interface.html#workerlikep" class="tsd-signature-type">WorkerLikeP</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">terminate<wbr>Worker<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">?: </span><a href="../modules/src_core_async_modules_proxy_index.html#workerlikep" class="tsd-signature-type">WorkerLikeP</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">terminate<wbr>Worker<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_async_interface.clearproxyoptions.html" class="tsd-signature-type">ClearProxyOptions</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_async_modules_proxy_index.html#workerlikep" class="tsd-signature-type">WorkerLikeP</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -1934,7 +2027,7 @@ myImage.onload = <span class="hljs-keyword">async</span>.proxy(<span class="hljs
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> id: <a href="../modules/src_core_async_interface.html#workerlikep" class="tsd-signature-type">WorkerLikeP</a></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> id: <a href="../modules/src_core_async_modules_proxy_index.html#workerlikep" class="tsd-signature-type">WorkerLikeP</a></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -1953,7 +2046,7 @@ myImage.onload = <span class="hljs-keyword">async</span>.proxy(<span class="hljs
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>opts: <a href="../interfaces/src_core_async_interface.clearproxyoptions.html" class="tsd-signature-type">ClearProxyOptions</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_async_interface.html#workerlikep" class="tsd-signature-type">WorkerLikeP</a><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>opts: <a href="../interfaces/src_core_async_interface.clearproxyoptions.html" class="tsd-signature-type">ClearProxyOptions</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_async_modules_proxy_index.html#workerlikep" class="tsd-signature-type">WorkerLikeP</a><span class="tsd-signature-symbol">&gt;</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>options for the operation</p>
 									</div>
@@ -1967,7 +2060,7 @@ myImage.onload = <span class="hljs-keyword">async</span>.proxy(<span class="hljs
 					<a name="throttle" class="tsd-anchor"></a>
 					<h3>throttle</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">throttle&lt;F, C&gt;<span class="tsd-signature-symbol">(</span>fn<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">F</span>, delay<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/src_core_async_interface.asynccboptions.html" class="tsd-signature-type">AsyncCbOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/index_d.anyfunction.html" class="tsd-signature-type">AnyFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Parameters</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">F</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">throttle&lt;F, C&gt;<span class="tsd-signature-symbol">(</span>fn<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">F</span>, delay<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../modules/src_core_async_modules_proxy_index.html#asynccboptions" class="tsd-signature-type">AsyncCbOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/index_d.anyfunction.html" class="tsd-signature-type">AnyFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Parameters</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">F</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -1999,7 +2092,7 @@ myImage.onload = <span class="hljs-keyword">async</span>.proxy(<span class="hljs
 									<h5>delay: <span class="tsd-signature-type">number</span></h5>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/src_core_async_interface.asynccboptions.html" class="tsd-signature-type">AsyncCbOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../modules/src_core_async_modules_proxy_index.html#asynccboptions" class="tsd-signature-type">AsyncCbOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="../interfaces/index_d.anyfunction.html" class="tsd-signature-type">AnyFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Parameters</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">F</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -2010,7 +2103,7 @@ myImage.onload = <span class="hljs-keyword">async</span>.proxy(<span class="hljs
 					<a name="unmuteall" class="tsd-anchor"></a>
 					<h3>unmute<wbr>All</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">unmute<wbr>All<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/src_core_async_interface.clearoptions.html" class="tsd-signature-type">ClearOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">unmute<wbr>All<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">?: </span><a href="../modules/src_core_async_modules_proxy_index.html#clearoptions" class="tsd-signature-type">ClearOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -2028,7 +2121,7 @@ myImage.onload = <span class="hljs-keyword">async</span>.proxy(<span class="hljs
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/src_core_async_interface.clearoptions.html" class="tsd-signature-type">ClearOptions</a></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../modules/src_core_async_modules_proxy_index.html#clearoptions" class="tsd-signature-type">ClearOptions</a></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -2039,8 +2132,8 @@ myImage.onload = <span class="hljs-keyword">async</span>.proxy(<span class="hljs
 					<a name="unmutepromise" class="tsd-anchor"></a>
 					<h3>unmute<wbr>Promise</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">unmute<wbr>Promise<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">?: </span><a href="../interfaces/node_modules_eventemitter2_eventemitter2_d.waitforoptions.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
-						<li class="tsd-signature tsd-kind-icon">unmute<wbr>Promise<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_async_interface.clearoptionsid.html" class="tsd-signature-type">ClearOptionsId</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">unmute<wbr>Promise<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">?: </span><a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">unmute<wbr>Promise<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_async_interface.clearoptionsid.html" class="tsd-signature-type">ClearOptionsId</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -2057,7 +2150,7 @@ myImage.onload = <span class="hljs-keyword">async</span>.proxy(<span class="hljs
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> id: <a href="../interfaces/node_modules_eventemitter2_eventemitter2_d.waitforoptions.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> id: <a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -2076,7 +2169,7 @@ myImage.onload = <span class="hljs-keyword">async</span>.proxy(<span class="hljs
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>opts: <a href="../interfaces/src_core_async_interface.clearoptionsid.html" class="tsd-signature-type">ClearOptionsId</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>opts: <a href="../interfaces/src_core_async_interface.clearoptionsid.html" class="tsd-signature-type">ClearOptionsId</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>options for the operation</p>
 									</div>
@@ -2090,8 +2183,8 @@ myImage.onload = <span class="hljs-keyword">async</span>.proxy(<span class="hljs
 					<a name="unmuteproxy" class="tsd-anchor"></a>
 					<h3>unmute<wbr>Proxy</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">unmute<wbr>Proxy<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">?: </span><a href="../interfaces/src_core_async_interface.clearfn.html#function" class="tsd-signature-type">Function</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
-						<li class="tsd-signature tsd-kind-icon">unmute<wbr>Proxy<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_async_interface.clearproxyoptions.html" class="tsd-signature-type">ClearProxyOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Function</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">unmute<wbr>Proxy<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">?: </span><a href="../interfaces/index_d.anyfunction.html#function" class="tsd-signature-type">Function</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">unmute<wbr>Proxy<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_async_interface.clearproxyoptions.html" class="tsd-signature-type">ClearProxyOptions</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.anyfunction.html#function" class="tsd-signature-type">Function</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -2108,7 +2201,7 @@ myImage.onload = <span class="hljs-keyword">async</span>.proxy(<span class="hljs
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> id: <a href="../interfaces/src_core_async_interface.clearfn.html#function" class="tsd-signature-type">Function</a></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> id: <a href="../interfaces/index_d.anyfunction.html#function" class="tsd-signature-type">Function</a></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -2127,7 +2220,7 @@ myImage.onload = <span class="hljs-keyword">async</span>.proxy(<span class="hljs
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>opts: <a href="../interfaces/src_core_async_interface.clearproxyoptions.html" class="tsd-signature-type">ClearProxyOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Function</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>opts: <a href="../interfaces/src_core_async_interface.clearproxyoptions.html" class="tsd-signature-type">ClearProxyOptions</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.anyfunction.html#function" class="tsd-signature-type">Function</a><span class="tsd-signature-symbol">&gt;</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>options for the operation</p>
 									</div>
@@ -2141,8 +2234,8 @@ myImage.onload = <span class="hljs-keyword">async</span>.proxy(<span class="hljs
 					<a name="unmuterequest" class="tsd-anchor"></a>
 					<h3>unmute<wbr>Request</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">unmute<wbr>Request<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">?: </span><a href="../interfaces/node_modules_eventemitter2_eventemitter2_d.waitforoptions.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
-						<li class="tsd-signature tsd-kind-icon">unmute<wbr>Request<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_async_interface.clearoptionsid.html" class="tsd-signature-type">ClearOptionsId</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">unmute<wbr>Request<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">?: </span><a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">unmute<wbr>Request<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_async_interface.clearoptionsid.html" class="tsd-signature-type">ClearOptionsId</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -2159,7 +2252,7 @@ myImage.onload = <span class="hljs-keyword">async</span>.proxy(<span class="hljs
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> id: <a href="../interfaces/node_modules_eventemitter2_eventemitter2_d.waitforoptions.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> id: <a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -2178,7 +2271,7 @@ myImage.onload = <span class="hljs-keyword">async</span>.proxy(<span class="hljs
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>opts: <a href="../interfaces/src_core_async_interface.clearoptionsid.html" class="tsd-signature-type">ClearOptionsId</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>opts: <a href="../interfaces/src_core_async_interface.clearoptionsid.html" class="tsd-signature-type">ClearOptionsId</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>options for the operation</p>
 									</div>
@@ -2192,7 +2285,7 @@ myImage.onload = <span class="hljs-keyword">async</span>.proxy(<span class="hljs
 					<a name="unsuspendall" class="tsd-anchor"></a>
 					<h3>unsuspend<wbr>All</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">unsuspend<wbr>All<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/src_core_async_interface.clearoptions.html" class="tsd-signature-type">ClearOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">unsuspend<wbr>All<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">?: </span><a href="../modules/src_core_async_modules_proxy_index.html#clearoptions" class="tsd-signature-type">ClearOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -2210,7 +2303,7 @@ myImage.onload = <span class="hljs-keyword">async</span>.proxy(<span class="hljs
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/src_core_async_interface.clearoptions.html" class="tsd-signature-type">ClearOptions</a></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../modules/src_core_async_modules_proxy_index.html#clearoptions" class="tsd-signature-type">ClearOptions</a></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -2221,8 +2314,8 @@ myImage.onload = <span class="hljs-keyword">async</span>.proxy(<span class="hljs
 					<a name="unsuspendpromise" class="tsd-anchor"></a>
 					<h3>unsuspend<wbr>Promise</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">unsuspend<wbr>Promise<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">?: </span><a href="../interfaces/node_modules_eventemitter2_eventemitter2_d.waitforoptions.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
-						<li class="tsd-signature tsd-kind-icon">unsuspend<wbr>Promise<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_async_interface.clearoptionsid.html" class="tsd-signature-type">ClearOptionsId</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">unsuspend<wbr>Promise<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">?: </span><a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">unsuspend<wbr>Promise<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_async_interface.clearoptionsid.html" class="tsd-signature-type">ClearOptionsId</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -2239,7 +2332,7 @@ myImage.onload = <span class="hljs-keyword">async</span>.proxy(<span class="hljs
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> id: <a href="../interfaces/node_modules_eventemitter2_eventemitter2_d.waitforoptions.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> id: <a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -2258,7 +2351,7 @@ myImage.onload = <span class="hljs-keyword">async</span>.proxy(<span class="hljs
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>opts: <a href="../interfaces/src_core_async_interface.clearoptionsid.html" class="tsd-signature-type">ClearOptionsId</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>opts: <a href="../interfaces/src_core_async_interface.clearoptionsid.html" class="tsd-signature-type">ClearOptionsId</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>options for the operation</p>
 									</div>
@@ -2272,8 +2365,8 @@ myImage.onload = <span class="hljs-keyword">async</span>.proxy(<span class="hljs
 					<a name="unsuspendproxy" class="tsd-anchor"></a>
 					<h3>unsuspend<wbr>Proxy</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">unsuspend<wbr>Proxy<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">?: </span><a href="../interfaces/src_core_async_interface.clearfn.html#function" class="tsd-signature-type">Function</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
-						<li class="tsd-signature tsd-kind-icon">unsuspend<wbr>Proxy<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_async_interface.clearproxyoptions.html" class="tsd-signature-type">ClearProxyOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Function</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">unsuspend<wbr>Proxy<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">?: </span><a href="../interfaces/index_d.anyfunction.html#function" class="tsd-signature-type">Function</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">unsuspend<wbr>Proxy<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_async_interface.clearproxyoptions.html" class="tsd-signature-type">ClearProxyOptions</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.anyfunction.html#function" class="tsd-signature-type">Function</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -2290,7 +2383,7 @@ myImage.onload = <span class="hljs-keyword">async</span>.proxy(<span class="hljs
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> id: <a href="../interfaces/src_core_async_interface.clearfn.html#function" class="tsd-signature-type">Function</a></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> id: <a href="../interfaces/index_d.anyfunction.html#function" class="tsd-signature-type">Function</a></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -2309,7 +2402,7 @@ myImage.onload = <span class="hljs-keyword">async</span>.proxy(<span class="hljs
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>opts: <a href="../interfaces/src_core_async_interface.clearproxyoptions.html" class="tsd-signature-type">ClearProxyOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Function</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>opts: <a href="../interfaces/src_core_async_interface.clearproxyoptions.html" class="tsd-signature-type">ClearProxyOptions</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.anyfunction.html#function" class="tsd-signature-type">Function</a><span class="tsd-signature-symbol">&gt;</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>options for the operation</p>
 									</div>
@@ -2323,8 +2416,8 @@ myImage.onload = <span class="hljs-keyword">async</span>.proxy(<span class="hljs
 					<a name="unsuspendrequest" class="tsd-anchor"></a>
 					<h3>unsuspend<wbr>Request</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">unsuspend<wbr>Request<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">?: </span><a href="../interfaces/node_modules_eventemitter2_eventemitter2_d.waitforoptions.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
-						<li class="tsd-signature tsd-kind-icon">unsuspend<wbr>Request<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_async_interface.clearoptionsid.html" class="tsd-signature-type">ClearOptionsId</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">unsuspend<wbr>Request<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">?: </span><a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">unsuspend<wbr>Request<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_async_interface.clearoptionsid.html" class="tsd-signature-type">ClearOptionsId</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -2341,7 +2434,7 @@ myImage.onload = <span class="hljs-keyword">async</span>.proxy(<span class="hljs
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> id: <a href="../interfaces/node_modules_eventemitter2_eventemitter2_d.waitforoptions.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> id: <a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -2360,7 +2453,7 @@ myImage.onload = <span class="hljs-keyword">async</span>.proxy(<span class="hljs
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>opts: <a href="../interfaces/src_core_async_interface.clearoptionsid.html" class="tsd-signature-type">ClearOptionsId</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>opts: <a href="../interfaces/src_core_async_interface.clearoptionsid.html" class="tsd-signature-type">ClearOptionsId</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>options for the operation</p>
 									</div>
@@ -2374,7 +2467,7 @@ myImage.onload = <span class="hljs-keyword">async</span>.proxy(<span class="hljs
 					<a name="worker" class="tsd-anchor"></a>
 					<h3>worker</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">worker&lt;T&gt;<span class="tsd-signature-symbol">(</span>worker<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/src_core_async_interface.asyncworkeroptions.html" class="tsd-signature-type">AsyncWorkerOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">CTX</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span></li>
+						<li class="tsd-signature tsd-kind-icon">worker&lt;T&gt;<span class="tsd-signature-symbol">(</span>worker<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../modules/src_core_async_modules_proxy_index.html#asyncworkeroptions" class="tsd-signature-type">AsyncWorkerOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">CTX</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -2398,15 +2491,15 @@ myImage.onload = <span class="hljs-keyword">async</span>.proxy(<span class="hljs
 									<dt>example</dt>
 									<dd><pre><code class="language-js"><span class="hljs-keyword">const</span>
   <span class="hljs-keyword">async</span> = <span class="hljs-keyword">new</span> Async(),
-  el = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'div'</span>);
+  el = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">&#x27;div&#x27;</span>);
 
 $el.appendChild(el);
 
 <span class="hljs-comment">// This function will work as the worker destructor</span>
-<span class="hljs-keyword">async</span>.worker(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> el.remove());
+<span class="hljs-keyword">async</span>.worker(<span class="hljs-function">() =&gt;</span> el.remove());
 
 <span class="hljs-keyword">const</span>
-  myWorker = <span class="hljs-keyword">new</span> Worker(<span class="hljs-string">'my-worker.js'</span>);
+  myWorker = <span class="hljs-keyword">new</span> Worker(<span class="hljs-string">&#x27;my-worker.js&#x27;</span>);
 
 <span class="hljs-keyword">async</span>.worker(myWorker);
 
@@ -2417,7 +2510,7 @@ $el.appendChild(el);
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
-									<h4>T<span class="tsd-signature-symbol">: </span><a href="../modules/src_core_async_interface.html#workerlikep" class="tsd-signature-type">WorkerLikeP</a></h4>
+									<h4>T<span class="tsd-signature-symbol">: </span><a href="../modules/src_core_async_modules_proxy_index.html#workerlikep" class="tsd-signature-type">WorkerLikeP</a></h4>
 								</li>
 							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2426,7 +2519,7 @@ $el.appendChild(el);
 									<h5>worker: <span class="tsd-signature-type">T</span></h5>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/src_core_async_interface.asyncworkeroptions.html" class="tsd-signature-type">AsyncWorkerOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">CTX</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../modules/src_core_async_modules_proxy_index.html#asyncworkeroptions" class="tsd-signature-type">AsyncWorkerOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">CTX</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">T</span></h4>
@@ -2437,7 +2530,7 @@ $el.appendChild(el);
 					<a name="workerdestructor" class="tsd-anchor"></a>
 					<h3>worker<wbr>Destructor</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">worker<wbr>Destructor<span class="tsd-signature-symbol">(</span>destructor<span class="tsd-signature-symbol">: </span><a href="../modules/index_d.html#canundef" class="tsd-signature-type">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span>, worker<span class="tsd-signature-symbol">: </span><a href="../modules/src_core_async_interface.html#workerlikep" class="tsd-signature-type">WorkerLikeP</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">worker<wbr>Destructor<span class="tsd-signature-symbol">(</span>destructor<span class="tsd-signature-symbol">: </span><a href="../modules/index_d.html#canundef" class="tsd-signature-type">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span>, worker<span class="tsd-signature-symbol">: </span><a href="../modules/src_core_async_modules_proxy_index.html#workerlikep" class="tsd-signature-type">WorkerLikeP</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -2460,7 +2553,7 @@ $el.appendChild(el);
 									</div>
 								</li>
 								<li>
-									<h5>worker: <a href="../modules/src_core_async_interface.html#workerlikep" class="tsd-signature-type">WorkerLikeP</a></h5>
+									<h5>worker: <a href="../modules/src_core_async_modules_proxy_index.html#workerlikep" class="tsd-signature-type">WorkerLikeP</a></h5>
 									<div class="tsd-comment tsd-typography">
 									</div>
 								</li>
@@ -2477,7 +2570,7 @@ $el.appendChild(el);
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
-					<li class="current tsd-kind-external-module">
+					<li class="current tsd-kind-module">
 						<a href="../modules/src_core_async_modules_proxy_index.html">&quot;src/core/async/modules/proxy/index&quot;</a>
 					</li>
 				</ul>
@@ -2486,7 +2579,7 @@ $el.appendChild(el);
 				<ul class="before-current">
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-class tsd-parent-kind-external-module tsd-has-type-parameter">
+					<li class="current tsd-kind-class tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="src_core_async_modules_proxy_index.async.html" class="tsd-kind-icon">Async</a>
 						<ul>
 							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited">
@@ -2668,64 +2761,39 @@ $el.appendChild(el);
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
-				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
+				<li class="tsd-kind-namespace"><span class="tsd-kind-icon">Namespace</span></li>
 				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
 				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
 				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
 				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
-				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
 				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
 				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
-				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
-				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
-				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
-				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
-			</ul>
-			<ul class="tsd-legend">
 				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
 				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
-				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
 				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
-				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
 				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+			</ul>
+			<ul class="tsd-legend">
 				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
 			</ul>
 		</div>
 	</div>
 </footer>
 <div class="overlay"></div>
 <script src="../assets/js/main.js"></script>
-<script>if (location.protocol == 'file:') document.write('<script src="../assets/js/search.js"><' + '/script>');</script>
 <script>'use strict';
 
 /*!
@@ -2740,13 +2808,13 @@ $el.appendChild(el);
 	document.body.style.display = 'block';
 
 	var
-		isDTS = /([^/.]+)\.d/,
-		isIndex = /\/index|\.d/,
-		isNode = /(?:^|\b)node_modules(?:\b|$)/;
+		isDTS = /\.d$/,
+		isIndex = /^(?:(?!(?:^|\/)(?:interface|modules|prelude|engines)\/).)*?(?:^|\/)index$/,
+		isNode = /(?:^|\/)node_modules(?:\/|$)/;
 
 	var
 		trimRgxp = /^\s+|[\n\v"']+|\s+$/g,
-		normalizeRgxp = /(?:^|\b)src\//;
+		normalizeRgxp = /(?:^|\b)src\/|\/index$/g;
 
 	var
 		breadcrumbs = Array.from(document.querySelectorAll('.tsd-breadcrumb a')),
@@ -2761,32 +2829,30 @@ $el.appendChild(el);
 	});
 
 	var
-		navigation = Array.from(document.querySelectorAll('.tsd-navigation.primary .tsd-kind-external-module a')),
-		globalIndex = Array.from(document.querySelectorAll('.tsd-index-list a'));
+		navigation = Array.from(document.querySelectorAll('.tsd-navigation.primary .tsd-kind-module a')),
+		globalIndex = Array.from(document.querySelectorAll('.tsd-kind-module a'));
 
-	[].concat(navigation, breadcrumbs.length <= 1 ? globalIndex : []).forEach(function (el) {
+	[].concat(breadcrumbs.length <= 1 ? globalIndex : navigation).forEach(function (el) {
 		var
 			wrapper = el.parentNode,
 			linkText = el.textContent.replace(trimRgxp, '');
 
-		if (isIndex.test(linkText)) {
-			if (isDTS.test(linkText)) {
-				var
-					nm = RegExp.$1;
+		if (isDTS.test(linkText)) {
+			var
+				nm = RegExp.$1;
 
-				if (linkText === 'index.d') {
-					el.innerHTML = '<b>prelude</b>';
+			if (linkText === 'index.d') {
+				el.innerHTML = '<b>prelude</b>';
 
-				} else if (isNode.test(linkText)) {
-					el.textContent = nm;
-
-				} else {
-					wrapper.parentNode.removeChild(wrapper);
-				}
+			} else if (isNode.test(linkText)) {
+				el.textContent = nm;
 
 			} else {
-				el.textContent = linkText.replace(isIndex, '').replace(normalizeRgxp, '');
+				wrapper.parentNode.removeChild(wrapper);
 			}
+
+		} else if (isIndex.test(linkText)) {
+			el.textContent = linkText.replace(normalizeRgxp, '');
 
 		} else {
 			wrapper.parentNode.removeChild(wrapper);

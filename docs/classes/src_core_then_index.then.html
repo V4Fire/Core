@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>Then | V4Fire</title>
-	<meta name="description" content="">
+	<meta name="description" content="Documentation for V4Fire">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
 <style>/*!
@@ -15,7 +15,26 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+body {
+	font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+}
+
+code, pre, tt {
+	font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+}
+
+.tsd-typography h1,
+.tsd-typography h2,
+.tsd-typography h3,
+.tsd-typography h4,
+.tsd-typography h5,
+.tsd-typography h6 {
+	margin: 1em 0;
+	font-family: -apple-system, BlinkMacSystemFont, UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+}
+
 .tsd-panel {
+	padding: 20px 40px;
 	border: 1px solid #DDD;
 	border-radius: 10px;
 	box-shadow: none;
@@ -24,8 +43,8 @@
 .tsd-page-title {
 	color: #EEE;
 
-	background: #232526;  /* fallback for old browsers */
-	background: -webkit-linear-gradient(to right, #414345, #232526);  /* Chrome 10-25, Safari 5.1-6 */
+	background: #232526; /* fallback for old browsers */
+	background: -webkit-linear-gradient(to right, #414345, #232526); /* Chrome 10-25, Safari 5.1-6 */
 	background: linear-gradient(to right, #414345, #232526); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
@@ -58,6 +77,90 @@
 #tsd-search .field {
 	height: 100%;
 }
+
+pre {
+	background-color: rgba(7, 7, 7, 0.01);
+}
+
+/**
+ * GitHub Gist Theme
+ * Author : Anthony Attard - https://github.com/AnthonyAttard
+ * Author : Louis Barranqueiro - https://github.com/LouisBarranqueiro
+ */
+
+.hljs {
+	display: block;
+	background: white;
+	padding: 0.5em;
+	color: #333333;
+	overflow-x: auto;
+}
+
+.hljs-comment,
+.hljs-meta {
+	color: #969896;
+}
+
+.hljs-variable,
+.hljs-template-variable,
+.hljs-strong,
+.hljs-emphasis,
+.hljs-quote {
+	color: #df5000;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-type {
+	color: #d73a49;
+}
+
+.hljs-literal,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-attribute {
+	color: #0086b3;
+}
+
+.hljs-section,
+.hljs-name {
+	color: #63a35c;
+}
+
+.hljs-tag {
+	color: #333333;
+}
+
+.hljs-title,
+.hljs-attr,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-selector-attr,
+.hljs-selector-pseudo {
+	color: #6f42c1;
+}
+
+.hljs-addition {
+	color: #55a532;
+	background-color: #eaffea;
+}
+
+.hljs-deletion {
+	color: #bd2c00;
+	background-color: #ffecec;
+}
+
+.hljs-link {
+	text-decoration: underline;
+}
+
+.hljs-number {
+	color: #005cc5;
+}
+
+.hljs-string {
+	color: #032f62;
+}
 </style>
 </head>
 <body>
@@ -84,7 +187,7 @@
 	<div class="tsd-page-toolbar">
 		<div class="container">
 			<div class="table-wrap">
-				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.js" data-base="..">
+				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.json" data-base="..">
 					<div class="field">
 						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
 						<input id="tsd-search-field" type="text" />
@@ -109,10 +212,6 @@
 							</div>
 							<input type="checkbox" id="tsd-filter-inherited" checked />
 							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
-							<input type="checkbox" id="tsd-filter-externals" checked />
-							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
-							<input type="checkbox" id="tsd-filter-only-exported" />
-							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
 						</div>
 					</div>
 					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
@@ -172,7 +271,7 @@
 			<section class="tsd-panel">
 				<h3>Implements</h3>
 				<ul class="tsd-hierarchy">
-					<li><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
+					<li><a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
 				</ul>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
@@ -265,7 +364,7 @@
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="_symbol_tostringtag_" class="tsd-anchor"></a>
-					<h3>[<wbr>Symbol.to<wbr>String<wbr>Tag]</h3>
+					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> [<wbr>Symbol.to<wbr>String<wbr>Tag]</h3>
 					<div class="tsd-signature tsd-kind-icon">[<wbr>Symbol.to<wbr>String<wbr>Tag]<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"Promise"</span></div>
 					<aside class="tsd-sources">
 						<ul>
@@ -282,7 +381,7 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
 					<a name="aborted" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> aborted</h3>
-					<div class="tsd-signature tsd-kind-icon">aborted<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></div>
+					<div class="tsd-signature tsd-kind-icon">aborted<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = false</span></div>
 					<aside class="tsd-sources">
 						<ul>
 							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/then/index.ts#L267">src/core/then/index.ts:267</a></li>
@@ -342,7 +441,7 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
 					<a name="pendingchildren" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> pending<wbr>Children</h3>
-					<div class="tsd-signature tsd-kind-icon">pending<wbr>Children<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;0</span></div>
+					<div class="tsd-signature tsd-kind-icon">pending<wbr>Children<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = 0</span></div>
 					<aside class="tsd-sources">
 						<ul>
 							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/then/index.ts#L257">src/core/then/index.ts:257</a></li>
@@ -357,7 +456,7 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
 					<a name="promise" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> promise</h3>
-					<div class="tsd-signature tsd-kind-icon">promise<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<div class="tsd-signature tsd-kind-icon">promise<span class="tsd-signature-symbol">:</span> <a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
 							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/then/index.ts#L272">src/core/then/index.ts:272</a></li>
@@ -372,7 +471,7 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
 					<a name="state" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> state</h3>
-					<div class="tsd-signature tsd-kind-icon">state<span class="tsd-signature-symbol">:</span> <a href="../enums/src_core_then_interface.state.html" class="tsd-signature-type">State</a><span class="tsd-signature-symbol"> =&nbsp;State.pending</span></div>
+					<div class="tsd-signature tsd-kind-icon">state<span class="tsd-signature-symbol">:</span> <a href="../enums/src_core_then_interface.state.html" class="tsd-signature-type">State</a><span class="tsd-signature-symbol"> = State.pending</span></div>
 					<aside class="tsd-sources">
 						<ul>
 							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/then/index.ts#L262">src/core/then/index.ts:262</a></li>
@@ -386,8 +485,8 @@
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static">
 					<a name="never" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> never</h3>
-					<div class="tsd-signature tsd-kind-icon">never<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">never</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;new Promise(() &#x3D;&gt; undefined)</span></div>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> never</h3>
+					<div class="tsd-signature tsd-kind-icon">never<span class="tsd-signature-symbol">:</span> <a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">never</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = new Promise(() &#x3D;&gt; undefined)</span></div>
 					<aside class="tsd-sources">
 						<ul>
 							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/then/index.ts#L43">src/core/then/index.ts:43</a></li>
@@ -459,7 +558,7 @@
 					<a name="call" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> call</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-protected">
-						<li class="tsd-signature tsd-kind-icon">call&lt;A, V&gt;<span class="tsd-signature-symbol">(</span>fn<span class="tsd-signature-symbol">: </span><a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Function</span><span class="tsd-signature-symbol">&gt;</span>, args<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">[]</span>, onError<span class="tsd-signature-symbol">?: </span><a href="../interfaces/src_core_then_interface.constrrejecthandler.html" class="tsd-signature-type">ConstrRejectHandler</a>, onValue<span class="tsd-signature-symbol">?: </span><a href="../interfaces/index_d.anyoneargfunction.html" class="tsd-signature-type">AnyOneArgFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">call&lt;A, V&gt;<span class="tsd-signature-symbol">(</span>fn<span class="tsd-signature-symbol">: </span><a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.anyfunction.html#function" class="tsd-signature-type">Function</a><span class="tsd-signature-symbol">&gt;</span>, args<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">[]</span>, onError<span class="tsd-signature-symbol">?: </span><a href="../modules/src_core_then_index.html#constrrejecthandler" class="tsd-signature-type">ConstrRejectHandler</a>, onValue<span class="tsd-signature-symbol">?: </span><a href="../interfaces/index_d.anyoneargfunction.html" class="tsd-signature-type">AnyOneArgFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -485,16 +584,16 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>fn: <a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Function</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>fn: <a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.anyfunction.html#function" class="tsd-signature-type">Function</a><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> args: <span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[]</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> args: <span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = []</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>arguments for the function</p>
 									</div>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> onError: <a href="../interfaces/src_core_then_interface.constrrejecthandler.html" class="tsd-signature-type">ConstrRejectHandler</a></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> onError: <a href="../modules/src_core_then_index.html#constrrejecthandler" class="tsd-signature-type">ConstrRejectHandler</a></h5>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> onValue: <a href="../interfaces/index_d.anyoneargfunction.html" class="tsd-signature-type">AnyOneArgFunction</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">&gt;</span></h5>
@@ -508,8 +607,8 @@
 					<a name="catch" class="tsd-anchor"></a>
 					<h3>catch</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">catch<span class="tsd-signature-symbol">(</span>onReject<span class="tsd-signature-symbol">?: </span><a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_then_interface.html#rejecthandler" class="tsd-signature-type">RejectHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
-						<li class="tsd-signature tsd-kind-icon">catch&lt;R&gt;<span class="tsd-signature-symbol">(</span>onReject<span class="tsd-signature-symbol">: </span><a href="../modules/src_core_then_interface.html#rejecthandler" class="tsd-signature-type">RejectHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">catch<span class="tsd-signature-symbol">(</span>onReject<span class="tsd-signature-symbol">?: </span><a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_then_index.html#rejecthandler" class="tsd-signature-type">RejectHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">catch&lt;R&gt;<span class="tsd-signature-symbol">(</span>onReject<span class="tsd-signature-symbol">: </span><a href="../modules/src_core_then_index.html#rejecthandler" class="tsd-signature-type">RejectHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -526,7 +625,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> onReject: <a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_then_interface.html#rejecthandler" class="tsd-signature-type">RejectHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> onReject: <a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_then_index.html#rejecthandler" class="tsd-signature-type">RejectHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -546,7 +645,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>onReject: <a href="../modules/src_core_then_interface.html#rejecthandler" class="tsd-signature-type">RejectHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>onReject: <a href="../modules/src_core_then_index.html#rejecthandler" class="tsd-signature-type">RejectHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -557,7 +656,7 @@
 					<a name="finally" class="tsd-anchor"></a>
 					<h3>finally</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">finally<span class="tsd-signature-symbol">(</span>cb<span class="tsd-signature-symbol">?: </span><a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_then_interface.html#finallyhandler" class="tsd-signature-type">FinallyHandler</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">finally<span class="tsd-signature-symbol">(</span>cb<span class="tsd-signature-symbol">?: </span><a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_then_index.html#finallyhandler" class="tsd-signature-type">FinallyHandler</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -575,7 +674,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> cb: <a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_then_interface.html#finallyhandler" class="tsd-signature-type">FinallyHandler</a><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> cb: <a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_then_index.html#finallyhandler" class="tsd-signature-type">FinallyHandler</a><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -586,10 +685,10 @@
 					<a name="then" class="tsd-anchor"></a>
 					<h3>then</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">then<span class="tsd-signature-symbol">(</span>onFulfill<span class="tsd-signature-symbol">?: </span><a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_then_interface.html#resolvehandler" class="tsd-signature-type">ResolveHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span>, onReject<span class="tsd-signature-symbol">?: </span><a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_then_interface.html#rejecthandler" class="tsd-signature-type">RejectHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span>, onAbort<span class="tsd-signature-symbol">?: </span><a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/src_core_then_interface.constrrejecthandler.html" class="tsd-signature-type">ConstrRejectHandler</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
-						<li class="tsd-signature tsd-kind-icon">then&lt;R&gt;<span class="tsd-signature-symbol">(</span>onFulfill<span class="tsd-signature-symbol">: </span><a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_then_interface.html#resolvehandler" class="tsd-signature-type">ResolveHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span>, onReject<span class="tsd-signature-symbol">: </span><a href="../modules/src_core_then_interface.html#rejecthandler" class="tsd-signature-type">RejectHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span>, onAbort<span class="tsd-signature-symbol">?: </span><a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/src_core_then_interface.constrrejecthandler.html" class="tsd-signature-type">ConstrRejectHandler</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span></li>
-						<li class="tsd-signature tsd-kind-icon">then&lt;V&gt;<span class="tsd-signature-symbol">(</span>onFulfill<span class="tsd-signature-symbol">: </span><a href="../modules/src_core_then_interface.html#resolvehandler" class="tsd-signature-type">ResolveHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">&gt;</span>, onReject<span class="tsd-signature-symbol">?: </span><a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_then_interface.html#rejecthandler" class="tsd-signature-type">RejectHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span>, onAbort<span class="tsd-signature-symbol">?: </span><a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/src_core_then_interface.constrrejecthandler.html" class="tsd-signature-type">ConstrRejectHandler</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">&gt;</span></li>
-						<li class="tsd-signature tsd-kind-icon">then&lt;V, R&gt;<span class="tsd-signature-symbol">(</span>onFulfill<span class="tsd-signature-symbol">: </span><a href="../modules/src_core_then_interface.html#resolvehandler" class="tsd-signature-type">ResolveHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">&gt;</span>, onReject<span class="tsd-signature-symbol">: </span><a href="../modules/src_core_then_interface.html#rejecthandler" class="tsd-signature-type">RejectHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span>, onAbort<span class="tsd-signature-symbol">?: </span><a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/src_core_then_interface.constrrejecthandler.html" class="tsd-signature-type">ConstrRejectHandler</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">then<span class="tsd-signature-symbol">(</span>onFulfill<span class="tsd-signature-symbol">?: </span><a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_then_index.html#resolvehandler" class="tsd-signature-type">ResolveHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span>, onReject<span class="tsd-signature-symbol">?: </span><a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_then_index.html#rejecthandler" class="tsd-signature-type">RejectHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span>, onAbort<span class="tsd-signature-symbol">?: </span><a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/src_core_then_interface.constrrejecthandler.html" class="tsd-signature-type">ConstrRejectHandler</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">then&lt;R&gt;<span class="tsd-signature-symbol">(</span>onFulfill<span class="tsd-signature-symbol">: </span><a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_then_index.html#resolvehandler" class="tsd-signature-type">ResolveHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span>, onReject<span class="tsd-signature-symbol">: </span><a href="../modules/src_core_then_index.html#rejecthandler" class="tsd-signature-type">RejectHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span>, onAbort<span class="tsd-signature-symbol">?: </span><a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/src_core_then_interface.constrrejecthandler.html" class="tsd-signature-type">ConstrRejectHandler</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">then&lt;V&gt;<span class="tsd-signature-symbol">(</span>onFulfill<span class="tsd-signature-symbol">: </span><a href="../modules/src_core_then_index.html#resolvehandler" class="tsd-signature-type">ResolveHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">&gt;</span>, onReject<span class="tsd-signature-symbol">?: </span><a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_then_index.html#rejecthandler" class="tsd-signature-type">RejectHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span>, onAbort<span class="tsd-signature-symbol">?: </span><a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/src_core_then_interface.constrrejecthandler.html" class="tsd-signature-type">ConstrRejectHandler</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">then&lt;V, R&gt;<span class="tsd-signature-symbol">(</span>onFulfill<span class="tsd-signature-symbol">: </span><a href="../modules/src_core_then_index.html#resolvehandler" class="tsd-signature-type">ResolveHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">&gt;</span>, onReject<span class="tsd-signature-symbol">: </span><a href="../modules/src_core_then_index.html#rejecthandler" class="tsd-signature-type">RejectHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span>, onAbort<span class="tsd-signature-symbol">?: </span><a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/src_core_then_interface.constrrejecthandler.html" class="tsd-signature-type">ConstrRejectHandler</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -606,10 +705,10 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> onFulfill: <a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_then_interface.html#resolvehandler" class="tsd-signature-type">ResolveHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> onFulfill: <a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_then_index.html#resolvehandler" class="tsd-signature-type">ResolveHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> onReject: <a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_then_interface.html#rejecthandler" class="tsd-signature-type">RejectHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> onReject: <a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_then_index.html#rejecthandler" class="tsd-signature-type">RejectHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> onAbort: <a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/src_core_then_interface.constrrejecthandler.html" class="tsd-signature-type">ConstrRejectHandler</a><span class="tsd-signature-symbol">&gt;</span></h5>
@@ -632,10 +731,10 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>onFulfill: <a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_then_interface.html#resolvehandler" class="tsd-signature-type">ResolveHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>onFulfill: <a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_then_index.html#resolvehandler" class="tsd-signature-type">ResolveHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 								<li>
-									<h5>onReject: <a href="../modules/src_core_then_interface.html#rejecthandler" class="tsd-signature-type">RejectHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>onReject: <a href="../modules/src_core_then_index.html#rejecthandler" class="tsd-signature-type">RejectHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> onAbort: <a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/src_core_then_interface.constrrejecthandler.html" class="tsd-signature-type">ConstrRejectHandler</a><span class="tsd-signature-symbol">&gt;</span></h5>
@@ -658,10 +757,10 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>onFulfill: <a href="../modules/src_core_then_interface.html#resolvehandler" class="tsd-signature-type">ResolveHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>onFulfill: <a href="../modules/src_core_then_index.html#resolvehandler" class="tsd-signature-type">ResolveHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> onReject: <a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_then_interface.html#rejecthandler" class="tsd-signature-type">RejectHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> onReject: <a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_then_index.html#rejecthandler" class="tsd-signature-type">RejectHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> onAbort: <a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/src_core_then_interface.constrrejecthandler.html" class="tsd-signature-type">ConstrRejectHandler</a><span class="tsd-signature-symbol">&gt;</span></h5>
@@ -687,10 +786,10 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>onFulfill: <a href="../modules/src_core_then_interface.html#resolvehandler" class="tsd-signature-type">ResolveHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>onFulfill: <a href="../modules/src_core_then_index.html#resolvehandler" class="tsd-signature-type">ResolveHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 								<li>
-									<h5>onReject: <a href="../modules/src_core_then_interface.html#rejecthandler" class="tsd-signature-type">RejectHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>onReject: <a href="../modules/src_core_then_index.html#rejecthandler" class="tsd-signature-type">RejectHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> onAbort: <a href="../modules/index_d.html#nullable" class="tsd-signature-type">Nullable</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/src_core_then_interface.constrrejecthandler.html" class="tsd-signature-type">ConstrRejectHandler</a><span class="tsd-signature-symbol">&gt;</span></h5>
@@ -704,12 +803,12 @@
 					<a name="all" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> all</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">all&lt;T1, T2, T3, T4, T5&gt;<span class="tsd-signature-symbol">(</span>values<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">[</span><a href="../modules/src_core_then_interface.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/src_core_then_interface.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/src_core_then_interface.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T3</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/src_core_then_interface.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T4</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/src_core_then_interface.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T5</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">]</span>, parent<span class="tsd-signature-symbol">?: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T3</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T4</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T5</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></li>
-						<li class="tsd-signature tsd-kind-icon">all&lt;T1, T2, T3, T4&gt;<span class="tsd-signature-symbol">(</span>values<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">[</span><a href="../modules/src_core_then_interface.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/src_core_then_interface.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/src_core_then_interface.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T3</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/src_core_then_interface.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T4</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">]</span>, parent<span class="tsd-signature-symbol">?: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T3</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T4</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></li>
-						<li class="tsd-signature tsd-kind-icon">all&lt;T1, T2, T3&gt;<span class="tsd-signature-symbol">(</span>values<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">[</span><a href="../modules/src_core_then_interface.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/src_core_then_interface.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/src_core_then_interface.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T3</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">]</span>, parent<span class="tsd-signature-symbol">?: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T3</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></li>
-						<li class="tsd-signature tsd-kind-icon">all&lt;T1, T2&gt;<span class="tsd-signature-symbol">(</span>values<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">[</span><a href="../modules/src_core_then_interface.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/src_core_then_interface.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">]</span>, parent<span class="tsd-signature-symbol">?: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></li>
-						<li class="tsd-signature tsd-kind-icon">all&lt;T1&gt;<span class="tsd-signature-symbol">(</span>values<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">[</span><a href="../modules/src_core_then_interface.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">]</span>, parent<span class="tsd-signature-symbol">?: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></li>
-						<li class="tsd-signature tsd-kind-icon">all&lt;T&gt;<span class="tsd-signature-symbol">(</span>values<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, parent<span class="tsd-signature-symbol">?: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T extends Iterable&lt;Value&lt;infer V&gt;&gt; ? V : unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">all&lt;T1, T2, T3, T4, T5&gt;<span class="tsd-signature-symbol">(</span>values<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">[</span><a href="../modules/src_core_then_index.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/src_core_then_index.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/src_core_then_index.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T3</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/src_core_then_index.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T4</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/src_core_then_index.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T5</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">]</span>, parent<span class="tsd-signature-symbol">?: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T3</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T4</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T5</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">all&lt;T1, T2, T3, T4&gt;<span class="tsd-signature-symbol">(</span>values<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">[</span><a href="../modules/src_core_then_index.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/src_core_then_index.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/src_core_then_index.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T3</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/src_core_then_index.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T4</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">]</span>, parent<span class="tsd-signature-symbol">?: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T3</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T4</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">all&lt;T1, T2, T3&gt;<span class="tsd-signature-symbol">(</span>values<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">[</span><a href="../modules/src_core_then_index.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/src_core_then_index.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/src_core_then_index.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T3</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">]</span>, parent<span class="tsd-signature-symbol">?: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T3</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">all&lt;T1, T2&gt;<span class="tsd-signature-symbol">(</span>values<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">[</span><a href="../modules/src_core_then_index.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/src_core_then_index.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">]</span>, parent<span class="tsd-signature-symbol">?: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">all&lt;T1&gt;<span class="tsd-signature-symbol">(</span>values<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">[</span><a href="../modules/src_core_then_index.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">]</span>, parent<span class="tsd-signature-symbol">?: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">all&lt;T&gt;<span class="tsd-signature-symbol">(</span>values<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, parent<span class="tsd-signature-symbol">?: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.array.html" class="tsd-signature-type">Array</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">Iterable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Value</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">infer </span> V<span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -745,7 +844,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>values: <span class="tsd-signature-symbol">[</span><a href="../modules/src_core_then_interface.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/src_core_then_interface.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/src_core_then_interface.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T3</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/src_core_then_interface.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T4</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/src_core_then_interface.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T5</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">]</span></h5>
+									<h5>values: <span class="tsd-signature-symbol">[</span><a href="../modules/src_core_then_index.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/src_core_then_index.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/src_core_then_index.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T3</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/src_core_then_index.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T4</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/src_core_then_index.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T5</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">]</span></h5>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> parent: <a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a></h5>
@@ -777,7 +876,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>values: <span class="tsd-signature-symbol">[</span><a href="../modules/src_core_then_interface.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/src_core_then_interface.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/src_core_then_interface.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T3</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/src_core_then_interface.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T4</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">]</span></h5>
+									<h5>values: <span class="tsd-signature-symbol">[</span><a href="../modules/src_core_then_index.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/src_core_then_index.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/src_core_then_index.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T3</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/src_core_then_index.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T4</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">]</span></h5>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> parent: <a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a></h5>
@@ -806,7 +905,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>values: <span class="tsd-signature-symbol">[</span><a href="../modules/src_core_then_interface.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/src_core_then_interface.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/src_core_then_interface.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T3</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">]</span></h5>
+									<h5>values: <span class="tsd-signature-symbol">[</span><a href="../modules/src_core_then_index.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/src_core_then_index.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/src_core_then_index.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T3</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">]</span></h5>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> parent: <a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a></h5>
@@ -832,7 +931,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>values: <span class="tsd-signature-symbol">[</span><a href="../modules/src_core_then_interface.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/src_core_then_interface.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">]</span></h5>
+									<h5>values: <span class="tsd-signature-symbol">[</span><a href="../modules/src_core_then_index.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">, </span><a href="../modules/src_core_then_index.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">]</span></h5>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> parent: <a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a></h5>
@@ -855,7 +954,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>values: <span class="tsd-signature-symbol">[</span><a href="../modules/src_core_then_interface.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">]</span></h5>
+									<h5>values: <span class="tsd-signature-symbol">[</span><a href="../modules/src_core_then_index.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T1</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">]</span></h5>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> parent: <a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a></h5>
@@ -872,7 +971,7 @@
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
-									<h4>T<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Iterable</span><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_then_interface.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&gt;</span></h4>
+									<h4>T<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Iterable</span><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_then_index.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&gt;</span></h4>
 								</li>
 							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -884,7 +983,7 @@
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> parent: <a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T extends Iterable&lt;Value&lt;infer V&gt;&gt; ? V : unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.array.html" class="tsd-signature-type">Array</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">Iterable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Value</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">infer </span> V<span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -892,7 +991,7 @@
 					<a name="immediate" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> immediate</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">immediate&lt;T&gt;<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><a href="../modules/src_core_then_interface.html#executablevalue" class="tsd-signature-type">ExecutableValue</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>, parent<span class="tsd-signature-symbol">?: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">immediate&lt;T&gt;<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><a href="../modules/src_core_then_index.html#executablevalue" class="tsd-signature-type">ExecutableValue</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>, parent<span class="tsd-signature-symbol">?: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -919,7 +1018,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>value: <a href="../modules/src_core_then_interface.html#executablevalue" class="tsd-signature-type">ExecutableValue</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>value: <a href="../modules/src_core_then_index.html#executablevalue" class="tsd-signature-type">ExecutableValue</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> parent: <a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a></h5>
@@ -970,7 +1069,7 @@
 					<a name="race" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> race</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">race&lt;T&gt;<span class="tsd-signature-symbol">(</span>values<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, parent<span class="tsd-signature-symbol">?: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T extends Iterable&lt;Value&lt;infer V&gt;&gt; ? V : unknown</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">race&lt;T&gt;<span class="tsd-signature-symbol">(</span>values<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, parent<span class="tsd-signature-symbol">?: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">Iterable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Value</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">infer </span> V<span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -987,7 +1086,7 @@
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
-									<h4>T<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Iterable</span><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_then_interface.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&gt;</span></h4>
+									<h4>T<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Iterable</span><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_then_index.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&gt;</span></h4>
 								</li>
 							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -999,7 +1098,7 @@
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> parent: <a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T extends Iterable&lt;Value&lt;infer V&gt;&gt; ? V : unknown</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-type">Iterable</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Value</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">infer </span> V<span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -1044,7 +1143,7 @@
 					<a name="resolve" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> resolve</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">resolve&lt;T&gt;<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><a href="../modules/src_core_then_interface.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>, parent<span class="tsd-signature-symbol">?: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">resolve&lt;T&gt;<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><a href="../modules/src_core_then_index.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>, parent<span class="tsd-signature-symbol">?: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
 						<li class="tsd-signature tsd-kind-icon">resolve<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
@@ -1068,7 +1167,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>value: <a href="../modules/src_core_then_interface.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>value: <a href="../modules/src_core_then_index.html#value" class="tsd-signature-type">Value</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> parent: <a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a></h5>
@@ -1095,7 +1194,7 @@
 					<a name="resolveandcall" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> resolve<wbr>And<wbr>Call</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">resolve<wbr>And<wbr>Call&lt;T&gt;<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><a href="../modules/src_core_then_interface.html#executablevalue" class="tsd-signature-type">ExecutableValue</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>, parent<span class="tsd-signature-symbol">?: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">resolve<wbr>And<wbr>Call&lt;T&gt;<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><a href="../modules/src_core_then_index.html#executablevalue" class="tsd-signature-type">ExecutableValue</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>, parent<span class="tsd-signature-symbol">?: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
 						<li class="tsd-signature tsd-kind-icon">resolve<wbr>And<wbr>Call<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
@@ -1121,7 +1220,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>value: <a href="../modules/src_core_then_interface.html#executablevalue" class="tsd-signature-type">ExecutableValue</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>value: <a href="../modules/src_core_then_index.html#executablevalue" class="tsd-signature-type">ExecutableValue</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> parent: <a href="src_core_then_index.then.html" class="tsd-signature-type">Then</a></h5>
@@ -1152,16 +1251,46 @@
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
-					<li class="current tsd-kind-external-module">
+					<li class="current tsd-kind-module">
 						<a href="../modules/src_core_then_index.html">&quot;src/core/then/index&quot;</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="../modules/src_core_then_index.html#constraborthandler" class="tsd-kind-icon">Constr<wbr>Abort<wbr>Handler</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="../modules/src_core_then_index.html#constrrejecthandler" class="tsd-kind-icon">Constr<wbr>Reject<wbr>Handler</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="../modules/src_core_then_index.html#constrresolvehandler" class="tsd-kind-icon">Constr<wbr>Resolve<wbr>Handler</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="../modules/src_core_then_index.html#executablevalue" class="tsd-kind-icon">Executable<wbr>Value</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="../modules/src_core_then_index.html#executor" class="tsd-kind-icon">Executor</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="../modules/src_core_then_index.html#finallyhandler" class="tsd-kind-icon">Finally<wbr>Handler</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="../modules/src_core_then_index.html#rejecthandler" class="tsd-kind-icon">Reject<wbr>Handler</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="../modules/src_core_then_index.html#resolvehandler" class="tsd-kind-icon">Resolve<wbr>Handler</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="../modules/src_core_then_index.html#state" class="tsd-kind-icon">State</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="../modules/src_core_then_index.html#value" class="tsd-kind-icon">Value</a>
+					</li>
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-class tsd-parent-kind-external-module tsd-has-type-parameter">
+					<li class="current tsd-kind-class tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="src_core_then_index.then.html" class="tsd-kind-icon">Then</a>
 						<ul>
 							<li class=" tsd-kind-constructor tsd-parent-kind-class">
@@ -1247,28 +1376,13 @@
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
-				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
+				<li class="tsd-kind-namespace"><span class="tsd-kind-icon">Namespace</span></li>
 				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
 				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
 				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
 				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
-				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
 				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
 				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
-				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
-				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
-				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
-				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
@@ -1276,35 +1390,26 @@
 				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
 				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
 				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
-				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
 			</ul>
 		</div>
 	</div>
 </footer>
 <div class="overlay"></div>
 <script src="../assets/js/main.js"></script>
-<script>if (location.protocol == 'file:') document.write('<script src="../assets/js/search.js"><' + '/script>');</script>
 <script>'use strict';
 
 /*!
@@ -1319,13 +1424,13 @@
 	document.body.style.display = 'block';
 
 	var
-		isDTS = /([^/.]+)\.d/,
-		isIndex = /\/index|\.d/,
-		isNode = /(?:^|\b)node_modules(?:\b|$)/;
+		isDTS = /\.d$/,
+		isIndex = /^(?:(?!(?:^|\/)(?:interface|modules|prelude|engines)\/).)*?(?:^|\/)index$/,
+		isNode = /(?:^|\/)node_modules(?:\/|$)/;
 
 	var
 		trimRgxp = /^\s+|[\n\v"']+|\s+$/g,
-		normalizeRgxp = /(?:^|\b)src\//;
+		normalizeRgxp = /(?:^|\b)src\/|\/index$/g;
 
 	var
 		breadcrumbs = Array.from(document.querySelectorAll('.tsd-breadcrumb a')),
@@ -1340,32 +1445,30 @@
 	});
 
 	var
-		navigation = Array.from(document.querySelectorAll('.tsd-navigation.primary .tsd-kind-external-module a')),
-		globalIndex = Array.from(document.querySelectorAll('.tsd-index-list a'));
+		navigation = Array.from(document.querySelectorAll('.tsd-navigation.primary .tsd-kind-module a')),
+		globalIndex = Array.from(document.querySelectorAll('.tsd-kind-module a'));
 
-	[].concat(navigation, breadcrumbs.length <= 1 ? globalIndex : []).forEach(function (el) {
+	[].concat(breadcrumbs.length <= 1 ? globalIndex : navigation).forEach(function (el) {
 		var
 			wrapper = el.parentNode,
 			linkText = el.textContent.replace(trimRgxp, '');
 
-		if (isIndex.test(linkText)) {
-			if (isDTS.test(linkText)) {
-				var
-					nm = RegExp.$1;
+		if (isDTS.test(linkText)) {
+			var
+				nm = RegExp.$1;
 
-				if (linkText === 'index.d') {
-					el.innerHTML = '<b>prelude</b>';
+			if (linkText === 'index.d') {
+				el.innerHTML = '<b>prelude</b>';
 
-				} else if (isNode.test(linkText)) {
-					el.textContent = nm;
-
-				} else {
-					wrapper.parentNode.removeChild(wrapper);
-				}
+			} else if (isNode.test(linkText)) {
+				el.textContent = nm;
 
 			} else {
-				el.textContent = linkText.replace(isIndex, '').replace(normalizeRgxp, '');
+				wrapper.parentNode.removeChild(wrapper);
 			}
+
+		} else if (isIndex.test(linkText)) {
+			el.textContent = linkText.replace(normalizeRgxp, '');
 
 		} else {
 			wrapper.parentNode.removeChild(wrapper);

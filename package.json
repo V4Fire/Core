@@ -78,7 +78,7 @@
     "sugar": "^2.0.6",
     "through2": "^4.0.2",
     "tsconfig": "^7.0.0",
-    "typedoc": "^0.15.8",
+    "typedoc": "^0.17.8",
     "typescript": "3.9.3",
     "uniconf": "^2.1.1",
     "upath": "^1.2.0",
@@ -95,6 +95,6 @@
     "husky": "^4.2.5",
     "nyc": "^15.1.0",
     "prettier": "^2.0.5",
-    "tslint": "^5.20.1"
+    "tslint": "^6.1.2"
   }
 }

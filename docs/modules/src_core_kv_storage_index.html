@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>&quot;src/core/kv-storage/index&quot; | V4Fire</title>
-	<meta name="description" content="">
+	<meta name="description" content="Documentation for V4Fire">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
 <style>/*!
@@ -15,7 +15,26 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+body {
+	font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+}
+
+code, pre, tt {
+	font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+}
+
+.tsd-typography h1,
+.tsd-typography h2,
+.tsd-typography h3,
+.tsd-typography h4,
+.tsd-typography h5,
+.tsd-typography h6 {
+	margin: 1em 0;
+	font-family: -apple-system, BlinkMacSystemFont, UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+}
+
 .tsd-panel {
+	padding: 20px 40px;
 	border: 1px solid #DDD;
 	border-radius: 10px;
 	box-shadow: none;
@@ -24,8 +43,8 @@
 .tsd-page-title {
 	color: #EEE;
 
-	background: #232526;  /* fallback for old browsers */
-	background: -webkit-linear-gradient(to right, #414345, #232526);  /* Chrome 10-25, Safari 5.1-6 */
+	background: #232526; /* fallback for old browsers */
+	background: -webkit-linear-gradient(to right, #414345, #232526); /* Chrome 10-25, Safari 5.1-6 */
 	background: linear-gradient(to right, #414345, #232526); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
@@ -58,6 +77,90 @@
 #tsd-search .field {
 	height: 100%;
 }
+
+pre {
+	background-color: rgba(7, 7, 7, 0.01);
+}
+
+/**
+ * GitHub Gist Theme
+ * Author : Anthony Attard - https://github.com/AnthonyAttard
+ * Author : Louis Barranqueiro - https://github.com/LouisBarranqueiro
+ */
+
+.hljs {
+	display: block;
+	background: white;
+	padding: 0.5em;
+	color: #333333;
+	overflow-x: auto;
+}
+
+.hljs-comment,
+.hljs-meta {
+	color: #969896;
+}
+
+.hljs-variable,
+.hljs-template-variable,
+.hljs-strong,
+.hljs-emphasis,
+.hljs-quote {
+	color: #df5000;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-type {
+	color: #d73a49;
+}
+
+.hljs-literal,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-attribute {
+	color: #0086b3;
+}
+
+.hljs-section,
+.hljs-name {
+	color: #63a35c;
+}
+
+.hljs-tag {
+	color: #333333;
+}
+
+.hljs-title,
+.hljs-attr,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-selector-attr,
+.hljs-selector-pseudo {
+	color: #6f42c1;
+}
+
+.hljs-addition {
+	color: #55a532;
+	background-color: #eaffea;
+}
+
+.hljs-deletion {
+	color: #bd2c00;
+	background-color: #ffecec;
+}
+
+.hljs-link {
+	text-decoration: underline;
+}
+
+.hljs-number {
+	color: #005cc5;
+}
+
+.hljs-string {
+	color: #032f62;
+}
 </style>
 </head>
 <body>
@@ -84,7 +187,7 @@
 	<div class="tsd-page-toolbar">
 		<div class="container">
 			<div class="table-wrap">
-				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.js" data-base="..">
+				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.json" data-base="..">
 					<div class="field">
 						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
 						<input id="tsd-search-field" type="text" />
@@ -109,10 +212,6 @@
 							</div>
 							<input type="checkbox" id="tsd-filter-inherited" checked />
 							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
-							<input type="checkbox" id="tsd-filter-externals" checked />
-							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
-							<input type="checkbox" id="tsd-filter-only-exported" />
-							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
 						</div>
 					</div>
 					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
@@ -130,7 +229,7 @@
 					<a href="src_core_kv_storage_index.html">&quot;src/core/kv-storage/index&quot;</a>
 				</li>
 			</ul>
-			<h1>External module &quot;src/core/kv-storage/index&quot;</h1>
+			<h1>Module &quot;src/core/kv-storage/index&quot;</h1>
 		</div>
 	</div>
 </header>
@@ -148,16 +247,16 @@
 							<h2>Simple synchronous API</h2>
 						</a>
 						<p>The module provides a bunch of functions to work with long-term local storage.</p>
-						<pre><code class="language-js"><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> kv <span class="hljs-keyword">from</span> <span class="hljs-string">'core/kv-storage'</span>;
+						<pre><code class="language-js"><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> kv <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;core/kv-storage&#x27;</span>;
 
-kv.set(<span class="hljs-string">'bla'</span>, <span class="hljs-number">1</span>);
-<span class="hljs-built_in">console</span>.log(kv.get(<span class="hljs-string">'bla'</span>) === <span class="hljs-number">1</span>);
-<span class="hljs-built_in">console</span>.log(kv.has(<span class="hljs-string">'bla'</span>) === <span class="hljs-literal">true</span>);
+kv.set(<span class="hljs-string">&#x27;bla&#x27;</span>, <span class="hljs-number">1</span>);
+<span class="hljs-built_in">console</span>.log(kv.get(<span class="hljs-string">&#x27;bla&#x27;</span>) === <span class="hljs-number">1</span>);
+<span class="hljs-built_in">console</span>.log(kv.has(<span class="hljs-string">&#x27;bla&#x27;</span>) === <span class="hljs-literal">true</span>);
 
-kv.set(<span class="hljs-string">'obj'</span>, {<span class="hljs-attr">a</span>: <span class="hljs-number">1</span>});
-<span class="hljs-built_in">console</span>.log(kv.get(<span class="hljs-string">'obj'</span>).a === <span class="hljs-number">1</span>);
+kv.set(<span class="hljs-string">&#x27;obj&#x27;</span>, {<span class="hljs-attr">a</span>: <span class="hljs-number">1</span>});
+<span class="hljs-built_in">console</span>.log(kv.get(<span class="hljs-string">&#x27;obj&#x27;</span>).a === <span class="hljs-number">1</span>);
 
-kv.remove(<span class="hljs-string">'bla'</span>);
+kv.remove(<span class="hljs-string">&#x27;bla&#x27;</span>);
 kv.clear(<span class="hljs-function">(<span class="hljs-params">el, key</span>) =&gt;</span> el.a === <span class="hljs-number">1</span>);</code></pre>
 						<a href="#custom-namespaces" id="custom-namespaces" style="color: inherit; text-decoration: none;">
 							<h3>Custom namespaces</h3>
@@ -165,36 +264,36 @@ kv.clear(<span class="hljs-function">(<span class="hljs-params">el, key</span>) 
 						<p>All values are stored within local storage are placed in a global namespace, i.e., you can override any value you have.
 							If you want to isolate data from other data, you can specify a custom namespace. Mind, that you still can override or remove these
 						values from storage by using global API.</p>
-						<pre><code class="language-js"><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> kv <span class="hljs-keyword">from</span> <span class="hljs-string">'core/kv-storage'</span>;
+						<pre><code class="language-js"><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> kv <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;core/kv-storage&#x27;</span>;
 
-kv.set(<span class="hljs-string">'bla'</span>, <span class="hljs-number">1</span>);
+kv.set(<span class="hljs-string">&#x27;bla&#x27;</span>, <span class="hljs-number">1</span>);
 
-<span class="hljs-keyword">const</span> blaStore = kv.namespace(<span class="hljs-string">'[[BLA]]'</span>);
+<span class="hljs-keyword">const</span> blaStore = kv.namespace(<span class="hljs-string">&#x27;[[BLA]]&#x27;</span>);
 
-blaStore.set(<span class="hljs-string">'baz'</span>, <span class="hljs-literal">true</span>);
+blaStore.set(<span class="hljs-string">&#x27;baz&#x27;</span>, <span class="hljs-literal">true</span>);
 blaStore.clear();
 
-<span class="hljs-built_in">console</span>.log(kv.has(<span class="hljs-string">'bla'</span>) === <span class="hljs-literal">true</span>);
+<span class="hljs-built_in">console</span>.log(kv.has(<span class="hljs-string">&#x27;bla&#x27;</span>) === <span class="hljs-literal">true</span>);
 
-blaStore.set(<span class="hljs-string">'foo'</span>, <span class="hljs-number">1</span>);
+blaStore.set(<span class="hljs-string">&#x27;foo&#x27;</span>, <span class="hljs-number">1</span>);
 
 kv.clear();
-<span class="hljs-built_in">console</span>.log(blaStore.has(<span class="hljs-string">'foo'</span>) === <span class="hljs-literal">false</span>);</code></pre>
+<span class="hljs-built_in">console</span>.log(blaStore.has(<span class="hljs-string">&#x27;foo&#x27;</span>) === <span class="hljs-literal">false</span>);</code></pre>
 						<a href="#local-api-engine" id="local-api-engine" style="color: inherit; text-decoration: none;">
 							<h3>Local API engine</h3>
 						</a>
 						<p>You can pass your storage API as a strategy to another function or method.</p>
-						<pre><code class="language-typescript"><span class="hljs-keyword">import</span> { local, SyncStorage } <span class="hljs-keyword">from</span> <span class="hljs-string">'core/kv-storage'</span>;
+						<pre><code class="language-typescript"><span class="hljs-keyword">import</span> { local, SyncStorage } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;core/kv-storage&#x27;</span>;
 
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">foo</span>(<span class="hljs-params">kv: SyncStorage</span>): <span class="hljs-title">void</span> </span>{
-  kv.set(<span class="hljs-string">'bla'</span>, <span class="hljs-number">1</span>);
-  <span class="hljs-built_in">console</span>.log(kv.get(<span class="hljs-string">'bla'</span>) === <span class="hljs-number">1</span>);
-  <span class="hljs-built_in">console</span>.log(kv.has(<span class="hljs-string">'bla'</span>) === <span class="hljs-literal">true</span>);
+  kv.set(<span class="hljs-string">&#x27;bla&#x27;</span>, <span class="hljs-number">1</span>);
+  <span class="hljs-built_in">console</span>.log(kv.get(<span class="hljs-string">&#x27;bla&#x27;</span>) === <span class="hljs-number">1</span>);
+  <span class="hljs-built_in">console</span>.log(kv.has(<span class="hljs-string">&#x27;bla&#x27;</span>) === <span class="hljs-literal">true</span>);
 
-  kv.set(<span class="hljs-string">'obj'</span>, {a: <span class="hljs-number">1</span>});
-  <span class="hljs-built_in">console</span>.log(kv.get(<span class="hljs-string">'obj'</span>).a === <span class="hljs-number">1</span>);
+  kv.set(<span class="hljs-string">&#x27;obj&#x27;</span>, {a: <span class="hljs-number">1</span>});
+  <span class="hljs-built_in">console</span>.log(kv.get(<span class="hljs-string">&#x27;obj&#x27;</span>).a === <span class="hljs-number">1</span>);
 
-  kv.remove(<span class="hljs-string">'bla'</span>);
+  kv.remove(<span class="hljs-string">&#x27;bla&#x27;</span>);
   kv.clear(<span class="hljs-function">(<span class="hljs-params">el, key</span>) =&gt;</span> el.a === <span class="hljs-number">1</span>);
 }
 
@@ -204,50 +303,50 @@ foo(local);</code></pre>
 						</a>
 						<p>If you need to work with asynchronous local storage, you can use <code>asyncLocal</code> API is pretty similar to local, but its
 						methods return a promise instead of a raw result.</p>
-						<pre><code class="language-js"><span class="hljs-keyword">import</span> { asyncLocal } <span class="hljs-keyword">from</span> <span class="hljs-string">'core/kv-storage'</span>;
+						<pre><code class="language-js"><span class="hljs-keyword">import</span> { asyncLocal } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;core/kv-storage&#x27;</span>;
 
-asyncLocal.set(<span class="hljs-string">'bla'</span>, <span class="hljs-number">1</span>).then(<span class="hljs-keyword">async</span> () =&gt; {
-  <span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">await</span> asyncLocal.get(<span class="hljs-string">'bla'</span>) === <span class="hljs-number">1</span>);
+asyncLocal.set(<span class="hljs-string">&#x27;bla&#x27;</span>, <span class="hljs-number">1</span>).then(<span class="hljs-keyword">async</span> () =&gt; {
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">await</span> asyncLocal.get(<span class="hljs-string">&#x27;bla&#x27;</span>) === <span class="hljs-number">1</span>);
 });
 
-<span class="hljs-keyword">const</span> blaStore = asyncLocal.namespace(<span class="hljs-string">'[[BLA]]'</span>);
+<span class="hljs-keyword">const</span> blaStore = asyncLocal.namespace(<span class="hljs-string">&#x27;[[BLA]]&#x27;</span>);
 
-blaStore.set(<span class="hljs-string">'bla'</span>, <span class="hljs-number">1</span>).then(<span class="hljs-keyword">async</span> () =&gt; {
-  <span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">await</span> blaStore.get(<span class="hljs-string">'bla'</span>) === <span class="hljs-number">1</span>);
+blaStore.set(<span class="hljs-string">&#x27;bla&#x27;</span>, <span class="hljs-number">1</span>).then(<span class="hljs-keyword">async</span> () =&gt; {
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">await</span> blaStore.get(<span class="hljs-string">&#x27;bla&#x27;</span>) === <span class="hljs-number">1</span>);
 });</code></pre>
 						<a href="#session-api" id="session-api" style="color: inherit; text-decoration: none;">
 							<h2>Session API</h2>
 						</a>
 						<p>If you need to store data only for a session, you can use <code>session</code> and <code>asyncSession</code> API-s.</p>
-						<pre><code class="language-js"><span class="hljs-keyword">import</span> { session, asyncSession } <span class="hljs-keyword">from</span> <span class="hljs-string">'core/kv-storage'</span>;
+						<pre><code class="language-js"><span class="hljs-keyword">import</span> { session, asyncSession } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;core/kv-storage&#x27;</span>;
 
-session.set(<span class="hljs-string">'bla'</span>, <span class="hljs-number">1</span>);
-<span class="hljs-built_in">console</span>.log(session.get(<span class="hljs-string">'bla'</span>) === <span class="hljs-number">1</span>);
+session.set(<span class="hljs-string">&#x27;bla&#x27;</span>, <span class="hljs-number">1</span>);
+<span class="hljs-built_in">console</span>.log(session.get(<span class="hljs-string">&#x27;bla&#x27;</span>) === <span class="hljs-number">1</span>);
 session.clear();
 
-asyncSession.set(<span class="hljs-string">'bla'</span>, <span class="hljs-number">1</span>).then(<span class="hljs-keyword">async</span> () =&gt; {
-  <span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">await</span> asyncSession.get(<span class="hljs-string">'bla'</span>) === <span class="hljs-number">1</span>);
+asyncSession.set(<span class="hljs-string">&#x27;bla&#x27;</span>, <span class="hljs-number">1</span>).then(<span class="hljs-keyword">async</span> () =&gt; {
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">await</span> asyncSession.get(<span class="hljs-string">&#x27;bla&#x27;</span>) === <span class="hljs-number">1</span>);
 });
 
-<span class="hljs-keyword">const</span> blaStore = asyncSession.namespace(<span class="hljs-string">'[[BLA]]'</span>);
+<span class="hljs-keyword">const</span> blaStore = asyncSession.namespace(<span class="hljs-string">&#x27;[[BLA]]&#x27;</span>);
 
-blaStore.set(<span class="hljs-string">'bla'</span>, <span class="hljs-number">1</span>).then(<span class="hljs-keyword">async</span> () =&gt; {
-  <span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">await</span> blaStore.get(<span class="hljs-string">'bla'</span>) === <span class="hljs-number">1</span>);
+blaStore.set(<span class="hljs-string">&#x27;bla&#x27;</span>, <span class="hljs-number">1</span>).then(<span class="hljs-keyword">async</span> () =&gt; {
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">await</span> blaStore.get(<span class="hljs-string">&#x27;bla&#x27;</span>) === <span class="hljs-number">1</span>);
 });</code></pre>
 						<a href="#specifying-a-custom-engine" id="specifying-a-custom-engine" style="color: inherit; text-decoration: none;">
 							<h2>Specifying a custom engine</h2>
 						</a>
 						<p>By default, in a browser, the module uses native <code>window.localStorage</code> and <code>window.sessionStorage</code> API-s, but you can
 						specify your own engine by using the special factory function.</p>
-						<pre><code class="language-js"><span class="hljs-keyword">import</span> { factory } <span class="hljs-keyword">from</span> <span class="hljs-string">'core/kv-storage'</span>;
+						<pre><code class="language-js"><span class="hljs-keyword">import</span> { factory } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;core/kv-storage&#x27;</span>;
 
 <span class="hljs-keyword">const</span> syncStorage = factory(YourSyncStorage);
 <span class="hljs-keyword">const</span> asyncStorage = factory(YourSyncStorage, <span class="hljs-literal">true</span>);</code></pre>
 						<p>The wrapped engine need to have CRUD methods from the interface:</p>
 						<pre><code class="language-typescript"><span class="hljs-keyword">interface</span> StorageEngine {
-  <span class="hljs-keyword">get</span>?(key: unknown): unknown;
+  get?(key: unknown): unknown;
   getItem?(key: unknown): unknown;
-  <span class="hljs-keyword">set</span>?(key: unknown, value: unknown): unknown;
+  set?(key: unknown, value: unknown): unknown;
   setItem?(key: unknown, value: unknown): unknown;
   remove?(key: unknown): unknown;
   removeItem?(key: unknown): unknown;
@@ -269,35 +368,79 @@ blaStore.set(<span class="hljs-string">'bla'</span>, <span class="hljs-number">1
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
+							<h3>References</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_kv_storage_index.html#asyncstorage" class="tsd-kind-icon">Async<wbr>Storage</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_kv_storage_index.html#asyncstoragenamespace" class="tsd-kind-icon">Async<wbr>Storage<wbr>Namespace</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_kv_storage_index.html#clearfilter" class="tsd-kind-icon">Clear<wbr>Filter</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_kv_storage_index.html#storageengine" class="tsd-kind-icon">Storage<wbr>Engine</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_kv_storage_index.html#syncstorage" class="tsd-kind-icon">Sync<wbr>Storage</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_kv_storage_index.html#syncstoragenamespace" class="tsd-kind-icon">Sync<wbr>Storage<wbr>Namespace</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
 							<h3>Variables</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-variable tsd-parent-kind-external-module"><a href="src_core_kv_storage_index.html#asynclocal" class="tsd-kind-icon">async<wbr>Local</a></li>
-								<li class="tsd-kind-variable tsd-parent-kind-external-module"><a href="src_core_kv_storage_index.html#asyncsession" class="tsd-kind-icon">async<wbr>Session</a></li>
-								<li class="tsd-kind-variable tsd-parent-kind-external-module"><a href="src_core_kv_storage_index.html#clear" class="tsd-kind-icon">clear</a></li>
-								<li class="tsd-kind-variable tsd-parent-kind-external-module"><a href="src_core_kv_storage_index.html#get" class="tsd-kind-icon">get</a></li>
-								<li class="tsd-kind-variable tsd-parent-kind-external-module"><a href="src_core_kv_storage_index.html#has" class="tsd-kind-icon">has</a></li>
-								<li class="tsd-kind-variable tsd-parent-kind-external-module"><a href="src_core_kv_storage_index.html#local" class="tsd-kind-icon">local</a></li>
-								<li class="tsd-kind-variable tsd-parent-kind-external-module"><a href="src_core_kv_storage_index.html#namespace" class="tsd-kind-icon">namespace</a></li>
-								<li class="tsd-kind-variable tsd-parent-kind-external-module"><a href="src_core_kv_storage_index.html#remove" class="tsd-kind-icon">remove</a></li>
-								<li class="tsd-kind-variable tsd-parent-kind-external-module"><a href="src_core_kv_storage_index.html#session" class="tsd-kind-icon">session</a></li>
-								<li class="tsd-kind-variable tsd-parent-kind-external-module"><a href="src_core_kv_storage_index.html#set" class="tsd-kind-icon">set</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="src_core_kv_storage_index.html#asynclocal" class="tsd-kind-icon">async<wbr>Local</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="src_core_kv_storage_index.html#asyncsession" class="tsd-kind-icon">async<wbr>Session</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="src_core_kv_storage_index.html#clear" class="tsd-kind-icon">clear</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="src_core_kv_storage_index.html#get" class="tsd-kind-icon">get</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="src_core_kv_storage_index.html#has" class="tsd-kind-icon">has</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="src_core_kv_storage_index.html#local" class="tsd-kind-icon">local</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="src_core_kv_storage_index.html#namespace" class="tsd-kind-icon">namespace</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="src_core_kv_storage_index.html#remove" class="tsd-kind-icon">remove</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="src_core_kv_storage_index.html#session" class="tsd-kind-icon">session</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="src_core_kv_storage_index.html#set" class="tsd-kind-icon">set</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Functions</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="src_core_kv_storage_index.html#factory" class="tsd-kind-icon">factory</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="src_core_kv_storage_index.html#factory" class="tsd-kind-icon">factory</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
+				<h2>References</h2>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="asyncstorage" class="tsd-anchor"></a>
+					<h3>Async<wbr>Storage</h3>
+					Re-exports <a href="../interfaces/src_core_kv_storage_interface.asyncstorage.html">AsyncStorage</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="asyncstoragenamespace" class="tsd-anchor"></a>
+					<h3>Async<wbr>Storage<wbr>Namespace</h3>
+					Re-exports <a href="../interfaces/src_core_kv_storage_interface.asyncstoragenamespace.html">AsyncStorageNamespace</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="clearfilter" class="tsd-anchor"></a>
+					<h3>Clear<wbr>Filter</h3>
+					Re-exports <a href="../interfaces/src_core_kv_storage_interface.clearfilter.html">ClearFilter</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="storageengine" class="tsd-anchor"></a>
+					<h3>Storage<wbr>Engine</h3>
+					Re-exports <a href="../interfaces/src_core_kv_storage_interface.storageengine.html">StorageEngine</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="syncstorage" class="tsd-anchor"></a>
+					<h3>Sync<wbr>Storage</h3>
+					Re-exports <a href="../interfaces/src_core_kv_storage_interface.syncstorage.html">SyncStorage</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="syncstoragenamespace" class="tsd-anchor"></a>
+					<h3>Sync<wbr>Storage<wbr>Namespace</h3>
+					Re-exports <a href="../interfaces/src_core_kv_storage_interface.syncstoragenamespace.html">SyncStorageNamespace</a>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Variables</h2>
-				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module">
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module">
 					<a name="asynclocal" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> async<wbr>Local</h3>
-					<div class="tsd-signature tsd-kind-icon">async<wbr>Local<span class="tsd-signature-symbol">:</span> <a href="../interfaces/src_core_kv_storage_interface.asyncstorage.html" class="tsd-signature-type">AsyncStorage</a><span class="tsd-signature-symbol"> =&nbsp;factory(asyncLocalStorage, true)</span></div>
+					<div class="tsd-signature tsd-kind-icon">async<wbr>Local<span class="tsd-signature-symbol">:</span> <a href="../interfaces/src_core_kv_storage_interface.asyncstorage.html" class="tsd-signature-type">AsyncStorage</a><span class="tsd-signature-symbol"> = factory(asyncLocalStorage, true)</span></div>
 					<aside class="tsd-sources">
 						<ul>
 							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/kv-storage/index.ts#L59">src/core/kv-storage/index.ts:59</a></li>
@@ -309,17 +452,17 @@ blaStore.set(<span class="hljs-string">'bla'</span>, <span class="hljs-number">1
 						</div>
 						<dl class="tsd-comment-tags">
 							<dt>example</dt>
-							<dd><pre><code class="language-js">asyncLocal.set(<span class="hljs-string">'foo'</span>, <span class="hljs-string">'bar'</span>).then(<span class="hljs-keyword">async</span> () =&gt; {
-  <span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">await</span> asyncLocal.get(<span class="hljs-string">'foo'</span>)); <span class="hljs-comment">// 'foo'</span>
+							<dd><pre><code class="language-js">asyncLocal.set(<span class="hljs-string">&#x27;foo&#x27;</span>, <span class="hljs-string">&#x27;bar&#x27;</span>).then(<span class="hljs-keyword">async</span> () =&gt; {
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">await</span> asyncLocal.get(<span class="hljs-string">&#x27;foo&#x27;</span>)); <span class="hljs-comment">// &#x27;foo&#x27;</span>
 });</code></pre>
 							</dd>
 						</dl>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module">
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module">
 					<a name="asyncsession" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> async<wbr>Session</h3>
-					<div class="tsd-signature tsd-kind-icon">async<wbr>Session<span class="tsd-signature-symbol">:</span> <a href="../interfaces/src_core_kv_storage_interface.asyncstorage.html" class="tsd-signature-type">AsyncStorage</a><span class="tsd-signature-symbol"> =&nbsp;factory(asyncSessionStorage, true)</span></div>
+					<div class="tsd-signature tsd-kind-icon">async<wbr>Session<span class="tsd-signature-symbol">:</span> <a href="../interfaces/src_core_kv_storage_interface.asyncstorage.html" class="tsd-signature-type">AsyncStorage</a><span class="tsd-signature-symbol"> = factory(asyncSessionStorage, true)</span></div>
 					<aside class="tsd-sources">
 						<ul>
 							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/kv-storage/index.ts#L82">src/core/kv-storage/index.ts:82</a></li>
@@ -331,17 +474,17 @@ blaStore.set(<span class="hljs-string">'bla'</span>, <span class="hljs-number">1
 						</div>
 						<dl class="tsd-comment-tags">
 							<dt>example</dt>
-							<dd><pre><code class="language-js">asyncSession.set(<span class="hljs-string">'foo'</span>, <span class="hljs-string">'bar'</span>).then(<span class="hljs-keyword">async</span> () =&gt; {
-  <span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">await</span> asyncSession.get(<span class="hljs-string">'foo'</span>)); <span class="hljs-comment">// 'foo'</span>
+							<dd><pre><code class="language-js">asyncSession.set(<span class="hljs-string">&#x27;foo&#x27;</span>, <span class="hljs-string">&#x27;bar&#x27;</span>).then(<span class="hljs-keyword">async</span> () =&gt; {
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">await</span> asyncSession.get(<span class="hljs-string">&#x27;foo&#x27;</span>)); <span class="hljs-comment">// &#x27;foo&#x27;</span>
 });</code></pre>
 							</dd>
 						</dl>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module">
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module">
 					<a name="clear" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> clear</h3>
-					<div class="tsd-signature tsd-kind-icon">clear<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> =&nbsp;local.clear.bind(local)</span></div>
+					<div class="tsd-signature tsd-kind-icon">clear<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> = local.clear.bind(local)</span></div>
 					<aside class="tsd-sources">
 						<ul>
 							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/kv-storage/index.ts#L122">src/core/kv-storage/index.ts:122</a></li>
@@ -360,10 +503,10 @@ blaStore.set(<span class="hljs-string">'bla'</span>, <span class="hljs-number">1
 						</dl>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module">
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module">
 					<a name="get" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> get</h3>
-					<div class="tsd-signature tsd-kind-icon">get<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> =&nbsp;local.get.bind(local)</span></div>
+					<div class="tsd-signature tsd-kind-icon">get<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> = local.get.bind(local)</span></div>
 					<aside class="tsd-sources">
 						<ul>
 							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/kv-storage/index.ts#L98">src/core/kv-storage/index.ts:98</a></li>
@@ -382,10 +525,10 @@ blaStore.set(<span class="hljs-string">'bla'</span>, <span class="hljs-number">1
 						</dl>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module">
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module">
 					<a name="has" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> has</h3>
-					<div class="tsd-signature tsd-kind-icon">has<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> =&nbsp;local.has.bind(local)</span></div>
+					<div class="tsd-signature tsd-kind-icon">has<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> = local.has.bind(local)</span></div>
 					<aside class="tsd-sources">
 						<ul>
 							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/kv-storage/index.ts#L90">src/core/kv-storage/index.ts:90</a></li>
@@ -404,10 +547,10 @@ blaStore.set(<span class="hljs-string">'bla'</span>, <span class="hljs-number">1
 						</dl>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module">
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module">
 					<a name="local" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> local</h3>
-					<div class="tsd-signature tsd-kind-icon">local<span class="tsd-signature-symbol">:</span> <a href="../interfaces/src_core_kv_storage_interface.syncstorage.html" class="tsd-signature-type">SyncStorage</a><span class="tsd-signature-symbol"> =&nbsp;factory(syncLocalStorage)</span></div>
+					<div class="tsd-signature tsd-kind-icon">local<span class="tsd-signature-symbol">:</span> <a href="../interfaces/src_core_kv_storage_interface.syncstorage.html" class="tsd-signature-type">SyncStorage</a><span class="tsd-signature-symbol"> = factory(syncLocalStorage)</span></div>
 					<aside class="tsd-sources">
 						<ul>
 							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/kv-storage/index.ts#L47">src/core/kv-storage/index.ts:47</a></li>
@@ -419,16 +562,16 @@ blaStore.set(<span class="hljs-string">'bla'</span>, <span class="hljs-number">1
 						</div>
 						<dl class="tsd-comment-tags">
 							<dt>example</dt>
-							<dd><pre><code class="language-js">local.set(<span class="hljs-string">'foo'</span>, <span class="hljs-string">'bar'</span>);
-local.get(<span class="hljs-string">'foo'</span>); <span class="hljs-comment">// 'foo'</span></code></pre>
+							<dd><pre><code class="language-js">local.set(<span class="hljs-string">&#x27;foo&#x27;</span>, <span class="hljs-string">&#x27;bar&#x27;</span>);
+local.get(<span class="hljs-string">&#x27;foo&#x27;</span>); <span class="hljs-comment">// &#x27;foo&#x27;</span></code></pre>
 							</dd>
 						</dl>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module">
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module">
 					<a name="namespace" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> namespace</h3>
-					<div class="tsd-signature tsd-kind-icon">namespace<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> =&nbsp;local.namespace.bind(local)</span></div>
+					<div class="tsd-signature tsd-kind-icon">namespace<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> = local.namespace.bind(local)</span></div>
 					<aside class="tsd-sources">
 						<ul>
 							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/kv-storage/index.ts#L138">src/core/kv-storage/index.ts:138</a></li>
@@ -445,18 +588,18 @@ local.get(<span class="hljs-string">'foo'</span>); <span class="hljs-comment">//
 							<dd><p><a href="src_core_kv_storage_index.html#local">local</a></p>
 							</dd>
 							<dt>example</dt>
-							<dd><pre><code class="language-js"><span class="hljs-keyword">const</span> storage = namespace(<span class="hljs-string">'REQUEST_STORAGE'</span>);
-storage.set(<span class="hljs-string">'foo'</span>, <span class="hljs-string">'bar'</span>);
-storage.get(<span class="hljs-string">'foo'</span>); <span class="hljs-comment">// 'foo'</span>
-local.get(<span class="hljs-string">'foo'</span>); <span class="hljs-comment">// undefined</span></code></pre>
+							<dd><pre><code class="language-js"><span class="hljs-keyword">const</span> storage = namespace(<span class="hljs-string">&#x27;REQUEST_STORAGE&#x27;</span>);
+storage.set(<span class="hljs-string">&#x27;foo&#x27;</span>, <span class="hljs-string">&#x27;bar&#x27;</span>);
+storage.get(<span class="hljs-string">&#x27;foo&#x27;</span>); <span class="hljs-comment">// &#x27;foo&#x27;</span>
+local.get(<span class="hljs-string">&#x27;foo&#x27;</span>); <span class="hljs-comment">// undefined</span></code></pre>
 							</dd>
 						</dl>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module">
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module">
 					<a name="remove" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> remove</h3>
-					<div class="tsd-signature tsd-kind-icon">remove<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> =&nbsp;local.remove.bind(local)</span></div>
+					<div class="tsd-signature tsd-kind-icon">remove<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> = local.remove.bind(local)</span></div>
 					<aside class="tsd-sources">
 						<ul>
 							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/kv-storage/index.ts#L114">src/core/kv-storage/index.ts:114</a></li>
@@ -475,10 +618,10 @@ local.get(<span class="hljs-string">'foo'</span>); <span class="hljs-comment">//
 						</dl>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module">
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module">
 					<a name="session" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> session</h3>
-					<div class="tsd-signature tsd-kind-icon">session<span class="tsd-signature-symbol">:</span> <a href="../interfaces/src_core_kv_storage_interface.syncstorage.html" class="tsd-signature-type">SyncStorage</a><span class="tsd-signature-symbol"> =&nbsp;factory(syncSessionStorage)</span></div>
+					<div class="tsd-signature tsd-kind-icon">session<span class="tsd-signature-symbol">:</span> <a href="../interfaces/src_core_kv_storage_interface.syncstorage.html" class="tsd-signature-type">SyncStorage</a><span class="tsd-signature-symbol"> = factory(syncSessionStorage)</span></div>
 					<aside class="tsd-sources">
 						<ul>
 							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/kv-storage/index.ts#L70">src/core/kv-storage/index.ts:70</a></li>
@@ -490,16 +633,16 @@ local.get(<span class="hljs-string">'foo'</span>); <span class="hljs-comment">//
 						</div>
 						<dl class="tsd-comment-tags">
 							<dt>example</dt>
-							<dd><pre><code class="language-js">session.set(<span class="hljs-string">'foo'</span>, <span class="hljs-string">'bar'</span>);
-session.get(<span class="hljs-string">'foo'</span>); <span class="hljs-comment">// 'foo'</span></code></pre>
+							<dd><pre><code class="language-js">session.set(<span class="hljs-string">&#x27;foo&#x27;</span>, <span class="hljs-string">&#x27;bar&#x27;</span>);
+session.get(<span class="hljs-string">&#x27;foo&#x27;</span>); <span class="hljs-comment">// &#x27;foo&#x27;</span></code></pre>
 							</dd>
 						</dl>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module">
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module">
 					<a name="set" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> set</h3>
-					<div class="tsd-signature tsd-kind-icon">set<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> =&nbsp;local.set.bind(local)</span></div>
+					<div class="tsd-signature tsd-kind-icon">set<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> = local.set.bind(local)</span></div>
 					<aside class="tsd-sources">
 						<ul>
 							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/kv-storage/index.ts#L106">src/core/kv-storage/index.ts:106</a></li>
@@ -521,10 +664,10 @@ session.get(<span class="hljs-string">'foo'</span>); <span class="hljs-comment">
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Functions</h2>
-				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module">
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
 					<a name="factory" class="tsd-anchor"></a>
 					<h3>factory</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
 						<li class="tsd-signature tsd-kind-icon">factory<span class="tsd-signature-symbol">(</span>engine<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_kv_storage_interface.storageengine.html" class="tsd-signature-type">StorageEngine</a>, async<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_kv_storage_interface.asyncstorage.html" class="tsd-signature-type">AsyncStorage</a></li>
 						<li class="tsd-signature tsd-kind-icon">factory<span class="tsd-signature-symbol">(</span>engine<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_kv_storage_interface.storageengine.html" class="tsd-signature-type">StorageEngine</a>, async<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_kv_storage_interface.syncstorage.html" class="tsd-signature-type">SyncStorage</a></li>
 					</ul>
@@ -542,8 +685,8 @@ session.get(<span class="hljs-string">'foo'</span>); <span class="hljs-comment">
 								<dl class="tsd-comment-tags">
 									<dt>example</dt>
 									<dd><pre><code class="language-js"><span class="hljs-keyword">const</span> storage = factory(<span class="hljs-built_in">window</span>.localStorage);
-storage.set(<span class="hljs-string">'foo'</span>, <span class="hljs-string">'bar'</span>);
-storage.get(<span class="hljs-string">'foo'</span>); <span class="hljs-comment">// 'foo'</span></code></pre>
+storage.set(<span class="hljs-string">&#x27;foo&#x27;</span>, <span class="hljs-string">&#x27;bar&#x27;</span>);
+storage.get(<span class="hljs-string">&#x27;foo&#x27;</span>); <span class="hljs-comment">// &#x27;foo&#x27;</span></code></pre>
 									</dd>
 								</dl>
 							</div>
@@ -588,44 +731,62 @@ storage.get(<span class="hljs-string">'foo'</span>); <span class="hljs-comment">
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
-					<li class="current tsd-kind-external-module">
+					<li class="current tsd-kind-module">
 						<a href="src_core_kv_storage_index.html">&quot;src/core/kv-<wbr>storage/index&quot;</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-variable tsd-parent-kind-external-module">
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_kv_storage_index.html#asyncstorage" class="tsd-kind-icon">Async<wbr>Storage</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_kv_storage_index.html#asyncstoragenamespace" class="tsd-kind-icon">Async<wbr>Storage<wbr>Namespace</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_kv_storage_index.html#clearfilter" class="tsd-kind-icon">Clear<wbr>Filter</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_kv_storage_index.html#storageengine" class="tsd-kind-icon">Storage<wbr>Engine</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_kv_storage_index.html#syncstorage" class="tsd-kind-icon">Sync<wbr>Storage</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_kv_storage_index.html#syncstoragenamespace" class="tsd-kind-icon">Sync<wbr>Storage<wbr>Namespace</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module">
 						<a href="src_core_kv_storage_index.html#asynclocal" class="tsd-kind-icon">async<wbr>Local</a>
 					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-external-module">
+					<li class=" tsd-kind-variable tsd-parent-kind-module">
 						<a href="src_core_kv_storage_index.html#asyncsession" class="tsd-kind-icon">async<wbr>Session</a>
 					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-external-module">
+					<li class=" tsd-kind-variable tsd-parent-kind-module">
 						<a href="src_core_kv_storage_index.html#clear" class="tsd-kind-icon">clear</a>
 					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-external-module">
+					<li class=" tsd-kind-variable tsd-parent-kind-module">
 						<a href="src_core_kv_storage_index.html#get" class="tsd-kind-icon">get</a>
 					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-external-module">
+					<li class=" tsd-kind-variable tsd-parent-kind-module">
 						<a href="src_core_kv_storage_index.html#has" class="tsd-kind-icon">has</a>
 					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-external-module">
+					<li class=" tsd-kind-variable tsd-parent-kind-module">
 						<a href="src_core_kv_storage_index.html#local" class="tsd-kind-icon">local</a>
 					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-external-module">
+					<li class=" tsd-kind-variable tsd-parent-kind-module">
 						<a href="src_core_kv_storage_index.html#namespace" class="tsd-kind-icon">namespace</a>
 					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-external-module">
+					<li class=" tsd-kind-variable tsd-parent-kind-module">
 						<a href="src_core_kv_storage_index.html#remove" class="tsd-kind-icon">remove</a>
 					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-external-module">
+					<li class=" tsd-kind-variable tsd-parent-kind-module">
 						<a href="src_core_kv_storage_index.html#session" class="tsd-kind-icon">session</a>
 					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-external-module">
+					<li class=" tsd-kind-variable tsd-parent-kind-module">
 						<a href="src_core_kv_storage_index.html#set" class="tsd-kind-icon">set</a>
 					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-external-module">
+					<li class=" tsd-kind-function tsd-parent-kind-module">
 						<a href="src_core_kv_storage_index.html#factory" class="tsd-kind-icon">factory</a>
 					</li>
 				</ul>
@@ -638,64 +799,30 @@ storage.get(<span class="hljs-string">'foo'</span>); <span class="hljs-comment">
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
-				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
+				<li class="tsd-kind-namespace"><span class="tsd-kind-icon">Namespace</span></li>
 				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
 				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
 				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
 				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
-				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
 				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
 				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
-				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
-			</ul>
-			<ul class="tsd-legend">
 				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
 				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
-				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
-				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
 				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
-				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
-				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
 			</ul>
 		</div>
 	</div>
 </footer>
 <div class="overlay"></div>
 <script src="../assets/js/main.js"></script>
-<script>if (location.protocol == 'file:') document.write('<script src="../assets/js/search.js"><' + '/script>');</script>
 <script>'use strict';
 
 /*!
@@ -710,13 +837,13 @@ storage.get(<span class="hljs-string">'foo'</span>); <span class="hljs-comment">
 	document.body.style.display = 'block';
 
 	var
-		isDTS = /([^/.]+)\.d/,
-		isIndex = /\/index|\.d/,
-		isNode = /(?:^|\b)node_modules(?:\b|$)/;
+		isDTS = /\.d$/,
+		isIndex = /^(?:(?!(?:^|\/)(?:interface|modules|prelude|engines)\/).)*?(?:^|\/)index$/,
+		isNode = /(?:^|\/)node_modules(?:\/|$)/;
 
 	var
 		trimRgxp = /^\s+|[\n\v"']+|\s+$/g,
-		normalizeRgxp = /(?:^|\b)src\//;
+		normalizeRgxp = /(?:^|\b)src\/|\/index$/g;
 
 	var
 		breadcrumbs = Array.from(document.querySelectorAll('.tsd-breadcrumb a')),
@@ -731,32 +858,30 @@ storage.get(<span class="hljs-string">'foo'</span>); <span class="hljs-comment">
 	});
 
 	var
-		navigation = Array.from(document.querySelectorAll('.tsd-navigation.primary .tsd-kind-external-module a')),
-		globalIndex = Array.from(document.querySelectorAll('.tsd-index-list a'));
+		navigation = Array.from(document.querySelectorAll('.tsd-navigation.primary .tsd-kind-module a')),
+		globalIndex = Array.from(document.querySelectorAll('.tsd-kind-module a'));
 
-	[].concat(navigation, breadcrumbs.length <= 1 ? globalIndex : []).forEach(function (el) {
+	[].concat(breadcrumbs.length <= 1 ? globalIndex : navigation).forEach(function (el) {
 		var
 			wrapper = el.parentNode,
 			linkText = el.textContent.replace(trimRgxp, '');
 
-		if (isIndex.test(linkText)) {
-			if (isDTS.test(linkText)) {
-				var
-					nm = RegExp.$1;
+		if (isDTS.test(linkText)) {
+			var
+				nm = RegExp.$1;
 
-				if (linkText === 'index.d') {
-					el.innerHTML = '<b>prelude</b>';
+			if (linkText === 'index.d') {
+				el.innerHTML = '<b>prelude</b>';
 
-				} else if (isNode.test(linkText)) {
-					el.textContent = nm;
-
-				} else {
-					wrapper.parentNode.removeChild(wrapper);
-				}
+			} else if (isNode.test(linkText)) {
+				el.textContent = nm;
 
 			} else {
-				el.textContent = linkText.replace(isIndex, '').replace(normalizeRgxp, '');
+				wrapper.parentNode.removeChild(wrapper);
 			}
+
+		} else if (isIndex.test(linkText)) {
+			el.textContent = linkText.replace(normalizeRgxp, '');
 
 		} else {
 			wrapper.parentNode.removeChild(wrapper);

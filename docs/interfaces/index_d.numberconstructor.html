@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>NumberConstructor | V4Fire</title>
-	<meta name="description" content="">
+	<meta name="description" content="Documentation for V4Fire">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
 <style>/*!
@@ -15,7 +15,26 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+body {
+	font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+}
+
+code, pre, tt {
+	font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+}
+
+.tsd-typography h1,
+.tsd-typography h2,
+.tsd-typography h3,
+.tsd-typography h4,
+.tsd-typography h5,
+.tsd-typography h6 {
+	margin: 1em 0;
+	font-family: -apple-system, BlinkMacSystemFont, UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+}
+
 .tsd-panel {
+	padding: 20px 40px;
 	border: 1px solid #DDD;
 	border-radius: 10px;
 	box-shadow: none;
@@ -24,8 +43,8 @@
 .tsd-page-title {
 	color: #EEE;
 
-	background: #232526;  /* fallback for old browsers */
-	background: -webkit-linear-gradient(to right, #414345, #232526);  /* Chrome 10-25, Safari 5.1-6 */
+	background: #232526; /* fallback for old browsers */
+	background: -webkit-linear-gradient(to right, #414345, #232526); /* Chrome 10-25, Safari 5.1-6 */
 	background: linear-gradient(to right, #414345, #232526); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
@@ -58,6 +77,90 @@
 #tsd-search .field {
 	height: 100%;
 }
+
+pre {
+	background-color: rgba(7, 7, 7, 0.01);
+}
+
+/**
+ * GitHub Gist Theme
+ * Author : Anthony Attard - https://github.com/AnthonyAttard
+ * Author : Louis Barranqueiro - https://github.com/LouisBarranqueiro
+ */
+
+.hljs {
+	display: block;
+	background: white;
+	padding: 0.5em;
+	color: #333333;
+	overflow-x: auto;
+}
+
+.hljs-comment,
+.hljs-meta {
+	color: #969896;
+}
+
+.hljs-variable,
+.hljs-template-variable,
+.hljs-strong,
+.hljs-emphasis,
+.hljs-quote {
+	color: #df5000;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-type {
+	color: #d73a49;
+}
+
+.hljs-literal,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-attribute {
+	color: #0086b3;
+}
+
+.hljs-section,
+.hljs-name {
+	color: #63a35c;
+}
+
+.hljs-tag {
+	color: #333333;
+}
+
+.hljs-title,
+.hljs-attr,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-selector-attr,
+.hljs-selector-pseudo {
+	color: #6f42c1;
+}
+
+.hljs-addition {
+	color: #55a532;
+	background-color: #eaffea;
+}
+
+.hljs-deletion {
+	color: #bd2c00;
+	background-color: #ffecec;
+}
+
+.hljs-link {
+	text-decoration: underline;
+}
+
+.hljs-number {
+	color: #005cc5;
+}
+
+.hljs-string {
+	color: #032f62;
+}
 </style>
 </head>
 <body>
@@ -84,7 +187,7 @@
 	<div class="tsd-page-toolbar">
 		<div class="container">
 			<div class="table-wrap">
-				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.js" data-base="..">
+				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.json" data-base="..">
 					<div class="field">
 						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
 						<input id="tsd-search-field" type="text" />
@@ -109,10 +212,6 @@
 							</div>
 							<input type="checkbox" id="tsd-filter-inherited" checked />
 							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
-							<input type="checkbox" id="tsd-filter-externals" checked />
-							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
-							<input type="checkbox" id="tsd-filter-only-exported" />
-							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
 						</div>
 					</div>
 					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
@@ -152,50 +251,50 @@
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
-						<section class="tsd-index-section tsd-is-not-exported">
+						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.numberconstructor.html#ceil" class="tsd-kind-icon">ceil</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.numberconstructor.html#days" class="tsd-kind-icon">days</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.numberconstructor.html#floor" class="tsd-kind-icon">floor</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.numberconstructor.html#format" class="tsd-kind-icon">format</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.numberconstructor.html#getoption" class="tsd-kind-icon">get<wbr>Option</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.numberconstructor.html#hours" class="tsd-kind-icon">hours</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.numberconstructor.html#isbetweenzeroandone" class="tsd-kind-icon">is<wbr>Between<wbr>Zero<wbr>And<wbr>One</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.numberconstructor.html#iseven" class="tsd-kind-icon">is<wbr>Even</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.numberconstructor.html#isfloat" class="tsd-kind-icon">is<wbr>Float</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.numberconstructor.html#isinteger" class="tsd-kind-icon">is<wbr>Integer</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.numberconstructor.html#isnatural" class="tsd-kind-icon">is<wbr>Natural</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.numberconstructor.html#isnegative" class="tsd-kind-icon">is<wbr>Negative</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.numberconstructor.html#isnonnegative" class="tsd-kind-icon">is<wbr>Non<wbr>Negative</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.numberconstructor.html#isodd" class="tsd-kind-icon">is<wbr>Odd</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.numberconstructor.html#ispositive" class="tsd-kind-icon">is<wbr>Positive</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.numberconstructor.html#ispositivebetweenzeroandone" class="tsd-kind-icon">is<wbr>Positive<wbr>Between<wbr>Zero<wbr>And<wbr>One</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.numberconstructor.html#minutes" class="tsd-kind-icon">minutes</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.numberconstructor.html#pad" class="tsd-kind-icon">pad</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.numberconstructor.html#round" class="tsd-kind-icon">round</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.numberconstructor.html#seconds" class="tsd-kind-icon">seconds</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.numberconstructor.html#setoption" class="tsd-kind-icon">set<wbr>Option</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported"><a href="index_d.numberconstructor.html#weeks" class="tsd-kind-icon">weeks</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="index_d.numberconstructor.html#ceil" class="tsd-kind-icon">ceil</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="index_d.numberconstructor.html#days" class="tsd-kind-icon">days</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="index_d.numberconstructor.html#floor" class="tsd-kind-icon">floor</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="index_d.numberconstructor.html#format" class="tsd-kind-icon">format</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="index_d.numberconstructor.html#getoption" class="tsd-kind-icon">get<wbr>Option</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="index_d.numberconstructor.html#hours" class="tsd-kind-icon">hours</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="index_d.numberconstructor.html#isbetweenzeroandone" class="tsd-kind-icon">is<wbr>Between<wbr>Zero<wbr>And<wbr>One</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="index_d.numberconstructor.html#iseven" class="tsd-kind-icon">is<wbr>Even</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="index_d.numberconstructor.html#isfloat" class="tsd-kind-icon">is<wbr>Float</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="index_d.numberconstructor.html#isinteger" class="tsd-kind-icon">is<wbr>Integer</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="index_d.numberconstructor.html#isnatural" class="tsd-kind-icon">is<wbr>Natural</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="index_d.numberconstructor.html#isnegative" class="tsd-kind-icon">is<wbr>Negative</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="index_d.numberconstructor.html#isnonnegative" class="tsd-kind-icon">is<wbr>Non<wbr>Negative</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="index_d.numberconstructor.html#isodd" class="tsd-kind-icon">is<wbr>Odd</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="index_d.numberconstructor.html#ispositive" class="tsd-kind-icon">is<wbr>Positive</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="index_d.numberconstructor.html#ispositivebetweenzeroandone" class="tsd-kind-icon">is<wbr>Positive<wbr>Between<wbr>Zero<wbr>And<wbr>One</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="index_d.numberconstructor.html#minutes" class="tsd-kind-icon">minutes</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="index_d.numberconstructor.html#pad" class="tsd-kind-icon">pad</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="index_d.numberconstructor.html#round" class="tsd-kind-icon">round</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="index_d.numberconstructor.html#seconds" class="tsd-kind-icon">seconds</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="index_d.numberconstructor.html#setoption" class="tsd-kind-icon">set<wbr>Option</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="index_d.numberconstructor.html#weeks" class="tsd-kind-icon">weeks</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
+			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="ceil" class="tsd-anchor"></a>
 					<h3>ceil</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">ceil<span class="tsd-signature-symbol">(</span>precision<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span></li>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">ceil<span class="tsd-signature-symbol">(</span>precision<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">number</span></li>
 						<li class="tsd-signature tsd-kind-icon">ceil<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, precision<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2117">index.d.ts:2117</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2121">index.d.ts:2121</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -211,10 +310,10 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">function</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">number</span></h4>
 							<ul class="tsd-parameters">
-								<li class="tsd-parameter-siganture">
-									<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
+								<li class="tsd-parameter-signature">
+									<ul class="tsd-signatures tsd-kind-type-literal">
 										<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
 									</ul>
 									<ul class="tsd-descriptions">
@@ -234,7 +333,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2125">index.d.ts:2125</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2129">index.d.ts:2129</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -257,17 +356,17 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="days" class="tsd-anchor"></a>
 					<h3>days</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
 						<li class="tsd-signature tsd-kind-icon">days<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2078">index.d.ts:2078</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2082">index.d.ts:2082</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -285,18 +384,18 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="floor" class="tsd-anchor"></a>
 					<h3>floor</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">floor<span class="tsd-signature-symbol">(</span>precision<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span></li>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">floor<span class="tsd-signature-symbol">(</span>precision<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">number</span></li>
 						<li class="tsd-signature tsd-kind-icon">floor<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, precision<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2089">index.d.ts:2089</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2093">index.d.ts:2093</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -312,10 +411,10 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">function</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">number</span></h4>
 							<ul class="tsd-parameters">
-								<li class="tsd-parameter-siganture">
-									<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
+								<li class="tsd-parameter-signature">
+									<ul class="tsd-signatures tsd-kind-type-literal">
 										<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
 									</ul>
 									<ul class="tsd-descriptions">
@@ -335,7 +434,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2097">index.d.ts:2097</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2101">index.d.ts:2101</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -358,12 +457,12 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="format" class="tsd-anchor"></a>
 					<h3>format</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">format<span class="tsd-signature-symbol">(</span>pattern<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, locale<span class="tsd-signature-symbol">?: </span><a href="../modules/index_d.html#canarray" class="tsd-signature-type">CanArray</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span></li>
-						<li class="tsd-signature tsd-kind-icon">format<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">NumberFormatOptions</span>, locale<span class="tsd-signature-symbol">?: </span><a href="../modules/index_d.html#canarray" class="tsd-signature-type">CanArray</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span></li>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">format<span class="tsd-signature-symbol">(</span>pattern<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, locale<span class="tsd-signature-symbol">?: </span><a href="../modules/index_d.html#canarray" class="tsd-signature-type">CanArray</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">string</span></li>
+						<li class="tsd-signature tsd-kind-icon">format<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">NumberFormatOptions</span>, locale<span class="tsd-signature-symbol">?: </span><a href="../modules/index_d.html#canarray" class="tsd-signature-type">CanArray</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">string</span></li>
 						<li class="tsd-signature tsd-kind-icon">format<span class="tsd-signature-symbol">(</span>num<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, pattern<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span>, locale<span class="tsd-signature-symbol">?: </span><a href="../modules/index_d.html#canarray" class="tsd-signature-type">CanArray</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
 						<li class="tsd-signature tsd-kind-icon">format<span class="tsd-signature-symbol">(</span>num<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, opts<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">NumberFormatOptions</span>, locale<span class="tsd-signature-symbol">?: </span><a href="../modules/index_d.html#canarray" class="tsd-signature-type">CanArray</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
 					</ul>
@@ -371,7 +470,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2155">index.d.ts:2155</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2159">index.d.ts:2159</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -390,10 +489,10 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">function</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">string</span></h4>
 							<ul class="tsd-parameters">
-								<li class="tsd-parameter-siganture">
-									<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
+								<li class="tsd-parameter-signature">
+									<ul class="tsd-signatures tsd-kind-type-literal">
 										<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
 									</ul>
 									<ul class="tsd-descriptions">
@@ -413,7 +512,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2163">index.d.ts:2163</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2167">index.d.ts:2167</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -432,10 +531,10 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">function</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">string</span></h4>
 							<ul class="tsd-parameters">
-								<li class="tsd-parameter-siganture">
-									<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
+								<li class="tsd-parameter-signature">
+									<ul class="tsd-signatures tsd-kind-type-literal">
 										<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
 									</ul>
 									<ul class="tsd-descriptions">
@@ -455,7 +554,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2195">index.d.ts:2195</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2199">index.d.ts:2199</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -478,8 +577,8 @@
 								</ol>
 								<dl class="tsd-comment-tags">
 									<dt>example</dt>
-									<dd><pre><code class="language-js"> <span class="hljs-number">100.50</span>.format(<span class="hljs-string">'$'</span>, <span class="hljs-string">'en-us'</span>) <span class="hljs-comment">// '$100.50'</span>
- <span class="hljs-number">100.50</span>.format(<span class="hljs-string">'$:EUR;$d:code'</span>, <span class="hljs-string">'en-us'</span>) <span class="hljs-comment">// 'EUR 100.50'</span></code></pre>
+									<dd><pre><code class="language-js"> <span class="hljs-number">100.50</span>.format(<span class="hljs-string">&#x27;$&#x27;</span>, <span class="hljs-string">&#x27;en-us&#x27;</span>) <span class="hljs-comment">// &#x27;$100.50&#x27;</span>
+ <span class="hljs-number">100.50</span>.format(<span class="hljs-string">&#x27;$:EUR;$d:code&#x27;</span>, <span class="hljs-string">&#x27;en-us&#x27;</span>) <span class="hljs-comment">// &#x27;EUR 100.50&#x27;</span></code></pre>
 									</dd>
 								</dl>
 							</div>
@@ -508,7 +607,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2204">index.d.ts:2204</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2208">index.d.ts:2208</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -535,17 +634,17 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="getoption" class="tsd-anchor"></a>
 					<h3>get<wbr>Option</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
 						<li class="tsd-signature tsd-kind-icon">get<wbr>Option<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><a href="../modules/index_d.html#numberoption" class="tsd-signature-type">NumberOption</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L1989">index.d.ts:1989</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L1993">index.d.ts:1993</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -569,17 +668,17 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="hours" class="tsd-anchor"></a>
 					<h3>hours</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
 						<li class="tsd-signature tsd-kind-icon">hours<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2073">index.d.ts:2073</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2077">index.d.ts:2077</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -597,17 +696,17 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="isbetweenzeroandone" class="tsd-anchor"></a>
 					<h3>is<wbr>Between<wbr>Zero<wbr>And<wbr>One</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
 						<li class="tsd-signature tsd-kind-icon">is<wbr>Between<wbr>Zero<wbr>And<wbr>One<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2052">index.d.ts:2052</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2056">index.d.ts:2056</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -627,17 +726,17 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="iseven" class="tsd-anchor"></a>
 					<h3>is<wbr>Even</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
 						<li class="tsd-signature tsd-kind-icon">is<wbr>Even<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2016">index.d.ts:2016</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2020">index.d.ts:2020</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -657,17 +756,17 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="isfloat" class="tsd-anchor"></a>
 					<h3>is<wbr>Float</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
 						<li class="tsd-signature tsd-kind-icon">is<wbr>Float<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2010">index.d.ts:2010</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2014">index.d.ts:2014</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -687,17 +786,17 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="isinteger" class="tsd-anchor"></a>
 					<h3>is<wbr>Integer</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
 						<li class="tsd-signature tsd-kind-icon">is<wbr>Integer<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2004">index.d.ts:2004</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2008">index.d.ts:2008</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -717,17 +816,17 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="isnatural" class="tsd-anchor"></a>
 					<h3>is<wbr>Natural</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
 						<li class="tsd-signature tsd-kind-icon">is<wbr>Natural<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2028">index.d.ts:2028</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2032">index.d.ts:2032</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -747,17 +846,17 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="isnegative" class="tsd-anchor"></a>
 					<h3>is<wbr>Negative</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
 						<li class="tsd-signature tsd-kind-icon">is<wbr>Negative<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2040">index.d.ts:2040</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2044">index.d.ts:2044</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -777,17 +876,17 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="isnonnegative" class="tsd-anchor"></a>
 					<h3>is<wbr>Non<wbr>Negative</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
 						<li class="tsd-signature tsd-kind-icon">is<wbr>Non<wbr>Negative<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2046">index.d.ts:2046</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2050">index.d.ts:2050</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -807,17 +906,17 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="isodd" class="tsd-anchor"></a>
 					<h3>is<wbr>Odd</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
 						<li class="tsd-signature tsd-kind-icon">is<wbr>Odd<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2022">index.d.ts:2022</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2026">index.d.ts:2026</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -837,17 +936,17 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="ispositive" class="tsd-anchor"></a>
 					<h3>is<wbr>Positive</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
 						<li class="tsd-signature tsd-kind-icon">is<wbr>Positive<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2034">index.d.ts:2034</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2038">index.d.ts:2038</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -867,17 +966,17 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="ispositivebetweenzeroandone" class="tsd-anchor"></a>
 					<h3>is<wbr>Positive<wbr>Between<wbr>Zero<wbr>And<wbr>One</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
 						<li class="tsd-signature tsd-kind-icon">is<wbr>Positive<wbr>Between<wbr>Zero<wbr>And<wbr>One<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2058">index.d.ts:2058</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2062">index.d.ts:2062</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -897,17 +996,17 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="minutes" class="tsd-anchor"></a>
 					<h3>minutes</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
 						<li class="tsd-signature tsd-kind-icon">minutes<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2068">index.d.ts:2068</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2072">index.d.ts:2072</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -925,11 +1024,11 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="pad" class="tsd-anchor"></a>
 					<h3>pad</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">pad<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="index_d.numberpadoptions.html" class="tsd-signature-type">NumberPadOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span></li>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">pad<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="index_d.numberpadoptions.html" class="tsd-signature-type">NumberPadOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">string</span></li>
 						<li class="tsd-signature tsd-kind-icon">pad<span class="tsd-signature-symbol">(</span>num<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, targetLength<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
 						<li class="tsd-signature tsd-kind-icon">pad<span class="tsd-signature-symbol">(</span>num<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, opts<span class="tsd-signature-symbol">: </span><a href="index_d.numberpadoptions.html" class="tsd-signature-type">NumberPadOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
 					</ul>
@@ -937,7 +1036,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2131">index.d.ts:2131</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2135">index.d.ts:2135</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -954,10 +1053,10 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">function</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">string</span></h4>
 							<ul class="tsd-parameters">
-								<li class="tsd-parameter-siganture">
-									<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
+								<li class="tsd-parameter-signature">
+									<ul class="tsd-signatures tsd-kind-type-literal">
 										<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
 									</ul>
 									<ul class="tsd-descriptions">
@@ -977,7 +1076,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2139">index.d.ts:2139</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2143">index.d.ts:2143</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1002,7 +1101,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2147">index.d.ts:2147</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2151">index.d.ts:2151</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1026,18 +1125,18 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="round" class="tsd-anchor"></a>
 					<h3>round</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">round<span class="tsd-signature-symbol">(</span>precision<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span></li>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">round<span class="tsd-signature-symbol">(</span>precision<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">number</span></li>
 						<li class="tsd-signature tsd-kind-icon">round<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, precision<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2103">index.d.ts:2103</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2107">index.d.ts:2107</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1053,10 +1152,10 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">function</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">number</span></h4>
 							<ul class="tsd-parameters">
-								<li class="tsd-parameter-siganture">
-									<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
+								<li class="tsd-parameter-signature">
+									<ul class="tsd-signatures tsd-kind-type-literal">
 										<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
 									</ul>
 									<ul class="tsd-descriptions">
@@ -1076,7 +1175,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2111">index.d.ts:2111</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2115">index.d.ts:2115</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1099,17 +1198,17 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="seconds" class="tsd-anchor"></a>
 					<h3>seconds</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
 						<li class="tsd-signature tsd-kind-icon">seconds<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2063">index.d.ts:2063</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2067">index.d.ts:2067</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1127,17 +1226,17 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="setoption" class="tsd-anchor"></a>
 					<h3>set<wbr>Option</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
 						<li class="tsd-signature tsd-kind-icon">set<wbr>Option<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><a href="../modules/index_d.html#numberoption" class="tsd-signature-type">NumberOption</a>, value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L1998">index.d.ts:1998</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2002">index.d.ts:2002</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1164,17 +1263,17 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="weeks" class="tsd-anchor"></a>
 					<h3>weeks</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
 						<li class="tsd-signature tsd-kind-icon">weeks<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2083">index.d.ts:2083</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2087">index.d.ts:2087</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1200,10 +1299,10 @@
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
-					<li class="current tsd-kind-external-module">
+					<li class="current tsd-kind-module">
 						<a href="../modules/index_d.html">&quot;index.d&quot;</a>
 						<ul>
-							<li class=" tsd-kind-module tsd-parent-kind-external-module tsd-is-not-exported">
+							<li class=" tsd-kind-namespace tsd-parent-kind-module">
 								<a href="../modules/index_d.tb.html">TB</a>
 							</li>
 						</ul>
@@ -1214,73 +1313,73 @@
 				<ul class="before-current">
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-interface tsd-parent-kind-external-module tsd-is-not-exported">
+					<li class="current tsd-kind-interface tsd-parent-kind-module">
 						<a href="index_d.numberconstructor.html" class="tsd-kind-icon">Number<wbr>Constructor</a>
 						<ul>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="index_d.numberconstructor.html#ceil" class="tsd-kind-icon">ceil</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="index_d.numberconstructor.html#days" class="tsd-kind-icon">days</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="index_d.numberconstructor.html#floor" class="tsd-kind-icon">floor</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="index_d.numberconstructor.html#format" class="tsd-kind-icon">format</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="index_d.numberconstructor.html#getoption" class="tsd-kind-icon">get<wbr>Option</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="index_d.numberconstructor.html#hours" class="tsd-kind-icon">hours</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="index_d.numberconstructor.html#isbetweenzeroandone" class="tsd-kind-icon">is<wbr>Between<wbr>Zero<wbr>And<wbr>One</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="index_d.numberconstructor.html#iseven" class="tsd-kind-icon">is<wbr>Even</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="index_d.numberconstructor.html#isfloat" class="tsd-kind-icon">is<wbr>Float</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="index_d.numberconstructor.html#isinteger" class="tsd-kind-icon">is<wbr>Integer</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="index_d.numberconstructor.html#isnatural" class="tsd-kind-icon">is<wbr>Natural</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="index_d.numberconstructor.html#isnegative" class="tsd-kind-icon">is<wbr>Negative</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="index_d.numberconstructor.html#isnonnegative" class="tsd-kind-icon">is<wbr>Non<wbr>Negative</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="index_d.numberconstructor.html#isodd" class="tsd-kind-icon">is<wbr>Odd</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="index_d.numberconstructor.html#ispositive" class="tsd-kind-icon">is<wbr>Positive</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="index_d.numberconstructor.html#ispositivebetweenzeroandone" class="tsd-kind-icon">is<wbr>Positive<wbr>Between<wbr>Zero<wbr>And<wbr>One</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="index_d.numberconstructor.html#minutes" class="tsd-kind-icon">minutes</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="index_d.numberconstructor.html#pad" class="tsd-kind-icon">pad</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="index_d.numberconstructor.html#round" class="tsd-kind-icon">round</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="index_d.numberconstructor.html#seconds" class="tsd-kind-icon">seconds</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="index_d.numberconstructor.html#setoption" class="tsd-kind-icon">set<wbr>Option</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-not-exported">
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="index_d.numberconstructor.html#weeks" class="tsd-kind-icon">weeks</a>
 							</li>
 						</ul>
@@ -1297,64 +1396,31 @@
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
-				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
+				<li class="tsd-kind-namespace"><span class="tsd-kind-icon">Namespace</span></li>
 				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
 				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
 				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
 				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
-				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
 				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
 				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
-				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
-			</ul>
-			<ul class="tsd-legend">
 				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
 				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
-				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
 				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
-				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
 				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
-				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
-				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
 			</ul>
 		</div>
 	</div>
 </footer>
 <div class="overlay"></div>
 <script src="../assets/js/main.js"></script>
-<script>if (location.protocol == 'file:') document.write('<script src="../assets/js/search.js"><' + '/script>');</script>
 <script>'use strict';
 
 /*!
@@ -1369,13 +1435,13 @@
 	document.body.style.display = 'block';
 
 	var
-		isDTS = /([^/.]+)\.d/,
-		isIndex = /\/index|\.d/,
-		isNode = /(?:^|\b)node_modules(?:\b|$)/;
+		isDTS = /\.d$/,
+		isIndex = /^(?:(?!(?:^|\/)(?:interface|modules|prelude|engines)\/).)*?(?:^|\/)index$/,
+		isNode = /(?:^|\/)node_modules(?:\/|$)/;
 
 	var
 		trimRgxp = /^\s+|[\n\v"']+|\s+$/g,
-		normalizeRgxp = /(?:^|\b)src\//;
+		normalizeRgxp = /(?:^|\b)src\/|\/index$/g;
 
 	var
 		breadcrumbs = Array.from(document.querySelectorAll('.tsd-breadcrumb a')),
@@ -1390,32 +1456,30 @@
 	});
 
 	var
-		navigation = Array.from(document.querySelectorAll('.tsd-navigation.primary .tsd-kind-external-module a')),
-		globalIndex = Array.from(document.querySelectorAll('.tsd-index-list a'));
+		navigation = Array.from(document.querySelectorAll('.tsd-navigation.primary .tsd-kind-module a')),
+		globalIndex = Array.from(document.querySelectorAll('.tsd-kind-module a'));
 
-	[].concat(navigation, breadcrumbs.length <= 1 ? globalIndex : []).forEach(function (el) {
+	[].concat(breadcrumbs.length <= 1 ? globalIndex : navigation).forEach(function (el) {
 		var
 			wrapper = el.parentNode,
 			linkText = el.textContent.replace(trimRgxp, '');
 
-		if (isIndex.test(linkText)) {
-			if (isDTS.test(linkText)) {
-				var
-					nm = RegExp.$1;
+		if (isDTS.test(linkText)) {
+			var
+				nm = RegExp.$1;
 
-				if (linkText === 'index.d') {
-					el.innerHTML = '<b>prelude</b>';
+			if (linkText === 'index.d') {
+				el.innerHTML = '<b>prelude</b>';
 
-				} else if (isNode.test(linkText)) {
-					el.textContent = nm;
-
-				} else {
-					wrapper.parentNode.removeChild(wrapper);
-				}
+			} else if (isNode.test(linkText)) {
+				el.textContent = nm;
 
 			} else {
-				el.textContent = linkText.replace(isIndex, '').replace(normalizeRgxp, '');
+				wrapper.parentNode.removeChild(wrapper);
 			}
+
+		} else if (isIndex.test(linkText)) {
+			el.textContent = linkText.replace(normalizeRgxp, '');
 
 		} else {
 			wrapper.parentNode.removeChild(wrapper);

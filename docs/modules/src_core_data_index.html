@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>&quot;src/core/data/index&quot; | V4Fire</title>
-	<meta name="description" content="">
+	<meta name="description" content="Documentation for V4Fire">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
 <style>/*!
@@ -15,7 +15,26 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+body {
+	font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+}
+
+code, pre, tt {
+	font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+}
+
+.tsd-typography h1,
+.tsd-typography h2,
+.tsd-typography h3,
+.tsd-typography h4,
+.tsd-typography h5,
+.tsd-typography h6 {
+	margin: 1em 0;
+	font-family: -apple-system, BlinkMacSystemFont, UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+}
+
 .tsd-panel {
+	padding: 20px 40px;
 	border: 1px solid #DDD;
 	border-radius: 10px;
 	box-shadow: none;
@@ -24,8 +43,8 @@
 .tsd-page-title {
 	color: #EEE;
 
-	background: #232526;  /* fallback for old browsers */
-	background: -webkit-linear-gradient(to right, #414345, #232526);  /* Chrome 10-25, Safari 5.1-6 */
+	background: #232526; /* fallback for old browsers */
+	background: -webkit-linear-gradient(to right, #414345, #232526); /* Chrome 10-25, Safari 5.1-6 */
 	background: linear-gradient(to right, #414345, #232526); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
@@ -58,6 +77,90 @@
 #tsd-search .field {
 	height: 100%;
 }
+
+pre {
+	background-color: rgba(7, 7, 7, 0.01);
+}
+
+/**
+ * GitHub Gist Theme
+ * Author : Anthony Attard - https://github.com/AnthonyAttard
+ * Author : Louis Barranqueiro - https://github.com/LouisBarranqueiro
+ */
+
+.hljs {
+	display: block;
+	background: white;
+	padding: 0.5em;
+	color: #333333;
+	overflow-x: auto;
+}
+
+.hljs-comment,
+.hljs-meta {
+	color: #969896;
+}
+
+.hljs-variable,
+.hljs-template-variable,
+.hljs-strong,
+.hljs-emphasis,
+.hljs-quote {
+	color: #df5000;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-type {
+	color: #d73a49;
+}
+
+.hljs-literal,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-attribute {
+	color: #0086b3;
+}
+
+.hljs-section,
+.hljs-name {
+	color: #63a35c;
+}
+
+.hljs-tag {
+	color: #333333;
+}
+
+.hljs-title,
+.hljs-attr,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-selector-attr,
+.hljs-selector-pseudo {
+	color: #6f42c1;
+}
+
+.hljs-addition {
+	color: #55a532;
+	background-color: #eaffea;
+}
+
+.hljs-deletion {
+	color: #bd2c00;
+	background-color: #ffecec;
+}
+
+.hljs-link {
+	text-decoration: underline;
+}
+
+.hljs-number {
+	color: #005cc5;
+}
+
+.hljs-string {
+	color: #032f62;
+}
 </style>
 </head>
 <body>
@@ -84,7 +187,7 @@
 	<div class="tsd-page-toolbar">
 		<div class="container">
 			<div class="table-wrap">
-				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.js" data-base="..">
+				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.json" data-base="..">
 					<div class="field">
 						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
 						<input id="tsd-search-field" type="text" />
@@ -109,10 +212,6 @@
 							</div>
 							<input type="checkbox" id="tsd-filter-inherited" checked />
 							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
-							<input type="checkbox" id="tsd-filter-externals" checked />
-							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
-							<input type="checkbox" id="tsd-filter-only-exported" />
-							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
 						</div>
 					</div>
 					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
@@ -130,7 +229,7 @@
 					<a href="src_core_data_index.html">&quot;src/core/data/index&quot;</a>
 				</li>
 			</ul>
-			<h1>External module &quot;src/core/data/index&quot;</h1>
+			<h1>Module &quot;src/core/data/index&quot;</h1>
 		</div>
 	</div>
 </header>
@@ -149,87 +248,87 @@
 						<ol>
 							<li><code>GET user/:id</code> returns an object of user fields by the specified user id:</li>
 						</ol>
-						<pre><code class="language-js"><span class="hljs-keyword">import</span> request <span class="hljs-keyword">from</span> <span class="hljs-string">'core/request'</span>;
-request(<span class="hljs-string">'user/1'</span>);</code></pre>
+						<pre><code class="language-js"><span class="hljs-keyword">import</span> request <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;core/request&#x27;</span>;
+request(<span class="hljs-string">&#x27;user/1&#x27;</span>);</code></pre>
 						<pre><code class="language-json">{
-  <span class="hljs-attr">"id"</span>: <span class="hljs-number">1</span>,
-  <span class="hljs-attr">"name"</span>: <span class="hljs-string">"Andrey"</span>,
-  <span class="hljs-attr">"age"</span>: <span class="hljs-number">30</span>
+  <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-number">1</span>,
+  <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Andrey&quot;</span>,
+  <span class="hljs-attr">&quot;age&quot;</span>: <span class="hljs-number">30</span>
 }</code></pre>
 						<ol start="2">
 							<li><code>PUT user/:id</code> modifies a user by the specified id with some provided data and returns new data:</li>
 						</ol>
-						<pre><code class="language-js"><span class="hljs-keyword">import</span> request <span class="hljs-keyword">from</span> <span class="hljs-string">'core/request'</span>;
-request(<span class="hljs-string">'user/1'</span>, {<span class="hljs-attr">method</span>: <span class="hljs-string">'PUT'</span>, <span class="hljs-attr">body</span>: {<span class="hljs-string">"age"</span>: <span class="hljs-number">31</span>}});</code></pre>
+						<pre><code class="language-js"><span class="hljs-keyword">import</span> request <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;core/request&#x27;</span>;
+request(<span class="hljs-string">&#x27;user/1&#x27;</span>, {<span class="hljs-attr">method</span>: <span class="hljs-string">&#x27;PUT&#x27;</span>, <span class="hljs-attr">body</span>: {<span class="hljs-string">&quot;age&quot;</span>: <span class="hljs-number">31</span>}});</code></pre>
 						<pre><code class="language-json">{
-  <span class="hljs-attr">"id"</span>: <span class="hljs-number">1</span>,
-  <span class="hljs-attr">"name"</span>: <span class="hljs-string">"Andrey"</span>,
-  <span class="hljs-attr">"age"</span>: <span class="hljs-number">31</span>
+  <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-number">1</span>,
+  <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Andrey&quot;</span>,
+  <span class="hljs-attr">&quot;age&quot;</span>: <span class="hljs-number">31</span>
 }</code></pre>
 						<ol start="3">
 							<li><code>DELETE user/:id</code> deletes a user by the specified id:</li>
 						</ol>
-						<pre><code class="language-js"><span class="hljs-keyword">import</span> request <span class="hljs-keyword">from</span> <span class="hljs-string">'core/request'</span>;
-request(<span class="hljs-string">'user/1'</span>, {<span class="hljs-attr">method</span>: <span class="hljs-string">'DELETE'</span>});</code></pre>
+						<pre><code class="language-js"><span class="hljs-keyword">import</span> request <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;core/request&#x27;</span>;
+request(<span class="hljs-string">&#x27;user/1&#x27;</span>, {<span class="hljs-attr">method</span>: <span class="hljs-string">&#x27;DELETE&#x27;</span>});</code></pre>
 						<ol start="4">
 							<li><code>POST user</code> creates a new user with the specified data and returns it:</li>
 						</ol>
-						<pre><code class="language-js"><span class="hljs-keyword">import</span> request <span class="hljs-keyword">from</span> <span class="hljs-string">'core/request'</span>;
-request(<span class="hljs-string">'user'</span>, {<span class="hljs-attr">method</span>: <span class="hljs-string">'POST'</span>, <span class="hljs-attr">body</span>: {<span class="hljs-string">"name"</span>: <span class="hljs-string">"Andrey"</span>, <span class="hljs-string">"age"</span>: <span class="hljs-number">30</span>}});</code></pre>
+						<pre><code class="language-js"><span class="hljs-keyword">import</span> request <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;core/request&#x27;</span>;
+request(<span class="hljs-string">&#x27;user&#x27;</span>, {<span class="hljs-attr">method</span>: <span class="hljs-string">&#x27;POST&#x27;</span>, <span class="hljs-attr">body</span>: {<span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;Andrey&quot;</span>, <span class="hljs-string">&quot;age&quot;</span>: <span class="hljs-number">30</span>}});</code></pre>
 						<pre><code class="language-json">{
-  <span class="hljs-attr">"id"</span>: <span class="hljs-number">2</span>,
-  <span class="hljs-attr">"name"</span>: <span class="hljs-string">"Andrey"</span>,
-  <span class="hljs-attr">"age"</span>: <span class="hljs-number">30</span>
+  <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-number">2</span>,
+  <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;Andrey&quot;</span>,
+  <span class="hljs-attr">&quot;age&quot;</span>: <span class="hljs-number">30</span>
 }</code></pre>
 						<p>All of these handlers are associated with one data model that represents a user. Knowing this, we can create a class for this model.</p>
-						<pre><code class="language-js"><span class="hljs-keyword">import</span> request <span class="hljs-keyword">from</span> <span class="hljs-string">'core/request'</span>;
+						<pre><code class="language-js"><span class="hljs-keyword">import</span> request <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;core/request&#x27;</span>;
 
 <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span> </span>{
-  url = <span class="hljs-string">'user/'</span>;
+  url = <span class="hljs-string">&#x27;user/&#x27;</span>;
 
-  <span class="hljs-keyword">async</span> <span class="hljs-keyword">get</span>(id) {
-    <span class="hljs-keyword">return</span> (<span class="hljs-keyword">await</span> request(<span class="hljs-keyword">this</span>.url + id)).data;
+  <span class="hljs-keyword">async</span> get(id) {
+    <span class="hljs-keyword">return</span> (<span class="hljs-keyword">await</span> request(<span class="hljs-built_in">this</span>.url + id)).data;
   }
 
   <span class="hljs-keyword">async</span> upd(id, body) {
-    <span class="hljs-keyword">return</span> (<span class="hljs-keyword">await</span> request(<span class="hljs-keyword">this</span>.url + id, {<span class="hljs-attr">method</span>: <span class="hljs-string">'PUT'</span>, body})).data;
+    <span class="hljs-keyword">return</span> (<span class="hljs-keyword">await</span> request(<span class="hljs-built_in">this</span>.url + id, {<span class="hljs-attr">method</span>: <span class="hljs-string">&#x27;PUT&#x27;</span>, body})).data;
   }
 
   <span class="hljs-keyword">async</span> del(id) {
-    <span class="hljs-keyword">return</span> (<span class="hljs-keyword">await</span> request(<span class="hljs-keyword">this</span>.url + id, {<span class="hljs-attr">method</span>: <span class="hljs-string">'DELETE'</span>})).data;
+    <span class="hljs-keyword">return</span> (<span class="hljs-keyword">await</span> request(<span class="hljs-built_in">this</span>.url + id, {<span class="hljs-attr">method</span>: <span class="hljs-string">&#x27;DELETE&#x27;</span>})).data;
   }
 
   <span class="hljs-keyword">async</span> add(body) {
-    <span class="hljs-keyword">return</span> (<span class="hljs-keyword">await</span> request(<span class="hljs-keyword">this</span>.url, {<span class="hljs-attr">method</span>: <span class="hljs-string">'POST'</span>, body})).data;
+    <span class="hljs-keyword">return</span> (<span class="hljs-keyword">await</span> request(<span class="hljs-built_in">this</span>.url, {<span class="hljs-attr">method</span>: <span class="hljs-string">&#x27;POST&#x27;</span>, body})).data;
   }
 }</code></pre>
 						<p>This might seem naive, but it works. Also, we need to create some API to submit events of the provider that allows notifying an application if data was changed.</p>
-						<pre><code class="language-js"><span class="hljs-keyword">import</span> request <span class="hljs-keyword">from</span> <span class="hljs-string">'core/request'</span>;
-<span class="hljs-keyword">import</span> { EventEmitter2 <span class="hljs-keyword">as</span> EventEmitter } <span class="hljs-keyword">from</span> <span class="hljs-string">'eventemitter2'</span>;
+						<pre><code class="language-js"><span class="hljs-keyword">import</span> request <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;core/request&#x27;</span>;
+<span class="hljs-keyword">import</span> { EventEmitter2 <span class="hljs-keyword">as</span> EventEmitter } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;eventemitter2&#x27;</span>;
 
 <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span> </span>{
-  url = <span class="hljs-string">'user/'</span>;
+  url = <span class="hljs-string">&#x27;user/&#x27;</span>;
   emitter = <span class="hljs-keyword">new</span> EventEmitter();
 
-  <span class="hljs-keyword">async</span> <span class="hljs-keyword">get</span>(id) {
-    <span class="hljs-keyword">return</span> (<span class="hljs-keyword">await</span> request(<span class="hljs-keyword">this</span>.url + id)).data;
+  <span class="hljs-keyword">async</span> get(id) {
+    <span class="hljs-keyword">return</span> (<span class="hljs-keyword">await</span> request(<span class="hljs-built_in">this</span>.url + id)).data;
   }
 
   <span class="hljs-keyword">async</span> upd(id, body) {
-    <span class="hljs-keyword">const</span> {data} = <span class="hljs-keyword">await</span> request(<span class="hljs-keyword">this</span>.url + id, {<span class="hljs-attr">method</span>: <span class="hljs-string">'PUT'</span>, body});
-    <span class="hljs-keyword">this</span>.emitter.emit(<span class="hljs-string">'upd'</span>, data);
+    <span class="hljs-keyword">const</span> {data} = <span class="hljs-keyword">await</span> request(<span class="hljs-built_in">this</span>.url + id, {<span class="hljs-attr">method</span>: <span class="hljs-string">&#x27;PUT&#x27;</span>, body});
+    <span class="hljs-built_in">this</span>.emitter.emit(<span class="hljs-string">&#x27;upd&#x27;</span>, data);
     <span class="hljs-keyword">return</span> data;
   }
 
   <span class="hljs-keyword">async</span> del(id) {
-    <span class="hljs-keyword">const</span> {data} = <span class="hljs-keyword">await</span> request(<span class="hljs-keyword">this</span>.url + id, {<span class="hljs-attr">method</span>: <span class="hljs-string">'DELETE'</span>});
-    <span class="hljs-keyword">this</span>.emitter.emit(<span class="hljs-string">'del'</span>, data);
+    <span class="hljs-keyword">const</span> {data} = <span class="hljs-keyword">await</span> request(<span class="hljs-built_in">this</span>.url + id, {<span class="hljs-attr">method</span>: <span class="hljs-string">&#x27;DELETE&#x27;</span>});
+    <span class="hljs-built_in">this</span>.emitter.emit(<span class="hljs-string">&#x27;del&#x27;</span>, data);
     <span class="hljs-keyword">return</span> data;
   }
 
   <span class="hljs-keyword">async</span> add(body) {
-    <span class="hljs-keyword">const</span> {data} = <span class="hljs-keyword">await</span> request(<span class="hljs-keyword">this</span>.url, {<span class="hljs-attr">method</span>: <span class="hljs-string">'POST'</span>, body});
-    <span class="hljs-keyword">this</span>.emitter.emit(<span class="hljs-string">'add'</span>, data);
+    <span class="hljs-keyword">const</span> {data} = <span class="hljs-keyword">await</span> request(<span class="hljs-built_in">this</span>.url, {<span class="hljs-attr">method</span>: <span class="hljs-string">&#x27;POST&#x27;</span>, body});
+    <span class="hljs-built_in">this</span>.emitter.emit(<span class="hljs-string">&#x27;add&#x27;</span>, data);
     <span class="hljs-keyword">return</span> data;
   }
 }</code></pre>
@@ -239,7 +338,7 @@ request(<span class="hljs-string">'user'</span>, {<span class="hljs-attr">method
 						</a>
 						<p>The &quot;core/data&quot; module provides a default interface for any data providers. If your class implements this interface, then you can use it as a data provider with any V4Fire modules. This interface is pretty similar to the above-mentioned example of a data class but realizes more common API. Let&#39;s take a look at it.</p>
 						<p><strong>core/data/interface</strong></p>
-						<pre><code class="language-typescript"><span class="hljs-keyword">import</span> { EventEmitterLike } <span class="hljs-keyword">from</span> <span class="hljs-string">'core/async'</span>;
+						<pre><code class="language-typescript"><span class="hljs-keyword">import</span> { EventEmitterLike } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;core/async&#x27;</span>;
 <span class="hljs-keyword">import</span> {
 
   CreateRequestOptions,
@@ -248,15 +347,15 @@ request(<span class="hljs-string">'user'</span>, {<span class="hljs-attr">method
   RequestResponse,
   RequestBody
 
-} <span class="hljs-keyword">from</span> <span class="hljs-string">'core/request'</span>;
+} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;core/request&#x27;</span>;
 
-<span class="hljs-keyword">import</span> { ModelMethod } <span class="hljs-keyword">from</span> <span class="hljs-string">'core/data/interface'</span>;
-<span class="hljs-keyword">export</span> * <span class="hljs-keyword">from</span> <span class="hljs-string">'core/data/interface/types'</span>;
+<span class="hljs-keyword">import</span> { ModelMethod } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;core/data/interface&#x27;</span>;
+<span class="hljs-keyword">export</span> * <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;core/data/interface/types&#x27;</span>;
 
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-keyword">interface</span> Provider {
-  readonly providerName: <span class="hljs-built_in">string</span>;
+  <span class="hljs-keyword">readonly</span> providerName: <span class="hljs-built_in">string</span>;
 
-  readonly emitter: EventEmitterLike;
+  <span class="hljs-keyword">readonly</span> emitter: EventEmitterLike;
 
   name(): CanUndef&lt;ModelMethod&gt;;
   name(value: ModelMethod): Provider;
@@ -272,7 +371,7 @@ request(<span class="hljs-string">'user'</span>, {<span class="hljs-attr">method
 
   dropCache(): <span class="hljs-built_in">void</span>;
 
-  <span class="hljs-keyword">get</span>&lt;T = unknown&gt;(query?: RequestQuery, opts?: CreateRequestOptions&lt;T&gt;): RequestResponse;
+  get&lt;T = unknown&gt;(query?: RequestQuery, opts?: CreateRequestOptions&lt;T&gt;): RequestResponse;
 
   peek&lt;T = unknown&gt;(query?: RequestQuery, opts?: CreateRequestOptions&lt;T&gt;): RequestResponse;
 
@@ -289,29 +388,29 @@ request(<span class="hljs-string">'user'</span>, {<span class="hljs-attr">method
 							<li><code>providerName</code> contains a full name of the provider.</li>
 							<li><code>name</code> — a pair of get/set methods to provide &quot;logical&quot; meaning for a request:</li>
 						</ol>
-						<pre><code class="language-js"><span class="hljs-comment">// Will emit "init" event, which contains the data, after successfully receiving</span>
-myProvider.name(<span class="hljs-string">'init'</span>).get(<span class="hljs-string">'foo'</span>);</code></pre>
+						<pre><code class="language-js"><span class="hljs-comment">// Will emit &quot;init&quot; event, which contains the data, after successfully receiving</span>
+myProvider.name(<span class="hljs-string">&#x27;init&#x27;</span>).get(<span class="hljs-string">&#x27;foo&#x27;</span>);</code></pre>
 						<p>Mind that the default V4Fire implementation of a data provider by default sends events for &quot;upd&quot;, &quot;add&quot;, &quot;del&quot; requests.
 						These events have the same name with methods that produce them.</p>
 						<ol start="3">
 							<li><code>method</code> — a pair of get/set methods to provide a type of HTTP request:</li>
 						</ol>
 						<pre><code class="language-js"><span class="hljs-comment">// The request uses POST method to get data</span>
-myProvider.method(<span class="hljs-string">'POST'</span>).get(<span class="hljs-string">'foo'</span>);</code></pre>
+myProvider.method(<span class="hljs-string">&#x27;POST&#x27;</span>).get(<span class="hljs-string">&#x27;foo&#x27;</span>);</code></pre>
 						<ol start="4">
 							<li><code>base</code> — a pair of get/set methods to provide a base URL for requests:</li>
 						</ol>
 						<pre><code class="language-js"><span class="hljs-comment">// The request is addressed for https://google.com/foo</span>
-myProvider.base(<span class="hljs-string">'https://google.com'</span>).get(<span class="hljs-string">'foo'</span>);</code></pre>
+myProvider.base(<span class="hljs-string">&#x27;https://google.com&#x27;</span>).get(<span class="hljs-string">&#x27;foo&#x27;</span>);</code></pre>
 						<ol start="5">
 							<li><code>url</code> — a pair of get/set methods to provide URL for requests:</li>
 						</ol>
 						<pre><code class="language-js"><span class="hljs-comment">// The request is addressed for https://google.com/foo</span>
-myProvider.url(<span class="hljs-string">'https://google.com'</span>).get(<span class="hljs-string">'foo'</span>);
+myProvider.url(<span class="hljs-string">&#x27;https://google.com&#x27;</span>).get(<span class="hljs-string">&#x27;foo&#x27;</span>);
 
 <span class="hljs-comment">// We can combine .base() and .url():</span>
 <span class="hljs-comment">// The request is addressed for https://google.com/bla/baz</span>
-myProvider.base(<span class="hljs-string">'https://google.com'</span>).url(<span class="hljs-string">'bla/baz'</span>).get(<span class="hljs-string">'foo'</span>);</code></pre>
+myProvider.base(<span class="hljs-string">&#x27;https://google.com&#x27;</span>).url(<span class="hljs-string">&#x27;bla/baz&#x27;</span>).get(<span class="hljs-string">&#x27;foo&#x27;</span>);</code></pre>
 						<ol start="6">
 							<li><p><code>dropCache</code> — a method that drops any request cache.</p>
 							</li>
@@ -324,10 +423,10 @@ myProvider.base(<span class="hljs-string">'https://google.com'</span>).url(<span
 							<h2>Default implementation</h2>
 						</a>
 						<p>In addition to the base interface of data providers V4Fire provides an implementation that grants some extra functionality and more flexibility.</p>
-						<pre><code class="language-js"><span class="hljs-keyword">import</span> Provider <span class="hljs-keyword">from</span> <span class="hljs-string">'core/provider'</span>;
+						<pre><code class="language-js"><span class="hljs-keyword">import</span> Provider <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;core/provider&#x27;</span>;
 
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Provider</span> </span>{
-  baseURL = <span class="hljs-string">'user/:id'</span>;
+  baseURL = <span class="hljs-string">&#x27;user/:id&#x27;</span>;
 }
 
 <span class="hljs-keyword">const</span> user = <span class="hljs-keyword">new</span> User();
@@ -338,10 +437,10 @@ user.get({<span class="hljs-attr">id</span>: <span class="hljs-number">1</span>}
 							<h3>Constructor parameters</h3>
 						</a>
 						<p>You can provide some parameters to a provider by using a constructor.</p>
-						<pre><code class="language-js"><span class="hljs-keyword">import</span> Provider <span class="hljs-keyword">from</span> <span class="hljs-string">'core/provider'</span>;
+						<pre><code class="language-js"><span class="hljs-keyword">import</span> Provider <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;core/provider&#x27;</span>;
 
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Provider</span> </span>{
-  baseURL = <span class="hljs-string">'user/:id'</span>;
+  baseURL = <span class="hljs-string">&#x27;user/:id&#x27;</span>;
 }
 
 <span class="hljs-keyword">const</span> user = <span class="hljs-keyword">new</span> User({
@@ -351,7 +450,7 @@ user.get({<span class="hljs-attr">id</span>: <span class="hljs-number">1</span>}
 						<p>The entire list of parameters:</p>
 						<pre><code class="language-typescript"><span class="hljs-keyword">interface</span> ProviderOptions {
   <span class="hljs-comment">/**
-   * List of additional data providers for the "get" method.
+   * List of additional data providers for the &quot;get&quot; method.
    * It can be useful if you have some providers that you want combine to one.
    */</span>
   extraProviders?: FunctionalExtraProviders;
@@ -370,7 +469,7 @@ user.get({<span class="hljs-attr">id</span>: <span class="hljs-number">1</span>}
   collapseEvents?: <span class="hljs-built_in">boolean</span>;
 
   <span class="hljs-comment">/**
-   * @see &lt;a href="../interfaces/src_core_request_interface.createrequestoptions.html#externalrequest"&gt;CreateRequestOptions.externalRequest&lt;/a&gt;
+   * @see &lt;a href=&quot;../interfaces/src_core_request_interface.createrequestoptions.html#externalrequest&quot;&gt;CreateRequestOptions.externalRequest&lt;/a&gt;
    * @default `false`
    */</span>
   externalRequest?: <span class="hljs-built_in">boolean</span>;
@@ -385,25 +484,25 @@ user.get({<span class="hljs-attr">id</span>: <span class="hljs-number">1</span>}
 							<h3>Registering a data provider as multiton</h3>
 						</a>
 						<p>You can register your data provider by a name in the global storage. For that case, you should use the special decorator &quot;provider&quot;.</p>
-						<pre><code class="language-js"><span class="hljs-keyword">import</span> Provider, { provider, providers } <span class="hljs-keyword">from</span> <span class="hljs-string">'core/provider'</span>;
+						<pre><code class="language-js"><span class="hljs-keyword">import</span> Provider, { provider, providers } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;core/provider&#x27;</span>;
 
 @provider
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Provider</span> </span>{
-  baseURL = <span class="hljs-string">'user/:id'</span>;
+  baseURL = <span class="hljs-string">&#x27;user/:id&#x27;</span>;
 }
 
-<span class="hljs-built_in">console</span>.log(providers[<span class="hljs-string">'User'</span>]);</code></pre>
+<span class="hljs-built_in">console</span>.log(providers[<span class="hljs-string">&#x27;User&#x27;</span>]);</code></pre>
 						<p>The name to register is taken from the class name of the provider. Also, you can declare a namespace that is concatenated with the name.</p>
-						<pre><code class="language-js"><span class="hljs-keyword">import</span> Provider, { provider, providers } <span class="hljs-keyword">from</span> <span class="hljs-string">'core/provider'</span>;
+						<pre><code class="language-js"><span class="hljs-keyword">import</span> Provider, { provider, providers } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;core/provider&#x27;</span>;
 
-@provider(<span class="hljs-string">'base'</span>)
+@provider(<span class="hljs-string">&#x27;base&#x27;</span>)
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Provider</span> </span>{
-  baseURL = <span class="hljs-string">'user/:id'</span>;
+  baseURL = <span class="hljs-string">&#x27;user/:id&#x27;</span>;
 }
 
-<span class="hljs-built_in">console</span>.log(providers[<span class="hljs-string">'base.User'</span>]);</code></pre>
+<span class="hljs-built_in">console</span>.log(providers[<span class="hljs-string">&#x27;base.User&#x27;</span>]);</code></pre>
 						<p>It can be useful to provide data providers to components as input properties:</p>
-						<pre><code class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">my-component</span> <span class="hljs-attr">dataProvider</span>=<span class="hljs-string">"base.User"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">my-component</span>&gt;</span></code></pre>
+						<pre><code class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">my-component</span> <span class="hljs-attr">dataProvider</span>=<span class="hljs-string">&quot;base.User&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">my-component</span>&gt;</span></code></pre>
 						<a href="#decorating-a-request-function" id="decorating-a-request-function" style="color: inherit; text-decoration: none;">
 							<h3>Decorating a request function</h3>
 						</a>
@@ -413,50 +512,50 @@ user.get({<span class="hljs-attr">id</span>: <span class="hljs-number">1</span>}
 						<p>The default implementation of a data provider has association between HTTP request methods and the provider methods:</p>
 						<pre><code class="language-js">{
   <span class="hljs-comment">/**
-   * Default HTTP request method for the "get" method
+   * Default HTTP request method for the &quot;get&quot; method
    */</span>
-  <span class="hljs-attr">getMethod</span>: RequestMethod = <span class="hljs-string">'GET'</span>;
+  <span class="hljs-attr">getMethod</span>: RequestMethod = <span class="hljs-string">&#x27;GET&#x27;</span>;
 
   <span class="hljs-comment">/**
-   * Default HTTP request method for the "peek" method
+   * Default HTTP request method for the &quot;peek&quot; method
    */</span>
-  peekMethod: RequestMethod = <span class="hljs-string">'HEAD'</span>;
+  peekMethod: RequestMethod = <span class="hljs-string">&#x27;HEAD&#x27;</span>;
 
   <span class="hljs-comment">/**
-   * Default HTTP request method for the "add" method
+   * Default HTTP request method for the &quot;add&quot; method
    */</span>
-  addMethod: RequestMethod = <span class="hljs-string">'POST'</span>;
+  addMethod: RequestMethod = <span class="hljs-string">&#x27;POST&#x27;</span>;
 
   <span class="hljs-comment">/**
-   * Default HTTP request method for the "upd" method
+   * Default HTTP request method for the &quot;upd&quot; method
    */</span>
-  updMethod: RequestMethod = <span class="hljs-string">'PUT'</span>;
+  updMethod: RequestMethod = <span class="hljs-string">&#x27;PUT&#x27;</span>;
 
   <span class="hljs-comment">/**
-   * Default HTTP request method for the "del" method
+   * Default HTTP request method for the &quot;del&quot; method
    */</span>
-  delMethod: RequestMethod = <span class="hljs-string">'DELETE'</span>;
+  delMethod: RequestMethod = <span class="hljs-string">&#x27;DELETE&#x27;</span>;
 }</code></pre>
 						<p>You allow to rewrite it in your subclass.</p>
-						<pre><code class="language-js"><span class="hljs-keyword">import</span> Provider, { provider } <span class="hljs-keyword">from</span> <span class="hljs-string">'core/provider'</span>;
+						<pre><code class="language-js"><span class="hljs-keyword">import</span> Provider, { provider } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;core/provider&#x27;</span>;
 
 @provider
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Provider</span> </span>{
-  baseURL = <span class="hljs-string">'user/:id'</span>;
-  getMethod = <span class="hljs-string">'POST'</span>;
+  baseURL = <span class="hljs-string">&#x27;user/:id&#x27;</span>;
+  getMethod = <span class="hljs-string">&#x27;POST&#x27;</span>;
 }</code></pre>
 						<a href="#base-url-for-requests" id="base-url-for-requests" style="color: inherit; text-decoration: none;">
 							<h4>Base URL for requests</h4>
 						</a>
 						<p>The base URL is the starting point for URLs of each request. You can provide one universal URL by using <code>baseURL</code> parameter, but also,
 						you can specify a base URL for each particular method.</p>
-						<pre><code class="language-js"><span class="hljs-keyword">import</span> Provider, { provider } <span class="hljs-keyword">from</span> <span class="hljs-string">'core/provider'</span>;
+						<pre><code class="language-js"><span class="hljs-keyword">import</span> Provider, { provider } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;core/provider&#x27;</span>;
 
 @provider
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Provider</span> </span>{
-  baseURL = <span class="hljs-string">'user/:id'</span>;
-  baseAddURL = <span class="hljs-string">'user/add'</span>;
-  baseDeLURL = <span class="hljs-string">'user/:id/del'</span>;
+  baseURL = <span class="hljs-string">&#x27;user/:id&#x27;</span>;
+  baseAddURL = <span class="hljs-string">&#x27;user/add&#x27;</span>;
+  baseDeLURL = <span class="hljs-string">&#x27;user/:id/del&#x27;</span>;
 }</code></pre>
 						<a href="#url-interpolation" id="url-interpolation" style="color: inherit; text-decoration: none;">
 							<h5>URL interpolation</h5>
@@ -476,36 +575,36 @@ user.get({<span class="hljs-attr">id</span>: <span class="hljs-number">1</span>}
 }</code></pre>
 						<p>You can specify a sequence of middlewares to the provider, but notice that the order of middlewares depends on the structure that you use (hash doesn&#39;t preserve the order, but arrays/maps do it).</p>
 						<p>For example, we need to add some authorization header for every request of the provider.</p>
-						<pre><code class="language-js"><span class="hljs-keyword">import</span> Provider, { provider } <span class="hljs-keyword">from</span> <span class="hljs-string">'core/provider'</span>;
+						<pre><code class="language-js"><span class="hljs-keyword">import</span> Provider, { provider } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;core/provider&#x27;</span>;
 
 @provider
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Provider</span> </span>{
   <span class="hljs-keyword">static</span> middlewares = {
     addSession({<span class="hljs-attr">opts</span>: {headers}}) {
-      headers[<span class="hljs-string">'Authorization'</span>] = <span class="hljs-string">'bearer myJWTToken'</span>;
+      headers[<span class="hljs-string">&#x27;Authorization&#x27;</span>] = <span class="hljs-string">&#x27;bearer myJWTToken&#x27;</span>;
     }
   };
 
-  baseURL = <span class="hljs-string">'user/:id'</span>;
+  baseURL = <span class="hljs-string">&#x27;user/:id&#x27;</span>;
 }</code></pre>
 						<p>Basically, the result of a middleware function is ignoring, with the exceptions of promises and functions.
 							If some middleware returns a promise, it will be awaited.
 							If at least one of the middlewares returns a function, then the result of invoking this function will be returned as the request result.
 						It can be helpful to organize mocks of data and other similar cases when you don&#39;t want to execute a real request.</p>
-						<pre><code class="language-js"><span class="hljs-keyword">import</span> Provider, { provider, Response } <span class="hljs-keyword">from</span> <span class="hljs-string">'core/provider'</span>;
+						<pre><code class="language-js"><span class="hljs-keyword">import</span> Provider, { provider, Response } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;core/provider&#x27;</span>;
 
 @provider
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Provider</span> </span>{
   <span class="hljs-keyword">static</span> middlewares = {
     attachMocks() {
-      <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-keyword">new</span> Response({<span class="hljs-attr">id</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">'Andrey'</span>}, {
+      <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> <span class="hljs-keyword">new</span> Response({<span class="hljs-attr">id</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Andrey&#x27;</span>}, {
         <span class="hljs-attr">status</span>: <span class="hljs-number">200</span>,
-        <span class="hljs-attr">responseType</span>: <span class="hljs-string">'object'</span>
+        <span class="hljs-attr">responseType</span>: <span class="hljs-string">&#x27;object&#x27;</span>
       });
     }
   };
 
-  baseURL = <span class="hljs-string">'user/:id'</span>;
+  baseURL = <span class="hljs-string">&#x27;user/:id&#x27;</span>;
 }</code></pre>
 						<a href="#encoders" id="encoders" style="color: inherit; text-decoration: none;">
 							<h4>Encoders</h4>
@@ -514,7 +613,7 @@ user.get({<span class="hljs-attr">id</span>: <span class="hljs-number">1</span>}
 							to another encoder or a request, which means that a sequence of encoders are tied with an order of following.
 							Encoders are using to convert data to another format before submitting it to a request.
 						For example, your server demands that all request data must be represented as a protobuf value.</p>
-						<pre><code class="language-js"><span class="hljs-keyword">import</span> Provider, { provider } <span class="hljs-keyword">from</span> <span class="hljs-string">'core/provider'</span>;
+						<pre><code class="language-js"><span class="hljs-keyword">import</span> Provider, { provider } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;core/provider&#x27;</span>;
 
 @provider
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Provider</span> </span>{
@@ -522,7 +621,7 @@ user.get({<span class="hljs-attr">id</span>: <span class="hljs-number">1</span>}
     <span class="hljs-attr">upd</span>: [toProtobuf]
   };
 
-  baseURL = <span class="hljs-string">'user/:id'</span>;
+  baseURL = <span class="hljs-string">&#x27;user/:id&#x27;</span>;
 }</code></pre>
 						<p>Note that unlike &quot;middlewares&quot; parameter the encoders are separated between provider methods, which means
 						that you should declare encoders for all your method pipelines.</p>
@@ -546,7 +645,7 @@ user.get({<span class="hljs-attr">id</span>: <span class="hljs-number">1</span>}
   (data: I, params: MiddlewareParams, response: Response): O;
 }</code></pre>
 						<p>The first parameters are equal to the encoder function. The last parameter contains a link to a response object.</p>
-						<pre><code class="language-js"><span class="hljs-keyword">import</span> Provider, { provider } <span class="hljs-keyword">from</span> <span class="hljs-string">'core/provider'</span>;
+						<pre><code class="language-js"><span class="hljs-keyword">import</span> Provider, { provider } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;core/provider&#x27;</span>;
 
 @provider
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Provider</span> </span>{
@@ -554,107 +653,107 @@ user.get({<span class="hljs-attr">id</span>: <span class="hljs-number">1</span>}
     <span class="hljs-attr">get</span>: [fromProtobuf]
   };
 
-  baseURL = <span class="hljs-string">'user/:id'</span>;
+  baseURL = <span class="hljs-string">&#x27;user/:id&#x27;</span>;
 }</code></pre>
 						<p>If some encoder returns a promise, it will be awaited.</p>
 						<a href="#custom-request-function" id="custom-request-function" style="color: inherit; text-decoration: none;">
 							<h4>Custom request function</h4>
 						</a>
 						<p>To create a request all providers use the <code>core/request</code> module. If you need to provide some extra parameters of the request, such as &quot;contentType&quot;, you can specify a factory to make these requests using the special overload of the request function.</p>
-						<pre><code class="language-js"><span class="hljs-keyword">import</span> request <span class="hljs-keyword">from</span> <span class="hljs-string">'core/request'</span>;
-<span class="hljs-keyword">import</span> Provider, { provider } <span class="hljs-keyword">from</span> <span class="hljs-string">'core/provider'</span>;
+						<pre><code class="language-js"><span class="hljs-keyword">import</span> request <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;core/request&#x27;</span>;
+<span class="hljs-keyword">import</span> Provider, { provider } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;core/provider&#x27;</span>;
 
 @provider
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Provider</span> </span>{
   <span class="hljs-keyword">static</span> request = request({
-    <span class="hljs-attr">contentType</span>: <span class="hljs-string">'json'</span>,
-    <span class="hljs-attr">cacheStrategy</span>: <span class="hljs-string">'forever'</span>,
+    <span class="hljs-attr">contentType</span>: <span class="hljs-string">&#x27;json&#x27;</span>,
+    <span class="hljs-attr">cacheStrategy</span>: <span class="hljs-string">&#x27;forever&#x27;</span>,
     <span class="hljs-attr">cacheTTL</span>: (<span class="hljs-number">10</span>).seconds()
   });
 
-  baseURL = <span class="hljs-string">'user/:id'</span>;
+  baseURL = <span class="hljs-string">&#x27;user/:id&#x27;</span>;
 }</code></pre>
 						<a href="#interpolation-of-headers" id="interpolation-of-headers" style="color: inherit; text-decoration: none;">
 							<h4>Interpolation of headers</h4>
 						</a>
 						<p>Headers of a request also have support for interpolation from request data, which similar to &quot;baseURL&quot;.</p>
-						<pre><code class="language-js"><span class="hljs-keyword">import</span> request <span class="hljs-keyword">from</span> <span class="hljs-string">'core/request'</span>;
-<span class="hljs-keyword">import</span> Provider, { provider } <span class="hljs-keyword">from</span> <span class="hljs-string">'core/provider'</span>;
+						<pre><code class="language-js"><span class="hljs-keyword">import</span> request <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;core/request&#x27;</span>;
+<span class="hljs-keyword">import</span> Provider, { provider } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;core/provider&#x27;</span>;
 
 @provider
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Provider</span> </span>{
   <span class="hljs-keyword">static</span> request = request({
     <span class="hljs-attr">header</span>: {
-      <span class="hljs-attr">Accept</span>: <span class="hljs-string">'${accept}'</span>
+      <span class="hljs-attr">Accept</span>: <span class="hljs-string">&#x27;${accept}&#x27;</span>
     }
   });
 
-  baseURL = <span class="hljs-string">'user/:id'</span>;
+  baseURL = <span class="hljs-string">&#x27;user/:id&#x27;</span>;
 }</code></pre>
 						<a href="#providing-an-api-url" id="providing-an-api-url" style="color: inherit; text-decoration: none;">
 							<h5>Providing an API URL</h5>
 						</a>
 						<p>You can specify a base URL for your server. It can be useful if you have different URLs for development, staging, and production.
 						The API URL is concatenated with the base URL of a provider.</p>
-						<pre><code class="language-js"><span class="hljs-keyword">import</span> Provider, { provider } <span class="hljs-keyword">from</span> <span class="hljs-string">'core/provider'</span>;
+						<pre><code class="language-js"><span class="hljs-keyword">import</span> Provider, { provider } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;core/provider&#x27;</span>;
 
 @provider
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Provider</span> </span>{
   <span class="hljs-keyword">static</span> request = request({
-    <span class="hljs-attr">api</span>: {<span class="hljs-attr">url</span>: <span class="hljs-string">'https://google.com'</span>}
+    <span class="hljs-attr">api</span>: {<span class="hljs-attr">url</span>: <span class="hljs-string">&#x27;https://google.com&#x27;</span>}
   });
 
-  baseURL = <span class="hljs-string">'user/:id'</span>;
+  baseURL = <span class="hljs-string">&#x27;user/:id&#x27;</span>;
 }</code></pre>
 						<p>The value can also be declared as a function that is invoked at each request.</p>
-						<pre><code class="language-js"><span class="hljs-keyword">import</span> Provider, { provider } <span class="hljs-keyword">from</span> <span class="hljs-string">'core/provider'</span>;
+						<pre><code class="language-js"><span class="hljs-keyword">import</span> Provider, { provider } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;core/provider&#x27;</span>;
 
 @provider
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Provider</span> </span>{
   <span class="hljs-keyword">static</span> request = request({
-    <span class="hljs-attr">api</span>: {<span class="hljs-attr">url</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> USE_PROD ? <span class="hljs-string">'https://google.com'</span> : <span class="hljs-string">'https://dev.google.com'</span>}
+    <span class="hljs-attr">api</span>: {<span class="hljs-attr">url</span>: <span class="hljs-function">() =&gt;</span> USE_PROD ? <span class="hljs-string">&#x27;https://google.com&#x27;</span> : <span class="hljs-string">&#x27;https://dev.google.com&#x27;</span>}
   });
 
-  baseURL = <span class="hljs-string">'user/:id'</span>;
+  baseURL = <span class="hljs-string">&#x27;user/:id&#x27;</span>;
 }</code></pre>
 						<p>Finally, if you specify the default API URL within <code>core/config/api</code>, you can provide some chunks of an API URL that are applied to the base.</p>
-						<pre><code class="language-js"><span class="hljs-keyword">import</span> Provider, { provider } <span class="hljs-keyword">from</span> <span class="hljs-string">'core/provider'</span>;
+						<pre><code class="language-js"><span class="hljs-keyword">import</span> Provider, { provider } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;core/provider&#x27;</span>;
 
 @provider
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Provider</span> </span>{
   <span class="hljs-keyword">static</span> request = request({
     <span class="hljs-attr">api</span>: {
-      <span class="hljs-attr">domain3</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> USE_PROD ? <span class="hljs-string">''</span> : <span class="hljs-string">'dev'</span>,
-      <span class="hljs-attr">zone</span>: <span class="hljs-string">'io'</span>
+      <span class="hljs-attr">domain3</span>: <span class="hljs-function">() =&gt;</span> <span class="hljs-function">() =&gt;</span> USE_PROD ? <span class="hljs-string">&#x27;&#x27;</span> : <span class="hljs-string">&#x27;dev&#x27;</span>,
+      <span class="hljs-attr">zone</span>: <span class="hljs-string">&#x27;io&#x27;</span>
     }
   });
 
-  baseURL = <span class="hljs-string">'user/:id'</span>;
+  baseURL = <span class="hljs-string">&#x27;user/:id&#x27;</span>;
 }</code></pre>
 						<a href="#composition-of-providers" id="composition-of-providers" style="color: inherit; text-decoration: none;">
 							<h3>Composition of providers</h3>
 						</a>
 						<p>You can create a composition of multiple providers that are fetching in parallel and merging to one data. This mechanism is called &quot;extraProviders&quot;. Mind that API work only for a get request.</p>
-						<pre><code class="language-js"><span class="hljs-keyword">import</span> Provider, { provider } <span class="hljs-keyword">from</span> <span class="hljs-string">'core/provider'</span>;
+						<pre><code class="language-js"><span class="hljs-keyword">import</span> Provider, { provider } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;core/provider&#x27;</span>;
 
 @provider
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Provider</span> </span>{
   extraProviders = <span class="hljs-function">(<span class="hljs-params">{opts: {query}}</span>) =&gt;</span> ({
-    <span class="hljs-string">'skills'</span>: {
-      <span class="hljs-attr">provider</span>: <span class="hljs-string">'Skills'</span>,
+    <span class="hljs-string">&#x27;skills&#x27;</span>: {
+      <span class="hljs-attr">provider</span>: <span class="hljs-string">&#x27;Skills&#x27;</span>,
       <span class="hljs-attr">query</span>: {<span class="hljs-attr">id</span>: query.id}
     }
   });
 
-  alias = <span class="hljs-string">'user'</span>;
-  baseURL = <span class="hljs-string">'user/:id'</span>;
+  alias = <span class="hljs-string">&#x27;user&#x27;</span>;
+  baseURL = <span class="hljs-string">&#x27;user/:id&#x27;</span>;
 }
 
 <span class="hljs-keyword">new</span> User().get({<span class="hljs-attr">id</span>: <span class="hljs-number">1</span>}).then(<span class="hljs-function">(<span class="hljs-params">data</span>) =&gt;</span> {
-  <span class="hljs-comment">// The main data from User provider is stored by an alias (if it's specified) or by a provider name</span>
+  <span class="hljs-comment">// The main data from User provider is stored by an alias (if it&#x27;s specified) or by a provider name</span>
   <span class="hljs-built_in">console</span>.log(data.user);
 
-  <span class="hljs-comment">// The extra data is stored by an alias (if it's specified) or by a key name from the declaration</span>
+  <span class="hljs-comment">// The extra data is stored by an alias (if it&#x27;s specified) or by a key name from the declaration</span>
   <span class="hljs-built_in">console</span>.log(data.skills);
 });</code></pre>
 						<a href="#extra-provider" id="extra-provider" style="color: inherit; text-decoration: none;">
@@ -684,50 +783,50 @@ user.get({<span class="hljs-attr">id</span>: <span class="hljs-number">1</span>}
 							<h4>Static extra providers</h4>
 						</a>
 						<p>If you don&#39;t need to provide dynamic parameters to a request you can define a static object instead of function.</p>
-						<pre><code class="language-js"><span class="hljs-keyword">import</span> Provider, { provider } <span class="hljs-keyword">from</span> <span class="hljs-string">'core/provider'</span>;
+						<pre><code class="language-js"><span class="hljs-keyword">import</span> Provider, { provider } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;core/provider&#x27;</span>;
 
 @provider
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Provider</span> </span>{
   extraProviders = {
-    <span class="hljs-string">'skills'</span>: {
-      <span class="hljs-attr">provider</span>: <span class="hljs-string">'Skills'</span>
+    <span class="hljs-string">&#x27;skills&#x27;</span>: {
+      <span class="hljs-attr">provider</span>: <span class="hljs-string">&#x27;Skills&#x27;</span>
     }
   };
 
-  alias = <span class="hljs-string">'user'</span>;
-  baseURL = <span class="hljs-string">'user/:id'</span>;
+  alias = <span class="hljs-string">&#x27;user&#x27;</span>;
+  baseURL = <span class="hljs-string">&#x27;user/:id&#x27;</span>;
 }</code></pre>
 						<a href="#extending-one-data-provider-from-another-provider" id="extending-one-data-provider-from-another-provider" style="color: inherit; text-decoration: none;">
 							<h3>Extending one data provider from another provider</h3>
 						</a>
 						<p>The data provider is a simple class implements a special interface. That&#39;s why to create a new provider that is extended parameters from another provider you should create a simple subclass.</p>
-						<pre><code class="language-js"><span class="hljs-keyword">import</span> Provider, { provider } <span class="hljs-keyword">from</span> <span class="hljs-string">'core/provider'</span>;
+						<pre><code class="language-js"><span class="hljs-keyword">import</span> Provider, { provider } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;core/provider&#x27;</span>;
 
 @provider
 <span class="hljs-keyword">export</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Provider</span> </span>{
   <span class="hljs-keyword">static</span> request = request({
-    <span class="hljs-attr">api</span>: {<span class="hljs-attr">url</span>: <span class="hljs-string">'https://google.com'</span>}
+    <span class="hljs-attr">api</span>: {<span class="hljs-attr">url</span>: <span class="hljs-string">&#x27;https://google.com&#x27;</span>}
   });
 
   <span class="hljs-keyword">static</span> middlewares = {
     addSession({<span class="hljs-attr">opts</span>: {headers}}) {
-      headers[<span class="hljs-string">'Authorization'</span>] = <span class="hljs-string">'bearer myJWTToken'</span>;
+      headers[<span class="hljs-string">&#x27;Authorization&#x27;</span>] = <span class="hljs-string">&#x27;bearer myJWTToken&#x27;</span>;
     }
   };
 
-  baseURL = <span class="hljs-string">'user/:id'</span>;
+  baseURL = <span class="hljs-string">&#x27;user/:id&#x27;</span>;
 }
 
 @provider
 <span class="hljs-keyword">export</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User2</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">User</span> </span>{
   <span class="hljs-keyword">static</span> request = User.request({
-    <span class="hljs-attr">contentType</span>: <span class="hljs-string">'json'</span>
+    <span class="hljs-attr">contentType</span>: <span class="hljs-string">&#x27;json&#x27;</span>
   });
 
   <span class="hljs-keyword">static</span> middlewares = {
     ...User.middlewares,
     addABHeader({<span class="hljs-attr">opts</span>: {headers}}) {
-      headers[<span class="hljs-string">'X-AB'</span>] = <span class="hljs-string">'foo'</span>;
+      headers[<span class="hljs-string">&#x27;X-AB&#x27;</span>] = <span class="hljs-string">&#x27;foo&#x27;</span>;
     }
   };
 }</code></pre>
@@ -735,7 +834,7 @@ user.get({<span class="hljs-attr">id</span>: <span class="hljs-number">1</span>}
 							<h3>Specifying data mocks</h3>
 						</a>
 						<p>There is a standard middleware to organize a mechanism of data mocking — &quot;attackMock&quot; middleware (it is used by default).</p>
-						<pre><code class="language-js"><span class="hljs-keyword">import</span> Provider, { provider } <span class="hljs-keyword">from</span> <span class="hljs-string">'core/provider'</span>;
+						<pre><code class="language-js"><span class="hljs-keyword">import</span> Provider, { provider } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;core/provider&#x27;</span>;
 
 @provider
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Provider</span> </span>{
@@ -748,7 +847,7 @@ user.get({<span class="hljs-attr">id</span>: <span class="hljs-number">1</span>}
 
         <span class="hljs-attr">response</span>: {
           <span class="hljs-attr">id</span>: <span class="hljs-number">1</span>,
-          <span class="hljs-attr">name</span>: <span class="hljs-string">"Andrey"</span>,
+          <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Andrey&quot;</span>,
           <span class="hljs-attr">age</span>: <span class="hljs-number">31</span>
         }
       }
@@ -757,16 +856,16 @@ user.get({<span class="hljs-attr">id</span>: <span class="hljs-number">1</span>}
     <span class="hljs-attr">GET</span>: [{
       <span class="hljs-attr">response</span>: {
         <span class="hljs-attr">id</span>: <span class="hljs-number">1</span>,
-        <span class="hljs-attr">name</span>: <span class="hljs-string">"Andrey"</span>,
+        <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Andrey&quot;</span>,
         <span class="hljs-attr">age</span>: <span class="hljs-number">30</span>
       }
     }]
   };
 
-  baseURL = <span class="hljs-string">'user/:id'</span>;
+  baseURL = <span class="hljs-string">&#x27;user/:id&#x27;</span>;
 }</code></pre>
 						<p>Mind that root keys of mocks represent HTTP methods, but not provider methods. The values contain arrays of request objects to match: the algorithm finds the most suitable option and returns its response. Also, the middleware supports dynamically casting responses:</p>
-						<pre><code class="language-js"><span class="hljs-keyword">import</span> Provider, { provider } <span class="hljs-keyword">from</span> <span class="hljs-string">'core/provider'</span>;
+						<pre><code class="language-js"><span class="hljs-keyword">import</span> Provider, { provider } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;core/provider&#x27;</span>;
 
 @provider
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Provider</span> </span>{
@@ -781,32 +880,32 @@ user.get({<span class="hljs-attr">id</span>: <span class="hljs-number">1</span>}
         response.status = <span class="hljs-number">200</span>;
         <span class="hljs-keyword">return</span> {
           <span class="hljs-attr">id</span>: <span class="hljs-number">1</span>,
-          <span class="hljs-attr">name</span>: <span class="hljs-string">"Andrey"</span>,
+          <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;Andrey&quot;</span>,
           <span class="hljs-attr">age</span>: <span class="hljs-number">30</span>
         };
        }
     }]
   };
 
-  baseURL = <span class="hljs-string">'user/:id'</span>;
+  baseURL = <span class="hljs-string">&#x27;user/:id&#x27;</span>;
 }</code></pre>
 						<p>Finally, you can use dynamic importing with mocks:</p>
-						<pre><code class="language-js"><span class="hljs-keyword">import</span> Provider, { provider } <span class="hljs-keyword">from</span> <span class="hljs-string">'core/provider'</span>;
+						<pre><code class="language-js"><span class="hljs-keyword">import</span> Provider, { provider } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;core/provider&#x27;</span>;
 
 @provider
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">User</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Provider</span> </span>{
-  <span class="hljs-keyword">static</span> mocks = <span class="hljs-keyword">import</span>(<span class="hljs-string">'mocks/user.json'</span>);
-  baseURL = <span class="hljs-string">'user/:id'</span>;
+  <span class="hljs-keyword">static</span> mocks = <span class="hljs-keyword">import</span>(<span class="hljs-string">&#x27;mocks/user.json&#x27;</span>);
+  baseURL = <span class="hljs-string">&#x27;user/:id&#x27;</span>;
 }</code></pre>
 						<a href="#enabling-data-mocks-for-a-provider" id="enabling-data-mocks-for-a-provider" style="color: inherit; text-decoration: none;">
 							<h4>Enabling data mocks for a provider</h4>
 						</a>
 						<p>By default, all data mocks is disabled, but you can enable it just type to a console of a browser:</p>
 						<pre><code class="language-js"><span class="hljs-comment">// Enables mocks for the User provider</span>
-setEnv(<span class="hljs-string">'mock'</span>, {<span class="hljs-attr">patterns</span>: [<span class="hljs-string">'User'</span>]});
+setEnv(<span class="hljs-string">&#x27;mock&#x27;</span>, {<span class="hljs-attr">patterns</span>: [<span class="hljs-string">&#x27;User&#x27;</span>]});
 
 <span class="hljs-comment">// Enables mocks for all providers</span>
-setEnv(<span class="hljs-string">'mock'</span>, {<span class="hljs-attr">patterns</span>: [<span class="hljs-string">'.*'</span>]});</code></pre>
+setEnv(<span class="hljs-string">&#x27;mock&#x27;</span>, {<span class="hljs-attr">patterns</span>: [<span class="hljs-string">&#x27;.*&#x27;</span>]});</code></pre>
 						<p>The values of patterns are converted to RegExp objects and applied to provider names (including namespaces).
 						Config settings are stored within a browser local storage.</p>
 					</div>
@@ -817,12 +916,272 @@ setEnv(<span class="hljs-string">'mock'</span>, {<span class="hljs-attr">pattern
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
+							<h3>References</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_data_index.html#cachestrategy" class="tsd-kind-icon">Cache<wbr>Strategy</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_data_index.html#createrequestoptions" class="tsd-kind-icon">Create<wbr>Request<wbr>Options</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_data_index.html#datawithstatus" class="tsd-kind-icon">Data<wbr>With<wbr>Status</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_data_index.html#decodersmap" class="tsd-kind-icon">Decoders<wbr>Map</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_data_index.html#encodersmap" class="tsd-kind-icon">Encoders<wbr>Map</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_data_index.html#extraprovider" class="tsd-kind-icon">Extra<wbr>Provider</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_data_index.html#extraproviderconstructor" class="tsd-kind-icon">Extra<wbr>Provider<wbr>Constructor</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_data_index.html#extraproviderparams" class="tsd-kind-icon">Extra<wbr>Provider<wbr>Params</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_data_index.html#extraproviders" class="tsd-kind-icon">Extra<wbr>Providers</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_data_index.html#functionalextraproviders" class="tsd-kind-icon">Functional<wbr>Extra<wbr>Providers</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_data_index.html#middlewareparams" class="tsd-kind-icon">Middleware<wbr>Params</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_data_index.html#middlewares" class="tsd-kind-icon">Middlewares</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_data_index.html#mock" class="tsd-kind-icon">Mock</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_data_index.html#mockcustomresponse" class="tsd-kind-icon">Mock<wbr>Custom<wbr>Response</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_data_index.html#mockoptions" class="tsd-kind-icon">Mock<wbr>Options</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_data_index.html#mockresponse" class="tsd-kind-icon">Mock<wbr>Response</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_data_index.html#mockresponsefunction" class="tsd-kind-icon">Mock<wbr>Response<wbr>Function</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_data_index.html#mockresponsetype" class="tsd-kind-icon">Mock<wbr>Response<wbr>Type</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_data_index.html#mocks" class="tsd-kind-icon">Mocks</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_data_index.html#modelmethod" class="tsd-kind-icon">Model<wbr>Method</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_data_index.html#provideroptions" class="tsd-kind-icon">Provider<wbr>Options</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_data_index.html#requestbody" class="tsd-kind-icon">Request<wbr>Body</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_data_index.html#requesterror" class="tsd-kind-icon">Request<wbr>Error</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_data_index.html#requestfunctionresponse" class="tsd-kind-icon">Request<wbr>Function<wbr>Response</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_data_index.html#requestmethod" class="tsd-kind-icon">Request<wbr>Method</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_data_index.html#requestquery" class="tsd-kind-icon">Request<wbr>Query</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_data_index.html#requestresponse" class="tsd-kind-icon">Request<wbr>Response</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_data_index.html#requestresponseobject" class="tsd-kind-icon">Request<wbr>Response<wbr>Object</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_data_index.html#response" class="tsd-kind-icon">Response</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_data_index.html#socket" class="tsd-kind-icon">Socket</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_data_index.html#attachmock" class="tsd-kind-icon">attach<wbr>Mock</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_data_index.html#attachstatus" class="tsd-kind-icon">attach<wbr>Status</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_data_index.html#connectcache" class="tsd-kind-icon">connect<wbr>Cache</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_data_index.html#emitter" class="tsd-kind-icon">emitter</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_data_index.html#globalopts" class="tsd-kind-icon">global<wbr>Opts</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_data_index.html#instancecache" class="tsd-kind-icon">instance<wbr>Cache</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_data_index.html#namespace" class="tsd-kind-icon">namespace</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_data_index.html#provider" class="tsd-kind-icon">provider</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_data_index.html#providers" class="tsd-kind-icon">providers</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_data_index.html#querymethods" class="tsd-kind-icon">query<wbr>Methods</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_data_index.html#requestcache" class="tsd-kind-icon">request<wbr>Cache</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_data_index.html#wait" class="tsd-kind-icon">wait</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
 							<h3>Classes</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-class tsd-parent-kind-external-module"><a href="../classes/src_core_data_index.provider.html" class="tsd-kind-icon">Provider</a></li>
+								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/src_core_data_index.provider-1.html" class="tsd-kind-icon">Provider</a></li>
 							</ul>
 						</section>
 					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>References</h2>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="cachestrategy" class="tsd-anchor"></a>
+					<h3>Cache<wbr>Strategy</h3>
+					Re-exports <a href="src_core_request_interface.html#cachestrategy">CacheStrategy</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="createrequestoptions" class="tsd-anchor"></a>
+					<h3>Create<wbr>Request<wbr>Options</h3>
+					Re-exports <a href="../interfaces/src_core_request_interface.createrequestoptions.html">CreateRequestOptions</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="datawithstatus" class="tsd-anchor"></a>
+					<h3>Data<wbr>With<wbr>Status</h3>
+					Re-exports <a href="../interfaces/src_core_data_middlewares_attach_status_interface.datawithstatus.html">DataWithStatus</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="decodersmap" class="tsd-anchor"></a>
+					<h3>Decoders<wbr>Map</h3>
+					Re-exports <a href="src_core_data_interface_types.html#decodersmap">DecodersMap</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="encodersmap" class="tsd-anchor"></a>
+					<h3>Encoders<wbr>Map</h3>
+					Re-exports <a href="src_core_data_interface_types.html#encodersmap">EncodersMap</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="extraprovider" class="tsd-anchor"></a>
+					<h3>Extra<wbr>Provider</h3>
+					Re-exports <a href="../interfaces/src_core_data_interface_types.extraprovider.html">ExtraProvider</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="extraproviderconstructor" class="tsd-anchor"></a>
+					<h3>Extra<wbr>Provider<wbr>Constructor</h3>
+					Re-exports <a href="src_core_data_interface_types.html#extraproviderconstructor">ExtraProviderConstructor</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="extraproviderparams" class="tsd-anchor"></a>
+					<h3>Extra<wbr>Provider<wbr>Params</h3>
+					Re-exports <a href="../interfaces/src_core_data_interface_types.extraproviderparams.html">ExtraProviderParams</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="extraproviders" class="tsd-anchor"></a>
+					<h3>Extra<wbr>Providers</h3>
+					Re-exports <a href="src_core_data_interface_types.html#extraproviders">ExtraProviders</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="functionalextraproviders" class="tsd-anchor"></a>
+					<h3>Functional<wbr>Extra<wbr>Providers</h3>
+					Re-exports <a href="src_core_data_interface_types.html#functionalextraproviders">FunctionalExtraProviders</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="middlewareparams" class="tsd-anchor"></a>
+					<h3>Middleware<wbr>Params</h3>
+					Re-exports <a href="../interfaces/src_core_request_interface.middlewareparams.html">MiddlewareParams</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="middlewares" class="tsd-anchor"></a>
+					<h3>Middlewares</h3>
+					Re-exports <a href="src_core_request_interface.html#middlewares">Middlewares</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="mock" class="tsd-anchor"></a>
+					<h3>Mock</h3>
+					Re-exports <a href="../interfaces/src_core_data_interface_types.mock.html">Mock</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="mockcustomresponse" class="tsd-anchor"></a>
+					<h3>Mock<wbr>Custom<wbr>Response</h3>
+					Re-exports <a href="../interfaces/src_core_data_interface_types.mockcustomresponse.html">MockCustomResponse</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="mockoptions" class="tsd-anchor"></a>
+					<h3>Mock<wbr>Options</h3>
+					Re-exports <a href="../interfaces/src_core_data_middlewares_attach_mock_interface.mockoptions.html">MockOptions</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="mockresponse" class="tsd-anchor"></a>
+					<h3>Mock<wbr>Response</h3>
+					Re-exports <a href="src_core_data_interface_types.html#mockresponse">MockResponse</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="mockresponsefunction" class="tsd-anchor"></a>
+					<h3>Mock<wbr>Response<wbr>Function</h3>
+					Re-exports <a href="../interfaces/src_core_data_interface_types.mockresponsefunction.html">MockResponseFunction</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="mockresponsetype" class="tsd-anchor"></a>
+					<h3>Mock<wbr>Response<wbr>Type</h3>
+					Re-exports <a href="src_core_data_interface_types.html#mockresponsetype">MockResponseType</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="mocks" class="tsd-anchor"></a>
+					<h3>Mocks</h3>
+					Re-exports <a href="src_core_data_interface_types.html#mocks">Mocks</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="modelmethod" class="tsd-anchor"></a>
+					<h3>Model<wbr>Method</h3>
+					Re-exports <a href="src_core_data_interface_types.html#modelmethod">ModelMethod</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="provideroptions" class="tsd-anchor"></a>
+					<h3>Provider<wbr>Options</h3>
+					Re-exports <a href="../interfaces/src_core_data_interface_types.provideroptions.html">ProviderOptions</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="requestbody" class="tsd-anchor"></a>
+					<h3>Request<wbr>Body</h3>
+					Re-exports <a href="src_core_request_interface.html#requestbody">RequestBody</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="requesterror" class="tsd-anchor"></a>
+					<h3>Request<wbr>Error</h3>
+					Re-exports <a href="../classes/src_core_request_error_index.requesterror.html">RequestError</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="requestfunctionresponse" class="tsd-anchor"></a>
+					<h3>Request<wbr>Function<wbr>Response</h3>
+					Re-exports <a href="../interfaces/src_core_request_interface.requestfunctionresponse.html">RequestFunctionResponse</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="requestmethod" class="tsd-anchor"></a>
+					<h3>Request<wbr>Method</h3>
+					Re-exports <a href="src_core_request_interface.html#requestmethod">RequestMethod</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="requestquery" class="tsd-anchor"></a>
+					<h3>Request<wbr>Query</h3>
+					Re-exports <a href="src_core_request_interface.html#requestquery">RequestQuery</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="requestresponse" class="tsd-anchor"></a>
+					<h3>Request<wbr>Response</h3>
+					Re-exports <a href="src_core_request_interface.html#requestresponse">RequestResponse</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="requestresponseobject" class="tsd-anchor"></a>
+					<h3>Request<wbr>Response<wbr>Object</h3>
+					Re-exports <a href="../interfaces/src_core_request_interface.requestresponseobject.html">RequestResponseObject</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="response" class="tsd-anchor"></a>
+					<h3>Response</h3>
+					Re-exports <a href="../classes/src_core_request_response_index.response.html">Response</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="socket" class="tsd-anchor"></a>
+					<h3>Socket</h3>
+					Re-exports <a href="src_core_socket_interface.html#socket">Socket</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="attachmock" class="tsd-anchor"></a>
+					<h3>attach<wbr>Mock</h3>
+					Re-exports <a href="src_core_data_middlewares_attach_mock_index.html#attachmock">attachMock</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="attachstatus" class="tsd-anchor"></a>
+					<h3>attach<wbr>Status</h3>
+					Re-exports <a href="src_core_data_middlewares_attach_status_index.html#attachstatus">attachStatus</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="connectcache" class="tsd-anchor"></a>
+					<h3>connect<wbr>Cache</h3>
+					Re-exports <a href="src_core_data_const.html#connectcache">connectCache</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="emitter" class="tsd-anchor"></a>
+					<h3>emitter</h3>
+					Re-exports <a href="src_core_data_const.html#emitter">emitter</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="globalopts" class="tsd-anchor"></a>
+					<h3>global<wbr>Opts</h3>
+					Re-exports <a href="src_core_request_const.html#globalopts">globalOpts</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="instancecache" class="tsd-anchor"></a>
+					<h3>instance<wbr>Cache</h3>
+					Re-exports <a href="src_core_data_const.html#instancecache">instanceCache</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="namespace" class="tsd-anchor"></a>
+					<h3>namespace</h3>
+					Re-exports <a href="src_core_data_const.html#namespace">namespace</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="provider" class="tsd-anchor"></a>
+					<h3>provider</h3>
+					Re-exports <a href="src_core_data_decorators.html#provider">provider</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="providers" class="tsd-anchor"></a>
+					<h3>providers</h3>
+					Re-exports <a href="src_core_data_const.html#providers">providers</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="querymethods" class="tsd-anchor"></a>
+					<h3>query<wbr>Methods</h3>
+					Re-exports <a href="src_core_data_const.html#querymethods">queryMethods</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="requestcache" class="tsd-anchor"></a>
+					<h3>request<wbr>Cache</h3>
+					Re-exports <a href="src_core_data_const.html#requestcache">requestCache</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="wait" class="tsd-anchor"></a>
+					<h3>wait</h3>
+					Re-exports <a href="src_core_data_middlewares_wait_index.html#wait">wait</a>
 				</section>
 			</section>
 		</div>
@@ -832,15 +1191,141 @@ setEnv(<span class="hljs-string">'mock'</span>, {<span class="hljs-attr">pattern
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
-					<li class="current tsd-kind-external-module">
+					<li class="current tsd-kind-module">
 						<a href="src_core_data_index.html">&quot;src/core/data/index&quot;</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-class tsd-parent-kind-external-module">
-						<a href="../classes/src_core_data_index.provider.html" class="tsd-kind-icon">Provider</a>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_data_index.html#cachestrategy" class="tsd-kind-icon">Cache<wbr>Strategy</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_data_index.html#createrequestoptions" class="tsd-kind-icon">Create<wbr>Request<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_data_index.html#datawithstatus" class="tsd-kind-icon">Data<wbr>With<wbr>Status</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_data_index.html#decodersmap" class="tsd-kind-icon">Decoders<wbr>Map</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_data_index.html#encodersmap" class="tsd-kind-icon">Encoders<wbr>Map</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_data_index.html#extraprovider" class="tsd-kind-icon">Extra<wbr>Provider</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_data_index.html#extraproviderconstructor" class="tsd-kind-icon">Extra<wbr>Provider<wbr>Constructor</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_data_index.html#extraproviderparams" class="tsd-kind-icon">Extra<wbr>Provider<wbr>Params</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_data_index.html#extraproviders" class="tsd-kind-icon">Extra<wbr>Providers</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_data_index.html#functionalextraproviders" class="tsd-kind-icon">Functional<wbr>Extra<wbr>Providers</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_data_index.html#middlewareparams" class="tsd-kind-icon">Middleware<wbr>Params</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_data_index.html#middlewares" class="tsd-kind-icon">Middlewares</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_data_index.html#mock" class="tsd-kind-icon">Mock</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_data_index.html#mockcustomresponse" class="tsd-kind-icon">Mock<wbr>Custom<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_data_index.html#mockoptions" class="tsd-kind-icon">Mock<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_data_index.html#mockresponse" class="tsd-kind-icon">Mock<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_data_index.html#mockresponsefunction" class="tsd-kind-icon">Mock<wbr>Response<wbr>Function</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_data_index.html#mockresponsetype" class="tsd-kind-icon">Mock<wbr>Response<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_data_index.html#mocks" class="tsd-kind-icon">Mocks</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_data_index.html#modelmethod" class="tsd-kind-icon">Model<wbr>Method</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_data_index.html#provideroptions" class="tsd-kind-icon">Provider<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_data_index.html#requestbody" class="tsd-kind-icon">Request<wbr>Body</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_data_index.html#requesterror" class="tsd-kind-icon">Request<wbr>Error</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_data_index.html#requestfunctionresponse" class="tsd-kind-icon">Request<wbr>Function<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_data_index.html#requestmethod" class="tsd-kind-icon">Request<wbr>Method</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_data_index.html#requestquery" class="tsd-kind-icon">Request<wbr>Query</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_data_index.html#requestresponse" class="tsd-kind-icon">Request<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_data_index.html#requestresponseobject" class="tsd-kind-icon">Request<wbr>Response<wbr>Object</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_data_index.html#response" class="tsd-kind-icon">Response</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_data_index.html#socket" class="tsd-kind-icon">Socket</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_data_index.html#attachmock" class="tsd-kind-icon">attach<wbr>Mock</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_data_index.html#attachstatus" class="tsd-kind-icon">attach<wbr>Status</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_data_index.html#connectcache" class="tsd-kind-icon">connect<wbr>Cache</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_data_index.html#emitter" class="tsd-kind-icon">emitter</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_data_index.html#globalopts" class="tsd-kind-icon">global<wbr>Opts</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_data_index.html#instancecache" class="tsd-kind-icon">instance<wbr>Cache</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_data_index.html#namespace" class="tsd-kind-icon">namespace</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_data_index.html#provider" class="tsd-kind-icon">provider</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_data_index.html#providers" class="tsd-kind-icon">providers</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_data_index.html#querymethods" class="tsd-kind-icon">query<wbr>Methods</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_data_index.html#requestcache" class="tsd-kind-icon">request<wbr>Cache</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_data_index.html#wait" class="tsd-kind-icon">wait</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/src_core_data_index.provider-1.html" class="tsd-kind-icon">Provider</a>
 					</li>
 				</ul>
 			</nav>
@@ -852,64 +1337,30 @@ setEnv(<span class="hljs-string">'mock'</span>, {<span class="hljs-attr">pattern
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
-				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
+				<li class="tsd-kind-namespace"><span class="tsd-kind-icon">Namespace</span></li>
 				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
 				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
 				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
 				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
-				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
 				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
 				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
-				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
-			</ul>
-			<ul class="tsd-legend">
 				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
 				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
-				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
-				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
 				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
-				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
-				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
 			</ul>
 		</div>
 	</div>
 </footer>
 <div class="overlay"></div>
 <script src="../assets/js/main.js"></script>
-<script>if (location.protocol == 'file:') document.write('<script src="../assets/js/search.js"><' + '/script>');</script>
 <script>'use strict';
 
 /*!
@@ -924,13 +1375,13 @@ setEnv(<span class="hljs-string">'mock'</span>, {<span class="hljs-attr">pattern
 	document.body.style.display = 'block';
 
 	var
-		isDTS = /([^/.]+)\.d/,
-		isIndex = /\/index|\.d/,
-		isNode = /(?:^|\b)node_modules(?:\b|$)/;
+		isDTS = /\.d$/,
+		isIndex = /^(?:(?!(?:^|\/)(?:interface|modules|prelude|engines)\/).)*?(?:^|\/)index$/,
+		isNode = /(?:^|\/)node_modules(?:\/|$)/;
 
 	var
 		trimRgxp = /^\s+|[\n\v"']+|\s+$/g,
-		normalizeRgxp = /(?:^|\b)src\//;
+		normalizeRgxp = /(?:^|\b)src\/|\/index$/g;
 
 	var
 		breadcrumbs = Array.from(document.querySelectorAll('.tsd-breadcrumb a')),
@@ -945,32 +1396,30 @@ setEnv(<span class="hljs-string">'mock'</span>, {<span class="hljs-attr">pattern
 	});
 
 	var
-		navigation = Array.from(document.querySelectorAll('.tsd-navigation.primary .tsd-kind-external-module a')),
-		globalIndex = Array.from(document.querySelectorAll('.tsd-index-list a'));
+		navigation = Array.from(document.querySelectorAll('.tsd-navigation.primary .tsd-kind-module a')),
+		globalIndex = Array.from(document.querySelectorAll('.tsd-kind-module a'));
 
-	[].concat(navigation, breadcrumbs.length <= 1 ? globalIndex : []).forEach(function (el) {
+	[].concat(breadcrumbs.length <= 1 ? globalIndex : navigation).forEach(function (el) {
 		var
 			wrapper = el.parentNode,
 			linkText = el.textContent.replace(trimRgxp, '');
 
-		if (isIndex.test(linkText)) {
-			if (isDTS.test(linkText)) {
-				var
-					nm = RegExp.$1;
+		if (isDTS.test(linkText)) {
+			var
+				nm = RegExp.$1;
 
-				if (linkText === 'index.d') {
-					el.innerHTML = '<b>prelude</b>';
+			if (linkText === 'index.d') {
+				el.innerHTML = '<b>prelude</b>';
 
-				} else if (isNode.test(linkText)) {
-					el.textContent = nm;
-
-				} else {
-					wrapper.parentNode.removeChild(wrapper);
-				}
+			} else if (isNode.test(linkText)) {
+				el.textContent = nm;
 
 			} else {
-				el.textContent = linkText.replace(isIndex, '').replace(normalizeRgxp, '');
+				wrapper.parentNode.removeChild(wrapper);
 			}
+
+		} else if (isIndex.test(linkText)) {
+			el.textContent = linkText.replace(normalizeRgxp, '');
 
 		} else {
 			wrapper.parentNode.removeChild(wrapper);
