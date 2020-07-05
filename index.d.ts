@@ -210,7 +210,8 @@ interface FastCloneOptions {
 
 interface ObjectMixinOptions<V = unknown, K = unknown, D = unknown> {
 	/**
-	 * If true, then object properties are copied recursively
+	 * If true, then object properties are copied recursively.
+	 * Also, this mode enables copying properties from a prototype.
 	 *
 	 * @default `false`
 	 * @example
@@ -220,6 +221,9 @@ interface ObjectMixinOptions<V = unknown, K = unknown, D = unknown> {
 	 *
 	 * // {a: {b: 1, c: 2}}
 	 * Object.mixin({deep: true}, {a: {b: 1}}, {a: {c: 2}});
+	 *
+	 * // {a: {c: 2}}
+	 * Object.mixin({deep: true}, {}, {__proto__: {a: {c: 2}}});
 	 * ```
 	 */
 	deep?: boolean;

@@ -133,7 +133,8 @@ extend(Object, 'mixin', function mixin(
 	}
 
 	const forEachParams = {
-		withDescriptor: Object.isTruly(p.withAccessors) || Object.isTruly(p.withDescriptor)
+		withDescriptor: Object.isTruly(p.withAccessors) || Object.isTruly(p.withDescriptor),
+		notOwn: Object.isTruly(p.deep)
 	};
 
 	for (let i = 0; i < objects.length; i++) {

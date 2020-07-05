@@ -253,6 +253,15 @@ describe('core/prelude/object/mixin', () => {
 			}
 		});
 
+		expect(Object.mixin({deep: true, withProto: true}, {}, base2)).toEqual({
+			a: 2,
+			b: {
+				c: 2,
+				e: 3,
+				arr: [1]
+			}
+		});
+
 		const
 			base3 = Object.create(proto);
 
@@ -337,6 +346,11 @@ describe('core/prelude/object/mixin', () => {
 			c: new Set([1, 2, 3, 4]),
 			d: [2, 3, 3]
 		});
+	});
+
+	it('deep extending with not own properties', () => {
+		expect(Object.mixin(false, {}, {__proto__: {a: 1}})).toEqual({});
+		expect(Object.mixin(true, {}, {__proto__: {a: 1}})).toEqual({a: 1});
 	});
 
 	it('deep extending with the concatenation of arrays', () => {
