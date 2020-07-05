@@ -79,7 +79,7 @@
     "through2": "^4.0.2",
     "tsconfig": "^7.0.0",
     "typedoc": "^0.17.8",
-    "typescript": "3.9.3",
+    "typescript": "3.9.6",
     "uniconf": "^2.1.1",
     "upath": "^1.2.0",
     "urlconcat": "0.0.12"
@@ -91,7 +91,7 @@
     "babel-eslint": "^10.1.0",
     "eslint": "^7.4.0",
     "eslint-plugin-enchanted-curly": "1.0.1",
-    "eslint-plugin-import": "2.20.2",
+    "eslint-plugin-import": "2.22.0",
     "husky": "^4.2.5",
     "nyc": "^15.1.0",
     "prettier": "^2.0.5",
