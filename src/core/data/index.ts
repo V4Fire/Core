@@ -61,7 +61,7 @@ export default class Provider extends DefaultProvider {
 	};
 
 	/** @override */
-	public constructor(opts: ProviderOptions) {
+	public constructor(opts?: ProviderOptions) {
 		super(opts);
 	}
 }
