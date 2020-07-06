@@ -58,4 +58,9 @@ export default class Provider extends DefaultProvider {
 	static readonly middlewares: Middlewares = {
 		attachMock
 	};
+
+	/** @override */
+	public constructor() {
+		super();
+	}
 }
