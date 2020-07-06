@@ -42,6 +42,7 @@ module.exports = config.createConfig(
 
 		/**
 		 * Application name
+		 * @type {string}
 		 */
 		appName: o('app-name', {
 			env: true,
@@ -54,6 +55,7 @@ module.exports = config.createConfig(
 
 		/**
 		 * Default application locale to internalize
+		 * @type {string}
 		 */
 		locale: o('locale', {
 			env: true,
@@ -66,6 +68,7 @@ module.exports = config.createConfig(
 
 		/**
 		 * Application environment (prod, stage, etc.)
+		 * @type {string}
 		 */
 		environment: o('environment', {
 			env: true,
@@ -225,6 +228,7 @@ module.exports = config.createConfig(
 		api: {
 			/**
 			 * True, if the application should use proxy to connect to a server
+			 * @type {boolean}
 			 */
 			proxy: o('api-proxy', {
 				env: true,
@@ -234,6 +238,7 @@ module.exports = config.createConfig(
 
 			/**
 			 * Base server API URL
+			 * @type {string}
 			 */
 			url: o('api-url', {
 				env: true,
@@ -242,6 +247,7 @@ module.exports = config.createConfig(
 
 			/**
 			 * Server port to launch
+			 * @type {number}
 			 */
 			port: o('port', {
 				env: true,
@@ -315,11 +321,13 @@ module.exports = config.createConfig(
 
 			/**
 			 * Default hash algorithm to use
+			 * @type {string}
 			 */
 			hashAlg: 'md5',
 
 			/**
 			 * Length of a hashed string
+			 * @type {number}
 			 */
 			hashLength: 8,
 
