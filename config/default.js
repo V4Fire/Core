@@ -174,6 +174,10 @@ module.exports = config.createConfig(
 
 			/**
 			 * Returns a path to the application dist directory for client scripts
+			 *
+			 * @cli client-output
+			 * @env CLIENT_OUTPUT
+			 *
 			 * @returns {string}
 			 */
 			clientOutput(...args) {
@@ -187,6 +191,10 @@ module.exports = config.createConfig(
 
 			/**
 			 * Returns a path to the application dist directory for server scripts
+			 *
+			 * @cli server-output
+			 * @env SERVER_OUTPUT
+			 *
 			 * @returns {string}
 			 */
 			serverOutput(...args) {
@@ -246,6 +254,10 @@ module.exports = config.createConfig(
 
 			/**
 			 * Returns URL of the launched server
+			 *
+			 * @cli host-url
+			 * @env HOST_URL
+			 *
 			 * @returns {string}
 			 */
 			host() {
@@ -257,6 +269,10 @@ module.exports = config.createConfig(
 
 			/**
 			 * Returns a pathname of the launched server
+			 *
+			 * @cli base-path
+			 * @env BASE_PATH
+			 *
 			 * @returns {string}
 			 */
 			pathname() {
@@ -277,6 +293,10 @@ module.exports = config.createConfig(
 		build: {
 			/**
 			 * Returns the build identifier
+			 *
+			 * @cli build-id
+			 * @env BUILD_ID
+			 *
 			 * @returns {?string}
 			 */
 			id() {
@@ -318,12 +338,19 @@ module.exports = config.createConfig(
 
 		/**
 		 * Returns the version of the used ECMAScript specification
+		 *
+		 * @cli es
+		 * @env ES
+		 *
 		 * @returns {string}
 		 */
 		es() {
 			return o('es', {
 				env: true,
-				default: 'ES6'
+				default: 'ES6',
+				coerce(value) {
+					return value.toUpperCase();
+				}
 			});
 		},
 
