@@ -19,7 +19,8 @@
     "url": "https://github.com/V4Fire/Core/issues"
   },
   "keywords": [
-    "V4Fire"
+    "V4Fire",
+    "Core"
   ],
   "scripts": {
     "dev": "npx gulp watch:server",
