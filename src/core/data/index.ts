@@ -19,6 +19,7 @@ import DefaultProvider from 'core/data/modules/base';
 
 import { provider } from 'core/data/decorators';
 import { attachMock } from 'core/data/middlewares';
+import { ProviderOptions } from 'core/data/interface';
 
 export * from 'core/data/const';
 export * from 'core/data/decorators';
@@ -60,7 +61,7 @@ export default class Provider extends DefaultProvider {
 	};
 
 	/** @override */
-	public constructor() {
-		super();
+	public constructor(opts: ProviderOptions) {
+		super(opts);
 	}
 }

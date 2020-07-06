@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.20.3 (2020-07-06)
+
+#### :bug: Bug Fix
+
+* Fixed passing of constructor options `core/data`
+
 ## v3.20.2 (2020-07-06)
 
 #### :bug: Bug Fix
