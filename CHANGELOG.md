@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.20.1 (2020-07-06)
+
+#### :house: Internal
+
+* All linter configurations now loaded from @v4fire/linters
+
 ## v3.20.0 (2020-07-05)
 
 #### :boom: Breaking Change
