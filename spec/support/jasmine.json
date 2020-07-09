@@ -4,5 +4,6 @@
     "**/*[sS]pec.js"
   ],
   "stopSpecOnExpectationFailure": false,
-  "random": true
+  "random": true,
+  "timeoutInterval": 10000
 }

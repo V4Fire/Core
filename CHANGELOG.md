@@ -17,6 +17,10 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 * Fixed bug when comparing with `ord` strategy `core/semver`
 
+#### :house: Internal
+
+* Made timeout interval for async specs bigger
+
 ## v3.20.4 (2020-07-06)
 
 #### :bug: Bug Fix
