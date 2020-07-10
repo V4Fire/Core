@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.22.0 (2020-07-10)
+
+#### :bug: Bug Fix
+
+* Fixed the bug when comparing intermediate numbers
+
 ## v3.21.0 (2020-07-10)
 
 #### :bug: Bug Fix
