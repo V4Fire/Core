@@ -26,7 +26,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 * Made timeout interval for async specs bigger
 * Refactoring `build/tsconfig.gulp.js`
-* Updated dependencies: got@11.5.0, @v4fire/linters@1.2.0
+* Updated dependencies: got@11.5.0, @v4fire/linters@1.2.1
 
 ## v3.20.4 (2020-07-06)
 
