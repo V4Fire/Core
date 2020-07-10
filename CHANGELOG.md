@@ -11,15 +11,22 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-## v3.20.5 (2020-07-09)
+## v3.21.0 (2020-07-10)
+
+#### :rocket: New Feature
+
+* Added `build/const/isLayerDep` & `build/const/isExternalDep`
 
 #### :bug: Bug Fix
 
-* Fixed bug when comparing with `ord` strategy `core/semver`
+* Fixed the bug when comparing with `ord` strategy `core/semver`
+* Added the project name to `build/const/depsRgxpStr`
 
 #### :house: Internal
 
 * Made timeout interval for async specs bigger
+* Refactoring `build/tsconfig.gulp.js`
+* Updated dependencies: got@11.5.0, @v4fire/linters@1.2.1
 
 ## v3.20.4 (2020-07-06)
 

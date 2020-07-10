@@ -11,26 +11,14 @@ Changelog
 
 ## v3.21.0 (2020-07-10)
 
-#### :bug: Bug Fix
-
-* Fixed the bug when comparing with `ord` strategy
-
-## v3.17.0 (2020-05-22)
-
 #### :rocket: New Feature
 
-* Added tilda ranges
-
-## v3.15.3 (2020-05-11)
-
-#### :nail_care: Polish
-
-* Module refactoring
+* Added `const/isLayerDep` & `const/isExternalDep`
 
 #### :bug: Bug Fix
 
-* Fixed some bugs with a comparison
+* Added the project name to `const/depsRgxpStr`
 
-#### :house: Tests
+#### :house: Internal
 
-* Added `spec.js` with test cases
+* Refactoring `tsconfig.gulp.js`
