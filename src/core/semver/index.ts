@@ -111,6 +111,14 @@ export default function compare(a: string, b: string, op: Operation, opts: Compa
 					return op.length !== 1;
 				}
 
+				// 1.2.1 <= 1.1.1
+				// 2.1.1 <= 1.1.1
+				// 1.1.1 >= 1.2.1
+				// 1.1.1 >= 2.1.1
+				if (!res && op.length === 2) {
+					return res;
+				}
+
 				// 1.1.2 > 1.1.1
 				// 1.3.0 > 1.2.*
 				if (res && op.length === 1) {

@@ -10,8 +10,16 @@ import check, { operandLengthErrorText } from 'core/semver';
 
 describe('core/semver', () => {
 	it('greater than (>)', () => {
-		expect(check('1.2.9', '1.2.7', '>')).toBeTrue();
-		expect(check('1.2.9', '1.2.9', '>')).toBeFalse();
+		expect(check('1.1.1', '2.1.1', '>')).toBeFalse();
+		expect(check('1.1.1', '1.2.1', '>')).toBeFalse();
+		expect(check('1.1.1', '1.1.2', '>')).toBeFalse();
+
+		expect(check('2.1.1', '1.1.1', '>')).toBeTrue();
+		expect(check('1.2.1', '1.1.1', '>')).toBeTrue();
+		expect(check('1.1.2', '1.1.1', '>')).toBeTrue();
+
+		expect(check('1.1.2', '1.1.2', '>')).toBeFalse();
+
 		expect(check('1.0.0', '1.2.7', '>')).toBeFalse();
 
 		expect(check('1.*', '1.2.7', '>')).toBeFalse();
@@ -24,9 +32,15 @@ describe('core/semver', () => {
 	});
 
 	it('greater than or equal (>=)', () => {
-		expect(check('1.2.9', '1.2.7', '>=')).toBeTrue();
-		expect(check('1.2.9', '1.2.9', '>=')).toBeTrue();
-		expect(check('1.0.0', '1.2.7', '>=')).toBeFalse();
+		expect(check('1.1.1', '2.1.1', '>=')).toBeFalse();
+		expect(check('1.1.1', '1.2.1', '>=')).toBeFalse();
+		expect(check('1.1.1', '1.1.2', '>=')).toBeFalse();
+
+		expect(check('2.1.1', '1.1.1', '>=')).toBeTrue();
+		expect(check('1.2.1', '1.1.1', '>=')).toBeTrue();
+		expect(check('1.1.2', '1.1.1', '>=')).toBeTrue();
+
+		expect(check('1.1.2', '1.1.2', '>=')).toBeTrue();
 
 		expect(check('1.*', '1.2.7', '>=')).toBeTrue();
 
@@ -38,8 +52,16 @@ describe('core/semver', () => {
 	});
 
 	it('less than (<)', () => {
-		expect(check('1.2.9', '1.2.7', '<')).toBeFalse();
-		expect(check('1.2.9', '1.2.9', '<')).toBeFalse();
+		expect(check('1.1.1', '2.1.1', '<')).toBeTrue();
+		expect(check('1.1.1', '1.2.1', '<')).toBeTrue();
+		expect(check('1.1.1', '1.1.2', '<')).toBeTrue();
+
+		expect(check('2.1.1', '1.1.1', '<')).toBeFalse();
+		expect(check('1.2.1', '1.1.1', '<')).toBeFalse();
+		expect(check('1.1.2', '1.1.1', '<')).toBeFalse();
+
+		expect(check('1.1.2', '1.1.2', '<')).toBeFalse();
+
 		expect(check('1.0.0', '1.2.7', '<')).toBeTrue();
 
 		expect(check('1.*', '1.2.7', '<')).toBeFalse();
@@ -49,9 +71,17 @@ describe('core/semver', () => {
 	});
 
 	it('less than or equal (<=)', () => {
+		expect(check('1.1.1', '2.1.1', '<=')).toBeTrue();
+		expect(check('1.1.1', '1.2.1', '<=')).toBeTrue();
+		expect(check('1.1.1', '1.1.2', '<=')).toBeTrue();
+
+		expect(check('2.1.1', '1.1.1', '<=')).toBeFalse();
+		expect(check('1.2.1', '1.1.1', '<=')).toBeFalse();
+		expect(check('1.1.2', '1.1.1', '<=')).toBeFalse();
+
+		expect(check('1.1.2', '1.1.2', '<=')).toBeTrue();
+
 		expect(check('1.3.0', '1.2.*', '<=')).toBeFalse();
-		expect(check('1.2.9', '1.2.7', '<=')).toBeFalse();
-		expect(check('1.2.9', '1.2.9', '<=')).toBeTrue();
 		expect(check('1.0.0', '1.2.7', '<=')).toBeTrue();
 
 		expect(check('1.*', '1.2.7', '<=')).toBeTrue();
