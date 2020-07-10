@@ -9,11 +9,11 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
-## v3.20.5 (2020-07-09)
+## v3.21.0 (2020-07-10)
 
 #### :bug: Bug Fix
 
-* Fixed bug when comparing with `ord` strategy
+* Fixed the bug when comparing with `ord` strategy
 
 ## v3.17.0 (2020-05-22)
 
