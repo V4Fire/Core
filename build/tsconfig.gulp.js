@@ -40,9 +40,6 @@ module.exports = function init(gulp) {
 			{src, extend} = require('config'),
 			{config: pzlr, resolve} = require('@pzlr/build-core');
 
-		const
-			h = include('build/helpers');
-
 		const files = [
 			'./**/*.tsconfig',
 			'./**/.tsconfig',
@@ -104,14 +101,11 @@ module.exports = function init(gulp) {
 
 				function resolveExtends(config) {
 					if (config.extends) {
-						const
-							{name: projectName} = h.getProjectInfo();
-
 						let
 							parentConfig = config.extends;
 
-						if (parentConfig.startsWith(projectName)) {
-							parentConfig = path.join(src.cwd(), parentConfig.replace(h.getProjectInfo().name, ''));
+						if (parentConfig.startsWith(pzlr.projectName)) {
+							parentConfig = path.join(src.cwd(), parentConfig.replace(pzlr.projectName, ''));
 
 						} else if (!resolve.isNodeModule(parentConfig)) {
 							parentConfig = path.join(src.cwd(), parentConfig);
