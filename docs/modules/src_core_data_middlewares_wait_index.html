@@ -262,7 +262,7 @@ pre {
   dataProvider: <span class="hljs-built_in">string</span> = <span class="hljs-string">&#x27;MyProvider&#x27;</span>;
 
   <span class="hljs-comment">/** @override */</span>
-  <span class="hljs-meta">@system</span>(<span class="hljs-function">(<span class="hljs-params">o</span>) =&gt;</span> o.sync.object(<span class="hljs-string">&#x27;get&#x27;</span>, [<span class="hljs-string">&#x27;wait&#x27;</span>, <span class="hljs-string">&#x27;canLoadData&#x27;</span>]))
+  <span class="hljs-meta">@system</span>(<span class="hljs-function">(<span class="hljs-params">o</span>) =&gt;</span> o.sync.object(<span class="hljs-string">&#x27;get&#x27;</span>, [[<span class="hljs-string">&#x27;wait&#x27;</span>, <span class="hljs-string">&#x27;canLoadData&#x27;</span>]]))
   requestParams!: RequestParams;
 
   <span class="hljs-keyword">async</span> canLoadData(): <span class="hljs-built_in">Promise</span>&lt;<span class="hljs-built_in">boolean</span>&gt; {
