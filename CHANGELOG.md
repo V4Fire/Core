@@ -15,7 +15,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :bug: Bug Fix
 
-* Frozen dependencies: got@11.3.0
+* Frozen dependencies: got@11.2.0
 
 ## v3.21.0 (2020-07-10)
 
