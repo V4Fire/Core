@@ -13,10 +13,22 @@ describe('core/semver', () => {
 		expect(check('1.1.1', '2.1.1', '>')).toBeFalse();
 		expect(check('1.1.1', '1.2.1', '>')).toBeFalse();
 		expect(check('1.1.1', '1.1.2', '>')).toBeFalse();
+		expect(check('1.1.2', '2.1.1', '>')).toBeFalse();
+		expect(check('1.1.2', '1.2.1', '>')).toBeFalse();
+		expect(check('1.1.3', '2.1.1', '>')).toBeFalse();
+		expect(check('1.1.3', '1.2.1', '>')).toBeFalse();
+		expect(check('1.2.1', '2.1.1', '>')).toBeFalse();
+		expect(check('1.3.1', '2.1.1', '>')).toBeFalse();
 
 		expect(check('2.1.1', '1.1.1', '>')).toBeTrue();
 		expect(check('1.2.1', '1.1.1', '>')).toBeTrue();
 		expect(check('1.1.2', '1.1.1', '>')).toBeTrue();
+		expect(check('2.1.1', '1.1.2', '>')).toBeTrue();
+		expect(check('1.2.1', '1.1.2', '>')).toBeTrue();
+		expect(check('2.1.1', '1.1.3', '>')).toBeTrue();
+		expect(check('1.2.1', '1.1.3', '>')).toBeTrue();
+		expect(check('2.1.1', '1.2.1', '>')).toBeTrue();
+		expect(check('2.1.1', '1.3.1', '>')).toBeTrue();
 
 		expect(check('1.1.2', '1.1.2', '>')).toBeFalse();
 
@@ -35,10 +47,22 @@ describe('core/semver', () => {
 		expect(check('1.1.1', '2.1.1', '>=')).toBeFalse();
 		expect(check('1.1.1', '1.2.1', '>=')).toBeFalse();
 		expect(check('1.1.1', '1.1.2', '>=')).toBeFalse();
+		expect(check('1.1.2', '2.1.1', '>=')).toBeFalse();
+		expect(check('1.1.2', '1.2.1', '>=')).toBeFalse();
+		expect(check('1.1.3', '2.1.1', '>=')).toBeFalse();
+		expect(check('1.1.3', '1.2.1', '>=')).toBeFalse();
+		expect(check('1.2.1', '2.1.1', '>=')).toBeFalse();
+		expect(check('1.3.1', '2.1.1', '>=')).toBeFalse();
 
 		expect(check('2.1.1', '1.1.1', '>=')).toBeTrue();
 		expect(check('1.2.1', '1.1.1', '>=')).toBeTrue();
 		expect(check('1.1.2', '1.1.1', '>=')).toBeTrue();
+		expect(check('2.1.1', '1.1.2', '>=')).toBeTrue();
+		expect(check('1.2.1', '1.1.2', '>=')).toBeTrue();
+		expect(check('2.1.1', '1.1.3', '>=')).toBeTrue();
+		expect(check('1.2.1', '1.1.3', '>=')).toBeTrue();
+		expect(check('2.1.1', '1.2.1', '>=')).toBeTrue();
+		expect(check('2.1.1', '1.3.1', '>=')).toBeTrue();
 
 		expect(check('1.1.2', '1.1.2', '>=')).toBeTrue();
 
@@ -55,10 +79,22 @@ describe('core/semver', () => {
 		expect(check('1.1.1', '2.1.1', '<')).toBeTrue();
 		expect(check('1.1.1', '1.2.1', '<')).toBeTrue();
 		expect(check('1.1.1', '1.1.2', '<')).toBeTrue();
+		expect(check('1.1.2', '2.1.1', '<')).toBeTrue();
+		expect(check('1.1.2', '1.2.1', '<')).toBeTrue();
+		expect(check('1.1.3', '2.1.1', '<')).toBeTrue();
+		expect(check('1.1.3', '1.2.1', '<')).toBeTrue();
+		expect(check('1.2.1', '2.1.1', '<')).toBeTrue();
+		expect(check('1.3.1', '2.1.1', '<')).toBeTrue();
 
 		expect(check('2.1.1', '1.1.1', '<')).toBeFalse();
 		expect(check('1.2.1', '1.1.1', '<')).toBeFalse();
 		expect(check('1.1.2', '1.1.1', '<')).toBeFalse();
+		expect(check('2.1.1', '1.1.2', '<')).toBeFalse();
+		expect(check('1.2.1', '1.1.2', '<')).toBeFalse();
+		expect(check('2.1.1', '1.1.3', '<')).toBeFalse();
+		expect(check('1.2.1', '1.1.3', '<')).toBeFalse();
+		expect(check('2.1.1', '1.2.1', '<')).toBeFalse();
+		expect(check('2.1.1', '1.3.1', '<')).toBeFalse();
 
 		expect(check('1.1.2', '1.1.2', '<')).toBeFalse();
 
@@ -74,10 +110,22 @@ describe('core/semver', () => {
 		expect(check('1.1.1', '2.1.1', '<=')).toBeTrue();
 		expect(check('1.1.1', '1.2.1', '<=')).toBeTrue();
 		expect(check('1.1.1', '1.1.2', '<=')).toBeTrue();
+		expect(check('1.1.2', '2.1.1', '<=')).toBeTrue();
+		expect(check('1.1.2', '1.2.1', '<=')).toBeTrue();
+		expect(check('1.1.3', '2.1.1', '<=')).toBeTrue();
+		expect(check('1.1.3', '1.2.1', '<=')).toBeTrue();
+		expect(check('1.2.1', '2.1.1', '<=')).toBeTrue();
+		expect(check('1.3.1', '2.1.1', '<=')).toBeTrue();
 
 		expect(check('2.1.1', '1.1.1', '<=')).toBeFalse();
 		expect(check('1.2.1', '1.1.1', '<=')).toBeFalse();
 		expect(check('1.1.2', '1.1.1', '<=')).toBeFalse();
+		expect(check('2.1.1', '1.1.2', '<=')).toBeFalse();
+		expect(check('1.2.1', '1.1.2', '<=')).toBeFalse();
+		expect(check('2.1.1', '1.1.3', '<=')).toBeFalse();
+		expect(check('1.2.1', '1.1.3', '<=')).toBeFalse();
+		expect(check('2.1.1', '1.2.1', '<=')).toBeFalse();
+		expect(check('2.1.1', '1.3.1', '<=')).toBeFalse();
 
 		expect(check('1.1.2', '1.1.2', '<=')).toBeTrue();
 
