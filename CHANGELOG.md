@@ -16,7 +16,6 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 #### :bug: Bug Fix
 
 * Fixed the bug when comparing intermediate numbers `core/semver`
-* Frozen dependencies: got@11.3.0
 
 ## v3.21.0 (2020-07-10)
 
