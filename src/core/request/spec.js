@@ -33,13 +33,13 @@ describe('core/request', () => {
 	});
 
 	it('json get', async () => {
-		expect((await request('https://run.mocky.io/v3/bc04b660-5e52-4c10-a58c-539fb854516b')).data)
-			.toEqual({hello: 'world'});
+		expect((await request('http://3878g.mocklab.io/json/1')).data)
+			.toEqual({id: 1, value: 'things'});
 	});
 
 	it('json get with caching', async (done) => {
 		const
-			url = 'https://run.mocky.io/v3/bc04b660-5e52-4c10-a58c-539fb854516b',
+			url = 'http://3878g.mocklab.io/json/1',
 			get = request({cacheStrategy: 'forever', cacheTTL: 10});
 
 		await get(url);
@@ -48,7 +48,7 @@ describe('core/request', () => {
 			req = await get(url);
 
 		expect(req.cache).toBe('memory');
-		expect(req.data).toEqual({hello: 'world'});
+		expect(req.data).toEqual({id: 1, value: 'things'});
 
 		setTimeout(async () => {
 			{
@@ -56,7 +56,7 @@ describe('core/request', () => {
 					req = await get(url);
 
 				expect(req.cache).toBeUndefined();
-				expect(req.data).toEqual({hello: 'world'});
+				expect(req.data).toEqual({id: 1, value: 'things'});
 				req.dropCache();
 			}
 
@@ -65,7 +65,7 @@ describe('core/request', () => {
 					req = await get(url);
 
 				expect(req.cache).toBeUndefined();
-				expect(req.data).toEqual({hello: 'world'});
+				expect(req.data).toEqual({id: 1, value: 'things'});
 			}
 
 			done();
@@ -73,12 +73,12 @@ describe('core/request', () => {
 	});
 
 	it('text/xml get', async () => {
-		expect((await request('https://run.mocky.io/v3/69575792-41b0-4857-8e74-b87b1f55fbf1')).data.querySelector('foo').textContent)
+		expect((await request('http://3878g.mocklab.io/xml/text')).data.querySelector('foo').textContent)
 			.toBe('Hello world');
 	});
 
 	it('application/xml get', async () => {
-		expect((await request('https://run.mocky.io/v3/676b051e-3fb3-4bf5-b2c6-79732445eb44')).data.querySelector('foo').textContent)
+		expect((await request('http://3878g.mocklab.io/xml/app')).data.querySelector('foo').textContent)
 			.toBe('Hello world');
 	});
 
@@ -278,11 +278,11 @@ describe('core/request', () => {
 
 	it('request factory with rewriting of URL', async () => {
 		const
-			resolver = () => ['https://run.mocky.io/v3/', 'bc04b660-5e52-4c10-a58c-539fb854516b'],
-			get = request('http://3878g.mocklab.io', resolver),
+			resolver = () => ['http://3878g.mocklab.io', 'json', 1],
+			get = request('https://run.mocky.io/v3/', resolver),
 			req = await get();
 
-		expect(req.data).toEqual({hello: 'world'});
+		expect(req.data).toEqual({id: 1, value: 'things'});
 		expect(req.response.status).toBe(200);
 	});
 
@@ -307,7 +307,7 @@ describe('core/request', () => {
 		let err;
 
 		try {
-			const req = request('https://run.mocky.io/v3/bc04b660-5e52-4c10-a58c-539fb854516b');
+			const req = request('http://3878g.mocklab.io/json/1');
 			req.abort();
 			await req;
 

@@ -11,11 +11,17 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-## v3.22.0 (2020-07-10)
+## v3.22.0 (2020-07-13)
 
 #### :bug: Bug Fix
 
 * Fixed the bug when comparing intermediate numbers `core/semver`
+
+## v3.21.1 ()
+
+#### :bug: Bug Fix
+
+* Frozen dependencies: got@11.3.0
 
 ## v3.21.0 (2020-07-10)
 
