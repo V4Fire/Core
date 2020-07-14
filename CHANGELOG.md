@@ -13,7 +13,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 ## v3.22.0 (2020-07-14)
 
-#### :bug: Bug Fix
+#### :rocket: New Feature
 
 * Added `core/object/watch/isProxy`
 
