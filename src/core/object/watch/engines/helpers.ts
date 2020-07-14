@@ -12,6 +12,18 @@ import { toOriginalObject } from 'core/object/watch/const';
 import { WatchHandlersSet, InternalWatchOptions } from 'core/object/watch/interface';
 
 /**
+ * Returns true if the specified value is a watch proxy
+ * @param value
+ */
+export function isProxy(value: unknown): value is object {
+	if (value == null || typeof value !== 'object') {
+		return false;
+	}
+
+	return toOriginalObject in value!;
+}
+
+/**
  * Unwraps the specified value to watch and returns the raw object
  * @param value
  */

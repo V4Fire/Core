@@ -32,7 +32,7 @@ import {
 } from 'core/object/watch/interface';
 
 export * from 'core/object/watch/const';
-export { unwrap, getProxyType } from 'core/object/watch/engines/helpers';
+export { unwrap, isProxy, getProxyType } from 'core/object/watch/engines/helpers';
 export * from 'core/object/watch/interface';
 
 export default watch;

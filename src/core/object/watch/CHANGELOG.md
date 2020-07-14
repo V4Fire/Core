@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.22.0 (2020-07-14)
+
+#### :rocket: New Feature
+
+* Added `isProxy`
+
 ## v3.20.0 (2020-07-05)
 
 #### :rocket: New Feature

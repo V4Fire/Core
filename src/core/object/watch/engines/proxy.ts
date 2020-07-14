@@ -317,6 +317,16 @@ export function watch<T extends object>(
 		},
 
 		has: (target, key) => {
+			if (
+				key === toOriginalObject ||
+				key === toRootObject ||
+				key === toTopObject ||
+				key === watchHandlers ||
+				key === watchPath
+			) {
+				return true;
+			}
+
 			if (blackListStore.has(key)) {
 				return false;
 			}

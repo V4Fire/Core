@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.22.0 (2020-07-14)
+
+#### :bug: Bug Fix
+
+* Added `core/object/watch/isProxy`
+
 ## v3.21.1 (2020-07-13)
 
 #### :bug: Bug Fix

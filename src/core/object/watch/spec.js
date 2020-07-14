@@ -8,7 +8,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import watch, { mute, unmute, set, unset } from 'core/object/watch';
+import watch, { mute, unmute, set, unset, isProxy } from 'core/object/watch';
 
 import * as proxyEngine from 'core/object/watch/engines/proxy';
 import * as accEngine from 'core/object/watch/engines/accessors';
@@ -596,7 +596,7 @@ describe('core/object/watch', () => {
 			expect(spy).toHaveBeenCalledWith(4, 2);
 		});
 
-		it(`filtering of mutations ${type})`, () => {
+		it(`filtering of mutations (${type})`, () => {
 			const
 				obj = {a: 1, b: 2},
 				spy = jasmine.createSpy();
@@ -615,7 +615,7 @@ describe('core/object/watch', () => {
 			expect(spy).toHaveBeenCalledWith(2, 1);
 		});
 
-		it(`modifying of mutations ${type})`, () => {
+		it(`modifying of mutations (${type})`, () => {
 			const
 				obj = {a: 1, b: 2},
 				spy = jasmine.createSpy();
@@ -634,7 +634,7 @@ describe('core/object/watch', () => {
 			expect(spy).toHaveBeenCalledWith(4, 2, ['b']);
 		});
 
-		it(`muting of mutations ${type})`, () => {
+		it(`muting of mutations (${type})`, () => {
 			const
 				obj = {a: 1, b: 2},
 				spy = jasmine.createSpy();
@@ -654,7 +654,7 @@ describe('core/object/watch', () => {
 			expect(spy).toHaveBeenCalledWith(4, 2, ['b']);
 		});
 
-		it(`cancels watching ${type})`, () => {
+		it(`cancels watching (${type})`, () => {
 			const
 				obj = {a: 1, b: 2},
 				spy = jasmine.createSpy();
@@ -669,7 +669,7 @@ describe('core/object/watch', () => {
 			expect(spy).not.toHaveBeenCalled();
 		});
 
-		it(`setting of new properties ${type})`, () => {
+		it(`setting of new properties (${type})`, () => {
 			{
 				const
 					obj = {},
@@ -703,7 +703,7 @@ describe('core/object/watch', () => {
 			}
 		});
 
-		it(`deleting of properties ${type})`, () => {
+		it(`deleting of properties (${type})`, () => {
 			{
 				const
 					obj = {},
@@ -754,6 +754,12 @@ describe('core/object/watch', () => {
 				proxy.a = 2;
 				expect(spy).toHaveBeenCalledWith(2, undefined, ['a']);
 			}
+		});
+
+		it(`isProxy (${type})`, () => {
+			expect(isProxy(watch({}, {immediate: true, engine}).proxy)).toBeTrue();
+			expect(isProxy(null)).toBeFalse();
+			expect(isProxy({})).toBeFalse();
 		});
 	});
 });
