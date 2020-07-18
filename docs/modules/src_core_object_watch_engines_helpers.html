@@ -246,6 +246,7 @@ pre {
 								<li class="tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter"><a href="src_core_object_watch_engines_helpers.html#getorcreatelabelvaluebyhandlers" class="tsd-kind-icon">get<wbr>OrCreate<wbr>Label<wbr>Value<wbr>ByHandlers</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-module"><a href="src_core_object_watch_engines_helpers.html#getproxytype" class="tsd-kind-icon">get<wbr>Proxy<wbr>Type</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-module"><a href="src_core_object_watch_engines_helpers.html#getproxyvalue" class="tsd-kind-icon">get<wbr>Proxy<wbr>Value</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="src_core_object_watch_engines_helpers.html#isproxy" class="tsd-kind-icon">is<wbr>Proxy</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-module"><a href="src_core_object_watch_engines_helpers.html#unwrap" class="tsd-kind-icon">unwrap</a></li>
 							</ul>
 						</section>
@@ -265,7 +266,7 @@ pre {
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/object/watch/engines/helpers.ts#L93">src/core/object/watch/engines/helpers.ts:93</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/object/watch/engines/helpers.ts#L105">src/core/object/watch/engines/helpers.ts:105</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -298,7 +299,7 @@ pre {
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/object/watch/engines/helpers.ts#L107">src/core/object/watch/engines/helpers.ts:107</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/object/watch/engines/helpers.ts#L119">src/core/object/watch/engines/helpers.ts:119</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -344,7 +345,7 @@ pre {
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/object/watch/engines/helpers.ts#L27">src/core/object/watch/engines/helpers.ts:27</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/object/watch/engines/helpers.ts#L39">src/core/object/watch/engines/helpers.ts:39</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -374,7 +375,7 @@ pre {
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/object/watch/engines/helpers.ts#L58">src/core/object/watch/engines/helpers.ts:58</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/object/watch/engines/helpers.ts#L70">src/core/object/watch/engines/helpers.ts:70</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -423,6 +424,36 @@ pre {
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="isproxy" class="tsd-anchor"></a>
+					<h3>is<wbr>Proxy</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">is<wbr>Proxy<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">value</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type">object</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/object/watch/engines/helpers.ts#L18">src/core/object/watch/engines/helpers.ts:18</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns true if the specified value is a watch proxy</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>value: <span class="tsd-signature-type">unknown</span></h5>
+									<div class="tsd-comment tsd-typography">
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">value</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type">object</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
 					<a name="unwrap" class="tsd-anchor"></a>
 					<h3>unwrap</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
@@ -432,7 +463,7 @@ pre {
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/object/watch/engines/helpers.ts#L18">src/core/object/watch/engines/helpers.ts:18</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/object/watch/engines/helpers.ts#L30">src/core/object/watch/engines/helpers.ts:30</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -475,6 +506,9 @@ pre {
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module">
 						<a href="src_core_object_watch_engines_helpers.html#getproxyvalue" class="tsd-kind-icon">get<wbr>Proxy<wbr>Value</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="src_core_object_watch_engines_helpers.html#isproxy" class="tsd-kind-icon">is<wbr>Proxy</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module">
 						<a href="src_core_object_watch_engines_helpers.html#unwrap" class="tsd-kind-icon">unwrap</a>

@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.22.1 ()
+
+#### :house: Internal
+
+* Updated dependencies: typescript@3.9.7, @v4fire/linters@1.4.0
+
 ## v3.22.0 (2020-07-14)
 
 #### :rocket: New Feature
