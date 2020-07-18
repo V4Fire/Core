@@ -6,11 +6,12 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import { EventEmitter2 as EventEmitter } from 'eventemitter2';
+
 import Provider from 'core/data/interface';
 
 import { Socket } from 'core/socket';
 import { RequestResponseObject } from 'core/request';
-import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 
 export const
 	namespace = Symbol('Provider namespace'),
