@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.22.1 (2020-07-20)
+
+#### :bug: Bug Fix
+
+* Fixed deep watching with a complex path
+
 ## v3.22.0 (2020-07-14)
 
 #### :rocket: New Feature

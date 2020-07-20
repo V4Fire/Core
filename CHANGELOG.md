@@ -11,7 +11,11 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-## v3.22.1 ()
+## v3.22.1 (2020-07-20)
+
+#### :bug: Bug Fix
+
+* Fixed deep watching with a complex path `core/object/watch`
 
 #### :house: Internal
 

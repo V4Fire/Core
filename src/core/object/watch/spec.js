@@ -101,6 +101,19 @@ describe('core/object/watch', () => {
 			expect(spy).toHaveBeenCalledWith(4, 1);
 		});
 
+		it(`deep watching for an object with a complex path (${type})`, () => {
+			const
+				obj = {a: {b: []}},
+				spy = jasmine.createSpy();
+
+			const {proxy} = watch(obj, 'a.b', {immediate: true, engine}, (value, oldValue) => {
+				spy(value, oldValue);
+			});
+
+			proxy.a.b = [1, 2, 3];
+			expect(spy).toHaveBeenCalledWith([1, 2, 3], []);
+		});
+
 		it(`isolated watchers (${type})`, () => {
 			const
 				obj = {a: {b: [], c: {e: 1}}},
