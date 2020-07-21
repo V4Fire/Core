@@ -32,7 +32,14 @@ export default class SimpleWorkerQueue<T, V = unknown> extends WorkerQueue<T, V>
 			return undefined;
 		}
 
-		return this.tasks[0]?.task;
+		const
+			fst = this.tasks[0];
+
+		if (fst == null) {
+			return undefined;
+		}
+
+		return (<Task<T>>fst).task;
 	}
 
 	/** @override */

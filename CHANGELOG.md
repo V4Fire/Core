@@ -38,6 +38,10 @@ const {proxy} = watch(obj, 'a.b.c', (newVal, oldVal) => {
 proxy.a.b = {c: 1};
 ```
 
+#### :house: Internal
+
+* Fixed TS errors
+
 ## v3.22.1 (2020-07-20)
 
 #### :bug: Bug Fix
