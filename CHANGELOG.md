@@ -13,6 +13,10 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 ## v3.22.2 (2020-07-21)
 
+#### :boom: Breaking Change
+
+* Set `skipLibCheck` to true `.tsconfig`
+
 #### :bug: Bug Fix
 
 * Fixed errors within `index.d.ts`
