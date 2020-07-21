@@ -11,6 +11,28 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.22.2 (2020-07-21)
+
+#### :bug: Bug Fix
+
+* Fixed deep watching by a complex path with overrides `core/object/watch`
+
+```js
+const obj = {
+  a: {
+    b: {
+      c: 1
+    }
+  }
+};
+
+const {proxy} = watch(obj, 'a.b.c', (newVal, oldVal) => {
+  console.log(newVal, oldVal);
+});
+
+proxy.a.b = {c: 1};
+```
+
 ## v3.22.1 (2020-07-20)
 
 #### :bug: Bug Fix

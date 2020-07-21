@@ -101,17 +101,39 @@ describe('core/object/watch', () => {
 			expect(spy).toHaveBeenCalledWith(4, 1);
 		});
 
-		it(`deep watching for an object with a complex path (${type})`, () => {
+		it(`deep watching for an object by a complex path (${type})`, () => {
 			const
-				obj = {a: {b: []}},
-				spy = jasmine.createSpy();
+				obj = {a: {b: []}, c: {e: 1}};
 
-			const {proxy} = watch(obj, 'a.b', {immediate: true, engine}, (value, oldValue) => {
-				spy(value, oldValue);
-			});
+			{
+				const
+					spy = jasmine.createSpy();
 
-			proxy.a.b = [1, 2, 3];
-			expect(spy).toHaveBeenCalledWith([1, 2, 3], []);
+				const {proxy} = watch(obj, 'a.b', {immediate: true, engine}, (value, oldValue) => {
+					spy(value, oldValue);
+				});
+
+				proxy.a.b = [1, 2, 3];
+				expect(spy).toHaveBeenCalledWith([1, 2, 3], []);
+			}
+
+			{
+				const
+					spy = jasmine.createSpy();
+
+				const {proxy} = watch(obj, 'c.e', {immediate: true, engine}, (value, oldValue) => {
+					spy(value, oldValue);
+				});
+
+				proxy.c = {e: 1};
+				expect(spy).not.toHaveBeenCalled();
+
+				proxy.c = {e: 2};
+				expect(spy).toHaveBeenCalledWith(2, 1);
+
+				proxy.c.e++;
+				expect(spy).toHaveBeenCalledWith(3, 2);
+			}
 		});
 
 		it(`isolated watchers (${type})`, () => {
