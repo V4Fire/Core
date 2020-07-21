@@ -1,4 +1,4 @@
-/* eslint-disable max-lines */
+/* eslint-disable max-lines, @typescript-eslint/unified-signatures */
 
 /*!
  * V4Fire Core
@@ -17,6 +17,7 @@ declare namespace TB {
 	type Cast<X, Y> = X extends Y ? X : Y;
 
 	type Type<A extends any, ID extends string> = A & {
+		// @ts-ignore (hack)
 		[K in typeof symbol]: ID;
 	};
 
@@ -52,6 +53,7 @@ declare namespace TB {
 		1: R;
 	}[Pos<I> extends Length<T> ? 1 : 0];
 
+	// @ts-ignore (recursive type)
 	type Concat<T1 extends any[], T2 extends any[]> = Reverse<Cast<Reverse<T1>, any[]>, T2>;
 
 	type Append<E, T extends any[]> = Concat<T, [E]>;
@@ -62,7 +64,9 @@ declare namespace TB {
 		T1[Pos<I>] extends __ ? Append<T2[Pos<I>], TN> : TN;
 
 	type GapsOf<T1 extends any[], T2 extends any[], TN extends any[] = [], I extends any[] = []> = {
+		// @ts-ignore (recursive type)
 		0: GapsOf<T1, T2, Cast<GapOf<T1, T2, TN, I>, any[]>, Next<I>>;
+		// @ts-ignore (recursive type)
 		1: Concat<TN, Cast<Drop<Pos<I>, T2>, any[]>>;
 	}[Pos<I> extends Length<T1> ? 1 : 0];
 
@@ -79,6 +83,7 @@ declare namespace TB {
 	type Curry<F extends ((...args: any) => any)> =
 		<T extends any[]>(...args: Cast<Cast<T, Gaps<Parameters<F>>>, any[]>) =>
 			GapsOf<T, Parameters<F>> extends [any, ...any[]] ?
+				// @ts-ignore (recursive type)
 				Curry<(...args: Cast<GapsOf<T, Parameters<F>>, any[]>) => ReturnType<F>> :
 				ReturnType<F>;
 }
@@ -138,7 +143,7 @@ type Nullable<T> = T | null | undefined;
 // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
 type CanVoid<T> = T | void;
 
-interface AnyFunction<ARGS = any[], R = any> extends Function {
+interface AnyFunction<ARGS extends any[] = any[], R = any> extends Function {
 	(...args: ARGS): R;
 }
 
@@ -154,12 +159,8 @@ interface StrictDictionary<T = unknown> {
 	[key: string]: T;
 }
 
-interface Dictionary<T> {
+interface Dictionary<T = unknown> {
 	[key: string]: CanUndef<T>;
-}
-
-interface Dictionary<T extends unknown = unknown> {
-	[key: string]: T;
 }
 
 interface Maybe<T = unknown> extends Promise<T> {
@@ -174,17 +175,12 @@ type NewPromise<K, V> = K extends Maybe ?
 	Maybe<V> : K extends Either ?
 		Either<V> : Promise<V>;
 
-type PromiseType<T extends Promise<any>> =
+type PromiseType<T> =
 	T extends Maybe<infer V> ?
 		NonNullable<V> : T extends Promise<infer V> ? V : T;
 
 type DictionaryType<T extends Dictionary> = T extends Dictionary<infer V> ? NonNullable<V> : T;
 type IterableType<T extends Iterable<unknown>> = T extends Iterable<infer V> ? V : T;
-
-interface ArrayLike<T = unknown> {
-	[i: number]: T;
-	length: number;
-}
 
 interface JSONCb {
 	(key: string, value: unknown): unknown;
@@ -602,7 +598,7 @@ interface ObjectConstructor {
 	 * @param value
 	 * @param [opts] - additional options
 	 */
-	set<T>(obj: unknown, path: ObjectPropertyPath, value: T, opts?: ObjectSetOptions): CaunUndef<T>;
+	set<T>(obj: unknown, path: ObjectPropertyPath, value: T, opts?: ObjectSetOptions): CanUndef<T>;
 
 	/**
 	 * Returns a function that sets a value to an object, which the function takes, by the specified path.
@@ -612,7 +608,7 @@ interface ObjectConstructor {
 	 * @param [opts] - additional options
 	 * @param [value]
 	 */
-	set(path: ObjectPropertyPath, opts?: ObjectSetOptions, value?: unknown): <T>(obj: T, value?: unknown) => CaunUndef<T>;
+	set(path: ObjectPropertyPath, opts?: ObjectSetOptions, value?: unknown): <T>(obj: T, value?: unknown) => CanUndef<T>;
 
 	/**
 	 * Returns a function that sets a value to the specified object by a path that the function takes.
@@ -622,7 +618,7 @@ interface ObjectConstructor {
 	 * @param [opts] - additional options
 	 * @param [value]
 	 */
-	set<T>(obj: T, opts?: ObjectSetOptions, value?: unknown): (path: ObjectPropertyPath, value?: unknown) => CaunUndef<T>;
+	set<T>(obj: T, opts?: ObjectSetOptions, value?: unknown): (path: ObjectPropertyPath, value?: unknown) => CanUndef<T>;
 
 	/**
 	 * Returns size/length of the specified object
@@ -840,7 +836,7 @@ interface ObjectConstructor {
 	 * Returns a curried version of Object.fastCompare for one argument
 	 * @param a
 	 */
-	fastCompare(a: unknown): <T>(b: T) => a is T;
+	fastCompare(a: unknown): (b: unknown) => boolean;
 
 	/**
 	 * Compares two specified objects by using a naive but fast "JSON.stringify/parse" strategy and
@@ -916,7 +912,7 @@ interface ObjectConstructor {
 	 * @param base - base object
 	 * @param obj1 - object for extending
 	 */
-	mixin<B, O1>(opts: ObjectMixinOptions | boolean, base?: B, obj1: O1): B & O1;
+	mixin<B, O1>(opts: ObjectMixinOptions | boolean, base: B, obj1: O1): B & O1;
 
 	/**
 	 * Extends the specified object by another objects.
@@ -927,7 +923,7 @@ interface ObjectConstructor {
 	 * @param obj1 - object for extending
 	 * @param obj2 - object for extending
 	 */
-	mixin<B, O1, O2>(opts: ObjectMixinOptions | boolean, base?: B, obj1: O1, obj2: O2): B & O1 & O2;
+	mixin<B, O1, O2>(opts: ObjectMixinOptions | boolean, base: B, obj1: O1, obj2: O2): B & O1 & O2;
 
 	/**
 	 * Extends the specified object by another objects.
@@ -939,7 +935,7 @@ interface ObjectConstructor {
 	 * @param obj2 - object for extending
 	 * @param obj3 - object for extending
 	 */
-	mixin<B, O1, O2, O3>(opts: ObjectMixinOptions | boolean, base?: B, obj1: O1, obj2: O2, obj3: O3): B & O1 & O2 & O3;
+	mixin<B, O1, O2, O3>(opts: ObjectMixinOptions | boolean, base: B, obj1: O1, obj2: O2, obj3: O3): B & O1 & O2 & O3;
 
 	/**
 	 * Extends the specified object by another objects.
@@ -1419,8 +1415,8 @@ interface ObjectConstructor {
 	 * Object.Option('foo').then((value) => value === 'foo');
 	 * ```
 	 */
-	Option<A1, A extends unknown[], R>(value: (a1: A1, a: A) => R):
-		AnyFunction<[Maybe<Nullable<A1>> | Either<A1> | Nullable<A1>, ...A], Maybe<R>>;
+	Option<A1, A extends unknown[], R>(value: (a1: A1, ...rest: A) => R):
+		(a1: Maybe<Nullable<A1>> | Either<A1> | Nullable<A1>, ...rest) => Maybe<R>;
 
 	/**
 	 * Wraps the specified value into the Either structure.
@@ -1475,8 +1471,8 @@ interface ObjectConstructor {
 	 * Object.Result('foo').then((value) => value === 'foo');
 	 * ```
 	 */
-	Result<A1, A extends unknown[], R>(value: (a1: A1, a: A) => R):
-		AnyFunction<[Maybe<A1> | Either<A1> | Nullable<A1>, ...A], Either<R>>;
+	Result<A1, A extends unknown[], R>(value: (a1: A1, ...a: A) => R):
+		(a1: Maybe<A1> | Either<A1>, ...rest) => Either<R>;
 
 	/**
 	 * Wraps the specified value into the Either structure
@@ -1507,6 +1503,7 @@ interface ObjectConstructor {
 	 * @param obj
 	 */
 	isPlainObject<T>(obj: T): obj is
+		// @ts-ignore (unsafe type cast)
 		T extends
 			unknown[] |
 
@@ -1620,7 +1617,7 @@ interface ObjectConstructor {
 	 * Returns true if the specified value is looks like an array
 	 * @param value
 	 */
-	isArrayLike(value: unknown): value is ArrayLike;
+	isArrayLike(value: unknown): value is ArrayLike<any>;
 
 	/**
 	 * Returns true if the specified value is a function
@@ -1734,7 +1731,9 @@ interface ArrayConstructor {
 	 */
 	union<T extends Nullable<unknown[]>>(arr: T): <A extends Iterable<unknown> | unknown>(
 		...args: Array<Iterable<A> | A>
-	) => A extends Iterable<infer V> ? Array<IterableType<T> | V> : Array<IterableType<T> | NonNullable<A>>;
+	) => A extends Iterable<infer V> ?
+		Array<IterableType<NonNullable<T>> | V> :
+		Array<IterableType<NonNullable<T>> | NonNullable<A>>;
 
 	/**
 	 * Returns a new array containing elements from all specified iterable values with duplicates removed.
@@ -1747,14 +1746,18 @@ interface ArrayConstructor {
 	union<T extends Nullable<unknown[]>, A extends Iterable<unknown> | unknown>(
 		arr: T,
 		...args: Array<Iterable<A> | A>
-	): A extends Iterable<infer V> ? Array<IterableType<T> | V> : Array<IterableType<T> | NonNullable<A>>;
+	): A extends Iterable<infer V> ?
+		Array<IterableType<NonNullable<T>> | V> :
+		Array<IterableType<NonNullable<T>> | NonNullable<A>>;
 
 	/**
 	 * Returns a curried version of Array.concat
 	 * @param arr
 	 */
 	concat<T extends Nullable<unknown[]>>(arr: T): <A extends CanArray<unknown>>(...args: Array<CanArray<A>>) =>
-		A extends Array<infer V> ? Array<IterableType<T> | V> : Array<IterableType<T> | NonNullable<A>>;
+		A extends Array<infer V> ?
+			Array<IterableType<NonNullable<T>> | V> :
+			Array<IterableType<NonNullable<T>> | NonNullable<A>>;
 
 	/**
 	 * Returns a new array containing elements from all specified arrays.
@@ -1767,7 +1770,9 @@ interface ArrayConstructor {
 	concat<T extends Nullable<unknown[]>, A extends CanArray<unknown>>(
 		arr: T,
 		...args: Array<CanArray<A>>
-	): A extends Array<infer V> ? Array<IterableType<T> | V> : Array<IterableType<T> | NonNullable<A>>;
+	): A extends Array<infer V> ?
+		Array<IterableType<NonNullable<T>> | V> :
+		Array<IterableType<NonNullable<T>> | NonNullable<A>>;
 }
 
 interface Array<T> {
@@ -3406,8 +3411,6 @@ interface FunctionConstructor {
 }
 
 interface Function {
-	name: string;
-
 	/**
 	 * Returns a new function that allows to invoke the target function only once
 	 */
@@ -3475,8 +3478,8 @@ interface Function {
 	 * toLowerCase.option()(toLowerCase.option()('FOO')).then((value) => value === 'foo');
 	 * ```
 	 */
-	option<A1, A extends unknown[], R>(this: (a1: A1, a: A) => R):
-		AnyFunction<[Maybe<Nullable<A1>> | Either<A1> | Nullable<A1>, ...A], Maybe<R>>;
+	option<A1, A extends unknown[], R>(this: (a1: A1, ...rest: A) => R):
+		(a1: Maybe<Nullable<A1>> | Either<A1> | Nullable<A1>, ...rest: A) => Maybe<R>;
 
 	/**
 	 * Returns a new function based on the target that wraps the returning value into the Either structure
@@ -3508,7 +3511,8 @@ interface Function {
 	 * toLowerCase.result()(toLowerCase.result()('FOO')).then((value) => value === 'foo');
 	 * ```
 	 */
-	result<A1, A extends unknown[], R>(this: (a1: A1, a: A) => R): AnyFunction<[Maybe<A1> | Either<A1>, ...A], Maybe<R>>;
+	result<A1, A extends unknown[], R>(this: (a1: A1, ...rest: A) => R):
+		(a1: Maybe<A1> | Either<A1>, ...rest: A) => Either<R>;
 
 	/**
 	 * Returns a curried equivalent of the function.

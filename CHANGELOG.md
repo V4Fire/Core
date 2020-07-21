@@ -15,6 +15,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :bug: Bug Fix
 
+* Fixed errors within `index.d.ts`
 * Fixed deep watching by a complex path with overrides `core/object/watch`
 
 ```js
