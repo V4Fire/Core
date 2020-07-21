@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.22.3 ()
+
+#### :house: Internal
+
+* Added `typedoc.tsconfig`
+
 ## v3.22.2 (2020-07-21)
 
 #### :boom: Breaking Change

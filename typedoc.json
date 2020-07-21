@@ -1,6 +1,6 @@
 {
   "name": "V4Fire",
-  "tsconfig": "./tsconfig.json",
+  "tsconfig": "./typedoc.tsconfig.json",
   "mode": "modules",
   "inputFiles": ["./src", "./index.d.ts"],
   "out": "./docs",
