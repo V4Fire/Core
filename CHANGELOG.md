@@ -15,7 +15,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :boom: Breaking Change
 
-* Set `skipLibCheck` to true `.tsconfig`
+* Set `skipLibCheck` to false `.tsconfig`
 
 #### :bug: Bug Fix
 
