@@ -9,7 +9,7 @@
     "module": "commonjs",
     "lib": ["dom", "esnext"],
     "allowJs": false,
-    "skipLibCheck": true,
+    "skipLibCheck": false,
     "strictNullChecks": true,
     "strictFunctionTypes": true,
     "strictPropertyInitialization": true,
