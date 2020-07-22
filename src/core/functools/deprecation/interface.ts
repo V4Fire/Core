@@ -11,7 +11,8 @@ export type DeprecatedExprType =
 	'method' |
 	'property' |
 	'constant' |
-	'accessor';
+	'accessor' |
+	'component';
 
 export interface DeprecatedAlternativeOptions {
 	/**
