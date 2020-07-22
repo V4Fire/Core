@@ -21,7 +21,7 @@ export function generate(): Uint8Array {
 	if (IS_NODE) {
 		//#if node_js
 
-		// eslint-disable-next-line @typescript-eslint/no-var-requires
+		// eslint-disable-next-line @typescript-eslint/no-var-requires, import/no-nodejs-modules
 		const crypto = require('crypto');
 
 		const uuid = crypto.randomBytes(16);

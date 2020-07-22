@@ -76,7 +76,6 @@ function watch<T extends object>(obj: T, opts: WatchOptions, handler?: MultipleW
  */
 function watch<T extends object>(
 	obj: T,
-	// eslint-disable-next-line @typescript-eslint/unified-signatures
 	path: WatchPath,
 	handler?: MultipleWatchHandler
 ): Watcher<T>;
@@ -236,9 +235,10 @@ function watch<T extends object>(
 		}
 	}
 
+	opts.deep = normalizedPath != null && normalizedPath.length > 1 || opts.deep;
+
 	const
-		deep = normalizedPath != null && normalizedPath.length > 1 || opts.deep,
-		{collapse} = opts;
+		{deep, collapse} = opts;
 
 	const
 		pref = opts.prefixes,
@@ -309,7 +309,7 @@ function watch<T extends object>(
 						const
 							dynamicVal = Object.get(unwrappedObj, collapse ? tiedPath[0] : tiedPath);
 
-						if (handler!.length < 2) {
+						if (Object.size(handler) < 2) {
 							return [dynamicVal, undefined, resolvedInfo];
 						}
 
@@ -379,7 +379,25 @@ function watch<T extends object>(
 			// Takes a tied path and checks if it matches with the actual path
 			const checkTiedPath = (tiedPath: unknown[], deps: CanUndef<unknown[]>) => {
 				const
-					path = info.path.length > tiedPath.length ? info.path.slice(0, tiedPath.length) : info.path;
+					mutationPath = info.path,
+					path = mutationPath.length > tiedPath.length ? mutationPath.slice(0, tiedPath.length) : mutationPath,
+					tailPath = path.length !== tiedPath.length ? tiedPath.slice(path.length) : [];
+
+				// Sometimes, we can be caught in the situation when we watch by the path, like, foo.bar.bla,
+				// and the mutation occurs on foo.bar.
+				// We need to get a value by the tail (.bla) and check that it really was changed.
+
+				// const obj = {foo: {bar: {bla: 1}}}};
+				// obj.foo.bar = {bla: 1};
+
+				if (tailPath.length > 0) {
+					value = Object.get(value, tailPath);
+					oldValue = Object.get(oldValue, tailPath);
+
+					if (value === oldValue) {
+						return;
+					}
+				}
 
 				// The flag that indicates that we need to get a real property value from the original object.
 				// It makes sense for getters.

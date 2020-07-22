@@ -11,6 +11,53 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.22.3 ()
+
+#### :house: Internal
+
+* Added `typedoc.tsconfig`
+
+## v3.22.2 (2020-07-21)
+
+#### :boom: Breaking Change
+
+* Set `skipLibCheck` to false `.tsconfig`
+
+#### :bug: Bug Fix
+
+* Fixed errors within `index.d.ts`
+* Fixed deep watching by a complex path with overrides `core/object/watch`
+
+```js
+const obj = {
+  a: {
+    b: {
+      c: 1
+    }
+  }
+};
+
+const {proxy} = watch(obj, 'a.b.c', (newVal, oldVal) => {
+  console.log(newVal, oldVal);
+});
+
+proxy.a.b = {c: 1};
+```
+
+#### :house: Internal
+
+* Fixed TS errors
+
+## v3.22.1 (2020-07-20)
+
+#### :bug: Bug Fix
+
+* Fixed deep watching with a complex path `core/object/watch`
+
+#### :house: Internal
+
+* Updated dependencies: typescript@3.9.7, @v4fire/linters@1.4.0
+
 ## v3.22.0 (2020-07-14)
 
 #### :rocket: New Feature

@@ -6,10 +6,10 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { Cache } from 'core/cache';
-
 import Storage from 'dom-storage';
 import * as fs from 'fs-extra-promise';
+
+import { Cache } from 'core/cache';
 
 const
 	tmpDir = './tmp/local';

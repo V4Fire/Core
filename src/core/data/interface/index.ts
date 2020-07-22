@@ -13,7 +13,7 @@
 
 import { EventEmitterLike } from 'core/async';
 import { CreateRequestOptions, RequestQuery, RequestMethod, RequestResponse, RequestBody } from 'core/request';
-import { ModelMethod } from 'core/data/interface';
+import { ModelMethod } from 'core/data/interface/types';
 
 export * from 'core/data/interface/types';
 
