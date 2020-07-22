@@ -19,7 +19,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :house: Internal
 
-* [Added component to the `core/functools/deprecation/interface/DeprecatedExprType`](https://github.com/V4Fire/Core/pull/120)
+* [Added `component` to the `DeprecatedExprType` `core/functools/deprecation`](https://github.com/V4Fire/Core/pull/120)
 * Added `typedoc.tsconfig`
 
 ## v3.22.2 (2020-07-21)
