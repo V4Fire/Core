@@ -11,15 +11,16 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-## v3.22.3 (2020-07-22)
+## v3.22.3 (2020-07-23)
 
 #### :bug: Bug Fix
 
 * [Fixed notice params being ignored `core/functools/deprecation`](https://github.com/V4Fire/Core/pull/120)
+* Fixed notice params being ignored `core/functools/not-implemented`
 
 #### :house: Internal
 
-* [Added `component` to the `DeprecatedExprType` `core/functools/deprecation`](https://github.com/V4Fire/Core/pull/120)
+* [Added `component` `core/functools/deprecation/DeprecatedExprType`](https://github.com/V4Fire/Core/pull/120)
 * Added `typedoc.tsconfig`
 
 ## v3.22.2 (2020-07-21)
