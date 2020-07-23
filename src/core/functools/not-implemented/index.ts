@@ -84,7 +84,7 @@ export function notImplement<T extends Function>(
 		}
 
 		if (p.notice != null) {
-			msg.join(p.notice);
+			msg.push(p.notice);
 		}
 
 		const
