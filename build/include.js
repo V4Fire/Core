@@ -60,6 +60,16 @@ module.exports = function init(layers) {
 			return path.join(root, src);
 		}
 
+		function moduleExists(src) {
+			try {
+				require.resolve(src);
+				return true;
+
+			} catch {
+				return false;
+			}
+		}
+
 		let
 			resolvedLayers = layers;
 
@@ -90,16 +100,17 @@ module.exports = function init(layers) {
 
 			try {
 				if (opts.source) {
-					return fs.readFileSync(layerSrc).toString();
-				}
+					if (fs.existsSync(layerSrc)) {
+						return fs.readFileSync(layerSrc).toString();
+					}
 
-				return require(layerSrc);
+				} else if (moduleExists(layerSrc)) {
+					return require(layerSrc);
+				}
 
 			} catch (err) {
-				if (!{MODULE_NOT_FOUND: true, ENOENT: true}[err.code]) {
-					console.error(`Failed to load ${layerSrc}`);
-					throw err;
-				}
+				console.error(`Failed to load ${layerSrc}`);
+				throw err;
 			}
 		}
 
