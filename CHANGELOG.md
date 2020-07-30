@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.22.4 (2020-07-30)
+
+#### :bug: Bug Fix
+
+* Fixed incorrectly ignored errors `build/include`
+
 ## v3.22.3 (2020-07-23)
 
 #### :bug: Bug Fix

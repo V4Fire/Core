@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.22.4 (2020-07-30)
+
+#### :bug: Bug Fix
+
+* Fixed incorrectly ignored errors `include`
+
 ## v3.21.0 (2020-07-10)
 
 #### :rocket: New Feature
