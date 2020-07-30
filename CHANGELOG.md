@@ -15,7 +15,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :bug: Bug Fix
 
-* Fixed incorrectly ignored errors `build/include`
+* [Fixed incorrectly ignored errors `build/include`](https://github.com/V4Fire/Core/pull/121)
 
 ## v3.22.3 (2020-07-23)
 

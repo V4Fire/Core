@@ -13,7 +13,7 @@ Changelog
 
 #### :bug: Bug Fix
 
-* Fixed incorrectly ignored errors `include`
+* [Fixed incorrectly ignored errors `include`](https://github.com/V4Fire/Core/pull/121)
 
 ## v3.21.0 (2020-07-10)
 
