@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.22.5 (2020-07-31)
+
+#### :bug: Bug Fix
+
+* Fixed `engines/accessors/set`
+
 ## v3.22.2 (2020-07-21)
 
 #### :bug: Bug Fix

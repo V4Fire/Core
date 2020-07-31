@@ -308,7 +308,7 @@ export function set(obj: object, path: WatchPath, value: unknown, handlers: Watc
 	const
 		hasPath = fullRefPath.length > 0,
 		resolvedPath = hasPath ? fullRefPath : undefined,
-		resolvedRoot = hasPath ? root : obj,
+		resolvedRoot = hasPath ? root : unwrappedObj,
 		resolvedTop = hasPath ? top : undefined;
 
 	const resolvedProxy = setWatchAccessors(
@@ -383,7 +383,7 @@ export function unset(obj: object, path: WatchPath, handlers: WatchHandlersSet):
 	const
 		hasPath = fullRefPath.length > 0,
 		resolvedPath = hasPath ? fullRefPath : undefined,
-		resolvedRoot = hasPath ? root : obj,
+		resolvedRoot = hasPath ? root : unwrappedObj,
 		resolvedTop = hasPath ? top : undefined;
 
 	const resolvedProxy = setWatchAccessors(
