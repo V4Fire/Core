@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.22.5 (2020-07-31)
+
+#### :bug: Bug Fix
+
+* Fixed `core/object/watch/engines/accessors/set`
+
 ## v3.22.4 (2020-07-30)
 
 #### :bug: Bug Fix
