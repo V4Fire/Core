@@ -11,6 +11,14 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## ()
+
+#### :house: Internal
+
+* Updated dependencies:
+  `@v4fire/linters@1.5.4`
+  `@types/jasmine@3.5.12`
+
 ## v3.22.5 (2020-07-31)
 
 #### :bug: Bug Fix
