@@ -87,6 +87,7 @@
   },
   "devDependencies": {
     "@v4fire/linters": "^1.5.4",
+    "fake-indexeddb": "^3.1.2",
     "husky": "^4.2.5",
     "nyc": "^15.1.0"
   }

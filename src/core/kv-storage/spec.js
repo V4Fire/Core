@@ -6,7 +6,28 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import * as kv from 'core/kv-storage';
+import {
+
+	local,
+	session,
+	asyncLocal,
+	asyncSession,
+	factory
+
+} from 'core/kv-storage';
+
+// eslint-disable-next-line import/extensions
+import * as indexedDBKv from 'core/kv-storage/engines/node.indexeddb';
+
+const kv = {
+	local,
+	session,
+	asyncLocal,
+	asyncSession,
+	indexedDBSession: factory(indexedDBKv.syncSessionStorage),
+	asyncIndexedDBLocal: factory(indexedDBKv.asyncLocalStorage, true),
+	asyncIndexedDBSession: factory(indexedDBKv.asyncSessionStorage, true)
+};
 
 describe('core/kv-storage', () => {
 	const getNms = () => {
@@ -14,7 +35,7 @@ describe('core/kv-storage', () => {
 		return (name) => `${prfx}_${name}`;
 	};
 
-	['local', 'session'].forEach((method) => {
+	['local', 'session', 'indexedDBSession'].forEach((method) => {
 		const
 			api = kv[method];
 
@@ -108,7 +129,7 @@ describe('core/kv-storage', () => {
 		}
 	});
 
-	['asyncLocal', 'asyncSession'].forEach((method) => {
+	['asyncLocal', 'asyncSession', 'asyncIndexedDBLocal', 'asyncIndexedDBSession'].forEach((method) => {
 		const
 			api = kv[method];
 
