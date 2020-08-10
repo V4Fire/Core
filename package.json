@@ -59,6 +59,7 @@
     "config": "^1.31.0",
     "del": "^5.1.0",
     "dotenv": "^8.2.0",
+    "fake-indexeddb": "^3.1.2",
     "find-up": "^4.1.0",
     "gulp": "^4.0.2",
     "gulp-header": "^2.0.9",
@@ -87,7 +88,6 @@
   },
   "devDependencies": {
     "@v4fire/linters": "^1.5.4",
-    "fake-indexeddb": "^3.1.2",
     "husky": "^4.2.5",
     "nyc": "^15.1.0"
   }
