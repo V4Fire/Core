@@ -242,11 +242,19 @@ pre {
 						<a href="#corekv-storage" id="corekv-storage" style="color: inherit; text-decoration: none;">
 							<h1>core/kv-storage</h1>
 						</a>
-						<p>This module provides API to work with a persistent key-value storage using different runtime engines, like localStorage, indexedDb, SQLite, etc.</p>
+						<p>This module provides API to work with a persistent key-value storage by using different runtime engines, like localStorage, indexedDb, SQLite, etc.</p>
+						<a href="#supported-engines" id="supported-engines" style="color: inherit; text-decoration: none;">
+							<h2>Supported engines</h2>
+						</a>
+						<ul>
+							<li><code>browser.localstorage</code></li>
+							<li><code>browser.indexeddb</code></li>
+							<li><code>node.localstorage</code></li>
+						</ul>
 						<a href="#simple-synchronous-api" id="simple-synchronous-api" style="color: inherit; text-decoration: none;">
 							<h2>Simple synchronous API</h2>
 						</a>
-						<p>The module provides a bunch of functions to work with long-term local storage.</p>
+						<p>The module provides a bunch of functions to work with a long-term local storage.</p>
 						<pre><code class="language-js"><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> kv <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;core/kv-storage&#x27;</span>;
 
 kv.set(<span class="hljs-string">&#x27;bla&#x27;</span>, <span class="hljs-number">1</span>);
@@ -261,9 +269,9 @@ kv.clear(<span class="hljs-function">(<span class="hljs-params">el, key</span>) 
 						<a href="#custom-namespaces" id="custom-namespaces" style="color: inherit; text-decoration: none;">
 							<h3>Custom namespaces</h3>
 						</a>
-						<p>All values are stored within local storage are placed in a global namespace, i.e., you can override any value you have.
-							If you want to isolate data from other data, you can specify a custom namespace. Mind, that you still can override or remove these
-						values from storage by using global API.</p>
+						<p>All values are stored within a local storage are placed in the global namespace, i.e., you can override any value you have.
+							If you want to isolate data from other data, you can specify the custom namespace. Mind, that you still can override or remove these
+						values from the storage by using global API.</p>
 						<pre><code class="language-js"><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> kv <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;core/kv-storage&#x27;</span>;
 
 kv.set(<span class="hljs-string">&#x27;bla&#x27;</span>, <span class="hljs-number">1</span>);
@@ -301,8 +309,8 @@ foo(local);</code></pre>
 						<a href="#async-api" id="async-api" style="color: inherit; text-decoration: none;">
 							<h2>Async API</h2>
 						</a>
-						<p>If you need to work with asynchronous local storage, you can use <code>asyncLocal</code> API is pretty similar to local, but its
-						methods return a promise instead of a raw result.</p>
+						<p>If you need to work with an asynchronous local storage, you can use `asyncLocal. The API is pretty similar to local, but its
+						methods return a promise instead of the raw result.</p>
 						<pre><code class="language-js"><span class="hljs-keyword">import</span> { asyncLocal } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;core/kv-storage&#x27;</span>;
 
 asyncLocal.set(<span class="hljs-string">&#x27;bla&#x27;</span>, <span class="hljs-number">1</span>).then(<span class="hljs-keyword">async</span> () =&gt; {

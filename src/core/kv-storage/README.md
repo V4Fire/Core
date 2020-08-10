@@ -1,10 +1,16 @@
 # core/kv-storage
 
-This module provides API to work with a persistent key-value storage using different runtime engines, like localStorage, indexedDb, SQLite, etc.
+This module provides API to work with a persistent key-value storage by using different runtime engines, like localStorage, indexedDb, SQLite, etc.
+
+## Supported engines
+
+* `browser.localstorage`
+* `browser.indexeddb`
+* `node.localstorage`
 
 ## Simple synchronous API
 
-The module provides a bunch of functions to work with long-term local storage.
+The module provides a bunch of functions to work with a long-term local storage.
 
 ```js
 import * as kv from 'core/kv-storage';
@@ -22,9 +28,9 @@ kv.clear((el, key) => el.a === 1);
 
 ### Custom namespaces
 
-All values are stored within local storage are placed in a global namespace, i.e., you can override any value you have.
-If you want to isolate data from other data, you can specify a custom namespace. Mind, that you still can override or remove these
-values from storage by using global API.
+All values are stored within a local storage are placed in the global namespace, i.e., you can override any value you have.
+If you want to isolate data from other data, you can specify the custom namespace. Mind, that you still can override or remove these
+values from the storage by using global API.
 
 ```js
 import * as kv from 'core/kv-storage';
@@ -68,8 +74,8 @@ foo(local);
 
 ## Async API
 
-If you need to work with asynchronous local storage, you can use `asyncLocal` API is pretty similar to local, but its
-methods return a promise instead of a raw result.
+If you need to work with an asynchronous local storage, you can use `asyncLocal. The API is pretty similar to local, but its
+methods return a promise instead of the raw result.
 
 ```js
 import { asyncLocal } from 'core/kv-storage';
