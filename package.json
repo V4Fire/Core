@@ -5,7 +5,7 @@
   "main": "src/core/index.js",
   "typings": "index.d.ts",
   "license": "MIT",
-  "version": "3.22.5",
+  "version": "3.23.0",
   "author": {
     "name": "kobezzza",
     "email": "kobezzza@gmail.com",
@@ -43,7 +43,7 @@
     "dom-storage": "^2.1.0",
     "eventemitter2": "^6.4.3",
     "fs-extra-promise": "^1.0.1",
-    "got": "^11.5.1",
+    "got": "^11.5.2",
     "jasmine": "^3.6.1",
     "set-value": "^3.0.2",
     "tslib": "2.0.0",
