@@ -11,7 +11,11 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-## ()
+## v3.23.0 (2020-08-10)
+
+#### :rocket: New Feature
+
+* Added a new engine based on IndexedDB `core/kv-storage`
 
 #### :house: Internal
 

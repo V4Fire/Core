@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.23.0 (2020-08-10)
+
+#### :rocket: New Feature
+
+* Added a new engine based on IndexedDB
+
 ## v3.20.0 (2020-07-05)
 
 #### :rocket: New Feature
