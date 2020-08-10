@@ -6,22 +6,17 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-function promisifyRequestToStore<T>(request: IDBRequest<T>): Promise<T> {
-	return new Promise((resolve, reject) => {
-		request.onsuccess = () => resolve(request.result);
-		request.onerror = () => reject(request.error);
-	});
-}
+import { AsyncEngineOptions, StoreMode } from 'core/kv-storage/engines/browser.indexeddb/interface';
 
 /**
- * Asynchronous implementation of persistent key-value storage based on IndexedDB
+ * Implementation of persistent asynchronous key-value storage based on IndexedDB
  */
 export default class KVStorageIndexedDBEngine {
 	protected db: Promise<IDBDatabase>;
 
 	protected storeName: string;
 
-	constructor({dbName = 'kv-storage-db', storeName = 'kv-storage'}: {dbName?: string; storeName?: string} = {}) {
+	constructor({dbName = 'kv-storage-db', storeName = 'kv-storage'}: AsyncEngineOptions = {}) {
 		this.storeName = storeName;
 
 		const
@@ -44,23 +39,17 @@ export default class KVStorageIndexedDBEngine {
 	}
 
 	async get(key: IDBValidKey): Promise<unknown> {
-		const
-			store = await this.getStore('readonly');
-
+		const store = await this.getStore('readonly');
 		return promisifyRequestToStore(store.get(key));
 	}
 
 	async set(key: IDBValidKey, value: unknown): Promise<void> {
-		const
-			store = await this.getStore('readwrite');
-
+		const store = await this.getStore('readwrite');
 		await promisifyRequestToStore(store.put(value, key));
 	}
 
 	async remove(key: IDBValidKey): Promise<void> {
-		const
-			store = await this.getStore('readwrite');
-
+		const store = await this.getStore('readwrite');
 		await promisifyRequestToStore(store.delete(key));
 	}
 
@@ -68,8 +57,8 @@ export default class KVStorageIndexedDBEngine {
 		const
 			store = await this.getStore('readonly');
 
-		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-		if (store.getAllKeys !== undefined) {
+		// eslint-disable-next-line @typescript-eslint/unbound-method
+		if (Object.isFunction(store.getAllKeys)) {
 			return promisifyRequestToStore(store.getAllKeys());
 		}
 
@@ -95,16 +84,19 @@ export default class KVStorageIndexedDBEngine {
 	}
 
 	async clear(): Promise<void> {
-		const
-			store = await this.getStore('readwrite');
-
+		const store = await this.getStore('readwrite');
 		return promisifyRequestToStore(store.clear());
 	}
 
-	protected async getStore(mode: 'readwrite' | 'readonly'): Promise<IDBObjectStore> {
-		const
-			db = await this.db;
-
+	protected async getStore(mode: StoreMode): Promise<IDBObjectStore> {
+		const db = await this.db;
 		return db.transaction(this.storeName, mode).objectStore(this.storeName);
 	}
+}
+
+function promisifyRequestToStore<T>(request: IDBRequest<T>): Promise<T> {
+	return new Promise((resolve, reject) => {
+		request.onsuccess = () => resolve(request.result);
+		request.onerror = () => reject(request.error);
+	});
 }

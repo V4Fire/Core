@@ -17,6 +17,18 @@ const
 
 export const
 	syncLocalStorage = syncLocalEngine,
-	asyncLocalStorage = asyncLocalEngine,
-	syncSessionStorage = sessionEngine,
+	asyncLocalStorage = asyncLocalEngine;
+
+// eslint-disable-next-line import/no-mutable-exports
+export let
+	syncSessionStorage,
+	asyncSessionStorage;
+
+if (typeof globalThis.sessionStorage !== 'undefined') {
+	syncSessionStorage = globalThis.sessionStorage;
+	asyncSessionStorage = globalThis.sessionStorage;
+
+} else {
+	syncSessionStorage = sessionEngine;
 	asyncSessionStorage = sessionEngine;
+}

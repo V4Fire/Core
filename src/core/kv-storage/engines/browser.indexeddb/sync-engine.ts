@@ -14,8 +14,6 @@ export default [
 	'remove',
 	'keys'
 ].reduce((engine, method) => {
-	// eslint-disable-next-line no-new-func
 	engine[method] = notImplement({name: method}, () => undefined);
-
 	return engine;
 }, {});

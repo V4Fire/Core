@@ -17,16 +17,16 @@ import {
 } from 'core/kv-storage';
 
 // eslint-disable-next-line import/extensions
-import * as indexedDBKv from 'core/kv-storage/engines/node.indexeddb';
+import * as IDBEngine from 'core/kv-storage/engines/fake.indexeddb';
 
 const kv = {
 	local,
 	session,
 	asyncLocal,
 	asyncSession,
-	indexedDBSession: factory(indexedDBKv.syncSessionStorage),
-	asyncIndexedDBLocal: factory(indexedDBKv.asyncLocalStorage, true),
-	asyncIndexedDBSession: factory(indexedDBKv.asyncSessionStorage, true)
+	IDBSession: factory(IDBEngine.syncSessionStorage),
+	asyncIDBLocal: factory(IDBEngine.asyncLocalStorage, true),
+	asyncIDBSession: factory(IDBEngine.asyncSessionStorage, true)
 };
 
 describe('core/kv-storage', () => {
@@ -35,7 +35,7 @@ describe('core/kv-storage', () => {
 		return (name) => `${prfx}_${name}`;
 	};
 
-	['local', 'session', 'indexedDBSession'].forEach((method) => {
+	['local', 'session', 'IDBSession'].forEach((method) => {
 		const
 			api = kv[method];
 
@@ -129,7 +129,7 @@ describe('core/kv-storage', () => {
 		}
 	});
 
-	['asyncLocal', 'asyncSession', 'asyncIndexedDBLocal', 'asyncIndexedDBSession'].forEach((method) => {
+	['asyncLocal', 'asyncSession', 'asyncIDBLocal', 'asyncIDBSession'].forEach((method) => {
 		const
 			api = kv[method];
 
