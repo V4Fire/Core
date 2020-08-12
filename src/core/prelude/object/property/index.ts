@@ -106,7 +106,7 @@ extend(Object, 'has', (
 			return false;
 		}
 
-		if (Object.isMap(res) || Object.isWeakMap(res)) {
+		if (Object.isMap(res) || Object.isSet(res) || Object.isWeakMap(res) || Object.isWeakSet(res)) {
 			return res.has(key);
 		}
 

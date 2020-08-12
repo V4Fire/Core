@@ -15,6 +15,10 @@ Changelog
 
 * Added `Object.delete`
 
+#### :bug: Bug Fix
+
+* Fixed `Object.has` with Set and WeakSet
+
 ## v3.20.0 (2020-07-05)
 
 #### :rocket: New Feature

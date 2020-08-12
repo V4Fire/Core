@@ -17,6 +17,10 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 * Added `Object.delete`
 
+#### :bug: Bug Fix
+
+* Fixed `Object.has` with Set and WeakSet
+
 ## v3.23.0 (2020-08-10)
 
 #### :rocket: New Feature

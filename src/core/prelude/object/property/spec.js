@@ -48,8 +48,15 @@ describe('core/prelude/object/property/has', () => {
 		const key = {};
 		expect(Object.has({a: {b: new Map([[key, 1]])}}, ['a', 'b', key])).toBeTrue();
 		expect(Object.has({a: {b: new Map([[key, 1]])}}, ['a', 'b', {}])).toBeFalse();
+
 		expect(Object.has({a: {b: new WeakMap([[key, 1]])}}, ['a', 'b', key])).toBeTrue();
 		expect(Object.has({a: {b: new WeakMap([[key, 1]])}}, ['a', 'b', 1, 5])).toBeFalse();
+
+		expect(Object.has({a: {b: new Set([key])}}, ['a', 'b', key])).toBeTrue();
+		expect(Object.has({a: {b: new Set([key])}}, ['a', 'b', 1, 5])).toBeFalse();
+
+		expect(Object.has({a: {b: new WeakSet([key])}}, ['a', 'b', key])).toBeTrue();
+		expect(Object.has({a: {b: new WeakSet([key])}}, ['a', 'b', 1, 5])).toBeFalse();
 	});
 
 	it('custom separator', () => {
