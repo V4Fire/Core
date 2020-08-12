@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.24.0 (2020-08-12)
+
+#### :rocket: New Feature
+
+* Added `Object.delete`
+
 ## v3.23.0 (2020-08-10)
 
 #### :rocket: New Feature

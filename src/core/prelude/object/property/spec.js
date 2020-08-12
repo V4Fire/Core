@@ -65,6 +65,131 @@ describe('core/prelude/object/property/has', () => {
 	});
 });
 
+describe('core/prelude/object/property/delete', () => {
+	it('simple delete', () => {
+		{
+			const obj = {a: 1};
+			expect(Object.delete(obj, 'a')).toBeTrue();
+			expect('a' in obj).toBeFalse();
+		}
+
+		{
+			const obj = {a: 1};
+			expect(Object.delete(obj, 'b')).toBeFalse();
+			expect(obj).toEqual({a: 1});
+		}
+
+		{
+			const obj = {a: {b: 1}};
+			expect(Object.delete(obj, 'a.b')).toBeTrue();
+			expect('b' in obj.a).toBeFalse();
+		}
+
+		{
+			const obj = {a: {b: 1}};
+			expect(Object.delete(obj, 'a.b.c.e')).toBeFalse();
+			expect(obj).toEqual({a: {b: 1}});
+		}
+
+		{
+			const obj = {a: {b: [{c: 1}]}};
+			expect(Object.delete(obj, 'a.b.0.c')).toBeTrue();
+			expect(obj).toEqual({a: {b: [{}]}});
+		}
+
+		{
+			const obj = {a: {b: [{c: 1}]}};
+			expect(Object.delete(obj, 'a.b.1.c')).toBeFalse();
+			expect(obj).toEqual({a: {b: [{c: 1}]}});
+		}
+	});
+
+	it('array as a path', () => {
+		const
+			key = {};
+
+		{
+			const
+				obj = {a: {b: new Map([[key, 1]])}},
+				path = ['a', 'b', key];
+
+			expect(Object.delete(obj, path)).toBeTrue();
+			expect(Object.has(obj, path)).toBeFalse();
+		}
+
+		{
+			const
+				obj = {a: {b: new Map([[key, 1]])}},
+				path = ['a', 'b', key, {}, 'ff'];
+
+			expect(Object.delete(obj, path)).toBeFalse();
+		}
+
+		{
+			const
+				obj = {a: {b: new WeakMap([[key, 1]])}},
+				path = ['a', 'b', key];
+
+			expect(Object.delete(obj, path)).toBeTrue();
+			expect(Object.has(obj, path)).toBeFalse();
+		}
+
+		{
+			const
+				obj = {a: {b: new WeakMap([[key, 1]])}},
+				path = ['a', 'b', key, {}, 'ff'];
+
+			expect(Object.delete(obj, path)).toBeFalse();
+		}
+
+		{
+			const
+				obj = {a: {b: new Set([key])}},
+				path = ['a', 'b', key];
+
+			expect(Object.delete(obj, path)).toBeTrue();
+			expect(Object.has(obj, path)).toBeFalse();
+		}
+
+		{
+			const
+				obj = {a: {b: new Set([key])}},
+				path = ['a', 'b', key, {}, 'ff'];
+
+			expect(Object.delete(obj, path)).toBeFalse();
+		}
+
+		{
+			const
+				obj = {a: {b: new WeakSet([key])}},
+				path = ['a', 'b', key];
+
+			expect(Object.delete(obj, path)).toBeTrue();
+			expect(Object.has(obj, path)).toBeFalse();
+		}
+
+		{
+			const
+				obj = {a: {b: new WeakSet([key])}},
+				path = ['a', 'b', key, {}, 'ff'];
+
+			expect(Object.delete(obj, path)).toBeFalse();
+		}
+	});
+
+	it('custom separator', () => {
+		expect(Object.delete({a: {b: 1}}, 'a:b', {separator: ':'})).toBeTrue();
+	});
+
+	it('functional overloads', () => {
+		expect(Object.delete({a: 1})('a')).toBeTrue();
+		expect(Object.delete({a: {b: 1}}, {separator: ':'})('a:b')).toBeTrue();
+
+		expect(Object.delete('a')({a: 1})).toBeTrue();
+		expect(Object.delete('a:b', {separator: ':'})({a: {b: 1}})).toBeTrue();
+	});
+});
+
 describe('core/prelude/object/property/hasOwnProperty', () => {
 	it('simple hasOwnProperty', () => {
 		expect(Object.hasOwnProperty({a: 1}, 'a')).toBeTrue();

@@ -621,6 +621,31 @@ interface ObjectConstructor {
 	set<T>(obj: T, opts?: ObjectSetOptions, value?: unknown): (path: ObjectPropertyPath, value?: unknown) => CanUndef<T>;
 
 	/**
+	 * Deletes a value from an object by the specified path
+	 *
+	 * @param obj
+	 * @param path
+	 * @param [opts] - additional options
+	 */
+	delete(obj: object, path: ObjectPropertyPath, opts?: ObjectGetOptions): boolean;
+
+	/**
+	 * Returns a function that deletes a value from an object, which the function takes, by the specified path
+	 *
+	 * @param path
+	 * @param [opts] - additional options
+	 */
+	delete(path: ObjectPropertyPath, opts?: ObjectGetOptions): (obj: unknown) => boolean;
+
+	/**
+	 * Returns a function that deletes a value from the specified object by a path that the function takes
+	 *
+	 * @param obj
+	 * @param [opts] - additional options
+	 */
+	delete(obj: object, opts?: ObjectGetOptions): (path: ObjectPropertyPath) => boolean;
+
+	/**
 	 * Returns size/length of the specified object
 	 *
 	 * @param obj

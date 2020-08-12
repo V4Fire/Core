@@ -61,7 +61,7 @@ extend(Object, 'get', (
 /** @see [[ObjectConstructor.has]] */
 extend(Object, 'has', (
 	obj: any,
-	path?: string | any[] | ObjectGetOptions,
+	path: string | any[] | ObjectGetOptions,
 	opts?: ObjectGetOptions
 ) => {
 	if (needCurriedOverload(obj, path)) {
@@ -251,6 +251,72 @@ extend(Object, 'set', function set(
 
 		return finalValue;
 	}
+});
+
+/** @see [[ObjectConstructor.delete]] */
+extend(Object, 'delete', (
+	obj: any,
+	path: string | any[] | ObjectGetOptions,
+	opts?: ObjectGetOptions
+) => {
+	if (needCurriedOverload(obj, path)) {
+		const
+			curriedPath = obj,
+			curriedOpts = <ObjectGetOptions>path;
+
+		return (obj) => Object.delete(obj, curriedPath, curriedOpts);
+	}
+
+	const
+		p = {separator: '.', ...Object.isPlainObject(path) ? path : opts};
+
+	const del = (path) => {
+		const
+			chunks = Object.isString(path) ? path.split(p.separator) : path;
+
+		let
+			res = obj,
+			i = 0;
+
+		for (; i < chunks.length - 1; i++) {
+			if (res == null) {
+				return false;
+			}
+
+			const
+				key = chunks[i];
+
+			if (Object.isMap(res) || Object.isWeakMap(res)) {
+				res = res.get(key);
+
+			} else {
+				res = res[key];
+			}
+		}
+
+		const
+			key = chunks[i];
+
+		if (res == null) {
+			return false;
+		}
+
+		if (Object.isMap(res) || Object.isSet(res) || Object.isWeakMap(res) || Object.isWeakSet(res)) {
+			return res.delete(key);
+		}
+
+		if (typeof res === 'object' ? key in res : res[key] !== undefined) {
+			return delete res[key];
+		}
+
+		return false;
+	};
+
+	if (Object.isArray(path) || Object.isString(path)) {
+		return del(path);
+	}
+
+	return del;
 });
 
 function needCurriedOverload(obj: unknown, path: unknown): boolean {
