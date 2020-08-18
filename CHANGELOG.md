@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.24.1 (2020-08-18)
+
+#### :bug: Bug Fix
+
+* Fixed parsing "1997-07-16T19:20:30.45+0100" format on iOS
+
 ## v3.24.0 (2020-08-12)
 
 #### :rocket: New Feature
