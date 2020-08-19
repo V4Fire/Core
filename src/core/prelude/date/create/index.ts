@@ -39,7 +39,7 @@ extend(Date, 'create', (pattern?: DateCreateValue) => {
 		};
 
 		const normalizeZone = (zone) => {
-			if (/[+-]\d{4}/.test(zone)) {
+			if (/^[+-]\d{4}$/.test(zone)) {
 				return `${zone.substr(0, 3)}:${zone.substr(3)}`;
 			}
 
