@@ -27,6 +27,7 @@ export default class SimpleWorkerQueue<T, V = unknown> extends WorkerQueue<T, V>
 	readonly Tasks!: Tasks<Task<T>>;
 
 	/** @override */
+	// @ts-ignore (accessor)
 	get head(): CanUndef<T> {
 		if (this.length === 0) {
 			return undefined;

@@ -39,14 +39,14 @@
   },
   "dependencies": {
     "@types/got": "^9.6.11",
-    "@types/jasmine": "^3.5.12",
+    "@types/jasmine": "^3.5.14",
     "dom-storage": "^2.1.0",
     "eventemitter2": "^6.4.3",
     "fs-extra-promise": "^1.0.1",
     "got": "^11.5.2",
     "jasmine": "^3.6.1",
     "set-value": "^3.0.2",
-    "tslib": "2.0.0",
+    "tslib": "2.0.1",
     "w3c-xmlserializer": "^2.0.0"
   },
   "optionalDependencies": {
@@ -81,13 +81,13 @@
     "through2": "^4.0.2",
     "tsconfig": "^7.0.0",
     "typedoc": "^0.17.8",
-    "typescript": "3.9.7",
+    "typescript": "4.0.2",
     "uniconf": "^2.1.1",
     "upath": "^1.2.0",
     "urlconcat": "0.0.12"
   },
   "devDependencies": {
-    "@v4fire/linters": "^1.5.4",
+    "@v4fire/linters": "^1.5.7",
     "husky": "^4.2.5",
     "nyc": "^15.1.0"
   }

@@ -27,6 +27,7 @@ export default class MergeWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> 
 	readonly Tasks!: Tasks<string>;
 
 	/** @override */
+	// @ts-ignore (accessor)
 	get head(): CanUndef<T> {
 		if (this.length === 0) {
 			return undefined;

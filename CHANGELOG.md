@@ -11,6 +11,18 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.25.0 (2020-09-01)
+
+#### :boom: Breaking Change
+
+* Moved to `typescript@4.0.2`
+
+#### :house: Internal
+
+* Updated dependencies:
+  `@v4fire/linters@1.5.7`
+  `tslib@2.0.1`
+
 ## v3.24.0 (2020-08-12)
 
 #### :rocket: New Feature
