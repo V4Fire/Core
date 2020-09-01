@@ -549,7 +549,7 @@ interface ObjectConstructor {
 	 * @param path
 	 * @param [opts] - additional options
 	 */
-	has(obj: object, path: ObjectPropertyPath, opts?: ObjectGetOptions): boolean;
+	has(obj: unknown, path: ObjectPropertyPath, opts?: ObjectGetOptions): boolean;
 
 	/**
 	 * Returns a function that returns true if an object, which the function takes, has a value by the specified path
@@ -565,7 +565,7 @@ interface ObjectConstructor {
 	 * @param obj
 	 * @param [opts] - additional options
 	 */
-	has(obj: object, opts?: ObjectGetOptions): (path: ObjectPropertyPath) => boolean;
+	has(obj: unknown, opts?: ObjectGetOptions): (path: ObjectPropertyPath) => boolean;
 
 	/**
 	 * Returns a function that returns true if the passed object, which the function takes,
@@ -627,7 +627,7 @@ interface ObjectConstructor {
 	 * @param path
 	 * @param [opts] - additional options
 	 */
-	delete(obj: object, path: ObjectPropertyPath, opts?: ObjectGetOptions): boolean;
+	delete(obj: unknown, path: ObjectPropertyPath, opts?: ObjectGetOptions): boolean;
 
 	/**
 	 * Returns a function that deletes a value from an object, which the function takes, by the specified path
@@ -643,7 +643,7 @@ interface ObjectConstructor {
 	 * @param obj
 	 * @param [opts] - additional options
 	 */
-	delete(obj: object, opts?: ObjectGetOptions): (path: ObjectPropertyPath) => boolean;
+	delete(obj: unknown, opts?: ObjectGetOptions): (path: ObjectPropertyPath) => boolean;
 
 	/**
 	 * Returns size/length of the specified object

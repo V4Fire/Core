@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.24.1 (2020-09-01)
+
+#### :bug: Bug Fix
+
+* Fixed TS signatures of `Object.has`, `Object.delete`
+
 ## v3.24.0 (2020-08-12)
 
 #### :rocket: New Feature
