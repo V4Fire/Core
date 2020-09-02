@@ -125,6 +125,7 @@ export default class RequestContext<D = unknown> extends Super<D> {
 
 				if (Object.isFunction(resolver)) {
 					const
+						// @ts-ignore (spread)
 						res = resolver(url, middlewareParams, ...args);
 
 					if (Object.isArray(res)) {
