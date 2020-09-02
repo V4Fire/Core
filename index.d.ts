@@ -99,29 +99,29 @@ declare const LOCALE: string;
  * Converts the specified unknown value to any
  * @param obj
  */
-declare function Any(obj: unknown): any;
+declare function Any(obj: any): any;
 
 /**
  * STDERR wrapper
  * @param err
  */
-declare function stderr(err: unknown): void;
+declare function stderr(err: any): void;
 
 /**
  * Global i18n function (can be used as a string tag or simple function)
  */
-declare function i18n(strings: unknown | string[], ...expr: unknown[]): string;
+declare function i18n(strings: any | string[], ...expr: any[]): string;
 
 /**
  * @alias
  * @see globalI18n
  */
-declare function t(strings: unknown | string[], ...expr: unknown[]): string;
+declare function t(strings: any | string[], ...expr: any[]): string;
 
 /**
  * Global i18n loopback (can be used as a string tag or simple function)
  */
-declare function l(strings: unknown | string[], ...expr: unknown[]): string;
+declare function l(strings: any | string[], ...expr: any[]): string;
 
 declare class IdleDeadline {
 	readonly didTimeout: boolean;
@@ -180,7 +180,7 @@ type PromiseType<T> =
 		NonNullable<V> : T extends Promise<infer V> ? V : T;
 
 type DictionaryType<T extends Dictionary> = T extends Dictionary<infer V> ? NonNullable<V> : T;
-type IterableType<T extends Iterable<unknown>> = T extends Iterable<infer V> ? V : T;
+type IterableType<T extends Iterable<any>> = T extends Iterable<infer V> ? V : T;
 
 interface JSONCb {
 	(key: string, value: unknown): unknown;
@@ -510,7 +510,7 @@ interface ObjectFromArrayOptions<T = boolean> {
 
 type ObjectPropertyPath =
 	string |
-	unknown[];
+	any[];
 
 interface ObjectPropertyFilter<K = string, V = unknown> {
 	(key: K, el: V): any;
@@ -524,7 +524,7 @@ interface ObjectConstructor {
 	 * @param path
 	 * @param [opts] - additional options
 	 */
-	get<T = unknown>(obj: unknown, path: ObjectPropertyPath, opts?: ObjectGetOptions): T;
+	get<T = unknown>(obj: any, path: ObjectPropertyPath, opts?: ObjectGetOptions): T;
 
 	/**
 	 * Returns a function that returns a value from the passed object, which the function takes, by the specified path
@@ -532,7 +532,7 @@ interface ObjectConstructor {
 	 * @param path
 	 * @param [opts] - additional options
 	 */
-	get<T = unknown>(path: ObjectPropertyPath, opts?: ObjectGetOptions): (obj: unknown) => T;
+	get<T = unknown>(path: ObjectPropertyPath, opts?: ObjectGetOptions): (obj: any) => T;
 
 	/**
 	 * Returns a function that returns a value from the specified object by a path that the function takes
@@ -540,7 +540,7 @@ interface ObjectConstructor {
 	 * @param obj
 	 * @param [opts] - additional options
 	 */
-	get<T = unknown>(obj: unknown, opts?: ObjectGetOptions): (path: ObjectPropertyPath) => T;
+	get<T = unknown>(obj: any, opts?: ObjectGetOptions): (path: ObjectPropertyPath) => T;
 
 	/**
 	 * Returns true if an object has a property by the specified path
@@ -549,7 +549,7 @@ interface ObjectConstructor {
 	 * @param path
 	 * @param [opts] - additional options
 	 */
-	has(obj: unknown, path: ObjectPropertyPath, opts?: ObjectGetOptions): boolean;
+	has(obj: any, path: ObjectPropertyPath, opts?: ObjectGetOptions): boolean;
 
 	/**
 	 * Returns a function that returns true if an object, which the function takes, has a value by the specified path
@@ -557,7 +557,7 @@ interface ObjectConstructor {
 	 * @param path
 	 * @param [opts] - additional options
 	 */
-	has(path: ObjectPropertyPath, opts?: ObjectGetOptions): (obj: unknown) => boolean;
+	has(path: ObjectPropertyPath, opts?: ObjectGetOptions): (obj: any) => boolean;
 
 	/**
 	 * Returns a function that returns true if the specified object has a value by a path that the function takes
@@ -565,7 +565,7 @@ interface ObjectConstructor {
 	 * @param obj
 	 * @param [opts] - additional options
 	 */
-	has(obj: unknown, opts?: ObjectGetOptions): (path: ObjectPropertyPath) => boolean;
+	has(obj: any, opts?: ObjectGetOptions): (path: ObjectPropertyPath) => boolean;
 
 	/**
 	 * Returns a function that returns true if the passed object, which the function takes,
@@ -573,13 +573,13 @@ interface ObjectConstructor {
 	 *
 	 * @param key
 	 */
-	hasOwnProperty(key: string): (obj: unknown) => boolean;
+	hasOwnProperty(key: string): (obj: any) => boolean;
 
 	/**
 	 * Returns a function that returns true if the specified object has own property by a key that the function takes
 	 * @param obj
 	 */
-	hasOwnProperty(obj: unknown): (key: string) => boolean;
+	hasOwnProperty(obj: any): (key: string) => boolean;
 
 	/**
 	 * Returns true if the passed object has an own property by the specified key
@@ -587,7 +587,7 @@ interface ObjectConstructor {
 	 * @param obj
 	 * @param key
 	 */
-	hasOwnProperty(obj: unknown, key: string): boolean;
+	hasOwnProperty(obj: any, key: string): boolean;
 
 	/**
 	 * Sets a value to the passed object by the specified path.
@@ -598,7 +598,7 @@ interface ObjectConstructor {
 	 * @param value
 	 * @param [opts] - additional options
 	 */
-	set<T>(obj: unknown, path: ObjectPropertyPath, value: T, opts?: ObjectSetOptions): CanUndef<T>;
+	set<T>(obj: any, path: ObjectPropertyPath, value: T, opts?: ObjectSetOptions): CanUndef<T>;
 
 	/**
 	 * Returns a function that sets a value to an object, which the function takes, by the specified path.
@@ -608,7 +608,7 @@ interface ObjectConstructor {
 	 * @param [opts] - additional options
 	 * @param [value]
 	 */
-	set(path: ObjectPropertyPath, opts?: ObjectSetOptions, value?: unknown): <T>(obj: T, value?: unknown) => CanUndef<T>;
+	set(path: ObjectPropertyPath, opts?: ObjectSetOptions, value?: any): <T>(obj: T, value?: any) => CanUndef<T>;
 
 	/**
 	 * Returns a function that sets a value to the specified object by a path that the function takes.
@@ -618,7 +618,7 @@ interface ObjectConstructor {
 	 * @param [opts] - additional options
 	 * @param [value]
 	 */
-	set<T>(obj: T, opts?: ObjectSetOptions, value?: unknown): (path: ObjectPropertyPath, value?: unknown) => CanUndef<T>;
+	set<T>(obj: T, opts?: ObjectSetOptions, value?: any): (path: ObjectPropertyPath, value?: any) => CanUndef<T>;
 
 	/**
 	 * Deletes a value from an object by the specified path
@@ -627,7 +627,7 @@ interface ObjectConstructor {
 	 * @param path
 	 * @param [opts] - additional options
 	 */
-	delete(obj: unknown, path: ObjectPropertyPath, opts?: ObjectGetOptions): boolean;
+	delete(obj: any, path: ObjectPropertyPath, opts?: ObjectGetOptions): boolean;
 
 	/**
 	 * Returns a function that deletes a value from an object, which the function takes, by the specified path
@@ -635,7 +635,7 @@ interface ObjectConstructor {
 	 * @param path
 	 * @param [opts] - additional options
 	 */
-	delete(path: ObjectPropertyPath, opts?: ObjectGetOptions): (obj: unknown) => boolean;
+	delete(path: ObjectPropertyPath, opts?: ObjectGetOptions): (obj: any) => boolean;
 
 	/**
 	 * Returns a function that deletes a value from the specified object by a path that the function takes
@@ -643,7 +643,7 @@ interface ObjectConstructor {
 	 * @param obj
 	 * @param [opts] - additional options
 	 */
-	delete(obj: unknown, opts?: ObjectGetOptions): (path: ObjectPropertyPath) => boolean;
+	delete(obj: any, opts?: ObjectGetOptions): (path: ObjectPropertyPath) => boolean;
 
 	/**
 	 * Returns size/length of the specified object
@@ -673,7 +673,7 @@ interface ObjectConstructor {
 	 * Object.size(undefined);
 	 * ```
 	 */
-	size(obj: unknown): number;
+	size(obj: any): number;
 
 	/**
 	 * Iterates over the specified dictionary
@@ -838,7 +838,7 @@ interface ObjectConstructor {
 	 * @param opts - additional options
 	 * @param cb - callback function that is called on each of object elements
 	 */
-	forEach<V = unknown, K = unknown, D = unknown>(
+	forEach<V = unknown, K = unknown, D = any>(
 		obj: D,
 		opts: ObjectForEachOptions,
 		cb: (el: V, key: K, data: D) => any
@@ -851,7 +851,7 @@ interface ObjectConstructor {
 	 * @param cb - callback function that is called on each of object elements
 	 * @param [opts] - additional options
 	 */
-	forEach<V = unknown, K = unknown, D = unknown>(
+	forEach<V = unknown, K = unknown, D = any>(
 		obj: D,
 		cb: (el: V, key: K, data: D) => any,
 		opts?: ObjectForEachOptions
@@ -861,7 +861,7 @@ interface ObjectConstructor {
 	 * Returns a curried version of Object.fastCompare for one argument
 	 * @param a
 	 */
-	fastCompare(a: unknown): (b: unknown) => boolean;
+	fastCompare(a: any): (b: any) => boolean;
 
 	/**
 	 * Compares two specified objects by using a naive but fast "JSON.stringify/parse" strategy and
@@ -873,7 +873,7 @@ interface ObjectConstructor {
 	 * @param a
 	 * @param b
 	 */
-	fastCompare<T>(a: unknown, b: T): a is T;
+	fastCompare<T>(a: any, b: T): a is T;
 
 	/**
 	 * Returns a curried version of Object.fastClone
@@ -899,7 +899,7 @@ interface ObjectConstructor {
 	 *
 	 * @param obj
 	 */
-	fastHash(obj: unknown): string;
+	fastHash(obj: any): string;
 
 	/**
 	 * Returns a curried version of Object.mixin for one argument
@@ -911,7 +911,7 @@ interface ObjectConstructor {
 	 * Returns a curried version of Object.mixin for one argument
 	 * @param opts - if true, then properties will be copied recursively, or additional options to extend
 	 */
-	mixin(opts: ObjectMixinOptions | boolean): <R = unknown>(...objects: unknown[]) => R;
+	mixin(opts: ObjectMixinOptions | boolean): <R = unknown>(...objects: any[]) => R;
 
 	/**
 	 * Returns a curried version of Object.mixin for two arguments
@@ -927,7 +927,7 @@ interface ObjectConstructor {
 	 * @param opts - if true, then properties will be copied recursively, or additional options to extend
 	 * @param base - base object
 	 */
-	mixin(opts: ObjectMixinOptions | boolean, base: unknown): <R = unknown>(...objects: unknown[]) => R;
+	mixin(opts: ObjectMixinOptions | boolean, base: any): <R = unknown>(...objects: any[]) => R;
 
 	/**
 	 * Extends the specified object by another objects.
@@ -970,7 +970,7 @@ interface ObjectConstructor {
 	 * @param base - base object
 	 * @param objects - objects for extending
 	 */
-	mixin<R = unknown>(opts: ObjectMixinOptions | boolean, base?: unknown, ...objects: unknown[]): R;
+	mixin<R = unknown>(opts: ObjectMixinOptions | boolean, base?: any, ...objects: any[]): R;
 
 	/**
 	 * Returns a curried version of Object.parse
@@ -1440,7 +1440,7 @@ interface ObjectConstructor {
 	 * Object.Option('foo').then((value) => value === 'foo');
 	 * ```
 	 */
-	Option<A1, A extends unknown[], R>(value: (a1: A1, ...rest: A) => R):
+	Option<A1, A extends any[], R>(value: (a1: A1, ...rest: A) => R):
 		(a1: Maybe<Nullable<A1>> | Either<A1> | Nullable<A1>, ...rest) => Maybe<R>;
 
 	/**
@@ -1496,7 +1496,7 @@ interface ObjectConstructor {
 	 * Object.Result('foo').then((value) => value === 'foo');
 	 * ```
 	 */
-	Result<A1, A extends unknown[], R>(value: (a1: A1, ...a: A) => R):
+	Result<A1, A extends any[], R>(value: (a1: A1, ...a: A) => R):
 		(a1: Maybe<A1> | Either<A1>, ...rest) => Either<R>;
 
 	/**
@@ -1521,7 +1521,7 @@ interface ObjectConstructor {
 	 * Returns true if the specified value can be interpreted as true
 	 * @param value
 	 */
-	isTruly(value: unknown): boolean;
+	isTruly(value: any): boolean;
 
 	/**
 	 * Returns true if the specified value is a plain object
@@ -1530,7 +1530,7 @@ interface ObjectConstructor {
 	isPlainObject<T>(obj: T): obj is
 		// @ts-ignore (unsafe type cast)
 		T extends
-			unknown[] |
+			any[] |
 
 			Int8Array |
 			Int16Array |
@@ -1605,50 +1605,50 @@ interface ObjectConstructor {
 	 * }
 	 * ```
 	 */
-	isDictionary(value: unknown): value is Dictionary;
+	isDictionary(value: any): value is Dictionary;
 
 	/**
 	 * @deprecated
 	 * @see [[ObjectConstructor.isPlainObject]]
 	 * @see [[ObjectConstructor.isDictionary]]
 	 */
-	isObject(value: unknown): value is Dictionary;
+	isObject(value: any): value is Dictionary;
 
 	/**
 	 * Returns true if the specified value has a primitive type
 	 * @param value
 	 */
-	isPrimitive(value: unknown): boolean;
+	isPrimitive(value: any): boolean;
 
 	/**
 	 * Returns true if the specified value is a custom (not native) object or function
 	 * @param value
 	 */
-	isCustomObject(value: unknown): boolean;
+	isCustomObject(value: any): boolean;
 
 	/**
 	 * Returns true if the specified value is a simple object (without a string type tag)
 	 * @param value
 	 */
-	isSimpleObject<T extends object = object>(value: unknown): value is T;
+	isSimpleObject<T extends object = object>(value: any): value is T;
 
 	/**
 	 * Returns true if the specified value is an array
 	 * @param value
 	 */
-	isArray(value: unknown): value is unknown[];
+	isArray(value: any): value is unknown[];
 
 	/**
 	 * Returns true if the specified value is looks like an array
 	 * @param value
 	 */
-	isArrayLike(value: unknown): value is ArrayLike<any>;
+	isArrayLike(value: any): value is ArrayLike<any>;
 
 	/**
 	 * Returns true if the specified value is a function
 	 * @param value
 	 */
-	isFunction(value: unknown): value is AnyFunction;
+	isFunction(value: any): value is AnyFunction;
 
 	/**
 	 * Returns true if the specified value is a simple function.
@@ -1656,97 +1656,97 @@ interface ObjectConstructor {
 	 *
 	 * @param value
 	 */
-	isSimpleFunction(value: unknown): value is Function;
+	isSimpleFunction(value: any): value is Function;
 
 	/**
 	 * Returns true if the specified value is a generator function
 	 * @param value
 	 */
-	isGenerator(value: unknown): value is GeneratorFunction;
+	isGenerator(value: any): value is GeneratorFunction;
 
 	/**
 	 * Returns true if the specified value is an iterable structure
 	 * @param value
 	 */
-	isIterable(value: unknown): value is IterableIterator<unknown>;
+	isIterable(value: any): value is IterableIterator<unknown>;
 
 	/**
 	 * Returns true if the specified value is an iterator
 	 * @param value
 	 */
-	isIterator(value: unknown): value is Iterator<unknown>;
+	isIterator(value: any): value is Iterator<unknown>;
 
 	/**
 	 * Returns true if the specified value is a string
 	 * @param value
 	 */
-	isString(value: unknown): value is string;
+	isString(value: any): value is string;
 
 	/**
 	 * Returns true if the specified value is a number
 	 * @param value
 	 */
-	isNumber(value: unknown): value is number;
+	isNumber(value: any): value is number;
 
 	/**
 	 * Returns true if the specified value is a boolean
 	 * @param value
 	 */
-	isBoolean(value: unknown): value is boolean;
+	isBoolean(value: any): value is boolean;
 
 	/**
 	 * Returns true if the specified value is a symbol
 	 * @param value
 	 */
-	isSymbol(value: unknown): value is symbol;
+	isSymbol(value: any): value is symbol;
 
 	/**
 	 * Returns true if the specified value is a regular expression
 	 * @param value
 	 */
-	isRegExp(value: unknown): value is RegExp;
+	isRegExp(value: any): value is RegExp;
 
 	/**
 	 * Returns true if the specified value is a date
 	 * @param value
 	 */
-	isDate(value: unknown): value is Date;
+	isDate(value: any): value is Date;
 
 	/**
 	 * Returns true if the specified value is a promise
 	 * @param value
 	 */
-	isPromise(value: unknown): value is Promise<unknown>;
+	isPromise(value: any): value is Promise<unknown>;
 
 	/**
 	 * Returns true if the specified value is looks like a promise
 	 * @param value
 	 */
-	isPromiseLike(value: unknown): value is PromiseLike<unknown>;
+	isPromiseLike(value: any): value is PromiseLike<unknown>;
 
 	/**
 	 * Returns true if the specified value is a map
 	 * @param value
 	 */
-	isMap(value: unknown): value is Map<unknown, unknown>;
+	isMap(value: any): value is Map<unknown, unknown>;
 
 	/**
 	 * Returns true if the specified value is a weak map
 	 * @param value
 	 */
-	isWeakMap(value: unknown): value is WeakMap<object, unknown>;
+	isWeakMap(value: any): value is WeakMap<object, unknown>;
 
 	/**
 	 * Returns true if the specified value is a set
 	 * @param value
 	 */
-	isSet(value: unknown): value is Set<unknown>;
+	isSet(value: any): value is Set<unknown>;
 
 	/**
 	 * Returns true if the specified value is a weak set
 	 * @param value
 	 */
-	isWeakSet(value: unknown): value is WeakSet<object>;
+	isWeakSet(value: any): value is WeakSet<object>;
 }
 
 interface ArrayConstructor {
@@ -1754,7 +1754,7 @@ interface ArrayConstructor {
 	 * Returns a curried version of Array.union
 	 * @param arr
 	 */
-	union<T extends Nullable<unknown[]>>(arr: T): <A extends Iterable<unknown> | unknown>(
+	union<T extends Nullable<any[]>>(arr: T): <A extends Iterable<any> | any>(
 		...args: Array<Iterable<A> | A>
 	) => A extends Iterable<infer V> ?
 		Array<IterableType<NonNullable<T>> | V> :
@@ -1768,7 +1768,7 @@ interface ArrayConstructor {
 	 * @param arr
 	 * @param args
 	 */
-	union<T extends Nullable<unknown[]>, A extends Iterable<unknown> | unknown>(
+	union<T extends Nullable<any[]>, A extends Iterable<any> | any>(
 		arr: T,
 		...args: Array<Iterable<A> | A>
 	): A extends Iterable<infer V> ?
@@ -1779,7 +1779,7 @@ interface ArrayConstructor {
 	 * Returns a curried version of Array.concat
 	 * @param arr
 	 */
-	concat<T extends Nullable<unknown[]>>(arr: T): <A extends CanArray<unknown>>(...args: Array<CanArray<A>>) =>
+	concat<T extends Nullable<any[]>>(arr: T): <A extends CanArray<any>>(...args: Array<CanArray<A>>) =>
 		A extends Array<infer V> ?
 			Array<IterableType<NonNullable<T>> | V> :
 			Array<IterableType<NonNullable<T>> | NonNullable<A>>;
@@ -1792,7 +1792,7 @@ interface ArrayConstructor {
 	 * @param arr
 	 * @param args
 	 */
-	concat<T extends Nullable<unknown[]>, A extends CanArray<unknown>>(
+	concat<T extends Nullable<any[]>, A extends CanArray<any>>(
 		arr: T,
 		...args: Array<CanArray<A>>
 	): A extends Array<infer V> ?
@@ -1808,7 +1808,7 @@ interface Array<T> {
 	 *
 	 * @param args
 	 */
-	union<A extends Iterable<unknown> | unknown>(
+	union<A extends Iterable<any> | any>(
 		...args: Array<Iterable<A> | A>
 	): A extends Iterable<infer V> ? Array<T | V> : Array<T | NonNullable<A>>;
 }
@@ -2035,61 +2035,61 @@ interface NumberConstructor {
 	 * Returns true if the specified value is an integer number
 	 * @param value
 	 */
-	isInteger(value: unknown): boolean;
+	isInteger(value: any): boolean;
 
 	/**
 	 * Returns true if the specified value is a float number
 	 * @param value
 	 */
-	isFloat(value: unknown): boolean;
+	isFloat(value: any): boolean;
 
 	/**
 	 * Returns true if the specified value is an even number
 	 * @param value
 	 */
-	isEven(value: unknown): boolean;
+	isEven(value: any): boolean;
 
 	/**
 	 * Returns true if the specified value is an odd number
 	 * @param value
 	 */
-	isOdd(value: unknown): boolean;
+	isOdd(value: any): boolean;
 
 	/**
 	 * Returns true if the specified value is a natural number
 	 * @param value
 	 */
-	isNatural(value: unknown): boolean;
+	isNatural(value: any): boolean;
 
 	/**
 	 * Returns true if the specified value is a positive number
 	 * @param value
 	 */
-	isPositive(value: unknown): boolean;
+	isPositive(value: any): boolean;
 
 	/**
 	 * Returns true if the specified value is a negative number
 	 * @param value
 	 */
-	isNegative(value: unknown): boolean;
+	isNegative(value: any): boolean;
 
 	/**
 	 * Returns true if the specified value is a non-negative number
 	 * @param value
 	 */
-	isNonNegative(value: unknown): boolean;
+	isNonNegative(value: any): boolean;
 
 	/**
 	 * Returns true if the specified value is a number and is more or equal than 0 and less or equal than 1
 	 * @param value
 	 */
-	isBetweenZeroAndOne(value: unknown): boolean;
+	isBetweenZeroAndOne(value: any): boolean;
 
 	/**
 	 * Returns true if the specified value is a number and is more than 0 and less or equal than 1
 	 * @param value
 	 */
-	isPositiveBetweenZeroAndOne(value: unknown): boolean;
+	isPositiveBetweenZeroAndOne(value: any): boolean;
 
 	/**
 	 * Returns a value of milliseconds from the seconds
@@ -3287,7 +3287,7 @@ interface FunctionConstructor {
 	 *
 	 * @param delay
 	 */
-	debounce(delay: number): <A extends unknown[]>(fn: AnyFunction<A>) => AnyFunction<A, void>;
+	debounce(delay: number): <A extends any[]>(fn: AnyFunction<A>) => AnyFunction<A, void>;
 
 	/**
 	 * Returns a new function that allows to invoke the function only with the specified delay.
@@ -3296,7 +3296,7 @@ interface FunctionConstructor {
 	 * @param fn
 	 * @param [delay]
 	 */
-	debounce<A extends unknown[]>(fn: AnyFunction<A>, delay?: number): AnyFunction<A, void>;
+	debounce<A extends any[]>(fn: AnyFunction<A>, delay?: number): AnyFunction<A, void>;
 
 	/**
 	 * Returns a new function that allows to invoke a function, which it takes, not more often than the specified delay.
@@ -3305,7 +3305,7 @@ interface FunctionConstructor {
 	 *
 	 * @param delay
 	 */
-	throttle(delay: number): <A extends unknown[]>(fn: AnyFunction<A>) => AnyFunction<A, void>;
+	throttle(delay: number): <A extends any[]>(fn: AnyFunction<A>) => AnyFunction<A, void>;
 
 	/**
 	 * Returns a new function that allows to invoke a function, which it takes, not more often than the specified delay.
@@ -3314,7 +3314,7 @@ interface FunctionConstructor {
 	 *
 	 * @param opts - options for the operation
 	 */
-	throttle(opts: ThrottleOptions): <A extends unknown[]>(fn: AnyFunction<A>) => AnyFunction<A, void>;
+	throttle(opts: ThrottleOptions): <A extends any[]>(fn: AnyFunction<A>) => AnyFunction<A, void>;
 
 	/**
 	 * Returns a new function that allows to invoke the function not more often than the specified delay.
@@ -3324,7 +3324,7 @@ interface FunctionConstructor {
 	 * @param fn
 	 * @param [delay]
 	 */
-	throttle<A extends unknown[]>(fn: AnyFunction<A>, delay?: number): AnyFunction<A, void>;
+	throttle<A extends any[]>(fn: AnyFunction<A>, delay?: number): AnyFunction<A, void>;
 
 	/**
 	 * Returns a new function that allows to invoke the function not more often than the specified delay.
@@ -3334,7 +3334,7 @@ interface FunctionConstructor {
 	 * @param fn
 	 * @param opts - options for the operation
 	 */
-	throttle<A extends unknown[]>(fn: AnyFunction<A>, opts: ThrottleOptions): AnyFunction<A, void>;
+	throttle<A extends any[]>(fn: AnyFunction<A>, opts: ThrottleOptions): AnyFunction<A, void>;
 
 	/**
 	 * Returns a curried equivalent of the provided function.
@@ -3376,20 +3376,20 @@ interface FunctionConstructor {
 	 *
 	 * @param fn0
 	 */
-	compose<A extends unknown[], T1>(fn0: AnyFunction<A, T1>): AnyFunction<A, T1>;
+	compose<A extends any[], T1>(fn0: AnyFunction<A, T1>): AnyFunction<A, T1>;
 
-	compose<A extends unknown[], T1, T2>(
+	compose<A extends any[], T1, T2>(
 		fn1: AnyOneArgFunction<PromiseType<T1>, T2>,
 		fn0: AnyFunction<A, T1>
 	): AnyFunction<A, T1 extends Promise<any> ? NewPromise<T1, T2> : T2>;
 
-	compose<A extends unknown[], T1, T2, T3>(
+	compose<A extends any[], T1, T2, T3>(
 		fn2: AnyOneArgFunction<PromiseType<T2>, T3>,
 		fn1: AnyOneArgFunction<PromiseType<T1>, T2>,
 		fn0: AnyFunction<A, T1>
 	): AnyFunction<A, T2 extends Promise<any> ? Promise<T3> : T1 extends Promise<any> ? Promise<T3> : T3>;
 
-	compose<A extends unknown[], T1, T2, T3, T4>(
+	compose<A extends any[], T1, T2, T3, T4>(
 		fn3: AnyOneArgFunction<PromiseType<T3>, T4>,
 		fn2: AnyOneArgFunction<PromiseType<T2>, T3>,
 		fn1: AnyOneArgFunction<PromiseType<T1>, T2>,
@@ -3402,7 +3402,7 @@ interface FunctionConstructor {
 					Promise<T4> : T4
 	>;
 
-	compose<A extends unknown[], T1, T2, T3, T4, T5>(
+	compose<A extends any[], T1, T2, T3, T4, T5>(
 		fn4: AnyOneArgFunction<PromiseType<T4>, T5>,
 		fn3: AnyOneArgFunction<PromiseType<T3>, T4>,
 		fn2: AnyOneArgFunction<PromiseType<T2>, T3>,
@@ -3417,7 +3417,7 @@ interface FunctionConstructor {
 						Promise<T5> : T5
 	>;
 
-	compose<A extends unknown[], T1, T2, T3, T4, T5, T6>(
+	compose<A extends any[], T1, T2, T3, T4, T5, T6>(
 		fn5: AnyOneArgFunction<PromiseType<T5>, T6>,
 		fn4: AnyOneArgFunction<PromiseType<T4>, T5>,
 		fn3: AnyOneArgFunction<PromiseType<T3>, T4>,
@@ -3503,7 +3503,7 @@ interface Function {
 	 * toLowerCase.option()(toLowerCase.option()('FOO')).then((value) => value === 'foo');
 	 * ```
 	 */
-	option<A1, A extends unknown[], R>(this: (a1: A1, ...rest: A) => R):
+	option<A1, A extends any[], R>(this: (a1: A1, ...rest: A) => R):
 		(a1: Maybe<Nullable<A1>> | Either<A1> | Nullable<A1>, ...rest: A) => Maybe<R>;
 
 	/**
@@ -3536,7 +3536,7 @@ interface Function {
 	 * toLowerCase.result()(toLowerCase.result()('FOO')).then((value) => value === 'foo');
 	 * ```
 	 */
-	result<A1, A extends unknown[], R>(this: (a1: A1, ...rest: A) => R):
+	result<A1, A extends any[], R>(this: (a1: A1, ...rest: A) => R):
 		(a1: Maybe<A1> | Either<A1>, ...rest: A) => Either<R>;
 
 	/**
@@ -3579,18 +3579,18 @@ interface Function {
 	 */
 	compose<T>(this: T): T;
 
-	compose<A extends unknown[], T1, T2>(
+	compose<A extends any[], T1, T2>(
 		this: AnyFunction<A, T1>,
 		fn1: AnyOneArgFunction<T1, T2>
 	): AnyFunction<A, T1 extends Promise<any> ? Promise<T2> : T2>;
 
-	compose<A extends unknown[], T1, T2, T3>(
+	compose<A extends any[], T1, T2, T3>(
 		this: AnyFunction<A, T1>,
 		fn1: AnyOneArgFunction<T1, T2>,
 		fn2: AnyOneArgFunction<T2, T3>
 	): AnyFunction<A, T2 extends Promise<any> ? Promise<T3> : T1 extends Promise<any> ? Promise<T3> : T3>;
 
-	compose<A extends unknown[], T1, T2, T3, T4>(
+	compose<A extends any[], T1, T2, T3, T4>(
 		this: AnyFunction<A, T1>,
 		fn1: AnyOneArgFunction<T1, T2>,
 		fn2: AnyOneArgFunction<T2, T3>,
@@ -3603,7 +3603,7 @@ interface Function {
 					Promise<T4> : T4
 	>;
 
-	compose<A extends unknown[], T1, T2, T3, T4, T5>(
+	compose<A extends any[], T1, T2, T3, T4, T5>(
 		this: AnyFunction<A, T1>,
 		fn1: AnyOneArgFunction<T1, T2>,
 		fn2: AnyOneArgFunction<T2, T3>,
@@ -3618,7 +3618,7 @@ interface Function {
 						Promise<T5> : T5
 	>;
 
-	compose<A extends unknown[], T1, T2, T3, T4, T5, T6>(
+	compose<A extends any[], T1, T2, T3, T4, T5, T6>(
 		this: AnyFunction<A, T1>,
 		fn1: AnyOneArgFunction<T1, T2>,
 		fn2: AnyOneArgFunction<T2, T3>,

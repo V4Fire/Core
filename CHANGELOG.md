@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.24.2 (2020-09-02)
+
+#### :house: Internal
+
+* Review `any` and `unknown` types
+
 ## v3.24.1 (2020-09-01)
 
 #### :bug: Bug Fix
