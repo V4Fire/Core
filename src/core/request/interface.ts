@@ -80,11 +80,11 @@ export interface RequestResponseObject<D = unknown> {
 
 export type RequestResponse<D = unknown> = Then<RequestResponseObject<D>>;
 
-export interface RequestFunctionResponse<D = unknown, ARGS extends any[] = []> {
+export interface RequestFunctionResponse<D = unknown, ARGS extends any[] = unknown[]> {
 	(...args: ARGS extends Array<infer V> ? V[] : unknown[]): RequestResponse<D>;
 }
 
-export interface RequestResolver<D = unknown, ARGS extends any[] = []> {
+export interface RequestResolver<D = unknown, ARGS extends any[] = unknown[]> {
 	(url: string, params: MiddlewareParams<D>, ...args: ARGS): ResolverResult;
 }
 

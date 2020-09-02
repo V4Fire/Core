@@ -92,7 +92,7 @@ function request<D = unknown>(opts: CreateRequestOptions<D>): typeof request;
  * request('https://foo.com', () => ['https://bla.com', 'bla', 'baz'])() // https://bla.com/bla/baz
  * ```
  */
-function request<D = unknown, A extends any[] = []>(
+function request<D = unknown, A extends any[] = unknown[]>(
 	path: string,
 	resolver: RequestResolver<D, A>,
 	opts?: CreateRequestOptions<D>
