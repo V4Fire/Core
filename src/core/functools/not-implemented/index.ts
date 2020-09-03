@@ -11,7 +11,13 @@
  * @packageDocumentation
  */
 
-import { NotImplementedOptions, InlineNotImplementedOptions } from 'core/functools/not-implemented/interface';
+import {
+
+	NotImplementedOptions,
+	InlineNotImplementedOptions,
+	NotImplementedFn
+
+} from 'core/functools/not-implemented/interface';
 
 export * from 'core/functools/deprecation/interface';
 
@@ -27,7 +33,7 @@ const
 export function notImplement<T extends Function>(
 	opts: NotImplementedOptions,
 	fn: T
-): T;
+): T extends ((...args: infer A) => infer R) ? NotImplementedFn<A, R> : T;
 
 /**
  * Emits a "not implemented" warning with the specified parameters
@@ -39,7 +45,9 @@ export function notImplement(opts: InlineNotImplementedOptions): void;
  * Marks the specified function as not implemented
  * @param fn - function for wrapping
  */
-export function notImplement<T extends Function>(fn: T): T;
+export function notImplement<T extends Function>(fn: T): T extends ((...args: infer A) => infer R) ?
+	NotImplementedFn<A, R> :
+	T;
 
 export function notImplement<T extends Function>(
 	fnOrParams: NotImplementedOptions | InlineNotImplementedOptions | T,
@@ -61,6 +69,7 @@ export function notImplement<T extends Function>(
 		return;
 	}
 
+	wrapper.notImplemented = p;
 	function wrapper(this: unknown, ...args: unknown[]): unknown {
 		//#unless isProd
 
