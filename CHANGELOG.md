@@ -15,7 +15,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :bug: Bug Fix
 
-* Fixed parsing "1997-07-16T19:20:30.45+0100" format on iOS
+* Fixed parsing "1997-07-16T19:20:30.45+0100" format on iOS `core/prelude/date` 
 
 ## v3.24.0 (2020-08-12)
 
