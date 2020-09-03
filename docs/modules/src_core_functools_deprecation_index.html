@@ -275,6 +275,7 @@ pre {
 								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_functools_deprecation_index.html#deprecatedalternative" class="tsd-kind-icon">Deprecated<wbr>Alternative</a></li>
 								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_functools_deprecation_index.html#deprecatedalternativeoptions" class="tsd-kind-icon">Deprecated<wbr>Alternative<wbr>Options</a></li>
 								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_functools_deprecation_index.html#deprecatedexprtype" class="tsd-kind-icon">Deprecated<wbr>Expr<wbr>Type</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_functools_deprecation_index.html#deprecatedfn" class="tsd-kind-icon">Deprecated<wbr>Fn</a></li>
 								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_functools_deprecation_index.html#deprecatedoptions" class="tsd-kind-icon">Deprecated<wbr>Options</a></li>
 								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_functools_deprecation_index.html#inlinedeprecatedoptions" class="tsd-kind-icon">Inline<wbr>Deprecated<wbr>Options</a></li>
 							</ul>
@@ -307,6 +308,11 @@ pre {
 					Re-exports <a href="src_core_functools_deprecation_interface.html#deprecatedexprtype">DeprecatedExprType</a>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="deprecatedfn" class="tsd-anchor"></a>
+					<h3>Deprecated<wbr>Fn</h3>
+					Re-exports <a href="../interfaces/src_core_functools_deprecation_interface.deprecatedfn.html">DeprecatedFn</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
 					<a name="deprecatedoptions" class="tsd-anchor"></a>
 					<h3>Deprecated<wbr>Options</h3>
 					Re-exports <a href="../interfaces/src_core_functools_deprecation_interface.deprecatedoptions.html">DeprecatedOptions</a>
@@ -323,9 +329,9 @@ pre {
 					<a name="deprecate" class="tsd-anchor"></a>
 					<h3>deprecate</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">deprecate&lt;T&gt;<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_functools_deprecation_interface.deprecatedoptions.html" class="tsd-signature-type">DeprecatedOptions</a>, fn<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span></li>
+						<li class="tsd-signature tsd-kind-icon">deprecate&lt;T&gt;<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_functools_deprecation_interface.deprecatedoptions.html" class="tsd-signature-type">DeprecatedOptions</a>, fn<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">infer </span> A<span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-symbol">infer </span> R<span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">DeprecatedFn</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">T</span></li>
 						<li class="tsd-signature tsd-kind-icon">deprecate<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_functools_deprecation_interface.inlinedeprecatedoptions.html" class="tsd-signature-type">InlineDeprecatedOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-						<li class="tsd-signature tsd-kind-icon">deprecate&lt;T&gt;<span class="tsd-signature-symbol">(</span>fn<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span></li>
+						<li class="tsd-signature tsd-kind-icon">deprecate&lt;T&gt;<span class="tsd-signature-symbol">(</span>fn<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">infer </span> A<span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-symbol">infer </span> R<span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">DeprecatedFn</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">T</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -357,7 +363,7 @@ pre {
 									<h5>fn: <span class="tsd-signature-type">T</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">T</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">infer </span> A<span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-symbol">infer </span> R<span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">DeprecatedFn</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">T</span></h4>
 						</li>
 						<li class="tsd-description">
 							<aside class="tsd-sources">
@@ -407,7 +413,7 @@ pre {
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">T</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">infer </span> A<span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-symbol">infer </span> R<span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">DeprecatedFn</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">T</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -422,7 +428,7 @@ pre {
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/functools/deprecation/index.ts#L144">src/core/functools/deprecation/index.ts:144</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/functools/deprecation/index.ts#L147">src/core/functools/deprecation/index.ts:147</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -462,7 +468,7 @@ pre {
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/functools/deprecation/index.ts#L163">src/core/functools/deprecation/index.ts:163</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/functools/deprecation/index.ts#L166">src/core/functools/deprecation/index.ts:166</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -517,6 +523,9 @@ pre {
 					</li>
 					<li class=" tsd-kind-reference tsd-parent-kind-module">
 						<a href="src_core_functools_deprecation_index.html#deprecatedexprtype" class="tsd-kind-icon">Deprecated<wbr>Expr<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_functools_deprecation_index.html#deprecatedfn" class="tsd-kind-icon">Deprecated<wbr>Fn</a>
 					</li>
 					<li class=" tsd-kind-reference tsd-parent-kind-module">
 						<a href="src_core_functools_deprecation_index.html#deprecatedoptions" class="tsd-kind-icon">Deprecated<wbr>Options</a>

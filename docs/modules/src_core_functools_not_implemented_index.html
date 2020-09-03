@@ -274,6 +274,7 @@ pre {
 								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_functools_not_implemented_index.html#deprecatedalternative" class="tsd-kind-icon">Deprecated<wbr>Alternative</a></li>
 								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_functools_not_implemented_index.html#deprecatedalternativeoptions" class="tsd-kind-icon">Deprecated<wbr>Alternative<wbr>Options</a></li>
 								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_functools_not_implemented_index.html#deprecatedexprtype" class="tsd-kind-icon">Deprecated<wbr>Expr<wbr>Type</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_functools_not_implemented_index.html#deprecatedfn" class="tsd-kind-icon">Deprecated<wbr>Fn</a></li>
 								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_functools_not_implemented_index.html#deprecatedoptions" class="tsd-kind-icon">Deprecated<wbr>Options</a></li>
 								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_functools_not_implemented_index.html#inlinedeprecatedoptions" class="tsd-kind-icon">Inline<wbr>Deprecated<wbr>Options</a></li>
 							</ul>
@@ -306,6 +307,11 @@ pre {
 					Re-exports <a href="src_core_functools_deprecation_interface.html#deprecatedexprtype">DeprecatedExprType</a>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="deprecatedfn" class="tsd-anchor"></a>
+					<h3>Deprecated<wbr>Fn</h3>
+					Re-exports <a href="../interfaces/src_core_functools_deprecation_interface.deprecatedfn.html">DeprecatedFn</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
 					<a name="deprecatedoptions" class="tsd-anchor"></a>
 					<h3>Deprecated<wbr>Options</h3>
 					Re-exports <a href="../interfaces/src_core_functools_deprecation_interface.deprecatedoptions.html">DeprecatedOptions</a>
@@ -322,15 +328,15 @@ pre {
 					<a name="notimplement" class="tsd-anchor"></a>
 					<h3>not<wbr>Implement</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">not<wbr>Implement&lt;T&gt;<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_functools_not_implemented_interface.notimplementedoptions.html" class="tsd-signature-type">NotImplementedOptions</a>, fn<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span></li>
+						<li class="tsd-signature tsd-kind-icon">not<wbr>Implement&lt;T&gt;<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_functools_not_implemented_interface.notimplementedoptions.html" class="tsd-signature-type">NotImplementedOptions</a>, fn<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">infer </span> A<span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-symbol">infer </span> R<span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">NotImplementedFn</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">T</span></li>
 						<li class="tsd-signature tsd-kind-icon">not<wbr>Implement<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_functools_not_implemented_interface.inlinenotimplementedoptions.html" class="tsd-signature-type">InlineNotImplementedOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-						<li class="tsd-signature tsd-kind-icon">not<wbr>Implement&lt;T&gt;<span class="tsd-signature-symbol">(</span>fn<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span></li>
+						<li class="tsd-signature tsd-kind-icon">not<wbr>Implement&lt;T&gt;<span class="tsd-signature-symbol">(</span>fn<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">infer </span> A<span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-symbol">infer </span> R<span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">NotImplementedFn</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">T</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/functools/not-implemented/index.ts#L27">src/core/functools/not-implemented/index.ts:27</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/functools/not-implemented/index.ts#L33">src/core/functools/not-implemented/index.ts:33</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -356,12 +362,12 @@ pre {
 									<h5>fn: <span class="tsd-signature-type">T</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">T</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">infer </span> A<span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-symbol">infer </span> R<span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">NotImplementedFn</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">T</span></h4>
 						</li>
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/functools/not-implemented/index.ts#L36">src/core/functools/not-implemented/index.ts:36</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/functools/not-implemented/index.ts#L42">src/core/functools/not-implemented/index.ts:42</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -383,7 +389,7 @@ pre {
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/functools/not-implemented/index.ts#L42">src/core/functools/not-implemented/index.ts:42</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/functools/not-implemented/index.ts#L48">src/core/functools/not-implemented/index.ts:48</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -406,7 +412,7 @@ pre {
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">T</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">infer </span> A<span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-symbol">infer </span> R<span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">NotImplementedFn</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">T</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -421,7 +427,7 @@ pre {
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/functools/not-implemented/index.ts#L122">src/core/functools/not-implemented/index.ts:122</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/functools/not-implemented/index.ts#L131">src/core/functools/not-implemented/index.ts:131</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -461,7 +467,7 @@ pre {
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/functools/not-implemented/index.ts#L141">src/core/functools/not-implemented/index.ts:141</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/functools/not-implemented/index.ts#L150">src/core/functools/not-implemented/index.ts:150</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -516,6 +522,9 @@ pre {
 					</li>
 					<li class=" tsd-kind-reference tsd-parent-kind-module">
 						<a href="src_core_functools_not_implemented_index.html#deprecatedexprtype" class="tsd-kind-icon">Deprecated<wbr>Expr<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_functools_not_implemented_index.html#deprecatedfn" class="tsd-kind-icon">Deprecated<wbr>Fn</a>
 					</li>
 					<li class=" tsd-kind-reference tsd-parent-kind-module">
 						<a href="src_core_functools_not_implemented_index.html#deprecatedoptions" class="tsd-kind-icon">Deprecated<wbr>Options</a>
