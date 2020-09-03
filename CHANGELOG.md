@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.25.0 (2020-09-03)
+
+#### :rocket: New Feature
+
+* Now `deprecate` returns `DeprecatedFn` `core/functools/deprecation`
+
 ## v3.24.2 (2020-09-02)
 
 #### :house: Internal

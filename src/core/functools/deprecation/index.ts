@@ -11,7 +11,7 @@
  * @packageDocumentation
  */
 
-import { DeprecatedOptions, InlineDeprecatedOptions } from 'core/functools/deprecation/interface';
+import { DeprecatedOptions, InlineDeprecatedOptions, DeprecatedFn } from 'core/functools/deprecation/interface';
 
 export * from 'core/functools/deprecation/interface';
 
@@ -27,7 +27,7 @@ const
 export function deprecate<T extends Function>(
 	opts: DeprecatedOptions,
 	fn: T
-): T;
+): T extends ((...args: infer A) => infer R) ? DeprecatedFn<A, R> : T;
 
 /**
  * Emits an obsolescence warning with the specified parameters
@@ -39,7 +39,9 @@ export function deprecate(opts: InlineDeprecatedOptions): void;
  * Marks the specified function as obsolescence
  * @param fn - function for wrapping
  */
-export function deprecate<T extends Function>(fn: T): T;
+export function deprecate<T extends Function>(fn: T): T extends ((...args: infer A) => infer R) ?
+	DeprecatedFn<A, R> :
+	T;
 
 export function deprecate<T extends Function>(
 	fnOrParams: DeprecatedOptions | InlineDeprecatedOptions | T,
@@ -61,6 +63,7 @@ export function deprecate<T extends Function>(
 		return;
 	}
 
+	wrapper.deprecated = p;
 	function wrapper(this: unknown, ...args: unknown[]): unknown {
 		//#unless isProd
 
