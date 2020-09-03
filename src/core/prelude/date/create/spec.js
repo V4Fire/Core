@@ -76,6 +76,8 @@ describe('core/prelude/date/create', () => {
 		expect(Date.create('2015.10.11 10:00:00.100')).toEqual(new Date(date.valueOf() + 100));
 		expect(Date.create('2015/10/11T10:00:00')).toEqual(date);
 		expect(Date.create('2015-10-11 T10:00:00')).toEqual(date);
+		expect(Date.create('2015-10-11 10:00:00+00:00')).toEqual(utcDate);
+		expect(Date.create('2015-10-11 10:00:00+0000')).toEqual(utcDate);
 		expect(Date.create('2015-10-11 10:00:00Z')).toEqual(utcDate);
 	});
 });
