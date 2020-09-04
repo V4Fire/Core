@@ -11,6 +11,24 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.27.0 (2020-09-04)
+
+#### :boom: Breaking Change
+
+* Dropped `interface.ts`:
+  * `core/functools/deprecation`
+  * `core/functools/not-implemented`
+
+#### :rocket: New Feature
+
+* Added a new module `core/functools/warning`
+
+#### :house: Internal
+
+* Re-wrote the module with `core/functools/warning`
+  * `core/functools/deprecation`
+  * `core/functools/not-implemented`
+
 ## v3.26.0 (2020-09-04)
 
 #### :rocket: New Feature
