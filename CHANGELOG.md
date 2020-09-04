@@ -25,7 +25,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :house: Internal
 
-* Re-wrote the module with `core/functools/warning`
+* Re-wrote the module with `core/functools/warning`:
   * `core/functools/deprecation`
   * `core/functools/not-implemented`
 
