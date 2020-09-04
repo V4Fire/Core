@@ -11,11 +11,30 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-## v3.24.1 (2020-08-18)
+## v3.25.1 (2020-09-04)
 
 #### :bug: Bug Fix
 
 * Fixed parsing "1997-07-16T19:20:30.45+0100" format on iOS `core/prelude/date` 
+
+## v3.25.0 (2020-09-03)
+
+#### :rocket: New Feature
+
+* Now `deprecate` returns `DeprecatedFn` `core/functools/deprecation`
+* Now `notImplement` returns `NotImplementedFn` `core/functools/not-implemented`
+
+## v3.24.2 (2020-09-02)
+
+#### :house: Internal
+
+* Review `any` and `unknown` types
+
+## v3.24.1 (2020-09-01)
+
+#### :bug: Bug Fix
+
+* Fixed TS signatures of `Object.has`, `Object.delete`
 
 ## v3.24.0 (2020-08-12)
 

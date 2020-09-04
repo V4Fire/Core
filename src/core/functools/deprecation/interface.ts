@@ -70,3 +70,8 @@ export interface InlineDeprecatedOptions extends DeprecatedOptions {
 	/** @see [[DeprecatedOptions.type]] */
 	type: DeprecatedExprType;
 }
+
+export interface DeprecatedFn<A extends unknown[] = [], R = unknown> {
+	(...args: A): R;
+	deprecated: DeprecatedOptions | InlineDeprecatedOptions;
+}

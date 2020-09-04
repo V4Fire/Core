@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.25.0 (2020-09-03)
+
+#### :rocket: New Feature
+
+* Now `notImplement` returns `NotImplementedFn`
+
 ## v3.22.3 (2020-07-23)
 
 #### :bug: Bug Fix

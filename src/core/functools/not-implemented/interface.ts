@@ -55,3 +55,8 @@ export interface InlineNotImplementedOptions extends NotImplementedOptions {
 	/** @see [[NotImplementedOptions.type]] */
 	type: NotImplementedExprType;
 }
+
+export interface NotImplementedFn<A extends unknown[] = [], R = unknown> {
+	(...args: A): R;
+	notImplemented: NotImplementedOptions | InlineNotImplementedOptions;
+}

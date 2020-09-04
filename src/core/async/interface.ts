@@ -410,7 +410,7 @@ export type ProxyCb<
 	R = unknown,
 	CTX extends object = Async
 > = A extends never ?
-	((this: CTX) => R) : A extends unknown[] ?
+	((this: CTX) => R) : A extends any[] ?
 		((this: CTX, ...args: A) => R) : ((this: CTX, e: A) => R) | Function;
 
 export type AsyncCb<CTX extends object = Async> =
