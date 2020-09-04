@@ -7,7 +7,7 @@
  */
 
 import extend from 'core/prelude/extend';
-import { convertIfDate } from 'core/json';
+import { ValMap } from 'core/prelude/object/clone/interface';
 
 /** @see [[ObjectConstructor.fastClone]] */
 extend(Object, 'fastClone', (obj, opts?: FastCloneOptions) => {
@@ -126,18 +126,18 @@ extend(Object, 'fastClone', (obj, opts?: FastCloneOptions) => {
 
 const
 	objRef = '[[OBJ_REF:base]]',
-	funcRef = '[[FUNC_REF:';
+	valRef = '[[VAL_REF:';
 
 /**
  * Returns a function to serialize object values into strings
  *
  * @param base - base object
- * @param funcMap - map to store functions
+ * @param valMap - map to store non-clonable values
  * @param replacer - additional replacer
  */
 export function createSerializer(
 	base: unknown,
-	funcMap: Map<Function | string, Function | string>,
+	valMap: ValMap,
 	replacer?: JSONCb
 ): JSONCb {
 	let
@@ -152,10 +152,10 @@ export function createSerializer(
 			init = true;
 		}
 
-		if (typeof value === 'function') {
-			const key = funcMap.get(value) ?? `${funcRef}${Math.random()}]]`;
-			funcMap.set(value, key);
-			funcMap.set(key, value);
+		if (typeof value === 'function' || value instanceof Date) {
+			const key = valMap.get(value) ?? `${valRef}${Math.random()}]]`;
+			valMap.set(value, key);
+			valMap.set(key, value);
 			return key;
 		}
 
@@ -171,30 +171,26 @@ export function createSerializer(
  * Returns a function to parse object values from strings
  *
  * @param base - base object
- * @param funcMap - map that stores functions
+ * @param valMap - map that stores functions
  * @param reviewer - additional reviewer
  */
 export function createParser(
 	base: unknown,
-	funcMap: Map<Function | string, Function | string>,
-	reviewer?: JSONCb | false
+	valMap: ValMap,
+	reviewer?: JSONCb
 ): JSONCb {
 	return (key, value) => {
 		if (value === objRef) {
 			return base;
 		}
 
-		if (typeof value === 'string' && value.startsWith(funcRef)) {
+		if (typeof value === 'string' && value.startsWith(valRef)) {
 			const
-				fn = funcMap.get(value);
+				resolvedValue = valMap.get(value);
 
-			if (typeof fn === 'function') {
-				return fn;
+			if (resolvedValue !== undefined) {
+				return resolvedValue;
 			}
-		}
-
-		if (reviewer !== false) {
-			value = convertIfDate(key, value);
 		}
 
 		if (Object.isFunction(reviewer)) {

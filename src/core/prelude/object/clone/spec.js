@@ -29,7 +29,7 @@ describe('core/prelude/object/clone/fastClone', () => {
 		expect(Object.fastClone(obj1)).toEqual(obj1);
 
 		const
-			obj2 = [1, 2, 3, new Date()];
+			obj2 = [1, 2, 3, new Date(), '2017-02-03'];
 
 		expect(Object.fastClone(obj2)).not.toBe(obj2);
 		expect(Object.fastClone(obj2)).toEqual(obj2);

@@ -11,11 +11,21 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.25.2 (2020-09-04)
+
+#### :bug: Bug Fix
+
+* Fixed a bug when strings could be compiled to Dates after cloning `Object.fastClone`
+
+#### :house: Internal
+
+* Extracted some types to `interface.ts` `core/prelude/object/clone`
+
 ## v3.25.1 (2020-09-04)
 
 #### :bug: Bug Fix
 
-* Fixed parsing "1997-07-16T19:20:30.45+0100" format on iOS `core/prelude/date` 
+* Fixed parsing "1997-07-16T19:20:30.45+0100" format on iOS `core/prelude/date`
 
 ## v3.25.0 (2020-09-03)
 
