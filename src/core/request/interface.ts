@@ -96,6 +96,7 @@ export interface RequestOptions {
 	readonly contentType?: string;
 	readonly responseType?: ResponseType;
 	readonly decoders?: WrappedDecoders;
+	readonly jsonReviver?: JSONCb | false;
 	readonly headers?: Dictionary<CanArray<string>>;
 	readonly body?: RequestBody;
 	readonly important?: boolean;
@@ -369,6 +370,12 @@ export interface CreateRequestOptions<D = unknown> {
 	 * will provide a result to the next function from te sequence, etc.
 	 */
 	decoder?: Decoder | Decoders;
+
+	/**
+	 * Reviver function for JSON.parse or false to disable defaults
+	 * @default `convertIfDate`
+	 */
+	jsonReviver?: JSONCb | false;
 
 	/**
 	 * The special flag that indicates that request will be invoked not directly by a browser,

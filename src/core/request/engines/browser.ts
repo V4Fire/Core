@@ -105,7 +105,8 @@ const request: RequestEngine = (params) => {
 				okStatuses: p.okStatuses,
 				status: xhr.status,
 				headers: xhr.getAllResponseHeaders(),
-				decoder: p.decoders
+				decoder: p.decoders,
+				jsonReviver: p.jsonReviver
 			}));
 		});
 

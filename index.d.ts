@@ -193,9 +193,9 @@ interface FastCloneOptions {
 	replacer?: JSONCb;
 
 	/**
-	 * Reviver function for JSON.parse or false to disable defaults
+	 * Reviver function for JSON.parse
 	 */
-	reviver?: JSONCb | false;
+	reviver?: JSONCb;
 
 	/**
 	 * If false the object freeze/seal state won't be copy
