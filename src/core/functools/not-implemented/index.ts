@@ -101,9 +101,9 @@ export function notImplemented(
 	descriptor?: PropertyDescriptor
 ): Function | undefined {
 	if (arguments.length > 1) {
-		warned({context: 'notImplemented'})(key, descriptor);
+		warned({context: 'notImplemented'})(opts, key, descriptor);
 		return;
 	}
 
-	return (target, key, descriptor) => warned({context: 'notImplemented', ...opts})(key, descriptor);
+	return (target, key, descriptor) => warned({context: 'notImplemented', ...opts})(target, key, descriptor);
 }

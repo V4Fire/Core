@@ -101,9 +101,9 @@ export function deprecated(
 	descriptor?: PropertyDescriptor
 ): Function | undefined {
 	if (arguments.length > 1) {
-		warned({context: 'deprecated'})(key, descriptor);
+		warned({context: 'deprecated'})(opts, key, descriptor);
 		return;
 	}
 
-	return (target, key, descriptor) => warned({context: 'deprecated', ...opts})(key, descriptor);
+	return (target, key, descriptor) => warned({context: 'deprecated', ...opts})(target, key, descriptor);
 }
