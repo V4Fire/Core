@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>&quot;src/core/prelude/object/clone/index&quot; | V4Fire</title>
+	<title>&quot;src/core/prelude/object/clone/interface&quot; | V4Fire</title>
 	<meta name="description" content="Documentation for V4Fire">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -226,10 +226,10 @@ pre {
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="src_core_prelude_object_clone_index.html">&quot;src/core/prelude/object/clone/index&quot;</a>
+					<a href="src_core_prelude_object_clone_interface.html">&quot;src/core/prelude/object/clone/interface&quot;</a>
 				</li>
 			</ul>
-			<h1>Module &quot;src/core/prelude/object/clone/index&quot;</h1>
+			<h1>Module &quot;src/core/prelude/object/clone/interface&quot;</h1>
 		</div>
 	</div>
 </header>
@@ -241,102 +241,25 @@ pre {
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Functions</h3>
+							<h3>Type aliases</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-function tsd-parent-kind-module"><a href="src_core_prelude_object_clone_index.html#createparser" class="tsd-kind-icon">create<wbr>Parser</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-module"><a href="src_core_prelude_object_clone_index.html#createserializer" class="tsd-kind-icon">create<wbr>Serializer</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="src_core_prelude_object_clone_interface.html#valmap" class="tsd-kind-icon">Val<wbr>Map</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Functions</h2>
-				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
-					<a name="createparser" class="tsd-anchor"></a>
-					<h3>create<wbr>Parser</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-						<li class="tsd-signature tsd-kind-icon">create<wbr>Parser<span class="tsd-signature-symbol">(</span>base<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span>, valMap<span class="tsd-signature-symbol">: </span><a href="src_core_prelude_object_clone_interface.html#valmap" class="tsd-signature-type">ValMap</a>, reviewer<span class="tsd-signature-symbol">?: </span><a href="../interfaces/index_d.jsoncb.html" class="tsd-signature-type">JSONCb</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/index_d.jsoncb.html" class="tsd-signature-type">JSONCb</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/object/clone/index.ts#L177">src/core/prelude/object/clone/index.ts:177</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Returns a function to parse object values from strings</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>base: <span class="tsd-signature-type">unknown</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>base object</p>
-									</div>
-								</li>
-								<li>
-									<h5>valMap: <a href="src_core_prelude_object_clone_interface.html#valmap" class="tsd-signature-type">ValMap</a></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>map that stores functions</p>
-									</div>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> reviewer: <a href="../interfaces/index_d.jsoncb.html" class="tsd-signature-type">JSONCb</a></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>additional reviewer</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="../interfaces/index_d.jsoncb.html" class="tsd-signature-type">JSONCb</a></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
-					<a name="createserializer" class="tsd-anchor"></a>
-					<h3>create<wbr>Serializer</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-						<li class="tsd-signature tsd-kind-icon">create<wbr>Serializer<span class="tsd-signature-symbol">(</span>base<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span>, valMap<span class="tsd-signature-symbol">: </span><a href="src_core_prelude_object_clone_interface.html#valmap" class="tsd-signature-type">ValMap</a>, replacer<span class="tsd-signature-symbol">?: </span><a href="../interfaces/index_d.jsoncb.html" class="tsd-signature-type">JSONCb</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/index_d.jsoncb.html" class="tsd-signature-type">JSONCb</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/object/clone/index.ts#L138">src/core/prelude/object/clone/index.ts:138</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Returns a function to serialize object values into strings</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>base: <span class="tsd-signature-type">unknown</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>base object</p>
-									</div>
-								</li>
-								<li>
-									<h5>valMap: <a href="src_core_prelude_object_clone_interface.html#valmap" class="tsd-signature-type">ValMap</a></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>map to store non-clonable values</p>
-									</div>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> replacer: <a href="../interfaces/index_d.jsoncb.html" class="tsd-signature-type">JSONCb</a></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>additional replacer</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="../interfaces/index_d.jsoncb.html" class="tsd-signature-type">JSONCb</a></h4>
-						</li>
-					</ul>
+				<h2>Type aliases</h2>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
+					<a name="valmap" class="tsd-anchor"></a>
+					<h3>Val<wbr>Map</h3>
+					<div class="tsd-signature tsd-kind-icon">Val<wbr>Map<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Map</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/object/clone/interface.ts#L9">src/core/prelude/object/clone/interface.ts:9</a></li>
+						</ul>
+					</aside>
 				</section>
 			</section>
 		</div>
@@ -347,17 +270,14 @@ pre {
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class="current tsd-kind-module">
-						<a href="src_core_prelude_object_clone_index.html">&quot;src/core/prelude/object/clone/index&quot;</a>
+						<a href="src_core_prelude_object_clone_interface.html">&quot;src/core/prelude/object/clone/interface&quot;</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-function tsd-parent-kind-module">
-						<a href="src_core_prelude_object_clone_index.html#createparser" class="tsd-kind-icon">create<wbr>Parser</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module">
-						<a href="src_core_prelude_object_clone_index.html#createserializer" class="tsd-kind-icon">create<wbr>Serializer</a>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="src_core_prelude_object_clone_interface.html#valmap" class="tsd-kind-icon">Val<wbr>Map</a>
 					</li>
 				</ul>
 			</nav>
