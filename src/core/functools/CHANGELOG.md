@@ -13,20 +13,16 @@ Changelog
 
 #### :boom: Breaking Change
 
-* Dropped `interface.ts`
-
-#### :house: Internal
-
-* Re-wrote the module with `core/functools/warning`
-
-## v3.25.0 (2020-09-03)
+* Dropped `interface.ts`:
+  * `deprecation`
+  * `not-implemented`
 
 #### :rocket: New Feature
 
-* Now `notImplement` returns `NotImplementedFn`
+* Added a new module `warning`
 
-## v3.22.3 (2020-07-23)
+#### :house: Internal
 
-#### :bug: Bug Fix
-
-* Fixed notice params being ignored
+* Re-wrote the module with `warning`:
+  * `deprecation`
+  * `not-implemented`

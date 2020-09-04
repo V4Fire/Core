@@ -9,6 +9,16 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.27.0 (2020-09-04)
+
+#### :boom: Breaking Change
+
+* Dropped `interface.ts`
+
+#### :house: Internal
+
+* Re-wrote the module with `core/functools/warning`
+
 ## v3.25.0 (2020-09-03)
 
 #### :rocket: New Feature

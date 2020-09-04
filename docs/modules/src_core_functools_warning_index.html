@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>&quot;src/core/functools/deprecation/index&quot; | V4Fire</title>
+	<title>&quot;src/core/functools/warning/index&quot; | V4Fire</title>
 	<meta name="description" content="Documentation for V4Fire">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -226,10 +226,10 @@ pre {
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="src_core_functools_deprecation_index.html">&quot;src/core/functools/deprecation/index&quot;</a>
+					<a href="src_core_functools_warning_index.html">&quot;src/core/functools/warning/index&quot;</a>
 				</li>
 			</ul>
-			<h1>Module &quot;src/core/functools/deprecation/index&quot;</h1>
+			<h1>Module &quot;src/core/functools/warning/index&quot;</h1>
 		</div>
 	</div>
 </header>
@@ -239,23 +239,22 @@ pre {
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<a href="#corefunctoolsdeprecation" id="corefunctoolsdeprecation" style="color: inherit; text-decoration: none;">
-							<h1>core/functools/deprecation</h1>
+						<a href="#corefunctoolswarning" id="corefunctoolswarning" style="color: inherit; text-decoration: none;">
+							<h1>core/functools/warning</h1>
 						</a>
-						<p>This module provides a bunch of functions and decorators to mark deprecated functions with the special flag.</p>
-						<pre><code class="language-js"><span class="hljs-keyword">import</span> { deprecate, deprecated } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;core/functools/deprecation&#x27;</span>;
+						<p>This module provides a bunch of functions and decorators to mark functions with different warnings.</p>
+						<pre><code class="language-js"><span class="hljs-keyword">import</span> { warn, warned } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;core/functools/warning&#x27;</span>;
 
-<span class="hljs-keyword">const</span> foo = deprecate({
-  <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;foo&#x27;</span>,
-  <span class="hljs-attr">renamedTo</span>: <span class="hljs-string">&#x27;bar&#x27;</span>
-}, bar);
+<span class="hljs-keyword">const</span> foo = warn({<span class="hljs-attr">context</span>: <span class="hljs-string">&#x27;notImplemented&#x27;</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;foo&#x27;</span>, <span class="hljs-attr">alternative</span>: <span class="hljs-string">&#x27;bar&#x27;</span>}, <span class="hljs-function">() =&gt;</span> {
+
+});
 
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">bar</span>(<span class="hljs-params"></span>) </span>{
 
 }
 
 <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Baz</span> </span>{
-  @deprecated({<span class="hljs-attr">alternative</span>: <span class="hljs-string">&#x27;newMethod&#x27;</span>})
+  @warned({<span class="hljs-attr">context</span>: <span class="hljs-string">&#x27;deprecated&#x27;</span>, <span class="hljs-attr">alternative</span>: <span class="hljs-string">&#x27;newMethod&#x27;</span>})
   oldMethod() {
 
   }
@@ -272,20 +271,20 @@ pre {
 						<section class="tsd-index-section ">
 							<h3>References</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_functools_deprecation_index.html#inlinewarnoptions" class="tsd-kind-icon">Inline<wbr>Warn<wbr>Options</a></li>
-								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_functools_deprecation_index.html#warnalternative" class="tsd-kind-icon">Warn<wbr>Alternative</a></li>
-								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_functools_deprecation_index.html#warnalternativeoptions" class="tsd-kind-icon">Warn<wbr>Alternative<wbr>Options</a></li>
-								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_functools_deprecation_index.html#warncontext" class="tsd-kind-icon">Warn<wbr>Context</a></li>
-								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_functools_deprecation_index.html#warnexprtype" class="tsd-kind-icon">Warn<wbr>Expr<wbr>Type</a></li>
-								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_functools_deprecation_index.html#warnoptions" class="tsd-kind-icon">Warn<wbr>Options</a></li>
-								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_functools_deprecation_index.html#warnedfn" class="tsd-kind-icon">Warned<wbr>Fn</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_functools_warning_index.html#inlinewarnoptions" class="tsd-kind-icon">Inline<wbr>Warn<wbr>Options</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_functools_warning_index.html#warnalternative" class="tsd-kind-icon">Warn<wbr>Alternative</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_functools_warning_index.html#warnalternativeoptions" class="tsd-kind-icon">Warn<wbr>Alternative<wbr>Options</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_functools_warning_index.html#warncontext" class="tsd-kind-icon">Warn<wbr>Context</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_functools_warning_index.html#warnexprtype" class="tsd-kind-icon">Warn<wbr>Expr<wbr>Type</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_functools_warning_index.html#warnoptions" class="tsd-kind-icon">Warn<wbr>Options</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_functools_warning_index.html#warnedfn" class="tsd-kind-icon">Warned<wbr>Fn</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Functions</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter"><a href="src_core_functools_deprecation_index.html#deprecate" class="tsd-kind-icon">deprecate</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-module"><a href="src_core_functools_deprecation_index.html#deprecated" class="tsd-kind-icon">deprecated</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter"><a href="src_core_functools_warning_index.html#warn" class="tsd-kind-icon">warn</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="src_core_functools_warning_index.html#warned" class="tsd-kind-icon">warned</a></li>
 							</ul>
 						</section>
 					</div>
@@ -332,23 +331,23 @@ pre {
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Functions</h2>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
-					<a name="deprecate" class="tsd-anchor"></a>
-					<h3>deprecate</h3>
+					<a name="warn" class="tsd-anchor"></a>
+					<h3>warn</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">deprecate&lt;T&gt;<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_functools_warning_interface.warnoptions.html" class="tsd-signature-type">WarnOptions</a>, fn<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">infer </span> A<span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-symbol">infer </span> R<span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">WarnedFn</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">T</span></li>
-						<li class="tsd-signature tsd-kind-icon">deprecate<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_functools_warning_interface.inlinewarnoptions.html" class="tsd-signature-type">InlineWarnOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-						<li class="tsd-signature tsd-kind-icon">deprecate&lt;T&gt;<span class="tsd-signature-symbol">(</span>fn<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">infer </span> A<span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-symbol">infer </span> R<span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">WarnedFn</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">T</span></li>
+						<li class="tsd-signature tsd-kind-icon">warn&lt;T&gt;<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_functools_warning_interface.warnoptions.html" class="tsd-signature-type">WarnOptions</a>, fn<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">infer </span> A<span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-symbol">infer </span> R<span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">WarnedFn</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">T</span></li>
+						<li class="tsd-signature tsd-kind-icon">warn<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_functools_warning_interface.inlinewarnoptions.html" class="tsd-signature-type">InlineWarnOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">warn&lt;T&gt;<span class="tsd-signature-symbol">(</span>fn<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">infer </span> A<span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-symbol">infer </span> R<span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">WarnedFn</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">T</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/functools/deprecation/index.ts#L24">src/core/functools/deprecation/index.ts:24</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/functools/warning/index.ts#L25">src/core/functools/warning/index.ts:25</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Marks the specified function as obsolescence</p>
+									<p>Marks a function with the specified warning</p>
 								</div>
 							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -377,12 +376,12 @@ pre {
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/functools/deprecation/index.ts#L33">src/core/functools/deprecation/index.ts:33</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/functools/warning/index.ts#L34">src/core/functools/warning/index.ts:34</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Emits an obsolescence warning with the specified parameters</p>
+									<p>Emits a  warning with the specified parameters</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -399,12 +398,12 @@ pre {
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/functools/deprecation/index.ts#L39">src/core/functools/deprecation/index.ts:39</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/functools/warning/index.ts#L40">src/core/functools/warning/index.ts:40</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Marks the specified function as obsolescence</p>
+									<p>Marks a function as non recommended to use</p>
 								</div>
 							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -427,32 +426,32 @@ pre {
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
-					<a name="deprecated" class="tsd-anchor"></a>
-					<h3>deprecated</h3>
+					<a name="warned" class="tsd-anchor"></a>
+					<h3>warned</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-						<li class="tsd-signature tsd-kind-icon">deprecated<span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span>, key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">symbol</span>, descriptor<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PropertyDescriptor</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-						<li class="tsd-signature tsd-kind-icon">deprecated<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">?: </span><a href="src_core_functools_deprecation_index.html#warnoptions" class="tsd-signature-type">WarnOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/index_d.anyfunction.html#function" class="tsd-signature-type">Function</a></li>
+						<li class="tsd-signature tsd-kind-icon">warned<span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span>, key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">symbol</span>, descriptor<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PropertyDescriptor</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">warned<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">?: </span><a href="src_core_functools_warning_index.html#warnoptions" class="tsd-signature-type">WarnOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/index_d.anyfunction.html#function" class="tsd-signature-type">Function</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/functools/deprecation/index.ts#L77">src/core/functools/deprecation/index.ts:77</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/functools/warning/index.ts#L166">src/core/functools/warning/index.ts:166</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Decorator for the &quot;deprecate&quot; function</p>
+									<p>Decorator for the &quot;warn&quot; function</p>
 								</div>
 								<dl class="tsd-comment-tags">
 									<dt>decorator</dt>
 									<dd></dd>
 									<dt>see</dt>
-									<dd><p><a href="src_core_functools_deprecation_index.html#deprecate">deprecate</a></p>
+									<dd><p><a href="src_core_functools_warning_index.html#warn">warn</a></p>
 									</dd>
 									<dt>example</dt>
 									<dd><pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Foo</span> </span>{
-  @deprecated
+  @warned()
   bar() {
 
   }
@@ -477,21 +476,21 @@ pre {
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/functools/deprecation/index.ts#L96">src/core/functools/deprecation/index.ts:96</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/functools/warning/index.ts#L185">src/core/functools/warning/index.ts:185</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Decorator for the &quot;deprecate&quot; function.
+									<p>Decorator for the &quot;warn&quot; function.
 									This overload adds a feature to provide additional options.</p>
 								</div>
 								<dl class="tsd-comment-tags">
 									<dt>see</dt>
-									<dd><p><a href="src_core_functools_deprecation_index.html#deprecate">deprecate</a></p>
+									<dd><p><a href="src_core_functools_warning_index.html#warn">warn</a></p>
 									</dd>
 									<dt>example</dt>
 									<dd><pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Foo</span> </span>{
-  @deprecated({<span class="hljs-attr">renamedTo</span>: <span class="hljs-string">&#x27;baz&#x27;</span>}})
+  @warned({<span class="hljs-attr">alternative</span>: <span class="hljs-string">&#x27;baz&#x27;</span>}})
   bar() {
 
   }
@@ -502,7 +501,7 @@ pre {
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="src_core_functools_deprecation_index.html#warnoptions" class="tsd-signature-type">WarnOptions</a></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="src_core_functools_warning_index.html#warnoptions" class="tsd-signature-type">WarnOptions</a></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="../interfaces/index_d.anyfunction.html#function" class="tsd-signature-type">Function</a></h4>
@@ -518,38 +517,38 @@ pre {
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class="current tsd-kind-module">
-						<a href="src_core_functools_deprecation_index.html">&quot;src/core/functools/deprecation/index&quot;</a>
+						<a href="src_core_functools_warning_index.html">&quot;src/core/functools/warning/index&quot;</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-reference tsd-parent-kind-module">
-						<a href="src_core_functools_deprecation_index.html#inlinewarnoptions" class="tsd-kind-icon">Inline<wbr>Warn<wbr>Options</a>
+						<a href="src_core_functools_warning_index.html#inlinewarnoptions" class="tsd-kind-icon">Inline<wbr>Warn<wbr>Options</a>
 					</li>
 					<li class=" tsd-kind-reference tsd-parent-kind-module">
-						<a href="src_core_functools_deprecation_index.html#warnalternative" class="tsd-kind-icon">Warn<wbr>Alternative</a>
+						<a href="src_core_functools_warning_index.html#warnalternative" class="tsd-kind-icon">Warn<wbr>Alternative</a>
 					</li>
 					<li class=" tsd-kind-reference tsd-parent-kind-module">
-						<a href="src_core_functools_deprecation_index.html#warnalternativeoptions" class="tsd-kind-icon">Warn<wbr>Alternative<wbr>Options</a>
+						<a href="src_core_functools_warning_index.html#warnalternativeoptions" class="tsd-kind-icon">Warn<wbr>Alternative<wbr>Options</a>
 					</li>
 					<li class=" tsd-kind-reference tsd-parent-kind-module">
-						<a href="src_core_functools_deprecation_index.html#warncontext" class="tsd-kind-icon">Warn<wbr>Context</a>
+						<a href="src_core_functools_warning_index.html#warncontext" class="tsd-kind-icon">Warn<wbr>Context</a>
 					</li>
 					<li class=" tsd-kind-reference tsd-parent-kind-module">
-						<a href="src_core_functools_deprecation_index.html#warnexprtype" class="tsd-kind-icon">Warn<wbr>Expr<wbr>Type</a>
+						<a href="src_core_functools_warning_index.html#warnexprtype" class="tsd-kind-icon">Warn<wbr>Expr<wbr>Type</a>
 					</li>
 					<li class=" tsd-kind-reference tsd-parent-kind-module">
-						<a href="src_core_functools_deprecation_index.html#warnoptions" class="tsd-kind-icon">Warn<wbr>Options</a>
+						<a href="src_core_functools_warning_index.html#warnoptions" class="tsd-kind-icon">Warn<wbr>Options</a>
 					</li>
 					<li class=" tsd-kind-reference tsd-parent-kind-module">
-						<a href="src_core_functools_deprecation_index.html#warnedfn" class="tsd-kind-icon">Warned<wbr>Fn</a>
+						<a href="src_core_functools_warning_index.html#warnedfn" class="tsd-kind-icon">Warned<wbr>Fn</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="src_core_functools_deprecation_index.html#deprecate" class="tsd-kind-icon">deprecate</a>
+						<a href="src_core_functools_warning_index.html#warn" class="tsd-kind-icon">warn</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module">
-						<a href="src_core_functools_deprecation_index.html#deprecated" class="tsd-kind-icon">deprecated</a>
+						<a href="src_core_functools_warning_index.html#warned" class="tsd-kind-icon">warned</a>
 					</li>
 				</ul>
 			</nav>
