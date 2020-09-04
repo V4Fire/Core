@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.26.0 (2020-09-04)
+
+#### :rocket: New Feature
+
+* Added `jsonReviver` to `CreateRequestOptions`
+
 ## v3.20.0 (2020-07-05)
 
 #### :rocket: New Feature

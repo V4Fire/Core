@@ -43,6 +43,7 @@ export interface ResponseOptions {
 	status?: StatusCodes;
 	headers?: string | Dictionary<string>;
 	decoder?: WrappedDecoder | WrappedDecoders;
+	jsonReviver?: JSONCb | false;
 }
 
 export type NormalizedResponseOptions = typeof defaultResponseOpts & ResponseOptions;

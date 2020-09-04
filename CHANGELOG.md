@@ -11,7 +11,11 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-## v3.25.2 (2020-09-04)
+## v3.26.0 (2020-09-04)
+
+#### :rocket: New Feature
+
+* Added `jsonReviver` to `CreateRequestOptions` `core/request`
 
 #### :bug: Bug Fix
 
