@@ -82,7 +82,10 @@ export function warn<T extends Function>(
 				break;
 
 			case 'notImplemented':
-				msg.push(`The ${type} "${name}" is not implemented.`);
+				if (!wasMovedOrRenamed) {
+					msg.push(`The ${type} "${name}" is not implemented.`);
+				}
+
 				break;
 
 			default:
