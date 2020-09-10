@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>InlineNotImplementedOptions | V4Fire</title>
+	<title>WarnedFn | V4Fire</title>
 	<meta name="description" content="Documentation for V4Fire">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -226,29 +226,57 @@ pre {
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/src_core_functools_not_implemented_interface.html">&quot;src/core/functools/not-implemented/interface&quot;</a>
+					<a href="../modules/src_core_functools_warning_interface.html">&quot;src/core/functools/warning/interface&quot;</a>
 				</li>
 				<li>
-					<a href="src_core_functools_not_implemented_interface.inlinenotimplementedoptions.html">InlineNotImplementedOptions</a>
+					<a href="src_core_functools_warning_interface.warnedfn.html">WarnedFn</a>
 				</li>
 			</ul>
-			<h1>Interface InlineNotImplementedOptions</h1>
+			<h1>Interface WarnedFn&lt;A, R&gt;</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-type-parameters">
+				<h3>Type parameters</h3>
+				<ul class="tsd-type-parameters">
+					<li>
+						<h4>A<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">[]</span></h4>
+					</li>
+					<li>
+						<h4>R</h4>
+					</li>
+				</ul>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<a href="src_core_functools_not_implemented_interface.notimplementedoptions.html" class="tsd-signature-type">NotImplementedOptions</a>
-						<ul class="tsd-hierarchy">
+						<span class="target">WarnedFn</span>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel">
+				<h3 class="tsd-before-signature">Callable</h3>
+				<ul class="tsd-signatures tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
+					<li class="tsd-signature tsd-kind-icon">__call<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">R</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/functools/warning/interface.ts#L91">src/core/functools/warning/interface.ts:91</a></li>
+							</ul>
+						</aside>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
 							<li>
-								<span class="target">InlineNotImplementedOptions</span>
+								<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>args: <span class="tsd-signature-type">A</span></h5>
 							</li>
 						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">R</span></h4>
 					</li>
 				</ul>
 			</section>
@@ -259,10 +287,9 @@ pre {
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="src_core_functools_not_implemented_interface.inlinenotimplementedoptions.html#alternative" class="tsd-kind-icon">alternative</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite"><a href="src_core_functools_not_implemented_interface.inlinenotimplementedoptions.html#name" class="tsd-kind-icon">name</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="src_core_functools_not_implemented_interface.inlinenotimplementedoptions.html#notice" class="tsd-kind-icon">notice</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite"><a href="src_core_functools_not_implemented_interface.inlinenotimplementedoptions.html#type" class="tsd-kind-icon">type</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="src_core_functools_warning_interface.warnedfn.html#deprecated" class="tsd-kind-icon">deprecated</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="src_core_functools_warning_interface.warnedfn.html#notimplemented" class="tsd-kind-icon">not<wbr>Implemented</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="src_core_functools_warning_interface.warnedfn.html#warning" class="tsd-kind-icon">warning</a></li>
 							</ul>
 						</section>
 					</div>
@@ -270,74 +297,35 @@ pre {
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-					<a name="alternative" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> alternative</h3>
-					<div class="tsd-signature tsd-kind-icon">alternative<span class="tsd-signature-symbol">:</span> <a href="../modules/src_core_functools_not_implemented_interface.html#notimplementedalternative" class="tsd-signature-type">NotImplementedAlternative</a></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="deprecated" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> deprecated</h3>
+					<div class="tsd-signature tsd-kind-icon">deprecated<span class="tsd-signature-symbol">:</span> <a href="src_core_functools_warning_interface.warnoptions.html" class="tsd-signature-type">WarnOptions</a><span class="tsd-signature-symbol"> | </span><a href="src_core_functools_warning_interface.inlinewarnoptions.html" class="tsd-signature-type">InlineWarnOptions</a></div>
 					<aside class="tsd-sources">
-						<p>Inherited from <a href="src_core_functools_not_implemented_interface.notimplementedoptions.html">NotImplementedOptions</a>.<a href="src_core_functools_not_implemented_interface.notimplementedoptions.html#alternative">alternative</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/functools/not-implemented/interface.ts#L43">src/core/functools/not-implemented/interface.ts:43</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/functools/warning/interface.ts#L94">src/core/functools/warning/interface.ts:94</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Name of a function/method/etc. that need to use instead of the current
-							or an object with additional options of the alternative</p>
-						</div>
-					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite">
-					<a name="name" class="tsd-anchor"></a>
-					<h3>name</h3>
-					<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="notimplemented" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> not<wbr>Implemented</h3>
+					<div class="tsd-signature tsd-kind-icon">not<wbr>Implemented<span class="tsd-signature-symbol">:</span> <a href="src_core_functools_warning_interface.warnoptions.html" class="tsd-signature-type">WarnOptions</a><span class="tsd-signature-symbol"> | </span><a href="src_core_functools_warning_interface.inlinewarnoptions.html" class="tsd-signature-type">InlineWarnOptions</a></div>
 					<aside class="tsd-sources">
-						<p>Overrides <a href="src_core_functools_not_implemented_interface.notimplementedoptions.html">NotImplementedOptions</a>.<a href="src_core_functools_not_implemented_interface.notimplementedoptions.html#name">name</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/functools/not-implemented/interface.ts#L53">src/core/functools/not-implemented/interface.ts:53</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/functools/warning/interface.ts#L95">src/core/functools/warning/interface.ts:95</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<dl class="tsd-comment-tags">
-							<dt>see</dt>
-							<dd><p><a href="src_core_functools_not_implemented_interface.notimplementedoptions.html#name">NotImplementedOptions.name</a></p>
-							</dd>
-						</dl>
-					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-					<a name="notice" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> notice</h3>
-					<div class="tsd-signature tsd-kind-icon">notice<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="warning" class="tsd-anchor"></a>
+					<h3>warning</h3>
+					<div class="tsd-signature tsd-kind-icon">warning<span class="tsd-signature-symbol">:</span> <a href="src_core_functools_warning_interface.warnoptions.html" class="tsd-signature-type">WarnOptions</a><span class="tsd-signature-symbol"> | </span><a href="src_core_functools_warning_interface.inlinewarnoptions.html" class="tsd-signature-type">InlineWarnOptions</a></div>
 					<aside class="tsd-sources">
-						<p>Inherited from <a href="src_core_functools_not_implemented_interface.notimplementedoptions.html">NotImplementedOptions</a>.<a href="src_core_functools_not_implemented_interface.notimplementedoptions.html#notice">notice</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/functools/not-implemented/interface.ts#L48">src/core/functools/not-implemented/interface.ts:48</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/functools/warning/interface.ts#L93">src/core/functools/warning/interface.ts:93</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Additional information</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite">
-					<a name="type" class="tsd-anchor"></a>
-					<h3>type</h3>
-					<div class="tsd-signature tsd-kind-icon">type<span class="tsd-signature-symbol">:</span> <a href="../modules/src_core_functools_not_implemented_interface.html#notimplementedexprtype" class="tsd-signature-type">NotImplementedExprType</a></div>
-					<aside class="tsd-sources">
-						<p>Overrides <a href="src_core_functools_not_implemented_interface.notimplementedoptions.html">NotImplementedOptions</a>.<a href="src_core_functools_not_implemented_interface.notimplementedoptions.html#type">type</a></p>
-						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/functools/not-implemented/interface.ts#L56">src/core/functools/not-implemented/interface.ts:56</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<dl class="tsd-comment-tags">
-							<dt>see</dt>
-							<dd><p><a href="src_core_functools_not_implemented_interface.notimplementedoptions.html#type">NotImplementedOptions.type</a></p>
-							</dd>
-						</dl>
-					</div>
 				</section>
 			</section>
 		</div>
@@ -348,44 +336,47 @@ pre {
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class="current tsd-kind-module">
-						<a href="../modules/src_core_functools_not_implemented_interface.html">&quot;src/core/functools/not-<wbr>implemented/interface&quot;</a>
+						<a href="../modules/src_core_functools_warning_interface.html">&quot;src/core/functools/warning/interface&quot;</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="src_core_functools_warning_interface.inlinewarnoptions.html" class="tsd-kind-icon">Inline<wbr>Warn<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="src_core_functools_warning_interface.warnalternativeoptions.html" class="tsd-kind-icon">Warn<wbr>Alternative<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="src_core_functools_warning_interface.warnoptions.html" class="tsd-kind-icon">Warn<wbr>Options</a>
+					</li>
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-interface tsd-parent-kind-module">
-						<a href="src_core_functools_not_implemented_interface.inlinenotimplementedoptions.html" class="tsd-kind-icon">Inline<wbr>Not<wbr>Implemented<wbr>Options</a>
+					<li class="current tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="src_core_functools_warning_interface.warnedfn.html" class="tsd-kind-icon">Warned<wbr>Fn</a>
 						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-								<a href="src_core_functools_not_implemented_interface.inlinenotimplementedoptions.html#alternative" class="tsd-kind-icon">alternative</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="src_core_functools_warning_interface.warnedfn.html#deprecated" class="tsd-kind-icon">deprecated</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite">
-								<a href="src_core_functools_not_implemented_interface.inlinenotimplementedoptions.html#name" class="tsd-kind-icon">name</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="src_core_functools_warning_interface.warnedfn.html#notimplemented" class="tsd-kind-icon">not<wbr>Implemented</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
-								<a href="src_core_functools_not_implemented_interface.inlinenotimplementedoptions.html#notice" class="tsd-kind-icon">notice</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite">
-								<a href="src_core_functools_not_implemented_interface.inlinenotimplementedoptions.html#type" class="tsd-kind-icon">type</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="src_core_functools_warning_interface.warnedfn.html#warning" class="tsd-kind-icon">warning</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="src_core_functools_not_implemented_interface.notimplementedalternativeoptions.html" class="tsd-kind-icon">Not<wbr>Implemented<wbr>Alternative<wbr>Options</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="src_core_functools_not_implemented_interface.notimplementedoptions.html" class="tsd-kind-icon">Not<wbr>Implemented<wbr>Options</a>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="../modules/src_core_functools_warning_interface.html#warnalternative" class="tsd-kind-icon">Warn<wbr>Alternative</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
-						<a href="../modules/src_core_functools_not_implemented_interface.html#notimplementedalternative" class="tsd-kind-icon">Not<wbr>Implemented<wbr>Alternative</a>
+						<a href="../modules/src_core_functools_warning_interface.html#warncontext" class="tsd-kind-icon">Warn<wbr>Context</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
-						<a href="../modules/src_core_functools_not_implemented_interface.html#notimplementedexprtype" class="tsd-kind-icon">Not<wbr>Implemented<wbr>Expr<wbr>Type</a>
+						<a href="../modules/src_core_functools_warning_interface.html#warnexprtype" class="tsd-kind-icon">Warn<wbr>Expr<wbr>Type</a>
 					</li>
 				</ul>
 			</nav>

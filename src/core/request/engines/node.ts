@@ -94,6 +94,7 @@ const request: RequestEngine = (params) => {
 				okStatuses: p.okStatuses,
 				status: res.statusCode,
 				headers: <Dictionary<string>>res.headers,
+				jsonReviver: p.jsonReviver,
 				decoder: p.decoders
 			}));
 

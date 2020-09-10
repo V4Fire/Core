@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>DeprecatedOptions | V4Fire</title>
+	<title>WarnAlternativeOptions | V4Fire</title>
 	<meta name="description" content="Documentation for V4Fire">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -226,13 +226,13 @@ pre {
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/src_core_functools_deprecation_interface.html">&quot;src/core/functools/deprecation/interface&quot;</a>
+					<a href="../modules/src_core_functools_warning_interface.html">&quot;src/core/functools/warning/interface&quot;</a>
 				</li>
 				<li>
-					<a href="src_core_functools_deprecation_interface.deprecatedoptions.html">DeprecatedOptions</a>
+					<a href="src_core_functools_warning_interface.warnalternativeoptions.html">WarnAlternativeOptions</a>
 				</li>
 			</ul>
-			<h1>Interface DeprecatedOptions</h1>
+			<h1>Interface WarnAlternativeOptions</h1>
 		</div>
 	</div>
 </header>
@@ -243,12 +243,7 @@ pre {
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">DeprecatedOptions</span>
-						<ul class="tsd-hierarchy">
-							<li>
-								<a href="src_core_functools_deprecation_interface.inlinedeprecatedoptions.html" class="tsd-signature-type">InlineDeprecatedOptions</a>
-							</li>
-						</ul>
+						<span class="target">WarnAlternativeOptions</span>
 					</li>
 				</ul>
 			</section>
@@ -259,12 +254,8 @@ pre {
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="src_core_functools_deprecation_interface.deprecatedoptions.html#alternative" class="tsd-kind-icon">alternative</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="src_core_functools_deprecation_interface.deprecatedoptions.html#movedto" class="tsd-kind-icon">moved<wbr>To</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="src_core_functools_deprecation_interface.deprecatedoptions.html#name" class="tsd-kind-icon">name</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="src_core_functools_deprecation_interface.deprecatedoptions.html#notice" class="tsd-kind-icon">notice</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="src_core_functools_deprecation_interface.deprecatedoptions.html#renamedto" class="tsd-kind-icon">renamed<wbr>To</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="src_core_functools_deprecation_interface.deprecatedoptions.html#type" class="tsd-kind-icon">type</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="src_core_functools_warning_interface.warnalternativeoptions.html#name" class="tsd-kind-icon">name</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="src_core_functools_warning_interface.warnalternativeoptions.html#source" class="tsd-kind-icon">source</a></li>
 							</ul>
 						</section>
 					</div>
@@ -273,95 +264,32 @@ pre {
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="alternative" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> alternative</h3>
-					<div class="tsd-signature tsd-kind-icon">alternative<span class="tsd-signature-symbol">:</span> <a href="../modules/src_core_functools_deprecation_interface.html#deprecatedalternative" class="tsd-signature-type">DeprecatedAlternative</a></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/functools/deprecation/interface.ts#L58">src/core/functools/deprecation/interface.ts:58</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Name of a function/method/etc. that should prefer to use instead of the current
-							or an object with additional options of the alternative</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="movedto" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> moved<wbr>To</h3>
-					<div class="tsd-signature tsd-kind-icon">moved<wbr>To<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/functools/deprecation/interface.ts#L52">src/core/functools/deprecation/interface.ts:52</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Indicates that a function/method/etc. was moved to a different file, but its interface still actual,
-							the value contains a source path after moving</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="name" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> name</h3>
-					<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
+					<h3>name</h3>
+					<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/functools/deprecation/interface.ts#L35">src/core/functools/deprecation/interface.ts:35</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/functools/warning/interface.ts#L32">src/core/functools/warning/interface.ts:32</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Name of an expression to wrap</p>
+							<p>Name of an alternative function/method/etc.</p>
 						</div>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="notice" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> notice</h3>
-					<div class="tsd-signature tsd-kind-icon">notice<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
+					<a name="source" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> source</h3>
+					<div class="tsd-signature tsd-kind-icon">source<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/functools/deprecation/interface.ts#L63">src/core/functools/deprecation/interface.ts:63</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/functools/warning/interface.ts#L37">src/core/functools/warning/interface.ts:37</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Additional notice about deprecation</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="renamedto" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> renamed<wbr>To</h3>
-					<div class="tsd-signature tsd-kind-icon">renamed<wbr>To<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/functools/deprecation/interface.ts#L46">src/core/functools/deprecation/interface.ts:46</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Indicates that a function/method/etc. was renamed, but its interface still actual,
-							the value contains a name after renaming</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="type" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> type</h3>
-					<div class="tsd-signature tsd-kind-icon">type<span class="tsd-signature-symbol">:</span> <a href="../modules/src_core_functools_deprecation_interface.html#deprecatedexprtype" class="tsd-signature-type">DeprecatedExprType</a></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/functools/deprecation/interface.ts#L40">src/core/functools/deprecation/interface.ts:40</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Type of expression to wrap</p>
+							<p>Source path of the alternative</p>
 						</div>
 					</div>
 				</section>
@@ -374,50 +302,44 @@ pre {
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class="current tsd-kind-module">
-						<a href="../modules/src_core_functools_deprecation_interface.html">&quot;src/core/functools/deprecation/interface&quot;</a>
+						<a href="../modules/src_core_functools_warning_interface.html">&quot;src/core/functools/warning/interface&quot;</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="src_core_functools_deprecation_interface.deprecatedalternativeoptions.html" class="tsd-kind-icon">Deprecated<wbr>Alternative<wbr>Options</a>
+						<a href="src_core_functools_warning_interface.inlinewarnoptions.html" class="tsd-kind-icon">Inline<wbr>Warn<wbr>Options</a>
 					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-module">
-						<a href="src_core_functools_deprecation_interface.deprecatedoptions.html" class="tsd-kind-icon">Deprecated<wbr>Options</a>
+						<a href="src_core_functools_warning_interface.warnalternativeoptions.html" class="tsd-kind-icon">Warn<wbr>Alternative<wbr>Options</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="src_core_functools_deprecation_interface.deprecatedoptions.html#alternative" class="tsd-kind-icon">alternative</a>
+								<a href="src_core_functools_warning_interface.warnalternativeoptions.html#name" class="tsd-kind-icon">name</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="src_core_functools_deprecation_interface.deprecatedoptions.html#movedto" class="tsd-kind-icon">moved<wbr>To</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="src_core_functools_deprecation_interface.deprecatedoptions.html#name" class="tsd-kind-icon">name</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="src_core_functools_deprecation_interface.deprecatedoptions.html#notice" class="tsd-kind-icon">notice</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="src_core_functools_deprecation_interface.deprecatedoptions.html#renamedto" class="tsd-kind-icon">renamed<wbr>To</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="src_core_functools_deprecation_interface.deprecatedoptions.html#type" class="tsd-kind-icon">type</a>
+								<a href="src_core_functools_warning_interface.warnalternativeoptions.html#source" class="tsd-kind-icon">source</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="src_core_functools_deprecation_interface.inlinedeprecatedoptions.html" class="tsd-kind-icon">Inline<wbr>Deprecated<wbr>Options</a>
+						<a href="src_core_functools_warning_interface.warnoptions.html" class="tsd-kind-icon">Warn<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="src_core_functools_warning_interface.warnedfn.html" class="tsd-kind-icon">Warned<wbr>Fn</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
-						<a href="../modules/src_core_functools_deprecation_interface.html#deprecatedalternative" class="tsd-kind-icon">Deprecated<wbr>Alternative</a>
+						<a href="../modules/src_core_functools_warning_interface.html#warnalternative" class="tsd-kind-icon">Warn<wbr>Alternative</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
-						<a href="../modules/src_core_functools_deprecation_interface.html#deprecatedexprtype" class="tsd-kind-icon">Deprecated<wbr>Expr<wbr>Type</a>
+						<a href="../modules/src_core_functools_warning_interface.html#warncontext" class="tsd-kind-icon">Warn<wbr>Context</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="../modules/src_core_functools_warning_interface.html#warnexprtype" class="tsd-kind-icon">Warn<wbr>Expr<wbr>Type</a>
 					</li>
 				</ul>
 			</nav>

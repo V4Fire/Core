@@ -256,7 +256,7 @@ pre {
 					<a name="createparser" class="tsd-anchor"></a>
 					<h3>create<wbr>Parser</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-						<li class="tsd-signature tsd-kind-icon">create<wbr>Parser<span class="tsd-signature-symbol">(</span>base<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span>, funcMap<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Map</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.anyfunction.html#function" class="tsd-signature-type">Function</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><a href="../interfaces/index_d.anyfunction.html#function" class="tsd-signature-type">Function</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span>, reviewer<span class="tsd-signature-symbol">?: </span><a href="../interfaces/index_d.jsoncb.html" class="tsd-signature-type">JSONCb</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/index_d.jsoncb.html" class="tsd-signature-type">JSONCb</a></li>
+						<li class="tsd-signature tsd-kind-icon">create<wbr>Parser<span class="tsd-signature-symbol">(</span>base<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span>, valMap<span class="tsd-signature-symbol">: </span><a href="src_core_prelude_object_clone_interface.html#valmap" class="tsd-signature-type">ValMap</a>, reviewer<span class="tsd-signature-symbol">?: </span><a href="../interfaces/index_d.jsoncb.html" class="tsd-signature-type">JSONCb</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/index_d.jsoncb.html" class="tsd-signature-type">JSONCb</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -279,13 +279,13 @@ pre {
 									</div>
 								</li>
 								<li>
-									<h5>funcMap: <span class="tsd-signature-type">Map</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.anyfunction.html#function" class="tsd-signature-type">Function</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><a href="../interfaces/index_d.anyfunction.html#function" class="tsd-signature-type">Function</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>valMap: <a href="src_core_prelude_object_clone_interface.html#valmap" class="tsd-signature-type">ValMap</a></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>map that stores functions</p>
 									</div>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> reviewer: <a href="../interfaces/index_d.jsoncb.html" class="tsd-signature-type">JSONCb</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> reviewer: <a href="../interfaces/index_d.jsoncb.html" class="tsd-signature-type">JSONCb</a></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>additional reviewer</p>
 									</div>
@@ -299,7 +299,7 @@ pre {
 					<a name="createserializer" class="tsd-anchor"></a>
 					<h3>create<wbr>Serializer</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-						<li class="tsd-signature tsd-kind-icon">create<wbr>Serializer<span class="tsd-signature-symbol">(</span>base<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span>, funcMap<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Map</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.anyfunction.html#function" class="tsd-signature-type">Function</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><a href="../interfaces/index_d.anyfunction.html#function" class="tsd-signature-type">Function</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span>, replacer<span class="tsd-signature-symbol">?: </span><a href="../interfaces/index_d.jsoncb.html" class="tsd-signature-type">JSONCb</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/index_d.jsoncb.html" class="tsd-signature-type">JSONCb</a></li>
+						<li class="tsd-signature tsd-kind-icon">create<wbr>Serializer<span class="tsd-signature-symbol">(</span>base<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span>, valMap<span class="tsd-signature-symbol">: </span><a href="src_core_prelude_object_clone_interface.html#valmap" class="tsd-signature-type">ValMap</a>, replacer<span class="tsd-signature-symbol">?: </span><a href="../interfaces/index_d.jsoncb.html" class="tsd-signature-type">JSONCb</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/index_d.jsoncb.html" class="tsd-signature-type">JSONCb</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -322,9 +322,9 @@ pre {
 									</div>
 								</li>
 								<li>
-									<h5>funcMap: <span class="tsd-signature-type">Map</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.anyfunction.html#function" class="tsd-signature-type">Function</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><a href="../interfaces/index_d.anyfunction.html#function" class="tsd-signature-type">Function</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<h5>valMap: <a href="src_core_prelude_object_clone_interface.html#valmap" class="tsd-signature-type">ValMap</a></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>map to store functions</p>
+										<p>map to store non-clonable values</p>
 									</div>
 								</li>
 								<li>

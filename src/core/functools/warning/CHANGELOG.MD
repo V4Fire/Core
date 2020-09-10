@@ -9,18 +9,8 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
-## v3.25.1 (2020-09-04)
-
-#### :bug: Bug Fix
-
-* Fixed parsing "1997-07-16T19:20:30.45+0100" format on iOS
-
-## v3.20.0 (2020-07-05)
+## v3.27.0 (2020-09-04)
 
 #### :rocket: New Feature
 
-* Added tests
-
-#### :bug: Bug Fix
-
-* Fixed bugs
+* Initial release

@@ -11,6 +11,7 @@
  * @packageDocumentation
  */
 
+export * from 'core/functools/warning';
 export * from 'core/functools/deprecation';
 export * from 'core/functools/not-implemented';
 export * from 'core/functools/memoize';

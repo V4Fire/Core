@@ -38,6 +38,14 @@ extend(Date, 'create', (pattern?: DateCreateValue) => {
 			return `${h <= 0 ? '+' : '-'}${Math.abs(h).toString().padStart(2, '0')}:00`;
 		};
 
+		const normalizeZone = (zone) => {
+			if (/^[+-]\d{4}$/.test(zone)) {
+				return `${zone.substr(0, 3)}:${zone.substr(3)}`;
+			}
+
+			return zone;
+		}
+
 		const normalizeDate = (date) => {
 			const
 				chunks = normalizeDateChunkRgxp.exec(date);
@@ -56,7 +64,7 @@ extend(Date, 'create', (pattern?: DateCreateValue) => {
 		const replacer = (str, date, time, zone) => {
 			time = Object.isTruly(time) ? time : '00:00:00';
 			zone = Object.isTruly(zone) ? zone : getZone();
-			return `${normalizeDate(date)}T${time}${zone}`;
+			return `${normalizeDate(date)}T${time}${normalizeZone(zone)}`;
 		};
 
 		return new Date(Date.parse(pattern.replace(isDateStr, replacer)));

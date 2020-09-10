@@ -80,6 +80,12 @@ export default class Response<
 	readonly decoders: WrappedDecoders;
 
 	/**
+	 * Reviver function for JSON.parse
+	 * @default `convertIfDate`
+	 */
+	readonly jsonReviver?: JSONCb;
+
+	/**
 	 * True, if the request is important
 	 */
 	readonly important?: boolean;
@@ -125,6 +131,13 @@ export default class Response<
 
 		} else {
 			this.decoders = Object.isFunction(p.decoder) ? [p.decoder] : p.decoder;
+		}
+
+		if (Object.isFunction(p.jsonReviver)) {
+			this.jsonReviver = p.jsonReviver;
+
+		} else if (p.jsonReviver !== false) {
+			this.jsonReviver = convertIfDate;
 		}
 
 		this.body = body;
@@ -249,7 +262,7 @@ export default class Response<
 		}
 
 		if (Object.isString(body)) {
-			return Then.resolveAndCall(() => JSON.parse(body, convertIfDate), this.parent);
+			return Then.resolveAndCall(() => JSON.parse(body, this.jsonReviver), this.parent);
 		}
 
 		return Then.resolveAndCall<_>(

@@ -9,11 +9,17 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
-## v3.24.1 (2020-09-10)
+## v3.27.1 (2020-09-10)
 
 #### :bug: Bug Fix
 
 * Fixed a bug with iOS and ES6 when the engine hasn't parsed a declaration with nested arrow functions
+
+## v3.26.0 (2020-09-04)
+
+#### :rocket: New Feature
+
+* Added `jsonReviver` to `CreateRequestOptions`
 
 ## v3.20.0 (2020-07-05)
 

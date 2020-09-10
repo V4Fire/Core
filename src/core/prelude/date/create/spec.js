@@ -69,13 +69,18 @@ describe('core/prelude/date/create', () => {
 
 	it('new date based on non-standard templates', () => {
 		const
-			date = new Date(2015, 9, 11, 10),
+			date = new Date(2015, 9, 11, 10, 0, 0),
+			fixedUTCDate = new Date(date.valueOf() - (date.getTimezoneOffset() + 4 * 60) * 60 * 1e3),
 			utcDate = new Date(date.valueOf() - date.getTimezoneOffset() * 60 * 1e3);
 
 		expect(Date.create('2015.10.11 10:00:00')).toEqual(date);
 		expect(Date.create('2015.10.11 10:00:00.100')).toEqual(new Date(date.valueOf() + 100));
 		expect(Date.create('2015/10/11T10:00:00')).toEqual(date);
 		expect(Date.create('2015-10-11 T10:00:00')).toEqual(date);
+		expect(Date.create('2015-10-11 10:00:00+0400')).toEqual(fixedUTCDate);
+		expect(Date.create('2015-10-11 10:00:00+04:00')).toEqual(fixedUTCDate);
+		expect(Date.create('2015-10-11 10:00:00+00:00')).toEqual(utcDate);
+		expect(Date.create('2015-10-11 10:00:00+0000')).toEqual(utcDate);
 		expect(Date.create('2015-10-11 10:00:00Z')).toEqual(utcDate);
 	});
 });
