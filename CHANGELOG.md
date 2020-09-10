@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.24.1 (2020-09-10)
+
+#### :bug: Bug Fix
+
+* Fixed a bug with iOS and ES6 when the engine hasn't parsed a declaration with nested arrow functions
+
 ## v3.24.0 (2020-08-12)
 
 #### :rocket: New Feature
