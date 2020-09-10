@@ -15,7 +15,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :bug: Bug Fix
 
-* Fixed a bug with iOS and ES6 when the engine hasn't parsed a declaration with nested arrow functions
+* Fixed a bug with iOS and ES6 when the engine hasn't parsed a declaration with nested arrow functions `core/request`
 
 ## v3.24.0 (2020-08-12)
 
