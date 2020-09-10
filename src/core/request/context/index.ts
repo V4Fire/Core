@@ -67,7 +67,7 @@ export default class RequestContext<D = unknown> extends Super<D> {
 			const
 				loggingContext = `request:${namespace}:${key}:${path}`,
 				getTime = () => `Finished at ${Date.now() - time}ms`,
-				clone = (data) => () => Object.isPlainObject(data) || Object.isArray(data) ? Object.fastClone(data) : data;
+				clone = (data) => (() => Object.isPlainObject(data) || Object.isArray(data) ? Object.fastClone(data) : data);
 
 			if (Object.isPromise(res)) {
 				res.then((data) => log(loggingContext, getTime(), clone(data)), stderr);
