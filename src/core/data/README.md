@@ -135,7 +135,7 @@ import {
   RequestResponse,
   RequestBody
 
-} from 'core/request';
+} from 'core/data';
 
 import { ModelMethod } from 'core/data/interface';
 export * from 'core/data/interface/types';
@@ -222,7 +222,7 @@ myProvider.base('https://google.com').url('bla/baz').get('foo');
 In addition to the base interface of data providers V4Fire provides an implementation that grants some extra functionality and more flexibility.
 
 ```js
-import Provider from 'core/provider';
+import Provider from 'core/data';
 
 export default class User extends Provider {
   baseURL = 'user/:id';
@@ -239,7 +239,7 @@ user.get({id: 1}).then((data) => {
 You can provide some parameters to a provider by using a constructor.
 
 ```js
-import Provider from 'core/provider';
+import Provider from 'core/data';
 
 export default class User extends Provider {
   baseURL = 'user/:id';
@@ -293,7 +293,7 @@ interface ProviderOptions {
 You can register your data provider by a name in the global storage. For that case, you should use the special decorator "provider".
 
 ```js
-import Provider, { provider, providers } from 'core/provider';
+import Provider, { provider, providers } from 'core/data';
 
 @provider
 export default class User extends Provider {
@@ -306,7 +306,7 @@ console.log(providers['User']);
 The name to register is taken from the class name of the provider. Also, you can declare a namespace that is concatenated with the name.
 
 ```js
-import Provider, { provider, providers } from 'core/provider';
+import Provider, { provider, providers } from 'core/data';
 
 @provider('base')
 export default class User extends Provider {
@@ -359,7 +359,7 @@ The default implementation of a data provider has association between HTTP reque
 You allow to rewrite it in your subclass.
 
 ```js
-import Provider, { provider } from 'core/provider';
+import Provider, { provider } from 'core/data';
 
 @provider
 export default class User extends Provider {
@@ -374,7 +374,7 @@ The base URL is the starting point for URLs of each request. You can provide one
 you can specify a base URL for each particular method.
 
 ```js
-import Provider, { provider } from 'core/provider';
+import Provider, { provider } from 'core/data';
 
 @provider
 export default class User extends Provider {
@@ -408,7 +408,7 @@ You can specify a sequence of middlewares to the provider, but notice that the o
 For example, we need to add some authorization header for every request of the provider.
 
 ```js
-import Provider, { provider } from 'core/provider';
+import Provider, { provider } from 'core/data';
 
 @provider
 export default class User extends Provider {
@@ -428,7 +428,7 @@ If at least one of the middlewares returns a function, then the result of invoki
 It can be helpful to organize mocks of data and other similar cases when you don't want to execute a real request.
 
 ```js
-import Provider, { provider, Response } from 'core/provider';
+import Provider, { provider, Response } from 'core/data';
 
 @provider
 export default class User extends Provider {
@@ -453,7 +453,7 @@ Encoders are using to convert data to another format before submitting it to a r
 For example, your server demands that all request data must be represented as a protobuf value.
 
 ```js
-import Provider, { provider } from 'core/provider';
+import Provider, { provider } from 'core/data';
 
 @provider
 export default class User extends Provider {
@@ -499,7 +499,7 @@ export interface Encoder<I = unknown, O = unknown> {
 The first parameters are equal to the encoder function. The last parameter contains a link to a response object.
 
 ```js
-import Provider, { provider } from 'core/provider';
+import Provider, { provider } from 'core/data';
 
 @provider
 export default class User extends Provider {
@@ -519,7 +519,7 @@ To create a request all providers use the `core/request` module. If you need to 
 
 ```js
 import request from 'core/request';
-import Provider, { provider } from 'core/provider';
+import Provider, { provider } from 'core/data';
 
 @provider
 export default class User extends Provider {
@@ -539,7 +539,7 @@ Headers of a request also have support for interpolation from request data, whic
 
 ```js
 import request from 'core/request';
-import Provider, { provider } from 'core/provider';
+import Provider, { provider } from 'core/data';
 
 @provider
 export default class User extends Provider {
@@ -559,7 +559,7 @@ You can specify a base URL for your server. It can be useful if you have differe
 The API URL is concatenated with the base URL of a provider.
 
 ```js
-import Provider, { provider } from 'core/provider';
+import Provider, { provider } from 'core/data';
 
 @provider
 export default class User extends Provider {
@@ -574,7 +574,7 @@ export default class User extends Provider {
 The value can also be declared as a function that is invoked at each request.
 
 ```js
-import Provider, { provider } from 'core/provider';
+import Provider, { provider } from 'core/data';
 
 @provider
 export default class User extends Provider {
@@ -589,7 +589,7 @@ export default class User extends Provider {
 Finally, if you specify the default API URL within `core/config/api`, you can provide some chunks of an API URL that are applied to the base.
 
 ```js
-import Provider, { provider } from 'core/provider';
+import Provider, { provider } from 'core/data';
 
 @provider
 export default class User extends Provider {
@@ -609,7 +609,7 @@ export default class User extends Provider {
 You can create a composition of multiple providers that are fetching in parallel and merging to one data. This mechanism is called "extraProviders". Mind that API work only for a get request.
 
 ```js
-import Provider, { provider } from 'core/provider';
+import Provider, { provider } from 'core/data';
 
 @provider
 export default class User extends Provider {
@@ -663,7 +663,7 @@ interface ExtraProvider {
 If you don't need to provide dynamic parameters to a request you can define a static object instead of function.
 
 ```js
-import Provider, { provider } from 'core/provider';
+import Provider, { provider } from 'core/data';
 
 @provider
 export default class User extends Provider {
@@ -683,7 +683,7 @@ export default class User extends Provider {
 The data provider is a simple class implements a special interface. That's why to create a new provider that is extended parameters from another provider you should create a simple subclass.
 
 ```js
-import Provider, { provider } from 'core/provider';
+import Provider, { provider } from 'core/data';
 
 @provider
 export class User extends Provider {
@@ -720,7 +720,7 @@ export class User2 extends User {
 There is a standard middleware to organize a mechanism of data mocking — "attackMock" middleware (it is used by default).
 
 ```js
-import Provider, { provider } from 'core/provider';
+import Provider, { provider } from 'core/data';
 
 @provider
 export default class User extends Provider {
@@ -755,7 +755,7 @@ export default class User extends Provider {
 Mind that root keys of mocks represent HTTP methods, but not provider methods. The values contain arrays of request objects to match: the algorithm finds the most suitable option and returns its response. Also, the middleware supports dynamically casting responses:
 
 ```js
-import Provider, { provider } from 'core/provider';
+import Provider, { provider } from 'core/data';
 
 @provider
 export default class User extends Provider {
@@ -784,7 +784,7 @@ export default class User extends Provider {
 Finally, you can use dynamic importing with mocks:
 
 ```js
-import Provider, { provider } from 'core/provider';
+import Provider, { provider } from 'core/data';
 
 @provider
 export default class User extends Provider {
