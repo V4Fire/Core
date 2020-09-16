@@ -242,7 +242,7 @@ pre {
 						<a href="#corekv-storage" id="corekv-storage" style="color: inherit; text-decoration: none;">
 							<h1>core/kv-storage</h1>
 						</a>
-						<p>This module provides API to work with a persistent key-value storage by using different runtime engines, like localStorage, indexedDb, SQLite, etc.</p>
+						<p>This module provides API to work with a persistent key-value storage using different runtime engines, like localStorage, indexedDb, SQLite, etc.</p>
 						<a href="#supported-engines" id="supported-engines" style="color: inherit; text-decoration: none;">
 							<h2>Supported engines</h2>
 						</a>
@@ -269,8 +269,8 @@ kv.clear(<span class="hljs-function">(<span class="hljs-params">el, key</span>) 
 						<a href="#custom-namespaces" id="custom-namespaces" style="color: inherit; text-decoration: none;">
 							<h3>Custom namespaces</h3>
 						</a>
-						<p>All values are stored within a local storage are placed in the global namespace, i.e., you can override any value you have.
-							If you want to isolate data from other data, you can specify the custom namespace. Mind, that you still can override or remove these
+						<p>All values are stored within a local storage in the global namespace, i.e., you can override any value you have.
+							If you want to isolate data from other data, you can specify the custom namespace. Mind, you still can override or remove these
 						values from the storage by using global API.</p>
 						<pre><code class="language-js"><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> kv <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;core/kv-storage&#x27;</span>;
 
@@ -345,7 +345,7 @@ blaStore.set(<span class="hljs-string">&#x27;bla&#x27;</span>, <span class="hljs
 							<h2>Specifying a custom engine</h2>
 						</a>
 						<p>By default, in a browser, the module uses native <code>window.localStorage</code> and <code>window.sessionStorage</code> API-s, but you can
-						specify your own engine by using the special factory function.</p>
+						specify your engine by using the special factory function.</p>
 						<pre><code class="language-js"><span class="hljs-keyword">import</span> { factory } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;core/kv-storage&#x27;</span>;
 
 <span class="hljs-keyword">const</span> syncStorage = factory(YourSyncStorage);
