@@ -1,6 +1,6 @@
 # core/kv-storage
 
-This module provides API to work with a persistent key-value storage by using different runtime engines, like localStorage, indexedDb, SQLite, etc.
+This module provides API to work with a persistent key-value storage using different runtime engines, like localStorage, indexedDb, SQLite, etc.
 
 ## Supported engines
 
@@ -28,8 +28,8 @@ kv.clear((el, key) => el.a === 1);
 
 ### Custom namespaces
 
-All values are stored within a local storage are placed in the global namespace, i.e., you can override any value you have.
-If you want to isolate data from other data, you can specify the custom namespace. Mind, that you still can override or remove these
+All values are stored within a local storage in the global namespace, i.e., you can override any value you have.
+If you want to isolate data from other data, you can specify the custom namespace. Mind, you still can override or remove these
 values from the storage by using global API.
 
 ```js
@@ -116,7 +116,7 @@ blaStore.set('bla', 1).then(async () => {
 ## Specifying a custom engine
 
 By default, in a browser, the module uses native `window.localStorage` and `window.sessionStorage` API-s, but you can
-specify your own engine by using the special factory function.
+specify your engine by using the special factory function.
 
 ```js
 import { factory } from 'core/kv-storage';

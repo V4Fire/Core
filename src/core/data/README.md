@@ -798,4 +798,4 @@ setEnv('mock', {patterns: ['.*']});
 ```
 
 The values of patterns are converted to RegExp objects and applied to provider names (including namespaces).
-Config settings are stored within local browser storage.
+Config settings are stored within a local browser storage.
