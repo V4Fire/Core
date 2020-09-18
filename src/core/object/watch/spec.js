@@ -94,6 +94,10 @@ describe('core/object/watch', () => {
 				spy(value, oldValue);
 			});
 
+			// eslint-disable-next-line no-self-assign
+			proxy.a = proxy.a;
+			expect(spy).not.toHaveBeenCalled();
+
 			proxy.a.b = [1, 2, 3];
 			expect(spy).toHaveBeenCalledWith([1, 2, 3], []);
 

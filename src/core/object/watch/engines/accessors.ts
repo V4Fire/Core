@@ -447,10 +447,11 @@ export function setWatchAccessors(
 
 			set(val: unknown): void {
 				let
-					fromProto = opts?.fromProto ?? false;
-
-				const
+					fromProto = opts?.fromProto ?? false,
 					oldVal = obj[key];
+
+				val = unwrap(val) ?? val;
+				oldVal = unwrap(oldVal) ?? oldVal;
 
 				if (oldVal !== val) {
 					try {

@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.27.2 (2020-09-18)
+
+#### :bug: Bug Fix
+
+* Fixed a bug when a new value to set is equal by a link with the previous
+
 ## v3.22.5 (2020-07-31)
 
 #### :bug: Bug Fix

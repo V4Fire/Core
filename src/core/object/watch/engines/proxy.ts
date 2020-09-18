@@ -262,6 +262,8 @@ export function watch<T extends object>(
 				return false;
 			}
 
+			val = unwrap(val) ?? val;
+
 			const
 				isArray = Object.isArray(target),
 				isCustomObj = isArray || Object.isCustomObject(target),
@@ -275,8 +277,8 @@ export function watch<T extends object>(
 				key = Number(key);
 			}
 
-			const
-				oldVal = Reflect.get(target, key, isCustomObj ? receiver : target);
+			let oldVal = Reflect.get(target, key, isCustomObj ? receiver : target);
+			oldVal = unwrap(oldVal) ?? oldVal;
 
 			if (oldVal !== val && set()) {
 				if (!opts!.withProto && (fromProto || !isArray && !Object.hasOwnProperty(target, <string>key))) {
