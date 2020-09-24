@@ -44,7 +44,7 @@ extend(Date, 'create', (pattern?: DateCreateValue) => {
 			}
 
 			return zone;
-		}
+		};
 
 		const normalizeDate = (date) => {
 			const
