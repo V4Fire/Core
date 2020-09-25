@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.27.3 (2020-09-25)
+
+#### :bug: Bug Fix
+
+* Fixed a bug when Dates could be transformed to strings after cloning
+
 ## v3.26.0 (2020-09-04)
 
 #### :bug: Bug Fix
