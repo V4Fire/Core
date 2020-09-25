@@ -5,7 +5,7 @@
   "main": "src/core/index.js",
   "typings": "index.d.ts",
   "license": "MIT",
-  "version": "3.27.2",
+  "version": "3.27.3",
   "author": {
     "name": "kobezzza",
     "email": "kobezzza@gmail.com",
@@ -43,7 +43,7 @@
     "dom-storage": "^2.1.0",
     "eventemitter2": "^6.4.3",
     "fs-extra-promise": "^1.0.1",
-    "got": "^11.6.2",
+    "got": "^11.7.0",
     "jasmine": "^3.6.1",
     "set-value": "^3.0.2",
     "tslib": "2.0.0",
@@ -87,7 +87,7 @@
     "urlconcat": "0.0.12"
   },
   "devDependencies": {
-    "@v4fire/linters": "^1.5.9",
+    "@v4fire/linters": "^1.6.1",
     "husky": "^4.3.0",
     "nyc": "^15.1.0"
   }

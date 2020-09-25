@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.27.3 (2020-09-25)
+
+#### :bug: Bug Fix
+
+* Fixed a bug when Dates could be transformed to strings after cloning `Object.fastClone`
+
 ## v3.27.2 (2020-09-18)
 
 #### :bug: Bug Fix
