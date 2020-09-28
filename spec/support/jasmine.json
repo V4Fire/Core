@@ -5,5 +5,5 @@
   ],
   "stopSpecOnExpectationFailure": false,
   "random": true,
-  "timeoutInterval": 10000
+  "timeoutInterval": 20000
 }
