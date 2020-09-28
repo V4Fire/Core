@@ -280,48 +280,45 @@ export function set(obj: object, path: WatchPath, value: unknown, handlers: Watc
 		top = proxy?.[toTopObject] ?? unwrappedObj;
 
 	const
-		ref = Object.get(top, refPath);
+		ref = Object.get(top, refPath),
+		type = getProxyType(ref);
 
-	if (!Object.isDictionary(ref)) {
-		const
-			type = getProxyType(ref);
+	switch (type) {
+		case null:
+		case 'set':
+			throw new TypeError('Invalid data type');
 
-		switch (type) {
-			case 'array':
-				(<unknown[]>ref).splice(Number(prop), 1, value);
-				break;
+		case 'array':
+			(<unknown[]>ref).splice(Number(prop), 1, value);
+			break;
 
-			case 'map':
-				(<Map<unknown, unknown>>ref).set(prop, value);
-				break;
+		case 'map':
+			(<Map<unknown, unknown>>ref).set(prop, value);
+			break;
 
-			default:
-				throw new TypeError('Invalid data type');
+		default: {
+			const
+				key = String(prop);
+
+			const
+				hasPath = fullRefPath.length > 0,
+				resolvedPath = hasPath ? fullRefPath : undefined,
+				resolvedRoot = hasPath ? root : unwrappedObj,
+				resolvedTop = hasPath ? top : undefined;
+
+			const resolvedProxy = setWatchAccessors(
+				unwrappedObj,
+				key,
+				resolvedPath,
+				handlers,
+				resolvedRoot,
+				resolvedTop,
+				{deep: true}
+			);
+
+			resolvedProxy[key] = value;
 		}
-
-		return;
 	}
-
-	const
-		key = String(prop);
-
-	const
-		hasPath = fullRefPath.length > 0,
-		resolvedPath = hasPath ? fullRefPath : undefined,
-		resolvedRoot = hasPath ? root : unwrappedObj,
-		resolvedTop = hasPath ? top : undefined;
-
-	const resolvedProxy = setWatchAccessors(
-		unwrappedObj,
-		key,
-		resolvedPath,
-		handlers,
-		resolvedRoot,
-		resolvedTop,
-		{deep: true}
-	);
-
-	resolvedProxy[key] = value;
 }
 
 /**
@@ -354,49 +351,45 @@ export function unset(obj: object, path: WatchPath, handlers: WatchHandlersSet):
 		top = proxy?.[toTopObject] ?? unwrappedObj;
 
 	const
-		ref = Object.get(top, refPath);
+		ref = Object.get(top, refPath),
+		type = getProxyType(ref);
 
-	if (!Object.isDictionary(ref)) {
-		const
-			type = getProxyType(ref);
+	switch (type) {
+		case null:
+			throw new TypeError('Invalid data type');
 
-		switch (type) {
-			case 'array':
-				(<unknown[]>ref).splice(Number(prop), 1);
-				break;
+		case 'array':
+			(<unknown[]>ref).splice(Number(prop), 1);
+			break;
 
-			case 'map':
-			case 'set':
-				(<Map<unknown, unknown>>ref).delete(prop);
-				break;
+		case 'map':
+		case 'set':
+			(<Map<unknown, unknown>>ref).delete(prop);
+			break;
 
-			default:
-				throw new TypeError('Invalid data type');
+		default: {
+			const
+				key = String(prop);
+
+			const
+				hasPath = fullRefPath.length > 0,
+				resolvedPath = hasPath ? fullRefPath : undefined,
+				resolvedRoot = hasPath ? root : unwrappedObj,
+				resolvedTop = hasPath ? top : undefined;
+
+			const resolvedProxy = setWatchAccessors(
+				unwrappedObj,
+				key,
+				resolvedPath,
+				handlers,
+				resolvedRoot,
+				resolvedTop,
+				{deep: true}
+			);
+
+			resolvedProxy[key] = undefined;
 		}
-
-		return;
 	}
-
-	const
-		key = String(prop);
-
-	const
-		hasPath = fullRefPath.length > 0,
-		resolvedPath = hasPath ? fullRefPath : undefined,
-		resolvedRoot = hasPath ? root : unwrappedObj,
-		resolvedTop = hasPath ? top : undefined;
-
-	const resolvedProxy = setWatchAccessors(
-		unwrappedObj,
-		key,
-		resolvedPath,
-		handlers,
-		resolvedRoot,
-		resolvedTop,
-		{deep: true}
-	);
-
-	resolvedProxy[key] = undefined;
 }
 
 /**

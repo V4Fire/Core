@@ -372,32 +372,29 @@ export function set(obj: object, path: WatchPath, value: unknown, handlers: Watc
 	);
 
 	const
-		blackListStore = getOrCreateLabelValueByHandlers<Set<unknown>>(unwrappedObj, blackList, handlers);
+		blackListStore = getOrCreateLabelValueByHandlers<Set<unknown>>(unwrappedObj, blackList, handlers),
+		type = getProxyType(ref);
 
-	if (!Object.isDictionary(ref)) {
-		const
-			type = getProxyType(ref);
+	switch (type) {
+		case null:
+		case 'set':
+			throw new TypeError('Invalid data type');
 
-		switch (type) {
-			case 'array':
-				(<unknown[]>ref).splice(Number(prop), 1, value);
-				break;
+		case 'array':
+			(<unknown[]>ref).splice(Number(prop), 1, value);
+			break;
 
-			case 'map':
-				blackListStore?.delete(prop);
-				(<Map<unknown, unknown>>ref).set(prop, value);
-				break;
+		case 'map':
+			blackListStore?.delete(prop);
+			(<Map<unknown, unknown>>ref).set(prop, value);
+			break;
 
-			default:
-				throw new TypeError('Invalid data type');
+		default: {
+			const key = String(prop);
+			blackListStore?.delete(key);
+			(<Dictionary>ref)[key] = value;
 		}
-
-		return;
 	}
-
-	const key = String(prop);
-	blackListStore?.delete(key);
-	ref[key] = value;
 }
 
 /**
@@ -428,31 +425,27 @@ export function unset(obj: object, path: WatchPath, handlers: WatchHandlersSet):
 	);
 
 	const
-		blackListStore = getOrCreateLabelValueByHandlers<Set<unknown>>(unwrappedObj, blackList, handlers);
+		blackListStore = getOrCreateLabelValueByHandlers<Set<unknown>>(unwrappedObj, blackList, handlers),
+		type = getProxyType(ref);
 
-	if (!Object.isDictionary(ref)) {
-		const
-			type = getProxyType(ref);
+	switch (type) {
+		case null:
+			throw new TypeError('Invalid data type');
 
-		switch (type) {
-			case 'array':
-				(<unknown[]>ref).splice(Number(prop), 1);
-				break;
+		case 'array':
+			(<unknown[]>ref).splice(Number(prop), 1);
+			break;
 
-			case 'map':
-			case 'set':
-				blackListStore?.delete(prop);
-				(<Map<unknown, unknown>>ref).delete(prop);
-				break;
+		case 'map':
+		case 'set':
+			blackListStore?.delete(prop);
+			(<Map<unknown, unknown>>ref).delete(prop);
+			break;
 
-			default:
-				throw new TypeError('Invalid data type');
+		default: {
+			const key = String(prop);
+			blackListStore?.delete(key);
+			(<Dictionary>ref)[key] = undefined;
 		}
-
-		return;
 	}
-
-	const key = String(prop);
-	blackListStore?.delete(key);
-	ref[key] = undefined;
 }
