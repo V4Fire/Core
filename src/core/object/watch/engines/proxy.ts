@@ -378,7 +378,7 @@ export function set(obj: object, path: WatchPath, value: unknown, handlers: Watc
 	switch (type) {
 		case null:
 		case 'set':
-			throw new TypeError('Invalid data type');
+			throw new TypeError('Invalid data type to watch');
 
 		case 'array':
 			(<unknown[]>ref).splice(Number(prop), 1, value);
@@ -430,7 +430,7 @@ export function unset(obj: object, path: WatchPath, handlers: WatchHandlersSet):
 
 	switch (type) {
 		case null:
-			throw new TypeError('Invalid data type');
+			throw new TypeError('Invalid data type to watch');
 
 		case 'array':
 			(<unknown[]>ref).splice(Number(prop), 1);
