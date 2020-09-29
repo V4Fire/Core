@@ -306,6 +306,20 @@ export function set(obj: object, path: WatchPath, value: unknown, handlers: Watc
 				resolvedRoot = hasPath ? root : unwrappedObj,
 				resolvedTop = hasPath ? top : undefined;
 
+			let
+				currentProxy;
+
+			if (unwrappedObj !== obj) {
+				currentProxy = obj;
+
+			} else {
+				currentProxy = unwrappedObj[toProxyObject]?.get(handlers) ?? Object.createDict();
+			}
+
+			if (!Object.isFunction(Object.getOwnPropertyDescriptor(currentProxy, key)?.get)) {
+				unwrappedObj[key] = currentProxy[key];
+			}
+
 			const resolvedProxy = setWatchAccessors(
 				unwrappedObj,
 				key,

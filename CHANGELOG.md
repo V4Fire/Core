@@ -15,7 +15,9 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :bug: Bug Fix
 
-* Fixed a bug when a deleted property won't be deleted from an object if using `unset` `core/object/watch`
+* `core/object/watch`:
+  * Fixed a bug when a deleted property won't be deleted from an object if using `unset`
+  * Fixed restoring of an old value `engines/accessors/set`
 
 #### :house: Internal
 

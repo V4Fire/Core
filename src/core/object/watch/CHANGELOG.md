@@ -14,6 +14,7 @@ Changelog
 #### :bug: Bug Fix
 
 * Fixed a bug when a deleted property won't be deleted from an object if using `unset`
+* Fixed restoring of an old value `engines/accessors/set`
 
 #### :house: Internal
 
