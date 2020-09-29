@@ -1,4 +1,4 @@
-/* eslint-disable max-lines-per-function */
+/* eslint-disable max-lines-per-function, max-lines */
 
 /*!
  * V4Fire Core
@@ -745,7 +745,7 @@ describe('core/object/watch', () => {
 		it(`deleting of properties (${type})`, () => {
 			{
 				const
-					obj = {},
+					obj = {a: 1},
 					spy = jasmine.createSpy();
 
 				const {proxy} = watch(obj, {immediate: true, engine}, (value, oldValue, info) => {
@@ -764,7 +764,7 @@ describe('core/object/watch', () => {
 
 			{
 				const
-					obj = {},
+					obj = {a: 1},
 					spy = jasmine.createSpy();
 
 				const watcher = watch(obj, {immediate: true, engine}, (value, oldValue, info) => {
@@ -772,15 +772,18 @@ describe('core/object/watch', () => {
 				});
 
 				watcher.delete('a');
-				expect(spy).not.toHaveBeenCalled();
+				expect(spy).toHaveBeenCalledWith(undefined, 1, ['a']);
 
 				watcher.proxy.a = 2;
-				expect(spy).toHaveBeenCalledWith(2, undefined, ['a']);
+				expect(spy).not.toHaveBeenCalledWith(2, undefined, ['a']);
+
+				watcher.set('a', 3);
+				expect(spy).toHaveBeenCalledWith(3, 2, ['a']);
 			}
 
 			{
 				const
-					obj = {},
+					obj = {a: 1},
 					spy = jasmine.createSpy();
 
 				const {proxy} = watch(obj, {immediate: true, engine}, (value, oldValue, info) => {
@@ -788,10 +791,13 @@ describe('core/object/watch', () => {
 				});
 
 				unset(proxy, 'a', engine);
-				expect(spy).not.toHaveBeenCalled();
+				expect(spy).toHaveBeenCalledWith(undefined, 1, ['a']);
 
 				proxy.a = 2;
-				expect(spy).toHaveBeenCalledWith(2, undefined, ['a']);
+				expect(spy).not.toHaveBeenCalledWith(2, undefined, ['a']);
+
+				set(proxy, 'a', 3, engine);
+				expect(spy).toHaveBeenCalledWith(3, 2, ['a']);
 			}
 		});
 
