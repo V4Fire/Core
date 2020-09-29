@@ -313,9 +313,12 @@ export function set(obj: object, path: WatchPath, value: unknown, handlers: Watc
 				currentProxy = obj;
 
 			} else {
-				currentProxy = unwrappedObj[toProxyObject]?.get(handlers) ?? Object.createDict();
+				currentProxy =
+					(<CanUndef<WeakMap<object, Dictionary>>>unwrappedObj[toProxyObject])?.get(handlers) ??
+					Object.createDict();
 			}
 
+			// eslint-disable-next-line @typescript-eslint/unbound-method
 			if (!Object.isFunction(Object.getOwnPropertyDescriptor(currentProxy, key)?.get)) {
 				unwrappedObj[key] = currentProxy[key];
 			}
