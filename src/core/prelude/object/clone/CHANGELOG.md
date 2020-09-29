@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.27.5 (2020-09-29)
+
+#### :bug: Bug Fix
+
+* Fixed a bug when cloning an object with cycle links
+
 ## v3.27.3 (2020-09-25)
 
 #### :bug: Bug Fix

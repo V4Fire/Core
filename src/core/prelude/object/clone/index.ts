@@ -105,39 +105,22 @@ extend(Object, 'fastClone', (obj, opts?: FastCloneOptions) => {
 			functionToJSON = Function.prototype['toJSON'];
 
 		// eslint-disable-next-line func-style
-		const replacer = function replacer(this: Date | Function) {
+		const toJSON = function toJSON(this: Date | Function) {
 			const key = valMap.get(this) ?? `${valRef}${Math.random()}]]`;
 			valMap.set(this, key);
 			valMap.set(key, this);
 			return <string>key;
 		};
 
-		const reviver = (key, value) => {
-			if (value === objRef) {
-				return obj;
-			}
-
-			if (typeof value === 'string' && value.startsWith(valRef)) {
-				const
-					resolvedValue = valMap.get(value);
-
-				if (resolvedValue !== undefined) {
-					return resolvedValue;
-				}
-			}
-
-			if (Object.isFunction(p.reviver)) {
-				return p.reviver(key, value);
-			}
-
-			return value;
-		};
-
-		Date.prototype.toJSON = replacer;
-		Function.prototype['toJSON'] = replacer;
+		Date.prototype.toJSON = toJSON;
+		Function.prototype['toJSON'] = toJSON;
 
 		const
-			clone = JSON.parse(JSON.stringify(obj, p.replacer), reviver);
+			replacer = createSerializer(obj, valMap, p.replacer),
+			reviver = createParser(obj, valMap, p.reviver);
+
+		const
+			clone = JSON.parse(JSON.stringify(obj, replacer), reviver);
 
 		Date.prototype.toJSON = dateToJSON;
 		Function.prototype['toJSON'] = functionToJSON;
@@ -161,3 +144,69 @@ extend(Object, 'fastClone', (obj, opts?: FastCloneOptions) => {
 
 	return obj;
 });
+
+/**
+ * Returns a function to serialize object values into strings
+ *
+ * @param base - base object
+ * @param valMap - map to store non-clonable values
+ * @param replacer - additional replacer
+ */
+export function createSerializer(
+	base: unknown,
+	valMap: ValMap,
+	replacer?: JSONCb
+): JSONCb {
+	let
+		init = false;
+
+	return (key, value) => {
+		if (init && value === base) {
+			return objRef;
+		}
+
+		if (!init) {
+			init = true;
+		}
+
+		if (replacer) {
+			return replacer(key, value);
+		}
+
+		return value;
+	};
+}
+
+/**
+ * Returns a function to parse object values from strings
+ *
+ * @param base - base object
+ * @param valMap - map that stores on-clonable values
+ * @param reviver - additional reviewer
+ */
+export function createParser(
+	base: unknown,
+	valMap: ValMap,
+	reviver?: JSONCb | false
+): JSONCb {
+	return (key, value) => {
+		if (value === objRef) {
+			return base;
+		}
+
+		if (typeof value === 'string' && value.startsWith(valRef)) {
+			const
+				resolvedValue = valMap.get(value);
+
+			if (resolvedValue !== undefined) {
+				return resolvedValue;
+			}
+		}
+
+		if (Object.isFunction(reviver)) {
+			return reviver(key, value);
+		}
+
+		return value;
+	};
+}

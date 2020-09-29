@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.27.5 (2020-09-29)
+
+#### :bug: Bug Fix
+
+* Fixed a bug when cloning an object with cycle links `Object.fastClone`
+
 ## v3.27.4 (2020-09-29)
 
 #### :bug: Bug Fix

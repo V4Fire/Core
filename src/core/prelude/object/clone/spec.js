@@ -47,6 +47,14 @@ describe('core/prelude/object/clone/fastClone', () => {
 		expect(Object.fastClone(obj)).toEqual(obj);
 	});
 
+	it('cloning of objects with cycle links', () => {
+		const obj = {a: 1};
+		obj.obj = obj;
+
+		expect(Object.fastClone(obj)).not.toBe(obj);
+		expect(Object.fastClone(obj)).toEqual(obj);
+	});
+
 	it('cloning of non extendable objects', () => {
 		const
 			obj = Object.preventExtensions({a: 1, b: 2}),
