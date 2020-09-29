@@ -9,6 +9,16 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.27.4 (2020-09-29)
+
+#### :bug: Bug Fix
+
+* Fixed a bug when a deleted property won't be deleted from an object if using `unset`
+
+#### :house: Internal
+
+* Refactoring
+
 ## v3.27.2 (2020-09-18)
 
 #### :bug: Bug Fix

@@ -11,6 +11,16 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.27.4 (2020-09-29)
+
+#### :bug: Bug Fix
+
+* Fixed a bug when a deleted property won't be deleted from an object if using `unset` `core/object/watch`
+
+#### :house: Internal
+
+* Refactoring `core/object/watch`
+
 ## v3.27.3 (2020-09-25)
 
 #### :bug: Bug Fix

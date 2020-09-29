@@ -390,9 +390,12 @@ export function set(obj: object, path: WatchPath, value: unknown, handlers: Watc
 			break;
 
 		default: {
-			const key = String(prop);
+			const
+				key = String(prop),
+				store = <Dictionary>ref;
+
 			blackListStore?.delete(key);
-			(<Dictionary>ref)[key] = value;
+			store[key] = value;
 		}
 	}
 }
@@ -443,9 +446,13 @@ export function unset(obj: object, path: WatchPath, handlers: WatchHandlersSet):
 			break;
 
 		default: {
-			const key = String(prop);
+			const
+				key = String(prop),
+				store = <Dictionary>ref;
+
 			blackListStore?.delete(key);
-			(<Dictionary>ref)[key] = undefined;
+			store[key] = undefined;
+			delete store[key];
 		}
 	}
 }

@@ -388,6 +388,7 @@ export function unset(obj: object, path: WatchPath, handlers: WatchHandlersSet):
 			);
 
 			resolvedProxy[key] = undefined;
+			delete resolvedProxy[key];
 		}
 	}
 }
