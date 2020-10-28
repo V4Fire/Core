@@ -83,7 +83,8 @@ class User {
 }
 ```
 
-It might seem naive, but it works. Also, we need to create some API to submit the provider's events that allows notifying an application if data was changed.
+It might seem naive, but it works. Also, we need to create some API to submit the provider's events that allows notifying an application
+if data was changed.
 
 ```js
 import request from 'core/request';
@@ -117,11 +118,15 @@ class User {
 }
 ```
 
-Still looks fine and useful, but if we want to create more classes for other data instances, we need to make some kind of superclass to avoid "copy-pasting" code lines. The superclass may also improve our API with added extra functionality, such as support for socket events, middlewares, etc. This is exactly what `core/data` module does.
+Still looks fine and useful, but if we want to create more classes for other data instances, we need to make some kind
+of superclass to avoid "copy-pasting" code lines. The superclass may also improve our API with added extra functionality,
+such as support for socket events, middlewares, etc. This is exactly what `core/data` module does.
 
 ## Default interface
 
-The `core/data` module provides the default interface for any data providers. If your class implements that interface, you can use it as a data provider with any V4Fire modules. The interface is pretty similar to the example mentioned above of a data class but realizes more common API. Let's take a look at it.
+The `core/data` module provides the default interface for any data providers. If your class implements that interface,
+you can use it as a data provider with any V4Fire modules. The interface is pretty similar to the example mentioned above of
+a data class but realizes more common API. Let's take a look at it.
 
 **core/data/interface**
 
@@ -219,7 +224,8 @@ myProvider.base('https://google.com').url('bla/baz').get('foo');
 
 ## Default implementation
 
-In addition to the base interface of data providers, V4Fire provides an implementation that grants some extra functionality and more flexibility.
+In addition to the base interface of data providers, V4Fire provides an implementation that grants some extra functionality
+and more flexibility.
 
 ```js
 import Provider from 'core/data';
@@ -395,7 +401,8 @@ The function takes a request environment:
 }
 ```
 
-You can specify a sequence of middlewares to the provider, but notice that middlewares' order depends on the structure that you use (hash doesn't preserve the order, but arrays/maps do it).
+You can specify a sequence of middlewares to the provider, but notice that middlewares' order depends on the structure that you use
+(hash doesn't preserve the order, but arrays/maps do it).
 
 For example, we need to add some authorization header for every request of the provider.
 
@@ -507,7 +514,8 @@ If some encoder returns a promise, it will be awaited.
 
 #### Custom request function
 
-To create a request, all providers use the `core/request` module. If you need to provide some extra parameters of the request, such as `contentType`, you can specify a factory to make these requests using an overload of the request function.
+To create a request, all providers use the `core/request` module. If you need to provide some extra parameters of the request,
+such as `contentType`, you can specify a factory to make these requests using an overload of the request function.
 
 ```js
 import request from 'core/request';
@@ -578,7 +586,8 @@ export default class User extends Provider {
 }
 ```
 
-Finally, if you specify the default API URL within `core/config/api`, you can provide some chunks of an API URL that are applied to the base.
+Finally, if you specify the default API URL within `core/config/api`, you can provide some chunks of an API URL
+that are applied to the base.
 
 ```js
 import Provider, { provider } from 'core/data';
@@ -598,7 +607,8 @@ export default class User extends Provider {
 
 ### Composition of providers
 
-You can create a composition of multiple providers that are fetching in parallel and merging to one data. This mechanism is called "extraProviders". Mind that API work only for a get request.
+You can create a composition of multiple providers that are fetching in parallel and merging to one data.
+This mechanism is called "extraProviders". Mind that API work only for a get request.
 
 ```js
 import Provider, { provider } from 'core/data';
@@ -672,7 +682,8 @@ export default class User extends Provider {
 
 ### Extending one data provider from another provider
 
-The data provider is a simple class that implements a special interface. That's why to create a new provider that is extended parameters from another provider, you should create a simple subclass.
+The data provider is a simple class that implements a special interface.
+That's why to create a new provider that is extended parameters from another provider, you should create a simple subclass.
 
 ```js
 import Provider, { provider } from 'core/data';
@@ -744,7 +755,9 @@ export default class User extends Provider {
 }
 ```
 
-Mind that the root keys of mocks represent HTTP methods, but not provider methods. The values contain arrays of request objects to match: the algorithm finds the most suitable option and returns its response. Also, the middleware supports dynamically casting responses:
+Mind that the root keys of mocks represent HTTP methods, but not provider methods.
+The values contain arrays of request objects to match: the algorithm finds the most suitable option and returns its response.
+Also, the middleware supports dynamically casting responses:
 
 ```js
 import Provider, { provider } from 'core/data';

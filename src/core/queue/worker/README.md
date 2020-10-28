@@ -1,6 +1,7 @@
 # core/queue/worker
 
-This module provides an abstract class for the [[WorkerQueue]] data structure. The submodules contains different implementations of that class.
+This module provides an abstract class for the [[WorkerQueue]] data structure.
+The submodules contains different implementations of that class.
 
 ## Implementations:
 

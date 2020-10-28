@@ -1,6 +1,7 @@
 # core/queue
 
-This module provides an abstract class for the [[Queue]] data structure. The submodules contains different classes and interfaces that extends or implements that class.
+This module provides an abstract class for the [[Queue]] data structure.
+The submodules contains different classes and interfaces that extends or implements that class.
 
 The main module re-exports these implementations:
 

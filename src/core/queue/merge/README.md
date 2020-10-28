@@ -1,6 +1,7 @@
 # core/queue/merge
 
-This module provides a class to organize a queue data structure with support of task merging by the specified hash function. It means that the same tasks aren't duplicated.
+This module provides a class to organize a queue data structure with support of task merging by the specified hash function.
+It means that the same tasks aren't duplicated.
 
 ```js
 import MergeQueue from 'core/queue/merge';
