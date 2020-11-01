@@ -113,15 +113,15 @@ export async function attachMock(this: Provider, params: MiddlewareParams): Prom
 			}
 
 			const
-				val = request[key],
-				baseVal = opts[key];
+				valFromMock = request[key],
+				reqVal = opts[key];
 
-			if (Object.isPlainObject(val)) {
-				for (let keys = Object.keys(val), i = 0; i < keys.length; i++) {
+			if (Object.isPlainObject(valFromMock)) {
+				for (let keys = Object.keys(valFromMock), i = 0; i < keys.length; i++) {
 					const
 						key = keys[i];
 
-					if (!Object.fastCompare(val[key], baseVal?.[key])) {
+					if (!Object.fastCompare(valFromMock[key], reqVal?.[key])) {
 						currentRequest = undefined;
 						break requestKeys;
 					}
@@ -131,7 +131,7 @@ export async function attachMock(this: Provider, params: MiddlewareParams): Prom
 				continue;
 			}
 
-			if (Object.fastCompare(baseVal, val)) {
+			if (Object.fastCompare(reqVal, valFromMock)) {
 				currentRequest = request;
 				continue;
 			}
