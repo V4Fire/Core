@@ -250,18 +250,18 @@ pre {
 <span class="hljs-keyword">import</span> { wait } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;core/data/middlewares&#x27;</span>;
 
 <span class="hljs-meta">@provider</span>
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-keyword">class</span> MyProvider <span class="hljs-keyword">extends</span> Provider {
-  encoders: EncodersMap = [wait];
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyProvider</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Provider</span> </span>{
+  <span class="hljs-attr">encoders</span>: EncodersMap = [wait];
 }</code></pre>
 						<p><em>base/b-example</em></p>
 						<pre><code class="language-typescript"><span class="hljs-keyword">import</span> <span class="hljs-string">&#x27;models/my-provider&#x27;</span>;
 <span class="hljs-keyword">import</span> iData, { system, RequestParams } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;super/i-data/i-data&#x27;</span>;
 
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-keyword">class</span> bExample <span class="hljs-keyword">extends</span> iData {
-  <span class="hljs-comment">/** @override */</span>
-  dataProvider: <span class="hljs-built_in">string</span> = <span class="hljs-string">&#x27;MyProvider&#x27;</span>;
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">bExample</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">iData</span> </span>{
+  <span class="hljs-comment">/** <span class="hljs-doctag">@override </span>*/</span>
+  <span class="hljs-attr">dataProvider</span>: <span class="hljs-built_in">string</span> = <span class="hljs-string">&#x27;MyProvider&#x27;</span>;
 
-  <span class="hljs-comment">/** @override */</span>
+  <span class="hljs-comment">/** <span class="hljs-doctag">@override </span>*/</span>
   <span class="hljs-meta">@system</span>(<span class="hljs-function">(<span class="hljs-params">o</span>) =&gt;</span> o.sync.object(<span class="hljs-string">&#x27;get&#x27;</span>, [[<span class="hljs-string">&#x27;wait&#x27;</span>, <span class="hljs-string">&#x27;canLoadData&#x27;</span>]]))
   requestParams!: RequestParams;
 
@@ -306,7 +306,7 @@ pre {
 					<a name="wait" class="tsd-anchor"></a>
 					<h3>wait</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-						<li class="tsd-signature tsd-kind-icon">wait<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">wait<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_async_interface.cancelablepromise.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -329,7 +329,7 @@ pre {
 									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>args: <span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">[]</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/src_core_async_interface.cancelablepromise.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>

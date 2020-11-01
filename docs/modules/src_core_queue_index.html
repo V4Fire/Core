@@ -242,7 +242,8 @@ pre {
 						<a href="#corequeue" id="corequeue" style="color: inherit; text-decoration: none;">
 							<h1>core/queue</h1>
 						</a>
-						<p>This module provides an abstract class for the <a href="src_core_queue_index.html#queue">Queue</a> data structure. The submodules contains different classes and interfaces that extends or implements that class.</p>
+						<p>This module provides an abstract class for the <a href="src_core_queue_index.html#queue">Queue</a> data structure.
+						The submodules contains different classes and interfaces that extends or implements that class.</p>
 						<p>The main module re-exports these implementations:</p>
 						<ul>
 							<li><code>AbstractQueue</code> — an alias for <a href="src_core_queue_interface.html"><code>core/queue/interface/Queue</code></a>;</li>
@@ -267,15 +268,15 @@ pre {
     <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.internalQueue.length;
   }
 
-  push(el) {
+  <span class="hljs-function"><span class="hljs-title">push</span>(<span class="hljs-params">el</span>)</span> {
     <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.internalQueue.push(el);
   }
 
-  pop() {
+  <span class="hljs-function"><span class="hljs-title">pop</span>(<span class="hljs-params"></span>)</span> {
     <span class="hljs-keyword">return</span> <span class="hljs-built_in">this</span>.internalQueue.shift();
   }
 
-  clear() {
+  <span class="hljs-function"><span class="hljs-title">clear</span>(<span class="hljs-params"></span>)</span> {
     <span class="hljs-built_in">this</span>.internalQueue = [];
   }
 }</code></pre>
