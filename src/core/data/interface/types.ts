@@ -21,17 +21,12 @@ import {
 
 } from 'core/request/interface';
 
-import {
-
-	ResponseType,
-	ResponseTypeValue
-
-} from 'core/request/response/interface';
+import { ResponseTypeValue } from 'core/request/response/interface';
 
 import Provider from 'core/data/interface';
 
-export type MockResponseType =
-	ResponseType |
+export type MockResponseValue =
+	ResponseTypeValue |
 	object;
 
 export interface MockCustomResponse {
@@ -41,11 +36,11 @@ export interface MockCustomResponse {
 }
 
 export interface MockResponseFunction<D = unknown> {
-	(params: MiddlewareParams<D>, response: MockCustomResponse): CanPromise<MockResponseType>;
+	(params: MiddlewareParams<D>, response: MockCustomResponse): CanPromise<MockResponseValue>;
 }
 
 export type MockResponse<D = unknown> =
-	CanPromise<MockResponseType> |
+	CanPromise<MockResponseValue> |
 	MockResponseFunction<D>;
 
 export interface Mock<D = unknown> {

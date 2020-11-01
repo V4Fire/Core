@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.27.6 (2020-11-01)
+
+#### :boom: Breaking Change
+
+* Renamed `MockResponseType` -> `MockResponseValue`
+
 ## v3.27.2 (2020-09-18)
 
 #### :bug: Bug Fix
