@@ -251,12 +251,12 @@ pre {
   <span class="hljs-attr">online</span>: {
     <span class="hljs-comment">// URL to check online connection</span>
     <span class="hljs-comment">// (with the &quot;browser.request&quot; engine can be used only image URL-s)</span>
-    <span class="hljs-attr">checkURL</span>: <span class="hljs-string">&#x27;https://google.com/favicon.ico&#x27;</span>,
+    checkURL: <span class="hljs-string">&#x27;https://google.com/favicon.ico&#x27;</span>,
 
     <span class="hljs-comment">// Default options:</span>
 
     <span class="hljs-comment">// How often need to check online connection (ms)</span>
-    <span class="hljs-attr">checkInterval</span>: (<span class="hljs-number">5</span>).seconds(),
+    checkInterval: (<span class="hljs-number">5</span>).seconds(),
 
     <span class="hljs-comment">// The timeout of downloading the check URL</span>
     <span class="hljs-attr">checkTimeout</span>: (<span class="hljs-number">2</span>).seconds(),
@@ -356,7 +356,7 @@ pre {
 					<a name="isonline" class="tsd-anchor"></a>
 					<h3>is<wbr>Online</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-						<li class="tsd-signature tsd-kind-icon">is<wbr>Online<span class="tsd-signature-symbol">(</span>engine<span class="tsd-signature-symbol">?: </span><a href="../interfaces/src_core_net_interface.netengine.html" class="tsd-signature-type">NetEngine</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/src_core_net_interface.netstatus.html" class="tsd-signature-type">NetStatus</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">is<wbr>Online<span class="tsd-signature-symbol">(</span>engine<span class="tsd-signature-symbol">?: </span><a href="../interfaces/src_core_net_interface.netengine.html" class="tsd-signature-type">NetEngine</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_async_interface.cancelablepromise.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/src_core_net_interface.netstatus.html" class="tsd-signature-type">NetStatus</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -387,7 +387,7 @@ pre {
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> engine: <a href="../interfaces/src_core_net_interface.netengine.html" class="tsd-signature-type">NetEngine</a><span class="tsd-signature-symbol"> = netEngine</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/src_core_net_interface.netstatus.html" class="tsd-signature-type">NetStatus</a><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/src_core_async_interface.cancelablepromise.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/src_core_net_interface.netstatus.html" class="tsd-signature-type">NetStatus</a><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -395,7 +395,7 @@ pre {
 					<a name="syncstatuswithstorage" class="tsd-anchor"></a>
 					<h3>sync<wbr>Status<wbr>With<wbr>Storage</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-						<li class="tsd-signature tsd-kind-icon">sync<wbr>Status<wbr>With<wbr>Storage<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">sync<wbr>Status<wbr>With<wbr>Storage<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_async_interface.cancelablepromise.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -409,7 +409,7 @@ pre {
 									<p>Synchronizes the online status with a local storage</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns <a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/src_core_async_interface.cancelablepromise.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -417,7 +417,7 @@ pre {
 					<a name="updatestatus" class="tsd-anchor"></a>
 					<h3>update<wbr>Status</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-						<li class="tsd-signature tsd-kind-icon">update<wbr>Status<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">update<wbr>Status<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_async_interface.cancelablepromise.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -431,7 +431,7 @@ pre {
 									<p>Updates the online status</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns <a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/src_core_async_interface.cancelablepromise.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>

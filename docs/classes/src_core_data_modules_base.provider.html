@@ -606,7 +606,7 @@ pre {
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
 					<a name="connection" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> <span class="tsd-flag ts-flagOptional">Optional</span> connection</h3>
-					<div class="tsd-signature tsd-kind-icon">connection<span class="tsd-signature-symbol">:</span> <a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_socket_interface.html#socket" class="tsd-signature-type">Socket</a><span class="tsd-signature-symbol">&gt;</span></div>
+					<div class="tsd-signature tsd-kind-icon">connection<span class="tsd-signature-symbol">:</span> <a href="../interfaces/src_core_async_interface.cancelablepromise.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_socket_interface.html#socket" class="tsd-signature-type">Socket</a><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
 							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/base.ts#L79">src/core/data/modules/base.ts:79</a></li>
@@ -922,14 +922,14 @@ pre {
 
 <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Parent</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Provider</span> </span>{
   <span class="hljs-keyword">static</span> middlewares = {
-    attachGeoCoords() { ... }
+    <span class="hljs-function"><span class="hljs-title">attachGeoCoords</span>(<span class="hljs-params"></span>)</span> { ... }
   };
 }
 
 <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Children</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Parent</span> </span>{
   <span class="hljs-keyword">static</span> middlewares = {
     ...Parent.middlewares,
-    addSession() {
+    <span class="hljs-function"><span class="hljs-title">addSession</span>(<span class="hljs-params"></span>)</span> {
       ...
     }
   };
@@ -1181,7 +1181,7 @@ class MyProvider extends Provider {
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
-									<h4>D</h4>
+									<h4>D = <span class="tsd-signature-type">unknown</span></h4>
 								</li>
 							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1246,7 +1246,7 @@ class MyProvider extends Provider {
 					<a name="connect" class="tsd-anchor"></a>
 					<h3>connect</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">connect<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/index_d.dictionary.html" class="tsd-signature-type">Dictionary</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_socket_interface.html#socket" class="tsd-signature-type">Socket</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">connect<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/index_d.dictionary.html" class="tsd-signature-type">Dictionary</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_async_interface.cancelablepromise.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_socket_interface.html#socket" class="tsd-signature-type">Socket</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -1266,7 +1266,7 @@ class MyProvider extends Provider {
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/index_d.dictionary.html" class="tsd-signature-type">Dictionary</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_socket_interface.html#socket" class="tsd-signature-type">Socket</a><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/src_core_async_interface.cancelablepromise.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_socket_interface.html#socket" class="tsd-signature-type">Socket</a><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -1298,7 +1298,7 @@ class MyProvider extends Provider {
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
-									<h4>D</h4>
+									<h4>D = <span class="tsd-signature-type">unknown</span></h4>
 								</li>
 							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1360,7 +1360,7 @@ class MyProvider extends Provider {
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
-									<h4>D</h4>
+									<h4>D = <span class="tsd-signature-type">unknown</span></h4>
 								</li>
 							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1380,7 +1380,7 @@ class MyProvider extends Provider {
 					<a name="getauthparams" class="tsd-anchor"></a>
 					<h3>get<wbr>Auth<wbr>Params</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Auth<wbr>Params<span class="tsd-signature-symbol">(</span>params<span class="tsd-signature-symbol">?: </span><a href="../interfaces/index_d.dictionary.html" class="tsd-signature-type">Dictionary</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.dictionary.html" class="tsd-signature-type">Dictionary</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Auth<wbr>Params<span class="tsd-signature-symbol">(</span>params<span class="tsd-signature-symbol">?: </span><a href="../interfaces/index_d.dictionary.html" class="tsd-signature-type">Dictionary</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_async_interface.cancelablepromise.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.dictionary.html" class="tsd-signature-type">Dictionary</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -1403,7 +1403,7 @@ class MyProvider extends Provider {
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.dictionary.html" class="tsd-signature-type">Dictionary</a><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/src_core_async_interface.cancelablepromise.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/index_d.dictionary.html" class="tsd-signature-type">Dictionary</a><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -1493,7 +1493,7 @@ class MyProvider extends Provider {
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
-									<h4>D</h4>
+									<h4>D = <span class="tsd-signature-type">unknown</span></h4>
 								</li>
 							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1516,7 +1516,7 @@ class MyProvider extends Provider {
 					<a name="initsocketbehaviour" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> init<wbr>Socket<wbr>Behaviour</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-protected">
-						<li class="tsd-signature tsd-kind-icon">init<wbr>Socket<wbr>Behaviour<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">init<wbr>Socket<wbr>Behaviour<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_async_interface.cancelablepromise.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -1530,7 +1530,7 @@ class MyProvider extends Provider {
 									<p>Initializes the socket behaviour after successful connecting</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns <a href="../interfaces/index_d.maybe.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/src_core_async_interface.cancelablepromise.html#promise" class="tsd-signature-type">Promise</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -1649,7 +1649,7 @@ class MyProvider extends Provider {
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
-									<h4>D</h4>
+									<h4>D = <span class="tsd-signature-type">unknown</span></h4>
 								</li>
 							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1688,7 +1688,7 @@ class MyProvider extends Provider {
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
-									<h4>D</h4>
+									<h4>D = <span class="tsd-signature-type">unknown</span></h4>
 								</li>
 							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1764,7 +1764,7 @@ class MyProvider extends Provider {
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
-									<h4>T</h4>
+									<h4>T = <span class="tsd-signature-type">unknown</span></h4>
 								</li>
 							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1845,7 +1845,7 @@ class MyProvider extends Provider {
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
-									<h4>D</h4>
+									<h4>D = <span class="tsd-signature-type">unknown</span></h4>
 								</li>
 							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1883,7 +1883,7 @@ class MyProvider extends Provider {
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
-									<h4>D</h4>
+									<h4>D = <span class="tsd-signature-type">unknown</span></h4>
 								</li>
 							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1917,7 +1917,7 @@ class MyProvider extends Provider {
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
-									<h4>D</h4>
+									<h4>D = <span class="tsd-signature-type">unknown</span></h4>
 								</li>
 							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2018,7 +2018,7 @@ MyProvider.select([{<span class="hljs-attr">test</span>: <span class="hljs-numbe
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
-									<h4>T</h4>
+									<h4>T = <span class="tsd-signature-type">unknown</span></h4>
 								</li>
 							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>

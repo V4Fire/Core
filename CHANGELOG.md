@@ -11,6 +11,24 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.27.6 (2020-11-01)
+
+#### :boom: Breaking Change
+
+* Renamed `MockResponseType` -> `MockResponseValue` `core/data`
+
+#### :house: Internal
+
+* Updated dependencies:
+  `tslib@2.0.3`
+  `got@11.8.0`
+  `del@6.0.0`
+  `upath@2.0.0`
+  `find-up@5.0.0`
+  `typedoc@0.19.2`
+  `jasmine@3.6.3`
+  `@types/jasmine@3.6.0`
+
 ## v3.27.5 (2020-09-29)
 
 #### :bug: Bug Fix

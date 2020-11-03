@@ -298,7 +298,7 @@ kv.clear();
   <span class="hljs-built_in">console</span>.log(kv.get(<span class="hljs-string">&#x27;bla&#x27;</span>) === <span class="hljs-number">1</span>);
   <span class="hljs-built_in">console</span>.log(kv.has(<span class="hljs-string">&#x27;bla&#x27;</span>) === <span class="hljs-literal">true</span>);
 
-  kv.set(<span class="hljs-string">&#x27;obj&#x27;</span>, {a: <span class="hljs-number">1</span>});
+  kv.set(<span class="hljs-string">&#x27;obj&#x27;</span>, {<span class="hljs-attr">a</span>: <span class="hljs-number">1</span>});
   <span class="hljs-built_in">console</span>.log(kv.get(<span class="hljs-string">&#x27;obj&#x27;</span>).a === <span class="hljs-number">1</span>);
 
   kv.remove(<span class="hljs-string">&#x27;bla&#x27;</span>);
@@ -354,8 +354,8 @@ blaStore.set(<span class="hljs-string">&#x27;bla&#x27;</span>, <span class="hljs
 						<pre><code class="language-typescript"><span class="hljs-keyword">interface</span> StorageEngine {
   get?(key: unknown): unknown;
   getItem?(key: unknown): unknown;
-  set?(key: unknown, value: unknown): unknown;
-  setItem?(key: unknown, value: unknown): unknown;
+  set?(key: unknown, <span class="hljs-attr">value</span>: unknown): unknown;
+  setItem?(key: unknown, <span class="hljs-attr">value</span>: unknown): unknown;
   remove?(key: unknown): unknown;
   removeItem?(key: unknown): unknown;
   <span class="hljs-keyword">delete</span>?(key: unknown): unknown;
