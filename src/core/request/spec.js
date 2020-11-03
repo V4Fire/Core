@@ -29,7 +29,7 @@ describe('core/request', () => {
 	it('blob get', async () => {
 		const req = await request('https://google.com/favicon.ico');
 		expect(req.data.type).toBe('image/x-icon');
-		expect(req.data.size).toBe(12693);
+		expect(req.data.size).toBe(5430);
 	});
 
 	it('json get', async () => {
