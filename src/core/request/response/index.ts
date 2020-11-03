@@ -265,17 +265,11 @@ export default class Response<
 		}
 		//#endunless
 
-		//#if node_js
-		if (body instanceof Buffer) {
-			throw new TypeError('Invalid data type');
-		}
-		//#endif
-
 		if (body == null || body === '') {
 			return Then.resolve<_>(null, this.parent);
 		}
 
-		if (Object.isString(body) || body instanceof ArrayBuffer) {
+		if (Object.isString(body) || body instanceof ArrayBuffer || body instanceof Uint8Array) {
 			return Then.resolve(
 				this.text().then<_>((text) => {
 					if (text == null || text === '') {
