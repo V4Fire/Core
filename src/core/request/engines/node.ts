@@ -68,6 +68,7 @@ const request: RequestEngine = (params) => {
 				break;
 
 			case 'arrayBuffer':
+			case 'blob':
 				v = 'buffer';
 				break;
 
