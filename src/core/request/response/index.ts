@@ -271,16 +271,21 @@ export default class Response<
 		}
 		//#endif
 
-		if (body instanceof ArrayBuffer) {
-			throw new TypeError('Invalid data type');
-		}
-
 		if (body == null || body === '') {
 			return Then.resolve<_>(null, this.parent);
 		}
 
-		if (Object.isString(body)) {
-			return Then.resolveAndCall(() => JSON.parse(body, this.jsonReviver), this.parent);
+		if (Object.isString(body) || body instanceof ArrayBuffer) {
+			return Then.resolve(
+				this.text().then<_>((text) => {
+					if (text == null || text === '') {
+						return null;
+					}
+
+					return JSON.parse(text, this.jsonReviver);
+				}),
+				this.parent
+			);
 		}
 
 		return Then.resolveAndCall<_>(
