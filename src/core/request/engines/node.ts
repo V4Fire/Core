@@ -77,6 +77,9 @@ const request: RequestEngine = (params) => {
 		}
 
 		normalizedOpts.responseType = v;
+
+	} else {
+		normalizedOpts.responseType = 'buffer';
 	}
 
 	return new Then<Response>((resolve, reject, onAbort) => {

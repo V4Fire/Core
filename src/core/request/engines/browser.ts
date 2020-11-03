@@ -59,6 +59,9 @@ const request: RequestEngine = (params) => {
 		xhr.responseType = p.responseType === 'json' ?
 			'text' :
 			<XMLHttpRequestResponseType>p.responseType.toLowerCase();
+
+	} else {
+		xhr.responseType = 'arraybuffer';
 	}
 
 	if (p.credentials) {
