@@ -211,25 +211,43 @@ export default class Response<
 	 */
 	@once
 	document(): Then<Document | null> {
+		type _ = Document | null;
+
 		const
 			{body} = this;
 
 		//#if node_js
-		if (Object.isString(body)) {
+		if (IS_NODE) {
 			// eslint-disable-next-line @typescript-eslint/no-var-requires
 			const {JSDOM} = require('jsdom');
-			return Then.resolve<Document | null>(new JSDOM(body), this.parent)
-				.then((res) => Object.get(res, 'window.document'));
+
+			return Then.resolve(
+				this.text().then<any>(
+					(text) => new JSDOM(text)
+				).then<_>(
+					(res) => Object.get(res, 'window.document')
+				),
+				this.parent
+			);
 		}
 		//#endif
 
 		//#unless node_js
+		if (Object.isString(body) || body instanceof ArrayBuffer) {
+			return Then.resolve(
+				this.text().then<_>(
+					(text) => (new DOMParser()).parseFromString(text ?? '', 'text/html')
+				),
+				this.parent
+			);
+		}
+
 		if (!(body instanceof Document)) {
 			throw new TypeError('Invalid data type');
 		}
 		//#endunless
 
-		return Then.resolve<Document | null>(<any>body, this.parent);
+		return Then.resolve<_>(<any>body, this.parent);
 	}
 
 	/**
