@@ -6,15 +6,15 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+//#if node_js
+import fetch from 'node-fetch';
+import AbortController from 'abort-controller';
+//#endif
+
 import Then from 'core/then';
 import Response, { ResponseTypeValue } from 'core/request/response';
 import RequestError from 'core/request/error';
 import { RequestEngine } from 'core/request/interface';
-
-//#if node_js
-globalThis.fetch = require('node-fetch');
-require('abort-controller/polyfill');
-//#endif
 
 const request: RequestEngine = (params) => {
 	const
