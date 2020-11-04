@@ -6,7 +6,13 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+//#if node_js
+import XMLHttpRequest from 'xhr2';
+//#endif
+
+import { IS_NODE } from 'core/env';
 import Then from 'core/then';
+
 import Response from 'core/request/response';
 import RequestError from 'core/request/error';
 import { RequestEngine } from 'core/request/interface';
@@ -24,7 +30,7 @@ const request: RequestEngine = (params) => {
 		data,
 		{contentType} = p;
 
-	if (p.body instanceof FormData) {
+	if (!IS_NODE && p.body instanceof FormData) {
 		data = p.body;
 
 		if (contentType == null) {
@@ -55,13 +61,24 @@ const request: RequestEngine = (params) => {
 		xhr.timeout = p.timeout;
 	}
 
-	if (p.responseType != null) {
-		xhr.responseType = p.responseType === 'json' ?
-			'text' :
-			<XMLHttpRequestResponseType>p.responseType.toLowerCase();
+	switch (p.responseType) {
+		case 'json':
+		case 'text':
+			xhr.responseType = 'text';
+			break;
 
-	} else {
-		xhr.responseType = 'arraybuffer';
+		case 'document':
+			//#if node_js
+			xhr.responseType = 'text';
+			//#endif
+
+			//#unless node_js
+			xhr.responseType = 'document';
+			//#endunless
+			break;
+
+		default:
+			xhr.responseType = 'arraybuffer';
 	}
 
 	if (p.credentials) {

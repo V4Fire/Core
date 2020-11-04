@@ -13,10 +13,12 @@ import { defaultRequestOpts } from 'core/request/const';
 
 import fetchEngine from 'core/request/engines/fetch';
 import nodeEngine from 'core/request/engines/node';
+import xhrEngine from 'core/request/engines/browser';
 
 const engines = {
 	node: nodeEngine,
-	fetch: fetchEngine
+	fetch: fetchEngine,
+	xhr: xhrEngine
 };
 
 describe('core/request', () => {
