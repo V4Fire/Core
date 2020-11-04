@@ -15,7 +15,7 @@ Changelog
 
 * Fixed resolving a promise after the catch
 
-```
+```js
 SyncPromise.resolve(1).catch(() => undefined).then((r) => console.log(r));
 ```
 

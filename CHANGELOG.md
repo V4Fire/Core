@@ -17,7 +17,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 * Fixed resolving a promise after the catch `core/promise/sync`
 
-```
+```js
 SyncPromise.resolve(1).catch(() => undefined).then((r) => console.log(r));
 ```
 
