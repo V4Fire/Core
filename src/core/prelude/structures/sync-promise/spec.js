@@ -22,6 +22,20 @@ describe('core/prelude/structures/sync-promise', () => {
 		expect(i).toBe(6);
 	});
 
+	it('resolved then after catch', () => {
+		let
+			i = 1;
+
+		new SyncPromise((resolve) => {
+			resolve();
+		})
+			.catch(() => undefined)
+			.then(() => i + 2)
+			.then((val) => i = val * 2);
+
+		expect(i).toBe(6);
+	});
+
 	it('rejected then', () => {
 		let
 			i = 1;

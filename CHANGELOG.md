@@ -11,6 +11,16 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.27.7 (2020-11-04)
+
+#### :bug: Bug Fix
+
+* Fixed resolving a promise after the catch `core/promise/sync`
+
+```
+SyncPromise.resolve(1).catch(() => undefined).then((r) => console.log(r));
+```
+
 ## v3.27.6 (2020-11-01)
 
 #### :boom: Breaking Change

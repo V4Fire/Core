@@ -283,13 +283,15 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 	catch(onReject?: RejectHandler): SyncPromise {
 		return new SyncPromise((resolve, reject) => {
 			const
+				resolveWrapper = (v) => this.call(resolve, [v], reject, resolve),
 				rejectWrapper = (v) => this.call(onReject ?? reject, [v], reject, resolve);
 
 			if (this.isPending) {
+				this.resolveHandlers.push(resolveWrapper);
 				this.rejectHandlers.push(rejectWrapper);
 
-			} else if (this.state === State.rejected) {
-				rejectWrapper(this.value);
+			} else {
+				(this.state === State.fulfilled ? resolveWrapper : rejectWrapper)(this.value);
 			}
 		});
 	}
