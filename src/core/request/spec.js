@@ -344,6 +344,28 @@ describe('core/request', () => {
 				expect(err.details.request.method).toBe('GET');
 				expect(err.details.response).toBeUndefined();
 			});
+
+			it('request with low timeout', async () => {
+				let err;
+
+				try {
+					await request('http://3878g.mocklab.io/delayed', {timeout: 500});
+
+				} catch (e) {
+					err = e;
+				}
+
+				expect(err).toBeInstanceOf(RequestError);
+				expect(err.type).toBe('timeout');
+				expect(err.message).toBe('API error, type: timeout');
+				expect(err.details.response).toBeUndefined();
+			});
+
+			it('request with high timeout', async () => {
+				const req = await request('http://3878g.mocklab.io/delayed', {timeout: 5000});
+
+				expect(req.response.ok).toBeTrue();
+			});
 		});
 	}
 });
