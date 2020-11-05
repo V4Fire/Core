@@ -11,6 +11,19 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.27.8 (2020-11-05)
+
+#### :bug: Bug Fix
+
+* Fixed a bug with the redundant saving of the state `core/prelude/function/curry`
+
+```js
+const a = (b, c) => b + c;
+const e = a.curry()
+console.log(e(4)(5)); // 9
+console.log(e(3)(4)); // Error
+```
+
 ## v3.27.7 (2020-11-04)
 
 #### :bug: Bug Fix

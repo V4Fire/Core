@@ -9,6 +9,29 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.27.8 (2020-11-05)
+
+#### :bug: Bug Fix
+
+* Fixed a bug with the redundant saving of the state `function/curry`
+
+```js
+const a = (b, c) => b + c;
+const e = a.curry()
+console.log(e(4)(5)); // 9
+console.log(e(3)(4)); // Error
+```
+
+## v3.27.7 (2020-11-04)
+
+#### :bug: Bug Fix
+
+* Fixed resolving a promise after the catch `structures/sync-promise`
+
+```js
+SyncPromise.resolve(1).catch(() => undefined).then((r) => console.log(r));
+```
+
 ## v3.27.5 (2020-09-29)
 
 #### :bug: Bug Fix
