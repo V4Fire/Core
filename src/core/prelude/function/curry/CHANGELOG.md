@@ -9,6 +9,19 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.27.8 (2020-11-05)
+
+#### :bug: Bug Fix
+
+* Fixed a bug with the redundant saving of the state
+
+```js
+const a = (b, c) => b + c;
+const e = a.curry()
+console.log(e(4)(5)); // 9
+console.log(e(3)(4)); // Error
+```
+
 ## v3.20.0 (2020-07-05)
 
 #### :rocket: New Feature

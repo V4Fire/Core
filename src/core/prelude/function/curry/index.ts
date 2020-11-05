@@ -18,61 +18,63 @@ extend(Function, '__', {
 
 /** @see [[Function.curry]] */
 extend(Function.prototype, 'curry', function curry(this: AnyFunction): AnyFunction {
-	let
-		{length} = this;
-
 	const
 		// eslint-disable-next-line @typescript-eslint/no-this-alias
 		fn = this;
 
-	const
-		filteredArgs = <unknown[]>[],
-		gaps = <number[]>[];
+	return createWrapper(this.length, [], []);
 
-	return wrapper;
+	function createWrapper(length: number, filteredArgs: unknown[], gaps: number[]): AnyFunction {
+		return wrapper;
 
-	function wrapper(this: unknown, ...args: unknown[]): unknown {
-		let
-			i = 0;
-
-		if (gaps.length > 0 && args.length > 0) {
+		function wrapper(this: unknown, ...args: unknown[]): unknown {
 			const
-				tmp = gaps.slice();
+				localFilteredArgs = filteredArgs.slice(),
+				localGaps = gaps.slice();
 
-			for (let j = args.length, d = 0; i < tmp.length; i++) {
-				if (j-- === 0) {
-					break;
+			let
+				i = 0;
+
+			if (localGaps.length > 0 && args.length > 0) {
+				const
+					tmp = localGaps.slice();
+
+				for (let j = args.length, d = 0; i < tmp.length; i++) {
+					if (j-- === 0) {
+						break;
+					}
+
+					const
+						el = args[i];
+
+					if (el !== __) {
+						localFilteredArgs[tmp[i]] = el;
+						localGaps.splice(i - d, 1);
+						d++;
+					}
 				}
+			}
 
+			for (; i < args.length; i++) {
 				const
 					el = args[i];
 
-				if (el !== __) {
-					filteredArgs[tmp[i]] = el;
-					gaps.splice(i - d, 1);
-					d++;
+				if (el === __) {
+					localGaps.push(i);
 				}
-			}
-		}
 
-		for (; i < args.length; i++) {
+				localFilteredArgs.push(el);
+			}
+
 			const
-				el = args[i];
+				newLength = length - args.length + localGaps.length;
 
-			if (el === __) {
-				gaps.push(i);
+			if (newLength <= 0 && localGaps.length === 0) {
+				return fn.apply(this, localFilteredArgs);
 			}
 
-			filteredArgs.push(el);
+			return createWrapper(newLength, localFilteredArgs, localGaps);
 		}
-
-		length -= args.length - gaps.length;
-
-		if (length <= 0 && gaps.length === 0) {
-			return fn.apply(this, filteredArgs);
-		}
-
-		return wrapper;
 	}
 });
 
