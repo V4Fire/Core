@@ -222,11 +222,10 @@ export default class Response<
 			const {JSDOM} = require('jsdom');
 
 			return Then.resolve(
-				this.text().then<any>(
-					(text) => new JSDOM(text)
-				).then<_>(
-					(res) => Object.get(res, 'window.document')
-				),
+				this.text()
+					.then<any>((text) => new JSDOM(text))
+					.then<_>((res) => Object.get(res, 'window.document')),
+
 				this.parent
 			);
 		}
@@ -235,9 +234,9 @@ export default class Response<
 		//#unless node_js
 		if (Object.isString(body) || body instanceof ArrayBuffer) {
 			return Then.resolve(
-				this.text().then<_>(
-					(text) => (new DOMParser()).parseFromString(text ?? '', 'text/html')
-				),
+				this.text()
+					.then<_>((text) => (new DOMParser()).parseFromString(text ?? '', 'text/html')),
+
 				this.parent
 			);
 		}
@@ -278,6 +277,7 @@ export default class Response<
 
 					return JSON.parse(text, this.jsonReviver);
 				}),
+
 				this.parent
 			);
 		}
@@ -341,11 +341,11 @@ export default class Response<
 		let
 			{Blob} = globalThis;
 
+		//#if node_js
 		if (IS_NODE) {
-			//#if node_js
 			Blob = require('node-blob');
-			//#endif
 		}
+		//#endif
 
 		return Then.resolve<_>(new Blob([<any>body], {type: this.getHeader('content-type')}), this.parent);
 	}
@@ -399,11 +399,11 @@ export default class Response<
 			}
 		}
 
+		//#if node_js
 		if (IS_NODE) {
-			//#if node_js
 			return Then.resolve<_>(Buffer.from(<any>body).toString(encoding));
-			//#endif
 		}
+		//#endif
 
 		if (typeof TextDecoder !== 'undefined') {
 			const decoder = new TextDecoder(encoding, {fatal: true});

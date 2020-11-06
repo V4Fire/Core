@@ -18,9 +18,6 @@ if (IS_NODE) {
 	transport = require('core/request/engines/node').default;
 	//#endif
 
-} else if (typeof AbortController !== 'undefined') {
-	transport = require('core/request/engines/fetch').default;
-
 } else {
 	transport = require('core/request/engines/browser').default;
 }

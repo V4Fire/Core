@@ -31,6 +31,7 @@ const request: RequestEngine = (params) => {
 		if (contentType == null) {
 			contentType = 'application/json;charset=UTF-8';
 		}
+
 	} else if (Object.isNumber(p.body) || Object.isBoolean(p.body)) {
 		body = String(p.body);
 

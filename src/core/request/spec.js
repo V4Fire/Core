@@ -379,7 +379,7 @@ describe('core/request', () => {
 				expect(err.details.response).toBeUndefined();
 			});
 
-			it('request with low timeout', async () => {
+			it('request with a low timeout', async () => {
 				let err;
 
 				try {
