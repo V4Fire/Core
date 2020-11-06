@@ -13,9 +13,9 @@ import { set, get } from 'core/env';
 import request, { globalOpts, RequestError } from 'core/request';
 import { defaultRequestOpts } from 'core/request/const';
 
-import fetchEngine from 'core/request/engines/fetch';
 import nodeEngine from 'core/request/engines/node';
-import xhrEngine from 'core/request/engines/browser';
+import fetchEngine from 'core/request/engines/fetch';
+import xhrEngine from 'core/request/engines/xhr';
 
 describe('core/request', () => {
 	const engines = new Map([
