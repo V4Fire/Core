@@ -11,6 +11,22 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.28.0 (2020-11-06)
+
+#### :rocket: New Feature
+
+* Added new engine based on Fetch API `core/request`
+* Added decoding text in `Response` into `Document` `core/request`
+* Added decoding `Buffer` (in Node.js) and `ArrayBuffer` in `Response` into json `core/request`
+* Supported response type `"blob"` in Node.js request engine `core/request`
+* Use `"arraybuffer"` (in `XmlHtpRequest` engine ) and `"buffer"` (in Node.js engine) as default `responseType` `core/request`
+* Use Fetch API by default in browser if `AbortController` is supported `core/request`
+
+#### :house: Internal
+* Run tests with all engines instead of only Node.js one `core/request`
+* Test aborting the request on timeout `core/request`
+* Improved stability of tests by using local server instead of remote mock service `core/request`
+
 ## v3.27.6 (2020-11-01)
 
 #### :boom: Breaking Change
