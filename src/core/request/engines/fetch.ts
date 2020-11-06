@@ -16,6 +16,10 @@ import Response, { ResponseTypeValue } from 'core/request/response';
 import RequestError from 'core/request/error';
 import { RequestEngine } from 'core/request/interface';
 
+/**
+ * Creates request by using the fetch API with the specified parameters and returns a promise
+ * @param params
+ */
 const request: RequestEngine = (params) => {
 	const
 		p = params,
@@ -128,6 +132,7 @@ const request: RequestEngine = (params) => {
 
 			reject(new RequestError(type, {error}));
 		});
+
 	}, p.parent);
 };
 
