@@ -17,13 +17,13 @@ import fetchEngine from 'core/request/engines/fetch';
 import nodeEngine from 'core/request/engines/node';
 import xhrEngine from 'core/request/engines/browser';
 
-const engines = {
-	node: nodeEngine,
-	fetch: fetchEngine,
-	xhr: xhrEngine
-};
-
 describe('core/request', () => {
+	const engines = new Map([
+		['node', nodeEngine],
+		['fetch', fetchEngine],
+		['xhr', xhrEngine]
+	]);
+
 	let
 		api,
 		logOptions,
@@ -50,8 +50,8 @@ describe('core/request', () => {
 		server.close(done);
 	});
 
-	for (const [name, engine] of Object.entries(engines)) {
-		describe(`with engine "${name}"`, () => {
+	engines.forEach((engine, name) => {
+		describe(`with the "${name}" engine`, () => {
 			beforeAll(() => {
 				defaultRequestOpts.engine = engine;
 			});
@@ -401,7 +401,7 @@ describe('core/request', () => {
 				expect(req.response.ok).toBeTrue();
 			});
 		});
-	}
+	});
 });
 
 function createServer() {
