@@ -88,7 +88,11 @@
   },
   "devDependencies": {
     "@v4fire/linters": "^1.6.1",
+    "abort-controller": "^3.0.0",
+    "express": "^4.17.1",
     "husky": "^4.3.0",
-    "nyc": "^15.1.0"
+    "node-fetch": "^2.6.1",
+    "nyc": "^15.1.0",
+    "xhr2": "^0.2.0"
   }
 }
