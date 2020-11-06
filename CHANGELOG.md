@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.28.1 (2020-11-06)
+
+#### :house: Internal
+
+* Updated dependencies: `typescript@4.1.1-rc`
+
 ## v3.28.0 (2020-11-06)
 
 #### :rocket: New Feature
