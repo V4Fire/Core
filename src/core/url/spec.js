@@ -91,6 +91,14 @@ describe('core/url/fromQueryString', () => {
 
 		expect(fromQueryString('json={"foo": 1}', {convert: false})).toEqual({json: '{"foo": 1}'});
 	});
+
+	it('prototype pollution', () => {
+		const
+			res = fromQueryString('__proto__[hack]=boom', {arraySyntax: true});
+
+		expect(res).toEqual({});
+		expect(res.__proto__).toEqual({});
+	});
 });
 
 describe('core/url/toQueryString', () => {

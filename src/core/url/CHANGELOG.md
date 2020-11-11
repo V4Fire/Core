@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.28.2 (2020-11-11)
+
+#### :bug: Bug Fix
+
+* Fixed a security issue with the prototype pollution
+
 ## v3.20.0 (2020-07-05)
 
 #### :house: Internal

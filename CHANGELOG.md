@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.28.2 (2020-11-11)
+
+#### :bug: Bug Fix
+
+* Fixed a security issue with the prototype pollution `core/url/convert`
+
 ## v3.28.1 (2020-11-06)
 
 #### :house: Internal

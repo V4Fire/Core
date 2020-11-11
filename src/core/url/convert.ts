@@ -53,7 +53,8 @@ export function toQueryString(data: unknown, optsOrEncode?: ToQueryStringOptions
 }
 
 const
-	arraySyntax = /\[([^\]]*)]/g,
+	isInvalidKey = /\b__proto__\b/,
+	arraySyntaxRgxp = /\[([^\]]*)]/g,
 	normalizeURLRgxp = /[^?]*\?/;
 
 /**
@@ -68,7 +69,7 @@ const
  * toQueryString('?a=1');
  * ```
  */
-export function fromQueryString(query: string, decode?: boolean): Dictionary<string | null>;
+export function fromQueryString(query: string, decode?: boolean): Dictionary;
 
 /**
  * Creates a dictionary from the specified querystring and returns it
@@ -82,7 +83,26 @@ export function fromQueryString(query: string, decode?: boolean): Dictionary<str
  * toQueryString('?a[]=1&a[]=2', {arraySyntax: true});
  * ```
  */
-export function fromQueryString(query: string, opts: FromQueryStringOptions): Dictionary<string | null>;
+export function fromQueryString(query: string, opts: FromQueryStringOptions): Dictionary;
+
+/**
+ * Creates a dictionary from the specified querystring and returns it.
+ * This overload doesn't convert key values from a string.
+ *
+ * @param query
+ * @param opts - additional options
+ *
+ * @example
+ * ```js
+ * // {a: '1'}
+ * toQueryString('?a=1', {convert: false});
+ * ```
+ */
+export function fromQueryString(
+	query: string,
+	opts: {convert: false} & FromQueryStringOptions
+): Dictionary<string | null>;
+
 export function fromQueryString(
 	query: string,
 	optsOrDecode?: FromQueryStringOptions | boolean
@@ -124,7 +144,7 @@ export function fromQueryString(
 				path = '',
 				nestedArray = false;
 
-			key = key.replace(arraySyntax, (str, prop, lastIndex) => {
+			key = key.replace(arraySyntaxRgxp, (str, prop, lastIndex) => {
 				if (path === '') {
 					path += key.slice(0, lastIndex);
 				}
@@ -155,6 +175,10 @@ export function fromQueryString(
 
 		if (oldVal !== undefined) {
 			normalizedVal = Array.concat([], oldVal, Object.isArray(normalizedVal) ? [normalizedVal] : normalizedVal);
+		}
+
+		if (isInvalidKey.test(key)) {
+			continue;
 		}
 
 		if (objOpts.separator != null) {
