@@ -15,11 +15,17 @@ export class BaseError extends Error {
 	 */
 	protected internalMessage?: string;
 
-	constructor(message?: string) {
+	/**
+	 * An error that causes the current error
+	 */
+	protected readonly cause?: Error;
+
+	constructor(message?: string, cause?: Error) {
 		super(message);
 
 		this.name = new.target.name;
 		this.internalMessage = message;
+		this.cause = cause;
 
 		Object.defineProperty(this, 'message', {
 			enumerable: false,
