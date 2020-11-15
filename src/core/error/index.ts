@@ -10,10 +10,29 @@
  * Base error class of v4fire
  */
 export class BaseError extends Error {
+	/**
+	 * Internal storage for message
+	 */
+	protected internalMessage?: string;
+
 	constructor(message?: string) {
 		super(message);
 
 		this.name = new.target.name;
+		this.internalMessage = message;
+
+		Object.defineProperty(this, 'message', {
+			enumerable: false,
+			configurable: true,
+
+			get(): string {
+				return this.format();
+			},
+
+			set(newValue: string): void {
+				this.internalMessage = newValue;
+			}
+		});
 
 		// Change prototype of 'this' only if it's corrupted
 		if (Object.getPrototypeOf(this) === Error.prototype) {
@@ -25,5 +44,13 @@ export class BaseError extends Error {
 				Error.captureStackTrace(this, new.target);
 			}
 		}
+	}
+
+	/**
+	 * Formats internal error's data to produce a message.
+	 * The method calls when accessing message property.
+	 */
+	protected format(): string {
+		return this.internalMessage ?? '';
 	}
 }
