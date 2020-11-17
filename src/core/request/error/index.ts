@@ -11,6 +11,7 @@
  * @packageDocumentation
  */
 
+import { BaseError } from 'core/error';
 import type { Details } from 'core/request/error/interface';
 
 export * from 'core/request/error/interface';
@@ -18,21 +19,11 @@ export * from 'core/request/error/interface';
 /**
  * Class to wrap a request error
  */
-export default class RequestError<D = undefined> implements Error {
-	/**
-	 * Error name
-	 */
-	readonly name: string = 'RequestError';
-
+export default class RequestError<D = undefined> extends BaseError {
 	/**
 	 * Error type
 	 */
 	readonly type: string;
-
-	/**
-	 * Error message
-	 */
-	readonly message: string;
 
 	/**
 	 * Error details
@@ -44,11 +35,17 @@ export default class RequestError<D = undefined> implements Error {
 	 * @param details - error details
 	 */
 	constructor(type: string, details?: Details<D>) {
+		super();
+
 		this.type = type;
-		this.message = `API error, type: ${type}`;
 
 		if (details) {
 			this.details = details;
 		}
+	}
+
+	/** @override */
+	protected format(): string {
+		return `Api error, type: ${this.type}`;
 	}
 }
