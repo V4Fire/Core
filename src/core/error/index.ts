@@ -11,14 +11,14 @@
  */
 export class BaseError extends Error {
 	/**
+	 * An error that causes the current error
+	 */
+	readonly cause?: Error;
+
+	/**
 	 * Internal storage for message
 	 */
 	protected internalMessage?: string;
-
-	/**
-	 * An error that causes the current error
-	 */
-	protected readonly cause?: Error;
 
 	constructor(message?: string, cause?: Error) {
 		super(message);
