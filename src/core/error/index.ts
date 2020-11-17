@@ -7,6 +7,11 @@
  */
 
 /**
+ * [[include:core/error/README.md]]
+ * @packageDocumentation
+ */
+
+/**
  * Base error class of v4fire
  */
 export class BaseError extends Error {
