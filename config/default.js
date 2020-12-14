@@ -109,11 +109,11 @@ module.exports = config.createConfig(
 		},
 
 		/**
-		 * Map with application URL-s
+		 * Map of application source directories and helpers
 		 */
 		src: {
 			/**
-			 * Initialized version of the include function
+			 * The initialized version of the include function
 			 */
 			include() {
 				return require('../build/include')(this.roots);
@@ -211,7 +211,7 @@ module.exports = config.createConfig(
 		},
 
 		/**
-		 * Resolved URL to the server API.
+		 * The resolved URL to server API.
 		 * Usually, it's used with a develop server.
 		 *
 		 * @returns {?string}
@@ -267,10 +267,12 @@ module.exports = config.createConfig(
 			 * @returns {string}
 			 */
 			host() {
-				return o('host-url', {
+				const url = o('host-url', {
 					env: true,
-					default: `http://localhost:${this.port}/`
+					default: 'http://localhost'
 				});
+
+				return `${url}:${this.port}/`;
 			},
 
 			/**
@@ -345,7 +347,7 @@ module.exports = config.createConfig(
 		},
 
 		/**
-		 * Returns the version of the used ECMAScript specification
+		 * Returns a version of the used ECMAScript specification
 		 *
 		 * @cli es
 		 * @env ES
