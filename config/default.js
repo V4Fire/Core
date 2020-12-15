@@ -42,6 +42,10 @@ module.exports = config.createConfig(
 
 		/**
 		 * Application name
+		 *
+		 * @cli app-name
+		 * @env APP_NAME
+		 *
 		 * @type {string}
 		 */
 		appName: o('app-name', {
@@ -54,7 +58,11 @@ module.exports = config.createConfig(
 		}),
 
 		/**
-		 * Default application locale to internalize
+		 * Default application locale
+		 *
+		 * @cli locale
+		 * @env LOCALE
+		 *
 		 * @type {string}
 		 */
 		locale: o('locale', {
@@ -68,9 +76,14 @@ module.exports = config.createConfig(
 
 		/**
 		 * Application environment (prod, stage, etc.)
+		 *
+		 * @cli environment
+		 * @cli e
+		 * @env ENVIRONMENT
+		 *
 		 * @type {string}
 		 */
-		environment: o('environment', {
+		environment: o('e', {
 			env: true,
 			short: 'e',
 			default: env.NODE_ENV,
@@ -128,7 +141,7 @@ module.exports = config.createConfig(
 			},
 
 			/**
-			 * Returns the relative path to the working directory
+			 * Returns a relative path to the working directory
 			 *
 			 * @param path - path or a property from "src"
 			 * @param args - extra path-s to join
@@ -211,7 +224,7 @@ module.exports = config.createConfig(
 		},
 
 		/**
-		 * The resolved URL to server API.
+		 * Returns the resolved URL to server API.
 		 * Usually, it's used with a develop server.
 		 *
 		 * @returns {?string}
@@ -228,6 +241,10 @@ module.exports = config.createConfig(
 		api: {
 			/**
 			 * True, if the application should use proxy to connect to a server
+			 *
+			 * @cli api-proxy
+			 * @env API_PROXY
+			 *
 			 * @type {boolean}
 			 */
 			proxy: o('api-proxy', {
@@ -238,6 +255,10 @@ module.exports = config.createConfig(
 
 			/**
 			 * Base server API URL
+			 *
+			 * @cli api-url
+			 * @env API_URL
+			 *
 			 * @type {string}
 			 */
 			url: o('api-url', {
@@ -247,6 +268,10 @@ module.exports = config.createConfig(
 
 			/**
 			 * Server port to launch
+			 *
+			 * @cli port
+			 * @env PORT
+			 *
 			 * @type {number}
 			 */
 			port: o('port', {
@@ -376,7 +401,7 @@ module.exports = config.createConfig(
 		},
 
 		/**
-		 * Returns parameters for a TypeScript transpiler
+		 * Returns parameters for TypeScript
 		 * @returns {!Object}
 		 */
 		typescript() {
