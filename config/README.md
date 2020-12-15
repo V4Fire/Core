@@ -1,6 +1,7 @@
 # config
 
-This folder contains config files to compile an application and run a server. File names are tied with a value of the `NODE_ENV` environment variable.
+This folder contains config files to compile an application and run a server.
+File names are tied with a value of the `NODE_ENV` environment variable.
 
 ## Inheritance
 
