@@ -13,6 +13,7 @@ Changelog
 
 #### :rocket: New Feature
 
+* Added support of `Map/WeakMap/Set/WeakSet/Array` `Object.select` and `Object.reject`
 * Added overloads for nullable values:
   * `Object.select`
   * `Object.reject`
@@ -21,10 +22,6 @@ Changelog
   * `Object.createEnumLike`
   * `Object.createMap`
   * `Object.fromArray`
-
-#### :bug: Bug Fix
-
-* Fixed bugs with `Object.select` and `Object.reject`
 
 ## v3.27.5 (2020-09-29)
 

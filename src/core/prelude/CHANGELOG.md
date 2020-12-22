@@ -13,14 +13,16 @@ Changelog
 
 #### :rocket: New Feature
 
-* Added overloads for nullable values:
-  * `Object.select`
-  * `Object.reject`
-  * `Object.createDict`
-  * `Object.convertEnumToDict`
-  * `Object.createEnumLike`
-  * `Object.createMap`
-  * `Object.fromArray`
+* `object/create`:
+  * Added support of `Map/WeakMap/Set/WeakSet/Array` `Object.select` and `Object.reject`
+  * Added overloads for nullable values:
+    * `Object.select`
+    * `Object.reject`
+    * `Object.createDict`
+    * `Object.convertEnumToDict`
+    * `Object.createEnumLike`
+    * `Object.createMap`
+    * `Object.fromArray`
 
 ## v3.27.8 (2020-11-05)
 

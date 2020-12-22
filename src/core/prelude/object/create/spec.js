@@ -62,79 +62,85 @@ describe('core/prelude/object/create', () => {
 		}
 	});
 
-	it('Object.select', () => {
-		{
-			const dict = Object.select({a: 1, b: 2}, 'a');
-			expect(dict).toEqual({a: 1});
-			expect(Object.getPrototypeOf(dict)).toBeNull();
-		}
+	describe('Object.select', () => {
+		it('supported conditions to filter', () => {
+			{
+				const dict = Object.select({a: 1, b: 2}, 'a');
+				expect(dict).toEqual({a: 1});
+			}
 
-		{
-			const dict = Object.select({a: 1, b: 2, c: 3}, ['a', 'b']);
-			expect(dict).toEqual({a: 1, b: 2});
-			expect(Object.getPrototypeOf(dict)).toBeNull();
-		}
+			{
+				const dict = Object.select({a: 1, b: 2, c: 3}, ['a', 'b']);
+				expect(dict).toEqual({a: 1, b: 2});
+			}
 
-		{
-			const dict = Object.select({a: 1, b: 2, c: 3}, ['a', 'b'].values());
-			expect(dict).toEqual({a: 1, b: 2});
-			expect(Object.getPrototypeOf(dict)).toBeNull();
-		}
+			{
+				const dict = Object.select({a: 1, b: 2, c: 3}, ['a', 'b'].values());
+				expect(dict).toEqual({a: 1, b: 2});
+			}
 
-		{
-			const dict = Object.select({a: 1, b: 2, c: 3}, /[ab]/);
-			expect(dict).toEqual({a: 1, b: 2});
-			expect(Object.getPrototypeOf(dict)).toBeNull();
-		}
+			{
+				const dict = Object.select({a: 1, b: 2, c: 3}, /[ab]/);
+				expect(dict).toEqual({a: 1, b: 2});
+			}
 
-		{
-			const dict = Object.select({a: 1, b: 2, c: 3}, {a: true, b: false});
-			expect(dict).toEqual({a: 1});
-			expect(Object.getPrototypeOf(dict)).toBeNull();
-		}
+			{
+				const dict = Object.select({a: 1, b: 2, c: 3}, {a: true, b: false});
+				expect(dict).toEqual({a: 1});
+			}
 
-		{
-			const dict = Object.select({a: 1, b: 2, c: 3}, (key) => /[ab]/.test(key));
-			expect(dict).toEqual({a: 1, b: 2});
-			expect(Object.getPrototypeOf(dict)).toBeNull();
-		}
+			{
+				const dict = Object.select({a: 1, b: 2, c: 3}, (key) => /[ab]/.test(key));
+				expect(dict).toEqual({a: 1, b: 2});
+			}
+		});
+
+		it('supported values to filter', () => {
+			expect(Object.select({a: 1, b: 2}, 'a')).toEqual({a: 1});
+			expect(Object.select(new Set(['a', 'b']), 'a')).toEqual(new Set(['a']));
+			expect(Object.select(new Map([['a', 1], ['b', 2]]), 'a')).toEqual(new Map([['a', 1]]));
+			expect(Object.select(['a', 'b', 'c'], [0, 2])).toEqual(['a', 'c']);
+		});
 	});
 
-	it('Object.reject', () => {
-		{
-			const dict = Object.reject({a: 1, b: 2}, 'a');
-			expect(dict).toEqual({b: 2});
-			expect(Object.getPrototypeOf(dict)).toBeNull();
-		}
+	describe('Object.reject', () => {
+		it('supported conditions to filter', () => {
+			{
+				const dict = Object.reject({a: 1, b: 2}, 'a');
+				expect(dict).toEqual({b: 2});
+			}
 
-		{
-			const dict = Object.reject({a: 1, b: 2, c: 3}, ['a', 'b']);
-			expect(dict).toEqual({c: 3});
-			expect(Object.getPrototypeOf(dict)).toBeNull();
-		}
+			{
+				const dict = Object.reject({a: 1, b: 2, c: 3}, ['a', 'b']);
+				expect(dict).toEqual({c: 3});
+			}
 
-		{
-			const dict = Object.reject({a: 1, b: 2, c: 3}, ['a', 'b'].values());
-			expect(dict).toEqual({c: 3});
-			expect(Object.getPrototypeOf(dict)).toBeNull();
-		}
+			{
+				const dict = Object.reject({a: 1, b: 2, c: 3}, ['a', 'b'].values());
+				expect(dict).toEqual({c: 3});
+			}
 
-		{
-			const dict = Object.reject({a: 1, b: 2, c: 3}, /[ab]/);
-			expect(dict).toEqual({c: 3});
-			expect(Object.getPrototypeOf(dict)).toBeNull();
-		}
+			{
+				const dict = Object.reject({a: 1, b: 2, c: 3}, /[ab]/);
+				expect(dict).toEqual({c: 3});
+			}
 
-		{
-			const dict = Object.reject({a: 1, b: 2, c: 3}, {a: true, b: true});
-			expect(dict).toEqual({c: 3});
-			expect(Object.getPrototypeOf(dict)).toBeNull();
-		}
+			{
+				const dict = Object.reject({a: 1, b: 2, c: 3}, {a: true, b: true});
+				expect(dict).toEqual({c: 3});
+			}
 
-		{
-			const dict = Object.reject({a: 1, b: 2, c: 3}, (key) => /[ab]/.test(key));
-			expect(dict).toEqual({c: 3});
-			expect(Object.getPrototypeOf(dict)).toBeNull();
-		}
+			{
+				const dict = Object.reject({a: 1, b: 2, c: 3}, (key) => /[ab]/.test(key));
+				expect(dict).toEqual({c: 3});
+			}
+		});
+
+		it('supported values to filter', () => {
+			expect(Object.reject({a: 1, b: 2}, 'a')).toEqual({b: 2});
+			expect(Object.reject(new Set(['a', 'b']), 'a')).toEqual(new Set(['b']));
+			expect(Object.reject(new Map([['a', 1], ['b', 2]]), 'a')).toEqual(new Map([['b', 2]]));
+			expect(Object.reject(['a', 'b', 'c'], [0, 2])).toEqual(['b']);
+		});
 	});
 });

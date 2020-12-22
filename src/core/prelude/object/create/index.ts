@@ -159,9 +159,16 @@ export function selectReject(select: boolean): AnyFunction {
 			if (Object.isPrimitive(condition)) {
 				filter.add(condition);
 
-			} else {
+			} else if (Object.isIterable(condition)) {
 				Object.forEach(condition, (el) => {
 					filter.add(el);
+				});
+
+			} else {
+				Object.forEach(condition, (el, key) => {
+					if (Object.isTruly(el)) {
+						filter.add(key);
+					}
 				});
 			}
 		}
@@ -181,7 +188,15 @@ export function selectReject(select: boolean): AnyFunction {
 			}
 
 			if (select ? test : !test) {
-				Object.set(res, [key], el);
+				if (Object.isArray(res)) {
+					res.push(el);
+
+				} else if (Object.isSet(res) || Object.isWeakSet(res)) {
+					res.add(<any>key);
+
+				} else {
+					Object.set(res, [key], el);
+				}
 			}
 		});
 
