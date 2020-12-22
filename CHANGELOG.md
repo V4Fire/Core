@@ -24,6 +24,10 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
   * `Object.createMap`
   * `Object.fromArray`
 
+#### :bug: Bug Fix
+
+* Fixed bugs with `Object.select` and `Object.reject`
+
 #### :house: Internal
 
 * Fixed TS errors `core/log`

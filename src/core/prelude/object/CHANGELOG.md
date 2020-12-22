@@ -22,6 +22,10 @@ Changelog
   * `Object.createMap`
   * `Object.fromArray`
 
+#### :bug: Bug Fix
+
+* Fixed bugs with `Object.select` and `Object.reject`
+
 ## v3.27.5 (2020-09-29)
 
 #### :bug: Bug Fix

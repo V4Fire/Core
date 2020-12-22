@@ -138,33 +138,30 @@ extend(Object, 'reject', selectReject(false));
 export function selectReject(select: boolean): AnyFunction {
 	return function wrapper(
 		obj: Nullable<object>,
-		condition: CanArray<string> | Dictionary | RegExp | Function
+		condition: Iterable<unknown> | Dictionary | RegExp | Function
 	): unknown {
-		if (obj == null) {
-			return Object.createDict();
-		}
-
 		if (arguments.length === 1) {
-			condition = Object.isDictionary(obj) ? obj : {};
+			condition = <any>obj;
 			return (obj) => wrapper(obj, condition);
 		}
 
 		const
-			filter = Object.isPlainObject(condition) ? condition : Object.createDict(),
-			res = getSameAs(obj) ?? {};
+			res = getSameAs(obj);
+
+		if (res == null) {
+			return res;
+		}
+
+		const
+			filter = new Set();
 
 		if (!Object.isRegExp(condition) && !Object.isFunction(condition)) {
-			if (Object.isString(condition)) {
-				filter[condition] = true;
+			if (Object.isPrimitive(condition)) {
+				filter.add(condition);
 
-			} else if (Object.isArray(condition)) {
-				for (let i = 0; i < condition.length; i++) {
-					filter[String(condition[i])] = true;
-				}
-
-			} else if (Object.isIterable(condition)) {
-				Object.forEach(condition, (key) => {
-					filter[String(key)] = true;
+			} else {
+				Object.forEach(condition, (el) => {
+					filter.add(el);
 				});
 			}
 		}
@@ -180,7 +177,7 @@ export function selectReject(select: boolean): AnyFunction {
 				test = condition.test(String(key));
 
 			} else {
-				test = Object.isTruly(Object.get(filter, [key]));
+				test = filter.has(key);
 			}
 
 			if (select ? test : !test) {
