@@ -17,7 +17,7 @@ export class ConsoleEngine implements LogEngine {
 	protected stringifiedStylesCache: Dictionary<string> = Object.createDict();
 
 	constructor(styles?: LogStylesConfig) {
-		if (styles) {
+		if (styles != null) {
 			this.stylesCache = createStyleCache(styles);
 		}
 	}
@@ -29,14 +29,14 @@ export class ConsoleEngine implements LogEngine {
 	log(event: LogEvent): void {
 		//#if runtime has core/log
 
-		if (!event.details && !event.error) {
+		if (event.details == null && event.error == null) {
 			console.log(`%c${event.context}`, this.getStringifiedStyle(event.level));
 
 		} else {
 			const
-				details = [...event.details];
+				details = event.details?.slice() ?? [];
 
-			if (event.error) {
+			if (event.error != null) {
 				details.push(event.error);
 			}
 

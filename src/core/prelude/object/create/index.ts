@@ -7,7 +7,9 @@
  */
 
 import extend from 'core/prelude/extend';
+
 import { deprecate } from 'core/functools';
+import { getSameAs } from 'core/prelude/object/helpers';
 
 /** @see [[ObjectConstructor.createDict]] */
 extend(Object, 'createDict', (...objects) => {
@@ -52,7 +54,7 @@ extend(Object, 'createEnumLike', createEnumLike);
 extend(Object, 'createMap', deprecate({renamedTo: 'createEnum'}, createEnumLike));
 
 /** @see [[ObjectConstructor.createEnumLike]] */
-export function createEnumLike(obj: any): Dictionary {
+export function createEnumLike(obj: Nullable<object>): Dictionary {
 	const
 		map = Object.createDict();
 
@@ -135,7 +137,7 @@ extend(Object, 'reject', selectReject(false));
  */
 export function selectReject(select: boolean): AnyFunction {
 	return function wrapper(
-		obj: any,
+		obj: Nullable<object>,
 		condition: CanArray<string> | Dictionary | RegExp | Function
 	): unknown {
 		if (obj == null) {
@@ -143,67 +145,48 @@ export function selectReject(select: boolean): AnyFunction {
 		}
 
 		if (arguments.length === 1) {
-			condition = obj;
+			condition = Object.isDictionary(obj) ? obj : {};
 			return (obj) => wrapper(obj, condition);
 		}
 
 		const
-			res = Object.createDict();
+			filter = Object.isPlainObject(condition) ? condition : Object.createDict(),
+			res = getSameAs(obj) ?? {};
 
-		if (Object.isFunction(condition)) {
-			for (let keys = Object.keys(obj), i = 0; i < keys.length; i++) {
-				const
-					key = keys[i],
-					test = Object.isTruly(condition(key, obj[key]));
+		if (!Object.isRegExp(condition) && !Object.isFunction(condition)) {
+			if (Object.isString(condition)) {
+				filter[condition] = true;
 
-				if (select ? test : !test) {
-					res[key] = obj[key];
+			} else if (Object.isArray(condition)) {
+				for (let i = 0; i < condition.length; i++) {
+					filter[String(condition[i])] = true;
 				}
-			}
 
-			return res;
+			} else if (Object.isIterable(condition)) {
+				Object.forEach(condition, (key) => {
+					filter[String(key)] = true;
+				});
+			}
 		}
 
-		if (Object.isRegExp(condition)) {
-			for (let keys = Object.keys(obj), i = 0; i < keys.length; i++) {
-				const
-					key = keys[i],
-					test = condition.test(key);
+		Object.forEach(obj, (el, key) => {
+			let
+				test: boolean;
 
-				if (select ? test : !test) {
-					res[key] = obj[key];
-				}
+			if (Object.isFunction(condition)) {
+				test = Object.isTruly((<Function>condition)(key, el));
+
+			} else if (Object.isRegExp(condition)) {
+				test = condition.test(String(key));
+
+			} else {
+				test = Object.isTruly(Object.get(filter, [key]));
 			}
-
-			return res;
-		}
-
-		const
-			map = Object.isPlainObject(condition) ? condition : Object.createDict();
-
-		if (Object.isString(condition)) {
-			map[condition] = true;
-
-		} else if (Object.isArray(condition)) {
-			for (let i = 0; i < condition.length; i++) {
-				map[String(condition[i])] = true;
-			}
-
-		} else if (Object.isIterable(condition)) {
-			Object.forEach(condition, (key) => {
-				map[String(key)] = true;
-			});
-		}
-
-		for (let keys = Object.keys(obj), i = 0; i < keys.length; i++) {
-			const
-				key = keys[i],
-				test = Object.isTruly(map[key]);
 
 			if (select ? test : !test) {
-				res[key] = obj[key];
+				Object.set(res, [key], el);
 			}
-		}
+		});
 
 		return res;
 	};

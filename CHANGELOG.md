@@ -24,6 +24,10 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
   * `Object.createMap`
   * `Object.fromArray`
 
+#### :house: Internal
+
+* Fixed TS errors `core/log`
+
 ## v3.28.2 (2020-11-11)
 
 #### :bug: Bug Fix
