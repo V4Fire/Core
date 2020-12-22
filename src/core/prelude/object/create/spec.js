@@ -96,6 +96,8 @@ describe('core/prelude/object/create', () => {
 		});
 
 		it('supported values to filter', () => {
+			expect(Object.select(null, [0, 2])).toEqual({});
+			expect(Object.select(undefined, [0, 2])).toEqual({});
 			expect(Object.select({a: 1, b: 2}, 'a')).toEqual({a: 1});
 			expect(Object.select(new Set(['a', 'b']), 'a')).toEqual(new Set(['a']));
 			expect(Object.select(new Map([['a', 1], ['b', 2]]), 'a')).toEqual(new Map([['a', 1]]));
@@ -137,6 +139,8 @@ describe('core/prelude/object/create', () => {
 		});
 
 		it('supported values to filter', () => {
+			expect(Object.reject(null, [0, 2])).toEqual({});
+			expect(Object.reject(undefined, [0, 2])).toEqual({});
 			expect(Object.reject({a: 1, b: 2}, 'a')).toEqual({b: 2});
 			expect(Object.reject(new Set(['a', 'b']), 'a')).toEqual(new Set(['b']));
 			expect(Object.reject(new Map([['a', 1], ['b', 2]]), 'a')).toEqual(new Map([['b', 2]]));

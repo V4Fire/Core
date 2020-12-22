@@ -149,7 +149,7 @@ export function selectReject(select: boolean): AnyFunction {
 			res = getSameAs(obj);
 
 		if (res == null) {
-			return res;
+			return {};
 		}
 
 		const
