@@ -1008,7 +1008,7 @@ interface ObjectConstructor {
 	 * Object.createDict({a: 1}, {b: 2}) // {a: 1, b: 2, __proto__: null}
 	 * ```
 	 */
-	createDict<D extends object>(...objects: D[]): Pick<D, keyof D>;
+	createDict<D extends object>(...objects: Array<Nullable<D>>): Pick<D, keyof D>;
 
 	/**
 	 * Takes the enum-like object and converts it to a dictionary:
@@ -1016,7 +1016,7 @@ interface ObjectConstructor {
 	 *
 	 * @param obj
 	 */
-	convertEnumToDict<D extends object>(obj: D): {[K in keyof D]: K};
+	convertEnumToDict<D extends object>(obj: Nullable<D>): {[K in keyof D]: K};
 
 	/**
 	 * Creates an object which has the similar structure to the TS enum and returns it
@@ -1027,14 +1027,14 @@ interface ObjectConstructor {
 	 * Object.createEnumLike({a: 1}) // {a: 1, 1: 'a', __proto__: null}
 	 * ```
 	 */
-	createEnumLike<D extends object, K extends keyof D>(obj: D):
+	createEnumLike<D extends object, K extends keyof D>(obj: Nullable<D>):
 		D extends Array<infer E> ? Dictionary<E | number> : D & {[I: string]: K};
 
 	/**
 	 * @deprecated
 	 * @see ObjectConstructor.createEnumLike
 	 */
-	createMap<D extends object, K extends keyof D>(obj: D):
+	createMap<D extends object, K extends keyof D>(obj: Nullable<D>):
 		D extends Array<infer E> ? Dictionary<E | number> : D & {[I: string]: K};
 
 	/**
@@ -1052,13 +1052,13 @@ interface ObjectConstructor {
 	 * Object.fromArray(['foo', 'bar'], {value: (val, i) => i});
 	 * ```
 	 */
-	fromArray<T>(arr: unknown[], opts?: ObjectFromArrayOptions<T>): Dictionary<T>;
+	fromArray<T>(arr: Nullable<unknown[]>, opts?: ObjectFromArrayOptions<T>): Dictionary<T>;
 
 	/**
 	 * Returns a curried version of Object.select
 	 * @param condition - regular expression to filter
 	 */
-	select(condition: RegExp | ObjectPropertyFilter): <D extends object>(obj: D) => {[K in keyof D]?: D[K]};
+	select(condition: RegExp | ObjectPropertyFilter): <D extends object>(obj: Nullable<D>) => {[K in keyof D]?: D[K]};
 
 	/**
 	 * Returns a curried version of Object.select
@@ -1070,7 +1070,7 @@ interface ObjectConstructor {
 	 * Returns a curried version of Object.select
 	 * @param condition - whitelist of keys to filter
 	 */
-	select<C extends string>(condition: C | [C]): <D extends object>(obj: D) => Pick<D, Extract<keyof D, C>>;
+	select<C extends string>(condition: C | [C]): <D extends object>(obj: Nullable<D>) => Pick<D, Extract<keyof D, C>>;
 
 	/**
 	 * Returns a curried version of Object.select
@@ -1079,7 +1079,7 @@ interface ObjectConstructor {
 	select<
 		C1 extends string,
 		C2 extends string
-	>(condition: [C1, C2]): <D extends object>(obj: D) => Pick<D, Extract<keyof D, C1 | C2>>;
+	>(condition: [C1, C2]): <D extends object>(obj: Nullable<D>) => Pick<D, Extract<keyof D, C1 | C2>>;
 
 	/**
 	 * Returns a curried version of Object.select
@@ -1089,7 +1089,7 @@ interface ObjectConstructor {
 		C1 extends string,
 		C2 extends string,
 		C3 extends string,
-	>(condition: [C1, C2, C3]): <D extends object>(obj: D) => Pick<D, Extract<keyof D, C1 | C2 | C3>>;
+	>(condition: [C1, C2, C3]): <D extends object>(obj: Nullable<D>) => Pick<D, Extract<keyof D, C1 | C2 | C3>>;
 
 	/**
 	 * Returns a curried version of Object.select
@@ -1100,7 +1100,7 @@ interface ObjectConstructor {
 		C2 extends string,
 		C3 extends string,
 		C4 extends string
-	>(condition: [C1, C2, C3, C4]): <D extends object>(obj: D) => Pick<D, Extract<keyof D, C1 | C2 | C3 | C4>>;
+	>(condition: [C1, C2, C3, C4]): <D extends object>(obj: Nullable<D>) => Pick<D, Extract<keyof D, C1 | C2 | C3 | C4>>;
 
 	/**
 	 * Returns a curried version of Object.select
@@ -1112,19 +1112,20 @@ interface ObjectConstructor {
 		C3 extends string,
 		C4 extends string,
 		C5 extends string
-	>(condition: [C1, C2, C3, C4, C5]): <D extends object>(obj: D) => Pick<D, Extract<keyof D, C1 | C2 | C3 | C4 | C5>>;
+	>(condition: [C1, C2, C3, C4, C5]): <D extends object>(obj: Nullable<D>) =>
+		Pick<D, Extract<keyof D, C1 | C2 | C3 | C4 | C5>>;
 
 	/**
 	 * Returns a curried version of Object.select
 	 * @param condition - whitelist of keys to filter
 	 */
-	select<C extends string>(condition: Iterable<C>): <D extends object>(obj: D) => {[K in keyof D]?: D[K]};
+	select<C extends string>(condition: Iterable<C>): <D extends object>(obj: Nullable<D>) => {[K in keyof D]?: D[K]};
 
 	/**
 	 * Returns a curried version of Object.select
 	 * @param condition - map of keys to filter
 	 */
-	select<C extends object>(condition: C): <D extends object>(obj: D) => Pick<D, Extract<keyof D, keyof C>>;
+	select<C extends object>(condition: C): <D extends object>(obj: Nullable<D>) => Pick<D, Extract<keyof D, keyof C>>;
 
 	/**
 	 * Returns a new object based on the specified, but only with fields that match to the specified condition.
@@ -1133,7 +1134,7 @@ interface ObjectConstructor {
 	 * @param obj
 	 * @param condition - regular expression to filter
 	 */
-	select<D extends object>(obj: D, condition: RegExp | ObjectPropertyFilter): {[K in keyof D]?: D[K]};
+	select<D extends object>(obj: Nullable<D>, condition: RegExp | ObjectPropertyFilter): {[K in keyof D]?: D[K]};
 
 	/**
 	 * Returns a new object based on the specified, but only with fields that match to the specified condition.
@@ -1142,7 +1143,7 @@ interface ObjectConstructor {
 	 * @param obj
 	 * @param condition - whitelist of keys to filter
 	 */
-	select<D extends object>(obj: D, condition: []): D;
+	select<D extends object>(obj: Nullable<D>, condition: []): D;
 
 	/**
 	 * Returns a new object based on the specified, but only with fields that match to the specified condition.
@@ -1151,7 +1152,7 @@ interface ObjectConstructor {
 	 * @param obj
 	 * @param condition - whitelist of keys to filter
 	 */
-	select<D extends object, C extends string>(obj: D, condition: C | [C]): Pick<D, Extract<keyof D, C>>;
+	select<D extends object, C extends string>(obj: Nullable<D>, condition: C | [C]): Pick<D, Extract<keyof D, C>>;
 
 	/**
 	 * Returns a new object based on the specified, but only with fields that match to the specified condition.
@@ -1164,7 +1165,7 @@ interface ObjectConstructor {
 		D extends object,
 		C1 extends string,
 		C2 extends string
-	>(obj: D, condition: [C1, C2]): Pick<D, Extract<keyof D, C1 | C2>>;
+	>(obj: Nullable<D>, condition: [C1, C2]): Pick<D, Extract<keyof D, C1 | C2>>;
 
 	/**
 	 * Returns a new object based on the specified, but only with fields that match to the specified condition.
@@ -1178,7 +1179,7 @@ interface ObjectConstructor {
 		C1 extends string,
 		C2 extends string,
 		C3 extends string
-	>(obj: D, condition: [C1, C2, C3]): Pick<D, Extract<keyof D, C1 | C2 | C3>>;
+	>(obj: Nullable<D>, condition: [C1, C2, C3]): Pick<D, Extract<keyof D, C1 | C2 | C3>>;
 
 	/**
 	 * Returns a new object based on the specified, but only with fields that match to the specified condition.
@@ -1193,7 +1194,7 @@ interface ObjectConstructor {
 		C2 extends string,
 		C3 extends string,
 		C4 extends string
-	>(obj: D, condition: [C1, C2, C3, C4]): Pick<D, Extract<keyof D, C1 | C2 | C3 | C4>>;
+	>(obj: Nullable<D>, condition: [C1, C2, C3, C4]): Pick<D, Extract<keyof D, C1 | C2 | C3 | C4>>;
 
 	/**
 	 * Returns a new object based on the specified, but only with fields that match to the specified condition.
@@ -1209,7 +1210,7 @@ interface ObjectConstructor {
 		C3 extends string,
 		C4 extends string,
 		C5 extends string,
-	>(obj: D, condition: [C1, C2, C3, C4, C5]): Pick<D, Extract<keyof D, C1 | C2 | C3 | C4 | C5>>;
+	>(obj: Nullable<D>, condition: [C1, C2, C3, C4, C5]): Pick<D, Extract<keyof D, C1 | C2 | C3 | C4 | C5>>;
 
 	/**
 	 * Returns a new object based on the specified, but only with fields that match to the specified condition.
@@ -1218,7 +1219,7 @@ interface ObjectConstructor {
 	 * @param obj
 	 * @param condition - whitelist of keys to filter
 	 */
-	select<D extends object, C extends string>(obj: D, condition: Iterable<C>): {[K in keyof D]?: D[K]};
+	select<D extends object, C extends string>(obj: Nullable<D>, condition: Iterable<C>): {[K in keyof D]?: D[K]};
 
 	/**
 	 * Returns a new object based on the specified, but only with fields that match to the specified condition.
@@ -1227,25 +1228,25 @@ interface ObjectConstructor {
 	 * @param obj
 	 * @param condition - map of keys to filter
 	 */
-	select<D extends object, C extends object>(obj: D, condition: C): Pick<D, Extract<keyof D, keyof C>>;
+	select<D extends object, C extends object>(obj: Nullable<D>, condition: C): Pick<D, Extract<keyof D, keyof C>>;
 
 	/**
 	 * Returns a curried version of Object.reject
 	 * @param condition - regular expression to filter
 	 */
-	reject(condition: RegExp | ObjectPropertyFilter): <D extends object>(obj: D) => {[K in keyof D]?: D[K]};
+	reject(condition: RegExp | ObjectPropertyFilter): <D extends object>(obj: Nullable<D>) => {[K in keyof D]?: D[K]};
 
 	/**
 	 * Returns a curried version of Object.reject
 	 * @param condition - whitelist of keys to filter
 	 */
-	reject<C>(condition: []): <D extends object>(obj: D) => D;
+	reject<C>(condition: []): <D extends object>(obj: Nullable<D>) => D;
 
 	/**
 	 * Returns a curried version of Object.reject
 	 * @param condition - whitelist of keys to filter
 	 */
-	reject<C extends string>(condition: C | [C]): <D extends object>(obj: D) => Omit<D, C>;
+	reject<C extends string>(condition: C | [C]): <D extends object>(obj: Nullable<D>) => Omit<D, C>;
 
 	/**
 	 * Returns a curried version of Object.reject
@@ -1254,7 +1255,7 @@ interface ObjectConstructor {
 	reject<
 		C1 extends string,
 		C2 extends string
-	>(condition: [C1, C2]): <D extends object>(obj: D) => Omit<D, C1 | C2>;
+	>(condition: [C1, C2]): <D extends object>(obj: Nullable<D>) => Omit<D, C1 | C2>;
 
 	/**
 	 * Returns a curried version of Object.reject
@@ -1264,7 +1265,7 @@ interface ObjectConstructor {
 		C1 extends string,
 		C2 extends string,
 		C3 extends string
-	>(condition: [C1, C2, C3]): <D extends object>(obj: D) => Omit<D, C1 | C2 | C3>;
+	>(condition: [C1, C2, C3]): <D extends object>(obj: Nullable<D>) => Omit<D, C1 | C2 | C3>;
 
 	/**
 	 * Returns a curried version of Object.reject
@@ -1275,7 +1276,7 @@ interface ObjectConstructor {
 		C2 extends string,
 		C3 extends string,
 		C4 extends string
-	>(condition: [C1, C2, C3, C4]): <D extends object>(obj: D) => Omit<D, C1 | C2 | C3 | C4>;
+	>(condition: [C1, C2, C3, C4]): <D extends object>(obj: Nullable<D>) => Omit<D, C1 | C2 | C3 | C4>;
 
 	/**
 	 * Returns a curried version of Object.reject
@@ -1287,19 +1288,19 @@ interface ObjectConstructor {
 		C3 extends string,
 		C4 extends string,
 		C5 extends string
-	>(condition: [C1, C2, C3, C4, C5]): <D extends object>(obj: D) => Omit<D, C1 | C2 | C3 | C4 | C5>;
+	>(condition: [C1, C2, C3, C4, C5]): <D extends object>(obj: Nullable<D>) => Omit<D, C1 | C2 | C3 | C4 | C5>;
 
 	/**
 	 * Returns a curried version of Object.reject
 	 * @param condition - whitelist of keys to filter
 	 */
-	reject<C extends string>(condition: Iterable<C>): <D extends object>(obj: D) => {[K in keyof D]?: D[K]};
+	reject<C extends string>(condition: Iterable<C>): <D extends object>(obj: Nullable<D>) => {[K in keyof D]?: D[K]};
 
 	/**
 	 * Returns a curried version of Object.reject
 	 * @param condition - map of keys to filter
 	 */
-	reject<C extends object>(condition: C): <D extends object>(obj: D) => Omit<D, keyof C>;
+	reject<C extends object>(condition: C): <D extends object>(obj: Nullable<D>) => Omit<D, keyof C>;
 
 	/**
 	 * Returns a new object based on the specified, but without fields that match to the specified condition.
@@ -1308,7 +1309,7 @@ interface ObjectConstructor {
 	 * @param obj
 	 * @param condition - regular expression to filter
 	 */
-	reject<D extends object>(obj: D, condition: RegExp | ObjectPropertyFilter): {[K in keyof D]?: D[K]};
+	reject<D extends object>(obj: Nullable<D>, condition: RegExp | ObjectPropertyFilter): {[K in keyof D]?: D[K]};
 
 	/**
 	 * Returns a new object based on the specified, but without fields that match to the specified condition.
@@ -1317,7 +1318,7 @@ interface ObjectConstructor {
 	 * @param obj
 	 * @param condition - whitelist of keys to filter
 	 */
-	reject<D extends object>(obj: D, condition: []): D;
+	reject<D extends object>(obj: Nullable<D>, condition: []): D;
 
 	/**
 	 * Returns a new object based on the specified, but without fields that match to the specified condition.
@@ -1326,7 +1327,7 @@ interface ObjectConstructor {
 	 * @param obj
 	 * @param condition - whitelist of keys to filter
 	 */
-	reject<D extends object, C extends string>(obj: D, condition: C | [C]): Omit<D, C>;
+	reject<D extends object, C extends string>(obj: Nullable<D>, condition: C | [C]): Omit<D, C>;
 
 	/**
 	 * Returns a new object based on the specified, but without fields that match to the specified condition.
@@ -1339,7 +1340,7 @@ interface ObjectConstructor {
 		D extends object,
 		C1 extends string,
 		C2 extends string
-	>(obj: D, condition: [C1, C2]): Omit<D, C1 | C2>;
+	>(obj: Nullable<D>, condition: [C1, C2]): Omit<D, C1 | C2>;
 
 	/**
 	 * Returns a new object based on the specified, but without fields that match to the specified condition.
@@ -1353,7 +1354,7 @@ interface ObjectConstructor {
 		C1 extends string,
 		C2 extends string,
 		C3 extends string
-	>(obj: D, condition: [C1, C2, C3]): Omit<D, C1 | C2 | C3>;
+	>(obj: Nullable<D>, condition: [C1, C2, C3]): Omit<D, C1 | C2 | C3>;
 
 	/**
 	 * Returns a new object based on the specified, but without fields that match to the specified condition.
@@ -1368,7 +1369,7 @@ interface ObjectConstructor {
 		C2 extends string,
 		C3 extends string,
 		C4 extends string
-	>(obj: D, condition: [C1, C2, C3, C4]): Omit<D, C1 | C2 | C3 | C4>;
+	>(obj: Nullable<D>, condition: [C1, C2, C3, C4]): Omit<D, C1 | C2 | C3 | C4>;
 
 	/**
 	 * Returns a new object based on the specified, but without fields that match to the specified condition.
@@ -1384,7 +1385,7 @@ interface ObjectConstructor {
 		C3 extends string,
 		C4 extends string,
 		C5 extends string
-	>(obj: D, condition: [C1, C2, C3, C4, C5]): Omit<D, C1 | C2 | C3 | C4 | C5>;
+	>(obj: Nullable<D>, condition: [C1, C2, C3, C4, C5]): Omit<D, C1 | C2 | C3 | C4 | C5>;
 
 	/**
 	 * Returns a new object based on the specified, but without fields that match to the specified condition.
@@ -1393,7 +1394,7 @@ interface ObjectConstructor {
 	 * @param obj
 	 * @param condition - whitelist of keys to filter
 	 */
-	reject<D extends object, C extends string>(obj: D, condition: Iterable<C>): {[K in keyof D]?: D[K]};
+	reject<D extends object, C extends string>(obj: Nullable<D>, condition: Iterable<C>): {[K in keyof D]?: D[K]};
 
 	/**
 	 * Returns a new object based on the specified, but without fields that match to the specified condition.
@@ -1402,7 +1403,7 @@ interface ObjectConstructor {
 	 * @param obj
 	 * @param condition - map of keys to filter
 	 */
-	reject<D extends object, C extends object>(obj: D, condition: C): Omit<D, keyof C>;
+	reject<D extends object, C extends object>(obj: Nullable<D>, condition: C): Omit<D, keyof C>;
 
 	/**
 	 * Wraps the specified value into the Either structure.

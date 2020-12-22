@@ -11,6 +11,19 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.29.0 (2020-12-22)
+
+#### :rocket: New Feature
+
+* Added overloads for nullable values:
+  * `Object.select`
+  * `Object.reject`
+  * `Object.createDict`
+  * `Object.convertEnumToDict`
+  * `Object.createEnumLike`
+  * `Object.createMap`
+  * `Object.fromArray`
+
 ## v3.28.2 (2020-11-11)
 
 #### :bug: Bug Fix

@@ -9,6 +9,19 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.29.0 (2020-12-22)
+
+#### :rocket: New Feature
+
+* Added overloads for nullable values:
+  * `Object.select`
+  * `Object.reject`
+  * `Object.createDict`
+  * `Object.convertEnumToDict`
+  * `Object.createEnumLike`
+  * `Object.createMap`
+  * `Object.fromArray`
+
 ## v3.27.5 (2020-09-29)
 
 #### :bug: Bug Fix
