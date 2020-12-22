@@ -83,29 +83,31 @@ export function getType(value: unknown): string {
  * @param value
  */
 export function getSameAs<T>(value: T): Nullable<T> {
-	if (!Object.isTruly(value) || typeof value !== 'object') {
-		return null;
+	let
+		res: any = null;
+
+	if (value != null && typeof value === 'object') {
+		if (Object.isArray(value)) {
+			res = [];
+
+		} else if (Object.isDictionary(value)) {
+			if (Object.getPrototypeOf(value) == null) {
+				res = Object.create(null);
+
+			} else {
+				res = {};
+			}
+
+		} else if (Object.isMap(value)) {
+			res = new Map();
+
+		} else if (Object.isSet(value)) {
+			res = new Set();
+
+		} else if (Object.isCustomObject((<any>value).constructor)) {
+			res = {};
+		}
 	}
 
-	if (Object.isArray(value)) {
-		return <any>[];
-	}
-
-	if (Object.isPlainObject(value)) {
-		return <any>{};
-	}
-
-	if (Object.isMap(value)) {
-		return <any>new Map();
-	}
-
-	if (Object.isSet(value)) {
-		return <any>new Set();
-	}
-
-	if (Object.isCustomObject((<any>value).constructor)) {
-		return <any>{};
-	}
-
-	return null;
+	return res;
 }
