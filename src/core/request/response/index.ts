@@ -126,6 +126,7 @@ export default class Response<
 		this.responseType = contentType != null ? getDataType(contentType) : p.responseType;
 		this.sourceResponseType = this.responseType;
 
+		// tslint:disable-next-line:prefer-conditional-expression
 		if (p.decoder == null) {
 			this.decoders = [];
 
@@ -157,29 +158,35 @@ export default class Response<
 	@once
 	decode(): Then<D> {
 		let data;
-		switch (this.sourceResponseType) {
-			case 'json':
-				data = this.json();
-				break;
 
-			case 'arrayBuffer':
-				data = this.arrayBuffer();
-				break;
+		if (this.status === 204) {
+			data = Then.resolve(null, this.parent);
 
-			case 'blob':
-				data = this.blob();
-				break;
+		} else {
+			switch (this.sourceResponseType) {
+				case 'json':
+					data = this.json();
+					break;
 
-			case 'document':
-				data = this.document();
-				break;
+				case 'arrayBuffer':
+					data = this.arrayBuffer();
+					break;
 
-			case 'object':
-				data = Then.resolve(this.body, this.parent);
-				break;
+				case 'blob':
+					data = this.blob();
+					break;
 
-			default:
-				data = this.text();
+				case 'document':
+					data = this.document();
+					break;
+
+				case 'object':
+					data = Then.resolve(this.body, this.parent);
+					break;
+
+				default:
+					data = this.text();
+			}
 		}
 
 		let
