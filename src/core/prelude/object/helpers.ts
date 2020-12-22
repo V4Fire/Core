@@ -91,12 +91,7 @@ export function getSameAs<T>(value: T): Nullable<T> {
 			res = [];
 
 		} else if (Object.isDictionary(value)) {
-			if (Object.getPrototypeOf(value) == null) {
-				res = Object.create(null);
-
-			} else {
-				res = {};
-			}
+			res = {};
 
 		} else if (Object.isMap(value)) {
 			res = new Map();
