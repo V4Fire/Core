@@ -400,6 +400,11 @@ describe('core/request', () => {
 
 				expect(req.response.ok).toBeTrue();
 			});
+
+			it('response with 204 status', async () => {
+				const req = await request('http://localhost:3000/octet/204');
+				expect(req.data).toBe(null);
+			});
 		});
 	});
 });
@@ -471,6 +476,10 @@ function createServer() {
 
 		res.type('image/x-icon');
 		res.send(Buffer.from(faviconInBase64, 'base64'));
+	});
+
+	serverApp.get('/octet/204', (req, res) => {
+		res.type('application/octet-stream').status(204).end();
 	});
 
 	return serverApp.listen(3000);
