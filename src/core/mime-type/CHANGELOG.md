@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.29.1 (2020-12-23)
+
+#### :house: Internal
+
+* Added mapping `application/octet-stream` to `arrayBuffer`
+
 ## v3.20.0 (2020-07-05)
 
 #### :rocket: New Feature

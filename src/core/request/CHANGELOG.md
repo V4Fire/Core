@@ -9,12 +9,11 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
-## v3.x (2020-12-xx)
+## v3.29.1 (2020-12-23)
 
-#### :house: Internal
+#### :bug: Bug Fix
 
-* Added default mapping of content type `application/octet-stream` to response type `arrayBuffer`
-* Added response status checking whether it's 204 before decoding server response in `Response` class
+* Added response status checking whether it's 204 before decoding a server response `Response`
 
 ## v3.28.0 (2020-11-06)
 
