@@ -9,6 +9,13 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.x (2020-12-xx)
+
+#### :house: Internal
+
+* Added default mapping of content type `application/octet-stream` to response type `arrayBuffer`
+* Added response status checking whether it's 204 before decoding server response in `Response` class
+
 ## v3.28.0 (2020-11-06)
 
 #### :rocket: New Feature
