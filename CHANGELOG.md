@@ -11,6 +11,13 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.x (2020-12-xx)
+
+#### :house: Internal
+
+* Added default mapping of content type `application/octet-stream` to response type `arrayBuffer`
+* Added response status checking whether it's 204 before decoding server response in `Response` class
+
 ## v3.29.0 (2020-12-22)
 
 #### :rocket: New Feature
