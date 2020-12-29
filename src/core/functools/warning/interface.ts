@@ -18,6 +18,7 @@ export type WarnExprType =
 
 	'method' |
 	'property' |
+	'value' |
 	'accessor';
 
 export type WarnContext =

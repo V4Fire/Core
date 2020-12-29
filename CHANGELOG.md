@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.29.2 (2021-01-??)
+
+#### :rocket: Internal
+
+* Added `value` to the `WarnExprType` at `core/functools/warning`
+
 ## v3.29.1 (2020-12-23)
 
 #### :bug: Bug Fix
