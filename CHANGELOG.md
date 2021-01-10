@@ -22,6 +22,10 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 * Improved unicode support `core/prelude/string`
 * Fixed providing of empty strings as API URL-s `core/request`
 
+#### :house: Internal
+
+* Updated `typedoc@0.20.14`
+
 ## v3.29.1 (2020-12-23)
 
 #### :bug: Bug Fix
