@@ -9,6 +9,16 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.30.0 (2021-01-10)
+
+#### :rocket: New Feature
+
+* Added `letters` and `String.letters` `string`
+
+#### :bug: Bug Fix
+
+* Improved unicode support `string`
+
 ## v3.29.0 (2020-12-22)
 
 #### :rocket: New Feature

@@ -1,5 +1,3 @@
-/* eslint-disable max-lines, @typescript-eslint/unified-signatures */
-
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -7,6 +5,8 @@
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
+
+/* eslint-disable max-lines, @typescript-eslint/unified-signatures */
 
 /**
  * [[include:core/prelude/README.md]]
@@ -188,12 +188,14 @@ interface JSONCb {
 
 interface FastCloneOptions {
 	/**
-	 * JSON.stringify replacer
+	 * Replacer function for JSON.stringify
+	 * @see [[JSON.stringify]]
 	 */
 	replacer?: JSONCb;
 
 	/**
 	 * Reviver function for JSON.parse
+	 * @see [[JSON.parse]]
 	 */
 	reviver?: JSONCb;
 
@@ -1424,7 +1426,7 @@ interface ObjectConstructor {
 	 * ```
 	 */
 	Option<A1, A extends any[], R>(value: (a1: A1, ...rest: A) => R):
-		(a1: Maybe<Nullable<A1>> | Either<A1> | Nullable<A1>, ...rest) => Maybe<R>;
+		(a1: Maybe<Nullable<A1>> | Either<A1> | Nullable<A1>, ...rest: A) => Maybe<R>;
 
 	/**
 	 * Wraps the specified value into the Either structure.
@@ -1480,7 +1482,7 @@ interface ObjectConstructor {
 	 * ```
 	 */
 	Result<A1, A extends any[], R>(value: (a1: A1, ...a: A) => R):
-		(a1: Maybe<A1> | Either<A1>, ...rest) => Either<R>;
+		(a1: Maybe<A1> | Either<A1>, ...rest: A) => Either<R>;
 
 	/**
 	 * Wraps the specified value into the Either structure
@@ -1850,6 +1852,17 @@ interface StringUnderscoreOptions extends StringDasherizeOptions {
 
 interface StringConstructor {
 	/**
+	 * Returns an iterator over the string letters.
+	 * The method understands the composition of multiple Unicode symbols that produce one visual symbol.
+	 *
+	 * @example
+	 * ```
+	 * [...String.letters('12🇷🇺👩')] // ['1', '2', '🇷🇺', '👩']
+	 * ```
+	 */
+	letters(str: string): IterableIterator<string>;
+
+	/**
 	 * Returns a curried version of String.capitalize
 	 * @param opts - additional options
 	 */
@@ -1949,6 +1962,17 @@ interface StringConstructor {
 }
 
 interface String {
+	/**
+	 * Returns an iterator over the string letters.
+	 * The method understands the composition of multiple Unicode symbols that produce one visual symbol.
+	 *
+	 * @example
+	 * ```
+	 * [...'12🇷🇺👩'.letters()] // ['1', '2', '🇷🇺', '👩']
+	 * ```
+	 */
+	letters(): IterableIterator<string>;
+
 	/**
 	 * Capitalizes the first character of a string and returns it
 	 * @param [opts] - additional options

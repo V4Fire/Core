@@ -11,6 +11,16 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.30.0 (2021-01-10)
+
+#### :rocket: New Feature
+
+* Added `letters` and `String.letters` `core/prelude/string`
+
+#### :bug: Bug Fix
+
+* Improved unicode support `core/prelude/string`
+
 ## v3.29.1 (2020-12-23)
 
 #### :bug: Bug Fix

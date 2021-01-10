@@ -9,9 +9,38 @@
 import { capitalizeCache, camelizeCache, dasherizeCache, underscoreCache } from 'core/prelude/string/const';
 
 describe('core/prelude/string', () => {
+	it('letters', () => {
+		expect('1'.letters().next).toBeInstanceOf(Function);
+
+		expect([...'1😃à🇷🇺👩🏽‍❤️‍💋‍👨'.letters()]).toEqual([
+			'1',
+			'😃',
+			'à',
+			'🇷🇺',
+			'👩🏽‍❤️‍💋‍👨'
+		]);
+	});
+
+	it('static letters', () => {
+		expect(String.letters('1').next).toBeInstanceOf(Function);
+
+		expect([...String.letters('1😃à🇷🇺👩🏽‍❤️‍💋‍👨')]).toEqual([
+			'1',
+			'😃',
+			'à',
+			'🇷🇺',
+			'👩🏽‍❤️‍💋‍👨'
+		]);
+	});
+
 	it('capitalize', () => {
 		expect('hello world😃😡'.capitalize()).toBe('Hello world😃😡');
 		expect('HELLO WORLD😃😡'.capitalize()).toBe('HELLO WORLD😃😡');
+	});
+
+	it('capitalize (extended unicode)', () => {
+		expect('à hello world'.capitalize()).toBe('À hello world');
+		expect('😃 hello world'.capitalize()).toBe('😃 hello world');
 	});
 
 	it('capitalize with lowering', () => {
@@ -49,6 +78,11 @@ describe('core/prelude/string', () => {
 		expect('foo_bar_b-l aBaz😃😡'.camelize()).toBe('FooBarBLABaz😃😡');
 	});
 
+	it('camelize (extended unicode)', () => {
+		expect('Àhello_world'.camelize()).toBe('ÀhelloWorld');
+		expect('😃_hello_world'.camelize()).toBe('😃HelloWorld');
+	});
+
 	it('camelize without capitalizing', () => {
 		expect('foo_bar_b-l aBaz'.camelize(false)).toBe('fooBarBLABaz');
 		expect('foo_bar_b-l aBaz'.camelize({upper: false})).toBe('fooBarBLABaz');
@@ -76,6 +110,10 @@ describe('core/prelude/string', () => {
 		expect('foo_bar_b-l aBaz😃😡'.dasherize()).toBe('foo-bar-b-l-a-baz😃😡');
 		expect('FooBarBAZ'.dasherize()).toBe('foo-bar-baz');
 		expect('FOOBarBAZ'.dasherize()).toBe('foo-bar-baz');
+	});
+
+	it('dasherize (extended unicode)', () => {
+		expect('FooBarÀZ'.dasherize()).toBe('foo-bar-àz');
 	});
 
 	it('stable dasherize', () => {
@@ -106,6 +144,10 @@ describe('core/prelude/string', () => {
 		expect('foo_bar_b-l aBaz😃😡'.underscore()).toBe('foo_bar_b_l_a_baz😃😡');
 		expect('FooBarBAZ'.underscore()).toBe('foo_bar_baz');
 		expect('FOOBarBAZ'.underscore()).toBe('foo_bar_baz');
+	});
+
+	it('underscore (extended unicode)', () => {
+		expect('FooBarÀZ'.underscore()).toBe('foo_bar_àz');
 	});
 
 	it('stable underscore', () => {
