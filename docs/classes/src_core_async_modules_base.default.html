@@ -1,0 +1,1377 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>default | V4Fire</title>
+	<meta name="description" content="Documentation for V4Fire">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="../assets/css/main.css">
+	<script async src="../assets/js/search.js" id="search-script"></script>
+<style>/*!
+ * V4Fire Core
+ * https://github.com/V4Fire/Core
+ *
+ * Released under the MIT license
+ * https://github.com/V4Fire/Core/blob/master/LICENSE
+ */
+
+body {
+	font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+}
+
+code, pre, tt {
+	font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+}
+
+.tsd-typography h1,
+.tsd-typography h2,
+.tsd-typography h3,
+.tsd-typography h4,
+.tsd-typography h5,
+.tsd-typography h6 {
+	margin: 1em 0;
+	font-family: -apple-system, BlinkMacSystemFont, UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+}
+
+.tsd-panel {
+	padding: 20px 40px;
+	border: 1px solid #DDD;
+	border-radius: 10px;
+	box-shadow: none;
+}
+
+.tsd-page-title {
+	color: #EEE;
+
+	background: #232526; /* fallback for old browsers */
+	background: -webkit-linear-gradient(to right, #414345, #232526); /* Chrome 10-25, Safari 5.1-6 */
+	background: linear-gradient(to right, #414345, #232526); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+.tsd-page-toolbar {
+	height: 43px;
+}
+
+.title {
+	display: inline-flex;
+	align-items: center;
+}
+
+.title::before {
+	content: "";
+
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	margin-right: 10px;
+
+	border-radius: 5px;
+	background-image: url("https://avatars0.githubusercontent.com/u/29952525?s=200&v=4");
+	background-size: contain;
+}
+
+#tsd-search .tsd-widget.search.no-caption {
+	bottom: 0;
+}
+
+#tsd-search .field {
+	height: 100%;
+}
+
+pre {
+	background-color: rgba(7, 7, 7, 0.01);
+}
+
+/**
+ * GitHub Gist Theme
+ * Author : Anthony Attard - https://github.com/AnthonyAttard
+ * Author : Louis Barranqueiro - https://github.com/LouisBarranqueiro
+ */
+
+.hljs {
+	display: block;
+	background: white;
+	padding: 0.5em;
+	color: #333333;
+	overflow-x: auto;
+}
+
+.hljs-comment,
+.hljs-meta {
+	color: #969896;
+}
+
+.hljs-variable,
+.hljs-template-variable,
+.hljs-strong,
+.hljs-emphasis,
+.hljs-quote {
+	color: #df5000;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-type {
+	color: #d73a49;
+}
+
+.hljs-literal,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-attribute {
+	color: #0086b3;
+}
+
+.hljs-section,
+.hljs-name {
+	color: #63a35c;
+}
+
+.hljs-tag {
+	color: #333333;
+}
+
+.hljs-title,
+.hljs-attr,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-selector-attr,
+.hljs-selector-pseudo {
+	color: #6f42c1;
+}
+
+.hljs-addition {
+	color: #55a532;
+	background-color: #eaffea;
+}
+
+.hljs-deletion {
+	color: #bd2c00;
+	background-color: #ffecec;
+}
+
+.hljs-link {
+	text-decoration: underline;
+}
+
+.hljs-number {
+	color: #005cc5;
+}
+
+.hljs-string {
+	color: #032f62;
+}
+</style>
+</head>
+<body>
+<script>'use strict';
+
+/*!
+ * V4Fire Core
+ * https://github.com/V4Fire/Core
+ *
+ * Released under the MIT license
+ * https://github.com/V4Fire/Core/blob/master/LICENSE
+ */
+
+(function () {
+	if (localStorage.getItem('visibility') == null) {
+		localStorage.setItem('visibility', 'public');
+	}
+
+	document.title = document.title.replace(/['"]+|src\//g, '');
+	document.body.style.display = 'none';
+})();
+</script>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.json" data-base="..">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="../index.html" class="title">V4Fire</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="../modules.html">V4Fire</a>
+				</li>
+				<li>
+					<a href="../modules/src_core_async_modules_base.html">src/core/async/modules/base</a>
+				</li>
+				<li>
+					<a href="src_core_async_modules_base.default.html">default</a>
+				</li>
+			</ul>
+			<h1>Class default&lt;CTX&gt;</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-type-parameters">
+				<h3>Type parameters</h3>
+				<ul class="tsd-type-parameters">
+					<li>
+						<h4>CTX<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span> = <a href="src_core_async_modules_base.default.html" class="tsd-signature-type" data-tsd-kind="Class">default</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-hierarchy">
+				<h3>Hierarchy</h3>
+				<ul class="tsd-hierarchy">
+					<li>
+						<span class="target">default</span>
+						<ul class="tsd-hierarchy">
+							<li>
+								<a href="src_core_async_modules_proxy.default.html" class="tsd-signature-type" data-tsd-kind="Class">default</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel-group tsd-index-group">
+				<h2>Index</h2>
+				<section class="tsd-panel tsd-index-panel">
+					<div class="tsd-index-content">
+						<section class="tsd-index-section ">
+							<h3>Constructors</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-constructor tsd-parent-kind-class tsd-has-type-parameter"><a href="src_core_async_modules_base.default.html#constructor" class="tsd-kind-icon">constructor</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Properties</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="src_core_async_modules_base.default.html#cache" class="tsd-kind-icon">cache</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="src_core_async_modules_base.default.html#context" class="tsd-kind-icon">context</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="src_core_async_modules_base.default.html#ctx" class="tsd-kind-icon">ctx</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="src_core_async_modules_base.default.html#locked" class="tsd-kind-icon">locked</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="src_core_async_modules_base.default.html#workercache" class="tsd-kind-icon">worker<wbr>Cache</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><a href="src_core_async_modules_base.default.html#linknames" class="tsd-kind-icon">link<wbr>Names</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><a href="src_core_async_modules_base.default.html#namespaces" class="tsd-kind-icon">namespaces</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Accessors</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="src_core_async_modules_base.default.html#linknames-1" class="tsd-kind-icon">link<wbr>Names</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="src_core_async_modules_base.default.html#namespaces-1" class="tsd-kind-icon">namespaces</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Methods</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><a href="src_core_async_modules_base.default.html#canceltask" class="tsd-kind-icon">cancel<wbr>Task</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="src_core_async_modules_base.default.html#clearall" class="tsd-kind-icon">clear<wbr>All</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><a href="src_core_async_modules_base.default.html#clearasync" class="tsd-kind-icon">clear<wbr>Async</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><a href="src_core_async_modules_base.default.html#getcache" class="tsd-kind-icon">get<wbr>Cache</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><a href="src_core_async_modules_base.default.html#initcache" class="tsd-kind-icon">init<wbr>Cache</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><a href="src_core_async_modules_base.default.html#markalltasks" class="tsd-kind-icon">mark<wbr>All<wbr>Tasks</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><a href="src_core_async_modules_base.default.html#markasync" class="tsd-kind-icon">mark<wbr>Async</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><a href="src_core_async_modules_base.default.html#marktask" class="tsd-kind-icon">mark<wbr>Task</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="src_core_async_modules_base.default.html#muteall" class="tsd-kind-icon">mute<wbr>All</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-protected"><a href="src_core_async_modules_base.default.html#registertask" class="tsd-kind-icon">register<wbr>Task</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-protected"><a href="src_core_async_modules_base.default.html#setasync" class="tsd-kind-icon">set<wbr>Async</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="src_core_async_modules_base.default.html#suspendall" class="tsd-kind-icon">suspend<wbr>All</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="src_core_async_modules_base.default.html#unmuteall" class="tsd-kind-icon">unmute<wbr>All</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="src_core_async_modules_base.default.html#unsuspendall" class="tsd-kind-icon">unsuspend<wbr>All</a></li>
+							</ul>
+						</section>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Constructors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class tsd-has-type-parameter">
+					<a name="constructor" class="tsd-anchor"></a>
+					<h3>constructor</h3>
+					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-has-type-parameter">
+						<li class="tsd-signature tsd-kind-icon">new default&lt;CTX&gt;<span class="tsd-signature-symbol">(</span>ctx<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">CTX</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_async_modules_base.default.html" class="tsd-signature-type" data-tsd-kind="Class">default</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">CTX</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/modules/base/index.ts#L104">src/core/async/modules/base/index.ts:104</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-type-parameters-title">Type parameters</h4>
+							<ul class="tsd-type-parameters">
+								<li>
+									<h4>CTX<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span> = <a href="src_core_async_modules_base.default.html" class="tsd-signature-type" data-tsd-kind="Class">default</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
+								</li>
+							</ul>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> ctx: <span class="tsd-signature-type">CTX</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="src_core_async_modules_base.default.html" class="tsd-signature-type" data-tsd-kind="Class">default</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">CTX</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+					<a name="cache" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> cache</h3>
+					<div class="tsd-signature tsd-kind-icon">cache<span class="tsd-signature-symbol">:</span> <a href="../interfaces/index.dictionary.html" class="tsd-signature-type" data-tsd-kind="Interface">Dictionary</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/src_core_async_interface.globalcache.html" class="tsd-signature-type" data-tsd-kind="Interface">GlobalCache</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = ...</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/modules/base/index.ts#L65">src/core/async/modules/base/index.ts:65</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Cache for async operations</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+					<a name="context" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> context</h3>
+					<div class="tsd-signature tsd-kind-icon">context<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">CTX</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/modules/base/index.ts#L81">src/core/async/modules/base/index.ts:81</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<dl class="tsd-comment-tags">
+							<dt>deprecated</dt>
+							<dd></dd>
+							<dt>see</dt>
+							<dd><p>[[Async.ctx]]</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+					<a name="ctx" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> ctx</h3>
+					<div class="tsd-signature tsd-kind-icon">ctx<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">CTX</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/modules/base/index.ts#L75">src/core/async/modules/base/index.ts:75</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Context of applying for async handlers</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="locked" class="tsd-anchor"></a>
+					<h3>locked</h3>
+					<div class="tsd-signature tsd-kind-icon">locked<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = false</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/modules/base/index.ts#L60">src/core/async/modules/base/index.ts:60</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The lock status.
+							If true, then all new tasks won&#39;t be registered.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+					<a name="workercache" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> worker<wbr>Cache</h3>
+					<div class="tsd-signature tsd-kind-icon">worker<wbr>Cache<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">WeakMap</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = ...</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/modules/base/index.ts#L70">src/core/async/modules/base/index.ts:70</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Cache for initialized workers</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static">
+					<a name="linknames" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> link<wbr>Names</h3>
+					<div class="tsd-signature tsd-kind-icon">link<wbr>Names<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>eventListener<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;eventListener&quot;</span><span class="tsd-signature-symbol">; </span>eventListenerPromise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;eventListenerPromise&quot;</span><span class="tsd-signature-symbol">; </span>idleCallback<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;idleCallback&quot;</span><span class="tsd-signature-symbol">; </span>idleCallbackPromise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;idleCallbackPromise&quot;</span><span class="tsd-signature-symbol">; </span>immediate<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;immediate&quot;</span><span class="tsd-signature-symbol">; </span>immediatePromise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;immediatePromise&quot;</span><span class="tsd-signature-symbol">; </span>interval<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;interval&quot;</span><span class="tsd-signature-symbol">; </span>intervalPromise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;intervalPromise&quot;</span><span class="tsd-signature-symbol">; </span>promise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;promise&quot;</span><span class="tsd-signature-symbol">; </span>proxy<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;proxy&quot;</span><span class="tsd-signature-symbol">; </span>proxyPromise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;proxyPromise&quot;</span><span class="tsd-signature-symbol">; </span>request<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;request&quot;</span><span class="tsd-signature-symbol">; </span>timeout<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;timeout&quot;</span><span class="tsd-signature-symbol">; </span>timeoutPromise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;timeoutPromise&quot;</span><span class="tsd-signature-symbol">; </span>worker<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;worker&quot;</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> = ...</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/modules/base/index.ts#L54">src/core/async/modules/base/index.ts:54</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<dl class="tsd-comment-tags">
+							<dt>deprecated</dt>
+							<dd></dd>
+							<dt>see</dt>
+							<dd><p>Async.namespaces</p>
+							</dd>
+						</dl>
+					</div>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter">
+								<h5>event<wbr>Listener<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;eventListener&quot;</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5>event<wbr>Listener<wbr>Promise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;eventListenerPromise&quot;</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5>idle<wbr>Callback<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;idleCallback&quot;</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5>idle<wbr>Callback<wbr>Promise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;idleCallbackPromise&quot;</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5>immediate<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;immediate&quot;</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5>immediate<wbr>Promise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;immediatePromise&quot;</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5>interval<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;interval&quot;</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5>interval<wbr>Promise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;intervalPromise&quot;</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5>promise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;promise&quot;</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5>proxy<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;proxy&quot;</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5>proxy<wbr>Promise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;proxyPromise&quot;</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5>request<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;request&quot;</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5>timeout<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;timeout&quot;</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5>timeout<wbr>Promise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;timeoutPromise&quot;</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5>worker<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;worker&quot;</span></h5>
+							</li>
+						</ul>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static">
+					<a name="namespaces" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> namespaces</h3>
+					<div class="tsd-signature tsd-kind-icon">namespaces<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>eventListener<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;eventListener&quot;</span><span class="tsd-signature-symbol">; </span>eventListenerPromise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;eventListenerPromise&quot;</span><span class="tsd-signature-symbol">; </span>idleCallback<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;idleCallback&quot;</span><span class="tsd-signature-symbol">; </span>idleCallbackPromise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;idleCallbackPromise&quot;</span><span class="tsd-signature-symbol">; </span>immediate<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;immediate&quot;</span><span class="tsd-signature-symbol">; </span>immediatePromise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;immediatePromise&quot;</span><span class="tsd-signature-symbol">; </span>interval<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;interval&quot;</span><span class="tsd-signature-symbol">; </span>intervalPromise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;intervalPromise&quot;</span><span class="tsd-signature-symbol">; </span>promise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;promise&quot;</span><span class="tsd-signature-symbol">; </span>proxy<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;proxy&quot;</span><span class="tsd-signature-symbol">; </span>proxyPromise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;proxyPromise&quot;</span><span class="tsd-signature-symbol">; </span>request<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;request&quot;</span><span class="tsd-signature-symbol">; </span>timeout<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;timeout&quot;</span><span class="tsd-signature-symbol">; </span>timeoutPromise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;timeoutPromise&quot;</span><span class="tsd-signature-symbol">; </span>worker<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;worker&quot;</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> = ...</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/modules/base/index.ts#L48">src/core/async/modules/base/index.ts:48</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Map of namespaces for async operations</p>
+						</div>
+					</div>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter">
+								<h5>event<wbr>Listener<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;eventListener&quot;</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5>event<wbr>Listener<wbr>Promise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;eventListenerPromise&quot;</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5>idle<wbr>Callback<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;idleCallback&quot;</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5>idle<wbr>Callback<wbr>Promise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;idleCallbackPromise&quot;</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5>immediate<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;immediate&quot;</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5>immediate<wbr>Promise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;immediatePromise&quot;</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5>interval<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;interval&quot;</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5>interval<wbr>Promise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;intervalPromise&quot;</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5>promise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;promise&quot;</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5>proxy<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;proxy&quot;</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5>proxy<wbr>Promise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;proxyPromise&quot;</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5>request<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;request&quot;</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5>timeout<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;timeout&quot;</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5>timeout<wbr>Promise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;timeoutPromise&quot;</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5>worker<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;worker&quot;</span></h5>
+							</li>
+						</ul>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Accessors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
+					<a name="linknames-1" class="tsd-anchor"></a>
+					<h3>link<wbr>Names</h3>
+					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> linkNames<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>eventListener<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;eventListener&quot;</span><span class="tsd-signature-symbol">; </span>eventListenerPromise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;eventListenerPromise&quot;</span><span class="tsd-signature-symbol">; </span>idleCallback<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;idleCallback&quot;</span><span class="tsd-signature-symbol">; </span>idleCallbackPromise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;idleCallbackPromise&quot;</span><span class="tsd-signature-symbol">; </span>immediate<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;immediate&quot;</span><span class="tsd-signature-symbol">; </span>immediatePromise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;immediatePromise&quot;</span><span class="tsd-signature-symbol">; </span>interval<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;interval&quot;</span><span class="tsd-signature-symbol">; </span>intervalPromise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;intervalPromise&quot;</span><span class="tsd-signature-symbol">; </span>promise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;promise&quot;</span><span class="tsd-signature-symbol">; </span>proxy<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;proxy&quot;</span><span class="tsd-signature-symbol">; </span>proxyPromise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;proxyPromise&quot;</span><span class="tsd-signature-symbol">; </span>request<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;request&quot;</span><span class="tsd-signature-symbol">; </span>timeout<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;timeout&quot;</span><span class="tsd-signature-symbol">; </span>timeoutPromise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;timeoutPromise&quot;</span><span class="tsd-signature-symbol">; </span>worker<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;worker&quot;</span><span class="tsd-signature-symbol"> }</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/modules/base/index.ts#L101">src/core/async/modules/base/index.ts:101</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<dl class="tsd-comment-tags">
+									<dt>deprecated</dt>
+									<dd></dd>
+									<dt>see</dt>
+									<dd><p>[[Async.namespaces]]</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">{ </span>eventListener<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;eventListener&quot;</span><span class="tsd-signature-symbol">; </span>eventListenerPromise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;eventListenerPromise&quot;</span><span class="tsd-signature-symbol">; </span>idleCallback<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;idleCallback&quot;</span><span class="tsd-signature-symbol">; </span>idleCallbackPromise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;idleCallbackPromise&quot;</span><span class="tsd-signature-symbol">; </span>immediate<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;immediate&quot;</span><span class="tsd-signature-symbol">; </span>immediatePromise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;immediatePromise&quot;</span><span class="tsd-signature-symbol">; </span>interval<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;interval&quot;</span><span class="tsd-signature-symbol">; </span>intervalPromise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;intervalPromise&quot;</span><span class="tsd-signature-symbol">; </span>promise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;promise&quot;</span><span class="tsd-signature-symbol">; </span>proxy<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;proxy&quot;</span><span class="tsd-signature-symbol">; </span>proxyPromise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;proxyPromise&quot;</span><span class="tsd-signature-symbol">; </span>request<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;request&quot;</span><span class="tsd-signature-symbol">; </span>timeout<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;timeout&quot;</span><span class="tsd-signature-symbol">; </span>timeoutPromise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;timeoutPromise&quot;</span><span class="tsd-signature-symbol">; </span>worker<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;worker&quot;</span><span class="tsd-signature-symbol"> }</span></h4>
+							<ul class="tsd-parameters">
+								<li class="tsd-parameter">
+									<h5>event<wbr>Listener<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;eventListener&quot;</span></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>event<wbr>Listener<wbr>Promise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;eventListenerPromise&quot;</span></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>idle<wbr>Callback<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;idleCallback&quot;</span></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>idle<wbr>Callback<wbr>Promise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;idleCallbackPromise&quot;</span></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>immediate<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;immediate&quot;</span></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>immediate<wbr>Promise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;immediatePromise&quot;</span></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>interval<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;interval&quot;</span></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>interval<wbr>Promise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;intervalPromise&quot;</span></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>promise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;promise&quot;</span></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>proxy<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;proxy&quot;</span></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>proxy<wbr>Promise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;proxyPromise&quot;</span></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>request<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;request&quot;</span></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>timeout<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;timeout&quot;</span></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>timeout<wbr>Promise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;timeoutPromise&quot;</span></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>worker<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;worker&quot;</span></h5>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
+					<a name="namespaces-1" class="tsd-anchor"></a>
+					<h3>namespaces</h3>
+					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> namespaces<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>eventListener<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;eventListener&quot;</span><span class="tsd-signature-symbol">; </span>eventListenerPromise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;eventListenerPromise&quot;</span><span class="tsd-signature-symbol">; </span>idleCallback<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;idleCallback&quot;</span><span class="tsd-signature-symbol">; </span>idleCallbackPromise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;idleCallbackPromise&quot;</span><span class="tsd-signature-symbol">; </span>immediate<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;immediate&quot;</span><span class="tsd-signature-symbol">; </span>immediatePromise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;immediatePromise&quot;</span><span class="tsd-signature-symbol">; </span>interval<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;interval&quot;</span><span class="tsd-signature-symbol">; </span>intervalPromise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;intervalPromise&quot;</span><span class="tsd-signature-symbol">; </span>promise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;promise&quot;</span><span class="tsd-signature-symbol">; </span>proxy<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;proxy&quot;</span><span class="tsd-signature-symbol">; </span>proxyPromise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;proxyPromise&quot;</span><span class="tsd-signature-symbol">; </span>request<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;request&quot;</span><span class="tsd-signature-symbol">; </span>timeout<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;timeout&quot;</span><span class="tsd-signature-symbol">; </span>timeoutPromise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;timeoutPromise&quot;</span><span class="tsd-signature-symbol">; </span>worker<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;worker&quot;</span><span class="tsd-signature-symbol"> }</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/modules/base/index.ts#L86">src/core/async/modules/base/index.ts:86</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Link to Async.namespaces</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">{ </span>eventListener<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;eventListener&quot;</span><span class="tsd-signature-symbol">; </span>eventListenerPromise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;eventListenerPromise&quot;</span><span class="tsd-signature-symbol">; </span>idleCallback<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;idleCallback&quot;</span><span class="tsd-signature-symbol">; </span>idleCallbackPromise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;idleCallbackPromise&quot;</span><span class="tsd-signature-symbol">; </span>immediate<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;immediate&quot;</span><span class="tsd-signature-symbol">; </span>immediatePromise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;immediatePromise&quot;</span><span class="tsd-signature-symbol">; </span>interval<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;interval&quot;</span><span class="tsd-signature-symbol">; </span>intervalPromise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;intervalPromise&quot;</span><span class="tsd-signature-symbol">; </span>promise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;promise&quot;</span><span class="tsd-signature-symbol">; </span>proxy<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;proxy&quot;</span><span class="tsd-signature-symbol">; </span>proxyPromise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;proxyPromise&quot;</span><span class="tsd-signature-symbol">; </span>request<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;request&quot;</span><span class="tsd-signature-symbol">; </span>timeout<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;timeout&quot;</span><span class="tsd-signature-symbol">; </span>timeoutPromise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;timeoutPromise&quot;</span><span class="tsd-signature-symbol">; </span>worker<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;worker&quot;</span><span class="tsd-signature-symbol"> }</span></h4>
+							<ul class="tsd-parameters">
+								<li class="tsd-parameter">
+									<h5>event<wbr>Listener<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;eventListener&quot;</span></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>event<wbr>Listener<wbr>Promise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;eventListenerPromise&quot;</span></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>idle<wbr>Callback<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;idleCallback&quot;</span></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>idle<wbr>Callback<wbr>Promise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;idleCallbackPromise&quot;</span></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>immediate<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;immediate&quot;</span></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>immediate<wbr>Promise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;immediatePromise&quot;</span></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>interval<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;interval&quot;</span></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>interval<wbr>Promise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;intervalPromise&quot;</span></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>promise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;promise&quot;</span></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>proxy<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;proxy&quot;</span></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>proxy<wbr>Promise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;proxyPromise&quot;</span></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>request<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;request&quot;</span></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>timeout<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;timeout&quot;</span></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>timeout<wbr>Promise<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;timeoutPromise&quot;</span></h5>
+								</li>
+								<li class="tsd-parameter">
+									<h5>worker<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;worker&quot;</span></h5>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-protected">
+					<a name="canceltask" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> cancel<wbr>Task</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-protected">
+						<li class="tsd-signature tsd-kind-icon">cancel<wbr>Task<span class="tsd-signature-symbol">(</span>task<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, name<span class="tsd-signature-symbol">?: </span><a href="../modules/index.html#canundef" class="tsd-signature-type" data-tsd-kind="Type alias">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_async_modules_base.default.html" class="tsd-signature-type" data-tsd-kind="Class">default</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">CTX</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/modules/base/index.ts#L433">src/core/async/modules/base/index.ts:433</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Cancels a task (or a group of tasks) from the specified namespace</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>task: <span class="tsd-signature-type">any</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>operation options or task link</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> name: <a href="../modules/index.html#canundef" class="tsd-signature-type" data-tsd-kind="Type alias">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="src_core_async_modules_base.default.html" class="tsd-signature-type" data-tsd-kind="Class">default</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">CTX</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="clearall" class="tsd-anchor"></a>
+					<h3>clear<wbr>All</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">clear<wbr>All<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/src_core_async_interface.clearoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">ClearOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_async_modules_base.default.html" class="tsd-signature-type" data-tsd-kind="Class">default</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">CTX</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/modules/base/index.ts#L118">src/core/async/modules/base/index.ts:118</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Clears all async tasks</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/src_core_async_interface.clearoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">ClearOptions</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="src_core_async_modules_base.default.html" class="tsd-signature-type" data-tsd-kind="Class">default</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">CTX</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-protected">
+					<a name="clearasync" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> clear<wbr>Async</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-protected">
+						<li class="tsd-signature tsd-kind-icon">clear<wbr>Async<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, name<span class="tsd-signature-symbol">?: </span><a href="../modules/index.html#canundef" class="tsd-signature-type" data-tsd-kind="Type alias">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_async_modules_base.default.html" class="tsd-signature-type" data-tsd-kind="Class">default</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">CTX</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/modules/base/index.ts#L557">src/core/async/modules/base/index.ts:557</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<dl class="tsd-comment-tags">
+									<dt>deprecated</dt>
+									<dd></dd>
+									<dt>see</dt>
+									<dd><p>[[Async.cancelTask]]</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>opts: <span class="tsd-signature-type">any</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> name: <a href="../modules/index.html#canundef" class="tsd-signature-type" data-tsd-kind="Type alias">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="src_core_async_modules_base.default.html" class="tsd-signature-type" data-tsd-kind="Class">default</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">CTX</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-protected">
+					<a name="getcache" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> get<wbr>Cache</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-protected">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Cache<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, promise<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_async_interface.globalcache.html" class="tsd-signature-type" data-tsd-kind="Interface">GlobalCache</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/modules/base/index.ts#L213">src/core/async/modules/base/index.ts:213</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns a cache object by the specified name</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>name: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> promise: <span class="tsd-signature-type">boolean</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/src_core_async_interface.globalcache.html" class="tsd-signature-type" data-tsd-kind="Interface">GlobalCache</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-protected">
+					<a name="initcache" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> init<wbr>Cache</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-protected">
+						<li class="tsd-signature tsd-kind-icon">init<wbr>Cache<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, promise<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_async_interface.globalcache.html" class="tsd-signature-type" data-tsd-kind="Interface">GlobalCache</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/modules/base/index.ts#L231">src/core/async/modules/base/index.ts:231</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<dl class="tsd-comment-tags">
+									<dt>deprecated</dt>
+									<dd></dd>
+									<dt>see</dt>
+									<dd><p>[[Async.getCache]]</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>name: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> promise: <span class="tsd-signature-type">boolean</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/src_core_async_interface.globalcache.html" class="tsd-signature-type" data-tsd-kind="Interface">GlobalCache</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-protected">
+					<a name="markalltasks" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> mark<wbr>All<wbr>Tasks</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-protected">
+						<li class="tsd-signature tsd-kind-icon">mark<wbr>All<wbr>Tasks<span class="tsd-signature-symbol">(</span>label<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_async_interface.fullclearoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">FullClearOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_async_modules_base.default.html" class="tsd-signature-type" data-tsd-kind="Class">default</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">CTX</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/modules/base/index.ts#L700">src/core/async/modules/base/index.ts:700</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Marks all async tasks from the namespace by the specified label</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>label: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>opts: <a href="../interfaces/src_core_async_interface.fullclearoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">FullClearOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>operation options</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="src_core_async_modules_base.default.html" class="tsd-signature-type" data-tsd-kind="Class">default</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">CTX</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-protected">
+					<a name="markasync" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> mark<wbr>Async</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-protected">
+						<li class="tsd-signature tsd-kind-icon">mark<wbr>Async<span class="tsd-signature-symbol">(</span>label<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, opts<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, name<span class="tsd-signature-symbol">?: </span><a href="../modules/index.html#canundef" class="tsd-signature-type" data-tsd-kind="Type alias">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_async_modules_base.default.html" class="tsd-signature-type" data-tsd-kind="Class">default</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">CTX</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/modules/base/index.ts#L690">src/core/async/modules/base/index.ts:690</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<dl class="tsd-comment-tags">
+									<dt>deprecated</dt>
+									<dd></dd>
+									<dt>see</dt>
+									<dd><p>[[Async.markTask]]</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>label: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>opts: <span class="tsd-signature-type">any</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> name: <a href="../modules/index.html#canundef" class="tsd-signature-type" data-tsd-kind="Type alias">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="src_core_async_modules_base.default.html" class="tsd-signature-type" data-tsd-kind="Class">default</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">CTX</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-protected">
+					<a name="marktask" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> mark<wbr>Task</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-protected">
+						<li class="tsd-signature tsd-kind-icon">mark<wbr>Task<span class="tsd-signature-symbol">(</span>label<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, task<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, name<span class="tsd-signature-symbol">?: </span><a href="../modules/index.html#canundef" class="tsd-signature-type" data-tsd-kind="Type alias">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_async_modules_base.default.html" class="tsd-signature-type" data-tsd-kind="Class">default</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">CTX</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/modules/base/index.ts#L568">src/core/async/modules/base/index.ts:568</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Marks a task (or a group of tasks) from the namespace by the specified label</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>label: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>task: <span class="tsd-signature-type">any</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>operation options or a link to the task</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> name: <a href="../modules/index.html#canundef" class="tsd-signature-type" data-tsd-kind="Type alias">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="src_core_async_modules_base.default.html" class="tsd-signature-type" data-tsd-kind="Class">default</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">CTX</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="muteall" class="tsd-anchor"></a>
+					<h3>mute<wbr>All</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">mute<wbr>All<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/src_core_async_interface.clearoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">ClearOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_async_modules_base.default.html" class="tsd-signature-type" data-tsd-kind="Class">default</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">CTX</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/modules/base/index.ts#L139">src/core/async/modules/base/index.ts:139</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Mutes all async tasks</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/src_core_async_interface.clearoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">ClearOptions</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="src_core_async_modules_base.default.html" class="tsd-signature-type" data-tsd-kind="Class">default</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">CTX</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-protected">
+					<a name="registertask" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> register<wbr>Task</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-protected">
+						<li class="tsd-signature tsd-kind-icon">register<wbr>Task&lt;R&gt;<span class="tsd-signature-symbol">(</span>task<span class="tsd-signature-symbol">: </span><a href="../modules/src_core_async_interface.html#fullasyncoptions" class="tsd-signature-type" data-tsd-kind="Type alias">FullAsyncOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">R</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/modules/base/index.ts#L239">src/core/async/modules/base/index.ts:239</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Registers the specified async task</p>
+								</div>
+							</div>
+							<h4 class="tsd-type-parameters-title">Type parameters</h4>
+							<ul class="tsd-type-parameters">
+								<li>
+									<h4>R = <span class="tsd-signature-type">unknown</span></h4>
+								</li>
+							</ul>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>task: <a href="../modules/src_core_async_interface.html#fullasyncoptions" class="tsd-signature-type" data-tsd-kind="Type alias">FullAsyncOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<div class="tsd-comment tsd-typography">
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">R</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-protected">
+					<a name="setasync" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> set<wbr>Async</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-protected">
+						<li class="tsd-signature tsd-kind-icon">set<wbr>Async&lt;R, C&gt;<span class="tsd-signature-symbol">(</span>task<span class="tsd-signature-symbol">: </span><a href="../modules/src_core_async_interface.html#fullasyncoptions" class="tsd-signature-type" data-tsd-kind="Type alias">FullAsyncOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">R</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/modules/base/index.ts#L423">src/core/async/modules/base/index.ts:423</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<dl class="tsd-comment-tags">
+									<dt>deprecated</dt>
+									<dd></dd>
+									<dt>see</dt>
+									<dd><p>[[Async.registerTask]]</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-type-parameters-title">Type parameters</h4>
+							<ul class="tsd-type-parameters">
+								<li>
+									<h4>R = <span class="tsd-signature-type">unknown</span></h4>
+								</li>
+								<li>
+									<h4>C<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span> = <span class="tsd-signature-type">CTX</span></h4>
+								</li>
+							</ul>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>task: <a href="../modules/src_core_async_interface.html#fullasyncoptions" class="tsd-signature-type" data-tsd-kind="Type alias">FullAsyncOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">R</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="suspendall" class="tsd-anchor"></a>
+					<h3>suspend<wbr>All</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">suspend<wbr>All<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/src_core_async_interface.clearoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">ClearOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_async_modules_base.default.html" class="tsd-signature-type" data-tsd-kind="Class">default</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">CTX</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/modules/base/index.ts#L175">src/core/async/modules/base/index.ts:175</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Suspends all async tasks</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/src_core_async_interface.clearoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">ClearOptions</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="src_core_async_modules_base.default.html" class="tsd-signature-type" data-tsd-kind="Class">default</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">CTX</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="unmuteall" class="tsd-anchor"></a>
+					<h3>unmute<wbr>All</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">unmute<wbr>All<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/src_core_async_interface.clearoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">ClearOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_async_modules_base.default.html" class="tsd-signature-type" data-tsd-kind="Class">default</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">CTX</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/modules/base/index.ts#L157">src/core/async/modules/base/index.ts:157</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Unmutes all async tasks</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/src_core_async_interface.clearoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">ClearOptions</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="src_core_async_modules_base.default.html" class="tsd-signature-type" data-tsd-kind="Class">default</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">CTX</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="unsuspendall" class="tsd-anchor"></a>
+					<h3>unsuspend<wbr>All</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">unsuspend<wbr>All<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/src_core_async_interface.clearoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">ClearOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_async_modules_base.default.html" class="tsd-signature-type" data-tsd-kind="Class">default</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">CTX</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/modules/base/index.ts#L193">src/core/async/modules/base/index.ts:193</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Unsuspends all async tasks</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/src_core_async_interface.clearoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">ClearOptions</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="src_core_async_modules_base.default.html" class="tsd-signature-type" data-tsd-kind="Class">default</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">CTX</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class=" ">
+						<a href="../modules.html">Modules</a>
+					</li>
+					<li class="current tsd-kind-module">
+						<a href="../modules/src_core_async_modules_base.html">src/core/async/modules/base</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-class tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="src_core_async_modules_base.default.html" class="tsd-kind-icon">default</a>
+						<ul>
+							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-has-type-parameter">
+								<a href="src_core_async_modules_base.default.html#constructor" class="tsd-kind-icon">constructor</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+								<a href="src_core_async_modules_base.default.html#cache" class="tsd-kind-icon">cache</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+								<a href="src_core_async_modules_base.default.html#context" class="tsd-kind-icon">context</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+								<a href="src_core_async_modules_base.default.html#ctx" class="tsd-kind-icon">ctx</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="src_core_async_modules_base.default.html#locked" class="tsd-kind-icon">locked</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+								<a href="src_core_async_modules_base.default.html#workercache" class="tsd-kind-icon">worker<wbr>Cache</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static">
+								<a href="src_core_async_modules_base.default.html#linknames" class="tsd-kind-icon">link<wbr>Names</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static">
+								<a href="src_core_async_modules_base.default.html#namespaces" class="tsd-kind-icon">namespaces</a>
+							</li>
+							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
+								<a href="src_core_async_modules_base.default.html#linknames-1" class="tsd-kind-icon">link<wbr>Names</a>
+							</li>
+							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
+								<a href="src_core_async_modules_base.default.html#namespaces-1" class="tsd-kind-icon">namespaces</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-protected">
+								<a href="src_core_async_modules_base.default.html#canceltask" class="tsd-kind-icon">cancel<wbr>Task</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="src_core_async_modules_base.default.html#clearall" class="tsd-kind-icon">clear<wbr>All</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-protected">
+								<a href="src_core_async_modules_base.default.html#clearasync" class="tsd-kind-icon">clear<wbr>Async</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-protected">
+								<a href="src_core_async_modules_base.default.html#getcache" class="tsd-kind-icon">get<wbr>Cache</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-protected">
+								<a href="src_core_async_modules_base.default.html#initcache" class="tsd-kind-icon">init<wbr>Cache</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-protected">
+								<a href="src_core_async_modules_base.default.html#markalltasks" class="tsd-kind-icon">mark<wbr>All<wbr>Tasks</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-protected">
+								<a href="src_core_async_modules_base.default.html#markasync" class="tsd-kind-icon">mark<wbr>Async</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-protected">
+								<a href="src_core_async_modules_base.default.html#marktask" class="tsd-kind-icon">mark<wbr>Task</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="src_core_async_modules_base.default.html#muteall" class="tsd-kind-icon">mute<wbr>All</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-protected">
+								<a href="src_core_async_modules_base.default.html#registertask" class="tsd-kind-icon">register<wbr>Task</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-protected">
+								<a href="src_core_async_modules_base.default.html#setasync" class="tsd-kind-icon">set<wbr>Async</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="src_core_async_modules_base.default.html#suspendall" class="tsd-kind-icon">suspend<wbr>All</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="src_core_async_modules_base.default.html#unmuteall" class="tsd-kind-icon">unmute<wbr>All</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="src_core_async_modules_base.default.html#unsuspendall" class="tsd-kind-icon">unsuspend<wbr>All</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<ul class="after-current">
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer>
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-namespace"><span class="tsd-kind-icon">Namespace</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="overlay"></div>
+<script src="../assets/js/main.js"></script>
+<script>'use strict';
+
+/*!
+ * V4Fire Core
+ * https://github.com/V4Fire/Core
+ *
+ * Released under the MIT license
+ * https://github.com/V4Fire/Core/blob/master/LICENSE
+ */
+
+(function () {
+	document.body.style.display = 'block';
+
+	var
+		isDTS = /\.d$/,
+		isIndex = /^(?:(?!(?:^|\/)(?:interface|modules|prelude|engines)\/).)*?(?:^|\/)index$/,
+		isNode = /(?:^|\/)node_modules(?:\/|$)/;
+
+	var
+		trimRgxp = /^\s+|[\n\v"']+|\s+$/g,
+		normalizeRgxp = /(?:^|\b)src\/|\/index$/g;
+
+	var
+		breadcrumbs = Array.from(document.querySelectorAll('.tsd-breadcrumb a')),
+		headers = Array.from(document.querySelectorAll('h1'));
+
+	breadcrumbs.forEach(function (el) {
+		el.textContent = el.textContent.replace(trimRgxp, '').replace(normalizeRgxp, '');
+	});
+
+	headers.forEach(function (el) {
+		el.textContent = el.textContent.replace(trimRgxp, '').replace(normalizeRgxp, '');
+	});
+
+	var
+		navigation = Array.from(document.querySelectorAll('.tsd-navigation.primary .tsd-kind-module a')),
+		globalIndex = Array.from(document.querySelectorAll('.tsd-kind-module a'));
+
+	[].concat(breadcrumbs.length <= 1 ? globalIndex : navigation).forEach(function (el) {
+		var
+			wrapper = el.parentNode,
+			linkText = el.textContent.replace(trimRgxp, '');
+
+		if (isDTS.test(linkText)) {
+			var
+				nm = RegExp.$1;
+
+			if (linkText === 'index.d') {
+				el.innerHTML = '<b>prelude</b>';
+
+			} else if (isNode.test(linkText)) {
+				el.textContent = nm;
+
+			} else {
+				wrapper.parentNode.removeChild(wrapper);
+			}
+
+		} else if (isIndex.test(linkText)) {
+			el.textContent = linkText.replace(normalizeRgxp, '');
+
+		} else {
+			wrapper.parentNode.removeChild(wrapper);
+		}
+	});
+})();
+</script>
+</body>
+</html>
