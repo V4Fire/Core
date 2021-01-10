@@ -53,7 +53,7 @@ This file provides a bunch of gulp tasks to build the project.
 This file provides a bunch of gulp tasks to generate HTML documentation based on the project.
 
 ```bash
-npx gulp build:docs
+npx gulp build:doc
 ```
 
 ## other.gulp.js
