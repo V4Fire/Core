@@ -9,6 +9,13 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.30.0 (2021-01-10)
+
+#### :boom: Breaking Change
+
+* Renamed `docs.gulp.js` -> `doc.gulp.js`
+* Renamed `gulp build:docs` -> `gulp build:doc`
+
 ## v3.22.4 (2020-07-30)
 
 #### :bug: Bug Fix

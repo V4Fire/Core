@@ -48,7 +48,7 @@ This file provides a bunch of gulp tasks to build the project.
  * npx gulp clean:server
  * ```
 
-## docs.gulp.js
+## doc.gulp.js
 
 This file provides a bunch of gulp tasks to generate HTML documentation based on the project.
 

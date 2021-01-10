@@ -23,14 +23,14 @@ module.exports = function init(gulp) {
 	/**
 	 * Builds an HTML files by using typedoc
 	 */
-	gulp.task('build:docs:typedoc', () => $.run('typedoc')
+	gulp.task('build:doc:typedoc', () => $.run('typedoc')
 		.exec()
 		.on('error', console.error));
 
 	/**
 	 * Normalizes generated HTML files: attaches extra styles and js, removes some trash
 	 */
-	gulp.task('build:docs:normalise', gulp.series([
+	gulp.task('build:doc:normalize', gulp.series([
 		() => gulp.src('./docs/**/*.+(html|js|json)')
 			.pipe($.replace(/(['"/\\])_+(.+?)_+(\.(?:[^\s'"/\\<>#.]+\.)?html\b)/g, (...str) => str.slice(1, 4).join('')))
 			.pipe(gulp.dest('./docs')),
@@ -66,5 +66,5 @@ module.exports = function init(gulp) {
 	/**
 	 * The main task to generate documentation
 	 */
-	gulp.task('build:docs', gulp.series(['build:tsconfig', 'build:docs:typedoc', 'build:docs:normalise']));
+	gulp.task('build:doc', gulp.series(['build:tsconfig', 'build:doc:typedoc', 'build:doc:normalize']));
 };

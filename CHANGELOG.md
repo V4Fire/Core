@@ -13,6 +13,12 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 ## v3.30.0 (2021-01-10)
 
+#### :boom: Breaking Change
+
+* `build`:
+  * Renamed `docs.gulp.js` -> `doc.gulp.js`
+  * Renamed `gulp build:docs` -> `gulp build:doc`
+
 #### :rocket: New Feature
 
 * Added `letters` and `String.letters` `core/prelude/string`
