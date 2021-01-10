@@ -17,8 +17,7 @@ declare namespace TB {
 	type Cast<X, Y> = X extends Y ? X : Y;
 
 	type Type<A extends any, ID extends string> = A & {
-		// @ts-ignore (hack)
-		[K in typeof symbol]: ID;
+		[K in 'symbol']: ID;
 	};
 
 	type Length<T extends any[]> = T['length'];
