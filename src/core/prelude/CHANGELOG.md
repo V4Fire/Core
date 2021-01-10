@@ -17,7 +17,7 @@ Changelog
 
 #### :bug: Bug Fix
 
-* Improved unicode support `string`
+* Improved Unicode support `string`
 
 ## v3.29.0 (2020-12-22)
 

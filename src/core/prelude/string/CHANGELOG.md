@@ -17,7 +17,7 @@ Changelog
 
 #### :bug: Bug Fix
 
-* Improved unicode support
+* Improved Unicode support
 
 ## v3.20.0 (2020-07-05)
 
