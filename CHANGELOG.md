@@ -20,6 +20,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 #### :bug: Bug Fix
 
 * Improved unicode support `core/prelude/string`
+* Fixed providing of empty strings as API URL-s `core/request`
 
 ## v3.29.1 (2020-12-23)
 

@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.30.0 (2021-01-10)
+
+#### :bug: Bug Fix
+
+* Fixed providing of empty strings as API url-s
+
 ## v3.29.1 (2020-12-23)
 
 #### :bug: Bug Fix

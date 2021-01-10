@@ -70,8 +70,17 @@ export default class RequestContext<D = unknown> extends Super<D> {
 
 			for (let i = 0; i < list.length; i++) {
 				const
-					lvl = list[i],
-					domain = (lvl === 1 ? api.zone : api[`domain${lvl}`]) ?? def[lvl - 1];
+					lvl = list[i];
+
+				let
+					domain = (lvl === 1 ? api.zone : api[`domain${lvl}`]);
+
+				if (domain == null) {
+					domain = def[lvl - 1];
+
+				} else if (domain === '') {
+					domain = undefined;
+				}
 
 				if (domain != null) {
 					url.push(domain);
