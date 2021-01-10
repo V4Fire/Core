@@ -521,8 +521,8 @@ pre {
 	document.body.style.display = 'block';
 
 	var
-		isDTS = /\.d$/,
-		isIndex = /^(?:(?!(?:^|\/)(?:interface|modules|prelude|engines)\/).)*?(?:^|\/)index$/,
+		isDTS = /^index$|\.d$/,
+		needHide = /\/(?:prelude|interface|const|modules|helpers|engines)\b/,
 		isNode = /(?:^|\/)node_modules(?:\/|$)/;
 
 	var
@@ -554,7 +554,7 @@ pre {
 			var
 				nm = RegExp.$1;
 
-			if (linkText === 'index.d') {
+			if (linkText === 'index') {
 				el.innerHTML = '<b>prelude</b>';
 
 			} else if (isNode.test(linkText)) {
@@ -564,11 +564,11 @@ pre {
 				wrapper.parentNode.removeChild(wrapper);
 			}
 
-		} else if (isIndex.test(linkText)) {
-			el.textContent = linkText.replace(normalizeRgxp, '');
+		} else if (needHide.test(linkText)) {
+			wrapper.parentNode.removeChild(wrapper);
 
 		} else {
-			wrapper.parentNode.removeChild(wrapper);
+			el.textContent = linkText.replace(normalizeRgxp, '');
 		}
 	});
 })();
