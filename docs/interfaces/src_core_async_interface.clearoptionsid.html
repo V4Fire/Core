@@ -7,6 +7,7 @@
 	<meta name="description" content="Documentation for V4Fire">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
+	<script async src="../assets/js/search.js" id="search-script"></script>
 <style>/*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -223,10 +224,10 @@ pre {
 		<div class="container">
 			<ul class="tsd-breadcrumb">
 				<li>
-					<a href="../globals.html">Globals</a>
+					<a href="../modules.html">V4Fire</a>
 				</li>
 				<li>
-					<a href="../modules/src_core_async_interface.html">&quot;src/core/async/interface&quot;</a>
+					<a href="../modules/src_core_async_interface.html">src/core/async/interface</a>
 				</li>
 				<li>
 					<a href="src_core_async_interface.clearoptionsid.html">ClearOptionsId</a>
@@ -251,13 +252,28 @@ pre {
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<a href="src_core_async_interface.clearoptions.html" class="tsd-signature-type">ClearOptions</a>
+						<a href="src_core_async_interface.clearoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">ClearOptions</a>
 						<ul class="tsd-hierarchy">
 							<li>
 								<span class="target">ClearOptionsId</span>
 								<ul class="tsd-hierarchy">
 									<li>
-										<a href="src_core_async_interface.clearproxyoptions.html" class="tsd-signature-type">ClearProxyOptions</a>
+										<a href="src_core_async_interface.clearproxyoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">ClearProxyOptions</a>
+									</li>
+									<li>
+										<a href="src_core_async.clearproxyoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">ClearProxyOptions</a>
+									</li>
+									<li>
+										<a href="src_core_async_modules_base.clearproxyoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">ClearProxyOptions</a>
+									</li>
+									<li>
+										<a href="src_core_async_modules_events.clearproxyoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">ClearProxyOptions</a>
+									</li>
+									<li>
+										<a href="src_core_async_modules_proxy.clearproxyoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">ClearProxyOptions</a>
+									</li>
+									<li>
+										<a href="src_core_async_modules_timers.clearproxyoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">ClearProxyOptions</a>
 									</li>
 								</ul>
 							</li>
@@ -286,7 +302,7 @@ pre {
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 					<a name="group" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> group</h3>
-					<div class="tsd-signature tsd-kind-icon">group<span class="tsd-signature-symbol">:</span> <a href="../modules/src_core_async_interface.html#group" class="tsd-signature-type">Group</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">RegExp</span></div>
+					<div class="tsd-signature tsd-kind-icon">group<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">RegExp</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_async_interface.clearoptions.html">ClearOptions</a>.<a href="src_core_async_interface.clearoptions.html#group">group</a></p>
 						<ul>
@@ -302,7 +318,7 @@ pre {
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="id" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> id</h3>
-					<div class="tsd-signature tsd-kind-icon">id<span class="tsd-signature-symbol">:</span> <a href="" class="tsd-signature-type">ID</a></div>
+					<div class="tsd-signature tsd-kind-icon">id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ID</span></div>
 					<aside class="tsd-sources">
 						<ul>
 							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/interface.ts#L274">src/core/async/interface.ts:274</a></li>
@@ -317,7 +333,7 @@ pre {
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 					<a name="label" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> label</h3>
-					<div class="tsd-signature tsd-kind-icon">label<span class="tsd-signature-symbol">:</span> <a href="../modules/src_core_async_interface.html#label" class="tsd-signature-type">Label</a></div>
+					<div class="tsd-signature tsd-kind-icon">label<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">symbol</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_async_interface.clearoptions.html">ClearOptions</a>.<a href="src_core_async_interface.clearoptions.html#label">label</a></p>
 						<ul>
@@ -333,7 +349,7 @@ pre {
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 					<a name="preventdefault" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> prevent<wbr>Default</h3>
-					<div class="tsd-signature tsd-kind-icon">prevent<wbr>Default<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span></div>
+					<div class="tsd-signature tsd-kind-icon">prevent<wbr>Default<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_async_interface.clearoptions.html">ClearOptions</a>.<a href="src_core_async_interface.clearoptions.html#preventdefault">preventDefault</a></p>
 						<ul>
@@ -351,11 +367,11 @@ pre {
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
 			<nav class="tsd-navigation primary">
 				<ul>
-					<li class="globals  ">
-						<a href="../globals.html"><em>Globals</em></a>
+					<li class=" ">
+						<a href="../modules.html">Modules</a>
 					</li>
 					<li class="current tsd-kind-module">
-						<a href="../modules/src_core_async_interface.html">&quot;src/core/async/interface&quot;</a>
+						<a href="../modules/src_core_async_interface.html">src/core/async/interface</a>
 					</li>
 				</ul>
 			</nav>
@@ -393,7 +409,6 @@ pre {
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
 				<li class="tsd-kind-namespace"><span class="tsd-kind-icon">Namespace</span></li>
-				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
 				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
 				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
 				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
