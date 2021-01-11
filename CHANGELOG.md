@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.30.1 (2021-01-11)
+
+#### :bug: Bug Fix
+
+* Fixed iterations over chained emoji-s `core/prelude/string`
+
 ## v3.30.0 (2021-01-10)
 
 #### :boom: Breaking Change

@@ -7,48 +7,59 @@
  */
 
 import extend from 'core/prelude/extend';
-import { isCombinable, isConcatChar, isFlagLetters } from 'core/prelude/string/const';
+import { unicode } from 'core/prelude/string/const';
 
 /** @see [[String.letters]] */
 extend(String.prototype, 'letters', function* letters(this: string): IterableIterator<string> {
 	let
-		needConcat = false;
+		baseStr: Nullable<string> = null,
+		prevChar: Nullable<string> = null;
 
 	let
-		baseStr,
-		prevChar;
+		needConcat = false;
 
 	for (const char of this) {
-		if (isCombinable.test(char)) {
-			if (isConcatChar.test(char)) {
+		let
+			saveConcat = false;
+
+		if (unicode.modifiers.test(char) || unicode.textModifiers.test(char)) {
+			needConcat = true;
+
+			if (unicode.zeroWidthJoiner.test(char)) {
+				saveConcat = true;
+			}
+
+		} else if (prevChar != null) {
+			const
+				isColor = unicode.colorModifiers.test(char);
+
+			if (isColor && unicode.zeroWidthJoiner.test(prevChar)) {
 				needConcat = true;
-			}
+				saveConcat = true;
 
-			if (baseStr != null) {
-				baseStr += char;
-			}
-
-		} else {
-			if (prevChar != null && isFlagLetters.test(prevChar) && isFlagLetters.test(char)) {
-				needConcat = true;
-			}
-
-			if (!needConcat && baseStr != null) {
-				yield baseStr;
-				baseStr = null;
-			}
-
-			needConcat = false;
-
-			if (baseStr != null) {
-				baseStr += char;
-
-			} else {
-				baseStr = char;
+			} else if (!needConcat) {
+				needConcat =
+					isColor && unicode.emojiWithColorModifiers.test(prevChar) ||
+					unicode.regionalIndicators.test(char) && unicode.regionalIndicators.test(prevChar);
 			}
 		}
 
+		if (needConcat) {
+			baseStr = (baseStr ?? '') + char;
+
+		} else {
+			if (baseStr != null) {
+				yield baseStr;
+			}
+
+			baseStr = char;
+		}
+
 		prevChar = char;
+
+		if (!saveConcat) {
+			needConcat = false;
+		}
 	}
 
 	if (baseStr != null) {
