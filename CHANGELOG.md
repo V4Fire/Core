@@ -16,6 +16,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 #### :bug: Bug Fix
 
 * Fixed iterations over chained emoji-s `core/prelude/string`
+* Fixed Unicode support of char ranges `core/range`
 
 ## v3.30.0 (2021-01-10)
 

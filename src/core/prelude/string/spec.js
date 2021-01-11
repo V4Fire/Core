@@ -45,7 +45,7 @@ describe('core/prelude/string', () => {
 		expect('HELLO WORLD😃😡'.capitalize()).toBe('HELLO WORLD😃😡');
 	});
 
-	it('capitalize (extended unicode)', () => {
+	it('capitalize (extended Unicode)', () => {
 		expect('à hello world'.capitalize()).toBe('À hello world');
 		expect('😃 hello world'.capitalize()).toBe('😃 hello world');
 	});
@@ -85,7 +85,7 @@ describe('core/prelude/string', () => {
 		expect('foo_bar_b-l aBaz😃😡'.camelize()).toBe('FooBarBLABaz😃😡');
 	});
 
-	it('camelize (extended unicode)', () => {
+	it('camelize (extended Unicode)', () => {
 		expect('Àhello_world'.camelize()).toBe('ÀhelloWorld');
 		expect('😃_hello_world'.camelize()).toBe('😃HelloWorld');
 	});
@@ -119,7 +119,7 @@ describe('core/prelude/string', () => {
 		expect('FOOBarBAZ'.dasherize()).toBe('foo-bar-baz');
 	});
 
-	it('dasherize (extended unicode)', () => {
+	it('dasherize (extended Unicode)', () => {
 		expect('FooBarÀZ'.dasherize()).toBe('foo-bar-àz');
 	});
 
@@ -153,7 +153,7 @@ describe('core/prelude/string', () => {
 		expect('FOOBarBAZ'.underscore()).toBe('foo_bar_baz');
 	});
 
-	it('underscore (extended unicode)', () => {
+	it('underscore (extended Unicode)', () => {
 		expect('FooBarÀZ'.underscore()).toBe('foo_bar_àz');
 	});
 
