@@ -519,29 +519,32 @@ interface ObjectPropertyFilter<K = string, V = unknown> {
 
 interface ObjectConstructor {
 	/**
-	 * Returns a value from the passed object by the specified path
+	 * Returns a value from the passed object by the specified path.
+	 * Returns undefined if the specified path doesn't exist in the object.
 	 *
 	 * @param obj
 	 * @param path
 	 * @param [opts] - additional options
 	 */
-	get<T = unknown>(obj: any, path: ObjectPropertyPath, opts?: ObjectGetOptions): T;
+	get<T = unknown>(obj: any, path: ObjectPropertyPath, opts?: ObjectGetOptions): CanUndef<T>;
 
 	/**
-	 * Returns a function that returns a value from the passed object, which the function takes, by the specified path
+	 * Returns a function that returns a value from the passed object, which the function takes, by the specified path.
+	 * The function returns undefined if the specified path doesn't exist in the object.
 	 *
 	 * @param path
 	 * @param [opts] - additional options
 	 */
-	get<T = unknown>(path: ObjectPropertyPath, opts?: ObjectGetOptions): (obj: any) => T;
+	get<T = unknown>(path: ObjectPropertyPath, opts?: ObjectGetOptions): (obj: any) => CanUndef<T>;
 
 	/**
-	 * Returns a function that returns a value from the specified object by a path that the function takes
+	 * Returns a function that returns a value from the specified object by a path that the function takes.
+	 * The function returns undefined if the specified path doesn't exist in the object.
 	 *
 	 * @param obj
 	 * @param [opts] - additional options
 	 */
-	get<T = unknown>(obj: any, opts?: ObjectGetOptions): (path: ObjectPropertyPath) => T;
+	get<T = unknown>(obj: any, opts?: ObjectGetOptions): (path: ObjectPropertyPath) => CanUndef<T>;
 
 	/**
 	 * Returns true if an object has a property by the specified path
