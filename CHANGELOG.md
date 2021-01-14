@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.30.2 (2021-01-14)
+
+#### :bug: Bug Fix
+
+* Fixed `Object.get` interface and comments
+
 ## v3.30.1 (2021-01-11)
 
 #### :bug: Bug Fix
