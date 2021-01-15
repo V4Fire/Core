@@ -11,7 +11,7 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-## v3.30.2 (2021-01-14)
+## v3.30.2 (2021-01-15)
 
 #### :bug: Bug Fix
 
