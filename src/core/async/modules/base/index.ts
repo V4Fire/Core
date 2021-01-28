@@ -81,7 +81,7 @@ export default class Async<CTX extends object = Async<any>> {
 	protected readonly context: CTX;
 
 	/**
-	 * Set of used async namespace
+	 * Set of used async namespaces
 	 */
 	protected readonly usedNamespaces: Set<string> = new Set();
 
