@@ -11,6 +11,14 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.30.3 (2021-01-28)
+
+#### :house: Internal
+
+* `core/async`:
+  * Optimized clearing of async wrappers
+  * Now all promises are wrapped by using `SyncPromise`
+
 ## v3.30.2 (2021-01-15)
 
 #### :bug: Bug Fix

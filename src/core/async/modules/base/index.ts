@@ -81,6 +81,11 @@ export default class Async<CTX extends object = Async<any>> {
 	protected readonly context: CTX;
 
 	/**
+	 * Set of used async namespace
+	 */
+	protected readonly usedNamespaces: Set<string> = new Set();
+
+	/**
 	 * Link to Async.namespaces
 	 */
 	protected get namespaces(): NamespacesDictionary {
@@ -116,10 +121,10 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @param [opts] - additional options for the operation
 	 */
 	clearAll(opts?: ClearOptions): this {
-		for (let o = this.namespaces, keys = Object.keys(o), i = 0; i < keys.length; i++) {
+		for (let o = this.usedNamespaces.values(), el = o.next(); !el.done; el = o.next()) {
 			const
-				key = keys[i],
-				alias = `clear-${o[key]}`.camelize(false);
+				key = el.value,
+				alias = `clear-${this.namespaces[key]}`.camelize(false);
 
 			if (Object.isFunction(this[alias])) {
 				this[alias](opts);
@@ -137,10 +142,10 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @param [opts] - additional options for the operation
 	 */
 	muteAll(opts?: ClearOptions): this {
-		for (let o = this.namespaces, keys = Object.keys(o), i = 0; i < keys.length; i++) {
+		for (let o = this.usedNamespaces.values(), el = o.next(); !el.done; el = o.next()) {
 			const
-				key = keys[i],
-				alias = `mute-${o[key]}`.camelize(false);
+				key = el.value,
+				alias = `mute-${this.namespaces[key]}`.camelize(false);
 
 			if (!isPromisifyNamespace.test(key) && Object.isFunction(this[alias])) {
 				this[alias](opts);
@@ -155,10 +160,10 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @param [opts] - additional options for the operation
 	 */
 	unmuteAll(opts?: ClearOptions): this {
-		for (let o = this.namespaces, keys = Object.keys(o), i = 0; i < keys.length; i++) {
+		for (let o = this.usedNamespaces.values(), el = o.next(); !el.done; el = o.next()) {
 			const
-				key = keys[i],
-				alias = `unmute-${o[keys[i]]}`.camelize(false);
+				key = el.value,
+				alias = `unmute-${this.namespaces[key]}`.camelize(false);
 
 			if (!isPromisifyNamespace.test(key) && Object.isFunction(this[alias])) {
 				this[alias](opts);
@@ -173,10 +178,10 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @param [opts] - additional options for the operation
 	 */
 	suspendAll(opts?: ClearOptions): this {
-		for (let o = this.namespaces, keys = Object.keys(o), i = 0; i < keys.length; i++) {
+		for (let o = this.usedNamespaces.values(), el = o.next(); !el.done; el = o.next()) {
 			const
-				key = keys[i],
-				alias = `suspend-${o[keys[i]]}`.camelize(false);
+				key = el.value,
+				alias = `suspend-${this.namespaces[key]}`.camelize(false);
 
 			if (!isPromisifyNamespace.test(key) && Object.isFunction(this[alias])) {
 				this[alias](opts);
@@ -191,10 +196,10 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @param [opts] - additional options for the operation
 	 */
 	unsuspendAll(opts?: ClearOptions): this {
-		for (let o = this.namespaces, keys = Object.keys(o), i = 0; i < keys.length; i++) {
+		for (let o = this.usedNamespaces.values(), el = o.next(); !el.done; el = o.next()) {
 			const
-				key = keys[i],
-				alias = `unsuspend-${o[keys[i]]}`.camelize(false);
+				key = el.value,
+				alias = `unsuspend-${this.namespaces[key]}`.camelize(false);
 
 			if (!isPromisifyNamespace.test(key) && Object.isFunction(this[alias])) {
 				this[alias](opts);
@@ -241,12 +246,14 @@ export default class Async<CTX extends object = Async<any>> {
 			return null;
 		}
 
-		const
-			baseCache = this.getCache(task.name, task.promise),
-			callable = task.callable ?? task.needCall;
+		this.usedNamespaces.add(task.name);
 
 		const
 			{ctx} = this;
+
+		const
+			baseCache = this.getCache(task.name, task.promise),
+			callable = task.callable ?? task.needCall;
 
 		let
 			cache: LocalCache;
