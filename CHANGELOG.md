@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.30.4 (2021-01-29)
+
+#### :bug: Bug Fix
+
+* Fixed the `requestIdleCallback` interface
+
 ## v3.30.3 (2021-01-28)
 
 #### :house: Internal
