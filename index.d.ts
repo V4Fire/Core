@@ -127,7 +127,7 @@ declare class IdleDeadline {
 	timeRemaining(): number;
 }
 
-declare function requestIdleCallback(fn: (deadline: IdleDeadline) => void, opts?: {timer?: number}): number;
+declare function requestIdleCallback(fn: (deadline: IdleDeadline) => void, opts?: {timeout?: number}): number;
 declare function cancelIdleCallback(id: number): void;
 
 declare function setImmediate(fn: AnyFunction): number;
