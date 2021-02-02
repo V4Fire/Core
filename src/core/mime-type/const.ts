@@ -25,5 +25,6 @@ export const mimeTypes: Dictionary<DataType> = Object.createDict({
 	'application/x-www-form-urlencoded': 'text',
 	'application/x-msgpack': 'arrayBuffer',
 	'application/x-protobuf': 'arrayBuffer',
-	'application/vnd.google.protobuf': 'arrayBuffer'
+	'application/vnd.google.protobuf': 'arrayBuffer',
+	'application/octet-stream': 'arrayBuffer'
 });

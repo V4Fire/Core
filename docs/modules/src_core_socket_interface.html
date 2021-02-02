@@ -3,10 +3,11 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>&quot;src/core/socket/interface&quot; | V4Fire</title>
+	<title>src/core/socket/interface | V4Fire</title>
 	<meta name="description" content="Documentation for V4Fire">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
+	<script async src="../assets/js/search.js" id="search-script"></script>
 <style>/*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -223,13 +224,13 @@ pre {
 		<div class="container">
 			<ul class="tsd-breadcrumb">
 				<li>
-					<a href="../globals.html">Globals</a>
+					<a href="../modules.html">V4Fire</a>
 				</li>
 				<li>
-					<a href="src_core_socket_interface.html">&quot;src/core/socket/interface&quot;</a>
+					<a href="src_core_socket_interface.html">src/core/socket/interface</a>
 				</li>
 			</ul>
-			<h1>Module &quot;src/core/socket/interface&quot;</h1>
+			<h1>Module src/core/socket/interface</h1>
 		</div>
 	</div>
 </header>
@@ -254,10 +255,11 @@ pre {
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
 					<a name="socket" class="tsd-anchor"></a>
 					<h3>Socket</h3>
-					<div class="tsd-signature tsd-kind-icon">Socket<span class="tsd-signature-symbol">:</span> <a href="../interfaces/src_core_async_interface.workerlike.html" class="tsd-signature-type">WorkerLike</a><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/src_core_async_interface.eventemitterlike.html" class="tsd-signature-type">EventEmitterLike</a></div>
+					<div class="tsd-signature tsd-kind-icon">Socket<span class="tsd-signature-symbol">:</span> <a href="../interfaces/src_core_async_interface.workerlike.html" class="tsd-signature-type" data-tsd-kind="Interface">WorkerLike</a><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/src_core_async_interface.eventemitterlike.html" class="tsd-signature-type" data-tsd-kind="Interface">EventEmitterLike</a></div>
 					<aside class="tsd-sources">
 						<ul>
 							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/socket/interface.ts#L11">src/core/socket/interface.ts:11</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/index.ts#L29">src/core/data/index.ts:29</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -266,11 +268,11 @@ pre {
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
 			<nav class="tsd-navigation primary">
 				<ul>
-					<li class="globals  ">
-						<a href="../globals.html"><em>Globals</em></a>
+					<li class=" ">
+						<a href="../modules.html">Modules</a>
 					</li>
 					<li class="current tsd-kind-module">
-						<a href="src_core_socket_interface.html">&quot;src/core/socket/interface&quot;</a>
+						<a href="src_core_socket_interface.html">src/core/socket/interface</a>
 					</li>
 				</ul>
 			</nav>
@@ -290,7 +292,6 @@ pre {
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
 				<li class="tsd-kind-namespace"><span class="tsd-kind-icon">Namespace</span></li>
-				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
 				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
 				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
 				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
@@ -327,8 +328,8 @@ pre {
 	document.body.style.display = 'block';
 
 	var
-		isDTS = /\.d$/,
-		isIndex = /^(?:(?!(?:^|\/)(?:interface|modules|prelude|engines)\/).)*?(?:^|\/)index$/,
+		isDTS = /^index$|\.d$/,
+		needHide = /\/(?:prelude|interface|const|modules|helpers|engines)\b/,
 		isNode = /(?:^|\/)node_modules(?:\/|$)/;
 
 	var
@@ -360,7 +361,7 @@ pre {
 			var
 				nm = RegExp.$1;
 
-			if (linkText === 'index.d') {
+			if (linkText === 'index') {
 				el.innerHTML = '<b>prelude</b>';
 
 			} else if (isNode.test(linkText)) {
@@ -370,11 +371,11 @@ pre {
 				wrapper.parentNode.removeChild(wrapper);
 			}
 
-		} else if (isIndex.test(linkText)) {
-			el.textContent = linkText.replace(normalizeRgxp, '');
+		} else if (needHide.test(linkText)) {
+			wrapper.parentNode.removeChild(wrapper);
 
 		} else {
-			wrapper.parentNode.removeChild(wrapper);
+			el.textContent = linkText.replace(normalizeRgxp, '');
 		}
 	});
 })();

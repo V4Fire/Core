@@ -44,11 +44,20 @@ export default class Range<T extends RangeValue> {
 	 * @param start - start position
 	 * @param end - end position
 	 */
-	constructor(start: T, end: Nullable<T>) {
+	constructor(start: T, end: Nullable<T | number>) {
 		if (Object.isString(start)) {
 			this.type = 'string';
-			this.start = charCodeAt(start, 0);
-			this.end = Object.isString(end) ? charCodeAt(end, end.length - 1) : Infinity;
+			this.start = codePointAt(start);
+
+			if (Object.isString(end)) {
+				this.end = codePointAt(end);
+
+			} else if (end != null && Object.isNumber(end)) {
+				this.end = codePointAt(String.fromCodePoint(end));
+
+			} else {
+				this.end = this.start;
+			}
 
 		} else {
 			this.type = Object.isDate(start) ? 'date' : 'number';
@@ -74,7 +83,7 @@ export default class Range<T extends RangeValue> {
 	 * Returns true if the range is valid
 	 */
 	isValid(): boolean {
-		return !isNaN(this.start) && !isNaN(this.end);
+		return !Number.isNaN(this.start) && !Number.isNaN(this.end);
 	}
 
 	/**
@@ -88,7 +97,7 @@ export default class Range<T extends RangeValue> {
 			return this.intersect(el).isValid();
 		}
 
-		const val = Object.isString(el) ? charCodeAt(el, 0) : Number(el);
+		const val = Object.isString(el) ? codePointAt(el) : Number(el);
 		return this.start <= val && val <= this.end;
 	}
 
@@ -141,7 +150,7 @@ export default class Range<T extends RangeValue> {
 	 */
 	clamp(el: unknown): T {
 		const
-			val = Object.isString(el) ? charCodeAt(el, 0) : Number(el);
+			val = Object.isString(el) ? codePointAt(el) : Number(el);
 
 		if (!this.isValid()) {
 			return this.toType(val);
@@ -254,7 +263,7 @@ export default class Range<T extends RangeValue> {
 	protected toType(value: number): T {
 		switch (this.type) {
 			case 'string':
-				return <T>fromCharCode(value);
+				return <T>String.fromCodePoint(value);
 
 			case 'date':
 				return <T>new Date(value);
@@ -265,12 +274,7 @@ export default class Range<T extends RangeValue> {
 	}
 }
 
-function charCodeAt(str: string, pos: number): number {
-	// eslint-disable-next-line @typescript-eslint/unbound-method
-	const v = Object.isFunction(str.codePointAt) ? str.codePointAt(pos) : str.charCodeAt(pos);
-	return v == null || isNaN(v) ? NaN : v;
-}
-
-function fromCharCode(code: number): string {
-	return Object.isFunction(String.fromCodePoint) ? String.fromCodePoint(code) : String.fromCharCode(code);
+function codePointAt(str: string, pos: number = 0): number {
+	const v = str.codePointAt(pos);
+	return v == null || Number.isNaN(v) ? NaN : v;
 }

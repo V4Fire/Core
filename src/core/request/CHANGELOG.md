@@ -9,6 +9,18 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.30.0 (2021-01-10)
+
+#### :bug: Bug Fix
+
+* Fixed providing of empty strings as API url-s
+
+## v3.29.1 (2020-12-23)
+
+#### :bug: Bug Fix
+
+* Added response status checking whether it's 204 before decoding a server response `Response`
+
 ## v3.28.0 (2020-11-06)
 
 #### :rocket: New Feature

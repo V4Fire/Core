@@ -266,17 +266,21 @@ describe('core/request', () => {
 					api: {
 						protocol: 'http',
 						zone: () => 'localhost',
+						domain2: '',
+						domain3: '',
 						port: 3000,
 						namespace: 'json'
 					}
 				});
 
-				expect(req.data).toEqual({
-					id: 1,
-					value: 'things'
-				});
+				expect(req.data)
+					.toEqual({
+						id: 1,
+						value: 'things'
+					});
 
-				expect(req.response.status).toBe(200);
+				expect(req.response.status)
+					.toBe(200);
 			});
 
 			it('resolving API schema to url', async () => {
@@ -307,8 +311,10 @@ describe('core/request', () => {
 			});
 
 			it('request builder', async () => {
+				let get = request({api: {protocol: 'http', port: 3000, domain3: ''}});
+				get = get({api: {zone: 'localhost', namespace: 'json', domain2: ''}});
+
 				const
-					get = request({api: {protocol: 'http', port: 3000}})({api: {zone: 'localhost', namespace: 'json'}}),
 					req = await get('/1');
 
 				expect(req.data).toEqual({
@@ -400,6 +406,11 @@ describe('core/request', () => {
 
 				expect(req.response.ok).toBeTrue();
 			});
+
+			it('response with 204 status', async () => {
+				const req = await request('http://localhost:3000/octet/204');
+				expect(req.data).toBe(null);
+			});
 		});
 	});
 });
@@ -471,6 +482,10 @@ function createServer() {
 
 		res.type('image/x-icon');
 		res.send(Buffer.from(faviconInBase64, 'base64'));
+	});
+
+	serverApp.get('/octet/204', (req, res) => {
+		res.type('application/octet-stream').status(204).end();
 	});
 
 	return serverApp.listen(3000);

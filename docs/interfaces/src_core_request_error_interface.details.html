@@ -7,6 +7,7 @@
 	<meta name="description" content="Documentation for V4Fire">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
+	<script async src="../assets/js/search.js" id="search-script"></script>
 <style>/*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -223,16 +224,16 @@ pre {
 		<div class="container">
 			<ul class="tsd-breadcrumb">
 				<li>
-					<a href="../globals.html">Globals</a>
+					<a href="../modules.html">V4Fire</a>
 				</li>
 				<li>
-					<a href="../modules/src_core_request_error_interface.html">&quot;src/core/request/error/interface&quot;</a>
+					<a href="../modules/src_core_request_error_interface.html">src/core/request/error/interface</a>
 				</li>
 				<li>
 					<a href="src_core_request_error_interface.details.html">Details</a>
 				</li>
 			</ul>
-			<h1>Interface Details&lt;D, T&gt;</h1>
+			<h1>Interface Details&lt;D&gt;</h1>
 		</div>
 	</div>
 </header>
@@ -245,16 +246,13 @@ pre {
 					<li>
 						<h4>D = <span class="tsd-signature-type">unknown</span></h4>
 					</li>
-					<li>
-						<h4>T = <span class="tsd-signature-type">unknown</span></h4>
-					</li>
 				</ul>
 			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<a href="index_d.dictionary.html" class="tsd-signature-type">Dictionary</a>
+						<a href="index.dictionary.html" class="tsd-signature-type" data-tsd-kind="Interface">Dictionary</a>
 						<ul class="tsd-hierarchy">
 							<li>
 								<span class="target">Details</span>
@@ -262,10 +260,6 @@ pre {
 						</ul>
 					</li>
 				</ul>
-			</section>
-			<section class="tsd-panel tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
-				<h3 class="tsd-before-signature">Indexable</h3>
-				<div class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">[</span>key: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]: </span><a href="../modules/index_d.html#canundef" class="tsd-signature-type">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></div>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
@@ -297,7 +291,7 @@ pre {
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="request" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> request</h3>
-					<div class="tsd-signature tsd-kind-icon">request<span class="tsd-signature-symbol">:</span> <a href="../modules/src_core_request_interface.html#normalizedcreaterequestoptions" class="tsd-signature-type">NormalizedCreateRequestOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<div class="tsd-signature tsd-kind-icon">request<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="../modules/src_core_request_interface.html#normalizedcreaterequestoptions" class="tsd-signature-type" data-tsd-kind="Type alias">NormalizedCreateRequestOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
 							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/error/interface.ts#L16">src/core/request/error/interface.ts:16</a></li>
@@ -307,7 +301,7 @@ pre {
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="response" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> response</h3>
-					<div class="tsd-signature tsd-kind-icon">response<span class="tsd-signature-symbol">:</span> <a href="../classes/src_core_request_response_index.response.html" class="tsd-signature-type">Response</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<div class="tsd-signature tsd-kind-icon">response<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="../classes/src_core_request_response.default.html" class="tsd-signature-type" data-tsd-kind="Class">default</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
 							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/error/interface.ts#L17">src/core/request/error/interface.ts:17</a></li>
@@ -319,11 +313,11 @@ pre {
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
 			<nav class="tsd-navigation primary">
 				<ul>
-					<li class="globals  ">
-						<a href="../globals.html"><em>Globals</em></a>
+					<li class=" ">
+						<a href="../modules.html">Modules</a>
 					</li>
 					<li class="current tsd-kind-module">
-						<a href="../modules/src_core_request_error_interface.html">&quot;src/core/request/error/interface&quot;</a>
+						<a href="../modules/src_core_request_error_interface.html">src/core/request/error/interface</a>
 					</li>
 				</ul>
 			</nav>
@@ -358,7 +352,6 @@ pre {
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
 				<li class="tsd-kind-namespace"><span class="tsd-kind-icon">Namespace</span></li>
-				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
 				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
 				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
 				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
@@ -396,8 +389,8 @@ pre {
 	document.body.style.display = 'block';
 
 	var
-		isDTS = /\.d$/,
-		isIndex = /^(?:(?!(?:^|\/)(?:interface|modules|prelude|engines)\/).)*?(?:^|\/)index$/,
+		isDTS = /^index$|\.d$/,
+		needHide = /\/(?:prelude|interface|const|modules|helpers|engines)\b/,
 		isNode = /(?:^|\/)node_modules(?:\/|$)/;
 
 	var
@@ -429,7 +422,7 @@ pre {
 			var
 				nm = RegExp.$1;
 
-			if (linkText === 'index.d') {
+			if (linkText === 'index') {
 				el.innerHTML = '<b>prelude</b>';
 
 			} else if (isNode.test(linkText)) {
@@ -439,11 +432,11 @@ pre {
 				wrapper.parentNode.removeChild(wrapper);
 			}
 
-		} else if (isIndex.test(linkText)) {
-			el.textContent = linkText.replace(normalizeRgxp, '');
+		} else if (needHide.test(linkText)) {
+			wrapper.parentNode.removeChild(wrapper);
 
 		} else {
-			wrapper.parentNode.removeChild(wrapper);
+			el.textContent = linkText.replace(normalizeRgxp, '');
 		}
 	});
 })();

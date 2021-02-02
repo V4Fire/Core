@@ -1,0 +1,1133 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>src/core/request | V4Fire</title>
+	<meta name="description" content="Documentation for V4Fire">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="../assets/css/main.css">
+	<script async src="../assets/js/search.js" id="search-script"></script>
+<style>/*!
+ * V4Fire Core
+ * https://github.com/V4Fire/Core
+ *
+ * Released under the MIT license
+ * https://github.com/V4Fire/Core/blob/master/LICENSE
+ */
+
+body {
+	font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+}
+
+code, pre, tt {
+	font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+}
+
+.tsd-typography h1,
+.tsd-typography h2,
+.tsd-typography h3,
+.tsd-typography h4,
+.tsd-typography h5,
+.tsd-typography h6 {
+	margin: 1em 0;
+	font-family: -apple-system, BlinkMacSystemFont, UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+}
+
+.tsd-panel {
+	padding: 20px 40px;
+	border: 1px solid #DDD;
+	border-radius: 10px;
+	box-shadow: none;
+}
+
+.tsd-page-title {
+	color: #EEE;
+
+	background: #232526; /* fallback for old browsers */
+	background: -webkit-linear-gradient(to right, #414345, #232526); /* Chrome 10-25, Safari 5.1-6 */
+	background: linear-gradient(to right, #414345, #232526); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+.tsd-page-toolbar {
+	height: 43px;
+}
+
+.title {
+	display: inline-flex;
+	align-items: center;
+}
+
+.title::before {
+	content: "";
+
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	margin-right: 10px;
+
+	border-radius: 5px;
+	background-image: url("https://avatars0.githubusercontent.com/u/29952525?s=200&v=4");
+	background-size: contain;
+}
+
+#tsd-search .tsd-widget.search.no-caption {
+	bottom: 0;
+}
+
+#tsd-search .field {
+	height: 100%;
+}
+
+pre {
+	background-color: rgba(7, 7, 7, 0.01);
+}
+
+/**
+ * GitHub Gist Theme
+ * Author : Anthony Attard - https://github.com/AnthonyAttard
+ * Author : Louis Barranqueiro - https://github.com/LouisBarranqueiro
+ */
+
+.hljs {
+	display: block;
+	background: white;
+	padding: 0.5em;
+	color: #333333;
+	overflow-x: auto;
+}
+
+.hljs-comment,
+.hljs-meta {
+	color: #969896;
+}
+
+.hljs-variable,
+.hljs-template-variable,
+.hljs-strong,
+.hljs-emphasis,
+.hljs-quote {
+	color: #df5000;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-type {
+	color: #d73a49;
+}
+
+.hljs-literal,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-attribute {
+	color: #0086b3;
+}
+
+.hljs-section,
+.hljs-name {
+	color: #63a35c;
+}
+
+.hljs-tag {
+	color: #333333;
+}
+
+.hljs-title,
+.hljs-attr,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-selector-attr,
+.hljs-selector-pseudo {
+	color: #6f42c1;
+}
+
+.hljs-addition {
+	color: #55a532;
+	background-color: #eaffea;
+}
+
+.hljs-deletion {
+	color: #bd2c00;
+	background-color: #ffecec;
+}
+
+.hljs-link {
+	text-decoration: underline;
+}
+
+.hljs-number {
+	color: #005cc5;
+}
+
+.hljs-string {
+	color: #032f62;
+}
+</style>
+</head>
+<body>
+<script>'use strict';
+
+/*!
+ * V4Fire Core
+ * https://github.com/V4Fire/Core
+ *
+ * Released under the MIT license
+ * https://github.com/V4Fire/Core/blob/master/LICENSE
+ */
+
+(function () {
+	if (localStorage.getItem('visibility') == null) {
+		localStorage.setItem('visibility', 'public');
+	}
+
+	document.title = document.title.replace(/['"]+|src\//g, '');
+	document.body.style.display = 'none';
+})();
+</script>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.json" data-base="..">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="../index.html" class="title">V4Fire</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="../modules.html">V4Fire</a>
+				</li>
+				<li>
+					<a href="src_core_request.html">src/core/request</a>
+				</li>
+			</ul>
+			<h1>Module src/core/request</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<a href="#corerequest" id="corerequest" style="color: inherit; text-decoration: none;">
+							<h1>core/request</h1>
+						</a>
+						<p>This module provides API to request/submit data using AJAX and similar techniques.</p>
+						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">request</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/request&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #795E26">request</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;https://foo.com&#039;</span><span style="color: #000000">, {</span>
+<span style="color: #000000">  </span><span style="color: #001080">method:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;POST&#039;</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #001080">body:</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #001080">bla:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;bar&#039;</span>
+<span style="color: #000000">  }</span>
+<span style="color: #000000">}).</span><span style="color: #795E26">then</span><span style="color: #000000">(({</span><span style="color: #001080">response</span><span style="color: #000000">}) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">response</span><span style="color: #000000">.</span><span style="color: #795E26">decode</span><span style="color: #000000">(), </span><span style="color: #001080">response</span><span style="color: #000000">.</span><span style="color: #001080">status</span><span style="color: #000000">);</span>
+<span style="color: #000000">})</span>
+</code></pre>
+					</div>
+				</div>
+			</section>
+			<section class="tsd-panel-group tsd-index-group">
+				<h2>Index</h2>
+				<section class="tsd-panel tsd-index-panel">
+					<div class="tsd-index-content">
+						<section class="tsd-index-section ">
+							<h3>References</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_request.html#requesterror" class="tsd-kind-icon">Request<wbr>Error</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_request.html#response" class="tsd-kind-icon">Response</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_request.html#cache" class="tsd-kind-icon">cache</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_request.html#default" class="tsd-kind-icon">default</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_request.html#globalopts" class="tsd-kind-icon">global<wbr>Opts</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_request.html#pendingcache" class="tsd-kind-icon">pending<wbr>Cache</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Interfaces</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter"><a href="../interfaces/src_core_request.createrequestoptions.html" class="tsd-kind-icon">Create<wbr>Request<wbr>Options</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter"><a href="../interfaces/src_core_request.decoder.html" class="tsd-kind-icon">Decoder</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter"><a href="../interfaces/src_core_request.encoder.html" class="tsd-kind-icon">Encoder</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/src_core_request.globaloptions.html" class="tsd-kind-icon">Global<wbr>Options</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter"><a href="../interfaces/src_core_request.middleware.html" class="tsd-kind-icon">Middleware</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter"><a href="../interfaces/src_core_request.middlewareparams.html" class="tsd-kind-icon">Middleware<wbr>Params</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/src_core_request.requestapi.html" class="tsd-kind-icon">RequestAPI</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/src_core_request.requestengine.html" class="tsd-kind-icon">Request<wbr>Engine</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter"><a href="../interfaces/src_core_request.requestfunctionresponse.html" class="tsd-kind-icon">Request<wbr>Function<wbr>Response</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/src_core_request.requestoptions.html" class="tsd-kind-icon">Request<wbr>Options</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter"><a href="../interfaces/src_core_request.requestresolver.html" class="tsd-kind-icon">Request<wbr>Resolver</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter"><a href="../interfaces/src_core_request.requestresponseobject.html" class="tsd-kind-icon">Request<wbr>Response<wbr>Object</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/src_core_request.responseheaders.html" class="tsd-kind-icon">Response<wbr>Headers</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/src_core_request.responseoptions.html" class="tsd-kind-icon">Response<wbr>Options</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter"><a href="../interfaces/src_core_request.wrappedcreaterequestoptions.html" class="tsd-kind-icon">Wrapped<wbr>Create<wbr>Request<wbr>Options</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter"><a href="../interfaces/src_core_request.wrappeddecoder.html" class="tsd-kind-icon">Wrapped<wbr>Decoder</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter"><a href="../interfaces/src_core_request.wrappedencoder.html" class="tsd-kind-icon">Wrapped<wbr>Encoder</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Type aliases</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="src_core_request.html#cachestrategy" class="tsd-kind-icon">Cache<wbr>Strategy</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="src_core_request.html#cachetype" class="tsd-kind-icon">Cache<wbr>Type</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="src_core_request.html#decoders" class="tsd-kind-icon">Decoders</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="src_core_request.html#encoders" class="tsd-kind-icon">Encoders</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="src_core_request.html#jsonlikevalue" class="tsd-kind-icon">JSONLike<wbr>Value</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter"><a href="src_core_request.html#middlewares" class="tsd-kind-icon">Middlewares</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter"><a href="src_core_request.html#normalizedcreaterequestoptions" class="tsd-kind-icon">Normalized<wbr>Create<wbr>Request<wbr>Options</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="src_core_request.html#normalizedresponseoptions" class="tsd-kind-icon">Normalized<wbr>Response<wbr>Options</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="src_core_request.html#okstatuses" class="tsd-kind-icon">Ok<wbr>Statuses</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter"><a href="src_core_request.html#requestapivalue" class="tsd-kind-icon">RequestAPIValue</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="src_core_request.html#requestbody" class="tsd-kind-icon">Request<wbr>Body</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="src_core_request.html#requestmethod" class="tsd-kind-icon">Request<wbr>Method</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="src_core_request.html#requestquery" class="tsd-kind-icon">Request<wbr>Query</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter"><a href="src_core_request.html#requestresponse" class="tsd-kind-icon">Request<wbr>Response</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="src_core_request.html#resolverresult" class="tsd-kind-icon">Resolver<wbr>Result</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="src_core_request.html#responsetype" class="tsd-kind-icon">Response<wbr>Type</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="src_core_request.html#responsetypevalue" class="tsd-kind-icon">Response<wbr>Type<wbr>Value</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="src_core_request.html#wrappeddecoders" class="tsd-kind-icon">Wrapped<wbr>Decoders</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="src_core_request.html#wrappedencoders" class="tsd-kind-icon">Wrapped<wbr>Encoders</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Variables</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="src_core_request.html#tplrgxp" class="tsd-kind-icon">tpl<wbr>Rgxp</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Functions</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="src_core_request.html#applyqueryforstr" class="tsd-kind-icon">apply<wbr>Query<wbr>For<wbr>Str</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="src_core_request.html#dropcache" class="tsd-kind-icon">drop<wbr>Cache</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter"><a href="src_core_request.html#getrequestkey" class="tsd-kind-icon">get<wbr>Request<wbr>Key</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="src_core_request.html#getstoragekey" class="tsd-kind-icon">get<wbr>Storage<wbr>Key</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter"><a href="src_core_request.html#merge" class="tsd-kind-icon">merge</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="src_core_request.html#normalizeheadername" class="tsd-kind-icon">normalize<wbr>Header<wbr>Name</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="src_core_request.html#normalizeheadervalue" class="tsd-kind-icon">normalize<wbr>Header<wbr>Value</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="src_core_request.html#normalizeheaders" class="tsd-kind-icon">normalize<wbr>Headers</a></li>
+							</ul>
+						</section>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>References</h2>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="requesterror" class="tsd-anchor"></a>
+					<h3>Request<wbr>Error</h3>
+					Renames and exports <a href="../classes/src_core_request_error.default.html">default</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="response" class="tsd-anchor"></a>
+					<h3>Response</h3>
+					Renames and exports <a href="../classes/src_core_request_response.default.html">default</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="cache" class="tsd-anchor"></a>
+					<h3>cache</h3>
+					Re-exports <a href="src_core_request_const.html#cache">cache</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="default" class="tsd-anchor"></a>
+					<h3>default</h3>
+					Renames and exports <a href="../classes/src_core_data.default.html#__type">__type</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="globalopts" class="tsd-anchor"></a>
+					<h3>global<wbr>Opts</h3>
+					Re-exports <a href="src_core_request_const.html#globalopts">globalOpts</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="pendingcache" class="tsd-anchor"></a>
+					<h3>pending<wbr>Cache</h3>
+					Re-exports <a href="src_core_request_const.html#pendingcache">pendingCache</a>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Type aliases</h2>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
+					<a name="cachestrategy" class="tsd-anchor"></a>
+					<h3>Cache<wbr>Strategy</h3>
+					<div class="tsd-signature tsd-kind-icon">Cache<wbr>Strategy<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;queue&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;forever&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;never&quot;</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/src_core_cache_interface.default.html" class="tsd-signature-type" data-tsd-kind="Interface">default</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L30">src/core/request/interface.ts:30</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
+					<a name="cachetype" class="tsd-anchor"></a>
+					<h3>Cache<wbr>Type</h3>
+					<div class="tsd-signature tsd-kind-icon">Cache<wbr>Type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;memory&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;offline&quot;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L71">src/core/request/interface.ts:71</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
+					<a name="decoders" class="tsd-anchor"></a>
+					<h3>Decoders</h3>
+					<div class="tsd-signature tsd-kind-icon">Decoders<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Iterable</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/src_core_request_interface.decoder.html" class="tsd-signature-type" data-tsd-kind="Interface">Decoder</a><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L68">src/core/request/interface.ts:68</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
+					<a name="encoders" class="tsd-anchor"></a>
+					<h3>Encoders</h3>
+					<div class="tsd-signature tsd-kind-icon">Encoders<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Iterable</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/src_core_request_interface.encoder.html" class="tsd-signature-type" data-tsd-kind="Interface">Encoder</a><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L57">src/core/request/interface.ts:57</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
+					<a name="jsonlikevalue" class="tsd-anchor"></a>
+					<h3>JSONLike<wbr>Value</h3>
+					<div class="tsd-signature tsd-kind-icon">JSONLike<wbr>Value<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/index.dictionary.html" class="tsd-signature-type" data-tsd-kind="Interface">Dictionary</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/response/interface.ts#L26">src/core/request/response/interface.ts:26</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
+					<a name="middlewares" class="tsd-anchor"></a>
+					<h3>Middlewares</h3>
+					<div class="tsd-signature tsd-kind-icon">Middlewares&lt;D&gt;<span class="tsd-signature-symbol">:</span> <a href="../interfaces/index.dictionary.html" class="tsd-signature-type" data-tsd-kind="Interface">Dictionary</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/src_core_request_interface.middleware.html" class="tsd-signature-type" data-tsd-kind="Interface">Middleware</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Iterable</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/src_core_request_interface.middleware.html" class="tsd-signature-type" data-tsd-kind="Interface">Middleware</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L143">src/core/request/interface.ts:143</a></li>
+						</ul>
+					</aside>
+					<h4 class="tsd-type-parameters-title">Type parameters</h4>
+					<ul class="tsd-type-parameters">
+						<li>
+							<h4>D = <span class="tsd-signature-type">unknown</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
+					<a name="normalizedcreaterequestoptions" class="tsd-anchor"></a>
+					<h3>Normalized<wbr>Create<wbr>Request<wbr>Options</h3>
+					<div class="tsd-signature tsd-kind-icon">Normalized<wbr>Create<wbr>Request<wbr>Options&lt;D&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">typeof </span><a href="src_core_request_const.html#defaultrequestopts" class="tsd-signature-type" data-tsd-kind="Variable">defaultRequestOpts</a><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/src_core_request_interface.wrappedcreaterequestoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">WrappedCreateRequestOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L119">src/core/request/interface.ts:119</a></li>
+						</ul>
+					</aside>
+					<h4 class="tsd-type-parameters-title">Type parameters</h4>
+					<ul class="tsd-type-parameters">
+						<li>
+							<h4>D = <span class="tsd-signature-type">unknown</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
+					<a name="normalizedresponseoptions" class="tsd-anchor"></a>
+					<h3>Normalized<wbr>Response<wbr>Options</h3>
+					<div class="tsd-signature tsd-kind-icon">Normalized<wbr>Response<wbr>Options<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">typeof </span><a href="src_core_request_response_const.html#defaultresponseopts" class="tsd-signature-type" data-tsd-kind="Variable">defaultResponseOpts</a><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/src_core_request_response_interface.responseoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">ResponseOptions</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/response/interface.ts#L49">src/core/request/response/interface.ts:49</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
+					<a name="okstatuses" class="tsd-anchor"></a>
+					<h3>Ok<wbr>Statuses</h3>
+					<div class="tsd-signature tsd-kind-icon">Ok<wbr>Statuses<span class="tsd-signature-symbol">:</span> <a href="../classes/src_core_range.default.html" class="tsd-signature-type" data-tsd-kind="Class">default</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><a href="../enums/src_core_status_codes_interface.statuscodes.html" class="tsd-signature-type" data-tsd-kind="Enumeration">StatusCodes</a><span class="tsd-signature-symbol"> | </span><a href="../enums/src_core_status_codes_interface.statuscodes.html" class="tsd-signature-type" data-tsd-kind="Enumeration">StatusCodes</a><span class="tsd-signature-symbol">[]</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L44">src/core/request/interface.ts:44</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
+					<a name="requestapivalue" class="tsd-anchor"></a>
+					<h3>RequestAPIValue</h3>
+					<div class="tsd-signature tsd-kind-icon">RequestAPIValue&lt;T&gt;<span class="tsd-signature-symbol">:</span> <a href="index.html#nullable" class="tsd-signature-type" data-tsd-kind="Type alias">Nullable</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><a href="index.html#nullable" class="tsd-signature-type" data-tsd-kind="Type alias">Nullable</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L147">src/core/request/interface.ts:147</a></li>
+						</ul>
+					</aside>
+					<h4 class="tsd-type-parameters-title">Type parameters</h4>
+					<ul class="tsd-type-parameters">
+						<li>
+							<h4>T = <span class="tsd-signature-type">string</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
+					<a name="requestbody" class="tsd-anchor"></a>
+					<h3>Request<wbr>Body</h3>
+					<div class="tsd-signature tsd-kind-icon">Request<wbr>Body<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/index.dictionary.html" class="tsd-signature-type" data-tsd-kind="Interface">Dictionary</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">FormData</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ArrayBuffer</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L36">src/core/request/interface.ts:36</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
+					<a name="requestmethod" class="tsd-anchor"></a>
+					<h3>Request<wbr>Method</h3>
+					<div class="tsd-signature tsd-kind-icon">Request<wbr>Method<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;GET&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;POST&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;PUT&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;DELETE&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;PATCH&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;HEAD&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;CONNECT&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;OPTIONS&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;TRACE&quot;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L19">src/core/request/interface.ts:19</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
+					<a name="requestquery" class="tsd-anchor"></a>
+					<h3>Request<wbr>Query</h3>
+					<div class="tsd-signature tsd-kind-icon">Request<wbr>Query<span class="tsd-signature-symbol">:</span> <a href="../interfaces/index.dictionary.html" class="tsd-signature-type" data-tsd-kind="Interface">Dictionary</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L107">src/core/request/interface.ts:107</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
+					<a name="requestresponse" class="tsd-anchor"></a>
+					<h3>Request<wbr>Response</h3>
+					<div class="tsd-signature tsd-kind-icon">Request<wbr>Response&lt;D&gt;<span class="tsd-signature-symbol">:</span> <a href="../classes/src_core_then.default.html" class="tsd-signature-type" data-tsd-kind="Class">default</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/src_core_request_interface.requestresponseobject.html" class="tsd-signature-type" data-tsd-kind="Interface">RequestResponseObject</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L81">src/core/request/interface.ts:81</a></li>
+						</ul>
+					</aside>
+					<h4 class="tsd-type-parameters-title">Type parameters</h4>
+					<ul class="tsd-type-parameters">
+						<li>
+							<h4>D = <span class="tsd-signature-type">unknown</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
+					<a name="resolverresult" class="tsd-anchor"></a>
+					<h3>Resolver<wbr>Result</h3>
+					<div class="tsd-signature tsd-kind-icon">Resolver<wbr>Result<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L123">src/core/request/interface.ts:123</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
+					<a name="responsetype" class="tsd-anchor"></a>
+					<h3>Response<wbr>Type</h3>
+					<div class="tsd-signature tsd-kind-icon">Response<wbr>Type<span class="tsd-signature-symbol">:</span> <a href="src_core_mime_type_interface.html#datatype" class="tsd-signature-type" data-tsd-kind="Type alias">DataType</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;object&quot;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/response/interface.ts#L17">src/core/request/response/interface.ts:17</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
+					<a name="responsetypevalue" class="tsd-anchor"></a>
+					<h3>Response<wbr>Type<wbr>Value</h3>
+					<div class="tsd-signature tsd-kind-icon">Response<wbr>Type<wbr>Value<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ArrayBuffer</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Buffer</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Document</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/response/interface.ts#L18">src/core/request/response/interface.ts:18</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
+					<a name="wrappeddecoders" class="tsd-anchor"></a>
+					<h3>Wrapped<wbr>Decoders</h3>
+					<div class="tsd-signature tsd-kind-icon">Wrapped<wbr>Decoders<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Iterable</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/src_core_request_interface.wrappeddecoder.html" class="tsd-signature-type" data-tsd-kind="Interface">WrappedDecoder</a><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L69">src/core/request/interface.ts:69</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
+					<a name="wrappedencoders" class="tsd-anchor"></a>
+					<h3>Wrapped<wbr>Encoders</h3>
+					<div class="tsd-signature tsd-kind-icon">Wrapped<wbr>Encoders<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Iterable</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/src_core_request_interface.wrappedencoder.html" class="tsd-signature-type" data-tsd-kind="Interface">WrappedEncoder</a><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L58">src/core/request/interface.ts:58</a></li>
+						</ul>
+					</aside>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Variables</h2>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module">
+					<a name="tplrgxp" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> tpl<wbr>Rgxp</h3>
+					<div class="tsd-signature tsd-kind-icon">tpl<wbr>Rgxp<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RegExp</span><span class="tsd-signature-symbol"> = ...</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/utils/const.ts#L10">src/core/request/utils/const.ts:10</a></li>
+						</ul>
+					</aside>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Functions</h2>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="applyqueryforstr" class="tsd-anchor"></a>
+					<h3>apply<wbr>Query<wbr>For<wbr>Str</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">apply<wbr>Query<wbr>For<wbr>Str<span class="tsd-signature-symbol">(</span>str<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, query<span class="tsd-signature-symbol">?: </span><a href="../interfaces/index.dictionary.html" class="tsd-signature-type" data-tsd-kind="Interface">Dictionary</a>, rgxp<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">RegExp</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/utils/index.ts#L131">src/core/request/utils/index.ts:131</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Applies a query object for the specified string
+									(used keys are removed from the query)</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>str: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> query: <a href="../interfaces/index.dictionary.html" class="tsd-signature-type" data-tsd-kind="Interface">Dictionary</a></h5>
+								</li>
+								<li>
+									<h5>rgxp: <span class="tsd-signature-type">RegExp</span><span class="tsd-signature-symbol"> = ...</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="dropcache" class="tsd-anchor"></a>
+					<h3>drop<wbr>Cache</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">drop<wbr>Cache<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/utils/index.ts#L220">src/core/request/utils/index.ts:220</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Truncates all static cache storage-s</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+					<a name="getrequestkey" class="tsd-anchor"></a>
+					<h3>get<wbr>Request<wbr>Key</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Request<wbr>Key&lt;T&gt;<span class="tsd-signature-symbol">(</span>url<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, params<span class="tsd-signature-symbol">?: </span><a href="src_core_request_interface.html#normalizedcreaterequestoptions" class="tsd-signature-type" data-tsd-kind="Type alias">NormalizedCreateRequestOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/utils/index.ts#L47">src/core/request/utils/index.ts:47</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Generates a string cache key for the specified parameters and returns it</p>
+								</div>
+							</div>
+							<h4 class="tsd-type-parameters-title">Type parameters</h4>
+							<ul class="tsd-type-parameters">
+								<li>
+									<h4>T</h4>
+								</li>
+							</ul>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>url: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>request url</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> params: <a href="src_core_request_interface.html#normalizedcreaterequestoptions" class="tsd-signature-type" data-tsd-kind="Type alias">NormalizedCreateRequestOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="getstoragekey" class="tsd-anchor"></a>
+					<h3>get<wbr>Storage<wbr>Key</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Storage<wbr>Key<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/utils/index.ts#L37">src/core/request/utils/index.ts:37</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Takes a key for data and returns a new key to save the data in a storage</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>key: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+					<a name="merge" class="tsd-anchor"></a>
+					<h3>merge</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+						<li class="tsd-signature tsd-kind-icon">merge&lt;T&gt;<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/utils/index.ts#L24">src/core/request/utils/index.ts:24</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Merges the specified arguments and returns a new object</p>
+								</div>
+							</div>
+							<h4 class="tsd-type-parameters-title">Type parameters</h4>
+							<ul class="tsd-type-parameters">
+								<li>
+									<h4>T</h4>
+								</li>
+							</ul>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>args: <span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">T</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="normalizeheadername" class="tsd-anchor"></a>
+					<h3>normalize<wbr>Header<wbr>Name</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">normalize<wbr>Header<wbr>Name<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, query<span class="tsd-signature-symbol">?: </span><a href="../interfaces/index.dictionary.html" class="tsd-signature-type" data-tsd-kind="Interface">Dictionary</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/utils/index.ts#L155">src/core/request/utils/index.ts:155</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Normalizes the specified HTTP header name</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>name: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> query: <a href="../interfaces/index.dictionary.html" class="tsd-signature-type" data-tsd-kind="Interface">Dictionary</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="normalizeheadervalue" class="tsd-anchor"></a>
+					<h3>normalize<wbr>Header<wbr>Value</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">normalize<wbr>Header<wbr>Value<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span>, query<span class="tsd-signature-symbol">?: </span><a href="../interfaces/index.dictionary.html" class="tsd-signature-type" data-tsd-kind="Interface">Dictionary</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/utils/index.ts#L165">src/core/request/utils/index.ts:165</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Normalizes the specified HTTP header value</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>value: <span class="tsd-signature-type">unknown</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> query: <a href="../interfaces/index.dictionary.html" class="tsd-signature-type" data-tsd-kind="Interface">Dictionary</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="normalizeheaders" class="tsd-anchor"></a>
+					<h3>normalize<wbr>Headers</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">normalize<wbr>Headers<span class="tsd-signature-symbol">(</span>headers<span class="tsd-signature-symbol">?: </span><a href="../interfaces/index.dictionary.html" class="tsd-signature-type" data-tsd-kind="Interface">Dictionary</a>, query<span class="tsd-signature-symbol">?: </span><a href="../interfaces/index.dictionary.html" class="tsd-signature-type" data-tsd-kind="Interface">Dictionary</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/index.dictionary.html" class="tsd-signature-type" data-tsd-kind="Interface">Dictionary</a><span class="tsd-signature-symbol">&lt;</span><a href="index.html#canarray" class="tsd-signature-type" data-tsd-kind="Type alias">CanArray</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/utils/index.ts#L175">src/core/request/utils/index.ts:175</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Normalizes the specified HTTP header object</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> headers: <a href="../interfaces/index.dictionary.html" class="tsd-signature-type" data-tsd-kind="Interface">Dictionary</a></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> query: <a href="../interfaces/index.dictionary.html" class="tsd-signature-type" data-tsd-kind="Interface">Dictionary</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/index.dictionary.html" class="tsd-signature-type" data-tsd-kind="Interface">Dictionary</a><span class="tsd-signature-symbol">&lt;</span><a href="index.html#canarray" class="tsd-signature-type" data-tsd-kind="Type alias">CanArray</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class=" ">
+						<a href="../modules.html">Modules</a>
+					</li>
+					<li class="current tsd-kind-module">
+						<a href="src_core_request.html">src/core/request</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_request.html#requesterror" class="tsd-kind-icon">Request<wbr>Error</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_request.html#response" class="tsd-kind-icon">Response</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_request.html#cache" class="tsd-kind-icon">cache</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_request.html#default" class="tsd-kind-icon">default</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_request.html#globalopts" class="tsd-kind-icon">global<wbr>Opts</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_request.html#pendingcache" class="tsd-kind-icon">pending<wbr>Cache</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../interfaces/src_core_request.createrequestoptions.html" class="tsd-kind-icon">Create<wbr>Request<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../interfaces/src_core_request.decoder.html" class="tsd-kind-icon">Decoder</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../interfaces/src_core_request.encoder.html" class="tsd-kind-icon">Encoder</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/src_core_request.globaloptions.html" class="tsd-kind-icon">Global<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../interfaces/src_core_request.middleware.html" class="tsd-kind-icon">Middleware</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../interfaces/src_core_request.middlewareparams.html" class="tsd-kind-icon">Middleware<wbr>Params</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/src_core_request.requestapi.html" class="tsd-kind-icon">RequestAPI</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/src_core_request.requestengine.html" class="tsd-kind-icon">Request<wbr>Engine</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../interfaces/src_core_request.requestfunctionresponse.html" class="tsd-kind-icon">Request<wbr>Function<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/src_core_request.requestoptions.html" class="tsd-kind-icon">Request<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../interfaces/src_core_request.requestresolver.html" class="tsd-kind-icon">Request<wbr>Resolver</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../interfaces/src_core_request.requestresponseobject.html" class="tsd-kind-icon">Request<wbr>Response<wbr>Object</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/src_core_request.responseheaders.html" class="tsd-kind-icon">Response<wbr>Headers</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/src_core_request.responseoptions.html" class="tsd-kind-icon">Response<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../interfaces/src_core_request.wrappedcreaterequestoptions.html" class="tsd-kind-icon">Wrapped<wbr>Create<wbr>Request<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../interfaces/src_core_request.wrappeddecoder.html" class="tsd-kind-icon">Wrapped<wbr>Decoder</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../interfaces/src_core_request.wrappedencoder.html" class="tsd-kind-icon">Wrapped<wbr>Encoder</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="src_core_request.html#cachestrategy" class="tsd-kind-icon">Cache<wbr>Strategy</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="src_core_request.html#cachetype" class="tsd-kind-icon">Cache<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="src_core_request.html#decoders" class="tsd-kind-icon">Decoders</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="src_core_request.html#encoders" class="tsd-kind-icon">Encoders</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="src_core_request.html#jsonlikevalue" class="tsd-kind-icon">JSONLike<wbr>Value</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="src_core_request.html#middlewares" class="tsd-kind-icon">Middlewares</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="src_core_request.html#normalizedcreaterequestoptions" class="tsd-kind-icon">Normalized<wbr>Create<wbr>Request<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="src_core_request.html#normalizedresponseoptions" class="tsd-kind-icon">Normalized<wbr>Response<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="src_core_request.html#okstatuses" class="tsd-kind-icon">Ok<wbr>Statuses</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="src_core_request.html#requestapivalue" class="tsd-kind-icon">RequestAPIValue</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="src_core_request.html#requestbody" class="tsd-kind-icon">Request<wbr>Body</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="src_core_request.html#requestmethod" class="tsd-kind-icon">Request<wbr>Method</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="src_core_request.html#requestquery" class="tsd-kind-icon">Request<wbr>Query</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="src_core_request.html#requestresponse" class="tsd-kind-icon">Request<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="src_core_request.html#resolverresult" class="tsd-kind-icon">Resolver<wbr>Result</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="src_core_request.html#responsetype" class="tsd-kind-icon">Response<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="src_core_request.html#responsetypevalue" class="tsd-kind-icon">Response<wbr>Type<wbr>Value</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="src_core_request.html#wrappeddecoders" class="tsd-kind-icon">Wrapped<wbr>Decoders</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="src_core_request.html#wrappedencoders" class="tsd-kind-icon">Wrapped<wbr>Encoders</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module">
+						<a href="src_core_request.html#tplrgxp" class="tsd-kind-icon">tpl<wbr>Rgxp</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="src_core_request.html#applyqueryforstr" class="tsd-kind-icon">apply<wbr>Query<wbr>For<wbr>Str</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="src_core_request.html#dropcache" class="tsd-kind-icon">drop<wbr>Cache</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="src_core_request.html#getrequestkey" class="tsd-kind-icon">get<wbr>Request<wbr>Key</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="src_core_request.html#getstoragekey" class="tsd-kind-icon">get<wbr>Storage<wbr>Key</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="src_core_request.html#merge" class="tsd-kind-icon">merge</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="src_core_request.html#normalizeheadername" class="tsd-kind-icon">normalize<wbr>Header<wbr>Name</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="src_core_request.html#normalizeheadervalue" class="tsd-kind-icon">normalize<wbr>Header<wbr>Value</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="src_core_request.html#normalizeheaders" class="tsd-kind-icon">normalize<wbr>Headers</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer>
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-namespace"><span class="tsd-kind-icon">Namespace</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="overlay"></div>
+<script src="../assets/js/main.js"></script>
+<script>'use strict';
+
+/*!
+ * V4Fire Core
+ * https://github.com/V4Fire/Core
+ *
+ * Released under the MIT license
+ * https://github.com/V4Fire/Core/blob/master/LICENSE
+ */
+
+(function () {
+	document.body.style.display = 'block';
+
+	var
+		isDTS = /^index$|\.d$/,
+		needHide = /\/(?:prelude|interface|const|modules|helpers|engines)\b/,
+		isNode = /(?:^|\/)node_modules(?:\/|$)/;
+
+	var
+		trimRgxp = /^\s+|[\n\v"']+|\s+$/g,
+		normalizeRgxp = /(?:^|\b)src\/|\/index$/g;
+
+	var
+		breadcrumbs = Array.from(document.querySelectorAll('.tsd-breadcrumb a')),
+		headers = Array.from(document.querySelectorAll('h1'));
+
+	breadcrumbs.forEach(function (el) {
+		el.textContent = el.textContent.replace(trimRgxp, '').replace(normalizeRgxp, '');
+	});
+
+	headers.forEach(function (el) {
+		el.textContent = el.textContent.replace(trimRgxp, '').replace(normalizeRgxp, '');
+	});
+
+	var
+		navigation = Array.from(document.querySelectorAll('.tsd-navigation.primary .tsd-kind-module a')),
+		globalIndex = Array.from(document.querySelectorAll('.tsd-kind-module a'));
+
+	[].concat(breadcrumbs.length <= 1 ? globalIndex : navigation).forEach(function (el) {
+		var
+			wrapper = el.parentNode,
+			linkText = el.textContent.replace(trimRgxp, '');
+
+		if (isDTS.test(linkText)) {
+			var
+				nm = RegExp.$1;
+
+			if (linkText === 'index') {
+				el.innerHTML = '<b>prelude</b>';
+
+			} else if (isNode.test(linkText)) {
+				el.textContent = nm;
+
+			} else {
+				wrapper.parentNode.removeChild(wrapper);
+			}
+
+		} else if (needHide.test(linkText)) {
+			wrapper.parentNode.removeChild(wrapper);
+
+		} else {
+			el.textContent = linkText.replace(normalizeRgxp, '');
+		}
+	});
+})();
+</script>
+</body>
+</html>

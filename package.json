@@ -5,7 +5,7 @@
   "main": "src/core/index.js",
   "typings": "index.d.ts",
   "license": "MIT",
-  "version": "3.29.0",
+  "version": "3.30.4",
   "author": {
     "name": "kobezzza",
     "email": "kobezzza@gmail.com",
@@ -30,7 +30,7 @@
     "test:typescript": "node node_modules/@v4fire/typescript-check",
     "test:eslint": "npx eslint ./config/**/*.js ./build/**/*.js ./src/**/*.js ./src/**/*.ts",
     "test:jasmine": "nyc --reporter=lcov --reporter=text npx jasmine",
-    "up": "npm i && npm up && npm audit fix && npx gulp build:docs"
+    "up": "npm i && npm up && npm audit fix && npx gulp build:doc"
   },
   "husky": {
     "hooks": {
@@ -39,14 +39,14 @@
   },
   "dependencies": {
     "@types/got": "^9.6.11",
-    "@types/jasmine": "^3.6.2",
+    "@types/jasmine": "^3.6.3",
     "dom-storage": "^2.1.0",
     "eventemitter2": "^6.4.3",
     "fs-extra-promise": "^1.0.1",
     "got": "^11.8.1",
-    "jasmine": "^3.6.3",
+    "jasmine": "^3.6.4",
     "set-value": "^3.0.2",
-    "tslib": "2.0.3",
+    "tslib": "2.1.0",
     "w3c-xmlserializer": "^2.0.0"
   },
   "optionalDependencies": {
@@ -80,7 +80,7 @@
     "sugar": "^2.0.6",
     "through2": "^4.0.2",
     "tsconfig": "^7.0.0",
-    "typedoc": "^0.19.2",
+    "typedoc": "^0.20.14",
     "typescript": "4.1.3",
     "uniconf": "^2.1.1",
     "upath": "^2.0.0",
@@ -90,7 +90,7 @@
     "@v4fire/linters": "^1.6.1",
     "abort-controller": "^3.0.0",
     "express": "^4.17.1",
-    "husky": "^4.3.6",
+    "husky": "^4.3.8",
     "node-fetch": "^2.6.1",
     "nyc": "^15.1.0",
     "xhr2": "^0.2.0"

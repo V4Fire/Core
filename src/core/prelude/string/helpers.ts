@@ -12,7 +12,7 @@ import { isDigital } from 'core/prelude/string/const';
  * Returns true, if the specified character is declared in upper case
  * @param char
  */
-export function isUpper(char: string): boolean {
+export function isCharUpper(char: string): boolean {
 	const up = char.toUpperCase();
 	return char === up && char.toLowerCase() !== up;
 }
@@ -88,12 +88,15 @@ export function toDasherize(
  * @param stable
  */
 export function convertToSeparatedStr(str: string, separator: string, stable?: boolean): string {
+	const
+		symbols = [...str.letters()];
+
 	let
 		res = '';
 
-	for (let i = 0; i < str.length; i++) {
+	for (let i = 0; i < symbols.length; i++) {
 		const
-			el = str[i];
+			el = symbols[i];
 
 		if (el === separator) {
 			res += separator;
@@ -106,12 +109,12 @@ export function convertToSeparatedStr(str: string, separator: string, stable?: b
 		}
 
 		const
-			nextChar = str[i + 1];
+			nextChar = symbols[i + 1];
 
-		if (isDigital.test(el) || isUpper(el)) {
+		if (isDigital.test(el) || isCharUpper(el)) {
 			const needSeparator = i > 0 && (
 				stable ||
-				Object.isTruly(nextChar) && !isDigital.test(nextChar) && !isUpper(nextChar)
+				Object.isTruly(nextChar) && !isDigital.test(nextChar) && !isCharUpper(nextChar)
 			);
 
 			if (needSeparator) {
@@ -124,7 +127,7 @@ export function convertToSeparatedStr(str: string, separator: string, stable?: b
 			res += el;
 
 			const
-				needSeparator = Object.isTruly(nextChar) && (isDigital.test(nextChar) || isUpper(nextChar));
+				needSeparator = Object.isTruly(nextChar) && (isDigital.test(nextChar) || isCharUpper(nextChar));
 
 			if (needSeparator) {
 				res += separator;

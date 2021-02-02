@@ -11,6 +11,8 @@
  * @packageDeclaration
  */
 
+import SyncPromise from 'core/promise/sync';
+
 import Super, {
 
 	asyncCounter,
@@ -447,12 +449,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	promise<T = unknown>(promise: PromiseLikeP<T>, opts?: AsyncPromiseOptions): Promise<T> {
 		const
 			that = this,
-			p = <AsyncPromiseOptions>({name: this.namespaces.promise, ...opts});
-
-		const
 			{ctx} = this;
 
-		return new Promise((resolve, reject) => {
+		const p = <AsyncPromiseOptions>({
+			name: this.namespaces.promise,
+			...opts
+		});
+
+		return new SyncPromise((resolve, reject) => {
 			let
 				canceled = false,
 				proxyReject;

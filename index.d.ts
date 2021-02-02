@@ -1,5 +1,3 @@
-/* eslint-disable max-lines, @typescript-eslint/unified-signatures */
-
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -7,6 +5,8 @@
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
+
+/* eslint-disable max-lines, @typescript-eslint/unified-signatures */
 
 /**
  * [[include:core/prelude/README.md]]
@@ -17,8 +17,7 @@ declare namespace TB {
 	type Cast<X, Y> = X extends Y ? X : Y;
 
 	type Type<A extends any, ID extends string> = A & {
-		// @ts-ignore (hack)
-		[K in typeof symbol]: ID;
+		[K in 'symbol']: ID;
 	};
 
 	type Length<T extends any[]> = T['length'];
@@ -128,7 +127,7 @@ declare class IdleDeadline {
 	timeRemaining(): number;
 }
 
-declare function requestIdleCallback(fn: (deadline: IdleDeadline) => void, opts?: {timer?: number}): number;
+declare function requestIdleCallback(fn: (deadline: IdleDeadline) => void, opts?: {timeout?: number}): number;
 declare function cancelIdleCallback(id: number): void;
 
 declare function setImmediate(fn: AnyFunction): number;
@@ -188,12 +187,14 @@ interface JSONCb {
 
 interface FastCloneOptions {
 	/**
-	 * JSON.stringify replacer
+	 * Replacer function for JSON.stringify
+	 * @see [[JSON.stringify]]
 	 */
 	replacer?: JSONCb;
 
 	/**
 	 * Reviver function for JSON.parse
+	 * @see [[JSON.parse]]
 	 */
 	reviver?: JSONCb;
 
@@ -518,29 +519,32 @@ interface ObjectPropertyFilter<K = string, V = unknown> {
 
 interface ObjectConstructor {
 	/**
-	 * Returns a value from the passed object by the specified path
+	 * Returns a value from the passed object by the specified path.
+	 * Returns undefined if the specified path doesn't exist in the object.
 	 *
 	 * @param obj
 	 * @param path
 	 * @param [opts] - additional options
 	 */
-	get<T = unknown>(obj: any, path: ObjectPropertyPath, opts?: ObjectGetOptions): T;
+	get<T = unknown>(obj: any, path: ObjectPropertyPath, opts?: ObjectGetOptions): CanUndef<T>;
 
 	/**
-	 * Returns a function that returns a value from the passed object, which the function takes, by the specified path
+	 * Returns a function that returns a value from the passed object, which the function takes, by the specified path.
+	 * The function returns undefined if the specified path doesn't exist in the object.
 	 *
 	 * @param path
 	 * @param [opts] - additional options
 	 */
-	get<T = unknown>(path: ObjectPropertyPath, opts?: ObjectGetOptions): (obj: any) => T;
+	get<T = unknown>(path: ObjectPropertyPath, opts?: ObjectGetOptions): (obj: any) => CanUndef<T>;
 
 	/**
-	 * Returns a function that returns a value from the specified object by a path that the function takes
+	 * Returns a function that returns a value from the specified object by a path that the function takes.
+	 * The function returns undefined if the specified path doesn't exist in the object.
 	 *
 	 * @param obj
 	 * @param [opts] - additional options
 	 */
-	get<T = unknown>(obj: any, opts?: ObjectGetOptions): (path: ObjectPropertyPath) => T;
+	get<T = unknown>(obj: any, opts?: ObjectGetOptions): (path: ObjectPropertyPath) => CanUndef<T>;
 
 	/**
 	 * Returns true if an object has a property by the specified path
@@ -1424,7 +1428,7 @@ interface ObjectConstructor {
 	 * ```
 	 */
 	Option<A1, A extends any[], R>(value: (a1: A1, ...rest: A) => R):
-		(a1: Maybe<Nullable<A1>> | Either<A1> | Nullable<A1>, ...rest) => Maybe<R>;
+		(a1: Maybe<Nullable<A1>> | Either<A1> | Nullable<A1>, ...rest: A) => Maybe<R>;
 
 	/**
 	 * Wraps the specified value into the Either structure.
@@ -1480,7 +1484,7 @@ interface ObjectConstructor {
 	 * ```
 	 */
 	Result<A1, A extends any[], R>(value: (a1: A1, ...a: A) => R):
-		(a1: Maybe<A1> | Either<A1>, ...rest) => Either<R>;
+		(a1: Maybe<A1> | Either<A1>, ...rest: A) => Either<R>;
 
 	/**
 	 * Wraps the specified value into the Either structure
@@ -1850,6 +1854,17 @@ interface StringUnderscoreOptions extends StringDasherizeOptions {
 
 interface StringConstructor {
 	/**
+	 * Returns an iterator over the string letters.
+	 * The method understands the composition of multiple Unicode symbols that produce one visual symbol.
+	 *
+	 * @example
+	 * ```
+	 * [...String.letters('12🇷🇺👩')] // ['1', '2', '🇷🇺', '👩']
+	 * ```
+	 */
+	letters(str: string): IterableIterator<string>;
+
+	/**
 	 * Returns a curried version of String.capitalize
 	 * @param opts - additional options
 	 */
@@ -1949,6 +1964,17 @@ interface StringConstructor {
 }
 
 interface String {
+	/**
+	 * Returns an iterator over the string letters.
+	 * The method understands the composition of multiple Unicode symbols that produce one visual symbol.
+	 *
+	 * @example
+	 * ```
+	 * [...'12🇷🇺👩'.letters()] // ['1', '2', '🇷🇺', '👩']
+	 * ```
+	 */
+	letters(): IterableIterator<string>;
+
 	/**
 	 * Capitalizes the first character of a string and returns it
 	 * @param [opts] - additional options

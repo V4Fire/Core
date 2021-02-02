@@ -11,6 +11,64 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.30.4 (2021-01-29)
+
+#### :bug: Bug Fix
+
+* Fixed the `requestIdleCallback` interface
+
+## v3.30.3 (2021-01-28)
+
+#### :house: Internal
+
+* `core/async`:
+  * Optimized clearing of async wrappers
+  * Now all promises are wrapped by using `SyncPromise`
+
+## v3.30.2 (2021-01-15)
+
+#### :bug: Bug Fix
+
+* Fixed `Object.get` interface and comments
+
+## v3.30.1 (2021-01-11)
+
+#### :bug: Bug Fix
+
+* Fixed iterations over chained emoji-s `core/prelude/string`
+* Fixed Unicode support of char ranges `core/range`
+
+## v3.30.0 (2021-01-10)
+
+#### :boom: Breaking Change
+
+* `build`:
+  * Renamed `docs.gulp.js` -> `doc.gulp.js`
+  * Renamed `gulp build:docs` -> `gulp build:doc`
+
+#### :rocket: New Feature
+
+* Added `letters` and `String.letters` `core/prelude/string`
+
+#### :bug: Bug Fix
+
+* Improved Unicode support `core/prelude/string`
+* Fixed providing of empty strings as API URL-s `core/request`
+
+#### :house: Internal
+
+* Updated `typedoc@0.20.14`
+
+## v3.29.1 (2020-12-23)
+
+#### :bug: Bug Fix
+
+* Added response status checking whether it's 204 before decoding a server response `core/request/response`
+
+#### :house: Internal
+
+* Added mapping `application/octet-stream` to `arrayBuffer` `core/mime-type`
+
 ## v3.29.0 (2020-12-22)
 
 #### :rocket: New Feature

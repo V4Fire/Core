@@ -9,6 +9,22 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.30.1 (2021-01-11)
+
+#### :bug: Bug Fix
+
+* Fixed iterations over chained emoji-s `string`
+
+## v3.30.0 (2021-01-10)
+
+#### :rocket: New Feature
+
+* Added `letters` and `String.letters` `string`
+
+#### :bug: Bug Fix
+
+* Improved Unicode support `string`
+
 ## v3.29.0 (2020-12-22)
 
 #### :rocket: New Feature

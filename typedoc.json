@@ -1,17 +1,13 @@
 {
   "name": "V4Fire",
   "tsconfig": "./typedoc.tsconfig.json",
-  "mode": "modules",
-  "inputFiles": ["./src", "./index.d.ts"],
+  "entryPoints": ["./src", "./index.d.ts"],
   "out": "./docs",
   "readme": "./README.md",
   "hideGenerator": true,
-  "ignoreCompilerErrors": false,
   "gitRevision": "master",
   "includes": "./src",
   "media": "./assets",
-  "includeDeclarations": true,
   "excludePrivate": true,
-  "excludeNotExported": true,
   "excludeExternals": true
 }

@@ -1,0 +1,1497 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>default | V4Fire</title>
+	<meta name="description" content="Documentation for V4Fire">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="../assets/css/main.css">
+	<script async src="../assets/js/search.js" id="search-script"></script>
+<style>/*!
+ * V4Fire Core
+ * https://github.com/V4Fire/Core
+ *
+ * Released under the MIT license
+ * https://github.com/V4Fire/Core/blob/master/LICENSE
+ */
+
+body {
+	font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+}
+
+code, pre, tt {
+	font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+}
+
+.tsd-typography h1,
+.tsd-typography h2,
+.tsd-typography h3,
+.tsd-typography h4,
+.tsd-typography h5,
+.tsd-typography h6 {
+	margin: 1em 0;
+	font-family: -apple-system, BlinkMacSystemFont, UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+}
+
+.tsd-panel {
+	padding: 20px 40px;
+	border: 1px solid #DDD;
+	border-radius: 10px;
+	box-shadow: none;
+}
+
+.tsd-page-title {
+	color: #EEE;
+
+	background: #232526; /* fallback for old browsers */
+	background: -webkit-linear-gradient(to right, #414345, #232526); /* Chrome 10-25, Safari 5.1-6 */
+	background: linear-gradient(to right, #414345, #232526); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+.tsd-page-toolbar {
+	height: 43px;
+}
+
+.title {
+	display: inline-flex;
+	align-items: center;
+}
+
+.title::before {
+	content: "";
+
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	margin-right: 10px;
+
+	border-radius: 5px;
+	background-image: url("https://avatars0.githubusercontent.com/u/29952525?s=200&v=4");
+	background-size: contain;
+}
+
+#tsd-search .tsd-widget.search.no-caption {
+	bottom: 0;
+}
+
+#tsd-search .field {
+	height: 100%;
+}
+
+pre {
+	background-color: rgba(7, 7, 7, 0.01);
+}
+
+/**
+ * GitHub Gist Theme
+ * Author : Anthony Attard - https://github.com/AnthonyAttard
+ * Author : Louis Barranqueiro - https://github.com/LouisBarranqueiro
+ */
+
+.hljs {
+	display: block;
+	background: white;
+	padding: 0.5em;
+	color: #333333;
+	overflow-x: auto;
+}
+
+.hljs-comment,
+.hljs-meta {
+	color: #969896;
+}
+
+.hljs-variable,
+.hljs-template-variable,
+.hljs-strong,
+.hljs-emphasis,
+.hljs-quote {
+	color: #df5000;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-type {
+	color: #d73a49;
+}
+
+.hljs-literal,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-attribute {
+	color: #0086b3;
+}
+
+.hljs-section,
+.hljs-name {
+	color: #63a35c;
+}
+
+.hljs-tag {
+	color: #333333;
+}
+
+.hljs-title,
+.hljs-attr,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-selector-attr,
+.hljs-selector-pseudo {
+	color: #6f42c1;
+}
+
+.hljs-addition {
+	color: #55a532;
+	background-color: #eaffea;
+}
+
+.hljs-deletion {
+	color: #bd2c00;
+	background-color: #ffecec;
+}
+
+.hljs-link {
+	text-decoration: underline;
+}
+
+.hljs-number {
+	color: #005cc5;
+}
+
+.hljs-string {
+	color: #032f62;
+}
+</style>
+</head>
+<body>
+<script>'use strict';
+
+/*!
+ * V4Fire Core
+ * https://github.com/V4Fire/Core
+ *
+ * Released under the MIT license
+ * https://github.com/V4Fire/Core/blob/master/LICENSE
+ */
+
+(function () {
+	if (localStorage.getItem('visibility') == null) {
+		localStorage.setItem('visibility', 'public');
+	}
+
+	document.title = document.title.replace(/['"]+|src\//g, '');
+	document.body.style.display = 'none';
+})();
+</script>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.json" data-base="..">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="../index.html" class="title">V4Fire</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="../modules.html">V4Fire</a>
+				</li>
+				<li>
+					<a href="../modules/src_core_data_modules_params.html">src/core/data/modules/params</a>
+				</li>
+				<li>
+					<a href="src_core_data_modules_params.default.html">default</a>
+				</li>
+			</ul>
+			<h1>Class default</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-hierarchy">
+				<h3>Hierarchy</h3>
+				<ul class="tsd-hierarchy">
+					<li>
+						<span class="target">default</span>
+						<ul class="tsd-hierarchy">
+							<li>
+								<a href="src_core_data_modules_base.default.html" class="tsd-signature-type" data-tsd-kind="Class">default</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel-group tsd-index-group">
+				<h2>Index</h2>
+				<section class="tsd-panel tsd-index-panel">
+					<div class="tsd-index-content">
+						<section class="tsd-index-section ">
+							<h3>Constructors</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="src_core_data_modules_params.default.html#constructor" class="tsd-kind-icon">constructor</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Properties</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="src_core_data_modules_params.default.html#addmethod" class="tsd-kind-icon">add<wbr>Method</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="src_core_data_modules_params.default.html#advurl" class="tsd-kind-icon">advURL</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="src_core_data_modules_params.default.html#baseaddurl" class="tsd-kind-icon">base<wbr>AddURL</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="src_core_data_modules_params.default.html#basedelurl" class="tsd-kind-icon">base<wbr>DelURL</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="src_core_data_modules_params.default.html#basegeturl" class="tsd-kind-icon">base<wbr>GetURL</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="src_core_data_modules_params.default.html#basepeekurl" class="tsd-kind-icon">base<wbr>PeekURL</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="src_core_data_modules_params.default.html#baseurl" class="tsd-kind-icon">baseURL</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="src_core_data_modules_params.default.html#baseupdurl" class="tsd-kind-icon">base<wbr>UpdURL</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="src_core_data_modules_params.default.html#custommethod" class="tsd-kind-icon">custom<wbr>Method</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="src_core_data_modules_params.default.html#delmethod" class="tsd-kind-icon">del<wbr>Method</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="src_core_data_modules_params.default.html#eventname" class="tsd-kind-icon">event<wbr>Name</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="src_core_data_modules_params.default.html#externalrequest" class="tsd-kind-icon">external<wbr>Request</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="src_core_data_modules_params.default.html#extraproviders" class="tsd-kind-icon">extra<wbr>Providers</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="src_core_data_modules_params.default.html#getmethod" class="tsd-kind-icon">get<wbr>Method</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="src_core_data_modules_params.default.html#globalemitter" class="tsd-kind-icon">global<wbr>Emitter</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="src_core_data_modules_params.default.html#mocks" class="tsd-kind-icon">mocks</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="src_core_data_modules_params.default.html#peekmethod" class="tsd-kind-icon">peek<wbr>Method</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="src_core_data_modules_params.default.html#socketurl" class="tsd-kind-icon">socketURL</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="src_core_data_modules_params.default.html#updmethod" class="tsd-kind-icon">upd<wbr>Method</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><a href="src_core_data_modules_params.default.html#decoders" class="tsd-kind-icon">decoders</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><a href="src_core_data_modules_params.default.html#encoders" class="tsd-kind-icon">encoders</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><a href="src_core_data_modules_params.default.html#middlewares" class="tsd-kind-icon">middlewares</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><a href="src_core_data_modules_params.default.html#mocks-1" class="tsd-kind-icon">mocks</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><a href="src_core_data_modules_params.default.html#request" class="tsd-kind-icon">request</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Accessors</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="src_core_data_modules_params.default.html#globalevent" class="tsd-kind-icon">global<wbr>Event</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="src_core_data_modules_params.default.html#request-1" class="tsd-kind-icon">request</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Methods</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static"><a href="src_core_data_modules_params.default.html#select" class="tsd-kind-icon">select</a></li>
+							</ul>
+						</section>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Constructors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class">
+					<a name="constructor" class="tsd-anchor"></a>
+					<h3>constructor</h3>
+					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">new default<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="src_core_data_modules_params.default.html" class="tsd-signature-type" data-tsd-kind="Class">default</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+							</aside>
+							<h4 class="tsd-returns-title">Returns <a href="src_core_data_modules_params.default.html" class="tsd-signature-type" data-tsd-kind="Class">default</a></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="addmethod" class="tsd-anchor"></a>
+					<h3>add<wbr>Method</h3>
+					<div class="tsd-signature tsd-kind-icon">add<wbr>Method<span class="tsd-signature-symbol">:</span> <a href="../modules/src_core_request_interface.html#requestmethod" class="tsd-signature-type" data-tsd-kind="Type alias">RequestMethod</a><span class="tsd-signature-symbol"> = &#x27;POST&#x27;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L325">src/core/data/modules/params.ts:325</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Default HTTP request method for the &quot;add&quot; method</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="advurl" class="tsd-anchor"></a>
+					<h3>advURL</h3>
+					<div class="tsd-signature tsd-kind-icon">advURL<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = &#x27;&#x27;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L212">src/core/data/modules/params.ts:212</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Advanced part of URL for a request of all request methods
+							(it is concatenated with the base part)</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="baseaddurl" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> base<wbr>AddURL</h3>
+					<div class="tsd-signature tsd-kind-icon">base<wbr>AddURL<span class="tsd-signature-symbol">:</span> <a href="../modules/index.html#canundef" class="tsd-signature-type" data-tsd-kind="Type alias">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L259">src/core/data/modules/params.ts:259</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Base part of URL for a request for the &quot;add&quot; method</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>example</dt>
+							<dd><pre><code class="language-js"><span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">Profile</span><span style="color: #000000"> </span><span style="color: #0000FF">extends</span><span style="color: #000000"> </span><span style="color: #267F99">Provider</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #008000">// baseURL request methods despite the &quot;add&quot; is used this URL</span>
+<span style="color: #000000">  </span><span style="color: #001080">basePeekURL</span><span style="color: #000000">: </span><span style="color: #A31515">&#039;profile/info&#039;</span>
+<span style="color: #000000">  </span><span style="color: #001080">baseAddURL</span><span style="color: #000000">: </span><span style="color: #A31515">&#039;profile/info/add&#039;</span>
+<span style="color: #000000">}</span>
+</code></pre>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="basedelurl" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> base<wbr>DelURL</h3>
+					<div class="tsd-signature tsd-kind-icon">base<wbr>DelURL<span class="tsd-signature-symbol">:</span> <a href="../modules/index.html#canundef" class="tsd-signature-type" data-tsd-kind="Type alias">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L287">src/core/data/modules/params.ts:287</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Base part of URL for a request for the &quot;del&quot; method</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>example</dt>
+							<dd><pre><code class="language-js"><span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">Profile</span><span style="color: #000000"> </span><span style="color: #0000FF">extends</span><span style="color: #000000"> </span><span style="color: #267F99">Provider</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #008000">// baseURL request methods despite the &quot;del&quot; is used this URL</span>
+<span style="color: #000000">  </span><span style="color: #001080">basePeekURL</span><span style="color: #000000">: </span><span style="color: #A31515">&#039;profile/info&#039;</span>
+<span style="color: #000000">  </span><span style="color: #001080">baseDelURL</span><span style="color: #000000">: </span><span style="color: #A31515">&#039;profile/info/del&#039;</span>
+<span style="color: #000000">}</span>
+</code></pre>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="basegeturl" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> base<wbr>GetURL</h3>
+					<div class="tsd-signature tsd-kind-icon">base<wbr>GetURL<span class="tsd-signature-symbol">:</span> <a href="../modules/index.html#canundef" class="tsd-signature-type" data-tsd-kind="Type alias">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L231">src/core/data/modules/params.ts:231</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Base part of URL for a request for the &quot;get&quot; method</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>example</dt>
+							<dd><pre><code class="language-js"><span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">Profile</span><span style="color: #000000"> </span><span style="color: #0000FF">extends</span><span style="color: #000000"> </span><span style="color: #267F99">Provider</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #008000">// For all request methods despite the &quot;get&quot; is used this URL</span>
+<span style="color: #000000">  </span><span style="color: #001080">baseURL</span><span style="color: #000000">: </span><span style="color: #A31515">&#039;profile/info&#039;</span>
+<span style="color: #000000">  </span><span style="color: #001080">baseGetURL</span><span style="color: #000000">: </span><span style="color: #A31515">&#039;profile/info/get&#039;</span>
+<span style="color: #000000">}</span>
+</code></pre>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="basepeekurl" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> base<wbr>PeekURL</h3>
+					<div class="tsd-signature tsd-kind-icon">base<wbr>PeekURL<span class="tsd-signature-symbol">:</span> <a href="../modules/index.html#canundef" class="tsd-signature-type" data-tsd-kind="Type alias">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L245">src/core/data/modules/params.ts:245</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Base part of URL for a request for the &quot;peek&quot; method</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>example</dt>
+							<dd><pre><code class="language-js"><span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">Profile</span><span style="color: #000000"> </span><span style="color: #0000FF">extends</span><span style="color: #000000"> </span><span style="color: #267F99">Provider</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #008000">// For all request methods despite the &quot;peek&quot; is used this URL</span>
+<span style="color: #000000">  </span><span style="color: #001080">baseURL</span><span style="color: #000000">: </span><span style="color: #A31515">&#039;profile/info&#039;</span>
+<span style="color: #000000">  </span><span style="color: #001080">basePeekURL</span><span style="color: #000000">: </span><span style="color: #A31515">&#039;profile/info/peek&#039;</span>
+<span style="color: #000000">}</span>
+</code></pre>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="baseurl" class="tsd-anchor"></a>
+					<h3>baseURL</h3>
+					<div class="tsd-signature tsd-kind-icon">baseURL<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = &#x27;&#x27;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L206">src/core/data/modules/params.ts:206</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Base part of URL for a request of all request methods</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>example</dt>
+							<dd><pre><code class="language-js"><span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">Profile</span><span style="color: #000000"> </span><span style="color: #0000FF">extends</span><span style="color: #000000"> </span><span style="color: #267F99">Provider</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #001080">baseURL</span><span style="color: #000000">: </span><span style="color: #A31515">&#039;profile/info&#039;</span>
+<span style="color: #000000">}</span>
+</code></pre>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="baseupdurl" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> base<wbr>UpdURL</h3>
+					<div class="tsd-signature tsd-kind-icon">base<wbr>UpdURL<span class="tsd-signature-symbol">:</span> <a href="../modules/index.html#canundef" class="tsd-signature-type" data-tsd-kind="Type alias">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L273">src/core/data/modules/params.ts:273</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Base part of URL for a request for the &quot;upd&quot; method</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>example</dt>
+							<dd><pre><code class="language-js"><span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">Profile</span><span style="color: #000000"> </span><span style="color: #0000FF">extends</span><span style="color: #000000"> </span><span style="color: #267F99">Provider</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #008000">// baseURL request methods despite the &quot;upd&quot; is used this URL</span>
+<span style="color: #000000">  </span><span style="color: #001080">basePeekURL</span><span style="color: #000000">: </span><span style="color: #A31515">&#039;profile/info&#039;</span>
+<span style="color: #000000">  </span><span style="color: #001080">baseUpdURL</span><span style="color: #000000">: </span><span style="color: #A31515">&#039;profile/info/upd&#039;</span>
+<span style="color: #000000">}</span>
+</code></pre>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="custommethod" class="tsd-anchor"></a>
+					<h3>custom<wbr>Method</h3>
+					<div class="tsd-signature tsd-kind-icon">custom<wbr>Method<span class="tsd-signature-symbol">:</span> <a href="../modules/index.html#canundef" class="tsd-signature-type" data-tsd-kind="Type alias">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_request_interface.html#requestmethod" class="tsd-signature-type" data-tsd-kind="Type alias">RequestMethod</a><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L341">src/core/data/modules/params.ts:341</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>HTTP request method for all request methods.
+							This parameter will override other method parameters, such as &quot;getMethod&quot; or &quot;delMethod&quot;.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="delmethod" class="tsd-anchor"></a>
+					<h3>del<wbr>Method</h3>
+					<div class="tsd-signature tsd-kind-icon">del<wbr>Method<span class="tsd-signature-symbol">:</span> <a href="../modules/src_core_request_interface.html#requestmethod" class="tsd-signature-type" data-tsd-kind="Type alias">RequestMethod</a><span class="tsd-signature-symbol"> = &#x27;DELETE&#x27;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L335">src/core/data/modules/params.ts:335</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Default HTTP request method for the &quot;del&quot; method</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="eventname" class="tsd-anchor"></a>
+					<h3>event<wbr>Name</h3>
+					<div class="tsd-signature tsd-kind-icon">event<wbr>Name<span class="tsd-signature-symbol">:</span> <a href="../modules/index.html#canundef" class="tsd-signature-type" data-tsd-kind="Type alias">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_data_interface_types.html#modelmethod" class="tsd-signature-type" data-tsd-kind="Type alias">ModelMethod</a><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L347">src/core/data/modules/params.ts:347</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Event name for requests.
+							Please notice that all request methods except &quot;get&quot;, &quot;peek&quot; and &quot;request&quot; emit events by default.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="externalrequest" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> external<wbr>Request</h3>
+					<div class="tsd-signature tsd-kind-icon">external<wbr>Request<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = false</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L356">src/core/data/modules/params.ts:356</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<dl class="tsd-comment-tags">
+							<dt>see</dt>
+							<dd><p><a href="../interfaces/src_core_request_interface.createrequestoptions.html#externalrequest">CreateRequestOptions.externalRequest</a></p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="extraproviders" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> extra<wbr>Providers</h3>
+					<div class="tsd-signature tsd-kind-icon">extra<wbr>Providers<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="../modules/src_core_data_interface_types.html#extraproviders" class="tsd-signature-type" data-tsd-kind="Type alias">ExtraProviders</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span>params<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_data_interface_types.extraproviderparams.html" class="tsd-signature-type" data-tsd-kind="Interface">ExtraProviderParams</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><a href="../modules/index.html#canundef" class="tsd-signature-type" data-tsd-kind="Type alias">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/src_core_data_interface_types.html#extraproviders" class="tsd-signature-type" data-tsd-kind="Type alias">ExtraProviders</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L310">src/core/data/modules/params.ts:310</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>List of additional data providers for the &quot;get&quot; method.
+							It can be useful if you have some providers that you want combine to one.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>example</dt>
+							<dd><pre><code class="language-js"><span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">User</span><span style="color: #000000"> </span><span style="color: #0000FF">extends</span><span style="color: #000000"> </span><span style="color: #267F99">Provider</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #001080">baseURL</span><span style="color: #000000">: </span><span style="color: #A31515">&#039;user/info&#039;</span><span style="color: #000000">,</span>
+
+<span style="color: #000000">  </span><span style="color: #001080">extraProviders</span><span style="color: #000000">: {</span>
+<span style="color: #000000">    </span><span style="color: #001080">balance</span><span style="color: #000000">: {</span>
+<span style="color: #000000">      </span><span style="color: #001080">provider</span><span style="color: #000000">: </span><span style="color: #A31515">&#039;UserBalance&#039;</span>
+<span style="color: #000000">    },</span>
+
+<span style="color: #000000">    </span><span style="color: #001080">hobby</span><span style="color: #000000">: {</span>
+<span style="color: #000000">      </span><span style="color: #001080">provider</span><span style="color: #000000">: </span><span style="color: #A31515">&#039;UserHobby&#039;</span>
+<span style="color: #000000">    },</span>
+<span style="color: #000000">  }</span>
+<span style="color: #000000">}</span>
+</code></pre>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="getmethod" class="tsd-anchor"></a>
+					<h3>get<wbr>Method</h3>
+					<div class="tsd-signature tsd-kind-icon">get<wbr>Method<span class="tsd-signature-symbol">:</span> <a href="../modules/src_core_request_interface.html#requestmethod" class="tsd-signature-type" data-tsd-kind="Type alias">RequestMethod</a><span class="tsd-signature-symbol"> = &#x27;GET&#x27;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L315">src/core/data/modules/params.ts:315</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Default HTTP request method for the &quot;get&quot; method</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="globalemitter" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> global<wbr>Emitter</h3>
+					<div class="tsd-signature tsd-kind-icon">global<wbr>Emitter<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">EventEmitter2</span><span class="tsd-signature-symbol"> = ...</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L194">src/core/data/modules/params.ts:194</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Global event emitter to broadcast provider events</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="mocks" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> mocks</h3>
+					<div class="tsd-signature tsd-kind-icon">mocks<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">{ </span>CONNECT<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>DELETE<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>GET<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>HEAD<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>OPTIONS<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>PATCH<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>POST<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>PUT<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>TRACE<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">{ </span>default<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>CONNECT<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>DELETE<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>GET<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>HEAD<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>OPTIONS<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>PATCH<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>POST<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>PUT<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>TRACE<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">{ </span>CONNECT<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>DELETE<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>GET<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>HEAD<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>OPTIONS<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>PATCH<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>POST<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>PUT<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>TRACE<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">{ </span>default<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>CONNECT<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>DELETE<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>GET<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>HEAD<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>OPTIONS<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>PATCH<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>POST<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>PUT<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>TRACE<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L353">src/core/data/modules/params.ts:353</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<dl class="tsd-comment-tags">
+							<dt>deprecated</dt>
+							<dd></dd>
+							<dt>see</dt>
+							<dd><p>[[Provider.mocks]]</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="peekmethod" class="tsd-anchor"></a>
+					<h3>peek<wbr>Method</h3>
+					<div class="tsd-signature tsd-kind-icon">peek<wbr>Method<span class="tsd-signature-symbol">:</span> <a href="../modules/src_core_request_interface.html#requestmethod" class="tsd-signature-type" data-tsd-kind="Type alias">RequestMethod</a><span class="tsd-signature-symbol"> = &#x27;HEAD&#x27;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L320">src/core/data/modules/params.ts:320</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Default HTTP request method for the &quot;peek&quot; method</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="socketurl" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> socketURL</h3>
+					<div class="tsd-signature tsd-kind-icon">socketURL<span class="tsd-signature-symbol">:</span> <a href="../modules/index.html#canundef" class="tsd-signature-type" data-tsd-kind="Type alias">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L217">src/core/data/modules/params.ts:217</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>URL for a socket connection</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="updmethod" class="tsd-anchor"></a>
+					<h3>upd<wbr>Method</h3>
+					<div class="tsd-signature tsd-kind-icon">upd<wbr>Method<span class="tsd-signature-symbol">:</span> <a href="../modules/src_core_request_interface.html#requestmethod" class="tsd-signature-type" data-tsd-kind="Type alias">RequestMethod</a><span class="tsd-signature-symbol"> = &#x27;PUT&#x27;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L330">src/core/data/modules/params.ts:330</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Default HTTP request method for the &quot;upd&quot; method</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static">
+					<a name="decoders" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> <span class="tsd-flag ts-flagStatic">Static</span> decoders</h3>
+					<div class="tsd-signature tsd-kind-icon">decoders<span class="tsd-signature-symbol">:</span> <a href="../modules/src_core_data_interface_types.html#decodersmap" class="tsd-signature-type" data-tsd-kind="Type alias">DecodersMap</a><span class="tsd-signature-symbol"> = ...</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L111">src/core/data/modules/params.ts:111</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Map of data decoder sequences.
+								The key of a map element represent a name of the provider method: &#39;get&#39;, &#39;post&#39;, etc.
+							The value of a map element represent a sequence of decoders for the specified provider method.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>see</dt>
+							<dd><p><a href="../modules/src_core_request_interface.html#decoders">Decoders</a></p>
+							</dd>
+							<dt>example</dt>
+							<dd><pre><code class="language-js"><span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">MyProvider</span><span style="color: #000000"> </span><span style="color: #0000FF">extends</span><span style="color: #000000"> </span><span style="color: #267F99">Provider</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #0000FF">static</span><span style="color: #000000"> </span><span style="color: #001080">decoders</span><span style="color: #000000"> = {</span>
+<span style="color: #000000">    </span><span style="color: #001080">get:</span><span style="color: #000000"> [</span><span style="color: #001080">fromJSON</span><span style="color: #000000">],</span>
+<span style="color: #000000">    </span><span style="color: #001080">upd:</span><span style="color: #000000"> [</span><span style="color: #001080">fromBuffer</span><span style="color: #000000">]</span>
+<span style="color: #000000">  };</span>
+<span style="color: #000000">}</span>
+</code></pre>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static">
+					<a name="encoders" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> <span class="tsd-flag ts-flagStatic">Static</span> encoders</h3>
+					<div class="tsd-signature tsd-kind-icon">encoders<span class="tsd-signature-symbol">:</span> <a href="../modules/src_core_data_interface_types.html#encodersmap" class="tsd-signature-type" data-tsd-kind="Type alias">EncodersMap</a><span class="tsd-signature-symbol"> = ...</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L93">src/core/data/modules/params.ts:93</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Map of data encoder sequences.
+								The key of a map element represent a name of the provider method: &#39;get&#39;, &#39;post&#39;, etc.
+							The value of a map element represent a sequence of encoders for the specified provider method.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>see</dt>
+							<dd><p><a href="../modules/src_core_request_interface.html#encoders">Encoders</a></p>
+							</dd>
+							<dt>example</dt>
+							<dd><pre><code class="language-js"><span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">MyProvider</span><span style="color: #000000"> </span><span style="color: #0000FF">extends</span><span style="color: #000000"> </span><span style="color: #267F99">Provider</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #0000FF">static</span><span style="color: #000000"> </span><span style="color: #001080">encoders</span><span style="color: #000000"> = {</span>
+<span style="color: #000000">    </span><span style="color: #001080">get:</span><span style="color: #000000"> [</span><span style="color: #001080">convertToJSON</span><span style="color: #000000">],</span>
+<span style="color: #000000">    </span><span style="color: #001080">upd:</span><span style="color: #000000"> [</span><span style="color: #001080">convertToBuffer</span><span style="color: #000000">]</span>
+<span style="color: #000000">  };</span>
+<span style="color: #000000">}</span>
+</code></pre>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static">
+					<a name="middlewares" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> <span class="tsd-flag ts-flagStatic">Static</span> middlewares</h3>
+					<div class="tsd-signature tsd-kind-icon">middlewares<span class="tsd-signature-symbol">:</span> <a href="../modules/src_core_request_interface.html#middlewares" class="tsd-signature-type" data-tsd-kind="Type alias">Middlewares</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = ...</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L75">src/core/data/modules/params.ts:75</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Sequence of middlewares that is provided to the request function.
+							An object form is easily to extend, bur you can choose any different form.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>see</dt>
+							<dd><p><a href="../modules/src_core_request_interface.html#middlewares">Middlewares</a></p>
+							</dd>
+							<dt>example</dt>
+							<dd><pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">request</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/request&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">Parent</span><span style="color: #000000"> </span><span style="color: #0000FF">extends</span><span style="color: #000000"> </span><span style="color: #267F99">Provider</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #0000FF">static</span><span style="color: #000000"> </span><span style="color: #001080">middlewares</span><span style="color: #000000"> = {</span>
+<span style="color: #000000">    </span><span style="color: #795E26">attachGeoCoords</span><span style="color: #000000">() { ... }</span>
+<span style="color: #000000">  };</span>
+<span style="color: #000000">}</span>
+
+<span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">Children</span><span style="color: #000000"> </span><span style="color: #0000FF">extends</span><span style="color: #000000"> </span><span style="color: #267F99">Parent</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #0000FF">static</span><span style="color: #000000"> </span><span style="color: #001080">middlewares</span><span style="color: #000000"> = {</span>
+<span style="color: #000000">    ...</span><span style="color: #001080">Parent</span><span style="color: #000000">.</span><span style="color: #001080">middlewares</span><span style="color: #000000">,</span>
+<span style="color: #000000">    </span><span style="color: #795E26">addSession</span><span style="color: #000000">() {</span>
+<span style="color: #000000">      ...</span>
+<span style="color: #000000">    }</span>
+<span style="color: #000000">  };</span>
+<span style="color: #000000">}</span>
+</code></pre>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static">
+					<a name="mocks-1" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> <span class="tsd-flag ts-flagStatic">Static</span> mocks</h3>
+					<div class="tsd-signature tsd-kind-icon">mocks<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">{ </span>CONNECT<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>DELETE<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>GET<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>HEAD<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>OPTIONS<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>PATCH<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>POST<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>PUT<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>TRACE<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">{ </span>default<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>CONNECT<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>DELETE<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>GET<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>HEAD<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>OPTIONS<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>PATCH<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>POST<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>PUT<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>TRACE<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">{ </span>CONNECT<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>DELETE<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>GET<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>HEAD<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>OPTIONS<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>PATCH<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>POST<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>PUT<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>TRACE<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">{ </span>default<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>CONNECT<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>DELETE<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>GET<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>HEAD<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>OPTIONS<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>PATCH<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>POST<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>PUT<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>TRACE<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L173">src/core/data/modules/params.ts:173</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Map of data mocks.
+								This object can be used with a middleware that implements API for data mocking,
+							for example <a href="../modules/src_core_data_middlewares_attach_mock.html#attachmock">attachMock</a> from <code>&#39;core/data/middlewares&#39;</code>.</p>
+						</div>
+						<p>The key of a map element represent a method request type: &#39;GET&#39;, &#39;POST&#39;, etc.
+						The value of a map element represent a list of parameters to match.</p>
+						<dl class="tsd-comment-tags">
+							<dt>see</dt>
+							<dd><p><a href="../modules/src_core_request_interface.html#middlewares">Middlewares</a></p>
+							</dd>
+							<dt>example</dt>
+							<dd><pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">attachMock</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/data/middlewares&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">MyProvider</span><span style="color: #000000"> </span><span style="color: #0000FF">extends</span><span style="color: #000000"> </span><span style="color: #267F99">Provider</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #0000FF">static</span><span style="color: #000000"> </span><span style="color: #001080">mocks</span><span style="color: #000000"> = {</span>
+<span style="color: #000000">    </span><span style="color: #001080">GET:</span><span style="color: #000000"> [</span>
+<span style="color: #000000">      </span><span style="color: #008000">// The mock for a GET request with a query parameter that contains</span>
+<span style="color: #000000">      </span><span style="color: #008000">// `search=foo` parameter</span>
+<span style="color: #000000">      {</span>
+<span style="color: #000000">        </span><span style="color: #001080">status:</span><span style="color: #000000"> </span><span style="color: #098658">200</span><span style="color: #000000">,</span>
+
+<span style="color: #000000">        </span><span style="color: #008000">// For the mock response won&#039;t be applied decoders</span>
+<span style="color: #000000">        </span><span style="color: #008000">// (by default, `true`)</span>
+<span style="color: #000000">        </span><span style="color: #001080">decoders:</span><span style="color: #000000"> </span><span style="color: #0000FF">false</span><span style="color: #000000">,</span>
+
+<span style="color: #000000">        </span><span style="color: #001080">query:</span><span style="color: #000000"> {</span>
+<span style="color: #000000">          </span><span style="color: #001080">search:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;foo&#039;</span>
+<span style="color: #000000">        },</span>
+
+<span style="color: #000000">        </span><span style="color: #008000">// The response</span>
+<span style="color: #000000">        </span><span style="color: #001080">response:</span><span style="color: #000000"> {</span>
+<span style="color: #000000">          </span><span style="color: #001080">data:</span><span style="color: #000000"> [</span>
+<span style="color: #000000">            </span><span style="color: #A31515">&#039;bla&#039;</span><span style="color: #000000">,</span>
+<span style="color: #000000">            </span><span style="color: #A31515">&#039;ba</span><span style="color: #CD3131">z</span>
+<span style="color: #000000">          ]</span>
+<span style="color: #000000">        }</span>
+<span style="color: #000000">      }</span>
+<span style="color: #000000">    ],</span>
+
+<span style="color: #000000">    </span><span style="color: #001080">POST:</span><span style="color: #000000"> [</span>
+<span style="color: #000000">      </span><span style="color: #008000">// The mock is catches all POST requests and dynamically generated responses</span>
+<span style="color: #000000">      {</span>
+<span style="color: #000000">        </span><span style="color: #795E26">response</span><span style="color: #000000">(</span><span style="color: #001080">params</span><span style="color: #000000">, </span><span style="color: #001080">response</span><span style="color: #000000">) {</span>
+<span style="color: #000000">          </span><span style="color: #AF00DB">if</span><span style="color: #000000"> (!</span><span style="color: #001080">params</span><span style="color: #000000">.</span><span style="color: #001080">opts</span><span style="color: #000000">.</span><span style="color: #001080">query</span><span style="color: #000000">?.</span><span style="color: #001080">data</span><span style="color: #000000">) {</span>
+<span style="color: #000000">            </span><span style="color: #001080">response</span><span style="color: #000000">.</span><span style="color: #001080">status</span><span style="color: #000000"> = </span><span style="color: #098658">400</span><span style="color: #000000">;</span>
+<span style="color: #000000">            </span><span style="color: #AF00DB">return</span><span style="color: #000000">;</span>
+<span style="color: #000000">          }</span>
+
+<span style="color: #000000">          </span><span style="color: #001080">response</span><span style="color: #000000">.</span><span style="color: #001080">status</span><span style="color: #000000"> = </span><span style="color: #098658">200</span><span style="color: #000000">;</span>
+<span style="color: #000000">          </span><span style="color: #001080">response</span><span style="color: #000000">.</span><span style="color: #001080">responseType</span><span style="color: #000000"> = </span><span style="color: #A31515">&#039;string&#039;</span><span style="color: #000000">;</span>
+<span style="color: #000000">          </span><span style="color: #AF00DB">return</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;ok&#039;</span><span style="color: #000000">;</span>
+<span style="color: #000000">        }</span>
+<span style="color: #000000">      }</span>
+<span style="color: #000000">    ]</span>
+<span style="color: #000000">  };</span>
+
+<span style="color: #000000">  </span><span style="color: #0000FF">static</span><span style="color: #000000"> </span><span style="color: #001080">middlewares</span><span style="color: #000000"> = {</span><span style="color: #001080">attachMock</span><span style="color: #000000">};</span>
+<span style="color: #000000">}</span>
+</code></pre>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static">
+					<a name="request" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> <span class="tsd-flag ts-flagStatic">Static</span> request</h3>
+					<div class="tsd-signature tsd-kind-icon">request<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>&lt;D&gt;<span class="tsd-signature-symbol">(</span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/src_core_request_interface.createrequestoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">CreateRequestOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/src_core_request_interface.html#requestresponse" class="tsd-signature-type" data-tsd-kind="Type alias">RequestResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>&lt;D&gt;<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_request_interface.createrequestoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">CreateRequestOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">typeof </span><a href="src_core_data.default.html#__type" class="tsd-signature-type" data-tsd-kind="Type literal">__type</a><span class="tsd-signature-symbol">; </span>&lt;D, A&gt;<span class="tsd-signature-symbol">(</span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, resolver<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_request_interface.requestresolver.html" class="tsd-signature-type" data-tsd-kind="Interface">RequestResolver</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">&gt;</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/src_core_request_interface.createrequestoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">CreateRequestOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_request_interface.requestfunctionresponse.html" class="tsd-signature-type" data-tsd-kind="Interface">RequestFunctionResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-symbol">infer </span> V<span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> = ...</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L48">src/core/data/modules/params.ts:48</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Transport function for a request.
+							Basically, you can use an overload of the request API for flexibly extending.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>see</dt>
+							<dd><p><a href="src_core_data_modules_params.default.html#request">request</a></p>
+							</dd>
+							<dt>see</dt>
+							<dd><p><a href="../interfaces/src_core_request_interface.createrequestoptions.html">CreateRequestOptions</a></p>
+							</dd>
+							<dt>example</dt>
+							<dd><pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">request</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/request&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">Parent</span><span style="color: #000000"> </span><span style="color: #0000FF">extends</span><span style="color: #000000"> </span><span style="color: #267F99">Provider</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #0000FF">static</span><span style="color: #000000"> </span><span style="color: #001080">request</span><span style="color: #000000"> = </span><span style="color: #795E26">request</span><span style="color: #000000">({</span><span style="color: #001080">responseType:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;json&#039;</span><span style="color: #000000">})</span>
+<span style="color: #000000">}</span>
+
+<span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">Children</span><span style="color: #000000"> </span><span style="color: #0000FF">extends</span><span style="color: #000000"> </span><span style="color: #267F99">Parent</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #0000FF">static</span><span style="color: #000000"> </span><span style="color: #001080">request</span><span style="color: #000000"> = </span><span style="color: #001080">Parent</span><span style="color: #000000">.</span><span style="color: #795E26">request</span><span style="color: #000000">({</span><span style="color: #001080">credentials:</span><span style="color: #000000"> </span><span style="color: #0000FF">true</span><span style="color: #000000">})</span>
+<span style="color: #000000">}</span>
+</code></pre>
+							</dd>
+						</dl>
+					</div>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter-signature">
+								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-class tsd-has-type-parameter">
+									<li class="tsd-signature tsd-kind-icon">&lt;D&gt;<span class="tsd-signature-symbol">(</span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/src_core_request_interface.createrequestoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">CreateRequestOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/src_core_request_interface.html#requestresponse" class="tsd-signature-type" data-tsd-kind="Type alias">RequestResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span></li>
+									<li class="tsd-signature tsd-kind-icon">&lt;D&gt;<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_request_interface.createrequestoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">CreateRequestOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">typeof </span><a href="src_core_data.default.html#__type" class="tsd-signature-type" data-tsd-kind="Type literal">__type</a></li>
+									<li class="tsd-signature tsd-kind-icon">&lt;D, A&gt;<span class="tsd-signature-symbol">(</span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, resolver<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_request_interface.requestresolver.html" class="tsd-signature-type" data-tsd-kind="Interface">RequestResolver</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">&gt;</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/src_core_request_interface.createrequestoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">CreateRequestOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_request_interface.requestfunctionresponse.html" class="tsd-signature-type" data-tsd-kind="Interface">RequestFunctionResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-symbol">infer </span> V<span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<div class="tsd-comment tsd-typography">
+											<div class="lead">
+												<p>Creates a new remote request with the specified options</p>
+											</div>
+											<dl class="tsd-comment-tags">
+												<dt>example</dt>
+												<dd><pre><code class="language-js"><span style="color: #795E26">request</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;bla/get&#039;</span><span style="color: #000000">).</span><span style="color: #795E26">then</span><span style="color: #000000">(({</span><span style="color: #001080">data</span><span style="color: #000000">, </span><span style="color: #001080">response</span><span style="color: #000000">}) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">data</span><span style="color: #000000">, </span><span style="color: #001080">response</span><span style="color: #000000">.</span><span style="color: #001080">status</span><span style="color: #000000">);</span>
+<span style="color: #000000">});</span>
+</code></pre>
+												</dd>
+											</dl>
+										</div>
+										<h4 class="tsd-type-parameters-title">Type parameters</h4>
+										<ul class="tsd-type-parameters">
+											<li>
+												<h4>D = <span class="tsd-signature-type">unknown</span></h4>
+											</li>
+										</ul>
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>path: <span class="tsd-signature-type">string</span></h5>
+												<div class="tsd-comment tsd-typography">
+													<p>request path URL</p>
+												</div>
+											</li>
+											<li>
+												<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/src_core_request_interface.createrequestoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">CreateRequestOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span></h5>
+												<div class="tsd-comment tsd-typography">
+													<p>request options</p>
+												</div>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <a href="../modules/src_core_request_interface.html#requestresponse" class="tsd-signature-type" data-tsd-kind="Type alias">RequestResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span></h4>
+									</li>
+									<li class="tsd-description">
+										<div class="tsd-comment tsd-typography">
+											<div class="lead">
+												<p>Returns a wrapped request constructor with the specified options.
+												This overload helps to organize the &quot;builder&quot; pattern.</p>
+											</div>
+											<dl class="tsd-comment-tags">
+												<dt>example</dt>
+												<dd><pre><code class="language-js"><span style="color: #795E26">request</span><span style="color: #000000">({</span><span style="color: #001080">okStatuses:</span><span style="color: #000000"> </span><span style="color: #098658">200</span><span style="color: #000000">})({</span><span style="color: #001080">method:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;POST&#039;</span><span style="color: #000000">})(</span><span style="color: #A31515">&#039;bla/get&#039;</span><span style="color: #000000">).</span><span style="color: #795E26">then</span><span style="color: #000000">(({</span><span style="color: #001080">data</span><span style="color: #000000">, </span><span style="color: #001080">response</span><span style="color: #000000">}) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">data</span><span style="color: #000000">, </span><span style="color: #001080">response</span><span style="color: #000000">.</span><span style="color: #001080">status</span><span style="color: #000000">);</span>
+<span style="color: #000000">});</span>
+</code></pre>
+												</dd>
+											</dl>
+										</div>
+										<h4 class="tsd-type-parameters-title">Type parameters</h4>
+										<ul class="tsd-type-parameters">
+											<li>
+												<h4>D = <span class="tsd-signature-type">unknown</span></h4>
+											</li>
+										</ul>
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>opts: <a href="../interfaces/src_core_request_interface.createrequestoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">CreateRequestOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span></h5>
+												<div class="tsd-comment tsd-typography">
+													<p>request options</p>
+												</div>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">typeof </span><a href="src_core_data.default.html#__type" class="tsd-signature-type" data-tsd-kind="Type literal">__type</a></h4>
+									</li>
+									<li class="tsd-description">
+										<div class="tsd-comment tsd-typography">
+											<div class="lead">
+												<p>Returns a function to create a new remote request with the specified options.
+												This overload helps to create a factory of requests.</p>
+											</div>
+											<dl class="tsd-comment-tags">
+												<dt>example</dt>
+												<dd><pre><code class="language-js"><span style="color: #008000">// Modifying the current URL</span>
+<span style="color: #795E26">request</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;https://foo.com&#039;</span><span style="color: #000000">, (</span><span style="color: #001080">url</span><span style="color: #000000">, </span><span style="color: #001080">env</span><span style="color: #000000">, ...</span><span style="color: #001080">args</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">args</span><span style="color: #000000">.</span><span style="color: #795E26">join</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;/&#039;</span><span style="color: #000000">))(</span><span style="color: #A31515">&#039;bla&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;baz&#039;</span><span style="color: #000000">) </span><span style="color: #008000">// https://foo.com/bla/baz</span>
+
+<span style="color: #008000">// Replacing the current URL</span>
+<span style="color: #795E26">request</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;https://foo.com&#039;</span><span style="color: #000000">, () </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> [</span><span style="color: #A31515">&#039;https://bla.com&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;bla&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;baz&#039;</span><span style="color: #000000">])() </span><span style="color: #008000">// https://bla.com/bla/baz</span>
+</code></pre>
+												</dd>
+											</dl>
+										</div>
+										<h4 class="tsd-type-parameters-title">Type parameters</h4>
+										<ul class="tsd-type-parameters">
+											<li>
+												<h4>D = <span class="tsd-signature-type">unknown</span></h4>
+											</li>
+											<li>
+												<h4>A<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span> = <span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">[]</span></h4>
+											</li>
+										</ul>
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>path: <span class="tsd-signature-type">string</span></h5>
+												<div class="tsd-comment tsd-typography">
+													<p>request path URL</p>
+												</div>
+											</li>
+											<li>
+												<h5>resolver: <a href="../interfaces/src_core_request_interface.requestresolver.html" class="tsd-signature-type" data-tsd-kind="Interface">RequestResolver</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">&gt;</span></h5>
+												<div class="tsd-comment tsd-typography">
+													<p>function to resolve a request: it takes a request URL, request environment and arguments
+														from invoking of the outer function and can modify some request parameters.
+														Also, if the function returns a new string, the string will be appended to the request URL, or
+													if the function returns a string that wrapped with an array, the string fully override the original URL.</p>
+												</div>
+											</li>
+											<li>
+												<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/src_core_request_interface.createrequestoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">CreateRequestOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span></h5>
+												<div class="tsd-comment tsd-typography">
+													<p>request options</p>
+												</div>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <a href="../interfaces/src_core_request_interface.requestfunctionresponse.html" class="tsd-signature-type" data-tsd-kind="Interface">RequestFunctionResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-symbol">infer </span> V<span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Accessors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
+					<a name="globalevent" class="tsd-anchor"></a>
+					<h3>global<wbr>Event</h3>
+					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> globalEvent<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">EventEmitter2</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L362">src/core/data/modules/params.ts:362</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<dl class="tsd-comment-tags">
+									<dt>deprecated</dt>
+									<dd></dd>
+									<dt>see</dt>
+									<dd><p>[[Provider.globalEmitter]]</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">EventEmitter2</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
+					<a name="request-1" class="tsd-anchor"></a>
+					<h3>request</h3>
+					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> request<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>&lt;D&gt;<span class="tsd-signature-symbol">(</span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/src_core_request_interface.createrequestoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">CreateRequestOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/src_core_request_interface.html#requestresponse" class="tsd-signature-type" data-tsd-kind="Type alias">RequestResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>&lt;D&gt;<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_request_interface.createrequestoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">CreateRequestOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">typeof </span><a href="src_core_data.default.html#__type" class="tsd-signature-type" data-tsd-kind="Type literal">__type</a><span class="tsd-signature-symbol">; </span>&lt;D, A&gt;<span class="tsd-signature-symbol">(</span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, resolver<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_request_interface.requestresolver.html" class="tsd-signature-type" data-tsd-kind="Interface">RequestResolver</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">&gt;</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/src_core_request_interface.createrequestoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">CreateRequestOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_request_interface.requestfunctionresponse.html" class="tsd-signature-type" data-tsd-kind="Interface">RequestFunctionResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-symbol">infer </span> V<span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> }</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L370">src/core/data/modules/params.ts:370</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Alias for the request function</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">{ </span>&lt;D&gt;<span class="tsd-signature-symbol">(</span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/src_core_request_interface.createrequestoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">CreateRequestOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/src_core_request_interface.html#requestresponse" class="tsd-signature-type" data-tsd-kind="Type alias">RequestResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>&lt;D&gt;<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_request_interface.createrequestoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">CreateRequestOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">typeof </span><a href="src_core_data.default.html#__type" class="tsd-signature-type" data-tsd-kind="Type literal">__type</a><span class="tsd-signature-symbol">; </span>&lt;D, A&gt;<span class="tsd-signature-symbol">(</span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, resolver<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_request_interface.requestresolver.html" class="tsd-signature-type" data-tsd-kind="Interface">RequestResolver</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">&gt;</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/src_core_request_interface.createrequestoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">CreateRequestOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_request_interface.requestfunctionresponse.html" class="tsd-signature-type" data-tsd-kind="Interface">RequestFunctionResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-symbol">infer </span> V<span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> }</span></h4>
+							<ul class="tsd-parameters">
+								<li class="tsd-parameter-signature">
+									<ul class="tsd-signatures tsd-kind-type-literal tsd-has-type-parameter">
+										<li class="tsd-signature tsd-kind-icon">&lt;D&gt;<span class="tsd-signature-symbol">(</span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/src_core_request_interface.createrequestoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">CreateRequestOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/src_core_request_interface.html#requestresponse" class="tsd-signature-type" data-tsd-kind="Type alias">RequestResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span></li>
+										<li class="tsd-signature tsd-kind-icon">&lt;D&gt;<span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_request_interface.createrequestoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">CreateRequestOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">typeof </span><a href="src_core_data.default.html#__type" class="tsd-signature-type" data-tsd-kind="Type literal">__type</a></li>
+										<li class="tsd-signature tsd-kind-icon">&lt;D, A&gt;<span class="tsd-signature-symbol">(</span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, resolver<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_request_interface.requestresolver.html" class="tsd-signature-type" data-tsd-kind="Interface">RequestResolver</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">&gt;</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/src_core_request_interface.createrequestoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">CreateRequestOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_request_interface.requestfunctionresponse.html" class="tsd-signature-type" data-tsd-kind="Interface">RequestFunctionResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-symbol">infer </span> V<span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+									</ul>
+									<ul class="tsd-descriptions">
+										<li class="tsd-description">
+											<div class="tsd-comment tsd-typography">
+												<div class="lead">
+													<p>Creates a new remote request with the specified options</p>
+												</div>
+												<dl class="tsd-comment-tags">
+													<dt>example</dt>
+													<dd><pre><code class="language-js"><span style="color: #795E26">request</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;bla/get&#039;</span><span style="color: #000000">).</span><span style="color: #795E26">then</span><span style="color: #000000">(({</span><span style="color: #001080">data</span><span style="color: #000000">, </span><span style="color: #001080">response</span><span style="color: #000000">}) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">data</span><span style="color: #000000">, </span><span style="color: #001080">response</span><span style="color: #000000">.</span><span style="color: #001080">status</span><span style="color: #000000">);</span>
+<span style="color: #000000">});</span>
+</code></pre>
+													</dd>
+												</dl>
+											</div>
+											<h4 class="tsd-type-parameters-title">Type parameters</h4>
+											<ul class="tsd-type-parameters">
+												<li>
+													<h4>D = <span class="tsd-signature-type">unknown</span></h4>
+												</li>
+											</ul>
+											<h4 class="tsd-parameters-title">Parameters</h4>
+											<ul class="tsd-parameters">
+												<li>
+													<h5>path: <span class="tsd-signature-type">string</span></h5>
+													<div class="tsd-comment tsd-typography">
+														<p>request path URL</p>
+													</div>
+												</li>
+												<li>
+													<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/src_core_request_interface.createrequestoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">CreateRequestOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span></h5>
+													<div class="tsd-comment tsd-typography">
+														<p>request options</p>
+													</div>
+												</li>
+											</ul>
+											<h4 class="tsd-returns-title">Returns <a href="../modules/src_core_request_interface.html#requestresponse" class="tsd-signature-type" data-tsd-kind="Type alias">RequestResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span></h4>
+										</li>
+										<li class="tsd-description">
+											<div class="tsd-comment tsd-typography">
+												<div class="lead">
+													<p>Returns a wrapped request constructor with the specified options.
+													This overload helps to organize the &quot;builder&quot; pattern.</p>
+												</div>
+												<dl class="tsd-comment-tags">
+													<dt>example</dt>
+													<dd><pre><code class="language-js"><span style="color: #795E26">request</span><span style="color: #000000">({</span><span style="color: #001080">okStatuses:</span><span style="color: #000000"> </span><span style="color: #098658">200</span><span style="color: #000000">})({</span><span style="color: #001080">method:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;POST&#039;</span><span style="color: #000000">})(</span><span style="color: #A31515">&#039;bla/get&#039;</span><span style="color: #000000">).</span><span style="color: #795E26">then</span><span style="color: #000000">(({</span><span style="color: #001080">data</span><span style="color: #000000">, </span><span style="color: #001080">response</span><span style="color: #000000">}) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">data</span><span style="color: #000000">, </span><span style="color: #001080">response</span><span style="color: #000000">.</span><span style="color: #001080">status</span><span style="color: #000000">);</span>
+<span style="color: #000000">});</span>
+</code></pre>
+													</dd>
+												</dl>
+											</div>
+											<h4 class="tsd-type-parameters-title">Type parameters</h4>
+											<ul class="tsd-type-parameters">
+												<li>
+													<h4>D = <span class="tsd-signature-type">unknown</span></h4>
+												</li>
+											</ul>
+											<h4 class="tsd-parameters-title">Parameters</h4>
+											<ul class="tsd-parameters">
+												<li>
+													<h5>opts: <a href="../interfaces/src_core_request_interface.createrequestoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">CreateRequestOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span></h5>
+													<div class="tsd-comment tsd-typography">
+														<p>request options</p>
+													</div>
+												</li>
+											</ul>
+											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">typeof </span><a href="src_core_data.default.html#__type" class="tsd-signature-type" data-tsd-kind="Type literal">__type</a></h4>
+										</li>
+										<li class="tsd-description">
+											<div class="tsd-comment tsd-typography">
+												<div class="lead">
+													<p>Returns a function to create a new remote request with the specified options.
+													This overload helps to create a factory of requests.</p>
+												</div>
+												<dl class="tsd-comment-tags">
+													<dt>example</dt>
+													<dd><pre><code class="language-js"><span style="color: #008000">// Modifying the current URL</span>
+<span style="color: #795E26">request</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;https://foo.com&#039;</span><span style="color: #000000">, (</span><span style="color: #001080">url</span><span style="color: #000000">, </span><span style="color: #001080">env</span><span style="color: #000000">, ...</span><span style="color: #001080">args</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">args</span><span style="color: #000000">.</span><span style="color: #795E26">join</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;/&#039;</span><span style="color: #000000">))(</span><span style="color: #A31515">&#039;bla&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;baz&#039;</span><span style="color: #000000">) </span><span style="color: #008000">// https://foo.com/bla/baz</span>
+
+<span style="color: #008000">// Replacing the current URL</span>
+<span style="color: #795E26">request</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;https://foo.com&#039;</span><span style="color: #000000">, () </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> [</span><span style="color: #A31515">&#039;https://bla.com&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;bla&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;baz&#039;</span><span style="color: #000000">])() </span><span style="color: #008000">// https://bla.com/bla/baz</span>
+</code></pre>
+													</dd>
+												</dl>
+											</div>
+											<h4 class="tsd-type-parameters-title">Type parameters</h4>
+											<ul class="tsd-type-parameters">
+												<li>
+													<h4>D = <span class="tsd-signature-type">unknown</span></h4>
+												</li>
+												<li>
+													<h4>A<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span> = <span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">[]</span></h4>
+												</li>
+											</ul>
+											<h4 class="tsd-parameters-title">Parameters</h4>
+											<ul class="tsd-parameters">
+												<li>
+													<h5>path: <span class="tsd-signature-type">string</span></h5>
+													<div class="tsd-comment tsd-typography">
+														<p>request path URL</p>
+													</div>
+												</li>
+												<li>
+													<h5>resolver: <a href="../interfaces/src_core_request_interface.requestresolver.html" class="tsd-signature-type" data-tsd-kind="Interface">RequestResolver</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">&gt;</span></h5>
+													<div class="tsd-comment tsd-typography">
+														<p>function to resolve a request: it takes a request URL, request environment and arguments
+															from invoking of the outer function and can modify some request parameters.
+															Also, if the function returns a new string, the string will be appended to the request URL, or
+														if the function returns a string that wrapped with an array, the string fully override the original URL.</p>
+													</div>
+												</li>
+												<li>
+													<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/src_core_request_interface.createrequestoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">CreateRequestOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span></h5>
+													<div class="tsd-comment tsd-typography">
+														<p>request options</p>
+													</div>
+												</li>
+											</ul>
+											<h4 class="tsd-returns-title">Returns <a href="../interfaces/src_core_request_interface.requestfunctionresponse.html" class="tsd-signature-type" data-tsd-kind="Interface">RequestFunctionResponse</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-symbol">infer </span> V<span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
+					<a name="select" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> select</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">select&lt;T&gt;<span class="tsd-signature-symbol">(</span>obj<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span>, params<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_object_select_interface.selectparams.html" class="tsd-signature-type" data-tsd-kind="Interface">SelectParams</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/index.html#canundef" class="tsd-signature-type" data-tsd-kind="Type alias">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/modules/params.ts#L187">src/core/data/modules/params.ts:187</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Finds an element from an object by the specified parameters</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>example</dt>
+									<dd><pre><code class="language-js"><span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">MyProvider</span><span style="color: #000000"> </span><span style="color: #0000FF">extends</span><span style="color: #000000"> </span><span style="color: #267F99">Provider</span><span style="color: #000000"> {}</span>
+<span style="color: #001080">MyProvider</span><span style="color: #000000">.</span><span style="color: #795E26">select</span><span style="color: #000000">([{</span><span style="color: #001080">test:</span><span style="color: #000000"> </span><span style="color: #098658">1</span><span style="color: #000000">}], {</span><span style="color: #001080">where:</span><span style="color: #000000"> {</span><span style="color: #001080">test:</span><span style="color: #000000"> </span><span style="color: #098658">1</span><span style="color: #000000">}}) </span><span style="color: #008000">// {test: 1}</span>
+</code></pre>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-type-parameters-title">Type parameters</h4>
+							<ul class="tsd-type-parameters">
+								<li>
+									<h4>T = <span class="tsd-signature-type">unknown</span></h4>
+								</li>
+							</ul>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>obj: <span class="tsd-signature-type">unknown</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>object to search</p>
+									</div>
+								</li>
+								<li>
+									<h5>params: <a href="../interfaces/src_core_object_select_interface.selectparams.html" class="tsd-signature-type" data-tsd-kind="Interface">SelectParams</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>search parameters</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../modules/index.html#canundef" class="tsd-signature-type" data-tsd-kind="Type alias">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class=" ">
+						<a href="../modules.html">Modules</a>
+					</li>
+					<li class="current tsd-kind-module">
+						<a href="../modules/src_core_data_modules_params.html">src/core/data/modules/params</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-class tsd-parent-kind-module">
+						<a href="src_core_data_modules_params.default.html" class="tsd-kind-icon">default</a>
+						<ul>
+							<li class=" tsd-kind-constructor tsd-parent-kind-class">
+								<a href="src_core_data_modules_params.default.html#constructor" class="tsd-kind-icon">constructor</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="src_core_data_modules_params.default.html#addmethod" class="tsd-kind-icon">add<wbr>Method</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="src_core_data_modules_params.default.html#advurl" class="tsd-kind-icon">advURL</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="src_core_data_modules_params.default.html#baseaddurl" class="tsd-kind-icon">base<wbr>AddURL</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="src_core_data_modules_params.default.html#basedelurl" class="tsd-kind-icon">base<wbr>DelURL</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="src_core_data_modules_params.default.html#basegeturl" class="tsd-kind-icon">base<wbr>GetURL</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="src_core_data_modules_params.default.html#basepeekurl" class="tsd-kind-icon">base<wbr>PeekURL</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="src_core_data_modules_params.default.html#baseurl" class="tsd-kind-icon">baseURL</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="src_core_data_modules_params.default.html#baseupdurl" class="tsd-kind-icon">base<wbr>UpdURL</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="src_core_data_modules_params.default.html#custommethod" class="tsd-kind-icon">custom<wbr>Method</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="src_core_data_modules_params.default.html#delmethod" class="tsd-kind-icon">del<wbr>Method</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="src_core_data_modules_params.default.html#eventname" class="tsd-kind-icon">event<wbr>Name</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="src_core_data_modules_params.default.html#externalrequest" class="tsd-kind-icon">external<wbr>Request</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="src_core_data_modules_params.default.html#extraproviders" class="tsd-kind-icon">extra<wbr>Providers</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="src_core_data_modules_params.default.html#getmethod" class="tsd-kind-icon">get<wbr>Method</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="src_core_data_modules_params.default.html#globalemitter" class="tsd-kind-icon">global<wbr>Emitter</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="src_core_data_modules_params.default.html#mocks" class="tsd-kind-icon">mocks</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="src_core_data_modules_params.default.html#peekmethod" class="tsd-kind-icon">peek<wbr>Method</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="src_core_data_modules_params.default.html#socketurl" class="tsd-kind-icon">socketURL</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="src_core_data_modules_params.default.html#updmethod" class="tsd-kind-icon">upd<wbr>Method</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static">
+								<a href="src_core_data_modules_params.default.html#decoders" class="tsd-kind-icon">decoders</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static">
+								<a href="src_core_data_modules_params.default.html#encoders" class="tsd-kind-icon">encoders</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static">
+								<a href="src_core_data_modules_params.default.html#middlewares" class="tsd-kind-icon">middlewares</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static">
+								<a href="src_core_data_modules_params.default.html#mocks-1" class="tsd-kind-icon">mocks</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static">
+								<a href="src_core_data_modules_params.default.html#request" class="tsd-kind-icon">request</a>
+							</li>
+							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
+								<a href="src_core_data_modules_params.default.html#globalevent" class="tsd-kind-icon">global<wbr>Event</a>
+							</li>
+							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
+								<a href="src_core_data_modules_params.default.html#request-1" class="tsd-kind-icon">request</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
+								<a href="src_core_data_modules_params.default.html#select" class="tsd-kind-icon">select</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<ul class="after-current">
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer>
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-namespace"><span class="tsd-kind-icon">Namespace</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="overlay"></div>
+<script src="../assets/js/main.js"></script>
+<script>'use strict';
+
+/*!
+ * V4Fire Core
+ * https://github.com/V4Fire/Core
+ *
+ * Released under the MIT license
+ * https://github.com/V4Fire/Core/blob/master/LICENSE
+ */
+
+(function () {
+	document.body.style.display = 'block';
+
+	var
+		isDTS = /^index$|\.d$/,
+		needHide = /\/(?:prelude|interface|const|modules|helpers|engines)\b/,
+		isNode = /(?:^|\/)node_modules(?:\/|$)/;
+
+	var
+		trimRgxp = /^\s+|[\n\v"']+|\s+$/g,
+		normalizeRgxp = /(?:^|\b)src\/|\/index$/g;
+
+	var
+		breadcrumbs = Array.from(document.querySelectorAll('.tsd-breadcrumb a')),
+		headers = Array.from(document.querySelectorAll('h1'));
+
+	breadcrumbs.forEach(function (el) {
+		el.textContent = el.textContent.replace(trimRgxp, '').replace(normalizeRgxp, '');
+	});
+
+	headers.forEach(function (el) {
+		el.textContent = el.textContent.replace(trimRgxp, '').replace(normalizeRgxp, '');
+	});
+
+	var
+		navigation = Array.from(document.querySelectorAll('.tsd-navigation.primary .tsd-kind-module a')),
+		globalIndex = Array.from(document.querySelectorAll('.tsd-kind-module a'));
+
+	[].concat(breadcrumbs.length <= 1 ? globalIndex : navigation).forEach(function (el) {
+		var
+			wrapper = el.parentNode,
+			linkText = el.textContent.replace(trimRgxp, '');
+
+		if (isDTS.test(linkText)) {
+			var
+				nm = RegExp.$1;
+
+			if (linkText === 'index') {
+				el.innerHTML = '<b>prelude</b>';
+
+			} else if (isNode.test(linkText)) {
+				el.textContent = nm;
+
+			} else {
+				wrapper.parentNode.removeChild(wrapper);
+			}
+
+		} else if (needHide.test(linkText)) {
+			wrapper.parentNode.removeChild(wrapper);
+
+		} else {
+			el.textContent = linkText.replace(normalizeRgxp, '');
+		}
+	});
+})();
+</script>
+</body>
+</html>

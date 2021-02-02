@@ -76,10 +76,10 @@ const request: RequestEngine = (params) => {
 			req = fetch(p.url, normalizedOpts);
 
 		let
-			timeoutTimerId;
+			timer;
 
 		if (p.timeout != null) {
-			timeoutTimerId = setTimeout(() => controller.abort(), p.timeout);
+			timer = setTimeout(() => controller.abort(), p.timeout);
 		}
 
 		onAbort(() => {
@@ -87,7 +87,7 @@ const request: RequestEngine = (params) => {
 		});
 
 		req.then(async (response) => {
-			clearTimeout(timeoutTimerId);
+			clearTimeout(timer);
 
 			let
 				body: ResponseTypeValue;
@@ -125,7 +125,7 @@ const request: RequestEngine = (params) => {
 			}));
 
 		}, (error) => {
-			clearTimeout(timeoutTimerId);
+			clearTimeout(timer);
 
 			const
 				type = error.name === 'AbortError' ? 'timeout' : 'engine';

@@ -21,6 +21,12 @@ describe('core/range', () => {
 		expect(new Range('a', 'e').toArray()).toEqual(['a', 'b', 'c', 'd', 'e']);
 	});
 
+	it('char range (extended Unicode)', () => {
+		expect(new Range('😁', '😅').toArray()).toEqual(['😁', '😂', '😃', '😄', '😅']);
+		expect(new Range('😁').toArray()).toEqual(['😁']);
+		expect(new Range('😁', '😅'.codePointAt(0) - 2).toArray()).toEqual(['😁', '😂', '😃']);
+	});
+
 	it('reversed char range', () => {
 		expect(new Range('e', 'a').toArray()).toEqual(['e', 'd', 'c', 'b', 'a']);
 	});
