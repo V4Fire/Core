@@ -7,7 +7,18 @@
  */
 
 import extend from 'core/prelude/extend';
-import { isDateStr, isFloatStr, normalizeDateChunkRgxp, createAliases } from 'core/prelude/date/const';
+
+import {
+
+	isDateStr,
+	isFloatStr,
+
+	normalizeDateChunkRgxp,
+	normalizeZoneRgxp,
+
+	createAliases
+
+} from 'core/prelude/date/const';
 
 /** @see [[Date.clone]] */
 extend(Date.prototype, 'clone', function clone(this: Date): Date {
@@ -39,7 +50,7 @@ extend(Date, 'create', (pattern?: DateCreateValue) => {
 		};
 
 		const normalizeZone = (zone) => {
-			if (/^[+-]\d{4}$/.test(zone)) {
+			if (normalizeZoneRgxp.test(zone)) {
 				return `${zone.substr(0, 3)}:${zone.substr(3)}`;
 			}
 
