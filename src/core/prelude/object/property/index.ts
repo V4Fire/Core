@@ -11,7 +11,7 @@ import extend from 'core/prelude/extend';
 /** @see [[ObjectConstructor.get]] */
 extend(Object, 'get', (
 	obj: any,
-	path: string | any[] | ObjectGetOptions,
+	path: ObjectPropertyPath | ObjectGetOptions,
 	opts?: ObjectGetOptions
 ) => {
 	if (needCurriedOverload(obj, path)) {
@@ -61,7 +61,7 @@ extend(Object, 'get', (
 /** @see [[ObjectConstructor.has]] */
 extend(Object, 'has', (
 	obj: any,
-	path: string | any[] | ObjectGetOptions,
+	path: ObjectPropertyPath | ObjectGetOptions,
 	opts?: ObjectGetOptions
 ) => {
 	if (needCurriedOverload(obj, path)) {
@@ -145,7 +145,7 @@ extend(Object, 'hasOwnProperty', function hasOwnProperty(obj: any, key?: string)
 /** @see [[ObjectConstructor.set]] */
 extend(Object, 'set', function set(
 	obj: any,
-	path: string | any[] | ObjectGetOptions,
+	path: ObjectPropertyPath | ObjectGetOptions,
 	value: unknown,
 	opts?: ObjectSetOptions
 ): unknown | AnyFunction {
@@ -179,7 +179,7 @@ extend(Object, 'set', function set(
 		return obj;
 	};
 
-	function set(path: string | any[], newValue?: unknown): unknown {
+	function set(path: ObjectPropertyPath, newValue?: unknown): unknown {
 		const
 			finalValue = arguments.length > 1 ? newValue : value,
 			chunks = Object.isString(path) ? path.split(p.separator) : path;
@@ -256,7 +256,7 @@ extend(Object, 'set', function set(
 /** @see [[ObjectConstructor.delete]] */
 extend(Object, 'delete', (
 	obj: any,
-	path: string | any[] | ObjectGetOptions,
+	path: ObjectPropertyPath | ObjectGetOptions,
 	opts?: ObjectGetOptions
 ) => {
 	if (needCurriedOverload(obj, path)) {
