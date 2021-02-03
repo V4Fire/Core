@@ -2481,7 +2481,7 @@ interface Number {
 	ceil(precision?: number): number;
 }
 
-type RegExpFlag = 'g' | 'i' | 'm' | 'u' | 'y' | 's';
+type RegExpFlag = '' | 'g' | 'i' | 'm' | 'u' | 'y' | 's';
 
 interface RegExp {
 	/**

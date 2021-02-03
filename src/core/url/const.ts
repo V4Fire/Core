@@ -7,4 +7,5 @@
  */
 
 export const
-	isAbsURL = /^(?:\w+:)?\/\//;
+	isAbsURL = /^(?:\w+:)?\/\//,
+	isURLWithSlash = /^(?:\w+:)?\/+/;

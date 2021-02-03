@@ -6,10 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { isAbsURL } from 'core/url/const';
-
-const
-	isURLWithSlash = /^(?:\w+:)?\/+/;
+import { isAbsURL, isURLWithSlash } from 'core/url/const';
 
 /**
  * Concatenates the specified parts of URL-s with correctly arranging of slashes and returns a new string

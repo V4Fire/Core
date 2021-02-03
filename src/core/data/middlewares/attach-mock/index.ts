@@ -63,7 +63,12 @@ export async function attachMock(this: Provider, params: MiddlewareParams): Prom
 		id = opts.cacheId,
 		mocksDecl = (<typeof Provider>this.constructor).mocks ?? this.mocks;
 
-	if (mocksDecl == null || !Object.isString(id) || mockOpts.patterns.every((rgxp) => !rgxp.test(id))) {
+	const canIgnore =
+		mocksDecl == null ||
+		!Object.isString(id) ||
+		mockOpts.patterns.every((rgxp) => !RegExp.test(rgxp, id));
+
+	if (canIgnore) {
 		return;
 	}
 

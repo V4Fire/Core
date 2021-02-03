@@ -108,7 +108,7 @@ export default class RequestContext<D = unknown> extends Super<D> {
 			);
 		}
 
-		if (!resolveURLRgxp.test(apiURL)) {
+		if (!RegExp.test(resolveURLRgxp, apiURL)) {
 			return concatUrls(...resolveDomains({slice: 2, join: false}), resolve('namespace'));
 		}
 

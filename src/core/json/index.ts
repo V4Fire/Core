@@ -28,7 +28,7 @@ const
  * ```
  */
 export function convertIfDate(key: string, value: unknown): unknown {
-	if (Object.isString(value) && value.length >= minDateLength && normalizeDateChunkRgxp.test(value)) {
+	if (Object.isString(value) && value.length >= minDateLength && RegExp.test(normalizeDateChunkRgxp, value)) {
 		const date = Date.create(value);
 		return isNaN(date.valueOf()) ? value : date;
 	}

@@ -50,7 +50,7 @@ extend(Date, 'create', (pattern?: DateCreateValue) => {
 		};
 
 		const normalizeZone = (zone) => {
-			if (normalizeZoneRgxp.test(zone)) {
+			if (RegExp.test(normalizeZoneRgxp, zone)) {
 				return `${zone.substr(0, 3)}:${zone.substr(3)}`;
 			}
 

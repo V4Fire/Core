@@ -19,6 +19,10 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
   * Added new methods `addFlags`, `removeFlags`, `setFlags`
   * Added new static methods `addFlags`, `removeFlags`, `setFlags`, `test`
 
+#### :bug: Bug Fix
+
+* Fixed using of global RegExp-s with the `g` flag
+
 ## v3.30.4 (2021-01-29)
 
 #### :bug: Bug Fix
