@@ -7,4 +7,8 @@
  */
 
 export const
+	isGlobal = /g/,
 	escapeRgxp = /([\\/'*+?|()[\]{}.^$-])/g;
+
+export const
+	testCache = Object.createDict<RegExp>();

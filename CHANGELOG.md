@@ -11,6 +11,14 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.31.0 (2021-02-03)
+
+#### :rocket: New Feature
+
+* `core/prelude/regexp`:
+  * Added new methods `addFlags`, `removeFlags`, `setFlags`
+  * Added new static methods `addFlags`, `removeFlags`, `setFlags`, `test`
+
 ## v3.30.4 (2021-01-29)
 
 #### :bug: Bug Fix
