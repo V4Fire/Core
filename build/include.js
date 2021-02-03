@@ -73,7 +73,7 @@ module.exports = function init(layers) {
 		let
 			resolvedLayers = layers;
 
-		if (superRgxp.setFlags('').test(src)) {
+		if (superRgxp.removeFlags('g').test(src)) {
 			if (!ctx) {
 				throw new ReferenceError('The context for @super is not defined');
 			}
