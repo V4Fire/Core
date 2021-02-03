@@ -28,7 +28,7 @@ describe('core/prelude/string', () => {
 		]);
 	});
 
-	it('static letters', () => {
+	it('String.letters', () => {
 		expect(String.letters('1').next).toBeInstanceOf(Function);
 
 		expect([...String.letters('1😃à🇷🇺👩🏽‍❤️‍💋‍👨')]).toEqual([
@@ -75,7 +75,7 @@ describe('core/prelude/string', () => {
 		expect(capitalizeCache['false:false:non cached string']).toBeUndefined();
 	});
 
-	it('static capitalize', () => {
+	it('String.capitalize', () => {
 		expect(String.capitalize('hello world')).toBe('Hello world');
 		expect(String.capitalize('hello world', {all: true})).toBe('Hello World');
 		expect(String.capitalize({all: true})('hello world')).toBe('Hello World');
@@ -106,7 +106,7 @@ describe('core/prelude/string', () => {
 		expect(camelizeCache['false:false:non cached string']).toBeUndefined();
 	});
 
-	it('static camelize', () => {
+	it('String.camelize', () => {
 		expect(String.camelize('foo_bar_b-l aBaz')).toBe('FooBarBLABaz');
 		expect(String.camelize('foo_bar_b-l aBaz', false)).toBe('fooBarBLABaz');
 		expect(String.camelize('foo_bar_b-l aBaz', {upper: false})).toBe('fooBarBLABaz');
@@ -140,7 +140,7 @@ describe('core/prelude/string', () => {
 		expect(dasherizeCache['false:false:non cached string']).toBeUndefined();
 	});
 
-	it('static dasherize', () => {
+	it('String.dasherize', () => {
 		expect(String.dasherize('foo_bar_b-l aBaz')).toBe('foo-bar-b-l-a-baz');
 		expect(String.dasherize('FOOBarBAZ', true)).toBe('f-o-o-bar-b-a-z');
 		expect(String.dasherize('FOOBarBAZ', {stable: true})).toBe('f-o-o-bar-b-a-z');
@@ -174,7 +174,7 @@ describe('core/prelude/string', () => {
 		expect(underscoreCache['false:false:non cached string']).toBeUndefined();
 	});
 
-	it('static underscore', () => {
+	it('String.underscore', () => {
 		expect(String.underscore('foo_bar_b-l aBaz')).toBe('foo_bar_b_l_a_baz');
 		expect(String.underscore('FOOBarBAZ', true)).toBe('f_o_o_bar_b_a_z');
 		expect(String.underscore('FOOBarBAZ', {stable: true})).toBe('f_o_o_bar_b_a_z');
