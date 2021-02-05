@@ -768,7 +768,7 @@ describe('core/object/watch', () => {
 						obj = {a: 1},
 						spy = jasmine.createSpy();
 
-					const watcher = watch(obj, {immediate: true, engine}, (value, oldValue, info) => {
+					const watcher = watch(obj, {immediate: true, deep: true, engine}, (value, oldValue, info) => {
 						spy(value, oldValue, info.path);
 					});
 
@@ -780,6 +780,9 @@ describe('core/object/watch', () => {
 
 					watcher.set('a', 3);
 					expect(spy).toHaveBeenCalledWith(3, 2, ['a']);
+
+					watcher.set('b.c', 3);
+					expect(spy).toHaveBeenCalledWith(3, undefined, ['b', 'c']);
 				}
 
 				{

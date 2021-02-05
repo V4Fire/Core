@@ -17,6 +17,10 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 * Added a new parameter `setter` for `set` `core/prelude/object`
 
+#### :bug: Bug Fix
+
+* Fixed an issue when trying to set a property by the complex path `core/object/watch`
+
 ## v3.31.0 (2021-02-03)
 
 #### :rocket: New Feature

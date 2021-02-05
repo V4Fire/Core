@@ -274,6 +274,20 @@ export function set(obj: object, path: WatchPath, value: unknown, handlers: Watc
 		refPath = Array.concat([], ctxPath.slice(1), normalizedPath.slice(0, -1)),
 		fullRefPath = Array.concat([], ctxPath.slice(0, 1), refPath);
 
+	if (normalizedPath.length > 1 && Object.get(obj, refPath) == null) {
+		Object.set(obj, refPath, {}, {
+			setter: (ref, key, val) => {
+				if (ref == null || typeof ref !== 'object') {
+					return;
+				}
+
+				ref![muteLabel] = true;
+				set(ref!, [key], val, handlers);
+				ref![muteLabel] = false;
+			}
+		});
+	}
+
 	const
 		proxy = getOrCreateLabelValueByHandlers<object>(unwrappedObj, toProxyObject, handlers),
 		root = proxy?.[toTopObject] ?? unwrappedObj,
@@ -284,7 +298,6 @@ export function set(obj: object, path: WatchPath, value: unknown, handlers: Watc
 		type = getProxyType(ref);
 
 	switch (type) {
-		case null:
 		case 'set':
 			throw new TypeError('Invalid data type to watch');
 
@@ -373,7 +386,7 @@ export function unset(obj: object, path: WatchPath, handlers: WatchHandlersSet):
 
 	switch (type) {
 		case null:
-			throw new TypeError('Invalid data type to watch');
+			return;
 
 		case 'array':
 			(<unknown[]>ref).splice(Number(prop), 1);

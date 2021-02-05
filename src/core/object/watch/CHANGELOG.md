@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.32.0 (2021-02-05)
+
+#### :bug: Bug Fix
+
+* Fixed an issue when trying to set a property by the complex path
+
 ## v3.27.4 (2020-09-29)
 
 #### :bug: Bug Fix
