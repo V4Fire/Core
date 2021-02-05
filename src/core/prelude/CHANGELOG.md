@@ -9,6 +9,20 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.32.0 (2021-02-05)
+
+#### :rocket: New Feature
+
+* Added a new parameter `setter` for `set` `object`
+
+## v3.31.0 (2021-02-03)
+
+#### :rocket: New Feature
+
+* `regexp`:
+  * Added new methods `addFlags`, `removeFlags`, `setFlags`
+  * Added new static methods `addFlags`, `removeFlags`, `setFlags`, `test`
+
 ## v3.30.1 (2021-01-11)
 
 #### :bug: Bug Fix

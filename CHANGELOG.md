@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.32.0 (2021-02-05)
+
+#### :rocket: New Feature
+
+* Added a new parameter `setter` for `set` `core/prelude/object`
+
 ## v3.31.0 (2021-02-03)
 
 #### :rocket: New Feature

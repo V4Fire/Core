@@ -161,7 +161,7 @@ extend(Object, 'set', function set(
 	}
 
 	const
-		p = {separator: '.', concat: false, ...Object.isPlainObject(path) ? path : opts};
+		p = <ObjectSetOptions>{separator: '.', concat: false, ...Object.isPlainObject(path) ? path : opts};
 
 	if (Object.isArray(path) || Object.isString(path)) {
 		if (arguments.length < 2) {
@@ -182,7 +182,7 @@ extend(Object, 'set', function set(
 	function set(path: ObjectPropertyPath, newValue?: unknown): unknown {
 		const
 			finalValue = arguments.length > 1 ? newValue : value,
-			chunks = Object.isString(path) ? path.split(p.separator) : path;
+			chunks = Object.isString(path) ? path.split(p.separator!) : path;
 
 		let
 			ref = obj,
@@ -212,7 +212,14 @@ extend(Object, 'set', function set(
 						return undefined;
 					}
 
-					ref.set(key, val = nextChunkIsObj ? new Map() : []);
+					val = nextChunkIsObj ? new Map() : [];
+
+					if (p.setter != null) {
+						p.setter(ref, key, val);
+
+					} else {
+						ref.set(key, val);
+					}
 				}
 
 				ref = val;
@@ -223,7 +230,13 @@ extend(Object, 'set', function set(
 
 				if (val == null || typeof val !== 'object') {
 					val = nextChunkIsObj ? {} : [];
-					ref[key] = val;
+
+					if (p.setter != null) {
+						p.setter(ref, key, val);
+
+					} else {
+						ref[key] = val;
+					}
 				}
 
 				ref = val;
@@ -238,18 +251,29 @@ extend(Object, 'set', function set(
 				return undefined;
 			}
 
-			if (ref.has(cursor) && p.concat) {
-				ref.set(cursor, Array.concat([], ref[cursor], finalValue));
+			const val = ref.has(cursor) && p.concat ?
+				Array.concat([], ref[cursor], finalValue) :
+				finalValue;
 
-			} else {
-				ref.set(cursor, finalValue);
+			if (p.setter != null) {
+				p.setter(ref, cursor, val);
+				return ref.get(cursor);
 			}
 
-		} else {
-			ref[cursor] = cursor in ref && p.concat ? Array.concat([], ref[cursor], finalValue) : finalValue;
+			ref.set(cursor, val);
+			return val;
 		}
 
-		return finalValue;
+		const
+			val = cursor in ref && p.concat ? Array.concat([], ref[cursor], finalValue) : finalValue;
+
+		if (p.setter != null) {
+			p.setter(ref, cursor, val);
+			return ref[cursor];
+		}
+
+		ref[cursor] = val;
+		return val;
 	}
 });
 

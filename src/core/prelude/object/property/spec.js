@@ -122,6 +122,20 @@ describe('core/prelude/object/property/set', () => {
 		}
 	});
 
+	it('set with a setter', () => {
+		const obj = {};
+
+		expect(
+			Object.set(obj, 'a', 2, {
+				setter(obj, key, value) {
+					obj[key] = value * 2;
+				}
+			})
+		).toBe(4);
+
+		expect(Object.get(obj, 'a')).toBe(4);
+	});
+
 	it('array as a path', () => {
 		const
 			key = {};
@@ -171,7 +185,7 @@ describe('core/prelude/object/property/set', () => {
 
 	it('concatenation of values', () => {
 		const obj = {a: {b: 1}};
-		expect(Object.set(obj, 'a.b', 2, {concat: true})).toBe(2);
+		expect(Object.set(obj, 'a.b', 2, {concat: true})).toEqual([1, 2]);
 		expect(Object.get(obj, 'a.b')).toEqual([1, 2]);
 	});
 

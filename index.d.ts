@@ -423,6 +423,15 @@ interface ObjectSetOptions extends ObjectGetOptions {
 	 * ```
 	 */
 	concat?: boolean;
+
+	/**
+	 * Function to set a value
+	 *
+	 * @param obj
+	 * @param key
+	 * @param value
+	 */
+	setter?(obj: unknown, key: unknown, value: unknown);
 }
 
 interface ObjectForEachOptions {
