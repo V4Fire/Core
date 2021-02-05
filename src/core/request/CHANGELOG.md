@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.32.0 (2021-02-05)
+
+#### :bug: Bug Fix
+
+* Fixed parsing of JSON structures `engines/fetch`
+
 ## v3.30.0 (2021-01-10)
 
 #### :bug: Bug Fix

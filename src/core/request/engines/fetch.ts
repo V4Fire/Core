@@ -101,9 +101,6 @@ const request: RequestEngine = (params) => {
 
 			switch (p.responseType) {
 				case 'json':
-					body = await response.json();
-					break;
-
 				case 'document':
 				case 'text':
 					body = await response.text();

@@ -20,6 +20,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 #### :bug: Bug Fix
 
 * Fixed an issue when trying to set a property by the complex path `core/object/watch`
+* Fixed parsing of JSON structures `core/request/engines/fetch`
 
 ## v3.31.0 (2021-02-03)
 
