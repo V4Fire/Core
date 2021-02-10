@@ -228,7 +228,7 @@ function request<D = unknown>(
 				fromCache = false,
 				fromLocalStorage = false;
 
-			if (cacheKey != null && ctx.canCache) {
+			if (cacheKey != null && ctx.canCache && ctx.canUsePendingCache) {
 				if (ctx.pendingCache.has(cacheKey)) {
 					try {
 						const

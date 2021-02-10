@@ -44,6 +44,11 @@ export default class RequestContext<D = unknown> {
 	readonly cache: Cache<Nullable<D>>;
 
 	/**
+	 * Hack for data provider engine
+	 */
+	canUsePendingCache: boolean = true;
+
+	/**
 	 * Storage to cache the pending request
 	 */
 	readonly pendingCache: Cache<RequestResponse<D>> = pendingCache;
