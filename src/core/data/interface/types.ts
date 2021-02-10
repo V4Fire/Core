@@ -84,10 +84,14 @@ export interface ExtraProviderParams<D = unknown> {
 	globalOpts: GlobalOptions;
 }
 
+export interface ProviderConstructor {
+	new(opts?: ProviderOptions): Provider
+}
+
 export type ExtraProviderConstructor =
 	string |
 	Provider |
-	{new(opts?: ProviderOptions): Provider};
+	ProviderConstructor;
 
 export interface ExtraProvider<D = unknown> {
 	provider?: ExtraProviderConstructor;

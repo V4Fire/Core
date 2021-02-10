@@ -1,42 +1,58 @@
 import {
-	RequestEngine,
-	RequestOptions,
+	MiddlewareParams, Middlewares,
+	OkStatuses,
+	RequestAPI,
+	RequestBody, RequestEngine, RequestMethod,
+	RequestOptions, RequestQuery,
 } from 'core/request/interface';
 import Response from 'core/request/response';
-import iProvider, { ExtraProviderConstructor } from 'core/data/interface';
-import { providers } from 'core/data/const';
+import iProvider, { ModelMethod, ProviderConstructor, ExtraProviderConstructor } from 'core/data/interface';
+import {providers, queryMethods} from 'core/data/const';
 import Then from 'core/then';
+import {generate, serialize} from "core/uuid";
+import Provider from "core/data";
 
-type DataProvider = string | iProvider | ExtraProviderConstructor;
+interface AvailableOptions {
+	readonly method: RequestMethod; // всегда есть, падает из дефолтных настроек
+	readonly api: RequestAPI; // всегда есть, падает из globalOpts
+	readonly body?: RequestBody;
+	readonly query: RequestQuery; // всегда есть, падает из дефолтных настроек
+	readonly headers: Dictionary<CanArray<unknown>>; // всегда есть, падает из дефолтных настроек
+	readonly okStatuses?: OkStatuses;
+	readonly timeout?: number;
+	readonly externalRequest?: boolean;
+	readonly important?: boolean;
+	readonly meta: Dictionary; // всегда есть, падает из дефолтных настроек
+	readonly url: string; // всегда есть, падает из реквеста
+
+	parent?: Then;
+	middlewares?: Middlewares;
+	isProvider?: boolean; // хак для обхода проблем с pendingCache
+}
+
+type MethodsMapping = {
+	[key in ModelMethod]: ModelMethod
+}
 
 /**
  * Returns provider class or object.
  *
  * @param providerOrNamespace - provider class or object, or provider namespace in the global store
  */
-function getProvider(providerOrNamespace): iProvider {
+function getProvider(providerOrNamespace: ExtraProviderConstructor): iProvider {
 	if (Object.isString(providerOrNamespace)) {
-		if (providerOrNamespace in providers) {
-			return providers[providerOrNamespace];
+		if (! (providerOrNamespace in providers)) {
+			throw new ReferenceError(`A provider "${providerOrNamespace}" is not registered`);
 		}
 
-		throw new ReferenceError(`A provider "${providerOrNamespace}" is not registered`);
+		providerOrNamespace = <ProviderConstructor>providers[providerOrNamespace];
 	}
 
-	return providerOrNamespace;
-}
+	if (providerOrNamespace instanceof Provider) {
+		return providerOrNamespace;
+	}
 
-/**
- * Returns a path argument for the request.
- *
- * todo: сначала собираем, а потом разбираем - двойная работа.
- *
- * @param params
- */
-function getPath(params: RequestOptions) {
-	const baseUrl = params.api.url();
-
-	return params.url.replace(baseUrl, '').split('?')[0];
+	return new (<ProviderConstructor>providerOrNamespace)();
 }
 
 const availableParams = [
@@ -70,45 +86,103 @@ const availableParams = [
 ];
 
 /**
- * Creates request by using data provider as source
+ * Prepare initial params for engine.
+ *
+ * @param params
+ */
+function prepareParams(params: RequestOptions): AvailableOptions {
+	return <AvailableOptions>Object.select(params, availableParams);
+}
+
+/**
+ * Hack for pending cache.
+ *
+ * @param opts
+ * @param ctx
+ */
+const middleware = ({ opts, ctx }: MiddlewareParams): void => {
+	// @ts-ignore
+	if (opts.isProvider) {
+		ctx.canUsePendingCache = false;
+
+	} else {
+		// @ts-ignore
+		opts.isProvider = true;
+	}
+}
+
+/**
+ * Creates engine for request by using data provider as source
  *
  * @param providerOrNamespace - provider class or object, or provider namespace in the global store
+ * @param methodsMapping -
  */
-export default function makeEngine(providerOrNamespace: DataProvider): RequestEngine {
+export default function makeProviderEngine(
+	providerOrNamespace: ExtraProviderConstructor,
+	methodsMapping?: MethodsMapping
+): RequestEngine {
 	return (params: RequestOptions): Then<Response> => {
-		const p = Object.select(params, availableParams);
+		const p: AvailableOptions = prepareParams(params);
+		const provider = getProvider(providerOrNamespace);
 
-		const parent = new Then<Response>(async (resolve, reject, onAbort): Then<Response<unknown>> => {
+		let providerMethod = <string>p.meta!.providerMethod;
+
+		if (methodsMapping && providerMethod in methodsMapping) {
+			providerMethod = methodsMapping[providerMethod];
+		}
+
+		const parent = new Then<Response<unknown>>(async (resolve, reject, onAbort): Then<Response<unknown>> => {
 			await new Promise((r) => {
 				globalThis['setImmediate'](r);
 			});
 
 			if (!('middlewares' in p)) {
-				p.middlewares = [];
+				p.middlewares = [middleware];
+
+			} else if (Object.isArray(p.middlewares)) {
+				p.middlewares.push(middleware);
+
+			} else if (Object.isPlainObject(p.middlewares)) {
+				p.middlewares[serialize(generate())] = middleware;
 			}
 
-			p.middlewares.push(({ opts, ctx }) => {
-				if (opts.isProvider) {
-					ctx.canUsePendingCache = false;
-				} else {
-					opts.isProvider = true;
-				}
-			});
+			let method;
 
-			p.parent = parent;
-			const path = getPath(p);
-			const req = getProvider(providerOrNamespace).request(path, p);
+			if (providerMethod === 'post') {
+				method = 'POST';
+			} else {
+				const methodPropertyName = `${providerMethod}Method`;
+
+				method = provider[methodPropertyName];
+			}
+
+			let body: RequestQuery | RequestBody | undefined = p.body;
+
+			if (queryMethods[method]) {
+				body = p.query;
+			}
+
+			p.parent = <Then<unknown>>parent;
+			const req = provider[providerMethod](body, p);
 
 			onAbort(() => {
 				req.abort();
 			});
 
-			const res = (await req).response;
+			const { data, response: res } = (await req);
 
-			resolve(new Response(res.body, {
+			let responseBody = data;
+
+			if (Object.isArray(data)) {
+				responseBody = [...data];
+			} else if (Object.isPlainObject(data)) {
+				responseBody = {...data};
+			}
+
+			return resolve(new Response(responseBody, {
 				parent: params.parent,
 				important: res.important,
-				responseType: res.responseType,
+				responseType: 'object',
 				okStatuses: res.okStatuses,
 				status: res.status,
 				headers: res.headers,
