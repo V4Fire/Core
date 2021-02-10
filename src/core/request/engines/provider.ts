@@ -27,7 +27,6 @@ interface AvailableOptions {
 
 	parent?: Then;
 	middlewares?: Middlewares;
-	isProvider?: boolean; // хак для обхода проблем с pendingCache
 }
 
 type MethodsMapping = {
@@ -82,7 +81,6 @@ const availableParams = [
 	'url', // без этого непонятно на какой адрес идти
 	// 'decoders', // у источника свои
 	// 'parent',
-	'isProvider',
 ];
 
 /**
@@ -101,13 +99,11 @@ function prepareParams(params: RequestOptions): AvailableOptions {
  * @param ctx
  */
 const middleware = ({ opts, ctx }: MiddlewareParams): void => {
-	// @ts-ignore
-	if (opts.isProvider) {
+	if (opts.meta.isProvider) {
 		ctx.canUsePendingCache = false;
 
 	} else {
-		// @ts-ignore
-		opts.isProvider = true;
+		opts.meta.isProvider = true;
 	}
 }
 
