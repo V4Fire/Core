@@ -53,6 +53,8 @@ export default class RequestContext<D = unknown> extends Super<D> {
 			forkedCtx = Object.create(ctx),
 			params = merge<NormalizedCreateRequestOptions>(ctx.params);
 
+		params.meta.path = path;
+
 		const middlewareParams = {
 			opts: params,
 			ctx: forkedCtx,

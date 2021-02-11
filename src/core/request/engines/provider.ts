@@ -3,9 +3,9 @@ import {
 	OkStatuses,
 	RequestAPI,
 	RequestBody, RequestEngine, RequestMethod,
-	RequestOptions, RequestQuery,
+	RequestOptions, RequestQuery, RequestResponse,
 } from 'core/request/interface';
-import Response from 'core/request/response';
+import Response, {ResponseTypeValue} from 'core/request/response';
 import iProvider, { ModelMethod, ProviderConstructor, ExtraProviderConstructor } from 'core/data/interface';
 import {providers, queryMethods} from 'core/data/const';
 import Then from 'core/then';
@@ -99,12 +99,54 @@ function prepareParams(params: RequestOptions): AvailableOptions {
  * @param ctx
  */
 const middleware = ({ opts, ctx }: MiddlewareParams): void => {
-	if (opts.meta.isProvider) {
+	if (opts.meta.isProvider || !opts.meta.providerMethod) {
 		ctx.canUsePendingCache = false;
 
 	} else {
 		opts.meta.isProvider = true;
 	}
+}
+
+/**
+ * Returns request promise created by provider method
+ *
+ * @param provider
+ * @param providerMethod
+ * @param params
+ */
+function getRequestByProviderMethod(
+	provider: iProvider,
+	providerMethod: string,
+	params: AvailableOptions
+): Then<RequestResponse> {
+	let method;
+
+	if (providerMethod === 'post') {
+		method = 'POST';
+	} else {
+		const methodPropertyName = `${providerMethod}Method`;
+
+		method = provider[methodPropertyName];
+	}
+
+	let body: RequestQuery | RequestBody | undefined = params.body;
+
+	if (queryMethods[method]) {
+		body = params.query;
+	}
+
+	return provider[providerMethod](body, params);
+}
+
+/**
+ * Returns request promise created by path (default request)
+ *
+ * @param provider
+ * @param params
+ */
+function getRequestByPath(provider: iProvider, params: AvailableOptions): Then<RequestResponse> {
+	// @ts-ignore - Property 'request' does not exist on type 'Provider'.
+	return provider.request(params.meta.path, params);
 }
 
 /**
@@ -121,16 +163,12 @@ export default function makeProviderEngine(
 		const p: AvailableOptions = prepareParams(params);
 		const provider = getProvider(providerOrNamespace);
 
-		let providerMethod = <string>p.meta!.providerMethod;
-
-		if (methodsMapping && providerMethod in methodsMapping) {
-			providerMethod = methodsMapping[providerMethod];
-		}
-
 		const parent = new Then<Response<unknown>>(async (resolve, reject, onAbort): Then<Response<unknown>> => {
 			await new Promise((r) => {
 				globalThis['setImmediate'](r);
 			});
+
+			p.parent = <Then<unknown>>parent;
 
 			if (!('middlewares' in p)) {
 				p.middlewares = [middleware];
@@ -142,24 +180,18 @@ export default function makeProviderEngine(
 				p.middlewares[serialize(generate())] = middleware;
 			}
 
-			let method;
+			let providerMethod = <string>p.meta.providerMethod;
+			let req: Then<RequestResponse>;
 
-			if (providerMethod === 'post') {
-				method = 'POST';
+			if (providerMethod !== undefined) {
+				if (methodsMapping && providerMethod in methodsMapping) {
+					providerMethod = methodsMapping[providerMethod];
+				}
+
+				req = getRequestByProviderMethod(provider, providerMethod, p);
 			} else {
-				const methodPropertyName = `${providerMethod}Method`;
-
-				method = provider[methodPropertyName];
+				req = getRequestByPath(provider, p);
 			}
-
-			let body: RequestQuery | RequestBody | undefined = p.body;
-
-			if (queryMethods[method]) {
-				body = p.query;
-			}
-
-			p.parent = <Then<unknown>>parent;
-			const req = provider[providerMethod](body, p);
 
 			onAbort(() => {
 				req.abort();
@@ -175,7 +207,7 @@ export default function makeProviderEngine(
 				responseBody = {...data};
 			}
 
-			return resolve(new Response(responseBody, {
+			return resolve(new Response(<ResponseTypeValue>responseBody, {
 				parent: params.parent,
 				important: res.important,
 				responseType: 'object',
