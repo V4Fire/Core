@@ -1,29 +1,36 @@
 import {
-	MiddlewareParams, Middlewares,
+
+	MiddlewareParams,
+	Middlewares,
+
 	OkStatuses,
-	RequestAPI,
-	RequestBody, RequestEngine, RequestMethod,
-	RequestOptions, RequestQuery, RequestResponse,
+
+	RequestBody,
+	RequestEngine,
+	RequestMethod,
+	RequestOptions,
+	RequestQuery,
+	RequestResponse
+
 } from 'core/request/interface';
-import Response, {ResponseTypeValue} from 'core/request/response';
+import Response, { ResponseTypeValue } from 'core/request/response';
 import iProvider, { ModelMethod, ProviderConstructor, ExtraProviderConstructor } from 'core/data/interface';
-import {providers, queryMethods} from 'core/data/const';
+import { providers, queryMethods } from 'core/data/const';
 import Then from 'core/then';
-import {generate, serialize} from "core/uuid";
-import Provider from "core/data";
+import { generate, serialize } from 'core/uuid';
+import Provider from 'core/data';
 
 interface AvailableOptions {
-	readonly method: RequestMethod; // всегда есть, падает из дефолтных настроек
-	readonly api: RequestAPI; // всегда есть, падает из globalOpts
+	readonly method: RequestMethod;
 	readonly body?: RequestBody;
-	readonly query: RequestQuery; // всегда есть, падает из дефолтных настроек
-	readonly headers: Dictionary<CanArray<unknown>>; // всегда есть, падает из дефолтных настроек
+	readonly query: RequestQuery;
+	readonly headers: Dictionary<CanArray<unknown>>;
 	readonly okStatuses?: OkStatuses;
 	readonly timeout?: number;
 	readonly externalRequest?: boolean;
 	readonly important?: boolean;
-	readonly meta: Dictionary; // всегда есть, падает из дефолтных настроек
-	readonly url: string; // всегда есть, падает из реквеста
+	readonly meta: Dictionary;
+	readonly url: string;
 
 	parent?: Then;
 	middlewares?: Middlewares;
@@ -31,7 +38,7 @@ interface AvailableOptions {
 
 type MethodsMapping = {
 	[key in ModelMethod]: ModelMethod
-}
+};
 
 /**
  * Returns provider class or object.
@@ -40,7 +47,7 @@ type MethodsMapping = {
  */
 function getProvider(providerOrNamespace: ExtraProviderConstructor): iProvider {
 	if (Object.isString(providerOrNamespace)) {
-		if (! (providerOrNamespace in providers)) {
+		if (!(providerOrNamespace in providers)) {
 			throw new ReferenceError(`A provider "${providerOrNamespace}" is not registered`);
 		}
 
@@ -62,7 +69,7 @@ const availableParams = [
 	'query',
 	'headers',
 	// 'credentials', // задает источник
-	'api', // необходимо для получения базового пути, чтобы сделать запрос
+	// 'api', // у источника свой
 	'okStatuses', // задает источник ?
 	'timeout',
 	// 'cacheStrategy', // у источника
@@ -76,9 +83,9 @@ const availableParams = [
 	// 'jsonReviver', // у источника свои
 	'externalRequest', // не до конца понимаю влияние
 	'important',
-	'meta',
+	'meta'
 	// 'engine',
-	'url', // без этого непонятно на какой адрес идти
+	// 'url' // путь для реквеста берем из мета-данных
 	// 'decoders', // у источника свои
 	// 'parent',
 ];
@@ -98,14 +105,14 @@ function prepareParams(params: RequestOptions): AvailableOptions {
  * @param opts
  * @param ctx
  */
-const middleware = ({ opts, ctx }: MiddlewareParams): void => {
-	if (opts.meta.isProvider || !opts.meta.providerMethod) {
+const middleware = ({opts, ctx}: MiddlewareParams): void => {
+	if (opts.meta.isProvider === true || opts.meta.providerMethod === undefined) {
 		ctx.canUsePendingCache = false;
 
 	} else {
 		opts.meta.isProvider = true;
 	}
-}
+};
 
 /**
  * Returns request promise created by provider method
@@ -129,11 +136,7 @@ function getRequestByProviderMethod(
 		method = provider[methodPropertyName];
 	}
 
-	let body: RequestQuery | RequestBody | undefined = params.body;
-
-	if (queryMethods[method]) {
-		body = params.query;
-	}
+	const body = method in queryMethods ? params.query : params.body;
 
 	return provider[providerMethod](body, params);
 }
@@ -180,7 +183,7 @@ export default function makeProviderEngine(
 				p.middlewares[serialize(generate())] = middleware;
 			}
 
-			let providerMethod = <string>p.meta.providerMethod;
+			let providerMethod = <string | undefined>p.meta.providerMethod;
 			let req: Then<RequestResponse>;
 
 			if (providerMethod !== undefined) {
@@ -188,7 +191,7 @@ export default function makeProviderEngine(
 					providerMethod = methodsMapping[providerMethod];
 				}
 
-				req = getRequestByProviderMethod(provider, providerMethod, p);
+				req = getRequestByProviderMethod(provider, providerMethod!, p);
 			} else {
 				req = getRequestByPath(provider, p);
 			}
@@ -197,7 +200,7 @@ export default function makeProviderEngine(
 				req.abort();
 			});
 
-			const { data, response: res } = (await req);
+			const {data, response: res} = (await req);
 
 			let responseBody = data;
 

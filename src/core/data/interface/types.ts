@@ -85,7 +85,7 @@ export interface ExtraProviderParams<D = unknown> {
 }
 
 export interface ProviderConstructor {
-	new(opts?: ProviderOptions): Provider
+	new(opts?: ProviderOptions): Provider;
 }
 
 export type ExtraProviderConstructor =
