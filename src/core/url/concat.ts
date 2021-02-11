@@ -6,6 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import { deprecate } from 'core/functools/deprecation';
 import { isAbsURL, isURLWithSlash } from 'core/url/const';
 
 /**
@@ -22,7 +23,7 @@ import { isAbsURL, isURLWithSlash } from 'core/url/const';
  * concatUrls('http://foo.bar', 'bla');
  * ```
  */
-export function concatUrls(...urls: Array<Nullable<string>>): string {
+export function concatURLs(...urls: Array<Nullable<string>>): string {
 	let
 		res = '';
 
@@ -52,4 +53,19 @@ export function concatUrls(...urls: Array<Nullable<string>>): string {
 	}
 
 	return res;
+}
+
+/**
+ * @deprecated
+ * @see [[concatURLs]]
+ * @param urls
+ */
+export function concatUrls(...urls: Array<Nullable<string>>): string {
+	deprecate({
+		name: 'concatUrls',
+		type: 'function',
+		renamedTo: 'concatURLs'
+	});
+
+	return concatURLs(...urls);
 }
