@@ -1,4 +1,4 @@
-import {
+import type {
 
 	MiddlewareParams,
 	Middlewares,
@@ -14,7 +14,8 @@ import {
 
 } from 'core/request/interface';
 import Response, { ResponseTypeValue } from 'core/request/response';
-import iProvider, { ModelMethod, ProviderConstructor, ExtraProviderConstructor } from 'core/data/interface';
+import type iProvider from 'core/data/interface';
+import type { ModelMethod, ProviderConstructor, ExtraProviderConstructor } from 'core/data/interface/types';
 import { providers, queryMethods } from 'core/data/const';
 import Then from 'core/then';
 import { generate, serialize } from 'core/uuid';
