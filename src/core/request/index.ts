@@ -28,7 +28,7 @@ import {
 	RequestResolver,
 	RequestResponse,
 	RequestFunctionResponse,
-	Middleware
+	Middleware, RetryParams
 
 } from 'core/request/interface';
 
@@ -305,8 +305,49 @@ function request<D = unknown>(
 					parent,
 					decoders: ctx.decoders
 				};
+				if (opts?.retry != null) {
+					const retry: RetryParams = Object.isNumber(opts.retry) ? {attempts: opts.retry} : opts.retry,
+						attemptLimit = retry.attempts ?? Infinity;
+					if (retry.delayBeforeAttempt == null) {
+						retry.delayBeforeAttempt = () => Promise.resolve();
+					}
 
-				res = requestParams.engine(reqOpts).then(success).then(ctx.saveCache.bind(ctx));
+					const calculateDelay: (attempt: number) => Promise<void> | false = (attempt) => {
+							const delay = retry.delayBeforeAttempt!(attempt);
+							if (Object.isNumber(delay)) {
+								return new Promise((res) => setTimeout(res, delay));
+							}
+
+							return delay;
+						},
+						retries = async () => {
+							let response,
+								attempt = 0;
+							const retry = async () => {
+								try {
+									response = await success(await requestParams.engine(reqOpts));
+								} catch (err) {
+									if (attemptLimit > attempt++) {
+										const delay = await calculateDelay(attempt);
+										if (delay === false) {
+											throw err;
+										}
+
+										await retry();
+									} else {
+										throw err;
+									}
+								}
+							};
+
+							await retry();
+							return response;
+						};
+
+					res = retries().then(ctx.saveCache.bind(ctx));
+				} else {
+					res = requestParams.engine(reqOpts).then(success).then(ctx.saveCache.bind(ctx));
+				}
 			}
 
 			res

@@ -38,6 +38,12 @@ describe('core/request', () => {
 		set('log', {patterns: []});
 
 		defaultEngine = defaultRequestOpts.engine;
+	});
+
+	beforeEach(() => {
+		if(server) {
+			server.close();
+		}
 
 		server = createServer();
 	});
@@ -366,58 +372,115 @@ describe('core/request', () => {
 				expect(err.details.response.status).toBe(404);
 			});
 
-			it('aborting of a request', async () => {
-				let err;
-
-				try {
-					const req = request('http://localhost:3000/json/1');
-					req.abort();
-					await req;
-
-				} catch (e) {
-					err = e;
-				}
-
-				expect(err).toBeInstanceOf(RequestError);
-				expect(err.type).toBe('abort');
-				expect(err.message).toBe('API error, type: abort');
-				expect(err.details.request.method).toBe('GET');
-				expect(err.details.response).toBeUndefined();
-			});
-
-			it('request with a low timeout', async () => {
-				let err;
-
-				try {
-					await request('http://localhost:3000/delayed', {timeout: 100});
-
-				} catch (e) {
-					err = e;
-				}
-
-				expect(err).toBeInstanceOf(RequestError);
-				expect(err.type).toBe('timeout');
-				expect(err.message).toBe('API error, type: timeout');
-				expect(err.details.response).toBeUndefined();
-			});
-
-			it('request with high timeout', async () => {
-				const req = await request('http://localhost:3000/delayed', {timeout: 500});
-
-				expect(req.response.ok).toBeTrue();
-			});
-
-			it('response with 204 status', async () => {
-				const req = await request('http://localhost:3000/octet/204');
-				expect(req.data).toBe(null);
-			});
+			// Fix arrow function max length
+			secondTestsPart();
 		});
 	});
 });
 
+function secondTestsPart() {
+	it('aborting of a request', async () => {
+		let err;
+
+		try {
+			const req = request('http://localhost:3000/json/1');
+			req.abort();
+			await req;
+
+		} catch (e) {
+			err = e;
+		}
+
+		expect(err).toBeInstanceOf(RequestError);
+		expect(err.type).toBe('abort');
+		expect(err.message).toBe('API error, type: abort');
+		expect(err.details.request.method).toBe('GET');
+		expect(err.details.response).toBeUndefined();
+	});
+
+	it('request with a low timeout', async () => {
+		let err;
+
+		try {
+			await request('http://localhost:3000/delayed', {timeout: 100});
+
+		} catch (e) {
+			err = e;
+		}
+
+		expect(err).toBeInstanceOf(RequestError);
+		expect(err.type).toBe('timeout');
+		expect(err.message).toBe('API error, type: timeout');
+		expect(err.details.response).toBeUndefined();
+	});
+
+	it('request with high timeout', async () => {
+		const req = await request('http://localhost:3000/delayed', {timeout: 500});
+
+		expect(req.response.ok).toBeTrue();
+	});
+
+	it('response with 204 status', async () => {
+		const req = await request('http://localhost:3000/octet/204');
+		expect(req.data).toBe(null);
+	});
+
+	it('retry', async () => {
+		const body = await (await request('http://localhost:3000/retry', {retry: 5})).response.json();
+		expect(body.tryNumber).toBe(4);
+	});
+
+	const retryDelayTest = async (delayBeforeAttempt, delay) => {
+		const startTime = new Date().getTime(),
+			body = await (await request('http://localhost:3000/retry', {
+				retry: {attempts: 5, delayBeforeAttempt}
+			})).response.json(),
+			firstRequest = body.times.shift(),
+			requestDelays = body.times.reduce((acc, time, i) => acc.concat(time - firstRequest - i * delay), []);
+		expect(firstRequest - startTime).toBeLessThan(delay);
+		requestDelays.forEach((time) => expect(time).toBeGreaterThanOrEqual(delay));
+	};
+
+	it('retry with ms delay between tries', async () => {
+		await retryDelayTest(() => 200, 200);
+	});
+
+	it('retry with promise delay between tries', async () => {
+		await retryDelayTest(() => new Promise((res) => setTimeout(res, 200)), 200);
+	});
+
+	it('retry with speedup response', async () => {
+		const req = await request('http://localhost:3000/retry/speedup', {
+			timeout: 300,
+			retry: 5
+		});
+		expect(req.response.ok).toBeTrue();
+		const body = await req.response.json();
+		expect(body.tryNumber).toBe(2);
+	});
+
+	it('retry fail after given attempt', async () => {
+		try {
+			await request('http://localhost:3000/retry/bad', {retry: 5});
+		} catch (er) {
+			const body = await er.details.response.json();
+			expect(er).toBeInstanceOf(RequestError);
+			expect(er.type).toBe('invalidStatus');
+			expect(er.message).toBe('API error, type: invalidStatus');
+			expect(er.details.request.method).toBe('GET');
+			expect(er.details.response.status).toBe(500);
+			expect(body.tryNumber).toEqual(5);
+		}
+	});
+}
+
 function createServer() {
 	const
-		serverApp = express();
+		serverApp = express(),
+		triesBeforeSuccess = 3,
+		requestTimes = [];
+	let tryNumber = 0,
+		speed = 600;
 
 	serverApp.use(express.json());
 
@@ -486,6 +549,33 @@ function createServer() {
 
 	serverApp.get('/octet/204', (req, res) => {
 		res.type('application/octet-stream').status(204).end();
+	});
+
+	serverApp.get('/retry', (req, res) => {
+		requestTimes.push(new Date().getTime());
+		if (tryNumber <= triesBeforeSuccess) {
+			res.sendStatus(500);
+			tryNumber++;
+		} else {
+			res.status(200);
+			res.json({tryNumber, times: requestTimes});
+		}
+	});
+
+	serverApp.get('/retry/speedup', (req, res) => {
+		setTimeout(() => {
+			res.status(200);
+			res.json({tryNumber});
+			tryNumber++;
+		}, speed);
+
+		speed -= 200;
+	});
+
+	serverApp.get('/retry/bad', (req, res) => {
+		res.status(500);
+		res.json({tryNumber});
+		tryNumber++;
 	});
 
 	return serverApp.listen(3000);

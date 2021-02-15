@@ -249,6 +249,11 @@ export interface CreateRequestOptions<D = unknown> {
 	readonly method?: RequestMethod;
 
 	/**
+	 * Params for request retries or attempts number
+	 */
+	retry?: RetryParams | number;
+
+	/**
 	 * Mime type of request data (if not specified, it will be casted dynamically)
 	 */
 	contentType?: string;
@@ -399,4 +404,21 @@ export interface CreateRequestOptions<D = unknown> {
 	 * Custom request engine
 	 */
 	engine?: RequestEngine;
+}
+
+/**
+ * Retry request params
+ */
+export interface RetryParams {
+	/**
+	 * Number of retryAttempts
+	 */
+	attempts?: number;
+
+	/**
+	 * Function that return ms delay or Promise before next try
+	 * or return false to stop trying
+	 * @param attempt next attempt number
+	 */
+	delayBeforeAttempt?(attempt?: number): number | Promise<void> | false;
 }
