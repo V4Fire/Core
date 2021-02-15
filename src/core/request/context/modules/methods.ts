@@ -7,7 +7,7 @@
  */
 
 import { deprecated } from 'core/functools';
-import { concatUrls, toQueryString } from 'core/url';
+import { concatURLs, toQueryString } from 'core/url';
 
 import { normalizeHeaders, applyQueryForStr, getStorageKey, getRequestKey } from 'core/request/utils';
 import { storage, globalOpts } from 'core/request/const';
@@ -98,7 +98,7 @@ export default class RequestContext<D = unknown> extends Super<D> {
 				return nm.startsWith('/') ? nm : `/${nm}`;
 			}
 
-			return concatUrls(
+			return concatURLs(
 				resolve('protocol') +
 				resolve('auth') +
 				resolveDomains().toString() +
@@ -109,7 +109,7 @@ export default class RequestContext<D = unknown> extends Super<D> {
 		}
 
 		if (!RegExp.test(resolveURLRgxp, apiURL)) {
-			return concatUrls(...resolveDomains({slice: 2, join: false}), resolve('namespace'));
+			return concatURLs(...resolveDomains({slice: 2, join: false}), resolve('namespace'));
 		}
 
 		return apiURL.replace(resolveURLRgxp, (str, protocol, auth, domains, port, nm) => {
@@ -117,10 +117,10 @@ export default class RequestContext<D = unknown> extends Super<D> {
 			nm = resolve('namespace', nm);
 
 			if (protocol == null) {
-				return concatUrls(...resolveDomains({slice: 2, join: false}), nm);
+				return concatURLs(...resolveDomains({slice: 2, join: false}), nm);
 			}
 
-			return concatUrls(
+			return concatURLs(
 				resolve('protocol', protocol) +
 				resolve('auth', auth) +
 				resolveDomains({def: domains}).toString() +

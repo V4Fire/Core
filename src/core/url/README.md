@@ -5,8 +5,8 @@ This module provides a bunch of functions to work with URL strings, such as pars
 ## Concatenation of URL-s
 
 ```js
-import { concatUrls } from 'core/url';
-concatUrls('foo/baz', '/bar', 'bla') === '/foo/baz/bar/bla';
+import { concatURLs } from 'core/url';
+concatURLs('foo/baz', '/bar', 'bla') === '/foo/baz/bar/bla';
 ```
 
 ## Parsing/Serialization

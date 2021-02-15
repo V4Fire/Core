@@ -6,21 +6,21 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { concatUrls, fromQueryString, toQueryString } from 'core/url';
+import { concatURLs, fromQueryString, toQueryString } from 'core/url';
 
-describe('core/url/concatUrls', () => {
+describe('core/url/concatURLs', () => {
 	it('simple concatenation', () => {
-		expect(concatUrls('foo/baz', '/bar', 'bla')).toBe('/foo/baz/bar/bla');
+		expect(concatURLs('foo/baz', '/bar', 'bla')).toBe('/foo/baz/bar/bla');
 	});
 
 	it('concatenation with trailing slashes', () => {
-		expect(concatUrls('foo/baz', '/bar/', 'bla/')).toBe('/foo/baz/bar/bla/');
+		expect(concatURLs('foo/baz', '/bar/', 'bla/')).toBe('/foo/baz/bar/bla/');
 	});
 
 	it('concatenation of URL-s with an absolute path', () => {
-		expect(concatUrls('http://foo.bar', 'bla')).toBe('http://foo.bar/bla');
-		expect(concatUrls('file:///C://foo.bla', 'bla')).toBe('file:///C://foo.bla/bla');
-		expect(concatUrls('/foo', 'http://google.com', 'bla')).toBe('http://google.com/bla');
+		expect(concatURLs('http://foo.bar', 'bla')).toBe('http://foo.bar/bla');
+		expect(concatURLs('file:///C://foo.bla', 'bla')).toBe('file:///C://foo.bla/bla');
+		expect(concatURLs('/foo', 'http://google.com', 'bla')).toBe('http://google.com/bla');
 	});
 });
 

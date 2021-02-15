@@ -17,10 +17,10 @@ import { isAbsURL, isURLWithSlash } from 'core/url/const';
  * @example
  * ```js
  * // '/foo/baz/bar/bla'
- * concatUrls('foo/baz', '/bar', 'bla');
+ * concatURLs('foo/baz', '/bar', 'bla');
  *
  * // 'http://foo.bar/bla'
- * concatUrls('http://foo.bar', 'bla');
+ * concatURLs('http://foo.bar', 'bla');
  * ```
  */
 export function concatURLs(...urls: Array<Nullable<string>>): string {
