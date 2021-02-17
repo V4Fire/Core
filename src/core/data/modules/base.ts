@@ -533,9 +533,16 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 			encoder: merge(encoders[method] ?? encoders['def'], params?.encoder),
 			decoder: merge(decoders[method] ?? decoders['def'], params?.decoder),
 
-			// Todo: в методе post возможен проброс eventName вместо ModelMethod, добавить еще 1 параметр?
 			meta: {
-				providerMethod: method
+				providerMethod: method,
+				providerBaseUrls: {
+					baseURL: this.baseURL,
+					baseGetURL: this.baseGetURL,
+					basePeekURL: this.basePeekURL,
+					baseAddURL: this.baseAddURL,
+					baseUpdURL: this.baseUpdURL,
+					baseDelURL: this.baseDelURL
+				}
 			}
 		};
 	}

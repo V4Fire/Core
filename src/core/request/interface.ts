@@ -236,6 +236,12 @@ export interface RequestAPI {
  */
 export interface RequestEngine {
 	(params: RequestOptions): Then<Response>;
+
+	/**
+	 * The flag that indicates that the request will wait until previous request with the same cache key will be done.
+	 * True by default.
+	 */
+	pendingCache?: boolean;
 }
 
 /**
