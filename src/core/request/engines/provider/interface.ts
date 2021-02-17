@@ -19,7 +19,7 @@ import type { ModelMethod } from 'core/data';
 import Then from 'core/then';
 
 /**
- *
+ * Available options for request with data provider engine
  */
 export interface AvailableOptions {
 	readonly url: string;
@@ -37,6 +37,9 @@ export interface AvailableOptions {
 	parent?: Then;
 }
 
+/**
+ * Mapping of current to source data provider methods
+ */
 export type MethodsMapping = {
 	[key in ModelMethod]: ModelMethod
 };
