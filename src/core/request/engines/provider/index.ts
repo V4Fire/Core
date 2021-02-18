@@ -18,12 +18,12 @@ import {
 } from 'core/request';
 import type iProvider from 'core/data/interface';
 import type { ProviderConstructor, ExtraProviderConstructor } from 'core/data/interface/types';
-import { providers, queryMethods } from 'core/data/const';
-import Provider from 'core/data';
-import { AvailableOptions, MethodsMapping } from 'core/request/engines/provider/interface';
-import { availableParams } from 'core/request/engines/provider/const';
+import Provider, { providers, queryMethods } from 'core/data';
 import Then from 'core/then';
 import { concatUrls } from 'core/url';
+
+import type { AvailableOptions, MethodsMapping } from 'core/request/engines/provider/interface';
+import { availableParams } from 'core/request/engines/provider/const';
 
 export * from 'core/request/engines/provider/interface';
 export * from 'core/request/engines/provider/const';
