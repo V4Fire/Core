@@ -43,12 +43,18 @@ function getProvider(providerOrNamespace: ExtraProviderConstructor, meta: Dictio
 		providerOrNamespace = <ProviderConstructor>providers[providerOrNamespace];
 	}
 
-	const provider = providerOrNamespace instanceof Provider ?
-		providerOrNamespace :
-		new (<ProviderConstructor>providerOrNamespace)();
+	let
+		provider: iProvider;
+
+	if (providerOrNamespace instanceof Provider) {
+		provider = providerOrNamespace;
+	} else {
+		provider = new (<ProviderConstructor>providerOrNamespace)();
+	}
 
 	if ('providerBaseUrls' in meta) {
-		const providerBaseUrls = <Dictionary<string>>meta.providerBaseUrls;
+		const
+			providerBaseUrls = <Dictionary<string>>meta.providerBaseUrls;
 
 		return new Proxy(provider, {
 			get(target: typeof provider, prop: string): any {
@@ -77,7 +83,8 @@ function getRequestByProviderMethod(
 	providerMethod: string,
 	params: AvailableOptions
 ): Then<RequestResponse> {
-	let method;
+	let
+		method;
 
 	if (providerMethod === 'post') {
 		method = 'POST';
@@ -87,7 +94,8 @@ function getRequestByProviderMethod(
 		method = provider[methodPropertyName];
 	}
 
-	const body = method in queryMethods ? params.query : params.body;
+	const
+		body = method in queryMethods ? params.query : params.body;
 
 	return provider[providerMethod](body, params);
 }
@@ -122,8 +130,9 @@ export default function makeProviderEngine(
 	methodsMapping?: MethodsMapping
 ): RequestEngine {
 	function dataProviderEngine(params: RequestOptions): Then<Response> {
-		const p = <AvailableOptions>Object.select(params, availableParams);
-		const provider = getProvider(providerOrNamespace, p.meta);
+		const
+			p = <AvailableOptions>Object.select(params, availableParams),
+			provider = getProvider(providerOrNamespace, p.meta);
 
 		const parent = new Then<Response>(async (resolve, reject, onAbort): Then<Response> => {
 			await new Promise((r) => {
@@ -132,8 +141,9 @@ export default function makeProviderEngine(
 
 			p.parent = <Then>parent;
 
-			let providerMethod = <string | undefined>p.meta.providerMethod;
-			let req: Then<RequestResponse>;
+			let
+				providerMethod = <string | undefined>p.meta.providerMethod,
+				req: Then<RequestResponse>;
 
 			if (providerMethod !== undefined) {
 				if (methodsMapping && providerMethod in methodsMapping) {
