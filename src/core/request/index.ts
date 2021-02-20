@@ -19,16 +19,17 @@ import Response from 'core/request/response';
 import RequestError from 'core/request/error';
 import RequestContext from 'core/request/context';
 
-import { merge, getStorageKey } from 'core/request/utils';
-import { storage, globalOpts, defaultRequestOpts } from 'core/request/const';
+import { getStorageKey, merge } from 'core/request/utils';
+import { defaultRequestOpts, globalOpts, storage } from 'core/request/const';
 
 import {
 
 	CreateRequestOptions,
+	Middleware,
+	RequestFunctionResponse,
 	RequestResolver,
 	RequestResponse,
-	RequestFunctionResponse,
-	Middleware, RetryParams
+	RetryParams
 
 } from 'core/request/interface';
 
@@ -120,7 +121,8 @@ function request<D = unknown>(
 	}
 
 	let
-		resolver, opts: CanUndef<CreateRequestOptions<D>>;
+		resolver,
+		opts: CanUndef<CreateRequestOptions<D>>;
 
 	if (args.length > 1) {
 		[resolver, opts] = args;
@@ -240,7 +242,10 @@ function request<D = unknown>(
 						}
 
 					} catch (err) {
-						if (err != null && {clearAsync: true, abort: true}[err.type] != null) {
+						if (err != null && {
+							clearAsync: true,
+							abort: true
+						}[err.type] != null) {
 							reject(err);
 							return;
 						}
@@ -305,15 +310,20 @@ function request<D = unknown>(
 					parent,
 					decoders: ctx.decoders
 				};
+
 				if (opts?.retry != null) {
-					const retry: RetryParams = Object.isNumber(opts.retry) ? {attempts: opts.retry} : opts.retry,
+					const
+						retry: RetryParams = Object.isNumber(opts.retry) ? {attempts: opts.retry} : opts.retry,
 						attemptLimit = retry.attempts ?? Infinity;
+
 					if (retry.delayBeforeAttempt == null) {
 						retry.delayBeforeAttempt = () => Promise.resolve();
 					}
 
 					const calculateDelay: (attempt: number) => Promise<void> | false = (attempt) => {
-							const delay = retry.delayBeforeAttempt!(attempt);
+							const
+								delay = retry.delayBeforeAttempt!(attempt);
+
 							if (Object.isNumber(delay)) {
 								return new Promise((res) => setTimeout(res, delay));
 							}
@@ -321,14 +331,17 @@ function request<D = unknown>(
 							return delay;
 						},
 						retries = async () => {
-							let response,
+							let
+								response,
 								attempt = 0;
+
 							const retry = async () => {
 								try {
 									response = await success(await requestParams.engine(reqOpts));
 								} catch (err) {
 									if (attemptLimit > attempt++) {
 										const delay = await calculateDelay(attempt);
+
 										if (delay === false) {
 											throw err;
 										}
@@ -344,9 +357,14 @@ function request<D = unknown>(
 							return response;
 						};
 
-					res = retries().then(ctx.saveCache.bind(ctx));
+					res = retries()
+						.then(ctx.saveCache.bind(ctx));
+
 				} else {
-					res = requestParams.engine(reqOpts).then(success).then(ctx.saveCache.bind(ctx));
+					res = requestParams.engine(reqOpts)
+						.then(success)
+						.then(ctx.saveCache.bind(ctx));
+
 				}
 			}
 
