@@ -13,17 +13,13 @@ import Provider, {
 
 	providers,
 	queryMethods,
-	urlProperties as providerUrlProperties
+	urlProperties as providerUrlProperties,
+	methodProperties as providerMethodProperties,
+	globalOpts
 
 } from 'core/data';
 
-import {
-
-	RequestEngine,
-	RequestOptions,
-	RequestResponse
-
-} from 'core/request/interface';
+import { RequestEngine, RequestOptions } from 'core/request/interface';
 
 import Response from 'core/request/response';
 import { ResponseTypeValue } from 'core/request/response/interface';
@@ -54,13 +50,24 @@ export * from 'core/request/engines/provider/const';
  */
 export default function createProviderEngine(
 	src: ExtraProviderConstructor,
-	methodsMapping?: MethodsMapping
+	methodsMapping: MethodsMapping = {}
 ): RequestEngine {
 	function dataProviderEngine(params: RequestOptions): Then<Response> {
 		const
 			p = <AvailableOptions>Object.select(params, availableParams),
-			{providerMethod} = p.meta,
-			provider = getProviderInstance(src, p.meta);
+			provider = getProviderInstance(src, p.meta),
+			defaultRequestMethods = <MethodsMapping>providerMethodProperties.reduceRight((carry, key) => {
+				if (key in provider && provider[key] !== '' && provider[key] != null) {
+					carry[provider[key]] = key.replace('Method', '');
+				}
+
+				return carry;
+			}, {});
+
+		methodsMapping = {
+			...defaultRequestMethods,
+			...methodsMapping
+		};
 
 		const parent = new Then<Response>(async (resolve, reject, onAbort): Then<Response> => {
 			await new Promise((r) => {
@@ -69,24 +76,38 @@ export default function createProviderEngine(
 
 			p.parent = <Then>parent;
 
-			const getMethod = (key) => {
-				if (methodsMapping && key in methodsMapping) {
-					return methodsMapping[key];
-				}
+			let
+				{providerMethod} = p.meta;
 
-				return key;
-			};
+			const
+				isSimpleRequest = providerMethod === undefined,
+				getMethod = (key) => key in methodsMapping ? methodsMapping[key] : key;
+
+			providerMethod = getMethod(providerMethod === undefined ? p.method : providerMethod);
+
+			if (!(providerMethod !== undefined && providerMethod in provider)) {
+				throw new ReferenceError('A provider method not found');
+			}
+
+			const
+				method = providerMethod === 'post' ? 'POST' : provider[`${providerMethod}Method`],
+				body = method in queryMethods ? p.query : p.body;
 
 			let
-				req: Then<RequestResponse>;
+				urlProperty = `base-${providerMethod}-URL`.camelize(false);
 
-			if (providerMethod !== undefined) {
-				req = getRequestByProviderMethod(provider, getMethod(providerMethod), p);
-
-			} else {
-				p.method = getMethod(p.method);
-				req = provider.request(params.url.split('?')[0], p);
+			if (!(urlProperty in provider && provider[urlProperty] !== '' && provider[urlProperty] != null)) {
+				urlProperty = providerUrlProperties[0];
 			}
+
+			const pr = isSimpleRequest ?
+				createMixedProvider(provider, {
+					[urlProperty]: p.url.replace(globalOpts.api ?? '', '').split('?')[0]
+				}) :
+				provider;
+
+			const
+				req = pr[<string>providerMethod](body, p);
 
 			onAbort(() => {
 				req.abort();
@@ -154,40 +175,30 @@ function getProviderInstance(src: ExtraProviderConstructor, meta?: Meta): Provid
 	}
 
 	if (meta !== undefined && 'provider' in meta) {
-		const
-			metaProvider = <Provider>meta.provider,
-			mixedProvider = provider.base('just do it');
-
-		providerUrlProperties.forEach((key) => {
-			if (provider[key] == null || provider[key] === '') {
-				mixedProvider[key] = metaProvider[key];
-
-			} else {
-				mixedProvider[key] = concatUrls(provider[key], metaProvider[key]);
-			}
-		});
-
-		return mixedProvider;
+		return createMixedProvider(provider, <Provider>meta.provider);
 	}
 
 	return provider;
 }
 
 /**
- * Returns a request promise created by using the specified data provider and the passed method
+ * Creates mixed provider that has concatenated base URLs
  *
- * @param provider
- * @param providerMethod
- * @param requestParams
+ * @param base - base provider
+ * @param [additional] - provider or dictionary with additional base urls
  */
-function getRequestByProviderMethod(
-	provider: Provider,
-	providerMethod: string,
-	requestParams: AvailableOptions
-): Then<RequestResponse> {
+function createMixedProvider(base: Provider, additional: Provider | Dictionary<string> = {}): Provider {
 	const
-		method = providerMethod === 'post' ? 'POST' : provider[`${providerMethod}Method`],
-		body = method in queryMethods ? requestParams.query : requestParams.body;
+		// Method base needs not empty string in that case
+		mixedProvider = base.base('just do it');
 
-	return provider[providerMethod](body, requestParams);
+	providerUrlProperties.forEach((key) => {
+		if (base[key] === undefined && additional[key] === undefined) {
+			mixedProvider[key] = undefined;
+		} else {
+			mixedProvider[key] = concatUrls(base[key], additional[key]);
+		}
+	});
+
+	return mixedProvider;
 }

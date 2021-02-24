@@ -49,5 +49,5 @@ export interface AvailableOptions {
  * Mapping of current to source data provider or request methods
  */
 export type MethodsMapping =
-	{[key in ModelMethod]: ModelMethod} |
-	{[key in RequestMethod]: RequestMethod};
+	{[key in ModelMethod]?: ModelMethod} &
+	{[key in RequestMethod]?: ModelMethod};

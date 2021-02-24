@@ -10,7 +10,7 @@ import express from 'express';
 
 import { set, get } from 'core/env';
 
-import { globalOpts } from 'core/request';
+import request, { globalOpts } from 'core/request';
 import Provider, { provider } from 'core/data';
 import createProviderEngine from 'core/request/engines/provider';
 
@@ -98,7 +98,7 @@ describe('core/request/engine/provider', () => {
 
 	beforeAll(async () => {
 		api = globalOpts.api;
-		globalOpts.api = 'https://run.mocky.io';
+		globalOpts.api = 'http://localhost:3000';
 
 		logOptions = await get('log');
 		set('log', {patterns: []});
@@ -162,6 +162,17 @@ describe('core/request/engine/provider', () => {
 
 		expect(req.response.status)
 			.toBe(201);
+	});
+
+	it('simple request methods mapping', async () => {
+		const req = request({
+			engine: createProviderEngine(ProviderEngineTestDataProvider, {
+				POST: 'get'
+			})
+		});
+
+		expect((await req('/json', {method: 'POST'})).data)
+			.toEqual({id: 1, value: 'things'});
 	});
 });
 

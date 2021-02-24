@@ -36,6 +36,14 @@ export const queryMethods = Object.createDict({
 	HEAD: true
 });
 
+export const methodProperties = [
+	'getMethod',
+	'peekMethod',
+	'addMethod',
+	'updMethod',
+	'delMethod'
+];
+
 export const urlProperties = [
 	'baseURL',
 	'advURL',

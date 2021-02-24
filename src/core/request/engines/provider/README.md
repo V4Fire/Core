@@ -62,20 +62,13 @@ Also, you can pass object with request methods mapping:
 ```js
 const req = request({
   engine: createProviderEngine('dataProvider', {
-    'POST': 'PUT',
-    'PUT': 'POST'
+    'POST': 'upd',
+    'PUT': 'post'
   })
 });
 ```
 
-And now for `method='POST'` will be executed `PUT` request:
-
-```js
-req('/data', {
-  method: 'POST'
-}); // PUT request
-```
-
+And now parameter `method='POST'` will execute `upd` method of data provider.
 Same mechanic for the data providers chain:
 
 ```js
@@ -88,5 +81,5 @@ class DataProvider extends Provider {
   })
 }
 
-(new DataProvider()).peek() // will be executed 'upd' method of BaseProvider
+(new DataProvider()).peek() // execution of 'upd' method of BaseProvider
 ```
