@@ -8,7 +8,7 @@
 
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 
-import Provider from 'core/data/interface';
+import { Provider } from 'core/data/interface';
 
 import { Socket } from 'core/socket';
 import { RequestResponseObject } from 'core/request';
@@ -35,3 +35,14 @@ export const queryMethods = Object.createDict({
 	GET: true,
 	HEAD: true
 });
+
+export const urlProperties = [
+	'baseURL',
+	'advURL',
+	'socketURL',
+	'baseGetURL',
+	'basePeekURL',
+	'baseAddURL',
+	'baseUpdURL',
+	'baseDelURL'
+];

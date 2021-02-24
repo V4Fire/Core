@@ -6,133 +6,61 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import Provider, {
+
+	ProviderConstructor,
+	ExtraProviderConstructor,
+
+	providers,
+	queryMethods,
+	urlProperties as providerUrlProperties
+
+} from 'core/data';
+
 import {
 
 	RequestEngine,
 	RequestOptions,
-	RequestResponse,
+	RequestResponse
 
-	Response,
-	ResponseTypeValue
+} from 'core/request/interface';
 
-} from 'core/request';
-import type iProvider from 'core/data/interface';
-import type { ProviderConstructor, ExtraProviderConstructor } from 'core/data/interface/types';
-import Provider, { providers, queryMethods } from 'core/data';
+import Response from 'core/request/response';
+import { ResponseTypeValue } from 'core/request/response/interface';
+
 import Then from 'core/then';
 import { concatUrls } from 'core/url';
 
-import type { AvailableOptions, MethodsMapping } from 'core/request/engines/provider/interface';
+import type { AvailableOptions, MethodsMapping, Meta } from 'core/request/engines/provider/interface';
 import { availableParams } from 'core/request/engines/provider/const';
 
 export * from 'core/request/engines/provider/interface';
 export * from 'core/request/engines/provider/const';
 
 /**
- * Returns provider class or object.
+ * Creates a request engine from the specified data provider
  *
- * @param providerOrNamespace - provider class or object, or provider namespace in the global store
- * @param meta - meta params of current provider
- */
-function getProvider(providerOrNamespace: ExtraProviderConstructor, meta: Dictionary = {}): iProvider {
-	if (Object.isString(providerOrNamespace)) {
-		if (!(providerOrNamespace in providers)) {
-			throw new ReferenceError(`A provider "${providerOrNamespace}" is not registered`);
-		}
-
-		providerOrNamespace = <ProviderConstructor>providers[providerOrNamespace];
-	}
-
-	let
-		provider: iProvider;
-
-	if (providerOrNamespace instanceof Provider) {
-		provider = providerOrNamespace;
-	} else {
-		provider = new (<ProviderConstructor>providerOrNamespace)();
-	}
-
-	if ('providerBaseUrls' in meta) {
-		const
-			providerBaseUrls = <Dictionary<string>>meta.providerBaseUrls;
-
-		return new Proxy(provider, {
-			get(target: typeof provider, prop: string): any {
-				// eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-				if ({}.hasOwnProperty.call(providerBaseUrls, prop)) {
-					return concatUrls(target[prop] ?? '', providerBaseUrls[prop] ?? '');
-				}
-
-				return target[prop];
-			}
-		});
-	}
-
-	return provider;
-}
-
-/**
- * Returns request promise created by provider method
- *
- * @param provider
- * @param providerMethod
- * @param params
- */
-function getRequestByProviderMethod(
-	provider: iProvider,
-	providerMethod: string,
-	params: AvailableOptions
-): Then<RequestResponse> {
-	let
-		method;
-
-	if (providerMethod === 'post') {
-		method = 'POST';
-	} else {
-		const methodPropertyName = `${providerMethod}Method`;
-
-		method = provider[methodPropertyName];
-	}
-
-	const
-		body = method in queryMethods ? params.query : params.body;
-
-	return provider[providerMethod](body, params);
-}
-
-/**
- * Returns request promise created by path (default request)
- *
- * @param provider
- * @param params
- */
-function getRequestByPath(provider: iProvider, params: AvailableOptions): Then<RequestResponse> {
-	// @ts-ignore - Property 'request' does not exist on type 'Provider'.
-	return provider.request(params.url.split('?')[0], params);
-}
-
-/**
- * Creates engine for request by using data provider as source
- *
- * @param providerOrNamespace - provider class or object, or provider namespace in the global store
- * @param methodsMapping - mapping of current to source data provider methods
+ * @param src - provider constructor, an instance, or the global name
+ * @param [methodsMapping] - how to map original provider methods on engine methods
+ * (by default will be used the scheme from the provider options)
  *
  * @example
  * ```js
- * makeProviderEngine('MegaSourceOfAllData', {
+ * createProviderEngine('MegaSourceOfAllData', {
  *   post: 'put',
  *   put: 'post'
  * })
  * ```
  */
-export default function makeProviderEngine(
-	providerOrNamespace: ExtraProviderConstructor,
+export default function createProviderEngine(
+	src: ExtraProviderConstructor,
 	methodsMapping?: MethodsMapping
 ): RequestEngine {
 	function dataProviderEngine(params: RequestOptions): Then<Response> {
 		const
 			p = <AvailableOptions>Object.select(params, availableParams),
-			provider = getProvider(providerOrNamespace, p.meta);
+			{providerMethod} = p.meta,
+			provider = getProviderInstance(src, p.meta);
 
 		const parent = new Then<Response>(async (resolve, reject, onAbort): Then<Response> => {
 			await new Promise((r) => {
@@ -141,18 +69,23 @@ export default function makeProviderEngine(
 
 			p.parent = <Then>parent;
 
+			const getMethod = (key) => {
+				if (methodsMapping && key in methodsMapping) {
+					return methodsMapping[key];
+				}
+
+				return key;
+			};
+
 			let
-				providerMethod = <string | undefined>p.meta.providerMethod,
 				req: Then<RequestResponse>;
 
 			if (providerMethod !== undefined) {
-				if (methodsMapping && providerMethod in methodsMapping) {
-					providerMethod = methodsMapping[providerMethod];
-				}
+				req = getRequestByProviderMethod(provider, getMethod(providerMethod), p);
 
-				req = getRequestByProviderMethod(provider, providerMethod!, p);
 			} else {
-				req = getRequestByPath(provider, p);
+				p.method = getMethod(p.method);
+				req = provider.request(params.url.split('?')[0], p);
 			}
 
 			onAbort(() => {
@@ -170,6 +103,7 @@ export default function makeProviderEngine(
 
 			if (Object.isArray(data)) {
 				responseBody = [...data];
+
 			} else if (Object.isPlainObject(data)) {
 				responseBody = {...data};
 			}
@@ -192,4 +126,68 @@ export default function makeProviderEngine(
 	dataProviderEngine.pendingCache = false;
 
 	return dataProviderEngine;
+}
+
+/**
+ * Returns an instance of a data provider by the specified global name or constructor
+ *
+ * @param src - provider constructor, an instance, or the global name
+ * @param [meta] - meta params of current provider
+ */
+function getProviderInstance(src: ExtraProviderConstructor, meta?: Meta): Provider {
+	if (Object.isString(src)) {
+		if (!(src in providers)) {
+			throw new ReferenceError(`A provider "${src}" is not registered`);
+		}
+
+		src = <ProviderConstructor>providers[src];
+	}
+
+	let
+		provider: Provider;
+
+	if (src instanceof Provider) {
+		provider = src;
+
+	} else {
+		provider = <Provider>new (<ProviderConstructor>src)();
+	}
+
+	if (meta !== undefined && 'provider' in meta) {
+		const
+			metaProvider = <Provider>meta.provider,
+			mixedProvider = provider.base('just do it');
+
+		providerUrlProperties.forEach((key) => {
+			if (provider[key] == null || provider[key] === '') {
+				mixedProvider[key] = metaProvider[key];
+
+			} else {
+				mixedProvider[key] = concatUrls(provider[key], metaProvider[key]);
+			}
+		});
+
+		return mixedProvider;
+	}
+
+	return provider;
+}
+
+/**
+ * Returns a request promise created by using the specified data provider and the passed method
+ *
+ * @param provider
+ * @param providerMethod
+ * @param requestParams
+ */
+function getRequestByProviderMethod(
+	provider: Provider,
+	providerMethod: string,
+	requestParams: AvailableOptions
+): Then<RequestResponse> {
+	const
+		method = providerMethod === 'post' ? 'POST' : provider[`${providerMethod}Method`],
+		body = method in queryMethods ? requestParams.query : requestParams.body;
+
+	return provider[providerMethod](body, requestParams);
 }

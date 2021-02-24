@@ -20,7 +20,7 @@ export * from 'core/data/interface/types';
 /**
  * Base interface of a data provider
  */
-export default interface Provider {
+export interface Provider {
 	/**
 	 * Full name of the provider including a namespace
 	 */

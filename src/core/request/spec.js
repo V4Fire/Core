@@ -17,12 +17,12 @@ import { defaultRequestOpts } from 'core/request/const';
 import nodeEngine from 'core/request/engines/node';
 import fetchEngine from 'core/request/engines/fetch';
 import xhrEngine from 'core/request/engines/xhr';
-import makeProviderEngine from 'core/request/engines/provider';
+import createProviderEngine from 'core/request/engines/provider';
 
 @provider
 class TestRequestChainProvider extends Provider {
 	static request = Provider.request({
-		engine: makeProviderEngine(Provider)
+		engine: createProviderEngine(Provider)
 	});
 }
 
@@ -31,8 +31,8 @@ describe('core/request', () => {
 		['node', nodeEngine],
 		['fetch', fetchEngine],
 		['xhr', xhrEngine],
-		['provider', makeProviderEngine('Provider')],
-		['chain provider', makeProviderEngine(TestRequestChainProvider)]
+		['provider', createProviderEngine('Provider')],
+		['chain provider', createProviderEngine(TestRequestChainProvider)]
 	]);
 
 	let
@@ -68,6 +68,7 @@ describe('core/request', () => {
 				if (name.includes('provider')) {
 					defaultRequestOpts.engine = defaultEngine;
 					request = baseRequest({engine});
+
 				} else {
 					defaultRequestOpts.engine = engine;
 					request = baseRequest;

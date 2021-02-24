@@ -55,7 +55,7 @@ export default request;
  * });
  * ```
  */
-function request<D = unknown>(path: string, opts?: CreateRequestOptions<D>): RequestResponse<D>;
+function request<D = unknown>(path: string, opts?: CreateRequestOptions<D>): Then<RequestResponse<D>>;
 
 /**
  * Returns a wrapped request constructor with the specified options.

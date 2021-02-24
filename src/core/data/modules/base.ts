@@ -35,7 +35,7 @@ import {
 
 } from 'core/request';
 
-import iProvider, { ProviderOptions, ModelMethod } from 'core/data/interface';
+import { Provider as iProvider, ProviderOptions, ModelMethod } from 'core/data/interface';
 import { providers, requestCache, queryMethods, instanceCache, namespace, connectCache } from 'core/data/const';
 
 import ParamsProvider from 'core/data/modules/params';
@@ -535,14 +535,7 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 
 			meta: {
 				providerMethod: method,
-				providerBaseUrls: {
-					baseURL: this.baseURL,
-					baseGetURL: this.baseGetURL,
-					basePeekURL: this.basePeekURL,
-					baseAddURL: this.baseAddURL,
-					baseUpdURL: this.baseUpdURL,
-					baseDelURL: this.baseDelURL
-				}
+				provider: this
 			}
 		};
 	}

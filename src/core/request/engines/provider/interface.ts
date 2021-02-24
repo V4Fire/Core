@@ -6,6 +6,9 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import type { Provider, ModelMethod } from 'core/data';
+import type Then from 'core/then';
+
 import {
 
 	OkStatuses,
@@ -15,31 +18,36 @@ import {
 	RequestQuery
 
 } from 'core/request';
-import type { ModelMethod } from 'core/data';
-import Then from 'core/then';
 
 /**
- * Available options for request with data provider engine
+ * Meta params for engine
+ */
+export interface Meta extends Dictionary {
+	provider?: CanUndef<Provider>;
+	providerMethod?: CanUndef<ModelMethod>;
+}
+
+/**
+ * Available options to request with a data provider engine
  */
 export interface AvailableOptions {
-	readonly url: string;
-	readonly method: RequestMethod;
-	readonly contentType?: string;
-	readonly body?: RequestBody;
-	readonly query: RequestQuery;
-	readonly headers: Dictionary<CanArray<unknown>>;
-	readonly okStatuses?: OkStatuses;
-	readonly timeout?: number;
-	readonly externalRequest?: boolean;
-	readonly important?: boolean;
-	readonly meta: Dictionary;
-
+	url: string;
+	method: RequestMethod;
+	contentType?: string;
+	body?: RequestBody;
+	query: RequestQuery;
+	headers: Dictionary<CanArray<unknown>>;
+	okStatuses?: OkStatuses;
+	timeout?: number;
+	externalRequest?: boolean;
+	important?: boolean;
+	meta: Meta;
 	parent?: Then;
 }
 
 /**
- * Mapping of current to source data provider methods
+ * Mapping of current to source data provider or request methods
  */
-export type MethodsMapping = {
-	[key in ModelMethod]: ModelMethod
-};
+export type MethodsMapping =
+	{[key in ModelMethod]: ModelMethod} |
+	{[key in RequestMethod]: RequestMethod};

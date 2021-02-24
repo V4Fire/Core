@@ -12,7 +12,7 @@ import { set, get } from 'core/env';
 
 import { globalOpts } from 'core/request';
 import Provider, { provider } from 'core/data';
-import makeProviderEngine from 'core/request/engines/provider';
+import createProviderEngine from 'core/request/engines/provider';
 
 @provider
 class ProviderEngineTestBaseProvider extends Provider {
@@ -26,7 +26,7 @@ class ProviderEngineTestBaseProvider extends Provider {
 @provider
 class ProviderEngineTestDataProvider extends Provider {
 	static request = ProviderEngineTestBaseProvider.request({
-		engine: makeProviderEngine(ProviderEngineTestBaseProvider)
+		engine: createProviderEngine(ProviderEngineTestBaseProvider)
 	});
 
 	baseURL = '/data';
@@ -35,7 +35,7 @@ class ProviderEngineTestDataProvider extends Provider {
 @provider
 class ProviderEngineTestJSONProvider extends Provider {
 	static request = ProviderEngineTestDataProvider.request({
-		engine: makeProviderEngine(ProviderEngineTestDataProvider, {
+		engine: createProviderEngine(ProviderEngineTestDataProvider, {
 			peek: 'get'
 		})
 	});
@@ -46,7 +46,7 @@ class ProviderEngineTestJSONProvider extends Provider {
 @provider
 class ProviderEngineTestDecodersProvider extends Provider {
 	static request = ProviderEngineTestJSONProvider.request({
-		engine: makeProviderEngine(ProviderEngineTestJSONProvider)
+		engine: createProviderEngine(ProviderEngineTestJSONProvider)
 	});
 
 	static encoders = {
@@ -67,7 +67,7 @@ class ProviderEngineTestDecodersProvider extends Provider {
 @provider
 class ProviderEngineTestMiddlewareProvider extends Provider {
 	static request = ProviderEngineTestDecodersProvider.request({
-		engine: makeProviderEngine(ProviderEngineTestDecodersProvider)
+		engine: createProviderEngine(ProviderEngineTestDecodersProvider)
 	});
 
 	static decoders = {

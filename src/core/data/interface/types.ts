@@ -23,7 +23,7 @@ import {
 
 import { ResponseTypeValue } from 'core/request/response/interface';
 
-import Provider from 'core/data/interface';
+import { Provider } from 'core/data/interface';
 
 export type MockResponseValue =
 	ResponseTypeValue |
