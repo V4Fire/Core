@@ -22,8 +22,8 @@ extend(Function.prototype, 'debounce', function debounce(this: AnyFunction, dela
 			cb = () => fn.apply(this, args);
 
 		if (delay === 0) {
-			globalThis['clearImmediate'](timer);
-			timer = globalThis['setImmediate'](cb);
+			clearImmediate(timer);
+			timer = setImmediate(cb);
 
 		} else {
 			clearTimeout(timer);
@@ -82,7 +82,7 @@ extend(Function.prototype, 'throttle', function throttle(
 			};
 
 			if (opts.delay === 0) {
-				timer = globalThis['setImmediate'](cb);
+				timer = setImmediate(cb);
 
 			} else {
 				timer = setTimeout(cb, opts.delay);

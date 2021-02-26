@@ -193,7 +193,13 @@ export default class Response<
 			decoders = data.then((obj) => Then.resolve(obj, this.parent));
 
 		Object.forEach(this.decoders, (fn) => {
-			decoders = decoders.then((data) => fn(data, this));
+			decoders = decoders.then((data) => {
+				if (data != null && Object.isFrozen(data)) {
+					data = data.valueOf();
+				}
+
+				return fn(data, this);
+			});
 		});
 
 		return decoders.then((res) => {

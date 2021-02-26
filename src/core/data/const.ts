@@ -8,14 +8,14 @@
 
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 
-import { Provider } from 'core/data/interface';
-
 import { Socket } from 'core/socket';
 import { RequestResponseObject } from 'core/request';
 
+import { Provider, ProviderConstructor } from 'core/data/interface';
+
 export const
 	namespace = Symbol('Provider namespace'),
-	providers = Object.createDict();
+	providers = Object.createDict<ProviderConstructor>();
 
 /**
  * Global event emitter to broadcast provider events

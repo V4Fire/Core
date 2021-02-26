@@ -158,7 +158,7 @@ function request<D = unknown>(
 			});
 
 			await new Promise((r) => {
-				globalThis['setImmediate'](r);
+				setImmediate(r);
 			});
 
 			ctx.parent = parent;

@@ -113,11 +113,12 @@ describe('core/request/engine/provider', () => {
 		server.close(done);
 	});
 
-	it('base URLs concatenation', async () => {
+	it('base URL-s concatenation', async () => {
 		try {
 			const req = await baseProvider.get();
 
 			expect(req).toBe(undefined);
+
 		} catch(err) {
 			expect(err.details.response.status).toBe(404);
 		}

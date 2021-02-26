@@ -6,8 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type { Provider, ModelMethod } from 'core/data';
 import type Then from 'core/then';
+import { Provider, ModelMethod } from 'core/data';
 
 import {
 
@@ -20,15 +20,15 @@ import {
 } from 'core/request';
 
 /**
- * Meta params for engine
+ * Meta parameters for the engine
  */
 export interface Meta extends Dictionary {
-	provider?: CanUndef<Provider>;
-	providerMethod?: CanUndef<ModelMethod>;
+	provider?: Provider;
+	providerMethod?: ModelMethod;
 }
 
 /**
- * Available options to request with a data provider engine
+ * Available options to request with the engine
  */
 export interface AvailableOptions {
 	url: string;
@@ -46,7 +46,7 @@ export interface AvailableOptions {
 }
 
 /**
- * Mapping of current to source data provider or request methods
+ * Mapping of methods to request for the engine
  */
 export type MethodsMapping =
 	{[key in ModelMethod]?: ModelMethod} &
