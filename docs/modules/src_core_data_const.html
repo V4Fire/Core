@@ -247,10 +247,12 @@ pre {
 								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="src_core_data_const.html#connectcache" class="tsd-kind-icon">connect<wbr>Cache</a></li>
 								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="src_core_data_const.html#emitter" class="tsd-kind-icon">emitter</a></li>
 								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="src_core_data_const.html#instancecache" class="tsd-kind-icon">instance<wbr>Cache</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="src_core_data_const.html#methodproperties" class="tsd-kind-icon">method<wbr>Properties</a></li>
 								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="src_core_data_const.html#namespace" class="tsd-kind-icon">namespace</a></li>
 								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="src_core_data_const.html#providers" class="tsd-kind-icon">providers</a></li>
 								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="src_core_data_const.html#querymethods" class="tsd-kind-icon">query<wbr>Methods</a></li>
 								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="src_core_data_const.html#requestcache" class="tsd-kind-icon">request<wbr>Cache</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="src_core_data_const.html#urlproperties" class="tsd-kind-icon">url<wbr>Properties</a></li>
 							</ul>
 						</section>
 					</div>
@@ -286,10 +288,20 @@ pre {
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module">
 					<a name="instancecache" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> instance<wbr>Cache</h3>
-					<div class="tsd-signature tsd-kind-icon">instance<wbr>Cache<span class="tsd-signature-symbol">:</span> <a href="../interfaces/index.dictionary.html" class="tsd-signature-type" data-tsd-kind="Interface">Dictionary</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/src_core_data_interface.default.html" class="tsd-signature-type" data-tsd-kind="Interface">default</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = ...</span></div>
+					<div class="tsd-signature tsd-kind-icon">instance<wbr>Cache<span class="tsd-signature-symbol">:</span> <a href="../interfaces/index.dictionary.html" class="tsd-signature-type" data-tsd-kind="Interface">Dictionary</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/src_core_data_interface.provider.html" class="tsd-signature-type" data-tsd-kind="Interface">Provider</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = ...</span></div>
 					<aside class="tsd-sources">
 						<ul>
 							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/const.ts#L30">src/core/data/const.ts:30</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module">
+					<a name="methodproperties" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> method<wbr>Properties</h3>
+					<div class="tsd-signature tsd-kind-icon">method<wbr>Properties<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = ...</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/const.ts#L39">src/core/data/const.ts:39</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -306,7 +318,7 @@ pre {
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module">
 					<a name="providers" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> providers</h3>
-					<div class="tsd-signature tsd-kind-icon">providers<span class="tsd-signature-symbol">:</span> <a href="../interfaces/index.dictionary.html" class="tsd-signature-type" data-tsd-kind="Interface">Dictionary</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = ...</span></div>
+					<div class="tsd-signature tsd-kind-icon">providers<span class="tsd-signature-symbol">:</span> <a href="../interfaces/index.dictionary.html" class="tsd-signature-type" data-tsd-kind="Interface">Dictionary</a><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/src_core_data_interface_types.providerconstructor.html" class="tsd-signature-type" data-tsd-kind="Interface">ProviderConstructor</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = ...</span></div>
 					<aside class="tsd-sources">
 						<ul>
 							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/const.ts#L18">src/core/data/const.ts:18</a></li>
@@ -330,6 +342,16 @@ pre {
 					<aside class="tsd-sources">
 						<ul>
 							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/const.ts#L31">src/core/data/const.ts:31</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module">
+					<a name="urlproperties" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> url<wbr>Properties</h3>
+					<div class="tsd-signature tsd-kind-icon">url<wbr>Properties<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = ...</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/data/const.ts#L47">src/core/data/const.ts:47</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -358,6 +380,9 @@ pre {
 						<a href="src_core_data_const.html#instancecache" class="tsd-kind-icon">instance<wbr>Cache</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-parent-kind-module">
+						<a href="src_core_data_const.html#methodproperties" class="tsd-kind-icon">method<wbr>Properties</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module">
 						<a href="src_core_data_const.html#namespace" class="tsd-kind-icon">namespace</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-parent-kind-module">
@@ -368,6 +393,9 @@ pre {
 					</li>
 					<li class=" tsd-kind-variable tsd-parent-kind-module">
 						<a href="src_core_data_const.html#requestcache" class="tsd-kind-icon">request<wbr>Cache</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module">
+						<a href="src_core_data_const.html#urlproperties" class="tsd-kind-icon">url<wbr>Properties</a>
 					</li>
 				</ul>
 			</nav>
