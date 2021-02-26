@@ -13,7 +13,7 @@
 
 import log from 'core/log';
 
-import { concatUrls } from 'core/url';
+import { concatURLs } from 'core/url';
 import { getDataTypeFromURL } from 'core/mime-type';
 
 import { merge } from 'core/request/utils';
@@ -121,17 +121,17 @@ export default class RequestContext<D = unknown> extends Super<D> {
 
 				let url = isAbsoluteURL.test(reqPath) ?
 					reqPath :
-					concatUrls(api != null ? this.resolveAPI(api) : null, reqPath);
+					concatURLs(api != null ? this.resolveAPI(api) : null, reqPath);
 
 				if (Object.isFunction(resolver)) {
 					const
 						res = resolver(url, middlewareParams, ...args);
 
 					if (Object.isArray(res)) {
-						url = concatUrls(...res.map(String));
+						url = concatURLs(...res.map(String));
 
 					} else if (res != null) {
-						url = concatUrls(url, res);
+						url = concatURLs(url, res);
 					}
 				}
 

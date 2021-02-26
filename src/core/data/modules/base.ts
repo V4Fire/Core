@@ -11,7 +11,7 @@ import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 import symbolGenerator from 'core/symbol';
 
 import { deprecate } from 'core/functools';
-import { concatUrls } from 'core/url';
+import { concatURLs } from 'core/url';
 
 import Then from 'core/then';
 import Async from 'core/async';
@@ -259,7 +259,7 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 	url(value: string): Provider;
 	url(value?: string): string | Provider {
 		if (value == null) {
-			return concatUrls(this.baseURL, this.advURL);
+			return concatURLs(this.baseURL, this.advURL);
 		}
 
 		const obj = Object.create(this);
@@ -487,7 +487,7 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 	 * @param [advURL]
 	 */
 	protected resolveURL(baseURL?: Nullable<string>, advURL?: Nullable<string>): string {
-		return concatUrls(baseURL == null ? this.baseURL : baseURL, advURL == null ? this.advURL : advURL);
+		return concatURLs(baseURL == null ? this.baseURL : baseURL, advURL == null ? this.advURL : advURL);
 	}
 
 	/**

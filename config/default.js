@@ -230,8 +230,8 @@ module.exports = config.createConfig(
 		 * @returns {?string}
 		 */
 		apiURL() {
-			const concatUrls = require('urlconcat').concat;
-			return this.api.proxy ? concatUrls(this.api.pathname(), 'api') : this.api.url;
+			const concatURLs = require('urlconcat').concat;
+			return this.api.proxy ? concatURLs(this.api.pathname(), 'api') : this.api.url;
 		},
 
 		/**

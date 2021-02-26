@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.32.1 (????-??-??)
+
+#### :boom: Breaking Change
+
+* Renamed `concatUrls` to `concatURLs`
+
 ## v3.28.2 (2020-11-11)
 
 #### :bug: Bug Fix
