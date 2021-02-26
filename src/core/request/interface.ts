@@ -245,7 +245,7 @@ export interface RequestEngine {
 }
 
 /**
- * Options for request
+ * Options for a request
  * @typeparam D - response data type
  */
 export interface CreateRequestOptions<D = unknown> {
