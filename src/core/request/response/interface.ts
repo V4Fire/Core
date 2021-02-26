@@ -17,6 +17,7 @@ import { defaultResponseOpts } from 'core/request/response/const';
 export type ResponseType = DataType | 'object';
 export type ResponseTypeValue =
 	string |
+	object |
 	ArrayBuffer |
 	Buffer |
 	Document |

@@ -10,21 +10,33 @@ import express from 'express';
 
 import { set, get } from 'core/env';
 
-import request, { globalOpts, RequestError } from 'core/request';
+import Provider, { provider } from 'core/data';
+import baseRequest, { globalOpts, RequestError } from 'core/request';
 import { defaultRequestOpts } from 'core/request/const';
 
 import nodeEngine from 'core/request/engines/node';
 import fetchEngine from 'core/request/engines/fetch';
 import xhrEngine from 'core/request/engines/xhr';
+import createProviderEngine from 'core/request/engines/provider';
+
+@provider
+class TestRequestChainProvider extends Provider {
+	static request = Provider.request({
+		engine: createProviderEngine(Provider)
+	});
+}
 
 describe('core/request', () => {
 	const engines = new Map([
 		['node', nodeEngine],
 		['fetch', fetchEngine],
-		['xhr', xhrEngine]
+		['xhr', xhrEngine],
+		['provider', createProviderEngine('Provider')],
+		['chain provider', createProviderEngine(TestRequestChainProvider)]
 	]);
 
 	let
+		request,
 		api,
 		logOptions,
 		defaultEngine,
@@ -53,7 +65,14 @@ describe('core/request', () => {
 	engines.forEach((engine, name) => {
 		describe(`with the "${name}" engine`, () => {
 			beforeAll(() => {
-				defaultRequestOpts.engine = engine;
+				if (name.includes('provider')) {
+					defaultRequestOpts.engine = defaultEngine;
+					request = baseRequest({engine});
+
+				} else {
+					defaultRequestOpts.engine = engine;
+					request = baseRequest;
+				}
 			});
 
 			it('blob get', async () => {

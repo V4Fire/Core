@@ -8,14 +8,14 @@
 
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 
-import Provider from 'core/data/interface';
-
 import { Socket } from 'core/socket';
 import { RequestResponseObject } from 'core/request';
 
+import { Provider, ProviderConstructor } from 'core/data/interface';
+
 export const
 	namespace = Symbol('Provider namespace'),
-	providers = Object.createDict();
+	providers = Object.createDict<ProviderConstructor>();
 
 /**
  * Global event emitter to broadcast provider events
@@ -35,3 +35,22 @@ export const queryMethods = Object.createDict({
 	GET: true,
 	HEAD: true
 });
+
+export const methodProperties = [
+	'getMethod',
+	'peekMethod',
+	'addMethod',
+	'updMethod',
+	'delMethod'
+];
+
+export const urlProperties = [
+	'baseURL',
+	'advURL',
+	'socketURL',
+	'baseGetURL',
+	'basePeekURL',
+	'baseAddURL',
+	'baseUpdURL',
+	'baseDelURL'
+];

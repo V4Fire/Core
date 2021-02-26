@@ -236,10 +236,16 @@ export interface RequestAPI {
  */
 export interface RequestEngine {
 	(params: RequestOptions): Then<Response>;
+
+	/**
+	 * The flag indicates that the active requests with the same request hash can be merged
+	 * @default `true`
+	 */
+	pendingCache?: boolean;
 }
 
 /**
- * Options for request
+ * Options for a request
  * @typeparam D - response data type
  */
 export interface CreateRequestOptions<D = unknown> {
