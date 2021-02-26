@@ -238,8 +238,8 @@ export interface RequestEngine {
 	(params: RequestOptions): Then<Response>;
 
 	/**
-	 * The flag that indicates that the request will wait until previous request with the same cache key will be done.
-	 * True by default.
+	 * The flag indicates that the active requests with the same request hash can be merged
+	 * @default `true`
 	 */
 	pendingCache?: boolean;
 }
