@@ -11,11 +11,15 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-## v3.32.1 (????-??-??)
+## v3.33.0 (????-??-??)
 
 #### :boom: Breaking Change
 
 * Renamed `concatUrls` to `concatURLs` `core/url`
+
+#### :rocket: New Feature
+
+* Added a new engine based on the data providers `core/request`
 
 ## v3.32.0 (2021-02-05)
 

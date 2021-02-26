@@ -6,6 +6,11 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/**
+ * [[include:core/request/engines/provider/README.md]]
+ * @packageDocumentation
+ */
+
 import Then from 'core/then';
 import { concatURLs } from 'core/url';
 
