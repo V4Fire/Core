@@ -118,7 +118,7 @@ export default function createProviderEngine(
 
 			const providerToRequest = isSimpleRequest ?
 				createMixedProvider(provider, {
-					[urlProperty]: p.url.replace(globalOpts.api ?? '', '').split('?', 1)[0]
+					[urlProperty]: p.url.replace(globalOpts.api ?? '', '')
 				}) :
 
 				provider;
