@@ -7,7 +7,7 @@
  */
 
 import Then from 'core/then';
-import { concatUrls } from 'core/url';
+import { concatURLs } from 'core/url';
 
 import Provider, {
 
@@ -201,7 +201,7 @@ function createMixedProvider(base: Provider, modifier: Provider | Dictionary<str
 			mixedProvider[key] = undefined;
 
 		} else {
-			mixedProvider[key] = concatUrls(base[key], modifier[key]);
+			mixedProvider[key] = concatURLs(base[key], modifier[key]);
 		}
 	});
 
