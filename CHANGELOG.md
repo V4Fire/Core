@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.33.1 (2021-03-01)
+
+#### :bug: Bug Fix
+
+* Fixed an issue with invalid rounding of months `core/prelude/date`
+
 ## v3.33.0 (2021-02-26)
 
 #### :boom: Breaking Change
