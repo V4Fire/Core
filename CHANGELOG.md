@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.33.2 (2021-03-01)
+
+#### :bug: Bug Fix
+
+* Fixed optimizing of imports `config`
+
 ## v3.33.1 (2021-03-01)
 
 #### :bug: Bug Fix
