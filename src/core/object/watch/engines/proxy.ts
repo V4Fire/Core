@@ -221,10 +221,14 @@ export function watch<T extends object>(
 					isArray = Object.isArray(target);
 
 				let
-					propFromProto = fromProto;
+					propFromProto = fromProto,
+					normalizedKey;
 
 				if (isArray && String(Number(key)) === key) {
-					key = Number(key);
+					normalizedKey = Number(key);
+
+				} else {
+					normalizedKey = key;
 				}
 
 				if (propFromProto || !isArray && !Object.hasOwnProperty(target, <string>key)) {
@@ -232,7 +236,7 @@ export function watch<T extends object>(
 				}
 
 				const watchOpts = Object.assign(Object.create(opts!), {fromProto: propFromProto});
-				return getProxyValue(val, key, path, handlers, resolvedRoot, top, watchOpts);
+				return getProxyValue(val, normalizedKey, path, handlers, resolvedRoot, top, watchOpts);
 			}
 
 			if (Object.isArray(target)) {
@@ -273,11 +277,17 @@ export function watch<T extends object>(
 				return set();
 			}
 
+			let
+				normalizedKey;
+
 			if (isArray && String(Number(key)) === key) {
-				key = Number(key);
+				normalizedKey = Number(key);
+
+			} else {
+				normalizedKey = key;
 			}
 
-			let oldVal = Reflect.get(target, key, isCustomObj ? receiver : target);
+			let oldVal = Reflect.get(target, normalizedKey, isCustomObj ? receiver : target);
 			oldVal = unwrap(oldVal) ?? oldVal;
 
 			if (oldVal !== val && set()) {
@@ -287,7 +297,7 @@ export function watch<T extends object>(
 
 				for (let o = handlers.values(), el = o.next(); !el.done; el = o.next()) {
 					const
-						path = resolvedPath.concat(key);
+						path = resolvedPath.concat(normalizedKey);
 
 					el.value(val, oldVal, {
 						obj: unwrappedObj,

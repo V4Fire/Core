@@ -20,6 +20,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 #### :house: Internal
 
 * Added `importsNotUsedAsValues` to `.tsconfig`
+* Updated dependencies: `typescript@4.2.2`
 
 ## v3.33.0 (2021-02-26)
 
