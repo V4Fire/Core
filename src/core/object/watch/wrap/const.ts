@@ -7,7 +7,7 @@
  */
 
 import { getProxyValue } from 'core/object/watch/engines/helpers';
-import { WrapParams, WrapResult, StructureWrappers } from 'core/object/watch/wrap/interface';
+import type { WrapParams, WrapResult, StructureWrappers } from 'core/object/watch/wrap/interface';
 
 export const deleteMethods = {
 	delete: (

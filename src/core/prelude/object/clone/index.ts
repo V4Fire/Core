@@ -7,7 +7,7 @@
  */
 
 import extend from 'core/prelude/extend';
-import { ValMap } from 'core/prelude/object/clone/interface';
+import type { ValMap } from 'core/prelude/object/clone/interface';
 
 const
 	objRef = '[[OBJ_REF:base]]',

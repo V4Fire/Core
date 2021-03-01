@@ -7,7 +7,7 @@
  */
 
 import { convertIfDate } from 'core/json';
-import { ToQueryStringOptions, FromQueryStringOptions } from 'core/url/interface';
+import type { ToQueryStringOptions, FromQueryStringOptions } from 'core/url/interface';
 
 export * from 'core/url/interface';
 

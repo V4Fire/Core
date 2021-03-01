@@ -7,8 +7,9 @@
  */
 
 import config from 'config';
-import { LogPipeline } from 'core/log/curator/pipeline';
+
 import { createPipeline } from 'core/log/config';
+import type { LogPipeline } from 'core/log/curator/pipeline';
 
 const
 	pipelines: LogPipeline[] = [];

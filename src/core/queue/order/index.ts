@@ -12,7 +12,7 @@
  */
 
 import Queue from 'core/queue/interface';
-import { Tasks, CreateTasks, TaskComparator } from 'core/queue/order/interface';
+import type { Tasks, CreateTasks, TaskComparator } from 'core/queue/order/interface';
 
 export * from 'core/queue/interface';
 export * from 'core/queue/order/interface';

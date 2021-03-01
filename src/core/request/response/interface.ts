@@ -6,15 +6,18 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import Then from 'core/then';
+import type Then from 'core/then';
 
-import { StatusCodes } from 'core/status-codes';
-import { DataType } from 'core/mime-type';
+import type { StatusCodes } from 'core/status-codes';
+import type { DataType } from 'core/mime-type';
 
-import { OkStatuses, WrappedDecoders, WrappedDecoder } from 'core/request/interface';
-import { defaultResponseOpts } from 'core/request/response/const';
+import type { OkStatuses, WrappedDecoders, WrappedDecoder } from 'core/request/interface';
+import type { defaultResponseOpts } from 'core/request/response/const';
 
-export type ResponseType = DataType | 'object';
+export type ResponseType =
+	DataType |
+	'object';
+
 export type ResponseTypeValue =
 	string |
 	object |

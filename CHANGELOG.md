@@ -17,6 +17,10 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 * Fixed an issue with invalid rounding of months `core/prelude/date`
 
+#### :house: Internal
+
+* Added `importsNotUsedAsValues` to `.tsconfig`
+
 ## v3.33.0 (2021-02-26)
 
 #### :boom: Breaking Change

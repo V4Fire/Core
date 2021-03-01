@@ -22,8 +22,9 @@ import { getDataType } from 'core/mime-type';
 import { normalizeHeaderName } from 'core/request/utils';
 import { defaultResponseOpts } from 'core/request/response/const';
 
-import { OkStatuses, WrappedDecoders } from 'core/request/interface';
-import {
+import type { OkStatuses, WrappedDecoders } from 'core/request/interface';
+
+import type {
 
 	ResponseType,
 	ResponseTypeValue,

@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import Async from 'core/async';
+import type Async from 'core/async';
 
 export enum Namespaces {
 	proxy,

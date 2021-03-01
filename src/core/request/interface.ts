@@ -6,15 +6,17 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import Then from 'core/then';
-import Range from 'core/range';
-import Cache from 'core/cache/interface';
+import type Then from 'core/then';
+import type Range from 'core/range';
+import type Cache from 'core/cache/interface';
 
-import Response, { ResponseType } from 'core/request/response';
-import RequestContext from 'core/request/context';
+import type Response from 'core/request/response';
+import type { ResponseType } from 'core/request/response';
 
-import { defaultRequestOpts } from 'core/request/const';
-import { StatusCodes } from 'core/status-codes';
+import type RequestContext from 'core/request/context';
+
+import type { defaultRequestOpts } from 'core/request/const';
+import type { StatusCodes } from 'core/status-codes';
 
 export type RequestMethod =
 	'GET' |

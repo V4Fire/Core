@@ -7,7 +7,7 @@
  */
 
 import { ConsoleEngine } from 'core/log/engines/console';
-import { LogEngine, LogEngineConstructor } from 'core/log/engines/interface';
+import type { LogEngine, LogEngineConstructor } from 'core/log/engines/interface';
 
 export { extend, Extended } from 'core/log/base';
 export * from 'core/log/engines/interface';

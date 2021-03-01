@@ -7,7 +7,8 @@
  */
 
 import extend from 'core/prelude/extend';
-import { AsyncStorageNamespace } from 'core/kv-storage';
+import type { AsyncStorageNamespace } from 'core/kv-storage';
+
 import { emitter } from 'core/prelude/env/const';
 
 export * from 'core/prelude/env/const';

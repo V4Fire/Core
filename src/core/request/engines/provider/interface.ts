@@ -7,9 +7,9 @@
  */
 
 import type Then from 'core/then';
-import { Provider, ModelMethod } from 'core/data';
+import type { Provider, ModelMethod } from 'core/data';
 
-import {
+import type {
 
 	OkStatuses,
 

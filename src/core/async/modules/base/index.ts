@@ -22,7 +22,7 @@ import {
 
 } from 'core/async/const';
 
-import {
+import type {
 
 	FullAsyncOptions,
 	FullClearOptions,

@@ -7,7 +7,7 @@
  */
 
 import { deprecate } from 'core/functools';
-import { AsyncOptions, Event } from 'core/async/interface';
+import type { AsyncOptions, Event } from 'core/async/interface';
 
 /**
  * Returns true if the specified value is looks like an instance of AsyncOptions

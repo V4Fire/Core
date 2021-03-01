@@ -6,13 +6,13 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import Then from 'core/then';
-import Cache from 'core/cache/interface';
+import type Then from 'core/then';
+import type Cache from 'core/cache/interface';
 
 import { merge } from 'core/request/utils';
 import { cache, pendingCache, methodsWithoutBody } from 'core/request/const';
 
-import {
+import type {
 
 	NormalizedCreateRequestOptions,
 	RequestQuery,

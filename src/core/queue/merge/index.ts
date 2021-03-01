@@ -12,7 +12,7 @@
  */
 
 import Queue from 'core/queue/interface';
-import { HashFn, Tasks, CreateTasks } from 'core/queue/merge/interface';
+import type { HashFn, Tasks, CreateTasks } from 'core/queue/merge/interface';
 
 export * from 'core/queue/merge/interface';
 

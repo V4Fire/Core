@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import Provider from 'core/data/index';
+import type Provider from 'core/data/index';
 import { providers, namespace } from 'core/data/const';
 
 /**

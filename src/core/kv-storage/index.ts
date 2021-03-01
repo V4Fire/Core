@@ -22,7 +22,7 @@ import {
 
 } from 'core/kv-storage/engines';
 
-import {
+import type {
 
 	SyncStorage,
 	SyncStorageNamespace,

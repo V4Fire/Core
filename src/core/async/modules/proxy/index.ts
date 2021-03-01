@@ -22,7 +22,7 @@ import Super, {
 
 } from 'core/async/modules/base';
 
-import {
+import type {
 
 	AsyncWorkerOptions,
 	AsyncProxyOptions,

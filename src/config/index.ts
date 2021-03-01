@@ -11,7 +11,7 @@
  * @packageDocumentation
  */
 
-import { Config } from 'config/interface';
+import type { Config } from 'config/interface';
 
 export * from 'config/interface';
 

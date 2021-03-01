@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { AnalyticEngine } from 'core/analytics/interface';
+import type { AnalyticEngine } from 'core/analytics/interface';
 
 /**
  * Sends an analytic event with the specified details

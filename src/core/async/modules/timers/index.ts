@@ -14,7 +14,7 @@
 import SyncPromise from 'core/promise/sync';
 import Super from 'core/async/modules/proxy';
 
-import {
+import type {
 
 	AsyncOptions,
 	AsyncCbOptions,

@@ -11,7 +11,7 @@
  * @packageDocumentation
  */
 
-import { Socket } from 'core/socket/interface';
+import type { Socket } from 'core/socket/interface';
 
 export * from 'core/socket/const';
 export * from 'core/socket/interface';

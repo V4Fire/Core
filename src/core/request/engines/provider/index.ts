@@ -29,10 +29,10 @@ import Provider, {
 } from 'core/data';
 
 import Response from 'core/request/response';
-import { RequestEngine, RequestOptions } from 'core/request/interface';
+import type { RequestEngine, RequestOptions } from 'core/request/interface';
 
 import { availableParams } from 'core/request/engines/provider/const';
-import { AvailableOptions, MethodsMapping, Meta } from 'core/request/engines/provider/interface';
+import type { AvailableOptions, MethodsMapping, Meta } from 'core/request/engines/provider/interface';
 
 export * from 'core/request/engines/provider/const';
 export * from 'core/request/engines/provider/interface';

@@ -12,8 +12,9 @@
  */
 
 import { cache } from 'core/request/const';
-import { NormalizedCreateRequestOptions } from 'core/request/interface';
 import { tplRgxp } from 'core/request/utils/const';
+
+import type { NormalizedCreateRequestOptions } from 'core/request/interface';
 
 export * from 'core/request/utils/const';
 

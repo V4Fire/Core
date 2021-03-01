@@ -9,7 +9,8 @@
 import config from 'config';
 
 import { IS_NODE } from 'core/env';
-import { AsyncStorageNamespace } from 'core/kv-storage';
+import type { AsyncStorageNamespace } from 'core/kv-storage';
+
 import { emitter, locale } from 'core/prelude/i18n/const';
 
 export * from 'core/prelude/i18n/const';

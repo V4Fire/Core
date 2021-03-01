@@ -15,7 +15,7 @@ import config from 'config';
 import * as netEngine from 'core/net/engines';
 
 import { state, emitter } from 'core/net/const';
-import { NetStatus, NetEngine } from 'core/net/interface';
+import type { NetStatus, NetEngine } from 'core/net/interface';
 
 export * from 'core/net/const';
 export * from 'core/net/interface';

@@ -13,9 +13,9 @@ import symbolGenerator from 'core/symbol';
 import { deprecate } from 'core/functools';
 import { concatURLs } from 'core/url';
 
-import Then from 'core/then';
 import Async from 'core/async';
 import IO, { Socket } from 'core/socket';
+import type Then from 'core/then';
 
 import {
 
@@ -35,7 +35,7 @@ import {
 
 } from 'core/request';
 
-import {
+import type {
 
 	Provider as IProvider,
 	ProviderOptions,

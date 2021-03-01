@@ -6,6 +6,7 @@
     "downlevelIteration": true,
     "esModuleInterop": true,
     "importHelpers": true,
+    "importsNotUsedAsValues": "error",
     "lib": ["dom", "esnext"],
     "allowJs": false,
     "skipLibCheck": false,

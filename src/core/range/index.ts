@@ -11,7 +11,7 @@
  * @packageDocumentation
  */
 
-import { RangeValue, RangeType } from 'core/range/interface';
+import type { RangeValue, RangeType } from 'core/range/interface';
 
 export * from 'core/range/interface';
 

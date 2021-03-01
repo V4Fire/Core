@@ -10,7 +10,7 @@ import Response, { ResponseTypeValue } from 'core/request/response';
 import { getStorageKey } from 'core/request/utils';
 
 import { storage } from 'core/request/const';
-import { RequestResponse, RequestResponseObject } from 'core/request/interface';
+import type { RequestResponse, RequestResponseObject } from 'core/request/interface';
 
 import Super from 'core/request/context/modules/methods';
 

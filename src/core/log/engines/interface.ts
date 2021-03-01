@@ -6,8 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import engineFactory from 'core/log/engines';
-import { LogEvent } from 'core/log/middlewares/interface';
+import type engineFactory from 'core/log/engines';
+import type { LogEvent } from 'core/log/middlewares/interface';
 
 export interface LogEngineConstructor<T extends LogEngine> {
 	new (opts?: Dictionary): T;

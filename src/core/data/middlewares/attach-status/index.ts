@@ -11,8 +11,8 @@
  * @packageDocumentation
  */
 
-import { Response, MiddlewareParams } from 'core/request';
-import { DataWithStatus } from 'core/data/middlewares/attach-status/interface';
+import type { Response, MiddlewareParams } from 'core/request';
+import type { DataWithStatus } from 'core/data/middlewares/attach-status/interface';
 
 export * from 'core/data/middlewares/attach-status/interface';
 

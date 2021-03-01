@@ -12,7 +12,7 @@
  */
 
 import Queue from 'core/queue/interface';
-import { Tasks, CreateTasks } from 'core/queue/simple/interface';
+import type { Tasks, CreateTasks } from 'core/queue/simple/interface';
 
 export * from 'core/queue/interface';
 

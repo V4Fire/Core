@@ -20,7 +20,7 @@ import {
 
 import { storage, globalOpts } from 'core/request/const';
 import { queryTplRgxp, resolveURLRgxp } from 'core/request/context/const';
-import { RequestAPI } from 'core/request/interface';
+import type { RequestAPI } from 'core/request/interface';
 
 import Super from 'core/request/context/modules/params';
 

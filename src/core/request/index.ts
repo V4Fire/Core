@@ -22,7 +22,7 @@ import RequestContext from 'core/request/context';
 import { merge, getStorageKey } from 'core/request/utils';
 import { storage, globalOpts, defaultRequestOpts } from 'core/request/const';
 
-import {
+import type {
 
 	CreateRequestOptions,
 	RequestResolver,
