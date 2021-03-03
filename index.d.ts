@@ -248,7 +248,7 @@ interface ObjectMixinOptions<V = unknown, K = unknown, D = unknown> {
 
 	/**
 	 * If true, then the original value of an object property can be rewritten
-	 * from another object even with undefined value
+	 * from another object even with an undefined value
 	 *
 	 * @default `false`
 	 * @example
@@ -263,7 +263,7 @@ interface ObjectMixinOptions<V = unknown, K = unknown, D = unknown> {
 	withUndef?: boolean;
 
 	/**
-	 * If true, then an object property descriptor is copied too
+	 * If true, then object property descriptors are copied too
 	 * @default `false`
 	 */
 	withDescriptor?: boolean;
@@ -341,7 +341,7 @@ interface ObjectMixinOptions<V = unknown, K = unknown, D = unknown> {
 	concatArray?: boolean;
 
 	/**
-	 * Function that concatenates arrays
+	 * Function to concatenate arrays
 	 * (works only with the "concatArray" mode)
 	 *
 	 * @param oldValue - old array
@@ -361,12 +361,12 @@ interface ObjectMixinOptions<V = unknown, K = unknown, D = unknown> {
 	concatFn?(oldValue: V, newValue: unknown[], key: K): unknown[];
 
 	/**
-	 * Function that filters values that support deep extending
+	 * Function to filter values that support deep extending
 	 * (works only with the "deep" mode)
 	 *
-	 * @param target - target object
-	 * @param value - new value to set
-	 * @param key - target property key
+	 * @param el - element value
+	 * @param key - element key
+	 * @param data - element container
 	 *
 	 * @example
 	 * ```js
@@ -374,18 +374,17 @@ interface ObjectMixinOptions<V = unknown, K = unknown, D = unknown> {
 	 * Object.mixin({deep: true}, {a: {a: 1}}, {a: {b: 2}});
 	 *
 	 * // {a: {b: 2}}
-	 * Object.mixin({deep: true, extendFilter: (t, v) => !v.b}, {a: {a: 1}}, {a: {b: 2}});
+	 * Object.mixin({deep: true, extendFilter: (el) => !el.b}, {a: {a: 1}}, {a: {b: 2}});
 	 * ```
 	 */
-	extendFilter?(target: V, value: unknown, key: K): unknown;
+	extendFilter?(el: unknown, key: K, data: V): unknown;
 
 	/**
-	 * Function that filters values which shouldn't be copied
+	 * Function to filter values that shouldn't be copied
 	 *
 	 * @param el - element value
 	 * @param key - element key
 	 * @param data - element container
-	 * @default `false`
 	 *
 	 * @example
 	 * ```js

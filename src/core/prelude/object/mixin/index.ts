@@ -192,7 +192,7 @@ extend(Object, 'mixin', function mixin(
 				canDeepExtend = Boolean(extVal);
 
 			if (canDeepExtend && p.extendFilter != null) {
-				canDeepExtend = Boolean(p.extendFilter(base, extVal, key));
+				canDeepExtend = Boolean(p.extendFilter(extVal, key, base));
 			}
 
 			let

@@ -13,6 +13,10 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 ## v3.34.0 (2021-03-03)
 
+#### :boom: Breaking Change
+
+* Changed a signature of `extendFilter` `core/prelude/object/mixin`
+
 #### :rocket: New Feature
 
 * Added a new helper `core/promise/sync/memoize`
