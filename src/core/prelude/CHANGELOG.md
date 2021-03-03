@@ -15,6 +15,15 @@ Changelog
 
 * Changed a signature of `extendFilter` `object/mixin`
 
+#### :rocket: New Feature
+
+* Now `Object.reject and Object.select` respect object without prototypes `object/create`
+
+```
+// true
+console.log(Object.reject({a: 1, b: 2, __proto__: null}, 'a').__proto__ == null);
+```
+
 ## v3.32.0 (2021-02-05)
 
 #### :rocket: New Feature

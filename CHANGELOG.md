@@ -22,6 +22,12 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 * Added a new helper `core/promise/sync/memoize`
 * Now all null values from `.tsconfig` files are removed `core/build`
 * Added a new config `client.tsconfig`
+* Now `Object.reject and Object.select` respect object without prototypes `core/prelude/object/create`
+
+```
+// true
+console.log(Object.reject({a: 1, b: 2, __proto__: null}, 'a').__proto__ == null);
+```
 
 ## v3.33.2 (2021-03-01)
 
