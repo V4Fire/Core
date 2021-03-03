@@ -1,0 +1,7 @@
+{
+  "extends": "@v4fire/core/.tsconfig",
+
+  "compilerOptions": {
+    "importsNotUsedAsValues": null
+  }
+}

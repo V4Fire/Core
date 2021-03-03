@@ -97,6 +97,7 @@ module.exports = function init(gulp) {
 
 				file.path = file.path.replace(/([^/\\]*?)\.tsconfig$/, (str, nm) => `${nm ? `${nm}.tsconfig` : 'tsconfig'}.json`);
 				file.contents = new Buffer(JSON.stringify(config, null, 2));
+
 				cb(null, file);
 
 				function resolveExtends(config) {
@@ -128,7 +129,12 @@ module.exports = function init(gulp) {
 							concatFn: (a, b) => b
 						}, parent, config);
 
-						$C(config).forEach((el) => {
+						$C(config).forEach((el, key) => {
+							if (el == null) {
+								delete config[key];
+								return;
+							}
+
 							if (Object.isObject(el)) {
 								$C(el).forEach((el, key, config) => {
 									if (el == null) {

@@ -413,8 +413,7 @@ module.exports = config.createConfig(
 				transpileOnly: true,
 				compilerOptions: {
 					target: es,
-					importHelpers,
-					importsNotUsedAsValues: null
+					importHelpers
 				}
 			};
 		},

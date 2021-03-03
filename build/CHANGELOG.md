@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.34.0 (2021-03-03)
+
+#### :rocket: New Feature
+
+* Now all null values from `.tsconfig` files are removed
+
 ## v3.30.0 (2021-01-10)
 
 #### :boom: Breaking Change
