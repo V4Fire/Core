@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.34.0 (2021-03-03)
+
+#### :rocket: New Feature
+
+* Added a new module `core/promise/memoize`
+
 ## v3.33.2 (2021-03-01)
 
 #### :bug: Bug Fix
