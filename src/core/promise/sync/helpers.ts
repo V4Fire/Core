@@ -30,7 +30,7 @@ import { weakMemoizeCache, longMemoizeCache } from 'core/promise/sync/const';
  * memoize('core/url/concat', () => import('core/url/concat'));
  * ```
  */
-export function memoize<T>(keyOrPromise: unknown | PromiseLikeP, promise?: PromiseLikeP): Promise<T> {
+export function memoize<T = unknown>(keyOrPromise: unknown | PromiseLikeP<T>, promise?: PromiseLikeP<T>): Promise<T> {
 	return new SyncPromise((resolve, reject) => {
 		if (keyOrPromise != null && typeof keyOrPromise === 'object') {
 			if (weakMemoizeCache.has(keyOrPromise!)) {
