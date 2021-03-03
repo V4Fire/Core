@@ -8,7 +8,7 @@
 
 import { memoize } from 'core/promise/memoize';
 
-describe('core/promise/memoize/memoize', () => {
+describe('core/promise/sync/memoize', () => {
 	it('simple memoization', async () => {
 		const promise = memoize(new Promise((r) => setTimeout(r, 100)));
 		await promise;

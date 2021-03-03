@@ -15,7 +15,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :rocket: New Feature
 
-* Added a new module `core/promise/memoize`
+* Added a new helper `core/promise/sync/memoize`
 * Now all null values from `.tsconfig` files are removed `core/build`
 * Added a new config `client.tsconfig`
 

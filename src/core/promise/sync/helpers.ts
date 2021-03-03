@@ -11,10 +11,10 @@
  * @packageDocumentation
  */
 
-import SyncPromise from 'core/promise/sync';
+import SyncPromise from 'core/prelude/structures/sync-promise';
 import type { PromiseLikeP } from 'core/async';
 
-import { weakMemoizeCache, longMemoizeCache } from 'core/promise/memoize/const';
+import { weakMemoizeCache, longMemoizeCache } from 'core/promise/sync/const';
 
 /**
  * Memorizes the specified promise and converts it to a synchronous promise.
