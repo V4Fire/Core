@@ -127,6 +127,16 @@ module.exports = function init(gulp) {
 							concatArray: true,
 							concatFn: (a, b) => b
 						}, parent, config);
+
+						$C(config).forEach((el) => {
+							if (Object.isObject(el)) {
+								$C(el).forEach((el, key, config) => {
+									if (el == null) {
+										delete config[key];
+									}
+								});
+							}
+						});
 					}
 
 					delete config.extends;
