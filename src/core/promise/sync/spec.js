@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { memoize } from 'core/promise/memoize';
+import { memoize } from 'core/promise/sync';
 
 describe('core/promise/sync/memoize', () => {
 	it('simple memoization', async () => {
