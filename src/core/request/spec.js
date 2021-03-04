@@ -442,7 +442,7 @@ describe('core/request', () => {
 				const req = request('http://localhost:3000/retry', {
 					retry: {
 						attempts: 5,
-						delayBeforeAttempt: () => 0
+						delay: () => 0
 					}
 				});
 
@@ -489,13 +489,13 @@ describe('core/request', () => {
 				}
 			});
 
-			async function retryDelayTest(delayBeforeAttempt, delay) {
+			async function retryDelayTest(delay, delay) {
 				const startTime = new Date().getTime();
 
 				const req = request('http://localhost:3000/retry', {
 					retry: {
 						attempts: 5,
-						delayBeforeAttempt
+						delay
 					}
 				});
 

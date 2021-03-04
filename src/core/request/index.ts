@@ -304,8 +304,8 @@ function request<D = unknown>(
 					const
 						attemptLimit = retryParams.attempts ?? Infinity;
 
-					if (retryParams.delayBeforeAttempt == null) {
-						retryParams.delayBeforeAttempt = (i) => i < 5 ? i * 500 : (5).seconds();
+					if (retryParams.delay == null) {
+						retryParams.delay = (i) => i < 5 ? i * 500 : (5).seconds();
 					}
 
 					let
@@ -314,7 +314,7 @@ function request<D = unknown>(
 					const createReqWithRetrying = async () => {
 						const calculateDelay = (attempt: number, err: RequestError<any>) => {
 							const
-								delay = retryParams.delayBeforeAttempt!(attempt, err);
+								delay = retryParams.delay!(attempt, err);
 
 							if (Object.isPromise(delay) || delay === false) {
 								return delay;

@@ -432,5 +432,5 @@ export interface RetryOptions<D = unknown> {
 	 * @param attempt - current attempt number
 	 * @param error - error object
 	 */
-	delayBeforeAttempt?(attempt: number, error: RequestError<D>): number | Promise<void> | false;
+	delay?(attempt: number, error: RequestError<D>): number | Promise<void> | false;
 }
