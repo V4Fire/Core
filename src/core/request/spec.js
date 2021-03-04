@@ -7,7 +7,6 @@
  */
 
 import express from 'express';
-
 import { set, get } from 'core/env';
 
 import Provider, { provider } from 'core/data';
@@ -37,9 +36,11 @@ describe('core/request', () => {
 
 	let
 		request,
-		api,
-		logOptions,
 		defaultEngine,
+		logOptions;
+
+	let
+		api,
 		server;
 
 	beforeAll(async () => {
@@ -68,6 +69,7 @@ describe('core/request', () => {
 		server.close(done);
 	});
 
+	// eslint-disable-next-line max-lines-per-function
 	engines.forEach((engine, name) => {
 		describe(`with the "${name}" engine`, () => {
 			beforeAll(() => {
@@ -391,116 +393,126 @@ describe('core/request', () => {
 				expect(err.details.response.status).toBe(404);
 			});
 
-			// Fix arrow function max length
-			secondTestsPart();
+			it('aborting of a request', async () => {
+				let err;
+
+				try {
+					const req = request('http://localhost:3000/json/1');
+					req.abort();
+					await req;
+
+				} catch (e) {
+					err = e;
+				}
+
+				expect(err).toBeInstanceOf(RequestError);
+				expect(err.type).toBe('abort');
+				expect(err.message).toBe('API error, type: abort');
+				expect(err.details.request.method).toBe('GET');
+				expect(err.details.response).toBeUndefined();
+			});
+
+			it('request with a low timeout', async () => {
+				let err;
+
+				try {
+					await request('http://localhost:3000/delayed', {timeout: 100});
+
+				} catch (e) {
+					err = e;
+				}
+
+				expect(err).toBeInstanceOf(RequestError);
+				expect(err.type).toBe('timeout');
+				expect(err.message).toBe('API error, type: timeout');
+				expect(err.details.response).toBeUndefined();
+			});
+
+			it('request with a high timeout', async () => {
+				const req = await request('http://localhost:3000/delayed', {timeout: 500});
+				expect(req.response.ok).toBeTrue();
+			});
+
+			it('response with 204 status', async () => {
+				const req = await request('http://localhost:3000/octet/204');
+				expect(req.data).toBe(null);
+			});
+
+			it('retrying of a request', async () => {
+				const req = request('http://localhost:3000/retry', {
+					retry: {
+						attempts: 5,
+						delayBeforeAttempt: () => 0
+					}
+				});
+
+				const body = await (await req).response.json();
+				expect(body.tryNumber).toBe(4);
+			});
+
+			it('retrying of a request with the specified delay between tries', async () => {
+				await retryDelayTest(() => 200, 200);
+			});
+
+			it('retrying of a request with the specified promisify delay between tries', async () => {
+				await retryDelayTest(() => new Promise((res) => setTimeout(res, 200)), 200);
+			});
+
+			it('retrying with the speeduped response', async () => {
+				const req = await request('http://localhost:3000/retry/speedup', {
+					timeout: 300,
+					retry: 2
+				});
+
+				expect(req.response.ok).toBeTrue();
+
+				const body = await req.response.json();
+				expect(body.tryNumber).toBe(2);
+			});
+
+			it('failing after given attempts', async () => {
+				try {
+					await request('http://localhost:3000/retry/bad', {retry: 3});
+
+				} catch (err) {
+					const
+						body = await err.details.response.json();
+
+					expect(err).toBeInstanceOf(RequestError);
+					expect(err.type).toBe('invalidStatus');
+					expect(err.message).toBe('API error, type: invalidStatus');
+
+					expect(err.details.request.method).toBe('GET');
+					expect(err.details.response.status).toBe(500);
+
+					expect(body.tryNumber).toEqual(3);
+				}
+			});
+
+			async function retryDelayTest(delayBeforeAttempt, delay) {
+				const startTime = new Date().getTime();
+
+				const req = request('http://localhost:3000/retry', {
+					retry: {
+						attempts: 5,
+						delayBeforeAttempt
+					}
+				});
+
+				const
+					body = await (await req).response.json(),
+					firstRequest = body.times.shift(),
+					requestDelays = body.times.reduce((acc, time, i) => acc.concat(time - firstRequest - i * delay), []);
+
+				expect(firstRequest - startTime).toBeLessThan(delay);
+				requestDelays.forEach((time) => expect(time).toBeGreaterThanOrEqual(delay));
+			}
 		});
 	});
 });
 
-function secondTestsPart() {
-	it('aborting of a request', async () => {
-		let err;
-
-		try {
-			const req = request('http://localhost:3000/json/1');
-			req.abort();
-			await req;
-
-		} catch (e) {
-			err = e;
-		}
-
-		expect(err).toBeInstanceOf(RequestError);
-		expect(err.type).toBe('abort');
-		expect(err.message).toBe('API error, type: abort');
-		expect(err.details.request.method).toBe('GET');
-		expect(err.details.response).toBeUndefined();
-	});
-
-	it('request with a low timeout', async () => {
-		let err;
-
-		try {
-			await request('http://localhost:3000/delayed', {timeout: 100});
-
-		} catch (e) {
-			err = e;
-		}
-
-		expect(err).toBeInstanceOf(RequestError);
-		expect(err.type).toBe('timeout');
-		expect(err.message).toBe('API error, type: timeout');
-		expect(err.details.response).toBeUndefined();
-	});
-
-	it('request with high timeout', async () => {
-		const req = await request('http://localhost:3000/delayed', {timeout: 500});
-
-		expect(req.response.ok).toBeTrue();
-	});
-
-	it('response with 204 status', async () => {
-		const req = await request('http://localhost:3000/octet/204');
-		expect(req.data).toBe(null);
-	});
-
-	it('retry', async () => {
-		const body = await (await request('http://localhost:3000/retry', {retry: 5})).response.json();
-		expect(body.tryNumber).toBe(4);
-	});
-
-	const retryDelayTest = async (delayBeforeAttempt, delay) => {
-		const startTime = new Date().getTime(),
-			body = await (await request('http://localhost:3000/retry', {
-				retry: {attempts: 5, delayBeforeAttempt}
-			})).response.json(),
-			firstRequest = body.times.shift(),
-			requestDelays = body.times.reduce((acc, time, i) => acc.concat(time - firstRequest - i * delay), []);
-		expect(firstRequest - startTime).toBeLessThan(delay);
-		requestDelays.forEach((time) => expect(time).toBeGreaterThanOrEqual(delay));
-	};
-
-	it('retry with ms delay between tries', async () => {
-		await retryDelayTest(() => 200, 200);
-	});
-
-	it('retry with promise delay between tries', async () => {
-		await retryDelayTest(() => new Promise((res) => setTimeout(res, 200)), 200);
-	});
-
-	it('retry with speedup response', async () => {
-		const req = await request('http://localhost:3000/retry/speedup', {
-			timeout: 300,
-			retry: 5
-		});
-		expect(req.response.ok).toBeTrue();
-		const body = await req.response.json();
-		expect(body.tryNumber).toBe(2);
-	});
-
-	it('retry fail after given attempt', async () => {
-		try {
-			await request('http://localhost:3000/retry/bad', {retry: 5});
-		} catch (er) {
-			const body = await er.details.response.json();
-			expect(er).toBeInstanceOf(RequestError);
-			expect(er.type).toBe('invalidStatus');
-			expect(er.message).toBe('API error, type: invalidStatus');
-			expect(er.details.request.method).toBe('GET');
-			expect(er.details.response.status).toBe(500);
-			expect(body.tryNumber).toEqual(5);
-		}
-	});
-}
-
 function createServer() {
-	const
-		serverApp = express(),
-		triesBeforeSuccess = 3,
-		requestTimes = [];
-	let tryNumber = 0,
-		speed = 600;
-
+	const serverApp = express();
 	serverApp.use(express.json());
 
 	serverApp.get('/json/1', (req, res) => {
@@ -570,14 +582,27 @@ function createServer() {
 		res.type('application/octet-stream').status(204).end();
 	});
 
+	const
+		triesBeforeSuccess = 3,
+		requestTimes = [];
+
+	let
+		tryNumber = 0,
+		speed = 600;
+
 	serverApp.get('/retry', (req, res) => {
 		requestTimes.push(new Date().getTime());
+
 		if (tryNumber <= triesBeforeSuccess) {
 			res.sendStatus(500);
 			tryNumber++;
+
 		} else {
 			res.status(200);
-			res.json({tryNumber, times: requestTimes});
+			res.json({
+				tryNumber,
+				times: requestTimes
+			});
 		}
 	});
 
