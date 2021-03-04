@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.35.0 (2021-03-04)
+
+#### :rocket: New Feature
+
+* Added a new feature of request retryings
+
 ## v3.33.0 (2021-02-26)
 
 #### :rocket: New Feature
