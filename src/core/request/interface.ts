@@ -258,7 +258,7 @@ export interface CreateRequestOptions<D = unknown> {
 	readonly method?: RequestMethod;
 
 	/**
-	 * Params for request retries or attempts number
+	 * Options to retry bad requests
 	 */
 	retry?: RetryOptions | number;
 
@@ -416,7 +416,7 @@ export interface CreateRequestOptions<D = unknown> {
 }
 
 /**
- * Options for retrying of bad requests
+ * Options to retry bad requests
  * @typeparam D - response data type
  */
 export interface RetryOptions<D = unknown> {
