@@ -160,6 +160,24 @@ describe('core/prelude/object/iterators/forEach', () => {
 		expect(scan).toEqual([[3, 'c', data]]);
 	});
 
+	it('iteration of an object with non-enumerable properties', () => {
+		const
+			data = {a: 1},
+			scan = [];
+
+		Object.defineProperty(data, 'b', {value: 2});
+
+		Object.forEach(data, (...args) => {
+			scan.push(args);
+		});
+
+		Object.forEach(data, {withNonEnumerables: true}, (...args) => {
+			scan.push(args);
+		});
+
+		expect(scan).toEqual([[1, 'a', data], [1, 'a', data], [2, 'b', data]]);
+	});
+
 	it('iteration of an iterator with object flags', () => {
 		const
 			data = Object.assign([1, 2, 3].values(), {a: 1}),

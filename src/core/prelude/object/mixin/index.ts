@@ -87,6 +87,7 @@ extend(Object, 'mixin', function mixin(
 		!p.withProto &&
 		!p.withDescriptor &&
 		!p.withAccessors &&
+		!p.withNonEnumerables &&
 		!Object.isTruly(onlyNew) &&
 		!p.extendFilter &&
 		!p.filter
@@ -134,6 +135,7 @@ extend(Object, 'mixin', function mixin(
 
 	const forEachParams = {
 		withDescriptor: Object.isTruly(p.withAccessors) || Object.isTruly(p.withDescriptor),
+		withNonEnumerables: p.withNonEnumerables,
 		notOwn: Object.isTruly(p.deep)
 	};
 

@@ -11,7 +11,13 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-## v3.34.1 (2021-03-04)
+## v3.35.0 (2021-03-04)
+
+#### :rocket: New Feature
+
+* Added a new option `withNonEnumerables`:
+  * `Object.forEach`
+  * `Object.mixin`
 
 #### :bug: Bug Fix
 
