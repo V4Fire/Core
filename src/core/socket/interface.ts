@@ -6,6 +6,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { EventEmitterLike, WorkerLike } from 'core/async';
+import type { EventEmitterLike, WorkerLike } from 'core/async';
 
 export type Socket = WorkerLike & EventEmitterLike;

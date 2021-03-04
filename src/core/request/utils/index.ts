@@ -12,8 +12,9 @@
  */
 
 import { cache } from 'core/request/const';
-import { NormalizedCreateRequestOptions } from 'core/request/interface';
 import { tplRgxp } from 'core/request/utils/const';
+
+import type { NormalizedCreateRequestOptions } from 'core/request/interface';
 
 export * from 'core/request/utils/const';
 
@@ -26,7 +27,7 @@ export function merge<T>(...args: unknown[]): T {
 		deep: true,
 		concatArray: true,
 		concatFn: (a: unknown[], b: unknown[]) => a.union(b),
-		extendFilter: (d, v) => Array.isArray(v) || Object.isDictionary(v)
+		extendFilter: (el) => Array.isArray(el) || Object.isDictionary(el)
 	}, undefined, ...args);
 }
 

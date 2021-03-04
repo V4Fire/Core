@@ -12,7 +12,7 @@
  */
 
 import { mimeTypes, normalizeMimeStrRgxp, dataURIRgxp, isTextType, isXMLType } from 'core/mime-type/const';
-import { DataType } from 'core/mime-type/interface';
+import type { DataType } from 'core/mime-type/interface';
 
 export * from 'core/mime-type/const';
 export * from 'core/mime-type/interface';

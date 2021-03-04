@@ -7,12 +7,20 @@
  */
 
 import { deprecated } from 'core/functools';
-import { concatURLs, toQueryString } from 'core/url';
+import { concatURLs, fromQueryString, toQueryString } from 'core/url';
 
-import { normalizeHeaders, applyQueryForStr, getStorageKey, getRequestKey } from 'core/request/utils';
+import {
+
+	normalizeHeaders,
+	applyQueryForStr,
+	getStorageKey,
+	getRequestKey
+
+} from 'core/request/utils';
+
 import { storage, globalOpts } from 'core/request/const';
 import { queryTplRgxp, resolveURLRgxp } from 'core/request/context/const';
-import { RequestAPI } from 'core/request/interface';
+import type { RequestAPI } from 'core/request/interface';
 
 import Super from 'core/request/context/modules/params';
 
@@ -160,6 +168,14 @@ export default class RequestContext<D = unknown> extends Super<D> {
 
 			} else {
 				p.headers = normalizeHeaders(p.headers);
+			}
+
+			const
+				urlChunks = url.split('?', 2);
+
+			if (urlChunks.length > 1) {
+				Object.assign(q, fromQueryString(url));
+				url = urlChunks[0];
 			}
 
 			if (Object.size(q) > 0) {

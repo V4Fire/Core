@@ -11,7 +11,7 @@
  * @packageDocumentation
  */
 
-import { SelectParams } from 'core/object/select/interface';
+import type { SelectParams } from 'core/object/select/interface';
 
 export * from 'core/object/select/interface';
 

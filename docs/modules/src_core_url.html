@@ -247,8 +247,8 @@ pre {
 						<a href="#concatenation-of-url-s" id="concatenation-of-url-s" style="color: inherit; text-decoration: none;">
 							<h2>Concatenation of URL-s</h2>
 						</a>
-						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">concatUrls</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/url&#039;</span><span style="color: #000000">;</span>
-<span style="color: #795E26">concatUrls</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;foo/baz&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;/bar&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;bla&#039;</span><span style="color: #000000">) === </span><span style="color: #A31515">&#039;/foo/baz/bar/bla&#039;</span><span style="color: #000000">;</span>
+						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">concatURLs</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/url&#039;</span><span style="color: #000000">;</span>
+<span style="color: #795E26">concatURLs</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;foo/baz&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;/bar&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;bla&#039;</span><span style="color: #000000">) === </span><span style="color: #A31515">&#039;/foo/baz/bar/bla&#039;</span><span style="color: #000000">;</span>
 </code></pre>
 						<a href="#parsingserialization" id="parsingserialization" style="color: inherit; text-decoration: none;">
 							<h2>Parsing/Serialization</h2>
@@ -291,7 +291,8 @@ pre {
 						<section class="tsd-index-section ">
 							<h3>Functions</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-function tsd-parent-kind-module"><a href="src_core_url.html#concaturls" class="tsd-kind-icon">concat<wbr>Urls</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="src_core_url.html#concaturls" class="tsd-kind-icon">concatURLs</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="src_core_url.html#concaturls-1" class="tsd-kind-icon">concat<wbr>Urls</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-module"><a href="src_core_url.html#fromquerystring" class="tsd-kind-icon">from<wbr>Query<wbr>String</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-module"><a href="src_core_url.html#toquerystring" class="tsd-kind-icon">to<wbr>Query<wbr>String</a></li>
 							</ul>
@@ -326,15 +327,15 @@ pre {
 				<h2>Functions</h2>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
 					<a name="concaturls" class="tsd-anchor"></a>
-					<h3>concat<wbr>Urls</h3>
+					<h3>concatURLs</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-						<li class="tsd-signature tsd-kind-icon">concat<wbr>Urls<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>urls<span class="tsd-signature-symbol">: </span><a href="index.html#nullable" class="tsd-signature-type" data-tsd-kind="Type alias">Nullable</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+						<li class="tsd-signature tsd-kind-icon">concatURLs<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>urls<span class="tsd-signature-symbol">: </span><a href="index.html#nullable" class="tsd-signature-type" data-tsd-kind="Type alias">Nullable</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/url/concat.ts#L25">src/core/url/concat.ts:25</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/url/concat.ts#L26">src/core/url/concat.ts:26</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -344,11 +345,45 @@ pre {
 								<dl class="tsd-comment-tags">
 									<dt>example</dt>
 									<dd><pre><code class="language-js"><span style="color: #008000">// &#039;/foo/baz/bar/bla&#039;</span>
-<span style="color: #795E26">concatUrls</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;foo/baz&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;/bar&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;bla&#039;</span><span style="color: #000000">);</span>
+<span style="color: #795E26">concatURLs</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;foo/baz&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;/bar&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;bla&#039;</span><span style="color: #000000">);</span>
 
 <span style="color: #008000">// &#039;http://foo.bar/bla&#039;</span>
-<span style="color: #795E26">concatUrls</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;http://foo.bar&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;bla&#039;</span><span style="color: #000000">);</span>
+<span style="color: #795E26">concatURLs</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;http://foo.bar&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;bla&#039;</span><span style="color: #000000">);</span>
 </code></pre>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>urls: <a href="index.html#nullable" class="tsd-signature-type" data-tsd-kind="Type alias">Nullable</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="concaturls-1" class="tsd-anchor"></a>
+					<h3>concat<wbr>Urls</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">concat<wbr>Urls<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>urls<span class="tsd-signature-symbol">: </span><a href="index.html#nullable" class="tsd-signature-type" data-tsd-kind="Type alias">Nullable</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/url/concat.ts#L63">src/core/url/concat.ts:63</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<dl class="tsd-comment-tags">
+									<dt>deprecated</dt>
+									<dd></dd>
+									<dt>see</dt>
+									<dd><p><a href="src_core_url.html#concaturls">concatURLs</a></p>
 									</dd>
 								</dl>
 							</div>
@@ -568,7 +603,10 @@ pre {
 						<a href="src_core_url.html#isurlwithslash" class="tsd-kind-icon">isURLWith<wbr>Slash</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module">
-						<a href="src_core_url.html#concaturls" class="tsd-kind-icon">concat<wbr>Urls</a>
+						<a href="src_core_url.html#concaturls" class="tsd-kind-icon">concatURLs</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="src_core_url.html#concaturls-1" class="tsd-kind-icon">concat<wbr>Urls</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module">
 						<a href="src_core_url.html#fromquerystring" class="tsd-kind-icon">from<wbr>Query<wbr>String</a>

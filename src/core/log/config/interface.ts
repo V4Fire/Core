@@ -6,9 +6,9 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { LogLevel } from 'core/log/interface';
-import { LogMiddlewares } from 'core/log/middlewares/interface';
-import { LogEngines } from 'core/log/engines/interface';
+import type { LogLevel } from 'core/log/interface';
+import type { LogMiddlewares } from 'core/log/middlewares/interface';
+import type { LogEngines } from 'core/log/engines/interface';
 
 export interface LogConfig {
 	pipelines: LogPipelineConfig[];

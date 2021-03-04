@@ -9,6 +9,17 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.34.0 (2021-03-03)
+
+#### :rocket: New Feature
+
+* Now `Object.reject and Object.select` respect object without prototypes
+
+```
+// true
+console.log(Object.reject({a: 1, b: 2, __proto__: null}, 'a').__proto__ == null);
+```
+
 ## v3.29.0 (2020-12-22)
 
 #### :rocket: New Feature

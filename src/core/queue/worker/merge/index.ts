@@ -12,7 +12,7 @@
  */
 
 import WorkerQueue from 'core/queue/worker/interface';
-import { Task, Tasks, QueueWorker, QueueOptions, HashFn } from 'core/queue/worker/merge/interface';
+import type { Task, Tasks, QueueWorker, QueueOptions, HashFn } from 'core/queue/worker/merge/interface';
 
 export * from 'core/queue/worker/merge/interface';
 

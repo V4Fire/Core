@@ -11,8 +11,8 @@ import { getOrCreateLabelValueByHandlers } from 'core/object/watch/engines/helpe
 import { toProxyObject } from 'core/object/watch/const';
 import { structureWrappers } from 'core/object/watch/wrap/const';
 
-import { WatchHandlersSet } from 'core/object/watch/interface';
-import { WrapOptions, WrapResult } from 'core/object/watch/wrap/interface';
+import type { WatchHandlersSet } from 'core/object/watch/interface';
+import type { WrapOptions, WrapResult } from 'core/object/watch/wrap/interface';
 
 export * from 'core/object/watch/wrap/interface';
 

@@ -8,12 +8,12 @@
 
 import config from 'config';
 
-import { AsyncStorage } from 'core/kv-storage';
 import { Cache, RestrictedCache, NeverCache, AbstractCache } from 'core/cache';
+import type { AsyncStorage } from 'core/kv-storage';
 
 import engine from 'core/request/engines';
 
-import {
+import type {
 
 	RequestQuery,
 	RequestMethod,

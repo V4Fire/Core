@@ -8,8 +8,9 @@
 
 import pipelines from 'core/log/curator/pipelines';
 
-import { LogEvent } from 'core/log/middlewares';
-import { LogMessageOptions } from 'core/log/interface';
+import type { LogEvent } from 'core/log/middlewares';
+import type { LogMessageOptions } from 'core/log/interface';
+
 import { DEFAULT_LEVEL } from 'core/log/base';
 
 const

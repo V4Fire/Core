@@ -13,7 +13,8 @@
  * @packageDocumentation
  */
 
-import Cache, { ClearFilter } from 'core/cache/interface';
+import type Cache from 'core/cache/interface';
+import type { ClearFilter } from 'core/cache/interface';
 
 export * from 'core/cache/interface';
 

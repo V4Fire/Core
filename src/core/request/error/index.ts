@@ -11,7 +11,7 @@
  * @packageDocumentation
  */
 
-import { Details } from 'core/request/error/interface';
+import type { Details } from 'core/request/error/interface';
 
 export * from 'core/request/error/interface';
 

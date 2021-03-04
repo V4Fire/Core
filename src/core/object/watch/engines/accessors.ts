@@ -32,7 +32,7 @@ import {
 
 } from 'core/object/watch/engines/helpers';
 
-import {
+import type {
 
 	WatchPath,
 	RawWatchHandler,

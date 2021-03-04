@@ -11,7 +11,7 @@
  * @packageDocumentation
  */
 
-import { MiddlewareParams } from 'core/request';
+import type { MiddlewareParams } from 'core/request';
 
 export * from 'core/data/middlewares/attach-status/interface';
 

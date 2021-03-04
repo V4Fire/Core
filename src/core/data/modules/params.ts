@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { EventEmitter2 as EventEmitter } from 'eventemitter2';
+import type { EventEmitter2 as EventEmitter } from 'eventemitter2';
 import { deprecate } from 'core/functools';
 
 import request, { Middlewares, RequestMethod } from 'core/request';
@@ -14,7 +14,7 @@ import select, { SelectParams } from 'core/object/select';
 
 import { emitter } from 'core/data/const';
 
-import {
+import type {
 
 	ModelMethod,
 	FunctionalExtraProviders,

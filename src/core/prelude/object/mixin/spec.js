@@ -447,13 +447,8 @@ describe('core/prelude/object/mixin', () => {
 			c: new Set([1, 2, 3])
 		};
 
-		const extendFilter = (data, val) => {
-			if (val instanceof Set) {
-				return false;
-			}
-
-			return true;
-		};
+		const
+			extendFilter = (val) => !(val instanceof Set);
 
 		Object.mixin({deep: true, extendFilter}, base, {
 			a: {

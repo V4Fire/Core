@@ -7,10 +7,10 @@
  */
 
 //#if node_js
-import Response from 'core/request/response';
+import type Response from 'core/request/response';
 //#endif
 
-import { NormalizedCreateRequestOptions } from 'core/request/interface';
+import type { NormalizedCreateRequestOptions } from 'core/request/interface';
 
 export interface Details<D = unknown> extends Dictionary {
 	request?: NormalizedCreateRequestOptions<D>;

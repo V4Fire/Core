@@ -12,7 +12,7 @@
  */
 
 import { consoleCache } from 'core/functools/warning/const';
-import { WarnOptions, InlineWarnOptions, WarnedFn } from 'core/functools/warning/interface';
+import type { WarnOptions, InlineWarnOptions, WarnedFn } from 'core/functools/warning/interface';
 
 export * from 'core/functools/warning/interface';
 

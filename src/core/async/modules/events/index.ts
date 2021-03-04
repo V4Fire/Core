@@ -14,7 +14,7 @@
 import SyncPromise from 'core/promise/sync';
 import Super, { isEvent } from 'core/async/modules/timers';
 
-import {
+import type {
 
 	AsyncOnOptions,
 	AsyncOnceOptions,

@@ -13,9 +13,9 @@ import symbolGenerator from 'core/symbol';
 import { deprecate } from 'core/functools';
 import { concatURLs } from 'core/url';
 
-import Then from 'core/then';
 import Async from 'core/async';
 import IO, { Socket } from 'core/socket';
+import type Then from 'core/then';
 
 import {
 
@@ -35,8 +35,26 @@ import {
 
 } from 'core/request';
 
-import iProvider, { ProviderOptions, ModelMethod } from 'core/data/interface';
-import { providers, requestCache, queryMethods, instanceCache, namespace, connectCache } from 'core/data/const';
+import type {
+
+	Provider as IProvider,
+	ProviderOptions,
+	ModelMethod
+
+} from 'core/data/interface';
+
+import {
+
+	namespace,
+
+	providers,
+	queryMethods,
+
+	requestCache,
+	instanceCache,
+	connectCache
+
+} from 'core/data/const';
 
 import ParamsProvider from 'core/data/modules/params';
 
@@ -45,7 +63,7 @@ export * from 'core/data/modules/params';
 export const
 	$$ = symbolGenerator();
 
-export default abstract class Provider extends ParamsProvider implements iProvider {
+export default abstract class Provider extends ParamsProvider implements IProvider {
 	/**
 	 * Cache identifier
 	 */
@@ -528,10 +546,18 @@ export default abstract class Provider extends ParamsProvider implements iProvid
 
 		return {
 			...params,
+
 			cacheId: this.cacheId,
 			middlewares: mappedMiddlewares,
+
 			encoder: merge(encoders[method] ?? encoders['def'], params?.encoder),
-			decoder: merge(decoders[method] ?? decoders['def'], params?.decoder)
+			decoder: merge(decoders[method] ?? decoders['def'], params?.decoder),
+
+			meta: {
+				provider: this,
+				providerMethod: method,
+				providerParams: params
+			}
 		};
 	}
 

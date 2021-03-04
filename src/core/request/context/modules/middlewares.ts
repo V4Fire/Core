@@ -10,7 +10,7 @@ import Response, { ResponseTypeValue } from 'core/request/response';
 import { getStorageKey } from 'core/request/utils';
 
 import { storage } from 'core/request/const';
-import { RequestResponse, RequestResponseObject } from 'core/request/interface';
+import type { RequestResponse, RequestResponseObject } from 'core/request/interface';
 
 import Super from 'core/request/context/modules/methods';
 
@@ -22,9 +22,10 @@ export default class RequestContext<D = unknown> extends Super<D> {
 	wrapRequest(promise: RequestResponse<D>): RequestResponse<D> {
 		const
 			key = this.cacheKey,
-			cache = this.pendingCache;
+			cache = this.pendingCache,
+			canUsePendingCache = this.params.engine.pendingCache !== false;
 
-		if (key != null && !cache.has(key)) {
+		if (key != null && !cache.has(key) && canUsePendingCache) {
 			promise = promise.then(
 				(v) => {
 					void cache.remove(key);

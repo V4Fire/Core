@@ -16,7 +16,7 @@ import watchEngine from 'core/object/watch/engines';
 import { muteLabel, toOriginalObject, toRootObject, watchHandlers } from 'core/object/watch/const';
 import { unwrap } from 'core/object/watch/engines/helpers';
 
-import {
+import type {
 
 	WatchPath,
 	WatchOptions,

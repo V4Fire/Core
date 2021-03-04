@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.33.0 (2021-02-26)
+
+#### :rocket: New Feature
+
+* Added a new engine based on the data providers
+
 ## v3.32.0 (2021-02-05)
 
 #### :bug: Bug Fix

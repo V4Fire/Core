@@ -7,7 +7,7 @@
  */
 
 import Range from 'core/range';
-import { ResponseType } from 'core/request';
+import type { ResponseType } from 'core/request';
 
 export const defaultResponseOpts = {
 	responseType: <ResponseType>'text',

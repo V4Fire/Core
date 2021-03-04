@@ -13,13 +13,14 @@
 
 //#set runtime.core/data
 
-import { Middlewares } from 'core/request';
+import type { Middlewares } from 'core/request';
 
 import DefaultProvider from 'core/data/modules/base';
 
 import { provider } from 'core/data/decorators';
 import { attachMock } from 'core/data/middlewares';
-import { ProviderOptions } from 'core/data/interface';
+
+import type { ProviderOptions } from 'core/data/interface';
 
 export * from 'core/data/const';
 export * from 'core/data/decorators';

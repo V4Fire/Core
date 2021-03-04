@@ -7,7 +7,7 @@
  */
 
 import { ConfigurableMiddleware } from 'core/log/middlewares/configurable';
-import { LogMiddleware } from 'core/log/middlewares/interface';
+import type { LogMiddleware } from 'core/log/middlewares/interface';
 
 export { extend, Extended } from 'core/log/base';
 export * from 'core/log/middlewares/interface';

@@ -11,11 +11,50 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-## v3.32.1 (????-??-??)
+## v3.34.0 (2021-03-03)
+
+#### :boom: Breaking Change
+
+* Changed a signature of `extendFilter` `core/prelude/object/mixin`
+
+#### :rocket: New Feature
+
+* Added a new helper `core/promise/sync/memoize`
+* Now all null values from `.tsconfig` files are removed `core/build`
+* Added a new config `client.tsconfig`
+* Now `Object.reject and Object.select` respect object without prototypes `core/prelude/object/create`
+
+```
+// true
+console.log(Object.reject({a: 1, b: 2, __proto__: null}, 'a').__proto__ == null);
+```
+
+## v3.33.2 (2021-03-01)
+
+#### :bug: Bug Fix
+
+* Fixed optimizing of imports `config`
+
+## v3.33.1 (2021-03-01)
+
+#### :bug: Bug Fix
+
+* Fixed an issue with invalid rounding of months `core/prelude/date`
+
+#### :house: Internal
+
+* Added `importsNotUsedAsValues` to `.tsconfig`
+* Updated dependencies: `typescript@4.2.2`
+
+## v3.33.0 (2021-02-26)
 
 #### :boom: Breaking Change
 
 * Renamed `concatUrls` to `concatURLs` `core/url`
+
+#### :rocket: New Feature
+
+* Added a new engine based on the data providers `core/request`
 
 ## v3.32.0 (2021-02-05)
 

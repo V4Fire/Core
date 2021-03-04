@@ -11,5 +11,7 @@
  * @packageDocumentation
  */
 
-export * from 'core/prelude/structures/sync-promise';
 export { default } from 'core/prelude/structures/sync-promise';
+
+export * from 'core/prelude/structures/sync-promise';
+export * from 'core/promise/sync/helpers';

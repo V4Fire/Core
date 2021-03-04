@@ -14,7 +14,8 @@ import AbortController from 'abort-controller';
 import Then from 'core/then';
 import Response, { ResponseTypeValue } from 'core/request/response';
 import RequestError from 'core/request/error';
-import { RequestEngine } from 'core/request/interface';
+
+import type { RequestEngine } from 'core/request/interface';
 
 /**
  * Creates request by using the fetch API with the specified parameters and returns a promise

@@ -6,7 +6,7 @@
 * https://github.com/V4Fire/Core/blob/master/LICENSE
 */
 
-import { DataType } from 'core/mime-type/interface';
+import type { DataType } from 'core/mime-type/interface';
 
 export const
 	normalizeMimeStrRgxp = /;.*/,

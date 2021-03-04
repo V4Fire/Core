@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.34.0 (2021-03-03)
+
+#### :boom: Breaking Change
+
+* Changed a signature of `extendFilter`
+
 ## v3.20.0 (2020-07-05)
 
 #### :rocket: New Feature

@@ -9,7 +9,7 @@
 import watchEngine from 'core/object/watch/engines';
 
 import { toOriginalObject } from 'core/object/watch/const';
-import { WatchHandlersSet, InternalWatchOptions } from 'core/object/watch/interface';
+import type { WatchHandlersSet, InternalWatchOptions } from 'core/object/watch/interface';
 
 /**
  * Returns true if the specified value is a watch proxy

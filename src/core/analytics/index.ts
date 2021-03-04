@@ -12,7 +12,7 @@
  */
 
 import sendAnalyticsEvent from 'core/analytics/engines';
-import { AnalyticEngine } from 'core/analytics/interface';
+import type { AnalyticEngine } from 'core/analytics/interface';
 
 export * from 'core/analytics/interface';
 

@@ -19,7 +19,7 @@ import { getDataTypeFromURL } from 'core/mime-type';
 import { merge } from 'core/request/utils';
 import { globalOpts, isAbsoluteURL } from 'core/request/const';
 
-import {
+import type {
 
 	NormalizedCreateRequestOptions,
 	RequestResolver,

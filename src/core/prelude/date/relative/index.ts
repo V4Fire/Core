@@ -56,9 +56,13 @@ export function getRelative(from: DateCreateValue, to: DateCreateValue): DateRel
 			{type, bound} = intervals[i];
 
 		if (Math.abs(diff) < bound) {
+			const
+				value = diff / (i > 0 ? intervals[i - 1].bound : 1),
+				tail = parseInt(value.toFixed(2).split('.')[1], 10);
+
 			return {
 				type: <DateRelative['type']>type,
-				value: Math.floor(diff / (i > 0 ? intervals[i - 1].bound : 1)),
+				value: tail > 95 ? Math.round(value) : Math.floor(value),
 				diff
 			};
 		}

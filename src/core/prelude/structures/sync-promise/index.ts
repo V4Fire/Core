@@ -206,8 +206,13 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 			this.value = value;
 			this.state = State.fulfilled;
 
-			this.resolveHandlers.forEach((fn) => fn(this.value));
-			this.finallyHandlers.forEach((fn) => fn());
+			for (let o = this.resolveHandlers, i = 0; i < o.length; i++) {
+				o[i](this.value);
+			}
+
+			for (let o = this.finallyHandlers, i = 0; i < o.length; i++) {
+				o[i]();
+			}
 
 			clear();
 		};
@@ -220,8 +225,13 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 			this.value = err;
 			this.state = State.rejected;
 
-			this.rejectHandlers.forEach((fn) => fn(this.value));
-			this.finallyHandlers.forEach((fn) => fn());
+			for (let o = this.rejectHandlers, i = 0; i < o.length; i++) {
+				o[i](this.value);
+			}
+
+			for (let o = this.finallyHandlers, i = 0; i < o.length; i++) {
+				o[i]();
+			}
 
 			clear();
 		};

@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import {
+import type {
 
 	Encoders,
 	Decoders,
@@ -21,9 +21,8 @@ import {
 
 } from 'core/request/interface';
 
-import { ResponseTypeValue } from 'core/request/response/interface';
-
-import Provider from 'core/data/interface';
+import type { ResponseTypeValue } from 'core/request/response/interface';
+import type { Provider } from 'core/data/interface';
 
 export type MockResponseValue =
 	ResponseTypeValue |
@@ -84,10 +83,14 @@ export interface ExtraProviderParams<D = unknown> {
 	globalOpts: GlobalOptions;
 }
 
+export interface ProviderConstructor {
+	new(opts?: ProviderOptions): Provider;
+}
+
 export type ExtraProviderConstructor =
 	string |
 	Provider |
-	{new(opts?: ProviderOptions): Provider};
+	ProviderConstructor;
 
 export interface ExtraProvider<D = unknown> {
 	provider?: ExtraProviderConstructor;

@@ -7,7 +7,7 @@
  */
 
 import * as env from 'core/env';
-import { LogEvent, LogMiddleware, NextCallback } from 'core/log/middlewares/interface';
+import type { LogEvent, LogMiddleware, NextCallback } from 'core/log/middlewares/interface';
 
 interface LogOptions {
 	patterns: RegExp[];
