@@ -431,7 +431,7 @@ pre {
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>If true, then an object property descriptor is copied too</p>
+							<p>If true, then object property descriptors are copied too</p>
 						</div>
 						<dl class="tsd-comment-tags">
 							<dt>default</dt>
@@ -515,7 +515,7 @@ pre {
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>If true, then the original value of an object property can be rewritten
-							from another object even with undefined value</p>
+							from another object even with an undefined value</p>
 						</div>
 						<dl class="tsd-comment-tags">
 							<dt>default</dt>
@@ -538,23 +538,166 @@ pre {
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="concatfn" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> concat<wbr>Fn</h3>
-					<div class="tsd-signature tsd-kind-icon">concat<wbr>Fn<span class="tsd-signature-symbol">:</span></div>
-					<aside class="tsd-sources">
-					</aside>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">concat<wbr>Fn<span class="tsd-signature-symbol">(</span>oldValue<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">V</span>, newValue<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">[]</span>, key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">[]</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L361">index.d.ts:361</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Function to concatenate arrays
+									(works only with the &quot;concatArray&quot; mode)</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>default</dt>
+									<dd><p><code>Array.prototype.concat</code></p>
+									</dd>
+									<dt>example</dt>
+									<dd><pre><code class="language-js"><span style="color: #008000">// {a: [1, 1, 2]}</span>
+<span style="color: #267F99">Object</span><span style="color: #000000">.</span><span style="color: #795E26">mixin</span><span style="color: #000000">({</span><span style="color: #001080">deep:</span><span style="color: #000000"> </span><span style="color: #0000FF">true</span><span style="color: #000000">, </span><span style="color: #001080">concatArray:</span><span style="color: #000000"> </span><span style="color: #0000FF">true</span><span style="color: #000000">}, {</span><span style="color: #001080">a:</span><span style="color: #000000"> [</span><span style="color: #098658">1</span><span style="color: #000000">]}, {</span><span style="color: #001080">a:</span><span style="color: #000000"> [</span><span style="color: #098658">1</span><span style="color: #000000">, </span><span style="color: #098658">2</span><span style="color: #000000">]});</span>
+
+<span style="color: #008000">// {a: [1, 2]}</span>
+<span style="color: #267F99">Object</span><span style="color: #000000">.</span><span style="color: #795E26">mixin</span><span style="color: #000000">({</span><span style="color: #001080">deep:</span><span style="color: #000000"> </span><span style="color: #0000FF">true</span><span style="color: #000000">, </span><span style="color: #001080">concatArray:</span><span style="color: #000000"> </span><span style="color: #0000FF">true</span><span style="color: #000000">, </span><span style="color: #001080">concatFn:</span><span style="color: #000000"> [].</span><span style="color: #001080">union</span><span style="color: #000000">}, {</span><span style="color: #001080">a:</span><span style="color: #000000"> [</span><span style="color: #098658">1</span><span style="color: #000000">]}, {</span><span style="color: #001080">a:</span><span style="color: #000000"> [</span><span style="color: #098658">1</span><span style="color: #000000">, </span><span style="color: #098658">2</span><span style="color: #000000">]});</span>
+</code></pre>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>oldValue: <span class="tsd-signature-type">V</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>old array</p>
+									</div>
+								</li>
+								<li>
+									<h5>newValue: <span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>new array</p>
+									</div>
+								</li>
+								<li>
+									<h5>key: <span class="tsd-signature-type">K</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>target property key</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">[]</span></h4>
+						</li>
+					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="extendfilter" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> extend<wbr>Filter</h3>
-					<div class="tsd-signature tsd-kind-icon">extend<wbr>Filter<span class="tsd-signature-symbol">:</span></div>
-					<aside class="tsd-sources">
-					</aside>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">extend<wbr>Filter<span class="tsd-signature-symbol">(</span>el<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span>, key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">K</span>, data<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L380">index.d.ts:380</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Function to filter values that support deep extending
+									(works only with the &quot;deep&quot; mode)</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>example</dt>
+									<dd><pre><code class="language-js"><span style="color: #008000">// {a: {a: 1, b: 2}}</span>
+<span style="color: #267F99">Object</span><span style="color: #000000">.</span><span style="color: #795E26">mixin</span><span style="color: #000000">({</span><span style="color: #001080">deep:</span><span style="color: #000000"> </span><span style="color: #0000FF">true</span><span style="color: #000000">}, {</span><span style="color: #001080">a:</span><span style="color: #000000"> {</span><span style="color: #001080">a:</span><span style="color: #000000"> </span><span style="color: #098658">1</span><span style="color: #000000">}}, {</span><span style="color: #001080">a:</span><span style="color: #000000"> {</span><span style="color: #001080">b:</span><span style="color: #000000"> </span><span style="color: #098658">2</span><span style="color: #000000">}});</span>
+
+<span style="color: #008000">// {a: {b: 2}}</span>
+<span style="color: #267F99">Object</span><span style="color: #000000">.</span><span style="color: #795E26">mixin</span><span style="color: #000000">({</span><span style="color: #001080">deep:</span><span style="color: #000000"> </span><span style="color: #0000FF">true</span><span style="color: #000000">, </span><span style="color: #795E26">extendFilter</span><span style="color: #001080">:</span><span style="color: #000000"> (</span><span style="color: #001080">el</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> !</span><span style="color: #001080">el</span><span style="color: #000000">.</span><span style="color: #001080">b</span><span style="color: #000000">}, {</span><span style="color: #001080">a:</span><span style="color: #000000"> {</span><span style="color: #001080">a:</span><span style="color: #000000"> </span><span style="color: #098658">1</span><span style="color: #000000">}}, {</span><span style="color: #001080">a:</span><span style="color: #000000"> {</span><span style="color: #001080">b:</span><span style="color: #000000"> </span><span style="color: #098658">2</span><span style="color: #000000">}});</span>
+</code></pre>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>el: <span class="tsd-signature-type">unknown</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>element value</p>
+									</div>
+								</li>
+								<li>
+									<h5>key: <span class="tsd-signature-type">K</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>element key</p>
+									</div>
+								</li>
+								<li>
+									<h5>data: <span class="tsd-signature-type">V</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>element container</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">unknown</span></h4>
+						</li>
+					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="filter" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> filter</h3>
-					<div class="tsd-signature tsd-kind-icon">filter<span class="tsd-signature-symbol">:</span></div>
-					<aside class="tsd-sources">
-					</aside>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">filter<span class="tsd-signature-symbol">(</span>el<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">V</span>, key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">K</span>, data<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L398">index.d.ts:398</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Function to filter values that shouldn&#39;t be copied</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>example</dt>
+									<dd><pre><code class="language-js"><span style="color: #008000">// {a: 1, b: 2}</span>
+<span style="color: #267F99">Object</span><span style="color: #000000">.</span><span style="color: #795E26">mixin</span><span style="color: #000000">({</span><span style="color: #001080">deep:</span><span style="color: #000000"> </span><span style="color: #0000FF">true</span><span style="color: #000000">}, {</span><span style="color: #001080">a:</span><span style="color: #000000"> </span><span style="color: #098658">1</span><span style="color: #000000">}, {</span><span style="color: #001080">b:</span><span style="color: #000000"> </span><span style="color: #098658">2</span><span style="color: #000000">});</span>
+
+<span style="color: #008000">// {a: 1}</span>
+<span style="color: #267F99">Object</span><span style="color: #000000">.</span><span style="color: #795E26">mixin</span><span style="color: #000000">({</span><span style="color: #001080">deep:</span><span style="color: #000000"> </span><span style="color: #0000FF">true</span><span style="color: #000000">, </span><span style="color: #795E26">filter</span><span style="color: #001080">:</span><span style="color: #000000"> (</span><span style="color: #001080">el</span><span style="color: #000000">, </span><span style="color: #001080">key</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">key</span><span style="color: #000000"> !== </span><span style="color: #A31515">&#039;b&#039;</span><span style="color: #000000">}, {</span><span style="color: #001080">a:</span><span style="color: #000000"> </span><span style="color: #098658">1</span><span style="color: #000000">}, {</span><span style="color: #001080">b:</span><span style="color: #000000"> </span><span style="color: #098658">2</span><span style="color: #000000">});</span>
+</code></pre>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>el: <span class="tsd-signature-type">V</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>element value</p>
+									</div>
+								</li>
+								<li>
+									<h5>key: <span class="tsd-signature-type">K</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>element key</p>
+									</div>
+								</li>
+								<li>
+									<h5>data: <span class="tsd-signature-type">D</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>element container</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">unknown</span></h4>
+						</li>
+					</ul>
 				</section>
 			</section>
 		</div>

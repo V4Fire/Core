@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.35.0 (2021-03-04)
+
+#### :rocket: New Feature
+
+* Added a new feature of request retryings `core/request`
+
 ## v3.34.0 (2021-03-03)
 
 #### :boom: Breaking Change
