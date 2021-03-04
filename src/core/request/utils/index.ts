@@ -139,7 +139,13 @@ export function applyQueryForStr(str: string, query?: Dictionary, rgxp: RegExp =
 			val = query[param];
 
 		if (val != null) {
-			delete query[param];
+			Object.defineProperty(query, param, {
+				enumerable: false,
+				configurable: true,
+				writable: true,
+				value: query[param]
+			});
+
 			return (str.startsWith('/') ? '/' : '') + String(val) + String(Object.isNumber(adv) ? '' : adv);
 		}
 

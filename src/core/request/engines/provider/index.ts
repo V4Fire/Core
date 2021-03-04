@@ -38,6 +38,29 @@ export * from 'core/request/engines/provider/const';
 export * from 'core/request/engines/provider/interface';
 
 /**
+ * Restores enumerable option (sets true) for properties of an object
+ */
+function restoreEnumerable<T extends Dictionary | unknown>(obj: T): T {
+	if (!Object.isPlainObject(obj)) {
+		return obj;
+	}
+
+	const
+		keys = Object.keys(obj),
+		names = Object.getOwnPropertyNames(obj);
+
+	if (keys.length === names.length) {
+		return obj;
+	}
+
+	return names.reduce((carry, key) => {
+		carry[key] = obj[key];
+
+		return carry;
+	}, Object.create(obj));
+}
+
+/**
  * Creates a request engine from the specified data provider
  *
  * @param src - provider constructor, an instance, or the global name
@@ -66,6 +89,9 @@ export default function createProviderEngine(
 		const
 			p = <AvailableOptions>Object.select(params, availableParams),
 			provider = getProviderInstance(src, p.meta);
+
+		p.query = restoreEnumerable(p.query);
+		p.body = restoreEnumerable(p.body);
 
 		const defaultRequestMethods = providerMethodProperties.reduceRight((carry, key) => {
 			const

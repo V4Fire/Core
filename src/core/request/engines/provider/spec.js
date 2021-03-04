@@ -84,12 +84,22 @@ class ProviderEngineTestMiddlewareProvider extends Provider {
 	}
 }
 
+@provider
+class ProviderEngineTestPathProvider extends Provider {
+	static request = ProviderEngineTestDataProvider.request({
+		engine: createProviderEngine(ProviderEngineTestDataProvider)
+	});
+
+	baseURL = '/:id';
+}
+
 describe('core/request/engine/provider', () => {
 	const baseProvider = new ProviderEngineTestBaseProvider();
 	const dataProvider = new ProviderEngineTestDataProvider();
 	const jsonProvider = new ProviderEngineTestJSONProvider();
 	const encodersProvider = new ProviderEngineTestDecodersProvider();
 	const middlewareProvider = new ProviderEngineTestMiddlewareProvider();
+	const pathProvider = new ProviderEngineTestPathProvider();
 
 	let
 		api,
@@ -175,6 +185,11 @@ describe('core/request/engine/provider', () => {
 		expect((await req('/json', {method: 'POST'})).data)
 			.toEqual({id: 1, value: 'things'});
 	});
+
+	it('correct path resolving for url with parameters', async () => {
+		expect((await pathProvider.get({id: 1})).response.status)
+			.toEqual(200);
+	});
 });
 
 function createServer() {
@@ -186,6 +201,10 @@ function createServer() {
 	serverApp.get('/data', (req, res) => {
 		res.type('text/xml');
 		res.status(200).send('<foo>Hello world</foo>');
+	});
+
+	serverApp.get('/data/1', (req, res) => {
+		res.sendStatus(200);
 	});
 
 	serverApp.get('/data/json', (req, res) => {

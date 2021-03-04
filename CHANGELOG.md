@@ -11,6 +11,16 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.34.1 (2021-03-04)
+
+#### :bug: Bug Fix
+
+* Fixed incorrect path resolving for providers chain with parameters in a URL `core/request/engines/provider`
+
+#### :house: Internal
+
+* `applyQueryForStr` method now redefine property for `query` with `enumerable: false` option instead of deleting it `core/request`
+
 ## v3.34.0 (2021-03-03)
 
 #### :boom: Breaking Change
