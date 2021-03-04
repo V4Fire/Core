@@ -24,12 +24,15 @@ import { defaultRequestOpts, globalOpts, storage } from 'core/request/const';
 
 import type {
 
-	CreateRequestOptions,
 	Middleware,
-	RequestFunctionResponse,
+	CreateRequestOptions,
+
+	RetryOptions,
 	RequestResolver,
+
 	RequestResponse,
-	RetryParams
+	RequestFunctionResponse,
+	RequestResponseObject
 
 } from 'core/request/interface';
 
@@ -159,12 +162,10 @@ function request<D = unknown>(
 				reject(err ?? new RequestError('abort', errDetails));
 			});
 
-			await new Promise((r) => {
-				setImmediate(r);
-			});
+			await new Promise((r) => setImmediate(r));
+			await checkOnline();
 
 			ctx.parent = parent;
-			ctx.isOnline = (await Then.resolve(isOnline(), parent)).status;
 
 			const
 				tasks = <Array<CanPromise<unknown>>>[];
@@ -174,24 +175,15 @@ function request<D = unknown>(
 			});
 
 			const
-				middlewareResults = await Then.all(tasks, parent);
+				middlewareResults = await Then.all(tasks, parent),
+				keyToEncode = ctx.withoutBody ? 'query' : 'body';
 
-			const applyEncoders = (data) => {
-				let
-					res = Then.resolve(data, parent);
-
-				Object.forEach(ctx.encoders, (fn, i: number) => {
-					res = res.then((obj) => fn(i > 0 ? obj : Object.fastClone(obj)));
-				});
-
-				return res;
-			};
-
-			const keyToEncode = ctx.withoutBody ? 'query' : 'body';
 			// eslint-disable-next-line require-atomic-updates
 			requestParams[keyToEncode] = await applyEncoders(requestParams[keyToEncode]);
 
 			for (let i = 0; i < middlewareResults.length; i++) {
+				// If the middleware returns a function, the function will be executed.
+				// The result of invoking is provided as the result of the whole request.
 				if (!Object.isFunction(middlewareResults[i])) {
 					continue;
 				}
@@ -242,10 +234,10 @@ function request<D = unknown>(
 						}
 
 					} catch (err) {
-						if (err != null && {
-							clearAsync: true,
-							abort: true
-						}[err.type] != null) {
+						const
+							isRequestCanceled = {clearAsync: true, abort: true}[err?.type] === true;
+
+						if (isRequestCanceled) {
 							reject(err);
 							return;
 						}
@@ -254,13 +246,21 @@ function request<D = unknown>(
 
 				localCacheKey = getStorageKey(cacheKey);
 				fromCache = ctx.cache.has(cacheKey);
-				fromLocalStorage = Boolean(
-					!fromCache &&
-					requestParams.offlineCache &&
-					!ctx.isOnline &&
-					storage &&
-					await (await storage).has(localCacheKey)
-				);
+
+				try {
+					fromLocalStorage = Boolean(
+						!fromCache &&
+						requestParams.offlineCache &&
+
+						!ctx.isOnline &&
+
+						storage &&
+						await (await storage).has(localCacheKey)
+					);
+
+				} catch {
+					fromLocalStorage = false;
+				}
 			}
 
 			let
@@ -280,30 +280,7 @@ function request<D = unknown>(
 					.then(ctx.wrapAsResponse.bind(ctx))
 					.then((res) => Object.assign(res, {cache}));
 
-			} else if (!ctx.isOnline && !requestParams.externalRequest) {
-				res = Then.reject(new RequestError('offline', errDetails));
-
 			} else {
-				const success = async (response) => {
-					if (response.ok !== true) {
-						throw new RequestError('invalidStatus', {response, ...errDetails});
-					}
-
-					const
-						data = await response.decode();
-
-					if (requestParams.externalRequest && !ctx.isOnline && data == null) {
-						throw new RequestError('offline', {response, ...errDetails});
-					}
-
-					return {
-						data,
-						response,
-						ctx,
-						dropCache: ctx.dropCache.bind(ctx)
-					};
-				};
-
 				const reqOpts = {
 					...requestParams,
 					url,
@@ -311,62 +288,71 @@ function request<D = unknown>(
 					decoders: ctx.decoders
 				};
 
-				if (opts?.retry != null) {
-					const
-						retry: RetryParams = Object.isNumber(opts.retry) ? {attempts: opts.retry} : opts.retry,
-						attemptLimit = retry.attempts ?? Infinity;
-
-					if (retry.delayBeforeAttempt == null) {
-						retry.delayBeforeAttempt = () => Promise.resolve();
+				const createReq = () => {
+					if (!ctx.isOnline && !requestParams.externalRequest) {
+						return Then.reject(new RequestError('offline', errDetails));
 					}
 
-					const calculateDelay: (attempt: number) => Promise<void> | false = (attempt) => {
-							const
-								delay = retry.delayBeforeAttempt!(attempt);
+					return requestParams.engine(reqOpts);
+				};
 
-							if (Object.isNumber(delay)) {
-								return new Promise((res) => setTimeout(res, delay));
+				if (requestParams.retry != null) {
+					const retryParams: RetryOptions = Object.isNumber(requestParams.retry) ?
+						{attempts: requestParams.retry} :
+						requestParams.retry;
+
+					const
+						attemptLimit = retryParams.attempts ?? Infinity;
+
+					if (retryParams.delayBeforeAttempt == null) {
+						retryParams.delayBeforeAttempt = (i) => i < 5 ? i * 500 : (5).seconds();
+					}
+
+					let
+						attempt = 0;
+
+					const createReqWithRetrying = async () => {
+						const calculateDelay = (attempt: number, err: RequestError<any>) => {
+							const
+								delay = retryParams.delayBeforeAttempt!(attempt, err);
+
+							if (Object.isPromise(delay) || delay === false) {
+								return delay;
 							}
 
-							return delay;
-						},
-						retries = async () => {
-							let
-								response,
-								attempt = 0;
-
-							const retry = async () => {
-								try {
-									response = await success(await requestParams.engine(reqOpts));
-								} catch (err) {
-									if (attemptLimit > attempt++) {
-										const delay = await calculateDelay(attempt);
-
-										if (delay === false) {
-											throw err;
-										}
-
-										await retry();
-									} else {
-										throw err;
-									}
-								}
-							};
-
-							await retry();
-							return response;
+							return new Promise((r) => {
+								setTimeout(r, Object.isNumber(delay) ? delay : (1).second());
+							});
 						};
 
-					res = retries()
-						.then(ctx.saveCache.bind(ctx));
+						try {
+							await checkOnline();
+							return await createReq().then(wrapSuccessResponse);
+
+						} catch (err) {
+							if (attempt++ >= attemptLimit) {
+								throw err;
+							}
+
+							const
+								delay = await calculateDelay(attempt, err);
+
+							if (delay === false) {
+								throw err;
+							}
+
+							return createReqWithRetrying();
+						}
+					};
+
+					res = createReqWithRetrying();
 
 				} else {
-					res = requestParams.engine(reqOpts)
-						.then(success)
-						.then(ctx.saveCache.bind(ctx));
-
+					res = createReq().then(wrapSuccessResponse);
 				}
 			}
+
+			res = res.then(ctx.saveCache.bind(ctx));
 
 			res
 				.then((response) => log(`request:response:${path}`, response.data, {
@@ -380,7 +366,47 @@ function request<D = unknown>(
 					request: requestParams
 				}));
 
-			resolve(ctx.wrapRequest(res));
+			resolve(
+				ctx.wrapRequest(res)
+			);
+
+			function applyEncoders(data: unknown): Promise<any> {
+				let
+					res = Then.resolve(data, parent);
+
+				Object.forEach(ctx.encoders, (fn, i: number) => {
+					res = res.then((obj) => fn(i > 0 ? obj : Object.fastClone(obj)));
+				});
+
+				return res;
+			}
+
+			async function wrapSuccessResponse(response: Response<D>): Promise<RequestResponseObject<D>> {
+				const
+					details = {response, ...errDetails};
+
+				if (!response.ok) {
+					throw new RequestError('invalidStatus', details);
+				}
+
+				const
+					data = await response.decode();
+
+				if (requestParams.externalRequest && !ctx.isOnline && data == null) {
+					throw new RequestError('offline', details);
+				}
+
+				return {
+					data,
+					response,
+					ctx,
+					dropCache: ctx.dropCache.bind(ctx)
+				};
+			}
+
+			async function checkOnline(): Promise<void> {
+				ctx.isOnline = (await Then.resolve(isOnline(), parent)).status;
+			}
 		});
 
 		return parent;

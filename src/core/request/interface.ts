@@ -13,6 +13,7 @@ import type Cache from 'core/cache/interface';
 import type Response from 'core/request/response';
 import type { ResponseType } from 'core/request/response';
 
+import type RequestError from 'core/request/error';
 import type RequestContext from 'core/request/context';
 
 import type { defaultRequestOpts } from 'core/request/const';
@@ -259,7 +260,7 @@ export interface CreateRequestOptions<D = unknown> {
 	/**
 	 * Params for request retries or attempts number
 	 */
-	retry?: RetryParams | number;
+	retry?: RetryOptions | number;
 
 	/**
 	 * Mime type of request data (if not specified, it will be casted dynamically)
@@ -415,18 +416,21 @@ export interface CreateRequestOptions<D = unknown> {
 }
 
 /**
- * Retry request params
+ * Options for retrying of bad requests
+ * @typeparam D - response data type
  */
-export interface RetryParams {
+export interface RetryOptions<D = unknown> {
 	/**
-	 * Number of retryAttempts
+	 * Maximum number of attempts to request
 	 */
 	attempts?: number;
 
 	/**
-	 * Function that return ms delay or Promise before next try
-	 * or return false to stop trying
-	 * @param attempt next attempt number
+	 * Returns a number in milliseconds (or a promise) to wait before the next attempt.
+	 * If the function returns false, it will prevent all further attempts.
+	 *
+	 * @param attempt - current attempt number
+	 * @param error - error object
 	 */
-	delayBeforeAttempt?(attempt?: number): number | Promise<void> | false;
+	delayBeforeAttempt?(attempt: number, error: RequestError<D>): number | Promise<void> | false;
 }
