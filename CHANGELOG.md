@@ -21,11 +21,11 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :bug: Bug Fix
 
-* Fixed incorrect path resolving for providers chain with parameters in a URL `core/request/engines/provider`
+* Fixed incorrect path resolving by a chain of provider engines with parameters within URL `core/request/engines/provider`
 
 #### :house: Internal
 
-* `applyQueryForStr` method now redefine property for `query` with `enumerable: false` option instead of deleting it `core/request`
+* `applyQueryForStr` now redefines a property with the `enumerable: false` descriptor instead of deleting it
 
 ## v3.34.0 (2021-03-03)
 

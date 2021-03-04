@@ -186,7 +186,7 @@ describe('core/request/engine/provider', () => {
 			.toEqual({id: 1, value: 'things'});
 	});
 
-	it('correct path resolving for url with parameters', async () => {
+	it('correct path resolving for URL with parameters', async () => {
 		expect((await pathProvider.get({id: 1})).response.status)
 			.toEqual(200);
 	});

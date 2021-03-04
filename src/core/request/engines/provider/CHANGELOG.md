@@ -9,11 +9,11 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
-## v3.34.1 (2021-03-04)
+## v3.35.0 (2021-03-04)
 
 #### :bug: Bug Fix
 
-* Fixed incorrect path resolving for providers chain with parameters in a URL
+* Fixed incorrect path resolving by a chain of provider engines with parameters within URL
 
 ## v3.33.0 (2021-02-26)
 

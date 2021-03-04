@@ -9,11 +9,11 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
-## v3.34.1 (2021-03-04)
+## v3.35.0 (2021-03-04)
 
 #### :house: Internal
 
-* `applyQueryForStr` method now redefine property for `query` with `enumerable: false` option instead of deleting it
+* `applyQueryForStr` now redefines a property with the `enumerable: false` descriptor instead of deleting it
 
 ## v3.33.0 (2021-02-26)
 
