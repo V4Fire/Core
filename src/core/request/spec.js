@@ -54,7 +54,7 @@ describe('core/request', () => {
 	});
 
 	beforeEach(() => {
-		if(server) {
+		if (server) {
 			server.close();
 		}
 
@@ -489,7 +489,7 @@ describe('core/request', () => {
 				}
 			});
 
-			async function retryDelayTest(delay, delay) {
+			async function retryDelayTest(delay, delayMS) {
 				const startTime = new Date().getTime();
 
 				const req = request('http://localhost:3000/retry', {
@@ -502,10 +502,10 @@ describe('core/request', () => {
 				const
 					body = await (await req).response.json(),
 					firstRequest = body.times.shift(),
-					requestDelays = body.times.reduce((acc, time, i) => acc.concat(time - firstRequest - i * delay), []);
+					requestDelays = body.times.reduce((acc, time, i) => acc.concat(time - firstRequest - i * delayMS), []);
 
-				expect(firstRequest - startTime).toBeLessThan(delay);
-				requestDelays.forEach((time) => expect(time).toBeGreaterThanOrEqual(delay));
+				expect(firstRequest - startTime).toBeLessThan(delayMS);
+				requestDelays.forEach((time) => expect(time).toBeGreaterThanOrEqual(delayMS));
 			}
 		});
 	});
