@@ -7,7 +7,6 @@
  */
 
 import express from 'express';
-
 import { set, get } from 'core/env';
 
 import Provider, { provider } from 'core/data';
@@ -37,9 +36,11 @@ describe('core/request', () => {
 
 	let
 		request,
-		api,
-		logOptions,
 		defaultEngine,
+		logOptions;
+
+	let
+		api,
 		server;
 
 	beforeAll(async () => {
@@ -50,6 +51,12 @@ describe('core/request', () => {
 		set('log', {patterns: []});
 
 		defaultEngine = defaultRequestOpts.engine;
+	});
+
+	beforeEach(() => {
+		if (server) {
+			server.close();
+		}
 
 		server = createServer();
 	});
@@ -62,6 +69,7 @@ describe('core/request', () => {
 		server.close(done);
 	});
 
+	// eslint-disable-next-line max-lines-per-function
 	engines.forEach((engine, name) => {
 		describe(`with the "${name}" engine`, () => {
 			beforeAll(() => {
@@ -420,9 +428,8 @@ describe('core/request', () => {
 				expect(err.details.response).toBeUndefined();
 			});
 
-			it('request with high timeout', async () => {
+			it('request with a high timeout', async () => {
 				const req = await request('http://localhost:3000/delayed', {timeout: 500});
-
 				expect(req.response.ok).toBeTrue();
 			});
 
@@ -430,14 +437,82 @@ describe('core/request', () => {
 				const req = await request('http://localhost:3000/octet/204');
 				expect(req.data).toBe(null);
 			});
+
+			it('retrying of a request', async () => {
+				const req = request('http://localhost:3000/retry', {
+					retry: {
+						attempts: 5,
+						delay: () => 0
+					}
+				});
+
+				const body = await (await req).response.json();
+				expect(body.tryNumber).toBe(4);
+			});
+
+			it('retrying of a request with the specified delay between tries', async () => {
+				await retryDelayTest(() => 200, 200);
+			});
+
+			it('retrying of a request with the specified promisify delay between tries', async () => {
+				await retryDelayTest(() => new Promise((res) => setTimeout(res, 200)), 200);
+			});
+
+			it('retrying with the speeduped response', async () => {
+				const req = await request('http://localhost:3000/retry/speedup', {
+					timeout: 300,
+					retry: 2
+				});
+
+				expect(req.response.ok).toBeTrue();
+
+				const body = await req.response.json();
+				expect(body.tryNumber).toBe(2);
+			});
+
+			it('failing after given attempts', async () => {
+				try {
+					await request('http://localhost:3000/retry/bad', {retry: 3});
+
+				} catch (err) {
+					const
+						body = await err.details.response.json();
+
+					expect(err).toBeInstanceOf(RequestError);
+					expect(err.type).toBe('invalidStatus');
+					expect(err.message).toBe('API error, type: invalidStatus');
+
+					expect(err.details.request.method).toBe('GET');
+					expect(err.details.response.status).toBe(500);
+
+					expect(body.tryNumber).toEqual(3);
+				}
+			});
+
+			async function retryDelayTest(delay, delayMS) {
+				const startTime = new Date().getTime();
+
+				const req = request('http://localhost:3000/retry', {
+					retry: {
+						attempts: 5,
+						delay
+					}
+				});
+
+				const
+					body = await (await req).response.json(),
+					firstRequest = body.times.shift(),
+					requestDelays = body.times.reduce((acc, time, i) => acc.concat(time - firstRequest - i * delayMS), []);
+
+				expect(firstRequest - startTime).toBeLessThan(delayMS);
+				requestDelays.forEach((time) => expect(time).toBeGreaterThanOrEqual(delayMS));
+			}
 		});
 	});
 });
 
 function createServer() {
-	const
-		serverApp = express();
-
+	const serverApp = express();
 	serverApp.use(express.json());
 
 	serverApp.get('/json/1', (req, res) => {
@@ -505,6 +580,46 @@ function createServer() {
 
 	serverApp.get('/octet/204', (req, res) => {
 		res.type('application/octet-stream').status(204).end();
+	});
+
+	const
+		triesBeforeSuccess = 3,
+		requestTimes = [];
+
+	let
+		tryNumber = 0,
+		speed = 600;
+
+	serverApp.get('/retry', (req, res) => {
+		requestTimes.push(new Date().getTime());
+
+		if (tryNumber <= triesBeforeSuccess) {
+			res.sendStatus(500);
+			tryNumber++;
+
+		} else {
+			res.status(200);
+			res.json({
+				tryNumber,
+				times: requestTimes
+			});
+		}
+	});
+
+	serverApp.get('/retry/speedup', (req, res) => {
+		setTimeout(() => {
+			res.status(200);
+			res.json({tryNumber});
+			tryNumber++;
+		}, speed);
+
+		speed -= 200;
+	});
+
+	serverApp.get('/retry/bad', (req, res) => {
+		res.status(500);
+		res.json({tryNumber});
+		tryNumber++;
 	});
 
 	return serverApp.listen(3000);

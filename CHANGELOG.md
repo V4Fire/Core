@@ -19,6 +19,8 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
   * `Object.forEach`
   * `Object.mixin`
 
+* Added a new feature of request retryings `core/request`
+
 #### :bug: Bug Fix
 
 * Fixed incorrect path resolving by a chain of provider engines with parameters within URL `core/request/engines/provider`

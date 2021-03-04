@@ -53,6 +53,7 @@ const request: RequestEngine = (params) => {
 		throwHttpErrors: false,
 		method: p.method,
 		timeout: p.timeout,
+		retry: 0,
 		headers,
 		body
 	};

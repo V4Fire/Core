@@ -11,6 +11,10 @@ Changelog
 
 ## v3.35.0 (2021-03-04)
 
+#### :rocket: New Feature
+
+* Added a new feature of request retryings
+
 #### :house: Internal
 
 * `applyQueryForStr` now redefines a property with the `enumerable: false` descriptor instead of deleting it

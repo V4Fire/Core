@@ -6,11 +6,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-/**
- * [[include:core/promise/memoize/README.md]]
- * @packageDocumentation
- */
-
 import SyncPromise from 'core/prelude/structures/sync-promise';
 import type { PromiseLikeP } from 'core/async';
 

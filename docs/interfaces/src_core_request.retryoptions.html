@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>src/core/promise/memoize/const | V4Fire</title>
+	<title>RetryOptions | V4Fire</title>
 	<meta name="description" content="Documentation for V4Fire">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -227,51 +227,123 @@ pre {
 					<a href="../modules.html">V4Fire</a>
 				</li>
 				<li>
-					<a href="src_core_promise_memoize_const.html">src/core/promise/memoize/const</a>
+					<a href="../modules/src_core_request.html">src/core/request</a>
+				</li>
+				<li>
+					<a href="src_core_request.retryoptions.html">RetryOptions</a>
 				</li>
 			</ul>
-			<h1>Module src/core/promise/memoize/const</h1>
+			<h1>Interface RetryOptions&lt;D&gt;</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Options to retry bad requests</p>
+					</div>
+				</div>
+			</section>
+			<section class="tsd-panel tsd-type-parameters">
+				<h3>Type parameters</h3>
+				<ul class="tsd-type-parameters">
+					<li>
+						<h4>D = <span class="tsd-signature-type">unknown</span></h4>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>response data type</p>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-hierarchy">
+				<h3>Hierarchy</h3>
+				<ul class="tsd-hierarchy">
+					<li>
+						<span class="target">RetryOptions</span>
+					</li>
+				</ul>
+			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Variables</h3>
+							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="src_core_promise_memoize_const.html#longmemoizecache" class="tsd-kind-icon">long<wbr>Memoize<wbr>Cache</a></li>
-								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="src_core_promise_memoize_const.html#weakmemoizecache" class="tsd-kind-icon">weak<wbr>Memoize<wbr>Cache</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="src_core_request.retryoptions.html#attempts" class="tsd-kind-icon">attempts</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Methods</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="src_core_request.retryoptions.html#delay" class="tsd-kind-icon">delay</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Variables</h2>
-				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module">
-					<a name="longmemoizecache" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagConst">Const</span> long<wbr>Memoize<wbr>Cache</h3>
-					<div class="tsd-signature tsd-kind-icon">long<wbr>Memoize<wbr>Cache<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Map</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = ...</span></div>
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="attempts" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> attempts</h3>
+					<div class="tsd-signature tsd-kind-icon">attempts<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/promise/memoize/const.ts#L11">src/core/promise/memoize/const.ts:11</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L426">src/core/request/interface.ts:426</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Maximum number of attempts to request</p>
+						</div>
+					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module">
-					<a name="weakmemoizecache" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagConst">Const</span> weak<wbr>Memoize<wbr>Cache</h3>
-					<div class="tsd-signature tsd-kind-icon">weak<wbr>Memoize<wbr>Cache<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">WeakMap</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = ...</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/promise/memoize/const.ts#L10">src/core/promise/memoize/const.ts:10</a></li>
-						</ul>
-					</aside>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
+					<a name="delay" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> delay</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">delay<span class="tsd-signature-symbol">(</span>attempt<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, error<span class="tsd-signature-symbol">: </span><a href="../classes/src_core_request_error.default.html" class="tsd-signature-type" data-tsd-kind="Class">default</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/interface.ts#L435">src/core/request/interface.ts:435</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns a number in milliseconds (or a promise) to wait before the next attempt.
+									If the function returns false, it will prevent all further attempts.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>attempt: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>current attempt number</p>
+									</div>
+								</li>
+								<li>
+									<h5>error: <a href="../classes/src_core_request_error.default.html" class="tsd-signature-type" data-tsd-kind="Class">default</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">D</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>error object</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
 				</section>
 			</section>
 		</div>
@@ -282,18 +354,27 @@ pre {
 						<a href="../modules.html">Modules</a>
 					</li>
 					<li class="current tsd-kind-module">
-						<a href="src_core_promise_memoize_const.html">src/core/promise/memoize/const</a>
+						<a href="../modules/src_core_request.html">src/core/request</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-variable tsd-parent-kind-module">
-						<a href="src_core_promise_memoize_const.html#longmemoizecache" class="tsd-kind-icon">long<wbr>Memoize<wbr>Cache</a>
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="src_core_request.retryoptions.html" class="tsd-kind-icon">Retry<wbr>Options</a>
+						<ul>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="src_core_request.retryoptions.html#attempts" class="tsd-kind-icon">attempts</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
+								<a href="src_core_request.retryoptions.html#delay" class="tsd-kind-icon">delay</a>
+							</li>
+						</ul>
 					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-module">
-						<a href="src_core_promise_memoize_const.html#weakmemoizecache" class="tsd-kind-icon">weak<wbr>Memoize<wbr>Cache</a>
-					</li>
+				</ul>
+				<ul class="after-current">
 				</ul>
 			</nav>
 		</div>
@@ -314,6 +395,8 @@ pre {
 			<ul class="tsd-legend">
 				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
 				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
