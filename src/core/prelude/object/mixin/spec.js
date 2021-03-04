@@ -353,6 +353,32 @@ describe('core/prelude/object/mixin', () => {
 		expect(Object.mixin(true, {}, {__proto__: {a: 1}})).toEqual({a: 1});
 	});
 
+	it('deep extending with non-enumerable properties', () => {
+		const base = {
+			a: 1,
+			b: {
+				c: 2
+			}
+		};
+
+		Object.defineProperty(base.b, 'd', {value: 3});
+
+		expect(Object.mixin(true, {}, base)).toEqual({
+			a: 1,
+			b: {
+				c: 2
+			}
+		});
+
+		expect(Object.mixin({deep: true, withNonEnumerables: true}, {}, base)).toEqual({
+			a: 1,
+			b: {
+				c: 2,
+				d: 3
+			}
+		});
+	});
+
 	it('deep extending with the concatenation of arrays', () => {
 		const base = {
 			a: [1, 2, 3]

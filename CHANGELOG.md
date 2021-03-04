@@ -15,7 +15,19 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :rocket: New Feature
 
+* Added a new option `withNonEnumerables`:
+  * `Object.forEach`
+  * `Object.mixin`
+
 * Added a new feature of request retryings `core/request`
+
+#### :bug: Bug Fix
+
+* Fixed incorrect path resolving by a chain of provider engines with parameters within URL `core/request/engines/provider`
+
+#### :house: Internal
+
+* `applyQueryForStr` now redefines a property with the `enumerable: false` descriptor instead of deleting it
 
 ## v3.34.0 (2021-03-03)
 

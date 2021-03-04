@@ -257,6 +257,7 @@ pre {
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="index.objectforeachoptions.html#notown" class="tsd-kind-icon">not<wbr>Own</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="index.objectforeachoptions.html#withdescriptor" class="tsd-kind-icon">with<wbr>Descriptor</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="index.objectforeachoptions.html#withnonenumerables" class="tsd-kind-icon">with<wbr>Non<wbr>Enumerables</a></li>
 							</ul>
 						</section>
 					</div>
@@ -270,7 +271,7 @@ pre {
 					<div class="tsd-signature tsd-kind-icon">not<wbr>Own<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">-1</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L472">index.d.ts:472</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L511">index.d.ts:511</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -283,6 +284,9 @@ pre {
 							</ol>
 						</div>
 						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><p><code>false</code></p>
+							</dd>
 							<dt>example</dt>
 							<dd><pre><code class="language-js"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">obj</span><span style="color: #000000"> = {</span><span style="color: #001080">a:</span><span style="color: #000000"> </span><span style="color: #098658">1</span><span style="color: #000000">, </span><span style="color: #001080">__proto__:</span><span style="color: #000000"> {</span><span style="color: #001080">b:</span><span style="color: #000000"> </span><span style="color: #098658">2</span><span style="color: #000000">}};</span>
 
@@ -308,7 +312,7 @@ pre {
 					<div class="tsd-signature tsd-kind-icon">with<wbr>Descriptor<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L447">index.d.ts:447</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L465">index.d.ts:465</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -316,9 +320,45 @@ pre {
 							<p>If true, then the first element of the callback function will be an element descriptor</p>
 						</div>
 						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><p><code>false</code></p>
+							</dd>
 							<dt>example</dt>
 							<dd><pre><code class="language-js"><span style="color: #267F99">Object</span><span style="color: #000000">.</span><span style="color: #795E26">forEach</span><span style="color: #000000">({</span><span style="color: #001080">a:</span><span style="color: #000000"> </span><span style="color: #098658">1</span><span style="color: #000000">}, {</span><span style="color: #001080">withDescriptor:</span><span style="color: #000000"> </span><span style="color: #0000FF">true</span><span style="color: #000000">}, (</span><span style="color: #001080">el</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
 <span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">el</span><span style="color: #000000">); </span><span style="color: #008000">// {configurable: true, enumerable: true, writable: true, value: 1}</span>
+<span style="color: #000000">});</span>
+</code></pre>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="withnonenumerables" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> with<wbr>Non<wbr>Enumerables</h3>
+					<div class="tsd-signature tsd-kind-icon">with<wbr>Non<wbr>Enumerables<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">boolean</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L485">index.d.ts:485</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>If true, the function will iterate all object properties, but not only enumerable.
+							Non enumerable properties from a prototype are ignored.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><p><code>false</code></p>
+							</dd>
+							<dt>example</dt>
+							<dd><pre><code class="language-js"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">obj</span><span style="color: #000000"> = {</span><span style="color: #001080">a:</span><span style="color: #000000"> </span><span style="color: #098658">1</span><span style="color: #000000">};</span>
+
+<span style="color: #267F99">Object</span><span style="color: #000000">.</span><span style="color: #795E26">defineProperty</span><span style="color: #000000">(</span><span style="color: #001080">obj</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;b&#039;</span><span style="color: #000000">, {</span><span style="color: #001080">value:</span><span style="color: #000000"> </span><span style="color: #098658">2</span><span style="color: #000000">});</span>
+
+<span style="color: #008000">// 1</span>
+<span style="color: #008000">// 2</span>
+<span style="color: #267F99">Object</span><span style="color: #000000">.</span><span style="color: #795E26">forEach</span><span style="color: #000000">(</span><span style="color: #001080">obj</span><span style="color: #000000">, {</span><span style="color: #001080">withNonEnumerables:</span><span style="color: #000000"> </span><span style="color: #0000FF">true</span><span style="color: #000000">}, (</span><span style="color: #001080">el</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">el</span><span style="color: #000000">);</span>
 <span style="color: #000000">});</span>
 </code></pre>
 							</dd>
@@ -355,6 +395,9 @@ pre {
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="index.objectforeachoptions.html#withdescriptor" class="tsd-kind-icon">with<wbr>Descriptor</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="index.objectforeachoptions.html#withnonenumerables" class="tsd-kind-icon">with<wbr>Non<wbr>Enumerables</a>
 							</li>
 						</ul>
 					</li>

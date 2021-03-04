@@ -27,7 +27,8 @@ export function merge<T>(...args: unknown[]): T {
 		deep: true,
 		concatArray: true,
 		concatFn: (a: unknown[], b: unknown[]) => a.union(b),
-		extendFilter: (el) => Array.isArray(el) || Object.isDictionary(el)
+		extendFilter: (el) => Array.isArray(el) || Object.isDictionary(el),
+		withNonEnumerables: true
 	}, undefined, ...args);
 }
 
@@ -139,7 +140,13 @@ export function applyQueryForStr(str: string, query?: Dictionary, rgxp: RegExp =
 			val = query[param];
 
 		if (val != null) {
-			delete query[param];
+			Object.defineProperty(query, param, {
+				enumerable: false,
+				configurable: true,
+				writable: true,
+				value: query[param]
+			});
+
 			return (str.startsWith('/') ? '/' : '') + String(val) + String(Object.isNumber(adv) ? '' : adv);
 		}
 

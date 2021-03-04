@@ -82,18 +82,36 @@ extend(Object, 'forEach', (
 	}
 
 	if (Object.isTruly(opts.notOwn)) {
-		for (const key in obj) {
-			if (opts.notOwn === -1 && Object.hasOwnProperty(obj, key)) {
-				continue;
+		if (opts.notOwn === -1) {
+			for (const key in obj) {
+				if (Object.hasOwnProperty(obj, key)) {
+					continue;
+				}
+
+				cb(opts.withDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : obj[key], key, obj);
 			}
 
+			return;
+		}
+
+		if (opts.withNonEnumerables) {
+			Object.forEach(obj, cb, {withNonEnumerables: true, withDescriptor: opts.withDescriptor});
+			Object.forEach(Object.getPrototypeOf(obj), cb, {notOwn: true, withDescriptor: opts.withDescriptor});
+			return;
+		}
+
+		// eslint-disable-next-line guard-for-in
+		for (const key in obj) {
 			cb(opts.withDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : obj[key], key, obj);
 		}
 
 		return;
 	}
 
-	for (let keys = Object.keys(obj!), i = 0; i < keys.length; i++) {
+	const
+		keys = Object[opts.withNonEnumerables ? 'getOwnPropertyNames' : 'keys'](obj!);
+
+	for (let i = 0; i < keys.length; i++) {
 		const key = keys[i];
 		cb(opts.withDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : obj![key], key, obj);
 	}

@@ -325,6 +325,23 @@ interface ObjectMixinOptions<V = unknown, K = unknown, D = unknown> {
 	withProto?: boolean;
 
 	/**
+	 * If true, the function will merge all object properties, but not only enumerable.
+	 * Non enumerable properties from a prototype are ignored.
+	 *
+	 * @default `false`
+	 * @example
+	 * ```js
+	 * const obj = {a: 1};
+	 *
+	 * Object.defineProperty(obj, 'b', {value: 2});
+	 *
+	 * // {a: 1, b: 2}
+	 * Object.mixin({withNonEnumerables: true}, {}, obj);
+	 * ```
+	 */
+	withNonEnumerables?: boolean;
+
+	/**
 	 * If true, then to merge two arrays will be used a concatenation strategy
 	 * (works only with the "deep" mode)
 	 *
@@ -437,6 +454,7 @@ interface ObjectForEachOptions {
 	/**
 	 * If true, then the first element of the callback function will be an element descriptor
 	 *
+	 * @default `false`
 	 * @example
 	 * ```js
 	 * Object.forEach({a: 1}, {withDescriptor: true}, (el) => {
@@ -447,11 +465,32 @@ interface ObjectForEachOptions {
 	withDescriptor?: boolean;
 
 	/**
+	 * If true, the function will iterate all object properties, but not only enumerable.
+	 * Non enumerable properties from a prototype are ignored.
+	 *
+	 * @default `false`
+	 * @example
+	 * ```js
+	 * const obj = {a: 1};
+	 *
+	 * Object.defineProperty(obj, 'b', {value: 2});
+	 *
+	 * // 1
+	 * // 2
+	 * Object.forEach(obj, {withNonEnumerables: true}, (el) => {
+	 *   console.log(el);
+	 * });
+	 * ```
+	 */
+	withNonEnumerables?: boolean;
+
+	/**
 	 * Strategy for not own properties of the iterated object:
 	 *   1. if `false`, then the `hasOwnProperty` test is enabled and all not own properties will be skipped;
 	 *   1. if `true`, then the `hasOwnProperty` test is disabled;
 	 *   1. if `-1`, then the `hasOwnProperty` test is enabled and all own properties will be skipped.
 	 *
+	 * @default `false`
 	 * @example
 	 * ```js
 	 * const obj = {a: 1, __proto__: {b: 2}};
