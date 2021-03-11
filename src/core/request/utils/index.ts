@@ -27,8 +27,7 @@ export function merge<T>(...args: unknown[]): T {
 		deep: true,
 		concatArray: true,
 		concatFn: (a: unknown[], b: unknown[]) => a.union(b),
-		extendFilter: (el) => Array.isArray(el) || Object.isDictionary(el),
-		withNonEnumerables: true
+		extendFilter: (el) => Array.isArray(el) || Object.isDictionary(el)
 	}, undefined, ...args);
 }
 

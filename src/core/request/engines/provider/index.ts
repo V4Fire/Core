@@ -106,7 +106,9 @@ export default function createProviderEngine(
 			}
 
 			const
-				requestMethod = provider[`${providerMethod}Method`] ?? 'post',
+				requestMethod = provider[`${providerMethod}Method`] ?? 'post';
+
+			let
 				body = queryMethods[requestMethod] === true ? p.query : p.body;
 
 			let
@@ -122,6 +124,10 @@ export default function createProviderEngine(
 				}) :
 
 				provider;
+
+			if (Object.isDictionary(body)) {
+				body = Object.mixin({withNonEnumerables: true}, {}, body);
+			}
 
 			const
 				req = providerToRequest[<string>providerMethod](body, p);

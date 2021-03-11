@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.35.1 (2021-03-11)
+
+#### :bug: Bug Fix
+
+* Fixed an issue when external non-enumerable properties become enumerable `core/request`
+
 ## v3.35.0 (2021-03-04)
 
 #### :rocket: New Feature

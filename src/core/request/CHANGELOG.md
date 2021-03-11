@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.35.1 (2021-03-11)
+
+#### :bug: Bug Fix
+
+* Fixed an issue when external non-enumerable properties become enumerable
+
 ## v3.35.0 (2021-03-04)
 
 #### :rocket: New Feature

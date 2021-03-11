@@ -25,7 +25,7 @@ class ProviderEngineTestBaseProvider extends Provider {
 
 @provider
 class ProviderEngineTestDataProvider extends Provider {
-	static request = ProviderEngineTestBaseProvider.request({
+	static request = Provider.request({
 		engine: createProviderEngine(ProviderEngineTestBaseProvider)
 	});
 
@@ -34,7 +34,7 @@ class ProviderEngineTestDataProvider extends Provider {
 
 @provider
 class ProviderEngineTestJSONProvider extends Provider {
-	static request = ProviderEngineTestDataProvider.request({
+	static request = Provider.request({
 		engine: createProviderEngine(ProviderEngineTestDataProvider, {
 			peek: 'get'
 		})
@@ -45,7 +45,7 @@ class ProviderEngineTestJSONProvider extends Provider {
 
 @provider
 class ProviderEngineTestDecodersProvider extends Provider {
-	static request = ProviderEngineTestJSONProvider.request({
+	static request = Provider.request({
 		engine: createProviderEngine(ProviderEngineTestJSONProvider)
 	});
 
@@ -66,7 +66,7 @@ class ProviderEngineTestDecodersProvider extends Provider {
 
 @provider
 class ProviderEngineTestMiddlewareProvider extends Provider {
-	static request = ProviderEngineTestDecodersProvider.request({
+	static request = Provider.request({
 		engine: createProviderEngine(ProviderEngineTestDecodersProvider)
 	});
 
@@ -85,21 +85,27 @@ class ProviderEngineTestMiddlewareProvider extends Provider {
 }
 
 @provider
+class ProviderEngineTestBasePathProvider extends ProviderEngineTestDataProvider {
+	baseURL = '/data/:id';
+}
+
+@provider
 class ProviderEngineTestPathProvider extends Provider {
-	static request = ProviderEngineTestDataProvider.request({
-		engine: createProviderEngine(ProviderEngineTestDataProvider)
+	static request = Provider.request({
+		engine: createProviderEngine(ProviderEngineTestBasePathProvider)
 	});
 
 	baseURL = '/:id';
 }
 
 describe('core/request/engine/provider', () => {
-	const baseProvider = new ProviderEngineTestBaseProvider();
-	const dataProvider = new ProviderEngineTestDataProvider();
-	const jsonProvider = new ProviderEngineTestJSONProvider();
-	const encodersProvider = new ProviderEngineTestDecodersProvider();
-	const middlewareProvider = new ProviderEngineTestMiddlewareProvider();
-	const pathProvider = new ProviderEngineTestPathProvider();
+	const
+		baseProvider = new ProviderEngineTestBaseProvider(),
+		dataProvider = new ProviderEngineTestDataProvider(),
+		jsonProvider = new ProviderEngineTestJSONProvider(),
+		encodersProvider = new ProviderEngineTestDecodersProvider(),
+		middlewareProvider = new ProviderEngineTestMiddlewareProvider(),
+		pathProvider = new ProviderEngineTestPathProvider();
 
 	let
 		api,
@@ -187,8 +193,8 @@ describe('core/request/engine/provider', () => {
 	});
 
 	it('correct path resolving for URL with parameters', async () => {
-		expect((await pathProvider.get({id: 1})).response.status)
-			.toEqual(200);
+		expect((await pathProvider.get({id: 2})).response.status)
+			.toEqual(201);
 	});
 });
 
@@ -205,6 +211,10 @@ function createServer() {
 
 	serverApp.get('/data/1', (req, res) => {
 		res.sendStatus(200);
+	});
+
+	serverApp.get('/data/2/2', (req, res) => {
+		res.sendStatus(201);
 	});
 
 	serverApp.get('/data/json', (req, res) => {
