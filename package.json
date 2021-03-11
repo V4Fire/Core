@@ -5,7 +5,7 @@
   "main": "src/core/index.js",
   "typings": "index.d.ts",
   "license": "MIT",
-  "version": "3.35.0",
+  "version": "3.35.1",
   "author": {
     "name": "kobezzza",
     "email": "kobezzza@gmail.com",
@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "@types/got": "^9.6.11",
-    "@types/jasmine": "^3.6.4",
+    "@types/jasmine": "^3.6.6",
     "dom-storage": "^2.1.0",
     "eventemitter2": "^6.4.4",
     "fs-extra-promise": "^1.0.1",
@@ -80,7 +80,7 @@
     "sugar": "^2.0.6",
     "through2": "^4.0.2",
     "tsconfig": "^7.0.0",
-    "typedoc": "^0.20.28",
+    "typedoc": "^0.20.30",
     "typescript": "4.2.2",
     "uniconf": "^2.1.1",
     "upath": "^2.0.1",
