@@ -497,26 +497,6 @@ interface ObjectForEachOptions {
 	passDescriptor?: boolean;
 
 	/**
-	 * If true, the function will iterate all object properties, but not only enumerable.
-	 * Non enumerable properties from a prototype are ignored.
-	 *
-	 * @default `false`
-	 * @example
-	 * ```js
-	 * const obj = {a: 1};
-	 *
-	 * Object.defineProperty(obj, 'b', {value: 2});
-	 *
-	 * // 1
-	 * // 2
-	 * Object.forEach(obj, {withNonEnumerables: true}, (el) => {
-	 *   console.log(el);
-	 * });
-	 * ```
-	 */
-	withNonEnumerables?: boolean;
-
-	/**
 	 * Strategy to iterate object properties:
 	 *   1. `'own'` - the object iterates only own properties (by default)
 	 *   2. `'notOwn'` - the object iterates only non-own properties too (for-in with the negative `hasOwnProperty` check)
@@ -541,6 +521,26 @@ interface ObjectForEachOptions {
 	 * ```
 	 */
 	propsToIterate: 'own' | 'notOwn' | 'all';
+
+	/**
+	 * If true, the function will iterate all object properties, but not only enumerable.
+	 * Non enumerable properties from a prototype are ignored.
+	 *
+	 * @default `false`
+	 * @example
+	 * ```js
+	 * const obj = {a: 1};
+	 *
+	 * Object.defineProperty(obj, 'b', {value: 2});
+	 *
+	 * // 1
+	 * // 2
+	 * Object.forEach(obj, {withNonEnumerables: true}, (el) => {
+	 *   console.log(el);
+	 * });
+	 * ```
+	 */
+	withNonEnumerables?: boolean;
 
 	/**
 	 * @deprecated
