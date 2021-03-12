@@ -106,6 +106,26 @@ describe('core/prelude/object/mixin', () => {
 		expect(clone1).toEqual({a: 1, b: 2});
 
 		const
+			clone2 = Object.mixin({skipUndefs: false}, undefined, base);
+
+		expect(clone2).not.toBe(base);
+		expect(clone2).toEqual(base);
+	});
+
+	it('extending of an object with undefined fields (legacy)', () => {
+		const base = {
+			a: 1,
+			b: 2,
+			c: undefined
+		};
+
+		const
+			clone1 = Object.mixin(false, undefined, base);
+
+		expect(clone1).not.toBe(base);
+		expect(clone1).toEqual({a: 1, b: 2});
+
+		const
 			clone2 = Object.mixin({withUndef: true}, undefined, base);
 
 		expect(clone2).not.toBe(base);
@@ -113,6 +133,24 @@ describe('core/prelude/object/mixin', () => {
 	});
 
 	it('extending of an object with new properties', () => {
+		const base1 = {
+			a: 1,
+			b: 2
+		};
+
+		const base2 = {
+			a: 2,
+			c: 3
+		};
+
+		expect(Object.mixin({propsToCopy: 'new'}, undefined, base1, base2)).toEqual({
+			a: 1,
+			b: 2,
+			c: 3
+		});
+	});
+
+	it('extending of an object with new properties (legacy)', () => {
 		const base1 = {
 			a: 1,
 			b: 2
@@ -131,6 +169,23 @@ describe('core/prelude/object/mixin', () => {
 	});
 
 	it('extending of an object with not new properties', () => {
+		const base1 = {
+			a: 1,
+			b: 2
+		};
+
+		const base2 = {
+			a: 2,
+			c: 3
+		};
+
+		expect(Object.mixin({propsToCopy: 'exist'}, base1, base2)).toEqual({
+			a: 2,
+			b: 2
+		});
+	});
+
+	it('extending of an object with not new properties (legacy)', () => {
 		const base1 = {
 			a: 1,
 			b: 2
@@ -161,6 +216,29 @@ describe('core/prelude/object/mixin', () => {
 		};
 
 		const
+			clone = Object.mixin({withDescriptors: 'onlyAccessors'}, undefined, base);
+
+		expect(clone).not.toBe(base);
+		expect(clone._a).toBe(1);
+
+		clone.a = 2;
+		expect(clone._a).toBe(2);
+	});
+
+	it('extending of an object with accessors (legacy)', () => {
+		const base = {
+			_a: 1,
+
+			get a() {
+				return this._a;
+			},
+
+			set a(value) {
+				this._a = value;
+			}
+		};
+
+		const
 			clone = Object.mixin({withAccessors: true}, undefined, base);
 
 		expect(clone).not.toBe(base);
@@ -171,6 +249,28 @@ describe('core/prelude/object/mixin', () => {
 	});
 
 	it('extending of an object with descriptors', () => {
+		const
+			base = {};
+
+		Object.defineProperty(base, 'a', {
+			enumerable: true,
+			writable: false,
+			value: 1
+		});
+
+		const
+			clone = Object.mixin({withDescriptors: true}, undefined, base);
+
+		expect(clone).not.toBe(base);
+		expect(Object.getOwnPropertyDescriptor(clone, 'a')).toEqual({
+			enumerable: true,
+			configurable: false,
+			writable: false,
+			value: 1
+		});
+	});
+
+	it('extending of an object with descriptors (legacy)', () => {
 		const
 			base = {};
 
@@ -401,6 +501,23 @@ describe('core/prelude/object/mixin', () => {
 		const
 			concatFn = (a, b) => [...new Set(a.concat(b))];
 
+		Object.mixin({deep: true, concatArrays: concatFn}, base, {
+			a: [2, 3, 4]
+		});
+
+		expect(base).toEqual({
+			a: [1, 2, 3, 4]
+		});
+	});
+
+	it('deep extending with the custom array concatenation (legacy)', () => {
+		const base = {
+			a: [1, 2, 3]
+		};
+
+		const
+			concatFn = (a, b) => [...new Set(a.concat(b))];
+
 		Object.mixin({deep: true, concatArray: true, concatFn}, base, {
 			a: [2, 3, 4]
 		});
@@ -496,7 +613,7 @@ describe('core/prelude/object/mixin', () => {
 	});
 
 	it('functional overloads', () => {
-		expect(Object.mixin({onlyNew: true})({a: 1}, {a: 2, b: 2})).toEqual({a: 1, b: 2});
-		expect(Object.mixin({onlyNew: true}, {a: 1})({a: 2, b: 2})).toEqual({a: 1, b: 2});
+		expect(Object.mixin({propsToCopy: 'new'})({a: 1}, {a: 2, b: 2})).toEqual({a: 1, b: 2});
+		expect(Object.mixin({propsToCopy: 'new'}, {a: 1})({a: 2, b: 2})).toEqual({a: 1, b: 2});
 	});
 });

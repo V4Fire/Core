@@ -122,6 +122,21 @@ describe('core/prelude/object/iterators/forEach', () => {
 			data = {a: 1, b: 2, __proto__: {c: 3}},
 			scan = [];
 
+		Object.forEach(data, {passDescriptor: true}, (...args) => {
+			scan.push(args);
+		});
+
+		expect(scan).toEqual([
+			[{value: 1, enumerable: true, writable: true, configurable: true}, 'a', data],
+			[{value: 2, enumerable: true, writable: true, configurable: true}, 'b', data]
+		]);
+	});
+
+	it('iteration of an object with descriptors (legacy)', () => {
+		const
+			data = {a: 1, b: 2, __proto__: {c: 3}},
+			scan = [];
+
 		Object.forEach(data, {withDescriptor: true}, (...args) => {
 			scan.push(args);
 		});
@@ -133,6 +148,22 @@ describe('core/prelude/object/iterators/forEach', () => {
 	});
 
 	it('iteration of an object with adding of inherited properties', () => {
+		const
+			data = {a: 1, b: 2, __proto__: {c: 3}},
+			scan = [];
+
+		Object.forEach(data, {propsToIterate: 'all'}, (...args) => {
+			scan.push(args);
+		});
+
+		expect(scan).toEqual([
+			[1, 'a', data],
+			[2, 'b', data],
+			[3, 'c', data]
+		]);
+	});
+
+	it('iteration of an object with adding of inherited properties (legacy)', () => {
 		const
 			data = {a: 1, b: 2, __proto__: {c: 3}},
 			scan = [];
@@ -149,6 +180,18 @@ describe('core/prelude/object/iterators/forEach', () => {
 	});
 
 	it('iteration of an object with skipping of own properties', () => {
+		const
+			data = {a: 1, b: 2, __proto__: {c: 3}},
+			scan = [];
+
+		Object.forEach(data, {propsToIterate: 'notOwn'}, (...args) => {
+			scan.push(args);
+		});
+
+		expect(scan).toEqual([[3, 'c', data]]);
+	});
+
+	it('iteration of an object with skipping of own properties (legacy)', () => {
 		const
 			data = {a: 1, b: 2, __proto__: {c: 3}},
 			scan = [];
@@ -179,6 +222,18 @@ describe('core/prelude/object/iterators/forEach', () => {
 	});
 
 	it('iteration of an iterator with object flags', () => {
+		const
+			data = Object.assign([1, 2, 3].values(), {a: 1}),
+			scan = [];
+
+		Object.forEach(data, {propsToIterate: 'own'}, (...args) => {
+			scan.push(args);
+		});
+
+		expect(scan).toEqual([[1, 'a', data]]);
+	});
+
+	t('iteration of an iterator with object flags (legacy)', () => {
 		const
 			data = Object.assign([1, 2, 3].values(), {a: 1}),
 			scan = [];

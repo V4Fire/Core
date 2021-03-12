@@ -9,6 +9,20 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.35.2 (2021-03-12)
+
+#### :boom: Breaking Change
+
+* `object/mixin`:
+  * Marked `onlyNew` as deprecated. Use `propsToCopy` instead.
+  * Marked `withDescriptor` and `withAccessors` as deprecated. Use `withDescriptors` instead.
+  * Marked `withUndef` as deprecated. Use `skipUndefs` instead.
+  * Marked `concatArray` and `concatFn` as deprecated. Use `concatArrays` instead.
+
+* `object/iterators`:
+  * Marked `notOwn` as deprecated. Use `propsToIterate` instead.
+  * Marked `withDescriptor` as deprecated. Use `passDescriptor` instead.
+
 ## v3.34.0 (2021-03-03)
 
 #### :boom: Breaking Change

@@ -19,12 +19,12 @@ extend(Object, 'forEach', (
 	}
 
 	let
-		opts: ObjectForEachOptions,
+		p: ObjectForEachOptions,
 		cb: AnyFunction;
 
 	if (Object.isFunction(cbOrOpts)) {
 		cb = cbOrOpts;
-		opts = Object.isPlainObject(optsOrCb) ? optsOrCb : {};
+		p = Object.isPlainObject(optsOrCb) ? optsOrCb : {};
 
 	} else {
 		if (Object.isFunction(optsOrCb)) {
@@ -34,7 +34,30 @@ extend(Object, 'forEach', (
 			throw new ReferenceError('A callback to iterate is not specified');
 		}
 
-		opts = Object.isPlainObject(cbOrOpts) ? cbOrOpts : {};
+		p = Object.isPlainObject(cbOrOpts) ? cbOrOpts : {};
+	}
+
+	const
+		passDescriptor = p.passDescriptor ?? p.withDescriptor;
+
+	let
+		notOwn;
+
+	switch (p.propsToIterate) {
+		case 'own':
+			notOwn = false;
+			break;
+
+		case 'notOwn':
+			notOwn = -1;
+			break;
+
+		case 'all':
+			notOwn = true;
+			break;
+
+		default:
+			notOwn = p.notOwn;
 	}
 
 	if (Object.isArray(obj)) {
@@ -71,8 +94,8 @@ extend(Object, 'forEach', (
 
 	if (
 		Object.isIterable(obj) &&
-		opts.notOwn == null &&
-		opts.withDescriptor == null
+		notOwn == null &&
+		passDescriptor == null
 	) {
 		for (const el of obj) {
 			cb(el, null, obj);
@@ -81,38 +104,42 @@ extend(Object, 'forEach', (
 		return;
 	}
 
-	if (Object.isTruly(opts.notOwn)) {
-		if (opts.notOwn === -1) {
+	if (Object.isTruly(notOwn)) {
+		if (notOwn === -1) {
 			for (const key in obj) {
 				if (Object.hasOwnProperty(obj, key)) {
 					continue;
 				}
 
-				cb(opts.withDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : obj[key], key, obj);
+				cb(passDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : obj[key], key, obj);
 			}
 
 			return;
 		}
 
-		if (opts.withNonEnumerables) {
-			Object.forEach(obj, cb, {withNonEnumerables: true, withDescriptor: opts.withDescriptor});
-			Object.forEach(Object.getPrototypeOf(obj), cb, {notOwn: true, withDescriptor: opts.withDescriptor});
+		if (p.withNonEnumerables) {
+			Object.forEach(obj, cb, {withNonEnumerables: true, passDescriptor});
+			Object.forEach(Object.getPrototypeOf(obj), cb, {propsToIterate: 'all', passDescriptor});
 			return;
 		}
 
 		// eslint-disable-next-line guard-for-in
 		for (const key in obj) {
-			cb(opts.withDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : obj[key], key, obj);
+			const el = passDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : obj[key];
+			cb(el, key, obj);
 		}
 
 		return;
 	}
 
 	const
-		keys = Object[opts.withNonEnumerables ? 'getOwnPropertyNames' : 'keys'](obj!);
+		keys = Object[p.withNonEnumerables ? 'getOwnPropertyNames' : 'keys'](obj!);
 
 	for (let i = 0; i < keys.length; i++) {
-		const key = keys[i];
-		cb(opts.withDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : obj![key], key, obj);
+		const
+			key = keys[i],
+			el = passDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : obj![key];
+
+		cb(el, key, obj);
 	}
 });

@@ -374,8 +374,8 @@ interface ObjectMixinOptions<V = unknown, K = unknown, D = unknown> {
 	withProto?: boolean;
 
 	/**
-	 * If true, then to merge two arrays will be used a concatenation strategy
-	 * (works only with the "deep" mode)
+	 * If true, then to merge two arrays will be used a concatenation strategy (works only with the "deep" mode).
+	 * Also, the parameter can be passed as a function to concatenate arrays.
 	 *
 	 * @default `false`
 	 * @example
@@ -385,29 +385,27 @@ interface ObjectMixinOptions<V = unknown, K = unknown, D = unknown> {
 	 *
 	 * // {a: [1, 2]}
 	 * Object.mixin({deep: true, concatArrays: true}, {a: [1]}, {a: [2]});
-	 * ```
-	 */
-	concatArrays?: boolean;
-
-	/**
-	 * Function to concatenate arrays
-	 * (works only with the "concatArray" mode)
 	 *
-	 * @param oldValue - old array
-	 * @param newValue - new array
-	 * @param key - target property key
-	 * @default `Array.prototype.concat`
-	 *
-	 * @example
-	 * ```js
 	 * // {a: [1, 1, 2]}
-	 * Object.mixin({deep: true, concatArray: true}, {a: [1]}, {a: [1, 2]});
+	 * Object.mixin({deep: true, concatArrays: true}, {a: [1]}, {a: [1, 2]});
 	 *
 	 * // {a: [1, 2]}
-	 * Object.mixin({deep: true, concatArray: true, concatFn: [].union}, {a: [1]}, {a: [1, 2]});
+	 * Object.mixin({deep: true, concatArrays: (a, b) => a.union(b)}, {a: [1]}, {a: [1, 2]});
 	 * ```
 	 */
-	concatFn?(oldValue: V, newValue: unknown[], key: K): unknown[];
+	concatArrays?: boolean | ((a: unknown[], b: unknown[], key: K) => unknown[]);
+
+	/**
+	 * @deprecated
+	 * @see [[ObjectMixinOptions.concatArrays]]
+	 */
+	concatArray?: boolean;
+
+	/**
+	 * @deprecated
+	 * @see [[ObjectMixinOptions.concatArrays]]
+	 */
+	concatFn?(a: unknown[], b: unknown[], key: K): unknown[];
 
 	/**
 	 * @deprecated
@@ -438,12 +436,6 @@ interface ObjectMixinOptions<V = unknown, K = unknown, D = unknown> {
 	 * @see [[ObjectMixinOptions.withDescriptors]]
 	 */
 	withAccessors?: boolean;
-
-	/**
-	 * @deprecated
-	 * @see [[ObjectMixinOptions.concatArrays]]
-	 */
-	concatArray?: boolean;
 }
 
 interface ObjectGetOptions {
@@ -502,7 +494,6 @@ interface ObjectForEachOptions {
 	 *   2. `'notOwn'` - the object iterates only non-own properties too (for-in with the negative `hasOwnProperty` check)
 	 *   3. `'all'` - the object iterates non-own properties too (for-in without the `hasOwnProperty` check)
 	 *
-	 * @default `'own'`
 	 * @example
 	 * ```js
 	 * const obj = {a: 1, __proto__: {b: 2}};
@@ -520,7 +511,7 @@ interface ObjectForEachOptions {
 	 * });
 	 * ```
 	 */
-	propsToIterate: 'own' | 'notOwn' | 'all';
+	propsToIterate?: 'own' | 'notOwn' | 'all';
 
 	/**
 	 * If true, the function will iterate all object properties, but not only enumerable.
@@ -779,7 +770,7 @@ interface ObjectConstructor {
 	 */
 	forEach<V>(
 		obj: Dictionary<V>,
-		opts: ObjectForEachOptions & {withDescriptor: true},
+		opts: ObjectForEachOptions & {withDescriptors: true},
 		cb: (el: ObjectForEachPropertyDescriptor<V>, key: string, data: Dictionary<V>) => any
 	): void;
 
@@ -792,7 +783,7 @@ interface ObjectConstructor {
 	 */
 	forEach<V>(
 		obj: Dictionary<V>,
-		opts: ObjectForEachOptions & ({notOwn: boolean | -1} | {withDescriptor: false}),
+		opts: ObjectForEachOptions & ({propsToIterate: 'all' | 'notOwn'} | {withDescriptors: false}),
 		cb: (el: V, key: string, data: Dictionary<V>) => any
 	): void;
 

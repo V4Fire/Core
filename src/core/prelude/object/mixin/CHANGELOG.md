@@ -9,6 +9,15 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.35.2 (2021-03-12)
+
+#### :boom: Breaking Change
+
+* Marked `onlyNew` as deprecated. Use `propsToCopy` instead.
+* Marked `withDescriptor` and `withAccessors` as deprecated. Use `withDescriptors` instead.
+* Marked `withUndef` as deprecated. Use `skipUndefs` instead.
+* Marked `concatArray` and `concatFn` as deprecated. Use `concatArrays` instead.
+
 ## v3.35.0 (2021-03-04)
 
 #### :rocket: New Feature

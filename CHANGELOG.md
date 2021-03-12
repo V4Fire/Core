@@ -11,6 +11,20 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.35.2 (2021-03-12)
+
+#### :boom: Breaking Change
+
+* `Object.mixin`:
+  * Marked `onlyNew` as deprecated. Use `propsToCopy` instead.
+  * Marked `withDescriptor` and `withAccessors` as deprecated. Use `withDescriptors` instead.
+  * Marked `withUndef` as deprecated. Use `skipUndefs` instead.
+  * Marked `concatArray` and `concatFn` as deprecated. Use `concatArrays` instead.
+
+* `Object.forEach`:
+  * Marked `notOwn` as deprecated. Use `propsToIterate` instead.
+  * Marked `withDescriptor` as deprecated. Use `passDescriptor` instead.
+
 ## v3.35.1 (2021-03-11)
 
 #### :bug: Bug Fix
