@@ -184,7 +184,7 @@ describe('core/prelude/object/iterators/forEach', () => {
 			data = {a: 1, b: 2, __proto__: {c: 3}},
 			scan = [];
 
-		Object.forEach(data, {propsToIterate: 'notOwn'}, (...args) => {
+		Object.forEach(data, {propsToIterate: 'inherited'}, (...args) => {
 			scan.push(args);
 		});
 

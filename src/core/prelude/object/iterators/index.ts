@@ -48,7 +48,7 @@ extend(Object, 'forEach', (
 			notOwn = false;
 			break;
 
-		case 'notOwn':
+		case 'inherited':
 			notOwn = -1;
 			break;
 

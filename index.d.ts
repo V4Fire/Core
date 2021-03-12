@@ -491,8 +491,10 @@ interface ObjectForEachOptions {
 	/**
 	 * Strategy to iterate object properties:
 	 *   1. `'own'` - the object iterates only own properties (by default)
-	 *   2. `'notOwn'` - the object iterates only non-own properties too (for-in with the negative `hasOwnProperty` check)
-	 *   3. `'all'` - the object iterates non-own properties too (for-in without the `hasOwnProperty` check)
+	 *   2. `'inherited'` - the object iterates only inherited properties
+	 *     (for-in with the negative `hasOwnProperty` check)
+	 *
+	 *   3. `'all'` - the object iterates inherited properties too (for-in without the `hasOwnProperty` check)
 	 *
 	 * @example
 	 * ```js
@@ -506,12 +508,12 @@ interface ObjectForEachOptions {
 	 *   console.log(el); // 1 2
 	 * });
 	 *
-	 * Object.forEach(obj, {propsToIterate: 'notOwn'}, (el) => {
+	 * Object.forEach(obj, {propsToIterate: 'inherited'}, (el) => {
 	 *   console.log(el); // 2
 	 * });
 	 * ```
 	 */
-	propsToIterate?: 'own' | 'notOwn' | 'all';
+	propsToIterate?: 'own' | 'inherited' | 'all';
 
 	/**
 	 * If true, the function will iterate all object properties, but not only enumerable.
