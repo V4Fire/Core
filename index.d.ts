@@ -567,9 +567,6 @@ interface ObjectFromArrayOptions<T = boolean> {
 	/**
 	 * @deprecated
 	 * @see [[ObjectFromArrayOptions.key]]
-	 *
-	 * @param i
-	 * @param el
 	 */
 	keyConverter?(i: number, el: unknown): string | symbol;
 
@@ -584,9 +581,6 @@ interface ObjectFromArrayOptions<T = boolean> {
 	/**
 	 * @deprecated
 	 * @see [[ObjectFromArrayOptions.value]]
-	 *
-	 * @param el
-	 * @param i
 	 */
 	valueConverter?(el: unknown, i: number): T;
 }
