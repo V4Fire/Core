@@ -15,6 +15,7 @@ import { BaseError } from 'core/error';
 import type { Details } from 'core/request/error/interface';
 
 export * from 'core/request/error/interface';
+export * from 'core/request/error/extractor';
 
 /**
  * Class to wrap a request error
