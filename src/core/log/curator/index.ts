@@ -54,12 +54,14 @@ export default function log(context: string | LogMessageOptions, ...details: unk
 		level: logLevel,
 		error: logError,
 
-		get details(): unknown[] {
-			if (logDetails != null) {
-				return logDetails;
-			}
+		additionals: {
+			get details(): unknown[] {
+				if (logDetails != null) {
+					return logDetails;
+				}
 
-			return logDetails = prepareDetails(details);
+				return logDetails = prepareDetails(details);
+			}
 		}
 	};
 

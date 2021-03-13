@@ -12,7 +12,7 @@ import type { LogLevel } from 'core/log/interface';
 export interface LogEvent {
 	readonly context: string;
 	readonly level: LogLevel;
-	readonly details?: unknown[];
+	readonly additionals: Dictionary;
 	readonly error?: Error;
 }
 
