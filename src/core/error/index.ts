@@ -11,6 +11,8 @@
  * @packageDocumentation
  */
 
+export * from 'core/error/interface';
+
 /**
  * Base error class of v4fire
  */
