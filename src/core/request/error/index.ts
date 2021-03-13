@@ -46,6 +46,13 @@ export default class RequestError<D = undefined> extends BaseError {
 
 	/** @override */
 	protected format(): string {
-		return `Api error, type: ${this.type}`;
+		const
+			parts = [
+				this.details.request?.method,
+				this.details.request?.path,
+				this.details.response?.status
+			].filter((p) => p != null);
+
+		return `${this.type}: ${parts.join(' ')}`;
 	}
 }
