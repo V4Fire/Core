@@ -16,8 +16,8 @@ export * from 'core/log/middlewares/interface';
  * Returns a function that creates a middleware of the specified class
  * @param Ctor - constructor or just a class
  */
-export function creatorFor<T extends LogMiddleware>(Ctor: new () => T): () => T {
-	return () => new Ctor();
+export function creatorFor<T extends LogMiddleware, A extends any[]>(Ctor: new (...args: A) => T): (...args: A) => T {
+	return (...args) => new Ctor(...args);
 }
 
 const middlewareFactory = {
