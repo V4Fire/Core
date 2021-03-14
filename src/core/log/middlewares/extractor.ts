@@ -35,6 +35,10 @@ interface ErrorInfo {
 	cause?: ErrorInfo;
 }
 
+/**
+ * Middleware that extracts information of an error from a log event and stores it in `additionals` dictionary
+ * of the event.
+ */
 export class ExtractorMiddleware implements LogMiddleware {
 	extractorsMap: Map<ErrorCtor<Error>, ErrorDetailsExtractor<Error>>;
 
@@ -42,6 +46,7 @@ export class ExtractorMiddleware implements LogMiddleware {
 		this.extractorsMap = new Map(extractors.map((ext) => [ext.target, ext]));
 	}
 
+	/** @inheritDoc */
 	exec(events: CanArray<LogEvent>, next: NextCallback): void {
 		if (Object.isArray(events)) {
 			next(events.map((e) => this.processEvent(e)));
@@ -51,6 +56,10 @@ export class ExtractorMiddleware implements LogMiddleware {
 		}
 	}
 
+	/**
+	 * Extract an error's details of an error from the passed log event and stores it in `additionals.error` property
+	 * @param event - a log event from a pipeline
+	 */
 	protected processEvent(event: LogEvent): LogEvent {
 		if (event.error) {
 			const
@@ -64,6 +73,12 @@ export class ExtractorMiddleware implements LogMiddleware {
 		return event;
 	}
 
+	/**
+	 * Return error's info structure
+	 *
+	 * @param error - an error, which details should be returned
+	 * @param isRoot - if false then adds `name` and `message` of a passed error to it's info
+	 */
 	protected generateErrorInfo(error: Error, isRoot: boolean = true): ErrorInfo {
 		const
 			info: ErrorInfo = {};
