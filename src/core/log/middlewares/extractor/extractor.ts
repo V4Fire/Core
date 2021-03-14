@@ -8,32 +8,9 @@
 
 import type { LogEvent, LogMiddleware, NextCallback } from 'core/log/middlewares/interface';
 import type { ErrorDetailsExtractor, ErrorCtor } from 'core/error';
+import type { ErrorInfo } from 'core/log/middlewares/extractor/interface';
 // tslint:disable-next-line:no-duplicate-imports
 import { BaseError } from 'core/error';
-
-/**
- * Recurrent structure that represents detailed error information
- */
-interface ErrorInfo {
-	/**
-	 * General info about an error.
-	 * Using only for cause errors and not for the root one
-	 */
-	error?: {
-		name: string;
-		message: string;
-	};
-
-	/**
-	 * Error's details that could be extracted from it via error details extractors
-	 */
-	details?: unknown;
-
-	/**
-	 * Information of cause error
-	 */
-	cause?: ErrorInfo;
-}
 
 /**
  * Middleware that extracts information of an error from a log event and stores it in `additionals` dictionary
