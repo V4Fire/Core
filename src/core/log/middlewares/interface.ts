@@ -14,6 +14,9 @@ export interface LogEvent {
 	readonly level: LogLevel;
 	readonly additionals: Dictionary;
 	readonly error?: Error;
+
+	/** @deprecated */
+	readonly details: Dictionary;
 }
 
 export interface NextCallback {

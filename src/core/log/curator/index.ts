@@ -76,7 +76,8 @@ export default function log(context: string | LogMessageOptions, ...details: unk
 		level: logLevel,
 		error: logError,
 
-		additionals
+		additionals,
+		details: additionals
 	};
 
 	for (let i = 0; i < pipelines.length; ++i) {
