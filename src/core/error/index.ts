@@ -30,20 +30,19 @@ export class BaseError extends Error {
 	constructor(message?: string, cause?: Error) {
 		super(message);
 
-		this.name = new.target.name;
-		this.internalMessage = message;
-		this.cause = cause;
+		// All following fields are not enumerable
+		Object.defineProperties(this, {
+			name: {value: new.target.name},
+			internalMessage: {value: message},
+			cause: {value: cause},
+			message: {
+				get(): string {
+					return this.format();
+				},
 
-		Object.defineProperty(this, 'message', {
-			enumerable: false,
-			configurable: true,
-
-			get(): string {
-				return this.format();
-			},
-
-			set(newValue: string): void {
-				this.internalMessage = newValue;
+				set(newValue: string): void {
+					this.internalMessage = newValue;
+				}
 			}
 		});
 
