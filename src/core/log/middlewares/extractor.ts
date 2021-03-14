@@ -11,6 +11,30 @@ import type { ErrorDetailsExtractor, ErrorCtor } from 'core/error';
 // tslint:disable-next-line:no-duplicate-imports
 import { BaseError } from 'core/error';
 
+/**
+ * Recurrent structure that represents detailed error information
+ */
+interface ErrorInfo {
+	/**
+	 * General info about an error.
+	 * Using only for cause errors and not for the root one
+	 */
+	error?: {
+		name: string;
+		message: string;
+	};
+
+	/**
+	 * Error's details that could be extracted from it via error details extractors
+	 */
+	details?: unknown;
+
+	/**
+	 * Information of cause error
+	 */
+	cause?: ErrorInfo;
+}
+
 export class ExtractorMiddleware implements LogMiddleware {
 	extractorsMap: Map<ErrorCtor<Error>, ErrorDetailsExtractor<Error>>;
 
@@ -29,14 +53,22 @@ export class ExtractorMiddleware implements LogMiddleware {
 
 	protected processEvent(event: LogEvent): LogEvent {
 		if (event.error) {
-			this.addErrorInfo(event.error, event.additionals);
+			const
+				error = this.generateErrorInfo(event.error);
+
+			if (Object.size(error) > 0) {
+				event.additionals.error = error;
+			}
 		}
 
 		return event;
 	}
 
-	protected addErrorInfo(error: Error, info: Dictionary, logError: boolean = false): void {
-		if (logError) {
+	protected generateErrorInfo(error: Error, isRoot: boolean = true): ErrorInfo {
+		const
+			info: ErrorInfo = {};
+
+		if (!isRoot) {
 			info.error = {
 				name: error.name,
 				message: error.message
@@ -47,11 +79,13 @@ export class ExtractorMiddleware implements LogMiddleware {
 			ctor = Object.getPrototypeOf(error).constructor;
 
 		if (this.extractorsMap.has(ctor)) {
-			info.errorDetails = this.extractorsMap.get(ctor)?.extract(error);
+			info.details = this.extractorsMap.get(ctor)?.extract(error);
 		}
 
 		if (error instanceof BaseError && error.cause) {
-			this.addErrorInfo(error.cause, (info.errorCause = {}), true);
+			info.cause = this.generateErrorInfo(error.cause, false);
 		}
+
+		return info;
 	}
 }
