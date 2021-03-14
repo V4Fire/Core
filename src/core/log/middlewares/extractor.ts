@@ -95,6 +95,16 @@ export class ExtractorMiddleware implements LogMiddleware {
 
 		if (this.extractorsMap.has(ctor)) {
 			info.details = this.extractorsMap.get(ctor)?.extract(error);
+
+		} else {
+			const details = Object.keys(error).reduce((obj, keyName) => {
+				obj[keyName] = error[keyName];
+				return obj;
+			}, {});
+
+			if (Object.size(details) > 0) {
+				info.details = details;
+			}
 		}
 
 		if (error instanceof BaseError && error.cause) {
