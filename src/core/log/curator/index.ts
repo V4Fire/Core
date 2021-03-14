@@ -48,21 +48,35 @@ export default function log(context: string | LogMessageOptions, ...details: unk
 		details = details.slice(1);
 	}
 
+	const
+		additionals = {};
+
+	if (details.length > 0) {
+		Object.defineProperty(
+			additionals,
+			'details',
+
+			{
+				enumerable: true,
+
+				get(): unknown[] {
+					if (logDetails != null) {
+						return logDetails;
+					}
+
+					return logDetails = prepareDetails(details);
+				}
+			}
+		);
+	}
+
 	const event: LogEvent = {
 		context: logContext,
 
 		level: logLevel,
 		error: logError,
 
-		additionals: {
-			get details(): unknown[] {
-				if (logDetails != null) {
-					return logDetails;
-				}
-
-				return logDetails = prepareDetails(details);
-			}
-		}
+		additionals
 	};
 
 	for (let i = 0; i < pipelines.length; ++i) {
