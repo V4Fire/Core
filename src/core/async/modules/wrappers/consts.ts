@@ -8,7 +8,7 @@
 
 import type { AsyncOptions } from 'core/async/modules/events';
 
-import type { EmitLikeEvents, MethodsToReplace } from 'core/async/modules/wrappers/types';
+import type { EmitLikeEvents, MethodsToReplace } from 'core/async/modules/wrappers/interface';
 
 export const emitLikeEvents: EmitLikeEvents[] = [
 	'emit',

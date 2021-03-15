@@ -13,12 +13,10 @@
 
 import Super, { AsyncOptions } from 'core/async/modules/events';
 
-import type { CreateRequestOptions, RequestQuery, RequestBody } from 'core/request';
-
-import type { Provider } from 'core/data/interface';
-
 import { emitLikeEvents, methodsToReplace, asyncParamsKeys } from 'core/async/modules/wrappers/consts';
 
+import type { CreateRequestOptions, RequestQuery, RequestBody } from 'core/request';
+import type { Provider } from 'core/data/interface';
 import type {
 
 	WrappedProvider,
@@ -29,25 +27,35 @@ import type {
 	EventEmitterWrapper,
 	EventEmitterOverwrited
 
-} from 'core/async/modules/wrappers/types';
+} from 'core/async/modules/wrappers/interface';
 
 export * from 'core/async/modules/events';
 
 export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	/**
-	 * Wraps the specified data provider
+	 * The wrapper takes a link to the "raw" data provider and returns a new object that based
+	 * on the original, but all async methods and properties are wrapped by Async.
+	 * Notice, the wrapped methods can take additional Async parameters, like group or label.
 	 *
 	 * @param provider
 	 * @param [opts] - group for async methods
+	 *
+	 * @example
+	 * ```typescript
+	 * // If group not provided use class name as default group
+	 * const dp = new Async().wrapDataProvider(new Provider(), {group: 'example'});
+	 *
+	 * // Async options `{group: 'example'}`
+	 * dp.method('POST').get('foo');
+	 *
+	 * // Async options `{group: 'example:inner', label: 'label'}`
+	 * dp.method('POST').get('foo', {group: 'inner', label: 'label'});
+	 * ```
 	 */
 	wrapDataProvider<P extends Provider, W extends WrappedProvider>(provider: P, opts?: Pick<AsyncOptions, 'group'>):W {
 		const
 			wrappedProvider: W = Object.create(provider),
 			wrappedProviderGroup = opts?.group ?? provider.providerName;
-
-		function isQueryMethod(name: MethodsToReplace): name is QueryMethodsToReplace {
-			return ['get', 'peek'].includes(name);
-		}
 
 		for (let i = 0; i < methodsToReplace.length; i++) {
 			const methodName = methodsToReplace[i];
@@ -76,13 +84,36 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 		wrappedProvider.emitter = this.wrapEventEmitter(provider.emitter, opts);
 		return wrappedProvider;
+
+		function isQueryMethod(name: MethodsToReplace): name is QueryMethodsToReplace {
+			return ['get', 'peek'].includes(name);
+		}
 	}
 
 	/**
-	 * Wraps the specified event emitter
+	 * The wrapper takes a link to the "raw" event emitter and returns a new object that based
+	 * on the original, but all async methods and properties are wrapped by Async.
+	 * Notice, the wrapped methods can take additional Async parameters, like group or label.
+	 * In addition, the wrapper adds new methods, like "on" or "off", to make the emitter API more standard.
 	 *
 	 * @param emitter
 	 * @param [opts] - group for async methods
+	 *
+	 * @example
+	 * ```typescript
+	 * const wrappedEventEmitter = new Async().wrapEventEmitter(window, {group: 'example'});
+	 *
+	 * // Emit call all emit-like events 'emit' | 'fire' | 'dispatch' | 'dispatchEvent' on original emitter
+	 * wrappedEventEmitter.emit('scroll');
+	 *
+	 * const handler = () => null;
+	 *
+	 * // Async options will be {group: 'example:inner'}
+	 * wrappedEventEmitter.addEventListener('scroll', handler, {group: 'inner'});
+	 *
+	 * // Async options will be {group: 'example'}
+	 * wrappedEventEmitter.on('scroll', handler);
+	 * ```
 	 */
 	wrapEventEmitter<T extends EventEmitterLike>(
 		emitter: T,

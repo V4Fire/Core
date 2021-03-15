@@ -24,69 +24,54 @@ export type BodyMethodsToReplace = 'post' | 'add' | 'upd' | 'del';
 
 export type WrappedProvider = Overwrite<Provider, {
 	/**
-	 * Event emitter to broadcast provider events
+	 * @see [[AsyncEventEmitterLike]]
 	 */
 	emitter: AsyncEventEmitterLike;
 
 	/**
-	 * Requests the provider for data by a query.
-	 * This method is similar for a GET request.
+	 * @see [[Provider.get]]
 	 *
-	 * @param [query] - request query
 	 * @param [opts] - additional request options with async options
 	 */
 	get<D = unknown>
 		(query?: RequestQuery, opts?: CreateRequestOptions<D> & AsyncOptions): Promise<RequestResponseObject<D>>;
 
 	/**
-	 * Checks accessibility of the provider by a query.
-	 * This method is similar for a HEAD request.
+	 * @see [[Provider.peek]]
 	 *
-	 * @param [query] - request query
 	 * @param [opts] - additional request options with async options
 	 */
 	peek<D = unknown>
 		(query?: RequestQuery, opts?: CreateRequestOptions<D> & AsyncOptions): Promise<RequestResponseObject<D>>;
 
 	/**
-	 * Sends custom data to the provider without any logically effect.
-	 * This method is similar for a POST request.
+	 * @see [[Provider.post]]
 	 *
-	 * @param [body] - request body
 	 * @param [opts] - additional request options with async options
 	 */
 	post<D = unknown>
 		(body?: RequestBody, opts?: CreateRequestOptions<D> & AsyncOptions): Promise<RequestResponseObject<D>>;
 
 	/**
-	 * Add new data to the provider.
-	 * This method is similar for a POST request.
+	 * @see [[Provider.add]]
 	 *
-	 * @param [body] - request body
 	 * @param [opts] - additional request options with async options
-	 * @emits `add<T>(data: () => T)`
 	 */
 	add<D = unknown>
 		(body?: RequestBody, opts?: CreateRequestOptions<D> & AsyncOptions): Promise<RequestResponseObject<D>>;
 
 	/**
-	 * Updates data of the provider by a query.
-	 * This method is similar for a PUT request.
+	 * @see [[Provider.add]]
 	 *
-	 * @param [body] - request body
 	 * @param [opts] - additional request options with async options
-	 * @emits `upd<T>(data: () => T)`
 	 */
 	upd<D = unknown>
 		(body?: RequestBody, opts?: CreateRequestOptions<D> & AsyncOptions): Promise<RequestResponseObject<D>>;
 
 	/**
-	 * Deletes data of the provider by a query.
-	 * This method is similar for a DELETE request.
+	 * @see [[Provider.add]]
 	 *
-	 * @param [body] - request body
 	 * @param [opts] - additional request options with async options
-	 * @emits `del<T>(data: () => T)`
 	 */
 	del<D = unknown>
 		(body?: RequestBody, opts?: CreateRequestOptions<D> & AsyncOptions): Promise<RequestResponseObject<D>>;
