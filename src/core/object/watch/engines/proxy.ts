@@ -231,7 +231,7 @@ export function watch<T extends object>(
 					normalizedKey = key;
 				}
 
-				if (propFromProto || !isArray && !Object.hasOwnProperty(target, <string>key)) {
+				if (propFromProto || !isArray && !Object.hasOwnProperty(target, key)) {
 					propFromProto = true;
 				}
 
@@ -291,7 +291,7 @@ export function watch<T extends object>(
 			oldVal = unwrap(oldVal) ?? oldVal;
 
 			if (oldVal !== val && set()) {
-				if (!opts!.withProto && (fromProto || !isArray && !Object.hasOwnProperty(target, <string>key))) {
+				if (!opts!.withProto && (fromProto || !isArray && !Object.hasOwnProperty(target, key))) {
 					return true;
 				}
 
