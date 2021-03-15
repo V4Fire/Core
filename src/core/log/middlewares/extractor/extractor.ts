@@ -11,6 +11,7 @@ import type { ErrorDetailsExtractor, ErrorCtor } from 'core/error';
 import type { ErrorInfo } from 'core/log/middlewares/extractor/interface';
 // tslint:disable-next-line:no-duplicate-imports
 import { BaseError } from 'core/error';
+import { DEPTH_LIMIT } from 'core/log/middlewares/extractor/const';
 
 /**
  * Middleware that extracts information of an error from a log event and stores it in `additionals` dictionary
@@ -55,8 +56,9 @@ export class ExtractorMiddleware implements LogMiddleware {
 	 *
 	 * @param error - an error, which details should be returned
 	 * @param isRoot - if false then adds `name` and `message` of a passed error to it's info
+	 * @param depthLimit - maximum amount of levels in error's hierarchy
 	 */
-	protected generateErrorInfo(error: Error, isRoot: boolean = true): ErrorInfo {
+	protected generateErrorInfo(error: Error, isRoot: boolean = true, depthLimit: number = DEPTH_LIMIT): ErrorInfo {
 		const
 			info: ErrorInfo = {};
 
@@ -85,7 +87,7 @@ export class ExtractorMiddleware implements LogMiddleware {
 		}
 
 		if (error instanceof BaseError && error.cause) {
-			info.cause = this.generateErrorInfo(error.cause, false);
+			info.cause = depthLimit > 0 ? this.generateErrorInfo(error.cause, false, depthLimit - 1) : undefined;
 		}
 
 		return info;
