@@ -29,7 +29,7 @@ export default class RequestError<D = undefined> extends BaseError {
 	/**
 	 * Error details
 	 */
-	readonly details: Details<D> = {};
+	readonly details: Details<D>;
 
 	/**
 	 * @param type - error type
@@ -39,10 +39,7 @@ export default class RequestError<D = undefined> extends BaseError {
 		super();
 
 		this.type = type;
-
-		if (details) {
-			this.details = details;
-		}
+		this.details = details ?? {};
 	}
 
 	/** @override */
