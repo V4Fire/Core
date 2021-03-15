@@ -10,14 +10,24 @@ import type { ErrorDetailsExtractor, ErrorCtor } from 'core/error';
 import type { RequestErrorDetailsExtractorSettings } from 'core/request/error/interface';
 import RequestError from 'core/request/error';
 
+/**
+ * Internal filtering settings
+ */
 interface SettingsPreprocessedFiltering {
 	include: Set<string>;
 	exclude: Set<string>;
 }
 
+/**
+ * Extractor that gets details from `RequestError`
+ */
 export class RequestErrorDetailsExtractor implements ErrorDetailsExtractor<RequestError> {
+	/** @inheritDoc */
 	target: ErrorCtor<RequestError> = RequestError;
 
+	/**
+	 * Settings that define which header makes its way to the result
+	 */
 	protected headerSettings: SettingsPreprocessedFiltering;
 
 	constructor(settings?: RequestErrorDetailsExtractorSettings) {
@@ -27,6 +37,7 @@ export class RequestErrorDetailsExtractor implements ErrorDetailsExtractor<Reque
 		};
 	}
 
+	/** @inheritDoc */
 	extract(error: RequestError): unknown {
 		return {
 			type: error.type,
@@ -47,6 +58,10 @@ export class RequestErrorDetailsExtractor implements ErrorDetailsExtractor<Reque
 		};
 	}
 
+	/**
+	 * Filter headers according to settings {@see headerSettings}
+	 * @param headers - headers that need to be filtered
+	 */
 	protected prepareHeaders(headers: CanUndef<Dictionary<CanArray<string>>>): CanUndef<Dictionary<CanArray<string>>> {
 		let
 			filteredHeaders = headers;
