@@ -61,7 +61,7 @@ console.log(error.message); // Invalid field: FullName
 ### Causing error
 
 It's possible to pass an error as the second argument to `BaseError` constructor. In this case it's considered
-as the error that caused the new one. After this caused error can be accessed via readonly `cause` field.
+as the error that caused the new one. After this, caused error can be accessed via readonly `cause` field.
 
 ```ts
 class ExternalLibError extends BaseError {
