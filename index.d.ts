@@ -3794,3 +3794,26 @@ interface Function {
 							Promise<T6> : T6
 		>;
 }
+
+/**
+ * Used to overwrite the interface/type properties.
+ *
+ * if the property does not exist, then use `extends`.
+ *
+ * @template T original type
+ * @template U type with overrided properties
+ *
+ * @example
+ *  type A = {
+ *      x: number;
+ *      y: number;
+ *  }
+ *
+ *  type B = Overwrite<A, { y: string; }>
+ *                               |
+ *  Then type B will be          |
+ *              { x:number; y: string; }
+ */
+type Overwrite<T, U> = Pick<T, Exclude<keyof T, keyof U>> & U;
+
+type Primitive = string | number | boolean | undefined | null;
