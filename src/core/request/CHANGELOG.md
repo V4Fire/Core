@@ -9,6 +9,18 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.??.?? (2021-03-16)
+
+#### :rocket: New Feature
+
+* Now `RequestError` extends `BaseError` class
+* Changed `RequestError`'s message format
+* Added `RequestErrorDetailsExtractor` that gets `RequestError`'s details
+
+#### :memo: Documentation
+
+* Updated `core/request/error` documentation
+
 ## v3.35.1 (2021-03-11)
 
 #### :bug: Bug Fix
