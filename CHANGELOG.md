@@ -11,6 +11,25 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.??.?? (2021-03-16)
+
+#### :boom: Breaking Change
+
+* Now `details` property in `LogEvent` object is deprecated. `additionals` property should be using instead `core/log/middlewares`
+
+#### :rocket: New Feature
+
+* Added `BaseError` class `core/error`
+* Now `RequestError` extends `BaseError` class `core/request/error`
+* Changed `RequestError`'s message format `core/request/error`
+* Added `RequestErrorDetailsExtractor` that gets `RequestError`'s details `core/request/error`
+* Added ability to set up middlewares via config `core/log/middlewares`
+* Added new middleware `ExtractorMiddleware` `core/log/middlewares/extractor`
+
+#### :memo: Documentation
+
+* Updated `core/request/error` documentation
+
 ## v3.35.1 (2021-03-11)
 
 #### :bug: Bug Fix
