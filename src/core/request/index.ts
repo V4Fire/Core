@@ -361,10 +361,7 @@ function request<D = unknown>(
 					request: requestParams
 				}))
 
-				.catch((err) => log.error(`request:${path}`, err, {
-					externalRequest: requestParams.externalRequest,
-					request: requestParams
-				}));
+				.catch((err) => log.error('request', err));
 
 			resolve(
 				ctx.wrapRequest(res)
