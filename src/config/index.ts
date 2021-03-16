@@ -64,9 +64,8 @@ const config = <Config>{
 export function extend<T extends Config>(...objects: Array<CanUndef<Dictionary>>): T {
 	return Object.mixin({
 		deep: true,
-		concatArray: true,
-		concatFn: (a: unknown[], b: unknown[]) => a.union(b),
-		withUndef: true
+		skipUndefs: false,
+		concatArrays: (a: unknown[], b: unknown[]) => a.union(b)
 	}, config, ...objects);
 }
 
