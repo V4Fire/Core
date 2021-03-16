@@ -10,34 +10,6 @@ import { ExtractorMiddleware } from 'core/log/middlewares/extractor';
 import { TestDetailedError, TestBaseError, TestDetailedBaseError, TestExtractor } from 'core/log/middlewares/extractor/testing';
 
 describe('middlewares/extractor', () => {
-	function createLogEvent(error) {
-		const logEvent = {
-			context: 'test',
-			level: error ? 'error' : 'info',
-			additionals: {}
-		};
-
-		if (error) {
-			logEvent.error = error;
-		}
-
-		return logEvent;
-	}
-
-	function copyLogEvent(srcLogEvent, additionals) {
-		const copy = {
-			context: srcLogEvent.context,
-			level: srcLogEvent.level,
-			additionals: additionals ?? srcLogEvent.additionals
-		};
-
-		if (srcLogEvent.error) {
-			copy.error = srcLogEvent.error;
-		}
-
-		return copy;
-	}
-
 	describe('no error extractors', () => {
 		beforeEach(() => {
 			this.middleware = new ExtractorMiddleware();
@@ -47,7 +19,7 @@ describe('middlewares/extractor', () => {
 			this.middleware = undefined;
 		});
 
-		it('no error in a log event', () => {
+		it('no error within a log event', () => {
 			const logEvent = createLogEvent();
 
 			this.middleware.exec(logEvent, (res) => {
@@ -76,7 +48,7 @@ describe('middlewares/extractor', () => {
 			});
 		});
 
-		it('error with cause', () => {
+		it('error with a cause', () => {
 			const
 				causeErrorMessage = 'general error',
 				logEvent = createLogEvent(new TestBaseError('no details', new Error(causeErrorMessage)));
@@ -89,7 +61,7 @@ describe('middlewares/extractor', () => {
 			});
 		});
 
-		it('error with details and cause', () => {
+		it('error with details and a cause', () => {
 			const
 				errorDetails = {msg: 'yep'},
 				causeErrorMessage = 'general error',
@@ -115,16 +87,13 @@ describe('middlewares/extractor', () => {
 				causeMessage = 'cause error',
 				causeCauseMessage = 'cause of the cause';
 
-			const
-				logEvent = createLogEvent(new TestDetailedBaseError(
-					'error details',
-					errorDetails,
-					new TestDetailedBaseError(
-						causeMessage,
-						causeDetails,
-						new Error(causeCauseMessage)
-					)
-				));
+			const logEvent = createLogEvent(
+				new TestDetailedBaseError('error details', errorDetails, new TestDetailedBaseError(
+					causeMessage,
+					causeDetails,
+					new Error(causeCauseMessage)
+				))
+			);
 
 			this.middleware.exec(logEvent, (res) => {
 				expect(res).toEqual(copyLogEvent(
@@ -153,7 +122,7 @@ describe('middlewares/extractor', () => {
 			this.middleware = undefined;
 		});
 
-		it('error matches extractor', () => {
+		it('error matches some extractor', () => {
 			const
 				errorDetails = {msg: 'yep'},
 				logEvent = createLogEvent(new TestDetailedBaseError('details', errorDetails));
@@ -166,7 +135,7 @@ describe('middlewares/extractor', () => {
 			});
 		});
 
-		it('error does not match extractor', () => {
+		it('error does not match any extractor', () => {
 			const
 				errorDetails = {msg: 'yep'},
 				logEvent = createLogEvent(new TestDetailedError('details', errorDetails));
@@ -179,4 +148,32 @@ describe('middlewares/extractor', () => {
 			});
 		});
 	});
+
+	function createLogEvent(error) {
+		const logEvent = {
+			context: 'test',
+			level: error ? 'error' : 'info',
+			additionals: {}
+		};
+
+		if (error) {
+			logEvent.error = error;
+		}
+
+		return logEvent;
+	}
+
+	function copyLogEvent(srcLogEvent, additionals) {
+		const copy = {
+			context: srcLogEvent.context,
+			level: srcLogEvent.level,
+			additionals: additionals ?? srcLogEvent.additionals
+		};
+
+		if (srcLogEvent.error) {
+			copy.error = srcLogEvent.error;
+		}
+
+		return copy;
+	}
 });

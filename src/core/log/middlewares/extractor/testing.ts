@@ -6,9 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type { ErrorDetailsExtractor, ErrorCtor } from 'core/error';
-// tslint:disable-next-line:no-duplicate-imports
-import { BaseError } from 'core/error';
+import { BaseError, ErrorDetailsExtractor, ErrorCtor } from 'core/error';
 
 export class TestDetailedError extends Error {
 	readonly reason: unknown;

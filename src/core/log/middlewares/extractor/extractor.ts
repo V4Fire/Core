@@ -6,16 +6,16 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type { LogEvent, LogMiddleware, NextCallback } from 'core/log/middlewares/interface';
-import type { ErrorDetailsExtractor, ErrorCtor } from 'core/error';
-import type { ErrorInfo } from 'core/log/middlewares/extractor/interface';
-// tslint:disable-next-line:no-duplicate-imports
-import { BaseError } from 'core/error';
+import { BaseError, ErrorDetailsExtractor, ErrorCtor } from 'core/error';
+
 import { DEPTH_LIMIT } from 'core/log/middlewares/extractor/const';
 
+import type { LogEvent, LogMiddleware, NextCallback } from 'core/log/middlewares/interface';
+import type { ErrorInfo } from 'core/log/middlewares/extractor/interface';
+
 /**
- * Middleware that extracts information of an error from a log event and stores it in `additionals` dictionary
- * of the event.
+ * Middleware to extract information from an error log event and store
+ * it within the `additionals` dictionary of the event
  */
 export class ExtractorMiddleware implements LogMiddleware {
 	extractorsMap: Map<ErrorCtor<Error>, ErrorDetailsExtractor<Error>>;
@@ -35,8 +35,8 @@ export class ExtractorMiddleware implements LogMiddleware {
 	}
 
 	/**
-	 * Extract an error's details of an error from the passed log event and stores it in `additionals.error` property
-	 * @param event - a log event from a pipeline
+	 * Extracts error's details from the passed log event and stores it within the `additionals.error` property
+	 * @param event - log event from a pipeline
 	 */
 	protected processEvent(event: LogEvent): LogEvent {
 		if (event.error) {
@@ -52,11 +52,11 @@ export class ExtractorMiddleware implements LogMiddleware {
 	}
 
 	/**
-	 * Return error's info structure
+	 * Returns an error's info structure
 	 *
-	 * @param error - an error, which details should be returned
-	 * @param isRoot - if false then adds `name` and `message` of a passed error to it's info
-	 * @param depthLimit - maximum amount of levels in error's hierarchy
+	 * @param error - error, which details should be returned
+	 * @param isRoot - if false then adds `name` and `message` of the passed error to it's info
+	 * @param depthLimit - maximum depth of nested errors
 	 */
 	protected generateErrorInfo(error: Error, isRoot: boolean = true, depthLimit: number = DEPTH_LIMIT): ErrorInfo {
 		const
