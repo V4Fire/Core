@@ -6,6 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import { deprecate } from 'core/functools';
+
 import pipelines from 'core/log/curator/pipelines';
 
 import type { LogEvent } from 'core/log/middlewares';
@@ -75,7 +77,10 @@ export default function log(context: string | LogMessageOptions, ...details: unk
 		error: logError,
 
 		additionals,
-		details: additionals
+		get details(): typeof additionals {
+			deprecate({name: 'details', type: 'property', renamedTo: 'additionals'});
+			return additionals;
+		}
 	};
 
 	for (let i = 0; i < pipelines.length; ++i) {
