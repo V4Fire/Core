@@ -11,8 +11,8 @@
  * @packageDocumentation
  */
 
-import type { Config } from 'config/interface';
 import { RequestErrorDetailsExtractor } from 'core/request/error';
+import type { Config } from 'config/interface';
 
 export * from 'config/interface';
 
@@ -34,7 +34,11 @@ const config = <Config>{
 	log: {
 		pipelines: [
 			{
-				middlewares: ['configurable', ['extractor', [new RequestErrorDetailsExtractor()]]],
+				middlewares: [
+					'configurable',
+					['extractor', [new RequestErrorDetailsExtractor()]]
+				],
+
 				engine: 'console',
 				engineOptions: {
 					default: {
