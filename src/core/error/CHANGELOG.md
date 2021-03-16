@@ -13,4 +13,4 @@ Changelog
 
 #### :rocket: New Feature
 
-* Added `BaseError` class
+* Added a new `BaseError` class

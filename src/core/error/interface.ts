@@ -18,7 +18,7 @@ export interface ErrorDetailsExtractor<E extends Error> {
 	target: ErrorCtor<E>;
 
 	/**
-	 * Extracts details from a passed error
+	 * Extracts details from the passed error
 	 * @param error - an error, which details should be extracted
 	 */
 	extract(error: E): unknown;

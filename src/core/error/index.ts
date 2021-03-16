@@ -14,7 +14,7 @@
 export * from 'core/error/interface';
 
 /**
- * Base error class of v4fire
+ * Superclass of any error to inherit
  */
 export class BaseError extends Error {
 	/**
@@ -23,7 +23,7 @@ export class BaseError extends Error {
 	readonly cause?: Error;
 
 	/**
-	 * Internal storage for message
+	 * Internal storage for an error message
 	 */
 	protected internalMessage?: string;
 
@@ -46,11 +46,11 @@ export class BaseError extends Error {
 			}
 		});
 
-		// Change prototype of 'this' only if it's corrupted
+		// Change a prototype of 'this' only if it's corrupted
 		if (Object.getPrototypeOf(this) === Error.prototype) {
 			Object.setPrototypeOf(this, new.target.prototype);
 
-			// Left all unnecessary frames from stack trace
+			// Left all unnecessary frames from the stack trace
 			// @see https://v8.dev/docs/stack-trace-api#stack-trace-collection-for-custom-exceptions
 			if ('captureStackTrace' in Error) {
 				Error.captureStackTrace(this, new.target);
@@ -60,7 +60,7 @@ export class BaseError extends Error {
 
 	/**
 	 * Formats internal error's data to produce a message.
-	 * The method calls when accessing message property.
+	 * The method calls when accessing the `message` property.
 	 */
 	protected format(): string {
 		return this.internalMessage ?? '';

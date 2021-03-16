@@ -7,6 +7,6 @@
  */
 
 /**
- * Maximum amount of levels in error's hierarchy
+ * Maximum depth of nested errors
  */
 export const DEPTH_LIMIT = 10;
