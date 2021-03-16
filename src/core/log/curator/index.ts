@@ -12,9 +12,7 @@ import type { LogEvent } from 'core/log/middlewares';
 import type { LogMessageOptions } from 'core/log/interface';
 
 import { DEFAULT_LEVEL } from 'core/log/base';
-
-const
-	DEFAULT_CONTEXT = 'global';
+import { DEFAULT_CONTEXT } from 'core/log/curator/const';
 
 /**
  * Sends data to every logging pipeline

@@ -23,8 +23,14 @@ import engineFactory from 'core/log/engines';
 export function createPipeline(pipelineConfig: LogPipelineConfig): CanUndef<LogPipeline> {
 	//#if runtime has core/log
 
+	const {
+		middlewares,
+		engine,
+		engineOptions,
+		minLevel
+	} = pipelineConfig;
+
 	const
-		{middlewares, engine, engineOptions, minLevel} = pipelineConfig,
 		middlewareInstances: LogMiddleware[] = [];
 
 	if (middlewares) {
