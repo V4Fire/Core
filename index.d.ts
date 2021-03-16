@@ -1683,7 +1683,7 @@ interface ObjectConstructor {
 	 * Returns true if the specified value has a primitive type
 	 * @param value
 	 */
-	isPrimitive(value: any): boolean;
+	isPrimitive(value: any): value is Primitive;
 
 	/**
 	 * Returns true if the specified value is a custom (not native) object or function
@@ -3825,3 +3825,25 @@ interface Function {
 							Promise<T6> : T6
 		>;
 }
+
+/**
+ * Overrides properties of the specified type or interface.
+ * Don't use this helper if you simply extend one type from another, i. e. without overriding properties.
+ *
+ * @template T - original type
+ * @template U - type with the overridden properties
+ *
+ * @example
+ * ```typescript
+ * type A = {
+ *   x: number;
+ *   y: number;
+ * };
+ *
+ * // {x:number; y: string}
+ * type B = Overwrite<A, {y: string}>;
+ * ```
+ */
+type Overwrite<T, U> = Pick<T, Exclude<keyof T, keyof U>> & U;
+
+type Primitive = string | number | boolean | undefined | null;
