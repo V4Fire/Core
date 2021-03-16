@@ -18,7 +18,7 @@ export * from 'core/request/error/interface';
 export * from 'core/request/error/extractor';
 
 /**
- * Class to wrap a request error
+ * Class to wrap any request error
  */
 export default class RequestError<D = undefined> extends BaseError {
 	/**
