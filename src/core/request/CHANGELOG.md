@@ -13,13 +13,16 @@ Changelog
 
 #### :rocket: New Feature
 
-* Now `RequestError` extends `BaseError` class
-* Changed `RequestError`'s message format
-* Added `RequestErrorDetailsExtractor` that gets `RequestError`'s details
+* Now `RequestError` extends the `BaseError` class `core/request/error`
+* Added `RequestErrorDetailsExtractor`  to extract `RequestError`'s details
 
 #### :memo: Documentation
 
 * Updated `core/request/error` documentation
+
+#### :nail_care: Polish
+
+* Improved the `RequestError`'s message format
 
 ## v3.35.1 (2021-03-11)
 

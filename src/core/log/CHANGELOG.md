@@ -13,12 +13,13 @@ Changelog
 
 #### :boom: Breaking Change
 
-* Now `details` property in `LogEvent` object is deprecated. `additionals` property should be using instead
+* Now `details` property within the `LogEvent` object is deprecated.
+  The `additionals` property should be using instead.
 
 #### :rocket: New Feature
 
-* Added ability to set up middlewares via config
-* Added new middleware `ExtractorMiddleware`
+* Added ability to set up middlewares via the config
+* Added a new middleware `ExtractorMiddleware`
 
 ## v3.29.0 (2020-12-22)
 
