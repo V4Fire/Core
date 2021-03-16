@@ -52,7 +52,7 @@ class ValidationError extends BaseError {
     this.fieldName = fieldName;
   }
 
-  format(): string {
+  protected format(): string {
     return `Invalid field: ${this.fieldName}`;
   }
 }
