@@ -30,7 +30,7 @@ wrappedProvider.get({uuid: 1}).then((res) => {
 // So we can use it to clear or suspend requests, etc.
 $a.clearAll({group: 'api.User'})
 
-wrappedProvider.upd({uuid: 1},{
+wrappedProvider.upd({uuid: 1}, {
   // All wrapped methods can take additional Async parameters as the second argument: `group`, `label` and `join`
   group: 'bla',
   label: 'foo',
@@ -40,6 +40,7 @@ wrappedProvider.upd({uuid: 1},{
   headers: {
     'X-Foo': '1'
   }
+
 }).then((res) => {
   console.log(res);
 });
