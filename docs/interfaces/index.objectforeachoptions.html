@@ -256,6 +256,8 @@ pre {
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="index.objectforeachoptions.html#notown" class="tsd-kind-icon">not<wbr>Own</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="index.objectforeachoptions.html#passdescriptor" class="tsd-kind-icon">pass<wbr>Descriptor</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="index.objectforeachoptions.html#propstoiterate" class="tsd-kind-icon">props<wbr>ToIterate</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="index.objectforeachoptions.html#withdescriptor" class="tsd-kind-icon">with<wbr>Descriptor</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="index.objectforeachoptions.html#withnonenumerables" class="tsd-kind-icon">with<wbr>Non<wbr>Enumerables</a></li>
 							</ul>
@@ -271,22 +273,68 @@ pre {
 					<div class="tsd-signature tsd-kind-icon">not<wbr>Own<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">-1</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L511">index.d.ts:511</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L548">index.d.ts:548</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<dl class="tsd-comment-tags">
+							<dt>deprecated</dt>
+							<dd></dd>
+							<dt>see</dt>
+							<dd><p><a href="index.objectforeachoptions.html#propstoiterate">ObjectForEachOptions.propsToIterate</a></p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="passdescriptor" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> pass<wbr>Descriptor</h3>
+					<div class="tsd-signature tsd-kind-icon">pass<wbr>Descriptor<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L489">index.d.ts:489</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Strategy for not own properties of the iterated object:</p>
-							<ol>
-								<li>if <code>false</code>, then the <code>hasOwnProperty</code> test is enabled and all not own properties will be skipped;</li>
-								<li>if <code>true</code>, then the <code>hasOwnProperty</code> test is disabled;</li>
-								<li>if <code>-1</code>, then the <code>hasOwnProperty</code> test is enabled and all own properties will be skipped.</li>
-							</ol>
+							<p>If true, then the callback function takes an element descriptor instead of a value</p>
 						</div>
 						<dl class="tsd-comment-tags">
 							<dt>default</dt>
 							<dd><p><code>false</code></p>
 							</dd>
+							<dt>example</dt>
+							<dd><pre><code class="language-js"><span style="color: #267F99">Object</span><span style="color: #000000">.</span><span style="color: #795E26">forEach</span><span style="color: #000000">({</span><span style="color: #001080">a:</span><span style="color: #000000"> </span><span style="color: #098658">1</span><span style="color: #000000">}, {</span><span style="color: #001080">showDescriptor:</span><span style="color: #000000"> </span><span style="color: #0000FF">true</span><span style="color: #000000">}, (</span><span style="color: #001080">el</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #008000">// {configurable: true, enumerable: true, writable: true, value: 1}</span>
+<span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">el</span><span style="color: #000000">);</span>
+<span style="color: #000000">});</span>
+</code></pre>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="propstoiterate" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> props<wbr>ToIterate</h3>
+					<div class="tsd-signature tsd-kind-icon">props<wbr>ToIterate<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;all&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;own&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;inherited&quot;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L516">index.d.ts:516</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Strategy to iterate object properties:</p>
+							<ol>
+								<li><code>&#39;own&#39;</code> - the object iterates only own properties (by default)</li>
+								<li><code>&#39;inherited&#39;</code> - the object iterates only inherited properties
+								(for-in with the negative <code>hasOwnProperty</code> check)</li>
+							</ol>
+						</div>
+						<ol start="3">
+							<li><code>&#39;all&#39;</code> - the object iterates inherited properties too (for-in without the <code>hasOwnProperty</code> check)</li>
+						</ol>
+						<dl class="tsd-comment-tags">
 							<dt>example</dt>
 							<dd><pre><code class="language-js"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">obj</span><span style="color: #000000"> = {</span><span style="color: #001080">a:</span><span style="color: #000000"> </span><span style="color: #098658">1</span><span style="color: #000000">, </span><span style="color: #001080">__proto__:</span><span style="color: #000000"> {</span><span style="color: #001080">b:</span><span style="color: #000000"> </span><span style="color: #098658">2</span><span style="color: #000000">}};</span>
 
@@ -294,11 +342,11 @@ pre {
 <span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">el</span><span style="color: #000000">); </span><span style="color: #008000">// 1</span>
 <span style="color: #000000">});</span>
 
-<span style="color: #267F99">Object</span><span style="color: #000000">.</span><span style="color: #795E26">forEach</span><span style="color: #000000">(</span><span style="color: #001080">obj</span><span style="color: #000000">, {</span><span style="color: #001080">notOwn:</span><span style="color: #000000"> </span><span style="color: #0000FF">true</span><span style="color: #000000">}, (</span><span style="color: #001080">el</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #267F99">Object</span><span style="color: #000000">.</span><span style="color: #795E26">forEach</span><span style="color: #000000">(</span><span style="color: #001080">obj</span><span style="color: #000000">, {</span><span style="color: #001080">propsToIterate:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;all&#039;</span><span style="color: #000000">}, (</span><span style="color: #001080">el</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
 <span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">el</span><span style="color: #000000">); </span><span style="color: #008000">// 1 2</span>
 <span style="color: #000000">});</span>
 
-<span style="color: #267F99">Object</span><span style="color: #000000">.</span><span style="color: #795E26">forEach</span><span style="color: #000000">(</span><span style="color: #001080">obj</span><span style="color: #000000">, {</span><span style="color: #001080">notOwn:</span><span style="color: #000000"> -</span><span style="color: #098658">1</span><span style="color: #000000">}, (</span><span style="color: #001080">el</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #267F99">Object</span><span style="color: #000000">.</span><span style="color: #795E26">forEach</span><span style="color: #000000">(</span><span style="color: #001080">obj</span><span style="color: #000000">, {</span><span style="color: #001080">propsToIterate:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;inherited&#039;</span><span style="color: #000000">}, (</span><span style="color: #001080">el</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
 <span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">el</span><span style="color: #000000">); </span><span style="color: #008000">// 2</span>
 <span style="color: #000000">});</span>
 </code></pre>
@@ -312,22 +360,15 @@ pre {
 					<div class="tsd-signature tsd-kind-icon">with<wbr>Descriptor<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L465">index.d.ts:465</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L542">index.d.ts:542</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>If true, then the first element of the callback function will be an element descriptor</p>
-						</div>
 						<dl class="tsd-comment-tags">
-							<dt>default</dt>
-							<dd><p><code>false</code></p>
-							</dd>
-							<dt>example</dt>
-							<dd><pre><code class="language-js"><span style="color: #267F99">Object</span><span style="color: #000000">.</span><span style="color: #795E26">forEach</span><span style="color: #000000">({</span><span style="color: #001080">a:</span><span style="color: #000000"> </span><span style="color: #098658">1</span><span style="color: #000000">}, {</span><span style="color: #001080">withDescriptor:</span><span style="color: #000000"> </span><span style="color: #0000FF">true</span><span style="color: #000000">}, (</span><span style="color: #001080">el</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
-<span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">el</span><span style="color: #000000">); </span><span style="color: #008000">// {configurable: true, enumerable: true, writable: true, value: 1}</span>
-<span style="color: #000000">});</span>
-</code></pre>
+							<dt>deprecated</dt>
+							<dd></dd>
+							<dt>see</dt>
+							<dd><p><a href="index.objectforeachoptions.html#passdescriptor">ObjectForEachOptions.passDescriptor</a></p>
 							</dd>
 						</dl>
 					</div>
@@ -338,7 +379,7 @@ pre {
 					<div class="tsd-signature tsd-kind-icon">with<wbr>Non<wbr>Enumerables<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L485">index.d.ts:485</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L536">index.d.ts:536</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -392,6 +433,12 @@ pre {
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="index.objectforeachoptions.html#notown" class="tsd-kind-icon">not<wbr>Own</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="index.objectforeachoptions.html#passdescriptor" class="tsd-kind-icon">pass<wbr>Descriptor</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="index.objectforeachoptions.html#propstoiterate" class="tsd-kind-icon">props<wbr>ToIterate</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="index.objectforeachoptions.html#withdescriptor" class="tsd-kind-icon">with<wbr>Descriptor</a>
