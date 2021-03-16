@@ -11,7 +11,7 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-## v3.35.2 (2021-03-12)
+## v3.36.0 (2021-03-16)
 
 #### :boom: Breaking Change
 
@@ -24,6 +24,10 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 * `Object.forEach`:
   * Marked `notOwn` as deprecated. Use `propsToIterate` instead.
   * Marked `withDescriptor` as deprecated. Use `passDescriptor` instead.
+
+#### :rocket: New Feature
+
+* Added wrappers for data-providers and event-emitters `core/async`
 
 ## v3.35.1 (2021-03-11)
 
