@@ -19,4 +19,4 @@ export const emitLikeEvents: EmitLikeEvents[] = [
 
 export const dataProviderMethodsToReplace: DataProviderMethodsToReplace[] = ['get', 'peek', 'post', 'add', 'upd', 'del'];
 
-export const asyncParamsKeys: Array<keyof AsyncOptions> = ['group', 'label', 'join'];
+export const asyncOptionsKeys: Array<keyof AsyncOptions> = ['group', 'label', 'join'];

@@ -11,10 +11,11 @@
  * @packageDocumentation
  */
 
-import Super, { AsyncOptions } from 'core/async/modules/events';
-
-import type { CreateRequestOptions, RequestQuery, RequestBody } from 'core/request';
 import type { Provider } from 'core/data';
+import type { CreateRequestOptions, RequestQuery, RequestBody } from 'core/request';
+
+import Super, { AsyncOptions } from 'core/async/modules/events';
+import { emitLikeEvents, dataProviderMethodsToReplace, asyncOptionsKeys } from 'core/async/modules/wrappers/consts';
 
 import type {
 
@@ -29,7 +30,6 @@ import type {
 	AsyncOptionsForWrappers
 
 } from 'core/async/modules/wrappers/interface';
-import { emitLikeEvents, dataProviderMethodsToReplace, asyncParamsKeys } from 'core/async/modules/wrappers/consts';
 
 export * from 'core/async/modules/events';
 
@@ -64,7 +64,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * // So we can use it to clear or suspend requests, etc.
 	 * $a.clearAll({group: 'api.User'})
 	 *
-	 * wrappedProvider.upd({uuid: 1},{
+	 * wrappedProvider.upd({uuid: 1}, {
 	 *   // All wrapped methods can take additional Async parameters as the second argument: `group`, `label` and `join`
 	 *   group: 'bla',
 	 *   label: 'foo',
@@ -74,6 +74,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 *   headers: {
 	 *     'X-Foo': '1'
 	 *   }
+	 *
 	 * }).then((res) => {
 	 *   console.log(res);
 	 * });
@@ -104,8 +105,8 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 				opts?: CreateRequestOptions<D> & AsyncOptions
 			) => {
 				const
-					ownParams = Object.reject(opts, asyncParamsKeys),
-					asyncParams = Object.select(opts, asyncParamsKeys),
+					ownParams = Object.reject(opts, asyncOptionsKeys),
+					asyncParams = Object.select(opts, asyncOptionsKeys),
 					group = `${wrappedProviderGroup}${asyncParams.group != null ? `:${asyncParams.group}` : ''}`;
 
 				if (isQueryMethod(methodName)) {
@@ -182,7 +183,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 		wrappedEmitter.on = (event, fn, ...params) => {
 			if (!Object.isFunction(fn)) {
-				throw new TypeError('Wrapped emitters methods `on, addEventListener, addListener` accept only function as second parameter');
+				throw new TypeError('Wrapped emitters methods `on, addEventListener, addListener` accept only a function as the second parameter');
 			}
 
 			return this.on(emitter, event, fn, ...normalizeAdditionalArgs(params));
@@ -230,8 +231,8 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		function normalizeAdditionalArgs(params: unknown[]): unknown[] {
 			if (Object.isPlainObject(params[0])) {
 				const
-					ownParam = Object.reject(params[0], asyncParamsKeys),
-					asyncParam = Object.select(params[0], asyncParamsKeys);
+					ownParam = Object.reject(params[0], asyncOptionsKeys),
+					asyncParam = Object.select(params[0], asyncOptionsKeys);
 
 				return [
 					{

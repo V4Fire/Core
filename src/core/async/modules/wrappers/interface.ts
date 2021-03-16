@@ -19,54 +19,40 @@ export type DataProviderQueryMethodsToReplace = 'get' | 'peek';
 export type DataProviderBodyMethodsToReplace = 'post' | 'add' | 'upd' | 'del';
 
 export type WrappedDataProvider = Overwrite<Provider, {
-	/**
-	 * @see [[AsyncEventEmitterLike]]
-	 */
+	/** @see [[Provider.emitter]] */
 	emitter: AsyncEventEmitterLike;
 
-	/**
-	 * @see [[Provider.get]]
-	 */
+	/** @see [[Provider.get]] */
 	get<D = unknown>(
 		query?: RequestQuery,
 		opts?: CreateRequestOptions<D> & AsyncOptions
 	): Promise<RequestResponseObject<D>>;
 
-	/**
-	 * @see [[Provider.peek]]
-	 */
+	/** @see [[Provider.peek]] */
 	peek<D = unknown>(
 		query?: RequestQuery,
 		opts?: CreateRequestOptions<D> & AsyncOptions
 	): Promise<RequestResponseObject<D>>;
 
-	/**
-	 * @see [[Provider.post]]
-	 */
+	/** @see [[Provider.post]] */
 	post<D = unknown>(
 		body?: RequestBody,
 		opts?: CreateRequestOptions<D> & AsyncOptions
 	): Promise<RequestResponseObject<D>>;
 
-	/**
-	 * @see [[Provider.add]]
-	 */
+	/** @see [[Provider.add]] */
 	add<D = unknown>(
 		body?: RequestBody,
 		opts?: CreateRequestOptions<D> & AsyncOptions
 	): Promise<RequestResponseObject<D>>;
 
-	/**
-	 * @see [[Provider.upd]]
-	 */
+	/** @see [[Provider.upd]] */
 	upd<D = unknown>(
 		body?: RequestBody,
 		opts?: CreateRequestOptions<D> & AsyncOptions
 	): Promise<RequestResponseObject<D>>;
 
-	/**
-	 * @see [[Provider.del]]
-	 */
+	/**  @see [[Provider.del]] */
 	del<D = unknown>(
 		body?: RequestBody,
 		opts?: CreateRequestOptions<D> & AsyncOptions
@@ -123,7 +109,7 @@ export interface EventEmitterWrapper<CTX extends object = Async> extends Readonl
 
 type MapNotPrimitive<T, A> = T extends Primitive ? T : T & A ;
 
-type addEventListenerLikeFunctionMapper<T extends (...args: unknown[]) => unknown> =
+type AddEventListenerLikeFunctionMapper<T extends (...args: unknown[]) => unknown> =
 	(
 		arg0: Parameters<T>[0],
 		arg1: Parameters<T>[1],
@@ -134,12 +120,12 @@ type addEventListenerLikeFunctionMapper<T extends (...args: unknown[]) => unknow
 export type EventEmitterOverwritten<T extends EventEmitterLike> = Overwrite<T, {
 	addEventListener:
 		T['addEventListener'] extends (...args: any[]) => any
-			? addEventListenerLikeFunctionMapper<T['addEventListener']>
+			? AddEventListenerLikeFunctionMapper<T['addEventListener']>
 			: never;
 
 	addListener:
 		T['addListener'] extends (...args: any[]) => any
-			? addEventListenerLikeFunctionMapper<T['addListener']>
+			? AddEventListenerLikeFunctionMapper<T['addListener']>
 			: never;
 }>;
 
