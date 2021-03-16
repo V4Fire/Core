@@ -30,11 +30,8 @@ wrappedProvider.get({uuid: 1}).then((res) => {
 // So we can use it to clear or suspend requests, etc.
 $a.clearAll({group: 'api.User'})
 
-wrappedProvider.upd({uuid: 1}).then((res) => {
-  console.log(res);
-
-// All wrapped methods can take additional Async parameters as the second argument: `group`, `label` and `join`
-}, {
+wrappedProvider.upd({uuid: 1},{
+  // All wrapped methods can take additional Async parameters as the second argument: `group`, `label` and `join`
   group: 'bla',
   label: 'foo',
   join: true,
@@ -43,6 +40,8 @@ wrappedProvider.upd({uuid: 1}).then((res) => {
   headers: {
     'X-Foo': '1'
   }
+}).then((res) => {
+  console.log(res);
 });
 
 // If we are providing a group to the method, it will be joined with the global group by using the `:` character
@@ -107,10 +106,6 @@ const id = wrappedEventEmitter.addEventListener('scroll', handler, {
 
 // The wrapper preserves the original API of emitter methods, so we can call something like this
 wrappedEventEmitter.removeEventListener('scroll', handler);
-
-// But also, the wrapper extends the original API with Async feature, like groups or labels
-wrappedEventEmitter.removeEventListener({label: 'label'});
-wrappedEventEmitter.removeEventListener(id);
 
 // Finally, the wrapper adds a bunch of standard methods to the emitter, like `on`, `once`, and other stuff.
 // We can use their instead of the original methods to make our code more universal.

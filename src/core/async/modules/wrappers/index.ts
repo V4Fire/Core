@@ -13,21 +13,23 @@
 
 import Super, { AsyncOptions } from 'core/async/modules/events';
 
-import { emitLikeEvents, methodsToReplace, asyncParamsKeys } from 'core/async/modules/wrappers/consts';
-
 import type { CreateRequestOptions, RequestQuery, RequestBody } from 'core/request';
-import type { Provider } from 'core/data/interface';
+import type { Provider } from 'core/data';
+
 import type {
 
-	WrappedProvider,
-	MethodsToReplace,
-	QueryMethodsToReplace,
+	WrappedDataProvider,
+	DataProviderMethodsToReplace,
+	DataProviderQueryMethodsToReplace,
 
 	EventEmitterLike,
 	EventEmitterWrapper,
-	EventEmitterOverwrited
+	EventEmitterOverwritten,
+
+	AsyncOptionsForWrappers
 
 } from 'core/async/modules/wrappers/interface';
+import { emitLikeEvents, dataProviderMethodsToReplace, asyncParamsKeys } from 'core/async/modules/wrappers/consts';
 
 export * from 'core/async/modules/events';
 
@@ -38,46 +40,86 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Notice, the wrapped methods can take additional Async parameters, like group or label.
 	 *
 	 * @param provider
-	 * @param [opts] - group for async methods
+	 * @param [opts] - additional options for the wrapper
 	 *
 	 * @example
-	 * ```typescript
-	 * // If group not provided use class name as default group
-	 * const dp = new Async().wrapDataProvider(new Provider(), {group: 'example'});
+	 * ```js
+	 * import Async from 'core/async';
+	 * import Provider, { provider } from 'core/data';
 	 *
-	 * // Async options `{group: 'example'}`
-	 * dp.method('POST').get('foo');
+	 * @provider('api')
+	 * export default class User extends Provider {
+	 *   baseURL = 'user/:id';
+	 * }
 	 *
-	 * // Async options `{group: 'example:inner', label: 'label'}`
-	 * dp.method('POST').get('foo', {group: 'inner', label: 'label'});
+	 * const
+	 *   $a = new Async(),
+	 *   wrappedProvider = $a.wrapDataProvider(new User());
+	 *
+	 * wrappedProvider.get({uuid: 1}).then((res) => {
+	 *   console.log(res);
+	 * });
+	 *
+	 * // By default, all wrapped methods have a group name that is equal to the provider name.
+	 * // So we can use it to clear or suspend requests, etc.
+	 * $a.clearAll({group: 'api.User'})
+	 *
+	 * wrappedProvider.upd({uuid: 1},{
+	 *   // All wrapped methods can take additional Async parameters as the second argument: `group`, `label` and `join`
+	 *   group: 'bla',
+	 *   label: 'foo',
+	 *   join: true,
+	 *
+	 *   // Also, the second argument of the wrapped method can take the original parameters from a provider
+	 *   headers: {
+	 *     'X-Foo': '1'
+	 *   }
+	 * }).then((res) => {
+	 *   console.log(res);
+	 * });
+	 *
+	 * // If we are providing a group to the method, it will be joined with the global group by using the `:` character
+	 * $a.suspendAll({group: 'api.User:bla'});
+	 *
+	 * // Obviously, we can use a group as RegExp
+	 * $a.muteAll({group: /api\.User/});
+	 *
+	 * // We can use any methods or properties from the original data provider
+	 * wrappedProvider.dropCache();
 	 * ```
 	 */
-	wrapDataProvider<P extends Provider, W extends WrappedProvider>(provider: P, opts?: Pick<AsyncOptions, 'group'>):W {
+	wrapDataProvider<
+		P extends Provider,
+		W extends WrappedDataProvider
+	>(provider: P, opts?: AsyncOptionsForWrappers):W {
 		const
 			wrappedProvider: W = Object.create(provider),
 			wrappedProviderGroup = opts?.group ?? provider.providerName;
 
-		for (let i = 0; i < methodsToReplace.length; i++) {
-			const methodName = methodsToReplace[i];
-			const newMethod =
-				<D = unknown>(body?: RequestBody | RequestQuery, opts?: CreateRequestOptions<D> & AsyncOptions) => {
-					const
-						ownParams = Object.reject(opts, asyncParamsKeys),
-						asyncParams = Object.select(opts, asyncParamsKeys),
-						group = `${wrappedProviderGroup}${asyncParams.group != null ? `:${asyncParams.group}` : ''}`;
+		for (let i = 0; i < dataProviderMethodsToReplace.length; i++) {
+			const methodName = dataProviderMethodsToReplace[i];
 
-					if (isQueryMethod(methodName)) {
-						return this.request(provider[methodName](<RequestQuery>body, ownParams), {
-							...asyncParams,
-							group
-						});
-					}
+			const newMethod = <D = unknown>(
+				body?: RequestBody | RequestQuery,
+				opts?: CreateRequestOptions<D> & AsyncOptions
+			) => {
+				const
+					ownParams = Object.reject(opts, asyncParamsKeys),
+					asyncParams = Object.select(opts, asyncParamsKeys),
+					group = `${wrappedProviderGroup}${asyncParams.group != null ? `:${asyncParams.group}` : ''}`;
 
-					return this.request(provider[methodName](<RequestBody>body, ownParams), {
+				if (isQueryMethod(methodName)) {
+					return this.request(provider[methodName](<RequestQuery>body, ownParams), {
 						...asyncParams,
 						group
 					});
-				};
+				}
+
+				return this.request(provider[methodName](<RequestBody>body, ownParams), {
+					...asyncParams,
+					group
+				});
+			};
 
 			wrappedProvider[methodName] = newMethod;
 		}
@@ -85,7 +127,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		wrappedProvider.emitter = this.wrapEventEmitter(provider.emitter, opts);
 		return wrappedProvider;
 
-		function isQueryMethod(name: MethodsToReplace): name is QueryMethodsToReplace {
+		function isQueryMethod(name: DataProviderMethodsToReplace): name is DataProviderQueryMethodsToReplace {
 			return ['get', 'peek'].includes(name);
 		}
 	}
@@ -97,36 +139,95 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * In addition, the wrapper adds new methods, like "on" or "off", to make the emitter API more standard.
 	 *
 	 * @param emitter
-	 * @param [opts] - group for async methods
+	 * @param [opts] - additional options for the wrapper
 	 *
 	 * @example
-	 * ```typescript
-	 * const wrappedEventEmitter = new Async().wrapEventEmitter(window, {group: 'example'});
+	 * ```js
+	 * import Async from 'core/async';
 	 *
-	 * // Emit call all emit-like events 'emit' | 'fire' | 'dispatch' | 'dispatchEvent' on original emitter
-	 * wrappedEventEmitter.emit('scroll');
+	 * const
+	 *   $a = new Async(),
+	 *   wrappedEventEmitter = $a.wrapEventEmitter(window);
 	 *
-	 * const handler = () => null;
+	 * const handler = () => console.log('scroll event');
 	 *
-	 * // Async options will be {group: 'example:inner'}
-	 * wrappedEventEmitter.addEventListener('scroll', handler, {group: 'inner'});
+	 * // We can safely listen to emitter events,
+	 * // cause all emitter methods, like `addListener` or `on` are wrapped by Async.
+	 * const id = wrappedEventEmitter.addEventListener('scroll', handler, {
+	 *   // Notice, the third argument can take Async parameters in addition to the native emitter parameters
+	 *   capture: true,
+	 *   label: 'label'
+	 * });
 	 *
-	 * // Async options will be {group: 'example'}
-	 * wrappedEventEmitter.on('scroll', handler);
+	 * // The wrapper preserves the original API of emitter methods, so we can call something like this
+	 * wrappedEventEmitter.removeEventListener('scroll', handler);
+	 *
+	 * // Finally, the wrapper adds a bunch of standard methods to the emitter, like `on`, `once`, and other stuff.
+	 * // We can use their instead of the original methods to make our code more universal.
+	 * wrappedEventEmitter.once('resize', (e) => {
+	 *   console.log(e);
+	 * }, {group: 'resizers'});
+	 *
+	 * $a.muteAll({group: 'resizers'});
+	 *
+	 * // We can use any methods or properties from the original emitter
+	 * console.log(wrappedEventEmitter.name); // window.name
 	 * ```
 	 */
 	wrapEventEmitter<T extends EventEmitterLike>(
 		emitter: T,
-		opts?: Pick<AsyncOptions, 'group'>
-	): (EventEmitterOverwrited<T> & EventEmitterWrapper) {
+		opts?: AsyncOptionsForWrappers
+	): (EventEmitterOverwritten<T> & EventEmitterWrapper) {
 		const wrappedEmitter = Object.create(emitter);
 
-		/**
-		 * Separates the first parameter on async param and function param
-		 *
-		 * @param params params to normalize
-		 */
-		const paramsNormalizer = (params: unknown[]): unknown[] => {
+		wrappedEmitter.on = (event, fn, ...params) => {
+			if (!Object.isFunction(fn)) {
+				throw new TypeError('Wrapped emitters methods `on, addEventListener, addListener` accept only function as second parameter');
+			}
+
+			return this.on(emitter, event, fn, ...normalizeAdditionalArgs(params));
+		};
+
+		wrappedEmitter.addEventListener = wrappedEmitter.on;
+		wrappedEmitter.addListener = wrappedEmitter.on;
+
+		wrappedEmitter.once =
+			(event, fn, ...params) => this.once(emitter, event, fn, ...normalizeAdditionalArgs(params));
+
+		wrappedEmitter.promisifyOnce =
+			(event, ...params) => this.promisifyOnce(emitter, event, ...normalizeAdditionalArgs(params));
+
+		const wrapOff = (originalMethod) => {
+			const off = (link, ...args) => {
+				if (link == null || typeof link !== 'object' || args.length > 0) {
+					return Object.isFunction(originalMethod) ? originalMethod.call(emitter, link, ...args) : null;
+				}
+
+				return this.off(link);
+			};
+
+			return off;
+		};
+
+		wrappedEmitter.off = wrapOff(emitter.off);
+		wrappedEmitter.removeEventListener = wrapOff(emitter.removeEventListener);
+		wrappedEmitter.removeListener = wrapOff(emitter.removeListener);
+
+		wrappedEmitter.emit = (event, ...args) => {
+			for (let i = 0; i < emitLikeEvents.length; i++) {
+				const
+					key = emitLikeEvents[i],
+					property = emitter[key];
+
+				if (Object.isFunction(property)) {
+					return property.call(emitter, event, ...args);
+				}
+			}
+		};
+
+		return wrappedEmitter;
+
+		function normalizeAdditionalArgs(params: unknown[]): unknown[] {
 			if (Object.isPlainObject(params[0])) {
 				const
 					ownParam = Object.reject(params[0], asyncParamsKeys),
@@ -137,60 +238,13 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 						...asyncParam,
 						group: [opts?.group, asyncParam.group].filter(Boolean).join(':')
 					},
+
 					ownParam,
 					...params.slice(1)
 				];
 			}
 
 			return [opts?.group != null ? {group: opts.group} : {}, ...params];
-		};
-
-		wrappedEmitter.on = (event, fn, ...params) => {
-			if (!Object.isFunction(fn)) {
-				throw new TypeError('Wrapped emitters methods `on, addEventListener, addListener` accept only function as second parameter');
-			}
-
-			return this.on(emitter, event, fn, ...paramsNormalizer(params));
-		};
-
-		wrappedEmitter.addEventListener = wrappedEmitter.on;
-		wrappedEmitter.addListener = wrappedEmitter.on;
-
-		wrappedEmitter.once =
-			(event, fn, ...params) => this.once(emitter, event, fn, ...paramsNormalizer(params));
-
-		wrappedEmitter.promisifyOnce =
-			(event, ...params) => this.promisifyOnce(emitter, event, ...paramsNormalizer(params));
-
-		/**
-		 * Wrapper return control to original function if params unvalid for off method
-		 *
-		 * @param originalMethod original function
-		 */
-		const offWrapper = (originalMethod) => (link, ...args) => {
-				if (link == null || typeof link !== 'object' || args.length > 0) {
-					return Object.isFunction(originalMethod) ? originalMethod.call(emitter, link, ...args) : null;
-				}
-
-				return this.off(link);
-			};
-
-		wrappedEmitter.off = offWrapper(emitter.off);
-		wrappedEmitter.removeEventListener = offWrapper(emitter.removeEventListener);
-		wrappedEmitter.removeListener = offWrapper(emitter.removeListener);
-
-		wrappedEmitter.emit = (event, ...args) => {
-			for (let i = 0; i < emitLikeEvents.length; i++) {
-				const
-					key = emitLikeEvents[i];
-
-				const property = emitter[key];
-				if (Object.isFunction(property)) {
-					return property.call(emitter, event, ...args);
-				}
-			}
-		};
-
-		return wrappedEmitter;
+		}
 	}
 }

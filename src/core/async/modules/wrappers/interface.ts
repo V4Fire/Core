@@ -1,14 +1,10 @@
-import type { AsyncOptions } from 'core/async/modules/events';
-
+import type { Provider } from 'core/data';
 import type { CreateRequestOptions, RequestQuery, RequestResponseObject, RequestBody } from 'core/request';
-
-import type { Provider } from 'core/data/interface';
 
 import type Async from 'core/async';
 import type {
 
-	AsyncOnOptions,
-	AsyncOnceOptions,
+	AsyncOptions,
 	ClearOptionsId,
 
 	ProxyCb,
@@ -16,13 +12,13 @@ import type {
 
 } from 'core/async';
 
-export type MethodsToReplace = QueryMethodsToReplace | BodyMethodsToReplace;
+export type DataProviderMethodsToReplace = DataProviderQueryMethodsToReplace | DataProviderBodyMethodsToReplace;
 
-export type QueryMethodsToReplace = 'get' | 'peek';
+export type DataProviderQueryMethodsToReplace = 'get' | 'peek';
 
-export type BodyMethodsToReplace = 'post' | 'add' | 'upd' | 'del';
+export type DataProviderBodyMethodsToReplace = 'post' | 'add' | 'upd' | 'del';
 
-export type WrappedProvider = Overwrite<Provider, {
+export type WrappedDataProvider = Overwrite<Provider, {
 	/**
 	 * @see [[AsyncEventEmitterLike]]
 	 */
@@ -30,51 +26,51 @@ export type WrappedProvider = Overwrite<Provider, {
 
 	/**
 	 * @see [[Provider.get]]
-	 *
-	 * @param [opts] - additional request options with async options
 	 */
-	get<D = unknown>
-		(query?: RequestQuery, opts?: CreateRequestOptions<D> & AsyncOptions): Promise<RequestResponseObject<D>>;
+	get<D = unknown>(
+		query?: RequestQuery,
+		opts?: CreateRequestOptions<D> & AsyncOptions
+	): Promise<RequestResponseObject<D>>;
 
 	/**
 	 * @see [[Provider.peek]]
-	 *
-	 * @param [opts] - additional request options with async options
 	 */
-	peek<D = unknown>
-		(query?: RequestQuery, opts?: CreateRequestOptions<D> & AsyncOptions): Promise<RequestResponseObject<D>>;
+	peek<D = unknown>(
+		query?: RequestQuery,
+		opts?: CreateRequestOptions<D> & AsyncOptions
+	): Promise<RequestResponseObject<D>>;
 
 	/**
 	 * @see [[Provider.post]]
-	 *
-	 * @param [opts] - additional request options with async options
 	 */
-	post<D = unknown>
-		(body?: RequestBody, opts?: CreateRequestOptions<D> & AsyncOptions): Promise<RequestResponseObject<D>>;
+	post<D = unknown>(
+		body?: RequestBody,
+		opts?: CreateRequestOptions<D> & AsyncOptions
+	): Promise<RequestResponseObject<D>>;
 
 	/**
 	 * @see [[Provider.add]]
-	 *
-	 * @param [opts] - additional request options with async options
 	 */
-	add<D = unknown>
-		(body?: RequestBody, opts?: CreateRequestOptions<D> & AsyncOptions): Promise<RequestResponseObject<D>>;
+	add<D = unknown>(
+		body?: RequestBody,
+		opts?: CreateRequestOptions<D> & AsyncOptions
+	): Promise<RequestResponseObject<D>>;
 
 	/**
-	 * @see [[Provider.add]]
-	 *
-	 * @param [opts] - additional request options with async options
+	 * @see [[Provider.upd]]
 	 */
-	upd<D = unknown>
-		(body?: RequestBody, opts?: CreateRequestOptions<D> & AsyncOptions): Promise<RequestResponseObject<D>>;
+	upd<D = unknown>(
+		body?: RequestBody,
+		opts?: CreateRequestOptions<D> & AsyncOptions
+	): Promise<RequestResponseObject<D>>;
 
 	/**
-	 * @see [[Provider.add]]
-	 *
-	 * @param [opts] - additional request options with async options
+	 * @see [[Provider.del]]
 	 */
-	del<D = unknown>
-		(body?: RequestBody, opts?: CreateRequestOptions<D> & AsyncOptions): Promise<RequestResponseObject<D>>;
+	del<D = unknown>(
+		body?: RequestBody,
+		opts?: CreateRequestOptions<D> & AsyncOptions
+	): Promise<RequestResponseObject<D>>;
 }>;
 
 export type EmitLikeEvents = 'emit' | 'fire' | 'dispatch' | 'dispatchEvent';
@@ -93,7 +89,7 @@ export interface ReadonlyEventEmitterWrapper<CTX extends object = Async> {
 	on<E = unknown, R = unknown>(
 		events: CanArray<string>,
 		handler: ProxyCb<E, R, CTX>,
-		params: AsyncOnOptions<CTX>,
+		params: AsyncOptions,
 		...args: unknown[]
 	): object;
 
@@ -106,14 +102,14 @@ export interface ReadonlyEventEmitterWrapper<CTX extends object = Async> {
 	once<E = unknown, R = unknown>(
 		events: CanArray<string>,
 		handler: ProxyCb<E, R, CTX>,
-		params: AsyncOnceOptions<CTX>,
+		params: AsyncOptions,
 		...args: unknown[]
 	): object;
 
 	promisifyOnce<T = unknown>(events: CanArray<string>, ...args: unknown[]): Promise<CanUndef<T>>;
 	promisifyOnce<T = unknown>(
 		events: CanArray<string>,
-		params: AsyncOnceOptions<CTX>,
+		params: AsyncOptions,
 		...args: unknown[]
 	): Promise<CanUndef<T>>;
 
@@ -125,23 +121,26 @@ export interface EventEmitterWrapper<CTX extends object = Async> extends Readonl
 	emit(event: string, ...args: unknown[]): boolean;
 }
 
-type mapNotPrimitive<T, A> = T extends Primitive ? T : T & A ;
+type MapNotPrimitive<T, A> = T extends Primitive ? T : T & A ;
 
 type addEventListenerLikeFunctionMapper<T extends (...args: unknown[]) => unknown> =
 	(
 		arg0: Parameters<T>[0],
 		arg1: Parameters<T>[1],
-		arg2: mapNotPrimitive<Parameters<T>[2], AsyncOptions>,
+		arg2: MapNotPrimitive<Parameters<T>[2], AsyncOptions>,
 		...args: unknown[]
 	) => unknown;
 
-export type EventEmitterOverwrited<T extends EventEmitterLike> = Overwrite<T, {
+export type EventEmitterOverwritten<T extends EventEmitterLike> = Overwrite<T, {
 	addEventListener:
 		T['addEventListener'] extends (...args: any[]) => any
 			? addEventListenerLikeFunctionMapper<T['addEventListener']>
 			: never;
+
 	addListener:
 		T['addListener'] extends (...args: any[]) => any
 			? addEventListenerLikeFunctionMapper<T['addListener']>
 			: never;
 }>;
+
+export type AsyncOptionsForWrappers = Pick<AsyncOptions, 'group'>;

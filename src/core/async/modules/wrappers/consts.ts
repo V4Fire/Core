@@ -8,7 +8,7 @@
 
 import type { AsyncOptions } from 'core/async/modules/events';
 
-import type { EmitLikeEvents, MethodsToReplace } from 'core/async/modules/wrappers/interface';
+import type { EmitLikeEvents, DataProviderMethodsToReplace } from 'core/async/modules/wrappers/interface';
 
 export const emitLikeEvents: EmitLikeEvents[] = [
 	'emit',
@@ -17,6 +17,6 @@ export const emitLikeEvents: EmitLikeEvents[] = [
 	'dispatchEvent'
 ];
 
-export const methodsToReplace: MethodsToReplace[] = ['get', 'peek', 'post', 'add', 'upd', 'del'];
+export const dataProviderMethodsToReplace: DataProviderMethodsToReplace[] = ['get', 'peek', 'post', 'add', 'upd', 'del'];
 
 export const asyncParamsKeys: Array<keyof AsyncOptions> = ['group', 'label', 'join'];
