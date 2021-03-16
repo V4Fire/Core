@@ -12,7 +12,7 @@
 export interface ErrorInfo {
 	/**
 	 * General info about an error.
-	 * Using only for cause errors and not for the root one
+	 * Using only for cause errors and not for the root one.
 	 */
 	error?: {
 		name: string;
@@ -25,7 +25,7 @@ export interface ErrorInfo {
 	details?: unknown;
 
 	/**
-	 * Information of cause error
+	 * Information of a caused error
 	 */
 	cause?: ErrorInfo;
 }
