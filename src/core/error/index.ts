@@ -16,7 +16,7 @@ export * from 'core/error/interface';
 /**
  * Superclass of any error to inherit
  */
-export class BaseError extends Error {
+export default class BaseError extends Error {
 	/**
 	 * An error that causes the current error
 	 */

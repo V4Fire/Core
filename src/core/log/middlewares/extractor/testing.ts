@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { BaseError, ErrorDetailsExtractor, ErrorCtor } from 'core/error';
+import BaseError, { ErrorDetailsExtractor, ErrorCtor } from 'core/error';
 
 export class TestDetailedError extends Error {
 	readonly reason: unknown;

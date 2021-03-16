@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { BaseError, ErrorDetailsExtractor, ErrorCtor } from 'core/error';
+import BaseError, { ErrorDetailsExtractor, ErrorCtor } from 'core/error';
 
 import { DEPTH_LIMIT } from 'core/log/middlewares/extractor/const';
 
