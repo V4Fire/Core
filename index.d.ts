@@ -226,56 +226,105 @@ interface ObjectMixinOptions<V = unknown, K = unknown, D = unknown> {
 	deep?: boolean;
 
 	/**
-	 * If true, then only new object properties are copied, or if `-1`, only old
+	 * Strategy to resolve collisions of properties when merging:
+	 *   1. `'all'` - all properties are merged in spite of possible collisions (by default)
+	 *   2. `'new'` - properties with collisions aren't merged
+	 *   3. `'exist'` - properties without collisions aren't merged
 	 *
-	 * @default `false`
+	 * @default `'all'`
 	 * @example
 	 * ```js
+	 * // {a: 2, b: 3}
+	 * Object.mixin({propsToCopy: 'all'}, {a: 1}, {a: 2, b: 3});
+	 *
 	 * // {a: 1, b: 3}
-	 * Object.mixin({onlyNew: true}, {a: 1}, {a: 2, b: 3});
+	 * Object.mixin({propsToCopy: 'new'}, {a: 1}, {a: 2, b: 3});
 	 *
 	 * // {a: 2}
-	 * Object.mixin({onlyNew: -1}, {a: 1}, {a: 2, b: 3});
+	 * Object.mixin({propsToCopy: 'exist'}, {a: 1}, {a: 2, b: 3});
 	 * ```
 	 */
-	onlyNew?: boolean | -1;
+	propsToCopy?: 'new' | 'exist' | 'all';
 
 	/**
-	 * @deprecated
-	 * @see [[ObjectMixinOptions.onlyNew]]
-	 */
-	traits?: boolean | -1;
-
-	/**
-	 * If true, then the original value of an object property can be rewritten
-	 * from another object even with an undefined value
+	 * Function to filter values that shouldn't be copied
 	 *
-	 * @default `false`
+	 * @param el - element value
+	 * @param key - element key
+	 * @param data - element container
+	 *
+	 * @example
+	 * ```js
+	 * // {a: 1, b: 2}
+	 * Object.mixin({deep: true}, {a: 1}, {b: 2});
+	 *
+	 * // {a: 1}
+	 * Object.mixin({deep: true, filter: (el, key) => key !== 'b'}, {a: 1}, {b: 2});
+	 * ```
+	 */
+	filter?(el: V, key: K, data: D): unknown;
+
+	/**
+	 * Function to filter values that support deep extending
+	 * (works only with the "deep" mode)
+	 *
+	 * @param el - element value
+	 * @param key - element key
+	 * @param data - element container
+	 *
+	 * @example
+	 * ```js
+	 * // {a: {a: 1, b: 2}}
+	 * Object.mixin({deep: true}, {a: {a: 1}}, {a: {b: 2}});
+	 *
+	 * // {a: {b: 2}}
+	 * Object.mixin({deep: true, extendFilter: (el) => !el.b}, {a: {a: 1}}, {a: {b: 2}});
+	 * ```
+	 */
+	extendFilter?(el: unknown, key: K, data: V): unknown;
+
+	/**
+	 * If true, all properties with undefined value aren't copied
+	 *
+	 * @default `true`
 	 * @example
 	 * ```js
 	 * // {a: 1}
-	 * Object.mixin({withUndef: false}, {a: 1}, {a: undefined});
+	 * Object.mixin({skipUndefs: true}, {a: 1}, {a: undefined});
 	 *
 	 * // {a: undefined}
-	 * Object.mixin({withUndef: true}, {a: 1}, {a: undefined});
+	 * Object.mixin({skipUndefs: false}, {a: 1}, {a: undefined});
 	 * ```
 	 */
-	withUndef?: boolean;
+	skipUndefs?: boolean;
 
 	/**
-	 * If true, then object property descriptors are copied too
+	 * If true, the function will merge all object properties, but not only enumerable.
+	 * Non enumerable properties from a prototype are ignored.
+	 *
+	 * @default `false`
+	 * @example
+	 * ```js
+	 * const obj = {a: 1};
+	 *
+	 * Object.defineProperty(obj, 'b', {value: 2});
+	 *
+	 * // {a: 1, b: 2}
+	 * Object.mixin({withNonEnumerables: true}, {}, obj);
+	 * ```
+	 */
+	withNonEnumerables?: boolean;
+
+	/**
+	 * Should or shouldn't copy property descriptors too.
+	 * If passed `onlyAccessors`, the descriptor properties like `enumerable` or `configurable` are ignored.
+	 *
 	 * @default `false`
 	 */
-	withDescriptor?: boolean;
+	withDescriptors?: boolean | 'onlyAccessors';
 
 	/**
-	 * If true, then property accessors (but not the whole property descriptor) are copied too
-	 * @default `false`
-	 */
-	withAccessors?: boolean;
-
-	/**
-	 * If true, then object properties from a prototype are copied recursively
+	 * If true, then merging preserve prototypes of properties
 	 * (works only with the "deep" mode)
 	 *
 	 * @default `false`
@@ -325,94 +374,68 @@ interface ObjectMixinOptions<V = unknown, K = unknown, D = unknown> {
 	withProto?: boolean;
 
 	/**
-	 * If true, the function will merge all object properties, but not only enumerable.
-	 * Non enumerable properties from a prototype are ignored.
-	 *
-	 * @default `false`
-	 * @example
-	 * ```js
-	 * const obj = {a: 1};
-	 *
-	 * Object.defineProperty(obj, 'b', {value: 2});
-	 *
-	 * // {a: 1, b: 2}
-	 * Object.mixin({withNonEnumerables: true}, {}, obj);
-	 * ```
-	 */
-	withNonEnumerables?: boolean;
-
-	/**
-	 * If true, then to merge two arrays will be used a concatenation strategy
-	 * (works only with the "deep" mode)
+	 * If true, then to merge two arrays will be used a concatenation strategy (works only with the "deep" mode).
+	 * Also, the parameter can be passed as a function to concatenate arrays.
 	 *
 	 * @default `false`
 	 * @example
 	 * ```js
 	 * // {a: [2]}
-	 * Object.mixin({deep: true, concatArray: false}, {a: [1]}, {a: [2]});
+	 * Object.mixin({deep: true, concatArrays: false}, {a: [1]}, {a: [2]});
 	 *
 	 * // {a: [1, 2]}
-	 * Object.mixin({deep: true, concatArray: true}, {a: [1]}, {a: [2]});
+	 * Object.mixin({deep: true, concatArrays: true}, {a: [1]}, {a: [2]});
+	 *
+	 * // {a: [1, 1, 2]}
+	 * Object.mixin({deep: true, concatArrays: true}, {a: [1]}, {a: [1, 2]});
+	 *
+	 * // {a: [1, 2]}
+	 * Object.mixin({deep: true, concatArrays: (a, b) => a.union(b)}, {a: [1]}, {a: [1, 2]});
 	 * ```
+	 */
+	concatArrays?: boolean | ((a: unknown[], b: unknown[], key: K) => unknown[]);
+
+	/**
+	 * @deprecated
+	 * @see [[ObjectMixinOptions.concatArrays]]
 	 */
 	concatArray?: boolean;
 
 	/**
-	 * Function to concatenate arrays
-	 * (works only with the "concatArray" mode)
-	 *
-	 * @param oldValue - old array
-	 * @param newValue - new array
-	 * @param key - target property key
-	 * @default `Array.prototype.concat`
-	 *
-	 * @example
-	 * ```js
-	 * // {a: [1, 1, 2]}
-	 * Object.mixin({deep: true, concatArray: true}, {a: [1]}, {a: [1, 2]});
-	 *
-	 * // {a: [1, 2]}
-	 * Object.mixin({deep: true, concatArray: true, concatFn: [].union}, {a: [1]}, {a: [1, 2]});
-	 * ```
+	 * @deprecated
+	 * @see [[ObjectMixinOptions.concatArrays]]
 	 */
-	concatFn?(oldValue: V, newValue: unknown[], key: K): unknown[];
+	concatFn?(a: unknown[], b: unknown[], key: K): unknown[];
 
 	/**
-	 * Function to filter values that support deep extending
-	 * (works only with the "deep" mode)
-	 *
-	 * @param el - element value
-	 * @param key - element key
-	 * @param data - element container
-	 *
-	 * @example
-	 * ```js
-	 * // {a: {a: 1, b: 2}}
-	 * Object.mixin({deep: true}, {a: {a: 1}}, {a: {b: 2}});
-	 *
-	 * // {a: {b: 2}}
-	 * Object.mixin({deep: true, extendFilter: (el) => !el.b}, {a: {a: 1}}, {a: {b: 2}});
-	 * ```
+	 * @deprecated
+	 * @see [[ObjectMixinOptions.propsToCopy]]
 	 */
-	extendFilter?(el: unknown, key: K, data: V): unknown;
+	onlyNew?: boolean | -1;
 
 	/**
-	 * Function to filter values that shouldn't be copied
-	 *
-	 * @param el - element value
-	 * @param key - element key
-	 * @param data - element container
-	 *
-	 * @example
-	 * ```js
-	 * // {a: 1, b: 2}
-	 * Object.mixin({deep: true}, {a: 1}, {b: 2});
-	 *
-	 * // {a: 1}
-	 * Object.mixin({deep: true, filter: (el, key) => key !== 'b'}, {a: 1}, {b: 2});
-	 * ```
+	 * @deprecated
+	 * @see [[ObjectMixinOptions.propsToCopy]]
 	 */
-	filter?(el: V, key: K, data: D): unknown;
+	traits?: boolean | -1;
+
+	/**
+	 * @deprecated
+	 * @see [[ObjectMixinOptions.skipUndefs]]
+	 */
+	withUndef?: boolean;
+
+	/**
+	 * @deprecated
+	 * @see [[ObjectMixinOptions.withDescriptors]]
+	 */
+	withDescriptor?: boolean;
+
+	/**
+	 * @deprecated
+	 * @see [[ObjectMixinOptions.withDescriptors]]
+	 */
+	withAccessors?: boolean;
 }
 
 interface ObjectGetOptions {
@@ -452,17 +475,45 @@ interface ObjectSetOptions extends ObjectGetOptions {
 
 interface ObjectForEachOptions {
 	/**
-	 * If true, then the first element of the callback function will be an element descriptor
+	 * If true, then the callback function takes an element descriptor instead of a value
 	 *
 	 * @default `false`
 	 * @example
 	 * ```js
-	 * Object.forEach({a: 1}, {withDescriptor: true}, (el) => {
-	 *   console.log(el); // {configurable: true, enumerable: true, writable: true, value: 1}
+	 * Object.forEach({a: 1}, {showDescriptor: true}, (el) => {
+	 *   // {configurable: true, enumerable: true, writable: true, value: 1}
+	 *   console.log(el);
 	 * });
 	 * ```
 	 */
-	withDescriptor?: boolean;
+	passDescriptor?: boolean;
+
+	/**
+	 * Strategy to iterate object properties:
+	 *   1. `'own'` - the object iterates only own properties (by default)
+	 *   2. `'inherited'` - the object iterates only inherited properties
+	 *     (for-in with the negative `hasOwnProperty` check)
+	 *
+	 *   3. `'all'` - the object iterates inherited properties too (for-in without the `hasOwnProperty` check)
+	 *
+	 * @example
+	 * ```js
+	 * const obj = {a: 1, __proto__: {b: 2}};
+	 *
+	 * Object.forEach(obj, (el) => {
+	 *   console.log(el); // 1
+	 * });
+	 *
+	 * Object.forEach(obj, {propsToIterate: 'all'}, (el) => {
+	 *   console.log(el); // 1 2
+	 * });
+	 *
+	 * Object.forEach(obj, {propsToIterate: 'inherited'}, (el) => {
+	 *   console.log(el); // 2
+	 * });
+	 * ```
+	 */
+	propsToIterate?: 'own' | 'inherited' | 'all';
 
 	/**
 	 * If true, the function will iterate all object properties, but not only enumerable.
@@ -485,28 +536,14 @@ interface ObjectForEachOptions {
 	withNonEnumerables?: boolean;
 
 	/**
-	 * Strategy for not own properties of the iterated object:
-	 *   1. if `false`, then the `hasOwnProperty` test is enabled and all not own properties will be skipped;
-	 *   1. if `true`, then the `hasOwnProperty` test is disabled;
-	 *   1. if `-1`, then the `hasOwnProperty` test is enabled and all own properties will be skipped.
-	 *
-	 * @default `false`
-	 * @example
-	 * ```js
-	 * const obj = {a: 1, __proto__: {b: 2}};
-	 *
-	 * Object.forEach(obj, (el) => {
-	 *   console.log(el); // 1
-	 * });
-	 *
-	 * Object.forEach(obj, {notOwn: true}, (el) => {
-	 *   console.log(el); // 1 2
-	 * });
-	 *
-	 * Object.forEach(obj, {notOwn: -1}, (el) => {
-	 *   console.log(el); // 2
-	 * });
-	 * ```
+	 * @deprecated
+	 * @see [[ObjectForEachOptions.passDescriptor]]
+	 */
+	withDescriptor?: boolean;
+
+	/**
+	 * @deprecated
+	 * @see [[ObjectForEachOptions.propsToIterate]]
 	 */
 	notOwn?: boolean | -1;
 }
@@ -532,9 +569,6 @@ interface ObjectFromArrayOptions<T = boolean> {
 	/**
 	 * @deprecated
 	 * @see [[ObjectFromArrayOptions.key]]
-	 *
-	 * @param i
-	 * @param el
 	 */
 	keyConverter?(i: number, el: unknown): string | symbol;
 
@@ -549,9 +583,6 @@ interface ObjectFromArrayOptions<T = boolean> {
 	/**
 	 * @deprecated
 	 * @see [[ObjectFromArrayOptions.value]]
-	 *
-	 * @param el
-	 * @param i
 	 */
 	valueConverter?(el: unknown, i: number): T;
 }
@@ -735,7 +766,7 @@ interface ObjectConstructor {
 	 */
 	forEach<V>(
 		obj: Dictionary<V>,
-		opts: ObjectForEachOptions & {withDescriptor: true},
+		opts: ObjectForEachOptions & {withDescriptors: true},
 		cb: (el: ObjectForEachPropertyDescriptor<V>, key: string, data: Dictionary<V>) => any
 	): void;
 
@@ -748,7 +779,7 @@ interface ObjectConstructor {
 	 */
 	forEach<V>(
 		obj: Dictionary<V>,
-		opts: ObjectForEachOptions & ({notOwn: boolean | -1} | {withDescriptor: false}),
+		opts: ObjectForEachOptions & ({propsToIterate: 'all' | 'notOwn'} | {withDescriptors: false}),
 		cb: (el: V, key: string, data: Dictionary<V>) => any
 	): void;
 
@@ -1652,7 +1683,7 @@ interface ObjectConstructor {
 	 * Returns true if the specified value has a primitive type
 	 * @param value
 	 */
-	isPrimitive(value: any): boolean;
+	isPrimitive(value: any): value is Primitive;
 
 	/**
 	 * Returns true if the specified value is a custom (not native) object or function
@@ -3794,3 +3825,25 @@ interface Function {
 							Promise<T6> : T6
 		>;
 }
+
+/**
+ * Overrides properties of the specified type or interface.
+ * Don't use this helper if you simply extend one type from another, i. e. without overriding properties.
+ *
+ * @template T - original type
+ * @template U - type with the overridden properties
+ *
+ * @example
+ * ```typescript
+ * type A = {
+ *   x: number;
+ *   y: number;
+ * };
+ *
+ * // {x:number; y: string}
+ * type B = Overwrite<A, {y: string}>;
+ * ```
+ */
+type Overwrite<T, U> = Pick<T, Exclude<keyof T, keyof U>> & U;
+
+type Primitive = string | number | boolean | undefined | null;

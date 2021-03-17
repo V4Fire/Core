@@ -25,8 +25,7 @@ export * from 'core/request/utils/const';
 export function merge<T>(...args: unknown[]): T {
 	return Object.mixin({
 		deep: true,
-		concatArray: true,
-		concatFn: (a: unknown[], b: unknown[]) => a.union(b),
+		concatArrays: (a: unknown[], b: unknown[]) => a.union(b),
 		extendFilter: (el) => Array.isArray(el) || Object.isDictionary(el)
 	}, undefined, ...args);
 }

@@ -11,7 +11,7 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-## v3.??.?? (2021-03-16)
+## v3.37.0 (2021-03-17)
 
 #### :boom: Breaking Change
 
@@ -33,6 +33,24 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 #### :nail_care: Polish
 
 * Improved the `RequestError`'s message format `core/request/error`
+
+## v3.36.0 (2021-03-16)
+
+#### :boom: Breaking Change
+
+* `Object.mixin`:
+  * Marked `onlyNew` as deprecated. Use `propsToCopy` instead.
+  * Marked `withDescriptor` and `withAccessors` as deprecated. Use `withDescriptors` instead.
+  * Marked `withUndef` as deprecated. Use `skipUndefs` instead.
+  * Marked `concatArray` and `concatFn` as deprecated. Use `concatArrays` instead.
+
+* `Object.forEach`:
+  * Marked `notOwn` as deprecated. Use `propsToIterate` instead.
+  * Marked `withDescriptor` as deprecated. Use `passDescriptor` instead.
+
+#### :rocket: New Feature
+
+* Added wrappers for data-providers and event-emitters `core/async`
 
 ## v3.35.1 (2021-03-11)
 

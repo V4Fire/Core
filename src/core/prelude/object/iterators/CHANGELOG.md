@@ -9,6 +9,13 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.36.0 (2021-03-16)
+
+#### :boom: Breaking Change
+
+* Marked `notOwn` as deprecated. Use `propsToIterate` instead.
+* Marked `withDescriptor` as deprecated. Use `passDescriptor` instead.
+
 ## v3.35.0 (2021-03-04)
 
 #### :rocket: New Feature

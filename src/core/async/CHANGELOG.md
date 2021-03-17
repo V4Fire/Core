@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.36.0 (2021-03-16)
+
+#### :rocket: New Feature
+
+* Added wrappers for data-providers and event-emitters
+
 ## v3.30.3 (2021-01-28)
 
 #### :house: Internal

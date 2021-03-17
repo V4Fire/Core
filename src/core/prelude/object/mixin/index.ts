@@ -34,8 +34,35 @@ extend(Object, 'mixin', function mixin(
 	}
 
 	const
-		withDescriptor = p.withDescriptor && !p.withAccessors,
-		onlyNew = p.onlyNew != null ? p.onlyNew : p.traits;
+		skipUndefs = 'withUndef' in p ? !p.withUndef : p.skipUndefs !== false,
+		concatArrays = Object.isTruly(p.concatArrays) || p.concatArray === true,
+
+		// eslint-disable-next-line @typescript-eslint/unbound-method
+		concatFn = Object.isFunction(p.concatArrays) ? p.concatArrays : p.concatFn;
+
+	const
+		onlyAccessors = p.withDescriptors === 'onlyAccessors' || p.withAccessors === true,
+		withDescriptors = (p.withDescriptors === true || p.withDescriptor === true) && !onlyAccessors;
+
+	let
+		onlyNew;
+
+	switch (p.propsToCopy) {
+		case 'new':
+			onlyNew = true;
+			break;
+
+		case 'exist':
+			onlyNew = -1;
+			break;
+
+		case 'all':
+			onlyNew = false;
+			break;
+
+		default:
+			onlyNew = p.onlyNew != null ? p.onlyNew : p.traits;
+	}
 
 	let
 		type = getType(base);
@@ -79,27 +106,32 @@ extend(Object, 'mixin', function mixin(
 		simpleTypes = {object: true, array: true},
 		dataIsSimple = simpleTypes[type] === true;
 
-	if (
+	const canUseNativeAssign =
 		!p.deep &&
-		p.withUndef &&
 		dataIsSimple &&
-		!p.concatArray &&
-		!p.withProto &&
-		!p.withDescriptor &&
-		!p.withAccessors &&
-		!p.withNonEnumerables &&
+
+		!skipUndefs &&
+		!concatArrays &&
+		!onlyAccessors &&
+		!withDescriptors &&
 		!Object.isTruly(onlyNew) &&
+
+		!p.withProto &&
+		!p.withNonEnumerables &&
 		!p.extendFilter &&
-		!p.filter
-	) {
+		!p.filter;
+
+	if (canUseNativeAssign) {
 		return Object.assign(<object>base, ...objects);
 	}
 
-	let setVal;
+	let
+		setter;
+
 	switch (type) {
 		case 'weakMap':
 		case 'map':
-			setVal = (data, key, val) => {
+			setter = (data, key, val) => {
 				if (Object.isTruly(onlyNew) && data.has(key) !== (onlyNew === -1)) {
 					return;
 				}
@@ -111,7 +143,7 @@ extend(Object, 'mixin', function mixin(
 
 		case 'weakSet':
 		case 'set':
-			setVal = (data, key, val) => {
+			setter = (data, key, val) => {
 				if (Object.isTruly(onlyNew) && data.has(val) !== (onlyNew === -1)) {
 					return;
 				}
@@ -122,21 +154,21 @@ extend(Object, 'mixin', function mixin(
 			break;
 
 		default:
-			setVal = (data, key, val) => {
+			setter = (data, key, val) => {
 				if (Object.isTruly(onlyNew) && key in data !== (onlyNew === -1)) {
 					return;
 				}
 
-				if (p.withUndef || val !== undefined) {
+				if (!skipUndefs || val !== undefined) {
 					data[key] = val;
 				}
 			};
 	}
 
-	const forEachParams = {
-		withDescriptor: Object.isTruly(p.withAccessors) || Object.isTruly(p.withDescriptor),
+	const forEachParams = <ObjectForEachOptions>{
+		passDescriptor: withDescriptors || onlyAccessors,
 		withNonEnumerables: p.withNonEnumerables,
-		notOwn: Object.isTruly(p.deep)
+		propsToIterate: Object.isTruly(p.deep) ? 'all' : 'own'
 	};
 
 	for (let i = 0; i < objects.length; i++) {
@@ -156,8 +188,8 @@ extend(Object, 'mixin', function mixin(
 			}
 
 			const needExtendDescriptor = dataIsSimple && isSimple && (
-				withDescriptor ||
-				p.withAccessors && (el.get != null || el.set != null)
+				withDescriptors ||
+				onlyAccessors && (el.get != null || el.set != null)
 			);
 
 			if (needExtendDescriptor) {
@@ -165,7 +197,7 @@ extend(Object, 'mixin', function mixin(
 					return;
 				}
 
-				if (p.withAccessors) {
+				if (onlyAccessors) {
 					Object.defineProperty(base, key, {
 						configurable: true,
 						enumerable: true,
@@ -173,7 +205,7 @@ extend(Object, 'mixin', function mixin(
 						set: el.set
 					});
 
-				} else if (!('value' in el) || el.value !== undefined || p.withUndef) {
+				} else if (!skipUndefs || !('value' in el) || el.value !== undefined) {
 					Object.defineProperty(base, key, el);
 				}
 
@@ -227,16 +259,16 @@ extend(Object, 'mixin', function mixin(
 						isProto = false,
 						construct;
 
-					if (!srcIsArray && canExtendSrcProto && p.concatArray) {
+					if (!srcIsArray && canExtendSrcProto && concatArrays) {
 						construct = Object.getPrototypeOf(oldVal);
 						srcIsArray = construct != null && Object.isArray(construct);
 						isProto = srcIsArray;
 					}
 
 					if (srcIsArray) {
-						if (p.concatArray) {
+						if (concatArrays) {
 							const old = isProto ? construct : oldVal;
-							base[key] = p.concatFn ? p.concatFn(old, extVal, key) : old.concat(extVal);
+							base[key] = Object.isFunction(concatFn) ? concatFn(old, extVal, key) : old.concat(extVal);
 							return;
 						}
 
@@ -253,7 +285,7 @@ extend(Object, 'mixin', function mixin(
 				Object.set(base, [key], Object.mixin(p, clone, extVal));
 
 			} else {
-				setVal(base, key, extVal);
+				setter(base, key, extVal);
 			}
 
 		}, forEachParams);
