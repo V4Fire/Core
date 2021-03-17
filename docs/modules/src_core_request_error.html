@@ -243,7 +243,38 @@ pre {
 						<a href="#corerequesterror" id="corerequesterror" style="color: inherit; text-decoration: none;">
 							<h1>core/request/error</h1>
 						</a>
-						<p>This module provides a class for a request error.</p>
+						<p>This module provides a class for any request error and its details extractor.</p>
+						<a href="#requesterror" id="requesterror" style="color: inherit; text-decoration: none;">
+							<h2>RequestError</h2>
+						</a>
+						<p>A constructor of the class accepts two parameters: required <code>type</code> and optional <code>details</code>.</p>
+						<pre><code><span style="color: #AF00DB">throw</span><span style="color: #000000"> </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">RequestError</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;invalidStatus&#039;</span><span style="color: #000000">, </span><span style="color: #001080">details</span><span style="color: #000000">);</span>
+</code></pre>
+						<p>Now we support the following types of <code>RequestError</code>:</p>
+						<ul>
+							<li><code>invalidStatus</code> - the response status from a server isn&#39;t considered as ok</li>
+							<li><code>abort</code> - the request was aborted</li>
+							<li><code>timeout</code> - the response from a server wasn&#39;t received for the expected amount of time</li>
+							<li><code>offline</code> - no network</li>
+						</ul>
+						<p>The second parameter could contain <code>request</code> and <code>response</code> objects and the <code>error</code> object that is caused the problem.</p>
+						<a href="#requesterrordetailsextractor" id="requesterrordetailsextractor" style="color: inherit; text-decoration: none;">
+							<h2>RequestErrorDetailsExtractor</h2>
+						</a>
+						<p>The extractor gets details from <code>RequestError</code>. A constructor of the class accepts one optional parameter: <code>headerSettings</code>.
+							These settings allow filtering headers from request and response objects of the error&#39;s details object. It helps to hide
+						sensitive information.</p>
+						<p>The settings itself look like this:</p>
+						<pre><code><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">settings</span><span style="color: #000000"> = {</span>
+<span style="color: #000000">  </span><span style="color: #001080">include:</span><span style="color: #000000"> [...],</span>
+<span style="color: #000000">  </span><span style="color: #001080">exclude:</span><span style="color: #000000"> [...]</span>
+<span style="color: #000000">};</span>
+
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">extractor</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">RequestErrorDetailsExtractor</span><span style="color: #000000">(</span><span style="color: #001080">settings</span><span style="color: #000000">);</span>
+</code></pre>
+						<p>If the <code>include</code> array is defined, the extractor gets only headers from this array.
+							If the <code>exclude</code> array is defined, the extractor gets all available headers except the specified ones.
+						If both arrays are defined, then only <code>inlcude</code> array is using.</p>
 					</div>
 				</div>
 			</section>
@@ -254,6 +285,7 @@ pre {
 						<section class="tsd-index-section ">
 							<h3>Classes</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/src_core_request_error.requesterrordetailsextractor.html" class="tsd-kind-icon">Request<wbr>Error<wbr>Details<wbr>Extractor</a></li>
 								<li class="tsd-kind-class tsd-parent-kind-module tsd-has-type-parameter"><a href="../classes/src_core_request_error.default.html" class="tsd-kind-icon">default</a></li>
 							</ul>
 						</section>
@@ -261,6 +293,7 @@ pre {
 							<h3>Interfaces</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter"><a href="../interfaces/src_core_request_error.details.html" class="tsd-kind-icon">Details</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/src_core_request_error.requesterrordetailsextractorsettings.html" class="tsd-kind-icon">Request<wbr>Error<wbr>Details<wbr>Extractor<wbr>Settings</a></li>
 							</ul>
 						</section>
 					</div>
@@ -280,11 +313,17 @@ pre {
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/src_core_request_error.requesterrordetailsextractor.html" class="tsd-kind-icon">Request<wbr>Error<wbr>Details<wbr>Extractor</a>
+					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="../classes/src_core_request_error.default.html" class="tsd-kind-icon">default</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="../interfaces/src_core_request_error.details.html" class="tsd-kind-icon">Details</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/src_core_request_error.requesterrordetailsextractorsettings.html" class="tsd-kind-icon">Request<wbr>Error<wbr>Details<wbr>Extractor<wbr>Settings</a>
 					</li>
 				</ul>
 			</nav>

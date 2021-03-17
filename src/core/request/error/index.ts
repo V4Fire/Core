@@ -11,44 +11,48 @@
  * @packageDocumentation
  */
 
+import BaseError from 'core/error';
 import type { Details } from 'core/request/error/interface';
 
 export * from 'core/request/error/interface';
+export * from 'core/request/error/extractor';
 
 /**
- * Class to wrap a request error
+ * Class to wrap any request error
  */
-export default class RequestError<D = undefined> implements Error {
-	/**
-	 * Error name
-	 */
-	readonly name: string = 'RequestError';
-
+export default class RequestError<D = undefined> extends BaseError {
 	/**
 	 * Error type
 	 */
 	readonly type: string;
 
 	/**
-	 * Error message
-	 */
-	readonly message: string;
-
-	/**
 	 * Error details
 	 */
-	readonly details: Details<D> = {};
+	readonly details: Details<D>;
 
 	/**
 	 * @param type - error type
 	 * @param details - error details
 	 */
 	constructor(type: string, details?: Details<D>) {
-		this.type = type;
-		this.message = `API error, type: ${type}`;
+		super();
 
-		if (details) {
-			this.details = details;
-		}
+		this.type = type;
+		this.details = details ?? {};
+	}
+
+	/** @override */
+	protected format(): string {
+		const parts = [
+			this.details.request?.method,
+			this.details.request?.path,
+			this.details.response?.status
+		];
+
+		const
+			requestInfo = parts.filter((p) => p != null).join(' ');
+
+		return requestInfo.length > 0 ? `[${this.type}] ${requestInfo}` : `[${this.type}]`;
 	}
 }

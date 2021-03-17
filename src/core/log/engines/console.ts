@@ -31,12 +31,16 @@ export class ConsoleEngine implements LogEngine {
 	log(event: LogEvent): void {
 		//#if runtime has core/log
 
-		if (event.details == null && event.error == null) {
+		if (Object.size(event.additionals) === 0 && event.error == null) {
 			console.log(`%c${event.context}`, this.getStringifiedStyle(event.level));
 
 		} else {
 			const
-				details = event.details?.slice() ?? [];
+				details: unknown[] = [];
+
+			if (Object.size(event.additionals) > 0) {
+				details.push(event.additionals);
+			}
 
 			if (event.error != null) {
 				details.push(event.error);

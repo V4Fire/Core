@@ -6,15 +6,15 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import { deprecate } from 'core/functools';
+
 import pipelines from 'core/log/curator/pipelines';
 
 import type { LogEvent } from 'core/log/middlewares';
 import type { LogMessageOptions } from 'core/log/interface';
 
 import { DEFAULT_LEVEL } from 'core/log/base';
-
-const
-	DEFAULT_CONTEXT = 'global';
+import { DEFAULT_CONTEXT } from 'core/log/curator/const';
 
 /**
  * Sends data to every logging pipeline
@@ -48,18 +48,38 @@ export default function log(context: string | LogMessageOptions, ...details: unk
 		details = details.slice(1);
 	}
 
+	const
+		additionals = {};
+
+	if (details.length > 0) {
+		Object.defineProperty(
+			additionals,
+			'details',
+
+			{
+				enumerable: true,
+
+				get(): unknown[] {
+					if (logDetails != null) {
+						return logDetails;
+					}
+
+					return logDetails = prepareDetails(details);
+				}
+			}
+		);
+	}
+
 	const event: LogEvent = {
 		context: logContext,
 
 		level: logLevel,
 		error: logError,
 
-		get details(): unknown[] {
-			if (logDetails != null) {
-				return logDetails;
-			}
-
-			return logDetails = prepareDetails(details);
+		additionals,
+		get details(): typeof additionals {
+			deprecate({name: 'details', type: 'property', renamedTo: 'additionals'});
+			return additionals;
 		}
 	};
 

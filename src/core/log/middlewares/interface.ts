@@ -12,8 +12,14 @@ import type { LogLevel } from 'core/log/interface';
 export interface LogEvent {
 	readonly context: string;
 	readonly level: LogLevel;
-	readonly details?: unknown[];
+	readonly additionals: Dictionary;
 	readonly error?: Error;
+
+	/**
+	 *  @deprecated
+	 *  @see additionals
+	 */
+	readonly details: Dictionary;
 }
 
 export interface NextCallback {
@@ -31,4 +37,10 @@ export interface LogMiddleware {
 	exec(events: CanArray<LogEvent>, next: NextCallback): void;
 }
 
-export type LogMiddlewares = keyof typeof middlewareFactory;
+export type LogMiddlewaresName = keyof typeof middlewareFactory;
+
+export type LogMiddlewares = LogMiddlewaresName | LogMiddlewaresTuple<LogMiddlewaresName>;
+
+export type LogMiddlewaresTuple<K extends LogMiddlewaresName> = [K, CtorArgs<typeof middlewareFactory[K]>];
+
+export type CtorArgs<T extends (...args: any) => any> = T extends (...args: infer A) => ReturnType<T> ? A : never;

@@ -23,15 +23,41 @@ import engineFactory from 'core/log/engines';
 export function createPipeline(pipelineConfig: LogPipelineConfig): CanUndef<LogPipeline> {
 	//#if runtime has core/log
 
+	const {
+		middlewares,
+		engine,
+		engineOptions,
+		minLevel
+	} = pipelineConfig;
+
 	const
-		{middlewares, engine, engineOptions, minLevel} = pipelineConfig;
+		middlewareInstances: LogMiddleware[] = [];
 
 	if (middlewares) {
 		for (let i = 0; i < middlewares.length; ++i) {
-			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-			if (middlewareFactory[middlewares[i]] == null) {
-				console.error(`Can't find the middleware "${middlewares[i]}"`);
-				return;
+			const
+				nameOrTuple = middlewares[i];
+
+			if (Object.isString(nameOrTuple)) {
+				// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+				if (middlewareFactory[nameOrTuple] == null) {
+					console.error(`Can't find the middleware "${nameOrTuple}"`);
+					continue;
+				}
+
+				middlewareInstances.push(middlewareFactory[nameOrTuple]());
+
+			} else {
+				const
+					[name, params] = nameOrTuple;
+
+				// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+				if (middlewareFactory[name] == null) {
+					console.error(`Can't find the middleware "${name}"`);
+					continue;
+				}
+
+				middlewareInstances.push(middlewareFactory[name](...params));
 			}
 		}
 	}
@@ -43,14 +69,7 @@ export function createPipeline(pipelineConfig: LogPipelineConfig): CanUndef<LogP
 	}
 
 	const
-		engineInstance = engineFactory[engine](engineOptions),
-		middlewareInstances: LogMiddleware[] = [];
-
-	if (middlewares) {
-		for (let i = 0; i < middlewares.length; ++i) {
-			middlewareInstances.push(middlewareFactory[middlewares[i]]());
-		}
-	}
+		engineInstance = engineFactory[engine](engineOptions);
 
 	return new LogPipeline(engineInstance, middlewareInstances, minLevel ?? DEFAULT_LEVEL);
 

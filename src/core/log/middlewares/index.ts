@@ -7,6 +7,7 @@
  */
 
 import { ConfigurableMiddleware } from 'core/log/middlewares/configurable';
+import { ExtractorMiddleware } from 'core/log/middlewares/extractor';
 import type { LogMiddleware } from 'core/log/middlewares/interface';
 
 export { extend, Extended } from 'core/log/base';
@@ -16,12 +17,13 @@ export * from 'core/log/middlewares/interface';
  * Returns a function that creates a middleware of the specified class
  * @param Ctor - constructor or just a class
  */
-export function creatorFor<T extends LogMiddleware>(Ctor: new () => T): () => T {
-	return () => new Ctor();
+export function creatorFor<T extends LogMiddleware, A extends any[]>(Ctor: new (...args: A) => T): (...args: A) => T {
+	return (...args) => new Ctor(...args);
 }
 
 const middlewareFactory = {
-	configurable: creatorFor(ConfigurableMiddleware)
+	configurable: creatorFor(ConfigurableMiddleware),
+	extractor: creatorFor(ExtractorMiddleware)
 };
 
 export default middlewareFactory;

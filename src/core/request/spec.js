@@ -180,7 +180,7 @@ describe('core/request', () => {
 				} catch (err) {
 					expect(err).toBeInstanceOf(RequestError);
 					expect(err.type).toBe('invalidStatus');
-					expect(err.message).toBe('API error, type: invalidStatus');
+					expect(err.message).toBe('[invalidStatus] POST http://localhost:3000/json 201');
 					expect(err.details.request.method).toBe('POST');
 					expect(err.details.response.status).toBe(201);
 				}
@@ -388,7 +388,7 @@ describe('core/request', () => {
 
 				expect(err).toBeInstanceOf(RequestError);
 				expect(err.type).toBe('invalidStatus');
-				expect(err.message).toBe('API error, type: invalidStatus');
+				expect(err.message).toBe('[invalidStatus] GET http://localhost:3000/bla 404');
 				expect(err.details.request.method).toBe('GET');
 				expect(err.details.response.status).toBe(404);
 			});
@@ -407,7 +407,7 @@ describe('core/request', () => {
 
 				expect(err).toBeInstanceOf(RequestError);
 				expect(err.type).toBe('abort');
-				expect(err.message).toBe('API error, type: abort');
+				expect(err.message).toBe('[abort] GET http://localhost:3000/json/1');
 				expect(err.details.request.method).toBe('GET');
 				expect(err.details.response).toBeUndefined();
 			});
@@ -424,7 +424,7 @@ describe('core/request', () => {
 
 				expect(err).toBeInstanceOf(RequestError);
 				expect(err.type).toBe('timeout');
-				expect(err.message).toBe('API error, type: timeout');
+				expect(err.message).toBe('[timeout]');
 				expect(err.details.response).toBeUndefined();
 			});
 
@@ -480,7 +480,7 @@ describe('core/request', () => {
 
 					expect(err).toBeInstanceOf(RequestError);
 					expect(err.type).toBe('invalidStatus');
-					expect(err.message).toBe('API error, type: invalidStatus');
+					expect(err.message).toBe('[invalidStatus] GET http://localhost:3000/retry/bad 500');
 
 					expect(err.details.request.method).toBe('GET');
 					expect(err.details.response.status).toBe(500);

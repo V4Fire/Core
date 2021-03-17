@@ -114,7 +114,16 @@ export type RequestQuery =
 
 // @ts-ignore (extend)
 export interface WrappedCreateRequestOptions<D = unknown> extends CreateRequestOptions<D> {
+	/**
+	 * URL to make request
+	 */
 	url: CanUndef<string>;
+
+	/**
+	 * Original path that was passed into the request function
+	 */
+	path: CanUndef<string>;
+
 	encoder?: WrappedEncoder | WrappedEncoders;
 	decoder?: WrappedDecoder | WrappedDecoders;
 }
