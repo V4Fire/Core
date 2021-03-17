@@ -12,4 +12,4 @@
  */
 
 export { ExtractorMiddleware } from 'core/log/middlewares/extractor/extractor';
-export { ErrorInfo } from 'core/log/middlewares/extractor/interface';
+export * from 'core/log/middlewares/extractor/interface';
