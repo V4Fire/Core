@@ -27,7 +27,7 @@ in the constructor.
 ## How to use
 
 ```ts
-import { BaseError } from 'core/error';
+import BaseError from 'core/error';
 
 class ValidationError extends BaseError {}
 ```
