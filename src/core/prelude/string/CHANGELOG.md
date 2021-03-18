@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.38.0 (2021-03-18)
+
+#### :bug: Bug Fix
+
+* Fixed `camelize` when calling with `upper: false`
+
 ## v3.30.1 (2021-01-11)
 
 #### :bug: Bug Fix
