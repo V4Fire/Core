@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.39.0 (2021-03-19)
+
+#### :bug: Bug Fix
+
+* Fixed `camelize` when calling with empty string `prelude/string/transformers`
+
 ## v3.38.1 (2021-03-19)
 
 #### :bug: Bug Fix
@@ -21,7 +27,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :bug: Bug Fix
 
-* Fixed `camelize` when calling with `upper: false` `prelude/string/transformers'
+* Fixed `camelize` when calling with `upper: false` `prelude/string/transformers`
 
 ## v3.37.0 (2021-03-17)
 
