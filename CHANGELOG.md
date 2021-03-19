@@ -15,7 +15,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :bug: Bug Fix
 
-* Fixed `camelize` when calling with empty string `prelude/string/transformers`
+* Fixed `camelize` when calling with an empty string `prelude/string/transformers`
 
 ## v3.38.1 (2021-03-19)
 

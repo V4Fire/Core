@@ -13,7 +13,7 @@ Changelog
 
 #### :bug: Bug Fix
 
-* Fixed `camelize` when calling with empty string
+* Fixed `camelize` when calling with an empty string
 
 ## v3.38.0 (2021-03-18)
 
