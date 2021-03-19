@@ -1,12 +1,14 @@
 # core/cache
 
+## caches
+
 This module provides the base interface for a [[Cache]] data structure: a simple in-memory key-value storage, which can be useful to organize cache data structures.
 The submodules contain different implementations for that interface. The main module re-exports these implementations:
 
-* `AbstractCache` — an alias for [`core/cache/interface/Cache`](src_core_cache_interface.html);
-* `Cache` — an alias for [`core/cache/simple`](src_core_cache_simple_index.html);
-* `RestrictedCache` — an alias for [`core/cache/restricted`](src_core_cache_restricted_index.html);
-* `NeverCache` — an alias for [`core/cache/never`](src_core_cache_never_index.html).
+* `AbstractCache` — an alias for [`core/cache/interface/Cache`](interface.ts);
+* `Cache` — an alias for [`core/cache/simple`](simple);
+* `RestrictedCache` — an alias for [`core/cache/restricted`](restricted);
+* `NeverCache` — an alias for [`core/cache/never`](never).
 
 ```js
 import SimpleCache from 'core/cache/simple';
@@ -23,4 +25,23 @@ console.log(cache.keys().length); // 3
 cache.clear((val, key) => /foo/.test(key));
 
 console.log(cache.keys().length); // 1
+```
+
+## ttl
+
+`core/cache/ttl` provide wrapper for any cache. Takes instance of cache and return wrapped version with additional features.
+
+```js
+import SimpleCache from 'core/cache/simple';
+import wrapCacheWithTTL from 'core/cache/ttl';
+
+const
+  cache = wrapCacheWithTTL(new SimpleCache());
+
+// Diffs:
+// 1) Method "add" accept third optional parameter time until destroy item in milliseconds
+cache.add('foo', 'bar1', {ttl: 500});
+
+// 2) Additional method for clear ttl from property
+cache.clearTTL('foo');
 ```

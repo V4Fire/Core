@@ -54,3 +54,27 @@ export default interface Cache<V = unknown, K = string> {
 	 */
 	clear(filter?: ClearFilter<V, K>): Map<K, V>;
 }
+
+export interface TTLCache<V = unknown, K = string> extends Cache<V, K> {
+	/**
+	 * Saves a value to the cache by the specified key
+	 * and delete after ttl timeout
+	 *
+	 * @param key
+	 * @param value
+	 * @param ttl
+	 */
+	set(key: K, value: V, options?: DecoratorOptions): V;
+
+	/**
+	 * Clear ttl from a property
+	 *
+	 * @param key
+	 * @param ttl
+	 */
+	clearTTL(key: K): void;
+}
+
+export interface DecoratorOptions {
+	ttl?: number;
+}
