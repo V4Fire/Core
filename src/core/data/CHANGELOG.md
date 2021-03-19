@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.38.1 (2021-03-19)
+
+#### :bug: Bug Fix
+
+* Rewrited tests on express
+
 ## v3.27.6 (2020-11-01)
 
 #### :boom: Breaking Change

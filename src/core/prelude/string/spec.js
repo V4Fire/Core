@@ -83,6 +83,9 @@ describe('core/prelude/string', () => {
 
 	it('camelize', () => {
 		expect('foo_bar_b-l aBaz😃😡'.camelize()).toBe('FooBarBLABaz😃😡');
+		expect('foo_bar_b-l aBaz😃😡'.camelize()).toBe('FooBarBLABaz😃😡');
+		expect('foo_bar_b-l aBaz😃😡'.camelize(true)).toBe('FooBarBLABaz😃😡');
+		expect('foo_bar_b-l aBaz😃😡'.camelize({upper: true})).toBe('FooBarBLABaz😃😡');
 	});
 
 	it('camelize (extended Unicode)', () => {
@@ -93,6 +96,7 @@ describe('core/prelude/string', () => {
 	it('camelize without capitalizing', () => {
 		expect('foo_bar_b-l aBaz'.camelize(false)).toBe('fooBarBLABaz');
 		expect('foo_bar_b-l aBaz'.camelize({upper: false})).toBe('fooBarBLABaz');
+		expect('Foo_bar_b-l aBaz'.camelize(false)).toBe('fooBarBLABaz');
 	});
 
 	it('camelize cache', () => {

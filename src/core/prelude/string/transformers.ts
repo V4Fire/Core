@@ -101,9 +101,7 @@ extend(String.prototype, 'camelize', function camelize(
 	let
 		res = str.trim().replace(camelizeRgxp, toCamelize);
 
-	if (opts.upper) {
-		res = res[0].toUpperCase() + res.slice(1);
-	}
+	res = (opts.upper ? res[0].toUpperCase() : res[0].toLowerCase()) + res.slice(1);
 
 	if (cacheKey != null) {
 		camelizeCache[cacheKey] = res;

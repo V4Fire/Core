@@ -6,14 +6,29 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import express from 'express';
+
 import Provider, { provider, providers } from 'core/data';
 
-// Probably http://3878g.mocklab.io died
-xdescribe('core/data', () => {
+describe('core/data', () => {
+	let server;
+
+	beforeEach(() => {
+		if (server) {
+			server.close();
+		}
+
+		server = createServer();
+	});
+
+	afterAll((done) => {
+		server.close(done);
+	});
+
 	it('simple provider', async () => {
 		@provider
 		class TestProvider extends Provider {
-			static request = Provider.request({api: {url: 'http://3878g.mocklab.io'}});
+			static request = Provider.request({api: {url: 'http://localhost:3000/'}});
 
 			baseGetURL = 'json/1';
 
@@ -36,7 +51,7 @@ xdescribe('core/data', () => {
 	it('provider with overrides', async () => {
 		@provider
 		class TestOverrideProvider extends Provider {
-			static request = Provider.request({api: {url: 'http://3878g.mocklab.io'}});
+			static request = Provider.request({api: {url: 'http://localhost:3000/'}});
 		}
 
 		const
@@ -74,11 +89,11 @@ xdescribe('core/data', () => {
 				]
 			};
 
-			baseGetURL = 'http://3878g.mocklab.io/json/1';
+			baseGetURL = 'http://localhost:3000/json/1';
 
 			updMethod = 'POST';
 
-			baseUpdURL = 'http://3878g.mocklab.io/json';
+			baseUpdURL = 'http://localhost:3000/json';
 		}
 
 		const
@@ -100,14 +115,14 @@ xdescribe('core/data', () => {
 	it('get with extra providers', async () => {
 		@provider
 		class TestExtraProvider extends Provider {
-			baseGetURL = 'http://3878g.mocklab.io/json/1';
+			baseGetURL = 'http://localhost:3000/json/1';
 		}
 
 		@provider
 		class TestProviderWithExtra extends Provider {
 			alias = 'foo';
 
-			baseGetURL = 'http://3878g.mocklab.io/json/1';
+			baseGetURL = 'http://localhost:3000/json/1';
 
 			extraProviders = () => ({
 				TestExtraProvider: {
@@ -130,3 +145,35 @@ xdescribe('core/data', () => {
 		});
 	});
 });
+
+function createServer() {
+	const serverApp = express();
+	serverApp.use(express.json());
+
+	serverApp.get('/json/1', (req, res) => {
+		res.status(200).json({id: 1, value: 'things'});
+	});
+
+	serverApp.put('/json/2', (req, res) => {
+		if (req.get('Accept') === 'application/json') {
+			res.status(200).end('{"message": "Success"}');
+
+		} else {
+			res.sendStatus(422);
+		}
+	});
+
+	serverApp.post('/json', (req, res) => {
+		const
+			{body} = req;
+
+		if (body.id === 12345 && body.value === 'abc-def-ghi') {
+			res.status(201).json({message: 'Success'});
+
+		} else {
+			res.sendStatus(422);
+		}
+	});
+
+	return serverApp.listen(3000);
+}
