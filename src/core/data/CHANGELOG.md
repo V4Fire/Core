@@ -11,7 +11,7 @@ Changelog
 
 ## v3.?.? (2021-??-??)
 
-#### :bug:
+#### :bug: Bug Fix
 
 * Rewrited tests on express
 
