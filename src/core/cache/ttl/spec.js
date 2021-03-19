@@ -14,7 +14,7 @@ describe('core/cache/ttl', () => {
 		const cache = wrapCacheWithTTL(new SimpleCache());
 
 		cache.set('foo', 1);
-		cache.set('bar', 2, {ttl: 100});
+		cache.set('bar', 2, {ttl: 5});
 		cache.set('baz', 3, {ttl: 0});
 
 		setTimeout(() => {
@@ -24,7 +24,7 @@ describe('core/cache/ttl', () => {
 			expect(cache.has('baz')).toBe(false);
 
 			done();
-		}, 500);
+		}, 10);
 	});
 
 	it('should not delete props after timeout if clearTTL was called', (done) => {
@@ -32,7 +32,7 @@ describe('core/cache/ttl', () => {
 
 		cache.set('foo', 1);
 
-		cache.set('bar', 2, {ttl: 100});
+		cache.set('bar', 2, {ttl: 5});
 		cache.clearTTL('bar');
 
 		cache.set('baz', 3, {ttl: 0});
@@ -44,7 +44,7 @@ describe('core/cache/ttl', () => {
 			expect(cache.has('baz')).toBe(true);
 
 			done();
-		}, 500);
+		}, 10);
 	});
 
 	it('remove work', () => {
