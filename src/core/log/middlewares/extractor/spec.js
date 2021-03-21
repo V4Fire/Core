@@ -7,6 +7,7 @@
  */
 
 import { ExtractorMiddleware } from 'core/log/middlewares/extractor';
+import { createLogEvent, copyLogEvent } from 'core/log/middlewares/testing';
 import { TestDetailedError, TestBaseError, TestDetailedBaseError, TestExtractor } from 'core/log/middlewares/extractor/testing';
 
 describe('middlewares/extractor', () => {
@@ -148,32 +149,4 @@ describe('middlewares/extractor', () => {
 			});
 		});
 	});
-
-	function createLogEvent(error) {
-		const logEvent = {
-			context: 'test',
-			level: error ? 'error' : 'info',
-			additionals: {}
-		};
-
-		if (error) {
-			logEvent.error = error;
-		}
-
-		return logEvent;
-	}
-
-	function copyLogEvent(srcLogEvent, additionals) {
-		const copy = {
-			context: srcLogEvent.context,
-			level: srcLogEvent.level,
-			additionals: additionals ?? srcLogEvent.additionals
-		};
-
-		if (srcLogEvent.error) {
-			copy.error = srcLogEvent.error;
-		}
-
-		return copy;
-	}
 });
