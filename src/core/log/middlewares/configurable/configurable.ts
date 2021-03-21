@@ -6,40 +6,18 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import * as env from 'core/env';
 import type { LogEvent, LogMiddleware, NextCallback } from 'core/log/middlewares/interface';
-
-interface LogOptions {
-	patterns: RegExp[];
-}
-
-let
-	logOps: CanUndef<LogOptions>;
-
-const setConfig = (opts) => {
-	const p = {
-		patterns: [':error\\b'],
-		...opts
-	};
-
-	logOps = p;
-
-	if (logOps == null) {
-		return;
-	}
-
-	p.patterns = (p.patterns ?? []).map((el) => Object.isRegExp(el) ? el : new RegExp(el));
-};
-
-env.get('log').then(setConfig, setConfig);
-env.emitter.on('set.log', setConfig);
-env.emitter.on('remove.log', setConfig);
+import type { Options } from 'core/log/middlewares/configurable/interface';
+import { getOptions } from 'core/log/middlewares/configurable/subscribe';
 
 export class ConfigurableMiddleware implements LogMiddleware {
 	protected queue: LogEvent[] = [];
 
 	exec(events: CanArray<LogEvent>, next: NextCallback): void {
 		//#if runtime has core/log
+
+		const
+			logOps = getOptions();
 
 		if (logOps == null) {
 			if (Array.isArray(events)) {
@@ -60,7 +38,7 @@ export class ConfigurableMiddleware implements LogMiddleware {
 				const
 					el = o[i];
 
-				if (this.filterContext(el.context)) {
+				if (this.filterContext(el.context, logOps)) {
 					queuedEvents.push(el);
 				}
 			}
@@ -80,7 +58,7 @@ export class ConfigurableMiddleware implements LogMiddleware {
 				const
 					el = o[i];
 
-				if (this.filterContext(el.context)) {
+				if (this.filterContext(el.context, logOps)) {
 					filteredEvents.push(el);
 				}
 			}
@@ -89,7 +67,7 @@ export class ConfigurableMiddleware implements LogMiddleware {
 				next(filteredEvents);
 			}
 
-		} else if (this.filterContext(events.context)) {
+		} else if (this.filterContext(events.context, logOps)) {
 			next(events);
 		}
 
@@ -98,9 +76,11 @@ export class ConfigurableMiddleware implements LogMiddleware {
 
 	/**
 	 * Returns true if config patterns allow to log a record with the specified context
+	 *
 	 * @param context
+	 * @param logOps
 	 */
-	protected filterContext(context: string): boolean {
+	protected filterContext(context: string, logOps?: Options): boolean {
 		//#if runtime has core/log
 
 		if (logOps?.patterns) {
