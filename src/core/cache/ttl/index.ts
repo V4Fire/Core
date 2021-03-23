@@ -10,23 +10,25 @@
  * @packageDocumentation
  */
 import type Cache from 'core/cache/interface';
-
 import type { TTLCache, ClearFilter, DecoratorOptions } from 'core/cache/interface';
 
 export * from 'core/cache/interface';
 
-export default function wrapCacheWithTTL<V = unknown, K = string>(cache: Cache<V, K>): TTLCache<V, K> {
+export default function wrapCacheWithTTL<V = unknown, K = string>(cache: Cache<V, K>, ttl?: number): TTLCache<V, K> {
 	const
 		cacheWithTTL: TTLCache<V, K> = Object.create(cache),
 		ttlMemory = new Map<K, number>();
 
 	cacheWithTTL.set = (key: K, value: V, options?: DecoratorOptions) => {
-		if (options?.ttl != null) {
+		if (options?.ttl != null || ttl != null) {
+			const
+				time = options?.ttl ?? ttl;
+
 			cacheWithTTL.clearTTL(key);
-			ttlMemory.set(key, (<Window['setTimeout']>setTimeout)(() => cacheWithTTL.remove(key)));
+			ttlMemory.set(key, (<Window['setTimeout']>setTimeout)(() => cacheWithTTL.remove(key), time));
 		}
 
-		return cache.set(key, value);
+		return cache.set(key, value, options);
 	};
 
 	cacheWithTTL.remove = (key: K) => {
@@ -45,11 +47,9 @@ export default function wrapCacheWithTTL<V = unknown, K = string>(cache: Cache<V
 		const
 			removed = cache.clear(filter);
 
-		if (removed != null) {
-			removed.forEach((_, key) => {
-				cacheWithTTL.clearTTL(key);
-			});
-		}
+		removed.forEach((_, key) => {
+			cacheWithTTL.clearTTL(key);
+		});
 
 		return removed;
 	};

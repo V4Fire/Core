@@ -27,6 +27,36 @@ describe('core/cache/ttl', () => {
 		}, 10);
 	});
 
+	it('should not`delete props before timeout', (done) => {
+		const cache = wrapCacheWithTTL(new SimpleCache());
+
+		cache.set('foo', 1);
+		cache.set('bar', 2, {ttl: 50});
+		cache.set('baz', 3, {ttl: 50});
+
+		setTimeout(() => {
+			expect(cache.has('foo')).toBe(true);
+			expect(cache.has('bar')).toBe(true);
+			expect(cache.has('baz')).toBe(true);
+
+			done();
+		}, 10);
+	});
+
+	it('should override default ttl', (done) => {
+		const cache = wrapCacheWithTTL(new SimpleCache(), 10);
+
+		cache.set('foo', 1);
+		cache.set('bar', 2, {ttl: 50});
+
+		setTimeout(() => {
+			expect(cache.has('foo')).toBe(false);
+			expect(cache.has('bar')).toBe(true);
+
+			done();
+		}, 25);
+	});
+
 	it('should not delete props after timeout if clearTTL was called', (done) => {
 		const cache = wrapCacheWithTTL(new SimpleCache());
 

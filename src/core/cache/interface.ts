@@ -34,8 +34,9 @@ export default interface Cache<V = unknown, K = string> {
 	 *
 	 * @param key
 	 * @param value
+	 * @param options
 	 */
-	set(key: K, value: V): V;
+	set(key: K, value: V, options?: DecoratorOptions): V;
 
 	/**
 	 * Removes a value from the cache by the specified key
@@ -56,16 +57,6 @@ export default interface Cache<V = unknown, K = string> {
 }
 
 export interface TTLCache<V = unknown, K = string> extends Cache<V, K> {
-	/**
-	 * Saves a value to the cache by the specified key
-	 * and delete after ttl timeout
-	 *
-	 * @param key
-	 * @param value
-	 * @param ttl
-	 */
-	set(key: K, value: V, options?: DecoratorOptions): V;
-
 	/**
 	 * Clear ttl from a property
 	 *
