@@ -44,15 +44,23 @@ export default class RequestError<D = undefined> extends BaseError {
 
 	/** @override */
 	protected format(): string {
+		const
+			d = this.details;
+
 		const parts = [
-			this.details.request?.method,
-			this.details.request?.path,
-			this.details.response?.status
+			d.request?.method,
+			d.request?.path,
+			d.response?.status
 		];
 
 		const
-			requestInfo = parts.filter((p) => p != null).join(' ');
+			head = `[${this.type}]`,
+			body = parts.filter((p) => p != null).join(' ');
 
-		return requestInfo.length > 0 ? `[${this.type}] ${requestInfo}` : `[${this.type}]`;
+		if (body.length > 0) {
+			return `${head} ${body}`;
+		}
+
+		return head;
 	}
 }
