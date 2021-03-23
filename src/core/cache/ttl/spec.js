@@ -94,7 +94,7 @@ describe('core/cache/ttl', () => {
 		[
 			{
 				method: 'set',
-				parameters: ['foo', 1]
+				parameters: ['foo', 1, undefined]
 			}, {
 				method: 'remove',
 				parameters: ['foo']
