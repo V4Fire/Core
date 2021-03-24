@@ -7,7 +7,7 @@ TTL for property and default TTL provides in milliseconds.
 
 ```js
 import SimpleCache from 'core/cache/simple';
-import addTTL from 'core/decorators/cache/ttl';
+import addTTL from 'core/cache/decorators/ttl';
 
 const
   cache = addTTL(new SimpleCache());
@@ -30,7 +30,7 @@ Default ttl has a lower priority than the ttl bound to the property.
 
 ```js
 import SimpleCache from 'core/cache/simple';
-import addTTL from 'core/decorators/cache/ttl';
+import addTTL from 'core/cache/decorators/ttl';
 
 const
   cache = addTTL(new SimpleCache(), 10000);
@@ -45,7 +45,7 @@ In case of a property collision, all the old properties, including the TTL, will
 
 ```js
 import SimpleCache from 'core/cache/simple';
-import addTTL from 'core/decorators/cache/ttl';
+import addTTL from 'core/cache/decorators/ttl';
 
 const
   cache = addTTL(new SimpleCache());

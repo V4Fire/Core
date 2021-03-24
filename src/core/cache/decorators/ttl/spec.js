@@ -7,7 +7,7 @@
  */
 
 import SimpleCache from 'core/cache/simple';
-import addTTL from 'core/decorators/cache/ttl';
+import addTTL from 'core/cache/decorators/ttl';
 
 describe('core/cache/decorators/ttl', () => {
 	it('should remove items after expiring', (done) => {

@@ -36,7 +36,7 @@ Provides a decorator for any cache to add the feature of cache expiring.
 
 ```js
 import SimpleCache from 'core/cache/simple';
-import addTTL from 'core/decorators/cache/ttl';
+import addTTL from 'core/cache/decorators/ttl';
 
 // Function addTTL accept cache and default ttl as second argument
 const
