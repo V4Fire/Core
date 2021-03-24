@@ -1,8 +1,7 @@
 # core/cache
 
-## caches
-
-This module provides the base interface for a [[Cache]] data structure: a simple in-memory key-value storage, which can be useful to organize cache data structures.
+This module provides the base interface for a [[Cache]] data structure: a simple in-memory key-value storage,
+which can be useful to organize cache data structures.
 The submodules contain different implementations for that interface. The main module re-exports these implementations:
 
 * `AbstractCache` — an alias for [`core/cache/interface/Cache`](interface.ts);
@@ -27,9 +26,13 @@ cache.clear((val, key) => /foo/.test(key));
 console.log(cache.keys().length); // 1
 ```
 
-## ttl
+## Decorators
 
-`core/cache/ttl` provide wrapper for any cache. Takes instance of cache and return wrapped version with additional features.
+Also, the module provides a bunch of functions to decorate cache storage, like adding the `ttl` feature or persisting storing.
+
+### core/cache/ttl
+
+Provides a decorator for any cache to add the feature of cache expiring.
 
 ```js
 import SimpleCache from 'core/cache/simple';
@@ -38,10 +41,9 @@ import wrapCacheWithTTL from 'core/cache/ttl';
 const
   cache = wrapCacheWithTTL(new SimpleCache());
 
-// Diffs:
-// 1) Method "add" accept third optional parameter time until destroy item in milliseconds
+// Method "add" accepts as the third optional parameter time until expiring the item to store in milliseconds.
 cache.add('foo', 'bar1', {ttl: 500});
 
-// 2) Additional method for clear ttl from property
+// Additional method to clear the `ttl` descriptor from a cache iteb by the specified key
 cache.clearTTL('foo');
 ```
