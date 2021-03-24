@@ -34,8 +34,9 @@ export default interface Cache<V = unknown, K = string> {
 	 *
 	 * @param key
 	 * @param value
+	 * @param options
 	 */
-	set(key: K, value: V): V;
+	set(key: K, value: V, options?: DecoratorOptions): V;
 
 	/**
 	 * Removes a value from the cache by the specified key
@@ -53,4 +54,18 @@ export default interface Cache<V = unknown, K = string> {
 	 * @param [filter] - filter for removing (if not specified, then all cache values will be removed)
 	 */
 	clear(filter?: ClearFilter<V, K>): Map<K, V>;
+}
+
+export type PersistentCache<V = unknown, K = string> = {
+	[key in (keyof Cache<V, K>)]: ReturnPromise<Cache<V, K>[key]>
+};
+
+export interface DecoratorOptions {
+	persistentTTL?: number;
+}
+
+export interface PersistentOptions {
+    persistentTTL?: number;
+    readFromMemoryStrategy: 'always' | 'connection loss';
+    initializationStrategy: 'lazy' | 'semi-lazy' | 'active';
 }
