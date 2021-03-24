@@ -34,9 +34,9 @@ export default interface Cache<V = unknown, K = string> {
 	 *
 	 * @param key
 	 * @param value
-	 * @param options
+	 * @param opts
 	 */
-	set(key: K, value: V, options?: DecoratorOptions): V;
+	set(key: K, value: V, opts?: DecoratorOptions): V;
 
 	/**
 	 * Removes a value from the cache by the specified key
@@ -58,14 +58,14 @@ export default interface Cache<V = unknown, K = string> {
 
 export interface TTLCache<V = unknown, K = string> extends Cache<V, K> {
 	/**
-	 * Clear ttl from a property
+	 * Removes the `ttl` descriptor from a cache item by the specified key
 	 *
 	 * @param key
-	 * @param ttl
 	 */
-	clearTTL(key: K): void;
+	removeTTLFrom(key: K): void;
 }
 
 export interface DecoratorOptions {
+	// Time to expire a cache item in milliseconds
 	ttl?: number;
 }

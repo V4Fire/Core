@@ -4,10 +4,10 @@ This module provides the base interface for a [[Cache]] data structure: a simple
 which can be useful to organize cache data structures.
 The submodules contain different implementations for that interface. The main module re-exports these implementations:
 
-* `AbstractCache` — an alias for [`core/cache/interface/Cache`](interface.ts);
-* `Cache` — an alias for [`core/cache/simple`](simple);
-* `RestrictedCache` — an alias for [`core/cache/restricted`](restricted);
-* `NeverCache` — an alias for [`core/cache/never`](never).
+* `AbstractCache` — an alias for [`core/cache/interface/Cache`](src_core_cache_interface.html);
+* `Cache` — an alias for [`core/cache/simple`](src_core_cache_simple_index.html);
+* `RestrictedCache` — an alias for [`core/cache/restricted`](src_core_cache_restricted_index.html);
+* `NeverCache` — an alias for [`core/cache/never`](src_core_cache_never_index.html).
 
 ```js
 import SimpleCache from 'core/cache/simple';
@@ -36,14 +36,15 @@ Provides a decorator for any cache to add the feature of cache expiring.
 
 ```js
 import SimpleCache from 'core/cache/simple';
-import wrapCacheWithTTL from 'core/cache/ttl';
+import addTTL from 'core/decorators/cache/ttl';
 
+// Function addTTL accept cache and default ttl as second argument
 const
-  cache = wrapCacheWithTTL(new SimpleCache());
+  cache = addTTL(new SimpleCache(), 1000);
 
 // Method "add" accepts as the third optional parameter time until expiring the item to store in milliseconds.
 cache.add('foo', 'bar1', {ttl: 500});
 
-// Additional method to clear the `ttl` descriptor from a cache iteb by the specified key
-cache.clearTTL('foo');
+// Additional method to clear the `ttl` descriptor from a cache item by the specified key
+cache.removeTTLFrom('foo');
 ```

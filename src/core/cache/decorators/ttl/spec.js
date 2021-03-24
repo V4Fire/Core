@@ -7,11 +7,11 @@
  */
 
 import SimpleCache from 'core/cache/simple';
-import wrapCacheWithTTL from 'core/cache/ttl';
+import addTTL from 'core/decorators/cache/ttl';
 
-describe('core/cache/ttl', () => {
-	it('should delete props after timeout', (done) => {
-		const cache = wrapCacheWithTTL(new SimpleCache());
+describe('core/cache/decorators/ttl', () => {
+	it('should remove items after expiring', (done) => {
+		const cache = addTTL(new SimpleCache());
 
 		cache.set('foo', 1);
 		cache.set('bar', 2, {ttl: 5});
@@ -27,8 +27,8 @@ describe('core/cache/ttl', () => {
 		}, 10);
 	});
 
-	it('should not`delete props before timeout', (done) => {
-		const cache = wrapCacheWithTTL(new SimpleCache());
+	it('should not remove items before expiring', (done) => {
+		const cache = addTTL(new SimpleCache());
 
 		cache.set('foo', 1);
 		cache.set('bar', 2, {ttl: 50});
@@ -43,8 +43,8 @@ describe('core/cache/ttl', () => {
 		}, 10);
 	});
 
-	it('should override default ttl', (done) => {
-		const cache = wrapCacheWithTTL(new SimpleCache(), 10);
+	it('should override the default `ttl`', (done) => {
+		const cache = addTTL(new SimpleCache(), 10);
 
 		cache.set('foo', 1);
 		cache.set('bar', 2, {ttl: 50});
@@ -57,16 +57,16 @@ describe('core/cache/ttl', () => {
 		}, 25);
 	});
 
-	it('should not delete props after timeout if clearTTL was called', (done) => {
-		const cache = wrapCacheWithTTL(new SimpleCache());
+	it('should not remove items after expiring after invoking of `removeTTLFrom`', (done) => {
+		const cache = addTTL(new SimpleCache());
 
 		cache.set('foo', 1);
 
 		cache.set('bar', 2, {ttl: 5});
-		cache.clearTTL('bar');
+		cache.removeTTLFrom('bar');
 
 		cache.set('baz', 3, {ttl: 0});
-		cache.clearTTL('baz');
+		cache.removeTTLFrom('baz');
 
 		setTimeout(() => {
 			expect(cache.has('foo')).toBe(true);
@@ -77,8 +77,8 @@ describe('core/cache/ttl', () => {
 		}, 10);
 	});
 
-	it('remove work', () => {
-		const cache = wrapCacheWithTTL(new SimpleCache());
+	it('clearing of the storage', () => {
+		const cache = addTTL(new SimpleCache());
 
 		cache.set('foo', 1);
 		cache.set('bar', 2);
@@ -86,10 +86,10 @@ describe('core/cache/ttl', () => {
 		expect(cache.clear()).toEqual(new Map([['foo', 1], ['bar', 2]]));
 	});
 
-	it('all methods should call original instance', () => {
+	it('all methods should call the original instance', () => {
 		const
 			simpleCache = new SimpleCache(),
-			cache = wrapCacheWithTTL(simpleCache);
+			cache = addTTL(simpleCache);
 
 		[
 			{

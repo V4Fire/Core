@@ -13,4 +13,4 @@ Changelog
 
 #### :rocket: New Feature
 
-* TTL wrapper for cache
+* Added a wrapper to provide the feature of cache expiring
