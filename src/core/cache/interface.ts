@@ -78,6 +78,6 @@ export interface DecoratorOptions {
 
 export interface PersistentOptions {
     persistentTTL?: number;
-    readFromMemoryStrategy: 'always' | 'connection loss';
+    readFromMemoryStrategy: 'always' | 'connectionLoss';
     initializationStrategy: 'lazy' | 'semi-lazy' | 'active';
 }

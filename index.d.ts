@@ -3862,18 +3862,3 @@ interface Function {
 type Overwrite<T, U> = Pick<T, Exclude<keyof T, keyof U>> & U;
 
 type Primitive = string | number | boolean | undefined | null;
-
-/**
- * Wrap return of function with promise
- *
- * @template T - any function
- *
- * @example
- * ```typescript
- * type A = typeof () => null;
- *
- * // () => Promise<null>
- * type B = ReturnPromise<A>;
- * ```
- */
-type ReturnPromise<T extends (...args: any[]) => unknown> = (...args: Parameters<T>) => Promise<ReturnType<T>>;

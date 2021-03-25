@@ -8,9 +8,9 @@
 
 import { asyncLocal } from 'core/kv-storage';
 
-import { StorageManager } from 'core/cache/persistent';
+import { StorageManager } from 'core/cache/decorators/persistent/helpers';
 
-describe('core/cache/persistent', () => {
+describe('core/cache/decorators/persistent', () => {
 	describe('StorageManager', () => {
 		it('default methods should work', async (done) => {
 			const wrapper = new StorageManager(asyncLocal);

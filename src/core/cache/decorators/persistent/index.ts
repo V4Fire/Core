@@ -5,101 +5,60 @@
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
+
 /**
  * [[include:core/cache/simple/README.md]]
  * @packageDocumentation
  */
+
 import type Cache from 'core/cache/interface';
 import type { PersistentOptions, PersistentCache } from 'core/cache/interface';
 
 import { isOnline } from 'core/net';
 import type { SyncStorageNamespace, AsyncStorageNamespace } from 'core/kv-storage';
+import { StorageManager } from 'core/cache/decorators/persistent/helpers';
 
 export * from 'core/cache/interface';
 
 const ttlPostfix = '__ttl';
 const inMemoryPath = '__storage__';
 
-export class StorageManager {
-	private memory: {
-		[key: string]: {
-			value?: unknown;
-			action: 'set' | 'remove';
-			callback?(): void;
-		};
-	} = {};
-	private readonly storage: SyncStorageNamespace | AsyncStorageNamespace;
-	private promise: Promise<unknown> = Promise.resolve();
-
-	constructor(storage: SyncStorageNamespace | AsyncStorageNamespace) {
-		this.storage = storage;
-	}
-
-	public set(key: string, value: unknown, callback?: () => void): void {
-		this.changeElement(key, {
-			action: 'set',
-			value,
-			callback
-		});
-	}
-
-	public remove(key: string, callback?: () => void): void {
-		this.changeElement(key, {
-			action: 'remove',
-			callback
-		});
-	}
-
-	private changeElement(key: string, parameters: {
-		action: 'set';
-		value: unknown;
-		callback?(): void;
-	} | {
-		action: 'remove';
-		callback?(): void;
-	}): void {
-		this.memory[key] = parameters;
-
-		if (Object.keys(this.memory).length === 1) {
-			this.promise = this.promise.then(async () => {
-				await this.makeIteration();
-			});
-		}
-	}
-
-	private async makeIteration() {
-		const
-			clone = {...this.memory};
-		this.memory = {};
-
-		await Promise.all(Object.keys(clone).map((key) => {
-			const promiseForKey = new Promise<void>(async (resolve) => {
-				if (clone[key].action === 'remove') {
-					await this.storage.remove(key);
-				} else {
-					await this.storage.set(key, clone[key].value);
-				}
-
-				const
-					cb = clone[key].callback;
-
-				if (cb) {
-					cb();
-				}
-
-				resolve();
-			});
-			return promiseForKey;
-		}));
-	}
-}
-
 class PersistentWrapper<V = unknown> {
+	/**
+	 * A cache whose methods will be rewritten to synchronize with the storage
+	 */
 	private readonly cacheWithStorage: PersistentCache<V, string>;
+
+	/**
+	 * Cache
+	 */
 	private readonly cache: Cache<V, string>;
+
+	/**
+	 * Storage object
+	 */
 	private readonly kvStorage: SyncStorageNamespace | AsyncStorageNamespace;
+
+	/**
+	 * Options that affect how the cache will be initialized and when the wrapper will access the storage
+	 */
 	private readonly options: PersistentOptions;
+
+	/**
+	 * Used for saving and deleting properties from storage
+	 */
 	private readonly StorageManager: StorageManager;
+
+	/**
+	 * An object that stores the keys of all properties that have already been fetched from the storage
+	 * used only in `lazy` and `semi-lazy` options
+	 */
+	private readonly fetchedMemory: Set<string> = new Set();
+
+	/**
+	 * An object that stores the keys of all properties in the storage and their ttls
+	 * used only in `active` and `semi-lazy` options
+	 */
 	private storage: {[key: string]: number} = {};
 
 	constructor(
@@ -114,7 +73,7 @@ class PersistentWrapper<V = unknown> {
 		this.StorageManager = new StorageManager(kvStorage);
 	}
 
-	public async getInstance(): Promise<PersistentCache<V, string>> {
+	async getInstance(): Promise<PersistentCache<V, string>> {
 		await this.init();
 		this.replaceHasMethod();
 		return this.cacheWithStorage;
@@ -128,7 +87,8 @@ class PersistentWrapper<V = unknown> {
 		}
 
 		if (this.options.initializationStrategy === 'active') {
-			const time = Date.now();
+			const
+				time = Date.now();
 
 			await Promise.all(Object.keys(this.storage).map((key) => {
 				const promiseInitProp = new Promise<void>(async (resolve) => {
@@ -158,34 +118,34 @@ class PersistentWrapper<V = unknown> {
 			}
 
 			const
-				online = (await isOnline()).status;
+				online = (await isOnline()).status,
+				time = Date.now();
 
-			if (options.readFromMemoryStrategy === 'connection loss' && online) {
-				return cache.has(key);
+			if (this.options.readFromMemoryStrategy === 'connectionLoss' && online) {
+				return this.cache.has(key);
 			}
 
-			if (options.initializationStrategy === 'lazy') {
-				if (wasFetched.has(key)) {
-					return cache.has(key);
+			if (this.options.initializationStrategy === 'lazy') {
+				if (this.fetchedMemory.has(key)) {
+					return this.cache.has(key);
 				}
 
-				wasFetched.add(key);
-				const value = await kvStorage.has(key) && await kvStorage.get<V>(key);
+				this.fetchedMemory.add(key);
+				const value = await this.kvStorage.has(key) && await this.kvStorage.get<V>(key);
 
 				if (value != null && value !== false) {
-					const timeStampTTL = await kvStorage.has(`${key}${ttlPostfix}`) && await kvStorage.get<number>(`${key}${ttlPostfix}`);
+					const timeStampTTL = await this.kvStorage.has(`${key}${ttlPostfix}`) && await this.kvStorage.get<number>(`${key}${ttlPostfix}`);
 
-					if (timeStampTTL != null && timeStampTTL > timeNow) {
-						cache.set(key, value);
+					if (timeStampTTL != null && timeStampTTL > time) {
+						this.cache.set(key, value);
 						return true;
 					}
 				}
 
-				return cache.has(key);
-
+				return this.cache.has(key);
 			}
 
-			return cache.has(key);
+			return this.cache.has(key);
 		};
 	}
 }
