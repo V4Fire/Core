@@ -55,6 +55,7 @@ await persistentCache.add('foo2', 'bar2');
 ### Initialization Strategy
 
 The required parameter describes how properties from storage will be copied in the cache.
+Warning! method keys will work correct only with `active` initialization strategy.
 
 #### active
 

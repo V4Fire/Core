@@ -11,10 +11,12 @@
  * @packageDocumentation
  */
 
-import type Cache from 'core/cache/interface';
-import type { PersistentOptions, PersistentCache } from 'core/cache/interface';
+import type Cache, {DecoratorOptions} from 'core/cache/interface';
+import type { PersistentOptions, PersistentCache, ClearFilter } from 'core/cache/interface';
 
 import { isOnline } from 'core/net';
+import watch from 'core/object/watch';
+import SyncPromise from 'core/promise/sync';
 import type { SyncStorageNamespace, AsyncStorageNamespace } from 'core/kv-storage';
 import { StorageManager } from 'core/cache/decorators/persistent/helpers';
 
@@ -75,7 +77,13 @@ class PersistentWrapper<V = unknown> {
 
 	async getInstance(): Promise<PersistentCache<V, string>> {
 		await this.init();
+		this.watchOnCache();
 		this.replaceHasMethod();
+		this.replaceGetMethod();
+		this.replaceSetMethod();
+		this.replaceRemoveMethod();
+		this.replaceKeysMethod();
+		this.replaceClearMethod();
 		return this.cacheWithStorage;
 	}
 
@@ -96,11 +104,7 @@ class PersistentWrapper<V = unknown> {
 						const value = (await this.kvStorage.get<V>(key))!;
 						await this.cacheWithStorage.set(key, value);
 					} else {
-						this.StorageManager.remove(key, () => {
-							delete this.storage[key];
-							const copyOfStorage = {...this.storage};
-							this.StorageManager.set(inMemoryPath, copyOfStorage);
-						});
+						void this.removeValueFromStorage(key);
 					}
 
 					resolve();
@@ -111,11 +115,23 @@ class PersistentWrapper<V = unknown> {
 		}
 	}
 
+	private watchOnCache(): void {
+		this.cache.storage = watch(this.cache.storage, {deep: true, immediate: true}, (newValue, oldValue, params) => {
+			this.StorageManager.set(params.originalPath, newValue);
+		});
+	}
+
 	private replaceHasMethod(): void {
 		this.cacheWithStorage.has = async (key: string) => {
 			if (this.options.initializationStrategy === 'active') {
 				return this.cache.has(key);
 			}
+
+			if (this.fetchedMemory.has(key)) {
+				return this.cache.has(key);
+			}
+
+			this.fetchedMemory.add(key);
 
 			const
 				online = (await isOnline()).status,
@@ -126,11 +142,6 @@ class PersistentWrapper<V = unknown> {
 			}
 
 			if (this.options.initializationStrategy === 'lazy') {
-				if (this.fetchedMemory.has(key)) {
-					return this.cache.has(key);
-				}
-
-				this.fetchedMemory.add(key);
 				const value = await this.kvStorage.has(key) && await this.kvStorage.get<V>(key);
 
 				if (value != null && value !== false) {
@@ -145,7 +156,121 @@ class PersistentWrapper<V = unknown> {
 				return this.cache.has(key);
 			}
 
+			const ttl = this.storage[key];
+
+			if (ttl > time) {
+				const value = await this.kvStorage.has(key) && await this.kvStorage.get<V>(key);
+
+				if (value != null && value !== false) {
+					this.cache.set(key, value);
+					return true;
+				}
+			}
+
 			return this.cache.has(key);
+		};
+	}
+
+	private replaceGetMethod(): void {
+		this.cacheWithStorage.get = async (key: string) => {
+			if (this.options.initializationStrategy === 'active') {
+				return this.cache.get(key);
+			}
+
+			if (this.fetchedMemory.has(key)) {
+				return this.cache.get(key);
+			}
+
+			this.fetchedMemory.add(key);
+
+			const
+				online = (await isOnline()).status,
+				time = Date.now();
+
+			if (this.options.readFromMemoryStrategy === 'connectionLoss' && online) {
+				return this.cache.get(key);
+			}
+
+			if (this.options.initializationStrategy === 'lazy') {
+				const value = await this.kvStorage.get<V>(key);
+
+				if (value != null) {
+					const timeStampTTL = await this.kvStorage.get<number>(`${key}${ttlPostfix}`);
+
+					if (timeStampTTL != null && timeStampTTL > time) {
+						this.cache.set(key, value);
+						return value;
+					}
+				}
+
+				return this.cache.get(key);
+			}
+
+			const ttl = this.storage[key];
+
+			if (ttl > time) {
+				const value = await this.kvStorage.get<V>(key);
+
+				if (value != null) {
+					this.cache.set(key, value);
+					return value;
+				}
+			}
+
+			return this.cache.get(key);
+		};
+	}
+
+	private replaceSetMethod(): void {
+		this.cacheWithStorage.set = async (key: string, value: V, opts?: DecoratorOptions) => {
+			// TODO
+		};
+	}
+
+	private replaceRemoveMethod(): void {
+		this.cacheWithStorage.remove = async (key: string) => {
+			this.fetchedMemory.add(key);
+			const removed = await this.removeValue(key);
+			return removed;
+		};
+	}
+
+	private async removeValue(key: string): Promise<CanUndef<V>> {
+		await this.removeValueFromStorage(key);
+		return this.cache.remove(key);
+	}
+
+	private async removeValueFromStorage(key: string): Promise<void> {
+		await Promise.all([
+			this.StorageManager.remove(`${key}__ttl`),
+			this.StorageManager.remove(key, () => {
+				delete this.storage[key];
+				const copyOfStorage = {...this.storage};
+				this.StorageManager.set(inMemoryPath, copyOfStorage);
+			})
+		]);
+	}
+
+	private replaceKeysMethod(): void {
+		this.cacheWithStorage.keys = async () => {
+			const keys = await SyncPromise.resolve(this.cache.keys());
+			return keys;
+		};
+	}
+
+	private replaceClearMethod(): void {
+		this.cacheWithStorage.clear = async (filter?: ClearFilter<V, string>) => {
+			const
+				removed = this.cache.clear(filter),
+				removedKeys: string[] = [];
+
+			removed.forEach((_, key) => {
+				removedKeys.push(key);
+			});
+
+			await Promise.all(removedKeys.map((key) => this.removeValueFromStorage(key)));
+
+			return removed;
 		};
 	}
 }
