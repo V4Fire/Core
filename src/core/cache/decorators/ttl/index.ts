@@ -16,6 +16,27 @@ import type { TTLCache, ClearFilter, DecoratorOptions } from 'core/cache/interfa
 
 export * from 'core/cache/interface';
 
+/**
+ * Wrapper for Cache data structures to add the feature of cache expiring.
+ *
+ * @template V - Values in cache
+ * @template K - Keys in cache
+ *
+ * @param cache
+ * @param ttl the default ttl provides in milliseconds
+ *
+ * @example
+ * ```typescript
+ * import addTTL from 'core/cache/decorators/ttl';
+ * import SimpleCache from 'core/cache/simple';
+ *
+ * const
+ *   cache = addTTL(new SimpleCache(), 10000);
+ *
+ * cache.add('foo', 'bar1', {ttl: 500});
+ * cache.add('foo2', 'bar2');
+ * ```
+ */
 export default function addTTL<V = unknown, K = string>(cache: Cache<V, K>, ttl?: number): TTLCache<V, K> {
 	const
 		cacheWithTTL: TTLCache<V, K> = Object.create(cache),
@@ -38,7 +59,7 @@ export default function addTTL<V = unknown, K = string>(cache: Cache<V, K>, ttl?
 		return cache.remove(key);
 	};
 
-	cacheWithTTL.removeTTLFrom = function removeTTLFrom(key: K) {
+	cacheWithTTL.removeTTLFrom = (key: K) => {
 		if (ttlTimers.has(key)) {
 			clearTimeout(<number>ttlTimers.get(key));
 			ttlTimers.delete(key);

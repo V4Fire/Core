@@ -1,7 +1,7 @@
 # core/cache/decorators/ttl
 
-This module provides a wrapper for [[Cache]] data structure with ttl api.
-TTL for property and default TTL provides in milliseconds.
+This module provides a wrapper for [[Cache]] data structures to add the feature of cache expiring.
+A value for `ttl` properties provides in milliseconds.
 
 ## Example
 
@@ -25,8 +25,8 @@ setTimeout(() => {
 
 ## Default ttl
 
-When you wrap cache with ttl decorator you can provide default ttl.
-Default ttl has a lower priority than the ttl bound to the property.
+When you wrap a cache object with the `ttl` decorator you can provide the default ttl value.
+The default value is used when you don't provide the `ttl` property when saving an item.
 
 ```js
 import SimpleCache from 'core/cache/simple';
@@ -35,13 +35,13 @@ import addTTL from 'core/cache/decorators/ttl';
 const
   cache = addTTL(new SimpleCache(), 10000);
 
-cache.add('foo', 'bar1', {ttl: 500}); // TTL 500 have higher priority and will overwrite 10000
+cache.add('foo', 'bar1', {ttl: 500}); // TTL 500 has the higher priority and will overwrite 10000s
 cache.add('foo2', 'bar2'); // TTL will be 10000
 ```
 
 ## Property collisions
 
-In case of a property collision, all the old properties, including the TTL, will be overwrited.
+In case of a property collision, all old properties, including their TTL values, will be overwritten.
 
 ```js
 import SimpleCache from 'core/cache/simple';
@@ -51,5 +51,5 @@ const
   cache = addTTL(new SimpleCache());
 
 cache.add('foo', 'bar1', {ttl: 500});
-cache.add('foo', 'bar1'); // TTL will be overwrited
+cache.add('foo', 'bar1'); // TTL will be overwritten
 ```
