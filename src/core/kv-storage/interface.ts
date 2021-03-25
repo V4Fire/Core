@@ -64,48 +64,12 @@ export interface SyncStorage extends SyncStorageNamespace {
 	namespace(name: string): SyncStorageNamespace;
 }
 
-export interface AsyncStorageNamespace {
-	/**
-	 * Returns true if a value by the specified key exists in the storage
-	 *
-	 * @param key,
-	 * @param [args]
-	 */
-	has(key: string, ...args: unknown[]): Promise<boolean>;
-
-	/**
-	 * Returns a value from the storage by the specified key
-	 *
-	 * @param key
-	 * @param [args]
-	 */
+export type AsyncStorageNamespace = {
+	[key in Exclude<keyof SyncStorageNamespace, 'get' | 'clear'>]: ReturnPromise<SyncStorageNamespace[key]>;
+} & {
 	get<T = unknown>(key: string, ...args: unknown[]): Promise<CanUndef<T>>;
-
-	/**
-	 * Saves a value to the storage by the specified key
-	 *
-	 * @param key
-	 * @param value
-	 * @param [args]
-	 */
-	set(key: string, value: unknown, ...args: unknown[]): Promise<void>;
-
-	/**
-	 * Removes a value from the storage by the specified key
-	 *
-	 * @param key
-	 * @param [args]
-	 */
-	remove(key: string, ...args: unknown[]): Promise<void>;
-
-	/**
-	 * Clears the storage by the specified filter and returns a list of removed keys
-	 *
-	 * @param [filter] - filter for removing (if not specified, then all storage values will be removed)
-	 * @param [args]
-	 */
 	clear<T = unknown>(filter?: ClearFilter<T>, ...args: unknown[]): Promise<void>;
-}
+};
 
 /**
  * API for an asynchronous storage

@@ -34,9 +34,9 @@ export default interface Cache<V = unknown, K = string> {
 	 *
 	 * @param key
 	 * @param value
-	 * @param options
+	 * @param opts
 	 */
-	set(key: K, value: V, options?: DecoratorOptions): V;
+	set(key: K, value: V, opts?: DecoratorOptions): V;
 
 	/**
 	 * Removes a value from the cache by the specified key
@@ -60,8 +60,20 @@ export type PersistentCache<V = unknown, K = string> = {
 	[key in (keyof Cache<V, K>)]: ReturnPromise<Cache<V, K>[key]>
 };
 
+export interface TTLCache<V = unknown, K = string> extends Cache<V, K> {
+	/**
+	 * Removes the `ttl` descriptor from a cache item by the specified key
+	 *
+	 * @param key
+	 */
+	removeTTLFrom(key: K): void;
+}
+
 export interface DecoratorOptions {
+	// Time to expire a cache item in persistent storage
 	persistentTTL?: number;
+	// Time to expire a cache item in milliseconds
+	ttl?: number;
 }
 
 export interface PersistentOptions {
