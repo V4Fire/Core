@@ -179,7 +179,7 @@ export default class RequestContext<D = unknown> extends Super<D> {
 			}
 
 			if (Object.size(q) > 0) {
-				url = `${url}?${toQueryString(q)}`;
+				url = `${url}?${toQueryString(q, {removeEmptyParams: p.removeEmptyDataParams})}`;
 			}
 
 			if (this.canCache) {

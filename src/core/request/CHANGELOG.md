@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.40.0
+
+#### :rocket: New Feature
+
+* Added new property `removeEmptyDataParams` for request options that can disable removing empty properties from request query or request body
+
 ## v3.37.0 (2021-03-17)
 
 #### :rocket: New Feature

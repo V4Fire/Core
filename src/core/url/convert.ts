@@ -193,8 +193,16 @@ export function fromQueryString(
 }
 
 function chunkToQueryString(data: unknown, opts: ToQueryStringOptions, prfx: string = ''): string {
-	if (data == null || data === '') {
-		return '';
+	const
+		removeEmptyParams = opts.removeEmptyParams == null ? true : opts.removeEmptyParams;
+
+	if (removeEmptyParams) {
+		if (data == null || data === '') {
+			return '';
+		}
+
+	} else if (data == null) {
+		data = '';
 	}
 
 	const
@@ -216,8 +224,10 @@ function chunkToQueryString(data: unknown, opts: ToQueryStringOptions, prfx: str
 			let
 				key = String(pt);
 
-			if (val == null || val === '' || valIsArr && (<unknown[]>val).length === 0) {
-				continue;
+			if (removeEmptyParams) {
+				if (val == null || val === '' || valIsArr && (<unknown[]>val).length === 0) {
+					continue;
+				}
 			}
 
 			if (opts.arraySyntax) {

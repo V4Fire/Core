@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.40.0
+
+#### :rocket: New Feature
+
+* Added new property `removeEmptyParams` in `ToQueryStringOptions` options that can disable removing empty properties in `toQueryString`
+
 ## v3.33.0 (2021-02-26)
 
 #### :boom: Breaking Change

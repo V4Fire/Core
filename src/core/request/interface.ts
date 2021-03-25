@@ -422,6 +422,11 @@ export interface CreateRequestOptions<D = unknown> {
 	 * Custom request engine
 	 */
 	engine?: RequestEngine;
+
+	/**
+	 * @see [[[ToQueryStringOptions.removeEmptyParams]]]
+	 */
+	removeEmptyDataParams?: boolean;
 }
 
 /**

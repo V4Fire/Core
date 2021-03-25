@@ -38,6 +38,19 @@ export interface ToQueryStringOptions {
 	 * ```
 	 */
 	arraySyntax?: boolean;
+
+	/**
+	 * If false, then properties with empty values will not be removed
+	 *
+	 * @default `true`
+	 *
+	 * @example
+	 * ```js
+	 * // foo=&bar=
+	 * fromQueryString({foo: [], bar: null}, {removeEmptyParams: false});
+	 * ```
+	 */
+	removeEmptyParams?: boolean;
 }
 
 export interface FromQueryStringOptions {

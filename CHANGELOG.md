@@ -11,6 +11,13 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.40.0
+
+#### :rocket: New Feature
+
+* Added new property `removeEmptyParams` in `ToQueryStringOptions` options that can disable removing empty properties in `toQueryString` `core/url`
+* Added new property `removeEmptyDataParams` for request options that can disable removing empty properties from request query or request body `core/request`
+
 ## v3.39.0 (2021-03-19)
 
 #### :bug: Bug Fix
