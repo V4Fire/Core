@@ -10,15 +10,15 @@ import SimpleCache from 'core/cache/simple';
 import { asyncLocal } from 'core/kv-storage';
 
 const options = {
-    readFromMemoryStrategy: 'always',
-    initializationStrategy: 'active',
-  };
+  readFromMemoryStrategy: 'always',
+  initializationStrategy: 'active',
+};
 
 const
   persistentCache = await new PersistentWrapper(new SimpleCache(), asyncLocal, options).getInstance();
 
-await persistentCache.add('foo', 'bar');
-await persistentCache.add('foo2', 'bar2');
+await persistentCache.set('foo', 'bar');
+await persistentCache.set('foo2', 'bar2');
 
 // Will have all values from the old cache
 const 
@@ -39,17 +39,17 @@ import SimpleCache from 'core/cache/simple';
 import { asyncLocal } from 'core/kv-storage';
 
 const options = {
-    persistentTTL: 60000,
-    readFromMemoryStrategy: 'always',
-    initializationStrategy: 'active',
-  };
+  persistentTTL: 60000,
+  readFromMemoryStrategy: 'always',
+  initializationStrategy: 'active',
+};
 
 const
   persistentCache = await new PersistentWrapper(new SimpleCache(), asyncLocal, options).getInstance();
 
 // These values will be valid for the next 60 seconds, after 60 seconds they will be deleted at the first request
-await persistentCache.add('foo', 'bar');
-await persistentCache.add('foo2', 'bar2');
+await persistentCache.set('foo', 'bar');
+await persistentCache.set('foo2', 'bar2');
 ```
 
 ### Initialization Strategy
@@ -68,15 +68,15 @@ import SimpleCache from 'core/cache/simple';
 import { asyncLocal } from 'core/kv-storage';
 
 const options = {
-    readFromMemoryStrategy: 'always',
-    initializationStrategy: 'active',
-  };
+  readFromMemoryStrategy: 'always',
+  initializationStrategy: 'active',
+};
   
 const
   persistentCache = await new PersistentWrapper(new SimpleCache(), asyncLocal, options).getInstance();
 
-await persistentCache.add('foo', 'bar');
-await persistentCache.add('foo2', 'bar2');
+await persistentCache.set('foo', 'bar');
+await persistentCache.set('foo2', 'bar2');
 
 // All properties already in our Simple cache
 const 
@@ -94,15 +94,15 @@ import SimpleCache from 'core/cache/simple';
 import { asyncLocal } from 'core/kv-storage';
 
 const options = {
-    readFromMemoryStrategy: 'always',
-    initializationStrategy: 'semi-lazy',
-  };
+  readFromMemoryStrategy: 'always',
+  initializationStrategy: 'semi-lazy',
+};
 
 const
   persistentCache = await new PersistentWrapper(new SimpleCache(), asyncLocal, options).getInstance();
 
-await persistentCache.add('foo', 'bar');
-await persistentCache.add('foo2', 'bar2');
+await persistentCache.set('foo', 'bar');
+await persistentCache.set('foo2', 'bar2');
 
 // At this moment simple cache don't have our properties
 const 
@@ -123,15 +123,15 @@ import SimpleCache from 'core/cache/simple';
 import { asyncLocal } from 'core/kv-storage';
 
 const options = {
-    readFromMemoryStrategy: 'always',
-    initializationStrategy: 'lazy',
-  };
+  readFromMemoryStrategy: 'always',
+  initializationStrategy: 'lazy',
+};
 
 const
   persistentCache = await new PersistentWrapper(new SimpleCache(), asyncLocal, options).getInstance();;
 
-await persistentCache.add('foo', 'bar');
-await persistentCache.add('foo2', 'bar2');
+await persistentCache.set('foo', 'bar');
+await persistentCache.set('foo2', 'bar2');
 
 // At this moment simple cache don't have our properties
 const 

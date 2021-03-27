@@ -1,4 +1,13 @@
+import type Cache from 'core/cache/interface';
 import type { SyncStorageNamespace, AsyncStorageNamespace } from 'core/kv-storage';
+import type { PersistentOptions, ClearFilter } from 'core/cache/interface';
+import type {
+
+	StorageManagerChangeElementParams, StorageManagerMemory,
+	ConnectorRemoveCacheOrBothOptions, ConnectorRemoveStorageOptions,
+	ConnectorSetCacheOrBothOptions, ConnectorSetStorageOptions
+
+} from 'core/cache/decorators/persistent/interface';
 
 /**
  * The manager for working with the storage
@@ -9,13 +18,7 @@ export class StorageManager {
 	/**
 	 * Stores keys that will need to be updated at the next iteration
 	 */
-	private memory: {
-		[key: string]: {
-			value?: unknown;
-			action: 'set' | 'remove';
-			callback?(): void;
-		};
-	} = {};
+	private memory: StorageManagerMemory = {};
 
 	/**
 	 * Storage object
@@ -69,14 +72,7 @@ export class StorageManager {
 	 * @param key
 	 * @param parameters
 	 */
-	private changeElement(key: string, parameters: {
-		action: 'set';
-		value: unknown;
-		callback?(): void;
-	} | {
-		action: 'remove';
-		callback?(): void;
-	}): void {
+	private changeElement(key: string, parameters: StorageManagerChangeElementParams): void {
 		this.memory[key] = parameters;
 
 		if (Object.keys(this.memory).length === 1) {
@@ -114,5 +110,170 @@ export class StorageManager {
 			});
 			return promiseForKey;
 		}));
+	}
+}
+
+const ttlPostfix = '__ttl';
+const inMemoryPath = '__storage__';
+
+/**
+ * The connector knows which fields to write ttl in which mode and how to get them
+ * Used for encapsulating the storage and cache relationships
+ */
+export class StorageCacheConnector<V = unknown> {
+	/**
+	 * Cache
+	 */
+	private readonly cache: Cache<V, string>;
+
+	/**
+	 * Storage object
+	 */
+	private readonly kvStorage: SyncStorageNamespace | AsyncStorageNamespace;
+
+	/**
+	 * Options that affect how the cache will be initialized and when the wrapper will access the storage
+	 */
+	private readonly opts: PersistentOptions;
+
+	/**
+	 * Used for saving and deleting properties from storage
+	 */
+	private readonly StorageManager: StorageManager;
+
+	/**
+	 * An object that stores the keys of all properties in the storage and their ttls
+	 * used only in `active` and `semi-lazy` opts
+	 */
+	private storage: {[key: string]: number} = {};
+
+	constructor(
+		cache: Cache<V, string>,
+		kvStorage: SyncStorageNamespace | AsyncStorageNamespace,
+		opts: PersistentOptions
+	) {
+		this.cache = cache;
+		this.kvStorage = kvStorage;
+		this.opts = opts;
+		this.StorageManager = new StorageManager(kvStorage);
+	}
+
+	public async initCache(): Promise<void> {
+		if (await this.kvStorage.has(inMemoryPath)) {
+			this.storage = (await this.kvStorage.get<{[key: string]: number}>(inMemoryPath))!;
+		} else {
+			await this.kvStorage.set(inMemoryPath, this.storage);
+		}
+
+		if (this.opts.initializationStrategy === 'active') {
+			const
+				time = Date.now();
+
+			await Promise.all(Object.keys(this.storage).map((key) => {
+				const promiseInitProp = new Promise<void>(async (resolve) => {
+					if (this.storage[key] > time) {
+						const value = (await this.kvStorage.get<V>(key))!;
+						await this.set(key, value, {target: 'cache'});
+					} else {
+						void this.remove(key, {target: 'storage'});
+					}
+
+					resolve();
+				});
+
+				return promiseInitProp;
+			}));
+		}
+	}
+
+	public async set(key: string, value: V, opts: ConnectorSetCacheOrBothOptions): Promise<V>
+	public async set(key: string, value: V, opts: ConnectorSetStorageOptions): Promise<undefined>
+	public async set(
+		key: string,
+		value: V,
+		opts: ConnectorSetCacheOrBothOptions | ConnectorSetStorageOptions
+	): Promise<undefined | V> {
+		if (opts.target === 'both' || opts.target === 'storage') {
+			if (this.opts.initializationStrategy === 'lazy') {
+				await this.StorageManager.set(key, value, () => {
+					this.StorageManager.set(`${key}${ttlPostfix}`, opts.ttl ?? Number.MAX_SAFE_INTEGER);
+				});
+			}
+
+			await this.StorageManager.set(key, value, () => {
+				this.storage[key] = opts.ttl ?? Number.MAX_SAFE_INTEGER;
+				const copyOfStorage = {...this.storage};
+				this.StorageManager.set(inMemoryPath, copyOfStorage);
+			});
+		}
+
+		if (opts.target === 'both' || opts.target === 'cache') {
+			return this.cache.set(key, value);
+		}
+	}
+
+	public async remove(key: string, opts: ConnectorRemoveCacheOrBothOptions): Promise<V>
+	public async remove(key: string, opts: ConnectorRemoveStorageOptions): Promise<undefined>
+	public async remove(
+		key: string,
+		opts: ConnectorRemoveCacheOrBothOptions | ConnectorRemoveStorageOptions
+	): Promise<undefined | V> {
+		if (opts.target === 'both' || opts.target === 'storage') {
+			if (this.opts.initializationStrategy === 'lazy') {
+				await this.StorageManager.remove(key, () => {
+					this.StorageManager.remove(`${key}${ttlPostfix}`);
+				});
+			}
+
+			await this.StorageManager.remove(key, () => {
+				delete this.storage[key];
+				const copyOfStorage = {...this.storage};
+				this.StorageManager.set(inMemoryPath, copyOfStorage);
+			});
+		}
+
+		if (opts.target === 'both' || opts.target === 'cache') {
+			return this.cache.remove(key);
+		}
+	}
+
+	public async clear(filter?: ClearFilter<V, string>): Promise<Map<string, V>> {
+		const
+			removed = this.cache.clear(filter),
+			removedKeys: string[] = [];
+
+		removed.forEach((_, key) => {
+			removedKeys.push(key);
+		});
+
+		await Promise.all(removedKeys.map((key) => this.remove(key, {target: 'storage'})));
+
+		return removed;
+	}
+
+	public async checkPropertyInStorage(key: string): Promise<void> {
+		const
+			ttl = await this.getTTL(key),
+			time = Date.now();
+
+		if (ttl != null && ttl > time) {
+			if (ttl > time) {
+				const value = await this.kvStorage.get<V>(key);
+				if (value != null) {
+					await this.set(key, value, {target: 'cache'});
+				}
+			} else {
+				await this.remove(key, {target: 'storage'});
+			}
+		}
+	}
+
+	public async getTTL(key: string): Promise<number | null> {
+		if (this.opts.initializationStrategy === 'lazy') {
+			const ttl = await this.kvStorage.get<number>(`${key}${ttlPostfix}`);
+			return ttl ?? null;
+		}
+
+		return <number | undefined>this.storage[key] ?? null;
 	}
 }
