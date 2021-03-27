@@ -8,7 +8,7 @@
 
 import type { LogEvent, LogMiddleware, NextCallback } from 'core/log/middlewares/interface';
 import type { Options } from 'core/log/middlewares/configurable/interface';
-import { getOptions } from 'core/log/middlewares/configurable/options';
+import { get } from 'core/log/middlewares/configurable/options';
 
 export class ConfigurableMiddleware implements LogMiddleware {
 	protected queue: LogEvent[] = [];
@@ -17,7 +17,7 @@ export class ConfigurableMiddleware implements LogMiddleware {
 		//#if runtime has core/log
 
 		const
-			logOps = getOptions();
+			logOps = get();
 
 		if (logOps == null) {
 			if (Array.isArray(events)) {

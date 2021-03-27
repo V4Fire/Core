@@ -16,25 +16,49 @@ let
 /**
  * Returns current options of configurable middleware
  */
-export function getOptions(): CanUndef<Options> {
+export function get(): CanUndef<Options> {
 	return logOps;
+}
+
+/**
+ * Sets passed options of configurable middleware if they are valid
+ * @param opts
+ */
+export function set(opts: unknown): void {
+	let po: PersistentOptions;
+
+	if (isValidOptions(opts)) {
+		po = {
+			...DEFAULT_OPTIONS,
+			...opts
+		};
+
+	} else {
+		po = {
+			...DEFAULT_OPTIONS
+		};
+	}
+
+	logOps = {
+		patterns: po.patterns.map((pattern) => new RegExp(pattern))
+	};
 }
 
 /**
  * Inits a configurable middleware with data from a storage and subscribes for its changes
  */
 export function subscribe(): void {
-	env.get('log').then(setOptions, setOptions);
-	env.emitter.on('set.log', setOptions);
-	env.emitter.on('remove.log', setOptions);
+	env.get('log').then(set, set);
+	env.emitter.on('set.log', set);
+	env.emitter.on('remove.log', set);
 }
 
 /**
  * Unsubscribes from a storage changes
  */
 export function unsubscribe(): void {
-	env.emitter.off('set.log', setOptions);
-	env.emitter.off('remove.log', setOptions);
+	env.emitter.off('set.log', set);
+	env.emitter.off('remove.log', set);
 }
 
 /**
@@ -54,28 +78,4 @@ function isValidOptions(opts: unknown): opts is CanUndef<PersistentOptions> {
 	}
 
 	return true;
-}
-
-/**
- * Sets passed options as options for a configurable middleware if it's possible
- * @param opts
- */
-export function setOptions(opts: unknown): void {
-	let po: PersistentOptions;
-
-	if (isValidOptions(opts)) {
-		po = {
-			...DEFAULT_OPTIONS,
-			...opts
-		};
-
-	} else {
-		po = {
-			...DEFAULT_OPTIONS
-		};
-	}
-
-	logOps = {
-		patterns: po.patterns.map((pattern) => new RegExp(pattern))
-	};
 }
