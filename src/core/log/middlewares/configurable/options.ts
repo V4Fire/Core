@@ -50,8 +50,8 @@ export function clear(): void {
 /**
  * Inits a configurable middleware with data from options storage
  */
-export function init(): void {
-	env.get('log').then(set, (_) => set());
+export function init(): Promise<void> {
+	return env.get('log').then(set, (_) => set());
 }
 
 /**
