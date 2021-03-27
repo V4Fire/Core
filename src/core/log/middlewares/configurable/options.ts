@@ -22,26 +22,22 @@ export function get(): CanUndef<Options> {
 
 /**
  * Sets passed options of configurable middleware if they are valid
- * @param opts
+ * @param [opts]
  */
-export function set(opts: unknown): void {
-	let po: PersistentOptions;
-
+export function set(opts?: unknown): void {
 	if (isValidOptions(opts)) {
-		po = {
+		const po: PersistentOptions = {
 			...DEFAULT_OPTIONS,
 			...opts
 		};
 
-	} else {
-		po = {
-			...DEFAULT_OPTIONS
+		logOps = {
+			patterns: po.patterns.map((pattern) => new RegExp(pattern))
 		};
-	}
 
-	logOps = {
-		patterns: po.patterns.map((pattern) => new RegExp(pattern))
-	};
+	} else {
+		throw new Error('Incorrect format of log options: should be "{patterns: string[]}"');
+	}
 }
 
 /**
@@ -70,16 +66,15 @@ export function unsubscribe(): void {
 
 /**
  * Returns `true` if passed options have correct format
- * @param opts
+ * @param [opts]
  */
-function isValidOptions(opts: unknown): opts is CanUndef<PersistentOptions> {
+function isValidOptions(opts?: unknown): opts is CanUndef<PersistentOptions> {
 	if (opts != null) {
 		if (
 			!Object.isPlainObject(opts) ||
 			!Object.isArray(opts.patterns) ||
 			opts.patterns.some((p) => !Object.isString(p))
 		) {
-			console.error('Incorrect format of log options: should be "{patterns: string[]}"');
 			return false;
 		}
 	}
