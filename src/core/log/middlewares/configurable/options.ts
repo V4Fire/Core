@@ -45,6 +45,13 @@ export function set(opts: unknown): void {
 }
 
 /**
+ * Reverts options ot its initial state - undefined
+ */
+export function clear(): void {
+	logOps = undefined;
+}
+
+/**
  * Inits a configurable middleware with data from a storage and subscribes for its changes
  */
 export function subscribe(): void {
