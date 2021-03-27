@@ -8,7 +8,7 @@
 
 import type { LogEvent, LogMiddleware, NextCallback } from 'core/log/middlewares/interface';
 import type { Options } from 'core/log/middlewares/configurable/interface';
-import { getOptions } from 'core/log/middlewares/configurable/subscribe';
+import { getOptions } from 'core/log/middlewares/configurable/options';
 
 export class ConfigurableMiddleware implements LogMiddleware {
 	protected queue: LogEvent[] = [];
