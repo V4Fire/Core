@@ -48,10 +48,16 @@ export function clear(): void {
 }
 
 /**
- * Inits a configurable middleware with data from a storage and subscribes for its changes
+ * Inits a configurable middleware with data from options storage
+ */
+export function init(): void {
+	env.get('log').then(set, set);
+}
+
+/**
+ * Subscribes for options storage changes
  */
 export function subscribe(): void {
-	env.get('log').then(set, set);
 	env.emitter.on('set.log', set);
 	env.emitter.on('remove.log', set);
 }
