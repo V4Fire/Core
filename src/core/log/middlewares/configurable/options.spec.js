@@ -14,9 +14,8 @@ describe('middlewares/configurable/options', () => {
 		storageKey = 'log',
 		defaultOptions = {patterns: [/:error\b/]};
 
-	beforeEach(() => {
-		clear();
-	});
+	beforeAll(clear);
+	afterEach(clear);
 
 	describe('successful get/set operation:', () => {
 		it('get initial options', () => {
@@ -93,9 +92,12 @@ describe('middlewares/configurable/options', () => {
 	});
 
 	describe('initialization.', () => {
-		beforeEach(async () => {
-			await env.remove(storageKey);
-		});
+		function clean() {
+			return env.remove(storageKey);
+		}
+
+		beforeAll(clean);
+		afterEach(clean);
 
 		it('init from the storage', async () => {
 			expect(get()).toBeUndefined();
@@ -127,10 +129,13 @@ describe('middlewares/configurable/options', () => {
 	});
 
 	describe('subscriptions.', () => {
-		beforeEach(async () => {
+		async function clean() {
 			env.emitter.removeAllListeners();
 			await env.remove(storageKey);
-		});
+		}
+
+		beforeAll(clean);
+		afterEach(clean);
 
 		it('change storage', async () => {
 			expect(get()).toBeUndefined();
