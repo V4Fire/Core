@@ -79,15 +79,8 @@ export function subscribe(): void {
  * @param [opts]
  */
 function isValidOptions(opts?: unknown): opts is CanUndef<PersistentOptions> {
-	if (opts != null) {
-		if (
-			!Object.isPlainObject(opts) ||
-			!Object.isArray(opts.patterns) ||
-			opts.patterns.some((p) => !Object.isString(p))
-		) {
-			return false;
-		}
-	}
-
-	return true;
+	return opts == null ||
+		Object.isPlainObject(opts) &&
+		Object.isArray(opts.patterns) &&
+		opts.patterns.every((p) => Object.isString(p));
 }
