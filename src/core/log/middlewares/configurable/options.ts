@@ -75,14 +75,6 @@ export function subscribe(): void {
 }
 
 /**
- * Unsubscribes from a storage changes
- */
-export function unsubscribe(): void {
-	env.emitter.off('set.log', set);
-	env.emitter.off('remove.log', set);
-}
-
-/**
  * Returns `true` if passed options have correct format
  * @param [opts]
  */
