@@ -42,9 +42,14 @@ export async function get(key: string): Promise<CanUndef<Dictionary>> {
  * @param key
  * @param value
  */
-export function set(key: string, value: Dictionary): void {
+export async function set(key: string, value: Dictionary): Promise<void> {
 	if (Object.isPromise(storage)) {
-		storage.then((storage) => storage.set(key, value)).catch(stderr);
+		try {
+			await (await storage).set(key, value);
+
+		} catch (e) {
+			stderr(e);
+		}
 
 	} else {
 		memoryStorage[key] = value;
@@ -57,9 +62,14 @@ export function set(key: string, value: Dictionary): void {
  * Removes settings from the application environment by the specified key
  * @param key
  */
-export function remove(key: string): void {
+export async function remove(key: string): Promise<void> {
 	if (Object.isPromise(storage)) {
-		storage.then((storage) => storage.remove(key)).catch(stderr);
+		try {
+			await (await storage).remove(key);
+
+		} catch (e) {
+			stderr(e);
+		}
 
 	} else {
 		delete memoryStorage[key];
