@@ -25,17 +25,29 @@ export function get(): CanUndef<Options> {
  * @param [opts]
  */
 export function set(opts?: unknown): void {
+	const updateOpts = (opts: PersistentOptions) => {
+		logOps = {
+			patterns: opts.patterns.map((pattern) => new RegExp(pattern))
+		};
+	};
+
 	if (isValidOptions(opts)) {
-		const po: PersistentOptions = {
+		const po = {
 			...DEFAULT_OPTIONS,
 			...opts
 		};
 
-		logOps = {
-			patterns: po.patterns.map((pattern) => new RegExp(pattern))
-		};
+		updateOpts(po);
 
 	} else {
+		if (!logOps) {
+			const po = {
+				...DEFAULT_OPTIONS
+			};
+
+			updateOpts(po);
+		}
+
 		throw new Error('Incorrect format of log options: should be "{patterns: string[]}"');
 	}
 }
