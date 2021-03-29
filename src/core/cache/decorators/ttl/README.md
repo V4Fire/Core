@@ -1,7 +1,7 @@
 # core/cache/decorators/ttl
 
-This module provides a wrapper for [[Cache]] data structures to add the feature of cache expiring.
-A value for `ttl` properties provides in milliseconds.
+This module provides a wrapper for [[Cache]] data structures to add a feature of the cache expiring.
+A value for `ttl` properties should be provided in milliseconds.
 
 ## Example
 
@@ -25,8 +25,8 @@ setTimeout(() => {
 
 ## Default ttl
 
-When you wrap a cache object with the `ttl` decorator you can provide the default ttl value.
-The default value is used when you don't provide the `ttl` property when saving an item.
+When you wrap a cache object with the `ttl` decorator, you can provide the default ttl value.
+This value is used when you don't provide the `ttl` property when saving an item.
 
 ```js
 import SimpleCache from 'core/cache/simple';
