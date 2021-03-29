@@ -62,17 +62,23 @@ export type PersistentCache<V = unknown, K = string> = {
 
 export interface TTLCache<V = unknown, K = string> extends Cache<V, K> {
 	/**
-	 * Removes the `ttl` descriptor from a cache item by the specified key
+	 * Removes the `ttl` descriptor from a cache item by the specified key.
+	 * The method returns `true` if the operation has been successful, otherwise `false`
+	 * (the requested item hasn't been found).
 	 *
 	 * @param key
 	 */
-	removeTTLFrom(key: K): void;
+	removeTTLFrom(key: K): boolean;
 }
 
 export interface DecoratorOptions {
-	// Time to expire a cache item in persistent storage
+	/**
+	 * Time to expire a cache item in persistent storage
+	 */
 	persistentTTL?: number;
-	// Time to expire a cache item in milliseconds
+	/**
+	 * Time to expire a cache item in milliseconds
+	 */
 	ttl?: number;
 }
 

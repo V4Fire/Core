@@ -6,8 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import SimpleCache from 'core/cache/simple';
 import addTTL from 'core/cache/decorators/ttl';
+import SimpleCache from 'core/cache/simple';
 
 describe('core/cache/decorators/ttl', () => {
 	it('should remove items after expiring', (done) => {

@@ -7,7 +7,7 @@
  */
 
 /**
- * [[include:core/cache/simple/README.md]]
+ * [[include:core/cache/decorators/ttl/README.md]]
  * @packageDocumentation
  */
 
@@ -17,13 +17,13 @@ import type { TTLCache, ClearFilter, DecoratorOptions } from 'core/cache/interfa
 export * from 'core/cache/interface';
 
 /**
- * Wrapper for Cache data structures to add the feature of cache expiring.
+ * Wraps the specified cache object to add a feature of the cache expiring
  *
- * @template V - Values in cache
- * @template K - Keys in cache
+ * @typeparam V - value type of the cache object
+ * @typeparam K - key type of the cache object
  *
- * @param cache
- * @param ttl the default ttl provides in milliseconds
+ * @param cache - cache object to wrap
+ * @param ttl - default ttl value in milliseconds
  *
  * @example
  * ```typescript
@@ -31,9 +31,9 @@ export * from 'core/cache/interface';
  * import SimpleCache from 'core/cache/simple';
  *
  * const
- *   cache = addTTL(new SimpleCache(), 10000);
+ *   cache = addTTL(new SimpleCache(), (10).seconds());
  *
- * cache.add('foo', 'bar1', {ttl: 500});
+ * cache.add('foo', 'bar1', {ttl: 0.5.seconds()});
  * cache.add('foo2', 'bar2');
  * ```
  */
@@ -63,7 +63,10 @@ export default function addTTL<V = unknown, K = string>(cache: Cache<V, K>, ttl?
 		if (ttlTimers.has(key)) {
 			clearTimeout(<number>ttlTimers.get(key));
 			ttlTimers.delete(key);
+			return true;
 		}
+
+		return false;
 	};
 
 	cacheWithTTL.clear = (filter?: ClearFilter<V, K>) => {
