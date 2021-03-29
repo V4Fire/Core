@@ -10,15 +10,14 @@ The value for `persistentTTL` should be provided in milliseconds.
 import { asyncLocal } from 'core/kv-storage';
 
 import SimpleCache from 'core/cache/simple';
-import PersistentWrapper from 'core/cache/persistent';
+import addPersistent from 'core/cache/persistent';
 
 const opts = {
-  readFromMemoryStrategy: 'always',
   initializationStrategy: 'active',
 };
 
 const
-  persistentCache = await new PersistentWrapper(new SimpleCache(), asyncLocal, opts).getInstance();
+  persistentCache = await addPersistent(new SimpleCache(), asyncLocal, opts);
 
 await persistentCache.set('foo', 'bar');
 await persistentCache.set('foo2', 'bar2');
@@ -27,7 +26,7 @@ await persistentCache.set('foo2', 'bar2');
 // this cache will have all values from the previous (it will be loaded from the storage during initialization)
 
 const
-  copyOfCache = await new PersistentWrapper(new SimpleCache(), asyncLocal, opts).getInstance();
+  copyOfCache = await addPersistent(new SimpleCache(), asyncLocal, opts);
 ```
 
 ## Options
@@ -41,16 +40,15 @@ This value is used when you don't provide the `persistentTTL` parameter when sav
 import { asyncLocal } from 'core/kv-storage';
 
 import SimpleCache from 'core/cache/simple';
-import PersistentWrapper from 'core/cache/persistent';
+import addPersistent from 'core/cache/persistent';
 
 const options = {
   persistentTTL: (60).seconds(),
-  readFromMemoryStrategy: 'always',
   initializationStrategy: 'active',
 };
 
 const
-  persistentCache = await new PersistentWrapper(new SimpleCache(), asyncLocal, options).getInstance();
+  persistentCache = await addPersistent(new SimpleCache(), asyncLocal, options);
 
 // If we "reload" the cache from the storage by using the browser reloading or another way,
 // these saved values can be "restored" from the storage only for the next 60 seconds
@@ -58,7 +56,7 @@ await persistentCache.set('foo', 'bar');
 await persistentCache.set('foo2', 'bar2');
 ```
 
-### initializationStrategy
+### Load From Storage
 
 There is more than one way to initialize a cache from persistent storage.
 The most obvious way to do it is to load all data from the storage to RAM during the cache's initialization.
@@ -69,98 +67,86 @@ In that case, we haven't to load the whole stored data on cache initialization,
 but all cache methods will change API - they will become return promises instead of the raw results.
 Some consumers cannot be ready for changing API, so there is no silver bullet. We have to keep both strategies.
 
-#### active
+#### onInit
 
-'active' - all properties from storage will be cloned in cache during initialization.
+'onInit' - all properties from storage will be cloned in cache during initialization.
 Assumes that our storage has property `__storage__` with object format `{ key: ttl }`.
 
 ```js
-import PersistentWrapper from 'core/cache/persistent';
+import addPersistent from 'core/cache/persistent';
 import SimpleCache from 'core/cache/simple';
 import { asyncLocal } from 'core/kv-storage';
 
 const options = {
-  readFromMemoryStrategy: 'always',
-  initializationStrategy: 'active',
+  loadFromStorage: 'onInit',
 };
 
 const
-  persistentCache = await new PersistentWrapper(new SimpleCache(), asyncLocal, options).getInstance();
+  persistentCache = await addPersistent(new SimpleCache(), asyncLocal, options);
 
 await persistentCache.set('foo', 'bar');
 await persistentCache.set('foo2', 'bar2');
 
 // All properties already in our Simple cache
 const
-  copyOfCache = await new PersistentWrapper(new SimpleCache(), asyncLocal, options).getInstance();
+  copyOfCache = await addPersistent(new SimpleCache(), asyncLocal, options);
 ```
 
-#### semi-lazy
+#### onDemand
 
-'semi-lazy' - properties from storage will be cloned during the first request of property.
-Assumes that our storage has property `__storage__` with object format `{ key: ttl }`.
-
-```js
-import PersistentWrapper from 'core/cache/persistent';
-import SimpleCache from 'core/cache/simple';
-import { asyncLocal } from 'core/kv-storage';
-
-const options = {
-  readFromMemoryStrategy: 'always',
-  initializationStrategy: 'semi-lazy',
-};
-
-const
-  persistentCache = await new PersistentWrapper(new SimpleCache(), asyncLocal, options).getInstance();
-
-await persistentCache.set('foo', 'bar');
-await persistentCache.set('foo2', 'bar2');
-
-// At this moment simple cache don't have our properties
-const
-  copyOfCache = await new PersistentWrapper(new SimpleCache(), asyncLocal, options).getInstance();
-
-// The cache will check ttl in storage.__storage__[key] and copied from storage to our cache
-await copyOfCache.get('foo');
-```
-
-#### lazy
-
-'lazy' - properties from storage will be cloned during the first request of property.
+'onDemand' - properties from storage will be cloned during the first request of property.
 Assumes that our storage has additional property for each property with key `${key}__ttl`.
 
 ```js
-import PersistentWrapper from 'core/cache/persistent';
+import addPersistent from 'core/cache/persistent';
 import SimpleCache from 'core/cache/simple';
 import { asyncLocal } from 'core/kv-storage';
 
 const options = {
-  readFromMemoryStrategy: 'always',
-  initializationStrategy: 'lazy',
+  loadFromStorage: 'onDemand',
 };
 
 const
-  persistentCache = await new PersistentWrapper(new SimpleCache(), asyncLocal, options).getInstance();;
+  persistentCache = await addPersistent(new SimpleCache(), asyncLocal, options);
 
 await persistentCache.set('foo', 'bar');
 await persistentCache.set('foo2', 'bar2');
 
 // At this moment simple cache don't have our properties
 const
-  copyOfCache = await new PersistentWrapper(new SimpleCache(), asyncLocal, options).getInstance();
+  copyOfCache = await addPersistent(new SimpleCache(), asyncLocal, options);
 
 // The cache will check ttl in storage[${key}_ttl] and copied from storage to our cache
 await copyOfCache.get('foo');
 ```
 
-### Read From Memory Strategy
+#### onOfflineDemand
 
-The required parameter describes when properties will get from storage.
+'onOfflineDemand' - properties from storage will be cloned during the first request of property if internet connection is lost.
+Assumes that our storage has additional property for each property with key `${key}__ttl`.
 
-#### always
+```js
+import addPersistent from 'core/cache/persistent';
+import SimpleCache from 'core/cache/simple';
+import { asyncLocal } from 'core/kv-storage';
 
-Any request of the property will try to get a copy from storage.
+const options = {
+  loadFromStorage: 'onDemand',
+};
 
-#### connection loss
+const
+  persistentCache = await addPersistent(new SimpleCache(), asyncLocal, options);
 
-Storage requests will be only if the client offline.
+await persistentCache.set('foo', 'bar');
+await persistentCache.set('foo2', 'bar2');
+
+// At this moment simple cache don't have our properties
+const
+  copyOfCache = await addPersistent(new SimpleCache(), asyncLocal, options);
+
+/*
+ * If internet connection is lost The cache will check ttl in storage[${key}_ttl] and copied from storage to our cache
+ * Else will work as common cache
+ */
+await copyOfCache.get('foo');
+```

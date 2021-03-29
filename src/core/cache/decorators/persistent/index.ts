@@ -7,7 +7,7 @@
  */
 
 /**
- * [[include:core/cache/simple/README.md]]
+ * [[include:core/cache/decorators/persistent/README.md]]
  * @packageDocumentation
  */
 
@@ -20,34 +20,34 @@ import { isOnline } from 'core/net';
 import SyncPromise from 'core/promise/sync';
 import { StorageCacheConnector } from 'core/cache/decorators/persistent/helpers';
 
-export * from 'core/cache/interface';
+export * from 'core/cache/decorators/persistent/interface';
 
 class PersistentWrapper<V = unknown> {
 	/**
 	 * A cache whose methods will be rewritten to synchronize with the storage
 	 */
-	private readonly cacheWithStorage: PersistentCache<V, string>;
+	protected readonly cacheWithStorage: PersistentCache<V, string>;
 
 	/**
 	 * Cache
 	 */
-	private readonly cache: CacheWithoutDirectMutations<V>;
+	protected readonly cache: CacheWithoutDirectMutations<V>;
 
 	/**
 	 * Storage Cache Connector used for all operations that mutate the cache or storage
 	 */
-	private readonly StorageCacheConnector: StorageCacheConnector<V>;
+	protected readonly StorageCacheConnector: StorageCacheConnector<V>;
 
 	/**
 	 * Options that affect how the cache will be initialized and when the wrapper will access the storage
 	 */
-	private readonly opts: PersistentOptions;
+	protected readonly opts: PersistentOptions;
 
 	/**
 	 * An object that stores the keys of all properties that have already been fetched from the storage
 	 * used only in `lazy` and `semi-lazy` opts
 	 */
-	private readonly fetchedMemory: Set<string> = new Set();
+	protected readonly fetchedMemory: Set<string> = new Set();
 
 	constructor(
 		cache: Cache<V, string>,
@@ -72,23 +72,23 @@ class PersistentWrapper<V = unknown> {
 		return this.cacheWithStorage;
 	}
 
-	private watchOnCache(): void {
+	protected watchOnCache(): void {
 		// TODO watch on delete props
 	}
 
-	private replaceHasMethod(): void {
+	protected replaceHasMethod(): void {
 		this.cacheWithStorage.has = this.getHasMethod('has');
 	}
 
-	private replaceGetMethod(): void {
+	protected replaceGetMethod(): void {
 		this.cacheWithStorage.get = this.getHasMethod('get');
 	}
 
-	private getHasMethod(method: 'has'): (key: string) => Promise<boolean>
-	private getHasMethod(method: 'get'): (key: string) => Promise<CanUndef<V>>
-	private getHasMethod(method: 'get' | 'has'): (key: string) => Promise<CanUndef<V> | boolean> {
+	protected getHasMethod(method: 'has'): (key: string) => Promise<boolean>
+	protected getHasMethod(method: 'get'): (key: string) => Promise<CanUndef<V>>
+	protected getHasMethod(method: 'get' | 'has'): (key: string) => Promise<CanUndef<V> | boolean> {
 		return async (key: string) => {
-			if (this.opts.initializationStrategy === 'active') {
+			if (this.opts.loadFromStorage === 'onInit') {
 				return this.cache[method](key);
 			}
 
@@ -101,7 +101,7 @@ class PersistentWrapper<V = unknown> {
 			const
 				online = (await isOnline()).status;
 
-			if (this.opts.readFromMemoryStrategy === 'connectionLoss' && online) {
+			if (this.opts.loadFromStorage === 'onOfflineDemand' && online) {
 				return this.cache[method](key);
 			}
 
@@ -111,7 +111,7 @@ class PersistentWrapper<V = unknown> {
 		};
 	}
 
-	private replaceSetMethod(): void {
+	protected replaceSetMethod(): void {
 		this.cacheWithStorage.set = async (key: string, value: V, opts?: DecoratorOptions) => {
 			const
 				ttl = this.opts.persistentTTL ?? opts?.ttl;
@@ -125,7 +125,7 @@ class PersistentWrapper<V = unknown> {
 		};
 	}
 
-	private replaceRemoveMethod(): void {
+	protected replaceRemoveMethod(): void {
 		this.cacheWithStorage.remove = async (key: string) => {
 			this.fetchedMemory.add(key);
 			const removed = await this.StorageCacheConnector.remove(key, {target: 'both'});
@@ -133,17 +133,26 @@ class PersistentWrapper<V = unknown> {
 		};
 	}
 
-	private replaceKeysMethod(): void {
+	protected replaceKeysMethod(): void {
 		this.cacheWithStorage.keys = async () => {
 			const keys = await SyncPromise.resolve(this.cache.keys());
 			return keys;
 		};
 	}
 
-	private replaceClearMethod(): void {
+	protected replaceClearMethod(): void {
 		this.cacheWithStorage.clear = async (filter?: ClearFilter<V, string>) =>
 			this.StorageCacheConnector.clear(filter);
 	}
 }
 
-export default PersistentWrapper;
+const addPersistent = async <V>(
+	cache: Cache<V, string>,
+	kvStorage: SyncStorageNamespace | AsyncStorageNamespace,
+	opts: PersistentOptions
+): Promise<PersistentCache<V, string>> => {
+	const persistentCache = await new PersistentWrapper(cache, kvStorage, opts).getInstance();
+	return persistentCache;
+};
+
+export default addPersistent;

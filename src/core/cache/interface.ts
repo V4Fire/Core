@@ -84,6 +84,5 @@ export interface DecoratorOptions {
 
 export interface PersistentOptions {
     persistentTTL?: number;
-    readFromMemoryStrategy: 'always' | 'connectionLoss';
-    initializationStrategy: 'lazy' | 'semi-lazy' | 'active';
+    loadFromStorage: 'onInit' | 'onDemand' | 'onOfflineDemand';
 }

@@ -181,7 +181,7 @@ type PromiseType<T> =
 /**
  * Wraps the specified function to return a value as Promise
  *
- * @template T - any function
+ * @typeparam T - any function
  *
  * @example
  * ```typescript
@@ -3845,8 +3845,8 @@ interface Function {
  * Overrides properties of the specified type or interface.
  * Don't use this helper if you simply extend one type from another, i. e. without overriding properties.
  *
- * @template T - original type
- * @template U - type with the overridden properties
+ * @typeparam T - original type
+ * @typeparam U - type with the overridden properties
  *
  * @example
  * ```typescript

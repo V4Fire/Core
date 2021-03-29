@@ -1,3 +1,11 @@
+/*!
+ * V4Fire Core
+ * https://github.com/V4Fire/Core
+ *
+ * Released under the MIT license
+ * https://github.com/V4Fire/Core/blob/master/LICENSE
+ */
+
 import type Cache from 'core/cache/interface';
 import type { SyncStorageNamespace, AsyncStorageNamespace } from 'core/kv-storage';
 import type { PersistentOptions, ClearFilter } from 'core/cache/interface';
@@ -18,17 +26,17 @@ export class StorageManager {
 	/**
 	 * Stores keys that will need to be updated at the next iteration
 	 */
-	private memory: StorageManagerMemory = {};
+	protected memory: StorageManagerMemory = {};
 
 	/**
 	 * Storage object
 	 */
-	private readonly storage: SyncStorageNamespace | AsyncStorageNamespace;
+	protected readonly storage: SyncStorageNamespace | AsyncStorageNamespace;
 
 	/**
 	 * Promise used to ensure that the new iteration starts only after the old one ends
 	 */
-	private promise: Promise<unknown> = Promise.resolve();
+	protected promise: Promise<unknown> = Promise.resolve();
 
 	constructor(storage: SyncStorageNamespace | AsyncStorageNamespace) {
 		this.storage = storage;
@@ -72,7 +80,7 @@ export class StorageManager {
 	 * @param key
 	 * @param parameters
 	 */
-	private changeElement(key: string, parameters: StorageManagerChangeElementParams): void {
+	protected changeElement(key: string, parameters: StorageManagerChangeElementParams): void {
 		this.memory[key] = parameters;
 
 		if (Object.keys(this.memory).length === 1) {
@@ -86,7 +94,7 @@ export class StorageManager {
 	 * Executes all the tasks saved in the current iteration
 	 * and creates a promise that will be resolved when all the tasks are completed
 	 */
-	private async makeIteration() {
+	protected async makeIteration(): Promise<void> {
 		const
 			clone = {...this.memory};
 		this.memory = {};
@@ -124,28 +132,28 @@ export class StorageCacheConnector<V = unknown> {
 	/**
 	 * Cache
 	 */
-	private readonly cache: Cache<V, string>;
+	protected readonly cache: Cache<V, string>;
 
 	/**
 	 * Storage object
 	 */
-	private readonly kvStorage: SyncStorageNamespace | AsyncStorageNamespace;
+	protected readonly kvStorage: SyncStorageNamespace | AsyncStorageNamespace;
 
 	/**
 	 * Options that affect how the cache will be initialized and when the wrapper will access the storage
 	 */
-	private readonly opts: PersistentOptions;
+	protected readonly opts: PersistentOptions;
 
 	/**
 	 * Used for saving and deleting properties from storage
 	 */
-	private readonly StorageManager: StorageManager;
+	protected readonly StorageManager: StorageManager;
 
 	/**
 	 * An object that stores the keys of all properties in the storage and their ttls
 	 * used only in `active` and `semi-lazy` opts
 	 */
-	private storage: {[key: string]: number} = {};
+	protected storage: {[key: string]: number} = {};
 
 	constructor(
 		cache: Cache<V, string>,
@@ -165,7 +173,7 @@ export class StorageCacheConnector<V = unknown> {
 			await this.kvStorage.set(inMemoryPath, this.storage);
 		}
 
-		if (this.opts.initializationStrategy === 'active') {
+		if (this.opts.loadFromStorage === 'onInit') {
 			const
 				time = Date.now();
 
@@ -194,17 +202,19 @@ export class StorageCacheConnector<V = unknown> {
 		opts: ConnectorSetCacheOrBothOptions | ConnectorSetStorageOptions
 	): Promise<undefined | V> {
 		if (opts.target === 'both' || opts.target === 'storage') {
-			if (this.opts.initializationStrategy === 'lazy') {
+
+			if (this.opts.loadFromStorage === 'onInit') {
+				await this.StorageManager.set(key, value, () => {
+					this.storage[key] = opts.ttl ?? Number.MAX_SAFE_INTEGER;
+					const copyOfStorage = {...this.storage};
+					this.StorageManager.set(inMemoryPath, copyOfStorage);
+				});
+
+			} else {
 				await this.StorageManager.set(key, value, () => {
 					this.StorageManager.set(`${key}${ttlPostfix}`, opts.ttl ?? Number.MAX_SAFE_INTEGER);
 				});
 			}
-
-			await this.StorageManager.set(key, value, () => {
-				this.storage[key] = opts.ttl ?? Number.MAX_SAFE_INTEGER;
-				const copyOfStorage = {...this.storage};
-				this.StorageManager.set(inMemoryPath, copyOfStorage);
-			});
 		}
 
 		if (opts.target === 'both' || opts.target === 'cache') {
@@ -219,17 +229,19 @@ export class StorageCacheConnector<V = unknown> {
 		opts: ConnectorRemoveCacheOrBothOptions | ConnectorRemoveStorageOptions
 	): Promise<undefined | V> {
 		if (opts.target === 'both' || opts.target === 'storage') {
-			if (this.opts.initializationStrategy === 'lazy') {
+
+			if (this.opts.loadFromStorage === 'onInit') {
+				await this.StorageManager.remove(key, () => {
+					delete this.storage[key];
+					const copyOfStorage = {...this.storage};
+					this.StorageManager.set(inMemoryPath, copyOfStorage);
+				});
+
+			} else {
 				await this.StorageManager.remove(key, () => {
 					this.StorageManager.remove(`${key}${ttlPostfix}`);
 				});
 			}
-
-			await this.StorageManager.remove(key, () => {
-				delete this.storage[key];
-				const copyOfStorage = {...this.storage};
-				this.StorageManager.set(inMemoryPath, copyOfStorage);
-			});
 		}
 
 		if (opts.target === 'both' || opts.target === 'cache') {
@@ -269,11 +281,11 @@ export class StorageCacheConnector<V = unknown> {
 	}
 
 	public async getTTL(key: string): Promise<number | null> {
-		if (this.opts.initializationStrategy === 'lazy') {
-			const ttl = await this.kvStorage.get<number>(`${key}${ttlPostfix}`);
-			return ttl ?? null;
+		if (this.opts.loadFromStorage === 'onInit') {
+			return <number | undefined>this.storage[key] ?? null;
 		}
 
-		return <number | undefined>this.storage[key] ?? null;
+		const ttl = await this.kvStorage.get<number>(`${key}${ttlPostfix}`);
+		return ttl ?? null;
 	}
 }
