@@ -28,15 +28,15 @@ console.log(cache.keys().length); // 1
 
 ## Decorators
 
-Also, the module provides a bunch of functions to decorate cache storages, like adding the `ttl` feature or persisting storing.
+Also, the module provides a bunch of functions to decorate cache storages, like adding the `ttl` feature or persisting data storing.
 
 ### core/cache/decorators/ttl
 
 Provides a decorator for any cache to add a feature of the cache expiring.
 
 ```js
-import SimpleCache from 'core/cache/simple';
 import addTTL from 'core/cache/decorators/ttl';
+import SimpleCache from 'core/cache/simple';
 
 // The function `addTTL` accepts a cache object and a value for the default TTL as the second argument
 const
