@@ -27,7 +27,7 @@ setTimeout(() => {
 ## Default ttl
 
 When you wrap a cache object with the `ttl` decorator, you can provide the default ttl value.
-This value is used when you don't provide the `ttl` property when saving an item.
+This value is used when you don't provide the `ttl` parameter when saving an item.
 
 ```js
 import addTTL from 'core/cache/decorators/ttl';
