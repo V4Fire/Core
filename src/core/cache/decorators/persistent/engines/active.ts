@@ -7,14 +7,14 @@
  */
 
 import type Cache from 'core/cache/interface';
-import type { UnavailableToCheckInStorageEngine } from 'core/cache/decorators/persistent/engines/interface';
+import { UnavailableToCheckInStorageEngine } from 'core/cache/decorators/persistent/engines/interface';
 import type { SyncStorageNamespace, AsyncStorageNamespace } from 'core/kv-storage';
 
 import { StorageManager } from 'core/cache/decorators/persistent/helpers';
 
 const storagePath = '__storage__';
 
-export class ActiveEngine<V> implements UnavailableToCheckInStorageEngine<V> {
+export class ActiveEngine<V> extends UnavailableToCheckInStorageEngine<V> {
 	/**
 	 * Storage object
 	 */
@@ -31,6 +31,7 @@ export class ActiveEngine<V> implements UnavailableToCheckInStorageEngine<V> {
 	protected storage: {[key: string]: number} = {};
 
 	constructor(kvStorage: SyncStorageNamespace | AsyncStorageNamespace) {
+		super();
 		this.kvStorage = kvStorage;
 		this.StorageManager = new StorageManager(kvStorage);
 	}

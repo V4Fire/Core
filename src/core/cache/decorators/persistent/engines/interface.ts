@@ -7,13 +7,28 @@
  */
 
 import type Cache from 'core/cache/interface';
+import type { SyncStorageNamespace, AsyncStorageNamespace } from 'core/kv-storage';
 
-abstract class AbstractPersistentEngine<V = unknown> {
+import Async from 'core/async';
+
+interface AbstractPersistentEngine<V = unknown> {
 	/**
 	 * Init cache before return instance of the cache
 	 * @param cache
 	 */
-	abstract initCache?(cache: Cache<V>): CanPromise<void>;
+	initCache?(cache: Cache<V>): CanPromise<void>;
+}
+
+abstract class AbstractPersistentEngine<V = unknown> {
+	/**
+	 * Storage object
+	 */
+	protected abstract readonly kvStorage: SyncStorageNamespace | AsyncStorageNamespace;
+
+	/**
+	 * Async instance
+	 */
+	protected async: Async = new Async();
 
 	/**
 	 * Checking TTL of some property
@@ -34,6 +49,19 @@ abstract class AbstractPersistentEngine<V = unknown> {
 	 * @param key
 	 */
 	abstract remove(key: string): CanPromise<void>;
+
+	protected setElementToStorage(key: string, value: V, callback?: () => CanPromise<void>): void {
+
+	}
+
+	protected removeElementFromStorage(key: string, callback?: () => CanPromise<void>): void {
+		this.async.setImmediate(async () => {
+			await this.kvStorage.remove(key);
+			if (callback) {
+				await callback();
+			}
+		}, {label: key});
+	}
 }
 
 export abstract class AvailableToCheckInStorageEngine<V = unknown> extends AbstractPersistentEngine<V> {
