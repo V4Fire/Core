@@ -8,7 +8,6 @@
 
 import { AvailableToCheckInStorageEngine } from 'core/cache/decorators/persistent/engines/interface';
 import type { SyncStorageNamespace, AsyncStorageNamespace } from 'core/kv-storage';
-import { StorageManager } from 'core/cache/decorators/persistent/helpers';
 
 const ttlPostfix = '__ttl';
 
@@ -18,15 +17,9 @@ export class LazyEngine<V> extends AvailableToCheckInStorageEngine<V> {
 	 */
 	protected readonly kvStorage: SyncStorageNamespace | AsyncStorageNamespace;
 
-	/**
-	 * Used for saving and deleting properties from storage
-	 */
-	protected readonly StorageManager: StorageManager;
-
 	constructor(kvStorage: SyncStorageNamespace | AsyncStorageNamespace) {
 		super();
 		this.kvStorage = kvStorage;
-		this.StorageManager = new StorageManager(kvStorage);
 	}
 
 	async getTTL(key: string): Promise<number | undefined> {
@@ -34,19 +27,23 @@ export class LazyEngine<V> extends AvailableToCheckInStorageEngine<V> {
 		return ttl;
 	}
 
-	async set(key: string, value: V, ttl?: number): Promise<void> {
-		await this.StorageManager.set(key, value, () => {
+	set(key: string, value: V, ttl?: number): void {
+		void this.execTask(key, async () => {
+			await this.kvStorage.set(key, value);
+
 			if (ttl != null) {
-				this.StorageManager.set(`${key}${ttlPostfix}`, ttl);
+				await this.kvStorage.set(`${key}${ttlPostfix}`, ttl);
 			} else {
-				this.StorageManager.remove(`${key}${ttlPostfix}`);
+				await this.kvStorage.remove(`${key}${ttlPostfix}`);
 			}
 		});
 	}
 
-	async remove(key: string): Promise<void> {
-		await this.StorageManager.remove(key, () => {
-			this.StorageManager.remove(`${key}${ttlPostfix}`);
+	remove(key: string): void {
+		void this.execTask(key, async () => {
+			await this.kvStorage.remove(key);
+
+			await this.kvStorage.remove(`${key}${ttlPostfix}`);
 		});
 	}
 

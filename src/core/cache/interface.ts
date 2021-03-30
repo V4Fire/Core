@@ -55,19 +55,3 @@ export default interface Cache<V = unknown, K = string> {
 	 */
 	clear(filter?: ClearFilter<V, K>): Map<K, V>;
 }
-
-export type PersistentCache<V = unknown, K = string> = {
-	[key in (keyof Cache<V, K>)]: ReturnPromise<Cache<V, K>[key]>
-};
-
-export interface DecoratorOptions {
-	/**
-	 * Time to expire a cache item in persistent storage
-	 */
-	persistentTTL?: number;
-}
-
-export interface PersistentOptions {
-    persistentTTL?: number;
-    loadFromStorage: 'onInit' | 'onDemand' | 'onOfflineDemand';
-}

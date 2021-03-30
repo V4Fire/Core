@@ -31,6 +31,11 @@ abstract class AbstractPersistentEngine<V = unknown> {
 	protected async: Async = new Async();
 
 	/**
+	 * Pending requests of change property
+	 */
+	protected readonly pending: Map<string, Promise<void>> = new Map();
+
+	/**
 	 * Checking TTL of some property
 	 * @param key
 	 */
@@ -42,24 +47,29 @@ abstract class AbstractPersistentEngine<V = unknown> {
 	 * @param value
 	 * @param ttl
 	 */
-	abstract set(key: string, value: V, ttl?: number): CanPromise<void>;
+	abstract set(key: string, value: V, ttl?: number): void;
 
 	/**
 	 * Remove value from storage
 	 * @param key
 	 */
-	abstract remove(key: string): CanPromise<void>;
+	abstract remove(key: string): void;
 
-	protected setElementToStorage(key: string, value: V, callback?: () => CanPromise<void>): void {
+	/**
+	 * Creating a task to update a property
+	 * @param key key of property to update
+	 * @param task Storage and TTL update task
+	 */
+	protected async execTask(key: string, task: () => Promise<void>): Promise<void> {
+		if (this.pending.has(key)) {
+			await this.pending.get(key);
+		}
 
-	}
-
-	protected removeElementFromStorage(key: string, callback?: () => CanPromise<void>): void {
-		this.async.setImmediate(async () => {
-			await this.kvStorage.remove(key);
-			if (callback) {
-				await callback();
-			}
+		this.async.setImmediate(() => {
+			this.pending.set(key, (async () => {
+				await task();
+				this.pending.delete(key);
+			})());
 		}, {label: key});
 	}
 }

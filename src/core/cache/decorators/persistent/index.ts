@@ -12,16 +12,17 @@
  */
 
 import type Cache from 'core/cache/interface';
-import type { PersistentOptions, PersistentCache, ClearFilter, DecoratorOptions } from 'core/cache/interface';
+import type { ClearFilter } from 'core/cache/interface';
 import type { SyncStorageNamespace, AsyncStorageNamespace } from 'core/kv-storage';
 import type { AvailableToCheckInStorageEngine, PersistentEngine } from 'core/cache/decorators/persistent/engines/interface';
+import type { PersistentOptions, PersistentCache, PersistentTTLDecoratorOptions } from 'core/cache/decorators/persistent/interface';
 
 import SyncPromise from 'core/promise/sync';
 import engines from 'core/cache/decorators/persistent/engines';
 
 export * from 'core/cache/decorators/persistent/interface';
 
-class PersistentWrapper<V = unknown> {
+class PersistentWrapper<T extends Cache<V, string>, V = unknown> {
 	/**
 	 * A cache whose methods will be rewritten to synchronize with the storage
 	 */
@@ -30,7 +31,7 @@ class PersistentWrapper<V = unknown> {
 	/**
 	 * Cache
 	 */
-	protected readonly cache: Cache<V>;
+	protected readonly cache: T;
 
 	/**
 	 * An object that stores the keys of all properties that have already been fetched from the storage
@@ -48,7 +49,7 @@ class PersistentWrapper<V = unknown> {
 	protected readonly ttl?: number;
 
 	constructor(
-		cache: Cache<V, string>,
+		cache: T,
 		kvStorage: SyncStorageNamespace | AsyncStorageNamespace,
 		opts: PersistentOptions
 	) {
@@ -98,9 +99,9 @@ class PersistentWrapper<V = unknown> {
 	}
 
 	protected replaceSetMethod(): void {
-		this.cacheWithStorage.set = async (key: string, value: V, opts?: DecoratorOptions) => {
+		this.cacheWithStorage.set = async (key: string, value: V, opts?: PersistentTTLDecoratorOptions & Parameters<T['set']>[2]) => {
 			const
-				ttl = this.ttl ?? opts?.ttl;
+				ttl = this.ttl ?? opts?.persistentTTL;
 
 			this.fetchedMemory.add(key);
 
@@ -169,7 +170,7 @@ const addPersistent = async <V>(
 	kvStorage: SyncStorageNamespace | AsyncStorageNamespace,
 	opts: PersistentOptions
 ): Promise<PersistentCache<V, string>> => {
-	const persistentCache = await new PersistentWrapper(cache, kvStorage, opts).getInstance();
+	const persistentCache = await new PersistentWrapper<Cache<V, string>, V>(cache, kvStorage, opts).getInstance();
 	return persistentCache;
 };
 

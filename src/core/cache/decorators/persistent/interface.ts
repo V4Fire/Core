@@ -6,19 +6,30 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-export interface StorageManagerMemory {
-	[key: string]: {
-		value?: unknown;
-		action: 'set' | 'remove';
-		callback?(): void;
-	};
+import type Cache from 'core/cache/interface';
+
+export type PersistentCache<V = unknown, K = string, T extends Cache<V, K> = Cache<V, K>> = {
+	[key in Exclude<(keyof Cache<V, K>), 'set'>]: ReturnPromise<Cache<V, K>[key]>
+} & {
+	/**
+	 * Saves a value to the cache by the specified key
+	 *
+	 * @param key
+	 * @param value
+	 * @param opts
+	 */
+	set(key: K, value: V, opts?: PersistentTTLDecoratorOptions & Parameters<T['set']>[2]): Promise<V>;
+};
+
+export interface PersistentTTLDecoratorOptions {
+	/**
+	 * Time to expire a cache item in persistent storage
+	 */
+	persistentTTL?: number;
 }
 
-export type StorageManagerChangeElementParams = {
-	action: 'set';
-	value: unknown;
-	callback?(): void;
-} | {
-	action: 'remove';
-	callback?(): void;
-};
+export interface PersistentOptions {
+    persistentTTL?: number;
+    loadFromStorage: 'onInit' | 'onDemand' | 'onOfflineDemand';
+}
+
