@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.40.0 (2021-03-30)
+
+#### :rocket: New Feature
+
+* Added a wrapper to provide the feature of `core/cache` expiring
+
 ## v3.39.0 (2021-03-19)
 
 #### :bug: Bug Fix
