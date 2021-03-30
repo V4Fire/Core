@@ -36,7 +36,7 @@ export default interface Cache<V = unknown, K = string> {
 	 * @param value
 	 * @param opts
 	 */
-	set(key: K, value: V, opts?: DecoratorOptions): V;
+	set(key: K, value: V, opts?: {}): V;
 
 	/**
 	 * Removes a value from the cache by the specified key
@@ -54,22 +54,4 @@ export default interface Cache<V = unknown, K = string> {
 	 * @param [filter] - filter for removing (if not specified, then all cache values will be removed)
 	 */
 	clear(filter?: ClearFilter<V, K>): Map<K, V>;
-}
-
-export interface TTLCache<V = unknown, K = string> extends Cache<V, K> {
-	/**
-	 * Removes the `ttl` descriptor from a cache item by the specified key.
-	 * The method returns `true` if the operation has been successful, otherwise `false`
-	 * (the requested item hasn't been found).
-	 *
-	 * @param key
-	 */
-	removeTTLFrom(key: K): boolean;
-}
-
-export interface DecoratorOptions {
-	/**
-	 * Time to expire a cache item in milliseconds
-	 */
-	ttl?: number;
 }
