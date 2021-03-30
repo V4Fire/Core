@@ -87,11 +87,3 @@ export default function addTTL<
 
 	return cacheWithTTL;
 }
-
-interface foo<V = unknown, K = string> extends Cache<V, K> {
-	set(key: K, value: V, opts?: { bar: 'str' }): V;
-}
-
-const b = addTTL(<foo><unknown>null);
-
-b.set('bar', 'baz', {bar: 'str'});
