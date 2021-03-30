@@ -12,9 +12,10 @@
  */
 
 import type Cache from 'core/cache/interface';
-import type { TTLCache, ClearFilter, DecoratorOptions } from 'core/cache/interface';
+import type { ClearFilter } from 'core/cache/interface';
+import type { TTLDecoratorOptions, TTLCache } from 'core/cache/decorators/ttl/interface';
 
-export * from 'core/cache/interface';
+export * from 'core/cache/decorators/ttl/interface';
 
 /**
  * Wraps the specified cache object to add a feature of the cache expiring
@@ -37,12 +38,16 @@ export * from 'core/cache/interface';
  * cache.add('foo2', 'bar2');
  * ```
  */
-export default function addTTL<V = unknown, K = string>(cache: Cache<V, K>, ttl?: number): TTLCache<V, K> {
+export default function addTTL<
+	T extends Cache<V, K>,
+	V = unknown,
+	K = string,
+>(cache: T, ttl?: number): TTLCache<V, K, T> {
 	const
 		cacheWithTTL: TTLCache<V, K> = Object.create(cache),
 		ttlTimers = new Map<K, number | NodeJS.Timeout>();
 
-	cacheWithTTL.set = (key: K, value: V, opts?: DecoratorOptions) => {
+	cacheWithTTL.set = (key: K, value: V, opts?: TTLDecoratorOptions & Parameters<T['set']>[2]) => {
 		if (opts?.ttl != null || ttl != null) {
 			const
 				time = opts?.ttl ?? ttl;
