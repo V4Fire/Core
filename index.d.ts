@@ -178,6 +178,21 @@ type PromiseType<T> =
 	T extends Maybe<infer V> ?
 		NonNullable<V> : T extends Promise<infer V> ? V : T;
 
+/**
+ * Wraps the specified function to return a value as Promise
+ *
+ * @template T - any function
+ *
+ * @example
+ * ```typescript
+ * type A = typeof () => null;
+ *
+ * // () => Promise<null>
+ * type B = ReturnPromise<A>;
+ * ```
+ */
+type ReturnPromise<T extends AnyFunction<any[], unknown>> = (...args: Parameters<T>) => Promise<ReturnType<T>>;
+
 type DictionaryType<T extends Dictionary> = T extends Dictionary<infer V> ? NonNullable<V> : T;
 type IterableType<T extends Iterable<any>> = T extends Iterable<infer V> ? V : T;
 
