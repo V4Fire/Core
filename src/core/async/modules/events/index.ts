@@ -36,6 +36,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	/**
 	 * Attaches an event listener from the specified event emitter.
 	 * If the emitter is a function, it is interpreted as the function to attach events.
+	 * Notice, if you don't provide a group for the operation, it will be taken from the event name.
 	 *
 	 * @param emitter - event emitter
 	 * @param events - event or list of events (can also specify multiple events by using spaces)
@@ -52,6 +53,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	/**
 	 * Attaches an event listener from the specified event emitter.
 	 * If the emitter is a function, it is interpreted as the function to attach events.
+	 * Notice, if you don't provide a group for the operation, it will be taken from the event name.
 	 *
 	 * @param emitter - event emitter
 	 * @param events - event or list of events (can also specify multiple events by using spaces)
@@ -172,6 +174,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	/**
 	 * Attaches an event listener from the specified event emitter, but the event is listened only once.
 	 * If the emitter is a function, it is interpreted as the function to attach events.
+	 * Notice, if you don't provide a group for the operation, it will be taken from the event name.
 	 *
 	 * @param emitter - event emitter
 	 * @param events - event or list of events (can also specify multiple events by using spaces)
@@ -188,6 +191,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	/**
 	 * Attaches an event listener from the specified event emitter, but the event is listened only once.
 	 * If the emitter is a function, it is interpreted as the function to attach events.
+	 * Notice, if you don't provide a group for the operation, it will be taken from the event name.
 	 *
 	 * @param emitter - event emitter
 	 * @param events - event or list of events (can also specify multiple events with a space)
@@ -227,6 +231,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	/**
 	 * Returns a promise that is resolved after emitting the specified event.
 	 * If the emitter is a function, it is interpreted as the function to attach events.
+	 * Notice, if you don't provide a group for the operation, it will be taken from the event name.
 	 *
 	 * @param emitter - event emitter
 	 * @param events - event or list of events (can also specify multiple events with a space)
@@ -243,6 +248,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	/**
 	 * Returns a promise that is resolved after emitting the specified event.
 	 * If the emitter is a function, it is interpreted as the function to attach events.
+	 * Notice, if you don't provide a group for the operation, it will be taken from the event name.
 	 *
 	 * @param emitter - event emitter
 	 * @param events - event or list of events (can also specify multiple events with a space)
@@ -298,7 +304,9 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	off(id?: EventId): this;
 
 	/**
-	 * Removes the specified event listener or a group of listeners
+	 * Removes the specified event listener or a group of listeners.
+	 * Notice, you can't remove event listeners by a label without providing a group.
+	 *
 	 * @param opts - options for the operation
 	 */
 	off(opts: StrictClearOptionsId<EventId>): this;
@@ -314,7 +322,9 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	clearEventListener(id?: EventId): this;
 
 	/**
-	 * Removes the specified event listener or a group of listeners
+	 * Removes the specified event listener or a group of listeners.
+	 * Notice, you can't remove event listeners by a label without providing a group.
+	 *
 	 * @param opts - options for the operation
 	 */
 	clearEventListener(opts: StrictClearOptionsId<EventId>): this;
@@ -337,7 +347,9 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	muteEventListener(id?: EventId): this;
 
 	/**
-	 * Mutes the specified event listener or a group of listeners
+	 * Mutes the specified event listener or a group of listeners.
+	 * Notice, you can't mute event listeners by a label without providing a group.
+	 *
 	 * @param opts - options for the operation
 	 */
 	muteEventListener(opts: StrictClearOptionsId<EventId>): this;
@@ -352,7 +364,9 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	unmuteEventListener(id?: EventId): this;
 
 	/**
-	 * Unmutes the specified event listener or a group of listeners
+	 * Unmutes the specified event listener or a group of listeners.
+	 * Notice, you can't unmute event listeners by a label without providing a group.
+	 *
 	 * @param opts - options for the operation
 	 */
 	unmuteEventListener(opts: StrictClearOptionsId<EventId>): this;
@@ -367,7 +381,9 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	suspendEventListener(id?: EventId): this;
 
 	/**
-	 * Suspends the specified event listener or a group of listeners
+	 * Suspends the specified event listener or a group of listeners.
+	 * Notice, you can't suspend event listeners by a label without providing a group.
+	 *
 	 * @param opts - options for the operation
 	 */
 	suspendEventListener(opts: StrictClearOptionsId<EventId>): this;
@@ -382,7 +398,9 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	unsuspendEventListener(id?: EventId): this;
 
 	/**
-	 * Unsuspends the specified event listener or a group of listeners
+	 * Unsuspends the specified event listener or a group of listeners.
+	 * Notice, you can't unsuspend event listeners by a label without providing a group.
+	 *
 	 * @param opts - options for the operation
 	 */
 	unsuspendEventListener(opts: StrictClearOptionsId<EventId>): this;
