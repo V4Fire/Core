@@ -27,8 +27,8 @@ export class LazyEngine<V> extends AvailableToCheckInStorageEngine<V> {
 		return ttl;
 	}
 
-	set(key: string, value: V, ttl?: number): void {
-		void this.execTask(key, async () => {
+	async set(key: string, value: V, ttl?: number): Promise<void> {
+		await this.execTask(key, async () => {
 			await this.kvStorage.set(key, value);
 
 			if (ttl != null) {
@@ -39,8 +39,8 @@ export class LazyEngine<V> extends AvailableToCheckInStorageEngine<V> {
 		});
 	}
 
-	remove(key: string): void {
-		void this.execTask(key, async () => {
+	async remove(key: string): Promise<void> {
+		await this.execTask(key, async () => {
 			await this.kvStorage.remove(key);
 
 			await this.kvStorage.remove(`${key}${ttlPostfix}`);

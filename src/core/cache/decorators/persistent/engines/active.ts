@@ -38,7 +38,7 @@ export class ActiveEngine<V> extends UnavailableToCheckInStorageEngine<V> {
 		const
 			time = Date.now();
 
-		await Promise.all(Object.keys(this.storage).map((key) => {
+		await Promise.allSettled(Object.keys(this.storage).map((key) => {
 			const promiseInitProp = new Promise<void>(async (resolve) => {
 				if (this.storage[key] > time) {
 					const value = (await this.kvStorage.get<V>(key))!;
@@ -58,8 +58,8 @@ export class ActiveEngine<V> extends UnavailableToCheckInStorageEngine<V> {
 		return this.storage[key];
 	}
 
-	set(key: string, value: V, ttl?: number): void {
-		void this.execTask(key, async () => {
+	async set(key: string, value: V, ttl?: number): Promise<void> {
+		await this.execTask(key, async () => {
 			await this.kvStorage.set(key, value);
 
 			this.storage[key] = ttl ?? Number.MAX_SAFE_INTEGER;
@@ -68,8 +68,8 @@ export class ActiveEngine<V> extends UnavailableToCheckInStorageEngine<V> {
 		});
 	}
 
-	remove(key: string): void {
-		void this.execTask(key, async () => {
+	async remove(key: string): Promise<void> {
+		await this.execTask(key, async () => {
 			await this.kvStorage.remove(key);
 
 			delete this.storage[key];

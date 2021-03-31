@@ -10,7 +10,7 @@ The value for `persistentTTL` should be provided in milliseconds.
 import { asyncLocal } from 'core/kv-storage';
 
 import SimpleCache from 'core/cache/simple';
-import addPersistent from 'core/cache/persistent';
+import addPersistent from 'core/cache/decorators/persistent';
 
 const opts = {
   initializationStrategy: 'active',
@@ -40,7 +40,7 @@ This value is used when you don't provide the `persistentTTL` parameter when sav
 import { asyncLocal } from 'core/kv-storage';
 
 import SimpleCache from 'core/cache/simple';
-import addPersistent from 'core/cache/persistent';
+import addPersistent from 'core/cache/decorators/persistent';
 
 const options = {
   persistentTTL: (60).seconds(),
@@ -73,12 +73,12 @@ Some consumers cannot be ready for changing API, so there is no silver bullet. W
 Assumes that our storage has property `__storage__` with object format `{ key: ttl }`.
 
 ```js
-import addPersistent from 'core/cache/persistent';
+import addPersistent from 'core/cache/decorators/persistent';
 import SimpleCache from 'core/cache/simple';
 import { asyncLocal } from 'core/kv-storage';
 
 const options = {
-  loadFromStorage: 'onInit',
+  loadFromStorage: 'onInit'
 };
 
 const
@@ -98,12 +98,12 @@ const
 Assumes that our storage has additional property for each property with key `${key}__ttl`.
 
 ```js
-import addPersistent from 'core/cache/persistent';
+import addPersistent from 'core/cache/decorators/persistent';
 import SimpleCache from 'core/cache/simple';
 import { asyncLocal } from 'core/kv-storage';
 
 const options = {
-  loadFromStorage: 'onDemand',
+  loadFromStorage: 'onDemand'
 };
 
 const
@@ -126,12 +126,12 @@ await copyOfCache.get('foo');
 Assumes that our storage has additional property for each property with key `${key}__ttl`.
 
 ```js
-import addPersistent from 'core/cache/persistent';
+import addPersistent from 'core/cache/decorators/persistent';
 import SimpleCache from 'core/cache/simple';
 import { asyncLocal } from 'core/kv-storage';
 
 const options = {
-  loadFromStorage: 'onDemand',
+  loadFromStorage: 'onOfflineDemand'
 };
 
 const
