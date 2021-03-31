@@ -35,8 +35,12 @@ export type Label = string | symbol;
 export type Group = string;
 export type Join = boolean | 'replace';
 
+export interface IdObject {
+	__id__: unknown;
+}
+
 export type TimerId = number | object;
-export type EventId = CanArray<object>;
+export type EventId = CanArray<IdObject>;
 
 export interface AsyncOptions {
 	/**
@@ -273,6 +277,14 @@ export interface ClearOptionsId<ID = any> extends ClearOptions {
 	 */
 	id?: ID;
 }
+
+export type StrictClearOptions =
+	Omit<ClearOptions, 'label'> |
+	Overwrite<ClearOptions, {label: Label; group: Group | RegExp}>;
+
+export type StrictClearOptionsId<ID = any> =
+	Omit<ClearOptionsId<ID>, 'label'> |
+	Overwrite<ClearOptionsId<ID>, {label: Label; group: Group | RegExp}>;
 
 export interface ClearProxyOptions<ID = any> extends ClearOptionsId<ID> {
 	/**

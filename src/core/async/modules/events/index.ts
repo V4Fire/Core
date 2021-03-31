@@ -20,8 +20,9 @@ import type {
 	AsyncOnceOptions,
 	AsyncPromisifyOnceOptions,
 
+	IdObject,
 	EventId,
-	ClearOptionsId,
+	StrictClearOptionsId,
 
 	ProxyCb,
 	Event,
@@ -94,14 +95,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 		const
 			that = this,
-			links: object[] = [],
+			links: IdObject[] = [],
 			multipleEvent = events.length > 1;
 
 		for (let i = 0; i < events.length; i++) {
 			const
 				event = events[i];
 
-			const link = this.registerTask<object>({
+			const link = this.registerTask<IdObject>({
 				...p,
 
 				name: this.namespaces.eventListener,
@@ -159,7 +160,8 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 				}
 			});
 
-			if (link) {
+			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+			if (link != null) {
 				links.push(link);
 			}
 		}
@@ -299,9 +301,10 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Removes the specified event listener or a group of listeners
 	 * @param opts - options for the operation
 	 */
-	off(opts: ClearOptionsId<EventId>): this;
-	off(task?: EventId | ClearOptionsId<EventId>): this {
-		return this.clearEventListener(task);
+	off(opts: StrictClearOptionsId<EventId>): this;
+
+	off(task?: EventId | StrictClearOptionsId<EventId>): this {
+		return this.clearEventListener(<any>task);
 	}
 
 	/**
@@ -314,8 +317,8 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Removes the specified event listener or a group of listeners
 	 * @param opts - options for the operation
 	 */
-	clearEventListener(opts: ClearOptionsId<EventId>): this;
-	clearEventListener(task?: EventId | ClearOptionsId<EventId>): this {
+	clearEventListener(opts: StrictClearOptionsId<EventId>): this;
+	clearEventListener(task?: EventId | StrictClearOptionsId<EventId>): this {
 		if (Object.isArray(task)) {
 			for (let i = 0; i < task.length; i++) {
 				this.clearEventListener(<EventId>task[i]);
@@ -337,9 +340,9 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Mutes the specified event listener or a group of listeners
 	 * @param opts - options for the operation
 	 */
-	muteEventListener(opts: ClearOptionsId<EventId>): this;
-	muteEventListener(task?: EventId | ClearOptionsId<EventId>): this {
-		return this.markEvent('muted', task);
+	muteEventListener(opts: StrictClearOptionsId<EventId>): this;
+	muteEventListener(task?: EventId | StrictClearOptionsId<EventId>): this {
+		return this.markEvent('muted', <any>task);
 	}
 
 	/**
@@ -352,9 +355,9 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Unmutes the specified event listener or a group of listeners
 	 * @param opts - options for the operation
 	 */
-	unmuteEventListener(opts: ClearOptionsId<EventId>): this;
-	unmuteEventListener(task?: EventId | ClearOptionsId<EventId>): this {
-		return this.markEvent('!muted', task);
+	unmuteEventListener(opts: StrictClearOptionsId<EventId>): this;
+	unmuteEventListener(task?: EventId | StrictClearOptionsId<EventId>): this {
+		return this.markEvent('!muted', <any>task);
 	}
 
 	/**
@@ -367,9 +370,9 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Suspends the specified event listener or a group of listeners
 	 * @param opts - options for the operation
 	 */
-	suspendEventListener(opts: ClearOptionsId<EventId>): this;
-	suspendEventListener(task?: EventId | ClearOptionsId<EventId>): this {
-		return this.markEvent('paused', task);
+	suspendEventListener(opts: StrictClearOptionsId<EventId>): this;
+	suspendEventListener(task?: EventId | StrictClearOptionsId<EventId>): this {
+		return this.markEvent('paused', <any>task);
 	}
 
 	/**
@@ -382,9 +385,9 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Unsuspends the specified event listener or a group of listeners
 	 * @param opts - options for the operation
 	 */
-	unsuspendEventListener(opts: ClearOptionsId<EventId>): this;
-	unsuspendEventListener(p: EventId | ClearOptionsId<EventId>): this {
-		return this.markEvent('!paused', p);
+	unsuspendEventListener(opts: StrictClearOptionsId<EventId>): this;
+	unsuspendEventListener(p?: EventId | StrictClearOptionsId<EventId>): this {
+		return this.markEvent('!paused', <any>p);
 	}
 
 	/**
@@ -418,8 +421,8 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * @param label
 	 * @param opts - additional options
 	 */
-	protected markEvent(label: string, opts: ClearOptionsId<EventId>): this;
-	protected markEvent(label: string, task: EventId | ClearOptionsId<EventId>): this {
+	protected markEvent(label: string, opts: StrictClearOptionsId<EventId>): this;
+	protected markEvent(label: string, task?: EventId | StrictClearOptionsId<EventId>): this {
 		if (Object.isArray(task)) {
 			for (let i = 0; i < task.length; i++) {
 				this.markEvent(label, <EventId>task[i]);

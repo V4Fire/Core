@@ -68,6 +68,24 @@ describe('core/async/modules/events', () => {
 		expect(i).toBe(1);
 	});
 
+	it('once event with a label', () => {
+		let
+			i = 0;
+
+		const
+			$a = new Async(),
+			$e = new EventEmitter(),
+			cb = (v) => i += v;
+
+		$a.once($e, 'foo', cb, {label: 'foo', join: true});
+		$e.emit('foo', 1);
+
+		$a.once($e, 'foo', cb, {label: 'foo', join: true});
+		$e.emit('foo', 2);
+
+		expect(i).toBe(3);
+	});
+
 	it('clearing of a listener', () => {
 		let
 			i = 0;
@@ -83,7 +101,7 @@ describe('core/async/modules/events', () => {
 		expect(i).toBe(0);
 	});
 
-	it('clearing of listeners by a group', () => {
+	it('clearing of listeners by an implicit group', () => {
 		let
 			i = 0;
 
@@ -96,6 +114,24 @@ describe('core/async/modules/events', () => {
 		$a.on($e, 'foo', cb);
 
 		$a.off({group: 'foo'});
+		$e.emit('foo', 1);
+
+		expect(i).toBe(0);
+	});
+
+	it('clearing of listeners by a group', () => {
+		let
+			i = 0;
+
+		const
+			$a = new Async(),
+			$e = new EventEmitter(),
+			cb = (v) => i += v;
+
+		$a.on($e, 'foo', cb, {group: 'baz'});
+		$a.on($e, 'foo', cb, {group: 'baz'});
+
+		$a.off({group: 'baz'});
 		$e.emit('foo', 1);
 
 		expect(i).toBe(0);

@@ -96,7 +96,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * @param opts - options for the operation
 	 */
 	unmuteImmediate(opts: ClearOptionsId<TimerId>): this;
-	unmuteImmediate(p: TimerId | ClearOptionsId<TimerId>): this {
+	unmuteImmediate(p?: TimerId | ClearOptionsId<TimerId>): this {
 		return this.markTask('!muted', p, this.namespaces.immediate);
 	}
 
@@ -111,7 +111,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * @param opts - options for the operation
 	 */
 	suspendImmediate(opts: ClearOptionsId<TimerId>): this;
-	suspendImmediate(p: TimerId | ClearOptionsId<TimerId>): this {
+	suspendImmediate(p?: TimerId | ClearOptionsId<TimerId>): this {
 		return this.markTask('paused', p, this.namespaces.immediate);
 	}
 
@@ -126,7 +126,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * @param opts - options for the operation
 	 */
 	unsuspendImmediate(opts: ClearOptionsId<TimerId>): this;
-	unsuspendImmediate(p: TimerId | ClearOptionsId<TimerId>): this {
+	unsuspendImmediate(p?: TimerId | ClearOptionsId<TimerId>): this {
 		return this.markTask('!paused', p, this.namespaces.immediate);
 	}
 
