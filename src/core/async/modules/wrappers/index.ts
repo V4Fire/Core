@@ -38,6 +38,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * The wrapper takes a link to the "raw" data provider and returns a new object that based
 	 * on the original, but all async methods and properties are wrapped by Async.
 	 * Notice, the wrapped methods can take additional Async parameters, like group or label.
+	 * If you don't provide a group, it will be taken from the provider name.
 	 *
 	 * @param provider
 	 * @param [opts] - additional options for the wrapper
