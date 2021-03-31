@@ -48,3 +48,31 @@ cache.add('foo', 'bar1', {ttl: 500});
 // Additional method to remove the `ttl` descriptor from a cache item by the specified key
 cache.removeTTLFrom('foo');
 ```
+
+### core/cache/decorators/persistent
+
+Provides a decorator for any cache to add a feature of synchronous cloning of data to external storage and the ability to restore state from it.
+
+```js
+import { asyncLocal } from 'core/kv-storage';
+
+import SimpleCache from 'core/cache/simple';
+import addPersistent from 'core/cache/decorators/persistent';
+
+// You can read about the options in the readme `core/cache/decorators/persistent/README.md`
+const opts = {
+  initializationStrategy: 'active',
+};
+
+const
+  persistentCache = await addPersistent(new SimpleCache(), asyncLocal, opts);
+
+await persistentCache.set('foo', 'bar');
+await persistentCache.set('foo2', 'bar2');
+
+// Cause we use the same instance for local data storing,
+// this cache will have all values from the previous (it will be loaded from the storage during initialization)
+
+const
+  copyOfCache = await addPersistent(new SimpleCache(), asyncLocal, opts);
+```

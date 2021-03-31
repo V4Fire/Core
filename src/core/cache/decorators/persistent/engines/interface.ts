@@ -61,16 +61,19 @@ abstract class AbstractPersistentEngine<V = unknown> {
 	 * @param task Storage and TTL update task
 	 */
 	protected async execTask(key: string, task: () => Promise<void>): Promise<void> {
-		if (this.pending.has(key)) {
-			await this.pending.get(key);
-		}
+		return new Promise(async (resolve) => {
+			if (this.pending.has(key)) {
+				await this.pending.get(key);
+			}
 
-		this.async.setImmediate(() => {
+			await this.async.nextTick({label: key});
+
 			this.pending.set(key, (async () => {
 				await task();
 				this.pending.delete(key);
+				resolve();
 			})());
-		}, {label: key});
+		});
 	}
 }
 

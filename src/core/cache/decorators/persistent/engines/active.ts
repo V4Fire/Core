@@ -59,23 +59,27 @@ export class ActiveEngine<V> extends UnavailableToCheckInStorageEngine<V> {
 	}
 
 	async set(key: string, value: V, ttl?: number): Promise<void> {
-		await this.execTask(key, async () => {
-			await this.kvStorage.set(key, value);
+		try {
+			await this.execTask(key, async () => {
+				await this.kvStorage.set(key, value);
 
-			this.storage[key] = ttl ?? Number.MAX_SAFE_INTEGER;
-			const copyOfStorage = {...this.storage};
-			await this.kvStorage.set(storagePath, copyOfStorage);
-		});
+				this.storage[key] = ttl ?? Number.MAX_SAFE_INTEGER;
+				const copyOfStorage = {...this.storage};
+				await this.kvStorage.set(storagePath, copyOfStorage);
+			});
+		} catch(e) {}
 	}
 
 	async remove(key: string): Promise<void> {
-		await this.execTask(key, async () => {
-			await this.kvStorage.remove(key);
+		try {
+			await this.execTask(key, async () => {
+				await this.kvStorage.remove(key);
 
-			delete this.storage[key];
-			const copyOfStorage = {...this.storage};
-			await this.kvStorage.set(storagePath, copyOfStorage);
-		});
+				delete this.storage[key];
+				const copyOfStorage = {...this.storage};
+				await this.kvStorage.set(storagePath, copyOfStorage);
+			});
+		} catch(e) {}
 	}
 
 	isNeedToCheckInStorage(): false {

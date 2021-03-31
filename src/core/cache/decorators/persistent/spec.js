@@ -16,6 +16,10 @@ describe('core/cache/decorators/persistent', () => {
 		await asyncLocal.clear();
 	});
 
+	beforeAll(() => {
+		spyOn(Date, 'now').and.returnValue(0);
+	});
+
 	describe('core', () => {
 		it('every replaced method should call original method', async () => {
 			const methods = [
@@ -65,7 +69,7 @@ describe('core/cache/decorators/persistent', () => {
 	});
 
 	describe('engine active', () => {
-		it('should init cache on create', async (done) => {
+		it('should init cache on create', async () => {
 			const options = {
 				loadFromStorage: 'onInit'
 			};
@@ -79,18 +83,56 @@ describe('core/cache/decorators/persistent', () => {
 			const
 				newCache = new SimpleCache();
 
-			setTimeout(async () => {
-				await addPersistent(newCache, asyncLocal, options);
+			await addPersistent(newCache, asyncLocal, options);
 
-				expect(newCache.get('foo')).toEqual('bar');
-				expect(newCache.get('foo2')).toEqual('bar2');
-				done();
-			}, 0);
+			expect(newCache.get('foo')).toEqual('bar');
+			expect(newCache.get('foo2')).toEqual('bar2');
+		});
+
+		it('ttl saved at correct paths', async () => {
+			const options = {
+				loadFromStorage: 'onInit'
+			};
+
+			const
+				persistentCache = await addPersistent(new SimpleCache(), asyncLocal, options);
+
+			await persistentCache.set('foo', 'bar');
+			await persistentCache.set('foo2', 'bar2', {persistentTTL: 100});
+
+			expect(await asyncLocal.get('__storage__')).toEqual({
+				foo: Number.MAX_SAFE_INTEGER,
+				foo2: 100
+			});
+		});
+
+		it('should not save value if value is expired', async () => {
+			const options = {
+				loadFromStorage: 'onInit'
+			};
+
+			const
+				persistentCache = await addPersistent(new SimpleCache(), asyncLocal, options);
+
+			await persistentCache.set('foo', 'bar', {persistentTTL: -100});
+
+			const
+				newCache = new SimpleCache();
+
+			expect(await asyncLocal.get('__storage__')).toEqual({
+				foo: -100
+			});
+
+			await addPersistent(newCache, asyncLocal, options);
+
+			expect(newCache.get('foo')).toEqual(undefined);
+			expect(await asyncLocal.get('foo')).toEqual(undefined);
+			expect(await asyncLocal.get('__storage__')).toEqual({});
 		});
 	});
 
 	describe('engine lazy', () => {
-		it('must save at first demand', async (done) => {
+		it('must save at first demand', async () => {
 			const options = {
 				loadFromStorage: 'onDemand'
 			};
@@ -103,22 +145,57 @@ describe('core/cache/decorators/persistent', () => {
 			const
 				newCache = new SimpleCache();
 
-			setTimeout(async () => {
-				const
-					copyOfCache = await addPersistent(newCache, asyncLocal, options);
+			const
+				copyOfCache = await addPersistent(newCache, asyncLocal, options);
 
-				expect(newCache.get('foo')).toEqual(undefined);
+			expect(newCache.get('foo')).toEqual(undefined);
 
-				expect(await copyOfCache.get('foo')).toEqual('bar');
+			expect(await copyOfCache.get('foo')).toEqual('bar');
 
-				expect(newCache.get('foo')).toEqual('bar');
-				done();
-			}, 0);
+			expect(newCache.get('foo')).toEqual('bar');
+		});
+
+		it('ttl saved at correct paths', async () => {
+			const options = {
+				loadFromStorage: 'onDemand'
+			};
+
+			const
+				persistentCache = await addPersistent(new SimpleCache(), asyncLocal, options);
+
+			await persistentCache.set('foo', 'bar');
+			await persistentCache.set('foo2', 'bar2', {persistentTTL: 100});
+
+			expect(await asyncLocal.get('foo__ttl')).toEqual(undefined);
+			expect(await asyncLocal.get('foo2__ttl')).toEqual(100);
+		});
+
+		it('should not save value if value is expired', async () => {
+			const options = {
+				loadFromStorage: 'onDemand'
+			};
+
+			const
+				persistentCache = await addPersistent(new SimpleCache(), asyncLocal, options);
+
+			await persistentCache.set('foo', 'bar', {persistentTTL: -100});
+
+			const
+				newCache = new SimpleCache();
+
+			const
+				copyOfCache = await addPersistent(newCache, asyncLocal, options);
+
+			expect(await copyOfCache.get('foo')).toEqual(undefined);
+
+			expect(newCache.get('foo')).toEqual(undefined);
+			expect(await asyncLocal.get('foo')).toEqual(undefined);
+			expect(await asyncLocal.get('foo__ttl')).toEqual(undefined);
 		});
 	});
 
 	describe('engine lazyOffline', () => {
-		it('must save at first demand if internet is offline', async (done) => {
+		it('must save at first demand if internet is offline', async () => {
 			const options = {
 				loadFromStorage: 'onOfflineDemand'
 			};
@@ -132,21 +209,18 @@ describe('core/cache/decorators/persistent', () => {
 			const
 				newCache = new SimpleCache();
 
-			setTimeout(async () => {
-				const
-					copyOfCache = await addPersistent(newCache, asyncLocal, options);
+			const
+				copyOfCache = await addPersistent(newCache, asyncLocal, options);
 
-				spyOn(netModule, 'isOnline').and.returnValues(Promise.resolve({status: false}), Promise.resolve({status: true}));
+			spyOn(netModule, 'isOnline').and.returnValues(Promise.resolve({status: false}), Promise.resolve({status: true}));
 
-				expect(newCache.get('foo')).toEqual(undefined);
-				expect(await copyOfCache.get('foo')).toEqual('bar');
-				expect(newCache.get('foo')).toEqual('bar');
+			expect(newCache.get('foo')).toEqual(undefined);
+			expect(await copyOfCache.get('foo')).toEqual('bar');
+			expect(newCache.get('foo')).toEqual('bar');
 
-				expect(newCache.get('foo2')).toEqual(undefined);
-				expect(await copyOfCache.get('foo2')).toEqual(undefined);
-				expect(newCache.get('foo2')).toEqual(undefined);
-				done();
-			}, 0);
+			expect(newCache.get('foo2')).toEqual(undefined);
+			expect(await copyOfCache.get('foo2')).toEqual(undefined);
+			expect(newCache.get('foo2')).toEqual(undefined);
 		});
 	});
 });
