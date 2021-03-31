@@ -7,7 +7,7 @@
  */
 
 import { convertIfDate } from 'core/json';
-import type { ToQueryStringOptions, FromQueryStringOptions } from 'core/url/interface';
+import type { ToQueryStringOptions, FromQueryStringOptions, StackItem } from 'core/url/interface';
 
 export * from 'core/url/interface';
 
@@ -39,8 +39,12 @@ export function toQueryString(data: unknown, encode?: boolean): string;
  */
 export function toQueryString(data: unknown, opts: ToQueryStringOptions): string;
 export function toQueryString(data: unknown, optsOrEncode?: ToQueryStringOptions | boolean): string {
+	if (!Object.isDictionary(data)) {
+		return Object.isString(data) ? data : '';
+	}
+
 	let
-		opts;
+		opts: ToQueryStringOptions;
 
 	if (Object.isPlainObject(optsOrEncode)) {
 		opts = optsOrEncode;
@@ -49,7 +53,82 @@ export function toQueryString(data: unknown, optsOrEncode?: ToQueryStringOptions
 		opts = {encode: optsOrEncode};
 	}
 
-	return chunkToQueryString(data, opts);
+	const
+		separator = opts.separator ?? '_',
+		filterFn = opts.paramsFilter ?? defaultParamsFilterFn,
+		stack: StackItem[] = Object.keys(data).sort().reverse()
+			.map((key) => ({
+				key,
+				data: data[key]
+			}));
+
+	const dictionaryKeyFn = opts.arraySyntax ?
+		(baseKey, additionalKey) => `${baseKey}[${additionalKey}]` :
+		(baseKey, additionalKey) => `${baseKey}${separator}${additionalKey}`;
+
+	const arrayKeyFn = opts.arraySyntax ?
+		(baseKey) => `${baseKey}[]` :
+		(baseKey) => baseKey;
+
+	const checkAndPush = (item, additionalKey, fn) => {
+		const
+			nextLvlKey = fn(item.key, additionalKey);
+
+		if (filterFn(item.data[additionalKey], additionalKey, nextLvlKey)) {
+			stack.push({
+				key: nextLvlKey,
+				data: item.data[additionalKey],
+				checked: true
+			});
+		}
+	};
+
+	let
+		res = '';
+
+	while (stack.length > 0) {
+		const item = <StackItem>stack.pop();
+
+		if (Object.isDictionary(item.data)) {
+			const keys = Object.keys(item.data).sort();
+
+			if (keys.length > 0) {
+				for (let i = keys.length - 1; i >= 0; i--) {
+					checkAndPush(item, keys[i], dictionaryKeyFn);
+				}
+
+				continue;
+			}
+		}
+
+		if (Object.isArray(item.data) && item.data.length > 0) {
+			for (let key = item.data.length - 1; key >= 0; key--) {
+				checkAndPush(item, key, arrayKeyFn);
+			}
+
+			continue;
+		}
+
+		if (item.checked || filterFn(item.data, item.key)) {
+			let
+				data;
+
+			if (Object.isDictionary(item.data)) {
+				data = '';
+
+			} else {
+				data = String(item.data ?? '');
+
+				if (opts.encode !== false) {
+					data = encodeURIComponent(data);
+				}
+			}
+
+			res += `&${item.key}=${data}`;
+		}
+	}
+
+	return res.substr(1);
 }
 
 const
@@ -192,81 +271,10 @@ export function fromQueryString(
 	return queryObj;
 }
 
-function chunkToQueryString(data: unknown, opts: ToQueryStringOptions, prfx: string = ''): string {
-	const
-		removeEmptyParams = opts.removeEmptyParams == null ? true : opts.removeEmptyParams;
-
-	if (removeEmptyParams) {
-		if (data == null || data === '') {
-			return '';
-		}
-
-	} else if (data == null) {
-		data = '';
-	}
-
-	const
-		separator = opts.separator ?? '_',
-		dataIsArray = Object.isArray(data);
-
-	const reduce = (arr) => {
-		arr.sort();
-
-		let
-			res = '';
-
-		for (let i = 0; i < arr.length; i++) {
-			const
-				pt = dataIsArray ? i : arr[i],
-				val = (<Dictionary>data)[pt],
-				valIsArr = Object.isArray(val);
-
-			let
-				key = String(pt);
-
-			if (removeEmptyParams) {
-				if (val == null || val === '' || valIsArr && (<unknown[]>val).length === 0) {
-					continue;
-				}
-			}
-
-			if (opts.arraySyntax) {
-				if (dataIsArray) {
-					key = `${prfx}[]`;
-
-				} else if (prfx !== '') {
-					key = `${prfx}[${key}]`;
-				}
-
-			} else if (dataIsArray) {
-				key = prfx;
-
-			} else {
-				key = prfx !== '' ? prfx + separator + key : key;
-			}
-
-			const str = valIsArr || Object.isDictionary(val) ?
-				chunkToQueryString(val, opts, key) :
-				`${key}=${chunkToQueryString(val, opts)}`;
-
-			if (res !== '') {
-				res += `&${str}`;
-				continue;
-			}
-
-			res = str;
-		}
-
-		return res;
-	};
-
-	if (dataIsArray) {
-		return reduce(data);
-	}
-
-	if (Object.isDictionary(data)) {
-		return reduce(Object.keys(data));
-	}
-
-	return opts.encode !== false ? encodeURIComponent(String(data)) : String(data);
+/**
+ * Default filter function for query params
+ * @param value
+ */
+export function defaultParamsFilterFn(value: unknown): boolean {
+	return !(value == null || value === '' || (Object.isArray(value) && value.length === 0));
 }

@@ -424,9 +424,10 @@ export interface CreateRequestOptions<D = unknown> {
 	engine?: RequestEngine;
 
 	/**
-	 * @see [[[ToQueryStringOptions.removeEmptyParams]]]
+	 * Must return serialized query string
+	 * @param query
 	 */
-	removeEmptyDataParams?: boolean;
+	querySerializer?(query: RequestQuery): string;
 }
 
 /**

@@ -13,7 +13,7 @@ Changelog
 
 #### :rocket: New Feature
 
-* Added new property `removeEmptyDataParams` for request options that can disable removing empty properties from request query or request body
+* Added a new method `querySerializer` in a default request options for an ability to change the way parameters are serialized
 
 ## v3.37.0 (2021-03-17)
 

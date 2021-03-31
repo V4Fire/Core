@@ -40,17 +40,13 @@ export interface ToQueryStringOptions {
 	arraySyntax?: boolean;
 
 	/**
-	 * If false, then properties with empty values will not be removed
+	 * Returns true if a value must be presented in a query string
 	 *
-	 * @default `true`
-	 *
-	 * @example
-	 * ```js
-	 * // foo=&bar=
-	 * fromQueryString({foo: [], bar: null}, {removeEmptyParams: false});
-	 * ```
+	 * @param value
+	 * @param key
+	 * @param fullKey - full key for deep objects ({a: {b: 1}} => 'a_b')
 	 */
-	removeEmptyParams?: boolean;
+	paramsFilter?(value: unknown, key: string, fullKey?: string): boolean;
 }
 
 export interface FromQueryStringOptions {
@@ -96,4 +92,13 @@ export interface FromQueryStringOptions {
 	 * ```
 	 */
 	arraySyntax?: boolean;
+}
+
+/**
+ * Element of stack that used in the `toQueryString` function
+ */
+export interface StackItem {
+	key: string;
+	data: unknown;
+	checked?: true;
 }

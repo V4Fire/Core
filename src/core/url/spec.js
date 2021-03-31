@@ -130,10 +130,10 @@ describe('core/url/toQueryString', () => {
 	});
 
 	it('serializing of deep objects with the array syntax and with disabled removeEmptyParams option', () => {
-		expect(toQueryString({foo: {a: null, b: undefined}}, {removeEmptyParams: false, arraySyntax: true})).toBe('foo[a]=&foo[b]=');
+		expect(toQueryString({foo: {a: null, b: undefined}}, {paramsFilter: () => true, arraySyntax: true})).toBe('foo[a]=&foo[b]=');
 
 		const
-			hardCaseExpectedResult = 'bar=&foo[a][]=&foo[a][]=1&foo[a][]=&foo[a][]=&foo[b]=&foo[c][d]=',
+			hardCaseExpectedResult = 'bar=&foo[a][]=&foo[a][]=&foo[a][]=&foo[a][]=1&foo[b]=&foo[c][d]=',
 			hardCase = {
 				foo: {
 					a: [undefined, null, '', 1],
@@ -143,6 +143,6 @@ describe('core/url/toQueryString', () => {
 				bar: null
 			};
 
-		expect(toQueryString(hardCase, {removeEmptyParams: false, arraySyntax: true})).toBe(hardCaseExpectedResult);
+		expect(toQueryString(hardCase, {paramsFilter: () => true, arraySyntax: true})).toBe(hardCaseExpectedResult);
 	});
 });

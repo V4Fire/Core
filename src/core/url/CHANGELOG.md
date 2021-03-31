@@ -13,7 +13,7 @@ Changelog
 
 #### :rocket: New Feature
 
-* Added new property `removeEmptyParams` in `ToQueryStringOptions` options that can disable removing empty properties in `toQueryString`
+* Added `paramsFilter` option in `ToQueryStringOptions` that decides which property should be included in the final query string
 
 ## v3.33.0 (2021-02-26)
 
