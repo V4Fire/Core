@@ -128,4 +128,33 @@ describe('core/url/toQueryString', () => {
 		expect(toQueryString({foo: {a: 1, b: 2}}, {arraySyntax: true})).toBe('foo[a]=1&foo[b]=2');
 		expect(toQueryString({foo: {a: {b: 1}, c: 2}}, {arraySyntax: true})).toBe('foo[a][b]=1&foo[c]=2');
 	});
+
+	it('serializing of deep objects with the array syntax and providing `paramsFilter`', () => {
+		const
+			opts = {paramsFilter: () => true, arraySyntax: true};
+
+		{
+			const obj = {foo: {a: null, b: undefined}};
+			expect(toQueryString(obj, opts)).toBe('foo[a]=&foo[b]=');
+		}
+
+		{
+			const obj = {
+				foo: {
+					a: [undefined, null, '', 1],
+					c: {d: undefined},
+					b: ''
+				},
+
+				bar: null
+			};
+
+			expect(toQueryString(obj, opts)).toBe('bar=&foo[a][]=&foo[a][]=&foo[a][]=&foo[a][]=1&foo[b]=&foo[c][d]=');
+		}
+
+		{
+			const obj = {foo: [1], bar: {bla: 2}};
+			expect(toQueryString(obj, {...opts, paramsFilter: (el, key) => key !== 'bla'})).toBe('foo[]=1');
+		}
+	});
 });

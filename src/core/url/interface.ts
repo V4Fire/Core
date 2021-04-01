@@ -34,10 +34,26 @@ export interface ToQueryStringOptions {
 	 * @example
 	 * ```js
 	 * // foo[]=1&bar[bla]=2
-	 * fromQueryString({foo: [1], bar: {bla: 2}}, {arraySyntax: true});
+	 * toQueryString({foo: [1], bar: {bla: 2}}, {arraySyntax: true});
 	 * ```
 	 */
 	arraySyntax?: boolean;
+
+	/**
+	 * Filters values that shouldn't be serialized.
+	 * By default, the function skip all values with null-s and empty strings.
+	 *
+	 * @param value
+	 * @param key - property key
+	 * @param path - accumulated property path ({a: {b: 1}} => 'a_b')
+	 *
+	 * @example
+	 * ```js
+	 * // foo=1
+	 * toQueryString({foo: 1, bar: {bla: 2}}, {paramsFilter: (el, key) => key !== 'bla'});
+	 * ```
+	 */
+	paramsFilter?(value: unknown, key: string, path?: string): unknown;
 }
 
 export interface FromQueryStringOptions {
