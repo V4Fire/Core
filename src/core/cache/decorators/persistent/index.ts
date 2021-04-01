@@ -56,6 +56,7 @@ class PersistentWrapper<T extends Cache<V, string>, V = unknown> {
 		this.cacheWithStorage = Object.create(cache);
 		this.cache = cache;
 		this.engine = new engines[opts.loadFromStorage]<V>(kvStorage);
+		this.ttl = opts.persistentTTL;
 	}
 
 	async getInstance(): Promise<PersistentCache<V, string>> {
@@ -101,7 +102,7 @@ class PersistentWrapper<T extends Cache<V, string>, V = unknown> {
 	protected replaceSetMethod(): void {
 		this.cacheWithStorage.set = async (key: string, value: V, opts?: PersistentTTLDecoratorOptions & Parameters<T['set']>[2]) => {
 			const
-				ttl = this.ttl ?? opts?.persistentTTL;
+				ttl = opts?.persistentTTL ?? this.ttl;
 
 			this.fetchedMemory.add(key);
 
