@@ -33,7 +33,7 @@ abstract class AbstractPersistentEngine<V = unknown> {
 	/**
 	 * Pending requests of change property
 	 */
-	protected readonly pending: Map<string, Promise<void>> = new Map();
+	protected readonly pending: Map<string, Promise<unknown>> = new Map();
 
 	/**
 	 * Checking TTL of some property
@@ -57,27 +57,42 @@ abstract class AbstractPersistentEngine<V = unknown> {
 
 	/**
 	 * Creating a task to update a property
+	 *
 	 * @param key key of property to update
 	 * @param task Storage and TTL update task
 	 */
-	protected async execTask(key: string, task: () => Promise<void>): Promise<void> {
-		return new Promise(async (resolve, reject) => {
-			if (this.pending.has(key)) {
-				await this.pending.get(key);
-			}
-
+	protected async execTask<T>(key: string, task: () => CanPromise<T>): Promise<T> {
+		if (this.pending.has(key)) {
 			try {
-				await this.async.nextTick({label: key});
+				await this.pending.get(key);
 
-				this.pending.set(key, (async () => {
-					await task();
-					this.pending.delete(key);
-					resolve();
-				})());
-			} catch(e) {
-				reject(e);
+			} catch (err) {
+				stderr(err);
 			}
-		});
+		}
+
+		let
+			promise;
+
+		try {
+			await this.async.nextTick({label: key});
+
+			promise = (async () => {
+				try {
+					return await task();
+
+				} finally {
+					this.pending.delete(key);
+				}
+			})();
+
+			this.pending.set(key, promise);
+
+		} catch (err) {
+			stderr(err);
+		}
+
+		return promise;
 	}
 }
 

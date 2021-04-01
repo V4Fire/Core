@@ -12,17 +12,13 @@ import { asyncLocal } from 'core/kv-storage';
 import SimpleCache from 'core/cache/simple';
 import addPersistent from 'core/cache/decorators/persistent';
 
-const opts = {
-  initializationStrategy: 'active',
-};
-
 const
-  persistentCache = await addPersistent(new SimpleCache(), asyncLocal, opts);
+  persistentCache = await addPersistent(new SimpleCache(), asyncLocal);
 
-await persistentCache.set('foo', 'bar');
+await persistentCache.set('foo', 'bar', {persistentTTL: (2).seconds()});
 await persistentCache.set('foo2', 'bar2');
 
-// Cause we use the same instance for local data storing,
+// Cause we use the same instance for the local data storing,
 // this cache will have all values from the previous (it will be loaded from the storage during initialization)
 
 const
@@ -42,13 +38,10 @@ import { asyncLocal } from 'core/kv-storage';
 import SimpleCache from 'core/cache/simple';
 import addPersistent from 'core/cache/decorators/persistent';
 
-const options = {
+const persistentCache = await addPersistent(new SimpleCache(), asyncLocal, {
   persistentTTL: (60).seconds(),
   initializationStrategy: 'active',
-};
-
-const
-  persistentCache = await addPersistent(new SimpleCache(), asyncLocal, options);
+});
 
 // If we "reload" the cache from the storage by using the browser reloading or another way,
 // these saved values can be "restored" from the storage only for the next 60 seconds

@@ -16,20 +16,34 @@ export type PersistentCache<V = unknown, K = string, T extends Cache<V, K> = Cac
 	 *
 	 * @param key
 	 * @param value
-	 * @param opts
+	 * @param [opts] - additional options
 	 */
 	set(key: K, value: V, opts?: PersistentTTLDecoratorOptions & Parameters<T['set']>[2]): Promise<V>;
 };
 
 export interface PersistentTTLDecoratorOptions {
 	/**
-	 * Time to expire a cache item in persistent storage
+	 * Time to expire a cache item in the persistent storage
 	 */
 	persistentTTL?: number;
 }
 
 export interface PersistentOptions {
-    persistentTTL?: number;
-    loadFromStorage: 'onInit' | 'onDemand' | 'onOfflineDemand';
+	/**
+	 * Default time to expire a cache item in the persistent storage
+	 */
+	persistentTTL?: number;
+
+	/**
+	 * How to load cache items from the the persistent storage:
+	 *
+	 * 1. `'onInit'` - the the whole stored data will be loaded during cache initialization;
+	 * 2. `'onDemand'` - each stored item will be loaded from the cache only on the first touch, i.e. on-demand or lazily;
+	 * 3. `'onOfflineDemand'` - each stored item will be loaded from the cache only on the first touch and only if
+	 *  there is no internet connection (the strategy is useful to create net-first offline storages)
+	 *
+	 * @default `'onDemand'`
+	 */
+	loadFromStorage: 'onInit' | 'onDemand' | 'onOfflineDemand';
 }
 

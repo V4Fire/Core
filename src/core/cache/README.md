@@ -32,7 +32,7 @@ Also, the module provides a bunch of functions to decorate cache storages, like 
 
 ### core/cache/decorators/ttl
 
-Provides a decorator for any cache to add a feature of the cache expiring.
+Provides a decorator for any cache to add a feature of cache expiring.
 
 ```js
 import addTTL from 'core/cache/decorators/ttl';
@@ -51,26 +51,21 @@ cache.removeTTLFrom('foo');
 
 ### core/cache/decorators/persistent
 
-Provides a decorator for any cache to add a feature of synchronous cloning of data to external storage and the ability to restore state from it.
+Provides a decorator for any cache to add a feature of persistent data storing.
 
 ```js
 import { asyncLocal } from 'core/kv-storage';
 
-import SimpleCache from 'core/cache/simple';
 import addPersistent from 'core/cache/decorators/persistent';
-
-// You can read about the options in the readme `core/cache/decorators/persistent/README.md`
-const opts = {
-  initializationStrategy: 'active',
-};
+import SimpleCache from 'core/cache/simple';
 
 const
-  persistentCache = await addPersistent(new SimpleCache(), asyncLocal, opts);
+  persistentCache = await addPersistent(new SimpleCache(), asyncLocal);
 
-await persistentCache.set('foo', 'bar');
+await persistentCache.set('foo', 'bar', {persistentTTL: (2).seconds()});
 await persistentCache.set('foo2', 'bar2');
 
-// Cause we use the same instance for local data storing,
+// Cause we use the same instance for the local data storing,
 // this cache will have all values from the previous (it will be loaded from the storage during initialization)
 
 const
