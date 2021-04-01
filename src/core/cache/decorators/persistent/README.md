@@ -71,7 +71,9 @@ import { asyncLocal } from 'core/kv-storage';
 import addPersistent from 'core/cache/decorators/persistent';
 import SimpleCache from 'core/cache/simple';
 
-const persistentCache = await addPersistent(new SimpleCache(), asyncLocal);
+const persistentCache = await addPersistent(new SimpleCache(), asyncLocal, {
+  loadFromStorage: 'onInit'
+});
 
 await persistentCache.set('foo', 'bar');
 await persistentCache.set('foo2', 'bar2');
@@ -95,15 +97,12 @@ import { asyncLocal } from 'core/kv-storage';
 import addPersistent from 'core/cache/decorators/persistent';
 import SimpleCache from 'core/cache/simple';
 
-const
-  persistentCache = await addPersistent(new SimpleCache(), asyncLocal);
+const persistentCache = await addPersistent(new SimpleCache(), asyncLocal);
 
 await persistentCache.set('foo', 'bar');
 await persistentCache.set('foo2', 'bar2');
 
-const copyOfCache = await addPersistent(new SimpleCache(), asyncLocal, {
-  loadFromStorage: 'onDemand'
-});
+const copyOfCache = await addPersistent(new SimpleCache(), asyncLocal);
 
 console.log(await copyOfCache.get('foo') === 'bar');
 ```
