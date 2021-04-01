@@ -7,7 +7,7 @@
  */
 
 import { deprecated } from 'core/functools';
-import { concatURLs, fromQueryString, toQueryString } from 'core/url';
+import { concatURLs, fromQueryString } from 'core/url';
 
 import {
 
@@ -179,7 +179,7 @@ export default class RequestContext<D = unknown> extends Super<D> {
 			}
 
 			if (Object.size(q) > 0) {
-				url = `${url}?${toQueryString(q)}`;
+				url = `${url}?${p.querySerializer(q)}`;
 			}
 
 			if (this.canCache) {
