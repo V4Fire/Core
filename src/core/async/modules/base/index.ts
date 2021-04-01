@@ -22,10 +22,9 @@ import {
 
 } from 'core/async/const';
 
-import type {
+import type { FullAsyncOptions, FullClearOptions } from 'core/async/interface';
 
-	FullAsyncOptions,
-	FullClearOptions,
+import type {
 
 	ClearOptions,
 	ClearProxyOptions,
@@ -35,11 +34,13 @@ import type {
 
 	TaskCtx
 
-} from 'core/async/interface';
+} from 'core/async/modules/base/interface';
 
 export * from 'core/async/const';
 export * from 'core/async/helpers';
+
 export * from 'core/async/interface';
+export * from 'core/async/modules/base/interface';
 
 export default class Async<CTX extends object = Async<any>> {
 	/**
