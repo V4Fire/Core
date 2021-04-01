@@ -11,11 +11,15 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-## v3.40.0 (2021-03-30)
+## v3.40.0 (2021-04-01)
 
 #### :rocket: New Feature
 
 * Added a wrapper to provide the feature of `core/cache` expiring
+
+#### :bug: Bug Fix
+
+* Fixed an issue when trying to remove event listeners by providing a label without specifying a group `core/async`
 
 ## v3.39.0 (2021-03-19)
 

@@ -133,6 +133,8 @@ declare function cancelIdleCallback(id: number): void;
 declare function setImmediate(fn: AnyFunction): number;
 declare function clearImmediate(id: number): void;
 
+type Primitive = string | number | boolean | undefined | null;
+
 type CanPromise<T> = T | Promise<T>;
 type CanArray<T> = T | T[];
 
@@ -195,6 +197,26 @@ type ReturnPromise<T extends AnyFunction<any[], unknown>> = (...args: Parameters
 
 type DictionaryType<T extends Dictionary> = T extends Dictionary<infer V> ? NonNullable<V> : T;
 type IterableType<T extends Iterable<any>> = T extends Iterable<infer V> ? V : T;
+
+/**
+ * Overrides properties of the specified type or interface.
+ * Don't use this helper if you simply extend one type from another, i. e. without overriding properties.
+ *
+ * @template T - original type
+ * @template U - type with the overridden properties
+ *
+ * @example
+ * ```typescript
+ * type A = {
+ *   x: number;
+ *   y: number;
+ * };
+ *
+ * // {x:number; y: string}
+ * type B = Overwrite<A, {y: string}>;
+ * ```
+ */
+type Overwrite<T, U> = Pick<T, Exclude<keyof T, keyof U>> & U;
 
 interface JSONCb {
 	(key: string, value: unknown): unknown;
@@ -3840,25 +3862,3 @@ interface Function {
 							Promise<T6> : T6
 		>;
 }
-
-/**
- * Overrides properties of the specified type or interface.
- * Don't use this helper if you simply extend one type from another, i. e. without overriding properties.
- *
- * @typeparam T - original type
- * @typeparam U - type with the overridden properties
- *
- * @example
- * ```typescript
- * type A = {
- *   x: number;
- *   y: number;
- * };
- *
- * // {x:number; y: string}
- * type B = Overwrite<A, {y: string}>;
- * ```
- */
-type Overwrite<T, U> = Pick<T, Exclude<keyof T, keyof U>> & U;
-
-type Primitive = string | number | boolean | undefined | null;
