@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.40.1 (2021-04-01)
+
+#### :bug: Bug Fix
+
+* Restored `core/async/const`
+
 ## v3.36.0 (2021-03-16)
 
 #### :rocket: New Feature
