@@ -20,6 +20,8 @@ import type {
 
 export type EventId = CanArray<IdObject>;
 
+export type EmitLikeEvents = 'emit' | 'fire' | 'dispatch' | 'dispatchEvent';
+
 /**
  * Something that looks like an event emitter
  */

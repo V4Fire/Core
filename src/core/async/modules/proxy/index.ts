@@ -17,8 +17,8 @@ import Super, {
 
 	asyncCounter,
 
-	isPromisifyNamespace,
 	isAsyncOptions,
+	isPromisifyNamespace,
 
 	BoundFn,
 

@@ -7,7 +7,7 @@
  */
 
 import { deprecate } from 'core/functools';
-import type { AsyncOptions, Event } from 'core/async/interface';
+import type { AsyncOptions } from 'core/async/modules/events';
 
 /**
  * Returns true if the specified value is looks like an instance of AsyncOptions
@@ -15,14 +15,6 @@ import type { AsyncOptions, Event } from 'core/async/interface';
  */
 export function isAsyncOptions<T extends object = AsyncOptions>(value: unknown): value is T {
 	return Object.isPlainObject(value);
-}
-
-/**
- * Returns true if the specified value is looks like an event object
- * @param value
- */
-export function isEvent(value: unknown): value is Event {
-	return Object.isPlainObject(value) && Object.isString((<any>value).event);
 }
 
 /**

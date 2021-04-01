@@ -2,21 +2,11 @@ import type { Provider } from 'core/data';
 import type { CreateRequestOptions, RequestQuery, RequestResponseObject, RequestBody } from 'core/request';
 
 import type Async from 'core/async';
-import type {
-
-	AsyncOptions,
-	ClearOptionsId,
-
-	ProxyCb,
-	EventEmitterLike
-
-} from 'core/async';
-
-export type DataProviderMethodsToReplace = DataProviderQueryMethodsToReplace | DataProviderBodyMethodsToReplace;
+import type { AsyncOptions, ClearOptionsId, ProxyCb, EventEmitterLike } from 'core/async';
 
 export type DataProviderQueryMethodsToReplace = 'get' | 'peek';
-
 export type DataProviderBodyMethodsToReplace = 'post' | 'add' | 'upd' | 'del';
+export type DataProviderMethodsToReplace = DataProviderQueryMethodsToReplace | DataProviderBodyMethodsToReplace;
 
 export type WrappedDataProvider = Overwrite<Provider, {
 	/** @see [[Provider.emitter]] */

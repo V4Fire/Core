@@ -20,7 +20,7 @@ import {
 	isPromisifyNamespace,
 	NamespacesDictionary
 
-} from 'core/async/const';
+} from 'core/async/modules/base/const';
 
 import type { FullAsyncOptions, FullClearOptions } from 'core/async/interface';
 
@@ -36,8 +36,8 @@ import type {
 
 } from 'core/async/modules/base/interface';
 
-export * from 'core/async/const';
-export * from 'core/async/helpers';
+export * from 'core/async/modules/base/const';
+export * from 'core/async/modules/base/helpers';
 
 export * from 'core/async/interface';
 export * from 'core/async/modules/base/interface';
