@@ -83,6 +83,22 @@ describe('core/cache/decorators/persistent', () => {
 			await persistentCache.set('bar', null, {persistentTTL: 150});
 			expect(await asyncLocal.get('__storage__')).toEqual({foo: 100, bar: 150});
 		});
+
+		it('collapse same prop change', async () => {
+			const options = {
+				loadFromStorage: 'onInit'
+			};
+
+			const
+				cache = new SimpleCache(),
+				persistentCache = await addPersistent(cache, asyncLocal, options);
+
+			spyOn(asyncLocal, 'set').and.callThrough();
+			persistentCache.set('foo', 1);
+			await persistentCache.set('foo', 2);
+
+			expect(asyncLocal.set.calls.first().args).toEqual(['foo', 2]);
+		});
 	});
 
 	describe('engine active', () => {
