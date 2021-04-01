@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { AvailableToCheckInStorageEngine } from 'core/cache/decorators/persistent/engines/interface';
+import { AvailableToCheckInStorageEngine, StorageCheckState } from 'core/cache/decorators/persistent/engines/interface';
 import { lazyEngineTTLPostfix } from 'core/cache/decorators/persistent/engines/const';
 
 export class LazyEngine<V> extends AvailableToCheckInStorageEngine<V> {
@@ -44,7 +44,10 @@ export class LazyEngine<V> extends AvailableToCheckInStorageEngine<V> {
 		return res;
 	}
 
-	isNeedToCheckInStorage(): CanPromise<boolean> {
-		return true;
+	getCheckStorageState(): CanPromise<StorageCheckState> {
+		return {
+			available: true,
+			checked: true
+		};
 	}
 }

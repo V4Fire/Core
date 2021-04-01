@@ -289,7 +289,11 @@ describe('core/cache/decorators/persistent', () => {
 			const
 				copyOfCache = await addPersistent(newCache, asyncLocal, options);
 
-			spyOn(netModule, 'isOnline').and.returnValues(Promise.resolve({status: false}), Promise.resolve({status: true}));
+			spyOn(netModule, 'isOnline').and.returnValues(
+				Promise.resolve({status: false}),
+				Promise.resolve({status: true}),
+				Promise.resolve({status: false})
+			);
 
 			expect(newCache.get('foo')).toEqual(undefined);
 			expect(await copyOfCache.get('foo')).toEqual('bar');
@@ -298,6 +302,10 @@ describe('core/cache/decorators/persistent', () => {
 			expect(newCache.get('foo2')).toEqual(undefined);
 			expect(await copyOfCache.get('foo2')).toEqual(undefined);
 			expect(newCache.get('foo2')).toEqual(undefined);
+
+			expect(newCache.get('foo2')).toEqual(undefined);
+			expect(await copyOfCache.get('foo2')).toEqual('bar2');
+			expect(newCache.get('foo2')).toEqual('bar2');
 		});
 	});
 });

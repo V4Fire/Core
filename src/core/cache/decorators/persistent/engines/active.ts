@@ -71,7 +71,10 @@ export class ActiveEngine<V> extends UnavailableToCheckInStorageEngine<V> {
 		await this.kvStorage.set(activeEngineStoragePath, copyOfStorage);
 	}
 
-	isNeedToCheckInStorage(): false {
-		return false;
+	getCheckStorageState(): CanPromise<{available: false; checked: boolean}> {
+		return {
+			available: false,
+			checked: true
+		};
 	}
 }

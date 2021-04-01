@@ -115,20 +115,23 @@ export abstract class AvailableToCheckInStorageEngine<V = unknown> extends Abstr
 
 	/**
 	 * Before every method 'get' | 'has' called this method is invoked
-	 * If method return true will call action `check in storage`
+	 * Return state need to check in storage and mark property is checked or no
 	 *
 	 * @param method
 	 * @param key
 	 */
-	abstract isNeedToCheckInStorage(method: 'get' | 'has', key: string): CanPromise<boolean>;
+	abstract getCheckStorageState(method: 'get' | 'has', key: string): CanPromise<StorageCheckState>;
 }
 
 /**
- * Subtype of engine where `isNeedToCheckInStorage` always return false
+ * Subtype of engine where `getCheckStorageState` always return available: false
  * allows you not to implement method 'get'
  */
 export abstract class UnavailableToCheckInStorageEngine<V = unknown> extends AbstractPersistentEngine<V> {
-	abstract isNeedToCheckInStorage(method: 'get' | 'has', key: string): CanPromise<false>;
+	abstract getCheckStorageState(method: 'get' | 'has', key: string): CanPromise<{
+		available: false;
+		checked: boolean;
+	}>;
 }
 
 /**
@@ -136,3 +139,16 @@ export abstract class UnavailableToCheckInStorageEngine<V = unknown> extends Abs
  */
 export type PersistentEngine<V = unknown> = AvailableToCheckInStorageEngine<V> | UnavailableToCheckInStorageEngine<V>;
 
+/**
+ * Storage check state
+ * available: false / checked: false -> dont need to check storage, dont mark property as checked
+ * available: false / checked: true -> dont need to check storage, mark property as checked
+ * available: true / checked: true -> check storage, mark property as checked
+ */
+export type StorageCheckState = {
+	available: false;
+	checked: boolean;
+} | {
+	available: true;
+	checked: true;
+};

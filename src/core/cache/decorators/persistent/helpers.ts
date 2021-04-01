@@ -122,9 +122,13 @@ export class PersistentWrapper<T extends Cache<V, string>, V = unknown> {
 				return this.cache[method](key);
 			}
 
-			this.fetchedMemory.add(key);
+			const checkState = await this.engine.getCheckStorageState(method, key);
 
-			if (await this.engine.isNeedToCheckInStorage(method, key)) {
+			if (checkState.checked) {
+				this.fetchedMemory.add(key);
+			}
+
+			if (checkState.available) {
 				await this.checkPropertyInStorage(key);
 			}
 
