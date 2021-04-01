@@ -17,7 +17,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 * Added a wrapper to provide the feature of `core/cache` expiring
 * Added a new parameter `paramsFilter` to filter values that shouldn't be serialized `core/url/toQueryString`
-* Added a new method `querySerializer` in a default request options for an ability to change the way parameters are serialized `core/request`
+* Added a new parameter `querySerializer` to specify how to serialize queries to URL `core/request`
 
 #### :bug: Bug Fix
 
