@@ -9,11 +9,11 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
-## v3.40.0
+## v3.40.0 (2021-04-01)
 
 #### :rocket: New Feature
 
-* Added a new method `querySerializer` in a default request options for an ability to change the way parameters are serialized
+* Added a new parameter `querySerializer` to specify how to serialize queries to URL
 
 ## v3.37.0 (2021-03-17)
 

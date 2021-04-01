@@ -424,7 +424,7 @@ export interface CreateRequestOptions<D = unknown> {
 	engine?: RequestEngine;
 
 	/**
-	 * Must return serialized query string
+	 * Returns serialized value of the specified query object
 	 * @param query
 	 */
 	querySerializer?(query: RequestQuery): string;
