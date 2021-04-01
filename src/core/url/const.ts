@@ -9,3 +9,11 @@
 export const
 	isAbsURL = /^(?:\w+:)?\/\//,
 	isURLWithSlash = /^(?:\w+:)?\/+/;
+
+/**
+ * Default function to filter query parameters to serialize with the `toQueryString` method
+ * @param value
+ */
+export function defaultToQueryStringParamsFilter(value: unknown): boolean {
+	return !(value == null || value === '' || (Object.isArray(value) && value.length === 0));
+}

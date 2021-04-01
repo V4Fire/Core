@@ -12,25 +12,30 @@
  */
 
 import SyncPromise from 'core/promise/sync';
-import Super from 'core/async/modules/proxy';
 
-import type {
+import Super, {
+
+	AsyncCb,
 
 	AsyncOptions,
 	AsyncCbOptions,
-	AsyncWaitOptions,
-	AsyncRequestIdleCallbackOptions,
-	AsyncIdleOptions,
+	ClearOptionsId
 
-	ClearOptionsId,
+} from 'core/async/modules/proxy';
+
+import type {
+
 	TimerId,
+	IdleCb,
 
-	AsyncCb,
-	IdleCb
+	AsyncWaitOptions,
+	AsyncIdleOptions,
+	AsyncRequestIdleCallbackOptions
 
-} from 'core/async/interface';
+} from 'core/async/modules/timers/interface';
 
 export * from 'core/async/modules/proxy';
+export * from 'core/async/modules/timers/interface';
 
 export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	/**
@@ -367,7 +372,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	cancelIdleCallback(opts: ClearOptionsId<TimerId>): this;
 	cancelIdleCallback(task?: TimerId | ClearOptionsId<TimerId>): this {
-		return this.clearIdleCallback(task);
+		return this.clearIdleCallback(<any>task);
 	}
 
 	/**

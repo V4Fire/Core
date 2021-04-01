@@ -25,6 +25,8 @@ import type {
 
 } from 'core/request/interface';
 
+import { toQueryString } from 'core/url';
+
 // eslint-disable-next-line import/no-mutable-exports
 export let storage: CanUndef<Promise<AsyncStorage>>;
 
@@ -70,5 +72,6 @@ export const defaultRequestOpts = {
 	headers: <Dictionary<CanArray<string>>>{},
 	query: <RequestQuery>{},
 	meta: <Dictionary>{},
-	engine: <RequestEngine>engine
+	engine: <RequestEngine>engine,
+	querySerializer: toQueryString
 };

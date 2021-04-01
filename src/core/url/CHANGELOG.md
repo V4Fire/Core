@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.40.0 (2021-04-01)
+
+#### :rocket: New Feature
+
+* Added a new parameter `paramsFilter` to filter values that shouldn't be serialized `toQueryString`
+
 ## v3.33.0 (2021-02-26)
 
 #### :boom: Breaking Change

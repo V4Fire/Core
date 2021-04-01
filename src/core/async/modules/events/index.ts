@@ -12,25 +12,33 @@
  */
 
 import SyncPromise from 'core/promise/sync';
-import Super, { isEvent } from 'core/async/modules/timers';
+
+import Super, {
+
+	IdObject,
+	ProxyCb,
+
+	StrictClearOptionsId
+
+} from 'core/async/modules/timers';
+
+import { isEvent } from 'core/async/modules/events/helpers';
 
 import type {
 
+	Event,
+	EventId,
+	EventEmitterLikeP,
+
 	AsyncOnOptions,
 	AsyncOnceOptions,
-	AsyncPromisifyOnceOptions,
+	AsyncPromisifyOnceOptions
 
-	IdObject,
-	EventId,
-	StrictClearOptionsId,
-
-	ProxyCb,
-	Event,
-	EventEmitterLikeP
-
-} from 'core/async/interface';
+} from 'core/async/modules/events/interface';
 
 export * from 'core/async/modules/timers';
+export * from 'core/async/modules/events/helpers';
+export * from 'core/async/modules/events/interface';
 
 export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	/**

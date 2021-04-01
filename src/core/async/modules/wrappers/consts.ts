@@ -6,9 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type { AsyncOptions } from 'core/async/modules/events';
-
-import type { EmitLikeEvents, DataProviderMethodsToReplace } from 'core/async/modules/wrappers/interface';
+import type { EmitLikeEvents, AsyncOptions } from 'core/async/modules/events';
+import type { DataProviderMethodsToReplace } from 'core/async/modules/wrappers/interface';
 
 export const emitLikeEvents: EmitLikeEvents[] = [
 	'emit',
@@ -17,6 +16,13 @@ export const emitLikeEvents: EmitLikeEvents[] = [
 	'dispatchEvent'
 ];
 
-export const dataProviderMethodsToReplace: DataProviderMethodsToReplace[] = ['get', 'peek', 'post', 'add', 'upd', 'del'];
+export const dataProviderMethodsToReplace: DataProviderMethodsToReplace[] = [
+	'get',
+	'peek',
+	'post',
+	'add',
+	'upd',
+	'del'
+];
 
 export const asyncOptionsKeys: Array<keyof AsyncOptions> = ['group', 'label', 'join'];

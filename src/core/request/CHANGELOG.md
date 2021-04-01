@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.40.0 (2021-04-01)
+
+#### :rocket: New Feature
+
+* Added a new parameter `querySerializer` to specify how to serialize queries to URL
+
 ## v3.37.0 (2021-03-17)
 
 #### :rocket: New Feature

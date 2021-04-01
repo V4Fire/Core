@@ -16,30 +16,34 @@ import SyncPromise from 'core/promise/sync';
 import Super, {
 
 	asyncCounter,
-	isPromisifyNamespace,
+
 	isAsyncOptions,
-	AsyncCbOptions
+	isPromisifyNamespace,
+
+	BoundFn,
+
+	AsyncCbOptions,
+	AsyncProxyOptions,
+
+	ClearProxyOptions,
+	ClearOptionsId
 
 } from 'core/async/modules/base';
 
 import type {
 
-	AsyncWorkerOptions,
-	AsyncProxyOptions,
-	AsyncRequestOptions,
-	AsyncPromiseOptions,
-
-	ClearProxyOptions,
-	ClearOptionsId,
-
 	WorkerLikeP,
 	PromiseLikeP,
 	CancelablePromise,
-	BoundFn
 
-} from 'core/async/interface';
+	AsyncRequestOptions,
+	AsyncWorkerOptions,
+	AsyncPromiseOptions
+
+} from 'core/async/modules/proxy/interface';
 
 export * from 'core/async/modules/base';
+export * from 'core/async/modules/proxy/interface';
 
 export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	/**
