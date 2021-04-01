@@ -11,12 +11,17 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-## v3.40.0
+## v3.40.0 (2021-04-01)
 
 #### :rocket: New Feature
 
-* Added a `paramsFilter` option in `ToQueryStringOptions` that decides which property should be included in the final query string `core/url`
+* Added a wrapper to provide the feature of `core/cache` expiring
+* Added a new parameter `paramsFilter` to filter values that shouldn't be serialized `core/url/toQueryString`
 * Added a new method `querySerializer` in a default request options for an ability to change the way parameters are serialized `core/request`
+
+#### :bug: Bug Fix
+
+* Fixed an issue when trying to remove event listeners by providing a label without specifying a group `core/async`
 
 ## v3.39.0 (2021-03-19)
 

@@ -8,6 +8,30 @@
 
 import type Async from 'core/async';
 
+import type {
+
+	Task,
+
+	MarkReason,
+	ClearReason,
+
+	BoundFn,
+	ClearFn,
+
+	AsyncProxyOptions,
+	ClearProxyOptions
+
+} from 'core/async/modules/base';
+
+import type {
+
+	AsyncWorkerOptions,
+	AsyncPromiseOptions
+
+} from 'core/async/modules/proxy';
+
+import type { AsyncPromisifyOnceOptions } from 'core/async/modules/events';
+
 export enum Namespaces {
 	proxy,
 	proxyPromise,
@@ -30,32 +54,6 @@ export type Namespace = keyof typeof Namespaces;
 
 /** @deprecated */
 export { Namespaces as LinkNames };
-
-export type Label = string | symbol;
-export type Group = string;
-export type Join = boolean | 'replace';
-
-export type TimerId = number | object;
-export type EventId = CanArray<object>;
-
-export interface AsyncOptions {
-	/**
-	 * Label of a task (the previous task with the same label will be canceled)
-	 */
-	label?: Label;
-
-	/**
-	 * Group name of a task
-	 */
-	group?: Group;
-
-	/**
-	 * Strategy to join competitive tasks (with the same labels):
-	 *   1. `true` - all tasks are joined to the first;
-	 *   1. `'replace'` - all tasks are joined (replaced) to the last (only for promises).
-	 */
-	join?: Join;
-}
 
 export type FullAsyncOptions<CTX extends object = Async> =
 	{
@@ -233,54 +231,6 @@ export type FullAsyncOptions<CTX extends object = Async> =
 		AsyncPromisifyOnceOptions<unknown, unknown, CTX>
 	);
 
-/**
- * Reason why a task can be marked
- */
-export type MarkReason =
-	'id' |
-	'label' |
-	'group' |
-	'rgxp' |
-	'all';
-
-/**
- * Reason why a task can be killed (cleared)
- */
-export type ClearReason =
-	MarkReason |
-	'collision';
-
-export interface ClearOptions {
-	/**
-	 * Label of the task to clear
-	 */
-	label?: Label;
-
-	/**
-	 * Group name of the task to clear
-	 */
-	group?: Group | RegExp;
-
-	/**
-	 * If true, then a cleanup handler of the task is prevented
-	 */
-	preventDefault?: boolean;
-}
-
-export interface ClearOptionsId<ID = any> extends ClearOptions {
-	/**
-	 * Identifier of the task to clear
-	 */
-	id?: ID;
-}
-
-export interface ClearProxyOptions<ID = any> extends ClearOptionsId<ID> {
-	/**
-	 * Namespace of the proxy to clear
-	 */
-	name?: string;
-}
-
 export interface FullClearOptions<ID = any> extends ClearProxyOptions<ID> {
 	/**
 	 * Namespace of the task to clear
@@ -301,322 +251,4 @@ export interface FullClearOptions<ID = any> extends ClearProxyOptions<ID> {
 	 * Link to a task that replaces the current
 	 */
 	replacedBy?: Task;
-}
-
-/**
- * Registered task object
- */
-export interface Task<CTX extends object = Async> {
-	/**
-	 * Task unique identifier
-	 */
-	id: unknown;
-
-	/**
-	 * Raw task object
-	 */
-	obj: unknown;
-
-	/**
-	 * Name of the raw task object
-	 */
-	objName?: string;
-
-	/**
-	 * Group name the task
-	 */
-	group?: string;
-
-	/**
-	 * Label of the task
-	 */
-	label?: Label;
-
-	/**
-	 * True if the task is paused
-	 */
-	paused: boolean;
-
-	/**
-	 * True if the task is muted
-	 */
-	muted: boolean;
-
-	/**
-	 * Queue of pending handlers
-	 * (if the task is paused)
-	 */
-	queue: Function[];
-
-	/**
-	 * List of complete handlers:
-	 *
-	 * [0] - onFulfilled
-	 * [1] - onRejected
-	 */
-	onComplete: Array<Array<BoundFn<CTX>>>;
-
-	/**
-	 * List of clear handlers
-	 */
-	onClear: Array<AsyncCb<CTX>>;
-
-	/**
-	 * Unregisters the task
-	 */
-	unregister: Function;
-
-	/**
-	 * Function to clear the task
-	 */
-	clearFn?: ClearFn;
-}
-
-/**
- * Context of a task
- */
-export type TaskCtx<CTX extends object = Async> = {
-	/**
-	 * Task type
-	 */
-	type: string;
-
-	/**
-	 * Link to the registered task
-	 */
-	link: Task<CTX>;
-
-	/**
-	 * Link to a new task that replaces the current
-	 */
-	replacedBy?: Task<CTX>;
-
-	/**
-	 * Reason to clear the task
-	 */
-	reason?: ClearReason;
-} & AsyncOptions & ClearOptionsId<unknown>;
-
-export interface ClearFn<CTX extends object = Async> extends Function {
-	(id: any, ctx: TaskCtx<CTX>): any;
-}
-
-export interface BoundFn<CTX extends object = Async> extends Function {
-	(this: CTX, ...args: any[]): any;
-}
-
-export type ProxyCb<
-	A = unknown,
-	R = unknown,
-	CTX extends object = Async
-> = A extends never ?
-	((this: CTX) => R) : A extends any[] ?
-		((this: CTX, ...args: A) => R) : ((this: CTX, e: A) => R) | Function;
-
-export type AsyncCb<CTX extends object = Async> =
-	ProxyCb<TaskCtx<CTX>, void, CTX>;
-
-export type IdleCb<
-	R = unknown,
-	CTX extends object = Async
-> = ProxyCb<IdleDeadline, R, CTX>;
-
-export interface AsyncCbOptions<CTX extends object = Async> extends AsyncOptions {
-	/**
-	 * If true, then a task namespace is marked as promisified
-	 * @default `false`
-	 */
-	promise?: boolean;
-
-	/**
-	 * Handler/s of task clearing
-	 */
-	onClear?: CanArray<AsyncCb<CTX>>;
-
-	/**
-	 * Handler/s of task merging: the task should merge to another task with the same label and with "join: true" strategy
-	 */
-	onMerge?: CanArray<AsyncCb<CTX>>;
-}
-
-export interface AsyncCbOptionsSingle<CTX extends object = Async> extends AsyncCbOptions<CTX> {
-	/**
-	 * If false, then the proxy supports multiple callings
-	 * @default `true`
-	 */
-	single?: boolean;
-}
-
-export interface AsyncProxyOptions<CTX extends object = Async> extends AsyncCbOptionsSingle<CTX> {
-	/**
-	 * Namespace of the proxy
-	 */
-	name?: string;
-
-	/**
-	 * Function to clear memory of the proxy
-	 */
-	clearFn?: ClearFn<CTX>;
-}
-
-export interface AsyncPromiseOptions extends AsyncOptions {
-	/**
-	 * Namespace of the proxy
-	 */
-	name?: string;
-
-	/**
-	 * Name of a destructor method
-	 */
-	destructor?: string;
-}
-
-export interface AsyncRequestOptions extends AsyncOptions {
-	/**
-	 * Name of a destructor method
-	 */
-	destructor?: string;
-}
-
-export interface AsyncRequestIdleCallbackOptions<CTX extends object = Async> extends AsyncCbOptions<CTX> {
-	/**
-	 * Timeout value for the native requestIdleCallback function
-	 */
-	timeout?: number;
-}
-
-export interface AsyncIdleOptions extends AsyncOptions {
-	/**
-	 * Timeout value for the native requestIdleCallback function
-	 */
-	timeout?: number;
-}
-
-export interface AsyncWaitOptions extends AsyncOptions {
-	/**
-	 * Delay value in milliseconds
-	 */
-	delay?: number;
-}
-
-export interface AsyncOnOptions<CTX extends object = Async> extends AsyncCbOptionsSingle<CTX> {
-	/**
-	 * Additional options for the emitter
-	 */
-	options?: Dictionary;
-}
-
-export interface AsyncOnceOptions<T extends object = Async> extends AsyncCbOptions<T> {
-	/**
-	 * Additional options for the emitter
-	 */
-	options?: Dictionary;
-}
-
-export interface AsyncPromisifyOnceOptions<
-	E = unknown,
-	R = unknown,
-	CTX extends object = Async
-> extends AsyncOptions {
-	/**
-	 * Event handler (the result of invoking is provided to a promise)
-	 */
-	handler?: ProxyCb<E, R, CTX>;
-
-	/**
-	 * Additional options for the emitter
-	 */
-	options?: Dictionary;
-}
-
-export interface AsyncWorkerOptions<CTX extends object = Async> extends AsyncProxyOptions<CTX> {
-	/**
-	 * Name of a destructor method
-	 */
-	destructor?: string;
-}
-
-/**
- * Something that looks like a worker
- */
-export interface WorkerLike {
-	terminate?: Function;
-	destroy?: Function;
-	destructor?: Function;
-	close?: Function;
-	abort?: Function;
-	cancel?: Function;
-	disconnect?: Function;
-	unwatch?: Function;
-}
-
-/**
- * Extended type of a worker
- */
-export type WorkerLikeP = Function | WorkerLike;
-
-/**
- * Promise that supports canceling
- */
-export interface CancelablePromise<T = unknown> extends Promise<T> {
-	abort?: Function;
-	cancel?: Function;
-}
-
-/**
- * Extended type of a promise
- */
-export type PromiseLikeP<T = unknown> = (() => PromiseLike<T>) | PromiseLike<T>;
-
-/**
- * Something that looks like an event emitter
- */
-export interface EventEmitterLike {
-	on?: Function;
-	addListener?: Function;
-	addEventListener?: Function;
-	once?: Function;
-	off?: Function;
-	removeListener?: Function;
-	removeEventListener?: Function;
-}
-
-/**
- * Extended type of an event emitter
- */
-export type EventEmitterLikeP = Function | EventEmitterLike;
-
-/**
- * Event object
- */
-export interface Event<E extends EventEmitterLikeP = EventEmitterLikeP> {
-	/**
-	 * Event emitter
-	 */
-	emitter: E;
-
-	/**
-	 * Event name
-	 */
-	event: string;
-
-	/**
-	 * Event handler
-	 */
-	handler: ProxyCb;
-
-	/**
-	 * Additional arguments for the emitter
-	 */
-	args: unknown[];
-}
-
-export interface LocalCache {
-	labels: Record<Label, any>;
-	links: Map<object, Task<any>>;
-}
-
-export interface GlobalCache {
-	root: LocalCache;
-	groups: Dictionary<LocalCache>;
 }

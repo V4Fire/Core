@@ -11,12 +11,6 @@ Changelog
 
 ## v3.40.0 (2021-04-01)
 
-#### :bug: Bug Fix
-
-* Fixed an issue when trying to remove event listeners by providing a label without specifying a group
-
-## v3.20.0 (2020-07-05)
-
 #### :rocket: New Feature
 
-* Added tests
+* Added a wrapper to provide the feature of cache expiring

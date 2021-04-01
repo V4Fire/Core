@@ -34,8 +34,9 @@ export default interface Cache<V = unknown, K = string> {
 	 *
 	 * @param key
 	 * @param value
+	 * @param opts
 	 */
-	set(key: K, value: V): V;
+	set(key: K, value: V, opts?: {}): V;
 
 	/**
 	 * Removes a value from the cache by the specified key

@@ -9,11 +9,11 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
-## v3.40.0
+## v3.40.0 (2021-04-01)
 
 #### :rocket: New Feature
 
-* Added `paramsFilter` option in `ToQueryStringOptions` that decides which property should be included in the final query string
+* Added a new parameter `paramsFilter` to filter values that shouldn't be serialized `toQueryString`
 
 ## v3.33.0 (2021-02-26)
 

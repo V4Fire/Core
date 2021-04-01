@@ -14,8 +14,15 @@
 import type { Provider } from 'core/data';
 import type { CreateRequestOptions, RequestQuery, RequestBody } from 'core/request';
 
-import Super, { AsyncOptions } from 'core/async/modules/events';
-import { emitLikeEvents, dataProviderMethodsToReplace, asyncOptionsKeys } from 'core/async/modules/wrappers/consts';
+import Super, { AsyncOptions, EventEmitterLike } from 'core/async/modules/events';
+
+import {
+
+	emitLikeEvents,
+	asyncOptionsKeys,
+	dataProviderMethodsToReplace
+
+} from 'core/async/modules/wrappers/consts';
 
 import type {
 
@@ -23,7 +30,6 @@ import type {
 	DataProviderMethodsToReplace,
 	DataProviderQueryMethodsToReplace,
 
-	EventEmitterLike,
 	EventEmitterWrapper,
 	EventEmitterOverwritten,
 
@@ -32,12 +38,15 @@ import type {
 } from 'core/async/modules/wrappers/interface';
 
 export * from 'core/async/modules/events';
+export * from 'core/async/modules/wrappers/consts';
+export * from 'core/async/modules/wrappers/interface';
 
 export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	/**
 	 * The wrapper takes a link to the "raw" data provider and returns a new object that based
 	 * on the original, but all async methods and properties are wrapped by Async.
 	 * Notice, the wrapped methods can take additional Async parameters, like group or label.
+	 * If you don't provide a group, it will be taken from the provider name.
 	 *
 	 * @param provider
 	 * @param [opts] - additional options for the wrapper

@@ -7,7 +7,9 @@
  */
 
 import { convertIfDate } from 'core/json';
-import type { ToQueryStringOptions, FromQueryStringOptions, StackItem } from 'core/url/interface';
+
+import { defaultToQueryStringParamsFilter } from 'core/url/const';
+import type { ToQueryStringOptions, FromQueryStringOptions } from 'core/url/interface';
 
 export * from 'core/url/interface';
 
@@ -55,80 +57,94 @@ export function toQueryString(data: unknown, optsOrEncode?: ToQueryStringOptions
 
 	const
 		separator = opts.separator ?? '_',
-		filterFn = opts.paramsFilter ?? defaultParamsFilterFn,
-		stack: StackItem[] = Object.keys(data).sort().reverse()
-			.map((key) => ({
-				key,
-				data: data[key]
-			}));
+		paramsFilter = opts.paramsFilter ?? defaultToQueryStringParamsFilter;
 
-	const dictionaryKeyFn = opts.arraySyntax ?
+	const stack = Object.keys(data)
+		.sort()
+		.reverse()
+		.map((key) => ({
+			key,
+			el: data[key],
+			checked: false
+		}));
+
+	const dictionaryKeyTransformer = opts.arraySyntax ?
 		(baseKey, additionalKey) => `${baseKey}[${additionalKey}]` :
 		(baseKey, additionalKey) => `${baseKey}${separator}${additionalKey}`;
 
-	const arrayKeyFn = opts.arraySyntax ?
+	const arrayKeyTransformer = opts.arraySyntax ?
 		(baseKey) => `${baseKey}[]` :
 		(baseKey) => baseKey;
-
-	const checkAndPush = (item, additionalKey, fn) => {
-		const
-			nextLvlKey = fn(item.key, additionalKey);
-
-		if (filterFn(item.data[additionalKey], additionalKey, nextLvlKey)) {
-			stack.push({
-				key: nextLvlKey,
-				data: item.data[additionalKey],
-				checked: true
-			});
-		}
-	};
 
 	let
 		res = '';
 
 	while (stack.length > 0) {
-		const item = <StackItem>stack.pop();
+		const
+			item = stack.pop();
 
-		if (Object.isDictionary(item.data)) {
-			const keys = Object.keys(item.data).sort();
+		if (item == null) {
+			continue;
+		}
+
+		const
+			{el, key} = item;
+
+		if (Object.isDictionary(el)) {
+			const keys = Object.keys(el).sort();
 
 			if (keys.length > 0) {
 				for (let i = keys.length - 1; i >= 0; i--) {
-					checkAndPush(item, keys[i], dictionaryKeyFn);
+					checkAndPush(item, keys[i], dictionaryKeyTransformer);
 				}
 
 				continue;
 			}
 		}
 
-		if (Object.isArray(item.data) && item.data.length > 0) {
-			for (let key = item.data.length - 1; key >= 0; key--) {
-				checkAndPush(item, key, arrayKeyFn);
+		if (Object.isArray(el) && el.length > 0) {
+			for (let key = el.length - 1; key >= 0; key--) {
+				checkAndPush(item, key, arrayKeyTransformer);
 			}
 
 			continue;
 		}
 
-		if (item.checked || filterFn(item.data, item.key)) {
+		if (item.checked || Object.isTruly(paramsFilter(el, key))) {
 			let
 				data;
 
-			if (Object.isDictionary(item.data)) {
+			if (Object.isDictionary(el)) {
 				data = '';
 
 			} else {
-				data = String(item.data ?? '');
+				data = String(el ?? '');
 
 				if (opts.encode !== false) {
 					data = encodeURIComponent(data);
 				}
 			}
 
-			res += `&${item.key}=${data}`;
+			res += `&${key}=${data}`;
 		}
 	}
 
 	return res.substr(1);
+
+	function checkAndPush(item: typeof stack[0], key: unknown, keyTransformer: Function): void {
+		const
+			normalizedKey = String(key),
+			nextLvlKey = keyTransformer(item.key, normalizedKey),
+			el = Object.get(item.el, [key]);
+
+		if (Object.isTruly(paramsFilter(el, normalizedKey, nextLvlKey))) {
+			stack.push({
+				key: nextLvlKey,
+				el,
+				checked: true
+			});
+		}
+	}
 }
 
 const
@@ -269,12 +285,4 @@ export function fromQueryString(
 	}
 
 	return queryObj;
-}
-
-/**
- * Default filter function for query params
- * @param value
- */
-export function defaultParamsFilterFn(value: unknown): boolean {
-	return !(value == null || value === '' || (Object.isArray(value) && value.length === 0));
 }
