@@ -7,32 +7,21 @@
  */
 
 import type Cache from 'core/cache/interface';
-import { UnavailableToCheckInStorageEngine } from 'core/cache/decorators/persistent/engines/interface';
-import type { SyncStorageNamespace, AsyncStorageNamespace } from 'core/kv-storage';
 
-const storagePath = '__storage__';
+import { activeEngineStoragePath } from 'core/cache/decorators/persistent/engines/const';
+import { UnavailableToCheckInStorageEngine } from 'core/cache/decorators/persistent/engines/interface';
 
 export class ActiveEngine<V> extends UnavailableToCheckInStorageEngine<V> {
-	/**
-	 * Storage object
-	 */
-	protected readonly kvStorage: SyncStorageNamespace | AsyncStorageNamespace;
-
 	/**
 	 * An object that stores the keys of all properties in the storage and their ttls
 	 */
 	protected storage: {[key: string]: number} = {};
 
-	constructor(kvStorage: SyncStorageNamespace | AsyncStorageNamespace) {
-		super();
-		this.kvStorage = kvStorage;
-	}
-
 	async initCache(cache: Cache<V>): Promise<void> {
-		if (await this.kvStorage.has(storagePath)) {
-			this.storage = (await this.kvStorage.get<{[key: string]: number}>(storagePath))!;
+		if (await this.kvStorage.has(activeEngineStoragePath)) {
+			this.storage = (await this.kvStorage.get<{[key: string]: number}>(activeEngineStoragePath))!;
 		} else {
-			await this.kvStorage.set(storagePath, this.storage);
+			await this.kvStorage.set(activeEngineStoragePath, this.storage);
 		}
 
 		const
@@ -59,27 +48,27 @@ export class ActiveEngine<V> extends UnavailableToCheckInStorageEngine<V> {
 	}
 
 	async set(key: string, value: V, ttl?: number): Promise<void> {
-		try {
-			await this.execTask(key, async () => {
-				await this.kvStorage.set(key, value);
+		await this.execTask(key, async () => {
+			await this.kvStorage.set(key, value);
 
-				this.storage[key] = ttl ?? Number.MAX_SAFE_INTEGER;
-				const copyOfStorage = {...this.storage};
-				await this.kvStorage.set(storagePath, copyOfStorage);
-			});
-		} catch(e) {}
+			this.storage[key] = ttl ?? Number.MAX_SAFE_INTEGER;
+			const copyOfStorage = {...this.storage};
+			await this.kvStorage.set(activeEngineStoragePath, copyOfStorage);
+		});
 	}
 
 	async remove(key: string): Promise<void> {
-		try {
-			await this.execTask(key, async () => {
-				await this.kvStorage.remove(key);
+		await this.execTask(key, async () => {
+			await this.kvStorage.remove(key);
 
-				delete this.storage[key];
-				const copyOfStorage = {...this.storage};
-				await this.kvStorage.set(storagePath, copyOfStorage);
-			});
-		} catch(e) {}
+			await this.removeTTL(key);
+		});
+	}
+
+	async removeTTL(key: string): Promise<void> {
+		delete this.storage[key];
+		const copyOfStorage = {...this.storage};
+		await this.kvStorage.set(activeEngineStoragePath, copyOfStorage);
 	}
 
 	isNeedToCheckInStorage(): false {

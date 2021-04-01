@@ -10,6 +10,8 @@ import addPersistent from 'core/cache/decorators/persistent';
 import SimpleCache from 'core/cache/simple';
 import { asyncLocal } from 'core/kv-storage';
 import * as netModule from 'core/net';
+import engines from 'core/cache/decorators/persistent/engines';
+import { lazyEngineTTLPostfix, activeEngineStoragePath } from 'core/cache/decorators/persistent/engines/const';
 
 describe('core/cache/decorators/persistent', () => {
 	beforeEach(async () => {
@@ -78,10 +80,10 @@ describe('core/cache/decorators/persistent', () => {
 				persistentCache = await addPersistent(cache, asyncLocal, options);
 
 			await persistentCache.set('foo', null);
-			expect(await asyncLocal.get('__storage__')).toEqual({foo: 100});
+			expect(await asyncLocal.get(activeEngineStoragePath)).toEqual({foo: 100});
 
 			await persistentCache.set('bar', null, {persistentTTL: 150});
-			expect(await asyncLocal.get('__storage__')).toEqual({foo: 100, bar: 150});
+			expect(await asyncLocal.get(activeEngineStoragePath)).toEqual({foo: 100, bar: 150});
 		});
 
 		it('collapse same prop change', async () => {
@@ -133,7 +135,7 @@ describe('core/cache/decorators/persistent', () => {
 			await persistentCache.set('foo', 'bar');
 			await persistentCache.set('foo2', 'bar2', {persistentTTL: 100});
 
-			expect(await asyncLocal.get('__storage__')).toEqual({
+			expect(await asyncLocal.get(activeEngineStoragePath)).toEqual({
 				foo: Number.MAX_SAFE_INTEGER,
 				foo2: 100
 			});
@@ -152,7 +154,7 @@ describe('core/cache/decorators/persistent', () => {
 			const
 				newCache = new SimpleCache();
 
-			expect(await asyncLocal.get('__storage__')).toEqual({
+			expect(await asyncLocal.get(activeEngineStoragePath)).toEqual({
 				foo: -100
 			});
 
@@ -160,11 +162,36 @@ describe('core/cache/decorators/persistent', () => {
 
 			expect(newCache.get('foo')).toEqual(undefined);
 			expect(await asyncLocal.get('foo')).toEqual(undefined);
-			expect(await asyncLocal.get('__storage__')).toEqual({});
+			expect(await asyncLocal.get(activeEngineStoragePath)).toEqual({});
+		});
+
+		it('remove ttl work as expected', async () => {
+			const options = {
+				loadFromStorage: 'onInit'
+			};
+
+			const
+				persistentCache = await addPersistent(new SimpleCache(), asyncLocal, options);
+
+			await persistentCache.set('foo', 'bar', {persistentTTL: 100});
+
+			expect(await asyncLocal.get(activeEngineStoragePath)).toEqual({foo: 100});
+
+			await persistentCache.removePersistentTTL('foo');
+
+			expect(await asyncLocal.get(activeEngineStoragePath)).toEqual({});
 		});
 	});
 
 	describe('engine lazy', () => {
+		it('should be default engine', async () => {
+			spyOn(engines, 'onDemand').and.callThrough();
+
+			await addPersistent(new SimpleCache(), asyncLocal);
+
+			expect(engines.onDemand.calls.count()).toBe(1);
+		});
+
 		it('must save at first demand', async () => {
 			const options = {
 				loadFromStorage: 'onDemand'
@@ -199,8 +226,8 @@ describe('core/cache/decorators/persistent', () => {
 			await persistentCache.set('foo', 'bar');
 			await persistentCache.set('foo2', 'bar2', {persistentTTL: 100});
 
-			expect(await asyncLocal.get('foo__ttl')).toEqual(undefined);
-			expect(await asyncLocal.get('foo2__ttl')).toEqual(100);
+			expect(await asyncLocal.get(`foo${lazyEngineTTLPostfix}`)).toEqual(undefined);
+			expect(await asyncLocal.get(`foo2${lazyEngineTTLPostfix}`)).toEqual(100);
 		});
 
 		it('should not save value if value is expired', async () => {
@@ -223,7 +250,24 @@ describe('core/cache/decorators/persistent', () => {
 
 			expect(newCache.get('foo')).toEqual(undefined);
 			expect(await asyncLocal.get('foo')).toEqual(undefined);
-			expect(await asyncLocal.get('foo__ttl')).toEqual(undefined);
+			expect(await asyncLocal.get(`foo${lazyEngineTTLPostfix}`)).toEqual(undefined);
+		});
+
+		it('remove ttl work as expected', async () => {
+			const options = {
+				loadFromStorage: 'onDemand'
+			};
+
+			const
+				persistentCache = await addPersistent(new SimpleCache(), asyncLocal, options);
+
+			await persistentCache.set('foo', 'bar', {persistentTTL: 100});
+
+			expect(await asyncLocal.get(`foo${lazyEngineTTLPostfix}`)).toEqual(100);
+
+			await persistentCache.removePersistentTTL('foo');
+
+			expect(await asyncLocal.get(`foo${lazyEngineTTLPostfix}`)).toEqual(undefined);
 		});
 	});
 

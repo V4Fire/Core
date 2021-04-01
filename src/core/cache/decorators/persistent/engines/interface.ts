@@ -23,7 +23,7 @@ abstract class AbstractPersistentEngine<V = unknown> {
 	/**
 	 * Storage object
 	 */
-	protected abstract readonly kvStorage: SyncStorageNamespace | AsyncStorageNamespace;
+	protected readonly kvStorage: SyncStorageNamespace | AsyncStorageNamespace;
 
 	/**
 	 * Async instance
@@ -34,6 +34,10 @@ abstract class AbstractPersistentEngine<V = unknown> {
 	 * Pending requests of change property
 	 */
 	protected readonly pending: Map<string, Promise<unknown>> = new Map();
+
+	constructor(kvStorage: SyncStorageNamespace | AsyncStorageNamespace) {
+		this.kvStorage = kvStorage;
+	}
 
 	/**
 	 * Checking TTL of some property
@@ -54,6 +58,12 @@ abstract class AbstractPersistentEngine<V = unknown> {
 	 * @param key
 	 */
 	abstract remove(key: string): void;
+
+	/**
+	 * Removes the `ttl` descriptor from a item in persistent storage by the specified key.
+	 * @param key
+	 */
+	abstract removeTTL(key: string): Promise<void>;
 
 	/**
 	 * Creating a task to update a property

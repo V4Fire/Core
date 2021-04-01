@@ -13,7 +13,8 @@ import addPersistent from 'core/cache/decorators/persistent';
 import SimpleCache from 'core/cache/simple';
 
 const
-  persistentCache = await addPersistent(new SimpleCache(), asyncLocal);
+  opts = {loadFromStorage: 'onInit'},
+  persistentCache = await addPersistent(new SimpleCache(), asyncLocal, opts);
 
 await persistentCache.set('foo', 'bar', {persistentTTL: (2).seconds()});
 await persistentCache.set('foo2', 'bar2');
@@ -71,15 +72,15 @@ import { asyncLocal } from 'core/kv-storage';
 import addPersistent from 'core/cache/decorators/persistent';
 import SimpleCache from 'core/cache/simple';
 
-const persistentCache = await addPersistent(new SimpleCache(), asyncLocal);
+const
+  opts = {loadFromStorage: 'onInit'};
+  persistentCache = await addPersistent(new SimpleCache(), asyncLocal, opts);
 
 await persistentCache.set('foo', 'bar');
 await persistentCache.set('foo2', 'bar2');
 
 // All properties already in our `Simple` cache
-const copyOfCache = await addPersistent(new SimpleCache(), asyncLocal, {
-  loadFromStorage: 'onInit'
-});
+const copyOfCache = await addPersistent(new SimpleCache(), asyncLocal, opts);
 
 console.log(copyOfCache.get('foo') === 'bar');
 ```
@@ -101,9 +102,7 @@ const
 await persistentCache.set('foo', 'bar');
 await persistentCache.set('foo2', 'bar2');
 
-const copyOfCache = await addPersistent(new SimpleCache(), asyncLocal, {
-  loadFromStorage: 'onDemand'
-});
+const copyOfCache = await addPersistent(new SimpleCache(), asyncLocal);
 
 console.log(await copyOfCache.get('foo') === 'bar');
 ```
@@ -121,16 +120,15 @@ import addPersistent from 'core/cache/decorators/persistent';
 import SimpleCache from 'core/cache/simple';
 
 const
-  persistentCache = await addPersistent(new SimpleCache(), asyncLocal, options);
+  opts = {loadFromStorage: 'onOfflineDemand'},
+  persistentCache = await addPersistent(new SimpleCache(), asyncLocal, opts);
 
 await persistentCache.set('foo', 'bar');
 await persistentCache.set('foo2', 'bar2');
 
-const copyOfCache = await addPersistent(new SimpleCache(), asyncLocal, {
-  loadFromStorage: 'onOfflineDemand'
-});
+const copyOfCache = await addPersistent(new SimpleCache(), asyncLocal, opts);
 
-if (await isOnline()) {
+if ((await isOnline()).status) {
   console.log(await copyOfCache.get('foo') !== 'bar');
 
 } else {

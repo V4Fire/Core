@@ -7,48 +7,36 @@
  */
 
 import { AvailableToCheckInStorageEngine } from 'core/cache/decorators/persistent/engines/interface';
-import type { SyncStorageNamespace, AsyncStorageNamespace } from 'core/kv-storage';
-
-const ttlPostfix = '__ttl';
+import { lazyEngineTTLPostfix } from 'core/cache/decorators/persistent/engines/const';
 
 export class LazyEngine<V> extends AvailableToCheckInStorageEngine<V> {
-	/**
-	 * Storage object
-	 */
-	protected readonly kvStorage: SyncStorageNamespace | AsyncStorageNamespace;
-
-	constructor(kvStorage: SyncStorageNamespace | AsyncStorageNamespace) {
-		super();
-		this.kvStorage = kvStorage;
-	}
-
 	async getTTL(key: string): Promise<number | undefined> {
-		const ttl = await this.kvStorage.get<number>(`${key}${ttlPostfix}`);
+		const ttl = await this.kvStorage.get<number>(`${key}${lazyEngineTTLPostfix}`);
 		return ttl;
 	}
 
 	async set(key: string, value: V, ttl?: number): Promise<void> {
-		try {
-			await this.execTask(key, async () => {
-				await this.kvStorage.set(key, value);
+		await this.execTask(key, async () => {
+			await this.kvStorage.set(key, value);
 
-				if (ttl != null) {
-					await this.kvStorage.set(`${key}${ttlPostfix}`, ttl);
-				} else {
-					await this.kvStorage.remove(`${key}${ttlPostfix}`);
-				}
-			});
-		} catch(e) {}
+			if (ttl != null) {
+				await this.kvStorage.set(`${key}${lazyEngineTTLPostfix}`, ttl);
+			} else {
+				await this.removeTTL(key);
+			}
+		});
 	}
 
 	async remove(key: string): Promise<void> {
-		try {
-			await this.execTask(key, async () => {
-				await this.kvStorage.remove(key);
+		await this.execTask(key, async () => {
+			await this.kvStorage.remove(key);
 
-				await this.kvStorage.remove(`${key}${ttlPostfix}`);
-			});
-		} catch(e) {}
+			await this.removeTTL(key);
+		});
+	}
+
+	async removeTTL(key: string): Promise<void> {
+		await this.kvStorage.remove(`${key}${lazyEngineTTLPostfix}`);
 	}
 
 	async get<T>(key: string): Promise<T | undefined> {

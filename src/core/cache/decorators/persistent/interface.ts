@@ -19,6 +19,12 @@ export type PersistentCache<V = unknown, K = string, T extends Cache<V, K> = Cac
 	 * @param [opts] - additional options
 	 */
 	set(key: K, value: V, opts?: PersistentTTLDecoratorOptions & Parameters<T['set']>[2]): Promise<V>;
+
+	/**
+	 * Removes the `ttl` descriptor from a item in persistent storage by the specified key.
+	 * @param key
+	 */
+	removePersistentTTL(key: K): Promise<void>;
 };
 
 export interface PersistentTTLDecoratorOptions {
@@ -44,6 +50,6 @@ export interface PersistentOptions {
 	 *
 	 * @default `'onDemand'`
 	 */
-	loadFromStorage: 'onInit' | 'onDemand' | 'onOfflineDemand';
+	loadFromStorage?: 'onInit' | 'onDemand' | 'onOfflineDemand';
 }
 
