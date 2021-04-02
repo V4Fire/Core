@@ -81,9 +81,21 @@ export default class PersistentWrapper<T extends Cache<V, string>, V = unknown> 
 				ttl = opts?.persistentTTL ?? this.ttl;
 
 			this.fetchedItems.add(key);
-			await this.engine.set(key, value, ttl);
 
-			return this.cache.set(key, value, opts);
+			const
+				res = this.cache.set(key, value, opts);
+
+			if (this.cache.has(key)) {
+				try {
+					await this.engine.set(key, value, ttl);
+
+				} catch (err) {
+					this.cache.remove(key);
+					throw err;
+				}
+			}
+
+			return res;
 		};
 
 		this.wrappedCache.remove = async (key: string) => {
