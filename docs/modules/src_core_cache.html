@@ -274,7 +274,7 @@ pre {
 						<a href="#corecachedecoratorsttl" id="corecachedecoratorsttl" style="color: inherit; text-decoration: none;">
 							<h3>core/cache/decorators/ttl</h3>
 						</a>
-						<p>Provides a decorator for any cache to add a feature of the cache expiring.</p>
+						<p>Provides a decorator for any cache to add a feature of cache expiring.</p>
 						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">addTTL</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/cache/decorators/ttl&#039;</span><span style="color: #000000">;</span>
 <span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">SimpleCache</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/cache/simple&#039;</span><span style="color: #000000">;</span>
 
@@ -287,6 +287,27 @@ pre {
 
 <span style="color: #008000">// Additional method to remove the `ttl` descriptor from a cache item by the specified key</span>
 <span style="color: #001080">cache</span><span style="color: #000000">.</span><span style="color: #795E26">removeTTLFrom</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;foo&#039;</span><span style="color: #000000">);</span>
+</code></pre>
+						<a href="#corecachedecoratorspersistent" id="corecachedecoratorspersistent" style="color: inherit; text-decoration: none;">
+							<h3>core/cache/decorators/persistent</h3>
+						</a>
+						<p>Provides a decorator for any cache to add a feature of persistent data storing.</p>
+						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">asyncLocal</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/kv-storage&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">addPersistent</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/cache/decorators/persistent&#039;</span><span style="color: #000000">;</span>
+<span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">SimpleCache</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/cache/simple&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #0000FF">const</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">persistentCache</span><span style="color: #000000"> = </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #795E26">addPersistent</span><span style="color: #000000">(</span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">SimpleCache</span><span style="color: #000000">(), </span><span style="color: #001080">asyncLocal</span><span style="color: #000000">);</span>
+
+<span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">persistentCache</span><span style="color: #000000">.</span><span style="color: #795E26">set</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;foo&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;bar&#039;</span><span style="color: #000000">, {</span><span style="color: #001080">persistentTTL:</span><span style="color: #000000"> (</span><span style="color: #098658">2</span><span style="color: #000000">).</span><span style="color: #795E26">seconds</span><span style="color: #000000">()});</span>
+<span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">persistentCache</span><span style="color: #000000">.</span><span style="color: #795E26">set</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;foo2&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;bar2&#039;</span><span style="color: #000000">);</span>
+
+<span style="color: #008000">// Cause we use the same instance for the local data storing,</span>
+<span style="color: #008000">// this cache will have all values from the previous (it will be loaded from the storage during initialization)</span>
+
+<span style="color: #0000FF">const</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">copyOfCache</span><span style="color: #000000"> = </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #795E26">addPersistent</span><span style="color: #000000">(</span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">SimpleCache</span><span style="color: #000000">(), </span><span style="color: #001080">asyncLocal</span><span style="color: #000000">, </span><span style="color: #001080">opts</span><span style="color: #000000">);</span>
 </code></pre>
 					</div>
 				</div>

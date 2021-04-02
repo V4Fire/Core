@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.41.0 (2021-04-02)
+
+#### :rocket: New Feature
+
+* Added a wrapper to provide the feature of persistent storing `core/cache/decorators/persistent`
+
 ## v3.40.1 (2021-04-01)
 
 #### :bug: Bug Fix
