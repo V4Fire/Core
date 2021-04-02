@@ -55,11 +55,16 @@ extend(Date.prototype, 'format', function format(
 	}
 
 	const
-		pattern = String(patternOrOpts),
-		cacheKey = [locale, pattern].join(),
-		cache = formatCache[cacheKey];
+		pattern = String(patternOrOpts);
 
-	if (cache) {
+	const
+		canCache = !/\?/.test(pattern),
+		cacheKey = [locale, pattern].join();
+
+	const
+		cache = canCache ? formatCache[cacheKey] : null;
+
+	if (cache != null) {
 		return cache.format(this);
 	}
 
@@ -83,6 +88,15 @@ extend(Date.prototype, 'format', function format(
 
 		if (alias != null) {
 			key = alias;
+
+			if (Object.isFunction(key)) {
+				key = key(this);
+
+				// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+				if (key == null) {
+					continue;
+				}
+			}
 		}
 
 		if (val === '') {
@@ -92,8 +106,12 @@ extend(Date.prototype, 'format', function format(
 		opts[key] = val in boolAliases ? boolAliases[val] : val;
 	}
 
-	const formatter = new Intl.DateTimeFormat(locale, opts);
-	formatCache[cacheKey] = formatter;
+	const
+		formatter = new Intl.DateTimeFormat(locale, opts);
+
+	if (canCache) {
+		formatCache[cacheKey] = formatter;
+	}
 
 	return formatter.format(this);
 });

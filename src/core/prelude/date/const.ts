@@ -51,6 +51,24 @@ export const formatAliases = Object.createDict({
 	z: 'timeZoneName'
 });
 
+Object.forEach(formatAliases, (val) => {
+	formatAliases[val] = val;
+});
+
+['Y', 'M', 'w', 'd', 'h', 'm', 's'].forEach((key) => {
+	const format = (date) => {
+		const
+			now = new Date();
+
+		if (date.format(key) !== now.format(key)) {
+			return key;
+		}
+	};
+
+	formatAliases[`${key}?`] = format;
+	formatAliases[`${formatAliases[key]}?`] = format;
+});
+
 export const boolAliases = Object.createDict({
 	'+': true,
 	'-': false

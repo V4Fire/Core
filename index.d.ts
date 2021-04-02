@@ -3004,6 +3004,18 @@ interface DateConstructor {
 	 *   1. `'s'` - second
 	 *   1. `'z'` - timeZoneName
 	 *
+	 * Also, some directives support optional use.
+	 * To mark a directive as optional, add the special `?` character after the name or alias.
+	 *
+	 * ```js
+	 * // Will be shown only the day value,
+	 * // because the rest values are equal with `Date.now()`
+	 * new Date().format('year?:month?:short:day', 'en-us');
+	 *
+	 * // Will be shown all values that are declared in the pattern
+	 * new Date('12/28/2019').format('year?:2-digit;month?;day', 'en-us');
+	 * ```
+	 *
 	 * @param date
 	 * @param pattern - string pattern of the format:
 	 *
@@ -3379,6 +3391,18 @@ interface Date {
 	 *   1. `'m'` - minute
 	 *   1. `'s'` - second
 	 *   1. `'z'` - timeZoneName
+	 *
+	 * Also, some directives support optional use.
+	 * To mark a directive as optional, add the special `?` character after the name or alias.
+	 *
+	 * ```js
+	 * // Will be shown only the day value,
+	 * // because the rest values are equal with `Date.now()`
+	 * new Date().format('year?:month?:short:day', 'en-us');
+	 *
+	 * // Will be shown all values that are declared in the pattern
+	 * new Date('12/28/2019').format('year?:2-digit;month?;day', 'en-us');
+	 * ```
 	 *
 	 * @param pattern - string pattern of the format:
 	 *

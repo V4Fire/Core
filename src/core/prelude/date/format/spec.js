@@ -39,6 +39,11 @@ describe('core/prelude/date/format', () => {
 		expect(date.format({year: 'numeric'})).toBe('1989');
 	});
 
+	it('format with optional values', () => {
+		expect(date.format('Y?;M?:2-digit', 'en')).toBe('10/18/1989');
+		expect(new Date().format('Y?;M?:2-digit;d', 'en')).toBe('02');
+	});
+
 	it('Date.format', () => {
 		expect(Date.format('Y;M:2-digit', 'en')(date)).toBe('10/1989');
 		expect(Date.format({year: 'numeric'})(date)).toBe('1989');

@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.42.0 (2021-04-02)
+
+#### :rocket: New Feature
+
+* [Added a feature of optional patterns with `Date.format`](https://github.com/V4Fire/Core/issues/163)
+
 ## v3.41.0 (2021-04-02)
 
 #### :rocket: New Feature
