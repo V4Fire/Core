@@ -14,7 +14,7 @@ export interface TTLCache<V = unknown, K = string, T extends Cache<V, K> = Cache
 	 *
 	 * @param key
 	 * @param value
-	 * @param opts
+	 * @param [opts] - additional options
 	 */
 	set(key: K, value: V, opts?: TTLDecoratorOptions & Parameters<T['set']>[2]): V;
 

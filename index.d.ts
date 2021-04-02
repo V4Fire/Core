@@ -183,7 +183,7 @@ type PromiseType<T> =
 /**
  * Wraps the specified function to return a value as Promise
  *
- * @template T - any function
+ * @typeparam T - any function
  *
  * @example
  * ```typescript
