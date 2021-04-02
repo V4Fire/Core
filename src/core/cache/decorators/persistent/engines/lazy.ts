@@ -11,7 +11,7 @@ import SyncPromise from 'core/promise/sync';
 import { TTL_POSTFIX } from 'core/cache/decorators/persistent/engines/const';
 import { CheckablePersistentEngine, StorageCheckState } from 'core/cache/decorators/persistent/engines/interface';
 
-export default class LazyEngine<V> extends CheckablePersistentEngine<V> {
+export default class LazyPersistentEngine<V> extends CheckablePersistentEngine<V> {
 	/** @override */
 	get<T>(key: string): Promise<CanUndef<T>> {
 		return SyncPromise.resolve(this.storage.get(key));

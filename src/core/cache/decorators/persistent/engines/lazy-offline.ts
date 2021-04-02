@@ -8,10 +8,10 @@
 
 import { isOnline } from 'core/net';
 
-import LazyEngine from 'core/cache/decorators/persistent/engines/lazy';
+import LazyPersistentEngine from 'core/cache/decorators/persistent/engines/lazy';
 import type { StorageCheckState } from 'core/cache/decorators/persistent/engines/interface';
 
-export default class LazyOfflineEngine<V> extends LazyEngine<V> {
+export default class LazyPersistentOfflineEngine<V> extends LazyPersistentEngine<V> {
 	/** @override */
 	async getCheckStorageState(): Promise<StorageCheckState> {
 		const

@@ -12,7 +12,7 @@ import type Cache from 'core/cache/interface';
 import { INDEX_STORAGE_NAME } from 'core/cache/decorators/persistent/engines/const';
 import { UncheckablePersistentEngine } from 'core/cache/decorators/persistent/engines/interface';
 
-export default class ActiveEngine<V> extends UncheckablePersistentEngine<V> {
+export default class ActivePersistentEngine<V> extends UncheckablePersistentEngine<V> {
 	/**
 	 * An index with keys and ttl-s of stored values
 	 */
