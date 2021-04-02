@@ -6,12 +6,14 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import * as netModule from 'core/net';
+import { asyncLocal } from 'core/kv-storage';
+
 import addPersistent from 'core/cache/decorators/persistent';
 import SimpleCache from 'core/cache/simple';
-import { asyncLocal } from 'core/kv-storage';
-import * as netModule from 'core/net';
+
 import engines from 'core/cache/decorators/persistent/engines';
-import { lazyEngineTTLPostfix, activeEngineStoragePath } from 'core/cache/decorators/persistent/engines/const';
+import { INDEX_STORAGE_NAME, TTL_POSTFIX } from 'core/cache/decorators/persistent/engines/const';
 
 describe('core/cache/decorators/persistent', () => {
 	beforeEach(async () => {
@@ -22,78 +24,91 @@ describe('core/cache/decorators/persistent', () => {
 		spyOn(Date, 'now').and.returnValue(0);
 	});
 
-	describe('core', () => {
-		it('every replaced method should call original method', async () => {
+	describe('core functionality', () => {
+		it('every replaced method should call the original method', async () => {
 			const methods = [
 				{
 					name: 'has',
 					params: ['foo']
-				}, {
+				},
+
+				{
 					name: 'get',
 					params: ['foo']
-				}, {
+				},
+
+				{
 					name: 'set',
 					params: [
 						'foo',
+
 						1,
+
 						{
 							ttl: 1000,
 							persistentTTL: 900
 						}
 					]
-				}, {
+				},
+
+				{
 					name: 'remove',
 					params: ['foo']
-				}, {
+				},
+
+				{
 					name: 'keys',
 					params: []
-				}, {
+				},
+
+				{
 					name: 'clear',
 					params: [() => true]
 				}
 			];
 
-			const options = {
+			const opts = {
 				loadFromStorage: 'onInit'
 			};
 
 			const
 				cache = new SimpleCache(),
-				persistentCache = await addPersistent(cache, asyncLocal, options);
+				persistentCache = await addPersistent(cache, asyncLocal, opts);
 
 			for (let i = 0; i < methods.length; i += 1) {
 				const method = methods[i];
 				spyOn(cache, method.name).and.callThrough();
+
 				await persistentCache[method.name](...method.params);
 				expect(cache[method.name].calls.mostRecent().args).toEqual(method.params);
 			}
 		});
 
-		it('ttl options', async () => {
-			const options = {
+		it('providing the default `persistentTTL` option', async () => {
+			const opts = {
 				loadFromStorage: 'onInit',
 				persistentTTL: 100
 			};
 
 			const
 				cache = new SimpleCache(),
-				persistentCache = await addPersistent(cache, asyncLocal, options);
+				persistentCache = await addPersistent(cache, asyncLocal, opts);
 
 			await persistentCache.set('foo', null);
-			expect(await asyncLocal.get(activeEngineStoragePath)).toEqual({foo: 100});
+			expect(await asyncLocal.get(INDEX_STORAGE_NAME)).toEqual({foo: 100});
 
 			await persistentCache.set('bar', null, {persistentTTL: 150});
-			expect(await asyncLocal.get(activeEngineStoragePath)).toEqual({foo: 100, bar: 150});
+			expect(await asyncLocal.get(INDEX_STORAGE_NAME)).toEqual({foo: 100, bar: 150});
 		});
 
-		it('collapse same prop change', async () => {
-			const options = {
+		it('collapsing operations with the same key', async () => {
+			const opts = {
 				loadFromStorage: 'onInit'
 			};
 
 			const
 				cache = new SimpleCache(),
-				persistentCache = await addPersistent(cache, asyncLocal, options);
+				persistentCache = await addPersistent(cache, asyncLocal, opts);
 
 			spyOn(asyncLocal, 'set').and.callThrough();
 			persistentCache.set('foo', 1);
@@ -103,14 +118,14 @@ describe('core/cache/decorators/persistent', () => {
 		});
 	});
 
-	describe('engine active', () => {
-		it('should init cache on create', async () => {
-			const options = {
+	describe('`onInit` loading from the storage', () => {
+		it('should init the cache during initialization', async () => {
+			const opts = {
 				loadFromStorage: 'onInit'
 			};
 
 			const
-				persistentCache = await addPersistent(new SimpleCache(), asyncLocal, options);
+				persistentCache = await addPersistent(new SimpleCache(), asyncLocal, opts);
 
 			await persistentCache.set('foo', 'bar');
 			await persistentCache.set('foo2', 'bar2');
@@ -118,73 +133,73 @@ describe('core/cache/decorators/persistent', () => {
 			const
 				newCache = new SimpleCache();
 
-			await addPersistent(newCache, asyncLocal, options);
+			await addPersistent(newCache, asyncLocal, opts);
 
 			expect(newCache.get('foo')).toEqual('bar');
 			expect(newCache.get('foo2')).toEqual('bar2');
 		});
 
-		it('ttl saved at correct paths', async () => {
-			const options = {
+		it('should save the `persistentTTL` descriptor', async () => {
+			const opts = {
 				loadFromStorage: 'onInit'
 			};
 
 			const
-				persistentCache = await addPersistent(new SimpleCache(), asyncLocal, options);
+				persistentCache = await addPersistent(new SimpleCache(), asyncLocal, opts);
 
 			await persistentCache.set('foo', 'bar');
 			await persistentCache.set('foo2', 'bar2', {persistentTTL: 100});
 
-			expect(await asyncLocal.get(activeEngineStoragePath)).toEqual({
+			expect(await asyncLocal.get(INDEX_STORAGE_NAME)).toEqual({
 				foo: Number.MAX_SAFE_INTEGER,
 				foo2: 100
 			});
 		});
 
-		it('should not save value if value is expired', async () => {
-			const options = {
+		it('should not save an item if it is already expired', async () => {
+			const opts = {
 				loadFromStorage: 'onInit'
 			};
 
 			const
-				persistentCache = await addPersistent(new SimpleCache(), asyncLocal, options);
+				persistentCache = await addPersistent(new SimpleCache(), asyncLocal, opts);
 
 			await persistentCache.set('foo', 'bar', {persistentTTL: -100});
 
 			const
 				newCache = new SimpleCache();
 
-			expect(await asyncLocal.get(activeEngineStoragePath)).toEqual({
+			expect(await asyncLocal.get(INDEX_STORAGE_NAME)).toEqual({
 				foo: -100
 			});
 
-			await addPersistent(newCache, asyncLocal, options);
+			await addPersistent(newCache, asyncLocal, opts);
 
 			expect(newCache.get('foo')).toEqual(undefined);
 			expect(await asyncLocal.get('foo')).toEqual(undefined);
-			expect(await asyncLocal.get(activeEngineStoragePath)).toEqual({});
+			expect(await asyncLocal.get(INDEX_STORAGE_NAME)).toEqual({});
 		});
 
-		it('remove ttl work as expected', async () => {
-			const options = {
+		it('removing the `persistentTTL` descriptor from a cache item', async () => {
+			const opts = {
 				loadFromStorage: 'onInit'
 			};
 
 			const
-				persistentCache = await addPersistent(new SimpleCache(), asyncLocal, options);
+				persistentCache = await addPersistent(new SimpleCache(), asyncLocal, opts);
 
 			await persistentCache.set('foo', 'bar', {persistentTTL: 100});
 
-			expect(await asyncLocal.get(activeEngineStoragePath)).toEqual({foo: 100});
+			expect(await asyncLocal.get(INDEX_STORAGE_NAME)).toEqual({foo: 100});
 
-			await persistentCache.removePersistentTTL('foo');
+			await persistentCache.removePersistentTTLFrom('foo');
 
-			expect(await asyncLocal.get(activeEngineStoragePath)).toEqual({});
+			expect(await asyncLocal.get(INDEX_STORAGE_NAME)).toEqual({});
 		});
 	});
 
-	describe('engine lazy', () => {
-		it('should be default engine', async () => {
+	describe('`onDemand` loading from the storage', () => {
+		it('should work by default', async () => {
 			spyOn(engines, 'onDemand').and.callThrough();
 
 			await addPersistent(new SimpleCache(), asyncLocal);
@@ -192,21 +207,19 @@ describe('core/cache/decorators/persistent', () => {
 			expect(engines.onDemand.calls.count()).toBe(1);
 		});
 
-		it('must save at first demand', async () => {
-			const options = {
+		it('must save an item at the first demand', async () => {
+			const opts = {
 				loadFromStorage: 'onDemand'
 			};
 
 			const
-				persistentCache = await addPersistent(new SimpleCache(), asyncLocal, options);
+				persistentCache = await addPersistent(new SimpleCache(), asyncLocal, opts);
 
 			await persistentCache.set('foo', 'bar');
 
 			const
-				newCache = new SimpleCache();
-
-			const
-				copyOfCache = await addPersistent(newCache, asyncLocal, options);
+				newCache = new SimpleCache(),
+				copyOfCache = await addPersistent(newCache, asyncLocal, opts);
 
 			expect(newCache.get('foo')).toEqual(undefined);
 
@@ -215,79 +228,76 @@ describe('core/cache/decorators/persistent', () => {
 			expect(newCache.get('foo')).toEqual('bar');
 		});
 
-		it('ttl saved at correct paths', async () => {
-			const options = {
+		it('should save the `persistentTTL` descriptor', async () => {
+			const opts = {
 				loadFromStorage: 'onDemand'
 			};
 
 			const
-				persistentCache = await addPersistent(new SimpleCache(), asyncLocal, options);
+				persistentCache = await addPersistent(new SimpleCache(), asyncLocal, opts);
 
 			await persistentCache.set('foo', 'bar');
 			await persistentCache.set('foo2', 'bar2', {persistentTTL: 100});
 
-			expect(await asyncLocal.get(`foo${lazyEngineTTLPostfix}`)).toEqual(undefined);
-			expect(await asyncLocal.get(`foo2${lazyEngineTTLPostfix}`)).toEqual(100);
+			expect(await asyncLocal.get(`foo${TTL_POSTFIX}`)).toEqual(undefined);
+			expect(await asyncLocal.get(`foo2${TTL_POSTFIX}`)).toEqual(100);
 		});
 
-		it('should not save value if value is expired', async () => {
-			const options = {
+		it('should not save an item if it is already expired', async () => {
+			const opts = {
 				loadFromStorage: 'onDemand'
 			};
 
 			const
-				persistentCache = await addPersistent(new SimpleCache(), asyncLocal, options);
+				persistentCache = await addPersistent(new SimpleCache(), asyncLocal, opts);
 
 			await persistentCache.set('foo', 'bar', {persistentTTL: -100});
 
 			const
-				newCache = new SimpleCache();
-
-			const
-				copyOfCache = await addPersistent(newCache, asyncLocal, options);
+				newCache = new SimpleCache(),
+				copyOfCache = await addPersistent(newCache, asyncLocal, opts);
 
 			expect(await copyOfCache.get('foo')).toEqual(undefined);
 
 			expect(newCache.get('foo')).toEqual(undefined);
+
 			expect(await asyncLocal.get('foo')).toEqual(undefined);
-			expect(await asyncLocal.get(`foo${lazyEngineTTLPostfix}`)).toEqual(undefined);
+			expect(await asyncLocal.get(`foo${TTL_POSTFIX}`)).toEqual(undefined);
 		});
 
-		it('remove ttl work as expected', async () => {
-			const options = {
+		it('removing the `persistentTTL` descriptor from a cache item', async () => {
+			const opts = {
 				loadFromStorage: 'onDemand'
 			};
 
 			const
-				persistentCache = await addPersistent(new SimpleCache(), asyncLocal, options);
+				persistentCache = await addPersistent(new SimpleCache(), asyncLocal, opts);
 
 			await persistentCache.set('foo', 'bar', {persistentTTL: 100});
 
-			expect(await asyncLocal.get(`foo${lazyEngineTTLPostfix}`)).toEqual(100);
+			expect(await asyncLocal.get(`foo${TTL_POSTFIX}`)).toEqual(100);
 
-			await persistentCache.removePersistentTTL('foo');
+			await persistentCache.removePersistentTTLFrom('foo');
 
-			expect(await asyncLocal.get(`foo${lazyEngineTTLPostfix}`)).toEqual(undefined);
+			expect(await asyncLocal.get(`foo${TTL_POSTFIX}`)).toEqual(undefined);
 		});
 	});
 
-	describe('engine lazyOffline', () => {
-		it('must save at first demand if internet is offline', async () => {
-			const options = {
+	describe('`onOfflineDemand` loading from the storage', () => {
+		it('must load a value from the storage cache only if there is no internet', async () => {
+			const opts = {
 				loadFromStorage: 'onOfflineDemand'
 			};
 
 			const
-				persistentCache = await addPersistent(new SimpleCache(), asyncLocal, options);
+				persistentCache = await addPersistent(new SimpleCache(), asyncLocal, opts);
 
 			await persistentCache.set('foo', 'bar');
 			await persistentCache.set('foo2', 'bar2');
 
 			const
-				newCache = new SimpleCache();
-
-			const
-				copyOfCache = await addPersistent(newCache, asyncLocal, options);
+				newCache = new SimpleCache(),
+				copyOfCache = await addPersistent(newCache, asyncLocal, opts);
 
 			spyOn(netModule, 'isOnline').and.returnValues(
 				Promise.resolve({status: false}),

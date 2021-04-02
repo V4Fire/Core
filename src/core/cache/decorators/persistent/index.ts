@@ -11,11 +11,11 @@
  * @packageDocumentation
  */
 
-import type Cache from 'core/cache/interface';
 import type { SyncStorageNamespace, AsyncStorageNamespace } from 'core/kv-storage';
-import type { PersistentOptions, PersistentCache } from 'core/cache/decorators/persistent/interface';
+import type Cache from 'core/cache/interface';
 
-import { PersistentWrapper } from 'core/cache/decorators/persistent/helpers';
+import PersistentWrapper from 'core/cache/decorators/persistent/wrapper';
+import type { PersistentOptions, PersistentCache } from 'core/cache/decorators/persistent/interface';
 
 export * from 'core/cache/decorators/persistent/interface';
 
@@ -25,7 +25,7 @@ export * from 'core/cache/decorators/persistent/interface';
  * @typeparam V - value type of the cache object
  *
  * @param cache - cache object to wrap
- * @param kvStorage - storage to backup data
+ * @param storage - storage to save data
  * @param [opts] - additional options
  *
  * @example
@@ -49,12 +49,12 @@ export * from 'core/cache/decorators/persistent/interface';
  *   copyOfCache = await addPersistent(new SimpleCache(), asyncLocal, opts);
  * ```
  */
-const addPersistent = async <V>(
+const addPersistent = <V>(
 	cache: Cache<V, string>,
-	kvStorage: SyncStorageNamespace | AsyncStorageNamespace,
+	storage: SyncStorageNamespace | AsyncStorageNamespace,
 	opts?: PersistentOptions
 ): Promise<PersistentCache<V, string>> => {
-	const persistentCache = await new PersistentWrapper<Cache<V, string>, V>(cache, kvStorage, opts).getInstance();
+	const persistentCache = new PersistentWrapper<Cache<V, string>, V>(cache, storage, opts).getInstance();
 	return persistentCache;
 };
 

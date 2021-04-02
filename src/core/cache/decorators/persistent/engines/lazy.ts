@@ -6,44 +6,66 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { AvailableToCheckInStorageEngine, StorageCheckState } from 'core/cache/decorators/persistent/engines/interface';
-import { lazyEngineTTLPostfix } from 'core/cache/decorators/persistent/engines/const';
+import SyncPromise from 'core/promise/sync';
 
-export class LazyEngine<V> extends AvailableToCheckInStorageEngine<V> {
-	async getTTL(key: string): Promise<number | undefined> {
-		const ttl = await this.kvStorage.get<number>(`${key}${lazyEngineTTLPostfix}`);
-		return ttl;
+import { TTL_POSTFIX } from 'core/cache/decorators/persistent/engines/const';
+import { CheckablePersistentEngine, StorageCheckState } from 'core/cache/decorators/persistent/engines/interface';
+
+export default class LazyEngine<V> extends CheckablePersistentEngine<V> {
+	/** @override */
+	get<T>(key: string): Promise<CanUndef<T>> {
+		return SyncPromise.resolve(this.storage.get(key));
 	}
 
+	/** @override */
 	async set(key: string, value: V, ttl?: number): Promise<void> {
 		await this.execTask(key, async () => {
-			await this.kvStorage.set(key, value);
+			try {
+				await this.storage.set(key, value);
 
-			if (ttl != null) {
-				await this.kvStorage.set(`${key}${lazyEngineTTLPostfix}`, ttl);
-			} else {
-				await this.removeTTL(key);
+			} finally {
+				if (ttl != null) {
+					await this.storage.set(key + TTL_POSTFIX, ttl);
+
+				} else {
+					await this.removeTTLFrom(key);
+				}
 			}
 		});
 	}
 
+	/** @override */
 	async remove(key: string): Promise<void> {
 		await this.execTask(key, async () => {
-			await this.kvStorage.remove(key);
+			try {
+				await this.storage.remove(key);
 
-			await this.removeTTL(key);
+			} finally {
+				await this.removeTTLFrom(key);
+			}
 		});
 	}
 
-	async removeTTL(key: string): Promise<void> {
-		await this.kvStorage.remove(`${key}${lazyEngineTTLPostfix}`);
+	/** @override */
+	getTTLFrom(key: string): Promise<CanUndef<number>> {
+		return SyncPromise.resolve(this.storage.get(key + TTL_POSTFIX));
 	}
 
-	async get<T>(key: string): Promise<T | undefined> {
-		const res = await this.kvStorage.get<T>(key);
-		return res;
+	/** @override */
+	removeTTLFrom(key: string): Promise<boolean> {
+		const
+			ttlKey = key + TTL_POSTFIX;
+
+		return SyncPromise.resolve(this.storage.has(ttlKey)).then((res) => {
+			if (res) {
+				return SyncPromise.resolve(this.storage.remove(ttlKey)).then(() => true);
+			}
+
+			return false;
+		});
 	}
 
+	/** @override */
 	getCheckStorageState(): CanPromise<StorageCheckState> {
 		return {
 			available: true,

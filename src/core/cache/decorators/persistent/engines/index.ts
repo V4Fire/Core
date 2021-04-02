@@ -6,9 +6,9 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { ActiveEngine } from 'core/cache/decorators/persistent/engines/active';
-import { LazyEngine } from 'core/cache/decorators/persistent/engines/lazy';
-import { LazyOfflineEngine } from 'core/cache/decorators/persistent/engines/lazyOffline';
+import LazyEngine from 'core/cache/decorators/persistent/engines/lazy';
+import LazyOfflineEngine from 'core/cache/decorators/persistent/engines/lazy-offline';
+import ActiveEngine from 'core/cache/decorators/persistent/engines/active';
 
 export * from 'core/cache/decorators/persistent/interface';
 

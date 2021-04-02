@@ -6,12 +6,13 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type { StorageCheckState } from 'core/cache/decorators/persistent/engines/interface';
-
-import { LazyEngine } from 'core/cache/decorators/persistent/engines/lazy';
 import { isOnline } from 'core/net';
 
-export class LazyOfflineEngine<V> extends LazyEngine<V> {
+import LazyEngine from 'core/cache/decorators/persistent/engines/lazy';
+import type { StorageCheckState } from 'core/cache/decorators/persistent/engines/interface';
+
+export default class LazyOfflineEngine<V> extends LazyEngine<V> {
+	/** @override */
 	async getCheckStorageState(): Promise<StorageCheckState> {
 		const
 			online = (await isOnline()).status;

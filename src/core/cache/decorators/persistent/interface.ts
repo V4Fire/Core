@@ -21,10 +21,13 @@ export type PersistentCache<V = unknown, K = string, T extends Cache<V, K> = Cac
 	set(key: K, value: V, opts?: PersistentTTLDecoratorOptions & Parameters<T['set']>[2]): Promise<V>;
 
 	/**
-	 * Removes the `ttl` descriptor from a item in persistent storage by the specified key.
+	 * Removes the `persistentTTL` descriptor from a cache item by the specified key.
+	 * The method returns `true` if the operation has been successful, otherwise `false`
+	 * (the requested item hasn't been found).
+	 *
 	 * @param key
 	 */
-	removePersistentTTL(key: K): Promise<void>;
+	removePersistentTTLFrom(key: K): Promise<boolean>;
 };
 
 export interface PersistentTTLDecoratorOptions {

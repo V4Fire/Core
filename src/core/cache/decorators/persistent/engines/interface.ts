@@ -6,14 +6,14 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type Cache from 'core/cache/interface';
-import type { SyncStorageNamespace, AsyncStorageNamespace } from 'core/kv-storage';
-
 import Async from 'core/async';
+
+import type { SyncStorageNamespace, AsyncStorageNamespace } from 'core/kv-storage';
+import type Cache from 'core/cache/interface';
 
 interface AbstractPersistentEngine<V = unknown> {
 	/**
-	 * Init cache before return instance of the cache
+	 * Initializes a new cache instance from the past one
 	 * @param cache
 	 */
 	initCache?(cache: Cache<V>): CanPromise<void>;
@@ -21,55 +21,59 @@ interface AbstractPersistentEngine<V = unknown> {
 
 abstract class AbstractPersistentEngine<V = unknown> {
 	/**
-	 * Storage object
-	 */
-	protected readonly kvStorage: SyncStorageNamespace | AsyncStorageNamespace;
-
-	/**
-	 * Async instance
+	 * API for async operations
 	 */
 	protected async: Async = new Async();
 
 	/**
-	 * Pending requests of change property
+	 * API to store data
+	 */
+	protected readonly storage: SyncStorageNamespace | AsyncStorageNamespace;
+
+	/**
+	 * Map of pending operations by keys
 	 */
 	protected readonly pending: Map<string, Promise<unknown>> = new Map();
 
-	constructor(kvStorage: SyncStorageNamespace | AsyncStorageNamespace) {
-		this.kvStorage = kvStorage;
+	constructor(storage: SyncStorageNamespace | AsyncStorageNamespace) {
+		this.storage = storage;
 	}
 
 	/**
-	 * Checking TTL of some property
-	 * @param key
-	 */
-	abstract getTTL(key: string): CanPromise<number | undefined>;
-
-	/**
-	 * Set value to the storage
+	 * Sets a value to the storage by the specified key and ttl
+	 *
 	 * @param key
 	 * @param value
-	 * @param ttl
+	 * @param [ttl]
 	 */
-	abstract set(key: string, value: V, ttl?: number): void;
+	abstract set(key: string, value: V, ttl?: number): Promise<void>;
 
 	/**
-	 * Remove value from storage
+	 * Removes a value from the storage by the specified key
 	 * @param key
 	 */
-	abstract remove(key: string): void;
+	abstract remove(key: string): Promise<void>;
 
 	/**
-	 * Removes the `ttl` descriptor from a item in persistent storage by the specified key.
+	 * Returns a value of the `persistentTTL` descriptor by the specified key
 	 * @param key
 	 */
-	abstract removeTTL(key: string): Promise<void>;
+	abstract getTTLFrom(key: string): Promise<CanUndef<number>>;
 
 	/**
-	 * Creating a task to update a property
+	 * Removes the `persistentTTL` descriptor from a cache item by the specified key.
+	 * The method returns `true` if the operation has been successful, otherwise `false`
+	 * (the requested item hasn't been found).
 	 *
-	 * @param key key of property to update
-	 * @param task Storage and TTL update task
+	 * @param key
+	 */
+	abstract removeTTLFrom(key: string): Promise<boolean>;
+
+	/**
+	 * Registers a task to update a cache item by the specified key
+	 *
+	 * @param key
+	 * @param task - function that doing something with the storage
 	 */
 	protected async execTask<T>(key: string, task: () => CanPromise<T>): Promise<T> {
 		if (this.pending.has(key)) {
@@ -106,28 +110,29 @@ abstract class AbstractPersistentEngine<V = unknown> {
 	}
 }
 
-export abstract class AvailableToCheckInStorageEngine<V = unknown> extends AbstractPersistentEngine<V> {
+export abstract class CheckablePersistentEngine<V = unknown> extends AbstractPersistentEngine<V> {
 	/**
-	 * Get value from storage used only in action `check in storage`
+	 * Returns a value from the storage by the specified key.
+	 * Before checking the storage, the method will ask `getCheckStorageState` for permissions to do it.
+	 *
 	 * @param key
 	 */
-	abstract get<T = unknown>(key: string): CanPromise<T | undefined>;
+	abstract get<T = unknown>(key: string): CanPromise<CanUndef<T>>;
 
 	/**
-	 * Before every method 'get' | 'has' called this method is invoked
-	 * Return state need to check in storage and mark property is checked or no
+	 * This method is called before every operation that checks data from the storage, like, `has` or `get`
 	 *
-	 * @param method
-	 * @param key
+	 * @param method - operation method
+	 * @param key - data key within the storage
 	 */
 	abstract getCheckStorageState(method: 'get' | 'has', key: string): CanPromise<StorageCheckState>;
 }
 
 /**
- * Subtype of engine where `getCheckStorageState` always return available: false
- * allows you not to implement method 'get'
+ * A subtype of a persistent engine where `getCheckStorageState` will always return `available: false`.
+ * It allows you not to implement the `get` method.
  */
-export abstract class UnavailableToCheckInStorageEngine<V = unknown> extends AbstractPersistentEngine<V> {
+export abstract class UncheckablePersistentEngine<V = unknown> extends AbstractPersistentEngine<V> {
 	abstract getCheckStorageState(method: 'get' | 'has', key: string): CanPromise<{
 		available: false;
 		checked: boolean;
@@ -135,20 +140,17 @@ export abstract class UnavailableToCheckInStorageEngine<V = unknown> extends Abs
 }
 
 /**
- * Engine to connect logic with storage
+ * Engine to provide the persistent feature
  */
-export type PersistentEngine<V = unknown> = AvailableToCheckInStorageEngine<V> | UnavailableToCheckInStorageEngine<V>;
+export type PersistentEngine<V = unknown> = CheckablePersistentEngine<V> | UncheckablePersistentEngine<V>;
 
 /**
- * Storage check state
- * available: false / checked: false -> dont need to check storage, dont mark property as checked
- * available: false / checked: true -> dont need to check storage, mark property as checked
- * available: true / checked: true -> check storage, mark property as checked
+ * Available checking state of a storage item:
+ *
+ * 1. `available: false; checked: false` - don't need to check the storage, don't mark the item as checked;
+ * 2. `available: false; checked: true` - don't need to check the storage, mark the item as checked;
+ * 3. `available: true; checked: true` - check the storage, mark the item is checked.
  */
-export type StorageCheckState = {
-	available: false;
-	checked: boolean;
-} | {
-	available: true;
-	checked: true;
-};
+export type StorageCheckState =
+	{available: false; checked: boolean} |
+	{available: true; checked: true};

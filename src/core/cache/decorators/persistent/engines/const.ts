@@ -6,5 +6,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-export const activeEngineStoragePath = '__storage__';
-export const lazyEngineTTLPostfix = '__ttl';
+export const
+	INDEX_STORAGE_NAME = '[[INDEX_STORAGE]]',
+	TTL_POSTFIX = '__ttl';
