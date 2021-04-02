@@ -10,7 +10,7 @@ import { AvailableToCheckInStorageEngine, StorageCheckState } from 'core/cache/d
 import { lazyEngineTTLPostfix } from 'core/cache/decorators/persistent/engines/const';
 
 export class LazyEngine<V> extends AvailableToCheckInStorageEngine<V> {
-	async getTTL(key: string): Promise<number | undefined> {
+	async getTTL(key: string): Promise<CanUndef<number>> {
 		const ttl = await this.kvStorage.get<number>(`${key}${lazyEngineTTLPostfix}`);
 		return ttl;
 	}
@@ -39,7 +39,7 @@ export class LazyEngine<V> extends AvailableToCheckInStorageEngine<V> {
 		await this.kvStorage.remove(`${key}${lazyEngineTTLPostfix}`);
 	}
 
-	async get<T>(key: string): Promise<T | undefined> {
+	async get<T>(key: string): Promise<CanUndef<T>> {
 		const res = await this.kvStorage.get<T>(key);
 		return res;
 	}

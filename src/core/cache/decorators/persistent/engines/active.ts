@@ -43,7 +43,7 @@ export class ActiveEngine<V> extends UnavailableToCheckInStorageEngine<V> {
 		}));
 	}
 
-	getTTL(key: string): number | undefined {
+	getTTL(key: string): CanUndef<number> {
 		return this.storage[key];
 	}
 

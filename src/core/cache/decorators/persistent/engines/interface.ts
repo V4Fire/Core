@@ -43,7 +43,7 @@ abstract class AbstractPersistentEngine<V = unknown> {
 	 * Checking TTL of some property
 	 * @param key
 	 */
-	abstract getTTL(key: string): CanPromise<number | undefined>;
+	abstract getTTL(key: string): CanPromise<CanUndef<number>>;
 
 	/**
 	 * Set value to the storage
@@ -111,7 +111,7 @@ export abstract class AvailableToCheckInStorageEngine<V = unknown> extends Abstr
 	 * Get value from storage used only in action `check in storage`
 	 * @param key
 	 */
-	abstract get<T = unknown>(key: string): CanPromise<T | undefined>;
+	abstract get<T = unknown>(key: string): CanPromise<CanUndef<T>>;
 
 	/**
 	 * Before every method 'get' | 'has' called this method is invoked
