@@ -94,7 +94,7 @@ describe('core/request', () => {
 					.toEqual({id: 1, value: 'things'});
 			});
 
-			it('json get with caching', async (done) => {
+			it('json get with caching', async () => {
 				const
 					url = 'http://localhost:3000/json/1',
 					get = request({cacheStrategy: 'forever', cacheTTL: 10});
@@ -124,8 +124,6 @@ describe('core/request', () => {
 						expect(req.cache).toBeUndefined();
 						expect(req.data).toEqual({id: 1, value: 'things'});
 					}
-
-					done();
 				}, 15);
 			});
 
