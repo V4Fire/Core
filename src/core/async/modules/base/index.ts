@@ -13,14 +13,8 @@
 
 import { deprecate, deprecated } from 'core/functools';
 
-import {
-
-	namespaces,
-	isZombieGroup,
-	isPromisifyNamespace,
-	NamespacesDictionary
-
-} from 'core/async/modules/base/const';
+import { namespaces, NamespacesDictionary } from 'core/async/const';
+import { isZombieGroup, isPromisifyNamespace } from 'core/async/modules/base/const';
 
 import type { FullAsyncOptions, FullClearOptions } from 'core/async/interface';
 

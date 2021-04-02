@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.40.1 (2021-04-01)
+
+#### :bug: Bug Fix
+
+* Restored `core/async/const`
+
 ## v3.40.0 (2021-04-01)
 
 #### :rocket: New Feature

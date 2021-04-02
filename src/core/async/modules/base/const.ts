@@ -6,18 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { Namespaces } from 'core/async/interface';
-
 export const
 	asyncCounter = Symbol('Async counter id');
-
-export const
-	namespaces = Object.convertEnumToDict(Namespaces),
-
-	/** @deprecated */
-	linkNamesDictionary = namespaces;
-
-export type NamespacesDictionary = typeof namespaces;
 
 export const
 	isZombieGroup = /:zombie\b/;
