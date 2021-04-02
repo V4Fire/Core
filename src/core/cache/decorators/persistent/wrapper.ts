@@ -86,13 +86,7 @@ export default class PersistentWrapper<T extends Cache<V, string>, V = unknown> 
 				res = this.cache.set(key, value, opts);
 
 			if (this.cache.has(key)) {
-				try {
-					await this.engine.set(key, value, ttl);
-
-				} catch (err) {
-					this.cache.remove(key);
-					throw err;
-				}
+				await this.engine.set(key, value, ttl);
 			}
 
 			return res;
