@@ -243,7 +243,8 @@ pre {
 						<a href="#corecache" id="corecache" style="color: inherit; text-decoration: none;">
 							<h1>core/cache</h1>
 						</a>
-						<p>This module provides the base interface for a <a href="src_core_cache.html#cache">Cache</a> data structure: a simple in-memory key-value storage, which can be useful to organize cache data structures.
+						<p>This module provides the base interface for a <a href="src_core_cache.html#cache">Cache</a> data structure: a simple in-memory key-value storage,
+							which can be useful to organize cache data structures.
 						The submodules contain different implementations for that interface. The main module re-exports these implementations:</p>
 						<ul>
 							<li><code>AbstractCache</code> — an alias for <a href="src_core_cache_interface.html"><code>core/cache/interface/Cache</code></a>;</li>
@@ -265,6 +266,27 @@ pre {
 <span style="color: #001080">cache</span><span style="color: #000000">.</span><span style="color: #795E26">clear</span><span style="color: #000000">((</span><span style="color: #001080">val</span><span style="color: #000000">, </span><span style="color: #001080">key</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #811F3F"> /foo/</span><span style="color: #000000">.</span><span style="color: #795E26">test</span><span style="color: #000000">(</span><span style="color: #001080">key</span><span style="color: #000000">));</span>
 
 <span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">cache</span><span style="color: #000000">.</span><span style="color: #795E26">keys</span><span style="color: #000000">().</span><span style="color: #001080">length</span><span style="color: #000000">); </span><span style="color: #008000">// 1</span>
+</code></pre>
+						<a href="#decorators" id="decorators" style="color: inherit; text-decoration: none;">
+							<h2>Decorators</h2>
+						</a>
+						<p>Also, the module provides a bunch of functions to decorate cache storages, like adding the <code>ttl</code> feature or persisting data storing.</p>
+						<a href="#corecachedecoratorsttl" id="corecachedecoratorsttl" style="color: inherit; text-decoration: none;">
+							<h3>core/cache/decorators/ttl</h3>
+						</a>
+						<p>Provides a decorator for any cache to add a feature of the cache expiring.</p>
+						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">addTTL</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/cache/decorators/ttl&#039;</span><span style="color: #000000">;</span>
+<span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">SimpleCache</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/cache/simple&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #008000">// The function `addTTL` accepts a cache object and a value for the default TTL as the second argument</span>
+<span style="color: #0000FF">const</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">cache</span><span style="color: #000000"> = </span><span style="color: #795E26">addTTL</span><span style="color: #000000">(</span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">SimpleCache</span><span style="color: #000000">(), </span><span style="color: #098658">1000</span><span style="color: #000000">);</span>
+
+<span style="color: #008000">// The method &quot;add&quot; accepts as the third optional parameter time until expiring the item to store in milliseconds</span>
+<span style="color: #001080">cache</span><span style="color: #000000">.</span><span style="color: #795E26">add</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;foo&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;bar1&#039;</span><span style="color: #000000">, {</span><span style="color: #001080">ttl:</span><span style="color: #000000"> </span><span style="color: #098658">500</span><span style="color: #000000">});</span>
+
+<span style="color: #008000">// Additional method to remove the `ttl` descriptor from a cache item by the specified key</span>
+<span style="color: #001080">cache</span><span style="color: #000000">.</span><span style="color: #795E26">removeTTLFrom</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;foo&#039;</span><span style="color: #000000">);</span>
 </code></pre>
 					</div>
 				</div>
