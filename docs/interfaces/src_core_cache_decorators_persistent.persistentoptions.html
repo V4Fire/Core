@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>ThrottleOptions | V4Fire</title>
+	<title>PersistentOptions | V4Fire</title>
 	<meta name="description" content="Documentation for V4Fire">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -227,13 +227,13 @@ pre {
 					<a href="../modules.html">V4Fire</a>
 				</li>
 				<li>
-					<a href="../modules/index.html">index</a>
+					<a href="../modules/src_core_cache_decorators_persistent.html">src/core/cache/decorators/persistent</a>
 				</li>
 				<li>
-					<a href="index.throttleoptions.html">ThrottleOptions</a>
+					<a href="src_core_cache_decorators_persistent.persistentoptions.html">PersistentOptions</a>
 				</li>
 			</ul>
-			<h1>Interface ThrottleOptions</h1>
+			<h1>Interface PersistentOptions</h1>
 		</div>
 	</div>
 </header>
@@ -244,7 +244,7 @@ pre {
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">ThrottleOptions</span>
+						<span class="target">PersistentOptions</span>
 					</li>
 				</ul>
 			</section>
@@ -255,8 +255,8 @@ pre {
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="index.throttleoptions.html#delay" class="tsd-kind-icon">delay</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="index.throttleoptions.html#single" class="tsd-kind-icon">single</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="src_core_cache_decorators_persistent.persistentoptions.html#loadfromstorage" class="tsd-kind-icon">load<wbr>From<wbr>Storage</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="src_core_cache_decorators_persistent.persistentoptions.html#persistentttl" class="tsd-kind-icon">persistentTTL</a></li>
 							</ul>
 						</section>
 					</div>
@@ -265,43 +265,44 @@ pre {
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="delay" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> delay</h3>
-					<div class="tsd-signature tsd-kind-icon">delay<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<a name="loadfromstorage" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> load<wbr>From<wbr>Storage</h3>
+					<div class="tsd-signature tsd-kind-icon">load<wbr>From<wbr>Storage<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;onInit&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;onDemand&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;onOfflineDemand&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3505">index.d.ts:3505</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/cache/decorators/persistent/interface.ts#L56">src/core/cache/decorators/persistent/interface.ts:56</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Delay to wait in milliseconds</p>
+							<p>How to load cache items from the the persistent storage:</p>
 						</div>
+						<ol>
+							<li><code>&#39;onInit&#39;</code> - the whole stored data will be loaded during the cache initialization;</li>
+							<li><code>&#39;onDemand&#39;</code> - each stored item will be loaded from the cache only on the first touch, i.e. on-demand or lazily;</li>
+							<li><code>&#39;onOfflineDemand&#39;</code> - each stored item will be loaded from the cache only on the first touch and only if
+							there is no internet connection (the strategy is useful to create net-first offline storages)</li>
+						</ol>
 						<dl class="tsd-comment-tags">
 							<dt>default</dt>
-							<dd><p><code>250</code></p>
+							<dd><p><code>&#39;onDemand&#39;</code></p>
 							</dd>
 						</dl>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="single" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> single</h3>
-					<div class="tsd-signature tsd-kind-icon">single<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+					<a name="persistentttl" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> persistentTTL</h3>
+					<div class="tsd-signature tsd-kind-icon">persistentTTL<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3511">index.d.ts:3511</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/cache/decorators/persistent/interface.ts#L44">src/core/cache/decorators/persistent/interface.ts:44</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>If true, then all rest invokes that caught in the sleep span are ignored</p>
+							<p>Default time to expire a cache item in the persistent storage</p>
 						</div>
-						<dl class="tsd-comment-tags">
-							<dt>default</dt>
-							<dd><p><code>false</code></p>
-							</dd>
-						</dl>
 					</div>
 				</section>
 			</section>
@@ -313,12 +314,7 @@ pre {
 						<a href="../modules.html">Modules</a>
 					</li>
 					<li class="current tsd-kind-module">
-						<a href="../modules/index.html">index</a>
-						<ul>
-							<li class=" tsd-kind-namespace tsd-parent-kind-module">
-								<a href="../modules/index.tb.html">TB</a>
-							</li>
-						</ul>
+						<a href="../modules/src_core_cache_decorators_persistent.html">src/core/cache/decorators/persistent</a>
 					</li>
 				</ul>
 			</nav>
@@ -327,18 +323,27 @@ pre {
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-module">
-						<a href="index.throttleoptions.html" class="tsd-kind-icon">Throttle<wbr>Options</a>
+						<a href="src_core_cache_decorators_persistent.persistentoptions.html" class="tsd-kind-icon">Persistent<wbr>Options</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="index.throttleoptions.html#delay" class="tsd-kind-icon">delay</a>
+								<a href="src_core_cache_decorators_persistent.persistentoptions.html#loadfromstorage" class="tsd-kind-icon">load<wbr>From<wbr>Storage</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="index.throttleoptions.html#single" class="tsd-kind-icon">single</a>
+								<a href="src_core_cache_decorators_persistent.persistentoptions.html#persistentttl" class="tsd-kind-icon">persistentTTL</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="src_core_cache_decorators_persistent.persistentttldecoratoroptions.html" class="tsd-kind-icon">PersistentTTLDecorator<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../modules/src_core_cache_decorators_persistent.html#persistentcache" class="tsd-kind-icon">Persistent<wbr>Cache</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../modules/src_core_cache_decorators_persistent.html#default" class="tsd-kind-icon">default</a>
+					</li>
 				</ul>
 			</nav>
 		</div>

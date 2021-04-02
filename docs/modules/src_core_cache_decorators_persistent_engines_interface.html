@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>ThrottleOptions | V4Fire</title>
+	<title>src/core/cache/decorators/persistent/engines/interface | V4Fire</title>
 	<meta name="description" content="Documentation for V4Fire">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -227,81 +227,78 @@ pre {
 					<a href="../modules.html">V4Fire</a>
 				</li>
 				<li>
-					<a href="../modules/index.html">index</a>
-				</li>
-				<li>
-					<a href="index.throttleoptions.html">ThrottleOptions</a>
+					<a href="src_core_cache_decorators_persistent_engines_interface.html">src/core/cache/decorators/persistent/engines/interface</a>
 				</li>
 			</ul>
-			<h1>Interface ThrottleOptions</h1>
+			<h1>Module src/core/cache/decorators/persistent/engines/interface</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
-			<section class="tsd-panel tsd-hierarchy">
-				<h3>Hierarchy</h3>
-				<ul class="tsd-hierarchy">
-					<li>
-						<span class="target">ThrottleOptions</span>
-					</li>
-				</ul>
-			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Properties</h3>
+							<h3>Classes</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="index.throttleoptions.html#delay" class="tsd-kind-icon">delay</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="index.throttleoptions.html#single" class="tsd-kind-icon">single</a></li>
+								<li class="tsd-kind-class tsd-parent-kind-module tsd-has-type-parameter"><a href="../classes/src_core_cache_decorators_persistent_engines_interface.checkablepersistentengine.html" class="tsd-kind-icon">Checkable<wbr>Persistent<wbr>Engine</a></li>
+								<li class="tsd-kind-class tsd-parent-kind-module tsd-has-type-parameter"><a href="../classes/src_core_cache_decorators_persistent_engines_interface.uncheckablepersistentengine.html" class="tsd-kind-icon">Uncheckable<wbr>Persistent<wbr>Engine</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Type aliases</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter"><a href="src_core_cache_decorators_persistent_engines_interface.html#persistentengine" class="tsd-kind-icon">Persistent<wbr>Engine</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="src_core_cache_decorators_persistent_engines_interface.html#storagecheckstate" class="tsd-kind-icon">Storage<wbr>Check<wbr>State</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="delay" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> delay</h3>
-					<div class="tsd-signature tsd-kind-icon">delay<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+				<h2>Type aliases</h2>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
+					<a name="persistentengine" class="tsd-anchor"></a>
+					<h3>Persistent<wbr>Engine</h3>
+					<div class="tsd-signature tsd-kind-icon">Persistent<wbr>Engine&lt;V&gt;<span class="tsd-signature-symbol">:</span> <a href="../classes/src_core_cache_decorators_persistent_engines_interface.checkablepersistentengine.html" class="tsd-signature-type" data-tsd-kind="Class">CheckablePersistentEngine</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><a href="../classes/src_core_cache_decorators_persistent_engines_interface.uncheckablepersistentengine.html" class="tsd-signature-type" data-tsd-kind="Class">UncheckablePersistentEngine</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3505">index.d.ts:3505</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/cache/decorators/persistent/engines/interface.ts#L145">src/core/cache/decorators/persistent/engines/interface.ts:145</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Delay to wait in milliseconds</p>
+							<p>Engine to provide the persistent feature</p>
 						</div>
-						<dl class="tsd-comment-tags">
-							<dt>default</dt>
-							<dd><p><code>250</code></p>
-							</dd>
-						</dl>
 					</div>
+					<h4 class="tsd-type-parameters-title">Type parameters</h4>
+					<ul class="tsd-type-parameters">
+						<li>
+							<h4>V = <span class="tsd-signature-type">unknown</span></h4>
+						</li>
+					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="single" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> single</h3>
-					<div class="tsd-signature tsd-kind-icon">single<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
+					<a name="storagecheckstate" class="tsd-anchor"></a>
+					<h3>Storage<wbr>Check<wbr>State</h3>
+					<div class="tsd-signature tsd-kind-icon">Storage<wbr>Check<wbr>State<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>available<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol">; </span>checked<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">{ </span>available<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol">; </span>checked<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol"> }</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3511">index.d.ts:3511</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/cache/decorators/persistent/engines/interface.ts#L154">src/core/cache/decorators/persistent/engines/interface.ts:154</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>If true, then all rest invokes that caught in the sleep span are ignored</p>
+							<p>Available checking state of a storage item:</p>
 						</div>
-						<dl class="tsd-comment-tags">
-							<dt>default</dt>
-							<dd><p><code>false</code></p>
-							</dd>
-						</dl>
+						<ol>
+							<li><code>available: false; checked: false</code> - don&#39;t need to check the storage, don&#39;t mark the item as checked;</li>
+							<li><code>available: false; checked: true</code> - don&#39;t need to check the storage, mark the item as checked;</li>
+							<li><code>available: true; checked: true</code> - check the storage, mark the item is checked.</li>
+						</ol>
 					</div>
 				</section>
 			</section>
@@ -313,32 +310,24 @@ pre {
 						<a href="../modules.html">Modules</a>
 					</li>
 					<li class="current tsd-kind-module">
-						<a href="../modules/index.html">index</a>
-						<ul>
-							<li class=" tsd-kind-namespace tsd-parent-kind-module">
-								<a href="../modules/index.tb.html">TB</a>
-							</li>
-						</ul>
+						<a href="src_core_cache_decorators_persistent_engines_interface.html">src/core/cache/decorators/persistent/engines/interface</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-				</ul>
-				<ul class="current">
-					<li class="current tsd-kind-interface tsd-parent-kind-module">
-						<a href="index.throttleoptions.html" class="tsd-kind-icon">Throttle<wbr>Options</a>
-						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="index.throttleoptions.html#delay" class="tsd-kind-icon">delay</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="index.throttleoptions.html#single" class="tsd-kind-icon">single</a>
-							</li>
-						</ul>
+					<li class=" tsd-kind-class tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../classes/src_core_cache_decorators_persistent_engines_interface.checkablepersistentengine.html" class="tsd-kind-icon">Checkable<wbr>Persistent<wbr>Engine</a>
 					</li>
-				</ul>
-				<ul class="after-current">
+					<li class=" tsd-kind-class tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../classes/src_core_cache_decorators_persistent_engines_interface.uncheckablepersistentengine.html" class="tsd-kind-icon">Uncheckable<wbr>Persistent<wbr>Engine</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="src_core_cache_decorators_persistent_engines_interface.html#persistentengine" class="tsd-kind-icon">Persistent<wbr>Engine</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="src_core_cache_decorators_persistent_engines_interface.html#storagecheckstate" class="tsd-kind-icon">Storage<wbr>Check<wbr>State</a>
+					</li>
 				</ul>
 			</nav>
 		</div>
@@ -359,7 +348,6 @@ pre {
 			<ul class="tsd-legend">
 				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
 				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
