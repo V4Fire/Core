@@ -32,10 +32,10 @@ import type {
 	AsyncIdleOptions,
 	AsyncRequestIdleCallbackOptions
 
-} from 'core/async/modules/timers/interface';
+} from 'core/async/interface';
 
 export * from 'core/async/modules/proxy';
-export * from 'core/async/modules/timers/interface';
+export * from 'core/async/interface';
 
 export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	/**

@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.43.0 (2021-04-07)
+
+#### :house: Internal
+
+* Optimized export of interfaces
+
 ## v3.40.1 (2021-04-01)
 
 #### :bug: Bug Fix

@@ -21,16 +21,22 @@ import type {
 	AsyncProxyOptions,
 	ClearProxyOptions
 
-} from 'core/async/modules/base';
+} from 'core/async/modules/base/interface';
 
 import type {
 
 	AsyncWorkerOptions,
 	AsyncPromiseOptions
 
-} from 'core/async/modules/proxy';
+} from 'core/async/modules/proxy/interface';
 
-import type { AsyncPromisifyOnceOptions } from 'core/async/modules/events';
+import type { AsyncPromisifyOnceOptions } from 'core/async/modules/events/interface';
+
+export * from 'core/async/modules/base/interface';
+export * from 'core/async/modules/events/interface';
+export * from 'core/async/modules/proxy/interface';
+export * from 'core/async/modules/timers/interface';
+export * from 'core/async/modules/wrappers/interface';
 
 export enum Namespaces {
 	proxy,
