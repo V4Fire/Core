@@ -11,6 +11,7 @@ import { asyncLocal } from 'core/kv-storage';
 
 import addPersistent from 'core/cache/decorators/persistent';
 import SimpleCache from 'core/cache/simple';
+import RestrictedCache from 'core/cache/restricted';
 
 import engines from 'core/cache/decorators/persistent/engines';
 import { INDEX_STORAGE_NAME, TTL_POSTFIX } from 'core/cache/decorators/persistent/engines/const';
@@ -49,11 +50,6 @@ describe('core/cache/decorators/persistent', () => {
 							persistentTTL: 900
 						}
 					]
-				},
-
-				{
-					name: 'remove',
-					params: ['foo']
 				},
 
 				{
@@ -115,6 +111,28 @@ describe('core/cache/decorators/persistent', () => {
 			await persistentCache.set('foo', 2);
 
 			expect(asyncLocal.set.calls.first().args).toEqual(['foo', 2]);
+		});
+
+		it('should delete property from storage if it was deleted by side effect', async (done) => {
+			const opts = {
+				loadFromStorage: 'onInit'
+			};
+
+			const
+				cache = new RestrictedCache(1),
+				persistentCache = await addPersistent(cache, asyncLocal, opts);
+
+			await persistentCache.set('foo', 1);
+			expect(await asyncLocal.get(INDEX_STORAGE_NAME)).toEqual({foo: Number.MAX_SAFE_INTEGER});
+
+			await persistentCache.set('bar', 1);
+			expect(await persistentCache.get('foo')).toBe(undefined);
+			expect(await persistentCache.get('bar')).toBe(1);
+
+			setTimeout(async () => {
+				expect(await asyncLocal.get(INDEX_STORAGE_NAME)).toEqual({bar: Number.MAX_SAFE_INTEGER});
+				done();
+			}, 10);
 		});
 	});
 

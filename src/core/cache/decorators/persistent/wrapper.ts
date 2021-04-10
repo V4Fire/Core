@@ -8,6 +8,7 @@
 
 import SyncPromise from 'core/promise/sync';
 import type { SyncStorageNamespace, AsyncStorageNamespace } from 'core/kv-storage';
+import wrapEmit from 'core/cache/decorators/emit';
 
 import type Cache from 'core/cache/interface';
 import type { ClearFilter } from 'core/cache/interface';
@@ -73,6 +74,8 @@ export default class PersistentWrapper<T extends Cache<V, string>, V = unknown> 
 	 * Implements API of the wrapped cache object
 	 */
 	protected implementAPI(): void {
+		const {remove: originalRemove} = wrapEmit<T, V, string>(this.cache);
+
 		this.wrappedCache.has = this.getDefaultImplementation('has');
 		this.wrappedCache.get = this.getDefaultImplementation('get');
 
@@ -95,8 +98,10 @@ export default class PersistentWrapper<T extends Cache<V, string>, V = unknown> 
 		this.wrappedCache.remove = async (key: string) => {
 			this.fetchedItems.add(key);
 			await this.engine.remove(key);
-			return this.cache.remove(key);
+			return originalRemove(key);
 		};
+
+		this.wrappedCache.eventEmitter.on('remove', this.engine.remove.bind(this.engine));
 
 		this.wrappedCache.keys = () => SyncPromise.resolve(this.cache.keys());
 

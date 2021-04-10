@@ -8,6 +8,7 @@
 
 import addTTL from 'core/cache/decorators/ttl';
 import SimpleCache from 'core/cache/simple';
+import RestrictedCache from 'core/cache/restricted';
 
 describe('core/cache/decorators/ttl', () => {
 	it('should remove items after expiring', (done) => {
@@ -57,6 +58,20 @@ describe('core/cache/decorators/ttl', () => {
 		}, 25);
 	});
 
+	it('should remove ttl if next call dont provide ttl', (done) => {
+		const cache = addTTL(new SimpleCache());
+
+		spyOn(cache, 'removeTTLFrom').and.callThrough();
+		cache.set('foo', 1, {ttl: 10});
+		cache.set('foo', 2);
+		expect(cache.removeTTLFrom.calls.count()).toEqual(1);
+
+		setTimeout(() => {
+			expect(cache.get('foo')).toBe(2);
+			done();
+		}, 50);
+	});
+
 	it('should not remove items after expiring after invoking of `removeTTLFrom`', (done) => {
 		const cache = addTTL(new SimpleCache());
 
@@ -96,9 +111,6 @@ describe('core/cache/decorators/ttl', () => {
 				method: 'set',
 				parameters: ['foo', 1, undefined]
 			}, {
-				method: 'remove',
-				parameters: ['foo']
-			}, {
 				method: 'clear',
 				parameters: [() => true]
 			}
@@ -108,5 +120,17 @@ describe('core/cache/decorators/ttl', () => {
 
 			expect(simpleCache[el.method].calls.mostRecent().args).toEqual(el.parameters);
 		});
+	});
+
+	it('should delete property from storage if it was deleted by side effect', () => {
+		const cache = addTTL(new RestrictedCache(1));
+
+		const memory = [];
+
+		cache.eventEmitter.on('remove', (...args) => memory.push(args));
+		cache.set('bar', 1, {ttl: 1000});
+		cache.set('baz', 2, {ttl: 1000});
+
+		expect(memory).toEqual([['bar'], ['baz'], ['bar']]);
 	});
 });
