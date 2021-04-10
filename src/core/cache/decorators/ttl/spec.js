@@ -131,6 +131,6 @@ describe('core/cache/decorators/ttl', () => {
 		cache.set('bar', 1, {ttl: 1000});
 		cache.set('baz', 2, {ttl: 1000});
 
-		expect(memory).toEqual([['bar'], ['baz'], ['bar']]);
+		expect(memory).toEqual([['bar']]);
 	});
 });

@@ -56,7 +56,7 @@ export default class RestrictedCache<V = unknown, K = string> extends SimpleCach
 
 	/** @override */
 	set(key: K, value: V): V {
-		this.remove(key);
+		this.queue.delete(key);
 
 		if (this.queue.size === this.max) {
 			const

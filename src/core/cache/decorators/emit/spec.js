@@ -44,7 +44,7 @@ describe('core/cache/decorators/emit', () => {
 
 			cache.set('foo', 1);
 			cache.set('bar', 1);
-			expect(memory).toEqual(['foo', 'bar', 'foo']);
+			expect(memory).toEqual(['foo']);
 		});
 	});
 });
