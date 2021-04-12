@@ -47,7 +47,7 @@ export default function addTTL<
 	K = string,
 >(cache: T, ttl?: number): TTLCache<V, K, EmitCache<V, K, T>> {
 	const
-		{remove: originalRemove} = wrapEmit<T, V, K>(cache),
+		{remove: originalRemove, subscribe} = wrapEmit<T, V, K>(cache),
 		cacheWithTTL: TTLCache<V, K> = Object.create(cache),
 		ttlTimers = new Map<K, number | NodeJS.Timeout>();
 
@@ -79,8 +79,7 @@ export default function addTTL<
 		return false;
 	};
 
-	// eslint-disable-next-line @typescript-eslint/unbound-method
-	cacheWithTTL.eventEmitter.on('remove', cacheWithTTL.removeTTLFrom);
+	subscribe('remove', cacheWithTTL, (key: K) => cacheWithTTL.removeTTLFrom(key));
 
 	cacheWithTTL.clear = (filter?: ClearFilter<V, K>) => {
 		const

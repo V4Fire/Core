@@ -123,14 +123,17 @@ describe('core/cache/decorators/ttl', () => {
 	});
 
 	it('should delete property from storage if it was deleted by side effect', () => {
-		const cache = addTTL(new RestrictedCache(1));
+		const
+			cache = addTTL(new RestrictedCache(1)),
+			memory = [];
 
-		const memory = [];
+		cache.removeTTLFrom = (key) => {
+			memory.push(key);
+		};
 
-		cache.eventEmitter.on('remove', (...args) => memory.push(args));
 		cache.set('bar', 1, {ttl: 1000});
 		cache.set('baz', 2, {ttl: 1000});
 
-		expect(memory).toEqual([['bar']]);
+		expect(memory).toEqual(['bar']);
 	});
 });

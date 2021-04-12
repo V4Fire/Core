@@ -74,7 +74,7 @@ export default class PersistentWrapper<T extends Cache<V, string>, V = unknown> 
 	 * Implements API of the wrapped cache object
 	 */
 	protected implementAPI(): void {
-		const {remove: originalRemove} = wrapEmit<T, V, string>(this.cache);
+		const {remove: originalRemove, subscribe} = wrapEmit<T, V, string>(this.cache);
 
 		this.wrappedCache.has = this.getDefaultImplementation('has');
 		this.wrappedCache.get = this.getDefaultImplementation('get');
@@ -101,7 +101,7 @@ export default class PersistentWrapper<T extends Cache<V, string>, V = unknown> 
 			return originalRemove(key);
 		};
 
-		this.wrappedCache.eventEmitter.on('remove', this.engine.remove.bind(this.engine));
+		subscribe('remove', this.wrappedCache, this.engine.remove.bind(this.engine));
 
 		this.wrappedCache.keys = () => SyncPromise.resolve(this.cache.keys());
 

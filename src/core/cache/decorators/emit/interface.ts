@@ -19,5 +19,16 @@ export interface EmitCache<V = unknown, K = string, T extends Cache<V, K> = Cach
 	 */
 	set(key: K, value: V, opts?: Parameters<T['set']>[2]): V;
 
+	/**
+	 * Emit events caused by side-effect
+	 */
 	eventEmitter: EventEmitter;
 }
+
+export type WrapEmit = <T extends Cache<V, K>,
+	V = unknown,
+	K = string,
+>(cache: T) => {
+	remove: T['remove'];
+	subscribe<M extends 'remove'>(key: M, thisInstance: Object, callback: ((...args: Parameters<T[M]>) => void)): void;
+};
