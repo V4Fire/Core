@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.42.1 (2021-04-12)
+
+#### :house: Internal
+
+* Optimized exporting of interfaces `core/async`
+
 ## v3.42.0 (2021-04-02)
 
 #### :rocket: New Feature

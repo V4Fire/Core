@@ -34,11 +34,12 @@ import type {
 	AsyncOnceOptions,
 	AsyncPromisifyOnceOptions
 
-} from 'core/async/modules/events/interface';
+} from 'core/async/interface';
 
 export * from 'core/async/modules/timers';
 export * from 'core/async/modules/events/helpers';
-export * from 'core/async/modules/events/interface';
+
+export * from 'core/async/interface';
 
 export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	/**

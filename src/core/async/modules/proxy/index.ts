@@ -40,10 +40,10 @@ import type {
 	AsyncWorkerOptions,
 	AsyncPromiseOptions
 
-} from 'core/async/modules/proxy/interface';
+} from 'core/async/interface';
 
 export * from 'core/async/modules/base';
-export * from 'core/async/modules/proxy/interface';
+export * from 'core/async/interface';
 
 export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	/**

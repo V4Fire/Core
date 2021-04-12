@@ -7,7 +7,7 @@
  */
 
 import type Async from 'core/async';
-import type { ProxyCb, AsyncOptions, AsyncProxyOptions } from 'core/async/modules/base';
+import type { AsyncOptions, AsyncProxyOptions } from 'core/async/interface';
 
 /**
  * Something that looks like a worker

@@ -35,11 +35,11 @@ import type {
 
 	AsyncOptionsForWrappers
 
-} from 'core/async/modules/wrappers/interface';
+} from 'core/async/interface';
 
 export * from 'core/async/modules/events';
 export * from 'core/async/modules/wrappers/consts';
-export * from 'core/async/modules/wrappers/interface';
+export * from 'core/async/interface';
 
 export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	/**
