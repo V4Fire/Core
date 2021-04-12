@@ -41,7 +41,9 @@ describe('core/prelude/date/format', () => {
 
 	it('format with optional values', () => {
 		expect(date.format('Y?;M?:2-digit', 'en')).toBe('10/18/1989');
-		expect(new Date().format('Y?;M?:2-digit;d', 'en')).toBe('02');
+
+		const now = new Date();
+		expect(new Date(now.getFullYear(), now.getMonth(), 2).format('Y?;M?:2-digit;d', 'en')).toBe('02');
 	});
 
 	it('Date.format', () => {

@@ -16,8 +16,6 @@ import { deprecate, deprecated } from 'core/functools';
 import { namespaces, NamespacesDictionary } from 'core/async/const';
 import { isZombieGroup, isPromisifyNamespace } from 'core/async/modules/base/const';
 
-import type { FullAsyncOptions, FullClearOptions } from 'core/async/interface';
-
 import type {
 
 	ClearOptions,
@@ -26,15 +24,17 @@ import type {
 	LocalCache,
 	GlobalCache,
 
-	TaskCtx
+	TaskCtx,
 
-} from 'core/async/modules/base/interface';
+	FullAsyncOptions,
+	FullClearOptions
+
+} from 'core/async/interface';
 
 export * from 'core/async/modules/base/const';
 export * from 'core/async/modules/base/helpers';
 
 export * from 'core/async/interface';
-export * from 'core/async/modules/base/interface';
 
 export default class Async<CTX extends object = Async<any>> {
 	/**
