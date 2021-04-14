@@ -15,6 +15,10 @@ Changelog
 
 * Added filtering out status codes with no message bodies in response
 
+#### :bug: Bug Fix
+
+* Fixed async execution of the test case
+
 ## v3.40.0 (2021-04-01)
 
 #### :rocket: New Feature
