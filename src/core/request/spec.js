@@ -25,6 +25,9 @@ class TestRequestChainProvider extends Provider {
 	});
 }
 
+const
+	emptyBodyStatuses = [204, 304];
+
 describe('core/request', () => {
 	const engines = new Map([
 		['node', nodeEngine],
@@ -107,24 +110,28 @@ describe('core/request', () => {
 				expect(req.cache).toBe('memory');
 				expect(req.data).toEqual({id: 1, value: 'things'});
 
-				setTimeout(async () => {
-					{
-						const
-							req = await get(url);
+				return new Promise(((resolve) => {
+					setTimeout(async () => {
+						{
+							const
+								req = await get(url);
 
-						expect(req.cache).toBeUndefined();
-						expect(req.data).toEqual({id: 1, value: 'things'});
-						req.dropCache();
-					}
+							expect(req.cache).toBeUndefined();
+							expect(req.data).toEqual({id: 1, value: 'things'});
+							req.dropCache();
+						}
 
-					{
-						const
-							req = await get(url);
+						{
+							const
+								req = await get(url);
 
-						expect(req.cache).toBeUndefined();
-						expect(req.data).toEqual({id: 1, value: 'things'});
-					}
-				}, 15);
+							expect(req.cache).toBeUndefined();
+							expect(req.data).toEqual({id: 1, value: 'things'});
+						}
+
+						resolve();
+					}, 15);
+				}));
 			});
 
 			it('text/xml get', async () => {
@@ -431,9 +438,13 @@ describe('core/request', () => {
 				expect(req.response.ok).toBeTrue();
 			});
 
-			it('response with 204 status', async () => {
-				const req = await request('http://localhost:3000/octet/204');
-				expect(req.data).toBe(null);
+			describe('responses with no message body', () => {
+				for (const status of emptyBodyStatuses) {
+					it(`response with ${status} status`, async () => {
+						const req = await request(`http://localhost:3000/octet/${status}`, {okStatuses: status});
+						expect(req.data).toBe(null);
+					});
+				}
 			});
 
 			it('retrying of a request', async () => {
@@ -576,9 +587,11 @@ function createServer() {
 		res.send(Buffer.from(faviconInBase64, 'base64'));
 	});
 
-	serverApp.get('/octet/204', (req, res) => {
-		res.type('application/octet-stream').status(204).end();
-	});
+	for (const status of emptyBodyStatuses) {
+		serverApp.get(`/octet/${status}`, (req, res) => {
+			res.type('application/octet-stream').status(status).end();
+		});
+	}
 
 	const
 		triesBeforeSuccess = 3,
