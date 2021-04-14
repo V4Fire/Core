@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.43.0 (2021-04-14)
+
+#### :house: Internal
+
+* Added filtering out status codes with no message bodies in response
+
 ## v3.40.0 (2021-04-01)
 
 #### :rocket: New Feature
