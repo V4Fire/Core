@@ -110,24 +110,28 @@ describe('core/request', () => {
 				expect(req.cache).toBe('memory');
 				expect(req.data).toEqual({id: 1, value: 'things'});
 
-				setTimeout(async () => {
-					{
-						const
-							req = await get(url);
+				return new Promise(((resolve) => {
+					setTimeout(async () => {
+						{
+							const
+								req = await get(url);
 
-						expect(req.cache).toBeUndefined();
-						expect(req.data).toEqual({id: 1, value: 'things'});
-						req.dropCache();
-					}
+							expect(req.cache).toBeUndefined();
+							expect(req.data).toEqual({id: 1, value: 'things'});
+							req.dropCache();
+						}
 
-					{
-						const
-							req = await get(url);
+						{
+							const
+								req = await get(url);
 
-						expect(req.cache).toBeUndefined();
-						expect(req.data).toEqual({id: 1, value: 'things'});
-					}
-				}, 15);
+							expect(req.cache).toBeUndefined();
+							expect(req.data).toEqual({id: 1, value: 'things'});
+						}
+
+						resolve();
+					}, 15);
+				}));
 			});
 
 			it('text/xml get', async () => {
