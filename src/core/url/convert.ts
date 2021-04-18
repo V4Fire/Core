@@ -149,6 +149,7 @@ export function toQueryString(data: unknown, optsOrEncode?: ToQueryStringOptions
 
 const
 	isInvalidKey = /\b__proto__\b/,
+	hasProtocol = /^\w+:\/\//,
 	arraySyntaxRgxp = /\[([^\]]*)]/g,
 	normalizeURLRgxp = /[^?]*\?/;
 
@@ -161,7 +162,7 @@ const
  * @example
  * ```js
  * // {a: 1}
- * toQueryString('?a=1');
+ * fromQueryString('?a=1');
  * ```
  */
 export function fromQueryString(query: string, decode?: boolean): Dictionary;
@@ -175,7 +176,7 @@ export function fromQueryString(query: string, decode?: boolean): Dictionary;
  * @example
  * ```js
  * // {a: [1, 2]}
- * toQueryString('?a[]=1&a[]=2', {arraySyntax: true});
+ * fromQueryString('?a[]=1&a[]=2', {arraySyntax: true});
  * ```
  */
 export function fromQueryString(query: string, opts: FromQueryStringOptions): Dictionary;
@@ -190,7 +191,7 @@ export function fromQueryString(query: string, opts: FromQueryStringOptions): Di
  * @example
  * ```js
  * // {a: '1'}
- * toQueryString('?a=1', {convert: false});
+ * fromQueryString('?a=1', {convert: false});
  * ```
  */
 export function fromQueryString(
@@ -202,10 +203,11 @@ export function fromQueryString(
 	query: string,
 	optsOrDecode?: FromQueryStringOptions | boolean
 ): Dictionary<string | null> {
-	query = query.replace(normalizeURLRgxp, '');
-
 	const
+		hasQuery = hasProtocol.test(query) ? normalizeURLRgxp.test(query) : true,
 		queryObj = {};
+
+	query = hasQuery ? query.replace(normalizeURLRgxp, '') : '';
 
 	if (query === '') {
 		return queryObj;
