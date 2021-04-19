@@ -132,8 +132,8 @@ export default class OrderedQueue<T> extends Queue<T> {
 	protected toBottom(): void {
 		let
 			pos = 0,
-			child1 = Math.floor(pos * 2 + 1),
-			child2 = Math.floor(pos * 2 + 2);
+			child1 = 1,
+			child2 = 2;
 
 		const
 			val = this.tasks[pos];
@@ -159,8 +159,8 @@ export default class OrderedQueue<T> extends Queue<T> {
 			this.tasks[pos] = childVal;
 
 			pos = child;
-			child1 = Math.floor(pos * 2 + 1);
-			child2 = Math.floor(pos * 2 + 2);
+			child1 = pos * 2 + 1;
+			child2 = pos * 2 + 2;
 		}
 
 		this.tasks[pos] = val;
