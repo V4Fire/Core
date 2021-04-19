@@ -240,8 +240,8 @@ type Overwrite<T, U> = Pick<T, Exclude<keyof T, keyof U>> & U;
  * Trait<typeof bFoo>
  * ```
  */
-type Trait<T extends Function, I extends T['prototype'] = T['prototype']> = {
-	[K in keyof T]: K extends keyof I ? I[K] : never;
+type Trait<C extends Function, I extends C['prototype'] = C['prototype']> = {
+	[K in Extract<keyof C, keyof I>]: I[K];
 };
 
 /**

@@ -8,7 +8,7 @@ abstract class Interface1 {
   abstract bar(): string;
 
   /**
-   * A method that have the default implementation.
+   * The method that have the default implementation.
    * The implementation is placed as a static method.
    */
    bla(a: number): number {
