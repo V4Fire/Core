@@ -91,7 +91,7 @@ export interface EventEmitterWrapper<CTX extends object = Async> extends Readonl
 	emit(event: string, ...args: unknown[]): boolean;
 }
 
-type MapNotPrimitive<T, A> = T extends Primitive ? T : T & A ;
+type MapNotPrimitive<T, A> = T extends Primitive ? T : T & A;
 
 type AddEventListenerLikeFunctionMapper<T extends (...args: unknown[]) => unknown> =
 	(
