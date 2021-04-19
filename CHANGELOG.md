@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.42.2 (2021-04-19)
+
+#### :bug: Bug Fix
+
+* Fixed a query string normalizing when it starts with a protocol `fromQueryString` `core/url`
+
 ## v3.42.1 (2021-04-12)
 
 #### :house: Internal
