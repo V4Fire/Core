@@ -20,7 +20,7 @@ import { convertIfDate } from 'core/json';
 import { getDataType } from 'core/mime-type';
 
 import { normalizeHeaderName } from 'core/request/utils';
-import { defaultResponseOpts, noMessageBodyStatusCodes } from 'core/request/response/const';
+import { defaultResponseOpts, noContentStatusCodes } from 'core/request/response/const';
 
 import type { OkStatuses, WrappedDecoders } from 'core/request/interface';
 
@@ -160,7 +160,7 @@ export default class Response<
 	decode(): Then<D> {
 		let data;
 
-		if (noMessageBodyStatusCodes.includes(this.status)) {
+		if (noContentStatusCodes.includes(this.status)) {
 			data = Then.resolve(null, this.parent);
 
 		} else {
