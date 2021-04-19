@@ -149,9 +149,8 @@ export function toQueryString(data: unknown, optsOrEncode?: ToQueryStringOptions
 
 const
 	isInvalidKey = /\b__proto__\b/,
-	hasProtocol = /^\w+:\/\//,
 	arraySyntaxRgxp = /\[([^\]]*)]/g,
-	normalizeURLRgxp = /[^?]*\?/;
+	normalizeURLRgxp = /^(?:[^?]*\?|(?:\w+:)?\/\/.*)/;
 
 /**
  * Creates a dictionary from the specified querystring and returns it
@@ -204,10 +203,9 @@ export function fromQueryString(
 	optsOrDecode?: FromQueryStringOptions | boolean
 ): Dictionary<string | null> {
 	const
-		hasQuery = hasProtocol.test(query) ? normalizeURLRgxp.test(query) : true,
 		queryObj = {};
 
-	query = hasQuery ? query.replace(normalizeURLRgxp, '') : '';
+	query = query.replace(normalizeURLRgxp, '');
 
 	if (query === '') {
 		return queryObj;
