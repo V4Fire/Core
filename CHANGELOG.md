@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.??.?? (2021-??-??)
+
+#### :rocket: New Feature
+
+* Added a module to create class traits `core/functools/trait`
+
 ## v3.43.1 (2021-04-19)
 
 #### :bug: Bug Fix

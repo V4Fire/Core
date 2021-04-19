@@ -218,6 +218,45 @@ type IterableType<T extends Iterable<any>> = T extends Iterable<infer V> ? V : T
  */
 type Overwrite<T, U> = Pick<T, Exclude<keyof T, keyof U>> & U;
 
+/**
+ * Returns a new non-abstract class from the specified abstract class where methods can have the default implementation.
+ * The default implementations are taken from the static methods that match by names with the class's methods.
+ *
+ * @example
+ * ```typescript
+ * abstract class iFoo {
+ *   static bar(self: object): string {
+ *     return self.bla.toString();
+ *   }
+ *
+ *   bar(): string {
+ *     return <any>>null;
+ *   }
+ *
+ *   abstract bar(): number;
+ * }
+ *
+ * // class { bar(): string; }
+ * Trait<typeof bFoo>
+ * ```
+ */
+type Trait<T extends Function, I extends T['prototype'] = T['prototype']> = {
+	[K in keyof T]: K extends keyof I ? I[K] : never;
+};
+
+/**
+ * Returns a new function based on the specified with adding as the first parameter the passed object
+ *
+ * @example
+ * ```typescript
+ * // (self: bFoo, a: number) => string
+ * AddSelf<(a: number) => string, bFoo>
+ * ```
+ */
+type AddSelf<M extends Function, S extends object> = M extends (...args: infer A) => infer R ?
+	(self: S, ...args: A) => R :
+	never;
+
 interface JSONCb {
 	(key: string, value: unknown): unknown;
 }
