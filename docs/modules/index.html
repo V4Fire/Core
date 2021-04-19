@@ -288,6 +288,7 @@ pre {
 						<section class="tsd-index-section ">
 							<h3>Type aliases</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter"><a href="index.html#addself" class="tsd-kind-icon">Add<wbr>Self</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter"><a href="index.html#canarray" class="tsd-kind-icon">Can<wbr>Array</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter"><a href="index.html#canpromise" class="tsd-kind-icon">Can<wbr>Promise</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter"><a href="index.html#canundef" class="tsd-kind-icon">Can<wbr>Undef</a></li>
@@ -306,6 +307,7 @@ pre {
 								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter"><a href="index.html#promisetype" class="tsd-kind-icon">Promise<wbr>Type</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="index.html#regexpflag" class="tsd-kind-icon">Reg<wbr>Exp<wbr>Flag</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter"><a href="index.html#returnpromise" class="tsd-kind-icon">Return<wbr>Promise</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter"><a href="index.html#trait" class="tsd-kind-icon">Trait</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
@@ -335,6 +337,37 @@ pre {
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Type aliases</h2>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
+					<a name="addself" class="tsd-anchor"></a>
+					<h3>Add<wbr>Self</h3>
+					<div class="tsd-signature tsd-kind-icon">Add<wbr>Self&lt;M, S&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">M</span><span class="tsd-signature-symbol"> extends </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">infer </span> A<span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-symbol">infer </span> R<span class="tsd-signature-symbol"> ? </span><span class="tsd-signature-symbol">(</span>self<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">S</span>, <span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol"> : </span><span class="tsd-signature-type">never</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L256">index.d.ts:256</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Returns a new function based on the specified with adding as the first parameter the passed object</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>example</dt>
+							<dd><pre><code class="language-typescript"><span style="color: #008000">// (self: bFoo, a: number) =&gt; string</span>
+<span style="color: #001080">AddSelf</span><span style="color: #000000">&lt;(</span><span style="color: #001080">a</span><span style="color: #000000">: </span><span style="color: #267F99">number</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">string</span><span style="color: #000000">, </span><span style="color: #001080">bFoo</span><span style="color: #000000">&gt;</span>
+</code></pre>
+							</dd>
+						</dl>
+					</div>
+					<h4 class="tsd-type-parameters-title">Type parameters</h4>
+					<ul class="tsd-type-parameters">
+						<li>
+							<h4>M<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Function</span></h4>
+						</li>
+						<li>
+							<h4>S<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span></h4>
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
 					<a name="canarray" class="tsd-anchor"></a>
 					<h3>Can<wbr>Array</h3>
@@ -405,7 +438,7 @@ pre {
 					<div class="tsd-signature tsd-kind-icon">Date<wbr>Create<wbr>Value<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Date</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2710">index.d.ts:2710</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2749">index.d.ts:2749</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -415,7 +448,7 @@ pre {
 					<div class="tsd-signature tsd-kind-icon">DateHTMLString<wbr>Options<span class="tsd-signature-symbol">:</span> <a href="../interfaces/index.datehtmltimestringoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">DateHTMLTimeStringOptions</a><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/index.datehtmldatestringoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">DateHTMLDateStringOptions</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3217">index.d.ts:3217</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3256">index.d.ts:3256</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -425,7 +458,7 @@ pre {
 					<div class="tsd-signature tsd-kind-icon">Date<wbr>Relative<wbr>Type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;milliseconds&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;seconds&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;minutes&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;hours&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;days&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;weeks&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;months&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;years&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3221">index.d.ts:3221</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L3260">index.d.ts:3260</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -502,7 +535,7 @@ pre {
 					<div class="tsd-signature tsd-kind-icon">Number<wbr>Option<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;decimal&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;thousands&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2136">index.d.ts:2136</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2175">index.d.ts:2175</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -512,7 +545,7 @@ pre {
 					<div class="tsd-signature tsd-kind-icon">Object<wbr>Property<wbr>Path<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L627">index.d.ts:627</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L666">index.d.ts:666</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -595,7 +628,7 @@ pre {
 					<div class="tsd-signature tsd-kind-icon">Reg<wbr>Exp<wbr>Flag<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;g&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;i&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;m&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;u&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;y&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;s&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2599">index.d.ts:2599</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L2638">index.d.ts:2638</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -654,6 +687,50 @@ pre {
 							</li>
 						</ul>
 					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
+					<a name="trait" class="tsd-anchor"></a>
+					<h3>Trait</h3>
+					<div class="tsd-signature tsd-kind-icon">Trait&lt;C, I&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{</span><span class="tsd-signature-symbol">[ </span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol"> in </span><span class="tsd-signature-type">Extract</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">keyof </span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-symbol">keyof </span><span class="tsd-signature-type">I</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">I</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol"> }</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/index.d.ts#L243">index.d.ts:243</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Returns a new non-abstract class from the specified abstract class where methods can have the default implementation.
+							The default implementations are taken from the static methods that match by names with the class&#39;s methods.</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>example</dt>
+							<dd><pre><code class="language-typescript"><span style="color: #0000FF">abstract</span><span style="color: #000000"> </span><span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">iFoo</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #0000FF">static</span><span style="color: #000000"> </span><span style="color: #795E26">bar</span><span style="color: #000000">(</span><span style="color: #001080">self</span><span style="color: #000000">: </span><span style="color: #267F99">object</span><span style="color: #000000">): </span><span style="color: #267F99">string</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #AF00DB">return</span><span style="color: #000000"> </span><span style="color: #001080">self</span><span style="color: #000000">.</span><span style="color: #001080">bla</span><span style="color: #000000">.</span><span style="color: #795E26">toString</span><span style="color: #000000">();</span>
+<span style="color: #000000">  }</span>
+
+<span style="color: #000000">  </span><span style="color: #795E26">bar</span><span style="color: #000000">(): </span><span style="color: #267F99">string</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #AF00DB">return</span><span style="color: #000000"> &lt;</span><span style="color: #267F99">any</span><span style="color: #000000">&gt;&gt;</span><span style="color: #0000FF">null</span><span style="color: #000000">;</span>
+<span style="color: #000000">  }</span>
+
+<span style="color: #000000">  </span><span style="color: #0000FF">abstract</span><span style="color: #000000"> </span><span style="color: #795E26">bar</span><span style="color: #000000">(): </span><span style="color: #267F99">number</span><span style="color: #000000">;</span>
+<span style="color: #000000">}</span>
+
+<span style="color: #008000">// class { bar(): string; }</span>
+<span style="color: #001080">Trait</span><span style="color: #000000">&lt;</span><span style="color: #0000FF">typeof</span><span style="color: #000000"> </span><span style="color: #001080">bFoo</span><span style="color: #000000">&gt;</span>
+</code></pre>
+							</dd>
+						</dl>
+					</div>
+					<h4 class="tsd-type-parameters-title">Type parameters</h4>
+					<ul class="tsd-type-parameters">
+						<li>
+							<h4>C<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Function</span></h4>
+						</li>
+						<li>
+							<h4>I<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">&quot;prototype&quot;</span><span class="tsd-signature-symbol">]</span> = <span class="tsd-signature-type">C</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">&quot;prototype&quot;</span><span class="tsd-signature-symbol">]</span></h4>
+						</li>
+					</ul>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
@@ -1045,6 +1122,9 @@ pre {
 						<a href="../interfaces/index.throttleoptions.html" class="tsd-kind-icon">Throttle<wbr>Options</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="index.html#addself" class="tsd-kind-icon">Add<wbr>Self</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="index.html#canarray" class="tsd-kind-icon">Can<wbr>Array</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
@@ -1097,6 +1177,9 @@ pre {
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="index.html#returnpromise" class="tsd-kind-icon">Return<wbr>Promise</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="index.html#trait" class="tsd-kind-icon">Trait</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-parent-kind-module">
 						<a href="index.html#api_url" class="tsd-kind-icon">API_<wbr>URL</a>
