@@ -17,6 +17,10 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 * Renamed `noMessageBodyStatusCodes` to `noContentStatusCodes` `core/request/response`
 
+#### :bug: Bug Fix
+
+* Fixed a query string normalizing when it starts with a protocol `fromQueryString` `core/url`
+
 ## v3.43.0 (2021-04-14)
 
 #### :house: Internal

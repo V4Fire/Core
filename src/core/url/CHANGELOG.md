@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.42.2 (2021-04-19)
+
+#### :bug: Bug Fix
+
+* Fixed a query string normalizing when it starts with a protocol `fromQueryString`
+
 ## v3.40.0 (2021-04-01)
 
 #### :rocket: New Feature
