@@ -11,15 +11,15 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-## v3.??.?? (2021-??-??)
-
-#### :boom: Breaking Change
-
-* Renamed `noMessageBodyStatusCodes` to `noContentStatusCodes` `core/request/response`
+## v3.43.1 (2021-04-19)
 
 #### :bug: Bug Fix
 
-* Fixed a query string normalizing when it starts with a protocol `fromQueryString` `core/url`
+* Fixed a bug when parsing a query string from a URL without query parameters `fromQueryString` `core/url`
+
+#### :house: Internal
+
+* Renamed `noMessageBodyStatusCodes` to `noContentStatusCodes` `core/request/response`
 
 ## v3.43.0 (2021-04-14)
 

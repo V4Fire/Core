@@ -9,11 +9,11 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
-## v3.42.2 (2021-04-19)
+## v3.43.1 (2021-04-19)
 
 #### :bug: Bug Fix
 
-* Fixed a query string normalizing when it starts with a protocol `fromQueryString`
+* Fixed a bug when parsing a query string from a URL without query parameters `fromQueryString`
 
 ## v3.40.0 (2021-04-01)
 

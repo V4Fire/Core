@@ -7,7 +7,7 @@
  */
 
 /**
- * [[include:core/async/modules/data-providers/README.md]]
+ * [[include:core/async/modules/wrappers/README.md]]
  * @packageDocumentation
  */
 
