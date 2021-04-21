@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import wrapEmit from 'core/cache/decorators/emit';
+import addEmit from 'core/cache/decorators/helpers/emit';
 import SimpleCache from 'core/cache/simple';
 import RestrictedCache from 'core/cache/restricted';
 
@@ -16,6 +16,8 @@ describe('core/cache/decorators/helpers/emit', () => {
 			function CreateLevel(level) {
 				this.level = level;
 				this.remove = () => null;
+				this.set = () => null;
+				this.clear = () => null;
 			}
 
 			const
@@ -27,8 +29,8 @@ describe('core/cache/decorators/helpers/emit', () => {
 
 			Object.setPrototypeOf(level2, level1);
 			Object.setPrototypeOf(level3, level2);
-			const {subscribe: subscribe1} = wrapEmit(level1);
-			const {subscribe: subscribe2} = wrapEmit(level2);
+			const {subscribe: subscribe1} = addEmit(level1);
+			const {subscribe: subscribe2} = addEmit(level2);
 
 			subscribe1('remove', level2, () => memory.push('level1'));
 			subscribe2('remove', level3, () => memory.push('level2'));
@@ -46,7 +48,7 @@ describe('core/cache/decorators/helpers/emit', () => {
 		it('emit remove event if remove was called, and dont emit if original method was called', () => {
 			const cache = new SimpleCache(),
 				// Original method
-				{remove} = wrapEmit(cache);
+				{remove} = addEmit(cache);
 
 			const memory = [];
 
@@ -56,7 +58,7 @@ describe('core/cache/decorators/helpers/emit', () => {
 
 			cache.set('foo', 1);
 			cache.remove('foo');
-			expect(memory[0]).toEqual([cache, ['foo']]);
+			expect(memory[0]).toEqual([cache, {args: ['foo'], result: 1}]);
 
 			cache.set('bar', 1);
 			remove('bar');
@@ -65,7 +67,7 @@ describe('core/cache/decorators/helpers/emit', () => {
 
 		it('example with restricted cache', () => {
 			const cache = new RestrictedCache(1);
-			wrapEmit(cache);
+			addEmit(cache);
 
 			const memory = [];
 
@@ -75,7 +77,7 @@ describe('core/cache/decorators/helpers/emit', () => {
 
 			cache.set('foo', 1);
 			cache.set('bar', 1);
-			expect(memory).toEqual([[cache, ['foo']]]);
+			expect(memory).toEqual([[cache, {args: ['foo'], result: 1}]]);
 		});
 	});
 });

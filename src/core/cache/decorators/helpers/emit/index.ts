@@ -7,7 +7,7 @@
  */
 
 /**
- * [[include:core/cache/decorators/emit/README.md]]
+ * [[include:core/cache/decorators/helpers/emit/README.md]]
  * @packageDocumentation
  */
 
@@ -27,7 +27,7 @@ const addEmit: AddEmit = <T extends Cache<V, K>, V = unknown, K = string>(cache)
 	const
 		emitCache = <EmitCache<V, K, T>>emitCacheWithoutEmitter,
 		originalRemove = emitCache.remove.bind(emitCache),
-		originalSet = emitCache.remove.bind(emitCache),
+		originalSet = emitCache.set.bind(emitCache),
 		originalClear = emitCache.clear.bind(emitCache);
 
 	emitCache.set = (key: K, value: V, opts?: Parameters<T['set']>[2]) => {

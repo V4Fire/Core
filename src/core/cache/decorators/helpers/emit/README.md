@@ -5,7 +5,7 @@ This module provides a helper for [[Cache]] decorator. to add a emit events caus
 ## Example
 
 ```js
-import addEmit from 'core/cache/decorators/emit';
+import addEmit from 'core/cache/decorators/helpers/emit';
 import SimpleCache from 'core/cache/simple';
 
 const
