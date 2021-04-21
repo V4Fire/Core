@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type { EmitCache } from 'core/cache/decorators/emit/interface';
+import type { EmitCache } from 'core/cache/decorators/helpers/emit/interface';
 
 export type PersistentCache<V = unknown, K = string, T extends EmitCache<V, K> = EmitCache<V, K>> = {
 	[key in Exclude<(keyof EmitCache<V, K>), 'set' | 'eventEmitter'>]: ReturnPromise<EmitCache<V, K>[key]>

@@ -1,18 +1,18 @@
-# core/cache/decorators/emit
+# core/cache/decorators/helpers/emit
 
-This module provides a wrapper for [[Cache]] data structures to add a emit events caused by side-effect.
+This module provides a helper for [[Cache]] decorator. to add a emit events caused by side-effect.
 
 ## Example
 
 ```js
-import wrapEmit from 'core/cache/decorators/emit';
+import addEmit from 'core/cache/decorators/emit';
 import SimpleCache from 'core/cache/simple';
 
 const
   cache = new SimpleCache();
 
 // originalRemove did not emit remove event
-const { remove: originalRemove, subscribe } = wrapEmit(cache);
+const { remove: originalRemove, subscribe } = addEmit(cache);
 
 // Now cache.eventEmitter emit event 'remove' with args [cache(instance what call emit), [...args]]
 cache.remove('foo');

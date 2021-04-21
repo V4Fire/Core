@@ -25,10 +25,12 @@ export interface EmitCache<V = unknown, K = string, T extends Cache<V, K> = Cach
 	eventEmitter: EventEmitter;
 }
 
-export type WrapEmit = <T extends Cache<V, K>,
+export type AddEmit = <T extends Cache<V, K>,
 	V = unknown,
 	K = string,
 >(cache: T) => {
 	remove: T['remove'];
-	subscribe<M extends 'remove'>(key: M, thisInstance: Object, callback: ((...args: Parameters<T[M]>) => void)): void;
+	set: T['set'];
+	clear: T['clear'];
+	subscribe<M extends 'remove' | 'set' | 'clear'>(key: M, thisInstance: Object, callback: ((signature: {args: Parameters<T[M]>; result: ReturnType<T[M]>}) => void)): void;
 };

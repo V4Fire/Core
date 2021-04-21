@@ -8,7 +8,7 @@
 
 import SyncPromise from 'core/promise/sync';
 import type { SyncStorageNamespace, AsyncStorageNamespace } from 'core/kv-storage';
-import wrapEmit from 'core/cache/decorators/emit';
+import addEmit from 'core/cache/decorators/helpers/emit';
 
 import type Cache from 'core/cache/interface';
 import type { ClearFilter } from 'core/cache/interface';
@@ -74,7 +74,8 @@ export default class PersistentWrapper<T extends Cache<V, string>, V = unknown> 
 	 * Implements API of the wrapped cache object
 	 */
 	protected implementAPI(): void {
-		const {remove: originalRemove, subscribe} = wrapEmit<T, V, string>(this.cache);
+		// eslint-disable-next-line @typescript-eslint/unbound-method
+		const {remove: originalRemove, subscribe} = addEmit<T, V, string>(this.cache);
 
 		this.wrappedCache.has = this.getDefaultImplementation('has');
 		this.wrappedCache.get = this.getDefaultImplementation('get');
@@ -101,7 +102,7 @@ export default class PersistentWrapper<T extends Cache<V, string>, V = unknown> 
 			return originalRemove(key);
 		};
 
-		subscribe('remove', this.wrappedCache, this.engine.remove.bind(this.engine));
+		subscribe('remove', this.wrappedCache, ({args}) => this.engine.remove(args[0]));
 
 		this.wrappedCache.keys = () => SyncPromise.resolve(this.cache.keys());
 

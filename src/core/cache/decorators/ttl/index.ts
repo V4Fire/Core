@@ -11,10 +11,10 @@
  * @packageDocumentation
  */
 
-import wrapEmit from 'core/cache/decorators/emit';
+import addEmit from 'core/cache/decorators/helpers/emit';
 
 import type Cache from 'core/cache/interface';
-import type { EmitCache } from 'core/cache/decorators/emit/interface';
+import type { EmitCache } from 'core/cache/decorators/helpers/emit/interface';
 import type { ClearFilter } from 'core/cache/interface';
 import type { TTLDecoratorOptions, TTLCache } from 'core/cache/decorators/ttl/interface';
 
@@ -47,7 +47,8 @@ export default function addTTL<
 	K = string,
 >(cache: T, ttl?: number): TTLCache<V, K, EmitCache<V, K, T>> {
 	const
-		{remove: originalRemove, subscribe} = wrapEmit<T, V, K>(cache),
+		// eslint-disable-next-line @typescript-eslint/unbound-method
+		{remove: originalRemove, subscribe} = addEmit<T, V, K>(cache),
 		cacheWithTTL: TTLCache<V, K> = Object.create(cache),
 		ttlTimers = new Map<K, number | NodeJS.Timeout>();
 
@@ -79,7 +80,7 @@ export default function addTTL<
 		return false;
 	};
 
-	subscribe('remove', cacheWithTTL, (key: K) => cacheWithTTL.removeTTLFrom(key));
+	subscribe('remove', cacheWithTTL, ({args}) => cacheWithTTL.removeTTLFrom(args[0]));
 
 	cacheWithTTL.clear = (filter?: ClearFilter<V, K>) => {
 		const

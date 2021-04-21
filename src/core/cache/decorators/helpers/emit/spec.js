@@ -10,7 +10,7 @@ import wrapEmit from 'core/cache/decorators/emit';
 import SimpleCache from 'core/cache/simple';
 import RestrictedCache from 'core/cache/restricted';
 
-describe('core/cache/decorators/emit', () => {
+describe('core/cache/decorators/helpers/emit', () => {
 	describe('subscribe', () => {
 		it('emit events only to top', () => {
 			function CreateLevel(level) {
