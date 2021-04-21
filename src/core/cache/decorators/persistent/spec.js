@@ -26,60 +26,6 @@ describe('core/cache/decorators/persistent', () => {
 	});
 
 	describe('core functionality', () => {
-		it('every replaced method should call the original method', async () => {
-			const methods = [
-				{
-					name: 'has',
-					params: ['foo']
-				},
-
-				{
-					name: 'get',
-					params: ['foo']
-				},
-
-				{
-					name: 'set',
-					params: [
-						'foo',
-
-						1,
-
-						{
-							ttl: 1000,
-							persistentTTL: 900
-						}
-					]
-				},
-
-				{
-					name: 'keys',
-					params: []
-				},
-
-				{
-					name: 'clear',
-					params: [() => true]
-				}
-			];
-
-			const opts = {
-				loadFromStorage: 'onInit'
-			};
-
-			const
-				cache = new SimpleCache(),
-				persistentCache = await addPersistent(cache, asyncLocal, opts);
-
-			for (let i = 0; i < methods.length; i += 1) {
-				const method = methods[i];
-				spyOn(cache, method.name).and.callThrough();
-
-				await persistentCache[method.name](...method.params);
-				expect(cache[method.name].calls.mostRecent().args).toEqual(method.params);
-			}
-		});
-
 		it('providing the default `persistentTTL` option', async () => {
 			const opts = {
 				loadFromStorage: 'onInit',

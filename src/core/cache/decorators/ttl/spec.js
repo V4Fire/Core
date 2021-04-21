@@ -101,27 +101,6 @@ describe('core/cache/decorators/ttl', () => {
 		expect(cache.clear()).toEqual(new Map([['foo', 1], ['bar', 2]]));
 	});
 
-	it('all methods should call the original instance', () => {
-		const
-			simpleCache = new SimpleCache(),
-			cache = addTTL(simpleCache);
-
-		[
-			{
-				method: 'set',
-				parameters: ['foo', 1, undefined]
-			}, {
-				method: 'clear',
-				parameters: [() => true]
-			}
-		].forEach((el) => {
-			spyOn(simpleCache, el.method).and.callThrough();
-			cache[el.method](...el.parameters);
-
-			expect(simpleCache[el.method].calls.mostRecent().args).toEqual(el.parameters);
-		});
-	});
-
 	it('should delete property from storage if it was deleted by side effect', () => {
 		const
 			cache = addTTL(new RestrictedCache(1)),
