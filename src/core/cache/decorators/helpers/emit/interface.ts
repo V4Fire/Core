@@ -8,6 +8,7 @@
 
 import type { EventEmitter2 as EventEmitter } from 'eventemitter2';
 import type Cache from 'core/cache/interface';
+import { eventEmitterSymbol } from 'core/cache/decorators/helpers/emit';
 
 export interface EmitCache<V = unknown, K = string, T extends Cache<V, K> = Cache<V, K>> extends Cache<V, K> {
 	/**
@@ -22,7 +23,7 @@ export interface EmitCache<V = unknown, K = string, T extends Cache<V, K> = Cach
 	/**
 	 * Emit events caused by side-effect
 	 */
-	eventEmitter: EventEmitter;
+	[eventEmitterSymbol]: EventEmitter;
 }
 
 export type AddEmit = <T extends Cache<V, K>,
