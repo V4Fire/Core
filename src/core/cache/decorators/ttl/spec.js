@@ -115,4 +115,38 @@ describe('core/cache/decorators/ttl', () => {
 
 		expect(memory).toEqual(['bar']);
 	});
+
+	it('side effect clear', () => {
+		const
+			originalCache = new SimpleCache(),
+			cache = addTTL(originalCache),
+			memory = [];
+
+		cache.removeTTLFrom = (key) => {
+			memory.push(key);
+		};
+
+		cache.set('bar', 1, {ttl: 100});
+		cache.set('baz', 2, {ttl: 100});
+
+		originalCache.clear();
+
+		expect(memory).toEqual(['bar', 'baz']);
+	});
+
+	it('side effect set', () => {
+		const
+			originalCache = new SimpleCache(),
+			cache = addTTL(originalCache),
+			memory = [];
+
+		cache.removeTTLFrom = (key) => {
+			memory.push(key);
+		};
+
+		cache.set('bar', 1, {ttl: 100});
+		originalCache.set('bar', 2);
+
+		expect(memory).toEqual(['bar']);
+	});
 });

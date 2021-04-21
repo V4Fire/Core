@@ -80,6 +80,69 @@ describe('core/cache/decorators/persistent', () => {
 				done();
 			}, 10);
 		});
+
+		it('side effect clear', async (done) => {
+			const opts = {
+				loadFromStorage: 'onInit'
+			};
+
+			const
+				cache = new SimpleCache(),
+				persistentCache = await addPersistent(cache, asyncLocal, opts);
+
+			await persistentCache.set('foo', 1);
+			await persistentCache.set('bar', 1);
+			expect(await asyncLocal.get(INDEX_STORAGE_NAME))
+				.toEqual({foo: Number.MAX_SAFE_INTEGER, bar: Number.MAX_SAFE_INTEGER});
+
+			cache.clear();
+
+			setTimeout(async () => {
+				expect(await asyncLocal.get(INDEX_STORAGE_NAME)).toEqual({});
+				done();
+			}, 10);
+		});
+
+		it('side effect set', async (done) => {
+			const opts = {
+				loadFromStorage: 'onInit'
+			};
+
+			const
+				cache = new SimpleCache(),
+				persistentCache = await addPersistent(cache, asyncLocal, opts);
+
+			await persistentCache.set('foo', 1);
+			cache.set('bar', 1);
+
+			setTimeout(async () => {
+				expect(await asyncLocal.get(INDEX_STORAGE_NAME))
+					.toEqual({foo: Number.MAX_SAFE_INTEGER, bar: Number.MAX_SAFE_INTEGER});
+
+				done();
+			}, 10);
+		});
+
+		it('side effect set use default ttl', async (done) => {
+			const opts = {
+				loadFromStorage: 'onInit',
+				persistentTTL: 100
+			};
+
+			const
+				cache = new SimpleCache(),
+				persistentCache = await addPersistent(cache, asyncLocal, opts);
+
+			await persistentCache.set('foo', 1, {persistentTTL: 500});
+			cache.set('bar', 1);
+
+			setTimeout(async () => {
+				expect(await asyncLocal.get(INDEX_STORAGE_NAME))
+					.toEqual({foo: 500, bar: 100});
+
+				done();
+			}, 10);
+		});
 	});
 
 	describe('`onInit` loading from the storage', () => {
