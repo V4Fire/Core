@@ -11,6 +11,14 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.44.1 (2021-04-23)
+
+#### :bug: Bug Fix
+
+* `core/functools/trait`:
+  * Fixed a bug when one trait extends from another
+  * Fixed a bug with accessors within a trait
+
 ## v3.44.0 (2021-04-19)
 
 #### :rocket: New Feature

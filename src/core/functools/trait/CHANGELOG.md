@@ -9,6 +9,13 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.44.1 (2021-04-23)
+
+#### :bug: Bug Fix
+
+* Fixed a bug when one trait extends from another
+* Fixed a bug with accessors within a trait
+
 ## v3.44.0 (2021-04-19)
 
 #### :rocket: New Feature

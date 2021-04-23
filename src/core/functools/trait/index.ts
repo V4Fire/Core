@@ -76,20 +76,39 @@ export function derive(...traits: Function[]) {
 
 		for (let i = 0; i < traits.length; i++) {
 			const
-				trait = traits[i],
-				keys = Object.getOwnPropertyNames(trait);
+				originalTrait = traits[i],
+				chain = getTraitChain(originalTrait);
 
-			for (let i = 0; i < keys.length; i++) {
+			for (let i = 0; i < chain.length; i++) {
 				const
-					key = keys[i],
-					defMethod = trait[key];
+					[trait, keys] = chain[i];
 
-				if (proto[key] == null && Object.isFunction(defMethod) && Object.isFunction(trait.prototype[key])) {
-					proto[key] = function defaultMethod(...args: unknown[]) {
-						return defMethod(this, ...args);
-					};
+				for (let i = 0; i < keys.length; i++) {
+					const
+						key = keys[i],
+						defMethod = Object.getOwnPropertyDescriptor(trait, key);
+
+					if (
+						defMethod != null &&
+						!(key in proto) &&
+						Object.isFunction(defMethod.value) &&
+						Object.isFunction(trait.prototype[key])
+					) {
+						proto[key] = function defaultMethod(...args: unknown[]) {
+							return originalTrait[key](this, ...args);
+						};
+					}
 				}
 			}
+		}
+
+		function getTraitChain<T extends Array<[Function, string[]]>>(trait: Nullable<object>, methods: T = <any>[]): T {
+			if (!Object.isFunction(trait) || trait === Function.prototype) {
+				return methods;
+			}
+
+			methods.push([trait, Object.getOwnPropertyNames(trait)]);
+			return getTraitChain(Object.getPrototypeOf(trait), methods);
 		}
 	};
 }
