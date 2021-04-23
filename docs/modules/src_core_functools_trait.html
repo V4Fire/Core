@@ -243,53 +243,136 @@ pre {
 						<a href="#corefunctoolstrait" id="corefunctoolstrait" style="color: inherit; text-decoration: none;">
 							<h1>core/functools/trait</h1>
 						</a>
-						<p>This module provides a bunch of functions to create and implement class traits.
-						The trait is the special kind of interface that can have default implementations of methods.</p>
-						<pre><code class="language-typescript"><span style="color: #0000FF">abstract</span><span style="color: #000000"> </span><span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">Interface1</span><span style="color: #000000"> {</span>
-<span style="color: #000000">  </span><span style="color: #0000FF">abstract</span><span style="color: #000000"> </span><span style="color: #795E26">bar</span><span style="color: #000000">(): </span><span style="color: #267F99">string</span><span style="color: #000000">;</span>
-
-<span style="color: #000000">  </span><span style="color: #008000">/**</span>
-<span style="color: #008000">   * The method that have the default implementation.</span>
-<span style="color: #008000">   * The implementation is placed as a static method.</span>
-<span style="color: #008000">   */</span>
-<span style="color: #000000">   </span><span style="color: #795E26">bla</span><span style="color: #000000">(</span><span style="color: #001080">a</span><span style="color: #000000">: </span><span style="color: #267F99">number</span><span style="color: #000000">): </span><span style="color: #267F99">number</span><span style="color: #000000"> {</span>
-<span style="color: #000000">    </span><span style="color: #AF00DB">return</span><span style="color: #000000"> &lt;</span><span style="color: #267F99">any</span><span style="color: #000000">&gt;</span><span style="color: #0000FF">null</span><span style="color: #000000">;</span>
-<span style="color: #000000">  };</span>
-
-<span style="color: #000000">  </span><span style="color: #008000">/**</span>
-<span style="color: #008000">   * The default implementation for `Interface1.bla`.</span>
-<span style="color: #008000">   * As the first parameter, the method is taken a context.</span>
-<span style="color: #008000">   *</span>
-<span style="color: #008000">   * </span><span style="color: #0000FF">@see</span><span style="color: #008000"> </span><span style="color: #267F99">Interface1.bla</span>
-<span style="color: #008000">   */</span>
-<span style="color: #000000">  </span><span style="color: #0000FF">static</span><span style="color: #000000"> </span><span style="color: #795E26">bla</span><span style="color: #000000">: </span><span style="color: #267F99">AddSelf</span><span style="color: #000000">&lt;</span><span style="color: #267F99">iFoo</span><span style="color: #000000">[</span><span style="color: #A31515">&#039;bla&#039;</span><span style="color: #000000">], </span><span style="color: #267F99">Baz</span><span style="color: #000000">&gt; = (</span><span style="color: #001080">self</span><span style="color: #000000">, </span><span style="color: #001080">a</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">a</span><span style="color: #000000"> + </span><span style="color: #098658">1</span><span style="color: #000000">;</span>
+						<p>This module provides a bunch of functions to create and implement traits.
+							A trait is the special kind of an abstract class that is used as an interface.
+							Why would we need that? Well, unlike Java or Kotlin, TypeScript interfaces can&#39;t have default implementations of methods.
+							So we need to implement each method in our classes even if the implementation doesn&#39;t change.
+						And this is where traits come into play. But how it works? Ok, let&#39;s enumerate the steps to create a trait:</p>
+						<ol>
+							<li>Create an abstract class, where define all necessary abstract methods and properties (yes, the trait can also define properties,
+							not only methods).</li>
+						</ol>
+						<pre><code class="language-typescript"><span style="color: #0000FF">abstract</span><span style="color: #000000"> </span><span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">Duckable</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #0000FF">abstract</span><span style="color: #000000"> </span><span style="color: #001080">name</span><span style="color: #000000">: </span><span style="color: #267F99">string</span><span style="color: #000000">;</span>
+<span style="color: #000000">  </span><span style="color: #0000FF">abstract</span><span style="color: #000000"> </span><span style="color: #795E26">fly</span><span style="color: #000000">(): </span><span style="color: #267F99">void</span><span style="color: #000000">;</span>
 <span style="color: #000000">}</span>
+</code></pre>
+						<ol start="2">
+							<li>Define all non-abstract methods as simple methods without implementations: as a method body, use the loopback code,
+							like <code>return &lt;any&gt;null</code>.</li>
+						</ol>
+						<pre><code class="language-typescript"><span style="color: #0000FF">abstract</span><span style="color: #000000"> </span><span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">Duckable</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #0000FF">abstract</span><span style="color: #000000"> </span><span style="color: #001080">name</span><span style="color: #000000">: </span><span style="color: #267F99">string</span><span style="color: #000000">;</span>
+<span style="color: #000000">  </span><span style="color: #0000FF">abstract</span><span style="color: #000000"> </span><span style="color: #795E26">fly</span><span style="color: #000000">(): </span><span style="color: #267F99">void</span><span style="color: #000000">;</span>
 
-<span style="color: #0000FF">abstract</span><span style="color: #000000"> </span><span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">Interface2</span><span style="color: #000000"> {</span>
-<span style="color: #000000">  </span><span style="color: #0000FF">abstract</span><span style="color: #000000"> </span><span style="color: #795E26">bar2</span><span style="color: #000000">(): </span><span style="color: #267F99">string</span><span style="color: #000000">;</span>
-
-<span style="color: #000000">  </span><span style="color: #795E26">bla2</span><span style="color: #000000">(</span><span style="color: #001080">a</span><span style="color: #000000">: </span><span style="color: #267F99">number</span><span style="color: #000000">): </span><span style="color: #267F99">string</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #795E26">getQuack</span><span style="color: #000000">(</span><span style="color: #001080">size</span><span style="color: #000000">: </span><span style="color: #267F99">number</span><span style="color: #000000">): </span><span style="color: #267F99">string</span><span style="color: #000000"> {</span>
 <span style="color: #000000">    </span><span style="color: #AF00DB">return</span><span style="color: #000000"> &lt;</span><span style="color: #267F99">any</span><span style="color: #000000">&gt;</span><span style="color: #0000FF">null</span><span style="color: #000000">;</span>
-<span style="color: #000000">  };</span>
-
-<span style="color: #000000">  </span><span style="color: #008000">/** </span><span style="color: #0000FF">@see</span><span style="color: #008000"> </span><span style="color: #267F99">Interface2.bla2</span><span style="color: #008000"> */</span>
-<span style="color: #000000">  </span><span style="color: #0000FF">static</span><span style="color: #000000"> </span><span style="color: #795E26">bla2</span><span style="color: #000000">: </span><span style="color: #267F99">AddSelf</span><span style="color: #000000">&lt;</span><span style="color: #267F99">iFoo2</span><span style="color: #000000">[</span><span style="color: #A31515">&#039;bla2&#039;</span><span style="color: #000000">], </span><span style="color: #267F99">Baz</span><span style="color: #000000">&gt; = (</span><span style="color: #001080">self</span><span style="color: #000000">, </span><span style="color: #001080">a</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">a</span><span style="color: #000000">.</span><span style="color: #795E26">toFixed</span><span style="color: #000000">();</span>
-<span style="color: #000000">}</span>
-
-<span style="color: #0000FF">interface</span><span style="color: #000000"> </span><span style="color: #267F99">Baz</span><span style="color: #000000"> </span><span style="color: #0000FF">extends</span><span style="color: #000000"> </span><span style="color: #267F99">Trait</span><span style="color: #000000">&lt;</span><span style="color: #0000FF">typeof</span><span style="color: #000000"> </span><span style="color: #001080">iFoo</span><span style="color: #000000">&gt;, </span><span style="color: #267F99">Trait</span><span style="color: #000000">&lt;</span><span style="color: #0000FF">typeof</span><span style="color: #000000"> </span><span style="color: #001080">iFoo2</span><span style="color: #000000">&gt; {}</span>
-
-<span style="color: #000000">@</span><span style="color: #795E26">derive</span><span style="color: #000000">(</span><span style="color: #001080">iFoo</span><span style="color: #000000">, </span><span style="color: #001080">iFoo2</span><span style="color: #000000">)</span>
-<span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">Baz</span><span style="color: #000000"> </span><span style="color: #0000FF">implements</span><span style="color: #000000"> </span><span style="color: #267F99">iFoo</span><span style="color: #000000">, </span><span style="color: #267F99">iFoo2</span><span style="color: #000000"> {</span>
-<span style="color: #000000">  </span><span style="color: #795E26">bar</span><span style="color: #000000">() {</span>
-<span style="color: #000000">    </span><span style="color: #AF00DB">return</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;1&#039;</span><span style="color: #000000">;</span>
-<span style="color: #000000">  }</span>
-
-<span style="color: #000000">  </span><span style="color: #795E26">bar2</span><span style="color: #000000">() {</span>
-<span style="color: #000000">    </span><span style="color: #AF00DB">return</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;1&#039;</span><span style="color: #000000">;</span>
 <span style="color: #000000">  }</span>
 <span style="color: #000000">}</span>
+</code></pre>
+						<ol start="3">
+							<li>Define the non-abstract methods as static class methods with the same names and signatures but add as the first parameter
+							a link to the class instance, as we do it in Python or Rust. Also, we can use the <code>AddSelf</code> helper to produce less code.</li>
+						</ol>
+						<pre><code class="language-typescript"><span style="color: #0000FF">abstract</span><span style="color: #000000"> </span><span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">Duckable</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #0000FF">abstract</span><span style="color: #000000"> </span><span style="color: #001080">name</span><span style="color: #000000">: </span><span style="color: #267F99">string</span><span style="color: #000000">;</span>
+<span style="color: #000000">  </span><span style="color: #0000FF">abstract</span><span style="color: #000000"> </span><span style="color: #795E26">fly</span><span style="color: #000000">(): </span><span style="color: #267F99">void</span><span style="color: #000000">;</span>
 
-<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">Baz</span><span style="color: #000000">().</span><span style="color: #795E26">bla2</span><span style="color: #000000">(</span><span style="color: #098658">2.9872</span><span style="color: #000000">));</span>
+<span style="color: #000000">  </span><span style="color: #795E26">getQuack</span><span style="color: #000000">(</span><span style="color: #001080">size</span><span style="color: #000000">: </span><span style="color: #267F99">number</span><span style="color: #000000">): </span><span style="color: #267F99">string</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #AF00DB">return</span><span style="color: #000000"> &lt;</span><span style="color: #267F99">any</span><span style="color: #000000">&gt;</span><span style="color: #0000FF">null</span><span style="color: #000000">;</span>
+<span style="color: #000000">  }</span>
+
+<span style="color: #000000">  </span><span style="color: #008000">// The first parameter provides a method to wrap.</span>
+<span style="color: #000000">  </span><span style="color: #008000">// The second parameter declares which type has `self`.</span>
+<span style="color: #000000">  </span><span style="color: #0000FF">static</span><span style="color: #000000"> </span><span style="color: #795E26">getQuack</span><span style="color: #000000">: </span><span style="color: #267F99">AddSelf</span><span style="color: #000000">&lt;</span><span style="color: #267F99">Duckable</span><span style="color: #000000">[</span><span style="color: #A31515">&#039;getQuack&#039;</span><span style="color: #000000">], </span><span style="color: #267F99">Duckable</span><span style="color: #000000">&gt; = (</span><span style="color: #001080">self</span><span style="color: #000000">, </span><span style="color: #001080">size</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #AF00DB">if</span><span style="color: #000000"> (</span><span style="color: #001080">size</span><span style="color: #000000"> &lt; </span><span style="color: #098658">10</span><span style="color: #000000">) {</span>
+<span style="color: #000000">      </span><span style="color: #AF00DB">return</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;quack!&#039;</span><span style="color: #000000">;</span>
+<span style="color: #000000">    }</span>
+
+<span style="color: #000000">    </span><span style="color: #AF00DB">if</span><span style="color: #000000"> (</span><span style="color: #001080">size</span><span style="color: #000000"> &lt; </span><span style="color: #098658">20</span><span style="color: #000000">) {</span>
+<span style="color: #000000">      </span><span style="color: #AF00DB">return</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;quack!!!&#039;</span><span style="color: #000000">;</span>
+<span style="color: #000000">    }</span>
+
+<span style="color: #000000">    </span><span style="color: #AF00DB">return</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;QUACK!!!&#039;</span><span style="color: #000000">;</span>
+<span style="color: #000000">  };</span>
+<span style="color: #000000">}</span>
+</code></pre>
+						<p>We have created a trait. Now we can implement it in a simple class.</p>
+						<ol>
+							<li>Create a simple class and implement the trait by using the <code>implements</code> keyword.
+							Don&#39;t implement methods, which you want to store their default implementations.</li>
+						</ol>
+						<pre><code class="language-typescript"><span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">DuckLike</span><span style="color: #000000"> </span><span style="color: #0000FF">implements</span><span style="color: #000000"> </span><span style="color: #267F99">Duckable</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #001080">name</span><span style="color: #000000">: </span><span style="color: #267F99">string</span><span style="color: #000000"> = </span><span style="color: #A31515">&#039;Bob&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #000000">  </span><span style="color: #795E26">fly</span><span style="color: #000000">(): </span><span style="color: #267F99">void</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #008000">// Do some logic to fly</span>
+<span style="color: #000000">  }</span>
+<span style="color: #000000">}</span>
+</code></pre>
+						<ol start="2">
+							<li>Create an interface with the same name as our class and extend it from the trait using the <code>Trait</code> type.</li>
+						</ol>
+						<pre><code class="language-typescript"><span style="color: #0000FF">interface</span><span style="color: #000000"> </span><span style="color: #267F99">DuckLike</span><span style="color: #000000"> </span><span style="color: #0000FF">extends</span><span style="color: #000000"> </span><span style="color: #267F99">Trait</span><span style="color: #000000">&lt;</span><span style="color: #0000FF">typeof</span><span style="color: #000000"> </span><span style="color: #001080">Duckable</span><span style="color: #000000">&gt; {}</span>
+
+<span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">DuckLike</span><span style="color: #000000"> </span><span style="color: #0000FF">implements</span><span style="color: #000000"> </span><span style="color: #267F99">Duckable</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #001080">name</span><span style="color: #000000">: </span><span style="color: #267F99">string</span><span style="color: #000000"> = </span><span style="color: #A31515">&#039;Bob&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #000000">  </span><span style="color: #795E26">fly</span><span style="color: #000000">(): </span><span style="color: #267F99">void</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #008000">// Do some logic to fly</span>
+<span style="color: #000000">  }</span>
+<span style="color: #000000">}</span>
+</code></pre>
+						<ol start="3">
+							<li>Use the <code>derive</code> decorator from <code>core/functools/trait</code> with our class and provide all traits that we want to implement automatically.</li>
+						</ol>
+						<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">derive</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/functools/trait&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #0000FF">interface</span><span style="color: #000000"> </span><span style="color: #267F99">DuckLike</span><span style="color: #000000"> </span><span style="color: #0000FF">extends</span><span style="color: #000000"> </span><span style="color: #267F99">Trait</span><span style="color: #000000">&lt;</span><span style="color: #0000FF">typeof</span><span style="color: #000000"> </span><span style="color: #001080">Duckable</span><span style="color: #000000">&gt; {}</span>
+
+<span style="color: #000000">@</span><span style="color: #795E26">derive</span><span style="color: #000000">(</span><span style="color: #001080">Duckable</span><span style="color: #000000">)</span>
+<span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">DuckLike</span><span style="color: #000000"> </span><span style="color: #0000FF">implements</span><span style="color: #000000"> </span><span style="color: #267F99">Duckable</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #001080">name</span><span style="color: #000000">: </span><span style="color: #267F99">string</span><span style="color: #000000"> = </span><span style="color: #A31515">&#039;Bob&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #000000">  </span><span style="color: #795E26">fly</span><span style="color: #000000">(): </span><span style="color: #267F99">void</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #008000">// Do some logic to fly</span>
+<span style="color: #000000">  }</span>
+<span style="color: #000000">}</span>
+</code></pre>
+						<ol start="4">
+							<li>Profit! Now TS understands default methods of interfaces, and it works in runtime.</li>
+						</ol>
+						<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">derive</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/functools/trait&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #0000FF">interface</span><span style="color: #000000"> </span><span style="color: #267F99">DuckLike</span><span style="color: #000000"> </span><span style="color: #0000FF">extends</span><span style="color: #000000"> </span><span style="color: #267F99">Trait</span><span style="color: #000000">&lt;</span><span style="color: #0000FF">typeof</span><span style="color: #000000"> </span><span style="color: #001080">Duckable</span><span style="color: #000000">&gt; {}</span>
+
+<span style="color: #000000">@</span><span style="color: #795E26">derive</span><span style="color: #000000">(</span><span style="color: #001080">Duckable</span><span style="color: #000000">)</span>
+<span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">DuckLike</span><span style="color: #000000"> </span><span style="color: #0000FF">implements</span><span style="color: #000000"> </span><span style="color: #267F99">Duckable</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #001080">name</span><span style="color: #000000">: </span><span style="color: #267F99">string</span><span style="color: #000000"> = </span><span style="color: #A31515">&#039;Bob&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #000000">  </span><span style="color: #795E26">fly</span><span style="color: #000000">(): </span><span style="color: #267F99">void</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #008000">// Do some logic to fly</span>
+<span style="color: #000000">  }</span>
+<span style="color: #000000">}</span>
+
+<span style="color: #008000">/// &#039;QUACK!!!&#039;</span>
+<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">DuckLike</span><span style="color: #000000">().</span><span style="color: #795E26">getQuack</span><span style="color: #000000">(</span><span style="color: #098658">60</span><span style="color: #000000">));</span>
+</code></pre>
+						<ol start="5">
+							<li>Of course, we can implement more than one trait in a component.</li>
+						</ol>
+						<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">derive</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/functools/trait&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #0000FF">interface</span><span style="color: #000000"> </span><span style="color: #267F99">DuckLike</span><span style="color: #000000"> </span><span style="color: #0000FF">extends</span><span style="color: #000000"> </span><span style="color: #267F99">Trait</span><span style="color: #000000">&lt;</span><span style="color: #0000FF">typeof</span><span style="color: #000000"> </span><span style="color: #001080">Duckable</span><span style="color: #000000">&gt;, </span><span style="color: #267F99">Trait</span><span style="color: #000000">&lt;</span><span style="color: #0000FF">typeof</span><span style="color: #000000"> </span><span style="color: #001080">AnotherTrait</span><span style="color: #000000">&gt; {}</span>
+
+<span style="color: #000000">@</span><span style="color: #795E26">derive</span><span style="color: #000000">(</span><span style="color: #001080">Duckable</span><span style="color: #000000">, </span><span style="color: #001080">AnotherTrait</span><span style="color: #000000">)</span>
+<span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">DuckLike</span><span style="color: #000000"> </span><span style="color: #0000FF">implements</span><span style="color: #000000"> </span><span style="color: #267F99">Duckable</span><span style="color: #000000">, </span><span style="color: #267F99">AnotherTrait</span><span style="color: #000000">, </span><span style="color: #267F99">SimpleInterfaceWithoutDefaultMethods</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #001080">name</span><span style="color: #000000">: </span><span style="color: #267F99">string</span><span style="color: #000000"> = </span><span style="color: #A31515">&#039;Bob&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #000000">  </span><span style="color: #795E26">fly</span><span style="color: #000000">(): </span><span style="color: #267F99">void</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #008000">// Do some logic to fly</span>
+<span style="color: #000000">  }</span>
+<span style="color: #000000">}</span>
 </code></pre>
 					</div>
 				</div>
