@@ -388,6 +388,12 @@ export interface CreateRequestOptions<D = unknown> {
 	encoder?: Encoder | Encoders;
 
 	/**
+	 * Returns serialized value of the specified query object
+	 * @param query
+	 */
+	querySerializer?(query: RequestQuery): string;
+
+	/**
 	 * Function (or a sequence of functions) that takes response data of the current request
 	 * and returns a new data to respond. If you provide a sequence of functions, then the first function
 	 * will provide a result to the next function from te sequence, etc.
@@ -422,12 +428,6 @@ export interface CreateRequestOptions<D = unknown> {
 	 * Custom request engine
 	 */
 	engine?: RequestEngine;
-
-	/**
-	 * Returns serialized value of the specified query object
-	 * @param query
-	 */
-	querySerializer?(query: RequestQuery): string;
 }
 
 /**
