@@ -356,7 +356,7 @@ function watch<T extends object>(
 					}
 
 					if (timer == null) {
-						timer = globalThis['setImmediate'](() => {
+						timer = setImmediate(() => {
 							timer = undefined;
 
 							try {

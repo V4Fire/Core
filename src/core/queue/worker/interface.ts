@@ -141,7 +141,7 @@ export default abstract class WorkerQueue<T, V = unknown> extends Queue<T> {
 				setTimeout(cb, i);
 
 			} else {
-				globalThis['setImmediate'](cb);
+				setImmediate(cb);
 			}
 		});
 	}
