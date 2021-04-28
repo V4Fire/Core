@@ -272,7 +272,7 @@ export interface CreateRequestOptions<D = unknown> {
 	retry?: RetryOptions | number;
 
 	/**
-	 * Mime type of request data (if not specified, it will be casted dynamically)
+	 * Mime type of the request data (if not specified, it will be casted dynamically)
 	 */
 	contentType?: string;
 
