@@ -20,7 +20,7 @@ export interface Watcher<T extends object = object> {
 	proxy: T;
 
 	/**
-	 * Sets a new watchable value for an object by the specified path
+	 * Sets a new watchable value for the proxy object by the specified path
 	 *
 	 * @param path
 	 * @param value
@@ -28,13 +28,13 @@ export interface Watcher<T extends object = object> {
 	set(path: WatchPath, value: unknown): void;
 
 	/**
-	 * Deletes a watchable value from an object by the specified path
+	 * Deletes a watchable value from the proxy object by the specified path
 	 * @param path
 	 */
 	delete(path: WatchPath): void;
 
 	/**
-	 * Cancels watching for an object
+	 * Cancels watching for the proxy object
 	 */
 	unwatch(): void;
 }
