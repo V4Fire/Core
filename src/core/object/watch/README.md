@@ -15,8 +15,8 @@ const obj = {
   d: {}
 };
 
-const {proxy, unwatch} = watch(obj, {deep: true, immediate: true}, (value, oldValue) => {
-  console.log(value, oldValue);
+const {proxy, unwatch} = watch(obj, {deep: true, immediate: true}, (value, oldValue, info) => {
+  console.log(value, oldValue, info.path);
 });
 
 proxy.a++;
@@ -30,7 +30,7 @@ unwatch();
 ## How it works?
 
 The module provides a function to watch changes. The function takes an object to watch and can take some watching options,
-and a callback function is invoked on each mutation of the observed object.
+and a callback function that accumulates mutations and invokes on the next tick after the first mutation.
 After this, the function returns API to watch changes. The API has an interface bellow.
 
 ```typescript
@@ -61,6 +61,26 @@ export interface Watcher<T extends object = object> {
 }
 ```
 
+The function to watch supports: objects, arrays, Map-s, Set-s.
+
+```js
+import watch from 'core/object/watch';
+
+const user = new Map([
+  ['name', 'Kobezzza'],
+  ['age', 31]
+]);
+
+const {proxy} = watch(user, (mutations) => {
+  mutations.forEach((value, oldValue, info) => {
+    console.log(value, oldValue, info.path);
+  });
+});
+
+// This mutation will invoke our callback
+proxy.set('name', 'Andrey');
+```
+
 Notice, the function creates a new object that wraps the original and adds watching functionality.
 The new object is connected to the original, i.e. if you change a value of some property of the proxy object,
 it will affect the original object. The connection works with the reverted direction too, when you change the original object,
@@ -74,8 +94,10 @@ const user = {
   age: 31
 };
 
-const {proxy} = watch(user, (value, oldValue) => {
-  console.log(value, oldValue);
+const {proxy} = watch(user, (mutations) => {
+  mutations.forEach((value, oldValue, info) => {
+    console.log(value, oldValue, info.path);
+  });
 });
 
 // This mutation will invoke our callback
@@ -95,8 +117,10 @@ const user = {
   age: 31
 };
 
-const {proxy, unwatch} = watch(user, (value, oldValue) => {
-  console.log(value, oldValue);
+const {proxy, unwatch} = watch(user, (mutations) => {
+  mutations.forEach((value, oldValue, info) => {
+    console.log(value, oldValue, info.path);
+  });
 });
 
 // This mutation will invoke our callback
@@ -123,15 +147,19 @@ const user = {
   age: 31
 };
 
-const proxyWatcher = watch(user, {engine: proxyEngine}, (value, oldValue) => {
-  console.log(value, oldValue);
+const proxyWatcher = watch(user, {engine: proxyEngine}, (mutations) => {
+  mutations.forEach((value, oldValue, info) => {
+    console.log(value, oldValue, info.path);
+  });
 });
 
 // This mutation will invoke our callback
 proxyWatcher.proxy.skils = ['programming', 'JS'];
 
-const accWatcher = watch(user, {engine: accEngine}, (value, oldValue) => {
-  console.log(value, oldValue);
+const accWatcher = watch(user, {engine: accEngine}, (mutations) => {
+  mutations.forEach((value, oldValue, info) => {
+    console.log(value, oldValue, info.path);
+  });
 });
 
 // If we add a new property, we have to register a new accessor to watch.
@@ -153,8 +181,10 @@ const user = {
   age: 31
 };
 
-const watcher = watch(user, (value, oldValue) => {
-  console.log(value, oldValue);
+const watcher = watch(user, (mutations) => {
+  mutations.forEach((value, oldValue, info) => {
+    console.log(value, oldValue, info.path);
+  });
 });
 
 /* ***************** */
@@ -202,4 +232,80 @@ console.log('age' in watcher.proxy);
 
 // This mutation will invoke our callback
 watcher.proxy.age = 32;
+```
+
+## Options of watching
+
+### deep
+
+By default, are watched only mutations from the top object properties, i.e., all nested mutations, are ignored.
+To enable watching of nested properties, provide the `deep` option.
+
+```js
+import watch from 'core/object/watch';
+
+const user = {
+  name: 'Kobezzza',
+  skils: {
+    programming: 80,
+    singing: 10
+  }
+};
+
+const {proxy} = watch(user, {deep: true}, (mutations) => {
+  mutations.forEach((value, oldValue, info) => {
+    console.log(value, oldValue, info.path);
+  });
+});
+
+// This mutation will invoke our callback
+proxy.skils.singing++;
+```
+
+### withProto
+
+By default, all mutations of properties from a prototype of the proxy object are ignored.
+To enable watching of prototype properties, provide the `withProto` option.
+
+```js
+import watch from 'core/object/watch';
+
+const user = {
+  name: 'Kobezzza',
+  __proto__: {
+    age: 31
+  }
+};
+
+const {proxy} = watch(user, {withProto: true}, (mutations) => {
+  mutations.forEach((value, oldValue, info) => {
+    console.log(value, oldValue, info.path, info.fromProto);
+  });
+});
+
+// This mutation will invoke our callback
+proxy.age++;
+```
+
+### immediate
+
+By default, all mutations that occur on the same tick are accumulated within a mutation list.
+The provided handler function is invoked on the next tick and takes the list of mutations as an argument, i.e., it works lazily.
+To force a watcher to invoke its handler immediately after the occurred mutation,  provide the `immediate` option.
+In this case, the callback function doesn't take a list of mutations but parameters of the single mutation.
+
+```js
+import watch from 'core/object/watch';
+
+const user = {
+  name: 'Kobezzza',
+  age: 31
+};
+
+const {proxy} = watch(user, {immediate: true}, (value, oldValue, info) => {
+  console.log(value, oldValue, info.path);
+});
+
+// This mutation will invoke our callback
+proxy.age++;
 ```
