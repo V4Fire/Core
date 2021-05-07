@@ -45,13 +45,13 @@ export interface PathModifier {
 
 export interface WatchOptions {
 	/**
-	 * If true, then the callback of changing is also fired on mutation of nested objects
+	 * If true, then the callback of changing is also fired on mutations of nested properties
 	 * @default `false`
 	 */
 	deep?: boolean;
 
 	/**
-	 * If true, then the callback of changing is also fired on mutation of objects from a prototype
+	 * If true, then the callback of changing is also fired on mutations of properties from prototypes
 	 * @default `false`
 	 */
 	withProto?: boolean;
