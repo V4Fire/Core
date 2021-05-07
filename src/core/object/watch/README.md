@@ -72,7 +72,7 @@ const user = new Map([
 ]);
 
 const {proxy} = watch(user, (mutations) => {
-  mutations.forEach((value, oldValue, info) => {
+  mutations.forEach(([value, oldValue, info]) => {
     console.log(value, oldValue, info.path);
   });
 });
@@ -95,7 +95,7 @@ const user = {
 };
 
 const {proxy} = watch(user, (mutations) => {
-  mutations.forEach((value, oldValue, info) => {
+  mutations.forEach(([value, oldValue, info]) => {
     console.log(value, oldValue, info.path);
   });
 });
@@ -118,7 +118,7 @@ const user = {
 };
 
 const {proxy, unwatch} = watch(user, (mutations) => {
-  mutations.forEach((value, oldValue, info) => {
+  mutations.forEach(([value, oldValue, info]) => {
     console.log(value, oldValue, info.path);
   });
 });
@@ -148,7 +148,7 @@ const user = {
 };
 
 const proxyWatcher = watch(user, {engine: proxyEngine}, (mutations) => {
-  mutations.forEach((value, oldValue, info) => {
+  mutations.forEach(([value, oldValue, info]) => {
     console.log(value, oldValue, info.path);
   });
 });
@@ -157,7 +157,7 @@ const proxyWatcher = watch(user, {engine: proxyEngine}, (mutations) => {
 proxyWatcher.proxy.skils = ['programming', 'JS'];
 
 const accWatcher = watch(user, {engine: accEngine}, (mutations) => {
-  mutations.forEach((value, oldValue, info) => {
+  mutations.forEach(([value, oldValue, info]) => {
     console.log(value, oldValue, info.path);
   });
 });
@@ -182,7 +182,7 @@ const user = {
 };
 
 const watcher = watch(user, (mutations) => {
-  mutations.forEach((value, oldValue, info) => {
+  mutations.forEach(([value, oldValue, info]) => {
     console.log(value, oldValue, info.path);
   });
 });
@@ -253,7 +253,7 @@ const user = {
 };
 
 const {proxy} = watch(user, {deep: true}, (mutations) => {
-  mutations.forEach((value, oldValue, info) => {
+  mutations.forEach(([value, oldValue, info]) => {
     console.log(value, oldValue, info.path);
   });
 });
@@ -278,7 +278,7 @@ const user = {
 };
 
 const {proxy} = watch(user, {withProto: true}, (mutations) => {
-  mutations.forEach((value, oldValue, info) => {
+  mutations.forEach(([value, oldValue, info]) => {
     console.log(value, oldValue, info.path, info.fromProto);
   });
 });
@@ -291,7 +291,7 @@ proxy.age++;
 
 By default, all mutations that occur on the same tick are accumulated within a mutation list.
 The provided handler function is invoked on the next tick and takes the list of mutations as an argument, i.e., it works lazily.
-To force a watcher to invoke its handler immediately after the occurred mutation,  provide the `immediate` option.
+To force a watcher to invoke its handler immediately after the occurred mutation, provide the `immediate` option.
 In this case, the callback function doesn't take a list of mutations but parameters of the single mutation.
 
 ```js
