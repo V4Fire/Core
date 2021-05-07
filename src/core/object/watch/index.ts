@@ -336,6 +336,15 @@ function watch<T extends object>(
 						];
 					}
 
+					if (
+						collapse !== false &&
+						normalizedPath != null &&
+						normalizedPath.length < resolvedInfo.originalPath.length
+					) {
+						const val = Object.get(unwrappedObj, normalizedPath);
+						return [val, val, resolvedInfo];
+					}
+
 					return [value, oldValue, resolvedInfo];
 				};
 
@@ -346,7 +355,7 @@ function watch<T extends object>(
 				// Deferred events
 				} else {
 					const
-						needEventQueue = normalizedPath == null;
+						needEventQueue = normalizedPath == null || collapse === false;
 
 					if (needEventQueue) {
 						argsQueue.push(getArgs());
