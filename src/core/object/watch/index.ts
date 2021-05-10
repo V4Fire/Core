@@ -264,7 +264,7 @@ function watch<T extends object>(
 			const
 				originalPath = info.path;
 
-			if (pathModifier) {
+			if (pathModifier != null) {
 				info = {...info, path: pathModifier(info.path)};
 			}
 
@@ -277,8 +277,8 @@ function watch<T extends object>(
 				// We don't watch prototype mutations
 				!withProto && info.fromProto ||
 
-				// The mutation was already fired
-				eventFilter && !Object.isTruly(eventFilter(value, oldValue, info))
+				// The mutation is skipped by the filter
+				eventFilter != null && !Object.isTruly(eventFilter(value, oldValue, info))
 			) {
 				return;
 			}
