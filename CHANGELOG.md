@@ -11,6 +11,20 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.??.?? (2021-??-??)
+
+#### :bug: Bug Fix
+
+* Fixed a bug when watching an object by the specified path when occurring a mutation of nested properties `core/object/watch`
+
+#### :memo: Documentation
+
+* Improved documentation `core/object/watch`
+
+#### :house: Internal
+
+* Updated dependencies: `typescript@4.2.4`, `tslib@2.2.0`
+
 ## v3.44.1 (2021-04-23)
 
 #### :bug: Bug Fix
