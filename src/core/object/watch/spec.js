@@ -22,23 +22,7 @@ describe('core/object/watch', () => {
 
 	engines.forEach((engine, name) => {
 		describe(`with the "${name}" engine`, () => {
-			it('watching for an object', () => {
-				const
-					obj = {a: 1, b: 2},
-					spy = jasmine.createSpy();
-
-				const {proxy} = watch(obj, {immediate: true, engine}, (value, oldValue) => {
-					spy(value, oldValue);
-				});
-
-				proxy.a = 2;
-				expect(spy).toHaveBeenCalledWith(2, 1);
-
-				proxy.b = 4;
-				expect(spy).toHaveBeenCalledWith(4, 2);
-			});
-
-			it('lazy watching for an object', (done) => {
+			it('simple watching for an object', (done) => {
 				const
 					obj = {a: 1, b: 2},
 					spy = jasmine.createSpy();
@@ -62,7 +46,23 @@ describe('core/object/watch', () => {
 				}, 15);
 			});
 
-			it('lazy watching for an object with collapsing', (done) => {
+			it('watching for an object with the `immediate` option', () => {
+				const
+					obj = {a: 1, b: 2},
+					spy = jasmine.createSpy();
+
+				const {proxy} = watch(obj, {immediate: true, engine}, (value, oldValue) => {
+					spy(value, oldValue);
+				});
+
+				proxy.a = 2;
+				expect(spy).toHaveBeenCalledWith(2, 1);
+
+				proxy.b = 4;
+				expect(spy).toHaveBeenCalledWith(4, 2);
+			});
+
+			it('watching for an object with collapsing', (done) => {
 				const
 					obj = {a: 1, b: 2},
 					spy = jasmine.createSpy();
@@ -141,6 +141,45 @@ describe('core/object/watch', () => {
 				}
 			});
 
+			it('deep watching for an object by a complex path with collapsing', async () => {
+				const
+					obj = {a: {b: []}};
+
+				const
+					spy = jasmine.createSpy();
+
+				const {proxy} = watch(obj, 'a.b', {engine}, (value, oldValue, info) => {
+					spy(value, oldValue, info.path, info.originalPath);
+				});
+
+				proxy.a.b.push(1);
+				proxy.a.b.push(2);
+				await new Promise((r) => setTimeout(r, 100));
+
+				expect(spy).toHaveBeenCalledWith([1, 2], [1, 2], ['a', 'b'], ['a', 'b', 1]);
+			});
+
+			it('deep watching for an object by a complex path without collapsing', async () => {
+				const
+					obj = {a: {b: []}};
+
+				const
+					spy = jasmine.createSpy();
+
+				const {proxy} = watch(obj, 'a.b', {engine, collapse: false}, (mutations) => {
+					mutations.forEach(([value, oldValue, info]) => {
+						spy(value, oldValue, info.path, info.originalPath);
+					});
+				});
+
+				proxy.a.b.push(1);
+				proxy.a.b.push(2);
+				await new Promise((r) => setTimeout(r, 100));
+
+				expect(spy).toHaveBeenCalledWith(1, undefined, ['a', 'b'], ['a', 'b', 0]);
+				expect(spy).toHaveBeenCalledWith(2, undefined, ['a', 'b'], ['a', 'b', 1]);
+			});
+
 			it('isolated watchers', () => {
 				const
 					obj = {a: {b: [], c: {e: 1}}},
@@ -187,7 +226,7 @@ describe('core/object/watch', () => {
 				expect(spy2).toHaveBeenCalledWith(4, 1);
 			});
 
-			it('deep watching for an object with the prototype', () => {
+			it('deep watching for an object with prototypes', () => {
 				const
 					obj = {a: {b: [], __proto__: {c: {e: 1}}}},
 					protoSpy = jasmine.createSpy('with the prototype'),
@@ -210,33 +249,7 @@ describe('core/object/watch', () => {
 				expect(nonProtoSpy).toHaveBeenCalledTimes(1);
 			});
 
-			it('deep watching with collapsing', () => {
-				const
-					obj = {a: {b: [], c: {e: 1}}, c: []},
-					spy = jasmine.createSpy();
-
-				const opts = {
-					immediate: true,
-					deep: true,
-					collapse: true,
-					engine
-				};
-
-				const {proxy} = watch(obj, opts, (value, oldValue) => {
-					spy(value, oldValue);
-				});
-
-				proxy.c.push(1);
-				expect(spy).toHaveBeenCalledWith([1], [1]);
-
-				proxy.a.b.push(1);
-				expect(spy).toHaveBeenCalledWith({b: [1], c: {e: 1}}, {b: [1], c: {e: 1}});
-
-				proxy.a.c.e = 2;
-				expect(spy).toHaveBeenCalledWith({b: [1], c: {e: 2}}, {b: [1], c: {e: 2}});
-			});
-
-			it('lazy deep watching with collapsing', (done) => {
+			it('deep watching with collapsing', (done) => {
 				const
 					obj = {a: {b: [], c: {e: 1}}, c: []},
 					spy = jasmine.createSpy();
@@ -269,6 +282,32 @@ describe('core/object/watch', () => {
 
 					done();
 				}, 15);
+			});
+
+			it('deep watching with collapsing and the `immediate` option', () => {
+				const
+					obj = {a: {b: [], c: {e: 1}}, c: []},
+					spy = jasmine.createSpy();
+
+				const opts = {
+					immediate: true,
+					deep: true,
+					collapse: true,
+					engine
+				};
+
+				const {proxy} = watch(obj, opts, (value, oldValue) => {
+					spy(value, oldValue);
+				});
+
+				proxy.c.push(1);
+				expect(spy).toHaveBeenCalledWith([1], [1]);
+
+				proxy.a.b.push(1);
+				expect(spy).toHaveBeenCalledWith({b: [1], c: {e: 1}}, {b: [1], c: {e: 1}});
+
+				proxy.a.c.e = 2;
+				expect(spy).toHaveBeenCalledWith({b: [1], c: {e: 2}}, {b: [1], c: {e: 2}});
 			});
 
 			it('watching for getters with prefixes and postfixes', () => {
@@ -619,7 +658,7 @@ describe('core/object/watch', () => {
 				expect(map.has(key2)).toBeFalse();
 			});
 
-			it('ties watcher with another object', () => {
+			it('tying a watcher to another object', () => {
 				const
 					another = {},
 					obj = {a: 1, b: 2},
@@ -694,7 +733,7 @@ describe('core/object/watch', () => {
 				expect(spy).toHaveBeenCalledWith(4, 2, ['b']);
 			});
 
-			it('cancels watching', () => {
+			it('canceling of watching', () => {
 				const
 					obj = {a: 1, b: 2},
 					spy = jasmine.createSpy();

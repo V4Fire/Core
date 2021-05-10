@@ -77,7 +77,7 @@ function watch<T extends object>(obj: T, opts: WatchOptions, handler?: MultipleW
 function watch<T extends object>(
 	obj: T,
 	path: WatchPath,
-	handler?: MultipleWatchHandler
+	handler?: WatchHandler
 ): Watcher<T>;
 
 /**
@@ -91,8 +91,8 @@ function watch<T extends object>(
 function watch<T extends object>(
 	obj: T,
 	path: WatchPath,
-	opts: WatchOptions & ({immediate: true} | {collapse: true}),
-	handler?: WatchHandler
+	opts: WatchOptions & ({collapse: false}),
+	handler?: MultipleWatchHandler
 ): Watcher<T>;
 
 /**
@@ -264,7 +264,7 @@ function watch<T extends object>(
 			const
 				originalPath = info.path;
 
-			if (pathModifier) {
+			if (pathModifier != null) {
 				info = {...info, path: pathModifier(info.path)};
 			}
 
@@ -277,8 +277,8 @@ function watch<T extends object>(
 				// We don't watch prototype mutations
 				!withProto && info.fromProto ||
 
-				// The mutation was already fired
-				eventFilter && !Object.isTruly(eventFilter(value, oldValue, info))
+				// The mutation is skipped by the filter
+				eventFilter != null && !Object.isTruly(eventFilter(value, oldValue, info))
 			) {
 				return;
 			}
@@ -336,6 +336,15 @@ function watch<T extends object>(
 						];
 					}
 
+					if (
+						collapse !== false &&
+						normalizedPath != null &&
+						normalizedPath.length < resolvedInfo.originalPath.length
+					) {
+						const val = Object.get(unwrappedObj, normalizedPath);
+						return [val, val, resolvedInfo];
+					}
+
 					return [value, oldValue, resolvedInfo];
 				};
 
@@ -346,7 +355,7 @@ function watch<T extends object>(
 				// Deferred events
 				} else {
 					const
-						needEventQueue = normalizedPath == null;
+						needEventQueue = normalizedPath == null || collapse === false;
 
 					if (needEventQueue) {
 						argsQueue.push(getArgs());
@@ -399,7 +408,7 @@ function watch<T extends object>(
 					}
 				}
 
-				// The flag that indicates that we need to get a real property value from the original object.
+				// The flag indicates that we need to get a real property value from the original object.
 				// It makes sense for getters.
 				let dynamic = false;
 

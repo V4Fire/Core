@@ -1,9 +1,13 @@
 # core/object/watch
 
-The module provides API to watch changes of JS objects, like, map-s, arrays, etc.
-The watching supports different strategies: one based on rewriting property accessors, another one based on JS Proxy objects.
-By default, is used the Proxy approach, if it supported by an execution environment, otherwise will be used the strategy of accessors.
-You can manually define the strategy to use at each watcher.
+The module provides API to watch changes of JS objects, like, maps, arrays, etc.
+The watching supports different strategies:
+
+* based on rewriting property accessors (ES5 runtime);
+* based on JS Proxy objects (ES6 runtime).
+
+By default, if runtime supports Proxy objects, then will be used an approach based on these objects.
+Otherwise, will be used a strategy based on accessors. Also, you can manually define a strategy to use for each watcher.
 
 ```js
 import watch from 'core/object/watch';
@@ -29,9 +33,9 @@ unwatch();
 
 ## How it works?
 
-The module provides a function to watch changes. The function takes an object to watch and can take some watching options,
+The module provides a function to watch changes. It takes an object to watch, optionally some watching options,
 and a callback function that accumulates mutations and invokes on the next tick after the first mutation.
-After this, the function returns API to watch changes. The API has an interface bellow.
+After this, the function returns API to watch changes. The API has an interface below.
 
 ```typescript
 export interface Watcher<T extends object = object> {
@@ -81,8 +85,8 @@ const {proxy} = watch(user, (mutations) => {
 proxy.set('name', 'Andrey');
 ```
 
-Notice, the function creates a new object that wraps the original and adds watching functionality.
-The new object is connected to the original, i.e. if you change a value of some property of the proxy object,
+Notice, the function creates a new object that wraps the original and adds the watching functionality.
+The new object is connected to the original, and if you change the value of some property of the proxy object,
 it will affect the original object. The connection works with the reverted direction too, when you change the original object,
 but in this case, you can't watch these mutations.
 
@@ -132,7 +136,7 @@ unwatch();
 proxy.age++;
 ```
 
-The rest two methods of API allow adding or removing properties to the proxy object.
+The rest two methods of the API allow adding or removing properties to the proxy object.
 If your environment supports Proxy objects, you can add new properties without invoking `set`,
 but the invoking is necessary for a strategy based on accessors.
 
@@ -170,8 +174,9 @@ accWatcher.set('skils', ['programming', 'JS']);
 accWatcher.skils = ['programming', 'JS', 'music'];
 ```
 
-To delete a property from the proxy object, we can set it to undefined, use the `delete` operator or invoke the `delete` method of the watcher.
-All of these methods have different semantic and work the same with any engine. Let's watch these in action.
+To delete a property from the proxy object, we can set it to `undefined`, or use the `delete` operator,
+or invoke the `delete` method of the watcher. All of these methods have different semantic and work the same with any engine.
+Let's watch these in action.
 
 ```js
 import watch from 'core/object/watch';
@@ -233,6 +238,12 @@ console.log('age' in watcher.proxy);
 // This mutation will invoke our callback
 watcher.proxy.age = 32;
 ```
+
+## Watching for the specific path
+
+We can set watching not to the whole object properties, but only the properties by the specified path.
+To do it, just provide a path as the second parameter of the watching function.
+Notice, because we watch the specific path, now the callback function will take not a list of mutations, but just a single mutation.
 
 ## Options of watching
 
