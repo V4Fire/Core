@@ -77,7 +77,7 @@ function watch<T extends object>(obj: T, opts: WatchOptions, handler?: MultipleW
 function watch<T extends object>(
 	obj: T,
 	path: WatchPath,
-	handler?: MultipleWatchHandler
+	handler?: WatchHandler
 ): Watcher<T>;
 
 /**
@@ -91,8 +91,8 @@ function watch<T extends object>(
 function watch<T extends object>(
 	obj: T,
 	path: WatchPath,
-	opts: WatchOptions & ({immediate: true} | {collapse: true}),
-	handler?: WatchHandler
+	opts: WatchOptions & ({collapse: false}),
+	handler?: MultipleWatchHandler
 ): Watcher<T>;
 
 /**
