@@ -408,7 +408,7 @@ function watch<T extends object>(
 					}
 				}
 
-				// The flag that indicates that we need to get a real property value from the original object.
+				// The flag indicates that we need to get a real property value from the original object.
 				// It makes sense for getters.
 				let dynamic = false;
 
