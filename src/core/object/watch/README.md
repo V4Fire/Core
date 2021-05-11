@@ -629,6 +629,8 @@ A function that takes a path of the mutation event and returns a new path.
 The function is used when you want to mask one mutation to another one.
 
 ```js
+import watch from 'core/object/watch';
+
 function pathModifier(path) {
   return path.map((chunk) => chunk.replace(/^_/, ''));
 }
@@ -649,6 +651,8 @@ A filter function for mutation events.
 The function allows skipping some mutation events.
 
 ```js
+import watch from 'core/object/watch';
+
 function eventFilter(value, oldValue, info) {
   return info.path[0] !== '_a';
 }
@@ -661,4 +665,128 @@ const {proxy} = watch({a: 1, b: 2, _a: 1}, {eventFilter}, (mutations) => {
 
 // This mutation won't fire an event
 proxy._a = 2;
+```
+
+### tiedWith
+
+A link to an object that should connect with the watched object, i.e., changing of properties of the tied object, will also emit mutation events.
+
+```js
+import watch from 'core/object/watch';
+
+const data = {
+  foo: 2
+};
+
+class Bla {
+  data = data;
+
+  constructor() {
+    watch(this.data, {tiedWith: this}, (val) => {
+      console.log(val);
+    });
+  }
+}
+
+const bla = new Bla();
+bla.foo = 3;
+```
+
+### prefixes
+
+A list of prefixes for paths to watch. This parameter can help to watch getters.
+
+```js
+import watch from 'core/object/watch';
+
+const obj = {
+  get foo() {
+    return this._foo * 2;
+  },
+
+  _foo: 2
+};
+
+const {proxy} = watch(obj, 'foo', {prefixes: ['_']}, (val) => {
+  console.log(val);
+});
+
+// This mutation will invoke our callback
+proxy._foo++;
+```
+
+### postfixes
+
+A list of postfixes for paths to watch. This parameter can help to watch getters.
+
+```js
+import watch from 'core/object/watch';
+
+const obj = {
+  get foo() {
+    return this.fooStore * 2;
+  },
+
+  fooStore: 2
+};
+
+const {proxy} = watch(obj, 'foo', {postfixes: ['Store']}, (val) => {
+  console.log(val);
+});
+
+// This mutation will invoke our callback
+proxy.fooStore++;
+```
+
+### dependencies
+
+List of dependencies for paths to watch. This parameter can help to watch getters.
+
+```js
+import watch from 'core/object/watch';
+
+const obj = {
+  get foo() {
+    return this.bla * this.baz;
+  },
+
+  bla: 2,
+  baz: 3
+};
+
+const {proxy} = watch(obj, 'foo', {dependencies: ['bla', 'baz']}, (val) => {
+  console.log(val);
+});
+
+// This mutation will invoke our callback
+proxy.baz++;
+```
+
+### engine
+
+A watch engine to use.
+By default, will be used proxy if supported, otherwise accessors.
+
+```js
+import watch from 'core/object/watch';
+
+import * as proxyEngine from 'core/object/watch/engines/proxy';
+import * as accEngine from 'core/object/watch/engines/accessors';
+
+const user = {
+  name: 'Kobezzza',
+  age: 31
+};
+
+const proxyWatcher = watch(user, {engine: proxyEngine}, (mutations) => {
+  mutations.forEach(([value, oldValue, info]) => {
+    console.log(value, oldValue, info.path);
+  });
+});
+
+const accWatcher = watch(user, {engine: accEngine}, (mutations) => {
+  mutations.forEach(([value, oldValue, info]) => {
+    console.log(value, oldValue, info.path);
+  });
+});
 ```

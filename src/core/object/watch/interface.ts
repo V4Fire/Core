@@ -196,7 +196,8 @@ export interface WatchOptions {
 	eventFilter?: WatchHandler;
 
 	/**
-	 * Link to an object that should have a connection with the watched object
+	 * Link to an object that should connect with the watched object, i.e.,
+	 * changing of properties of the tied object, will also emit mutation events
 	 *
 	 * @example
 	 * ```js
@@ -221,7 +222,7 @@ export interface WatchOptions {
 	tiedWith?: object;
 
 	/**
-	 * List of prefixes for a path to watch.
+	 * List of prefixes for paths to watch.
 	 * This parameter can help to watch getters.
 	 *
 	 * @example
@@ -242,7 +243,7 @@ export interface WatchOptions {
 	prefixes?: string[];
 
 	/**
-	 * List of postfixes for a path to watch.
+	 * List of postfixes for paths to watch.
 	 * This parameter can help to watch getters.
 	 *
 	 * @example
@@ -263,7 +264,7 @@ export interface WatchOptions {
 	postfixes?: string[];
 
 	/**
-	 * List of dependencies for a path to watch.
+	 * List of dependencies for paths to watch.
 	 * This parameter can help to watch getters.
 	 *
 	 * @example
@@ -286,7 +287,7 @@ export interface WatchOptions {
 
 	/**
 	 * Watch engine to use.
-	 * By default will be used proxy if supported, otherwise accessors.
+	 * By default, will be used proxy if supported, otherwise accessors.
 	 */
 	engine?: WatchEngine;
 }
