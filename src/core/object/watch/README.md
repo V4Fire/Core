@@ -226,7 +226,7 @@ watcher.set('age', 31)
 watcher.proxy.age = 32;
 
 /* ***************** */
-/* The thrid variant */
+/* The third variant */
 /* ***************** */
 
 // This mutation will invoke our callback
@@ -239,11 +239,252 @@ console.log('age' in watcher.proxy);
 watcher.proxy.age = 32;
 ```
 
+## Parameters of a mutation handler
+
+A function that handles mutations can take a list of mutations or a single mutation.
+The list of mutations contains sub-arrays, where the first two parameters refer to new and old values of the mutated property.
+The third parameter refers to an object that contains some information about a particular mutation, like, where the mutation has occurred.
+In case when the function takes a single mutation, the function tree arguments instead of one.
+
+```typescript
+interface WatchHandlerParams {
+  /**
+   * Link to the object that is watched
+   */
+  obj: object;
+
+  /**
+   * Link to the root object of watching
+   */
+  root: object;
+
+  /**
+   * Link to the top property of watching
+   * (the first level property of the root)
+   */
+  top?: object;
+
+  /**
+   * Information about the parent mutation event
+   */
+  parent?: WatchHandlerParentParams;
+
+  /**
+   * True if the mutation has occurred on a prototype of the watched object
+   */
+  fromProto: boolean;
+
+  /**
+   * Path to a property that was changed
+   */
+  path: unknown[];
+
+  /**
+   * The original path to a property that was changed
+   */
+  originalPath: unknown[];
+}
+
+interface WatchHandlerParentParams {
+  value: unknown;
+  oldValue: unknown;
+  info: WatchHandlerParams;
+}
+```
+
 ## Watching for the specific path
 
-We can set watching not to the whole object properties, but only the properties by the specified path.
+We can set watching not to the whole object properties, but only the property by the specified path.
 To do it, just provide a path as the second parameter of the watching function.
-Notice, because we watch the specific path, now the callback function will take not a list of mutations, but just a single mutation.
+
+```js
+import watch from 'core/object/watch';
+
+const user = {
+  name: 'Kobezzza',
+  skils: {
+    programming: {
+      js: 80,
+      rust: 30
+    },
+
+    singing: 10
+  }
+};
+
+const {proxy} = watch(user, 'skils.programming', (value, oldValue, info) => {
+  console.log(value, oldValue, info.path, info.originalPath);
+});
+
+// This mutation won't invoke our callback
+proxy.name = 'Andrey';
+
+// This mutation will invoke our callback
+// console.log: {js: 81, rust: 30} {js: 81, rust: 30} ['skils', 'programming'] ['skils', 'programming', 'js']
+proxy.skils.programming.js++;
+
+// Also, we can provide a path in the array form, like, ['skils', 'programming'].
+// It helps provide a path with non-string keys.
+
+const key = {};
+
+const data = {
+  map: new Map([[key, 1]])
+};
+
+const {proxy: proxy2} = watch(data, ['map', key], (value, oldValue, info) => {
+  console.log(value, oldValue, info.originalPath);
+});
+
+proxy2.map.set(key, proxy2.map.get(key) + 1);
+```
+
+There are some nuances of using this approach:
+
+* Because we watch the specific path, the callback function will take not a list of mutations, but just a single mutation.
+
+  ```js
+  import watch from 'core/object/watch';
+
+  const user = {
+    name: 'Kobezzza',
+    skils: {
+      programming: {
+        js: 80,
+        rust: 30
+      },
+
+      singing: 10
+    }
+  };
+
+  const {proxy} = watch(user, (mutations) => {
+    mutations.forEach(([value, oldValue, info]) => {
+      console.log(value, oldValue, info.path);
+    })
+  });
+
+  const {proxy: proxyByPath} = watch(user, 'skils.programming', (value, oldValue, info) => {
+    console.log(value, oldValue, info.path);
+  });
+  ```
+
+* Mutations of nested properties that match the path also invoke the callback.
+  To get a path of the mutated property, use `info.originalPath`, because `info.path` always refers to the path that we watched.
+
+  ```js
+  import watch from 'core/object/watch';
+
+  const user = {
+    name: 'Kobezzza',
+    skils: {
+      programming: {
+        js: 80,
+        rust: 30
+      },
+
+      singing: 10
+    }
+  };
+
+  const {proxy: proxyByPath} = watch(user, 'skils.programming', (value, oldValue, info) => {
+    console.log(value, oldValue, info.originalPath);
+  });
+
+  // This mutation will invoke our callback
+  // info.path: ['skils', 'programming']
+  // info.originalPath: ['skils', 'programming', 'js']
+  proxyByPath.skils.programming.js++;
+
+  // This mutation will invoke our callback
+  // info.path: ['skils', 'programming']
+  // info.originalPath: ['skils', 'programming']
+  proxyByPath.skils.programming = {js: 80, rust: 30, python: 30};
+
+  // This mutation will invoke our callback
+  // info.path: ['skils', 'programming']
+  // info.originalPath: ['skils']
+  proxyByPath.skils = {programming: {js: 80, rust: 30, python: 30, haskell: 20}};
+  ```
+
+* By default, all mutations that occur on the same tick are accumulated within a mutation list.
+  The provided handler function is invoked on the next tick and takes the last value from this list as an argument, i.e., it works lazily.
+  To force a watcher to invoke its handler immediately after the occurred mutation, provide the `immediate` option.
+  To watch the whole list of mutations, provide the `collapse` option to `false`.
+
+  ```js
+  import watch from 'core/object/watch';
+
+  const user = {
+    name: 'Kobezzza',
+    skils: {
+      programming: {
+        js: 80,
+        rust: 30
+      },
+
+      singing: 10
+    }
+  };
+
+  const {proxy: collapsedProxy} = watch(user, 'skils.programming', (value, oldValue, info) => {
+    console.log(value, oldValue, info.originalPath);
+  });
+
+  collapsedProxy.skils.programming.js++;
+
+  // This mutation overwrites the previous
+  // console.log: {js: 80, rust: 30, python: 30} {js: 81, rust: 30} ['skils', 'programming']
+  collapsedProxy.skils.programming = {js: 80, rust: 30, python: 30};
+
+  const {proxy} = watch(user, (mutations) => {
+    mutations.forEach(([value, oldValue, info]) => {
+      console.log(value, oldValue, info.originalPath);
+    })
+  });
+
+  // console.log: 81, 80, ['skils', 'programming', 'js']
+  proxy.skils.programming.js++;
+
+  // console.log: {js: 80, rust: 30} {js: 81, rust: 30, python: 30} ['skils']
+  proxy.skils = {programming: {js: 80, rust: 30}};
+  ```
+
+* The provided handler function takes new and old values of a property by the provided path.
+  Notice, if a mutation of some nested property occurs, the new and old values will be equal because they refer to the same object.
+  To get values of changed nested properties, provide the `collapse` option to `false`.
+
+  ```js
+  import watch from 'core/object/watch';
+
+  const user = {
+    name: 'Kobezzza',
+    skils: {
+      programming: {
+        js: 80,
+        rust: 30
+      },
+
+      singing: 10
+    }
+  };
+
+  const {proxy: collapsedProxy} = watch(user, 'skils.programming', (value, oldValue, info) => {
+    console.log(value, oldValue, info.originalPath);
+  });
+
+  // console.log: {js: 81, python: 30} {js: 81, rust: 30} ['skils', 'programming', 'js']
+  collapsedProxy.skils.programming.js++;
+
+  const {proxy} = watch(user, (mutations) => {
+    mutations.forEach(([value, oldValue, info]) => {
+      console.log(value, oldValue, info.originalPath);
+    })
+  });
+
+  // console.log: 82, 81, ['skils', 'programming', 'js']
+  proxy.skils.programming.js++;
+  ```
 
 ## Options of watching
 
