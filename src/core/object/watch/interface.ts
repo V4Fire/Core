@@ -124,6 +124,7 @@ export interface WatchOptions {
 	 *
 	 * // {b: {c: 2}} {b: {c: 2}} ['a', 'b', 'c']
 	 * proxy.a.b.c = 2;
+	 * ```
 	 *
 	 * When it toggles to `false,` and the watcher binds to the specified path, the callback takes a list of mutations.
 	 * Otherwise, the callback takes only the last mutation.
@@ -160,7 +161,7 @@ export interface WatchOptions {
 	 *   return path.map((chunk) => chunk.replace(/^_/, ''));
 	 * }
 	 *
-	 * const {proxy} = watch(a: 1, b: 2, _a: 1}, 'a', {pathModifier}, (mutations) => {
+	 * const {proxy} = watch({a: 1, b: 2, _a: 1}, 'a', {pathModifier}, (mutations) => {
 	 *   mutations.forEach(([value, oldValue, info]) => {
 	 *     console.log(value, oldValue, info.path, info.originalPath);
 	 *   });
@@ -182,7 +183,7 @@ export interface WatchOptions {
 	 *   return info.path[0] !== '_a';
 	 * }
 	 *
-	 * const {proxy} = watch(a: 1, b: 2, _a: 1}, {eventFilter}, (mutations) => {
+	 * const {proxy} = watch({a: 1, b: 2, _a: 1}, {eventFilter}, (mutations) => {
 	 *   mutations.forEach(([value, oldValue, info]) => {
 	 *     console.log(value, oldValue, info.path, info.originalPath);
 	 *   });

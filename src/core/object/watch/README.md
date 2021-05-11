@@ -561,3 +561,104 @@ const {proxy} = watch(user, {immediate: true}, (value, oldValue, info) => {
 // This mutation will invoke our callback
 proxy.age++;
 ```
+
+### collapse
+
+The option enables or disables collapsing of mutation events.
+When it toggles to `true`, all mutation events fire as if they occur on top properties of the watchable object.
+
+```js
+import watch from 'core/object/watch';
+
+const user = {
+  name: 'Kobezzza',
+  skils: {
+    programming: 80,
+    singing: 10
+  }
+};
+
+const {proxy} = watch(user, {collapse: true, deep: true}, (mutations) => {
+  mutations.forEach(([value, oldValue, info]) => {
+    console.log(value, oldValue, info.path);
+  });
+});
+
+// {programming: 81, singing: 10} {programming: 81, singing: 10} ['skils', 'programming']
+proxy.skils.programming++;
+````
+
+When it toggles to `false,` and the watcher binds to the specified path, the callback takes a list of mutations.
+Otherwise, the callback takes only the last mutation.
+
+```js
+import watch from 'core/object/watch';
+
+const user = {
+  name: 'Kobezzza',
+  skils: {
+    programming: {
+      js: 80,
+      rust: 30
+    },
+
+    singing: 10
+  }
+};
+
+const {proxy} = watch(user, 'skils.programming', {collapse: false}, (mutations) => {
+  mutations.forEach(([value, oldValue, info]) => {
+    console.log(value, oldValue, info.top, info.path, info.originalPath);
+  });
+});
+
+// 81 80 {programming: {js: 81, rust: 30}, singing: 10} ['skils', 'programming'] ['skils', 'programming', 'js']
+proxy.skils.programming.js++;
+
+const {proxy: collapsedProxy} = watch({a: {b: {c: 1}}}, 'skils.programming', (value, oldValue, info) => {
+  console.log(value, oldValue);
+});
+
+// {programming: {js: 82, rust: 30}, singing: 10} {programming: {js: 82, rust: 30}, singing: 10}
+collapsedProxy.skils.programming.js++;
+```
+
+### pathModifier
+
+A function that takes a path of the mutation event and returns a new path.
+The function is used when you want to mask one mutation to another one.
+
+```js
+function pathModifier(path) {
+  return path.map((chunk) => chunk.replace(/^_/, ''));
+}
+
+const {proxy} = watch({a: 1, b: 2, _a: 1}, 'a', {pathModifier}, (mutations) => {
+  mutations.forEach(([value, oldValue, info]) => {
+    console.log(value, oldValue, info.path, info.originalPath);
+  });
+});
+
+// 2 1 ['a'], ['_a']
+proxy._a = 2;
+```
+
+### eventFilter
+
+A filter function for mutation events.
+The function allows skipping some mutation events.
+
+```js
+function eventFilter(value, oldValue, info) {
+  return info.path[0] !== '_a';
+}
+
+const {proxy} = watch({a: 1, b: 2, _a: 1}, {eventFilter}, (mutations) => {
+  mutations.forEach(([value, oldValue, info]) => {
+    console.log(value, oldValue, info.path, info.originalPath);
+  });
+});
+
+// This mutation won't fire an event
+proxy._a = 2;
+```
