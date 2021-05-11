@@ -235,8 +235,8 @@ export interface WatchOptions {
 	 *   _foo: 2
 	 * };
 	 *
-	 * watch(obj, 'foo', {prefixes: ['_']}, (val) => {
-	 *   console.log(val);
+	 * watch(obj, 'foo', {prefixes: ['_']}, (value, oldValue, info) => {
+	 *   console.log(value, oldValue, info.path, info.originalPath, info.parent);
 	 * });
 	 * ```
 	 */
@@ -256,8 +256,8 @@ export interface WatchOptions {
 	 *   fooStore: 2
 	 * };
 	 *
-	 * watch(obj, 'foo', {postfixes: ['Store']}, (val) => {
-	 *   console.log(val);
+	 * watch(obj, 'foo', {postfixes: ['Store']}, (value, oldValue, info) => {
+	 *   console.log(value, oldValue, info.path, info.originalPath, info.parent);
 	 * });
 	 * ```
 	 */
@@ -278,8 +278,8 @@ export interface WatchOptions {
 	 *   baz: 3
 	 * };
 	 *
-	 * watch(obj, 'foo', {dependencies: ['bla', 'baz']}, (val) => {
-	 *   console.log(val);
+	 * watch(obj, 'foo', {dependencies: ['bla', 'baz']}, (value, oldValue, info) => {
+	 *   console.log(value, oldValue, info.path, info.originalPath, info.parent);
 	 * });
 	 * ```
 	 */

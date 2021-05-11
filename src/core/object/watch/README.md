@@ -707,8 +707,8 @@ const obj = {
   _foo: 2
 };
 
-const {proxy} = watch(obj, 'foo', {prefixes: ['_']}, (val) => {
-  console.log(val);
+const {proxy} = watch(obj, 'foo', {prefixes: ['_']}, (value, oldValue, info) => {
+  console.log(value, oldValue, info.path, info.originalPath, info.parent);
 });
 
 // This mutation will invoke our callback
@@ -730,8 +730,8 @@ const obj = {
   fooStore: 2
 };
 
-const {proxy} = watch(obj, 'foo', {postfixes: ['Store']}, (val) => {
-  console.log(val);
+const {proxy} = watch(obj, 'foo', {postfixes: ['Store']}, (value, oldValue, info) => {
+  console.log(value, oldValue, info.path, info.originalPath, info.parent);
 });
 
 // This mutation will invoke our callback
@@ -754,8 +754,8 @@ const obj = {
   baz: 3
 };
 
-const {proxy} = watch(obj, 'foo', {dependencies: ['bla', 'baz']}, (val) => {
-  console.log(val);
+const {proxy} = watch(obj, 'foo', {dependencies: ['bla', 'baz']}, (value, oldValue, info) => {
+  console.log(value, oldValue, info.path, info.originalPath, info.parent);
 });
 
 // This mutation will invoke our callback
