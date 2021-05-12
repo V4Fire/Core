@@ -245,7 +245,7 @@ export default class Then<T = unknown> implements Promise<T> {
 	readonly [Symbol.toStringTag]: 'Promise';
 
 	/**
-	 * Returns true if the current promise is pending
+	 * True if the current promise is pending
 	 */
 	get isPending(): boolean {
 		return this.state === State.pending;

@@ -23,7 +23,9 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :memo: Documentation
 
-* Improved documentation `core/object/watch`
+* Improved documentation:
+  * `core/object/watch`
+  * `core/then`
 
 #### :house: Internal
 

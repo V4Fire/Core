@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.??.?? (2021-??-??)
+
+#### :memo: Documentation
+
+* Improved documentation
+
 ## v3.20.0 (2020-07-05)
 
 #### :rocket: New Feature
