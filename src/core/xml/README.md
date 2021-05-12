@@ -4,7 +4,7 @@ This module provides a bunch of helper functions to work with XML documents.
 
 ```js
 import { toDataURI } from 'core/xml';
-import { getDataTypeFromURL } from 'core/mime-type';
+import { getDataTypeFromURI } from 'core/mime-type';
 
 const node = document.createElement('foo');
 node.innerHTML = 'hello';
@@ -13,5 +13,5 @@ node.innerHTML = 'hello';
 console.log(toDataURI(node));
 
 // document
-console.log(getDataTypeFromURL(toDataURI(node)));
+console.log(getDataTypeFromURI(toDataURI(node)));
 ```
