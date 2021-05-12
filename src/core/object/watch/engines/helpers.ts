@@ -57,7 +57,7 @@ export function getProxyType(obj: unknown): Nullable<string> {
 }
 
 /**
- * Returns a value to poxy from the specified raw value
+ * Returns a value to the proxy from the specified raw value
  *
  * @param rawValue
  * @param key - property key for a value
