@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { getDataType, getDataTypeFromURL } from 'core/mime-type';
+import { getDataType, getDataTypeFromURI } from 'core/mime-type';
 
 describe('core/mime-type', () => {
 	it('getDataType', () => {
@@ -14,7 +14,7 @@ describe('core/mime-type', () => {
 		expect(getDataType('application/x-protobuf;...')).toBe('arrayBuffer');
 	});
 
-	it('getDataTypeFromURL', () => {
-		expect(getDataTypeFromURL('data:application/javascript;...')).toBe('text');
+	it('getDataTypeFromURI', () => {
+		expect(getDataTypeFromURI('data:application/javascript;...')).toBe('text');
 	});
 });
