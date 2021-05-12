@@ -8,7 +8,7 @@
 
 export interface ToQueryStringOptions {
 	/**
-	 * If false, then the result string won't be encoded by using encodeURIComponent
+	 * If false, then the result string won't be encoded by using `encodeURIComponent`
 	 * @default `true`
 	 */
 	encode?: boolean;
@@ -27,7 +27,7 @@ export interface ToQueryStringOptions {
 	separator?: string;
 
 	/**
-	 * If true, then nested properties will be encoded by using [] syntax
+	 * If true, then nested properties will be encoded by using `[]` syntax
 	 *
 	 * @default `false`
 	 *
@@ -45,7 +45,7 @@ export interface ToQueryStringOptions {
 	 *
 	 * @param value
 	 * @param key - property key
-	 * @param path - accumulated property path ({a: {b: 1}} => 'a_b')
+	 * @param path - accumulated property path `({a: {b: 1}} => 'a_b')`
 	 *
 	 * @example
 	 * ```js
@@ -58,7 +58,7 @@ export interface ToQueryStringOptions {
 
 export interface FromQueryStringOptions {
 	/**
-	 * If false, then the passed string won't be decoded by using decodeURIComponent
+	 * If false, then the passed string won't be decoded by using `decodeURIComponent`
 	 * @default `true`
 	 */
 	decode?: boolean;
@@ -88,7 +88,7 @@ export interface FromQueryStringOptions {
 	separator?: string;
 
 	/**
-	 * If true, then nested properties will be decoded by using [] syntax
+	 * If true, then nested properties will be decoded by using `[]` syntax
 	 *
 	 * @default `false`
 	 *
