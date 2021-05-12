@@ -41,10 +41,27 @@ export default class Range<T extends RangeValue> {
 	reverse: boolean = false;
 
 	/**
-	 * @param start - start position
-	 * @param end - end position
+	 * @param start - start position: if it wrapped by an array, the bound won't be included to the range
+	 * @param end - end position: if it wrapped by an array, the bound won't be included to the range
 	 */
-	constructor(start: T, end: Nullable<T | number>) {
+	constructor(start: CanArray<T>, end?: Nullable<T | number> | T[]) {
+		const
+			unwrap = (v) => Object.isArray(v) ? v[0] : v;
+
+		const
+			unwrappedStart = unwrap(start),
+			unwrappedEnd = unwrap(end);
+
+		if (Object.isArray(start)) {
+			const r = new Range(unwrappedStart);
+			start = r.toType(r.start + (unwrappedStart > unwrappedEnd ? -1 : 1));
+		}
+
+		if (Object.isArray(end)) {
+			const r = new Range(unwrappedEnd);
+			end = r.toType(r.start + (unwrappedStart > unwrappedEnd ? 1 : -1));
+		}
+
 		if (Object.isString(start)) {
 			this.type = 'string';
 			this.start = codePointAt(start);
@@ -241,8 +258,8 @@ export default class Range<T extends RangeValue> {
 			chunks = [this.start],
 			res = <T[]>[];
 
+		chunks.push(this.end);
 		if (isFinite(this.end)) {
-			chunks.push(this.end);
 		}
 
 		for (let i = 0; i < chunks.length; i++) {
@@ -260,7 +277,7 @@ export default class Range<T extends RangeValue> {
 	 * Converts a value to the real range type
 	 * @param value
 	 */
-	protected toType(value: number): T {
+	toType(value: number): T {
 		switch (this.type) {
 			case 'string':
 				return <T>String.fromCodePoint(value);

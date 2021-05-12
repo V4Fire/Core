@@ -17,6 +17,10 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 * `getDataTypeFromURL` marked as deprecated. Use `getDataTypeFromURI` instead. `core/mime-type`
 
+#### :rocket: New Feature
+
+* Added the support of non-including range bounds `core/range`
+
 #### :bug: Bug Fix
 
 * Fixed a bug when watching an object by the specified path when occurring a mutation of nested properties `core/object/watch`

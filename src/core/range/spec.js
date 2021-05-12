@@ -13,12 +13,24 @@ describe('core/range', () => {
 		expect(new Range(0, 3).toArray()).toEqual([0, 1, 2, 3]);
 	});
 
+	it('number range without including of bounds', () => {
+		expect(new Range([0], [3]).toArray()).toEqual([1, 2]);
+	});
+
 	it('reversed number range', () => {
 		expect(new Range(3, 0).toArray()).toEqual([3, 2, 1, 0]);
 	});
 
+	it('reversed number range without including of bounds', () => {
+		expect(new Range([3], [0]).toArray()).toEqual([2, 1]);
+	});
+
 	it('char range', () => {
 		expect(new Range('a', 'e').toArray()).toEqual(['a', 'b', 'c', 'd', 'e']);
+	});
+
+	it('char range without including of bounds', () => {
+		expect(new Range(['a'], ['e']).toArray()).toEqual(['b', 'c', 'd']);
 	});
 
 	it('char range (extended Unicode)', () => {
@@ -27,8 +39,16 @@ describe('core/range', () => {
 		expect(new Range('😁', '😅'.codePointAt(0) - 2).toArray()).toEqual(['😁', '😂', '😃']);
 	});
 
+	it('char range (extended Unicode) without including of bounds', () => {
+		expect(new Range(['😁'], ['😅']).toArray()).toEqual(['😂', '😃', '😄']);
+	});
+
 	it('reversed char range', () => {
 		expect(new Range('e', 'a').toArray()).toEqual(['e', 'd', 'c', 'b', 'a']);
+	});
+
+	it('reversed char range without including of bounds', () => {
+		expect(new Range(['e'], ['a']).toArray()).toEqual(['d', 'c', 'b']);
 	});
 
 	it('date range', () => {
@@ -39,11 +59,25 @@ describe('core/range', () => {
 		]);
 	});
 
+	it('date range without including of bounds', () => {
+		expect(new Range([Date.create('today')], [Date.create('tomorrow')]).toArray((12).hours())).toEqual([
+			Date.create('today').set({milliseconds: 1}),
+			Date.create('today').set({milliseconds: 1, hours: 12})
+		]);
+	});
+
 	it('reversed date range', () => {
 		expect(new Range(Date.create('tomorrow'), Date.create('today')).toArray((12).hours())).toEqual([
 			Date.create('tomorrow'),
 			Date.create('today').set({hours: 12}),
 			Date.create('today')
+		]);
+	});
+
+	it('reversed date range without including of bounds', () => {
+		expect(new Range([Date.create('tomorrow')], [Date.create('today')]).toArray((12).hours())).toEqual([
+			Date.create('today').endOfDay(),
+			Date.create('today').add({milliseconds: -1, hours: 12})
 		]);
 	});
 
