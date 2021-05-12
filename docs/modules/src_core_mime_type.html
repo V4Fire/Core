@@ -244,11 +244,11 @@ pre {
 							<h1>core/mime-type</h1>
 						</a>
 						<p>This module provides API to extract data types from mime-type/DATA:URI strings.</p>
-						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">getDataType</span><span style="color: #000000">, </span><span style="color: #001080">getDataTypeFromURL</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/mine-type&#039;</span><span style="color: #000000">;</span>
+						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">getDataType</span><span style="color: #000000">, </span><span style="color: #001080">getDataTypeFromURI</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/mine-type&#039;</span><span style="color: #000000">;</span>
 
 <span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #795E26">getDataType</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;application/json&#039;</span><span style="color: #000000">)); </span><span style="color: #008000">// json</span>
 
-<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #795E26">getDataTypeFromURL</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;data:application/javascript;...&#039;</span><span style="color: #000000">)); </span><span style="color: #008000">// text</span>
+<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #795E26">getDataTypeFromURI</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;data:application/javascript;...&#039;</span><span style="color: #000000">)); </span><span style="color: #008000">// text</span>
 </code></pre>
 					</div>
 				</div>
@@ -277,6 +277,7 @@ pre {
 							<h3>Functions</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-function tsd-parent-kind-module"><a href="src_core_mime_type.html#getdatatype" class="tsd-kind-icon">get<wbr>Data<wbr>Type</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="src_core_mime_type.html#getdatatypefromuri" class="tsd-kind-icon">get<wbr>Data<wbr>Type<wbr>FromURI</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-module"><a href="src_core_mime_type.html#getdatatypefromurl" class="tsd-kind-icon">get<wbr>Data<wbr>Type<wbr>FromURL</a></li>
 							</ul>
 						</section>
@@ -361,7 +362,7 @@ pre {
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/mime-type/index.ts#L33">src/core/mime-type/index.ts:33</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/mime-type/index.ts#L44">src/core/mime-type/index.ts:44</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -382,16 +383,16 @@ pre {
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
-					<a name="getdatatypefromurl" class="tsd-anchor"></a>
-					<h3>get<wbr>Data<wbr>Type<wbr>FromURL</h3>
+					<a name="getdatatypefromuri" class="tsd-anchor"></a>
+					<h3>get<wbr>Data<wbr>Type<wbr>FromURI</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Data<wbr>Type<wbr>FromURL<span class="tsd-signature-symbol">(</span>url<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="index.html#canundef" class="tsd-signature-type" data-tsd-kind="Type alias">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><a href="src_core_mime_type_interface.html#datatype" class="tsd-signature-type" data-tsd-kind="Type alias">DataType</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Data<wbr>Type<wbr>FromURI<span class="tsd-signature-symbol">(</span>uri<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="index.html#canundef" class="tsd-signature-type" data-tsd-kind="Type alias">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><a href="src_core_mime_type_interface.html#datatype" class="tsd-signature-type" data-tsd-kind="Type alias">DataType</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/mime-type/index.ts#L24">src/core/mime-type/index.ts:24</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/mime-type/index.ts#L26">src/core/mime-type/index.ts:26</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -402,9 +403,41 @@ pre {
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>url: <span class="tsd-signature-type">string</span></h5>
+									<h5>uri: <span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
 									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="index.html#canundef" class="tsd-signature-type" data-tsd-kind="Type alias">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><a href="src_core_mime_type_interface.html#datatype" class="tsd-signature-type" data-tsd-kind="Type alias">DataType</a><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="getdatatypefromurl" class="tsd-anchor"></a>
+					<h3>get<wbr>Data<wbr>Type<wbr>FromURL</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Data<wbr>Type<wbr>FromURL<span class="tsd-signature-symbol">(</span>url<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="index.html#canundef" class="tsd-signature-type" data-tsd-kind="Type alias">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><a href="src_core_mime_type_interface.html#datatype" class="tsd-signature-type" data-tsd-kind="Type alias">DataType</a><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/mime-type/index.ts#L35">src/core/mime-type/index.ts:35</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<dl class="tsd-comment-tags">
+									<dt>deprecated</dt>
+									<dd></dd>
+									<dt>see</dt>
+									<dd><p><a href="src_core_mime_type.html#getdatatypefromuri">getDataTypeFromURI</a></p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>url: <span class="tsd-signature-type">string</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="index.html#canundef" class="tsd-signature-type" data-tsd-kind="Type alias">CanUndef</a><span class="tsd-signature-symbol">&lt;</span><a href="src_core_mime_type_interface.html#datatype" class="tsd-signature-type" data-tsd-kind="Type alias">DataType</a><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -446,6 +479,9 @@ pre {
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module">
 						<a href="src_core_mime_type.html#getdatatype" class="tsd-kind-icon">get<wbr>Data<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="src_core_mime_type.html#getdatatypefromuri" class="tsd-kind-icon">get<wbr>Data<wbr>Type<wbr>FromURI</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module">
 						<a href="src_core_mime_type.html#getdatatypefromurl" class="tsd-kind-icon">get<wbr>Data<wbr>Type<wbr>FromURL</a>

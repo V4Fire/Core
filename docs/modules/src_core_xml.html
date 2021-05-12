@@ -245,7 +245,7 @@ pre {
 						</a>
 						<p>This module provides a bunch of helper functions to work with XML documents.</p>
 						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">toDataURI</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/xml&#039;</span><span style="color: #000000">;</span>
-<span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">getDataTypeFromURL</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/mime-type&#039;</span><span style="color: #000000">;</span>
+<span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">getDataTypeFromURI</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/mime-type&#039;</span><span style="color: #000000">;</span>
 
 <span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">node</span><span style="color: #000000"> = </span><span style="color: #001080">document</span><span style="color: #000000">.</span><span style="color: #795E26">createElement</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;foo&#039;</span><span style="color: #000000">);</span>
 <span style="color: #001080">node</span><span style="color: #000000">.</span><span style="color: #001080">innerHTML</span><span style="color: #000000"> = </span><span style="color: #A31515">&#039;hello&#039;</span><span style="color: #000000">;</span>
@@ -254,7 +254,7 @@ pre {
 <span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #795E26">toDataURI</span><span style="color: #000000">(</span><span style="color: #001080">node</span><span style="color: #000000">));</span>
 
 <span style="color: #008000">// document</span>
-<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #795E26">getDataTypeFromURL</span><span style="color: #000000">(</span><span style="color: #795E26">toDataURI</span><span style="color: #000000">(</span><span style="color: #001080">node</span><span style="color: #000000">)));</span>
+<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #795E26">getDataTypeFromURI</span><span style="color: #000000">(</span><span style="color: #795E26">toDataURI</span><span style="color: #000000">(</span><span style="color: #001080">node</span><span style="color: #000000">)));</span>
 </code></pre>
 					</div>
 				</div>

@@ -244,8 +244,15 @@ pre {
 							<h1>core/semver</h1>
 						</a>
 						<p>This module provides a function to compare string versions by using semver strategy.</p>
+						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">check</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/semver&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #795E26">check</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;1.4.1&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;1.5.2&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;&gt;&#039;</span><span style="color: #000000">));  </span><span style="color: #008000">// false</span>
+<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #795E26">check</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;1&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;1.5.2&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;==&#039;</span><span style="color: #000000">));     </span><span style="color: #008000">// true</span>
+<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #795E26">check</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;2.4.1&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;2.4&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;&lt;=&#039;</span><span style="color: #000000">));   </span><span style="color: #008000">// true</span>
+<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #795E26">check</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;2.4&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;2.4.2&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;^=&#039;</span><span style="color: #000000">));   </span><span style="color: #008000">// true</span>
+</code></pre>
 						<a href="#supported-comparisons" id="supported-comparisons" style="color: inherit; text-decoration: none;">
-							<h3>Supported Comparisons</h3>
+							<h2>Supported Comparisons</h2>
 						</a>
 						<blockquote>
 							<p>Note:
@@ -260,16 +267,6 @@ pre {
 							<li><code>&gt;=</code> greater than or equal to</li>
 							<li><code>&lt;=</code> less than or equal to</li>
 						</ul>
-						<a href="#examples" id="examples" style="color: inherit; text-decoration: none;">
-							<h3>Examples</h3>
-						</a>
-						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">check</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/semver&#039;</span><span style="color: #000000">;</span>
-
-<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #795E26">check</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;1.4.1&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;1.5.2&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;&gt;&#039;</span><span style="color: #000000">));  </span><span style="color: #008000">// false</span>
-<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #795E26">check</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;1&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;1.5.2&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;==&#039;</span><span style="color: #000000">));     </span><span style="color: #008000">// true</span>
-<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #795E26">check</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;2.4.1&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;2.4&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;&lt;=&#039;</span><span style="color: #000000">));   </span><span style="color: #008000">// true</span>
-<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #795E26">check</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;2.4&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;2.4.2&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;^=&#039;</span><span style="color: #000000">));   </span><span style="color: #008000">// true</span>
-</code></pre>
 					</div>
 				</div>
 			</section>

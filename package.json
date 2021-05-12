@@ -5,7 +5,7 @@
   "main": "src/core/index.js",
   "typings": "index.d.ts",
   "license": "MIT",
-  "version": "3.44.1",
+  "version": "3.45.0",
   "author": {
     "name": "kobezzza",
     "email": "kobezzza@gmail.com",
@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "@types/got": "^9.6.11",
-    "@types/jasmine": "^3.6.9",
+    "@types/jasmine": "^3.7.2",
     "dom-storage": "^2.1.0",
     "eventemitter2": "^6.4.4",
     "fs-extra-promise": "^1.0.1",

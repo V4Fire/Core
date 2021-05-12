@@ -267,6 +267,102 @@ pre {
 <span style="color: #008000">// {foo: 1, bar: true, baz: [1, 2, 3], ban: {a: 2}}</span>
 <span style="color: #795E26">fromQueryString</span><span style="color: #000000">(</span><span style="color: #795E26">toQueryString</span><span style="color: #000000">(</span><span style="color: #001080">data</span><span style="color: #000000">), {</span><span style="color: #001080">separator:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;_&#039;</span><span style="color: #000000">});</span>
 </code></pre>
+						<p>These methods can take additional options:</p>
+						<pre><code class="language-typescript"><span style="color: #0000FF">interface</span><span style="color: #000000"> </span><span style="color: #267F99">ToQueryStringOptions</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #008000">/**</span>
+<span style="color: #008000">   * If false, then the result string won&#039;t be encoded by using `encodeURIComponent`</span>
+<span style="color: #008000">   * </span><span style="color: #0000FF">@default</span><span style="color: #008000"> </span><span style="color: #001080">`true`</span>
+<span style="color: #008000">   */</span>
+<span style="color: #000000">  </span><span style="color: #001080">encode</span><span style="color: #000000">?: </span><span style="color: #267F99">boolean</span><span style="color: #000000">;</span>
+
+<span style="color: #000000">  </span><span style="color: #008000">/**</span>
+<span style="color: #008000">   * Separator for nested properties</span>
+<span style="color: #008000">   *</span>
+<span style="color: #008000">   * </span><span style="color: #0000FF">@default</span><span style="color: #008000"> </span><span style="color: #001080">`&#039;_&#039;`</span>
+<span style="color: #008000">   *</span>
+<span style="color: #008000">   * </span><span style="color: #0000FF">@example</span>
+<span style="color: #008000">   * ```js</span>
+<span style="color: #008000">   * // foo.bar=1</span>
+<span style="color: #008000">   * toQueryString({foo: {bar: 1}}, {separator: &#039;.&#039;});</span>
+<span style="color: #008000">   * ```</span>
+<span style="color: #008000">   */</span>
+<span style="color: #000000">  </span><span style="color: #001080">separator</span><span style="color: #000000">?: </span><span style="color: #267F99">string</span><span style="color: #000000">;</span>
+
+<span style="color: #000000">  </span><span style="color: #008000">/**</span>
+<span style="color: #008000">   * If true, then nested properties will be encoded by using `[]` syntax</span>
+<span style="color: #008000">   *</span>
+<span style="color: #008000">   * </span><span style="color: #0000FF">@default</span><span style="color: #008000"> </span><span style="color: #001080">`false`</span>
+<span style="color: #008000">   *</span>
+<span style="color: #008000">   * </span><span style="color: #0000FF">@example</span>
+<span style="color: #008000">   * ```js</span>
+<span style="color: #008000">   * // foo[]=1&amp;bar[bla]=2</span>
+<span style="color: #008000">   * toQueryString({foo: [1], bar: {bla: 2}}, {arraySyntax: true});</span>
+<span style="color: #008000">   * ```</span>
+<span style="color: #008000">   */</span>
+<span style="color: #000000">  </span><span style="color: #001080">arraySyntax</span><span style="color: #000000">?: </span><span style="color: #267F99">boolean</span><span style="color: #000000">;</span>
+
+<span style="color: #000000">  </span><span style="color: #008000">/**</span>
+<span style="color: #008000">   * Filters values that shouldn&#039;t be serialized.</span>
+<span style="color: #008000">   * By default, the function skip all values with null-s and empty strings.</span>
+<span style="color: #008000">   *</span>
+<span style="color: #008000">   * </span><span style="color: #0000FF">@param</span><span style="color: #008000"> </span><span style="color: #001080">value</span>
+<span style="color: #008000">   * </span><span style="color: #0000FF">@param</span><span style="color: #008000"> </span><span style="color: #001080">key</span><span style="color: #008000"> - property key</span>
+<span style="color: #008000">   * </span><span style="color: #0000FF">@param</span><span style="color: #008000"> </span><span style="color: #001080">path</span><span style="color: #008000"> - accumulated property path `({a: {b: 1}} =&gt; &#039;a_b&#039;)`</span>
+<span style="color: #008000">   *</span>
+<span style="color: #008000">   * </span><span style="color: #0000FF">@example</span>
+<span style="color: #008000">   * ```js</span>
+<span style="color: #008000">   * // foo=1</span>
+<span style="color: #008000">   * toQueryString({foo: 1, bar: {bla: 2}}, {paramsFilter: (el, key) =&gt; key !== &#039;bla&#039;});</span>
+<span style="color: #008000">   * ```</span>
+<span style="color: #008000">   */</span>
+<span style="color: #000000">  </span><span style="color: #795E26">paramsFilter</span><span style="color: #000000">?(</span><span style="color: #001080">value</span><span style="color: #000000">: </span><span style="color: #267F99">unknown</span><span style="color: #000000">, </span><span style="color: #001080">key</span><span style="color: #000000">: </span><span style="color: #267F99">string</span><span style="color: #000000">, </span><span style="color: #001080">path</span><span style="color: #000000">?: </span><span style="color: #267F99">string</span><span style="color: #000000">): </span><span style="color: #267F99">unknown</span><span style="color: #000000">;</span>
+<span style="color: #000000">}</span>
+
+<span style="color: #0000FF">interface</span><span style="color: #000000"> </span><span style="color: #267F99">FromQueryStringOptions</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #008000">/**</span>
+<span style="color: #008000">   * If false, then the passed string won&#039;t be decoded by using `decodeURIComponent`</span>
+<span style="color: #008000">   * </span><span style="color: #0000FF">@default</span><span style="color: #008000"> </span><span style="color: #001080">`true`</span>
+<span style="color: #008000">   */</span>
+<span style="color: #000000">  </span><span style="color: #001080">decode</span><span style="color: #000000">?: </span><span style="color: #267F99">boolean</span><span style="color: #000000">;</span>
+
+<span style="color: #000000">  </span><span style="color: #008000">/**</span>
+<span style="color: #008000">   * If false, then all parsed values won&#039;t be converted from a string</span>
+<span style="color: #008000">   *</span>
+<span style="color: #008000">   * </span><span style="color: #0000FF">@default</span><span style="color: #008000"> </span><span style="color: #001080">`true`</span>
+<span style="color: #008000">   *</span>
+<span style="color: #008000">   * </span><span style="color: #0000FF">@example</span>
+<span style="color: #008000">   * ```js</span>
+<span style="color: #008000">   * // {foo: &#039;1&#039;}</span>
+<span style="color: #008000">   * fromQueryString(&#039;foo=1&#039;, {convert: false});</span>
+<span style="color: #008000">   * ```</span>
+<span style="color: #008000">   */</span>
+<span style="color: #000000">  </span><span style="color: #001080">convert</span><span style="color: #000000">?: </span><span style="color: #267F99">boolean</span><span style="color: #000000">;</span>
+
+<span style="color: #000000">  </span><span style="color: #008000">/**</span>
+<span style="color: #008000">   * Separator for nested properties</span>
+<span style="color: #008000">   *</span>
+<span style="color: #008000">   * </span><span style="color: #0000FF">@example</span>
+<span style="color: #008000">   * ```js</span>
+<span style="color: #008000">   * // {foo: {bar: 1}}</span>
+<span style="color: #008000">   * fromQueryString(&#039;foo_bar=1&#039;, {separator: &#039;_&#039;});</span>
+<span style="color: #008000">   * ```</span>
+<span style="color: #008000">   */</span>
+<span style="color: #000000">  </span><span style="color: #001080">separator</span><span style="color: #000000">?: </span><span style="color: #267F99">string</span><span style="color: #000000">;</span>
+
+<span style="color: #000000">  </span><span style="color: #008000">/**</span>
+<span style="color: #008000">   * If true, then nested properties will be decoded by using `[]` syntax</span>
+<span style="color: #008000">   *</span>
+<span style="color: #008000">   * </span><span style="color: #0000FF">@default</span><span style="color: #008000"> </span><span style="color: #001080">`false`</span>
+<span style="color: #008000">   *</span>
+<span style="color: #008000">   * </span><span style="color: #0000FF">@example</span>
+<span style="color: #008000">   * ```js</span>
+<span style="color: #008000">   * // {foo: [1], bar: {bla: 2}}</span>
+<span style="color: #008000">   * fromQueryString(&#039;foo[]=1&amp;bar[bla]=2&#039;, {arraySyntax: true});</span>
+<span style="color: #008000">   * ```</span>
+<span style="color: #008000">   */</span>
+<span style="color: #000000">  </span><span style="color: #001080">arraySyntax</span><span style="color: #000000">?: </span><span style="color: #267F99">boolean</span><span style="color: #000000">;</span>
+<span style="color: #000000">}</span>
+</code></pre>
 					</div>
 				</div>
 			</section>

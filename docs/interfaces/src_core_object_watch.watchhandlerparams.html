@@ -288,12 +288,12 @@ pre {
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_object_watch_interface.rawwatchhandlerparams.html">RawWatchHandlerParams</a>.<a href="src_core_object_watch_interface.rawwatchhandlerparams.html#fromproto">fromProto</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/object/watch/interface.ts#L235">src/core/object/watch/interface.ts:235</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/object/watch/interface.ts#L408">src/core/object/watch/interface.ts:408</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>True if a mutation has occurred on an object from a prototype of the watched object</p>
+							<p>True if the mutation has occurred on a prototype of the watched object</p>
 						</div>
 					</div>
 				</section>
@@ -304,12 +304,12 @@ pre {
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_object_watch_interface.rawwatchhandlerparams.html">RawWatchHandlerParams</a>.<a href="src_core_object_watch_interface.rawwatchhandlerparams.html#obj">obj</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/object/watch/interface.ts#L219">src/core/object/watch/interface.ts:219</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/object/watch/interface.ts#L392">src/core/object/watch/interface.ts:392</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Link to an object that is watched</p>
+							<p>Link to the object that is watched</p>
 						</div>
 					</div>
 				</section>
@@ -319,13 +319,30 @@ pre {
 					<div class="tsd-signature tsd-kind-icon">original<wbr>Path<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/object/watch/interface.ts#L255">src/core/object/watch/interface.ts:255</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/object/watch/interface.ts#L444">src/core/object/watch/interface.ts:444</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>An original path to a property that was changed</p>
+							<p>The original path to a property that was changed.</p>
 						</div>
+						<dl class="tsd-comment-tags">
+							<dt>example</dt>
+							<dd><pre><code class="language-js"><span style="color: #0000FF">function</span><span style="color: #000000"> </span><span style="color: #795E26">pathModifier</span><span style="color: #000000">(</span><span style="color: #001080">path</span><span style="color: #000000">) {</span>
+<span style="color: #000000">  </span><span style="color: #AF00DB">return</span><span style="color: #000000"> </span><span style="color: #001080">path</span><span style="color: #000000">.</span><span style="color: #795E26">map</span><span style="color: #000000">((</span><span style="color: #001080">chunk</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">chunk</span><span style="color: #000000">.</span><span style="color: #795E26">replace</span><span style="color: #000000">(</span><span style="color: #811F3F">/</span><span style="color: #EE0000">^</span><span style="color: #811F3F">_/</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;&#039;</span><span style="color: #000000">));</span>
+<span style="color: #000000">}</span>
+
+<span style="color: #0000FF">const</span><span style="color: #000000"> {</span><span style="color: #0070C1">proxy</span><span style="color: #000000">} = </span><span style="color: #795E26">watch</span><span style="color: #000000">(</span><span style="color: #001080">a</span><span style="color: #000000">: </span><span style="color: #098658">1</span><span style="color: #000000">, </span><span style="color: #001080">b</span><span style="color: #000000">: </span><span style="color: #098658">2</span><span style="color: #000000">, </span><span style="color: #001080">_a</span><span style="color: #000000">: </span><span style="color: #098658">1</span><span style="color: #000000">}, </span><span style="color: #A31515">&#039;a&#039;</span><span style="color: #000000">, {</span><span style="color: #001080">pathModifier</span><span style="color: #000000">}, (</span><span style="color: #001080">mutations</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #001080">mutations</span><span style="color: #000000">.</span><span style="color: #795E26">forEach</span><span style="color: #000000">(([</span><span style="color: #001080">value</span><span style="color: #000000">, </span><span style="color: #001080">oldValue</span><span style="color: #000000">, </span><span style="color: #001080">info</span><span style="color: #000000">]) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">value</span><span style="color: #000000">, </span><span style="color: #001080">oldValue</span><span style="color: #000000">, </span><span style="color: #001080">info</span><span style="color: #000000">.</span><span style="color: #001080">path</span><span style="color: #000000">, </span><span style="color: #001080">info</span><span style="color: #000000">.</span><span style="color: #001080">originalPath</span><span style="color: #000000">);</span>
+<span style="color: #000000">  });</span>
+<span style="color: #000000">});</span>
+
+<span style="color: #008000">// 2 1 [&#039;a&#039;], [&#039;_a&#039;]</span>
+<span style="color: #001080">proxy</span><span style="color: #000000">.</span><span style="color: #001080">_a</span><span style="color: #000000"> = </span><span style="color: #098658">2</span><span style="color: #000000">;</span>
+</code></pre>
+							</dd>
+						</dl>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
@@ -334,12 +351,12 @@ pre {
 					<div class="tsd-signature tsd-kind-icon">parent<span class="tsd-signature-symbol">:</span> <a href="src_core_object_watch_interface.watchhandlerparentparams.html" class="tsd-signature-type" data-tsd-kind="Interface">WatchHandlerParentParams</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/object/watch/interface.ts#L250">src/core/object/watch/interface.ts:250</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/object/watch/interface.ts#L423">src/core/object/watch/interface.ts:423</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Information about a parent mutation event</p>
+							<p>Information about the parent mutation event</p>
 						</div>
 					</div>
 				</section>
@@ -350,7 +367,7 @@ pre {
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_object_watch_interface.rawwatchhandlerparams.html">RawWatchHandlerParams</a>.<a href="src_core_object_watch_interface.rawwatchhandlerparams.html#path">path</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/object/watch/interface.ts#L240">src/core/object/watch/interface.ts:240</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/object/watch/interface.ts#L413">src/core/object/watch/interface.ts:413</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -366,7 +383,7 @@ pre {
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_object_watch_interface.rawwatchhandlerparams.html">RawWatchHandlerParams</a>.<a href="src_core_object_watch_interface.rawwatchhandlerparams.html#root">root</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/object/watch/interface.ts#L224">src/core/object/watch/interface.ts:224</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/object/watch/interface.ts#L397">src/core/object/watch/interface.ts:397</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -382,12 +399,12 @@ pre {
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_object_watch_interface.rawwatchhandlerparams.html">RawWatchHandlerParams</a>.<a href="src_core_object_watch_interface.rawwatchhandlerparams.html#top">top</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/object/watch/interface.ts#L230">src/core/object/watch/interface.ts:230</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/object/watch/interface.ts#L403">src/core/object/watch/interface.ts:403</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Link to the top object of watching
+							<p>Link to the top property of watching
 							(the first level property of the root)</p>
 						</div>
 					</div>
