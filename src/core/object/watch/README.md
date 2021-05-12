@@ -158,7 +158,7 @@ const proxyWatcher = watch(user, {engine: proxyEngine}, (mutations) => {
 });
 
 // This mutation will invoke our callback
-proxyWatcher.proxy.skils = ['programming', 'JS'];
+proxyWatcher.proxy.skills = ['programming', 'JS'];
 
 const accWatcher = watch(user, {engine: accEngine}, (mutations) => {
   mutations.forEach(([value, oldValue, info]) => {
@@ -168,10 +168,10 @@ const accWatcher = watch(user, {engine: accEngine}, (mutations) => {
 
 // If we add a new property, we have to register a new accessor to watch.
 // This mutation will invoke our callback.
-accWatcher.set('skils', ['programming', 'JS']);
+accWatcher.set('skills', ['programming', 'JS']);
 
 // Now we can change it without any doubt
-accWatcher.skils = ['programming', 'JS', 'music'];
+accWatcher.skills = ['programming', 'JS', 'music'];
 ```
 
 To delete a property from the proxy object, we can set it to `undefined`, or use the `delete` operator,
@@ -235,6 +235,13 @@ watcher.delete('age');
 // false
 console.log('age' in watcher.proxy);
 
+// This mutation won't invoke our callback
+watcher.proxy.age = 32;
+
+// Invoke set to register a property to watch.
+// This mutation will invoke our callback.
+watcher.set('age', 31)
+
 // This mutation will invoke our callback
 watcher.proxy.age = 32;
 ```
@@ -244,12 +251,12 @@ watcher.proxy.age = 32;
 A function that handles mutations can take a list of mutations or a single mutation.
 The list of mutations contains sub-arrays, where the first two parameters refer to new and old values of the mutated property.
 The third parameter refers to an object that contains some information about a particular mutation, like, where the mutation has occurred.
-In case when the function takes a single mutation, the function tree arguments instead of one.
+In case when the function takes a single mutation, the function takes tree arguments instead of one.
 
 ```typescript
 interface WatchHandlerParams {
   /**
-   * Link to the object that is watched
+   * Link to an object that is watched
    */
   obj: object;
 
@@ -265,12 +272,12 @@ interface WatchHandlerParams {
   top?: object;
 
   /**
-   * Information about the parent mutation event
+   * Information about a parent mutation event
    */
   parent?: WatchHandlerParentParams;
 
   /**
-   * True if the mutation has occurred on a prototype of the watched object
+   * True if a mutation has occurred on a prototype of the watched object
    */
   fromProto: boolean;
 
@@ -302,7 +309,7 @@ import watch from 'core/object/watch';
 
 const user = {
   name: 'Kobezzza',
-  skils: {
+  skills: {
     programming: {
       js: 80,
       rust: 30
@@ -312,7 +319,7 @@ const user = {
   }
 };
 
-const {proxy} = watch(user, 'skils.programming', (value, oldValue, info) => {
+const {proxy} = watch(user, 'skills.programming', (value, oldValue, info) => {
   console.log(value, oldValue, info.path, info.originalPath);
 });
 
@@ -320,10 +327,10 @@ const {proxy} = watch(user, 'skils.programming', (value, oldValue, info) => {
 proxy.name = 'Andrey';
 
 // This mutation will invoke our callback
-// console.log: {js: 81, rust: 30} {js: 81, rust: 30} ['skils', 'programming'] ['skils', 'programming', 'js']
-proxy.skils.programming.js++;
+// {js: 81, rust: 30} {js: 81, rust: 30} ['skills', 'programming'] ['skills', 'programming', 'js']
+proxy.skills.programming.js++;
 
-// Also, we can provide a path in the array form, like, ['skils', 'programming'].
+// Also, we can provide a path in the array form, like, ['skills', 'programming'].
 // It helps provide a path with non-string keys.
 
 const key = {};
@@ -348,7 +355,7 @@ There are some nuances of using this approach:
 
   const user = {
     name: 'Kobezzza',
-    skils: {
+    skills: {
       programming: {
         js: 80,
         rust: 30
@@ -364,7 +371,7 @@ There are some nuances of using this approach:
     })
   });
 
-  const {proxy: proxyByPath} = watch(user, 'skils.programming', (value, oldValue, info) => {
+  const {proxy: proxyByPath} = watch(user, 'skills.programming', (value, oldValue, info) => {
     console.log(value, oldValue, info.path);
   });
   ```
@@ -377,7 +384,7 @@ There are some nuances of using this approach:
 
   const user = {
     name: 'Kobezzza',
-    skils: {
+    skills: {
       programming: {
         js: 80,
         rust: 30
@@ -387,24 +394,24 @@ There are some nuances of using this approach:
     }
   };
 
-  const {proxy: proxyByPath} = watch(user, 'skils.programming', (value, oldValue, info) => {
+  const {proxy: proxyByPath} = watch(user, 'skills.programming', (value, oldValue, info) => {
     console.log(value, oldValue, info.originalPath);
   });
 
   // This mutation will invoke our callback
-  // info.path: ['skils', 'programming']
-  // info.originalPath: ['skils', 'programming', 'js']
-  proxyByPath.skils.programming.js++;
+  // info.path: ['skills', 'programming']
+  // info.originalPath: ['skills', 'programming', 'js']
+  proxyByPath.skills.programming.js++;
 
   // This mutation will invoke our callback
-  // info.path: ['skils', 'programming']
-  // info.originalPath: ['skils', 'programming']
-  proxyByPath.skils.programming = {js: 80, rust: 30, python: 30};
+  // info.path: ['skills', 'programming']
+  // info.originalPath: ['skills', 'programming']
+  proxyByPath.skills.programming = {js: 80, rust: 30, python: 30};
 
   // This mutation will invoke our callback
-  // info.path: ['skils', 'programming']
-  // info.originalPath: ['skils']
-  proxyByPath.skils = {programming: {js: 80, rust: 30, python: 30, haskell: 20}};
+  // info.path: ['skills', 'programming']
+  // info.originalPath: ['skills']
+  proxyByPath.skills = {programming: {js: 80, rust: 30, python: 30, haskell: 20}};
   ```
 
 * By default, all mutations that occur on the same tick are accumulated within a mutation list.
@@ -417,7 +424,7 @@ There are some nuances of using this approach:
 
   const user = {
     name: 'Kobezzza',
-    skils: {
+    skills: {
       programming: {
         js: 80,
         rust: 30
@@ -427,15 +434,15 @@ There are some nuances of using this approach:
     }
   };
 
-  const {proxy: collapsedProxy} = watch(user, 'skils.programming', (value, oldValue, info) => {
+  const {proxy: collapsedProxy} = watch(user, 'skills.programming', (value, oldValue, info) => {
     console.log(value, oldValue, info.originalPath);
   });
 
-  collapsedProxy.skils.programming.js++;
+  collapsedProxy.skills.programming.js++;
 
   // This mutation overwrites the previous
-  // console.log: {js: 80, rust: 30, python: 30} {js: 81, rust: 30} ['skils', 'programming']
-  collapsedProxy.skils.programming = {js: 80, rust: 30, python: 30};
+  //  {js: 80, rust: 30, python: 30} {js: 81, rust: 30} ['skills', 'programming']
+  collapsedProxy.skills.programming = {js: 80, rust: 30, python: 30};
 
   const {proxy} = watch(user, (mutations) => {
     mutations.forEach(([value, oldValue, info]) => {
@@ -443,11 +450,11 @@ There are some nuances of using this approach:
     })
   });
 
-  // console.log: 81, 80, ['skils', 'programming', 'js']
-  proxy.skils.programming.js++;
+  // 81, 80, ['skills', 'programming', 'js']
+  proxy.skills.programming.js++;
 
-  // console.log: {js: 80, rust: 30} {js: 81, rust: 30, python: 30} ['skils']
-  proxy.skils = {programming: {js: 80, rust: 30}};
+  // {js: 80, rust: 30} {js: 81, rust: 30, python: 30} ['skills']
+  proxy.skills = {programming: {js: 80, rust: 30}};
   ```
 
 * The provided handler function takes new and old values of a property by the provided path.
@@ -459,7 +466,7 @@ There are some nuances of using this approach:
 
   const user = {
     name: 'Kobezzza',
-    skils: {
+    skills: {
       programming: {
         js: 80,
         rust: 30
@@ -469,12 +476,12 @@ There are some nuances of using this approach:
     }
   };
 
-  const {proxy: collapsedProxy} = watch(user, 'skils.programming', (value, oldValue, info) => {
+  const {proxy: collapsedProxy} = watch(user, 'skills.programming', (value, oldValue, info) => {
     console.log(value, oldValue, info.originalPath);
   });
 
-  // console.log: {js: 81, python: 30} {js: 81, rust: 30} ['skils', 'programming', 'js']
-  collapsedProxy.skils.programming.js++;
+  // {js: 81, python: 30} {js: 81, rust: 30} ['skills', 'programming', 'js']
+  collapsedProxy.skills.programming.js++;
 
   const {proxy} = watch(user, (mutations) => {
     mutations.forEach(([value, oldValue, info]) => {
@@ -482,9 +489,73 @@ There are some nuances of using this approach:
     })
   });
 
-  // console.log: 82, 81, ['skils', 'programming', 'js']
-  proxy.skils.programming.js++;
+  // 82, 81, ['skills', 'programming', 'js']
+  proxy.skills.programming.js++;
   ```
+
+## Separated and shared watchers
+
+The important point is that the watch function doesn't mutate the passed object but creates a new object based on the original and returns it.
+Only mutation of this new object will create events of modifications, and when we make another one watcher based on the original object,
+they can't watch mutations of each other.
+
+```js
+import watch from 'core/object/watch';
+
+const user = {
+  name: 'Kobezzza',
+  age: 31
+};
+
+const {proxy: proxy1} = watch(user, (mutations) => {
+  mutations.forEach(([value, oldValue, info]) => {
+    console.log(value, oldValue, info.path);
+  });
+});
+
+const {proxy: proxy2} = watch(user, (mutations) => {
+  mutations.forEach(([value, oldValue, info]) => {
+    console.log(value, oldValue, info.path);
+  });
+});
+
+
+// proxy2 won't handle this mutation
+proxy1.name = 'Andrey';
+
+// proxy1 won't handle this mutation
+proxy2.age++;
+```
+
+If we want to share mutations between different watchers, we should invoke the watch function by providing the previous proxy object instead of the original.
+
+```js
+import watch from 'core/object/watch';
+
+const user = {
+  name: 'Kobezzza',
+  age: 31
+};
+
+const {proxy: proxy1} = watch(user, (mutations) => {
+  mutations.forEach(([value, oldValue, info]) => {
+    console.log(value, oldValue, info.path);
+  });
+});
+
+const {proxy: proxy2} = watch(proxy1, (mutations) => {
+  mutations.forEach(([value, oldValue, info]) => {
+    console.log(value, oldValue, info.path);
+  });
+});
+
+
+// proxy2 will handle this mutation
+proxy1.name = 'Andrey';
+
+// proxy1 will handle this mutation
+proxy2.age++;
+```
 
 ## Options of watching
 
@@ -498,7 +569,7 @@ import watch from 'core/object/watch';
 
 const user = {
   name: 'Kobezzza',
-  skils: {
+  skills: {
     programming: 80,
     singing: 10
   }
@@ -511,7 +582,8 @@ const {proxy} = watch(user, {deep: true}, (mutations) => {
 });
 
 // This mutation will invoke our callback
-proxy.skils.singing++;
+// 11 10 ['skills', 'singing']
+proxy.skills.singing++;
 ```
 
 ### withProto
@@ -536,6 +608,7 @@ const {proxy} = watch(user, {withProto: true}, (mutations) => {
 });
 
 // This mutation will invoke our callback
+// 32 31 ['age'] true
 proxy.age++;
 ```
 
@@ -559,6 +632,7 @@ const {proxy} = watch(user, {immediate: true}, (value, oldValue, info) => {
 });
 
 // This mutation will invoke our callback
+// 32 31 ['age']
 proxy.age++;
 ```
 
@@ -572,7 +646,7 @@ import watch from 'core/object/watch';
 
 const user = {
   name: 'Kobezzza',
-  skils: {
+  skills: {
     programming: 80,
     singing: 10
   }
@@ -580,12 +654,12 @@ const user = {
 
 const {proxy} = watch(user, {collapse: true, deep: true}, (mutations) => {
   mutations.forEach(([value, oldValue, info]) => {
-    console.log(value, oldValue, info.path);
+    console.log(value, oldValue, info.path, info.obj === info.top);
   });
 });
 
-// {programming: 81, singing: 10} {programming: 81, singing: 10} ['skils', 'programming']
-proxy.skils.programming++;
+// {programming: 81, singing: 10} {programming: 81, singing: 10} ['skills', 'programming'] true
+proxy.skills.programming++;
 ````
 
 When it toggles to `false,` and the watcher binds to the specified path, the callback takes a list of mutations.
@@ -596,7 +670,7 @@ import watch from 'core/object/watch';
 
 const user = {
   name: 'Kobezzza',
-  skils: {
+  skills: {
     programming: {
       js: 80,
       rust: 30
@@ -606,21 +680,21 @@ const user = {
   }
 };
 
-const {proxy} = watch(user, 'skils.programming', {collapse: false}, (mutations) => {
+const {proxy} = watch(user, 'skills.programming', {collapse: false}, (mutations) => {
   mutations.forEach(([value, oldValue, info]) => {
     console.log(value, oldValue, info.top, info.path, info.originalPath);
   });
 });
 
-// 81 80 {programming: {js: 81, rust: 30}, singing: 10} ['skils', 'programming'] ['skils', 'programming', 'js']
-proxy.skils.programming.js++;
+// 81 80 {programming: {js: 81, rust: 30}, singing: 10} ['skills', 'programming'] ['skills', 'programming', 'js']
+proxy.skills.programming.js++;
 
-const {proxy: collapsedProxy} = watch({a: {b: {c: 1}}}, 'skils.programming', (value, oldValue, info) => {
+const {proxy: collapsedProxy} = watch({a: {b: {c: 1}}}, 'skills.programming', (value, oldValue, info) => {
   console.log(value, oldValue);
 });
 
 // {programming: {js: 82, rust: 30}, singing: 10} {programming: {js: 82, rust: 30}, singing: 10}
-collapsedProxy.skils.programming.js++;
+collapsedProxy.skills.programming.js++;
 ```
 
 ### pathModifier
@@ -663,7 +737,7 @@ const {proxy} = watch({a: 1, b: 2, _a: 1}, {eventFilter}, (mutations) => {
   });
 });
 
-// This mutation won't fire an event
+// This mutation won't invoke our callback
 proxy._a = 2;
 ```
 
@@ -694,7 +768,7 @@ bla.foo = 3;
 
 ### prefixes
 
-A list of prefixes for paths to watch. This parameter can help to watch getters.
+A list of prefixes for paths to watch. This parameter can help to watch accessors.
 
 ```js
 import watch from 'core/object/watch';
@@ -717,7 +791,7 @@ proxy._foo++;
 
 ### postfixes
 
-A list of postfixes for paths to watch. This parameter can help to watch getters.
+A list of postfixes for paths to watch. This parameter can help to watch accessors.
 
 ```js
 import watch from 'core/object/watch';
@@ -740,11 +814,10 @@ proxy.fooStore++;
 
 ### dependencies
 
-List of dependencies for paths to watch. This parameter can help to watch getters.
+When providing the specific path to watch, this parameter can contain a list of dependencies for the watching path.
+This parameter can help to watch accessors.
 
 ```js
-import watch from 'core/object/watch';
-
 const obj = {
   get foo() {
     return this.bla * this.baz;
@@ -759,7 +832,54 @@ const {proxy} = watch(obj, 'foo', {dependencies: ['bla', 'baz']}, (value, oldVal
 });
 
 // This mutation will invoke our callback
-proxy.baz++;
+proxy.bla++;
+
+```
+When providing the specific path to watch, this parameter can contain an object or `Map` with lists of
+dependencies to watch.
+
+```js
+const obj = {
+  foo: {
+    get value() {
+      return this.bla * this.baz;
+    }
+  },
+
+  bla: 2,
+  baz: 3
+};
+
+const depsAsObj = {
+  'foo.value': ['bla', 'baz']
+};
+
+const {proxy: proxy1} = watch(obj, {dependencies: depsAsObj}, (mutations) => {
+  mutations.forEach(([value, oldValue, info]) => {
+    console.log(value, oldValue, info.path, info.originalPath, info.parent);
+  });
+});
+
+// This mutation will fire an additional event for `foo.value`
+proxy1.bla++;
+
+const depsAsMap = new Map([
+  [
+    // A path to the property with dependencies
+    ['foo', 'value'],
+
+    // Dependencies
+    ['bla', 'baz']
+  ]
+]);
+
+const {proxy: proxy2} = watch(obj, {dependencies: depsAsMap}, (mutations) => {
+  mutations.forEach(([value, oldValue, info]) => {
+    console.log(value, oldValue, info.path, info.originalPath, info.parent);
+  });
+});
+
+proxy2.baz++;
 ```
 
 ### engine
@@ -789,4 +909,129 @@ const accWatcher = watch(user, {engine: accEngine}, (mutations) => {
     console.log(value, oldValue, info.path);
   });
 });
+```
+
+## Global API
+
+The module provides a bunch of additional helper functions.
+
+### mute
+
+The function temporarily mutes all mutation events for the specified proxy object.
+
+```js
+import watch, { mute } from 'core/object/watch';
+
+const user = {
+  name: 'Kobezzza',
+  skills: {
+    programming: 80,
+    singing: 10
+  }
+};
+
+const {proxy} = watch(user, {immediate: true, deep: true}, (value, oldValue, info) => {
+  console.log(value, oldValue, info.path);
+});
+
+// 81 80 ['skills', 'programming']
+proxy.skills.programming++;
+mute(proxy);
+
+// This mutation won't invoke our callback
+proxy.skills.programming++;
+```
+
+### unmute
+
+The function unmutes all mutation events for the specified proxy object.
+
+```js
+import watch, { mute, unmute } from 'core/object/watch';
+
+const user = {
+  name: 'Kobezzza',
+  skills: {
+    programming: 80,
+    singing: 10
+  }
+};
+
+const {proxy} = watch(user, {immediate: true, deep: true}, (value, oldValue, info) => {
+  console.log(value, oldValue, info.path);
+});
+
+// 81 80 ['skills', 'programming']
+proxy.skills.programming++;
+
+mute(proxy);
+
+// This mutation won't invoke our callback
+proxy.skills.programming++;
+
+unmute(proxy);
+
+// 83 82 ['skills', 'programming']
+proxy.skills.programming++;
+```
+
+### set
+
+The function sets a new watchable value for a proxy object by the specified path.
+It is actual when using an engine based on accessors to add new properties to the watchable object.
+Or when you want to restore watching for a property after deleting it.
+
+```js
+import watch, { set } from 'core/object/watch';
+
+const user = {
+  name: 'Kobezzza',
+  skills: {
+    programming: 80,
+    singing: 10
+  }
+};
+
+const {proxy} = watch(user, {immediate: true, deep: true}, (value, oldValue, info) => {
+  console.log(value, oldValue, info.path);
+});
+
+// This mutation will invoke our callback
+set(proxy, 'bla.foo', 1);
+```
+
+### unset
+
+The function deletes a watchable value from a proxy object by the specified path.
+To restore watching for this property, use `set`.
+
+```js
+import watch, { set, unset } from 'core/object/watch';
+
+const user = {
+  name: 'Kobezzza',
+  skills: {
+    programming: 80,
+    singing: 10
+  }
+};
+
+const {proxy} = watch(user, {immediate: true, deep: true}, (value, oldValue, info) => {
+  console.log(value, oldValue, info.path);
+});
+
+// This mutation will invoke our callback
+unset(proxy, 'skills.programming');
+
+console.log('programming' in proxy.skills === false);
+
+// This mutation won't invoke our callback
+proxy.skills.programming = 80;
+
+// Invoke set to register a property to watch.
+// This mutation will invoke our callback.
+set(proxy, 'skills.programming', 80)
+
+// This mutation will invoke our callback
+proxy.skills.programming++;
 ```

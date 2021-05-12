@@ -28,7 +28,9 @@ export interface Watcher<T extends object = object> {
 	set(path: WatchPath, value: unknown): void;
 
 	/**
-	 * Deletes a watchable value from the proxy object by the specified path
+	 * Deletes a watchable value from the proxy object by the specified path.
+	 * To restore watching for this property, use `set`.
+	 *
 	 * @param path
 	 */
 	delete(path: WatchPath): void;
@@ -189,7 +191,7 @@ export interface WatchOptions {
 	 *   });
 	 * });
 	 *
-	 * // This mutation won't fire an event
+	 * // This mutation won't invoke our callback
 	 * proxy._a = 2;
 	 * ```
 	 */
@@ -223,7 +225,7 @@ export interface WatchOptions {
 
 	/**
 	 * List of prefixes for paths to watch.
-	 * This parameter can help to watch getters.
+	 * This parameter can help to watch accessors.
 	 *
 	 * @example
 	 * ```js
@@ -235,16 +237,19 @@ export interface WatchOptions {
 	 *   _foo: 2
 	 * };
 	 *
-	 * watch(obj, 'foo', {prefixes: ['_']}, (value, oldValue, info) => {
+	 * const {proxy} = watch(obj, 'foo', {prefixes: ['_']}, (value, oldValue, info) => {
 	 *   console.log(value, oldValue, info.path, info.originalPath, info.parent);
 	 * });
+	 *
+	 * // This mutation will invoke our callback
+	 * proxy._foo++;
 	 * ```
 	 */
 	prefixes?: string[];
 
 	/**
 	 * List of postfixes for paths to watch.
-	 * This parameter can help to watch getters.
+	 * This parameter can help to watch accessors.
 	 *
 	 * @example
 	 * ```js
@@ -256,18 +261,20 @@ export interface WatchOptions {
 	 *   fooStore: 2
 	 * };
 	 *
-	 * watch(obj, 'foo', {postfixes: ['Store']}, (value, oldValue, info) => {
+	 * const {proxy} = watch(obj, 'foo', {postfixes: ['Store']}, (value, oldValue, info) => {
 	 *   console.log(value, oldValue, info.path, info.originalPath, info.parent);
 	 * });
+	 *
+	 * // This mutation will invoke our callback
+	 * proxy.fooStore++;
 	 * ```
 	 */
 	postfixes?: string[];
 
 	/**
-	 * List of dependencies for paths to watch.
-	 * This parameter can help to watch getters.
+	 * When providing the specific path to watch, this parameter can contain a list of dependencies for the watching path.
+	 * This parameter can help to watch accessors.
 	 *
-	 * @example
 	 * ```js
 	 * const obj = {
 	 *   get foo() {
@@ -278,9 +285,59 @@ export interface WatchOptions {
 	 *   baz: 3
 	 * };
 	 *
-	 * watch(obj, 'foo', {dependencies: ['bla', 'baz']}, (value, oldValue, info) => {
+	 * const {proxy} = watch(obj, 'foo', {dependencies: ['bla', 'baz']}, (value, oldValue, info) => {
 	 *   console.log(value, oldValue, info.path, info.originalPath, info.parent);
 	 * });
+	 *
+	 * // This mutation will invoke our callback
+	 * proxy.bla++;
+	 * ```
+	 *
+	 * When providing the specific path to watch, this parameter can contain an object or `Map` with lists of
+	 * dependencies to watch.
+	 *
+	 * ```js
+	 * const obj = {
+	 *   foo: {
+	 *     get value() {
+	 *       return this.bla * this.baz;
+	 *     }
+	 *   },
+	 *
+	 *   bla: 2,
+	 *   baz: 3
+	 * };
+	 *
+	 * const depsAsObj = {
+	 *   'foo.value': ['bla', 'baz']
+	 * };
+	 *
+	 * const {proxy: proxy1} = watch(obj, {dependencies: depsAsObj}, (mutations) => {
+	 *   mutations.forEach(([value, oldValue, info]) => {
+	 *     console.log(value, oldValue, info.path, info.originalPath, info.parent);
+	 *   });
+	 * });
+	 *
+	 * // This mutation will fire an additional event for `foo.value`
+	 * proxy1.bla++;
+	 *
+	 * const depsAsMap = new Map([
+	 *   [
+	 *     // A path to the property with dependencies
+	 *     ['foo', 'value'],
+	 *
+	 *     // Dependencies
+	 *     ['bla', 'baz']
+	 *   ]
+	 * ]);
+	 *
+	 * const {proxy: proxy2} = watch(obj, {dependencies: depsAsMap}, (mutations) => {
+	 *   mutations.forEach(([value, oldValue, info]) => {
+	 *     console.log(value, oldValue, info.path, info.originalPath, info.parent);
+	 *   });
+	 * });
+	 *
+	 * proxy2.baz++;
 	 * ```
 	 */
 	dependencies?: WatchDependencies;
