@@ -13,6 +13,10 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 ## v3.??.?? (2021-??-??)
 
+#### :boom: Breaking Change
+
+* `getDataTypeFromURL` marked as deprecated. Use `getDataTypeFromURI` instead. `core/mime-type`
+
 #### :bug: Bug Fix
 
 * Fixed a bug when watching an object by the specified path when occurring a mutation of nested properties `core/object/watch`
