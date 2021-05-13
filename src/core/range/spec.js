@@ -211,8 +211,14 @@ describe('core/range', () => {
 	it('toString', () => {
 		expect(new Range(0, 10).toString()).toBe('0..10');
 		expect(new Range(10, 0).toString()).toBe('10..0');
+
+		expect(new Range(0, 0).toString()).toBe('0..0');
+		expect(new Range(0, [0]).toString()).toBe('');
+		expect(new Range([0], 0).toString()).toBe('');
+
 		expect(new Range('a', 'd').toString()).toBe('a..d');
 		expect(new Range(['a'], 'd').toString()).toBe('b..d');
+
 		expect(new Range('a').toString()).toBe('a..');
 		expect(new Range(null, 'a').toString()).toBe('..a');
 	});

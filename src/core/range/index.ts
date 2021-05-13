@@ -345,7 +345,7 @@ export default class Range<T extends RangeValue> {
 	 */
 	toString(): string {
 		if (!this.isValid()) {
-			return 'Invalid range';
+			return '';
 		}
 
 		const
