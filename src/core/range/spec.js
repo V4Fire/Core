@@ -25,28 +25,30 @@ describe('core/range', () => {
 		expect(new Range([3], [0]).toArray()).toEqual([2, 1]);
 	});
 
-	it('char range', () => {
+	it('string range', () => {
 		expect(new Range('a', 'e').toArray()).toEqual(['a', 'b', 'c', 'd', 'e']);
+		expect(new Range('a', 'e'.codePointAt(0) - 2).toArray()).toEqual(['a', 'b', 'c']);
+		expect(new Range('a'.codePointAt(0) + 2, 'e').toArray()).toEqual(['c', 'd', 'e']);
 	});
 
-	it('char range without including of bounds', () => {
+	it('string range without including of bounds', () => {
 		expect(new Range(['a'], ['e']).toArray()).toEqual(['b', 'c', 'd']);
 	});
 
-	it('char range (extended Unicode)', () => {
+	it('string range (extended Unicode)', () => {
 		expect(new Range('😁', '😅').toArray()).toEqual(['😁', '😂', '😃', '😄', '😅']);
 		expect(new Range('😁', '😅'.codePointAt(0) - 2).toArray()).toEqual(['😁', '😂', '😃']);
 	});
 
-	it('char range (extended Unicode) without including of bounds', () => {
+	it('string range (extended Unicode) without including of bounds', () => {
 		expect(new Range(['😁'], ['😅']).toArray()).toEqual(['😂', '😃', '😄']);
 	});
 
-	it('reversed char range', () => {
+	it('reversed string range', () => {
 		expect(new Range('e', 'a').toArray()).toEqual(['e', 'd', 'c', 'b', 'a']);
 	});
 
-	it('reversed char range without including of bounds', () => {
+	it('reversed string range without including of bounds', () => {
 		expect(new Range(['e'], ['a']).toArray()).toEqual(['d', 'c', 'b']);
 	});
 
