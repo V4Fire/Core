@@ -147,6 +147,11 @@ describe('core/range', () => {
 		expect(new Range(1, 10).contains(new Range(4, 6))).toBeTrue();
 		expect(new Range(1, 10).contains(new Range(4, 12))).toBeFalse();
 
+		expect(new Range(1).contains(new Range(4, 6))).toBeTrue();
+		expect(new Range(1, 10).contains(new Range(4))).toBeFalse();
+
+		expect(new Range(1, 10).contains(new Range('a', 'z'))).toBeFalse();
+
 		expect(new Range('a', 'd').contains('b')).toBeTrue();
 		expect(new Range('a', 'd').contains('z')).toBeFalse();
 	});
