@@ -9,6 +9,22 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.??.?? (2021-??-??)
+
+#### :boom: Breaking Change
+
+* Renamed `reverse` to `isReversed`
+* Now `union` and `intersect` preserve ordering of the first range
+* New API of infinite ranges
+
+#### :bug: Bug Fix
+
+* Fixed a bug when intersection doesn't include bounds
+
+#### :memo: Documentation
+
+* Improved documentation
+
 ## v3.45.0 (2021-05-12)
 
 #### :rocket: New Feature

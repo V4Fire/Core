@@ -38,13 +38,16 @@ export default class Range<T extends RangeValue> {
 	/**
 	 * True if the range is reversed
 	 */
-	reverse: boolean = false;
+	isReversed: boolean = false;
 
 	/**
-	 * @param start - start position: if it wrapped by an array, the bound won't be included to the range
-	 * @param end - end position: if it wrapped by an array, the bound won't be included to the range
+	 * @param [start] - start position: if it wrapped by an array, the bound won't be included to the range
+	 * @param [end] - end position: if it wrapped by an array, the bound won't be included to the range
 	 */
-	constructor(start: CanArray<T>, end?: Nullable<T | number> | T[]) {
+	constructor(
+		start: T[] | Nullable<T> | number = -Infinity,
+		end: CanArray<T> | number = Infinity
+	) {
 		const
 			unwrap = (v) => Object.isArray(v) ? v[0] : v;
 
@@ -52,43 +55,77 @@ export default class Range<T extends RangeValue> {
 			unwrappedStart = unwrap(start),
 			unwrappedEnd = unwrap(end);
 
+		let
+			type;
+
 		if (Object.isArray(start)) {
-			const r = new Range(unwrappedStart);
-			start = r.toType(r.start + (unwrappedStart > unwrappedEnd ? -1 : 1));
+			const
+				r = new Range(unwrappedStart);
+
+			if (unwrappedStart !== unwrappedEnd) {
+				start = r.toType(r.start + (unwrappedStart > unwrappedEnd ? -1 : 1));
+
+			} else {
+				start = NaN;
+				type = r.type;
+			}
 		}
 
 		if (Object.isArray(end)) {
-			const r = new Range(unwrappedEnd);
-			end = r.toType(r.start + (unwrappedStart > unwrappedEnd ? 1 : -1));
+			const
+				r = new Range(unwrappedEnd);
+
+			if (unwrappedStart !== unwrappedEnd) {
+				end = r.toType(r.start + (unwrappedStart > unwrappedEnd ? 1 : -1));
+
+			} else {
+				end = NaN;
+				type = type ?? r.type;
+			}
 		}
 
-		if (Object.isString(start)) {
+		if (Object.isString(start) || Object.isString(end)) {
 			this.type = 'string';
-			this.start = codePointAt(start);
+
+			if (Object.isString(start)) {
+				this.start = codePointAt(start);
+
+			} else if (Object.isNumber(start)) {
+				if (isFinite(start)) {
+					this.start = codePointAt(String.fromCodePoint(start));
+
+				} else {
+					this.start = start;
+				}
+
+			} else {
+				this.start = -Infinity;
+			}
 
 			if (Object.isString(end)) {
 				this.end = codePointAt(end);
 
-			} else if (end != null && Object.isNumber(end)) {
-				this.end = codePointAt(String.fromCodePoint(end));
+			} else if (Object.isNumber(end)) {
+				if (isFinite(end)) {
+					this.end = codePointAt(String.fromCodePoint(end));
+
+				} else {
+					this.end = end;
+				}
 
 			} else {
-				this.end = this.start;
+				this.end = Infinity;
 			}
 
 		} else {
-			this.type = Object.isDate(start) ? 'date' : 'number';
-			this.start = Number(start);
-			this.end = end !== undefined ? Number(end) : Infinity;
+			this.type = type ?? (Object.isDate(start) || Object.isDate(end) ? 'date' : 'number');
+			this.start = start == null ? -Infinity : Number(start);
+			this.end = Number(end);
 		}
 
 		if (this.start > this.end) {
 			[this.start, this.end] = [this.end, this.start];
-			this.reverse = true;
-		}
-
-		if (this.reverse && !Number.isFinite(this.end)) {
-			throw new Error('Can\'t reverse a range without ending');
+			this.isReversed = true;
 		}
 	}
 
@@ -111,7 +148,7 @@ export default class Range<T extends RangeValue> {
 	 */
 	contains(el: unknown): boolean {
 		if (el instanceof Range) {
-			return this.intersect(el).isValid();
+			return this.type === el.type && this.start <= el.start && this.end >= el.end;
 		}
 
 		const val = Object.isString(el) ? codePointAt(el) : Number(el);
@@ -127,10 +164,19 @@ export default class Range<T extends RangeValue> {
 	intersect(range: Range<T extends string ? string : T>): Range<T> {
 		const
 			start = <T>Math.max(this.start, range.start),
-			end = <T>Math.min(this.end, range.end),
-			newRange = start < end ? new Range(start, end) : new Range(<T>NaN, <T>NaN);
+			end = <T>Math.min(this.end, range.end);
+
+		if (this.type !== range.type) {
+			return new Range(<T>0, [<T>0]);
+		}
+
+		const newRange = start <= end ?
+			new Range(start, end) :
+			new Range(<T>0, [<T>0]);
 
 		newRange.type = this.type;
+		newRange.isReversed = this.isReversed;
+
 		return newRange;
 	}
 
@@ -141,10 +187,18 @@ export default class Range<T extends RangeValue> {
 	 * @param range
 	 */
 	union(range: Range<T extends string ? string : T>): Range<T> {
-		const
-			newRange = new Range<T>(<T>Math.min(this.start, range.start), <T>Math.max(this.end, range.end));
+		if (this.type !== range.type) {
+			return new Range(<T>0, [<T>0]);
+		}
+
+		const newRange = new Range<T>(
+			<T>Math.min(this.start, range.start),
+			<T>Math.max(this.end, range.end)
+		);
 
 		newRange.type = this.type;
+		newRange.isReversed = this.isReversed;
+
 		return newRange;
 	}
 
@@ -156,7 +210,7 @@ export default class Range<T extends RangeValue> {
 			range = new Range(<T>this.start, <T>this.end);
 
 		range.type = this.type;
-		range.reverse = this.reverse;
+		range.isReversed = this.isReversed;
 
 		return range;
 	}
@@ -194,7 +248,7 @@ export default class Range<T extends RangeValue> {
 			return NaN;
 		}
 
-		if (!isFinite(this.end)) {
+		if (!isFinite(this.start) || !isFinite(this.end)) {
 			return Infinity;
 		}
 
@@ -211,27 +265,63 @@ export default class Range<T extends RangeValue> {
 		}
 
 		if (step == null || step === 0) {
-			step = this.type === 'date' ? (this.end - this.start) * 0.01 : 1;
+			if (this.type === 'date') {
+				if (isFinite(this.start) && isFinite(this.end)) {
+					step = (this.end - this.start) * 0.01;
+
+				} else {
+					step = (30).days();
+				}
+
+			} else {
+				step = 1;
+			}
 		}
 
 		if (!Number.isNatural(step)) {
 			throw new TypeError('Step value can be only natural');
 		}
 
-		if (this.reverse) {
-			for (let i = this.end; i >= this.start; i -= step) {
-				yield this.toType(i);
+		let
+			start,
+			end;
 
-				if (i >= Number.MAX_SAFE_INTEGER) {
+		const
+			isStringRange = this.type === 'string';
+
+		if (isFinite(this.start)) {
+			start = this.start;
+
+		} else if (isStringRange) {
+			start = 0;
+
+		} else {
+			start = Number.MIN_SAFE_INTEGER;
+		}
+
+		if (isFinite(this.end)) {
+			end = this.end;
+
+		} else {
+			end = Number.MAX_SAFE_INTEGER;
+		}
+
+		if (this.isReversed) {
+			for (let i = end; i >= start; i -= step) {
+				try {
+					yield this.toType(i);
+
+				} catch {
 					break;
 				}
 			}
 
 		} else {
-			for (let i = this.start; i <= this.end; i += step) {
-				yield this.toType(i);
+			for (let i = start; i <= end; i += step) {
+				try {
+					yield this.toType(i);
 
-				if (i >= Number.MAX_SAFE_INTEGER) {
+				} catch {
 					break;
 				}
 			}
@@ -243,6 +333,10 @@ export default class Range<T extends RangeValue> {
 	 * @param [step] - iteration step value
 	 */
 	toArray(step?: number): T[] {
+		if (this.isValid() && !isFinite(this.span())) {
+			throw new RangeError("Can't create an array of the infinitive range. Use an iterator instead.");
+		}
+
 		return [...this.values(step)];
 	}
 
@@ -255,22 +349,27 @@ export default class Range<T extends RangeValue> {
 		}
 
 		const
-			chunks = [this.start],
-			res = <T[]>[];
+			res = <Array<T | string>>[];
 
-		chunks.push(this.end);
+		if (isFinite(this.start)) {
+			res.push(this.toType(this.start));
+
+		} else {
+			res.push('');
+		}
+
 		if (isFinite(this.end)) {
+			res.push(this.toType(this.end));
+
+		} else {
+			res.push('');
 		}
 
-		for (let i = 0; i < chunks.length; i++) {
-			res.push(this.toType(chunks[i]));
-		}
-
-		if (this.reverse) {
+		if (this.isReversed) {
 			res.reverse();
 		}
 
-		return res.length === 2 ? res.join('..') : `${String(res[0])}..`;
+		return res.join('..');
 	}
 
 	/**

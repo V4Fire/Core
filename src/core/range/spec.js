@@ -35,7 +35,6 @@ describe('core/range', () => {
 
 	it('char range (extended Unicode)', () => {
 		expect(new Range('😁', '😅').toArray()).toEqual(['😁', '😂', '😃', '😄', '😅']);
-		expect(new Range('😁').toArray()).toEqual(['😁']);
 		expect(new Range('😁', '😅'.codePointAt(0) - 2).toArray()).toEqual(['😁', '😂', '😃']);
 	});
 
@@ -89,10 +88,52 @@ describe('core/range', () => {
 		expect(new Range(new Date(), new Date().add({milliseconds: 3})).span()).toBeGreaterThanOrEqual(4);
 	});
 
+	it('infinity ranges', () => {
+		expect(new Range().span()).toBePositiveInfinity();
+		expect(new Range().toString()).toBe('..');
+		expect(new Range().contains(-10)).toBeTrue();
+		expect(() => new Range().toArray())
+			.toThrowError("Can't create an array of the infinitive range. Use an iterator instead.");
+
+		expect(new Range(0).span()).toBePositiveInfinity();
+		expect(new Range(0).toString()).toBe('0..');
+		expect(new Range(0).contains(-10)).toBeFalse();
+		expect(new Range(0).contains(10)).toBeTrue();
+		expect(new Range(0).contains(0)).toBeTrue();
+		expect(new Range([0]).contains(0)).toBeFalse();
+
+		expect(new Range(null, 0).span()).toBePositiveInfinity();
+		expect(new Range(-Infinity, 0).toString()).toBe('..0');
+		expect(new Range(null, 0).contains(-10)).toBeTrue();
+		expect(new Range(null, 0).contains(10)).toBeFalse();
+		expect(new Range(null, 0).contains(0)).toBeTrue();
+		expect(new Range(null, [0]).contains(0)).toBeFalse();
+
+		expect(new Range(new Date()).span()).toBePositiveInfinity();
+
+		expect(new Range('a').span()).toBePositiveInfinity();
+		expect(new Range('a').toString()).toBe('a..');
+		expect(new Range('a').contains('0')).toBeFalse();
+		expect(new Range('a').contains('c')).toBeTrue();
+		expect(new Range('a').contains('a')).toBeTrue();
+		expect(new Range(['a']).contains('a')).toBeFalse();
+
+		expect(new Range(null, 'a').span()).toBePositiveInfinity();
+		expect(new Range(-Infinity, 'a').toString()).toBe('..a');
+		expect(new Range(null, 'a').contains('0')).toBeTrue();
+		expect(new Range(null, 'a').contains('c')).toBeFalse();
+		expect(new Range(null, 'a').contains('a')).toBeTrue();
+		expect(new Range(null, ['a']).contains('a')).toBeFalse();
+	});
+
 	it('clamped element', () => {
 		expect(new Range(0, 3).clamp(2)).toBe(2);
 		expect(new Range(0, 3).clamp(20)).toBe(3);
 		expect(new Range(0, 3).clamp(-20)).toBe(0);
+
+		expect(new Range(0).clamp(20)).toBe(20);
+		expect(new Range(null, 3).clamp(-20)).toBe(-20);
+
 		expect(new Range(0).clamp(20)).toBe(20);
 		expect(new Range(40, 10).clamp(20)).toBe(20);
 		expect(new Range(40, 10).clamp(0)).toBe(10);
@@ -102,32 +143,68 @@ describe('core/range', () => {
 		expect(new Range(0, 3).contains(1)).toBeTrue();
 		expect(new Range(0, 3).contains(10)).toBeFalse();
 		expect(new Range(0).contains(10)).toBeTrue();
+
+		expect(new Range(1, 10).contains(new Range(4, 6))).toBeTrue();
+		expect(new Range(1, 10).contains(new Range(4, 12))).toBeFalse();
+
 		expect(new Range('a', 'd').contains('b')).toBeTrue();
 		expect(new Range('a', 'd').contains('z')).toBeFalse();
 	});
 
 	it('intersection', () => {
-		expect(new Range(0, 3).intersect(new Range(2, 10)).toArray()).toEqual([2, 3]);
-		expect(new Range(5, -2).intersect(new Range(2, 10)).toArray()).toEqual([2, 3, 4, 5]);
-		expect(new Range(-2, 5).intersect(new Range(10, 2)).toArray()).toEqual([2, 3, 4, 5]);
+		expect(new Range(0, 3).intersect(new Range(2, 10)).toArray())
+			.toEqual([2, 3]);
+
+		expect(new Range(5, -2).intersect(new Range(2, 10)).toArray())
+			.toEqual([5, 4, 3, 2]);
+
+		expect(new Range(-2, 5).intersect(new Range(10, 2)).toArray())
+			.toEqual([2, 3, 4, 5]);
+
+		expect(new Range(-1, 1).intersect(new Range(1, 2)).toArray())
+			.toEqual([1]);
+
+		expect(new Range(-1, 1).intersect(new Range([1], 2)).toArray())
+			.toEqual([]);
+
+		expect(new Range(1).intersect(new Range([1], 3)).toArray())
+			.toEqual([2, 3]);
+
+		expect(new Range(1, 10000).intersect(new Range('a', 'z')).toArray())
+			.toEqual([]);
 	});
 
 	it('union', () => {
-		expect(new Range(0, 3).union(new Range(2, 4)).toArray()).toEqual([0, 1, 2, 3, 4]);
-		expect(new Range(5, -2).union(new Range(2, 3)).toArray()).toEqual([-2, -1, 0, 1, 2, 3, 4, 5]);
-		expect(new Range(-2, 5).union(new Range(3, 2)).toArray()).toEqual([-2, -1, 0, 1, 2, 3, 4, 5]);
+		expect(new Range(0, 3).union(new Range(2, 4)).toArray())
+			.toEqual([0, 1, 2, 3, 4]);
+
+		expect(new Range(5, -2).union(new Range(2, 3)).toArray())
+			.toEqual([5, 4, 3, 2, 1, 0, -1, -2]);
+
+		expect(new Range(-2, 5).union(new Range(3, 2)).toArray())
+			.toEqual([-2, -1, 0, 1, 2, 3, 4, 5]);
+
+		expect(new Range([-2], [5]).union(new Range(3, 2)).toArray())
+			.toEqual([-1, 0, 1, 2, 3, 4]);
+
+		expect(new Range(2).union(new Range(3, 2)).toString())
+			.toBe('2..');
+
+		expect(new Range(1, 10000).union(new Range('a', 'z')).toArray())
+			.toEqual([]);
 	});
 
 	it('cloning', () => {
 		const r = new Range(0, 1);
 		expect(r.clone()).not.toBe(r);
 		expect(r.clone().toArray()).toEqual(r.toArray());
+		expect(new Range(0, [0]).clone().toArray()).toEqual([]);
 	});
 
 	it('validation', () => {
 		expect(new Range(0, 2).isValid()).toBeTrue();
 		expect(new Range(0, '2').isValid()).toBeTrue();
-		expect(new Range(0, 'a').isValid()).toBeFalse();
+		expect(new Range(0, 'a').isValid()).toBeTrue();
 		expect(new Range(new Date(), new Date('foo')).isValid()).toBeFalse();
 	});
 
@@ -135,6 +212,9 @@ describe('core/range', () => {
 		expect(new Range(0, 10).toString()).toBe('0..10');
 		expect(new Range(10, 0).toString()).toBe('10..0');
 		expect(new Range('a', 'd').toString()).toBe('a..d');
+		expect(new Range(['a'], 'd').toString()).toBe('b..d');
+		expect(new Range('a').toString()).toBe('a..');
+		expect(new Range(null, 'a').toString()).toBe('..a');
 	});
 
 	it('toArray', () => {

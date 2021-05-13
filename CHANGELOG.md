@@ -11,6 +11,23 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.??.?? (2021-??-??)
+
+#### :boom: Breaking Change
+
+* `core/range`:
+  * Renamed `reverse` to `isReversed`
+  * Now `union` and `intersect` preserve ordering of the first range
+  * New API of infinite ranges
+
+#### :bug: Bug Fix
+
+* Fixed a bug when intersection doesn't include bounds `core/range`
+
+#### :memo: Documentation
+
+* Improved documentation `core/range`
+
 ## v3.45.0 (2021-05-12)
 
 #### :boom: Breaking Change
