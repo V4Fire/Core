@@ -11,10 +11,10 @@
  * @packageDocumentation
  */
 
-import wrapEmit from 'core/cache/decorators/emit';
+import addEmit from 'core/cache/decorators/helpers/emit';
 
 import type Cache from 'core/cache/interface';
-import type { EmitCache } from 'core/cache/decorators/emit/interface';
+import type { EmitCache } from 'core/cache/decorators/helpers/emit/interface';
 import type { ClearFilter } from 'core/cache/interface';
 import type { TTLDecoratorOptions, TTLCache } from 'core/cache/decorators/ttl/interface';
 
@@ -46,22 +46,17 @@ export default function addTTL<
 	V = unknown,
 	K = string,
 >(cache: T, ttl?: number): TTLCache<V, K, EmitCache<V, K, T>> {
+	// eslint-disable-next-line @typescript-eslint/unbound-method
+	const {remove: originalRemove, set: originalSet, clear: originalClear, subscribe} =
+			addEmit<TTLCache<V, K>, V, K>(<TTLCache<V, K>><unknown>cache);
+
 	const
-		{remove: originalRemove, subscribe} = wrapEmit<T, V, K>(cache),
 		cacheWithTTL: TTLCache<V, K> = Object.create(cache),
 		ttlTimers = new Map<K, number | NodeJS.Timeout>();
 
 	cacheWithTTL.set = (key: K, value: V, opts?: TTLDecoratorOptions & Parameters<T['set']>[2]) => {
-		if (opts?.ttl != null || ttl != null) {
-			const
-				time = opts?.ttl ?? ttl;
-
-			ttlTimers.set(key, setTimeout(() => cacheWithTTL.remove(key), time));
-		} else {
-			cacheWithTTL.removeTTLFrom(key);
-		}
-
-		return cache.set(key, value, opts);
+		updateTTL(key, opts?.ttl);
+		return originalSet(key, value, opts);
 	};
 
 	cacheWithTTL.remove = (key: K) => {
@@ -79,11 +74,9 @@ export default function addTTL<
 		return false;
 	};
 
-	subscribe('remove', cacheWithTTL, (key: K) => cacheWithTTL.removeTTLFrom(key));
-
 	cacheWithTTL.clear = (filter?: ClearFilter<V, K>) => {
 		const
-			removed = cache.clear(filter);
+			removed = originalClear(filter);
 
 		removed.forEach((_, key) => {
 			cacheWithTTL.removeTTLFrom(key);
@@ -92,5 +85,24 @@ export default function addTTL<
 		return removed;
 	};
 
+	subscribe('remove', cacheWithTTL, ({args}) => cacheWithTTL.removeTTLFrom(args[0]));
+	subscribe('set', cacheWithTTL, ({args}) => updateTTL(args[0], args[2]?.ttl));
+	subscribe('clear', cacheWithTTL, ({result}) => {
+		result.forEach((_, key) => {
+			cacheWithTTL.removeTTLFrom(key);
+		});
+	});
+
 	return cacheWithTTL;
+
+	function updateTTL(key: K, optionTTL?: number): void {
+		if (optionTTL != null || ttl != null) {
+			const
+				time = optionTTL ?? ttl;
+
+			ttlTimers.set(key, setTimeout(() => cacheWithTTL.remove(key), time));
+		} else {
+			cacheWithTTL.removeTTLFrom(key);
+		}
+	}
 }

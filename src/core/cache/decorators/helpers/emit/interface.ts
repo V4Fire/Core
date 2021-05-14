@@ -8,6 +8,7 @@
 
 import type { EventEmitter2 as EventEmitter } from 'eventemitter2';
 import type Cache from 'core/cache/interface';
+import { eventEmitterSymbol } from 'core/cache/decorators/helpers/emit';
 
 export interface EmitCache<V = unknown, K = string, T extends Cache<V, K> = Cache<V, K>> extends Cache<V, K> {
 	/**
@@ -22,13 +23,15 @@ export interface EmitCache<V = unknown, K = string, T extends Cache<V, K> = Cach
 	/**
 	 * Emit events caused by side-effect
 	 */
-	eventEmitter: EventEmitter;
+	[eventEmitterSymbol]: EventEmitter;
 }
 
-export type WrapEmit = <T extends Cache<V, K>,
+export type AddEmit = <T extends Cache<V, K>,
 	V = unknown,
 	K = string,
 >(cache: T) => {
 	remove: T['remove'];
-	subscribe<M extends 'remove'>(key: M, thisInstance: Object, callback: ((...args: Parameters<T[M]>) => void)): void;
+	set: T['set'];
+	clear: T['clear'];
+	subscribe<M extends 'remove' | 'set' | 'clear'>(key: M, thisInstance: Object, callback: ((signature: {args: Parameters<T[M]>; result: ReturnType<T[M]>}) => void)): void;
 };

@@ -101,27 +101,6 @@ describe('core/cache/decorators/ttl', () => {
 		expect(cache.clear()).toEqual(new Map([['foo', 1], ['bar', 2]]));
 	});
 
-	it('all methods should call the original instance', () => {
-		const
-			simpleCache = new SimpleCache(),
-			cache = addTTL(simpleCache);
-
-		[
-			{
-				method: 'set',
-				parameters: ['foo', 1, undefined]
-			}, {
-				method: 'clear',
-				parameters: [() => true]
-			}
-		].forEach((el) => {
-			spyOn(simpleCache, el.method).and.callThrough();
-			cache[el.method](...el.parameters);
-
-			expect(simpleCache[el.method].calls.mostRecent().args).toEqual(el.parameters);
-		});
-	});
-
 	it('should delete property from storage if it was deleted by side effect', () => {
 		const
 			cache = addTTL(new RestrictedCache(1)),
@@ -133,6 +112,40 @@ describe('core/cache/decorators/ttl', () => {
 
 		cache.set('bar', 1, {ttl: 1000});
 		cache.set('baz', 2, {ttl: 1000});
+
+		expect(memory).toEqual(['bar']);
+	});
+
+	it('side effect clear', () => {
+		const
+			originalCache = new SimpleCache(),
+			cache = addTTL(originalCache),
+			memory = [];
+
+		cache.removeTTLFrom = (key) => {
+			memory.push(key);
+		};
+
+		cache.set('bar', 1, {ttl: 100});
+		cache.set('baz', 2, {ttl: 100});
+
+		originalCache.clear();
+
+		expect(memory).toEqual(['bar', 'baz']);
+	});
+
+	it('side effect set', () => {
+		const
+			originalCache = new SimpleCache(),
+			cache = addTTL(originalCache),
+			memory = [];
+
+		cache.removeTTLFrom = (key) => {
+			memory.push(key);
+		};
+
+		cache.set('bar', 1, {ttl: 100});
+		originalCache.set('bar', 2);
 
 		expect(memory).toEqual(['bar']);
 	});

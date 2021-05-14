@@ -8,7 +8,7 @@
 
 import SyncPromise from 'core/promise/sync';
 import type { SyncStorageNamespace, AsyncStorageNamespace } from 'core/kv-storage';
-import wrapEmit from 'core/cache/decorators/emit';
+import addEmit from 'core/cache/decorators/helpers/emit';
 
 import type Cache from 'core/cache/interface';
 import type { ClearFilter } from 'core/cache/interface';
@@ -74,7 +74,9 @@ export default class PersistentWrapper<T extends Cache<V, string>, V = unknown> 
 	 * Implements API of the wrapped cache object
 	 */
 	protected implementAPI(): void {
-		const {remove: originalRemove, subscribe} = wrapEmit<T, V, string>(this.cache);
+		// eslint-disable-next-line @typescript-eslint/unbound-method
+		const {remove: originalRemove, set: originalSet, clear: originalClear, subscribe} =
+			addEmit<T, V, string>(this.cache);
 
 		this.wrappedCache.has = this.getDefaultImplementation('has');
 		this.wrappedCache.get = this.getDefaultImplementation('get');
@@ -86,7 +88,7 @@ export default class PersistentWrapper<T extends Cache<V, string>, V = unknown> 
 			this.fetchedItems.add(key);
 
 			const
-				res = this.cache.set(key, value, opts);
+				res = originalSet(key, value, opts);
 
 			if (this.cache.has(key)) {
 				await this.engine.set(key, value, ttl);
@@ -101,13 +103,11 @@ export default class PersistentWrapper<T extends Cache<V, string>, V = unknown> 
 			return originalRemove(key);
 		};
 
-		subscribe('remove', this.wrappedCache, this.engine.remove.bind(this.engine));
-
 		this.wrappedCache.keys = () => SyncPromise.resolve(this.cache.keys());
 
 		this.wrappedCache.clear = async (filter?: ClearFilter<V, string>) => {
 			const
-				removed = this.cache.clear(filter),
+				removed = originalClear(filter),
 				removedKeys: string[] = [];
 
 			removed.forEach((_, key) => {
@@ -119,6 +119,18 @@ export default class PersistentWrapper<T extends Cache<V, string>, V = unknown> 
 		};
 
 		this.wrappedCache.removePersistentTTLFrom = (key: string) => this.engine.removeTTLFrom(key);
+
+		subscribe('remove', this.wrappedCache, ({args}) => this.engine.remove(args[0]));
+		subscribe('set', this.wrappedCache, ({args}) => {
+			const ttl = (<CanUndef<PersistentTTLDecoratorOptions>>args[2])?.persistentTTL ?? this.ttl;
+			return this.engine.set(args[0], args[1], ttl);
+		});
+
+		subscribe('clear', this.wrappedCache, ({result}) => {
+			result.forEach((_, key) => {
+				void this.engine.remove(key);
+			});
+		});
 	}
 
 	/**
