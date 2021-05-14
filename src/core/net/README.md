@@ -6,7 +6,7 @@ This module provides API to work with a network, such as testing of the network 
 import * as net from 'core/net';
 
 (async () => {
-  await net.isOnline();
+  console.log(await net.isOnline());
 })();
 ```
 
@@ -42,4 +42,19 @@ export default {
     lastDateSyncInterval: (1).minute()
   }
 }
-````
+```
+
+## Engines
+
+The module supports different implementations to check the online connection.
+The implementations are placed within `core/net/engines`. By default, it uses a strategy by requesting
+some recourse from the internet, like a Google favicon. But you can manually provide an engine to use.
+
+```js
+import * as net from 'core/net';
+
+(async () => {
+  // Loopback. Always online.
+  console.log(await net.isOnline(async () => true));
+})();
+```
