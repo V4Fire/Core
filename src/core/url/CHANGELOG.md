@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.43.1 (2021-04-19)
+
+#### :bug: Bug Fix
+
+* Fixed a bug when parsing a query string from a URL without query parameters `fromQueryString`
+
 ## v3.40.0 (2021-04-01)
 
 #### :rocket: New Feature

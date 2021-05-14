@@ -45,16 +45,12 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * @param [opts] - additional options for the operation
 	 */
 	setImmediate(cb: Function, opts?: AsyncCbOptions<CTX>): Nullable<TimerId> {
-		const
-			wrapper = globalThis['setImmediate'],
-			clearFn = globalThis['clearImmediate'];
-
 		return this.registerTask({
 			...opts,
 			name: this.namespaces.immediate,
 			obj: cb,
-			clearFn,
-			wrapper,
+			clearFn: clearImmediate,
+			wrapper: setImmediate,
 			linkByWrapper: true
 		});
 	}

@@ -11,6 +11,8 @@
  * @packageDocumentation
  */
 
+import { deprecate } from 'core/functools/deprecation';
+
 import { mimeTypes, normalizeMimeStrRgxp, dataURIRgxp, isTextType, isXMLType } from 'core/mime-type/const';
 import type { DataType } from 'core/mime-type/interface';
 
@@ -19,11 +21,20 @@ export * from 'core/mime-type/interface';
 
 /**
  * Returns a type of data from the specified DATA:URI string
- * @param url
+ * @param uri
+ */
+export function getDataTypeFromURI(uri: string): CanUndef<DataType> {
+	const mime = dataURIRgxp.exec(uri)?.[1];
+	return mime != null ? getDataType(mime) : undefined;
+}
+
+/**
+ * @deprecated
+ * @see [[getDataTypeFromURI]]
  */
 export function getDataTypeFromURL(url: string): CanUndef<DataType> {
-	const mime = dataURIRgxp.exec(url)?.[1];
-	return mime != null ? getDataType(mime) : undefined;
+	deprecate({type: 'function', name: 'getDataTypeFromURL', renamedTo: 'getDataTypeFromURI'});
+	return getDataTypeFromURI(url);
 }
 
 /**

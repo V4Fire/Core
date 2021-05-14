@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.43.1 (2021-04-19)
+
+#### :house: Internal
+
+* Renamed `noMessageBodyStatusCodes` to `noContentStatusCodes` `response`
+
 ## v3.43.0 (2021-04-14)
 
 #### :house: Internal

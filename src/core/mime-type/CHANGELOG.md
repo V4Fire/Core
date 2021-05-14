@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.45.0 (2021-05-12)
+
+#### :boom: Breaking Change
+
+* `getDataTypeFromURL` marked as deprecated. Use `getDataTypeFromURI` instead.
+
 ## v3.29.1 (2020-12-23)
 
 #### :house: Internal

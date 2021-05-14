@@ -14,7 +14,7 @@
 import log from 'core/log';
 
 import { concatURLs } from 'core/url';
-import { getDataTypeFromURL } from 'core/mime-type';
+import { getDataTypeFromURI } from 'core/mime-type';
 
 import { merge } from 'core/request/utils';
 import { globalOpts, isAbsoluteURL } from 'core/request/const';
@@ -108,7 +108,7 @@ export default class RequestContext<D = unknown> extends Super<D> {
 			resolveRequest(api?: Nullable<string>): string {
 				const
 					reqPath = String(path),
-					type = getDataTypeFromURL(reqPath);
+					type = getDataTypeFromURI(reqPath);
 
 				// Support for "mime string" requests
 				if (type != null) {

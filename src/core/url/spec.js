@@ -31,7 +31,14 @@ describe('core/url/fromQueryString', () => {
 
 	it('parsing from querystring', () => {
 		expect(fromQueryString('?foo=bar')).toEqual({foo: 'bar'});
+
 		expect(fromQueryString('http://foo.bla?foo=bar')).toEqual({foo: 'bar'});
+		expect(fromQueryString('http://foo.bla/bar/baz?foo=bar')).toEqual({foo: 'bar'});
+		expect(fromQueryString('http://foo.bla/bar/baz')).toEqual({});
+
+		expect(fromQueryString('wss://foo.bla/bar/baz')).toEqual({});
+		expect(fromQueryString('/foo/bar/baz')).toEqual({'/foo/bar/baz': null});
+		expect(fromQueryString('wss://foo.bla/bar/baz?foo=bar')).toEqual({foo: 'bar'});
 	});
 
 	it('parsing without decoding', () => {

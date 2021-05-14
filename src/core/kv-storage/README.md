@@ -122,7 +122,7 @@ specify your engine by using the special factory function.
 import { factory } from 'core/kv-storage';
 
 const syncStorage = factory(YourSyncStorage);
-const asyncStorage = factory(YourSyncStorage, true);
+const asyncStorage = factory(YourAsyncStorage, true);
 ```
 
 The wrapped engine need to have CRUD methods from the interface:

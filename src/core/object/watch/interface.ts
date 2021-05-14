@@ -20,7 +20,7 @@ export interface Watcher<T extends object = object> {
 	proxy: T;
 
 	/**
-	 * Sets a new watchable value for an object by the specified path
+	 * Sets a new watchable value for the proxy object by the specified path
 	 *
 	 * @param path
 	 * @param value
@@ -28,13 +28,15 @@ export interface Watcher<T extends object = object> {
 	set(path: WatchPath, value: unknown): void;
 
 	/**
-	 * Deletes a watchable value from an object by the specified path
+	 * Deletes a watchable value from the proxy object by the specified path.
+	 * To restore watching for this property, use `set`.
+	 *
 	 * @param path
 	 */
 	delete(path: WatchPath): void;
 
 	/**
-	 * Cancels watching for an object
+	 * Cancels watching for the proxy object
 	 */
 	unwatch(): void;
 }
@@ -45,43 +47,159 @@ export interface PathModifier {
 
 export interface WatchOptions {
 	/**
-	 * If true, then the callback of changing is also fired on mutation of nested objects
+	 * If true, then the callback of changing is also fired on mutations of nested properties
+	 *
 	 * @default `false`
+	 * @example
+	 * ```js
+	 * const {proxy} = watch({a: {b: {c: 1}}}, {deep: true}, (mutations) => {
+	 *   mutations.forEach(([value, oldValue, info]) => {
+	 *     console.log(value, oldValue, info.path);
+	 *   });
+	 * });
+	 *
+	 * // 2 1 ['a', 'b', 'c']
+	 * proxy.a.b.c = 2;
+	 *
+	 * // {c: 2} {e: 2} ['a', 'b']
+	 * proxy.a.b = {e: 2};
+	 * ```
 	 */
 	deep?: boolean;
 
 	/**
-	 * If true, then the callback of changing is also fired on mutation of objects from a prototype
+	 * If true, then the callback of changing is also fired on mutations of properties from prototypes
+	 *
 	 * @default `false`
+	 * @example
+	 * ```js
+	 * const {proxy} = watch(a: 1, {__proto__: {b: 1}}, {withProto: true}, (mutations) => {
+	 *   mutations.forEach(([value, oldValue, info]) => {
+	 *     console.log(value, oldValue, info.path, info.fromProto);
+	 *   });
+	 * });
+	 *
+	 * // 2 1 ['a'] false
+	 * proxy.a = 2;
+	 *
+	 * // 2 1 ['b'] true
+	 * proxy.b = 2;
+	 * ```
 	 */
 	withProto?: boolean;
 
 	/**
-	 * If true, then all mutation events will be fired immediately
+	 * If true, then all mutation events will be fired immediately.
+	 * Notice, with enabling this option, the callback changes its interface:
+	 *
+	 * ```typescript
+	 * // Before
+	 * type Cb = (mutations: [[unknown, unknown, WatchHandlerParams]]) => any;
+	 *
+	 * // After
+	 * type CbWithImmediate = (newValue: unknown, oldValue: unknown, info: WatchHandlerParams) => any;
+	 * ```
+	 *
 	 * @default `false`
+	 * @example
+	 * ```js
+	 * const {proxy} = watch(a: 1}, {immediate: true}, (value, oldValue, info) => {
+	 *   console.log(value, oldValue, info.path);
+	 * });
+	 *
+	 * // 2 1 ['a']
+	 * proxy.a = 2;
+	 * ```
 	 */
 	immediate?: boolean;
 
 	/**
-	 * If true, then all mutation events of nested properties will be collapsed to one event
-	 * and fired from a top property of the object
+	 * The option enables or disables collapsing of mutation events.
+	 * When it toggles to `true`, all mutation events fire as if they occur on top properties of the watchable object.
+	 *
+	 * ```js
+	 * const {proxy} = watch({a: {b: {c: 1}}}, {collapse: true, deep: true}, (mutations) => {
+	 *   mutations.forEach(([value, oldValue, info]) => {
+	 *     console.log(value, oldValue, info.path);
+	 *   });
+	 * });
+	 *
+	 * // {b: {c: 2}} {b: {c: 2}} ['a', 'b', 'c']
+	 * proxy.a.b.c = 2;
+	 * ```
+	 *
+	 * When it toggles to `false,` and the watcher binds to the specified path, the callback takes a list of mutations.
+	 * Otherwise, the callback takes only the last mutation.
+	 *
+	 * ```js
+	 * const {proxy} = watch({a: {b: {c: 1}}}, 'a.b', {collapse: false}, (mutations) => {
+	 *   mutations.forEach(([value, oldValue, info]) => {
+	 *     console.log(value, oldValue, info.path, info.originalPath);
+	 *   });
+	 * });
+	 *
+	 * // 2 1 ['a', 'b'] ['a', 'b', 'c']
+	 * proxy.a.b.c = 2;
+	 *
+	 * const {proxy: proxy2} = watch({a: {b: {c: 1}}}, 'a.b', (value, oldValue, info) => {
+	 *   console.log(value, oldValue, info.path, info.originalPath);
+	 * });
+	 *
+	 * // {c: 2} {c: 2} ['a', 'b'] ['a', 'b', 'c']
+	 * proxy2.a.b.c = 2;
+	 * ```
 	 *
 	 * @default `false`
 	 */
 	collapse?: boolean;
 
 	/**
-	 * Function that takes a path of the mutation event and returns a new path
+	 * A function that takes a path of the mutation event and returns a new path.
+	 * The function is used when you want to mask one mutation to another one.
+	 *
+	 * @example
+	 * ```js
+	 * function pathModifier(path) {
+	 *   return path.map((chunk) => chunk.replace(/^_/, ''));
+	 * }
+	 *
+	 * const {proxy} = watch({a: 1, b: 2, _a: 1}, 'a', {pathModifier}, (mutations) => {
+	 *   mutations.forEach(([value, oldValue, info]) => {
+	 *     console.log(value, oldValue, info.path, info.originalPath);
+	 *   });
+	 * });
+	 *
+	 * // 2 1 ['a'], ['_a']
+	 * proxy._a = 2;
+	 * ```
 	 */
 	pathModifier?: PathModifier;
 
 	/**
-	 * Filter function for mutation events
+	 * A filter function for mutation events.
+	 * The function allows skipping some mutation events.
+	 *
+	 * @example
+	 * ```js
+	 * function eventFilter(value, oldValue, info) {
+	 *   return info.path[0] !== '_a';
+	 * }
+	 *
+	 * const {proxy} = watch({a: 1, b: 2, _a: 1}, {eventFilter}, (mutations) => {
+	 *   mutations.forEach(([value, oldValue, info]) => {
+	 *     console.log(value, oldValue, info.path, info.originalPath);
+	 *   });
+	 * });
+	 *
+	 * // This mutation won't invoke our callback
+	 * proxy._a = 2;
+	 * ```
 	 */
 	eventFilter?: WatchHandler;
 
 	/**
-	 * Link to an object that has connection with the watched object
+	 * Link to an object that should connect with the watched object, i.e.,
+	 * changing of properties of the tied object, will also emit mutation events
 	 *
 	 * @example
 	 * ```js
@@ -106,8 +224,8 @@ export interface WatchOptions {
 	tiedWith?: object;
 
 	/**
-	 * List of prefixes for a path to watch.
-	 * This parameter can help to watch getters.
+	 * List of prefixes for paths to watch.
+	 * This parameter can help to watch accessors.
 	 *
 	 * @example
 	 * ```js
@@ -119,16 +237,19 @@ export interface WatchOptions {
 	 *   _foo: 2
 	 * };
 	 *
-	 * watch(obj, 'foo', {prefixes: ['_']}, (val) => {
-	 *   console.log(val);
+	 * const {proxy} = watch(obj, 'foo', {prefixes: ['_']}, (value, oldValue, info) => {
+	 *   console.log(value, oldValue, info.path, info.originalPath, info.parent);
 	 * });
+	 *
+	 * // This mutation will invoke our callback
+	 * proxy._foo++;
 	 * ```
 	 */
 	prefixes?: string[];
 
 	/**
-	 * List of postfixes for a path to watch.
-	 * This parameter can help to watch getters.
+	 * List of postfixes for paths to watch.
+	 * This parameter can help to watch accessors.
 	 *
 	 * @example
 	 * ```js
@@ -140,18 +261,20 @@ export interface WatchOptions {
 	 *   fooStore: 2
 	 * };
 	 *
-	 * watch(obj, 'foo', {postfixes: ['Store']}, (val) => {
-	 *   console.log(val);
+	 * const {proxy} = watch(obj, 'foo', {postfixes: ['Store']}, (value, oldValue, info) => {
+	 *   console.log(value, oldValue, info.path, info.originalPath, info.parent);
 	 * });
+	 *
+	 * // This mutation will invoke our callback
+	 * proxy.fooStore++;
 	 * ```
 	 */
 	postfixes?: string[];
 
 	/**
-	 * List of dependencies for a path to watch.
-	 * This parameter can help to watch getters.
+	 * When providing the specific path to watch, this parameter can contain a list of dependencies for the watching path.
+	 * This parameter can help to watch accessors.
 	 *
-	 * @example
 	 * ```js
 	 * const obj = {
 	 *   get foo() {
@@ -162,16 +285,66 @@ export interface WatchOptions {
 	 *   baz: 3
 	 * };
 	 *
-	 * watch(obj, 'foo', {dependencies: ['bla', 'baz']}, (val) => {
-	 *   console.log(val);
+	 * const {proxy} = watch(obj, 'foo', {dependencies: ['bla', 'baz']}, (value, oldValue, info) => {
+	 *   console.log(value, oldValue, info.path, info.originalPath, info.parent);
 	 * });
+	 *
+	 * // This mutation will invoke our callback
+	 * proxy.bla++;
+	 * ```
+	 *
+	 * When providing the specific path to watch, this parameter can contain an object or `Map` with lists of
+	 * dependencies to watch.
+	 *
+	 * ```js
+	 * const obj = {
+	 *   foo: {
+	 *     get value() {
+	 *       return this.bla * this.baz;
+	 *     }
+	 *   },
+	 *
+	 *   bla: 2,
+	 *   baz: 3
+	 * };
+	 *
+	 * const depsAsObj = {
+	 *   'foo.value': ['bla', 'baz']
+	 * };
+	 *
+	 * const {proxy: proxy1} = watch(obj, {dependencies: depsAsObj}, (mutations) => {
+	 *   mutations.forEach(([value, oldValue, info]) => {
+	 *     console.log(value, oldValue, info.path, info.originalPath, info.parent);
+	 *   });
+	 * });
+	 *
+	 * // This mutation will fire an additional event for `foo.value`
+	 * proxy1.bla++;
+	 *
+	 * const depsAsMap = new Map([
+	 *   [
+	 *     // A path to the property with dependencies
+	 *     ['foo', 'value'],
+	 *
+	 *     // Dependencies
+	 *     ['bla', 'baz']
+	 *   ]
+	 * ]);
+	 *
+	 * const {proxy: proxy2} = watch(obj, {dependencies: depsAsMap}, (mutations) => {
+	 *   mutations.forEach(([value, oldValue, info]) => {
+	 *     console.log(value, oldValue, info.path, info.originalPath, info.parent);
+	 *   });
+	 * });
+	 *
+	 * proxy2.baz++;
 	 * ```
 	 */
 	dependencies?: WatchDependencies;
 
 	/**
 	 * Watch engine to use.
-	 * By default will be used proxy if supported, otherwise accessors.
+	 * By default, will be used proxy if supported, otherwise accessors.
 	 */
 	engine?: WatchEngine;
 }
@@ -214,7 +387,7 @@ export interface WatchHandlerParentParams {
  */
 export interface RawWatchHandlerParams {
 	/**
-	 * Link to an object that is watched
+	 * Link to the object that is watched
 	 */
 	obj: object;
 
@@ -224,13 +397,13 @@ export interface RawWatchHandlerParams {
 	root: object;
 
 	/**
-	 * Link to the top object of watching
+	 * Link to the top property of watching
 	 * (the first level property of the root)
 	 */
 	top?: object;
 
 	/**
-	 * True if a mutation has occurred on an object from a prototype of the watched object
+	 * True if the mutation has occurred on a prototype of the watched object
 	 */
 	fromProto: boolean;
 
@@ -245,12 +418,28 @@ export interface RawWatchHandlerParams {
  */
 export interface WatchHandlerParams extends RawWatchHandlerParams {
 	/**
-	 * Information about a parent mutation event
+	 * Information about the parent mutation event
 	 */
 	parent?: WatchHandlerParentParams;
 
 	/**
-	 * An original path to a property that was changed
+	 * The original path to a property that was changed.
+	 *
+	 * @example
+	 * ```js
+	 * function pathModifier(path) {
+	 *   return path.map((chunk) => chunk.replace(/^_/, ''));
+	 * }
+	 *
+	 * const {proxy} = watch(a: 1, b: 2, _a: 1}, 'a', {pathModifier}, (mutations) => {
+	 *   mutations.forEach(([value, oldValue, info]) => {
+	 *     console.log(value, oldValue, info.path, info.originalPath);
+	 *   });
+	 * });
+	 *
+	 * // 2 1 ['a'], ['_a']
+	 * proxy._a = 2;
+	 * ```
 	 */
 	originalPath: unknown[];
 }

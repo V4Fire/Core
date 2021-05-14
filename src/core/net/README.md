@@ -2,6 +2,14 @@
 
 This module provides API to work with a network, such as testing of the network connection, etc.
 
+```js
+import * as net from 'core/net';
+
+(async () => {
+  console.log(await net.isOnline());
+})();
+```
+
 ## Configuration
 
 To enable online checking you need to add a configuration within your runtime config module (`src/config`).
@@ -34,14 +42,43 @@ export default {
     lastDateSyncInterval: (1).minute()
   }
 }
-````
+```
 
-## Examples
+## Events
+
+The module exports an event emitter to handle connection events.
+
+```js
+import * as net from 'core/net';
+
+net.emitter.emitter.on('online', () => {
+  console.log("I'm online!");
+});
+
+net.emitter.emitter.on('offline', (lastOnlineDate) => {
+  console.log(`I have been online at ${lastOnlineDate}`);
+});
+
+net.emitter.emitter.on('status', (e) => {
+  console.log(`Connection is ${e.status ? 'online' : 'offline'}`);
+
+  if (!e.status) {
+    console.log(`I have been online at ${el.lastOnline}`);
+  }
+});
+```
+
+## Engines
+
+The module supports different implementations to check the online connection.
+The implementations are placed within `core/net/engines`. By default, it uses a strategy by requesting
+some recourse from the internet, like a Google favicon. But you can manually provide an engine to use.
 
 ```js
 import * as net from 'core/net';
 
 (async () => {
-  await net.isOnline();
+  // Loopback. Always online.
+  console.log(await net.isOnline(async () => true));
 })();
 ```

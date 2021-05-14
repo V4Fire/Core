@@ -1,0 +1,616 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>src/core/functools/trait | V4Fire</title>
+	<meta name="description" content="Documentation for V4Fire">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="../assets/css/main.css">
+	<script async src="../assets/js/search.js" id="search-script"></script>
+<style>/*!
+ * V4Fire Core
+ * https://github.com/V4Fire/Core
+ *
+ * Released under the MIT license
+ * https://github.com/V4Fire/Core/blob/master/LICENSE
+ */
+
+body {
+	font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+}
+
+code, pre, tt {
+	font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+}
+
+.tsd-typography h1,
+.tsd-typography h2,
+.tsd-typography h3,
+.tsd-typography h4,
+.tsd-typography h5,
+.tsd-typography h6 {
+	margin: 1em 0;
+	font-family: -apple-system, BlinkMacSystemFont, UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+}
+
+.tsd-panel {
+	padding: 20px 40px;
+	border: 1px solid #DDD;
+	border-radius: 10px;
+	box-shadow: none;
+}
+
+.tsd-page-title {
+	color: #EEE;
+
+	background: #232526; /* fallback for old browsers */
+	background: -webkit-linear-gradient(to right, #414345, #232526); /* Chrome 10-25, Safari 5.1-6 */
+	background: linear-gradient(to right, #414345, #232526); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+.tsd-page-toolbar {
+	height: 43px;
+}
+
+.title {
+	display: inline-flex;
+	align-items: center;
+}
+
+.title::before {
+	content: "";
+
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	margin-right: 10px;
+
+	border-radius: 5px;
+	background-image: url("https://avatars0.githubusercontent.com/u/29952525?s=200&v=4");
+	background-size: contain;
+}
+
+#tsd-search .tsd-widget.search.no-caption {
+	bottom: 0;
+}
+
+#tsd-search .field {
+	height: 100%;
+}
+
+pre {
+	background-color: rgba(7, 7, 7, 0.01);
+}
+
+/**
+ * GitHub Gist Theme
+ * Author : Anthony Attard - https://github.com/AnthonyAttard
+ * Author : Louis Barranqueiro - https://github.com/LouisBarranqueiro
+ */
+
+.hljs {
+	display: block;
+	background: white;
+	padding: 0.5em;
+	color: #333333;
+	overflow-x: auto;
+}
+
+.hljs-comment,
+.hljs-meta {
+	color: #969896;
+}
+
+.hljs-variable,
+.hljs-template-variable,
+.hljs-strong,
+.hljs-emphasis,
+.hljs-quote {
+	color: #df5000;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-type {
+	color: #d73a49;
+}
+
+.hljs-literal,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-attribute {
+	color: #0086b3;
+}
+
+.hljs-section,
+.hljs-name {
+	color: #63a35c;
+}
+
+.hljs-tag {
+	color: #333333;
+}
+
+.hljs-title,
+.hljs-attr,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-selector-attr,
+.hljs-selector-pseudo {
+	color: #6f42c1;
+}
+
+.hljs-addition {
+	color: #55a532;
+	background-color: #eaffea;
+}
+
+.hljs-deletion {
+	color: #bd2c00;
+	background-color: #ffecec;
+}
+
+.hljs-link {
+	text-decoration: underline;
+}
+
+.hljs-number {
+	color: #005cc5;
+}
+
+.hljs-string {
+	color: #032f62;
+}
+</style>
+</head>
+<body>
+<script>'use strict';
+
+/*!
+ * V4Fire Core
+ * https://github.com/V4Fire/Core
+ *
+ * Released under the MIT license
+ * https://github.com/V4Fire/Core/blob/master/LICENSE
+ */
+
+(function () {
+	if (localStorage.getItem('visibility') == null) {
+		localStorage.setItem('visibility', 'public');
+	}
+
+	document.title = document.title.replace(/['"]+|src\//g, '');
+	document.body.style.display = 'none';
+})();
+</script>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.json" data-base="..">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="../index.html" class="title">V4Fire</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="../modules.html">V4Fire</a>
+				</li>
+				<li>
+					<a href="src_core_functools_trait.html">src/core/functools/trait</a>
+				</li>
+			</ul>
+			<h1>Module src/core/functools/trait</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<a href="#corefunctoolstrait" id="corefunctoolstrait" style="color: inherit; text-decoration: none;">
+							<h1>core/functools/trait</h1>
+						</a>
+						<p>This module provides a bunch of functions to create and implement traits.
+							A trait is the special kind of an abstract class that is used as an interface.
+							Why would we need that? Well, unlike Java or Kotlin, TypeScript interfaces can&#39;t have default implementations of methods.
+							So we need to implement each method in our classes even if the implementation doesn&#39;t change.
+						And this is where traits come into play. But how it works? Ok, let&#39;s enumerate the steps to create a trait:</p>
+						<ol>
+							<li>Create an abstract class, where define all necessary abstract methods and properties (yes, the trait can also define properties,
+							not only methods).</li>
+						</ol>
+						<pre><code class="language-typescript"><span style="color: #0000FF">abstract</span><span style="color: #000000"> </span><span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">Duckable</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #0000FF">abstract</span><span style="color: #000000"> </span><span style="color: #001080">name</span><span style="color: #000000">: </span><span style="color: #267F99">string</span><span style="color: #000000">;</span>
+<span style="color: #000000">  </span><span style="color: #0000FF">abstract</span><span style="color: #000000"> </span><span style="color: #795E26">fly</span><span style="color: #000000">(): </span><span style="color: #267F99">void</span><span style="color: #000000">;</span>
+<span style="color: #000000">}</span>
+</code></pre>
+						<ol start="2">
+							<li>Define all non-abstract methods as simple methods without implementations: as a method body, use the loopback code,
+							like <code>return &lt;any&gt;null</code>.</li>
+						</ol>
+						<pre><code class="language-typescript"><span style="color: #0000FF">abstract</span><span style="color: #000000"> </span><span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">Duckable</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #0000FF">abstract</span><span style="color: #000000"> </span><span style="color: #001080">name</span><span style="color: #000000">: </span><span style="color: #267F99">string</span><span style="color: #000000">;</span>
+<span style="color: #000000">  </span><span style="color: #0000FF">abstract</span><span style="color: #000000"> </span><span style="color: #795E26">fly</span><span style="color: #000000">(): </span><span style="color: #267F99">void</span><span style="color: #000000">;</span>
+
+<span style="color: #000000">  </span><span style="color: #795E26">getQuack</span><span style="color: #000000">(</span><span style="color: #001080">size</span><span style="color: #000000">: </span><span style="color: #267F99">number</span><span style="color: #000000">): </span><span style="color: #267F99">string</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #AF00DB">return</span><span style="color: #000000"> &lt;</span><span style="color: #267F99">any</span><span style="color: #000000">&gt;</span><span style="color: #0000FF">null</span><span style="color: #000000">;</span>
+<span style="color: #000000">  }</span>
+<span style="color: #000000">}</span>
+</code></pre>
+						<ol start="3">
+							<li>Define the non-abstract methods as static class methods with the same names and signatures but add as the first parameter
+							a link to the class instance, as we do it in Python or Rust. Also, we can use the <code>AddSelf</code> helper to produce less code.</li>
+						</ol>
+						<pre><code class="language-typescript"><span style="color: #0000FF">abstract</span><span style="color: #000000"> </span><span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">Duckable</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #0000FF">abstract</span><span style="color: #000000"> </span><span style="color: #001080">name</span><span style="color: #000000">: </span><span style="color: #267F99">string</span><span style="color: #000000">;</span>
+<span style="color: #000000">  </span><span style="color: #0000FF">abstract</span><span style="color: #000000"> </span><span style="color: #795E26">fly</span><span style="color: #000000">(): </span><span style="color: #267F99">void</span><span style="color: #000000">;</span>
+
+<span style="color: #000000">  </span><span style="color: #795E26">getQuack</span><span style="color: #000000">(</span><span style="color: #001080">size</span><span style="color: #000000">: </span><span style="color: #267F99">number</span><span style="color: #000000">): </span><span style="color: #267F99">string</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #AF00DB">return</span><span style="color: #000000"> &lt;</span><span style="color: #267F99">any</span><span style="color: #000000">&gt;</span><span style="color: #0000FF">null</span><span style="color: #000000">;</span>
+<span style="color: #000000">  }</span>
+
+<span style="color: #000000">  </span><span style="color: #008000">// The first parameter provides a method to wrap.</span>
+<span style="color: #000000">  </span><span style="color: #008000">// The second parameter declares which type has `self`.</span>
+<span style="color: #000000">  </span><span style="color: #0000FF">static</span><span style="color: #000000"> </span><span style="color: #795E26">getQuack</span><span style="color: #000000">: </span><span style="color: #267F99">AddSelf</span><span style="color: #000000">&lt;</span><span style="color: #267F99">Duckable</span><span style="color: #000000">[</span><span style="color: #A31515">&#039;getQuack&#039;</span><span style="color: #000000">], </span><span style="color: #267F99">Duckable</span><span style="color: #000000">&gt; = (</span><span style="color: #001080">self</span><span style="color: #000000">, </span><span style="color: #001080">size</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #AF00DB">if</span><span style="color: #000000"> (</span><span style="color: #001080">size</span><span style="color: #000000"> &lt; </span><span style="color: #098658">10</span><span style="color: #000000">) {</span>
+<span style="color: #000000">      </span><span style="color: #AF00DB">return</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;quack!&#039;</span><span style="color: #000000">;</span>
+<span style="color: #000000">    }</span>
+
+<span style="color: #000000">    </span><span style="color: #AF00DB">if</span><span style="color: #000000"> (</span><span style="color: #001080">size</span><span style="color: #000000"> &lt; </span><span style="color: #098658">20</span><span style="color: #000000">) {</span>
+<span style="color: #000000">      </span><span style="color: #AF00DB">return</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;quack!!!&#039;</span><span style="color: #000000">;</span>
+<span style="color: #000000">    }</span>
+
+<span style="color: #000000">    </span><span style="color: #AF00DB">return</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;QUACK!!!&#039;</span><span style="color: #000000">;</span>
+<span style="color: #000000">  };</span>
+<span style="color: #000000">}</span>
+</code></pre>
+						<p>We have created a trait. Now we can implement it in a simple class.</p>
+						<ol>
+							<li>Create a simple class and implement the trait by using the <code>implements</code> keyword.
+							Don&#39;t implement methods, which you want to store their default implementations.</li>
+						</ol>
+						<pre><code class="language-typescript"><span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">DuckLike</span><span style="color: #000000"> </span><span style="color: #0000FF">implements</span><span style="color: #000000"> </span><span style="color: #267F99">Duckable</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #001080">name</span><span style="color: #000000">: </span><span style="color: #267F99">string</span><span style="color: #000000"> = </span><span style="color: #A31515">&#039;Bob&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #000000">  </span><span style="color: #795E26">fly</span><span style="color: #000000">(): </span><span style="color: #267F99">void</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #008000">// Do some logic to fly</span>
+<span style="color: #000000">  }</span>
+<span style="color: #000000">}</span>
+</code></pre>
+						<ol start="2">
+							<li>Create an interface with the same name as our class and extend it from the trait using the <code>Trait</code> type.</li>
+						</ol>
+						<pre><code class="language-typescript"><span style="color: #0000FF">interface</span><span style="color: #000000"> </span><span style="color: #267F99">DuckLike</span><span style="color: #000000"> </span><span style="color: #0000FF">extends</span><span style="color: #000000"> </span><span style="color: #267F99">Trait</span><span style="color: #000000">&lt;</span><span style="color: #0000FF">typeof</span><span style="color: #000000"> </span><span style="color: #001080">Duckable</span><span style="color: #000000">&gt; {}</span>
+
+<span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">DuckLike</span><span style="color: #000000"> </span><span style="color: #0000FF">implements</span><span style="color: #000000"> </span><span style="color: #267F99">Duckable</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #001080">name</span><span style="color: #000000">: </span><span style="color: #267F99">string</span><span style="color: #000000"> = </span><span style="color: #A31515">&#039;Bob&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #000000">  </span><span style="color: #795E26">fly</span><span style="color: #000000">(): </span><span style="color: #267F99">void</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #008000">// Do some logic to fly</span>
+<span style="color: #000000">  }</span>
+<span style="color: #000000">}</span>
+</code></pre>
+						<ol start="3">
+							<li>Use the <code>derive</code> decorator from <code>core/functools/trait</code> with our class and provide all traits that we want to implement automatically.</li>
+						</ol>
+						<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">derive</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/functools/trait&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #0000FF">interface</span><span style="color: #000000"> </span><span style="color: #267F99">DuckLike</span><span style="color: #000000"> </span><span style="color: #0000FF">extends</span><span style="color: #000000"> </span><span style="color: #267F99">Trait</span><span style="color: #000000">&lt;</span><span style="color: #0000FF">typeof</span><span style="color: #000000"> </span><span style="color: #001080">Duckable</span><span style="color: #000000">&gt; {}</span>
+
+<span style="color: #000000">@</span><span style="color: #795E26">derive</span><span style="color: #000000">(</span><span style="color: #001080">Duckable</span><span style="color: #000000">)</span>
+<span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">DuckLike</span><span style="color: #000000"> </span><span style="color: #0000FF">implements</span><span style="color: #000000"> </span><span style="color: #267F99">Duckable</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #001080">name</span><span style="color: #000000">: </span><span style="color: #267F99">string</span><span style="color: #000000"> = </span><span style="color: #A31515">&#039;Bob&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #000000">  </span><span style="color: #795E26">fly</span><span style="color: #000000">(): </span><span style="color: #267F99">void</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #008000">// Do some logic to fly</span>
+<span style="color: #000000">  }</span>
+<span style="color: #000000">}</span>
+</code></pre>
+						<ol start="4">
+							<li>Profit! Now TS understands default methods of interfaces, and it works in runtime.</li>
+						</ol>
+						<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">derive</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/functools/trait&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #0000FF">interface</span><span style="color: #000000"> </span><span style="color: #267F99">DuckLike</span><span style="color: #000000"> </span><span style="color: #0000FF">extends</span><span style="color: #000000"> </span><span style="color: #267F99">Trait</span><span style="color: #000000">&lt;</span><span style="color: #0000FF">typeof</span><span style="color: #000000"> </span><span style="color: #001080">Duckable</span><span style="color: #000000">&gt; {}</span>
+
+<span style="color: #000000">@</span><span style="color: #795E26">derive</span><span style="color: #000000">(</span><span style="color: #001080">Duckable</span><span style="color: #000000">)</span>
+<span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">DuckLike</span><span style="color: #000000"> </span><span style="color: #0000FF">implements</span><span style="color: #000000"> </span><span style="color: #267F99">Duckable</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #001080">name</span><span style="color: #000000">: </span><span style="color: #267F99">string</span><span style="color: #000000"> = </span><span style="color: #A31515">&#039;Bob&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #000000">  </span><span style="color: #795E26">fly</span><span style="color: #000000">(): </span><span style="color: #267F99">void</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #008000">// Do some logic to fly</span>
+<span style="color: #000000">  }</span>
+<span style="color: #000000">}</span>
+
+<span style="color: #008000">/// &#039;QUACK!!!&#039;</span>
+<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">DuckLike</span><span style="color: #000000">().</span><span style="color: #795E26">getQuack</span><span style="color: #000000">(</span><span style="color: #098658">60</span><span style="color: #000000">));</span>
+</code></pre>
+						<ol start="5">
+							<li>Of course, we can implement more than one trait in a component.</li>
+						</ol>
+						<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">derive</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/functools/trait&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #0000FF">interface</span><span style="color: #000000"> </span><span style="color: #267F99">DuckLike</span><span style="color: #000000"> </span><span style="color: #0000FF">extends</span><span style="color: #000000"> </span><span style="color: #267F99">Trait</span><span style="color: #000000">&lt;</span><span style="color: #0000FF">typeof</span><span style="color: #000000"> </span><span style="color: #001080">Duckable</span><span style="color: #000000">&gt;, </span><span style="color: #267F99">Trait</span><span style="color: #000000">&lt;</span><span style="color: #0000FF">typeof</span><span style="color: #000000"> </span><span style="color: #001080">AnotherTrait</span><span style="color: #000000">&gt; {}</span>
+
+<span style="color: #000000">@</span><span style="color: #795E26">derive</span><span style="color: #000000">(</span><span style="color: #001080">Duckable</span><span style="color: #000000">, </span><span style="color: #001080">AnotherTrait</span><span style="color: #000000">)</span>
+<span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">DuckLike</span><span style="color: #000000"> </span><span style="color: #0000FF">implements</span><span style="color: #000000"> </span><span style="color: #267F99">Duckable</span><span style="color: #000000">, </span><span style="color: #267F99">AnotherTrait</span><span style="color: #000000">, </span><span style="color: #267F99">SimpleInterfaceWithoutDefaultMethods</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #001080">name</span><span style="color: #000000">: </span><span style="color: #267F99">string</span><span style="color: #000000"> = </span><span style="color: #A31515">&#039;Bob&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #000000">  </span><span style="color: #795E26">fly</span><span style="color: #000000">(): </span><span style="color: #267F99">void</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #008000">// Do some logic to fly</span>
+<span style="color: #000000">  }</span>
+<span style="color: #000000">}</span>
+</code></pre>
+					</div>
+				</div>
+			</section>
+			<section class="tsd-panel-group tsd-index-group">
+				<h2>Index</h2>
+				<section class="tsd-panel tsd-index-panel">
+					<div class="tsd-index-content">
+						<section class="tsd-index-section ">
+							<h3>Functions</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="src_core_functools_trait.html#derive" class="tsd-kind-icon">derive</a></li>
+							</ul>
+						</section>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Functions</h2>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="derive" class="tsd-anchor"></a>
+					<h3>derive</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">derive<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>traits<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Function</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/functools/trait/index.ts#L72">src/core/functools/trait/index.ts:72</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Derives the provided traits to a class.
+									The function is used to organize multiple implementing interfaces with the support of default methods.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>decorator</dt>
+									<dd></dd>
+									<dt>example</dt>
+									<dd><pre><code class="language-typescript"><span style="color: #0000FF">abstract</span><span style="color: #000000"> </span><span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">Interface1</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #0000FF">abstract</span><span style="color: #000000"> </span><span style="color: #795E26">bar</span><span style="color: #000000">(): </span><span style="color: #267F99">string</span><span style="color: #000000">;</span>
+
+<span style="color: #000000">  </span><span style="color: #008000">/**</span>
+<span style="color: #008000">   * The method that have the default implementation.</span>
+<span style="color: #008000">   * The implementation is placed as a static method.</span>
+<span style="color: #008000">   *\/</span>
+<span style="color: #008000">  bla(a: number): number {</span>
+<span style="color: #008000">    return &lt;any&gt;null;</span>
+<span style="color: #008000">  };</span>
+
+<span style="color: #008000">  /**</span>
+<span style="color: #008000">   * The default implementation for `Interface1.bla`.</span>
+<span style="color: #008000">   * As the first parameter, the method is taken a context.</span>
+<span style="color: #008000">   *</span>
+<span style="color: #008000">   * </span><span style="color: #0000FF">@see</span><span style="color: #008000"> </span><span style="color: #267F99">Interface1.bla</span>
+<span style="color: #008000">   *\/</span>
+<span style="color: #008000">  static bla: AddSelf&lt;iFoo[&#039;bla&#039;], Baz&gt; = (self, a) =&gt; a + 1;</span>
+<span style="color: #008000">}</span>
+
+<span style="color: #008000">abstract class Interface2 {</span>
+<span style="color: #008000">  abstract bar2(): string;</span>
+
+<span style="color: #008000">  bla2(a: number): string {</span>
+<span style="color: #008000">    return &lt;any&gt;null;</span>
+<span style="color: #008000">  };</span>
+
+<span style="color: #008000">  /** </span><span style="color: #0000FF">@see</span><span style="color: #008000"> </span><span style="color: #267F99">Interface2.bla2</span><span style="color: #008000"> *\/</span>
+<span style="color: #008000">  static bla2: AddSelf&lt;iFoo2[&#039;bla2&#039;], Baz&gt; = (self, a) =&gt; a.toFixed();</span>
+<span style="color: #008000">}</span>
+
+<span style="color: #008000">interface Baz extends Trait&lt;typeof iFoo&gt;, Trait&lt;typeof iFoo2&gt; {</span>
+
+<span style="color: #008000">}</span>
+
+<span style="color: #008000">@derive(iFoo, iFoo2)</span>
+<span style="color: #008000">class Baz implements iFoo, iFoo2 {</span>
+<span style="color: #008000">  bar() {</span>
+<span style="color: #008000">    return &#039;1&#039;;</span>
+<span style="color: #008000">  }</span>
+
+<span style="color: #008000">  bar2() {</span>
+<span style="color: #008000">    return &#039;1&#039;;</span>
+<span style="color: #008000">  }</span>
+<span style="color: #008000">}</span>
+
+<span style="color: #008000">console.log(new Baz().bla2(2.9872));</span>
+</code></pre>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>traits: <span class="tsd-signature-type">Function</span><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></h4>
+							<ul class="tsd-parameters">
+								<li class="tsd-parameter-signature">
+									<ul class="tsd-signatures tsd-kind-type-literal">
+										<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+									</ul>
+									<ul class="tsd-descriptions">
+										<li class="tsd-description">
+											<h4 class="tsd-parameters-title">Parameters</h4>
+											<ul class="tsd-parameters">
+												<li>
+													<h5>target: <span class="tsd-signature-type">Function</span></h5>
+												</li>
+											</ul>
+											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+			</section>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class=" ">
+						<a href="../modules.html">Modules</a>
+					</li>
+					<li class="current tsd-kind-module">
+						<a href="src_core_functools_trait.html">src/core/functools/trait</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="src_core_functools_trait.html#derive" class="tsd-kind-icon">derive</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer>
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-namespace"><span class="tsd-kind-icon">Namespace</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="overlay"></div>
+<script src="../assets/js/main.js"></script>
+<script>'use strict';
+
+/*!
+ * V4Fire Core
+ * https://github.com/V4Fire/Core
+ *
+ * Released under the MIT license
+ * https://github.com/V4Fire/Core/blob/master/LICENSE
+ */
+
+(function () {
+	document.body.style.display = 'block';
+
+	var
+		isDTS = /^index$|\.d$/,
+		needHide = /\/(?:prelude|interface|const|modules|helpers|engines)\b/,
+		isNode = /(?:^|\/)node_modules(?:\/|$)/;
+
+	var
+		trimRgxp = /^\s+|[\n\v"']+|\s+$/g,
+		normalizeRgxp = /(?:^|\b)src\/|\/index$/g;
+
+	var
+		breadcrumbs = Array.from(document.querySelectorAll('.tsd-breadcrumb a')),
+		headers = Array.from(document.querySelectorAll('h1'));
+
+	breadcrumbs.forEach(function (el) {
+		el.textContent = el.textContent.replace(trimRgxp, '').replace(normalizeRgxp, '');
+	});
+
+	headers.forEach(function (el) {
+		el.textContent = el.textContent.replace(trimRgxp, '').replace(normalizeRgxp, '');
+	});
+
+	var
+		navigation = Array.from(document.querySelectorAll('.tsd-navigation.primary .tsd-kind-module a')),
+		globalIndex = Array.from(document.querySelectorAll('.tsd-kind-module a'));
+
+	[].concat(breadcrumbs.length <= 1 ? globalIndex : navigation).forEach(function (el) {
+		var
+			wrapper = el.parentNode,
+			linkText = el.textContent.replace(trimRgxp, '');
+
+		if (isDTS.test(linkText)) {
+			var
+				nm = RegExp.$1;
+
+			if (linkText === 'index') {
+				el.innerHTML = '<b>prelude</b>';
+
+			} else if (isNode.test(linkText)) {
+				el.textContent = nm;
+
+			} else {
+				wrapper.parentNode.removeChild(wrapper);
+			}
+
+		} else if (needHide.test(linkText)) {
+			wrapper.parentNode.removeChild(wrapper);
+
+		} else {
+			el.textContent = linkText.replace(normalizeRgxp, '');
+		}
+	});
+})();
+</script>
+</body>
+</html>

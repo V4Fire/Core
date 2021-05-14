@@ -240,6 +240,166 @@ pre {
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
+						<a href="#coreasyncmoduleswrappers" id="coreasyncmoduleswrappers" style="color: inherit; text-decoration: none;">
+							<h1>core/async/modules/wrappers</h1>
+						</a>
+						<p>This module provides a bunch of helpers to wrap some objects, like event emitters or data providers.</p>
+						<a href="#wrapdataprovider" id="wrapdataprovider" style="color: inherit; text-decoration: none;">
+							<h2>wrapDataProvider</h2>
+						</a>
+						<p>The wrapper takes a link to the &quot;raw&quot; data provider and returns a new object that based on the original,
+						but all async methods and properties are wrapped by Async.</p>
+						<p>Notice, the wrapped methods can take additional Async parameters, like group or label.</p>
+						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">Async</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/async&#039;</span><span style="color: #000000">;</span>
+<span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">Provider</span><span style="color: #000000">, { </span><span style="color: #001080">provider</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/data&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #000000">@</span><span style="color: #795E26">provider</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;api&#039;</span><span style="color: #000000">)</span>
+<span style="color: #AF00DB">export</span><span style="color: #000000"> </span><span style="color: #AF00DB">default</span><span style="color: #000000"> </span><span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">User</span><span style="color: #000000"> </span><span style="color: #0000FF">extends</span><span style="color: #000000"> </span><span style="color: #267F99">Provider</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #001080">baseURL</span><span style="color: #000000"> = </span><span style="color: #A31515">&#039;user/:id&#039;</span><span style="color: #000000">;</span>
+<span style="color: #000000">}</span>
+
+<span style="color: #0000FF">const</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">$a</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">Async</span><span style="color: #000000">(),</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">wrappedProvider</span><span style="color: #000000"> = </span><span style="color: #001080">$a</span><span style="color: #000000">.</span><span style="color: #795E26">wrapDataProvider</span><span style="color: #000000">(</span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">User</span><span style="color: #000000">());</span>
+
+<span style="color: #001080">wrappedProvider</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">({</span><span style="color: #001080">uuid:</span><span style="color: #000000"> </span><span style="color: #098658">1</span><span style="color: #000000">}).</span><span style="color: #795E26">then</span><span style="color: #000000">((</span><span style="color: #001080">res</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">res</span><span style="color: #000000">);</span>
+<span style="color: #000000">});</span>
+
+<span style="color: #008000">// By default, all wrapped methods have a group name that is equal to the provider name.</span>
+<span style="color: #008000">// So we can use it to clear or suspend requests, etc.</span>
+<span style="color: #001080">$a</span><span style="color: #000000">.</span><span style="color: #795E26">clearAll</span><span style="color: #000000">({</span><span style="color: #001080">group:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;api.User&#039;</span><span style="color: #000000">})</span>
+
+<span style="color: #001080">wrappedProvider</span><span style="color: #000000">.</span><span style="color: #795E26">upd</span><span style="color: #000000">({</span><span style="color: #001080">uuid:</span><span style="color: #000000"> </span><span style="color: #098658">1</span><span style="color: #000000">}, {</span>
+<span style="color: #000000">  </span><span style="color: #008000">// All wrapped methods can take additional Async parameters as the second argument: `group`, `label` and `join`</span>
+<span style="color: #000000">  </span><span style="color: #001080">group:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;bla&#039;</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #001080">label:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;foo&#039;</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #001080">join:</span><span style="color: #000000"> </span><span style="color: #0000FF">true</span><span style="color: #000000">,</span>
+
+<span style="color: #000000">  </span><span style="color: #008000">// Also, the second argument of the wrapped method can take the original parameters from a provider</span>
+<span style="color: #000000">  </span><span style="color: #001080">headers:</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #A31515">&#039;X-Foo&#039;</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;1&#039;</span>
+<span style="color: #000000">  }</span>
+
+<span style="color: #000000">}).</span><span style="color: #795E26">then</span><span style="color: #000000">((</span><span style="color: #001080">res</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">res</span><span style="color: #000000">);</span>
+<span style="color: #000000">});</span>
+
+<span style="color: #008000">// If we are providing a group to the method, it will be joined with the global group by using the `:` character</span>
+<span style="color: #001080">$a</span><span style="color: #000000">.</span><span style="color: #795E26">suspendAll</span><span style="color: #000000">({</span><span style="color: #001080">group:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;api.User:bla&#039;</span><span style="color: #000000">});</span>
+
+<span style="color: #008000">// Obviously, we can use a group as RegExp</span>
+<span style="color: #001080">$a</span><span style="color: #000000">.</span><span style="color: #795E26">muteAll</span><span style="color: #000000">({</span><span style="color: #001080">group:</span><span style="color: #811F3F"> /api</span><span style="color: #EE0000">\.</span><span style="color: #811F3F">User/</span><span style="color: #000000">});</span>
+
+<span style="color: #008000">// We can use any methods or properties from the original data provider</span>
+<span style="color: #001080">wrappedProvider</span><span style="color: #000000">.</span><span style="color: #795E26">dropCache</span><span style="color: #000000">();</span>
+</code></pre>
+						<a href="#custom-global-group" id="custom-global-group" style="color: inherit; text-decoration: none;">
+							<h3>Custom global group</h3>
+						</a>
+						<p>By default, when the wrapper wraps the provider, it takes the provider name and passes it as a group to all wrapped methods.
+							This behavior brings a future to clear or suspend all requests from the wrapped provider by its name.
+						But we can provide a different global name when wrapping a provider.</p>
+						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">Async</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/async&#039;</span><span style="color: #000000">;</span>
+<span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">Provider</span><span style="color: #000000">, { </span><span style="color: #001080">provider</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/data&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #000000">@</span><span style="color: #795E26">provider</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;api&#039;</span><span style="color: #000000">)</span>
+<span style="color: #AF00DB">export</span><span style="color: #000000"> </span><span style="color: #AF00DB">default</span><span style="color: #000000"> </span><span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">User</span><span style="color: #000000"> </span><span style="color: #0000FF">extends</span><span style="color: #000000"> </span><span style="color: #267F99">Provider</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #001080">baseURL</span><span style="color: #000000"> = </span><span style="color: #A31515">&#039;user/:id&#039;</span><span style="color: #000000">;</span>
+<span style="color: #000000">}</span>
+
+<span style="color: #0000FF">const</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">$a</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">Async</span><span style="color: #000000">(),</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">dp1</span><span style="color: #000000"> = </span><span style="color: #001080">$a</span><span style="color: #000000">.</span><span style="color: #795E26">wrapDataProvider</span><span style="color: #000000">(</span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">User</span><span style="color: #000000">(), {</span><span style="color: #001080">group:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;foo&#039;</span><span style="color: #000000">});</span>
+
+<span style="color: #001080">dp1</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">({</span><span style="color: #001080">uuid:</span><span style="color: #000000"> </span><span style="color: #098658">1</span><span style="color: #000000">}).</span><span style="color: #795E26">then</span><span style="color: #000000">((</span><span style="color: #001080">res</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">res</span><span style="color: #000000">);</span>
+<span style="color: #000000">});</span>
+
+<span style="color: #001080">$a</span><span style="color: #000000">.</span><span style="color: #795E26">clearAll</span><span style="color: #000000">({</span><span style="color: #001080">group:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;foo&#039;</span><span style="color: #000000">})</span>
+</code></pre>
+						<a href="#wrapeventemitter" id="wrapeventemitter" style="color: inherit; text-decoration: none;">
+							<h2>wrapEventEmitter</h2>
+						</a>
+						<p>The wrapper takes a link to the &quot;raw&quot; event emitter and returns a new object that based on the original,
+						but all async methods and properties are wrapped by Async.</p>
+						<p>Notice, the wrapped methods can take additional Async parameters, like group or label. In addition,
+						the wrapper adds new methods, like &quot;on&quot; or &quot;off&quot;, to make the emitter API more standard.</p>
+						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">Async</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/async&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #0000FF">const</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">$a</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">Async</span><span style="color: #000000">(),</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">wrappedEventEmitter</span><span style="color: #000000"> = </span><span style="color: #001080">$a</span><span style="color: #000000">.</span><span style="color: #795E26">wrapEventEmitter</span><span style="color: #000000">(</span><span style="color: #001080">window</span><span style="color: #000000">);</span>
+
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #795E26">handler</span><span style="color: #000000"> = () </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;scroll event&#039;</span><span style="color: #000000">);</span>
+
+<span style="color: #008000">// We can safely listen to emitter events, cause all emitter methods, like `addListener` or `on` are wrapped by Async.</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">id</span><span style="color: #000000"> = </span><span style="color: #001080">wrappedEventEmitter</span><span style="color: #000000">.</span><span style="color: #795E26">addEventListener</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;scroll&#039;</span><span style="color: #000000">, </span><span style="color: #001080">handler</span><span style="color: #000000">, {</span>
+<span style="color: #000000">  </span><span style="color: #008000">// Notice, the third argument can take Async parameters in addition to the native emitter parameters</span>
+<span style="color: #000000">  </span><span style="color: #001080">capture:</span><span style="color: #000000"> </span><span style="color: #0000FF">true</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #001080">label:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;label&#039;</span>
+<span style="color: #000000">});</span>
+
+<span style="color: #008000">// The wrapper preserves the original API of emitter methods, so we can call something like this</span>
+<span style="color: #001080">wrappedEventEmitter</span><span style="color: #000000">.</span><span style="color: #795E26">removeEventListener</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;scroll&#039;</span><span style="color: #000000">, </span><span style="color: #001080">handler</span><span style="color: #000000">);</span>
+
+<span style="color: #008000">// Finally, the wrapper adds a bunch of standard methods to the emitter, like `on`, `once`, and other stuff.</span>
+<span style="color: #008000">// We can use their instead of the original methods to make our code more universal.</span>
+<span style="color: #001080">wrappedEventEmitter</span><span style="color: #000000">.</span><span style="color: #795E26">once</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;resize&#039;</span><span style="color: #000000">, (</span><span style="color: #001080">e</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">e</span><span style="color: #000000">);</span>
+<span style="color: #000000">}, {</span><span style="color: #001080">group:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;resizers&#039;</span><span style="color: #000000">});</span>
+
+<span style="color: #001080">$a</span><span style="color: #000000">.</span><span style="color: #795E26">muteAll</span><span style="color: #000000">({</span><span style="color: #001080">group:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;resizers&#039;</span><span style="color: #000000">});</span>
+
+<span style="color: #008000">// We can use any methods or properties from the original emitter</span>
+<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">wrappedEventEmitter</span><span style="color: #000000">.</span><span style="color: #001080">name</span><span style="color: #000000">); </span><span style="color: #008000">// window.name</span>
+</code></pre>
+						<a href="#custom-global-group-1" id="custom-global-group-1" style="color: inherit; text-decoration: none;">
+							<h3>Custom global group</h3>
+						</a>
+						<p>Unlike the wrapper of data providers, the emitter wrapper doesn&#39;t have any default global group for operations,
+							but you can pass it manually.
+						This behavior brings a future to clear or suspend all events from the wrapped provider by its name.</p>
+						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">Async</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/async&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #0000FF">const</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">$a</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">Async</span><span style="color: #000000">(),</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">wrappedEventEmitter</span><span style="color: #000000"> = </span><span style="color: #001080">$a</span><span style="color: #000000">.</span><span style="color: #795E26">wrapEventEmitter</span><span style="color: #000000">(</span><span style="color: #001080">window</span><span style="color: #000000">, {</span><span style="color: #001080">group:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;windowEvents&#039;</span><span style="color: #000000">});</span>
+
+<span style="color: #001080">wrappedEventEmitter</span><span style="color: #000000">.</span><span style="color: #795E26">once</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;resize&#039;</span><span style="color: #000000">, (</span><span style="color: #001080">e</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">e</span><span style="color: #000000">);</span>
+<span style="color: #000000">});</span>
+
+<span style="color: #001080">$a</span><span style="color: #000000">.</span><span style="color: #795E26">muteAll</span><span style="color: #000000">({</span><span style="color: #001080">group:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;windowEvents&#039;</span><span style="color: #000000">});</span>
+
+<span style="color: #001080">wrappedEventEmitter</span><span style="color: #000000">.</span><span style="color: #795E26">on</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;scroll&#039;</span><span style="color: #000000">, (</span><span style="color: #001080">e</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">e</span><span style="color: #000000">);</span>
+<span style="color: #000000">}, {</span>
+<span style="color: #000000">  </span><span style="color: #008000">// If we are providing a group to the method, it will be joined with the global group by using the `:` character</span>
+<span style="color: #000000">  </span><span style="color: #001080">group:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;scrolling&#039;</span>
+<span style="color: #000000">});</span>
+
+<span style="color: #001080">$a</span><span style="color: #000000">.</span><span style="color: #795E26">muteAll</span><span style="color: #000000">({</span><span style="color: #001080">group:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;windowEvents:scrolling&#039;</span><span style="color: #000000">});</span>
+</code></pre>
+						<a href="#native-api-of-emitters" id="native-api-of-emitters" style="color: inherit; text-decoration: none;">
+							<h3>Native API of emitters</h3>
+						</a>
+						<p>As you can see, the wrapper creates a new object based on the original emitter and replaces some methods with the safely Async analogs.
+						The overridden methods preserve the original emitter API, but some interfaces are not supported to use.</p>
+						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">Async</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/async&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #0000FF">const</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">$a</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">Async</span><span style="color: #000000">(),</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">wrappedEventEmitter</span><span style="color: #000000"> = </span><span style="color: #001080">$a</span><span style="color: #000000">.</span><span style="color: #795E26">wrapEventEmitter</span><span style="color: #000000">(</span><span style="color: #001080">window</span><span style="color: #000000">, {</span><span style="color: #001080">group:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;windowEvents&#039;</span><span style="color: #000000">});</span>
+
+<span style="color: #008000">// The wrapper does not support this kind of attaching listeners.</span>
+<span style="color: #008000">// The replaced method can take the second argument only as a function.</span>
+<span style="color: #001080">wrappedEventEmitter</span><span style="color: #000000">.</span><span style="color: #795E26">addEventListener</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;scroll&#039;</span><span style="color: #000000">, {</span>
+<span style="color: #000000">  </span><span style="color: #795E26">handleEvent</span><span style="color: #001080">:</span><span style="color: #000000"> (</span><span style="color: #001080">e</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">e</span><span style="color: #000000">);</span>
+<span style="color: #000000">  }</span>
+<span style="color: #000000">})</span>
+</code></pre>
 					</div>
 				</div>
 			</section>
@@ -490,7 +650,7 @@ pre {
 					<div class="tsd-signature tsd-kind-icon">Full<wbr>Async<wbr>Options&lt;CTX&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>args<span class="tsd-signature-symbol">?: </span><a href="index.html#canarray" class="tsd-signature-type" data-tsd-kind="Type alias">CanArray</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>callable<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">; </span>clearFn<span class="tsd-signature-symbol">?: </span><a href="../interfaces/src_core_async_modules_base_interface.clearfn.html" class="tsd-signature-type" data-tsd-kind="Interface">ClearFn</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">CTX</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>linkByWrapper<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">; </span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>needCall<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">; </span>obj<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-symbol">{ </span>name<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">; </span>periodic<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">; </span>wrapper<span class="tsd-signature-symbol">?: </span><a href="../interfaces/src_core_async_modules_base_interface.boundfn.html" class="tsd-signature-type" data-tsd-kind="Interface">BoundFn</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">CTX</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/src_core_async_modules_base_interface.asyncproxyoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">AsyncProxyOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">CTX</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/src_core_async_modules_proxy_interface.asyncpromiseoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">AsyncPromiseOptions</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/src_core_async_modules_proxy_interface.asyncworkeroptions.html" class="tsd-signature-type" data-tsd-kind="Interface">AsyncWorkerOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">CTX</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/src_core_async_modules_events_interface.asyncpromisifyonceoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">AsyncPromisifyOnceOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">CTX</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/interface.ts#L58">src/core/async/interface.ts:58</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/interface.ts#L64">src/core/async/interface.ts:64</a></li>
 						</ul>
 					</aside>
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -570,7 +730,7 @@ pre {
 					<div class="tsd-signature tsd-kind-icon">Namespace<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">keyof </span><span class="tsd-signature-symbol">typeof </span><a href="../enums/src_core_async_interface.namespaces.html" class="tsd-signature-type" data-tsd-kind="Enumeration">Namespaces</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/interface.ts#L53">src/core/async/interface.ts:53</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/async/interface.ts#L59">src/core/async/interface.ts:59</a></li>
 						</ul>
 					</aside>
 				</section>

@@ -150,7 +150,7 @@ export function toQueryString(data: unknown, optsOrEncode?: ToQueryStringOptions
 const
 	isInvalidKey = /\b__proto__\b/,
 	arraySyntaxRgxp = /\[([^\]]*)]/g,
-	normalizeURLRgxp = /[^?]*\?/;
+	normalizeURLRgxp = /^(?:[^?]*\?|(?:\w+:)?\/\/.*)/;
 
 /**
  * Creates a dictionary from the specified querystring and returns it
@@ -161,7 +161,7 @@ const
  * @example
  * ```js
  * // {a: 1}
- * toQueryString('?a=1');
+ * fromQueryString('?a=1');
  * ```
  */
 export function fromQueryString(query: string, decode?: boolean): Dictionary;
@@ -175,7 +175,7 @@ export function fromQueryString(query: string, decode?: boolean): Dictionary;
  * @example
  * ```js
  * // {a: [1, 2]}
- * toQueryString('?a[]=1&a[]=2', {arraySyntax: true});
+ * fromQueryString('?a[]=1&a[]=2', {arraySyntax: true});
  * ```
  */
 export function fromQueryString(query: string, opts: FromQueryStringOptions): Dictionary;
@@ -190,7 +190,7 @@ export function fromQueryString(query: string, opts: FromQueryStringOptions): Di
  * @example
  * ```js
  * // {a: '1'}
- * toQueryString('?a=1', {convert: false});
+ * fromQueryString('?a=1', {convert: false});
  * ```
  */
 export function fromQueryString(
@@ -202,10 +202,10 @@ export function fromQueryString(
 	query: string,
 	optsOrDecode?: FromQueryStringOptions | boolean
 ): Dictionary<string | null> {
-	query = query.replace(normalizeURLRgxp, '');
-
 	const
 		queryObj = {};
+
+	query = query.replace(normalizeURLRgxp, '');
 
 	if (query === '') {
 		return queryObj;
@@ -226,7 +226,7 @@ export function fromQueryString(
 	}
 
 	const
-		indexes = Object.createDict<number>(),
+		indices = Object.createDict<number>(),
 		objOpts = {separator: opts.arraySyntax ? ']' : opts.separator},
 		variables = query.split('&');
 
@@ -251,8 +251,8 @@ export function fromQueryString(
 						prop = '0';
 
 					} else {
-						prop = indexes[path] ?? '0';
-						indexes[path] = Number(prop) + 1;
+						prop = indices[path] ?? '0';
+						indices[path] = Number(prop) + 1;
 					}
 
 					nestedArray = true;

@@ -77,7 +77,7 @@ function watch<T extends object>(obj: T, opts: WatchOptions, handler?: MultipleW
 function watch<T extends object>(
 	obj: T,
 	path: WatchPath,
-	handler?: MultipleWatchHandler
+	handler?: WatchHandler
 ): Watcher<T>;
 
 /**
@@ -91,8 +91,8 @@ function watch<T extends object>(
 function watch<T extends object>(
 	obj: T,
 	path: WatchPath,
-	opts: WatchOptions & ({immediate: true} | {collapse: true}),
-	handler?: WatchHandler
+	opts: WatchOptions & ({collapse: false}),
+	handler?: MultipleWatchHandler
 ): Watcher<T>;
 
 /**
@@ -264,7 +264,7 @@ function watch<T extends object>(
 			const
 				originalPath = info.path;
 
-			if (pathModifier) {
+			if (pathModifier != null) {
 				info = {...info, path: pathModifier(info.path)};
 			}
 
@@ -277,8 +277,8 @@ function watch<T extends object>(
 				// We don't watch prototype mutations
 				!withProto && info.fromProto ||
 
-				// The mutation was already fired
-				eventFilter && !Object.isTruly(eventFilter(value, oldValue, info))
+				// The mutation is skipped by the filter
+				eventFilter != null && !Object.isTruly(eventFilter(value, oldValue, info))
 			) {
 				return;
 			}
@@ -336,6 +336,15 @@ function watch<T extends object>(
 						];
 					}
 
+					if (
+						collapse !== false &&
+						normalizedPath != null &&
+						normalizedPath.length < resolvedInfo.originalPath.length
+					) {
+						const val = Object.get(unwrappedObj, normalizedPath);
+						return [val, val, resolvedInfo];
+					}
+
 					return [value, oldValue, resolvedInfo];
 				};
 
@@ -346,7 +355,7 @@ function watch<T extends object>(
 				// Deferred events
 				} else {
 					const
-						needEventQueue = normalizedPath == null;
+						needEventQueue = normalizedPath == null || collapse === false;
 
 					if (needEventQueue) {
 						argsQueue.push(getArgs());
@@ -356,7 +365,7 @@ function watch<T extends object>(
 					}
 
 					if (timer == null) {
-						timer = globalThis['setImmediate'](() => {
+						timer = setImmediate(() => {
 							timer = undefined;
 
 							try {
@@ -399,7 +408,7 @@ function watch<T extends object>(
 					}
 				}
 
-				// The flag that indicates that we need to get a real property value from the original object.
+				// The flag indicates that we need to get a real property value from the original object.
 				// It makes sense for getters.
 				let dynamic = false;
 
@@ -597,8 +606,30 @@ function watch<T extends object>(
 }
 
 /**
- * Mutes watching of changes from the specified object
+ * The function temporarily mutes all mutation events for the specified proxy object
+ *
  * @param obj
+ * @example
+ * ```js
+ * const user = {
+ *   name: 'Kobezzza',
+ *   skills: {
+ *     programming: 80,
+ *     singing: 10
+ *   }
+ * };
+ *
+ * const {proxy} = watch(user, {immediate: true, deep: true}, (value, oldValue, info) => {
+ *   console.log(value, oldValue, info.path);
+ * });
+ *
+ * // 81 80 ['skills', 'programming']
+ * proxy.skills.programming++;
+ * mute(proxy);
+ *
+ * // This mutation won't invoke our callback
+ * proxy.skills.programming++;
+ * ```
  */
 export function mute(obj: object): boolean {
 	const
@@ -613,8 +644,34 @@ export function mute(obj: object): boolean {
 }
 
 /**
- * Unmutes watching of changes from the specified object
+ * The function unmutes all mutation events for the specified proxy object
+ *
  * @param obj
+ * @example
+ * ```js
+ * const user = {
+ *   name: 'Kobezzza',
+ *   skills: {
+ *     programming: 80,
+ *     singing: 10
+ *   }
+ * };
+ *
+ * const {proxy} = watch(user, {immediate: true, deep: true}, (value, oldValue, info) => {
+ *   console.log(value, oldValue, info.path);
+ * });
+ *
+ * // 81 80 ['skills', 'programming']
+ * proxy.skills.programming++;
+ * mute(proxy);
+ *
+ * // This mutation won't invoke our callback
+ * proxy.skills.programming++;
+ * unmute(proxy);
+ *
+ * // 83 82 ['skills', 'programming']
+ * proxy.skills.programming++;
+ * ```
  */
 export function unmute(obj: object): boolean {
 	const
@@ -629,12 +686,32 @@ export function unmute(obj: object): boolean {
 }
 
 /**
- * Sets a new watchable value for an object by the specified path
+ * Sets a new watchable value for a proxy object by the specified path.
+ * The function is actual when using an engine based on accessors to add new properties to the watchable object.
+ * Or when you want to restore watching for a property after deleting it.
  *
  * @param obj
  * @param path
  * @param value
  * @param [engine] - watch engine to use
+ *
+ * @example
+ * ```js
+ * const user = {
+ *   name: 'Kobezzza',
+ *   skills: {
+ *     programming: 80,
+ *     singing: 10
+ *   }
+ * };
+ *
+ * const {proxy} = watch(user, {immediate: true, deep: true}, (value, oldValue, info) => {
+ *   console.log(value, oldValue, info.path);
+ * });
+ *
+ * // This mutation will invoke our callback
+ * set(proxy, 'bla.foo', 1);
+ * ```
  */
 export function set(
 	obj: object,
@@ -644,7 +721,9 @@ export function set(
 ): void;
 
 /**
- * Sets a new watchable value for an object by the specified path
+ * Sets a new watchable value for a proxy object by the specified path.
+ * The function is actual when using an engine based on accessors to add new properties to the watchable object.
+ * Or when you want to restore watching for a property after deleting it.
  *
  * @param obj
  * @param path
@@ -682,11 +761,41 @@ export function set(
 }
 
 /**
- * Deletes a watchable value from an object by the specified path
+ * Deletes a watchable value from a proxy object by the specified path
  *
  * @param obj
  * @param path
  * @param [engine] - watch engine to use
+ *
+ * @example
+ * ```js
+ * const user = {
+ *   name: 'Kobezzza',
+ *   skills: {
+ *     programming: 80,
+ *     singing: 10
+ *   }
+ * };
+ *
+ * const {proxy} = watch(user, {immediate: true, deep: true}, (value, oldValue, info) => {
+ *   console.log(value, oldValue, info.path);
+ * });
+ *
+ * // This mutation will invoke our callback
+ * unset(proxy, 'skills.programming');
+ *
+ * console.log('programming' in proxy.skills === false);
+ *
+ * // This mutation won't invoke our callback
+ * proxy.skills.programming = 80;
+ *
+ * // Invoke set to register a property to watch.
+ * // This mutation will invoke our callback.
+ * set(proxy, 'skills.programming', 80)
+ *
+ * // This mutation will invoke our callback
+ * proxy.skills.programming++;
+ * ```
  */
 export function unset(
 	obj: object,
@@ -695,7 +804,8 @@ export function unset(
 ): void;
 
 /**
- * Deletes a watchable value from an object by the specified path
+ * Deletes a watchable value from a proxy object by the specified path.
+ * To restore watching for this property, use `set`.
  *
  * @param obj
  * @param path

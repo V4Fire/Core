@@ -287,14 +287,41 @@ pre {
 					<div class="tsd-signature tsd-kind-icon">collapse<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/object/watch/interface.ts#L71">src/core/object/watch/interface.ts:71</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/object/watch/interface.ts#L154">src/core/object/watch/interface.ts:154</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>If true, then all mutation events of nested properties will be collapsed to one event
-							and fired from a top property of the object</p>
+							<p>The option enables or disables collapsing of mutation events.
+							When it toggles to <code>true</code>, all mutation events fire as if they occur on top properties of the watchable object.</p>
 						</div>
+						<pre><code class="language-js"><span style="color: #0000FF">const</span><span style="color: #000000"> {</span><span style="color: #0070C1">proxy</span><span style="color: #000000">} = </span><span style="color: #795E26">watch</span><span style="color: #000000">({</span><span style="color: #001080">a:</span><span style="color: #000000"> {</span><span style="color: #001080">b:</span><span style="color: #000000"> {</span><span style="color: #001080">c:</span><span style="color: #000000"> </span><span style="color: #098658">1</span><span style="color: #000000">}}}, {</span><span style="color: #001080">collapse:</span><span style="color: #000000"> </span><span style="color: #0000FF">true</span><span style="color: #000000">, </span><span style="color: #001080">deep:</span><span style="color: #000000"> </span><span style="color: #0000FF">true</span><span style="color: #000000">}, (</span><span style="color: #001080">mutations</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #001080">mutations</span><span style="color: #000000">.</span><span style="color: #795E26">forEach</span><span style="color: #000000">(([</span><span style="color: #001080">value</span><span style="color: #000000">, </span><span style="color: #001080">oldValue</span><span style="color: #000000">, </span><span style="color: #001080">info</span><span style="color: #000000">]) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">value</span><span style="color: #000000">, </span><span style="color: #001080">oldValue</span><span style="color: #000000">, </span><span style="color: #001080">info</span><span style="color: #000000">.</span><span style="color: #001080">path</span><span style="color: #000000">);</span>
+<span style="color: #000000">  });</span>
+<span style="color: #000000">});</span>
+
+<span style="color: #008000">// {b: {c: 2}} {b: {c: 2}} [&#039;a&#039;, &#039;b&#039;, &#039;c&#039;]</span>
+<span style="color: #001080">proxy</span><span style="color: #000000">.</span><span style="color: #001080">a</span><span style="color: #000000">.</span><span style="color: #001080">b</span><span style="color: #000000">.</span><span style="color: #001080">c</span><span style="color: #000000"> = </span><span style="color: #098658">2</span><span style="color: #000000">;</span>
+</code></pre>
+						<p>When it toggles to <code>false,</code> and the watcher binds to the specified path, the callback takes a list of mutations.
+						Otherwise, the callback takes only the last mutation.</p>
+						<pre><code class="language-js"><span style="color: #0000FF">const</span><span style="color: #000000"> {</span><span style="color: #0070C1">proxy</span><span style="color: #000000">} = </span><span style="color: #795E26">watch</span><span style="color: #000000">({</span><span style="color: #001080">a:</span><span style="color: #000000"> {</span><span style="color: #001080">b:</span><span style="color: #000000"> {</span><span style="color: #001080">c:</span><span style="color: #000000"> </span><span style="color: #098658">1</span><span style="color: #000000">}}}, </span><span style="color: #A31515">&#039;a.b&#039;</span><span style="color: #000000">, {</span><span style="color: #001080">collapse:</span><span style="color: #000000"> </span><span style="color: #0000FF">false</span><span style="color: #000000">}, (</span><span style="color: #001080">mutations</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #001080">mutations</span><span style="color: #000000">.</span><span style="color: #795E26">forEach</span><span style="color: #000000">(([</span><span style="color: #001080">value</span><span style="color: #000000">, </span><span style="color: #001080">oldValue</span><span style="color: #000000">, </span><span style="color: #001080">info</span><span style="color: #000000">]) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">value</span><span style="color: #000000">, </span><span style="color: #001080">oldValue</span><span style="color: #000000">, </span><span style="color: #001080">info</span><span style="color: #000000">.</span><span style="color: #001080">path</span><span style="color: #000000">, </span><span style="color: #001080">info</span><span style="color: #000000">.</span><span style="color: #001080">originalPath</span><span style="color: #000000">);</span>
+<span style="color: #000000">  });</span>
+<span style="color: #000000">});</span>
+
+<span style="color: #008000">// 2 1 [&#039;a&#039;, &#039;b&#039;] [&#039;a&#039;, &#039;b&#039;, &#039;c&#039;]</span>
+<span style="color: #001080">proxy</span><span style="color: #000000">.</span><span style="color: #001080">a</span><span style="color: #000000">.</span><span style="color: #001080">b</span><span style="color: #000000">.</span><span style="color: #001080">c</span><span style="color: #000000"> = </span><span style="color: #098658">2</span><span style="color: #000000">;</span>
+
+<span style="color: #0000FF">const</span><span style="color: #000000"> {</span><span style="color: #001080">proxy</span><span style="color: #000000">: </span><span style="color: #0070C1">proxy2</span><span style="color: #000000">} = </span><span style="color: #795E26">watch</span><span style="color: #000000">({</span><span style="color: #001080">a:</span><span style="color: #000000"> {</span><span style="color: #001080">b:</span><span style="color: #000000"> {</span><span style="color: #001080">c:</span><span style="color: #000000"> </span><span style="color: #098658">1</span><span style="color: #000000">}}}, </span><span style="color: #A31515">&#039;a.b&#039;</span><span style="color: #000000">, (</span><span style="color: #001080">value</span><span style="color: #000000">, </span><span style="color: #001080">oldValue</span><span style="color: #000000">, </span><span style="color: #001080">info</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">value</span><span style="color: #000000">, </span><span style="color: #001080">oldValue</span><span style="color: #000000">, </span><span style="color: #001080">info</span><span style="color: #000000">.</span><span style="color: #001080">path</span><span style="color: #000000">, </span><span style="color: #001080">info</span><span style="color: #000000">.</span><span style="color: #001080">originalPath</span><span style="color: #000000">);</span>
+<span style="color: #000000">});</span>
+
+<span style="color: #008000">// {c: 2} {c: 2} [&#039;a&#039;, &#039;b&#039;] [&#039;a&#039;, &#039;b&#039;, &#039;c&#039;]</span>
+<span style="color: #001080">proxy2</span><span style="color: #000000">.</span><span style="color: #001080">a</span><span style="color: #000000">.</span><span style="color: #001080">b</span><span style="color: #000000">.</span><span style="color: #001080">c</span><span style="color: #000000"> = </span><span style="color: #098658">2</span><span style="color: #000000">;</span>
+</code></pre>
 						<dl class="tsd-comment-tags">
 							<dt>default</dt>
 							<dd><p><code>false</code></p>
@@ -308,16 +335,30 @@ pre {
 					<div class="tsd-signature tsd-kind-icon">deep<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/object/watch/interface.ts#L51">src/core/object/watch/interface.ts:51</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/object/watch/interface.ts#L68">src/core/object/watch/interface.ts:68</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>If true, then the callback of changing is also fired on mutation of nested objects</p>
+							<p>If true, then the callback of changing is also fired on mutations of nested properties</p>
 						</div>
 						<dl class="tsd-comment-tags">
 							<dt>default</dt>
 							<dd><p><code>false</code></p>
+							</dd>
+							<dt>example</dt>
+							<dd><pre><code class="language-js"><span style="color: #0000FF">const</span><span style="color: #000000"> {</span><span style="color: #0070C1">proxy</span><span style="color: #000000">} = </span><span style="color: #795E26">watch</span><span style="color: #000000">({</span><span style="color: #001080">a:</span><span style="color: #000000"> {</span><span style="color: #001080">b:</span><span style="color: #000000"> {</span><span style="color: #001080">c:</span><span style="color: #000000"> </span><span style="color: #098658">1</span><span style="color: #000000">}}}, {</span><span style="color: #001080">deep:</span><span style="color: #000000"> </span><span style="color: #0000FF">true</span><span style="color: #000000">}, (</span><span style="color: #001080">mutations</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #001080">mutations</span><span style="color: #000000">.</span><span style="color: #795E26">forEach</span><span style="color: #000000">(([</span><span style="color: #001080">value</span><span style="color: #000000">, </span><span style="color: #001080">oldValue</span><span style="color: #000000">, </span><span style="color: #001080">info</span><span style="color: #000000">]) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">value</span><span style="color: #000000">, </span><span style="color: #001080">oldValue</span><span style="color: #000000">, </span><span style="color: #001080">info</span><span style="color: #000000">.</span><span style="color: #001080">path</span><span style="color: #000000">);</span>
+<span style="color: #000000">  });</span>
+<span style="color: #000000">});</span>
+
+<span style="color: #008000">// 2 1 [&#039;a&#039;, &#039;b&#039;, &#039;c&#039;]</span>
+<span style="color: #001080">proxy</span><span style="color: #000000">.</span><span style="color: #001080">a</span><span style="color: #000000">.</span><span style="color: #001080">b</span><span style="color: #000000">.</span><span style="color: #001080">c</span><span style="color: #000000"> = </span><span style="color: #098658">2</span><span style="color: #000000">;</span>
+
+<span style="color: #008000">// {c: 2} {e: 2} [&#039;a&#039;, &#039;b&#039;]</span>
+<span style="color: #001080">proxy</span><span style="color: #000000">.</span><span style="color: #001080">a</span><span style="color: #000000">.</span><span style="color: #001080">b</span><span style="color: #000000"> = {</span><span style="color: #001080">e:</span><span style="color: #000000"> </span><span style="color: #098658">2</span><span style="color: #000000">};</span>
+</code></pre>
 							</dd>
 						</dl>
 					</div>
@@ -328,17 +369,15 @@ pre {
 					<div class="tsd-signature tsd-kind-icon">dependencies<span class="tsd-signature-symbol">:</span> <a href="../modules/src_core_object_watch_interface.html#watchdependencies" class="tsd-signature-type" data-tsd-kind="Type alias">WatchDependencies</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/object/watch/interface.ts#L170">src/core/object/watch/interface.ts:170</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/object/watch/interface.ts#L343">src/core/object/watch/interface.ts:343</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>List of dependencies for a path to watch.
-							This parameter can help to watch getters.</p>
+							<p>When providing the specific path to watch, this parameter can contain a list of dependencies for the watching path.
+							This parameter can help to watch accessors.</p>
 						</div>
-						<dl class="tsd-comment-tags">
-							<dt>example</dt>
-							<dd><pre><code class="language-js"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">obj</span><span style="color: #000000"> = {</span>
+						<pre><code class="language-js"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">obj</span><span style="color: #000000"> = {</span>
 <span style="color: #000000">  </span><span style="color: #0000FF">get</span><span style="color: #000000"> </span><span style="color: #795E26">foo</span><span style="color: #000000">() {</span>
 <span style="color: #000000">    </span><span style="color: #AF00DB">return</span><span style="color: #000000"> </span><span style="color: #0000FF">this</span><span style="color: #000000">.</span><span style="color: #001080">bla</span><span style="color: #000000"> * </span><span style="color: #0000FF">this</span><span style="color: #000000">.</span><span style="color: #001080">baz</span><span style="color: #000000">;</span>
 <span style="color: #000000">  },</span>
@@ -347,12 +386,57 @@ pre {
 <span style="color: #000000">  </span><span style="color: #001080">baz:</span><span style="color: #000000"> </span><span style="color: #098658">3</span>
 <span style="color: #000000">};</span>
 
-<span style="color: #795E26">watch</span><span style="color: #000000">(</span><span style="color: #001080">obj</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;foo&#039;</span><span style="color: #000000">, {</span><span style="color: #001080">dependencies:</span><span style="color: #000000"> [</span><span style="color: #A31515">&#039;bla&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;baz&#039;</span><span style="color: #000000">]}, (</span><span style="color: #001080">val</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
-<span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">val</span><span style="color: #000000">);</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> {</span><span style="color: #0070C1">proxy</span><span style="color: #000000">} = </span><span style="color: #795E26">watch</span><span style="color: #000000">(</span><span style="color: #001080">obj</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;foo&#039;</span><span style="color: #000000">, {</span><span style="color: #001080">dependencies:</span><span style="color: #000000"> [</span><span style="color: #A31515">&#039;bla&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;baz&#039;</span><span style="color: #000000">]}, (</span><span style="color: #001080">value</span><span style="color: #000000">, </span><span style="color: #001080">oldValue</span><span style="color: #000000">, </span><span style="color: #001080">info</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">value</span><span style="color: #000000">, </span><span style="color: #001080">oldValue</span><span style="color: #000000">, </span><span style="color: #001080">info</span><span style="color: #000000">.</span><span style="color: #001080">path</span><span style="color: #000000">, </span><span style="color: #001080">info</span><span style="color: #000000">.</span><span style="color: #001080">originalPath</span><span style="color: #000000">, </span><span style="color: #001080">info</span><span style="color: #000000">.</span><span style="color: #001080">parent</span><span style="color: #000000">);</span>
 <span style="color: #000000">});</span>
+
+<span style="color: #008000">// This mutation will invoke our callback</span>
+<span style="color: #001080">proxy</span><span style="color: #000000">.</span><span style="color: #001080">bla</span><span style="color: #000000">++;</span>
 </code></pre>
-							</dd>
-						</dl>
+						<p>When providing the specific path to watch, this parameter can contain an object or <code>Map</code> with lists of
+						dependencies to watch.</p>
+						<pre><code class="language-js"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">obj</span><span style="color: #000000"> = {</span>
+<span style="color: #000000">  </span><span style="color: #001080">foo:</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #0000FF">get</span><span style="color: #000000"> </span><span style="color: #795E26">value</span><span style="color: #000000">() {</span>
+<span style="color: #000000">      </span><span style="color: #AF00DB">return</span><span style="color: #000000"> </span><span style="color: #0000FF">this</span><span style="color: #000000">.</span><span style="color: #001080">bla</span><span style="color: #000000"> * </span><span style="color: #0000FF">this</span><span style="color: #000000">.</span><span style="color: #001080">baz</span><span style="color: #000000">;</span>
+<span style="color: #000000">    }</span>
+<span style="color: #000000">  },</span>
+
+<span style="color: #000000">  </span><span style="color: #001080">bla:</span><span style="color: #000000"> </span><span style="color: #098658">2</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #001080">baz:</span><span style="color: #000000"> </span><span style="color: #098658">3</span>
+<span style="color: #000000">};</span>
+
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">depsAsObj</span><span style="color: #000000"> = {</span>
+<span style="color: #000000">  </span><span style="color: #A31515">&#039;foo.value&#039;</span><span style="color: #001080">:</span><span style="color: #000000"> [</span><span style="color: #A31515">&#039;bla&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;baz&#039;</span><span style="color: #000000">]</span>
+<span style="color: #000000">};</span>
+
+<span style="color: #0000FF">const</span><span style="color: #000000"> {</span><span style="color: #001080">proxy</span><span style="color: #000000">: </span><span style="color: #0070C1">proxy1</span><span style="color: #000000">} = </span><span style="color: #795E26">watch</span><span style="color: #000000">(</span><span style="color: #001080">obj</span><span style="color: #000000">, {</span><span style="color: #001080">dependencies:</span><span style="color: #000000"> </span><span style="color: #001080">depsAsObj</span><span style="color: #000000">}, (</span><span style="color: #001080">mutations</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #001080">mutations</span><span style="color: #000000">.</span><span style="color: #795E26">forEach</span><span style="color: #000000">(([</span><span style="color: #001080">value</span><span style="color: #000000">, </span><span style="color: #001080">oldValue</span><span style="color: #000000">, </span><span style="color: #001080">info</span><span style="color: #000000">]) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">value</span><span style="color: #000000">, </span><span style="color: #001080">oldValue</span><span style="color: #000000">, </span><span style="color: #001080">info</span><span style="color: #000000">.</span><span style="color: #001080">path</span><span style="color: #000000">, </span><span style="color: #001080">info</span><span style="color: #000000">.</span><span style="color: #001080">originalPath</span><span style="color: #000000">, </span><span style="color: #001080">info</span><span style="color: #000000">.</span><span style="color: #001080">parent</span><span style="color: #000000">);</span>
+<span style="color: #000000">  });</span>
+<span style="color: #000000">});</span>
+
+<span style="color: #008000">// This mutation will fire an additional event for `foo.value`</span>
+<span style="color: #001080">proxy1</span><span style="color: #000000">.</span><span style="color: #001080">bla</span><span style="color: #000000">++;</span>
+
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">depsAsMap</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #267F99">Map</span><span style="color: #000000">([</span>
+<span style="color: #000000">  [</span>
+<span style="color: #000000">    </span><span style="color: #008000">// A path to the property with dependencies</span>
+<span style="color: #000000">    [</span><span style="color: #A31515">&#039;foo&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;value&#039;</span><span style="color: #000000">],</span>
+
+<span style="color: #000000">    </span><span style="color: #008000">// Dependencies</span>
+<span style="color: #000000">    [</span><span style="color: #A31515">&#039;bla&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;baz&#039;</span><span style="color: #000000">]</span>
+<span style="color: #000000">  ]</span>
+<span style="color: #000000">]);</span>
+
+<span style="color: #0000FF">const</span><span style="color: #000000"> {</span><span style="color: #001080">proxy</span><span style="color: #000000">: </span><span style="color: #0070C1">proxy2</span><span style="color: #000000">} = </span><span style="color: #795E26">watch</span><span style="color: #000000">(</span><span style="color: #001080">obj</span><span style="color: #000000">, {</span><span style="color: #001080">dependencies:</span><span style="color: #000000"> </span><span style="color: #001080">depsAsMap</span><span style="color: #000000">}, (</span><span style="color: #001080">mutations</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #001080">mutations</span><span style="color: #000000">.</span><span style="color: #795E26">forEach</span><span style="color: #000000">(([</span><span style="color: #001080">value</span><span style="color: #000000">, </span><span style="color: #001080">oldValue</span><span style="color: #000000">, </span><span style="color: #001080">info</span><span style="color: #000000">]) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">value</span><span style="color: #000000">, </span><span style="color: #001080">oldValue</span><span style="color: #000000">, </span><span style="color: #001080">info</span><span style="color: #000000">.</span><span style="color: #001080">path</span><span style="color: #000000">, </span><span style="color: #001080">info</span><span style="color: #000000">.</span><span style="color: #001080">originalPath</span><span style="color: #000000">, </span><span style="color: #001080">info</span><span style="color: #000000">.</span><span style="color: #001080">parent</span><span style="color: #000000">);</span>
+<span style="color: #000000">  });</span>
+<span style="color: #000000">});</span>
+
+<span style="color: #001080">proxy2</span><span style="color: #000000">.</span><span style="color: #001080">baz</span><span style="color: #000000">++;</span>
+</code></pre>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
@@ -361,13 +445,13 @@ pre {
 					<div class="tsd-signature tsd-kind-icon">engine<span class="tsd-signature-symbol">:</span> <a href="src_core_object_watch_interface.watchengine.html" class="tsd-signature-type" data-tsd-kind="Interface">WatchEngine</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/object/watch/interface.ts#L176">src/core/object/watch/interface.ts:176</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/object/watch/interface.ts#L349">src/core/object/watch/interface.ts:349</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>Watch engine to use.
-							By default will be used proxy if supported, otherwise accessors.</p>
+							By default, will be used proxy if supported, otherwise accessors.</p>
 						</div>
 					</div>
 				</section>
@@ -377,13 +461,31 @@ pre {
 					<div class="tsd-signature tsd-kind-icon">event<wbr>Filter<span class="tsd-signature-symbol">:</span> <a href="src_core_object_watch_interface.watchhandler.html" class="tsd-signature-type" data-tsd-kind="Interface">WatchHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/object/watch/interface.ts#L81">src/core/object/watch/interface.ts:81</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/object/watch/interface.ts#L198">src/core/object/watch/interface.ts:198</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Filter function for mutation events</p>
+							<p>A filter function for mutation events.
+							The function allows skipping some mutation events.</p>
 						</div>
+						<dl class="tsd-comment-tags">
+							<dt>example</dt>
+							<dd><pre><code class="language-js"><span style="color: #0000FF">function</span><span style="color: #000000"> </span><span style="color: #795E26">eventFilter</span><span style="color: #000000">(</span><span style="color: #001080">value</span><span style="color: #000000">, </span><span style="color: #001080">oldValue</span><span style="color: #000000">, </span><span style="color: #001080">info</span><span style="color: #000000">) {</span>
+<span style="color: #000000">  </span><span style="color: #AF00DB">return</span><span style="color: #000000"> </span><span style="color: #001080">info</span><span style="color: #000000">.</span><span style="color: #001080">path</span><span style="color: #000000">[</span><span style="color: #098658">0</span><span style="color: #000000">] !== </span><span style="color: #A31515">&#039;_a&#039;</span><span style="color: #000000">;</span>
+<span style="color: #000000">}</span>
+
+<span style="color: #0000FF">const</span><span style="color: #000000"> {</span><span style="color: #0070C1">proxy</span><span style="color: #000000">} = </span><span style="color: #795E26">watch</span><span style="color: #000000">({</span><span style="color: #001080">a:</span><span style="color: #000000"> </span><span style="color: #098658">1</span><span style="color: #000000">, </span><span style="color: #001080">b:</span><span style="color: #000000"> </span><span style="color: #098658">2</span><span style="color: #000000">, </span><span style="color: #001080">_a:</span><span style="color: #000000"> </span><span style="color: #098658">1</span><span style="color: #000000">}, {</span><span style="color: #001080">eventFilter</span><span style="color: #000000">}, (</span><span style="color: #001080">mutations</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #001080">mutations</span><span style="color: #000000">.</span><span style="color: #795E26">forEach</span><span style="color: #000000">(([</span><span style="color: #001080">value</span><span style="color: #000000">, </span><span style="color: #001080">oldValue</span><span style="color: #000000">, </span><span style="color: #001080">info</span><span style="color: #000000">]) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">value</span><span style="color: #000000">, </span><span style="color: #001080">oldValue</span><span style="color: #000000">, </span><span style="color: #001080">info</span><span style="color: #000000">.</span><span style="color: #001080">path</span><span style="color: #000000">, </span><span style="color: #001080">info</span><span style="color: #000000">.</span><span style="color: #001080">originalPath</span><span style="color: #000000">);</span>
+<span style="color: #000000">  });</span>
+<span style="color: #000000">});</span>
+
+<span style="color: #008000">// This mutation won&#039;t invoke our callback</span>
+<span style="color: #001080">proxy</span><span style="color: #000000">.</span><span style="color: #001080">_a</span><span style="color: #000000"> = </span><span style="color: #098658">2</span><span style="color: #000000">;</span>
+</code></pre>
+							</dd>
+						</dl>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
@@ -392,16 +494,32 @@ pre {
 					<div class="tsd-signature tsd-kind-icon">immediate<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/object/watch/interface.ts#L63">src/core/object/watch/interface.ts:63</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/object/watch/interface.ts#L114">src/core/object/watch/interface.ts:114</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>If true, then all mutation events will be fired immediately</p>
+							<p>If true, then all mutation events will be fired immediately.
+							Notice, with enabling this option, the callback changes its interface:</p>
 						</div>
+						<pre><code class="language-typescript"><span style="color: #008000">// Before</span>
+<span style="color: #0000FF">type</span><span style="color: #000000"> </span><span style="color: #267F99">Cb</span><span style="color: #000000"> = (</span><span style="color: #001080">mutations</span><span style="color: #000000">: [[</span><span style="color: #267F99">unknown</span><span style="color: #000000">, </span><span style="color: #267F99">unknown</span><span style="color: #000000">, </span><span style="color: #267F99">WatchHandlerParams</span><span style="color: #000000">]]) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #267F99">any</span><span style="color: #000000">;</span>
+
+<span style="color: #008000">// After</span>
+<span style="color: #0000FF">type</span><span style="color: #000000"> </span><span style="color: #267F99">CbWithImmediate</span><span style="color: #000000"> = (</span><span style="color: #001080">newValue</span><span style="color: #000000">: </span><span style="color: #267F99">unknown</span><span style="color: #000000">, </span><span style="color: #001080">oldValue</span><span style="color: #000000">: </span><span style="color: #267F99">unknown</span><span style="color: #000000">, </span><span style="color: #001080">info</span><span style="color: #000000">: </span><span style="color: #267F99">WatchHandlerParams</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #267F99">any</span><span style="color: #000000">;</span>
+</code></pre>
 						<dl class="tsd-comment-tags">
 							<dt>default</dt>
 							<dd><p><code>false</code></p>
+							</dd>
+							<dt>example</dt>
+							<dd><pre><code class="language-js"><span style="color: #0000FF">const</span><span style="color: #000000"> {</span><span style="color: #0070C1">proxy</span><span style="color: #000000">} = </span><span style="color: #795E26">watch</span><span style="color: #000000">(</span><span style="color: #001080">a</span><span style="color: #000000">: </span><span style="color: #098658">1</span><span style="color: #000000">}, {</span><span style="color: #001080">immediate:</span><span style="color: #000000"> </span><span style="color: #0000FF">true</span><span style="color: #000000">}, (</span><span style="color: #001080">value</span><span style="color: #000000">, </span><span style="color: #001080">oldValue</span><span style="color: #000000">, </span><span style="color: #001080">info</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">value</span><span style="color: #000000">, </span><span style="color: #001080">oldValue</span><span style="color: #000000">, </span><span style="color: #001080">info</span><span style="color: #000000">.</span><span style="color: #001080">path</span><span style="color: #000000">);</span>
+<span style="color: #000000">});</span>
+
+<span style="color: #008000">// 2 1 [&#039;a&#039;]</span>
+<span style="color: #001080">proxy</span><span style="color: #000000">.</span><span style="color: #001080">a</span><span style="color: #000000"> = </span><span style="color: #098658">2</span><span style="color: #000000">;</span>
+</code></pre>
 							</dd>
 						</dl>
 					</div>
@@ -412,13 +530,31 @@ pre {
 					<div class="tsd-signature tsd-kind-icon">path<wbr>Modifier<span class="tsd-signature-symbol">:</span> <a href="src_core_object_watch_interface.pathmodifier.html" class="tsd-signature-type" data-tsd-kind="Interface">PathModifier</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/object/watch/interface.ts#L76">src/core/object/watch/interface.ts:76</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/object/watch/interface.ts#L176">src/core/object/watch/interface.ts:176</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Function that takes a path of the mutation event and returns a new path</p>
+							<p>A function that takes a path of the mutation event and returns a new path.
+							The function is used when you want to mask one mutation to another one.</p>
 						</div>
+						<dl class="tsd-comment-tags">
+							<dt>example</dt>
+							<dd><pre><code class="language-js"><span style="color: #0000FF">function</span><span style="color: #000000"> </span><span style="color: #795E26">pathModifier</span><span style="color: #000000">(</span><span style="color: #001080">path</span><span style="color: #000000">) {</span>
+<span style="color: #000000">  </span><span style="color: #AF00DB">return</span><span style="color: #000000"> </span><span style="color: #001080">path</span><span style="color: #000000">.</span><span style="color: #795E26">map</span><span style="color: #000000">((</span><span style="color: #001080">chunk</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">chunk</span><span style="color: #000000">.</span><span style="color: #795E26">replace</span><span style="color: #000000">(</span><span style="color: #811F3F">/</span><span style="color: #EE0000">^</span><span style="color: #811F3F">_/</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;&#039;</span><span style="color: #000000">));</span>
+<span style="color: #000000">}</span>
+
+<span style="color: #0000FF">const</span><span style="color: #000000"> {</span><span style="color: #0070C1">proxy</span><span style="color: #000000">} = </span><span style="color: #795E26">watch</span><span style="color: #000000">({</span><span style="color: #001080">a:</span><span style="color: #000000"> </span><span style="color: #098658">1</span><span style="color: #000000">, </span><span style="color: #001080">b:</span><span style="color: #000000"> </span><span style="color: #098658">2</span><span style="color: #000000">, </span><span style="color: #001080">_a:</span><span style="color: #000000"> </span><span style="color: #098658">1</span><span style="color: #000000">}, </span><span style="color: #A31515">&#039;a&#039;</span><span style="color: #000000">, {</span><span style="color: #001080">pathModifier</span><span style="color: #000000">}, (</span><span style="color: #001080">mutations</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #001080">mutations</span><span style="color: #000000">.</span><span style="color: #795E26">forEach</span><span style="color: #000000">(([</span><span style="color: #001080">value</span><span style="color: #000000">, </span><span style="color: #001080">oldValue</span><span style="color: #000000">, </span><span style="color: #001080">info</span><span style="color: #000000">]) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">value</span><span style="color: #000000">, </span><span style="color: #001080">oldValue</span><span style="color: #000000">, </span><span style="color: #001080">info</span><span style="color: #000000">.</span><span style="color: #001080">path</span><span style="color: #000000">, </span><span style="color: #001080">info</span><span style="color: #000000">.</span><span style="color: #001080">originalPath</span><span style="color: #000000">);</span>
+<span style="color: #000000">  });</span>
+<span style="color: #000000">});</span>
+
+<span style="color: #008000">// 2 1 [&#039;a&#039;], [&#039;_a&#039;]</span>
+<span style="color: #001080">proxy</span><span style="color: #000000">.</span><span style="color: #001080">_a</span><span style="color: #000000"> = </span><span style="color: #098658">2</span><span style="color: #000000">;</span>
+</code></pre>
+							</dd>
+						</dl>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
@@ -427,13 +563,13 @@ pre {
 					<div class="tsd-signature tsd-kind-icon">postfixes<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/object/watch/interface.ts#L148">src/core/object/watch/interface.ts:148</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/object/watch/interface.ts#L272">src/core/object/watch/interface.ts:272</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>List of postfixes for a path to watch.
-							This parameter can help to watch getters.</p>
+							<p>List of postfixes for paths to watch.
+							This parameter can help to watch accessors.</p>
 						</div>
 						<dl class="tsd-comment-tags">
 							<dt>example</dt>
@@ -445,9 +581,12 @@ pre {
 <span style="color: #000000">  </span><span style="color: #001080">fooStore:</span><span style="color: #000000"> </span><span style="color: #098658">2</span>
 <span style="color: #000000">};</span>
 
-<span style="color: #795E26">watch</span><span style="color: #000000">(</span><span style="color: #001080">obj</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;foo&#039;</span><span style="color: #000000">, {</span><span style="color: #001080">postfixes:</span><span style="color: #000000"> [</span><span style="color: #A31515">&#039;Store&#039;</span><span style="color: #000000">]}, (</span><span style="color: #001080">val</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
-<span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">val</span><span style="color: #000000">);</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> {</span><span style="color: #0070C1">proxy</span><span style="color: #000000">} = </span><span style="color: #795E26">watch</span><span style="color: #000000">(</span><span style="color: #001080">obj</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;foo&#039;</span><span style="color: #000000">, {</span><span style="color: #001080">postfixes:</span><span style="color: #000000"> [</span><span style="color: #A31515">&#039;Store&#039;</span><span style="color: #000000">]}, (</span><span style="color: #001080">value</span><span style="color: #000000">, </span><span style="color: #001080">oldValue</span><span style="color: #000000">, </span><span style="color: #001080">info</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">value</span><span style="color: #000000">, </span><span style="color: #001080">oldValue</span><span style="color: #000000">, </span><span style="color: #001080">info</span><span style="color: #000000">.</span><span style="color: #001080">path</span><span style="color: #000000">, </span><span style="color: #001080">info</span><span style="color: #000000">.</span><span style="color: #001080">originalPath</span><span style="color: #000000">, </span><span style="color: #001080">info</span><span style="color: #000000">.</span><span style="color: #001080">parent</span><span style="color: #000000">);</span>
 <span style="color: #000000">});</span>
+
+<span style="color: #008000">// This mutation will invoke our callback</span>
+<span style="color: #001080">proxy</span><span style="color: #000000">.</span><span style="color: #001080">fooStore</span><span style="color: #000000">++;</span>
 </code></pre>
 							</dd>
 						</dl>
@@ -459,13 +598,13 @@ pre {
 					<div class="tsd-signature tsd-kind-icon">prefixes<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/object/watch/interface.ts#L127">src/core/object/watch/interface.ts:127</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/object/watch/interface.ts#L248">src/core/object/watch/interface.ts:248</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>List of prefixes for a path to watch.
-							This parameter can help to watch getters.</p>
+							<p>List of prefixes for paths to watch.
+							This parameter can help to watch accessors.</p>
 						</div>
 						<dl class="tsd-comment-tags">
 							<dt>example</dt>
@@ -477,9 +616,12 @@ pre {
 <span style="color: #000000">  </span><span style="color: #001080">_foo:</span><span style="color: #000000"> </span><span style="color: #098658">2</span>
 <span style="color: #000000">};</span>
 
-<span style="color: #795E26">watch</span><span style="color: #000000">(</span><span style="color: #001080">obj</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;foo&#039;</span><span style="color: #000000">, {</span><span style="color: #001080">prefixes:</span><span style="color: #000000"> [</span><span style="color: #A31515">&#039;_&#039;</span><span style="color: #000000">]}, (</span><span style="color: #001080">val</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
-<span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">val</span><span style="color: #000000">);</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> {</span><span style="color: #0070C1">proxy</span><span style="color: #000000">} = </span><span style="color: #795E26">watch</span><span style="color: #000000">(</span><span style="color: #001080">obj</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;foo&#039;</span><span style="color: #000000">, {</span><span style="color: #001080">prefixes:</span><span style="color: #000000"> [</span><span style="color: #A31515">&#039;_&#039;</span><span style="color: #000000">]}, (</span><span style="color: #001080">value</span><span style="color: #000000">, </span><span style="color: #001080">oldValue</span><span style="color: #000000">, </span><span style="color: #001080">info</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">value</span><span style="color: #000000">, </span><span style="color: #001080">oldValue</span><span style="color: #000000">, </span><span style="color: #001080">info</span><span style="color: #000000">.</span><span style="color: #001080">path</span><span style="color: #000000">, </span><span style="color: #001080">info</span><span style="color: #000000">.</span><span style="color: #001080">originalPath</span><span style="color: #000000">, </span><span style="color: #001080">info</span><span style="color: #000000">.</span><span style="color: #001080">parent</span><span style="color: #000000">);</span>
 <span style="color: #000000">});</span>
+
+<span style="color: #008000">// This mutation will invoke our callback</span>
+<span style="color: #001080">proxy</span><span style="color: #000000">.</span><span style="color: #001080">_foo</span><span style="color: #000000">++;</span>
 </code></pre>
 							</dd>
 						</dl>
@@ -491,12 +633,13 @@ pre {
 					<div class="tsd-signature tsd-kind-icon">tied<wbr>With<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/object/watch/interface.ts#L106">src/core/object/watch/interface.ts:106</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/object/watch/interface.ts#L224">src/core/object/watch/interface.ts:224</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Link to an object that has connection with the watched object</p>
+							<p>Link to an object that should connect with the watched object, i.e.,
+							changing of properties of the tied object, will also emit mutation events</p>
 						</div>
 						<dl class="tsd-comment-tags">
 							<dt>example</dt>
@@ -527,16 +670,30 @@ pre {
 					<div class="tsd-signature tsd-kind-icon">with<wbr>Proto<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/object/watch/interface.ts#L57">src/core/object/watch/interface.ts:57</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/object/watch/interface.ts#L89">src/core/object/watch/interface.ts:89</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>If true, then the callback of changing is also fired on mutation of objects from a prototype</p>
+							<p>If true, then the callback of changing is also fired on mutations of properties from prototypes</p>
 						</div>
 						<dl class="tsd-comment-tags">
 							<dt>default</dt>
 							<dd><p><code>false</code></p>
+							</dd>
+							<dt>example</dt>
+							<dd><pre><code class="language-js"><span style="color: #0000FF">const</span><span style="color: #000000"> {</span><span style="color: #0070C1">proxy</span><span style="color: #000000">} = </span><span style="color: #795E26">watch</span><span style="color: #000000">(</span><span style="color: #001080">a</span><span style="color: #000000">: </span><span style="color: #098658">1</span><span style="color: #000000">, {</span><span style="color: #001080">__proto__:</span><span style="color: #000000"> {</span><span style="color: #001080">b:</span><span style="color: #000000"> </span><span style="color: #098658">1</span><span style="color: #000000">}}, {</span><span style="color: #001080">withProto:</span><span style="color: #000000"> </span><span style="color: #0000FF">true</span><span style="color: #000000">}, (</span><span style="color: #001080">mutations</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #001080">mutations</span><span style="color: #000000">.</span><span style="color: #795E26">forEach</span><span style="color: #000000">(([</span><span style="color: #001080">value</span><span style="color: #000000">, </span><span style="color: #001080">oldValue</span><span style="color: #000000">, </span><span style="color: #001080">info</span><span style="color: #000000">]) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">value</span><span style="color: #000000">, </span><span style="color: #001080">oldValue</span><span style="color: #000000">, </span><span style="color: #001080">info</span><span style="color: #000000">.</span><span style="color: #001080">path</span><span style="color: #000000">, </span><span style="color: #001080">info</span><span style="color: #000000">.</span><span style="color: #001080">fromProto</span><span style="color: #000000">);</span>
+<span style="color: #000000">  });</span>
+<span style="color: #000000">});</span>
+
+<span style="color: #008000">// 2 1 [&#039;a&#039;] false</span>
+<span style="color: #001080">proxy</span><span style="color: #000000">.</span><span style="color: #001080">a</span><span style="color: #000000"> = </span><span style="color: #098658">2</span><span style="color: #000000">;</span>
+
+<span style="color: #008000">// 2 1 [&#039;b&#039;] true</span>
+<span style="color: #001080">proxy</span><span style="color: #000000">.</span><span style="color: #001080">b</span><span style="color: #000000"> = </span><span style="color: #098658">2</span><span style="color: #000000">;</span>
+</code></pre>
 							</dd>
 						</dl>
 					</div>

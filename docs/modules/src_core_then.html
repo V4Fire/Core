@@ -247,9 +247,7 @@ pre {
 						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">Then</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/then&#039;</span><span style="color: #000000">;</span>
 
 <span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">promise</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">Then</span><span style="color: #000000">((</span><span style="color: #001080">resolve</span><span style="color: #000000">, </span><span style="color: #001080">reject</span><span style="color: #000000">, </span><span style="color: #001080">onAbort</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
-<span style="color: #000000">  </span><span style="color: #795E26">setTimeout</span><span style="color: #000000">(() </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
-<span style="color: #000000">    </span><span style="color: #795E26">resolve</span><span style="color: #000000">();</span>
-<span style="color: #000000">  }, </span><span style="color: #098658">100</span><span style="color: #000000">);</span>
+<span style="color: #000000">  </span><span style="color: #795E26">setTimeout</span><span style="color: #000000">(</span><span style="color: #001080">resolve</span><span style="color: #000000">, </span><span style="color: #098658">100</span><span style="color: #000000">);</span>
 
 <span style="color: #000000">  </span><span style="color: #795E26">onAbort</span><span style="color: #000000">((</span><span style="color: #001080">reason</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
 <span style="color: #000000">    </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">error</span><span style="color: #000000">(</span><span style="color: #A31515">`The promise was aborted by a reason of </span><span style="color: #0000FF">${</span><span style="color: #001080">reason</span><span style="color: #0000FF">}</span><span style="color: #A31515">`</span><span style="color: #000000">);</span>
@@ -257,7 +255,74 @@ pre {
 
 <span style="color: #000000">}).</span><span style="color: #795E26">catch</span><span style="color: #000000">((</span><span style="color: #001080">err</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">error</span><span style="color: #000000">(</span><span style="color: #001080">err</span><span style="color: #000000">)); </span><span style="color: #008000">// timeout</span>
 
+<span style="color: #008000">// Invoking of `abort` rejects the promise.</span>
+<span style="color: #008000">// Additionally, you can specify a reason to abort.</span>
 <span style="color: #001080">promise</span><span style="color: #000000">.</span><span style="color: #795E26">abort</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;timeout&#039;</span><span style="color: #000000">);</span>
+</code></pre>
+						<a href="#tied-promises" id="tied-promises" style="color: inherit; text-decoration: none;">
+							<h2>Tied promises</h2>
+						</a>
+						<p>You can tie one promise with another. Tying is mean that when your abort one promise, another one will be aborted too.
+						To tie a promise, provide a parent promise as the second argument of the constructor or static methods, like <code>all</code> or <code>race</code>.</p>
+						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">Then</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/then&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #008000">// catch: timeout</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">parent</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">Then</span><span style="color: #000000">((</span><span style="color: #001080">resolve</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #795E26">setTimeout</span><span style="color: #000000">(</span><span style="color: #001080">resolve</span><span style="color: #000000">, </span><span style="color: #098658">100</span><span style="color: #000000">)).</span><span style="color: #795E26">catch</span><span style="color: #000000">((</span><span style="color: #001080">err</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">error</span><span style="color: #000000">(</span><span style="color: #001080">err</span><span style="color: #000000">));</span>
+
+<span style="color: #008000">// catch: timeout</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">childPromise</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">Then</span><span style="color: #000000">((</span><span style="color: #001080">resolve</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #795E26">setTimeout</span><span style="color: #000000">(</span><span style="color: #001080">resolve</span><span style="color: #000000">, </span><span style="color: #098658">200</span><span style="color: #000000">)).</span><span style="color: #795E26">catch</span><span style="color: #000000">((</span><span style="color: #001080">err</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">error</span><span style="color: #000000">(</span><span style="color: #001080">err</span><span style="color: #000000">), </span><span style="color: #001080">parent</span><span style="color: #000000">);</span>
+
+<span style="color: #001080">parent</span><span style="color: #000000">.</span><span style="color: #795E26">abort</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;timeout&#039;</span><span style="color: #000000">);</span>
+</code></pre>
+						<a href="#api" id="api" style="color: inherit; text-decoration: none;">
+							<h2>API</h2>
+						</a>
+						<p>The module re-use native Promise API with adding some extra getters, etc., you free to use such methods like <code>then</code>, <code>catch</code>, or <code>finally</code>.</p>
+						<a href="#ispending" id="ispending" style="color: inherit; text-decoration: none;">
+							<h3>isPending</h3>
+						</a>
+						<p>True if the current promise is pending.</p>
+						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">Then</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/then&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">promise</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">Then</span><span style="color: #000000">((</span><span style="color: #001080">resolve</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #795E26">setTimeout</span><span style="color: #000000">(() </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #795E26">resolve</span><span style="color: #000000">();</span>
+
+<span style="color: #000000">    </span><span style="color: #008000">// false</span>
+<span style="color: #000000">    </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">promise</span><span style="color: #000000">.</span><span style="color: #001080">isPending</span><span style="color: #000000">);</span>
+<span style="color: #000000">  }, </span><span style="color: #098658">100</span><span style="color: #000000">);</span>
+<span style="color: #000000">});</span>
+
+<span style="color: #008000">// true</span>
+<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">promise</span><span style="color: #000000">.</span><span style="color: #001080">isPending</span><span style="color: #000000">);</span>
+</code></pre>
+						<a href="#helpers" id="helpers" style="color: inherit; text-decoration: none;">
+							<h2>Helpers</h2>
+						</a>
+						<p>The module provides a bunch of static helper methods and getters.</p>
+						<a href="#never" id="never" style="color: inherit; text-decoration: none;">
+							<h3>never</h3>
+						</a>
+						<p>The promise that is never resolved. It can be useful to create some loopback.</p>
+						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">Then</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/then&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #008000">// This promise will never be resolved</span>
+<span style="color: #001080">Then</span><span style="color: #000000">.</span><span style="color: #001080">never</span><span style="color: #000000">.</span><span style="color: #795E26">then</span><span style="color: #000000">((</span><span style="color: #001080">res</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">res</span><span style="color: #000000">);</span>
+<span style="color: #000000">});</span>
+</code></pre>
+						<a href="#resolveandcall" id="resolveandcall" style="color: inherit; text-decoration: none;">
+							<h3>resolveAndCall</h3>
+						</a>
+						<p>The method creates a new resolved Then promise for the specified value.
+							If the resolved value is a function, it will be invoked.
+						The result of the invoking will be provided as a value of the promise.</p>
+						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">Then</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/then&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #001080">Then</span><span style="color: #000000">.</span><span style="color: #795E26">resolveAndCall</span><span style="color: #000000">(</span><span style="color: #267F99">Promise</span><span style="color: #000000">.</span><span style="color: #795E26">resolve</span><span style="color: #000000">(() </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #098658">1</span><span style="color: #000000">)).</span><span style="color: #795E26">then</span><span style="color: #000000">((</span><span style="color: #001080">res</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #008000">// 1</span>
+<span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">res</span><span style="color: #000000">);</span>
+<span style="color: #000000">});</span>
 </code></pre>
 					</div>
 				</div>

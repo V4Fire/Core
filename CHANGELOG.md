@@ -11,6 +11,80 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.46.0 (2021-05-14)
+
+#### :boom: Breaking Change
+
+* `core/range`:
+  * Renamed `reverse` to `isReversed`
+  * Now `union` and `intersect` preserve ordering of the first range
+  * New API of infinite ranges
+
+#### :rocket: New Feature
+
+* Added new methods `entries`, `keys`, `indices` `core/range`
+
+#### :bug: Bug Fix
+
+* Fixed a bug when intersection doesn't include bounds `core/range`
+
+#### :memo: Documentation
+
+* Improved documentation `core/range`
+
+#### :house: Internal
+
+* Updated dependencies: `dotenv@9.0.2`, `husky@6.0.0`
+
+## v3.45.0 (2021-05-12)
+
+#### :boom: Breaking Change
+
+* `getDataTypeFromURL` marked as deprecated. Use `getDataTypeFromURI` instead. `core/mime-type`
+
+#### :rocket: New Feature
+
+* Added the support of non-including range bounds `core/range`
+
+#### :bug: Bug Fix
+
+* Fixed a bug when watching an object by the specified path when occurring a mutation of nested properties `core/object/watch`
+
+#### :memo: Documentation
+
+* Improved documentation:
+  * `core/object/watch`
+  * `core/then`
+  * `core/status-codes`
+
+#### :house: Internal
+
+* Updated dependencies: `typescript@4.2.4`, `tslib@2.2.0`
+
+## v3.44.1 (2021-04-23)
+
+#### :bug: Bug Fix
+
+* `core/functools/trait`:
+  * Fixed a bug when one trait extends from another
+  * Fixed a bug with accessors within a trait
+
+## v3.44.0 (2021-04-19)
+
+#### :rocket: New Feature
+
+* Added a module to create class traits `core/functools/trait`
+
+## v3.43.1 (2021-04-19)
+
+#### :bug: Bug Fix
+
+* Fixed a bug when parsing a query string from a URL without query parameters `fromQueryString` `core/url`
+
+#### :house: Internal
+
+* Renamed `noMessageBodyStatusCodes` to `noContentStatusCodes` `core/request/response`
+
 ## v3.43.0 (2021-04-14)
 
 #### :house: Internal

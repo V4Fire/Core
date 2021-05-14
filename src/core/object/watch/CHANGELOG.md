@@ -9,6 +9,16 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.45.0 (2021-05-12)
+
+#### :bug: Bug Fix
+
+* Fixed a bug when watching an object by the specified path when occurring a mutation of nested properties
+
+#### :memo: Documentation
+
+* Improved documentation
+
 ## v3.32.0 (2021-02-05)
 
 #### :bug: Bug Fix

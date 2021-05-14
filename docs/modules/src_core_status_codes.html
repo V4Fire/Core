@@ -244,6 +244,82 @@ pre {
 							<h1>core/status-codes</h1>
 						</a>
 						<p>This module provides a map of HTTP status codes.</p>
+						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">StatusCodes</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/status-codes&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #008000">// 301</span>
+<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">StatusCodes</span><span style="color: #000000">.</span><span style="color: #0070C1">MOVED_PERMANENTLY</span><span style="color: #000000">);</span>
+
+<span style="color: #008000">// 404</span>
+<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">StatusCodes</span><span style="color: #000000">.</span><span style="color: #0070C1">NOT_FOUND</span><span style="color: #000000">);</span>
+</code></pre>
+						<p>List of supported statuses:</p>
+						<pre><code class="language-typescript"><span style="color: #0000FF">enum</span><span style="color: #000000"> </span><span style="color: #267F99">StatusCodes</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">CONTINUE</span><span style="color: #000000"> = </span><span style="color: #098658">100</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">SWITCHING_PROTOCOLS</span><span style="color: #000000"> = </span><span style="color: #098658">101</span><span style="color: #000000">,</span>
+
+<span style="color: #000000">  </span><span style="color: #0070C1">OK</span><span style="color: #000000"> = </span><span style="color: #098658">200</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">CREATED</span><span style="color: #000000"> = </span><span style="color: #098658">201</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">ACCEPTED</span><span style="color: #000000"> = </span><span style="color: #098658">202</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">NON_AUTHORITATIVE_INFORMATION</span><span style="color: #000000"> = </span><span style="color: #098658">203</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">NO_CONTENT</span><span style="color: #000000"> = </span><span style="color: #098658">204</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">RESET_CONTENT</span><span style="color: #000000"> = </span><span style="color: #098658">205</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">PARTIAL_CONTENT</span><span style="color: #000000"> = </span><span style="color: #098658">206</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">MULTI_STATUS</span><span style="color: #000000"> = </span><span style="color: #098658">207</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">ALREADY_REPORTED</span><span style="color: #000000"> = </span><span style="color: #098658">208</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">IM_USED</span><span style="color: #000000"> = </span><span style="color: #098658">226</span><span style="color: #000000">,</span>
+
+<span style="color: #000000">  </span><span style="color: #0070C1">MULTIPLE_CHOICES</span><span style="color: #000000"> = </span><span style="color: #098658">300</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">MOVED_PERMANENTLY</span><span style="color: #000000"> = </span><span style="color: #098658">301</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">FOUND</span><span style="color: #000000"> = </span><span style="color: #098658">302</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">SEE_OTHER</span><span style="color: #000000"> = </span><span style="color: #098658">303</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">NOT_MODIFIED</span><span style="color: #000000"> = </span><span style="color: #098658">304</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">USE_PROXY</span><span style="color: #000000"> = </span><span style="color: #098658">305</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">SWITCH_PROXY</span><span style="color: #000000"> = </span><span style="color: #098658">306</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">TEMPORARY_REDIRECT</span><span style="color: #000000"> = </span><span style="color: #098658">307</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">PERMANENT_REDIRECT</span><span style="color: #000000"> = </span><span style="color: #098658">308</span><span style="color: #000000">,</span>
+
+<span style="color: #000000">  </span><span style="color: #0070C1">BAD_REQUEST</span><span style="color: #000000"> = </span><span style="color: #098658">400</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">UNAUTHORIZED</span><span style="color: #000000"> = </span><span style="color: #098658">401</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">PAYMENT_REQUIRED</span><span style="color: #000000"> = </span><span style="color: #098658">402</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">FORBIDDEN</span><span style="color: #000000"> = </span><span style="color: #098658">403</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">NOT_FOUND</span><span style="color: #000000"> = </span><span style="color: #098658">404</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">METHOD_NOT_ALLOWED</span><span style="color: #000000"> = </span><span style="color: #098658">405</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">NOT_ACCEPTABLE</span><span style="color: #000000"> = </span><span style="color: #098658">406</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">PROXY_AUTHENTICATION_REQUIRED</span><span style="color: #000000"> = </span><span style="color: #098658">407</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">REQUEST_TIMEOUT</span><span style="color: #000000"> = </span><span style="color: #098658">408</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">CONFLICT</span><span style="color: #000000"> = </span><span style="color: #098658">409</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">GONE</span><span style="color: #000000"> = </span><span style="color: #098658">410</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">LENGTH_REQUIRED</span><span style="color: #000000"> = </span><span style="color: #098658">411</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">PRECONDITION_FAILED</span><span style="color: #000000"> = </span><span style="color: #098658">412</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">REQUEST_ENTITY_TOO_LARGE</span><span style="color: #000000"> = </span><span style="color: #098658">413</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">REQUEST_URI_TOO_LONG</span><span style="color: #000000"> = </span><span style="color: #098658">414</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">UNSUPPORTED_MEDIA_TYPE</span><span style="color: #000000"> = </span><span style="color: #098658">415</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">REQUESTED_RANGE_NOT_SATISFIABLE</span><span style="color: #000000"> = </span><span style="color: #098658">416</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">EXPECTATION_FAILED</span><span style="color: #000000"> = </span><span style="color: #098658">417</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">IM_A_TEAPOT</span><span style="color: #000000"> = </span><span style="color: #098658">418</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">MISDIRECTED_REQUEST</span><span style="color: #000000"> = </span><span style="color: #098658">421</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">UNPROCESSABLE_ENTITY</span><span style="color: #000000"> = </span><span style="color: #098658">422</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">UPGRADE_REQUIRED</span><span style="color: #000000"> = </span><span style="color: #098658">426</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">PRECONDITION_REQUIRED</span><span style="color: #000000"> = </span><span style="color: #098658">428</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">LOCKED</span><span style="color: #000000"> = </span><span style="color: #098658">423</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">FAILED_DEPENDENCY</span><span style="color: #000000"> = </span><span style="color: #098658">424</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">TOO_MANY_REQUESTS</span><span style="color: #000000"> = </span><span style="color: #098658">429</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">REQUEST_HEADER_FIELDS_TOO_LARGE</span><span style="color: #000000"> = </span><span style="color: #098658">431</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">UNAVAILABLE_FOR_LEGAL_REASONS</span><span style="color: #000000"> = </span><span style="color: #098658">451</span><span style="color: #000000">,</span>
+
+<span style="color: #000000">  </span><span style="color: #0070C1">INTERNAL_SERVER_ERROR</span><span style="color: #000000"> = </span><span style="color: #098658">500</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">NOT_IMPLEMENTED</span><span style="color: #000000"> = </span><span style="color: #098658">501</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">BAD_GATEWAY</span><span style="color: #000000"> = </span><span style="color: #098658">502</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">SERVICE_UNAVAILABLE</span><span style="color: #000000"> = </span><span style="color: #098658">503</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">GATEWAY_TIMEOUT</span><span style="color: #000000"> = </span><span style="color: #098658">504</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">HTTP_VERSION_NOT_SUPPORTED</span><span style="color: #000000"> = </span><span style="color: #098658">505</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">VARIANT_ALSO_NEGOTIATES</span><span style="color: #000000"> = </span><span style="color: #098658">506</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">INSUFFICIENT_STORAGE</span><span style="color: #000000"> = </span><span style="color: #098658">507</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">LOOP_DETECTED</span><span style="color: #000000"> = </span><span style="color: #098658">508</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">NOT_EXTENDED</span><span style="color: #000000"> = </span><span style="color: #098658">510</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">NETWORK_AUTHENTICATION_REQUIRED</span><span style="color: #000000"> = </span><span style="color: #098658">511</span>
+<span style="color: #000000">}</span>
+</code></pre>
 					</div>
 				</div>
 			</section>

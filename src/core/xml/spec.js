@@ -7,7 +7,7 @@
  */
 
 import { toDataURI } from 'core/xml';
-import { getDataTypeFromURL } from 'core/mime-type';
+import { getDataTypeFromURI } from 'core/mime-type';
 import { IS_NODE } from 'core/env';
 
 describe('core/xml', () => {
@@ -38,6 +38,6 @@ describe('core/xml', () => {
 		node.innerHTML = 'hello';
 
 		expect(toDataURI(node)).toBe("data:image/svg+xml;%3Cfoo xmlns='http://www.w3.org/1999/xhtml'%3Ehello%3C/foo%3E");
-		expect(getDataTypeFromURL(toDataURI(node))).toBe('document');
+		expect(getDataTypeFromURI(toDataURI(node))).toBe('document');
 	});
 });
