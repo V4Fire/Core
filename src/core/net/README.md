@@ -2,6 +2,14 @@
 
 This module provides API to work with a network, such as testing of the network connection, etc.
 
+```js
+import * as net from 'core/net';
+
+(async () => {
+  await net.isOnline();
+})();
+```
+
 ## Configuration
 
 To enable online checking you need to add a configuration within your runtime config module (`src/config`).
@@ -35,13 +43,3 @@ export default {
   }
 }
 ````
-
-## Examples
-
-```js
-import * as net from 'core/net';
-
-(async () => {
-  await net.isOnline();
-})();
-```
