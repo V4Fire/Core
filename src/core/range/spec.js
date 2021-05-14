@@ -271,12 +271,12 @@ describe('core/range', () => {
 		expect([...r.entries(3)]).toEqual([[0, 3], [1, 0]]);
 	});
 
-	it('keys', () => {
+	it('indices', () => {
 		const
 			r = new Range([4], [0]);
 
-		expect([...r.keys()]).toEqual([0, 1, 2]);
-		expect([...r.keys(2)]).toEqual([0, 1]);
-		expect([...r.keys(3)]).toEqual([0]);
+		expect([...r.indices()]).toEqual([0, 1, 2]);
+		expect([...r.indices(2)]).toEqual([0, 1]);
+		expect([...r.indices(3)]).toEqual([0]);
 	});
 });

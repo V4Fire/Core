@@ -19,7 +19,7 @@ Changelog
 
 #### :rocket: New Feature
 
-* Added new methods `entries`, `keys`, `reverse`
+* Added new methods `entries`, `indices`, `reverse`
 
 #### :bug: Bug Fix
 

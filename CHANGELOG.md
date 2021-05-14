@@ -22,7 +22,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :rocket: New Feature
 
-* Added new methods `entries`, `keys`, `reverse` `core/range`
+* Added new methods `entries`, `keys`, `indices` `core/range`
 
 #### :bug: Bug Fix
 

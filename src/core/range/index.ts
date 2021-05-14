@@ -272,7 +272,7 @@ export default class Range<T extends RangeValue> {
 
 	/**
 	 * Returns a new range with the earliest starting point as its start, and the latest ending point as its end.
-	 * If the two ranges do not intersect this will effectively remove the "gap" between them.
+	 * If the two ranges do not intersect, this will effectively remove the "gap" between them.
 	 *
 	 * The method preserves element ordering of the first range.
 	 * The union of ranges with different types will always produce an empty range.
@@ -348,13 +348,13 @@ export default class Range<T extends RangeValue> {
 	 * @example
 	 * ```js
 	 * // 3
-	 * console.log(new Range(0, 10).clamp(3)));
+	 * console.log(new Range(0, 10).clamp(3));
 	 *
 	 * // 'd'
-	 * console.log(new Range('a', 'd').clamp('z')));
+	 * console.log(new Range('a', 'd').clamp('z'));
 	 *
 	 * // null
-	 * console.log(new Range(0, [0]).clamp(10)));
+	 * console.log(new Range(0, [0]).clamp(10));
 	 * ```
 	 */
 	clamp(el: unknown): T | null {
@@ -386,10 +386,10 @@ export default class Range<T extends RangeValue> {
 	 * @example
 	 * ```js
 	 * // 4
-	 * console.log(new Range(7, 10).span()));
+	 * console.log(new Range(7, 10).span());
 	 *
 	 * // 0
-	 * console.log(new Range(0, [0]).span()));
+	 * console.log(new Range(0, [0]).span());
 	 * ```
 	 */
 	span(): number {
@@ -407,7 +407,7 @@ export default class Range<T extends RangeValue> {
 	/**
 	 * Returns an iterable object from the range
 	 *
-	 * @param [step] - step to iterate elements (for date ranges it means milliseconds to shift)
+	 * @param [step] - step to iterate elements (for date ranges, it means milliseconds to shift)
 	 * @example
 	 * ```js
 	 * for (const el of new Range(0, 3).values()) {
@@ -493,7 +493,7 @@ export default class Range<T extends RangeValue> {
 	/**
 	 * Returns an iterable object from the range that produces pairs of iteration indexes and values
 	 *
-	 * @param [step] - step to iterate elements (for date ranges it means milliseconds to shift)
+	 * @param [step] - step to iterate elements (for date ranges, it means milliseconds to shift)
 	 * @example
 	 * ```js
 	 * for (const el of new Range(3, 1).entries()) {
@@ -519,21 +519,21 @@ export default class Range<T extends RangeValue> {
 	/**
 	 * Returns an iterable object from the range that produces iteration indexes
 	 *
-	 * @param [step] - step to iterate elements (for date ranges it means milliseconds to shift)
+	 * @param [step] - step to iterate elements (for date ranges, it means milliseconds to shift)
 	 * @example
 	 * ```js
-	 * for (const el of new Range(3, 1).keys()) {
+	 * for (const el of new Range(3, 1).indices()) {
 	 *   // 0 1 2
 	 *   console.log(el);
 	 * }
 	 *
-	 * for (const el of new Range(0, 3).keys(2)) {
+	 * for (const el of new Range(0, 3).indices(2)) {
 	 *   // 0 1
 	 *   console.log(el);
 	 * }
 	 * ```
 	 */
-	*keys(step?: number): IterableIterator<number> {
+	*indices(step?: number): IterableIterator<number> {
 		const
 			iterator = this.values(step);
 
@@ -546,7 +546,18 @@ export default class Range<T extends RangeValue> {
 	 * Creates an array from the range and returns it.
 	 * Mind, you can't transform infinite ranges to arrays, but you free to use iterators.
 	 *
-	 * @param [step] - step to iterate elements (for date ranges it means milliseconds to shift)
+	 * @param [step] - step to iterate elements (for date ranges, it means milliseconds to shift)
+	 * @example
+	 * ```js
+	 * // [0, 3, 6, 9]
+	 * console.log(new Range(0, 10).toArray(3));
+	 *
+	 * // ['a', 'b']
+	 * console.log(new Range('a', ['c']).toArray());
+	 *
+	 * // []
+	 * console.log(new Range(0, [0]).toArray());
+	 * ```
 	 */
 	toArray(step?: number): T[] {
 		if (this.isValid() && !isFinite(this.span())) {
@@ -563,19 +574,19 @@ export default class Range<T extends RangeValue> {
 	 * @example
 	 * ```js
 	 * // 0..10
-	 * console.log(new Range(0, 10));
+	 * console.log(new Range(0, 10).toString());
 	 *
 	 * // 0..9
-	 * console.log(new Range(0, [10]));
+	 * console.log(new Range(0, [10]).toString());
 	 *
 	 * // 0..
-	 * console.log(new Range(0));
+	 * console.log(new Range(0).toString());
 	 *
 	 * // ..z
-	 * console.log(new Range(null, 'z'));
+	 * console.log(new Range(null, 'z').toString());
 	 *
 	 * // ''
-	 * console.log(new Range(0, [0]));
+	 * console.log(new Range(0, [0]).toString());
 	 * ```
 	 */
 	toString(): string {
