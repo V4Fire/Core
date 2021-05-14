@@ -51,15 +51,15 @@ The module exports an event emitter to handle connection events.
 ```js
 import * as net from 'core/net';
 
-emitter.emitter.on('online', () => {
+net.emitter.emitter.on('online', () => {
   console.log("I'm online!");
 });
 
-emitter.emitter.on('offline', (lastOnlineDate) => {
+net.emitter.emitter.on('offline', (lastOnlineDate) => {
   console.log(`I have been online at ${lastOnlineDate}`);
 });
 
-emitter.emitter.on('status', (e) => {
+net.emitter.emitter.on('status', (e) => {
   console.log(`Connection is ${e.status ? 'online' : 'offline'}`);
 
   if (!e.status) {
