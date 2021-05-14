@@ -441,7 +441,7 @@ export default class Range<T extends RangeValue> {
 		}
 
 		if (!Number.isNatural(step)) {
-			throw new TypeError('Step value can be only natural');
+			throw new TypeError('Step value can be only a natural number');
 		}
 
 		let
