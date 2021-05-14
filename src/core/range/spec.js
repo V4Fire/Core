@@ -82,7 +82,7 @@ describe('core/range', () => {
 		]);
 	});
 
-	it('range span', () => {
+	it('span', () => {
 		expect(new Range(0, 3).span()).toBe(4);
 		expect(new Range(0).span()).toBe(Infinity);
 		expect(new Range(3, 0).span()).toBe(4);
@@ -128,7 +128,7 @@ describe('core/range', () => {
 		expect(new Range(null, ['a']).contains('a')).toBeFalse();
 	});
 
-	it('clamped element', () => {
+	it('clamp', () => {
 		expect(new Range(0, 3).clamp(2)).toBe(2);
 		expect(new Range(0, 3).clamp(20)).toBe(3);
 		expect(new Range(0, 3).clamp(-20)).toBe(0);
@@ -201,14 +201,21 @@ describe('core/range', () => {
 			.toEqual([]);
 	});
 
-	it('cloning', () => {
+	it('clone', () => {
 		const r = new Range(0, 1);
 		expect(r.clone()).not.toBe(r);
 		expect(r.clone().toArray()).toEqual(r.toArray());
 		expect(new Range(0, [0]).clone().toArray()).toEqual([]);
 	});
 
-	it('validation', () => {
+	it('reverse', () => {
+		const r = new Range(0, [3]);
+		expect(r.reverse()).not.toBe(r);
+		expect(r.reverse().toArray()).toEqual(r.toArray().reverse());
+		expect(new Range(0, [0]).reverse().toArray()).toEqual([]);
+	});
+
+	it('isValid', () => {
 		expect(new Range(0, 2).isValid()).toBeTrue();
 		expect(new Range(0, '2').isValid()).toBeTrue();
 		expect(new Range(0, 'a').isValid()).toBeTrue();
@@ -238,9 +245,38 @@ describe('core/range', () => {
 	});
 
 	it('toIterator', () => {
-		const r = new Range(0, 2);
+		const
+			r = new Range(0, 2);
+
 		expect(r[Symbol.iterator]().next()).toEqual({value: 0, done: false});
 		expect(r.values().next()).toEqual({value: 0, done: false});
 		expect([...r.values()]).toEqual([0, 1, 2]);
+	});
+
+	it('values', () => {
+		const
+			r = new Range(0, 4);
+
+		expect([...r.values()]).toEqual([0, 1, 2, 3, 4]);
+		expect([...r.values(2)]).toEqual([0, 2, 4]);
+		expect([...r.values(3)]).toEqual([0, 3]);
+	});
+
+	it('entries', () => {
+		const
+			r = new Range([4], 0);
+
+		expect([...r.entries()]).toEqual([[0, 3], [1, 2], [2, 1], [3, 0]]);
+		expect([...r.entries(2)]).toEqual([[0, 3], [1, 1]]);
+		expect([...r.entries(3)]).toEqual([[0, 3], [1, 0]]);
+	});
+
+	it('keys', () => {
+		const
+			r = new Range([4], [0]);
+
+		expect([...r.keys()]).toEqual([0, 1, 2]);
+		expect([...r.keys(2)]).toEqual([0, 1]);
+		expect([...r.keys(3)]).toEqual([0]);
 	});
 });

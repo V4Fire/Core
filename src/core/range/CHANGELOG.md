@@ -17,6 +17,10 @@ Changelog
 * Now `union` and `intersect` preserve ordering of the first range
 * New API of infinite ranges
 
+#### :rocket: New Feature
+
+* Added new methods `entries`, `keys`, `reverse`
+
 #### :bug: Bug Fix
 
 * Fixed a bug when intersection doesn't include bounds

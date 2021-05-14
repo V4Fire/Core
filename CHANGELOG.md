@@ -20,6 +20,10 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
   * Now `union` and `intersect` preserve ordering of the first range
   * New API of infinite ranges
 
+#### :rocket: New Feature
+
+* Added new methods `entries`, `keys`, `reverse` `core/range`
+
 #### :bug: Bug Fix
 
 * Fixed a bug when intersection doesn't include bounds `core/range`
