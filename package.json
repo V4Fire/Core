@@ -23,6 +23,7 @@
     "Core"
   ],
   "scripts": {
+    "prepare": "husky install",
     "dev": "npx gulp watch:server",
     "build": "npx gulp build:server",
     "test": "npm run build && npm run test:typescript && npm run test:eslint && npm run test:jasmine",
