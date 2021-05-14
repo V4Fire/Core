@@ -44,6 +44,30 @@ export default {
 }
 ```
 
+## Events
+
+The module exports an event emitter to handle connection events.
+
+```js
+import * as net from 'core/net';
+
+emitter.emitter.on('online', () => {
+  console.log("I'm online!");
+});
+
+emitter.emitter.on('offline', (lastOnlineDate) => {
+  console.log(`I have been online at ${lastOnlineDate}`);
+});
+
+emitter.emitter.on('status', (e) => {
+  console.log(`Connection is ${e.status ? 'online' : 'offline'}`);
+
+  if (!e.status) {
+    console.log(`I have been online at ${el.lastOnline}`);
+  }
+});
+```
+
 ## Engines
 
 The module supports different implementations to check the online connection.
