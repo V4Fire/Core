@@ -11,7 +11,7 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-## v3.??.?? (2021-??-??)
+## v3.46.0 (2021-05-14)
 
 #### :boom: Breaking Change
 
@@ -31,6 +31,10 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 #### :memo: Documentation
 
 * Improved documentation `core/range`
+
+#### :house: Internal
+
+* Updated dependencies: `dotenv@9.0.2`, `husky@6.0.0`
 
 ## v3.45.0 (2021-05-12)
 

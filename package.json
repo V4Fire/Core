@@ -5,7 +5,7 @@
   "main": "src/core/index.js",
   "typings": "index.d.ts",
   "license": "MIT",
-  "version": "3.45.0",
+  "version": "3.46.0",
   "author": {
     "name": "kobezzza",
     "email": "kobezzza@gmail.com",
@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "@types/got": "^9.6.11",
-    "@types/jasmine": "^3.7.2",
+    "@types/jasmine": "^3.7.4",
     "dom-storage": "^2.1.0",
     "eventemitter2": "^6.4.4",
     "fs-extra-promise": "^1.0.1",
@@ -57,7 +57,7 @@
     "collection.js": "^6.7.10",
     "config": "^1.31.0",
     "del": "^6.0.0",
-    "dotenv": "^8.2.0",
+    "dotenv": "^9.0.2",
     "fake-indexeddb": "^3.1.2",
     "find-up": "^5.0.0",
     "gulp": "^4.0.2",
@@ -89,7 +89,7 @@
     "@v4fire/linters": "^1.7.2",
     "abort-controller": "^3.0.0",
     "express": "^4.17.1",
-    "husky": "^4.3.8",
+    "husky": "^6.0.0",
     "node-fetch": "^2.6.1",
     "nyc": "^15.1.0",
     "xhr2": "^0.2.1"
