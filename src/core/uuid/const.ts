@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-export const separatorIndexes = Object.createDict({
+export const separatorIndices = Object.createDict({
 	3: true,
 	5: true,
 	7: true,

@@ -491,7 +491,7 @@ export default class Range<T extends RangeValue> {
 	}
 
 	/**
-	 * Returns an iterable object from the range that produces pairs of iteration indexes and values
+	 * Returns an iterable object from the range that produces pairs of iteration indices and values
 	 *
 	 * @param [step] - step to iterate elements (for date ranges, it means milliseconds to shift)
 	 * @example
@@ -517,7 +517,7 @@ export default class Range<T extends RangeValue> {
 	}
 
 	/**
-	 * Returns an iterable object from the range that produces iteration indexes
+	 * Returns an iterable object from the range that produces iteration indices
 	 *
 	 * @param [step] - step to iterate elements (for date ranges, it means milliseconds to shift)
 	 * @example

@@ -169,7 +169,7 @@ for (const el of new Range(0, 3).values(2)) {
 }
 ```
 
-2. By pairs of indexes and values.
+2. By pairs of indices and values.
 
 ```js
 for (const el of new Range('c', 'a').entries()) {
@@ -182,7 +182,7 @@ for (const el of new Range('c', 'a').entries(2)) {
 }
 ```
 
-3. By indexes.
+3. By indices.
 
 ```js
 for (const el of new Range(3, 1).indices()) {

@@ -226,7 +226,7 @@ export function fromQueryString(
 	}
 
 	const
-		indexes = Object.createDict<number>(),
+		indices = Object.createDict<number>(),
 		objOpts = {separator: opts.arraySyntax ? ']' : opts.separator},
 		variables = query.split('&');
 
@@ -251,8 +251,8 @@ export function fromQueryString(
 						prop = '0';
 
 					} else {
-						prop = indexes[path] ?? '0';
-						indexes[path] = Number(prop) + 1;
+						prop = indices[path] ?? '0';
+						indices[path] = Number(prop) + 1;
 					}
 
 					nestedArray = true;

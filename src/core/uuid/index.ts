@@ -12,7 +12,7 @@
  */
 
 import { IS_NODE } from 'core/env';
-import { separatorIndexes } from 'core/uuid/const';
+import { separatorIndices } from 'core/uuid/const';
 
 /**
  * Generates UUID v4 and returns it
@@ -76,7 +76,7 @@ export function serialize(uuid: Uint8Array): string {
 			chunk = `0${chunk}`;
 		}
 
-		res += chunk + (separatorIndexes[i] === true ? '-' : '');
+		res += chunk + (separatorIndices[i] === true ? '-' : '');
 	}
 
 	return res;
