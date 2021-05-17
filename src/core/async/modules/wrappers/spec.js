@@ -8,169 +8,174 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import Async from 'core/async';
+import express from 'express';
 
+import Async from 'core/async';
 import Provider, { provider } from 'core/data';
 
-@provider
-class ProviderExample extends Provider {}
-
 describe('core/async/modules/data-providers', () => {
+	let server;
+
+	beforeAll(() => {
+		server = createServer();
+	});
+
+	afterAll((done) => {
+		server.close(done);
+	});
+
+	@provider
+	class ProviderExample extends Provider {
+		baseURL = 'http://localhost:3000/ok';
+	}
+
 	describe('wrapDataProvider', () => {
-		it('should call methods on original instance', () => {
+		it('should call methods from the original instance', () => {
 			const
 				$a = new Async(),
-				$dp = new ProviderExample();
+				provider = new ProviderExample(),
+				wrappedProvider = $a.wrapDataProvider(provider);
 
-			const dp = $a.wrapDataProvider($dp);
+			spyOn(provider, 'name');
+			wrappedProvider.name();
+			expect(provider.name).toHaveBeenCalled();
 
-			spyOn($dp, 'name');
-			dp.name();
-			expect($dp.name).toHaveBeenCalled();
-
-			spyOn($dp, 'base');
-			dp.base('bar');
-			expect($dp.base).toHaveBeenCalledWith('bar');
+			spyOn(provider, 'base');
+			wrappedProvider.base('bar');
+			expect(provider.base).toHaveBeenCalledWith('bar');
 		});
 
-		it('should call replaced methods on original instance', () => {
+		it('should call replaced methods from the original instance', () => {
 			const
 				$a = new Async(),
-				$dp = new ProviderExample();
+				provider = new ProviderExample(),
+				wrappedProvider = $a.wrapDataProvider(provider);
 
-			const dp = $a.wrapDataProvider($dp);
+			spyOn(provider, 'get');
+			wrappedProvider.get();
+			expect(provider.get).toHaveBeenCalled();
 
-			spyOn($dp, 'get');
-			dp.get();
-			expect($dp.get).toHaveBeenCalled();
-
-			spyOn($dp, 'upd');
-			dp.upd();
-			expect($dp.upd).toHaveBeenCalled();
+			spyOn(provider, 'upd');
+			wrappedProvider.upd();
+			expect(provider.upd).toHaveBeenCalled();
 		});
 
-		it('if group not provided should use classname of provider', () => {
+		it('if a group is not provided should use a class name from the provider', () => {
 			const
 				$a = new Async(),
-				$dp = new ProviderExample();
-
-			const dp = $a.wrapDataProvider($dp);
+				provider = new ProviderExample(),
+				wrappedProvider = $a.wrapDataProvider(provider);
 
 			spyOn($a, 'request');
-			dp.get({id: 1});
+			wrappedProvider.get({id: 1});
 			expect($a.request.calls.mostRecent().args[1]).toEqual({group: 'ProviderExample'});
 		});
 
-		it('should concatenate global group and method group', () => {
+		it('should concatenate a global group and local group', () => {
 			const
 				$a = new Async(),
-				$dp = new ProviderExample();
-
-			const dp = $a.wrapDataProvider($dp, {group: 'example'});
+				provider = new ProviderExample(),
+				wrappedProvider = $a.wrapDataProvider(provider, {group: 'example'});
 
 			spyOn($a, 'request');
-			dp.get({id: 1});
+			wrappedProvider.get({id: 1});
 			expect($a.request.calls.mostRecent().args[1]).toEqual({group: 'example'});
 
-			dp.upd({id: 1}, {group: 'foo'});
+			wrappedProvider.upd({id: 1}, {group: 'foo'});
 			expect($a.request.calls.mostRecent().args[1]).toEqual({group: 'example:foo'});
 		});
 
-		it('should provide group in eventEmitter wrapper and replace eventEmitter with eventEmitter wrapper', () => {
+		it('should provide a group into a nested event emitter wrapper and replace the original emitter with a wrapper', () => {
 			const
 				$a = new Async(),
-				$dp = new ProviderExample();
-
-			const fakeWrapper = {info: 'Is wrappedEventEmitter'};
+				provider = new ProviderExample(),
+				fakeWrapper = {info: 'Is a wrapped event emitter'};
 
 			spyOn($a, 'wrapEventEmitter').and.returnValue(fakeWrapper);
-			const dp = $a.wrapDataProvider($dp, {group: 'example'});
 
-			expect($a.wrapEventEmitter.calls.mostRecent().args).toEqual([$dp.emitter, {group: 'example'}]);
+			const
+				wrappedProvider = $a.wrapDataProvider(provider, {group: 'example'});
 
-			expect(dp.emitter).toEqual(fakeWrapper);
+			expect($a.wrapEventEmitter.calls.mostRecent().args).toEqual([provider.emitter, {group: 'example'}]);
+			expect(wrappedProvider.emitter).toEqual(fakeWrapper);
 		});
 	});
 
 	describe('wrapEventEmitter', () => {
-		it('should have access to event emitter props and methods', () => {
+		it('should have access to event emitter properties and methods', () => {
 			const
-				$a = new Async(),
-				fakeEventEmitter = {
-					foo: () => null,
-					bar: 'bar'
-				};
+				$a = new Async();
 
-			const ee = $a.wrapEventEmitter(fakeEventEmitter);
+			const fakeEventEmitter = {
+				foo: () => null,
+				bar: 'bar'
+			};
 
-			expect(ee.foo).toEqual(fakeEventEmitter.foo);
-			expect(ee.bar).toEqual(fakeEventEmitter.bar);
+			const emitter = $a.wrapEventEmitter(fakeEventEmitter);
+
+			expect(emitter.foo).toEqual(fakeEventEmitter.foo);
+			expect(emitter.bar).toEqual(fakeEventEmitter.bar);
 		});
 
-		it('addEventListener and eventListener should be alias for on', () => {
+		it('`addEventListener` and `addListener` should be aliases for `on`', () => {
 			const
 				$a = new Async(),
-				ee = $a.wrapEventEmitter({});
+				emitter = $a.wrapEventEmitter({});
 
-			expect(ee.addEventListener).toEqual(ee.on);
-			expect(ee.addListener).toEqual(ee.on);
+			expect(emitter.addEventListener).toEqual(emitter.on);
+			expect(emitter.addListener).toEqual(emitter.on);
 		});
 
-		it('should throw error if second parameter in `on` method is not function', () => {
+		it('should throw an error if the second parameter at `on` is not a function', () => {
 			const
 				$a = new Async(),
-				ee = $a.wrapEventEmitter({
-					on: () => null
-				});
+				emitter = $a.wrapEventEmitter({on: () => null});
 
-			expect(ee.on.bind(null, 'bar', {handleEvent: () => ({})})).toThrowError();
+			expect(emitter.on.bind(null, 'bar', {handleEvent: () => ({})})).toThrowError();
 		});
 
-		it('should concatenate global group and method group', () => {
+		it('should concatenate a global group and local group', () => {
 			const
 				$a = new Async(),
-				eeWithGroup = $a.wrapEventEmitter({
-					on: () => null
-				}, {group: 'example'});
+				emitterWithGroup = $a.wrapEventEmitter({on: () => null}, {group: 'example'});
 
 			spyOn($a, 'on');
-			eeWithGroup.on('foo', () => null, {
+			emitterWithGroup.on('foo', () => null, {
 				group: 'example2'
 			});
 
 			expect($a.on.calls.mostRecent().args[3]).toEqual({group: 'example:example2'});
 
-			eeWithGroup.on('bar', () => null);
+			emitterWithGroup.on('bar', () => null);
 			expect($a.on.calls.mostRecent().args[3]).toEqual({group: 'example'});
 
-			const eeWithoutGroup = $a.wrapEventEmitter({
+			const emitterWithoutGroup = $a.wrapEventEmitter({
 				on: () => null
 			});
 
-			eeWithoutGroup.on('foo', () => null, {
+			emitterWithoutGroup.on('foo', () => null, {
 				group: 'example3'
 			});
 
 			expect($a.on.calls.mostRecent().args[3]).toEqual({group: 'example3'});
 
-			eeWithoutGroup.on('bar', () => null);
+			emitterWithoutGroup.on('bar', () => null);
 			expect($a.on.calls.mostRecent().args[3]).toEqual({});
 		});
 
-		it('paramsNormalizer', () => {
+		it('normalizes of input parameters', () => {
 			const
 				$a = new Async(),
-				ee = $a.wrapEventEmitter({
-					on: () => null
-				});
+				emitter = $a.wrapEventEmitter({on: () => null});
 
 			spyOn($a, 'on');
+
 			// [] => [{}]
-			ee.on('foo', () => null);
+			emitter.on('foo', () => null);
 			expect($a.on.calls.mostRecent().args.slice(3)).toEqual([{}]);
 
 			// [true] => [{}, true]
-			ee.on('foo', () => null, true);
+			emitter.on('foo', () => null, true);
 			expect($a.on.calls.mostRecent().args.slice(3)).toEqual([{}, true]);
 
 			/*
@@ -178,29 +183,29 @@ describe('core/async/modules/data-providers', () => {
 			 *  =>
 			 * [{group: 'group', label: 'label'}, {foo: 'foo'}, null, 5]
 			 */
-			ee.on('foo', () => null, {foo: 'foo', group: 'group', label: 'label'}, null, 5);
+			emitter.on('foo', () => null, {foo: 'foo', group: 'group', label: 'label'}, null, 5);
 			expect($a.on.calls.mostRecent().args.slice(3)).toEqual([{group: 'group', label: 'label'}, {foo: 'foo'}, null, 5]);
 		});
 
-		it('off, once, promisifyOnce should call async methods', () => {
+		it('`off`, `once`, `promisifyOnce` should call async wrappers', () => {
 			const
 				$a = new Async(),
-				ee = $a.wrapEventEmitter({});
+				emitter = $a.wrapEventEmitter({});
 
 			spyOn($a, 'once');
 			spyOn($a, 'promisifyOnce');
 			spyOn($a, 'off');
 
-			ee.once('foo', () => null);
-			ee.promisifyOnce('bar', () => null);
-			ee.off({});
+			emitter.once('foo', () => null);
+			emitter.promisifyOnce('bar', () => null);
+			emitter.off({});
 
 			expect($a.once).toHaveBeenCalled();
 			expect($a.promisifyOnce).toHaveBeenCalled();
 			expect($a.off).toHaveBeenCalled();
 		});
 
-		it('off alias should return control to original function if wrong parameters provided', () => {
+		it('`off` alias should return control to the original function if wrong parameters are provided', () => {
 			const originalMethods = {
 				off: false,
 				removeEventListener: false,
@@ -208,17 +213,18 @@ describe('core/async/modules/data-providers', () => {
 			};
 
 			const
-				$a = new Async(),
-				ee = $a.wrapEventEmitter({
-					on: () => null,
-					off: () => originalMethods.off = true,
-					removeEventListener: () => originalMethods.removeEventListener = true,
-					removeListener: () => originalMethods.removeListener = true
-				});
+				$a = new Async();
 
-			ee.off(null);
-			ee.removeEventListener('foo');
-			ee.removeListener({}, () => null, 'bar', 1);
+			const emitter = $a.wrapEventEmitter({
+				on: () => null,
+				off: () => originalMethods.off = true,
+				removeEventListener: () => originalMethods.removeEventListener = true,
+				removeListener: () => originalMethods.removeListener = true
+			});
+
+			emitter.off(null);
+			emitter.removeEventListener('foo');
+			emitter.removeListener({}, () => null, 'bar', 1);
 
 			expect(originalMethods).toEqual({
 				off: true,
@@ -227,7 +233,7 @@ describe('core/async/modules/data-providers', () => {
 			});
 		});
 
-		it('emit should call all emit like events', () => {
+		it('`emit` should call all emit like events', () => {
 			const results = {
 				emit: null,
 				fire: null,
@@ -239,15 +245,14 @@ describe('core/async/modules/data-providers', () => {
 				$a = new Async(),
 				fakeEventEmitter = {};
 
-			const events = Object.keys(results);
-
-			const ee = $a.wrapEventEmitter(fakeEventEmitter);
+			const
+				events = Object.keys(results),
+				emitter = $a.wrapEventEmitter(fakeEventEmitter);
 
 			for (let i = 0; i < events.length; i += 1) {
 				delete fakeEventEmitter[events[i - 1]];
-
 				fakeEventEmitter[events[i]] = (event) => results[events[i]] = event;
-				ee.emit(events[i]);
+				emitter.emit(events[i]);
 			}
 
 			expect(results).toEqual({
@@ -259,3 +264,13 @@ describe('core/async/modules/data-providers', () => {
 		});
 	});
 });
+
+function createServer() {
+	const
+		serverApp = express();
+
+	serverApp.use(express.json());
+	serverApp.use('/ok', (req, res) => res.status(200).json({ok: true}));
+
+	return serverApp.listen(3000);
+}
