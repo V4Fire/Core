@@ -66,10 +66,11 @@ describe('core/request', () => {
 
 	afterAll((done) => {
 		globalOpts.api = api;
-		set('log', logOptions);
-		defaultRequestOpts.engine = defaultEngine;
 
 		server.close(done);
+		defaultRequestOpts.engine = defaultEngine;
+
+		set('log', logOptions);
 	});
 
 	// eslint-disable-next-line max-lines-per-function

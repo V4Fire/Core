@@ -244,6 +244,12 @@ pre {
 							<h1>core/net</h1>
 						</a>
 						<p>This module provides API to work with a network, such as testing of the network connection, etc.</p>
+						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #0000FF">*</span><span style="color: #000000"> </span><span style="color: #AF00DB">as</span><span style="color: #000000"> </span><span style="color: #001080">net</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/net&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #000000">(</span><span style="color: #0000FF">async</span><span style="color: #000000"> () </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">net</span><span style="color: #000000">.</span><span style="color: #795E26">isOnline</span><span style="color: #000000">());</span>
+<span style="color: #000000">})();</span>
+</code></pre>
 						<a href="#configuration" id="configuration" style="color: inherit; text-decoration: none;">
 							<h2>Configuration</h2>
 						</a>
@@ -276,13 +282,39 @@ pre {
 <span style="color: #000000">  }</span>
 <span style="color: #000000">}</span>
 </code></pre>
-						<a href="#examples" id="examples" style="color: inherit; text-decoration: none;">
-							<h2>Examples</h2>
+						<a href="#events" id="events" style="color: inherit; text-decoration: none;">
+							<h2>Events</h2>
 						</a>
+						<p>The module exports an event emitter to handle connection events.</p>
+						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #0000FF">*</span><span style="color: #000000"> </span><span style="color: #AF00DB">as</span><span style="color: #000000"> </span><span style="color: #001080">net</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/net&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #001080">net</span><span style="color: #000000">.</span><span style="color: #001080">emitter</span><span style="color: #000000">.</span><span style="color: #001080">emitter</span><span style="color: #000000">.</span><span style="color: #795E26">on</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;online&#039;</span><span style="color: #000000">, () </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;I&#039;m online!&quot;</span><span style="color: #000000">);</span>
+<span style="color: #000000">});</span>
+
+<span style="color: #001080">net</span><span style="color: #000000">.</span><span style="color: #001080">emitter</span><span style="color: #000000">.</span><span style="color: #001080">emitter</span><span style="color: #000000">.</span><span style="color: #795E26">on</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;offline&#039;</span><span style="color: #000000">, (</span><span style="color: #001080">lastOnlineDate</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #A31515">`I have been online at </span><span style="color: #0000FF">${</span><span style="color: #001080">lastOnlineDate</span><span style="color: #0000FF">}</span><span style="color: #A31515">`</span><span style="color: #000000">);</span>
+<span style="color: #000000">});</span>
+
+<span style="color: #001080">net</span><span style="color: #000000">.</span><span style="color: #001080">emitter</span><span style="color: #000000">.</span><span style="color: #001080">emitter</span><span style="color: #000000">.</span><span style="color: #795E26">on</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;status&#039;</span><span style="color: #000000">, (</span><span style="color: #001080">e</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #A31515">`Connection is </span><span style="color: #0000FF">${</span><span style="color: #001080">e</span><span style="color: #000000FF">.</span><span style="color: #001080">status</span><span style="color: #000000FF"> </span><span style="color: #000000">?</span><span style="color: #000000FF"> </span><span style="color: #A31515">&#039;online&#039;</span><span style="color: #000000FF"> </span><span style="color: #000000">:</span><span style="color: #000000FF"> </span><span style="color: #A31515">&#039;offline&#039;</span><span style="color: #0000FF">}</span><span style="color: #A31515">`</span><span style="color: #000000">);</span>
+
+<span style="color: #000000">  </span><span style="color: #AF00DB">if</span><span style="color: #000000"> (!</span><span style="color: #001080">e</span><span style="color: #000000">.</span><span style="color: #001080">status</span><span style="color: #000000">) {</span>
+<span style="color: #000000">    </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #A31515">`I have been online at </span><span style="color: #0000FF">${</span><span style="color: #001080">el</span><span style="color: #000000FF">.</span><span style="color: #001080">lastOnline</span><span style="color: #0000FF">}</span><span style="color: #A31515">`</span><span style="color: #000000">);</span>
+<span style="color: #000000">  }</span>
+<span style="color: #000000">});</span>
+</code></pre>
+						<a href="#engines" id="engines" style="color: inherit; text-decoration: none;">
+							<h2>Engines</h2>
+						</a>
+						<p>The module supports different implementations to check the online connection.
+							The implementations are placed within <code>core/net/engines</code>. By default, it uses a strategy by requesting
+						some recourse from the internet, like a Google favicon. But you can manually provide an engine to use.</p>
 						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #0000FF">*</span><span style="color: #000000"> </span><span style="color: #AF00DB">as</span><span style="color: #000000"> </span><span style="color: #001080">net</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/net&#039;</span><span style="color: #000000">;</span>
 
 <span style="color: #000000">(</span><span style="color: #0000FF">async</span><span style="color: #000000"> () </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
-<span style="color: #000000">  </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">net</span><span style="color: #000000">.</span><span style="color: #795E26">isOnline</span><span style="color: #000000">();</span>
+<span style="color: #000000">  </span><span style="color: #008000">// Loopback. Always online.</span>
+<span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">net</span><span style="color: #000000">.</span><span style="color: #795E26">isOnline</span><span style="color: #000000">(</span><span style="color: #0000FF">async</span><span style="color: #000000"> () </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #0000FF">true</span><span style="color: #000000">));</span>
 <span style="color: #000000">})();</span>
 </code></pre>
 					</div>

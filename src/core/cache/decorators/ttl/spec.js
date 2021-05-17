@@ -7,7 +7,9 @@
  */
 
 import addTTL from 'core/cache/decorators/ttl';
+
 import SimpleCache from 'core/cache/simple';
+import RestrictedCache from 'core/cache/restricted';
 
 describe('core/cache/decorators/ttl', () => {
 	it('should remove items after expiring', (done) => {
@@ -57,6 +59,21 @@ describe('core/cache/decorators/ttl', () => {
 		}, 25);
 	});
 
+	it("should remove `ttl` if the next invoking doesn't provide `ttl`", (done) => {
+		const cache = addTTL(new SimpleCache());
+		spyOn(cache, 'removeTTLFrom').and.callThrough();
+
+		cache.set('foo', 1, {ttl: 10});
+		cache.set('foo', 2);
+
+		expect(cache.removeTTLFrom.calls.count()).toEqual(1);
+
+		setTimeout(() => {
+			expect(cache.get('foo')).toBe(2);
+			done();
+		}, 50);
+	});
+
 	it('should not remove items after expiring after invoking of `removeTTLFrom`', (done) => {
 		const cache = addTTL(new SimpleCache());
 
@@ -86,27 +103,52 @@ describe('core/cache/decorators/ttl', () => {
 		expect(cache.clear()).toEqual(new Map([['foo', 1], ['bar', 2]]));
 	});
 
-	it('all methods should call the original instance', () => {
+	it('should delete a value from the storage if a side effect has deleted it', () => {
 		const
-			simpleCache = new SimpleCache(),
-			cache = addTTL(simpleCache);
+			cache = addTTL(new RestrictedCache(1)),
+			memory = [];
 
-		[
-			{
-				method: 'set',
-				parameters: ['foo', 1, undefined]
-			}, {
-				method: 'remove',
-				parameters: ['foo']
-			}, {
-				method: 'clear',
-				parameters: [() => true]
-			}
-		].forEach((el) => {
-			spyOn(simpleCache, el.method).and.callThrough();
-			cache[el.method](...el.parameters);
+		cache.removeTTLFrom = (key) => {
+			memory.push(key);
+		};
 
-			expect(simpleCache[el.method].calls.mostRecent().args).toEqual(el.parameters);
-		});
+		cache.set('bar', 1, {ttl: 1000});
+		cache.set('baz', 2, {ttl: 1000});
+
+		expect(memory).toEqual(['bar']);
+	});
+
+	it('`clear` caused by a side effect', () => {
+		const
+			originalCache = new SimpleCache(),
+			cache = addTTL(originalCache),
+			memory = [];
+
+		cache.removeTTLFrom = (key) => {
+			memory.push(key);
+		};
+
+		cache.set('bar', 1, {ttl: 100});
+		cache.set('baz', 2, {ttl: 100});
+
+		originalCache.clear();
+
+		expect(memory).toEqual(['bar', 'baz']);
+	});
+
+	it('`set` caused by a side effect', () => {
+		const
+			originalCache = new SimpleCache(),
+			cache = addTTL(originalCache),
+			memory = [];
+
+		cache.removeTTLFrom = (key) => {
+			memory.push(key);
+		};
+
+		cache.set('bar', 1, {ttl: 100});
+		originalCache.set('bar', 2);
+
+		expect(memory).toEqual(['bar']);
 	});
 });

@@ -7,7 +7,6 @@
  */
 
 import express from 'express';
-
 import Provider, { provider, providers } from 'core/data';
 
 describe('core/data', () => {

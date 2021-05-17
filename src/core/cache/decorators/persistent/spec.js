@@ -10,7 +10,9 @@ import * as netModule from 'core/net';
 import { asyncLocal } from 'core/kv-storage';
 
 import addPersistent from 'core/cache/decorators/persistent';
+
 import SimpleCache from 'core/cache/simple';
+import RestrictedCache from 'core/cache/restricted';
 
 import engines from 'core/cache/decorators/persistent/engines';
 import { INDEX_STORAGE_NAME, TTL_POSTFIX } from 'core/cache/decorators/persistent/engines/const';
@@ -25,65 +27,6 @@ describe('core/cache/decorators/persistent', () => {
 	});
 
 	describe('core functionality', () => {
-		it('every replaced method should call the original method', async () => {
-			const methods = [
-				{
-					name: 'has',
-					params: ['foo']
-				},
-
-				{
-					name: 'get',
-					params: ['foo']
-				},
-
-				{
-					name: 'set',
-					params: [
-						'foo',
-
-						1,
-
-						{
-							ttl: 1000,
-							persistentTTL: 900
-						}
-					]
-				},
-
-				{
-					name: 'remove',
-					params: ['foo']
-				},
-
-				{
-					name: 'keys',
-					params: []
-				},
-
-				{
-					name: 'clear',
-					params: [() => true]
-				}
-			];
-
-			const opts = {
-				loadFromStorage: 'onInit'
-			};
-
-			const
-				cache = new SimpleCache(),
-				persistentCache = await addPersistent(cache, asyncLocal, opts);
-
-			for (let i = 0; i < methods.length; i += 1) {
-				const method = methods[i];
-				spyOn(cache, method.name).and.callThrough();
-
-				await persistentCache[method.name](...method.params);
-				expect(cache[method.name].calls.mostRecent().args).toEqual(method.params);
-			}
-		});
-
 		it('providing the default `persistentTTL` option', async () => {
 			const opts = {
 				loadFromStorage: 'onInit',
@@ -115,6 +58,83 @@ describe('core/cache/decorators/persistent', () => {
 			await persistentCache.set('foo', 2);
 
 			expect(asyncLocal.set.calls.first().args).toEqual(['foo', 2]);
+		});
+
+		it('should delete a value from the storage if a side effect has deleted it', async () => {
+			const opts = {
+				loadFromStorage: 'onInit'
+			};
+
+			const
+				cache = new RestrictedCache(1),
+				persistentCache = await addPersistent(cache, asyncLocal, opts);
+
+			await persistentCache.set('foo', 1);
+			expect(await asyncLocal.get(INDEX_STORAGE_NAME)).toEqual({foo: Number.MAX_SAFE_INTEGER});
+
+			await persistentCache.set('bar', 1);
+			expect(await persistentCache.get('foo')).toBe(undefined);
+			expect(await persistentCache.get('bar')).toBe(1);
+
+			await new Promise((r) => setTimeout(r, 10));
+			expect(await asyncLocal.get(INDEX_STORAGE_NAME)).toEqual({bar: Number.MAX_SAFE_INTEGER});
+		});
+
+		it('`clear` caused by a side effect', async () => {
+			const opts = {
+				loadFromStorage: 'onInit'
+			};
+
+			const
+				cache = new SimpleCache(),
+				persistentCache = await addPersistent(cache, asyncLocal, opts);
+
+			await persistentCache.set('foo', 1);
+			await persistentCache.set('bar', 1);
+			expect(await asyncLocal.get(INDEX_STORAGE_NAME))
+				.toEqual({foo: Number.MAX_SAFE_INTEGER, bar: Number.MAX_SAFE_INTEGER});
+
+			cache.clear();
+
+			await new Promise((r) => setTimeout(r, 10));
+			expect(await asyncLocal.get(INDEX_STORAGE_NAME)).toEqual({});
+		});
+
+		it('`set` caused by a side effect', async () => {
+			const opts = {
+				loadFromStorage: 'onInit'
+			};
+
+			const
+				cache = new SimpleCache(),
+				persistentCache = await addPersistent(cache, asyncLocal, opts);
+
+			await persistentCache.set('foo', 1);
+			cache.set('bar', 1);
+
+			await new Promise((r) => setTimeout(r, 10));
+
+			expect(await asyncLocal.get(INDEX_STORAGE_NAME)).toEqual({
+				foo: Number.MAX_SAFE_INTEGER,
+				bar: Number.MAX_SAFE_INTEGER
+			});
+		});
+
+		it('setting the default `ttl` caused by a side effect', async () => {
+			const opts = {
+				loadFromStorage: 'onInit',
+				persistentTTL: 100
+			};
+
+			const
+				cache = new SimpleCache(),
+				persistentCache = await addPersistent(cache, asyncLocal, opts);
+
+			await persistentCache.set('foo', 1, {persistentTTL: 500});
+			cache.set('bar', 1);
+
+			await new Promise((r) => setTimeout(r, 10));
+			expect(await asyncLocal.get(INDEX_STORAGE_NAME)).toEqual({foo: 500, bar: 100});
 		});
 	});
 

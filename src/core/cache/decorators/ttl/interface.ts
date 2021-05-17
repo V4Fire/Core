@@ -6,9 +6,13 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type Cache from 'core/cache/interface';
+import type { CacheWithEmitter } from 'core/cache/decorators/helpers/add-emitter/interface';
 
-export interface TTLCache<V = unknown, K = string, T extends Cache<V, K> = Cache<V, K>> extends Cache<V, K> {
+export interface TTLCache<
+	V = unknown,
+	K = string,
+	T extends CacheWithEmitter<V, K> = CacheWithEmitter<V, K>
+> extends CacheWithEmitter<V, K> {
 	/**
 	 * Saves a value to the cache by the specified key
 	 *
