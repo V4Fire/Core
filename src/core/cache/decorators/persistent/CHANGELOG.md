@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.47.0 (2021-05-17)
+
+#### :bug: Bug Fix
+
+* Fixed bugs when take a place mutations caused by side effects
+
 ## v3.41.0 (2021-04-02)
 
 #### :rocket: New Feature

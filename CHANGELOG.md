@@ -11,6 +11,18 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.47.0 (2021-05-17)
+
+#### :rocket: New Feature
+
+* Added a new modules `core/cache/decorators/helpers/add-emitter`
+
+#### :bug: Bug Fix
+
+* Fixed bugs when take a place mutations caused by side effects:
+  * `core/cache/decorators/persistent`
+  * `core/cache/decorators/ttl`
+
 ## v3.46.0 (2021-05-14)
 
 #### :boom: Breaking Change

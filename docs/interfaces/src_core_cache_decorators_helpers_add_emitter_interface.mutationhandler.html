@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>PersistentTTLDecoratorOptions | V4Fire</title>
+	<title>MutationHandler | V4Fire</title>
 	<meta name="description" content="Documentation for V4Fire">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -227,57 +227,56 @@ pre {
 					<a href="../modules.html">V4Fire</a>
 				</li>
 				<li>
-					<a href="../modules/src_core_cache_decorators_persistent_engines.html">src/core/cache/decorators/persistent/engines</a>
+					<a href="../modules/src_core_cache_decorators_helpers_add_emitter_interface.html">src/core/cache/decorators/helpers/add-emitter/interface</a>
 				</li>
 				<li>
-					<a href="src_core_cache_decorators_persistent_engines.persistentttldecoratoroptions.html">PersistentTTLDecoratorOptions</a>
+					<a href="src_core_cache_decorators_helpers_add_emitter_interface.mutationhandler.html">MutationHandler</a>
 				</li>
 			</ul>
-			<h1>Interface PersistentTTLDecoratorOptions</h1>
+			<h1>Interface MutationHandler&lt;M&gt;</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-type-parameters">
+				<h3>Type parameters</h3>
+				<ul class="tsd-type-parameters">
+					<li>
+						<h4>M<span class="tsd-signature-symbol">: </span><a href="index.anyfunction.html" class="tsd-signature-type" data-tsd-kind="Interface">AnyFunction</a> = <a href="index.anyfunction.html" class="tsd-signature-type" data-tsd-kind="Interface">AnyFunction</a></h4>
+					</li>
+				</ul>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">PersistentTTLDecoratorOptions</span>
+						<span class="target">MutationHandler</span>
 					</li>
 				</ul>
 			</section>
-			<section class="tsd-panel-group tsd-index-group">
-				<h2>Index</h2>
-				<section class="tsd-panel tsd-index-panel">
-					<div class="tsd-index-content">
-						<section class="tsd-index-section ">
-							<h3>Properties</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="src_core_cache_decorators_persistent_engines.persistentttldecoratoroptions.html#persistentttl" class="tsd-kind-icon">persistentTTL</a></li>
+			<section class="tsd-panel">
+				<h3 class="tsd-before-signature">Callable</h3>
+				<ul class="tsd-signatures tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
+					<li class="tsd-signature tsd-kind-icon">Mutation<wbr>Handler<span class="tsd-signature-symbol">(</span>e<span class="tsd-signature-symbol">: </span><a href="src_core_cache_decorators_helpers_add_emitter_interface.mutationevent.html" class="tsd-signature-type" data-tsd-kind="Interface">MutationEvent</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">M</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/cache/decorators/helpers/add-emitter/interface.ts#L24">src/core/cache/decorators/helpers/add-emitter/interface.ts:24</a></li>
 							</ul>
-						</section>
-					</div>
-				</section>
-			</section>
-			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="persistentttl" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> persistentTTL</h3>
-					<div class="tsd-signature tsd-kind-icon">persistentTTL<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/cache/decorators/persistent/interface.ts#L41">src/core/cache/decorators/persistent/interface.ts:41</a></li>
+						</aside>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>e: <a href="src_core_cache_decorators_helpers_add_emitter_interface.mutationevent.html" class="tsd-signature-type" data-tsd-kind="Interface">MutationEvent</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">M</span><span class="tsd-signature-symbol">&gt;</span></h5>
+							</li>
 						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Time to expire a cache item in the persistent storage</p>
-						</div>
-					</div>
-				</section>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+					</li>
+				</ul>
 			</section>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
@@ -287,32 +286,30 @@ pre {
 						<a href="../modules.html">Modules</a>
 					</li>
 					<li class="current tsd-kind-module">
-						<a href="../modules/src_core_cache_decorators_persistent_engines.html">src/core/cache/decorators/persistent/engines</a>
+						<a href="../modules/src_core_cache_decorators_helpers_add_emitter_interface.html">src/core/cache/decorators/helpers/add-<wbr>emitter/interface</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="src_core_cache_decorators_persistent_engines.persistentoptions.html" class="tsd-kind-icon">Persistent<wbr>Options</a>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="src_core_cache_decorators_helpers_add_emitter_interface.cachewithemitter.html" class="tsd-kind-icon">Cache<wbr>With<wbr>Emitter</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="src_core_cache_decorators_helpers_add_emitter_interface.mutationevent.html" class="tsd-kind-icon">Mutation<wbr>Event</a>
 					</li>
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-interface tsd-parent-kind-module">
-						<a href="src_core_cache_decorators_persistent_engines.persistentttldecoratoroptions.html" class="tsd-kind-icon">PersistentTTLDecorator<wbr>Options</a>
-						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="src_core_cache_decorators_persistent_engines.persistentttldecoratoroptions.html#persistentttl" class="tsd-kind-icon">persistentTTL</a>
-							</li>
-						</ul>
+					<li class="current tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="src_core_cache_decorators_helpers_add_emitter_interface.mutationhandler.html" class="tsd-kind-icon">Mutation<wbr>Handler</a>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../modules/src_core_cache_decorators_persistent_engines.html#persistentcache" class="tsd-kind-icon">Persistent<wbr>Cache</a>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="../modules/src_core_cache_decorators_helpers_add_emitter_interface.html#addemitter" class="tsd-kind-icon">Add<wbr>Emitter</a>
 					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-module">
-						<a href="../modules/src_core_cache_decorators_persistent_engines.html#default" class="tsd-kind-icon">default</a>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="../modules/src_core_cache_decorators_helpers_add_emitter_interface.html#methodstowrap" class="tsd-kind-icon">Methods<wbr>ToWrap</a>
 					</li>
 				</ul>
 			</nav>
@@ -334,7 +331,6 @@ pre {
 			<ul class="tsd-legend">
 				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
 				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
