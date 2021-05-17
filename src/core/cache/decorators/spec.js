@@ -10,12 +10,13 @@ import { asyncLocal } from 'core/kv-storage';
 
 import addPersistent from 'core/cache/decorators/persistent';
 import addTTL from 'core/cache/decorators/ttl';
+
 import RestrictedCache from 'core/cache/restricted';
 
 import { INDEX_STORAGE_NAME } from 'core/cache/decorators/persistent/engines/const';
 
 describe('core/cache/decorators', () => {
-	it('complex test', async (done) => {
+	it('complex test', async () => {
 		spyOn(Date, 'now').and.returnValue(0);
 
 		const opts = {
@@ -42,12 +43,9 @@ describe('core/cache/decorators', () => {
 			baz: Number.MAX_SAFE_INTEGER
 		});
 
-		setTimeout(async () => {
-			expect(await asyncLocal.get(INDEX_STORAGE_NAME)).toEqual({
-				baz: Number.MAX_SAFE_INTEGER
-			});
-
-			done();
-		}, 50);
+		await new Promise((r) => setTimeout(r, 50));
+		expect(await asyncLocal.get(INDEX_STORAGE_NAME)).toEqual({
+			baz: Number.MAX_SAFE_INTEGER
+		});
 	});
 });

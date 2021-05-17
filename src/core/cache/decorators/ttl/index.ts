@@ -11,11 +11,10 @@
  * @packageDocumentation
  */
 
-import addEmit from 'core/cache/decorators/helpers/emit';
-
 import type Cache from 'core/cache/interface';
-import type { EmitCache } from 'core/cache/decorators/helpers/emit/interface';
 import type { ClearFilter } from 'core/cache/interface';
+
+import addEmitter, { CacheWithEmitter } from 'core/cache/decorators/helpers/add-emitter';
 import type { TTLDecoratorOptions, TTLCache } from 'core/cache/decorators/ttl/interface';
 
 export * from 'core/cache/decorators/ttl/interface';
@@ -45,10 +44,14 @@ export default function addTTL<
 	T extends Cache<V, K>,
 	V = unknown,
 	K = string,
->(cache: T, ttl?: number): TTLCache<V, K, EmitCache<V, K, T>> {
+>(cache: T, ttl?: number): TTLCache<V, K, CacheWithEmitter<V, K, T>> {
 	// eslint-disable-next-line @typescript-eslint/unbound-method
-	const {remove: originalRemove, set: originalSet, clear: originalClear, subscribe} =
-			addEmit<TTLCache<V, K>, V, K>(<TTLCache<V, K>><unknown>cache);
+	const {
+		remove: originalRemove,
+		set: originalSet,
+		clear: originalClear,
+		subscribe
+	} = addEmitter<TTLCache<V, K>, V, K>(<TTLCache<V, K>><unknown>cache);
 
 	const
 		cacheWithTTL: TTLCache<V, K> = Object.create(cache),
@@ -85,22 +88,23 @@ export default function addTTL<
 		return removed;
 	};
 
-	subscribe('remove', cacheWithTTL, ({args}) => cacheWithTTL.removeTTLFrom(args[0]));
-	subscribe('set', cacheWithTTL, ({args}) => updateTTL(args[0], args[2]?.ttl));
+	subscribe('remove', cacheWithTTL, ({args}) =>
+		cacheWithTTL.removeTTLFrom(args[0]));
+
+	subscribe('set', cacheWithTTL, ({args}) =>
+		updateTTL(args[0], args[2]?.ttl));
+
 	subscribe('clear', cacheWithTTL, ({result}) => {
-		result.forEach((_, key) => {
-			cacheWithTTL.removeTTLFrom(key);
-		});
+		result.forEach((_, key) => cacheWithTTL.removeTTLFrom(key));
 	});
 
 	return cacheWithTTL;
 
 	function updateTTL(key: K, optionTTL?: number): void {
 		if (optionTTL != null || ttl != null) {
-			const
-				time = optionTTL ?? ttl;
-
+			const time = optionTTL ?? ttl;
 			ttlTimers.set(key, setTimeout(() => cacheWithTTL.remove(key), time));
+
 		} else {
 			cacheWithTTL.removeTTLFrom(key);
 		}

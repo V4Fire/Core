@@ -6,13 +6,14 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import addEmit, { eventEmitterSymbol } from 'core/cache/decorators/helpers/emit';
+import addEmitter, { eventEmitter } from 'core/cache/decorators/helpers/add-emitter';
+
 import SimpleCache from 'core/cache/simple';
 import RestrictedCache from 'core/cache/restricted';
 
-describe('core/cache/decorators/helpers/emit', () => {
+describe('core/cache/decorators/helpers/add-emitter', () => {
 	describe('subscribe', () => {
-		it('emit events only to top', () => {
+		it('emits events only to top', () => {
 			function CreateLevel(level) {
 				this.level = level;
 				this.remove = () => null;
@@ -29,8 +30,9 @@ describe('core/cache/decorators/helpers/emit', () => {
 
 			Object.setPrototypeOf(level2, level1);
 			Object.setPrototypeOf(level3, level2);
-			const {subscribe: subscribe1} = addEmit(level1);
-			const {subscribe: subscribe2} = addEmit(level2);
+
+			const {subscribe: subscribe1} = addEmitter(level1);
+			const {subscribe: subscribe2} = addEmitter(level2);
 
 			subscribe1('remove', level2, () => memory.push('level1'));
 			subscribe2('remove', level3, () => memory.push('level2'));
@@ -44,16 +46,15 @@ describe('core/cache/decorators/helpers/emit', () => {
 		});
 	});
 
-	describe('remove method', () => {
-		it('emit remove event if remove was called, and dont emit if original method was called', () => {
+	describe('remove', () => {
+		it("emits a remove event if `remove` was called and didn't emit if the original method was called", () => {
 			const
 				cache = new SimpleCache(),
-				// Original method
-				{remove} = addEmit(cache);
+				{remove} = addEmitter(cache);
 
 			const memory = [];
 
-			cache[eventEmitterSymbol].on('remove', (...args) => {
+			cache[eventEmitter].on('remove', (...args) => {
 				memory.push(args);
 			});
 
@@ -68,11 +69,11 @@ describe('core/cache/decorators/helpers/emit', () => {
 
 		it('example with restricted cache', () => {
 			const cache = new RestrictedCache(1);
-			addEmit(cache);
+			addEmitter(cache);
 
 			const memory = [];
 
-			cache[eventEmitterSymbol].on('remove', (...args) => {
+			cache[eventEmitter].on('remove', (...args) => {
 				memory.push(args);
 			});
 
@@ -82,16 +83,15 @@ describe('core/cache/decorators/helpers/emit', () => {
 		});
 	});
 
-	describe('clear method', () => {
-		it('clear all', () => {
+	describe('clear', () => {
+		it('clears all', () => {
 			const
 				cache = new SimpleCache(),
-				// Original method
-				{clear} = addEmit(cache);
+				{clear} = addEmitter(cache);
 
 			const memory = [];
 
-			cache[eventEmitterSymbol].on('clear', (...args) => {
+			cache[eventEmitter].on('clear', (...args) => {
 				memory.push(args);
 			});
 
@@ -106,16 +106,16 @@ describe('core/cache/decorators/helpers/emit', () => {
 			expect(memory[1]).toBe(undefined);
 		});
 
-		it('clear with function', () => {
+		it('clears with a predicate', () => {
 			const cache = new SimpleCache();
 
-			addEmit(cache);
+			addEmitter(cache);
 
 			const
 				memory = [],
 				clearFunction = (el, key) => key === 'bar';
 
-			cache[eventEmitterSymbol].on('clear', (...args) => {
+			cache[eventEmitter].on('clear', (...args) => {
 				memory.push(args);
 			});
 
@@ -126,16 +126,15 @@ describe('core/cache/decorators/helpers/emit', () => {
 		});
 	});
 
-	describe('set method', () => {
-		it('set property', () => {
+	describe('set', () => {
+		it('sets a new value', () => {
 			const
 				cache = new SimpleCache(),
-				// Original method
-				{set} = addEmit(cache);
+				{set} = addEmitter(cache);
 
 			const memory = [];
 
-			cache[eventEmitterSymbol].on('set', (...args) => {
+			cache[eventEmitter].on('set', (...args) => {
 				memory.push(args);
 			});
 

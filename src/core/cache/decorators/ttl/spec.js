@@ -7,6 +7,7 @@
  */
 
 import addTTL from 'core/cache/decorators/ttl';
+
 import SimpleCache from 'core/cache/simple';
 import RestrictedCache from 'core/cache/restricted';
 
@@ -58,12 +59,13 @@ describe('core/cache/decorators/ttl', () => {
 		}, 25);
 	});
 
-	it('should remove ttl if next call dont provide ttl', (done) => {
+	it("should remove `ttl` if the next invoking doesn't provide `ttl`", (done) => {
 		const cache = addTTL(new SimpleCache());
-
 		spyOn(cache, 'removeTTLFrom').and.callThrough();
+
 		cache.set('foo', 1, {ttl: 10});
 		cache.set('foo', 2);
+
 		expect(cache.removeTTLFrom.calls.count()).toEqual(1);
 
 		setTimeout(() => {
@@ -101,7 +103,7 @@ describe('core/cache/decorators/ttl', () => {
 		expect(cache.clear()).toEqual(new Map([['foo', 1], ['bar', 2]]));
 	});
 
-	it('should delete property from storage if it was deleted by side effect', () => {
+	it('should delete a value from the storage if a side effect has deleted it', () => {
 		const
 			cache = addTTL(new RestrictedCache(1)),
 			memory = [];
@@ -116,7 +118,7 @@ describe('core/cache/decorators/ttl', () => {
 		expect(memory).toEqual(['bar']);
 	});
 
-	it('side effect clear', () => {
+	it('`clear` caused by a side effect', () => {
 		const
 			originalCache = new SimpleCache(),
 			cache = addTTL(originalCache),
@@ -134,7 +136,7 @@ describe('core/cache/decorators/ttl', () => {
 		expect(memory).toEqual(['bar', 'baz']);
 	});
 
-	it('side effect set', () => {
+	it('`set` caused by a side effect', () => {
 		const
 			originalCache = new SimpleCache(),
 			cache = addTTL(originalCache),

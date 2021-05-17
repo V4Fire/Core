@@ -8,15 +8,15 @@
 
 import SyncPromise from 'core/promise/sync';
 import type { SyncStorageNamespace, AsyncStorageNamespace } from 'core/kv-storage';
-import addEmit from 'core/cache/decorators/helpers/emit';
 
 import type Cache from 'core/cache/interface';
 import type { ClearFilter } from 'core/cache/interface';
 
+import engines from 'core/cache/decorators/persistent/engines';
+import addEmitter from 'core/cache/decorators/helpers/add-emitter';
+
 import type { PersistentEngine, CheckablePersistentEngine } from 'core/cache/decorators/persistent/engines/interface';
 import type { PersistentOptions, PersistentCache, PersistentTTLDecoratorOptions } from 'core/cache/decorators/persistent/interface';
-
-import engines from 'core/cache/decorators/persistent/engines';
 
 export default class PersistentWrapper<T extends Cache<V, string>, V = unknown> {
 	/**
@@ -75,8 +75,12 @@ export default class PersistentWrapper<T extends Cache<V, string>, V = unknown> 
 	 */
 	protected implementAPI(): void {
 		// eslint-disable-next-line @typescript-eslint/unbound-method
-		const {remove: originalRemove, set: originalSet, clear: originalClear, subscribe} =
-			addEmit<T, V, string>(this.cache);
+		const {
+			remove: originalRemove,
+			set: originalSet,
+			clear: originalClear,
+			subscribe
+		} = addEmitter<T, V, string>(this.cache);
 
 		this.wrappedCache.has = this.getDefaultImplementation('has');
 		this.wrappedCache.get = this.getDefaultImplementation('get');
@@ -120,16 +124,16 @@ export default class PersistentWrapper<T extends Cache<V, string>, V = unknown> 
 
 		this.wrappedCache.removePersistentTTLFrom = (key: string) => this.engine.removeTTLFrom(key);
 
-		subscribe('remove', this.wrappedCache, ({args}) => this.engine.remove(args[0]));
+		subscribe('remove', this.wrappedCache, ({args}) =>
+			this.engine.remove(args[0]));
+
 		subscribe('set', this.wrappedCache, ({args}) => {
 			const ttl = (<CanUndef<PersistentTTLDecoratorOptions>>args[2])?.persistentTTL ?? this.ttl;
 			return this.engine.set(args[0], args[1], ttl);
 		});
 
 		subscribe('clear', this.wrappedCache, ({result}) => {
-			result.forEach((_, key) => {
-				void this.engine.remove(key);
-			});
+			result.forEach((_, key) => this.engine.remove(key));
 		});
 	}
 

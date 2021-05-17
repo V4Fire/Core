@@ -1,22 +1,24 @@
 # core/cache/decorators/helpers/emit
 
-This module provides a helper for [[Cache]] decorator. to add a emit events caused by side-effect.
+This module provides a helper for [[Cache]] decorators to add a feature of emitting mutation events caused by side-effect.
 
 ## Example
 
 ```js
-import addEmit from 'core/cache/decorators/helpers/emit';
+import addEmitter from 'core/cache/decorators/helpers/add-emitter';
 import SimpleCache from 'core/cache/simple';
 
 const
   cache = new SimpleCache();
 
-// originalRemove did not emit remove event
-const { remove: originalRemove, subscribe } = addEmit(cache);
+// `originalRemove` doesn't emit events
+const {remove: originalRemove, subscribe} = addEmitter(cache);
 
 // Now cache.eventEmitter emit event 'remove' with args [cache(instance what call emit), [...args]]
 cache.remove('foo');
 
 // (eventName, instanceOfListener, callback) - callback invoked only if emit was made by children of instanceOfListener;
-subscribe('remove', cache, (key) => { console.log(key) });
+subscribe('remove', cache, (key) => {
+  console.log(key);
+});
 ```

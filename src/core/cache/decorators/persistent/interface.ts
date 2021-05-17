@@ -6,11 +6,11 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type { EmitCache } from 'core/cache/decorators/helpers/emit/interface';
-import type { eventEmitterSymbol } from 'core/cache/decorators/helpers/emit';
+import type { CacheWithEmitter } from 'core/cache/decorators/helpers/add-emitter/interface';
+import type { eventEmitter } from 'core/cache/decorators/helpers/add-emitter';
 
-export type PersistentCache<V = unknown, K = string, T extends EmitCache<V, K> = EmitCache<V, K>> = {
-	[key in Exclude<(keyof EmitCache<V, K>), 'set' | typeof eventEmitterSymbol>]: ReturnPromise<EmitCache<V, K>[key]>
+export type PersistentCache<V = unknown, K = string, T extends CacheWithEmitter<V, K> = CacheWithEmitter<V, K>> = {
+	[key in Exclude<(keyof CacheWithEmitter<V, K>), 'set' | typeof eventEmitter>]: ReturnPromise<CacheWithEmitter<V, K>[key]>
 } & {
 	/**
 	 * Saves a value to the cache by the specified key
@@ -30,8 +30,8 @@ export type PersistentCache<V = unknown, K = string, T extends EmitCache<V, K> =
 	 */
 	removePersistentTTLFrom(key: K): Promise<boolean>;
 
-	/**  @see [[EmitCache[eventEmitterSymbol]]] */
-	eventEmitter: T[typeof eventEmitterSymbol];
+	/** @see [[CacheWithEmitter[eventEmitterSymbol]]] */
+	eventEmitter: T[typeof eventEmitter];
 };
 
 export interface PersistentTTLDecoratorOptions {

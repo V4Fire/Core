@@ -10,6 +10,7 @@ import * as netModule from 'core/net';
 import { asyncLocal } from 'core/kv-storage';
 
 import addPersistent from 'core/cache/decorators/persistent';
+
 import SimpleCache from 'core/cache/simple';
 import RestrictedCache from 'core/cache/restricted';
 
@@ -59,7 +60,7 @@ describe('core/cache/decorators/persistent', () => {
 			expect(asyncLocal.set.calls.first().args).toEqual(['foo', 2]);
 		});
 
-		it('should delete property from storage if it was deleted by side effect', async (done) => {
+		it('should delete a value from the storage if a side effect has deleted it', async () => {
 			const opts = {
 				loadFromStorage: 'onInit'
 			};
@@ -75,13 +76,11 @@ describe('core/cache/decorators/persistent', () => {
 			expect(await persistentCache.get('foo')).toBe(undefined);
 			expect(await persistentCache.get('bar')).toBe(1);
 
-			setTimeout(async () => {
-				expect(await asyncLocal.get(INDEX_STORAGE_NAME)).toEqual({bar: Number.MAX_SAFE_INTEGER});
-				done();
-			}, 10);
+			await new Promise((r) => setTimeout(r, 10));
+			expect(await asyncLocal.get(INDEX_STORAGE_NAME)).toEqual({bar: Number.MAX_SAFE_INTEGER});
 		});
 
-		it('side effect clear', async (done) => {
+		it('`clear` caused by a side effect', async () => {
 			const opts = {
 				loadFromStorage: 'onInit'
 			};
@@ -97,13 +96,11 @@ describe('core/cache/decorators/persistent', () => {
 
 			cache.clear();
 
-			setTimeout(async () => {
-				expect(await asyncLocal.get(INDEX_STORAGE_NAME)).toEqual({});
-				done();
-			}, 10);
+			await new Promise((r) => setTimeout(r, 10));
+			expect(await asyncLocal.get(INDEX_STORAGE_NAME)).toEqual({});
 		});
 
-		it('side effect set', async (done) => {
+		it('`set` caused by a side effect', async () => {
 			const opts = {
 				loadFromStorage: 'onInit'
 			};
@@ -115,15 +112,15 @@ describe('core/cache/decorators/persistent', () => {
 			await persistentCache.set('foo', 1);
 			cache.set('bar', 1);
 
-			setTimeout(async () => {
-				expect(await asyncLocal.get(INDEX_STORAGE_NAME))
-					.toEqual({foo: Number.MAX_SAFE_INTEGER, bar: Number.MAX_SAFE_INTEGER});
+			await new Promise((r) => setTimeout(r, 10));
 
-				done();
-			}, 10);
+			expect(await asyncLocal.get(INDEX_STORAGE_NAME)).toEqual({
+				foo: Number.MAX_SAFE_INTEGER,
+				bar: Number.MAX_SAFE_INTEGER
+			});
 		});
 
-		it('side effect set use default ttl', async (done) => {
+		it('setting the default `ttl` caused by a side effect', async () => {
 			const opts = {
 				loadFromStorage: 'onInit',
 				persistentTTL: 100
@@ -136,12 +133,8 @@ describe('core/cache/decorators/persistent', () => {
 			await persistentCache.set('foo', 1, {persistentTTL: 500});
 			cache.set('bar', 1);
 
-			setTimeout(async () => {
-				expect(await asyncLocal.get(INDEX_STORAGE_NAME))
-					.toEqual({foo: 500, bar: 100});
-
-				done();
-			}, 10);
+			await new Promise((r) => setTimeout(r, 10));
+			expect(await asyncLocal.get(INDEX_STORAGE_NAME)).toEqual({foo: 500, bar: 100});
 		});
 	});
 
