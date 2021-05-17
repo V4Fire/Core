@@ -1,8 +1,6 @@
-# core/cache/decorators/helpers/emit
+# core/cache/decorators/helpers/add-emitter
 
 This module provides a helper for [[Cache]] decorators to add a feature of emitting mutation events caused by side-effect.
-
-## Example
 
 ```js
 import addEmitter from 'core/cache/decorators/helpers/add-emitter';
