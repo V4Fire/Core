@@ -13,7 +13,8 @@ Changelog
 
 #### :rocket: New Feature
 
-* Added support for Iterable objects
+* Added support for iterable objects
+* Added support for complex conditions
 
 #### :bug: Bug Fix
 

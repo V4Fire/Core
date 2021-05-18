@@ -102,7 +102,7 @@ export default function select<T = unknown>(obj: unknown, params: SelectParams =
 				continue;
 			}
 
-			if (val !== resolvedObj[key]) {
+			if (!Object.fastCompare(val, resolvedObj[key])) {
 				res = NULL;
 				break;
 			}

@@ -9,7 +9,7 @@
 import select from 'core/object/select';
 
 describe('core/object/select', () => {
-	describe('searching into a plain object', () => {
+	describe('searching upon a plain object', () => {
 		it('`where` is provided', () => {
 			const obj = {
 				foo: 1,
@@ -17,13 +17,13 @@ describe('core/object/select', () => {
 			};
 
 			expect(select(obj, {where: obj}))
-				.toEqual(obj);
+				.toBe(obj);
 
 			expect(select(obj, {where: {foo: 1}}))
-				.toEqual(obj);
+				.toBe(obj);
 
 			expect(select(obj, {where: {foo: 1, bla: 2}}))
-				.toEqual(obj);
+				.toBe(obj);
 
 			expect(select(obj, {where: {foo: 1, bla: 3}}))
 				.toBeUndefined();
@@ -55,7 +55,7 @@ describe('core/object/select', () => {
 			};
 
 			expect(select(obj, {where: [{foo: 11}, {bla: 2}]}))
-				.toEqual(obj);
+				.toBe(obj);
 
 			expect(select(obj, {where: [{foo: 11}, {bla: 22}]}))
 				.toBeUndefined();
@@ -74,7 +74,21 @@ describe('core/object/select', () => {
 				.toBeUndefined();
 
 			expect(select(obj, {where: {foo: 1, b2: 1}}))
-				.toEqual(obj);
+				.toBe(obj);
+		});
+
+		it('`where` contains complex conditions', () => {
+			const obj = {
+				foo: {
+					b: [1, 2, 3]
+				}
+			};
+
+			expect(select(obj, {where: {foo: {b: [1, 2, 3]}}}))
+				.toBe(obj);
+
+			expect(select(obj, {where: {foo: {b: [1]}}}))
+				.toBeUndefined();
 		});
 
 		it('`from` is provided', () => {
@@ -131,7 +145,7 @@ describe('core/object/select', () => {
 		});
 	});
 
-	describe('searching into an iterable object', () => {
+	describe('searching upon an iterable object', () => {
 		it('`where` is provided', () => {
 			const obj = [
 				{foo: 1, bla: 2},
@@ -139,13 +153,13 @@ describe('core/object/select', () => {
 			];
 
 			expect(select(obj, {where: obj}))
-				.toEqual(obj[0]);
+				.toBe(obj[0]);
 
 			expect(select(obj, {where: {foo: 1}}))
-				.toEqual(obj[0]);
+				.toBe(obj[0]);
 
 			expect(select(obj, {where: {foo: 1, bla: 2}}))
-				.toEqual(obj[0]);
+				.toBe(obj[0]);
 
 			expect(select(obj, {where: {foo: 1, bla: 3}}))
 				.toBeUndefined();
@@ -174,7 +188,7 @@ describe('core/object/select', () => {
 			]);
 
 			expect(select(obj, {where: [{foo: 11}, {bla: 2}]}))
-				.toEqual(obj.get(0));
+				.toBe(obj.get(0));
 
 			expect(select(obj, {where: [{foo: 11}, {bla: 22}]}))
 				.toBeUndefined();

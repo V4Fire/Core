@@ -15,7 +15,9 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :rocket: New Feature
 
-* Added support for Iterable objects `core/object/select`
+* `core/object/select`:
+  * Added support for iterable objects
+  * Added support for complex conditions
 
 #### :bug: Bug Fix
 
