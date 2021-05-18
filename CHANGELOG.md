@@ -23,6 +23,12 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 * Bugfixes `core/object/select`
 
+#### :memo: Documentation
+
+* Improved documentation
+  * `core/object/select`
+  * `core/event`
+
 ## v3.47.0 (2021-05-17)
 
 #### :rocket: New Feature

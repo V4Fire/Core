@@ -20,6 +20,10 @@ Changelog
 
 * Bugfixes
 
+#### :memo: Documentation
+
+* Improved documentation
+
 ## v3.20.0 (2020-07-05)
 
 #### :rocket: New Feature
