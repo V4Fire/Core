@@ -11,6 +11,16 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.48.0 (2021-05-18)
+
+#### :rocket: New Feature
+
+* Added support for Iterable objects `core/object/select`
+
+#### :bug: Bug Fix
+
+* Bugfixes `core/object/select`
+
 ## v3.47.0 (2021-05-17)
 
 #### :rocket: New Feature

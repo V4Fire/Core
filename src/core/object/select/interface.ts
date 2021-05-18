@@ -15,7 +15,7 @@ export interface SelectParams {
 	 * select({foo: {bar: {bla: {}}}}, {from: 'foo.bla'})
 	 * ```
 	 */
-	from?: string | number;
+	from?: ObjectPropertyPath | number;
 
 	/**
 	 * Object to match or array of objects.

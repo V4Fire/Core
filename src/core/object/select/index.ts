@@ -19,9 +19,9 @@ export * from 'core/object/select/interface';
  * Finds an element from an object by the specified parameters
  *
  * @param obj - object to search
- * @param params - search parameters
+ * @param [params] - search parameters
  */
-export default function select<T = unknown>(obj: unknown, params: SelectParams): CanUndef<T> {
+export default function select<T = unknown>(obj: unknown, params: SelectParams = {}): CanUndef<T> {
 	const
 		{where, from} = params;
 
@@ -29,69 +29,86 @@ export default function select<T = unknown>(obj: unknown, params: SelectParams):
 		target = obj,
 		res;
 
-	if ((Object.isPlainObject(target) || Object.isArray(target)) && from != null) {
-		target = Object.get(target, String(from));
-		res = target;
+	if (from != null) {
+		target = Object.get(target, Object.isArray(from) ? from : String(from));
+
+		if (where == null) {
+			return <any>target;
+		}
+	}
+
+	const cantSearch =
+		Object.isPrimitive(target) ||
+		where == null ||
+		Object.isArray(where) && where.length === 0;
+
+	if (cantSearch) {
+		return;
 	}
 
 	const
 		NULL = {};
 
-	if (where) {
-		for (let conditions = Array.concat([], where), i = 0; i < conditions.length; i++) {
+	where: for (let conditions = Array.concat([], where), i = 0; i < conditions.length; i++) {
+		const
+			where = conditions[i];
+
+		if (Object.isPlainObject(target)) {
 			const
-				where = conditions[i];
+				match = getMatch(target, where);
 
-			if (Object.isPlainObject(target)) {
-				const
-					match = getMatch(target, where);
-
-				if (match !== NULL) {
-					res = match;
-					break;
-				}
-			}
-
-			const some = (el) => {
-				if (getMatch(el, where) !== NULL) {
-					res = el;
-					return true;
-				}
-
-				return false;
-			};
-
-			if (Object.isArray(target) && target.some(some)) {
+			if (match !== NULL) {
+				res = match;
 				break;
+			}
+		}
+
+		if (Object.isIterable(target)) {
+			const
+				iterator = target[Symbol.iterator]();
+
+			for (let el = iterator.next(); !el.done; el = iterator.next()) {
+				if (getMatch(el.value, where) !== NULL) {
+					res = el.value;
+					break where;
+				}
 			}
 		}
 	}
 
 	return res;
 
-	function getMatch(obj: Dictionary | unknown[], where: Nullable<Dictionary>): unknown {
+	function getMatch(obj: unknown, where: Nullable<Dictionary>): unknown {
 		if (where == null || obj === where) {
 			return obj;
 		}
 
-		if (!Object.isPlainObject(where) && !Object.isArray(where)) {
+		if (Object.isPrimitive(obj)) {
 			return NULL;
 		}
+
+		const
+			resolvedObj = <object>obj;
 
 		let
 			res = NULL;
 
-		Object.forEach(where, (v, k) => {
-			if (Object.isPlainObject(obj) && !(k in obj)) {
-				return;
+		for (let keys = Object.keys(where), i = 0; i < keys.length; i++) {
+			const
+				key = keys[i],
+				val = where[key];
+
+			if (!(key in resolvedObj)) {
+				continue;
 			}
 
-			if (v !== obj[k]) {
-				return;
+			if (val !== resolvedObj[key]) {
+				res = NULL;
+				break;
 			}
 
-			res = obj;
-		});
+			res = resolvedObj;
+		}
 
 		return res;
 	}
