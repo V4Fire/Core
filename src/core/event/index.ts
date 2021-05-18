@@ -54,9 +54,9 @@ export function resolveAfterEvents(emitter: EventEmitterLike, ...events: string[
 }
 
 /**
- * Wraps a callback function into a new function that never calls the target until all specified flags are resolved.
+ * Wraps a callback into a new function that never calls the target until all specified flags are resolved.
  * The function returns a new function that takes a string flag and resolves it.
- * After all flags are resolved, the last function invokes the target function.
+ * After all, flags are resolved, the last function invokes the target function.
  * If you try to invoke the function after the first time resolving, ii won't be executed.
  *
  * @param cb - callback function that is invoked after resolving all flags
