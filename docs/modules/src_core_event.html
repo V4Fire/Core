@@ -243,24 +243,32 @@ pre {
 						<a href="#coreevent" id="coreevent" style="color: inherit; text-decoration: none;">
 							<h1>core/event</h1>
 						</a>
-						<p>This module provides a bunch of helper functions to observe events in more flexibly way.</p>
-						<pre><code class="language-js"><span style="color: #008000">/*!</span>
-<span style="color: #008000"> * V4Fire Core</span>
-<span style="color: #008000"> * https://github.com/V4Fire/Core</span>
-<span style="color: #008000"> *</span>
-<span style="color: #008000"> * Released under the MIT license</span>
-<span style="color: #008000"> * https://github.com/V4Fire/Core/blob/master/LICENSE</span>
-<span style="color: #008000"> */</span>
-
-<span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">EventEmitter2</span><span style="color: #000000"> </span><span style="color: #AF00DB">as</span><span style="color: #000000"> </span><span style="color: #001080">EventEmitter</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;eventemitter2&#039;</span><span style="color: #000000">;</span>
-<span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">resolveAfterEvents</span><span style="color: #000000">, </span><span style="color: #001080">createsAsyncSemaphore</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/event&#039;</span><span style="color: #000000">;</span>
+						<p>This module provides a bunch of helper functions to handle events in more flexibly way.</p>
+						<a href="#resolveafterevents" id="resolveafterevents" style="color: inherit; text-decoration: none;">
+							<h2>resolveAfterEvents</h2>
+						</a>
+						<p>The function returns a promise that will be resolved after emitting of all events from the specified emitter.</p>
+						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">EventEmitter2</span><span style="color: #000000"> </span><span style="color: #AF00DB">as</span><span style="color: #000000"> </span><span style="color: #001080">EventEmitter</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;eventemitter2&#039;</span><span style="color: #000000">;</span>
+<span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">resolveAfterEvents</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/event&#039;</span><span style="color: #000000">;</span>
 
 <span style="color: #0000FF">const</span>
 <span style="color: #000000">  </span><span style="color: #0070C1">emitter</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">EventEmitter</span><span style="color: #000000">();</span>
 
-<span style="color: #795E26">resolveAfterEvents</span><span style="color: #000000">(</span><span style="color: #001080">emitter</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;foo&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;bar&#039;</span><span style="color: #000000">).</span><span style="color: #795E26">then</span><span style="color: #000000">(() </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;Bang!&#039;</span><span style="color: #000000">));</span>
+<span style="color: #795E26">resolveAfterEvents</span><span style="color: #000000">(</span><span style="color: #001080">emitter</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;foo&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;bar&#039;</span><span style="color: #000000">)</span>
+<span style="color: #000000">  .</span><span style="color: #795E26">then</span><span style="color: #000000">(() </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;Bang!&#039;</span><span style="color: #000000">));</span>
+
 <span style="color: #001080">emitter</span><span style="color: #000000">.</span><span style="color: #795E26">emit</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;foo&#039;</span><span style="color: #000000">);</span>
 <span style="color: #001080">emitter</span><span style="color: #000000">.</span><span style="color: #795E26">emit</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;bar&#039;</span><span style="color: #000000">);</span>
+</code></pre>
+						<a href="#createsasyncsemaphore" id="createsasyncsemaphore" style="color: inherit; text-decoration: none;">
+							<h2>createsAsyncSemaphore</h2>
+						</a>
+						<p>The function wraps a callback into a new function that never calls the target until all specified flags are resolved.
+							<code>createsAsyncSemaphore</code> returns a new function that takes a string flag and resolves it.
+							After all, flags are resolved, the last function invokes the target function.
+						If you try to invoke the function after the first time resolving, ii won&#39;t be executed.</p>
+						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">EventEmitter2</span><span style="color: #000000"> </span><span style="color: #AF00DB">as</span><span style="color: #000000"> </span><span style="color: #001080">EventEmitter</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;eventemitter2&#039;</span><span style="color: #000000">;</span>
+<span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">createsAsyncSemaphore</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/event&#039;</span><span style="color: #000000">;</span>
 
 <span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">semaphore</span><span style="color: #000000"> = </span><span style="color: #795E26">createsAsyncSemaphore</span><span style="color: #000000">(() </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
 <span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;Boom!&#039;</span><span style="color: #000000">);</span>
@@ -378,9 +386,9 @@ pre {
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Wraps a callback function into a new function that never calls the target until all specified flags are resolved.
+									<p>Wraps a callback into a new function that never calls the target until all specified flags are resolved.
 										The function returns a new function that takes a string flag and resolves it.
-										After all flags are resolved, the last function invokes the target function.
+										After all, flags are resolved, the last function invokes the target function.
 									If you try to invoke the function after the first time resolving, ii won&#39;t be executed.</p>
 								</div>
 								<dl class="tsd-comment-tags">
