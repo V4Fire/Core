@@ -176,6 +176,7 @@ for (const el of new Range('c', 'a').entries()) {
   // [0, 'c'] [1, 'b'] [2 'a']
   console.log(el);
 }
+
 for (const el of new Range('c', 'a').entries(2)) {
   // [0, 'c'] [1, 'a']
   console.log(el);
