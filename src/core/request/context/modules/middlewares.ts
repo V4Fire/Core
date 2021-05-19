@@ -7,9 +7,6 @@
  */
 
 import Response, { ResponseTypeValue } from 'core/request/response';
-import { getStorageKey } from 'core/request/utils';
-
-import { storage } from 'core/request/const';
 import type { RequestResponse, RequestResponseObject } from 'core/request/interface';
 
 import Super from 'core/request/context/modules/methods';
@@ -54,35 +51,10 @@ export default class RequestContext<D = unknown> extends Super<D> {
 	 */
 	saveCache(res: RequestResponseObject<D>): RequestResponseObject<D> {
 		const
-			p = this.params,
 			key = this.cacheKey;
 
-		const
-			{cache} = this;
-
 		if (key != null) {
-			if (p.offlineCache) {
-				if (!storage) {
-					throw new ReferenceError("kv-storage module isn't loaded");
-				}
-
-				storage
-					.then((storage) => storage.set(getStorageKey(key), res.data, p.offlineCacheTTL))
-					.catch(stderr);
-			}
-
-			if (this.cacheTimeoutId != null) {
-				clearTimeout(this.cacheTimeoutId);
-			}
-
-			cache.set(
-				key,
-				res.data
-			);
-
-			if (Object.isNumber(p.cacheTTL)) {
-				this.cacheTimeoutId = <any>setTimeout(() => cache.remove(key), p.cacheTTL);
-			}
+			this.cache.set(key, res.data);
 		}
 
 		return res;

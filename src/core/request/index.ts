@@ -162,10 +162,14 @@ function request<D = unknown>(
 				reject(err ?? new RequestError('abort', errDetails));
 			});
 
-			await new Promise((r) => setImmediate(r));
-			await checkOnline();
-
+			await new Promise(setImmediate);
 			ctx.parent = parent;
+
+			if (Object.isPromise(ctx.cache)) {
+				await Then.resolve(ctx.cache, parent);
+			}
+
+			await checkOnline();
 
 			const
 				tasks = <Array<CanPromise<unknown>>>[];
