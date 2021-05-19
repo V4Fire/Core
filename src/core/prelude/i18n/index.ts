@@ -61,7 +61,7 @@ export function setLocale(value: string, def?: boolean): string {
 	locale.value = value;
 	locale.isDefined = Boolean(def);
 
-	if (!IS_NODE && storage) {
+	if (!IS_NODE && storage != null) {
 		storage.then((storage) => Promise.all([
 			storage.set('locale', value),
 			storage.set('isLocaleDef', locale.isDefined)

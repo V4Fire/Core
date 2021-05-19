@@ -12,8 +12,8 @@
  */
 
 import config from 'config';
-import * as netEngine from 'core/net/engines';
 
+import * as netEngine from 'core/net/engines';
 import { state, emitter } from 'core/net/const';
 import type { NetStatus, NetEngine } from 'core/net/interface';
 
