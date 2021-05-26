@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.49.0 (2021-05-26)
+
+#### :bug: Bug Fix
+
+* Fix `ReuqestBody` type to include `Blob`
+
 ## v3.43.1 (2021-04-19)
 
 #### :house: Internal

@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.49.0 (2021-05-26)
+
+#### :bug: Bug Fix
+
+* Fix `ReuqestBody` type to include `Blob` in `core/request`
+
 ## v3.48.0 (2021-05-18)
 
 #### :rocket: New Feature
