@@ -1689,6 +1689,7 @@ interface ObjectConstructor {
 			SharedArrayBuffer |
 			DataView |
 			FormData |
+			Blob |
 
 			Date |
 			RegExp |
