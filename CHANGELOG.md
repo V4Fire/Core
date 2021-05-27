@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.49.2 (2021-05-27)
+
+#### :bug: Bug Fix
+
+* Fixed subscribing to the original object `core/cache/decorators/helpers/add-emitter`
+
 ## v3.49.1 (2021-05-26)
 
 #### :bug: Bug Fix
