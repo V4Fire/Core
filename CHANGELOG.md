@@ -15,13 +15,13 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :bug: Bug Fix
 
-* Fix `isPlaingObject` to check for `Blob` type
+* Fixed checking of `Blob` via `isPlaingObject`
 
 ## v3.49.0 (2021-05-26)
 
 #### :bug: Bug Fix
 
-* Fix `ReuqestBody` type to include `Blob` in `core/request`
+* Added `Blob` to `ReuqestBody` `core/request`
 
 ## v3.48.0 (2021-05-18)
 

@@ -13,7 +13,7 @@ Changelog
 
 #### :bug: Bug Fix
 
-* Fix `ReuqestBody` type to include `Blob`
+* Added `Blob` to `ReuqestBody`
 
 ## v3.43.1 (2021-04-19)
 
