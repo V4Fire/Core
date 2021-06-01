@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.xx.x (2021-06-01)
+
+#### :rocket: New Feature
+
+* Added option to change size of `restricted cache`
+
 ## v3.49.2 (2021-05-27)
 
 #### :bug: Bug Fix

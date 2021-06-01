@@ -95,4 +95,28 @@ export default class RestrictedCache<V = unknown, K = string> extends SimpleCach
 
 		return removed;
 	}
+
+	/**
+	 * Modify size of cache
+	 * @param amount - positive values increase size of cache, negative values decrease size
+	 */
+	modifySize(amount: number): Map<K, V> {
+		const
+			removed = new Map<K, V>();
+
+		this.max += amount;
+		this.max = this.max > 0 ? this.max : 0;
+
+		if (amount < 0) {
+			while (this.max < this.queue.size) {
+				const key = this.queue.values().next().value;
+				const el = this.remove(key);
+				if (el) {
+					removed.set(key, el);
+				}
+			}
+		}
+
+		return removed;
+	}
 }

@@ -9,16 +9,27 @@ import RestrictedCache from 'core/cache/restricted';
 const
   cache = new RestrictedCache(4);
 
-cache.add('foo', 'bar1');
-cache.add('foo2', 'bar2');
-cache.add('foo3', 'bar3');
+cache.set('foo1', 'bar1');
+cache.set('foo2', 'bar2');
+cache.set('foo3', 'bar3');
 
 console.log(cache.keys().length); // 3
 console.log(cache.has('foo1'));   // true
 
-cache.add('foo4', 'bar4');
+cache.set('foo4', 'bar4');
 
 console.log(cache.keys().length); // 3
 console.log(cache.has('foo1'));   // false
 console.log(cache.has('foo4'));   // true
+
+// Modify max size of cache
+cache.modifySize(2);
+cache.set('foo5', 'bar5');
+cache.set('foo6', 'bar6');
+console.log(cache.keys().length); // 5
+
+cache.modifySize(-2);
+console.log(cache.keys().length); // 3
+console.log(cache.has('foo2'));   // false
+console.log(cache.has('foo3'));   // false
 ```
