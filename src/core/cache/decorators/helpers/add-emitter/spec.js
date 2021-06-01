@@ -33,16 +33,18 @@ describe('core/cache/decorators/helpers/add-emitter', () => {
 
 			const {subscribe: subscribe1} = addEmitter(level1);
 			const {subscribe: subscribe2} = addEmitter(level2);
+			const {subscribe: subscribe3} = addEmitter(level3);
 
-			subscribe1('remove', level2, () => memory.push('level1'));
-			subscribe2('remove', level3, () => memory.push('level2'));
+			subscribe1('remove', level1, () => memory.push('level1'));
+			subscribe2('remove', level2, () => memory.push('level2'));
+			subscribe3('remove', level3, () => memory.push('level3'));
 
 			level1.remove();
-			expect(memory).toEqual(['level1', 'level2']);
+			expect(memory).toEqual(['level1', 'level2', 'level3']);
 			memory.length = 0;
 
 			level2.remove();
-			expect(memory).toEqual(['level2']);
+			expect(memory).toEqual(['level2', 'level3']);
 		});
 	});
 
