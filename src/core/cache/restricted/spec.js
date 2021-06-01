@@ -75,7 +75,7 @@ describe('core/cache/restricted', () => {
 		expect(cache.modifySize(-2)).toEqual(new Map([['foo', 1], ['bar', 2]]));
 
 		expect(cache.has('foo')).toBeFalse();
-		expect(cache.has('bar')).toBeTrue();
+		expect(cache.has('bar')).toBeFalse();
 	});
 
 	it('modify size of cache with excess', () => {
