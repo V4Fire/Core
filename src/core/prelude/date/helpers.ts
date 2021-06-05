@@ -159,17 +159,3 @@ export function createStaticDateFormatter(method: string): AnyFunction {
 		return date[method](opts);
 	};
 }
-
-/**
- * Adds leading zeros until the string reaches the required length
- *
- * @param string
- * @param length
- */
-export function addLeadingZeroesInString(string: string, length: number): string {
-	if (string.length >= length) {
-		return string;
-	}
-
-	return `${'0'.repeat(length - string.length)}${string}`;
-}

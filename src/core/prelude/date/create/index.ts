@@ -20,8 +20,6 @@ import {
 
 } from 'core/prelude/date/const';
 
-import { addLeadingZeroesInString } from 'core/prelude/date/helpers';
-
 /** @see [[Date.clone]] */
 extend(Date.prototype, 'clone', function clone(this: Date): Date {
 	return new Date(this);
@@ -71,7 +69,7 @@ extend(Date, 'create', (pattern?: DateCreateValue) => {
 				year = chunks[1].length === 4 ? chunks[1] : chunks[3],
 				day = chunks[1].length === 4 ? chunks[3] : chunks[1];
 
-			return `${year}-${addLeadingZeroesInString(chunks[2], 2)}-${addLeadingZeroesInString(day, 2)}`;
+			return `${year}-${chunks[2].padStart(2, '0')}-${day.padStart(2, '0')}`;
 		};
 
 		const replacer = (str, date, time, zone) => {

@@ -71,11 +71,16 @@ describe('core/prelude/date/create', () => {
 		];
 
 		dates.forEach(({date, withZeroes}) => {
-			expect(Date.create(date)).toEqual(Date.create(withZeroes));
+			const replaceDot = (val, to) => val.replace(/\./g, to);
 
-			expect(Date.create(date.replace(/\./g, '-'))).toEqual(Date.create(withZeroes.replace(/\./g, '-')));
+			expect(Date.create(date))
+				.toEqual(Date.create(withZeroes));
 
-			expect(Date.create(date.replace(/\./g, '/'))).toEqual(Date.create(withZeroes.replace(/\./g, '/')));
+			expect(Date.create(replaceDot(date, '-')))
+				.toEqual(Date.create(replaceDot(withZeroes, '-')));
+
+			expect(Date.create(replaceDot(date, '/')))
+				.toEqual(Date.create(replaceDot(withZeroes, '/')));
 		});
 	});
 
