@@ -30,7 +30,7 @@ export default class RestrictedCache<V = unknown, K = string> extends SimpleCach
 	/**
 	 * Number of maximum records in the cache
 	 */
-	protected max: number = 20;
+	protected capacity: number = 20;
 
 	/**
 	 * @override
@@ -40,7 +40,7 @@ export default class RestrictedCache<V = unknown, K = string> extends SimpleCach
 		super();
 
 		if (max != null) {
-			this.max = max;
+			this.setCapacity(max);
 		}
 	}
 
@@ -58,7 +58,7 @@ export default class RestrictedCache<V = unknown, K = string> extends SimpleCach
 	set(key: K, value: V): V {
 		this.queue.delete(key);
 
-		if (this.queue.size === this.max) {
+		if (this.queue.size === this.capacity) {
 			const
 				key = this.queue.values().next().value;
 
@@ -90,6 +90,38 @@ export default class RestrictedCache<V = unknown, K = string> extends SimpleCach
 
 			if (removed.has(el)) {
 				this.queue.delete(el);
+			}
+		}
+
+		return removed;
+	}
+
+	/**
+	 * Sets a new capacity of the cache.
+	 * The method returns a map of truncated elements that the cache can't fit anymore.
+	 *
+	 * @param value
+	 */
+	setCapacity(value: number): Map<K, V> {
+		if (!Number.isInteger(value) || value < 0) {
+			throw new TypeError('A value of `max` can be defined only as a non-negative integer number');
+		}
+
+		const
+			removed = new Map<K, V>(),
+			amount = value - this.capacity;
+
+		this.capacity = value;
+
+		if (amount < 0) {
+			while (this.capacity < this.queue.size) {
+				const
+					key = this.queue.values().next().value,
+					el = this.remove(key);
+
+				if (el) {
+					removed.set(key, el);
+				}
 			}
 		}
 

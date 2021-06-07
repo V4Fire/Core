@@ -15,11 +15,53 @@ describe('core/cache/never', () => {
 		expect(cache.set('foo', 1)).toBe(1);
 		expect(cache.get('foo')).toBeUndefined();
 		expect(cache.has('foo')).toBeFalse();
+		expect(cache.size).toBe(0);
 		expect(cache.remove('foo')).toBeUndefined();
 		expect(cache.has('foo')).toBeFalse();
 	});
 
-	it('clear', () => {
+	it('default iterator', () => {
+		const
+			cache = new NeverCache();
+
+		cache.set('1', 1);
+		cache.set('2', 2);
+
+		expect(cache[Symbol.iterator]().next()).toEqual({value: undefined, done: true});
+		expect([...cache]).toEqual([]);
+	});
+
+	it('`keys`', () => {
+		const
+			cache = new NeverCache();
+
+		cache.set('1', 1);
+		cache.set('2', 2);
+
+		expect([...cache.keys()]).toEqual([]);
+	});
+
+	it('`values`', () => {
+		const
+			cache = new NeverCache();
+
+		cache.set('1', 1);
+		cache.set('2', 2);
+
+		expect([...cache.values()]).toEqual([]);
+	});
+
+	it('`entries`', () => {
+		const
+			cache = new NeverCache();
+
+		cache.set('1', 1);
+		cache.set('2', 2);
+
+		expect([...cache.entries()]).toEqual([]);
+	});
+
+	it('`clear`', () => {
 		const cache = new NeverCache();
 
 		cache.set('foo', 1);
@@ -28,7 +70,7 @@ describe('core/cache/never', () => {
 		expect(cache.clear()).toEqual(new Map([]));
 	});
 
-	it('clear with a filter', () => {
+	it('`clear` with a filter', () => {
 		const cache = new NeverCache();
 
 		cache.set('foo', 1);

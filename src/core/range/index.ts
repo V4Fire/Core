@@ -405,7 +405,7 @@ export default class Range<T extends RangeValue> {
 	}
 
 	/**
-	 * Returns an iterable object from the range
+	 * Returns an iterator from the range
 	 *
 	 * @param [step] - step to iterate elements (for date ranges, it means milliseconds to shift)
 	 * @example
@@ -491,33 +491,7 @@ export default class Range<T extends RangeValue> {
 	}
 
 	/**
-	 * Returns an iterable object from the range that produces pairs of iteration indices and values
-	 *
-	 * @param [step] - step to iterate elements (for date ranges, it means milliseconds to shift)
-	 * @example
-	 * ```js
-	 * for (const el of new Range(3, 1).entries()) {
-	 *   // [0, 3] [1, 2] [2 3]
-	 *   console.log(el);
-	 * }
-	 *
-	 * for (const el of new Range(0, 3).entries(2)) {
-	 *   // [0, 0] [1, 2]
-	 *   console.log(el);
-	 * }
-	 * ```
-	 */
-	*entries(step?: number): IterableIterator<[number, T]> {
-		const
-			iterator = this.values(step);
-
-		for (let el = iterator.next(), i = 0; !el.done; el = iterator.next(), i++) {
-			yield [i, el.value];
-		}
-	}
-
-	/**
-	 * Returns an iterable object from the range that produces iteration indices
+	 * Returns an iterator from the range that produces iteration indices
 	 *
 	 * @param [step] - step to iterate elements (for date ranges, it means milliseconds to shift)
 	 * @example
@@ -539,6 +513,32 @@ export default class Range<T extends RangeValue> {
 
 		for (let el = iterator.next(), i = 0; !el.done; el = iterator.next(), i++) {
 			yield i;
+		}
+	}
+
+	/**
+	 * Returns an iterator from the range that produces pairs of iteration indices and values
+	 *
+	 * @param [step] - step to iterate elements (for date ranges, it means milliseconds to shift)
+	 * @example
+	 * ```js
+	 * for (const el of new Range(3, 1).entries()) {
+	 *   // [0, 3] [1, 2] [2 3]
+	 *   console.log(el);
+	 * }
+	 *
+	 * for (const el of new Range(0, 3).entries(2)) {
+	 *   // [0, 0] [1, 2]
+	 *   console.log(el);
+	 * }
+	 * ```
+	 */
+	*entries(step?: number): IterableIterator<[number, T]> {
+		const
+			iterator = this.values(step);
+
+		for (let el = iterator.next(), i = 0; !el.done; el = iterator.next(), i++) {
+			yield [i, el.value];
 		}
 	}
 

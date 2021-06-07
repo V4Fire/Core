@@ -18,6 +18,11 @@ export interface ClearFilter<V = unknown, K = string> {
  */
 export default interface Cache<V = unknown, K = string> {
 	/**
+	 * Number of elements within the cache
+	 */
+	readonly size: number;
+
+	/**
 	 * Returns true if a value by the specified key exists in the cache
 	 * @param key
 	 */
@@ -45,13 +50,28 @@ export default interface Cache<V = unknown, K = string> {
 	remove(key: K): CanUndef<V>;
 
 	/**
-	 * Returns an iterator by the cache keys
-	 */
-	keys(): Iterator<K>;
-
-	/**
 	 * Clears the cache by the specified filter and returns a map of removed keys
 	 * @param [filter] - filter for removing (if not specified, then all cache values will be removed)
 	 */
 	clear(filter?: ClearFilter<V, K>): Map<K, V>;
+
+	/**
+	 * Returns an iterator by the cache keys
+	 */
+	[Symbol.iterator](): IterableIterator<K>;
+
+	/**
+	 * Returns an iterator by the cache keys
+	 */
+	keys(): IterableIterator<K>;
+
+	/**
+	 * Returns an iterator by the cache values
+	 */
+	values(): IterableIterator<V>;
+
+	/**
+	 * Returns an iterator from the cache that produces pairs of keys and values
+	 */
+	entries(): IterableIterator<[K, V]>;
 }

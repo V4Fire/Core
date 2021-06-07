@@ -12,6 +12,7 @@
  */
 
 export * from 'core/cache/interface';
+
 export { default as AbstractCache } from 'core/cache/interface';
 export { default as Cache } from 'core/cache/simple';
 export { default as RestrictedCache } from 'core/cache/restricted';

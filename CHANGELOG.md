@@ -16,10 +16,20 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 #### :rocket: New Feature
 
 * Added possibility to listen to events from a function emitter `core/async`
+* Added a feature to change maximum capacity `core/cache/restricted`
+
+* `core/cache`:
+  * Now all cache structures are iterable objects
+  * Added new iterators `values`, `entries`
+  * Added `size`
 
 #### :bug: Bug Fix
 
 * Fixed `Date.create` with dates without leading zeroes
+
+#### :memo: Documentation
+
+* Improved documentation `core/cache`
 
 #### :house: Internal
 

@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.xx.x (2021-06-01)
+
+#### :rocket: New Feature
+
+* Added option to change size of `cache`
+
 ## v3.20.0 (2020-07-05)
 
 #### :boom: Breaking Change
