@@ -21,6 +21,10 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 * Fixed `Date.create` with dates without leading zeroes
 
+#### :house: Internal
+
+* Updated dependencies: `typescript@4.3.2`
+
 ## v3.49.2 (2021-05-27)
 
 #### :bug: Bug Fix
