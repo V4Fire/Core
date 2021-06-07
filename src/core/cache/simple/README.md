@@ -8,9 +8,9 @@ import SimpleCache from 'core/cache/simple';
 const
   cache = new SimpleCache();
 
-cache.add('foo', 'bar1');
-cache.add('foo2', 'bar2');
-cache.add('baz', 'bar3');
+cache.set('foo', 'bar1');
+cache.set('foo2', 'bar2');
+cache.set('baz', 'bar3');
 
 console.log(cache.keys().length); // 3
 
@@ -18,3 +18,7 @@ cache.clear((val, key) => /foo/.test(key));
 
 console.log(cache.keys().length); // 1
 ```
+
+## API
+
+See [[Cache]].

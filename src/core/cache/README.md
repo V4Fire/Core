@@ -15,15 +15,69 @@ import SimpleCache from 'core/cache/simple';
 const
   cache = new SimpleCache();
 
-cache.add('foo', 'bar1');
-cache.add('foo2', 'bar2');
-cache.add('baz', 'bar3');
+cache.set('foo', 'bar1');
+cache.set('foo2', 'bar2');
+cache.set('baz', 'bar3');
 
-console.log(cache.keys().length); // 3
+console.log(cache.size); // 3
 
 cache.clear((val, key) => /foo/.test(key));
 
-console.log(cache.keys().length); // 1
+console.log(cache.size); // 1
+```
+
+## Iterators
+
+All caches support three kinds of iterators:
+
+1. By keys (used by default).
+
+```js
+import SimpleCache from 'core/cache/simple';
+
+cache.set('foo', 'bar1');
+cache.set('foo2', 'bar2');
+cache.set('baz', 'bar3');
+
+for (const key of SimpleCache) {
+  // 'foo' 'foo2' 'baz'
+  console.log(el);
+}
+
+for (const key of SimpleCache.keys()) {
+  // 'foo' 'foo2' 'baz'
+  console.log(el);
+}
+```
+
+2. By values.
+
+```js
+import SimpleCache from 'core/cache/simple';
+
+cache.set('foo', 'bar1');
+cache.set('foo2', 'bar2');
+cache.set('baz', 'bar3');
+
+for (const key of SimpleCache.values()) {
+  // 'bar1' 'bar2' 'bar3'
+  console.log(el);
+}
+```
+
+3. By pairs of keys and values.
+
+```js
+import SimpleCache from 'core/cache/simple';
+
+cache.set('foo', 'bar1');
+cache.set('foo2', 'bar2');
+cache.set('baz', 'bar3');
+
+for (const key of SimpleCache.entries()) {
+  // ['foo', 'bar1'] ['foo2', 'bar2'] ['baz', 'bar3']
+  console.log(el);
+}
 ```
 
 ## Decorators
@@ -70,4 +124,106 @@ await persistentCache.set('foo2', 'bar2');
 
 const
   copyOfCache = await addPersistent(new SimpleCache(), asyncLocal, opts);
+```
+
+## API
+
+Ranges support a bunch of methods to work with them.
+
+### size (getter)
+
+Number of elements within the cache.
+
+```js
+import SimpleCache from 'core/cache/simple';
+
+const
+  cache = new SimpleCache();
+
+cache.add('foo', 'bar1');
+console.log(cache.size); // 1
+```
+
+### has
+
+Returns true if a value by the specified key exists in the cache.
+
+```js
+import SimpleCache from 'core/cache/simple';
+
+const
+  cache = new SimpleCache();
+
+cache.add('foo', 'bar1');
+console.log(cache.has('foo')); // true
+```
+
+### get
+
+Returns a value from the cache by the specified key.
+
+```js
+import SimpleCache from 'core/cache/simple';
+
+const
+  cache = new SimpleCache();
+
+cache.add('foo', 'bar1');
+console.log(cache.get('foo')); // 'bar1'
+```
+
+### set
+
+Saves a value to the cache by the specified key.
+
+```js
+import SimpleCache from 'core/cache/simple';
+
+const
+  cache = new SimpleCache();
+
+cache.set('foo', 'bar1');
+console.log(cache.has('foo')); // true
+```
+
+### remove
+
+Removes a value from the cache by the specified key.
+
+```js
+import SimpleCache from 'core/cache/simple';
+
+const
+  cache = new SimpleCache();
+
+cache.set('foo', 'bar1');
+console.log(cache.has('foo')); // true
+
+cache.remove('foo');
+console.log(cache.has('foo')); // false
+```
+
+### clear
+
+Clears the cache by the specified filter and returns a map of removed keys.
+
+```js
+import SimpleCache from 'core/cache/simple';
+
+const
+  cache = new SimpleCache();
+
+cache.set('foo1', 'bar1');
+cache.set('foo2', 'bar2');
+cache.set('foo3', 'bar2');
+
+cache.clear((val) => val === 'bar2');
+
+console.log(cache.has('foo1')); // true
+console.log(cache.has('foo1')); // true
+console.log(cache.has('foo2')); // false
+
+cache.clear();
+
+console.log(cache.has('foo1')); // true
 ```
