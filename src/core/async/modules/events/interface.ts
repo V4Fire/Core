@@ -7,6 +7,7 @@
  */
 
 import type Async from 'core/async';
+
 import type {
 
 	IdObject,
@@ -20,7 +21,11 @@ import type {
 
 export type EventId = CanArray<IdObject>;
 
-export type EmitLikeEvents = 'emit' | 'fire' | 'dispatch' | 'dispatchEvent';
+export type EmitLikeEvents =
+	'emit' |
+	'fire' |
+	'dispatch' |
+	'dispatchEvent';
 
 /**
  * Something that looks like an event emitter
@@ -44,7 +49,7 @@ export interface EventEmitterLike {
 /**
  * Extended type of an event emitter
  */
-export type EventEmitterLikeP = Function | EventEmitterLike;
+export type EventEmitterLikeP = ((event: string, handler: Function) => CanUndef<Function>) | EventEmitterLike;
 
 export interface AsyncOnOptions<CTX extends object = Async> extends AsyncCbOptionsSingle<CTX> {
 	/**

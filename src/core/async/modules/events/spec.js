@@ -51,6 +51,38 @@ describe('core/async/modules/events', () => {
 		expect(i).toBe(4);
 	});
 
+	it('emitter as a function', () => {
+		let
+			i = 0;
+
+		const
+			emitter = new EventEmitter();
+
+		const $e = (event, handler) => {
+			emitter.on(event, handler);
+			return () => emitter.off(event, handler);
+		};
+
+		const
+			$a = new Async(),
+			cb = (v) => i += v;
+
+		$a.on($e, 'foo bar', cb);
+		$a.on($e, ['foo', 'bar'], cb);
+
+		emitter.emit('foo', 1);
+		emitter.emit('bar', 1);
+
+		expect(i).toBe(4);
+
+		$a.off();
+
+		emitter.emit('foo', 1);
+		emitter.emit('bar', 1);
+
+		expect(i).toBe(4);
+	});
+
 	it('once event', () => {
 		let
 			i = 0;
@@ -254,7 +286,7 @@ describe('core/async/modules/events', () => {
 		}, 15);
 	});
 
-	it('promise value of promisifyOnce', async () => {
+	it('return value of `promisifyOnce`', async () => {
 		const
 			$a = new Async(),
 			$e = new EventEmitter();

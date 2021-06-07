@@ -67,9 +67,9 @@ extend(Date, 'create', (pattern?: DateCreateValue) => {
 
 			const
 				year = chunks[1].length === 4 ? chunks[1] : chunks[3],
-				day = chunks[1].length === 2 ? chunks[1] : chunks[3];
+				day = chunks[1].length === 4 ? chunks[3] : chunks[1];
 
-			return `${year}-${chunks[2]}-${day}`;
+			return `${year}-${chunks[2].padStart(2, '0')}-${day.padStart(2, '0')}`;
 		};
 
 		const replacer = (str, date, time, zone) => {

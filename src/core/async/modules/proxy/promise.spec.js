@@ -8,7 +8,7 @@
 
 import Async from 'core/async';
 
-describe('core/async/modules/proxy/promise', () => {
+describe('core/async/modules/proxy `promise`', () => {
 	const $a = new Async();
 
 	it('simple promise wrapper with the resolved promise', async () => {

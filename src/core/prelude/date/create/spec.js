@@ -62,6 +62,28 @@ describe('core/prelude/date/create', () => {
 		expect(Date.create(chunks.slice().reverse().join('/'))).toEqual(today);
 	});
 
+	it('new date based on templates without leading zeros', () => {
+		const dates = [
+			{date: '25.3.1989', withZeroes: '25.03.1989'},
+			{date: '3.03.1989', withZeroes: '03.03.1989'},
+			{date: '1989.3.25', withZeroes: '1989.03.25'},
+			{date: '1989.03.3', withZeroes: '1989.03.03'}
+		];
+
+		dates.forEach(({date, withZeroes}) => {
+			const replaceDot = (val, to) => val.replace(/\./g, to);
+
+			expect(Date.create(date))
+				.toEqual(Date.create(withZeroes));
+
+			expect(Date.create(replaceDot(date, '-')))
+				.toEqual(Date.create(replaceDot(withZeroes, '-')));
+
+			expect(Date.create(replaceDot(date, '/')))
+				.toEqual(Date.create(replaceDot(withZeroes, '/')));
+		});
+	});
+
 	it('new date based on standard templates', () => {
 		expect(Date.create(today.toString())).toEqual(today);
 		expect(Date.create(today.toISOString())).toEqual(today);

@@ -13,7 +13,7 @@ import express from 'express';
 import Async from 'core/async';
 import Provider, { provider } from 'core/data';
 
-describe('core/async/modules/data-providers', () => {
+describe('core/async/modules/wrappers', () => {
 	let server;
 
 	beforeAll(() => {
@@ -29,7 +29,7 @@ describe('core/async/modules/data-providers', () => {
 		baseURL = 'http://localhost:3000/ok';
 	}
 
-	describe('wrapDataProvider', () => {
+	describe('`wrapDataProvider`', () => {
 		it('should call methods from the original instance', () => {
 			const
 				$a = new Async(),
@@ -101,7 +101,7 @@ describe('core/async/modules/data-providers', () => {
 		});
 	});
 
-	describe('wrapEventEmitter', () => {
+	describe('`wrapEventEmitter`', () => {
 		it('should have access to event emitter properties and methods', () => {
 			const
 				$a = new Async();

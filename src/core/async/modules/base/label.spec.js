@@ -12,7 +12,7 @@ import symbolGenerator from 'core/symbol';
 const
 	$$ = symbolGenerator();
 
-describe('core/async/modules/base/label', () => {
+describe('core/async/modules/base `label`', () => {
 	const onResolve = (res, label) => (v = label) => {
 		res.push(v);
 		return label;
