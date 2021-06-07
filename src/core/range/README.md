@@ -153,6 +153,8 @@ Each kind of iterators can take a step value to iterate elements (for date range
 1. By values (used by default).
 
 ```js
+import Range from 'core/range';
+
 for (const el of new Range('a', 'c')) {
   // 'a' 'b' 'c'
   console.log(el);
@@ -169,23 +171,11 @@ for (const el of new Range(0, 3).values(2)) {
 }
 ```
 
-2. By pairs of indices and values.
+2. By indices.
 
 ```js
-for (const el of new Range('c', 'a').entries()) {
-  // [0, 'c'] [1, 'b'] [2 'a']
-  console.log(el);
-}
+import Range from 'core/range';
 
-for (const el of new Range('c', 'a').entries(2)) {
-  // [0, 'c'] [1, 'a']
-  console.log(el);
-}
-```
-
-3. By indices.
-
-```js
 for (const el of new Range(3, 1).indices()) {
   // 0 1 2
   console.log(el);
@@ -193,6 +183,22 @@ for (const el of new Range(3, 1).indices()) {
 
 for (const el of new Range(0, 3).indices(2)) {
   // 0 1
+  console.log(el);
+}
+```
+
+3. By pairs of indices and values.
+
+```js
+import Range from 'core/range';
+
+for (const el of new Range('c', 'a').entries()) {
+  // [0, 'c'] [1, 'b'] [2 'a']
+  console.log(el);
+}
+
+for (const el of new Range('c', 'a').entries(2)) {
+  // [0, 'c'] [1, 'a']
   console.log(el);
 }
 ```
@@ -207,6 +213,8 @@ The method returns true if an element is contained inside the range
 (the element can be a simple value or another range).
 
 ```js
+import Range from 'core/range';
+
 // true
 console.log(new Range(0, 10).contains(4));
 
@@ -238,6 +246,8 @@ The method preserves element ordering of the first range.
 The intersection of ranges with different types will always produce an empty range.
 
 ```js
+import Range from 'core/range';
+
 // 8..10
 console.log(new Range(0, 10).intersect(new Range([7], 14)).toString());
 
@@ -266,6 +276,8 @@ The method preserves element ordering of the first range.
 The union of ranges with different types will always produce an empty range.
 
 ```js
+import Range from 'core/range';
+
 // 0..13
 console.log(new Range(0, 10).union(new Range(7, [14])).toString());
 
@@ -291,6 +303,8 @@ The method clones the range and returns a new.
 The method clones the range with reversing of element ordering and returns a new.
 
 ```js
+import Range from 'core/range';
+
 // [3, 2, 1, 0]
 console.log(new Range(0, 3).reverse().toArray());
 ```
@@ -301,6 +315,8 @@ The method clamps an element to be within the range if it falls outside.
 If the range is invalid or empty, the method always returns `null`.
 
 ```js
+import Range from 'core/range';
+
 // 3
 console.log(new Range(0, 10).clamp(3));
 
@@ -320,6 +336,8 @@ If the range is a date range, the value is in milliseconds.
 If the range is invalid or empty, the method always returns `0`.
 
 ```js
+import Range from 'core/range';
+
 // 4
 console.log(new Range(7, 10).span());
 
@@ -334,6 +352,8 @@ Also, it can take a step to iterate elements (for date ranges, it means millisec
 Mind, you can't transform infinite ranges to arrays, but you free to use iterators.
 
 ```js
+import Range from 'core/range';
+
 // [0, 3, 6, 9]
 console.log(new Range(0, 10).toArray(3));
 
@@ -350,6 +370,8 @@ The method creates a string from the range and returns it.
 If the range invalid or empty, the method always returns an empty string.
 
 ```js
+import Range from 'core/range';
+
 // 0..10
 console.log(new Range(0, 10).toString());
 
