@@ -81,7 +81,7 @@ export default class Async<CTX extends object = Async<any>> {
 	protected readonly usedNamespaces: Set<string> = new Set();
 
 	/**
-	 * Link to Async.namespaces
+	 * Link to `Async.namespaces`
 	 */
 	protected get namespaces(): NamespacesDictionary {
 		const

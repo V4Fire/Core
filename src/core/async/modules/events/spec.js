@@ -254,7 +254,7 @@ describe('core/async/modules/events', () => {
 		}, 15);
 	});
 
-	it('promise value of promisifyOnce', async () => {
+	it('return value of `promisifyOnce`', async () => {
 		const
 			$a = new Async(),
 			$e = new EventEmitter();

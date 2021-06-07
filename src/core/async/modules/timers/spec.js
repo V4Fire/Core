@@ -43,7 +43,7 @@ describe('core/async/modules/timers', () => {
 			suspend = `suspend-${method}`.camelize(false),
 			unsuspend = `un${suspend}`;
 
-		it(`simple ${method}`, (done) => {
+		it(`simple \`${method}\``, (done) => {
 			const
 				$a = new Async();
 
@@ -69,7 +69,7 @@ describe('core/async/modules/timers', () => {
 			}, 15);
 		});
 
-		it(`muting of ${method}`, (done) => {
+		it(`muting of \`${method}\``, (done) => {
 			const
 				$a = new Async();
 
@@ -96,7 +96,7 @@ describe('core/async/modules/timers', () => {
 			}, 15);
 		});
 
-		it(`suspending of ${method}`, (done) => {
+		it(`suspending of \`${method}\``, (done) => {
 			const
 				$a = new Async();
 
@@ -132,7 +132,7 @@ describe('core/async/modules/timers', () => {
 			onReject = (spy) => (err) => spy(Object.select(err, ['type', 'reason'])),
 			onMerge = (spy, label) => () => spy(label);
 
-		it(`${method} with labels`, (done) => {
+		it(`\`${method}\` with labels`, (done) => {
 			const
 				$a = new Async(),
 				spy = jasmine.createSpy(),
@@ -158,7 +158,7 @@ describe('core/async/modules/timers', () => {
 			}, 15);
 		});
 
-		it(`${method} with labels and joining`, (done) => {
+		it(`\`${method}\` with labels and joining`, (done) => {
 			const
 				$a = new Async(),
 				spy = jasmine.createSpy(),
@@ -184,7 +184,7 @@ describe('core/async/modules/timers', () => {
 			}, 15);
 		});
 
-		it(`${method} with labels and replacing`, (done) => {
+		it(`\`${method}\` with labels and replacing`, (done) => {
 			const
 				$a = new Async(),
 				spy = jasmine.createSpy(),
@@ -217,7 +217,7 @@ describe('core/async/modules/timers', () => {
 		'idle',
 		'wait'
 	].forEach((method) => {
-		it(method, (done) => {
+		it(`\`${method}\``, (done) => {
 			const
 				$a = new Async(),
 				args = [];
@@ -258,7 +258,7 @@ describe('core/async/modules/timers', () => {
 		});
 	});
 
-	it('requestIdleCallback', (done) => {
+	it('`requestIdleCallback`', (done) => {
 		const
 			$a = new Async(),
 			spy = jasmine.createSpy();
@@ -271,12 +271,12 @@ describe('core/async/modules/timers', () => {
 		});
 	});
 
-	it('promise value of idle', async () => {
+	it('promise value of `idle`', async () => {
 		const $a = new Async();
 		expect(Object.isNumber((await $a.idle()).timeRemaining())).toBeTrue();
 	});
 
-	it('promise value of wait', async () => {
+	it('promise value of `wait`', async () => {
 		const $a = new Async();
 		expect(await $a.wait(() => 1)).toBeTrue();
 	});
