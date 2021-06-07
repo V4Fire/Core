@@ -13,6 +13,10 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 ## v3.xx.x (2021-06-04)
 
+#### :rocket: New Feature
+
+* Added possibility to listen to events from a function emitter `core/async`
+
 #### :bug: Bug Fix
 
 * Fixed `Date.create` with dates without leading zeroes

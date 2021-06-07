@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.xx.x (2021-06-04)
+
+#### :rocket: New Feature
+
+* Added possibility to listen to events from a function emitter
+
 ## v3.40.0 (2021-04-01)
 
 #### :bug: Bug Fix
