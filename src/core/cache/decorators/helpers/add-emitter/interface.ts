@@ -35,22 +35,25 @@ export interface CacheWithEmitter<V = unknown, K = string, T extends Cache<V, K>
 	[eventEmitter]: EventEmitter;
 }
 
-export type AddEmitter = <T extends Cache<V, K>, V = unknown, K = string>(cache: T) => {
-		/** @see [[Cache.set]] */
-		set: T['set'];
+export type AddEmitter =
+	<T extends Cache<V, K>, V = unknown, K extends string = string>(cache: T) => AddEmitterReturn<T>;
 
-		/** @see [[Cache.remove]] */
-		remove: T['remove'];
+export interface AddEmitterReturn<T extends Cache<V, K>, V = unknown, K extends string = string> {
+	/** @see [[Cache.set]] */
+	set: T['set'];
 
-		/** @see [[Cache.clear]] */
-		clear: T['clear'];
+	/** @see [[Cache.remove]] */
+	remove: T['remove'];
 
-		/**
-		 * Subscribes for mutations of the specified cache object
-		 *
-		 * @param method - mutation method to subscribe
-		 * @param obj - object whose mutations we are handling
-		 * @param cb - callback that invokes when occurring mutations
-		 */
-		subscribe<M extends MethodsToWrap>(method: M, obj: object, cb: MutationHandler<T[M]>): void;
-};
+	/** @see [[Cache.clear]] */
+	clear: T['clear'];
+
+	/**
+	 * Subscribes for mutations of the specified cache object
+	 *
+	 * @param method - mutation method to subscribe
+	 * @param obj - object whose mutations we are handling
+	 * @param cb - callback that invokes when occurring mutations
+	 */
+	subscribe<M extends MethodsToWrap>(method: M, obj: object, cb: MutationHandler<T[M]>): void;
+}

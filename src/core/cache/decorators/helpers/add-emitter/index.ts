@@ -22,7 +22,8 @@ import type {
 
 	AddEmitter,
 	CacheWithEmitter,
-	MutationEvent
+	MutationEvent,
+	AddEmitterReturn
 
 } from 'core/cache/decorators/helpers/add-emitter/interface';
 
@@ -36,7 +37,7 @@ export * from 'core/cache/decorators/helpers/add-emitter/interface';
  *
  * @param cache
  */
-const addEmitter: AddEmitter = <T extends Cache<V, K>, V = unknown, K = string>(cache) => {
+const addEmitter: AddEmitter = <T extends Cache<V, K>, V = unknown, K extends string = string>(cache) => {
 	const
 		expandedCache = <Overwrite<CacheWithEmitter<V, K, T>, {[eventEmitter]?: EventEmitter}>><unknown>cache;
 
@@ -77,7 +78,7 @@ const addEmitter: AddEmitter = <T extends Cache<V, K>, V = unknown, K = string>(
 		return result;
 	};
 
-	return <ReturnType<AddEmitter>>{
+	return <AddEmitterReturn<T>>{
 		set: originalSet,
 		remove: originalRemove,
 		clear: originalClear,
