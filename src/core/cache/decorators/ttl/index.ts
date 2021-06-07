@@ -43,7 +43,7 @@ export * from 'core/cache/decorators/ttl/interface';
 export default function addTTL<
 	T extends Cache<V, K>,
 	V = unknown,
-	K = string,
+	K extends string = string,
 >(cache: T, ttl?: number): TTLCache<V, K, CacheWithEmitter<V, K, T>> {
 	// eslint-disable-next-line @typescript-eslint/unbound-method
 	const {
