@@ -140,3 +140,24 @@ We have created a trait. Now we can implement it in a simple class.
     }
   }
   ```
+
+Besides, regular methods, you can also define get/set accessors like this:
+
+```typescript
+abstract class Duckable {
+  get canFly(): boolean {
+      return <any>null;
+  }
+
+  set canFly(value: boolean) {};
+
+  static canFly(self: Duckable): string {
+    if (arguments.length > 1) {
+        const value =  arguments[1];
+        // Setter code
+    } else {
+        return /*Getter code*/;
+    }
+  }
+}
+```
