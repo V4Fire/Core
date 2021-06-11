@@ -11,7 +11,9 @@ Changelog
 
 ## v3.50.1 (2021-06-12)
 
-* Added the ability to set default getset accessors in trait classes.
+#### :rocket: New Feature
+
+* Added possibility to set default get/set accessors in trait classes.
 
 ## v3.44.1 (2021-04-23)
 
