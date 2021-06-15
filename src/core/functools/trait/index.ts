@@ -100,7 +100,9 @@ export function derive(...traits: Function[]) {
 						)
 					) {
 						const newDescriptor: PropertyDescriptor = {
-							enumerable: false
+							enumerable: false,
+							writable: true,
+							configurable: true
 						};
 
 						if (Object.isFunction(traitMethod.value)) {
