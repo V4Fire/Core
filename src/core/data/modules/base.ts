@@ -297,7 +297,6 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 			method = this.method() ?? this.getMethod;
 
 		const mergedOpts = this.getRequestOptions('get', {
-			externalRequest: this.externalRequest,
 			...opts,
 			[queryMethods[method] != null ? 'query' : 'body']: query,
 			method
@@ -545,6 +544,8 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 		}
 
 		return {
+			externalRequest: this.externalRequest,
+
 			...params,
 
 			cacheId: this.cacheId,
