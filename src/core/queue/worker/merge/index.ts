@@ -42,7 +42,7 @@ export default class MergeWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> 
 	protected tasksMap: Dictionary<Task<T, V>> = Object.createDict();
 
 	/**
-	 * The task hash function
+	 * Function to calculate task hash
 	 */
 	protected readonly hashFn: HashFn<T>;
 
