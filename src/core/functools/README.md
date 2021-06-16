@@ -5,7 +5,7 @@ Also, see submodules of this module:
 
 * [`core/functools/deprecation`](src_core_functools_deprecation_index.html);
 * [`core/functools/not-implemented`](src_core_functools_not-implemented_index.html);
-* [`core/functools/trait`](src_core_functools_trait_index.html);
+* [`core/functools/trait`](src_core_functools_trait_index.html).
 
 ## once
 
