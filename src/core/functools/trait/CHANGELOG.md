@@ -13,7 +13,7 @@ Changelog
 
 #### :rocket: New Feature
 
-* Added possibility to set default get/set accessors in trait classes.
+* Added possibility to set default get/set accessors within trait classes
 
 ## v3.44.1 (2021-04-23)
 

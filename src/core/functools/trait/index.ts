@@ -89,23 +89,25 @@ export function derive(...traits: Function[]) {
 						defMethod = Object.getOwnPropertyDescriptor(trait, key),
 						traitMethod = Object.getOwnPropertyDescriptor(trait.prototype, key);
 
-					if (
+					const canDerive =
 						defMethod != null &&
 						traitMethod != null &&
 						!(key in proto) &&
-						Object.isFunction(defMethod.value) &&
-						(
-								Object.isFunction(traitMethod.value) ||
-								Object.isFunction(traitMethod.get)
-						)
-					) {
+
+						Object.isFunction(defMethod.value) && (
+							Object.isFunction(traitMethod.value) ||
+							Object.isFunction(traitMethod.get) ||
+							Object.isFunction(traitMethod.set)
+						);
+
+					if (canDerive) {
 						const newDescriptor: PropertyDescriptor = {
 							enumerable: false,
 							writable: true,
 							configurable: true
 						};
 
-						if (Object.isFunction(traitMethod.value)) {
+						if (Object.isFunction(traitMethod?.value)) {
 							// eslint-disable-next-line func-name-matching
 							newDescriptor.value = function defaultMethod(...args: unknown[]) {
 								return originalTrait[key](this, ...args);

@@ -1,10 +1,10 @@
 # core/functools/trait
 
 This module provides a bunch of functions to create and implement traits.
-A trait is the special kind of an abstract class that is used as an interface.
+A trait is the special kind of abstract class that is used as an interface.
 Why would we need that? Well, unlike Java or Kotlin, TypeScript interfaces can't have default implementations of methods.
 So we need to implement each method in our classes even if the implementation doesn't change.
-And this is where traits come into play. But how it works? Ok, let's enumerate the steps to create a trait:
+This is where traits come into play. How it works? Ok, let's enumerate the steps to create a trait:
 
 1. Create an abstract class, where define all necessary abstract methods and properties (yes, the trait can also define properties,
    not only methods).
@@ -141,22 +141,23 @@ We have created a trait. Now we can implement it in a simple class.
   }
   ```
 
-Besides, regular methods, you can also define get/set accessors like this:
+Besides regular methods, you can also define get/set accessors like this:
 
 ```typescript
 abstract class Duckable {
   get canFly(): boolean {
-      return <any>null;
+    return <any>null;
   }
 
   set canFly(value: boolean) {};
 
   static canFly(self: Duckable): string {
     if (arguments.length > 1) {
-        const value =  arguments[1];
-        // Setter code
+      const value = arguments[1];
+      // Setter code
+
     } else {
-        return /*Getter code*/;
+      return /* Getter code */;
     }
   }
 }

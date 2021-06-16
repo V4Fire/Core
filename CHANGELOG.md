@@ -15,7 +15,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :rocket: New Feature
 
-* In `derive` decorator added possibility to set default get/set accessors in trait classes.
+* Added possibility to set default get/set accessors within trait classes `core/functools/trait`
 
 ## v3.50.0 (2021-06-07)
 
