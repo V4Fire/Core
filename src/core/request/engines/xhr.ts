@@ -12,11 +12,12 @@ import XMLHttpRequest from 'xhr2';
 
 import { IS_NODE } from 'core/env';
 import Then from 'core/then';
+import { isOnline } from 'core/net';
 
 import Response from 'core/request/response';
 import RequestError from 'core/request/error';
 
-import type { RequestEngine } from 'core/request/interface';
+import type { RequestEngine, NormalizedCreateRequestOptions } from 'core/request/interface';
 
 /**
  * Creates request by using XMLHttpRequest with the specified parameters and returns a promise
@@ -114,7 +115,16 @@ const request: RequestEngine = (params) => {
 		xhr.setRequestHeader('Content-Type', contentType);
 	}
 
-	return new Then<Response>((resolve, reject, onAbort) => {
+	return new Then<Response>(async (resolve, reject, onAbort) => {
+		const
+			{status} = await Then.resolve(isOnline(), p.parent);
+
+		if (!status) {
+			return reject(new RequestError('offline', {
+				request: <NormalizedCreateRequestOptions>xhr
+			}));
+		}
+
 		onAbort(() => {
 			xhr.abort();
 		});

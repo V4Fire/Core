@@ -103,7 +103,7 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 		super();
 
 		const
-			id = this.getCacheKey(Object.select(opts, 'externalRequest')),
+			id = this.getCacheKey(opts),
 			cacheVal = instanceCache[id];
 
 		if (cacheVal != null) {
@@ -116,10 +116,6 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 		this.cacheId = id;
 		this.async = new Async(this);
 		this.emitter = new EventEmitter({maxListeners: 1e3, newListener: false});
-
-		if (Object.isBoolean(opts.externalRequest)) {
-			this.setReadonlyParam('externalRequest', opts.externalRequest);
-		}
 
 		if (opts.socket || this.socketURL != null) {
 			this.connect().then(this.initSocketBehaviour.bind(this), stderr);
@@ -544,8 +540,6 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 		}
 
 		return {
-			externalRequest: this.externalRequest,
-
 			...params,
 
 			cacheId: this.cacheId,
