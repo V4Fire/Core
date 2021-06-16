@@ -11,8 +11,9 @@ import { createDateModifier, createStaticDateModifier } from 'core/prelude/date/
 
 /** @see [[Date.beginningOfDay]] */
 extend(Date.prototype, 'beginningOfDay', function beginningOfDay(this: Date): Date {
-	this.clone().setHours(0, 0, 0, 0);
-	return this;
+	const date = this.clone();
+	date.setHours(0, 0, 0, 0);
+	return date;
 });
 
 /** @see [[DateConstructor.beginningOfDay]] */
@@ -20,8 +21,9 @@ extend(Date, 'beginningOfDay', (date: Date) => date.beginningOfDay());
 
 /** @see [[Date.endOfDay]] */
 extend(Date.prototype, 'endOfDay', function endOfDay(this: Date): Date {
-	this.clone().setHours(23, 59, 59, 999);
-	return this;
+	const date = this.clone();
+	date.setHours(23, 59, 59, 999);
+	return date;
 });
 
 /** @see [[DateConstructor.endOfDay]] */
