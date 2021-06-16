@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.52.0 (2021-06-16)
+
+#### :boom: Breaking Change
+
+* Now the date methods `beginningOf.../endOf...` returns a new date
+
 ## v3.51.0 (2021-06-15)
 
 #### :rocket: New Feature

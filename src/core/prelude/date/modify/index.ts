@@ -11,7 +11,7 @@ import { createDateModifier, createStaticDateModifier } from 'core/prelude/date/
 
 /** @see [[Date.beginningOfDay]] */
 extend(Date.prototype, 'beginningOfDay', function beginningOfDay(this: Date): Date {
-	this.setHours(0, 0, 0, 0);
+	this.clone().setHours(0, 0, 0, 0);
 	return this;
 });
 
@@ -20,7 +20,7 @@ extend(Date, 'beginningOfDay', (date: Date) => date.beginningOfDay());
 
 /** @see [[Date.endOfDay]] */
 extend(Date.prototype, 'endOfDay', function endOfDay(this: Date): Date {
-	this.setHours(23, 59, 59, 999);
+	this.clone().setHours(23, 59, 59, 999);
 	return this;
 });
 
@@ -29,9 +29,9 @@ extend(Date, 'endOfDay', (date: Date) => date.endOfDay());
 
 /** @see [[Date.beginningOfWeek]] */
 extend(Date.prototype, 'beginningOfWeek', function beginningOfWeek(this: Date): Date {
-	this.setDate(this.getDate() - this.getDay());
-	this.beginningOfDay();
-	return this;
+	const date = this.clone();
+	date.setDate(this.getDate() - this.getDay());
+	return date.beginningOfDay();
 });
 
 /** @see [[DateConstructor.beginningOfWeek]] */
@@ -39,9 +39,9 @@ extend(Date, 'beginningOfWeek', (date: Date) => date.beginningOfWeek());
 
 /** @see [[Date.endOfWeek]] */
 extend(Date.prototype, 'endOfWeek', function endOfWeek(this: Date): Date {
-	this.setDate(this.getDate() + 6 - this.getDay());
-	this.endOfDay();
-	return this;
+	const date = this.clone();
+	date.setDate(this.getDate() + 6 - this.getDay());
+	return date.endOfDay();
 });
 
 /** @see [[DateConstructor.endOfWeek]] */
@@ -49,9 +49,9 @@ extend(Date, 'endOfWeek', (date: Date) => date.endOfWeek());
 
 /** @see [[Date.beginningOfMonth]] */
 extend(Date.prototype, 'beginningOfMonth', function beginningOfMonth(this: Date): Date {
-	this.setDate(1);
-	this.beginningOfDay();
-	return this;
+	const date = this.clone();
+	date.setDate(1);
+	return date.beginningOfDay();
 });
 
 /** @see [[DateConstructor.beginningOfMonth]] */
@@ -59,9 +59,9 @@ extend(Date, 'beginningOfMonth', (date: Date) => date.beginningOfMonth());
 
 /** @see [[Date.endOfMonth]] */
 extend(Date.prototype, 'endOfMonth', function endOfMonth(this: Date): Date {
-	this.setMonth(this.getMonth() + 1, 0);
-	this.endOfDay();
-	return this;
+	const date = this.clone();
+	date.setMonth(this.getMonth() + 1, 0);
+	return date.endOfDay();
 });
 
 /** @see [[DateConstructor.endOfMonth]] */
@@ -77,9 +77,9 @@ extend(Date, 'daysInMonth', (date: Date) => date.daysInMonth());
 
 /** @see [[Date.beginningOfYear]] */
 extend(Date.prototype, 'beginningOfYear', function beginningOfYear(this: Date): Date {
-	this.setMonth(0, 1);
-	this.beginningOfDay();
-	return this;
+	const date = this.clone();
+	date.setMonth(0, 1);
+	return date.beginningOfDay();
 });
 
 /** @see [[DateConstructor.beginningOfYear]] */
@@ -87,9 +87,9 @@ extend(Date, 'beginningOfYear', (date: Date) => date.beginningOfYear());
 
 /** @see [[Date.endOfYear]] */
 extend(Date.prototype, 'endOfYear', function endOfYear(this: Date): Date {
-	this.setMonth(12, 0);
-	this.endOfDay();
-	return this;
+	const date = this.clone();
+	date.setMonth(12, 0);
+	return date.endOfDay();
 });
 
 /** @see [[DateConstructor.endOfYear]] */
