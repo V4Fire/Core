@@ -244,9 +244,10 @@ pre {
 							<h1>core/url</h1>
 						</a>
 						<p>This module provides a bunch of functions to work with URL strings, such as parsing/serializing, concatenating groups of URLs to one, etc.</p>
-						<a href="#concatenation-of-url-s" id="concatenation-of-url-s" style="color: inherit; text-decoration: none;">
-							<h2>Concatenation of URL-s</h2>
+						<a href="#concaturls" id="concaturls" style="color: inherit; text-decoration: none;">
+							<h2>concatURLs</h2>
 						</a>
+						<p>Concatenates the specified parts of URL-s with correctly arranging of slashes and returns a new string.</p>
 						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">concatURLs</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/url&#039;</span><span style="color: #000000">;</span>
 <span style="color: #795E26">concatURLs</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;foo/baz&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;/bar&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;bla&#039;</span><span style="color: #000000">) === </span><span style="color: #A31515">&#039;/foo/baz/bar/bla&#039;</span><span style="color: #000000">;</span>
 </code></pre>
@@ -267,7 +268,59 @@ pre {
 <span style="color: #008000">// {foo: 1, bar: true, baz: [1, 2, 3], ban: {a: 2}}</span>
 <span style="color: #795E26">fromQueryString</span><span style="color: #000000">(</span><span style="color: #795E26">toQueryString</span><span style="color: #000000">(</span><span style="color: #001080">data</span><span style="color: #000000">), {</span><span style="color: #001080">separator:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;_&#039;</span><span style="color: #000000">});</span>
 </code></pre>
-						<p>These methods can take additional options:</p>
+						<a href="#fromquerystring" id="fromquerystring" style="color: inherit; text-decoration: none;">
+							<h3>fromQueryString</h3>
+						</a>
+						<p>Creates a querystring from the specified data and returns it. The method can take additional options:</p>
+						<pre><code class="language-typescript"><span style="color: #0000FF">interface</span><span style="color: #000000"> </span><span style="color: #267F99">FromQueryStringOptions</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #008000">/**</span>
+<span style="color: #008000">   * If false, then the passed string won&#039;t be decoded by using `decodeURIComponent`</span>
+<span style="color: #008000">   * </span><span style="color: #0000FF">@default</span><span style="color: #008000"> </span><span style="color: #001080">`true`</span>
+<span style="color: #008000">   */</span>
+<span style="color: #000000">  </span><span style="color: #001080">decode</span><span style="color: #000000">?: </span><span style="color: #267F99">boolean</span><span style="color: #000000">;</span>
+
+<span style="color: #000000">  </span><span style="color: #008000">/**</span>
+<span style="color: #008000">   * If false, then all parsed values won&#039;t be converted from a string</span>
+<span style="color: #008000">   *</span>
+<span style="color: #008000">   * </span><span style="color: #0000FF">@default</span><span style="color: #008000"> </span><span style="color: #001080">`true`</span>
+<span style="color: #008000">   *</span>
+<span style="color: #008000">   * </span><span style="color: #0000FF">@example</span>
+<span style="color: #008000">   * ```js</span>
+<span style="color: #008000">   * // {foo: &#039;1&#039;}</span>
+<span style="color: #008000">   * fromQueryString(&#039;foo=1&#039;, {convert: false});</span>
+<span style="color: #008000">   * ```</span>
+<span style="color: #008000">   */</span>
+<span style="color: #000000">  </span><span style="color: #001080">convert</span><span style="color: #000000">?: </span><span style="color: #267F99">boolean</span><span style="color: #000000">;</span>
+
+<span style="color: #000000">  </span><span style="color: #008000">/**</span>
+<span style="color: #008000">   * Separator for nested properties</span>
+<span style="color: #008000">   *</span>
+<span style="color: #008000">   * </span><span style="color: #0000FF">@example</span>
+<span style="color: #008000">   * ```js</span>
+<span style="color: #008000">   * // {foo: {bar: 1}}</span>
+<span style="color: #008000">   * fromQueryString(&#039;foo_bar=1&#039;, {separator: &#039;_&#039;});</span>
+<span style="color: #008000">   * ```</span>
+<span style="color: #008000">   */</span>
+<span style="color: #000000">  </span><span style="color: #001080">separator</span><span style="color: #000000">?: </span><span style="color: #267F99">string</span><span style="color: #000000">;</span>
+
+<span style="color: #000000">  </span><span style="color: #008000">/**</span>
+<span style="color: #008000">   * If true, then nested properties will be decoded by using `[]` syntax</span>
+<span style="color: #008000">   *</span>
+<span style="color: #008000">   * </span><span style="color: #0000FF">@default</span><span style="color: #008000"> </span><span style="color: #001080">`false`</span>
+<span style="color: #008000">   *</span>
+<span style="color: #008000">   * </span><span style="color: #0000FF">@example</span>
+<span style="color: #008000">   * ```js</span>
+<span style="color: #008000">   * // {foo: [1], bar: {bla: 2}}</span>
+<span style="color: #008000">   * fromQueryString(&#039;foo[]=1&amp;bar[bla]=2&#039;, {arraySyntax: true});</span>
+<span style="color: #008000">   * ```</span>
+<span style="color: #008000">   */</span>
+<span style="color: #000000">  </span><span style="color: #001080">arraySyntax</span><span style="color: #000000">?: </span><span style="color: #267F99">boolean</span><span style="color: #000000">;</span>
+<span style="color: #000000">}</span>
+</code></pre>
+						<a href="#toquerystring" id="toquerystring" style="color: inherit; text-decoration: none;">
+							<h3>toQueryString</h3>
+						</a>
+						<p>Creates a querystring from the specified data and returns it. The method can take additional options:</p>
 						<pre><code class="language-typescript"><span style="color: #0000FF">interface</span><span style="color: #000000"> </span><span style="color: #267F99">ToQueryStringOptions</span><span style="color: #000000"> {</span>
 <span style="color: #000000">  </span><span style="color: #008000">/**</span>
 <span style="color: #008000">   * If false, then the result string won&#039;t be encoded by using `encodeURIComponent`</span>
@@ -317,51 +370,6 @@ pre {
 <span style="color: #008000">   */</span>
 <span style="color: #000000">  </span><span style="color: #795E26">paramsFilter</span><span style="color: #000000">?(</span><span style="color: #001080">value</span><span style="color: #000000">: </span><span style="color: #267F99">unknown</span><span style="color: #000000">, </span><span style="color: #001080">key</span><span style="color: #000000">: </span><span style="color: #267F99">string</span><span style="color: #000000">, </span><span style="color: #001080">path</span><span style="color: #000000">?: </span><span style="color: #267F99">string</span><span style="color: #000000">): </span><span style="color: #267F99">unknown</span><span style="color: #000000">;</span>
 <span style="color: #000000">}</span>
-
-<span style="color: #0000FF">interface</span><span style="color: #000000"> </span><span style="color: #267F99">FromQueryStringOptions</span><span style="color: #000000"> {</span>
-<span style="color: #000000">  </span><span style="color: #008000">/**</span>
-<span style="color: #008000">   * If false, then the passed string won&#039;t be decoded by using `decodeURIComponent`</span>
-<span style="color: #008000">   * </span><span style="color: #0000FF">@default</span><span style="color: #008000"> </span><span style="color: #001080">`true`</span>
-<span style="color: #008000">   */</span>
-<span style="color: #000000">  </span><span style="color: #001080">decode</span><span style="color: #000000">?: </span><span style="color: #267F99">boolean</span><span style="color: #000000">;</span>
-
-<span style="color: #000000">  </span><span style="color: #008000">/**</span>
-<span style="color: #008000">   * If false, then all parsed values won&#039;t be converted from a string</span>
-<span style="color: #008000">   *</span>
-<span style="color: #008000">   * </span><span style="color: #0000FF">@default</span><span style="color: #008000"> </span><span style="color: #001080">`true`</span>
-<span style="color: #008000">   *</span>
-<span style="color: #008000">   * </span><span style="color: #0000FF">@example</span>
-<span style="color: #008000">   * ```js</span>
-<span style="color: #008000">   * // {foo: &#039;1&#039;}</span>
-<span style="color: #008000">   * fromQueryString(&#039;foo=1&#039;, {convert: false});</span>
-<span style="color: #008000">   * ```</span>
-<span style="color: #008000">   */</span>
-<span style="color: #000000">  </span><span style="color: #001080">convert</span><span style="color: #000000">?: </span><span style="color: #267F99">boolean</span><span style="color: #000000">;</span>
-
-<span style="color: #000000">  </span><span style="color: #008000">/**</span>
-<span style="color: #008000">   * Separator for nested properties</span>
-<span style="color: #008000">   *</span>
-<span style="color: #008000">   * </span><span style="color: #0000FF">@example</span>
-<span style="color: #008000">   * ```js</span>
-<span style="color: #008000">   * // {foo: {bar: 1}}</span>
-<span style="color: #008000">   * fromQueryString(&#039;foo_bar=1&#039;, {separator: &#039;_&#039;});</span>
-<span style="color: #008000">   * ```</span>
-<span style="color: #008000">   */</span>
-<span style="color: #000000">  </span><span style="color: #001080">separator</span><span style="color: #000000">?: </span><span style="color: #267F99">string</span><span style="color: #000000">;</span>
-
-<span style="color: #000000">  </span><span style="color: #008000">/**</span>
-<span style="color: #008000">   * If true, then nested properties will be decoded by using `[]` syntax</span>
-<span style="color: #008000">   *</span>
-<span style="color: #008000">   * </span><span style="color: #0000FF">@default</span><span style="color: #008000"> </span><span style="color: #001080">`false`</span>
-<span style="color: #008000">   *</span>
-<span style="color: #008000">   * </span><span style="color: #0000FF">@example</span>
-<span style="color: #008000">   * ```js</span>
-<span style="color: #008000">   * // {foo: [1], bar: {bla: 2}}</span>
-<span style="color: #008000">   * fromQueryString(&#039;foo[]=1&amp;bar[bla]=2&#039;, {arraySyntax: true});</span>
-<span style="color: #008000">   * ```</span>
-<span style="color: #008000">   */</span>
-<span style="color: #000000">  </span><span style="color: #001080">arraySyntax</span><span style="color: #000000">?: </span><span style="color: #267F99">boolean</span><span style="color: #000000">;</span>
-<span style="color: #000000">}</span>
 </code></pre>
 					</div>
 				</div>
@@ -371,26 +379,21 @@ pre {
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Interfaces</h3>
+							<h3>References</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/src_core_url.fromquerystringoptions.html" class="tsd-kind-icon">From<wbr>Query<wbr>String<wbr>Options</a></li>
-								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/src_core_url.toquerystringoptions.html" class="tsd-kind-icon">To<wbr>Query<wbr>String<wbr>Options</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section ">
-							<h3>Variables</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="src_core_url.html#isabsurl" class="tsd-kind-icon">is<wbr>AbsURL</a></li>
-								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="src_core_url.html#isurlwithslash" class="tsd-kind-icon">isURLWith<wbr>Slash</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_url.html#fromquerystringoptions" class="tsd-kind-icon">From<wbr>Query<wbr>String<wbr>Options</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_url.html#toquerystringoptions" class="tsd-kind-icon">To<wbr>Query<wbr>String<wbr>Options</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_url.html#concaturls" class="tsd-kind-icon">concatURLs</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_url.html#concaturls-1" class="tsd-kind-icon">concat<wbr>Urls</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_url.html#defaulttoquerystringparamsfilter" class="tsd-kind-icon">default<wbr>ToQuery<wbr>String<wbr>Params<wbr>Filter</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_url.html#fromquerystring" class="tsd-kind-icon">from<wbr>Query<wbr>String</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_url.html#isabsurl" class="tsd-kind-icon">is<wbr>AbsURL</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_url.html#isurlwithslash" class="tsd-kind-icon">isURLWith<wbr>Slash</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Functions</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-function tsd-parent-kind-module"><a href="src_core_url.html#concaturls" class="tsd-kind-icon">concatURLs</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-module"><a href="src_core_url.html#concaturls-1" class="tsd-kind-icon">concat<wbr>Urls</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-module"><a href="src_core_url.html#defaulttoquerystringparamsfilter" class="tsd-kind-icon">default<wbr>ToQuery<wbr>String<wbr>Params<wbr>Filter</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-module"><a href="src_core_url.html#fromquerystring" class="tsd-kind-icon">from<wbr>Query<wbr>String</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-module"><a href="src_core_url.html#toquerystring" class="tsd-kind-icon">to<wbr>Query<wbr>String</a></li>
 							</ul>
 						</section>
@@ -398,239 +401,50 @@ pre {
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Variables</h2>
-				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module">
-					<a name="isabsurl" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagConst">Const</span> is<wbr>AbsURL</h3>
-					<div class="tsd-signature tsd-kind-icon">is<wbr>AbsURL<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RegExp</span><span class="tsd-signature-symbol"> = ...</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/url/const.ts#L10">src/core/url/const.ts:10</a></li>
-						</ul>
-					</aside>
+				<h2>References</h2>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="fromquerystringoptions" class="tsd-anchor"></a>
+					<h3>From<wbr>Query<wbr>String<wbr>Options</h3>
+					Re-exports <a href="../interfaces/src_core_url_interface.fromquerystringoptions.html">FromQueryStringOptions</a>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module">
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="toquerystringoptions" class="tsd-anchor"></a>
+					<h3>To<wbr>Query<wbr>String<wbr>Options</h3>
+					Re-exports <a href="../interfaces/src_core_url_interface.toquerystringoptions.html">ToQueryStringOptions</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="concaturls" class="tsd-anchor"></a>
+					<h3>concatURLs</h3>
+					Re-exports <a href="src_core_url_concat.html#concaturls">concatURLs</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="concaturls-1" class="tsd-anchor"></a>
+					<h3>concat<wbr>Urls</h3>
+					Re-exports <a href="src_core_url_concat.html#concaturls-1">concatUrls</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="defaulttoquerystringparamsfilter" class="tsd-anchor"></a>
+					<h3>default<wbr>ToQuery<wbr>String<wbr>Params<wbr>Filter</h3>
+					Re-exports <a href="src_core_url_const.html#defaulttoquerystringparamsfilter">defaultToQueryStringParamsFilter</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="fromquerystring" class="tsd-anchor"></a>
+					<h3>from<wbr>Query<wbr>String</h3>
+					Re-exports <a href="src_core_url_convert.html#fromquerystring">fromQueryString</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="isabsurl" class="tsd-anchor"></a>
+					<h3>is<wbr>AbsURL</h3>
+					Re-exports <a href="src_core_url_const.html#isabsurl">isAbsURL</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
 					<a name="isurlwithslash" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagConst">Const</span> isURLWith<wbr>Slash</h3>
-					<div class="tsd-signature tsd-kind-icon">isURLWith<wbr>Slash<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RegExp</span><span class="tsd-signature-symbol"> = ...</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/url/const.ts#L11">src/core/url/const.ts:11</a></li>
-						</ul>
-					</aside>
+					<h3>isURLWith<wbr>Slash</h3>
+					Re-exports <a href="src_core_url_const.html#isurlwithslash">isURLWithSlash</a>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Functions</h2>
-				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
-					<a name="concaturls" class="tsd-anchor"></a>
-					<h3>concatURLs</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-						<li class="tsd-signature tsd-kind-icon">concatURLs<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>urls<span class="tsd-signature-symbol">: </span><a href="index.html#nullable" class="tsd-signature-type" data-tsd-kind="Type alias">Nullable</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/url/concat.ts#L26">src/core/url/concat.ts:26</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Concatenates the specified parts of URL-s with correctly arranging of slashes and returns a new string</p>
-								</div>
-								<dl class="tsd-comment-tags">
-									<dt>example</dt>
-									<dd><pre><code class="language-js"><span style="color: #008000">// &#039;/foo/baz/bar/bla&#039;</span>
-<span style="color: #795E26">concatURLs</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;foo/baz&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;/bar&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;bla&#039;</span><span style="color: #000000">);</span>
-
-<span style="color: #008000">// &#039;http://foo.bar/bla&#039;</span>
-<span style="color: #795E26">concatURLs</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;http://foo.bar&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;bla&#039;</span><span style="color: #000000">);</span>
-</code></pre>
-									</dd>
-								</dl>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>urls: <a href="index.html#nullable" class="tsd-signature-type" data-tsd-kind="Type alias">Nullable</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span></h5>
-									<div class="tsd-comment tsd-typography">
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
-					<a name="concaturls-1" class="tsd-anchor"></a>
-					<h3>concat<wbr>Urls</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-						<li class="tsd-signature tsd-kind-icon">concat<wbr>Urls<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>urls<span class="tsd-signature-symbol">: </span><a href="index.html#nullable" class="tsd-signature-type" data-tsd-kind="Type alias">Nullable</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/url/concat.ts#L63">src/core/url/concat.ts:63</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<dl class="tsd-comment-tags">
-									<dt>deprecated</dt>
-									<dd></dd>
-									<dt>see</dt>
-									<dd><p><a href="src_core_url.html#concaturls">concatURLs</a></p>
-									</dd>
-								</dl>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>urls: <a href="index.html#nullable" class="tsd-signature-type" data-tsd-kind="Type alias">Nullable</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span></h5>
-									<div class="tsd-comment tsd-typography">
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
-					<a name="defaulttoquerystringparamsfilter" class="tsd-anchor"></a>
-					<h3>default<wbr>ToQuery<wbr>String<wbr>Params<wbr>Filter</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-						<li class="tsd-signature tsd-kind-icon">default<wbr>ToQuery<wbr>String<wbr>Params<wbr>Filter<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/url/const.ts#L17">src/core/url/const.ts:17</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Default function to filter query parameters to serialize with the <code>toQueryString</code> method</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>value: <span class="tsd-signature-type">unknown</span></h5>
-									<div class="tsd-comment tsd-typography">
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
-					<a name="fromquerystring" class="tsd-anchor"></a>
-					<h3>from<wbr>Query<wbr>String</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-						<li class="tsd-signature tsd-kind-icon">from<wbr>Query<wbr>String<span class="tsd-signature-symbol">(</span>query<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, decode<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/index.dictionary.html" class="tsd-signature-type" data-tsd-kind="Interface">Dictionary</a></li>
-						<li class="tsd-signature tsd-kind-icon">from<wbr>Query<wbr>String<span class="tsd-signature-symbol">(</span>query<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, opts<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_url_interface.fromquerystringoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">FromQueryStringOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/index.dictionary.html" class="tsd-signature-type" data-tsd-kind="Interface">Dictionary</a></li>
-						<li class="tsd-signature tsd-kind-icon">from<wbr>Query<wbr>String<span class="tsd-signature-symbol">(</span>query<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, opts<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>convert<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/src_core_url_interface.fromquerystringoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">FromQueryStringOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/index.dictionary.html" class="tsd-signature-type" data-tsd-kind="Interface">Dictionary</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol">&gt;</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/url/convert.ts#L167">src/core/url/convert.ts:167</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Creates a dictionary from the specified querystring and returns it</p>
-								</div>
-								<dl class="tsd-comment-tags">
-									<dt>example</dt>
-									<dd><pre><code class="language-js"><span style="color: #008000">// {a: 1}</span>
-<span style="color: #795E26">fromQueryString</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;?a=1&#039;</span><span style="color: #000000">);</span>
-</code></pre>
-									</dd>
-								</dl>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>query: <span class="tsd-signature-type">string</span></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> decode: <span class="tsd-signature-type">boolean</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="../interfaces/index.dictionary.html" class="tsd-signature-type" data-tsd-kind="Interface">Dictionary</a></h4>
-						</li>
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/url/convert.ts#L181">src/core/url/convert.ts:181</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Creates a dictionary from the specified querystring and returns it</p>
-								</div>
-								<dl class="tsd-comment-tags">
-									<dt>example</dt>
-									<dd><pre><code class="language-js"><span style="color: #008000">// {a: [1, 2]}</span>
-<span style="color: #795E26">fromQueryString</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;?a[]=1&amp;a[]=2&#039;</span><span style="color: #000000">, {</span><span style="color: #001080">arraySyntax:</span><span style="color: #000000"> </span><span style="color: #0000FF">true</span><span style="color: #000000">});</span>
-</code></pre>
-									</dd>
-								</dl>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>query: <span class="tsd-signature-type">string</span></h5>
-								</li>
-								<li>
-									<h5>opts: <a href="../interfaces/src_core_url_interface.fromquerystringoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">FromQueryStringOptions</a></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>additional options</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="../interfaces/index.dictionary.html" class="tsd-signature-type" data-tsd-kind="Interface">Dictionary</a></h4>
-						</li>
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/url/convert.ts#L196">src/core/url/convert.ts:196</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Creates a dictionary from the specified querystring and returns it.
-									This overload doesn&#39;t convert key values from a string.</p>
-								</div>
-								<dl class="tsd-comment-tags">
-									<dt>example</dt>
-									<dd><pre><code class="language-js"><span style="color: #008000">// {a: &#039;1&#039;}</span>
-<span style="color: #795E26">fromQueryString</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;?a=1&#039;</span><span style="color: #000000">, {</span><span style="color: #001080">convert:</span><span style="color: #000000"> </span><span style="color: #0000FF">false</span><span style="color: #000000">});</span>
-</code></pre>
-									</dd>
-								</dl>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>query: <span class="tsd-signature-type">string</span></h5>
-								</li>
-								<li>
-									<h5>opts: <span class="tsd-signature-symbol">{ </span>convert<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/src_core_url_interface.fromquerystringoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">FromQueryStringOptions</a></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>additional options</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="../interfaces/index.dictionary.html" class="tsd-signature-type" data-tsd-kind="Interface">Dictionary</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol">&gt;</span></h4>
-						</li>
-					</ul>
-				</section>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
 					<a name="toquerystring" class="tsd-anchor"></a>
 					<h3>to<wbr>Query<wbr>String</h3>
@@ -717,29 +531,29 @@ pre {
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="../interfaces/src_core_url.fromquerystringoptions.html" class="tsd-kind-icon">From<wbr>Query<wbr>String<wbr>Options</a>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_url.html#fromquerystringoptions" class="tsd-kind-icon">From<wbr>Query<wbr>String<wbr>Options</a>
 					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="../interfaces/src_core_url.toquerystringoptions.html" class="tsd-kind-icon">To<wbr>Query<wbr>String<wbr>Options</a>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_url.html#toquerystringoptions" class="tsd-kind-icon">To<wbr>Query<wbr>String<wbr>Options</a>
 					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-module">
-						<a href="src_core_url.html#isabsurl" class="tsd-kind-icon">is<wbr>AbsURL</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-module">
-						<a href="src_core_url.html#isurlwithslash" class="tsd-kind-icon">isURLWith<wbr>Slash</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module">
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
 						<a href="src_core_url.html#concaturls" class="tsd-kind-icon">concatURLs</a>
 					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module">
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
 						<a href="src_core_url.html#concaturls-1" class="tsd-kind-icon">concat<wbr>Urls</a>
 					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module">
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
 						<a href="src_core_url.html#defaulttoquerystringparamsfilter" class="tsd-kind-icon">default<wbr>ToQuery<wbr>String<wbr>Params<wbr>Filter</a>
 					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-module">
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
 						<a href="src_core_url.html#fromquerystring" class="tsd-kind-icon">from<wbr>Query<wbr>String</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_url.html#isabsurl" class="tsd-kind-icon">is<wbr>AbsURL</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_url.html#isurlwithslash" class="tsd-kind-icon">isURLWith<wbr>Slash</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module">
 						<a href="src_core_url.html#toquerystring" class="tsd-kind-icon">to<wbr>Query<wbr>String</a>

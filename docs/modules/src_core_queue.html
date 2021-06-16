@@ -244,7 +244,7 @@ pre {
 							<h1>core/queue</h1>
 						</a>
 						<p>This module provides an abstract class for the <a href="src_core_queue.html#queue">Queue</a> data structure.
-						The submodules contains different classes and interfaces that extends or implements that class.</p>
+						The submodules contain different classes and interfaces that extends or implements that class.</p>
 						<p>The main module re-exports these implementations:</p>
 						<ul>
 							<li><code>AbstractQueue</code> — an alias for <a href="src_core_queue_interface.html"><code>core/queue/interface/Queue</code></a>;</li>
@@ -294,20 +294,15 @@ pre {
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_queue.html#abstractqueue" class="tsd-kind-icon">Abstract<wbr>Queue</a></li>
 								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_queue.html#abstractworkerqueue" class="tsd-kind-icon">Abstract<wbr>Worker<wbr>Queue</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_queue.html#createtasks" class="tsd-kind-icon">Create<wbr>Tasks</a></li>
 								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_queue.html#mergeworkerqueue" class="tsd-kind-icon">Merge<wbr>Worker<wbr>Queue</a></li>
 								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_queue.html#orderedqueue" class="tsd-kind-icon">Ordered<wbr>Queue</a></li>
 								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_queue.html#queue" class="tsd-kind-icon">Queue</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_queue.html#queueoptions" class="tsd-kind-icon">Queue<wbr>Options</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_queue.html#queueworker" class="tsd-kind-icon">Queue<wbr>Worker</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_queue.html#task" class="tsd-kind-icon">Task</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_queue.html#tasks" class="tsd-kind-icon">Tasks</a></li>
 								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_queue.html#workerqueueoptions" class="tsd-kind-icon">Worker<wbr>Queue<wbr>Options</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section ">
-							<h3>Interfaces</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter"><a href="../interfaces/src_core_queue.createtasks.html" class="tsd-kind-icon">Create<wbr>Tasks</a></li>
-								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/src_core_queue.queueoptions.html" class="tsd-kind-icon">Queue<wbr>Options</a></li>
-								<li class="tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter"><a href="../interfaces/src_core_queue.queueworker.html" class="tsd-kind-icon">Queue<wbr>Worker</a></li>
-								<li class="tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter"><a href="../interfaces/src_core_queue.task.html" class="tsd-kind-icon">Task</a></li>
-								<li class="tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter"><a href="../interfaces/src_core_queue.tasks.html" class="tsd-kind-icon">Tasks</a></li>
 							</ul>
 						</section>
 					</div>
@@ -326,6 +321,11 @@ pre {
 					Renames and exports <a href="../classes/src_core_queue_worker_interface.default.html">default</a>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="createtasks" class="tsd-anchor"></a>
+					<h3>Create<wbr>Tasks</h3>
+					Re-exports <a href="../interfaces/src_core_queue_interface.createtasks.html">CreateTasks</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
 					<a name="mergeworkerqueue" class="tsd-anchor"></a>
 					<h3>Merge<wbr>Worker<wbr>Queue</h3>
 					Renames and exports <a href="../classes/src_core_queue_worker_merge.default.html">default</a>
@@ -339,6 +339,26 @@ pre {
 					<a name="queue" class="tsd-anchor"></a>
 					<h3>Queue</h3>
 					Renames and exports <a href="../classes/src_core_queue_simple.default.html">default</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="queueoptions" class="tsd-anchor"></a>
+					<h3>Queue<wbr>Options</h3>
+					Re-exports <a href="../interfaces/src_core_queue_interface.queueoptions.html">QueueOptions</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="queueworker" class="tsd-anchor"></a>
+					<h3>Queue<wbr>Worker</h3>
+					Re-exports <a href="../interfaces/src_core_queue_worker_interface.queueworker.html">QueueWorker</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="task" class="tsd-anchor"></a>
+					<h3>Task</h3>
+					Re-exports <a href="../interfaces/src_core_queue_worker_interface.task.html">Task</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="tasks" class="tsd-anchor"></a>
+					<h3>Tasks</h3>
+					Re-exports <a href="../interfaces/src_core_queue_interface.tasks.html">Tasks</a>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
 					<a name="workerqueueoptions" class="tsd-anchor"></a>
@@ -367,6 +387,9 @@ pre {
 						<a href="src_core_queue.html#abstractworkerqueue" class="tsd-kind-icon">Abstract<wbr>Worker<wbr>Queue</a>
 					</li>
 					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_queue.html#createtasks" class="tsd-kind-icon">Create<wbr>Tasks</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
 						<a href="src_core_queue.html#mergeworkerqueue" class="tsd-kind-icon">Merge<wbr>Worker<wbr>Queue</a>
 					</li>
 					<li class=" tsd-kind-reference tsd-parent-kind-module">
@@ -376,22 +399,19 @@ pre {
 						<a href="src_core_queue.html#queue" class="tsd-kind-icon">Queue</a>
 					</li>
 					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_queue.html#queueoptions" class="tsd-kind-icon">Queue<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_queue.html#queueworker" class="tsd-kind-icon">Queue<wbr>Worker</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_queue.html#task" class="tsd-kind-icon">Task</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_queue.html#tasks" class="tsd-kind-icon">Tasks</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
 						<a href="src_core_queue.html#workerqueueoptions" class="tsd-kind-icon">Worker<wbr>Queue<wbr>Options</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../interfaces/src_core_queue.createtasks.html" class="tsd-kind-icon">Create<wbr>Tasks</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="../interfaces/src_core_queue.queueoptions.html" class="tsd-kind-icon">Queue<wbr>Options</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../interfaces/src_core_queue.queueworker.html" class="tsd-kind-icon">Queue<wbr>Worker</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../interfaces/src_core_queue.task.html" class="tsd-kind-icon">Task</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../interfaces/src_core_queue.tasks.html" class="tsd-kind-icon">Tasks</a>
 					</li>
 				</ul>
 			</nav>

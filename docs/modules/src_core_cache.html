@@ -257,15 +257,66 @@ pre {
 <span style="color: #0000FF">const</span>
 <span style="color: #000000">  </span><span style="color: #0070C1">cache</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">SimpleCache</span><span style="color: #000000">();</span>
 
-<span style="color: #001080">cache</span><span style="color: #000000">.</span><span style="color: #795E26">add</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;foo&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;bar1&#039;</span><span style="color: #000000">);</span>
-<span style="color: #001080">cache</span><span style="color: #000000">.</span><span style="color: #795E26">add</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;foo2&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;bar2&#039;</span><span style="color: #000000">);</span>
-<span style="color: #001080">cache</span><span style="color: #000000">.</span><span style="color: #795E26">add</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;baz&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;bar3&#039;</span><span style="color: #000000">);</span>
+<span style="color: #001080">cache</span><span style="color: #000000">.</span><span style="color: #795E26">set</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;foo&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;bar1&#039;</span><span style="color: #000000">);</span>
+<span style="color: #001080">cache</span><span style="color: #000000">.</span><span style="color: #795E26">set</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;foo2&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;bar2&#039;</span><span style="color: #000000">);</span>
+<span style="color: #001080">cache</span><span style="color: #000000">.</span><span style="color: #795E26">set</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;baz&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;bar3&#039;</span><span style="color: #000000">);</span>
 
-<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">cache</span><span style="color: #000000">.</span><span style="color: #795E26">keys</span><span style="color: #000000">().</span><span style="color: #001080">length</span><span style="color: #000000">); </span><span style="color: #008000">// 3</span>
+<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">cache</span><span style="color: #000000">.</span><span style="color: #001080">size</span><span style="color: #000000">); </span><span style="color: #008000">// 3</span>
 
 <span style="color: #001080">cache</span><span style="color: #000000">.</span><span style="color: #795E26">clear</span><span style="color: #000000">((</span><span style="color: #001080">val</span><span style="color: #000000">, </span><span style="color: #001080">key</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #811F3F"> /foo/</span><span style="color: #000000">.</span><span style="color: #795E26">test</span><span style="color: #000000">(</span><span style="color: #001080">key</span><span style="color: #000000">));</span>
 
-<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">cache</span><span style="color: #000000">.</span><span style="color: #795E26">keys</span><span style="color: #000000">().</span><span style="color: #001080">length</span><span style="color: #000000">); </span><span style="color: #008000">// 1</span>
+<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">cache</span><span style="color: #000000">.</span><span style="color: #001080">size</span><span style="color: #000000">); </span><span style="color: #008000">// 1</span>
+</code></pre>
+						<a href="#iterators" id="iterators" style="color: inherit; text-decoration: none;">
+							<h2>Iterators</h2>
+						</a>
+						<p>All caches support three kinds of iterators:</p>
+						<ol>
+							<li>By keys (used by default).</li>
+						</ol>
+						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">SimpleCache</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/cache/simple&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #001080">cache</span><span style="color: #000000">.</span><span style="color: #795E26">set</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;foo&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;bar1&#039;</span><span style="color: #000000">);</span>
+<span style="color: #001080">cache</span><span style="color: #000000">.</span><span style="color: #795E26">set</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;foo2&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;bar2&#039;</span><span style="color: #000000">);</span>
+<span style="color: #001080">cache</span><span style="color: #000000">.</span><span style="color: #795E26">set</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;baz&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;bar3&#039;</span><span style="color: #000000">);</span>
+
+<span style="color: #AF00DB">for</span><span style="color: #000000"> (</span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">key</span><span style="color: #000000"> </span><span style="color: #0000FF">of</span><span style="color: #000000"> </span><span style="color: #001080">SimpleCache</span><span style="color: #000000">) {</span>
+<span style="color: #000000">  </span><span style="color: #008000">// &#039;foo&#039; &#039;foo2&#039; &#039;baz&#039;</span>
+<span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">el</span><span style="color: #000000">);</span>
+<span style="color: #000000">}</span>
+
+<span style="color: #AF00DB">for</span><span style="color: #000000"> (</span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">key</span><span style="color: #000000"> </span><span style="color: #0000FF">of</span><span style="color: #000000"> </span><span style="color: #001080">SimpleCache</span><span style="color: #000000">.</span><span style="color: #795E26">keys</span><span style="color: #000000">()) {</span>
+<span style="color: #000000">  </span><span style="color: #008000">// &#039;foo&#039; &#039;foo2&#039; &#039;baz&#039;</span>
+<span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">el</span><span style="color: #000000">);</span>
+<span style="color: #000000">}</span>
+</code></pre>
+						<ol start="2">
+							<li>By values.</li>
+						</ol>
+						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">SimpleCache</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/cache/simple&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #001080">cache</span><span style="color: #000000">.</span><span style="color: #795E26">set</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;foo&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;bar1&#039;</span><span style="color: #000000">);</span>
+<span style="color: #001080">cache</span><span style="color: #000000">.</span><span style="color: #795E26">set</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;foo2&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;bar2&#039;</span><span style="color: #000000">);</span>
+<span style="color: #001080">cache</span><span style="color: #000000">.</span><span style="color: #795E26">set</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;baz&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;bar3&#039;</span><span style="color: #000000">);</span>
+
+<span style="color: #AF00DB">for</span><span style="color: #000000"> (</span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">key</span><span style="color: #000000"> </span><span style="color: #0000FF">of</span><span style="color: #000000"> </span><span style="color: #001080">SimpleCache</span><span style="color: #000000">.</span><span style="color: #795E26">values</span><span style="color: #000000">()) {</span>
+<span style="color: #000000">  </span><span style="color: #008000">// &#039;bar1&#039; &#039;bar2&#039; &#039;bar3&#039;</span>
+<span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">el</span><span style="color: #000000">);</span>
+<span style="color: #000000">}</span>
+</code></pre>
+						<ol start="3">
+							<li>By pairs of keys and values.</li>
+						</ol>
+						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">SimpleCache</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/cache/simple&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #001080">cache</span><span style="color: #000000">.</span><span style="color: #795E26">set</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;foo&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;bar1&#039;</span><span style="color: #000000">);</span>
+<span style="color: #001080">cache</span><span style="color: #000000">.</span><span style="color: #795E26">set</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;foo2&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;bar2&#039;</span><span style="color: #000000">);</span>
+<span style="color: #001080">cache</span><span style="color: #000000">.</span><span style="color: #795E26">set</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;baz&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;bar3&#039;</span><span style="color: #000000">);</span>
+
+<span style="color: #AF00DB">for</span><span style="color: #000000"> (</span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">key</span><span style="color: #000000"> </span><span style="color: #0000FF">of</span><span style="color: #000000"> </span><span style="color: #001080">SimpleCache</span><span style="color: #000000">.</span><span style="color: #795E26">entries</span><span style="color: #000000">()) {</span>
+<span style="color: #000000">  </span><span style="color: #008000">// [&#039;foo&#039;, &#039;bar1&#039;] [&#039;foo2&#039;, &#039;bar2&#039;] [&#039;baz&#039;, &#039;bar3&#039;]</span>
+<span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">el</span><span style="color: #000000">);</span>
+<span style="color: #000000">}</span>
 </code></pre>
 						<a href="#decorators" id="decorators" style="color: inherit; text-decoration: none;">
 							<h2>Decorators</h2>
@@ -309,6 +360,96 @@ pre {
 <span style="color: #0000FF">const</span>
 <span style="color: #000000">  </span><span style="color: #0070C1">copyOfCache</span><span style="color: #000000"> = </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #795E26">addPersistent</span><span style="color: #000000">(</span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">SimpleCache</span><span style="color: #000000">(), </span><span style="color: #001080">asyncLocal</span><span style="color: #000000">, </span><span style="color: #001080">opts</span><span style="color: #000000">);</span>
 </code></pre>
+						<a href="#api" id="api" style="color: inherit; text-decoration: none;">
+							<h2>API</h2>
+						</a>
+						<p>Ranges support a bunch of methods to work with them.</p>
+						<a href="#size-getter" id="size-getter" style="color: inherit; text-decoration: none;">
+							<h3>size (getter)</h3>
+						</a>
+						<p>Number of elements within the cache.</p>
+						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">SimpleCache</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/cache/simple&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #0000FF">const</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">cache</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">SimpleCache</span><span style="color: #000000">();</span>
+
+<span style="color: #001080">cache</span><span style="color: #000000">.</span><span style="color: #795E26">add</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;foo&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;bar1&#039;</span><span style="color: #000000">);</span>
+<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">cache</span><span style="color: #000000">.</span><span style="color: #001080">size</span><span style="color: #000000">); </span><span style="color: #008000">// 1</span>
+</code></pre>
+						<a href="#has" id="has" style="color: inherit; text-decoration: none;">
+							<h3>has</h3>
+						</a>
+						<p>Returns true if a value by the specified key exists in the cache.</p>
+						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">SimpleCache</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/cache/simple&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #0000FF">const</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">cache</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">SimpleCache</span><span style="color: #000000">();</span>
+
+<span style="color: #001080">cache</span><span style="color: #000000">.</span><span style="color: #795E26">add</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;foo&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;bar1&#039;</span><span style="color: #000000">);</span>
+<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">cache</span><span style="color: #000000">.</span><span style="color: #795E26">has</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;foo&#039;</span><span style="color: #000000">)); </span><span style="color: #008000">// true</span>
+</code></pre>
+						<a href="#get" id="get" style="color: inherit; text-decoration: none;">
+							<h3>get</h3>
+						</a>
+						<p>Returns a value from the cache by the specified key.</p>
+						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">SimpleCache</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/cache/simple&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #0000FF">const</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">cache</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">SimpleCache</span><span style="color: #000000">();</span>
+
+<span style="color: #001080">cache</span><span style="color: #000000">.</span><span style="color: #795E26">add</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;foo&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;bar1&#039;</span><span style="color: #000000">);</span>
+<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">cache</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;foo&#039;</span><span style="color: #000000">)); </span><span style="color: #008000">// &#039;bar1&#039;</span>
+</code></pre>
+						<a href="#set" id="set" style="color: inherit; text-decoration: none;">
+							<h3>set</h3>
+						</a>
+						<p>Saves a value to the cache by the specified key.</p>
+						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">SimpleCache</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/cache/simple&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #0000FF">const</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">cache</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">SimpleCache</span><span style="color: #000000">();</span>
+
+<span style="color: #001080">cache</span><span style="color: #000000">.</span><span style="color: #795E26">set</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;foo&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;bar1&#039;</span><span style="color: #000000">);</span>
+<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">cache</span><span style="color: #000000">.</span><span style="color: #795E26">has</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;foo&#039;</span><span style="color: #000000">)); </span><span style="color: #008000">// true</span>
+</code></pre>
+						<a href="#remove" id="remove" style="color: inherit; text-decoration: none;">
+							<h3>remove</h3>
+						</a>
+						<p>Removes a value from the cache by the specified key.</p>
+						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">SimpleCache</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/cache/simple&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #0000FF">const</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">cache</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">SimpleCache</span><span style="color: #000000">();</span>
+
+<span style="color: #001080">cache</span><span style="color: #000000">.</span><span style="color: #795E26">set</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;foo&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;bar1&#039;</span><span style="color: #000000">);</span>
+<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">cache</span><span style="color: #000000">.</span><span style="color: #795E26">has</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;foo&#039;</span><span style="color: #000000">)); </span><span style="color: #008000">// true</span>
+
+<span style="color: #001080">cache</span><span style="color: #000000">.</span><span style="color: #795E26">remove</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;foo&#039;</span><span style="color: #000000">);</span>
+<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">cache</span><span style="color: #000000">.</span><span style="color: #795E26">has</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;foo&#039;</span><span style="color: #000000">)); </span><span style="color: #008000">// false</span>
+</code></pre>
+						<a href="#clear" id="clear" style="color: inherit; text-decoration: none;">
+							<h3>clear</h3>
+						</a>
+						<p>Clears the cache by the specified filter and returns a map of removed keys.</p>
+						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">SimpleCache</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/cache/simple&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #0000FF">const</span>
+<span style="color: #000000">  </span><span style="color: #0070C1">cache</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">SimpleCache</span><span style="color: #000000">();</span>
+
+<span style="color: #001080">cache</span><span style="color: #000000">.</span><span style="color: #795E26">set</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;foo1&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;bar1&#039;</span><span style="color: #000000">);</span>
+<span style="color: #001080">cache</span><span style="color: #000000">.</span><span style="color: #795E26">set</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;foo2&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;bar2&#039;</span><span style="color: #000000">);</span>
+<span style="color: #001080">cache</span><span style="color: #000000">.</span><span style="color: #795E26">set</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;foo3&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;bar2&#039;</span><span style="color: #000000">);</span>
+
+<span style="color: #001080">cache</span><span style="color: #000000">.</span><span style="color: #795E26">clear</span><span style="color: #000000">((</span><span style="color: #001080">val</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">val</span><span style="color: #000000"> === </span><span style="color: #A31515">&#039;bar2&#039;</span><span style="color: #000000">);</span>
+
+<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">cache</span><span style="color: #000000">.</span><span style="color: #795E26">has</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;foo1&#039;</span><span style="color: #000000">)); </span><span style="color: #008000">// true</span>
+<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">cache</span><span style="color: #000000">.</span><span style="color: #795E26">has</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;foo1&#039;</span><span style="color: #000000">)); </span><span style="color: #008000">// true</span>
+<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">cache</span><span style="color: #000000">.</span><span style="color: #795E26">has</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;foo2&#039;</span><span style="color: #000000">)); </span><span style="color: #008000">// false</span>
+
+<span style="color: #001080">cache</span><span style="color: #000000">.</span><span style="color: #795E26">clear</span><span style="color: #000000">();</span>
+
+<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">cache</span><span style="color: #000000">.</span><span style="color: #795E26">has</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;foo1&#039;</span><span style="color: #000000">)); </span><span style="color: #008000">// true</span>
+</code></pre>
 					</div>
 				</div>
 			</section>
@@ -321,14 +462,9 @@ pre {
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_cache.html#abstractcache" class="tsd-kind-icon">Abstract<wbr>Cache</a></li>
 								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_cache.html#cache" class="tsd-kind-icon">Cache</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_cache.html#clearfilter" class="tsd-kind-icon">Clear<wbr>Filter</a></li>
 								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_cache.html#nevercache" class="tsd-kind-icon">Never<wbr>Cache</a></li>
 								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_cache.html#restrictedcache" class="tsd-kind-icon">Restricted<wbr>Cache</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section ">
-							<h3>Interfaces</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter"><a href="../interfaces/src_core_cache.clearfilter.html" class="tsd-kind-icon">Clear<wbr>Filter</a></li>
 							</ul>
 						</section>
 					</div>
@@ -345,6 +481,11 @@ pre {
 					<a name="cache" class="tsd-anchor"></a>
 					<h3>Cache</h3>
 					Renames and exports <a href="../classes/src_core_cache_simple.default.html">default</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="clearfilter" class="tsd-anchor"></a>
+					<h3>Clear<wbr>Filter</h3>
+					Re-exports <a href="../interfaces/src_core_cache_interface.clearfilter.html">ClearFilter</a>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
 					<a name="nevercache" class="tsd-anchor"></a>
@@ -378,13 +519,13 @@ pre {
 						<a href="src_core_cache.html#cache" class="tsd-kind-icon">Cache</a>
 					</li>
 					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_cache.html#clearfilter" class="tsd-kind-icon">Clear<wbr>Filter</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
 						<a href="src_core_cache.html#nevercache" class="tsd-kind-icon">Never<wbr>Cache</a>
 					</li>
 					<li class=" tsd-kind-reference tsd-parent-kind-module">
 						<a href="src_core_cache.html#restrictedcache" class="tsd-kind-icon">Restricted<wbr>Cache</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../interfaces/src_core_cache.clearfilter.html" class="tsd-kind-icon">Clear<wbr>Filter</a>
 					</li>
 				</ul>
 			</nav>
