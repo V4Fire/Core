@@ -148,7 +148,7 @@ export function warn<T extends Function>(
 }
 
 /**
- * Decorator for the "warn" function
+ * Decorator for `warn`
  *
  * @decorator
  * @see [[warn]]
@@ -166,7 +166,7 @@ export function warn<T extends Function>(
 export function warned(target: object, key: string | symbol, descriptor: PropertyDescriptor): void;
 
 /**
- * Decorator for the "warn" function.
+ * Decorator for `warn`.
  * This overload adds a feature to provide additional options.
  *
  * @see [[warn]]

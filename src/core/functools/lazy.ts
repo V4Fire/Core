@@ -7,7 +7,7 @@
  */
 
 /**
- * Decorator for Function.prototype.debounce
+ * Decorator for `Function.prototype.debounce`
  *
  * @decorator
  * @see [[Function.debounce]]
@@ -34,7 +34,7 @@ export function debounce(delay?: number): MethodDecorator {
 }
 
 /**
- * Decorator for Function.prototype.throttle
+ * Decorator for `Function.prototype.throttle`
  *
  * @decorator
  * @see [[Function.throttle]]

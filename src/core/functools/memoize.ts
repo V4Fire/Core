@@ -7,7 +7,7 @@
  */
 
 /**
- * Decorator for Function.prototype.once
+ * Decorator for `Function.prototype.once`
  *
  * @decorator
  * @see [[Function.once]]
