@@ -11,7 +11,7 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-## v3.51.0 (2021-06-11)
+## v3.51.0 (2021-06-15)
 
 #### :rocket: New Feature
 
