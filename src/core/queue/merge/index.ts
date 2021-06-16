@@ -47,7 +47,7 @@ export default class MergeQueue<T> extends Queue<T> {
 	protected tasksMap: Dictionary<T> = Object.createDict();
 
 	/**
-	 * The task hash function
+	 * Function to calculate task hash
 	 */
 	protected readonly hashFn: HashFn<T>;
 

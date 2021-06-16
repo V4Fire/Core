@@ -27,7 +27,7 @@ export interface WorkerQueueOptions extends QueueOptions {
 	concurrency?: number;
 
 	/**
-	 * Value of a task status refresh interval
+	 * How often to refresh task statuses
 	 * (in milliseconds)
 	 */
 	refreshInterval?: number;
@@ -54,15 +54,15 @@ export default abstract class WorkerQueue<T, V = unknown> extends Queue<T> {
 	}
 
 	/**
-	 * Value of the task status refresh interval
+	 * The maximum number of concurrent workers
+	 */
+	concurrency: number;
+
+	/**
+	 * How often to refresh task statuses
 	 * (in milliseconds)
 	 */
 	refreshInterval: number;
-
-	/**
-	 * Maximum number of concurrent workers
-	 */
-	concurrency: number;
 
 	/**
 	 * Number of active workers
