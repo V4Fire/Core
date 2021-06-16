@@ -5,9 +5,9 @@ which can be useful to organize cache data structures.
 The submodules contain different implementations for that interface. The main module re-exports these implementations:
 
 * `AbstractCache` — an alias for [`core/cache/interface/Cache`](src_core_cache_interface.html);
-* `Cache` — an alias for [`core/cache/simple`](src_core_cache_simple_index.html);
-* `RestrictedCache` — an alias for [`core/cache/restricted`](src_core_cache_restricted_index.html);
-* `NeverCache` — an alias for [`core/cache/never`](src_core_cache_never_index.html).
+* `Cache` — an alias for [`core/cache/simple`](src_core_cache_simple.html);
+* `RestrictedCache` — an alias for [`core/cache/restricted`](src_core_cache_restricted.html);
+* `NeverCache` — an alias for [`core/cache/never`](src_core_cache_never.html).
 
 ```js
 import SimpleCache from 'core/cache/simple';

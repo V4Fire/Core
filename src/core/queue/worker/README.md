@@ -5,6 +5,6 @@ The submodules contains different implementations of that class.
 
 ## Implementations:
 
-* [SimpleWorkerQueue](src_core_queue_worker_simple_index.html)
+* [SimpleWorkerQueue](src_core_queue_worker_simple.html)
 
-* [MergeWorkerQueue](src_core_queue_worker_merge_index.html)
+* [MergeWorkerQueue](src_core_queue_worker_merge.html)

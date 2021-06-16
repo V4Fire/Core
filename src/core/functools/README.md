@@ -3,9 +3,9 @@
 This module provides a bunch of functions and decorators to wrap another functions with adding some extra functionality.
 Also, see submodules of this module:
 
-* [`core/functools/deprecation`](src_core_functools_deprecation_index.html);
-* [`core/functools/not-implemented`](src_core_functools_not-implemented_index.html);
-* [`core/functools/trait`](src_core_functools_trait_index.html).
+* [`core/functools/deprecation`](src_core_functools_deprecation.html);
+* [`core/functools/not-implemented`](src_core_functools_not-implemented.html);
+* [`core/functools/trait`](src_core_functools_trait.html).
 
 ## once
 
