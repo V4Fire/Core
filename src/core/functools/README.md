@@ -4,7 +4,8 @@ This module provides a bunch of functions and decorators to wrap another functio
 Also, see submodules of this module:
 
 * [`core/functools/deprecation`](src_core_functools_deprecation.html);
-* [`core/functools/not-implemented`](src_core_functools_not-implemented.html);
+* [`core/functools/not-implemented`](src_core_functools_not_implemented.html);
+* [`core/functools/warning`](src_core_functools_warning.html);
 * [`core/functools/trait`](src_core_functools_trait.html).
 
 ## once
