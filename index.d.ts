@@ -3020,7 +3020,7 @@ interface DateConstructor {
 
 	/**
 	 * Returns a string representation of the date by the specified pattern.
-	 * All pattern directives are based on native Intl.DateTimeFormat options:
+	 * All pattern directives are based on native `Intl.DateTimeFormat` options:
 	 *
 	 *   1. `'era'`
 	 *   1. `'year'`
@@ -3050,7 +3050,7 @@ interface DateConstructor {
 	 * ```js
 	 * // Will be shown only the day value,
 	 * // because the rest values are equal with `Date.now()`
-	 * new Date().format('year?:month?:short:day', 'en-us');
+	 * new Date().format('year?;month?:short;day', 'en-us');
 	 *
 	 * // Will be shown all values that are declared in the pattern
 	 * new Date('12/28/2019').format('year?:2-digit;month?;day', 'en-us');
@@ -3408,7 +3408,7 @@ interface Date {
 
 	/**
 	 * Returns a string representation of the date by the specified pattern.
-	 * All pattern directives are based on native Intl.DateTimeFormat options:
+	 * All pattern directives are based on native `Intl.DateTimeFormat` options:
 	 *
 	 *   1. `'era'`
 	 *   1. `'year'`
@@ -3438,7 +3438,7 @@ interface Date {
 	 * ```js
 	 * // Will be shown only the day value,
 	 * // because the rest values are equal with `Date.now()`
-	 * new Date().format('year?:month?:short:day', 'en-us');
+	 * new Date().format('year?;month?:short;day', 'en-us');
 	 *
 	 * // Will be shown all values that are declared in the pattern
 	 * new Date('12/28/2019').format('year?:2-digit;month?;day', 'en-us');
