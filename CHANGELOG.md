@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.52.1 (2021-06-21)
+
+#### :bug: Bug Fix
+
+* Fix possibility to set default get/set accessors within trait classes
+
 ## v3.52.0 (2021-06-16)
 
 #### :boom: Breaking Change
