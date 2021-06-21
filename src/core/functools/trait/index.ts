@@ -107,11 +107,14 @@ export function derive(...traits: Function[]) {
 						};
 
 						if (Object.isFunction(traitMethod?.value)) {
-							newDescriptor.writable = true;
-							// eslint-disable-next-line func-name-matching
-							newDescriptor.value = function defaultMethod(...args: unknown[]) {
-								return originalTrait[key](this, ...args);
-							};
+							Object.assign(newDescriptor, {
+								writable: true,
+
+								// eslint-disable-next-line func-name-matching
+								value: function defaultMethod(...args: unknown[]) {
+									return originalTrait[key](this, ...args);
+								}
+							});
 
 						} else {
 							Object.assign(newDescriptor, {
