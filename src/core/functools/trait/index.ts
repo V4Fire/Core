@@ -103,11 +103,11 @@ export function derive(...traits: Function[]) {
 					if (canDerive) {
 						const newDescriptor: PropertyDescriptor = {
 							enumerable: false,
-							writable: true,
 							configurable: true
 						};
 
 						if (Object.isFunction(traitMethod?.value)) {
+							newDescriptor.writable = true;
 							// eslint-disable-next-line func-name-matching
 							newDescriptor.value = function defaultMethod(...args: unknown[]) {
 								return originalTrait[key](this, ...args);
