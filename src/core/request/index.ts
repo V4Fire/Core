@@ -13,7 +13,6 @@
 
 import log from 'core/log';
 import Then from 'core/then';
-import { isOnline } from 'core/net';
 
 import Response from 'core/request/response';
 import RequestError from 'core/request/error';
@@ -162,8 +161,7 @@ function request<D = unknown>(
 				reject(err ?? new RequestError('abort', errDetails));
 			});
 
-			await new Promise((r) => setImmediate(r));
-			await checkOnline();
+			await new Promise(setImmediate);
 
 			ctx.parent = parent;
 
@@ -288,13 +286,8 @@ function request<D = unknown>(
 					decoders: ctx.decoders
 				};
 
-				const createReq = () => {
-					if (!ctx.isOnline && !requestParams.externalRequest) {
-						return Then.reject(new RequestError('offline', errDetails));
-					}
-
-					return requestParams.engine(reqOpts);
-				};
+				const
+					createReq = () => requestParams.engine(reqOpts);
 
 				if (requestParams.retry != null) {
 					const retryParams: RetryOptions = Object.isNumber(requestParams.retry) ?
@@ -326,7 +319,6 @@ function request<D = unknown>(
 						};
 
 						try {
-							await checkOnline();
 							return await createReq().then(wrapSuccessResponse);
 
 						} catch (err) {
@@ -357,7 +349,6 @@ function request<D = unknown>(
 			res
 				.then((response) => log(`request:response:${path}`, response.data, {
 					cache,
-					externalRequest: requestParams.externalRequest,
 					request: requestParams
 				}))
 
@@ -389,20 +380,12 @@ function request<D = unknown>(
 				const
 					data = await response.decode();
 
-				if (requestParams.externalRequest && !ctx.isOnline && data == null) {
-					throw new RequestError('offline', details);
-				}
-
 				return {
 					data,
 					response,
 					ctx,
 					dropCache: ctx.dropCache.bind(ctx)
 				};
-			}
-
-			async function checkOnline(): Promise<void> {
-				ctx.isOnline = (await Then.resolve(isOnline(), parent)).status;
 			}
 		});
 

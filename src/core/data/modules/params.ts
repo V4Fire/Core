@@ -352,9 +352,6 @@ export default abstract class Provider {
 	 */
 	mocks?: Mocks;
 
-	/** @see [[CreateRequestOptions.externalRequest]] */
-	readonly externalRequest: boolean = false;
-
 	/**
 	 * @deprecated
 	 * @see [[Provider.globalEmitter]]

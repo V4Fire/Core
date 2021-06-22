@@ -50,7 +50,6 @@ export class RequestErrorDetailsExtractor implements ErrorDetailsExtractor<Reque
 
 			contentType: error.details.request?.contentType,
 			withCredentials: error.details.request?.credentials,
-			externalRequest: error.details.request?.externalRequest,
 
 			requestHeaders: this.prepareHeaders(error.details.request?.headers),
 			requestBody: error.details.request?.body,

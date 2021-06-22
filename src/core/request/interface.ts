@@ -408,12 +408,6 @@ export interface CreateRequestOptions<D = unknown> {
 	jsonReviver?: JSONCb | false;
 
 	/**
-	 * The special flag that indicates that request will be invoked not directly by a browser,
-	 * but some "external" application, such as a native application in a mobile (it's important for offline requests
-	 */
-	externalRequest?: boolean;
-
-	/**
 	 * The meta flag that indicates that the request is important: usually it used with middlewares
 	 * to indicate that the request need execute as soon as possible
 	 */

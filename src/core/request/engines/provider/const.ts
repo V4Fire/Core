@@ -15,7 +15,6 @@ export const availableParams = [
 	'headers',
 	'okStatuses',
 	'timeout',
-	'externalRequest',
 	'important',
 	'meta',
 	'parent'

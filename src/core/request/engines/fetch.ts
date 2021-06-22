@@ -14,8 +14,8 @@ import AbortController from 'abort-controller';
 import Then from 'core/then';
 import Response, { ResponseTypeValue } from 'core/request/response';
 import RequestError from 'core/request/error';
-
-import type { RequestEngine } from 'core/request/interface';
+import { isOnline } from 'core/net';
+import type { NormalizedCreateRequestOptions, RequestEngine } from 'core/request/interface';
 
 /**
  * Creates request by using the fetch API with the specified parameters and returns a promise
@@ -72,7 +72,16 @@ const request: RequestEngine = (params) => {
 		signal: controller.signal
 	};
 
-	return new Then<Response>((resolve, reject, onAbort) => {
+	return new Then<Response>(async (resolve, reject, onAbort) => {
+		const
+			{status} = await Then.resolve(isOnline(), p.parent);
+
+		if (!status) {
+			return reject(new RequestError('offline', {
+				request: <NormalizedCreateRequestOptions>normalizedOpts
+			}));
+		}
+
 		const
 			req = fetch(p.url, normalizedOpts);
 

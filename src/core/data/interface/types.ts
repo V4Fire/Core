@@ -66,12 +66,6 @@ export type ModelMethod =
 
 export interface ProviderOptions {
 	/**
-	 * @see [[CreateRequestOptions.externalRequest]]
-	 * @default `false`
-	 */
-	externalRequest?: boolean;
-
-	/**
 	 * If true, then the provider is connected to a socket server
 	 * @default `false`
 	 */
