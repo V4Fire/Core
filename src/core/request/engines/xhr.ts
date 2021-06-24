@@ -29,9 +29,9 @@ const request: RequestEngine = (params) => {
 		xhr = new XMLHttpRequest();
 
 	let
-		[data, contentType] = convertDataToSend<BodyInit>(p.body, p.contentType);
+		[body, contentType] = convertDataToSend<BodyInit>(p.body, p.contentType);
 
-	if (!IS_NODE && data instanceof FormData && contentType == null) {
+	if (!IS_NODE && body instanceof FormData && contentType == null) {
 		contentType = '';
 	}
 
@@ -112,7 +112,7 @@ const request: RequestEngine = (params) => {
 			reject(new RequestError('timeout'));
 		});
 
-		xhr.send(data);
+		xhr.send(body);
 	}, p.parent);
 };
 
