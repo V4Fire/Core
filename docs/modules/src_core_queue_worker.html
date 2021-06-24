@@ -243,8 +243,8 @@ pre {
 						<a href="#corequeueworker" id="corequeueworker" style="color: inherit; text-decoration: none;">
 							<h1>core/queue/worker</h1>
 						</a>
-						<p>This module provides an abstract class for the [[WorkerQueue]] data structure.
-						The submodules contains different implementations of that class.</p>
+						<p>This module provides an abstract class for a [[WorkerQueue]] data structure.
+						The submodules contain different implementations of that class.</p>
 						<a href="#implementations" id="implementations" style="color: inherit; text-decoration: none;">
 							<h2>Implementations:</h2>
 						</a>
@@ -254,6 +254,76 @@ pre {
 							<li><p><a href="src_core_queue_worker_merge.html">MergeWorkerQueue</a></p>
 							</li>
 						</ul>
+						<a href="#api" id="api" style="color: inherit; text-decoration: none;">
+							<h2>API</h2>
+						</a>
+						<a href="#constructor" id="constructor" style="color: inherit; text-decoration: none;">
+							<h3>Constructor</h3>
+						</a>
+						<a href="#providing-a-task-executor" id="providing-a-task-executor" style="color: inherit; text-decoration: none;">
+							<h4>Providing a task executor</h4>
+						</a>
+						<p>The structure constructor expects a function that will be invoked on each processed task.
+						The function can return a promise (it will be awaited).</p>
+						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">WorkerQueue</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/queue/worker/simple&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">queue</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">WorkerQueue</span><span style="color: #000000">((</span><span style="color: #001080">task</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">task</span><span style="color: #000000">);</span>
+<span style="color: #000000">});</span>
+
+<span style="color: #001080">queue</span><span style="color: #000000">.</span><span style="color: #795E26">push</span><span style="color: #000000">({</span><span style="color: #001080">a:</span><span style="color: #000000"> </span><span style="color: #098658">1</span><span style="color: #000000">});</span>
+<span style="color: #001080">queue</span><span style="color: #000000">.</span><span style="color: #795E26">push</span><span style="color: #000000">({</span><span style="color: #001080">a:</span><span style="color: #000000"> </span><span style="color: #098658">2</span><span style="color: #000000">});</span>
+</code></pre>
+						<a href="#queue-options" id="queue-options" style="color: inherit; text-decoration: none;">
+							<h4>Queue options</h4>
+						</a>
+						<a href="#concurrency--1" id="concurrency--1" style="color: inherit; text-decoration: none;">
+							<h5>[concurrency = <code>1</code>]</h5>
+						</a>
+						<p>The maximum number of concurrent workers.</p>
+						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">WorkerQueue</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/queue/worker/simple&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">queue</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">WorkerQueue</span><span style="color: #000000">((</span><span style="color: #001080">task</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">task</span><span style="color: #000000">);</span>
+<span style="color: #000000">}, {</span><span style="color: #001080">concurrency:</span><span style="color: #000000"> </span><span style="color: #098658">2</span><span style="color: #000000">});</span>
+
+<span style="color: #001080">queue</span><span style="color: #000000">.</span><span style="color: #795E26">push</span><span style="color: #000000">({</span><span style="color: #001080">a:</span><span style="color: #000000"> </span><span style="color: #098658">1</span><span style="color: #000000">});</span>
+
+<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">queue</span><span style="color: #000000">.</span><span style="color: #001080">length</span><span style="color: #000000">); </span><span style="color: #008000">// 0</span>
+
+<span style="color: #001080">queue</span><span style="color: #000000">.</span><span style="color: #795E26">push</span><span style="color: #000000">({</span><span style="color: #001080">a:</span><span style="color: #000000"> </span><span style="color: #098658">2</span><span style="color: #000000">});</span>
+
+<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">queue</span><span style="color: #000000">.</span><span style="color: #001080">length</span><span style="color: #000000">); </span><span style="color: #008000">// 0</span>
+
+<span style="color: #001080">queue</span><span style="color: #000000">.</span><span style="color: #795E26">push</span><span style="color: #000000">({</span><span style="color: #001080">a:</span><span style="color: #000000"> </span><span style="color: #098658">3</span><span style="color: #000000">});</span>
+
+<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">queue</span><span style="color: #000000">.</span><span style="color: #001080">length</span><span style="color: #000000">); </span><span style="color: #008000">// 1</span>
+
+<span style="color: #001080">queue</span><span style="color: #000000">.</span><span style="color: #795E26">push</span><span style="color: #000000">({</span><span style="color: #001080">a:</span><span style="color: #000000"> </span><span style="color: #098658">4</span><span style="color: #000000">});</span>
+
+<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">queue</span><span style="color: #000000">.</span><span style="color: #001080">length</span><span style="color: #000000">); </span><span style="color: #008000">// 2</span>
+</code></pre>
+						<a href="#refreshinterval" id="refreshinterval" style="color: inherit; text-decoration: none;">
+							<h5>[refreshInterval]</h5>
+						</a>
+						<p>How often to refresh task statuses, i.e., the next butch of tasks will be executed after the specified interval
+						(by default, on the next process tick).</p>
+						<a href="#properties" id="properties" style="color: inherit; text-decoration: none;">
+							<h3>Properties</h3>
+						</a>
+						<a href="#concurrency" id="concurrency" style="color: inherit; text-decoration: none;">
+							<h4>concurrency</h4>
+						</a>
+						<p>The maximum number of concurrent workers.</p>
+						<a href="#refreshinterval-1" id="refreshinterval-1" style="color: inherit; text-decoration: none;">
+							<h4>refreshInterval</h4>
+						</a>
+						<p>How often to refresh task statuses, i.e., the next butch of tasks will be executed after the specified interval
+						(by default, on the next process tick).</p>
+						<a href="#activeworkers" id="activeworkers" style="color: inherit; text-decoration: none;">
+							<h4>activeWorkers</h4>
+						</a>
+						<p>Number of active workers (in process).</p>
 					</div>
 				</div>
 			</section>
