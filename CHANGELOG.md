@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.53.0 (2021-06-24)
+
+#### :rocket: New Feature
+
+* Added automatically converting files and other blobs to send via `FormData` `core/request`
+
 ## v3.52.1 (2021-06-21)
 
 #### :bug: Bug Fix

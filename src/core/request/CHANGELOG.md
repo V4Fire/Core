@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.53.0 (2021-06-24)
+
+#### :rocket: New Feature
+
+* Added automatically converting files and other blobs to send via `FormData`
+
 ## v3.49.0 (2021-05-26)
 
 #### :bug: Bug Fix
