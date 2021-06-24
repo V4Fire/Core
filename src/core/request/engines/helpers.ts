@@ -83,6 +83,10 @@ export function convertDataToSend<T = RequestBody>(data: unknown, contentType?: 
 	return [<any>data, contentType];
 
 	function needFormToSend(val: unknown): boolean {
+		if (Object.isArray(val)) {
+			return val.some(needFormToSend);
+		}
+
 		if (IS_NODE) {
 			//#if node_js
 			// eslint-disable-next-line @typescript-eslint/no-var-requires
