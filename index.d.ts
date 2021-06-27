@@ -342,7 +342,7 @@ interface ObjectMixinOptions<V = unknown, K = unknown, D = unknown> {
 
 	/**
 	 * Function to filter values that support deep extending
-	 * (works only with the "deep" mode)
+	 * (works only with the `deep` mode)
 	 *
 	 * @param el - element value
 	 * @param key - element key
@@ -401,7 +401,7 @@ interface ObjectMixinOptions<V = unknown, K = unknown, D = unknown> {
 
 	/**
 	 * If true, then merging preserve prototypes of properties
-	 * (works only with the "deep" mode)
+	 * (works only with the `deep` mode)
 	 *
 	 * @default `false`
 	 * @example
@@ -450,7 +450,7 @@ interface ObjectMixinOptions<V = unknown, K = unknown, D = unknown> {
 	withProto?: boolean;
 
 	/**
-	 * If true, then to merge two arrays will be used a concatenation strategy (works only with the "deep" mode).
+	 * If true, then to merge two arrays will be used a concatenation strategy (works only with the `deep` mode).
 	 * Also, the parameter can be passed as a function to concatenate arrays.
 	 *
 	 * @default `false`
