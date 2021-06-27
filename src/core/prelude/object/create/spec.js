@@ -7,7 +7,7 @@
  */
 
 describe('core/prelude/object/create', () => {
-	it('Object.createDict', () => {
+	it('`Object.createDict`', () => {
 		{
 			const dict = Object.createDict();
 			expect(Object.getPrototypeOf(dict)).toBeNull();
@@ -20,7 +20,7 @@ describe('core/prelude/object/create', () => {
 		}
 	});
 
-	it('Object.convertEnumToDict', () => {
+	it('`Object.convertEnumToDict`', () => {
 		const dict = Object.convertEnumToDict({
 			0: 'bla',
 			bla: 0
@@ -30,7 +30,7 @@ describe('core/prelude/object/create', () => {
 		expect(Object.getPrototypeOf(dict)).toBeNull();
 	});
 
-	it('Object.createEnumLike', () => {
+	it('`Object.createEnumLike`', () => {
 		{
 			const dict = Object.createEnumLike(['foo']);
 			expect(dict).toEqual({0: 'foo', foo: 0});
@@ -44,7 +44,7 @@ describe('core/prelude/object/create', () => {
 		}
 	});
 
-	it('Object.fromArray', () => {
+	it('`Object.fromArray`', () => {
 		{
 			const dict = Object.fromArray(['foo']);
 			expect(dict).toEqual({foo: true});
@@ -62,7 +62,7 @@ describe('core/prelude/object/create', () => {
 		}
 	});
 
-	describe('Object.select', () => {
+	describe('`Object.select`', () => {
 		it('supported conditions to filter', () => {
 			{
 				const dict = Object.select({a: 1, b: 2}, 'a');
@@ -112,7 +112,7 @@ describe('core/prelude/object/create', () => {
 		});
 	});
 
-	describe('Object.reject', () => {
+	describe('`Object.reject`', () => {
 		it('supported conditions to filter', () => {
 			{
 				const dict = Object.reject({a: 1, b: 2}, 'a');

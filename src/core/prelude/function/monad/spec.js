@@ -7,7 +7,7 @@
  */
 
 describe('core/prelude/function/monad', () => {
-	it('option', async () => {
+	it('`option`', async () => {
 		const
 			square = ((n) => n * n).option();
 
@@ -20,7 +20,7 @@ describe('core/prelude/function/monad', () => {
 		expect(await square(square(null)).catch((e) => e)).toBe(null);
 	});
 
-	it('Object.Option', async () => {
+	it('`Object.Option`', async () => {
 		const
 			square = Object.Option((n) => n * n);
 
@@ -36,7 +36,7 @@ describe('core/prelude/function/monad', () => {
 		expect(await Object.Option(null).catch((e) => e)).toBe(null);
 	});
 
-	it('result', async () => {
+	it('`result`', async () => {
 		const
 			square = (n) => n * n,
 			call = ((f, ...args) => f(...args)).result(),
@@ -51,7 +51,7 @@ describe('core/prelude/function/monad', () => {
 		expect(await call(call(null)).catch((e) => Object.isString(e.message))).toBeTrue();
 	});
 
-	it('Object.Result', async () => {
+	it('`Object.Result`', async () => {
 		const
 			square = (n) => n * n,
 			call = Object.Result((f, ...args) => f(...args)),

@@ -7,7 +7,7 @@
  */
 
 describe('core/prelude/function/curry', () => {
-	it('curry', () => {
+	it('`curry`', () => {
 		const
 			multiply = (a, b, c) => a * b * c,
 			c = multiply.curry();
@@ -26,12 +26,12 @@ describe('core/prelude/function/curry', () => {
 		expect(c3(1)(2)).toBe(8);
 	});
 
-	it('curry with gaps', () => {
+	it('`curry` with gaps', () => {
 		const multiply = (a, b, c) => a * b * c;
 		expect(multiply.curry()(Function.__)(2)(3, 4)).toBe(24);
 	});
 
-	it('Function.curry', () => {
+	it('`Function.curry`', () => {
 		const multiply = (a, b, c) => a * b * c;
 		expect(Function.curry(multiply)(2)(3, 4)).toBe(24);
 	});

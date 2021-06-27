@@ -13,7 +13,7 @@ describe('core/net', () => {
 	const
 		originalURL = config.online.checkURL;
 
-	it('isOnline', async () => {
+	it('`isOnline`', async () => {
 		config.online.checkURL = 'https://google.com/favicon.ico';
 
 		expect(await isOnline()).toEqual({status: true, lastOnline: undefined});

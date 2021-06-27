@@ -9,7 +9,7 @@
 import { capitalizeCache, camelizeCache, dasherizeCache, underscoreCache } from 'core/prelude/string/const';
 
 describe('core/prelude/string', () => {
-	it('letters', () => {
+	it('`letters`', () => {
 		expect('1'.letters().next).toBeInstanceOf(Function);
 
 		expect([...'1😃à🇷🇺👩🏽‍❤️‍💋‍👨'.letters()]).toEqual([
@@ -28,7 +28,7 @@ describe('core/prelude/string', () => {
 		]);
 	});
 
-	it('String.letters', () => {
+	it('`String.letters`', () => {
 		expect(String.letters('1').next).toBeInstanceOf(Function);
 
 		expect([...String.letters('1😃à🇷🇺👩🏽‍❤️‍💋‍👨')]).toEqual([
@@ -40,28 +40,28 @@ describe('core/prelude/string', () => {
 		]);
 	});
 
-	it('capitalize', () => {
+	it('`capitalize`', () => {
 		expect('hello world😃😡'.capitalize()).toBe('Hello world😃😡');
 		expect('HELLO WORLD😃😡'.capitalize()).toBe('HELLO WORLD😃😡');
 	});
 
-	it('capitalize (extended Unicode)', () => {
+	it('`capitalize` (extended Unicode)', () => {
 		expect('à hello world'.capitalize()).toBe('À hello world');
 		expect('😃 hello world'.capitalize()).toBe('😃 hello world');
 	});
 
-	it('capitalize with lowering', () => {
+	it('`capitalize` with lowering', () => {
 		expect('hello world'.capitalize({lower: true})).toBe('Hello world');
 		expect('HELLO WORLD'.capitalize({lower: true})).toBe('Hello world');
 	});
 
-	it('capitalize all words', () => {
+	it('`capitalize` all words', () => {
 		expect('hello world'.capitalize({all: true})).toBe('Hello World');
 		expect('HELLO WORLD'.capitalize({all: true})).toBe('HELLO WORLD');
 		expect('HELLO WORLD'.capitalize({all: true, lower: true})).toBe('Hello World');
 	});
 
-	it('capitalize cache', () => {
+	it('`capitalize` cache', () => {
 		expect('cached string'.capitalize()).toBe('Cached string');
 		expect(capitalizeCache['false:false:cached string']).toBe('Cached string');
 
@@ -75,13 +75,13 @@ describe('core/prelude/string', () => {
 		expect(capitalizeCache['false:false:non cached string']).toBeUndefined();
 	});
 
-	it('String.capitalize', () => {
+	it('`String.capitalize`', () => {
 		expect(String.capitalize('hello world')).toBe('Hello world');
 		expect(String.capitalize('hello world', {all: true})).toBe('Hello World');
 		expect(String.capitalize({all: true})('hello world')).toBe('Hello World');
 	});
 
-	it('camelize', () => {
+	it('`camelize`', () => {
 		expect('foo_bar_b-l aBaz😃😡'.camelize()).toBe('FooBarBLABaz😃😡');
 		expect('foo_bar_b-l aBaz😃😡'.camelize()).toBe('FooBarBLABaz😃😡');
 		expect('foo_bar_b-l aBaz😃😡'.camelize(true)).toBe('FooBarBLABaz😃😡');
@@ -90,19 +90,19 @@ describe('core/prelude/string', () => {
 		expect(''.camelize(true)).toBe('');
 	});
 
-	it('camelize (extended Unicode)', () => {
+	it('`camelize` (extended Unicode)', () => {
 		expect('Àhello_world'.camelize()).toBe('ÀhelloWorld');
 		expect('😃_hello_world'.camelize()).toBe('😃HelloWorld');
 	});
 
-	it('camelize without capitalizing', () => {
+	it('`camelize` without capitalizing', () => {
 		expect('foo_bar_b-l aBaz'.camelize(false)).toBe('fooBarBLABaz');
 		expect('foo_bar_b-l aBaz'.camelize({upper: false})).toBe('fooBarBLABaz');
 		expect('Foo_bar_b-l aBaz'.camelize(false)).toBe('fooBarBLABaz');
 		expect(''.camelize(false)).toBe('');
 	});
 
-	it('camelize cache', () => {
+	it('`camelize` cache', () => {
 		expect('cached string'.camelize()).toBe('CachedString');
 		expect(camelizeCache['true:cached string']).toBe('CachedString');
 
@@ -113,30 +113,30 @@ describe('core/prelude/string', () => {
 		expect(camelizeCache['false:false:non cached string']).toBeUndefined();
 	});
 
-	it('String.camelize', () => {
+	it('`String.camelize`', () => {
 		expect(String.camelize('foo_bar_b-l aBaz')).toBe('FooBarBLABaz');
 		expect(String.camelize('foo_bar_b-l aBaz', false)).toBe('fooBarBLABaz');
 		expect(String.camelize('foo_bar_b-l aBaz', {upper: false})).toBe('fooBarBLABaz');
 		expect(String.camelize({upper: false})('foo_bar_b-l aBaz')).toBe('fooBarBLABaz');
 	});
 
-	it('dasherize', () => {
+	it('`dasherize`', () => {
 		expect('foo_bar_b-l aBaz😃😡'.dasherize()).toBe('foo-bar-b-l-a-baz😃😡');
 		expect('FooBarBAZ'.dasherize()).toBe('foo-bar-baz');
 		expect('FOOBarBAZ'.dasherize()).toBe('foo-bar-baz');
 	});
 
-	it('dasherize (extended Unicode)', () => {
+	it('`dasherize` (extended Unicode)', () => {
 		expect('FooBarÀZ'.dasherize()).toBe('foo-bar-àz');
 	});
 
-	it('stable dasherize', () => {
+	it('stable `dasherize`', () => {
 		expect('foo_bar_b-l aBaz'.dasherize(true)).toBe('foo-bar-b-l-a-baz');
 		expect('FooBarBAZ'.dasherize(true)).toBe('foo-bar-b-a-z');
 		expect('FOOBarBAZ'.dasherize({stable: true})).toBe('f-o-o-bar-b-a-z');
 	});
 
-	it('dasherize cache', () => {
+	it('`dasherize` cache', () => {
 		expect('cached string'.dasherize()).toBe('cached-string');
 		expect(dasherizeCache['false:cached string']).toBe('cached-string');
 
@@ -147,30 +147,30 @@ describe('core/prelude/string', () => {
 		expect(dasherizeCache['false:false:non cached string']).toBeUndefined();
 	});
 
-	it('String.dasherize', () => {
+	it('`String.dasherize`', () => {
 		expect(String.dasherize('foo_bar_b-l aBaz')).toBe('foo-bar-b-l-a-baz');
 		expect(String.dasherize('FOOBarBAZ', true)).toBe('f-o-o-bar-b-a-z');
 		expect(String.dasherize('FOOBarBAZ', {stable: true})).toBe('f-o-o-bar-b-a-z');
 		expect(String.dasherize({stable: true})('FOOBarBAZ')).toBe('f-o-o-bar-b-a-z');
 	});
 
-	it('underscore', () => {
+	it('`underscore`', () => {
 		expect('foo_bar_b-l aBaz😃😡'.underscore()).toBe('foo_bar_b_l_a_baz😃😡');
 		expect('FooBarBAZ'.underscore()).toBe('foo_bar_baz');
 		expect('FOOBarBAZ'.underscore()).toBe('foo_bar_baz');
 	});
 
-	it('underscore (extended Unicode)', () => {
+	it('`underscore` (extended Unicode)', () => {
 		expect('FooBarÀZ'.underscore()).toBe('foo_bar_àz');
 	});
 
-	it('stable underscore', () => {
+	it('stable `underscore`', () => {
 		expect('foo_bar_b-l aBaz'.underscore(true)).toBe('foo_bar_b_l_a_baz');
 		expect('FooBarBAZ'.underscore(true)).toBe('foo_bar_b_a_z');
 		expect('FOOBarBAZ'.underscore({stable: true})).toBe('f_o_o_bar_b_a_z');
 	});
 
-	it('underscore cache', () => {
+	it('`underscore` cache', () => {
 		expect('cached string'.underscore()).toBe('cached_string');
 		expect(underscoreCache['false:cached string']).toBe('cached_string');
 
@@ -181,7 +181,7 @@ describe('core/prelude/string', () => {
 		expect(underscoreCache['false:false:non cached string']).toBeUndefined();
 	});
 
-	it('String.underscore', () => {
+	it('`String.underscore`', () => {
 		expect(String.underscore('foo_bar_b-l aBaz')).toBe('foo_bar_b_l_a_baz');
 		expect(String.underscore('FOOBarBAZ', true)).toBe('f_o_o_bar_b_a_z');
 		expect(String.underscore('FOOBarBAZ', {stable: true})).toBe('f_o_o_bar_b_a_z');

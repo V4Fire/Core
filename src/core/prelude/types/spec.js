@@ -9,7 +9,7 @@
  */
 
 describe('core/prelude/types', () => {
-	it('Object.isTruly', () => {
+	it('`Object.isTruly`', () => {
 		expect(Object.isTruly(false)).toBeFalse();
 		expect(Object.isTruly(0)).toBeFalse();
 		expect(Object.isTruly('')).toBeFalse();
@@ -18,7 +18,7 @@ describe('core/prelude/types', () => {
 		expect(Object.isTruly(Object(false))).toBeTrue();
 	});
 
-	it('Object.isPrimitive', () => {
+	it('`Object.isPrimitive`', () => {
 		expect(Object.isPrimitive('')).toBeTrue();
 		expect(Object.isPrimitive(Symbol('primitive'))).toBeTrue();
 		expect(Object.isPrimitive(false)).toBeTrue();
@@ -28,7 +28,7 @@ describe('core/prelude/types', () => {
 		expect(Object.isPrimitive(Object(true))).toBeFalse();
 	});
 
-	it('Object.isDictionary', () => {
+	it('`Object.isDictionary`', () => {
 		class Foo {}
 
 		expect(Object.isDictionary({})).toBeTrue();
@@ -38,7 +38,7 @@ describe('core/prelude/types', () => {
 		expect(Object.isDictionary([])).toBeFalse();
 	});
 
-	it('Object.isPlainObject', () => {
+	it('`Object.isPlainObject`', () => {
 		class Foo {}
 
 		expect(Object.isPlainObject({})).toBeTrue();
@@ -48,7 +48,7 @@ describe('core/prelude/types', () => {
 		expect(Object.isPlainObject([])).toBeFalse();
 	});
 
-	it('Object.isCustomObject', () => {
+	it('`Object.isCustomObject`', () => {
 		class Foo {}
 
 		expect(Object.isCustomObject({})).toBeTrue();
@@ -58,7 +58,7 @@ describe('core/prelude/types', () => {
 		expect(Object.isCustomObject([])).toBeFalse();
 	});
 
-	it('Object.isSimpleObject', () => {
+	it('`Object.isSimpleObject`', () => {
 		class Foo {}
 
 		expect(Object.isSimpleObject({})).toBeTrue();
@@ -69,7 +69,7 @@ describe('core/prelude/types', () => {
 		expect(Object.isSimpleObject({[Symbol.toStringTag]: 'boom'})).toBeFalse();
 	});
 
-	it('Object.isArray', () => {
+	it('`Object.isArray`', () => {
 		expect(Object.isArray([])).toBeTrue();
 		expect(Object.isArray({length: 0})).toBeFalse();
 		expect(Object.isArray({length: 1, 0: 1})).toBeFalse();
@@ -78,7 +78,7 @@ describe('core/prelude/types', () => {
 		expect(Object.isArray(null)).toBeFalse();
 	});
 
-	it('Object.isArrayLike', () => {
+	it('`Object.isArrayLike`', () => {
 		expect(Object.isArrayLike([])).toBeTrue();
 		expect(Object.isArrayLike({length: 0})).toBeTrue();
 		expect(Object.isArrayLike({length: 1, 0: 1})).toBeTrue();
@@ -88,7 +88,7 @@ describe('core/prelude/types', () => {
 		expect(Object.isArrayLike(null)).toBeFalse();
 	});
 
-	it('Object.isFunction', () => {
+	it('`Object.isFunction`', () => {
 		function foo() {}
 
 		const
@@ -102,7 +102,7 @@ describe('core/prelude/types', () => {
 		expect(Object.isFunction(null)).toBeFalse();
 	});
 
-	it('Object.isSimpleFunction', () => {
+	it('`Object.isSimpleFunction`', () => {
 		function foo() {}
 
 		const
@@ -116,7 +116,7 @@ describe('core/prelude/types', () => {
 		expect(Object.isFunction(null)).toBeFalse();
 	});
 
-	it('Object.isGenerator', () => {
+	it('`Object.isGenerator`', () => {
 		function foo() {}
 
 		const
@@ -129,7 +129,7 @@ describe('core/prelude/types', () => {
 		expect(Object.isGenerator(null)).toBeFalse();
 	});
 
-	it('Object.isIterator', () => {
+	it('`Object.isIterator`', () => {
 		function* baz() {}
 
 		expect(Object.isIterator([].values())).toBeTrue();
@@ -138,7 +138,7 @@ describe('core/prelude/types', () => {
 		expect(Object.isIterator(null)).toBeFalse();
 	});
 
-	it('Object.isIterable', () => {
+	it('`Object.isIterable`', () => {
 		expect(Object.isIterable([])).toBeTrue();
 		expect(Object.isIterable([].values())).toBeTrue();
 		expect(Object.isIterable('')).toBeTrue();
@@ -146,13 +146,13 @@ describe('core/prelude/types', () => {
 		expect(Object.isIterable(null)).toBeFalse();
 	});
 
-	it('Object.isString', () => {
+	it('`Object.isString`', () => {
 		expect(Object.isString('')).toBeTrue();
 		expect(Object.isString(Object(''))).toBeFalse();
 		expect(Object.isString(null)).toBeFalse();
 	});
 
-	it('Object.isNumber', () => {
+	it('`Object.isNumber`', () => {
 		expect(Object.isNumber(0)).toBeTrue();
 		expect(Object.isNumber(Infinity)).toBeTrue();
 		expect(Object.isNumber(NaN)).toBeTrue();
@@ -164,21 +164,21 @@ describe('core/prelude/types', () => {
 		}
 	});
 
-	it('Object.isBoolean', () => {
+	it('`Object.isBoolean`', () => {
 		expect(Object.isBoolean(false)).toBeTrue();
 		expect(Object.isBoolean(Object(true))).toBeFalse();
 		expect(Object.isBoolean(1)).toBeFalse();
 		expect(Object.isBoolean(null)).toBeFalse();
 	});
 
-	it('Object.isSymbol', () => {
+	it('`Object.isSymbol`', () => {
 		expect(Object.isSymbol(Symbol('symbol'))).toBeTrue();
 		expect(Object.isSymbol(Symbol.iterator)).toBeTrue();
 		expect(Object.isSymbol('foo')).toBeFalse();
 		expect(Object.isSymbol(null)).toBeFalse();
 	});
 
-	it('Object.isRegExp', () => {
+	it('`Object.isRegExp`', () => {
 		expect(Object.isRegExp(/\d/)).toBeTrue();
 
 		// eslint-disable-next-line prefer-regex-literals
@@ -188,45 +188,45 @@ describe('core/prelude/types', () => {
 		expect(Object.isRegExp(null)).toBeFalse();
 	});
 
-	it('Object.isDate', () => {
+	it('`Object.isDate`', () => {
 		expect(Object.isDate(new Date())).toBeTrue();
 		expect(Object.isDate(new Date(NaN))).toBeTrue();
 		expect(Object.isDate(Date.now())).toBeFalse();
 		expect(Object.isDate(null)).toBeFalse();
 	});
 
-	it('Object.isPromise', () => {
+	it('`Object.isPromise`', () => {
 		expect(Object.isPromise(Promise.resolve())).toBeTrue();
 		expect(Object.isPromise({then: () => {}, catch: () => {}})).toBeTrue();
 		expect(Object.isPromise({then: () => {}})).toBeFalse();
 		expect(Object.isPromise(null)).toBeFalse();
 	});
 
-	it('Object.isPromiseLike', () => {
+	it('`Object.isPromiseLike`', () => {
 		expect(Object.isPromiseLike(Promise.resolve())).toBeTrue();
 		expect(Object.isPromiseLike({then: () => {}})).toBeTrue();
 		expect(Object.isPromiseLike(null)).toBeFalse();
 	});
 
-	it('Object.isMap', () => {
+	it('`Object.isMap`', () => {
 		expect(Object.isMap(new Map())).toBeTrue();
 		expect(Object.isMap(new WeakMap())).toBeFalse();
 		expect(Object.isMap(null)).toBeFalse();
 	});
 
-	it('Object.isWeakMap', () => {
+	it('`Object.isWeakMap`', () => {
 		expect(Object.isWeakMap(new WeakMap())).toBeTrue();
 		expect(Object.isWeakMap(new Map())).toBeFalse();
 		expect(Object.isWeakMap(null)).toBeFalse();
 	});
 
-	it('Object.isSet', () => {
+	it('`Object.isSet`', () => {
 		expect(Object.isSet(new Set())).toBeTrue();
 		expect(Object.isSet(new WeakSet())).toBeFalse();
 		expect(Object.isSet(null)).toBeFalse();
 	});
 
-	it('Object.isWeakSet', () => {
+	it('`Object.isWeakSet`', () => {
 		expect(Object.isWeakSet(new WeakSet())).toBeTrue();
 		expect(Object.isWeakSet(new Set())).toBeFalse();
 		expect(Object.isWeakSet(null)).toBeFalse();
