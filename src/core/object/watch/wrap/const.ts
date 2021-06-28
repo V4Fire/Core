@@ -154,7 +154,7 @@ export const structureWrappers = Object.createDict<StructureWrappers>({
 					return null;
 				}
 
-				deleteNumber = deleteNumber ?? target.length;
+				deleteNumber ??= target.length;
 
 				if (deleteNumber <= 0 && newEls.length === 0) {
 					return null;

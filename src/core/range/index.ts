@@ -108,7 +108,7 @@ export default class Range<T extends RangeValue> {
 
 			} else {
 				end = NaN;
-				type = type ?? r.type;
+				type ??= r.type;
 			}
 		}
 

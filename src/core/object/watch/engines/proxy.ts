@@ -91,7 +91,7 @@ export function watch<T extends object>(
 	root?: object,
 	top?: object
 ): Watcher<T> | T {
-	opts = opts ?? {};
+	opts ??= {};
 
 	const
 		unwrappedObj = unwrap(obj),

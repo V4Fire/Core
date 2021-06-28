@@ -137,7 +137,7 @@ function request<D = unknown>(
 		resolver = args[0];
 	}
 
-	opts = opts ?? {};
+	opts ??= {};
 
 	const
 		baseCtx = new RequestContext<D>(merge(defaultRequestOpts, opts));

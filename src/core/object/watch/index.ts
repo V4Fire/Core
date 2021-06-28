@@ -155,7 +155,7 @@ function watch<T extends object>(
 		}
 	}
 
-	opts = opts ?? {};
+	opts ??= {};
 	opts.engine = opts.engine ?? watchEngine;
 
 	const
@@ -293,7 +293,7 @@ function watch<T extends object>(
 				// If we have a tied property with the property that have a mutation,
 				// we need to register it
 				if (tiedPath != null) {
-					cache = cache ?? new Map();
+					cache ??= new Map();
 
 					if (Object.get(cache, tiedPath) === true) {
 						return;
@@ -313,7 +313,7 @@ function watch<T extends object>(
 							return [dynamicVal, undefined, resolvedInfo];
 						}
 
-						dynamicValStore = dynamicValStore ?? new Map();
+						dynamicValStore ??= new Map();
 
 						const args = [
 							dynamicVal,
