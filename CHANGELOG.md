@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.54.0 (2021-07-02)
+
+#### :rocket: Internal
+
+* Removed error logging duplication `core/data/modules/base`
+
 ## v3.53.0 (2021-06-24)
 
 #### :rocket: New Feature
