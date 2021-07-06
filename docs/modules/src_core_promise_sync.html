@@ -251,7 +251,16 @@ pre {
 <span style="color: #001080">SyncPromise</span><span style="color: #000000">.</span><span style="color: #795E26">resolve</span><span style="color: #000000">().</span><span style="color: #795E26">then</span><span style="color: #000000">(() </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #098658">1</span><span style="color: #000000">));</span>
 <span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">);</span>
 </code></pre>
-						<p>Also, the module provides a bunch of helpers to memoize promises.</p>
+						<a href="#helpers" id="helpers" style="color: inherit; text-decoration: none;">
+							<h2>Helpers</h2>
+						</a>
+						<p>The module provides a bunch of helpers to memoize promises.</p>
+						<a href="#memoize" id="memoize" style="color: inherit; text-decoration: none;">
+							<h3>Memoize</h3>
+						</a>
+						<p>Memorizes the specified promise and converts it to a synchronous promise.
+							It means that after the first resolution, the promised result will be cached,
+						and the method returns the synchronous version of a promise.</p>
 						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">memoize</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/promise/memoize&#039;</span><span style="color: #000000">;</span>
 
 <span style="color: #008000">// Will fire:</span>
