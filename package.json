@@ -4,7 +4,7 @@
   "homepage": "https://github.com/V4Fire/Core#readme",
   "main": "src/core/index.js",
   "typings": "index.d.ts",
-  "license": "MIT",===
+  "license": "MIT",
   "version": "3.53.1",
   "author": {
     "name": "kobezzza",
