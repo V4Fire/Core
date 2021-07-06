@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.53.1 (2021-07-06)
+
+#### :bug: Bug Fix
+
+* Fixed parsing with encoded system symbols
+
 ## v3.43.1 (2021-04-19)
 
 #### :bug: Bug Fix

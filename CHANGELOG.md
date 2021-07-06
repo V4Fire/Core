@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.53.1 (2021-07-06)
+
+#### :bug: Bug Fix
+
+* Fixed parsing with encoded system symbols `core/url`
+
 ## v3.53.0 (2021-06-24)
 
 #### :rocket: New Feature

@@ -31,14 +31,27 @@ describe('core/url/fromQueryString', () => {
 
 	it('parsing from querystring', () => {
 		expect(fromQueryString('?foo=bar')).toEqual({foo: 'bar'});
+		expect(fromQueryString('?foo=bar&bla=10')).toEqual({foo: 'bar', bla: 10});
+	});
 
+	it('parsing from a relative URL', () => {
+		expect(fromQueryString('/foo/bar/baz')).toEqual({'/foo/bar/baz': null});
+		expect(fromQueryString('/foo/bar/baz?baz=1')).toEqual({baz: 1});
+		expect(fromQueryString('/foo/bar/baz?baz=1&bar=true')).toEqual({baz: 1, bar: true});
+	});
+
+	it('parsing from an absolute URL', () => {
 		expect(fromQueryString('http://foo.bla?foo=bar')).toEqual({foo: 'bar'});
 		expect(fromQueryString('http://foo.bla/bar/baz?foo=bar')).toEqual({foo: 'bar'});
 		expect(fromQueryString('http://foo.bla/bar/baz')).toEqual({});
 
-		expect(fromQueryString('wss://foo.bla/bar/baz')).toEqual({});
-		expect(fromQueryString('/foo/bar/baz')).toEqual({'/foo/bar/baz': null});
 		expect(fromQueryString('wss://foo.bla/bar/baz?foo=bar')).toEqual({foo: 'bar'});
+		expect(fromQueryString('wss://foo.bla/bar/baz')).toEqual({});
+	});
+
+	it('parsing with encoded special symbols', () => {
+		expect(fromQueryString(`a=${encodeURIComponent('b=c')}`)).toEqual({a: 'b=c'});
+		expect(fromQueryString(`a=${encodeURIComponent('d=1&b=c')}&e=1`)).toEqual({a: 'd=1&b=c', e: 1});
 	});
 
 	it('parsing without decoding', () => {
