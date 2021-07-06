@@ -19,6 +19,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :house: Internal
 
+* Removed error logging duplication `core/data/modules/base`
 * Updated dependencies: `dotenv@10.0.0`, `typescript@4.3.5`, `tlib@2.3.0`, `typedoc@0.21.1`, `husky@7.0.0`
 
 ## v3.53.0 (2021-06-24)
