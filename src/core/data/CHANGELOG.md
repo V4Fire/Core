@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.53.1 (2021-07-06)
+
+#### :house: Internal
+
+* Removed error logging duplication
+
 ## v3.38.1 (2021-03-19)
 
 #### :bug: Bug Fix
