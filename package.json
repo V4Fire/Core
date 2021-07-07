@@ -35,8 +35,8 @@
     "up": "npm i && npm up && npm audit fix && npx gulp build:doc"
   },
   "dependencies": {
-    "@types/got": "^9.6.11",
-    "@types/jasmine": "^3.7.7",
+    "@types/got": "^9.6.12",
+    "@types/jasmine": "^3.7.8",
     "dom-storage": "^2.1.0",
     "eventemitter2": "^6.4.4",
     "form-data": "^4.0.0",
@@ -87,7 +87,7 @@
     "@v4fire/linters": "^1.7.3",
     "abort-controller": "^3.0.0",
     "express": "^4.17.1",
-    "husky": "^7.0.0",
+    "husky": "^7.0.1",
     "node-fetch": "^2.6.1",
     "nyc": "^15.1.0",
     "xhr2": "^0.2.1"

@@ -25,7 +25,7 @@
  */
 module.exports = function init(gulp) {
 	const
-		fs = require('fs-extra-promise');
+		fs = require('fs-extra');
 
 	const
 		{src, monic} = require('config'),
