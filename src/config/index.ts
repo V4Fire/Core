@@ -59,6 +59,10 @@ const config = <Config>{
 				}
 			}
 		]
+	},
+
+	perf: {
+		engine: 'console'
 	}
 };
 
