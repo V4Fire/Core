@@ -7,7 +7,7 @@
  */
 
 import Storage from 'dom-storage';
-import * as fs from 'fs-extra-promise';
+import * as fs from 'fs-extra';
 
 import { Cache } from 'core/cache';
 

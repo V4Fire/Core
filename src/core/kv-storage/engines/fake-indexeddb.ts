@@ -8,4 +8,4 @@
 
 import 'fake-indexeddb/auto';
 
-export * from 'core/kv-storage/engines/browser.indexeddb';
+export * from 'core/kv-storage/engines/browser-indexeddb';

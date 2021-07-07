@@ -11,6 +11,13 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.54.0 (2021-??-??)
+
+#### :boom: Breaking Change
+
+* Migration from `fs-extra-promise` to `fs-extra`
+* Renamed `core/kv-storage` engines: `browser.indexeddb` -> `browser-indexeddb`, `browser.localstorage` -> `browser-localstorage`, etc.
+
 ## v3.53.1 (2021-07-06)
 
 #### :bug: Bug Fix

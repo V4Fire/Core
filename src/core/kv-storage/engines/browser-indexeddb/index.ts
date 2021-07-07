@@ -8,8 +8,8 @@
 
 import { Cache } from 'core/cache';
 
-import syncLocalEngine from 'core/kv-storage/engines/browser.indexeddb/sync-engine';
-import AsyncLocalEngine from 'core/kv-storage/engines/browser.indexeddb/async-engine';
+import syncLocalEngine from 'core/kv-storage/engines/browser-indexeddb/sync-engine';
+import AsyncLocalEngine from 'core/kv-storage/engines/browser-indexeddb/async-engine';
 
 const
 	asyncLocalEngine = new AsyncLocalEngine(),
