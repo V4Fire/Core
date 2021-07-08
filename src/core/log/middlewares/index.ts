@@ -6,9 +6,10 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { ConfigurableMiddleware } from 'core/log/middlewares/configurable';
+import { InitializationQueueMiddleware } from 'core/log/middlewares/initialization-queue';
 import { ExtractorMiddleware } from 'core/log/middlewares/extractor';
 import type { LogMiddleware } from 'core/log/middlewares/interface';
+import { FilterMiddleware } from 'core/log/middlewares/filter';
 
 export { extend, Extended } from 'core/log/base';
 export * from 'core/log/middlewares/interface';
@@ -22,7 +23,8 @@ export function creatorFor<T extends LogMiddleware, A extends any[]>(Ctor: new (
 }
 
 const middlewareFactory = {
-	configurable: creatorFor(ConfigurableMiddleware),
+	initializationQueue: creatorFor(InitializationQueueMiddleware),
+	filter: creatorFor(FilterMiddleware),
 	extractor: creatorFor(ExtractorMiddleware)
 };
 

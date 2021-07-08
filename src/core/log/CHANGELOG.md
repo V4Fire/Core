@@ -9,6 +9,14 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.55.0 (2021-07-08)
+
+#### :rocket: New Feature
+
+* Added a new middleware `FilterMiddleware`
+* Added a new function for getting logging configuration options `getLogOptions`
+* `ConfigurableMiddleware` middleware transformed to `InitializationQueueMiddleware` and `ContextFilter`
+
 ## v3.37.0 (2021-03-17)
 
 #### :boom: Breaking Change

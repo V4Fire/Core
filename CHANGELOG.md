@@ -11,6 +11,16 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.55.0 (2021-07-08)
+
+#### :rocket: New Feature
+
+* `core/log`:
+  * Added a new middleware `FilterMiddleware`
+  * Added a new function for getting logging configuration options `getLogOptions`
+  * `ConfigurableMiddleware` middleware transformed to `InitializationQueueMiddleware` and `ContextFilter`
+* Added `FilterMiddleware` with `DuplicatesFilter` to log config
+
 ## v3.53.0 (2021-06-24)
 
 #### :rocket: New Feature

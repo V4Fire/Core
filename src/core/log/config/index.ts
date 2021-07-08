@@ -7,5 +7,6 @@
  */
 
 export * from 'core/log/config/interface';
-export * from 'core/log/config/styles';
+export * from 'core/log/config/options';
 export * from 'core/log/config/pipeline';
+export * from 'core/log/config/styles';

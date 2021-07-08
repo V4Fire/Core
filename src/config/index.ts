@@ -13,6 +13,8 @@
 
 import { RequestErrorDetailsExtractor } from 'core/request/error';
 import type { Config } from 'config/interface';
+import DuplicatesFilter from 'core/log/middlewares/filter/modules/duplicates-filter';
+import ContextFilter from 'core/log/middlewares/filter/modules/context-filter';
 
 export * from 'config/interface';
 
@@ -35,7 +37,8 @@ const config = <Config>{
 		pipelines: [
 			{
 				middlewares: [
-					'configurable',
+					'initializationQueue',
+					['filter', [new DuplicatesFilter(), new ContextFilter()]],
 					['extractor', [new RequestErrorDetailsExtractor()]]
 				],
 
