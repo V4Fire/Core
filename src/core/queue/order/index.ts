@@ -112,7 +112,7 @@ export default class OrderedQueue<T> extends Queue<T> {
 			const
 				parentVal = this.tasks[parent];
 
-			if (this.comparator(val!, parentVal!) <= 0) {
+			if (this.comparator(val, parentVal) <= 0) {
 				break;
 			}
 
@@ -141,7 +141,7 @@ export default class OrderedQueue<T> extends Queue<T> {
 				child;
 
 			if (child2 <= this.lastIndex) {
-				child = this.comparator(this.tasks[child1]!, this.tasks[child2]!) > 0 ? child1 : child2;
+				child = this.comparator(this.tasks[child1], this.tasks[child2]) > 0 ? child1 : child2;
 
 			} else {
 				child = child1;
@@ -150,7 +150,7 @@ export default class OrderedQueue<T> extends Queue<T> {
 			const
 				childVal = this.tasks[child];
 
-			if (child == null || this.comparator(val!, childVal!) > 0) {
+			if (child == null || this.comparator(val, childVal) > 0) {
 				break;
 			}
 

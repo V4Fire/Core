@@ -11,5 +11,5 @@ import type { Tasks as SuperTasks } from 'core/queue/interface';
 export * from 'core/queue/interface';
 
 export interface Tasks<T> extends SuperTasks<T> {
-	[i: number]: CanUndef<T>;
+	[i: number]: T;
 }
