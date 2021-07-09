@@ -89,7 +89,7 @@ export function convertDataToSend<T = RequestBody>(data: unknown, contentType?: 
 
 		if (IS_NODE) {
 			//#if node_js
-			// eslint-disable-next-line @typescript-eslint/no-var-requires
+			// eslint-disable-next-line @typescript-eslint/no-var-requires,import/no-nodejs-modules
 			return val instanceof Buffer || val instanceof require('stream').Readable;
 			//#endif
 		}

@@ -106,6 +106,48 @@ describe('core/prelude/function/lazy', () => {
 		}, 20);
 	});
 
+	it('`throttle` with an interval', (done) => {
+		let i = 0;
+
+		const foo = (() => {
+			i++;
+		}).throttle({delay: 500});
+
+		const timerId = setInterval(foo, 10);
+
+		setTimeout(() => {
+			expect(i).toBe(3);
+			clearInterval(timerId);
+
+			setTimeout(() => {
+				expect(i).toBe(4);
+				done();
+			}, 500);
+
+		}, 1100);
+	});
+
+	it('`throttle` with an interval and skipping the rest calls', (done) => {
+		let i = 0;
+
+		const foo = (() => {
+			i++;
+		}).throttle({delay: 500, single: true});
+
+		const timerId = setInterval(foo, 10);
+
+		setTimeout(() => {
+			expect(i).toBe(3);
+			clearInterval(timerId);
+
+			setTimeout(() => {
+				expect(i).toBe(3);
+				done();
+			}, 500);
+
+		}, 1100);
+	});
+
 	it('`Function.throttle`', (done) => {
 		let i = 0;
 

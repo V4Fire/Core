@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/unified-signatures */
+
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core

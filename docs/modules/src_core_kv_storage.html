@@ -243,33 +243,99 @@ pre {
 						<a href="#corekv-storage" id="corekv-storage" style="color: inherit; text-decoration: none;">
 							<h1>core/kv-storage</h1>
 						</a>
-						<p>This module provides API to work with a persistent key-value storage using different runtime engines, like localStorage, indexedDb, SQLite, etc.</p>
+						<p>This module provides API to work with a persistent key-value storage using different runtime engines, like localStorage,
+						indexedDb, SQLite, etc.</p>
 						<a href="#supported-engines" id="supported-engines" style="color: inherit; text-decoration: none;">
 							<h2>Supported engines</h2>
 						</a>
 						<ul>
-							<li><code>browser.localstorage</code></li>
-							<li><code>browser.indexeddb</code></li>
-							<li><code>node.localstorage</code></li>
+							<li><code>browser-localstorage</code></li>
+							<li><code>browser-indexeddb</code></li>
+							<li><code>node-localstorage</code></li>
 						</ul>
-						<a href="#simple-synchronous-api" id="simple-synchronous-api" style="color: inherit; text-decoration: none;">
-							<h2>Simple synchronous API</h2>
+						<a href="#api" id="api" style="color: inherit; text-decoration: none;">
+							<h2>API</h2>
 						</a>
-						<p>The module provides a bunch of functions to work with a long-term local storage.</p>
+						<a href="#synchronous-and-asynchronous-api" id="synchronous-and-asynchronous-api" style="color: inherit; text-decoration: none;">
+							<h3>Synchronous and asynchronous API</h3>
+						</a>
+						<p>The module has interfaces to work with storage in a synchronous and asynchronous way.
+							In the case of asynchronous API, all defined methods have the same input parameters as the synchronous API but return promises.
+						Notice, not each engine implements the synchronous API, so we recommend preferring to use asynchronous API in most cases.</p>
+						<a href="#api-structure" id="api-structure" style="color: inherit; text-decoration: none;">
+							<h3>API structure</h3>
+						</a>
+						<p>Both API exposes methods to implement simple CRUD operations.</p>
+						<a href="#has" id="has" style="color: inherit; text-decoration: none;">
+							<h4>has</h4>
+						</a>
+						<p>Returns true if a value by the specified key exists in the storage.
+						Notice, the method can take a list of additional parameters provided to the used storage&#39; engine.</p>
+						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #0000FF">*</span><span style="color: #000000"> </span><span style="color: #AF00DB">as</span><span style="color: #000000"> </span><span style="color: #001080">kv</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/kv-storage&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #001080">kv</span><span style="color: #000000">.</span><span style="color: #795E26">set</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;bla&#039;</span><span style="color: #000000">, </span><span style="color: #098658">1</span><span style="color: #000000">);</span>
+<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">kv</span><span style="color: #000000">.</span><span style="color: #795E26">has</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;bla&#039;</span><span style="color: #000000">) === </span><span style="color: #0000FF">true</span><span style="color: #000000">);</span>
+</code></pre>
+						<a href="#get" id="get" style="color: inherit; text-decoration: none;">
+							<h4>get</h4>
+						</a>
+						<p>Returns a value from the storage by the specified key.</p>
+						<p>The returning value automatically parses by using <code>Object.parse</code> from a string to equivalent JS value, i.e.,
+						<code>&#39;1&#39;</code> will be parsed to <code>1</code>, <code>&#39;true&#39;</code> to <code>true</code>, <code>&#39;2021-07-09T08:15:57.753Z&#39;</code> to <code>Date</code>, etc.</p>
+						<p>Notice, the method can take a list of additional parameters provided to the used storage&#39; engine.</p>
 						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #0000FF">*</span><span style="color: #000000"> </span><span style="color: #AF00DB">as</span><span style="color: #000000"> </span><span style="color: #001080">kv</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/kv-storage&#039;</span><span style="color: #000000">;</span>
 
 <span style="color: #001080">kv</span><span style="color: #000000">.</span><span style="color: #795E26">set</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;bla&#039;</span><span style="color: #000000">, </span><span style="color: #098658">1</span><span style="color: #000000">);</span>
 <span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">kv</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;bla&#039;</span><span style="color: #000000">) === </span><span style="color: #098658">1</span><span style="color: #000000">);</span>
+</code></pre>
+						<a href="#set" id="set" style="color: inherit; text-decoration: none;">
+							<h4>set</h4>
+						</a>
+						<p>Saves a value to the storage by the specified key.</p>
+						<p>The value to parse automatically serializes to a string by using <code>Object.trySerialize</code>, i.e.,
+						arrays and dictionaries will be serialized to JSON, etc.</p>
+						<p>Notice, the method can take a list of additional parameters provided to the used storage&#39; engine.</p>
+						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #0000FF">*</span><span style="color: #000000"> </span><span style="color: #AF00DB">as</span><span style="color: #000000"> </span><span style="color: #001080">kv</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/kv-storage&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #001080">kv</span><span style="color: #000000">.</span><span style="color: #795E26">set</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;bla&#039;</span><span style="color: #000000">, {</span><span style="color: #001080">a:</span><span style="color: #000000"> </span><span style="color: #098658">1</span><span style="color: #000000">});</span>
+<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">kv</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;bla&#039;</span><span style="color: #000000">).</span><span style="color: #001080">a</span><span style="color: #000000"> === </span><span style="color: #098658">1</span><span style="color: #000000">);</span>
+</code></pre>
+						<a href="#remove" id="remove" style="color: inherit; text-decoration: none;">
+							<h4>remove</h4>
+						</a>
+						<p>Removes a value from the storage by the specified key.
+						Notice, the method can take a list of additional parameters provided to the used storage&#39; engine.</p>
+						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #0000FF">*</span><span style="color: #000000"> </span><span style="color: #AF00DB">as</span><span style="color: #000000"> </span><span style="color: #001080">kv</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/kv-storage&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #001080">kv</span><span style="color: #000000">.</span><span style="color: #795E26">set</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;bla&#039;</span><span style="color: #000000">, </span><span style="color: #098658">1</span><span style="color: #000000">);</span>
 <span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">kv</span><span style="color: #000000">.</span><span style="color: #795E26">has</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;bla&#039;</span><span style="color: #000000">) === </span><span style="color: #0000FF">true</span><span style="color: #000000">);</span>
 
-<span style="color: #001080">kv</span><span style="color: #000000">.</span><span style="color: #795E26">set</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;obj&#039;</span><span style="color: #000000">, {</span><span style="color: #001080">a:</span><span style="color: #000000"> </span><span style="color: #098658">1</span><span style="color: #000000">});</span>
-<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">kv</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;obj&#039;</span><span style="color: #000000">).</span><span style="color: #001080">a</span><span style="color: #000000"> === </span><span style="color: #098658">1</span><span style="color: #000000">);</span>
-
 <span style="color: #001080">kv</span><span style="color: #000000">.</span><span style="color: #795E26">remove</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;bla&#039;</span><span style="color: #000000">);</span>
-<span style="color: #001080">kv</span><span style="color: #000000">.</span><span style="color: #795E26">clear</span><span style="color: #000000">((</span><span style="color: #001080">el</span><span style="color: #000000">, </span><span style="color: #001080">key</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">el</span><span style="color: #000000">.</span><span style="color: #001080">a</span><span style="color: #000000"> === </span><span style="color: #098658">1</span><span style="color: #000000">);</span>
+<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">kv</span><span style="color: #000000">.</span><span style="color: #795E26">has</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;bla&#039;</span><span style="color: #000000">) === </span><span style="color: #0000FF">false</span><span style="color: #000000">);</span>
 </code></pre>
-						<a href="#custom-namespaces" id="custom-namespaces" style="color: inherit; text-decoration: none;">
-							<h3>Custom namespaces</h3>
+						<a href="#clear" id="clear" style="color: inherit; text-decoration: none;">
+							<h4>clear</h4>
+						</a>
+						<p>Clears the storage by the specified filter and returns a list of removed keys.
+						Notice, the method can take a list of additional parameters provided to the used storage&#39; engine.</p>
+						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #0000FF">*</span><span style="color: #000000"> </span><span style="color: #AF00DB">as</span><span style="color: #000000"> </span><span style="color: #001080">kv</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/kv-storage&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #001080">kv</span><span style="color: #000000">.</span><span style="color: #795E26">set</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;bla&#039;</span><span style="color: #000000">, </span><span style="color: #098658">1</span><span style="color: #000000">);</span>
+<span style="color: #001080">kv</span><span style="color: #000000">.</span><span style="color: #795E26">set</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;bla2&#039;</span><span style="color: #000000">, </span><span style="color: #098658">2</span><span style="color: #000000">);</span>
+
+<span style="color: #008000">// [&#039;bla&#039;]</span>
+<span style="color: #001080">kv</span><span style="color: #000000">.</span><span style="color: #795E26">clear</span><span style="color: #000000">((</span><span style="color: #001080">el</span><span style="color: #000000">, </span><span style="color: #001080">key</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">el</span><span style="color: #000000"> === </span><span style="color: #098658">1</span><span style="color: #000000">);</span>
+
+<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">kv</span><span style="color: #000000">.</span><span style="color: #795E26">has</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;bla&#039;</span><span style="color: #000000">) === </span><span style="color: #0000FF">false</span><span style="color: #000000">);</span>
+<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">kv</span><span style="color: #000000">.</span><span style="color: #795E26">has</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;bla2&#039;</span><span style="color: #000000">) === </span><span style="color: #0000FF">true</span><span style="color: #000000">);</span>
+
+<span style="color: #008000">// [&#039;bla2&#039;]</span>
+<span style="color: #001080">kv</span><span style="color: #000000">.</span><span style="color: #795E26">clear</span><span style="color: #000000">();</span>
+
+<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">kv</span><span style="color: #000000">.</span><span style="color: #795E26">has</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;bla2&#039;</span><span style="color: #000000">) === </span><span style="color: #0000FF">false</span><span style="color: #000000">);</span>
+</code></pre>
+						<a href="#namespace" id="namespace" style="color: inherit; text-decoration: none;">
+							<h4>namespace</h4>
 						</a>
 						<p>All values are stored within a local storage in the global namespace, i.e., you can override any value you have.
 							If you want to isolate data from other data, you can specify the custom namespace. Mind, you still can override or remove these
@@ -290,31 +356,11 @@ pre {
 <span style="color: #001080">kv</span><span style="color: #000000">.</span><span style="color: #795E26">clear</span><span style="color: #000000">();</span>
 <span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">blaStore</span><span style="color: #000000">.</span><span style="color: #795E26">has</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;foo&#039;</span><span style="color: #000000">) === </span><span style="color: #0000FF">false</span><span style="color: #000000">);</span>
 </code></pre>
-						<a href="#local-api-engine" id="local-api-engine" style="color: inherit; text-decoration: none;">
-							<h3>Local API engine</h3>
-						</a>
-						<p>You can pass your storage API as a strategy to another function or method.</p>
-						<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">local</span><span style="color: #000000">, </span><span style="color: #001080">SyncStorage</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/kv-storage&#039;</span><span style="color: #000000">;</span>
-
-<span style="color: #0000FF">function</span><span style="color: #000000"> </span><span style="color: #795E26">foo</span><span style="color: #000000">(</span><span style="color: #001080">kv</span><span style="color: #000000">: </span><span style="color: #267F99">SyncStorage</span><span style="color: #000000">): </span><span style="color: #267F99">void</span><span style="color: #000000"> {</span>
-<span style="color: #000000">  </span><span style="color: #001080">kv</span><span style="color: #000000">.</span><span style="color: #795E26">set</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;bla&#039;</span><span style="color: #000000">, </span><span style="color: #098658">1</span><span style="color: #000000">);</span>
-<span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">kv</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;bla&#039;</span><span style="color: #000000">) === </span><span style="color: #098658">1</span><span style="color: #000000">);</span>
-<span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">kv</span><span style="color: #000000">.</span><span style="color: #795E26">has</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;bla&#039;</span><span style="color: #000000">) === </span><span style="color: #0000FF">true</span><span style="color: #000000">);</span>
-
-<span style="color: #000000">  </span><span style="color: #001080">kv</span><span style="color: #000000">.</span><span style="color: #795E26">set</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;obj&#039;</span><span style="color: #000000">, {</span><span style="color: #001080">a:</span><span style="color: #000000"> </span><span style="color: #098658">1</span><span style="color: #000000">});</span>
-<span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">kv</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;obj&#039;</span><span style="color: #000000">).</span><span style="color: #001080">a</span><span style="color: #000000"> === </span><span style="color: #098658">1</span><span style="color: #000000">);</span>
-
-<span style="color: #000000">  </span><span style="color: #001080">kv</span><span style="color: #000000">.</span><span style="color: #795E26">remove</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;bla&#039;</span><span style="color: #000000">);</span>
-<span style="color: #000000">  </span><span style="color: #001080">kv</span><span style="color: #000000">.</span><span style="color: #795E26">clear</span><span style="color: #000000">((</span><span style="color: #001080">el</span><span style="color: #000000">, </span><span style="color: #001080">key</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">el</span><span style="color: #000000">.</span><span style="color: #001080">a</span><span style="color: #000000"> === </span><span style="color: #098658">1</span><span style="color: #000000">);</span>
-<span style="color: #000000">}</span>
-
-<span style="color: #795E26">foo</span><span style="color: #000000">(</span><span style="color: #001080">local</span><span style="color: #000000">);</span>
-</code></pre>
-						<a href="#async-api" id="async-api" style="color: inherit; text-decoration: none;">
-							<h2>Async API</h2>
+						<a href="#asynchronous-api" id="asynchronous-api" style="color: inherit; text-decoration: none;">
+							<h3>Asynchronous API</h3>
 						</a>
 						<p>If you need to work with an asynchronous local storage, you can use `asyncLocal. The API is pretty similar to local, but its
-						methods return a promise instead of the raw result.</p>
+						methods return a promise instead of a raw result.</p>
 						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">asyncLocal</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/kv-storage&#039;</span><span style="color: #000000">;</span>
 
 <span style="color: #001080">asyncLocal</span><span style="color: #000000">.</span><span style="color: #795E26">set</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;bla&#039;</span><span style="color: #000000">, </span><span style="color: #098658">1</span><span style="color: #000000">).</span><span style="color: #795E26">then</span><span style="color: #000000">(</span><span style="color: #0000FF">async</span><span style="color: #000000"> () </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
@@ -328,9 +374,9 @@ pre {
 <span style="color: #000000">});</span>
 </code></pre>
 						<a href="#session-api" id="session-api" style="color: inherit; text-decoration: none;">
-							<h2>Session API</h2>
+							<h3>Session API</h3>
 						</a>
-						<p>If you need to store data only for a session, you can use <code>session</code> and <code>asyncSession</code> API-s.</p>
+						<p>If you need to store data only during the active session, you can use <code>session</code> and <code>asyncSession</code> API-s.</p>
 						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">session</span><span style="color: #000000">, </span><span style="color: #001080">asyncSession</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/kv-storage&#039;</span><span style="color: #000000">;</span>
 
 <span style="color: #001080">session</span><span style="color: #000000">.</span><span style="color: #795E26">set</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;bla&#039;</span><span style="color: #000000">, </span><span style="color: #098658">1</span><span style="color: #000000">);</span>
@@ -347,11 +393,54 @@ pre {
 <span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">blaStore</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;bla&#039;</span><span style="color: #000000">) === </span><span style="color: #098658">1</span><span style="color: #000000">);</span>
 <span style="color: #000000">});</span>
 </code></pre>
-						<a href="#specifying-a-custom-engine" id="specifying-a-custom-engine" style="color: inherit; text-decoration: none;">
-							<h2>Specifying a custom engine</h2>
+						<a href="#providing-api-as-a-strategy" id="providing-api-as-a-strategy" style="color: inherit; text-decoration: none;">
+							<h3>Providing API as a strategy</h3>
 						</a>
-						<p>By default, in a browser, the module uses native <code>window.localStorage</code> and <code>window.sessionStorage</code> API-s, but you can
-						specify your engine by using the special factory function.</p>
+						<p>You can pass your storage API as a strategy to another function or method.</p>
+						<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">local</span><span style="color: #000000">, </span><span style="color: #001080">asyncLocal</span><span style="color: #000000">, </span><span style="color: #001080">SyncStorage</span><span style="color: #000000">, </span><span style="color: #001080">AsyncStorage</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/kv-storage&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #0000FF">function</span><span style="color: #000000"> </span><span style="color: #795E26">save</span><span style="color: #000000">(</span><span style="color: #001080">kv</span><span style="color: #000000">: </span><span style="color: #267F99">SyncStorage</span><span style="color: #000000">): </span><span style="color: #267F99">void</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #001080">kv</span><span style="color: #000000">.</span><span style="color: #795E26">set</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;bla&#039;</span><span style="color: #000000">, </span><span style="color: #098658">1</span><span style="color: #000000">);</span>
+<span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">kv</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;bla&#039;</span><span style="color: #000000">) === </span><span style="color: #098658">1</span><span style="color: #000000">);</span>
+<span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">kv</span><span style="color: #000000">.</span><span style="color: #795E26">has</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;bla&#039;</span><span style="color: #000000">) === </span><span style="color: #0000FF">true</span><span style="color: #000000">);</span>
+
+<span style="color: #000000">  </span><span style="color: #001080">kv</span><span style="color: #000000">.</span><span style="color: #795E26">set</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;obj&#039;</span><span style="color: #000000">, {</span><span style="color: #001080">a:</span><span style="color: #000000"> </span><span style="color: #098658">1</span><span style="color: #000000">});</span>
+<span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">kv</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;obj&#039;</span><span style="color: #000000">).</span><span style="color: #001080">a</span><span style="color: #000000"> === </span><span style="color: #098658">1</span><span style="color: #000000">);</span>
+
+<span style="color: #000000">  </span><span style="color: #001080">kv</span><span style="color: #000000">.</span><span style="color: #795E26">remove</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;bla&#039;</span><span style="color: #000000">);</span>
+<span style="color: #000000">  </span><span style="color: #001080">kv</span><span style="color: #000000">.</span><span style="color: #795E26">clear</span><span style="color: #000000">((</span><span style="color: #001080">el</span><span style="color: #000000">, </span><span style="color: #001080">key</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">el</span><span style="color: #000000">.</span><span style="color: #001080">a</span><span style="color: #000000"> === </span><span style="color: #098658">1</span><span style="color: #000000">);</span>
+<span style="color: #000000">}</span>
+
+<span style="color: #795E26">save</span><span style="color: #000000">(</span><span style="color: #001080">local</span><span style="color: #000000">);</span>
+
+<span style="color: #0000FF">function</span><span style="color: #000000"> </span><span style="color: #795E26">asyncSave</span><span style="color: #000000">(</span><span style="color: #001080">kv</span><span style="color: #000000">: </span><span style="color: #267F99">AsyncStorage</span><span style="color: #000000">): </span><span style="color: #267F99">void</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #001080">asyncLocal</span><span style="color: #000000">.</span><span style="color: #795E26">set</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;bla&#039;</span><span style="color: #000000">, </span><span style="color: #098658">1</span><span style="color: #000000">).</span><span style="color: #795E26">then</span><span style="color: #000000">(</span><span style="color: #0000FF">async</span><span style="color: #000000"> () </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">asyncLocal</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;bla&#039;</span><span style="color: #000000">) === </span><span style="color: #098658">1</span><span style="color: #000000">);</span>
+<span style="color: #000000">  });</span>
+<span style="color: #000000">}</span>
+
+<span style="color: #795E26">save</span><span style="color: #000000">(</span><span style="color: #001080">asyncLocal</span><span style="color: #000000">);</span>
+</code></pre>
+						<a href="#specifying-engines-to-store" id="specifying-engines-to-store" style="color: inherit; text-decoration: none;">
+							<h2>Specifying engines to store</h2>
+						</a>
+						<p>By default, in a browser, the module uses native <code>window.localStorage</code> and <code>window.sessionStorage</code> API-s.
+						Also, there is a storage based on <code>IndexedDb</code>. Use the <code>factory</code> method to specify an engine to store.</p>
+						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">factory</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/kv-storage&#039;</span><span style="color: #000000">;</span>
+<span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #0000FF">*</span><span style="color: #000000"> </span><span style="color: #AF00DB">as</span><span style="color: #000000"> </span><span style="color: #001080">idb</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/kv-storage/engines/browser-indexeddb&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">asyncStorage</span><span style="color: #000000"> = </span><span style="color: #795E26">factory</span><span style="color: #000000">(</span><span style="color: #001080">idb</span><span style="color: #000000">.</span><span style="color: #001080">asyncLocalStorage</span><span style="color: #000000">, </span><span style="color: #0000FF">true</span><span style="color: #000000">);</span>
+
+<span style="color: #001080">asyncStorage</span><span style="color: #000000">.</span><span style="color: #795E26">set</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;bla&#039;</span><span style="color: #000000">, </span><span style="color: #098658">1</span><span style="color: #000000">).</span><span style="color: #795E26">then</span><span style="color: #000000">(</span><span style="color: #0000FF">async</span><span style="color: #000000"> () </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">asyncLocal</span><span style="color: #000000">.</span><span style="color: #795E26">get</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;bla&#039;</span><span style="color: #000000">) === </span><span style="color: #098658">1</span><span style="color: #000000">);</span>
+<span style="color: #000000">});</span>
+
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">asyncSessionStorage</span><span style="color: #000000"> = </span><span style="color: #795E26">factory</span><span style="color: #000000">(</span><span style="color: #001080">idb</span><span style="color: #000000">.</span><span style="color: #001080">asyncSessionStorage</span><span style="color: #000000">, </span><span style="color: #0000FF">true</span><span style="color: #000000">);</span>
+</code></pre>
+						<a href="#specifying-a-custom-engine" id="specifying-a-custom-engine" style="color: inherit; text-decoration: none;">
+							<h3>Specifying a custom engine</h3>
+						</a>
+						<p>You can specify your engine by using the <code>factory</code> method.</p>
 						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">factory</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/kv-storage&#039;</span><span style="color: #000000">;</span>
 
 <span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">syncStorage</span><span style="color: #000000"> = </span><span style="color: #795E26">factory</span><span style="color: #000000">(</span><span style="color: #001080">YourSyncStorage</span><span style="color: #000000">);</span>

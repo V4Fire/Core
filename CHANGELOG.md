@@ -11,16 +11,29 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-## v3.54.0 (2021-??-??)
+## v3.54.0 (2021-07-09)
 
 #### :boom: Breaking Change
 
 * Migration from `fs-extra-promise` to `fs-extra`
 * Renamed `core/kv-storage` engines: `browser.indexeddb` -> `browser-indexeddb`, `browser.localstorage` -> `browser-localstorage`, etc.
+* The module has been renamed from `parse` to `convert` `object`
+
+* `core/analytics`:
+  * Removed an implementation of `sendAnalytics`
+  * Updated API of `sendAnalytics`
+
+#### :rocket: New Feature
+
+* Added `Object.trySerialize`
+
+#### :bug: Bug Fix
+
+* Fixed `throttle` callback invoking `core/prelude/function/lazy`
 
 ## v3.53.1 (2021-07-06)
 
-#### :bug: Bug Fix
+#### :bug: Bug Fi
 
 * Fixed parsing with encoded system symbols `core/url`
 

@@ -265,22 +265,7 @@ export function factory(engine: StorageEngine, async?: boolean): AsyncStorage | 
 		},
 
 		set(key: string, value: unknown, ...args: unknown[]): CanPromise<void> {
-			let
-				encodedValue;
-
-			if (Object.isArray(value) || Object.isDictionary(value)) {
-				try {
-					encodedValue = JSON.stringify(value);
-
-				} catch {
-					encodedValue = value;
-				}
-
-			} else {
-				encodedValue = Object.isString(value) ? JSON.stringify(value) : value;
-			}
-
-			return wrap(set(key, encodedValue, ...args), () => undefined);
+			return wrap(set(key, Object.trySerialize(value), ...args), () => undefined);
 		},
 
 		remove(key: string, ...args: unknown[]): CanPromise<void> {

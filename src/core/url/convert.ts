@@ -57,6 +57,8 @@ export function toQueryString(data: unknown, optsOrEncode?: ToQueryStringOptions
 
 	const
 		separator = opts.separator ?? '_',
+
+		// eslint-disable-next-line @typescript-eslint/unbound-method
 		paramsFilter = opts.paramsFilter ?? defaultToQueryStringParamsFilter;
 
 	const stack = Object.keys(data)

@@ -9,8 +9,9 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
-## v3.20.0 (2020-07-05)
+## v3.54.0 (2021-07-09)
 
-#### :rocket: New Feature
+#### :boom: Breaking Change
 
-* Added tests
+* Removed an implementation of `sendAnalytics`
+* Updated API of `sendAnalytics`

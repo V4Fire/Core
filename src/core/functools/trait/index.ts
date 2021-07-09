@@ -96,8 +96,9 @@ export function derive(...traits: Function[]) {
 
 						Object.isFunction(defMethod.value) && (
 							Object.isFunction(traitMethod.value) ||
-							Object.isFunction(traitMethod.get) ||
-							Object.isFunction(traitMethod.set)
+
+							// eslint-disable-next-line @typescript-eslint/unbound-method
+							Object.isFunction(traitMethod.get) || Object.isFunction(traitMethod.set)
 						);
 
 					if (canDerive) {

@@ -263,13 +263,13 @@ interface JSONCb {
 
 interface FastCloneOptions {
 	/**
-	 * Replacer function for JSON.stringify
+	 * Replacer function for `JSON.stringify`
 	 * @see [[JSON.stringify]]
 	 */
 	replacer?: JSONCb;
 
 	/**
-	 * Reviver function for JSON.parse
+	 * Reviver function for `JSON.parse`
 	 * @see [[JSON.parse]]
 	 */
 	reviver?: JSONCb;
@@ -1131,8 +1131,26 @@ interface ObjectConstructor {
 	mixin<R = unknown>(opts: ObjectMixinOptions | boolean, base?: any, ...objects: any[]): R;
 
 	/**
+	 * Returns a curried version of `Object.serialize`
+	 * @param replacer - replacer function to serialize
+	 */
+	trySerialize(replacer?: JSONCb): <V>(value: V) => string | V;
+
+	/**
+	 * Tries to serialize the specified value into a string.
+	 *
+	 * If the value is an array, dictionary, or string or has the predefined `toJSON` method, it is serialized using
+	 * `JSON.stringify`. In other cases, the value isn't serialized and will be returned by the function.
+	 * Also, in the case of error during serialization, the function returns the original value.
+	 *
+	 * @param value
+	 * @param [replacer] - replacer function to serialize
+	 */
+	trySerialize<V>(value: V, replacer?: JSONCb): string | V;
+
+	/**
 	 * Returns a curried version of `Object.parse`
-	 * @param reviver - reviver function for JSON.parse
+	 * @param reviver - reviver function to parse
 	 */
 	parse(reviver?: JSONCb): <V, R = unknown>(value: V) => V extends string ? R : V;
 
@@ -1141,7 +1159,7 @@ interface ObjectConstructor {
 	 * If the value isn't a string or can't be parsed, the function returns the original value.
 	 *
 	 * @param value
-	 * @param [reviver] - reviver function for JSON.parse
+	 * @param [reviver] - reviver function to parse
 	 */
 	parse<V, R = unknown>(value: V, reviver?: JSONCb): V extends string ? R : V;
 
