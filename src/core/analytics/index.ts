@@ -16,11 +16,7 @@ import engine from 'core/analytics/engines';
 export * from 'core/analytics/interface';
 
 /**
- * Sends an analytic event with the specified details
- *
- * @param event - event name
- * @param [details] - event details
- * @param [engine] - engine to send the event
+ * Sends the specified analytic event
  */
 export function send(...args: unknown[]): void {
 	engine(...args);

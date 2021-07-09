@@ -6,18 +6,18 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import { notImplement } from 'core/functools/not-implemented';
 import type { AnalyticEngine } from 'core/analytics/interface';
 
 /**
- * Sends an analytic event with the specified details
- *
+ * Sends the specified analytic event
  * @abstract
- * @param event - event name
- * @param [details] - event details
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
-const sendAnalyticsEvent: AnalyticEngine = (...args: unknown[]) => {
-	// Need some implementation
+const sendEvent: AnalyticEngine = () => {
+	notImplement({
+		type: 'function',
+		name: 'sendAnalyticsEvent'
+	});
 };
 
-export default sendAnalyticsEvent;
+export default sendEvent;
