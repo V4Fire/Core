@@ -15,5 +15,5 @@ export interface Tasks<T> extends SuperTasks<T> {
 }
 
 export interface TaskComparator<T> {
-	(a: CanUndef<T>, b: CanUndef<T>): number;
+	(a: T, b: T): number;
 }
