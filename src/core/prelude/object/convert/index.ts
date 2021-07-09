@@ -38,7 +38,7 @@ extend(Object, 'trySerialize', (value, replacer?: JSONCb) => {
 
 		try {
 			if (Object.isFunction(replacer)) {
-				return replacer(null, encodedValue);
+				return Object.trySerialize(replacer('', encodedValue), replacer);
 			}
 		} catch {}
 	}
@@ -65,7 +65,7 @@ extend(Object, 'parse', (value, reviver?: JSONCb) => {
 		}
 
 		if (Object.isFunction(reviver)) {
-			return reviver(null, value);
+			return reviver('', value);
 		}
 	}
 

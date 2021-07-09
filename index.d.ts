@@ -258,7 +258,7 @@ type AddSelf<M extends Function, S extends object> = M extends (...args: infer A
 	never;
 
 interface JSONCb {
-	(key: string | null, value: unknown): unknown;
+	(key: string, value: unknown): unknown;
 }
 
 interface FastCloneOptions {
