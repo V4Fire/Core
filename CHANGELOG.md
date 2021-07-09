@@ -18,6 +18,10 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 * Migration from `fs-extra-promise` to `fs-extra`
 * Renamed `core/kv-storage` engines: `browser.indexeddb` -> `browser-indexeddb`, `browser.localstorage` -> `browser-localstorage`, etc.
 
+#### :bug: Bug Fix
+
+* Fixed `throttle` callback call `core/prelude/function/lazy`
+
 ## v3.53.1 (2021-07-06)
 
 #### :bug: Bug Fix
