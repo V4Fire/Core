@@ -28,13 +28,42 @@ export default class SimpleQueue<T> extends Queue<T> {
 
 	/** @inheritDoc */
 	get head(): CanUndef<T> {
-		return this.tasks[0];
+		return this.tasks[this.headCursor];
 	}
 
 	/** @inheritDoc */
 	get length(): number {
-		return this.tasks.length;
+		const {
+			headCursor,
+			emptyCursor,
+			tasks: {length}
+		} = this;
+
+		console.log(headCursor, emptyCursor, length);
+
+		if (emptyCursor === length) {
+			console.log('r1', headCursor === length ? 0 : length);
+			return headCursor === length ? 0 : length;
+		}
+
+		if (headCursor > emptyCursor) {
+			console.log('r2', length - emptyCursor - 1);
+			return length - emptyCursor - 1;
+		}
+
+		console.log('r3', length - emptyCursor + headCursor);
+		return length - emptyCursor + headCursor + 1;
 	}
+
+	/**
+	 * Index of the head
+	 */
+	protected headCursor: number = 0;
+
+	/**
+	 * Index of the nearest empty cell
+	 */
+	protected emptyCursor: number = 0;
 
 	/**
 	 * List of tasks
@@ -49,13 +78,25 @@ export default class SimpleQueue<T> extends Queue<T> {
 
 	/** @inheritDoc */
 	push(task: T): number {
-		return this.tasks.push(task);
+		this.tasks[this.emptyCursor++] = task;
+
+		if (this.emptyCursor === this.headCursor) {
+			this.emptyCursor = this.tasks.length;
+		}
+
+		return this.length;
 	}
 
 	/** @inheritDoc */
 	pop(): CanUndef<T> {
-		const {head} = this;
-		this.tasks.shift();
+		const
+			{head} = this;
+
+		this.tasks[this.headCursor] = undefined;
+
+		this.emptyCursor = this.headCursor;
+		this.headCursor++;
+
 		return head;
 	}
 
@@ -63,6 +104,8 @@ export default class SimpleQueue<T> extends Queue<T> {
 	clear(): void {
 		if (this.length > 0) {
 			this.tasks = this.createTasks();
+			this.emptyCursor = 0;
+			this.headCursor = 0;
 		}
 	}
 
