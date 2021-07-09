@@ -17,6 +17,8 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 * Migration from `fs-extra-promise` to `fs-extra`
 * Renamed `core/kv-storage` engines: `browser.indexeddb` -> `browser-indexeddb`, `browser.localstorage` -> `browser-localstorage`, etc.
+* Removed an implementation of `sendAnalytics` `core/analytics`
+* Update args that can be provided into `sendAnalytics` `core/analytics`
 
 #### :bug: Bug Fix
 
