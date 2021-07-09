@@ -244,7 +244,22 @@ pre {
 							<h1>core/analytics</h1>
 						</a>
 						<p>This module provides API to work with analytic services.
-						Each of the analytic services should define own engine within the <code>core/analytics/engines</code> folder.</p>
+						Each of the analytic services should define its own engine within the <code>core/analytics/engines</code> folder.</p>
+						<p>Notice, there is no implementation for any analytic services.
+						You have to create it by yourself.</p>
+						<a href="#creating-a-new-analytics-engine" id="creating-a-new-analytics-engine" style="color: inherit; text-decoration: none;">
+							<h2>Creating a new analytics engine</h2>
+						</a>
+						<p>Create a new file within the <code>engines</code> folder and expose it from the <code>index</code> file.
+						Let&#39;s create a simple engine for Google Analytics.</p>
+						<p><strong>core/analytics/engines/ga.ts</strong></p>
+						<pre><code class="language-typescript"><span style="color: #AF00DB">export</span><span style="color: #000000"> </span><span style="color: #AF00DB">default</span><span style="color: #000000"> </span><span style="color: #0000FF">function</span><span style="color: #000000"> </span><span style="color: #795E26">sendEvent</span><span style="color: #000000">(</span><span style="color: #001080">event</span><span style="color: #000000">: </span><span style="color: #267F99">string</span><span style="color: #000000">, </span><span style="color: #001080">hint</span><span style="color: #000000">?: </span><span style="color: #267F99">string</span><span style="color: #000000">, </span><span style="color: #001080">extra</span><span style="color: #000000">?: [...</span><span style="color: #267F99">string</span><span style="color: #000000">, </span><span style="color: #267F99">Dictionary</span><span style="color: #000000">?]) {</span>
+<span style="color: #000000">  </span><span style="color: #795E26">ga</span><span style="color: #000000">(</span><span style="color: #001080">event</span><span style="color: #000000">, </span><span style="color: #001080">hint</span><span style="color: #000000">, ...</span><span style="color: #001080">extra</span><span style="color: #000000">);</span>
+<span style="color: #000000">};</span>
+</code></pre>
+						<p><strong>core/analytics/engines/index.ts</strong></p>
+						<pre><code class="language-typescript"><span style="color: #AF00DB">export</span><span style="color: #000000"> { </span><span style="color: #AF00DB">default</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/analytics/engines/ga&#039;</span><span style="color: #000000">;</span>
+</code></pre>
 					</div>
 				</div>
 			</section>
@@ -281,33 +296,24 @@ pre {
 					<a name="send" class="tsd-anchor"></a>
 					<h3>send</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-						<li class="tsd-signature tsd-kind-icon">send<span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, details<span class="tsd-signature-symbol">?: </span><a href="../interfaces/index.dictionary.html" class="tsd-signature-type" data-tsd-kind="Interface">Dictionary</a>, engine<span class="tsd-signature-symbol">?: </span><a href="../interfaces/src_core_analytics_interface.analyticengine.html" class="tsd-signature-type" data-tsd-kind="Interface">AnalyticEngine</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">send<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/analytics/index.ts#L26">src/core/analytics/index.ts:26</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/analytics/index.ts#L21">src/core/analytics/index.ts:21</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Sends an analytic event with the specified details</p>
+									<p>Sends the specified analytic event</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>event: <span class="tsd-signature-type">string</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>event name</p>
-									</div>
-								</li>
-								<li>
-									<h5>details: <a href="../interfaces/index.dictionary.html" class="tsd-signature-type" data-tsd-kind="Interface">Dictionary</a><span class="tsd-signature-symbol"> = {}</span></h5>
-								</li>
-								<li>
-									<h5>engine: <a href="../interfaces/src_core_analytics_interface.analyticengine.html" class="tsd-signature-type" data-tsd-kind="Interface">AnalyticEngine</a><span class="tsd-signature-symbol"> = ...</span></h5>
+									<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>args: <span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">[]</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
