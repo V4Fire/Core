@@ -12,7 +12,8 @@ export interface ClearFilter<T = unknown> {
 
 export interface SyncStorageNamespace {
 	/**
-	 * Returns true if a value by the specified key exists in the storage
+	 * Returns true if a value by the specified key exists in the storage.
+	 * Notice, the method can take a list of additional parameters provided to the used storage' engine.
 	 *
 	 * @param key,
 	 * @param [args]
@@ -20,7 +21,12 @@ export interface SyncStorageNamespace {
 	has(key: string, ...args: unknown[]): boolean;
 
 	/**
-	 * Returns a value from the storage by the specified key
+	 * Returns a value from the storage by the specified key.
+	 *
+	 * The returning value automatically parses by using `Object.parse` from a string to equivalent JS value, i.e.,
+	 * `'1'` will be parsed to `1`, `'true'` to `true`, `'2021-07-09T08:15:57.753Z'` to `Date`, etc.
+	 *
+	 * Notice, the method can take a list of additional parameters provided to the used storage' engine.
 	 *
 	 * @param key
 	 * @param [args]
@@ -28,7 +34,12 @@ export interface SyncStorageNamespace {
 	get<T = unknown>(key: string, ...args: unknown[]): CanUndef<T>;
 
 	/**
-	 * Saves a value to the storage by the specified key
+	 * Saves a value to the storage by the specified key.
+	 *
+	 * The value to parse automatically serializes to a string by using `Object.trySerialize`, i.e.,
+	 * arrays and dictionaries will be serialized to JSON, etc.
+	 *
+	 * Notice, the method can take a list of additional parameters provided to the used storage' engine.
 	 *
 	 * @param key
 	 * @param value
@@ -37,7 +48,8 @@ export interface SyncStorageNamespace {
 	set(key: string, value: unknown, ...args: unknown[]): void;
 
 	/**
-	 * Removes a value from the storage by the specified key
+	 * Removes a value from the storage by the specified key.
+	 * Notice, the method can take a list of additional parameters provided to the used storage' engine.
 	 *
 	 * @param key
 	 * @param [args]
@@ -45,7 +57,8 @@ export interface SyncStorageNamespace {
 	remove(key: string, ...args: unknown[]): void;
 
 	/**
-	 * Clears the storage by the specified filter and returns a list of removed keys
+	 * Clears the storage by the specified filter and returns a list of removed keys.
+	 * Notice, the method can take a list of additional parameters provided to the used storage' engine.
 	 *
 	 * @param [filter] - filter for removing (if not specified, then all storage values will be removed)
 	 * @param [args]

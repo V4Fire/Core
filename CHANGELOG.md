@@ -19,6 +19,11 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 * Renamed `core/kv-storage` engines: `browser.indexeddb` -> `browser-indexeddb`, `browser.localstorage` -> `browser-localstorage`, etc.
 * Removed an implementation of `sendAnalytics` `core/analytics`
 * Update args that can be provided into `sendAnalytics` `core/analytics`
+* The module has been renamed from `parse` to `convert` `object`
+
+#### :rocket: New Feature
+
+* Added `Object.trySerialize`
 
 #### :bug: Bug Fix
 

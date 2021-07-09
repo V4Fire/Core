@@ -27,7 +27,7 @@ const
  * JSON.parse('"2015-10-12"', convertIfDate) instanceof Date // true
  * ```
  */
-export function convertIfDate(key: string, value: unknown): unknown {
+export function convertIfDate(key: unknown, value: unknown): unknown {
 	if (Object.isString(value) && value.length >= minDateLength && RegExp.test(normalizeDateChunkRgxp, value)) {
 		const date = Date.create(value);
 		return isNaN(date.valueOf()) ? value : date;

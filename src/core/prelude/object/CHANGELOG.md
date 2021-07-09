@@ -9,6 +9,16 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.54.0 (2021-??-??)
+
+#### :boom: Breaking Change
+
+* The module has been renamed from `parse` to `convert`
+
+#### :rocket: New Feature
+
+* Added `Object.trySerialize`
+
 ## v3.36.0 (2021-03-16)
 
 #### :boom: Breaking Change
