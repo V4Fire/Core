@@ -14,7 +14,6 @@
 import Queue from 'core/queue/interface';
 import type { Tasks, CreateTasks, TaskComparator } from 'core/queue/order/interface';
 
-export * from 'core/queue/interface';
 export * from 'core/queue/order/interface';
 
 /**
@@ -25,7 +24,7 @@ export default class OrderedQueue<T> extends Queue<T> {
 	/**
 	 * Type: list of tasks
 	 */
-	readonly Tasks!: Tasks<CanUndef<T>>;
+	readonly Tasks!: Tasks<T>;
 
 	/** @inheritDoc */
 	get head(): CanUndef<T> {
@@ -143,7 +142,7 @@ export default class OrderedQueue<T> extends Queue<T> {
 				child;
 
 			if (child2 <= this.last) {
-				child = this.comparator(this.tasks[child1]!, this.tasks[child2]!) > 0 ? child1 : child2;
+				child = this.comparator(this.tasks[child1], this.tasks[child2]) > 0 ? child1 : child2;
 
 			} else {
 				child = child1;

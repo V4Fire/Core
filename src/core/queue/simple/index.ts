@@ -33,26 +33,7 @@ export default class SimpleQueue<T> extends Queue<T> {
 
 	/** @inheritDoc */
 	get length(): number {
-		const {
-			headCursor,
-			emptyCursor,
-			tasks: {length}
-		} = this;
-
-		console.log(headCursor, emptyCursor, length);
-
-		if (emptyCursor === length) {
-			console.log('r1', headCursor === length ? 0 : length);
-			return headCursor === length ? 0 : length;
-		}
-
-		if (headCursor > emptyCursor) {
-			console.log('r2', length - emptyCursor - 1);
-			return length - emptyCursor - 1;
-		}
-
-		console.log('r3', length - emptyCursor + headCursor);
-		return length - emptyCursor + headCursor + 1;
+		return this.lengthStore;
 	}
 
 	/**
@@ -64,6 +45,11 @@ export default class SimpleQueue<T> extends Queue<T> {
 	 * Index of the nearest empty cell
 	 */
 	protected emptyCursor: number = 0;
+
+	/**
+	 * Internal length value
+	 */
+	protected lengthStore: number = 0;
 
 	/**
 	 * List of tasks
@@ -78,10 +64,11 @@ export default class SimpleQueue<T> extends Queue<T> {
 
 	/** @inheritDoc */
 	push(task: T): number {
+		this.lengthStore++;
 		this.tasks[this.emptyCursor++] = task;
 
 		if (this.emptyCursor === this.headCursor) {
-			this.emptyCursor = this.tasks.length;
+			this.emptyCursor = this.lengthStore;
 		}
 
 		return this.length;
@@ -89,13 +76,24 @@ export default class SimpleQueue<T> extends Queue<T> {
 
 	/** @inheritDoc */
 	pop(): CanUndef<T> {
-		const
-			{head} = this;
+		if (this.length === 0) {
+			return;
+		}
 
-		this.tasks[this.headCursor] = undefined;
+		const {head} = this;
+		this.lengthStore--;
 
-		this.emptyCursor = this.headCursor;
-		this.headCursor++;
+		if (this.length === 0) {
+			this.headCursor = 0;
+			this.emptyCursor = 0;
+
+		} else {
+			if (this.emptyCursor > this.headCursor) {
+				this.emptyCursor = this.headCursor;
+			}
+
+			this.headCursor++;
+		}
 
 		return head;
 	}
@@ -104,6 +102,7 @@ export default class SimpleQueue<T> extends Queue<T> {
 	clear(): void {
 		if (this.length > 0) {
 			this.tasks = this.createTasks();
+			this.lengthStore = 0;
 			this.emptyCursor = 0;
 			this.headCursor = 0;
 		}
