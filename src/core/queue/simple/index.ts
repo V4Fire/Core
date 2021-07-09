@@ -28,13 +28,28 @@ export default class SimpleQueue<T> extends Queue<T> {
 
 	/** @inheritDoc */
 	get head(): CanUndef<T> {
-		return this.tasks[0];
+		return this.tasks[this.headCursor];
 	}
 
 	/** @inheritDoc */
 	get length(): number {
-		return this.tasks.length;
+		return this.lengthStore;
 	}
+
+	/**
+	 * Index of the head
+	 */
+	protected headCursor: number = 0;
+
+	/**
+	 * Index of the nearest empty cell
+	 */
+	protected emptyCursor: number = 0;
+
+	/**
+	 * Internal length value
+	 */
+	protected lengthStore: number = 0;
 
 	/**
 	 * List of tasks
@@ -49,13 +64,37 @@ export default class SimpleQueue<T> extends Queue<T> {
 
 	/** @inheritDoc */
 	push(task: T): number {
-		return this.tasks.push(task);
+		this.lengthStore++;
+		this.tasks[this.emptyCursor++] = task;
+
+		if (this.emptyCursor === this.headCursor) {
+			this.emptyCursor = this.lengthStore;
+		}
+
+		return this.length;
 	}
 
 	/** @inheritDoc */
 	pop(): CanUndef<T> {
+		if (this.length === 0) {
+			return;
+		}
+
 		const {head} = this;
-		this.tasks.shift();
+		this.lengthStore--;
+
+		if (this.length === 0) {
+			this.headCursor = 0;
+			this.emptyCursor = 0;
+
+		} else {
+			if (this.emptyCursor > this.headCursor) {
+				this.emptyCursor = this.headCursor;
+			}
+
+			this.headCursor++;
+		}
+
 		return head;
 	}
 
@@ -63,6 +102,9 @@ export default class SimpleQueue<T> extends Queue<T> {
 	clear(): void {
 		if (this.length > 0) {
 			this.tasks = this.createTasks();
+			this.lengthStore = 0;
+			this.emptyCursor = 0;
+			this.headCursor = 0;
 		}
 	}
 

@@ -8,6 +8,7 @@
 
 export interface Tasks<T> {
 	readonly length: number;
+	readonly head?: CanUndef<T>;
 	push(task: T): number;
 	unshift(task: T): number;
 	pop(): CanUndef<T>;

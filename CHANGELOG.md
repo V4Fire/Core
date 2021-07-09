@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.54.1 (2021-07-09)
+
+#### :house: Internal
+
+* Refactored `core/queue` structures to use more effective implementations
+
 ## v3.54.0 (2021-07-09)
 
 #### :boom: Breaking Change

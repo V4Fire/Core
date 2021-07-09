@@ -6,7 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import Queue, { Tasks, CreateTasks, QueueOptions } from 'core/queue/interface';
+import SimpleQueue from 'core/queue/simple';
+import AbstractQueue, { Tasks, CreateTasks, QueueOptions } from 'core/queue/interface';
 
 export * from 'core/queue/interface';
 
@@ -39,7 +40,7 @@ export interface WorkerQueueOptions extends QueueOptions {
  * @typeparam T - task element
  * @typeparam V - worker value
  */
-export default abstract class WorkerQueue<T, V = unknown> extends Queue<T> {
+export default abstract class WorkerQueue<T, V = unknown> extends AbstractQueue<T> {
 	/**
 	 * Type: list of tasks
 	 */
@@ -118,7 +119,7 @@ export default abstract class WorkerQueue<T, V = unknown> extends Queue<T> {
 	/**
 	 * Returns a new blank list of tasks
 	 */
-	protected createTasks: CreateTasks<this['Tasks']> = () => [];
+	protected createTasks: CreateTasks<this['Tasks']> = () => new SimpleQueue();
 
 	/**
 	 * Executes a task chunk from the queue
