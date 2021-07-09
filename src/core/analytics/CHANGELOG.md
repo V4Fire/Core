@@ -11,13 +11,7 @@ Changelog
 
 ## v3.54.0 (2021-07-09)
 
-#### :bug: Bug Fix
+#### :boom: Breaking Change
 
-* Fixed `throttle` callback invoking
-
-## v3.20.0 (2020-07-05)
-
-#### :rocket: New Feature
-
-* Added tests
-* Added `single` parameter to `throttle`
+* Removed an implementation of `sendAnalytics`
+* Updated API of `sendAnalytics`
