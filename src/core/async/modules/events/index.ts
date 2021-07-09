@@ -136,6 +136,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 						// eslint-disable-next-line func-name-matching
 						emitter = function wrappedEmitter(this: unknown): CanUndef<Function> {
 							const
+								// eslint-disable-next-line prefer-rest-params
 								res = originalEmitter.apply(this, arguments);
 
 							if (Object.isFunction(res)) {

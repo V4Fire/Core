@@ -58,7 +58,7 @@ extend(Date.prototype, 'format', function format(
 		pattern = String(patternOrOpts);
 
 	const
-		canCache = !/\?/.test(pattern),
+		canCache = !pattern.includes('?'),
 		cacheKey = [locale, pattern].join();
 
 	const
