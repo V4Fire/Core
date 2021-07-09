@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.54.1 (2021-07-09)
+
+#### :house: Internal
+
+* Refactored structures to use more effective implementations
+
 ## v3.20.0 (2020-07-05)
 
 #### :boom: Breaking Change

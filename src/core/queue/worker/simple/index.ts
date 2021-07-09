@@ -28,18 +28,7 @@ export default class SimpleWorkerQueue<T, V = unknown> extends WorkerQueue<T, V>
 
 	/** @override */
 	get head(): CanUndef<T> {
-		if (this.length === 0) {
-			return undefined;
-		}
-
-		const
-			fst = this.tasks[0];
-
-		if (fst == null) {
-			return undefined;
-		}
-
-		return (<Task<T>>fst).task;
+		return this.tasks.head?.task;
 	}
 
 	/** @override */

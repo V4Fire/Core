@@ -32,7 +32,7 @@ export default class MergeWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> 
 			return undefined;
 		}
 
-		const obj = this.tasksMap[this.tasks[0]];
+		const obj = this.tasksMap[this.tasks.head!];
 		return obj?.task;
 	}
 
@@ -90,7 +90,7 @@ export default class MergeWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> 
 		const
 			{head} = this;
 
-		delete this.tasksMap[this.tasks[0]];
+		delete this.tasksMap[this.tasks.head!];
 		this.tasks.shift();
 
 		return head;
