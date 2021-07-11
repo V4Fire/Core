@@ -13,7 +13,7 @@ import type { LogFilter } from 'core/log/middlewares/filter/interface';
  * Removes duplicated events
  */
 export default class DuplicatesFilter implements LogFilter {
-	protected readonly errorsMap: WeakMap<Error, 1> = new WeakMap();
+	protected readonly errorsMap: WeakSet<Error> = new WeakSet();
 
 	check(event: LogEvent): boolean {
 		//#if runtime has core/log
@@ -26,7 +26,7 @@ export default class DuplicatesFilter implements LogFilter {
 			return false;
 		}
 
-		this.errorsMap.set(event.error, 1);
+		this.errorsMap.add(event.error);
 
 		//#endif
 

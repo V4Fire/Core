@@ -10,16 +10,16 @@ These objects are used to check whether events need to be displayed.
 ```js
 new FilterMiddleware(
   {
-    check: (event) => { /* Return true or false */ }
+    check: (event) => { /* Return boolean */ }
   },
 
   {
-    check: (event) => { /* Return true or false */ }
+    check: (event) => { /* Return boolean */ }
   }
 );
 ```
 
-## How ot use
+## How to use
 
 The middleware should be set up via config in `config/index`. It should be added to the `middleware` array property of a
 pipeline.
