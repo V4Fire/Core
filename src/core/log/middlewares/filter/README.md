@@ -4,7 +4,7 @@ This module provides a middleware for filtering events.
 
 ## Description
 
-A constructor of the extractor middleware takes a list of objects that implement the `LogFilter` interface.
+A constructor of the filter middleware takes a list of objects that implement the `LogFilter` interface.
 These objects are used to check whether events need to be displayed.
 
 ```js
@@ -40,8 +40,9 @@ To install the middleware, use the following form:
 ```
 
 The first opened bracket here is an array of middlewares. The second one is a tuple of the middleware name and its parameters.
+The filters will be applied in the order specified in the config.
 
-## Existing filters
+## Available filters
 
 - `ContextFilter` - removes events whose context does not fit the patterns specified in the logging config
 - `DuplicatesFilter` - removes events that have already been shown

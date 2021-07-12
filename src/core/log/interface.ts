@@ -6,6 +6,13 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/**
+ * Log options
+ */
+export interface LogOptions {
+	patterns: RegExp[];
+}
+
 export type LogLevel = 'info' | 'warn' | 'error';
 
 export interface LogMessageOptions {

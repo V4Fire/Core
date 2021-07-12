@@ -7,10 +7,7 @@
  */
 
 import * as env from 'core/env';
-
-interface LogOptions {
-	patterns: RegExp[];
-}
+import type { LogOptions } from 'core/log';
 
 let
 	logOps: CanUndef<LogOptions>;
@@ -31,6 +28,6 @@ env.emitter.on('remove.log', setConfig);
 /**
  * Returns the current logging parameters or undefined, if they are not already set
  */
-export function getLogOptions(): typeof logOps {
+export function getLogOptions(): CanUndef<LogOptions> {
 	return logOps;
 }
