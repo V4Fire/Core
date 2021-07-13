@@ -19,6 +19,26 @@ interface NormalizedLogOptions {
 	removeDuplicates?: boolean;
 }
 
+class DuplicatesFilter {
+	protected errorsSet: WeakSet<Error> = new WeakSet();
+
+	check(event: LogEvent): boolean {
+		//#if runtime has core/log
+
+		if (event.error != null) {
+			if (this.errorsSet.has(event.error)) {
+				return false;
+			}
+
+			this.errorsSet.add(event.error);
+		}
+
+		//#endif
+
+		return true;
+	}
+}
+
 class LogOpts {
 	protected ready: boolean = false;
 
@@ -28,8 +48,6 @@ class LogOpts {
 	};
 
 	protected filters: Array<(event: LogEvent) => boolean> = [];
-
-	protected errorsSet: WeakSet<Error> = new WeakSet();
 
 	constructor(namespaceOrConfig: string | CanUndef<LogOptions>) {
 		this.setConfig = this.setConfig.bind(this);
@@ -85,7 +103,7 @@ class LogOpts {
 		}
 
 		if (Object.isTruly(this.opts?.removeDuplicates)) {
-			this.filters.push(this.filterDuplicates);
+			this.filters.push((new DuplicatesFilter()).check);
 		}
 	}
 
@@ -103,21 +121,6 @@ class LogOpts {
 		return true;
 	}
 
-	protected filterDuplicates(event: LogEvent): boolean {
-		//#if runtime has core/log
-
-		if (event.error != null) {
-			if (this.errorsSet.has(event.error)) {
-				return false;
-			}
-
-			this.errorsSet.add(event.error);
-		}
-
-		//#endif
-
-		return true;
-	}
 }
 
 export class ConfigurableMiddleware implements LogMiddleware {
