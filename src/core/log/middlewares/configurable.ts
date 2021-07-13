@@ -10,38 +10,129 @@ import * as env from 'core/env';
 import type { LogEvent, LogMiddleware, NextCallback } from 'core/log/middlewares/interface';
 
 interface LogOptions {
-	patterns: RegExp[];
+	patterns?: Array<RegExp | string>;
+	removeDuplicates?: boolean;
 }
 
-let
-	logOps: CanUndef<LogOptions>;
+interface NormalizedLogOptions {
+	patterns?: RegExp[];
+	removeDuplicates?: boolean;
+}
 
-const setConfig = (opts) => {
-	const p = {
-		patterns: [':error\\b'],
-		...opts
+class LogOpts {
+	protected ready: boolean = false;
+
+	protected opts?: NormalizedLogOptions = {
+		patterns: [/:error\\b/],
+		removeDuplicates: true
 	};
 
-	logOps = p;
+	protected filters: Array<(event: LogEvent) => boolean> = [];
 
-	if (logOps == null) {
-		return;
+	protected errorsSet: WeakSet<Error> = new WeakSet();
+
+	constructor(namespaceOrConfig: string | CanUndef<LogOptions>) {
+		this.setConfig = this.setConfig.bind(this);
+
+		if (Object.isString(namespaceOrConfig)) {
+			// Хз как тут правильно namespace задать
+			env.get(`${namespaceOrConfig}.log`).then(this.setConfig, this.setConfig);
+			env.emitter.on(`set.${namespaceOrConfig}.log`, this.setConfig);
+			env.emitter.on(`set.${namespaceOrConfig}.log`, this.setConfig);
+
+		} else {
+			this.setConfig(namespaceOrConfig);
+		}
 	}
 
-	p.patterns = (p.patterns ?? []).map((el) => Object.isRegExp(el) ? el : new RegExp(el));
-};
+	get isReady(): boolean {
+		return this.ready;
+	}
 
-env.get('log').then(setConfig, setConfig);
-env.emitter.on('set.log', setConfig);
-env.emitter.on('remove.log', setConfig);
+	checkEvent(event: LogEvent): boolean {
+		if (this.filters.length > 0) {
+			return this.filters.every((filter) => filter(event));
+		}
+
+		return true;
+	}
+
+	protected setConfig(opts?: LogOptions) {
+		this.ready = true;
+		this.opts = this.prepare(opts);
+		this.initFilters();
+	}
+
+	protected prepare(opts?: LogOptions): CanUndef<NormalizedLogOptions> {
+		if (!Object.isPlainObject(opts)) {
+			return undefined;
+		}
+
+		if (Object.isArray(opts.patterns)) {
+			opts.patterns = opts.patterns.map(
+				(pattern) => Object.isRegExp(pattern) ? pattern : new RegExp(pattern)
+			);
+		}
+
+		return Object.mixin({deep: true}, this.opts, opts);
+	}
+
+	protected initFilters(): void {
+		this.filters = [];
+
+		if (Object.isArray(this.opts?.patterns) && this.opts!.patterns.length > 0) {
+			this.filters.push(this.filterContext);
+		}
+
+		if (Object.isTruly(this.opts?.removeDuplicates)) {
+			this.filters.push(this.filterDuplicates);
+		}
+	}
+
+	/**
+	 * Returns true if config patterns allow to log a record with the specified context
+	 * @param event
+	 */
+	protected filterContext(event: LogEvent): boolean {
+		//#if runtime has core/log
+
+		return this.opts!.patterns!.some((pattern) => pattern.test(event.context));
+
+		//#endif
+
+		return true;
+	}
+
+	protected filterDuplicates(event: LogEvent): boolean {
+		//#if runtime has core/log
+
+		if (event.error != null) {
+			if (this.errorsSet.has(event.error)) {
+				return false;
+			}
+
+			this.errorsSet.add(event.error);
+		}
+
+		//#endif
+
+		return true;
+	}
+}
 
 export class ConfigurableMiddleware implements LogMiddleware {
 	protected queue: LogEvent[] = [];
 
+	protected options: LogOpts;
+
+	constructor(namespace: string) {
+		this.options = new LogOpts(namespace);
+	}
+
 	exec(events: CanArray<LogEvent>, next: NextCallback): void {
 		//#if runtime has core/log
 
-		if (logOps == null) {
+		if (!this.options.isReady) {
 			if (Array.isArray(events)) {
 				this.queue.push(...events);
 
@@ -53,68 +144,22 @@ export class ConfigurableMiddleware implements LogMiddleware {
 		}
 
 		if (this.queue.length > 0) {
-			const
-				queuedEvents = <LogEvent[]>[];
-
-			for (let o = this.queue, i = 0; i < o.length; i++) {
-				const
-					el = o[i];
-
-				if (this.filterContext(el.context)) {
-					queuedEvents.push(el);
-				}
-			}
-
-			if (queuedEvents.length > 0) {
-				next(queuedEvents);
-			}
+			events = this.queue.concat(events);
 
 			this.queue = [];
 		}
 
-		if (Array.isArray(events)) {
-			const
-				filteredEvents = <LogEvent[]>[];
+		if (Object.isArray(events)) {
+			events = events.filter((event) => this.options.checkEvent(event));
 
-			for (let o = events, i = 0; i < o.length; i++) {
-				const
-					el = o[i];
-
-				if (this.filterContext(el.context)) {
-					filteredEvents.push(el);
-				}
+			if (events.length > 0) {
+				next(events);
 			}
 
-			if (filteredEvents.length > 0) {
-				next(filteredEvents);
-			}
-
-		} else if (this.filterContext(events.context)) {
+		} else if (this.options.checkEvent(events)) {
 			next(events);
 		}
 
 		//#endif
-	}
-
-	/**
-	 * Returns true if config patterns allow to log a record with the specified context
-	 * @param context
-	 */
-	protected filterContext(context: string): boolean {
-		//#if runtime has core/log
-
-		if (logOps?.patterns) {
-			for (let {patterns} = logOps, i = 0; i < patterns.length; i++) {
-				if (patterns[i].test(context)) {
-					return true;
-				}
-			}
-
-			return false;
-		}
-
-		//#endif
-
-		return true;
 	}
 }
