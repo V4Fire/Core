@@ -76,7 +76,7 @@ export function getProxyValue(
 	top?: object,
 	opts?: InternalWatchOptions
 ): unknown {
-	if (!opts) {
+	if (opts == null) {
 		return rawValue;
 	}
 

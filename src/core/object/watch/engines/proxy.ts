@@ -163,7 +163,7 @@ export function watch<T extends object>(
 		fromProto = Boolean(opts.fromProto),
 		resolvedPath = path ?? [];
 
-	if (!Object.isDictionary(unwrappedObj) && !Object.isArray(unwrappedObj)) {
+	if (!Object.isDictionary(unwrappedObj)) {
 		const wrapOpts = {
 			root: resolvedRoot,
 			top,

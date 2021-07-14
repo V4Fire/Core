@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.54.2 (2021-07-14)
+
+#### :bug: Bug Fix
+
+* Fixed watching of values from iterable objects `core/object/watch`
+
 ## v3.54.1 (2021-07-09)
 
 #### :house: Internal

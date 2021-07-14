@@ -6,8 +6,59 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import * as proxyEngine from 'core/object/watch/engines/proxy';
 import { getProxyValue } from 'core/object/watch/engines/helpers';
+
 import type { WrapParams, WrapResult, StructureWrappers } from 'core/object/watch/wrap/interface';
+
+export const iterators = {
+	keys: {
+		type: 'get',
+		*value(target: any[], opts: WrapParams): IterableIterator<unknown> {
+			const
+				iterable = <IterableIterator<unknown>>opts.original.call(target);
+
+			for (let el = iterable.next(); !el.done; el = iterable.next()) {
+				yield el.value;
+			}
+		}
+	},
+
+	entries: {
+		type: 'get',
+		*value(target: any[], opts: WrapParams): IterableIterator<[unknown, unknown]> {
+			const
+				iterable = <IterableIterator<[unknown, unknown]>>opts.original.call(target);
+
+			for (let el = iterable.next(); !el.done; el = iterable.next()) {
+				const [key, val] = el.value;
+
+				yield [
+					key,
+					getProxyValue(val, key, opts.path, opts.handlers, opts.root, opts.top ?? opts.root, opts.watchOpts)
+				];
+			}
+		}
+	},
+
+	values: {
+		type: 'get',
+		*value(target: any[]): IterableIterator<unknown> {
+			const
+				iterable = target.entries();
+
+			for (let el = iterable.next(); !el.done; el = iterable.next()) {
+				const [, val] = el.value;
+				yield val;
+			}
+		}
+	},
+
+	[Symbol.iterator]: {
+		type: 'get',
+		value: (target: any[]): IterableIterator<unknown> => target.values()
+	}
+};
 
 export const deleteMethods = {
 	delete: (
@@ -40,7 +91,7 @@ export const weakMapMethods = {
 		type: 'get',
 		value: (target: WeakMap<any, any>, opts: WrapParams, key: unknown): unknown => {
 			const val = opts.original.call(target, key);
-			return getProxyValue(val, key, opts.path, opts.handlers, opts.top ?? opts.root, opts.watchOpts);
+			return getProxyValue(val, key, opts.path, opts.handlers, opts.root, opts.top ?? opts.root, opts.watchOpts);
 		}
 	},
 
@@ -76,6 +127,7 @@ export const structureWrappers = Object.createDict<StructureWrappers>({
 	map: {
 		is: Object.isMap.bind(Object),
 		methods: {
+			...iterators,
 			...weakMapMethods,
 			...clearMethods
 		}
@@ -84,14 +136,28 @@ export const structureWrappers = Object.createDict<StructureWrappers>({
 	set: {
 		is: Object.isSet.bind(Object),
 		methods: {
+			...iterators,
 			...weakSetMethods,
 			...clearMethods
 		}
 	},
 
-	array: {
-		is: Object.isArray.bind(Object),
+	arrayProxyEngine: {
+		is: (val, opts) =>
+			Object.isArray(val) && opts.watchOpts.engine === proxyEngine,
+
 		methods: {
+			...iterators
+		}
+	},
+
+	array: {
+		is: (val, opts) =>
+			Object.isArray(val) && opts.watchOpts.engine !== proxyEngine,
+
+		methods: {
+			...iterators,
+
 			push: (target: unknown[], opts: WrapParams, ...value: unknown[]): Nullable<WrapResult> => {
 				const
 					res = <WrapResult>[];

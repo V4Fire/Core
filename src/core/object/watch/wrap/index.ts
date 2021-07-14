@@ -39,15 +39,31 @@ export function bindMutationHooks<T extends object>(
 ): T {
 	let
 		handlers: WatchHandlersSet,
-		opts;
+		opts: WrapOptions = <any>undefined;
 
 	if (Object.isSet(handlersOrOpts)) {
 		handlers = handlersOrOpts;
-		opts = Object.isPlainObject(optsOrHandlers) ? optsOrHandlers : {};
+
+		if (Object.isPlainObject(optsOrHandlers)) {
+			opts = optsOrHandlers;
+		}
 
 	} else {
-		handlers = Object.isSet(optsOrHandlers) ? optsOrHandlers : new Set();
-		opts = {};
+		if (Object.isSet(optsOrHandlers)) {
+			handlers = optsOrHandlers;
+
+		} else {
+			handlers = new Set();
+		}
+
+		if (Object.isPlainObject(handlersOrOpts)) {
+			opts = handlersOrOpts;
+		}
+	}
+
+	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+	if (opts == null) {
+		throw new ReferenceError('Options of wrapping are not specified');
 	}
 
 	const wrappedCb = (args: Nullable<WrapResult>) => {
@@ -76,14 +92,19 @@ export function bindMutationHooks<T extends object>(
 			key = keys[i],
 			el = structureWrappers[key];
 
-		if (el == null || !el.is(obj)) {
+		if (el == null || !el.is(obj, opts)) {
 			continue;
 		}
 
-		for (let keys = Object.keys(el.methods), i = 0; i < keys.length; i++) {
+		const innerKeys = (<Array<string | symbol>>[]).concat(
+			Object.keys(el.methods),
+			Object.getOwnPropertySymbols(el.methods)
+		);
+
+		for (let i = 0; i < innerKeys.length; i++) {
 			const
-				methodName = keys[i],
-				method = el.methods[methodName],
+				methodName = innerKeys[i],
+				method = el.methods[<any>methodName],
 				original = obj[methodName];
 
 			if (method == null) {

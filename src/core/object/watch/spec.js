@@ -549,6 +549,30 @@ describe('core/object/watch', () => {
 				expect(result).toEqual([1, 2, 3, 'foo', 'bar']);
 			});
 
+			it("watching for an array' iterator", () => {
+				const
+					arr = [{a: 1}],
+					spy = jasmine.createSpy();
+
+				const {proxy} = watch(arr, {deep: true, immediate: true, engine}, (value, oldValue, info) => {
+					spy(value, oldValue, info.path);
+				});
+
+				[...proxy][0].a++;
+				expect(spy).toHaveBeenCalledWith(2, 1, [0, 'a']);
+				expect(arr).toEqual([{a: 2}]);
+
+				[...proxy.values()][0].a++;
+				expect(spy).toHaveBeenCalledWith(3, 2, [0, 'a']);
+				expect(arr).toEqual([{a: 3}]);
+
+				[...proxy.entries()][0][1].a++;
+				expect(spy).toHaveBeenCalledWith(4, 3, [0, 'a']);
+				expect(arr).toEqual([{a: 4}]);
+
+				expect([...proxy.keys()].length).toBe(1);
+			});
+
 			it('watching for a set', () => {
 				const
 					set = new Set([]),
@@ -573,6 +597,31 @@ describe('core/object/watch', () => {
 				expect(proxy.clear()).toBeUndefined();
 				expect(spy).toHaveBeenCalledWith(undefined, undefined, []);
 				expect(set.has(1)).toBeFalse();
+			});
+
+			it("watching for a set' iterator", () => {
+				const
+					key = {a: 1},
+					set = new Set([key]),
+					spy = jasmine.createSpy();
+
+				const {proxy} = watch(set, {deep: true, immediate: true, engine}, (value, oldValue, info) => {
+					spy(value, oldValue, info.path);
+				});
+
+				[...proxy][0].a++;
+				expect(spy).toHaveBeenCalledWith(2, 1, [key, 'a']);
+				expect(set).toEqual(new Set([{a: 2}]));
+
+				[...proxy.values()][0].a++;
+				expect(spy).toHaveBeenCalledWith(3, 2, [key, 'a']);
+				expect(set).toEqual(new Set([{a: 3}]));
+
+				[...proxy.entries()][0][1].a++;
+				expect(spy).toHaveBeenCalledWith(4, 3, [key, 'a']);
+				expect(set).toEqual(new Set([{a: 4}]));
+
+				expect([...proxy.keys()].length).toBe(1);
 			});
 
 			it('watching for a weak set', () => {
@@ -628,6 +677,31 @@ describe('core/object/watch', () => {
 				expect(spy).toHaveBeenCalledWith(undefined, undefined, []);
 				expect(map.has(0)).toBeFalse();
 				expect(map.has(1)).toBeFalse();
+			});
+
+			it("watching for a map' iterator", () => {
+				const
+					key = {b: 1},
+					map = new Map([[key, {a: 1}]]),
+					spy = jasmine.createSpy();
+
+				const {proxy} = watch(map, {deep: true, immediate: true, engine}, (value, oldValue, info) => {
+					spy(value, oldValue, info.path);
+				});
+
+				[...proxy][0].a++;
+				expect(spy).toHaveBeenCalledWith(2, 1, [key, 'a']);
+				expect(map).toEqual(new Map([[key, {a: 2}]]));
+
+				[...proxy.values()][0].a++;
+				expect(spy).toHaveBeenCalledWith(3, 2, [key, 'a']);
+				expect(map).toEqual(new Map([[key, {a: 3}]]));
+
+				[...proxy.entries()][0][1].a++;
+				expect(spy).toHaveBeenCalledWith(4, 3, [key, 'a']);
+				expect(map).toEqual(new Map([[key, {a: 4}]]));
+
+				expect([...proxy.keys()].length).toBe(1);
 			});
 
 			it('watching for a weak map', () => {

@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.54.2 (2021-07-14)
+
+#### :bug: Bug Fix
+
+* Fixed watching of values from iterable objects
+
 ## v3.45.0 (2021-05-12)
 
 #### :bug: Bug Fix
