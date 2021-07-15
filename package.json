@@ -36,7 +36,6 @@
   },
   "dependencies": {
     "@types/got": "^9.6.12",
-    "@types/jasmine": "^3.8.1",
     "dom-storage": "^2.1.0",
     "eventemitter2": "^6.4.4",
     "form-data": "^4.0.0",
@@ -85,6 +84,7 @@
   },
   "devDependencies": {
     "@v4fire/linters": "^1.7.3",
+    "@types/jasmine": "^3.8.1",
     "abort-controller": "^3.0.0",
     "express": "^4.17.1",
     "husky": "^7.0.1",
