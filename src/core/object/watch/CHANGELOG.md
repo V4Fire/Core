@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.54.3 (2021-07-16)
+
+#### :bug: Bug Fix
+
+* Fixed watching for specific paths with collapsing
+
 ## v3.54.2 (2021-07-14)
 
 #### :bug: Bug Fix

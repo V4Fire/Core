@@ -354,7 +354,7 @@ function watch<T extends object>(
 					// eslint-disable-next-line prefer-spread
 					handler!.apply(null, getArgs());
 
-				// Deferred events
+					// Deferred events
 				} else {
 					const
 						needEventQueue = normalizedPath == null || collapse === false;
@@ -402,11 +402,17 @@ function watch<T extends object>(
 				// obj.foo.bar = {bla: 1};
 
 				if (tailPath.length > 0) {
-					value = Object.get(value, tailPath);
-					oldValue = Object.get(oldValue, tailPath);
+					const
+						tailValue = Object.get(value, tailPath),
+						tailOldValue = Object.get(oldValue, tailPath);
 
-					if (value === oldValue) {
+					if (tailValue === tailOldValue) {
 						return;
+					}
+
+					if (!collapse) {
+						value = tailValue;
+						oldValue = tailOldValue;
 					}
 				}
 
