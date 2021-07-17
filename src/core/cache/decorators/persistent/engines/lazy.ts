@@ -12,13 +12,11 @@ import { TTL_POSTFIX } from 'core/cache/decorators/persistent/engines/const';
 import { CheckablePersistentEngine, StorageCheckState } from 'core/cache/decorators/persistent/engines/interface';
 
 export default class LazyPersistentEngine<V> extends CheckablePersistentEngine<V> {
-	/** @override */
-	get<T>(key: string): Promise<CanUndef<T>> {
+	override get<T>(key: string): Promise<CanUndef<T>> {
 		return SyncPromise.resolve(this.storage.get(key));
 	}
 
-	/** @override */
-	async set(key: string, value: V, ttl?: number): Promise<void> {
+	override async set(key: string, value: V, ttl?: number): Promise<void> {
 		await this.execTask(key, async () => {
 			try {
 				await this.storage.set(key, value);
@@ -34,8 +32,7 @@ export default class LazyPersistentEngine<V> extends CheckablePersistentEngine<V
 		});
 	}
 
-	/** @override */
-	async remove(key: string): Promise<void> {
+	override async remove(key: string): Promise<void> {
 		await this.execTask(key, async () => {
 			try {
 				await this.storage.remove(key);
@@ -46,13 +43,11 @@ export default class LazyPersistentEngine<V> extends CheckablePersistentEngine<V
 		});
 	}
 
-	/** @override */
-	getTTLFrom(key: string): Promise<CanUndef<number>> {
+	override getTTLFrom(key: string): Promise<CanUndef<number>> {
 		return SyncPromise.resolve(this.storage.get(key + TTL_POSTFIX));
 	}
 
-	/** @override */
-	removeTTLFrom(key: string): Promise<boolean> {
+	override removeTTLFrom(key: string): Promise<boolean> {
 		const
 			ttlKey = key + TTL_POSTFIX;
 
@@ -65,8 +60,7 @@ export default class LazyPersistentEngine<V> extends CheckablePersistentEngine<V
 		});
 	}
 
-	/** @override */
-	getCheckStorageState(): CanPromise<StorageCheckState> {
+	override getCheckStorageState(): CanPromise<StorageCheckState> {
 		return {
 			available: true,
 			checked: true

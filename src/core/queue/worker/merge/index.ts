@@ -23,11 +23,9 @@ export * from 'core/queue/worker/merge/interface';
  * @typeparam V - worker value
  */
 export default class MergeWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> {
-	/** @override */
-	readonly Tasks!: Tasks<string>;
+	override readonly Tasks!: Tasks<string>;
 
-	/** @override */
-	get head(): CanUndef<T> {
+	override get head(): CanUndef<T> {
 		if (this.length === 0) {
 			return undefined;
 		}
@@ -56,8 +54,7 @@ export default class MergeWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> 
 		this.hashFn = opts.hashFn ?? Object.fastHash.bind(Object);
 	}
 
-	/** @override */
-	push(task: T): Promise<V> {
+	override push(task: T): Promise<V> {
 		const
 			hash = this.hashFn(task);
 
@@ -81,8 +78,7 @@ export default class MergeWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> 
 		return taskObj.promise;
 	}
 
-	/** @override */
-	pop(): CanUndef<T> {
+	override pop(): CanUndef<T> {
 		if (this.length === 0) {
 			return;
 		}
@@ -96,16 +92,14 @@ export default class MergeWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> 
 		return head;
 	}
 
-	/** @override */
-	clear(): void {
+	override clear(): void {
 		if (this.length > 0) {
 			super.clear();
 			this.tasksMap = Object.createDict();
 		}
 	}
 
-	/** @override */
-	protected perform(): void {
+	protected override perform(): void {
 		if (this.length === 0) {
 			this.activeWorkers--;
 			return;

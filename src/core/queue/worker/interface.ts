@@ -46,8 +46,7 @@ export default abstract class WorkerQueue<T, V = unknown> extends AbstractQueue<
 	 */
 	readonly Tasks!: Tasks<unknown>;
 
-	/** @inheritDoc */
-	abstract readonly head: CanUndef<T>;
+	abstract override readonly head: CanUndef<T>;
 
 	/** @inheritDoc */
 	get length(): number {
@@ -99,7 +98,7 @@ export default abstract class WorkerQueue<T, V = unknown> extends AbstractQueue<
 	}
 
 	/** @inheritDoc */
-	abstract push(task: T): unknown;
+	abstract override push(task: T): unknown;
 
 	/** @inheritDoc */
 	pop(): CanUndef<T> {

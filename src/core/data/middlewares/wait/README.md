@@ -23,12 +23,10 @@ import 'models/my-provider';
 import iData, { system, RequestParams } from 'super/i-data/i-data';
 
 export default class bExample extends iData {
-  /** @override */
-  dataProvider: string = 'MyProvider';
+  override dataProvider: string = 'MyProvider';
 
-  /** @override */
   @system((o) => o.sync.object('get', [['wait', 'canLoadData']]))
-  requestParams!: RequestParams;
+  override requestParams!: RequestParams;
 
   async canLoadData(): Promise<boolean> {
     await this.async.sleep((3).seconds());

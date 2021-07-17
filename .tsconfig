@@ -13,7 +13,8 @@
     "strictNullChecks": true,
     "strictFunctionTypes": true,
     "strictPropertyInitialization": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "noImplicitOverride": true
   },
   "typeAcquisition": {
     "exclude": ["node"]
