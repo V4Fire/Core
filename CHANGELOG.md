@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.54.4 (2021-07-18)
+
+#### :bug: Bug Fix
+
+* Fixed a bug when the tied path can be mutated from handlers `core/object/watch`
+
 ## v3.54.3 (2021-07-16)
 
 #### :bug: Bug Fix

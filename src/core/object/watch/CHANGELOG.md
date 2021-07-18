@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.54.4 (2021-07-18)
+
+#### :bug: Bug Fix
+
+* Fixed a bug when the tied path can be mutated from handlers
+
 ## v3.54.3 (2021-07-16)
 
 #### :bug: Bug Fix

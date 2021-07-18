@@ -302,7 +302,15 @@ function watch<T extends object>(
 					}
 
 					Object.set(cache, tiedPath, true);
-					resolvedInfo = {...info, path: tiedPath, parent: {value, oldValue, info}};
+					resolvedInfo = {
+						...info,
+						path: tiedPath.slice(),
+						parent: {
+							value,
+							oldValue,
+							info
+						}
+					};
 				}
 
 				// Returns a list of attributes to the mutation handler
