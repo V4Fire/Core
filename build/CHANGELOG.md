@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.55.0 (2021-07-24)
+
+#### :rocket: New Feature
+
+* Added a new option `path` for `globalThis.include`
+
 ## v3.34.0 (2021-03-03)
 
 #### :rocket: New Feature

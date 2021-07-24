@@ -114,6 +114,10 @@ module.exports = function init(layers) {
 			}
 		}
 
+		if (opts.path) {
+			return src;
+		}
+
 		if (opts.source) {
 			return fs.readFileSync(src).toString();
 		}

@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.55.0 (2021-07-24)
+
+#### :rocket: New Feature
+
+* Added a new option `path` for `globalThis.include`
+
 ## v3.54.4 (2021-07-18)
 
 #### :bug: Bug Fix
