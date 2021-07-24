@@ -74,7 +74,12 @@ module.exports = function init(layers) {
 			cwd = cwdOrOpts;
 		}
 
-		opts.return = opts.return ?? 'module';
+		if (opts.source) {
+			opts.return = 'source';
+
+		} else {
+			opts.return = opts.return ?? 'module';
+		}
 
 		function resolve(root) {
 			const
