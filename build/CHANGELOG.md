@@ -13,7 +13,7 @@ Changelog
 
 #### :rocket: New Feature
 
-* Added a new option `path` for `globalThis.include`
+* Added new options `return` and `ctx` for `globalThis.include`
 
 ## v3.34.0 (2021-03-03)
 

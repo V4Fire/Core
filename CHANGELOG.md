@@ -15,7 +15,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :rocket: New Feature
 
-* Added a new option `path` for `globalThis.include`
+* Added new options `return` and `ctx` for `globalThis.include`
 
 ## v3.54.4 (2021-07-18)
 
