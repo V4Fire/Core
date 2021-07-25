@@ -731,13 +731,13 @@ interface ObjectConstructor {
 	 *
 	 * @param key
 	 */
-	hasOwnProperty(key: string): (obj: any) => boolean;
+	hasOwnProperty(key: string | symbol): (obj: any) => boolean;
 
 	/**
 	 * Returns a function that returns true if the specified object has own property by a key that the function takes
 	 * @param obj
 	 */
-	hasOwnProperty(obj: any): (key: string) => boolean;
+	hasOwnProperty(obj: any): (key: string | symbol) => boolean;
 
 	/**
 	 * Returns true if the passed object has an own property by the specified key
@@ -745,7 +745,7 @@ interface ObjectConstructor {
 	 * @param obj
 	 * @param key
 	 */
-	hasOwnProperty(obj: any, key: string): boolean;
+	hasOwnProperty(obj: any, key: string | symbol): boolean;
 
 	/**
 	 * Sets a value to the passed object by the specified path.

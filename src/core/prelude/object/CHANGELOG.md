@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.56.0 (2021-07-25)
+
+#### :rocket: New Feature
+
+* Now `Object.hasOwnProperty` supports symbols
+
 ## v3.54.0 (2021-07-09)
 
 #### :boom: Breaking Change

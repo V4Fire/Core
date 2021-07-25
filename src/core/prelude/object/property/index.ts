@@ -125,7 +125,10 @@ const
 	{hasOwnProperty: nativeHasOwnProperty} = Object.prototype;
 
 /** @see [[ObjectConstructor.hasOwnProperty]] */
-extend(Object, 'hasOwnProperty', function hasOwnProperty(obj: any, key?: string): boolean | AnyFunction {
+extend(Object, 'hasOwnProperty', function hasOwnProperty(
+	obj: any,
+	key?: string | symbol
+): boolean | AnyFunction {
 	if (arguments.length > 1) {
 		if (obj == null) {
 			return false;
@@ -134,7 +137,7 @@ extend(Object, 'hasOwnProperty', function hasOwnProperty(obj: any, key?: string)
 		return nativeHasOwnProperty.call(obj, key);
 	}
 
-	if (Object.isString(obj)) {
+	if (Object.isString(obj) || Object.isSymbol(obj)) {
 		key = obj;
 		return (obj) => Object.hasOwnProperty(obj, key!);
 	}

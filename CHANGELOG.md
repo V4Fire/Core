@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.56.0 (2021-07-25)
+
+#### :rocket: New Feature
+
+* Now `Object.hasOwnProperty` supports symbols
+
 ## v3.55.0 (2021-07-24)
 
 #### :rocket: New Feature
