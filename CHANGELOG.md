@@ -17,6 +17,10 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 * Now `Object.hasOwnProperty` supports symbols
 
+#### :bug: Bug Fix
+
+* Fixed an issue when modifying a prototype value of the watched object `core/object/watch`
+
 ## v3.55.0 (2021-07-24)
 
 #### :rocket: New Feature

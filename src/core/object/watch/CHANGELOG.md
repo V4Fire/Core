@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.56.0 (2021-07-25)
+
+#### :bug: Bug Fix
+
+* Fixed an issue when modifying a prototype value of the watched object
+
 ## v3.54.4 (2021-07-18)
 
 #### :bug: Bug Fix

@@ -130,7 +130,7 @@ export function getOrCreateLabelValueByHandlers<T = unknown>(
 	def?: unknown
 ): T {
 	let
-		box = obj[label];
+		box = Object.hasOwnProperty(obj, label) ? obj[label] : null;
 
 	if (box == null) {
 		box = new WeakMap();

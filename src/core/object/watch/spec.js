@@ -918,6 +918,25 @@ describe('core/object/watch', () => {
 				}
 			});
 
+			it('modifying prototype values', () => {
+				const
+					obj = {a: {a: 1}, __proto__: {b: {b: 1}}},
+					spy = jasmine.createSpy();
+
+				const {proxy} = watch(obj, {deep: true, immediate: true, withProto: true, engine}, (value, oldValue, info) => {
+					spy(value, oldValue, info.path);
+				});
+
+				proxy.b.b++;
+				expect(spy).toHaveBeenCalledWith(2, 1, ['b', 'b']);
+
+				proxy.a.a++;
+				expect(spy).toHaveBeenCalledWith(2, 1, ['a', 'a']);
+
+				expect(proxy.b.b).toBe(2);
+				expect(proxy.a.a).toBe(2);
+			});
+
 			it('isProxy', () => {
 				expect(isProxy(watch({}, {immediate: true, engine}).proxy)).toBeTrue();
 				expect(isProxy(null)).toBeFalse();
