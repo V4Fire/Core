@@ -942,6 +942,21 @@ describe('core/object/watch', () => {
 				expect(isProxy(null)).toBeFalse();
 				expect(isProxy({})).toBeFalse();
 			});
+
+			if (name === 'proxy') {
+				it("shouldn't wrap readonly non-configurable properties", () => {
+					const
+						obj = {},
+						nested = {a: 1};
+
+					Object.defineProperty(obj, 'foo', {
+						value: nested
+					});
+
+					const {proxy} = watch(obj, {deep: true, engine});
+					expect(proxy.foo).toBe(nested);
+				});
+			}
 		});
 	});
 });

@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.56.1 (2021-07-28)
+
+#### :bug: Bug Fix
+
+* Readonly non-configurable values can't be watched via Proxy `core/object/watch`
+
 ## v3.56.0 (2021-07-25)
 
 #### :rocket: New Feature

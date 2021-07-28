@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.56.1 (2021-07-28)
+
+#### :bug: Bug Fix
+
+* Readonly non-configurable values can't be watched via Proxy
+
 ## v3.56.0 (2021-07-25)
 
 #### :bug: Bug Fix
