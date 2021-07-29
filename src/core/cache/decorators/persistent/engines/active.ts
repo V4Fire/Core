@@ -18,8 +18,7 @@ export default class ActivePersistentEngine<V> extends UncheckablePersistentEngi
 	 */
 	protected index: Dictionary<number> = Object.createDict();
 
-	/** @override */
-	async initCache(cache: Cache<V>): Promise<void> {
+	override async initCache(cache: Cache<V>): Promise<void> {
 		if (await this.storage.has(INDEX_STORAGE_NAME)) {
 			this.index = (await this.storage.get<Dictionary<number>>(INDEX_STORAGE_NAME))!;
 
@@ -54,8 +53,7 @@ export default class ActivePersistentEngine<V> extends UncheckablePersistentEngi
 		}));
 	}
 
-	/** @override */
-	async set(key: string, value: V, ttl?: number): Promise<void> {
+	override async set(key: string, value: V, ttl?: number): Promise<void> {
 		await this.execTask(key, async () => {
 			const res = await this.storage.set(key, value);
 
@@ -66,21 +64,18 @@ export default class ActivePersistentEngine<V> extends UncheckablePersistentEngi
 		});
 	}
 
-	/** @override */
-	async remove(key: string): Promise<void> {
+	override async remove(key: string): Promise<void> {
 		await this.execTask(key, async () => {
 			await this.storage.remove(key);
 			await this.removeTTLFrom(key);
 		});
 	}
 
-	/** @override */
-	getTTLFrom(key: string): Promise<CanUndef<number>> {
+	override getTTLFrom(key: string): Promise<CanUndef<number>> {
 		return SyncPromise.resolve(this.index[key]);
 	}
 
-	/** @override */
-	removeTTLFrom(key: string): Promise<boolean> {
+	override removeTTLFrom(key: string): Promise<boolean> {
 		if (key in this.index) {
 			delete this.index[key];
 			return SyncPromise.resolve(this.storage.set(INDEX_STORAGE_NAME, Object.fastClone(this.index)));
@@ -89,8 +84,7 @@ export default class ActivePersistentEngine<V> extends UncheckablePersistentEngi
 		return SyncPromise.resolve(false);
 	}
 
-	/** @override */
-	getCheckStorageState(): CanPromise<{available: false; checked: boolean}> {
+	override getCheckStorageState(): CanPromise<{available: false; checked: boolean}> {
 		return {
 			available: false,
 			checked: true

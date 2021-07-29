@@ -44,8 +44,7 @@ export default class RestrictedCache<V = unknown, K = string> extends SimpleCach
 		}
 	}
 
-	/** @override */
-	get(key: K): CanUndef<V> {
+	override get(key: K): CanUndef<V> {
 		if (this.has(key)) {
 			this.queue.delete(key);
 			this.queue.add(key);
@@ -54,8 +53,7 @@ export default class RestrictedCache<V = unknown, K = string> extends SimpleCach
 		return super.get(key);
 	}
 
-	/** @override */
-	set(key: K, value: V): V {
+	override set(key: K, value: V): V {
 		this.queue.delete(key);
 
 		if (this.queue.size === this.capacity) {
@@ -71,16 +69,14 @@ export default class RestrictedCache<V = unknown, K = string> extends SimpleCach
 		return super.set(key, value);
 	}
 
-	/** @override */
-	remove(key: K): CanUndef<V> {
+	override remove(key: K): CanUndef<V> {
 		if (this.has(key)) {
 			this.queue.delete(key);
 			return super.remove(key);
 		}
 	}
 
-	/** @override */
-	clear(filter?: ClearFilter<V, K>): Map<K, V> {
+	override clear(filter?: ClearFilter<V, K>): Map<K, V> {
 		const
 			removed = super.clear(filter);
 

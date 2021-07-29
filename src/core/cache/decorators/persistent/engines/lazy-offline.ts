@@ -12,8 +12,7 @@ import LazyPersistentEngine from 'core/cache/decorators/persistent/engines/lazy'
 import type { StorageCheckState } from 'core/cache/decorators/persistent/engines/interface';
 
 export default class LazyPersistentOfflineEngine<V> extends LazyPersistentEngine<V> {
-	/** @override */
-	async getCheckStorageState(): Promise<StorageCheckState> {
+	override async getCheckStorageState(): Promise<StorageCheckState> {
 		const
 			online = (await isOnline()).status;
 
