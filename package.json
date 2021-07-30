@@ -23,7 +23,6 @@
     "Core"
   ],
   "scripts": {
-    "prepare": "husky install",
     "prepublish": "npm test",
     "dev": "npx gulp watch:server",
     "build": "npx gulp build:server",
