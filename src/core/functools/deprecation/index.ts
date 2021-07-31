@@ -63,16 +63,6 @@ export function deprecate<T extends Function>(
  *
  * @decorator
  * @see [[deprecate]]
- *
- * @example
- * ```js
- * class Foo {
- *   @deprecated
- *   bar() {
- *
- *   }
- * }
- * ```
  */
 export function deprecated(target: object, key: string | symbol, descriptor: PropertyDescriptor): void;
 
@@ -82,16 +72,6 @@ export function deprecated(target: object, key: string | symbol, descriptor: Pro
  *
  * @see [[deprecate]]
  * @param [opts] - additional options
- *
- * @example
- * ```js
- * class Foo {
- *   @deprecated({renamedTo: 'baz'}})
- *   bar() {
- *
- *   }
- * }
- * ```
  */
 export function deprecated(opts?: WarnOptions): Function;
 

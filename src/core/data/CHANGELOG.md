@@ -19,7 +19,7 @@ Changelog
 
 #### :bug: Bug Fix
 
-* Rewrited tests on express
+* Rewritten tests on express
 
 ## v3.27.6 (2020-11-01)
 

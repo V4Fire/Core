@@ -11,7 +11,7 @@ import Async from 'core/async';
 import type { SyncStorageNamespace, AsyncStorageNamespace } from 'core/kv-storage';
 import type Cache from 'core/cache/interface';
 
-interface AbstractPersistentEngine<V = unknown> {
+export interface AbstractPersistentEngine<V = unknown> {
 	/**
 	 * Initializes a new cache instance from the past one
 	 * @param cache
@@ -19,7 +19,7 @@ interface AbstractPersistentEngine<V = unknown> {
 	initCache?(cache: Cache<V>): CanPromise<void>;
 }
 
-abstract class AbstractPersistentEngine<V = unknown> {
+export abstract class AbstractPersistentEngine<V = unknown> {
 	/**
 	 * API for async operations
 	 */

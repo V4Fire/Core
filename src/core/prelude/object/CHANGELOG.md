@@ -84,7 +84,7 @@ console.log(Object.reject({a: 1, b: 2, __proto__: null}, 'a').__proto__ == null)
 
 #### :bug: Bug Fix
 
-* Fixed a bug when Dates could be transformed to strings after cloning `Object.fastClone`
+* Fixed a bug when Dates could be transformed to string after cloning `Object.fastClone`
 
 ## v3.26.0 (2020-09-04)
 

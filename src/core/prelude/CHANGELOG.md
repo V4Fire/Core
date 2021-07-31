@@ -144,7 +144,7 @@ SyncPromise.resolve(1).catch(() => undefined).then((r) => console.log(r));
 
 #### :bug: Bug Fix
 
-* Fixed a bug when Dates could be transformed to strings after cloning `Object.fastClone`
+* Fixed a bug when Dates could be transformed to string after cloning `Object.fastClone`
 
 ## v3.26.0 (2020-09-04)
 
