@@ -14,13 +14,13 @@ import { UncheckablePersistentEngine } from 'core/cache/decorators/persistent/en
 
 export default class ActivePersistentEngine<V> extends UncheckablePersistentEngine<V> {
 	/**
-	 * An index with keys and ttl-s of stored values
+	 * Index with keys and TTL-s of stored values
 	 */
-	protected index: Dictionary<number> = Object.createDict();
+	protected ttlIndex: Dictionary<number> = Object.createDict();
 
 	override async initCache(cache: Cache<V>): Promise<void> {
 		if (await this.storage.has(INDEX_STORAGE_NAME)) {
-			this.index = (await this.storage.get<Dictionary<number>>(INDEX_STORAGE_NAME))!;
+			this.ttlIndex = (await this.storage.get<Dictionary<number>>(INDEX_STORAGE_NAME))!;
 
 		} else {
 			await this.storage.set(INDEX_STORAGE_NAME, this.storage);
@@ -29,36 +29,32 @@ export default class ActivePersistentEngine<V> extends UncheckablePersistentEngi
 		const
 			time = Date.now();
 
-		await Promise.allSettled(Object.keys(this.index).map((key) => {
-			const promiseInitProp = new Promise<void>(async (resolve) => {
-				const
-					ttl = this.index[key];
+		await Promise.allSettled(Object.keys(this.ttlIndex).map((key) => new Promise<void>(async (resolve) => {
+			const
+				ttl = this.ttlIndex[key];
 
-				if (!Object.isNumber(ttl)) {
-					return;
-				}
+			if (!Object.isNumber(ttl)) {
+				return;
+			}
 
-				if (ttl > time) {
-					const value = (await this.storage.get<V>(key))!;
-					cache.set(key, value);
+			if (ttl > time) {
+				const value = (await this.storage.get<V>(key))!;
+				cache.set(key, value);
 
-				} else {
-					await this.remove(key);
-				}
+			} else {
+				await this.remove(key);
+			}
 
-				resolve();
-			});
-
-			return promiseInitProp;
-		}));
+			resolve();
+		})));
 	}
 
 	override async set(key: string, value: V, ttl?: number): Promise<void> {
 		await this.execTask(key, async () => {
 			const res = await this.storage.set(key, value);
 
-			this.index[key] = ttl ?? Number.MAX_SAFE_INTEGER;
-			await this.storage.set(INDEX_STORAGE_NAME, Object.fastClone(this.index));
+			this.ttlIndex[key] = ttl ?? Number.MAX_SAFE_INTEGER;
+			await this.storage.set(INDEX_STORAGE_NAME, Object.fastClone(this.ttlIndex));
 
 			return res;
 		});
@@ -72,13 +68,13 @@ export default class ActivePersistentEngine<V> extends UncheckablePersistentEngi
 	}
 
 	override getTTLFrom(key: string): Promise<CanUndef<number>> {
-		return SyncPromise.resolve(this.index[key]);
+		return SyncPromise.resolve(this.ttlIndex[key]);
 	}
 
 	override removeTTLFrom(key: string): Promise<boolean> {
-		if (key in this.index) {
-			delete this.index[key];
-			return SyncPromise.resolve(this.storage.set(INDEX_STORAGE_NAME, Object.fastClone(this.index)));
+		if (key in this.ttlIndex) {
+			delete this.ttlIndex[key];
+			return SyncPromise.resolve(this.storage.set(INDEX_STORAGE_NAME, Object.fastClone(this.ttlIndex)));
 		}
 
 		return SyncPromise.resolve(false);
