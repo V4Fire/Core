@@ -9,7 +9,7 @@
 import Response, { ResponseTypeValue } from 'core/request/response';
 import { getStorageKey } from 'core/request/utils';
 
-import { storage } from 'core/request/const';
+import { storage, caches } from 'core/request/const';
 import type { RequestResponse, RequestResponseObject } from 'core/request/interface';
 
 import Super from 'core/request/context/modules/methods';
@@ -75,10 +75,8 @@ export default class RequestContext<D = unknown> extends Super<D> {
 				clearTimeout(this.cacheTimeoutId);
 			}
 
-			cache.set(
-				key,
-				res.data
-			);
+			cache.set(key, res.data);
+			caches.add(cache);
 
 			if (Object.isNumber(p.cacheTTL)) {
 				this.cacheTimeoutId = <any>setTimeout(() => cache.remove(key), p.cacheTTL);

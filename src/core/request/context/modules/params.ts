@@ -10,7 +10,7 @@ import type Then from 'core/then';
 import type Cache from 'core/cache/interface';
 
 import { merge } from 'core/request/utils';
-import { cache, pendingCache, methodsWithoutBody } from 'core/request/const';
+import { cache, pendingCache, caches, methodsWithoutBody } from 'core/request/const';
 
 import type {
 
@@ -107,7 +107,10 @@ export default class RequestContext<D = unknown> {
 		}
 
 		this.withoutBody = Boolean(methodsWithoutBody[p.method]);
+
 		this.cache = (Object.isString(p.cacheStrategy) ? cache[p.cacheStrategy] : p.cacheStrategy) ?? cache.never;
+		caches.add(this.cache);
+
 		this.canCache = p.cacheMethods.includes(p.method) || false;
 	}
 }

@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.56.2 (2021-08-05)
+
+#### :bug: Bug Fix
+
+* Fixed an issue when `dropCache` don't clear caches of mounted objects
+
 ## v3.53.0 (2021-06-24)
 
 #### :rocket: New Feature

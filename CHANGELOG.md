@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.56.2 (2021-08-05)
+
+#### :bug: Bug Fix
+
+* Fixed an issue when `dropCache` don't clear caches of mounted objects `core/request`
+
 ## v3.56.1 (2021-07-28)
 
 #### :bug: Bug Fix

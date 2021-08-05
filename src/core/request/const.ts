@@ -36,6 +36,7 @@ storage = import('core/kv-storage').then(({asyncLocal}) => asyncLocal);
 //#endif
 
 export const
+	caches = new Set<AbstractCache>(),
 	pendingCache = new Cache<RequestResponse<any>>();
 
 export const cache: Record<Exclude<CacheStrategy, AbstractCache>, AbstractCache> = {
