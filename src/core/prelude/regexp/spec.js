@@ -7,11 +7,11 @@
  */
 
 describe('core/prelude/regexp', () => {
-	it('RegExp.escape', () => {
+	it('`RegExp.escape`', () => {
 		expect(RegExp.escape('(\\d+[a-z].*)')).toBe('\\(\\\\d\\+\\[a\\-z\\]\\.\\*\\)');
 	});
 
-	it('RegExp.test', () => {
+	it('`RegExp.test`', () => {
 		const rgxp = /\d/g;
 		expect(RegExp.test(rgxp, '12')).toBe(true);
 		expect(RegExp.test(rgxp, '1d')).toBe(true);
@@ -20,34 +20,34 @@ describe('core/prelude/regexp', () => {
 		expect(RegExp.test(/\d/, 'd1d')).toBe(true);
 	});
 
-	it('addFlags', () => {
+	it('`addFlags`', () => {
 		expect(/1/.addFlags('g').flags).toBe('g');
 		expect(/1/i.addFlags('gm', 'si', 'y', 'i').flags).toBe('gimsy');
 	});
 
-	it('RegExp.addFlags', () => {
+	it('`RegExp.addFlags`', () => {
 		expect(RegExp.addFlags(/1/, 'g').flags).toBe('g');
 		expect(RegExp.addFlags(/1/i)('gm', 'si', 'y', 'i').flags).toBe('gimsy');
 		expect(RegExp.addFlags('g')(/1/m).flags).toBe('gm');
 	});
 
-	it('removeFlags', () => {
+	it('`removeFlags`', () => {
 		expect(/1/gi.removeFlags('g').flags).toBe('i');
 		expect(/1/gimsy.removeFlags('gm', 'si', 'i').flags).toBe('y');
 	});
 
-	it('RegExp.removeFlags', () => {
+	it('`RegExp.removeFlags`', () => {
 		expect(RegExp.removeFlags(/1/gi, 'g').flags).toBe('i');
 		expect(RegExp.removeFlags(/1/gimsy)('gm', 'si', 'i').flags).toBe('y');
 		expect(RegExp.removeFlags('g')(/1/i).flags).toBe('i');
 	});
 
-	it('setFlags', () => {
+	it('`setFlags`', () => {
 		expect(/1/gi.setFlags('g').flags).toBe('g');
 		expect(/1/y.setFlags('gm', 'si', 'i').flags).toBe('gims');
 	});
 
-	it('RegExp.setFlags', () => {
+	it('`RegExp.setFlags`', () => {
 		expect(RegExp.setFlags(/1/gi, 'g').flags).toBe('g');
 		expect(RegExp.setFlags(/1/u)('gm', 'si', 'i').flags).toBe('gims');
 		expect(RegExp.setFlags('g')(/1/i).flags).toBe('g');

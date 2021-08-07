@@ -6,7 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import Queue, { Tasks, CreateTasks, QueueOptions } from 'core/queue/interface';
+import SimpleQueue from 'core/queue/simple';
+import AbstractQueue, { Tasks, CreateTasks, QueueOptions } from 'core/queue/interface';
 
 export * from 'core/queue/interface';
 
@@ -27,7 +28,7 @@ export interface WorkerQueueOptions extends QueueOptions {
 	concurrency?: number;
 
 	/**
-	 * Value of a task status refresh interval
+	 * How often to refresh task statuses
 	 * (in milliseconds)
 	 */
 	refreshInterval?: number;
@@ -39,14 +40,13 @@ export interface WorkerQueueOptions extends QueueOptions {
  * @typeparam T - task element
  * @typeparam V - worker value
  */
-export default abstract class WorkerQueue<T, V = unknown> extends Queue<T> {
+export default abstract class WorkerQueue<T, V = unknown> extends AbstractQueue<T> {
 	/**
 	 * Type: list of tasks
 	 */
 	readonly Tasks!: Tasks<unknown>;
 
-	/** @inheritDoc */
-	abstract readonly head: CanUndef<T>;
+	abstract override readonly head: CanUndef<T>;
 
 	/** @inheritDoc */
 	get length(): number {
@@ -54,15 +54,15 @@ export default abstract class WorkerQueue<T, V = unknown> extends Queue<T> {
 	}
 
 	/**
-	 * Value of the task status refresh interval
+	 * The maximum number of concurrent workers
+	 */
+	concurrency: number;
+
+	/**
+	 * How often to refresh task statuses
 	 * (in milliseconds)
 	 */
 	refreshInterval: number;
-
-	/**
-	 * Maximum number of concurrent workers
-	 */
-	concurrency: number;
 
 	/**
 	 * Number of active workers
@@ -98,7 +98,7 @@ export default abstract class WorkerQueue<T, V = unknown> extends Queue<T> {
 	}
 
 	/** @inheritDoc */
-	abstract push(task: T): unknown;
+	abstract override push(task: T): unknown;
 
 	/** @inheritDoc */
 	pop(): CanUndef<T> {
@@ -118,7 +118,7 @@ export default abstract class WorkerQueue<T, V = unknown> extends Queue<T> {
 	/**
 	 * Returns a new blank list of tasks
 	 */
-	protected createTasks: CreateTasks<this['Tasks']> = () => [];
+	protected createTasks: CreateTasks<this['Tasks']> = () => new SimpleQueue();
 
 	/**
 	 * Executes a task chunk from the queue

@@ -111,7 +111,7 @@ describe('core/data', () => {
 		expect(spy).toHaveBeenCalledWith('upd', {message: 'Success'});
 	});
 
-	it('get with extra providers', async () => {
+	it('`get` with extra providers', async () => {
 		@provider
 		class TestExtraProvider extends Provider {
 			baseGetURL = 'http://localhost:3000/json/1';

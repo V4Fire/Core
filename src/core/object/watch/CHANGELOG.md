@@ -9,6 +9,36 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.56.1 (2021-07-28)
+
+#### :bug: Bug Fix
+
+* Readonly non-configurable values can't be watched via Proxy
+
+## v3.56.0 (2021-07-25)
+
+#### :bug: Bug Fix
+
+* Fixed an issue when modifying a prototype value of the watched object
+
+## v3.54.4 (2021-07-18)
+
+#### :bug: Bug Fix
+
+* Fixed a bug when the tied path can be mutated from handlers
+
+## v3.54.3 (2021-07-16)
+
+#### :bug: Bug Fix
+
+* Fixed watching for specific paths with collapsing
+
+## v3.54.2 (2021-07-14)
+
+#### :bug: Bug Fix
+
+* Fixed watching of values from iterable objects
+
 ## v3.45.0 (2021-05-12)
 
 #### :bug: Bug Fix

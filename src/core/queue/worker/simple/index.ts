@@ -23,27 +23,13 @@ export * from 'core/queue/worker/merge/interface';
  * @typeparam V - worker value
  */
 export default class SimpleWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> {
-	/** @override */
-	readonly Tasks!: Tasks<Task<T>>;
+	override readonly Tasks!: Tasks<Task<T>>;
 
-	/** @override */
-	get head(): CanUndef<T> {
-		if (this.length === 0) {
-			return undefined;
-		}
-
-		const
-			fst = this.tasks[0];
-
-		if (fst == null) {
-			return undefined;
-		}
-
-		return (<Task<T>>fst).task;
+	override get head(): CanUndef<T> {
+		return this.tasks.head?.task;
 	}
 
-	/** @override */
-	push(task: T): Promise<V> {
+	override push(task: T): Promise<V> {
 		let
 			resolve;
 
@@ -63,8 +49,7 @@ export default class SimpleWorkerQueue<T, V = unknown> extends WorkerQueue<T, V>
 		return taskObj.promise;
 	}
 
-	/** @override */
-	protected perform(): void {
+	protected override perform(): void {
 		if (this.length === 0) {
 			this.activeWorkers--;
 			return;

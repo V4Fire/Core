@@ -57,6 +57,8 @@ export function toQueryString(data: unknown, optsOrEncode?: ToQueryStringOptions
 
 	const
 		separator = opts.separator ?? '_',
+
+		// eslint-disable-next-line @typescript-eslint/unbound-method
 		paramsFilter = opts.paramsFilter ?? defaultToQueryStringParamsFilter;
 
 	const stack = Object.keys(data)
@@ -221,18 +223,25 @@ export function fromQueryString(
 		opts = {decode: optsOrDecode};
 	}
 
-	if (opts.decode !== false) {
-		query = decodeURIComponent(query);
-	}
+	const objOpts = {
+		separator: opts.arraySyntax ? ']' : opts.separator
+	};
 
 	const
 		indices = Object.createDict<number>(),
-		objOpts = {separator: opts.arraySyntax ? ']' : opts.separator},
 		variables = query.split('&');
 
 	for (let i = 0; i < variables.length; i++) {
 		let
 			[key, val = null] = variables[i].split('=');
+
+		if (opts.decode !== false) {
+			key = decodeURIComponent(key);
+
+			if (val != null) {
+				val = decodeURIComponent(val);
+			}
+		}
 
 		if (opts.arraySyntax) {
 			let

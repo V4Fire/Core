@@ -1,4 +1,5 @@
 dist/**
 assets/**
+src/assets/**
 docs/**
 node_modules/**

@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.50.0 (2021-06-07)
+
+#### :bug: Bug Fix
+
+* Fixed `Date.create` with dates without leading zeroes
+
 ## v3.25.1 (2020-09-04)
 
 #### :bug: Bug Fix

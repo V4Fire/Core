@@ -383,7 +383,9 @@ pre {
 						<ol>
 							<li>By values (used by default).</li>
 						</ol>
-						<pre><code class="language-js"><span style="color: #AF00DB">for</span><span style="color: #000000"> (</span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">el</span><span style="color: #000000"> </span><span style="color: #0000FF">of</span><span style="color: #000000"> </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">Range</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;a&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;c&#039;</span><span style="color: #000000">)) {</span>
+						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">Range</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/range&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #AF00DB">for</span><span style="color: #000000"> (</span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">el</span><span style="color: #000000"> </span><span style="color: #0000FF">of</span><span style="color: #000000"> </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">Range</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;a&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;c&#039;</span><span style="color: #000000">)) {</span>
 <span style="color: #000000">  </span><span style="color: #008000">// &#039;a&#039; &#039;b&#039; &#039;c&#039;</span>
 <span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">el</span><span style="color: #000000">);</span>
 <span style="color: #000000">}</span>
@@ -399,27 +401,32 @@ pre {
 <span style="color: #000000">}</span>
 </code></pre>
 						<ol start="2">
-							<li>By pairs of indices and values.</li>
-						</ol>
-						<pre><code class="language-js"><span style="color: #AF00DB">for</span><span style="color: #000000"> (</span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">el</span><span style="color: #000000"> </span><span style="color: #0000FF">of</span><span style="color: #000000"> </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">Range</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;c&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;a&#039;</span><span style="color: #000000">).</span><span style="color: #795E26">entries</span><span style="color: #000000">()) {</span>
-<span style="color: #000000">  </span><span style="color: #008000">// [0, &#039;c&#039;] [1, &#039;b&#039;] [2 &#039;a&#039;]</span>
-<span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">el</span><span style="color: #000000">);</span>
-<span style="color: #000000">}</span>
-<span style="color: #AF00DB">for</span><span style="color: #000000"> (</span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">el</span><span style="color: #000000"> </span><span style="color: #0000FF">of</span><span style="color: #000000"> </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">Range</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;c&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;a&#039;</span><span style="color: #000000">).</span><span style="color: #795E26">entries</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">)) {</span>
-<span style="color: #000000">  </span><span style="color: #008000">// [0, &#039;c&#039;] [1, &#039;a&#039;]</span>
-<span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">el</span><span style="color: #000000">);</span>
-<span style="color: #000000">}</span>
-</code></pre>
-						<ol start="3">
 							<li>By indices.</li>
 						</ol>
-						<pre><code class="language-js"><span style="color: #AF00DB">for</span><span style="color: #000000"> (</span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">el</span><span style="color: #000000"> </span><span style="color: #0000FF">of</span><span style="color: #000000"> </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">Range</span><span style="color: #000000">(</span><span style="color: #098658">3</span><span style="color: #000000">, </span><span style="color: #098658">1</span><span style="color: #000000">).</span><span style="color: #795E26">indices</span><span style="color: #000000">()) {</span>
+						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">Range</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/range&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #AF00DB">for</span><span style="color: #000000"> (</span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">el</span><span style="color: #000000"> </span><span style="color: #0000FF">of</span><span style="color: #000000"> </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">Range</span><span style="color: #000000">(</span><span style="color: #098658">3</span><span style="color: #000000">, </span><span style="color: #098658">1</span><span style="color: #000000">).</span><span style="color: #795E26">indices</span><span style="color: #000000">()) {</span>
 <span style="color: #000000">  </span><span style="color: #008000">// 0 1 2</span>
 <span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">el</span><span style="color: #000000">);</span>
 <span style="color: #000000">}</span>
 
 <span style="color: #AF00DB">for</span><span style="color: #000000"> (</span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">el</span><span style="color: #000000"> </span><span style="color: #0000FF">of</span><span style="color: #000000"> </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">Range</span><span style="color: #000000">(</span><span style="color: #098658">0</span><span style="color: #000000">, </span><span style="color: #098658">3</span><span style="color: #000000">).</span><span style="color: #795E26">indices</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">)) {</span>
 <span style="color: #000000">  </span><span style="color: #008000">// 0 1</span>
+<span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">el</span><span style="color: #000000">);</span>
+<span style="color: #000000">}</span>
+</code></pre>
+						<ol start="3">
+							<li>By pairs of indices and values.</li>
+						</ol>
+						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">Range</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/range&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #AF00DB">for</span><span style="color: #000000"> (</span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">el</span><span style="color: #000000"> </span><span style="color: #0000FF">of</span><span style="color: #000000"> </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">Range</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;c&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;a&#039;</span><span style="color: #000000">).</span><span style="color: #795E26">entries</span><span style="color: #000000">()) {</span>
+<span style="color: #000000">  </span><span style="color: #008000">// [0, &#039;c&#039;] [1, &#039;b&#039;] [2 &#039;a&#039;]</span>
+<span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">el</span><span style="color: #000000">);</span>
+<span style="color: #000000">}</span>
+
+<span style="color: #AF00DB">for</span><span style="color: #000000"> (</span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">el</span><span style="color: #000000"> </span><span style="color: #0000FF">of</span><span style="color: #000000"> </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">Range</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;c&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;a&#039;</span><span style="color: #000000">).</span><span style="color: #795E26">entries</span><span style="color: #000000">(</span><span style="color: #098658">2</span><span style="color: #000000">)) {</span>
+<span style="color: #000000">  </span><span style="color: #008000">// [0, &#039;c&#039;] [1, &#039;a&#039;]</span>
 <span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">el</span><span style="color: #000000">);</span>
 <span style="color: #000000">}</span>
 </code></pre>
@@ -432,7 +439,9 @@ pre {
 						</a>
 						<p>The method returns true if an element is contained inside the range
 						(the element can be a simple value or another range).</p>
-						<pre><code class="language-js"><span style="color: #008000">// true</span>
+						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">Range</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/range&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #008000">// true</span>
 <span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">Range</span><span style="color: #000000">(</span><span style="color: #098658">0</span><span style="color: #000000">, </span><span style="color: #098658">10</span><span style="color: #000000">).</span><span style="color: #795E26">contains</span><span style="color: #000000">(</span><span style="color: #098658">4</span><span style="color: #000000">));</span>
 
 <span style="color: #008000">// false</span>
@@ -460,7 +469,9 @@ pre {
 						If the two ranges do not intersect, this will effectively produce an empty range.</p>
 						<p>The method preserves element ordering of the first range.
 						The intersection of ranges with different types will always produce an empty range.</p>
-						<pre><code class="language-js"><span style="color: #008000">// 8..10</span>
+						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">Range</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/range&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #008000">// 8..10</span>
 <span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">Range</span><span style="color: #000000">(</span><span style="color: #098658">0</span><span style="color: #000000">, </span><span style="color: #098658">10</span><span style="color: #000000">).</span><span style="color: #795E26">intersect</span><span style="color: #000000">(</span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">Range</span><span style="color: #000000">([</span><span style="color: #098658">7</span><span style="color: #000000">], </span><span style="color: #098658">14</span><span style="color: #000000">)).</span><span style="color: #795E26">toString</span><span style="color: #000000">());</span>
 
 <span style="color: #008000">// 10..7</span>
@@ -485,7 +496,9 @@ pre {
 						If the two ranges do not intersect, this will effectively remove the &quot;gap&quot; between them.</p>
 						<p>The method preserves element ordering of the first range.
 						The union of ranges with different types will always produce an empty range.</p>
-						<pre><code class="language-js"><span style="color: #008000">// 0..13</span>
+						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">Range</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/range&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #008000">// 0..13</span>
 <span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">Range</span><span style="color: #000000">(</span><span style="color: #098658">0</span><span style="color: #000000">, </span><span style="color: #098658">10</span><span style="color: #000000">).</span><span style="color: #795E26">union</span><span style="color: #000000">(</span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">Range</span><span style="color: #000000">(</span><span style="color: #098658">7</span><span style="color: #000000">, [</span><span style="color: #098658">14</span><span style="color: #000000">])).</span><span style="color: #795E26">toString</span><span style="color: #000000">());</span>
 
 <span style="color: #008000">// 14..0</span>
@@ -507,8 +520,10 @@ pre {
 						<a href="#reverse" id="reverse" style="color: inherit; text-decoration: none;">
 							<h3>reverse</h3>
 						</a>
-						<p>The method clones the range with reversing of element ordering and returns a new.</p>
-						<pre><code class="language-js"><span style="color: #008000">// [3, 2, 1, 0]</span>
+						<p>The method clones the range with reversing of element ordering and returns a new one.</p>
+						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">Range</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/range&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #008000">// [3, 2, 1, 0]</span>
 <span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">Range</span><span style="color: #000000">(</span><span style="color: #098658">0</span><span style="color: #000000">, </span><span style="color: #098658">3</span><span style="color: #000000">).</span><span style="color: #795E26">reverse</span><span style="color: #000000">().</span><span style="color: #795E26">toArray</span><span style="color: #000000">());</span>
 </code></pre>
 						<a href="#clamp" id="clamp" style="color: inherit; text-decoration: none;">
@@ -516,7 +531,9 @@ pre {
 						</a>
 						<p>The method clamps an element to be within the range if it falls outside.
 						If the range is invalid or empty, the method always returns <code>null</code>.</p>
-						<pre><code class="language-js"><span style="color: #008000">// 3</span>
+						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">Range</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/range&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #008000">// 3</span>
 <span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">Range</span><span style="color: #000000">(</span><span style="color: #098658">0</span><span style="color: #000000">, </span><span style="color: #098658">10</span><span style="color: #000000">).</span><span style="color: #795E26">clamp</span><span style="color: #000000">(</span><span style="color: #098658">3</span><span style="color: #000000">));</span>
 
 <span style="color: #008000">// &#039;d&#039;</span>
@@ -532,7 +549,9 @@ pre {
 						The span includes both the start and the end.</p>
 						<p>If the range is a date range, the value is in milliseconds.
 						If the range is invalid or empty, the method always returns <code>0</code>.</p>
-						<pre><code class="language-js"><span style="color: #008000">// 4</span>
+						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">Range</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/range&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #008000">// 4</span>
 <span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">Range</span><span style="color: #000000">(</span><span style="color: #098658">7</span><span style="color: #000000">, </span><span style="color: #098658">10</span><span style="color: #000000">).</span><span style="color: #795E26">span</span><span style="color: #000000">());</span>
 
 <span style="color: #008000">// 0</span>
@@ -544,7 +563,9 @@ pre {
 						<p>The method creates an array from the range and returns it.
 							Also, it can take a step to iterate elements (for date ranges, it means milliseconds to shift).
 						Mind, you can&#39;t transform infinite ranges to arrays, but you free to use iterators.</p>
-						<pre><code class="language-js"><span style="color: #008000">// [0, 3, 6, 9]</span>
+						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">Range</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/range&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #008000">// [0, 3, 6, 9]</span>
 <span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">Range</span><span style="color: #000000">(</span><span style="color: #098658">0</span><span style="color: #000000">, </span><span style="color: #098658">10</span><span style="color: #000000">).</span><span style="color: #795E26">toArray</span><span style="color: #000000">(</span><span style="color: #098658">3</span><span style="color: #000000">));</span>
 
 <span style="color: #008000">// [&#039;a&#039;, &#039;b&#039;]</span>
@@ -558,7 +579,9 @@ pre {
 						</a>
 						<p>The method creates a string from the range and returns it.
 						If the range invalid or empty, the method always returns an empty string.</p>
-						<pre><code class="language-js"><span style="color: #008000">// 0..10</span>
+						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">Range</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/range&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #008000">// 0..10</span>
 <span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">Range</span><span style="color: #000000">(</span><span style="color: #098658">0</span><span style="color: #000000">, </span><span style="color: #098658">10</span><span style="color: #000000">).</span><span style="color: #795E26">toString</span><span style="color: #000000">());</span>
 
 <span style="color: #008000">// 0..9</span>
@@ -581,42 +604,32 @@ pre {
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Classes</h3>
+							<h3>References</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-class tsd-parent-kind-module tsd-has-type-parameter"><a href="../classes/src_core_range.default.html" class="tsd-kind-icon">default</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_range.html#rangetype" class="tsd-kind-icon">Range<wbr>Type</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_range.html#rangevalue" class="tsd-kind-icon">Range<wbr>Value</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
-							<h3>Type aliases</h3>
+							<h3>Classes</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="src_core_range.html#rangetype" class="tsd-kind-icon">Range<wbr>Type</a></li>
-								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="src_core_range.html#rangevalue" class="tsd-kind-icon">Range<wbr>Value</a></li>
+								<li class="tsd-kind-class tsd-parent-kind-module tsd-has-type-parameter"><a href="../classes/src_core_range.default.html" class="tsd-kind-icon">default</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Type aliases</h2>
-				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
+				<h2>References</h2>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
 					<a name="rangetype" class="tsd-anchor"></a>
 					<h3>Range<wbr>Type</h3>
-					<div class="tsd-signature tsd-kind-icon">Range<wbr>Type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;number&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;string&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;date&quot;</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/range/interface.ts#L14">src/core/range/interface.ts:14</a></li>
-						</ul>
-					</aside>
+					Re-exports <a href="src_core_range_interface.html#rangetype">RangeType</a>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
 					<a name="rangevalue" class="tsd-anchor"></a>
 					<h3>Range<wbr>Value</h3>
-					<div class="tsd-signature tsd-kind-icon">Range<wbr>Value<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Date</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/range/interface.ts#L9">src/core/range/interface.ts:9</a></li>
-						</ul>
-					</aside>
+					Re-exports <a href="src_core_range_interface.html#rangevalue">RangeValue</a>
 				</section>
 			</section>
 		</div>
@@ -633,14 +646,14 @@ pre {
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-class tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../classes/src_core_range.default.html" class="tsd-kind-icon">default</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
 						<a href="src_core_range.html#rangetype" class="tsd-kind-icon">Range<wbr>Type</a>
 					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
 						<a href="src_core_range.html#rangevalue" class="tsd-kind-icon">Range<wbr>Value</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../classes/src_core_range.default.html" class="tsd-kind-icon">default</a>
 					</li>
 				</ul>
 			</nav>

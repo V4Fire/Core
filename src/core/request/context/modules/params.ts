@@ -13,7 +13,7 @@ import addTTL from 'core/cache/decorators/ttl';
 import addPersistent from 'core/cache/decorators/persistent';
 
 import { merge } from 'core/request/utils';
-import { storage, cache, pendingCache, methodsWithoutBody } from 'core/request/const';
+import { storage, cache, pendingCache, caches, methodsWithoutBody } from 'core/request/const';
 
 import type {
 
@@ -113,19 +113,20 @@ export default class RequestContext<D = unknown> {
 		this.canCache = p.cacheMethods.includes(p.method) || false;
 
 		let
-			c = (Object.isString(p.cacheStrategy) ? cache[p.cacheStrategy] : p.cacheStrategy) ?? cache.never;
+			cacheAPI = (Object.isString(p.cacheStrategy) ? cache[p.cacheStrategy] : p.cacheStrategy) ?? cache.never;
 
 		if (p.cacheTTL != null) {
-			c = addTTL(c, p.cacheTTL);
+			cacheAPI = addTTL(cacheAPI, p.cacheTTL);
 		}
 
 		if (p.offlineCache != null && storage != null) {
-			c = storage.then((storage) => addPersistent(c, storage, {
+			cacheAPI = storage.then((storage) => addPersistent(cacheAPI, storage, {
 				persistentTTL: p.offlineCacheTTL,
 				loadFromStorage: 'onOfflineDemand'
 			}));
 		}
 
-		this.cache = c;
+		this.cache = cacheAPI;
+		caches.add(cacheAPI);
 	}
 }

@@ -9,87 +9,7 @@
  */
 
 describe('core/prelude/date/modify', () => {
-	it('beginningOfDay', () => {
-		expect(new Date(2015, 10, 11, 6).beginningOfDay())
-			.toEqual(new Date(2015, 10, 11));
-	});
-
-	it('Date.beginningOfDay', () => {
-		expect(Date.beginningOfDay(new Date(2015, 10, 11, 6)))
-			.toEqual(new Date(2015, 10, 11));
-	});
-
-	it('endOfDay', () => {
-		expect(new Date(2015, 10, 11, 6).endOfDay())
-			.toEqual(new Date(2015, 10, 11, 23, 59, 59, 999));
-	});
-
-	it('Date.endOfDay', () => {
-		expect(Date.endOfDay(new Date(2015, 10, 11, 6)))
-			.toEqual(new Date(2015, 10, 11, 23, 59, 59, 999));
-	});
-
-	it('beginningOfWeek', () => {
-		expect(new Date(2015, 10, 11, 6).beginningOfWeek())
-			.toEqual(new Date(2015, 10, 8));
-	});
-
-	it('Date.beginningOfWeek', () => {
-		expect(Date.beginningOfWeek(new Date(2015, 10, 11, 6)))
-			.toEqual(new Date(2015, 10, 8));
-	});
-
-	it('endOfWeek', () => {
-		expect(new Date(2015, 10, 11, 6).endOfWeek())
-			.toEqual(new Date(2015, 10, 14, 23, 59, 59, 999));
-	});
-
-	it('Date.endOfWeek', () => {
-		expect(Date.endOfWeek(new Date(2015, 10, 11, 6)))
-			.toEqual(new Date(2015, 10, 14, 23, 59, 59, 999));
-	});
-
-	it('beginningOfMonth', () => {
-		expect(new Date(2015, 10, 11, 6).beginningOfMonth())
-			.toEqual(new Date(2015, 10, 1));
-	});
-
-	it('Date.beginningOfMonth', () => {
-		expect(Date.beginningOfMonth(new Date(2015, 10, 11, 6)))
-			.toEqual(new Date(2015, 10, 1));
-	});
-
-	it('endOfMonth', () => {
-		expect(new Date(2015, 10, 11, 6).endOfMonth())
-			.toEqual(new Date(2015, 11, 0, 23, 59, 59, 999));
-	});
-
-	it('Date.endOfMonth', () => {
-		expect(Date.endOfMonth(new Date(2015, 10, 11, 6)))
-			.toEqual(new Date(2015, 11, 0, 23, 59, 59, 999));
-	});
-
-	it('beginningOfYear', () => {
-		expect(new Date(2015, 10, 11, 6).beginningOfYear())
-			.toEqual(new Date(2015, 0));
-	});
-
-	it('Date.beginningOfYear', () => {
-		expect(Date.beginningOfYear(new Date(2015, 10, 11, 6)))
-			.toEqual(new Date(2015, 0));
-	});
-
-	it('endOfYear', () => {
-		expect(new Date(2015, 10, 11, 6).endOfYear())
-			.toEqual(new Date(2016, 0, 0, 23, 59, 59, 999));
-	});
-
-	it('Date.endOfYear', () => {
-		expect(Date.endOfYear(new Date(2015, 10, 11, 6)))
-			.toEqual(new Date(2016, 0, 0, 23, 59, 59, 999));
-	});
-
-	it('add', () => {
+	it('`add`', () => {
 		{
 			const
 				date = new Date(2015, 10, 11, 6),
@@ -226,7 +146,7 @@ describe('core/prelude/date/modify', () => {
 		}
 	});
 
-	it('Date.add', () => {
+	it('`Date.add`', () => {
 		{
 			const
 				date = new Date(2015, 10, 11, 6),
@@ -255,7 +175,7 @@ describe('core/prelude/date/modify', () => {
 		}
 	});
 
-	it('set', () => {
+	it('`set`', () => {
 		{
 			const
 				date = new Date(2015, 10, 11, 6, 0, 0, 1),
@@ -392,7 +312,7 @@ describe('core/prelude/date/modify', () => {
 		}
 	});
 
-	it('Date.set', () => {
+	it('`Date.set`', () => {
 		{
 			const
 				date = new Date(2015, 10, 11, 6, 0, 0, 2),
@@ -421,7 +341,7 @@ describe('core/prelude/date/modify', () => {
 		}
 	});
 
-	it('rewind', () => {
+	it('`rewind`', () => {
 		{
 			const
 				date = new Date(2015, 10, 11, 6, 0, 0, 2),
@@ -558,7 +478,7 @@ describe('core/prelude/date/modify', () => {
 		}
 	});
 
-	it('Date.rewind', () => {
+	it('`Date.rewind`', () => {
 		{
 			const
 				date = new Date(2015, 10, 11, 6, 0, 0, 3),

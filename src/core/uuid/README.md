@@ -2,6 +2,8 @@
 
 This module provides API to generate, parse and serialize UUID strings and binary sequences.
 
+## Usage
+
 ```js
 import { generate, serialize, parse } from 'core/uuid';
 
@@ -14,3 +16,15 @@ const
 console.log(parse('ae2afd1a-b93c-11ea-b3de-0242ac130004')) // = uuid
 console.log(serialize(uuid)) // 'ae2afd1a-b93c-11ea-b3de-0242ac130004'
 ```
+
+## generate
+
+Generates a UUIDv4 buffer and returns it.
+
+## serialize
+
+Converts the specified binary UUID to a string and returns it.
+
+## parse
+
+Converts the specified UUID string to a binary sequence and returns it.

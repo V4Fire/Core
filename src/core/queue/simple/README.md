@@ -1,6 +1,6 @@
 # core/queue/simple
 
-This module provides a class to organize a simple queue data structure.
+This module provides a class to organize a simple [[Queue]] data structure.
 
 ```js
 import Queue from 'core/queue/simple';

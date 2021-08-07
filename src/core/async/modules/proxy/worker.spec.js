@@ -12,7 +12,7 @@ import symbolGenerator from 'core/symbol';
 const
 	$$ = symbolGenerator();
 
-describe('core/async/modules/proxy/worker', () => {
+describe('core/async/modules/proxy `worker`', () => {
 	it('simple worker', () => {
 		let
 			i = 0;

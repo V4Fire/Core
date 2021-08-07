@@ -11,7 +11,9 @@
  * @packageDocumentation
  */
 
-import Queue from 'core/queue/interface';
+import SimpleQueue from 'core/queue/simple';
+import AbstractQueue from 'core/queue/interface';
+
 import type { HashFn, Tasks, CreateTasks } from 'core/queue/merge/interface';
 
 export * from 'core/queue/merge/interface';
@@ -20,7 +22,7 @@ export * from 'core/queue/merge/interface';
  * Implementation of a queue data structure with support of task merging by the specified hash function
  * @typeparam T - queue element
  */
-export default class MergeQueue<T> extends Queue<T> {
+export default class MergeQueue<T> extends AbstractQueue<T> {
 	/**
 	 * Type: list of tasks
 	 */
@@ -28,7 +30,11 @@ export default class MergeQueue<T> extends Queue<T> {
 
 	/** @inheritDoc */
 	get head(): CanUndef<T> {
-		return this.tasksMap[this.tasks[0]];
+		if (this.length === 0) {
+			return undefined;
+		}
+
+		return this.tasksMap[this.tasks.head!];
 	}
 
 	/** @inheritDoc */
@@ -47,7 +53,7 @@ export default class MergeQueue<T> extends Queue<T> {
 	protected tasksMap: Dictionary<T> = Object.createDict();
 
 	/**
-	 * The task hash function
+	 * Function to calculate task hash
 	 */
 	protected readonly hashFn: HashFn<T>;
 
@@ -83,7 +89,7 @@ export default class MergeQueue<T> extends Queue<T> {
 		const
 			{head} = this;
 
-		delete this.tasksMap[this.tasks[0]];
+		delete this.tasksMap[this.tasks.head!];
 		this.tasks.shift();
 
 		return head;
@@ -100,5 +106,5 @@ export default class MergeQueue<T> extends Queue<T> {
 	/**
 	 * Returns a new blank list of tasks
 	 */
-	protected createTasks: CreateTasks<this['Tasks']> = () => [];
+	protected createTasks: CreateTasks<this['Tasks']> = () => new SimpleQueue();
 }

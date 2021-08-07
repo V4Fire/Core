@@ -11,11 +11,11 @@
  * @packageDocumentation
  */
 
-import type { SyncStorageNamespace, AsyncStorageNamespace } from 'core/kv-storage';
+import type { AsyncStorageNamespace, SyncStorageNamespace } from 'core/kv-storage';
 import type Cache from 'core/cache/interface';
 
 import PersistentWrapper from 'core/cache/decorators/persistent/wrapper';
-import type { PersistentOptions, PersistentCache } from 'core/cache/decorators/persistent/interface';
+import type { PersistentCache, PersistentOptions } from 'core/cache/decorators/persistent/interface';
 
 export * from 'core/cache/decorators/persistent/interface';
 
@@ -53,9 +53,6 @@ const addPersistent = <V>(
 	cache: Cache<V, string>,
 	storage: SyncStorageNamespace | AsyncStorageNamespace,
 	opts?: PersistentOptions
-): Promise<PersistentCache<V, string>> => {
-	const persistentCache = new PersistentWrapper<Cache<V, string>, V>(cache, storage, opts).getInstance();
-	return persistentCache;
-};
+): Promise<PersistentCache<V>> => new PersistentWrapper<Cache<V, string>, V>(cache, storage, opts).getInstance();
 
 export default addPersistent;

@@ -15,7 +15,7 @@ import { IS_NODE } from 'core/env';
 import { separatorIndices } from 'core/uuid/const';
 
 /**
- * Generates UUID v4 and returns it
+ * Generates a UUIDv4 buffer and returns it
  */
 export function generate(): Uint8Array {
 	if (IS_NODE) {

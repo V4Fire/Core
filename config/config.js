@@ -17,7 +17,7 @@ const
 	isPathEqual = require('path-equal').pathEqual;
 
 const
-	fs = require('fs-extra-promise');
+	fs = require('fs-extra');
 
 const
 	{env} = process;

@@ -260,12 +260,10 @@ pre {
 <span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">iData</span><span style="color: #000000">, { </span><span style="color: #001080">system</span><span style="color: #000000">, </span><span style="color: #001080">RequestParams</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;super/i-data/i-data&#039;</span><span style="color: #000000">;</span>
 
 <span style="color: #AF00DB">export</span><span style="color: #000000"> </span><span style="color: #AF00DB">default</span><span style="color: #000000"> </span><span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">bExample</span><span style="color: #000000"> </span><span style="color: #0000FF">extends</span><span style="color: #000000"> </span><span style="color: #267F99">iData</span><span style="color: #000000"> {</span>
-<span style="color: #000000">  </span><span style="color: #008000">/** </span><span style="color: #0000FF">@override</span><span style="color: #008000"> */</span>
-<span style="color: #000000">  </span><span style="color: #001080">dataProvider</span><span style="color: #000000">: </span><span style="color: #267F99">string</span><span style="color: #000000"> = </span><span style="color: #A31515">&#039;MyProvider&#039;</span><span style="color: #000000">;</span>
+<span style="color: #000000">  </span><span style="color: #0000FF">override</span><span style="color: #000000"> </span><span style="color: #001080">dataProvider</span><span style="color: #000000">: </span><span style="color: #267F99">string</span><span style="color: #000000"> = </span><span style="color: #A31515">&#039;MyProvider&#039;</span><span style="color: #000000">;</span>
 
-<span style="color: #000000">  </span><span style="color: #008000">/** </span><span style="color: #0000FF">@override</span><span style="color: #008000"> */</span>
 <span style="color: #000000">  @</span><span style="color: #795E26">system</span><span style="color: #000000">((</span><span style="color: #001080">o</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">o</span><span style="color: #000000">.</span><span style="color: #001080">sync</span><span style="color: #000000">.</span><span style="color: #795E26">object</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;get&#039;</span><span style="color: #000000">, [[</span><span style="color: #A31515">&#039;wait&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;canLoadData&#039;</span><span style="color: #000000">]]))</span>
-<span style="color: #000000">  </span><span style="color: #001080">requestParams</span><span style="color: #000000">!: </span><span style="color: #267F99">RequestParams</span><span style="color: #000000">;</span>
+<span style="color: #000000">  </span><span style="color: #0000FF">override</span><span style="color: #000000"> </span><span style="color: #001080">requestParams</span><span style="color: #000000">!: </span><span style="color: #267F99">RequestParams</span><span style="color: #000000">;</span>
 
 <span style="color: #000000">  </span><span style="color: #0000FF">async</span><span style="color: #000000"> </span><span style="color: #795E26">canLoadData</span><span style="color: #000000">(): </span><span style="color: #267F99">Promise</span><span style="color: #000000">&lt;</span><span style="color: #267F99">boolean</span><span style="color: #000000">&gt; {</span>
 <span style="color: #000000">    </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #0000FF">this</span><span style="color: #000000">.</span><span style="color: #001080">async</span><span style="color: #000000">.</span><span style="color: #795E26">sleep</span><span style="color: #000000">((</span><span style="color: #098658">3</span><span style="color: #000000">).</span><span style="color: #795E26">seconds</span><span style="color: #000000">());</span>
@@ -281,9 +279,9 @@ pre {
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Interfaces</h3>
+							<h3>References</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter"><a href="../interfaces/src_core_data_middlewares_wait.datawithstatus.html" class="tsd-kind-icon">Data<wbr>With<wbr>Status</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_data_middlewares_wait.html#datawithstatus" class="tsd-kind-icon">Data<wbr>With<wbr>Status</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
@@ -293,6 +291,14 @@ pre {
 							</ul>
 						</section>
 					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>References</h2>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="datawithstatus" class="tsd-anchor"></a>
+					<h3>Data<wbr>With<wbr>Status</h3>
+					Re-exports <a href="../interfaces/src_core_data_middlewares_attach_status_interface.datawithstatus.html">DataWithStatus</a>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
@@ -343,8 +349,8 @@ pre {
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../interfaces/src_core_data_middlewares_wait.datawithstatus.html" class="tsd-kind-icon">Data<wbr>With<wbr>Status</a>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_data_middlewares_wait.html#datawithstatus" class="tsd-kind-icon">Data<wbr>With<wbr>Status</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module">
 						<a href="src_core_data_middlewares_wait.html#wait" class="tsd-kind-icon">wait</a>

@@ -9,6 +9,18 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.52.1 (2021-06-21)
+
+#### :bug: Bug Fix
+
+* Fix possibility to set default get/set accessors within trait classes
+
+## v3.51.0 (2021-06-15)
+
+#### :rocket: New Feature
+
+* Added possibility to set default get/set accessors within trait classes
+
 ## v3.44.1 (2021-04-23)
 
 #### :bug: Bug Fix

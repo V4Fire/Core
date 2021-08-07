@@ -28,6 +28,8 @@ import type {
 
 	Event,
 	EventId,
+
+	EventEmitterLike,
 	EventEmitterLikeP,
 
 	AsyncOnOptions,
@@ -127,16 +129,34 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 					.bind(this),
 
 				wrapper(cb: AnyFunction): unknown {
-					const fn = Object.isSimpleFunction(emitter) ?
-						emitter :
-						p.single &&
-							emitter.once ||
-							emitter.addEventListener ||
-							emitter.addListener ||
-							emitter.on;
+					if (Object.isFunction(emitter)) {
+						const
+							originalEmitter = emitter;
 
-					if (Object.isFunction(fn)) {
-						fn.call(emitter, event, handler, ...args);
+						// eslint-disable-next-line func-name-matching
+						emitter = function wrappedEmitter(this: unknown): CanUndef<Function> {
+							const
+								// eslint-disable-next-line prefer-rest-params
+								res = originalEmitter.apply(this, arguments);
+
+							if (Object.isFunction(res)) {
+								Object.set(wrappedEmitter, 'off', res);
+							}
+
+							return res;
+						};
+					}
+
+					const on = Object.isSimpleFunction(emitter) ?
+						emitter :
+
+						p.single && emitter.once ||
+						emitter.addEventListener ||
+						emitter.addListener ||
+						emitter.on;
+
+					if (Object.isFunction(on)) {
+						on.call(emitter, event, handler, ...args);
 
 					} else {
 						throw new ReferenceError('A method to attach events is not defined');
@@ -150,7 +170,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 					};
 
 					function handler(this: unknown, ...handlerArgs: unknown[]): unknown {
-						if (Object.isFunction(emitter) || p.single && (multipleEvent || !emitter.once)) {
+						if (p.single && (multipleEvent || !emitter.once)) {
 							if (multipleEvent) {
 								that.clearEventListener(links);
 
@@ -423,13 +443,13 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	eventListenerDestructor(event: Event): void {
 		const
-			e = event.emitter,
-			fn = Object.isSimpleFunction(e) ? e : e.removeEventListener ?? e.removeListener ?? e.off;
+			emitter = <EventEmitterLike>event.emitter,
+			off = emitter.removeEventListener ?? emitter.removeListener ?? emitter.off;
 
-		if (Object.isFunction(fn)) {
-			fn.call(e, event.event, event.handler);
+		if (Object.isFunction(off)) {
+			off.call(emitter, event.event, event.handler);
 
-		} else {
+		} else if (!Object.isFunction(emitter)) {
 			throw new ReferenceError('A function to remove the event is not defined');
 		}
 	}

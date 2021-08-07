@@ -7,7 +7,7 @@
  */
 
 describe('core/prelude/number/format', () => {
-	it('pad', () => {
+	it('`pad`', () => {
 		expect((1).pad()).toBe('1');
 		expect((1).pad(2)).toBe('01');
 		expect((-1).pad({length: 2})).toBe('-01');
@@ -16,13 +16,13 @@ describe('core/prelude/number/format', () => {
 		expect((2).pad(4, {base: 2})).toBe('0010');
 	});
 
-	it('Number.pad', () => {
+	it('`Number.pad`', () => {
 		expect(Number.pad(1, 2)).toBe('01');
 		expect(Number.pad(-1, {length: 2})).toBe('-01');
 		expect(Number.pad({length: 2, sign: true})(1)).toBe('+01');
 	});
 
-	it('format', () => {
+	it('`format`', () => {
 		expect(34.5656.format(2)).toBe('34.57');
 		expect(34.5656.format()).toBe('34.566');
 
@@ -39,7 +39,7 @@ describe('core/prelude/number/format', () => {
 			.toBe(100.50.toLocaleString('en-us', {style: 'currency', currency: 'USD'}));
 	});
 
-	it('Number.format', () => {
+	it('`Number.format`', () => {
 		expect(Number.format(34.5656)).toBe('34.566');
 		expect(Number.format('$', 'en-us')(100.50)).toBe('$100.50');
 		expect(Number.format({style: 'currency', currency: 'USD'}, 'en-us')(100.50))

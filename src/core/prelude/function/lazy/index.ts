@@ -77,7 +77,7 @@ extend(Function.prototype, 'throttle', function throttle(
 				timer = undefined;
 
 				if (!opts.single && lastArgs !== args) {
-					fn.apply(this, lastArgs);
+					wrapper.apply(this, lastArgs);
 				}
 			};
 

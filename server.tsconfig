@@ -2,7 +2,8 @@
   "extends": "@v4fire/core/.tsconfig",
 
   "compilerOptions": {
-    "allowJs": true
+    "allowJs": true,
+    "target": "es6"
   },
 
   "include": [

@@ -39,7 +39,7 @@ export * from 'core/async/interface';
 
 export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	/**
-	 * Wrapper for global.setImmediate
+	 * Wrapper for `globalThis.setImmediate`
 	 *
 	 * @param cb - callback function
 	 * @param [opts] - additional options for the operation
@@ -56,7 +56,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	}
 
 	/**
-	 * Wrapper for global.clearImmediate
+	 * Wrapper for `globalThis.clearImmediate`
 	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	clearImmediate(id?: TimerId): this;
@@ -132,7 +132,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	}
 
 	/**
-	 * Wrapper for global.setInterval
+	 * Wrapper for `globalThis.setInterval`
 	 *
 	 * @param cb - callback function
 	 * @param timeout - timer value
@@ -152,7 +152,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	}
 
 	/**
-	 * Wrapper for global.clearInterval
+	 * Wrapper for `globalThis.clearInterval`
 	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	clearInterval(id?: TimerId): this;
@@ -227,7 +227,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	}
 
 	/**
-	 * Wrapper for global.setTimeout
+	 * Wrapper for `globalThis.setTimeout`
 	 *
 	 * @param cb - callback function
 	 * @param timeout - timeout value
@@ -246,7 +246,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	}
 
 	/**
-	 * Wrapper for global.clearTimeout
+	 * Wrapper for `globalThis.clearTimeout`
 	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	clearTimeout(id?: TimerId): this;
@@ -321,7 +321,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	}
 
 	/**
-	 * Wrapper for global.requestIdleCallback
+	 * Wrapper for `globalThis.requestIdleCallback`
 	 *
 	 * @param cb - callback function
 	 * @param [opts] - additional options for the operation
@@ -355,7 +355,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	}
 
 	/**
-	 * Wrapper for global.cancelIdleCallback
+	 * Wrapper for `globalThis.cancelIdleCallback`
 	 *
 	 * @alias
 	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
@@ -372,7 +372,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	}
 
 	/**
-	 * Wrapper for global.cancelIdleCallback
+	 * Wrapper for `globalThis.cancelIdleCallback`
 	 * @param [id] - operation id (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	clearIdleCallback(id?: TimerId): this;

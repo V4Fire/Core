@@ -59,39 +59,19 @@ export function deprecate<T extends Function>(
 }
 
 /**
- * Decorator for the "deprecate" function
+ * Decorator for `deprecate`
  *
  * @decorator
  * @see [[deprecate]]
- *
- * @example
- * ```js
- * class Foo {
- *   @deprecated
- *   bar() {
- *
- *   }
- * }
- * ```
  */
 export function deprecated(target: object, key: string | symbol, descriptor: PropertyDescriptor): void;
 
 /**
- * Decorator for the "deprecate" function.
+ * Decorator for `deprecate`.
  * This overload adds a feature to provide additional options.
  *
  * @see [[deprecate]]
  * @param [opts] - additional options
- *
- * @example
- * ```js
- * class Foo {
- *   @deprecated({renamedTo: 'baz'}})
- *   bar() {
- *
- *   }
- * }
- * ```
  */
 export function deprecated(opts?: WarnOptions): Function;
 

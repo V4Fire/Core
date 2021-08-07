@@ -17,7 +17,7 @@ const
 	minDateLength = '2017-02-03'.length;
 
 /**
- * Reviver for the JSON.parse method: converts all strings that is looks like a date to Date
+ * Reviver for the `JSON.parse` method: converts all strings that is looks like a date to Date
  *
  * @param key
  * @param value

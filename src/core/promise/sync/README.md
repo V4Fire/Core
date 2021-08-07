@@ -11,7 +11,15 @@ SyncPromise.resolve().then(() => console.log(1));
 console.log(2);
 ```
 
-Also, the module provides a bunch of helpers to memoize promises.
+## Helpers
+
+The module provides a bunch of helpers to memoize promises.
+
+### Memoize
+
+Memorizes the specified promise and converts it to a synchronous promise.
+It means that after the first resolution, the promised result will be cached,
+and the method returns the synchronous version of a promise.
 
 ```js
 import { memoize } from 'core/promise/memoize';

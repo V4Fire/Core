@@ -9,7 +9,7 @@
 import SyncPromise from 'core/promise/sync';
 
 describe('core/prelude/structures/sync-promise', () => {
-	it('simple then', () => {
+	it('simple `then`', () => {
 		let
 			i = 1;
 
@@ -22,7 +22,7 @@ describe('core/prelude/structures/sync-promise', () => {
 		expect(i).toBe(6);
 	});
 
-	it('resolved then after catch', () => {
+	it('resolved `then` after `catch`', () => {
 		let
 			i = 1;
 
@@ -36,7 +36,7 @@ describe('core/prelude/structures/sync-promise', () => {
 		expect(i).toBe(6);
 	});
 
-	it('rejected then', () => {
+	it('rejected `then`', () => {
 		let
 			i = 1;
 
@@ -51,7 +51,7 @@ describe('core/prelude/structures/sync-promise', () => {
 		expect(i).toBe(3);
 	});
 
-	it('dynamically rejected catch', () => {
+	it('dynamically rejected `catch`', () => {
 		let
 			i = 1;
 
@@ -73,7 +73,7 @@ describe('core/prelude/structures/sync-promise', () => {
 		expect(i).toBe(6);
 	});
 
-	it('catch', () => {
+	it('`catch`', () => {
 		let
 			i = 1;
 
@@ -89,7 +89,7 @@ describe('core/prelude/structures/sync-promise', () => {
 		expect(i).toBe(3);
 	});
 
-	it('dynamically rejected catch', () => {
+	it('dynamically rejected `catch`', () => {
 		let
 			i = 1;
 
@@ -111,7 +111,7 @@ describe('core/prelude/structures/sync-promise', () => {
 		expect(i).toBe(6);
 	});
 
-	it('resolved finally', () => {
+	it('resolved `finally`', () => {
 		let
 			i = 1;
 
@@ -127,7 +127,7 @@ describe('core/prelude/structures/sync-promise', () => {
 		expect(i).toBe(2);
 	});
 
-	it('rejected finally', () => {
+	it('rejected `finally`', () => {
 		let
 			i = 1;
 
@@ -142,7 +142,7 @@ describe('core/prelude/structures/sync-promise', () => {
 		expect(i).toBe(2);
 	});
 
-	it('dynamically rejected finally', () => {
+	it('dynamically rejected `finally`', () => {
 		let
 			i = 1;
 
@@ -173,7 +173,7 @@ describe('core/prelude/structures/sync-promise', () => {
 		expect(i).toBe(6);
 	});
 
-	it('SyncPromise.resolve', () => {
+	it('`SyncPromise.resolve`', () => {
 		let
 			i = 0,
 			j = 0;
@@ -190,7 +190,7 @@ describe('core/prelude/structures/sync-promise', () => {
 		expect(j).toBe(6);
 	});
 
-	it('SyncPromise.reject', () => {
+	it('`SyncPromise.reject`', () => {
 		let
 			i = 1;
 
@@ -203,7 +203,7 @@ describe('core/prelude/structures/sync-promise', () => {
 		expect(i).toBe(3);
 	});
 
-	it('SyncPromise.all', () => {
+	it('`SyncPromise.all`', () => {
 		let res;
 
 		SyncPromise.all([
@@ -215,7 +215,7 @@ describe('core/prelude/structures/sync-promise', () => {
 		expect(res).toEqual([1, null, 2]);
 	});
 
-	it('SyncPromise.race', () => {
+	it('`SyncPromise.race`', () => {
 		let res;
 
 		SyncPromise.race([

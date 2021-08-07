@@ -243,17 +243,87 @@ pre {
 						<a href="#corequeueworker" id="corequeueworker" style="color: inherit; text-decoration: none;">
 							<h1>core/queue/worker</h1>
 						</a>
-						<p>This module provides an abstract class for the [[WorkerQueue]] data structure.
-						The submodules contains different implementations of that class.</p>
+						<p>This module provides an abstract class for a [[WorkerQueue]] data structure.
+						The submodules contain different implementations of that class.</p>
 						<a href="#implementations" id="implementations" style="color: inherit; text-decoration: none;">
 							<h2>Implementations:</h2>
 						</a>
 						<ul>
-							<li><p><a href="src_core_queue_worker_simple_index.html">SimpleWorkerQueue</a></p>
+							<li><p><a href="src_core_queue_worker_simple.html">SimpleWorkerQueue</a></p>
 							</li>
-							<li><p><a href="src_core_queue_worker_merge_index.html">MergeWorkerQueue</a></p>
+							<li><p><a href="src_core_queue_worker_merge.html">MergeWorkerQueue</a></p>
 							</li>
 						</ul>
+						<a href="#api" id="api" style="color: inherit; text-decoration: none;">
+							<h2>API</h2>
+						</a>
+						<a href="#constructor" id="constructor" style="color: inherit; text-decoration: none;">
+							<h3>Constructor</h3>
+						</a>
+						<a href="#providing-a-task-executor" id="providing-a-task-executor" style="color: inherit; text-decoration: none;">
+							<h4>Providing a task executor</h4>
+						</a>
+						<p>The structure constructor expects a function that will be invoked on each processed task.
+						The function can return a promise (it will be awaited).</p>
+						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">WorkerQueue</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/queue/worker/simple&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">queue</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">WorkerQueue</span><span style="color: #000000">((</span><span style="color: #001080">task</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">task</span><span style="color: #000000">);</span>
+<span style="color: #000000">});</span>
+
+<span style="color: #001080">queue</span><span style="color: #000000">.</span><span style="color: #795E26">push</span><span style="color: #000000">({</span><span style="color: #001080">a:</span><span style="color: #000000"> </span><span style="color: #098658">1</span><span style="color: #000000">});</span>
+<span style="color: #001080">queue</span><span style="color: #000000">.</span><span style="color: #795E26">push</span><span style="color: #000000">({</span><span style="color: #001080">a:</span><span style="color: #000000"> </span><span style="color: #098658">2</span><span style="color: #000000">});</span>
+</code></pre>
+						<a href="#queue-options" id="queue-options" style="color: inherit; text-decoration: none;">
+							<h4>Queue options</h4>
+						</a>
+						<a href="#concurrency--1" id="concurrency--1" style="color: inherit; text-decoration: none;">
+							<h5>[concurrency = <code>1</code>]</h5>
+						</a>
+						<p>The maximum number of concurrent workers.</p>
+						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">WorkerQueue</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/queue/worker/simple&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">queue</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">WorkerQueue</span><span style="color: #000000">((</span><span style="color: #001080">task</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">task</span><span style="color: #000000">);</span>
+<span style="color: #000000">}, {</span><span style="color: #001080">concurrency:</span><span style="color: #000000"> </span><span style="color: #098658">2</span><span style="color: #000000">});</span>
+
+<span style="color: #001080">queue</span><span style="color: #000000">.</span><span style="color: #795E26">push</span><span style="color: #000000">({</span><span style="color: #001080">a:</span><span style="color: #000000"> </span><span style="color: #098658">1</span><span style="color: #000000">});</span>
+
+<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">queue</span><span style="color: #000000">.</span><span style="color: #001080">length</span><span style="color: #000000">); </span><span style="color: #008000">// 0</span>
+
+<span style="color: #001080">queue</span><span style="color: #000000">.</span><span style="color: #795E26">push</span><span style="color: #000000">({</span><span style="color: #001080">a:</span><span style="color: #000000"> </span><span style="color: #098658">2</span><span style="color: #000000">});</span>
+
+<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">queue</span><span style="color: #000000">.</span><span style="color: #001080">length</span><span style="color: #000000">); </span><span style="color: #008000">// 0</span>
+
+<span style="color: #001080">queue</span><span style="color: #000000">.</span><span style="color: #795E26">push</span><span style="color: #000000">({</span><span style="color: #001080">a:</span><span style="color: #000000"> </span><span style="color: #098658">3</span><span style="color: #000000">});</span>
+
+<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">queue</span><span style="color: #000000">.</span><span style="color: #001080">length</span><span style="color: #000000">); </span><span style="color: #008000">// 1</span>
+
+<span style="color: #001080">queue</span><span style="color: #000000">.</span><span style="color: #795E26">push</span><span style="color: #000000">({</span><span style="color: #001080">a:</span><span style="color: #000000"> </span><span style="color: #098658">4</span><span style="color: #000000">});</span>
+
+<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">queue</span><span style="color: #000000">.</span><span style="color: #001080">length</span><span style="color: #000000">); </span><span style="color: #008000">// 2</span>
+</code></pre>
+						<a href="#refreshinterval" id="refreshinterval" style="color: inherit; text-decoration: none;">
+							<h5>[refreshInterval]</h5>
+						</a>
+						<p>How often to refresh task statuses, i.e., the next butch of tasks will be executed after the specified interval
+						(by default, on the next process tick).</p>
+						<a href="#properties" id="properties" style="color: inherit; text-decoration: none;">
+							<h3>Properties</h3>
+						</a>
+						<a href="#concurrency" id="concurrency" style="color: inherit; text-decoration: none;">
+							<h4>concurrency</h4>
+						</a>
+						<p>The maximum number of concurrent workers.</p>
+						<a href="#refreshinterval-1" id="refreshinterval-1" style="color: inherit; text-decoration: none;">
+							<h4>refreshInterval</h4>
+						</a>
+						<p>How often to refresh task statuses, i.e., the next butch of tasks will be executed after the specified interval
+						(by default, on the next process tick).</p>
+						<a href="#activeworkers" id="activeworkers" style="color: inherit; text-decoration: none;">
+							<h4>activeWorkers</h4>
+						</a>
+						<p>Number of active workers (in process).</p>
 					</div>
 				</div>
 			</section>
@@ -264,18 +334,13 @@ pre {
 						<section class="tsd-index-section ">
 							<h3>References</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_queue_worker.html#createtasks" class="tsd-kind-icon">Create<wbr>Tasks</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_queue_worker.html#queueoptions" class="tsd-kind-icon">Queue<wbr>Options</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_queue_worker.html#queueworker" class="tsd-kind-icon">Queue<wbr>Worker</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_queue_worker.html#task" class="tsd-kind-icon">Task</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_queue_worker.html#tasks" class="tsd-kind-icon">Tasks</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_queue_worker.html#workerqueueoptions" class="tsd-kind-icon">Worker<wbr>Queue<wbr>Options</a></li>
 								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_queue_worker.html#default" class="tsd-kind-icon">default</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section ">
-							<h3>Interfaces</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter"><a href="../interfaces/src_core_queue_worker.createtasks.html" class="tsd-kind-icon">Create<wbr>Tasks</a></li>
-								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/src_core_queue_worker.queueoptions.html" class="tsd-kind-icon">Queue<wbr>Options</a></li>
-								<li class="tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter"><a href="../interfaces/src_core_queue_worker.queueworker.html" class="tsd-kind-icon">Queue<wbr>Worker</a></li>
-								<li class="tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter"><a href="../interfaces/src_core_queue_worker.task.html" class="tsd-kind-icon">Task</a></li>
-								<li class="tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter"><a href="../interfaces/src_core_queue_worker.tasks.html" class="tsd-kind-icon">Tasks</a></li>
-								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/src_core_queue_worker.workerqueueoptions.html" class="tsd-kind-icon">Worker<wbr>Queue<wbr>Options</a></li>
 							</ul>
 						</section>
 					</div>
@@ -283,6 +348,36 @@ pre {
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>References</h2>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="createtasks" class="tsd-anchor"></a>
+					<h3>Create<wbr>Tasks</h3>
+					Re-exports <a href="../interfaces/src_core_queue_interface.createtasks.html">CreateTasks</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="queueoptions" class="tsd-anchor"></a>
+					<h3>Queue<wbr>Options</h3>
+					Re-exports <a href="../interfaces/src_core_queue_interface.queueoptions.html">QueueOptions</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="queueworker" class="tsd-anchor"></a>
+					<h3>Queue<wbr>Worker</h3>
+					Re-exports <a href="../interfaces/src_core_queue_worker_interface.queueworker.html">QueueWorker</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="task" class="tsd-anchor"></a>
+					<h3>Task</h3>
+					Re-exports <a href="../interfaces/src_core_queue_worker_interface.task.html">Task</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="tasks" class="tsd-anchor"></a>
+					<h3>Tasks</h3>
+					Re-exports <a href="../interfaces/src_core_queue_interface.tasks.html">Tasks</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="workerqueueoptions" class="tsd-anchor"></a>
+					<h3>Worker<wbr>Queue<wbr>Options</h3>
+					Re-exports <a href="../interfaces/src_core_queue_worker_interface.workerqueueoptions.html">WorkerQueueOptions</a>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
 					<a name="default" class="tsd-anchor"></a>
 					<h3>default</h3>
@@ -304,25 +399,25 @@ pre {
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_queue_worker.html#createtasks" class="tsd-kind-icon">Create<wbr>Tasks</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_queue_worker.html#queueoptions" class="tsd-kind-icon">Queue<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_queue_worker.html#queueworker" class="tsd-kind-icon">Queue<wbr>Worker</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_queue_worker.html#task" class="tsd-kind-icon">Task</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_queue_worker.html#tasks" class="tsd-kind-icon">Tasks</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_queue_worker.html#workerqueueoptions" class="tsd-kind-icon">Worker<wbr>Queue<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
 						<a href="src_core_queue_worker.html#default" class="tsd-kind-icon">default</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../interfaces/src_core_queue_worker.createtasks.html" class="tsd-kind-icon">Create<wbr>Tasks</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="../interfaces/src_core_queue_worker.queueoptions.html" class="tsd-kind-icon">Queue<wbr>Options</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../interfaces/src_core_queue_worker.queueworker.html" class="tsd-kind-icon">Queue<wbr>Worker</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../interfaces/src_core_queue_worker.task.html" class="tsd-kind-icon">Task</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../interfaces/src_core_queue_worker.tasks.html" class="tsd-kind-icon">Tasks</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="../interfaces/src_core_queue_worker.workerqueueoptions.html" class="tsd-kind-icon">Worker<wbr>Queue<wbr>Options</a>
 					</li>
 				</ul>
 			</nav>

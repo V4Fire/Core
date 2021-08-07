@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.54.0 (2021-07-09)
+
+#### :boom: Breaking Change
+
+* Renamed engines: `browser.indexeddb` -> `browser-indexeddb`, `browser.localstorage` -> `browser-localstorage`, etc.
+
 ## v3.23.0 (2020-08-10)
 
 #### :rocket: New Feature

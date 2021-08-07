@@ -9,6 +9,18 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.50.0 (2021-06-07)
+
+#### :rocket: New Feature
+
+* Now all cache structures are iterable objects
+* Added new iterators `values`, `entries`
+* Added `size`
+
+#### :memo: Documentation
+
+* Improved documentation `core/cache`
+
 ## v3.20.0 (2020-07-05)
 
 #### :boom: Breaking Change

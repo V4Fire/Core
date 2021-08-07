@@ -34,7 +34,7 @@ export interface WrapOptions {
 	/**
 	 * Watch options
 	 */
-	watchOpts?: WatchOptions;
+	watchOpts: WatchOptions;
 }
 
 export interface WrapParams extends WrapOptions {
@@ -54,7 +54,7 @@ export interface WrapMethodObject {
 }
 
 export interface StructureWrapper {
-	is(obj: unknown): boolean;
+	is(obj: unknown, opts: WrapOptions): boolean;
 	methods: Dictionary<WrapMethod | WrapMethodObject>;
 }
 

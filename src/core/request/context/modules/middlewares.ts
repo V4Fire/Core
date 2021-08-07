@@ -7,9 +7,10 @@
  */
 
 import Response, { ResponseTypeValue } from 'core/request/response';
-import type { RequestResponse, RequestResponseObject } from 'core/request/interface';
+import { caches } from 'core/request/const';
 
 import Super from 'core/request/context/modules/methods';
+import type { RequestResponse, RequestResponseObject } from 'core/request/interface';
 
 export default class RequestContext<D = unknown> extends Super<D> {
 	/**
@@ -55,6 +56,7 @@ export default class RequestContext<D = unknown> extends Super<D> {
 
 		if (key != null) {
 			this.cache.set(key, res.data);
+			caches.add(this.cache);
 		}
 
 		return res;

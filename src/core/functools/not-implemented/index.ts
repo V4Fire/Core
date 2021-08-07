@@ -59,7 +59,7 @@ export function notImplement<T extends Function>(
 }
 
 /**
- * Decorator for the "notImplement" function
+ * Decorator for `notImplement`
  *
  * @decorator
  * @see [[notImplement]]
@@ -77,7 +77,7 @@ export function notImplement<T extends Function>(
 export function notImplemented(target: object, key: string | symbol, descriptor: PropertyDescriptor): void;
 
 /**
- * Decorator for the "notImplement" function.
+ * Decorator for `notImplement`.
  * This overload adds a feature to provide additional options.
  *
  * @see [[notImplement]]

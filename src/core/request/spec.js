@@ -1,3 +1,5 @@
+/* eslint-disable max-lines-per-function */
+
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -87,18 +89,18 @@ describe('core/request', () => {
 				}
 			});
 
-			it('blob get', async () => {
+			it('blob `get`', async () => {
 				const req = await request('http://localhost:3000/favicon.ico');
 				expect(req.data.type).toBe('image/x-icon');
 				expect(req.data.size).toBe(1150);
 			});
 
-			it('json get', async () => {
+			it('json `get`', async () => {
 				expect((await request('http://localhost:3000/json/1')).data)
 					.toEqual({id: 1, value: 'things'});
 			});
 
-			it('json get with caching', async () => {
+			it('json `get` with caching', async () => {
 				const
 					url = 'http://localhost:3000/json/1',
 					get = request({cacheStrategy: 'forever', cacheTTL: 10});
@@ -135,17 +137,17 @@ describe('core/request', () => {
 				}));
 			});
 
-			it('text/xml get', async () => {
+			it('text/xml `get`', async () => {
 				expect((await request('http://localhost:3000/xml/text')).data.querySelector('foo').textContent)
 					.toBe('Hello world');
 			});
 
-			it('application/xml get', async () => {
+			it('application/xml `get`', async () => {
 				expect((await request('http://localhost:3000/xml/app')).data.querySelector('foo').textContent)
 					.toBe('Hello world');
 			});
 
-			it('xml get with a query', async () => {
+			it('xml `get` with a query', async () => {
 				const
 					{data} = await request('http://localhost:3000/search', {query: {q: 'bla'}});
 
@@ -153,7 +155,7 @@ describe('core/request', () => {
 					.toBe('one');
 			});
 
-			it('json post', async () => {
+			it('json `post`', async () => {
 				const req = await request('http://localhost:3000/json', {
 					method: 'POST',
 					body: {
@@ -172,7 +174,7 @@ describe('core/request', () => {
 					.toBeTrue();
 			});
 
-			it('json post with the specified response status', async () => {
+			it('json `post` with the specified response status', async () => {
 				try {
 					await request('http://localhost:3000/json', {
 						method: 'POST',
@@ -192,7 +194,7 @@ describe('core/request', () => {
 				}
 			});
 
-			it('json post with encoders/decoders', async () => {
+			it('json `post` with encoders/decoders', async () => {
 				const req = await request('http://localhost:3000/json', {
 					method: 'POST',
 
@@ -225,7 +227,7 @@ describe('core/request', () => {
 					.toBe(201);
 			});
 
-			it('json post with middlewares', async () => {
+			it('json `post` with middlewares', async () => {
 				const req = await request('http://localhost:3000/json', {
 					method: 'POST',
 
@@ -251,7 +253,7 @@ describe('core/request', () => {
 					.toBe(201);
 			});
 
-			it('json post with the middleware that return a function', async () => {
+			it('json `post` with the middleware that return a function', async () => {
 				const req = await request('http://localhost:3000/json', {
 					method: 'POST',
 
@@ -273,7 +275,7 @@ describe('core/request', () => {
 					.toBe(200);
 			});
 
-			it('json put with headers', async () => {
+			it('json `put` with headers', async () => {
 				const req = await request('http://localhost:3000/json/2', {
 					method: 'PUT',
 					headers: {
@@ -316,7 +318,7 @@ describe('core/request', () => {
 					.toBe(200);
 			});
 
-			it('resolving API schema to url', async () => {
+			it('resolving API schema to URL', async () => {
 				let
 					resolvedUrl;
 

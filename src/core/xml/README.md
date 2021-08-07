@@ -2,6 +2,10 @@
 
 This module provides a bunch of helper functions to work with XML documents.
 
+## toDataURI
+
+Converts the specified XML node to a `DATA:URI` string.
+
 ```js
 import { toDataURI } from 'core/xml';
 import { getDataTypeFromURI } from 'core/mime-type';

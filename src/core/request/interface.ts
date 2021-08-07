@@ -42,7 +42,8 @@ export type RequestBody =
 	boolean |
 	Dictionary |
 	FormData |
-	ArrayBuffer;
+	ArrayBuffer |
+	Blob;
 
 export type OkStatuses =
 	Range<number> |

@@ -43,13 +43,13 @@ export interface Provider {
 	readonly event: EventEmitterLike;
 
 	/**
-	 * Returns a custom logical name of any request.
+	 * Returns the custom logical name of any request.
 	 * If a request has the name, then it will fire an event with the same name after successful receiving.
 	 */
 	name(): CanUndef<ModelMethod>;
 
 	/**
-	 * Sets a custom logical name for any request.
+	 * Sets the custom logical name for any request.
 	 * If a request has the name, then it will fire an event with the same name after successful receiving.
 	 * This method returns a new provider object with context.
 	 *
@@ -58,12 +58,12 @@ export interface Provider {
 	name(value: ModelMethod): Provider;
 
 	/**
-	 * Returns a custom HTTP request method of any request
+	 * Returns the custom HTTP request method of any request
 	 */
 	method(): CanUndef<RequestMethod>;
 
 	/**
-	 * Sets a custom HTTP request method for any request.
+	 * Sets the custom HTTP request method for any request.
 	 * This method returns a new provider object with context.
 	 *
 	 * @param [value]
@@ -71,12 +71,12 @@ export interface Provider {
 	method(value: RequestMethod): Provider;
 
 	/**
-	 * Returns a base part of URL of any request
+	 * Returns the base part of URL of any request
 	 */
 	base(): string;
 
 	/**
-	 * Sets a base part of URL for any request.
+	 * Sets the base part of URL for any request.
 	 * This method returns a new provider object with context.
 	 *
 	 * @param [value]
@@ -84,7 +84,7 @@ export interface Provider {
 	base(value: string): Provider;
 
 	/**
-	 * Returns full URL of any request
+	 * Returns the full URL of any request
 	 */
 	url(): string;
 

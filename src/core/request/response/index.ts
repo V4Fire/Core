@@ -245,11 +245,12 @@ export default class Response<
 		}
 		//#endif
 
-		//#unless node_js
 		if (Object.isString(body) || body instanceof ArrayBuffer) {
 			return Then.resolve(
-				this.text()
-					.then<_>((text) => (new DOMParser()).parseFromString(text ?? '', 'text/html')),
+				this.text().then<_>((text) => {
+					const type = this.getHeader('content-type') ?? 'text/html';
+					return(new DOMParser()).parseFromString(text ?? '', <any>type);
+				}),
 
 				this.parent
 			);
@@ -258,7 +259,6 @@ export default class Response<
 		if (!(body instanceof Document)) {
 			throw new TypeError('Invalid data type');
 		}
-		//#endunless
 
 		return Then.resolve<_>(<any>body, this.parent);
 	}
@@ -272,11 +272,9 @@ export default class Response<
 		const
 			{body} = this;
 
-		//#unless node_js
-		if (body instanceof Document) {
+		if (!IS_NODE && body instanceof Document) {
 			throw new TypeError('Invalid data type');
 		}
-		//#endunless
 
 		if (body == null || body === '') {
 			return Then.resolve<_>(null, this.parent);
@@ -315,7 +313,7 @@ export default class Response<
 			{body} = this;
 
 		//#unless node_js
-		if (!(body instanceof ArrayBuffer)) {
+		if (!IS_NODE && !(body instanceof ArrayBuffer)) {
 			throw new TypeError('Invalid data type');
 		}
 		//#endunless
@@ -342,11 +340,9 @@ export default class Response<
 		const
 			{body} = this;
 
-		//#unless node_js
-		if (body instanceof Document) {
+		if (!IS_NODE && body instanceof Document) {
 			throw new TypeError('Invalid data type');
 		}
-		//#endunless
 
 		if (body == null) {
 			return Then.resolve<_>(null);
@@ -378,17 +374,14 @@ export default class Response<
 			return Then.resolve<_>(null, this.parent);
 		}
 
-		//#if node_js
-		if (body instanceof Buffer && body.byteLength === 0) {
-			throw new TypeError('Invalid data type');
-		}
-		//#endif
+		if (IS_NODE) {
+			if (body instanceof Buffer && body.byteLength === 0) {
+				throw new TypeError('Invalid data type');
+			}
 
-		//#unless node_js
-		if (body instanceof Document) {
+		} else if (body instanceof Document) {
 			return Then.resolve<_>(String(body), this.parent);
 		}
-		//#endunless
 
 		if (Object.isString(body)) {
 			return Then.resolve<_>(String(body), this.parent);
@@ -413,11 +406,9 @@ export default class Response<
 			}
 		}
 
-		//#if node_js
 		if (IS_NODE) {
 			return Then.resolve<_>(Buffer.from(<any>body).toString(encoding));
 		}
-		//#endif
 
 		if (typeof TextDecoder !== 'undefined') {
 			const decoder = new TextDecoder(encoding, {fatal: true});

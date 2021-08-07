@@ -18,12 +18,22 @@ const
 	{pathEqual} = require('path-equal');
 
 /**
- * Returns a function to attach modules withing node.js process with the support of WebPack "layers".
- * The returned function takes a path to require, and, also, can take a directory of the caller file
- * (to enable "@super" alias).
+ * @typedef {{
+ *   ctx?: string,
+ *   return?: ('path'|'source'|'module'),
+ *   source?: boolean
+ * }}
+ */
+// eslint-disable-next-line no-unused-vars
+const IncludeOptions = {};
+
+/**
+ * Returns a function to attach modules within node.js process with the support of WebPack "layers".
+ * The returned function takes a path to require and takes a caller file's directory (to enable "@super" alias).
+ * Also, the function can return a path or source code of the found file if there is provided special flag.
  *
  * @param {Array<string>} layers - list of layers
- * @returns {function (string, string?): ?}
+ * @returns {function (string, (string|IncludeOptions)?): ?}
  *
  * @example
  * ```js
@@ -37,16 +47,38 @@ const
  * // Searches the first existed file from a list:
  * // ./node_modules/bla/build/i18n
  * include('@super/build/i18n', __dirname);
+ *
+ * // ./node_modules/bla/build/i18n
+ * include('@super/build/i18n', {ctx: __dirname});
+ *
+ * // Returns a path to the file
+ * include('build/i18n', {return: 'path');
+ *
+ * // Returns source code of the file
+ * include('@super/build/i18n', {return: 'source');
  * ```
  */
 module.exports = function init(layers) {
-	return function include(src, ctx) {
+	return function include(src, cwdOrOpts) {
 		const
 			opts = {};
 
-		if (Object.isObject(ctx)) {
-			Object.assign(opts, ctx);
-			ctx = undefined;
+		let
+			cwd;
+
+		if (Object.isObject(cwdOrOpts)) {
+			Object.assign(opts, cwdOrOpts);
+			cwd = opts.ctx;
+
+		} else {
+			cwd = cwdOrOpts;
+		}
+
+		if (opts.source) {
+			opts.return = 'source';
+
+		} else {
+			opts.return = opts.return ?? 'module';
 		}
 
 		function resolve(root) {
@@ -60,32 +92,22 @@ module.exports = function init(layers) {
 			return path.join(root, src);
 		}
 
-		function moduleExists(src) {
-			try {
-				require.resolve(src);
-				return true;
-
-			} catch {
-				return false;
-			}
-		}
-
 		let
 			resolvedLayers = layers;
 
 		if (superRgxp.removeFlags('g').test(src)) {
-			if (!ctx) {
-				throw new ReferenceError('The context for @super is not defined');
+			if (cwd == null) {
+				throw new ReferenceError('A context for @super is not defined');
 			}
 
-			ctx = path.dirname(findUp.sync('.pzlrrc', {
-				cwd: ctx
+			cwd = path.dirname(findUp.sync('.pzlrrc', {
+				cwd
 			}));
 
 			resolvedLayers = resolvedLayers.slice(0, -1);
 
 			for (let i = resolvedLayers.length; i--;) {
-				if (pathEqual(ctx, resolvedLayers[i])) {
+				if (pathEqual(cwd, resolvedLayers[i])) {
 					resolvedLayers = resolvedLayers.slice(0, i);
 					break;
 				}
@@ -99,12 +121,11 @@ module.exports = function init(layers) {
 				layerSrc = resolve(resolvedLayers[i]);
 
 			try {
-				if (opts.source) {
-					if (fs.existsSync(layerSrc)) {
-						return fs.readFileSync(layerSrc).toString();
-					}
+				if (opts.return !== 'module' && fs.existsSync(layerSrc)) {
+					return getResult(layerSrc);
+				}
 
-				} else if (moduleExists(layerSrc)) {
+				if (isModuleExists(layerSrc)) {
 					return require(layerSrc);
 				}
 
@@ -114,10 +135,29 @@ module.exports = function init(layers) {
 			}
 		}
 
-		if (opts.source) {
-			return fs.readFileSync(src).toString();
+		return getResult(src);
+
+		function isModuleExists(src) {
+			try {
+				require.resolve(src);
+				return true;
+
+			} catch {
+				return false;
+			}
 		}
 
-		require(src);
+		function getResult(src) {
+			switch (opts.return) {
+				case 'path':
+					return src;
+
+				case 'source':
+					return fs.readFileSync(src).toString();
+
+				default:
+					return require(src);
+			}
+		}
 	};
 };

@@ -9,6 +9,22 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.56.0 (2021-07-25)
+
+#### :rocket: New Feature
+
+* Now `Object.hasOwnProperty` supports symbols
+
+## v3.54.0 (2021-07-09)
+
+#### :boom: Breaking Change
+
+* The module has been renamed from `parse` to `convert`
+
+#### :rocket: New Feature
+
+* Added `Object.trySerialize`
+
 ## v3.36.0 (2021-03-16)
 
 #### :boom: Breaking Change
@@ -68,7 +84,7 @@ console.log(Object.reject({a: 1, b: 2, __proto__: null}, 'a').__proto__ == null)
 
 #### :bug: Bug Fix
 
-* Fixed a bug when Dates could be transformed to strings after cloning `Object.fastClone`
+* Fixed a bug when Dates could be transformed to string after cloning `Object.fastClone`
 
 ## v3.26.0 (2020-09-04)
 

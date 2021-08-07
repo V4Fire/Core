@@ -11,8 +11,8 @@
 import Async from 'core/async';
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 
-describe('core/async/modules/base/mark', () => {
-	it('muteAll/unmuteAll', (done) => {
+describe('core/async/modules/base `muteAll/unmuteAll`', () => {
+	it('simple usage', (done) => {
 		const
 			$a = new Async();
 
@@ -41,7 +41,7 @@ describe('core/async/modules/base/mark', () => {
 		}, 5);
 	});
 
-	it('muteAll/unmuteAll by a group', (done) => {
+	it('by a group', (done) => {
 		const
 			$a = new Async();
 
@@ -70,7 +70,7 @@ describe('core/async/modules/base/mark', () => {
 		}, 15);
 	});
 
-	it('muteAll/unmuteAll by a regexp group', (done) => {
+	it('by a regexp group', (done) => {
 		const
 			$a = new Async();
 
@@ -99,7 +99,7 @@ describe('core/async/modules/base/mark', () => {
 		}, 15);
 	});
 
-	it('muteAll/unmuteAll by a label', (done) => {
+	it('by a label', (done) => {
 		const
 			$a = new Async();
 
@@ -128,7 +128,7 @@ describe('core/async/modules/base/mark', () => {
 		}, 15);
 	});
 
-	it('muteAll/unmuteAll by a label', (done) => {
+	it('by a label', (done) => {
 		const
 			$a = new Async();
 
@@ -157,7 +157,7 @@ describe('core/async/modules/base/mark', () => {
 		}, 15);
 	});
 
-	it('muteAll/unmuteAll by a group and label', (done) => {
+	it('by a group and label', (done) => {
 		const
 			$a = new Async();
 
@@ -166,7 +166,10 @@ describe('core/async/modules/base/mark', () => {
 
 		$a.setTimeout(() => {
 			i++;
-		}, 10, {group: 'foo', label: 'foo'});
+		}, 10, {
+			group: 'foo',
+			label: 'foo'
+		});
 
 		$a.setInterval(() => {
 			i++;
@@ -186,7 +189,7 @@ describe('core/async/modules/base/mark', () => {
 		}, 15);
 	});
 
-	it('muteAll/unmuteAll by a label and group', (done) => {
+	it('by a label and group', (done) => {
 		const
 			$a = new Async();
 
@@ -199,9 +202,15 @@ describe('core/async/modules/base/mark', () => {
 
 		$a.setInterval(() => {
 			i++;
-		}, 5, {group: 'foo', label: 'foo'});
+		}, 5, {
+			group: 'foo',
+			label: 'foo'
+		});
 
-		$a.muteAll({group: 'foo', label: 'foo'});
+		$a.muteAll({
+			group: 'foo',
+			label: 'foo'
+		});
 
 		setTimeout(() => {
 			expect(i).toBe(1);
@@ -214,8 +223,10 @@ describe('core/async/modules/base/mark', () => {
 			}, 5);
 		}, 15);
 	});
+});
 
-	it('suspendAll/unsuspendAll', (done) => {
+describe('core/async/modules/base `suspendAll/unsuspendAll`', () => {
+	it('simple usage', (done) => {
 		const
 			$e = new EventEmitter(),
 			$a = new Async();
@@ -254,7 +265,7 @@ describe('core/async/modules/base/mark', () => {
 		}, 5);
 	});
 
-	it('suspendAll/unsuspendAll by a group', (done) => {
+	it('by a group', (done) => {
 		const
 			$e = new EventEmitter(),
 			$a = new Async();
@@ -289,7 +300,7 @@ describe('core/async/modules/base/mark', () => {
 		}, 15);
 	});
 
-	it('suspendAll/unsuspendAll by a regexp group', (done) => {
+	it('by a regexp group', (done) => {
 		const
 			$e = new EventEmitter(),
 			$a = new Async();
@@ -324,7 +335,7 @@ describe('core/async/modules/base/mark', () => {
 		}, 15);
 	});
 
-	it('suspendAll/unsuspendAll by a label', (done) => {
+	it('by a label', (done) => {
 		const
 			$e = new EventEmitter(),
 			$a = new Async();
@@ -359,7 +370,7 @@ describe('core/async/modules/base/mark', () => {
 		}, 15);
 	});
 
-	it('suspendAll/unsuspendAll by a group and label', (done) => {
+	it('by a group and label', (done) => {
 		const
 			$e = new EventEmitter(),
 			$a = new Async();
@@ -394,7 +405,7 @@ describe('core/async/modules/base/mark', () => {
 		}, 15);
 	});
 
-	it('suspendAll/unsuspendAll by a label and group', (done) => {
+	it('by a label and group', (done) => {
 		const
 			$e = new EventEmitter(),
 			$a = new Async();

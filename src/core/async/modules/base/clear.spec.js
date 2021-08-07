@@ -8,8 +8,8 @@
 
 import Async from 'core/async';
 
-describe('core/async/modules/base/clear', () => {
-	it('clearAll', (done) => {
+describe('core/async/modules/base `clearAll`', () => {
+	it('simple usage', (done) => {
 		const
 			$a = new Async();
 
@@ -37,7 +37,7 @@ describe('core/async/modules/base/clear', () => {
 		}, 15);
 	});
 
-	it('clearAll by a group', (done) => {
+	it('by a group', (done) => {
 		const
 			$a = new Async();
 
@@ -68,7 +68,7 @@ describe('core/async/modules/base/clear', () => {
 		}, 15);
 	});
 
-	it('clearAll by a regexp group', (done) => {
+	it('by a regexp group', (done) => {
 		const
 			$a = new Async();
 
@@ -99,7 +99,7 @@ describe('core/async/modules/base/clear', () => {
 		}, 15);
 	});
 
-	it('clearAll by a label', (done) => {
+	it('by a label', (done) => {
 		const
 			$a = new Async();
 
@@ -130,7 +130,7 @@ describe('core/async/modules/base/clear', () => {
 		}, 15);
 	});
 
-	it('clearAll by a group and label', (done) => {
+	it('by a group and label', (done) => {
 		const
 			$a = new Async();
 
@@ -161,7 +161,7 @@ describe('core/async/modules/base/clear', () => {
 		}, 15);
 	});
 
-	it('clearAll by a label and group', (done) => {
+	it('by a label and group', (done) => {
 		const
 			$a = new Async();
 

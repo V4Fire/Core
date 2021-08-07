@@ -10,8 +10,9 @@ import got, { Options, CancelableRequest, Response as GotResponse } from 'got';
 
 import Then from 'core/then';
 import Response from 'core/request/response';
-
 import RequestError from 'core/request/error';
+
+import { convertDataToSend } from 'core/request/engines/helpers';
 import type { RequestEngine } from 'core/request/interface';
 
 /**
@@ -22,23 +23,8 @@ const request: RequestEngine = (params) => {
 	const
 		p = params;
 
-	let
-		body,
-		{contentType} = p;
-
-	if (Object.isPlainObject(p.body)) {
-		body = JSON.stringify(p.body);
-
-		if (contentType == null) {
-			contentType = 'application/json;charset=UTF-8';
-		}
-
-	} else if (Object.isNumber(p.body) || Object.isBoolean(p.body)) {
-		body = String(p.body);
-
-	} else {
-		body = p.body;
-	}
+	const
+		[body, contentType] = convertDataToSend(p.body);
 
 	const
 		headers = {...p.headers};
@@ -104,8 +90,8 @@ const request: RequestEngine = (params) => {
 			}));
 
 		}, (error) => {
-			const nm = error.name === 'TimeoutError' ? 'timeout' : 'engine';
-			reject(new RequestError(nm, {error}));
+			const type = error.name === 'TimeoutError' ? 'timeout' : 'engine';
+			reject(new RequestError(type, {error}));
 		});
 
 	}, p.parent);

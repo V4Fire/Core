@@ -16,6 +16,7 @@ import Then from 'core/then';
 import Response from 'core/request/response';
 import RequestError from 'core/request/error';
 
+import { convertDataToSend } from 'core/request/engines/helpers';
 import type { RequestEngine } from 'core/request/interface';
 
 /**
@@ -28,35 +29,13 @@ const request: RequestEngine = (params) => {
 		xhr = new XMLHttpRequest();
 
 	let
-		data,
-		{contentType} = p;
+		[body, contentType] = convertDataToSend<BodyInit>(p.body, p.contentType);
 
-	if (!IS_NODE && p.body instanceof FormData) {
-		data = p.body;
-
-		if (contentType == null) {
-			contentType = '';
-		}
-
-	} else if (Object.isPlainObject(p.body)) {
-		data = JSON.stringify(p.body);
-
-		if (contentType == null) {
-			contentType = 'application/json;charset=UTF-8';
-		}
-
-	} else if (Object.isNumber(p.body) || Object.isBoolean(p.body)) {
-		data = String(p.body);
-
-	} else {
-		data = p.body;
+	if (!IS_NODE && body instanceof FormData && contentType == null) {
+		contentType = '';
 	}
 
-	xhr.open(
-		p.method,
-		p.url,
-		true
-	);
+	xhr.open(p.method, p.url, true);
 
 	if (p.timeout != null) {
 		xhr.timeout = p.timeout;
@@ -69,14 +48,7 @@ const request: RequestEngine = (params) => {
 			break;
 
 		case 'document':
-			//#if node_js
-			xhr.responseType = 'text';
-			//#endif
-
-			//#unless node_js
-			xhr.responseType = 'document';
-			//#endunless
-
+			xhr.responseType = IS_NODE ? 'text' : 'document';
 			break;
 
 		default:
@@ -140,7 +112,7 @@ const request: RequestEngine = (params) => {
 			reject(new RequestError('timeout'));
 		});
 
-		xhr.send(data);
+		xhr.send(body);
 	}, p.parent);
 };
 

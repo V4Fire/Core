@@ -2,7 +2,9 @@
 
 This module provides a bunch of functions to work with URL strings, such as parsing/serializing, concatenating groups of URLs to one, etc.
 
-## Concatenation of URL-s
+## concatURLs
+
+Concatenates the specified parts of URL-s with correctly arranging of slashes and returns a new string.
 
 ```js
 import { concatURLs } from 'core/url';
@@ -27,7 +29,60 @@ toQueryString(data) === 'ban_a=2&bar=true&baz=1&baz=2&baz=3&foo=1';
 fromQueryString(toQueryString(data), {separator: '_'});
 ```
 
-These methods can take additional options:
+### fromQueryString
+
+Creates a querystring from the specified data and returns it. The method can take additional options:
+
+````typescript
+interface FromQueryStringOptions {
+  /**
+   * If false, then the passed string won't be decoded by using `decodeURIComponent`
+   * @default `true`
+   */
+  decode?: boolean;
+
+  /**
+   * If false, then all parsed values won't be converted from a string
+   *
+   * @default `true`
+   *
+   * @example
+   * ```js
+   * // {foo: '1'}
+   * fromQueryString('foo=1', {convert: false});
+   * ```
+   */
+  convert?: boolean;
+
+  /**
+   * Separator for nested properties
+   *
+   * @example
+   * ```js
+   * // {foo: {bar: 1}}
+   * fromQueryString('foo_bar=1', {separator: '_'});
+   * ```
+   */
+  separator?: string;
+
+  /**
+   * If true, then nested properties will be decoded by using `[]` syntax
+   *
+   * @default `false`
+   *
+   * @example
+   * ```js
+   * // {foo: [1], bar: {bla: 2}}
+   * fromQueryString('foo[]=1&bar[bla]=2', {arraySyntax: true});
+   * ```
+   */
+  arraySyntax?: boolean;
+}
+````
+
+### toQueryString
+
+Creates a querystring from the specified data and returns it. The method can take additional options:
 
 ````typescript
 interface ToQueryStringOptions {
@@ -78,50 +133,5 @@ interface ToQueryStringOptions {
    * ```
    */
   paramsFilter?(value: unknown, key: string, path?: string): unknown;
-}
-
-interface FromQueryStringOptions {
-  /**
-   * If false, then the passed string won't be decoded by using `decodeURIComponent`
-   * @default `true`
-   */
-  decode?: boolean;
-
-  /**
-   * If false, then all parsed values won't be converted from a string
-   *
-   * @default `true`
-   *
-   * @example
-   * ```js
-   * // {foo: '1'}
-   * fromQueryString('foo=1', {convert: false});
-   * ```
-   */
-  convert?: boolean;
-
-  /**
-   * Separator for nested properties
-   *
-   * @example
-   * ```js
-   * // {foo: {bar: 1}}
-   * fromQueryString('foo_bar=1', {separator: '_'});
-   * ```
-   */
-  separator?: string;
-
-  /**
-   * If true, then nested properties will be decoded by using `[]` syntax
-   *
-   * @default `false`
-   *
-   * @example
-   * ```js
-   * // {foo: [1], bar: {bla: 2}}
-   * fromQueryString('foo[]=1&bar[bla]=2', {arraySyntax: true});
-   * ```
-   */
-  arraySyntax?: boolean;
 }
 ````

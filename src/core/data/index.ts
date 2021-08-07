@@ -56,8 +56,7 @@ export {
  */
 @provider
 export default class Provider extends DefaultProvider {
-	/** @override */
-	static readonly middlewares: Middlewares = {
+	static override readonly middlewares: Middlewares = {
 		attachMock
 	};
 

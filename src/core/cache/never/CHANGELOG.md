@@ -9,6 +9,13 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.50.0 (2021-06-07)
+
+#### :rocket: New Feature
+
+* Added possibility to listen to events from a function emitter `core/async`
+* Added a feature to change maximum capacity
+
 ## v3.20.0 (2020-07-05)
 
 #### :boom: Breaking Change

@@ -7,35 +7,35 @@
  */
 
 describe('core/prelude/number/converters', () => {
-	it('seconds', () => {
+	it('`seconds`', () => {
 		const res = 1000;
 		expect((1).second()).toBe(res);
 		expect((1).seconds()).toBe(res);
 		expect(Number.seconds(1)).toBe(res);
 	});
 
-	it('minutes', () => {
+	it('`minutes`', () => {
 		const res = 1000 * 60;
 		expect((1).minute()).toBe(res);
 		expect((1).minutes()).toBe(res);
 		expect(Number.minutes(1)).toBe(res);
 	});
 
-	it('hours', () => {
+	it('`hours`', () => {
 		const res = 1000 * 60 * 60;
 		expect((1).hour()).toBe(res);
 		expect((1).hours()).toBe(res);
 		expect(Number.hours(1)).toBe(res);
 	});
 
-	it('days', () => {
+	it('`days`', () => {
 		const res = 1000 * 60 * 60 * 24;
 		expect((1).day()).toBe(res);
 		expect((1).days()).toBe(res);
 		expect(Number.days(1)).toBe(res);
 	});
 
-	it('weeks', () => {
+	it('`weeks`', () => {
 		const res = 1000 * 60 * 60 * 24 * 7;
 		expect((1).week()).toBe(res);
 		expect((1).weeks()).toBe(res);

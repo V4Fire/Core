@@ -10,7 +10,7 @@ import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 import { resolveAfterEvents, createsAsyncSemaphore } from 'core/event';
 
 describe('core/event', () => {
-	it('resolveAfterEvents', (done) => {
+	it('`resolveAfterEvents`', (done) => {
 		const
 			emitter = new EventEmitter(),
 			promise = resolveAfterEvents(emitter, 'foo', 'bar');
@@ -31,7 +31,7 @@ describe('core/event', () => {
 		emitter.emit('bar');
 	});
 
-	it('createsAsyncSemaphore', () => {
+	it('`createsAsyncSemaphore`', () => {
 		let
 			i = 0;
 

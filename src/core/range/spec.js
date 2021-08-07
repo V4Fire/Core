@@ -82,7 +82,7 @@ describe('core/range', () => {
 		]);
 	});
 
-	it('span', () => {
+	it('`span`', () => {
 		expect(new Range(0, 3).span()).toBe(4);
 		expect(new Range(0).span()).toBe(Infinity);
 		expect(new Range(3, 0).span()).toBe(4);
@@ -128,7 +128,7 @@ describe('core/range', () => {
 		expect(new Range(null, ['a']).contains('a')).toBeFalse();
 	});
 
-	it('clamp', () => {
+	it('`clamp`', () => {
 		expect(new Range(0, 3).clamp(2)).toBe(2);
 		expect(new Range(0, 3).clamp(20)).toBe(3);
 		expect(new Range(0, 3).clamp(-20)).toBe(0);
@@ -158,7 +158,7 @@ describe('core/range', () => {
 		expect(new Range('a', 'd').contains('z')).toBeFalse();
 	});
 
-	it('intersection', () => {
+	it('`intersection`', () => {
 		expect(new Range(0, 3).intersect(new Range(2, 10)).toArray())
 			.toEqual([2, 3]);
 
@@ -181,7 +181,7 @@ describe('core/range', () => {
 			.toEqual([]);
 	});
 
-	it('union', () => {
+	it('`union`', () => {
 		expect(new Range(0, 3).union(new Range(2, 4)).toArray())
 			.toEqual([0, 1, 2, 3, 4]);
 
@@ -201,28 +201,28 @@ describe('core/range', () => {
 			.toEqual([]);
 	});
 
-	it('clone', () => {
+	it('`clone`', () => {
 		const r = new Range(0, 1);
 		expect(r.clone()).not.toBe(r);
 		expect(r.clone().toArray()).toEqual(r.toArray());
 		expect(new Range(0, [0]).clone().toArray()).toEqual([]);
 	});
 
-	it('reverse', () => {
+	it('`reverse`', () => {
 		const r = new Range(0, [3]);
 		expect(r.reverse()).not.toBe(r);
 		expect(r.reverse().toArray()).toEqual(r.toArray().reverse());
 		expect(new Range(0, [0]).reverse().toArray()).toEqual([]);
 	});
 
-	it('isValid', () => {
+	it('`isValid`', () => {
 		expect(new Range(0, 2).isValid()).toBeTrue();
 		expect(new Range(0, '2').isValid()).toBeTrue();
 		expect(new Range(0, 'a').isValid()).toBeTrue();
 		expect(new Range(new Date(), new Date('foo')).isValid()).toBeFalse();
 	});
 
-	it('toString', () => {
+	it('`toString`', () => {
 		expect(new Range(0, 10).toString()).toBe('0..10');
 		expect(new Range(10, 0).toString()).toBe('10..0');
 
@@ -237,23 +237,22 @@ describe('core/range', () => {
 		expect(new Range(null, 'a').toString()).toBe('..a');
 	});
 
-	it('toArray', () => {
+	it('`toArray`', () => {
 		expect(new Range(0, 2).toArray()).toEqual([0, 1, 2]);
 		expect(new Range(2, 0).toArray()).toEqual([2, 1, 0]);
 		expect(new Range('a', 'd').toArray()).toEqual(['a', 'b', 'c', 'd']);
 		expect(new Range('d', 'a').toArray()).toEqual(['d', 'c', 'b', 'a']);
 	});
 
-	it('toIterator', () => {
+	it('default iterator', () => {
 		const
 			r = new Range(0, 2);
 
 		expect(r[Symbol.iterator]().next()).toEqual({value: 0, done: false});
-		expect(r.values().next()).toEqual({value: 0, done: false});
-		expect([...r.values()]).toEqual([0, 1, 2]);
+		expect([...r]).toEqual([0, 1, 2]);
 	});
 
-	it('values', () => {
+	it('`values`', () => {
 		const
 			r = new Range(0, 4);
 
@@ -262,7 +261,7 @@ describe('core/range', () => {
 		expect([...r.values(3)]).toEqual([0, 3]);
 	});
 
-	it('entries', () => {
+	it('`entries`', () => {
 		const
 			r = new Range([4], 0);
 
@@ -271,7 +270,7 @@ describe('core/range', () => {
 		expect([...r.entries(3)]).toEqual([[0, 3], [1, 0]]);
 	});
 
-	it('indices', () => {
+	it('`indices`', () => {
 		const
 			r = new Range([4], [0]);
 
