@@ -7,10 +7,13 @@
  */
 
 import type Then from 'core/then';
-import type Cache from 'core/cache/interface';
+import type { AbstractCache } from 'core/cache';
+
+import addTTL from 'core/cache/decorators/ttl';
+import addPersistent from 'core/cache/decorators/persistent';
 
 import { merge } from 'core/request/utils';
-import { cache, pendingCache, caches, methodsWithoutBody } from 'core/request/const';
+import { storage, cache, pendingCache, caches, methodsWithoutBody } from 'core/request/const';
 
 import type {
 
@@ -41,12 +44,12 @@ export default class RequestContext<D = unknown> {
 	/**
 	 * Storage to cache the request
 	 */
-	readonly cache: Cache<Nullable<D>>;
+	readonly cache: AbstractCache<Nullable<D>>;
 
 	/**
 	 * Storage to cache the pending request
 	 */
-	readonly pendingCache: Cache<RequestResponse<D>> = pendingCache;
+	readonly pendingCache: AbstractCache<RequestResponse<D>> = pendingCache;
 
 	/**
 	 * True if the request can provide parameters only as a query string
@@ -107,10 +110,23 @@ export default class RequestContext<D = unknown> {
 		}
 
 		this.withoutBody = Boolean(methodsWithoutBody[p.method]);
-
-		this.cache = (Object.isString(p.cacheStrategy) ? cache[p.cacheStrategy] : p.cacheStrategy) ?? cache.never;
-		caches.add(this.cache);
-
 		this.canCache = p.cacheMethods.includes(p.method) || false;
+
+		let
+			cacheAPI = (Object.isString(p.cacheStrategy) ? cache[p.cacheStrategy] : p.cacheStrategy) ?? cache.never;
+
+		if (p.cacheTTL != null) {
+			cacheAPI = addTTL(cacheAPI, p.cacheTTL);
+		}
+
+		if (p.offlineCache != null && storage != null) {
+			cacheAPI = storage.then((storage) => addPersistent(cacheAPI, storage, {
+				persistentTTL: p.offlineCacheTTL,
+				loadFromStorage: 'onOfflineDemand'
+			}));
+		}
+
+		this.cache = cacheAPI;
+		caches.add(cacheAPI);
 	}
 }

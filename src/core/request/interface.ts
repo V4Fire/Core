@@ -8,7 +8,7 @@
 
 import type Then from 'core/then';
 import type Range from 'core/range';
-import type Cache from 'core/cache/interface';
+import type { AbstractCache } from 'core/cache';
 
 import type Response from 'core/request/response';
 import type { ResponseType } from 'core/request/response';
@@ -34,7 +34,7 @@ export type CacheStrategy =
 	'queue' |
 	'forever' |
 	'never' |
-	Cache;
+	AbstractCache;
 
 export type RequestBody =
 	string |
