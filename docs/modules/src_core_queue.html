@@ -243,19 +243,28 @@ pre {
 						<a href="#corequeue" id="corequeue" style="color: inherit; text-decoration: none;">
 							<h1>core/queue</h1>
 						</a>
-						<p>This module provides an abstract class for the <a href="src_core_queue.html#queue">Queue</a> data structure.
-						The submodules contains different classes and interfaces that extends or implements that class.</p>
+						<p>This module provides an abstract class for a <a href="src_core_queue.html#queue">Queue</a> data structure.
+						The submodules contain different classes and interfaces that extends or implements that class.</p>
 						<p>The main module re-exports these implementations:</p>
 						<ul>
 							<li><code>AbstractQueue</code> — an alias for <a href="src_core_queue_interface.html"><code>core/queue/interface/Queue</code></a>;</li>
 							<li><code>AbstractWorkerQueue</code> — an alias for <a href="src_core_queue_worker_interface.html"><code>core/queue/worker/interface/WorkerQueue</code></a>;</li>
-							<li><code>Queue</code> — an alias for <a href="src_core_queue_simple_index.html"><code>core/queue/simple</code></a>;</li>
-							<li><code>OrderedQueue</code> — an alias for <a href="src_core_queue_order_index.html"><code>core/queue/order</code></a>;</li>
-							<li><code>MergeQueue</code> — an alias for <a href="src_core_queue_merge_index.html"><code>core/queue/merge</code></a>.</li>
-							<li><code>AbstractWorkerQueue</code> — an alias for <a href="src_core_queue_worker_index.html"><code>core/queue/worker</code></a>.</li>
-							<li><code>WorkerQueue</code> — an alias for <a href="src_core_queue_worker_simple_index.html"><code>core/queue/worker/simple</code></a>.</li>
-							<li><code>MergeWorkerQueue</code> — an alias for <a href="src_core_queue_worker_merge_index.html"><code>core/queue/worker/merge</code></a>.</li>
+							<li><code>Queue</code> — an alias for <a href="src_core_queue_simple.html"><code>core/queue/simple</code></a>;</li>
+							<li><code>OrderedQueue</code> — an alias for <a href="src_core_queue_order.html"><code>core/queue/order</code></a>;</li>
+							<li><code>MergeQueue</code> — an alias for <a href="src_core_queue_merge.html"><code>core/queue/merge</code></a>.</li>
+							<li><code>AbstractWorkerQueue</code> — an alias for <a href="src_core_queue_worker.html"><code>core/queue/worker</code></a>.</li>
+							<li><code>WorkerQueue</code> — an alias for <a href="src_core_queue_worker_simple.html"><code>core/queue/worker/simple</code></a>.</li>
+							<li><code>MergeWorkerQueue</code> — an alias for <a href="src_core_queue_worker_merge.html"><code>core/queue/worker/merge</code></a>.</li>
 						</ul>
+						<a href="#api" id="api" style="color: inherit; text-decoration: none;">
+							<h2>API</h2>
+						</a>
+						<p>The base API is pretty close to a JS array: <code>push/unshift</code>, <code>pop/shift</code>, <code>length</code>.
+							Notice, the <code>shift</code> and <code>unshift</code> methods just aliases for <code>pop</code> and <code>push</code>.
+						In addition, the API declares <code>head</code> to get the first element from a queue and <code>clear</code> to clear the whole queue.</p>
+						<a href="#simple-implementation" id="simple-implementation" style="color: inherit; text-decoration: none;">
+							<h2>Simple implementation</h2>
+						</a>
 						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">AbstractQueue</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/queue&#039;</span><span style="color: #000000">;</span>
 
 <span style="color: #AF00DB">export</span><span style="color: #000000"> </span><span style="color: #AF00DB">default</span><span style="color: #000000"> </span><span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">Queue</span><span style="color: #000000"> </span><span style="color: #0000FF">extends</span><span style="color: #000000"> </span><span style="color: #267F99">AbstractQueue</span><span style="color: #000000"> {</span>
@@ -273,8 +282,20 @@ pre {
 <span style="color: #000000">    </span><span style="color: #AF00DB">return</span><span style="color: #000000"> </span><span style="color: #0000FF">this</span><span style="color: #000000">.</span><span style="color: #001080">internalQueue</span><span style="color: #000000">.</span><span style="color: #795E26">push</span><span style="color: #000000">(</span><span style="color: #001080">el</span><span style="color: #000000">);</span>
 <span style="color: #000000">  }</span>
 
+<span style="color: #000000">  </span><span style="color: #008000">// An alias for `push`.</span>
+<span style="color: #000000">  </span><span style="color: #008000">// The method has the default implementation.</span>
+<span style="color: #000000">  </span><span style="color: #795E26">unshift</span><span style="color: #000000">(</span><span style="color: #001080">el</span><span style="color: #000000">) {</span>
+<span style="color: #000000">    </span><span style="color: #AF00DB">return</span><span style="color: #000000"> </span><span style="color: #0000FF">this</span><span style="color: #000000">.</span><span style="color: #795E26">push</span><span style="color: #000000">(</span><span style="color: #001080">el</span><span style="color: #000000">);</span>
+<span style="color: #000000">  }</span>
+
 <span style="color: #000000">  </span><span style="color: #795E26">pop</span><span style="color: #000000">() {</span>
 <span style="color: #000000">    </span><span style="color: #AF00DB">return</span><span style="color: #000000"> </span><span style="color: #0000FF">this</span><span style="color: #000000">.</span><span style="color: #001080">internalQueue</span><span style="color: #000000">.</span><span style="color: #795E26">shift</span><span style="color: #000000">();</span>
+<span style="color: #000000">  }</span>
+
+<span style="color: #000000">  </span><span style="color: #008000">// An alias for `pop`.</span>
+<span style="color: #000000">  </span><span style="color: #008000">// The method has the default implementation.</span>
+<span style="color: #000000">  </span><span style="color: #795E26">shift</span><span style="color: #000000">() {</span>
+<span style="color: #000000">    </span><span style="color: #AF00DB">return</span><span style="color: #000000"> </span><span style="color: #0000FF">this</span><span style="color: #000000">.</span><span style="color: #795E26">pop</span><span style="color: #000000">();</span>
 <span style="color: #000000">  }</span>
 
 <span style="color: #000000">  </span><span style="color: #795E26">clear</span><span style="color: #000000">() {</span>
@@ -294,20 +315,15 @@ pre {
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_queue.html#abstractqueue" class="tsd-kind-icon">Abstract<wbr>Queue</a></li>
 								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_queue.html#abstractworkerqueue" class="tsd-kind-icon">Abstract<wbr>Worker<wbr>Queue</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_queue.html#createtasks" class="tsd-kind-icon">Create<wbr>Tasks</a></li>
 								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_queue.html#mergeworkerqueue" class="tsd-kind-icon">Merge<wbr>Worker<wbr>Queue</a></li>
 								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_queue.html#orderedqueue" class="tsd-kind-icon">Ordered<wbr>Queue</a></li>
 								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_queue.html#queue" class="tsd-kind-icon">Queue</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_queue.html#queueoptions" class="tsd-kind-icon">Queue<wbr>Options</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_queue.html#queueworker" class="tsd-kind-icon">Queue<wbr>Worker</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_queue.html#task" class="tsd-kind-icon">Task</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_queue.html#tasks" class="tsd-kind-icon">Tasks</a></li>
 								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_queue.html#workerqueueoptions" class="tsd-kind-icon">Worker<wbr>Queue<wbr>Options</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section ">
-							<h3>Interfaces</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter"><a href="../interfaces/src_core_queue.createtasks.html" class="tsd-kind-icon">Create<wbr>Tasks</a></li>
-								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/src_core_queue.queueoptions.html" class="tsd-kind-icon">Queue<wbr>Options</a></li>
-								<li class="tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter"><a href="../interfaces/src_core_queue.queueworker.html" class="tsd-kind-icon">Queue<wbr>Worker</a></li>
-								<li class="tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter"><a href="../interfaces/src_core_queue.task.html" class="tsd-kind-icon">Task</a></li>
-								<li class="tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter"><a href="../interfaces/src_core_queue.tasks.html" class="tsd-kind-icon">Tasks</a></li>
 							</ul>
 						</section>
 					</div>
@@ -326,6 +342,11 @@ pre {
 					Renames and exports <a href="../classes/src_core_queue_worker_interface.default.html">default</a>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="createtasks" class="tsd-anchor"></a>
+					<h3>Create<wbr>Tasks</h3>
+					Re-exports <a href="../interfaces/src_core_queue_interface.createtasks.html">CreateTasks</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
 					<a name="mergeworkerqueue" class="tsd-anchor"></a>
 					<h3>Merge<wbr>Worker<wbr>Queue</h3>
 					Renames and exports <a href="../classes/src_core_queue_worker_merge.default.html">default</a>
@@ -339,6 +360,26 @@ pre {
 					<a name="queue" class="tsd-anchor"></a>
 					<h3>Queue</h3>
 					Renames and exports <a href="../classes/src_core_queue_simple.default.html">default</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="queueoptions" class="tsd-anchor"></a>
+					<h3>Queue<wbr>Options</h3>
+					Re-exports <a href="../interfaces/src_core_queue_interface.queueoptions.html">QueueOptions</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="queueworker" class="tsd-anchor"></a>
+					<h3>Queue<wbr>Worker</h3>
+					Re-exports <a href="../interfaces/src_core_queue_worker_interface.queueworker.html">QueueWorker</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="task" class="tsd-anchor"></a>
+					<h3>Task</h3>
+					Re-exports <a href="../interfaces/src_core_queue_worker_interface.task.html">Task</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="tasks" class="tsd-anchor"></a>
+					<h3>Tasks</h3>
+					Re-exports <a href="../interfaces/src_core_queue_interface.tasks.html">Tasks</a>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
 					<a name="workerqueueoptions" class="tsd-anchor"></a>
@@ -367,6 +408,9 @@ pre {
 						<a href="src_core_queue.html#abstractworkerqueue" class="tsd-kind-icon">Abstract<wbr>Worker<wbr>Queue</a>
 					</li>
 					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_queue.html#createtasks" class="tsd-kind-icon">Create<wbr>Tasks</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
 						<a href="src_core_queue.html#mergeworkerqueue" class="tsd-kind-icon">Merge<wbr>Worker<wbr>Queue</a>
 					</li>
 					<li class=" tsd-kind-reference tsd-parent-kind-module">
@@ -376,22 +420,19 @@ pre {
 						<a href="src_core_queue.html#queue" class="tsd-kind-icon">Queue</a>
 					</li>
 					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_queue.html#queueoptions" class="tsd-kind-icon">Queue<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_queue.html#queueworker" class="tsd-kind-icon">Queue<wbr>Worker</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_queue.html#task" class="tsd-kind-icon">Task</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_queue.html#tasks" class="tsd-kind-icon">Tasks</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
 						<a href="src_core_queue.html#workerqueueoptions" class="tsd-kind-icon">Worker<wbr>Queue<wbr>Options</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../interfaces/src_core_queue.createtasks.html" class="tsd-kind-icon">Create<wbr>Tasks</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="../interfaces/src_core_queue.queueoptions.html" class="tsd-kind-icon">Queue<wbr>Options</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../interfaces/src_core_queue.queueworker.html" class="tsd-kind-icon">Queue<wbr>Worker</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../interfaces/src_core_queue.task.html" class="tsd-kind-icon">Task</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../interfaces/src_core_queue.tasks.html" class="tsd-kind-icon">Tasks</a>
 					</li>
 				</ul>
 			</nav>

@@ -11,7 +11,7 @@
  * @packageDocumentation
  */
 
-import { cache } from 'core/request/const';
+import { caches } from 'core/request/const';
 import { tplRgxp } from 'core/request/utils/const';
 
 import type { NormalizedCreateRequestOptions } from 'core/request/interface';
@@ -224,7 +224,9 @@ export function normalizeHeaders(headers?: Dictionary, query?: Dictionary): Dict
  * Truncates all static cache storage-s
  */
 export function dropCache(): void {
-	for (let keys = Object.keys(cache), i = 0; i < keys.length; i++) {
-		cache[keys[i]].clear();
-	}
+	Object.forEach(caches, (cache) => {
+		cache.clear();
+	});
+
+	caches.clear();
 }

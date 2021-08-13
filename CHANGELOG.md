@@ -11,6 +11,113 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.56.2 (2021-08-05)
+
+#### :bug: Bug Fix
+
+* Fixed an issue when `dropCache` don't clear caches of mounted objects `core/request`
+
+## v3.56.1 (2021-07-28)
+
+#### :bug: Bug Fix
+
+* Readonly non-configurable values can't be watched via Proxy `core/object/watch`
+
+## v3.56.0 (2021-07-25)
+
+#### :rocket: New Feature
+
+* Now `Object.hasOwnProperty` supports symbols
+
+#### :bug: Bug Fix
+
+* Fixed an issue when modifying a prototype value of the watched object `core/object/watch`
+
+## v3.55.0 (2021-07-24)
+
+#### :rocket: New Feature
+
+* Added new options `return` and `ctx` for `globalThis.include`
+
+## v3.54.4 (2021-07-18)
+
+#### :bug: Bug Fix
+
+* Fixed a bug when the tied path can be mutated from handlers `core/object/watch`
+
+## v3.54.3 (2021-07-16)
+
+#### :bug: Bug Fix
+
+* Fixed watching for specific paths with collapsing `core/object/watch`
+
+## v3.54.2 (2021-07-14)
+
+#### :bug: Bug Fix
+
+* Fixed watching of values from iterable objects `core/object/watch`
+
+## v3.54.1 (2021-07-09)
+
+#### :house: Internal
+
+* Refactored `core/queue` structures to use more effective implementations
+
+## v3.54.0 (2021-07-09)
+
+#### :boom: Breaking Change
+
+* Migration from `fs-extra-promise` to `fs-extra`
+* Renamed `core/kv-storage` engines: `browser.indexeddb` -> `browser-indexeddb`, `browser.localstorage` -> `browser-localstorage`, etc.
+* The module has been renamed from `parse` to `convert` `object`
+
+* `core/analytics`:
+  * Removed an implementation of `sendAnalytics`
+  * Updated API of `sendAnalytics`
+
+#### :rocket: New Feature
+
+* Added `Object.trySerialize`
+
+#### :bug: Bug Fix
+
+* Fixed `throttle` callback invoking `core/prelude/function/lazy`
+
+## v3.53.1 (2021-07-06)
+
+#### :bug: Bug Fi
+
+* Fixed parsing with encoded system symbols `core/url`
+
+#### :house: Internal
+
+* Removed error logging duplication `core/data/modules/base`
+* Updated dependencies: `dotenv@10.0.0`, `typescript@4.3.5`, `tlib@2.3.0`, `typedoc@0.21.1`, `husky@7.0.0`
+
+## v3.53.0 (2021-06-24)
+
+#### :rocket: New Feature
+
+* Added automatically converting files and other blobs to send via `FormData` `core/request`
+
+## v3.52.1 (2021-06-21)
+
+#### :bug: Bug Fix
+
+* Fix possibility to set default get/set accessors within trait classes
+
+## v3.52.0 (2021-06-16)
+
+#### :boom: Breaking Change
+
+* Now the date methods `beginningOf.../endOf...` returns a new date
+
+## v3.51.0 (2021-06-15)
+
+#### :rocket: New Feature
+
+* Added possibility to set default get/set accessors within trait classes `core/functools/trait`
+
 ## v3.50.0 (2021-06-07)
 
 #### :rocket: New Feature

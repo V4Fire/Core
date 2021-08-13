@@ -8,6 +8,9 @@
 
 import config from 'config';
 
+import { memoize } from 'core/promise/sync';
+import { toQueryString } from 'core/url';
+
 import { Cache, RestrictedCache, NeverCache, AbstractCache } from 'core/cache';
 import type { AsyncStorage } from 'core/kv-storage';
 
@@ -25,17 +28,16 @@ import type {
 
 } from 'core/request/interface';
 
-import { toQueryString } from 'core/url';
-
 // eslint-disable-next-line import/no-mutable-exports
 export let storage: CanUndef<Promise<AsyncStorage>>;
 
 //#if runtime has core/kv-storage
 // eslint-disable-next-line prefer-const
-storage = import('core/kv-storage').then(({asyncLocal}) => asyncLocal);
+storage = memoize(import('core/kv-storage').then(({asyncLocal}) => asyncLocal));
 //#endif
 
 export const
+	caches = new Set<AbstractCache>(),
 	pendingCache = new Cache<RequestResponse<any>>();
 
 export const cache: Record<Exclude<CacheStrategy, AbstractCache>, AbstractCache> = {

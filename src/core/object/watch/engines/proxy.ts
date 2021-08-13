@@ -91,7 +91,7 @@ export function watch<T extends object>(
 	root?: object,
 	top?: object
 ): Watcher<T> | T {
-	opts = opts ?? {};
+	opts ??= {};
 
 	const
 		unwrappedObj = unwrap(obj),
@@ -163,7 +163,7 @@ export function watch<T extends object>(
 		fromProto = Boolean(opts.fromProto),
 		resolvedPath = path ?? [];
 
-	if (!Object.isDictionary(unwrappedObj) && !Object.isArray(unwrappedObj)) {
+	if (!Object.isDictionary(unwrappedObj)) {
 		const wrapOpts = {
 			root: resolvedRoot,
 			top,
@@ -229,6 +229,14 @@ export function watch<T extends object>(
 
 				} else {
 					normalizedKey = key;
+
+					const
+						desc = Object.getOwnPropertyDescriptor(target, key);
+
+					// Readonly non-configurable values can't be wrapped due Proxy API limitations
+					if (desc?.writable === false && desc.configurable === false) {
+						return val;
+					}
 				}
 
 				if (propFromProto || !isArray && !Object.hasOwnProperty(target, key)) {

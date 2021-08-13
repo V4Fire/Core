@@ -16,7 +16,7 @@ import type { RangeValue, RangeType } from 'core/range/interface';
 export * from 'core/range/interface';
 
 /**
- * Class to create a range with the specified type.
+ * A class to create a range with the specified type.
  * The class supports ranges of numbers, strings, and dates.
  *
  * @typeparam T - range type value
@@ -108,7 +108,7 @@ export default class Range<T extends RangeValue> {
 
 			} else {
 				end = NaN;
-				type = type ?? r.type;
+				type ??= r.type;
 			}
 		}
 

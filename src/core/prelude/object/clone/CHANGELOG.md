@@ -19,7 +19,7 @@ Changelog
 
 #### :bug: Bug Fix
 
-* Fixed a bug when Dates could be transformed to strings after cloning
+* Fixed a bug when Dates could be transformed to string after cloning
 
 ## v3.26.0 (2020-09-04)
 

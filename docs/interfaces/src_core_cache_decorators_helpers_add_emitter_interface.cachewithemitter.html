@@ -266,9 +266,6 @@ pre {
 									<li>
 										<a href="src_core_cache_decorators_ttl_interface.ttlcache.html" class="tsd-signature-type" data-tsd-kind="Interface">TTLCache</a>
 									</li>
-									<li>
-										<a href="src_core_cache_decorators_ttl.ttlcache.html" class="tsd-signature-type" data-tsd-kind="Interface">TTLCache</a>
-									</li>
 								</ul>
 							</li>
 						</ul>
@@ -283,17 +280,21 @@ pre {
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="src_core_cache_decorators_helpers_add_emitter_interface.cachewithemitter.html#_eventemitter_" class="tsd-kind-icon">[event<wbr>Emitter]</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="src_core_cache_decorators_helpers_add_emitter_interface.cachewithemitter.html#size" class="tsd-kind-icon">size</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-inherited"><a href="src_core_cache_decorators_helpers_add_emitter_interface.cachewithemitter.html#_iterator_" class="tsd-kind-icon">[iterator]</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-inherited"><a href="src_core_cache_decorators_helpers_add_emitter_interface.cachewithemitter.html#clear" class="tsd-kind-icon">clear</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-inherited"><a href="src_core_cache_decorators_helpers_add_emitter_interface.cachewithemitter.html#entries" class="tsd-kind-icon">entries</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-inherited"><a href="src_core_cache_decorators_helpers_add_emitter_interface.cachewithemitter.html#get" class="tsd-kind-icon">get</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-inherited"><a href="src_core_cache_decorators_helpers_add_emitter_interface.cachewithemitter.html#has" class="tsd-kind-icon">has</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-inherited"><a href="src_core_cache_decorators_helpers_add_emitter_interface.cachewithemitter.html#keys" class="tsd-kind-icon">keys</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-inherited"><a href="src_core_cache_decorators_helpers_add_emitter_interface.cachewithemitter.html#remove" class="tsd-kind-icon">remove</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-overwrite"><a href="src_core_cache_decorators_helpers_add_emitter_interface.cachewithemitter.html#set" class="tsd-kind-icon">set</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface tsd-is-inherited"><a href="src_core_cache_decorators_helpers_add_emitter_interface.cachewithemitter.html#values" class="tsd-kind-icon">values</a></li>
 							</ul>
 						</section>
 					</div>
@@ -316,9 +317,48 @@ pre {
 						</div>
 					</div>
 				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="size" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> size</h3>
+					<div class="tsd-signature tsd-kind-icon">size<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="src_core_cache_interface.default.html">default</a>.<a href="src_core_cache_interface.default.html#size">size</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/cache/interface.ts#L23">src/core/cache/interface.ts:23</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Number of elements within the cache</p>
+						</div>
+					</div>
+				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
+					<a name="_iterator_" class="tsd-anchor"></a>
+					<h3>[iterator]</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
+						<li class="tsd-signature tsd-kind-icon">[iterator]<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IterableIterator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from <a href="src_core_cache_interface.default.html">default</a>.<a href="src_core_cache_interface.default.html#_iterator_">[iterator]</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/cache/interface.ts#L61">src/core/cache/interface.ts:61</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns an iterator by the cache keys</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">IterableIterator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
 					<a name="clear" class="tsd-anchor"></a>
 					<h3>clear</h3>
@@ -349,6 +389,29 @@ pre {
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
+					<a name="entries" class="tsd-anchor"></a>
+					<h3>entries</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
+						<li class="tsd-signature tsd-kind-icon">entries<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IterableIterator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from <a href="src_core_cache_interface.default.html">default</a>.<a href="src_core_cache_interface.default.html#entries">entries</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/cache/interface.ts#L76">src/core/cache/interface.ts:76</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns an iterator from the cache that produces pairs of keys and values</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">IterableIterator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
 					<a name="get" class="tsd-anchor"></a>
 					<h3>get</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
@@ -359,7 +422,7 @@ pre {
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="src_core_cache_interface.default.html">default</a>.<a href="src_core_cache_interface.default.html#get">get</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/cache/interface.ts#L30">src/core/cache/interface.ts:30</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/cache/interface.ts#L35">src/core/cache/interface.ts:35</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -390,7 +453,7 @@ pre {
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="src_core_cache_interface.default.html">default</a>.<a href="src_core_cache_interface.default.html#has">has</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/cache/interface.ts#L24">src/core/cache/interface.ts:24</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/cache/interface.ts#L29">src/core/cache/interface.ts:29</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -414,14 +477,14 @@ pre {
 					<a name="keys" class="tsd-anchor"></a>
 					<h3>keys</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">keys<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Iterator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">keys<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IterableIterator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="src_core_cache_interface.default.html">default</a>.<a href="src_core_cache_interface.default.html#keys">keys</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/cache/interface.ts#L50">src/core/cache/interface.ts:50</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/cache/interface.ts#L66">src/core/cache/interface.ts:66</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -429,7 +492,7 @@ pre {
 									<p>Returns an iterator by the cache keys</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Iterator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">IterableIterator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -444,7 +507,7 @@ pre {
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="src_core_cache_interface.default.html">default</a>.<a href="src_core_cache_interface.default.html#remove">remove</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/cache/interface.ts#L45">src/core/cache/interface.ts:45</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/cache/interface.ts#L50">src/core/cache/interface.ts:50</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -500,6 +563,29 @@ pre {
 						</li>
 					</ul>
 				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
+					<a name="values" class="tsd-anchor"></a>
+					<h3>values</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
+						<li class="tsd-signature tsd-kind-icon">values<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IterableIterator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from <a href="src_core_cache_interface.default.html">default</a>.<a href="src_core_cache_interface.default.html#values">values</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/cache/interface.ts#L71">src/core/cache/interface.ts:71</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns an iterator by the cache values</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">IterableIterator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
 			</section>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
@@ -515,6 +601,9 @@ pre {
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="src_core_cache_decorators_helpers_add_emitter_interface.addemitterreturn.html" class="tsd-kind-icon">Add<wbr>Emitter<wbr>Return</a>
+					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
@@ -523,8 +612,17 @@ pre {
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="src_core_cache_decorators_helpers_add_emitter_interface.cachewithemitter.html#_eventemitter_" class="tsd-kind-icon">[event<wbr>Emitter]</a>
 							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="src_core_cache_decorators_helpers_add_emitter_interface.cachewithemitter.html#size" class="tsd-kind-icon">size</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
+								<a href="src_core_cache_decorators_helpers_add_emitter_interface.cachewithemitter.html#_iterator_" class="tsd-kind-icon">[iterator]</a>
+							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
 								<a href="src_core_cache_decorators_helpers_add_emitter_interface.cachewithemitter.html#clear" class="tsd-kind-icon">clear</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
+								<a href="src_core_cache_decorators_helpers_add_emitter_interface.cachewithemitter.html#entries" class="tsd-kind-icon">entries</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
 								<a href="src_core_cache_decorators_helpers_add_emitter_interface.cachewithemitter.html#get" class="tsd-kind-icon">get</a>
@@ -540,6 +638,9 @@ pre {
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-overwrite">
 								<a href="src_core_cache_decorators_helpers_add_emitter_interface.cachewithemitter.html#set" class="tsd-kind-icon">set</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-interface tsd-is-inherited">
+								<a href="src_core_cache_decorators_helpers_add_emitter_interface.cachewithemitter.html#values" class="tsd-kind-icon">values</a>
 							</li>
 						</ul>
 					</li>

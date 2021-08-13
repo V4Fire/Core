@@ -11,35 +11,13 @@
  * @packageDocumentation
  */
 
-import sendAnalyticsEvent from 'core/analytics/engines';
-import type { AnalyticEngine } from 'core/analytics/interface';
+import engine from 'core/analytics/engines';
 
 export * from 'core/analytics/interface';
 
 /**
- * Sends an analytic event with the specified details
- *
- * @param event - event name
- * @param [details] - event details
- * @param [engine] - engine to send the event
+ * Sends the specified analytic event
  */
-export function send(
-	event: string,
-	details: Dictionary = {},
-	engine: AnalyticEngine = sendAnalyticsEvent
-): void {
-	const
-		finalDetails = {};
-
-	for (let keys = Object.keys(details), i = 0; i < keys.length; i++) {
-		const
-			key = keys[i],
-			el = details[key];
-
-		if (el != null && el !== '' && (typeof el === 'object' ? Object.size(el) > 0 : true)) {
-			finalDetails[key] = el;
-		}
-	}
-
-	engine(event, finalDetails);
+export function send(...args: unknown[]): void {
+	engine(...args);
 }

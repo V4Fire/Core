@@ -7,7 +7,7 @@
  */
 
 describe('core/prelude/date/relative', () => {
-	it('relative', () => {
+	it('`relative`', () => {
 		{
 			const
 				res = new Date().rewind({seconds: 10}).relative();
@@ -107,7 +107,7 @@ describe('core/prelude/date/relative', () => {
 		expect(res.diff).toBeGreaterThanOrEqual((10).minutes() - 5);
 	});
 
-	it('relativeTo', () => {
+	it('`relativeTo`', () => {
 		{
 			const
 				res = new Date().rewind({seconds: 10}).relativeTo(new Date());
@@ -195,7 +195,7 @@ describe('core/prelude/date/relative', () => {
 		}
 	});
 
-	it('Date.relativeTo', () => {
+	it('`Date.relativeTo`', () => {
 		{
 			const
 				res = Date.relativeTo(new Date().rewind({minutes: 10}), new Date());

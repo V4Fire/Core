@@ -243,7 +243,15 @@ pre {
 						<a href="#corequeueorder" id="corequeueorder" style="color: inherit; text-decoration: none;">
 							<h1>core/queue/order</h1>
 						</a>
-						<p>This module provides a class to organize an ordered queue data structure.</p>
+						<p>This module provides a class to organize an ordered <a href="src_core_queue.html#queue">Queue</a> data structure.</p>
+						<a href="#comparator" id="comparator" style="color: inherit; text-decoration: none;">
+							<h2>comparator</h2>
+						</a>
+						<p>To compare different elements from a queue is used the special comparator function that has the same API with
+						the native <code>Array.prototype.sort</code> comparator. To provide a comparator, use the structure&#39; constructor.</p>
+						<a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
+							<h2>usage</h2>
+						</a>
 						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">OrderedQueue</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/queue/order&#039;</span><span style="color: #000000">;</span>
 
 <span style="color: #0000FF">const</span>
@@ -274,21 +282,44 @@ pre {
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
+							<h3>References</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_queue_order.html#createtasks" class="tsd-kind-icon">Create<wbr>Tasks</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_queue_order.html#queueoptions" class="tsd-kind-icon">Queue<wbr>Options</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_queue_order.html#taskcomparator" class="tsd-kind-icon">Task<wbr>Comparator</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_queue_order.html#tasks" class="tsd-kind-icon">Tasks</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
 							<h3>Classes</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-class tsd-parent-kind-module tsd-has-type-parameter"><a href="../classes/src_core_queue_order.default.html" class="tsd-kind-icon">default</a></li>
 							</ul>
 						</section>
-						<section class="tsd-index-section ">
-							<h3>Interfaces</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter"><a href="../interfaces/src_core_queue_order.createtasks.html" class="tsd-kind-icon">Create<wbr>Tasks</a></li>
-								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/src_core_queue_order.queueoptions.html" class="tsd-kind-icon">Queue<wbr>Options</a></li>
-								<li class="tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter"><a href="../interfaces/src_core_queue_order.taskcomparator.html" class="tsd-kind-icon">Task<wbr>Comparator</a></li>
-								<li class="tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter"><a href="../interfaces/src_core_queue_order.tasks.html" class="tsd-kind-icon">Tasks</a></li>
-							</ul>
-						</section>
 					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>References</h2>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="createtasks" class="tsd-anchor"></a>
+					<h3>Create<wbr>Tasks</h3>
+					Re-exports <a href="../interfaces/src_core_queue_interface.createtasks.html">CreateTasks</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="queueoptions" class="tsd-anchor"></a>
+					<h3>Queue<wbr>Options</h3>
+					Re-exports <a href="../interfaces/src_core_queue_interface.queueoptions.html">QueueOptions</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="taskcomparator" class="tsd-anchor"></a>
+					<h3>Task<wbr>Comparator</h3>
+					Re-exports <a href="../interfaces/src_core_queue_order_interface.taskcomparator.html">TaskComparator</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="tasks" class="tsd-anchor"></a>
+					<h3>Tasks</h3>
+					Re-exports <a href="../interfaces/src_core_queue_order_interface.tasks.html">Tasks</a>
 				</section>
 			</section>
 		</div>
@@ -305,20 +336,20 @@ pre {
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_queue_order.html#createtasks" class="tsd-kind-icon">Create<wbr>Tasks</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_queue_order.html#queueoptions" class="tsd-kind-icon">Queue<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_queue_order.html#taskcomparator" class="tsd-kind-icon">Task<wbr>Comparator</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_queue_order.html#tasks" class="tsd-kind-icon">Tasks</a>
+					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="../classes/src_core_queue_order.default.html" class="tsd-kind-icon">default</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../interfaces/src_core_queue_order.createtasks.html" class="tsd-kind-icon">Create<wbr>Tasks</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="../interfaces/src_core_queue_order.queueoptions.html" class="tsd-kind-icon">Queue<wbr>Options</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../interfaces/src_core_queue_order.taskcomparator.html" class="tsd-kind-icon">Task<wbr>Comparator</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../interfaces/src_core_queue_order.tasks.html" class="tsd-kind-icon">Tasks</a>
 					</li>
 				</ul>
 			</nav>

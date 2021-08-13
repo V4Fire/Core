@@ -17,7 +17,7 @@ import {
 } from 'core/kv-storage';
 
 // eslint-disable-next-line import/extensions
-import * as IDBEngine from 'core/kv-storage/engines/fake.indexeddb';
+import * as IDBEngine from 'core/kv-storage/engines/fake-indexeddb';
 
 const kv = {
 	local,
@@ -39,7 +39,7 @@ describe('core/kv-storage', () => {
 		const
 			api = kv[method];
 
-		it(`synchronous ${method} crud`, () => {
+		it(`synchronous "${method}" crud`, () => {
 			const
 				getKey = getNms();
 
@@ -59,7 +59,7 @@ describe('core/kv-storage', () => {
 			expect(api.has(getKey('foo'))).toBeFalse();
 		});
 
-		it(`synchronous ${method} clear with a filter`, () => {
+		it(`synchronous "${method}" clear with a filter`, () => {
 			const
 				getKey = getNms();
 
@@ -82,7 +82,7 @@ describe('core/kv-storage', () => {
 				getKey = getNms(),
 				nms = api.namespace(getKey('custom namespace'));
 
-			it(`namespaced synchronous ${method} crud`, () => {
+			it(`namespaced synchronous "${method}" crud`, () => {
 				nms.set('foo', 1);
 				expect(nms.has('foo')).toBeTrue();
 				expect(nms.get('foo')).toBe(1);
@@ -99,7 +99,7 @@ describe('core/kv-storage', () => {
 				expect(nms.has('foo')).toBeFalse();
 			});
 
-			it(`namespaced synchronous ${method} clear`, () => {
+			it(`namespaced synchronous "${method}" clear`, () => {
 				nms.set('foo', 1);
 				nms.set('bar', 2);
 
@@ -112,7 +112,7 @@ describe('core/kv-storage', () => {
 				expect(nms.has('bar')).toBeFalse();
 			});
 
-			it(`namespaced synchronous ${method} clear with a filter`, () => {
+			it(`namespaced synchronous "${method}" clear with a filter`, () => {
 				nms.set('foo', 1);
 				nms.set('bar', 'boom');
 
@@ -133,7 +133,7 @@ describe('core/kv-storage', () => {
 		const
 			api = kv[method];
 
-		it(`asynchronous ${method} crud`, async () => {
+		it(`asynchronous "${method}" crud`, async () => {
 			const
 				getKey = getNms();
 
@@ -153,7 +153,7 @@ describe('core/kv-storage', () => {
 			expect(await api.has(getKey('foo'))).toBeFalse();
 		});
 
-		it(`asynchronous ${method} clear with a filter`, async () => {
+		it(`asynchronous "${method}" clear with a filter`, async () => {
 			const
 				getKey = getNms();
 
@@ -176,7 +176,7 @@ describe('core/kv-storage', () => {
 				getKey = getNms(),
 				nms = api.namespace(getKey('custom namespace'));
 
-			it(`namespaced asynchronous ${method} crud`, async () => {
+			it(`namespaced asynchronous "${method}" crud`, async () => {
 				await nms.set('foo', 1);
 				expect(await nms.has('foo')).toBeTrue();
 				expect(await nms.get('foo')).toBe(1);
@@ -193,7 +193,7 @@ describe('core/kv-storage', () => {
 				expect(await nms.has('foo')).toBeFalse();
 			});
 
-			it(`namespaced asynchronous ${method} clear`, async () => {
+			it(`namespaced asynchronous "${method}" clear`, async () => {
 				await nms.set('foo', 1);
 				await nms.set('bar', 2);
 
@@ -206,7 +206,7 @@ describe('core/kv-storage', () => {
 				expect(await nms.has('bar')).toBeFalse();
 			});
 
-			it(`namespaced asynchronous ${method} clear with a filter`, async () => {
+			it(`namespaced asynchronous "${method}" clear with a filter`, async () => {
 				await nms.set('foo', 1);
 				await nms.set('bar', 'boom');
 

@@ -2,6 +2,10 @@
 
 This module provides a bunch of helper functions to serialize/parse JSON data.
 
+## convertIfDate
+
+A reviver for the `JSON.parse` method: converts all strings that is looks like a date to Date.
+
 ```js
 import { convertIfDate } from 'core/json';
 

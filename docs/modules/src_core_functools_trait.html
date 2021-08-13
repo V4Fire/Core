@@ -244,10 +244,10 @@ pre {
 							<h1>core/functools/trait</h1>
 						</a>
 						<p>This module provides a bunch of functions to create and implement traits.
-							A trait is the special kind of an abstract class that is used as an interface.
+							A trait is the special kind of abstract class that is used as an interface.
 							Why would we need that? Well, unlike Java or Kotlin, TypeScript interfaces can&#39;t have default implementations of methods.
 							So we need to implement each method in our classes even if the implementation doesn&#39;t change.
-						And this is where traits come into play. But how it works? Ok, let&#39;s enumerate the steps to create a trait:</p>
+						This is where traits come into play. How it works? Ok, let&#39;s enumerate the steps to create a trait:</p>
 						<ol>
 							<li>Create an abstract class, where define all necessary abstract methods and properties (yes, the trait can also define properties,
 							not only methods).</li>
@@ -371,6 +371,25 @@ pre {
 
 <span style="color: #000000">  </span><span style="color: #795E26">fly</span><span style="color: #000000">(): </span><span style="color: #267F99">void</span><span style="color: #000000"> {</span>
 <span style="color: #000000">    </span><span style="color: #008000">// Do some logic to fly</span>
+<span style="color: #000000">  }</span>
+<span style="color: #000000">}</span>
+</code></pre>
+						<p>Besides regular methods, you can also define get/set accessors like this:</p>
+						<pre><code class="language-typescript"><span style="color: #0000FF">abstract</span><span style="color: #000000"> </span><span style="color: #0000FF">class</span><span style="color: #000000"> </span><span style="color: #267F99">Duckable</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #0000FF">get</span><span style="color: #000000"> </span><span style="color: #795E26">canFly</span><span style="color: #000000">(): </span><span style="color: #267F99">boolean</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #AF00DB">return</span><span style="color: #000000"> &lt;</span><span style="color: #267F99">any</span><span style="color: #000000">&gt;</span><span style="color: #0000FF">null</span><span style="color: #000000">;</span>
+<span style="color: #000000">  }</span>
+
+<span style="color: #000000">  </span><span style="color: #0000FF">set</span><span style="color: #000000"> </span><span style="color: #795E26">canFly</span><span style="color: #000000">(</span><span style="color: #001080">value</span><span style="color: #000000">: </span><span style="color: #267F99">boolean</span><span style="color: #000000">) {};</span>
+
+<span style="color: #000000">  </span><span style="color: #0000FF">static</span><span style="color: #000000"> </span><span style="color: #795E26">canFly</span><span style="color: #000000">(</span><span style="color: #001080">self</span><span style="color: #000000">: </span><span style="color: #267F99">Duckable</span><span style="color: #000000">): </span><span style="color: #267F99">string</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #AF00DB">if</span><span style="color: #000000"> (</span><span style="color: #0000FF">arguments</span><span style="color: #000000">.</span><span style="color: #001080">length</span><span style="color: #000000"> &gt; </span><span style="color: #098658">1</span><span style="color: #000000">) {</span>
+<span style="color: #000000">      </span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">value</span><span style="color: #000000"> = </span><span style="color: #0000FF">arguments</span><span style="color: #000000">[</span><span style="color: #098658">1</span><span style="color: #000000">];</span>
+<span style="color: #000000">      </span><span style="color: #008000">// Setter code</span>
+
+<span style="color: #000000">    } </span><span style="color: #AF00DB">else</span><span style="color: #000000"> {</span>
+<span style="color: #000000">      </span><span style="color: #AF00DB">return</span><span style="color: #000000"> </span><span style="color: #008000">/* Getter code */</span><span style="color: #000000">;</span>
+<span style="color: #000000">    }</span>
 <span style="color: #000000">  }</span>
 <span style="color: #000000">}</span>
 </code></pre>

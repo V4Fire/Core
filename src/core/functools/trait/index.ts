@@ -86,17 +86,50 @@ export function derive(...traits: Function[]) {
 				for (let i = 0; i < keys.length; i++) {
 					const
 						key = keys[i],
-						defMethod = Object.getOwnPropertyDescriptor(trait, key);
+						defMethod = Object.getOwnPropertyDescriptor(trait, key),
+						traitMethod = Object.getOwnPropertyDescriptor(trait.prototype, key);
 
-					if (
+					const canDerive =
 						defMethod != null &&
+						traitMethod != null &&
 						!(key in proto) &&
-						Object.isFunction(defMethod.value) &&
-						Object.isFunction(trait.prototype[key])
-					) {
-						proto[key] = function defaultMethod(...args: unknown[]) {
-							return originalTrait[key](this, ...args);
+
+						Object.isFunction(defMethod.value) && (
+							Object.isFunction(traitMethod.value) ||
+
+							// eslint-disable-next-line @typescript-eslint/unbound-method
+							Object.isFunction(traitMethod.get) || Object.isFunction(traitMethod.set)
+						);
+
+					if (canDerive) {
+						const newDescriptor: PropertyDescriptor = {
+							enumerable: false,
+							configurable: true
 						};
+
+						if (Object.isFunction(traitMethod?.value)) {
+							Object.assign(newDescriptor, {
+								writable: true,
+
+								// eslint-disable-next-line func-name-matching
+								value: function defaultMethod(...args: unknown[]) {
+									return originalTrait[key](this, ...args);
+								}
+							});
+
+						} else {
+							Object.assign(newDescriptor, {
+								get() {
+									return originalTrait[key](this);
+								},
+
+								set(value: unknown) {
+									originalTrait[key](this, value);
+								}
+							});
+						}
+
+						Object.defineProperty(proto, key, newDescriptor);
 					}
 				}
 			}

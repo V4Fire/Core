@@ -9,12 +9,12 @@
 import { getDataType, getDataTypeFromURI } from 'core/mime-type';
 
 describe('core/mime-type', () => {
-	it('getDataType', () => {
+	it('`getDataType`', () => {
 		expect(getDataType('application/json')).toBe('json');
 		expect(getDataType('application/x-protobuf;...')).toBe('arrayBuffer');
 	});
 
-	it('getDataTypeFromURI', () => {
+	it('getData`TypeFromURI', () => {
 		expect(getDataTypeFromURI('data:application/javascript;...')).toBe('text');
 	});
 });

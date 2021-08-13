@@ -291,12 +291,13 @@ pre {
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="src_core_kv_storage_interface.syncstoragenamespace.html">SyncStorageNamespace</a>.<a href="src_core_kv_storage_interface.syncstoragenamespace.html#clear">clear</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/kv-storage/interface.ts#L53">src/core/kv-storage/interface.ts:53</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/kv-storage/interface.ts#L66">src/core/kv-storage/interface.ts:66</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Clears the storage by the specified filter and returns a list of removed keys</p>
+									<p>Clears the storage by the specified filter and returns a list of removed keys.
+									Notice, the method can take a list of additional parameters provided to the used storage&#39; engine.</p>
 								</div>
 							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -329,13 +330,16 @@ pre {
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="src_core_kv_storage_interface.syncstoragenamespace.html">SyncStorageNamespace</a>.<a href="src_core_kv_storage_interface.syncstoragenamespace.html#get">get</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/kv-storage/interface.ts#L28">src/core/kv-storage/interface.ts:28</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/kv-storage/interface.ts#L34">src/core/kv-storage/interface.ts:34</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Returns a value from the storage by the specified key</p>
+									<p>Returns a value from the storage by the specified key.</p>
 								</div>
+								<p>The returning value automatically parses by using <code>Object.parse</code> from a string to equivalent JS value, i.e.,
+								<code>&#39;1&#39;</code> will be parsed to <code>1</code>, <code>&#39;true&#39;</code> to <code>true</code>, <code>&#39;2021-07-09T08:15:57.753Z&#39;</code> to <code>Date</code>, etc.</p>
+								<p>Notice, the method can take a list of additional parameters provided to the used storage&#39; engine.</p>
 							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
@@ -367,12 +371,13 @@ pre {
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="src_core_kv_storage_interface.syncstoragenamespace.html">SyncStorageNamespace</a>.<a href="src_core_kv_storage_interface.syncstoragenamespace.html#has">has</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/kv-storage/interface.ts#L20">src/core/kv-storage/interface.ts:20</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/kv-storage/interface.ts#L21">src/core/kv-storage/interface.ts:21</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Returns true if a value by the specified key exists in the storage</p>
+									<p>Returns true if a value by the specified key exists in the storage.
+									Notice, the method can take a list of additional parameters provided to the used storage&#39; engine.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -398,7 +403,7 @@ pre {
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/kv-storage/interface.ts#L64">src/core/kv-storage/interface.ts:64</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/kv-storage/interface.ts#L77">src/core/kv-storage/interface.ts:77</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -429,12 +434,13 @@ pre {
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="src_core_kv_storage_interface.syncstoragenamespace.html">SyncStorageNamespace</a>.<a href="src_core_kv_storage_interface.syncstoragenamespace.html#remove">remove</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/kv-storage/interface.ts#L45">src/core/kv-storage/interface.ts:45</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/kv-storage/interface.ts#L57">src/core/kv-storage/interface.ts:57</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Removes a value from the storage by the specified key</p>
+									<p>Removes a value from the storage by the specified key.
+									Notice, the method can take a list of additional parameters provided to the used storage&#39; engine.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -461,13 +467,16 @@ pre {
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="src_core_kv_storage_interface.syncstoragenamespace.html">SyncStorageNamespace</a>.<a href="src_core_kv_storage_interface.syncstoragenamespace.html#set">set</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/kv-storage/interface.ts#L37">src/core/kv-storage/interface.ts:37</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/kv-storage/interface.ts#L48">src/core/kv-storage/interface.ts:48</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Saves a value to the storage by the specified key</p>
+									<p>Saves a value to the storage by the specified key.</p>
 								</div>
+								<p>The value to parse automatically serializes to a string by using <code>Object.trySerialize</code>, i.e.,
+								arrays and dictionaries will be serialized to JSON, etc.</p>
+								<p>Notice, the method can take a list of additional parameters provided to the used storage&#39; engine.</p>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">

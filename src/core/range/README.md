@@ -300,7 +300,7 @@ The method clones the range and returns a new.
 
 ### reverse
 
-The method clones the range with reversing of element ordering and returns a new.
+The method clones the range with reversing of element ordering and returns a new one.
 
 ```js
 import Range from 'core/range';

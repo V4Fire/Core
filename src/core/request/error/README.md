@@ -1,6 +1,6 @@
 # core/request/error
 
-This module provides a class for any request error and its details extractor.
+This module provides a class for any request error and its details' extractor.
 
 ## RequestError
 

@@ -42,8 +42,7 @@ export default class RequestError<D = undefined> extends BaseError {
 		this.details = details ?? {};
 	}
 
-	/** @override */
-	protected format(): string {
+	protected override format(): string {
 		const
 			d = this.details;
 

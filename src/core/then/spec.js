@@ -76,7 +76,7 @@ describe('core/then', () => {
 		} catch {}
 	});
 
-	it('rejected then', async () => {
+	it('rejected `then`', async () => {
 		let
 			i = 1;
 
@@ -91,7 +91,7 @@ describe('core/then', () => {
 		expect(i).toBe(3);
 	});
 
-	it('dynamically rejected catch', async () => {
+	it('dynamically rejected `catch`', async () => {
 		let
 			i = 1;
 
@@ -129,7 +129,7 @@ describe('core/then', () => {
 		expect(i).toBe(3);
 	});
 
-	it('dynamically rejected catch', async () => {
+	it('dynamically rejected `catch`', async () => {
 		let
 			i = 1;
 
@@ -151,7 +151,7 @@ describe('core/then', () => {
 		expect(i).toBe(6);
 	});
 
-	it('resolved finally', async () => {
+	it('resolved `finally`', async () => {
 		let
 			i = 1;
 
@@ -167,7 +167,7 @@ describe('core/then', () => {
 		expect(i).toBe(2);
 	});
 
-	it('rejected finally', async () => {
+	it('rejected `finally`', async () => {
 		let
 			i = 1;
 
@@ -187,7 +187,7 @@ describe('core/then', () => {
 		expect(i).toBe(2);
 	});
 
-	it('dynamically rejected finally', async () => {
+	it('dynamically rejected `finally`', async () => {
 		let
 			i = 1;
 
@@ -218,7 +218,7 @@ describe('core/then', () => {
 		expect(i).toBe(6);
 	});
 
-	it('Then.resolve', async () => {
+	it('`Then.resolve`', async () => {
 		let
 			i = 0,
 			j = 0;
@@ -235,7 +235,7 @@ describe('core/then', () => {
 		expect(j).toBe(6);
 	});
 
-	it('Then.reject', async () => {
+	it('`Then.reject`', async () => {
 		let
 			i = 1;
 
@@ -248,7 +248,7 @@ describe('core/then', () => {
 		expect(i).toBe(3);
 	});
 
-	it('Then.all', async () => {
+	it('`Then.all`', async () => {
 		let res;
 
 		await Then.all([
@@ -260,7 +260,7 @@ describe('core/then', () => {
 		expect(res).toEqual([1, null, 2]);
 	});
 
-	it('Then.race', async () => {
+	it('`Then.race`', async () => {
 		let res;
 
 		await Then.race([

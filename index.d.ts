@@ -263,13 +263,13 @@ interface JSONCb {
 
 interface FastCloneOptions {
 	/**
-	 * Replacer function for JSON.stringify
+	 * Replacer function for `JSON.stringify`
 	 * @see [[JSON.stringify]]
 	 */
 	replacer?: JSONCb;
 
 	/**
-	 * Reviver function for JSON.parse
+	 * Reviver function for `JSON.parse`
 	 * @see [[JSON.parse]]
 	 */
 	reviver?: JSONCb;
@@ -342,7 +342,7 @@ interface ObjectMixinOptions<V = unknown, K = unknown, D = unknown> {
 
 	/**
 	 * Function to filter values that support deep extending
-	 * (works only with the "deep" mode)
+	 * (works only with the `deep` mode)
 	 *
 	 * @param el - element value
 	 * @param key - element key
@@ -401,7 +401,7 @@ interface ObjectMixinOptions<V = unknown, K = unknown, D = unknown> {
 
 	/**
 	 * If true, then merging preserve prototypes of properties
-	 * (works only with the "deep" mode)
+	 * (works only with the `deep` mode)
 	 *
 	 * @default `false`
 	 * @example
@@ -450,7 +450,7 @@ interface ObjectMixinOptions<V = unknown, K = unknown, D = unknown> {
 	withProto?: boolean;
 
 	/**
-	 * If true, then to merge two arrays will be used a concatenation strategy (works only with the "deep" mode).
+	 * If true, then to merge two arrays will be used a concatenation strategy (works only with the `deep` mode).
 	 * Also, the parameter can be passed as a function to concatenate arrays.
 	 *
 	 * @default `false`
@@ -731,13 +731,13 @@ interface ObjectConstructor {
 	 *
 	 * @param key
 	 */
-	hasOwnProperty(key: string): (obj: any) => boolean;
+	hasOwnProperty(key: string | symbol): (obj: any) => boolean;
 
 	/**
 	 * Returns a function that returns true if the specified object has own property by a key that the function takes
 	 * @param obj
 	 */
-	hasOwnProperty(obj: any): (key: string) => boolean;
+	hasOwnProperty(obj: any): (key: string | symbol) => boolean;
 
 	/**
 	 * Returns true if the passed object has an own property by the specified key
@@ -745,7 +745,7 @@ interface ObjectConstructor {
 	 * @param obj
 	 * @param key
 	 */
-	hasOwnProperty(obj: any, key: string): boolean;
+	hasOwnProperty(obj: any, key: string | symbol): boolean;
 
 	/**
 	 * Sets a value to the passed object by the specified path.
@@ -1016,17 +1016,17 @@ interface ObjectConstructor {
 	): void;
 
 	/**
-	 * Returns a curried version of Object.fastCompare for one argument
+	 * Returns a curried version of `Object.fastCompare` for one argument
 	 * @param a
 	 */
 	fastCompare(a: any): (b: any) => boolean;
 
 	/**
-	 * Compares two specified objects by using a naive but fast "JSON.stringify/parse" strategy and
+	 * Compares two specified objects by using a naive but fast `JSON.stringify/parse` strategy and
 	 * returns true if their are equal.
 	 *
-	 * Mind, that this method uses non-stable version JSON.stringify, i.e.,
-	 * it can work incorrectly with object like {a: 1, b: 2} and {b: 2, a: 1}.
+	 * Mind, that this method uses non-stable version `JSON.stringify`, i.e.,
+	 * it can work incorrectly with object like `{a: 1, b: 2}` and `{b: 2, a: 1}`.
 	 *
 	 * @param a
 	 * @param b
@@ -1034,7 +1034,7 @@ interface ObjectConstructor {
 	fastCompare<T>(a: any, b: T): a is T;
 
 	/**
-	 * Returns a curried version of Object.fastClone
+	 * Returns a curried version of `Object.fastClone`
 	 *
 	 * @param obj
 	 * @param opts - additional options
@@ -1042,7 +1042,7 @@ interface ObjectConstructor {
 	fastClone(obj: undefined, opts: FastCloneOptions): <T>(obj: T) => T;
 
 	/**
-	 * Clones the specified object by using a naive but fast "JSON.stringify/parse" strategy and returns a new object.
+	 * Clones the specified object by using a naive but fast `JSON.stringify/parse` strategy and returns a new object.
 	 *
 	 * @param obj
 	 * @param [opts] - additional options
@@ -1050,29 +1050,29 @@ interface ObjectConstructor {
 	fastClone<T>(obj: T, opts?: FastCloneOptions): T;
 
 	/**
-	 * Returns a string representation of the specified object by using a naive but fast "JSON.stringify/parse" strategy.
+	 * Returns a string representation of the specified object by using a naive but fast `JSON.stringify/parse` strategy.
 	 *
-	 * Mind, that this method uses non-stable version JSON.stringify, i.e.,
-	 * it can work incorrectly with object like {a: 1, b: 2} and {b: 2, a: 1}.
+	 * Mind, that this method uses non-stable version `JSON.stringify`, i.e.,
+	 * it can work incorrectly with object like `{a: 1, b: 2}` and `{b: 2, a: 1}`.
 	 *
 	 * @param obj
 	 */
 	fastHash(obj: any): string;
 
 	/**
-	 * Returns a curried version of Object.mixin for one argument
+	 * Returns a curried version of `Object.mixin` for one argument
 	 * @param opts - if true, then properties will be copied recursively, or additional options to extend
 	 */
 	mixin(opts: ObjectMixinOptions | boolean): <B, O1>(base: B, obj1: O1) => B & O1;
 
 	/**
-	 * Returns a curried version of Object.mixin for one argument
+	 * Returns a curried version of `Object.mixin` for one argument
 	 * @param opts - if true, then properties will be copied recursively, or additional options to extend
 	 */
 	mixin(opts: ObjectMixinOptions | boolean): <R = unknown>(...objects: any[]) => R;
 
 	/**
-	 * Returns a curried version of Object.mixin for two arguments
+	 * Returns a curried version of `Object.mixin` for two arguments
 	 *
 	 * @param opts - if true, then properties will be copied recursively, or additional options to extend
 	 * @param base - base object
@@ -1080,7 +1080,7 @@ interface ObjectConstructor {
 	mixin<B>(opts: ObjectMixinOptions | boolean, base: B): <O1>(obj1: O1) => B & O1;
 
 	/**
-	 * Returns a curried version of Object.mixin for two arguments
+	 * Returns a curried version of `Object.mixin` for two arguments
 	 *
 	 * @param opts - if true, then properties will be copied recursively, or additional options to extend
 	 * @param base - base object
@@ -1131,8 +1131,26 @@ interface ObjectConstructor {
 	mixin<R = unknown>(opts: ObjectMixinOptions | boolean, base?: any, ...objects: any[]): R;
 
 	/**
-	 * Returns a curried version of Object.parse
-	 * @param reviver - reviver function for JSON.parse
+	 * Returns a curried version of `Object.serialize`
+	 * @param replacer - replacer function to serialize
+	 */
+	trySerialize(replacer?: JSONCb): <V>(value: V) => string | V;
+
+	/**
+	 * Tries to serialize the specified value into a string.
+	 *
+	 * If the value is an array, dictionary, or string or has the predefined `toJSON` method, it is serialized using
+	 * `JSON.stringify`. In other cases, the value isn't serialized and will be returned by the function.
+	 * Also, in the case of error during serialization, the function returns the original value.
+	 *
+	 * @param value
+	 * @param [replacer] - replacer function to serialize
+	 */
+	trySerialize<V>(value: V, replacer?: JSONCb): string | V;
+
+	/**
+	 * Returns a curried version of `Object.parse`
+	 * @param reviver - reviver function to parse
 	 */
 	parse(reviver?: JSONCb): <V, R = unknown>(value: V) => V extends string ? R : V;
 
@@ -1141,7 +1159,7 @@ interface ObjectConstructor {
 	 * If the value isn't a string or can't be parsed, the function returns the original value.
 	 *
 	 * @param value
-	 * @param [reviver] - reviver function for JSON.parse
+	 * @param [reviver] - reviver function to parse
 	 */
 	parse<V, R = unknown>(value: V, reviver?: JSONCb): V extends string ? R : V;
 
@@ -1213,25 +1231,25 @@ interface ObjectConstructor {
 	fromArray<T>(arr: Nullable<unknown[]>, opts?: ObjectFromArrayOptions<T>): Dictionary<T>;
 
 	/**
-	 * Returns a curried version of Object.select
+	 * Returns a curried version of `Object.select`
 	 * @param condition - regular expression to filter by keys
 	 */
 	select(condition: RegExp | ObjectPropertyFilter): <D extends object>(obj: Nullable<D>) => {[K in keyof D]?: D[K]};
 
 	/**
-	 * Returns a curried version of Object.select
+	 * Returns a curried version of `Object.select`
 	 * @param condition - whitelist of keys to filter
 	 */
 	select(condition: []): <D extends object>(obj: D) => D;
 
 	/**
-	 * Returns a curried version of Object.select
+	 * Returns a curried version of `Object.select`
 	 * @param condition - whitelist of keys to filter
 	 */
 	select<C extends string>(condition: C | [C]): <D extends object>(obj: Nullable<D>) => Pick<D, Extract<keyof D, C>>;
 
 	/**
-	 * Returns a curried version of Object.select
+	 * Returns a curried version of `Object.select`
 	 * @param condition - whitelist of keys to filter
 	 */
 	select<
@@ -1240,7 +1258,7 @@ interface ObjectConstructor {
 	>(condition: [C1, C2]): <D extends object>(obj: Nullable<D>) => Pick<D, Extract<keyof D, C1 | C2>>;
 
 	/**
-	 * Returns a curried version of Object.select
+	 * Returns a curried version of `Object.select`
 	 * @param condition - whitelist of keys to filter
 	 */
 	select<
@@ -1250,7 +1268,7 @@ interface ObjectConstructor {
 	>(condition: [C1, C2, C3]): <D extends object>(obj: Nullable<D>) => Pick<D, Extract<keyof D, C1 | C2 | C3>>;
 
 	/**
-	 * Returns a curried version of Object.select
+	 * Returns a curried version of `Object.select`
 	 * @param condition - whitelist of keys to filter
 	 */
 	select<
@@ -1261,7 +1279,7 @@ interface ObjectConstructor {
 	>(condition: [C1, C2, C3, C4]): <D extends object>(obj: Nullable<D>) => Pick<D, Extract<keyof D, C1 | C2 | C3 | C4>>;
 
 	/**
-	 * Returns a curried version of Object.select
+	 * Returns a curried version of `Object.select`
 	 * @param condition - whitelist of keys to filter
 	 */
 	select<
@@ -1274,13 +1292,13 @@ interface ObjectConstructor {
 		Pick<D, Extract<keyof D, C1 | C2 | C3 | C4 | C5>>;
 
 	/**
-	 * Returns a curried version of Object.select
+	 * Returns a curried version of `Object.select`
 	 * @param condition - whitelist of keys to filter
 	 */
 	select(condition: Iterable<any>): <D extends object>(obj: Nullable<D>) => {[K in keyof D]?: D[K]};
 
 	/**
-	 * Returns a curried version of Object.select
+	 * Returns a curried version of `Object.select`
 	 * @param condition - map of keys to filter
 	 */
 	select<C extends object>(condition: C): <D extends object>(obj: Nullable<D>) => Pick<D, Extract<keyof D, keyof C>>;
@@ -1380,25 +1398,25 @@ interface ObjectConstructor {
 	select<D extends object, C extends object>(obj: Nullable<D>, condition: C): Pick<D, Extract<keyof D, keyof C>>;
 
 	/**
-	 * Returns a curried version of Object.reject
+	 * Returns a curried version of `Object.reject`
 	 * @param condition - regular expression to filter by keys
 	 */
 	reject(condition: RegExp | ObjectPropertyFilter): <D extends object>(obj: Nullable<D>) => {[K in keyof D]?: D[K]};
 
 	/**
-	 * Returns a curried version of Object.reject
+	 * Returns a curried version of `Object.reject`
 	 * @param condition - whitelist of keys to filter
 	 */
 	reject<C>(condition: []): <D extends object>(obj: Nullable<D>) => D;
 
 	/**
-	 * Returns a curried version of Object.reject
+	 * Returns a curried version of `Object.reject`
 	 * @param condition - whitelist of keys to filter
 	 */
 	reject<C extends string>(condition: C | [C]): <D extends object>(obj: Nullable<D>) => Omit<D, C>;
 
 	/**
-	 * Returns a curried version of Object.reject
+	 * Returns a curried version of `Object.reject`
 	 * @param condition - whitelist of keys to filter
 	 */
 	reject<
@@ -1407,7 +1425,7 @@ interface ObjectConstructor {
 	>(condition: [C1, C2]): <D extends object>(obj: Nullable<D>) => Omit<D, C1 | C2>;
 
 	/**
-	 * Returns a curried version of Object.reject
+	 * Returns a curried version of `Object.reject`
 	 * @param condition - whitelist of keys to filter
 	 */
 	reject<
@@ -1417,7 +1435,7 @@ interface ObjectConstructor {
 	>(condition: [C1, C2, C3]): <D extends object>(obj: Nullable<D>) => Omit<D, C1 | C2 | C3>;
 
 	/**
-	 * Returns a curried version of Object.reject
+	 * Returns a curried version of `Object.reject`
 	 * @param condition - whitelist of keys to filter
 	 */
 	reject<
@@ -1428,7 +1446,7 @@ interface ObjectConstructor {
 	>(condition: [C1, C2, C3, C4]): <D extends object>(obj: Nullable<D>) => Omit<D, C1 | C2 | C3 | C4>;
 
 	/**
-	 * Returns a curried version of Object.reject
+	 * Returns a curried version of `Object.reject`
 	 * @param condition - whitelist of keys to filter
 	 */
 	reject<
@@ -1440,13 +1458,13 @@ interface ObjectConstructor {
 	>(condition: [C1, C2, C3, C4, C5]): <D extends object>(obj: Nullable<D>) => Omit<D, C1 | C2 | C3 | C4 | C5>;
 
 	/**
-	 * Returns a curried version of Object.reject
+	 * Returns a curried version of `Object.reject`
 	 * @param condition - whitelist of keys to filter
 	 */
 	reject(condition: Iterable<any>): <D extends object>(obj: Nullable<D>) => {[K in keyof D]?: D[K]};
 
 	/**
-	 * Returns a curried version of Object.reject
+	 * Returns a curried version of `Object.reject`
 	 * @param condition - map of keys to filter
 	 */
 	reject<C extends object>(condition: C): <D extends object>(obj: Nullable<D>) => Omit<D, keyof C>;
@@ -1893,7 +1911,7 @@ interface ObjectConstructor {
 
 interface ArrayConstructor {
 	/**
-	 * Returns a curried version of Array.union
+	 * Returns a curried version of `Array.union`
 	 * @param arr
 	 */
 	union<T extends Nullable<any[]>>(arr: T): <A extends Iterable<any> | any>(
@@ -1918,7 +1936,7 @@ interface ArrayConstructor {
 		Array<IterableType<NonNullable<T>> | NonNullable<A>>;
 
 	/**
-	 * Returns a curried version of Array.concat
+	 * Returns a curried version of `Array.concat`
 	 * @param arr
 	 */
 	concat<T extends Nullable<any[]>>(arr: T): <A extends CanArray<any>>(...args: Array<CanArray<A>>) =>
@@ -2020,7 +2038,7 @@ interface StringConstructor {
 	letters(str: string): IterableIterator<string>;
 
 	/**
-	 * Returns a curried version of String.capitalize
+	 * Returns a curried version of `String.capitalize`
 	 * @param opts - additional options
 	 */
 	capitalize(opts: StringCapitalizeOptions): (str: string) => string;
@@ -2034,13 +2052,13 @@ interface StringConstructor {
 	capitalize(str: string, opts?: StringCapitalizeOptions): string;
 
 	/**
-	 * Returns a curried version of String.camelize
+	 * Returns a curried version of `String.camelize`
 	 * @param upper - if false, then the first character of a value is transformed to the lower case
 	 */
 	camelize(upper: boolean): (str: string) => string;
 
 	/**
-	 * Returns a curried version of String.camelize
+	 * Returns a curried version of `String.camelize`
 	 * @param opts - additional options
 	 */
 	camelize(opts: StringCamelizeOptions): (str: string) => string;
@@ -2062,13 +2080,13 @@ interface StringConstructor {
 	camelize(str: string, opts?: StringCamelizeOptions): string;
 
 	/**
-	 * Returns a curried version of String.dasherize
+	 * Returns a curried version of `String.dasherize`
 	 * @param stable - if true, then the operation can be reverted
 	 */
 	dasherize(stable: boolean): (str: string) => string;
 
 	/**
-	 * Returns a curried version of String.dasherize
+	 * Returns a curried version of `String.dasherize`
 	 * @param opts - additional options
 	 */
 	dasherize(opts: StringDasherizeOptions): (str: string) => string;
@@ -2090,13 +2108,13 @@ interface StringConstructor {
 	dasherize(str: string, opts?: StringDasherizeOptions): string;
 
 	/**
-	 * Returns a curried version of String.underscore
+	 * Returns a curried version of `String.underscore`
 	 * @param stable - if true, then the operation can be reverted
 	 */
 	underscore(stable: boolean): (str: string) => string;
 
 	/**
-	 * Returns a curried version of String.underscore
+	 * Returns a curried version of `String.underscore`
 	 * @param opts - additional options
 	 */
 	underscore(opts: StringUnderscoreOptions): (str: string) => string;
@@ -2281,7 +2299,7 @@ interface NumberConstructor {
 	weeks(value: number): number;
 
 	/**
-	 * Returns a curried version of Number.floor
+	 * Returns a curried version of `Number.floor`
 	 * @param precision
 	 */
 	floor(precision: number): (value: number) => number;
@@ -2295,7 +2313,7 @@ interface NumberConstructor {
 	floor(value: number, precision: number): number;
 
 	/**
-	 * Returns a curried version of Number.round
+	 * Returns a curried version of `Number.round`
 	 * @param precision
 	 */
 	round(precision: number): (value: number) => number;
@@ -2309,7 +2327,7 @@ interface NumberConstructor {
 	round(value: number, precision: number): number;
 
 	/**
-	 * Returns a curried version of Number.ceil
+	 * Returns a curried version of `Number.ceil`
 	 * @param precision
 	 */
 	ceil(precision: number): (value: number) => number;
@@ -2323,7 +2341,7 @@ interface NumberConstructor {
 	ceil(value: number, precision: number): number;
 
 	/**
-	 * Returns a curried version of Number.pad
+	 * Returns a curried version of `Number.pad`
 	 * @param opts - additional options
 	 */
 	pad(opts: NumberPadOptions): (value: string) => string;
@@ -2345,7 +2363,7 @@ interface NumberConstructor {
 	pad(num: number, opts: NumberPadOptions): string;
 
 	/**
-	 * Returns a curried version of Number.format
+	 * Returns a curried version of `Number.format`
 	 *
 	 * @param pattern
 	 * @param locale
@@ -2353,7 +2371,7 @@ interface NumberConstructor {
 	format(pattern: string, locale?: CanArray<string>): (value: number) => string;
 
 	/**
-	 * Returns a curried version of Number.format
+	 * Returns a curried version of `Number.format`
 	 *
 	 * @param opts
 	 * @param locale
@@ -2675,13 +2693,13 @@ interface RegExpConstructor {
 	test(rgxp: RegExp, str: string): boolean;
 
 	/**
-	 * Returns a curried version of RegExp.test
+	 * Returns a curried version of `RegExp.test`
 	 * @param rgxp
 	 */
 	test(rgxp: RegExp): (str: string) => boolean;
 
 	/**
-	 * Returns a curried version of inverted RegExp.test
+	 * Returns a curried version of `inverted` RegExp.test
 	 * @param str
 	 */
 	test(str: string): (rgxp: RegExp) => boolean;
@@ -2695,13 +2713,13 @@ interface RegExpConstructor {
 	addFlags(rgxp: RegExp, ...flags: RegExpFlag[]): RegExp;
 
 	/**
-	 * Returns a curried version of RegExp.addFlags
+	 * Returns a curried version of `RegExp.addFlags`
 	 * @param rgxp
 	 */
 	addFlags(rgxp: RegExp): (...flags: RegExpFlag[]) => RegExp;
 
 	/**
-	 * Returns a curried version of inverted RegExp.addFlags
+	 * Returns a curried version of `inverted` RegExp.addFlags
 	 * @param flags
 	 */
 	addFlags(flags: RegExpFlag): (rgxp: RegExp) => RegExp;
@@ -2715,13 +2733,13 @@ interface RegExpConstructor {
 	removeFlags(rgxp: RegExp, ...flags: RegExpFlag[]): RegExp;
 
 	/**
-	 * Returns a curried version of RegExp.removeFlags
+	 * Returns a curried version of `RegExp.removeFlags`
 	 * @param rgxp
 	 */
 	removeFlags(rgxp: RegExp): (...flags: RegExpFlag[]) => RegExp;
 
 	/**
-	 * Returns a curried version of inverted RegExp.removeFlags
+	 * Returns a curried version of `inverted` RegExp.removeFlags
 	 * @param flags
 	 */
 	removeFlags(flags: RegExpFlag): (rgxp: RegExp) => RegExp;
@@ -2735,13 +2753,13 @@ interface RegExpConstructor {
 	setFlags(rgxp: RegExp, ...flags: RegExpFlag[]): RegExp;
 
 	/**
-	 * Returns a curried version of RegExp.setFlags
+	 * Returns a curried version of `RegExp.setFlags`
 	 * @param rgxp
 	 */
 	setFlags(rgxp: RegExp): (...flags: RegExpFlag[]) => RegExp;
 
 	/**
-	 * Returns a curried version of inverted RegExp.setFlags
+	 * Returns a curried version of `inverted` RegExp.setFlags
 	 * @param flags
 	 */
 	setFlags(flags: RegExpFlag): (rgxp: RegExp) => RegExp;
@@ -2789,7 +2807,7 @@ interface DateConstructor {
 	getWeekDays(): string[];
 
 	/**
-	 * Returns a curried version of Date.is
+	 * Returns a curried version of `Date.is`
 	 *
 	 * @param margin - value of the maximum difference between two dates at which they are considered equal
 	 *   (in milliseconds)
@@ -2799,7 +2817,7 @@ interface DateConstructor {
 	is(margin: number, date1: DateCreateValue): (date2: DateCreateValue) => boolean;
 
 	/**
-	 * Returns a curried version of Date.is
+	 * Returns a curried version of `Date.is`
 	 * @param date1 - date to compare
 	 */
 	is(date1: DateCreateValue): (date2: DateCreateValue, margin?: number) => boolean;
@@ -2815,7 +2833,7 @@ interface DateConstructor {
 	is(date1: DateCreateValue, date2: DateCreateValue, margin?: number): boolean;
 
 	/**
-	 * Returns a curried version of Date.isAfter
+	 * Returns a curried version of `Date.isAfter`
 	 *
 	 * @param margin - value of the maximum difference between two dates at which they are considered equal
 	 *   (in milliseconds)
@@ -2825,7 +2843,7 @@ interface DateConstructor {
 	isAfter(margin: number, date1: DateCreateValue): (date2: DateCreateValue) => boolean;
 
 	/**
-	 * Returns a curried version of Date.isAfter
+	 * Returns a curried version of `Date.isAfter`
 	 * @param date1 - date to compare
 	 */
 	isAfter(date1: DateCreateValue): (date2: DateCreateValue, margin?: number) => boolean;
@@ -2841,7 +2859,7 @@ interface DateConstructor {
 	isAfter(date1: DateCreateValue, date2: DateCreateValue, margin?: number): boolean;
 
 	/**
-	 * Returns a curried version of Date.isBefore
+	 * Returns a curried version of `Date.isBefore`
 	 *
 	 * @param margin - value of the maximum difference between two dates at which they are considered equal
 	 *   (in milliseconds)
@@ -2851,7 +2869,7 @@ interface DateConstructor {
 	isBefore(margin: number, date1: DateCreateValue): (date2: DateCreateValue) => boolean;
 
 	/**
-	 * Returns a curried version of Date.isBefore
+	 * Returns a curried version of `Date.isBefore`
 	 * @param date1 - date to compare
 	 */
 	isBefore(date1: DateCreateValue): (date2: DateCreateValue, margin?: number) => boolean;
@@ -2867,7 +2885,7 @@ interface DateConstructor {
 	isBefore(date1: DateCreateValue, date2: DateCreateValue, margin?: number): boolean;
 
 	/**
-	 * Returns a curried version of Date.isBetween
+	 * Returns a curried version of `Date.isBetween`
 	 *
 	 * @param margin - value of the maximum difference between two dates at which they are considered equal
 	 *   (in milliseconds)
@@ -2875,7 +2893,7 @@ interface DateConstructor {
 	isBetween(margin: number): (date: Date, left?: Date, right?: Date) => boolean;
 
 	/**
-	 * Returns a curried version of Date.isBetween
+	 * Returns a curried version of `Date.isBetween`
 	 *
 	 * @param [left] - date of the beginning
 	 * @param [right] - date of the ending
@@ -2895,55 +2913,55 @@ interface DateConstructor {
 	isBetween(date: Date, left: DateCreateValue, right: DateCreateValue, margin?: number): boolean;
 
 	/**
-	 * Changes the date time so that it starts at the beginning of a day and returns it
+	 * Returns a new date based on the current so that it starts at the beginning of a day
 	 * @param date
 	 */
 	beginningOfDay(date: Date): Date;
 
 	/**
-	 * Changes the date time so that it starts at the ending of a day and returns it
+	 * Returns a new date based on the current so that it starts at the ending of a day
 	 * @param date
 	 */
 	endOfDay(date: Date): Date;
 
 	/**
-	 * Changes the date so that it starts at the beginning of a week and returns it
+	 * Returns a new date based on the current so that it starts at the beginning of a week
 	 * @param date
 	 */
 	beginningOfWeek(date: Date): Date;
 
 	/**
-	 * Changes the date so that it starts at the ending of a week and returns it
+	 * Returns a new date based on the current so that it starts at the ending of a week
 	 * @param date
 	 */
 	endOfWeek(date: Date): Date;
 
 	/**
-	 * Changes the date so that it starts at the beginning of a month and returns it
+	 * Returns a new date based on the current so that it starts at the beginning of a month
 	 * @param date
 	 */
 	beginningOfMonth(date: Date): Date;
 
 	/**
-	 * Changes the date so that it starts at the ending of a month and returns it
+	 * Returns a new date based on the current so that it starts at the ending of a month
 	 * @param date
 	 */
 	endOfMonth(date: Date): Date;
 
 	/**
-	 * Changes the date so that it starts at the beginning of a year and returns it
+	 * Returns a new date based on the current so that it starts at the beginning of a year
 	 * @param date
 	 */
 	beginningOfYear(date: Date): Date;
 
 	/**
-	 * Changes the date so that it starts at the ending of a year and returns it
+	 * Returns a new date based on the current so that it starts at the ending of a year
 	 * @param date
 	 */
 	endOfYear(date: Date): Date;
 
 	/**
-	 * Returns a curried version of Date.short
+	 * Returns a curried version of `Date.short`
 	 * @param locale - locale for internalizing
 	 */
 	short(locale: CanArray<string>): (date: Date) => string;
@@ -2963,7 +2981,7 @@ interface DateConstructor {
 	short(date: Date, locale?: CanArray<string>): string;
 
 	/**
-	 * Returns a curried version of Date.medium
+	 * Returns a curried version of `Date.medium`
 	 * @param locale - locale for internalizing
 	 */
 	medium(locale: CanArray<string>): (date: Date) => string;
@@ -2983,7 +3001,7 @@ interface DateConstructor {
 	medium(date: Date, locale?: CanArray<string>): string;
 
 	/**
-	 * Returns a curried version of Date.long
+	 * Returns a curried version of `Date.long`
 	 * @param locale - locale for internalizing
 	 */
 	long(locale: CanArray<string>): (date: Date) => string;
@@ -3003,7 +3021,7 @@ interface DateConstructor {
 	long(date: Date, locale?: CanArray<string>): string;
 
 	/**
-	 * Returns a curried version of Date.format
+	 * Returns a curried version of `Date.format`
 	 *
 	 * @param pattern
 	 * @param locale
@@ -3011,7 +3029,7 @@ interface DateConstructor {
 	format(pattern: string, locale?: CanArray<string>): (date: Date) => string;
 
 	/**
-	 * Returns a curried version of Date.format
+	 * Returns a curried version of `Date.format`
 	 *
 	 * @param opts
 	 * @param locale
@@ -3020,7 +3038,7 @@ interface DateConstructor {
 
 	/**
 	 * Returns a string representation of the date by the specified pattern.
-	 * All pattern directives are based on native Intl.DateTimeFormat options:
+	 * All pattern directives are based on native `Intl.DateTimeFormat` options:
 	 *
 	 *   1. `'era'`
 	 *   1. `'year'`
@@ -3050,7 +3068,7 @@ interface DateConstructor {
 	 * ```js
 	 * // Will be shown only the day value,
 	 * // because the rest values are equal with `Date.now()`
-	 * new Date().format('year?:month?:short:day', 'en-us');
+	 * new Date().format('year?;month?:short;day', 'en-us');
 	 *
 	 * // Will be shown all values that are declared in the pattern
 	 * new Date('12/28/2019').format('year?:2-digit;month?;day', 'en-us');
@@ -3087,7 +3105,7 @@ interface DateConstructor {
 	format(date: Date, opts: Intl.DateTimeFormatOptions, locale?: CanArray<string>): string;
 
 	/**
-	 * Returns a curried version of Date.toHTMLDateString
+	 * Returns a curried version of `Date.toHTMLDateString`
 	 * @param opts - additional options
 	 */
 	toHTMLDateString(opts: DateHTMLDateStringOptions): (date: Date) => string;
@@ -3102,7 +3120,7 @@ interface DateConstructor {
 	toHTMLDateString(date: Date, opts?: DateHTMLDateStringOptions): string;
 
 	/**
-	 * Returns a curried version of Date.toHTMLTimeString
+	 * Returns a curried version of `Date.toHTMLTimeString`
 	 * @param opts - additional options
 	 */
 	toHTMLTimeString(opts: DateHTMLDateStringOptions): (date: Date) => string;
@@ -3117,7 +3135,7 @@ interface DateConstructor {
 	toHTMLTimeString(date: Date, opts?: DateHTMLTimeStringOptions): string;
 
 	/**
-	 * Returns a curried version of Date.toHTMLString
+	 * Returns a curried version of `Date.toHTMLString`
 	 * @param opts - additional options
 	 */
 	toHTMLString(opts: DateHTMLDateStringOptions): (date: Date) => string;
@@ -3132,7 +3150,7 @@ interface DateConstructor {
 	toHTMLString(date: Date, opts?: DateHTMLStringOptions): string;
 
 	/**
-	 * Returns a curried version of Date.add
+	 * Returns a curried version of ``Date.add``
 	 *
 	 * @param units
 	 * @param reset - if true, then all lower units will be reset to zero
@@ -3149,7 +3167,7 @@ interface DateConstructor {
 	add(date: Date, units: DateSetParams, reset?: boolean): Date;
 
 	/**
-	 * Returns a curried version of Date.set
+	 * Returns a curried version of `Date.set`
 	 *
 	 * @param units
 	 * @param reset - if true, then all lower units will be reset to zero
@@ -3166,7 +3184,7 @@ interface DateConstructor {
 	set(date: Date, units: DateSetParams, reset?: boolean): Date;
 
 	/**
-	 * Returns a curried version of Date.rewind
+	 * Returns a curried version of `Date.rewind`
 	 *
 	 * @param units
 	 * @param reset - if true, then all lower units will be reset to zero
@@ -3189,7 +3207,7 @@ interface DateConstructor {
 	relative(date: DateCreateValue): DateRelative;
 
 	/**
-	 * Returns a curried version of Date.relativeTo
+	 * Returns a curried version of `Date.relativeTo`
 	 * @param from
 	 */
 	relativeTo(from: DateCreateValue): (to: DateCreateValue) => DateRelative;
@@ -3328,42 +3346,42 @@ interface Date {
 	isFuture(): boolean;
 
 	/**
-	 * Changes the date time so that it starts at the beginning of a day and returns it
+	 * Returns a new date based on the current so that it starts at the beginning of a day
 	 */
 	beginningOfDay(): Date;
 
 	/**
-	 * Changes the date time so that it starts at the ending of a day and returns it
+	 * Returns a new date based on the current so that it starts at the ending of a day
 	 */
 	endOfDay(): Date;
 
 	/**
-	 * Changes the date so that it starts at the beginning of a week and returns it
+	 * Returns a new date based on the current so that it starts at the beginning of a week
 	 */
 	beginningOfWeek(): Date;
 
 	/**
-	 * Changes the date so that it starts at the ending of a week and returns it
+	 * Returns a new date based on the current so that it starts at the ending of a week
 	 */
 	endOfWeek(): Date;
 
 	/**
-	 * Changes the date so that it starts at the beginning of a month and returns it
+	 * Returns a new date based on the current so that it starts at the beginning of a month
 	 */
 	beginningOfMonth(): Date;
 
 	/**
-	 * Changes the date so that it starts at the ending of a month and returns it
+	 * Returns a new date based on the current so that it starts at the ending of a month
 	 */
 	endOfMonth(): Date;
 
 	/**
-	 * Changes the date so that it starts at the beginning of a year and returns it
+	 * Returns a new date based on the current so that it starts at the beginning of a year
 	 */
 	beginningOfYear(): Date;
 
 	/**
-	 * Changes the date so that it starts at the ending of a year and returns it
+	 * Returns a new date based on the current so that it starts at the ending of a year
 	 */
 	endOfYear(): Date;
 
@@ -3408,7 +3426,7 @@ interface Date {
 
 	/**
 	 * Returns a string representation of the date by the specified pattern.
-	 * All pattern directives are based on native Intl.DateTimeFormat options:
+	 * All pattern directives are based on native `Intl.DateTimeFormat` options:
 	 *
 	 *   1. `'era'`
 	 *   1. `'year'`
@@ -3438,7 +3456,7 @@ interface Date {
 	 * ```js
 	 * // Will be shown only the day value,
 	 * // because the rest values are equal with `Date.now()`
-	 * new Date().format('year?:month?:short:day', 'en-us');
+	 * new Date().format('year?;month?:short;day', 'en-us');
 	 *
 	 * // Will be shown all values that are declared in the pattern
 	 * new Date('12/28/2019').format('year?:2-digit;month?;day', 'en-us');
@@ -3497,7 +3515,8 @@ interface Date {
 	toHTMLString(opts?: DateHTMLStringOptions): string;
 
 	/**
-	 * Modifies the date with adding time units
+	 * Modifies the date with adding time units.
+	 * The method mutates the original date.
 	 *
 	 * @param units
 	 * @param reset - if true, then all lower units will be reset to zero
@@ -3505,7 +3524,8 @@ interface Date {
 	add(units: DateSetParams, reset?: boolean): Date;
 
 	/**
-	 * Modifies the date with setting time units
+	 * Modifies the date with setting time units.
+	 * The method mutates the original date.
 	 *
 	 * @param units
 	 * @param reset - if true, then all lower units will be reset to zero
@@ -3513,7 +3533,8 @@ interface Date {
 	set(units: DateSetParams, reset?: boolean): Date;
 
 	/**
-	 * Modifies the date with subtracting time units
+	 * Modifies the date with subtracting time units.
+	 * The method mutates the original date.
 	 *
 	 * @param units
 	 * @param reset - if true, then all lower units will be reset to zero

@@ -14,6 +14,6 @@ let
  * @param node
  */
 export function serialize(node: Node): string {
-	xmlSerializer = xmlSerializer ?? new XMLSerializer();
+	xmlSerializer ??= new XMLSerializer();
 	return xmlSerializer.serializeToString(node);
 }

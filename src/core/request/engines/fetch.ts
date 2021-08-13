@@ -14,8 +14,10 @@ import AbortController from 'abort-controller';
 import Then from 'core/then';
 import Response, { ResponseTypeValue } from 'core/request/response';
 import RequestError from 'core/request/error';
+
+import { convertDataToSend } from 'core/request/engines/helpers';
+import type { RequestEngine, NormalizedCreateRequestOptions } from 'core/request/interface';
 import { isOnline } from 'core/net';
-import type { NormalizedCreateRequestOptions, RequestEngine } from 'core/request/interface';
 
 /**
  * Creates request by using the fetch API with the specified parameters and returns a promise
@@ -26,28 +28,13 @@ const request: RequestEngine = (params) => {
 		p = params,
 		controller = new AbortController();
 
-	let
-		body,
-		{contentType} = p;
-
-	if (Object.isPlainObject(p.body)) {
-		body = JSON.stringify(p.body);
-
-		if (contentType == null) {
-			contentType = 'application/json;charset=UTF-8';
-		}
-
-	} else if (Object.isNumber(p.body) || Object.isBoolean(p.body)) {
-		body = String(p.body);
-
-	} else {
-		body = p.body;
-	}
+	const
+		[body, contentType] = convertDataToSend<BodyInit>(p.body, p.contentType);
 
 	const
 		headers: Record<string, string> = {};
 
-	if (p.headers) {
+	if (p.headers != null) {
 		for (const name of Object.keys(p.headers)) {
 			const
 				val = p.headers[name];
@@ -134,9 +121,7 @@ const request: RequestEngine = (params) => {
 		}, (error) => {
 			clearTimeout(timer);
 
-			const
-				type = error.name === 'AbortError' ? 'timeout' : 'engine';
-
+			const type = error.name === 'AbortError' ? 'timeout' : 'engine';
 			reject(new RequestError(type, {error}));
 		});
 

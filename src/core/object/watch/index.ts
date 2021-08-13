@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/unified-signatures */
+
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -155,7 +157,7 @@ function watch<T extends object>(
 		}
 	}
 
-	opts = opts ?? {};
+	opts ??= {};
 	opts.engine = opts.engine ?? watchEngine;
 
 	const
@@ -293,14 +295,22 @@ function watch<T extends object>(
 				// If we have a tied property with the property that have a mutation,
 				// we need to register it
 				if (tiedPath != null) {
-					cache = cache ?? new Map();
+					cache ??= new Map();
 
 					if (Object.get(cache, tiedPath) === true) {
 						return;
 					}
 
 					Object.set(cache, tiedPath, true);
-					resolvedInfo = {...info, path: tiedPath, parent: {value, oldValue, info}};
+					resolvedInfo = {
+						...info,
+						path: tiedPath.slice(),
+						parent: {
+							value,
+							oldValue,
+							info
+						}
+					};
 				}
 
 				// Returns a list of attributes to the mutation handler
@@ -313,7 +323,7 @@ function watch<T extends object>(
 							return [dynamicVal, undefined, resolvedInfo];
 						}
 
-						dynamicValStore = dynamicValStore ?? new Map();
+						dynamicValStore ??= new Map();
 
 						const args = [
 							dynamicVal,
@@ -352,7 +362,7 @@ function watch<T extends object>(
 					// eslint-disable-next-line prefer-spread
 					handler!.apply(null, getArgs());
 
-				// Deferred events
+					// Deferred events
 				} else {
 					const
 						needEventQueue = normalizedPath == null || collapse === false;
@@ -400,11 +410,17 @@ function watch<T extends object>(
 				// obj.foo.bar = {bla: 1};
 
 				if (tailPath.length > 0) {
-					value = Object.get(value, tailPath);
-					oldValue = Object.get(oldValue, tailPath);
+					const
+						tailValue = Object.get(value, tailPath),
+						tailOldValue = Object.get(oldValue, tailPath);
 
-					if (value === oldValue) {
+					if (tailValue === tailOldValue) {
 						return;
+					}
+
+					if (!collapse) {
+						value = tailValue;
+						oldValue = tailOldValue;
 					}
 				}
 

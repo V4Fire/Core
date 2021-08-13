@@ -109,7 +109,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		for (let i = 0; i < dataProviderMethodsToReplace.length; i++) {
 			const methodName = dataProviderMethodsToReplace[i];
 
-			const newMethod = <D = unknown>(
+			wrappedProvider[methodName] = <D = unknown>(
 				body?: RequestBody | RequestQuery,
 				opts?: CreateRequestOptions<D> & AsyncOptions
 			) => {
@@ -130,8 +130,6 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 					group
 				});
 			};
-
-			wrappedProvider[methodName] = newMethod;
 		}
 
 		wrappedProvider.emitter = this.wrapEventEmitter(provider.emitter, opts);
@@ -207,16 +205,12 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		wrappedEmitter.promisifyOnce =
 			(event, ...params) => this.promisifyOnce(emitter, event, ...normalizeAdditionalArgs(params));
 
-		const wrapOff = (originalMethod) => {
-			const off = (link, ...args) => {
-				if (link == null || typeof link !== 'object' || args.length > 0) {
-					return Object.isFunction(originalMethod) ? originalMethod.call(emitter, link, ...args) : null;
-				}
+		const wrapOff = (originalMethod) => (link, ...args) => {
+			if (link == null || typeof link !== 'object' || args.length > 0) {
+				return Object.isFunction(originalMethod) ? originalMethod.call(emitter, link, ...args) : null;
+			}
 
-				return this.off(link);
-			};
-
-			return off;
+			return this.off(link);
 		};
 
 		wrappedEmitter.off = wrapOff(emitter.off);

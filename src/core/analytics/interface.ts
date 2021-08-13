@@ -10,5 +10,5 @@
  * Engine to send analytic events
  */
 export interface AnalyticEngine {
-	(event: string, details: Dictionary): any;
+	(...args: any[]): any;
 }

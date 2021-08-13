@@ -136,7 +136,7 @@ function request<D = unknown>(
 		resolver = args[0];
 	}
 
-	opts = opts ?? {};
+	opts ??= {};
 
 	const
 		baseCtx = new RequestContext<D>(merge(defaultRequestOpts, opts));
@@ -164,6 +164,10 @@ function request<D = unknown>(
 			await new Promise(setImmediate);
 
 			ctx.parent = parent;
+
+			if (Object.isPromise(ctx.cache)) {
+				await Then.resolve(ctx.cache, parent);
+			}
 
 			const
 				tasks = <Array<CanPromise<unknown>>>[];

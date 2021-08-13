@@ -9,6 +9,28 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.56.0 (2021-07-25)
+
+#### :rocket: New Feature
+
+* Now `Object.hasOwnProperty` supports symbols
+
+## v3.54.0 (2021-07-09)
+
+#### :boom: Breaking Change
+
+* The module has been renamed from `parse` to `convert` `object`
+
+#### :rocket: New Feature
+
+* Added `Object.trySerialize`
+
+## v3.52.0 (2021-06-16)
+
+#### :boom: Breaking Change
+
+* Now the date methods `beginningOf.../endOf...` returns a new date
+
 ## v3.42.0 (2021-04-02)
 
 #### :rocket: New Feature
@@ -122,7 +144,7 @@ SyncPromise.resolve(1).catch(() => undefined).then((r) => console.log(r));
 
 #### :bug: Bug Fix
 
-* Fixed a bug when Dates could be transformed to strings after cloning `Object.fastClone`
+* Fixed a bug when Dates could be transformed to string after cloning `Object.fastClone`
 
 ## v3.26.0 (2020-09-04)
 
