@@ -8,6 +8,7 @@
 
 import { ConfigurableMiddleware } from 'core/log/middlewares/configurable';
 import { ExtractorMiddleware } from 'core/log/middlewares/extractor';
+import { DeduplicatorMiddleware } from 'core/log/middlewares/deduplicator';
 import type { LogMiddleware } from 'core/log/middlewares/interface';
 
 export { extend, Extended } from 'core/log/base';
@@ -23,7 +24,8 @@ export function creatorFor<T extends LogMiddleware, A extends any[]>(Ctor: new (
 
 const middlewareFactory = {
 	configurable: creatorFor(ConfigurableMiddleware),
-	extractor: creatorFor(ExtractorMiddleware)
+	extractor: creatorFor(ExtractorMiddleware),
+	deduplicator: creatorFor(DeduplicatorMiddleware)
 };
 
 export default middlewareFactory;
