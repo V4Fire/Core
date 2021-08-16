@@ -1,4 +1,4 @@
-# core/log/middlewares/deduplicator
+# core/log/middlewares/errors-deduplicator
 
 This module provides a middleware for omitting duplicated errors from a log event.
 
@@ -21,7 +21,7 @@ pipeline. Like this:
 {
   log: {
     pipelines: [{
-      middlewares: ['deduplicator']
+      middlewares: ['errorsDeduplicator']
       // ...
     }]
   }

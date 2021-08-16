@@ -16,7 +16,7 @@ import type { LogEvent, LogMiddleware, NextCallback } from 'core/log/middlewares
 /**
  * Middleware for omitting duplicated errors
  */
-export class DeduplicatorMiddleware implements LogMiddleware {
+export class ErrorsDeduplicatorMiddleware implements LogMiddleware {
 	/**
 	 * Errors, that have already been occurred
 	 */

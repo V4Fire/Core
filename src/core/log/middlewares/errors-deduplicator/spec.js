@@ -6,11 +6,11 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { DeduplicatorMiddleware } from 'core/log/middlewares/deduplicator';
+import { ErrorsDeduplicatorMiddleware } from 'core/log/middlewares/errors-deduplicator';
 
-describe('middlewares/deduplicator', () => {
+describe('middlewares/errors-deduplicator', () => {
 	beforeEach(() => {
-		this.middleware = new DeduplicatorMiddleware();
+		this.middleware = new ErrorsDeduplicatorMiddleware();
 	});
 
 	afterEach(() => {
