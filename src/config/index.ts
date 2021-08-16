@@ -35,6 +35,7 @@ const config = <Config>{
 		pipelines: [
 			{
 				middlewares: [
+					'errorsDeduplicator',
 					'configurable',
 					['extractor', [new RequestErrorDetailsExtractor()]]
 				],
