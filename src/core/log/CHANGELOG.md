@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.56.3 (2021-08-16)
+
+#### :rocket: New Feature
+
+* Added new middleware `ErrorsDeduplicatorMiddleware`
+
 ## v3.37.0 (2021-03-17)
 
 #### :boom: Breaking Change

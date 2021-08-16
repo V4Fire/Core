@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.56.3 (2021-08-16)
+
+#### :rocket: New Feature
+
+* Added new middleware `core/log/middlewares/errors-deduplicator` to `core/log` pipeline
+
 ## v3.56.2 (2021-08-05)
 
 #### :bug: Bug Fix
