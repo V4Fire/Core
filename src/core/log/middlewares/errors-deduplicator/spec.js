@@ -7,6 +7,7 @@
  */
 
 import { ErrorsDeduplicatorMiddleware } from 'core/log/middlewares/errors-deduplicator';
+import middlewareFactory from 'core/log/middlewares';
 
 describe('middlewares/errors-deduplicator', () => {
 	describe('implementation', () => {
@@ -97,5 +98,15 @@ describe('middlewares/errors-deduplicator', () => {
 
 			return copy;
 		}
+	});
+
+	describe('factory', () => {
+		it('has "errorsDeduplicator" instance', () => {
+			expect('errorsDeduplicator' in middlewareFactory).toBeTrue();
+		});
+
+		it('"errorsDeduplicator" is instance of ErrorsDeduplicatorMiddleware', () => {
+			expect(middlewareFactory.errorsDeduplicator() instanceof ErrorsDeduplicatorMiddleware).toBeTrue();
+		});
 	});
 });
