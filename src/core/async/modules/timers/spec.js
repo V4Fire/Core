@@ -234,9 +234,9 @@ describe('core/async/modules/timers', () => {
 				setTimeout(() => j++, 10);
 			}
 
-			$a[method](...args).then(() => i++);
-			$a[method](...args, {group: 'foo'}).then(() => i++);
-			$a[method](...args, {group: 'bar'}).then(() => i++);
+			$a[method](...args).then(() => i++, stderr);
+			$a[method](...args, {group: 'foo'}).then(() => i++, stderr);
+			$a[method](...args, {group: 'bar'}).then(() => i++, stderr);
 
 			$a.clearPromise({group: 'foo'});
 			$a.suspendPromise({group: 'foo'});

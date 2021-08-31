@@ -269,9 +269,9 @@ describe('core/async/modules/events', () => {
 			$a = new Async(),
 			$e = new EventEmitter();
 
-		$a.promisifyOnce($e, 'bla').then(() => i++);
-		$a.promisifyOnce($e, 'bla', {group: 'foo'}).then(() => i++);
-		$a.promisifyOnce($e, 'bla', {group: 'bar'}).then(() => i++);
+		$a.promisifyOnce($e, 'bla').then(() => i++, stderr);
+		$a.promisifyOnce($e, 'bla', {group: 'foo'}).then(() => i++, stderr);
+		$a.promisifyOnce($e, 'bla', {group: 'bar'}).then(() => i++, stderr);
 
 		$a.clearPromise({group: 'foo'});
 		$a.suspendPromise({group: 'foo'});
