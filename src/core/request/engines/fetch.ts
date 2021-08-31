@@ -16,7 +16,8 @@ import Response, { ResponseTypeValue } from 'core/request/response';
 import RequestError from 'core/request/error';
 
 import { convertDataToSend } from 'core/request/engines/helpers';
-import type { RequestEngine } from 'core/request/interface';
+import type { RequestEngine, NormalizedCreateRequestOptions } from 'core/request/interface';
+import { isOnline } from 'core/net';
 
 /**
  * Creates request by using the fetch API with the specified parameters and returns a promise
@@ -58,7 +59,16 @@ const request: RequestEngine = (params) => {
 		signal: controller.signal
 	};
 
-	return new Then<Response>((resolve, reject, onAbort) => {
+	return new Then<Response>(async (resolve, reject, onAbort) => {
+		const
+			{status} = await Then.resolve(isOnline(), p.parent);
+
+		if (!status) {
+			return reject(new RequestError('offline', {
+				request: <NormalizedCreateRequestOptions>normalizedOpts
+			}));
+		}
+
 		const
 			req = fetch(p.url, normalizedOpts);
 

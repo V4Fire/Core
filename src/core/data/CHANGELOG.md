@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.??.? (2021-??-??)
+
+#### :boom: Breaking Changes
+
+* Removed the `externalRequest` option
+
 ## v3.53.1 (2021-07-06)
 
 #### :house: Internal

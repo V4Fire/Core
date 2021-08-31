@@ -11,7 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-## v3.56.3 (2021-08-16)
+## v3.??.? (2021-??-??)
+
+#### :boom: Breaking Changes
+
+* Removed the `externalRequest` option within `core/request` and `core/data`
+* Online checking functionality was moved to engines `core/request`
 
 #### :rocket: New Feature
 

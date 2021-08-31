@@ -9,6 +9,13 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.??.? (2021-??-??)
+
+#### :boom: Breaking Changes
+
+* Removed the `externalRequest` option
+* Online checking functionality was moved to engines
+
 ## v3.56.2 (2021-08-05)
 
 #### :bug: Bug Fix

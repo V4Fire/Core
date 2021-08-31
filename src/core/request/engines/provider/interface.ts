@@ -39,7 +39,6 @@ export interface AvailableOptions {
 	headers: Dictionary<CanArray<unknown>>;
 	okStatuses?: OkStatuses;
 	timeout?: number;
-	externalRequest?: boolean;
 	important?: boolean;
 	meta: Meta;
 	parent?: Then;
