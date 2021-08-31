@@ -18,6 +18,10 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 * Removed the `externalRequest` option within `core/request` and `core/data`
 * Online checking functionality was moved to engines `core/request`
 
+#### :rocket: New Feature
+
+* Added a new middleware `core/log/middlewares/errors-deduplicator` to `core/log` pipeline
+
 ## v3.56.2 (2021-08-05)
 
 #### :bug: Bug Fix
