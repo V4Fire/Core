@@ -11,6 +11,14 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.?.? (2021-??-??)
+
+#### :rocket: New Feature
+
+* Added a new static method `allSettled`:
+  * `core/promise/sync`
+  * `core/then`
+
 ## v3.57.0 (2021-08-31)
 
 #### :boom: Breaking Changes

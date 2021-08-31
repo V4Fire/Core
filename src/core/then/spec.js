@@ -248,16 +248,34 @@ describe('core/then', () => {
 		expect(i).toBe(3);
 	});
 
-	it('`Then.all`', async () => {
-		let res;
+	describe('`Then.all`', () => {
+		it('all promises are resolved', async () => {
+			const res = await Then.all([
+				1,
+				null,
+				Then.resolve(2)
+			]);
 
-		await Then.all([
-			1,
-			null,
-			Then.resolve(2)
-		]).then((val) => res = val);
+			expect(res).toEqual([1, null, 2]);
+		});
 
-		expect(res).toEqual([1, null, 2]);
+		it('some promises are rejected', async () => {
+			let
+				res;
+
+			try {
+				res = await Then.all([
+					1,
+					null,
+					Then.reject(2)
+				]);
+
+			} catch (err) {
+				res = err;
+			}
+
+			expect(res).toBe(2);
+		});
 	});
 
 	it('`Then.race`', async () => {
@@ -269,5 +287,33 @@ describe('core/then', () => {
 		]).then((val) => res = val);
 
 		expect(res).toBe(2);
+	});
+
+	describe('`Then.race`', () => {
+		it('all promises are resolved', async () => {
+			const res = await Then.race([
+				Promise.resolve(1),
+				Then.resolve(2)
+			]);
+
+			expect(res).toBe(2);
+		});
+
+		it('some promises are rejected', async () => {
+			let
+				res;
+
+			try {
+				res = await Then.race([
+					new Promise((r) => setTimeout(r, 15)),
+					Then.reject(2)
+				]);
+
+			} catch (err) {
+				res = err;
+			}
+
+			expect(res).toBe(2);
+		});
 	});
 });

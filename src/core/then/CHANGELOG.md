@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.?.? (2021-??-??)
+
+#### :rocket: New Feature
+
+* Added a new static method `allSettled`
+
 ## v3.45.0 (2021-05-12)
 
 #### :memo: Documentation

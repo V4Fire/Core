@@ -171,9 +171,9 @@ export default class Then<T = unknown> implements Promise<T> {
 				promises = <Then[]>[],
 				resolved = <any[]>[];
 
-			Object.forEach(values, (el) => {
+			for (const el of values) {
 				promises.push(Then.resolve(el));
-			});
+			}
 
 			if (promises.length === 0) {
 				resolve(resolved);
@@ -207,6 +207,118 @@ export default class Then<T = unknown> implements Promise<T> {
 	}
 
 	/**
+	 * Creates a promise that is resolved with an array of results when all the provided promises
+	 * are resolved or rejected
+	 *
+	 * @param values
+	 * @param [parent] - parent promise
+	 */
+	// @ts-ignore (invalid implementation)
+	static allSettled<T1, T2, T3, T4, T5>(
+		values: [Value<T1>, Value<T2>, Value<T3>, Value<T4>, Value<T5>],
+		parent?: Then
+	): Then<[
+		PromiseSettledResult<T1>,
+		PromiseSettledResult<T2>,
+		PromiseSettledResult<T3>,
+		PromiseSettledResult<T4>,
+		PromiseSettledResult<T5>
+	]>;
+
+	static allSettled<T1, T2, T3, T4>(
+		values: [Value<T1>, Value<T2>, Value<T3>, Value<T4>],
+		parent?: Then
+	): Then<[
+		PromiseSettledResult<T1>,
+		PromiseSettledResult<T2>,
+		PromiseSettledResult<T3>,
+		PromiseSettledResult<T4>
+	]>;
+
+	static allSettled<T1, T2, T3>(
+		values: [Value<T1>, Value<T2>, Value<T3>],
+		parent?: Then
+	): Then<[
+		PromiseSettledResult<T1>,
+		PromiseSettledResult<T2>,
+		PromiseSettledResult<T3>
+	]>;
+
+	static allSettled<T1, T2>(
+		values: [Value<T1>, Value<T2>],
+		parent?: Then
+	): Then<[
+		PromiseSettledResult<T1>,
+		PromiseSettledResult<T2>
+	]>;
+
+	static allSettled<T1>(
+		values: [Value<T1>],
+		parent?: Then
+	): Then<[PromiseSettledResult<T1>]>;
+
+	static allSettled<T extends Iterable<Value>>(
+		values: T,
+		parent?: Then
+	): Then<Array<T extends Iterable<Value<infer V>> ? PromiseSettledResult<V> : PromiseSettledResult<unknown>>>;
+
+	static allSettled<T extends Iterable<Value>>(
+		values: T,
+		parent?: Then
+	): Then<Array<T extends Iterable<Value<infer V>> ? PromiseSettledResult<V> : PromiseSettledResult<unknown>>> {
+		return new Then((resolve, _, onAbort) => {
+			const
+				promises = <Then[]>[],
+				resolved = <any[]>[];
+
+			for (const el of values) {
+				promises.push(Then.resolve(el));
+			}
+
+			if (promises.length === 0) {
+				resolve(resolved);
+				return;
+			}
+
+			onAbort((reason) => {
+				for (let i = 0; i < promises.length; i++) {
+					promises[i].abort(reason);
+				}
+			});
+
+			let
+				counter = 0;
+
+			for (let i = 0; i < promises.length; i++) {
+				promises[i].then(
+					(value) => {
+						resolved[i] = {
+							status: 'fulfilled',
+							value
+						};
+
+						if (++counter === promises.length) {
+							resolve(resolved);
+						}
+					},
+
+					(reason) => {
+						resolved[i] = {
+							status: 'rejected',
+							reason
+						};
+
+						if (++counter === promises.length) {
+							resolve(resolved);
+						}
+					}
+				);
+			}
+
+		}, parent);
+	}
+
+	/**
 	 * Creates a Then promise that is resolved or rejected when any of the provided promises are resolved or rejected
 	 *
 	 * @param values
@@ -220,9 +332,9 @@ export default class Then<T = unknown> implements Promise<T> {
 			const
 				promises = <Then[]>[];
 
-			Object.forEach(values, (el) => {
+			for (const el of values) {
 				promises.push(Then.resolve(el));
-			});
+			}
 
 			if (promises.length === 0) {
 				resolve();
