@@ -107,7 +107,7 @@ export function derive(...traits: Function[]) {
 							configurable: true
 						};
 
-						if (Object.isFunction(traitMethod?.value)) {
+						if (Object.isFunction(traitMethod.value)) {
 							Object.assign(newDescriptor, {
 								writable: true,
 

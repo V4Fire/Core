@@ -323,10 +323,10 @@ pre {
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module">
 					<a name="default" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> default</h3>
-					<div class="tsd-signature tsd-kind-icon">default<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>configurable<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><a href="../classes/src_core_log_middlewares_configurable.configurablemiddleware.html" class="tsd-signature-type" data-tsd-kind="Class">ConfigurableMiddleware</a><span class="tsd-signature-symbol">; </span>extractor<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_error_interface.errordetailsextractor.html" class="tsd-signature-type" data-tsd-kind="Interface">ErrorDetailsExtractor</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Error</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><a href="../classes/src_core_log_middlewares_extractor_extractor.extractormiddleware.html" class="tsd-signature-type" data-tsd-kind="Class">ExtractorMiddleware</a><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> = ...</span></div>
+					<div class="tsd-signature tsd-kind-icon">default<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>configurable<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><a href="../classes/src_core_log_middlewares_configurable.configurablemiddleware.html" class="tsd-signature-type" data-tsd-kind="Class">ConfigurableMiddleware</a><span class="tsd-signature-symbol">; </span>errorsDeduplicator<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><a href="../classes/src_core_log_middlewares_errors_deduplicator.errorsdeduplicatormiddleware.html" class="tsd-signature-type" data-tsd-kind="Class">ErrorsDeduplicatorMiddleware</a><span class="tsd-signature-symbol">; </span>extractor<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><a href="../interfaces/src_core_error_interface.errordetailsextractor.html" class="tsd-signature-type" data-tsd-kind="Interface">ErrorDetailsExtractor</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Error</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><a href="../classes/src_core_log_middlewares_extractor_extractor.extractormiddleware.html" class="tsd-signature-type" data-tsd-kind="Class">ExtractorMiddleware</a><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> = ...</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/log/middlewares/index.ts#L24">src/core/log/middlewares/index.ts:24</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/log/middlewares/index.ts#L25">src/core/log/middlewares/index.ts:25</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -348,6 +348,27 @@ pre {
 													</li>
 												</ul>
 												<h4 class="tsd-returns-title">Returns <a href="../classes/src_core_log_middlewares_configurable.configurablemiddleware.html" class="tsd-signature-type" data-tsd-kind="Class">ConfigurableMiddleware</a></h4>
+											</li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+							<li class="tsd-parameter">
+								<h5>errors<wbr>Deduplicator<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><a href="../classes/src_core_log_middlewares_errors_deduplicator.errorsdeduplicatormiddleware.html" class="tsd-signature-type" data-tsd-kind="Class">ErrorsDeduplicatorMiddleware</a></h5>
+								<ul class="tsd-parameters">
+									<li class="tsd-parameter-signature">
+										<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-literal">
+											<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../classes/src_core_log_middlewares_errors_deduplicator.errorsdeduplicatormiddleware.html" class="tsd-signature-type" data-tsd-kind="Class">ErrorsDeduplicatorMiddleware</a></li>
+										</ul>
+										<ul class="tsd-descriptions">
+											<li class="tsd-description">
+												<h4 class="tsd-parameters-title">Parameters</h4>
+												<ul class="tsd-parameters">
+													<li>
+														<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>args: <span class="tsd-signature-symbol">[</span><span class="tsd-signature-symbol">]</span></h5>
+													</li>
+												</ul>
+												<h4 class="tsd-returns-title">Returns <a href="../classes/src_core_log_middlewares_errors_deduplicator.errorsdeduplicatormiddleware.html" class="tsd-signature-type" data-tsd-kind="Class">ErrorsDeduplicatorMiddleware</a></h4>
 											</li>
 										</ul>
 									</li>
@@ -390,7 +411,7 @@ pre {
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/log/middlewares/index.ts#L20">src/core/log/middlewares/index.ts:20</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/log/middlewares/index.ts#L21">src/core/log/middlewares/index.ts:21</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
