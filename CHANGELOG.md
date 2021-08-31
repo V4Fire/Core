@@ -22,6 +22,10 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 * Added a new middleware `core/log/middlewares/errors-deduplicator` to `core/log` pipeline
 
+#### :bug: Bug Fix
+
+* Fixed `String.dasherize` and `String.underscore` with numbers
+
 #### :house: Internal
 
 * Updated dependencies: `typescript@4.4.2`, `tlib@2.3.1`, `jasmine@3.9.0`, `jsdom@17.0.0`

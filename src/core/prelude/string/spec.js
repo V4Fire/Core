@@ -124,6 +124,10 @@ describe('core/prelude/string', () => {
 		expect('foo_bar_b-l aBaz😃😡'.dasherize()).toBe('foo-bar-b-l-a-baz😃😡');
 		expect('FooBarBAZ'.dasherize()).toBe('foo-bar-baz');
 		expect('FOOBarBAZ'.dasherize()).toBe('foo-bar-baz');
+		expect('p-v4-demo'.dasherize()).toBe('p-v4-demo');
+		expect('pV4Demo'.dasherize()).toBe('p-v4-demo');
+		expect('p-4v4-demo'.dasherize()).toBe('p-4v4-demo');
+		expect('Foo---BAR_432Bla'.dasherize()).toBe('foo-bar-432-bla');
 	});
 
 	it('`dasherize` (extended Unicode)', () => {
@@ -134,6 +138,10 @@ describe('core/prelude/string', () => {
 		expect('foo_bar_b-l aBaz'.dasherize(true)).toBe('foo-bar-b-l-a-baz');
 		expect('FooBarBAZ'.dasherize(true)).toBe('foo-bar-b-a-z');
 		expect('FOOBarBAZ'.dasherize({stable: true})).toBe('f-o-o-bar-b-a-z');
+		expect('pV4Demo'.dasherize(true)).toBe('p-v4-demo');
+		expect('p-v4-demo'.dasherize(true)).toBe('p-v4-demo');
+		expect('p-4v4-demo'.dasherize(true)).toBe('p-4v4-demo');
+		expect('Foo---BAR_432Bla'.dasherize(true)).toBe('foo-b-a-r-432-bla');
 	});
 
 	it('`dasherize` cache', () => {
@@ -158,6 +166,10 @@ describe('core/prelude/string', () => {
 		expect('foo_bar_b-l aBaz😃😡'.underscore()).toBe('foo_bar_b_l_a_baz😃😡');
 		expect('FooBarBAZ'.underscore()).toBe('foo_bar_baz');
 		expect('FOOBarBAZ'.underscore()).toBe('foo_bar_baz');
+		expect('p_v4_demo'.underscore()).toBe('p_v4_demo');
+		expect('pV4Demo'.underscore()).toBe('p_v4_demo');
+		expect('p_4v4_demo'.underscore()).toBe('p_4v4_demo');
+		expect('Foo---BAR_432Bla'.underscore()).toBe('foo_bar_432_bla');
 	});
 
 	it('`underscore` (extended Unicode)', () => {
@@ -168,6 +180,10 @@ describe('core/prelude/string', () => {
 		expect('foo_bar_b-l aBaz'.underscore(true)).toBe('foo_bar_b_l_a_baz');
 		expect('FooBarBAZ'.underscore(true)).toBe('foo_bar_b_a_z');
 		expect('FOOBarBAZ'.underscore({stable: true})).toBe('f_o_o_bar_b_a_z');
+		expect('pV4Demo'.underscore(true)).toBe('p_v4_demo');
+		expect('p_v4_demo'.underscore(true)).toBe('p_v4_demo');
+		expect('p_4v4_demo'.underscore(true)).toBe('p_4v4_demo');
+		expect('Foo---BAR_432Bla'.underscore(true)).toBe('foo_b_a_r_432_bla');
 	});
 
 	it('`underscore` cache', () => {

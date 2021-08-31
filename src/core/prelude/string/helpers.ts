@@ -6,8 +6,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { isDigital } from 'core/prelude/string/const';
-
 /**
  * Returns true, if the specified character is declared in upper case
  * @param char
@@ -111,10 +109,10 @@ export function convertToSeparatedStr(str: string, separator: string, stable?: b
 		const
 			nextChar = symbols[i + 1];
 
-		if (isDigital.test(el) || isCharUpper(el)) {
+		if (isCharUpper(el)) {
 			const needSeparator = i > 0 && (
 				stable ||
-				Object.isTruly(nextChar) && !isDigital.test(nextChar) && !isCharUpper(nextChar)
+				Object.isTruly(nextChar) && nextChar !== separator && !isCharUpper(nextChar)
 			);
 
 			if (needSeparator) {
@@ -126,10 +124,7 @@ export function convertToSeparatedStr(str: string, separator: string, stable?: b
 		} else {
 			res += el;
 
-			const
-				needSeparator = Object.isTruly(nextChar) && (isDigital.test(nextChar) || isCharUpper(nextChar));
-
-			if (needSeparator) {
+			if (Object.isTruly(nextChar) && isCharUpper(nextChar)) {
 				res += separator;
 			}
 		}
