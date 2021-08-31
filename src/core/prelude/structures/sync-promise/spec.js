@@ -127,19 +127,25 @@ describe('core/prelude/structures/sync-promise', () => {
 		expect(i).toBe(2);
 	});
 
-	it('rejected `finally`', () => {
-		let
-			i = 1;
+	it('rejected `finally`', async () => {
+		try {
+			let
+				i = 1;
 
-		new SyncPromise((resolve, reject) => {
-			reject('boom');
-		})
-			.finally((arg) => {
-				expect(arg).toBeUndefined();
-				i *= 2;
-			});
+			const promise = new SyncPromise((resolve, reject) => {
+				reject('boom');
+			})
+				.finally((arg) => {
+					expect(arg).toBeUndefined();
+					i *= 2;
+				});
 
-		expect(i).toBe(2);
+			expect(i).toBe(2);
+			await promise;
+
+		} catch (err) {
+			expect(err).toBe('boom');
+		}
 	});
 
 	it('dynamically rejected `finally`', () => {
@@ -203,26 +209,83 @@ describe('core/prelude/structures/sync-promise', () => {
 		expect(i).toBe(3);
 	});
 
-	it('`SyncPromise.all`', () => {
-		let res;
+	describe('`SyncPromise.all`', () => {
+		it('all promises are resolved', () => {
+			let
+				res;
 
-		SyncPromise.all([
-			1,
-			null,
-			SyncPromise.resolve(2)
-		]).then((val) => res = val);
+			SyncPromise.all([
+				1,
+				null,
+				SyncPromise.resolve(2)
+			]).then((val) => res = val);
 
-		expect(res).toEqual([1, null, 2]);
+			expect(res).toEqual([1, null, 2]);
+		});
+
+		it('some promises are rejected', () => {
+			let
+				res;
+
+			SyncPromise.all([
+				1,
+				null,
+				SyncPromise.reject(2)
+			]).then(
+				(val) => res = val,
+				(err) => res = err
+			);
+
+			expect(res).toBe(2);
+		});
 	});
 
-	it('`SyncPromise.race`', () => {
-		let res;
+	it('`SyncPromise.allSettled`', () => {
+		let
+			res;
 
-		SyncPromise.race([
-			Promise.resolve(1),
-			SyncPromise.resolve(2)
-		]).then((val) => res = val);
+		SyncPromise.allSettled([
+			1,
+			null,
+			SyncPromise.reject(2)
+		]).then(
+			(val) => res = val,
+			(err) => res = err
+		);
 
-		expect(res).toBe(2);
+		expect(res).toEqual([
+			{status: 'fulfilled', value: 1},
+			{status: 'fulfilled', value: null},
+			{status: 'rejected', reason: 2}
+		]);
+	});
+
+	describe('`SyncPromise.race`', () => {
+		it('all promises are resolved', () => {
+			let
+				res;
+
+			SyncPromise.race([
+				Promise.resolve(1),
+				SyncPromise.resolve(2)
+			]).then((val) => res = val);
+
+			expect(res).toBe(2);
+		});
+
+		it('some promises are rejected', () => {
+			let
+				res;
+
+			SyncPromise.race([
+				Promise.resolve(1),
+				SyncPromise.reject(2)
+			]).then(
+				(val) => res = val,
+				(err) => res = ['error', err]
+			);
+
+			expect(res).toEqual(['error', 2]);
+		});
 	});
 });

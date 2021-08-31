@@ -9,6 +9,16 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.?.? (2021-??-??)
+
+#### :rocket: New Feature
+
+* Added a new static method `allSettled`
+
+#### :bug: Bug Fix
+
+* Now `SyncPromise` will emit `unhandledRejection` if there are no catch handlers
+
 ## v3.27.7 (2020-11-04)
 
 #### :bug: Bug Fix

@@ -451,6 +451,10 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * ```
 	 */
 	promise<T = unknown>(promise: PromiseLikeP<T>, opts?: AsyncPromiseOptions): Promise<T> {
+		if (!Object.isTruly(promise)) {
+			return SyncPromise.resolve();
+		}
+
 		const
 			that = this,
 			{ctx} = this;
