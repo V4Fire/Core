@@ -6,8 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { ErrorsDeduplicatorMiddleware } from 'core/log/middlewares/errors-deduplicator';
 import middlewareFactory from 'core/log/middlewares';
+import { ErrorsDeduplicatorMiddleware } from 'core/log/middlewares/errors-deduplicator';
 
 describe('middlewares/errors-deduplicator', () => {
 	describe('implementation', () => {

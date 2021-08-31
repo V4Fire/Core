@@ -13,7 +13,7 @@ Changelog
 
 #### :rocket: New Feature
 
-* Added new middleware `ErrorsDeduplicatorMiddleware`
+* Added a new middleware `ErrorsDeduplicatorMiddleware`
 
 ## v3.37.0 (2021-03-17)
 

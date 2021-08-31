@@ -14,11 +14,11 @@
 import type { LogEvent, LogMiddleware, NextCallback } from 'core/log/middlewares/interface';
 
 /**
- * Middleware for omitting duplicated errors
+ * Middleware to omit duplicated errors
  */
 export class ErrorsDeduplicatorMiddleware implements LogMiddleware {
 	/**
-	 * Errors, that have already been occurred
+	 * Errors that have already been occurred
 	 */
 	protected errorsDoubles: WeakSet<Error> = new WeakSet<Error>();
 
@@ -26,6 +26,7 @@ export class ErrorsDeduplicatorMiddleware implements LogMiddleware {
 	exec(events: CanArray<LogEvent>, next: NextCallback): void {
 		if (Object.isArray(events)) {
 			events = events.filter((event) => this.omitEvent(event));
+
 			if (events.length > 0) {
 				next(events);
 			}
@@ -36,7 +37,7 @@ export class ErrorsDeduplicatorMiddleware implements LogMiddleware {
 	}
 
 	/**
-	 * Returns `true` if an event has an error that's already occurred
+	 * Returns true if the passed event has an error that's already occurred
 	 * @param event - log event from a pipeline
 	 */
 	protected omitEvent(event: LogEvent): boolean {
