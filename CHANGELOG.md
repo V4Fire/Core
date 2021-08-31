@@ -19,6 +19,10 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
   * `core/promise/sync`
   * `core/then`
 
+#### :bug: Bug Fix
+
+* Now `SyncPromise` will emit `unhandledRejection` if there are no catch handlers
+
 ## v3.57.0 (2021-08-31)
 
 #### :boom: Breaking Changes
