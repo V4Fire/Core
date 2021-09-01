@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type Then from 'core/then';
+import type AbortablePromise from 'core/promise/abortable';
 import type { Provider, ModelMethod } from 'core/data';
 
 import type {
@@ -41,7 +41,7 @@ export interface AvailableOptions {
 	timeout?: number;
 	important?: boolean;
 	meta: Meta;
-	parent?: Then;
+	parent?: AbortablePromise;
 }
 
 /**

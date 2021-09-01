@@ -8,7 +8,7 @@
 
 import got, { Options, CancelableRequest, Response as GotResponse } from 'got';
 
-import Then from 'core/then';
+import AbortablePromise from 'core/promise/abortable';
 import Response from 'core/request/response';
 import RequestError from 'core/request/error';
 
@@ -69,7 +69,7 @@ const request: RequestEngine = (params) => {
 		normalizedOpts.responseType = 'buffer';
 	}
 
-	return new Then<Response>((resolve, reject, onAbort) => {
+	return new AbortablePromise<Response>((resolve, reject, onAbort) => {
 		const
 			request = <CancelableRequest<GotResponse>>got(p.url, normalizedOpts);
 

@@ -11,7 +11,7 @@
  * @packageDocumentation
  */
 
-import Then from 'core/then';
+import AbortablePromise from 'core/promise/abortable';
 import * as env from 'core/env';
 
 import Provider, { RequestError } from 'core/data';
@@ -166,7 +166,7 @@ export async function attachMock(this: Provider, params: MiddlewareParams): Prom
 		response = response.call(this, params, customResponse);
 	}
 
-	return () => Then.resolve(response, ctx.parent)
+	return () => AbortablePromise.resolve(response, ctx.parent)
 		.then((data) => {
 			const response = new Response(data, {
 				status: customResponse.status ?? currentRequest.status ?? 200,

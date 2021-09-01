@@ -11,7 +11,7 @@ import fetch from 'node-fetch';
 import AbortController from 'abort-controller';
 //#endif
 
-import Then from 'core/then';
+import AbortablePromise from 'core/promise/abortable';
 import Response, { ResponseTypeValue } from 'core/request/response';
 import RequestError from 'core/request/error';
 
@@ -59,9 +59,9 @@ const request: RequestEngine = (params) => {
 		signal: controller.signal
 	};
 
-	return new Then<Response>(async (resolve, reject, onAbort) => {
+	return new AbortablePromise<Response>(async (resolve, reject, onAbort) => {
 		const
-			{status} = await Then.resolve(isOnline(), p.parent);
+			{status} = await AbortablePromise.resolve(isOnline(), p.parent);
 
 		if (!status) {
 			return reject(new RequestError('offline', {

@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type Then from 'core/then';
+import type AbortablePromise from 'core/promise/abortable';
 import type { AbstractCache } from 'core/cache';
 
 import addTTL from 'core/cache/decorators/ttl';
@@ -74,7 +74,7 @@ export default class RequestContext<D = unknown> {
 	/**
 	 * Link to a parent operation promise
 	 */
-	parent!: Then;
+	parent!: AbortablePromise;
 
 	/**
 	 * Alias for query parameters of the request

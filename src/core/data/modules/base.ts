@@ -15,7 +15,7 @@ import { concatURLs } from 'core/url';
 
 import Async from 'core/async';
 import IO, { Socket } from 'core/socket';
-import type Then from 'core/then';
+import type AbortablePromise from 'core/promise/abortable';
 
 import {
 
@@ -309,7 +309,7 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 		if (extraProviders) {
 			const
 				composition = <D & object>{},
-				tasks = <Array<Then<RequestResponseObject>>>[],
+				tasks = <Array<AbortablePromise<RequestResponseObject>>>[],
 				cloneTasks = <Function[]>[];
 
 			for (let keys = Object.keys(extraProviders), i = 0; i < keys.length; i++) {

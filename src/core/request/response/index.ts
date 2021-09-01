@@ -11,8 +11,8 @@
  * @packageDocumentation
  */
 
-import Then from 'core/then';
 import Range from 'core/range';
+import AbortablePromise from 'core/promise/abortable';
 
 import { IS_NODE } from 'core/env';
 import { once } from 'core/functools';
@@ -94,7 +94,7 @@ export default class Response<
 	/**
 	 * Parent operation promise
 	 */
-	readonly parent?: Then;
+	readonly parent?: AbortablePromise;
 
 	/**
 	 * Value of the response body
@@ -157,11 +157,11 @@ export default class Response<
 	 * Parses a body of the response and returns the result
 	 */
 	@once
-	decode(): Then<D> {
+	decode(): AbortablePromise<D> {
 		let data;
 
 		if (noContentStatusCodes.includes(this.status)) {
-			data = Then.resolve(null, this.parent);
+			data = AbortablePromise.resolve(null, this.parent);
 
 		} else {
 			switch (this.sourceResponseType) {
@@ -182,7 +182,7 @@ export default class Response<
 					break;
 
 				case 'object':
-					data = Then.resolve(this.body, this.parent);
+					data = AbortablePromise.resolve(this.body, this.parent);
 					break;
 
 				default:
@@ -191,7 +191,7 @@ export default class Response<
 		}
 
 		let
-			decoders = data.then((obj) => Then.resolve(obj, this.parent));
+			decoders = data.then((obj) => AbortablePromise.resolve(obj, this.parent));
 
 		Object.forEach(this.decoders, (fn) => {
 			decoders = decoders.then((data) => {
@@ -224,7 +224,7 @@ export default class Response<
 	 * Parses the response body as a Document instance and returns it
 	 */
 	@once
-	document(): Then<Document | null> {
+	document(): AbortablePromise<Document | null> {
 		type _ = Document | null;
 
 		const
@@ -235,7 +235,7 @@ export default class Response<
 			// eslint-disable-next-line @typescript-eslint/no-var-requires
 			const {JSDOM} = require('jsdom');
 
-			return Then.resolve(
+			return AbortablePromise.resolve(
 				this.text()
 					.then<any>((text) => new JSDOM(text))
 					.then<_>((res) => Object.get(res, 'window.document')),
@@ -246,7 +246,7 @@ export default class Response<
 		//#endif
 
 		if (Object.isString(body) || body instanceof ArrayBuffer) {
-			return Then.resolve(
+			return AbortablePromise.resolve(
 				this.text().then<_>((text) => {
 					const type = this.getHeader('content-type') ?? 'text/html';
 					return(new DOMParser()).parseFromString(text ?? '', <any>type);
@@ -260,13 +260,13 @@ export default class Response<
 			throw new TypeError('Invalid data type');
 		}
 
-		return Then.resolve<_>(<any>body, this.parent);
+		return AbortablePromise.resolve<_>(<any>body, this.parent);
 	}
 
 	/**
 	 * Parses the response body as a JSON object and returns it
 	 */
-	json(): Then<D | null> {
+	json(): AbortablePromise<D | null> {
 		type _ = D | null;
 
 		const
@@ -277,11 +277,11 @@ export default class Response<
 		}
 
 		if (body == null || body === '') {
-			return Then.resolve<_>(null, this.parent);
+			return AbortablePromise.resolve<_>(null, this.parent);
 		}
 
 		if (Object.isString(body) || body instanceof ArrayBuffer || body instanceof Uint8Array) {
-			return Then.resolve(
+			return AbortablePromise.resolve(
 				this.text().then<_>((text) => {
 					if (text == null || text === '') {
 						return null;
@@ -294,7 +294,7 @@ export default class Response<
 			);
 		}
 
-		return Then.resolveAndCall<_>(
+		return AbortablePromise.resolveAndCall<_>(
 			() => Object.size(this.decoders) > 0 && !Object.isFrozen(body) ?
 				Object.fastClone(body) :
 				<any>body,
@@ -306,7 +306,7 @@ export default class Response<
 	/**
 	 * Parses the response body as an ArrayBuffer object and returns it
 	 */
-	arrayBuffer(): Then<ArrayBuffer | null> {
+	arrayBuffer(): AbortablePromise<ArrayBuffer | null> {
 		type _ = ArrayBuffer | null;
 
 		const
@@ -325,16 +325,16 @@ export default class Response<
 		//#endif
 
 		if (body.byteLength === 0) {
-			return Then.resolve<_>(null, this.parent);
+			return AbortablePromise.resolve<_>(null, this.parent);
 		}
 
-		return Then.resolve<_>(body, this.parent);
+		return AbortablePromise.resolve<_>(body, this.parent);
 	}
 
 	/**
 	 * Parses the response body as a Blob structure and returns it
 	 */
-	blob(): Then<Blob | null> {
+	blob(): AbortablePromise<Blob | null> {
 		type _ = Blob | null;
 
 		const
@@ -345,7 +345,7 @@ export default class Response<
 		}
 
 		if (body == null) {
-			return Then.resolve<_>(null);
+			return AbortablePromise.resolve<_>(null);
 		}
 
 		let
@@ -357,21 +357,21 @@ export default class Response<
 		}
 		//#endif
 
-		return Then.resolve<_>(new Blob([<any>body], {type: this.getHeader('content-type')}), this.parent);
+		return AbortablePromise.resolve<_>(new Blob([<any>body], {type: this.getHeader('content-type')}), this.parent);
 	}
 
 	/**
 	 * Parses the response body as a string and returns it
 	 */
 	@once
-	text(): Then<string | null> {
+	text(): AbortablePromise<string | null> {
 		type _ = string | null;
 
 		const
 			{body} = this;
 
 		if (body == null || body instanceof ArrayBuffer && body.byteLength === 0) {
-			return Then.resolve<_>(null, this.parent);
+			return AbortablePromise.resolve<_>(null, this.parent);
 		}
 
 		if (IS_NODE) {
@@ -380,15 +380,15 @@ export default class Response<
 			}
 
 		} else if (body instanceof Document) {
-			return Then.resolve<_>(String(body), this.parent);
+			return AbortablePromise.resolve<_>(String(body), this.parent);
 		}
 
 		if (Object.isString(body)) {
-			return Then.resolve<_>(String(body), this.parent);
+			return AbortablePromise.resolve<_>(String(body), this.parent);
 		}
 
 		if (Object.isDictionary(body)) {
-			return Then.resolve<_>(JSON.stringify(body), this.parent);
+			return AbortablePromise.resolve<_>(JSON.stringify(body), this.parent);
 		}
 
 		const
@@ -407,15 +407,15 @@ export default class Response<
 		}
 
 		if (IS_NODE) {
-			return Then.resolve<_>(Buffer.from(<any>body).toString(encoding));
+			return AbortablePromise.resolve<_>(Buffer.from(<any>body).toString(encoding));
 		}
 
 		if (typeof TextDecoder !== 'undefined') {
 			const decoder = new TextDecoder(encoding, {fatal: true});
-			return Then.resolve<_>(decoder.decode(new DataView(<any>body)), this.parent);
+			return AbortablePromise.resolve<_>(decoder.decode(new DataView(<any>body)), this.parent);
 		}
 
-		return new Then((resolve, reject, onAbort) => {
+		return new AbortablePromise((resolve, reject, onAbort) => {
 			const
 				reader = new FileReader();
 

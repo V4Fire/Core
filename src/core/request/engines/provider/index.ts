@@ -11,7 +11,7 @@
  * @packageDocumentation
  */
 
-import Then from 'core/then';
+import AbortablePromise from 'core/promise/abortable';
 import { concatURLs } from 'core/url';
 
 import Provider, {
@@ -62,7 +62,7 @@ export default function createProviderEngine(
 	dataProviderEngine.pendingCache = false;
 	return dataProviderEngine;
 
-	function dataProviderEngine(params: RequestOptions): Then<Response> {
+	function dataProviderEngine(params: RequestOptions): AbortablePromise<Response> {
 		const
 			p = <AvailableOptions>Object.select(params, availableParams),
 			provider = getProviderInstance(src, p.meta);
@@ -83,12 +83,12 @@ export default function createProviderEngine(
 			...methodsMapping
 		};
 
-		const parent = new Then<Response>(async (resolve, reject, onAbort): Then<Response> => {
+		const parent = new AbortablePromise<Response>(async (resolve, reject, onAbort): AbortablePromise<Response> => {
 			await new Promise((r) => {
 				setImmediate(r);
 			});
 
-			p.parent = <Then>parent;
+			p.parent = <AbortablePromise>parent;
 
 			let
 				{providerMethod} = p.meta;

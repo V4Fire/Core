@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type Then from 'core/then';
+import type AbortablePromise from 'core/promise/abortable';
 
 import type { StatusCodes } from 'core/status-codes';
 import type { DataType } from 'core/mime-type';
@@ -40,7 +40,7 @@ export interface ResponseHeaders {
 }
 
 export interface ResponseOptions {
-	parent?: Then;
+	parent?: AbortablePromise;
 	important?: boolean;
 	responseType?: ResponseType;
 	okStatuses?: OkStatuses;
