@@ -462,37 +462,37 @@ export default class Then<T = unknown> implements Promise<T> {
 	/**
 	 * Attaches callbacks for the resolution and/or rejection of the promise
 	 *
-	 * @param [onFulfill]
-	 * @param [onReject]
+	 * @param [onFulfilled]
+	 * @param [onRejected]
 	 * @param [onAbort]
 	 */
 	then(
-		onFulfill?: Nullable<ResolveHandler<T>>,
-		onReject?: Nullable<RejectHandler<T>>,
+		onFulfilled?: Nullable<ResolveHandler<T>>,
+		onRejected?: Nullable<RejectHandler<T>>,
 		onAbort?: Nullable<ConstrRejectHandler>
 	): Then<T>;
 
 	then<R>(
-		onFulfill: Nullable<ResolveHandler<T>>,
-		onReject: RejectHandler<R>,
+		onFulfilled: Nullable<ResolveHandler<T>>,
+		onRejected: RejectHandler<R>,
 		onAbort?: Nullable<ConstrRejectHandler>
 	): Then<T | R>;
 
 	then<V>(
-		onFulfill: ResolveHandler<T, V>,
-		onReject?: Nullable<RejectHandler<V>>,
+		onFulfilled: ResolveHandler<T, V>,
+		onRejected?: Nullable<RejectHandler<V>>,
 		onAbort?: Nullable<ConstrRejectHandler>
 	): Then<V>;
 
 	then<V, R>(
-		onFulfill: ResolveHandler<T, V>,
-		onReject: RejectHandler<R>,
+		onFulfilled: ResolveHandler<T, V>,
+		onRejected: RejectHandler<R>,
 		onAbort?: Nullable<ConstrRejectHandler>
 	): Then<V | R>;
 
 	then(
-		onFulfill: Nullable<ResolveHandler>,
-		onReject: Nullable<RejectHandler>,
+		onFulfilled: Nullable<ResolveHandler>,
+		onRejected: Nullable<RejectHandler>,
 		onAbort: Nullable<ConstrRejectHandler>
 	): Then<any> {
 		this.pendingChildren++;
@@ -501,18 +501,18 @@ export default class Then<T = unknown> implements Promise<T> {
 				resolveWrapper,
 				rejectWrapper;
 
-			if (Object.isFunction(onFulfill)) {
+			if (Object.isFunction(onFulfilled)) {
 				resolveWrapper = (val) => {
-					this.call(onFulfill, [val], reject, resolve);
+					this.call(onFulfilled, [val], reject, resolve);
 				};
 
 			} else {
 				resolveWrapper = resolve;
 			}
 
-			if (Object.isFunction(onReject)) {
+			if (Object.isFunction(onRejected)) {
 				rejectWrapper = (err) => {
-					this.call(onReject, [err], reject, resolve);
+					this.call(onRejected, [err], reject, resolve);
 				};
 
 			} else {
@@ -543,18 +543,18 @@ export default class Then<T = unknown> implements Promise<T> {
 
 	/**
 	 * Attaches a callback for only the rejection of the promise
-	 * @param [onReject]
+	 * @param [onRejected]
 	 */
-	catch(onReject?: Nullable<RejectHandler<T>>): Then<T>;
-	catch<R>(onReject: RejectHandler<R>): Then<R>;
-	catch(onReject?: RejectHandler): Then<any> {
+	catch(onRejected?: Nullable<RejectHandler<T>>): Then<T>;
+	catch<R>(onRejected: RejectHandler<R>): Then<R>;
+	catch(onRejected?: RejectHandler): Then<any> {
 		return new Then((resolve, reject, onAbort) => {
 			let
 				rejectWrapper;
 
-			if (Object.isFunction(onReject)) {
+			if (Object.isFunction(onRejected)) {
 				rejectWrapper = (err) => {
-					this.call(onReject, [err], reject, resolve);
+					this.call(onRejected, [err], reject, resolve);
 				};
 
 			} else {
