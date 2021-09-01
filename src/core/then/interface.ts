@@ -15,7 +15,7 @@ export enum State {
 export type Value<T = unknown> = PromiseLike<T> | T;
 export type ExecutableValue<T = unknown> = (() => T) | Value<T>;
 
-export interface ConstrResolveHandler<T = unknown> {
+export interface ConstrFulfillHandler<T = unknown> {
 	(value?: Value<T>): any;
 }
 
@@ -28,7 +28,7 @@ export interface ConstrAbortHandler {
 }
 
 export interface Executor<T = unknown> {
-	(resolve: ConstrResolveHandler<T>, reject: ConstrRejectHandler, onAbort: ConstrAbortHandler): any;
+	(resolve: ConstrFulfillHandler<T>, reject: ConstrRejectHandler, onAbort: ConstrAbortHandler): any;
 }
 
 export type ResolveHandler<V = unknown, R = V> = Function | ((value: V) => Value<R>);

@@ -17,7 +17,7 @@ import {
 	FinallyHandler,
 
 	ConstrRejectHandler,
-	ConstrResolveHandler
+	ConstrFulfillHandler
 
 } from 'core/prelude/structures/sync-promise/interface';
 
@@ -273,23 +273,23 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 	protected value: unknown;
 
 	/**
-	 * List of handler for the "finally" operation
-	 */
-	protected finallyHandlers: FinallyHandler[] = [];
-
-	/**
 	 * List of handler for the "resolve" operation
 	 */
-	protected resolveHandlers: ConstrResolveHandler[] = [];
+	protected fulfillHandlers: ConstrFulfillHandler[] = [];
 
 	/**
 	 * List of handler for the "reject" operation
 	 */
 	protected rejectHandlers: ConstrRejectHandler[] = [];
 
+	/**
+	 * List of handler for the "finally" operation
+	 */
+	protected finallyHandlers: FinallyHandler[] = [];
+
 	constructor(executor: Executor) {
 		const clear = () => {
-			this.resolveHandlers = [];
+			this.fulfillHandlers = [];
 			this.rejectHandlers = [];
 			this.finallyHandlers = [];
 		};
@@ -302,7 +302,7 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 			this.value = value;
 			this.state = State.fulfilled;
 
-			for (let o = this.resolveHandlers, i = 0; i < o.length; i++) {
+			for (let o = this.fulfillHandlers, i = 0; i < o.length; i++) {
 				o[i](value);
 			}
 
@@ -376,7 +376,7 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 				resolveWrapper = (v) => this.call(onFulfilled ?? resolve, [v], reject, resolve),
 				rejectWrapper = (v) => this.call(onRejected ?? reject, [v], reject, resolve);
 
-			this.resolveHandlers.push(resolveWrapper);
+			this.fulfillHandlers.push(resolveWrapper);
 			this.rejectHandlers.push(rejectWrapper);
 
 			if (!this.isPending) {
@@ -397,7 +397,7 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 				resolveWrapper = (v) => this.call(resolve, [v], reject, resolve),
 				rejectWrapper = (v) => this.call(onRejected ?? reject, [v], reject, resolve);
 
-			this.resolveHandlers.push(resolveWrapper);
+			this.fulfillHandlers.push(resolveWrapper);
 			this.rejectHandlers.push(rejectWrapper);
 
 			if (!this.isPending) {
@@ -418,7 +418,7 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 				this.finallyHandlers.push(cb);
 			}
 
-			this.resolveHandlers.push(resolve);
+			this.fulfillHandlers.push(resolve);
 			this.rejectHandlers.push(reject);
 
 			if (!this.isPending) {

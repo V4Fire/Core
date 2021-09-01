@@ -24,7 +24,7 @@ import {
 	RejectHandler,
 	FinallyHandler,
 
-	ConstrResolveHandler,
+	ConstrFulfillHandler,
 	ConstrRejectHandler
 
 } from 'core/then/interface';
@@ -385,9 +385,9 @@ export default class Then<T = unknown> implements Promise<T> {
 	protected promise: Promise<T>;
 
 	/**
-	 * Handler of the native promise resolving
+	 * Handler of the native promise fulfilling
 	 */
-	protected onResolve!: ConstrResolveHandler<T>;
+	protected onFulfill!: ConstrFulfillHandler<T>;
 
 	/**
 	 * Handler of the native promise rejection
@@ -423,7 +423,7 @@ export default class Then<T = unknown> implements Promise<T> {
 				reject(err);
 			};
 
-			this.onResolve = resolveWrapper;
+			this.onFulfill = resolveWrapper;
 			this.onReject = rejectWrapper;
 
 			let
