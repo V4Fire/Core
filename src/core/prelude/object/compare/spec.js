@@ -55,8 +55,14 @@ describe('core/prelude/object/compare/fastCompare', () => {
 
 	it('comparing of map-s', () => {
 		expect(Object.fastCompare(new Map(), new Map())).toBeTrue();
-		expect(Object.fastCompare(new Map([[1, 0]]), new Map([[1, 0]]))).toBeFalse();
+		expect(Object.fastCompare(new Map([[1, 0]]), new Map([[1, 0]]))).toBeTrue();
+		expect(Object.fastCompare(new Map([[{a: 1}, {b: 2}]]), new Map([[{a: 1}, {b: 2}]]))).toBeTrue();
+		expect(Object.fastCompare(new Map([[1, 0]]), new Map([]))).toBeFalse();
+		expect(Object.fastCompare(new Map([[{a: 1}, 1]]), new Map([[{a: 2}, 1]]))).toBeFalse();
+		expect(Object.fastCompare(new Map([[{a: 1}, {a: 1}]]), new Map([[{a: 1}, {a: 2}]]))).toBeFalse();
+	});
 
+	it('comparing of map-s by using `toJSON`', () => {
 		const map1 = Object.assign(new Map([[1, 0]]), {
 			toJSON() {
 				return [...this.values()];
@@ -74,8 +80,13 @@ describe('core/prelude/object/compare/fastCompare', () => {
 
 	it('comparing of set-s', () => {
 		expect(Object.fastCompare(new Set(), new Set())).toBeTrue();
-		expect(Object.fastCompare(new Set([1]), new Set([1]))).toBeFalse();
+		expect(Object.fastCompare(new Set([1]), new Set([1]))).toBeTrue();
+		expect(Object.fastCompare(new Set([{a: 1}]), new Set([{a: 1}]))).toBeTrue();
+		expect(Object.fastCompare(new Set([1]), new Set([1, 2]))).toBeFalse();
+		expect(Object.fastCompare(new Set([{a: 1}]), new Set([{b: 2}]))).toBeFalse();
+	});
 
+	it('comparing of set-s by using `toJSON`', () => {
 		const set1 = Object.assign(new Set([1]), {
 			toJSON() {
 				return [...this.values()];
