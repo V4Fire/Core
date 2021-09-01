@@ -6,9 +6,9 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import Then from 'core/then';
+import Then from 'core/promise/abortable';
 
-describe('core/then', () => {
+describe('core/promise/abortable', () => {
 	it('simple then', async () => {
 		let
 			i = 1;

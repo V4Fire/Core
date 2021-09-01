@@ -11,6 +11,10 @@ Changelog
 
 ## v3.?.? (2021-??-??)
 
+#### :boom: Breaking Change
+
+* The module has been moved to `promise/abortable`
+
 #### :rocket: New Feature
 
 * Added a new static method `allSettled`

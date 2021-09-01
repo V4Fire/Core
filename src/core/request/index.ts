@@ -12,7 +12,7 @@
  */
 
 import log from 'core/log';
-import Then from 'core/then';
+import AbortablePromise from 'core/promise/abortable';
 
 import Response from 'core/request/response';
 import RequestError from 'core/request/error';
@@ -58,7 +58,7 @@ export default request;
  * });
  * ```
  */
-function request<D = unknown>(path: string, opts?: CreateRequestOptions<D>): Then<RequestResponse<D>>;
+function request<D = unknown>(path: string, opts?: CreateRequestOptions<D>): AbortablePromise<RequestResponse<D>>;
 
 /**
  * Returns a wrapped request constructor with the specified options.
@@ -152,7 +152,7 @@ function request<D = unknown>(
 			globalOpts
 		};
 
-		const parent = new Then(async (resolve, reject, onAbort) => {
+		const parent = new AbortablePromise(async (resolve, reject, onAbort) => {
 			const errDetails = {
 				request: requestParams
 			};
@@ -166,7 +166,7 @@ function request<D = unknown>(
 			ctx.parent = parent;
 
 			if (Object.isPromise(ctx.cache)) {
-				await Then.resolve(ctx.cache, parent);
+				await AbortablePromise.resolve(ctx.cache, parent);
 			}
 
 			const
@@ -177,7 +177,7 @@ function request<D = unknown>(
 			});
 
 			const
-				middlewareResults = await Then.all(tasks, parent),
+				middlewareResults = await AbortablePromise.all(tasks, parent),
 				keyToEncode = ctx.withoutBody ? 'query' : 'body';
 
 			// eslint-disable-next-line require-atomic-updates
@@ -271,13 +271,13 @@ function request<D = unknown>(
 
 			if (fromCache) {
 				cache = 'memory';
-				res = Then.resolveAndCall(() => ctx.cache.get(cacheKey!), parent)
+				res = AbortablePromise.resolveAndCall(() => ctx.cache.get(cacheKey!), parent)
 					.then(ctx.wrapAsResponse.bind(ctx))
 					.then((res) => Object.assign(res, {cache}));
 
 			} else if (fromLocalStorage) {
 				cache = 'offline';
-				res = Then.resolveAndCall(() => storage!
+				res = AbortablePromise.resolveAndCall(() => storage!
 					.then((storage) => storage.get(localCacheKey)), parent)
 					.then(ctx.wrapAsResponse.bind(ctx))
 					.then((res) => Object.assign(res, {cache}));
@@ -364,7 +364,7 @@ function request<D = unknown>(
 
 			function applyEncoders(data: unknown): Promise<any> {
 				let
-					res = Then.resolve(data, parent);
+					res = AbortablePromise.resolve(data, parent);
 
 				Object.forEach(ctx.encoders, (fn, i: number) => {
 					res = res.then((obj) => fn(i > 0 ? obj : Object.fastClone(obj)));

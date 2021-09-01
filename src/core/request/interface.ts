@@ -6,8 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type Then from 'core/then';
 import type Range from 'core/range';
+import type AbortablePromise from 'core/promise/abortable';
 import type { AbstractCache } from 'core/cache';
 
 import type Response from 'core/request/response';
@@ -82,7 +82,7 @@ export interface RequestResponseObject<D = unknown> {
 	dropCache(): void;
 }
 
-export type RequestResponse<D = unknown> = Then<RequestResponseObject<D>>;
+export type RequestResponse<D = unknown> = AbortablePromise<RequestResponseObject<D>>;
 
 export interface RequestFunctionResponse<D = unknown, ARGS extends any[] = unknown[]> {
 	(...args: ARGS extends Array<infer V> ? V[] : unknown[]): RequestResponse<D>;
@@ -105,7 +105,7 @@ export interface RequestOptions {
 	readonly body?: RequestBody;
 	readonly important?: boolean;
 	readonly credentials?: boolean;
-	readonly parent: Then;
+	readonly parent: AbortablePromise;
 }
 
 export type RequestQuery =
@@ -248,7 +248,7 @@ export interface RequestAPI {
  * Request engine
  */
 export interface RequestEngine {
-	(params: RequestOptions): Then<Response>;
+	(params: RequestOptions): AbortablePromise<Response>;
 
 	/**
 	 * The flag indicates that the active requests with the same request hash can be merged
