@@ -51,7 +51,7 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 	 * @param obj
 	 */
 	@deprecated({alternative: {name: 'Object.isPromiseLike', source: 'core/prelude/types'}})
-	static isAbortablePromiseable(obj: unknown): obj is PromiseLike<unknown> {
+	static isThenable(obj: unknown): obj is PromiseLike<unknown> {
 		return Object.isPromiseLike(obj);
 	}
 
