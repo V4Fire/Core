@@ -244,86 +244,7 @@ pre {
 							<h1>core/then</h1>
 						</a>
 						<p>This module provides a class wraps promise-like objects and adds to them some extra functionality, such as possibility of cancellation, etc.</p>
-						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">Then</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/then&#039;</span><span style="color: #000000">;</span>
-
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">promise</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">Then</span><span style="color: #000000">((</span><span style="color: #001080">resolve</span><span style="color: #000000">, </span><span style="color: #001080">reject</span><span style="color: #000000">, </span><span style="color: #001080">onAbort</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
-<span style="color: #000000">  </span><span style="color: #795E26">setTimeout</span><span style="color: #000000">(</span><span style="color: #001080">resolve</span><span style="color: #000000">, </span><span style="color: #098658">100</span><span style="color: #000000">);</span>
-
-<span style="color: #000000">  </span><span style="color: #795E26">onAbort</span><span style="color: #000000">((</span><span style="color: #001080">reason</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
-<span style="color: #000000">    </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">error</span><span style="color: #000000">(</span><span style="color: #A31515">`The promise was aborted by a reason of </span><span style="color: #0000FF">${</span><span style="color: #001080">reason</span><span style="color: #0000FF">}</span><span style="color: #A31515">`</span><span style="color: #000000">);</span>
-<span style="color: #000000">  });</span>
-
-<span style="color: #000000">}).</span><span style="color: #795E26">catch</span><span style="color: #000000">((</span><span style="color: #001080">err</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">error</span><span style="color: #000000">(</span><span style="color: #001080">err</span><span style="color: #000000">)); </span><span style="color: #008000">// timeout</span>
-
-<span style="color: #008000">// Invoking of `abort` rejects the promise.</span>
-<span style="color: #008000">// Additionally, you can specify a reason to abort.</span>
-<span style="color: #001080">promise</span><span style="color: #000000">.</span><span style="color: #795E26">abort</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;timeout&#039;</span><span style="color: #000000">);</span>
-</code></pre>
-						<a href="#tied-promises" id="tied-promises" style="color: inherit; text-decoration: none;">
-							<h2>Tied promises</h2>
-						</a>
-						<p>You can tie one promise with another. Tying is mean that when your abort one promise, another one will be aborted too.
-						To tie a promise, provide a parent promise as the second argument of the constructor or static methods, like <code>all</code> or <code>race</code>.</p>
-						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">Then</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/then&#039;</span><span style="color: #000000">;</span>
-
-<span style="color: #008000">// catch: timeout</span>
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">parent</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">Then</span><span style="color: #000000">((</span><span style="color: #001080">resolve</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #795E26">setTimeout</span><span style="color: #000000">(</span><span style="color: #001080">resolve</span><span style="color: #000000">, </span><span style="color: #098658">100</span><span style="color: #000000">)).</span><span style="color: #795E26">catch</span><span style="color: #000000">((</span><span style="color: #001080">err</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">error</span><span style="color: #000000">(</span><span style="color: #001080">err</span><span style="color: #000000">));</span>
-
-<span style="color: #008000">// catch: timeout</span>
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">childPromise</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">Then</span><span style="color: #000000">((</span><span style="color: #001080">resolve</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #795E26">setTimeout</span><span style="color: #000000">(</span><span style="color: #001080">resolve</span><span style="color: #000000">, </span><span style="color: #098658">200</span><span style="color: #000000">)).</span><span style="color: #795E26">catch</span><span style="color: #000000">((</span><span style="color: #001080">err</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">error</span><span style="color: #000000">(</span><span style="color: #001080">err</span><span style="color: #000000">), </span><span style="color: #001080">parent</span><span style="color: #000000">);</span>
-
-<span style="color: #001080">parent</span><span style="color: #000000">.</span><span style="color: #795E26">abort</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;timeout&#039;</span><span style="color: #000000">);</span>
-</code></pre>
-						<a href="#api" id="api" style="color: inherit; text-decoration: none;">
-							<h2>API</h2>
-						</a>
-						<p>The module re-use native Promise API with adding some extra getters, etc., you free to use such methods like <code>then</code>, <code>catch</code>, or <code>finally</code>.</p>
-						<a href="#ispending" id="ispending" style="color: inherit; text-decoration: none;">
-							<h3>isPending</h3>
-						</a>
-						<p>True if the current promise is pending.</p>
-						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">Then</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/then&#039;</span><span style="color: #000000">;</span>
-
-<span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">promise</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">Then</span><span style="color: #000000">((</span><span style="color: #001080">resolve</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
-<span style="color: #000000">  </span><span style="color: #795E26">setTimeout</span><span style="color: #000000">(() </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
-<span style="color: #000000">    </span><span style="color: #795E26">resolve</span><span style="color: #000000">();</span>
-
-<span style="color: #000000">    </span><span style="color: #008000">// false</span>
-<span style="color: #000000">    </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">promise</span><span style="color: #000000">.</span><span style="color: #001080">isPending</span><span style="color: #000000">);</span>
-<span style="color: #000000">  }, </span><span style="color: #098658">100</span><span style="color: #000000">);</span>
-<span style="color: #000000">});</span>
-
-<span style="color: #008000">// true</span>
-<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">promise</span><span style="color: #000000">.</span><span style="color: #001080">isPending</span><span style="color: #000000">);</span>
-</code></pre>
-						<a href="#helpers" id="helpers" style="color: inherit; text-decoration: none;">
-							<h2>Helpers</h2>
-						</a>
-						<p>The module provides a bunch of static helper methods and getters.</p>
-						<a href="#never" id="never" style="color: inherit; text-decoration: none;">
-							<h3>never</h3>
-						</a>
-						<p>The promise that is never resolved. It can be useful to create some loopback.</p>
-						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">Then</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/then&#039;</span><span style="color: #000000">;</span>
-
-<span style="color: #008000">// This promise will never be resolved</span>
-<span style="color: #001080">Then</span><span style="color: #000000">.</span><span style="color: #001080">never</span><span style="color: #000000">.</span><span style="color: #795E26">then</span><span style="color: #000000">((</span><span style="color: #001080">res</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
-<span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">res</span><span style="color: #000000">);</span>
-<span style="color: #000000">});</span>
-</code></pre>
-						<a href="#resolveandcall" id="resolveandcall" style="color: inherit; text-decoration: none;">
-							<h3>resolveAndCall</h3>
-						</a>
-						<p>The method creates a new resolved Then promise for the specified value.
-							If the resolved value is a function, it will be invoked.
-						The result of the invoking will be provided as a value of the promise.</p>
-						<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">Then</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;core/then&#039;</span><span style="color: #000000">;</span>
-
-<span style="color: #001080">Then</span><span style="color: #000000">.</span><span style="color: #795E26">resolveAndCall</span><span style="color: #000000">(</span><span style="color: #267F99">Promise</span><span style="color: #000000">.</span><span style="color: #795E26">resolve</span><span style="color: #000000">(() </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #098658">1</span><span style="color: #000000">)).</span><span style="color: #795E26">then</span><span style="color: #000000">((</span><span style="color: #001080">res</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
-<span style="color: #000000">  </span><span style="color: #008000">// 1</span>
-<span style="color: #000000">  </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">res</span><span style="color: #000000">);</span>
-<span style="color: #000000">});</span>
-</code></pre>
+						<p>Mind that this module is deprecated and will be removed from the next major release of the library. You can use modules from <a href="src_core_promise_abortable.html">core/promise/abortable</a> instead of this.</p>
 					</div>
 				</div>
 			</section>
@@ -335,8 +256,8 @@ pre {
 							<h3>References</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_then.html#constraborthandler" class="tsd-kind-icon">Constr<wbr>Abort<wbr>Handler</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_then.html#constrfulfillhandler" class="tsd-kind-icon">Constr<wbr>Fulfill<wbr>Handler</a></li>
 								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_then.html#constrrejecthandler" class="tsd-kind-icon">Constr<wbr>Reject<wbr>Handler</a></li>
-								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_then.html#constrresolvehandler" class="tsd-kind-icon">Constr<wbr>Resolve<wbr>Handler</a></li>
 								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_then.html#executablevalue" class="tsd-kind-icon">Executable<wbr>Value</a></li>
 								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_then.html#executor" class="tsd-kind-icon">Executor</a></li>
 								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_then.html#finallyhandler" class="tsd-kind-icon">Finally<wbr>Handler</a></li>
@@ -344,12 +265,7 @@ pre {
 								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_then.html#resolvehandler" class="tsd-kind-icon">Resolve<wbr>Handler</a></li>
 								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_then.html#state" class="tsd-kind-icon">State</a></li>
 								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_then.html#value" class="tsd-kind-icon">Value</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section ">
-							<h3>Classes</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-class tsd-parent-kind-module tsd-has-type-parameter"><a href="../classes/src_core_then.default.html" class="tsd-kind-icon">default</a></li>
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="src_core_then.html#default" class="tsd-kind-icon">default</a></li>
 							</ul>
 						</section>
 					</div>
@@ -360,52 +276,57 @@ pre {
 				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
 					<a name="constraborthandler" class="tsd-anchor"></a>
 					<h3>Constr<wbr>Abort<wbr>Handler</h3>
-					Re-exports <a href="../interfaces/src_core_then_interface.constraborthandler.html">ConstrAbortHandler</a>
+					Re-exports <a href="../interfaces/src_core_promise_abortable_interface.constraborthandler.html">ConstrAbortHandler</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="constrfulfillhandler" class="tsd-anchor"></a>
+					<h3>Constr<wbr>Fulfill<wbr>Handler</h3>
+					Re-exports <a href="../interfaces/src_core_promise_abortable_interface.constrfulfillhandler.html">ConstrFulfillHandler</a>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
 					<a name="constrrejecthandler" class="tsd-anchor"></a>
 					<h3>Constr<wbr>Reject<wbr>Handler</h3>
-					Re-exports <a href="../interfaces/src_core_then_interface.constrrejecthandler.html">ConstrRejectHandler</a>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
-					<a name="constrresolvehandler" class="tsd-anchor"></a>
-					<h3>Constr<wbr>Resolve<wbr>Handler</h3>
-					Re-exports <a href="../interfaces/src_core_then_interface.constrresolvehandler.html">ConstrResolveHandler</a>
+					Re-exports <a href="../interfaces/src_core_promise_abortable_interface.constrrejecthandler.html">ConstrRejectHandler</a>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
 					<a name="executablevalue" class="tsd-anchor"></a>
 					<h3>Executable<wbr>Value</h3>
-					Re-exports <a href="src_core_then_interface.html#executablevalue">ExecutableValue</a>
+					Re-exports <a href="src_core_promise_abortable_interface.html#executablevalue">ExecutableValue</a>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
 					<a name="executor" class="tsd-anchor"></a>
 					<h3>Executor</h3>
-					Re-exports <a href="../interfaces/src_core_then_interface.executor.html">Executor</a>
+					Re-exports <a href="../interfaces/src_core_promise_abortable_interface.executor.html">Executor</a>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
 					<a name="finallyhandler" class="tsd-anchor"></a>
 					<h3>Finally<wbr>Handler</h3>
-					Re-exports <a href="src_core_then_interface.html#finallyhandler">FinallyHandler</a>
+					Re-exports <a href="src_core_promise_abortable_interface.html#finallyhandler">FinallyHandler</a>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
 					<a name="rejecthandler" class="tsd-anchor"></a>
 					<h3>Reject<wbr>Handler</h3>
-					Re-exports <a href="src_core_then_interface.html#rejecthandler">RejectHandler</a>
+					Re-exports <a href="src_core_promise_abortable_interface.html#rejecthandler">RejectHandler</a>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
 					<a name="resolvehandler" class="tsd-anchor"></a>
 					<h3>Resolve<wbr>Handler</h3>
-					Re-exports <a href="src_core_then_interface.html#resolvehandler">ResolveHandler</a>
+					Re-exports <a href="src_core_promise_abortable_interface.html#resolvehandler">ResolveHandler</a>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
 					<a name="state" class="tsd-anchor"></a>
 					<h3>State</h3>
-					Re-exports <a href="../enums/src_core_then_interface.state.html">State</a>
+					Re-exports <a href="../enums/src_core_promise_abortable_interface.state.html">State</a>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
 					<a name="value" class="tsd-anchor"></a>
 					<h3>Value</h3>
-					Re-exports <a href="src_core_then_interface.html#value">Value</a>
+					Re-exports <a href="src_core_promise_abortable_interface.html#value">Value</a>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="default" class="tsd-anchor"></a>
+					<h3>default</h3>
+					Re-exports <a href="../classes/src_core_promise_abortable.default.html">default</a>
 				</section>
 			</section>
 		</div>
@@ -426,10 +347,10 @@ pre {
 						<a href="src_core_then.html#constraborthandler" class="tsd-kind-icon">Constr<wbr>Abort<wbr>Handler</a>
 					</li>
 					<li class=" tsd-kind-reference tsd-parent-kind-module">
-						<a href="src_core_then.html#constrrejecthandler" class="tsd-kind-icon">Constr<wbr>Reject<wbr>Handler</a>
+						<a href="src_core_then.html#constrfulfillhandler" class="tsd-kind-icon">Constr<wbr>Fulfill<wbr>Handler</a>
 					</li>
 					<li class=" tsd-kind-reference tsd-parent-kind-module">
-						<a href="src_core_then.html#constrresolvehandler" class="tsd-kind-icon">Constr<wbr>Resolve<wbr>Handler</a>
+						<a href="src_core_then.html#constrrejecthandler" class="tsd-kind-icon">Constr<wbr>Reject<wbr>Handler</a>
 					</li>
 					<li class=" tsd-kind-reference tsd-parent-kind-module">
 						<a href="src_core_then.html#executablevalue" class="tsd-kind-icon">Executable<wbr>Value</a>
@@ -452,8 +373,8 @@ pre {
 					<li class=" tsd-kind-reference tsd-parent-kind-module">
 						<a href="src_core_then.html#value" class="tsd-kind-icon">Value</a>
 					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../classes/src_core_then.default.html" class="tsd-kind-icon">default</a>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="src_core_then.html#default" class="tsd-kind-icon">default</a>
 					</li>
 				</ul>
 			</nav>
