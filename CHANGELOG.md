@@ -22,6 +22,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 #### :bug: Bug Fix
 
 * Now `SyncPromise` will emit `unhandledRejection` if there are no catch handlers
+* Fixed comparing of `Map` and `Set` structures `Object.fastCompare`
 
 ## v3.57.0 (2021-08-31)
 

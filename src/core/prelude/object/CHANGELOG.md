@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.?.? (2021-??-??)
+
+#### :bug: Bug Fix
+
+* Fixed comparing of `Map` and `Set` structures `Object.fastCompare`
+
 ## v3.56.0 (2021-07-25)
 
 #### :rocket: New Feature

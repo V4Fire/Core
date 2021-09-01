@@ -57,7 +57,29 @@ extend(Object, 'fastCompare', function fastCompare(a: any, b: any): boolean | An
 	);
 
 	if (cantJSONCompare) {
-		if ((isMap || isSet) && a.size === 0 && b.size === 0) {
+		if ((isMap || isSet)) {
+			if (a.size !== b.size) {
+				return false;
+			}
+
+			if (a.size === 0) {
+				return true;
+			}
+
+			const
+				aIter = a.entries(),
+				bIter = b.entries();
+
+			for (let aEl = aIter.next(), bEl = bIter.next(); !aEl.done; aEl = aIter.next(), bEl = bIter.next()) {
+				const
+					aVal = aEl.value,
+					bVal = bEl.value;
+
+				if (!Object.fastCompare(aVal[0], bVal[0]) || !Object.fastCompare(aVal[1], bVal[1])) {
+					return false;
+				}
+			}
+
 			return true;
 		}
 
@@ -85,7 +107,7 @@ extend(Object, 'fastCompare', function fastCompare(a: any, b: any): boolean | An
 		return false;
 	}
 
-	if ((isArr || isMap || isSet) && length1 === 0) {
+	if (length1 === 0 && length2 === 0) {
 		return true;
 	}
 
