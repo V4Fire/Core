@@ -6,10 +6,10 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type engines from 'core/perf/engines/index';
+import type engines from 'core/perf/timer/engines/index';
 
-export type PerfEngineName = keyof typeof engines;
+export type PerfTimerEngineName = keyof typeof engines;
 
-export interface PerfEngine {
+export interface PerfTimerEngine {
 	(id: string, ns: string, duration: number, additional?: Dictionary): void;
 }

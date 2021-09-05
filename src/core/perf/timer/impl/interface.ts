@@ -6,11 +6,15 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-export interface PerfMeasurement {
+export interface PerfTimerMeasurement {
 	startTimestamp: number;
-	fullNamespace: string;
+	name: string;
 }
 
-export type PerfPredicate = (ns: string) => boolean;
+export interface PerfTimer {
+	start(name: string): PerfId;
+	finish(name: string, additional?: Dictionary): void;
+	namespace(ns: string): PerfTimer;
+}
 
 export type PerfId = CanUndef<string>;

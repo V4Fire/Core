@@ -6,12 +6,12 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { log } from 'core/perf/engines/console';
+import { log } from 'core/perf/timer/engines/console';
+
+export * from 'core/perf/timer/engines/interface';
 
 const engines = {
 	console: log
 };
 
 export default engines;
-
-export * from 'core/perf/engines/interface';

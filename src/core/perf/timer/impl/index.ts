@@ -6,5 +6,5 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-export { default as Performer } from 'core/perf/impl/performer';
-export * from 'core/perf/impl/interface';
+export * from 'core/perf/timer/impl/interface';
+export { default as PerfTimersRunner } from 'core/perf/timer/impl/runner';

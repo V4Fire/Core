@@ -6,23 +6,24 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type { PerfEngineName } from 'core/perf/engines';
+import type { PerfTimerEngineName } from 'core/perf/timer/engines';
 import type { PerfGroup } from 'core/perf/interface';
-import type { PerfPredicate } from 'core/perf';
 
 export interface PerfConfig {
-	engine: PerfEngineName;
-	filters?: PerfConfigGroupFilters;
+	timer: PerfTimerConfig;
 }
 
-export type PerfConfigGroupFilters = {
-	[K in PerfGroup]?: string[] | boolean;
-};
+export interface PerfTimerConfig {
+	engine: PerfTimerEngineName;
+	filters?: PerfGroupFilters;
+}
 
-export type PerfFiltersOptions = {
-	[K in PerfGroup]: RegExp[] | boolean;
+export type PerfGroupFilters = {
+	[K in PerfGroup]?: string[] | boolean;
 };
 
 export type PerfPredicates = {
 	[K in PerfGroup]: PerfPredicate;
 };
+
+export type PerfPredicate = (ns: string) => boolean;
