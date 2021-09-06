@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.58.2 (2021-09-06)
+
+#### :bug: Bug Fix
+
+* Fixed the bug when function `convertIfDate` converted a string with a date inside into a date object `core/json`
+
 ## v3.58.1 (2021-09-06)
 
 #### :bug: Bug Fix
