@@ -252,6 +252,45 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 		});
 	}
 
+	/**
+	 * Creates a promise that is resolved when any of the provided promises are resolved or
+	 * rejected if the provided all promises are rejected
+	 *
+	 * @param values
+	 */
+	static any<T extends Iterable<Value>>(
+		values: T
+	): SyncPromise<T extends Iterable<Value<infer V>> ? V : unknown> {
+		return new SyncPromise((resolve, reject) => {
+			const
+				promises = <SyncPromise[]>[];
+
+			for (const el of values) {
+				promises.push(SyncPromise.resolve(el));
+			}
+
+			if (promises.length === 0) {
+				resolve();
+				return;
+			}
+
+			const
+				errors = <Error[]>[];
+
+			for (let i = 0; i < promises.length; i++) {
+				promises[i].then(resolve, onReject);
+			}
+
+			function onReject(err: Error): void {
+				errors.push(err);
+
+				if (errors.length === promises.length) {
+					reject(new AggregateError(errors, 'No Promise in Promise.any was resolved'));
+				}
+			}
+		});
+	}
+
 	/** @override */
 	readonly [Symbol.toStringTag]: 'Promise';
 

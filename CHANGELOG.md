@@ -11,6 +11,14 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.?.? (2021-??-??)
+
+#### :rocket: New Feature
+
+* Added a new static method `any`:
+  * `core/promise/sync`
+  * `core/promise/abortable`
+
 ## v3.58.2 (2021-09-06)
 
 #### :bug: Bug Fix

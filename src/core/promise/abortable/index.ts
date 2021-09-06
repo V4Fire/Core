@@ -359,6 +359,53 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 		}, parent);
 	}
 
+	/**
+	 * Creates a promise that is resolved when any of the provided promises are resolved or
+	 * rejected if the provided all promises are rejected
+	 *
+	 * @param values
+	 * @param [parent] - parent promise
+	 */
+	static any<T extends Iterable<Value>>(
+		values: T,
+		parent?: AbortablePromise
+	): AbortablePromise<T extends Iterable<Value<infer V>> ? V : unknown> {
+		return new AbortablePromise((resolve, reject, onAbort) => {
+			const
+				promises = <AbortablePromise[]>[];
+
+			for (const el of values) {
+				promises.push(AbortablePromise.resolve(el));
+			}
+
+			if (promises.length === 0) {
+				resolve();
+				return;
+			}
+
+			onAbort((reason) => {
+				for (let i = 0; i < promises.length; i++) {
+					promises[i].abort(reason);
+				}
+			});
+
+			const
+				errors = <Error[]>[];
+
+			for (let i = 0; i < promises.length; i++) {
+				promises[i].then(resolve, onReject);
+			}
+
+			function onReject(err: Error): void {
+				errors.push(err);
+
+				if (errors.length === promises.length) {
+					reject(new AggregateError(errors, 'No Promise in Promise.any was resolved'));
+				}
+			}
+		}, parent);
+	}
+
 	/** @override */
 	readonly [Symbol.toStringTag]: 'Promise';
 

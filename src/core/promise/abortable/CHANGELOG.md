@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.?.? (2021-??-??)
+
+#### :rocket: New Feature
+
+* Added a new static method `any`
+
 ## v3.58.0 (2021-09-01)
 
 #### :boom: Breaking Change
