@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>src/core/request/engines/fetch | V4Fire</title>
+	<title>State | V4Fire</title>
 	<meta name="description" content="Documentation for V4Fire">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -227,10 +227,13 @@ pre {
 					<a href="../modules.html">V4Fire</a>
 				</li>
 				<li>
-					<a href="src_core_request_engines_fetch.html">src/core/request/engines/fetch</a>
+					<a href="../modules/src_core_promise_abortable_interface.html">src/core/promise/abortable/interface</a>
+				</li>
+				<li>
+					<a href="src_core_promise_abortable_interface.state.html">State</a>
 				</li>
 			</ul>
-			<h1>Module src/core/request/engines/fetch</h1>
+			<h1>Enumeration State</h1>
 		</div>
 	</div>
 </header>
@@ -242,34 +245,47 @@ pre {
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Variables</h3>
+							<h3>Enumeration members</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="src_core_request_engines_fetch.html#default" class="tsd-kind-icon">default</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="src_core_promise_abortable_interface.state.html#fulfilled" class="tsd-kind-icon">fulfilled</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="src_core_promise_abortable_interface.state.html#pending" class="tsd-kind-icon">pending</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="src_core_promise_abortable_interface.state.html#rejected" class="tsd-kind-icon">rejected</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Variables</h2>
-				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module">
-					<a name="default" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagConst">Const</span> default</h3>
-					<div class="tsd-signature tsd-kind-icon">default<span class="tsd-signature-symbol">:</span> <a href="../interfaces/src_core_request_interface.requestengine.html" class="tsd-signature-type" data-tsd-kind="Interface">RequestEngine</a><span class="tsd-signature-symbol"> = ...</span></div>
+				<h2>Enumeration members</h2>
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
+					<a name="fulfilled" class="tsd-anchor"></a>
+					<h3>fulfilled</h3>
+					<div class="tsd-signature tsd-kind-icon">fulfilled<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = 1</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/request/engines/fetch.ts#L27">src/core/request/engines/fetch.ts:27</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/promise/abortable/interface.ts#L11">src/core/promise/abortable/interface.ts:11</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Creates request by using the fetch API with the specified parameters and returns a promise</p>
-						</div>
-						<dl class="tsd-comment-tags">
-							<dt>param</dt>
-							<dd></dd>
-						</dl>
-					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
+					<a name="pending" class="tsd-anchor"></a>
+					<h3>pending</h3>
+					<div class="tsd-signature tsd-kind-icon">pending<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = 0</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/promise/abortable/interface.ts#L10">src/core/promise/abortable/interface.ts:10</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
+					<a name="rejected" class="tsd-anchor"></a>
+					<h3>rejected</h3>
+					<div class="tsd-signature tsd-kind-icon">rejected<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = 2</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/promise/abortable/interface.ts#L12">src/core/promise/abortable/interface.ts:12</a></li>
+						</ul>
+					</aside>
 				</section>
 			</section>
 		</div>
@@ -280,14 +296,56 @@ pre {
 						<a href="../modules.html">Modules</a>
 					</li>
 					<li class="current tsd-kind-module">
-						<a href="src_core_request_engines_fetch.html">src/core/request/engines/fetch</a>
+						<a href="../modules/src_core_promise_abortable_interface.html">src/core/promise/abortable/interface</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-variable tsd-parent-kind-module">
-						<a href="src_core_request_engines_fetch.html#default" class="tsd-kind-icon">default</a>
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-enum tsd-parent-kind-module">
+						<a href="src_core_promise_abortable_interface.state.html" class="tsd-kind-icon">State</a>
+						<ul>
+							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
+								<a href="src_core_promise_abortable_interface.state.html#fulfilled" class="tsd-kind-icon">fulfilled</a>
+							</li>
+							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
+								<a href="src_core_promise_abortable_interface.state.html#pending" class="tsd-kind-icon">pending</a>
+							</li>
+							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
+								<a href="src_core_promise_abortable_interface.state.html#rejected" class="tsd-kind-icon">rejected</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<ul class="after-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/src_core_promise_abortable_interface.constraborthandler.html" class="tsd-kind-icon">Constr<wbr>Abort<wbr>Handler</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../interfaces/src_core_promise_abortable_interface.constrfulfillhandler.html" class="tsd-kind-icon">Constr<wbr>Fulfill<wbr>Handler</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/src_core_promise_abortable_interface.constrrejecthandler.html" class="tsd-kind-icon">Constr<wbr>Reject<wbr>Handler</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../interfaces/src_core_promise_abortable_interface.executor.html" class="tsd-kind-icon">Executor</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../modules/src_core_promise_abortable_interface.html#executablevalue" class="tsd-kind-icon">Executable<wbr>Value</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="../modules/src_core_promise_abortable_interface.html#finallyhandler" class="tsd-kind-icon">Finally<wbr>Handler</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../modules/src_core_promise_abortable_interface.html#rejecthandler" class="tsd-kind-icon">Reject<wbr>Handler</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../modules/src_core_promise_abortable_interface.html#resolvehandler" class="tsd-kind-icon">Resolve<wbr>Handler</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../modules/src_core_promise_abortable_interface.html#value" class="tsd-kind-icon">Value</a>
 					</li>
 				</ul>
 			</nav>

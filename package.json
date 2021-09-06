@@ -5,7 +5,7 @@
   "main": "src/core/index.js",
   "typings": "index.d.ts",
   "license": "MIT",
-  "version": "3.58.0",
+  "version": "3.58.1",
   "author": {
     "name": "kobezzza",
     "email": "kobezzza@gmail.com",
@@ -82,7 +82,7 @@
     "urlconcat": "0.0.12"
   },
   "devDependencies": {
-    "@types/jasmine": "^3.8.2",
+    "@types/jasmine": "^3.9.0",
     "@v4fire/linters": "^1.7.3",
     "abort-controller": "^3.0.0",
     "express": "^4.17.1",
