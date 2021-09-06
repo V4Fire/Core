@@ -32,3 +32,45 @@ npx gulp build:tsconfig
 
 All build config files are contain within the `config` folder. File names of config files are tied with a value of the `NODE_ENV` environment variable.
 Build scripts, such as Gulp or Webpack, are contain within the `build` folder.
+
+In order to build the project you should run following script:
+
+```bash
+npm run build
+```
+
+## Run tests
+
+Before running tests the project should be built. There are several scripts that run tests:
+
+```bash
+// runs tests that check typing
+npm run test:typescript
+
+// runs tests that check code quality
+npm run test:eslint
+
+// runs both previous tests
+npm run test:linters
+
+// runs unit tests
+npm run test:jasmine
+
+// runs all tests
+npm test
+```
+
+### Unit tests developing
+
+During tests developing, it's convenient when the project is rebuilt automatically after changes in code.
+For this purpose you can use following script:
+
+```bash
+npm run dev
+```
+
+Then you can run tests that you're currently developing:
+
+```bash
+npx jasmine ./dist/server/path/to/*.spec.js
+```
