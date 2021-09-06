@@ -122,7 +122,7 @@ export default class RequestContext<D = unknown> {
 		this.cache = cacheAPI;
 
 		this.isReady = (async () => {
-			if (p.offlineCache != null && storage != null) {
+			if (p.offlineCache === true && storage != null) {
 				const storageAPI = await storage;
 
 				// eslint-disable-next-line require-atomic-updates
