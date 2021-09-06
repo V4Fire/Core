@@ -9,6 +9,13 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.58.1 (2021-09-06)
+
+#### :bug: Bug Fix
+
+* Fixed initializing of the cache API
+* Fixed detection of the online connection
+
 ## v3.57.0 (2021-08-31)
 
 #### :boom: Breaking Changes

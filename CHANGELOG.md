@@ -11,6 +11,14 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.58.1 (2021-09-06)
+
+#### :bug: Bug Fix
+
+* `core/request`:
+  * Fixed initializing of the cache API
+  * Fixed detection of the online connection
+
 ## v3.58.0 (2021-09-01)
 
 #### :boom: Breaking Change

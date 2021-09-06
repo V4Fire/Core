@@ -27,9 +27,9 @@ import type {
 
 export default class RequestContext<D = unknown> {
 	/**
-	 * True if a host has connection to the internet
+	 * Promise of instance initializing
 	 */
-	isOnline: boolean = false;
+	readonly isReady: Promise<void>;
 
 	/**
 	 * True if the request can be cached
@@ -44,7 +44,7 @@ export default class RequestContext<D = unknown> {
 	/**
 	 * Storage to cache the request
 	 */
-	readonly cache: AbstractCache<Nullable<D>>;
+	readonly cache!: AbstractCache<Nullable<D>>;
 
 	/**
 	 * Storage to cache the pending request
@@ -119,14 +119,22 @@ export default class RequestContext<D = unknown> {
 			cacheAPI = addTTL(cacheAPI, p.cacheTTL);
 		}
 
-		if (p.offlineCache != null && storage != null) {
-			cacheAPI = storage.then((storage) => addPersistent(cacheAPI, storage, {
-				persistentTTL: p.offlineCacheTTL,
-				loadFromStorage: 'onOfflineDemand'
-			}));
-		}
-
 		this.cache = cacheAPI;
-		caches.add(cacheAPI);
+
+		this.isReady = (async () => {
+			if (p.offlineCache != null && storage != null) {
+				const storageAPI = await storage;
+
+				// eslint-disable-next-line require-atomic-updates
+				cacheAPI = await addPersistent(cacheAPI, storageAPI, {
+					persistentTTL: p.offlineCacheTTL,
+					loadFromStorage: 'onOfflineDemand'
+				});
+
+				Object.set(this, 'cache', cacheAPI);
+			}
+
+			caches.add(cacheAPI);
+		})();
 	}
 }

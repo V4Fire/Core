@@ -12,7 +12,9 @@
  */
 
 import log from 'core/log';
+
 import AbortablePromise from 'core/promise/abortable';
+import { isOnline } from 'core/net';
 
 import Response from 'core/request/response';
 import RequestError from 'core/request/error';
@@ -162,11 +164,10 @@ function request<D = unknown>(
 			});
 
 			await new Promise(setImmediate);
-
 			ctx.parent = parent;
 
 			if (Object.isPromise(ctx.cache)) {
-				await AbortablePromise.resolve(ctx.cache, parent);
+				await AbortablePromise.resolve(ctx.isReady, parent);
 			}
 
 			const
@@ -252,12 +253,11 @@ function request<D = unknown>(
 				try {
 					fromLocalStorage = Boolean(
 						!fromCache &&
+
 						requestParams.offlineCache &&
+						!(await isOnline()).status &&
 
-						!ctx.isOnline &&
-
-						storage &&
-						await (await storage).has(localCacheKey)
+						await (await storage)?.has(localCacheKey)
 					);
 
 				} catch {

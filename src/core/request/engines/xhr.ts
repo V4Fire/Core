@@ -10,8 +10,9 @@
 import XMLHttpRequest from 'xhr2';
 //#endif
 
-import { IS_NODE } from 'core/env';
 import AbortablePromise from 'core/promise/abortable';
+
+import { IS_NODE } from 'core/env';
 import { isOnline } from 'core/net';
 
 import Response from 'core/request/response';
