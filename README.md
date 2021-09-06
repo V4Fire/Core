@@ -16,7 +16,7 @@ This library provides a bunch of isomorphic modules and configurations to work a
 
 ## Prepare to build and develop
 
-At first you should install dependencies using `npm`:
+At first, you should install dependencies using `npm`:
 
 ```bash
 npm ci
@@ -30,5 +30,47 @@ npx gulp build:tsconfig
 
 ## Configuration and building
 
-All build config files are contain within the `config` folder. File names of config files are tied with a value of the `NODE_ENV` environment variable.
-Build scripts, such as Gulp or Webpack, are contain within the `build` folder.
+All build config files are placed within the `config` folder. File names of config files are tied with a value of the `NODE_ENV` environment variable.
+Build scripts, such as Gulp or Webpack, are contained within the `build` folder.
+
+To build your project, you should run the following script:
+
+```bash
+npm run build
+```
+
+## Run tests
+
+Before running tests, your project should be built. There are several scripts that run tests:
+
+```bash
+// runs tests that check typing
+npm run test:typescript
+
+// runs tests that check code quality
+npm run test:eslint
+
+// runs both previous tests
+npm run test:linters
+
+// runs unit tests
+npm run test:jasmine
+
+// runs all tests
+npm test
+```
+
+### Unit tests developing
+
+During test development, it's convenient when the project is rebuilt automatically after changes in code.
+For this purpose, you can use the following script:
+
+```bash
+npm run dev
+```
+
+Then you can run tests that you are currently developing:
+
+```bash
+npx jasmine ./dist/server/path/to/*.spec.js
+```
