@@ -81,7 +81,7 @@ export default class Response<
 	readonly decoders: WrappedDecoders;
 
 	/**
-	 * Reviver function for JSON.parse
+	 * Reviver function for `JSON.parse`
 	 * @default `convertIfDate`
 	 */
 	readonly jsonReviver?: JSONCb;
@@ -115,6 +115,7 @@ export default class Response<
 
 		this.status = p.status;
 		this.okStatuses = ok;
+
 		this.ok = ok instanceof Range ?
 			ok.contains(this.status) :
 			Array.concat([], <number>ok).includes(this.status);
