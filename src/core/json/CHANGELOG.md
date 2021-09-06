@@ -13,7 +13,7 @@ Changelog
 
 #### :bug: Bug Fix
 
-* Fixed the bug when function `convertIfDate` converted a string with a date inside into a date object
+* Fixed a bug when the function `convertIfDate` converted a string with a date inside into a date object `core/json`
 
 ## v3.20.0 (2020-07-05)
 

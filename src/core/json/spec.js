@@ -27,21 +27,21 @@ function testConvertIfDateCases(templateParts, dateParts, delimiter, expectedDat
 		dateTemplate = templateParts.join(delimiter),
 		dateString = dateParts.join(delimiter);
 
-	it(`string ${dateTemplate} is parsed as date`, () => {
+	it(`string ${dateTemplate} is parsed as a date`, () => {
 		expect(JSON.parse(`"${dateString}"`, convertIfDate)).toEqual(expectedDate);
 	});
 
-	it('incorrect date string is not parsed as date', () => {
+	it('incorrect date string is not parsed as a date', () => {
 		const dateString = dateParts.slice(0, 2).join(delimiter);
 		expect(JSON.parse(`"${dateString}"`, convertIfDate)).toBe(dateString);
 	});
 
-	it(`string ${dateTemplate} with prefix is not parsed as date`, () => {
+	it(`string ${dateTemplate} with prefix is not parsed as a date`, () => {
 		const str = `not-a-date-${dateString}`;
 		expect(JSON.parse(`"${str}"`, convertIfDate)).toBe(str);
 	});
 
-	it(`string ${dateTemplate} with suffix in not parsed as date`, () => {
+	it(`string ${dateTemplate} with a suffix in not parsed as a date`, () => {
 		const str = `${dateString}-not-a-date`;
 		expect(JSON.parse(`"${str}"`, convertIfDate)).toBe(str);
 	});
