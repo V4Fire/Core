@@ -45,7 +45,7 @@ const addEmitter: AddEmitter = <T extends Cache<V, K>, V = unknown, K extends st
 		emitter;
 
 	if (expandedCache[eventEmitter] == null) {
-		emitter = new EventEmitter();
+		emitter = new EventEmitter({maxListeners: 100, newListener: false});
 		expandedCache[eventEmitter] = emitter;
 
 	} else {
