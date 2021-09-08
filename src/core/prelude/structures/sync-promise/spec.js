@@ -22,6 +22,53 @@ describe('core/prelude/structures/sync-promise', () => {
 		expect(i).toBe(6);
 	});
 
+	it('promise that is resolved with another promise', async () => {
+		const i = await new SyncPromise((resolve) => {
+			resolve(
+				new Promise((r) => setTimeout(() => r(SyncPromise.resolve(1)), 50))
+			);
+		})
+			.then((val) => new Promise((r) => setTimeout(() => r(SyncPromise.resolve(val + 2)), 50)))
+			.then((val) => val * 2);
+
+		expect(i).toBe(6);
+	});
+
+	it('promise that is rejected with another promise', async () => {
+		let i;
+
+		try {
+			await new SyncPromise((resolve) => {
+				resolve(
+					new Promise((r) => setTimeout(() => r(SyncPromise.resolve(1)), 50))
+				);
+			})
+				.then((val) => new Promise((r) => setTimeout(() => r(SyncPromise.reject(val + 2)), 50)))
+				.catch((val) => Promise.reject(val * 2));
+
+		} catch (err) {
+			i = err;
+		}
+
+		expect(i).toBe(6);
+	});
+
+	it('promise that is rejected with another promise by using a constructor', async () => {
+		let i;
+
+		try {
+			await new SyncPromise((resolve, reject) => {
+				reject(SyncPromise.resolve(1));
+			});
+
+		} catch (err) {
+			i = err;
+		}
+
+		expect(i).toBeInstanceOf(SyncPromise);
+		expect(await i).toBe(1);
+	});
+
 	it('resolved `then` after `catch`', () => {
 		let
 			i = 1;

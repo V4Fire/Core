@@ -103,15 +103,7 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 			return value;
 		}
 
-		return new AbortablePromise((resolve, reject) => {
-			if (Object.isPromiseLike(value)) {
-				value.then(resolve, reject);
-
-			} else {
-				resolve(value);
-			}
-
-		}, parent);
+		return new AbortablePromise((resolve) => resolve(value), parent);
 	}
 
 	/**
@@ -190,17 +182,16 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 				counter = 0;
 
 			for (let i = 0; i < promises.length; i++) {
-				promises[i].then(
-					(val) => {
-						resolved[i] = val;
+				const onFulfilled = (val) => {
+					counter++;
+					resolved[i] = val;
 
-						if (++counter === promises.length) {
-							resolve(resolved);
-						}
-					},
+					if (counter === promises.length) {
+						resolve(resolved);
+					}
+				};
 
-					reject
-				);
+				promises[i].then(onFulfilled, reject);
 			}
 
 		}, parent);
@@ -294,29 +285,31 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 				counter = 0;
 
 			for (let i = 0; i < promises.length; i++) {
-				promises[i].then(
-					(value) => {
-						resolved[i] = {
-							status: 'fulfilled',
-							value
-						};
+				const onFulfilled = (value) => {
+					counter++;
+					resolved[i] = {
+						status: 'fulfilled',
+						value
+					};
 
-						if (++counter === promises.length) {
-							resolve(resolved);
-						}
-					},
-
-					(reason) => {
-						resolved[i] = {
-							status: 'rejected',
-							reason
-						};
-
-						if (++counter === promises.length) {
-							resolve(resolved);
-						}
+					if (counter === promises.length) {
+						resolve(resolved);
 					}
-				);
+				};
+
+				const onRejected = (reason) => {
+					counter++;
+					resolved[i] = {
+						status: 'rejected',
+						reason
+					};
+
+					if (counter === promises.length) {
+						resolve(resolved);
+					}
+				};
+
+				promises[i].then(onFulfilled, onRejected);
 			}
 
 		}, parent);
@@ -457,16 +450,7 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 	 */
 	constructor(executor: Executor<T>, parent?: AbortablePromise) {
 		this.promise = new Promise((resolve, reject) => {
-			const resolveWrapper = (val) => {
-				if (!this.isPending) {
-					return;
-				}
-
-				this.state = State.fulfilled;
-				resolve(val);
-			};
-
-			const rejectWrapper = (err) => {
+			const onRejected = (err) => {
 				if (!this.isPending) {
 					return;
 				}
@@ -475,8 +459,22 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 				reject(err);
 			};
 
-			this.onFulfill = resolveWrapper;
-			this.onReject = rejectWrapper;
+			const onFulfilled = (val) => {
+				if (!this.isPending) {
+					return;
+				}
+
+				if (Object.isPromiseLike(val)) {
+					val.then(onFulfilled, onRejected);
+					return;
+				}
+
+				this.state = State.fulfilled;
+				resolve(val);
+			};
+
+			this.onFulfill = onFulfilled;
+			this.onReject = onRejected;
 
 			let
 				setOnAbort;
@@ -505,8 +503,8 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 				};
 			}
 
-			if (this.isPending && (!parent || parent.state !== State.rejected)) {
-				this.call(executor, [resolveWrapper, rejectWrapper, setOnAbort], rejectWrapper);
+			if (this.isPending && (parent == null || parent.state !== State.rejected)) {
+				this.call(executor, [onFulfilled, onRejected, setOnAbort], onRejected);
 			}
 		});
 	}
@@ -549,27 +547,13 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 	): AbortablePromise<any> {
 		this.pendingChildren++;
 		return new AbortablePromise((resolve, reject, abort) => {
-			let
-				resolveWrapper,
-				rejectWrapper;
+			const fulfillWrapper = (val) => {
+				this.call(onFulfilled ?? resolve, [val], reject, resolve);
+			};
 
-			if (Object.isFunction(onFulfilled)) {
-				resolveWrapper = (val) => {
-					this.call(onFulfilled, [val], reject, resolve);
-				};
-
-			} else {
-				resolveWrapper = resolve;
-			}
-
-			if (Object.isFunction(onRejected)) {
-				rejectWrapper = (err) => {
-					this.call(onRejected, [err], reject, resolve);
-				};
-
-			} else {
-				rejectWrapper = reject;
-			}
+			const rejectWrapper = (val) => {
+				this.call(onRejected ?? reject, [val], reject, resolve);
+			};
 
 			const
 				that = this;
@@ -589,7 +573,7 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 				}
 			});
 
-			this.promise.then(resolveWrapper, rejectWrapper);
+			this.promise.then(fulfillWrapper, rejectWrapper);
 		});
 	}
 
@@ -601,17 +585,9 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 	catch<R>(onRejected: RejectHandler<R>): AbortablePromise<R>;
 	catch(onRejected?: RejectHandler): AbortablePromise<any> {
 		return new AbortablePromise((resolve, reject, onAbort) => {
-			let
-				rejectWrapper;
-
-			if (Object.isFunction(onRejected)) {
-				rejectWrapper = (err) => {
-					this.call(onRejected, [err], reject, resolve);
-				};
-
-			} else {
-				rejectWrapper = reject;
-			}
+			const rejectWrapper = (val) => {
+				this.call(onRejected ?? reject, [val], reject, resolve);
+			};
 
 			const
 				that = this;
@@ -694,13 +670,12 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 		onValue?: AnyOneArgFunction<V>
 	): void {
 		const
-			loopback = () => undefined,
 			reject = onError ?? loopback,
 			resolve = onValue ?? loopback;
 
 		try {
 			const
-				v = fn ? fn(...args) : undefined;
+				v = fn?.(...args);
 
 			if (Object.isPromiseLike(v)) {
 				(<PromiseLike<V>>v).then(resolve, reject);
@@ -711,6 +686,10 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 
 		} catch (err) {
 			reject(err);
+		}
+
+		function loopback(): void {
+			return undefined;
 		}
 	}
 }

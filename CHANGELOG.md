@@ -19,6 +19,12 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
   * `core/promise/sync`
   * `core/promise/abortable`
 
+#### :bug: Bug Fix
+
+* Fixed some cases when a promise is resolved with another promise:
+  * `core/promise/sync`
+  * `core/promise/abortable`
+
 ## v3.58.2 (2021-09-06)
 
 #### :bug: Bug Fix

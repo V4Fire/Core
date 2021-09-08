@@ -45,14 +45,7 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 			return value;
 		}
 
-		return new Constr((resolve, reject) => {
-			if (Object.isPromiseLike(value)) {
-				value.then(resolve, reject);
-
-			} else {
-				resolve(value);
-			}
-		});
+		return new Constr((resolve) => resolve(value));
 	}
 
 	/**
@@ -115,17 +108,16 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 				counter = 0;
 
 			for (let i = 0; i < promises.length; i++) {
-				promises[i].then(
-					(val) => {
-						resolved[i] = val;
+				const onFulfilled = (val) => {
+					counter++;
+					resolved[i] = val;
 
-						if (++counter === promises.length) {
-							resolve(resolved);
-						}
-					},
+					if (counter === promises.length) {
+						resolve(resolved);
+					}
+				};
 
-					reject
-				);
+				promises[i].then(onFulfilled, reject);
 			}
 		});
 	}
@@ -199,29 +191,31 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 				counter = 0;
 
 			for (let i = 0; i < promises.length; i++) {
-				promises[i].then(
-					(value) => {
-						resolved[i] = {
-							status: 'fulfilled',
-							value
-						};
+				const onFulfilled = (value) => {
+					counter++;
+					resolved[i] = {
+						status: 'fulfilled',
+						value
+					};
 
-						if (++counter === promises.length) {
-							resolve(resolved);
-						}
-					},
-
-					(reason) => {
-						resolved[i] = {
-							status: 'rejected',
-							reason
-						};
-
-						if (++counter === promises.length) {
-							resolve(resolved);
-						}
+					if (counter === promises.length) {
+						resolve(resolved);
 					}
-				);
+				};
+
+				const onRejected = (reason) => {
+					counter++;
+					resolved[i] = {
+						status: 'rejected',
+						reason
+					};
+
+					if (counter === promises.length) {
+						resolve(resolved);
+					}
+				};
+
+				promises[i].then(onFulfilled, onRejected);
 			}
 		});
 	}
@@ -333,25 +327,6 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 			this.finallyHandlers = [];
 		};
 
-		const resolve = (value) => {
-			if (!this.isPending) {
-				return;
-			}
-
-			this.value = value;
-			this.state = State.fulfilled;
-
-			for (let o = this.fulfillHandlers, i = 0; i < o.length; i++) {
-				o[i](value);
-			}
-
-			for (let o = this.finallyHandlers, i = 0; i < o.length; i++) {
-				o[i]();
-			}
-
-			clear();
-		};
-
 		const reject = (err) => {
 			if (!this.isPending) {
 				return;
@@ -375,6 +350,30 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 
 				clear();
 			});
+		};
+
+		const resolve = (val) => {
+			if (!this.isPending) {
+				return;
+			}
+
+			if (Object.isPromiseLike(val)) {
+				val.then(resolve, reject);
+				return;
+			}
+
+			this.value = val;
+			this.state = State.fulfilled;
+
+			for (let o = this.fulfillHandlers, i = 0; i < o.length; i++) {
+				o[i](val);
+			}
+
+			for (let o = this.finallyHandlers, i = 0; i < o.length; i++) {
+				o[i]();
+			}
+
+			clear();
 		};
 
 		this.call(executor, [resolve, reject], reject);
@@ -411,15 +410,19 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 		onRejected: Nullable<RejectHandler>
 	): SyncPromise {
 		return new SyncPromise((resolve, reject) => {
-			const
-				resolveWrapper = (v) => this.call(onFulfilled ?? resolve, [v], reject, resolve),
-				rejectWrapper = (v) => this.call(onRejected ?? reject, [v], reject, resolve);
+			const fulfillWrapper = (val) => {
+				this.call(onFulfilled ?? resolve, [val], reject, resolve);
+			};
 
-			this.fulfillHandlers.push(resolveWrapper);
+			const rejectWrapper = (val) => {
+				this.call(onRejected ?? reject, [val], reject, resolve);
+			};
+
+			this.fulfillHandlers.push(fulfillWrapper);
 			this.rejectHandlers.push(rejectWrapper);
 
 			if (!this.isPending) {
-				(this.state === State.fulfilled ? resolveWrapper : rejectWrapper)(this.value);
+				(this.state === State.fulfilled ? fulfillWrapper : rejectWrapper)(this.value);
 			}
 		});
 	}
@@ -432,15 +435,15 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 	catch<R>(onRejected: RejectHandler<R>): SyncPromise<R>;
 	catch(onRejected?: RejectHandler): SyncPromise {
 		return new SyncPromise((resolve, reject) => {
-			const
-				resolveWrapper = (v) => this.call(resolve, [v], reject, resolve),
-				rejectWrapper = (v) => this.call(onRejected ?? reject, [v], reject, resolve);
+			const rejectWrapper = (val) => {
+				this.call(onRejected ?? reject, [val], reject, resolve);
+			};
 
-			this.fulfillHandlers.push(resolveWrapper);
+			this.fulfillHandlers.push(resolve);
 			this.rejectHandlers.push(rejectWrapper);
 
 			if (!this.isPending) {
-				(this.state === State.fulfilled ? resolveWrapper : rejectWrapper)(this.value);
+				(this.state === State.fulfilled ? resolve : rejectWrapper)(this.value);
 			}
 		});
 	}
@@ -482,23 +485,26 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 		onValue?: AnyOneArgFunction<V>
 	): void {
 		const
-			loopback = () => undefined,
 			reject = onError ?? loopback,
 			resolve = onValue ?? loopback;
 
 		try {
 			const
-				v = fn ? fn(...args) : undefined;
+				val = fn?.(...args);
 
-			if (Object.isPromiseLike(v)) {
-				(<PromiseLike<V>>v).then(resolve, reject);
+			if (Object.isPromiseLike(val)) {
+				(<PromiseLike<V>>val).then(resolve, reject);
 
 			} else {
-				resolve(v);
+				resolve(val);
 			}
 
 		} catch (err) {
 			reject(err);
+		}
+
+		function loopback(): void {
+			return undefined;
 		}
 	}
 }
