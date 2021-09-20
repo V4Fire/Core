@@ -7,11 +7,10 @@
  */
 
 import { log } from 'core/perf/timer/engines/console';
-import type { PerfTimerEngine } from 'core/perf/timer/engines/interface';
 
 export * from 'core/perf/timer/engines/interface';
 
-const engines: Dictionary<PerfTimerEngine> = {
+const engines = {
 	console: log
 };
 
