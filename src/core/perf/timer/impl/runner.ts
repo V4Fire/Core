@@ -84,7 +84,7 @@ export default class PerfTimersRunner {
 		const
 			duration = timestamp - measurement.startTimestamp;
 
-		this.engine(perfId, measurement.name, duration, additional);
+		this.engine(measurement.name, duration, additional);
 	}
 
 	protected getTimestamp(): number {

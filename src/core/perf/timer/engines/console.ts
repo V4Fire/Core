@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-export function log(id: string, ns: string, duration: number, additional?: Dictionary): void {
+export function log(ns: string, duration: number, additional?: Dictionary): void {
 	const
 		args: unknown[] = [`${ns} took ${duration} ms`];
 
