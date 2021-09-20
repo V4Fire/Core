@@ -13,8 +13,10 @@ import { getTimerEngine, createPredicates } from 'core/perf/config';
 
 import config from 'config';
 
+type RunnersByGroup = {[K in PerfGroup]?: PerfTimersRunner};
+
 const
-	runners = {},
+	runners: RunnersByGroup = {},
 	engine = getTimerEngine(config.perf),
 	predicates = createPredicates(config.perf.timer.filters ?? {});
 
