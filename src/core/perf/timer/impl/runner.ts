@@ -36,6 +36,9 @@ export default class PerfTimersRunner {
 			finish: (perfTimerId: PerfTimerId, additional?: Dictionary) =>
 				this.finish(perfTimerId, additional),
 
+			markFromTimeOrigin: (name: string, additional?: Dictionary) =>
+				this.markFromTimeOrigin(name, additional),
+
 			namespace(ns: string): PerfTimer {
 				return makeTimer(PerfTimersRunner.combineNamespaces(namespace, ns));
 			}
@@ -85,6 +88,13 @@ export default class PerfTimersRunner {
 			duration = timestamp - measurement.startTimestamp;
 
 		this.engine(measurement.name, duration, additional);
+	}
+
+	protected markFromTimeOrigin(name: string, additional?: Dictionary): void {
+		const
+			timestamp = globalThis.performance.now();
+
+		this.engine(name, timestamp, additional);
 	}
 
 	protected getTimestamp(): number {

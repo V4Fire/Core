@@ -14,6 +14,7 @@ export interface PerfTimerMeasurement {
 export interface PerfTimer {
 	start(name: string): PerfTimerId;
 	finish(perfTimerId: PerfTimerId, additional?: Dictionary): void;
+	markFromTimeOrigin(name: string, additional?: Dictionary): void;
 	namespace(ns: string): PerfTimer;
 }
 
