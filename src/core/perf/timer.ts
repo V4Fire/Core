@@ -29,5 +29,5 @@ export function getTimer(group: PerfGroup): PerfTimer {
 		runners[group] = new PerfTimersRunner(engine, predicates[group]);
 	}
 
-	return runners[group];
+	return runners[group]!.createTimer(group);
 }
