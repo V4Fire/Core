@@ -9,9 +9,9 @@
 import type { PerfGroup } from 'core/perf/interface';
 import type { PerfPredicate } from 'core/perf/config';
 import type { PerfTimerEngine } from 'core/perf/timer/engines';
-import type { PerfTimerMeasurement, PerfId, PerfTimer } from 'core/perf/timer/impl/interface';
+import type { PerfTimerMeasurement, PerfTimerId, PerfTimer } from 'core/perf/timer/impl/interface';
 
-export { PerfId } from 'core/perf/timer/impl/interface';
+export { PerfTimerId } from 'core/perf/timer/impl/interface';
 
 export default class PerfTimersRunner {
 	static combineNamespaces(...arg: Array<CanUndef<string>>): string {
@@ -29,12 +29,12 @@ export default class PerfTimersRunner {
 	}
 
 	createTimer(group: PerfGroup): PerfTimer {
-		const makeTimer = (namespace?: string) => ({
-			start: (name: string): PerfId =>
-				this.start(PerfTimersRunner.combineNamespaces(group, namespace, name)),
+		const makeTimer = (namespace?: string): PerfTimer => ({
+			start: (name: string): PerfTimerId =>
+				this.start(PerfTimersRunner.combineNamespaces(namespace, name)),
 
-			finish: (name: string, additional?: Dictionary) =>
-				this.finish(PerfTimersRunner.combineNamespaces(group, namespace, name), additional),
+			finish: (perfTimerId: PerfTimerId, additional?: Dictionary) =>
+				this.finish(perfTimerId, additional),
 
 			namespace(ns: string): PerfTimer {
 				return makeTimer(PerfTimersRunner.combineNamespaces(namespace, ns));
@@ -44,7 +44,7 @@ export default class PerfTimersRunner {
 		return makeTimer(group);
 	}
 
-	protected start(name: string): PerfId {
+	protected start(name: string): PerfTimerId {
 		const
 			timestamp = this.getTimestamp();
 
@@ -65,19 +65,19 @@ export default class PerfTimersRunner {
 		return perfId;
 	}
 
-	protected finish(perfId: PerfId, additional?: Dictionary): void {
+	protected finish(perfTimerId: PerfTimerId, additional?: Dictionary): void {
 		const
 			timestamp = this.getTimestamp();
 
-		if (perfId == null) {
+		if (perfTimerId == null) {
 			return;
 		}
 
 		const
-			measurement = this.idToMeasurement[perfId];
+			measurement = this.idToMeasurement[perfTimerId];
 
 		if (measurement == null) {
-			console.warn(`Timer with id '${perfId}' doesn't exist`);
+			console.warn(`Timer with id '${perfTimerId}' doesn't exist`);
 			return;
 		}
 

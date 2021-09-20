@@ -12,9 +12,9 @@ export interface PerfTimerMeasurement {
 }
 
 export interface PerfTimer {
-	start(name: string): PerfId;
-	finish(name: string, additional?: Dictionary): void;
+	start(name: string): PerfTimerId;
+	finish(perfTimerId: PerfTimerId, additional?: Dictionary): void;
 	namespace(ns: string): PerfTimer;
 }
 
-export type PerfId = CanUndef<string>;
+export type PerfTimerId = CanUndef<string>;
