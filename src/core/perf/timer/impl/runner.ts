@@ -84,6 +84,8 @@ export default class PerfTimersRunner {
 			return;
 		}
 
+		this.idToMeasurement[perfTimerId] = undefined;
+
 		const
 			duration = timestamp - measurement.startTimestamp;
 
