@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.59.1 (2021-09-21)
+
+#### :bug: Bug Fix
+
+* Don't override methods of already override objects `core/cache/decorators/helpers/add-emitter`
+
 ## v3.59.0 (2021-09-08)
 
 #### :rocket: New Feature
