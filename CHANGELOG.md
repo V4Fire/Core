@@ -11,6 +11,16 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.59.2 (2021-09-23)
+
+#### :bug: Bug Fix
+
+* Fixed date formatting with optional patterns `core/prelude/date/format`
+
+#### :nail_care: Polish
+
+* Refactored `Date.format` `core/prelude/date/format`
+
 ## v3.59.1 (2021-09-21)
 
 #### :bug: Bug Fix
