@@ -13,4 +13,5 @@ export { PerfGroup } from 'core/perf/const';
 
 export interface Perf {
 	getTimer(group: PerfGroup): PerfTimer;
+	getScopedTimer(group: PerfGroup, scope: string): PerfTimer;
 }

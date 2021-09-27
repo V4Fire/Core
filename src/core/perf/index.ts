@@ -7,11 +7,12 @@
  */
 
 import type { Perf } from 'core/perf/interface';
-import { getTimer } from 'core/perf/timer';
+import { getTimer, getScopedTimer } from 'core/perf/timer';
 
 export * from 'core/perf/interface';
 export * from 'core/perf/timer/impl/interface';
 
 export const perf: Perf = {
-	getTimer
+	getTimer,
+	getScopedTimer
 };

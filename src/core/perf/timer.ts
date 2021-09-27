@@ -17,12 +17,13 @@ type RunnersByGroup = {[K in PerfGroup]?: PerfTimersRunner};
 
 const
 	runners: RunnersByGroup = {},
+	scopedRunners: Dictionary<PerfTimersRunner> = {},
 	engine = getTimerEngine(config.perf),
 	predicates = createPredicates(config.perf.timer.filters ?? {});
 
 /**
  * Returns instance of a timer for a specific group
- * @param group - group name
+ * @param group - the group name, that timer should belong to. Appears in the beginning of all timemarks' namespaces
  */
 export function getTimer(group: PerfGroup): PerfTimer {
 	if (runners[group] == null) {
@@ -30,4 +31,22 @@ export function getTimer(group: PerfGroup): PerfTimer {
 	}
 
 	return runners[group]!.createTimer(group);
+}
+
+/**
+ * Returns instance of a scoped timer for specific group.
+ * Scoped timer is a timer, that measures timestamps from the moment of its creation.
+ *
+ * @param group - the group name, that timer should belong to. Appears in the beginning of all timemarks' namespaces
+ * @param scope - the scope name, that defines the scope. Doesn't appear in any timemark namespace
+ */
+export function getScopedTimer(group: PerfGroup, scope: string): PerfTimer {
+	const
+		key = `${group}_${scope}`;
+
+	if (scopedRunners[key] == null) {
+		scopedRunners[key] = new PerfTimersRunner(engine, predicates[group], true);
+	}
+
+	return scopedRunners[group]!.createTimer(group);
 }
