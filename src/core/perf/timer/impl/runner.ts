@@ -38,8 +38,8 @@ export default class PerfTimersRunner {
 			finish: (perfTimerId: PerfTimerId, additional?: Dictionary) =>
 				this.finish(perfTimerId, additional),
 
-			markFromTimeOrigin: (name: string, additional?: Dictionary) =>
-				this.markFromTimeOrigin(name, additional),
+			markTimestamp: (name: string, additional?: Dictionary) =>
+				this.markTimestamp(name, additional),
 
 			namespace(ns: string): PerfTimer {
 				return makeTimer(PerfTimersRunner.combineNamespaces(namespace, ns));
@@ -94,7 +94,7 @@ export default class PerfTimersRunner {
 		this.engine.sendDelta(measurement.name, duration, additional);
 	}
 
-	protected markFromTimeOrigin(name: string, additional?: Dictionary): void {
+	protected markTimestamp(name: string, additional?: Dictionary): void {
 		this.engine.sendDelta(name, this.getTimestamp(), additional);
 	}
 
