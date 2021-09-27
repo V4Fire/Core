@@ -16,7 +16,9 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 #### :bug: Bug Fix
 
 * Fixed date formatting with optional patterns `core/prelude/date/format`
-* Now `finally` respects exceptions values from a callback `core/promise/sync`
+* Now `finally` respects exceptions values from a callback:
+  * `core/promise/sync`
+  * `core/promise/abortable`
 
 #### :nail_care: Polish
 

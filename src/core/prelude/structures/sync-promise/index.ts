@@ -27,7 +27,7 @@ export * from 'core/prelude/structures/sync-promise/interface';
  */
 export default class SyncPromise<T = unknown> implements Promise<T> {
 	/**
-	 * Returns a Promise object that is resolved with a given value.
+	 * Returns a SyncPromise object that is resolved with a given value.
 	 *
 	 * If the value is a promise, that promise is returned; if the value is a thenable (i.e., has a "then" method),
 	 * the returned promise will "follow" that thenable, adopting its eventual state; otherwise,
@@ -41,7 +41,7 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 	static resolve<T = unknown>(value: Value<T>): SyncPromise<T>;
 
 	/**
-	 * Returns a new resolved Promise object with an undefined value
+	 * Returns a new resolved SyncPromise object with an undefined value
 	 */
 	static resolve(): SyncPromise<void>;
 	static resolve<T = unknown>(value?: Value<T>): SyncPromise<T> {
@@ -56,7 +56,7 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 	}
 
 	/**
-	 * Returns a Promise object that is rejected with a given reason
+	 * Returns a SyncPromise object that is rejected with a given reason
 	 * @param [reason]
 	 */
 	static reject<T = never>(reason?: unknown): SyncPromise<T> {
@@ -65,7 +65,7 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 	}
 
 	/**
-	 * Takes an iterable of promises and returns a single Promise that resolves to an array of the results
+	 * Takes an iterable of promises and returns a single SyncPromise that resolves to an array of the results
 	 * of the input promises. This returned promise will resolve when all of the input's promises have been resolved or
 	 * if the input iterable contains no promises. It rejects immediately upon any of the input promises rejecting or
 	 * non-promises throwing an error and will reject with this first rejection message/error.
@@ -140,7 +140,7 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 	 * It is typically used when you have multiple asynchronous tasks that are not dependent on one another to
 	 * complete successfully, or you'd always like to know the result of each promise.
 	 *
-	 * In comparison, the Promise returned by `SyncPromise.all()` may be more appropriate
+	 * In comparison, the SyncPromise returned by `SyncPromise.all()` may be more appropriate
 	 * if the tasks are dependent on each other / if you'd like to reject upon any of them reject immediately.
 	 *
 	 * @param values
@@ -268,7 +268,7 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 	}
 
 	/**
-	 * Takes an iterable of Promise objects and, as soon as one of the promises in the iterable fulfills,
+	 * Takes an iterable of SyncPromise objects and, as soon as one of the promises in the iterable fulfills,
 	 * returns a single promise that resolves with the value from that promise. If no promises in the iterable fulfill
 	 * (if all of the given promises are rejected), then the returned promise is rejected with an AggregateError,
 	 * a new subclass of Error that groups together individual errors.
