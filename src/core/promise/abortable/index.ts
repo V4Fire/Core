@@ -22,7 +22,6 @@ import {
 
 	ResolveHandler,
 	RejectHandler,
-	FinallyHandler,
 
 	ConstrFulfillHandler,
 	ConstrRejectHandler
@@ -633,7 +632,7 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 	 *
 	 * @param [cb]
 	 */
-	finally(cb?: Nullable<FinallyHandler>): AbortablePromise<T> {
+	finally(cb?: Nullable<Function>): AbortablePromise<T> {
 		return new AbortablePromise((resolve, reject, onAbort) => {
 			const
 				that = this;
