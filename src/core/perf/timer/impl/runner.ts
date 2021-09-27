@@ -19,13 +19,15 @@ export default class PerfTimersRunner {
 	}
 
 	protected engine: PerfTimerEngine;
+	protected timeOffset: number;
 	protected filter?: PerfPredicate;
 	protected nsToCounter: Dictionary<number> = {};
 	protected idToMeasurement: Dictionary<PerfTimerMeasurement> = {};
 
-	constructor(engine: PerfTimerEngine, filter?: PerfPredicate) {
+	constructor(engine: PerfTimerEngine, filter?: PerfPredicate, keepTImeOffset: boolean = false) {
 		this.engine = engine;
 		this.filter = filter;
+		this.timeOffset = keepTImeOffset ? engine.getTimestampFromTimeOrigin() : 0;
 	}
 
 	createTimer(group: PerfGroup): PerfTimer {
@@ -49,7 +51,7 @@ export default class PerfTimersRunner {
 
 	protected start(name: string): PerfTimerId {
 		const
-			timestamp = this.engine.getTimestampFromTimeOrigin();
+			timestamp = this.getTimestamp();
 
 		if (!this.filter?.(name)) {
 			return undefined;
@@ -70,7 +72,7 @@ export default class PerfTimersRunner {
 
 	protected finish(perfTimerId: PerfTimerId, additional?: Dictionary): void {
 		const
-			timestamp = this.engine.getTimestampFromTimeOrigin();
+			timestamp = this.getTimestamp();
 
 		if (perfTimerId == null) {
 			return;
@@ -93,9 +95,10 @@ export default class PerfTimersRunner {
 	}
 
 	protected markFromTimeOrigin(name: string, additional?: Dictionary): void {
-		const
-			timestamp = globalThis.performance.now();
+		this.engine.sendDelta(name, this.getTimestamp(), additional);
+	}
 
-		this.engine.sendDelta(name, timestamp, additional);
+	protected getTimestamp(): number {
+		return this.engine.getTimestampFromTimeOrigin() - this.timeOffset;
 	}
 }
