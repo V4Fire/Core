@@ -28,4 +28,3 @@ export interface Executor<T = unknown> {
 
 export type ResolveHandler<V = unknown, R = V> = Function | ((value: V) => Value<R>);
 export type RejectHandler<T = unknown> = ResolveHandler<unknown, T>;
-export type FinallyHandler = Function;
