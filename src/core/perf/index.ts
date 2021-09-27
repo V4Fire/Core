@@ -6,6 +6,11 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/**
+ * [[include:core/perf/README.md]]
+ * @packageDocumentation
+ */
+
 import type { Perf } from 'core/perf/interface';
 import { getTimer, getScopedTimer } from 'core/perf/timer';
 

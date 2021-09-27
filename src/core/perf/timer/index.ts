@@ -6,6 +6,11 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/**
+ * [[include:core/perf/timer/README.md]]
+ * @packageDocumentation
+ */
+
 import type { PerfGroup } from 'core/perf/interface';
 
 import { PerfTimersRunner, PerfTimer } from 'core/perf/timer/impl';
