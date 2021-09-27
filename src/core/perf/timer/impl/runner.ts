@@ -49,7 +49,7 @@ export default class PerfTimersRunner {
 
 	protected start(name: string): PerfTimerId {
 		const
-			timestamp = this.getTimestamp();
+			timestamp = this.engine.getTimestamp();
 
 		if (!this.filter?.(name)) {
 			return undefined;
@@ -70,7 +70,7 @@ export default class PerfTimersRunner {
 
 	protected finish(perfTimerId: PerfTimerId, additional?: Dictionary): void {
 		const
-			timestamp = this.getTimestamp();
+			timestamp = this.engine.getTimestamp();
 
 		if (perfTimerId == null) {
 			return;
@@ -89,18 +89,13 @@ export default class PerfTimersRunner {
 		const
 			duration = timestamp - measurement.startTimestamp;
 
-		this.engine(measurement.name, duration, additional);
+		this.engine.sendDelta(measurement.name, duration, additional);
 	}
 
 	protected markFromTimeOrigin(name: string, additional?: Dictionary): void {
 		const
 			timestamp = globalThis.performance.now();
 
-		this.engine(name, timestamp, additional);
-	}
-
-	protected getTimestamp(): number {
-		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-		return globalThis.performance?.now?.() ?? Date.now();
+		this.engine.sendDelta(name, timestamp, additional);
 	}
 }
