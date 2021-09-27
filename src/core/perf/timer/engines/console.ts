@@ -20,7 +20,7 @@ export const consoleEngine: PerfTimerEngine = {
 		console.warn(...args);
 	},
 
-	getTimestamp(): number {
+	getTimestampFromTimeOrigin(): number {
 		return performance.now();
 	}
 };

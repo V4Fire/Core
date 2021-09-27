@@ -12,5 +12,5 @@ export type PerfTimerEngineName = keyof typeof engines;
 
 export interface PerfTimerEngine {
 	sendDelta(ns: string, duration: number, additional?: Dictionary): void;
-	getTimestamp(): number;
+	getTimestampFromTimeOrigin(): number;
 }

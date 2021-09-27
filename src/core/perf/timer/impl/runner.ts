@@ -49,7 +49,7 @@ export default class PerfTimersRunner {
 
 	protected start(name: string): PerfTimerId {
 		const
-			timestamp = this.engine.getTimestamp();
+			timestamp = this.engine.getTimestampFromTimeOrigin();
 
 		if (!this.filter?.(name)) {
 			return undefined;
@@ -70,7 +70,7 @@ export default class PerfTimersRunner {
 
 	protected finish(perfTimerId: PerfTimerId, additional?: Dictionary): void {
 		const
-			timestamp = this.engine.getTimestamp();
+			timestamp = this.engine.getTimestampFromTimeOrigin();
 
 		if (perfTimerId == null) {
 			return;
