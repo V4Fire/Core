@@ -9,6 +9,16 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.59.2 (2021-09-23)
+
+#### :bug: Bug Fix
+
+* Fixed date formatting with optional patterns
+
+#### :nail_care: Polish
+
+* Refactored `Date.format`
+
 ## v3.52.0 (2021-06-16)
 
 #### :boom: Breaking Change

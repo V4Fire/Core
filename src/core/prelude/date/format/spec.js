@@ -40,10 +40,22 @@ describe('core/prelude/date/format', () => {
 	});
 
 	it('`format` with optional values', () => {
-		expect(date.format('Y?;M?:2-digit', 'en')).toBe('10/18/1989');
+		const
+			now = new Date(),
+			currentYear = now.getFullYear(),
+			currentMonth = now.getMonth();
 
-		const now = new Date();
-		expect(new Date(now.getFullYear(), now.getMonth(), 2).format('Y?;M?:2-digit;d', 'en')).toBe('02');
+		const date1 = new Date(currentYear, currentMonth, 2);
+		expect(date1.format('Y?;M?:2-digit;d', 'en')).toBe('02');
+
+		const date2 = Date.create('29.08.1900 10:10:23');
+		expect(date2.format('M;Y?', 'en')).toBe('Aug 1900');
+
+		const date3 = Date.create('29.08.2200 10:10:23');
+		expect(date3.format('M;Y?', 'en')).toBe('Aug 2200');
+
+		const date4 = Date.create(`29.08.${currentYear} 10:10:23`);
+		expect(date4.format('M;Y?', 'en')).toBe('Aug');
 	});
 
 	it('`Date.format`', () => {

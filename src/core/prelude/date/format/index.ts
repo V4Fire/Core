@@ -74,36 +74,36 @@ extend(Date.prototype, 'format', function format(
 
 	for (let i = 0; i < chunks.length; i++) {
 		const
-			el = chunks[i].trim();
+			formatChunk = chunks[i].trim();
 
-		let [key, val = ''] = el.split(':');
-		key = key.trim();
+		let [formatKey, formatPattern = ''] = formatChunk.split(':');
+		formatKey = formatKey.trim();
 
-		if (val !== '') {
-			val = val.trim();
+		if (formatPattern !== '') {
+			formatPattern = formatPattern.trim();
 		}
 
 		const
-			alias = formatAliases[key];
+			formatKeyAlias = formatAliases[formatKey];
 
-		if (alias != null) {
-			key = alias;
+		if (formatKeyAlias != null) {
+			formatKey = formatKeyAlias;
 
-			if (Object.isFunction(key)) {
-				key = key(this);
+			if (Object.isFunction(formatKey)) {
+				formatKey = formatKey(this);
 
 				// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-				if (key == null) {
+				if (formatKey == null) {
 					continue;
 				}
 			}
 		}
 
-		if (val === '') {
-			val = defaultFormats[key];
+		if (formatPattern === '') {
+			formatPattern = defaultFormats[formatKey];
 		}
 
-		opts[key] = val in boolAliases ? boolAliases[val] : val;
+		opts[formatKey] = formatPattern in boolAliases ? boolAliases[formatPattern] : formatPattern;
 	}
 
 	const
