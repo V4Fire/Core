@@ -281,7 +281,6 @@ pre {
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="src_core_prelude_structures_helpers.result.html#_tostringtag_" class="tsd-kind-icon">[to<wbr>String<wbr>Tag]</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="src_core_prelude_structures_helpers.result.html#finallyhandlers" class="tsd-kind-icon">finally<wbr>Handlers</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="src_core_prelude_structures_helpers.result.html#fulfillhandlers" class="tsd-kind-icon">fulfill<wbr>Handlers</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="src_core_prelude_structures_helpers.result.html#rejecthandlers" class="tsd-kind-icon">reject<wbr>Handlers</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="src_core_prelude_structures_helpers.result.html#state" class="tsd-kind-icon">state</a></li>
@@ -326,7 +325,7 @@ pre {
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="src_core_prelude_structures_sync_promise.default.html">default</a>.<a href="src_core_prelude_structures_sync_promise.default.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L321">src/core/prelude/structures/sync-promise/index.ts:321</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L339">src/core/prelude/structures/sync-promise/index.ts:339</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -356,7 +355,7 @@ pre {
 						<p>Implementation of Either.__@toStringTag@396</p>
 						<p>Inherited from <a href="src_core_prelude_structures_sync_promise.default.html">default</a>.<a href="src_core_prelude_structures_sync_promise.default.html#_tostringtag_">[toStringTag]</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L289">src/core/prelude/structures/sync-promise/index.ts:289</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L312">src/core/prelude/structures/sync-promise/index.ts:312</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -367,34 +366,18 @@ pre {
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
-					<a name="finallyhandlers" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagProtected">Protected</span> finally<wbr>Handlers</h3>
-					<div class="tsd-signature tsd-kind-icon">finally<wbr>Handlers<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Function</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = []</span></div>
-					<aside class="tsd-sources">
-						<p>Inherited from <a href="src_core_prelude_structures_sync_promise.default.html">default</a>.<a href="src_core_prelude_structures_sync_promise.default.html#finallyhandlers">finallyHandlers</a></p>
-						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L321">src/core/prelude/structures/sync-promise/index.ts:321</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>List of handler for the &quot;finally&quot; operation</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
 					<a name="fulfillhandlers" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> fulfill<wbr>Handlers</h3>
 					<div class="tsd-signature tsd-kind-icon">fulfill<wbr>Handlers<span class="tsd-signature-symbol">:</span> <a href="../interfaces/src_core_prelude_structures_sync_promise_interface.constrfulfillhandler.html" class="tsd-signature-type" data-tsd-kind="Interface">ConstrFulfillHandler</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = []</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_prelude_structures_sync_promise.default.html">default</a>.<a href="src_core_prelude_structures_sync_promise.default.html#fulfillhandlers">fulfillHandlers</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L311">src/core/prelude/structures/sync-promise/index.ts:311</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L334">src/core/prelude/structures/sync-promise/index.ts:334</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>List of handler for the &quot;resolve&quot; operation</p>
+							<p>List of handlers to handle the promise fulfilling</p>
 						</div>
 					</div>
 				</section>
@@ -405,12 +388,12 @@ pre {
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_prelude_structures_sync_promise.default.html">default</a>.<a href="src_core_prelude_structures_sync_promise.default.html#rejecthandlers">rejectHandlers</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L316">src/core/prelude/structures/sync-promise/index.ts:316</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L339">src/core/prelude/structures/sync-promise/index.ts:339</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>List of handler for the &quot;reject&quot; operation</p>
+							<p>List of handlers to handle the promise rejection</p>
 						</div>
 					</div>
 				</section>
@@ -421,12 +404,12 @@ pre {
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_prelude_structures_sync_promise.default.html">default</a>.<a href="src_core_prelude_structures_sync_promise.default.html#state">state</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L301">src/core/prelude/structures/sync-promise/index.ts:301</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L324">src/core/prelude/structures/sync-promise/index.ts:324</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Value of the current promise state</p>
+							<p>Actual promise state</p>
 						</div>
 					</div>
 				</section>
@@ -448,12 +431,12 @@ pre {
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="src_core_prelude_structures_sync_promise.default.html">default</a>.<a href="src_core_prelude_structures_sync_promise.default.html#value">value</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L306">src/core/prelude/structures/sync-promise/index.ts:306</a></li>
+							<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L329">src/core/prelude/structures/sync-promise/index.ts:329</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Value of the promise</p>
+							<p>Resolved promise value</p>
 						</div>
 					</div>
 				</section>
@@ -470,7 +453,7 @@ pre {
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L294">src/core/prelude/structures/sync-promise/index.ts:294</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L317">src/core/prelude/structures/sync-promise/index.ts:317</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -496,7 +479,7 @@ pre {
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="src_core_prelude_structures_sync_promise.default.html">default</a>.<a href="src_core_prelude_structures_sync_promise.default.html#call">call</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L481">src/core/prelude/structures/sync-promise/index.ts:481</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L526">src/core/prelude/structures/sync-promise/index.ts:526</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -521,7 +504,7 @@ pre {
 								<li>
 									<h5>args: <span class="tsd-signature-type">A</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = []</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>arguments of the function</p>
+										<p>arguments for the function</p>
 									</div>
 								</li>
 								<li>
@@ -548,12 +531,13 @@ pre {
 								<p>Implementation of Either.catch</p>
 								<p>Inherited from <a href="src_core_prelude_structures_sync_promise.default.html">default</a>.<a href="src_core_prelude_structures_sync_promise.default.html#catch">catch</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L434">src/core/prelude/structures/sync-promise/index.ts:434</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L446">src/core/prelude/structures/sync-promise/index.ts:446</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Attaches a callback for only the rejection of the promise</p>
+									<p>Attaches a handler for the promise&#39; rejected state.
+									The method returns a new promise that will be resolved with a value that returns from the passed handler.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -569,7 +553,7 @@ pre {
 								<p>Implementation of Either.catch</p>
 								<p>Inherited from <a href="src_core_prelude_structures_sync_promise.default.html">default</a>.<a href="src_core_prelude_structures_sync_promise.default.html#catch">catch</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L435">src/core/prelude/structures/sync-promise/index.ts:435</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L447">src/core/prelude/structures/sync-promise/index.ts:447</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -600,13 +584,14 @@ pre {
 								<p>Implementation of Either.finally</p>
 								<p>Inherited from <a href="src_core_prelude_structures_sync_promise.default.html">default</a>.<a href="src_core_prelude_structures_sync_promise.default.html#finally">finally</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L457">src/core/prelude/structures/sync-promise/index.ts:457</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L470">src/core/prelude/structures/sync-promise/index.ts:470</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Attaches a callback that is invoked when the promise is settled (fulfilled or rejected).
-									The resolved value cannot be modified from the callback.</p>
+									<p>Attaches a common callback for the promise fulfilled and rejected states.
+										The method returns a new promise with the state and value from the current.
+									A value from the passed callback will be ignored unless it equals a rejected promise or exception.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -634,12 +619,13 @@ pre {
 								<p>Implementation of Either.then</p>
 								<p>Inherited from <a href="src_core_prelude_structures_sync_promise.default.html">default</a>.<a href="src_core_prelude_structures_sync_promise.default.html#then">then</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L388">src/core/prelude/structures/sync-promise/index.ts:388</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L398">src/core/prelude/structures/sync-promise/index.ts:398</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Attaches callbacks for the resolution and/or rejection of the promise</p>
+									<p>Attaches handlers for the promise fulfilled and/or rejected states.
+									The method returns a new promise that will be resolved with a value that returns from the passed handlers.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -658,7 +644,7 @@ pre {
 								<p>Implementation of Either.then</p>
 								<p>Inherited from <a href="src_core_prelude_structures_sync_promise.default.html">default</a>.<a href="src_core_prelude_structures_sync_promise.default.html#then">then</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L393">src/core/prelude/structures/sync-promise/index.ts:393</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L403">src/core/prelude/structures/sync-promise/index.ts:403</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -683,7 +669,7 @@ pre {
 								<p>Implementation of Either.then</p>
 								<p>Inherited from <a href="src_core_prelude_structures_sync_promise.default.html">default</a>.<a href="src_core_prelude_structures_sync_promise.default.html#then">then</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L398">src/core/prelude/structures/sync-promise/index.ts:398</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L408">src/core/prelude/structures/sync-promise/index.ts:408</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -708,7 +694,7 @@ pre {
 								<p>Implementation of Either.then</p>
 								<p>Inherited from <a href="src_core_prelude_structures_sync_promise.default.html">default</a>.<a href="src_core_prelude_structures_sync_promise.default.html#then">then</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L403">src/core/prelude/structures/sync-promise/index.ts:403</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L413">src/core/prelude/structures/sync-promise/index.ts:413</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -749,13 +735,15 @@ pre {
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="src_core_prelude_structures_sync_promise.default.html">default</a>.<a href="src_core_prelude_structures_sync_promise.default.html#all">all</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L66">src/core/prelude/structures/sync-promise/index.ts:66</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L75">src/core/prelude/structures/sync-promise/index.ts:75</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Creates a promise that is resolved with an array of results when all the provided promises
-									are resolved, or rejected when any promise is rejected</p>
+									<p>Takes an iterable of promises and returns a single SyncPromise that resolves to an array of the results
+										of the input promises. This returned promise will resolve when all of the input&#39;s promises have been resolved or
+										if the input iterable contains no promises. It rejects immediately upon any of the input promises rejecting or
+									non-promises throwing an error and will reject with this first rejection message/error.</p>
 								</div>
 							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -790,7 +778,7 @@ pre {
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="src_core_prelude_structures_sync_promise.default.html">default</a>.<a href="src_core_prelude_structures_sync_promise.default.html#all">all</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L70">src/core/prelude/structures/sync-promise/index.ts:70</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L79">src/core/prelude/structures/sync-promise/index.ts:79</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -820,7 +808,7 @@ pre {
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="src_core_prelude_structures_sync_promise.default.html">default</a>.<a href="src_core_prelude_structures_sync_promise.default.html#all">all</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L74">src/core/prelude/structures/sync-promise/index.ts:74</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L83">src/core/prelude/structures/sync-promise/index.ts:83</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -847,7 +835,7 @@ pre {
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="src_core_prelude_structures_sync_promise.default.html">default</a>.<a href="src_core_prelude_structures_sync_promise.default.html#all">all</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L78">src/core/prelude/structures/sync-promise/index.ts:78</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L87">src/core/prelude/structures/sync-promise/index.ts:87</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -871,7 +859,7 @@ pre {
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="src_core_prelude_structures_sync_promise.default.html">default</a>.<a href="src_core_prelude_structures_sync_promise.default.html#all">all</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L82">src/core/prelude/structures/sync-promise/index.ts:82</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L91">src/core/prelude/structures/sync-promise/index.ts:91</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -892,7 +880,7 @@ pre {
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="src_core_prelude_structures_sync_promise.default.html">default</a>.<a href="src_core_prelude_structures_sync_promise.default.html#all">all</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L86">src/core/prelude/structures/sync-promise/index.ts:86</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L95">src/core/prelude/structures/sync-promise/index.ts:95</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -927,14 +915,18 @@ pre {
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="src_core_prelude_structures_sync_promise.default.html">default</a>.<a href="src_core_prelude_structures_sync_promise.default.html#allsettled">allSettled</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L131">src/core/prelude/structures/sync-promise/index.ts:131</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L148">src/core/prelude/structures/sync-promise/index.ts:148</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Creates a promise that is resolved with an array of results when all the provided promises
-									are resolved or rejected</p>
+									<p>Returns a promise that resolves after all of the given promises have either been fulfilled or rejected,
+									with an array of objects describing each promise&#39;s outcome.</p>
 								</div>
+								<p>It is typically used when you have multiple asynchronous tasks that are not dependent on one another to
+								complete successfully, or you&#39;d always like to know the result of each promise.</p>
+								<p>In comparison, the SyncPromise returned by <code>SyncPromise.all()</code> may be more appropriate
+								if the tasks are dependent on each other / if you&#39;d like to reject upon any of them reject immediately.</p>
 							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
@@ -968,7 +960,7 @@ pre {
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="src_core_prelude_structures_sync_promise.default.html">default</a>.<a href="src_core_prelude_structures_sync_promise.default.html#allsettled">allSettled</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L141">src/core/prelude/structures/sync-promise/index.ts:141</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L158">src/core/prelude/structures/sync-promise/index.ts:158</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -998,7 +990,7 @@ pre {
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="src_core_prelude_structures_sync_promise.default.html">default</a>.<a href="src_core_prelude_structures_sync_promise.default.html#allsettled">allSettled</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L150">src/core/prelude/structures/sync-promise/index.ts:150</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L167">src/core/prelude/structures/sync-promise/index.ts:167</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -1025,7 +1017,7 @@ pre {
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="src_core_prelude_structures_sync_promise.default.html">default</a>.<a href="src_core_prelude_structures_sync_promise.default.html#allsettled">allSettled</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L158">src/core/prelude/structures/sync-promise/index.ts:158</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L175">src/core/prelude/structures/sync-promise/index.ts:175</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -1049,7 +1041,7 @@ pre {
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="src_core_prelude_structures_sync_promise.default.html">default</a>.<a href="src_core_prelude_structures_sync_promise.default.html#allsettled">allSettled</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L165">src/core/prelude/structures/sync-promise/index.ts:165</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L182">src/core/prelude/structures/sync-promise/index.ts:182</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -1070,7 +1062,7 @@ pre {
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="src_core_prelude_structures_sync_promise.default.html">default</a>.<a href="src_core_prelude_structures_sync_promise.default.html#allsettled">allSettled</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L169">src/core/prelude/structures/sync-promise/index.ts:169</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L186">src/core/prelude/structures/sync-promise/index.ts:186</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -1100,13 +1092,15 @@ pre {
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="src_core_prelude_structures_sync_promise.default.html">default</a>.<a href="src_core_prelude_structures_sync_promise.default.html#any">any</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L255">src/core/prelude/structures/sync-promise/index.ts:255</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L278">src/core/prelude/structures/sync-promise/index.ts:278</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Creates a promise that is resolved when any of the provided promises are resolved or
-									rejected if the provided all promises are rejected</p>
+									<p>Takes an iterable of SyncPromise objects and, as soon as one of the promises in the iterable fulfills,
+										returns a single promise that resolves with the value from that promise. If no promises in the iterable fulfill
+										(if all of the given promises are rejected), then the returned promise is rejected with an AggregateError,
+									a new subclass of Error that groups together individual errors.</p>
 								</div>
 							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -1138,12 +1132,13 @@ pre {
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="src_core_prelude_structures_sync_promise.default.html">default</a>.<a href="src_core_prelude_structures_sync_promise.default.html#race">race</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L227">src/core/prelude/structures/sync-promise/index.ts:227</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L248">src/core/prelude/structures/sync-promise/index.ts:248</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Creates a promise that is resolved or rejected when any of the provided promises are resolved or rejected</p>
+									<p>Returns a promise that fulfills or rejects as soon as one of the promises in an iterable fulfills or rejects,
+									with the value or reason from that promise</p>
 								</div>
 							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -1175,12 +1170,12 @@ pre {
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="src_core_prelude_structures_sync_promise.default.html">default</a>.<a href="src_core_prelude_structures_sync_promise.default.html#reject">reject</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L55">src/core/prelude/structures/sync-promise/index.ts:55</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L62">src/core/prelude/structures/sync-promise/index.ts:62</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Creates a new rejected promise with the specified reason</p>
+									<p>Returns a SyncPromise object that is rejected with a given reason</p>
 								</div>
 							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -1211,13 +1206,18 @@ pre {
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="src_core_prelude_structures_sync_promise.default.html">default</a>.<a href="src_core_prelude_structures_sync_promise.default.html#resolve">resolve</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L34">src/core/prelude/structures/sync-promise/index.ts:34</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L41">src/core/prelude/structures/sync-promise/index.ts:41</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Creates a new resolved promise for the specified value</p>
+									<p>Returns a SyncPromise object that is resolved with a given value.</p>
 								</div>
+								<p>If the value is a promise, that promise is returned; if the value is a thenable (i.e., has a &quot;then&quot; method),
+									the returned promise will &quot;follow&quot; that thenable, adopting its eventual state; otherwise,
+								the returned promise will be fulfilled with the value.</p>
+								<p>This function flattens nested layers of promise-like objects
+								(e.g., a promise that resolves to a promise that resolves to something) into a single layer.</p>
 							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
@@ -1239,12 +1239,12 @@ pre {
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="src_core_prelude_structures_sync_promise.default.html">default</a>.<a href="src_core_prelude_structures_sync_promise.default.html#resolve">resolve</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L39">src/core/prelude/structures/sync-promise/index.ts:39</a></li>
+									<li>Defined in <a href="https://github.com/V4Fire/Core/blob/master/src/core/prelude/structures/sync-promise/index.ts#L46">src/core/prelude/structures/sync-promise/index.ts:46</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Creates a new resolved promise</p>
+									<p>Returns a new resolved SyncPromise object with an undefined value</p>
 								</div>
 							</div>
 							<h4 class="tsd-returns-title">Returns <a href="src_core_prelude_structures_sync_promise.default.html" class="tsd-signature-type" data-tsd-kind="Class">default</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -1279,9 +1279,6 @@ pre {
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 								<a href="src_core_prelude_structures_helpers.result.html#_tostringtag_" class="tsd-kind-icon">[to<wbr>String<wbr>Tag]</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
-								<a href="src_core_prelude_structures_helpers.result.html#finallyhandlers" class="tsd-kind-icon">finally<wbr>Handlers</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
 								<a href="src_core_prelude_structures_helpers.result.html#fulfillhandlers" class="tsd-kind-icon">fulfill<wbr>Handlers</a>
