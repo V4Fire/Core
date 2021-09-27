@@ -226,6 +226,40 @@ describe('core/prelude/structures/sync-promise', () => {
 		expect(i).toBe(6);
 	});
 
+	it('`finally` that returns an error', () => {
+		let
+			reason;
+
+		new SyncPromise((resolve) => {
+			resolve(1);
+		})
+			.finally(() => SyncPromise.reject('Boom'))
+
+			.catch((err) => {
+				reason = err;
+			});
+
+		expect(reason).toBe('Boom');
+	});
+
+	it('`finally` that throws an error', () => {
+		let
+			reason;
+
+		new SyncPromise((resolve) => {
+			resolve(1);
+		})
+			.finally(() => {
+				throw 'Boom';
+			})
+
+			.catch((err) => {
+				reason = err;
+			});
+
+		expect(reason).toBe('Boom');
+	});
+
 	it('`SyncPromise.resolve`', () => {
 		let
 			i = 0,
@@ -261,11 +295,8 @@ describe('core/prelude/structures/sync-promise', () => {
 			let
 				res;
 
-			SyncPromise.all([
-				1,
-				null,
-				SyncPromise.resolve(2)
-			]).then((val) => res = val);
+			SyncPromise.all([1, null, SyncPromise.resolve(2)])
+				.then((val) => res = val);
 
 			expect(res).toEqual([1, null, 2]);
 		});
@@ -274,11 +305,7 @@ describe('core/prelude/structures/sync-promise', () => {
 			let
 				res;
 
-			SyncPromise.all([
-				1,
-				null,
-				SyncPromise.reject(2)
-			]).then(
+			SyncPromise.all([1, null, SyncPromise.reject(2)]).then(
 				(val) => res = val,
 				(err) => res = err
 			);
@@ -291,11 +318,7 @@ describe('core/prelude/structures/sync-promise', () => {
 		let
 			res;
 
-		SyncPromise.allSettled([
-			1,
-			null,
-			SyncPromise.reject(2)
-		]).then(
+		SyncPromise.allSettled([1, null, SyncPromise.reject(2)]).then(
 			(val) => res = val,
 			(err) => res = err
 		);
@@ -312,10 +335,8 @@ describe('core/prelude/structures/sync-promise', () => {
 			let
 				res;
 
-			SyncPromise.race([
-				Promise.resolve(1),
-				SyncPromise.resolve(2)
-			]).then((val) => res = val);
+			SyncPromise.race([Promise.resolve(1), SyncPromise.resolve(2)])
+				.then((val) => res = val);
 
 			expect(res).toBe(2);
 		});
@@ -324,10 +345,7 @@ describe('core/prelude/structures/sync-promise', () => {
 			let
 				res;
 
-			SyncPromise.race([
-				Promise.resolve(1),
-				SyncPromise.reject(2)
-			]).then(
+			SyncPromise.race([Promise.resolve(1), SyncPromise.reject(2)]).then(
 				(val) => res = val,
 				(err) => res = ['error', err]
 			);

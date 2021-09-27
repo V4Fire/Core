@@ -265,6 +265,29 @@ describe('core/promise/abortable', () => {
 		expect(i).toBe(6);
 	});
 
+	it('`finally` that returns an error', async () => {
+		const reason = await new AbortablePromise((resolve) => {
+			resolve(1);
+		})
+			.finally(() => AbortablePromise.reject('Boom'))
+			.catch((err) => err);
+
+		expect(reason).toBe('Boom');
+	});
+
+	it('`finally` that throws an error', async () => {
+		const reason = await new AbortablePromise((resolve) => {
+			resolve(1);
+		})
+			.finally(() => {
+				throw 'Boom';
+			})
+
+			.catch((err) => err);
+
+		expect(reason).toBe('Boom');
+	});
+
 	it('`AbortablePromise.resolve`', async () => {
 		let
 			i = 0,
