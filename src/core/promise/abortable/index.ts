@@ -55,9 +55,16 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 	}
 
 	/**
-	 * Creates a new resolved AbortablePromise promise for the specified value.
+	 * Returns a AbortablePromise object that is resolved with a given value.
 	 * If the resolved value is a function, it will be invoked.
 	 * The result of the invoking will be provided as a value of the promise.
+	 *
+	 * If the value is a promise, that promise is returned; if the value is a thenable (i.e., has a "then" method),
+	 * the returned promise will "follow" that thenable, adopting its eventual state; otherwise,
+	 * the returned promise will be fulfilled with the value.
+	 *
+	 * This function flattens nested layers of promise-like objects
+	 * (e.g., a promise that resolves to a promise that resolves to something) into a single layer.
 	 *
 	 * @param value
 	 * @param [parent] - parent promise
@@ -65,7 +72,7 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 	static resolveAndCall<T = unknown>(value: ExecutableValue<T>, parent?: AbortablePromise): AbortablePromise<T>;
 
 	/**
-	 * Creates a new resolved AbortablePromise promise
+	 * Returns a new resolved AbortablePromise object with an undefined value
 	 */
 	static resolveAndCall(): AbortablePromise<void>;
 	static resolveAndCall<T = unknown>(value?: ExecutableValue<T>, parent?: AbortablePromise): AbortablePromise<T> {
