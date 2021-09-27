@@ -11,5 +11,6 @@ import type engines from 'core/perf/timer/engines/index';
 export type PerfTimerEngineName = keyof typeof engines;
 
 export interface PerfTimerEngine {
-	(ns: string, duration: number, additional?: Dictionary): void;
+	sendDelta(ns: string, duration: number, additional?: Dictionary): void;
+	getTimestamp(): number;
 }

@@ -6,13 +6,21 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-export function log(ns: string, duration: number, additional?: Dictionary): void {
-	const
-		args: unknown[] = [`${ns} took ${duration} ms`];
+import type { PerfTimerEngine } from 'core/perf/timer/engines/interface';
 
-	if (additional != null) {
-		args.push(additional);
+export const consoleEngine: PerfTimerEngine = {
+	sendDelta(ns: string, duration: number, additional?: Dictionary): void {
+		const
+			args: unknown[] = [`${ns} took ${duration} ms`];
+
+		if (additional != null) {
+			args.push(additional);
+		}
+
+		console.warn(...args);
+	},
+
+	getTimestamp(): number {
+		return performance.now();
 	}
-
-	console.warn(...args);
-}
+};
