@@ -44,7 +44,7 @@ export default class PerfTimersRunner {
 				this.finish(perfTimerId, additional),
 
 			markTimestamp: (name: string, additional?: Dictionary) =>
-				this.markTimestamp(name, additional),
+				this.markTimestamp(PerfTimersRunner.combineNamespaces(namespace, name), additional),
 
 			namespace(ns: string): PerfTimer {
 				return makeTimer(PerfTimersRunner.combineNamespaces(namespace, ns));
@@ -100,7 +100,14 @@ export default class PerfTimersRunner {
 	}
 
 	protected markTimestamp(name: string, additional?: Dictionary): void {
-		this.engine.sendDelta(name, this.getTimestamp(), additional);
+		const
+			timestamp = this.getTimestamp();
+
+		if (this.filter != null && !this.filter(name)) {
+			return undefined;
+		}
+
+		this.engine.sendDelta(name, timestamp, additional);
 	}
 
 	protected getTimestamp(): number {
