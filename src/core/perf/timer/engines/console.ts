@@ -7,6 +7,7 @@
  */
 
 import type { PerfTimerEngine } from 'core/perf/timer/engines/interface';
+import { IS_NODE } from 'core/prelude/env';
 
 export const consoleEngine: PerfTimerEngine = {
 	sendDelta(ns: string, duration: number, additional?: Dictionary): void {
@@ -21,6 +22,14 @@ export const consoleEngine: PerfTimerEngine = {
 	},
 
 	getTimestampFromTimeOrigin(): number {
-		return performance.now();
+		let
+			perf = globalThis.performance;
+
+		if (IS_NODE) {
+			// eslint-disable-next-line @typescript-eslint/no-var-requires,import/no-nodejs-modules
+			perf = require('perf_hooks').performance;
+		}
+
+		return perf.now();
 	}
 };
