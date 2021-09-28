@@ -37,16 +37,30 @@ export default class PerfTimersRunner {
 
 	createTimer(group: PerfGroup): PerfTimer {
 		const makeTimer = (namespace?: string): PerfTimer => ({
-			start: (name: string): PerfTimerId =>
-				this.start(PerfTimersRunner.combineNamespaces(namespace, name)),
+			start: (name: string): PerfTimerId => {
+				if (!Object.isTruly(name)) {
+					throw new Error('Metrics name should be defined');
+				}
+
+				return this.start(PerfTimersRunner.combineNamespaces(namespace, name));
+			},
 
 			finish: (perfTimerId: PerfTimerId, additional?: Dictionary) =>
 				this.finish(perfTimerId, additional),
 
-			markTimestamp: (name: string, additional?: Dictionary) =>
-				this.markTimestamp(PerfTimersRunner.combineNamespaces(namespace, name), additional),
+			markTimestamp: (name: string, additional?: Dictionary) => {
+				if (!Object.isTruly(name)) {
+					throw new Error('Metrics name should be defined');
+				}
+
+				return this.markTimestamp(PerfTimersRunner.combineNamespaces(namespace, name), additional);
+			},
 
 			namespace(ns: string): PerfTimer {
+				if (!Object.isTruly(ns)) {
+					throw new Error('Namespace should be defined');
+				}
+
 				return makeTimer(PerfTimersRunner.combineNamespaces(namespace, ns));
 			}
 		});
