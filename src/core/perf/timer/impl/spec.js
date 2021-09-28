@@ -221,6 +221,38 @@ describe('core/perf/timer/impl', () => {
 				expect(testEngine.sendDelta).toHaveBeenCalledOnceWith('network.auth.attach-headers', 1, undefined);
 			});
 
+			it('enriches the namespace for `markTimestamp` method several times in a row', () => {
+				const runner = new PerfTimersRunner(testEngine);
+				const timer = runner
+					.createTimer('network')
+					.namespace('auth')
+					.namespace('v1')
+					.namespace('api');
+
+				testEngine.getTimestampFromTimeOrigin.and.returnValue(1);
+				timer.markTimestamp('attach-headers');
+				expect(testEngine.sendDelta).toHaveBeenCalledOnceWith('network.auth.v1.api.attach-headers', 1, undefined);
+			});
+
+			it('creates another timer instance which `markTimestamp` method does not affect the same method of the previous timer', () => {
+				const runner = new PerfTimersRunner(testEngine);
+				const baseTimer = runner.createTimer('network');
+				const specificTimer = baseTimer.namespace('v1');
+
+				testEngine.getTimestampFromTimeOrigin.and.returnValue(1);
+				specificTimer.markTimestamp('attach-headers');
+
+				testEngine.getTimestampFromTimeOrigin.and.returnValue(2);
+				baseTimer.markTimestamp('attach-headers');
+
+				expect(testEngine.sendDelta.calls.allArgs()).toEqual(
+					[
+						['network.v1.attach-headers', 1, undefined],
+						['network.attach-headers', 2, undefined]
+					]
+				);
+			});
+
 			it('enriches the namespace for `start`/`finish` methods', () => {
 				const runner = new PerfTimersRunner(testEngine);
 				const timer = runner.createTimer('network').namespace('auth');
@@ -229,6 +261,44 @@ describe('core/perf/timer/impl', () => {
 				testEngine.getTimestampFromTimeOrigin.and.returnValue(1);
 				timer.finish(timerId);
 				expect(testEngine.sendDelta).toHaveBeenCalledOnceWith('network.auth.login', 1, undefined);
+			});
+
+			it('enriches the namespace for `start`/`finish` methods several times in a row', () => {
+				const runner = new PerfTimersRunner(testEngine);
+				const timer = runner
+					.createTimer('network')
+					.namespace('auth')
+					.namespace('v1')
+					.namespace('api');
+
+				testEngine.getTimestampFromTimeOrigin.and.returnValue(0);
+				const timerId = timer.start('login');
+				testEngine.getTimestampFromTimeOrigin.and.returnValue(1);
+				timer.finish(timerId);
+				expect(testEngine.sendDelta).toHaveBeenCalledOnceWith('network.auth.v1.api.login', 1, undefined);
+			});
+
+			it('creates another timer instance which `start`/`finish` methods do not affect the same methods of the previous timer', () => {
+				const runner = new PerfTimersRunner(testEngine);
+				const baseTimer = runner.createTimer('network');
+				const specificTimer = baseTimer.namespace('auth');
+
+				testEngine.getTimestampFromTimeOrigin.and.returnValue(0);
+				const specificTimerId = specificTimer.start('login');
+				testEngine.getTimestampFromTimeOrigin.and.returnValue(1);
+				specificTimer.finish(specificTimerId);
+
+				testEngine.getTimestampFromTimeOrigin.and.returnValue(2);
+				const baseTimerId = baseTimer.start('login');
+				testEngine.getTimestampFromTimeOrigin.and.returnValue(4);
+				baseTimer.finish(baseTimerId);
+
+				expect(testEngine.sendDelta.calls.allArgs()).toEqual(
+					[
+						['network.auth.login', 1, undefined],
+						['network.login', 2, undefined]
+					]
+				);
 			});
 
 			it('does not send a delta', () => {
