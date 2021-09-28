@@ -58,7 +58,7 @@ export default class PerfTimersRunner {
 		const
 			timestamp = this.getTimestamp();
 
-		if (!this.filter?.(name)) {
+		if (this.filter != null && !this.filter(name)) {
 			return undefined;
 		}
 
