@@ -6,35 +6,29 @@ This module provides the API to send performance metrics.
 
 Perf module is the factory for different measurers (or metrics).
 
+There are two ways to use this module: with a custom configuration or default one.
+
+### Default configuration
+
+Object `perf` is performance metrics factory that is configured using runtime config `src/config`. The `perf` field
+of the config defines performance settings.
+
+```js
+import { perf } from 'core/perf';
+```
+
+### Custom configuration
+
+There is an opportunity to create a performance metrics factory with a custom configuration. It allows to have several
+differently configured performance metrics factories at the same time.
+
+This is achieved using the `configurePerf` method which acquire a new config as the first argument.
+
+```js
+import { configurePerf } from 'core/pref';
+const myPerf = configurePerf(myConfig);
+```
+
 ## Time metrics
 
-Currently, the module supports only the time metrics. There are several ways these metrics can be used.
-
-### Regular timer
-
-The simplest way is to get regular timer and calculate time, that some method takes to execute:
-
-```js
-import { perf } from 'core/perf';
-
-const timer = perf.getTimer('manual');
-const timerId = timer.start('loading');
-await loadSomething();
-timer.finish(timerId);
-```
-
-### Scoped timer
-
-Another example shows using of scoped timer:
-
-```js
-import { perf } from 'core/perf';
-
-const timer = perf.getScopedTimer('components', 'p-main-page');
-// <some code>
-timer.markTimestamp('init');
-```
-
-A scoped timer remembers the time it was called the first time and measures all timestamp starting from this moment.
-On the other hand, regular timer measures all timestamps starting from
-[the time origin](https://developer.mozilla.org/en-US/docs/Web/API/DOMHighResTimeStamp#the_time_origin).
+Currently, the module supports only the time metrics [core/perf/timer](src_core_perf_timer.html).
