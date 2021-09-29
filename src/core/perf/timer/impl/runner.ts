@@ -59,8 +59,8 @@ export default class PerfTimersRunner {
 
 	/**
 	 * @param engine - the instance of the engine, that sends metrics to the target destination
-	 * @param filter - predicate for filtering metrics
-	 * @param withCurrentTimeOrigin - if `true`, then moment of instantiating of the class is considering as its time
+	 * @param [filter] - predicate for filtering metrics
+	 * @param [withCurrentTimeOrigin] - if `true`, then moment of instantiating of the class is considering as its time
 	 * origin
 	 */
 	constructor(engine: PerfTimerEngine, filter?: PerfPredicate, withCurrentTimeOrigin: boolean = false) {

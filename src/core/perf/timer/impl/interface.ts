@@ -35,7 +35,7 @@ export interface PerfTimer {
 	 * Finishes started measurement by its timerId. Works together with {@link start} method
 	 *
 	 * @param timerId - id of the metrics to stop
-	 * @param additional - additional params to send along with the metrics
+	 * @param [additional] - additional params to send along with the metrics
 	 */
 	finish(timerId: PerfTimerId, additional?: Dictionary): void;
 
@@ -43,7 +43,7 @@ export interface PerfTimer {
 	 * Measures difference between current moment and the time origin of the corresponding timers runner
 	 *
 	 * @param name - full name of the metrics
-	 * @param additional - additional params to send along with the metrics
+	 * @param [additional] - additional params to send along with the metrics
 	 */
 	markTimestamp(name: string, additional?: Dictionary): void;
 

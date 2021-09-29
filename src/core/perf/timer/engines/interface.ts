@@ -10,7 +10,21 @@ import type engines from 'core/perf/timer/engines/index';
 
 export type PerfTimerEngineName = keyof typeof engines;
 
+/**
+ * Engine that sends time metrics to the target
+ */
 export interface PerfTimerEngine {
-	sendDelta(ns: string, duration: number, additional?: Dictionary): void;
+	/**
+	 * Sends metrics
+	 *
+	 * @param name - metrics name
+	 * @param duration - difference between two moments of time
+	 * @param [additional] - additional data
+	 */
+	sendDelta(name: string, duration: number, additional?: Dictionary): void;
+
+	/**
+	 * Returns a timestamp from the application start
+	 */
 	getTimestampFromTimeOrigin(): number;
 }
