@@ -122,14 +122,14 @@ export default class PerfTimersRunner {
 		this.nsToCounter[name] = (this.nsToCounter[name] ?? 0) + 1;
 
 		const
-			perfId = `${this.salt}-${name}-${this.nsToCounter[name]}`;
+			timerId = `${this.salt}-${name}-${this.nsToCounter[name]}`;
 
-		this.idToMeasurement[perfId] = {
+		this.idToMeasurement[timerId] = {
 			startTimestamp: timestamp,
 			name
 		};
 
-		return perfId;
+		return timerId;
 	}
 
 	/** @see [[PerfTimer.finish]] */
