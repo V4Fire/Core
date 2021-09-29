@@ -14,44 +14,41 @@
 import type { PerfGroup } from 'core/perf/interface';
 
 import { PerfTimersRunner, PerfTimer } from 'core/perf/timer/impl';
-import { getTimerEngine, createPredicates } from 'core/perf/config';
+import { getTimerEngine, createPredicates, PerfTimerConfig } from 'core/perf/config';
+import type { PerfTimerFactory } from 'core/perf/timer/interface';
 
-import config from 'config';
-
-type RunnersByGroup = {[K in PerfGroup]?: PerfTimersRunner};
-
-const
-	runners: RunnersByGroup = {},
-	scopedRunners: Dictionary<PerfTimersRunner> = {},
-	engine = getTimerEngine(config.perf),
-	predicates = createPredicates(config.perf.timer.filters ?? {});
+export * from 'core/perf/timer/interface';
 
 /**
- * Returns instance of a timer for a specific group
- * @param group - the group name, that timer should belong to. Appears in the beginning of all timemarks' namespaces
+ * Return a timer factory
  */
-export function getTimer(group: PerfGroup): PerfTimer {
-	if (runners[group] == null) {
-		runners[group] = new PerfTimersRunner(engine, predicates[group]);
-	}
+export function getTimerFactory(config: PerfTimerConfig): PerfTimerFactory {
+	return (() => {
+		const
+			runners: Partial<Record<PerfGroup, PerfTimersRunner>> = {},
+			scopedRunners: Dictionary<PerfTimersRunner> = {},
+			engine = getTimerEngine(config),
+			predicates = createPredicates(config.filters ?? {});
 
-	return runners[group]!.createTimer(group);
-}
+		return {
+			getTimer(group: PerfGroup): PerfTimer {
+				if (runners[group] == null) {
+					runners[group] = new PerfTimersRunner(engine, predicates[group]);
+				}
 
-/**
- * Returns instance of a scoped timer for specific group.
- * Scoped timer is a timer, that measures timestamps from the moment of its creation.
- *
- * @param group - the group name, that timer should belong to. Appears in the beginning of all timemarks' namespaces
- * @param scope - the scope name, that defines the scope. Doesn't appear in any timemark namespace
- */
-export function getScopedTimer(group: PerfGroup, scope: string): PerfTimer {
-	const
-		key = `${group}_${scope}`;
+				return runners[group]!.createTimer(group);
+			},
 
-	if (scopedRunners[key] == null) {
-		scopedRunners[key] = new PerfTimersRunner(engine, predicates[group], true);
-	}
+			getScopedTimer(group: PerfGroup, scope: string): PerfTimer {
+				const
+					key = `${group}_${scope}`;
 
-	return scopedRunners[group]!.createTimer(group);
+				if (scopedRunners[key] == null) {
+					scopedRunners[key] = new PerfTimersRunner(engine, predicates[group], true);
+				}
+
+				return scopedRunners[key]!.createTimer(group);
+			}
+		};
+	})();
 }

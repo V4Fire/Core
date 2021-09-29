@@ -11,7 +11,7 @@
  * @packageDocumentation
  */
 
-import type { PerfConfig, PerfPredicates, PerfGroupFilters } from 'core/perf/config/interface';
+import type { PerfConfig, PerfTimerConfig, PerfPredicates, PerfGroupFilters } from 'core/perf/config/interface';
 import { GROUPS } from 'core/perf/const';
 import engines, { PerfTimerEngine } from 'core/perf/timer/engines';
 
@@ -21,8 +21,8 @@ export * from 'core/perf/config/interface';
  * Returns instance of the timer engine, defined in the performance config
  * @param config - performance config
  */
-export function getTimerEngine(config: PerfConfig): PerfTimerEngine {
-	return engines[config.timer.engine];
+export function getTimerEngine(config: PerfTimerConfig): PerfTimerEngine {
+	return engines[config.engine];
 }
 
 /**
@@ -48,6 +48,16 @@ export function createPredicates(filters: PerfGroupFilters): PerfPredicates {
 }
 
 /**
+ * Combines passed configs together
+ *
+ * @param baseConfig - base config, that has all required fields
+ * @param configs - additional configs, that override fields of the base one
+ */
+export function mergeConfigs(baseConfig: PerfConfig, ...configs: Array<Partial<PerfConfig>>): PerfConfig {
+	return Object.mixin({deep: true}, {}, baseConfig, ...configs);
+}
+
+/**
  * Preprocesses raw performance config filters and returns collection of regexps or boolean
  * @param filters - raw performance config filters
  */
@@ -56,5 +66,5 @@ function createFilters(filters: CanUndef<string[] | boolean>): RegExp[] | boolea
 		return filters.map((filter) => new RegExp(filter));
 	}
 
-	return filters ?? false;
+	return filters ?? true;
 }
