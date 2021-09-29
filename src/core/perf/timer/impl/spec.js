@@ -119,21 +119,26 @@ describe('core/perf/timer/impl', () => {
 			});
 
 			it('does not send a delta if passed timerId is not real timerId', () => {
+				spyOn(console, 'warn');
 				const runner = new PerfTimersRunner(testEngine);
 				const timer = runner.createTimer('manual');
 				timer.finish('my-own-timer-id');
 				expect(testEngine.sendDelta).not.toHaveBeenCalled();
+				expect(console.warn).toHaveBeenCalled();
 			});
 
 			it('does not send a delta after second call with the same timerId', () => {
+				spyOn(console, 'warn');
 				const runner = new PerfTimersRunner(testEngine);
 				const timer = runner.createTimer('manual');
 				testEngine.getTimestampFromTimeOrigin.and.returnValue(0);
 				const timerId = timer.start('metrics');
 				testEngine.getTimestampFromTimeOrigin.and.returnValue(1);
 				timer.finish(timerId);
+				expect(console.warn).not.toHaveBeenCalled();
 				timer.finish(timerId);
 				expect(testEngine.sendDelta).toHaveBeenCalledOnceWith('manual.metrics', 1, undefined);
+				expect(console.warn).toHaveBeenCalled();
 			});
 
 			it('is not affected by scoped runner', () => {
