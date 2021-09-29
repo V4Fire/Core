@@ -28,6 +28,7 @@ export default class PerfTimersRunner {
 	protected filter?: PerfPredicate;
 	protected nsToCounter: Dictionary<number> = {};
 	protected idToMeasurement: Dictionary<PerfTimerMeasurement> = {};
+	protected salt: number = Math.floor(Math.random() * 1234567890);
 
 	constructor(engine: PerfTimerEngine, filter?: PerfPredicate, keepTImeOffset: boolean = false) {
 		this.engine = engine;
@@ -79,7 +80,7 @@ export default class PerfTimersRunner {
 		this.nsToCounter[name] = (this.nsToCounter[name] ?? 0) + 1;
 
 		const
-			perfId = `${name}-${this.nsToCounter[name]}`;
+			perfId = `${this.salt}-${name}-${this.nsToCounter[name]}`;
 
 		this.idToMeasurement[perfId] = {
 			startTimestamp: timestamp,
