@@ -97,6 +97,10 @@ describe('core/prelude/object/convert', () => {
 	describe('`parse`', () => {
 		it('parsing of primitives', () => {
 			expect(Object.parse('1')).toBe(1);
+			expect(Object.parse('0.124')).toBe(0.124);
+			expect(Object.parse('.124')).toBe('.124');
+			expect(Object.parse('1e2')).toBe(100);
+			expect(Object.parse('1e309')).toBe('1e309');
 			expect(Object.parse('"1"')).toBe('1');
 			expect(Object.parse('"😃😡"')).toBe('😃😡');
 			expect(Object.parse('😃😡')).toBe('😃😡');

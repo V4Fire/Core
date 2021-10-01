@@ -60,7 +60,18 @@ extend(Object, 'parse', (value, reviver?: JSONCb) => {
 
 		if (canParse.test(value)) {
 			try {
-				return JSON.parse(value, reviver);
+				const
+					parsedVal = JSON.parse(value, reviver);
+
+				if (!isNaN(parsedVal)) {
+					if (value === String(parsedVal) || isFinite(parsedVal)) {
+						return parsedVal;
+					}
+
+					return value;
+				}
+
+				return parsedVal;
 			} catch {}
 		}
 

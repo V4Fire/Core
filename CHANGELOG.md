@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.59.3 (2021-10-01)
+
+#### :bug: Bug Fix
+
+* Fixed parsing of numbers `Object.parse`
+
 ## v3.59.2 (2021-09-27)
 
 #### :bug: Bug Fix
