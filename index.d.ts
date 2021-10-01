@@ -2206,6 +2206,12 @@ interface NumberConstructor {
 	setOption(key: NumberOption, value: string): string;
 
 	/**
+	 * Returns true if the specified value is a safe number
+	 * @param value
+	 */
+	isSafe(value: any): boolean;
+
+	/**
 	 * Returns true if the specified value is an integer number
 	 * @param value
 	 */
@@ -2523,7 +2529,12 @@ interface Number {
 	weeks(): number;
 
 	/**
-	 * Returns true if the number is integer
+	 * Returns true if the number is safe
+	 */
+	isSafe(): boolean;
+
+	/**
+	 * Returns true if the number is an integer
 	 */
 	isInteger(): boolean;
 

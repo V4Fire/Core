@@ -8,9 +8,12 @@
 
 import extend from 'core/prelude/extend';
 
-/** @see [[Number.isInteger]] */
-extend(Number.prototype, 'isInteger', function isInteger(this: number): boolean {
-	return this % 1 === 0;
+/** @see [[NumberConstructor.isSafe]] */
+extend(Number, 'isFloat', (value) => Object.isNumber(value) && value.isSafe());
+
+/** @see [[Number.isSafe]] */
+extend(Number.prototype, 'isSafe', function isSafe(this: number): boolean {
+	return this >= Number.MIN_SAFE_INTEGER && this <= Number.MAX_SAFE_INTEGER;
 });
 
 /** @see [[NumberConstructor.isInteger]] */
