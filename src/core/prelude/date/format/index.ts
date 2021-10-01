@@ -61,56 +61,53 @@ extend(Date.prototype, 'format', function format(
 		canCache = !pattern.includes('?'),
 		cacheKey = [locale, pattern].join();
 
-	const
-		cache = canCache ? formatCache[cacheKey] : null;
+	let
+		formatter = canCache ? formatCache[cacheKey] : null;
 
-	if (cache != null) {
-		return cache.format(this);
-	}
-
-	const
-		chunks = pattern.split(';'),
-		opts = {};
-
-	for (let i = 0; i < chunks.length; i++) {
+	if (formatter == null) {
 		const
-			formatChunk = chunks[i].trim();
+			chunks = pattern.split(';'),
+			opts = {};
 
-		let [formatKey, formatPattern = ''] = formatChunk.split(':');
-		formatKey = formatKey.trim();
+		for (let i = 0; i < chunks.length; i++) {
+			const
+				formatChunk = chunks[i].trim();
 
-		if (formatPattern !== '') {
-			formatPattern = formatPattern.trim();
-		}
+			let [formatKey, formatParams = ''] = formatChunk.split(':');
+			formatKey = formatKey.trim();
 
-		const
-			formatKeyAlias = formatAliases[formatKey];
+			if (formatParams !== '') {
+				formatParams = formatParams.trim();
+			}
 
-		if (formatKeyAlias != null) {
-			formatKey = formatKeyAlias;
+			const
+				formatKeyAlias = formatAliases[formatKey];
 
-			if (Object.isFunction(formatKey)) {
-				formatKey = formatKey(this);
+			if (formatKeyAlias != null) {
+				formatKey = formatKeyAlias;
 
-				// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-				if (formatKey == null) {
-					continue;
+				if (Object.isFunction(formatKey)) {
+					formatKey = formatKey(this);
+
+					// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+					if (formatKey == null) {
+						continue;
+					}
 				}
 			}
+
+			if (formatParams === '') {
+				formatParams = defaultFormats[formatKey];
+			}
+
+			opts[formatKey] = formatParams in boolAliases ? boolAliases[formatParams] : formatParams;
 		}
 
-		if (formatPattern === '') {
-			formatPattern = defaultFormats[formatKey];
-		}
-
-		opts[formatKey] = formatPattern in boolAliases ? boolAliases[formatPattern] : formatPattern;
-	}
-
-	const
 		formatter = new Intl.DateTimeFormat(locale, opts);
 
-	if (canCache) {
-		formatCache[cacheKey] = formatter;
+		if (canCache) {
+			formatCache[cacheKey] = formatter;
+		}
 	}
 
 	return formatter.format(this);
