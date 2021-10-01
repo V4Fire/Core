@@ -98,15 +98,24 @@ describe('core/prelude/object/convert', () => {
 		it('parsing of primitives', () => {
 			expect(Object.parse('1')).toBe(1);
 			expect(Object.parse('0.124')).toBe(0.124);
-			expect(Object.parse('.124')).toBe('.124');
 			expect(Object.parse('1e2')).toBe(100);
-			expect(Object.parse('1e309')).toBe('1e309');
 			expect(Object.parse('"1"')).toBe('1');
 			expect(Object.parse('"😃😡"')).toBe('😃😡');
 			expect(Object.parse('😃😡')).toBe('😃😡');
 			expect(Object.parse('true')).toBe(true);
 			expect(Object.parse('null')).toBe(null);
 			expect(Object.parse('undefined')).toBe(undefined);
+		});
+
+		it('parsing of invalid numbers', () => {
+			expect(Object.parse('.124')).toBe('.124');
+			expect(Object.parse('1e309')).toBe('1e309');
+
+			expect(Object.parse('Infinite')).toBe('Infinite');
+			expect(Object.parse('-Infinite')).toBe('-Infinite');
+
+			expect(Object.parse(String(Number.MAX_SAFE_INTEGER + 1))).toBe('9007199254740992');
+			expect(Object.parse(String(Number.MIN_SAFE_INTEGER - 1))).toBe('-9007199254740992');
 		});
 
 		it('parsing of objects', () => {

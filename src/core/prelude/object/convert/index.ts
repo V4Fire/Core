@@ -64,7 +64,7 @@ extend(Object, 'parse', (value, reviver?: JSONCb) => {
 					parsedVal = JSON.parse(value, reviver);
 
 				if (!isNaN(parsedVal)) {
-					if (value === String(parsedVal) || isFinite(parsedVal)) {
+					if (parsedVal >= Number.MIN_SAFE_INTEGER && parsedVal <= Number.MAX_SAFE_INTEGER) {
 						return parsedVal;
 					}
 
