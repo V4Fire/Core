@@ -17,6 +17,10 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 * Fixed parsing of numbers `Object.parse`
 
+#### :house: Internal
+
+* Updated dependencies: `typescript@4.4.3`, `typedoc@0.22.4`
+
 ## v3.59.2 (2021-09-27)
 
 #### :bug: Bug Fix
