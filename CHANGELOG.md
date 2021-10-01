@@ -11,17 +11,15 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-## v3.59.4 (2021-10-01)
+## v3.60.0 (2021-10-01)
+
+#### :rocket: New Feature
+
+* Added `Number.isSafe` and `Number.prototype.isSafe` `core/prelude/number`
 
 #### :bug: Bug Fix
 
-* Hotfix after `3.59.3`
-
-## v3.59.3 (2021-10-01)
-
-#### :bug: Bug Fix
-
-* Fixed parsing of numbers `Object.parse`
+* Fixed parsing of numbers `Object.parse` `core/prelude/object`
 
 #### :house: Internal
 

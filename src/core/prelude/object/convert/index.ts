@@ -63,12 +63,8 @@ extend(Object, 'parse', (value, reviver?: JSONCb) => {
 				const
 					parsedVal = JSON.parse(value, reviver);
 
-				if (!Number.isNaN(parsedVal)) {
-					if (parsedVal >= Number.MIN_SAFE_INTEGER && parsedVal <= Number.MAX_SAFE_INTEGER) {
-						return parsedVal;
-					}
-
-					return value;
+				if (Object.isNumber(parsedVal)) {
+					return parsedVal.isSafe() ? parsedVal : value;
 				}
 
 				return parsedVal;
