@@ -28,8 +28,10 @@ export const consoleEngine: PerfTimerEngine = {
 			perf = globalThis.performance;
 
 		if (IS_NODE) {
+			//#if node_js
 			// eslint-disable-next-line @typescript-eslint/no-var-requires,import/no-nodejs-modules
 			perf = require('perf_hooks').performance;
+			//#endif
 		}
 
 		return perf.now();
