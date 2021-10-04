@@ -33,21 +33,21 @@ export let storage: CanUndef<Promise<AsyncStorage>>;
 
 //#if runtime has core/kv-storage
 // eslint-disable-next-line prefer-const
-storage = memoize(import('core/kv-storage').then(({asyncLocal}) => asyncLocal));
+storage = memoize(import('core/kv-storage').then(({asyncLocal}) => asyncLocal.namespace('[[REQUEST]]')));
 //#endif
+
+export const
+	isAbsoluteURL = /^\w*:?\/\//;
 
 export const
 	caches = new Set<AbstractCache>(),
 	pendingCache = new Cache<RequestResponse<any>>();
 
-export const cache: Record<Exclude<CacheStrategy, AbstractCache>, AbstractCache> = {
+export const cache: Record<Exclude<CacheStrategy, AbstractCache | Promise<AbstractCache>>, AbstractCache> = {
 	queue: new RestrictedCache(),
 	forever: new Cache(),
 	never: new NeverCache()
 };
-
-export const
-	isAbsoluteURL = /^\w*:?\/\//;
 
 export const globalOpts: GlobalOptions = {
 	get api(): CanUndef<string> {

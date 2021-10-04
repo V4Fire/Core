@@ -20,8 +20,8 @@ import Response from 'core/request/response';
 import RequestError from 'core/request/error';
 import RequestContext from 'core/request/context';
 
-import { getStorageKey, merge } from 'core/request/utils';
-import { defaultRequestOpts, globalOpts, storage } from 'core/request/const';
+import { merge } from 'core/request/utils';
+import { defaultRequestOpts, globalOpts } from 'core/request/const';
 
 import type {
 
@@ -221,9 +221,7 @@ function request<D = unknown>(
 				{cacheKey} = ctx;
 
 			let
-				localCacheKey,
-				fromCache = false,
-				fromLocalStorage = false;
+				fromCache = false;
 
 			if (cacheKey != null && ctx.canCache) {
 				if (ctx.pendingCache.has(cacheKey)) {
@@ -247,22 +245,7 @@ function request<D = unknown>(
 					}
 				}
 
-				localCacheKey = getStorageKey(cacheKey);
-				fromCache = ctx.cache.has(cacheKey);
-
-				try {
-					fromLocalStorage = Boolean(
-						!fromCache &&
-
-						requestParams.offlineCache &&
-						!(await isOnline()).status &&
-
-						await (await storage)?.has(localCacheKey)
-					);
-
-				} catch {
-					fromLocalStorage = false;
-				}
+				fromCache = await AbortablePromise.resolve(ctx.cache.has(cacheKey), parent);
 			}
 
 			let
@@ -270,15 +253,12 @@ function request<D = unknown>(
 				cache = 'none';
 
 			if (fromCache) {
-				cache = 'memory';
-				res = AbortablePromise.resolveAndCall(() => ctx.cache.get(cacheKey!), parent)
-					.then(ctx.wrapAsResponse.bind(ctx))
-					.then((res) => Object.assign(res, {cache}));
+				const getFromCache = async () => {
+					cache = (await AbortablePromise.resolve(isOnline(), parent)).status ? 'memory' : 'offline';
+					return ctx.cache.get(cacheKey!);
+				};
 
-			} else if (fromLocalStorage) {
-				cache = 'offline';
-				res = AbortablePromise.resolveAndCall(() => storage!
-					.then((storage) => storage.get(localCacheKey)), parent)
+				res = AbortablePromise.resolveAndCall(getFromCache, parent)
 					.then(ctx.wrapAsResponse.bind(ctx))
 					.then((res) => Object.assign(res, {cache}));
 

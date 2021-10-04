@@ -53,7 +53,7 @@ export default class ActivePersistentEngine<V> extends UncheckablePersistentEngi
 		await this.execTask(key, async () => {
 			const res = await this.storage.set(key, value);
 
-			this.ttlIndex[key] = ttl ?? Number.MAX_SAFE_INTEGER;
+			this.ttlIndex[key] = this.normalizeTTL(ttl);
 			await this.storage.set(INDEX_STORAGE_NAME, Object.fastClone(this.ttlIndex));
 
 			return res;
