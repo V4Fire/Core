@@ -29,7 +29,11 @@ export default class RequestContext<D = unknown> extends Super<D> {
 			return '';
 		}
 
-		return [getRequestKey(url, this.params), p.cacheStrategy, p.cacheId ?? ''].join();
+		const
+			cacheId = p.cacheId ?? '',
+			strategy = Object.isString(p.cacheStrategy) ? p.cacheStrategy : p.cacheStrategy.constructor.name;
+
+		return [getRequestKey(url, this.params), strategy, cacheId].join();
 	}
 
 	/**
