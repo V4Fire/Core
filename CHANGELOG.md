@@ -11,6 +11,13 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.60.2 (2021-10-04)
+
+#### :bug: Bug Fix
+
+* Fixed restoring state if provided TTL `core/cache/decorators/persistent`
+* Fixed support of offline caching `core/request`
+
 ## v3.60.1 (2021-10-01)
 
 #### :bug: Bug Fix

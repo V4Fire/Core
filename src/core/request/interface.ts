@@ -34,7 +34,8 @@ export type CacheStrategy =
 	'queue' |
 	'forever' |
 	'never' |
-	AbstractCache;
+	AbstractCache |
+	Promise<AbstractCache>;
 
 export type RequestBody =
 	string |

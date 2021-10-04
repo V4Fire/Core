@@ -23,7 +23,7 @@ export default class LazyPersistentEngine<V> extends CheckablePersistentEngine<V
 
 			} finally {
 				if (ttl != null) {
-					await this.storage.set(key + TTL_POSTFIX, ttl);
+					await this.storage.set(key + TTL_POSTFIX, this.normalizeTTL(ttl));
 
 				} else {
 					await this.removeTTLFrom(key);

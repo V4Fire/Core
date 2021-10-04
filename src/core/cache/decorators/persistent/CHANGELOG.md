@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.60.2 (2021-10-04)
+
+#### :bug: Bug Fix
+
+* Fixed restoring state if provided TTL
+
 ## v3.47.0 (2021-05-17)
 
 #### :bug: Bug Fix

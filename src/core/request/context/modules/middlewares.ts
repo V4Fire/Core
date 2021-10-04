@@ -20,10 +20,14 @@ export default class RequestContext<D = unknown> extends Super<D> {
 	wrapRequest(promise: RequestResponse<D>): RequestResponse<D> {
 		const
 			key = this.cacheKey,
-			cache = this.pendingCache,
-			canUsePendingCache = this.params.engine.pendingCache !== false;
+			cache = this.pendingCache;
 
-		if (key != null && !cache.has(key) && canUsePendingCache) {
+		const canCache =
+			key != null &&
+			!cache.has(key) &&
+			this.params.engine.pendingCache !== false;
+
+		if (canCache) {
 			promise = promise.then(
 				(v) => {
 					void cache.remove(key);
@@ -55,7 +59,7 @@ export default class RequestContext<D = unknown> extends Super<D> {
 			key = this.cacheKey;
 
 		if (key != null) {
-			this.cache.set(key, res.data);
+			void this.cache.set(key, res.data);
 			caches.add(this.cache);
 		}
 
