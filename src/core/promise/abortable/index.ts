@@ -23,7 +23,7 @@ import {
 	ResolveHandler,
 	RejectHandler,
 
-	ConstrFulfillHandler,
+	ConstrResolveHandler,
 	ConstrRejectHandler
 
 } from 'core/promise/abortable/interface';
@@ -445,6 +445,11 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 	protected state: State = State.pending;
 
 	/**
+	 * Resolved promise value
+	 */
+	protected value: unknown;
+
+	/**
 	 * If true, then the promise was aborted
 	 */
 	protected aborted: boolean = false;
@@ -455,9 +460,9 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 	protected promise: Promise<T>;
 
 	/**
-	 * Handler of the native promise fulfilling
+	 * Handler of the native promise resolving
 	 */
-	protected onFulfill!: ConstrFulfillHandler<T>;
+	protected onResolve!: ConstrResolveHandler<T>;
 
 	/**
 	 * Handler of the native promise rejection
@@ -480,17 +485,21 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 					return;
 				}
 
+				this.value = err;
 				this.state = State.rejected;
 				reject(err);
 			};
 
-			const onFulfilled = (val) => {
-				if (!this.isPending) {
+			const onResolved = (val) => {
+				if (!this.isPending || this.value != null) {
 					return;
 				}
 
+				this.value = val;
+
 				if (Object.isPromiseLike(val)) {
-					val.then(onFulfilled, onRejected);
+					// eslint-disable-next-line @typescript-eslint/no-use-before-define
+					val.then(forceResolve, onRejected);
 					return;
 				}
 
@@ -498,7 +507,12 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 				resolve(val);
 			};
 
-			this.onFulfill = onFulfilled;
+			const forceResolve = (val) => {
+				this.value = undefined;
+				onResolved(val);
+			};
+
+			this.onResolve = onResolved;
 			this.onReject = onRejected;
 
 			let
@@ -529,7 +543,7 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 			}
 
 			if (this.isPending && (parent == null || parent.state !== State.rejected)) {
-				this.call(executor, [onFulfilled, onRejected, setOnAbort], onRejected);
+				this.call(executor, [onResolved, onRejected, setOnAbort], onRejected);
 			}
 		});
 	}

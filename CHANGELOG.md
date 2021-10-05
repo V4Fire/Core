@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.60.3 (2021-10-05)
+
+#### :bug: Bug Fix
+
+* Fixed a bug with double resolving of a promise when it resolved by another promise `core/promise`
+
 ## v3.60.2 (2021-10-04)
 
 #### :bug: Bug Fix

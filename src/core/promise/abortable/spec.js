@@ -72,6 +72,45 @@ describe('core/promise/abortable', () => {
 		expect(await i).toBe(1);
 	});
 
+	it('double promise resolution', async () => {
+		expect(
+			await new AbortablePromise((resolve) => {
+				resolve(1);
+				resolve(2);
+			})
+		).toBe(1);
+
+		expect(
+			await new AbortablePromise((resolve) => {
+				resolve(new Promise((r) => setTimeout(() => r(1)), 100));
+				resolve(2);
+			})
+		).toBe(1);
+	});
+
+	it('double promise rejection', async () => {
+		try {
+			await new AbortablePromise((resolve, reject) => {
+				reject(1);
+				reject(2);
+			});
+
+		} catch (err) {
+			expect(err).toBe(1);
+		}
+
+		try {
+			await new AbortablePromise((resolve, reject) => {
+				reject(new Promise((r) => setTimeout(() => r(1)), 100));
+				reject(2);
+			});
+
+		} catch (err) {
+			expect(err).toBeInstanceOf(Promise);
+			expect(await err).toBe(1);
+		}
+	});
+
 	it('aborting of a promise', async () => {
 		let
 			status = 'pending';

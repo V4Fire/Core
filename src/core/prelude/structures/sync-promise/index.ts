@@ -16,7 +16,7 @@ import {
 	RejectHandler,
 
 	ConstrRejectHandler,
-	ConstrFulfillHandler
+	ConstrResolveHandler
 
 } from 'core/prelude/structures/sync-promise/interface';
 
@@ -331,7 +331,7 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 	/**
 	 * List of handlers to handle the promise fulfilling
 	 */
-	protected fulfillHandlers: ConstrFulfillHandler[] = [];
+	protected fulfillHandlers: ConstrResolveHandler[] = [];
 
 	/**
 	 * List of handlers to handle the promise rejection
@@ -366,16 +366,18 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 		};
 
 		const resolve = (val) => {
-			if (!this.isPending) {
-				return;
-			}
-
-			if (Object.isPromiseLike(val)) {
-				val.then(resolve, reject);
+			if (!this.isPending || this.value != null) {
 				return;
 			}
 
 			this.value = val;
+
+			if (Object.isPromiseLike(val)) {
+				// eslint-disable-next-line @typescript-eslint/no-use-before-define
+				val.then(forceResolve, reject);
+				return;
+			}
+
 			this.state = State.fulfilled;
 
 			for (let o = this.fulfillHandlers, i = 0; i < o.length; i++) {
@@ -383,6 +385,11 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 			}
 
 			clear();
+		};
+
+		const forceResolve = (val) => {
+			this.value = undefined;
+			resolve(val);
 		};
 
 		this.call(executor, [resolve, reject], reject);
