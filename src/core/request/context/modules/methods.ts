@@ -23,13 +23,7 @@ export default class RequestContext<D = unknown> extends Super<D> {
 	 */
 	getRequestKey(url: string): string {
 		const
-			p = this.params;
-
-		if (p.cacheStrategy === 'never') {
-			return '';
-		}
-
-		const
+			p = this.params,
 			cacheId = p.cacheId ?? '',
 			strategy = Object.isString(p.cacheStrategy) ? p.cacheStrategy : p.cacheStrategy.constructor.name;
 

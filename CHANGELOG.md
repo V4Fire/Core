@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.60.4 (2021-10-06)
+
+#### :bug: Bug Fix
+
+* Now cache keys are generated for all strategies `core/request`
+
 ## v3.60.3 (2021-10-05)
 
 #### :bug: Bug Fix
