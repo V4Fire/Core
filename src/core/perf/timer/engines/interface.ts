@@ -11,11 +11,11 @@ import type engines from 'core/perf/timer/engines/index';
 export type PerfTimerEngineName = keyof typeof engines;
 
 /**
- * Engine that sends time metrics to the target
+ * An engine to send time metrics to the target
  */
 export interface PerfTimerEngine {
 	/**
-	 * Sends metrics
+	 * Sends metrics by the specified parameters
 	 *
 	 * @param name - metrics name
 	 * @param duration - difference between two moments of time
