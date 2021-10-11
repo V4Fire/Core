@@ -13,4 +13,4 @@ Changelog
 
 #### :rocket: New Feature
 
-* Created module
+* Initial release

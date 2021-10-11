@@ -13,16 +13,17 @@
 
 import config from 'config';
 
-import type { Perf } from 'core/perf/interface';
 import { getTimerFactory } from 'core/perf/timer';
 import { mergeConfigs, PerfConfig } from 'core/perf/config';
+
+import type { Perf } from 'core/perf/interface';
 
 export * from 'core/perf/interface';
 export * from 'core/perf/timer/impl/interface';
 
 /**
- * Return configured instance of `Perf` class
- * @param [perfConfig] - config that overrides default performance config fields {@see config.perf}
+ * Returns a configured instance of the `Perf` class
+ * @param [perfConfig] - config that overrides the default performance config fields {@see config.perf}
  */
 export function configurePerf(perfConfig?: Partial<PerfConfig>): Perf {
 	const
