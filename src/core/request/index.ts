@@ -263,11 +263,21 @@ function request<D = unknown>(
 					.then((res) => Object.assign(res, {cache}));
 
 			} else {
+				const
+					progress = {
+						loaded: undefined,
+						total: undefined
+					};
+
 				const reqOpts = {
 					...requestParams,
 					url,
 					parent,
-					decoders: ctx.decoders
+					decoders: ctx.decoders,
+					onProgress: ({loaded, total}) => {
+						progress.loaded = loaded;
+						progress.total = total;
+					}
 				};
 
 				const
@@ -303,7 +313,9 @@ function request<D = unknown>(
 						};
 
 						try {
-							return await createReq().then(wrapSuccessResponse);
+							return await createReq()
+								.then(wrapSuccessResponse)
+								.then((value) => ctx.wrapResponseWithIterator(value, progress));
 
 						} catch (err) {
 							if (attempt++ >= attemptLimit) {
@@ -324,7 +336,9 @@ function request<D = unknown>(
 					res = createReqWithRetrying();
 
 				} else {
-					res = createReq().then(wrapSuccessResponse);
+					res = createReq()
+						.then(wrapSuccessResponse)
+						.then((value) => ctx.wrapResponseWithIterator(value, progress));
 				}
 			}
 

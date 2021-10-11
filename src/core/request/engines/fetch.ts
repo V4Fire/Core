@@ -104,6 +104,9 @@ const request: RequestEngine = (params) => {
 					body = await response.text();
 					break;
 
+				case 'stream':
+					break;
+
 				default:
 					body = await response.arrayBuffer();
 			}
@@ -115,6 +118,7 @@ const request: RequestEngine = (params) => {
 				okStatuses: p.okStatuses,
 				status: response.status,
 				headers,
+				body: response.body,
 				decoder: p.decoders,
 				jsonReviver: p.jsonReviver
 			}));

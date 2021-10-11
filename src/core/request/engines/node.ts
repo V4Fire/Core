@@ -61,6 +61,9 @@ const request: RequestEngine = (params) => {
 				v = 'buffer';
 				break;
 
+			case 'stream':
+				break;
+
 			default:
 				v = p.responseType.toLowerCase();
 		}

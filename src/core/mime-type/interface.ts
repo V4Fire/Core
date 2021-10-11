@@ -11,4 +11,5 @@ export type DataType =
 	'json' |
 	'document' |
 	'arrayBuffer' |
+	'stream' |
 	'blob';

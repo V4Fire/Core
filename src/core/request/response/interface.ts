@@ -14,6 +14,8 @@ import type { DataType } from 'core/mime-type';
 import type { OkStatuses, WrappedDecoders, WrappedDecoder } from 'core/request/interface';
 import type { defaultResponseOpts } from 'core/request/response/const';
 
+import type { PassThrough } from 'stream';
+
 export type ResponseType =
 	DataType |
 	'object';
@@ -35,6 +37,8 @@ export type JSONLikeValue =
 	unknown[] |
 	Dictionary;
 
+export type StreamTypeValue = ReadableStream | PassThrough | undefined;
+
 export interface ResponseHeaders {
 	readonly [name: string]: string;
 }
@@ -45,6 +49,7 @@ export interface ResponseOptions {
 	responseType?: ResponseType;
 	okStatuses?: OkStatuses;
 	status?: StatusCodes;
+	body?: StreamTypeValue;
 	headers?: string | Dictionary<string>;
 	decoder?: WrappedDecoder | WrappedDecoders;
 	jsonReviver?: JSONCb | false;

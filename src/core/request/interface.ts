@@ -107,6 +107,7 @@ export interface RequestOptions {
 	readonly important?: boolean;
 	readonly credentials?: boolean;
 	readonly parent: AbortablePromise;
+	readonly onProgress?: Function;
 }
 
 export type RequestQuery =

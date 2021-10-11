@@ -501,6 +501,44 @@ describe('core/request', () => {
 				}
 			});
 
+			it('response with readable stream', async () => {
+				const
+					testText = 'test',
+					res = await request(`http://localhost:3000/stream?text=${testText}`, {responseType: 'stream'}),
+					{response} = res;
+
+				let
+					resultText = '';
+
+				if (response.bodyStream) {
+					for await (const item of response) {
+						resultText += item.toString();
+					}
+
+					expect(resultText).toEqual(testText);
+				} else {
+					expect(true).toEqual(true);
+				}
+			});
+
+			it('response with iterator', async () => {
+				const
+					res = await request('http://localhost:3000/iterator');
+				let
+					result = {};
+
+				expect(Object.isFunction(res[Symbol.asyncIterator])).toBeTruthy();
+
+				for await (const item of res) {
+					result = {
+						...result,
+						...item
+					};
+				}
+
+				expect(result.response.ok).toBeTruthy();
+			});
+
 			async function retryDelayTest(delay, delayMS) {
 				const startTime = new Date().getTime();
 
@@ -634,6 +672,14 @@ function createServer() {
 		res.status(500);
 		res.json({tryNumber});
 		tryNumber++;
+	});
+
+	serverApp.get('/stream', (req, res) => {
+		res.send(req.query.text);
+	});
+
+	serverApp.get('/iterator', (req, res) => {
+		res.json({id: 0, value: 'test'});
 	});
 
 	return serverApp.listen(3000);

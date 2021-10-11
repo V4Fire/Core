@@ -86,4 +86,36 @@ export default class RequestContext<D = unknown> extends Super<D> {
 			dropCache: this.dropCache.bind(this)
 		};
 	}
+
+	/**
+	 * Middleware to wrap with Iterator
+	 */
+	async wrapResponseWithIterator(value, progress) {
+		const newResponse = Object.create(value);
+
+		newResponse[Symbol.asyncIterator] = () => {
+			return {
+				done: false,
+				next() {
+					if (value && !this.done) {
+						if (value.response || progress.total === progress.loaded) {
+							this.done = true;
+						}
+
+						return Promise.resolve({
+							value: {
+								response: value.response,
+								...((progress.loaded || progress.total) && { progress })
+							},
+							done: false
+						});
+					}
+
+					return Promise.resolve({ done: true });
+				}
+			};
+		}
+
+		return newResponse;
+	}
 }

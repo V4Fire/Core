@@ -104,6 +104,7 @@ export default class RequestContext<D = unknown> extends Super<D> {
 			dropCache: ctx.dropCache.bind(forkedCtx),
 			wrapAsResponse: ctx.wrapAsResponse.bind(forkedCtx),
 			wrapRequest: ctx.wrapRequest.bind(forkedCtx),
+			wrapRequestWithIterator: ctx.wrapResponseWithIterator.bind(forkedCtx),
 
 			resolveRequest(api?: Nullable<string>): string {
 				const

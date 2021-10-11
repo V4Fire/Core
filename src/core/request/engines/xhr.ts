@@ -88,6 +88,10 @@ const request: RequestEngine = (params) => {
 		xhr.setRequestHeader('Content-Type', contentType);
 	}
 
+	if (Object.isFunction(p.onProgress)) {
+		xhr.addEventListener('progress', p.onProgress);
+	}
+
 	return new AbortablePromise<Response>(async (resolve, reject, onAbort) => {
 		const
 			{status} = await AbortablePromise.resolve(isOnline(), p.parent);

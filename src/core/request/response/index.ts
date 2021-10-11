@@ -30,7 +30,8 @@ import type {
 	ResponseTypeValue,
 	ResponseHeaders,
 	ResponseOptions,
-	JSONLikeValue
+	JSONLikeValue,
+	StreamTypeValue
 
 } from 'core/request/response/interface';
 
@@ -102,6 +103,11 @@ export default class Response<
 	protected readonly body: ResponseTypeValue;
 
 	/**
+	 * Value of the Readable Stream
+	 */
+	protected readonly bodyStream: StreamTypeValue;
+
+	/**
 	 * @param [body] - response body
 	 * @param [opts] - additional options
 	 */
@@ -144,6 +150,50 @@ export default class Response<
 		}
 
 		this.body = body;
+
+		this.bodyStream = opts?.body;
+	}
+
+	[Symbol.asyncIterator]() {
+		const readableStream = this.bodyStream;
+
+		if (!readableStream) {
+			return {
+				next() {
+					return Promise.resolve({ done: true });
+				}
+			};
+		}
+
+		const reader = IS_NODE ? readableStream : readableStream.getReader();
+
+		return {
+			chunk: null,
+
+			next() {
+				this.chunk = reader.read();
+
+				if (IS_NODE) {
+					if (this.chunk) {
+						return Promise.resolve({
+							value: this.chunk,
+							done: false
+						});
+					}
+
+					return Promise.resolve({ done: true });
+				} else {
+					return this.chunk;
+				}
+			},
+
+			return() {
+				if (!IS_NODE) {
+					reader.releaseLock();
+					return {};
+				}
+			}
+		};
 	}
 
 	/**
