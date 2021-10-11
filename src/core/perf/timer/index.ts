@@ -45,11 +45,15 @@ export function getTimerFactory(config: PerfTimerConfig): PerfTimerFactory {
 				const
 					key = `${group}_${scope}`;
 
-				if (scopedRunners[key] == null) {
-					scopedRunners[key] = new PerfTimersRunner(engine, predicates[group], true);
+				let
+					scopedRunner = scopedRunners[key];
+
+				if (scopedRunner == null) {
+					scopedRunner = new PerfTimersRunner(engine, predicates[group], true);
+					scopedRunners[key] = scopedRunner;
 				}
 
-				return scopedRunners[key]!.createTimer(group);
+				return scopedRunner.createTimer(group);
 			}
 		};
 	})();
