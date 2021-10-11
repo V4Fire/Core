@@ -1,17 +1,17 @@
 # core/perf
 
-This module provides the API to send performance metrics.
+This module provides API to send performance metrics.
 
 ## Overview
 
-Perf module is the factory for different measurers (or metrics).
+Perf module is a factory for different measures (or metrics).
 
 There are two ways to use this module: with a custom configuration or default one.
 
 ### Default configuration
 
-Object `perf` is performance metrics factory that is configured using runtime config `src/config`. The `perf` field
-of the config defines performance settings.
+Object `perf` is a performance metrics factory configured using the runtime config from `src/config`.
+The `perf` config field of the config defines performance settings.
 
 ```js
 import { perf } from 'core/perf';
@@ -19,13 +19,14 @@ import { perf } from 'core/perf';
 
 ### Custom configuration
 
-There is an opportunity to create a performance metrics factory with a custom configuration. It allows to have several
+There is an opportunity to create a performance metrics factory with a custom configuration. It allows having several
 differently configured performance metrics factories at the same time.
 
-This is achieved using the `configurePerf` method which acquire a new config as the first argument.
+This is achieved using the `configurePerf` method, which acquires a new config as the first argument.
 
 ```js
-import { configurePerf } from 'core/pref';
+import { configurePerf } from 'core/perf';
+
 const myPerf = configurePerf(myConfig);
 ```
 
