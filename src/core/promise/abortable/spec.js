@@ -6,14 +6,14 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import Then from 'core/promise/abortable';
+import AbortablePromise from 'core/promise/abortable';
 
 describe('core/promise/abortable', () => {
-	it('simple then', async () => {
+	it('simple `then`', async () => {
 		let
 			i = 1;
 
-		const promise = new Then((resolve) => {
+		const promise = new AbortablePromise((resolve) => {
 			resolve();
 		})
 			.then(() => i + 2)
@@ -25,11 +25,97 @@ describe('core/promise/abortable', () => {
 		expect(i).toBe(6);
 	});
 
+	it('promise that is resolved with another promise', async () => {
+		const i = await new AbortablePromise((resolve) => {
+			resolve(
+				new Promise((r) => setTimeout(() => r(AbortablePromise.resolve(1)), 50))
+			);
+		})
+			.then((val) => new Promise((r) => setTimeout(() => r(AbortablePromise.resolve(val + 2)), 50)))
+			.then((val) => val * 2);
+
+		expect(i).toBe(6);
+	});
+
+	it('promise that is rejected with another promise', async () => {
+		let i;
+
+		try {
+			await new AbortablePromise((resolve) => {
+				resolve(
+					new Promise((r) => setTimeout(() => r(AbortablePromise.resolve(1)), 50))
+				);
+			})
+				.then((val) => new Promise((r) => setTimeout(() => r(AbortablePromise.reject(val + 2)), 50)))
+				.catch((val) => Promise.reject(val * 2));
+
+		} catch (err) {
+			i = err;
+		}
+
+		expect(i).toBe(6);
+	});
+
+	it('promise that is rejected with another promise by using a constructor', async () => {
+		let i;
+
+		try {
+			await new AbortablePromise((resolve, reject) => {
+				reject(AbortablePromise.resolve(1));
+			});
+
+		} catch (err) {
+			i = err;
+		}
+
+		expect(i).toBeInstanceOf(AbortablePromise);
+		expect(await i).toBe(1);
+	});
+
+	it('double promise resolution', async () => {
+		expect(
+			await new AbortablePromise((resolve) => {
+				resolve(1);
+				resolve(2);
+			})
+		).toBe(1);
+
+		expect(
+			await new AbortablePromise((resolve) => {
+				resolve(new Promise((r) => setTimeout(() => r(1)), 100));
+				resolve(2);
+			})
+		).toBe(1);
+	});
+
+	it('double promise rejection', async () => {
+		try {
+			await new AbortablePromise((resolve, reject) => {
+				reject(1);
+				reject(2);
+			});
+
+		} catch (err) {
+			expect(err).toBe(1);
+		}
+
+		try {
+			await new AbortablePromise((resolve, reject) => {
+				reject(new Promise((r) => setTimeout(() => r(1)), 100));
+				reject(2);
+			});
+
+		} catch (err) {
+			expect(err).toBeInstanceOf(Promise);
+			expect(await err).toBe(1);
+		}
+	});
+
 	it('aborting of a promise', async () => {
 		let
 			status = 'pending';
 
-		const promise = new Then((resolve, reject, onAbort) => {
+		const promise = new AbortablePromise((resolve, reject, onAbort) => {
 			onAbort(() => {
 				status = 'aborted';
 			});
@@ -53,8 +139,8 @@ describe('core/promise/abortable', () => {
 	it('providing of a parent promise', async () => {
 		try {
 			const
-				parentPromise = new Then(() => undefined),
-				promise = new Then(() => undefined, parentPromise).catch((err) => err);
+				parentPromise = new AbortablePromise(() => undefined),
+				promise = new AbortablePromise(() => undefined, parentPromise).catch((err) => err);
 
 			parentPromise.abort('boom');
 			expect(await promise)
@@ -66,8 +152,8 @@ describe('core/promise/abortable', () => {
 
 		try {
 			const
-				parentPromise = new Then(() => undefined).catch((err) => err),
-				promise = new Then(() => undefined, parentPromise);
+				parentPromise = new AbortablePromise(() => undefined).catch((err) => err),
+				promise = new AbortablePromise(() => undefined, parentPromise);
 
 			promise.abort('boom');
 			expect(await parentPromise).toBe('boom');
@@ -80,7 +166,7 @@ describe('core/promise/abortable', () => {
 		let
 			i = 1;
 
-		await new Then((resolve, reject) => {
+		await new AbortablePromise((resolve, reject) => {
 			reject('boom');
 		})
 			.then((val) => val * 2, (err) => {
@@ -95,7 +181,7 @@ describe('core/promise/abortable', () => {
 		let
 			i = 1;
 
-		await new Then((resolve) => {
+		await new AbortablePromise((resolve) => {
 			resolve();
 		})
 			.then(() => {
@@ -113,11 +199,11 @@ describe('core/promise/abortable', () => {
 		expect(i).toBe(6);
 	});
 
-	it('catch', async () => {
+	it('`catch`', async () => {
 		let
 			i = 1;
 
-		await new Then((resolve, reject) => {
+		await new AbortablePromise((resolve, reject) => {
 			reject('boom');
 		})
 			.then((val) => val * 2)
@@ -133,7 +219,7 @@ describe('core/promise/abortable', () => {
 		let
 			i = 1;
 
-		await new Then((resolve) => {
+		await new AbortablePromise((resolve) => {
 			resolve();
 		})
 			.then(() => {
@@ -155,7 +241,7 @@ describe('core/promise/abortable', () => {
 		let
 			i = 1;
 
-		await new Then((resolve) => {
+		await new AbortablePromise((resolve) => {
 			resolve();
 		})
 			.then(() => i + 2)
@@ -172,7 +258,7 @@ describe('core/promise/abortable', () => {
 			i = 1;
 
 		try {
-			await new Then((resolve, reject) => {
+			await new AbortablePromise((resolve, reject) => {
 				reject('boom');
 			})
 				.finally((arg) => {
@@ -191,7 +277,7 @@ describe('core/promise/abortable', () => {
 		let
 			i = 1;
 
-		await new Then((resolve) => {
+		await new AbortablePromise((resolve) => {
 			resolve();
 		})
 			.then(() => {
@@ -218,16 +304,39 @@ describe('core/promise/abortable', () => {
 		expect(i).toBe(6);
 	});
 
-	it('`Then.resolve`', async () => {
+	it('`finally` that returns an error', async () => {
+		const reason = await new AbortablePromise((resolve) => {
+			resolve(1);
+		})
+			.finally(() => AbortablePromise.reject('Boom'))
+			.catch((err) => err);
+
+		expect(reason).toBe('Boom');
+	});
+
+	it('`finally` that throws an error', async () => {
+		const reason = await new AbortablePromise((resolve) => {
+			resolve(1);
+		})
+			.finally(() => {
+				throw 'Boom';
+			})
+
+			.catch((err) => err);
+
+		expect(reason).toBe('Boom');
+	});
+
+	it('`AbortablePromise.resolve`', async () => {
 		let
 			i = 0,
 			j = 0;
 
-		await Then.resolve(1)
+		await AbortablePromise.resolve(1)
 			.then((val) => i = val + 2)
 			.then((val) => i = val * 2);
 
-		await Then.resolve(Then.resolve(1))
+		await AbortablePromise.resolve(AbortablePromise.resolve(1))
 			.then((val) => j = val + 2)
 			.then((val) => j = val * 2);
 
@@ -235,11 +344,11 @@ describe('core/promise/abortable', () => {
 		expect(j).toBe(6);
 	});
 
-	it('`Then.reject`', async () => {
+	it('`AbortablePromise.reject`', async () => {
 		let
 			i = 1;
 
-		await Then.reject('boom')
+		await AbortablePromise.reject('boom')
 			.catch((err) => {
 				expect(err).toBe('boom');
 				i += 2;
@@ -248,12 +357,12 @@ describe('core/promise/abortable', () => {
 		expect(i).toBe(3);
 	});
 
-	describe('`Then.all`', () => {
+	describe('`AbortablePromise.all`', () => {
 		it('all promises are resolved', async () => {
-			const res = await Then.all([
+			const res = await AbortablePromise.all([
 				1,
 				null,
-				Then.resolve(2)
+				AbortablePromise.resolve(2)
 			]);
 
 			expect(res).toEqual([1, null, 2]);
@@ -264,10 +373,10 @@ describe('core/promise/abortable', () => {
 				res;
 
 			try {
-				res = await Then.all([
+				res = await AbortablePromise.all([
 					1,
 					null,
-					Then.reject(2)
+					AbortablePromise.reject(2)
 				]);
 
 			} catch (err) {
@@ -278,22 +387,22 @@ describe('core/promise/abortable', () => {
 		});
 	});
 
-	it('`Then.race`', async () => {
+	it('`AbortablePromise.race`', async () => {
 		let res;
 
-		await Then.race([
+		await AbortablePromise.race([
 			Promise.resolve(1),
-			Then.resolve(2)
+			AbortablePromise.resolve(2)
 		]).then((val) => res = val);
 
 		expect(res).toBe(2);
 	});
 
-	describe('`Then.race`', () => {
+	describe('`AbortablePromise.race`', () => {
 		it('all promises are resolved', async () => {
-			const res = await Then.race([
+			const res = await AbortablePromise.race([
 				Promise.resolve(1),
-				Then.resolve(2)
+				AbortablePromise.resolve(2)
 			]);
 
 			expect(res).toBe(2);
@@ -304,9 +413,9 @@ describe('core/promise/abortable', () => {
 				res;
 
 			try {
-				res = await Then.race([
+				res = await AbortablePromise.race([
 					new Promise((r) => setTimeout(r, 15)),
-					Then.reject(2)
+					AbortablePromise.reject(2)
 				]);
 
 			} catch (err) {

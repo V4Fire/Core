@@ -9,6 +9,16 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.60.0 (2021-10-01)
+
+#### :rocket: New Feature
+
+* Added `Number.isSafe` and `Number.prototype.isSafe`
+
+#### :bug: Bug Fix
+
+* Fixed parsing of numbers `Object.parse`
+
 ## v3.58.0 (2021-09-01)
 
 #### :bug: Bug Fix

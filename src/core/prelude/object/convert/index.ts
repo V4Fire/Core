@@ -60,7 +60,14 @@ extend(Object, 'parse', (value, reviver?: JSONCb) => {
 
 		if (canParse.test(value)) {
 			try {
-				return JSON.parse(value, reviver);
+				const
+					parsedVal = JSON.parse(value, reviver);
+
+				if (Object.isNumber(parsedVal)) {
+					return parsedVal.isSafe() ? parsedVal : value;
+				}
+
+				return parsedVal;
 			} catch {}
 		}
 

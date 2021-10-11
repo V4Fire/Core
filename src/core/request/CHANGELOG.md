@@ -9,6 +9,18 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.60.4 (2021-10-06)
+
+#### :bug: Bug Fix
+
+* Now cache keys are generated for all strategies
+
+## v3.60.2 (2021-10-04)
+
+#### :bug: Bug Fix
+
+* Fixed support of offline caching
+
 ## v3.58.1 (2021-09-06)
 
 #### :bug: Bug Fix

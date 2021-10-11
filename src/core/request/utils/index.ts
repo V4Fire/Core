@@ -31,14 +31,6 @@ export function merge<T>(...args: unknown[]): T {
 }
 
 /**
- * Takes a key for data and returns a new key to save the data in a storage
- * @param key
- */
-export function getStorageKey(key: string): string {
-	return `data:${key}`;
-}
-
-/**
  * Generates a string cache key for the specified parameters and returns it
  *
  * @param url - request url

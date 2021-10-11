@@ -100,7 +100,7 @@ describe('core/cache/decorators/helpers/add-emitter', () => {
 			cache.set('foo', 1);
 			cache.set('bar', 2);
 			cache.clear();
-			expect(memory[0]).toEqual([cache, {args: [undefined], result: new Map([['foo', 1], ['bar', 2]])}]);
+			expect(memory[0]).toEqual([cache, {args: [], result: new Map([['foo', 1], ['bar', 2]])}]);
 
 			cache.set('foo', 1);
 			cache.set('bar', 2);

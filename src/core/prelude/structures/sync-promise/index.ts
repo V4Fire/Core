@@ -14,10 +14,9 @@ import {
 
 	ResolveHandler,
 	RejectHandler,
-	FinallyHandler,
 
 	ConstrRejectHandler,
-	ConstrFulfillHandler
+	ConstrResolveHandler
 
 } from 'core/prelude/structures/sync-promise/interface';
 
@@ -28,13 +27,21 @@ export * from 'core/prelude/structures/sync-promise/interface';
  */
 export default class SyncPromise<T = unknown> implements Promise<T> {
 	/**
-	 * Creates a new resolved promise for the specified value
+	 * Returns a SyncPromise object that is resolved with a given value.
+	 *
+	 * If the value is a promise, that promise is returned; if the value is a thenable (i.e., has a "then" method),
+	 * the returned promise will "follow" that thenable, adopting its eventual state; otherwise,
+	 * the returned promise will be fulfilled with the value.
+	 *
+	 * This function flattens nested layers of promise-like objects
+	 * (e.g., a promise that resolves to a promise that resolves to something) into a single layer.
+	 *
 	 * @param value
 	 */
 	static resolve<T = unknown>(value: Value<T>): SyncPromise<T>;
 
 	/**
-	 * Creates a new resolved promise
+	 * Returns a new resolved SyncPromise object with an undefined value
 	 */
 	static resolve(): SyncPromise<void>;
 	static resolve<T = unknown>(value?: Value<T>): SyncPromise<T> {
@@ -45,18 +52,11 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 			return value;
 		}
 
-		return new Constr((resolve, reject) => {
-			if (Object.isPromiseLike(value)) {
-				value.then(resolve, reject);
-
-			} else {
-				resolve(value);
-			}
-		});
+		return new Constr((resolve) => resolve(value));
 	}
 
 	/**
-	 * Creates a new rejected promise with the specified reason
+	 * Returns a SyncPromise object that is rejected with a given reason
 	 * @param [reason]
 	 */
 	static reject<T = never>(reason?: unknown): SyncPromise<T> {
@@ -65,8 +65,10 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 	}
 
 	/**
-	 * Creates a promise that is resolved with an array of results when all the provided promises
-	 * are resolved, or rejected when any promise is rejected
+	 * Takes an iterable of promises and returns a single SyncPromise that resolves to an array of the results
+	 * of the input promises. This returned promise will resolve when all of the input's promises have been resolved or
+	 * if the input iterable contains no promises. It rejects immediately upon any of the input promises rejecting or
+	 * non-promises throwing an error and will reject with this first rejection message/error.
 	 *
 	 * @param values
 	 */
@@ -99,40 +101,47 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 	): SyncPromise<Array<T extends Iterable<Value<infer V>> ? V : unknown>> {
 		return new SyncPromise((resolve, reject) => {
 			const
-				promises = <SyncPromise[]>[],
-				resolved = <unknown[]>[];
+				promises = <SyncPromise[]>[];
 
 			for (const el of values) {
 				promises.push(SyncPromise.resolve(el));
 			}
 
 			if (promises.length === 0) {
-				resolve(resolved);
+				resolve([]);
 				return;
 			}
 
+			const
+				results = new Array(promises.length);
+
 			let
-				counter = 0;
+				done = 0;
 
 			for (let i = 0; i < promises.length; i++) {
-				promises[i].then(
-					(val) => {
-						resolved[i] = val;
+				const onFulfilled = (val) => {
+					done++;
+					results[i] = val;
 
-						if (++counter === promises.length) {
-							resolve(resolved);
-						}
-					},
+					if (done === promises.length) {
+						resolve(results);
+					}
+				};
 
-					reject
-				);
+				promises[i].then(onFulfilled, reject);
 			}
 		});
 	}
 
 	/**
-	 * Creates a promise that is resolved with an array of results when all the provided promises
-	 * are resolved or rejected
+	 * Returns a promise that resolves after all of the given promises have either been fulfilled or rejected,
+	 * with an array of objects describing each promise's outcome.
+	 *
+	 * It is typically used when you have multiple asynchronous tasks that are not dependent on one another to
+	 * complete successfully, or you'd always like to know the result of each promise.
+	 *
+	 * In comparison, the SyncPromise returned by `SyncPromise.all()` may be more appropriate
+	 * if the tasks are dependent on each other / if you'd like to reject upon any of them reject immediately.
 	 *
 	 * @param values
 	 */
@@ -183,51 +192,57 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 	): SyncPromise<Array<T extends Iterable<Value<infer V>> ? PromiseSettledResult<V> : PromiseSettledResult<unknown>>> {
 		return new SyncPromise((resolve) => {
 			const
-				promises = <SyncPromise[]>[],
-				resolved = <unknown[]>[];
+				promises = <SyncPromise[]>[];
 
 			for (const el of values) {
 				promises.push(SyncPromise.resolve(el));
 			}
 
 			if (promises.length === 0) {
-				resolve(resolved);
+				resolve([]);
 				return;
 			}
 
+			const
+				results = new Array(promises.length);
+
 			let
-				counter = 0;
+				done = 0;
 
 			for (let i = 0; i < promises.length; i++) {
-				promises[i].then(
-					(value) => {
-						resolved[i] = {
-							status: 'fulfilled',
-							value
-						};
+				const onFulfilled = (value) => {
+					done++;
+					results[i] = {
+						status: 'fulfilled',
+						value
+					};
 
-						if (++counter === promises.length) {
-							resolve(resolved);
-						}
-					},
-
-					(reason) => {
-						resolved[i] = {
-							status: 'rejected',
-							reason
-						};
-
-						if (++counter === promises.length) {
-							resolve(resolved);
-						}
+					if (done === promises.length) {
+						resolve(results);
 					}
-				);
+				};
+
+				const onRejected = (reason) => {
+					done++;
+					results[i] = {
+						status: 'rejected',
+						reason
+					};
+
+					if (done === promises.length) {
+						resolve(results);
+					}
+				};
+
+				promises[i].then(onFulfilled, onRejected);
 			}
 		});
 	}
 
 	/**
-	 * Creates a promise that is resolved or rejected when any of the provided promises are resolved or rejected
+	 * Returns a promise that fulfills or rejects as soon as one of the promises in an iterable fulfills or rejects,
+	 * with the value or reason from that promise
+	 *
 	 * @param values
 	 */
 	static race<T extends Iterable<Value>>(
@@ -253,8 +268,10 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 	}
 
 	/**
-	 * Creates a promise that is resolved when any of the provided promises are resolved or
-	 * rejected if the provided all promises are rejected
+	 * Takes an iterable of SyncPromise objects and, as soon as one of the promises in the iterable fulfills,
+	 * returns a single promise that resolves with the value from that promise. If no promises in the iterable fulfill
+	 * (if all of the given promises are rejected), then the returned promise is rejected with an AggregateError,
+	 * a new subclass of Error that groups together individual errors.
 	 *
 	 * @param values
 	 */
@@ -302,54 +319,29 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 	}
 
 	/**
-	 * Value of the current promise state
+	 * Actual promise state
 	 */
 	protected state: State = State.pending;
 
 	/**
-	 * Value of the promise
+	 * Resolved promise value
 	 */
 	protected value: unknown;
 
 	/**
-	 * List of handler for the "resolve" operation
+	 * List of handlers to handle the promise fulfilling
 	 */
-	protected fulfillHandlers: ConstrFulfillHandler[] = [];
+	protected fulfillHandlers: ConstrResolveHandler[] = [];
 
 	/**
-	 * List of handler for the "reject" operation
+	 * List of handlers to handle the promise rejection
 	 */
 	protected rejectHandlers: ConstrRejectHandler[] = [];
-
-	/**
-	 * List of handler for the "finally" operation
-	 */
-	protected finallyHandlers: FinallyHandler[] = [];
 
 	constructor(executor: Executor) {
 		const clear = () => {
 			this.fulfillHandlers = [];
 			this.rejectHandlers = [];
-			this.finallyHandlers = [];
-		};
-
-		const resolve = (value) => {
-			if (!this.isPending) {
-				return;
-			}
-
-			this.value = value;
-			this.state = State.fulfilled;
-
-			for (let o = this.fulfillHandlers, i = 0; i < o.length; i++) {
-				o[i](value);
-			}
-
-			for (let o = this.finallyHandlers, i = 0; i < o.length; i++) {
-				o[i]();
-			}
-
-			clear();
 		};
 
 		const reject = (err) => {
@@ -364,10 +356,6 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 				o[i](err);
 			}
 
-			for (let o = this.finallyHandlers, i = 0; i < o.length; i++) {
-				o[i]();
-			}
-
 			setImmediate(() => {
 				if (this.rejectHandlers.length === 0) {
 					void Promise.reject(err);
@@ -377,11 +365,39 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 			});
 		};
 
+		const resolve = (val) => {
+			if (!this.isPending || this.value != null) {
+				return;
+			}
+
+			this.value = val;
+
+			if (Object.isPromiseLike(val)) {
+				// eslint-disable-next-line @typescript-eslint/no-use-before-define
+				val.then(forceResolve, reject);
+				return;
+			}
+
+			this.state = State.fulfilled;
+
+			for (let o = this.fulfillHandlers, i = 0; i < o.length; i++) {
+				o[i](val);
+			}
+
+			clear();
+		};
+
+		const forceResolve = (val) => {
+			this.value = undefined;
+			resolve(val);
+		};
+
 		this.call(executor, [resolve, reject], reject);
 	}
 
 	/**
-	 * Attaches callbacks for the resolution and/or rejection of the promise
+	 * Attaches handlers for the promise fulfilled and/or rejected states.
+	 * The method returns a new promise that will be resolved with a value that returns from the passed handlers.
 	 *
 	 * @param [onFulfilled]
 	 * @param [onRejected]
@@ -411,58 +427,97 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 		onRejected: Nullable<RejectHandler>
 	): SyncPromise {
 		return new SyncPromise((resolve, reject) => {
-			const
-				resolveWrapper = (v) => this.call(onFulfilled ?? resolve, [v], reject, resolve),
-				rejectWrapper = (v) => this.call(onRejected ?? reject, [v], reject, resolve);
+			const fulfillWrapper = (val) => {
+				this.call(onFulfilled ?? resolve, [val], reject, resolve);
+			};
 
-			this.fulfillHandlers.push(resolveWrapper);
+			const rejectWrapper = (err) => {
+				this.call(onRejected ?? reject, [err], reject, resolve);
+			};
+
+			this.fulfillHandlers.push(fulfillWrapper);
 			this.rejectHandlers.push(rejectWrapper);
 
 			if (!this.isPending) {
-				(this.state === State.fulfilled ? resolveWrapper : rejectWrapper)(this.value);
+				(this.state === State.fulfilled ? fulfillWrapper : rejectWrapper)(this.value);
 			}
 		});
 	}
 
 	/**
-	 * Attaches a callback for only the rejection of the promise
+	 * Attaches a handler for the promise' rejected state.
+	 * The method returns a new promise that will be resolved with a value that returns from the passed handler.
+	 *
 	 * @param [onRejected]
 	 */
 	catch(onRejected?: Nullable<RejectHandler<T>>): SyncPromise<T>;
 	catch<R>(onRejected: RejectHandler<R>): SyncPromise<R>;
 	catch(onRejected?: RejectHandler): SyncPromise {
 		return new SyncPromise((resolve, reject) => {
-			const
-				resolveWrapper = (v) => this.call(resolve, [v], reject, resolve),
-				rejectWrapper = (v) => this.call(onRejected ?? reject, [v], reject, resolve);
+			const rejectWrapper = (err) => {
+				this.call(onRejected ?? reject, [err], reject, resolve);
+			};
 
-			this.fulfillHandlers.push(resolveWrapper);
+			this.fulfillHandlers.push(resolve);
 			this.rejectHandlers.push(rejectWrapper);
 
 			if (!this.isPending) {
-				(this.state === State.fulfilled ? resolveWrapper : rejectWrapper)(this.value);
+				(this.state === State.fulfilled ? resolve : rejectWrapper)(this.value);
 			}
 		});
 	}
 
 	/**
-	 * Attaches a callback that is invoked when the promise is settled (fulfilled or rejected).
-	 * The resolved value cannot be modified from the callback.
+	 * Attaches a common callback for the promise fulfilled and rejected states.
+	 * The method returns a new promise with the state and value from the current.
+	 * A value from the passed callback will be ignored unless it equals a rejected promise or exception.
 	 *
 	 * @param [cb]
 	 */
-	finally(cb?: Nullable<FinallyHandler>): SyncPromise<T> {
+	finally(cb?: Nullable<Function>): SyncPromise<T> {
 		return new SyncPromise((resolve, reject) => {
-			if (cb != null) {
-				this.finallyHandlers.push(cb);
-			}
+			const fulfillWrapper = () => {
+				try {
+					let
+						res = cb?.();
 
-			this.fulfillHandlers.push(resolve);
-			this.rejectHandlers.push(reject);
+					if (Object.isPromiseLike(res)) {
+						res = res.then(() => this.value);
+
+					} else {
+						res = this.value;
+					}
+
+					resolve(res);
+
+				} catch (err) {
+					reject(err);
+				}
+			};
+
+			const rejectWrapper = () => {
+				try {
+					let
+						res = cb?.();
+
+					if (Object.isPromiseLike(res)) {
+						res = res.then(() => this.value);
+						resolve(res);
+
+					} else {
+						reject(this.value);
+					}
+
+				} catch (err) {
+					reject(err);
+				}
+			};
+
+			this.fulfillHandlers.push(fulfillWrapper);
+			this.rejectHandlers.push(rejectWrapper);
 
 			if (!this.isPending) {
-				(this.state === State.fulfilled ? resolve : reject)(this.value);
-				cb?.();
+				(this.state === State.fulfilled ? fulfillWrapper : rejectWrapper)();
 			}
 		});
 	}
@@ -471,7 +526,7 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 	 * Executes a function with the specified parameters
 	 *
 	 * @param fn
-	 * @param args - arguments of the function
+	 * @param args - arguments for the function
 	 * @param [onError] - error handler
 	 * @param [onValue] - success handler
 	 */
@@ -482,23 +537,26 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 		onValue?: AnyOneArgFunction<V>
 	): void {
 		const
-			loopback = () => undefined,
 			reject = onError ?? loopback,
 			resolve = onValue ?? loopback;
 
 		try {
 			const
-				v = fn ? fn(...args) : undefined;
+				res = fn?.(...args);
 
-			if (Object.isPromiseLike(v)) {
-				(<PromiseLike<V>>v).then(resolve, reject);
+			if (Object.isPromiseLike(res)) {
+				(<PromiseLike<V>>res).then(resolve, reject);
 
 			} else {
-				resolve(v);
+				resolve(res);
 			}
 
 		} catch (err) {
 			reject(err);
+		}
+
+		function loopback(): void {
+			return undefined;
 		}
 	}
 }

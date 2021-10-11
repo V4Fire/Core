@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.59.1 (2021-09-21)
+
+#### :bug: Bug Fix
+
+* Don't override methods of already override objects
+
 ## v3.49.2 (2021-05-27)
 
 #### :bug: Bug Fix

@@ -11,11 +11,75 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-## v3.?.? (2021-??-??)
+## v3.60.4 (2021-10-06)
+
+#### :bug: Bug Fix
+
+* Now cache keys are generated for all strategies `core/request`
+
+## v3.60.3 (2021-10-05)
+
+#### :bug: Bug Fix
+
+* Fixed a bug with double resolving of a promise when it resolved by another promise `core/promise`
+
+## v3.60.2 (2021-10-04)
+
+#### :bug: Bug Fix
+
+* Fixed restoring state if provided TTL `core/cache/decorators/persistent`
+* Fixed support of offline caching `core/request`
+
+## v3.60.1 (2021-10-01)
+
+#### :bug: Bug Fix
+
+* Hotfix for `3.60.0`
+
+## v3.60.0 (2021-10-01)
+
+#### :rocket: New Feature
+
+* Added `Number.isSafe` and `Number.prototype.isSafe` `core/prelude/number`
+
+#### :bug: Bug Fix
+
+* Fixed parsing of numbers `Object.parse` `core/prelude/object`
+
+#### :house: Internal
+
+* Updated dependencies: `typescript@4.4.3`, `typedoc@0.22.4`
+
+## v3.59.2 (2021-09-27)
+
+#### :bug: Bug Fix
+
+* Fixed date formatting with optional patterns `core/prelude/date/format`
+* Now `finally` respects exceptions values from a callback:
+  * `core/promise/sync`
+  * `core/promise/abortable`
+
+#### :nail_care: Polish
+
+* Refactored `Date.format` `core/prelude/date/format`
+
+## v3.59.1 (2021-09-21)
+
+#### :bug: Bug Fix
+
+* Don't override methods of already override objects `core/cache/decorators/helpers/add-emitter`
+
+## v3.59.0 (2021-09-08)
 
 #### :rocket: New Feature
 
 * Added a new static method `any`:
+  * `core/promise/sync`
+  * `core/promise/abortable`
+
+#### :bug: Bug Fix
+
+* Fixed some cases when a promise is resolved with another promise:
   * `core/promise/sync`
   * `core/promise/abortable`
 

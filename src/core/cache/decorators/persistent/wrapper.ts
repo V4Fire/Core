@@ -122,7 +122,7 @@ export default class PersistentWrapper<T extends Cache<V, string>, V = unknown> 
 			return removed;
 		};
 
-		this.wrappedCache.removePersistentTTLFrom = (key: string) => this.engine.removeTTLFrom(key);
+		this.wrappedCache.removePersistentTTLFrom = (key) => this.engine.removeTTLFrom(key);
 
 		subscribe('remove', this.wrappedCache, ({args}) =>
 			this.engine.remove(args[0]));
@@ -144,7 +144,7 @@ export default class PersistentWrapper<T extends Cache<V, string>, V = unknown> 
 	protected getDefaultImplementation(method: 'has'): (key: string) => Promise<boolean>
 	protected getDefaultImplementation(method: 'get'): (key: string) => Promise<CanUndef<V>>
 	protected getDefaultImplementation(method: 'get' | 'has'): (key: string) => Promise<CanUndef<V> | boolean> {
-		return (key: string) => {
+		return (key) => {
 			if (this.fetchedItems.has(key)) {
 				return SyncPromise.resolve(this.cache[method](key));
 			}

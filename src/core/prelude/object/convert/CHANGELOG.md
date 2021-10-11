@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.60.0 (2021-10-01)
+
+#### :bug: Bug Fix
+
+* Fixed parsing of numbers `Object.parse`
+
 ## v3.54.0 (2021-07-09)
 
 #### :boom: Breaking Change

@@ -12,7 +12,7 @@ export const
 export const
 	decPartRgxp = /\.\d+/;
 
-export const globalOpts = Object.createDict({
+export const globalFormatOpts = Object.createDict({
 	init: false,
 	decimal: '.',
 	thousands: ','

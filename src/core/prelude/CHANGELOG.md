@@ -9,7 +9,23 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
-## v3.?.? (2021-??-??)
+## v3.60.0 (2021-10-01)
+
+#### :rocket: New Feature
+
+* Added `Number.isSafe` and `Number.prototype.isSafe`
+
+#### :bug: Bug Fix
+
+* Fixed parsing of numbers `Object.parse`
+
+## v3.59.2 (2021-09-27)
+
+#### :bug: Bug Fix
+
+* Now `finally` respects exceptions values from a callback `sync-promise`
+
+## v3.59.0 (2021-09-08)
 
 #### :rocket: New Feature
 

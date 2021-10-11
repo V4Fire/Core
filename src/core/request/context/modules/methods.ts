@@ -8,17 +8,9 @@
 
 import { deprecated } from 'core/functools';
 import { concatURLs, fromQueryString } from 'core/url';
+import { normalizeHeaders, applyQueryForStr, getRequestKey } from 'core/request/utils';
 
-import {
-
-	normalizeHeaders,
-	applyQueryForStr,
-	getStorageKey,
-	getRequestKey
-
-} from 'core/request/utils';
-
-import { storage, globalOpts } from 'core/request/const';
+import { globalOpts } from 'core/request/const';
 import { queryTplRgxp, resolveURLRgxp } from 'core/request/context/const';
 import type { RequestAPI } from 'core/request/interface';
 
@@ -30,8 +22,12 @@ export default class RequestContext<D = unknown> extends Super<D> {
 	 * @param url
 	 */
 	getRequestKey(url: string): string {
-		const p = this.params;
-		return [getRequestKey(url, this.params), p.cacheStrategy, p.cacheId ?? ''].join();
+		const
+			p = this.params,
+			cacheId = p.cacheId ?? '',
+			strategy = Object.isString(p.cacheStrategy) ? p.cacheStrategy : p.cacheStrategy.constructor.name;
+
+		return [getRequestKey(url, this.params), strategy, cacheId].join();
 	}
 
 	/**
@@ -210,10 +206,6 @@ export default class RequestContext<D = unknown> extends Super<D> {
 
 		if (key != null) {
 			this.cache.remove(key);
-
-			if (this.params.offlineCache && storage) {
-				storage.then((storage) => storage.remove(getStorageKey(key))).catch(stderr);
-			}
 		}
 	}
 }

@@ -22,9 +22,8 @@ import {
 
 	ResolveHandler,
 	RejectHandler,
-	FinallyHandler,
 
-	ConstrFulfillHandler,
+	ConstrResolveHandler,
 	ConstrRejectHandler
 
 } from 'core/promise/abortable/interface';
@@ -56,9 +55,16 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 	}
 
 	/**
-	 * Creates a new resolved AbortablePromise promise for the specified value.
+	 * Returns a AbortablePromise object that is resolved with a given value.
 	 * If the resolved value is a function, it will be invoked.
 	 * The result of the invoking will be provided as a value of the promise.
+	 *
+	 * If the value is a promise, that promise is returned; if the value is a thenable (i.e., has a "then" method),
+	 * the returned promise will "follow" that thenable, adopting its eventual state; otherwise,
+	 * the returned promise will be fulfilled with the value.
+	 *
+	 * This function flattens nested layers of promise-like objects
+	 * (e.g., a promise that resolves to a promise that resolves to something) into a single layer.
 	 *
 	 * @param value
 	 * @param [parent] - parent promise
@@ -66,7 +72,7 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 	static resolveAndCall<T = unknown>(value: ExecutableValue<T>, parent?: AbortablePromise): AbortablePromise<T>;
 
 	/**
-	 * Creates a new resolved AbortablePromise promise
+	 * Returns a new resolved AbortablePromise object with an undefined value
 	 */
 	static resolveAndCall(): AbortablePromise<void>;
 	static resolveAndCall<T = unknown>(value?: ExecutableValue<T>, parent?: AbortablePromise): AbortablePromise<T> {
@@ -83,7 +89,14 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 	}
 
 	/**
-	 * Creates a new resolved AbortablePromise promise for the specified value
+	 * Returns a AbortablePromise object that is resolved with a given value.
+	 *
+	 * If the value is a promise, that promise is returned; if the value is a thenable (i.e., has a "then" method),
+	 * the returned promise will "follow" that thenable, adopting its eventual state; otherwise,
+	 * the returned promise will be fulfilled with the value.
+	 *
+	 * This function flattens nested layers of promise-like objects
+	 * (e.g., a promise that resolves to a promise that resolves to something) into a single layer.
 	 *
 	 * @param value
 	 * @param [parent] - parent promise
@@ -91,7 +104,7 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 	static resolve<T = unknown>(value: Value<T>, parent?: AbortablePromise): AbortablePromise<T>;
 
 	/**
-	 * Creates a new resolved AbortablePromise promise
+	 * Returns a new resolved AbortablePromise object with an undefined value
 	 */
 	static resolve(): AbortablePromise<void>;
 	static resolve<T = unknown>(value?: Value<T>, parent?: AbortablePromise): AbortablePromise<T> {
@@ -103,19 +116,11 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 			return value;
 		}
 
-		return new AbortablePromise((resolve, reject) => {
-			if (Object.isPromiseLike(value)) {
-				value.then(resolve, reject);
-
-			} else {
-				resolve(value);
-			}
-
-		}, parent);
+		return new AbortablePromise((resolve) => resolve(value), parent);
 	}
 
 	/**
-	 * Creates a new rejected AbortablePromise promise for the specified reason
+	 * Returns a AbortablePromise object that is rejected with a given reason
 	 *
 	 * @param [reason]
 	 * @param [parent] - parent promise
@@ -125,8 +130,10 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 	}
 
 	/**
-	 * Creates a AbortablePromise promise that is resolved with an array of results when all the provided promises
-	 * are resolved, or rejected when any promise is rejected
+	 * Takes an iterable of promises and returns a single AbortablePromise that resolves to an array of the results
+	 * of the input promises. This returned promise will resolve when all of the input's promises have been resolved or
+	 * if the input iterable contains no promises. It rejects immediately upon any of the input promises rejecting or
+	 * non-promises throwing an error and will reject with this first rejection message/error.
 	 *
 	 * @param values
 	 * @param [parent] - parent promise
@@ -168,15 +175,14 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 	): AbortablePromise<Array<T extends Iterable<Value<infer V>> ? V : unknown>> {
 		return new AbortablePromise((resolve, reject, onAbort) => {
 			const
-				promises = <AbortablePromise[]>[],
-				resolved = <any[]>[];
+				promises = <AbortablePromise[]>[];
 
 			for (const el of values) {
-				promises.push(AbortablePromise.resolve(el));
+				promises.push(AbortablePromise.resolve(el, parent));
 			}
 
 			if (promises.length === 0) {
-				resolve(resolved);
+				resolve([]);
 				return;
 			}
 
@@ -186,29 +192,37 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 				}
 			});
 
+			const
+				results = new Array(promises.length);
+
 			let
-				counter = 0;
+				done = 0;
 
 			for (let i = 0; i < promises.length; i++) {
-				promises[i].then(
-					(val) => {
-						resolved[i] = val;
+				const onFulfilled = (val) => {
+					done++;
+					results[i] = val;
 
-						if (++counter === promises.length) {
-							resolve(resolved);
-						}
-					},
+					if (done === promises.length) {
+						resolve(results);
+					}
+				};
 
-					reject
-				);
+				promises[i].then(onFulfilled, reject);
 			}
 
 		}, parent);
 	}
 
 	/**
-	 * Creates a promise that is resolved with an array of results when all the provided promises
-	 * are resolved or rejected
+	 * Returns a promise that resolves after all of the given promises have either been fulfilled or rejected,
+	 * with an array of objects describing each promise's outcome.
+	 *
+	 * It is typically used when you have multiple asynchronous tasks that are not dependent on one another to
+	 * complete successfully, or you'd always like to know the result of each promise.
+	 *
+	 * In comparison, the AbortablePromise returned by `AbortablePromise.all()` may be more appropriate
+	 * if the tasks are dependent on each other / if you'd like to reject upon any of them reject immediately.
 	 *
 	 * @param values
 	 * @param [parent] - parent promise
@@ -272,15 +286,14 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 	> {
 		return new AbortablePromise((resolve, _, onAbort) => {
 			const
-				promises = <AbortablePromise[]>[],
-				resolved = <any[]>[];
+				promises = <AbortablePromise[]>[];
 
 			for (const el of values) {
-				promises.push(AbortablePromise.resolve(el));
+				promises.push(AbortablePromise.resolve(el, parent));
 			}
 
 			if (promises.length === 0) {
-				resolve(resolved);
+				resolve([]);
 				return;
 			}
 
@@ -290,33 +303,38 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 				}
 			});
 
+			const
+				results = new Array(promises.length);
+
 			let
-				counter = 0;
+				done = 0;
 
 			for (let i = 0; i < promises.length; i++) {
-				promises[i].then(
-					(value) => {
-						resolved[i] = {
-							status: 'fulfilled',
-							value
-						};
+				const onFulfilled = (value) => {
+					done++;
+					results[i] = {
+						status: 'fulfilled',
+						value
+					};
 
-						if (++counter === promises.length) {
-							resolve(resolved);
-						}
-					},
-
-					(reason) => {
-						resolved[i] = {
-							status: 'rejected',
-							reason
-						};
-
-						if (++counter === promises.length) {
-							resolve(resolved);
-						}
+					if (done === promises.length) {
+						resolve(results);
 					}
-				);
+				};
+
+				const onRejected = (reason) => {
+					done++;
+					results[i] = {
+						status: 'rejected',
+						reason
+					};
+
+					if (done === promises.length) {
+						resolve(results);
+					}
+				};
+
+				promises[i].then(onFulfilled, onRejected);
 			}
 
 		}, parent);
@@ -338,7 +356,7 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 				promises = <AbortablePromise[]>[];
 
 			for (const el of values) {
-				promises.push(AbortablePromise.resolve(el));
+				promises.push(AbortablePromise.resolve(el, parent));
 			}
 
 			if (promises.length === 0) {
@@ -375,7 +393,7 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 				promises = <AbortablePromise[]>[];
 
 			for (const el of values) {
-				promises.push(AbortablePromise.resolve(el));
+				promises.push(AbortablePromise.resolve(el, parent));
 			}
 
 			if (promises.length === 0) {
@@ -422,9 +440,14 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 	protected pendingChildren: number = 0;
 
 	/**
-	 * Value of the current promise state
+	 * Actual promise state
 	 */
 	protected state: State = State.pending;
+
+	/**
+	 * Resolved promise value
+	 */
+	protected value: unknown;
 
 	/**
 	 * If true, then the promise was aborted
@@ -437,9 +460,9 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 	protected promise: Promise<T>;
 
 	/**
-	 * Handler of the native promise fulfilling
+	 * Handler of the native promise resolving
 	 */
-	protected onFulfill!: ConstrFulfillHandler<T>;
+	protected onResolve!: ConstrResolveHandler<T>;
 
 	/**
 	 * Handler of the native promise rejection
@@ -457,8 +480,26 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 	 */
 	constructor(executor: Executor<T>, parent?: AbortablePromise) {
 		this.promise = new Promise((resolve, reject) => {
-			const resolveWrapper = (val) => {
+			const onRejected = (err) => {
 				if (!this.isPending) {
+					return;
+				}
+
+				this.value = err;
+				this.state = State.rejected;
+				reject(err);
+			};
+
+			const onResolved = (val) => {
+				if (!this.isPending || this.value != null) {
+					return;
+				}
+
+				this.value = val;
+
+				if (Object.isPromiseLike(val)) {
+					// eslint-disable-next-line @typescript-eslint/no-use-before-define
+					val.then(forceResolve, onRejected);
 					return;
 				}
 
@@ -466,17 +507,13 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 				resolve(val);
 			};
 
-			const rejectWrapper = (err) => {
-				if (!this.isPending) {
-					return;
-				}
-
-				this.state = State.rejected;
-				reject(err);
+			const forceResolve = (val) => {
+				this.value = undefined;
+				onResolved(val);
 			};
 
-			this.onFulfill = resolveWrapper;
-			this.onReject = rejectWrapper;
+			this.onResolve = onResolved;
+			this.onReject = onRejected;
 
 			let
 				setOnAbort;
@@ -505,14 +542,15 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 				};
 			}
 
-			if (this.isPending && (!parent || parent.state !== State.rejected)) {
-				this.call(executor, [resolveWrapper, rejectWrapper, setOnAbort], rejectWrapper);
+			if (this.isPending && (parent == null || parent.state !== State.rejected)) {
+				this.call(executor, [onResolved, onRejected, setOnAbort], onRejected);
 			}
 		});
 	}
 
 	/**
-	 * Attaches callbacks for the resolution and/or rejection of the promise
+	 * Attaches handlers for the promise fulfilled and/or rejected states.
+	 * The method returns a new promise that will be resolved with a value that returns from the passed handlers.
 	 *
 	 * @param [onFulfilled]
 	 * @param [onRejected]
@@ -549,27 +587,13 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 	): AbortablePromise<any> {
 		this.pendingChildren++;
 		return new AbortablePromise((resolve, reject, abort) => {
-			let
-				resolveWrapper,
-				rejectWrapper;
+			const fulfillWrapper = (val) => {
+				this.call(onFulfilled ?? resolve, [val], reject, resolve);
+			};
 
-			if (Object.isFunction(onFulfilled)) {
-				resolveWrapper = (val) => {
-					this.call(onFulfilled, [val], reject, resolve);
-				};
-
-			} else {
-				resolveWrapper = resolve;
-			}
-
-			if (Object.isFunction(onRejected)) {
-				rejectWrapper = (err) => {
-					this.call(onRejected, [err], reject, resolve);
-				};
-
-			} else {
-				rejectWrapper = reject;
-			}
+			const rejectWrapper = (val) => {
+				this.call(onRejected ?? reject, [val], reject, resolve);
+			};
 
 			const
 				that = this;
@@ -589,29 +613,23 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 				}
 			});
 
-			this.promise.then(resolveWrapper, rejectWrapper);
+			this.promise.then(fulfillWrapper, rejectWrapper);
 		});
 	}
 
 	/**
-	 * Attaches a callback for only the rejection of the promise
+	 * Attaches a handler for the promise' rejected state.
+	 * The method returns a new promise that will be resolved with a value that returns from the passed handler.
+	 *
 	 * @param [onRejected]
 	 */
 	catch(onRejected?: Nullable<RejectHandler<T>>): AbortablePromise<T>;
 	catch<R>(onRejected: RejectHandler<R>): AbortablePromise<R>;
 	catch(onRejected?: RejectHandler): AbortablePromise<any> {
 		return new AbortablePromise((resolve, reject, onAbort) => {
-			let
-				rejectWrapper;
-
-			if (Object.isFunction(onRejected)) {
-				rejectWrapper = (err) => {
-					this.call(onRejected, [err], reject, resolve);
-				};
-
-			} else {
-				rejectWrapper = reject;
-			}
+			const rejectWrapper = (val) => {
+				this.call(onRejected ?? reject, [val], reject, resolve);
+			};
 
 			const
 				that = this;
@@ -629,12 +647,13 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 	}
 
 	/**
-	 * Attaches a callback that is invoked when the promise is settled (fulfilled or rejected).
-	 * The resolved value cannot be modified from the callback.
+	 * Attaches a common callback for the promise fulfilled and rejected states.
+	 * The method returns a new promise with the state and value from the current.
+	 * A value from the passed callback will be ignored unless it equals a rejected promise or exception.
 	 *
 	 * @param [cb]
 	 */
-	finally(cb?: Nullable<FinallyHandler>): AbortablePromise<T> {
+	finally(cb?: Nullable<Function>): AbortablePromise<T> {
 		return new AbortablePromise((resolve, reject, onAbort) => {
 			const
 				that = this;
@@ -694,13 +713,12 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 		onValue?: AnyOneArgFunction<V>
 	): void {
 		const
-			loopback = () => undefined,
 			reject = onError ?? loopback,
 			resolve = onValue ?? loopback;
 
 		try {
 			const
-				v = fn ? fn(...args) : undefined;
+				v = fn?.(...args);
 
 			if (Object.isPromiseLike(v)) {
 				(<PromiseLike<V>>v).then(resolve, reject);
@@ -711,6 +729,10 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 
 		} catch (err) {
 			reject(err);
+		}
+
+		function loopback(): void {
+			return undefined;
 		}
 	}
 }

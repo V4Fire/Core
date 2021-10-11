@@ -2206,6 +2206,12 @@ interface NumberConstructor {
 	setOption(key: NumberOption, value: string): string;
 
 	/**
+	 * Returns true if the specified value is a safe number
+	 * @param value
+	 */
+	isSafe(value: any): boolean;
+
+	/**
 	 * Returns true if the specified value is an integer number
 	 * @param value
 	 */
@@ -2372,24 +2378,24 @@ interface NumberConstructor {
 
 	/**
 	 * Returns a string representation of a number by the specified pattern.
-	 * All pattern directives are based on native Intl.NumberFormat options:
+	 * All pattern directives are based on the native `Intl.NumberFormat` options:
 	 *
 	 *   1. `'style'`
-	 *   1. `'currency'`
-	 *   1. `'currencyDisplay'`
+	 *   2. `'currency'`
+	 *   3. `'currencyDisplay'`
 	 *
 	 * There are aliases for all directives:
 	 *
 	 *   1. `'$'` - `{style: 'currency', currency: 'USD'}`
-	 *   1. `'$:${currency}'` - `{style: 'currency', currency}`
-	 *   1. `'$d:${currencyDisplay}'` - `{currencyDisplay}`
-	 *   1. `'%'` - `{style: 'percent'}`
-	 *   1. `'.'` - `{style: 'decimal'}`
+	 *   2. `'$:${currency}'` - `{style: 'currency', currency}`
+	 *   3. `'$d:${currencyDisplay}'` - `{currencyDisplay}`
+	 *   4. `'%'` - `{style: 'percent'}`
+	 *   5. `'.'` - `{style: 'decimal'}`
 	 *
 	 * @param num
-	 * @param pattern - string pattern of the format:
-	 *   1. symbol `';'` is used as a separator character for pattern directives, for example: `'$;$d:code'`
-	 *   1. symbol `':'` is used for specifying a custom value for a pattern directive, for example:
+	 * @param pattern - format string pattern:
+	 *   1. symbol `';'` is used as a separator character for the pattern directives, for example: `'$;$d:code'`
+	 *   2. symbol `':'` is used for specifying a custom value for a pattern directive, for example:
 	 *    `'$:RUB;$d:code'`
 	 *
 	 * @param [locale] - locale for internalizing
@@ -2523,7 +2529,12 @@ interface Number {
 	weeks(): number;
 
 	/**
-	 * Returns true if the number is integer
+	 * Returns true if the number is safe
+	 */
+	isSafe(): boolean;
+
+	/**
+	 * Returns true if the number is an integer
 	 */
 	isInteger(): boolean;
 
@@ -2582,7 +2593,7 @@ interface Number {
 
 	/**
 	 * Returns a string representation of the number by the specified pattern.
-	 * All pattern directives are based on native Intl.NumberFormat options:
+	 * All pattern directives are based on the native `Intl.NumberFormat` options:
 	 *
 	 *   1. `'style'`
 	 *   1. `'currency'`
@@ -3030,7 +3041,7 @@ interface DateConstructor {
 
 	/**
 	 * Returns a string representation of the date by the specified pattern.
-	 * All pattern directives are based on native `Intl.DateTimeFormat` options:
+	 * All pattern directives are based on the native `Intl.DateTimeFormat` options:
 	 *
 	 *   1. `'era'`
 	 *   1. `'year'`
@@ -3418,7 +3429,7 @@ interface Date {
 
 	/**
 	 * Returns a string representation of the date by the specified pattern.
-	 * All pattern directives are based on native `Intl.DateTimeFormat` options:
+	 * All pattern directives are based on the native `Intl.DateTimeFormat` options:
 	 *
 	 *   1. `'era'`
 	 *   1. `'year'`
