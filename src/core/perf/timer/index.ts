@@ -15,13 +15,14 @@ import type { PerfGroup } from 'core/perf/interface';
 
 import { PerfTimersRunner, PerfTimer } from 'core/perf/timer/impl';
 import { getTimerEngine, createPredicates, PerfTimerConfig } from 'core/perf/config';
+
 import type { PerfTimerFactory } from 'core/perf/timer/interface';
 
 export * from 'core/perf/timer/interface';
 
 /**
  * Returns a timers factory for the passed config
- * @param config - config, that will be used by the new factory
+ * @param config - config, that the new factory will use
  */
 export function getTimerFactory(config: PerfTimerConfig): PerfTimerFactory {
 	return (() => {
