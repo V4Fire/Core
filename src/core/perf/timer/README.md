@@ -59,7 +59,6 @@ __file2.ts__
 const timer = factory.getTimer('components');
 ```
 
-
 ### Scoped timer
 
 ```js
