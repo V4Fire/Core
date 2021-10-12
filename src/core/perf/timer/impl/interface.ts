@@ -26,37 +26,41 @@ export interface PerfTimerMeasurement {
  */
 export interface PerfTimer {
 	/**
-	 * Starts measuring for defined metrics name and return timerId of the metrics
+	 * Starts measuring for the specified name and returns an identifier of the metrics
 	 * @param name - full name of the metrics
 	 */
 	start(name: string): PerfTimerId;
 
 	/**
-	 * Finishes started measurement by its timerId. Works together with {@link start} method
+	 * Finishes started measurement by its identifier.
+	 * Works together with the `start` method.
 	 *
 	 * @param timerId - id of the metrics to stop
-	 * @param [additional] - additional params to send along with the metrics
+	 * @param [additional] - additional parameters to send along with the metrics
 	 */
 	finish(timerId: PerfTimerId, additional?: Dictionary): void;
 
 	/**
-	 * Measures difference between current moment and the time origin of the corresponding timers runner
+	 * Measures difference between the current moment and the time origin of a corresponding timers runner
 	 *
 	 * @param name - full name of the metrics
-	 * @param [additional] - additional params to send along with the metrics
+	 * @param [additional] - additional parameters to send along with the metrics
 	 */
 	markTimestamp(name: string, additional?: Dictionary): void;
 
 	/**
-	 * Returns new instance of the performance timer but with passed suffix
+	 * Returns a new instance of the performance timer but with the passed suffix
+	 *
+	 * @param ns - namespace suffix
 	 *
 	 * @example
-	 * // `timer` has the namespace 'components'
+	 * ```js
+	 * // `timer` has a namespace "components"
 	 * const timer = getTimer('components');
-	 * // `newTimer` has the namespace 'components.button'
-	 * const newTimer = timer.namespace('button');
 	 *
-	 * @param ns - the namespace suffix
+	 * // `newTimer` has a namespace "components.button"
+	 * const newTimer = timer.namespace('button');
+	 * ```
 	 */
 	namespace(ns: string): PerfTimer;
 }

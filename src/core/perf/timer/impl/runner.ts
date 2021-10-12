@@ -6,19 +6,20 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type { PerfGroup } from 'core/perf/interface';
 import type { PerfPredicate } from 'core/perf/config';
+import type { PerfGroup } from 'core/perf/interface';
+
 import type { PerfTimerEngine } from 'core/perf/timer/engines';
 import type { PerfTimerMeasurement, PerfTimerId, PerfTimer } from 'core/perf/timer/impl/interface';
 
 export { PerfTimerId } from 'core/perf/timer/impl/interface';
 
 /**
- * Represents abstraction that can measure difference between time moments and create new performance timers
+ * Represents abstraction that can measure the difference between time moments and create new performance timers
  */
 export default class PerfTimersRunner {
 	/**
-	 * Combines namespaces together
+	 * Combines the passed namespaces together
 	 * @param namespaces - namespaces to combine
 	 */
 	static combineNamespaces(...namespaces: Array<CanUndef<string>>): string {
@@ -26,42 +27,44 @@ export default class PerfTimersRunner {
 	}
 
 	/**
-	 * The engine's instance, that sends metrics to the target destination
+	 * An engine's instance that sends metrics to the target destination
 	 */
 	protected engine: PerfTimerEngine;
 
 	/**
-	 * The time offset from the application start. It may be considering as the time from which all metrics are measured
-	 * for the current runner instance.
+	 * Time offset from the application start.
+	 * It may be considered as the time from which all metrics are measured for the current runner instance.
 	 */
 	protected timeOrigin: number;
 
 	/**
-	 * Predicate to filter metrics by their names. If returns `false`, the metrics will not send to the engine
+	 * Predicate to filter metrics by their names.
+	 * If it returns `false`, the metrics will not send to the engine.
 	 */
 	protected filter?: PerfPredicate;
 
 	/**
-	 * Internal storage for the next id of each namespace
+	 * Internal storage for the following identifier of each namespace
 	 */
 	protected nsToCounter: Dictionary<number> = {};
 
 	/**
-	 * Internal storage for current `start`/`finish` metrics
+	 * Internal storage for the current `start`/`finish` metrics
 	 */
 	protected idToMeasurement: Dictionary<PerfTimerMeasurement> = {};
 
 	/**
-	 * The salt for each runner instance. It is used in generating of a timeId, so the timeIds from the different runners
-	 * cannot be used interchangeably. It prevents from sending `start`/`finish` metrics by mistake.
+	 * Salt for each runner instance.
+	 * It is used to generate a time, so the times from the different runners cannot be used interchangeably.
+	 * It prevents sending `start`/`finish` metrics by mistake.
 	 */
 	protected salt: number = Math.floor(Math.random() * 1234567890);
 
 	/**
-	 * @param engine - the instance of the engine, that sends metrics to the target destination
-	 * @param [filter] - predicate for filtering metrics
-	 * @param [withCurrentTimeOrigin] - if `true`, then moment of instantiating of the class is considering as its time
-	 * origin
+	 * @param engine - engine instance that sends metrics to the target destination
+	 * @param [filter] - predicate to filter metrics
+	 * @param [withCurrentTimeOrigin] - if `true`, then a moment of instantiating of the class is considering as
+	 *   its time origin
 	 */
 	constructor(engine: PerfTimerEngine, filter?: PerfPredicate, withCurrentTimeOrigin: boolean = false) {
 		this.engine = engine;
@@ -70,15 +73,15 @@ export default class PerfTimersRunner {
 	}
 
 	/**
-	 * Returns the new instance of the performance timer
-	 * @param group - the group of the timer
+	 * Returns a new instance of the performance timer
+	 * @param group - timer group
 	 */
 	createTimer(group: PerfGroup): PerfTimer {
 		const makeTimer = (namespace?: string): PerfTimer => ({
 			/** @see [[PerfTimer.start]] */
 			start: (name: string): PerfTimerId => {
 				if (!Object.isTruly(name)) {
-					throw new Error('Metrics name should be defined');
+					throw new Error('The metrics name should be defined');
 				}
 
 				return this.start(PerfTimersRunner.combineNamespaces(namespace, name));
@@ -91,7 +94,7 @@ export default class PerfTimersRunner {
 			/** @see [[PerfTimer.markTimestamp]] */
 			markTimestamp: (name: string, additional?: Dictionary) => {
 				if (!Object.isTruly(name)) {
-					throw new Error('Metrics name should be defined');
+					throw new Error('The metrics name should be defined');
 				}
 
 				return this.markTimestamp(PerfTimersRunner.combineNamespaces(namespace, name), additional);
@@ -100,7 +103,7 @@ export default class PerfTimersRunner {
 			/** @see [[PerfTimer.namespace]] */
 			namespace(ns: string): PerfTimer {
 				if (!Object.isTruly(ns)) {
-					throw new Error('Namespace should be defined');
+					throw new Error('The namespace should be defined');
 				}
 
 				return makeTimer(PerfTimersRunner.combineNamespaces(namespace, ns));
@@ -145,7 +148,7 @@ export default class PerfTimersRunner {
 			measurement = this.idToMeasurement[perfTimerId];
 
 		if (measurement == null) {
-			console.warn(`Timer with id '${perfTimerId}' doesn't exist`);
+			console.warn(`A timer with the id "${perfTimerId}" doesn't exist`);
 			return;
 		}
 
