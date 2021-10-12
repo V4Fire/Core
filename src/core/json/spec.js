@@ -12,17 +12,21 @@ describe('core/json', () => {
 	describe('`convertIfDate`', () => {
 		['-', '.'].forEach((delimiter) => {
 			describe(`with delimiter '${delimiter}'`, () => {
-				testConvertIfDateCases(['YYYY', 'MM', 'DD'], [2015, 10, 12], delimiter, new Date(2015, 9, 12));
+				testConvertIfDateCasesByDateParts(['YYYY', 'MM', 'DD'], [2015, 10, 12], delimiter, new Date(2015, 9, 12));
 
-				testConvertIfDateCases(['YYYY', 'MM', 'DD'], [2021, '03', '01'], delimiter, new Date(2021, 2, 1));
+				testConvertIfDateCasesByDateParts(['YYYY', 'MM', 'DD'], [2021, '03', '01'], delimiter, new Date(2021, 2, 1));
 
-				testConvertIfDateCases(['YYYY', 'M', 'D'], [2021, 6, 3], delimiter, [2021, 6, 3].join(delimiter));
+				testConvertIfDateCasesByDateParts(['YYYY', 'M', 'D'], [2021, 6, 3], delimiter, [2021, 6, 3].join(delimiter));
 			});
+		});
+
+		it('ISO string is parsed as a date', () => {
+			expect(JSON.parse('"2021-03-26T10:38:34.937604Z"', convertIfDate)).toEqual(Date.create('2021-03-26T10:38:34.937604Z'));
 		});
 	});
 });
 
-function testConvertIfDateCases(templateParts, dateParts, delimiter, expectedDate) {
+function testConvertIfDateCasesByDateParts(templateParts, dateParts, delimiter, expectedDate) {
 	const
 		dateTemplate = templateParts.join(delimiter),
 		dateString = dateParts.join(delimiter);

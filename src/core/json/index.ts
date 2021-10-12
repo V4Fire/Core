@@ -11,7 +11,7 @@
  * @packageDocumentation
  */
 
-import { normalizeDateChunkRgxp } from 'core/prelude/date/const';
+import { isDateStr } from 'core/prelude/date/const';
 
 const
 	minDateLength = '2017-02-03'.length;
@@ -28,7 +28,7 @@ const
  * ```
  */
 export function convertIfDate(key: string, value: unknown): unknown {
-	if (Object.isString(value) && value.length >= minDateLength && RegExp.test(normalizeDateChunkRgxp, value)) {
+	if (Object.isString(value) && value.length >= minDateLength && RegExp.test(isDateStr, value)) {
 		const date = Date.create(value);
 		return isNaN(date.valueOf()) ? value : date;
 	}
