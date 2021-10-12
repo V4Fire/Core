@@ -10,7 +10,12 @@ import Response, { ResponseTypeValue } from 'core/request/response';
 import { caches } from 'core/request/const';
 
 import Super from 'core/request/context/modules/methods';
-import type { RequestResponse, RequestResponseObject } from 'core/request/interface';
+import type {
+	RequestResponse,
+	RequestResponseObject,
+	RequestProgressObject,
+	RequestResponseObjectWithIterator
+} from 'core/request/interface';
 
 export default class RequestContext<D = unknown> extends Super<D> {
 	/**
@@ -89,8 +94,10 @@ export default class RequestContext<D = unknown> extends Super<D> {
 
 	/**
 	 * Middleware to wrap with Iterator
+	 * @param value request response object
+	 * @param progress request progress from XHR
 	 */
-	async wrapResponseWithIterator(value, progress) {
+	async wrapResponseWithIterator(value: RequestResponseObject<D>, progress: RequestProgressObject): Promise<RequestResponseObjectWithIterator<D>> {
 		const newResponse = Object.create(value);
 
 		newResponse[Symbol.asyncIterator] = () => {

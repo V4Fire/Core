@@ -75,6 +75,16 @@ export type WrappedDecoders = Iterable<WrappedDecoder>;
 
 export type CacheType = 'memory' | 'offline';
 
+export interface RequestProgressObject {
+	loaded: ProgressEvent['loaded'];
+	total: ProgressEvent['total'];
+}
+
+export interface RequestResponseObjectWithIterator<D = unknown> {
+	response: Response<D>;
+	progress: RequestProgressObject;
+}
+
 export interface RequestResponseObject<D = unknown> {
 	data: Nullable<D>;
 	response: Response<D>;

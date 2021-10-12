@@ -33,7 +33,8 @@ import type {
 
 	RequestResponse,
 	RequestFunctionResponse,
-	RequestResponseObject
+	RequestResponseObject,
+	RequestProgressObject
 
 } from 'core/request/interface';
 
@@ -264,9 +265,9 @@ function request<D = unknown>(
 
 			} else {
 				const
-					progress = {
-						loaded: undefined,
-						total: undefined
+					progress: RequestProgressObject = {
+						loaded: 0,
+						total: 0
 					};
 
 				const reqOpts = {
@@ -315,7 +316,7 @@ function request<D = unknown>(
 						try {
 							return await createReq()
 								.then(wrapSuccessResponse)
-								.then((value) => ctx.wrapResponseWithIterator(value, progress));
+								.then((value: RequestResponseObject<D>) => ctx.wrapResponseWithIterator(value, progress));
 
 						} catch (err) {
 							if (attempt++ >= attemptLimit) {
@@ -338,7 +339,7 @@ function request<D = unknown>(
 				} else {
 					res = createReq()
 						.then(wrapSuccessResponse)
-						.then((value) => ctx.wrapResponseWithIterator(value, progress));
+						.then((value: RequestResponseObject<D>) => ctx.wrapResponseWithIterator(value, progress));
 				}
 			}
 
