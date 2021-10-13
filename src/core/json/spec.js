@@ -20,8 +20,27 @@ describe('core/json', () => {
 			});
 		});
 
-		it('ISO string is parsed as a date', () => {
-			expect(JSON.parse('"2021-03-26T10:38:34.937604Z"', convertIfDate)).toEqual(Date.create('2021-03-26T10:38:34.937604Z'));
+		describe('ISO string', () => {
+			const isoString = '2021-03-26T10:38:34.937604Z';
+
+			it('is parsed as a date', () => {
+				expect(JSON.parse(`"${isoString}"`, convertIfDate)).toEqual(Date.create(isoString));
+			});
+
+			it('with incorrect data is not parsed as a date', () => {
+				const incorrectIsoString = '2021-26T10:38:34.937604Z';
+				expect(JSON.parse(`"${incorrectIsoString}"`, convertIfDate)).toEqual(incorrectIsoString);
+			});
+
+			it('with prefix is not parsed as a date', () => {
+				const strWithPrefix = `not-a-date-${isoString}`;
+				expect(JSON.parse(`"${strWithPrefix}"`, convertIfDate)).toEqual(strWithPrefix);
+			});
+
+			it('with suffix is not parsed as a date', () => {
+				const strWithSuffix = `${isoString}-not-a-date`;
+				expect(JSON.parse(`"${strWithSuffix}"`, convertIfDate)).toEqual(strWithSuffix);
+			});
 		});
 	});
 });
