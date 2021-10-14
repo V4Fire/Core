@@ -5,7 +5,7 @@
   "main": "src/core/index.js",
   "typings": "index.d.ts",
   "license": "MIT",
-  "version": "3.60.4",
+  "version": "3.60.5",
   "author": {
     "name": "kobezzza",
     "email": "kobezzza@gmail.com",
@@ -40,7 +40,7 @@
     "form-data": "^4.0.0",
     "fs-extra": "^10.0.0",
     "got": "^11.8.2",
-    "jasmine": "^3.9.0",
+    "jasmine": "^3.10.0",
     "tslib": "2.3.1",
     "w3c-xmlserializer": "^2.0.0"
   },
