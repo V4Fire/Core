@@ -70,13 +70,13 @@ describe('core/perf/timer/impl', () => {
 			it('throws an exception if metrics name is not defined', () => {
 				const runner = new PerfTimersRunner(testEngine);
 				const timer = runner.createTimer('manual');
-				expect(() => timer.start(undefined)).toThrowError('Metrics name should be defined');
+				expect(() => timer.start(undefined)).toThrowError('The metrics name should be defined');
 			});
 
 			it('throws an exception if metrics name is empty', () => {
 				const runner = new PerfTimersRunner(testEngine);
 				const timer = runner.createTimer('manual');
-				expect(() => timer.start('')).toThrowError('Metrics name should be defined');
+				expect(() => timer.start('')).toThrowError('The metrics name should be defined');
 			});
 		});
 
