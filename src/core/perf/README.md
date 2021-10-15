@@ -2,6 +2,28 @@
 
 This module provides API to send performance metrics.
 
+## Usage
+
+```js
+import perf from 'core/perf';
+
+const timer = perf.getTimer('network').namespace('auth');
+
+// the duration of the `loginUser` request
+const timerId = timer.start('login');
+const user = await loginUser(credential);
+timer.finish(timerId, {email: user.email});
+
+// the reference point in time for following measurements
+const scopedTimer = perf.getScopedTimer('component').namespace('index-page');
+
+// a component was created
+scopedTimer.markTimestamp('created');
+
+// a component was mounted
+scopedTimer.markTimestamp('mounted');
+```
+
 ## Overview
 
 Perf module is a factory for different measures (or metrics).
