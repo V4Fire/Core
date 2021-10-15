@@ -10,11 +10,11 @@ There are two ways to use this module: with a custom configuration or default on
 
 ### Default configuration
 
-Object `perf` is a performance metrics factory configured using the runtime config from `src/config`.
-The `perf` config field of the config defines performance settings.
+The default export from the module refers to a performance metrics factory, configured using the runtime config
+from `src/config`. The `perf` config field of the config defines performance settings.
 
 ```js
-import { perf } from 'core/perf';
+import perf from 'core/perf';
 ```
 
 ### Custom configuration
@@ -22,12 +22,12 @@ import { perf } from 'core/perf';
 There is an opportunity to create a performance metrics factory with a custom configuration. It allows having several
 differently configured performance metrics factories at the same time.
 
-This is achieved using the `configurePerf` method, which acquires a new config as the first argument.
+This is achieved using the `perf` method, which acquires a new config as the first argument.
 
 ```js
-import { configurePerf } from 'core/perf';
+import { perf } from 'core/perf';
 
-const myPerf = configurePerf(myConfig);
+const myPerf = perf(myConfig);
 ```
 
 ## Time metrics

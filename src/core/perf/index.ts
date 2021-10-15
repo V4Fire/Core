@@ -25,7 +25,7 @@ export * from 'core/perf/timer/impl/interface';
  * Returns a configured instance of the `Perf` class
  * @param [perfConfig] - config that overrides the default performance config fields {@see config.perf}
  */
-export function configurePerf(perfConfig?: Partial<PerfConfig>): Perf {
+export function perf(perfConfig?: Partial<PerfConfig>): Perf {
 	const
 		workingConfig = perfConfig == null ? config.perf : mergeConfigs(config.perf, perfConfig),
 		factory = getTimerFactory(workingConfig.timer);
@@ -36,4 +36,6 @@ export function configurePerf(perfConfig?: Partial<PerfConfig>): Perf {
 	};
 }
 
-export const perf = configurePerf();
+const defaultPerf = perf();
+
+export default defaultPerf;
