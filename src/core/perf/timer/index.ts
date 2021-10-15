@@ -27,10 +27,10 @@ export * from 'core/perf/timer/interface';
 export function getTimerFactory(config: PerfTimerConfig): PerfTimerFactory {
 	return (() => {
 		const
-			runners: Partial<Record<PerfGroup, PerfTimersRunner>> = {},
-			scopedRunners: Dictionary<PerfTimersRunner> = {},
+			runners: Partial<Record<PerfGroup, PerfTimersRunner>> = Object.createDict(),
+			scopedRunners: Dictionary<PerfTimersRunner> = Object.createDict(),
 			engine = getTimerEngine(config),
-			predicates = createPredicates(config.filters ?? {});
+			predicates = createPredicates(config.filters ?? Object.createDict());
 
 		return {
 			getTimer(group: PerfGroup): PerfTimer {

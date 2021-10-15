@@ -46,12 +46,12 @@ export default class PerfTimersRunner {
 	/**
 	 * Internal storage for the following identifier of each namespace
 	 */
-	protected nsToCounter: Dictionary<number> = {};
+	protected nsToCounter: Dictionary<number> = Object.createDict();
 
 	/**
 	 * Internal storage for the current `start`/`finish` metrics
 	 */
-	protected idToMeasurement: Dictionary<PerfTimerMeasurement> = {};
+	protected idToMeasurement: Dictionary<PerfTimerMeasurement> = Object.createDict();
 
 	/**
 	 * Salt for each runner instance.
