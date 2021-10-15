@@ -42,6 +42,36 @@ const timer = factory.getTimer('manual');
 This method returns a regular timer that starts time measurement from
 [the time origin](https://developer.mozilla.org/en-US/docs/Web/API/DOMHighResTimeStamp#the_time_origin).
 
+**Duration measurement**
+
+```js
+const timer = perf.getTimer('network').namespace('auth');
+
+// the duration of the `loginUser` request
+const loginTimerId = timer.start('login');
+const user = await loginUser(credential);
+timer.finish(loginTimerId);
+
+// the duration of the `logoutUser` request
+const logoutTimerId = timer.start('logout');
+await logoutUser(user);
+// it's possible to send additional data when finishing measurement
+timer.finish(logoutTimerId, {email: user.email});
+```
+
+**Time marks from the time origin**
+
+```js
+const timer = perf.getTimer('components').namespace('index-page');
+
+// the page was created
+scopedTimer.markTimestamp('created');
+
+// the page was mounted
+// it's possible to send additional data with timestamp
+scopedTimer.markTimestamp('mounted', {id: data.id});
+```
+
 Using the same factory in different files and calling `getTimer` method with the same arguments guarantees that inside
 it will be used the same instance of the timers' runner. But the method returns different instances of the performance
 timer itself.
@@ -66,6 +96,7 @@ const timer = factory.getScopedTimer('network', 'old-api');
 ```
 
 This method returns a scoped timer that starts time measurement from the moment its runner was created.
+Timers from `getTimer` and `getScopedTimer` have the same interfaces.
 
 Since the next call of the method with the same arguments uses the already created runner, then the time origin
 for the new timer will be the same as for the previously created one.
