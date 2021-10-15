@@ -10,7 +10,15 @@ import type { PerfPredicate } from 'core/perf/config';
 import type { PerfGroup } from 'core/perf/interface';
 
 import type { PerfTimerEngine } from 'core/perf/timer/engines';
-import type { PerfTimerMeasurement, PerfTimerId, PerfTimer } from 'core/perf/timer/impl/interface';
+
+import type {
+
+	PerfTimerMeasurement,
+	PerfTimerId,
+	PerfTimer,
+	PerfTimersRunnerOptions
+
+} from 'core/perf/timer/impl/interface';
 
 export { PerfTimerId } from 'core/perf/timer/impl/interface';
 
@@ -62,14 +70,12 @@ export default class PerfTimersRunner {
 
 	/**
 	 * @param engine - engine instance that sends metrics to the target destination
-	 * @param [filter] - predicate to filter metrics
-	 * @param [withCurrentTimeOrigin] - if `true`, then a moment of instantiating of the class is considering as
-	 *   its time origin
+	 * @param [opts] - runner's options
 	 */
-	constructor(engine: PerfTimerEngine, filter?: PerfPredicate, withCurrentTimeOrigin: boolean = false) {
+	constructor(engine: PerfTimerEngine, opts?: PerfTimersRunnerOptions) {
 		this.engine = engine;
-		this.filter = filter;
-		this.timeOrigin = withCurrentTimeOrigin ? engine.getTimestampFromTimeOrigin() : 0;
+		this.filter = opts?.filter;
+		this.timeOrigin = opts?.withCurrentTimeOrigin === true ? engine.getTimestampFromTimeOrigin() : 0;
 	}
 
 	/**

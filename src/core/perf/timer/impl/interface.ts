@@ -6,6 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import type { PerfPredicate } from 'core/perf/config';
+
 /**
  * Internal timer measurement
  */
@@ -63,6 +65,21 @@ export interface PerfTimer {
 	 * ```
 	 */
 	namespace(ns: string): PerfTimer;
+}
+
+/**
+ * Options of a performance timers runner
+ */
+export interface PerfTimersRunnerOptions {
+	/**
+	 * Predicate to filter metrics
+	 */
+	filter?: PerfPredicate;
+
+	/**
+	 * If `true`, then a moment of instantiating of the runner is considering as its time origin
+	 */
+	withCurrentTimeOrigin?: boolean;
 }
 
 export type PerfTimerId = CanUndef<string>;

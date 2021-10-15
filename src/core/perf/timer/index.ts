@@ -35,7 +35,7 @@ export function getTimerFactory(config: PerfTimerConfig): PerfTimerFactory {
 		return {
 			getTimer(group: PerfGroup): PerfTimer {
 				if (runners[group] == null) {
-					runners[group] = new PerfTimersRunner(engine, predicates[group]);
+					runners[group] = new PerfTimersRunner(engine, {filter: predicates[group]});
 				}
 
 				return runners[group]!.createTimer(group);
@@ -49,7 +49,7 @@ export function getTimerFactory(config: PerfTimerConfig): PerfTimerFactory {
 					scopedRunner = scopedRunners[key];
 
 				if (scopedRunner == null) {
-					scopedRunner = new PerfTimersRunner(engine, predicates[group], true);
+					scopedRunner = new PerfTimersRunner(engine, {filter: predicates[group], withCurrentTimeOrigin: true});
 					scopedRunners[key] = scopedRunner;
 				}
 

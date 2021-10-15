@@ -33,7 +33,7 @@ A scoped runner:
 import { PerfTimersRunner } from 'core/perf/timer/impl'
 import engines from 'core/perf/timer/engines';
 
-const scopedRunner = new PerfTimersRunner(engines.console, undefined, true);
+const scopedRunner = new PerfTimersRunner(engines.console, {withCurrentTimeOrigin: true});
 ```
 
 A runner with filtering:
@@ -45,7 +45,7 @@ import engines from 'core/perf/timer/engines';
 const filterPredicate = (ns: string) => ns.startsWith('network');
 
 // Only metrics which namespace starts with 'network' will be printed in the console
-const runner = new PerfTimersRunner(engines.console, filterPredicate);
+const runner = new PerfTimersRunner(engines.console, {filter: filterPredicate});
 ```
 
 ### Methods

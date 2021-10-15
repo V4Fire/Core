@@ -54,14 +54,14 @@ describe('core/perf/timer/impl', () => {
 			});
 
 			it('returns a timerId if matches a filter predicate', () => {
-				const runner = new PerfTimersRunner(testEngine, (ns) => ns.startsWith('manual'));
+				const runner = new PerfTimersRunner(testEngine, {filter: (ns) => ns.startsWith('manual')});
 				const timer = runner.createTimer('manual');
 				const timerId = timer.start('metrics');
 				expect(timerId).toBeTruthy();
 			});
 
 			it('returns `undefined` if does not match a filter predicate', () => {
-				const runner = new PerfTimersRunner(testEngine, (ns) => ns.startsWith('network'));
+				const runner = new PerfTimersRunner(testEngine, {filter: (ns) => ns.startsWith('network')});
 				const timer = runner.createTimer('manual');
 				const timerId = timer.start('metrics');
 				expect(timerId).toBe(undefined);
@@ -102,7 +102,7 @@ describe('core/perf/timer/impl', () => {
 			});
 
 			it('does not send a delta if the metric does not match a filter predicate', () => {
-				const runner = new PerfTimersRunner(testEngine, (ns) => ns.startsWith('network'));
+				const runner = new PerfTimersRunner(testEngine, {filter: (ns) => ns.startsWith('network')});
 				const timer = runner.createTimer('manual');
 				testEngine.getTimestampFromTimeOrigin.and.returnValue(0);
 				const timerId = timer.start('metrics');
@@ -143,7 +143,7 @@ describe('core/perf/timer/impl', () => {
 
 			it('is not affected by scoped runner', () => {
 				testEngine.getTimestampFromTimeOrigin.and.returnValue(1);
-				const runner = new PerfTimersRunner(testEngine, undefined, true);
+				const runner = new PerfTimersRunner(testEngine, {withCurrentTimeOrigin: true});
 				const timer = runner.createTimer('manual');
 				testEngine.getTimestampFromTimeOrigin.and.returnValue(1);
 				const timerId = timer.start('metrics');
@@ -171,7 +171,7 @@ describe('core/perf/timer/impl', () => {
 			});
 
 			it('sends a delta if matches a filter predicate', () => {
-				const runner = new PerfTimersRunner(testEngine, (ns) => ns.startsWith('manual'));
+				const runner = new PerfTimersRunner(testEngine, {filter: (ns) => ns.startsWith('manual')});
 				const timer = runner.createTimer('manual');
 				testEngine.getTimestampFromTimeOrigin.and.returnValue(1);
 				timer.markTimestamp('mark');
@@ -191,7 +191,7 @@ describe('core/perf/timer/impl', () => {
 			});
 
 			it('does not send a delta if does not match a filter predicate', () => {
-				const runner = new PerfTimersRunner(testEngine, (ns) => ns.startsWith('network'));
+				const runner = new PerfTimersRunner(testEngine, {filter: (ns) => ns.startsWith('network')});
 				const timer = runner.createTimer('manual');
 				testEngine.getTimestampFromTimeOrigin.and.returnValue(1);
 				timer.markTimestamp('mark');
@@ -200,7 +200,7 @@ describe('core/perf/timer/impl', () => {
 
 			it('is affected by scoped runner when is called right after creating of the runner', () => {
 				testEngine.getTimestampFromTimeOrigin.and.returnValue(1);
-				const runner = new PerfTimersRunner(testEngine, undefined, true);
+				const runner = new PerfTimersRunner(testEngine, {withCurrentTimeOrigin: true});
 				const timer = runner.createTimer('manual');
 				testEngine.getTimestampFromTimeOrigin.and.returnValue(1);
 				timer.markTimestamp('mark');
@@ -209,7 +209,7 @@ describe('core/perf/timer/impl', () => {
 
 			it('is affected by scoped runner when is called in some time after creating of the runner', () => {
 				testEngine.getTimestampFromTimeOrigin.and.returnValue(1);
-				const runner = new PerfTimersRunner(testEngine, undefined, true);
+				const runner = new PerfTimersRunner(testEngine, {withCurrentTimeOrigin: true});
 				const timer = runner.createTimer('manual');
 				testEngine.getTimestampFromTimeOrigin.and.returnValue(3);
 				timer.markTimestamp('mark');
