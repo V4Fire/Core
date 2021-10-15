@@ -10,8 +10,3 @@
  * All supported group names
  */
 export const GROUPS = ['network', 'components', 'tools', 'manual'] as const;
-
-/**
- * A supported group
- */
-export type PerfGroup = typeof GROUPS[number];
