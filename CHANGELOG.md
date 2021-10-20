@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.61.0 (2021-10-20)
+
+#### :rocket: New Feature
+
+* Added a new module `core/perf`
+
 ## v3.60.5 (2021-10-14)
 
 #### :bug: Bug Fix
