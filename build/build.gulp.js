@@ -81,7 +81,7 @@ module.exports = function init(gulp) {
 
 		const
 			isDep = new RegExp(`(^.*?(?:^|[\\/])(${depsRgxpStr}))(?:$|[\\/])`),
-			requireInitializer = `(${h.redefineRequire.toString()})();\n`;
+			requireInitializer = `/* istanbul ignore next */(${h.redefineRequire.toString()})();\n`;
 
 		function dest(file) {
 			const
