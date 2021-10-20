@@ -47,15 +47,16 @@ This method returns a regular timer that starts time measurement from
 ```js
 const timer = perf.getTimer('network').namespace('auth');
 
-// the duration of the `loginUser` request
+// Duration of the `loginUser` request
 const loginTimerId = timer.start('login');
 const user = await loginUser(credential);
 timer.finish(loginTimerId);
 
-// the duration of the `logoutUser` request
+// Duration of the `logoutUser` request
 const logoutTimerId = timer.start('logout');
 await logoutUser(user);
-// it's possible to send additional data when finishing measurement
+
+// It's possible to send additional data when finishing measurement
 timer.finish(logoutTimerId, {email: user.email});
 ```
 
@@ -64,11 +65,11 @@ timer.finish(logoutTimerId, {email: user.email});
 ```js
 const timer = perf.getTimer('components').namespace('index-page');
 
-// the page was created
+// A page was created
 scopedTimer.markTimestamp('created');
 
-// the page was mounted
-// it's possible to send additional data with timestamp
+// A page was mounted
+// It's possible to send additional data with timestamp
 scopedTimer.markTimestamp('mounted', {id: data.id});
 ```
 

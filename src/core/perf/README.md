@@ -9,18 +9,18 @@ import perf from 'core/perf';
 
 const timer = perf.getTimer('network').namespace('auth');
 
-// the duration of the `loginUser` request
+// Duration of the `loginUser` request
 const timerId = timer.start('login');
 const user = await loginUser(credential);
 timer.finish(timerId, {email: user.email});
 
-// the reference point in time for following measurements
+// A reference point in time for the following measurements
 const scopedTimer = perf.getScopedTimer('component').namespace('index-page');
 
-// a component was created
+// A component was created
 scopedTimer.markTimestamp('created');
 
-// a component was mounted
+// A component was mounted
 scopedTimer.markTimestamp('mounted');
 ```
 
@@ -32,7 +32,7 @@ There are two ways to use this module: with a custom configuration or default on
 
 ### Default configuration
 
-The default export from the module refers to a performance metrics factory, configured using the runtime config
+The default export from the module refers to a performance metrics factory configured using the runtime config
 from `src/config`. The `perf` config field of the config defines performance settings.
 
 ```js
