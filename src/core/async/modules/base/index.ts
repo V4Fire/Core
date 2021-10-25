@@ -65,6 +65,11 @@ export default class Async<CTX extends object = Async<any>> {
 	protected readonly workerCache: WeakMap<object, boolean> = new WeakMap();
 
 	/**
+	 * Map for task identifiers
+	 */
+	protected readonly idsMap: WeakMap<object, object> = new WeakMap();
+
+	/**
 	 * Context of applying for async handlers
 	 */
 	protected readonly ctx: CTX;
@@ -254,23 +259,23 @@ export default class Async<CTX extends object = Async<any>> {
 			cache: LocalCache;
 
 		if (task.group != null) {
-			baseCache.groups[task.group] = baseCache.groups[task.group] ?? {
+			cache = baseCache.groups[task.group] ?? {
 				labels: Object.createDict(),
 				links: new Map()
 			};
 
-			cache = baseCache.groups[task.group]!;
+			baseCache.groups[task.group] = cache;
 
 		} else {
 			cache = baseCache.root;
 		}
 
 		const
+			{label} = task,
 			{labels, links} = cache,
 			{links: baseLinks} = baseCache.root;
 
 		const
-			label = <CanUndef<string>>task.label,
 			labelCache = label != null ? labels[label] : null;
 
 		if (labelCache != null && task.join === true) {
@@ -433,6 +438,8 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @param [name] - namespace of the operation
 	 */
 	protected cancelTask(task: CanUndef<FullClearOptions | any>, name?: string): this {
+		task = task != null ? this.idsMap.get(task) ?? task : task;
+
 		let
 			p: FullClearOptions;
 
@@ -471,11 +478,14 @@ export default class Async<CTX extends object = Async<any>> {
 				return this;
 			}
 
-			if (!baseCache.groups[p.group]) {
+			const
+				group = baseCache.groups[p.group];
+
+			if (group == null) {
 				return this;
 			}
 
-			cache = baseCache.groups[p.group]!;
+			cache = group;
 
 			if (p.reason == null) {
 				p.reason = 'group';
@@ -490,7 +500,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 		if (p.label != null) {
 			const
-				tmp = labels[<string>p.label];
+				tmp = labels[p.label];
 
 			if (p.id != null && p.id !== tmp) {
 				return this;
@@ -568,6 +578,8 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @param [name] - namespace of the operation
 	 */
 	protected markTask(label: string, task: CanUndef<ClearProxyOptions | any>, name?: string): this {
+		task = task != null ? this.idsMap.get(task) ?? task : task;
+
 		let
 			p: FullClearOptions;
 
@@ -624,7 +636,7 @@ export default class Async<CTX extends object = Async<any>> {
 
 		if (p.label != null) {
 			const
-				tmp = labels[<string>p.label];
+				tmp = labels[p.label];
 
 			if (p.id != null && p.id !== tmp) {
 				return this;

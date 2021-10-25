@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.61.1 (2021-10-25)
+
+#### :bug: Bug Fix
+
+* Fixed bugs with clearing/muting/suspending promises by their IDs `core/async`
+
 ## v3.61.0 (2021-10-20)
 
 #### :rocket: New Feature

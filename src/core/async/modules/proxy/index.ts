@@ -464,12 +464,15 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			...opts
 		});
 
-		return new SyncPromise((resolve, reject) => {
+		let
+			wrappedResolve;
+
+		const wrappedPromise = new SyncPromise((resolve, reject) => {
 			let
 				canceled = false,
 				proxyReject;
 
-			const proxyResolve = this.proxy(resolve, {
+			wrappedResolve = this.proxy(resolve, {
 				...p,
 
 				clearFn: () => {
@@ -504,9 +507,11 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 					const
 						cache = that.cache[p.name],
-						links = p.group != null ? cache?.groups[p.group]?.links : cache?.root.links,
-						task = links?.get(proxyResolve),
-						handlers = links?.get(proxyResolve)?.onComplete;
+						links = p.group != null ? cache?.groups[p.group]?.links : cache?.root.links;
+
+					const
+						task = links?.get(wrappedResolve),
+						handlers = links?.get(wrappedResolve)?.onComplete;
 
 					if (task != null && handlers != null) {
 						if (task.muted === true) {
@@ -534,9 +539,12 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 				}, Object.select(p, ['name', 'group']));
 
-				return promise.then(proxyResolve, proxyReject);
+				return promise.then(wrappedResolve, proxyReject);
 			}
 		});
+
+		this.idsMap.set(wrappedPromise, wrappedResolve);
+		return wrappedPromise;
 	}
 
 	/**
