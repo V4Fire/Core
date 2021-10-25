@@ -116,7 +116,7 @@ describe('core/async/modules/proxy `promise`', () => {
 	});
 
 	describe('mutePromise/unmutePromise`', () => {
-		it('suspending a promise by id', async () => {
+		it('muting a promise by id', async () => {
 			let i = 0;
 
 			const promise = $a.promise(
@@ -137,7 +137,7 @@ describe('core/async/modules/proxy `promise`', () => {
 			expect(i).toEqual(0);
 		});
 
-		it('suspending a promise by a label', async () => {
+		it('muting a promise by a label', async () => {
 			let i = 0;
 
 			const
@@ -162,7 +162,7 @@ describe('core/async/modules/proxy `promise`', () => {
 			expect(i).toEqual(0);
 		});
 
-		it('suspending a promise by a group', async () => {
+		it('muting a promise by a group', async () => {
 			let i = 0;
 
 			const
