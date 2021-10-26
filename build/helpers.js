@@ -10,7 +10,9 @@
 
 const
 	fs = require('fs'),
-	path = require('upath'),
+	path = require('upath');
+
+const
 	template = require('@babel/template').default,
 	{ensureStatementsHoisted} = require('@babel/helper-module-transforms');
 
@@ -103,7 +105,7 @@ exports.redefineRequire = function redefineRequire() {
 };
 
 /**
- * Babel plugin for inserting code into beginning of file
+ * Babel plugin to insert code into the beginning of a file
  */
 exports.prependCode = function prependCode(code) {
 	return function prependCode() {
@@ -113,7 +115,6 @@ exports.prependCode = function prependCode(code) {
 					exit(path) {
 						const node = template.ast(code, {preserveComments: true});
 						ensureStatementsHoisted([node]);
-
 						path.unshiftContainer('body', node);
 					}
 				}

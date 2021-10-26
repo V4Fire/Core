@@ -11,17 +11,19 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-## v3.62.0 (2021-10-25)
+## v3.62.0 (2021-??-??)
 
-#### :rocket: New Feature
+#### :boom: Breaking Change
 
-* Added a new structure `async/iterable`
+* Changed building of project from `gulp-typescript` to `gulp-babel`
+
+#### :house: Internal
+
+* Updated dependencies
 
 ### :nail_care: Polish
 
-* Changed building of project from gulp-typescript to gulp-babel
-* Added sourcemaps in hot-reload mode
-* Updated dependencies
+* Added generation of source maps with the hot-reload mode
 
 ## v3.61.1 (2021-10-25)
 

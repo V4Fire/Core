@@ -73,11 +73,16 @@ module.exports = function init(gulp) {
 			const
 				tsConfig = fs.readJSONSync(src.rel('./server.tsconfig.json'));
 
-			filesToBuild = [...tsConfig.include || [], ...resolve.rootDependencies.map((el) => `${el}/**/*.@(ts|js)`)];
+			filesToBuild = [
+				...tsConfig.include || [],
+				...resolve.rootDependencies.map((el) => `${el}/**/*.@(ts|js)`)
+			];
 
 		const
-			enableSourcemaps = process.env.SOURCEMAPS,
 			isDep = new RegExp(`(^.*?(?:^|[\\/])(${depsRgxpStr}))(?:$|[\\/])`),
+			enableSourcemaps = process.env.SOURCEMAPS;
+
+		const
 			requireInitializer = `/* istanbul ignore next */(${h.redefineRequire.toString()})();\n`,
 			insertRequireInitializer = h.prependCode(requireInitializer);
 
@@ -106,6 +111,7 @@ module.exports = function init(gulp) {
 							// eslint-disable-next-line camelcase
 							node_js: true
 						},
+
 						sourceMaps: true
 					})
 				)
