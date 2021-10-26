@@ -42,6 +42,40 @@ describe('core/async/modules/proxy `promise`', () => {
 		expect(await res).toBe('All fine');
 	});
 
+	it('cancel promise by label', async () => {
+		let i = 0;
+		const label = 'label';
+
+		$a.promise(new Promise((resolve) => setTimeout(resolve, 100)), {label})
+			.then(() => {
+				i++;
+			})
+			.catch(() => undefined);
+
+		$a.cancelPromise({label});
+		await $a.sleep(200);
+
+		expect(i).toEqual(0);
+	});
+
+	it('cancel promise by id', async () => {
+		let i = 0;
+
+		const prom = new Promise((resolve) => setTimeout(resolve, 100));
+
+		const res = $a.promise(prom);
+
+		res.then(() => {
+			i++;
+		}).catch(() => undefined);
+
+		$a.cancelPromise(res);
+
+		await $a.sleep(150);
+
+		expect(i).toEqual(0);
+	});
+
 	describe('suspendPromise/unsuspendPromise`', () => {
 		it('suspending a promise by id', async () => {
 			let i = 0;

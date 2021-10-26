@@ -38,7 +38,8 @@ import type {
 
 	AsyncRequestOptions,
 	AsyncWorkerOptions,
-	AsyncPromiseOptions
+	AsyncPromiseOptions,
+	AsyncIterableOptions
 
 } from 'core/async/interface';
 
@@ -450,7 +451,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * }))
 	 * ```
 	 */
-	promise<T = unknown>(promise: PromiseLikeP<T>, opts?: AsyncPromiseOptions): Promise<T> {
+	promise<T = unknown>(promise: PromiseLikeP<T>, opts?: AsyncPromiseOptions, namespace?: string): Promise<T> {
 		if (!Object.isTruly(promise)) {
 			return SyncPromise.resolve();
 		}
@@ -460,7 +461,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			{ctx} = this;
 
 		const p = <AsyncPromiseOptions>({
-			name: this.namespaces.promise,
+			name: Object.isString(namespace) && namespace || this.namespaces.promise,
 			...opts
 		});
 
@@ -501,6 +502,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 				}
 
 				proxyReject = this.proxy((err) => {
+					debugger;
 					if (canceled || p.name == null) {
 						return;
 					}
@@ -519,6 +521,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 						}
 
 						const exec = () => {
+							console.log('err', err);
 							reject(err);
 
 							for (let i = 0; i < handlers.length; i++) {
@@ -777,6 +780,162 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	}
 
 	/**
+	 * Wraps the specified iterable.
+	 *
+	 * This method doesn't attach any hook or listeners to the object,
+	 *
+	 * @param iterable
+	 * @param [opts] - additional options for the operation
+	 *
+	 * @example
+	 * ```js
+	 * const
+	 *   async = new Async();
+	 *
+	 * async.iterable([1, 2, 3, 4])
+	 * ```
+	 */
+	iterable<T>(
+		iterable: Iterable<T> | AsyncIterable<T>,
+		opts: AsyncIterableOptions
+	): AsyncIterable<T> | AsyncIterable<T> & Iterable<T> | {} {
+		const result = {};
+		const {idsMap} = this;
+		const baseIterator = this.getBaseIterator(iterable);
+
+		if (baseIterator) {
+			result[Symbol.asyncIterator] = () => ({
+				next: () => {
+					const prevProm =
+            Object.isAsyncIterable(result) &&
+            <Promise<unknown> & {canceled?: boolean}>idsMap.get(result);
+
+					if (Object.isPromise(prevProm) && Object.isTruly(prevProm.canceled)) {
+						return Promise.resolve({done: true, value: undefined});
+					}
+
+					const promise = this.promise(
+						Promise.resolve(baseIterator.next()),
+						{...opts, name: this.namespaces.iterable}
+					);
+
+					Object.isAsyncIterable(result) && idsMap.set(result, promise);
+
+					return promise;
+				}
+			});
+
+			if (Object.isIterable(iterable[Symbol.iterator])) {
+				result[Symbol.iterator] = iterable[Symbol.iterator];
+			}
+		}
+
+		return result;
+	}
+
+	/**
+	 * Cancels the specified iterable
+	 * @param [id] - link to the iterable (if not specified, then the operation will be applied for all registered tasks)
+	 */
+	cancelIterable(id?: AsyncIterable<unknown>): this;
+
+	/**
+	 Cancels the specified iterable or a group of iterable
+	 * @param opts - options for the operation
+	 */
+	cancelIterable(opts: ClearOptionsId<AsyncIterable<unknown>>): this;
+	cancelIterable(task?: AsyncIterable<unknown> | ClearOptionsId<AsyncIterable<unknown>>): this {
+		const promise = this.getPromiseFromIterable(task);
+		const key = this.getOptsFromIterable(task);
+
+		if (!promise && task) {
+			const prom: Promise<unknown> & {canceled?: boolean} = Promise.resolve();
+			prom.canceled = true;
+			this.idsMap.set(task, prom);
+		} else if (promise) {
+			promise.canceled = true;
+		}
+
+		return this.cancelTask(promise ?? key, this.namespaces.iterable);
+	}
+
+	/**
+	 * Mutes the specified iterable
+	 * @param [id] - link to the iterable (if not specified, then the operation will be applied for all registered tasks)
+	 */
+	 muteIterable(id?: AsyncIterable<unknown>): this;
+
+	 /**
+	  * Mutes the specified iterable or a group of iterables
+	  * @param opts - options for the operation
+	  */
+	 muteIterable(opts: ClearOptionsId<AsyncIterable<unknown>>): this;
+	 muteIterable(task?: AsyncIterable<unknown> | ClearOptionsId<AsyncIterable<unknown>>): this {
+		return this.markTask(
+			'muted',
+			this.getOptsFromIterable(task),
+			this.namespaces.iterable
+		);
+	 }
+
+	/**
+	 * Unmutes the specified iterable
+	 * @param [id] - link to the iterable (if not specified, then the operation will be applied for all registered tasks)
+	 */
+	 unmuteIterable(id?: AsyncIterable<unknown>): this;
+
+	 /**
+	  * Unmutes the specified iterable function or a group of iterables
+	  * @param opts - options for the operation
+	  */
+	 unmuteIterable(opts: ClearOptionsId<AsyncIterable<unknown>>): this;
+	 unmuteIterable(task?: AsyncIterable<unknown> | ClearOptionsId<AsyncIterable<unknown>>): this {
+		return this.markTask(
+			'!muted',
+			this.getOptsFromIterable(task),
+			this.namespaces.iterable
+		);
+	 }
+
+	/**
+	 * Suspends the specified iterable
+	 * @param [id] - link to the iterable (if not specified, then the operation will be applied for all registered tasks)
+	 */
+	suspendIterable(id?: AsyncIterable<unknown>): this;
+
+	/**
+	 * Suspends the specified iterable or a group of iterables
+	 * @param opts - options for the operation
+	 */
+	 suspendIterable(opts: ClearOptionsId<AsyncIterable<unknown>>): this;
+	 suspendIterable(task?: AsyncIterable<unknown> | ClearOptionsId<AsyncIterable<unknown>>): this {
+		return this.markTask(
+			'paused',
+			this.getOptsFromIterable(task),
+			this.namespaces.iterable
+		);
+	}
+
+	/**
+	 * Unsuspends the specified iterable
+	 * @param [id] - link to the iterable (if not specified, then the operation will be applied for all registered tasks)
+	 */
+	unsuspendIterable(id?: AsyncIterable<unknown>): this;
+
+	/**
+	 * Unsuspends the specified iterable or a group of iterables
+	 * @param opts - options for the operation
+	 */
+	unsuspendIterable(opts: ClearOptionsId<AsyncIterable<unknown>>): this;
+	unsuspendIterable(task?: AsyncIterable<unknown> | ClearOptionsId<AsyncIterable<unknown>>): this {
+		return this.markTask(
+			'!paused',
+			this.getOptsFromIterable(task),
+			this.namespaces.iterable
+		);
+	}
+
+	/**
 	 * Marks a promise with the specified label
 	 *
 	 * @param label
@@ -812,5 +971,55 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		}
 
 		return this;
+	}
+
+	/**
+	 * Extract base iterator from structure for building wrapped async iterator
+	 *
+	 * @param [iterable] - structure which contains sync or async iterator
+	 */
+	protected getBaseIterator(iterable: Iterable<unknown> | AsyncIterable<unknown>):
+	CanUndef<Iterator<unknown> | AsyncIterator<unknown>> {
+		if (Object.isFunction(iterable[Symbol.asyncIterator])) {
+			return iterable[Symbol.asyncIterator]();
+		}
+
+		if (Object.isFunction(iterable[Symbol.iterator])) {
+			return iterable[Symbol.iterator]();
+		}
+	}
+
+	/**
+	 * Extract promise from cache by key (iterable)
+	 *
+	 * @param [task] - iterable
+	 */
+	protected getPromiseFromIterable(
+			task: CanUndef<AsyncIterable<unknown> | ClearProxyOptions>
+		): CanUndef<Promise<unknown> & {canceled?:boolean}> {
+		let opts;
+
+		if (task && Object.isAsyncIterable(task)) {
+			opts = this.idsMap.get(<AsyncIterable<unknown>>task);
+		}
+
+		return opts;
+	}
+
+	/**
+	 * Create options for iterable
+	 *
+	 * @param task - iterable
+	 */
+	protected getOptsFromIterable(
+		task: CanUndef<AsyncIterable<unknown> | ClearOptionsId>
+	): CanUndef<Promise<unknown> | ClearProxyOptions> {
+		const promise = this.getPromiseFromIterable(task);
+
+		if (promise) {
+			return promise;
+		}
+
+		return {...task, name: this.namespaces.iterable};
 	}
 }

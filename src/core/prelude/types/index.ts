@@ -105,6 +105,16 @@ extend(Object, 'isIterable', (value) => {
 	);
 });
 
+extend(Object, 'isAsyncIterable', (value) => {
+	if (value == null) {
+		return false;
+	}
+
+	return Boolean(
+		typeof Symbol === 'function' ? value[Symbol.asyncIterator] : typeof value['@@asyncIterator'] === 'function'
+	);
+});
+
 /** @see [[ObjectConstructor.isString]] */
 extend(Object, 'isString', (value) => typeof value === 'string');
 

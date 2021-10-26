@@ -1823,6 +1823,12 @@ interface ObjectConstructor {
 	isIterable(value: any): value is IterableIterator<unknown>;
 
 	/**
+	 * Returns true if the specified value is an async iterable structure
+	 * @param value
+	 */
+	isAsyncIterable(value: any): value is AsyncIterableIterator<unknown>;
+
+	/**
 	 * Returns true if the specified value is an iterator
 	 * @param value
 	 */

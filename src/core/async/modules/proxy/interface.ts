@@ -66,3 +66,5 @@ export interface AsyncPromiseOptions extends AsyncOptions {
 	 */
 	destructor?: string;
 }
+
+export type AsyncIterableOptions = AsyncOptions;

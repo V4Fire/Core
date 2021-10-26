@@ -42,6 +42,7 @@ export enum Namespaces {
 	proxy,
 	proxyPromise,
 	promise,
+	iterable,
 	request,
 	idleCallback,
 	idleCallbackPromise,
