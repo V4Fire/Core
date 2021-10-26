@@ -103,25 +103,6 @@ describe('core/async/modules/proxy `iterable`', () => {
 		expect(await asyncIter.next()).toEqual({done: true, value: undefined});
 	});
 
-	// it('mute and unmute async iterator', async () => {
-	// 	const iterable = $a.iterable(objWithAsyncIterator);
-	// 	const asyncIter = iterable[Symbol.asyncIterator]();
-
-	// 	expect(await asyncIter.next()).toEqual({done: false, value: 1});
-
-	// 	const nextIter = asyncIter.next();
-	// 	$a.muteIterable(iterable);
-
-	// 	await $a.sleep(200);
-	// 	await expectToBePending(nextIter);
-
-	// 	$a.unmuteIterable(iterable);
-	// 	await $a.sleep(200);
-	// 	await expectToBeResolved(nextIter);
-
-	// 	expect(await nextIter).toEqual({done: false, value: 3});
-	// });
-
 	it('suspend and unsuspend async iterator', async () => {
 		const iterable = $a.iterable(objWithAsyncIterator);
 		const asyncIter = iterable[Symbol.asyncIterator]();

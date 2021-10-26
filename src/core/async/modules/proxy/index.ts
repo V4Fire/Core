@@ -451,7 +451,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * }))
 	 * ```
 	 */
-	promise<T = unknown>(promise: PromiseLikeP<T>, opts?: AsyncPromiseOptions, namespace?: string): Promise<T> {
+	promise<T = unknown>(promise: PromiseLikeP<T>, opts?: AsyncPromiseOptions): Promise<T> {
 		if (!Object.isTruly(promise)) {
 			return SyncPromise.resolve();
 		}
@@ -461,7 +461,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			{ctx} = this;
 
 		const p = <AsyncPromiseOptions>({
-			name: Object.isString(namespace) && namespace || this.namespaces.promise,
+			name: this.namespaces.promise,
 			...opts
 		});
 
@@ -502,7 +502,6 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 				}
 
 				proxyReject = this.proxy((err) => {
-					debugger;
 					if (canceled || p.name == null) {
 						return;
 					}
@@ -521,7 +520,6 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 						}
 
 						const exec = () => {
-							console.log('err', err);
 							reject(err);
 
 							for (let i = 0; i < handlers.length; i++) {
