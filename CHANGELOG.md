@@ -11,7 +11,17 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-## v3.62.0 (2021-??-??)
+## v3.63.0 (2021-10-26)
+
+#### :rocket: New Feature
+
+* Added iterable for async module
+
+### :nail_care: Polish
+
+* Added new tests for async.promise
+
+## v3.62.0 (2021-10-26)
 
 #### :boom: Breaking Change
 
