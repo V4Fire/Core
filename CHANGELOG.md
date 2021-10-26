@@ -11,6 +11,20 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.62.0 (2021-??-??)
+
+#### :boom: Breaking Change
+
+* Changed building of project from `gulp-typescript` to `gulp-babel`
+
+#### :house: Internal
+
+* Updated dependencies
+
+### :nail_care: Polish
+
+* Added generation of source maps with the hot-reload mode
+
 ## v3.61.1 (2021-10-25)
 
 #### :bug: Bug Fix

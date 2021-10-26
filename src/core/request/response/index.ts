@@ -395,14 +395,14 @@ export default class Response<
 			contentType = this.getHeader('content-type');
 
 		let
-			encoding = 'utf-8';
+			encoding = <BufferEncoding>'utf-8';
 
 		if (contentType != null) {
 			const
 				search = /charset=(\S+)/.exec(contentType);
 
 			if (search) {
-				encoding = search[1].toLowerCase();
+				encoding = <BufferEncoding>search[1].toLowerCase();
 			}
 		}
 

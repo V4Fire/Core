@@ -9,20 +9,22 @@
 import { ExtractorMiddleware } from 'core/log/middlewares/extractor';
 import { TestDetailedError, TestBaseError, TestDetailedBaseError, TestExtractor } from 'core/log/middlewares/extractor/testing';
 
+let middleware;
+
 describe('middlewares/extractor', () => {
 	describe('no error extractors', () => {
 		beforeEach(() => {
-			this.middleware = new ExtractorMiddleware();
+			middleware = new ExtractorMiddleware();
 		});
 
 		afterEach(() => {
-			this.middleware = undefined;
+			middleware = undefined;
 		});
 
 		it('no error within a log event', () => {
 			const logEvent = createLogEvent();
 
-			this.middleware.exec(logEvent, (res) => {
+			middleware.exec(logEvent, (res) => {
 				expect(res).toEqual(copyLogEvent(logEvent));
 			});
 		});
@@ -30,7 +32,7 @@ describe('middlewares/extractor', () => {
 		it('error without details', () => {
 			const logEvent = createLogEvent(new Error('no details'));
 
-			this.middleware.exec(logEvent, (res) => {
+			middleware.exec(logEvent, (res) => {
 				expect(res).toEqual(copyLogEvent(logEvent));
 			});
 		});
@@ -40,7 +42,7 @@ describe('middlewares/extractor', () => {
 				errorDetails = {msg: 'just for fun'},
 				logEvent = createLogEvent(new TestDetailedError('details', errorDetails));
 
-			this.middleware.exec(logEvent, (res) => {
+			middleware.exec(logEvent, (res) => {
 				expect(res).toEqual(copyLogEvent(
 					logEvent,
 					{error: {details: {reason: errorDetails}}}
@@ -53,7 +55,7 @@ describe('middlewares/extractor', () => {
 				causeErrorMessage = 'general error',
 				logEvent = createLogEvent(new TestBaseError('no details', new Error(causeErrorMessage)));
 
-			this.middleware.exec(logEvent, (res) => {
+			middleware.exec(logEvent, (res) => {
 				expect(res).toEqual(copyLogEvent(
 					logEvent,
 					{error: {cause: {error: {name: 'Error', message: causeErrorMessage}}}}
@@ -67,7 +69,7 @@ describe('middlewares/extractor', () => {
 				causeErrorMessage = 'general error',
 				logEvent = createLogEvent(new TestDetailedBaseError('details', errorDetails, new Error(causeErrorMessage)));
 
-			this.middleware.exec(logEvent, (res) => {
+			middleware.exec(logEvent, (res) => {
 				expect(res).toEqual(copyLogEvent(
 					logEvent,
 					{
@@ -95,7 +97,7 @@ describe('middlewares/extractor', () => {
 				))
 			);
 
-			this.middleware.exec(logEvent, (res) => {
+			middleware.exec(logEvent, (res) => {
 				expect(res).toEqual(copyLogEvent(
 					logEvent,
 					{
@@ -115,11 +117,11 @@ describe('middlewares/extractor', () => {
 
 	describe('has extractor', () => {
 		beforeEach(() => {
-			this.middleware = new ExtractorMiddleware(new TestExtractor());
+			middleware = new ExtractorMiddleware(new TestExtractor());
 		});
 
 		afterEach(() => {
-			this.middleware = undefined;
+			middleware = undefined;
 		});
 
 		it('error matches some extractor', () => {
@@ -127,7 +129,7 @@ describe('middlewares/extractor', () => {
 				errorDetails = {msg: 'yep'},
 				logEvent = createLogEvent(new TestDetailedBaseError('details', errorDetails));
 
-			this.middleware.exec(logEvent, (res) => {
+			middleware.exec(logEvent, (res) => {
 				expect(res).toEqual(copyLogEvent(
 					logEvent,
 					{error: {details: errorDetails}}
@@ -140,7 +142,7 @@ describe('middlewares/extractor', () => {
 				errorDetails = {msg: 'yep'},
 				logEvent = createLogEvent(new TestDetailedError('details', errorDetails));
 
-			this.middleware.exec(logEvent, (res) => {
+			middleware.exec(logEvent, (res) => {
 				expect(res).toEqual(copyLogEvent(
 					logEvent,
 					{error: {details: {reason: errorDetails}}}
