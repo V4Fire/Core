@@ -15,15 +15,13 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :rocket: New Feature
 
-* Added a new option `AsyncCbOptions.onMutedCall`
-
-#### :rocket: New Feature
-
-* Added iterable for async module
+* `core/async`:
+  * Added a new option `AsyncCbOptions.onMutedCall`
+  * Added new bunch of methods to hook iterable objects
 
 ### :nail_care: Polish
 
-* Added new tests for async.promise
+* Added new tests `core/async`
 
 ## v3.62.0 (2021-10-26)
 
