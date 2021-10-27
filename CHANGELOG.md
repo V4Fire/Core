@@ -15,6 +15,8 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :rocket: New Feature
 
+* Added a new method `Object.isIterable` `prelude`
+
 * `core/async`:
   * Added a new option `AsyncCbOptions.onMutedCall`
   * Added new bunch of methods to hook iterable objects
