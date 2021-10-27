@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.??.?? (2021-??-??)
+
+#### :rocket: New Feature
+
+* Added a new option `AsyncCbOptions.onMutedCall`
+
 ## v3.30.3 (2021-01-28)
 
 #### :house: Internal

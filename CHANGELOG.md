@@ -11,7 +11,11 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-## v3.63.0 (2021-10-26)
+## v3.??.?? (2021-??-??)
+
+#### :rocket: New Feature
+
+* Added a new option `AsyncCbOptions.onMutedCall`
 
 #### :rocket: New Feature
 
