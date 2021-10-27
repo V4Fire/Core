@@ -22,11 +22,12 @@ import Super, {
 
 	BoundFn,
 
+	AsyncOptions,
 	AsyncCbOptions,
 	AsyncProxyOptions,
 
 	ClearProxyOptions,
-	ClearOptionsId, AsyncOptions
+	ClearOptionsId
 
 } from 'core/async/modules/base';
 
@@ -818,6 +819,9 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			};
 		}
 
+		let
+			globalError;
+
 		const newIterable = {
 			[Symbol.asyncIterator]: () => ({
 				[Symbol.asyncIterator]() {
@@ -825,11 +829,21 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 				},
 
 				next: () => {
+					if (globalError != null) {
+						return Promise.reject(globalError);
+					}
+
 					const promise = this.promise(Promise.resolve(baseIterator.next()), {
 						...opts,
 						name: this.namespaces.iterable,
 						onMutedResolve: (resolve, reject) => {
 							Promise.resolve(baseIterator.next()).then(resolve, reject);
+						}
+					});
+
+					promise.catch((err) => {
+						if (Object.isDictionary(err) && err.type === 'clearAsync') {
+							globalError = err;
 						}
 					});
 
