@@ -114,7 +114,7 @@ describe('core/async/modules/proxy `iterable`', () => {
 			const nextIter = asyncIter.next();
 			$a.muteIterable(iterable);
 
-			await $a.sleep(200);
+			await $a.sleep(150);
 			await expectToBePending(nextIter);
 			$a.unmuteIterable(iterable);
 
