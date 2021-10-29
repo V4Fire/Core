@@ -15,7 +15,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :boom: Breaking Change
 
-* Changed building of project from `gulp-typescript` to `gulp-babel`
+* Changed project building from `gulp-typescript` to `gulp-babel`
 * Now, if a promise is resolved during muted, it will be rejected `core/async`
 
 #### :rocket: New Feature
