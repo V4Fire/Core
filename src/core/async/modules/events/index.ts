@@ -336,6 +336,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * Removes the specified event listener or a group of listeners.
 	 * Notice, you can't remove event listeners by a label without providing a group.
 	 *
+	 * @alias
 	 * @param opts - options for the operation
 	 */
 	off(opts: StrictClearOptionsId<EventId>): this;

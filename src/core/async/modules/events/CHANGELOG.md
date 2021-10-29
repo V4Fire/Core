@@ -11,6 +11,10 @@ Changelog
 
 ## v3.50.0 (2021-06-07)
 
+#### :boom: Breaking Change
+
+* Now, if a promise is resolved during muted, it will be rejected
+
 #### :rocket: New Feature
 
 * Added possibility to listen to events from a function emitter

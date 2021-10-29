@@ -11,7 +11,25 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-## v3.62.0 (2021-??-??)
+## v3.??.?? (2021-??-??)
+
+#### :boom: Breaking Change
+
+* Now, if a promise is resolved during muted, it will be rejected `core/async`
+
+#### :rocket: New Feature
+
+* Added a new method `Object.isIterable` `prelude`
+
+* `core/async`:
+  * Added a new option `AsyncCbOptions.onMutedCall`
+  * Added new bunch of methods to hook iterable objects
+
+### :nail_care: Polish
+
+* Added new tests `core/async`
+
+## v3.62.0 (2021-10-26)
 
 #### :boom: Breaking Change
 

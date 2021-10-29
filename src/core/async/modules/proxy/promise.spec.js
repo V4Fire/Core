@@ -42,6 +42,40 @@ describe('core/async/modules/proxy `promise`', () => {
 		expect(await res).toBe('All fine');
 	});
 
+	it('cancel promise by label', async () => {
+		let i = 0;
+		const label = 'label';
+
+		$a.promise(new Promise((resolve) => setTimeout(resolve, 100)), {label})
+			.then(() => {
+				i++;
+			})
+			.catch(() => undefined);
+
+		$a.cancelPromise({label});
+		await $a.sleep(200);
+
+		expect(i).toEqual(0);
+	});
+
+	it('cancel promise by id', async () => {
+		let i = 0;
+
+		const prom = new Promise((resolve) => setTimeout(resolve, 100));
+
+		const res = $a.promise(prom);
+
+		res.then(() => {
+			i++;
+		}).catch(() => undefined);
+
+		$a.cancelPromise(res);
+
+		await $a.sleep(150);
+
+		expect(i).toEqual(0);
+	});
+
 	describe('suspendPromise/unsuspendPromise`', () => {
 		it('suspending a promise by id', async () => {
 			let i = 0;
@@ -123,9 +157,15 @@ describe('core/async/modules/proxy `promise`', () => {
 				new Promise((resolve) => setTimeout(resolve, 150))
 			);
 
-			promise.then(() => {
-				i++;
-			});
+			promise.then(
+				() => {
+					i++;
+				},
+
+				() => {
+					// Loopback
+				}
+			);
 
 			expect(i).toEqual(0);
 
@@ -135,6 +175,8 @@ describe('core/async/modules/proxy `promise`', () => {
 
 			$a.unmutePromise(promise);
 			expect(i).toEqual(0);
+
+			await expectAsync(promise).toBeRejected();
 		});
 
 		it('muting a promise by a label', async () => {
@@ -148,9 +190,15 @@ describe('core/async/modules/proxy `promise`', () => {
 				label
 			);
 
-			promise.then(() => {
-				i++;
-			});
+			promise.then(
+				() => {
+					i++;
+				},
+
+				() => {
+					// Loopback
+				}
+			);
 
 			expect(i).toEqual(0);
 
@@ -160,6 +208,8 @@ describe('core/async/modules/proxy `promise`', () => {
 
 			$a.unmutePromise(label);
 			expect(i).toEqual(0);
+
+			await expectAsync(promise).toBeRejected();
 		});
 
 		it('muting a promise by a group', async () => {
@@ -173,9 +223,15 @@ describe('core/async/modules/proxy `promise`', () => {
 				group
 			);
 
-			promise.then(() => {
-				i++;
-			});
+			promise.then(
+				() => {
+					i++;
+				},
+
+				() => {
+					// Loopback
+				}
+			);
 
 			expect(i).toEqual(0);
 
@@ -185,6 +241,8 @@ describe('core/async/modules/proxy `promise`', () => {
 
 			$a.unmutePromise(group);
 			expect(i).toEqual(0);
+
+			await expectAsync(promise).toBeRejected();
 		});
 	});
 });
