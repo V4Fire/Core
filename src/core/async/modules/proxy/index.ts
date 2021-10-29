@@ -1057,7 +1057,6 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	}
 
 	/**
-	 *
 	 * Returns an iterator from the passed iterable object.
 	 * Notice, an asynchronous iterator has more priority.
 	 *

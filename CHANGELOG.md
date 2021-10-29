@@ -13,6 +13,10 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 ## v3.??.?? (2021-??-??)
 
+#### :boom: Breaking Change
+
+* Now, if a promise is resolved during muted, it will be rejected `core/async`
+
 #### :rocket: New Feature
 
 * Added a new method `Object.isIterable` `prelude`
