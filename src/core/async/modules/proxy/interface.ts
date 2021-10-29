@@ -7,7 +7,7 @@
  */
 
 import type Async from 'core/async';
-import type { AsyncOptions, AsyncProxyOptions } from 'core/async/interface';
+import type { AsyncOptions, AsyncProxyOptions, ProxyCb } from 'core/async/interface';
 
 /**
  * Something that looks like a worker
@@ -65,6 +65,10 @@ export interface AsyncPromiseOptions extends AsyncOptions {
 	 * Name of a destructor method
 	 */
 	destructor?: string;
-}
 
-export type AsyncIterableOptions = AsyncOptions;
+	/**
+	 * Handler/s of muted promise resolving.
+	 * These handlers are invoked when occurring resolving the promise if it is muted.
+	 */
+	onMutedResolve?: CanArray<ProxyCb<AnyFunction, AnyFunction>>;
+}

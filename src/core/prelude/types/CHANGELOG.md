@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.??.?? (2021-??-??)
+
+#### :rocket: New Feature
+
+* Added a new method `Object.isIterable`
+
 ## v3.20.0 (2020-07-05)
 
 #### :rocket: New Feature

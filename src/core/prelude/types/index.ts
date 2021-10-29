@@ -105,6 +105,7 @@ extend(Object, 'isIterable', (value) => {
 	);
 });
 
+/** @see [[ObjectConstructor.isAsyncIterable]] */
 extend(Object, 'isAsyncIterable', (value) => {
 	if (value == null) {
 		return false;
