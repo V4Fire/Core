@@ -303,14 +303,16 @@ export default class Async<CTX extends object = Async<any>> {
 				const
 					link = links.get(taskId);
 
-				if (!link || link.muted) {
+				if (link?.muted === true) {
 					const
 						mutedCallHandlers = Array.concat([], task.onMutedCall);
 
 					for (let i = 0; i < mutedCallHandlers.length; i++) {
 						mutedCallHandlers[i].call(ctx, link);
 					}
+				}
 
+				if (!link || link.muted) {
 					return;
 				}
 
