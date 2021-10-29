@@ -27,6 +27,7 @@ export type MarkReason =
  */
 export type ClearReason =
 	MarkReason |
+	'muting'|
 	'collision';
 
 export interface IdObject {
