@@ -9,129 +9,144 @@
 import Async from 'core/async';
 import SyncPromise from 'core/promise/sync';
 
-const objWithAsyncIterator = {
-	[Symbol.asyncIterator]() {
-		return {
-			data: [1, 2, 3, 4],
-			index: 0,
-			next() {
-				const {data, index} = this;
-
-				return new Promise((resolve) => {
-					setTimeout(
-						() =>
-							resolve({
-								done: Boolean(index > data.length),
-								value: data[this.index++]
-							}),
-						100
-					);
-				});
-			}
-		};
-	}
-};
-
-const expectToBePending = (promise) => {
-	const want = {};
-
-	return SyncPromise.race([promise, SyncPromise.resolve(want)])
-	.then((val) => {
-		expect(val).withContext('Promise should be pending').toEqual(want);
-	})
-	.catch((err) => {
-		fail(err);
-	});
-};
-
-const expectToBeResolved = (promise) => {
-	const obj = {};
-
-	return SyncPromise.race([promise, SyncPromise.resolve(obj)])
-	.then((val) => {
-		expect(val).withContext('Promise should be pending').not.toEqual(obj);
-	})
-	.catch((err) => {
-		fail(err);
-	});
-};
-
 describe('core/async/modules/proxy `iterable`', () => {
-	let $a;
+	let
+		$a,
+		asyncIterator;
 
 	beforeEach(() => {
 		$a = new Async();
+
+		asyncIterator = {
+			async*[Symbol.asyncIterator]() {
+				for (const el of [1, 2, 3, 4]) {
+					await new Promise((r) => setTimeout(r, 100));
+					yield el;
+				}
+			}
+		};
 	});
 
-	it('for await of loop on async iterable', async () => {
-		const iter = $a.iterable([1, 2, 3, 4]);
+	describe('wraps a synchronous iterable object', () => {
+		it('using for await', async () => {
+			const
+				iter = $a.iterable([1, 2, 3, 4]);
 
-		let i = 0;
-		for await (const item of iter) {
-			expect(item).toEqual(++i);
-		}
+			let
+				i = 0;
+
+			for await (const item of iter) {
+				i++;
+				expect(item).toEqual(i);
+			}
+		});
+
+		it('manual invoking of `next`', async () => {
+			const asyncIter = $a.iterable([1, 2, 3])[Symbol.asyncIterator]();
+			expect(await asyncIter.next()).toEqual({done: false, value: 1});
+		});
 	});
 
-	it('simple async iterator from array', async () => {
-		const asyncIter = $a.iterable([1, 2, 3])[Symbol.asyncIterator]();
+	describe('wraps an asynchronous iterable object', () => {
+		beforeEach(() => {
+			$a = new Async();
+		});
 
-		expect(await asyncIter.next()).toEqual({done: false, value: 1});
-	});
+		it('manual invoking of `next`', async () => {
+			const asyncIter = $a.iterable(asyncIterator)[Symbol.asyncIterator]();
+			expect(await asyncIter.next()).toEqual({done: false, value: 1});
+		});
 
-	it('simple async iterator', async () => {
-		const asyncIter = $a.iterable(objWithAsyncIterator)[Symbol.asyncIterator]();
+		it('cancellation of the iteration', async () => {
+			const
+				iterable = $a.iterable(asyncIterator),
+				asyncIter = iterable[Symbol.asyncIterator]();
 
-		expect(await asyncIter.next()).toEqual({done: false, value: 1});
-	});
+			expect(await asyncIter.next()).toEqual({
+				done: false,
+				value: 1
+			});
 
-	it('cancel async iterator', async () => {
-		const iterable = $a.iterable(objWithAsyncIterator);
-		const asyncIter = iterable[Symbol.asyncIterator]();
-		expect(await asyncIter.next()).toEqual({done: false, value: 1});
+			const promise1 = asyncIter.next();
+			$a.cancelIterable(iterable);
 
-		const promise1 = asyncIter.next();
-		$a.cancelIterable(iterable);
+			await expectAsync(promise1).toBeRejected();
 
-		await expectAsync(promise1).toBeRejected();
+			const promise2 = asyncIter.next();
+			await expectAsync(promise2).toBeRejected();
+		});
 
-		const promise2 = asyncIter.next();
-		await expectAsync(promise2).toBeRejected();
-	});
+		it('suspending/unsuspending of the iteration', async () => {
+			const
+				iterable = $a.iterable(asyncIterator),
+				asyncIter = iterable[Symbol.asyncIterator]();
 
-	it('suspend and unsuspend async iterator', async () => {
-		const iterable = $a.iterable(objWithAsyncIterator);
-		const asyncIter = iterable[Symbol.asyncIterator]();
+			expect(await asyncIter.next()).toEqual({
+				done: false,
+				value: 1
+			});
 
-		expect(await asyncIter.next()).toEqual({done: false, value: 1});
+			const nextIter = asyncIter.next();
+			$a.suspendIterable(iterable);
 
-		const nextIter = asyncIter.next();
-		$a.suspendIterable(iterable);
+			await $a.sleep(200);
+			await expectToBePending(nextIter);
 
-		await $a.sleep(200);
-		await expectToBePending(nextIter);
+			$a.unsuspendIterable(iterable);
+			await expectToBeResolved(nextIter);
 
-		$a.unsuspendIterable(iterable);
-		await expectToBeResolved(nextIter);
+			expect(await nextIter).toEqual({
+				done: false,
+				value: 2
+			});
+		});
 
-		expect(await nextIter).toEqual({done: false, value: 2});
-	});
+		it('muting/unmuting of the iteration', async () => {
+			const
+				iterable = $a.iterable(asyncIterator),
+				asyncIter = iterable[Symbol.asyncIterator]();
 
-	it('mute and unmute async iterator', async () => {
-		const iterable = $a.iterable(objWithAsyncIterator);
-		const asyncIter = iterable[Symbol.asyncIterator]();
+			expect(await asyncIter.next()).toEqual({
+				done: false,
+				value: 1
+			});
 
-		expect(await asyncIter.next()).toEqual({done: false, value: 1});
+			const nextIter = asyncIter.next();
+			$a.muteIterable(iterable);
 
-		const nextIter = asyncIter.next();
-		$a.muteIterable(iterable);
+			await $a.sleep(200);
+			await expectToBePending(nextIter);
 
-		await $a.sleep(200);
-		await expectToBePending(nextIter);
+			$a.unmuteIterable(iterable);
+			await $a.sleep(200);
+			await expectToBeResolved(nextIter);
 
-		$a.unmuteIterable(iterable);
-		await $a.sleep(200);
-		await expectToBeResolved(nextIter);
-
-		expect(await nextIter).toEqual({done: false, value: 3});
+			expect(await nextIter).toEqual({
+				done: false,
+				value: 3
+			});
+		});
 	});
 });
+
+function expectToBePending(promise) {
+	const want = {};
+
+	return SyncPromise.race([promise, SyncPromise.resolve(want)])
+		.then((val) => {
+			expect(val).withContext('A promise should be pending').toEqual(want);
+		})
+
+		.catch(fail);
+}
+
+function expectToBeResolved(promise) {
+	const want = {};
+
+	return SyncPromise.race([promise, SyncPromise.resolve(want)])
+		.then((val) => {
+			expect(val).withContext('A promise should be resolved').not.toEqual(want);
+		})
+
+		.catch(fail);
+}

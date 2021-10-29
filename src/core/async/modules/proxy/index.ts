@@ -485,7 +485,8 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		}
 
 		let
-			globalError;
+			globalError,
+			doneDelay = 0;
 
 		const newIterable = {
 			[Symbol.asyncIterator]: () => ({
@@ -502,7 +503,27 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 						...opts,
 						name: this.namespaces.iterable,
 						onMutedResolve: (resolve, reject) => {
-							Promise.resolve(baseIterator.next()).then(resolve, reject);
+							// Prevent an infinity loop if the iterable is already done
+							if (doneDelay > 0) {
+								setTimeout(() => {
+									resolve({value: undefined, done: true});
+								}, doneDelay);
+
+								return;
+							}
+
+							Promise.resolve(baseIterator.next()).then((res) => {
+								if (res.done) {
+									if (doneDelay === 0) {
+										doneDelay = 15;
+
+									} else if (doneDelay < 200) {
+										doneDelay *= 2;
+									}
+								}
+
+								resolve(res);
+							}, reject);
 						}
 					});
 
@@ -545,7 +566,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	cancelIterable(opts: ClearOptionsId<AsyncIterable<unknown>>): this;
 	cancelIterable(task?: AsyncIterable<unknown> | ClearOptionsId<AsyncIterable<unknown>>): this {
-		return this.cancelTask(task, this.namespaces.iterable);
+		return this.clearIterable(<any>task);
 	}
 
 	/**
@@ -708,7 +729,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 					const
 						handlers = Array.concat([], opts?.onMutedResolve);
 
-					if (handlers.length > 1) {
+					if (handlers.length > 0) {
 						for (let i = 0; i < handlers.length; i++) {
 							handlers[i].call(ctx, wrappedResolve, proxyReject);
 						}
