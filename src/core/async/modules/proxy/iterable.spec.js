@@ -91,9 +91,7 @@ describe('core/async/modules/proxy `iterable`', () => {
 
 			await $a.sleep(200);
 			await expectToBePending(nextIter);
-
 			$a.unsuspendIterable(iterable);
-			await expectToBeResolved(nextIter);
 
 			expect(await nextIter).toEqual({
 				done: false,
@@ -132,17 +130,6 @@ function expectToBePending(promise) {
 	return SyncPromise.race([promise, SyncPromise.resolve(want)])
 		.then((val) => {
 			expect(val).withContext('A promise should be pending').toEqual(want);
-		})
-
-		.catch(fail);
-}
-
-function expectToBeResolved(promise) {
-	const want = {};
-
-	return SyncPromise.race([promise, SyncPromise.resolve(want)])
-		.then((val) => {
-			expect(val).withContext('A promise should be resolved').not.toEqual(want);
 		})
 
 		.catch(fail);
