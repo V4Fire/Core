@@ -157,9 +157,15 @@ describe('core/async/modules/proxy `promise`', () => {
 				new Promise((resolve) => setTimeout(resolve, 150))
 			);
 
-			promise.then(() => {
-				i++;
-			});
+			promise.then(
+				() => {
+					i++;
+				},
+
+				() => {
+					// Loopback
+				}
+			);
 
 			expect(i).toEqual(0);
 
@@ -169,6 +175,8 @@ describe('core/async/modules/proxy `promise`', () => {
 
 			$a.unmutePromise(promise);
 			expect(i).toEqual(0);
+
+			await expectAsync(promise).toBeRejected();
 		});
 
 		it('muting a promise by a label', async () => {
@@ -182,9 +190,15 @@ describe('core/async/modules/proxy `promise`', () => {
 				label
 			);
 
-			promise.then(() => {
-				i++;
-			});
+			promise.then(
+				() => {
+					i++;
+				},
+
+				() => {
+					// Loopback
+				}
+			);
 
 			expect(i).toEqual(0);
 
@@ -194,6 +208,8 @@ describe('core/async/modules/proxy `promise`', () => {
 
 			$a.unmutePromise(label);
 			expect(i).toEqual(0);
+
+			await expectAsync(promise).toBeRejected();
 		});
 
 		it('muting a promise by a group', async () => {
@@ -207,9 +223,15 @@ describe('core/async/modules/proxy `promise`', () => {
 				group
 			);
 
-			promise.then(() => {
-				i++;
-			});
+			promise.then(
+				() => {
+					i++;
+				},
+
+				() => {
+					// Loopback
+				}
+			);
 
 			expect(i).toEqual(0);
 
@@ -219,6 +241,8 @@ describe('core/async/modules/proxy `promise`', () => {
 
 			$a.unmutePromise(group);
 			expect(i).toEqual(0);
+
+			await expectAsync(promise).toBeRejected();
 		});
 	});
 });

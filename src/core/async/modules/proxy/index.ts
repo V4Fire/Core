@@ -735,7 +735,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 						}
 
 					} else {
-						proxyReject({
+						reject({
 							...p,
 							link,
 							reason: 'muting',
