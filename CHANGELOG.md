@@ -11,10 +11,11 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-## v3.??.?? (2021-??-??)
+## v3.62.0 (2021-10-29)
 
 #### :boom: Breaking Change
 
+* Changed building of project from `gulp-typescript` to `gulp-babel`
 * Now, if a promise is resolved during muted, it will be rejected `core/async`
 
 #### :rocket: New Feature
@@ -25,22 +26,13 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
   * Added a new option `AsyncCbOptions.onMutedCall`
   * Added new bunch of methods to hook iterable objects
 
-### :nail_care: Polish
-
-* Added new tests `core/async`
-
-## v3.62.0 (2021-10-26)
-
-#### :boom: Breaking Change
-
-* Changed building of project from `gulp-typescript` to `gulp-babel`
-
 #### :house: Internal
 
 * Updated dependencies
 
 ### :nail_care: Polish
 
+* Added new tests `core/async`
 * Added generation of source maps with the hot-reload mode
 
 ## v3.61.1 (2021-10-25)
