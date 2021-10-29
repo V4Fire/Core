@@ -116,10 +116,7 @@ describe('core/async/modules/proxy `iterable`', () => {
 
 			await $a.sleep(200);
 			await expectToBePending(nextIter);
-
 			$a.unmuteIterable(iterable);
-			await $a.sleep(200);
-			await expectToBeResolved(nextIter);
 
 			expect(await nextIter).toEqual({
 				done: false,
