@@ -192,4 +192,52 @@ describe('core/prelude/date/create', () => {
 			expect(Date.endOfYear(date)).toEqual(new Date(2016, 0, 0, 23, 59, 59, 999));
 		});
 	});
+
+	describe('work correctly with timezones', () => {
+		let originGetTimeZone;
+
+		beforeAll(() => {
+			originGetTimeZone = Date.prototype.getTimezoneOffset;
+		});
+
+		afterAll(() => {
+			Date.prototype.getTimezoneOffset = originGetTimeZone;
+		});
+
+		it('UTC +9:30', () => {
+			Date.prototype.getTimezoneOffset = () => -(9 * 60 + 30);
+
+			expect(Date.create('2021-11-11')).toEqual(new Date('2021-11-10T14:30:00.000Z'));
+			expect(Date.create('2021-11-11 10:00:00')).toEqual(new Date('2021-11-11T00:30:00.000Z'));
+		});
+
+		it('UTC +8:45', () => {
+			Date.prototype.getTimezoneOffset = () => -(8 * 60 + 45);
+
+			expect(Date.create('2021-11-11')).toEqual(new Date('2021-11-10T15:15:00.000Z'));
+			expect(Date.create('2021-11-11 10:00:00')).toEqual(new Date('2021-11-11T01:15:00.000Z'));
+		});
+
+		it('UTC −03:30', () => {
+			Date.prototype.getTimezoneOffset = () => (3 * 60 + 30);
+
+			expect(Date.create('2021-11-11')).toEqual(new Date('2021-11-11T03:30:00.000Z'));
+			expect(Date.create('2021-11-11 10:00:00')).toEqual(new Date('2021-11-11T13:30:00.000Z'));
+		});
+
+		it('between 1991 and 2011 UTC +02:00 other UTC +03:00', () => {
+			Date.prototype.getTimezoneOffset = function getTimezoneOffset() {
+				const year = this.getFullYear();
+				if (year >= 1991 && year <= 2011) {
+					return -(2 * 60);
+				}
+
+				return -(3 * 60);
+			};
+
+			expect(Date.create('2021-11-11')).toEqual(new Date('2021-11-10T21:00:00.000Z'));
+			expect(Date.create('2000-11-11')).toEqual(new Date('2000-11-10T22:00:00.000Z'));
+			expect(Date.create('1990-11-11')).toEqual(new Date('1990-11-10T21:00:00.000Z'));
+		});
+	});
 });
