@@ -129,11 +129,18 @@ function watch<T extends object>(
 
 	let
 		timer,
+		pathParsedFromString = false,
 		normalizedPath: CanUndef<unknown[]>;
 
 	// Support for overloads of the function
 	if (Object.isString(pathOptsOrHandler) || Object.isArray(pathOptsOrHandler)) {
-		normalizedPath = Object.isArray(pathOptsOrHandler) ? pathOptsOrHandler : pathOptsOrHandler.split('.');
+		if (Object.isArray(pathOptsOrHandler)) {
+			normalizedPath = pathOptsOrHandler;
+
+		} else {
+			pathParsedFromString = true;
+			normalizedPath = pathOptsOrHandler.split('.');
+		}
 
 		if (Object.isFunction(handlerOrOpts)) {
 			handler = handlerOrOpts;
@@ -433,7 +440,14 @@ function watch<T extends object>(
 						pathVal = path[i],
 						tiedPathVal = tiedPath[i];
 
-					if (pathVal === tiedPathVal) {
+					let
+						pathsAreSame = pathVal === tiedPathVal;
+
+					if (pathParsedFromString && !isNaN(<any>tiedPathVal)) {
+						pathsAreSame = Number(tiedPathVal) === Number(pathVal);
+					}
+
+					if (pathsAreSame) {
 						continue;
 					}
 

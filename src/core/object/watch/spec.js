@@ -180,6 +180,27 @@ describe('core/object/watch', () => {
 				expect(spy).toHaveBeenCalledWith(2, undefined, ['a', 'b'], ['a', 'b', 1]);
 			});
 
+			it('deep watching for an array by a complex path without collapsing', async () => {
+				const
+					obj = {a: {b: []}};
+
+				const
+					spy = jasmine.createSpy();
+
+				const {proxy} = watch(obj, 'a.b.0', {engine, collapse: false}, (mutations) => {
+					mutations.forEach(([value, oldValue, info]) => {
+						spy(value, oldValue, info.path, info.originalPath);
+					});
+				});
+
+				proxy.a.b.push(1);
+				proxy.a.b.unshift(2);
+				await new Promise((r) => setTimeout(r, 100));
+
+				expect(spy).toHaveBeenCalledWith(1, undefined, ['a', 'b', '0'], ['a', 'b', 0]);
+				expect(spy).toHaveBeenCalledWith(2, 1, ['a', 'b', '0'], ['a', 'b', 0]);
+			});
+
 			it('isolated watchers', () => {
 				const
 					obj = {a: {b: [], c: {e: 1}}},

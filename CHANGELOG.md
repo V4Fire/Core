@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.62.1 (2021-11-08)
+
+#### :bug: Bug Fix
+
+* Fixed watching for an array by a complex path with indices `core/object/watch`
+
 ## v3.62.0 (2021-10-29)
 
 #### :boom: Breaking Change
