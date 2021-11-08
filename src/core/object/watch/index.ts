@@ -16,6 +16,7 @@
 import watchEngine from 'core/object/watch/engines';
 
 import { muteLabel, toOriginalObject, toRootObject, watchHandlers } from 'core/object/watch/const';
+import { isValueCanBeArrayIndex } from 'core/object/watch/helpers';
 import { unwrap } from 'core/object/watch/engines/helpers';
 
 import type {
@@ -440,12 +441,14 @@ function watch<T extends object>(
 						pathVal = path[i],
 						tiedPathVal = tiedPath[i];
 
-					let
-						pathsAreSame = pathVal === tiedPathVal;
+					const needNormalizeVal =
+						pathParsedFromString &&
+						Object.isNumber(pathVal) &&
+						isValueCanBeArrayIndex(tiedPathVal);
 
-					if (pathParsedFromString && !isNaN(<any>tiedPathVal)) {
-						pathsAreSame = Number(tiedPathVal) === Number(pathVal);
-					}
+					const pathsAreSame = needNormalizeVal ?
+						Number(tiedPathVal) === Number(pathVal) :
+						pathVal === tiedPathVal;
 
 					if (pathsAreSame) {
 						continue;
