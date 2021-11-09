@@ -121,6 +121,7 @@ function watch<T extends object>(
 	optsOrHandler?: WatchOptions | WatchHandler | MultipleWatchHandler
 ): Watcher<T> {
 	const
+		isPathParsedFromString = Symbol('Is the path parsed from a string'),
 		unwrappedObj = unwrap(obj);
 
 	let
@@ -130,7 +131,6 @@ function watch<T extends object>(
 
 	let
 		timer,
-		pathParsedFromString = false,
 		normalizedPath: CanUndef<unknown[]>;
 
 	// Support for overloads of the function
@@ -139,8 +139,8 @@ function watch<T extends object>(
 			normalizedPath = pathOptsOrHandler;
 
 		} else {
-			pathParsedFromString = true;
 			normalizedPath = pathOptsOrHandler.split('.');
+			normalizedPath[isPathParsedFromString] = true;
 		}
 
 		if (Object.isFunction(handlerOrOpts)) {
@@ -178,8 +178,14 @@ function watch<T extends object>(
 
 	// Normalize dependencies
 	if (rawDeps != null && unwrappedObj != null) {
-		const
-			convert = (dep) => Object.isArray(dep) ? dep : dep.split('.');
+		const convert = (dep) => {
+			if (Object.isString(dep)) {
+				dep = dep.split('.');
+				dep[isPathParsedFromString] = true;
+			}
+
+			return dep;
+		};
 
 		if (Object.isArray(rawDeps)) {
 			localDeps = [];
@@ -442,13 +448,13 @@ function watch<T extends object>(
 						tiedPathVal = tiedPath[i];
 
 					const needNormalizeVal =
-						pathParsedFromString &&
 						Object.isNumber(pathVal) &&
+						tiedPath[isPathParsedFromString] === true &&
 						isValueCanBeArrayIndex(tiedPathVal);
 
 					const pathsAreSame = needNormalizeVal ?
 						Number(tiedPathVal) === Number(pathVal) :
-						pathVal === tiedPathVal;
+						tiedPathVal === pathVal;
 
 					if (pathsAreSame) {
 						continue;
@@ -494,7 +500,16 @@ function watch<T extends object>(
 									pathVal = path[i],
 									depPathVal = depPath[i];
 
-								if (pathVal === depPathVal) {
+								const needNormalizeVal =
+									Object.isNumber(pathVal) &&
+									depPath[isPathParsedFromString] === true &&
+									isValueCanBeArrayIndex(depPathVal);
+
+								const pathsAreSame = needNormalizeVal ?
+									Number(depPathVal) === Number(pathVal) :
+									depPathVal === pathVal;
+
+								if (pathsAreSame) {
 									dynamic = true;
 									continue;
 								}

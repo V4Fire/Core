@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.62.3 (2021-11-09)
+
+#### :bug: Bug Fix
+
+* Fixed deep watching for array dependencies `core/object/watch`
+
 ## v3.62.2 (2021-11-09)
 
 #### :bug: Bug Fix

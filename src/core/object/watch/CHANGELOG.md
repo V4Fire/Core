@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.62.3 (2021-11-09)
+
+#### :bug: Bug Fix
+
+* Fixed deep watching for array dependencies
+
 ## v3.62.2 (2021-11-09)
 
 #### :bug: Bug Fix
