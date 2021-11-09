@@ -9,6 +9,14 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.62.2 (2021-11-09)
+
+#### :bug: Bug Fix
+
+* `create`:
+  * Now all dates create with a timezone actual to their creation date
+  * Fixed creating a date with a local timezone when it's partial (eg 'UTC +9:30')
+
 ## v3.59.2 (2021-09-27)
 
 #### :bug: Bug Fix
