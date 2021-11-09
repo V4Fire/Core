@@ -45,9 +45,11 @@ extend(Date, 'create', (pattern?: DateCreateValue) => {
 		}
 
 		const getZone = (normalizedDate) => {
-			const zone = new Date(normalizedDate).getTimezoneOffset(),
+			const
+				zone = new Date(normalizedDate).getTimezoneOffset(),
 				h = Math.floor(Math.abs(zone) / 60),
 				m = Math.abs(zone) - (h * 60);
+
 			return `${zone <= 0 ? '+' : '-'}${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
 		};
 
@@ -63,7 +65,7 @@ extend(Date, 'create', (pattern?: DateCreateValue) => {
 			const
 				chunks = normalizeDateChunkRgxp.exec(date);
 
-			if (!chunks) {
+			if (chunks == null) {
 				return date;
 			}
 
@@ -75,10 +77,12 @@ extend(Date, 'create', (pattern?: DateCreateValue) => {
 		};
 
 		const replacer = (str, date, time, zone) => {
-			const normalizedDate = normalizeDate(date);
+			const
+				normalizedDate = normalizeDate(date);
 
 			time = Object.isTruly(time) ? time : '00:00:00';
 			zone = Object.isTruly(zone) ? zone : getZone(normalizedDate);
+
 			return `${normalizedDate}T${time}${normalizeZone(zone)}`;
 		};
 

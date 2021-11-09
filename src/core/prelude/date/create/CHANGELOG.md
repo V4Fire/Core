@@ -13,8 +13,8 @@ Changelog
 
 #### :bug: Bug Fix
 
-* Now date creates with timezone actual on creating date
-* Fixed creating date with local timezone when it's partial (eg 'UTC +9:30')
+* Now all dates create with a timezone actual to their creation date
+* Fixed creating a date with a local timezone when it's partial (eg 'UTC +9:30')
 
 ## v3.50.0 (2021-06-07)
 

@@ -193,7 +193,7 @@ describe('core/prelude/date/create', () => {
 		});
 	});
 
-	describe('work correctly with timezones', () => {
+	describe('working with timezones', () => {
 		let originGetTimeZone;
 
 		beforeAll(() => {
