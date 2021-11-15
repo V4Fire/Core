@@ -256,35 +256,72 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		}
 	}
 
+	/**
+	 * The wrapper takes a link to the "raw" async storage and returns a new object that based
+	 * on the original, but all async methods and properties are wrapped by Async.
+	 * Notice, the wrapped methods can take additional Async parameters, like group or label.
+	 *
+	 * @param storage
+	 * @param opts
+	 *
+	 * @example
+	 * ```js
+	 * import Async from 'core/async';
+	 * import { asyncLocal } from 'core/kv-storage';
+	 *
+	 * const
+	 *   $a = new Async(),
+	 *   wrappedStorage = $a.wrapAsyncStorage(asyncLocal);
+	 *
+	 * wrappedStorage.set('bla', 1).then(async () => {
+	 *   console.log(await asyncLocal.get('bla') === 1);
+	 * });
+
+	 	namespace использует настройки которые были передены в wrapAsyncStorage и не помечает новвую группу
+		const blaStore = asyncLocal.namespace('[[BLA]]');
+
+		blaStore.set('bla', 1).then(async () => {
+			console.log(await blaStore.get('bla') === 1);
+		});
+	 *
+	 * $a.clearAll({group: 'api.User'})
+	 * ```
+	 */
 	wrapAsyncStorage<T extends AsyncStorage>(
 		storage: T,
 		opts?: AsyncOptionsForWrappers
 	): WrappedAsyncStorage {
-		const wrappedStorage = Object.create(storage);
+		const globalGroup = opts?.group;
+		const wrappedStorage: WrappedAsyncStorage = Object.create(storage);
 
-		wrappedStorage.has = (key: string, ...args: unknown[]) => {
+		wrappedStorage.has = (key, ...args) => {
 			const [asyncOpts, params] = separateArgs(args);
 			return this.promise(storage.has(key, ...params), asyncOpts);
 		};
 
-		wrappedStorage.get = <T = unknown>(key: string, ...args: unknown[]) => {
+		wrappedStorage.get = <T = unknown>(key, ...args) => {
 			const [asyncOpts, params] = separateArgs(args);
 			return this.promise(storage.get<T>(key, ...params), asyncOpts);
 		};
 
-		wrappedStorage.set = (key: string, value: unknown, ...args: unknown[]) => {
+		wrappedStorage.set = (key, value, ...args) => {
 			const [asyncOpts, params] = separateArgs(args);
 			return this.promise(storage.set(key, value, ...params), asyncOpts);
 		};
 
-		wrappedStorage.remove = (key: string, ...args: unknown[]) => {
+		wrappedStorage.remove = (key, ...args) => {
 			const [asyncOpts, params] = separateArgs(args);
 			return this.promise(storage.remove(key, ...params), asyncOpts);
 		};
 
-		wrappedStorage.clear = <T = unknown>(filter?: ClearFilter<T>, ...args: unknown[]) => {
+		wrappedStorage.clear = <T = unknown>(filter?, ...args) => {
 			const [asyncOpts, params] = separateArgs(args);
 			return this.promise(storage.clear<T>(filter, ...params), asyncOpts);
+		};
+
+		wrappedStorage.namespace = (name, opts?) => {
+			const asyncOpts = {group: [globalGroup, opts?.group].filter(Boolean).join(':')};
+			return this.wrapAsyncStorage(wrappedStorage, asyncOpts);
 		};
 
 		return wrappedStorage;
@@ -298,13 +335,13 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 				return [
 					{
 						...asyncParam,
-						group: [opts?.group, asyncParam.group].filter(Boolean).join(':')
+						group: [globalGroup, asyncParam.group].filter(Boolean).join(':')
 					},
 					[ownParam, ...args.slice(1)]
 				];
 			}
 
-			return [opts?.group != null ? {group: opts.group} : {}, args];
+			return [globalGroup != null ? {group: globalGroup} : {}, args];
 		}
 	}
 }

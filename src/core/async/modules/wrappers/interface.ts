@@ -4,7 +4,7 @@ import type { CreateRequestOptions, RequestQuery, RequestResponseObject, Request
 import type Async from 'core/async';
 import type { AsyncOptions, ClearOptionsId, ProxyCb, EventEmitterLike } from 'core/async';
 
-import type { AsyncStorage, AsyncStorageNamespace } from 'core/kv-storage';
+import type { ClearFilter } from 'core/kv-storage';
 
 export type DataProviderQueryMethodsToReplace = 'get' | 'peek';
 export type DataProviderBodyMethodsToReplace = 'post' | 'add' | 'upd' | 'del';
@@ -117,11 +117,28 @@ export type EventEmitterOverwritten<T extends EventEmitterLike> = Overwrite<T, {
 
 export type AsyncOptionsForWrappers = Pick<AsyncOptions, 'group'>;
 
-type InsertPenultimate<T, P> = T extends [...args: infer K, last: infer U] ? [...args: K, penult: P, last: U] : never;
+export interface WrappedAsyncStorage {
+	/** @see [[AsyncStorage.has]] */
+	has(key: string, ...args: unknown[]): Promise<boolean>;
+	has(key: string, opts?: AsyncOptions, ...args: unknown[]): Promise<boolean>;
 
-export type WrappedAsyncStorage = {
-	// eslint-disable-next-line max-len
-	[key in keyof AsyncStorageNamespace]: (...args: InsertPenultimate<Parameters<AsyncStorage[key]>, AsyncOptions>) => ReturnType<AsyncStorage[key]>
-} & {
+	/** @see [[AsyncStorage.get]] */
+	get<T = unknown>(key: string, ...args: unknown[]): Promise<CanUndef<T>>;
+	get<T = unknown>(key: string, opts?: AsyncOptions, ...args: unknown[]): Promise<CanUndef<T>>;
+
+	/** @see [[AsyncStorage.set]] */
+	set(key: string, value: unknown, ...args: unknown[]): Promise<void>;
+	set(key: string, value: unknown, opts?: AsyncOptions, ...args: unknown[]): Promise<void>;
+
+	/** @see [[AsyncStorage.remove]] */
+	remove(key: string, ...args: unknown[]): Promise<void>;
+	remove(key: string, opts?: AsyncOptions, ...args: unknown[]): Promise<void>;
+
+	/** @see [[AsyncStorage.clear]] */
+	clear<T = unknown>(filter?: ClearFilter<T>, ...args: unknown[]): Promise<void>;
+	clear<T = unknown>(filter?: ClearFilter<T>, opts?: unknown[], ...args: unknown[]): Promise<void>;
+
+	/** @see [[AsyncStorage.namespace]] */
 	namespace(name: string): WrappedAsyncStorage;
-};
+	namespace(name: string, opts: AsyncOptionsForWrappers): WrappedAsyncStorage;
+}
