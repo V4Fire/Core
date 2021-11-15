@@ -4,6 +4,8 @@ import type { CreateRequestOptions, RequestQuery, RequestResponseObject, Request
 import type Async from 'core/async';
 import type { AsyncOptions, ClearOptionsId, ProxyCb, EventEmitterLike } from 'core/async';
 
+import type { AsyncStorage, AsyncStorageNamespace } from 'core/kv-storage';
+
 export type DataProviderQueryMethodsToReplace = 'get' | 'peek';
 export type DataProviderBodyMethodsToReplace = 'post' | 'add' | 'upd' | 'del';
 export type DataProviderMethodsToReplace = DataProviderQueryMethodsToReplace | DataProviderBodyMethodsToReplace;
@@ -114,3 +116,12 @@ export type EventEmitterOverwritten<T extends EventEmitterLike> = Overwrite<T, {
 }>;
 
 export type AsyncOptionsForWrappers = Pick<AsyncOptions, 'group'>;
+
+type InsertPenultimate<T, P> = T extends [...args: infer K, last: infer U] ? [...args: K, penult: P, last: U] : never;
+
+export type WrappedAsyncStorage = {
+	// eslint-disable-next-line max-len
+	[key in keyof AsyncStorageNamespace]: (...args: InsertPenultimate<Parameters<AsyncStorage[key]>, AsyncOptions>) => ReturnType<AsyncStorage[key]>
+} & {
+	namespace(name: string): WrappedAsyncStorage;
+};
