@@ -16,6 +16,8 @@ import type { CreateRequestOptions, RequestQuery, RequestBody } from 'core/reque
 
 import Super, { AsyncOptions, EventEmitterLike } from 'core/async/modules/events';
 
+import type { AsyncStorage, ClearFilter } from 'core/kv-storage';
+
 import {
 
 	emitLikeEvents,
@@ -32,6 +34,8 @@ import type {
 
 	EventEmitterWrapper,
 	EventEmitterOverwritten,
+
+	WrappedAsyncStorage,
 
 	AsyncOptionsForWrappers
 
@@ -249,6 +253,58 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			}
 
 			return [opts?.group != null ? {group: opts.group} : {}, ...params];
+		}
+	}
+
+	wrapAsyncStorage<T extends AsyncStorage>(
+		storage: T,
+		opts?: AsyncOptionsForWrappers
+	): WrappedAsyncStorage {
+		const wrappedStorage = Object.create(storage);
+
+		wrappedStorage.has = (key: string, ...args: unknown[]) => {
+			const [asyncOpts, params] = separateArgs(args);
+			return this.promise(storage.has(key, ...params), asyncOpts);
+		};
+
+		wrappedStorage.get = <T = unknown>(key: string, ...args: unknown[]) => {
+			const [asyncOpts, params] = separateArgs(args);
+			return this.promise(storage.get<T>(key, ...params), asyncOpts);
+		};
+
+		wrappedStorage.set = (key: string, value: unknown, ...args: unknown[]) => {
+			const [asyncOpts, params] = separateArgs(args);
+			return this.promise(storage.set(key, value, ...params), asyncOpts);
+		};
+
+		wrappedStorage.remove = (key: string, ...args: unknown[]) => {
+			const [asyncOpts, params] = separateArgs(args);
+			return this.promise(storage.remove(key, ...params), asyncOpts);
+		};
+
+		wrappedStorage.clear = <T = unknown>(filter?: ClearFilter<T>, ...args: unknown[]) => {
+			const [asyncOpts, params] = separateArgs(args);
+			return this.promise(storage.clear<T>(filter, ...params), asyncOpts);
+		};
+
+		return wrappedStorage;
+
+		function separateArgs(args: unknown[]): [AsyncOptions, unknown[]] {
+			if (Object.isPlainObject(args[0])) {
+				const
+					ownParam = Object.reject(args[0], asyncOptionsKeys),
+					asyncParam = Object.select(args[0], asyncOptionsKeys);
+
+				return [
+					{
+						...asyncParam,
+						group: [opts?.group, asyncParam.group].filter(Boolean).join(':')
+					},
+					[ownParam, ...args.slice(1)]
+				];
+			}
+
+			return [opts?.group != null ? {group: opts.group} : {}, args];
 		}
 	}
 }
