@@ -359,7 +359,7 @@ export default class Async<CTX extends object = Async<any>> {
 						res = normalizedObj.apply(ctx, args);
 					}
 
-					if (Object.isPromise(res)) {
+					if (Object.isPromiseLike(res)) {
 						res.then(invokeHandlers(), invokeHandlers(1));
 
 					} else {
