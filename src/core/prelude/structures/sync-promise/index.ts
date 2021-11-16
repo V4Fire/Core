@@ -312,7 +312,7 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 	readonly [Symbol.toStringTag]: 'Promise';
 
 	/**
-	 * Returns true if the current promise is pending
+	 * True if the current promise is pending
 	 */
 	get isPending(): boolean {
 		return this.state === State.pending;
@@ -393,6 +393,27 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 		};
 
 		this.call(executor, [resolve, reject], reject);
+	}
+
+	/**
+	 * Returns the promise' value if it is fulfilled, otherwise throws an exception
+	 */
+	unwrap(): T {
+		if (this.state !== State.fulfilled) {
+			if (this.isPending) {
+				throw new Error("Can't unwrap a pending promise");
+			}
+
+			if (this.rejectHandlers.length === 0) {
+				this.rejectHandlers.push(() => {
+					// Loopback
+				});
+			}
+
+			throw this.value;
+		}
+
+		return <T>this.value;
 	}
 
 	/**

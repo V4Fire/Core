@@ -22,6 +22,42 @@ describe('core/prelude/structures/sync-promise', () => {
 		expect(i).toBe(6);
 	});
 
+	it('unwraps a promise', (done) => {
+		let
+			err;
+
+		const
+			sleep = new SyncPromise((r) => setTimeout(() => r(10), 30));
+
+		try {
+			sleep.unwrap();
+
+		} catch (e) {
+			err = e;
+		}
+
+		setTimeout(() => {
+			expect(err).toBeInstanceOf(Error);
+			expect(err?.message).toBe("Can't unwrap a pending promise");
+			expect(sleep.unwrap()).toBe(10);
+			done();
+		}, 50);
+	});
+
+	it('unwraps a rejected promise', () => {
+		let
+			err;
+
+		try {
+			SyncPromise.reject('Boom!').unwrap();
+
+		} catch (e) {
+			err = e;
+		}
+
+		expect(err).toBe('Boom!');
+	});
+
 	it('promise that is resolved with another promise', async () => {
 		const i = await new SyncPromise((resolve) => {
 			resolve(

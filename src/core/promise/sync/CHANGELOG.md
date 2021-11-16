@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.64.0 (2021-11-16)
+
+#### :rocket: New Feature
+
+* Added a new method `unwrap`
+
 ## v3.60.3 (2021-10-05)
 
 #### :bug: Bug Fix
