@@ -21,6 +21,12 @@ describe('core/prelude/object/property/get', () => {
 		expect(Object.get({a: {b: new WeakMap([[key, 1]])}}, ['a', 'b', null, 1, 2])).toBeUndefined();
 	});
 
+	it('get a value through a promise', async () => {
+		expect(Object.get({a: Promise.resolve({b: 3})}, 'a.then')).toBe(Promise.prototype.then);
+		expect(await Object.get({a: Promise.resolve({b: 3})}, 'a.b')).toBe(3);
+		expect(await Object.get({a: Promise.resolve({b: Promise.resolve({c: 3})})}, 'a.b.c')).toBe(3);
+	});
+
 	it('custom separator', () => {
 		expect(Object.get({a: {b: 1}}, 'a:b', {separator: ':'})).toBe(1);
 	});

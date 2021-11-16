@@ -40,7 +40,20 @@ extend(Object, 'get', (
 			const
 				key = chunks[i];
 
-			if (Object.isMap(res) || Object.isWeakMap(res)) {
+			if (Object.isPromiseLike(res) && !(key in res)) {
+				res = res.then((val) => {
+					if (val == null) {
+						return;
+					}
+
+					if (Object.isMap(val) || Object.isWeakMap(val)) {
+						return val.get(key);
+					}
+
+					return (<any>val)[key];
+				});
+
+			} else if (Object.isMap(res) || Object.isWeakMap(res)) {
 				res = res.get(key);
 
 			} else {

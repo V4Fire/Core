@@ -667,6 +667,7 @@ interface ObjectConstructor {
 	/**
 	 * Returns a value from the passed object by the specified path.
 	 * Returns undefined if the specified path doesn't exist in the object.
+	 * The method can access properties through promises.
 	 *
 	 * @param obj
 	 * @param path

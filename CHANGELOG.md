@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.63.0 (2021-11-16)
+
+#### :rocket: New Feature
+
+* Now `Object.get` can access properties through promises `core/prelude/object`
+
 ## v3.62.3 (2021-11-09)
 
 #### :bug: Bug Fix
