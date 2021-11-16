@@ -85,8 +85,8 @@
     "sugar": "^2.0.6",
     "through2": "^4.0.2",
     "tsconfig": "^7.0.0",
-    "typedoc": "^0.22.4",
-    "typescript": "4.4.3",
+    "typedoc": "^0.22.9",
+    "typescript": "4.4.4",
     "uniconf": "^2.1.1",
     "upath": "^2.0.1",
     "urlconcat": "0.0.12"
