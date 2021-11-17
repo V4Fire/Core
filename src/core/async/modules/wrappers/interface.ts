@@ -117,28 +117,30 @@ export type EventEmitterOverwritten<T extends EventEmitterLike> = Overwrite<T, {
 
 export type AsyncOptionsForWrappers = Pick<AsyncOptions, 'group'>;
 
-export interface WrappedAsyncStorage {
+export interface WrappedAsyncStorageNamespace {
 	/** @see [[AsyncStorage.has]] */
+	has(key: string, opts?: AsyncOptions): Promise<boolean>;
 	has(key: string, ...args: unknown[]): Promise<boolean>;
-	has(key: string, opts?: AsyncOptions, ...args: unknown[]): Promise<boolean>;
 
 	/** @see [[AsyncStorage.get]] */
+	get<T = unknown>(key: string, opts?: AsyncOptions): Promise<CanUndef<T>>;
 	get<T = unknown>(key: string, ...args: unknown[]): Promise<CanUndef<T>>;
-	get<T = unknown>(key: string, opts?: AsyncOptions, ...args: unknown[]): Promise<CanUndef<T>>;
 
 	/** @see [[AsyncStorage.set]] */
+	set(key: string, value: unknown, opts?: AsyncOptions): Promise<void>;
 	set(key: string, value: unknown, ...args: unknown[]): Promise<void>;
-	set(key: string, value: unknown, opts?: AsyncOptions, ...args: unknown[]): Promise<void>;
 
 	/** @see [[AsyncStorage.remove]] */
+	remove(key: string, opts?: AsyncOptions): Promise<void>;
 	remove(key: string, ...args: unknown[]): Promise<void>;
-	remove(key: string, opts?: AsyncOptions, ...args: unknown[]): Promise<void>;
 
 	/** @see [[AsyncStorage.clear]] */
+	clear<T = unknown>(filter?: ClearFilter<T>, opts?: unknown[]): Promise<void>;
 	clear<T = unknown>(filter?: ClearFilter<T>, ...args: unknown[]): Promise<void>;
-	clear<T = unknown>(filter?: ClearFilter<T>, opts?: unknown[], ...args: unknown[]): Promise<void>;
+}
 
+export interface WrappedAsyncStorage extends WrappedAsyncStorageNamespace {
 	/** @see [[AsyncStorage.namespace]] */
-	namespace(name: string): WrappedAsyncStorage;
-	namespace(name: string, opts: AsyncOptionsForWrappers): WrappedAsyncStorage;
+	namespace(name: string, opts: AsyncOptionsForWrappers): WrappedAsyncStorageNamespace;
+	namespace(name: string): WrappedAsyncStorageNamespace;
 }

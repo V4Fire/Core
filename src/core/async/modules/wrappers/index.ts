@@ -16,7 +16,7 @@ import type { CreateRequestOptions, RequestQuery, RequestBody } from 'core/reque
 
 import Super, { AsyncOptions, EventEmitterLike } from 'core/async/modules/events';
 
-import type { AsyncStorage, ClearFilter } from 'core/kv-storage';
+import type { AsyncStorage, AsyncStorageNamespace, ClearFilter } from 'core/kv-storage';
 
 import {
 
@@ -35,6 +35,7 @@ import type {
 	EventEmitterWrapper,
 	EventEmitterOverwritten,
 
+	WrappedAsyncStorageNamespace,
 	WrappedAsyncStorage,
 
 	AsyncOptionsForWrappers
@@ -287,12 +288,16 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * $a.clearAll({group: 'api.User'})
 	 * ```
 	 */
+	wrapAsyncStorage<T extends AsyncStorageNamespace>(
+		storage: T,
+		opts?: AsyncOptionsForWrappers
+	): WrappedAsyncStorageNamespace;
 	wrapAsyncStorage<T extends AsyncStorage>(
 		storage: T,
 		opts?: AsyncOptionsForWrappers
 	): WrappedAsyncStorage {
 		const globalGroup = opts?.group;
-		const wrappedStorage: WrappedAsyncStorage = Object.create(storage);
+		const wrappedStorage = Object.create(storage);
 
 		wrappedStorage.has = (key, ...args) => {
 			const [asyncOpts, params] = separateArgs(args);
@@ -319,29 +324,34 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			return this.promise(storage.clear<T>(filter, ...params), asyncOpts);
 		};
 
-		wrappedStorage.namespace = (name, opts?) => {
-			const asyncOpts = {group: [globalGroup, opts?.group].filter(Boolean).join(':')};
-			return this.wrapAsyncStorage(wrappedStorage, asyncOpts);
-		};
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+		if (storage.namespace != null) {
+			wrappedStorage.namespace = (name, opts?) => {
+				const [asyncOpts] = separateArgs([opts]);
+				const storageNamespace = storage.namespace(name);
+				return this.wrapAsyncStorage(storageNamespace, asyncOpts);
+			};
+		}
 
 		return wrappedStorage;
 
 		function separateArgs(args: unknown[]): [AsyncOptions, unknown[]] {
-			if (Object.isPlainObject(args[0])) {
-				const
-					ownParam = Object.reject(args[0], asyncOptionsKeys),
-					asyncParam = Object.select(args[0], asyncOptionsKeys);
-
-				return [
-					{
-						...asyncParam,
-						group: [globalGroup, asyncParam.group].filter(Boolean).join(':')
-					},
-					[ownParam, ...args.slice(1)]
-				];
+			if (args.length === 0 || !Object.isPlainObject(args[args.length - 1])) {
+				return [globalGroup != null ? {group: globalGroup} : {}, args];
 			}
 
-			return [globalGroup != null ? {group: globalGroup} : {}, args];
+			const
+				lastArg = <Record<string, unknown>>args.pop(),
+				ownParam = Object.reject(lastArg, asyncOptionsKeys),
+				asyncParam = Object.select(lastArg, asyncOptionsKeys);
+
+			return [
+				{
+					...asyncParam,
+					group: [globalGroup, asyncParam.group].filter(Boolean).join(':')
+				},
+				[...args, ownParam]
+			];
 		}
 	}
 }
