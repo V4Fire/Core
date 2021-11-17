@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.?.? (2020-??-??)
+
+#### :rocket: New Feature
+
+* Added a new module `core/lazy`
+
 ## v3.64.0 (2021-11-16)
 
 #### :rocket: New Feature
