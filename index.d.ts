@@ -125,7 +125,7 @@ declare function l(strings: any | string[], ...expr: any[]): string;
 declare function setImmediate(fn: AnyFunction): number;
 declare function clearImmediate(id: number): void;
 
-type Primitive = string | number | boolean | undefined | null;
+type Primitive = string | symbol | number | bigint | boolean | undefined | null;
 
 type CanPromise<T> = T | Promise<T>;
 type CanArray<T> = T | T[];
