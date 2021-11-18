@@ -13,7 +13,15 @@
 
 import type { ObjectScheme } from 'core/lazy/interface';
 
-export default function makeLazy(constructor: Function, scheme: ObjectScheme): AnyFunction {
+/**
+ * Creates a new function based on the passed function or class and returns it.
+ * The new function accumulates all method and properties actions into a queue.
+ * The queue will drain after invoking the created function.
+ *
+ * @param constructor
+ * @param scheme
+ */
+export default function makeLazy(constructor: Function, scheme?: ObjectScheme): AnyFunction {
 	const
 		actions = [constructor];
 
