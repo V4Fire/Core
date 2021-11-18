@@ -6,4 +6,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-export type ObjectScheme = Dictionary<ObjectScheme | Function>;
+export type ObjectScheme = Dictionary<
+	ObjectScheme | Function | Primitive
+>;
