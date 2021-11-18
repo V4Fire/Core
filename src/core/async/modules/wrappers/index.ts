@@ -16,7 +16,7 @@ import type { CreateRequestOptions, RequestQuery, RequestBody } from 'core/reque
 
 import Super, { AsyncOptions, EventEmitterLike } from 'core/async/modules/events';
 
-import type { AsyncStorage, AsyncStorageNamespace, ClearFilter } from 'core/kv-storage';
+import type { AsyncStorage, AsyncStorageNamespace } from 'core/kv-storage';
 
 import {
 
@@ -272,30 +272,31 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 *
 	 * const
 	 *   $a = new Async(),
-	 *   wrappedStorage = $a.wrapAsyncStorage(asyncLocal);
+	 *   wrappedAsyncStorage = $a.wrapAsyncStorage(asyncLocal, {group: bar});
 	 *
-	 * wrappedStorage.set('bla', 1).then(async () => {
-	 *   console.log(await asyncLocal.get('bla') === 1);
+	 * wrappedAsyncStorage.set('someKey', 'someValue', {
+	 *   // If we are providing a group to the method, it will be joined with the global group by using the `:` character
+	 *   group: 'bla',
+	 *   label: 'foo',
+	 *   join: true,
+	 * }).then(async () => {
+	 *   console.log(await wrappedAsyncStorage.get('someKey') === 'someValue');
 	 * });
-
-	 	namespace использует настройки которые были передены в wrapAsyncStorage и не помечает новвую группу
-		const blaStore = asyncLocal.namespace('[[BLA]]');
-
-		blaStore.set('bla', 1).then(async () => {
-			console.log(await blaStore.get('bla') === 1);
-		});
 	 *
-	 * $a.clearAll({group: 'api.User'})
+	 * $a.suspendAll({group: 'bar:bla'});
+	 *
+	 * // We can provide own global group to namespace, it will be joined with the parent's global group
+	 * const blaStore = wrappedAsyncStorage.namespace('[[BLA]]', {group: 'bla'});
+	 *
+	 * blaStore.clear({group: 'foo'});
+	 *
+	 * $a.muteAll({group: 'bar:bla:foo'});
 	 * ```
 	 */
-	wrapAsyncStorage<T extends AsyncStorageNamespace>(
+	wrapAsyncStorage<T extends AsyncStorage | AsyncStorageNamespace>(
 		storage: T,
 		opts?: AsyncOptionsForWrappers
-	): WrappedAsyncStorageNamespace;
-	wrapAsyncStorage<T extends AsyncStorage>(
-		storage: T,
-		opts?: AsyncOptionsForWrappers
-	): WrappedAsyncStorage {
+	): T extends AsyncStorage ? WrappedAsyncStorage : WrappedAsyncStorageNamespace {
 		const globalGroup = opts?.group;
 		const wrappedStorage = Object.create(storage);
 
@@ -320,12 +321,16 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		};
 
 		wrappedStorage.clear = <T = unknown>(filter?, ...args) => {
+			if (Object.isPlainObject(filter)) {
+				filter = undefined;
+				args = [filter];
+			}
+
 			const [asyncOpts, params] = separateArgs(args);
 			return this.promise(storage.clear<T>(filter, ...params), asyncOpts);
 		};
 
-		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-		if (storage.namespace != null) {
+		if ('namespace' in storage) {
 			wrappedStorage.namespace = (name, opts?) => {
 				const [asyncOpts] = separateArgs([opts]);
 				const storageNamespace = storage.namespace(name);
