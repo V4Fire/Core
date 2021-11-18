@@ -75,8 +75,8 @@ export default function makeLazy(constructor: Function, scheme: ObjectScheme): A
 		return getSchemeFromProto(Object.getPrototypeOf(obj), res);
 	}
 
-	function setActions(proxy: object, schema: ObjectScheme, breadcrumbs: string[] = []): void {
-		Object.forEach(schema, (scheme, key) => {
+	function setActions(proxy: object, scheme: ObjectScheme, breadcrumbs: string[] = []): void {
+		Object.forEach(scheme, (scheme, key) => {
 			const
 				fullPath = [...breadcrumbs, key];
 
@@ -141,7 +141,7 @@ export default function makeLazy(constructor: Function, scheme: ObjectScheme): A
 							}
 
 							const childProxy = Object.create(val);
-							setActions(childProxy, scheme, fullPath);
+							setActions(childProxy, <Exclude<typeof scheme, Primitive>>scheme, fullPath);
 							proxy[store] = childProxy;
 						}
 					});
