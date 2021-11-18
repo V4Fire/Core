@@ -42,6 +42,9 @@ export default function makeLazy(constructor: Function, scheme: ObjectScheme): A
 			fn.call(ctx);
 		});
 
+		actions.splice(1, actions.length);
+		setActions(applyActions, mergedScheme);
+
 		return ctx;
 	}
 
@@ -50,7 +53,14 @@ export default function makeLazy(constructor: Function, scheme: ObjectScheme): A
 			return res;
 		}
 
+		const
+			blackListRgxp = /^__\w+__$/;
+
 		Object.getOwnPropertyNames(obj).forEach((key) => {
+			if (blackListRgxp.test(key)) {
+				return;
+			}
+
 			const
 				val = Object.getOwnPropertyDescriptor(obj, key)?.value;
 
@@ -66,13 +76,15 @@ export default function makeLazy(constructor: Function, scheme: ObjectScheme): A
 	}
 
 	function setActions(proxy: object, schema: ObjectScheme, breadcrumbs: string[] = []): void {
-		Object.forEach(schema, (schema, key) => {
+		Object.forEach(schema, (scheme, key) => {
 			const
 				fullPath = [...breadcrumbs, key];
 
-			switch (typeof schema) {
+			switch (typeof scheme) {
 				case 'function': {
 					Object.defineProperty(proxy, key, {
+						configurable: true,
+
 						value: (...args) => {
 							actions.push(function method(this: object) {
 								const
@@ -98,8 +110,19 @@ export default function makeLazy(constructor: Function, scheme: ObjectScheme): A
 					const
 						store = Symbol(key);
 
+					if (Object.isPrimitive(scheme)) {
+						proxy[store] = scheme;
+
+					} else if (Object.size(scheme) > 0) {
+						const childProxy = {};
+						setActions(childProxy, scheme, fullPath);
+						proxy[store] = childProxy;
+					}
+
 					Object.defineProperty(proxy, key, {
 						enumerable: true,
+						configurable: true,
+
 						get: () => proxy[store],
 
 						set: (val) => {
@@ -111,23 +134,17 @@ export default function makeLazy(constructor: Function, scheme: ObjectScheme): A
 							if (
 								Object.isPrimitive(val) ||
 								Object.isFunction(val) ||
-								Object.size(schema) === 0
+								Object.size(scheme) === 0
 							) {
 								proxy[store] = val;
 								return;
 							}
 
 							const childProxy = Object.create(val);
-							setActions(childProxy, schema, fullPath);
+							setActions(childProxy, scheme, fullPath);
 							proxy[store] = childProxy;
 						}
 					});
-
-					if (Object.size(schema) > 0) {
-						const childProxy = {};
-						setActions(childProxy, schema, fullPath);
-						proxy[store] = childProxy;
-					}
 
 					break;
 				}
