@@ -153,8 +153,6 @@ export default function makeLazy(constructor: Function, scheme?: ObjectScheme): 
 							proxy[store] = childProxy;
 						}
 					});
-
-					break;
 				}
 			}
 		});
