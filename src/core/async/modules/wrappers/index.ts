@@ -348,14 +348,16 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			const
 				lastArg = <Record<string, unknown>>args.pop(),
 				ownParam = Object.reject(lastArg, asyncOptionsKeys),
-				asyncParam = Object.select(lastArg, asyncOptionsKeys);
+				asyncParam = Object.select(lastArg, asyncOptionsKeys),
+				group = [globalGroup, asyncParam.group].filter(Boolean).join(':');
+
+			if (group !== '') {
+				asyncParam.group = group;
+			}
 
 			return [
-				{
-					...asyncParam,
-					group: [globalGroup, asyncParam.group].filter(Boolean).join(':')
-				},
-				[...args, ownParam]
+				asyncParam,
+				[...args, ...[ownParam].filter((param) => Object.keys(param).length)]
 			];
 		}
 	}
