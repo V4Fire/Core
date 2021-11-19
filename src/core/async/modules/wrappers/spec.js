@@ -264,54 +264,109 @@ describe('core/async/modules/wrappers', () => {
 		});
 	});
 
-	fdescribe('`wrapAsyncStorage`', () => {
-		const methodsToLoopThrough = ['has', 'get', 'set', 'remove', 'clear'];
-		const allMethods = [...methodsToLoopThrough, 'namespace'];
-		let $a, mockedStorage;
+	describe('`wrapAsyncStorage`', () => {
+		const mainMethods = ['has', 'get', 'set', 'remove', 'clear'];
+		const methodsWithNamespace = [...mainMethods, 'namespace'];
+		let $a, mockedStorage, methodArgs, expectedResult;
 
 		beforeEach(() => {
-			mockedStorage = jasmine.createSpyObj(allMethods);
 			$a = new Async();
-			spyOn($a, 'promise');
+			methodArgs = [Symbol(), Symbol(), Symbol()];
+			expectedResult = Symbol();
+			jasmine.setDefaultSpyStrategy((and) => and.returnValue(Promise.resolve(expectedResult)));
+			mockedStorage = jasmine.createSpyObj(methodsWithNamespace);
 		});
 
 		const testMethod = (methodName) => {
-			it(`method \`${methodName}\` should call original method and return wrapped result`, () => {
+			it(`method \`${methodName}\` should call original method and return its result`, async () => {
 				const wrappedAsyncStorage = $a.wrapAsyncStorage(mockedStorage);
-				const firstArg = Symbol();
-				const secondArg = Symbol();
-				const originalPromise = Promise.resolve();
-				const wrappedPromise = Promise.resolve();
-				mockedStorage[methodName].and.returnValue(originalPromise);
-				$a.promise.and.returnValue(wrappedPromise);
-				const resultedPromise = wrappedAsyncStorage[methodName](firstArg, secondArg);
-				expect(mockedStorage[methodName]).toHaveBeenCalledWith(firstArg, secondArg);
-				expect($a.promise.calls.mostRecent().args[0]).toBe(originalPromise);
-				expect(resultedPromise).toBe(wrappedPromise);
+				const result = await wrappedAsyncStorage[methodName](...methodArgs);
+				expect(mockedStorage[methodName]).toHaveBeenCalledWith(...methodArgs);
+				expect(result).toBe(expectedResult);
+			});
+
+			it(`method \`${methodName}\` should mark stream by a global group`, async () => {
+				const wrappedAsyncStorage = $a.wrapAsyncStorage(mockedStorage, {group: 'bla'});
+				const spyPromise = jasmine.createSpy();
+				const promise = wrappedAsyncStorage[methodName](...methodArgs).then(
+					() => spyPromise('resolved'),
+					(err) => spyPromise(Object.select(err, ['type', 'reason']))
+				);
+				await $a.clearAll({group: 'bla'});
+				await promise;
+				expect(spyPromise).toHaveBeenCalledOnceWith({type: 'clearAsync', reason: 'group'});
+			});
+
+			it(`method \`${methodName}\` should consider \`group\` parameter`, async () => {
+				const wrappedAsyncStorage = $a.wrapAsyncStorage(mockedStorage);
+				const spyPromise = jasmine.createSpy();
+				const promise = wrappedAsyncStorage[methodName](...methodArgs, {group: 'bla'}).then(
+					() => spyPromise('resolved'),
+					(err) => spyPromise(Object.select(err, ['type', 'reason']))
+				);
+				await $a.clearAll({group: 'bla'});
+				await promise;
+				expect(spyPromise).toHaveBeenCalledOnceWith({type: 'clearAsync', reason: 'group'});
+			});
+
+			it(`method \`${methodName}\` should consider \`label\` parameter`, async () => {
+				const wrappedAsyncStorage = $a.wrapAsyncStorage(mockedStorage);
+				const spyPromise = jasmine.createSpy();
+				const promise = wrappedAsyncStorage[methodName](...methodArgs, {label: 'qoo'}).then(
+					() => spyPromise('resolved'),
+					(err) => spyPromise(Object.select(err, ['type', 'reason']))
+				);
+				await $a.clearAll({label: 'qoo'});
+				await promise;
+				expect(spyPromise).toHaveBeenCalledOnceWith({type: 'clearAsync', reason: 'label'});
+			});
+
+			it(`method \`${methodName}\` should consider \`join\` parameter`, async () => {
+				const wrappedAsyncStorage = $a.wrapAsyncStorage(mockedStorage);
+				const spyPromise = jasmine.createSpy();
+				const label = Symbol();
+				const promise1 = wrappedAsyncStorage[methodName](...methodArgs, {label, join: true}).then(() => spyPromise());
+				const promise2 = wrappedAsyncStorage[methodName](...methodArgs, {label, join: true}).then(() => spyPromise());
+				await Promise.all([promise1, promise2]);
+				expect(spyPromise).toHaveBeenCalledTimes(2);
+			});
+
+			it(`method \`${methodName}\` should concatenate a global group and local group`, async () => {
+				const wrappedAsyncStorage = $a.wrapAsyncStorage(mockedStorage, {group: 'bla'});
+				const spyWithoutLocal = jasmine.createSpy();
+				const spyWithLocal = jasmine.createSpy();
+
+				const promiseWithoutLocal = wrappedAsyncStorage[methodName](...methodArgs).then(
+					() => spyWithoutLocal('resolved'),
+					(err) => spyWithoutLocal(Object.select(err, ['type', 'reason']))
+				);
+				const promiseWithLocal = wrappedAsyncStorage[methodName](...methodArgs, {group: 'foo'}).then(
+					() => spyWithLocal('resolved'),
+					(err) => spyWithLocal(Object.select(err, ['type', 'reason']))
+				);
+
+				await $a.clearAll({group: 'bla:foo'});
+				await Promise.all([promiseWithoutLocal, promiseWithLocal]);
+
+				expect(spyWithoutLocal).toHaveBeenCalledOnceWith('resolved');
+				expect(spyWithLocal).toHaveBeenCalledOnceWith({type: 'clearAsync', reason: 'group'});
 			});
 
 			it(`method \`${methodName}\` should separate async options from additional params`, () => {
 				const wrappedAsyncStorage = $a.wrapAsyncStorage(mockedStorage);
 				wrappedAsyncStorage[methodName]('firstArg', 'secondArg', {additionalArg: true}, {
-					group: 'localGroup',
-					label: 'someLabel',
+					group: 'bla',
+					label: 'foo',
 					join: true,
 					notAsyncOption: true
 				});
 
 				expect(mockedStorage[methodName].calls.mostRecent().args[2]).toEqual({additionalArg: true});
 				expect(mockedStorage[methodName].calls.mostRecent().args[3]).toEqual({notAsyncOption: true});
-				expect($a.promise.calls.mostRecent().args[1]).toEqual({group: 'localGroup', label: 'someLabel', join: true});
-			});
-
-			it(`method \`${methodName}\` should concatenate a global group and local group`, () => {
-				const wrappedAsyncStorage = $a.wrapAsyncStorage(mockedStorage, {group: 'global'});
-				wrappedAsyncStorage[methodName]('firstArg', 'secondArg', {group: 'local'});
-				expect($a.promise.calls.mostRecent().args[1]).toEqual({group: 'global:local'});
 			});
 		};
 
-		methodsToLoopThrough.forEach(testMethod);
+		mainMethods.forEach(testMethod);
 
 		it('method `namespace` should call original method and return wrapped result', () => {
 			const parentStorage = $a.wrapAsyncStorage(mockedStorage);
@@ -328,10 +383,10 @@ describe('core/async/modules/wrappers', () => {
 		});
 
 		it('method `namespace` should concatenate a global and local group', () => {
-			const parentStorage = $a.wrapAsyncStorage(mockedStorage, {group: 'global'});
+			const parentStorage = $a.wrapAsyncStorage(mockedStorage, {group: 'bla'});
 			spyOn($a, 'wrapAsyncStorage');
-			parentStorage.namespace('someName', {group: 'local'});
-			expect($a.wrapAsyncStorage.calls.mostRecent().args[1]).toEqual({group: 'global:local'});
+			parentStorage.namespace('someName', {group: 'foo'});
+			expect($a.wrapAsyncStorage.calls.mostRecent().args[1]).toEqual({group: 'bla:foo'});
 		});
 	});
 });
