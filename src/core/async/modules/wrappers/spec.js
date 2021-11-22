@@ -271,8 +271,8 @@ describe('core/async/modules/wrappers', () => {
 
 		beforeEach(() => {
 			$a = new Async();
-			methodArgs = [Symbol(), Symbol(), Symbol()];
-			expectedResult = Symbol();
+			methodArgs = [Symbol('firstArg'), Symbol('secondArg'), Symbol('thirdArg')];
+			expectedResult = Symbol('result');
 			jasmine.setDefaultSpyStrategy((and) => and.returnValue(Promise.resolve(expectedResult)));
 			mockedStorage = jasmine.createSpyObj(methodsWithNamespace);
 		});
@@ -324,7 +324,7 @@ describe('core/async/modules/wrappers', () => {
 			it(`method \`${methodName}\` should consider \`join\` parameter`, async () => {
 				const wrappedAsyncStorage = $a.wrapAsyncStorage(mockedStorage);
 				const spyPromise = jasmine.createSpy();
-				const label = Symbol();
+				const label = Symbol('label');
 				const promise1 = wrappedAsyncStorage[methodName](...methodArgs, {label, join: true}).then(() => spyPromise());
 				const promise2 = wrappedAsyncStorage[methodName](...methodArgs, {label, join: true}).then(() => spyPromise());
 				await Promise.all([promise1, promise2]);
@@ -370,16 +370,16 @@ describe('core/async/modules/wrappers', () => {
 
 		it('method `namespace` should call original method and return wrapped result', () => {
 			const parentStorage = $a.wrapAsyncStorage(mockedStorage);
-			const name = Symbol();
-			const namespaceStorage = Symbol();
-			const wrappedNamespaceStorage = Symbol();
+			const name = Symbol('name');
+			const storageNamespace = Symbol('storageNamespace');
+			const wrappedStorageNamespace = Symbol('wrappedStorageNamespace');
 			spyOn($a, 'wrapAsyncStorage');
-			mockedStorage.namespace.and.returnValue(namespaceStorage);
-			$a.wrapAsyncStorage.and.returnValue(wrappedNamespaceStorage);
+			mockedStorage.namespace.and.returnValue(storageNamespace);
+			$a.wrapAsyncStorage.and.returnValue(wrappedStorageNamespace);
 			const returnedStorage = parentStorage.namespace(name);
 			expect(mockedStorage.namespace).toHaveBeenCalledWith(name);
-			expect($a.wrapAsyncStorage.calls.mostRecent().args[0]).toBe(namespaceStorage);
-			expect(returnedStorage).toBe(wrappedNamespaceStorage);
+			expect($a.wrapAsyncStorage.calls.mostRecent().args[0]).toBe(storageNamespace);
+			expect(returnedStorage).toBe(wrappedStorageNamespace);
 		});
 
 		it('method `namespace` should concatenate a global and local group', () => {
