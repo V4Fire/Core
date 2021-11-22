@@ -355,10 +355,11 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 				asyncParam.group = group;
 			}
 
-			return [
-				asyncParam,
-				[...args, ...[ownParam].filter((param) => Object.keys(param).length)]
-			];
+			if (Object.keys(ownParam).length !== 0) {
+				args.push(ownParam);
+			}
+
+			return [asyncParam, args];
 		}
 	}
 }
