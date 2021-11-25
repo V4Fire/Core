@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.??.0 (2021-??-??)
+
+#### :house: Internal
+
+* Replaced `uniconf` with `@v4fire/config`
+
 ## v3.65.0 (2021-11-18)
 
 #### :rocket: New Feature

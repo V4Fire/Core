@@ -18,7 +18,7 @@ const
 
 const
 	config = require('./config'),
-	o = require('uniconf/options').option;
+	o = require('@v4fire/config/options').option;
 
 const
 	{config: pzlr, resolve} = require('@pzlr/build-core'),
