@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.66.0 (2021-11-26)
+
+#### :rocket: New Feature
+
+* Added a wrapper for async storages
+
 ## v3.61.1 (2021-10-25)
 
 #### :bug: Bug Fix

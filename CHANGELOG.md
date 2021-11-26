@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.66.0 (2021-11-26)
+
+#### :rocket: New Feature
+
+* Added a wrapper for async storages `core/async`
+
 ## v3.65.1 (2021-11-26)
 
 #### :house: Internal
