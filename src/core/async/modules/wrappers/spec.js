@@ -265,10 +265,15 @@ describe('core/async/modules/wrappers', () => {
 	});
 
 	describe('`wrapStorage`', () => {
-		const mainMethods = ['has', 'get', 'set', 'remove', 'clear'],
+		const
+			mainMethods = ['has', 'get', 'set', 'remove', 'clear'],
 			methodsWithNamespace = [...mainMethods, 'namespace'];
 
-		let $a, mockedStorage, methodArgs, expectedResult;
+		let
+			$a,
+			mockedStorage,
+			methodArgs,
+			expectedResult;
 
 		beforeEach(() => {
 			$a = new Async();
@@ -280,7 +285,8 @@ describe('core/async/modules/wrappers', () => {
 
 		const testMethod = (methodName) => {
 			it(`method \`${methodName}\` should call original method and return its result`, async () => {
-				const wrappedStorage = $a.wrapStorage(mockedStorage),
+				const
+					wrappedStorage = $a.wrapStorage(mockedStorage),
 					result = await wrappedStorage[methodName](...methodArgs);
 
 				expect(mockedStorage[methodName]).toHaveBeenCalledWith(...methodArgs);
@@ -288,7 +294,8 @@ describe('core/async/modules/wrappers', () => {
 			});
 
 			it(`method \`${methodName}\` should mark stream by a global group`, async () => {
-				const wrappedStorage = $a.wrapStorage(mockedStorage, {group: 'bla'}),
+				const
+					wrappedStorage = $a.wrapStorage(mockedStorage, {group: 'bla'}),
 					spyPromise = jasmine.createSpy();
 
 				const promise = wrappedStorage[methodName](...methodArgs).then(
@@ -302,7 +309,8 @@ describe('core/async/modules/wrappers', () => {
 			});
 
 			it(`method \`${methodName}\` should consider \`group\` parameter`, async () => {
-				const wrappedStorage = $a.wrapStorage(mockedStorage),
+				const
+					wrappedStorage = $a.wrapStorage(mockedStorage),
 					spyPromise = jasmine.createSpy();
 
 				const promise = wrappedStorage[methodName](...methodArgs, {group: 'bla'}).then(
@@ -316,7 +324,8 @@ describe('core/async/modules/wrappers', () => {
 			});
 
 			it(`method \`${methodName}\` should consider \`label\` parameter`, async () => {
-				const wrappedStorage = $a.wrapStorage(mockedStorage),
+				const
+					wrappedStorage = $a.wrapStorage(mockedStorage),
 					spyPromise = jasmine.createSpy();
 
 				const promise = wrappedStorage[methodName](...methodArgs, {label: 'qoo'}).then(
@@ -330,7 +339,8 @@ describe('core/async/modules/wrappers', () => {
 			});
 
 			it(`method \`${methodName}\` should consider \`join\` parameter`, async () => {
-				const wrappedStorage = $a.wrapStorage(mockedStorage),
+				const
+					wrappedStorage = $a.wrapStorage(mockedStorage),
 					spyPromise = jasmine.createSpy(),
 					label = Symbol('label'),
 					promise1 = wrappedStorage[methodName](...methodArgs, {label, join: true}).then(() => spyPromise()),
@@ -341,7 +351,8 @@ describe('core/async/modules/wrappers', () => {
 			});
 
 			it(`method \`${methodName}\` should concatenate a global group and local group`, async () => {
-				const wrappedStorage = $a.wrapStorage(mockedStorage, {group: 'bla'}),
+				const
+					wrappedStorage = $a.wrapStorage(mockedStorage, {group: 'bla'}),
 					spyWithoutLocal = jasmine.createSpy(),
 					spyWithLocal = jasmine.createSpy();
 
@@ -349,6 +360,7 @@ describe('core/async/modules/wrappers', () => {
 					() => spyWithoutLocal('resolved'),
 					(err) => spyWithoutLocal(Object.select(err, ['type', 'reason']))
 				);
+
 				const promiseWithLocal = wrappedStorage[methodName](...methodArgs, {group: 'foo'}).then(
 					() => spyWithLocal('resolved'),
 					(err) => spyWithLocal(Object.select(err, ['type', 'reason']))
@@ -379,7 +391,8 @@ describe('core/async/modules/wrappers', () => {
 		mainMethods.forEach(testMethod);
 
 		it('method `namespace` should call original method and return wrapped result', () => {
-			const parentStorage = $a.wrapStorage(mockedStorage),
+			const
+				parentStorage = $a.wrapStorage(mockedStorage),
 				name = Symbol('name'),
 				storageNamespace = Symbol('storageNamespace'),
 				wrappedStorageNamespace = Symbol('wrappedStorageNamespace');
