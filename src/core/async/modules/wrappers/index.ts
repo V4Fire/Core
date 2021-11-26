@@ -297,8 +297,9 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		storage: T,
 		opts?: AsyncOptionsForWrappers
 	): T extends AsyncStorage ? WrappedAsyncStorage : WrappedAsyncStorageNamespace {
-		const globalGroup = opts?.group;
-		const wrappedStorage = Object.create(storage);
+		const
+			globalGroup = opts?.group,
+			wrappedStorage = Object.create(storage);
 
 		wrappedStorage.has = (key, ...args) => {
 			const [asyncOpts, params] = separateArgs(args);
