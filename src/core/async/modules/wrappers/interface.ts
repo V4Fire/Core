@@ -4,6 +4,8 @@ import type { CreateRequestOptions, RequestQuery, RequestResponseObject, Request
 import type Async from 'core/async';
 import type { AsyncOptions, ClearOptionsId, ProxyCb, EventEmitterLike } from 'core/async';
 
+import type { ClearFilter } from 'core/kv-storage';
+
 export type DataProviderQueryMethodsToReplace = 'get' | 'peek';
 export type DataProviderBodyMethodsToReplace = 'post' | 'add' | 'upd' | 'del';
 export type DataProviderMethodsToReplace = DataProviderQueryMethodsToReplace | DataProviderBodyMethodsToReplace;
@@ -114,3 +116,31 @@ export type EventEmitterOverwritten<T extends EventEmitterLike> = Overwrite<T, {
 }>;
 
 export type AsyncOptionsForWrappers = Pick<AsyncOptions, 'group'>;
+
+export interface WrappedAsyncStorageNamespace {
+	/** @see [[AsyncStorage.has]] */
+	has(key: string, opts?: AsyncOptions): Promise<boolean>;
+	has(key: string, ...args: unknown[]): Promise<boolean>;
+
+	/** @see [[AsyncStorage.get]] */
+	get<T = unknown>(key: string, opts?: AsyncOptions): Promise<CanUndef<T>>;
+	get<T = unknown>(key: string, ...args: unknown[]): Promise<CanUndef<T>>;
+
+	/** @see [[AsyncStorage.set]] */
+	set(key: string, value: unknown, opts?: AsyncOptions): Promise<void>;
+	set(key: string, value: unknown, ...args: unknown[]): Promise<void>;
+
+	/** @see [[AsyncStorage.remove]] */
+	remove(key: string, opts?: AsyncOptions): Promise<void>;
+	remove(key: string, ...args: unknown[]): Promise<void>;
+
+	/** @see [[AsyncStorage.clear]] */
+	clear<T = unknown>(filter?: ClearFilter<T>, opts?: unknown[]): Promise<void>;
+	clear<T = unknown>(filter?: ClearFilter<T>, ...args: unknown[]): Promise<void>;
+}
+
+export interface WrappedAsyncStorage extends WrappedAsyncStorageNamespace {
+	/** @see [[AsyncStorage.namespace]] */
+	namespace(name: string, opts: AsyncOptionsForWrappers): WrappedAsyncStorageNamespace;
+	namespace(name: string): WrappedAsyncStorageNamespace;
+}
