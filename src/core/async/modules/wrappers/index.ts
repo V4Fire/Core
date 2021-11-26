@@ -341,25 +341,26 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		return wrappedStorage;
 
 		function separateArgs(args: unknown[]): [AsyncOptions, unknown[]] {
-			if (args.length === 0 || !Object.isPlainObject(args[args.length - 1])) {
-				return [globalGroup != null ? {group: globalGroup} : {}, args];
+			const lastArg = args.pop();
+
+			if (!Object.isDictionary(lastArg)) {
+				return [globalGroup != null ? {group: globalGroup} : {}, [...args, lastArg]];
 			}
 
 			const
-				lastArg = <Record<string, unknown>>args.pop(),
-				ownParam = Object.reject(lastArg, asyncOptionsKeys),
-				asyncParam = Object.select(lastArg, asyncOptionsKeys),
-				group = [globalGroup, asyncParam.group].filter(Boolean).join(':');
+				ownParams = Object.reject(lastArg, asyncOptionsKeys),
+				asyncParams = Object.select(lastArg, asyncOptionsKeys),
+				group = [globalGroup, asyncParams.group].filter(Boolean).join(':');
 
 			if (group !== '') {
-				asyncParam.group = group;
+				asyncParams.group = group;
 			}
 
-			if (Object.keys(ownParam).length !== 0) {
-				args.push(ownParam);
+			if (Object.keys(ownParams).length !== 0) {
+				args.push(ownParams);
 			}
 
-			return [asyncParam, args];
+			return [asyncParams, args];
 		}
 	}
 }
