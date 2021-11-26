@@ -264,7 +264,7 @@ describe('core/async/modules/wrappers', () => {
 		});
 	});
 
-	fdescribe('`wrapStorage`', () => {
+	describe('`wrapStorage`', () => {
 		const mainMethods = ['has', 'get', 'set', 'remove', 'clear'],
 			methodsWithNamespace = [...mainMethods, 'namespace'];
 
