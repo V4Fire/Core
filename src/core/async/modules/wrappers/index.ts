@@ -272,28 +272,28 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 *
 	 * const
 	 *   $a = new Async(),
-	 *   wrappedAsyncStorage = $a.wrapAsyncStorage(asyncLocal, {group: bar});
+	 *   wrappedStorage = $a.wrapStorage(asyncLocal, {group: bar});
 	 *
-	 * wrappedAsyncStorage.set('someKey', 'someValue', {
+	 * wrappedStorage.set('someKey', 'someValue', {
 	 *   // If we are providing a group to the method, it will be joined with the global group by using the `:` character
 	 *   group: 'bla',
 	 *   label: 'foo',
 	 *   join: true,
 	 * }).then(async () => {
-	 *   console.log(await wrappedAsyncStorage.get('someKey') === 'someValue');
+	 *   console.log(await wrappedStorage.get('someKey') === 'someValue');
 	 * });
 	 *
 	 * $a.suspendAll({group: 'bar:bla'});
 	 *
 	 * // We can provide own global group to namespace, it will be joined with the parent's global group
-	 * const blaStore = wrappedAsyncStorage.namespace('[[BLA]]', {group: 'bla'});
+	 * const blaStore = wrappedStorage.namespace('[[BLA]]', {group: 'bla'});
 	 *
 	 * blaStore.clear({group: 'foo'});
 	 *
 	 * $a.muteAll({group: 'bar:bla:foo'});
 	 * ```
 	 */
-	wrapAsyncStorage<T extends AsyncStorage | AsyncStorageNamespace>(
+	wrapStorage<T extends AsyncStorage | AsyncStorageNamespace>(
 		storage: T,
 		opts?: AsyncOptionsForWrappers
 	): T extends AsyncStorage ? WrappedAsyncStorage : WrappedAsyncStorageNamespace {
@@ -334,7 +334,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			wrappedStorage.namespace = (name, opts?) => {
 				const [asyncOpts] = separateArgs([opts]);
 				const storageNamespace = storage.namespace(name);
-				return this.wrapAsyncStorage(storageNamespace, asyncOpts);
+				return this.wrapStorage(storageNamespace, asyncOpts);
 			};
 		}
 
