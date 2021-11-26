@@ -272,7 +272,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 *
 	 * const
 	 *   $a = new Async(),
-	 *   wrappedStorage = $a.wrapStorage(asyncLocal, {group: bar});
+	 *   wrappedStorage = $a.wrapStorage(asyncLocal, {group: 'bar'});
 	 *
 	 * wrappedStorage.set('someKey', 'someValue', {
 	 *   // If we are providing a group to the method, it will be joined with the global group by using the `:` character
