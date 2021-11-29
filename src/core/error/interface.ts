@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-export type ErrorCtor<E extends Error> = new (...args: any[]) => E;
+export type ErrorCtor<E extends Error> = new (...args: AnyArgs) => E;
 
 /**
  * Extractor that gets details from an error of type `E`
