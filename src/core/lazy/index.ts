@@ -35,7 +35,7 @@ export default function makeLazy(constructor: Function | ClassConstructor, schem
 
 	return applyActions;
 
-	function applyActions(this: unknown, ...args: unknown[]): any {
+	function applyActions(this: unknown, ...args: unknown[]): unknown {
 		let
 			ctx;
 

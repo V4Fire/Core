@@ -97,7 +97,7 @@ function request<D = unknown>(opts: CreateRequestOptions<D>): typeof request;
  * request('https://foo.com', () => ['https://bla.com', 'bla', 'baz'])() // https://bla.com/bla/baz
  * ```
  */
-function request<D = unknown, A extends AnyArgs = unknown[]>(
+function request<D = unknown, A extends any[] = unknown[]>(
 	path: string,
 	resolver: RequestResolver<D, A>,
 	opts?: CreateRequestOptions<D>
@@ -105,7 +105,7 @@ function request<D = unknown, A extends AnyArgs = unknown[]>(
 
 function request<D = unknown>(
 	path: string | CreateRequestOptions<D>,
-	...args: any[]
+	...args: unknown[]
 ): unknown {
 	if (Object.isPlainObject(path)) {
 		const
@@ -129,7 +129,7 @@ function request<D = unknown>(
 		opts: CanUndef<CreateRequestOptions<D>>;
 
 	if (args.length > 1) {
-		[resolver, opts] = args;
+		[resolver, opts] = Object.cast(args);
 
 	} else if (Object.isDictionary(args[0])) {
 		opts = args[0];

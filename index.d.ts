@@ -13,13 +13,6 @@
  * @packageDocumentation
  */
 
-type AnyToIgnore = any;
-type AnyToBoolean = any;
-
-type AnyArgs<T = any> = T[];
-type AnyPromise<T = any> = Promise<T>;
-type AnyIterable<T = any> = Iterable<T>;
-
 declare namespace TB {
 	type Cast<X, Y> = X extends Y ? X : Y;
 
@@ -27,67 +20,67 @@ declare namespace TB {
 		[K in 'symbol']: ID;
 	};
 
-	type Length<T extends AnyArgs> = T['length'];
+	type Length<T extends any[]> = T['length'];
 
-	type Head<T extends AnyArgs> = T extends [any, ...any[]] ?
+	type Head<T extends any[]> = T extends [any, ...any[]] ?
 		T[0] : never;
 
-	type Tail<T extends AnyArgs> = ((...t: T) => any) extends ((_: any, ...tail: infer TT) => any) ?
+	type Tail<T extends any[]> = ((...t: T) => any) extends ((_: any, ...tail: infer TT) => any) ?
 		TT : [];
 
-	type HasTail<T extends AnyArgs> = T extends [any] | [] ? false : true;
+	type HasTail<T extends any[]> = T extends [any] | [] ? false : true;
 
-	type Last<T extends AnyArgs> = {
+	type Last<T extends any[]> = {
 		0: Last<Tail<T>>;
 		1: Head<T>;
 	}[HasTail<T> extends true ? 0 : 1];
 
-	type Prepend<E, T extends AnyArgs> =
+	type Prepend<E, T extends any[]> =
 		((head: E, ...args: T) => any) extends ((...args: infer U) => any) ? U : T;
 
-	type Drop<N extends number, T extends AnyArgs, I extends AnyArgs = []> = {
+	type Drop<N extends number, T extends any[], I extends any[] = []> = {
 		0: Drop<N, Tail<T>, Prepend<any, I>>;
 		1: T;
 	}[Length<I> extends N ? 1 : 0];
 
-	type Pos<I extends AnyArgs> = Length<I>;
-	type Next<I extends AnyArgs> = Prepend<any, I>;
-	type Prev<I extends AnyArgs> = Tail<I>;
+	type Pos<I extends any[]> = Length<I>;
+	type Next<I extends any[]> = Prepend<any, I>;
+	type Prev<I extends any[]> = Tail<I>;
 
-	type Reverse<T extends AnyArgs, R extends AnyArgs = [], I extends AnyArgs = []> = {
+	type Reverse<T extends any[], R extends any[] = [], I extends any[] = []> = {
 		0: Reverse<T, Prepend<T[Pos<I>], R>, Next<I>>;
 		1: R;
 	}[Pos<I> extends Length<T> ? 1 : 0];
 
 	// @ts-ignore (recursive type)
-	type Concat<T1 extends AnyArgs, T2 extends AnyArgs> = Reverse<Cast<Reverse<T1>, any[]>, T2>;
+	type Concat<T1 extends any[], T2 extends any[]> = Reverse<Cast<Reverse<T1>, any[]>, T2>;
 
-	type Append<E, T extends AnyArgs> = Concat<T, [E]>;
+	type Append<E, T extends any[]> = Concat<T, [E]>;
 
 	type __ = Type<{}, 'x'>;
 
-	type GapOf<T1 extends AnyArgs, T2 extends AnyArgs, TN extends AnyArgs, I extends AnyArgs> =
+	type GapOf<T1 extends any[], T2 extends any[], TN extends any[], I extends any[]> =
 		T1[Pos<I>] extends __ ? Append<T2[Pos<I>], TN> : TN;
 
-	type GapsOf<T1 extends AnyArgs, T2 extends AnyArgs, TN extends AnyArgs = [], I extends AnyArgs = []> = {
+	type GapsOf<T1 extends any[], T2 extends any[], TN extends any[] = [], I extends any[] = []> = {
 		// @ts-ignore (recursive type)
 		0: GapsOf<T1, T2, Cast<GapOf<T1, T2, TN, I>, any[]>, Next<I>>;
 		// @ts-ignore (recursive type)
 		1: Concat<TN, Cast<Drop<Pos<I>, T2>, any[]>>;
 	}[Pos<I> extends Length<T1> ? 1 : 0];
 
-	type PartialGaps<T extends AnyArgs> = {
+	type PartialGaps<T extends any[]> = {
 		[K in keyof T]?: T[K] | __;
 	};
 
-	type CleanedGaps<T extends AnyArgs> = {
+	type CleanedGaps<T extends any[]> = {
 		[K in keyof T]: NonNullable<T[K]>;
 	};
 
-	type Gaps<T extends AnyArgs> = CleanedGaps<PartialGaps<T>>;
+	type Gaps<T extends any[]> = CleanedGaps<PartialGaps<T>>;
 
 	type Curry<F extends ((...args: any) => any)> =
-		<T extends AnyArgs>(...args: Cast<Cast<T, Gaps<Parameters<F>>>, any[]>) =>
+		<T extends any[]>(...args: Cast<Cast<T, Gaps<Parameters<F>>>, any[]>) =>
 			GapsOf<T, Parameters<F>> extends [any, ...any[]] ?
 				// @ts-ignore (recursive type)
 				Curry<(...args: Cast<GapsOf<T, Parameters<F>>, any[]>) => ReturnType<F>> :
@@ -143,7 +136,10 @@ type Nullable<T> = T | null | undefined;
 // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
 type CanVoid<T> = T | void;
 
-interface AnyFunction<ARGS extends AnyArgs = any[], R = any> extends Function {
+type AnyToIgnore = any;
+type AnyToBoolean = any;
+
+interface AnyFunction<ARGS extends any[] = any[], R = any> extends Function {
 	(...args: ARGS): R;
 }
 
@@ -151,7 +147,7 @@ interface AnyOneArgFunction<ARG = any, R = any> extends Function {
 	(arg: ARG): R;
 }
 
-type ClassConstructor<C = unknown, ARGS extends AnyArgs = any[]> = AnyFunction<ARGS, void> & {
+type ClassConstructor<C = unknown, ARGS extends any[] = any[]> = AnyFunction<ARGS, void> & {
 	new: C;
 };
 
@@ -197,7 +193,7 @@ type PromiseType<T> =
 type ReturnPromise<T extends AnyFunction<any[], unknown>> = (...args: Parameters<T>) => Promise<ReturnType<T>>;
 
 type DictionaryType<T extends Dictionary> = T extends Dictionary<infer V> ? NonNullable<V> : T;
-type IterableType<T extends AnyIterable> = T extends Iterable<infer V> ? V : T;
+type IterableType<T extends Iterable<any>> = T extends Iterable<infer V> ? V : T;
 
 /**
  * Overrides properties of the specified type or interface.
@@ -339,7 +335,7 @@ interface ObjectMixinOptions<V = unknown, K = unknown, D = unknown> {
 	 * Object.mixin({deep: true, filter: (el, key) => key !== 'b'}, {a: 1}, {b: 2});
 	 * ```
 	 */
-	filter?(el: V, key: K, data: D): unknown;
+	filter?(el: V, key: K, data: D): AnyToBoolean;
 
 	/**
 	 * Function to filter values that support deep extending
@@ -358,7 +354,7 @@ interface ObjectMixinOptions<V = unknown, K = unknown, D = unknown> {
 	 * Object.mixin({deep: true, extendFilter: (el) => !el.b}, {a: {a: 1}}, {a: {b: 2}});
 	 * ```
 	 */
-	extendFilter?(el: unknown, key: K, data: V): unknown;
+	extendFilter?(el: unknown, key: K, data: V): AnyToBoolean;
 
 	/**
 	 * If true, all properties with undefined value aren't copied
@@ -377,7 +373,7 @@ interface ObjectMixinOptions<V = unknown, K = unknown, D = unknown> {
 
 	/**
 	 * If true, the function will merge all object properties, but not only enumerable.
-	 * Non enumerable properties from a prototype are ignored.
+	 * Non-enumerable properties from a prototype are ignored.
 	 *
 	 * @default `false`
 	 * @example
@@ -669,7 +665,7 @@ type ObjectPropertyPath =
 	any[];
 
 interface ObjectPropertyFilter<K = string, V = unknown> {
-	(key: K, el: V): any;
+	(key: K, el: V): AnyToBoolean;
 }
 
 interface ObjectConstructor {
@@ -1071,7 +1067,7 @@ interface ObjectConstructor {
 	 * Returns a curried version of `Object.mixin` for one argument
 	 * @param opts - if true, then properties will be copied recursively, or additional options to extend
 	 */
-	mixin(opts: ObjectMixinOptions | boolean): <R = unknown>(...objects: unknown[]) => R;
+	mixin(opts: ObjectMixinOptions | boolean): <R = unknown>(...objects: any[]) => R;
 
 	/**
 	 * Returns a curried version of `Object.mixin` for two arguments
@@ -1087,7 +1083,7 @@ interface ObjectConstructor {
 	 * @param opts - if true, then properties will be copied recursively, or additional options to extend
 	 * @param target - target object
 	 */
-	mixin(opts: ObjectMixinOptions | boolean, target: unknown): <R = unknown>(...objects: unknown[]) => R;
+	mixin(opts: ObjectMixinOptions | boolean, target: any): <R = unknown>(...objects: any[]) => R;
 
 	/**
 	 * Extends the specified object by another objects.
@@ -1130,7 +1126,7 @@ interface ObjectConstructor {
 	 * @param target - target object
 	 * @param objects - objects for extending
 	 */
-	mixin<R = unknown>(opts: ObjectMixinOptions | boolean, target?: unknown, ...objects: unknown[]): R;
+	mixin<R = unknown>(opts: ObjectMixinOptions | boolean, target?: any, ...objects: any[]): R;
 
 	/**
 	 * Returns a curried version of `Object.serialize`
@@ -1230,7 +1226,7 @@ interface ObjectConstructor {
 	 * Object.fromArray(['foo', 'bar'], {value: (val, i) => i});
 	 * ```
 	 */
-	fromArray<T>(arr: Nullable<unknown[]>, opts?: ObjectFromArrayOptions<T>): Dictionary<T>;
+	fromArray<T>(arr: Nullable<any[]>, opts?: ObjectFromArrayOptions<T>): Dictionary<T>;
 
 	/**
 	 * Returns a curried version of `Object.select`
@@ -1297,7 +1293,7 @@ interface ObjectConstructor {
 	 * Returns a curried version of `Object.select`
 	 * @param condition - whitelist of keys to filter
 	 */
-	select(condition: AnyIterable): <D extends object>(obj: Nullable<D>) => {[K in keyof D]?: D[K]};
+	select(condition: Iterable<any>): <D extends object>(obj: Nullable<D>) => {[K in keyof D]?: D[K]};
 
 	/**
 	 * Returns a curried version of `Object.select`
@@ -1389,7 +1385,7 @@ interface ObjectConstructor {
 	 * @param obj
 	 * @param condition - whitelist of keys to filter
 	 */
-	select<D extends object>(obj: Nullable<D>, condition: AnyIterable): {[K in keyof D]?: D[K]};
+	select<D extends object>(obj: Nullable<D>, condition: Iterable<any>): {[K in keyof D]?: D[K]};
 
 	/**
 	 * Returns a new object based on the specified, but only with fields that match to the specified condition
@@ -1463,7 +1459,7 @@ interface ObjectConstructor {
 	 * Returns a curried version of `Object.reject`
 	 * @param condition - whitelist of keys to filter
 	 */
-	reject(condition: AnyIterable): <D extends object>(obj: Nullable<D>) => {[K in keyof D]?: D[K]};
+	reject(condition: Iterable<any>): <D extends object>(obj: Nullable<D>) => {[K in keyof D]?: D[K]};
 
 	/**
 	 * Returns a curried version of `Object.reject`
@@ -1555,7 +1551,7 @@ interface ObjectConstructor {
 	 * @param obj
 	 * @param condition - whitelist of keys to filter
 	 */
-	reject<D extends object>(obj: Nullable<D>, condition: AnyIterable): {[K in keyof D]?: D[K]};
+	reject<D extends object>(obj: Nullable<D>, condition: Iterable<any>): {[K in keyof D]?: D[K]};
 
 	/**
 	 * Returns a new object based on the specified, but without fields that match to the specified condition
@@ -1601,7 +1597,7 @@ interface ObjectConstructor {
 	 * Object.Option('foo').then((value) => value === 'foo');
 	 * ```
 	 */
-	Option<A1, A extends AnyArgs, R>(value: (a1: A1, ...rest: A) => R):
+	Option<A1, A extends any[], R>(value: (a1: A1, ...rest: A) => R):
 		(a1: Maybe<Nullable<A1>> | Either<A1> | Nullable<A1>, ...rest: A) => Maybe<R>;
 
 	/**
@@ -1657,7 +1653,7 @@ interface ObjectConstructor {
 	 * Object.Result('foo').then((value) => value === 'foo');
 	 * ```
 	 */
-	Result<A1, A extends AnyArgs, R>(value: (a1: A1, ...a: A) => R):
+	Result<A1, A extends any[], R>(value: (a1: A1, ...a: A) => R):
 		(a1: Maybe<A1> | Either<A1>, ...rest: A) => Either<R>;
 
 	/**
@@ -1731,7 +1727,7 @@ interface ObjectConstructor {
 			WeakMap<any, any> |
 			Set<any> |
 			WeakSet<any> |
-			AnyPromise |
+			Promise<any> |
 
 			Generator |
 			AnyFunction |
@@ -1936,7 +1932,7 @@ interface ArrayConstructor {
 	 * Returns a curried version of `Array.union`
 	 * @param arr
 	 */
-	union<T extends Nullable<any[]>>(arr: T): <A extends AnyIterable | any>(
+	union<T extends Nullable<any[]>>(arr: T): <A extends Iterable<any> | any>(
 		...args: Array<Iterable<A> | A>
 	) => A extends Iterable<infer V> ?
 		Array<IterableType<NonNullable<T>> | V> :
@@ -1950,7 +1946,7 @@ interface ArrayConstructor {
 	 * @param arr
 	 * @param args
 	 */
-	union<T extends Nullable<any[]>, A extends AnyIterable | any>(
+	union<T extends Nullable<any[]>, A extends Iterable<any> | any>(
 		arr: T,
 		...args: Array<Iterable<A> | A>
 	): A extends Iterable<infer V> ?
@@ -1990,7 +1986,7 @@ interface Array<T> {
 	 *
 	 * @param args
 	 */
-	union<A extends AnyIterable | any>(
+	union<A extends Iterable<any> | any>(
 		...args: Array<Iterable<A> | A>
 	): A extends Iterable<infer V> ? Array<T | V> : Array<T | NonNullable<A>>;
 }
@@ -3632,7 +3628,7 @@ interface FunctionConstructor {
 	 *
 	 * @param delay
 	 */
-	debounce(delay: number): <A extends AnyArgs>(fn: AnyFunction<A>) => AnyFunction<A, void>;
+	debounce(delay: number): <A extends any[]>(fn: AnyFunction<A>) => AnyFunction<A, void>;
 
 	/**
 	 * Returns a new function that allows to invoke the function only with the specified delay.
@@ -3641,7 +3637,7 @@ interface FunctionConstructor {
 	 * @param fn
 	 * @param [delay]
 	 */
-	debounce<A extends AnyArgs>(fn: AnyFunction<A>, delay?: number): AnyFunction<A, void>;
+	debounce<A extends any[]>(fn: AnyFunction<A>, delay?: number): AnyFunction<A, void>;
 
 	/**
 	 * Returns a new function that allows to invoke a function, which it takes, not more often than the specified delay.
@@ -3650,7 +3646,7 @@ interface FunctionConstructor {
 	 *
 	 * @param delay
 	 */
-	throttle(delay: number): <A extends AnyArgs>(fn: AnyFunction<A>) => AnyFunction<A, void>;
+	throttle(delay: number): <A extends any[]>(fn: AnyFunction<A>) => AnyFunction<A, void>;
 
 	/**
 	 * Returns a new function that allows to invoke a function, which it takes, not more often than the specified delay.
@@ -3659,7 +3655,7 @@ interface FunctionConstructor {
 	 *
 	 * @param opts - options for the operation
 	 */
-	throttle(opts: ThrottleOptions): <A extends AnyArgs>(fn: AnyFunction<A>) => AnyFunction<A, void>;
+	throttle(opts: ThrottleOptions): <A extends any[]>(fn: AnyFunction<A>) => AnyFunction<A, void>;
 
 	/**
 	 * Returns a new function that allows to invoke the function not more often than the specified delay.
@@ -3669,7 +3665,7 @@ interface FunctionConstructor {
 	 * @param fn
 	 * @param [delay]
 	 */
-	throttle<A extends AnyArgs>(fn: AnyFunction<A>, delay?: number): AnyFunction<A, void>;
+	throttle<A extends any[]>(fn: AnyFunction<A>, delay?: number): AnyFunction<A, void>;
 
 	/**
 	 * Returns a new function that allows to invoke the function not more often than the specified delay.
@@ -3679,7 +3675,7 @@ interface FunctionConstructor {
 	 * @param fn
 	 * @param opts - options for the operation
 	 */
-	throttle<A extends AnyArgs>(fn: AnyFunction<A>, opts: ThrottleOptions): AnyFunction<A, void>;
+	throttle<A extends any[]>(fn: AnyFunction<A>, opts: ThrottleOptions): AnyFunction<A, void>;
 
 	/**
 	 * Returns a curried equivalent of the provided function.
@@ -3721,33 +3717,33 @@ interface FunctionConstructor {
 	 *
 	 * @param fn0
 	 */
-	compose<A extends AnyArgs, T1>(fn0: AnyFunction<A, T1>): AnyFunction<A, T1>;
+	compose<A extends any[], T1>(fn0: AnyFunction<A, T1>): AnyFunction<A, T1>;
 
-	compose<A extends AnyArgs, T1, T2>(
+	compose<A extends any[], T1, T2>(
 		fn1: AnyOneArgFunction<PromiseType<T1>, T2>,
 		fn0: AnyFunction<A, T1>
-	): AnyFunction<A, T1 extends AnyPromise ? NewPromise<T1, T2> : T2>;
+	): AnyFunction<A, T1 extends Promise<any> ? NewPromise<T1, T2> : T2>;
 
-	compose<A extends AnyArgs, T1, T2, T3>(
+	compose<A extends any[], T1, T2, T3>(
 		fn2: AnyOneArgFunction<PromiseType<T2>, T3>,
 		fn1: AnyOneArgFunction<PromiseType<T1>, T2>,
 		fn0: AnyFunction<A, T1>
-	): AnyFunction<A, T2 extends AnyPromise ? Promise<T3> : T1 extends AnyPromise ? Promise<T3> : T3>;
+	): AnyFunction<A, T2 extends Promise<any> ? Promise<T3> : T1 extends Promise<any> ? Promise<T3> : T3>;
 
-	compose<A extends AnyArgs, T1, T2, T3, T4>(
+	compose<A extends any[], T1, T2, T3, T4>(
 		fn3: AnyOneArgFunction<PromiseType<T3>, T4>,
 		fn2: AnyOneArgFunction<PromiseType<T2>, T3>,
 		fn1: AnyOneArgFunction<PromiseType<T1>, T2>,
 		fn0: AnyFunction<A, T1>
 	): AnyFunction<
 		A,
-		T3 extends AnyPromise ?
-			Promise<T4> : T2 extends AnyPromise ?
-				Promise<T4> : T1 extends AnyPromise ?
+		T3 extends Promise<any> ?
+			Promise<T4> : T2 extends Promise<any> ?
+				Promise<T4> : T1 extends Promise<any> ?
 					Promise<T4> : T4
 	>;
 
-	compose<A extends AnyArgs, T1, T2, T3, T4, T5>(
+	compose<A extends any[], T1, T2, T3, T4, T5>(
 		fn4: AnyOneArgFunction<PromiseType<T4>, T5>,
 		fn3: AnyOneArgFunction<PromiseType<T3>, T4>,
 		fn2: AnyOneArgFunction<PromiseType<T2>, T3>,
@@ -3755,14 +3751,14 @@ interface FunctionConstructor {
 		fn0: AnyFunction<A, T1>
 	): AnyFunction<
 		A,
-		T4 extends AnyPromise ?
-			Promise<T5> : T3 extends AnyPromise ?
-				Promise<T5> : T2 extends AnyPromise ?
-					Promise<T5> : T1 extends AnyPromise ?
+		T4 extends Promise<any> ?
+			Promise<T5> : T3 extends Promise<any> ?
+				Promise<T5> : T2 extends Promise<any> ?
+					Promise<T5> : T1 extends Promise<any> ?
 						Promise<T5> : T5
 	>;
 
-	compose<A extends AnyArgs, T1, T2, T3, T4, T5, T6>(
+	compose<A extends any[], T1, T2, T3, T4, T5, T6>(
 		fn5: AnyOneArgFunction<PromiseType<T5>, T6>,
 		fn4: AnyOneArgFunction<PromiseType<T4>, T5>,
 		fn3: AnyOneArgFunction<PromiseType<T3>, T4>,
@@ -3771,11 +3767,11 @@ interface FunctionConstructor {
 		fn0: AnyFunction<A, T1>
 	): AnyFunction<
 		A,
-		T5 extends AnyPromise ?
-			Promise<T6> : T4 extends AnyPromise ?
-				Promise<T6> : T3 extends AnyPromise ?
-					Promise<T6> : T2 extends AnyPromise ?
-						Promise<T6> : T1 extends AnyPromise ?
+		T5 extends Promise<any> ?
+			Promise<T6> : T4 extends Promise<any> ?
+				Promise<T6> : T3 extends Promise<any> ?
+					Promise<T6> : T2 extends Promise<any> ?
+						Promise<T6> : T1 extends Promise<any> ?
 							Promise<T6> : T6
 		>;
 }
@@ -3848,7 +3844,7 @@ interface Function {
 	 * toLowerCase.option()(toLowerCase.option()('FOO')).then((value) => value === 'foo');
 	 * ```
 	 */
-	option<A1, A extends AnyArgs, R>(this: (a1: A1, ...rest: A) => R):
+	option<A1, A extends any[], R>(this: (a1: A1, ...rest: A) => R):
 		(a1: Maybe<Nullable<A1>> | Either<A1> | Nullable<A1>, ...rest: A) => Maybe<R>;
 
 	/**
@@ -3881,7 +3877,7 @@ interface Function {
 	 * toLowerCase.result()(toLowerCase.result()('FOO')).then((value) => value === 'foo');
 	 * ```
 	 */
-	result<A1, A extends AnyArgs, R>(this: (a1: A1, ...rest: A) => R):
+	result<A1, A extends any[], R>(this: (a1: A1, ...rest: A) => R):
 		(a1: Maybe<A1> | Either<A1>, ...rest: A) => Either<R>;
 
 	/**
@@ -3924,31 +3920,31 @@ interface Function {
 	 */
 	compose<T>(this: T): T;
 
-	compose<A extends AnyArgs, T1, T2>(
+	compose<A extends any[], T1, T2>(
 		this: AnyFunction<A, T1>,
 		fn1: AnyOneArgFunction<T1, T2>
-	): AnyFunction<A, T1 extends AnyPromise ? Promise<T2> : T2>;
+	): AnyFunction<A, T1 extends Promise<any> ? Promise<T2> : T2>;
 
-	compose<A extends AnyArgs, T1, T2, T3>(
+	compose<A extends any[], T1, T2, T3>(
 		this: AnyFunction<A, T1>,
 		fn1: AnyOneArgFunction<T1, T2>,
 		fn2: AnyOneArgFunction<T2, T3>
-	): AnyFunction<A, T2 extends AnyPromise ? Promise<T3> : T1 extends AnyPromise ? Promise<T3> : T3>;
+	): AnyFunction<A, T2 extends Promise<any> ? Promise<T3> : T1 extends Promise<any> ? Promise<T3> : T3>;
 
-	compose<A extends AnyArgs, T1, T2, T3, T4>(
+	compose<A extends any[], T1, T2, T3, T4>(
 		this: AnyFunction<A, T1>,
 		fn1: AnyOneArgFunction<T1, T2>,
 		fn2: AnyOneArgFunction<T2, T3>,
 		fn3: AnyOneArgFunction<T3, T4>
 	): AnyFunction<
 		A,
-		T3 extends AnyPromise ?
-			Promise<T4> : T2 extends AnyPromise ?
-				Promise<T4> : T1 extends AnyPromise ?
+		T3 extends Promise<any> ?
+			Promise<T4> : T2 extends Promise<any> ?
+				Promise<T4> : T1 extends Promise<any> ?
 					Promise<T4> : T4
 	>;
 
-	compose<A extends AnyArgs, T1, T2, T3, T4, T5>(
+	compose<A extends any[], T1, T2, T3, T4, T5>(
 		this: AnyFunction<A, T1>,
 		fn1: AnyOneArgFunction<T1, T2>,
 		fn2: AnyOneArgFunction<T2, T3>,
@@ -3956,14 +3952,14 @@ interface Function {
 		fn4: AnyOneArgFunction<T4, T5>
 	): AnyFunction<
 		A,
-		T4 extends AnyPromise ?
-			Promise<T5> : T3 extends AnyPromise ?
-				Promise<T5> : T2 extends AnyPromise ?
-					Promise<T5> : T1 extends AnyPromise ?
+		T4 extends Promise<any> ?
+			Promise<T5> : T3 extends Promise<any> ?
+				Promise<T5> : T2 extends Promise<any> ?
+					Promise<T5> : T1 extends Promise<any> ?
 						Promise<T5> : T5
 	>;
 
-	compose<A extends AnyArgs, T1, T2, T3, T4, T5, T6>(
+	compose<A extends any[], T1, T2, T3, T4, T5, T6>(
 		this: AnyFunction<A, T1>,
 		fn1: AnyOneArgFunction<T1, T2>,
 		fn2: AnyOneArgFunction<T2, T3>,
@@ -3972,11 +3968,11 @@ interface Function {
 		fn5: AnyOneArgFunction<T5, T6>
 	): AnyFunction<
 		A,
-		T5 extends AnyPromise ?
-			Promise<T6> : T4 extends AnyPromise ?
-				Promise<T6> : T3 extends AnyPromise ?
-					Promise<T6> : T2 extends AnyPromise ?
-						Promise<T6> : T1 extends AnyPromise ?
+		T5 extends Promise<any> ?
+			Promise<T6> : T4 extends Promise<any> ?
+				Promise<T6> : T3 extends Promise<any> ?
+					Promise<T6> : T2 extends Promise<any> ?
+						Promise<T6> : T1 extends Promise<any> ?
 							Promise<T6> : T6
 		>;
 }

@@ -105,12 +105,12 @@ type AddEventListenerLikeFunctionMapper<T extends (...args: unknown[]) => unknow
 
 export type EventEmitterOverwritten<T extends EventEmitterLike> = Overwrite<T, {
 	addEventListener:
-		T['addEventListener'] extends (...args: AnyArgs) => any
+		T['addEventListener'] extends (...args: any[]) => any
 			? AddEventListenerLikeFunctionMapper<T['addEventListener']>
 			: never;
 
 	addListener:
-		T['addListener'] extends (...args: AnyArgs) => any
+		T['addListener'] extends (...args: any[]) => any
 			? AddEventListenerLikeFunctionMapper<T['addListener']>
 			: never;
 }>;

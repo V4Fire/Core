@@ -84,7 +84,7 @@ export function getType(value: unknown): string {
  */
 export function getSameAs<T>(value: T): Nullable<T> {
 	let
-		res: any = null;
+		res: unknown = null;
 
 	if (value != null && typeof value === 'object') {
 		if (Object.isArray(value)) {
@@ -104,5 +104,5 @@ export function getSameAs<T>(value: T): Nullable<T> {
 		}
 	}
 
-	return res;
+	return Object.cast(res);
 }

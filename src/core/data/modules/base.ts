@@ -292,7 +292,7 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 			eventName = this.name(),
 			method = this.method() ?? this.getMethod;
 
-		const mergedOpts = this.getRequestOptions('get', {
+		const mergedOpts = this.getRequestOptions<D>('get', {
 			...opts,
 			[queryMethods[method] != null ? 'query' : 'body']: query,
 			method
@@ -303,7 +303,7 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 			res = eventName != null ? this.updateRequest(url, eventName, req) : this.updateRequest(url, req);
 
 		const extraProviders = Object.isFunction(this.extraProviders) ?
-			this.extraProviders({opts: mergedOpts, globalOpts}) :
+			this.extraProviders({opts: Object.cast(mergedOpts), globalOpts}) :
 			this.extraProviders;
 
 		if (extraProviders) {

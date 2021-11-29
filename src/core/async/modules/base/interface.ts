@@ -141,7 +141,7 @@ export type ProxyCb<
 	R = unknown,
 	CTX extends object = Async
 > = A extends never ?
-	((this: CTX) => R) : A extends AnyArgs ?
+	((this: CTX) => R) : A extends any[] ?
 		((this: CTX, ...args: A) => R) : ((this: CTX, e: A) => R) | Function;
 
 export type AsyncCb<CTX extends object = Async> =
@@ -242,11 +242,11 @@ export type TaskCtx<CTX extends object = Async> = {
 } & AsyncOptions & ClearOptionsId<unknown>;
 
 export interface ClearFn<CTX extends object = Async> extends Function {
-	(id: any, ctx: TaskCtx<CTX>): any;
+	(id: any, ctx: TaskCtx<CTX>): AnyToIgnore;
 }
 
 export interface BoundFn<CTX extends object = Async> extends Function {
-	(this: CTX, ...args: any[]): any;
+	(this: CTX, ...args: any[]): AnyToIgnore;
 }
 
 export interface LocalCache {
