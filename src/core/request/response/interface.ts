@@ -36,7 +36,7 @@ export type JSONLikeValue =
 	Dictionary;
 
 export interface ResponseHeaders {
-	readonly [name: string]: string;
+	readonly [name: DictionaryKey]: string;
 }
 
 export interface ResponseOptions {
