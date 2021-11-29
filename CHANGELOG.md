@@ -11,6 +11,14 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.??.?? (2021-??-??)
+
+#### :rocket: New Feature
+
+* `core/prelude/types`:
+  * Added a new method `Object.cast`
+  * Added a new method `Object.throw`
+
 ## v3.66.0 (2021-11-26)
 
 #### :rocket: New Feature

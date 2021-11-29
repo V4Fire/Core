@@ -144,16 +144,16 @@ interface AnyOneArgFunction<ARG = any, R = any> extends Function {
 	(arg: ARG): R;
 }
 
-interface ClassConstructor<T = unknown> {
-	new: T;
-}
+type ClassConstructor<C = unknown, ARGS extends any[] = any[]> = AnyFunction<ARGS, void> & {
+	new: C;
+};
 
 interface StrictDictionary<T = unknown> {
 	[key: string]: T;
 }
 
 interface Dictionary<T = unknown> {
-	[key: string]: CanUndef<T>;
+	[key: string | symbol]: CanUndef<T>;
 }
 
 interface Maybe<T = unknown> extends Promise<T> {
@@ -222,7 +222,7 @@ type Overwrite<T, U> = Pick<T, Exclude<keyof T, keyof U>> & U;
  *   }
  *
  *   bar(): string {
- *     return <any>>null;
+ *     return Object.throw();
  *   }
  *
  *   abstract bar(): number;
@@ -1668,6 +1668,20 @@ interface ObjectConstructor {
 	 * ```
 	 */
 	Result<T = unknown>(value: T): Either<T>;
+
+	/**
+	 * Casts any value to the specified type
+	 * @param value
+	 */
+	cast<T = unknown>(value: any): T;
+
+	/**
+	 * Throws an error.
+	 * This method is useful because the `throw` operator can't be used within expressions.
+	 *
+	 * @param [err]
+	 */
+	throw(err?: string | Error): any;
 
 	/**
 	 * Returns true if the specified value can be interpreted as true

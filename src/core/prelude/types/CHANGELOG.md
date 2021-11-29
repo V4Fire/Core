@@ -9,6 +9,13 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.??.?? (2021-??-??)
+
+#### :rocket: New Feature
+
+* Added a new method `Object.cast`
+* Added a new method `Object.throw`
+
 ## v3.62.0 (2021-10-29)
 
 #### :rocket: New Feature
