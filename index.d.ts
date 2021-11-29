@@ -197,7 +197,7 @@ type IterableType<T extends Iterable<any>> = T extends Iterable<infer V> ? V : T
 
 /**
  * Overrides properties of the specified type or interface.
- * Don't use this helper if you simply extend one type from another, i. e. without overriding properties.
+ * Don't use this helper if you simply extend one type from another, i.e. without overriding properties.
  *
  * @template T - original type
  * @template U - type with the overridden properties
