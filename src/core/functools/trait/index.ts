@@ -28,7 +28,7 @@
  *    * The implementation is placed as a static method.
  *    *\/
  *   bla(a: number): number {
- *     return <any>null;
+ *     return Object.throw();
  *   };
  *
  *   /**
@@ -44,7 +44,7 @@
  *   abstract bar2(): string;
  *
  *   bla2(a: number): string {
- *     return <any>null;
+ *     return Object.throw();
  *   };
  *
  *   /** @see Interface2.bla2 *\/

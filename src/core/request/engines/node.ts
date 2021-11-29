@@ -89,7 +89,7 @@ const request: RequestEngine = (params) => {
 		});
 
 		request.then((res) => {
-			resolve(new Response(<any>res.body, {
+			resolve(new Response(Object.cast(res.body), {
 				parent: p.parent,
 				important: p.important,
 				responseType: p.responseType,

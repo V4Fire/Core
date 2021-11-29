@@ -55,7 +55,7 @@ export function deprecate<T extends Function>(
 		p = fnOrParams;
 	}
 
-	return <any>warn({context: 'deprecated', ...p}, <T>fn);
+	return Object.cast(warn({context: 'deprecated', ...p}, <T>fn));
 }
 
 /**

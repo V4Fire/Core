@@ -112,7 +112,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @param [ctx] - context of applying for async handlers
 	 */
 	constructor(ctx?: CTX) {
-		this.ctx = ctx ?? <any>this;
+		this.ctx = ctx ?? Object.cast(this);
 		this.context = this.ctx;
 	}
 

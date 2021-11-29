@@ -120,12 +120,12 @@ extend(Date, 'format', (
 	locale?: CanArray<string>
 ) => {
 	if (Object.isString(date) || Object.isPlainObject(date)) {
-		locale = <any>patternOrOpts;
+		locale = Object.cast(patternOrOpts);
 		patternOrOpts = date;
-		return (date) => Date.format(date, <any>patternOrOpts, locale);
+		return (date) => Date.format(date, Object.cast(patternOrOpts), locale);
 	}
 
-	return date.format(<any>patternOrOpts, locale);
+	return date.format(Object.cast(patternOrOpts), locale);
 });
 
 /** @see [[Date.toHTMLDateString]] */

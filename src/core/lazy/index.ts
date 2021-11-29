@@ -21,7 +21,7 @@ import type { ObjectScheme } from 'core/lazy/interface';
  * @param constructor
  * @param scheme
  */
-export default function makeLazy(constructor: Function, scheme?: ObjectScheme): AnyFunction {
+export default function makeLazy(constructor: Function | ClassConstructor, scheme?: ObjectScheme): AnyFunction {
 	const
 		actions = [constructor];
 
@@ -40,7 +40,7 @@ export default function makeLazy(constructor: Function, scheme?: ObjectScheme): 
 			ctx;
 
 		if (new.target === applyActions) {
-			ctx = new (<any>constructor)(...args);
+			ctx = new (Object.cast<ClassConstructor>(constructor))(...args);
 
 		} else {
 			ctx = constructor.call(this, ...args);
@@ -73,7 +73,7 @@ export default function makeLazy(constructor: Function, scheme?: ObjectScheme): 
 				val = Object.getOwnPropertyDescriptor(obj, key)?.value;
 
 			if (Object.isFunction(val)) {
-				res[key] = <any>Function;
+				res[key] = Object.cast(Function);
 
 			} else {
 				res[key] = getSchemeFromProto(val);

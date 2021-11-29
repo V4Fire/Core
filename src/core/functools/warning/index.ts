@@ -144,7 +144,7 @@ export function warn<T extends Function>(
 		return fn?.apply(this, args);
 	}
 
-	return <any>wrapper;
+	return Object.cast(wrapper);
 }
 
 /**

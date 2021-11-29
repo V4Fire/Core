@@ -130,7 +130,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	terminateWorker(opts: ClearProxyOptions<WorkerLikeP>): this;
 	terminateWorker(task?: WorkerLikeP | ClearProxyOptions<WorkerLikeP>): this {
-		return this.clearWorker(<any>task);
+		return this.clearWorker(Object.cast(task));
 	}
 
 	/**
@@ -176,7 +176,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			wrapper: (fn) => fn,
 			linkByWrapper: true,
 			periodic: opts?.single === false
-		}) ?? <any>(() => undefined);
+		}) ?? Object.cast(() => undefined);
 	}
 
 	/**
@@ -226,7 +226,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	cancelProxy(opts: ClearProxyOptions<Function>): this;
 	cancelProxy(task?: Function | ClearProxyOptions<Function>): this {
-		return this.clearProxy(<any>task);
+		return this.clearProxy(Object.cast(task));
 	}
 
 	/**
@@ -361,7 +361,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	cancelRequest(opts: ClearOptionsId<Promise<unknown>>): this;
 	cancelRequest(task?: Promise<unknown> | ClearOptionsId<Promise<unknown>>): this {
-		return this.clearRequest(<any>task);
+		return this.clearRequest(Object.cast(task));
 	}
 
 	/**
@@ -566,7 +566,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	cancelIterable(opts: ClearOptionsId<AsyncIterable<unknown>>): this;
 	cancelIterable(task?: AsyncIterable<unknown> | ClearOptionsId<AsyncIterable<unknown>>): this {
-		return this.clearIterable(<any>task);
+		return this.clearIterable(Object.cast(task));
 	}
 
 	/**
@@ -816,7 +816,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	cancelPromise(opts: ClearProxyOptions<Promise<unknown>>): this;
 	cancelPromise(task?: Promise<unknown> | ClearProxyOptions<Promise<unknown>>): this {
-		return this.clearPromise(<any>task);
+		return this.clearPromise(Object.cast(task));
 	}
 
 	/**
@@ -873,7 +873,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	mutePromise(opts: ClearOptionsId<Promise<unknown>>): this;
 	mutePromise(task?: Promise<unknown> | ClearOptionsId<Promise<unknown>>): this {
-		return this.markPromise('muted', <any>task);
+		return this.markPromise('muted', Object.cast(task));
 	}
 
 	/**
@@ -888,7 +888,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	unmutePromise(opts: ClearOptionsId<Promise<unknown>>): this;
 	unmutePromise(task?: Promise<unknown> | ClearOptionsId<Promise<unknown>>): this {
-		return this.markPromise('!muted', <any>task);
+		return this.markPromise('!muted', Object.cast(task));
 	}
 
 	/**
@@ -903,7 +903,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	suspendPromise(opts: ClearOptionsId<Promise<unknown>>): this;
 	suspendPromise(task?: Promise<unknown> | ClearOptionsId<Promise<unknown>>): this {
-		return this.markPromise('paused', <any>task);
+		return this.markPromise('paused', Object.cast(task));
 	}
 
 	/**
@@ -918,7 +918,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	unsuspendPromise(opts: ClearOptionsId<Promise<unknown>>): this;
 	unsuspendPromise(task?: Promise<unknown> | ClearOptionsId<Promise<unknown>>): this {
-		return this.markPromise('!paused', <any>task);
+		return this.markPromise('!paused', Object.cast(task));
 	}
 
 	/**

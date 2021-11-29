@@ -50,7 +50,7 @@ extend(Object, 'get', (
 						return val.get(key);
 					}
 
-					return (<any>val)[key];
+					return (Object.cast<Dictionary>(val))[key];
 				});
 
 			} else if (Object.isMap(res) || Object.isWeakMap(res)) {

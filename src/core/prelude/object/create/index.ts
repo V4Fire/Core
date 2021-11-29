@@ -92,7 +92,7 @@ extend(Object, 'fromArray', (
 	opts?: ObjectFromArrayOptions
 ) => {
 	const
-		map = Object.createDict<any>();
+		map = Object.createDict();
 
 	if (arr == null) {
 		return map;
@@ -104,17 +104,17 @@ extend(Object, 'fromArray', (
 		...opts
 	};
 
-	if (p.keyConverter) {
+	if (p.keyConverter != null) {
 		p.key = (el, i) => {
 			deprecate({type: 'property', name: 'keyConverter', renamedTo: 'key'});
 			return p.keyConverter!(i, el);
 		};
 	}
 
-	if (p.valueConverter) {
+	if (p.valueConverter != null) {
 		p.value = (el, i) => {
 			deprecate({type: 'property', name: 'valueConverter', renamedTo: 'value'});
-			return <any>p.valueConverter!(el, i);
+			return p.valueConverter!(el, i);
 		};
 	}
 
@@ -141,7 +141,7 @@ export function selectReject(select: boolean): AnyFunction {
 		condition: Iterable<unknown> | Dictionary | RegExp | Function
 	): unknown {
 		if (arguments.length === 1) {
-			condition = <any>obj;
+			condition = Object.cast(obj);
 			return (obj) => wrapper(obj, condition);
 		}
 
@@ -173,12 +173,12 @@ export function selectReject(select: boolean): AnyFunction {
 			}
 		}
 
-		Object.forEach(obj, (el, key) => {
+		Object.forEach(obj, (el, key: object) => {
 			let
 				test: boolean;
 
 			if (Object.isFunction(condition)) {
-				test = Object.isTruly((<Function>condition)(key, el));
+				test = Object.isTruly(condition(key, el));
 
 			} else if (Object.isRegExp(condition)) {
 				test = condition.test(String(key));
@@ -192,7 +192,7 @@ export function selectReject(select: boolean): AnyFunction {
 					res.push(el);
 
 				} else if (Object.isSet(res) || Object.isWeakSet(res)) {
-					res.add(<any>key);
+					res.add(key);
 
 				} else {
 					Object.set(res, [key], el);

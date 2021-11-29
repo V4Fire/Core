@@ -237,7 +237,7 @@ export default class Response<
 
 			return AbortablePromise.resolve(
 				this.text()
-					.then<any>((text) => new JSDOM(text))
+					.then((text) => new JSDOM(text))
 					.then<_>((res) => Object.get(res, 'window.document')),
 
 				this.parent
@@ -249,7 +249,7 @@ export default class Response<
 			return AbortablePromise.resolve(
 				this.text().then<_>((text) => {
 					const type = this.getHeader('content-type') ?? 'text/html';
-					return(new DOMParser()).parseFromString(text ?? '', <any>type);
+					return(new DOMParser()).parseFromString(text ?? '', Object.cast(type));
 				}),
 
 				this.parent
@@ -260,7 +260,7 @@ export default class Response<
 			throw new TypeError('Invalid data type');
 		}
 
-		return AbortablePromise.resolve<_>(<any>body, this.parent);
+		return AbortablePromise.resolve<_>(body, this.parent);
 	}
 
 	/**
@@ -295,9 +295,11 @@ export default class Response<
 		}
 
 		return AbortablePromise.resolveAndCall<_>(
-			() => Object.size(this.decoders) > 0 && !Object.isFrozen(body) ?
-				Object.fastClone(body) :
-				<any>body,
+			() => Object.cast(
+				Object.size(this.decoders) > 0 && !Object.isFrozen(body) ?
+					Object.fastClone(body) :
+					body
+			),
 
 			this.parent
 		);
@@ -357,7 +359,8 @@ export default class Response<
 		}
 		//#endif
 
-		return AbortablePromise.resolve<_>(new Blob([<any>body], {type: this.getHeader('content-type')}), this.parent);
+		const blob = new Blob([Object.cast(body)], {type: this.getHeader('content-type')});
+		return AbortablePromise.resolve<_>(blob, this.parent);
 	}
 
 	/**
@@ -407,12 +410,12 @@ export default class Response<
 		}
 
 		if (IS_NODE) {
-			return AbortablePromise.resolve<_>(Buffer.from(<any>body).toString(encoding));
+			return AbortablePromise.resolve<_>(Buffer.from(Object.cast(body)).toString(encoding));
 		}
 
 		if (typeof TextDecoder !== 'undefined') {
 			const decoder = new TextDecoder(encoding, {fatal: true});
-			return AbortablePromise.resolve<_>(decoder.decode(new DataView(<any>body)), this.parent);
+			return AbortablePromise.resolve<_>(decoder.decode(new DataView(Object.cast(body))), this.parent);
 		}
 
 		return new AbortablePromise((resolve, reject, onAbort) => {
