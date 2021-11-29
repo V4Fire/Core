@@ -475,13 +475,12 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			baseIterator = this.getBaseIterator(iterable);
 
 		if (baseIterator == null) {
-			return {
-				// @ts-ignore (type cast)
+			return Object.cast({
 				// eslint-disable-next-line require-yield
 				*[Symbol.asyncIterator]() {
 					return undefined;
 				}
-			};
+			});
 		}
 
 		let
