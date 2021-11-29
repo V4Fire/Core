@@ -15,6 +15,8 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :rocket: New Feature
 
+* Added a new type `DictionaryKey`
+* Now the `Dictionary` type supports symbols and number
 * `core/prelude/types`:
   * Added a new method `Object.cast`
   * Added a new method `Object.throw`

@@ -152,8 +152,10 @@ interface StrictDictionary<T = unknown> {
 	[key: string]: T;
 }
 
+type DictionaryKey = string | symbol | number;
+
 interface Dictionary<T = unknown> {
-	[key: string | symbol]: CanUndef<T>;
+	[key: DictionaryKey]: CanUndef<T>;
 }
 
 interface Maybe<T = unknown> extends Promise<T> {
