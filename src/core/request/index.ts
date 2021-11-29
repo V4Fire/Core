@@ -182,7 +182,7 @@ function request<D = unknown>(
 				keyToEncode = ctx.withoutBody ? 'query' : 'body';
 
 			// eslint-disable-next-line require-atomic-updates
-			requestParams[keyToEncode] = await applyEncoders(requestParams[keyToEncode]);
+			requestParams[keyToEncode] = Object.cast(await applyEncoders(requestParams[keyToEncode]));
 
 			for (let i = 0; i < middlewareResults.length; i++) {
 				// If the middleware returns a function, the function will be executed.
@@ -339,7 +339,7 @@ function request<D = unknown>(
 				ctx.wrapRequest(res)
 			);
 
-			function applyEncoders(data: unknown): Promise<any> {
+			function applyEncoders(data: unknown): unknown {
 				let
 					res = AbortablePromise.resolve(data, parent);
 

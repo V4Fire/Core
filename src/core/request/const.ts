@@ -41,7 +41,7 @@ export const
 
 export const
 	caches = new Set<AbstractCache>(),
-	pendingCache = new Cache<RequestResponse<any>>();
+	pendingCache = new Cache<RequestResponse>();
 
 export const cache: Record<Exclude<CacheStrategy, AbstractCache | Promise<AbstractCache>>, AbstractCache> = {
 	queue: new RestrictedCache(),

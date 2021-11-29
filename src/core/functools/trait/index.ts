@@ -135,7 +135,10 @@ export function derive(...traits: Function[]) {
 			}
 		}
 
-		function getTraitChain<T extends Array<[Function, string[]]>>(trait: Nullable<object>, methods: T = <any>[]): T {
+		function getTraitChain<T extends Array<[Function, string[]]>>(
+			trait: Nullable<object>,
+			methods: T = Object.cast([])
+		): T {
 			if (!Object.isFunction(trait) || trait === Function.prototype) {
 				return methods;
 			}

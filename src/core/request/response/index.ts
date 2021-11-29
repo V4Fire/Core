@@ -199,7 +199,7 @@ export default class Response<
 					data = data.valueOf();
 				}
 
-				return fn(data, this);
+				return fn(data, Object.cast(this));
 			});
 		});
 

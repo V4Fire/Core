@@ -62,7 +62,7 @@ export const iterators = {
 
 export const deleteMethods = {
 	delete: (
-		target: Map<any, any> | Set<any>,
+		target: Map<unknown, unknown> | Set<unknown>,
 		opts: WrapParams,
 		key: unknown
 	): Nullable<WrapResult> => {
@@ -75,7 +75,7 @@ export const deleteMethods = {
 };
 
 export const clearMethods = {
-	clear: (target: Set<any>, opts: WrapParams): Nullable<WrapResult> => {
+	clear: (target: Set<unknown>, opts: WrapParams): Nullable<WrapResult> => {
 		if (target.size !== 0) {
 			return [[undefined, undefined, opts.path]];
 		}

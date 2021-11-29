@@ -1053,8 +1053,8 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * @param label
 	 * @param opts - additional options
 	 */
-	protected markPromise(label: string, opts: ClearOptionsId<Promise<any>>): this;
-	protected markPromise(label: string, task?: Promise<any> | ClearOptionsId<Promise<unknown>>): this {
+	protected markPromise(label: string, opts: ClearOptionsId<Promise<unknown>>): this;
+	protected markPromise(label: string, task?: Promise<unknown> | ClearOptionsId<Promise<unknown>>): this {
 		const
 			nms = this.namespaces,
 			nm = isAsyncOptions<ClearProxyOptions>(task) ? task.name : null;

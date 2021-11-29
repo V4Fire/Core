@@ -603,13 +603,17 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 			.then((res) => {
 				try {
 					const
-						{ctx: {canCache, cacheKey}} = res;
-
-					const
 						cache = requestCache[this.cacheId];
 
-					if (canCache && cacheKey != null && cache) {
-						cache[cacheKey] = res;
+					const {
+						ctx: {
+							canCache,
+							cacheKey
+						}
+					} = res;
+
+					if (canCache && cacheKey != null && cache != null) {
+						cache[cacheKey] = Object.cast(res);
 					}
 
 				} catch (err) {

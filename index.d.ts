@@ -136,6 +136,9 @@ type Nullable<T> = T | null | undefined;
 // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
 type CanVoid<T> = T | void;
 
+type AnyPromise<T = any> = Promise<T>;
+type AnyIterable<T = any> = Iterable<T>;
+
 interface AnyFunction<ARGS extends any[] = any[], R = any> extends Function {
 	(...args: ARGS): R;
 }
@@ -190,7 +193,7 @@ type PromiseType<T> =
 type ReturnPromise<T extends AnyFunction<any[], unknown>> = (...args: Parameters<T>) => Promise<ReturnType<T>>;
 
 type DictionaryType<T extends Dictionary> = T extends Dictionary<infer V> ? NonNullable<V> : T;
-type IterableType<T extends Iterable<any>> = T extends Iterable<infer V> ? V : T;
+type IterableType<T extends AnyIterable> = T extends Iterable<infer V> ? V : T;
 
 /**
  * Overrides properties of the specified type or interface.
@@ -1290,7 +1293,7 @@ interface ObjectConstructor {
 	 * Returns a curried version of `Object.select`
 	 * @param condition - whitelist of keys to filter
 	 */
-	select(condition: Iterable<any>): <D extends object>(obj: Nullable<D>) => {[K in keyof D]?: D[K]};
+	select(condition: AnyIterable): <D extends object>(obj: Nullable<D>) => {[K in keyof D]?: D[K]};
 
 	/**
 	 * Returns a curried version of `Object.select`
@@ -1382,7 +1385,7 @@ interface ObjectConstructor {
 	 * @param obj
 	 * @param condition - whitelist of keys to filter
 	 */
-	select<D extends object>(obj: Nullable<D>, condition: Iterable<any>): {[K in keyof D]?: D[K]};
+	select<D extends object>(obj: Nullable<D>, condition: AnyIterable): {[K in keyof D]?: D[K]};
 
 	/**
 	 * Returns a new object based on the specified, but only with fields that match to the specified condition
@@ -1456,7 +1459,7 @@ interface ObjectConstructor {
 	 * Returns a curried version of `Object.reject`
 	 * @param condition - whitelist of keys to filter
 	 */
-	reject(condition: Iterable<any>): <D extends object>(obj: Nullable<D>) => {[K in keyof D]?: D[K]};
+	reject(condition: AnyIterable): <D extends object>(obj: Nullable<D>) => {[K in keyof D]?: D[K]};
 
 	/**
 	 * Returns a curried version of `Object.reject`
@@ -1548,7 +1551,7 @@ interface ObjectConstructor {
 	 * @param obj
 	 * @param condition - whitelist of keys to filter
 	 */
-	reject<D extends object>(obj: Nullable<D>, condition: Iterable<any>): {[K in keyof D]?: D[K]};
+	reject<D extends object>(obj: Nullable<D>, condition: AnyIterable): {[K in keyof D]?: D[K]};
 
 	/**
 	 * Returns a new object based on the specified, but without fields that match to the specified condition
@@ -1724,7 +1727,7 @@ interface ObjectConstructor {
 			WeakMap<any, any> |
 			Set<any> |
 			WeakSet<any> |
-			Promise<any> |
+			AnyPromise |
 
 			Generator |
 			AnyFunction |
@@ -1929,7 +1932,7 @@ interface ArrayConstructor {
 	 * Returns a curried version of `Array.union`
 	 * @param arr
 	 */
-	union<T extends Nullable<any[]>>(arr: T): <A extends Iterable<any> | any>(
+	union<T extends Nullable<any[]>>(arr: T): <A extends AnyIterable | any>(
 		...args: Array<Iterable<A> | A>
 	) => A extends Iterable<infer V> ?
 		Array<IterableType<NonNullable<T>> | V> :
@@ -1943,7 +1946,7 @@ interface ArrayConstructor {
 	 * @param arr
 	 * @param args
 	 */
-	union<T extends Nullable<any[]>, A extends Iterable<any> | any>(
+	union<T extends Nullable<any[]>, A extends AnyIterable | any>(
 		arr: T,
 		...args: Array<Iterable<A> | A>
 	): A extends Iterable<infer V> ?
@@ -1983,7 +1986,7 @@ interface Array<T> {
 	 *
 	 * @param args
 	 */
-	union<A extends Iterable<any> | any>(
+	union<A extends AnyIterable | any>(
 		...args: Array<Iterable<A> | A>
 	): A extends Iterable<infer V> ? Array<T | V> : Array<T | NonNullable<A>>;
 }
@@ -3719,13 +3722,13 @@ interface FunctionConstructor {
 	compose<A extends any[], T1, T2>(
 		fn1: AnyOneArgFunction<PromiseType<T1>, T2>,
 		fn0: AnyFunction<A, T1>
-	): AnyFunction<A, T1 extends Promise<any> ? NewPromise<T1, T2> : T2>;
+	): AnyFunction<A, T1 extends AnyPromise ? NewPromise<T1, T2> : T2>;
 
 	compose<A extends any[], T1, T2, T3>(
 		fn2: AnyOneArgFunction<PromiseType<T2>, T3>,
 		fn1: AnyOneArgFunction<PromiseType<T1>, T2>,
 		fn0: AnyFunction<A, T1>
-	): AnyFunction<A, T2 extends Promise<any> ? Promise<T3> : T1 extends Promise<any> ? Promise<T3> : T3>;
+	): AnyFunction<A, T2 extends AnyPromise ? Promise<T3> : T1 extends AnyPromise ? Promise<T3> : T3>;
 
 	compose<A extends any[], T1, T2, T3, T4>(
 		fn3: AnyOneArgFunction<PromiseType<T3>, T4>,
@@ -3734,9 +3737,9 @@ interface FunctionConstructor {
 		fn0: AnyFunction<A, T1>
 	): AnyFunction<
 		A,
-		T3 extends Promise<any> ?
-			Promise<T4> : T2 extends Promise<any> ?
-				Promise<T4> : T1 extends Promise<any> ?
+		T3 extends AnyPromise ?
+			Promise<T4> : T2 extends AnyPromise ?
+				Promise<T4> : T1 extends AnyPromise ?
 					Promise<T4> : T4
 	>;
 
@@ -3748,10 +3751,10 @@ interface FunctionConstructor {
 		fn0: AnyFunction<A, T1>
 	): AnyFunction<
 		A,
-		T4 extends Promise<any> ?
-			Promise<T5> : T3 extends Promise<any> ?
-				Promise<T5> : T2 extends Promise<any> ?
-					Promise<T5> : T1 extends Promise<any> ?
+		T4 extends AnyPromise ?
+			Promise<T5> : T3 extends AnyPromise ?
+				Promise<T5> : T2 extends AnyPromise ?
+					Promise<T5> : T1 extends AnyPromise ?
 						Promise<T5> : T5
 	>;
 
@@ -3764,11 +3767,11 @@ interface FunctionConstructor {
 		fn0: AnyFunction<A, T1>
 	): AnyFunction<
 		A,
-		T5 extends Promise<any> ?
-			Promise<T6> : T4 extends Promise<any> ?
-				Promise<T6> : T3 extends Promise<any> ?
-					Promise<T6> : T2 extends Promise<any> ?
-						Promise<T6> : T1 extends Promise<any> ?
+		T5 extends AnyPromise ?
+			Promise<T6> : T4 extends AnyPromise ?
+				Promise<T6> : T3 extends AnyPromise ?
+					Promise<T6> : T2 extends AnyPromise ?
+						Promise<T6> : T1 extends AnyPromise ?
 							Promise<T6> : T6
 		>;
 }
@@ -3920,13 +3923,13 @@ interface Function {
 	compose<A extends any[], T1, T2>(
 		this: AnyFunction<A, T1>,
 		fn1: AnyOneArgFunction<T1, T2>
-	): AnyFunction<A, T1 extends Promise<any> ? Promise<T2> : T2>;
+	): AnyFunction<A, T1 extends AnyPromise ? Promise<T2> : T2>;
 
 	compose<A extends any[], T1, T2, T3>(
 		this: AnyFunction<A, T1>,
 		fn1: AnyOneArgFunction<T1, T2>,
 		fn2: AnyOneArgFunction<T2, T3>
-	): AnyFunction<A, T2 extends Promise<any> ? Promise<T3> : T1 extends Promise<any> ? Promise<T3> : T3>;
+	): AnyFunction<A, T2 extends AnyPromise ? Promise<T3> : T1 extends AnyPromise ? Promise<T3> : T3>;
 
 	compose<A extends any[], T1, T2, T3, T4>(
 		this: AnyFunction<A, T1>,
@@ -3935,9 +3938,9 @@ interface Function {
 		fn3: AnyOneArgFunction<T3, T4>
 	): AnyFunction<
 		A,
-		T3 extends Promise<any> ?
-			Promise<T4> : T2 extends Promise<any> ?
-				Promise<T4> : T1 extends Promise<any> ?
+		T3 extends AnyPromise ?
+			Promise<T4> : T2 extends AnyPromise ?
+				Promise<T4> : T1 extends AnyPromise ?
 					Promise<T4> : T4
 	>;
 
@@ -3949,10 +3952,10 @@ interface Function {
 		fn4: AnyOneArgFunction<T4, T5>
 	): AnyFunction<
 		A,
-		T4 extends Promise<any> ?
-			Promise<T5> : T3 extends Promise<any> ?
-				Promise<T5> : T2 extends Promise<any> ?
-					Promise<T5> : T1 extends Promise<any> ?
+		T4 extends AnyPromise ?
+			Promise<T5> : T3 extends AnyPromise ?
+				Promise<T5> : T2 extends AnyPromise ?
+					Promise<T5> : T1 extends AnyPromise ?
 						Promise<T5> : T5
 	>;
 
@@ -3965,11 +3968,11 @@ interface Function {
 		fn5: AnyOneArgFunction<T5, T6>
 	): AnyFunction<
 		A,
-		T5 extends Promise<any> ?
-			Promise<T6> : T4 extends Promise<any> ?
-				Promise<T6> : T3 extends Promise<any> ?
-					Promise<T6> : T2 extends Promise<any> ?
-						Promise<T6> : T1 extends Promise<any> ?
+		T5 extends AnyPromise ?
+			Promise<T6> : T4 extends AnyPromise ?
+				Promise<T6> : T3 extends AnyPromise ?
+					Promise<T6> : T2 extends AnyPromise ?
+						Promise<T6> : T1 extends AnyPromise ?
 							Promise<T6> : T6
 		>;
 }
