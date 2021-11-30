@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.66.1 (2021-12-01)
+
+#### :house: Internal
+
+* Updated `node` and `npm` in `ci`
+
 ## v3.66.0 (2021-11-26)
 
 #### :rocket: New Feature
