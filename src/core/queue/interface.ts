@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-export interface Tasks<T> {
+export interface InnerQueue<T = unknown> {
 	readonly length: number;
 	readonly head?: CanUndef<T>;
 	push(task: T): number;
@@ -15,15 +15,15 @@ export interface Tasks<T> {
 	shift(): CanUndef<T>;
 }
 
-export interface CreateTasks<T> {
+export interface CreateInnerQueue<T extends InnerQueue<any> = InnerQueue> {
 	(): T;
 }
 
-export interface QueueOptions {
+export interface QueueOptions<T extends InnerQueue<any> = InnerQueue> {
 	/**
-	 * Factory to create a task container
+	 * Factory to create an inner queue to store elements
 	 */
-	tasksFactory?: CreateTasks<any>;
+	queueFactory?: CreateInnerQueue<T>;
 }
 
 /**

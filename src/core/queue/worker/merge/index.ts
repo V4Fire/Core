@@ -12,7 +12,18 @@
  */
 
 import WorkerQueue from 'core/queue/worker/interface';
-import type { Task, Tasks, QueueWorker, QueueOptions, HashFn } from 'core/queue/worker/merge/interface';
+
+import type {
+
+	Task,
+	Tasks,
+
+	HashFn,
+	QueueWorker,
+
+	WorkerQueueOptions
+
+} from 'core/queue/worker/merge/interface';
 
 export * from 'core/queue/worker/merge/interface';
 
@@ -40,7 +51,7 @@ export default class MergeWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> 
 	protected tasksMap: Dictionary<Task<T, V>> = Object.createDict();
 
 	/**
-	 * Function to calculate task hash
+	 * Function to calculate a task hash
 	 */
 	protected readonly hashFn: HashFn<T>;
 
@@ -49,7 +60,7 @@ export default class MergeWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> 
 	 * @param worker
 	 * @param [opts]
 	 */
-	constructor(worker: QueueWorker<T, V>, opts: QueueOptions<T>) {
+	constructor(worker: QueueWorker<T, V>, opts: WorkerQueueOptions<T>) {
 		super(worker, opts);
 		this.hashFn = opts.hashFn ?? Object.fastHash.bind(Object);
 	}
