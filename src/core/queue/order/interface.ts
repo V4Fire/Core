@@ -6,14 +6,14 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type { Tasks as SuperTasks } from 'core/queue/interface';
+import type { InnerQueue as SuperInnerQueue } from 'core/queue/interface';
 
 export * from 'core/queue/interface';
 
-export interface Tasks<T> extends SuperTasks<T> {
+export interface InnerQueue<T = unknown> extends SuperInnerQueue<T> {
 	[i: number]: T;
 }
 
-export interface TaskComparator<T> {
+export interface ElsComparator<T> {
 	(a: T, b: T): number;
 }

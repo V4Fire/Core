@@ -17,7 +17,7 @@ This is where traits come into play. How it works? Ok, let's enumerate the steps
   ```
 
 2. Define all non-abstract methods as simple methods without implementations: as a method body, use the loopback code,
-   like `return <any>null`.
+   like `return Object.throw()`.
 
   ```typescript
   abstract class Duckable {
@@ -25,7 +25,7 @@ This is where traits come into play. How it works? Ok, let's enumerate the steps
     abstract fly(): void;
 
     getQuack(size: number): string {
-      return <any>null;
+      return Object.throw();
     }
   }
   ```
@@ -39,7 +39,7 @@ This is where traits come into play. How it works? Ok, let's enumerate the steps
     abstract fly(): void;
 
     getQuack(size: number): string {
-      return <any>null;
+      return Object.throw();
     }
 
     // The first parameter provides a method to wrap.
@@ -146,7 +146,7 @@ Besides regular methods, you can also define get/set accessors like this:
 ```typescript
 abstract class Duckable {
   get canFly(): boolean {
-    return <any>null;
+    return Object.throw();
   }
 
   set canFly(value: boolean) {};

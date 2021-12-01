@@ -63,11 +63,11 @@ export type Encoders = Iterable<Encoder>;
 export type WrappedEncoders = Iterable<WrappedEncoder>;
 
 export interface Decoder<I = unknown, O = unknown> {
-	(data: I, params: MiddlewareParams, response: Response<any>): CanPromise<O>;
+	(data: I, params: MiddlewareParams, response: Response): CanPromise<O>;
 }
 
 export interface WrappedDecoder<I = unknown, O = unknown> {
-	(data: I, response: Response<any>): CanPromise<O>;
+	(data: I, response: Response): CanPromise<O>;
 }
 
 export type Decoders = Iterable<Decoder>;

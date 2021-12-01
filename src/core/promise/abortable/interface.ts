@@ -16,19 +16,23 @@ export type Value<T = unknown> = PromiseLike<T> | T;
 export type ExecutableValue<T = unknown> = (() => T) | Value<T>;
 
 export interface ConstrResolveHandler<T = unknown> {
-	(value?: Value<T>): any;
+	(value?: Value<T>): AnyToIgnore;
 }
 
 export interface ConstrRejectHandler {
-	(reason?: unknown): any;
+	(reason?: unknown): AnyToIgnore;
 }
 
 export interface ConstrAbortHandler {
-	(cb: ConstrRejectHandler): any;
+	(cb: ConstrRejectHandler): AnyToIgnore;
 }
 
 export interface Executor<T = unknown> {
-	(resolve: ConstrResolveHandler<T>, reject: ConstrRejectHandler, onAbort: ConstrAbortHandler): any;
+	(
+		resolve: ConstrResolveHandler<T>,
+		reject: ConstrRejectHandler,
+		onAbort: ConstrAbortHandler
+	): AnyToIgnore;
 }
 
 export type ResolveHandler<V = unknown, R = V> = Function | ((value: V) => Value<R>);

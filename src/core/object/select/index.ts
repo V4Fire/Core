@@ -33,7 +33,7 @@ export default function select<T = unknown>(obj: unknown, params: SelectParams =
 		target = Object.get(target, Object.isArray(from) ? from : String(from));
 
 		if (where == null) {
-			return <any>target;
+			return Object.cast(target);
 		}
 	}
 

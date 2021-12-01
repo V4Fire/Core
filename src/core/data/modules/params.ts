@@ -307,7 +307,7 @@ export default abstract class Provider {
 	 * }
 	 * ```
 	 */
-	extraProviders?: FunctionalExtraProviders<any>;
+	extraProviders?: FunctionalExtraProviders;
 
 	/**
 	 * Default HTTP request method for the "get" method

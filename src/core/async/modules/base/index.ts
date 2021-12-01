@@ -112,7 +112,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @param [ctx] - context of applying for async handlers
 	 */
 	constructor(ctx?: CTX) {
-		this.ctx = ctx ?? <any>this;
+		this.ctx = ctx ?? Object.cast(this);
 		this.context = this.ctx;
 	}
 
@@ -436,7 +436,7 @@ export default class Async<CTX extends object = Async<any>> {
 	 * @see [[Async.registerTask]]
 	 */
 	@deprecated({renamedTo: 'registerTask'})
-	protected setAsync<R = unknown, C extends object = CTX>(task: FullAsyncOptions<C>): R | null {
+	protected setAsync<R = unknown>(task: FullAsyncOptions): R | null {
 		return this.registerTask(task);
 	}
 

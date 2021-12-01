@@ -12,7 +12,7 @@
  */
 
 import Queue from 'core/queue/interface';
-import type { Tasks, CreateTasks, TaskComparator } from 'core/queue/order/interface';
+import type { InnerQueue, CreateInnerQueue, ElsComparator } from 'core/queue/order/interface';
 
 export * from 'core/queue/order/interface';
 
@@ -22,13 +22,13 @@ export * from 'core/queue/order/interface';
  */
 export default class OrderedQueue<T> extends Queue<T> {
 	/**
-	 * Type: list of tasks
+	 * Type: inner queue to store elements
 	 */
-	readonly Tasks!: Tasks<T>;
+	readonly InnerQueue!: InnerQueue<T>;
 
 	/** @inheritDoc */
 	get head(): CanUndef<T> {
-		return this.tasks[0];
+		return this.innerQueue[0];
 	}
 
 	/** @inheritDoc */
@@ -42,27 +42,27 @@ export default class OrderedQueue<T> extends Queue<T> {
 	protected lastIndex: number = -1;
 
 	/**
-	 * List of tasks
+	 * Inner queue to store elements
 	 */
-	protected tasks: this['Tasks'];
+	protected innerQueue: this['InnerQueue'];
 
 	/**
 	 * Function to compare tasks
 	 */
-	protected comparator: TaskComparator<T>;
+	protected comparator: ElsComparator<T>;
 
 	/**
 	 * @param comparator
 	 */
-	constructor(comparator: TaskComparator<T>) {
+	constructor(comparator: ElsComparator<T>) {
 		super();
-		this.tasks = this.createTasks();
+		this.innerQueue = this.createInnerQueue();
 		this.comparator = comparator;
 	}
 
 	/** @inheritDoc */
 	push(task: T): number {
-		this.tasks[++this.lastIndex] = task;
+		this.innerQueue[++this.lastIndex] = task;
 		this.fromBottom();
 		return this.length;
 	}
@@ -73,7 +73,7 @@ export default class OrderedQueue<T> extends Queue<T> {
 			{head} = this;
 
 		if (this.lastIndex > 0) {
-			this.tasks[0] = this.tasks[this.lastIndex];
+			this.innerQueue[0] = this.innerQueue[this.lastIndex];
 			this.lastIndex--;
 			this.toBottom();
 
@@ -87,15 +87,15 @@ export default class OrderedQueue<T> extends Queue<T> {
 	/** @inheritDoc */
 	clear(): void {
 		if (this.length > 0) {
-			this.tasks = this.createTasks();
+			this.innerQueue = this.createInnerQueue();
 			this.lastIndex = -1;
 		}
 	}
 
 	/**
-	 * Returns a new blank list of tasks
+	 * Returns a new blank inner queue to store elements
 	 */
-	protected createTasks: CreateTasks<this['Tasks']> = () => [];
+	protected createInnerQueue: CreateInnerQueue<this['InnerQueue']> = () => [];
 
 	/**
 	 * Raises the headIndex queue element of the queue up
@@ -106,22 +106,22 @@ export default class OrderedQueue<T> extends Queue<T> {
 			parent = Math.floor((pos - 1) / 2);
 
 		const
-			val = this.tasks[pos];
+			val = this.innerQueue[pos];
 
 		while (pos !== 0) {
 			const
-				parentVal = this.tasks[parent];
+				parentVal = this.innerQueue[parent];
 
 			if (this.comparator(val, parentVal) <= 0) {
 				break;
 			}
 
-			this.tasks[pos] = parentVal;
+			this.innerQueue[pos] = parentVal;
 			pos = parent;
 			parent = Math.floor((pos - 1) / 2);
 		}
 
-		this.tasks[pos] = val;
+		this.innerQueue[pos] = val;
 	}
 
 	/**
@@ -134,33 +134,33 @@ export default class OrderedQueue<T> extends Queue<T> {
 			child2 = 2;
 
 		const
-			val = this.tasks[pos];
+			val = this.innerQueue[pos];
 
 		while (child1 <= this.lastIndex) {
 			let
 				child;
 
 			if (child2 <= this.lastIndex) {
-				child = this.comparator(this.tasks[child1], this.tasks[child2]) > 0 ? child1 : child2;
+				child = this.comparator(this.innerQueue[child1], this.innerQueue[child2]) > 0 ? child1 : child2;
 
 			} else {
 				child = child1;
 			}
 
 			const
-				childVal = this.tasks[child];
+				childVal = this.innerQueue[child];
 
 			if (child == null || this.comparator(val, childVal) > 0) {
 				break;
 			}
 
-			this.tasks[pos] = childVal;
+			this.innerQueue[pos] = childVal;
 
 			pos = child;
 			child1 = pos * 2 + 1;
 			child2 = pos * 2 + 2;
 		}
 
-		this.tasks[pos] = val;
+		this.innerQueue[pos] = val;
 	}
 }

@@ -370,7 +370,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	cancelIdleCallback(opts: ClearOptionsId<TimerId>): this;
 	cancelIdleCallback(task?: TimerId | ClearOptionsId<TimerId>): this {
-		return this.clearIdleCallback(<any>task);
+		return this.clearIdleCallback(Object.cast(task));
 	}
 
 	/**

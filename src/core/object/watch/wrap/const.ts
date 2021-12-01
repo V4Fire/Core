@@ -14,7 +14,7 @@ import type { WrapParams, WrapResult, StructureWrappers } from 'core/object/watc
 export const iterators = {
 	keys: {
 		type: 'get',
-		*value(target: any[], opts: WrapParams): IterableIterator<unknown> {
+		*value(target: unknown[], opts: WrapParams): IterableIterator<unknown> {
 			const
 				iterable = <IterableIterator<unknown>>opts.original.call(target);
 
@@ -26,7 +26,7 @@ export const iterators = {
 
 	entries: {
 		type: 'get',
-		*value(target: any[], opts: WrapParams): IterableIterator<[unknown, unknown]> {
+		*value(target: unknown[], opts: WrapParams): IterableIterator<[unknown, unknown]> {
 			const
 				iterable = <IterableIterator<[unknown, unknown]>>opts.original.call(target);
 
@@ -43,7 +43,7 @@ export const iterators = {
 
 	values: {
 		type: 'get',
-		*value(target: any[]): IterableIterator<unknown> {
+		*value(target: unknown[]): IterableIterator<unknown> {
 			const
 				iterable = target.entries();
 
@@ -56,13 +56,13 @@ export const iterators = {
 
 	[Symbol.iterator]: {
 		type: 'get',
-		value: (target: any[]): IterableIterator<unknown> => target.values()
+		value: (target: unknown[]): IterableIterator<unknown> => target.values()
 	}
 };
 
 export const deleteMethods = {
 	delete: (
-		target: Map<any, any> | Set<any>,
+		target: Map<unknown, unknown> | Set<unknown>,
 		opts: WrapParams,
 		key: unknown
 	): Nullable<WrapResult> => {
@@ -75,7 +75,7 @@ export const deleteMethods = {
 };
 
 export const clearMethods = {
-	clear: (target: Set<any>, opts: WrapParams): Nullable<WrapResult> => {
+	clear: (target: Set<unknown>, opts: WrapParams): Nullable<WrapResult> => {
 		if (target.size !== 0) {
 			return [[undefined, undefined, opts.path]];
 		}

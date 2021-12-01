@@ -105,7 +105,7 @@ function request<D = unknown, A extends any[] = unknown[]>(
 
 function request<D = unknown>(
 	path: string | CreateRequestOptions<D>,
-	...args: any[]
+	...args: unknown[]
 ): unknown {
 	if (Object.isPlainObject(path)) {
 		const
@@ -129,7 +129,7 @@ function request<D = unknown>(
 		opts: CanUndef<CreateRequestOptions<D>>;
 
 	if (args.length > 1) {
-		[resolver, opts] = args;
+		[resolver, opts] = Object.cast(args);
 
 	} else if (Object.isDictionary(args[0])) {
 		opts = args[0];
@@ -182,7 +182,7 @@ function request<D = unknown>(
 				keyToEncode = ctx.withoutBody ? 'query' : 'body';
 
 			// eslint-disable-next-line require-atomic-updates
-			requestParams[keyToEncode] = await applyEncoders(requestParams[keyToEncode]);
+			requestParams[keyToEncode] = Object.cast(await applyEncoders(requestParams[keyToEncode]));
 
 			for (let i = 0; i < middlewareResults.length; i++) {
 				// If the middleware returns a function, the function will be executed.
@@ -279,19 +279,16 @@ function request<D = unknown>(
 						requestParams.retry;
 
 					const
-						attemptLimit = retryParams.attempts ?? Infinity;
-
-					if (retryParams.delay == null) {
-						retryParams.delay = (i) => i < 5 ? i * 500 : (5).seconds();
-					}
+						attemptLimit = retryParams.attempts ?? Infinity,
+						delayFn = retryParams.delay?.bind(retryParams) ?? ((i) => i < 5 ? i * 500 : (5).seconds());
 
 					let
 						attempt = 0;
 
 					const createReqWithRetrying = async () => {
-						const calculateDelay = (attempt: number, err: RequestError<any>) => {
+						const calculateDelay = (attempt: number, err: RequestError) => {
 							const
-								delay = retryParams.delay!(attempt, err);
+								delay = delayFn(attempt, err);
 
 							if (Object.isPromise(delay) || delay === false) {
 								return delay;
@@ -342,7 +339,7 @@ function request<D = unknown>(
 				ctx.wrapRequest(res)
 			);
 
-			function applyEncoders(data: unknown): Promise<any> {
+			function applyEncoders(data: unknown): unknown {
 				let
 					res = AbortablePromise.resolve(data, parent);
 

@@ -58,7 +58,7 @@ extend(Number, 'pad', (value: number | NumberPadOptions, lengthOrOpts: number | 
 		return (value) => Number.pad(value, opts);
 	}
 
-	return value.pad(<any>lengthOrOpts);
+	return value.pad(Object.cast(lengthOrOpts));
 });
 
 /** @see [[Number.format]] */
@@ -182,12 +182,12 @@ extend(Number, 'format', (
 	locale?: CanArray<string>
 ) => {
 	if (Object.isString(value) || Object.isPlainObject(value)) {
-		locale = <any>patternOrOpts;
+		locale = Object.cast(patternOrOpts);
 		patternOrOpts = value;
-		return (value) => Number.format(value, <any>patternOrOpts, locale);
+		return (value) => Number.format(value, Object.cast(patternOrOpts), locale);
 	}
 
-	return value.format(<any>patternOrOpts, locale);
+	return value.format(Object.cast(patternOrOpts), locale);
 });
 
 /** @see [[NumberConstructor.getOption]] */

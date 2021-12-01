@@ -242,11 +242,11 @@ export type TaskCtx<CTX extends object = Async> = {
 } & AsyncOptions & ClearOptionsId<unknown>;
 
 export interface ClearFn<CTX extends object = Async> extends Function {
-	(id: any, ctx: TaskCtx<CTX>): any;
+	(id: any, ctx: TaskCtx<CTX>): AnyToIgnore;
 }
 
 export interface BoundFn<CTX extends object = Async> extends Function {
-	(this: CTX, ...args: any[]): any;
+	(this: CTX, ...args: any[]): AnyToIgnore;
 }
 
 export interface LocalCache {

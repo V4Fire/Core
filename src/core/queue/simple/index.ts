@@ -12,7 +12,7 @@
  */
 
 import Queue from 'core/queue/interface';
-import type { Tasks, CreateTasks } from 'core/queue/simple/interface';
+import type { InnerQueue, CreateInnerQueue } from 'core/queue/simple/interface';
 
 export * from 'core/queue/interface';
 
@@ -22,13 +22,13 @@ export * from 'core/queue/interface';
  */
 export default class SimpleQueue<T> extends Queue<T> {
 	/**
-	 * Type: list of tasks
+	 * Type: inner queue to store elements
 	 */
-	readonly Tasks!: Tasks<T>;
+	readonly InnerQueue!: InnerQueue<T>;
 
 	/** @inheritDoc */
 	get head(): CanUndef<T> {
-		return this.tasks[this.headCursor];
+		return this.innerQueue[this.headCursor];
 	}
 
 	/** @inheritDoc */
@@ -52,20 +52,20 @@ export default class SimpleQueue<T> extends Queue<T> {
 	protected lengthStore: number = 0;
 
 	/**
-	 * List of tasks
+	 * Inner queue to store elements
 	 */
-	protected tasks: this['Tasks'];
+	protected innerQueue: this['InnerQueue'];
 
 	/** @override */
 	constructor() {
 		super();
-		this.tasks = this.createTasks();
+		this.innerQueue = this.createInnerQueue();
 	}
 
 	/** @inheritDoc */
 	push(task: T): number {
 		this.lengthStore++;
-		this.tasks[this.emptyCursor++] = task;
+		this.innerQueue[this.emptyCursor++] = task;
 
 		if (this.emptyCursor === this.headCursor) {
 			this.emptyCursor = this.lengthStore;
@@ -101,7 +101,7 @@ export default class SimpleQueue<T> extends Queue<T> {
 	/** @inheritDoc */
 	clear(): void {
 		if (this.length > 0) {
-			this.tasks = this.createTasks();
+			this.innerQueue = this.createInnerQueue();
 			this.lengthStore = 0;
 			this.emptyCursor = 0;
 			this.headCursor = 0;
@@ -109,7 +109,7 @@ export default class SimpleQueue<T> extends Queue<T> {
 	}
 
 	/**
-	 * Returns a new blank list of tasks
+	 * Returns a new blank inner queue to store elements
 	 */
-	protected createTasks: CreateTasks<this['Tasks']> = () => [];
+	protected createInnerQueue: CreateInnerQueue<this['InnerQueue']> = () => [];
 }

@@ -342,7 +342,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	off(opts: StrictClearOptionsId<EventId>): this;
 
 	off(task?: EventId | StrictClearOptionsId<EventId>): this {
-		return this.clearEventListener(<any>task);
+		return this.clearEventListener(Object.cast(task));
 	}
 
 	/**
@@ -384,7 +384,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	muteEventListener(opts: StrictClearOptionsId<EventId>): this;
 	muteEventListener(task?: EventId | StrictClearOptionsId<EventId>): this {
-		return this.markEvent('muted', <any>task);
+		return this.markEvent('muted', Object.cast(task));
 	}
 
 	/**
@@ -401,7 +401,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	unmuteEventListener(opts: StrictClearOptionsId<EventId>): this;
 	unmuteEventListener(task?: EventId | StrictClearOptionsId<EventId>): this {
-		return this.markEvent('!muted', <any>task);
+		return this.markEvent('!muted', Object.cast(task));
 	}
 
 	/**
@@ -418,7 +418,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	suspendEventListener(opts: StrictClearOptionsId<EventId>): this;
 	suspendEventListener(task?: EventId | StrictClearOptionsId<EventId>): this {
-		return this.markEvent('paused', <any>task);
+		return this.markEvent('paused', Object.cast(task));
 	}
 
 	/**
@@ -435,7 +435,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	unsuspendEventListener(opts: StrictClearOptionsId<EventId>): this;
 	unsuspendEventListener(p?: EventId | StrictClearOptionsId<EventId>): this {
-		return this.markEvent('!paused', <any>p);
+		return this.markEvent('!paused', Object.cast(p));
 	}
 
 	/**

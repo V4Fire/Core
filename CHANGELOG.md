@@ -11,7 +11,26 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-## v3.66.1 (2021-12-01)
+## v3.??.?? (2021-??-??)
+
+#### :boom: Breaking Change
+
+* `core/net/engines`
+  * Renamed `browser.request` -> `browser-request`
+  * Renamed `node.request` -> `node-request`
+
+* `core/queue`:
+  * Renamed `Tasks` to `InnerQueue`
+  * Renamed `CreateTasks` to `CreateInnerQueue`
+  * Renamed `QueueOptions.tasksFactory` to `QueueOptions.queueFactory`
+
+#### :rocket: New Feature
+
+* Added new types `DictionaryKey`, `AnyToIgnore`, `AnyToBoolean`
+* Now the `Dictionary` type supports symbols and number
+* `core/prelude/types`:
+  * Added a new method `Object.cast`
+  * Added a new method `Object.throw`
 
 #### :house: Internal
 
