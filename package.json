@@ -6,11 +6,7 @@
   "typings": "index.d.ts",
   "license": "MIT",
   "version": "3.66.0",
-  "author": {
-    "name": "kobezzza",
-    "email": "kobezzza@gmail.com",
-    "url": "https://github.com/kobezzza"
-  },
+  "author": "kobezzza <kobezzza@gmail.com> (https://github.com/kobezzza)",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/V4Fire/Core.git"
@@ -100,5 +96,8 @@
     "node-fetch": "2.6.2",
     "nyc": "^15.1.0",
     "xhr2": "^0.2.1"
+  },
+  "directories": {
+    "doc": "docs"
   }
 }

@@ -15,7 +15,6 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :boom: Breaking Change
 
-* Migration to `npm@8`
 * `core/queue`:
   * Renamed `Tasks` to `InnerQueue`
   * Renamed `CreateTasks` to `CreateInnerQueue`
@@ -28,6 +27,10 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 * `core/prelude/types`:
   * Added a new method `Object.cast`
   * Added a new method `Object.throw`
+
+#### :house: Internal
+
+* Updated `node` and `npm` in `ci`
 
 ## v3.66.0 (2021-11-26)
 
