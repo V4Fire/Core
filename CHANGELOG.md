@@ -34,7 +34,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :house: Internal
 
-* Updated `node` and `npm` in `ci`
+* Bumped versions of `node/npm` within `ci`
 
 ## v3.66.0 (2021-11-26)
 
