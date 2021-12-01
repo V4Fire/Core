@@ -13,9 +13,17 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 ## v3.??.?? (2021-??-??)
 
+#### :boom: Breaking Change
+
+* Migration to `npm@8`
+* `core/queue`:
+  * Renamed `Tasks` to `InnerQueue`
+  * Renamed `CreateTasks` to `CreateInnerQueue`
+  * Renamed `QueueOptions.tasksFactory` to `QueueOptions.queueFactory`
+
 #### :rocket: New Feature
 
-* Added a new type `DictionaryKey`
+* Added new types `DictionaryKey`, `AnyToIgnore`, `AnyToBoolean`
 * Now the `Dictionary` type supports symbols and number
 * `core/prelude/types`:
   * Added a new method `Object.cast`
