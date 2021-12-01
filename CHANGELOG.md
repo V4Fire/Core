@@ -15,6 +15,10 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :boom: Breaking Change
 
+* `core/net/engines`
+  * Renamed `browser.request` -> `browser-request`
+  * Renamed `node.request` -> `node-request`
+
 * `core/queue`:
   * Renamed `Tasks` to `InnerQueue`
   * Renamed `CreateTasks` to `CreateInnerQueue`
