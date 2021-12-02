@@ -11,7 +11,7 @@
  * @packageDocumentation
  */
 
-import { normalizeDateChunkRgxp } from 'core/prelude/date/const';
+import { normalizeDateChunkRgxp } from '~/core/prelude/date/const';
 
 const
 	minDateLength = '2017-02-03'.length;

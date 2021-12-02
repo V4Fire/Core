@@ -6,5 +6,5 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-export * from 'core/prelude/string/iterators';
-export * from 'core/prelude/string/transformers';
+export * from '~/core/prelude/string/iterators';
+export * from '~/core/prelude/string/transformers';

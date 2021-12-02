@@ -11,5 +11,5 @@
  * @packageDocumentation
  */
 
-export { ExtractorMiddleware } from 'core/log/middlewares/extractor/extractor';
-export * from 'core/log/middlewares/extractor/interface';
+export { ExtractorMiddleware } from '~/core/log/middlewares/extractor/extractor';
+export * from '~/core/log/middlewares/extractor/interface';

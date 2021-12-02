@@ -6,10 +6,10 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { Cache } from 'core/cache';
+import { Cache } from '~/core/cache';
 
-import syncLocalEngine from 'core/kv-storage/engines/browser-indexeddb/sync-engine';
-import AsyncLocalEngine from 'core/kv-storage/engines/browser-indexeddb/async-engine';
+import syncLocalEngine from '~/core/kv-storage/engines/browser-indexeddb/sync-engine';
+import AsyncLocalEngine from '~/core/kv-storage/engines/browser-indexeddb/async-engine';
 
 const
 	asyncLocalEngine = new AsyncLocalEngine(),

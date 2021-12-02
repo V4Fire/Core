@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { IS_NODE } from 'core/env';
+import { IS_NODE } from '~/core/env';
 
 // eslint-disable-next-line import/no-mutable-exports
 export let

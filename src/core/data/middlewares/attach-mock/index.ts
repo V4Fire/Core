@@ -11,15 +11,15 @@
  * @packageDocumentation
  */
 
-import AbortablePromise from 'core/promise/abortable';
-import * as env from 'core/env';
+import AbortablePromise from '~/core/promise/abortable';
+import * as env from '~/core/env';
 
-import Provider, { RequestError } from 'core/data';
-import { Response, MiddlewareParams } from 'core/request';
+import Provider, { RequestError } from '~/core/data';
+import { Response, MiddlewareParams } from '~/core/request';
 
-import type { MockOptions } from 'core/data/middlewares/attach-mock/interface';
+import type { MockOptions } from '~/core/data/middlewares/attach-mock/interface';
 
-export * from 'core/data/middlewares/attach-mock/interface';
+export * from '~/core/data/middlewares/attach-mock/interface';
 
 let
 	mockOpts: CanUndef<MockOptions>;

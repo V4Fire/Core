@@ -13,10 +13,10 @@
  * @packageDocumentation
  */
 
-import watchEngine from 'core/object/watch/engines';
+import watchEngine from '~/core/object/watch/engines';
 
-import { muteLabel, toOriginalObject, toRootObject, watchHandlers } from 'core/object/watch/const';
-import { unwrap } from 'core/object/watch/engines/helpers';
+import { muteLabel, toOriginalObject, toRootObject, watchHandlers } from '~/core/object/watch/const';
+import { unwrap } from '~/core/object/watch/engines/helpers';
 
 import type {
 
@@ -31,11 +31,11 @@ import type {
 	WatchHandlersSet,
 	WatchEngine
 
-} from 'core/object/watch/interface';
+} from '~/core/object/watch/interface';
 
-export * from 'core/object/watch/const';
-export { unwrap, isProxy, getProxyType } from 'core/object/watch/engines/helpers';
-export * from 'core/object/watch/interface';
+export * from '~/core/object/watch/const';
+export { unwrap, isProxy, getProxyType } from '~/core/object/watch/engines/helpers';
+export * from '~/core/object/watch/interface';
 
 export default watch;
 

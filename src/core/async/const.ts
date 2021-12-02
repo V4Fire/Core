@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { Namespaces } from 'core/async/interface';
+import { Namespaces } from '~/core/async/interface';
 
 export const
 	namespaces = Object.convertEnumToDict(Namespaces),

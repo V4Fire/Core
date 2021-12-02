@@ -6,8 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import extend from 'core/prelude/extend';
-import { deprecate } from 'core/functools';
+import extend from '~/core/prelude/extend';
+import { deprecate } from '~/core/functools';
 
 /**
  * @deprecated

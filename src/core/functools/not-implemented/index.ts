@@ -11,9 +11,9 @@
  * @packageDocumentation
  */
 
-import { warn, warned, WarnOptions, InlineWarnOptions, WarnedFn } from 'core/functools/warning';
+import { warn, warned, WarnOptions, InlineWarnOptions, WarnedFn } from '~/core/functools/warning';
 
-export * from 'core/functools/warning/interface';
+export * from '~/core/functools/warning/interface';
 
 /**
  * Marks the specified function as not implemented

@@ -6,15 +6,15 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import config from 'config';
+import config from '~/config';
 
-import { memoize } from 'core/promise/sync';
-import { toQueryString } from 'core/url';
+import { memoize } from '~/core/promise/sync';
+import { toQueryString } from '~/core/url';
 
-import { Cache, RestrictedCache, NeverCache, AbstractCache } from 'core/cache';
-import type { AsyncStorage } from 'core/kv-storage';
+import { Cache, RestrictedCache, NeverCache, AbstractCache } from '~/core/cache';
+import type { AsyncStorage } from '~/core/kv-storage';
 
-import engine from 'core/request/engines';
+import engine from '~/core/request/engines';
 
 import type {
 
@@ -26,14 +26,14 @@ import type {
 	GlobalOptions,
 	CacheStrategy
 
-} from 'core/request/interface';
+} from '~/core/request/interface';
 
 // eslint-disable-next-line import/no-mutable-exports
 export let storage: CanUndef<Promise<AsyncStorage>>;
 
 //#if runtime has core/kv-storage
 // eslint-disable-next-line prefer-const
-storage = memoize(import('core/kv-storage').then(({asyncLocal}) => asyncLocal));
+storage = memoize(import('~/core/kv-storage').then(({asyncLocal}) => asyncLocal));
 //#endif
 
 export const

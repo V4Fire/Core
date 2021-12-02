@@ -6,8 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import config from 'config';
-import { state, emitter } from 'core/net/const';
+import config from '~/config';
+import { state, emitter } from '~/core/net/const';
 
 const
 	{online} = config;

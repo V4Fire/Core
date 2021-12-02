@@ -6,8 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type { CacheWithEmitter } from 'core/cache/decorators/helpers/add-emitter/interface';
-import type { eventEmitter } from 'core/cache/decorators/helpers/add-emitter';
+import type { CacheWithEmitter } from '~/core/cache/decorators/helpers/add-emitter/interface';
+import type { eventEmitter } from '~/core/cache/decorators/helpers/add-emitter';
 
 export type PersistentCache<V = unknown, K = string, T extends CacheWithEmitter<V, K> = CacheWithEmitter<V, K>> = {
 	[key in Exclude<(keyof CacheWithEmitter<V, K>), 'set' | 'size' | typeof eventEmitter>]: ReturnPromise<CacheWithEmitter<V, K>[key]>

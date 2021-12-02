@@ -6,8 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type { EmitLikeEvents, AsyncOptions } from 'core/async/modules/events';
-import type { DataProviderMethodsToReplace } from 'core/async/interface';
+import type { EmitLikeEvents, AsyncOptions } from '~/core/async/modules/events';
+import type { DataProviderMethodsToReplace } from '~/core/async/interface';
 
 export const emitLikeEvents: EmitLikeEvents[] = [
 	'emit',

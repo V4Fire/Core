@@ -9,7 +9,7 @@
 import Storage from 'dom-storage';
 import * as fs from 'fs-extra';
 
-import { Cache } from 'core/cache';
+import { Cache } from '~/core/cache';
 
 const
 	tmpDir = './tmp/local';

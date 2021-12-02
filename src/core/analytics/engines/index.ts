@@ -6,8 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { notImplement } from 'core/functools/not-implemented';
-import type { AnalyticEngine } from 'core/analytics/interface';
+import { notImplement } from '~/core/functools/not-implemented';
+import type { AnalyticEngine } from '~/core/analytics/interface';
 
 /**
  * Sends the specified analytic event

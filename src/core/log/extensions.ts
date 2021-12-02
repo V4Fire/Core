@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type { Logger, ExtendedLogger, LogMessageOptions } from 'core/log/interface';
+import type { Logger, ExtendedLogger, LogMessageOptions } from '~/core/log/interface';
 
 const extend = (func: Logger): ExtendedLogger => {
 	const res = <ExtendedLogger>func;

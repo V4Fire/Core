@@ -6,11 +6,11 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { cmpLevels } from 'core/log/base';
+import { cmpLevels } from '~/core/log/base';
 
-import type { LogEvent, LogMiddleware } from 'core/log/middlewares';
-import type { LogEngine } from 'core/log/engines';
-import type { LogLevel } from 'core/log/interface';
+import type { LogEvent, LogMiddleware } from '~/core/log/middlewares';
+import type { LogEngine } from '~/core/log/engines';
+import type { LogLevel } from '~/core/log/interface';
 
 export class LogPipeline {
 	protected engine!: LogEngine;

@@ -6,8 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import extend from 'core/prelude/extend';
-import { funcCache } from 'core/prelude/object/const';
+import extend from '~/core/prelude/extend';
+import { funcCache } from '~/core/prelude/object/const';
 
 /** @see [[ObjectConstructor.fastCompare]] */
 extend(Object, 'fastCompare', function fastCompare(a: any, b: any): boolean | AnyFunction {

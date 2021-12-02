@@ -11,11 +11,11 @@
  * @packageDocumentation
  */
 
-import { operations, compareRgxp, operandLengthErrorText } from 'core/semver/const';
-import type { Operation, Strategy, ComparisonOptions } from 'core/semver/interface';
+import { operations, compareRgxp, operandLengthErrorText } from '~/core/semver/const';
+import type { Operation, Strategy, ComparisonOptions } from '~/core/semver/interface';
 
-export * from 'core/semver/const';
-export * from 'core/semver/interface';
+export * from '~/core/semver/const';
+export * from '~/core/semver/interface';
 
 /**
  * Compares two strings with number versions (a <op> b) by using the semver strategy

@@ -11,7 +11,7 @@
  * @packageDocumentation
  */
 
-import { deprecated } from 'core/functools';
+import { deprecated } from '~/core/functools';
 
 import {
 
@@ -27,9 +27,9 @@ import {
 	ConstrFulfillHandler,
 	ConstrRejectHandler
 
-} from 'core/promise/abortable/interface';
+} from '~/core/promise/abortable/interface';
 
-export * from 'core/promise/abortable/interface';
+export * from '~/core/promise/abortable/interface';
 
 /**
  * Class wraps promise-like objects and adds to them some extra functionality,

@@ -8,14 +8,14 @@
 
 import got, { Options, CancelableRequest, Response as GotResponse } from 'got';
 
-import AbortablePromise from 'core/promise/abortable';
-import { isOnline } from 'core/net';
+import AbortablePromise from '~/core/promise/abortable';
+import { isOnline } from '~/core/net';
 
-import Response from 'core/request/response';
-import RequestError from 'core/request/error';
+import Response from '~/core/request/response';
+import RequestError from '~/core/request/error';
 
-import { convertDataToSend } from 'core/request/engines/helpers';
-import type { RequestEngine, NormalizedCreateRequestOptions } from 'core/request/interface';
+import { convertDataToSend } from '~/core/request/engines/helpers';
+import type { RequestEngine, NormalizedCreateRequestOptions } from '~/core/request/interface';
 
 /**
  * Creates request by using node.js with the specified parameters and returns a promise

@@ -6,10 +6,10 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import extend from 'core/prelude/extend';
+import extend from '~/core/prelude/extend';
 
-import * as langDict from 'lang';
-import { locale } from 'core/prelude/i18n/const';
+import * as langDict from '~/lang';
+import { locale } from '~/core/prelude/i18n/const';
 
 const
 	ws = /[\r\n]+/g;

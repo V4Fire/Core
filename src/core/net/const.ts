@@ -7,7 +7,7 @@
  */
 
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
-import type { State } from 'core/net/interface';
+import type { State } from '~/core/net/interface';
 
 /**
  * Event emitter to broadcast network events

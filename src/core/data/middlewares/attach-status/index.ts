@@ -11,10 +11,10 @@
  * @packageDocumentation
  */
 
-import type { Response, MiddlewareParams } from 'core/request';
-import type { DataWithStatus } from 'core/data/middlewares/attach-status/interface';
+import type { Response, MiddlewareParams } from '~/core/request';
+import type { DataWithStatus } from '~/core/data/middlewares/attach-status/interface';
 
-export * from 'core/data/middlewares/attach-status/interface';
+export * from '~/core/data/middlewares/attach-status/interface';
 
 /**
  * Decoder: attaches a response status to response data

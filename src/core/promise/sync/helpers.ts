@@ -6,10 +6,10 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import SyncPromise from 'core/prelude/structures/sync-promise';
-import type { PromiseLikeP } from 'core/async';
+import SyncPromise from '~/core/prelude/structures/sync-promise';
+import type { PromiseLikeP } from '~/core/async';
 
-import { weakMemoizeCache, longMemoizeCache } from 'core/promise/sync/const';
+import { weakMemoizeCache, longMemoizeCache } from '~/core/promise/sync/const';
 
 /**
  * Memorizes the specified promise and converts it to a synchronous promise.
@@ -22,7 +22,7 @@ import { weakMemoizeCache, longMemoizeCache } from 'core/promise/sync/const';
  * @example
  * ```
  * memoize(nextTick());
- * memoize('core/url/concat', () => import('core/url/concat'));
+ * memoize('core/url/concat', () => import('~/core/url/concat'));
  * ```
  */
 export function memoize<T = unknown>(keyOrPromise: unknown | PromiseLikeP<T>, promise?: PromiseLikeP<T>): Promise<T> {

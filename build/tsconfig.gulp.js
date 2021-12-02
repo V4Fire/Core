@@ -1,5 +1,7 @@
 'use strict';
 
+// @ts-check
+
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -59,7 +61,7 @@ module.exports = function init(gulp) {
 				));
 
 				const paths = {
-					'*': [
+					'~/*': [
 						`./${src.rel('src')}/*`,
 						...depsList
 					],

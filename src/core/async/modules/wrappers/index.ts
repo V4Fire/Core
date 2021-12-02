@@ -11,10 +11,10 @@
  * @packageDocumentation
  */
 
-import type { Provider } from 'core/data';
-import type { CreateRequestOptions, RequestQuery, RequestBody } from 'core/request';
+import type { Provider } from '~/core/data';
+import type { CreateRequestOptions, RequestQuery, RequestBody } from '~/core/request';
 
-import Super, { AsyncOptions, EventEmitterLike } from 'core/async/modules/events';
+import Super, { AsyncOptions, EventEmitterLike } from '~/core/async/modules/events';
 
 import {
 
@@ -22,7 +22,7 @@ import {
 	asyncOptionsKeys,
 	dataProviderMethodsToReplace
 
-} from 'core/async/modules/wrappers/consts';
+} from '~/core/async/modules/wrappers/consts';
 
 import type {
 
@@ -35,11 +35,11 @@ import type {
 
 	AsyncOptionsForWrappers
 
-} from 'core/async/interface';
+} from '~/core/async/interface';
 
-export * from 'core/async/modules/events';
-export * from 'core/async/modules/wrappers/consts';
-export * from 'core/async/interface';
+export * from '~/core/async/modules/events';
+export * from '~/core/async/modules/wrappers/consts';
+export * from '~/core/async/interface';
 
 export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	/**
@@ -53,8 +53,8 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 *
 	 * @example
 	 * ```js
-	 * import Async from 'core/async';
-	 * import Provider, { provider } from 'core/data';
+	 * import Async from '~/core/async';
+	 * import Provider, { provider } from '~/core/data';
 	 *
 	 * @provider('api')
 	 * export default class User extends Provider {
@@ -151,7 +151,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 *
 	 * @example
 	 * ```js
-	 * import Async from 'core/async';
+	 * import Async from '~/core/async';
 	 *
 	 * const
 	 *   $a = new Async(),

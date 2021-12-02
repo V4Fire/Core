@@ -11,10 +11,10 @@
  * @packageDocumentation
  */
 
-import type { Socket } from 'core/socket/interface';
+import type { Socket } from '~/core/socket/interface';
 
-export * from 'core/socket/const';
-export * from 'core/socket/interface';
+export * from '~/core/socket/const';
+export * from '~/core/socket/interface';
 
 /**
  * Wrapper for a socket library

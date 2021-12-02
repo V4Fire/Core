@@ -11,10 +11,10 @@
  * @packageDocumentation
  */
 
-import Queue from 'core/queue/interface';
-import type { Tasks, CreateTasks } from 'core/queue/simple/interface';
+import Queue from '~/core/queue/interface';
+import type { Tasks, CreateTasks } from '~/core/queue/simple/interface';
 
-export * from 'core/queue/interface';
+export * from '~/core/queue/interface';
 
 /**
  * Simple implementation of a queue data structure

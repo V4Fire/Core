@@ -6,4 +6,4 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-export * from 'core/const/string';
+export * from '~/core/const/string';

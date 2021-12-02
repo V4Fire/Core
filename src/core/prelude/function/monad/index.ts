@@ -6,8 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import extend from 'core/prelude/extend';
-import { Option, Result } from 'core/prelude/structures';
+import extend from '~/core/prelude/extend';
+import { Option, Result } from '~/core/prelude/structures';
 
 /** @see [[Function.option]] */
 extend(Function.prototype, 'option', function option(this: AnyFunction): AnyFunction {

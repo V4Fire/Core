@@ -11,5 +11,5 @@
  * @packageDocumentation
  */
 
-export * from 'core/queue/worker/interface';
-export { default } from 'core/queue/worker/interface';
+export * from '~/core/queue/worker/interface';
+export { default } from '~/core/queue/worker/interface';

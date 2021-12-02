@@ -6,8 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { deprecate } from 'core/functools';
-import type { AsyncOptions } from 'core/async/modules/events';
+import { deprecate } from '~/core/functools';
+import type { AsyncOptions } from '~/core/async/modules/events';
 
 /**
  * Returns true if the specified value is looks like an instance of AsyncOptions

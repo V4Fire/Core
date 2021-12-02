@@ -11,13 +11,13 @@
  * @packageDocumentation
  */
 
-import type Cache from 'core/cache/interface';
-import type { ClearFilter } from 'core/cache/interface';
+import type Cache from '~/core/cache/interface';
+import type { ClearFilter } from '~/core/cache/interface';
 
-import addEmitter, { CacheWithEmitter } from 'core/cache/decorators/helpers/add-emitter';
-import type { TTLDecoratorOptions, TTLCache } from 'core/cache/decorators/ttl/interface';
+import addEmitter, { CacheWithEmitter } from '~/core/cache/decorators/helpers/add-emitter';
+import type { TTLDecoratorOptions, TTLCache } from '~/core/cache/decorators/ttl/interface';
 
-export * from 'core/cache/decorators/ttl/interface';
+export * from '~/core/cache/decorators/ttl/interface';
 
 /**
  * Wraps the specified cache object to add a feature of the cache expiring
@@ -30,8 +30,8 @@ export * from 'core/cache/decorators/ttl/interface';
  *
  * @example
  * ```typescript
- * import addTTL from 'core/cache/decorators/ttl';
- * import SimpleCache from 'core/cache/simple';
+ * import addTTL from '~/core/cache/decorators/ttl';
+ * import SimpleCache from '~/core/cache/simple';
  *
  * const
  *   cache = addTTL(new SimpleCache(), (10).seconds());

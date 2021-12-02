@@ -6,13 +6,13 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { DEFAULT_LEVEL } from 'core/log/base';
-import { LogPipeline } from 'core/log/curator/pipeline';
+import { DEFAULT_LEVEL } from '~/core/log/base';
+import { LogPipeline } from '~/core/log/curator/pipeline';
 
-import type { LogPipelineConfig } from 'core/log/config/interface';
+import type { LogPipelineConfig } from '~/core/log/config/interface';
 
-import middlewareFactory, { LogMiddleware } from 'core/log/middlewares';
-import engineFactory from 'core/log/engines';
+import middlewareFactory, { LogMiddleware } from '~/core/log/middlewares';
+import engineFactory from '~/core/log/engines';
 
 /**
  * Creates a pipeline by using the config

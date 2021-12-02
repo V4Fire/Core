@@ -11,17 +11,17 @@
  * @packageDocumentation
  */
 
-import log from 'core/log';
+import log from '~/core/log';
 
-import AbortablePromise from 'core/promise/abortable';
-import { isOnline } from 'core/net';
+import AbortablePromise from '~/core/promise/abortable';
+import { isOnline } from '~/core/net';
 
-import Response from 'core/request/response';
-import RequestError from 'core/request/error';
-import RequestContext from 'core/request/context';
+import Response from '~/core/request/response';
+import RequestError from '~/core/request/error';
+import RequestContext from '~/core/request/context';
 
-import { getStorageKey, merge } from 'core/request/utils';
-import { defaultRequestOpts, globalOpts, storage } from 'core/request/const';
+import { getStorageKey, merge } from '~/core/request/utils';
+import { defaultRequestOpts, globalOpts, storage } from '~/core/request/const';
 
 import type {
 
@@ -35,15 +35,15 @@ import type {
 	RequestFunctionResponse,
 	RequestResponseObject
 
-} from 'core/request/interface';
+} from '~/core/request/interface';
 
-export * from 'core/request/utils';
-export * from 'core/request/interface';
-export * from 'core/request/response/interface';
+export * from '~/core/request/utils';
+export * from '~/core/request/interface';
+export * from '~/core/request/response/interface';
 
-export { globalOpts, cache, pendingCache } from 'core/request/const';
-export { default as RequestError } from 'core/request/error';
-export { default as Response } from 'core/request/response';
+export { globalOpts, cache, pendingCache } from '~/core/request/const';
+export { default as RequestError } from '~/core/request/error';
+export { default as Response } from '~/core/request/response';
 
 export default request;
 

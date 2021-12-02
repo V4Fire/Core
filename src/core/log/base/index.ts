@@ -6,6 +6,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-export { default as extend } from 'core/log/base/extend';
-export { cmpLevels, DEFAULT_LEVEL } from 'core/log/base/level';
-export * from 'core/log/base/interface';
+export { default as extend } from '~/core/log/base/extend';
+export { cmpLevels, DEFAULT_LEVEL } from '~/core/log/base/level';
+export * from '~/core/log/base/interface';

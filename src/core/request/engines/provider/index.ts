@@ -11,8 +11,8 @@
  * @packageDocumentation
  */
 
-import AbortablePromise from 'core/promise/abortable';
-import { concatURLs } from 'core/url';
+import AbortablePromise from '~/core/promise/abortable';
+import { concatURLs } from '~/core/url';
 
 import Provider, {
 
@@ -26,16 +26,16 @@ import Provider, {
 	ProviderConstructor,
 	ExtraProviderConstructor
 
-} from 'core/data';
+} from '~/core/data';
 
-import Response from 'core/request/response';
-import type { RequestEngine, RequestOptions } from 'core/request/interface';
+import Response from '~/core/request/response';
+import type { RequestEngine, RequestOptions } from '~/core/request/interface';
 
-import { availableParams } from 'core/request/engines/provider/const';
-import type { AvailableOptions, MethodsMapping, Meta } from 'core/request/engines/provider/interface';
+import { availableParams } from '~/core/request/engines/provider/const';
+import type { AvailableOptions, MethodsMapping, Meta } from '~/core/request/engines/provider/interface';
 
-export * from 'core/request/engines/provider/const';
-export * from 'core/request/engines/provider/interface';
+export * from '~/core/request/engines/provider/const';
+export * from '~/core/request/engines/provider/interface';
 
 /**
  * Creates a request engine from the specified data provider

@@ -6,13 +6,13 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type AbortablePromise from 'core/promise/abortable';
+import type AbortablePromise from '~/core/promise/abortable';
 
-import type { StatusCodes } from 'core/status-codes';
-import type { DataType } from 'core/mime-type';
+import type { StatusCodes } from '~/core/status-codes';
+import type { DataType } from '~/core/mime-type';
 
-import type { OkStatuses, WrappedDecoders, WrappedDecoder } from 'core/request/interface';
-import type { defaultResponseOpts } from 'core/request/response/const';
+import type { OkStatuses, WrappedDecoders, WrappedDecoder } from '~/core/request/interface';
+import type { defaultResponseOpts } from '~/core/request/response/const';
 
 export type ResponseType =
 	DataType |

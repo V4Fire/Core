@@ -6,10 +6,10 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import * as proxyEngine from 'core/object/watch/engines/proxy';
-import { getProxyValue } from 'core/object/watch/engines/helpers';
+import * as proxyEngine from '~/core/object/watch/engines/proxy';
+import { getProxyValue } from '~/core/object/watch/engines/helpers';
 
-import type { WrapParams, WrapResult, StructureWrappers } from 'core/object/watch/wrap/interface';
+import type { WrapParams, WrapResult, StructureWrappers } from '~/core/object/watch/wrap/interface';
 
 export const iterators = {
 	keys: {

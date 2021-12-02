@@ -11,13 +11,13 @@
  * @packageDocumentation
  */
 
-import type { AsyncStorageNamespace, SyncStorageNamespace } from 'core/kv-storage';
-import type Cache from 'core/cache/interface';
+import type { AsyncStorageNamespace, SyncStorageNamespace } from '~/core/kv-storage';
+import type Cache from '~/core/cache/interface';
 
-import PersistentWrapper from 'core/cache/decorators/persistent/wrapper';
-import type { PersistentCache, PersistentOptions } from 'core/cache/decorators/persistent/interface';
+import PersistentWrapper from '~/core/cache/decorators/persistent/wrapper';
+import type { PersistentCache, PersistentOptions } from '~/core/cache/decorators/persistent/interface';
 
-export * from 'core/cache/decorators/persistent/interface';
+export * from '~/core/cache/decorators/persistent/interface';
 
 /**
  * Wraps the specified cache object to add a feature of persistent data storing
@@ -30,10 +30,10 @@ export * from 'core/cache/decorators/persistent/interface';
  *
  * @example
  * ```typescript
- * import { asyncLocal } from 'core/kv-storage';
+ * import { asyncLocal } from '~/core/kv-storage';
  *
- * import addPersistent from 'core/cache/decorators/persistent';
- * import SimpleCache from 'core/cache/simple';
+ * import addPersistent from '~/core/cache/decorators/persistent';
+ * import SimpleCache from '~/core/cache/simple';
  *
  * const
  *   opts = {loadFromStorage: 'onInit'},

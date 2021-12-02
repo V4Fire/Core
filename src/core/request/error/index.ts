@@ -11,11 +11,11 @@
  * @packageDocumentation
  */
 
-import BaseError from 'core/error';
-import type { Details } from 'core/request/error/interface';
+import BaseError from '~/core/error';
+import type { Details } from '~/core/request/error/interface';
 
-export * from 'core/request/error/interface';
-export * from 'core/request/error/extractor';
+export * from '~/core/request/error/interface';
+export * from '~/core/request/error/extractor';
 
 /**
  * Class to wrap any request error

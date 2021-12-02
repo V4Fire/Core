@@ -6,8 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import extend from 'core/prelude/extend';
-import { isContainer, canExtendProto, getType, getSameAs } from 'core/prelude/object/helpers';
+import extend from '~/core/prelude/extend';
+import { isContainer, canExtendProto, getType, getSameAs } from '~/core/prelude/object/helpers';
 
 /** @see [[ObjectConstructor.mixin]] */
 extend(Object, 'mixin', function mixin(

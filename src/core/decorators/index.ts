@@ -13,7 +13,7 @@
  * @packageDocumentation
  */
 
-import * as tools from 'core/functools';
+import * as tools from '~/core/functools';
 
 /**
  * @deprecated

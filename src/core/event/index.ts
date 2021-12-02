@@ -11,9 +11,9 @@
  * @packageDocumentation
  */
 
-import SyncPromise from 'core/promise/sync';
-import Async, { EventEmitterLike } from 'core/async';
-import { deprecate } from 'core/functools';
+import SyncPromise from '~/core/promise/sync';
+import Async, { EventEmitterLike } from '~/core/async';
+import { deprecate } from '~/core/functools';
 
 /**
  * Returns a promise that will be resolved after emitting of all events from the specified emitter

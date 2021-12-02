@@ -6,8 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type { LogStylesConfig, StylesCache } from 'core/log/config/interface';
-import type { LogLevel } from 'core/log/interface';
+import type { LogStylesConfig, StylesCache } from '~/core/log/config/interface';
+import type { LogLevel } from '~/core/log/interface';
 
 /**
  * Creates an object of styles where each log level property merged with the default property of a log styles config

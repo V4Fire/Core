@@ -53,9 +53,19 @@ exports.redefineRequire = function redefineRequire() {
 		lib = path.join(outputDest, 'node_modules'),
 		deps = pzlr.dependencies;
 
+	const stripUrlIfNeeded = (url) => {
+		if (url.startsWith('~/')) {
+			return url.slice(2);
+		}
+
+		return url;
+	};
+
 	// @ts-ignore
 	// eslint-disable-next-line no-global-assign
 	require = (url) => {
+		url = stripUrlIfNeeded(url);
+
 		if (url in cache) {
 			return staticRequire(cache[url]);
 		}
@@ -71,6 +81,8 @@ exports.redefineRequire = function redefineRequire() {
 
 	// @ts-ignore
 	require.resolve = (url, opts) => {
+		url = stripUrlIfNeeded(url);
+
 		if (resolve.isNodeModule(url)) {
 			let
 				resolveUrl;

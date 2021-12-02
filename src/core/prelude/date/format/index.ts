@@ -6,10 +6,10 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import extend from 'core/prelude/extend';
-import { locale as defaultLocale } from 'core/prelude/i18n';
-import { formatCache, formatAliases, boolAliases, defaultFormats } from 'core/prelude/date/const';
-import { createStaticDateFormatter } from 'core/prelude/date/helpers';
+import extend from '~/core/prelude/extend';
+import { locale as defaultLocale } from '~/core/prelude/i18n';
+import { formatCache, formatAliases, boolAliases, defaultFormats } from '~/core/prelude/date/const';
+import { createStaticDateFormatter } from '~/core/prelude/date/helpers';
 
 /** @see [[Date.short]] */
 extend(Date.prototype, 'short', function short(

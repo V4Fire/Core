@@ -11,10 +11,10 @@
  * @packageDocumentation
  */
 
-import Queue from 'core/queue/interface';
-import type { Tasks, CreateTasks, TaskComparator } from 'core/queue/order/interface';
+import Queue from '~/core/queue/interface';
+import type { Tasks, CreateTasks, TaskComparator } from '~/core/queue/order/interface';
 
-export * from 'core/queue/order/interface';
+export * from '~/core/queue/order/interface';
 
 /**
  * Implementation of an ordered queue data structure

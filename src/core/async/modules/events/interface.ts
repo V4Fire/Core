@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type Async from 'core/async';
+import type Async from '~/core/async';
 
 import type {
 
@@ -17,7 +17,7 @@ import type {
 	AsyncCbOptions,
 	AsyncCbOptionsSingle
 
-} from 'core/async/modules/base';
+} from '~/core/async/modules/base';
 
 export type EventId = CanArray<IdObject>;
 

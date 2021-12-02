@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import extend from 'core/prelude/extend';
+import extend from '~/core/prelude/extend';
 
 /** @see [[Function.once]] */
 extend(Function.prototype, 'once', function once(this: AnyFunction): AnyFunction {

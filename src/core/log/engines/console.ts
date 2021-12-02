@@ -6,13 +6,13 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { createStyleCache } from 'core/log/config/styles';
+import { createStyleCache } from '~/core/log/config/styles';
 
-import type { LogStylesConfig, StylesCache } from 'core/log/config';
-import type { LogEvent } from 'core/log/middlewares';
+import type { LogStylesConfig, StylesCache } from '~/core/log/config';
+import type { LogEvent } from '~/core/log/middlewares';
 
-import type { LogLevel } from 'core/log/interface';
-import type { LogEngine } from 'core/log/engines/interface';
+import type { LogLevel } from '~/core/log/interface';
+import type { LogEngine } from '~/core/log/engines/interface';
 
 export class ConsoleEngine implements LogEngine {
 	protected stylesCache?: StylesCache;

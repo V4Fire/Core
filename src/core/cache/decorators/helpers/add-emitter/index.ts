@@ -13,10 +13,10 @@
 
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 
-import type Cache from 'core/cache/interface';
-import type { ClearFilter } from 'core/cache/interface';
+import type Cache from '~/core/cache/interface';
+import type { ClearFilter } from '~/core/cache/interface';
 
-import { eventEmitter } from 'core/cache/decorators/helpers/add-emitter/const';
+import { eventEmitter } from '~/core/cache/decorators/helpers/add-emitter/const';
 
 import type {
 
@@ -25,10 +25,10 @@ import type {
 	MutationEvent,
 	AddEmitterReturn
 
-} from 'core/cache/decorators/helpers/add-emitter/interface';
+} from '~/core/cache/decorators/helpers/add-emitter/interface';
 
-export * from 'core/cache/decorators/helpers/add-emitter/const';
-export * from 'core/cache/decorators/helpers/add-emitter/interface';
+export * from '~/core/cache/decorators/helpers/add-emitter/const';
+export * from '~/core/cache/decorators/helpers/add-emitter/interface';
 
 /**
  * Adds an event emitter to the provided cache object and wraps all mutation events to emit events, i.e.,

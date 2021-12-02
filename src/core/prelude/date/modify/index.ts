@@ -6,8 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import extend from 'core/prelude/extend';
-import { createDateModifier, createStaticDateModifier } from 'core/prelude/date/helpers';
+import extend from '~/core/prelude/extend';
+import { createDateModifier, createStaticDateModifier } from '~/core/prelude/date/helpers';
 
 /** @see [[Date.add]] */
 extend(Date.prototype, 'add', createDateModifier((v, b) => b + v));

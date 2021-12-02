@@ -11,7 +11,7 @@
  * @packageDocumentation
  */
 
-import SyncPromise from 'core/promise/sync';
+import SyncPromise from '~/core/promise/sync';
 
 import Super, {
 
@@ -21,7 +21,7 @@ import Super, {
 	AsyncCbOptions,
 	ClearOptionsId
 
-} from 'core/async/modules/proxy';
+} from '~/core/async/modules/proxy';
 
 import type {
 
@@ -32,10 +32,10 @@ import type {
 	AsyncIdleOptions,
 	AsyncRequestIdleCallbackOptions
 
-} from 'core/async/interface';
+} from '~/core/async/interface';
 
-export * from 'core/async/modules/proxy';
-export * from 'core/async/interface';
+export * from '~/core/async/modules/proxy';
+export * from '~/core/async/interface';
 
 export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	/**

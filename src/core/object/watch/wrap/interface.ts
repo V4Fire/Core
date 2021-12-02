@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type { WatchOptions, WatchHandlersSet } from 'core/object/watch/interface';
+import type { WatchOptions, WatchHandlersSet } from '~/core/object/watch/interface';
 
 export interface WrapOptions {
 	/**

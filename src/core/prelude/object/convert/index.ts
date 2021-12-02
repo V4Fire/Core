@@ -6,8 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import extend from 'core/prelude/extend';
-import { canParse } from 'core/prelude/object/const';
+import extend from '~/core/prelude/extend';
+import { canParse } from '~/core/prelude/object/const';
 
 /** @see [[ObjectConstructor.trySerialize]] */
 extend(Object, 'trySerialize', (value, replacer?: JSONCb) => {

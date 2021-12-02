@@ -8,10 +8,10 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import extend from 'core/prelude/extend';
+import extend from '~/core/prelude/extend';
 
-import { deprecate } from 'core/functools';
-import { isNative, toString, nonPrimitiveTypes } from 'core/prelude/types/const';
+import { deprecate } from '~/core/functools';
+import { isNative, toString, nonPrimitiveTypes } from '~/core/prelude/types/const';
 
 /** @see [[ObjectConstructor.isTruly]] */
 extend(Object, 'isTruly', (value) => Boolean(value));
