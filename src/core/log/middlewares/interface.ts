@@ -43,4 +43,4 @@ export type LogMiddlewares = LogMiddlewaresName | LogMiddlewaresTuple<LogMiddlew
 
 export type LogMiddlewaresTuple<K extends LogMiddlewaresName> = [K, CtorArgs<typeof middlewareFactory[K]>];
 
-export type CtorArgs<T extends (...args: any) => any> = T extends (...args: infer A) => ReturnType<T> ? A : never;
+export type CtorArgs<T extends (...args: any[]) => any> = T extends (...args: infer A) => ReturnType<T> ? A : never;

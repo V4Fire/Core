@@ -445,15 +445,15 @@ export interface WatchHandlerParams extends RawWatchHandlerParams {
 }
 
 export interface RawWatchHandler<NEW = unknown, OLD = NEW> {
-	(newValue: CanUndef<NEW>, oldValue: CanUndef<OLD>, params: RawWatchHandlerParams): any;
+	(newValue: CanUndef<NEW>, oldValue: CanUndef<OLD>, params: RawWatchHandlerParams): AnyToIgnore;
 }
 
 export interface WatchHandler<NEW = unknown, OLD = NEW> {
-	(newValue: CanUndef<NEW>, oldValue: CanUndef<OLD>, params: WatchHandlerParams): any;
+	(newValue: CanUndef<NEW>, oldValue: CanUndef<OLD>, params: WatchHandlerParams): AnyToIgnore;
 }
 
 export interface MultipleWatchHandler<NEW = unknown, OLD = NEW> {
-	(mutations: Array<[CanUndef<NEW>, CanUndef<OLD>, WatchHandlerParams]>): any;
+	(mutations: Array<[CanUndef<NEW>, CanUndef<OLD>, WatchHandlerParams]>): AnyToIgnore;
 }
 
 export type WatchHandlersSet = Set<RawWatchHandler>;

@@ -22,6 +22,7 @@ import Super, {
 
 	BoundFn,
 
+	AsyncOptions,
 	AsyncCbOptions,
 	AsyncProxyOptions,
 
@@ -123,11 +124,13 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Terminates the specified worker or a group of workers
+	 *
+	 * @alias
 	 * @param opts - options for the operation
 	 */
 	terminateWorker(opts: ClearProxyOptions<WorkerLikeP>): this;
 	terminateWorker(task?: WorkerLikeP | ClearProxyOptions<WorkerLikeP>): this {
-		return this.clearWorker(<any>task);
+		return this.clearWorker(Object.cast(task));
 	}
 
 	/**
@@ -146,7 +149,8 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	}
 
 	/**
-	 * Wraps the specified function.
+	 * Creates a new function that wraps the original and returns it.
+	 *
 	 * This method doesn't attach any hook or listeners to the object,
 	 * but if we cancel the operation by using one of Async's methods, like, `cancelProxy`,
 	 * the target function won't be invoked.
@@ -172,7 +176,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			wrapper: (fn) => fn,
 			linkByWrapper: true,
 			periodic: opts?.single === false
-		}) ?? <any>(() => undefined);
+		}) ?? Object.cast(() => undefined);
 	}
 
 	/**
@@ -216,11 +220,13 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Cancels the specified proxy function or a group of functions
+	 *
+	 * @alias
 	 * @param opts - options for the operation
 	 */
 	cancelProxy(opts: ClearProxyOptions<Function>): this;
 	cancelProxy(task?: Function | ClearProxyOptions<Function>): this {
-		return this.clearProxy(<any>task);
+		return this.clearProxy(Object.cast(task));
 	}
 
 	/**
@@ -315,13 +321,14 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	}
 
 	/**
-	 * Wraps the specified external request.
+	 * Creates a promise that wraps the passed request and returns it.
 	 *
 	 * This method doesn't attach any hook or listeners to the object,
 	 * but if we cancel the operation by using one of Async's methods, like, "cancelRequest",
 	 * the promise will be rejected.
 	 *
 	 * The request can be provided as a promise or function, that returns a promise.
+	 * Notice, the method uses `Async.promise`, but with a different namespace: `request` instead of `promise`.
 	 *
 	 * @param request
 	 * @param [opts] - additional options for the operation
@@ -337,7 +344,8 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	}
 
 	/**
-	 * Cancels the specified request
+	 * Cancels the specified request.
+	 * The canceled promise will be automatically rejected.
 	 *
 	 * @alias
 	 * @param [id] - link to the request (if not specified, then the operation will be applied for all registered tasks)
@@ -345,22 +353,29 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	cancelRequest(id?: Promise<unknown>): this;
 
 	/**
-	 * Cancels the specified request or a group of requests
+	 * Cancels the specified request or a group of requests.
+	 * The canceled promises will be automatically rejected.
+	 *
+	 * @alias
 	 * @param opts - options for the operation
 	 */
 	cancelRequest(opts: ClearOptionsId<Promise<unknown>>): this;
 	cancelRequest(task?: Promise<unknown> | ClearOptionsId<Promise<unknown>>): this {
-		return this.clearRequest(<any>task);
+		return this.clearRequest(Object.cast(task));
 	}
 
 	/**
-	 * Cancels the specified request
+	 * Cancels the specified request.
+	 * The canceled promise will be automatically rejected.
+	 *
 	 * @param [id] - link to the request (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	clearRequest(id?: Promise<unknown>): this;
 
 	/**
-	 * Cancels the specified request or a group of requests
+	 * Cancels the specified request or a group of requests.
+	 * The canceled promises will be automatically rejected.
+	 *
 	 * @param opts - options for the operation
 	 */
 	clearRequest(opts: ClearOptionsId<Promise<unknown>>): this;
@@ -369,13 +384,17 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	}
 
 	/**
-	 * Mutes the specified request
+	 * Mutes the specified request.
+	 * If the request is resolved during it muted, the promise wrapper will be rejected.
+	 *
 	 * @param [id] - link to the request (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	muteRequest(id?: Promise<unknown>): this;
 
 	/**
-	 * Mutes the specified request or a group of requests
+	 * Mutes the specified request or a group of requests.
+	 * If the requests are resolved during muted, the promise wrappers will be rejected.
+	 *
 	 * @param opts - options for the operation
 	 */
 	muteRequest(opts: ClearOptionsId<Promise<unknown>>): this;
@@ -429,7 +448,219 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	}
 
 	/**
-	 * Wraps the specified promise.
+	 * Creates a new asynchronous iterable object from the specified iterable and returns it.
+	 * If the passed iterable doesn't have `Symbol.asyncIterator`, it will be created from a synchronous object iterator
+	 * (the synchronous iterator will also be preserved).
+	 *
+	 * Notice, until the created promise object isn't executed by invoking the `next` method,
+	 * any async operations won't be registered.
+	 *
+	 * @param iterable
+	 * @param [opts] - additional options for the operation
+	 *
+	 * @example
+	 * ```js
+	 * const async = new Async();
+	 *
+	 * for await (const el of async.iterable([1, 2, 3, 4])) {
+	 *   console.log(el);
+	 * }
+	 * ```
+	 */
+	iterable<T>(
+		iterable: Iterable<T> | AsyncIterable<T>,
+		opts: AsyncOptions
+	): AsyncIterable<T> | AsyncIterable<T> & Iterable<T> {
+		const
+			baseIterator = this.getBaseIterator(iterable);
+
+		if (baseIterator == null) {
+			return Object.cast({
+				// eslint-disable-next-line require-yield
+				*[Symbol.asyncIterator]() {
+					return undefined;
+				}
+			});
+		}
+
+		let
+			globalError,
+			doneDelay = 0;
+
+		const newIterable = {
+			[Symbol.asyncIterator]: () => ({
+				[Symbol.asyncIterator]() {
+					return this;
+				},
+
+				next: () => {
+					if (globalError != null) {
+						return Promise.reject(globalError);
+					}
+
+					const promise = this.promise(Promise.resolve(baseIterator.next()), {
+						...opts,
+						name: this.namespaces.iterable,
+						onMutedResolve: (resolve, reject) => {
+							// Prevent an infinity loop if the iterable is already done
+							if (doneDelay > 0) {
+								setTimeout(() => {
+									resolve({value: undefined, done: true});
+								}, doneDelay);
+
+								return;
+							}
+
+							Promise.resolve(baseIterator.next()).then((res) => {
+								if (res.done) {
+									if (doneDelay === 0) {
+										doneDelay = 15;
+
+									} else if (doneDelay < 200) {
+										doneDelay *= 2;
+									}
+								}
+
+								resolve(res);
+							}, reject);
+						}
+					});
+
+					promise.catch((err) => {
+						if (Object.isDictionary(err) && err.type === 'clearAsync') {
+							globalError = err;
+						}
+					});
+
+					this.idsMap.set(newIterable, this.idsMap.get(promise) ?? promise);
+					return promise;
+				}
+			})
+		};
+
+		if (Object.isIterable(iterable[Symbol.iterator])) {
+			newIterable[Symbol.iterator] = iterable[Symbol.iterator];
+		}
+
+		return newIterable;
+	}
+
+	/**
+	 * Cancels the specified iterable object.
+	 * Notice that cancellation affects only objects that have already been activated by invoking the `next` method.
+	 * So, for example, canceled iterable will throw an error on the next invoking of `next`.
+	 *
+	 * @alias
+	 * @param [id] - link to the iterable (if not specified, then the operation will be applied for all registered tasks)
+	 */
+	cancelIterable(id?: AsyncIterable<unknown>): this;
+
+	/**
+	 * Cancels the specified iterable or a group of iterable.
+	 * Notice that cancellation affects only objects that have already been activated by invoking the `next` method.
+	 * So, for example, canceled iterable will throw an error on the next invoking of `next`.
+	 *
+	 * @alias
+	 * @param opts - options for the operation
+	 */
+	cancelIterable(opts: ClearOptionsId<AsyncIterable<unknown>>): this;
+	cancelIterable(task?: AsyncIterable<unknown> | ClearOptionsId<AsyncIterable<unknown>>): this {
+		return this.clearIterable(Object.cast(task));
+	}
+
+	/**
+	 * Cancels the specified iterable object.
+	 * Notice that cancellation affects only objects that have already been activated by invoking the `next` method.
+	 * So, for example, canceled iterable will throw an error on the next invoking of `next`.
+	 *
+	 * @param [id] - link to the request (if not specified, then the operation will be applied for all registered tasks)
+	 */
+	clearIterable(id?: Promise<unknown>): this;
+
+	/**
+	 * Cancels the specified iterable object.
+	 * Notice that cancellation affects only objects that have already been activated by invoking the `next` method.
+	 * So, for example, canceled iterable will throw an error on the next invoking of `next`.
+	 *
+	 * @param opts - options for the operation
+	 */
+	clearIterable(opts: ClearOptionsId<Promise<unknown>>): this;
+	clearIterable(task?: Promise<unknown> | ClearOptionsId<Promise<unknown>>): this {
+		return this.cancelTask(task, this.namespaces.iterable);
+	}
+
+	/**
+	 * Mutes the specified iterable object.
+	 * Elements that are consumed during the object is muted will be ignored.
+	 * Notice that muting affects only objects that have already been activated by invoking the `next` method.
+	 *
+	 * @param [id] - link to the iterable (if not specified, then the operation will be applied for all registered tasks)
+	 */
+	muteIterable(id?: AsyncIterable<unknown>): this;
+
+	/**
+	 * Mutes the specified iterable object or a group of iterable objects.
+	 * Elements, that are consumed during the object is muted will be ignored.
+	 * Notice that muting affects only objects that have already been activated by invoking the `next` method.
+	 *
+	 * @param opts - options for the operation
+	 */
+	muteIterable(opts: ClearOptionsId<AsyncIterable<unknown>>): this;
+	muteIterable(task?: AsyncIterable<unknown> | ClearOptionsId<AsyncIterable<unknown>>): this {
+		return this.markTask('muted', task, this.namespaces.iterable);
+	}
+
+	/**
+	 * Unmutes the specified iterable object
+	 * @param [id] - link to the iterable (if not specified, then the operation will be applied for all registered tasks)
+	 */
+	unmuteIterable(id?: AsyncIterable<unknown>): this;
+
+	/**
+	 * Unmutes the specified iterable function or a group of iterable objects
+	 * @param opts - options for the operation
+	 */
+	unmuteIterable(opts: ClearOptionsId<AsyncIterable<unknown>>): this;
+	unmuteIterable(task?: AsyncIterable<unknown> | ClearOptionsId<AsyncIterable<unknown>>): this {
+		return this.markTask('!muted', task, this.namespaces.iterable);
+	}
+
+	/**
+	 * Suspends the specified iterable object.
+	 * Notice that suspending affects only objects that have already been activated by invoking the `next` method.
+	 *
+	 * @param [id] - link to the iterable (if not specified, then the operation will be applied for all registered tasks)
+	 */
+	suspendIterable(id?: AsyncIterable<unknown>): this;
+
+	/**
+	 * Suspends the specified iterable or a group of iterable objects.
+	 * Notice that suspending affects only objects that have already been activated by invoking the `next` method.
+	 *
+	 * @param opts - options for the operation
+	 */
+	suspendIterable(opts: ClearOptionsId<AsyncIterable<unknown>>): this;
+	suspendIterable(task?: AsyncIterable<unknown> | ClearOptionsId<AsyncIterable<unknown>>): this {
+		return this.markTask('paused', task, this.namespaces.iterable);
+	}
+
+	/**
+	 * Unsuspends the specified iterable object
+	 * @param [id] - link to the iterable (if not specified, then the operation will be applied for all registered tasks)
+	 */
+	unsuspendIterable(id?: AsyncIterable<unknown>): this;
+
+	/**
+	 * Unsuspends the specified iterable or a group of iterable objects
+	 * @param opts - options for the operation
+	 */
+	unsuspendIterable(opts: ClearOptionsId<AsyncIterable<unknown>>): this;
+	unsuspendIterable(task?: AsyncIterable<unknown> | ClearOptionsId<AsyncIterable<unknown>>): this {
+		return this.markTask('!paused', task, this.namespaces.iterable);
+	}
+
+	/**
+	 * Creates a new promise that wraps the passed promise and returns it.
 	 *
 	 * This method doesn't attach any hook or listeners to the object,
 	 * but if we cancel the operation by using one of Async's methods, like, "cancelPromise",
@@ -464,12 +695,15 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			...opts
 		});
 
-		return new SyncPromise((resolve, reject) => {
+		let
+			wrappedResolve;
+
+		const wrappedPromise = new SyncPromise((resolve, reject) => {
 			let
 				canceled = false,
 				proxyReject;
 
-			const proxyResolve = this.proxy(resolve, {
+			wrappedResolve = this.proxy(resolve, {
 				...p,
 
 				clearFn: () => {
@@ -488,6 +722,25 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 				onMerge: (...args) => {
 					canceled = true;
 					return this.onPromiseMerge(resolve, reject)(...args);
+				},
+
+				onMutedCall: (link) => {
+					const
+						handlers = Array.concat([], opts?.onMutedResolve);
+
+					if (handlers.length > 0) {
+						for (let i = 0; i < handlers.length; i++) {
+							handlers[i].call(ctx, wrappedResolve, proxyReject);
+						}
+
+					} else {
+						reject({
+							...p,
+							link,
+							reason: 'muting',
+							type: 'clearAsync'
+						});
+					}
 				}
 			});
 
@@ -504,9 +757,11 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 					const
 						cache = that.cache[p.name],
-						links = p.group != null ? cache?.groups[p.group]?.links : cache?.root.links,
-						task = links?.get(proxyResolve),
-						handlers = links?.get(proxyResolve)?.onComplete;
+						links = p.group != null ? cache?.groups[p.group]?.links : cache?.root.links;
+
+					const
+						task = links?.get(wrappedResolve),
+						handlers = links?.get(wrappedResolve)?.onComplete;
 
 					if (task != null && handlers != null) {
 						if (task.muted === true) {
@@ -534,13 +789,17 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 				}, Object.select(p, ['name', 'group']));
 
-				return promise.then(proxyResolve, proxyReject);
+				return promise.then(wrappedResolve, proxyReject);
 			}
 		});
+
+		this.idsMap.set(wrappedPromise, wrappedResolve);
+		return wrappedPromise;
 	}
 
 	/**
-	 * Cancels the specified promise
+	 * Cancels the specified promise.
+	 * The canceled promise will be automatically rejected.
 	 *
 	 * @alias
 	 * @param [id] - link to the promise (if not specified, then the operation will be applied for all registered tasks)
@@ -548,22 +807,29 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	cancelPromise(id?: Promise<unknown>): this;
 
 	/**
-	 * Cancels the specified promise or a group of promises
+	 * Cancels the specified promise or a group of promises.
+	 * The canceled promises will be automatically rejected.
+	 *
+	 * @alias
 	 * @param opts - options for the operation
 	 */
 	cancelPromise(opts: ClearProxyOptions<Promise<unknown>>): this;
 	cancelPromise(task?: Promise<unknown> | ClearProxyOptions<Promise<unknown>>): this {
-		return this.clearPromise(<any>task);
+		return this.clearPromise(Object.cast(task));
 	}
 
 	/**
-	 * Cancels the specified promise
+	 * Cancels the specified promise.
+	 * The canceled promise will be automatically rejected.
+	 *
 	 * @param [id] - link to the promise (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	clearPromise(id?: Promise<unknown>): this;
 
 	/**
-	 * Cancels the specified promise or a group of promises
+	 * Cancels the specified promise or a group of promises.
+	 * The canceled promises will be automatically rejected.
+	 *
 	 * @param opts - options for the operation
 	 */
 	clearPromise(opts: ClearProxyOptions<Promise<unknown>>): this;
@@ -591,18 +857,22 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	}
 
 	/**
-	 * Mutes the specified promise
+	 * Mutes the specified promise.
+	 * If the promise is resolved during it muted, the promise wrapper will be rejected.
+	 *
 	 * @param [id] - link to the promise (if not specified, then the operation will be applied for all registered tasks)
 	 */
 	mutePromise(id?: Promise<unknown>): this;
 
 	/**
-	 * Mutes the specified promise or a group of promises
+	 * Mutes the specified promise or a group of promises.
+	 * If the promises are resolved during muted, the promise wrappers will be rejected.
+	 *
 	 * @param opts - options for the operation
 	 */
 	mutePromise(opts: ClearOptionsId<Promise<unknown>>): this;
 	mutePromise(task?: Promise<unknown> | ClearOptionsId<Promise<unknown>>): this {
-		return this.markPromise('muted', <any>task);
+		return this.markPromise('muted', Object.cast(task));
 	}
 
 	/**
@@ -617,7 +887,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	unmutePromise(opts: ClearOptionsId<Promise<unknown>>): this;
 	unmutePromise(task?: Promise<unknown> | ClearOptionsId<Promise<unknown>>): this {
-		return this.markPromise('!muted', <any>task);
+		return this.markPromise('!muted', Object.cast(task));
 	}
 
 	/**
@@ -632,7 +902,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	suspendPromise(opts: ClearOptionsId<Promise<unknown>>): this;
 	suspendPromise(task?: Promise<unknown> | ClearOptionsId<Promise<unknown>>): this {
-		return this.markPromise('paused', <any>task);
+		return this.markPromise('paused', Object.cast(task));
 	}
 
 	/**
@@ -647,7 +917,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	unsuspendPromise(opts: ClearOptionsId<Promise<unknown>>): this;
 	unsuspendPromise(task?: Promise<unknown> | ClearOptionsId<Promise<unknown>>): this {
-		return this.markPromise('!paused', <any>task);
+		return this.markPromise('!paused', Object.cast(task));
 	}
 
 	/**
@@ -782,8 +1052,8 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 * @param label
 	 * @param opts - additional options
 	 */
-	protected markPromise(label: string, opts: ClearOptionsId<Promise<any>>): this;
-	protected markPromise(label: string, task?: Promise<any> | ClearOptionsId<Promise<unknown>>): this {
+	protected markPromise(label: string, opts: ClearOptionsId<Promise<unknown>>): this;
+	protected markPromise(label: string, task?: Promise<unknown> | ClearOptionsId<Promise<unknown>>): this {
 		const
 			nms = this.namespaces,
 			nm = isAsyncOptions<ClearProxyOptions>(task) ? task.name : null;
@@ -804,5 +1074,23 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 		}
 
 		return this;
+	}
+
+	/**
+	 * Returns an iterator from the passed iterable object.
+	 * Notice, an asynchronous iterator has more priority.
+	 *
+	 * @param [iterable]
+	 */
+	protected getBaseIterator<T>(
+		iterable: Iterable<T> | AsyncIterable<T>
+	): CanUndef<IterableIterator<T> | AsyncIterableIterator<T>> {
+		if (Object.isFunction(iterable[Symbol.asyncIterator])) {
+			return iterable[Symbol.asyncIterator]();
+		}
+
+		if (Object.isFunction(iterable[Symbol.iterator])) {
+			return iterable[Symbol.iterator]();
+		}
 	}
 }

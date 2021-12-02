@@ -9,6 +9,49 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.67.0 (2021-12-01)
+
+#### :rocket: New Feature
+
+* Added a new method `Object.cast`
+* Added a new method `Object.throw`
+
+## v3.63.0 (2021-11-16)
+
+#### :rocket: New Feature
+
+* Now `Object.get` can access properties through promises
+
+## v3.62.2 (2021-11-09)
+
+#### :bug: Bug Fix
+
+* `data/create`:
+  * Now all dates create with a timezone actual to their creation date
+  * Fixed creating a date with a local timezone when it's partial (eg 'UTC +9:30')
+
+## v3.62.0 (2021-10-29)
+
+#### :rocket: New Feature
+
+* Added a new method `Object.isIterable`
+
+## v3.60.0 (2021-10-01)
+
+#### :rocket: New Feature
+
+* Added `Number.isSafe` and `Number.prototype.isSafe`
+
+#### :bug: Bug Fix
+
+* Fixed parsing of numbers `Object.parse`
+
+## v3.59.2 (2021-09-27)
+
+#### :bug: Bug Fix
+
+* Now `finally` respects exceptions values from a callback `sync-promise`
+
 ## v3.59.0 (2021-09-08)
 
 #### :rocket: New Feature

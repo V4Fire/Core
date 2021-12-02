@@ -169,3 +169,79 @@ wrappedEventEmitter.addEventListener('scroll', {
   }
 })
 ```
+
+## wrapStorage
+
+The wrapper takes a link to the "raw" async storage and returns a new object that based on the original,
+but all async methods and properties are wrapped by Async.
+
+Notice, the wrapped methods can take additional Async parameters, like group or label.
+
+```js
+import Async from 'core/async';
+import { asyncLocal } from 'core/kv-storage';
+
+const
+  $a = new Async(),
+  wrappedStorage = $a.wrapStorage(asyncLocal);
+
+wrappedStorage.set('someKey', 'someValue', {
+  // All wrapped methods can take additional Async parameters as the last argument: `group`, `label` and `join`
+  group: 'bla',
+  label: 'foo',
+  join: true,
+}).then(async () => {
+  console.log(await wrappedStorage.get('someKey') === 'someValue');
+});
+
+$a.suspendAll({label: 'foo'});
+```
+
+### Custom global group
+
+The storage wrapper doesn't have any default global group for operations, but you can pass it manually.
+This behavior brings a feature to clear or suspend all events from the wrapped provider by its name.
+
+```js
+import Async from 'core/async';
+import { asyncLocal } from 'core/kv-storage';
+
+const
+  $a = new Async(),
+  wrappedStorage = $a.wrapStorage(asyncLocal, {group: 'globalGroup'});
+
+wrappedStorage.set('someKey', 'someValue').then(() => {
+  console.log('yeah!');
+});
+
+$a.muteAll({group: 'globalGroup'});
+
+wrappedStorage.get('someKey', {
+  // If we are providing a group to the method, it will be joined with the global group by using the `:` character
+  group: 'localGroup'
+}).then((val) => {
+  console.log(val) === 'someValue';
+});
+
+$a.clearAll({group: 'globalGroup:localGroup'});
+```
+
+### Custom namespace
+
+By default, a custom namespace have the same global group as the global namespace
+
+```js
+import Async from 'core/async';
+import { asyncLocal } from 'core/kv-storage';
+
+const
+  $a = new Async(),
+  wrappedStorage = $a.wrapStorage(asyncLocal, {group: 'bar'});
+
+// We can provide own global group to namespace, it will be joined with the parent's global group
+const blaStore = wrappedStorage.namespace('[[BLA]]', {group: 'bla'});
+
+blaStore.clear({group: 'foo'});
+
+$a.muteAll({group: 'bar:bla:foo'});
+```

@@ -13,6 +13,18 @@ import extend from '~/core/prelude/extend';
 import { deprecate } from '~/core/functools';
 import { isNative, toString, nonPrimitiveTypes } from '~/core/prelude/types/const';
 
+/** @see [[ObjectConstructor.cast]] */
+extend(Object, 'cast', (value) => value);
+
+/** @see [[ObjectConstructor.throw]] */
+extend(Object, 'throw', (err = 'This is a loopback function or method') => {
+	if (Object.isString(err)) {
+		throw new Error(err);
+	}
+
+	throw err;
+});
+
 /** @see [[ObjectConstructor.isTruly]] */
 extend(Object, 'isTruly', (value) => Boolean(value));
 
@@ -102,6 +114,17 @@ extend(Object, 'isIterable', (value) => {
 
 	return Boolean(
 		typeof Symbol === 'function' ? value[Symbol.iterator] : typeof value['@@iterator'] === 'function'
+	);
+});
+
+/** @see [[ObjectConstructor.isAsyncIterable]] */
+extend(Object, 'isAsyncIterable', (value) => {
+	if (value == null) {
+		return false;
+	}
+
+	return Boolean(
+		typeof Symbol === 'function' ? value[Symbol.asyncIterator] : typeof value['@@asyncIterator'] === 'function'
 	);
 });
 

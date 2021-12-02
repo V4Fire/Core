@@ -95,8 +95,8 @@ extend(Function.prototype, 'throttle', function throttle(
 extend(Function, 'throttle', (fn: AnyFunction | number, delayOrOpts?: number | ThrottleOptions) => {
 	if (!Object.isFunction(fn)) {
 		delayOrOpts = fn;
-		return (fn) => Function.throttle(fn, <any>delayOrOpts);
+		return (fn) => Function.throttle(fn, Object.cast(delayOrOpts));
 	}
 
-	return fn.throttle(<any>delayOrOpts);
+	return fn.throttle(Object.cast(delayOrOpts));
 });

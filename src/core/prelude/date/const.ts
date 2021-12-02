@@ -61,7 +61,7 @@ Object.forEach(formatAliases, (val) => {
 			now = new Date();
 
 		if (date.format(key) !== now.format(key)) {
-			return key;
+			return formatAliases[key];
 		}
 	};
 

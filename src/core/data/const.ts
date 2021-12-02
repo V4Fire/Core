@@ -27,7 +27,7 @@ export const emitter = new EventEmitter({
 
 export const
 	instanceCache: Dictionary<Provider> = Object.createDict(),
-	requestCache: Dictionary<Dictionary<RequestResponseObject<any>>> = Object.createDict(),
+	requestCache: Dictionary<Dictionary<RequestResponseObject>> = Object.createDict(),
 	connectCache: Dictionary<Promise<Socket>> = Object.createDict();
 
 export const queryMethods = Object.createDict({

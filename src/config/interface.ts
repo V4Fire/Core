@@ -7,7 +7,8 @@
  */
 
 import type { LogConfig } from '~/core/log';
-import type { OnlineCheckConfig } from '~/core/net/interface';
+import type { OnlineCheckConfig } from '~/core/net';
+import type { PerfConfig } from '~/core/perf/config';
 
 export interface Config {
 	/**
@@ -30,6 +31,11 @@ export interface Config {
 	 * Options for "core/log" module
 	 */
 	log: LogConfig;
+
+	/**
+	 * Options for "core/perf" module
+	 */
+	perf: PerfConfig;
 
 	/**
 	 * Options for a module that checks online connection

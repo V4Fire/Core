@@ -49,7 +49,7 @@ export default class RequestContext<D = unknown> {
 	/**
 	 * Storage to cache the pending request
 	 */
-	readonly pendingCache: AbstractCache<RequestResponse<D>> = pendingCache;
+	readonly pendingCache: AbstractCache<RequestResponse<D>> = Object.cast(pendingCache);
 
 	/**
 	 * True if the request can provide parameters only as a query string
@@ -115,13 +115,14 @@ export default class RequestContext<D = unknown> {
 		let
 			cacheAPI = (Object.isString(p.cacheStrategy) ? cache[p.cacheStrategy] : p.cacheStrategy) ?? cache.never;
 
-		if (p.cacheTTL != null) {
-			cacheAPI = addTTL(cacheAPI, p.cacheTTL);
-		}
-
-		this.cache = cacheAPI;
-
 		this.isReady = (async () => {
+			// eslint-disable-next-line require-atomic-updates
+			cacheAPI = await cacheAPI;
+
+			if (p.cacheTTL != null) {
+				cacheAPI = addTTL(cacheAPI, p.cacheTTL);
+			}
+
 			if (p.offlineCache === true && storage != null) {
 				const storageAPI = await storage;
 
@@ -130,10 +131,9 @@ export default class RequestContext<D = unknown> {
 					persistentTTL: p.offlineCacheTTL,
 					loadFromStorage: 'onOfflineDemand'
 				});
-
-				Object.set(this, 'cache', cacheAPI);
 			}
 
+			Object.set(this, 'cache', cacheAPI);
 			caches.add(cacheAPI);
 		})();
 	}

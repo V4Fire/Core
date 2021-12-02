@@ -20,8 +20,8 @@ import Response from '~/core/request/response';
 import RequestError from '~/core/request/error';
 import RequestContext from '~/core/request/context';
 
-import { getStorageKey, merge } from '~/core/request/utils';
-import { defaultRequestOpts, globalOpts, storage } from '~/core/request/const';
+import { merge } from '~/core/request/utils';
+import { defaultRequestOpts, globalOpts } from '~/core/request/const';
 
 import type {
 
@@ -105,7 +105,7 @@ function request<D = unknown, A extends any[] = unknown[]>(
 
 function request<D = unknown>(
 	path: string | CreateRequestOptions<D>,
-	...args: any[]
+	...args: unknown[]
 ): unknown {
 	if (Object.isPlainObject(path)) {
 		const
@@ -129,7 +129,7 @@ function request<D = unknown>(
 		opts: CanUndef<CreateRequestOptions<D>>;
 
 	if (args.length > 1) {
-		[resolver, opts] = args;
+		[resolver, opts] = Object.cast(args);
 
 	} else if (Object.isDictionary(args[0])) {
 		opts = args[0];
@@ -182,7 +182,7 @@ function request<D = unknown>(
 				keyToEncode = ctx.withoutBody ? 'query' : 'body';
 
 			// eslint-disable-next-line require-atomic-updates
-			requestParams[keyToEncode] = await applyEncoders(requestParams[keyToEncode]);
+			requestParams[keyToEncode] = Object.cast(await applyEncoders(requestParams[keyToEncode]));
 
 			for (let i = 0; i < middlewareResults.length; i++) {
 				// If the middleware returns a function, the function will be executed.
@@ -221,9 +221,7 @@ function request<D = unknown>(
 				{cacheKey} = ctx;
 
 			let
-				localCacheKey,
-				fromCache = false,
-				fromLocalStorage = false;
+				fromCache = false;
 
 			if (cacheKey != null && ctx.canCache) {
 				if (ctx.pendingCache.has(cacheKey)) {
@@ -247,22 +245,7 @@ function request<D = unknown>(
 					}
 				}
 
-				localCacheKey = getStorageKey(cacheKey);
-				fromCache = ctx.cache.has(cacheKey);
-
-				try {
-					fromLocalStorage = Boolean(
-						!fromCache &&
-
-						requestParams.offlineCache &&
-						!(await isOnline()).status &&
-
-						await (await storage)?.has(localCacheKey)
-					);
-
-				} catch {
-					fromLocalStorage = false;
-				}
+				fromCache = await AbortablePromise.resolve(ctx.cache.has(cacheKey), parent);
 			}
 
 			let
@@ -270,15 +253,12 @@ function request<D = unknown>(
 				cache = 'none';
 
 			if (fromCache) {
-				cache = 'memory';
-				res = AbortablePromise.resolveAndCall(() => ctx.cache.get(cacheKey!), parent)
-					.then(ctx.wrapAsResponse.bind(ctx))
-					.then((res) => Object.assign(res, {cache}));
+				const getFromCache = async () => {
+					cache = (await AbortablePromise.resolve(isOnline(), parent)).status ? 'memory' : 'offline';
+					return ctx.cache.get(cacheKey!);
+				};
 
-			} else if (fromLocalStorage) {
-				cache = 'offline';
-				res = AbortablePromise.resolveAndCall(() => storage!
-					.then((storage) => storage.get(localCacheKey)), parent)
+				res = AbortablePromise.resolveAndCall(getFromCache, parent)
 					.then(ctx.wrapAsResponse.bind(ctx))
 					.then((res) => Object.assign(res, {cache}));
 
@@ -299,19 +279,16 @@ function request<D = unknown>(
 						requestParams.retry;
 
 					const
-						attemptLimit = retryParams.attempts ?? Infinity;
-
-					if (retryParams.delay == null) {
-						retryParams.delay = (i) => i < 5 ? i * 500 : (5).seconds();
-					}
+						attemptLimit = retryParams.attempts ?? Infinity,
+						delayFn = retryParams.delay?.bind(retryParams) ?? ((i) => i < 5 ? i * 500 : (5).seconds());
 
 					let
 						attempt = 0;
 
 					const createReqWithRetrying = async () => {
-						const calculateDelay = (attempt: number, err: RequestError<any>) => {
+						const calculateDelay = (attempt: number, err: RequestError) => {
 							const
-								delay = retryParams.delay!(attempt, err);
+								delay = delayFn(attempt, err);
 
 							if (Object.isPromise(delay) || delay === false) {
 								return delay;
@@ -362,7 +339,7 @@ function request<D = unknown>(
 				ctx.wrapRequest(res)
 			);
 
-			function applyEncoders(data: unknown): Promise<any> {
+			function applyEncoders(data: unknown): unknown {
 				let
 					res = AbortablePromise.resolve(data, parent);
 

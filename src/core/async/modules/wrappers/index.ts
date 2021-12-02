@@ -16,6 +16,8 @@ import type { CreateRequestOptions, RequestQuery, RequestBody } from '~/core/req
 
 import Super, { AsyncOptions, EventEmitterLike } from '~/core/async/modules/events';
 
+import type { AsyncStorage, AsyncStorageNamespace } from 'core/kv-storage';
+
 import {
 
 	emitLikeEvents,
@@ -32,6 +34,9 @@ import type {
 
 	EventEmitterWrapper,
 	EventEmitterOverwritten,
+
+	WrappedAsyncStorageNamespace,
+	WrappedAsyncStorage,
 
 	AsyncOptionsForWrappers
 
@@ -249,6 +254,114 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 			}
 
 			return [opts?.group != null ? {group: opts.group} : {}, ...params];
+		}
+	}
+
+	/**
+	 * The wrapper takes a link to the "raw" async storage and returns a new object that based
+	 * on the original, but all async methods and properties are wrapped by Async.
+	 * Notice, the wrapped methods can take additional Async parameters, like group or label.
+	 *
+	 * @param storage
+	 * @param opts
+	 *
+	 * @example
+	 * ```js
+	 * import Async from 'core/async';
+	 * import { asyncLocal } from 'core/kv-storage';
+	 *
+	 * const
+	 *   $a = new Async(),
+	 *   wrappedStorage = $a.wrapStorage(asyncLocal, {group: 'bar'});
+	 *
+	 * wrappedStorage.set('someKey', 'someValue', {
+	 *   // If we are providing a group to the method, it will be joined with the global group by using the `:` character
+	 *   group: 'bla',
+	 *   label: 'foo',
+	 *   join: true,
+	 * }).then(async () => {
+	 *   console.log(await wrappedStorage.get('someKey') === 'someValue');
+	 * });
+	 *
+	 * $a.suspendAll({group: 'bar:bla'});
+	 *
+	 * // We can provide own global group to namespace, it will be joined with the parent's global group
+	 * const blaStore = wrappedStorage.namespace('[[BLA]]', {group: 'bla'});
+	 *
+	 * blaStore.clear({group: 'foo'});
+	 *
+	 * $a.muteAll({group: 'bar:bla:foo'});
+	 * ```
+	 */
+	wrapStorage<T extends AsyncStorage | AsyncStorageNamespace>(
+		storage: T,
+		opts?: AsyncOptionsForWrappers
+	): T extends AsyncStorage ? WrappedAsyncStorage : WrappedAsyncStorageNamespace {
+		const
+			globalGroup = opts?.group,
+			wrappedStorage = Object.create(storage);
+
+		wrappedStorage.has = (key, ...args) => {
+			const [asyncOpts, params] = separateArgs(args);
+			return this.promise(storage.has(key, ...params), asyncOpts);
+		};
+
+		wrappedStorage.get = <T = unknown>(key, ...args) => {
+			const [asyncOpts, params] = separateArgs(args);
+			return this.promise(storage.get<T>(key, ...params), asyncOpts);
+		};
+
+		wrappedStorage.set = (key, value, ...args) => {
+			const [asyncOpts, params] = separateArgs(args);
+			return this.promise(storage.set(key, value, ...params), asyncOpts);
+		};
+
+		wrappedStorage.remove = (key, ...args) => {
+			const [asyncOpts, params] = separateArgs(args);
+			return this.promise(storage.remove(key, ...params), asyncOpts);
+		};
+
+		wrappedStorage.clear = <T = unknown>(filter?, ...args) => {
+			if (Object.isPlainObject(filter)) {
+				filter = undefined;
+				args = [filter];
+			}
+
+			const [asyncOpts, params] = separateArgs(args);
+			return this.promise(storage.clear<T>(filter, ...params), asyncOpts);
+		};
+
+		if ('namespace' in storage) {
+			wrappedStorage.namespace = (name, opts?) => {
+				const [asyncOpts] = separateArgs([opts]);
+				const storageNamespace = storage.namespace(name);
+				return this.wrapStorage(storageNamespace, asyncOpts);
+			};
+		}
+
+		return wrappedStorage;
+
+		function separateArgs(args: unknown[]): [AsyncOptions, unknown[]] {
+			const lastArg = args.pop();
+
+			if (!Object.isDictionary(lastArg)) {
+				return [globalGroup != null ? {group: globalGroup} : {}, [...args, lastArg]];
+			}
+
+			const
+				ownParams = Object.reject(lastArg, asyncOptionsKeys),
+				asyncParams = Object.select(lastArg, asyncOptionsKeys),
+				group = [globalGroup, asyncParams.group].filter(Boolean).join(':');
+
+			if (group !== '') {
+				asyncParams.group = group;
+			}
+
+			if (Object.keys(ownParams).length !== 0) {
+				args.push(ownParams);
+			}
+
+			return [asyncParams, args];
 		}
 	}
 }

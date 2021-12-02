@@ -9,6 +9,14 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.67.0 (2021-12-01)
+
+#### :boom: Breaking Change
+
+* Renamed `Tasks` to `InnerQueue`
+* Renamed `CreateTasks` to `CreateInnerQueue`
+* Renamed `QueueOptions.tasksFactory` to `QueueOptions.queueFactory`
+
 ## v3.54.1 (2021-07-09)
 
 #### :house: Internal

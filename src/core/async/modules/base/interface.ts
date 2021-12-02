@@ -27,6 +27,7 @@ export type MarkReason =
  */
 export type ClearReason =
 	MarkReason |
+	'muting'|
 	'collision';
 
 export interface IdObject {
@@ -65,9 +66,15 @@ export interface AsyncCbOptions<CTX extends object = Async> extends AsyncOptions
 	onClear?: CanArray<AsyncCb<CTX>>;
 
 	/**
-	 * Handler/s of task merging: the task should merge to another task with the same label and with "join: true" strategy
+	 * Handler/s of task merging: a task should merge to another task with the same label and with "join: true" strategy
 	 */
 	onMerge?: CanArray<AsyncCb<CTX>>;
+
+	/**
+	 * Handler/s of muted task calling.
+	 * These handlers are invoked when occurring calling the task if it is muted.
+	 */
+	onMutedCall?: CanArray<AsyncCb<CTX>>;
 }
 
 export interface AsyncCbOptionsSingle<CTX extends object = Async> extends AsyncCbOptions<CTX> {
@@ -235,11 +242,11 @@ export type TaskCtx<CTX extends object = Async> = {
 } & AsyncOptions & ClearOptionsId<unknown>;
 
 export interface ClearFn<CTX extends object = Async> extends Function {
-	(id: any, ctx: TaskCtx<CTX>): any;
+	(id: any, ctx: TaskCtx<CTX>): AnyToIgnore;
 }
 
 export interface BoundFn<CTX extends object = Async> extends Function {
-	(this: CTX, ...args: any[]): any;
+	(this: CTX, ...args: any[]): AnyToIgnore;
 }
 
 export interface LocalCache {

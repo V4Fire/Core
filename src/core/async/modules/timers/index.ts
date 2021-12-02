@@ -364,11 +364,13 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Clears the specified "requestIdleCallback" timer or a group of timers
+	 *
+	 * @alias
 	 * @param opts - options for the operation
 	 */
 	cancelIdleCallback(opts: ClearOptionsId<TimerId>): this;
 	cancelIdleCallback(task?: TimerId | ClearOptionsId<TimerId>): this {
-		return this.clearIdleCallback(<any>task);
+		return this.clearIdleCallback(Object.cast(task));
 	}
 
 	/**

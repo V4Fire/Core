@@ -9,6 +9,18 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.60.3 (2021-10-05)
+
+#### :bug: Bug Fix
+
+* Fixed a bug with double resolving of a promise when it resolved by another promise
+
+## v3.59.2 (2021-09-27)
+
+#### :bug: Bug Fix
+
+* Now `finally` respects exceptions values from a callback
+
 ## v3.59.0 (2021-09-08)
 
 #### :rocket: New Feature

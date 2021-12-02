@@ -14,7 +14,7 @@
 import SimpleQueue from '~/core/queue/simple';
 import AbstractQueue from '~/core/queue/interface';
 
-import type { HashFn, Tasks, CreateTasks } from '~/core/queue/merge/interface';
+import type { HashFn, InnerQueue, CreateInnerQueue } from '~/core/queue/merge/interface';
 
 export * from '~/core/queue/merge/interface';
 
@@ -24,9 +24,9 @@ export * from '~/core/queue/merge/interface';
  */
 export default class MergeQueue<T> extends AbstractQueue<T> {
 	/**
-	 * Type: list of tasks
+	 * Type: inner queue to store elements
 	 */
-	readonly Tasks!: Tasks<string>;
+	readonly InnerQueue!: InnerQueue<string>;
 
 	/** @inheritDoc */
 	get head(): CanUndef<T> {
@@ -34,18 +34,18 @@ export default class MergeQueue<T> extends AbstractQueue<T> {
 			return undefined;
 		}
 
-		return this.tasksMap[this.tasks.head!];
+		return this.tasksMap[this.innerQueue.head!];
 	}
 
 	/** @inheritDoc */
 	get length(): number {
-		return this.tasks.length;
+		return this.innerQueue.length;
 	}
 
 	/**
-	 * List of tasks
+	 * Inner queue to store elements
 	 */
-	protected tasks: this['Tasks'];
+	protected innerQueue: this['InnerQueue'];
 
 	/**
 	 * The map of registered tasks
@@ -53,7 +53,7 @@ export default class MergeQueue<T> extends AbstractQueue<T> {
 	protected tasksMap: Dictionary<T> = Object.createDict();
 
 	/**
-	 * Function to calculate task hash
+	 * Function to calculate a task hash
 	 */
 	protected readonly hashFn: HashFn<T>;
 
@@ -63,7 +63,7 @@ export default class MergeQueue<T> extends AbstractQueue<T> {
 	 */
 	constructor(hashFn?: HashFn<T>) {
 		super();
-		this.tasks = this.createTasks();
+		this.innerQueue = this.createInnerQueue();
 		this.hashFn = hashFn ?? Object.fastHash.bind(Object);
 	}
 
@@ -74,7 +74,7 @@ export default class MergeQueue<T> extends AbstractQueue<T> {
 
 		if (this.tasksMap[hash] == null) {
 			this.tasksMap[hash] = task;
-			this.tasks.push(hash);
+			this.innerQueue.push(hash);
 		}
 
 		return this.length;
@@ -89,8 +89,8 @@ export default class MergeQueue<T> extends AbstractQueue<T> {
 		const
 			{head} = this;
 
-		delete this.tasksMap[this.tasks.head!];
-		this.tasks.shift();
+		delete this.tasksMap[this.innerQueue.head!];
+		this.innerQueue.shift();
 
 		return head;
 	}
@@ -98,13 +98,13 @@ export default class MergeQueue<T> extends AbstractQueue<T> {
 	/** @inheritDoc */
 	clear(): void {
 		if (this.length > 0) {
-			this.tasks = this.createTasks();
+			this.innerQueue = this.createInnerQueue();
 			this.tasksMap = Object.createDict();
 		}
 	}
 
 	/**
-	 * Returns a new blank list of tasks
+	 * Returns a new blank inner queue to store elements
 	 */
-	protected createTasks: CreateTasks<this['Tasks']> = () => new SimpleQueue();
+	protected createInnerQueue: CreateInnerQueue<this['InnerQueue']> = () => new SimpleQueue();
 }

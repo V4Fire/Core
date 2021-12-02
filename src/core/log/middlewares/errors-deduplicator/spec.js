@@ -9,14 +9,16 @@
 import middlewareFactory from 'core/log/middlewares';
 import { ErrorsDeduplicatorMiddleware } from 'core/log/middlewares/errors-deduplicator';
 
+let middleware;
+
 describe('middlewares/errors-deduplicator', () => {
 	describe('implementation', () => {
 		beforeEach(() => {
-			this.middleware = new ErrorsDeduplicatorMiddleware();
+			middleware = new ErrorsDeduplicatorMiddleware();
 		});
 
 		afterEach(() => {
-			this.middleware = undefined;
+			middleware = undefined;
 		});
 
 		it('an event without an error - the event should pass to the next middleware', () => {
@@ -25,7 +27,7 @@ describe('middlewares/errors-deduplicator', () => {
 				eventCopy = copyLogEvent(event),
 				nextCallbackSpy = jasmine.createSpy('next');
 
-			this.middleware.exec(event, nextCallbackSpy);
+			middleware.exec(event, nextCallbackSpy);
 			expect(nextCallbackSpy).toHaveBeenCalledOnceWith(eventCopy);
 		});
 
@@ -35,7 +37,7 @@ describe('middlewares/errors-deduplicator', () => {
 				eventCopy = copyLogEvent(event),
 				nextCallbackSpy = jasmine.createSpy('next');
 
-			this.middleware.exec(event, nextCallbackSpy);
+			middleware.exec(event, nextCallbackSpy);
 			expect(nextCallbackSpy).toHaveBeenCalledOnceWith(eventCopy);
 		});
 
@@ -48,8 +50,8 @@ describe('middlewares/errors-deduplicator', () => {
 				firstNextCallbackSpy = jasmine.createSpy('firstNext'),
 				secondNextCallbackSpy = jasmine.createSpy('secondNext');
 
-			this.middleware.exec(firstEvent, firstNextCallbackSpy);
-			this.middleware.exec(secondEvent, secondNextCallbackSpy);
+			middleware.exec(firstEvent, firstNextCallbackSpy);
+			middleware.exec(secondEvent, secondNextCallbackSpy);
 
 			expect(firstNextCallbackSpy).toHaveBeenCalledOnceWith(firstEventCopy);
 			expect(secondNextCallbackSpy).not.toHaveBeenCalled();
@@ -64,8 +66,8 @@ describe('middlewares/errors-deduplicator', () => {
 				firstNextCallbackSpy = jasmine.createSpy('firstNext'),
 				secondNextCallbackSpy = jasmine.createSpy('secondNext');
 
-			this.middleware.exec(firstEvent, firstNextCallbackSpy);
-			this.middleware.exec(secondEvent, secondNextCallbackSpy);
+			middleware.exec(firstEvent, firstNextCallbackSpy);
+			middleware.exec(secondEvent, secondNextCallbackSpy);
 
 			expect(firstNextCallbackSpy).toHaveBeenCalledOnceWith(firstEventCopy);
 			expect(secondNextCallbackSpy).toHaveBeenCalledOnceWith(secondEventCopy);

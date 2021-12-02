@@ -11,6 +11,186 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.67.0 (2021-12-01)
+
+#### :boom: Breaking Change
+
+* `core/net/engines`
+  * Renamed `browser.request` -> `browser-request`
+  * Renamed `node.request` -> `node-request`
+
+* `core/queue`:
+  * Renamed `Tasks` to `InnerQueue`
+  * Renamed `CreateTasks` to `CreateInnerQueue`
+  * Renamed `QueueOptions.tasksFactory` to `QueueOptions.queueFactory`
+
+#### :rocket: New Feature
+
+* Added new types `DictionaryKey`, `AnyToIgnore`, `AnyToBoolean`
+* Now the `Dictionary` type supports symbols and number
+* `core/prelude/types`:
+  * Added a new method `Object.cast`
+  * Added a new method `Object.throw`
+
+#### :house: Internal
+
+* Bumped versions of `node/npm` within `ci`
+
+## v3.66.0 (2021-11-26)
+
+#### :rocket: New Feature
+
+* Added a wrapper for async storages `core/async`
+
+## v3.65.1 (2021-11-26)
+
+#### :house: Internal
+
+* Replaced `uniconf` with `@v4fire/config`
+
+## v3.65.0 (2021-11-18)
+
+#### :rocket: New Feature
+
+* Added a new module `core/lazy`
+
+#### :bug: Bug Fix
+
+* Added `bigint` and `symbol` into the `Primitive` type `index.d.ts`
+
+## v3.64.0 (2021-11-16)
+
+#### :rocket: New Feature
+
+* Added a new method `unwrap` `core/promise/sync`
+
+## v3.63.0 (2021-11-16)
+
+#### :rocket: New Feature
+
+* Now `Object.get` can access properties through promises `core/prelude/object`
+
+## v3.62.3 (2021-11-09)
+
+#### :bug: Bug Fix
+
+* Fixed deep watching for array dependencies `core/object/watch`
+
+## v3.62.2 (2021-11-09)
+
+#### :bug: Bug Fix
+
+* Fixed deep watching for an array element `core/object/watch`
+* `core/prelude/date/create`:
+  * Now all dates create with a timezone actual to their creation date
+  * Fixed creating a date with a local timezone when it's partial (eg 'UTC +9:30')
+
+## v3.62.1 (2021-11-08)
+
+#### :bug: Bug Fix
+
+* Fixed watching for an array by a complex path with indices `core/object/watch`
+
+## v3.62.0 (2021-10-29)
+
+#### :boom: Breaking Change
+
+* Changed project building from `gulp-typescript` to `gulp-babel`
+* Now, if a promise is resolved during muted, it will be rejected `core/async`
+
+#### :rocket: New Feature
+
+* Added a new method `Object.isIterable` `prelude`
+
+* `core/async`:
+  * Added a new option `AsyncCbOptions.onMutedCall`
+  * Added new bunch of methods to hook iterable objects
+
+#### :house: Internal
+
+* Updated dependencies
+
+### :nail_care: Polish
+
+* Added new tests `core/async`
+* Added generation of source maps with the hot-reload mode
+
+## v3.61.1 (2021-10-25)
+
+#### :bug: Bug Fix
+
+* Fixed bugs with clearing/muting/suspending promises by their IDs `core/async`
+
+## v3.61.0 (2021-10-20)
+
+#### :rocket: New Feature
+
+* Added a new module `core/perf`
+
+## v3.60.5 (2021-10-14)
+
+#### :bug: Bug Fix
+
+* Fixed a bug when the function `convertIfDate` didn't convert an ISO string to a date `core/json`
+
+## v3.60.4 (2021-10-06)
+
+#### :bug: Bug Fix
+
+* Now cache keys are generated for all strategies `core/request`
+
+## v3.60.3 (2021-10-05)
+
+#### :bug: Bug Fix
+
+* Fixed a bug with double resolving of a promise when it resolved by another promise `core/promise`
+
+## v3.60.2 (2021-10-04)
+
+#### :bug: Bug Fix
+
+* Fixed restoring state if provided TTL `core/cache/decorators/persistent`
+* Fixed support of offline caching `core/request`
+
+## v3.60.1 (2021-10-01)
+
+#### :bug: Bug Fix
+
+* Hotfix for `3.60.0`
+
+## v3.60.0 (2021-10-01)
+
+#### :rocket: New Feature
+
+* Added `Number.isSafe` and `Number.prototype.isSafe` `core/prelude/number`
+
+#### :bug: Bug Fix
+
+* Fixed parsing of numbers `Object.parse` `core/prelude/object`
+
+#### :house: Internal
+
+* Updated dependencies: `typescript@4.4.3`, `typedoc@0.22.4`
+
+## v3.59.2 (2021-09-27)
+
+#### :bug: Bug Fix
+
+* Fixed date formatting with optional patterns `core/prelude/date/format`
+* Now `finally` respects exceptions values from a callback:
+  * `core/promise/sync`
+  * `core/promise/abortable`
+
+#### :nail_care: Polish
+
+* Refactored `Date.format` `core/prelude/date/format`
+
+## v3.59.1 (2021-09-21)
+
+#### :bug: Bug Fix
+
+* Don't override methods of already override objects `core/cache/decorators/helpers/add-emitter`
+
 ## v3.59.0 (2021-09-08)
 
 #### :rocket: New Feature

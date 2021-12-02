@@ -10,16 +10,16 @@ import extend from '~/core/prelude/extend';
 
 /** @see [[ObjectConstructor.get]] */
 extend(Object, 'get', (
-	obj: any,
+	obj: unknown,
 	path: ObjectPropertyPath | ObjectGetOptions,
 	opts?: ObjectGetOptions
 ) => {
 	if (needCurriedOverload(obj, path)) {
 		const
 			curriedPath = obj,
-			curriedOpts = <ObjectGetOptions>path;
+			curriedOpts = path;
 
-		return (obj) => Object.get(obj, curriedPath, curriedOpts);
+		return (obj) => Object.get(obj, Object.cast(curriedPath), Object.cast(curriedOpts));
 	}
 
 	const
@@ -40,11 +40,24 @@ extend(Object, 'get', (
 			const
 				key = chunks[i];
 
-			if (Object.isMap(res) || Object.isWeakMap(res)) {
+			if (Object.isPromiseLike(res) && !(key in res)) {
+				res = res.then((val) => {
+					if (val == null) {
+						return;
+					}
+
+					if (Object.isMap(val) || Object.isWeakMap(val)) {
+						return val.get(key);
+					}
+
+					return (Object.cast<Dictionary>(val))[key];
+				});
+
+			} else if (Object.isMap(res) || Object.isWeakMap(res)) {
 				res = res.get(key);
 
 			} else {
-				res = res[key];
+				res = Object.cast<Dictionary>(res)[key];
 			}
 		}
 
@@ -60,16 +73,16 @@ extend(Object, 'get', (
 
 /** @see [[ObjectConstructor.has]] */
 extend(Object, 'has', (
-	obj: any,
+	obj: unknown,
 	path: ObjectPropertyPath | ObjectGetOptions,
 	opts?: ObjectGetOptions
 ) => {
 	if (needCurriedOverload(obj, path)) {
 		const
 			curriedPath = obj,
-			curriedOpts = <ObjectGetOptions>path;
+			curriedOpts = path;
 
-		return (obj) => Object.has(obj, curriedPath, curriedOpts);
+		return (obj) => Object.has(obj, Object.cast(curriedPath), Object.cast(curriedOpts));
 	}
 
 	const
@@ -95,7 +108,7 @@ extend(Object, 'has', (
 				res = res.get(key);
 
 			} else {
-				res = res[key];
+				res = Object.cast<Dictionary>(res)[key];
 			}
 		}
 
@@ -110,7 +123,11 @@ extend(Object, 'has', (
 			return res.has(key);
 		}
 
-		return typeof res === 'object' ? key in res : res[key] !== undefined;
+		if (typeof res === 'object') {
+			return key in res!;
+		}
+
+		return Object.cast<Dictionary>(res)[key] !== undefined;
 	};
 
 	if (Object.isArray(path) || Object.isString(path)) {
@@ -126,7 +143,7 @@ const
 
 /** @see [[ObjectConstructor.hasOwnProperty]] */
 extend(Object, 'hasOwnProperty', function hasOwnProperty(
-	obj: any,
+	obj: unknown,
 	key?: string | symbol
 ): boolean | AnyFunction {
 	if (arguments.length > 1) {
@@ -147,7 +164,7 @@ extend(Object, 'hasOwnProperty', function hasOwnProperty(
 
 /** @see [[ObjectConstructor.set]] */
 extend(Object, 'set', function set(
-	obj: any,
+	obj: unknown,
 	path: ObjectPropertyPath | ObjectGetOptions,
 	value: unknown,
 	opts?: ObjectSetOptions
@@ -155,10 +172,11 @@ extend(Object, 'set', function set(
 	if (needCurriedOverload(obj, path)) {
 		const
 			curriedPath = obj,
-			curriedOpts = <ObjectGetOptions>path;
+			curriedOpts = path;
 
-		return function wrapper(obj: any, newValue: unknown): unknown {
-			Object.set(obj, curriedPath, arguments.length > 1 ? newValue : value, curriedOpts);
+		return function wrapper(obj: unknown, newValue: unknown): unknown {
+			const val = arguments.length > 1 ? newValue : value;
+			Object.set(obj, Object.cast(curriedPath), val, Object.cast(curriedOpts));
 			return obj;
 		};
 	}
@@ -189,7 +207,7 @@ extend(Object, 'set', function set(
 
 		let
 			ref = obj,
-			cursor: any;
+			cursor;
 
 		for (let i = 0; i < chunks.length; i++) {
 			const
@@ -228,17 +246,20 @@ extend(Object, 'set', function set(
 				ref = val;
 
 			} else {
+				const
+					box = Object.cast<object>(ref);
+
 				let
-					val = ref[key];
+					val = box[key];
 
 				if (val == null || typeof val !== 'object') {
 					val = nextChunkIsObj ? {} : [];
 
 					if (p.setter != null) {
-						p.setter(ref, key, val);
+						p.setter(box, key, val);
 
 					} else {
-						ref[key] = val;
+						box[key] = val;
 					}
 				}
 
@@ -268,30 +289,31 @@ extend(Object, 'set', function set(
 		}
 
 		const
-			val = cursor in ref && p.concat ? Array.concat([], ref[cursor], finalValue) : finalValue;
+			box = Object.cast<object>(ref),
+			val = cursor in box && p.concat ? Array.concat([], box[cursor], finalValue) : finalValue;
 
 		if (p.setter != null) {
-			p.setter(ref, cursor, val);
-			return ref[cursor];
+			p.setter(box, cursor, val);
+			return box[cursor];
 		}
 
-		ref[cursor] = val;
+		box[cursor] = val;
 		return val;
 	}
 });
 
 /** @see [[ObjectConstructor.delete]] */
 extend(Object, 'delete', (
-	obj: any,
+	obj: unknown,
 	path: ObjectPropertyPath | ObjectGetOptions,
 	opts?: ObjectGetOptions
 ) => {
 	if (needCurriedOverload(obj, path)) {
 		const
 			curriedPath = obj,
-			curriedOpts = <ObjectGetOptions>path;
+			curriedOpts = path;
 
-		return (obj) => Object.delete(obj, curriedPath, curriedOpts);
+		return (obj) => Object.delete(obj, Object.cast(curriedPath), Object.cast(curriedOpts));
 	}
 
 	const
@@ -317,7 +339,7 @@ extend(Object, 'delete', (
 				res = res.get(key);
 
 			} else {
-				res = res[key];
+				res = Object.cast<Dictionary>(res)[key];
 			}
 		}
 
@@ -332,8 +354,11 @@ extend(Object, 'delete', (
 			return res.delete(key);
 		}
 
-		if (typeof res === 'object' ? key in res : res[key] !== undefined) {
-			return delete res[key];
+		const
+			box = Object.cast<object>(res);
+
+		if (typeof res === 'object' ? key in box : box[key] !== undefined) {
+			return delete box[key];
 		}
 
 		return false;

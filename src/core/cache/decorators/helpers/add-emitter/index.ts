@@ -13,8 +13,8 @@
 
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 
+import symbolGenerator from '~/core/symbol';
 import type Cache from '~/core/cache/interface';
-import type { ClearFilter } from '~/core/cache/interface';
 
 import { eventEmitter } from '~/core/cache/decorators/helpers/add-emitter/const';
 
@@ -30,6 +30,9 @@ import type {
 export * from '~/core/cache/decorators/helpers/add-emitter/const';
 export * from '~/core/cache/decorators/helpers/add-emitter/interface';
 
+export const
+	$$ = symbolGenerator();
+
 /**
  * Adds an event emitter to the provided cache object and wraps all mutation events to emit events, i.e.,
  * it mutates the original object. The function returns an object with the original unwrapped methods and
@@ -40,6 +43,9 @@ export * from '~/core/cache/decorators/helpers/add-emitter/interface';
 const addEmitter: AddEmitter = <T extends Cache<V, K>, V = unknown, K extends string = string>(cache) => {
 	const
 		expandedCache = <Overwrite<CacheWithEmitter<V, K, T>, {[eventEmitter]?: EventEmitter}>><unknown>cache;
+
+	const
+		cacheWithEmitter = <CacheWithEmitter<V, K, T>>expandedCache;
 
 	let
 		emitter;
@@ -52,36 +58,83 @@ const addEmitter: AddEmitter = <T extends Cache<V, K>, V = unknown, K extends st
 		emitter = expandedCache[eventEmitter];
 	}
 
-	const
-		cacheWithEmitter = <CacheWithEmitter<V, K, T>>expandedCache;
+	let
+		// eslint-disable-next-line @typescript-eslint/unbound-method
+		originalSet = cacheWithEmitter.set,
 
-	const
-		originalSet = cacheWithEmitter.set.bind(cacheWithEmitter),
-		originalRemove = cacheWithEmitter.remove.bind(cacheWithEmitter),
-		originalClear = cacheWithEmitter.clear.bind(cacheWithEmitter);
+		// eslint-disable-next-line @typescript-eslint/unbound-method
+		originalRemove = cacheWithEmitter.remove,
 
-	cacheWithEmitter.set = (key: K, value: V, opts?: Parameters<T['set']>[2]) => {
-		const result = originalSet(key, value, opts);
-		emitter.emit('set', cacheWithEmitter, {args: [key, value, opts], result});
-		return result;
-	};
+		// eslint-disable-next-line @typescript-eslint/unbound-method
+		originalClear = cacheWithEmitter.clear;
 
-	cacheWithEmitter.remove = (key: K) => {
-		const result = originalRemove(key);
-		emitter.emit('remove', cacheWithEmitter, {args: [key], result});
-		return result;
-	};
+	if (originalSet[eventEmitter] == null) {
+		cacheWithEmitter[$$.set] = originalSet;
 
-	cacheWithEmitter.clear = (filter?: ClearFilter<V, K>): Map<K, V> => {
-		const result = originalClear(filter);
-		emitter.emit('clear', cacheWithEmitter, {args: [filter], result});
-		return result;
-	};
+		cacheWithEmitter.set = function set(...args: unknown[]): V {
+			const
+				result = originalSet.call(this, ...args);
+
+			emitter.emit('set', cacheWithEmitter, {
+				args,
+				result
+			});
+
+			return result;
+		};
+
+		cacheWithEmitter.set[eventEmitter] = true;
+
+	} else {
+		originalSet = cacheWithEmitter[$$.set] ?? originalSet;
+	}
+
+	if (originalRemove[eventEmitter] == null) {
+		cacheWithEmitter[$$.remove] = originalRemove;
+
+		cacheWithEmitter.remove = function remove(...args: unknown[]): CanUndef<V> {
+			const
+				result = originalRemove.call(this, ...args);
+
+			emitter.emit('remove', cacheWithEmitter, {
+				args,
+				result
+			});
+
+			return result;
+		};
+
+		cacheWithEmitter.remove[eventEmitter] = true;
+
+	} else {
+		originalRemove = cacheWithEmitter[$$.remove] ?? originalRemove;
+	}
+
+	if (originalClear[eventEmitter] == null) {
+		cacheWithEmitter[$$.clear] = originalClear;
+
+		cacheWithEmitter.clear = function clear(...args: unknown[]): Map<K, V> {
+			const
+				result = originalClear.call(this, ...args);
+
+			emitter.emit('clear', cacheWithEmitter, {
+				args,
+				result
+			});
+
+			return result;
+		};
+
+		cacheWithEmitter.clear[eventEmitter] = true;
+
+	} else {
+		originalClear = cacheWithEmitter[$$.clear] ?? originalClear;
+	}
 
 	return <AddEmitterReturn<T>>{
-		set: originalSet,
-		remove: originalRemove,
-		clear: originalClear,
+		set: originalSet.bind(cacheWithEmitter),
+		remove: originalRemove.bind(cacheWithEmitter),
+		clear: originalClear.bind(cacheWithEmitter),
 
 		subscribe: ((method, obj, cb): void => {
 			emitter.on(method, handler);

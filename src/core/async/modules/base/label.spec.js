@@ -117,4 +117,60 @@ describe('core/async/modules/base `label`', () => {
 			done();
 		}, 15);
 	});
+
+	it('label collision with iterables and replacing', async () => {
+		const $a = new Async();
+
+		const result = [];
+
+		await Promise.all([
+			(async () => {
+				for await (const item of $a.iterable([1, 2], {
+					label: 'foo',
+					join: 'replace'
+				})) {
+					result.push(item);
+				}
+			})(),
+
+			(async () => {
+				for await (const item of $a.iterable([10, 20], {
+					label: 'foo',
+					join: 'replace'
+				})) {
+					result.push(item);
+				}
+			})()
+		]);
+
+		expect(result).toEqual([10, 10, 20, 20]);
+	});
+
+	it('label collision with iterables and join', async () => {
+		const $a = new Async();
+
+		const result = [];
+
+		await Promise.all([
+			(async () => {
+				for await (const item of $a.iterable([1, 2], {
+					label: 'foo',
+					join: true
+				})) {
+					result.push(item);
+				}
+			})(),
+
+			(async () => {
+				for await (const item of $a.iterable([10, 20], {
+					label: 'foo',
+					join: true
+				})) {
+					result.push(item);
+				}
+			})()
+		]);
+
+		expect(result).toEqual([1, 1, 2, 2]);
+	});
 });

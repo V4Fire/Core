@@ -10,7 +10,7 @@ import extend from '~/core/prelude/extend';
 import { funcCache } from '~/core/prelude/object/const';
 
 /** @see [[ObjectConstructor.fastCompare]] */
-extend(Object, 'fastCompare', function fastCompare(a: any, b: any): boolean | AnyFunction {
+extend(Object, 'fastCompare', function fastCompare(a: unknown, b: unknown): boolean | AnyFunction {
 	if (arguments.length < 2) {
 		return (b) => Object.fastCompare(a, b);
 	}
@@ -30,20 +30,24 @@ extend(Object, 'fastCompare', function fastCompare(a: any, b: any): boolean | An
 		return false;
 	}
 
-	if (typeA !== 'object' || typeB !== 'object' || !Object.isTruly(a) || !Object.isTruly(b)) {
+	if (typeA !== 'object' || typeB !== 'object' || a == null || b == null) {
 		return isEqual;
 	}
 
-	if (a.constructor !== b.constructor) {
+	const
+		objA = Object.cast<object>(a),
+		objB = Object.cast<object>(b);
+
+	if (objA.constructor !== objB.constructor) {
 		return false;
 	}
 
 	if (Object.isRegExp(a)) {
-		return a.toString() === b.toString();
+		return a.toString() === objB.toString();
 	}
 
 	if (Object.isDate(a)) {
-		return a.valueOf() === b.valueOf();
+		return a.valueOf() === objB.valueOf();
 	}
 
 	const
@@ -52,13 +56,16 @@ extend(Object, 'fastCompare', function fastCompare(a: any, b: any): boolean | An
 		isSet = !isMap && Object.isSet(a);
 
 	const cantJSONCompare = !isArr && !Object.isDictionary(a) && (
-		!Object.isFunction(a['toJSON']) ||
-		!Object.isFunction(b['toJSON'])
+		!Object.isFunction(objA['toJSON']) ||
+		!Object.isFunction(objB['toJSON'])
 	);
 
 	if (cantJSONCompare) {
 		if ((isMap || isSet)) {
-			if (a.size !== b.size) {
+			const
+				setB = Object.cast<Set<unknown>>(b);
+
+			if (a.size !== setB.size) {
 				return false;
 			}
 
@@ -68,7 +75,7 @@ extend(Object, 'fastCompare', function fastCompare(a: any, b: any): boolean | An
 
 			const
 				aIter = a.entries(),
-				bIter = b.entries();
+				bIter = setB.entries();
 
 			for (let aEl = aIter.next(), bEl = bIter.next(); !aEl.done; aEl = aIter.next(), bEl = bIter.next()) {
 				const
@@ -92,15 +99,15 @@ extend(Object, 'fastCompare', function fastCompare(a: any, b: any): boolean | An
 
 	if (isArr) {
 		length1 = a.length;
-		length2 = b.length;
+		length2 = objB['length'];
 
 	} else if (isMap || isSet) {
 		length1 = a.size;
-		length2 = b.size;
+		length2 = objA['size'];
 
 	} else {
-		length1 = a.length ?? Object.keys(a).length;
-		length2 = b.length ?? Object.keys(b).length;
+		length1 = objA['length'] ?? Object.keys(objA).length;
+		length2 = objB['length'] ?? Object.keys(objB).length;
 	}
 
 	if (length1 !== length2) {

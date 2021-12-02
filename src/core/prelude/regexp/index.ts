@@ -36,7 +36,7 @@ extend(RegExp, 'test', (rgxp: RegExp | string, str?: string) => {
 
 /** @see [[RegExp.addFlags]] */
 extend(RegExp.prototype, 'addFlags', function addFlags(this: RegExp, ...flags: RegExpFlag[]) {
-	const set = new Set(flags.concat(<any>this.flags).flatMap((str) => str.split('')));
+	const set = new Set([...flags, ...this.flags].flatMap((str) => str.split('')));
 	return new RegExp(this.source, [...set].join(''));
 });
 

@@ -19,7 +19,7 @@ export function isContainer(value: unknown): boolean {
 		return true;
 	}
 
-	return Object.isCustomObject((<any>value).constructor);
+	return Object.isCustomObject(value!.constructor);
 }
 
 /**
@@ -35,7 +35,7 @@ export function canExtendProto(value: unknown): boolean {
 		return true;
 	}
 
-	return Object.isCustomObject((<any>value).constructor);
+	return Object.isCustomObject(value!.constructor);
 }
 
 /**
@@ -84,7 +84,7 @@ export function getType(value: unknown): string {
  */
 export function getSameAs<T>(value: T): Nullable<T> {
 	let
-		res: any = null;
+		res: unknown = null;
 
 	if (value != null && typeof value === 'object') {
 		if (Object.isArray(value)) {
@@ -99,10 +99,10 @@ export function getSameAs<T>(value: T): Nullable<T> {
 		} else if (Object.isSet(value)) {
 			res = new Set();
 
-		} else if (Object.isCustomObject((<any>value).constructor)) {
+		} else if (Object.isCustomObject(Object.cast<object>(value).constructor)) {
 			res = {};
 		}
 	}
 
-	return res;
+	return Object.cast(res);
 }

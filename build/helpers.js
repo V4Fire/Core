@@ -12,6 +12,10 @@ const
 	fs = require('fs'),
 	path = require('upath');
 
+const
+	template = require('@babel/template').default,
+	{ensureStatementsHoisted} = require('@babel/helper-module-transforms');
+
 /**
  * Returns the project meta information
  * @returns {{name: string, version: string}}
@@ -79,7 +83,6 @@ exports.redefineRequire = function redefineRequire() {
 	require.extensions = staticRequire.extensions;
 	require.main = staticRequire.main;
 
-	// @ts-ignore
 	require.resolve = (url, opts) => {
 		url = stripUrlIfNeeded(url);
 
@@ -110,4 +113,23 @@ exports.redefineRequire = function redefineRequire() {
 	};
 
 	require('core/prelude');
+};
+
+/**
+ * Babel plugin to insert code into the beginning of a file
+ */
+exports.prependCode = function prependCode(code) {
+	return function prependCode() {
+		return {
+			visitor: {
+				Program: {
+					exit(path) {
+						const node = template.ast(code, {preserveComments: true});
+						ensureStatementsHoisted([node]);
+						path.unshiftContainer('body', node);
+					}
+				}
+			}
+		};
+	};
 };

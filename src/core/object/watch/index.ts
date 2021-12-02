@@ -16,6 +16,7 @@
 import watchEngine from '~/core/object/watch/engines';
 
 import { muteLabel, toOriginalObject, toRootObject, watchHandlers } from '~/core/object/watch/const';
+import { isValueCanBeArrayIndex } from '~/core/object/watch/helpers';
 import { unwrap } from '~/core/object/watch/engines/helpers';
 
 import type {
@@ -120,6 +121,7 @@ function watch<T extends object>(
 	optsOrHandler?: WatchOptions | WatchHandler | MultipleWatchHandler
 ): Watcher<T> {
 	const
+		isPathParsedFromString = Symbol('Is the path parsed from a string'),
 		unwrappedObj = unwrap(obj);
 
 	let
@@ -133,7 +135,13 @@ function watch<T extends object>(
 
 	// Support for overloads of the function
 	if (Object.isString(pathOptsOrHandler) || Object.isArray(pathOptsOrHandler)) {
-		normalizedPath = Object.isArray(pathOptsOrHandler) ? pathOptsOrHandler : pathOptsOrHandler.split('.');
+		if (Object.isArray(pathOptsOrHandler)) {
+			normalizedPath = pathOptsOrHandler;
+
+		} else {
+			normalizedPath = pathOptsOrHandler.split('.');
+			normalizedPath[isPathParsedFromString] = true;
+		}
 
 		if (Object.isFunction(handlerOrOpts)) {
 			handler = handlerOrOpts;
@@ -170,8 +178,14 @@ function watch<T extends object>(
 
 	// Normalize dependencies
 	if (rawDeps != null && unwrappedObj != null) {
-		const
-			convert = (dep) => Object.isArray(dep) ? dep : dep.split('.');
+		const convert = (dep) => {
+			if (Object.isString(dep)) {
+				dep = dep.split('.');
+				dep[isPathParsedFromString] = true;
+			}
+
+			return dep;
+		};
 
 		if (Object.isArray(rawDeps)) {
 			localDeps = [];
@@ -433,7 +447,16 @@ function watch<T extends object>(
 						pathVal = path[i],
 						tiedPathVal = tiedPath[i];
 
-					if (pathVal === tiedPathVal) {
+					const needNormalizeVal =
+						Object.isNumber(pathVal) &&
+						tiedPath[isPathParsedFromString] === true &&
+						isValueCanBeArrayIndex(tiedPathVal);
+
+					const pathsAreSame = needNormalizeVal ?
+						Number(tiedPathVal) === Number(pathVal) :
+						tiedPathVal === pathVal;
+
+					if (pathsAreSame) {
 						continue;
 					}
 
@@ -477,7 +500,16 @@ function watch<T extends object>(
 									pathVal = path[i],
 									depPathVal = depPath[i];
 
-								if (pathVal === depPathVal) {
+								const needNormalizeVal =
+									Object.isNumber(pathVal) &&
+									depPath[isPathParsedFromString] === true &&
+									isValueCanBeArrayIndex(depPathVal);
+
+								const pathsAreSame = needNormalizeVal ?
+									Number(depPathVal) === Number(pathVal) :
+									depPathVal === pathVal;
+
+								if (pathsAreSame) {
 									dynamic = true;
 									continue;
 								}

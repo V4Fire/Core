@@ -15,10 +15,10 @@ export let
 if (IS_NODE) {
 	//#if node_js
 	({isOnline} =
-		require('core/net/engines/node.request'));
+		require('core/net/engines/node-request'));
 	//#endif
 
 } else {
 	({isOnline} =
-		require('core/net/engines/browser.request'));
+		require('core/net/engines/browser-request'));
 }

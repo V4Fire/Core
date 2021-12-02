@@ -55,7 +55,7 @@ export function notImplement<T extends Function>(
 		p = fnOrParams;
 	}
 
-	return <any>warn({context: 'notImplemented', ...p}, <T>fn);
+	return Object.cast(warn({context: 'notImplemented', ...p}, <T>fn));
 }
 
 /**

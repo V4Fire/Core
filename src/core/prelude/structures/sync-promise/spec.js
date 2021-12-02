@@ -22,6 +22,42 @@ describe('core/prelude/structures/sync-promise', () => {
 		expect(i).toBe(6);
 	});
 
+	it('unwraps a promise', (done) => {
+		let
+			err;
+
+		const
+			sleep = new SyncPromise((r) => setTimeout(() => r(10), 30));
+
+		try {
+			sleep.unwrap();
+
+		} catch (e) {
+			err = e;
+		}
+
+		setTimeout(() => {
+			expect(err).toBeInstanceOf(Error);
+			expect(err?.message).toBe("Can't unwrap a pending promise");
+			expect(sleep.unwrap()).toBe(10);
+			done();
+		}, 50);
+	});
+
+	it('unwraps a rejected promise', () => {
+		let
+			err;
+
+		try {
+			SyncPromise.reject('Boom!').unwrap();
+
+		} catch (e) {
+			err = e;
+		}
+
+		expect(err).toBe('Boom!');
+	});
+
 	it('promise that is resolved with another promise', async () => {
 		const i = await new SyncPromise((resolve) => {
 			resolve(
@@ -67,6 +103,45 @@ describe('core/prelude/structures/sync-promise', () => {
 
 		expect(i).toBeInstanceOf(SyncPromise);
 		expect(await i).toBe(1);
+	});
+
+	it('double promise resolution', async () => {
+		expect(
+			await new SyncPromise((resolve) => {
+				resolve(1);
+				resolve(2);
+			})
+		).toBe(1);
+
+		expect(
+			await new SyncPromise((resolve) => {
+				resolve(new Promise((r) => setTimeout(() => r(1)), 100));
+				resolve(2);
+			})
+		).toBe(1);
+	});
+
+	it('double promise rejection', async () => {
+		try {
+			await new SyncPromise((resolve, reject) => {
+				reject(1);
+				reject(2);
+			});
+
+		} catch (err) {
+			expect(err).toBe(1);
+		}
+
+		try {
+			await new SyncPromise((resolve, reject) => {
+				reject(new Promise((r) => setTimeout(() => r(1)), 100));
+				reject(2);
+			});
+
+		} catch (err) {
+			expect(err).toBeInstanceOf(Promise);
+			expect(await err).toBe(1);
+		}
 	});
 
 	it('resolved `then` after `catch`', () => {
@@ -226,6 +301,40 @@ describe('core/prelude/structures/sync-promise', () => {
 		expect(i).toBe(6);
 	});
 
+	it('`finally` that returns an error', () => {
+		let
+			reason;
+
+		new SyncPromise((resolve) => {
+			resolve(1);
+		})
+			.finally(() => SyncPromise.reject('Boom'))
+
+			.catch((err) => {
+				reason = err;
+			});
+
+		expect(reason).toBe('Boom');
+	});
+
+	it('`finally` that throws an error', () => {
+		let
+			reason;
+
+		new SyncPromise((resolve) => {
+			resolve(1);
+		})
+			.finally(() => {
+				throw 'Boom';
+			})
+
+			.catch((err) => {
+				reason = err;
+			});
+
+		expect(reason).toBe('Boom');
+	});
+
 	it('`SyncPromise.resolve`', () => {
 		let
 			i = 0,
@@ -261,11 +370,8 @@ describe('core/prelude/structures/sync-promise', () => {
 			let
 				res;
 
-			SyncPromise.all([
-				1,
-				null,
-				SyncPromise.resolve(2)
-			]).then((val) => res = val);
+			SyncPromise.all([1, null, SyncPromise.resolve(2)])
+				.then((val) => res = val);
 
 			expect(res).toEqual([1, null, 2]);
 		});
@@ -274,11 +380,7 @@ describe('core/prelude/structures/sync-promise', () => {
 			let
 				res;
 
-			SyncPromise.all([
-				1,
-				null,
-				SyncPromise.reject(2)
-			]).then(
+			SyncPromise.all([1, null, SyncPromise.reject(2)]).then(
 				(val) => res = val,
 				(err) => res = err
 			);
@@ -291,11 +393,7 @@ describe('core/prelude/structures/sync-promise', () => {
 		let
 			res;
 
-		SyncPromise.allSettled([
-			1,
-			null,
-			SyncPromise.reject(2)
-		]).then(
+		SyncPromise.allSettled([1, null, SyncPromise.reject(2)]).then(
 			(val) => res = val,
 			(err) => res = err
 		);
@@ -312,10 +410,8 @@ describe('core/prelude/structures/sync-promise', () => {
 			let
 				res;
 
-			SyncPromise.race([
-				Promise.resolve(1),
-				SyncPromise.resolve(2)
-			]).then((val) => res = val);
+			SyncPromise.race([Promise.resolve(1), SyncPromise.resolve(2)])
+				.then((val) => res = val);
 
 			expect(res).toBe(2);
 		});
@@ -324,10 +420,7 @@ describe('core/prelude/structures/sync-promise', () => {
 			let
 				res;
 
-			SyncPromise.race([
-				Promise.resolve(1),
-				SyncPromise.reject(2)
-			]).then(
+			SyncPromise.race([Promise.resolve(1), SyncPromise.reject(2)]).then(
 				(val) => res = val,
 				(err) => res = ['error', err]
 			);

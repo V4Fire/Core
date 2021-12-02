@@ -13,5 +13,5 @@ import type { Event } from '~/core/async/interface';
  * @param value
  */
 export function isEvent(value: unknown): value is Event {
-	return Object.isPlainObject(value) && Object.isString((<any>value).event);
+	return Object.isPlainObject(value) && Object.isString(value.event);
 }

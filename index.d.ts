@@ -22,37 +22,31 @@ declare namespace TB {
 
 	type Length<T extends any[]> = T['length'];
 
-	type Head<T extends any[]> = T extends [any, ...any[]] ?
-		T[0] : never;
+	type Head<T extends any[]> = T extends [infer H, ...any[]] ?
+		H : never;
 
-	type Tail<T extends any[]> = ((...t: T) => any) extends ((_: any, ...tail: infer TT) => any) ?
+	type Tail<T extends any[]> = T extends [any, ...infer TT] ?
 		TT : [];
 
-	type HasTail<T extends any[]> = T extends [any] | [] ? false : true;
+	type HasTail<T extends any[]> = Length<T> extends 0 | 1 ?
+		false : true;
 
-	type Last<T extends any[]> = {
-		0: Last<Tail<T>>;
-		1: Head<T>;
-	}[HasTail<T> extends true ? 0 : 1];
+	type Last<T extends any[]> = HasTail<T> extends true ?
+		Last<Tail<T>> : Head<T>;
 
-	type Prepend<E, T extends any[]> =
-		((head: E, ...args: T) => any) extends ((...args: infer U) => any) ? U : T;
+	type Prepend<E, T extends any[]> = [E, ...T];
 
-	type Drop<N extends number, T extends any[], I extends any[] = []> = {
-		0: Drop<N, Tail<T>, Prepend<any, I>>;
-		1: T;
-	}[Length<I> extends N ? 1 : 0];
+	type Drop<N extends number, T extends any[], I extends any[] = []> = Length<I> extends N ?
+		T : Drop<N, Tail<T>, Prepend<any, I>>;
 
 	type Pos<I extends any[]> = Length<I>;
+
 	type Next<I extends any[]> = Prepend<any, I>;
 	type Prev<I extends any[]> = Tail<I>;
 
-	type Reverse<T extends any[], R extends any[] = [], I extends any[] = []> = {
-		0: Reverse<T, Prepend<T[Pos<I>], R>, Next<I>>;
-		1: R;
-	}[Pos<I> extends Length<T> ? 1 : 0];
+	type Reverse<T extends any[], R extends any[] = [], I extends any[] = []> = Pos<I> extends Length<T> ?
+		R : Reverse<T, Prepend<T[Pos<I>], R>, Next<I>>;
 
-	// @ts-ignore (recursive type)
 	type Concat<T1 extends any[], T2 extends any[]> = Reverse<Cast<Reverse<T1>, any[]>, T2>;
 
 	type Append<E, T extends any[]> = Concat<T, [E]>;
@@ -62,12 +56,10 @@ declare namespace TB {
 	type GapOf<T1 extends any[], T2 extends any[], TN extends any[], I extends any[]> =
 		T1[Pos<I>] extends __ ? Append<T2[Pos<I>], TN> : TN;
 
-	type GapsOf<T1 extends any[], T2 extends any[], TN extends any[] = [], I extends any[] = []> = {
-		// @ts-ignore (recursive type)
-		0: GapsOf<T1, T2, Cast<GapOf<T1, T2, TN, I>, any[]>, Next<I>>;
-		// @ts-ignore (recursive type)
-		1: Concat<TN, Cast<Drop<Pos<I>, T2>, any[]>>;
-	}[Pos<I> extends Length<T1> ? 1 : 0];
+	type GapsOf<T1 extends any[], T2 extends any[], TN extends any[] = [], I extends any[] = []> =
+		Pos<I> extends Length<T1> ?
+			Concat<TN, Cast<Drop<Pos<I>, T2>, any[]>> :
+			GapsOf<T1, T2, Cast<GapOf<T1, T2, TN, I>, any[]>, Next<I>>;
 
 	type PartialGaps<T extends any[]> = {
 		[K in keyof T]?: T[K] | __;
@@ -77,12 +69,12 @@ declare namespace TB {
 		[K in keyof T]: NonNullable<T[K]>;
 	};
 
-	type Gaps<T extends any[]> = CleanedGaps<PartialGaps<T>>;
+	type Gaps<T extends any[]> = CleanedGaps<PartialGaps<T>> extends [...infer A] ?
+		A : never;
 
 	type Curry<F extends ((...args: any) => any)> =
-		<T extends any[]>(...args: Cast<Cast<T, Gaps<Parameters<F>>>, any[]>) =>
+		<T extends any[]>(...args: Cast<T, Gaps<Parameters<F>>>) =>
 			GapsOf<T, Parameters<F>> extends [any, ...any[]] ?
-				// @ts-ignore (recursive type)
 				Curry<(...args: Cast<GapsOf<T, Parameters<F>>, any[]>) => ReturnType<F>> :
 				ReturnType<F>;
 }
@@ -125,7 +117,7 @@ declare function l(strings: any | string[], ...expr: any[]): string;
 declare function setImmediate(fn: AnyFunction): number;
 declare function clearImmediate(id: number): void;
 
-type Primitive = string | number | boolean | undefined | null;
+type Primitive = string | symbol | number | bigint | boolean | undefined | null;
 
 type CanPromise<T> = T | Promise<T>;
 type CanArray<T> = T | T[];
@@ -136,6 +128,9 @@ type Nullable<T> = T | null | undefined;
 // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
 type CanVoid<T> = T | void;
 
+type AnyToIgnore = any;
+type AnyToBoolean = any;
+
 interface AnyFunction<ARGS extends any[] = any[], R = any> extends Function {
 	(...args: ARGS): R;
 }
@@ -144,16 +139,18 @@ interface AnyOneArgFunction<ARG = any, R = any> extends Function {
 	(arg: ARG): R;
 }
 
-interface ClassConstructor<T = unknown> {
-	new: T;
-}
+type ClassConstructor<C = unknown, ARGS extends any[] = any[]> = AnyFunction<ARGS, void> & {
+	new: C;
+};
 
 interface StrictDictionary<T = unknown> {
 	[key: string]: T;
 }
 
+type DictionaryKey = string | symbol | number;
+
 interface Dictionary<T = unknown> {
-	[key: string]: CanUndef<T>;
+	[key: DictionaryKey]: CanUndef<T>;
 }
 
 interface Maybe<T = unknown> extends Promise<T> {
@@ -192,7 +189,7 @@ type IterableType<T extends Iterable<any>> = T extends Iterable<infer V> ? V : T
 
 /**
  * Overrides properties of the specified type or interface.
- * Don't use this helper if you simply extend one type from another, i. e. without overriding properties.
+ * Don't use this helper if you simply extend one type from another, i.e. without overriding properties.
  *
  * @template T - original type
  * @template U - type with the overridden properties
@@ -222,7 +219,7 @@ type Overwrite<T, U> = Pick<T, Exclude<keyof T, keyof U>> & U;
  *   }
  *
  *   bar(): string {
- *     return <any>>null;
+ *     return Object.throw();
  *   }
  *
  *   abstract bar(): number;
@@ -330,7 +327,7 @@ interface ObjectMixinOptions<V = unknown, K = unknown, D = unknown> {
 	 * Object.mixin({deep: true, filter: (el, key) => key !== 'b'}, {a: 1}, {b: 2});
 	 * ```
 	 */
-	filter?(el: V, key: K, data: D): unknown;
+	filter?(el: V, key: K, data: D): AnyToBoolean;
 
 	/**
 	 * Function to filter values that support deep extending
@@ -349,7 +346,7 @@ interface ObjectMixinOptions<V = unknown, K = unknown, D = unknown> {
 	 * Object.mixin({deep: true, extendFilter: (el) => !el.b}, {a: {a: 1}}, {a: {b: 2}});
 	 * ```
 	 */
-	extendFilter?(el: unknown, key: K, data: V): unknown;
+	extendFilter?(el: unknown, key: K, data: V): AnyToBoolean;
 
 	/**
 	 * If true, all properties with undefined value aren't copied
@@ -368,7 +365,7 @@ interface ObjectMixinOptions<V = unknown, K = unknown, D = unknown> {
 
 	/**
 	 * If true, the function will merge all object properties, but not only enumerable.
-	 * Non enumerable properties from a prototype are ignored.
+	 * Non-enumerable properties from a prototype are ignored.
 	 *
 	 * @default `false`
 	 * @example
@@ -632,13 +629,13 @@ interface ObjectFromArrayOptions<T = boolean> {
 	 * @param el - element value
 	 * @param i - element index
 	 */
-	key?(el: unknown, i: number): string | symbol;
+	key?(el: unknown, i: number): DictionaryKey;
 
 	/**
 	 * @deprecated
 	 * @see [[ObjectFromArrayOptions.key]]
 	 */
-	keyConverter?(i: number, el: unknown): string | symbol;
+	keyConverter?(i: number, el: unknown): DictionaryKey;
 
 	/**
 	 * Function that returns an element value
@@ -660,13 +657,14 @@ type ObjectPropertyPath =
 	any[];
 
 interface ObjectPropertyFilter<K = string, V = unknown> {
-	(key: K, el: V): any;
+	(key: K, el: V): AnyToBoolean;
 }
 
 interface ObjectConstructor {
 	/**
 	 * Returns a value from the passed object by the specified path.
 	 * Returns undefined if the specified path doesn't exist in the object.
+	 * The method can access properties through promises.
 	 *
 	 * @param obj
 	 * @param path
@@ -723,13 +721,13 @@ interface ObjectConstructor {
 	 *
 	 * @param key
 	 */
-	hasOwnProperty(key: string | symbol): (obj: any) => boolean;
+	hasOwnProperty(key: DictionaryKey): (obj: any) => boolean;
 
 	/**
 	 * Returns a function that returns true if the specified object has own property by a key that the function takes
 	 * @param obj
 	 */
-	hasOwnProperty(obj: any): (key: string | symbol) => boolean;
+	hasOwnProperty(obj: any): (key: DictionaryKey) => boolean;
 
 	/**
 	 * Returns true if the passed object has an own property by the specified key
@@ -737,7 +735,7 @@ interface ObjectConstructor {
 	 * @param obj
 	 * @param key
 	 */
-	hasOwnProperty(obj: any, key: string | symbol): boolean;
+	hasOwnProperty(obj: any, key: DictionaryKey): boolean;
 
 	/**
 	 * Sets a value to the passed object by the specified path.
@@ -1067,60 +1065,60 @@ interface ObjectConstructor {
 	 * Returns a curried version of `Object.mixin` for two arguments
 	 *
 	 * @param opts - if true, then properties will be copied recursively, or additional options to extend
-	 * @param base - base object
+	 * @param target - target object
 	 */
-	mixin<B>(opts: ObjectMixinOptions | boolean, base: B): <O1>(obj1: O1) => B & O1;
+	mixin<B>(opts: ObjectMixinOptions | boolean, target: B): <O1>(obj1: O1) => B & O1;
 
 	/**
 	 * Returns a curried version of `Object.mixin` for two arguments
 	 *
 	 * @param opts - if true, then properties will be copied recursively, or additional options to extend
-	 * @param base - base object
+	 * @param target - target object
 	 */
-	mixin(opts: ObjectMixinOptions | boolean, base: any): <R = unknown>(...objects: any[]) => R;
+	mixin(opts: ObjectMixinOptions | boolean, target: any): <R = unknown>(...objects: any[]) => R;
 
 	/**
 	 * Extends the specified object by another objects.
 	 * If the base value is not an object, a new object will be created with a type similar to the first extension object.
 	 *
 	 * @param opts - if true, then properties will be copied recursively, or additional options to extend
-	 * @param base - base object
+	 * @param target - target object
 	 * @param obj1 - object for extending
 	 */
-	mixin<B, O1>(opts: ObjectMixinOptions | boolean, base: B, obj1: O1): B & O1;
+	mixin<B, O1>(opts: ObjectMixinOptions | boolean, target: B, obj1: O1): B & O1;
 
 	/**
 	 * Extends the specified object by another objects.
 	 * If the base value is not an object, a new object will be created with a type similar to the first extension object.
 	 *
 	 * @param opts - if true, then properties will be copied recursively, or additional options to extend
-	 * @param base - base object
+	 * @param target - target object
 	 * @param obj1 - object for extending
 	 * @param obj2 - object for extending
 	 */
-	mixin<B, O1, O2>(opts: ObjectMixinOptions | boolean, base: B, obj1: O1, obj2: O2): B & O1 & O2;
+	mixin<B, O1, O2>(opts: ObjectMixinOptions | boolean, target: B, obj1: O1, obj2: O2): B & O1 & O2;
 
 	/**
 	 * Extends the specified object by another objects.
 	 * If the base value is not an object, a new object will be created with a type similar to the first extension object.
 	 *
 	 * @param opts - if true, then properties will be copied recursively, or additional options to extend
-	 * @param base - base object
+	 * @param target - target object
 	 * @param obj1 - object for extending
 	 * @param obj2 - object for extending
 	 * @param obj3 - object for extending
 	 */
-	mixin<B, O1, O2, O3>(opts: ObjectMixinOptions | boolean, base: B, obj1: O1, obj2: O2, obj3: O3): B & O1 & O2 & O3;
+	mixin<B, O1, O2, O3>(opts: ObjectMixinOptions | boolean, target: B, obj1: O1, obj2: O2, obj3: O3): B & O1 & O2 & O3;
 
 	/**
 	 * Extends the specified object by another objects.
 	 * If the base value is not an object, a new object will be created with a type similar to the first extension object.
 	 *
 	 * @param opts - if true, then properties will be copied recursively, or additional options to extend
-	 * @param base - base object
+	 * @param target - target object
 	 * @param objects - objects for extending
 	 */
-	mixin<R = unknown>(opts: ObjectMixinOptions | boolean, base?: any, ...objects: any[]): R;
+	mixin<R = unknown>(opts: ObjectMixinOptions | boolean, target?: any, ...objects: any[]): R;
 
 	/**
 	 * Returns a curried version of `Object.serialize`
@@ -1220,7 +1218,7 @@ interface ObjectConstructor {
 	 * Object.fromArray(['foo', 'bar'], {value: (val, i) => i});
 	 * ```
 	 */
-	fromArray<T>(arr: Nullable<unknown[]>, opts?: ObjectFromArrayOptions<T>): Dictionary<T>;
+	fromArray<T>(arr: Nullable<any[]>, opts?: ObjectFromArrayOptions<T>): Dictionary<T>;
 
 	/**
 	 * Returns a curried version of `Object.select`
@@ -1669,6 +1667,20 @@ interface ObjectConstructor {
 	Result<T = unknown>(value: T): Either<T>;
 
 	/**
+	 * Casts any value to the specified type
+	 * @param value
+	 */
+	cast<T = unknown>(value: any): T;
+
+	/**
+	 * Throws an error.
+	 * This method is useful because the `throw` operator can't be used within expressions.
+	 *
+	 * @param [err]
+	 */
+	throw(err?: string | Error): any;
+
+	/**
 	 * Returns true if the specified value can be interpreted as true
 	 * @param value
 	 */
@@ -1821,6 +1833,12 @@ interface ObjectConstructor {
 	 * @param value
 	 */
 	isIterable(value: any): value is IterableIterator<unknown>;
+
+	/**
+	 * Returns true if the specified value is an async iterable structure
+	 * @param value
+	 */
+	isAsyncIterable(value: any): value is AsyncIterableIterator<unknown>;
 
 	/**
 	 * Returns true if the specified value is an iterator
@@ -2206,6 +2224,12 @@ interface NumberConstructor {
 	setOption(key: NumberOption, value: string): string;
 
 	/**
+	 * Returns true if the specified value is a safe number
+	 * @param value
+	 */
+	isSafe(value: any): boolean;
+
+	/**
 	 * Returns true if the specified value is an integer number
 	 * @param value
 	 */
@@ -2372,24 +2396,24 @@ interface NumberConstructor {
 
 	/**
 	 * Returns a string representation of a number by the specified pattern.
-	 * All pattern directives are based on native Intl.NumberFormat options:
+	 * All pattern directives are based on the native `Intl.NumberFormat` options:
 	 *
 	 *   1. `'style'`
-	 *   1. `'currency'`
-	 *   1. `'currencyDisplay'`
+	 *   2. `'currency'`
+	 *   3. `'currencyDisplay'`
 	 *
 	 * There are aliases for all directives:
 	 *
 	 *   1. `'$'` - `{style: 'currency', currency: 'USD'}`
-	 *   1. `'$:${currency}'` - `{style: 'currency', currency}`
-	 *   1. `'$d:${currencyDisplay}'` - `{currencyDisplay}`
-	 *   1. `'%'` - `{style: 'percent'}`
-	 *   1. `'.'` - `{style: 'decimal'}`
+	 *   2. `'$:${currency}'` - `{style: 'currency', currency}`
+	 *   3. `'$d:${currencyDisplay}'` - `{currencyDisplay}`
+	 *   4. `'%'` - `{style: 'percent'}`
+	 *   5. `'.'` - `{style: 'decimal'}`
 	 *
 	 * @param num
-	 * @param pattern - string pattern of the format:
-	 *   1. symbol `';'` is used as a separator character for pattern directives, for example: `'$;$d:code'`
-	 *   1. symbol `':'` is used for specifying a custom value for a pattern directive, for example:
+	 * @param pattern - format string pattern:
+	 *   1. symbol `';'` is used as a separator character for the pattern directives, for example: `'$;$d:code'`
+	 *   2. symbol `':'` is used for specifying a custom value for a pattern directive, for example:
 	 *    `'$:RUB;$d:code'`
 	 *
 	 * @param [locale] - locale for internalizing
@@ -2523,7 +2547,12 @@ interface Number {
 	weeks(): number;
 
 	/**
-	 * Returns true if the number is integer
+	 * Returns true if the number is safe
+	 */
+	isSafe(): boolean;
+
+	/**
+	 * Returns true if the number is an integer
 	 */
 	isInteger(): boolean;
 
@@ -2582,7 +2611,7 @@ interface Number {
 
 	/**
 	 * Returns a string representation of the number by the specified pattern.
-	 * All pattern directives are based on native Intl.NumberFormat options:
+	 * All pattern directives are based on the native `Intl.NumberFormat` options:
 	 *
 	 *   1. `'style'`
 	 *   1. `'currency'`
@@ -3030,7 +3059,7 @@ interface DateConstructor {
 
 	/**
 	 * Returns a string representation of the date by the specified pattern.
-	 * All pattern directives are based on native `Intl.DateTimeFormat` options:
+	 * All pattern directives are based on the native `Intl.DateTimeFormat` options:
 	 *
 	 *   1. `'era'`
 	 *   1. `'year'`
@@ -3418,7 +3447,7 @@ interface Date {
 
 	/**
 	 * Returns a string representation of the date by the specified pattern.
-	 * All pattern directives are based on native `Intl.DateTimeFormat` options:
+	 * All pattern directives are based on the native `Intl.DateTimeFormat` options:
 	 *
 	 *   1. `'era'`
 	 *   1. `'year'`

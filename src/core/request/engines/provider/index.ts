@@ -190,7 +190,7 @@ function getProviderInstance(src: ExtraProviderConstructor, meta?: Meta): Provid
 	}
 
 	if (meta?.provider != null) {
-		return createMixedProvider(provider, <any>meta.provider);
+		return createMixedProvider(provider, Object.cast(meta.provider));
 	}
 
 	return provider;

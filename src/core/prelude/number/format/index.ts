@@ -13,13 +13,13 @@ import { locale as defaultLocale } from '~/core/prelude/i18n';
 
 import {
 
-	globalOpts,
+	globalFormatOpts,
+	defaultFormats,
 
 	formatCache,
 	formatAliases,
 	boolAliases,
 
-	defaultFormats,
 	decPartRgxp
 
 } from '~/core/prelude/number/const';
@@ -58,7 +58,7 @@ extend(Number, 'pad', (value: number | NumberPadOptions, lengthOrOpts: number | 
 		return (value) => Number.pad(value, opts);
 	}
 
-	return value.pad(<any>lengthOrOpts);
+	return value.pad(Object.cast(lengthOrOpts));
 });
 
 /** @see [[Number.format]] */
@@ -67,7 +67,7 @@ extend(Number.prototype, 'format', function format(
 	patternOrOpts?: number | string | Intl.NumberFormatOptions,
 	locale: CanArray<string> = defaultLocale.value
 ): string {
-	if (patternOrOpts === undefined && !globalOpts.init) {
+	if (patternOrOpts === undefined && !globalFormatOpts.init) {
 		return this.toLocaleString(locale);
 	}
 
@@ -78,75 +78,69 @@ extend(Number.prototype, 'format', function format(
 	if (Object.isString(patternOrOpts)) {
 		const
 			pattern = patternOrOpts,
-			cacheKey = [locale, pattern].join(),
-			cache = formatCache[cacheKey];
+			cacheKey = [locale, pattern].join();
 
-		if (cache) {
-			return cache.format(this);
-		}
+		let
+			formatter = formatCache[cacheKey];
 
-		const
-			chunks = pattern.split(';'),
-			opts = <Intl.NumberFormatOptions>{};
-
-		for (let i = 0; i < chunks.length; i++) {
+		if (formatter == null) {
 			const
-				el = chunks[i].trim();
+				chunks = pattern.split(';'),
+				opts = <Intl.NumberFormatOptions>{};
 
-			let [key, val = null] = el.split(':');
-			key = key.trim();
+			for (let i = 0; i < chunks.length; i++) {
+				const
+					formatChunk = chunks[i].trim();
 
-			if (val != null) {
-				val = val.trim();
-			}
+				let [formatKey, formatParams = null] = formatChunk.split(':');
+				formatKey = formatKey.trim();
 
-			const
-				alias = formatAliases[key];
+				if (formatParams != null) {
+					formatParams = formatParams.trim();
+				}
 
-			let
-				brk = false;
+				const
+					alias = formatAliases[formatKey];
 
-			if (alias != null) {
-				key = alias;
+				if (alias != null) {
+					formatKey = alias;
 
-				switch (alias) {
-					case 'currency':
-						opts.style = 'currency';
-						opts.currency = val ?? defaultFormats.currency;
-						brk = true;
-						break;
+					switch (alias) {
+						case 'currency':
+							opts.style = 'currency';
+							opts.currency = formatParams ?? defaultFormats.currency;
+							break;
 
-					case 'currencyDisplay':
-						opts.currencyDisplay = val ?? defaultFormats.currencyDisplay;
-						brk = true;
-						break;
+						case 'currencyDisplay':
+							opts.currencyDisplay = formatParams ?? defaultFormats.currencyDisplay;
+							break;
 
-					case 'percent':
-						opts.style = 'percent';
-						brk = true;
-						break;
+						case 'percent':
+							opts.style = 'percent';
+							break;
 
-					case 'decimal':
-						opts.style = 'decimal';
-						brk = true;
-						break;
+						case 'decimal':
+							opts.style = 'decimal';
+							break;
 
-					default:
-						throw new TypeError(`Unknown alias "${alias}"`);
+						default:
+							throw new TypeError(`Unknown alias "${alias}"`);
+					}
+
+				} else {
+					if (formatParams == null || formatParams === '') {
+						formatParams = defaultFormats[formatKey];
+					}
+
+					if (formatParams != null) {
+						opts[formatKey] = formatParams in boolAliases ? boolAliases[formatParams] : formatParams;
+					}
 				}
 			}
 
-			if (!brk) {
-				if (val == null || val === '') {
-					val = defaultFormats[key];
-				}
-
-				opts[key] = val! in boolAliases ? boolAliases[val!] : val;
-			}
+			formatter = new Intl.NumberFormat(locale, opts);
+			formatCache[cacheKey] = formatter;
 		}
-
-		const formatter = new Intl.NumberFormat(locale, opts);
-		formatCache[cacheKey] = formatter;
 
 		return formatter.format(this);
 	}
@@ -167,7 +161,7 @@ extend(Number.prototype, 'format', function format(
 	for (let i = int.length - 1, j = 0; i >= 0; i--) {
 		if (j === 3) {
 			j = 0;
-			res = globalOpts.thousands + res;
+			res = globalFormatOpts.thousands + res;
 		}
 
 		j++;
@@ -175,7 +169,7 @@ extend(Number.prototype, 'format', function format(
 	}
 
 	if (dec.length > 0) {
-		return res + globalOpts.decimal + dec;
+		return res + globalFormatOpts.decimal + dec;
 	}
 
 	return res;
@@ -188,21 +182,21 @@ extend(Number, 'format', (
 	locale?: CanArray<string>
 ) => {
 	if (Object.isString(value) || Object.isPlainObject(value)) {
-		locale = <any>patternOrOpts;
+		locale = Object.cast(patternOrOpts);
 		patternOrOpts = value;
-		return (value) => Number.format(value, <any>patternOrOpts, locale);
+		return (value) => Number.format(value, Object.cast(patternOrOpts), locale);
 	}
 
-	return value.format(<any>patternOrOpts, locale);
+	return value.format(Object.cast(patternOrOpts), locale);
 });
 
 /** @see [[NumberConstructor.getOption]] */
 extend(Number, 'getOption', deprecate(function getOption(key: string): string {
-	return globalOpts[key];
+	return globalFormatOpts[key];
 }));
 
 /** @see [[NumberConstructor.setOption]] */
 extend(Number, 'setOption', deprecate(function setOption(key: string, value: string): void {
-	globalOpts.init = true;
-	globalOpts[key] = value;
+	globalFormatOpts.init = true;
+	globalFormatOpts[key] = value;
 }));

@@ -20,8 +20,8 @@ describe('core/object/watch', () => {
 		['accessors', accEngine]
 	]);
 
-	engines.forEach((engine, name) => {
-		describe(`with the "${name}" engine`, () => {
+	engines.forEach((engine, engineName) => {
+		describe(`with the "${engineName}" engine`, () => {
 			it('simple watching for an object', (done) => {
 				const
 					obj = {a: 1, b: 2},
@@ -154,7 +154,7 @@ describe('core/object/watch', () => {
 
 				proxy.a.b.push(1);
 				proxy.a.b.push(2);
-				await new Promise((r) => setTimeout(r, 100));
+				await new Promise((r) => setTimeout(r, 15));
 
 				expect(spy).toHaveBeenCalledWith([1, 2], [1, 2], ['a', 'b'], ['a', 'b', 1]);
 			});
@@ -174,10 +174,39 @@ describe('core/object/watch', () => {
 
 				proxy.a.b.push(1);
 				proxy.a.b.push(2);
-				await new Promise((r) => setTimeout(r, 100));
+				await new Promise((r) => setTimeout(r, 15));
 
 				expect(spy).toHaveBeenCalledWith(1, undefined, ['a', 'b'], ['a', 'b', 0]);
 				expect(spy).toHaveBeenCalledWith(2, undefined, ['a', 'b'], ['a', 'b', 1]);
+			});
+
+			it('deep watching for an array by a complex path without collapsing', async () => {
+				const
+					obj = {a: {b: []}};
+
+				const
+					spy = jasmine.createSpy();
+
+				const {proxy} = watch(obj, 'a.b.0', {engine, collapse: false}, (mutations) => {
+					mutations.forEach(([value, oldValue, info]) => {
+						spy(value, oldValue, info.path, info.originalPath);
+					});
+				});
+
+				proxy.a.b.push(1);
+				proxy.a.b.unshift({e: 2});
+
+				await new Promise((r) => setTimeout(r, 15));
+
+				expect(spy).toHaveBeenCalledWith(1, undefined, ['a', 'b', '0'], ['a', 'b', 0]);
+				expect(spy).toHaveBeenCalledWith({e: 2}, 1, ['a', 'b', '0'], ['a', 'b', 0]);
+
+				if (engineName === 'proxy') {
+					proxy.a.b[0].e++;
+
+					await new Promise((r) => setTimeout(r, 15));
+					expect(spy).toHaveBeenCalledWith(3, 2, ['a', 'b', '0'], ['a', 'b', 0, 'e']);
+				}
 			});
 
 			it('isolated watchers', () => {
@@ -943,7 +972,7 @@ describe('core/object/watch', () => {
 				expect(isProxy({})).toBeFalse();
 			});
 
-			if (name === 'proxy') {
+			if (engineName === 'proxy') {
 				it("shouldn't wrap readonly non-configurable properties", () => {
 					const
 						obj = {},

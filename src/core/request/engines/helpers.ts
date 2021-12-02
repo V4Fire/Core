@@ -18,6 +18,9 @@ import type { RequestBody } from '~/core/request/interface';
  * @param [contentType]
  */
 export function convertDataToSend<T = RequestBody>(data: unknown, contentType?: string): [Nullable<T>, string?] {
+	let
+		normalizedData;
+
 	if (Object.isPlainObject(data)) {
 		const
 			keys = Object.keys(data);
@@ -66,10 +69,10 @@ export function convertDataToSend<T = RequestBody>(data: unknown, contentType?: 
 				append(key, data[key]);
 			}
 
-			data = formData;
+			normalizedData = formData;
 
 		} else {
-			data = JSON.stringify(data);
+			normalizedData = JSON.stringify(data);
 
 			if (contentType == null) {
 				contentType = 'application/json;charset=UTF-8';
@@ -77,10 +80,10 @@ export function convertDataToSend<T = RequestBody>(data: unknown, contentType?: 
 		}
 
 	} else if (Object.isNumber(data) || Object.isBoolean(data)) {
-		data = String(data);
+		normalizedData = String(data);
 	}
 
-	return [<any>data, contentType];
+	return [normalizedData, contentType];
 
 	function needFormToSend(val: unknown): boolean {
 		if (Object.isArray(val)) {

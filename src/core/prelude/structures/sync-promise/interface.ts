@@ -14,18 +14,17 @@ export enum State {
 
 export type Value<T = unknown> = PromiseLike<T> | T;
 
-export interface ConstrFulfillHandler<T = unknown> {
-	(value?: Value<T>): any;
+export interface ConstrResolveHandler<T = unknown> {
+	(value?: Value<T>): AnyToIgnore;
 }
 
 export interface ConstrRejectHandler {
-	(reason?: unknown): any;
+	(reason?: unknown): AnyToIgnore;
 }
 
 export interface Executor<T = unknown> {
-	(resolve: ConstrFulfillHandler<T>, reject: ConstrRejectHandler): any;
+	(resolve: ConstrResolveHandler<T>, reject: ConstrRejectHandler): AnyToIgnore;
 }
 
 export type ResolveHandler<V = unknown, R = V> = Function | ((value: V) => Value<R>);
 export type RejectHandler<T = unknown> = ResolveHandler<unknown, T>;
-export type FinallyHandler = Function;

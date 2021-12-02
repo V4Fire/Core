@@ -39,13 +39,13 @@ export function bindMutationHooks<T extends object>(
 ): T {
 	let
 		handlers: WatchHandlersSet,
-		opts: WrapOptions = <any>undefined;
+		rawOpts: Nullable<WrapOptions>;
 
 	if (Object.isSet(handlersOrOpts)) {
 		handlers = handlersOrOpts;
 
 		if (Object.isPlainObject(optsOrHandlers)) {
-			opts = optsOrHandlers;
+			rawOpts = optsOrHandlers;
 		}
 
 	} else {
@@ -57,14 +57,17 @@ export function bindMutationHooks<T extends object>(
 		}
 
 		if (Object.isPlainObject(handlersOrOpts)) {
-			opts = handlersOrOpts;
+			rawOpts = handlersOrOpts;
 		}
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-	if (opts == null) {
+	if (rawOpts == null) {
 		throw new ReferenceError('Options of wrapping are not specified');
 	}
+
+	const
+		opts = rawOpts;
 
 	const wrappedCb = (args: Nullable<WrapResult>) => {
 		if (args == null) {
@@ -104,7 +107,7 @@ export function bindMutationHooks<T extends object>(
 		for (let i = 0; i < innerKeys.length; i++) {
 			const
 				methodName = innerKeys[i],
-				method = el.methods[<any>methodName],
+				method = el.methods[methodName],
 				original = obj[methodName];
 
 			if (method == null) {

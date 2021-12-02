@@ -61,56 +61,53 @@ extend(Date.prototype, 'format', function format(
 		canCache = !pattern.includes('?'),
 		cacheKey = [locale, pattern].join();
 
-	const
-		cache = canCache ? formatCache[cacheKey] : null;
+	let
+		formatter = canCache ? formatCache[cacheKey] : null;
 
-	if (cache != null) {
-		return cache.format(this);
-	}
-
-	const
-		chunks = pattern.split(';'),
-		opts = {};
-
-	for (let i = 0; i < chunks.length; i++) {
+	if (formatter == null) {
 		const
-			el = chunks[i].trim();
+			chunks = pattern.split(';'),
+			opts = {};
 
-		let [key, val = ''] = el.split(':');
-		key = key.trim();
+		for (let i = 0; i < chunks.length; i++) {
+			const
+				formatChunk = chunks[i].trim();
 
-		if (val !== '') {
-			val = val.trim();
-		}
+			let [formatKey, formatParams = ''] = formatChunk.split(':');
+			formatKey = formatKey.trim();
 
-		const
-			alias = formatAliases[key];
+			if (formatParams !== '') {
+				formatParams = formatParams.trim();
+			}
 
-		if (alias != null) {
-			key = alias;
+			const
+				formatKeyAlias = formatAliases[formatKey];
 
-			if (Object.isFunction(key)) {
-				key = key(this);
+			if (formatKeyAlias != null) {
+				formatKey = formatKeyAlias;
 
-				// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-				if (key == null) {
-					continue;
+				if (Object.isFunction(formatKey)) {
+					formatKey = formatKey(this);
+
+					// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+					if (formatKey == null) {
+						continue;
+					}
 				}
 			}
+
+			if (formatParams === '') {
+				formatParams = defaultFormats[formatKey];
+			}
+
+			opts[formatKey] = formatParams in boolAliases ? boolAliases[formatParams] : formatParams;
 		}
 
-		if (val === '') {
-			val = defaultFormats[key];
-		}
-
-		opts[key] = val in boolAliases ? boolAliases[val] : val;
-	}
-
-	const
 		formatter = new Intl.DateTimeFormat(locale, opts);
 
-	if (canCache) {
-		formatCache[cacheKey] = formatter;
+		if (canCache) {
+			formatCache[cacheKey] = formatter;
+		}
 	}
 
 	return formatter.format(this);
@@ -123,12 +120,12 @@ extend(Date, 'format', (
 	locale?: CanArray<string>
 ) => {
 	if (Object.isString(date) || Object.isPlainObject(date)) {
-		locale = <any>patternOrOpts;
+		locale = Object.cast(patternOrOpts);
 		patternOrOpts = date;
-		return (date) => Date.format(date, <any>patternOrOpts, locale);
+		return (date) => Date.format(date, Object.cast(patternOrOpts), locale);
 	}
 
-	return date.format(<any>patternOrOpts, locale);
+	return date.format(Object.cast(patternOrOpts), locale);
 });
 
 /** @see [[Date.toHTMLDateString]] */

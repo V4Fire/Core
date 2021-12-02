@@ -23,6 +23,7 @@ import {
 } from '~/core/object/watch/const';
 
 import { bindMutationHooks } from '~/core/object/watch/wrap';
+import { isValueCanBeArrayIndex } from '~/core/object/watch/helpers';
 
 import {
 
@@ -209,7 +210,12 @@ export function watch<T extends object>(
 			}
 
 			const
-				isCustomObject = Object.isCustomObject(target);
+				isArray = Object.isArray(target),
+				isCustomObject = isArray || Object.isCustomObject(target);
+
+			if (isArray && !(Symbol.isConcatSpreadable in target)) {
+				target[Symbol.isConcatSpreadable] = true;
+			}
 
 			if (Object.isSymbol(key) || blackListStore.has(key)) {
 				if (isCustomObject) {
@@ -217,14 +223,11 @@ export function watch<T extends object>(
 				}
 
 			} else if (isCustomObject) {
-				const
-					isArray = Object.isArray(target);
-
 				let
 					propFromProto = fromProto,
 					normalizedKey;
 
-				if (isArray && String(Number(key)) === key) {
+				if (isArray && isValueCanBeArrayIndex(key)) {
 					normalizedKey = Number(key);
 
 				} else {
@@ -247,20 +250,7 @@ export function watch<T extends object>(
 				return getProxyValue(val, normalizedKey, path, handlers, resolvedRoot, top, watchOpts);
 			}
 
-			if (Object.isArray(target)) {
-				target[Symbol.isConcatSpreadable] = true;
-
-			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-			} else if (Object.isFunction(val) && !isCustomObject) {
-				return val.bind(target);
-			}
-
-			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-			if (Object.isFunction(val) && !isCustomObject && !Object.isArray(target)) {
-				return val.bind(target);
-			}
-
-			return val;
+			return Object.isFunction(val) ? val.bind(target) : val;
 		},
 
 		set: (target, key, val, receiver) => {
@@ -288,7 +278,7 @@ export function watch<T extends object>(
 			let
 				normalizedKey;
 
-			if (isArray && String(Number(key)) === key) {
+			if (isArray && isValueCanBeArrayIndex(key)) {
 				normalizedKey = Number(key);
 
 			} else {

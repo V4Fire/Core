@@ -60,6 +60,12 @@ const config = <Config>{
 				}
 			}
 		]
+	},
+
+	perf: {
+		timer: {
+			engine: 'console'
+		}
 	}
 };
 

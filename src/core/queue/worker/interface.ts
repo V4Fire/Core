@@ -7,7 +7,7 @@
  */
 
 import SimpleQueue from '~/core/queue/simple';
-import AbstractQueue, { Tasks, CreateTasks, QueueOptions } from '~/core/queue/interface';
+import AbstractQueue, { InnerQueue, CreateInnerQueue } from '~/core/queue/interface';
 
 export * from '~/core/queue/interface';
 
@@ -17,11 +17,20 @@ export interface Task<T = unknown, V = unknown> {
 	resolve(res: CanPromise<V>): void;
 }
 
+export type Tasks<T = unknown> = InnerQueue<T>;
+
+export type CreateTasks<T extends Tasks<any>> = CreateInnerQueue<T>;
+
 export interface QueueWorker<T = unknown, V = unknown> {
 	(task: T): CanPromise<V>;
 }
 
-export interface WorkerQueueOptions extends QueueOptions {
+export interface WorkerQueueOptions<T extends Tasks<any> = Tasks> {
+	/**
+	 * Factory to create an inner queue to store elements
+	 */
+	tasksFactory?: CreateInnerQueue<T>;
+
 	/**
 	 * Maximum number of concurrent workers
 	 */
@@ -42,9 +51,9 @@ export interface WorkerQueueOptions extends QueueOptions {
  */
 export default abstract class WorkerQueue<T, V = unknown> extends AbstractQueue<T> {
 	/**
-	 * Type: list of tasks
+	 * Type: queue of tasks
 	 */
-	readonly Tasks!: Tasks<unknown>;
+	readonly Tasks!: Tasks;
 
 	abstract override readonly head: CanUndef<T>;
 
@@ -75,7 +84,7 @@ export default abstract class WorkerQueue<T, V = unknown> extends AbstractQueue<
 	protected worker: QueueWorker<T, V>;
 
 	/**
-	 * List of tasks
+	 * Queue of tasks
 	 */
 	protected tasks: this['Tasks'];
 
@@ -116,9 +125,9 @@ export default abstract class WorkerQueue<T, V = unknown> extends AbstractQueue<
 	}
 
 	/**
-	 * Returns a new blank list of tasks
+	 * Returns a new blank queue of tasks
 	 */
-	protected createTasks: CreateTasks<this['Tasks']> = () => new SimpleQueue();
+	protected createTasks: CreateInnerQueue<this['Tasks']> = () => new SimpleQueue();
 
 	/**
 	 * Executes a task chunk from the queue

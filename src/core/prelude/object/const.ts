@@ -7,7 +7,7 @@
  */
 
 export const
-	canParse = /^[[{"]|^(?:true|false|null|\d+)$/;
+	canParse = /^[[{"]|^(?:true|false|null|(?:0\.)?\d+(?:[eE]\d+)?)$/;
 
 export const
 	funcCache = new WeakMap();

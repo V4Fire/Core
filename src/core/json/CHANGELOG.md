@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.60.5 (2021-10-14)
+
+#### :bug: Bug Fix
+
+* Fixed a bug when the function `convertIfDate` didn't convert an ISO string to a date
+
 ## v3.58.2 (2021-09-06)
 
 #### :bug: Bug Fix

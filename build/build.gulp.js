@@ -47,7 +47,6 @@ module.exports = function init(gulp) {
 	gulp.task('build:server', gulp.series([gulp.parallel(['build:tsconfig', 'clean:server']), build]));
 
 	let
-		tsProject,
 		filesToBuild;
 
 	/**
@@ -71,17 +70,21 @@ module.exports = function init(gulp) {
 			$C = require('collection.js'),
 			isPathInside = require('is-path-inside');
 
-		if (!tsProject) {
 			const
 				tsConfig = fs.readJSONSync(src.rel('./server.tsconfig.json'));
 
-			tsProject = $.typescript.createProject(src.rel('./server.tsconfig.json'), {noEmitOnError: false});
-			filesToBuild = [...tsConfig.include || [], ...resolve.rootDependencies.map((el) => `${el}/**/*.@(ts|js)`)];
-		}
+			filesToBuild = [
+				...tsConfig.include || [],
+				...resolve.rootDependencies.map((el) => `${el}/**/*.@(ts|js)`)
+			];
 
 		const
 			isDep = new RegExp(`(^.*?(?:^|[\\/])(${depsRgxpStr}))(?:$|[\\/])`),
-			requireInitializer = `(${h.redefineRequire.toString()})();\n`;
+			enableSourcemaps = process.env.SOURCEMAPS;
+
+		const
+			requireInitializer = `/* istanbul ignore next */(${h.redefineRequire.toString()})();\n`,
+			insertRequireInitializer = h.prependCode(requireInitializer);
 
 		function dest(file) {
 			const
@@ -96,21 +99,31 @@ module.exports = function init(gulp) {
 			return src.serverOutput();
 		}
 
-		return gulp.src(filesToBuild, {base: './', since: gulp.lastRun('build:server')})
+		return gulp
+			.src(filesToBuild, {base: './', since: gulp.lastRun('build:server')})
+			.pipe($.if(enableSourcemaps, $.sourcemaps.init()))
 			.pipe($.plumber())
 
-			.pipe($.monic($C.extend(true, {}, monic().typescript, {
-				flags: {
-					// eslint-disable-next-line camelcase
-					node_js: true
-				},
+			.pipe(
+				$.monic(
+					$C.extend(true, {}, monic().typescript, {
+						flags: {
+							// eslint-disable-next-line camelcase
+							node_js: true
+						},
 
-				replacers: [(text) => requireInitializer + text]
-			})))
+						sourceMaps: true
+					})
+				)
+			)
 
-			.pipe(tsProject())
-			.js
+			.pipe(
+				$.babel({
+					plugins: [insertRequireInitializer]
+				})
+			)
 
+			.pipe($.if(enableSourcemaps, $.sourcemaps.write('.')))
 			.pipe(gulp.dest(dest));
 	}
 };

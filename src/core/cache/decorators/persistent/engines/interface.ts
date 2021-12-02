@@ -70,6 +70,21 @@ export abstract class AbstractPersistentEngine<V = unknown> {
 	abstract removeTTLFrom(key: string): Promise<boolean>;
 
 	/**
+	 * Normalized the given TTL value and returns it
+	 * @param ttl
+	 */
+	protected normalizeTTL(ttl: Nullable<number>): number {
+		let
+			normalizedTTL = ttl != null ? Date.now() + ttl : Number.MAX_SAFE_INTEGER;
+
+		if (!Number.isSafeInteger(ttl)) {
+			normalizedTTL = Number.MAX_SAFE_INTEGER;
+		}
+
+		return normalizedTTL;
+	}
+
+	/**
 	 * Registers a task to update a cache item by the specified key
 	 *
 	 * @param key
