@@ -34,7 +34,8 @@ module.exports = () => {
 
 	tsPaths.register({
 		baseUrl: tsConfig.compilerOptions.baseUrl,
-		paths: normalizePaths(tsConfig.compilerOptions.paths)
+		paths: normalizePaths(tsConfig.compilerOptions.paths),
+		addMatchAll: false
 	});
 
 	tsNode.register({
@@ -42,7 +43,9 @@ module.exports = () => {
 
 		compilerOptions: {
 			module: 'CommonJS'
-		}
+		},
+
+		ignore: []
 	});
 
 	isInitialized = true;
