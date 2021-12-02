@@ -8,14 +8,14 @@
 
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 
-import symbolGenerator from '~/core/symbol';
+import symbolGenerator from '@src/core/symbol';
 
-import { deprecate } from '~/core/functools';
-import { concatURLs } from '~/core/url';
+import { deprecate } from '@src/core/functools';
+import { concatURLs } from '@src/core/url';
 
-import Async from '~/core/async';
-import IO, { Socket } from '~/core/socket';
-import type AbortablePromise from '~/core/promise/abortable';
+import Async from '@src/core/async';
+import IO, { Socket } from '@src/core/socket';
+import type AbortablePromise from '@src/core/promise/abortable';
 
 import {
 
@@ -33,7 +33,7 @@ import {
 	RequestFunctionResponse,
 	RequestResponseObject
 
-} from '~/core/request';
+} from '@src/core/request';
 
 import type {
 
@@ -41,7 +41,7 @@ import type {
 	ProviderOptions,
 	ModelMethod
 
-} from '~/core/data/interface';
+} from '@src/core/data/interface';
 
 import {
 
@@ -54,11 +54,11 @@ import {
 	instanceCache,
 	connectCache
 
-} from '~/core/data/const';
+} from '@src/core/data/const';
 
-import ParamsProvider from '~/core/data/modules/params';
+import ParamsProvider from '@src/core/data/modules/params';
 
-export * from '~/core/data/modules/params';
+export * from '@src/core/data/modules/params';
 
 export const
 	$$ = symbolGenerator();

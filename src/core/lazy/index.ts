@@ -11,7 +11,7 @@
  * @packageDocumentation
  */
 
-import type { ObjectScheme } from '~/core/lazy/interface';
+import type { ObjectScheme } from '@src/core/lazy/interface';
 
 /**
  * Creates a new function based on the passed function or class and returns it.

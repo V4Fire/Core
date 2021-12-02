@@ -18,9 +18,9 @@ import {
 	ConstrRejectHandler,
 	ConstrResolveHandler
 
-} from '~/core/prelude/structures/sync-promise/interface';
+} from '@src/core/prelude/structures/sync-promise/interface';
 
-export * from '~/core/prelude/structures/sync-promise/interface';
+export * from '@src/core/prelude/structures/sync-promise/interface';
 
 /**
  * Class is similar to the native promise class but works synchronously

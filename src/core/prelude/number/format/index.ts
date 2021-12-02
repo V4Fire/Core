@@ -6,10 +6,10 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import extend from '~/core/prelude/extend';
+import extend from '@src/core/prelude/extend';
 
-import { deprecate } from '~/core/functools';
-import { locale as defaultLocale } from '~/core/prelude/i18n';
+import { deprecate } from '@src/core/functools';
+import { locale as defaultLocale } from '@src/core/prelude/i18n';
 
 import {
 
@@ -22,9 +22,9 @@ import {
 
 	decPartRgxp
 
-} from '~/core/prelude/number/const';
+} from '@src/core/prelude/number/const';
 
-import { repeatString } from '~/core/prelude/number/helpers';
+import { repeatString } from '@src/core/prelude/number/helpers';
 
 /** @see [[Number.pad]] */
 extend(Number.prototype, 'pad', function pad(

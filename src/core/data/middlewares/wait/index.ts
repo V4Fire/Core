@@ -11,9 +11,9 @@
  * @packageDocumentation
  */
 
-import type { MiddlewareParams } from '~/core/request';
+import type { MiddlewareParams } from '@src/core/request';
 
-export * from '~/core/data/middlewares/attach-status/interface';
+export * from '@src/core/data/middlewares/attach-status/interface';
 
 /**
  * Middleware: if the request has some parameter to wait,

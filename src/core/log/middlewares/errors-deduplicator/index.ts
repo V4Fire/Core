@@ -11,7 +11,7 @@
  * @packageDocumentation
  */
 
-import type { LogEvent, LogMiddleware, NextCallback } from '~/core/log/middlewares/interface';
+import type { LogEvent, LogMiddleware, NextCallback } from '@src/core/log/middlewares/interface';
 
 /**
  * Middleware to omit duplicated errors

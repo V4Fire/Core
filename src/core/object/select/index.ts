@@ -11,9 +11,9 @@
  * @packageDocumentation
  */
 
-import type { SelectParams } from '~/core/object/select/interface';
+import type { SelectParams } from '@src/core/object/select/interface';
 
-export * from '~/core/object/select/interface';
+export * from '@src/core/object/select/interface';
 
 /**
  * Finds an element from an object by the specified parameters

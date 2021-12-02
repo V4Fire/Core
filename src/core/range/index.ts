@@ -11,9 +11,9 @@
  * @packageDocumentation
  */
 
-import type { RangeValue, RangeType } from '~/core/range/interface';
+import type { RangeValue, RangeType } from '@src/core/range/interface';
 
-export * from '~/core/range/interface';
+export * from '@src/core/range/interface';
 
 /**
  * A class to create a range with the specified type.

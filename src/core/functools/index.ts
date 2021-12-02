@@ -11,9 +11,9 @@
  * @packageDocumentation
  */
 
-export * from '~/core/functools/warning';
-export * from '~/core/functools/deprecation';
-export * from '~/core/functools/not-implemented';
-export * from '~/core/functools/memoize';
-export * from '~/core/functools/lazy';
-export * from '~/core/functools/helpers';
+export * from '@src/core/functools/warning';
+export * from '@src/core/functools/deprecation';
+export * from '@src/core/functools/not-implemented';
+export * from '@src/core/functools/memoize';
+export * from '@src/core/functools/lazy';
+export * from '@src/core/functools/helpers';

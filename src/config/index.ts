@@ -11,10 +11,10 @@
  * @packageDocumentation
  */
 
-import { RequestErrorDetailsExtractor } from '~/core/request/error';
-import type { Config } from '~/config/interface';
+import { RequestErrorDetailsExtractor } from '@src/core/request/error';
+import type { Config } from '@src/config/interface';
 
-export * from '~/config/interface';
+export * from '@src/config/interface';
 
 const config = <Config>{
 	appName: APP_NAME,

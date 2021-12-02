@@ -11,9 +11,9 @@
  * @packageDocumentation
  */
 
-import SimpleCache, { ClearFilter } from '~/core/cache/simple';
+import SimpleCache, { ClearFilter } from '@src/core/cache/simple';
 
-export * from '~/core/cache/simple';
+export * from '@src/core/cache/simple';
 
 /**
  * Implementation for an in-memory data structure with support for limiting of values in the cache

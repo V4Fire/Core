@@ -11,11 +11,11 @@
  * @packageDocumentation
  */
 
-import type { PerfConfig, PerfTimerConfig, PerfPredicates, PerfGroupFilters } from '~/core/perf/config/interface';
-import { GROUPS } from '~/core/perf/const';
-import engines, { PerfTimerEngine } from '~/core/perf/timer/engines';
+import type { PerfConfig, PerfTimerConfig, PerfPredicates, PerfGroupFilters } from '@src/core/perf/config/interface';
+import { GROUPS } from '@src/core/perf/const';
+import engines, { PerfTimerEngine } from '@src/core/perf/timer/engines';
 
-export * from '~/core/perf/config/interface';
+export * from '@src/core/perf/config/interface';
 
 /**
  * Returns instance of the timer engine, defined in the performance config

@@ -7,7 +7,7 @@
  */
 
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
-import { toString } from '~/core/prelude/types/const';
+import { toString } from '@src/core/prelude/types/const';
 
 /**
  * Event emitter to broadcast environment events

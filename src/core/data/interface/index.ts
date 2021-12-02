@@ -11,11 +11,11 @@
  * @packageDocumentation
  */
 
-import type { EventEmitterLike } from '~/core/async';
-import type { CreateRequestOptions, RequestQuery, RequestMethod, RequestResponse, RequestBody } from '~/core/request';
-import type { ModelMethod } from '~/core/data/interface/types';
+import type { EventEmitterLike } from '@src/core/async';
+import type { CreateRequestOptions, RequestQuery, RequestMethod, RequestResponse, RequestBody } from '@src/core/request';
+import type { ModelMethod } from '@src/core/data/interface/types';
 
-export * from '~/core/data/interface/types';
+export * from '@src/core/data/interface/types';
 
 /**
  * Base interface of a data provider

@@ -6,8 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import * as env from '~/core/env';
-import type { LogEvent, LogMiddleware, NextCallback } from '~/core/log/middlewares/interface';
+import * as env from '@src/core/env';
+import type { LogEvent, LogMiddleware, NextCallback } from '@src/core/log/middlewares/interface';
 
 interface LogOptions {
 	patterns: RegExp[];

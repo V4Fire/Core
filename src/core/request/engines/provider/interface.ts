@@ -6,8 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type AbortablePromise from '~/core/promise/abortable';
-import type { Provider, ModelMethod } from '~/core/data';
+import type AbortablePromise from '@src/core/promise/abortable';
+import type { Provider, ModelMethod } from '@src/core/data';
 
 import type {
 
@@ -17,7 +17,7 @@ import type {
 	RequestMethod,
 	RequestQuery
 
-} from '~/core/request';
+} from '@src/core/request';
 
 /**
  * Meta parameters for the engine

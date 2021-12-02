@@ -8,18 +8,18 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { IS_NODE } from '~/core/env';
+import { IS_NODE } from '@src/core/env';
 
 // eslint-disable-next-line import/no-mutable-exports
 let transport;
 
 if (IS_NODE) {
 	//#if node_js
-	transport = require('~/core/request/engines/node').default;
+	transport = require('@src/core/request/engines/node').default;
 	//#endif
 
 } else {
-	transport = require('~/core/request/engines/browser').default;
+	transport = require('@src/core/request/engines/browser').default;
 }
 
 export default transport;

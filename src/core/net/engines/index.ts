@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { IS_NODE } from '~/core/env';
+import { IS_NODE } from '@src/core/env';
 
 // eslint-disable-next-line import/no-mutable-exports
 export let
@@ -15,10 +15,10 @@ export let
 if (IS_NODE) {
 	//#if node_js
 	({isOnline} =
-		require('~/core/net/engines/node-request'));
+		require('@src/core/net/engines/node-request'));
 	//#endif
 
 } else {
 	({isOnline} =
-		require('~/core/net/engines/browser-request'));
+		require('@src/core/net/engines/browser-request'));
 }

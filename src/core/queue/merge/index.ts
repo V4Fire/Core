@@ -11,12 +11,12 @@
  * @packageDocumentation
  */
 
-import SimpleQueue from '~/core/queue/simple';
-import AbstractQueue from '~/core/queue/interface';
+import SimpleQueue from '@src/core/queue/simple';
+import AbstractQueue from '@src/core/queue/interface';
 
-import type { HashFn, InnerQueue, CreateInnerQueue } from '~/core/queue/merge/interface';
+import type { HashFn, InnerQueue, CreateInnerQueue } from '@src/core/queue/merge/interface';
 
-export * from '~/core/queue/merge/interface';
+export * from '@src/core/queue/merge/interface';
 
 /**
  * Implementation of a queue data structure with support of task merging by the specified hash function

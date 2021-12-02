@@ -11,13 +11,13 @@
  * @packageDocumentation
  */
 
-import log from '~/core/log';
+import log from '@src/core/log';
 
-import { concatURLs } from '~/core/url';
-import { getDataTypeFromURI } from '~/core/mime-type';
+import { concatURLs } from '@src/core/url';
+import { getDataTypeFromURI } from '@src/core/mime-type';
 
-import { merge } from '~/core/request/utils';
-import { globalOpts, isAbsoluteURL } from '~/core/request/const';
+import { merge } from '@src/core/request/utils';
+import { globalOpts, isAbsoluteURL } from '@src/core/request/const';
 
 import type {
 
@@ -26,9 +26,9 @@ import type {
 	WrappedEncoder,
 	WrappedDecoder
 
-} from '~/core/request/interface';
+} from '@src/core/request/interface';
 
-import Super from '~/core/request/context/modules/middlewares';
+import Super from '@src/core/request/context/modules/middlewares';
 
 /**
  * Context of a request

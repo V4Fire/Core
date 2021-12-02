@@ -11,6 +11,6 @@
  * @packageDocumentation
  */
 
-export * from '~/core/data/middlewares/attach-mock';
-export * from '~/core/data/middlewares/attach-status';
-export * from '~/core/data/middlewares/wait';
+export * from '@src/core/data/middlewares/attach-mock';
+export * from '@src/core/data/middlewares/attach-status';
+export * from '@src/core/data/middlewares/wait';

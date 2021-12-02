@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import extend from '~/core/prelude/extend';
+import extend from '@src/core/prelude/extend';
 
 /** @see [[Number.isSafe]] */
 extend(Number.prototype, 'isSafe', function isSafe(this: number): boolean {

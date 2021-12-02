@@ -57,9 +57,12 @@ exports.redefineRequire = function redefineRequire() {
 		lib = path.join(outputDest, 'node_modules'),
 		deps = pzlr.dependencies;
 
+	const
+		srcPrefix = '@src/';
+
 	const stripUrlIfNeeded = (url) => {
-		if (url.startsWith('~/')) {
-			return url.slice(2);
+		if (url.startsWith(srcPrefix)) {
+			return url.slice(srcPrefix.length);
 		}
 
 		return url;

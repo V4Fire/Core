@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import extend from '~/core/prelude/extend';
+import extend from '@src/core/prelude/extend';
 
 import {
 
@@ -18,7 +18,7 @@ import {
 
 	createAliases
 
-} from '~/core/prelude/date/const';
+} from '@src/core/prelude/date/const';
 
 /** @see [[Date.clone]] */
 extend(Date.prototype, 'clone', function clone(this: Date): Date {

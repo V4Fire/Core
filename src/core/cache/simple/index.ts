@@ -11,10 +11,10 @@
  * @packageDocumentation
  */
 
-import type Cache from '~/core/cache/interface';
-import type { ClearFilter } from '~/core/cache/interface';
+import type Cache from '@src/core/cache/interface';
+import type { ClearFilter } from '@src/core/cache/interface';
 
-export * from '~/core/cache/interface';
+export * from '@src/core/cache/interface';
 
 /**
  * Implementation for a simple in-memory cache data structure

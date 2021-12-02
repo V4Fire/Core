@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import extend from '~/core/prelude/extend';
+import extend from '@src/core/prelude/extend';
 
 import {
 
@@ -18,7 +18,7 @@ import {
 	camelizeRgxp,
 	normalizeRgxp
 
-} from '~/core/prelude/string/const';
+} from '@src/core/prelude/string/const';
 
 import {
 
@@ -28,7 +28,7 @@ import {
 	convertToSeparatedStr,
 	createStaticTransformFunction
 
-} from '~/core/prelude/string/helpers';
+} from '@src/core/prelude/string/helpers';
 
 /** @see [[String.capitalize]] */
 extend(String.prototype, 'capitalize', function capitalize(

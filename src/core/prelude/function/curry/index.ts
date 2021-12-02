@@ -6,8 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import extend from '~/core/prelude/extend';
-import { __ } from '~/core/prelude/function/const';
+import extend from '@src/core/prelude/extend';
+import { __ } from '@src/core/prelude/function/const';
 
 /** @see [[FunctionConstructor.__]] */
 extend(Function, '__', {

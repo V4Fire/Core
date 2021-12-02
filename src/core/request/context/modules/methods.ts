@@ -6,15 +6,15 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { deprecated } from '~/core/functools';
-import { concatURLs, fromQueryString } from '~/core/url';
-import { normalizeHeaders, applyQueryForStr, getRequestKey } from '~/core/request/utils';
+import { deprecated } from '@src/core/functools';
+import { concatURLs, fromQueryString } from '@src/core/url';
+import { normalizeHeaders, applyQueryForStr, getRequestKey } from '@src/core/request/utils';
 
-import { globalOpts } from '~/core/request/const';
-import { queryTplRgxp, resolveURLRgxp } from '~/core/request/context/const';
-import type { RequestAPI } from '~/core/request/interface';
+import { globalOpts } from '@src/core/request/const';
+import { queryTplRgxp, resolveURLRgxp } from '@src/core/request/context/const';
+import type { RequestAPI } from '@src/core/request/interface';
 
-import Super from '~/core/request/context/modules/params';
+import Super from '@src/core/request/context/modules/params';
 
 export default class RequestContext<D = unknown> extends Super<D> {
 	/**

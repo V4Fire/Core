@@ -6,8 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import extend from '~/core/prelude/extend';
-import { unicode } from '~/core/prelude/string/const';
+import extend from '@src/core/prelude/extend';
+import { unicode } from '@src/core/prelude/string/const';
 
 /** @see [[String.letters]] */
 extend(String.prototype, 'letters', function* letters(this: string): IterableIterator<string> {

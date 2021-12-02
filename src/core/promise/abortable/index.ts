@@ -11,7 +11,7 @@
  * @packageDocumentation
  */
 
-import { deprecated } from '~/core/functools';
+import { deprecated } from '@src/core/functools';
 
 import {
 
@@ -26,9 +26,9 @@ import {
 	ConstrResolveHandler,
 	ConstrRejectHandler
 
-} from '~/core/promise/abortable/interface';
+} from '@src/core/promise/abortable/interface';
 
-export * from '~/core/promise/abortable/interface';
+export * from '@src/core/promise/abortable/interface';
 
 /**
  * Class wraps promise-like objects and adds to them some extra functionality,
@@ -49,7 +49,7 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 	 * @see [[ObjectConstructor.isPromiseLike]]
 	 * @param obj
 	 */
-	@deprecated({alternative: {name: 'Object.isPromiseLike', source: '~/core/prelude/types'}})
+	@deprecated({alternative: {name: 'Object.isPromiseLike', source: '@src/core/prelude/types'}})
 	static isThenable(obj: unknown): obj is PromiseLike<unknown> {
 		return Object.isPromiseLike(obj);
 	}

@@ -60,10 +60,23 @@ module.exports = function init(gulp) {
 					(str, path) => (deps[`${el}/*`] = [`${el}:${path}/*`])[0]
 				));
 
+				const createNonSrcDepsList = (endFolder) => resolve.rootDependencies.map((p) =>
+					path.join(p.split(path.sep).slice(0, -1), `/${endFolder}/*`));
+
 				const paths = {
-					'~/*': [
+					'@src/*': [
 						`./${src.rel('src')}/*`,
 						...depsList
+					],
+
+					'@tests/*': [
+						`./${src.rel('tests')}/*`,
+						...createNonSrcDepsList('tests')
+					],
+
+					'@build/*': [
+						`./${src.rel('build')}/*`,
+						...createNonSrcDepsList('build')
 					],
 
 					...deps

@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import Fetch from '~/core/request/engines/fetch';
-import XHR from '~/core/request/engines/xhr';
+import Fetch from '@src/core/request/engines/fetch';
+import XHR from '@src/core/request/engines/xhr';
 
 export default typeof AbortController !== 'undefined' ? Fetch : XHR;

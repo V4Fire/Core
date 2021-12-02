@@ -13,21 +13,21 @@
 
 //#set runtime.core/data
 
-import type { Middlewares } from '~/core/request';
+import type { Middlewares } from '@src/core/request';
 
-import DefaultProvider from '~/core/data/modules/base';
+import DefaultProvider from '@src/core/data/modules/base';
 
-import { provider } from '~/core/data/decorators';
-import { attachMock } from '~/core/data/middlewares';
+import { provider } from '@src/core/data/decorators';
+import { attachMock } from '@src/core/data/middlewares';
 
-import type { ProviderOptions } from '~/core/data/interface';
+import type { ProviderOptions } from '@src/core/data/interface';
 
-export * from '~/core/data/const';
-export * from '~/core/data/decorators';
-export * from '~/core/data/middlewares';
-export * from '~/core/data/interface';
+export * from '@src/core/data/const';
+export * from '@src/core/data/decorators';
+export * from '@src/core/data/middlewares';
+export * from '@src/core/data/interface';
 
-export { Socket } from '~/core/socket';
+export { Socket } from '@src/core/socket';
 
 export {
 
@@ -49,7 +49,7 @@ export {
 	RequestBody,
 	RequestError
 
-} from '~/core/request';
+} from '@src/core/request';
 
 /**
  * Default data provider

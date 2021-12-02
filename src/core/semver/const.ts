@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type { Operation } from '~/core/semver/interface';
+import type { Operation } from '@src/core/semver/interface';
 
 export const operations: Record<Operation, (a: number, b: number) => boolean> = {
 	'>': (a, b) => a > b,

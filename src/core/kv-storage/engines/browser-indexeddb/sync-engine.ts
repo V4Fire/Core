@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { notImplement } from '~/core/functools/not-implemented';
+import { notImplement } from '@src/core/functools/not-implemented';
 
 export default [
 	'get',

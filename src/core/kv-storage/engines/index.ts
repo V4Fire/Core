@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { IS_NODE } from '~/core/env';
+import { IS_NODE } from '@src/core/env';
 
 // eslint-disable-next-line import/no-mutable-exports
 export let
@@ -18,10 +18,10 @@ export let
 if (IS_NODE) {
 	//#if node_js
 	({syncLocalStorage, asyncLocalStorage, syncSessionStorage, asyncSessionStorage} =
-		require('~/core/kv-storage/engines/node-localstorage'));
+		require('@src/core/kv-storage/engines/node-localstorage'));
 	//#endif
 
 } else {
 	({syncLocalStorage, asyncLocalStorage, syncSessionStorage, asyncSessionStorage} =
-		require('~/core/kv-storage/engines/browser-localstorage'));
+		require('@src/core/kv-storage/engines/browser-localstorage'));
 }

@@ -6,8 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import extend from '~/core/prelude/extend';
-import { createRoundingFunction, createStaticRoundingFunction } from '~/core/prelude/number/helpers';
+import extend from '@src/core/prelude/extend';
+import { createRoundingFunction, createStaticRoundingFunction } from '@src/core/prelude/number/helpers';
 
 /** @see [[Number.floor]] */
 extend(Number.prototype, 'floor', createRoundingFunction(Math.floor));

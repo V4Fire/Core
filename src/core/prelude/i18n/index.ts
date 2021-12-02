@@ -6,22 +6,22 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import config from '~/config';
+import config from '@src/config';
 
-import { IS_NODE } from '~/core/env';
-import type { AsyncStorageNamespace } from '~/core/kv-storage';
+import { IS_NODE } from '@src/core/env';
+import type { AsyncStorageNamespace } from '@src/core/kv-storage';
 
-import { emitter, locale } from '~/core/prelude/i18n/const';
+import { emitter, locale } from '@src/core/prelude/i18n/const';
 
-export * from '~/core/prelude/i18n/const';
-export * from '~/core/prelude/i18n/interface';
+export * from '@src/core/prelude/i18n/const';
+export * from '@src/core/prelude/i18n/interface';
 
 let
 	storage: CanUndef<Promise<AsyncStorageNamespace>>;
 
 //#if runtime has core/kv-storage
 // eslint-disable-next-line prefer-const
-storage = import('~/core/kv-storage').then(({asyncLocal}) => asyncLocal.namespace('[[I18N]]'));
+storage = import('@src/core/kv-storage').then(({asyncLocal}) => asyncLocal.namespace('[[I18N]]'));
 //#endif
 
 if (IS_NODE) {

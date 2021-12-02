@@ -6,8 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type Provider from '~/core/data/index';
-import { providers, namespace } from '~/core/data/const';
+import type Provider from '@src/core/data/index';
+import { providers, namespace } from '@src/core/data/const';
 
 /**
  * Registers a data provider class to the global store with the specified namespace:

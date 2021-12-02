@@ -6,18 +6,18 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type Range from '~/core/range';
-import type AbortablePromise from '~/core/promise/abortable';
-import type { AbstractCache } from '~/core/cache';
+import type Range from '@src/core/range';
+import type AbortablePromise from '@src/core/promise/abortable';
+import type { AbstractCache } from '@src/core/cache';
 
-import type Response from '~/core/request/response';
-import type { ResponseType } from '~/core/request/response';
+import type Response from '@src/core/request/response';
+import type { ResponseType } from '@src/core/request/response';
 
-import type RequestError from '~/core/request/error';
-import type RequestContext from '~/core/request/context';
+import type RequestError from '@src/core/request/error';
+import type RequestContext from '@src/core/request/context';
 
-import type { defaultRequestOpts } from '~/core/request/const';
-import type { StatusCodes } from '~/core/status-codes';
+import type { defaultRequestOpts } from '@src/core/request/const';
+import type { StatusCodes } from '@src/core/status-codes';
 
 export type RequestMethod =
 	'GET' |

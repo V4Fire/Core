@@ -11,10 +11,10 @@
  * @packageDocumentation
  */
 
-import { deprecate, deprecated } from '~/core/functools';
+import { deprecate, deprecated } from '@src/core/functools';
 
-import { namespaces, NamespacesDictionary } from '~/core/async/const';
-import { isZombieGroup, isPromisifyNamespace } from '~/core/async/modules/base/const';
+import { namespaces, NamespacesDictionary } from '@src/core/async/const';
+import { isZombieGroup, isPromisifyNamespace } from '@src/core/async/modules/base/const';
 
 import type {
 
@@ -29,12 +29,12 @@ import type {
 	FullAsyncOptions,
 	FullClearOptions
 
-} from '~/core/async/interface';
+} from '@src/core/async/interface';
 
-export * from '~/core/async/modules/base/const';
-export * from '~/core/async/modules/base/helpers';
+export * from '@src/core/async/modules/base/const';
+export * from '@src/core/async/modules/base/helpers';
 
-export * from '~/core/async/interface';
+export * from '@src/core/async/interface';
 
 export default class Async<CTX extends object = Async<any>> {
 	/**

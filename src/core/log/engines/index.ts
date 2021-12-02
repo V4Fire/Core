@@ -6,11 +6,11 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { ConsoleEngine } from '~/core/log/engines/console';
-import type { LogEngine, LogEngineConstructor } from '~/core/log/engines/interface';
+import { ConsoleEngine } from '@src/core/log/engines/console';
+import type { LogEngine, LogEngineConstructor } from '@src/core/log/engines/interface';
 
-export { extend, Extended } from '~/core/log/base';
-export * from '~/core/log/engines/interface';
+export { extend, Extended } from '@src/core/log/base';
+export * from '@src/core/log/engines/interface';
 
 /**
  * Returns a function that creates an engine of the specified class

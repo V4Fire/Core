@@ -1,10 +1,10 @@
-import type { Provider } from '~/core/data';
-import type { CreateRequestOptions, RequestQuery, RequestResponseObject, RequestBody } from '~/core/request';
+import type { Provider } from '@src/core/data';
+import type { CreateRequestOptions, RequestQuery, RequestResponseObject, RequestBody } from '@src/core/request';
 
-import type Async from '~/core/async';
-import type { AsyncOptions, ClearOptionsId, ProxyCb, EventEmitterLike } from '~/core/async';
+import type Async from '@src/core/async';
+import type { AsyncOptions, ClearOptionsId, ProxyCb, EventEmitterLike } from '@src/core/async';
 
-import type { ClearFilter } from '~/core/kv-storage';
+import type { ClearFilter } from '@src/core/kv-storage';
 
 export type DataProviderQueryMethodsToReplace = 'get' | 'peek';
 export type DataProviderBodyMethodsToReplace = 'post' | 'add' | 'upd' | 'del';

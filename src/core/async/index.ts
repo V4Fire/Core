@@ -11,11 +11,11 @@
  * @packageDocumentation
  */
 
-import Super from '~/core/async/modules/wrappers';
+import Super from '@src/core/async/modules/wrappers';
 
-export * from '~/core/async/const';
-export * from '~/core/async/interface';
-export * from '~/core/async/modules/wrappers';
+export * from '@src/core/async/const';
+export * from '@src/core/async/interface';
+export * from '@src/core/async/modules/wrappers';
 
 /**
  * Class to control asynchronous operations

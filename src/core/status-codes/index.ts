@@ -11,9 +11,9 @@
  * @packageDocumentation
  */
 
-import { StatusCodes } from '~/core/status-codes/interface';
+import { StatusCodes } from '@src/core/status-codes/interface';
 
-export * from '~/core/status-codes/interface';
+export * from '@src/core/status-codes/interface';
 
 /**
  * Enum-like structure of status codes

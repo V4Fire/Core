@@ -11,9 +11,9 @@
  * @packageDocumentation
  */
 
-import { consoleEngine } from '~/core/perf/timer/engines/console';
+import { consoleEngine } from '@src/core/perf/timer/engines/console';
 
-export * from '~/core/perf/timer/engines/interface';
+export * from '@src/core/perf/timer/engines/interface';
 
 const engines = {
 	console: consoleEngine

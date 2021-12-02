@@ -6,11 +6,11 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import SyncPromise from '~/core/promise/sync';
-import type Cache from '~/core/cache/interface';
+import SyncPromise from '@src/core/promise/sync';
+import type Cache from '@src/core/cache/interface';
 
-import { INDEX_STORAGE_NAME } from '~/core/cache/decorators/persistent/engines/const';
-import { UncheckablePersistentEngine } from '~/core/cache/decorators/persistent/engines/interface';
+import { INDEX_STORAGE_NAME } from '@src/core/cache/decorators/persistent/engines/const';
+import { UncheckablePersistentEngine } from '@src/core/cache/decorators/persistent/engines/interface';
 
 export default class ActivePersistentEngine<V> extends UncheckablePersistentEngine<V> {
 	/**

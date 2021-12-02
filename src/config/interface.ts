@@ -6,9 +6,9 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type { LogConfig } from '~/core/log';
-import type { OnlineCheckConfig } from '~/core/net';
-import type { PerfConfig } from '~/core/perf/config';
+import type { LogConfig } from '@src/core/log';
+import type { OnlineCheckConfig } from '@src/core/net';
+import type { PerfConfig } from '@src/core/perf/config';
 
 export interface Config {
 	/**

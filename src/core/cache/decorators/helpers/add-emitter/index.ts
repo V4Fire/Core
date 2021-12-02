@@ -13,10 +13,10 @@
 
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 
-import symbolGenerator from '~/core/symbol';
-import type Cache from '~/core/cache/interface';
+import symbolGenerator from '@src/core/symbol';
+import type Cache from '@src/core/cache/interface';
 
-import { eventEmitter } from '~/core/cache/decorators/helpers/add-emitter/const';
+import { eventEmitter } from '@src/core/cache/decorators/helpers/add-emitter/const';
 
 import type {
 
@@ -25,10 +25,10 @@ import type {
 	MutationEvent,
 	AddEmitterReturn
 
-} from '~/core/cache/decorators/helpers/add-emitter/interface';
+} from '@src/core/cache/decorators/helpers/add-emitter/interface';
 
-export * from '~/core/cache/decorators/helpers/add-emitter/const';
-export * from '~/core/cache/decorators/helpers/add-emitter/interface';
+export * from '@src/core/cache/decorators/helpers/add-emitter/const';
+export * from '@src/core/cache/decorators/helpers/add-emitter/interface';
 
 export const
 	$$ = symbolGenerator();

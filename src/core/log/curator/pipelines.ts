@@ -6,10 +6,10 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import config from '~/config';
+import config from '@src/config';
 
-import { createPipeline } from '~/core/log/config';
-import type { LogPipeline } from '~/core/log/curator/pipeline';
+import { createPipeline } from '@src/core/log/config';
+import type { LogPipeline } from '@src/core/log/curator/pipeline';
 
 const
 	pipelines: LogPipeline[] = [];

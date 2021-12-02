@@ -11,13 +11,13 @@
  * @packageDocumentation
  */
 
-import { deprecate } from '~/core/functools/deprecation';
+import { deprecate } from '@src/core/functools/deprecation';
 
-import { mimeTypes, normalizeMimeStrRgxp, dataURIRgxp, isTextType, isXMLType } from '~/core/mime-type/const';
-import type { DataType } from '~/core/mime-type/interface';
+import { mimeTypes, normalizeMimeStrRgxp, dataURIRgxp, isTextType, isXMLType } from '@src/core/mime-type/const';
+import type { DataType } from '@src/core/mime-type/interface';
 
-export * from '~/core/mime-type/const';
-export * from '~/core/mime-type/interface';
+export * from '@src/core/mime-type/const';
+export * from '@src/core/mime-type/interface';
 
 /**
  * Returns a type of data from the specified DATA:URI string

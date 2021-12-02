@@ -6,8 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { IS_NODE } from '~/core/prelude/env';
-import type { PerfTimerEngine } from '~/core/perf/timer/engines/interface';
+import { IS_NODE } from '@src/core/prelude/env';
+import type { PerfTimerEngine } from '@src/core/perf/timer/engines/interface';
 
 export const consoleEngine: PerfTimerEngine = {
 	/** @see [[PerfTimerEngine.sendDelta]] */

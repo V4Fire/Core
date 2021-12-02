@@ -6,10 +6,10 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type { PerfPredicate } from '~/core/perf/config';
-import type { PerfGroup } from '~/core/perf/interface';
+import type { PerfPredicate } from '@src/core/perf/config';
+import type { PerfGroup } from '@src/core/perf/interface';
 
-import type { PerfTimerEngine } from '~/core/perf/timer/engines';
+import type { PerfTimerEngine } from '@src/core/perf/timer/engines';
 
 import type {
 
@@ -18,9 +18,9 @@ import type {
 	PerfTimer,
 	PerfTimersRunnerOptions
 
-} from '~/core/perf/timer/impl/interface';
+} from '@src/core/perf/timer/impl/interface';
 
-export { PerfTimerId } from '~/core/perf/timer/impl/interface';
+export { PerfTimerId } from '@src/core/perf/timer/impl/interface';
 
 /**
  * Represents abstraction that can measure the difference between time moments and create new performance timers

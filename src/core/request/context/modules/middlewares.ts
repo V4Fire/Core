@@ -6,11 +6,11 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import Response, { ResponseTypeValue } from '~/core/request/response';
-import { caches } from '~/core/request/const';
+import Response, { ResponseTypeValue } from '@src/core/request/response';
+import { caches } from '@src/core/request/const';
 
-import Super from '~/core/request/context/modules/methods';
-import type { RequestResponse, RequestResponseObject } from '~/core/request/interface';
+import Super from '@src/core/request/context/modules/methods';
+import type { RequestResponse, RequestResponseObject } from '@src/core/request/interface';
 
 export default class RequestContext<D = unknown> extends Super<D> {
 	/**

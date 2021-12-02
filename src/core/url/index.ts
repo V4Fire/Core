@@ -11,6 +11,6 @@
  * @packageDocumentation
  */
 
-export * from '~/core/url/const';
-export * from '~/core/url/concat';
-export * from '~/core/url/convert';
+export * from '@src/core/url/const';
+export * from '@src/core/url/concat';
+export * from '@src/core/url/convert';

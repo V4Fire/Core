@@ -6,15 +6,15 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { deprecate } from '~/core/functools';
+import { deprecate } from '@src/core/functools';
 
-import pipelines from '~/core/log/curator/pipelines';
+import pipelines from '@src/core/log/curator/pipelines';
 
-import type { LogEvent } from '~/core/log/middlewares';
-import type { LogMessageOptions } from '~/core/log/interface';
+import type { LogEvent } from '@src/core/log/middlewares';
+import type { LogMessageOptions } from '@src/core/log/interface';
 
-import { DEFAULT_LEVEL } from '~/core/log/base';
-import { DEFAULT_CONTEXT } from '~/core/log/curator/const';
+import { DEFAULT_LEVEL } from '@src/core/log/base';
+import { DEFAULT_CONTEXT } from '@src/core/log/curator/const';
 
 /**
  * Sends data to every logging pipeline

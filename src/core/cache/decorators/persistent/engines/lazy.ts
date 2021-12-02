@@ -6,10 +6,10 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import SyncPromise from '~/core/promise/sync';
+import SyncPromise from '@src/core/promise/sync';
 
-import { TTL_POSTFIX } from '~/core/cache/decorators/persistent/engines/const';
-import { CheckablePersistentEngine, StorageCheckState } from '~/core/cache/decorators/persistent/engines/interface';
+import { TTL_POSTFIX } from '@src/core/cache/decorators/persistent/engines/const';
+import { CheckablePersistentEngine, StorageCheckState } from '@src/core/cache/decorators/persistent/engines/interface';
 
 export default class LazyPersistentEngine<V> extends CheckablePersistentEngine<V> {
 	override get<T>(key: string): Promise<CanUndef<T>> {

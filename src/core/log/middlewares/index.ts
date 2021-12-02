@@ -6,13 +6,13 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { ConfigurableMiddleware } from '~/core/log/middlewares/configurable';
-import { ExtractorMiddleware } from '~/core/log/middlewares/extractor';
-import { ErrorsDeduplicatorMiddleware } from '~/core/log/middlewares/errors-deduplicator';
-import type { LogMiddleware } from '~/core/log/middlewares/interface';
+import { ConfigurableMiddleware } from '@src/core/log/middlewares/configurable';
+import { ExtractorMiddleware } from '@src/core/log/middlewares/extractor';
+import { ErrorsDeduplicatorMiddleware } from '@src/core/log/middlewares/errors-deduplicator';
+import type { LogMiddleware } from '@src/core/log/middlewares/interface';
 
-export { extend, Extended } from '~/core/log/base';
-export * from '~/core/log/middlewares/interface';
+export { extend, Extended } from '@src/core/log/base';
+export * from '@src/core/log/middlewares/interface';
 
 /**
  * Returns a function that creates a middleware of the specified class

@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type { Extended } from '~/core/log/base/interface';
+import type { Extended } from '@src/core/log/base/interface';
 
 /**
  * Mixes two objects

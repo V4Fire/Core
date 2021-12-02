@@ -11,9 +11,9 @@
  * @packageDocumentation
  */
 
-import engine from '~/core/analytics/engines';
+import engine from '@src/core/analytics/engines';
 
-export * from '~/core/analytics/interface';
+export * from '@src/core/analytics/interface';
 
 /**
  * Sends the specified analytic event

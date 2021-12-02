@@ -11,7 +11,7 @@
  * @packageDeclaration
  */
 
-import SyncPromise from '~/core/promise/sync';
+import SyncPromise from '@src/core/promise/sync';
 
 import Super, {
 
@@ -29,7 +29,7 @@ import Super, {
 	ClearProxyOptions,
 	ClearOptionsId
 
-} from '~/core/async/modules/base';
+} from '@src/core/async/modules/base';
 
 import type {
 
@@ -41,10 +41,10 @@ import type {
 	AsyncWorkerOptions,
 	AsyncPromiseOptions
 
-} from '~/core/async/interface';
+} from '@src/core/async/interface';
 
-export * from '~/core/async/modules/base';
-export * from '~/core/async/interface';
+export * from '@src/core/async/modules/base';
+export * from '@src/core/async/interface';
 
 export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	/**

@@ -13,7 +13,7 @@
  * @packageDocumentation
  */
 
-import * as tools from '~/core/functools';
+import * as tools from '@src/core/functools';
 
 /**
  * @deprecated
@@ -22,7 +22,7 @@ import * as tools from '~/core/functools';
  */
 export const once = tools.deprecate(
 	{
-		movedTo: '~/core/functools'
+		movedTo: '@src/core/functools'
 	},
 
 	function once(this: unknown, target: object, key: string | symbol, descriptor: PropertyDescriptor): void {
@@ -37,7 +37,7 @@ export const once = tools.deprecate(
  */
 export const debounce = tools.deprecate(
 	{
-		movedTo: '~/core/functools'
+		movedTo: '@src/core/functools'
 	},
 
 	function debounce(this: unknown, delay?: number): MethodDecorator {
@@ -52,7 +52,7 @@ export const debounce = tools.deprecate(
  */
 export const throttle = tools.deprecate(
 	{
-		movedTo: '~/core/functools'
+		movedTo: '@src/core/functools'
 	},
 
 	function throttle(this: unknown, delay?: number): MethodDecorator {

@@ -11,11 +11,11 @@
  * @packageDocumentation
  */
 
-import extend from '~/core/log/extensions';
-import log from '~/core/log/curator';
+import extend from '@src/core/log/extensions';
+import log from '@src/core/log/curator';
 
-export * from '~/core/log/interface';
-export * from '~/core/log/config';
+export * from '@src/core/log/interface';
+export * from '@src/core/log/config';
 
 /**
  * API for logging

@@ -11,12 +11,12 @@
  * @packageDocumentation
  */
 
-import { caches } from '~/core/request/const';
-import { tplRgxp } from '~/core/request/utils/const';
+import { caches } from '@src/core/request/const';
+import { tplRgxp } from '@src/core/request/utils/const';
 
-import type { NormalizedCreateRequestOptions } from '~/core/request/interface';
+import type { NormalizedCreateRequestOptions } from '@src/core/request/interface';
 
-export * from '~/core/request/utils/const';
+export * from '@src/core/request/utils/const';
 
 /**
  * Merges the specified arguments and returns a new object

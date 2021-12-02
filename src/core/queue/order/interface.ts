@@ -6,9 +6,9 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type { InnerQueue as SuperInnerQueue } from '~/core/queue/interface';
+import type { InnerQueue as SuperInnerQueue } from '@src/core/queue/interface';
 
-export * from '~/core/queue/interface';
+export * from '@src/core/queue/interface';
 
 export interface InnerQueue<T = unknown> extends SuperInnerQueue<T> {
 	[i: number]: T;

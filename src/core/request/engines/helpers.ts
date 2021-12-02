@@ -6,8 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { IS_NODE } from '~/core/env';
-import type { RequestBody } from '~/core/request/interface';
+import { IS_NODE } from '@src/core/env';
+import type { RequestBody } from '@src/core/request/interface';
 
 /**
  * Converts the specified data to send via request engines.

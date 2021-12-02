@@ -11,4 +11,4 @@
  * @packageDocumentation
  */
 
-export * from '~/core/prelude/i18n';
+export * from '@src/core/prelude/i18n';

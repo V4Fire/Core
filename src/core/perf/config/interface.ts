@@ -6,8 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type { PerfTimerEngineName } from '~/core/perf/timer/engines';
-import type { PerfGroup } from '~/core/perf/interface';
+import type { PerfTimerEngineName } from '@src/core/perf/timer/engines';
+import type { PerfGroup } from '@src/core/perf/interface';
 
 /**
  * General config for performance metrics

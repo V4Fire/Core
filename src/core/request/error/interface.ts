@@ -6,8 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type Response from '~/core/request/response';
-import type { NormalizedCreateRequestOptions } from '~/core/request/interface';
+import type Response from '@src/core/request/response';
+import type { NormalizedCreateRequestOptions } from '@src/core/request/interface';
 
 export interface Details<D = unknown> extends Dictionary {
 	request?: NormalizedCreateRequestOptions<D>;
