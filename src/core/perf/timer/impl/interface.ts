@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type { PerfPredicate } from 'core/perf/config';
+import type { PerfPredicate } from '~/core/perf/config';
 
 /**
  * Internal timer measurement

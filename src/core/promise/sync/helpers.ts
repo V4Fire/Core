@@ -22,7 +22,7 @@ import { weakMemoizeCache, longMemoizeCache } from '~/core/promise/sync/const';
  * @example
  * ```
  * memoize(nextTick());
- * memoize('core/url/concat', () => import('~/core/url/concat'));
+ * memoize('~/core/url/concat', () => import('~/core/url/concat'));
  * ```
  */
 export function memoize<T = unknown>(keyOrPromise: unknown | PromiseLikeP<T>, promise?: PromiseLikeP<T>): Promise<T> {

@@ -11,14 +11,14 @@
  * @packageDocumentation
  */
 
-import type { PerfGroup } from 'core/perf/interface';
+import type { PerfGroup } from '~/core/perf/interface';
 
-import { PerfTimersRunner, PerfTimer } from 'core/perf/timer/impl';
-import { getTimerEngine, createPredicates, PerfTimerConfig } from 'core/perf/config';
+import { PerfTimersRunner, PerfTimer } from '~/core/perf/timer/impl';
+import { getTimerEngine, createPredicates, PerfTimerConfig } from '~/core/perf/config';
 
-import type { PerfTimerFactory } from 'core/perf/timer/interface';
+import type { PerfTimerFactory } from '~/core/perf/timer/interface';
 
-export * from 'core/perf/timer/interface';
+export * from '~/core/perf/timer/interface';
 
 /**
  * Returns a timers factory for the passed config

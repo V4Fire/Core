@@ -16,7 +16,7 @@ import type { CreateRequestOptions, RequestQuery, RequestBody } from '~/core/req
 
 import Super, { AsyncOptions, EventEmitterLike } from '~/core/async/modules/events';
 
-import type { AsyncStorage, AsyncStorageNamespace } from 'core/kv-storage';
+import type { AsyncStorage, AsyncStorageNamespace } from '~/core/kv-storage';
 
 import {
 
@@ -267,8 +267,8 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 *
 	 * @example
 	 * ```js
-	 * import Async from 'core/async';
-	 * import { asyncLocal } from 'core/kv-storage';
+	 * import Async from '~/core/async';
+	 * import { asyncLocal } from '~/core/kv-storage';
 	 *
 	 * const
 	 *   $a = new Async(),

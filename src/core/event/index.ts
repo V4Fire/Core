@@ -155,7 +155,7 @@ export const createSyncPromise = deprecate(
 	{
 		alternative: {
 			name: 'SyncPromise',
-			source: 'core/promise/sync'
+			source: '~/core/promise/sync'
 		}
 	},
 

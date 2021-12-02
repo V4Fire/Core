@@ -15,10 +15,10 @@ export let
 if (IS_NODE) {
 	//#if node_js
 	({serialize} =
-		require('core/xml/engines/node'));
+		require('~/core/xml/engines/node'));
 	//#endif
 
 } else {
 	({serialize} =
-		require('core/xml/engines/browser'));
+		require('~/core/xml/engines/browser'));
 }

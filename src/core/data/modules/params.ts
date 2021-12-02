@@ -113,7 +113,7 @@ export default abstract class Provider {
 	/**
 	 * Map of data mocks.
 	 * This object can be used with a middleware that implements API for data mocking,
-	 * for example [[attachMock]] from `'core/data/middlewares'`.
+	 * for example [[attachMock]] from `'~/core/data/middlewares'`.
 	 *
 	 * The key of a map element represent a method request type: 'GET', 'POST', etc.
 	 * The value of a map element represent a list of parameters to match.

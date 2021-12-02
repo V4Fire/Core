@@ -11,5 +11,5 @@
  * @packageDocumentation
  */
 
-export * from 'core/perf/timer/impl/interface';
-export { default as PerfTimersRunner } from 'core/perf/timer/impl/runner';
+export * from '~/core/perf/timer/impl/interface';
+export { default as PerfTimersRunner } from '~/core/perf/timer/impl/runner';

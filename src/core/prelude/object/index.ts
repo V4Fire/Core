@@ -6,11 +6,11 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import 'core/prelude/object/property';
-import 'core/prelude/object/iterators';
-import 'core/prelude/object/metrics';
-import 'core/prelude/object/compare';
-import 'core/prelude/object/convert';
-import 'core/prelude/object/create';
-import 'core/prelude/object/mixin';
-import 'core/prelude/object/clone';
+import '~/core/prelude/object/property';
+import '~/core/prelude/object/iterators';
+import '~/core/prelude/object/metrics';
+import '~/core/prelude/object/compare';
+import '~/core/prelude/object/convert';
+import '~/core/prelude/object/create';
+import '~/core/prelude/object/mixin';
+import '~/core/prelude/object/clone';
