@@ -528,7 +528,13 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 				};
 			}
 
-			if (this.isPending) {
+			const canInvokeExecutor = this.isPending && (
+				parent == null ||
+				parent.state !== State.rejected ||
+				Object.get(parent.value, [IGNORE]) === true
+			);
+
+			if (canInvokeExecutor) {
 				this.call(executor, [onResolved, onRejected, setOnAbort], onRejected);
 			}
 		});
