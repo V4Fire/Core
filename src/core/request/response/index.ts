@@ -99,7 +99,7 @@ export default class Response<
 	/**
 	 * Value of the response body
 	 */
-	protected readonly body: ResponseTypeValue;
+	readonly body: ResponseTypeValue;
 
 	/**
 	 * @param [body] - response body
