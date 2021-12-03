@@ -11,7 +11,7 @@
  * @packageDocumentation
  */
 
-import { deprecated } from 'core/functools';
+import { IGNORE } from 'core/promise/abortable/const';
 
 import {
 
@@ -38,6 +38,17 @@ export * from 'core/promise/abortable/interface';
  * @typeparam T - promise resolved value
  */
 export default class AbortablePromise<T = unknown> implements Promise<T> {
+	/**
+	 * The method wraps the specified abort reason to ignore with tied promises,
+	 * i.e., this reason won't reject all child promises
+	 *
+	 * @param reason
+	 */
+	static wrapReasonToIgnore<T extends object>(reason: T): T {
+		reason[IGNORE] = true;
+		return reason;
+	}
+
 	/**
 	 * Returns an AbortablePromise object that is resolved with a given value.
 	 *

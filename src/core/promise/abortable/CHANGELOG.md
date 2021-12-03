@@ -15,6 +15,10 @@ Changelog
 
 * Removed deprecated API
 
+#### :rocket: New Feature
+
+* Added a new static method `wrapReasonToIgnore`
+
 ## v3.60.3 (2021-10-05)
 
 #### :bug: Bug Fix

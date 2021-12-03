@@ -64,6 +64,11 @@ console.log(promise.isPending);
 
 The module provides a bunch of static helper methods and getters.
 
+### wrapReasonToIgnore
+
+The method wraps the specified abort reason to ignore with tied promises,
+i.e., this reason won't reject all child promises.
+
 ### resolveAndCall
 
 The method creates a new resolved promise for the specified value.
