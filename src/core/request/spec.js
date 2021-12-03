@@ -431,7 +431,7 @@ describe('core/request', () => {
 				}
 
 				expect(err).toBeInstanceOf(RequestError);
-				expect(err.type).toBe(RequestError.timeout);
+				expect(err.type).toBe(RequestError.Timeout);
 				expect(err.message).toBe('[timeout]');
 				expect(err.details.response).toBeUndefined();
 			});
