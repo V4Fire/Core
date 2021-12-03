@@ -5,7 +5,7 @@ This module provides a bunch of functions and decorators to mark functions with 
 ```js
 import { warn, warned } from 'core/functools/warning';
 
-const foo = warn({context: 'notImplemented', name: 'foo', alternative: 'bar'}, () => {
+const foo = warn({context: 'unimplemented', name: 'foo', alternative: 'bar'}, () => {
 
 });
 

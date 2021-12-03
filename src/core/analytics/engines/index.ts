@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { notImplement } from 'core/functools/not-implemented';
+import { unimplement } from 'core/functools/implementation';
 import type { AnalyticEngine } from 'core/analytics/interface';
 
 /**
@@ -14,7 +14,7 @@ import type { AnalyticEngine } from 'core/analytics/interface';
  * @abstract
  */
 const sendEvent: AnalyticEngine = () => {
-	notImplement({
+	unimplement({
 		type: 'function',
 		name: 'sendAnalyticsEvent'
 	});
