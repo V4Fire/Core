@@ -9,6 +9,16 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.??.?? (2021-12-??)
+
+#### :boom: Breaking Change
+
+* Renamed a module `core/functools/not-implemented` to `core/functools/implementation`
+* Renamed wrappers `notImplement/notImplemented` to `unimplement/unimplemented`
+* Now `unimplement/unimplemented` throw an exception
+
+## v3.27.0 (2020-09-04)
+
 ## v3.27.0 (2020-09-04)
 
 #### :boom: Breaking Change

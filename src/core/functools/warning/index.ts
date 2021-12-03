@@ -34,7 +34,7 @@ export function warn<T extends Function>(
 export function warn(opts: InlineWarnOptions): void;
 
 /**
- * Marks a function as non recommended to use
+ * Marks a function as non-recommended to use
  * @param fn - function to wrap
  */
 export function warn<T extends Function>(fn: T): T extends ((...args: infer A) => infer R) ?
@@ -81,9 +81,9 @@ export function warn<T extends Function>(
 
 				break;
 
-			case 'notImplemented':
+			case 'unimplemented':
 				if (!wasMovedOrRenamed) {
-					msg.push(`The ${type} "${name}" is not implemented.`);
+					msg.push(`The ${type} "${name}" is unimplemented.`);
 				}
 
 				break;
@@ -134,7 +134,10 @@ export function warn<T extends Function>(
 		const
 			str = msg.join(' ');
 
-		if (consoleCache[str] == null) {
+		if (p.context === 'unimplemented') {
+			throw new Error(str);
+
+		} else if (consoleCache[str] == null) {
 			console.warn(str);
 			consoleCache[str] = true;
 		}

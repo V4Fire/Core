@@ -11,6 +11,15 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.??.?? (2021-12-??)
+
+#### :boom: Breaking Change
+
+* `core/functools`:
+  * Renamed a module `core/functools/not-implemented` to `core/functools/implementation`
+  * Renamed wrappers `notImplement/notImplemented` to `unimplement/unimplemented`
+  * Now `unimplement/unimplemented` throw an exception
+
 ## v3.67.0 (2021-12-01)
 
 #### :boom: Breaking Change
@@ -897,7 +906,7 @@ SyncPromise.resolve(1).catch(() => undefined).then((r) => console.log(r));
 
 * Dropped `interface.ts`:
   * `core/functools/deprecation`
-  * `core/functools/not-implemented`
+  * `core/functools/implementation`
 
 #### :rocket: New Feature
 
@@ -907,7 +916,7 @@ SyncPromise.resolve(1).catch(() => undefined).then((r) => console.log(r));
 
 * Re-wrote the module with `core/functools/warning`:
   * `core/functools/deprecation`
-  * `core/functools/not-implemented`
+  * `core/functools/implementation`
 
 ## v3.26.0 (2020-09-04)
 
@@ -934,7 +943,7 @@ SyncPromise.resolve(1).catch(() => undefined).then((r) => console.log(r));
 #### :rocket: New Feature
 
 * Now `deprecate` returns `DeprecatedFn` `core/functools/deprecation`
-* Now `notImplement` returns `NotImplementedFn` `core/functools/not-implemented`
+* Now `notImplement` returns `NotImplementedFn` `core/functools/implementation`
 
 ## v3.24.2 (2020-09-02)
 
@@ -987,7 +996,7 @@ SyncPromise.resolve(1).catch(() => undefined).then((r) => console.log(r));
 #### :bug: Bug Fix
 
 * [Fixed notice params being ignored `core/functools/deprecation`](https://github.com/V4Fire/Core/pull/120)
-* Fixed notice params being ignored `core/functools/not-implemented`
+* Fixed notice params being ignored `core/functools/implementation`
 
 #### :house: Internal
 
@@ -1442,7 +1451,7 @@ Array.union([], 1, null, [1, 2].values()) // [1, 2];
 * [Added new overloads with options for `toQueryString/fromQueryString` `core/url`](https://github.com/V4Fire/Core/pull/72)
 * [Added `core/data/middlewares/attach-status`](https://github.com/V4Fire/Core/pull/73)
 * Added `Symbol.iterator` to `core/range`
-* [Added `core/functools/not-implemented`](https://github.com/V4Fire/Core/pull/75)
+* [Added `core/functools/implementation`](https://github.com/V4Fire/Core/pull/75)
 
 #### :house: Internal
 

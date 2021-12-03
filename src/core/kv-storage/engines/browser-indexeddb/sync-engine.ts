@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { notImplement } from 'core/functools/not-implemented';
+import { unimplement } from 'core/functools/implementation';
 
 export default [
 	'get',
@@ -14,6 +14,6 @@ export default [
 	'remove',
 	'keys'
 ].reduce((engine, method) => {
-	engine[method] = notImplement({name: method}, () => undefined);
+	engine[method] = unimplement({name: method}, () => undefined);
 	return engine;
 }, {});
