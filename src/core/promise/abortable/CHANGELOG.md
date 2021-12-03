@@ -19,6 +19,10 @@ Changelog
 
 * Added a new static method `wrapReasonToIgnore`
 
+#### :bug: Bug Fix
+
+* Fixed a bug when a child promise never resolved because its parent is already rejected
+
 ## v3.60.3 (2021-10-05)
 
 #### :bug: Bug Fix

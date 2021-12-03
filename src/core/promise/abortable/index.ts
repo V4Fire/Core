@@ -70,7 +70,7 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 	static resolve(): AbortablePromise<void>;
 	static resolve<T = unknown>(value?: Value<T>, parent?: AbortablePromise): AbortablePromise<T> {
 		if (value instanceof AbortablePromise) {
-			if (parent) {
+			if (parent != null) {
 				parent.catch((err) => value.abort(err));
 			}
 
@@ -504,7 +504,7 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 			let
 				setOnAbort;
 
-			if (parent) {
+			if (parent != null) {
 				const abortParent = (reason) => {
 					parent.abort(reason);
 				};
@@ -528,7 +528,7 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 				};
 			}
 
-			if (this.isPending && (parent == null || parent.state !== State.rejected)) {
+			if (this.isPending) {
 				this.call(executor, [onResolved, onRejected, setOnAbort], onRejected);
 			}
 		});
