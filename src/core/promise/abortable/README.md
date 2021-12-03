@@ -64,19 +64,6 @@ console.log(promise.isPending);
 
 The module provides a bunch of static helper methods and getters.
 
-### never
-
-The promise that is never resolved. It can be useful to create some loopback.
-
-```js
-import AbortablePromise from 'core/promise/abortable';
-
-// This promise will never be resolved
-AbortablePromise.never.then((res) => {
-  console.log(res);
-});
-```
-
 ### resolveAndCall
 
 The method creates a new resolved promise for the specified value.

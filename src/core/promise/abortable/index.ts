@@ -38,24 +38,7 @@ export * from 'core/promise/abortable/interface';
  */
 export default class AbortablePromise<T = unknown> implements Promise<T> {
 	/**
-	 * The promise that is never resolved
-	 */
-	static readonly never: Promise<never> = new Promise(() => undefined);
-
-	/**
-	 * Returns true if the specified value is looks like a promise
-	 *
-	 * @deprecated
-	 * @see [[ObjectConstructor.isPromiseLike]]
-	 * @param obj
-	 */
-	@deprecated({alternative: {name: 'Object.isPromiseLike', source: 'core/prelude/types'}})
-	static isThenable(obj: unknown): obj is PromiseLike<unknown> {
-		return Object.isPromiseLike(obj);
-	}
-
-	/**
-	 * Returns a AbortablePromise object that is resolved with a given value.
+	 * Returns an AbortablePromise object that is resolved with a given value.
 	 * If the resolved value is a function, it will be invoked.
 	 * The result of the invoking will be provided as a value of the promise.
 	 *
@@ -77,15 +60,6 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 	static resolveAndCall(): AbortablePromise<void>;
 	static resolveAndCall<T = unknown>(value?: ExecutableValue<T>, parent?: AbortablePromise): AbortablePromise<T> {
 		return AbortablePromise.resolve(value, parent).then<T>((obj) => Object.isFunction(obj) ? obj() : obj);
-	}
-
-	/**
-	 * @deprecated
-	 * @see [[AbortablePromise.resolveAndCall]]
-	 */
-	@deprecated({renamedTo: 'resolveAndCall'})
-	static immediate<T = unknown>(value: ExecutableValue<T>, parent?: AbortablePromise): AbortablePromise<T> {
-		return this.resolveAndCall(value, parent);
 	}
 
 	/**
