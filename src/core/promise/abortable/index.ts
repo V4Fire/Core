@@ -28,6 +28,7 @@ import {
 
 } from 'core/promise/abortable/interface';
 
+export * from 'core/promise/abortable/const';
 export * from 'core/promise/abortable/interface';
 
 /**
@@ -39,31 +40,6 @@ export * from 'core/promise/abortable/interface';
 export default class AbortablePromise<T = unknown> implements Promise<T> {
 	/**
 	 * Returns an AbortablePromise object that is resolved with a given value.
-	 * If the resolved value is a function, it will be invoked.
-	 * The result of the invoking will be provided as a value of the promise.
-	 *
-	 * If the value is a promise, that promise is returned; if the value is a thenable (i.e., has a "then" method),
-	 * the returned promise will "follow" that thenable, adopting its eventual state; otherwise,
-	 * the returned promise will be fulfilled with the value.
-	 *
-	 * This function flattens nested layers of promise-like objects
-	 * (e.g., a promise that resolves to a promise that resolves to something) into a single layer.
-	 *
-	 * @param value
-	 * @param [parent] - parent promise
-	 */
-	static resolveAndCall<T = unknown>(value: ExecutableValue<T>, parent?: AbortablePromise): AbortablePromise<T>;
-
-	/**
-	 * Returns a new resolved AbortablePromise object with an undefined value
-	 */
-	static resolveAndCall(): AbortablePromise<void>;
-	static resolveAndCall<T = unknown>(value?: ExecutableValue<T>, parent?: AbortablePromise): AbortablePromise<T> {
-		return AbortablePromise.resolve(value, parent).then<T>((obj) => Object.isFunction(obj) ? obj() : obj);
-	}
-
-	/**
-	 * Returns a AbortablePromise object that is resolved with a given value.
 	 *
 	 * If the value is a promise, that promise is returned; if the value is a thenable (i.e., has a "then" method),
 	 * the returned promise will "follow" that thenable, adopting its eventual state; otherwise,
@@ -94,7 +70,32 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 	}
 
 	/**
-	 * Returns a AbortablePromise object that is rejected with a given reason
+	 * Returns an AbortablePromise object that is resolved with a given value.
+	 * If the resolved value is a function, it will be invoked.
+	 * The result of the invoking will be provided as a value of the promise.
+	 *
+	 * If the value is a promise, that promise is returned; if the value is a thenable (i.e., has a "then" method),
+	 * the returned promise will "follow" that thenable, adopting its eventual state; otherwise,
+	 * the returned promise will be fulfilled with the value.
+	 *
+	 * This function flattens nested layers of promise-like objects
+	 * (e.g., a promise that resolves to a promise that resolves to something) into a single layer.
+	 *
+	 * @param value
+	 * @param [parent] - parent promise
+	 */
+	static resolveAndCall<T = unknown>(value: ExecutableValue<T>, parent?: AbortablePromise): AbortablePromise<T>;
+
+	/**
+	 * Returns a new resolved AbortablePromise object with an undefined value
+	 */
+	static resolveAndCall(): AbortablePromise<void>;
+	static resolveAndCall<T = unknown>(value?: ExecutableValue<T>, parent?: AbortablePromise): AbortablePromise<T> {
+		return AbortablePromise.resolve(value, parent).then<T>((obj) => Object.isFunction(obj) ? obj() : obj);
+	}
+
+	/**
+	 * Returns an AbortablePromise object that is rejected with a given reason
 	 *
 	 * @param [reason]
 	 * @param [parent] - parent promise
@@ -649,7 +650,7 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 	 * @param [reason] - abort reason
 	 */
 	abort(reason?: unknown): boolean {
-		if (!this.isPending || this.aborted) {
+		if (!this.isPending || this.aborted || Object.get(reason, [IGNORE]) === true) {
 			return false;
 		}
 
