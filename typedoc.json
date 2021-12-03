@@ -2,6 +2,7 @@
   "name": "V4Fire",
   "tsconfig": "./typedoc.tsconfig.json",
   "entryPoints": ["./src", "./index.d.ts"],
+  "entryPointStrategy": "Expand",
   "out": "./docs",
   "readme": "./README.md",
   "hideGenerator": true,
