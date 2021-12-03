@@ -7,17 +7,18 @@ This module provides a class for any request error and its details' extractor.
 A constructor of the class accepts two parameters: required `type` and optional `details`.
 
 ```
-throw new RequestError('invalidStatus', details);
+throw new RequestError(RequestError.InvalidStatus, details);
 ```
 
 Now we support the following types of `RequestError`:
 
-* `invalidStatus` - the response status from a server isn't considered as ok
-* `abort` - the request was aborted
-* `timeout` - the response from a server wasn't received for the expected amount of time
-* `offline` - no network
+* `RequestError.InvalidStatus` - a server has responded with a non-ok status;
+* `RequestError.Abort` - a request was aborted;
+* `RequestError.Timeout` - a request was aborted because of a timeout;
+* `RequestError.Offline` - a request was failed because there is no connection to a network;
+* `RequestError.Engine` - a request was failed because of an internal request engine' error.
 
-The second parameter could contain `request` and `response` objects and the `error` object that is caused the problem.
+The second parameter could contain `request` and `response` objects and an `error` object that is caused the problem.
 
 ## RequestErrorDetailsExtractor
 

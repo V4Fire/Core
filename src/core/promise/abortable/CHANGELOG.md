@@ -9,6 +9,20 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.??.?? (2021-??-??)
+
+#### :boom: Breaking Change
+
+* Removed deprecated API
+
+#### :rocket: New Feature
+
+* Added a new static method `wrapReasonToIgnore`
+
+#### :bug: Bug Fix
+
+* Fixed a bug when a child promise never resolved because its parent is already rejected
+
 ## v3.60.3 (2021-10-05)
 
 #### :bug: Bug Fix

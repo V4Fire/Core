@@ -55,7 +55,7 @@ export class RequestErrorDetailsExtractor implements ErrorDetailsExtractor<Reque
 			requestBody: error.details.request?.body,
 
 			responseHeaders: this.prepareHeaders(error.details.response?.headers),
-			responseBody: Object.get(error, 'details.response.body')
+			responseBody: error.details.response?.body
 		};
 	}
 
