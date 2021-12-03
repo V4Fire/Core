@@ -24,7 +24,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :bug: Bug Fix
 
-* Fixed a bug when a child promise never resolved because its parent is already rejected `core/promise/abortable`
+* Fixed a bug when a child promise is never resolved because its parent is already rejected `core/promise/abortable`
 
 ## v3.68.0 (2021-12-03)
 

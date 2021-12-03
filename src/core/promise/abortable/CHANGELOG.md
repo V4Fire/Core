@@ -21,7 +21,7 @@ Changelog
 
 #### :bug: Bug Fix
 
-* Fixed a bug when a child promise never resolved because its parent is already rejected
+* Fixed a bug when a child promise is never resolved because its parent is already rejected
 
 ## v3.60.3 (2021-10-05)
 
