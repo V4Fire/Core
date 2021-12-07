@@ -17,9 +17,9 @@ import type { Config } from 'config/interface';
 export * from 'config/interface';
 
 const config = <Config>{
-	appName: APP_NAME,
-	locale: LOCALE,
-	api: API_URL,
+	appName: typeof APP_NAME !== 'undefined' ? APP_NAME : undefined,
+	locale: typeof LOCALE !== 'undefined' ? LOCALE : undefined,
+	api: typeof API_URL !== 'undefined' ? API_URL : undefined,
 
 	online: {
 		checkURL: '',
