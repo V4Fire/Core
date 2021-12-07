@@ -30,6 +30,7 @@ module.exports = function init(gulp) {
 	const
 		{src, monic} = require('config'),
 		{resolve} = require('@pzlr/build-core'),
+		{replaceTscAliasPaths} = require('tsc-alias'),
 		{depsRgxpStr} = include('build/const');
 
 	const
@@ -46,6 +47,8 @@ module.exports = function init(gulp) {
 	 */
 	gulp.task('build:server', gulp.series([gulp.parallel(['build:tsconfig', 'clean:server']), build]));
 
+	gulp.task('build:standalone', gulp.series([gulp.parallel(['build:tsconfig', 'clean:server']), buildStandalone, replaceTscAliases]));
+
 	let
 		filesToBuild;
 
@@ -53,6 +56,11 @@ module.exports = function init(gulp) {
 	 * Rebuilds the project as a node.js package
 	 */
 	gulp.task('build:server:rebuild', build);
+
+		/**
+	 * Rebuilds the project as a standalone package
+	 */
+	gulp.task('build:standalone:rebuild', gulp.series([buildStandalone, replaceTscAliases]));
 
 	/**
 	 * Builds the project as a node.js package and watches for changes
@@ -65,7 +73,18 @@ module.exports = function init(gulp) {
 		}
 	]));
 
-	function build() {
+	/**
+	 * Builds the project as a standalone package and watches for changes
+	 */
+	gulp.task('watch:standalone', gulp.series([
+		'build:standalone',
+
+		() => {
+			gulp.watch(filesToBuild, gulp.series(['build:standalone:rebuild']));
+		}
+	]));
+
+	function baseBuild(options = {}) {
 		const
 			$C = require('collection.js'),
 			isPathInside = require('is-path-inside');
@@ -119,11 +138,23 @@ module.exports = function init(gulp) {
 
 			.pipe(
 				$.babel({
-					plugins: [insertRequireInitializer]
+					plugins: options.disableInsertRequire ? [] : [insertRequireInitializer]
 				})
 			)
 
 			.pipe($.if(enableSourcemaps, $.sourcemaps.write('.')))
 			.pipe(gulp.dest(dest));
+	}
+
+	function buildStandalone() {
+		return baseBuild({disableInsertRequire: true});
+	}
+
+	function replaceTscAliases() {
+		return replaceTscAliasPaths({configFile: src.rel('./server.tsconfig.json'), outDir: 'dist/server'});
+	}
+
+	function build() {
+		return baseBuild();
 	}
 };
