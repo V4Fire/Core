@@ -1931,9 +1931,9 @@ interface ArrayConstructor {
 		Array<IterableType<NonNullable<T>> | NonNullable<A>>;
 
 	/**
-	 * Returns a new array containing elements from all specified iterable values with duplicates removed.
-	 * You can also pass non-iterable values and they will be added to the final array,
-	 * except values with null or undefined.
+	 * Returns a new array containing elements from all specified non-primitive iterable values with duplicates removed.
+	 * You can also pass non-iterable values, and they will be added to the final array,
+	 * except values with `null` or `undefined`.
 	 *
 	 * @param arr
 	 * @param args
@@ -1956,8 +1956,8 @@ interface ArrayConstructor {
 
 	/**
 	 * Returns a new array containing elements from all specified arrays.
-	 * You can also pass non-iterable values and they will be added to the final array,
-	 * except values with null or undefined.
+	 * You can also pass non-iterable values, and they will be added to the final array,
+	 * except values with `null` or `undefined`.
 	 *
 	 * @param arr
 	 * @param args
@@ -1972,9 +1972,9 @@ interface ArrayConstructor {
 
 interface Array<T> {
 	/**
-	 * Returns a new array containing elements from all specified iterable values with duplicates removed.
-	 * You can also pass non-iterable values and they will be added to the final array,
-	 * except values with null or undefined.
+	 * Returns a new array containing elements from all specified non-primitive iterable values with duplicates removed.
+	 * You can also pass non-iterable values, and they will be added to the final array,
+	 * except values with `null` or `undefined`.
 	 *
 	 * @param args
 	 */
