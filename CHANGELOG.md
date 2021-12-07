@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.70.0 (2021-12-07)
+
+#### :rocket: New Feature
+
+* Now `@v4fire/core` can be used as a simple `node.js` library
+
 ## v3.69.0 (2021-12-03)
 
 #### :boom: Breaking Change
