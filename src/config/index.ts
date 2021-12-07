@@ -17,9 +17,17 @@ import type { Config } from 'config/interface';
 export * from 'config/interface';
 
 const config = <Config>{
-	appName: typeof APP_NAME !== 'undefined' ? APP_NAME : undefined,
-	locale: typeof LOCALE !== 'undefined' ? LOCALE : undefined,
-	api: typeof API_URL !== 'undefined' ? API_URL : undefined,
+	get appName() {
+		return typeof APP_NAME !== 'undefined' ? APP_NAME : undefined;
+	},
+
+	get locale() {
+		return typeof LOCALE !== 'undefined' ? LOCALE : undefined;
+	},
+
+	get api() {
+		return typeof API_URL !== 'undefined' ? API_URL : undefined;
+	},
 
 	online: {
 		checkURL: '',
