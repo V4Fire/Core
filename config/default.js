@@ -236,7 +236,7 @@ module.exports = config.createConfig(
 					default: ''
 				});
 
-				return this.output(v, ...args);
+				return path.resolve(this.cwd(), 'lib', v, ...args);
 			}
 		},
 

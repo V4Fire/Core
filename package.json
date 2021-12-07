@@ -2,7 +2,7 @@
   "name": "@v4fire/core",
   "description": "V4Fire core library",
   "homepage": "https://github.com/V4Fire/Core#readme",
-  "main": "dist/core/index.js",
+  "main": "lib/core/index.js",
   "typings": "index.d.ts",
   "license": "MIT",
   "version": "3.69.0",

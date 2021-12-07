@@ -44,11 +44,9 @@ Icon
 /yalc.lock
 
 # Build && test
+/dist
 /coverage
 /.nyc_output
-
-/dist/server
-/dist/client
 
 .env
 *.d.js
