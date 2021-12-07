@@ -38,14 +38,23 @@ module.exports();
 This file provides a bunch of gulp tasks to build the project.
 
 ```bash
- * # Builds the application as a node.js package
- * npx gulp build:server
- *
- * # Builds the application as a node.js package and watches for changes
- * npx gulp watch:server
- *
- * # Cleans the dist directory of a node.js package
- * npx gulp clean:server
+# Builds the application as a node.js package with the support of dynamic layers
+npx gulp build:server
+
+# Builds the project as a standalone node.js package without the support of dynamic layers
+npx gulp build:standalone
+
+# Builds the application as a node.js package with the support of dynamic layers and watches for changes
+npx gulp watch:server
+
+# Builds the project as a standalone node.js package without the support of dynamic layers and watches for changes
+npx gulp watch:standalone
+
+# Cleans the dist directory of a node.js package with the support of dynamic layers
+npx gulp clean:server
+
+# Cleans the dist directory of a node.js standalone package
+npx gulp clean:standalone
  * ```
 
 ## doc.gulp.js

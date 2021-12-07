@@ -13,14 +13,23 @@
  *
  * @example
  * ```bash
- * # Builds the application as a node.js package
+ * # Builds the application as a node.js package with the support of dynamic layers
  * npx gulp build:server
  *
- * # Builds the application as a node.js package and watches for changes
+ * # Builds the project as a standalone node.js package without the support of dynamic layers
+ * npx gulp build:standalone
+ *
+ * # Builds the application as a node.js package with the support of dynamic layers and watches for changes
  * npx gulp watch:server
  *
- * # Cleans the dist directory of a node.js package
+ * # Builds the project as a standalone node.js package without the support of dynamic layers and watches for changes
+ * npx gulp watch:standalone
+ *
+ * # Cleans the dist directory of a node.js package with the support of dynamic layers
  * npx gulp clean:server
+ *
+ * # Cleans the dist directory of a node.js standalone package
+ * npx gulp clean:standalone
  * ```
  */
 module.exports = function init(gulp) {
@@ -38,32 +47,44 @@ module.exports = function init(gulp) {
 		$ = require('gulp-load-plugins')({scope: ['optionalDependencies']});
 
 	/**
-	 * Cleans the dist directory of a node.js package
+	 * Cleans the dist directory of a node.js package with the support of dynamic layers
 	 */
 	gulp.task('clean:server', () => require('del')(src.serverOutput()));
 
 	/**
-	 * Builds the project as a node.js package
+	 * Cleans the dist directory of a node.js standalone package
+	 */
+	gulp.task('clean:standalone', () => require('del')(src.standaloneOutput()));
+
+	/**
+	 * Builds the project as a node.js package with the support of dynamic layers
 	 */
 	gulp.task('build:server', gulp.series([gulp.parallel(['build:tsconfig', 'clean:server']), build]));
 
-	gulp.task('build:standalone', gulp.series([gulp.parallel(['build:tsconfig', 'clean:server']), buildStandalone, replaceTscAliases]));
+	/**
+	 * Builds the project as a standalone node.js package without the support of dynamic layers
+	 */
+	gulp.task('build:standalone', gulp.series([
+		gulp.parallel(['build:tsconfig', 'clean:standalone']),
+		buildStandalone,
+		replaceTscAliases
+	]));
 
 	let
 		filesToBuild;
 
 	/**
-	 * Rebuilds the project as a node.js package
+	 * Rebuilds the project as a node.js package with the support of dynamic layers
 	 */
 	gulp.task('build:server:rebuild', build);
 
-		/**
-	 * Rebuilds the project as a standalone package
+	/**
+	 * Rebuilds the project as a standalone node.js package without the support of dynamic layers
 	 */
 	gulp.task('build:standalone:rebuild', gulp.series([buildStandalone, replaceTscAliases]));
 
 	/**
-	 * Builds the project as a node.js package and watches for changes
+	 * Builds the project as a node.js package with the support of dynamic layers and watches for changes
 	 */
 	gulp.task('watch:server', gulp.series([
 		'build:server',
@@ -74,7 +95,7 @@ module.exports = function init(gulp) {
 	]));
 
 	/**
-	 * Builds the project as a standalone package and watches for changes
+	 * Builds the project as a standalone node.js package without the support of dynamic layers and watches for changes
 	 */
 	gulp.task('watch:standalone', gulp.series([
 		'build:standalone',
@@ -84,13 +105,15 @@ module.exports = function init(gulp) {
 		}
 	]));
 
-	function baseBuild(options = {}) {
+	function baseBuild(opts = {}) {
+		opts = {type: 'server', ...opts};
+
 		const
 			$C = require('collection.js'),
 			isPathInside = require('is-path-inside');
 
 			const
-				tsConfig = fs.readJSONSync(src.rel('./server.tsconfig.json'));
+				tsConfig = fs.readJSONSync(src.rel(`./${opts.type}.tsconfig.json`));
 
 			filesToBuild = [
 				...tsConfig.include || [],
@@ -115,11 +138,11 @@ module.exports = function init(gulp) {
 			}
 
 			file.base = src.src();
-			return src.serverOutput();
+			return src[`${opts.type}Output`]();
 		}
 
 		return gulp
-			.src(filesToBuild, {base: './', since: gulp.lastRun('build:server')})
+			.src(filesToBuild, {base: './', since: gulp.lastRun(`build:${opts.type}`)})
 			.pipe($.if(enableSourcemaps, $.sourcemaps.init()))
 			.pipe($.plumber())
 
@@ -138,7 +161,7 @@ module.exports = function init(gulp) {
 
 			.pipe(
 				$.babel({
-					plugins: options.disableInsertRequire ? [] : [insertRequireInitializer]
+					plugins: opts.type === 'server' ? [insertRequireInitializer] : []
 				})
 			)
 
@@ -147,11 +170,14 @@ module.exports = function init(gulp) {
 	}
 
 	function buildStandalone() {
-		return baseBuild({disableInsertRequire: true});
+		return baseBuild({type: 'standalone'});
 	}
 
 	function replaceTscAliases() {
-		return replaceTscAliasPaths({configFile: src.rel('./server.tsconfig.json'), outDir: 'dist/server'});
+		return replaceTscAliasPaths({
+			configFile: src.rel('./standalone.tsconfig.json'),
+			outDir: src.rel('standaloneOutput')
+		});
 	}
 
 	function build() {
