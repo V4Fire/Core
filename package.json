@@ -32,7 +32,7 @@
     "test:typescript": "node node_modules/@v4fire/typescript-check",
     "test:eslint": "eslint ./config/**/*.js ./build/**/*.js ./src/**/*.js ./src/**/*.ts",
     "test:jasmine": "nyc --reporter=lcov --reporter=text jasmine",
-    "up": "npm i && npm up && npm audit fix && gulp build:doc"
+    "up": "npm i && npm up && gulp build:standalone && gulp build:doc"
   },
   "dependencies": {
     "@types/got": "^9.6.12",
