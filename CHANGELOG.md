@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.70.2 (2021-12-07)
+
+#### :bug: Bug Fix
+
+* Added setters to change config values `config`
+
 ## v3.70.1 (2021-12-07)
 
 #### :bug: Bug Fix
