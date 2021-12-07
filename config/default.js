@@ -176,7 +176,7 @@ module.exports = config.createConfig(
 			},
 
 			/**
-			 * Returns a path to the application dist directory
+			 * Returns an absolute path to the application dist directory
 			 * @returns {string}
 			 */
 			output(...args) {
@@ -217,6 +217,23 @@ module.exports = config.createConfig(
 				const v = o('server-output', {
 					env: true,
 					default: 'server'
+				});
+
+				return this.output(v, ...args);
+			},
+
+			/**
+			 * Returns a path to the application dist directory for standalone scripts
+			 *
+			 * @cli standalone-output
+			 * @env STANDALONE_OUTPUT
+			 *
+			 * @returns {string}
+			 */
+			standaloneOutput(...args) {
+				const v = o('standalone-output', {
+					env: true,
+					default: ''
 				});
 
 				return this.output(v, ...args);
