@@ -66,7 +66,7 @@ module.exports = function init(layers) {
 		let
 			cwd;
 
-		if (Object.isObject(cwdOrOpts)) {
+		if (Object.isDictionary(cwdOrOpts)) {
 			Object.assign(opts, cwdOrOpts);
 			cwd = opts.ctx;
 
