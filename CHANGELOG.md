@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.71.00 (2021-12-08)
+
+#### :boom: Breaking Change
+
+* Moved from `Sugar/Collection.js/urlconcat` to `@v4fire/core`
+
 ## v3.70.3 (2021-12-08)
 
 #### :bug: Bug Fix
