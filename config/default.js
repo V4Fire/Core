@@ -247,7 +247,7 @@ module.exports = config.createConfig(
 		 * @returns {?string}
 		 */
 		apiURL() {
-			const concatURLs = require('urlconcat').concat;
+			const {concatURLs} = require('../lib/core/url');
 			return this.api.proxy ? concatURLs(this.api.pathname(), 'api') : this.api.url;
 		},
 
