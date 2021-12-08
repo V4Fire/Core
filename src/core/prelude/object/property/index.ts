@@ -148,7 +148,7 @@ extend(Object, 'hasOwnProperty', function hasOwnProperty(
 	key?: string | symbol
 ): boolean | AnyFunction {
 	if (this != null && this !== Object) {
-		return nativeHasOwnProperty.call(this, key);
+		return nativeHasOwnProperty.call(this, obj);
 	}
 
 	if (arguments.length > 1) {
