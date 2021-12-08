@@ -143,9 +143,14 @@ const
 
 /** @see [[ObjectConstructor.hasOwnProperty]] */
 extend(Object, 'hasOwnProperty', function hasOwnProperty(
+	this: unknown,
 	obj: unknown,
 	key?: string | symbol
 ): boolean | AnyFunction {
+	if (this != null && this !== Object) {
+		return nativeHasOwnProperty.call(this, key);
+	}
+
 	if (arguments.length > 1) {
 		if (obj == null) {
 			return false;

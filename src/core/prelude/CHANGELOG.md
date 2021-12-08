@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.70.3 (2021-12-08)
+
+#### :bug: Bug Fix
+
+* Restored the native behavior of `Object.hasOwnProperty`
+
 ## v3.70.1 (2021-12-07)
 
 #### :bug: Bug Fix
