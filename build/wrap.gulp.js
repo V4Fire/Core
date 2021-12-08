@@ -8,9 +8,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-const
-	$C = require('collection.js');
-
 let gulpInitialized;
 
 /**
@@ -49,10 +46,10 @@ exports.wrapGulp = function wrapGulp(gulp) {
 
 	function apply(tasks) {
 		if (Object.isArray(tasks)) {
-			return $C(tasks).map((tasks) => apply(tasks));
+			return tasks.map((tasks) => apply(tasks));
 		}
 
-		if (Object.isObject(tasks)) {
+		if (Object.isDictionary(tasks)) {
 			return tasks.init();
 		}
 
@@ -87,7 +84,7 @@ exports.wrapGulp = function wrapGulp(gulp) {
 		}
 
 		gulpInitialized = true;
-		$C(cache).forEach((tasks, name) => {
+		Object.forEach(cache, (tasks, name) => {
 			addTask(name, typeof tasks === 'function' ? tasks : tasks.init());
 		});
 	};

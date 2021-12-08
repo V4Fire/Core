@@ -109,7 +109,6 @@ module.exports = function init(gulp) {
 		opts = {type: 'server', ...opts};
 
 		const
-			$C = require('collection.js'),
 			isPathInside = require('is-path-inside');
 
 			const
@@ -133,7 +132,7 @@ module.exports = function init(gulp) {
 				depDecl = isDep.exec(file.path);
 
 			if (depDecl) {
-				file.base = $C(resolve.rootDependencies).one.get((el) => isPathInside(el, depDecl[1]));
+				file.base = resolve.rootDependencies.find((el) => isPathInside(el, depDecl[1]));
 				return src.lib(depDecl[2]);
 			}
 
@@ -148,7 +147,7 @@ module.exports = function init(gulp) {
 
 			.pipe(
 				$.monic(
-					$C.extend(true, {}, monic().typescript, {
+					Object.mixin(true, {}, monic().typescript, {
 						flags: {
 							// eslint-disable-next-line camelcase
 							node_js: true
