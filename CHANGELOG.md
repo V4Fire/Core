@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.??.?? (2021-??-??)
+
+#### :rocket: New Feature
+
+* Now `Response` can take body as a function or promise `core/request/response`
+
 ## v3.71.00 (2021-12-08)
 
 #### :boom: Breaking Change

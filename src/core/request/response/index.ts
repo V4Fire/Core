@@ -28,8 +28,11 @@ import type {
 
 	ResponseType,
 	ResponseTypeValue,
+	ResponseTypeValueP,
+
 	ResponseHeaders,
 	ResponseOptions,
+
 	JSONLikeValue
 
 } from 'core/request/response/interface';
@@ -99,13 +102,13 @@ export default class Response<
 	/**
 	 * Value of the response body
 	 */
-	readonly body: ResponseTypeValue;
+	readonly body: CanPromise<ResponseTypeValue>;
 
 	/**
 	 * @param [body] - response body
 	 * @param [opts] - additional options
 	 */
-	constructor(body?: ResponseTypeValue, opts?: ResponseOptions) {
+	constructor(body?: ResponseTypeValueP, opts?: ResponseOptions) {
 		const
 			p = Object.mixin(false, {}, defaultResponseOpts, opts),
 			ok = p.okStatuses;
@@ -115,6 +118,7 @@ export default class Response<
 
 		this.status = p.status;
 		this.okStatuses = ok;
+
 		this.ok = ok instanceof Range ?
 			ok.contains(this.status) :
 			Array.concat([], <number>ok).includes(this.status);
@@ -142,7 +146,7 @@ export default class Response<
 			this.jsonReviver = convertIfDate;
 		}
 
-		this.body = body;
+		this.body = Object.isFunction(body) ? body() : body;
 	}
 
 	/**
@@ -225,142 +229,123 @@ export default class Response<
 	 */
 	@once
 	document(): AbortablePromise<Document | null> {
-		type _ = Document | null;
+		return AbortablePromise.resolve(this.body, this.parent)
+			.then<Document | null>((body) => {
+				//#if node_js
 
-		const
-			{body} = this;
+				if (IS_NODE) {
+					// eslint-disable-next-line @typescript-eslint/no-var-requires
+					const {JSDOM} = require('jsdom');
 
-		//#if node_js
-		if (IS_NODE) {
-			// eslint-disable-next-line @typescript-eslint/no-var-requires
-			const {JSDOM} = require('jsdom');
+					return this.text()
+						.then((text) => new JSDOM(text))
+						.then((res) => Object.get(res, 'window.document'));
+				}
 
-			return AbortablePromise.resolve(
-				this.text()
-					.then((text) => new JSDOM(text))
-					.then<_>((res) => Object.get(res, 'window.document')),
+				//#endif
 
-				this.parent
-			);
-		}
-		//#endif
+				if (Object.isString(body) || body instanceof ArrayBuffer) {
+					return this.text().then((text) => {
+						const type = this.getHeader('content-type') ?? 'text/html';
+						return new DOMParser().parseFromString(text ?? '', Object.cast(type));
+					});
+				}
 
-		if (Object.isString(body) || body instanceof ArrayBuffer) {
-			return AbortablePromise.resolve(
-				this.text().then<_>((text) => {
-					const type = this.getHeader('content-type') ?? 'text/html';
-					return(new DOMParser()).parseFromString(text ?? '', Object.cast(type));
-				}),
+				if (!(body instanceof Document)) {
+					throw new TypeError('Invalid data type');
+				}
 
-				this.parent
-			);
-		}
-
-		if (!(body instanceof Document)) {
-			throw new TypeError('Invalid data type');
-		}
-
-		return AbortablePromise.resolve<_>(body, this.parent);
+				return body;
+			});
 	}
 
 	/**
 	 * Parses the response body as a JSON object and returns it
 	 */
 	json(): AbortablePromise<D | null> {
-		type _ = D | null;
+		return AbortablePromise.resolve(this.body, this.parent)
+			.then<D | null>((body) => {
+				if (!IS_NODE && body instanceof Document) {
+					throw new TypeError('Invalid data type');
+				}
 
-		const
-			{body} = this;
+				if (body == null || body === '') {
+					return null;
+				}
 
-		if (!IS_NODE && body instanceof Document) {
-			throw new TypeError('Invalid data type');
-		}
+				if (Object.isString(body) || body instanceof ArrayBuffer || body instanceof Uint8Array) {
+					return this.text().then((text) => {
+						if (text == null || text === '') {
+							return null;
+						}
 
-		if (body == null || body === '') {
-			return AbortablePromise.resolve<_>(null, this.parent);
-		}
+						return JSON.parse(text, this.jsonReviver);
+					});
+				}
 
-		if (Object.isString(body) || body instanceof ArrayBuffer || body instanceof Uint8Array) {
-			return AbortablePromise.resolve(
-				this.text().then<_>((text) => {
-					if (text == null || text === '') {
-						return null;
-					}
-
-					return JSON.parse(text, this.jsonReviver);
-				}),
-
-				this.parent
-			);
-		}
-
-		return AbortablePromise.resolveAndCall<_>(
-			() => Object.cast(
-				Object.size(this.decoders) > 0 && !Object.isFrozen(body) ?
+				return Object.size(this.decoders) > 0 && !Object.isFrozen(body) ?
 					Object.fastClone(body) :
-					body
-			),
-
-			this.parent
-		);
+					body;
+			});
 	}
 
 	/**
 	 * Parses the response body as an ArrayBuffer object and returns it
 	 */
 	arrayBuffer(): AbortablePromise<ArrayBuffer | null> {
-		type _ = ArrayBuffer | null;
+		return AbortablePromise.resolve(this.body, this.parent)
+			.then<ArrayBuffer | null>((body) => {
+				//#unless node_js
 
-		const
-			{body} = this;
+				if (!IS_NODE && !(body instanceof ArrayBuffer)) {
+					throw new TypeError('Invalid data type');
+				}
 
-		//#unless node_js
-		if (!IS_NODE && !(body instanceof ArrayBuffer)) {
-			throw new TypeError('Invalid data type');
-		}
-		//#endunless
+				//#endunless
 
-		//#if node_js
-		if (!(body instanceof Buffer) && !(body instanceof ArrayBuffer)) {
-			throw new TypeError('Invalid data type');
-		}
-		//#endif
+				//#if node_js
 
-		if (body.byteLength === 0) {
-			return AbortablePromise.resolve<_>(null, this.parent);
-		}
+				if (!(body instanceof Buffer) && !(body instanceof ArrayBuffer)) {
+					throw new TypeError('Invalid data type');
+				}
 
-		return AbortablePromise.resolve<_>(body, this.parent);
+				//#endif
+
+				if (body.byteLength === 0) {
+					return null;
+				}
+
+				return body;
+			});
 	}
 
 	/**
 	 * Parses the response body as a Blob structure and returns it
 	 */
 	blob(): AbortablePromise<Blob | null> {
-		type _ = Blob | null;
+		return AbortablePromise.resolve(this.body, this.parent)
+			.then<Blob | null>((body) => {
+				if (!IS_NODE && body instanceof Document) {
+					throw new TypeError('Invalid data type');
+				}
 
-		const
-			{body} = this;
+				if (body == null) {
+					return null;
+				}
 
-		if (!IS_NODE && body instanceof Document) {
-			throw new TypeError('Invalid data type');
-		}
+				let
+					{Blob} = globalThis;
 
-		if (body == null) {
-			return AbortablePromise.resolve<_>(null);
-		}
+				//#if node_js
 
-		let
-			{Blob} = globalThis;
+				if (IS_NODE) {
+					Blob = require('node-blob');
+				}
 
-		//#if node_js
-		if (IS_NODE) {
-			Blob = require('node-blob');
-		}
-		//#endif
+				//#endif
 
-		const blob = new Blob([Object.cast(body)], {type: this.getHeader('content-type')});
-		return AbortablePromise.resolve<_>(blob, this.parent);
+				return new Blob([Object.cast(body)], {type: this.getHeader('content-type')});
+			});
 	}
 
 	/**
@@ -368,70 +353,68 @@ export default class Response<
 	 */
 	@once
 	text(): AbortablePromise<string | null> {
-		type _ = string | null;
+		return AbortablePromise.resolve(this.body, this.parent)
+			.then<string | null>((body) => {
+				if (body == null || body instanceof ArrayBuffer && body.byteLength === 0) {
+					return null;
+				}
 
-		const
-			{body} = this;
+				if (IS_NODE) {
+					if (body instanceof Buffer && body.byteLength === 0) {
+						throw new TypeError('Invalid data type');
+					}
 
-		if (body == null || body instanceof ArrayBuffer && body.byteLength === 0) {
-			return AbortablePromise.resolve<_>(null, this.parent);
-		}
+				} else if (body instanceof Document) {
+					return String(body);
+				}
 
-		if (IS_NODE) {
-			if (body instanceof Buffer && body.byteLength === 0) {
-				throw new TypeError('Invalid data type');
-			}
+				if (Object.isString(body)) {
+					return body;
+				}
 
-		} else if (body instanceof Document) {
-			return AbortablePromise.resolve<_>(String(body), this.parent);
-		}
+				if (Object.isDictionary(body)) {
+					return JSON.stringify(body);
+				}
 
-		if (Object.isString(body)) {
-			return AbortablePromise.resolve<_>(String(body), this.parent);
-		}
+				const
+					contentType = this.getHeader('content-type');
 
-		if (Object.isDictionary(body)) {
-			return AbortablePromise.resolve<_>(JSON.stringify(body), this.parent);
-		}
+				let
+					encoding = <BufferEncoding>'utf-8';
 
-		const
-			contentType = this.getHeader('content-type');
+				if (contentType != null) {
+					const
+						search = /charset=(\S+)/.exec(contentType);
 
-		let
-			encoding = <BufferEncoding>'utf-8';
+					if (search) {
+						encoding = <BufferEncoding>search[1].toLowerCase();
+					}
+				}
 
-		if (contentType != null) {
-			const
-				search = /charset=(\S+)/.exec(contentType);
+				if (IS_NODE) {
+					return Buffer.from(Object.cast(body)).toString(encoding);
+				}
 
-			if (search) {
-				encoding = <BufferEncoding>search[1].toLowerCase();
-			}
-		}
+				if (typeof TextDecoder !== 'undefined') {
+					const decoder = new TextDecoder(encoding, {fatal: true});
+					return decoder.decode(new DataView(Object.cast(body)));
+				}
 
-		if (IS_NODE) {
-			return AbortablePromise.resolve<_>(Buffer.from(Object.cast(body)).toString(encoding));
-		}
+				return new AbortablePromise((resolve, reject, onAbort) => {
+					const
+						reader = new FileReader();
 
-		if (typeof TextDecoder !== 'undefined') {
-			const decoder = new TextDecoder(encoding, {fatal: true});
-			return AbortablePromise.resolve<_>(decoder.decode(new DataView(Object.cast(body))), this.parent);
-		}
+					reader.onload = () => resolve(<string>reader.result);
+					reader.onerror = reject;
+					reader.onerror = reject;
 
-		return new AbortablePromise((resolve, reject, onAbort) => {
-			const
-				reader = new FileReader();
+					this.blob().then((blob) => {
+						onAbort(() => reader.abort());
+						reader.readAsText(<Blob>blob, encoding);
+					}).catch(stderr);
 
-			reader.onload = () => resolve(<string>reader.result);
-			reader.onerror = reject;
-			reader.onerror = reject;
-
-			this.blob().then((blob) => {
-				onAbort(() => reader.abort());
-				reader.readAsText(<Blob>blob, encoding);
-			}).catch(stderr);
-
-		}, this.parent);
+				}, this.parent);
+			});
 	}
 
 	/**
@@ -467,8 +450,7 @@ export default class Response<
 					continue;
 				}
 
-				res[normalizeHeaderName(name)] =
-					(Object.isArray(value) ? value.join(';') : value).trim();
+				res[normalizeHeaderName(name)] = (Object.isArray(value) ? value.join(';') : value).trim();
 			}
 		}
 

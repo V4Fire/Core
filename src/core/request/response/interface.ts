@@ -27,6 +27,10 @@ export type ResponseTypeValue =
 	null |
 	undefined;
 
+export type ResponseTypeValueP =
+	CanPromise<ResponseTypeValue> |
+	(() => CanPromise<ResponseTypeValue>);
+
 export type JSONLikeValue =
 	string |
 	number |
