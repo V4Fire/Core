@@ -213,7 +213,7 @@ export function watch<T extends object>(
 				isArray = Object.isArray(target),
 				isCustomObject = isArray || Object.isCustomObject(target);
 
-			if (isArray && !(Symbol.isConcatSpreadable in target)) {
+			if (isArray && !Reflect.has(target, Symbol.isConcatSpreadable)) {
 				target[Symbol.isConcatSpreadable] = true;
 			}
 
@@ -234,7 +234,7 @@ export function watch<T extends object>(
 					normalizedKey = key;
 
 					const
-						desc = Object.getOwnPropertyDescriptor(target, key);
+						desc = Reflect.getOwnPropertyDescriptor(target, key);
 
 					// Readonly non-configurable values can't be wrapped due Proxy API limitations
 					if (desc?.writable === false && desc.configurable === false) {
