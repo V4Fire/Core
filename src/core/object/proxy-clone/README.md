@@ -11,20 +11,20 @@ const original = {
   user: {
     name: 'Bob',
     age: 56,
-    skils: ['singing', 'dancing', 'programming']
+    skills: ['singing', 'dancing', 'programming']
   }
 };
 
 const clone = proxyClone(original);
 
 clone.user.name = 'Jack';
-clone.user.skils.push('boxing');
+clone.user.skills.push('boxing');
 
 console.log(clone.user.name !== original.user.name);
 
 // ['singing', 'dancing', 'programming', 'boxing']
-console.log(clone.user.skils);
+console.log(clone.user.skills);
 
 // ['singing', 'dancing', 'programming']
-console.log(original.user.skils);
+console.log(original.user.skills);
 ```
