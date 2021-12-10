@@ -59,12 +59,15 @@ export default function proxyClone<T>(obj: T): T {
 					val = Reflect.get(target, key, receiver);
 				}
 
-				const needBindFunc =
-					Object.isFunction(val) &&
-					!Object.isCustomObject(val) &&
-					!Object.isArray(target);
+				const
+					isArray = Object.isArray(target),
+					isCustomObject = isArray || Object.isCustomObject(target);
 
-				if (needBindFunc) {
+				if (isArray && !Reflect.has(target, Symbol.isConcatSpreadable)) {
+					target[Symbol.isConcatSpreadable] = true;
+				}
+
+				if (Object.isFunction(val) && !isCustomObject) {
 					if (Object.isMap(target) || Object.isSet(target)) {
 						switch (key) {
 							case 'get':
