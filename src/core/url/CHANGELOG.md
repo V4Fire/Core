@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.??.?? (2021-??-??)
+
+#### :bug: Bug Fix
+
+* Fixed a case when `concatURLs` appends trailing slashes
+
 ## v3.53.1 (2021-07-06)
 
 #### :bug: Bug Fix

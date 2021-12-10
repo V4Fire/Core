@@ -18,6 +18,10 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 * Now `Response` can take body as a function or promise `core/request/response`
 * Added a new module to create effective clones of objects `core/object/proxy-clone`
 
+#### :bug: Bug Fix
+
+* Fixed a case when `concatURLs` appends trailing slashes `core/url`
+
 ## v3.71.00 (2021-12-08)
 
 #### :boom: Breaking Change

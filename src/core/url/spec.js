@@ -10,14 +10,16 @@ import { concatURLs, fromQueryString, toQueryString } from 'core/url';
 
 describe('core/url/concatURLs', () => {
 	it('simple concatenation', () => {
-		expect(concatURLs('foo/baz', '/bar', 'bla')).toBe('/foo/baz/bar/bla');
+		expect(concatURLs('foo/baz', '/bar', 'bla')).toBe('foo/baz/bar/bla');
+		expect(concatURLs('/foo/baz', '/bar', 'bla')).toBe('/foo/baz/bar/bla');
 	});
 
 	it('concatenation with trailing slashes', () => {
-		expect(concatURLs('foo/baz', '/bar/', 'bla/')).toBe('/foo/baz/bar/bla/');
+		expect(concatURLs('/foo/baz///', '/////bar//', '/bla/')).toBe('/foo/baz/bar/bla/');
 	});
 
 	it('concatenation of URL-s with an absolute path', () => {
+		expect(concatURLs('///foo.bar', 'bla')).toBe('//foo.bar/bla');
 		expect(concatURLs('http://foo.bar', 'bla')).toBe('http://foo.bar/bla');
 		expect(concatURLs('file:///C://foo.bla', 'bla')).toBe('file:///C://foo.bla/bla');
 		expect(concatURLs('/foo', 'http://google.com', 'bla')).toBe('http://google.com/bla');
