@@ -139,4 +139,50 @@ describe('core/object/proxy-clone', () => {
 		expect(clone.get(user).skills.has(boxing)).toBeTrue();
 		expect(original.get(user).skills.has(boxing)).toBeFalse();
 	});
+
+	it('cloning an iterable object', () => {
+		const original = new Map([
+			[
+				'user',
+
+				{
+					name: 'Bob',
+					age: 56,
+					skills: [{type: 'singing'}, {type: 'dancing'}],
+					skillsSet: [{type: 'singing'}, {type: 'dancing'}]
+				}
+			]
+		]);
+
+		const
+			clone = proxyClone(original);
+
+		for (const el of clone.get('user').skills) {
+			el.type = [...el.type].reverse().join('');
+		}
+
+		expect([...clone.get('user').skills]).toEqual([
+			{type: 'gnignis'},
+			{type: 'gnicnad'}
+		]);
+
+		expect([...original.get('user').skills]).toEqual([
+			{type: 'singing'},
+			{type: 'dancing'}
+		]);
+
+		for (const el of clone.get('user').skillsSet) {
+			el.type = [...el.type].reverse().join('');
+		}
+
+		expect([...clone.get('user').skillsSet]).toEqual([
+			{type: 'gnignis'},
+			{type: 'gnicnad'}
+		]);
+
+		expect([...original.get('user').skillsSet]).toEqual([
+			{type: 'singing'},
+			{type: 'dancing'}
+		]);
+	});
 });
