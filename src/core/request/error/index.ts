@@ -22,6 +22,31 @@ export * from '@src/core/request/error/extractor';
  */
 export default class RequestError<D = undefined> extends BaseError {
 	/**
+	 * Default error type: a server has responded with a non-ok status
+	 */
+	static readonly InvalidStatus: string = 'invalidStatus';
+
+	/**
+	 * Default error type: a request was aborted
+	 */
+	static readonly Abort: string = 'abort';
+
+	/**
+	 * Default error type: a request was aborted because of a timeout
+	 */
+	static readonly Timeout: string = 'timeout';
+
+	/**
+	 * Default error type: a request was failed because there is no connection to a network
+	 */
+	static readonly Offline: string = 'offline';
+
+	/**
+	 * Default error type: a request was failed because of an internal request engine' error
+	 */
+	static readonly Engine: string = 'engine';
+
+	/**
 	 * Error type
 	 */
 	readonly type: string;

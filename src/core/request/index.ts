@@ -160,7 +160,7 @@ function request<D = unknown>(
 			};
 
 			onAbort((err) => {
-				reject(err ?? new RequestError('abort', errDetails));
+				reject(err ?? new RequestError(RequestError.Abort, errDetails));
 			});
 
 			await new Promise(setImmediate);
@@ -355,7 +355,7 @@ function request<D = unknown>(
 					details = {response, ...errDetails};
 
 				if (!response.ok) {
-					throw new RequestError('invalidStatus', details);
+					throw AbortablePromise.wrapReasonToIgnore(new RequestError(RequestError.InvalidStatus, details));
 				}
 
 				const

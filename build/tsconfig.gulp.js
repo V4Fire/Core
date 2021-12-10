@@ -27,9 +27,6 @@ module.exports = function init(gulp) {
 
 	gulp.task('build:tsconfig', () => {
 		const
-			$C = require('collection.js');
-
-		const
 			fs = require('fs'),
 			path = require('upath'),
 			find = require('find-up').sync;
@@ -55,7 +52,7 @@ module.exports = function init(gulp) {
 					config = resolveExtends(tsconfig.parse(file.contents.toString(), file.path)),
 					deps = {};
 
-				const depsList = $C(pzlr.dependencies).map((el, i) => resolve.rootDependencies[i].replace(
+				const depsList = pzlr.dependencies.map((el, i) => resolve.rootDependencies[i].replace(
 					new RegExp(`.*?${RegExp.escape(el)}/(.*)`),
 					(str, path) => (deps[`${el}/*`] = [`${el}:${path}/*`])[0]
 				));
@@ -92,8 +89,8 @@ module.exports = function init(gulp) {
 					}
 				});
 
-				$C(config.compilerOptions.paths).forEach((list) => {
-					$C(list).forEach((url, i) => {
+				Object.forEach(config.compilerOptions.paths, (list) => {
+					Object.forEach(list, (url, i) => {
 						if (resolve.isNodeModule(url)) {
 							const
 								parts = url.split(':');
@@ -138,20 +135,19 @@ module.exports = function init(gulp) {
 						const
 							parent = resolveExtends(tsconfig.parse(fs.readFileSync(parentConfig, 'utf-8'), parentConfig));
 
-						config = $C.extend({
+						config = Object.mixin({
 							deep: true,
-							concatArray: true,
-							concatFn: (a, b) => b
+							concatArrays: (a, b) => b
 						}, parent, config);
 
-						$C(config).forEach((el, key) => {
+						Object.forEach(config, (el, key) => {
 							if (el == null) {
 								delete config[key];
 								return;
 							}
 
-							if (Object.isObject(el)) {
-								$C(el).forEach((el, key, config) => {
+							if (Object.isDictionary(el)) {
+								Object.forEach(el, (el, key, config) => {
 									if (el == null) {
 										delete config[key];
 									}

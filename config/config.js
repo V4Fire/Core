@@ -8,9 +8,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-const
-	$C = require('collection.js'),
-	Sugar = require('sugar').extend();
+require('../lib/core');
 
 const
 	path = require('path'),
@@ -45,17 +43,16 @@ class Config {
 	}
 
 	/**
-	 * Wrapper for $C.extend
+	 * Wrapper for `Object.mixin`
 	 *
 	 * @param {...?} args
 	 * @returns {!Object}
 	 */
 	extend(...args) {
-		return $C.extend({
+		return Object.mixin({
 			deep: true,
 			withProto: true,
-			concatArray: true,
-			concatFn: Sugar.Array.union
+			concatArrays: Array.union
 		}, ...args);
 	}
 
@@ -75,7 +72,7 @@ class Config {
 		});
 
 		const reduce = (from, to) => {
-			$C(from).forEach((el, key) => {
+			Object.forEach(from, (el, key) => {
 				if (blacklist[key]) {
 					return;
 				}
@@ -88,7 +85,7 @@ class Config {
 						} catch {}
 					}
 
-				} else if (Object.isObject(el)) {
+				} else if (Object.isDictionary(el)) {
 					to[key] = {};
 					to[key] = reduce(el, to[key]);
 
@@ -143,11 +140,11 @@ class Config {
 			isActiveConfig = isPathEqual(path.join(process.cwd(), 'config'), activeDir);
 
 		if (envs) {
-			this.extend(env, envs, $C.clone(env));
+			this.extend(env, envs, Object.fastClone(env));
 		}
 
 		function setProto(obj, proto, link = []) {
-			$C(obj).forEach((el, key) => {
+			Object.forEach(obj, (el, key) => {
 				if (!el || typeof el !== 'object') {
 					return;
 				}
@@ -155,7 +152,7 @@ class Config {
 				key = [...link, key];
 
 				const
-					parent = $C(proto).get(key);
+					parent = Object.get(proto, key);
 
 				if (parent && el !== parent) {
 					Object.setPrototypeOf(el, parent);
@@ -176,7 +173,7 @@ class Config {
 			config = this.extend(Object.create(proto), opts),
 			p = this.getSrcMap(activeDir);
 
-		$C(['roots'].concat(dirs.slice(1))).forEach((nm, i) => {
+		['roots'].concat(dirs.slice(1)).forEach((nm, i) => {
 			let src;
 
 			if (i) {
@@ -196,7 +193,7 @@ class Config {
 		});
 
 		function bindObjCtx(obj) {
-			$C(obj).object(true).forEach((el, key) => {
+			Object.forEach(obj, {propsToIterate: 'all'}, (el, key) => {
 				if (Object.isFunction(el)) {
 					if (isPathEqual(path.join(process.cwd(), 'config'), activeDir)) {
 						const
@@ -222,7 +219,7 @@ class Config {
 		}
 
 		if (envs) {
-			$C(Object.keys(envs)).forEach((nm) => {
+			Object.keys(envs).forEach((nm) => {
 				config.envs[nm] = env[nm];
 			});
 		}

@@ -21,7 +21,7 @@ Changelog
 
 * Dropped `interface.ts`:
   * `deprecation`
-  * `not-implemented`
+  * `implementation`
 
 #### :rocket: New Feature
 
@@ -31,4 +31,4 @@ Changelog
 
 * Re-wrote the module with `warning`:
   * `deprecation`
-  * `not-implemented`
+  * `implementation`

@@ -93,7 +93,7 @@ const request: RequestEngine = (params) => {
 			{status} = await AbortablePromise.resolve(isOnline(), p.parent);
 
 		if (!status) {
-			return reject(new RequestError('offline', {
+			return reject(new RequestError(RequestError.Offline, {
 				request: <NormalizedCreateRequestOptions>xhr
 			}));
 		}
@@ -116,11 +116,11 @@ const request: RequestEngine = (params) => {
 		});
 
 		xhr.addEventListener('error', (error) => {
-			reject(new RequestError('engine', {error}));
+			reject(new RequestError(RequestError.Engine, {error}));
 		});
 
 		xhr.addEventListener('timeout', () => {
-			reject(new RequestError('timeout'));
+			reject(new RequestError(RequestError.Timeout));
 		});
 
 		xhr.send(body);

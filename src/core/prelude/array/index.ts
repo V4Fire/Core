@@ -28,7 +28,7 @@ extend(Array.prototype, 'union', function union(
 				continue;
 			}
 
-			if (Object.isIterable(val)) {
+			if (Object.isIterable(val) && !Object.isPrimitive(val)) {
 				yield* val[Symbol.iterator]();
 
 			} else {

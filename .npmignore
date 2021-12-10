@@ -44,26 +44,24 @@ Icon
 /yalc.lock
 
 # Build && test
+/dist
 /coverage
 /.nyc_output
-/dist
+
+.env
+*.d.js
+
 /tsconfig.json
 /*.tsconfig.json
-.env
 
 # Log
 *.log
 /stats.json
 
 # Temporary
+/tmp
 *.tmp
 *.gz
-/Releases-js
-/tmp
-/app-cache
-/app-std-cache
-/src/entries/tmp
-/db
 
 # NPM ignore list
 /docs

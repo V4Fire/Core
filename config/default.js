@@ -177,7 +177,7 @@ module.exports = config.createConfig(
 			},
 
 			/**
-			 * Returns a path to the application dist directory
+			 * Returns an absolute path to the application dist directory
 			 * @returns {string}
 			 */
 			output(...args) {
@@ -221,6 +221,23 @@ module.exports = config.createConfig(
 				});
 
 				return this.output(v, ...args);
+			},
+
+			/**
+			 * Returns a path to the application dist directory for standalone scripts
+			 *
+			 * @cli standalone-output
+			 * @env STANDALONE_OUTPUT
+			 *
+			 * @returns {string}
+			 */
+			standaloneOutput(...args) {
+				const v = o('standalone-output', {
+					env: true,
+					default: ''
+				});
+
+				return path.resolve(this.cwd(), 'lib', v, ...args);
 			}
 		},
 
@@ -231,7 +248,7 @@ module.exports = config.createConfig(
 		 * @returns {?string}
 		 */
 		apiURL() {
-			const concatURLs = require('urlconcat').concat;
+			const {concatURLs} = require('../lib/core/url');
 			return this.api.proxy ? concatURLs(this.api.pathname(), 'api') : this.api.url;
 		},
 

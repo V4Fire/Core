@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.??.?? (2021-??-??)
+
+#### :rocket: New Feature
+
+* Now `Response` can take body as a function or promise `response`
+
 ## v3.60.4 (2021-10-06)
 
 #### :bug: Bug Fix

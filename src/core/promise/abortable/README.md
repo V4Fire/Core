@@ -64,18 +64,10 @@ console.log(promise.isPending);
 
 The module provides a bunch of static helper methods and getters.
 
-### never
+### wrapReasonToIgnore
 
-The promise that is never resolved. It can be useful to create some loopback.
-
-```js
-import AbortablePromise from 'core/promise/abortable';
-
-// This promise will never be resolved
-AbortablePromise.never.then((res) => {
-  console.log(res);
-});
-```
+The method wraps the specified abort reason to ignore with tied promises,
+i.e., this reason won't reject all child promises.
 
 ### resolveAndCall
 

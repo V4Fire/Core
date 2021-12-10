@@ -23,7 +23,7 @@ export type WarnExprType =
 export type WarnContext =
 	'warning' |
 	'deprecated' |
-	'notImplemented';
+	'unimplemented';
 
 export interface WarnAlternativeOptions {
 	/**
@@ -41,7 +41,7 @@ export type WarnAlternative = string | WarnAlternativeOptions;
 
 export interface WarnOptions {
 	/**
-	 * Type of a warn context
+	 * Type of warn context
 	 * @type `'warning'`
 	 */
 	context?: WarnContext;
@@ -92,5 +92,5 @@ export interface WarnedFn<A extends unknown[] = [], R = unknown> {
 	(...args: A): R;
 	warning: WarnOptions | InlineWarnOptions;
 	deprecated?: WarnOptions | InlineWarnOptions;
-	notImplemented?: WarnOptions | InlineWarnOptions;
+	unimplemented?: WarnOptions | InlineWarnOptions;
 }

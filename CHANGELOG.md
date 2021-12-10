@@ -11,6 +11,66 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.??.?? (2021-??-??)
+
+#### :rocket: New Feature
+
+* Now `Response` can take body as a function or promise `core/request/response`
+
+## v3.71.00 (2021-12-08)
+
+#### :boom: Breaking Change
+
+* Moved from `Sugar/Collection.js/urlconcat` to `@v4fire/core`
+
+## v3.70.3 (2021-12-08)
+
+#### :bug: Bug Fix
+
+* Restored the native behavior of `Object.hasOwnProperty`
+
+## v3.70.2 (2021-12-07)
+
+#### :bug: Bug Fix
+
+* Added setters to change config values `config`
+
+## v3.70.1 (2021-12-07)
+
+#### :bug: Bug Fix
+
+* Now `Array.union` doesn't spread primitive iterable values `core/prelude`
+
+## v3.70.0 (2021-12-07)
+
+#### :rocket: New Feature
+
+* Now `@v4fire/core` can be used as a simple `node.js` library
+
+## v3.69.0 (2021-12-03)
+
+#### :boom: Breaking Change
+
+* Removed deprecated API `core/promise/abortable`
+
+#### :rocket: New Feature
+
+* Added a new static method `wrapReasonToIgnore` `core/promise/abortable`
+* Added static properties with the default error types `core/request/error`
+
+#### :bug: Bug Fix
+
+* Fixed a bug when a child promise is never resolved because its parent is already rejected `core/promise/abortable`
+
+## v3.68.0 (2021-12-03)
+
+#### :boom: Breaking Change
+
+* `core/functools`:
+  * Renamed a module `core/functools/not-implemented` to `core/functools/implementation`
+  * Renamed wrappers `notImplement/notImplemented` to `unimplement/unimplemented`
+  * Now `unimplement/unimplemented` throw an exception
+
 ## v3.67.0 (2021-12-01)
 
 #### :boom: Breaking Change
@@ -897,7 +957,7 @@ SyncPromise.resolve(1).catch(() => undefined).then((r) => console.log(r));
 
 * Dropped `interface.ts`:
   * `core/functools/deprecation`
-  * `core/functools/not-implemented`
+  * `core/functools/implementation`
 
 #### :rocket: New Feature
 
@@ -907,7 +967,7 @@ SyncPromise.resolve(1).catch(() => undefined).then((r) => console.log(r));
 
 * Re-wrote the module with `core/functools/warning`:
   * `core/functools/deprecation`
-  * `core/functools/not-implemented`
+  * `core/functools/implementation`
 
 ## v3.26.0 (2020-09-04)
 
@@ -934,7 +994,7 @@ SyncPromise.resolve(1).catch(() => undefined).then((r) => console.log(r));
 #### :rocket: New Feature
 
 * Now `deprecate` returns `DeprecatedFn` `core/functools/deprecation`
-* Now `notImplement` returns `NotImplementedFn` `core/functools/not-implemented`
+* Now `notImplement` returns `NotImplementedFn` `core/functools/implementation`
 
 ## v3.24.2 (2020-09-02)
 
@@ -987,7 +1047,7 @@ SyncPromise.resolve(1).catch(() => undefined).then((r) => console.log(r));
 #### :bug: Bug Fix
 
 * [Fixed notice params being ignored `core/functools/deprecation`](https://github.com/V4Fire/Core/pull/120)
-* Fixed notice params being ignored `core/functools/not-implemented`
+* Fixed notice params being ignored `core/functools/implementation`
 
 #### :house: Internal
 
@@ -1442,7 +1502,7 @@ Array.union([], 1, null, [1, 2].values()) // [1, 2];
 * [Added new overloads with options for `toQueryString/fromQueryString` `core/url`](https://github.com/V4Fire/Core/pull/72)
 * [Added `core/data/middlewares/attach-status`](https://github.com/V4Fire/Core/pull/73)
 * Added `Symbol.iterator` to `core/range`
-* [Added `core/functools/not-implemented`](https://github.com/V4Fire/Core/pull/75)
+* [Added `core/functools/implementation`](https://github.com/V4Fire/Core/pull/75)
 
 #### :house: Internal
 

@@ -14,6 +14,32 @@ This library provides a bunch of isomorphic modules and configurations to work a
 
 [GitHub](https://github.com/V4Fire/Core)
 
+## Using as a node.js library
+
+```js
+// Register Prelude in the top level of your project
+require('@v4fire/core');
+
+const {watch} = require('@v4fire/core/lib/core/object/watch').default;
+
+const {proxy} = watch({a: 1}, console.log);
+
+proxy.a++;
+```
+
+Also, you can require modules by using `import`.
+
+```js
+// Register Prelude in the top level of your project
+import '@v4fire/core';
+
+import watch from '@v4fire/core/lib/core/object/watch/index.js';
+
+const {proxy} = watch({a: 1}, console.log);
+
+proxy.a++;
+```
+
 ## Prepare to build and develop
 
 At first, you should install dependencies using `npm`:

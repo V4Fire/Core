@@ -11,15 +11,52 @@
  * @packageDocumentation
  */
 
+import symbolGenerator from '@src/core/symbol';
+
 import { RequestErrorDetailsExtractor } from '@src/core/request/error';
 import type { Config } from '@src/config/interface';
 
 export * from '@src/config/interface';
 
+export const
+	$$ = symbolGenerator();
+
 const config = <Config>{
-	appName: APP_NAME,
-	locale: LOCALE,
-	api: API_URL,
+	get appName() {
+		if ($$.appName in this) {
+			return this[$$.appName];
+		}
+
+		return typeof APP_NAME !== 'undefined' ? APP_NAME : undefined;
+	},
+
+	set appName(value: CanUndef<string>) {
+		this[$$.appName] = value;
+	},
+
+	get locale() {
+		if ($$.locale in this) {
+			return this[$$.locale];
+		}
+
+		return typeof LOCALE !== 'undefined' ? LOCALE : undefined;
+	},
+
+	set locale(value: CanUndef<string>) {
+		this[$$.locale] = value;
+	},
+
+	get api() {
+		if ($$.api in this) {
+			return this[$$.api];
+		}
+
+		return typeof API_URL !== 'undefined' ? API_URL : undefined;
+	},
+
+	set api(value: CanUndef<string>) {
+		this[$$.api] = value;
+	},
 
 	online: {
 		checkURL: '',
@@ -77,6 +114,7 @@ export function extend<T extends Config>(...objects: Array<CanUndef<Dictionary>>
 	return Object.mixin({
 		deep: true,
 		skipUndefs: false,
+		withDescriptors: true,
 		concatArrays: (a: unknown[], b: unknown[]) => a.union(b)
 	}, config, ...objects);
 }

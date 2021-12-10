@@ -162,6 +162,25 @@ describe('core/promise/abortable', () => {
 		} catch {}
 	});
 
+	it('ignoring of errors with child promises', async () => {
+		const parentPromise = new AbortablePromise((resolve, reject) => {
+			setTimeout(() => reject(AbortablePromise.wrapReasonToIgnore({msg: 'boom'})), 20);
+		});
+
+		const promise1 = new AbortablePromise((resolve) => {
+			setTimeout(() => resolve('ok'), 30);
+		}, parentPromise);
+
+		expect(await promise1).toBe('ok');
+
+		const promise2 = new AbortablePromise((resolve) => {
+			setTimeout(() => resolve('ok'), 30);
+		}, parentPromise);
+
+		expect(await promise2).toBe('ok');
+		expect(await parentPromise.catch((err) => err)).toEqual({msg: 'boom'});
+	});
+
 	it('rejected `then`', async () => {
 		let
 			i = 1;

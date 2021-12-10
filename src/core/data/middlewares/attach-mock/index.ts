@@ -176,7 +176,10 @@ export async function attachMock(this: Provider, params: MiddlewareParams): Prom
 			});
 
 			if (!response.ok) {
-				throw new RequestError('invalidStatus', {request: ctx.params, response});
+				throw AbortablePromise.wrapReasonToIgnore(new RequestError(RequestError.InvalidStatus, {
+					request: ctx.params,
+					response
+				}));
 			}
 
 			return response;

@@ -76,7 +76,7 @@ const request: RequestEngine = (params) => {
 			{status} = await AbortablePromise.resolve(isOnline(), p.parent);
 
 		if (!status) {
-			return reject(new RequestError('offline', {
+			return reject(new RequestError(RequestError.Offline, {
 				request: <NormalizedCreateRequestOptions>normalizedOpts
 			}));
 		}
@@ -101,7 +101,7 @@ const request: RequestEngine = (params) => {
 			}));
 
 		}, (error) => {
-			const type = error.name === 'TimeoutError' ? 'timeout' : 'engine';
+			const type = error.name === 'TimeoutError' ? RequestError.Timeout : RequestError.Engine;
 			reject(new RequestError(type, {error}));
 		});
 

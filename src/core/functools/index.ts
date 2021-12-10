@@ -13,7 +13,7 @@
 
 export * from '@src/core/functools/warning';
 export * from '@src/core/functools/deprecation';
-export * from '@src/core/functools/not-implemented';
+export * from '@src/core/functools/implementation';
 export * from '@src/core/functools/memoize';
 export * from '@src/core/functools/lazy';
 export * from '@src/core/functools/helpers';
