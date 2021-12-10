@@ -21,6 +21,9 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 #### :bug: Bug Fix
 
 * Fixed a case when `concatURLs` appends trailing slashes `core/url`
+* Removed generator methods from base iterators:
+  * `core/range`
+  * `core/object/watch`
 
 ## v3.71.00 (2021-12-08)
 

@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.??.?? (2021-??-??)
+
+#### :bug: Bug Fix
+
+* Removed generator methods from base iterators
+
 ## v3.62.3 (2021-11-09)
 
 #### :bug: Bug Fix

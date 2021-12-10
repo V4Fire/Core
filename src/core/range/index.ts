@@ -421,70 +421,84 @@ export default class Range<T extends RangeValue> {
 	 * }
 	 * ```
 	 */
-	*values(step?: number): IterableIterator<T> {
-		if (!this.isValid()) {
-			return;
-		}
+	values(step?: number): IterableIterator<T> {
+		const
+			that = this,
+			iter = createIter();
 
-		if (step == null || step === 0) {
-			if (this.type === 'date') {
-				if (isFinite(this.start) && isFinite(this.end)) {
-					step = (this.end - this.start) * 0.01;
+		return {
+			[Symbol.iterator]() {
+				return this;
+			},
+
+			next: iter.next.bind(iter)
+		};
+
+		function* createIter() {
+			if (!that.isValid()) {
+				return;
+			}
+
+			if (step == null || step === 0) {
+				if (that.type === 'date') {
+					if (isFinite(that.start) && isFinite(that.end)) {
+						step = (that.end - that.start) * 0.01;
+
+					} else {
+						step = (30).days();
+					}
 
 				} else {
-					step = (30).days();
+					step = 1;
+				}
+			}
+
+			if (!Number.isNatural(step)) {
+				throw new TypeError('Step value can be only a natural number');
+			}
+
+			let
+				start,
+				end;
+
+			const
+				isStringRange = that.type === 'string';
+
+			if (isFinite(that.start)) {
+				start = that.start;
+
+			} else if (isStringRange) {
+				start = 0;
+
+			} else {
+				start = Number.MIN_SAFE_INTEGER;
+			}
+
+			if (isFinite(that.end)) {
+				end = that.end;
+
+			} else {
+				end = Number.MAX_SAFE_INTEGER;
+			}
+
+			if (that.isReversed) {
+				for (let i = end; i >= start; i -= step) {
+					try {
+						yield that.toType(i);
+
+					} catch {
+						break;
+					}
 				}
 
 			} else {
-				step = 1;
-			}
-		}
+				for (let i = start; i <= end; i += step) {
+					try {
+						yield that.toType(i);
 
-		if (!Number.isNatural(step)) {
-			throw new TypeError('Step value can be only a natural number');
-		}
-
-		let
-			start,
-			end;
-
-		const
-			isStringRange = this.type === 'string';
-
-		if (isFinite(this.start)) {
-			start = this.start;
-
-		} else if (isStringRange) {
-			start = 0;
-
-		} else {
-			start = Number.MIN_SAFE_INTEGER;
-		}
-
-		if (isFinite(this.end)) {
-			end = this.end;
-
-		} else {
-			end = Number.MAX_SAFE_INTEGER;
-		}
-
-		if (this.isReversed) {
-			for (let i = end; i >= start; i -= step) {
-				try {
-					yield this.toType(i);
-
-				} catch {
-					break;
-				}
-			}
-
-		} else {
-			for (let i = start; i <= end; i += step) {
-				try {
-					yield this.toType(i);
-
-				} catch {
-					break;
+					} catch {
+						break;
+					}
 				}
 			}
 		}
@@ -507,12 +521,26 @@ export default class Range<T extends RangeValue> {
 	 * }
 	 * ```
 	 */
-	*indices(step?: number): IterableIterator<number> {
+	indices(step?: number): IterableIterator<number> {
 		const
-			iterator = this.values(step);
+			that = this,
+			iter = createIter();
 
-		for (let el = iterator.next(), i = 0; !el.done; el = iterator.next(), i++) {
-			yield i;
+		return {
+			[Symbol.iterator]() {
+				return this;
+			},
+
+			next: iter.next.bind(iter)
+		};
+
+		function* createIter() {
+			const
+				iter = that.values(step);
+
+			for (let el = iter.next(), i = 0; !el.done; el = iter.next(), i++) {
+				yield i;
+			}
 		}
 	}
 
@@ -533,12 +561,26 @@ export default class Range<T extends RangeValue> {
 	 * }
 	 * ```
 	 */
-	*entries(step?: number): IterableIterator<[number, T]> {
+	entries(step?: number): IterableIterator<[number, T]> {
 		const
-			iterator = this.values(step);
+			that = this,
+			iter = createIter();
 
-		for (let el = iterator.next(), i = 0; !el.done; el = iterator.next(), i++) {
-			yield [i, el.value];
+		return {
+			[Symbol.iterator]() {
+				return this;
+			},
+
+			next: iter.next.bind(iter)
+		};
+
+		function* createIter() {
+			const
+				iter = that.values(step);
+
+			for (let el = iter.next(), i = 0; !el.done; el = iter.next(), i++) {
+				yield [i, el.value];
+			}
 		}
 	}
 
