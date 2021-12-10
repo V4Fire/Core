@@ -7,8 +7,5 @@
  */
 
 export const
-	store = new WeakMap<object, Map<unknown, unknown>>();
-
-export const
 	SELF = {},
 	NULL = {};
