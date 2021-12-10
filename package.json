@@ -5,7 +5,7 @@
   "main": "lib/core/index.js",
   "typings": "index.d.ts",
   "license": "MIT",
-  "version": "3.71.0",
+  "version": "3.72.0",
   "author": "kobezzza <kobezzza@gmail.com> (https://github.com/kobezzza)",
   "repository": {
     "type": "git",
