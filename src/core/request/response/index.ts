@@ -15,7 +15,7 @@ import Range from 'core/range';
 import AbortablePromise from 'core/promise/abortable';
 
 import { IS_NODE } from 'core/env';
-import { once } from 'core/functools';
+import { once, unimplemented } from 'core/functools';
 import { convertIfDate } from 'core/json';
 import { getDataType } from 'core/mime-type';
 
@@ -103,6 +103,8 @@ export default class Response<
 	 * Value of the response body
 	 */
 	readonly body: CanPromise<ResponseTypeValue>;
+
+	[Symbol.asyncIterator]: () => AsyncGenerator<Uint8Array>;
 
 	/**
 	 * @param [body] - response body

@@ -103,7 +103,7 @@ const request: RequestEngine = (params) => {
 		});
 
 		xhr.addEventListener('load', () => {
-			resolve(new Response(xhr.response, {
+			const res = new Response(xhr.response, {
 				parent: p.parent,
 				important: p.important,
 				responseType: p.responseType,
@@ -112,7 +112,14 @@ const request: RequestEngine = (params) => {
 				headers: xhr.getAllResponseHeaders(),
 				decoder: p.decoders,
 				jsonReviver: p.jsonReviver
-			}));
+			});
+
+			// eslint-disable-next-line @typescript-eslint/require-await
+			res[Symbol.asyncIterator] = async function* iter() {
+					yield typeof xhr.response === 'string' ? new TextEncoder().encode(xhr.response) : xhr.response;
+			};
+
+			resolve(res);
 		});
 
 		xhr.addEventListener('error', (error) => {

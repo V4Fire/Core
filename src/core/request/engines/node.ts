@@ -6,12 +6,12 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import got, { Options, CancelableRequest, Response as GotResponse } from 'got';
+import got, { Options, CancelableRequest, Response as GotResponse, GotStream } from 'got';
 
 import AbortablePromise from 'core/promise/abortable';
 import { isOnline } from 'core/net';
 
-import Response from 'core/request/response';
+import Response, { ResponseTypeValueP } from 'core/request/response';
 import RequestError from 'core/request/error';
 
 import { convertDataToSend } from 'core/request/engines/helpers';
@@ -42,34 +42,10 @@ const request: RequestEngine = (params) => {
 		method: p.method,
 		timeout: p.timeout,
 		retry: 0,
+		isStream: true,
 		headers,
 		body
 	};
-
-	if (p.responseType != null) {
-		let
-			v;
-
-		switch (p.responseType) {
-			case 'json':
-			case 'document':
-				v = 'text';
-				break;
-
-			case 'arrayBuffer':
-			case 'blob':
-				v = 'buffer';
-				break;
-
-			default:
-				v = p.responseType.toLowerCase();
-		}
-
-		normalizedOpts.responseType = v;
-
-	} else {
-		normalizedOpts.responseType = 'buffer';
-	}
 
 	return new AbortablePromise<Response>(async (resolve, reject, onAbort) => {
 		const
@@ -82,14 +58,62 @@ const request: RequestEngine = (params) => {
 		}
 
 		const
-			request = <CancelableRequest<GotResponse>>got(p.url, normalizedOpts);
+			stream = <ReturnType<GotStream>>got(p.url, normalizedOpts);
 
 		onAbort(() => {
-			request.cancel();
+			stream.destroy();
 		});
 
-		request.then((res) => {
-			resolve(new Response(Object.cast(res.body), {
+		const cachedChunks: Uint8Array[] = [];
+
+		let
+			receivedLength = 0,
+			resBody: ResponseTypeValueP;
+
+		let pendingChunk: ReturnType<typeof createResolvablePromise> | null = createResolvablePromise();
+
+		const rawBody = new AbortablePromise<Uint8Array>((resolve) => {
+			stream.on('end', () => {
+				const allChunks = new Uint8Array(receivedLength);
+
+				let pos = 0;
+
+				for (const chunk of cachedChunks) {
+					allChunks.set(chunk, pos);
+					pos += chunk.length;
+				}
+
+				pendingChunk!.resolveNow();
+				pendingChunk = null;
+				resolve(allChunks);
+			});
+		}, p.parent);
+
+		stream.on('data', (chunk) => {
+			cachedChunks.push(chunk);
+			receivedLength += chunk.length;
+			pendingChunk!.resolveNow();
+			pendingChunk = createResolvablePromise();
+		});
+
+		stream.on('error', (error) => {
+			const type = error.name === 'TimeoutError' ? RequestError.Timeout : RequestError.Engine;
+			reject(new RequestError(type, {error}));
+		});
+
+		switch (p.responseType) {
+			case 'json':
+			case 'document':
+			case 'text':
+				resBody = rawBody.then((buf) => new TextDecoder('utf-8').decode(buf));
+				break;
+
+			default:
+				resBody = rawBody.then((buf) => buf.buffer);
+		}
+
+		stream.on('response', (res) => {
+			const result = new Response(Object.cast(resBody), {
 				parent: p.parent,
 				important: p.important,
 				responseType: p.responseType,
@@ -98,14 +122,46 @@ const request: RequestEngine = (params) => {
 				headers: <Dictionary<string>>res.headers,
 				jsonReviver: p.jsonReviver,
 				decoder: p.decoders
-			}));
+			});
 
-		}, (error) => {
-			const type = error.name === 'TimeoutError' ? RequestError.Timeout : RequestError.Engine;
-			reject(new RequestError(type, {error}));
+			result[Symbol.asyncIterator] = async function* iter() {
+				try {
+					let pos = 0;
+
+					while (true) {
+						if (pos < cachedChunks.length) {
+							yield cachedChunks[pos];
+							pos++;
+							continue;
+						}
+
+						if (!pendingChunk) {
+							return;
+						}
+
+						await pendingChunk;
+					}
+				} catch {}
+			};
+
+			resolve(result);
 		});
 
 	}, p.parent);
+
+	function createResolvablePromise(): AbortablePromise<undefined> & { resolveNow(): void } {
+		let promiseResolve;
+
+		const promise = <AbortablePromise<undefined> & { resolveNow(): void }>new AbortablePromise<undefined>(
+			(resolve) => {
+				promiseResolve = resolve;
+			},
+			p.parent
+		);
+
+		promise.resolveNow = promiseResolve;
+		return promise;
+	}
 };
 
 export default request;

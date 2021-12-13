@@ -80,6 +80,9 @@ export default class RequestContext<D = unknown> extends Super<D> {
 			});
 
 		return {
+			async*[Symbol.asyncIterator]() {
+				yield* response[Symbol.asyncIterator]();
+			},
 			response,
 			ctx: this,
 			data: await response.decode(),

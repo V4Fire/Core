@@ -76,6 +76,7 @@ export type WrappedDecoders = Iterable<WrappedDecoder>;
 export type CacheType = 'memory' | 'offline';
 
 export interface RequestResponseObject<D = unknown> {
+	[Symbol.asyncIterator](): AsyncGenerator<Uint8Array>;
 	data: Nullable<D>;
 	response: Response<D>;
 	ctx: Readonly<RequestContext<D>>;

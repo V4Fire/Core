@@ -362,6 +362,9 @@ function request<D = unknown>(
 					data = await response.decode();
 
 				return {
+					async*[Symbol.asyncIterator]() {
+						yield* response[Symbol.asyncIterator]();
+					},
 					data,
 					response,
 					ctx,
@@ -369,6 +372,11 @@ function request<D = unknown>(
 				};
 			}
 		});
+
+		parent[Symbol.asyncIterator] = async function* iter() {
+			const res = <RequestResponseObject<D>>await parent;
+			yield* res[Symbol.asyncIterator]();
+		};
 
 		return parent;
 	};

@@ -14,7 +14,7 @@ import AbortController from 'abort-controller';
 import AbortablePromise from 'core/promise/abortable';
 import { isOnline } from 'core/net';
 
-import Response, { ResponseTypeValue } from 'core/request/response';
+import Response, { ResponseTypeValueP } from 'core/request/response';
 import RequestError from 'core/request/error';
 
 import { convertDataToSend } from 'core/request/engines/helpers';
@@ -87,8 +87,43 @@ const request: RequestEngine = (params) => {
 		req.then(async (response) => {
 			clearTimeout(timer);
 
+			const cachedChunks: Uint8Array[] = [];
+
+			let pendingChunk: Promise<ReadableStreamDefaultReadResult<Uint8Array>> | null;
+
+			const rawBody = (async () => {
+				const reader: ReadableStreamDefaultReader<Uint8Array> = response.body.getReader();
+
+				let totalLength = 0;
+
+				while (true) {
+					pendingChunk = reader.read();
+
+					const {done, value} = await pendingChunk;
+
+					if (done) {
+						pendingChunk = null;
+						break;
+					}
+
+					cachedChunks.push(value!);
+					totalLength += value!.length;
+				}
+
+				const allChunks = new Uint8Array(totalLength);
+
+				let pos = 0;
+
+				for (const chunk of cachedChunks) {
+					allChunks.set(chunk, pos);
+					pos += chunk.length;
+				}
+
+				return allChunks;
+			})();
+
 			let
-				body: ResponseTypeValue;
+				body: ResponseTypeValueP;
 
 			const
 				headers: Dictionary<string> = {};
@@ -101,14 +136,14 @@ const request: RequestEngine = (params) => {
 				case 'json':
 				case 'document':
 				case 'text':
-					body = await response.text();
+					body = rawBody.then((buf) => new TextDecoder('utf-8').decode(buf));
 					break;
 
 				default:
-					body = await response.arrayBuffer();
+					body = rawBody.then((buf) => buf.buffer);
 			}
 
-			resolve(new Response(body, {
+			const res = new Response(body, {
 				parent: p.parent,
 				important: p.important,
 				responseType: p.responseType,
@@ -117,7 +152,29 @@ const request: RequestEngine = (params) => {
 				headers,
 				decoder: p.decoders,
 				jsonReviver: p.jsonReviver
-			}));
+			});
+
+			res[Symbol.asyncIterator] = async function* iter() {
+				try {
+					let pos = 0;
+
+					while (true) {
+						if (pos < cachedChunks.length) {
+							yield cachedChunks[pos];
+							pos++;
+							continue;
+						}
+
+						if (!pendingChunk) {
+							return;
+						}
+
+						await pendingChunk;
+					}
+				} catch {}
+			};
+
+			resolve(res);
 
 		}, (error) => {
 			clearTimeout(timer);
