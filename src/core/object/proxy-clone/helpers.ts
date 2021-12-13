@@ -10,6 +10,78 @@ import { SELF } from 'core/object/proxy-clone/const';
 import type { Store, ResolvedTarget } from 'core/object/proxy-clone/interface';
 
 /**
+ * Class to create a custom property descriptor
+ */
+export class Descriptor {
+	/**
+	 * Original property descriptor
+	 */
+	descriptor: PropertyDescriptor;
+
+	constructor(value: PropertyDescriptor) {
+		this.descriptor = value;
+	}
+
+	/**
+	 * Returns a value from the descriptor
+	 * @param receiver - receiver for a get method
+	 */
+	getValue<T = unknown>(receiver: object): T {
+		const
+			{descriptor} = this;
+
+		// eslint-disable-next-line @typescript-eslint/unbound-method
+		if (Object.isFunction(descriptor.get)) {
+			return descriptor.get.call(receiver);
+		}
+
+		return descriptor.value;
+	}
+
+	/**
+	 * Sets a new value to the descriptor
+	 *
+	 * @param value
+	 * @param receiver - receiver for a set method
+	 */
+	setValue(value: unknown, receiver: object): boolean {
+		const
+			{descriptor} = this;
+
+		// eslint-disable-next-line @typescript-eslint/unbound-method
+		if (Object.isFunction(descriptor.set)) {
+			descriptor.set.call(receiver);
+			return true;
+		}
+
+		// eslint-disable-next-line @typescript-eslint/unbound-method
+		if (Object.isFunction(descriptor.get)) {
+			return false;
+		}
+
+		descriptor.value = value;
+		return descriptor.value === value;
+	}
+}
+
+/**
+ * Returns a raw value by a key from the specified store
+ *
+ * @param key
+ * @param valStore
+ */
+export function getRawValueFromStore(key: PropertyKey, valStore: CanUndef<Map<unknown, unknown>>): unknown {
+	let
+		val;
+
+	if (valStore?.has(key)) {
+		val = valStore.get(key);
+	}
+
+	return val;
+}
+
+/**
  * Resolves the specified target by a value from the store and returns it
  *
  * @param store

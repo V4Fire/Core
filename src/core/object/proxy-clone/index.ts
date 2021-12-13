@@ -13,7 +13,7 @@
 
 import { unimplement } from 'core/functools/implementation';
 import { NULL } from 'core/object/proxy-clone/const';
-import { resolveTarget } from 'core/object/proxy-clone/helpers';
+import { resolveTarget, getRawValueFromStore, Descriptor } from 'core/object/proxy-clone/helpers';
 
 export * from 'core/object/proxy-clone/const';
 
@@ -34,7 +34,7 @@ export default function proxyClone<T>(obj: T): T {
 
 		if (typeof Proxy !== 'function') {
 			unimplement({
-				name: 'clone',
+				name: 'proxyClone',
 				type: 'function',
 				notice: 'An operation of proxy object cloning depends on the support of native Proxy API'
 			});
@@ -46,17 +46,15 @@ export default function proxyClone<T>(obj: T): T {
 				target = resolveTarget(target, store).value;
 
 				let
-					valStore = store.get(target);
+					valStore = store.get(target),
+					val = getRawValueFromStore(key, valStore) ?? Reflect.get(target, key, receiver);
 
-				let
-					val;
+				if (val instanceof Descriptor) {
+					val = val.getValue(receiver);
+				}
 
-				if (valStore?.has(key)) {
-					val = valStore.get(key);
-					val = val === NULL ? undefined : val;
-
-				} else {
-					val = Reflect.get(target, key, receiver);
+				if (val === NULL) {
+					val = undefined;
 				}
 
 				const
@@ -158,7 +156,14 @@ export default function proxyClone<T>(obj: T): T {
 				} = resolveTarget(target, store);
 
 				const
-					desc = Reflect.getOwnPropertyDescriptor(resolvedTarget, key);
+					rawValue = getRawValueFromStore(key, store.get(resolvedTarget));
+
+				if (rawValue instanceof Descriptor) {
+					return rawValue.setValue(val, receiver);
+				}
+
+				const
+					desc = Reflect.getOwnPropertyDescriptor(receiver, key);
 
 				if (desc != null) {
 					if (desc.writable === false || desc.get != null && desc.set == null) {
@@ -184,6 +189,67 @@ export default function proxyClone<T>(obj: T): T {
 				return Reflect.set(resolvedTarget, key, val);
 			},
 
+			defineProperty: (target, key, desc) => {
+				const {
+					value: resolvedTarget,
+					needWrap
+				} = resolveTarget(target, store);
+
+				const
+					rawValue = getRawValueFromStore(key, store.get(resolvedTarget)),
+					oldDesc = Reflect.getOwnPropertyDescriptor(resolvedTarget, key);
+
+				if (
+					oldDesc?.configurable === false &&
+					(oldDesc.writable === false || Object.size(desc) > 1 || !('value' in desc))
+				) {
+					return false;
+				}
+
+				const
+					mergedDesc = {};
+
+				if (oldDesc != null) {
+					const baseDesc: PropertyDescriptor = {
+						configurable: oldDesc.configurable,
+						enumerable: oldDesc.enumerable
+					};
+
+					Object.assign(mergedDesc, baseDesc);
+
+					if (rawValue instanceof Descriptor) {
+						Object.assign(mergedDesc, rawValue.descriptor);
+					}
+
+					Object.assign(mergedDesc, desc);
+
+					// eslint-disable-next-line @typescript-eslint/unbound-method
+					if (Object.isFunction(desc.get) || Object.isFunction(desc.set)) {
+						delete mergedDesc['value'];
+						delete mergedDesc['writable'];
+
+					} else {
+						delete mergedDesc['get'];
+						delete mergedDesc['set'];
+					}
+
+				} else {
+					Object.assign(mergedDesc, desc);
+				}
+
+				if (needWrap) {
+					const
+						valStore = store.get(resolvedTarget) ?? new Map();
+
+					store.set(resolvedTarget, valStore);
+					valStore.set(key, new Descriptor(mergedDesc));
+
+					return true;
+				}
+
+				return Reflect.defineProperty(resolvedTarget, key, mergedDesc);
+			},
+
 			deleteProperty: (target, key) => {
 				const {
 					value: resolvedTarget,
@@ -193,10 +259,8 @@ export default function proxyClone<T>(obj: T): T {
 				const
 					desc = Reflect.getOwnPropertyDescriptor(resolvedTarget, key);
 
-				if (desc != null) {
-					if (desc.writable === false || desc.get != null && desc.set == null) {
-						return false;
-					}
+				if (desc?.configurable === false) {
+					return false;
 				}
 
 				if (needWrap) {
@@ -209,7 +273,7 @@ export default function proxyClone<T>(obj: T): T {
 					return true;
 				}
 
-				return Reflect.deleteProperty(target, key);
+				return Reflect.deleteProperty(resolvedTarget, key);
 			},
 
 			has: (target, key) => {
@@ -222,6 +286,39 @@ export default function proxyClone<T>(obj: T): T {
 				}
 
 				return Reflect.has(resolvedTarget, key);
+			},
+
+			getOwnPropertyDescriptor: (target, key) => {
+				const
+					resolvedTarget = resolveTarget(target, store).value,
+					rawVal = getRawValueFromStore(key, store.get(resolvedTarget)),
+					desc = Reflect.getOwnPropertyDescriptor(resolvedTarget, key);
+
+				if (desc != null) {
+					if (rawVal instanceof Descriptor) {
+						if (desc.configurable) {
+							return rawVal.descriptor;
+						}
+
+						if ('value' in rawVal.descriptor) {
+							return {
+								...desc,
+								value: rawVal.getValue(proxy)
+							};
+						}
+
+						return {
+							...desc,
+							get: () => rawVal.getValue(proxy),
+
+							set: (val) => {
+								rawVal.setValue(val, proxy);
+							}
+						};
+					}
+
+					return desc;
+				}
 			}
 		});
 
