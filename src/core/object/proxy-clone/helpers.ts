@@ -48,14 +48,12 @@ export class Descriptor {
 		const
 			{descriptor} = this;
 
-		// eslint-disable-next-line @typescript-eslint/unbound-method
-		if (Object.isFunction(descriptor.set)) {
+		if (descriptor.set != null) {
 			descriptor.set.call(receiver);
 			return true;
 		}
 
-		// eslint-disable-next-line @typescript-eslint/unbound-method
-		if (Object.isFunction(descriptor.get)) {
+		if (descriptor.get != null) {
 			return false;
 		}
 

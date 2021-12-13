@@ -223,8 +223,7 @@ export default function proxyClone<T>(obj: T): T {
 
 					Object.assign(mergedDesc, desc);
 
-					// eslint-disable-next-line @typescript-eslint/unbound-method
-					if (Object.isFunction(desc.get) || Object.isFunction(desc.set)) {
+					if (desc.get != null || desc.set != null) {
 						delete mergedDesc['value'];
 						delete mergedDesc['writable'];
 
@@ -296,25 +295,32 @@ export default function proxyClone<T>(obj: T): T {
 
 				if (desc != null) {
 					if (rawVal instanceof Descriptor) {
+						const
+							rawDesc = rawVal.descriptor;
+
 						if (desc.configurable) {
 							return rawVal.descriptor;
 						}
 
-						if ('value' in rawVal.descriptor) {
-							return {
-								...desc,
-								value: rawVal.getValue(proxy)
-							};
+						const
+							mergedDesc = {...desc};
+
+						if (rawDesc.get != null || rawDesc.set != null) {
+							if (rawDesc.get != null) {
+								mergedDesc.get = () => rawVal.getValue(proxy);
+							}
+
+							if (rawDesc.set != null) {
+								mergedDesc.set = (val) => {
+									rawVal.setValue(val, proxy);
+								};
+							}
+
+						} else {
+							mergedDesc.value = rawVal.getValue(proxy);
 						}
 
-						return {
-							...desc,
-							get: () => rawVal.getValue(proxy),
-
-							set: (val) => {
-								rawVal.setValue(val, proxy);
-							}
-						};
+						return mergedDesc;
 					}
 
 					return desc;
