@@ -305,18 +305,7 @@ export default function proxyClone<T>(obj: T): T {
 						const
 							mergedDesc = {...desc};
 
-						if (rawDesc.get != null || rawDesc.set != null) {
-							if (rawDesc.get != null) {
-								mergedDesc.get = () => rawVal.getValue(proxy);
-							}
-
-							if (rawDesc.set != null) {
-								mergedDesc.set = (val) => {
-									rawVal.setValue(val, proxy);
-								};
-							}
-
-						} else {
+						if (rawDesc.get == null && rawDesc.set == null) {
 							mergedDesc.value = rawVal.getValue(proxy);
 						}
 
