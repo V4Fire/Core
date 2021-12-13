@@ -19,7 +19,7 @@ export * from 'core/object/proxy-clone/const';
 
 /**
  * Returns a clone of the specified object.
- * To clone an object, the function creates a Proxy object, i.e., the process of cloning is a lazy operation.
+ * The function uses a Proxy object to create a clone. The process of cloning is a lazy operation.
  *
  * @param obj
  */
