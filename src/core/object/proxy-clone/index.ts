@@ -183,6 +183,10 @@ export default function proxyClone<T>(obj: T): T {
 					store.set(resolvedTarget, valStore);
 					valStore.set(key, val);
 
+					if (!(key in resolvedTarget)) {
+						resolvedTarget[key] = undefined;
+					}
+
 					return true;
 				}
 
@@ -243,6 +247,10 @@ export default function proxyClone<T>(obj: T): T {
 					store.set(resolvedTarget, valStore);
 					valStore.set(key, new Descriptor(mergedDesc));
 
+					if (!(key in resolvedTarget)) {
+						resolvedTarget[key] = undefined;
+					}
+
 					return true;
 				}
 
@@ -290,31 +298,66 @@ export default function proxyClone<T>(obj: T): T {
 			getOwnPropertyDescriptor: (target, key) => {
 				const
 					resolvedTarget = resolveTarget(target, store).value,
-					rawVal = getRawValueFromStore(key, store.get(resolvedTarget)),
 					desc = Reflect.getOwnPropertyDescriptor(resolvedTarget, key);
 
-				if (desc != null) {
-					if (rawVal instanceof Descriptor) {
-						const
-							rawDesc = rawVal.descriptor;
+				if (desc == null) {
+					return;
+				}
 
-						if (desc.configurable) {
-							return rawVal.descriptor;
-						}
+				const
+					rawVal = getRawValueFromStore(key, store.get(resolvedTarget));
 
-						const
-							mergedDesc = {...desc};
+				if (rawVal instanceof Descriptor) {
+					const
+						rawDesc = rawVal.descriptor;
 
-						if (rawDesc.get == null && rawDesc.set == null) {
-							mergedDesc.value = rawVal.getValue(proxy);
-						}
-
-						return mergedDesc;
+					if (desc.configurable) {
+						return rawVal.descriptor;
 					}
 
-					return desc;
+					const
+						mergedDesc = {...desc};
+
+					if (rawDesc.get == null && rawDesc.set == null) {
+						mergedDesc.value = rawVal.getValue(proxy);
+					}
+
+					return mergedDesc;
 				}
-			}
+
+				return desc;
+			},
+
+			ownKeys: (target) => {
+				const
+					resolvedTarget = resolveTarget(target, store).value;
+
+				if (
+					Object.isArray(resolvedTarget) ||
+					Object.isMap(resolvedTarget) ||
+					Object.isWeakMap(resolvedTarget) ||
+					Object.isSet(resolvedTarget) ||
+					Object.isWeakSet(resolvedTarget)
+				) {
+					return Reflect.ownKeys(resolvedTarget);
+				}
+
+				const
+					keys = new Set(Reflect.ownKeys(resolvedTarget));
+
+				Object.forEach(store.get(resolvedTarget)?.entries(), ([key, val]) => {
+					if (val === NULL) {
+						keys.delete(key);
+
+					} else {
+						keys.add(key);
+					}
+				});
+
+				return [...keys];
+			},
+
+			preventExtensions: () => false
 		});
 
 		return Object.cast(proxy);

@@ -38,6 +38,24 @@ describe('core/object/proxy-clone', () => {
 		expect(original.user.name).toBe('Bob');
 	});
 
+	it('getting `Object.keys` from the clone object', () => {
+		const original = {
+			a: 1,
+			b: [1, 2, 3]
+		};
+
+		const
+			clone = proxyClone(original);
+
+		delete clone.a;
+		clone.c = 10;
+
+		expect(Object.keys(clone)).toEqual(['b', 'c']);
+
+		clone.b.push(4);
+		expect(Object.keys(clone.b)).toEqual(['0', '1', '2', '3']);
+	});
+
 	it('cloning an object with accessors', () => {
 		const original = {
 			user: {
