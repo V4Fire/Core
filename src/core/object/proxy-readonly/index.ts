@@ -19,7 +19,7 @@ import { unimplement } from 'core/functools/implementation';
  *
  * @param obj
  */
-export default function proxyReadonly<T>(obj: T): T {
+export default function proxyReadonly<T>(obj: T): Readonly<T> {
 	return readonly(obj);
 
 	function readonly<T>(obj: T): T {
@@ -117,20 +117,21 @@ export default function proxyReadonly<T>(obj: T): T {
 				const
 					desc = Reflect.getOwnPropertyDescriptor(target, key);
 
+				if (desc?.configurable === false) {
+					return desc;
+				}
+
 				return {
 					...desc,
-					writable: false,
-					configurable: false
+					writable: false
 				};
 			},
 
 			set: () => false,
 
-			deleteProperty: () => false,
-
 			defineProperty: () => false,
 
-			isExtensible: () => false
+			deleteProperty: () => false
 		});
 
 		return Object.cast(proxy);
