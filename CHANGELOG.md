@@ -11,6 +11,16 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.??.?? (2021-??-??)
+
+#### :boom: Breaking Change
+
+* Now to freeze and clone response data will be used `core/object/proxy-readonly` and `core/object/proxy-clone` if it's possible `core/request/response`
+
+#### :rocket: New Feature
+
+* Added a new method `isReadonly` `core/object/proxy/readonly`
+
 ## v3.73.0 (2021-12-14)
 
 #### :rocket: New Feature
