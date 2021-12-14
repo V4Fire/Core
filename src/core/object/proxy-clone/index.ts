@@ -13,7 +13,14 @@
 
 import { unimplement } from 'core/functools/implementation';
 import { NULL } from 'core/object/proxy-clone/const';
-import { resolveTarget, getRawValueFromStore, Descriptor } from 'core/object/proxy-clone/helpers';
+
+import {
+
+	resolveTarget,
+	getRawValueFromStore,
+	Descriptor
+
+} from 'core/object/proxy-clone/helpers';
 
 export * from 'core/object/proxy-clone/const';
 
@@ -177,14 +184,18 @@ export default function proxyClone<T>(obj: T): T {
 				}
 
 				if (needWrap) {
-					const
-						valStore = store.get(resolvedTarget) ?? new Map();
+					if (key in resolvedTarget) {
+						const valStore = store.get(resolvedTarget) ?? new Map();
+						store.set(resolvedTarget, valStore);
+						valStore.set(key, val);
 
-					store.set(resolvedTarget, valStore);
-					valStore.set(key, val);
-
-					if (!(key in resolvedTarget)) {
-						resolvedTarget[key] = undefined;
+					} else {
+						Object.defineProperty(receiver, key, {
+							enumerable: true,
+							configurable: true,
+							writable: true,
+							value: val
+						});
 					}
 
 					return true;
@@ -210,8 +221,9 @@ export default function proxyClone<T>(obj: T): T {
 					return false;
 				}
 
-				const
-					mergedDesc = {};
+				const mergedDesc = {
+					configurable: desc.configurable !== false
+				};
 
 				if (oldDesc != null) {
 					const baseDesc: PropertyDescriptor = {
@@ -248,7 +260,23 @@ export default function proxyClone<T>(obj: T): T {
 					valStore.set(key, new Descriptor(mergedDesc));
 
 					if (!(key in resolvedTarget)) {
-						resolvedTarget[key] = undefined;
+						Object.defineProperty(resolvedTarget, key, {
+							configurable: true,
+							enumerable: false,
+
+							set: (value) => {
+								Object.defineProperty(resolvedTarget, key, {
+									enumerable: true,
+									writable: true,
+									configurable: true,
+									value
+								});
+							},
+
+							get() {
+								return undefined;
+							}
+						});
 					}
 
 					return true;
@@ -349,7 +377,7 @@ export default function proxyClone<T>(obj: T): T {
 					if (val === NULL) {
 						keys.delete(key);
 
-					} else {
+					} else if (key in resolvedTarget) {
 						keys.add(key);
 					}
 				});

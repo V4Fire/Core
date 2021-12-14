@@ -135,14 +135,21 @@ describe('core/object/proxy-clone', () => {
 			configurable: true
 		});
 
+		const blaGetter = () => 10;
+
 		Object.defineProperty(clone, 'bla', {
 			enumerable: true,
-			get() {
-				return 10;
-			}
+			get: blaGetter
 		});
 
 		expect(clone.bla).toBe(10);
+
+		expect(Object.getOwnPropertyDescriptor(clone, 'bla')).toEqual({
+			configurable: true,
+			enumerable: true,
+			get: blaGetter,
+			set: undefined
+		});
 
 		Object.defineProperty(original.user, 'newAge', {
 			writable: true,
