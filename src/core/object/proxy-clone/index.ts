@@ -12,14 +12,15 @@
  */
 
 import { unimplement } from 'core/functools/implementation';
+
 import { NULL } from 'core/object/proxy-clone/const';
-import { resolveTarget } from 'core/object/proxy-clone/helpers';
+import { resolveTarget, getRawValueFromStore, Descriptor } from 'core/object/proxy-clone/helpers';
 
 export * from 'core/object/proxy-clone/const';
 
 /**
  * Returns a clone of the specified object.
- * To clone an object, the function creates a Proxy object, i.e., the process of cloning is a lazy operation.
+ * The function uses a Proxy object to create a clone. The process of cloning is a lazy operation.
  *
  * @param obj
  */
@@ -34,11 +35,14 @@ export default function proxyClone<T>(obj: T): T {
 
 		if (typeof Proxy !== 'function') {
 			unimplement({
-				name: 'clone',
+				name: 'proxyClone',
 				type: 'function',
 				notice: 'An operation of proxy object cloning depends on the support of native Proxy API'
 			});
 		}
+
+		let
+			lastSetKey;
 
 		const proxy = new Proxy(Object.cast<object>(obj), {
 			get: (target, key, receiver) => {
@@ -46,17 +50,15 @@ export default function proxyClone<T>(obj: T): T {
 				target = resolveTarget(target, store).value;
 
 				let
-					valStore = store.get(target);
+					valStore = store.get(target),
+					val = getRawValueFromStore(key, valStore) ?? Reflect.get(target, key, receiver);
 
-				let
-					val;
+				if (val instanceof Descriptor) {
+					val = val.getValue(receiver);
+				}
 
-				if (valStore?.has(key)) {
-					val = valStore.get(key);
-					val = val === NULL ? undefined : val;
-
-				} else {
-					val = Reflect.get(target, key, receiver);
+				if (val === NULL) {
+					val = undefined;
 				}
 
 				const
@@ -152,13 +154,22 @@ export default function proxyClone<T>(obj: T): T {
 			},
 
 			set: (target, key, val, receiver) => {
+				lastSetKey = key;
+
 				const {
 					value: resolvedTarget,
 					needWrap
 				} = resolveTarget(target, store);
 
 				const
-					desc = Reflect.getOwnPropertyDescriptor(resolvedTarget, key);
+					rawValue = getRawValueFromStore(key, store.get(resolvedTarget));
+
+				if (rawValue instanceof Descriptor) {
+					return rawValue.setValue(val, receiver);
+				}
+
+				const
+					desc = Reflect.getOwnPropertyDescriptor(receiver, key);
 
 				if (desc != null) {
 					if (desc.writable === false || desc.get != null && desc.set == null) {
@@ -172,16 +183,110 @@ export default function proxyClone<T>(obj: T): T {
 				}
 
 				if (needWrap) {
-					const
-						valStore = store.get(resolvedTarget) ?? new Map();
+					if (key in resolvedTarget) {
+						const valStore = store.get(resolvedTarget) ?? new Map();
+						store.set(resolvedTarget, valStore);
+						valStore.set(key, val);
 
-					store.set(resolvedTarget, valStore);
-					valStore.set(key, val);
+					} else {
+						Object.defineProperty(receiver, key, {
+							enumerable: true,
+							configurable: true,
+							writable: true,
+							value: val
+						});
+					}
 
 					return true;
 				}
 
 				return Reflect.set(resolvedTarget, key, val);
+			},
+
+			defineProperty: (target, key, desc) => {
+				if (lastSetKey === key) {
+					lastSetKey = undefined;
+					return Reflect.defineProperty(target, key, desc);
+				}
+
+				const {
+					value: resolvedTarget,
+					needWrap
+				} = resolveTarget(target, store);
+
+				const
+					rawValue = getRawValueFromStore(key, store.get(resolvedTarget)),
+					oldDesc = Reflect.getOwnPropertyDescriptor(resolvedTarget, key);
+
+				if (
+					oldDesc?.configurable === false &&
+					(oldDesc.writable === false || Object.size(desc) > 1 || !('value' in desc))
+				) {
+					return false;
+				}
+
+				const mergedDesc = {
+					configurable: desc.configurable !== false
+				};
+
+				if (oldDesc != null) {
+					const baseDesc: PropertyDescriptor = {
+						configurable: oldDesc.configurable,
+						enumerable: oldDesc.enumerable
+					};
+
+					Object.assign(mergedDesc, baseDesc);
+
+					if (rawValue instanceof Descriptor) {
+						Object.assign(mergedDesc, rawValue.descriptor);
+					}
+
+					Object.assign(mergedDesc, desc);
+
+					if (desc.get != null || desc.set != null) {
+						delete mergedDesc['value'];
+						delete mergedDesc['writable'];
+
+					} else {
+						delete mergedDesc['get'];
+						delete mergedDesc['set'];
+					}
+
+				} else {
+					Object.assign(mergedDesc, desc);
+				}
+
+				if (needWrap) {
+					const
+						valStore = store.get(resolvedTarget) ?? new Map();
+
+					store.set(resolvedTarget, valStore);
+					valStore.set(key, new Descriptor(mergedDesc));
+
+					if (!(key in resolvedTarget)) {
+						Object.defineProperty(resolvedTarget, key, {
+							configurable: true,
+							enumerable: false,
+
+							set: (value) => {
+								Object.defineProperty(resolvedTarget, key, {
+									enumerable: true,
+									writable: true,
+									configurable: true,
+									value
+								});
+							},
+
+							get() {
+								return undefined;
+							}
+						});
+					}
+
+					return true;
+				}
+
+				return Reflect.defineProperty(resolvedTarget, key, mergedDesc);
 			},
 
 			deleteProperty: (target, key) => {
@@ -193,10 +298,8 @@ export default function proxyClone<T>(obj: T): T {
 				const
 					desc = Reflect.getOwnPropertyDescriptor(resolvedTarget, key);
 
-				if (desc != null) {
-					if (desc.writable === false || desc.get != null && desc.set == null) {
-						return false;
-					}
+				if (desc?.configurable === false) {
+					return false;
 				}
 
 				if (needWrap) {
@@ -209,7 +312,7 @@ export default function proxyClone<T>(obj: T): T {
 					return true;
 				}
 
-				return Reflect.deleteProperty(target, key);
+				return Reflect.deleteProperty(resolvedTarget, key);
 			},
 
 			has: (target, key) => {
@@ -222,7 +325,71 @@ export default function proxyClone<T>(obj: T): T {
 				}
 
 				return Reflect.has(resolvedTarget, key);
-			}
+			},
+
+			getOwnPropertyDescriptor: (target, key) => {
+				const
+					resolvedTarget = resolveTarget(target, store).value,
+					desc = Reflect.getOwnPropertyDescriptor(resolvedTarget, key);
+
+				if (desc == null) {
+					return;
+				}
+
+				const
+					rawVal = getRawValueFromStore(key, store.get(resolvedTarget));
+
+				if (rawVal instanceof Descriptor) {
+					const
+						rawDesc = rawVal.descriptor;
+
+					if (desc.configurable) {
+						return rawVal.descriptor;
+					}
+
+					const
+						mergedDesc = {...desc};
+
+					if (rawDesc.get == null && rawDesc.set == null) {
+						mergedDesc.value = rawVal.getValue(proxy);
+					}
+
+					return mergedDesc;
+				}
+
+				return desc;
+			},
+
+			ownKeys: (target) => {
+				const
+					resolvedTarget = resolveTarget(target, store).value;
+
+				if (
+					Object.isArray(resolvedTarget) ||
+					Object.isMap(resolvedTarget) ||
+					Object.isWeakMap(resolvedTarget) ||
+					Object.isSet(resolvedTarget) ||
+					Object.isWeakSet(resolvedTarget)
+				) {
+					return Reflect.ownKeys(resolvedTarget);
+				}
+
+				const
+					keys = new Set(Reflect.ownKeys(resolvedTarget));
+
+				Object.forEach(store.get(resolvedTarget)?.entries(), ([key, val]) => {
+					if (val === NULL) {
+						keys.delete(key);
+
+					} else if (key in resolvedTarget) {
+						keys.add(key);
+					}
+				});
+
+				return [...keys];
+			},
+
+			preventExtensions: () => false
 		});
 
 		return Object.cast(proxy);

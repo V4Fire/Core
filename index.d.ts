@@ -147,10 +147,8 @@ interface StrictDictionary<T = unknown> {
 	[key: string]: T;
 }
 
-type DictionaryKey = string | symbol | number;
-
 interface Dictionary<T = unknown> {
-	[key: DictionaryKey]: CanUndef<T>;
+	[key: PropertyKey]: CanUndef<T>;
 }
 
 interface Maybe<T = unknown> extends Promise<T> {
@@ -629,13 +627,13 @@ interface ObjectFromArrayOptions<T = boolean> {
 	 * @param el - element value
 	 * @param i - element index
 	 */
-	key?(el: unknown, i: number): DictionaryKey;
+	key?(el: unknown, i: number): PropertyKey;
 
 	/**
 	 * @deprecated
 	 * @see [[ObjectFromArrayOptions.key]]
 	 */
-	keyConverter?(i: number, el: unknown): DictionaryKey;
+	keyConverter?(i: number, el: unknown): PropertyKey;
 
 	/**
 	 * Function that returns an element value
@@ -721,13 +719,13 @@ interface ObjectConstructor {
 	 *
 	 * @param key
 	 */
-	hasOwnProperty(key: DictionaryKey): (obj: any) => boolean;
+	hasOwnProperty(key: PropertyKey): (obj: any) => boolean;
 
 	/**
 	 * Returns a function that returns true if the specified object has own property by a key that the function takes
 	 * @param obj
 	 */
-	hasOwnProperty(obj: any): (key: DictionaryKey) => boolean;
+	hasOwnProperty(obj: any): (key: PropertyKey) => boolean;
 
 	/**
 	 * Returns true if the passed object has an own property by the specified key
@@ -735,7 +733,7 @@ interface ObjectConstructor {
 	 * @param obj
 	 * @param key
 	 */
-	hasOwnProperty(obj: any, key: DictionaryKey): boolean;
+	hasOwnProperty(obj: any, key: PropertyKey): boolean;
 
 	/**
 	 * Sets a value to the passed object by the specified path.

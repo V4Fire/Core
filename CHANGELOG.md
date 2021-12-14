@@ -11,6 +11,20 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.73.0 (2021-12-14)
+
+#### :rocket: New Feature
+
+* Added a new module to create effective read-only view of objects `core/object/proxy-readonly`
+
+#### :bug: Bug Fix
+
+* Now all properties that are added via `Object.defineProperty` can be handled via a proxy-based watcher `core/object/watch`
+
+* `core/object/proxy-clone`:
+  * Fixed removing of properties
+  * Now the clone function supports descriptors too
+
 ## v3.72.0 (2021-12-10)
 
 #### :rocket: New Feature

@@ -186,7 +186,7 @@ extend(Object, 'mixin', function mixin(
 		const
 			isSimple = simpleTypes[getType(extender)] === true;
 
-		Object.forEach(extender, (el, key: DictionaryKey) => {
+		Object.forEach(extender, (el, key: PropertyKey) => {
 			if (p.filter && !Object.isTruly(p.filter(el, key, extender))) {
 				return;
 			}

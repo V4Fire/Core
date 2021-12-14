@@ -36,12 +36,14 @@ import {
 
 import type {
 
+	Watcher,
 	WatchPath,
+
 	RawWatchHandler,
 	WatchHandlersSet,
+
 	WatchOptions,
-	InternalWatchOptions,
-	Watcher
+	InternalWatchOptions
 
 } from 'core/object/watch/interface';
 
@@ -177,20 +179,31 @@ export function watch<T extends object>(
 		bindMutationHooks(unwrappedObj, wrapOpts, handlers);
 	}
 
+	const frozenKeys = Object.createDict<Dictionary<boolean>>({
+		[toRootObject]: true,
+		[toTopObject]: true,
+		[toOriginalObject]: true,
+		[watchHandlers]: true,
+		[watchPath]: true
+	});
+
 	const
 		blackListStore = new Set();
+
+	let
+		lastSetKey;
 
 	proxy = new Proxy(unwrappedObj, {
 		get: (target, key) => {
 			switch (key) {
-				case toOriginalObject:
-					return target;
-
 				case toRootObject:
 					return resolvedRoot;
 
 				case toTopObject:
 					return top;
+
+				case toOriginalObject:
+					return target;
 
 				case watchHandlers:
 					return handlers;
@@ -254,16 +267,11 @@ export function watch<T extends object>(
 		},
 
 		set: (target, key, val, receiver) => {
-			if (
-				key === toOriginalObject ||
-				key === toRootObject ||
-				key === toTopObject ||
-				key === watchHandlers ||
-				key === watchPath
-			) {
+			if (frozenKeys[key]) {
 				return false;
 			}
 
+			lastSetKey = key;
 			val = unwrap(val) ?? val;
 
 			const
@@ -271,7 +279,12 @@ export function watch<T extends object>(
 				isCustomObj = isArray || Object.isCustomObject(target),
 				set = () => Reflect.set(target, key, val, isCustomObj ? receiver : target);
 
-			if (Object.isSymbol(key) || resolvedRoot[muteLabel] === true || blackListStore.has(key)) {
+			const canSetWithoutEmit =
+				Object.isSymbol(key) ||
+				resolvedRoot[muteLabel] === true ||
+				blackListStore.has(key);
+
+			if (canSetWithoutEmit) {
 				return set();
 			}
 
@@ -310,7 +323,57 @@ export function watch<T extends object>(
 			return true;
 		},
 
+		defineProperty: (target: object, key, desc) => {
+			if (frozenKeys[key]) {
+				return false;
+			}
+
+			if (lastSetKey === key) {
+				lastSetKey = undefined;
+				return Reflect.defineProperty(target, key, desc);
+			}
+
+			const {
+				configurable,
+				writable
+			} = desc;
+
+			const
+				mergedDesc = {...desc};
+
+			let
+				val;
+
+			if (desc.get == null && desc.set == null && desc.value !== Reflect.get(target, key, proxy)) {
+				val = desc.value;
+				mergedDesc.value = undefined;
+				mergedDesc.configurable = true;
+				mergedDesc.writable = true;
+			}
+
+			const
+				res = Reflect.defineProperty(target, key, mergedDesc);
+
+			if (res) {
+				if (val !== undefined) {
+					Object.cast<Dictionary>(proxy)[key] = val;
+					Reflect.defineProperty(target, key, {
+						configurable,
+						writable
+					});
+				}
+
+				return true;
+			}
+
+			return false;
+		},
+
 		deleteProperty: (target, key) => {
+			if (frozenKeys[key]) {
+				return false;
+			}
+
 			if (Reflect.deleteProperty(target, key)) {
 				if (resolvedRoot[muteLabel] === true) {
 					return true;
@@ -327,13 +390,7 @@ export function watch<T extends object>(
 		},
 
 		has: (target, key) => {
-			if (
-				key === toOriginalObject ||
-				key === toRootObject ||
-				key === toTopObject ||
-				key === watchHandlers ||
-				key === watchPath
-			) {
+			if (frozenKeys[key]) {
 				return true;
 			}
 
