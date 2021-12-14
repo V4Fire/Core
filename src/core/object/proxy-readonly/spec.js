@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import proxyReadonly, { isReadonly } from 'core/object/proxy-readonly';
+import proxyReadonly from 'core/object/proxy-readonly';
 
 describe('core/object/proxy-readonly', () => {
 	it('readonly object', () => {
@@ -158,13 +158,33 @@ describe('core/object/proxy-readonly', () => {
 		]);
 	});
 
-	it('isReadonly', () => {
-		expect(isReadonly(null)).toBeTrue();
-		expect(isReadonly(1)).toBeTrue();
-		expect(isReadonly('2')).toBeTrue();
-		expect(isReadonly(true)).toBeTrue();
-		expect(isReadonly(Object.freeze({}))).toBeTrue();
-		expect(isReadonly(proxyReadonly({}))).toBeTrue();
-		expect(isReadonly({})).toBeFalse();
+	it('Object.isExtensible', () => {
+		expect(Object.isExtensible(null)).toBeFalse();
+		expect(Object.isExtensible(1)).toBeFalse();
+		expect(Object.isExtensible('2')).toBeFalse();
+		expect(Object.isExtensible(true)).toBeFalse();
+		expect(Object.isExtensible(Object.freeze({}))).toBeFalse();
+		expect(Object.isExtensible(proxyReadonly({}))).toBeFalse();
+		expect(Object.isExtensible({})).toBeTrue();
+	});
+
+	it('Object.isSealed', () => {
+		expect(Object.isSealed(null)).toBeTrue();
+		expect(Object.isSealed(1)).toBeTrue();
+		expect(Object.isSealed('2')).toBeTrue();
+		expect(Object.isSealed(true)).toBeTrue();
+		expect(Object.isSealed(Object.freeze({}))).toBeTrue();
+		expect(Object.isSealed(proxyReadonly({}))).toBeTrue();
+		expect(Object.isSealed({})).toBeFalse();
+	});
+
+	it('Object.isFrozen', () => {
+		expect(Object.isFrozen(null)).toBeTrue();
+		expect(Object.isFrozen(1)).toBeTrue();
+		expect(Object.isFrozen('2')).toBeTrue();
+		expect(Object.isFrozen(true)).toBeTrue();
+		expect(Object.isFrozen(Object.freeze({}))).toBeTrue();
+		expect(Object.isFrozen(proxyReadonly({}))).toBeTrue();
+		expect(Object.isFrozen({})).toBeFalse();
 	});
 });

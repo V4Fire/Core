@@ -12,19 +12,7 @@
  */
 
 import { unimplement } from 'core/functools/implementation';
-import { READONLY } from 'core/object/proxy-readonly/const';
-
-/**
- * Returns true if the specified value is readonly
- * @param obj
- */
-export function isReadonly(obj: unknown): boolean {
-	if (Object.isPrimitive(obj) || Object.isFrozen(obj)) {
-		return true;
-	}
-
-	return Object.cast<Dictionary>(obj)[READONLY] === true;
-}
+import { READONLY } from 'core/prelude/types/const';
 
 /**
  * Returns a read-only view of the specified object.
@@ -148,7 +136,15 @@ export default function proxyReadonly<T>(obj: T): Readonly<T> {
 
 			defineProperty: () => false,
 
-			deleteProperty: () => false
+			deleteProperty: () => false,
+
+			has: (target, key) => {
+				if (key === READONLY) {
+					return true;
+				}
+
+				return Reflect.has(target, key);
+			}
 		});
 
 		return Object.cast(proxy);

@@ -7,6 +7,9 @@
  */
 
 export const
+	READONLY = Symbol('Is readonly');
+
+export const
 	isNative = /\[native code]/,
 	nonPrimitiveTypes = {object: true, function: true};
 

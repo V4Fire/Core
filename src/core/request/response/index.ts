@@ -14,7 +14,7 @@
 import Range from 'core/range';
 import AbortablePromise from 'core/promise/abortable';
 
-import proxyReadonly, { isReadonly } from 'core/object/proxy-readonly';
+import proxyReadonly from 'core/object/proxy-readonly';
 import proxyClone from 'core/object/proxy-clone';
 
 import { IS_NODE } from 'core/env';
@@ -202,7 +202,7 @@ export default class Response<
 
 		Object.forEach(this.decoders, (fn) => {
 			decoders = decoders.then((data) => {
-				if (!Object.isPrimitive(data) && isReadonly(data)) {
+				if (!Object.isPrimitive(data) && Object.isFrozen(data)) {
 					data = data.valueOf();
 				}
 

@@ -11,7 +11,7 @@
 import extend from 'core/prelude/extend';
 
 import { deprecate } from 'core/functools';
-import { isNative, toString, nonPrimitiveTypes } from 'core/prelude/types/const';
+import { isNative, toString, nonPrimitiveTypes, READONLY } from 'core/prelude/types/const';
 
 /** @see [[ObjectConstructor.cast]] */
 extend(Object, 'cast', (value) => value);
@@ -184,3 +184,23 @@ extend(Object, 'isObject', deprecate({
 	name: 'isObject',
 	renamedTo: 'isDictionary'
 }, isPlainObject));
+
+const {
+	isExtensible,
+	isSealed,
+	isFrozen
+} = Object;
+
+Object.isExtensible = (value) => {
+	if (value == null || value[READONLY] === true) {
+		return false;
+	}
+
+	return isExtensible(value);
+};
+
+Object.isSealed = (value) =>
+	value == null ? true : isSealed(value) || value[READONLY] === true;
+
+Object.isFrozen = (value) =>
+	value == null ? true : isFrozen(value) || value[READONLY] === true;
