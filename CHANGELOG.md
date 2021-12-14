@@ -19,6 +19,8 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :bug: Bug Fix
 
+* Now all properties that are added via `Object.defineProperty` can be handled via a proxy based watcher `core/object/watch`
+
 * `core/object/proxy-clone`:
   * Fixed removing of properties
   * Now the clone function supports descriptors too
