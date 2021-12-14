@@ -12,15 +12,9 @@
  */
 
 import { unimplement } from 'core/functools/implementation';
+
 import { NULL } from 'core/object/proxy-clone/const';
-
-import {
-
-	resolveTarget,
-	getRawValueFromStore,
-	Descriptor
-
-} from 'core/object/proxy-clone/helpers';
+import { resolveTarget, getRawValueFromStore, Descriptor } from 'core/object/proxy-clone/helpers';
 
 export * from 'core/object/proxy-clone/const';
 
