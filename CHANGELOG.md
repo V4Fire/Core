@@ -13,6 +13,10 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 ## v3.??.?? (2021-??-??)
 
+#### :rocket: New Feature
+
+* Added a new module to create effective read-only view of objects `core/object/proxy-readonly`
+
 #### :bug: Bug Fix
 
 * `core/object/proxy-clone`:
