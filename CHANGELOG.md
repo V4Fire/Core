@@ -11,7 +11,7 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-## v3.??.?? (2021-??-??)
+## v3.73.0 (2021-12-14)
 
 #### :rocket: New Feature
 
@@ -19,7 +19,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :bug: Bug Fix
 
-* Now all properties that are added via `Object.defineProperty` can be handled via a proxy based watcher `core/object/watch`
+* Now all properties that are added via `Object.defineProperty` can be handled via a proxy-based watcher `core/object/watch`
 
 * `core/object/proxy-clone`:
   * Fixed removing of properties
