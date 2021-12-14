@@ -41,6 +41,9 @@ export default function proxyClone<T>(obj: T): T {
 			});
 		}
 
+		let
+			lastSetKey;
+
 		const proxy = new Proxy(Object.cast<object>(obj), {
 			get: (target, key, receiver) => {
 				const originalTarget = target;
@@ -151,6 +154,8 @@ export default function proxyClone<T>(obj: T): T {
 			},
 
 			set: (target, key, val, receiver) => {
+				lastSetKey = key;
+
 				const {
 					value: resolvedTarget,
 					needWrap
@@ -199,6 +204,11 @@ export default function proxyClone<T>(obj: T): T {
 			},
 
 			defineProperty: (target, key, desc) => {
+				if (lastSetKey === key) {
+					lastSetKey = undefined;
+					return Reflect.defineProperty(target, key, desc);
+				}
+
 				const {
 					value: resolvedTarget,
 					needWrap
