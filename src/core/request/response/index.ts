@@ -13,6 +13,8 @@
 
 import Range from 'core/range';
 import AbortablePromise from 'core/promise/abortable';
+
+import proxyReadonly, { isReadonly } from 'core/object/proxy-readonly';
 import proxyClone from 'core/object/proxy-clone';
 
 import { IS_NODE } from 'core/env';
@@ -200,7 +202,7 @@ export default class Response<
 
 		Object.forEach(this.decoders, (fn) => {
 			decoders = decoders.then((data) => {
-				if (data != null) {
+				if (!Object.isPrimitive(data) && isReadonly(data)) {
 					data = data.valueOf();
 				}
 
@@ -208,18 +210,34 @@ export default class Response<
 			});
 		});
 
-		return decoders.then((res) => {
-			if (Object.isFrozen(res)) {
-				return res;
+		return decoders.then((data) => {
+			if (Object.isFrozen(data)) {
+				return data;
 			}
 
-			if (Object.isArray(res) || Object.isPlainObject(res)) {
-				Object.defineProperty(res, 'valueOf', {
-					value: () => typeof Proxy === 'function' ? proxyClone(res) : Object.fastClone(res, {freezable: false})
-				});
+			if (Object.isArray(data) || Object.isPlainObject(data)) {
+				const
+					originalData = data;
+
+				if (typeof Proxy === 'function') {
+					Object.defineProperty(data, 'valueOf', {
+						configurable: true,
+						value: () => proxyClone(originalData)
+					});
+
+					data = proxyReadonly(data);
+
+				} else {
+					Object.defineProperty(data, 'valueOf', {
+						configurable: true,
+						value: () => Object.fastClone(originalData, {freezable: false})
+					});
+
+					Object.freeze(data);
+				}
 			}
 
-			return res;
+			return data;
 		});
 	}
 

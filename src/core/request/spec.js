@@ -513,8 +513,10 @@ describe('core/request', () => {
 
 				const
 					body = await (await req).response.json(),
-					firstRequest = body.times.shift(),
-					requestDelays = body.times.reduce((acc, time, i) => acc.concat(time - firstRequest - i * delayMS), []);
+					firstRequest = body.times[0];
+
+				const requestDelays = body.times.slice(1)
+					.reduce((acc, time, i) => acc.concat(time - firstRequest - i * delayMS), []);
 
 				expect(firstRequest - startTime).toBeLessThan(delayMS);
 				requestDelays.forEach((time) => expect(time).toBeGreaterThanOrEqual(delayMS));
