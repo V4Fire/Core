@@ -39,3 +39,10 @@ console.log(clone.user.skills);
 // ['singing', 'dancing', 'programming']
 console.log(original.user.skills);
 ```
+
+## Known limitations
+
+Because the process of cloning uses native Proxy objects, there are a few limitations:
+
+1. You can't use `Object.preventExtension` at a clone object because it should be applied to the original object.
+2. `Object.isExtensible` always returns a value from the original object.
