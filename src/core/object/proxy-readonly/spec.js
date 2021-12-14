@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import proxyReadonly from 'core/object/proxy-readonly';
+import proxyReadonly, { isReadonly } from 'core/object/proxy-readonly';
 
 describe('core/object/proxy-readonly', () => {
 	it('readonly object', () => {
@@ -156,5 +156,15 @@ describe('core/object/proxy-readonly', () => {
 			{type: 'singing'},
 			{type: 'dancing'}
 		]);
+	});
+
+	it('isReadonly', () => {
+		expect(isReadonly(null)).toBeTrue();
+		expect(isReadonly(1)).toBeTrue();
+		expect(isReadonly('2')).toBeTrue();
+		expect(isReadonly(true)).toBeTrue();
+		expect(isReadonly(Object.freeze({}))).toBeTrue();
+		expect(isReadonly(proxyReadonly({}))).toBeTrue();
+		expect(isReadonly({})).toBeFalse();
 	});
 });
