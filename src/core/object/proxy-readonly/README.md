@@ -46,3 +46,19 @@ Because the process of cloning uses native Proxy objects, there are a few limita
 
 1. You can't use `Object.preventExtension` at a clone object because it should be applied to the original object.
 2. `Object.isExtensible` always returns a value from the original object.
+
+## isReadonly
+
+This function returns true if the passed value is read-only. It can be a primitive value, frozen object, or an object wrapped via `proxyReadonly`.
+
+```js
+import proxyReadonly, { isReadonly } from 'core/object/proxy-readonly';
+
+isReadonly(1); // true
+
+isReadonly(Object.freeze({})); // true
+
+isReadonly(proxyReadonly({})); // true
+
+isReadonly({}); // false
+```
