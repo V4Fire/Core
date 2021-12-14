@@ -31,6 +31,14 @@ proxy.d.foo = 'bar';
 unwatch();
 ```
 
+## Known limitations
+
+1. The assessors' based engine doesn't watch array indices. To add or remove new elements to an array, use array methods.
+   Or, you can use `set/unset` methods from a watcher to add or remove elements by a path.
+
+2. The assessors' based engine doesn't watch newly added elements.
+   To add watching for these properties, use `set/unset` methods from a watcher to add or remove elements by a path.
+
 ## How it works?
 
 The module provides a function to watch changes. It takes an object to watch, optionally some watching options,
