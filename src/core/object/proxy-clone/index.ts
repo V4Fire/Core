@@ -16,8 +16,6 @@ import { unimplement } from 'core/functools/implementation';
 import { NULL } from 'core/object/proxy-clone/const';
 import { resolveTarget, getRawValueFromStore, Descriptor } from 'core/object/proxy-clone/helpers';
 
-export * from 'core/object/proxy-clone/const';
-
 /**
  * Returns a clone of the specified object.
  * The function uses a Proxy object to create a clone. The process of cloning is a lazy operation.
