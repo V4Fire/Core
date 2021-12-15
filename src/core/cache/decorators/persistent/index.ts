@@ -42,7 +42,7 @@ export * from 'core/cache/decorators/persistent/interface';
  * await persistentCache.set('foo', 'bar', {persistentTTL: (2).seconds()});
  * await persistentCache.set('foo2', 'bar2');
  *
- * // Cause we use the same instance for the local data storing,
+ * // Because we use the same instance for the local data storing,
  * // this cache will have all values from the previous (it will be loaded from the storage during initialization)
  *
  * const

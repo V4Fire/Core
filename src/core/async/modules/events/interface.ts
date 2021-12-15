@@ -47,7 +47,7 @@ export interface EventEmitterLike {
 }
 
 /**
- * Extended type of an event emitter
+ * Extended type of event emitter
  */
 export type EventEmitterLikeP = ((event: string, handler: Function) => CanUndef<Function>) | EventEmitterLike;
 

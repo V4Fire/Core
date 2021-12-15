@@ -149,7 +149,7 @@ extend(Object, 'fastClone', (obj, opts?: FastCloneOptions) => {
  * Returns a function to serialize object values into strings
  *
  * @param base - base object
- * @param valMap - map to store non-clonable values
+ * @param valMap - map to store non-clone values
  * @param replacer - additional replacer
  */
 export function createSerializer(
@@ -181,7 +181,7 @@ export function createSerializer(
  * Returns a function to parse object values from strings
  *
  * @param base - base object
- * @param valMap - map that stores on-clonable values
+ * @param valMap - map that stores non-clone values
  * @param reviver - additional reviewer
  */
 export function createParser(

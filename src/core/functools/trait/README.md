@@ -141,7 +141,7 @@ We have created a trait. Now we can implement it in a simple class.
   }
   ```
 
-Besides regular methods, you can also define get/set accessors like this:
+Besides, regular methods, you can also define get/set accessors like this:
 
 ```typescript
 abstract class Duckable {

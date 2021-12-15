@@ -470,7 +470,7 @@ describe('core/request', () => {
 				await retryDelayTest(() => new Promise((res) => setTimeout(res, 200)), 200);
 			});
 
-			it('retrying with the speeduped response', async () => {
+			it('retrying with the speedup response', async () => {
 				const req = await request('http://localhost:3000/retry/speedup', {
 					timeout: 300,
 					retry: 2
