@@ -6,7 +6,7 @@ This module provides a middleware to omit duplicated errors from a log event.
 
 Only the first event will get to the next middleware when an application tries to log events with the same errors.
 
-This behavior doesn't affect a log event that doesn't have an error.
+This behavior doesn't affect a log event that does not have an error.
 
 ### Important notice
 

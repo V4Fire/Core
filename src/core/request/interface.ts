@@ -274,13 +274,13 @@ export interface CreateRequestOptions<D = unknown> {
 	retry?: RetryOptions | number;
 
 	/**
-	 * Mime type of the request data (if not specified, it will be casted dynamically)
+	 * Mime type of the request data (if not specified, it will be cast dynamically)
 	 */
 	contentType?: string;
 
 	/**
 	 * Type of the response data:
-	 * (if not specified, it will be casted dynamically from response headers):
+	 * (if not specified, it will be cast dynamically from response headers):
 	 *
 	 * 1. `'text'` - result is interpreted as a simple string;
 	 * 1. `'json'` - result is interpreted as a JSON string;
