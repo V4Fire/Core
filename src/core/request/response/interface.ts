@@ -14,6 +14,8 @@ import type { DataType } from 'core/mime-type';
 import type { OkStatuses, WrappedDecoders, WrappedDecoder } from 'core/request/interface';
 import type { defaultResponseOpts } from 'core/request/response/const';
 
+import type StreamController from 'core/request/simple-stream-controller';
+
 export type ResponseType =
 	DataType |
 	'object';
@@ -52,6 +54,7 @@ export interface ResponseOptions {
 	headers?: string | Dictionary<string>;
 	decoder?: WrappedDecoder | WrappedDecoders;
 	jsonReviver?: JSONCb | false;
+	streamController?: StreamController;
 }
 
 export type NormalizedResponseOptions = typeof defaultResponseOpts & ResponseOptions;

@@ -15,14 +15,16 @@ import Range from 'core/range';
 import AbortablePromise from 'core/promise/abortable';
 
 import { IS_NODE } from 'core/env';
-import { once, unimplemented } from 'core/functools';
+import { once } from 'core/functools';
 import { convertIfDate } from 'core/json';
 import { getDataType } from 'core/mime-type';
 
 import { normalizeHeaderName } from 'core/request/utils';
 import { defaultResponseOpts, noContentStatusCodes } from 'core/request/response/const';
 
-import type { OkStatuses, WrappedDecoders } from 'core/request/interface';
+import type StreamController from 'core/request/simple-stream-controller';
+
+import type { OkStatuses, WrappedDecoders, RequestChunk } from 'core/request/interface';
 
 import type {
 
@@ -104,7 +106,10 @@ export default class Response<
 	 */
 	readonly body: CanPromise<ResponseTypeValue>;
 
-	[Symbol.asyncIterator]: () => AsyncGenerator<Uint8Array>;
+	/**
+	 * Stream controller for handling async iteration
+	 */
+	readonly streamController?: StreamController<RequestChunk>;
 
 	/**
 	 * @param [body] - response body
@@ -417,6 +422,17 @@ export default class Response<
 
 				}, this.parent);
 			});
+	}
+
+	/**
+	 * Async iterator to iterate through stream
+	 */
+	async*[Symbol.asyncIterator](): AsyncGenerator<RequestChunk> {
+		if (!this.streamController) {
+			throw new Error('Stream controller wasn\'t provided');
+		}
+
+		yield* this.streamController[Symbol.asyncIterator]();
 	}
 
 	/**

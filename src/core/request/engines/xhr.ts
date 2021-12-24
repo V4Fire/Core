@@ -19,7 +19,9 @@ import Response from 'core/request/response';
 import RequestError from 'core/request/error';
 
 import { convertDataToSend } from 'core/request/engines/helpers';
-import type { RequestEngine, NormalizedCreateRequestOptions } from 'core/request/interface';
+import type { RequestEngine, NormalizedCreateRequestOptions, RequestChunk } from 'core/request/interface';
+
+import StreamController from 'core/request/simple-stream-controller';
 
 /**
  * Creates request by using XMLHttpRequest with the specified parameters and returns a promise
@@ -90,7 +92,8 @@ const request: RequestEngine = (params) => {
 
 	return new AbortablePromise<Response>(async (resolve, reject, onAbort) => {
 		const
-			{status} = await AbortablePromise.resolve(isOnline(), p.parent);
+			{status} = await AbortablePromise.resolve(isOnline(), p.parent),
+			streamController = new StreamController<RequestChunk>();
 
 		if (!status) {
 			return reject(new RequestError(RequestError.Offline, {
@@ -102,8 +105,23 @@ const request: RequestEngine = (params) => {
 			xhr.abort();
 		});
 
-		xhr.addEventListener('load', () => {
-			const res = new Response(xhr.response, {
+		xhr.addEventListener('onprogress', (event: ProgressEvent) => {
+			streamController.add({data: null, ...Object.select(event, ['loaded', 'total'])});
+		});
+
+		const resBody = new Promise((resolve) => {
+			xhr.addEventListener('load', () => {
+				streamController.close();
+				resolve(xhr.response);
+			});
+		});
+
+		xhr.addEventListener('readystatechange', () => {
+			if (xhr.readyState !== 2) {
+				return;
+			}
+
+			resolve(new Response(resBody, {
 				parent: p.parent,
 				important: p.important,
 				responseType: p.responseType,
@@ -111,23 +129,23 @@ const request: RequestEngine = (params) => {
 				status: xhr.status,
 				headers: xhr.getAllResponseHeaders(),
 				decoder: p.decoders,
-				jsonReviver: p.jsonReviver
-			});
-
-			// eslint-disable-next-line @typescript-eslint/require-await
-			res[Symbol.asyncIterator] = async function* iter() {
-					yield typeof xhr.response === 'string' ? new TextEncoder().encode(xhr.response) : xhr.response;
-			};
-
-			resolve(res);
+				jsonReviver: p.jsonReviver,
+				streamController
+			}));
 		});
 
 		xhr.addEventListener('error', (error) => {
-			reject(new RequestError(RequestError.Engine, {error}));
+			const requestError = new RequestError(RequestError.Engine, {error});
+
+			streamController.destroy(requestError);
+			reject(requestError);
 		});
 
 		xhr.addEventListener('timeout', () => {
-			reject(new RequestError(RequestError.Timeout));
+			const requestError = new RequestError(RequestError.Timeout);
+
+			streamController.destroy(requestError);
+			reject(requestError);
 		});
 
 		xhr.send(body);

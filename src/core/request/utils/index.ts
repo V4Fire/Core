@@ -14,7 +14,7 @@
 import { caches } from 'core/request/const';
 import { tplRgxp } from 'core/request/utils/const';
 
-import type { NormalizedCreateRequestOptions } from 'core/request/interface';
+import type { NormalizedCreateRequestOptions, ControllablePromise } from 'core/request/interface';
 
 export * from 'core/request/utils/const';
 
@@ -221,4 +221,24 @@ export function dropCache(): void {
 	});
 
 	caches.clear();
+}
+
+/**
+ * Return promise that can be resolved externally
+ */
+export function createControllablePromise<R = unknown>(): ControllablePromise<R> {
+	let
+		promiseResolve,
+		promiseReject;
+
+	const promise = <ControllablePromise<R>>new Promise(
+		(resolve, reject) => {
+			promiseResolve = resolve;
+			promiseReject = reject;
+		}
+	);
+
+	promise.resolveNow = promiseResolve;
+	promise.rejectNow = promiseReject;
+	return promise;
 }

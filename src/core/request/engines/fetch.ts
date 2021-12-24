@@ -7,8 +7,7 @@
  */
 
 //#if node_js
-import fetch from 'node-fetch';
-import AbortController from 'abort-controller';
+import fetch from 'core/request/engines/mock-fetch';
 //#endif
 
 import AbortablePromise from 'core/promise/abortable';
@@ -17,8 +16,10 @@ import { isOnline } from 'core/net';
 import Response, { ResponseTypeValueP } from 'core/request/response';
 import RequestError from 'core/request/error';
 
+import StreamController from 'core/request/simple-stream-controller';
+
 import { convertDataToSend } from 'core/request/engines/helpers';
-import type { RequestEngine, NormalizedCreateRequestOptions } from 'core/request/interface';
+import type { RequestEngine, NormalizedCreateRequestOptions, RequestChunk } from 'core/request/interface';
 
 /**
  * Creates request by using the fetch API with the specified parameters and returns a promise
@@ -71,7 +72,8 @@ const request: RequestEngine = (params) => {
 		}
 
 		const
-			req = fetch(p.url, normalizedOpts);
+			req = fetch(p.url, normalizedOpts),
+			streamController = new StreamController<RequestChunk>();
 
 		let
 			timer;
@@ -80,43 +82,52 @@ const request: RequestEngine = (params) => {
 			timer = setTimeout(() => controller.abort(), p.timeout);
 		}
 
-		onAbort(() => {
+		onAbort((err) => {
+			streamController.destroy(err);
 			controller.abort();
 		});
 
-		req.then(async (response) => {
+		req.then((response) => {
 			clearTimeout(timer);
 
-			const cachedChunks: Uint8Array[] = [];
-
-			let pendingChunk: Promise<ReadableStreamDefaultReadResult<Uint8Array>> | null;
+			const
+				contentLength = response.headers.get('Content-Length'),
+				totalLength = contentLength != null ? Number(contentLength) : null;
 
 			const rawBody = (async () => {
-				const reader: ReadableStreamDefaultReader<Uint8Array> = response.body.getReader();
+				let receivedLength = 0;
 
-				let totalLength = 0;
+				if (response.body != null) {
+					const reader: ReadableStreamDefaultReader<Uint8Array> = response.body.getReader();
 
-				while (true) {
-					pendingChunk = reader.read();
+					while (true) {
+						const {done, value} = await reader.read();
 
-					const {done, value} = await pendingChunk;
+						if (done) {
+							streamController.close();
+							break;
+						}
 
-					if (done) {
-						pendingChunk = null;
-						break;
+						receivedLength += value!.length;
+						streamController.add({
+							data: value ?? null,
+							loaded: receivedLength,
+							total: totalLength
+						});
 					}
-
-					cachedChunks.push(value!);
-					totalLength += value!.length;
 				}
 
-				const allChunks = new Uint8Array(totalLength);
+				const allChunks = new Uint8Array(receivedLength);
 
 				let pos = 0;
 
-				for (const chunk of cachedChunks) {
-					allChunks.set(chunk, pos);
-					pos += chunk.length;
+				for (const {data} of streamController) {
+					if (data == null) {
+						continue;
+					}
+
+					allChunks.set(data, pos);
+					pos += data.length;
 				}
 
 				return allChunks;
@@ -143,7 +154,7 @@ const request: RequestEngine = (params) => {
 					body = rawBody.then((buf) => buf.buffer);
 			}
 
-			const res = new Response(body, {
+			resolve(new Response(body, {
 				parent: p.parent,
 				important: p.important,
 				responseType: p.responseType,
@@ -151,36 +162,19 @@ const request: RequestEngine = (params) => {
 				status: response.status,
 				headers,
 				decoder: p.decoders,
-				jsonReviver: p.jsonReviver
-			});
-
-			res[Symbol.asyncIterator] = async function* iter() {
-				try {
-					let pos = 0;
-
-					while (true) {
-						if (pos < cachedChunks.length) {
-							yield cachedChunks[pos];
-							pos++;
-							continue;
-						}
-
-						if (!pendingChunk) {
-							return;
-						}
-
-						await pendingChunk;
-					}
-				} catch {}
-			};
-
-			resolve(res);
+				jsonReviver: p.jsonReviver,
+				streamController
+			}));
 
 		}, (error) => {
 			clearTimeout(timer);
 
-			const type = error.name === 'AbortError' ? RequestError.Timeout : RequestError.Engine;
-			reject(new RequestError(type, {error}));
+			const
+				type = error.name === 'AbortError' ? RequestError.Timeout : RequestError.Engine,
+				requestError = new RequestError(type, {error});
+
+			streamController.destroy(requestError);
+			reject(requestError);
 		});
 
 	}, p.parent);

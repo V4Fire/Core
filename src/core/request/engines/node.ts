@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import got, { Options, CancelableRequest, Response as GotResponse, GotStream } from 'got';
+import got, { Options, Response as GotResponse } from 'got';
 
 import AbortablePromise from 'core/promise/abortable';
 import { isOnline } from 'core/net';
@@ -14,8 +14,12 @@ import { isOnline } from 'core/net';
 import Response, { ResponseTypeValueP } from 'core/request/response';
 import RequestError from 'core/request/error';
 
+import { writeableStreamMethods } from 'core/request/engines/const';
+
+import StreamController from 'core/request/simple-stream-controller';
+
 import { convertDataToSend } from 'core/request/engines/helpers';
-import type { RequestEngine, NormalizedCreateRequestOptions } from 'core/request/interface';
+import type { RequestEngine, NormalizedCreateRequestOptions, RequestChunk } from 'core/request/interface';
 
 /**
  * Creates request by using node.js with the specified parameters and returns a promise
@@ -42,7 +46,6 @@ const request: RequestEngine = (params) => {
 		method: p.method,
 		timeout: p.timeout,
 		retry: 0,
-		isStream: true,
 		headers,
 		body
 	};
@@ -58,110 +61,96 @@ const request: RequestEngine = (params) => {
 		}
 
 		const
-			stream = <ReturnType<GotStream>>got(p.url, normalizedOpts);
+			stream = got.stream(p.url, <any>normalizedOpts),
+			streamController = new StreamController<RequestChunk>();
 
-		onAbort(() => {
+		onAbort((err) => {
+			streamController.destroy(err);
 			stream.destroy();
 		});
 
-		const cachedChunks: Uint8Array[] = [];
-
-		let
-			receivedLength = 0,
-			resBody: ResponseTypeValueP;
-
-		let pendingChunk: ReturnType<typeof createResolvablePromise> | null = createResolvablePromise();
-
-		const rawBody = new AbortablePromise<Uint8Array>((resolve) => {
-			stream.on('end', () => {
-				const allChunks = new Uint8Array(receivedLength);
-
-				let pos = 0;
-
-				for (const chunk of cachedChunks) {
-					allChunks.set(chunk, pos);
-					pos += chunk.length;
-				}
-
-				pendingChunk!.resolveNow();
-				pendingChunk = null;
-				resolve(allChunks);
-			});
-		}, p.parent);
-
-		stream.on('data', (chunk) => {
-			cachedChunks.push(chunk);
-			receivedLength += chunk.length;
-			pendingChunk!.resolveNow();
-			pendingChunk = createResolvablePromise();
-		});
-
-		stream.on('error', (error) => {
-			const type = error.name === 'TimeoutError' ? RequestError.Timeout : RequestError.Engine;
-			reject(new RequestError(type, {error}));
-		});
-
-		switch (p.responseType) {
-			case 'json':
-			case 'document':
-			case 'text':
-				resBody = rawBody.then((buf) => new TextDecoder('utf-8').decode(buf));
-				break;
-
-			default:
-				resBody = rawBody.then((buf) => buf.buffer);
+		if (needEndStream(normalizedOpts)) {
+			stream.end();
 		}
 
-		stream.on('response', (res) => {
-			const result = new Response(Object.cast(resBody), {
+		stream.on('error', (error) => {
+			const
+				type = error.name === 'TimeoutError' ? RequestError.Timeout : RequestError.Engine,
+				requestError = new RequestError(type, {error});
+
+			streamController.destroy(requestError);
+			reject(requestError);
+		});
+
+		stream.on('response', (response: GotResponse) => {
+			const
+				contentLength = <string | null>response.headers['Content-Length'],
+				totalLength = contentLength != null ? Number(contentLength) : null;
+
+			const rawBody = (async () => {
+				let
+					allChunks,
+					receivedLength = 0;
+
+				try {
+					for await (const chunk of stream) {
+						receivedLength += chunk.length;
+						streamController.add({
+							data: chunk,
+							loaded: receivedLength,
+							total: totalLength
+						});
+					}
+
+					streamController.close();
+					allChunks = new Uint8Array(receivedLength);
+
+					let pos = 0;
+
+					for (const {data} of streamController) {
+						if (data == null) {
+							continue;
+						}
+
+						allChunks.set(data, pos);
+						pos += data.length;
+					}
+				} catch {}
+
+				return <Uint8Array>allChunks;
+			})();
+
+			let resBody: ResponseTypeValueP;
+
+			switch (p.responseType) {
+				case 'json':
+				case 'document':
+				case 'text':
+					resBody = rawBody.then((buf: Uint8Array) => new TextDecoder('utf-8').decode(buf));
+					break;
+
+				default:
+					resBody = rawBody.then((buf: Uint8Array) => buf.buffer);
+			}
+
+			resolve(new Response(resBody, {
 				parent: p.parent,
 				important: p.important,
 				responseType: p.responseType,
 				okStatuses: p.okStatuses,
-				status: res.statusCode,
-				headers: <Dictionary<string>>res.headers,
+				status: response.statusCode,
+				headers: <Dictionary<string>>response.headers,
 				jsonReviver: p.jsonReviver,
-				decoder: p.decoders
-			});
-
-			result[Symbol.asyncIterator] = async function* iter() {
-				try {
-					let pos = 0;
-
-					while (true) {
-						if (pos < cachedChunks.length) {
-							yield cachedChunks[pos];
-							pos++;
-							continue;
-						}
-
-						if (!pendingChunk) {
-							return;
-						}
-
-						await pendingChunk;
-					}
-				} catch {}
-			};
-
-			resolve(result);
+				decoder: p.decoders,
+				streamController
+			}));
 		});
 
+		function needEndStream({body, method}: Options): boolean {
+			return body == null && method != null && writeableStreamMethods.includes(method.toUpperCase());
+		}
+
 	}, p.parent);
-
-	function createResolvablePromise(): AbortablePromise<undefined> & { resolveNow(): void } {
-		let promiseResolve;
-
-		const promise = <AbortablePromise<undefined> & { resolveNow(): void }>new AbortablePromise<undefined>(
-			(resolve) => {
-				promiseResolve = resolve;
-			},
-			p.parent
-		);
-
-		promise.resolveNow = promiseResolve;
-		return promise;
-	}
 };
 
 export default request;

@@ -75,8 +75,14 @@ export type WrappedDecoders = Iterable<WrappedDecoder>;
 
 export type CacheType = 'memory' | 'offline';
 
+export interface RequestChunk {
+	data: Uint8Array | null;
+	loaded: number;
+	total: number | null;
+}
+
 export interface RequestResponseObject<D = unknown> {
-	[Symbol.asyncIterator](): AsyncGenerator<Uint8Array>;
+	[Symbol.asyncIterator](): AsyncGenerator<RequestChunk>;
 	data: Nullable<D>;
 	response: Response<D>;
 	ctx: Readonly<RequestContext<D>>;
@@ -160,6 +166,11 @@ export type Middlewares<D = unknown> =
 	Iterable<Middleware<D>>;
 
 export type RequestAPIValue<T = string> = Nullable<T> | (() => Nullable<T>);
+
+export type ControllablePromise<R = unknown> = Promise<R> & {
+	resolveNow(value?: R): void;
+	rejectNow(error: any): void;
+};
 
 /**
  * Object with API parameters. If the API is specified it will be concatenated with

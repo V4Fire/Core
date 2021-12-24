@@ -20,7 +20,7 @@ import Response from 'core/request/response';
 import RequestError from 'core/request/error';
 import RequestContext from 'core/request/context';
 
-import { merge } from 'core/request/utils';
+import { merge, createControllablePromise } from 'core/request/utils';
 import { defaultRequestOpts, globalOpts } from 'core/request/const';
 
 import type {
@@ -146,7 +146,8 @@ function request<D = unknown>(
 	const run = (...args) => {
 		const
 			ctx = RequestContext.decorateContext(baseCtx, path, resolver, ...args),
-			requestParams = ctx.params;
+			requestParams = ctx.params,
+			responseWithoutBody = createControllablePromise<Response>();
 
 		const middlewareParams = {
 			opts: requestParams,
@@ -270,8 +271,10 @@ function request<D = unknown>(
 					decoders: ctx.decoders
 				};
 
-				const
-					createReq = () => requestParams.engine(reqOpts);
+				const createReq = () => requestParams.engine(reqOpts).then((res) => {
+					responseWithoutBody.resolveNow(res);
+					return res;
+				});
 
 				if (requestParams.retry != null) {
 					const retryParams: RetryOptions = Object.isNumber(requestParams.retry) ?
@@ -362,9 +365,7 @@ function request<D = unknown>(
 					data = await response.decode();
 
 				return {
-					async*[Symbol.asyncIterator]() {
-						yield* response[Symbol.asyncIterator]();
-					},
+					[Symbol.asyncIterator]: response[Symbol.asyncIterator],
 					data,
 					response,
 					ctx,
@@ -374,8 +375,7 @@ function request<D = unknown>(
 		});
 
 		parent[Symbol.asyncIterator] = async function* iter() {
-			const res = <RequestResponseObject<D>>await parent;
-			yield* res[Symbol.asyncIterator]();
+			yield* (await responseWithoutBody)[Symbol.asyncIterator]();
 		};
 
 		return parent;
