@@ -10,13 +10,13 @@
  * [[include:core/request/README.md]]
  * @packageDocumentation
  */
-
+import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 import log from 'core/log';
 
 import AbortablePromise from 'core/promise/abortable';
 import { isOnline } from 'core/net';
 
-import Response from 'core/request/response';
+import Response, { ListenerFn } from 'core/request/response';
 import RequestError from 'core/request/error';
 import RequestContext from 'core/request/context';
 
@@ -33,7 +33,8 @@ import type {
 
 	RequestResponse,
 	RequestFunctionResponse,
-	RequestResponseObject
+	RequestResponseObject,
+	RequestPromise
 
 } from 'core/request/interface';
 
@@ -149,13 +150,19 @@ function request<D = unknown>(
 			requestParams = ctx.params,
 			responseWithoutBody = createControllablePromise<Response>();
 
+		const eventEmitter = new EventEmitter({
+			wildcard: true,
+			newListener: true,
+			removeListener: true
+		});
+
 		const middlewareParams = {
 			opts: requestParams,
 			ctx,
 			globalOpts
 		};
 
-		const parent = new AbortablePromise(async (resolve, reject, onAbort) => {
+		const parent = <RequestPromise>new AbortablePromise(async (resolve, reject, onAbort) => {
 			const errDetails = {
 				request: requestParams
 			};
@@ -268,6 +275,7 @@ function request<D = unknown>(
 					...requestParams,
 					url,
 					parent,
+					eventEmitter,
 					decoders: ctx.decoders
 				};
 
@@ -376,6 +384,10 @@ function request<D = unknown>(
 
 		parent[Symbol.asyncIterator] = async function* iter() {
 			yield* (await responseWithoutBody)[Symbol.asyncIterator]();
+		};
+
+		parent.on = (eventName: string, listener: ListenerFn): void => {
+			eventEmitter.on(eventName, listener);
 		};
 
 		return parent;

@@ -11,8 +11,10 @@ import got, { Options, Response as GotResponse } from 'got';
 import AbortablePromise from 'core/promise/abortable';
 import { isOnline } from 'core/net';
 
-import Response, { ResponseTypeValueP } from 'core/request/response';
+import Response, { ResponseEventEmitter, ResponseTypeValue, ResponseTypeValueP } from 'core/request/response';
 import RequestError from 'core/request/error';
+
+import { RequestEvents } from 'core/request/const';
 
 import { writeableStreamMethods } from 'core/request/engines/const';
 
@@ -73,11 +75,22 @@ const request: RequestEngine = (params) => {
 			stream.end();
 		}
 
+		p.eventEmitter.on('newListener', (event) => {
+			if (RequestEvents.includes(event)) {
+				return;
+			}
+
+			stream.on(event, (...values: unknown[]) => {
+				p.eventEmitter.emit(event, ...values);
+			});
+		});
+
 		stream.on('error', (error) => {
 			const
 				type = error.name === 'TimeoutError' ? RequestError.Timeout : RequestError.Engine,
 				requestError = new RequestError(type, {error});
 
+			p.eventEmitter.emit('error', requestError);
 			streamController.destroy(requestError);
 			reject(requestError);
 		});
@@ -93,13 +106,17 @@ const request: RequestEngine = (params) => {
 					receivedLength = 0;
 
 				try {
-					for await (const chunk of stream) {
-						receivedLength += chunk.length;
-						streamController.add({
-							data: chunk,
+					for await (const data of stream) {
+						receivedLength += data.length;
+
+						const chunk = {
+							data,
 							loaded: receivedLength,
 							total: totalLength
-						});
+						};
+
+						p.eventEmitter.emit('progress', chunk);
+						streamController.add(chunk);
 					}
 
 					streamController.close();
@@ -133,7 +150,12 @@ const request: RequestEngine = (params) => {
 					resBody = rawBody.then((buf: Uint8Array) => buf.buffer);
 			}
 
-			resolve(new Response(resBody, {
+			resBody = (<Promise<ResponseTypeValue>>resBody).then((result) => {
+				p.eventEmitter.emit('load', result);
+				return result;
+			});
+
+			const res = new Response(resBody, {
 				parent: p.parent,
 				important: p.important,
 				responseType: p.responseType,
@@ -145,8 +167,12 @@ const request: RequestEngine = (params) => {
 				headers: <Dictionary<string>>response.headers,
 				jsonReviver: p.jsonReviver,
 				decoder: p.decoders,
-				streamController
-			}));
+				streamController,
+				eventEmitter: <ResponseEventEmitter>p.eventEmitter
+			});
+
+			p.eventEmitter.emit('response', res);
+			resolve(res);
 		});
 
 		function needEndStream({body, method}: Options): boolean {

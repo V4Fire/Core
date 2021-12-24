@@ -10,7 +10,6 @@
  * [[include:core/request/response/README.md]]
  * @packageDocumentation
  */
-
 import Range from 'core/range';
 import AbortablePromise from 'core/promise/abortable';
 
@@ -37,6 +36,9 @@ import type {
 	ResponseHeaders,
 	ResponseOptions,
 
+	ListenerFn,
+	ResponseEventEmitter,
+
 	JSONLikeValue
 
 } from 'core/request/response/interface';
@@ -52,7 +54,7 @@ export * from 'core/request/response/interface';
  */
 export default class Response<
 	D extends Nullable<string | JSONLikeValue | ArrayBuffer | Blob | Document | unknown
-> = unknown> {
+> = unknown> implements ResponseEventEmitter {
 	/**
 	 * Value of the response data type
 	 */
@@ -82,11 +84,6 @@ export default class Response<
 	 * True, if response was obtained through a redirect
 	 */
 	readonly redirected?: boolean;
-
-	/**
-	 * Stream controller for handling async iteration
-	 */
-	readonly streamController?: StreamController<RequestChunk>;
 
 	/**
 	 * True if the response is valid
@@ -131,6 +128,16 @@ export default class Response<
 	readonly body: CanPromise<ResponseTypeValue>;
 
 	/**
+	 * Stream controller for handling async iteration
+	 */
+	readonly streamController?: StreamController<RequestChunk>;
+
+	/**
+	 * Event emitter
+	 */
+	protected readonly emitter: ResponseEventEmitter;
+
+	/**
 	 * @param [body] - response body
 	 * @param [opts] - additional options
 	 */
@@ -142,12 +149,14 @@ export default class Response<
 		this.parent = p.parent;
 		this.important = p.important;
 
+		this.status = p.status;
+		this.okStatuses = ok;
+		this.statusText = p.statusText;
+
 		this.url = p.url;
 		this.redirected = p.redirected;
 
-		this.status = p.status;
-		this.statusText = p.statusText;
-		this.okStatuses = ok;
+		this.emitter = p.eventEmitter;
 
 		this.ok = ok instanceof Range ?
 			ok.contains(this.status) :
@@ -459,16 +468,52 @@ export default class Response<
 	}
 
 	/**
+	 * Synchronously calls each of the listeners registered for the event named eventName,
+	 * in the order they were registered,passing the supplied arguments to each.
+	 * Returns true if the event had listeners, false otherwise.
+	 */
+	emit(eventName: string, values: any[]): boolean {
+		return this.emitter.emit(eventName, values);
+	}
+
+	/**
+	 * Adds the listener function to the end of the listeners array for the event named eventName
+	 */
+	on(eventName: string, listener: ListenerFn): this {
+		this.emitter.on(eventName, listener);
+		return this;
+	}
+
+	/**
+	 * Adds a one-time listener function for the event named eventName.
+	 */
+	once(eventName: string, listener: ListenerFn): this {
+		this.emitter.once(eventName, listener);
+		return this;
+	}
+
+	/**
+	 * Removes the specified listener from the listener array for the event named eventName
+	 */
+	off(eventName: string, listener: ListenerFn): this {
+		this.emitter.off(eventName, listener);
+		return this;
+	}
+
+	/**
 	 * Returns a normalized object of HTTP headers from the specified string or object
 	 * @param headers
 	 */
 	protected parseHeaders(
-		headers: CanUndef<string | Dictionary<CanArray<string>>>
+		headers: CanUndef<string | Dictionary<CanArray<string>> | Headers>
 	): ResponseHeaders {
-		const
-			dict = {};
+		let init;
 
-		if (Object.isString(headers)) {
+		if (headers instanceof Headers) {
+			init = headers;
+		} else if (Object.isString(headers)) {
+			init = {};
+
 			for (let o = headers.split(/[\r\n]+/), i = 0; i < o.length; i++) {
 				const
 					header = o[i];
@@ -478,12 +523,12 @@ export default class Response<
 				}
 
 				const [name, value] = header.split(':', 2);
-				dict[normalizeHeaderName(name)] = value.trim();
+				init[normalizeHeaderName(name)] = value.trim();
 			}
 
-		} else if (headers instanceof Headers) {
-
 		} else if (headers != null) {
+			init = {};
+
 			for (let keys = Object.keys(headers), i = 0; i < keys.length; i++) {
 				const
 					name = keys[i],
@@ -493,11 +538,11 @@ export default class Response<
 					continue;
 				}
 
-				dict[normalizeHeaderName(name)] = (Object.isArray(value) ? value.join(';') : value).trim();
+				init[normalizeHeaderName(name)] = (Object.isArray(value) ? value.join(';') : value).trim();
 			}
 		}
 
-		const res = new Headers(dict);
+		const res = new Headers(init);
 
 		return <ResponseHeaders>new Proxy(res, {
 			get(target: Headers, prop: HeaderName, receiver: unknown): CanUndef<HeaderValue> {

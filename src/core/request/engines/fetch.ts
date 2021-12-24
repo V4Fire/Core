@@ -13,7 +13,7 @@ import fetch from 'core/request/engines/mock-fetch';
 import AbortablePromise from 'core/promise/abortable';
 import { isOnline } from 'core/net';
 
-import Response, { ResponseTypeValueP } from 'core/request/response';
+import Response, { ResponseTypeValueP, ResponseEventEmitter, ResponseTypeValue } from 'core/request/response';
 import RequestError from 'core/request/error';
 
 import StreamController from 'core/request/simple-stream-controller';
@@ -109,11 +109,15 @@ const request: RequestEngine = (params) => {
 						}
 
 						receivedLength += value!.length;
-						streamController.add({
+
+						const chunk = {
 							data: value ?? null,
 							loaded: receivedLength,
 							total: totalLength
-						});
+						};
+
+						p.eventEmitter.emit('progress', chunk);
+						streamController.add(chunk);
 					}
 				}
 
@@ -154,7 +158,12 @@ const request: RequestEngine = (params) => {
 					body = rawBody.then((buf) => buf.buffer);
 			}
 
-			resolve(new Response(body, {
+			body = (<Promise<ResponseTypeValue>>body).then((result) => {
+				p.eventEmitter.emit('load', result);
+				return result;
+			});
+
+			const res = new Response(body, {
 				parent: p.parent,
 				important: p.important,
 				redirected: response.redirected,
@@ -165,8 +174,12 @@ const request: RequestEngine = (params) => {
 				headers,
 				decoder: p.decoders,
 				jsonReviver: p.jsonReviver,
-				streamController
-			}));
+				streamController,
+				eventEmitter: <ResponseEventEmitter>p.eventEmitter
+			});
+
+			p.eventEmitter.emit('response', res);
+			resolve(res);
 
 		}, (error) => {
 			clearTimeout(timer);
@@ -175,6 +188,7 @@ const request: RequestEngine = (params) => {
 				type = error.name === 'AbortError' ? RequestError.Timeout : RequestError.Engine,
 				requestError = new RequestError(type, {error});
 
+			p.eventEmitter.emit('error', requestError);
 			streamController.destroy(requestError);
 			reject(requestError);
 		});

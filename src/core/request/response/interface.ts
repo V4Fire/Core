@@ -5,7 +5,6 @@
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
-
 import type AbortablePromise from 'core/promise/abortable';
 
 import type { StatusCodes } from 'core/status-codes';
@@ -50,6 +49,17 @@ export type HeadersLikeDictionary = Omit<{
 
 export type ResponseHeaders = Headers & HeadersLikeDictionary;
 
+export interface ListenerFn {
+	(...values: any[]): void;
+}
+
+export interface ResponseEventEmitter {
+	emit(event: string, ...values: any[]): boolean;
+	on(event: string, listener: ListenerFn): this;
+	once(event: string, listener: ListenerFn): this;
+	off(event: string, listener: ListenerFn): this;
+}
+
 export interface ResponseOptions {
 	parent?: AbortablePromise;
 	important?: boolean;
@@ -63,6 +73,7 @@ export interface ResponseOptions {
 	decoder?: WrappedDecoder | WrappedDecoders;
 	jsonReviver?: JSONCb | false;
 	streamController?: StreamController;
+	eventEmitter?: ResponseEventEmitter;
 }
 
 export type NormalizedResponseOptions = typeof defaultResponseOpts & ResponseOptions;

@@ -5,13 +5,14 @@
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
+import type { EventEmitter2 as EventEmitter } from 'eventemitter2';
 
 import type Range from 'core/range';
 import type AbortablePromise from 'core/promise/abortable';
 import type { AbstractCache } from 'core/cache';
 
 import type Response from 'core/request/response';
-import type { ResponseType } from 'core/request/response';
+import type { ListenerFn, ResponseType } from 'core/request/response';
 
 import type RequestError from 'core/request/error';
 import type RequestContext from 'core/request/context';
@@ -114,6 +115,7 @@ export interface RequestOptions {
 	readonly important?: boolean;
 	readonly credentials?: boolean;
 	readonly parent: AbortablePromise;
+	readonly eventEmitter: EventEmitter;
 }
 
 export type RequestQuery =
@@ -170,6 +172,11 @@ export type RequestAPIValue<T = string> = Nullable<T> | (() => Nullable<T>);
 export type ControllablePromise<R = unknown> = Promise<R> & {
 	resolveNow(value?: R): void;
 	rejectNow(error: any): void;
+};
+
+export type RequestPromise = AbortablePromise & {
+	[Symbol.asyncIterator](): AsyncGenerator<RequestChunk, void>;
+	on(eventName: string, listener: ListenerFn): void;
 };
 
 /**

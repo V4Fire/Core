@@ -15,8 +15,9 @@ import AbortablePromise from 'core/promise/abortable';
 import { IS_NODE } from 'core/env';
 import { isOnline } from 'core/net';
 
-import Response from 'core/request/response';
+import Response, { ResponseEventEmitter } from 'core/request/response';
 import RequestError from 'core/request/error';
+import { RequestEvents } from 'core/request/const';
 
 import { convertDataToSend } from 'core/request/engines/helpers';
 import type { RequestEngine, NormalizedCreateRequestOptions, RequestChunk } from 'core/request/interface';
@@ -105,12 +106,29 @@ const request: RequestEngine = (params) => {
 			xhr.abort();
 		});
 
+		p.eventEmitter.on('newListener', (event) => {
+			if (RequestEvents.includes(event)) {
+				return;
+			}
+
+			xhr.addEventListener(event, (...values: unknown[]) => {
+				p.eventEmitter.emit(event, ...values);
+			});
+		});
+
 		xhr.addEventListener('onprogress', (event: ProgressEvent) => {
-			streamController.add({data: null, ...Object.select(event, ['loaded', 'total'])});
+			const chunk = {
+				data: null,
+				...Object.select(event, ['loaded', 'total'])
+			};
+
+			p.eventEmitter.emit('progress', chunk);
+			streamController.add(chunk);
 		});
 
 		const resBody = new Promise((resolve) => {
 			xhr.addEventListener('load', () => {
+				p.eventEmitter.emit('load', xhr.response);
 				streamController.close();
 				resolve(xhr.response);
 			});
@@ -123,7 +141,7 @@ const request: RequestEngine = (params) => {
 
 			const redirected = xhr.status === 301 || xhr.status === 302;
 
-			resolve(new Response(resBody, {
+			const response = new Response(resBody, {
 				parent: p.parent,
 				important: p.important,
 				redirected: redirected || undefined,
@@ -134,13 +152,18 @@ const request: RequestEngine = (params) => {
 				headers: xhr.getAllResponseHeaders(),
 				decoder: p.decoders,
 				jsonReviver: p.jsonReviver,
-				streamController
-			}));
+				streamController,
+				eventEmitter: <ResponseEventEmitter>p.eventEmitter
+			});
+
+			p.eventEmitter.emit('response', response);
+			resolve(response);
 		});
 
 		xhr.addEventListener('error', (error) => {
 			const requestError = new RequestError(RequestError.Engine, {error});
 
+			p.eventEmitter.emit('error', requestError);
 			streamController.destroy(requestError);
 			reject(requestError);
 		});
@@ -148,6 +171,7 @@ const request: RequestEngine = (params) => {
 		xhr.addEventListener('timeout', () => {
 			const requestError = new RequestError(RequestError.Timeout);
 
+			p.eventEmitter.emit('error', requestError);
 			streamController.destroy(requestError);
 			reject(requestError);
 		});

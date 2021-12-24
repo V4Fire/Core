@@ -77,3 +77,10 @@ export const defaultRequestOpts = {
 	engine: <RequestEngine>engine,
 	querySerializer: toQueryString
 };
+
+export const RequestEvents = [
+	'response',
+	'progress',
+	'load',
+	'error'
+];
