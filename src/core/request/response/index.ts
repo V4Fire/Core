@@ -22,6 +22,8 @@ import { getDataType } from 'core/mime-type';
 import { normalizeHeaderName } from 'core/request/utils';
 import { defaultResponseOpts, noContentStatusCodes } from 'core/request/response/const';
 
+import Headers, { HeaderName, HeadersProperties, HeaderValue } from 'core/request/headers';
+
 import type StreamController from 'core/request/simple-stream-controller';
 
 import type { OkStatuses, WrappedDecoders, RequestChunk } from 'core/request/interface';
@@ -38,6 +40,8 @@ import type {
 	JSONLikeValue
 
 } from 'core/request/response/interface';
+
+export * from 'core/request/headers';
 
 export * from 'core/request/response/const';
 export * from 'core/request/response/interface';
@@ -63,6 +67,26 @@ export default class Response<
 	 * Value of the response status code
 	 */
 	readonly status: number;
+
+	/**
+	 * Response’s status message
+	 */
+	readonly statusText: string;
+
+	/**
+	 * The request URL or the final URL after redirects
+	 */
+	readonly url: string;
+
+	/**
+	 * True, if response was obtained through a redirect
+	 */
+	readonly redirected?: boolean;
+
+	/**
+	 * Stream controller for handling async iteration
+	 */
+	readonly streamController?: StreamController<RequestChunk>;
 
 	/**
 	 * True if the response is valid
@@ -107,11 +131,6 @@ export default class Response<
 	readonly body: CanPromise<ResponseTypeValue>;
 
 	/**
-	 * Stream controller for handling async iteration
-	 */
-	readonly streamController?: StreamController<RequestChunk>;
-
-	/**
 	 * @param [body] - response body
 	 * @param [opts] - additional options
 	 */
@@ -123,7 +142,11 @@ export default class Response<
 		this.parent = p.parent;
 		this.important = p.important;
 
+		this.url = p.url;
+		this.redirected = p.redirected;
+
 		this.status = p.status;
+		this.statusText = p.statusText;
 		this.okStatuses = ok;
 
 		this.ok = ok instanceof Range ?
@@ -443,7 +466,7 @@ export default class Response<
 		headers: CanUndef<string | Dictionary<CanArray<string>>>
 	): ResponseHeaders {
 		const
-			res = {};
+			dict = {};
 
 		if (Object.isString(headers)) {
 			for (let o = headers.split(/[\r\n]+/), i = 0; i < o.length; i++) {
@@ -455,8 +478,10 @@ export default class Response<
 				}
 
 				const [name, value] = header.split(':', 2);
-				res[normalizeHeaderName(name)] = value.trim();
+				dict[normalizeHeaderName(name)] = value.trim();
 			}
+
+		} else if (headers instanceof Headers) {
 
 		} else if (headers != null) {
 			for (let keys = Object.keys(headers), i = 0; i < keys.length; i++) {
@@ -468,10 +493,20 @@ export default class Response<
 					continue;
 				}
 
-				res[normalizeHeaderName(name)] = (Object.isArray(value) ? value.join(';') : value).trim();
+				dict[normalizeHeaderName(name)] = (Object.isArray(value) ? value.join(';') : value).trim();
 			}
 		}
 
-		return Object.freeze(res);
+		const res = new Headers(dict);
+
+		return <ResponseHeaders>new Proxy(res, {
+			get(target: Headers, prop: HeaderName, receiver: unknown): CanUndef<HeaderValue> {
+				if (HeadersProperties.includes(prop)) {
+					return Reflect.get(target, prop, receiver);
+				}
+
+				return target.get(prop) ?? undefined;
+			}
+		});
 	}
 }

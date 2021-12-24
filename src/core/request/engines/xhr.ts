@@ -121,12 +121,16 @@ const request: RequestEngine = (params) => {
 				return;
 			}
 
+			const redirected = xhr.status === 301 || xhr.status === 302;
+
 			resolve(new Response(resBody, {
 				parent: p.parent,
 				important: p.important,
+				redirected: redirected || undefined,
 				responseType: p.responseType,
 				okStatuses: p.okStatuses,
 				status: xhr.status,
+				statusText: xhr.statusText,
 				headers: xhr.getAllResponseHeaders(),
 				decoder: p.decoders,
 				jsonReviver: p.jsonReviver,

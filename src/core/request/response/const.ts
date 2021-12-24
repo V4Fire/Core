@@ -12,8 +12,10 @@ import type { ResponseType } from 'core/request';
 
 export const defaultResponseOpts = {
 	responseType: <ResponseType>'text',
+	url: '',
 	okStatuses: new Range(200, 299),
 	status: 200,
+	statusText: 'OK',
 	headers: {}
 };
 

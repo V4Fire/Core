@@ -14,6 +14,9 @@ import type { DataType } from 'core/mime-type';
 import type { OkStatuses, WrappedDecoders, WrappedDecoder } from 'core/request/interface';
 import type { defaultResponseOpts } from 'core/request/response/const';
 
+import type Headers from 'core/request/headers';
+import type { HeaderName, HeaderValue } from 'core/request/headers/interface';
+
 import type StreamController from 'core/request/simple-stream-controller';
 
 export type ResponseType =
@@ -41,16 +44,21 @@ export type JSONLikeValue =
 	unknown[] |
 	Dictionary;
 
-export interface ResponseHeaders {
-	readonly [name: DictionaryKey]: string;
-}
+export type HeadersLikeDictionary = Omit<{
+	readonly [name: HeaderName]: CanUndef<HeaderValue>;
+}, keyof Headers>;
+
+export type ResponseHeaders = Headers & HeadersLikeDictionary;
 
 export interface ResponseOptions {
 	parent?: AbortablePromise;
 	important?: boolean;
+	redirected?: boolean;
+	url?: string;
 	responseType?: ResponseType;
 	okStatuses?: OkStatuses;
 	status?: StatusCodes;
+	statusText?: string;
 	headers?: string | Dictionary<string>;
 	decoder?: WrappedDecoder | WrappedDecoders;
 	jsonReviver?: JSONCb | false;

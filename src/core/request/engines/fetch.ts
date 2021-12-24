@@ -157,9 +157,11 @@ const request: RequestEngine = (params) => {
 			resolve(new Response(body, {
 				parent: p.parent,
 				important: p.important,
+				redirected: response.redirected,
 				responseType: p.responseType,
 				okStatuses: p.okStatuses,
 				status: response.status,
+				statusText: response.statusText,
 				headers,
 				decoder: p.decoders,
 				jsonReviver: p.jsonReviver,
