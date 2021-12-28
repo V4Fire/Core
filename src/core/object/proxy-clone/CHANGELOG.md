@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.73.2 (2021-12-28)
+
+#### :bug: Bug Fix
+
+* Fixed a bug when adding a new property to the clone object
+
 ## v3.73.0 (2021-12-14)
 
 #### :bug: Bug Fix

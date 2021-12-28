@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.73.2 (2021-12-28)
+
+#### :bug: Bug Fix
+
+* Fixed a bug when adding a new property to the clone object `core/object/proxy-clone`
+
 ## v3.73.1 (2021-12-16)
 
 #### :bug: Bug Fix

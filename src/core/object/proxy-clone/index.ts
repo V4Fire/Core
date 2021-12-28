@@ -183,16 +183,16 @@ export default function proxyClone<T>(obj: T): T {
 				}
 
 				if (needWrap) {
-					if (key in resolvedTarget) {
+					if ((key in resolvedTarget)) {
 						const valStore = store.get(resolvedTarget) ?? new Map();
 						store.set(resolvedTarget, valStore);
 						valStore.set(key, val);
 
 					} else {
 						Object.defineProperty(receiver, key, {
-							enumerable: true,
 							configurable: true,
 							writable: true,
+							enumerable: true,
 							value: val
 						});
 					}
