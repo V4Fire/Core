@@ -35,6 +35,12 @@ export default class RequestContext<D = unknown> extends Super<D> {
 	 * @param [apiURL] - base API URL
 	 */
 	resolveAPI(apiURL: Nullable<string> = globalOpts.api): string {
+		interface DomainParams {
+			def?: string[];
+			slice?: number;
+			join?: boolean;
+		}
+
 		const
 			compute = (v) => Object.isFunction(v) ? v() : v,
 			api = <{[K in keyof RequestAPI]: Nullable<string>}>({...this.params.api});
@@ -47,52 +53,6 @@ export default class RequestContext<D = unknown> extends Super<D> {
 		if (api.url != null) {
 			return api.url;
 		}
-
-		const resolve = (name, def?) => {
-			const
-				val = String((api[name] != null ? api[name] : def) ?? '');
-
-			switch (name) {
-				case 'auth':
-					return val !== '' ? `${val}@` : '';
-
-				case 'port':
-					return val !== '' ? `:${val}` : '';
-
-				case 'protocol':
-					return val !== '' ? `${val.replace(/:\/+$/, '')}://` : '';
-
-				default:
-					return val;
-			}
-		};
-
-		const resolveDomains = ({def = [], slice = 0, join = true} = {}) => {
-			const
-				list = Array.from({length: 6}, (el, i) => i + 1).slice(slice).reverse(),
-				url = <string[]>[];
-
-			for (let i = 0; i < list.length; i++) {
-				const
-					lvl = list[i];
-
-				let
-					domain = (lvl === 1 ? api.zone : api[`domain${lvl}`]);
-
-				if (domain == null) {
-					domain = def[lvl - 1];
-
-				} else if (domain === '') {
-					domain = undefined;
-				}
-
-				if (domain != null) {
-					url.push(domain);
-				}
-			}
-
-			return join !== false ? url.join('.') : url;
-		};
 
 		if (apiURL == null) {
 			const
@@ -133,6 +93,52 @@ export default class RequestContext<D = unknown> extends Super<D> {
 				nm
 			);
 		});
+
+		function resolveDomains({def = [], slice = 0, join = true}: DomainParams = {}) {
+			const
+				list = Array.from({length: 6}, (el, i) => i + 1).slice(slice).reverse(),
+				url = <string[]>[];
+
+			for (let i = 0; i < list.length; i++) {
+				const
+					lvl = list[i];
+
+				let
+					domain = (lvl === 1 ? api.zone : api[`domain${lvl}`]);
+
+				if (domain == null) {
+					domain = def[lvl - 1];
+
+				} else if (domain === '') {
+					domain = undefined;
+				}
+
+				if (domain != null) {
+					url.push(domain);
+				}
+			}
+
+			return join !== false ? url.join('.') : url;
+		}
+
+		function resolve(name: string, def?: string): string {
+			const
+				val = String((api[name] != null ? api[name] : def) ?? '');
+
+			switch (name) {
+				case 'auth':
+					return val !== '' ? `${val}@` : '';
+
+				case 'port':
+					return val !== '' ? `:${val}` : '';
+
+				case 'protocol':
+					return val !== '' ? `${val.replace(/:\/+$/, '')}://` : '';
+
+				default:
+					return val;
+			}
+		}
 	}
 
 	/**

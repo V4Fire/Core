@@ -17,6 +17,18 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 * Now to freeze and clone response data will be used `core/object/proxy-readonly` and `core/object/proxy-clone` if it's possible `core/request/response`
 
+## v3.73.2 (2021-12-28)
+
+#### :bug: Bug Fix
+
+* Fixed a bug when adding a new property to the clone object `core/object/proxy-clone`
+
+## v3.73.1 (2021-12-16)
+
+#### :bug: Bug Fix
+
+* Fixed issues with symlinks `build`
+
 ## v3.73.0 (2021-12-14)
 
 #### :rocket: New Feature

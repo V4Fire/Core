@@ -132,7 +132,9 @@ module.exports = function init(gulp) {
 				depDecl = isDep.exec(file.path);
 
 			if (depDecl) {
-				file.base = resolve.rootDependencies.find((el) => isPathInside(el, depDecl[1]));
+				file.base = resolve.rootDependencies
+					.find((el) => isPathInside(fs.realpathSync(el), fs.realpathSync(depDecl[1])));
+
 				return src.lib(depDecl[2]);
 			}
 

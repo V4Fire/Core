@@ -8,7 +8,7 @@ Concatenates the specified parts of URL-s with correctly arranging of slashes an
 
 ```js
 import { concatURLs } from 'core/url';
-concatURLs('foo/baz', '/bar', 'bla') === '/foo/baz/bar/bla';
+concatURLs('foo/baz', '/bar', 'bla') === 'foo/baz/bar/bla';
 ```
 
 ## Parsing/Serialization
