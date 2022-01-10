@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.73.3 (2022-01-10)
+
+#### :bug: Bug Fix
+
+* Fixed emitting of mutation events produced via `Object.defineProperty` `core/object/watch`
+
 ## v3.73.2 (2021-12-28)
 
 #### :bug: Bug Fix

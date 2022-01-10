@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.73.3 (2022-01-10)
+
+#### :bug: Bug Fix
+
+* Fixed emitting of mutation events produced via `Object.defineProperty`
+
 ## v3.73.0 (2021-12-14)
 
 #### :bug: Bug Fix
