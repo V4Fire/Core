@@ -9,7 +9,7 @@
 import { createControllablePromise } from 'core/request/utils';
 
 export default class SimpleStreamController<ItemType = unknown> {
-	public readonly items: ItemType[];
+	protected readonly items: ItemType[];
 	protected pendingPromise: ReturnType<typeof createControllablePromise> | null;
 
 	constructor() {
