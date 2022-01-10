@@ -6,11 +6,11 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import Response, { ResponseTypeValue } from 'core/request/response';
+import Response, { ListenerFn, ResponseTypeValue } from 'core/request/response';
 import { caches } from 'core/request/const';
 
 import Super from 'core/request/context/modules/methods';
-import type { RequestResponse, RequestResponseObject } from 'core/request/interface';
+import type { RequestResponse, RequestResponseObject, RequestChunk } from 'core/request/interface';
 
 export default class RequestContext<D = unknown> extends Super<D> {
 	/**
@@ -80,7 +80,12 @@ export default class RequestContext<D = unknown> extends Super<D> {
 			});
 
 		return {
-			[Symbol.asyncIterator]: response[Symbol.asyncIterator],
+			on(eventName: string, listener: ListenerFn): void {
+				response.on(eventName, listener);
+			},
+			[Symbol.asyncIterator](): AsyncGenerator<RequestChunk> {
+				return response[Symbol.asyncIterator]();
+			},
 			response,
 			ctx: this,
 			data: await response.decode(),

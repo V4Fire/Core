@@ -33,6 +33,7 @@ import type { RequestEngine, RequestOptions } from 'core/request/interface';
 
 import { availableParams } from 'core/request/engines/provider/const';
 import type { AvailableOptions, MethodsMapping, Meta } from 'core/request/engines/provider/interface';
+import Headers from 'core/request/headers';
 
 export * from 'core/request/engines/provider/const';
 export * from 'core/request/engines/provider/interface';
@@ -83,7 +84,7 @@ export default function createProviderEngine(
 			...methodsMapping
 		};
 
-		const parent = new AbortablePromise<Response>(async (resolve, reject, onAbort): AbortablePromise<Response> => {
+		const parent = new AbortablePromise<Response>(async (resolve, reject, onAbort) => {
 			await new Promise((r) => {
 				setImmediate(r);
 			});
@@ -136,25 +137,47 @@ export default function createProviderEngine(
 				req.abort();
 			});
 
-			const
-				{data, response: res} = await req;
+			req.on('progress', (chunk) => {
+				params.eventEmitter.emit('progress', chunk);
+			});
 
-			const
-				headers = Object.reject(res.headers, 'content-type');
+			let response: Response;
 
-			return resolve(new Response(data, {
-				responseType: 'object',
-				important: res.important,
-				parent: params.parent,
+			const data = req.then(({data}) => {
+				resolve(response);
+				return data;
+			}, (err) => {
+				reject(err);
+				return null;
+			});
 
-				okStatuses: res.okStatuses,
-				status: res.status,
+			req.on('response', (res) => {
+				const headers = Object.reject(
+					res.headers instanceof Headers ? Object.fromEntries(res.headers) : res.headers,
+					'content-type'
+				);
 
-				headers,
-				decoder: params.decoders,
-				jsonReviver: params.jsonReviver
-			}));
+				response = new Response(data, {
+					responseType: 'object',
+					important: res.important,
+					parent: params.parent,
 
+					okStatuses: res.okStatuses,
+					status: res.status,
+
+					url: res.url,
+					statusText: res.statusText,
+					redirected: res.redirected,
+					streamController: res.streamController,
+					eventEmitter: params.eventEmitter,
+
+					headers,
+					decoder: params.decoders,
+					jsonReviver: params.jsonReviver
+				});
+
+				params.eventEmitter.emit('response', response);
+			});
 		}, params.parent);
 
 		return parent;

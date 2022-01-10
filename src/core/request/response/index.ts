@@ -21,7 +21,7 @@ import { getDataType } from 'core/mime-type';
 import { normalizeHeaderName } from 'core/request/utils';
 import { defaultResponseOpts, noContentStatusCodes } from 'core/request/response/const';
 
-import Headers, { HeaderName, HeadersProperties, HeaderValue } from 'core/request/headers';
+import Headers, { BasicHeadersInit, HeaderName, HeaderValue } from 'core/request/headers';
 
 import type StreamController from 'core/request/simple-stream-controller';
 
@@ -83,7 +83,7 @@ export default class Response<
 	/**
 	 * True, if response was obtained through a redirect
 	 */
-	readonly redirected?: boolean;
+	readonly redirected: boolean | null;
 
 	/**
 	 * True if the response is valid
@@ -135,7 +135,7 @@ export default class Response<
 	/**
 	 * Event emitter
 	 */
-	protected readonly emitter: ResponseEventEmitter;
+	protected readonly emitter?: ResponseEventEmitter;
 
 	/**
 	 * @param [body] - response body
@@ -157,6 +157,7 @@ export default class Response<
 		this.redirected = p.redirected;
 
 		this.emitter = p.eventEmitter;
+		this.streamController = p.streamController;
 
 		this.ok = ok instanceof Range ?
 			ok.contains(this.status) :
@@ -460,7 +461,7 @@ export default class Response<
 	 * Async iterator to iterate through stream
 	 */
 	async*[Symbol.asyncIterator](): AsyncGenerator<RequestChunk> {
-		if (!this.streamController) {
+		if (this.streamController == null) {
 			throw new Error('Stream controller wasn\'t provided');
 		}
 
@@ -473,14 +474,14 @@ export default class Response<
 	 * Returns true if the event had listeners, false otherwise.
 	 */
 	emit(eventName: string, values: any[]): boolean {
-		return this.emitter.emit(eventName, values);
+		return Boolean(this.emitter?.emit(eventName, values));
 	}
 
 	/**
 	 * Adds the listener function to the end of the listeners array for the event named eventName
 	 */
 	on(eventName: string, listener: ListenerFn): this {
-		this.emitter.on(eventName, listener);
+		this.emitter?.on(eventName, listener);
 		return this;
 	}
 
@@ -488,7 +489,7 @@ export default class Response<
 	 * Adds a one-time listener function for the event named eventName.
 	 */
 	once(eventName: string, listener: ListenerFn): this {
-		this.emitter.once(eventName, listener);
+		this.emitter?.once(eventName, listener);
 		return this;
 	}
 
@@ -496,7 +497,7 @@ export default class Response<
 	 * Removes the specified listener from the listener array for the event named eventName
 	 */
 	off(eventName: string, listener: ListenerFn): this {
-		this.emitter.off(eventName, listener);
+		this.emitter?.off(eventName, listener);
 		return this;
 	}
 
@@ -507,13 +508,11 @@ export default class Response<
 	protected parseHeaders(
 		headers: CanUndef<string | Dictionary<CanArray<string>> | Headers>
 	): ResponseHeaders {
-		let init;
+		let init: BasicHeadersInit = {};
 
 		if (headers instanceof Headers) {
 			init = headers;
 		} else if (Object.isString(headers)) {
-			init = {};
-
 			for (let o = headers.split(/[\r\n]+/), i = 0; i < o.length; i++) {
 				const
 					header = o[i];
@@ -527,8 +526,6 @@ export default class Response<
 			}
 
 		} else if (headers != null) {
-			init = {};
-
 			for (let keys = Object.keys(headers), i = 0; i < keys.length; i++) {
 				const
 					name = keys[i],
@@ -546,11 +543,11 @@ export default class Response<
 
 		return <ResponseHeaders>new Proxy(res, {
 			get(target: Headers, prop: HeaderName, receiver: unknown): CanUndef<HeaderValue> {
-				if (HeadersProperties.includes(prop)) {
+				if (prop in target) {
 					return Reflect.get(target, prop, receiver);
 				}
 
-				return target.get(prop) ?? undefined;
+				return target.get.call(receiver, prop) ?? undefined;
 			}
 		});
 	}

@@ -14,16 +14,20 @@ export * from 'core/request/headers/interface';
 export default class Headers {
 	protected readonly headers: Map<NormalizedHeaderName, NormalizedHeaderValue>;
 
-	constructor(init?: BasicHeadersInit | Headers) {
-		this.headers = Array.isArray(init) ? new Map(init) : new Map();
+	constructor(init?: BasicHeadersInit) {
+		this.headers = new Map();
 
 		if (init instanceof Headers) {
-			for (const [key, value] of init.entries()) {
-				this.set(key, value);
+			for (const [name, value] of init.entries()) {
+				this.set(name, value);
 			}
-		} else if (init != null && typeof init === 'object') {
-			for (const key of Object.keys(init)) {
-				this.set(key, init[key]);
+		} else if (Array.isArray(init)) {
+			for (const [name, value] of init) {
+				this.set(name, value);
+			}
+		} else if (init != null) {
+			for (const name of Object.keys(init)) {
+				this.set(name, <string>init[name]);
 			}
 		}
 	}

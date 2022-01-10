@@ -1,4 +1,5 @@
 /* eslint-disable max-lines-per-function */
+/* eslint-disable max-lines */
 
 /*!
  * V4Fire Core
@@ -13,7 +14,10 @@ import { set, get } from 'core/env';
 
 import Provider, { provider } from 'core/data';
 import baseRequest, { globalOpts, RequestError } from 'core/request';
+import Headers from 'core/request/headers';
 import { defaultRequestOpts } from 'core/request/const';
+
+import Response from 'core/request/response';
 
 import nodeEngine from 'core/request/engines/node';
 import fetchEngine from 'core/request/engines/fetch';
@@ -28,7 +32,8 @@ class TestRequestChainProvider extends Provider {
 }
 
 const
-	emptyBodyStatuses = [204, 304];
+	emptyBodyStatuses = [204, 304],
+	faviconInBase64 = 'AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAnISL6JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL5JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL1JyEi9ichIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEihCchIpgnISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEixCUgIRMmICEvJyEi5ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIrYnISKSJyEi9ichIlxQREUAHxobAichIo4nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISJeJyEiICchIuAnISJJJiAhbCYgITgmICEnJyEi4ichIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEiXichIiAnISLdJyEihichIuknISKkIRwdBCchIoUnISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIl4nISIgJyEi4ichIu4nISL/JyEi8CYgIT8mICEhJyEi3CchIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISJeJyEiHychIuUnISL/JyEi/ychIv8nISKrIh0eBiYhInwnISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEiXSYgITUnISLvJyEi/ychIv8nISL/JyEi9CYgIUcmICEbJyEi1ichIv8nISL/JyEi/ychIv8nISL/JyEi/ichImknISKjJyEi/ychIv8nISL/JyEi/ychIv8nISKzIRwdBiYhIX0nISL/JyEi/ychIv8nISL/JyEi/ychIvwnISK+JyEi9CchIv8nISL/JyEi/ychIv8nISL/JyEi9yYhIoonISKzJyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ichIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL6JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==';
 
 describe('core/request', () => {
 	const engines = new Map([
@@ -501,6 +506,159 @@ describe('core/request', () => {
 				}
 			});
 
+			it('responses with object that contains "url" property', async () => {
+				const
+					{response: res1} = await request('http://localhost:3000/json/1'),
+					{response: res2} = await request('http://localhost:3000/redirect');
+
+				expect(res1.url).toBe('http://localhost:3000/json/1');
+				expect(res2.url).toBe('http://localhost:3000/json/1');
+			});
+
+			it('responses with object that contains "headers" property as dictionary that is instance of Headers class', async () => {
+				const
+					{response} = await request('http://localhost:3000/header'),
+					{headers} = response;
+
+				expect(headers).toBeInstanceOf(Headers);
+				expect(headers['some-header-name']).toBe('some-header-value');
+				expect(headers.get('some-header-name')).toBe('some-header-value');
+			});
+
+			it('emits "response" event', (done) => {
+				const req = request('http://localhost:3000/json');
+
+				req.on('response', (res) => {
+					expect(res).toBeInstanceOf(Response);
+					done();
+				});
+			});
+
+			it('emits "error" event', (done) => {
+				const req = request('invalid-url');
+
+				req.on('error', (err) => {
+					expect(err).toBeInstanceOf(RequestError);
+					done();
+				});
+			});
+
+			it('emits "progress" event', async () => {
+				const
+					req = request('http://localhost:3000/json/1'),
+					chunks = [];
+
+				req.on('progress', (chunk) => {
+					chunks.push(chunk);
+				});
+
+				await req;
+
+				expect(chunks.length).toBeGreaterThan(0);
+				expect(chunks.every((chunk) => 'data' in chunk && 'loaded' in chunk && 'total' in chunk)).toBeTrue();
+			});
+
+			it('emits "load" event', (done) => {
+				const req = request('http://localhost:3000/json/1', {
+					responseType: 'json'
+				});
+
+				req.on('load', (body) => {
+					expect(body).toEqual({id: 1, value: 'things'});
+					done();
+				});
+			});
+
+			if (name === 'xhr') {
+				xhrTests();
+			} else {
+				notXhrTests();
+			}
+
+			function xhrTests() {
+				it('responses with object that contains "redirected" property', async () => {
+					const
+						{response: res1} = await request('http://localhost:3000/json/1'),
+						{response: res2} = await request('http://localhost:3000/redirect');
+
+					expect(res1.redirected).toBeNull();
+					expect(res2.redirected).toBeNull();
+				});
+
+				it('returns async iterable promise', async () => {
+					const
+						chunkLengths = [],
+						req = request('http://localhost:3000/favicon.ico');
+
+					let
+						loadedBefore = 0,
+						totalLength;
+
+					for await (const {loaded, total} of req) {
+						if (totalLength == null) {
+							totalLength = total;
+						}
+
+						chunkLengths.push(loaded - loadedBefore);
+						loadedBefore = loaded;
+					}
+
+					expect(totalLength).toBe(1150);
+					expect(loadedBefore).toBe(1150);
+					expect(chunkLengths.every((len) => len > 0)).toBeTrue();
+				});
+
+				it('resolving with async iterable stream', async () => {
+					const
+						chunkLengths = [],
+						req = await request('http://localhost:3000/favicon.ico');
+
+					let
+						loadedBefore = 0,
+						totalLength;
+
+					for await (const {loaded, total} of req) {
+						if (totalLength == null) {
+							totalLength = total;
+						}
+
+						chunkLengths.push(loaded - loadedBefore);
+						loadedBefore = loaded;
+					}
+
+					expect(totalLength).toBe(1150);
+					expect(loadedBefore).toBe(1150);
+					expect(chunkLengths.every((len) => len > 0)).toBeTrue();
+				});
+			}
+
+			function notXhrTests() {
+				it('responses with object that contains "redirected" property', async () => {
+					const
+						{response: res1} = await request('http://localhost:3000/json/1'),
+						{response: res2} = await request('http://localhost:3000/redirect');
+
+					expect(res1.redirected).toBeFalse();
+					expect(res2.redirected).toBeTrue();
+				});
+
+				it('returns async iterable promise', async () => {
+					const
+						req = request('http://localhost:3000/favicon.ico'),
+						result = await convertStreamToBase64(req);
+
+					expect(result).toBe(faviconInBase64);
+				});
+
+				it('resolving with async iterable stream', async () => {
+					const
+						req = await request('http://localhost:3000/favicon.ico'),
+						result = await convertStreamToBase64(req);
+
+					expect(result).toBe(faviconInBase64);
+				});
+			}
+
 			async function retryDelayTest(delay, delayMS) {
 				const startTime = new Date().getTime();
 
@@ -518,6 +676,23 @@ describe('core/request', () => {
 
 				expect(firstRequest - startTime).toBeLessThan(delayMS);
 				requestDelays.forEach((time) => expect(time).toBeGreaterThanOrEqual(delayMS));
+			}
+
+			async function convertStreamToBase64(stream) {
+				let
+					buffer = null,
+					pos = 0;
+
+				for await (const {data, loaded, total} of stream) {
+					if (buffer == null) {
+						buffer = new Uint8Array(total);
+					}
+
+					buffer.set(data, pos);
+					pos = loaded;
+				}
+
+				return Buffer.from(buffer).toString('base64');
 			}
 		});
 	});
@@ -583,9 +758,6 @@ function createServer() {
 	});
 
 	serverApp.get('/favicon.ico', (req, res) => {
-		const
-			faviconInBase64 = 'AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAnISL6JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL5JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL1JyEi9ichIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEihCchIpgnISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEixCUgIRMmICEvJyEi5ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIrYnISKSJyEi9ichIlxQREUAHxobAichIo4nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISJeJyEiICchIuAnISJJJiAhbCYgITgmICEnJyEi4ichIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEiXichIiAnISLdJyEihichIuknISKkIRwdBCchIoUnISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIl4nISIgJyEi4ichIu4nISL/JyEi8CYgIT8mICEhJyEi3CchIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISJeJyEiHychIuUnISL/JyEi/ychIv8nISKrIh0eBiYhInwnISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEiXSYgITUnISLvJyEi/ychIv8nISL/JyEi9CYgIUcmICEbJyEi1ichIv8nISL/JyEi/ychIv8nISL/JyEi/ichImknISKjJyEi/ychIv8nISL/JyEi/ychIv8nISKzIRwdBiYhIX0nISL/JyEi/ychIv8nISL/JyEi/ychIvwnISK+JyEi9CchIv8nISL/JyEi/ychIv8nISL/JyEi9yYhIoonISKzJyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ichIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL6JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==';
-
 		res.type('image/x-icon');
 		res.send(Buffer.from(faviconInBase64, 'base64'));
 	});
@@ -634,6 +806,16 @@ function createServer() {
 		res.status(500);
 		res.json({tryNumber});
 		tryNumber++;
+	});
+
+	serverApp.get('/header', (req, res) => {
+		res
+			.setHeader('Some-Header-Name', 'some-header-value')
+			.sendStatus(200);
+	});
+
+	serverApp.get('/redirect', (req, res) => {
+		res.redirect('http://localhost:3000/json/1');
 	});
 
 	return serverApp.listen(3000);

@@ -16,7 +16,7 @@ import log from 'core/log';
 import AbortablePromise from 'core/promise/abortable';
 import { isOnline } from 'core/net';
 
-import Response, { ListenerFn } from 'core/request/response';
+import Response, { ListenerFn, ResponseEventEmitter } from 'core/request/response';
 import RequestError from 'core/request/error';
 import RequestContext from 'core/request/context';
 
@@ -30,7 +30,7 @@ import type {
 
 	RetryOptions,
 	RequestResolver,
-
+	RequestChunk,
 	RequestResponse,
 	RequestFunctionResponse,
 	RequestResponseObject,
@@ -150,10 +150,11 @@ function request<D = unknown>(
 			requestParams = ctx.params,
 			responseWithoutBody = createControllablePromise<Response>();
 
-		const eventEmitter = new EventEmitter({
+		const eventEmitter = <ResponseEventEmitter>new EventEmitter({
 			wildcard: true,
 			newListener: true,
-			removeListener: true
+			removeListener: true,
+			ignoreErrors: true
 		});
 
 		const middlewareParams = {
@@ -372,14 +373,24 @@ function request<D = unknown>(
 				const
 					data = await response.decode();
 
+				eventEmitter.emit('load', data);
+
 				return {
-					[Symbol.asyncIterator]: response[Symbol.asyncIterator],
+					[Symbol.asyncIterator](): AsyncGenerator<RequestChunk> {
+						return response[Symbol.asyncIterator]();
+					},
+					on(eventName: string, listener: ListenerFn): void {
+						eventEmitter.on(eventName, listener);
+					},
 					data,
 					response,
 					ctx,
 					dropCache: ctx.dropCache.bind(ctx)
 				};
 			}
+		}).catch((err) => {
+			eventEmitter.emit('error', err);
+			throw err;
 		});
 
 		parent[Symbol.asyncIterator] = async function* iter() {

@@ -10,7 +10,7 @@ import type AbortablePromise from 'core/promise/abortable';
 import type { StatusCodes } from 'core/status-codes';
 import type { DataType } from 'core/mime-type';
 
-import type { OkStatuses, WrappedDecoders, WrappedDecoder } from 'core/request/interface';
+import type { OkStatuses, WrappedDecoders, WrappedDecoder, RequestChunk } from 'core/request/interface';
 import type { defaultResponseOpts } from 'core/request/response/const';
 
 import type Headers from 'core/request/headers';
@@ -63,16 +63,16 @@ export interface ResponseEventEmitter {
 export interface ResponseOptions {
 	parent?: AbortablePromise;
 	important?: boolean;
-	redirected?: boolean;
+	redirected?: boolean | null;
 	url?: string;
 	responseType?: ResponseType;
 	okStatuses?: OkStatuses;
 	status?: StatusCodes;
 	statusText?: string;
-	headers?: string | Dictionary<string>;
+	headers?: string | Dictionary<string> | Headers;
 	decoder?: WrappedDecoder | WrappedDecoders;
 	jsonReviver?: JSONCb | false;
-	streamController?: StreamController;
+	streamController?: StreamController<RequestChunk>;
 	eventEmitter?: ResponseEventEmitter;
 }
 

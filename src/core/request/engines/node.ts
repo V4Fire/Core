@@ -11,7 +11,7 @@ import got, { Options, Response as GotResponse } from 'got';
 import AbortablePromise from 'core/promise/abortable';
 import { isOnline } from 'core/net';
 
-import Response, { ResponseEventEmitter, ResponseTypeValue, ResponseTypeValueP } from 'core/request/response';
+import Response, { ResponseTypeValue, ResponseTypeValueP } from 'core/request/response';
 import RequestError from 'core/request/error';
 
 import { RequestEvents } from 'core/request/const';
@@ -75,6 +75,9 @@ const request: RequestEngine = (params) => {
 			stream.end();
 		}
 
+		// @ts-ignore i do what i want
+		p.eventEmitter.removeAllListeners('newListener');
+
 		p.eventEmitter.on('newListener', (event) => {
 			if (RequestEvents.includes(event)) {
 				return;
@@ -87,17 +90,14 @@ const request: RequestEngine = (params) => {
 
 		stream.on('error', (error) => {
 			const
-				type = error.name === 'TimeoutError' ? RequestError.Timeout : RequestError.Engine,
-				requestError = new RequestError(type, {error});
+				type = error.name === 'TimeoutError' ? RequestError.Timeout : RequestError.Engine;
 
-			p.eventEmitter.emit('error', requestError);
-			streamController.destroy(requestError);
-			reject(requestError);
+			reject(new RequestError(type, {error}));
 		});
 
 		stream.on('response', (response: GotResponse) => {
 			const
-				contentLength = <string | null>response.headers['Content-Length'],
+				contentLength = <string | null>response.headers['content-length'],
 				totalLength = contentLength != null ? Number(contentLength) : null;
 
 			const rawBody = (async () => {
@@ -150,11 +150,6 @@ const request: RequestEngine = (params) => {
 					resBody = rawBody.then((buf: Uint8Array) => buf.buffer);
 			}
 
-			resBody = (<Promise<ResponseTypeValue>>resBody).then((result) => {
-				p.eventEmitter.emit('load', result);
-				return result;
-			});
-
 			const res = new Response(resBody, {
 				parent: p.parent,
 				important: p.important,
@@ -168,7 +163,7 @@ const request: RequestEngine = (params) => {
 				jsonReviver: p.jsonReviver,
 				decoder: p.decoders,
 				streamController,
-				eventEmitter: <ResponseEventEmitter>p.eventEmitter
+				eventEmitter: p.eventEmitter
 			});
 
 			p.eventEmitter.emit('response', res);

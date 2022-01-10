@@ -15,7 +15,7 @@ import AbortablePromise from 'core/promise/abortable';
 import { IS_NODE } from 'core/env';
 import { isOnline } from 'core/net';
 
-import Response, { ResponseEventEmitter } from 'core/request/response';
+import Response from 'core/request/response';
 import RequestError from 'core/request/error';
 import { RequestEvents } from 'core/request/const';
 
@@ -106,6 +106,9 @@ const request: RequestEngine = (params) => {
 			xhr.abort();
 		});
 
+		// @ts-ignore i do what i want
+		p.eventEmitter.removeAllListeners('newListener');
+
 		p.eventEmitter.on('newListener', (event) => {
 			if (RequestEvents.includes(event)) {
 				return;
@@ -116,7 +119,7 @@ const request: RequestEngine = (params) => {
 			});
 		});
 
-		xhr.addEventListener('onprogress', (event: ProgressEvent) => {
+		xhr.addEventListener('progress', (event: ProgressEvent) => {
 			const chunk = {
 				data: null,
 				...Object.select(event, ['loaded', 'total'])
@@ -128,7 +131,6 @@ const request: RequestEngine = (params) => {
 
 		const resBody = new Promise((resolve) => {
 			xhr.addEventListener('load', () => {
-				p.eventEmitter.emit('load', xhr.response);
 				streamController.close();
 				resolve(xhr.response);
 			});
@@ -139,12 +141,11 @@ const request: RequestEngine = (params) => {
 				return;
 			}
 
-			const redirected = xhr.status === 301 || xhr.status === 302;
-
 			const response = new Response(resBody, {
 				parent: p.parent,
 				important: p.important,
-				redirected: redirected || undefined,
+				url: xhr.responseURL,
+				redirected: null,
 				responseType: p.responseType,
 				okStatuses: p.okStatuses,
 				status: xhr.status,
@@ -153,7 +154,7 @@ const request: RequestEngine = (params) => {
 				decoder: p.decoders,
 				jsonReviver: p.jsonReviver,
 				streamController,
-				eventEmitter: <ResponseEventEmitter>p.eventEmitter
+				eventEmitter: p.eventEmitter
 			});
 
 			p.eventEmitter.emit('response', response);
@@ -161,19 +162,11 @@ const request: RequestEngine = (params) => {
 		});
 
 		xhr.addEventListener('error', (error) => {
-			const requestError = new RequestError(RequestError.Engine, {error});
-
-			p.eventEmitter.emit('error', requestError);
-			streamController.destroy(requestError);
-			reject(requestError);
+			reject(new RequestError(RequestError.Engine, {error}));
 		});
 
 		xhr.addEventListener('timeout', () => {
-			const requestError = new RequestError(RequestError.Timeout);
-
-			p.eventEmitter.emit('error', requestError);
-			streamController.destroy(requestError);
-			reject(requestError);
+			reject(new RequestError(RequestError.Timeout));
 		});
 
 		xhr.send(body);

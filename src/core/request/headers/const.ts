@@ -50,5 +50,6 @@ export const HeadersProperties: HeaderName[] = [
 	'get',
 	'has',
 	'set',
-	'forEach'
+	'forEach',
+	'entries'
 ];
