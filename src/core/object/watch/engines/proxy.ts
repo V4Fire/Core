@@ -328,9 +328,21 @@ export function watch<T extends object>(
 				return false;
 			}
 
+			const
+				define = (desc) => Reflect.defineProperty(target, key, desc);
+
 			if (lastSetKey === key) {
 				lastSetKey = undefined;
-				return Reflect.defineProperty(target, key, desc);
+				return define(desc);
+			}
+
+			const canDefineWithoutEmit =
+				Object.isSymbol(key) ||
+				resolvedRoot[muteLabel] === true ||
+				blackListStore.has(key);
+
+			if (canDefineWithoutEmit) {
+				return define(desc);
 			}
 
 			const {
@@ -342,25 +354,28 @@ export function watch<T extends object>(
 				mergedDesc = {...desc};
 
 			let
-				val;
+				valToDefine;
 
-			if (desc.get == null && desc.set == null && desc.value !== Reflect.get(target, key, proxy)) {
-				val = desc.value;
+			const needRedefineValue =
+				desc.get == null &&
+				desc.set == null &&
+				'value' in desc &&
+				desc.value !== Reflect.get(target, key, proxy);
+
+			if (needRedefineValue) {
+				valToDefine = desc.value;
 				mergedDesc.value = undefined;
 				mergedDesc.configurable = true;
 				mergedDesc.writable = true;
 			}
 
 			const
-				res = Reflect.defineProperty(target, key, mergedDesc);
+				res = define(mergedDesc);
 
 			if (res) {
-				if (val !== undefined) {
-					Object.cast<Dictionary>(proxy)[key] = val;
-					Reflect.defineProperty(target, key, {
-						configurable,
-						writable
-					});
+				if (valToDefine !== undefined) {
+					Object.cast<Dictionary>(proxy)[key] = valToDefine;
+					define({configurable, writable});
 				}
 
 				return true;

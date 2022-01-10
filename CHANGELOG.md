@@ -17,6 +17,12 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 * Now to freeze and clone response data will be used `core/object/proxy-readonly` and `core/object/proxy-clone` if it's possible `core/request/response`
 
+## v3.73.3 (2022-01-10)
+
+#### :bug: Bug Fix
+
+* Fixed emitting of mutation events produced via `Object.defineProperty` `core/object/watch`
+
 ## v3.73.2 (2021-12-28)
 
 #### :bug: Bug Fix
