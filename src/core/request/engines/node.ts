@@ -11,7 +11,7 @@ import got, { Options, Response as GotResponse } from 'got';
 import AbortablePromise from 'core/promise/abortable';
 import { isOnline } from 'core/net';
 
-import Response, { ResponseTypeValue, ResponseTypeValueP } from 'core/request/response';
+import Response, { ResponseTypeValueP } from 'core/request/response';
 import RequestError from 'core/request/error';
 
 import { RequestEvents } from 'core/request/const';

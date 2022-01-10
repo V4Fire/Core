@@ -13,7 +13,7 @@ import fetch from 'core/request/engines/mock-fetch';
 import AbortablePromise from 'core/promise/abortable';
 import { isOnline } from 'core/net';
 
-import Response, { ResponseTypeValueP, ResponseTypeValue } from 'core/request/response';
+import Response, { ResponseTypeValueP } from 'core/request/response';
 import RequestError from 'core/request/error';
 
 import StreamController from 'core/request/simple-stream-controller';
