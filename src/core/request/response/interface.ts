@@ -14,7 +14,6 @@ import type { OkStatuses, WrappedDecoders, WrappedDecoder, RequestChunk } from '
 import type { defaultResponseOpts } from 'core/request/response/const';
 
 import type Headers from 'core/request/headers';
-import type { HeaderName, HeaderValue } from 'core/request/headers/interface';
 
 import type StreamController from 'core/request/simple-stream-controller';
 
@@ -43,9 +42,7 @@ export type JSONLikeValue =
 	unknown[] |
 	Dictionary;
 
-export type HeadersLikeDictionary = Omit<{
-	readonly [name: HeaderName]: CanUndef<HeaderValue>;
-}, keyof Headers>;
+export type HeadersLikeDictionary = Omit<Dictionary<string>, keyof Headers>;
 
 export type ResponseHeaders = Headers & HeadersLikeDictionary;
 

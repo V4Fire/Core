@@ -21,7 +21,7 @@ import { getDataType } from 'core/mime-type';
 import { normalizeHeaderName } from 'core/request/utils';
 import { defaultResponseOpts, noContentStatusCodes } from 'core/request/response/const';
 
-import Headers, { BasicHeadersInit, HeaderName, HeaderValue } from 'core/request/headers';
+import Headers, { HeadersInit } from 'core/request/headers';
 
 import type StreamController from 'core/request/simple-stream-controller';
 
@@ -508,7 +508,7 @@ export default class Response<
 	protected parseHeaders(
 		headers: CanUndef<string | Dictionary<CanArray<string>> | Headers>
 	): ResponseHeaders {
-		let init: BasicHeadersInit = {};
+		let init: HeadersInit = {};
 
 		if (headers instanceof Headers) {
 			init = headers;
@@ -542,7 +542,7 @@ export default class Response<
 		const res = new Headers(init);
 
 		return <ResponseHeaders>new Proxy(res, {
-			get(target: Headers, prop: HeaderName, receiver: unknown): CanUndef<HeaderValue> {
+			get(target: Headers, prop: string, receiver: unknown): CanUndef<string> {
 				if (prop in target) {
 					return Reflect.get(target, prop, receiver);
 				}

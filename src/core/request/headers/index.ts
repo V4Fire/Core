@@ -1,43 +1,35 @@
-import type {
+import type { HeadersInit } from 'core/request/headers/interface';
+import { normalizeHeaderName, normalizeHeaderValue } from 'core/request/utils';
 
-	BasicHeadersInit,
-	HeaderName,
-	HeaderValue,
-	NormalizedHeaderName,
-	NormalizedHeaderValue
-
-} from 'core/request/headers/interface';
-
-export * from 'core/request/headers/const';
 export * from 'core/request/headers/interface';
 
 export default class Headers {
-	protected readonly headers: Map<NormalizedHeaderName, NormalizedHeaderValue>;
+	protected readonly headers: Map<string, string>;
 
-	constructor(init?: BasicHeadersInit) {
+	constructor(init?: HeadersInit) {
 		this.headers = new Map();
 
+		let iter;
+
 		if (init instanceof Headers) {
-			for (const [name, value] of init.entries()) {
-				this.set(name, value);
-			}
+			iter = init.entries();
 		} else if (Array.isArray(init)) {
-			for (const [name, value] of init) {
-				this.set(name, value);
-			}
+			iter = init;
 		} else if (init != null) {
-			for (const name of Object.keys(init)) {
-				this.set(name, <string>init[name]);
-			}
+			iter = Object.entries(init);
+		}
+
+		for (const [name, value] of iter) {
+			this.set(name, value);
 		}
 	}
 
-	append(name: HeaderName, value: HeaderValue): void {
+	append(name: string, value: string): void {
 		const
-			normalizedName = this.normalizeName(name),
-			normalizedValue = this.normalizeValue(value),
+			normalizedName = normalizeHeaderName(name),
+			normalizedValue = normalizeHeaderValue(value),
 			currentValue = this.headers.get(normalizedName),
-			error = this.validate(normalizedName, normalizedValue);
+			error = validateHeader(normalizedName, normalizedValue);
 
 		if (error) {
 			throw error;
@@ -48,10 +40,10 @@ export default class Headers {
 		this.headers.set(normalizedName, newValue);
 	}
 
-	delete(name: HeaderName): void {
+	delete(name: string): void {
 		const
-			normalizedName = this.normalizeName(name),
-			error = this.validate(normalizedName);
+			normalizedName = normalizeHeaderName(name),
+			error = validateHeader(normalizedName);
 
 		if (error) {
 			throw error;
@@ -60,20 +52,20 @@ export default class Headers {
 		this.headers.delete(normalizedName);
 	}
 
-	entries(): IterableIterator<[NormalizedHeaderName, NormalizedHeaderValue]> {
+	entries(): IterableIterator<[string, string]> {
 		return this.headers.entries();
 	}
 
-	forEach(cb: (value: NormalizedHeaderValue, key: NormalizedHeaderName, parent: Headers) => void, thisArg?: any): void {
+	forEach(cb: (value: string, key: string, parent: Headers) => void, thisArg?: any): void {
 		for (const [key, value] of this.entries()) {
 			cb.call(thisArg, value, key, this);
 		}
 	}
 
-	get(name: HeaderName): NormalizedHeaderValue | null {
+	get(name: string): string | null {
 		const
-			normalizedName = this.normalizeName(name),
-			error = this.validate(normalizedName);
+			normalizedName = normalizeHeaderName(name),
+			error = validateHeader(normalizedName);
 
 		if (error) {
 			throw error;
@@ -82,10 +74,10 @@ export default class Headers {
 		return this.headers.get(normalizedName) ?? null;
 	}
 
-	has(name: HeaderName): boolean {
+	has(name: string): boolean {
 		const
-			normalizedName = this.normalizeName(name),
-			error = this.validate(normalizedName);
+			normalizedName = normalizeHeaderName(name),
+			error = validateHeader(normalizedName);
 
 		if (error) {
 			throw error;
@@ -94,17 +86,17 @@ export default class Headers {
 		return this.headers.has(normalizedName);
 	}
 
-	*keys(): IterableIterator<NormalizedHeaderName> {
+	*keys(): IterableIterator<string> {
 		for (const [name] of this.entries()) {
 			yield name;
 		}
 	}
 
-	set(name: HeaderName, value: HeaderValue): void {
+	set(name: string, value: string): void {
 		const
-			normalizedName = this.normalizeName(name),
-			normalizedValue = this.normalizeValue(value),
-			error = this.validate(normalizedName);
+			normalizedName = normalizeHeaderName(name),
+			normalizedValue = normalizeHeaderValue(value),
+			error = validateHeader(normalizedName);
 
 		if (error) {
 			throw error;
@@ -113,31 +105,23 @@ export default class Headers {
 		this.headers.set(normalizedName, normalizedValue);
 	}
 
-	*values(): IterableIterator<HeaderValue> {
+	*values(): IterableIterator<string> {
 		for (const [_, value] of this.entries()) {
 			yield value;
 		}
 	}
 
-	[Symbol.iterator](): IterableIterator<[HeaderName, HeaderValue]> {
+	[Symbol.iterator](): IterableIterator<[string, string]> {
 		return this.entries();
 	}
+}
 
-	protected validate(name: HeaderName, value?: HeaderValue): TypeError | undefined {
-		if (name === '') {
-			return new TypeError(`Invalid header name: ${name}`);
-		}
-
-		if (value === '') {
-			return new TypeError(`Invalid header value: ${value}`);
-		}
+function validateHeader(name: string, value?: string): TypeError | undefined {
+	if (name === '') {
+		return new TypeError(`Invalid header name: ${name}`);
 	}
 
-	protected normalizeName(name: HeaderName): NormalizedHeaderName {
-		return Object.isSymbol(name) ? name : String(name).trim().toLowerCase();
-	}
-
-	protected normalizeValue(value: HeaderValue): NormalizedHeaderValue {
-		return value.trim();
+	if (value === '') {
+		return new TypeError(`Invalid header value: ${value}`);
 	}
 }

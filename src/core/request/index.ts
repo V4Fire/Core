@@ -376,16 +376,16 @@ function request<D = unknown>(
 				eventEmitter.emit('load', data);
 
 				return {
+					data,
+					response,
+					ctx,
+					dropCache: ctx.dropCache.bind(ctx),
 					[Symbol.asyncIterator](): AsyncGenerator<RequestChunk> {
 						return response[Symbol.asyncIterator]();
 					},
 					on(eventName: string, listener: ListenerFn): void {
 						eventEmitter.on(eventName, listener);
-					},
-					data,
-					response,
-					ctx,
-					dropCache: ctx.dropCache.bind(ctx)
+					}
 				};
 			}
 		}).catch((err) => {
