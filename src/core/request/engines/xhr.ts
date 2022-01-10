@@ -106,9 +106,7 @@ const request: RequestEngine = (params) => {
 			xhr.abort();
 		});
 
-		// @ts-ignore i do what i want
 		p.eventEmitter.removeAllListeners('newListener');
-
 		p.eventEmitter.on('newListener', (event) => {
 			if (RequestEvents.includes(event)) {
 				return;
@@ -153,8 +151,7 @@ const request: RequestEngine = (params) => {
 				headers: xhr.getAllResponseHeaders(),
 				decoder: p.decoders,
 				jsonReviver: p.jsonReviver,
-				streamController,
-				eventEmitter: p.eventEmitter
+				streamController
 			});
 
 			p.eventEmitter.emit('response', response);

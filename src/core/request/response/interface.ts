@@ -5,7 +5,6 @@
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
-import type { EventEmitter2 as EventEmitter } from 'eventemitter2';
 import type AbortablePromise from 'core/promise/abortable';
 
 import type { StatusCodes } from 'core/status-codes';
@@ -64,7 +63,6 @@ export interface ResponseOptions {
 	decoder?: WrappedDecoder | WrappedDecoders;
 	jsonReviver?: JSONCb | false;
 	streamController?: StreamController<RequestChunk>;
-	eventEmitter?: EventEmitter;
 }
 
 export type NormalizedResponseOptions = typeof defaultResponseOpts & ResponseOptions;

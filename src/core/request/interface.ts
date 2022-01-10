@@ -84,7 +84,6 @@ export interface RequestChunk {
 
 export interface RequestResponseObject<D = unknown> {
 	[Symbol.asyncIterator](): AsyncGenerator<RequestChunk>;
-	on(event: string, listener: ListenerFn): void;
 	data: Nullable<D>;
 	response: Response<D>;
 	ctx: Readonly<RequestContext<D>>;

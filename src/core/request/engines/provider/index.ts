@@ -169,8 +169,6 @@ export default function createProviderEngine(
 					statusText: res.statusText,
 					redirected: res.redirected,
 					streamController: res.streamController,
-					eventEmitter: params.eventEmitter,
-
 					headers,
 					decoder: params.decoders,
 					jsonReviver: params.jsonReviver

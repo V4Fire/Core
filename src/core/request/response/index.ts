@@ -10,7 +10,6 @@
  * [[include:core/request/response/README.md]]
  * @packageDocumentation
  */
-import type { EventEmitter2 as EventEmitter } from 'eventemitter2';
 import Range from 'core/range';
 import AbortablePromise from 'core/promise/abortable';
 
@@ -36,8 +35,6 @@ import type {
 
 	ResponseHeaders,
 	ResponseOptions,
-
-	ListenerFn,
 
 	JSONLikeValue
 
@@ -133,11 +130,6 @@ export default class Response<
 	readonly streamController?: StreamController<RequestChunk>;
 
 	/**
-	 * Event emitter
-	 */
-	protected readonly emitter?: EventEmitter;
-
-	/**
 	 * @param [body] - response body
 	 * @param [opts] - additional options
 	 */
@@ -155,8 +147,6 @@ export default class Response<
 
 		this.url = p.url;
 		this.redirected = p.redirected;
-
-		this.emitter = p.eventEmitter;
 		this.streamController = p.streamController;
 
 		this.ok = ok instanceof Range ?
@@ -466,39 +456,6 @@ export default class Response<
 		}
 
 		yield* this.streamController[Symbol.asyncIterator]();
-	}
-
-	/**
-	 * Synchronously calls each of the listeners registered for the event named eventName,
-	 * in the order they were registered,passing the supplied arguments to each.
-	 * Returns true if the event had listeners, false otherwise.
-	 */
-	emit(eventName: string, values: any[]): boolean {
-		return Boolean(this.emitter?.emit(eventName, values));
-	}
-
-	/**
-	 * Adds the listener function to the end of the listeners array for the event named eventName
-	 */
-	on(eventName: string, listener: ListenerFn): this {
-		this.emitter?.on(eventName, listener);
-		return this;
-	}
-
-	/**
-	 * Adds a one-time listener function for the event named eventName.
-	 */
-	once(eventName: string, listener: ListenerFn): this {
-		this.emitter?.once(eventName, listener);
-		return this;
-	}
-
-	/**
-	 * Removes the specified listener from the listener array for the event named eventName
-	 */
-	off(eventName: string, listener: ListenerFn): this {
-		this.emitter?.off(eventName, listener);
-		return this;
 	}
 
 	/**

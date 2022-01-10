@@ -170,8 +170,7 @@ const request: RequestEngine = (params) => {
 				headers,
 				decoder: p.decoders,
 				jsonReviver: p.jsonReviver,
-				streamController,
-				eventEmitter: p.eventEmitter
+				streamController
 			});
 
 			p.eventEmitter.emit('response', res);

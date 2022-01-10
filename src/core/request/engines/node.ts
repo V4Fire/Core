@@ -75,9 +75,7 @@ const request: RequestEngine = (params) => {
 			stream.end();
 		}
 
-		// @ts-ignore i do what i want
 		p.eventEmitter.removeAllListeners('newListener');
-
 		p.eventEmitter.on('newListener', (event) => {
 			if (RequestEvents.includes(event)) {
 				return;
@@ -162,8 +160,7 @@ const request: RequestEngine = (params) => {
 				headers: <Dictionary<string>>response.headers,
 				jsonReviver: p.jsonReviver,
 				decoder: p.decoders,
-				streamController,
-				eventEmitter: p.eventEmitter
+				streamController
 			});
 
 			p.eventEmitter.emit('response', res);

@@ -382,9 +382,6 @@ function request<D = unknown>(
 					dropCache: ctx.dropCache.bind(ctx),
 					[Symbol.asyncIterator](): AsyncGenerator<RequestChunk> {
 						return response[Symbol.asyncIterator]();
-					},
-					on(eventName: string, listener: ListenerFn): void {
-						eventEmitter.on(eventName, listener);
 					}
 				};
 			}
