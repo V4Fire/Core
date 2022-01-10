@@ -5,6 +5,7 @@
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
+import type { EventEmitter2 as EventEmitter } from 'eventemitter2';
 import type AbortablePromise from 'core/promise/abortable';
 
 import type { StatusCodes } from 'core/status-codes';
@@ -50,13 +51,6 @@ export interface ListenerFn {
 	(...values: any[]): void;
 }
 
-export interface ResponseEventEmitter {
-	emit(event: string, ...values: any[]): boolean;
-	on(event: string, listener: ListenerFn): this;
-	once(event: string, listener: ListenerFn): this;
-	off(event: string, listener: ListenerFn): this;
-}
-
 export interface ResponseOptions {
 	parent?: AbortablePromise;
 	important?: boolean;
@@ -70,7 +64,7 @@ export interface ResponseOptions {
 	decoder?: WrappedDecoder | WrappedDecoders;
 	jsonReviver?: JSONCb | false;
 	streamController?: StreamController<RequestChunk>;
-	eventEmitter?: ResponseEventEmitter;
+	eventEmitter?: EventEmitter;
 }
 
 export type NormalizedResponseOptions = typeof defaultResponseOpts & ResponseOptions;

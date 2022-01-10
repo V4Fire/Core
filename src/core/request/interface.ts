@@ -6,12 +6,13 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import type { EventEmitter2 as EventEmitter } from 'eventemitter2';
 import type Range from 'core/range';
 import type AbortablePromise from 'core/promise/abortable';
 import type { AbstractCache } from 'core/cache';
 
 import type Response from 'core/request/response';
-import type { ListenerFn, ResponseType, ResponseEventEmitter } from 'core/request/response';
+import type { ListenerFn, ResponseType } from 'core/request/response';
 
 import type RequestError from 'core/request/error';
 import type RequestContext from 'core/request/context';
@@ -120,7 +121,7 @@ export interface RequestOptions {
 	readonly important?: boolean;
 	readonly credentials?: boolean;
 	readonly parent: AbortablePromise;
-	readonly eventEmitter: ResponseEventEmitter;
+	readonly eventEmitter: EventEmitter;
 }
 
 export type RequestQuery =

@@ -10,6 +10,7 @@
  * [[include:core/request/response/README.md]]
  * @packageDocumentation
  */
+import type { EventEmitter2 as EventEmitter } from 'eventemitter2';
 import Range from 'core/range';
 import AbortablePromise from 'core/promise/abortable';
 
@@ -37,7 +38,6 @@ import type {
 	ResponseOptions,
 
 	ListenerFn,
-	ResponseEventEmitter,
 
 	JSONLikeValue
 
@@ -54,7 +54,7 @@ export * from 'core/request/response/interface';
  */
 export default class Response<
 	D extends Nullable<string | JSONLikeValue | ArrayBuffer | Blob | Document | unknown
-> = unknown> implements ResponseEventEmitter {
+> = unknown> {
 	/**
 	 * Value of the response data type
 	 */
@@ -135,7 +135,7 @@ export default class Response<
 	/**
 	 * Event emitter
 	 */
-	protected readonly emitter?: ResponseEventEmitter;
+	protected readonly emitter?: EventEmitter;
 
 	/**
 	 * @param [body] - response body

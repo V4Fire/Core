@@ -16,7 +16,7 @@ import log from 'core/log';
 import AbortablePromise from 'core/promise/abortable';
 import { isOnline } from 'core/net';
 
-import Response, { ListenerFn, ResponseEventEmitter } from 'core/request/response';
+import Response, { ListenerFn } from 'core/request/response';
 import RequestError from 'core/request/error';
 import RequestContext from 'core/request/context';
 
@@ -150,7 +150,7 @@ function request<D = unknown>(
 			requestParams = ctx.params,
 			responseWithoutBody = createControllablePromise<Response>();
 
-		const eventEmitter = <ResponseEventEmitter>new EventEmitter({
+		const eventEmitter = new EventEmitter({
 			wildcard: true,
 			newListener: true,
 			removeListener: true,
