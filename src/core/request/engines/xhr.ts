@@ -108,7 +108,7 @@ const request: RequestEngine = (params) => {
 
 		p.eventEmitter.removeAllListeners('newListener');
 		p.eventEmitter.on('newListener', (event) => {
-			if (RequestEvents.includes(event)) {
+			if (Object.values(RequestEvents).includes(event)) {
 				return;
 			}
 
@@ -123,7 +123,7 @@ const request: RequestEngine = (params) => {
 				...Object.select(event, ['loaded', 'total'])
 			};
 
-			p.eventEmitter.emit('progress', chunk);
+			p.eventEmitter.emit(RequestEvents.PROGRESS, chunk);
 			streamController.add(chunk);
 		});
 
@@ -154,7 +154,7 @@ const request: RequestEngine = (params) => {
 				streamController
 			});
 
-			p.eventEmitter.emit('response', response);
+			p.eventEmitter.emit(RequestEvents.RESPONSE, response);
 			resolve(response);
 		});
 

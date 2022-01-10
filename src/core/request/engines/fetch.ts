@@ -16,6 +16,7 @@ import { isOnline } from 'core/net';
 import Response, { ResponseTypeValueP } from 'core/request/response';
 import RequestError from 'core/request/error';
 
+import { RequestEvents } from 'core/request/const';
 import StreamController from 'core/request/simple-stream-controller';
 
 import { convertDataToSend } from 'core/request/engines/helpers';
@@ -116,7 +117,7 @@ const request: RequestEngine = (params) => {
 							total: totalLength
 						};
 
-						p.eventEmitter.emit('progress', chunk);
+						p.eventEmitter.emit(RequestEvents.PROGRESS, chunk);
 						streamController.add(chunk);
 					}
 				}
@@ -173,7 +174,7 @@ const request: RequestEngine = (params) => {
 				streamController
 			});
 
-			p.eventEmitter.emit('response', res);
+			p.eventEmitter.emit(RequestEvents.RESPONSE, res);
 			resolve(res);
 
 		}, (error) => {

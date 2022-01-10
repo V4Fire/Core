@@ -78,9 +78,9 @@ export const defaultRequestOpts = {
 	querySerializer: toQueryString
 };
 
-export const RequestEvents = [
-	'response',
-	'progress',
-	'load',
-	'error'
-];
+export const RequestEvents = {
+	RESPONSE: 'response',
+	PROGRESS: 'progress',
+	LOAD: 'load',
+	ERROR: 'error'
+};
