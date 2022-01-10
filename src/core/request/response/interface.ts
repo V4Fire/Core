@@ -5,6 +5,7 @@
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
+
 import type AbortablePromise from 'core/promise/abortable';
 
 import type { StatusCodes } from 'core/status-codes';

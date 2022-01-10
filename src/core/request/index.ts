@@ -10,6 +10,7 @@
  * [[include:core/request/README.md]]
  * @packageDocumentation
  */
+
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 import log from 'core/log';
 
