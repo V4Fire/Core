@@ -22,7 +22,7 @@ import RequestError from 'core/request/error';
 import RequestContext from 'core/request/context';
 
 import { merge, createControllablePromise } from 'core/request/utils';
-import { defaultRequestOpts, globalOpts } from 'core/request/const';
+import { defaultRequestOpts, globalOpts, RequestEvents } from 'core/request/const';
 
 import type {
 
@@ -374,7 +374,7 @@ function request<D = unknown>(
 				const
 					data = await response.decode();
 
-				eventEmitter.emit('load', data);
+				eventEmitter.emit(RequestEvents.LOAD, data);
 
 				return {
 					data,
@@ -387,7 +387,7 @@ function request<D = unknown>(
 				};
 			}
 		}).catch((err) => {
-			eventEmitter.emit('error', err);
+			eventEmitter.emit(RequestEvents.ERROR, err);
 			throw err;
 		});
 

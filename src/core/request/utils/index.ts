@@ -242,3 +242,13 @@ export function createControllablePromise<R = unknown>(): ControllablePromise<R>
 	promise.rejectNow = promiseReject;
 	return promise;
 }
+
+export function validateHeader(name: string, value?: string): TypeError | undefined {
+	if (name === '') {
+		return new TypeError(`Invalid header name: ${name}`);
+	}
+
+	if (value === '') {
+		return new TypeError(`Invalid header value: ${value}`);
+	}
+}
