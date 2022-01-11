@@ -7,7 +7,8 @@
  */
 
 export const
-	READONLY = Symbol('Is readonly');
+	READONLY = Symbol('Is readonly'),
+	PROXY = Symbol('Link to a proxied original object');
 
 export const
 	isNative = /\[native code]/,

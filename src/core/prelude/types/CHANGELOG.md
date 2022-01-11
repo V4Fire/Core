@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.??.?? (2021-??-??)
+
+#### :rocket: New Feature
+
+* Added a new methods `Object.isProxy` and `Object.unwrapProxy`
+
 ## v3.67.0 (2021-12-01)
 
 #### :rocket: New Feature

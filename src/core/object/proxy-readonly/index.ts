@@ -12,7 +12,7 @@
  */
 
 import { unimplement } from 'core/functools/implementation';
-import { READONLY } from 'core/prelude/types/const';
+import { READONLY, PROXY } from 'core/prelude/types/const';
 
 /**
  * Returns a read-only view of the specified object.
@@ -40,6 +40,10 @@ export default function proxyReadonly<T>(obj: T): Readonly<T> {
 			get: (target, key, receiver) => {
 				if (key === READONLY) {
 					return true;
+				}
+
+				if (key === PROXY) {
+					return target;
 				}
 
 				const
@@ -133,13 +137,11 @@ export default function proxyReadonly<T>(obj: T): Readonly<T> {
 			},
 
 			set: () => false,
-
 			defineProperty: () => false,
-
 			deleteProperty: () => false,
 
 			has: (target, key) => {
-				if (key === READONLY) {
+				if (key === READONLY || key === PROXY) {
 					return true;
 				}
 

@@ -144,7 +144,7 @@ type ClassConstructor<C = unknown, ARGS extends any[] = any[]> = AnyFunction<ARG
 };
 
 interface StrictDictionary<T = unknown> {
-	[key: string]: T;
+	[key: PropertyKey]: T;
 }
 
 interface Dictionary<T = unknown> {
@@ -1891,6 +1891,20 @@ interface ObjectConstructor {
 	 * @param value
 	 */
 	isPromiseLike(value: any): value is PromiseLike<unknown>;
+
+	/**
+	 * Returns true if the specified value is looks like a proxy
+	 * @param value
+	 */
+	isProxy<T>(value: T): T extends Primitive ? false : boolean;
+
+	/**
+	 * If the passed value is a proxy object, the method returns an original object.
+	 * Otherwise, the passed object itself.
+	 *
+	 * @param value
+	 */
+	unwrapProxy<T>(value: T): T;
 
 	/**
 	 * Returns true if the specified value is a map

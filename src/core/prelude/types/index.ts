@@ -11,7 +11,7 @@
 import extend from 'core/prelude/extend';
 
 import { deprecate } from 'core/functools';
-import { isNative, toString, nonPrimitiveTypes, READONLY } from 'core/prelude/types/const';
+import { isNative, toString, nonPrimitiveTypes, READONLY, PROXY } from 'core/prelude/types/const';
 
 /** @see [[ObjectConstructor.cast]] */
 extend(Object, 'cast', (value) => value);
@@ -38,6 +38,8 @@ extend(Object, 'isDictionary', isPlainObject);
 extend(Object, 'isPlainObject', isPlainObject);
 
 function isPlainObject(value: unknown): boolean {
+	value = Object.unwrapProxy(value);
+
 	if (!value || typeof value !== 'object') {
 		return false;
 	}
@@ -49,6 +51,8 @@ function isPlainObject(value: unknown): boolean {
 
 /** @see [[ObjectConstructor.isCustomObject]] */
 extend(Object, 'isCustomObject', (value) => {
+	value = Object.unwrapProxy(value);
+
 	let
 		type;
 
@@ -164,6 +168,12 @@ extend(Object, 'isPromiseLike', (value) => {
 	return false;
 });
 
+/** @see [[ObjectConstructor.isProxy]] */
+extend(Object, 'isProxy', (value) => value?.[PROXY] != null);
+
+/** @see [[ObjectConstructor.isProxy]] */
+extend(Object, 'unwrapProxy', (value) => value?.[PROXY] ?? value);
+
 /** @see [[ObjectConstructor.isMap]] */
 extend(Object, 'isMap', (value) => value instanceof Map);
 
@@ -200,7 +210,7 @@ Object.isExtensible = (value) => {
 };
 
 Object.isSealed = (value) =>
-	value == null ? true : isSealed(value) || value[READONLY] === true;
+	value == null || isSealed(value) || value[READONLY] === true;
 
 Object.isFrozen = (value) =>
-	value == null ? true : isFrozen(value) || value[READONLY] === true;
+	value == null || isFrozen(value) || value[READONLY] === true;

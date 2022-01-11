@@ -13,7 +13,7 @@
 
 import { unimplement } from 'core/functools/implementation';
 
-import { NULL } from 'core/object/proxy-clone/const';
+import { toOriginalObject, NULL } from 'core/object/proxy-clone/const';
 import { resolveTarget, getRawValueFromStore, Descriptor } from 'core/object/proxy-clone/helpers';
 
 /**
@@ -44,6 +44,10 @@ export default function proxyClone<T>(obj: T): T {
 
 		const proxy = new Proxy(Object.cast<object>(obj), {
 			get: (target, key, receiver) => {
+				if (key === toOriginalObject) {
+					return target;
+				}
+
 				const
 					resolvedTarget = resolveTarget(target, store).value;
 
@@ -313,6 +317,10 @@ export default function proxyClone<T>(obj: T): T {
 			},
 
 			has: (target, key) => {
+				if (key === toOriginalObject) {
+					return true;
+				}
+
 				const {
 					value: resolvedTarget,
 					needWrap
