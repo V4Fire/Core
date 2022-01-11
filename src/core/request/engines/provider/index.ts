@@ -141,7 +141,8 @@ export default function createProviderEngine(
 				params.eventEmitter.emit('progress', chunk);
 			});
 
-			let response: Response;
+			let
+				response: Response;
 
 			const data = req.then(({data}) => {
 				resolve(response);

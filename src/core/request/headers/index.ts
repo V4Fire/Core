@@ -23,18 +23,12 @@ export default class Headers {
 	constructor(init?: HeadersInit) {
 		this.headers = new Map();
 
-		let iter;
+		if (init != null) {
+			const iter = <Iterable<[string, string]>>(Symbol.iterator in init ? init : Object.entries(init));
 
-		if (init instanceof Headers) {
-			iter = init.entries();
-		} else if (Array.isArray(init)) {
-			iter = init;
-		} else if (init != null) {
-			iter = Object.entries(init);
-		}
-
-		for (const [name, value] of iter) {
-			this.set(name, value);
+			for (const [name, value] of iter) {
+				this.set(name, value);
+			}
 		}
 	}
 
@@ -55,13 +49,13 @@ export default class Headers {
 			throw error;
 		}
 
-		const newValue = currentValue != null ? `${currentValue},${normalizedValue}` : normalizedValue;
+		const newValue = currentValue != null ? `${currentValue}, ${normalizedValue}` : normalizedValue;
 
 		this.headers.set(normalizedName, newValue);
 	}
 
 	/**
-	 * Deletes a header from this object.
+	 * Deletes a header with a given name.
 	 *
 	 * @param name - name of header to delete
 	 */
@@ -162,7 +156,7 @@ export default class Headers {
 	 * Returns an iterator allowing you to go through all values of headers
 	 */
 	*values(): IterableIterator<string> {
-		for (const [_, value] of this.entries()) {
+		for (const [, value] of this.entries()) {
 			yield value;
 		}
 	}
