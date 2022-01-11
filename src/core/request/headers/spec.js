@@ -9,7 +9,7 @@
 import { set, get } from 'core/env';
 import Headers from 'core/request/headers';
 
-fdescribe('core/request/headers', () => {
+describe('core/request/headers', () => {
 	let
 		logOptions,
 		arrHeaders,
