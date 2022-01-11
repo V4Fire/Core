@@ -14,3 +14,5 @@ request('https://foo.com', {
   console.log(response.decode(), response.status);
 })
 ```
+
+Use
