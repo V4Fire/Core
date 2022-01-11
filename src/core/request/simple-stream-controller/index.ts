@@ -20,8 +20,24 @@ export default class SimpleStreamController<ItemType = unknown> {
 	 */
 	protected pendingPromise: ReturnType<typeof createControllablePromise> | null;
 
-	constructor() {
-		this.items = [];
+	/**
+	 * True, if the [Symbol.asyncIterator] is called
+	 */
+	protected asyncIteratorInvoked: boolean;
+
+	/**
+	 * Returns a boolean stating whether the stream is open
+	 */
+	get open(): boolean {
+		return this.pendingPromise != null;
+	}
+
+	/**
+	 * @param [init] - iterable object contains initial items
+	 */
+	constructor(init: Iterable<ItemType> = []) {
+		this.items = [...init];
+		this.asyncIteratorInvoked = false;
 		this.pendingPromise = createControllablePromise();
 	}
 
@@ -74,7 +90,10 @@ export default class SimpleStreamController<ItemType = unknown> {
 			return;
 		}
 
-		this.pendingPromise.rejectNow(reason ?? Error('Stream was destroyed'));
+		if (this.asyncIteratorInvoked) {
+			this.pendingPromise.rejectNow(reason ?? Error('Stream was destroyed'));
+		}
+
 		this.pendingPromise = null;
 	}
 
@@ -87,6 +106,8 @@ export default class SimpleStreamController<ItemType = unknown> {
 
 		let
 			pos = 0;
+
+		this.asyncIteratorInvoked = true;
 
 		while (true) {
 			if (pos < items.length) {
