@@ -44,12 +44,12 @@ export default function proxyClone<T>(obj: T): T {
 
 		const proxy = new Proxy(Object.cast<object>(obj), {
 			get: (target, key, receiver) => {
-				const originalTarget = target;
-				target = resolveTarget(target, store).value;
+				const
+					resolvedTarget = resolveTarget(target, store).value;
 
 				let
-					valStore = store.get(target),
-					val = getRawValueFromStore(key, valStore) ?? Reflect.get(target, key, receiver);
+					valStore = store.get(resolvedTarget),
+					val = getRawValueFromStore(key, valStore) ?? Reflect.get(resolvedTarget, key, receiver);
 
 				if (val instanceof Descriptor) {
 					val = val.getValue(receiver);
@@ -60,19 +60,19 @@ export default function proxyClone<T>(obj: T): T {
 				}
 
 				const
-					isArray = Object.isArray(target),
-					isCustomObject = isArray || Object.isCustomObject(target);
+					isArray = Object.isArray(resolvedTarget),
+					isCustomObject = isArray || Object.isCustomObject(resolvedTarget);
 
-				if (isArray && !Reflect.has(target, Symbol.isConcatSpreadable)) {
-					target[Symbol.isConcatSpreadable] = true;
+				if (isArray && !Reflect.has(resolvedTarget, Symbol.isConcatSpreadable)) {
+					resolvedTarget[Symbol.isConcatSpreadable] = true;
 				}
 
 				if (Object.isFunction(val) && !isCustomObject) {
-					if (Object.isMap(target) || Object.isSet(target)) {
+					if (Object.isMap(resolvedTarget) || Object.isSet(resolvedTarget)) {
 						switch (key) {
 							case 'get':
 								return (...args) => {
-									const val = target[key](...args);
+									const val = resolvedTarget[key](...args);
 									return clone(val);
 								};
 
@@ -81,7 +81,7 @@ export default function proxyClone<T>(obj: T): T {
 							case Symbol.iterator:
 								return (...args) => {
 									const
-										iter = target[key](...args);
+										iter = resolvedTarget[key](...args);
 
 									return {
 										[Symbol.iterator]() {
@@ -101,19 +101,19 @@ export default function proxyClone<T>(obj: T): T {
 								};
 
 							default:
-								return val.bind(target);
+								return val.bind(resolvedTarget);
 						}
 					}
 
-					if (Object.isWeakMap(target) || Object.isWeakSet(target)) {
+					if (Object.isWeakMap(resolvedTarget) || Object.isWeakSet(resolvedTarget)) {
 						switch (key) {
 							case 'get':
 								return (prop) => {
 									if (valStore == null || !valStore.has(prop)) {
-										return clone(Object.cast<Map<unknown, unknown>>(originalTarget).get(prop));
+										return clone(Object.cast<Map<unknown, unknown>>(target).get(prop));
 									}
 
-									const val = target[key](prop);
+									const val = resolvedTarget[key](prop);
 									return clone(val);
 								};
 
@@ -121,31 +121,31 @@ export default function proxyClone<T>(obj: T): T {
 								return (prop, val) => {
 									valStore ??= new Map();
 									valStore.set(prop, val);
-									return target[key](prop, val);
+									return resolvedTarget[key](prop, val);
 								};
 
 							case 'add':
 								return (prop) => {
 									valStore ??= new Map();
 									valStore.set(prop, true);
-									return target[key](prop);
+									return resolvedTarget[key](prop);
 								};
 
 							case 'has':
 								return (prop) => {
 									if (valStore == null || !valStore.has(prop)) {
-										return Object.cast<Set<unknown>>(originalTarget).has(prop);
+										return Object.cast<Set<unknown>>(target).has(prop);
 									}
 
-									return target[key](prop);
+									return resolvedTarget[key](prop);
 								};
 
 							default:
-								return val.bind(target);
+								return val.bind(resolvedTarget);
 						}
 					}
 
-					return val.bind(target);
+					return val.bind(resolvedTarget);
 				}
 
 				return clone(val);
@@ -158,6 +158,10 @@ export default function proxyClone<T>(obj: T): T {
 					value: resolvedTarget,
 					needWrap
 				} = resolveTarget(target, store);
+
+				if (!needWrap) {
+					return Reflect.set(resolvedTarget, key, val);
+				}
 
 				const
 					rawValue = getRawValueFromStore(key, store.get(resolvedTarget));
@@ -180,37 +184,36 @@ export default function proxyClone<T>(obj: T): T {
 					}
 				}
 
-				if (needWrap) {
-					if ((key in resolvedTarget)) {
-						const valStore = store.get(resolvedTarget) ?? new Map();
-						store.set(resolvedTarget, valStore);
-						valStore.set(key, val);
+				if ((key in resolvedTarget)) {
+					const valStore = store.get(resolvedTarget) ?? new Map();
+					store.set(resolvedTarget, valStore);
+					valStore.set(key, val);
 
-					} else {
-						Object.defineProperty(receiver, key, {
-							configurable: true,
-							writable: true,
-							enumerable: true,
-							value: val
-						});
-					}
-
-					return true;
+				} else {
+					Object.defineProperty(receiver, key, {
+						configurable: true,
+						writable: true,
+						enumerable: true,
+						value: val
+					});
 				}
 
-				return Reflect.set(resolvedTarget, key, val);
+				return true;
 			},
 
 			defineProperty: (target, key, desc) => {
-				if (lastSetKey === key) {
-					lastSetKey = undefined;
-					return Reflect.defineProperty(target, key, desc);
-				}
-
 				const {
 					value: resolvedTarget,
 					needWrap
 				} = resolveTarget(target, store);
+
+				if (!needWrap || lastSetKey === key) {
+					if (lastSetKey === key) {
+						lastSetKey = undefined;
+					}
+
+					return Reflect.defineProperty(resolvedTarget, key, desc);
+				}
 
 				const
 					rawValue = getRawValueFromStore(key, store.get(resolvedTarget)),
@@ -254,37 +257,33 @@ export default function proxyClone<T>(obj: T): T {
 					Object.assign(mergedDesc, desc);
 				}
 
-				if (needWrap) {
-					const
-						valStore = store.get(resolvedTarget) ?? new Map();
+				const
+					valStore = store.get(resolvedTarget) ?? new Map();
 
-					store.set(resolvedTarget, valStore);
-					valStore.set(key, new Descriptor(mergedDesc));
+				store.set(resolvedTarget, valStore);
+				valStore.set(key, new Descriptor(mergedDesc));
 
-					if (!(key in resolvedTarget)) {
-						Object.defineProperty(resolvedTarget, key, {
-							configurable: true,
-							enumerable: false,
+				if (!(key in resolvedTarget)) {
+					Object.defineProperty(resolvedTarget, key, {
+						configurable: true,
+						enumerable: false,
 
-							set: (value) => {
-								Object.defineProperty(resolvedTarget, key, {
-									enumerable: true,
-									writable: true,
-									configurable: true,
-									value
-								});
-							},
+						set: (value) => {
+							Object.defineProperty(resolvedTarget, key, {
+								enumerable: true,
+								writable: true,
+								configurable: true,
+								value
+							});
+						},
 
-							get() {
-								return undefined;
-							}
-						});
-					}
-
-					return true;
+						get() {
+							return undefined;
+						}
+					});
 				}
 
-				return Reflect.defineProperty(resolvedTarget, key, mergedDesc);
+				return true;
 			},
 
 			deleteProperty: (target, key) => {
@@ -293,6 +292,10 @@ export default function proxyClone<T>(obj: T): T {
 					needWrap
 				} = resolveTarget(target, store);
 
+				if (!needWrap) {
+					return Reflect.deleteProperty(resolvedTarget, key);
+				}
+
 				const
 					desc = Reflect.getOwnPropertyDescriptor(resolvedTarget, key);
 
@@ -300,22 +303,26 @@ export default function proxyClone<T>(obj: T): T {
 					return false;
 				}
 
-				if (needWrap) {
-					const
-						valStore = store.get(resolvedTarget) ?? new Map();
+				const
+					valStore = store.get(resolvedTarget) ?? new Map();
 
-					store.set(resolvedTarget, valStore);
-					valStore.set(key, NULL);
+				store.set(resolvedTarget, valStore);
+				valStore.set(key, NULL);
 
-					return true;
-				}
-
-				return Reflect.deleteProperty(resolvedTarget, key);
+				return true;
 			},
 
 			has: (target, key) => {
+				const {
+					value: resolvedTarget,
+					needWrap
+				} = resolveTarget(target, store);
+
+				if (!needWrap) {
+					return Reflect.has(resolvedTarget, key);
+				}
+
 				const
-					resolvedTarget = resolveTarget(target, store).value,
 					valStore = store.get(resolvedTarget);
 
 				if (valStore?.has(key)) {
@@ -326,12 +333,16 @@ export default function proxyClone<T>(obj: T): T {
 			},
 
 			getOwnPropertyDescriptor: (target, key) => {
+				const {
+					value: resolvedTarget,
+					needWrap
+				} = resolveTarget(target, store);
+
 				const
-					resolvedTarget = resolveTarget(target, store).value,
 					desc = Reflect.getOwnPropertyDescriptor(resolvedTarget, key);
 
-				if (desc == null) {
-					return;
+				if (!needWrap || desc == null) {
+					return desc;
 				}
 
 				const
@@ -359,16 +370,12 @@ export default function proxyClone<T>(obj: T): T {
 			},
 
 			ownKeys: (target) => {
-				const
-					resolvedTarget = resolveTarget(target, store).value;
+				const {
+					value: resolvedTarget,
+					needWrap
+				} = resolveTarget(target, store);
 
-				if (
-					Object.isArray(resolvedTarget) ||
-					Object.isMap(resolvedTarget) ||
-					Object.isWeakMap(resolvedTarget) ||
-					Object.isSet(resolvedTarget) ||
-					Object.isWeakSet(resolvedTarget)
-				) {
+				if (!needWrap) {
 					return Reflect.ownKeys(resolvedTarget);
 				}
 
