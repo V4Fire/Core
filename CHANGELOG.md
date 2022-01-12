@@ -19,7 +19,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :bug: Bug Fix
 
-* Fixed behavior of `Object.isDictionary`, `Object.isPlainObject`, `Object.isFreeze` with proxy-based object
+* Fixed behavior of `Object.isDictionary`, `Object.isPlainObject`, `Object.isFreeze` with proxy-based objects
 
 ## v3.73.3 (2022-01-10)
 
