@@ -93,7 +93,7 @@ export default function makeLazy(constructor: Function | ClassConstructor, schem
 					Object.defineProperty(proxy, key, {
 						configurable: true,
 
-						value: (...args) => {
+						get: () => (...args) => {
 							actions.push(function method(this: object) {
 								const
 									obj = Object.get<Nullable<object>>(this, breadcrumbs);
@@ -107,6 +107,13 @@ export default function makeLazy(constructor: Function | ClassConstructor, schem
 								}
 
 								return obj[key](...args);
+							});
+						},
+
+						set: (fn) => {
+							actions.push(function setter(this: object) {
+								Object.set(this, fullPath, fn);
+								return fn;
 							});
 						}
 					});

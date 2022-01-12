@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.74.1 (2022-01-12)
+
+#### :bug: Bug Fix
+
+* Now function hooks can be overridden
+
 ## v3.65.0 (2021-11-18)
 
 #### :rocket: New Feature
