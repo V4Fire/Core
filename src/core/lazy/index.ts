@@ -23,7 +23,7 @@ import type { ObjectScheme } from 'core/lazy/interface';
  */
 export default function makeLazy(constructor: Function | ClassConstructor, scheme?: ObjectScheme): AnyFunction {
 	const
-		actions = [constructor];
+		actions = <Function[]>[];
 
 	const mergedScheme = {
 		...getSchemeFromProto(constructor.prototype),
@@ -46,12 +46,9 @@ export default function makeLazy(constructor: Function | ClassConstructor, schem
 			ctx = constructor.call(this, ...args);
 		}
 
-		actions.slice(1).forEach((fn) => {
+		actions.forEach((fn) => {
 			fn.call(ctx);
 		});
-
-		actions.splice(1, actions.length);
-		setActions(applyActions, mergedScheme);
 
 		return ctx;
 	}

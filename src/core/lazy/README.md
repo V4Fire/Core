@@ -94,4 +94,9 @@ const user = new LazyUser('Bob', 23);
 
 // Because of `LazyUser.config.attr = 'value'`
 console.log(user.config.attr === 'value');
+
+// After invoking we can see in a console the results of `showInfo` and `config.errorHandler()`:
+// `Name: Fred; Age: 56`
+// `Boom!`
+const user2 = new LazyUser('Fred', 56);
 ```

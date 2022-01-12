@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.74.2 (2022-01-12)
+
+#### :bug: Bug Fix
+
+* Don't drop all registered actions after the first invoking
+
 ## v3.74.1 (2022-01-12)
 
 #### :bug: Bug Fix
