@@ -14,9 +14,6 @@
 import Range from 'core/range';
 import AbortablePromise from 'core/promise/abortable';
 
-import proxyReadonly from 'core/object/proxy-readonly';
-import proxyClone from 'core/object/proxy-clone';
-
 import { IS_NODE } from 'core/env';
 import { once } from 'core/functools';
 import { convertIfDate } from 'core/json';
@@ -219,22 +216,12 @@ export default class Response<
 				const
 					originalData = data;
 
-				if (typeof Proxy === 'function') {
-					Object.defineProperty(data, 'valueOf', {
-						configurable: true,
-						value: () => proxyClone(originalData)
-					});
+				Object.defineProperty(data, 'valueOf', {
+					configurable: true,
+					value: () => Object.fastClone(originalData, {freezable: false})
+				});
 
-					data = proxyReadonly(data);
-
-				} else {
-					Object.defineProperty(data, 'valueOf', {
-						configurable: true,
-						value: () => Object.fastClone(originalData, {freezable: false})
-					});
-
-					Object.freeze(data);
-				}
+				Object.freeze(data);
 			}
 
 			return data;
