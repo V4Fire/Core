@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.74.1 (2022-01-12)
+
+#### :bug: Bug Fix
+
+* Now function hooks can be overridden `core/lazy`
+
 ## v3.74.0 (2022-01-12)
 
 #### :rocket: New Feature
