@@ -148,6 +148,15 @@ export default function createProviderEngine(
 				req.on(event, listener);
 			});
 
+			params.eventEmitter.removeAllListeners('removeListener');
+			params.eventEmitter.on('removeListener', (event, listener) => {
+				if (Object.values(RequestEvents).includes(event)) {
+					return;
+				}
+
+				req.off(event, listener);
+			});
+
 			req.on('progress', (chunk) => {
 				params.eventEmitter.emit('progress', chunk);
 			});

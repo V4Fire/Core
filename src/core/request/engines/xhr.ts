@@ -109,14 +109,21 @@ const request: RequestEngine = (params) => {
 		});
 
 		p.eventEmitter.removeAllListeners('newListener');
-		p.eventEmitter.on('newListener', (event) => {
+		p.eventEmitter.on('newListener', (event, listener) => {
 			if (Object.values(RequestEvents).includes(event)) {
 				return;
 			}
 
-			xhr.addEventListener(event, (...values: unknown[]) => {
-				p.eventEmitter.emit(event, ...values);
-			});
+			xhr.addEventListener(event, listener);
+		});
+
+		p.eventEmitter.removeAllListeners('removeListener');
+		p.eventEmitter.on('removeListener', (event, listener) => {
+			if (Object.values(RequestEvents).includes(event)) {
+				return;
+			}
+
+			xhr.removeEventListener(event, listener);
 		});
 
 		xhr.addEventListener('progress', (event: ProgressEvent) => {

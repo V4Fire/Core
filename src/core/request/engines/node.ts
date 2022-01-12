@@ -77,14 +77,21 @@ const request: RequestEngine = (params) => {
 		}
 
 		p.eventEmitter.removeAllListeners('newListener');
-		p.eventEmitter.on('newListener', (event) => {
+		p.eventEmitter.on('newListener', (event, listener) => {
 			if (Object.values(RequestEvents).includes(event)) {
 				return;
 			}
 
-			stream.on(event, (...values: unknown[]) => {
-				p.eventEmitter.emit(event, ...values);
-			});
+			stream.on(event, listener);
+		});
+
+		p.eventEmitter.removeAllListeners('removeListener');
+		p.eventEmitter.on('removeListener', (event, listener) => {
+			if (Object.values(RequestEvents).includes(event)) {
+				return;
+			}
+
+			stream.off(event, listener);
 		});
 
 		stream.on('error', (error) => {

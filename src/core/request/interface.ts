@@ -94,6 +94,7 @@ export interface RequestResponseObject<D = unknown> {
 export type RequestPromise = AbortablePromise & {
 	[Symbol.asyncIterator](): AsyncGenerator<RequestChunk, void>;
 	on(eventName: string, listener: ListenerFn): void;
+	off(eventName: string, listener: ListenerFn): void;
 };
 
 export type RequestResponse<D = unknown> = AbortablePromise<RequestResponseObject<D>>;

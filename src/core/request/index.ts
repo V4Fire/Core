@@ -399,6 +399,10 @@ function request<D = unknown>(
 			eventEmitter.on(eventName, listener);
 		};
 
+		parent.off = (eventName: string, listener: ListenerFn): void => {
+			eventEmitter.off(eventName, listener);
+		};
+
 		return parent;
 	};
 
