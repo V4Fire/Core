@@ -102,7 +102,9 @@ const request: RequestEngine = (params) => {
 			}));
 		}
 
-		onAbort(() => {
+		onAbort((reason) => {
+			p.eventEmitter.emit(RequestEvents.ABORT, reason);
+			streamController.destroy(reason);
 			xhr.abort();
 		});
 

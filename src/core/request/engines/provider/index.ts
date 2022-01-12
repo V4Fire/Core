@@ -34,6 +34,7 @@ import type { RequestEngine, RequestOptions } from 'core/request/interface';
 import { availableParams } from 'core/request/engines/provider/const';
 import type { AvailableOptions, MethodsMapping, Meta } from 'core/request/engines/provider/interface';
 import Headers from 'core/request/headers';
+import { RequestEvents } from 'core/request/const';
 
 export * from 'core/request/engines/provider/const';
 export * from 'core/request/engines/provider/interface';
@@ -133,8 +134,9 @@ export default function createProviderEngine(
 			const
 				req = providerToRequest[<string>providerMethod](body, p);
 
-			onAbort(() => {
-				req.abort();
+			onAbort((reason) => {
+				params.eventEmitter.emit(RequestEvents.ABORT, reason);
+				req.abort(reason);
 			});
 
 			req.on('progress', (chunk) => {

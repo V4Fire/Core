@@ -66,8 +66,9 @@ const request: RequestEngine = (params) => {
 			stream = got.stream(p.url, <any>normalizedOpts),
 			streamController = new StreamController<RequestChunk>();
 
-		onAbort((err) => {
-			streamController.destroy(err);
+		onAbort((reason) => {
+			p.eventEmitter.emit(RequestEvents.ABORT, reason);
+			streamController.destroy(reason);
 			stream.destroy();
 		});
 

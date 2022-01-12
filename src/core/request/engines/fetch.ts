@@ -83,8 +83,9 @@ const request: RequestEngine = (params) => {
 			timer = setTimeout(() => controller.abort(), p.timeout);
 		}
 
-		onAbort((err) => {
-			streamController.destroy(err);
+		onAbort((reason) => {
+			p.eventEmitter.emit(RequestEvents.ABORT, reason);
+			streamController.destroy(reason);
 			controller.abort();
 		});
 

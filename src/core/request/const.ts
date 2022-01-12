@@ -82,5 +82,6 @@ export const RequestEvents = {
 	RESPONSE: 'response',
 	PROGRESS: 'progress',
 	LOAD: 'load',
-	ERROR: 'error'
+	ERROR: 'error',
+	ABORT: 'abort'
 };
