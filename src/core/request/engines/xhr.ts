@@ -168,11 +168,19 @@ const request: RequestEngine = (params) => {
 		});
 
 		xhr.addEventListener('error', (error) => {
+			const
+				requestError = new RequestError(RequestError.Engine, {error});
+
+			streamController.destroy(requestError);
 			reject(new RequestError(RequestError.Engine, {error}));
 		});
 
 		xhr.addEventListener('timeout', () => {
-			reject(new RequestError(RequestError.Timeout));
+			const
+				requestError = new RequestError(RequestError.Timeout);
+
+			streamController.destroy(requestError);
+			reject(requestError);
 		});
 
 		xhr.send(body);

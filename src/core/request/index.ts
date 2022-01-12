@@ -368,7 +368,12 @@ function request<D = unknown>(
 					details = {response, ...errDetails};
 
 				if (!response.ok) {
-					throw AbortablePromise.wrapReasonToIgnore(new RequestError(RequestError.InvalidStatus, details));
+					const
+						requestError = new RequestError(RequestError.InvalidStatus, details);
+
+					await response.body;
+					response.streamController?.destroy(requestError);
+					throw AbortablePromise.wrapReasonToIgnore(requestError);
 				}
 
 				const

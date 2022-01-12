@@ -182,9 +182,11 @@ const request: RequestEngine = (params) => {
 			clearTimeout(timer);
 
 			const
-				type = error.name === 'AbortError' ? RequestError.Timeout : RequestError.Engine;
+				type = error.name === 'AbortError' ? RequestError.Timeout : RequestError.Engine,
+				requestError = new RequestError(type, {error});
 
-			reject(new RequestError(type, {error}));
+			streamController.destroy(requestError);
+			reject(requestError);
 		});
 
 	}, p.parent);

@@ -96,9 +96,11 @@ const request: RequestEngine = (params) => {
 
 		stream.on('error', (error) => {
 			const
-				type = error.name === 'TimeoutError' ? RequestError.Timeout : RequestError.Engine;
+				type = error.name === 'TimeoutError' ? RequestError.Timeout : RequestError.Engine,
+				requestError = new RequestError(type, {error});
 
-			reject(new RequestError(type, {error}));
+			streamController.destroy(requestError);
+			reject(requestError);
 		});
 
 		stream.on('response', (response: GotResponse) => {

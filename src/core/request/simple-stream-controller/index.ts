@@ -92,6 +92,8 @@ export default class SimpleStreamController<ItemType = unknown> {
 
 		if (this.asyncIteratorInvoked) {
 			this.pendingPromise.rejectNow(reason ?? Error('Stream was destroyed'));
+		} else {
+			this.pendingPromise.resolveNow();
 		}
 
 		this.pendingPromise = null;

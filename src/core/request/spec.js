@@ -590,6 +590,7 @@ fdescribe('core/request', () => {
 
 			if (name === 'xhr') {
 				xhrTests();
+
 			} else {
 				notXhrTests();
 			}
