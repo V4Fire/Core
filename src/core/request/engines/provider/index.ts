@@ -139,6 +139,15 @@ export default function createProviderEngine(
 				req.abort(reason);
 			});
 
+			params.eventEmitter.removeAllListeners('newListener');
+			params.eventEmitter.on('newListener', (event, listener) => {
+				if (Object.values(RequestEvents).includes(event)) {
+					return;
+				}
+
+				req.on(event, listener);
+			});
+
 			req.on('progress', (chunk) => {
 				params.eventEmitter.emit('progress', chunk);
 			});
