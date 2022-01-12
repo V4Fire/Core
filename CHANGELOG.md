@@ -17,6 +17,10 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 * Added a new methods `Object.isProxy` and `Object.unwrapProxy`
 
+#### :bug: Bug Fix
+
+* Fixed behavior of `Object.isDictionary`, `Object.isPlainObject`, `Object.isFreeze` with proxy-based object
+
 ## v3.73.3 (2022-01-10)
 
 #### :bug: Bug Fix
