@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.74.2 (2022-01-12)
+
+#### :bug: Bug Fix
+
+* Don't drop all registered actions after the first invoking `core/lazy`
+
 ## v3.74.1 (2022-01-12)
 
 #### :bug: Bug Fix
