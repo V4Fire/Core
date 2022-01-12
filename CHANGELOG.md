@@ -13,10 +13,6 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 ## v3.74.0 (2022-01-12)
 
-#### :boom: Breaking Change
-
-* Now to freeze and clone response data will be used `core/object/proxy-readonly` and `core/object/proxy-clone` if it's possible `core/request/response`
-
 #### :rocket: New Feature
 
 * Added a new methods `Object.isProxy` and `Object.unwrapProxy`
