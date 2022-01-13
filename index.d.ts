@@ -139,9 +139,7 @@ interface AnyOneArgFunction<ARG = any, R = any> extends Function {
 	(arg: ARG): R;
 }
 
-type ClassConstructor<C = unknown, ARGS extends any[] = any[]> = AnyFunction<ARGS, void> & {
-	new: C;
-};
+type ClassConstructor<ARGS extends any[] = any[], R = any> = new (...args: ARGS) => R;
 
 interface StrictDictionary<T = unknown> {
 	[key: PropertyKey]: T;
