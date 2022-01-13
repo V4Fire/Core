@@ -11,6 +11,16 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.74.3 (2022-01-13)
+
+#### :boom: Breaking Change
+
+* Changed signature of `ClassConstructor`
+
+#### :house: Internal
+
+* Improved type inferring `core/lazy`
+
 ## v3.74.2 (2022-01-12)
 
 #### :bug: Bug Fix
