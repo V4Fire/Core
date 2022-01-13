@@ -21,7 +21,10 @@ import type { ObjectScheme } from 'core/lazy/interface';
  * @param constructor
  * @param scheme
  */
-export default function makeLazy(constructor: Function | ClassConstructor, scheme?: ObjectScheme): AnyFunction {
+export default function makeLazy<T extends ClassConstructor | AnyFunction>(
+	constructor: T,
+	scheme?: ObjectScheme
+): T extends ClassConstructor ? T & InstanceType<T> : T extends AnyFunction ? T & ReturnType<T> : never {
 	const
 		actions = <Function[]>[];
 
@@ -33,7 +36,7 @@ export default function makeLazy(constructor: Function | ClassConstructor, schem
 	setActions(applyActions, mergedScheme);
 	applyActions.prototype = constructor.prototype;
 
-	return applyActions;
+	return Object.cast(applyActions);
 
 	function applyActions(this: unknown, ...args: unknown[]): unknown {
 		let
