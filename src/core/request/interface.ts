@@ -116,7 +116,7 @@ export interface RequestOptions {
 	readonly responseType?: ResponseType;
 	readonly decoders?: WrappedDecoders;
 	readonly jsonReviver?: JSONCb | false;
-	readonly headers?: Dictionary<CanArray<string>>;
+	readonly headers?: Dictionary<CanArray<string>> | Headers;
 	readonly body?: RequestBody;
 	readonly important?: boolean;
 	readonly credentials?: boolean;

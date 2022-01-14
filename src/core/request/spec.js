@@ -35,7 +35,7 @@ const
 	emptyBodyStatuses = [204, 304],
 	faviconInBase64 = 'AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAnISL6JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL5JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL1JyEi9ichIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEihCchIpgnISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEixCUgIRMmICEvJyEi5ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIrYnISKSJyEi9ichIlxQREUAHxobAichIo4nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISJeJyEiICchIuAnISJJJiAhbCYgITgmICEnJyEi4ichIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEiXichIiAnISLdJyEihichIuknISKkIRwdBCchIoUnISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIl4nISIgJyEi4ichIu4nISL/JyEi8CYgIT8mICEhJyEi3CchIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISJeJyEiHychIuUnISL/JyEi/ychIv8nISKrIh0eBiYhInwnISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEiXSYgITUnISLvJyEi/ychIv8nISL/JyEi9CYgIUcmICEbJyEi1ichIv8nISL/JyEi/ychIv8nISL/JyEi/ichImknISKjJyEi/ychIv8nISL/JyEi/ychIv8nISKzIRwdBiYhIX0nISL/JyEi/ychIv8nISL/JyEi/ychIvwnISK+JyEi9CchIv8nISL/JyEi/ychIv8nISL/JyEi9yYhIoonISKzJyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ichIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL6JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==';
 
-fdescribe('core/request', () => {
+describe('core/request', () => {
 	const engines = new Map([
 		['node', nodeEngine],
 		['fetch', fetchEngine],
@@ -515,7 +515,7 @@ fdescribe('core/request', () => {
 				expect(res2.url).toBe('http://localhost:3000/json/1');
 			});
 
-			it('responses with object that contains "headers" property as dictionary that is instance of Headers class', async () => {
+			it('responses with object that contains "headers" property as a dictionary that is an instance of Headers class', async () => {
 				const
 					{response} = await request('http://localhost:3000/header'),
 					{headers} = response;
@@ -586,6 +586,19 @@ fdescribe('core/request', () => {
 					expect(body).toEqual({id: 1, value: 'things'});
 					done();
 				});
+			});
+
+			it('takes a "Headers" instance as "headers" parameter', async () => {
+				const headers = new Headers([
+					['header1', 'header1-value'],
+					['header2', 'header2-value']
+				]);
+
+				const
+					{response} = await request('http://localhost:3000/request-headers', {headers});
+
+				expect(response.headers.get('header1')).toBe('header1-value');
+				expect(response.headers.get('header2')).toBe('header2-value');
 			});
 
 			if (name === 'xhr') {
@@ -832,6 +845,14 @@ function createServer() {
 		res
 			.setHeader('Some-Header-Name', 'some-header-value')
 			.sendStatus(200);
+	});
+
+	serverApp.get('/request-headers', (req, res) => {
+		for (const [name, value] of Object.entries(req.headers)) {
+			res.setHeader(name, value);
+		}
+
+		res.sendStatus(200);
 	});
 
 	serverApp.get('/redirect', (req, res) => {

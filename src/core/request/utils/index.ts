@@ -14,6 +14,8 @@
 import { caches } from 'core/request/const';
 import { tplRgxp } from 'core/request/utils/const';
 
+import Headers from 'core/request/headers';
+
 import type { NormalizedCreateRequestOptions, ControllablePromise } from 'core/request/interface';
 
 export * from 'core/request/utils/const';
@@ -170,11 +172,18 @@ export function normalizeHeaderValue(value: unknown, query?: Dictionary): string
  * @param headers
  * @param [query] - request query object (to interpolate keys/values)
  */
-export function normalizeHeaders(headers?: Dictionary, query?: Dictionary): Dictionary<CanArray<string>> {
+export function normalizeHeaders(headers?: Dictionary | Headers, query?: Dictionary): Dictionary<CanArray<string>> {
 	const
 		res = {};
 
-	if (headers) {
+	if (headers instanceof Headers) {
+		for (const [name, value] of headers) {
+			res[name] = value
+				.split(',')
+				.map((val) => val.trim());
+		}
+
+	} else if (headers) {
 		for (let keys = Object.keys(headers), i = 0; i < keys.length; i++) {
 			let
 				name = keys[i],
