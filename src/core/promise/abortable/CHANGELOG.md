@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.74.4 (2022-01-14)
+
+#### :bug: Bug Fix
+
+* Fix bug with onAbort calling after aborting promise
+
 ## v3.69.0 (2021-12-03)
 
 #### :boom: Breaking Change

@@ -520,11 +520,19 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 						abortParent(r);
 						cb.call(this, r);
 					};
+
+					if (this.aborted) {
+						this.onAbort();
+					}
 				};
 
 			} else {
 				setOnAbort = (cb) => {
 					this.onAbort = Object.assign(cb.bind(this), {cb});
+
+					if (this.aborted) {
+						this.onAbort();
+					}
 				};
 			}
 
