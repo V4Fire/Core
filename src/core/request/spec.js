@@ -32,10 +32,9 @@ class TestRequestChainProvider extends Provider {
 }
 
 const
-	emptyBodyStatuses = [204, 304],
-	faviconInBase64 = 'AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAnISL6JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL5JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL1JyEi9ichIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEihCchIpgnISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEixCUgIRMmICEvJyEi5ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIrYnISKSJyEi9ichIlxQREUAHxobAichIo4nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISJeJyEiICchIuAnISJJJiAhbCYgITgmICEnJyEi4ichIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEiXichIiAnISLdJyEihichIuknISKkIRwdBCchIoUnISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIl4nISIgJyEi4ichIu4nISL/JyEi8CYgIT8mICEhJyEi3CchIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISJeJyEiHychIuUnISL/JyEi/ychIv8nISKrIh0eBiYhInwnISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEiXSYgITUnISLvJyEi/ychIv8nISL/JyEi9CYgIUcmICEbJyEi1ichIv8nISL/JyEi/ychIv8nISL/JyEi/ichImknISKjJyEi/ychIv8nISL/JyEi/ychIv8nISKzIRwdBiYhIX0nISL/JyEi/ychIv8nISL/JyEi/ychIvwnISK+JyEi9CchIv8nISL/JyEi/ychIv8nISL/JyEi9yYhIoonISKzJyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ichIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL6JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==';
+	emptyBodyStatuses = [204, 304];
 
-describe('core/request', () => {
+fdescribe('core/request', () => {
 	const engines = new Map([
 		['node', nodeEngine],
 		['fetch', fetchEngine],
@@ -562,21 +561,6 @@ describe('core/request', () => {
 				});
 			});
 
-			it('emits "progress" event', async () => {
-				const
-					req = request('http://localhost:3000/json/1'),
-					chunks = [];
-
-				req.on('progress', (chunk) => {
-					chunks.push(chunk);
-				});
-
-				await req;
-
-				expect(chunks.length).toBeGreaterThan(0);
-				expect(chunks.every((chunk) => 'data' in chunk && 'loaded' in chunk && 'total' in chunk)).toBeTrue();
-			});
-
 			it('emits "load" event', (done) => {
 				const req = request('http://localhost:3000/json/1', {
 					responseType: 'json'
@@ -609,7 +593,39 @@ describe('core/request', () => {
 			}
 
 			function xhrTests() {
-				it('responses with object that contains "redirected" property', async () => {
+				it('emits "progress" event (no Content-Length)', async () => {
+					const
+						req = request('http://localhost:3000/stream/no-length'),
+						chunks = [];
+
+					req.on('progress', (chunk) => {
+						chunks.push(chunk);
+					});
+
+					await req;
+
+					expect(chunks.map(({data}) => data)).toEqual([null, null, null]);
+					expect(chunks.map(({loaded}) => loaded)).toEqual([6, 12, 18]);
+					expect(chunks.map(({total}) => total)).toEqual([null, null, null]);
+				});
+
+				it('emits "progress" event (with Content-Length)', async () => {
+					const
+						req = request('http://localhost:3000/stream/length'),
+						chunks = [];
+
+					req.on('progress', (chunk) => {
+						chunks.push(chunk);
+					});
+
+					await req;
+
+					expect(chunks.map(({data}) => data)).toEqual([null, null, null]);
+					expect(chunks.map(({loaded}) => loaded)).toEqual([6, 12, 18]);
+					expect(chunks.map(({total}) => total)).toEqual([18, 18, 18]);
+				});
+
+				it('responses with object that contains "redirected" property that is null', async () => {
 					const
 						{response: res1} = await request('http://localhost:3000/json/1'),
 						{response: res2} = await request('http://localhost:3000/redirect');
@@ -618,54 +634,86 @@ describe('core/request', () => {
 					expect(res2.redirected).toBeNull();
 				});
 
-				it('returns async iterable promise', async () => {
+				it('provides possibility of reading from a stream with async iterator (with Content-Length)', async () => {
 					const
-						chunkLengths = [],
-						req = request('http://localhost:3000/favicon.ico');
+						req = request('http://localhost:3000/stream/length'),
+						chunks = [];
 
-					let
-						loadedBefore = 0,
-						totalLength;
-
-					for await (const {loaded, total} of req) {
-						if (totalLength == null) {
-							totalLength = total;
-						}
-
-						chunkLengths.push(loaded - loadedBefore);
-						loadedBefore = loaded;
+					for await (const chunk of req) {
+						chunks.push(chunk);
 					}
 
-					expect(totalLength).toBe(1150);
-					expect(loadedBefore).toBe(1150);
-					expect(chunkLengths.every((len) => len > 0)).toBeTrue();
+					expect(chunks.map(({data}) => data)).toEqual([null, null, null]);
+					expect(chunks.map(({loaded}) => loaded)).toEqual([6, 12, 18]);
+					expect(chunks.map(({total}) => total)).toEqual([18, 18, 18]);
 				});
 
-				it('resolving with async iterable stream', async () => {
+				it('provides possibility of reading from a stream with async iterator (no Content-Length)', async () => {
 					const
-						chunkLengths = [],
-						req = await request('http://localhost:3000/favicon.ico');
+						req = request('http://localhost:3000/stream/no-length'),
+						chunks = [];
 
-					let
-						loadedBefore = 0,
-						totalLength;
-
-					for await (const {loaded, total} of req) {
-						if (totalLength == null) {
-							totalLength = total;
-						}
-
-						chunkLengths.push(loaded - loadedBefore);
-						loadedBefore = loaded;
+					for await (const chunk of req) {
+						chunks.push(chunk);
 					}
 
-					expect(totalLength).toBe(1150);
-					expect(loadedBefore).toBe(1150);
-					expect(chunkLengths.every((len) => len > 0)).toBeTrue();
+					expect(chunks.map(({data}) => data)).toEqual([null, null, null]);
+					expect(chunks.map(({loaded}) => loaded)).toEqual([6, 12, 18]);
+					expect(chunks.map(({total}) => total)).toEqual([null, null, null]);
+				});
+
+				it('resolving with async iterable object', async () => {
+					const
+						req = await request('http://localhost:3000/stream/length'),
+						chunks = [];
+
+					for await (const chunk of req) {
+						chunks.push(chunk);
+					}
+
+					expect(chunks.map(({data}) => data)).toEqual([null, null, null]);
+					expect(chunks.map(({loaded}) => loaded)).toEqual([6, 12, 18]);
+					expect(chunks.map(({total}) => total)).toEqual([18, 18, 18]);
 				});
 			}
 
 			function notXhrTests() {
+				it('emits "progress" event (no Content-Length)', async () => {
+					const
+						req = request('http://localhost:3000/stream/no-length'),
+						decoder = new TextDecoder('utf8'),
+						decode = decoder.decode.bind(decoder),
+						chunks = [];
+
+					req.on('progress', (chunk) => {
+						chunks.push(chunk);
+					});
+
+					await req;
+
+					expect(chunks.map(({data}) => decode(data))).toEqual(['chunk1', 'chunk2', 'chunk3']);
+					expect(chunks.map(({loaded}) => loaded)).toEqual([6, 12, 18]);
+					expect(chunks.map(({total}) => total)).toEqual([null, null, null]);
+				});
+
+				it('emits "progress" event (with Content-Length)', async () => {
+					const
+						req = request('http://localhost:3000/stream/length'),
+						decoder = new TextDecoder('utf8'),
+						decode = decoder.decode.bind(decoder),
+						chunks = [];
+
+					req.on('progress', (chunk) => {
+						chunks.push(chunk);
+					});
+
+					await req;
+
+					expect(chunks.map(({data}) => decode(data))).toEqual(['chunk1', 'chunk2', 'chunk3']);
+					expect(chunks.map(({loaded}) => loaded)).toEqual([6, 12, 18]);
+					expect(chunks.map(({total}) => total)).toEqual([18, 18, 18]);
+				});
+
 				it('responses with object that contains "redirected" property', async () => {
 					const
 						{response: res1} = await request('http://localhost:3000/json/1'),
@@ -675,20 +723,52 @@ describe('core/request', () => {
 					expect(res2.redirected).toBeTrue();
 				});
 
-				it('returns async iterable promise', async () => {
+				it('provides possibility of reading from a stream with async iterator (no Content-Length)', async () => {
 					const
-						req = request('http://localhost:3000/favicon.ico'),
-						result = await convertStreamToBase64(req);
+						req = request('http://localhost:3000/stream/no-length'),
+						decoder = new TextDecoder('utf8'),
+						decode = decoder.decode.bind(decoder),
+						chunks = [];
 
-					expect(result).toBe(faviconInBase64);
+					for await (const chunk of req) {
+						chunks.push(chunk);
+					}
+
+					expect(chunks.map(({data}) => decode(data))).toEqual(['chunk1', 'chunk2', 'chunk3']);
+					expect(chunks.map(({loaded}) => loaded)).toEqual([6, 12, 18]);
+					expect(chunks.map(({total}) => total)).toEqual([null, null, null]);
 				});
 
-				it('resolving with async iterable stream', async () => {
+				it('provides possibility of reading from a stream with async iterator (with Content-Length)', async () => {
 					const
-						req = await request('http://localhost:3000/favicon.ico'),
-						result = await convertStreamToBase64(req);
+						req = request('http://localhost:3000/stream/length'),
+						decoder = new TextDecoder('utf8'),
+						decode = decoder.decode.bind(decoder),
+						chunks = [];
 
-					expect(result).toBe(faviconInBase64);
+					for await (const chunk of req) {
+						chunks.push(chunk);
+					}
+
+					expect(chunks.map(({data}) => decode(data))).toEqual(['chunk1', 'chunk2', 'chunk3']);
+					expect(chunks.map(({loaded}) => loaded)).toEqual([6, 12, 18]);
+					expect(chunks.map(({total}) => total)).toEqual([18, 18, 18]);
+				});
+
+				it('resolving with async iterable object', async () => {
+					const
+						req = await request('http://localhost:3000/stream/length'),
+						decoder = new TextDecoder('utf8'),
+						decode = decoder.decode.bind(decoder),
+						chunks = [];
+
+					for await (const chunk of req) {
+						chunks.push(chunk);
+					}
+
+					expect(chunks.map(({data}) => decode(data))).toEqual(['chunk1', 'chunk2', 'chunk3']);
+					expect(chunks.map(({loaded}) => loaded)).toEqual([6, 12, 18]);
+					expect(chunks.map(({total}) => total)).toEqual([18, 18, 18]);
 				});
 			}
 
@@ -709,23 +789,6 @@ describe('core/request', () => {
 
 				expect(firstRequest - startTime).toBeLessThan(delayMS);
 				requestDelays.forEach((time) => expect(time).toBeGreaterThanOrEqual(delayMS));
-			}
-
-			async function convertStreamToBase64(stream) {
-				let
-					buffer = null,
-					pos = 0;
-
-				for await (const {data, loaded, total} of stream) {
-					if (buffer == null) {
-						buffer = new Uint8Array(total);
-					}
-
-					buffer.set(data, pos);
-					pos = loaded;
-				}
-
-				return Buffer.from(buffer).toString('base64');
 			}
 		});
 	});
@@ -791,6 +854,9 @@ function createServer() {
 	});
 
 	serverApp.get('/favicon.ico', (req, res) => {
+		const
+			faviconInBase64 = 'AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAnISL6JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL5JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL1JyEi9ichIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEihCchIpgnISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEixCUgIRMmICEvJyEi5ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIrYnISKSJyEi9ichIlxQREUAHxobAichIo4nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISJeJyEiICchIuAnISJJJiAhbCYgITgmICEnJyEi4ichIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEiXichIiAnISLdJyEihichIuknISKkIRwdBCchIoUnISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIl4nISIgJyEi4ichIu4nISL/JyEi8CYgIT8mICEhJyEi3CchIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISJeJyEiHychIuUnISL/JyEi/ychIv8nISKrIh0eBiYhInwnISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEiXSYgITUnISLvJyEi/ychIv8nISL/JyEi9CYgIUcmICEbJyEi1ichIv8nISL/JyEi/ychIv8nISL/JyEi/ichImknISKjJyEi/ychIv8nISL/JyEi/ychIv8nISKzIRwdBiYhIX0nISL/JyEi/ychIv8nISL/JyEi/ychIvwnISK+JyEi9CchIv8nISL/JyEi/ychIv8nISL/JyEi9yYhIoonISKzJyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ichIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL6JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==';
+
 		res.type('image/x-icon');
 		res.send(Buffer.from(faviconInBase64, 'base64'));
 	});
@@ -839,6 +905,35 @@ function createServer() {
 		res.status(500);
 		res.json({tryNumber});
 		tryNumber++;
+	});
+
+	serverApp.get('/stream/no-length', async (req, res) => {
+		const
+			sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
+			data = ['chunk1', 'chunk2', 'chunk3'];
+
+		for (const chunk of data) {
+			await sleep(50);
+			res.write(chunk);
+		}
+
+		res.end();
+	});
+
+	serverApp.get('/stream/length', async (req, res) => {
+		const
+			sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
+			data = ['chunk1', 'chunk2', 'chunk3'],
+			length = data.reduce((acc, chunk) => acc + chunk.length, 0);
+
+		res.setHeader('Content-Length', length);
+
+		for (const chunk of data) {
+			await sleep(50);
+			res.write(chunk);
+		}
+
+		res.end();
 	});
 
 	serverApp.get('/header', (req, res) => {
