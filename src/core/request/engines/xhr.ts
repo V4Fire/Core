@@ -126,10 +126,14 @@ const request: RequestEngine = (params) => {
 			xhr.removeEventListener(event, listener);
 		});
 
+		let
+			totalLength: number | null = null;
+
 		xhr.addEventListener('progress', (event: ProgressEvent) => {
 			const chunk = {
 				data: null,
-				...Object.select(event, ['loaded', 'total'])
+				loaded: event.loaded,
+				total: totalLength
 			};
 
 			p.eventEmitter.emit(RequestEvents.PROGRESS, chunk);
@@ -147,6 +151,11 @@ const request: RequestEngine = (params) => {
 			if (xhr.readyState !== 2) {
 				return;
 			}
+
+			const
+				contentLength = <string | null>xhr.getResponseHeader('Content-Length');
+
+			totalLength = contentLength != null ? Number(contentLength) : null;
 
 			const response = new Response(resBody, {
 				parent: p.parent,
