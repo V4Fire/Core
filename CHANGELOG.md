@@ -11,11 +11,11 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-## v3.74.4 (2022-01-14)
+## v3.??.?? (2022-??-??)
 
 #### :bug: Bug Fix
 
-* Fix bug with onAbort calling after aborting promise `core/promise/abortable`
+* Fixed a bug when `onAbort` calling occurred after promise aborting `core/promise/abortable`
 
 ## v3.74.3 (2022-01-13)
 

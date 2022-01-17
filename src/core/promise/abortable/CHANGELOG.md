@@ -9,11 +9,11 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
-## v3.74.4 (2022-01-14)
+## v3.??.?? (2022-??-??)
 
 #### :bug: Bug Fix
 
-* Fix bug with onAbort calling after aborting promise
+* Fixed a bug when `onAbort` calling occurred after promise aborting
 
 ## v3.69.0 (2021-12-03)
 
