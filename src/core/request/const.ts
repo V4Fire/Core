@@ -85,4 +85,4 @@ export const RequestEvents = {
 	LOAD: 'load',
 	ERROR: 'error',
 	ABORT: 'abort'
-} as const;
+};

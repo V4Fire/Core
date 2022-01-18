@@ -111,8 +111,19 @@ const request: RequestEngine = (params) => {
 		});
 
 		p.eventEmitter.removeAllListeners('newListener');
-		p.eventEmitter.on('newListener', (event, listener) => {
+		p.eventEmitter.on('newListener', (event: string, listener) => {
 			if (Object.values(RequestEvents).includes(event)) {
+				return;
+			}
+
+			if (event.startsWith('upload')) {
+				const
+					parts = event.split('.');
+
+				if (parts.length === 2) {
+					xhr.upload.addEventListener(parts[1], listener);
+				}
+
 				return;
 			}
 
@@ -120,8 +131,19 @@ const request: RequestEngine = (params) => {
 		});
 
 		p.eventEmitter.removeAllListeners('removeListener');
-		p.eventEmitter.on('removeListener', (event, listener) => {
+		p.eventEmitter.on('removeListener', (event: string, listener) => {
 			if (Object.values(RequestEvents).includes(event)) {
+				return;
+			}
+
+			if (event.startsWith('upload')) {
+				const
+					parts = event.split('.');
+
+				if (parts.length === 2) {
+					xhr.upload.removeEventListener(parts[1], listener);
+				}
+
 				return;
 			}
 
