@@ -6,8 +6,4 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type Headers from 'core/request/headers';
-
-export interface HeadersForEachCb {
-	(value: string, key: string, parent: Headers): any;
-}
+export const requestQuery: unique symbol = Symbol('Request query object');

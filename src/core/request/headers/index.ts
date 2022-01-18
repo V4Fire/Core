@@ -6,158 +6,45 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type { HeadersInit } from 'core/request/headers/interface';
-import { normalizeHeaderName, normalizeHeaderValue, validateHeader } from 'core/request/utils';
+/**
+ * [[include:core/request/headers/README.md]]
+ * @packageDocumentation
+ */
+
+import { applyQueryForStr } from 'core/request/helpers/interpolation';
+
+import { requestQuery } from 'core/request/headers/const';
+import type { HeadersForEachCb } from 'core/request/headers/interface';
 
 export * from 'core/request/headers/interface';
 
 export default class Headers {
 	/**
-	 * Container that holds normalized key-value pairs of headers
+	 * Request query object (to interpolate values from headers)
 	 */
-	protected readonly headers: Map<string, string>;
+	[requestQuery]?: Dictionary;
 
 	/**
-	 * @param init - initial headers
+	 * @param [headers] - headers to initialize
+	 * @param [query] - request query object (to interpolate values from headers)
 	 */
-	constructor(init?: HeadersInit) {
-		this.headers = new Map();
+	constructor(headers?: Dictionary<CanArray<string>> | Headers, query?: Dictionary) {
+		Object.defineProperty(this, requestQuery, {
+			enumerable: false,
+			configurable: false,
+			writable: true,
+			value: query
+		});
 
-		if (init != null) {
-			const iter = <Iterable<[string, string]>>(Symbol.iterator in init ? init : Object.entries(init));
+		if (headers != null) {
+			const
+				iter = headers instanceof Headers ? headers.entries() : Object.entries(headers);
 
 			for (const [name, value] of iter) {
-				this.set(name, value);
+				if (value != null) {
+					this.set(name, value);
+				}
 			}
-		}
-	}
-
-	/**
-	 * Appends a new value onto an existing header, or adds the header if it does not already exist.
-	 *
-	 * @param name - name of header to append
-	 * @param value - value of header to append
-	 */
-	append(name: string, value: string): void {
-		const
-			normalizedName = normalizeHeaderName(name),
-			normalizedValue = normalizeHeaderValue(value),
-			currentValue = this.headers.get(normalizedName),
-			error = validateHeader(normalizedName, normalizedValue);
-
-		if (error) {
-			throw error;
-		}
-
-		const newValue = currentValue != null ? `${currentValue}, ${normalizedValue}` : normalizedValue;
-
-		this.headers.set(normalizedName, newValue);
-	}
-
-	/**
-	 * Deletes a header with a given name.
-	 *
-	 * @param name - name of header to delete
-	 */
-	delete(name: string): void {
-		const
-			normalizedName = normalizeHeaderName(name),
-			error = validateHeader(normalizedName);
-
-		if (error) {
-			throw error;
-		}
-
-		this.headers.delete(normalizedName);
-	}
-
-	/**
-	 * Returns an iterator allowing to go through all key-value pairs of headers
-	 */
-	entries(): IterableIterator<[string, string]> {
-		return this.headers.entries();
-	}
-
-	/**
-	 * Executes a provided function once for each header
-	 *
-	 * @param cb - function to execute on each header
-	 * @param [thisArg] - value to use as this when executing callback
-	 */
-	forEach(cb: (value: string, key: string, parent: Headers) => void, thisArg?: any): void {
-		for (const [key, value] of this.entries()) {
-			cb.call(thisArg, value, key, this);
-		}
-	}
-
-	/**
-	 * Returns a String sequence of all the values of a header with a given name
-	 *
-	 * @param name - name of header to get
-	 */
-	get(name: string): string | null {
-		const
-			normalizedName = normalizeHeaderName(name),
-			error = validateHeader(normalizedName);
-
-		if (error) {
-			throw error;
-		}
-
-		return this.headers.get(normalizedName) ?? null;
-	}
-
-	/**
-	 * Returns a boolean stating whether this object contains a header with a given name
-	 *
-	 * @param name - name of header to check
-	 */
-	has(name: string): boolean {
-		const
-			normalizedName = normalizeHeaderName(name),
-			error = validateHeader(normalizedName);
-
-		if (error) {
-			throw error;
-		}
-
-		return this.headers.has(normalizedName);
-	}
-
-	/**
-	 * Returns an iterator allowing you to go through all keys of headers contained in this object
-	 */
-	*keys(): IterableIterator<string> {
-		for (const [name] of this.entries()) {
-			yield name;
-		}
-	}
-
-	/**
-	 * Sets a new value for an existing header, or adds the header if it does not already exist
-	 *
-	 * @param name - name of header to set
-	 * @param value - value of header to set
-	 */
-	set(name: string, value: string): void {
-		const
-			normalizedName = normalizeHeaderName(name),
-			normalizedValue = normalizeHeaderValue(value),
-			error = validateHeader(normalizedName);
-
-		if (error) {
-			throw error;
-		}
-
-		this.headers.set(normalizedName, normalizedValue);
-	}
-
-	/**
-	 * Returns an iterator allowing you to go through all values of headers
-	 */
-	*values(): IterableIterator<string> {
-		for (const [, value] of this.entries()) {
-			yield value;
 		}
 	}
 
@@ -166,5 +53,128 @@ export default class Headers {
 	 */
 	[Symbol.iterator](): IterableIterator<[string, string]> {
 		return this.entries();
+	}
+
+	/**
+	 * Returns a header' value by the specified name
+	 * @param name
+	 */
+	get(name: string): string | null {
+		return this[this.normalizeHeaderName(name)] ?? null;
+	}
+
+	/**
+	 * Returns true if the structure contains a header by the specified name
+	 * @param name
+	 */
+	has(name: string): boolean {
+		return this.normalizeHeaderName(name) in this;
+	}
+
+	/**
+	 * Sets a new header' value by the specified name.
+	 * To set multiple values for one header, provide its value as a list of values.
+	 *
+	 * @param name
+	 * @param value
+	 */
+	set(name: string, value: CanArray<string>): void {
+		const
+			normalizedName = this.normalizeHeaderName(name);
+
+		if (normalizedName === '') {
+			return;
+		}
+
+		if (Object.isArray(value)) {
+			value.forEach((val) => this.append(name, val));
+			return;
+		}
+
+		Object.defineProperty(this, normalizedName, {
+			enumerable: true,
+			configurable: true,
+			writable: true,
+			value: this.normalizeHeaderValue(value)
+		});
+	}
+
+	/**
+	 * Appends a new value into an existing header or adds the header if it does not already exist
+	 *
+	 * @param name
+	 * @param value
+	 */
+	append(name: string, value: string): void {
+		const
+			normalizedName = this.normalizeHeaderName(name);
+
+		if (normalizedName === '') {
+			return;
+		}
+
+		const
+			currentVal = this[normalizedName],
+			newVal = currentVal != null ? `${currentVal}, ${this.normalizeHeaderValue(value)}` : value;
+
+		this.set(name, newVal);
+	}
+
+	/**
+	 * Deletes a header by the specified name
+	 * @param name
+	 */
+	delete(name: string): void {
+		delete this[this.normalizeHeaderName(name)];
+	}
+
+	/**
+	 * Iterates over the headers and invokes the given callback function at each header
+	 *
+	 * @param cb
+	 * @param [thisArg] - value to use as `this` when executing callback
+	 */
+	forEach(cb: HeadersForEachCb, thisArg?: any): void {
+		for (const [key, value] of this.entries()) {
+			cb.call(thisArg, value, key, this);
+		}
+	}
+
+	/**
+	 * Returns an iterator over headers' values
+	 */
+	values(): IterableIterator<string> {
+		return Object.values(this).values();
+	}
+
+	/**
+	 * Returns an iterator over headers' names
+	 */
+	keys(): IterableIterator<string> {
+		return Object.keys(this).values();
+	}
+
+	/**
+	 * Returns an iterator over headers.
+	 * It produces tuples with headers' names and values.
+	 */
+	entries(): IterableIterator<[string, string]> {
+		return Object.entries(this).values();
+	}
+
+	/**
+	 * Normalizes the specified header name
+	 * @param name
+	 */
+	protected normalizeHeaderName(name: string): string {
+		return applyQueryForStr(String(name).trim(), this[requestQuery]).toLowerCase();
+	}
+
+	/**
+	 * Normalizes the specified header value
+	 * @param value
+	 */
+	protected normalizeHeaderValue(value: unknown): string {
+		return applyQueryForStr(String(value != null ? value : '').trim(), this[requestQuery]);
 	}
 }
