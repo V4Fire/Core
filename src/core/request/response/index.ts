@@ -23,7 +23,7 @@ import { defaultResponseOpts, noContentStatusCodes } from 'core/request/response
 
 import Headers, { HeadersInit } from 'core/request/headers';
 
-import type StreamController from 'core/request/simple-stream-controller';
+import type { StreamController } from 'core/request/stream-controller';
 
 import type { OkStatuses, WrappedDecoders, RequestChunk } from 'core/request/interface';
 

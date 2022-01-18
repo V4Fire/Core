@@ -122,6 +122,7 @@ export interface RequestOptions {
 	readonly credentials?: boolean;
 	readonly parent: AbortablePromise;
 	readonly eventEmitter: EventEmitter;
+	readonly stream?: boolean;
 }
 
 export type RequestQuery =
@@ -444,6 +445,13 @@ export interface CreateRequestOptions<D = unknown> {
 	 * Custom request engine
 	 */
 	engine?: RequestEngine;
+
+	/**
+	 * If true, switches request to the "stream" mode,
+	 * in the "stream" mode, request promise resolves as soon as a response received and doesn't wait for loading body,
+	 * the "data" property of a resolved promise would be null
+	 */
+	stream?: boolean;
 }
 
 /**

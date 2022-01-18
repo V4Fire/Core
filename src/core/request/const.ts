@@ -75,6 +75,7 @@ export const defaultRequestOpts = {
 	query: <RequestQuery>{},
 	meta: <Dictionary>{},
 	engine: <RequestEngine>engine,
+	stream: false,
 	querySerializer: toQueryString
 };
 
@@ -84,4 +85,4 @@ export const RequestEvents = {
 	LOAD: 'load',
 	ERROR: 'error',
 	ABORT: 'abort'
-};
+} as const;

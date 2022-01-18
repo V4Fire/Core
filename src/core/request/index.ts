@@ -379,8 +379,6 @@ function request<D = unknown>(
 				const
 					data = await response.decode();
 
-				eventEmitter.emit(RequestEvents.LOAD, data);
-
 				return {
 					data,
 					response,

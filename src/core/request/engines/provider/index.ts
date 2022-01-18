@@ -31,7 +31,7 @@ import Provider, {
 import Response from 'core/request/response';
 import type { RequestEngine, RequestOptions } from 'core/request/interface';
 
-import { availableParams } from 'core/request/engines/provider/const';
+import { availableParams, responseTypeToTransform } from 'core/request/engines/provider/const';
 import type { AvailableOptions, MethodsMapping, Meta } from 'core/request/engines/provider/interface';
 import Headers from 'core/request/headers';
 import { RequestEvents } from 'core/request/const';
@@ -158,7 +158,15 @@ export default function createProviderEngine(
 			});
 
 			req.on('progress', (chunk) => {
-				params.eventEmitter.emit('progress', chunk);
+				params.eventEmitter.emit(RequestEvents.PROGRESS, chunk);
+			});
+
+			req.on('load', (data) => {
+				if (params.responseType != null && responseTypeToTransform.includes(params.responseType)) {
+					data = new TextDecoder('utf-8').decode(data);
+				}
+
+				params.eventEmitter.emit(RequestEvents.LOAD, data);
 			});
 
 			let

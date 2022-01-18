@@ -22,7 +22,7 @@ import { RequestEvents } from 'core/request/const';
 import { convertDataToSend } from 'core/request/engines/helpers';
 import type { RequestEngine, NormalizedCreateRequestOptions, RequestChunk } from 'core/request/interface';
 
-import StreamController from 'core/request/simple-stream-controller';
+import { PersistentStreamController } from 'core/request/stream-controller';
 
 /**
  * Creates request by using XMLHttpRequest with the specified parameters and returns a promise
@@ -32,6 +32,9 @@ const request: RequestEngine = (params) => {
 	const
 		p = params,
 		xhr = new XMLHttpRequest();
+
+	const
+		streamController = new PersistentStreamController<RequestChunk>();
 
 	let
 		[body, contentType] = convertDataToSend<BodyInit>(p.body, p.contentType);
@@ -93,8 +96,7 @@ const request: RequestEngine = (params) => {
 
 	return new AbortablePromise<Response>(async (resolve, reject, onAbort) => {
 		const
-			{status} = await AbortablePromise.resolve(isOnline(), p.parent),
-			streamController = new StreamController<RequestChunk>();
+			{status} = await AbortablePromise.resolve(isOnline(), p.parent);
 
 		if (!status) {
 			return reject(new RequestError(RequestError.Offline, {
@@ -143,6 +145,7 @@ const request: RequestEngine = (params) => {
 		const resBody = new Promise((resolve) => {
 			xhr.addEventListener('load', () => {
 				streamController.close();
+				p.eventEmitter.emit(RequestEvents.LOAD, xhr.response);
 				resolve(xhr.response);
 			});
 		});

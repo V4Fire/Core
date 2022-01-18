@@ -18,6 +18,7 @@ import Headers from 'core/request/headers';
 import { defaultRequestOpts } from 'core/request/const';
 
 import Response from 'core/request/response';
+import Async from 'core/async';
 
 import nodeEngine from 'core/request/engines/node';
 import fetchEngine from 'core/request/engines/fetch';
@@ -32,9 +33,10 @@ class TestRequestChainProvider extends Provider {
 }
 
 const
+	sleep = (ms) => new Async().sleep(ms),
 	emptyBodyStatuses = [204, 304];
 
-fdescribe('core/request', () => {
+describe('core/request', () => {
 	const engines = new Map([
 		['node', nodeEngine],
 		['fetch', fetchEngine],
@@ -567,7 +569,7 @@ fdescribe('core/request', () => {
 				});
 
 				req.on('load', (body) => {
-					expect(body).toEqual({id: 1, value: 'things'});
+					expect(body).toEqual(JSON.stringify({id: 1, value: 'things'}));
 					done();
 				});
 			});
@@ -770,6 +772,34 @@ fdescribe('core/request', () => {
 					expect(chunks.map(({loaded}) => loaded)).toEqual([6, 12, 18]);
 					expect(chunks.map(({total}) => total)).toEqual([18, 18, 18]);
 				});
+
+				it('takes the "stream" option that switches request to the stream mode explicitly', async () => {
+					const
+						loadListener = jasmine.createSpy(),
+						req = request('http://localhost:3000/stream/length', {stream: true});
+
+					req.on('load', loadListener);
+
+					const
+						res = await req;
+
+					await sleep(200);
+
+					let
+						buffer;
+
+					for await (const {data} of res) {
+						buffer = new Uint8Array(data);
+						break;
+					}
+
+					const
+						body = new TextDecoder('utf8').decode(buffer);
+
+					expect(res.data).toBeNull();
+					expect(loadListener).not.toHaveBeenCalled();
+					expect(body).toBe('chunk1chunk2chunk3');
+				});
 			}
 
 			async function retryDelayTest(delay, delayMS) {
@@ -909,7 +939,6 @@ function createServer() {
 
 	serverApp.get('/stream/no-length', async (req, res) => {
 		const
-			sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
 			data = ['chunk1', 'chunk2', 'chunk3'];
 
 		for (const chunk of data) {
@@ -922,7 +951,6 @@ function createServer() {
 
 	serverApp.get('/stream/length', async (req, res) => {
 		const
-			sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
 			data = ['chunk1', 'chunk2', 'chunk3'],
 			length = data.reduce((acc, chunk) => acc + chunk.length, 0);
 

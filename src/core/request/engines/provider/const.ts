@@ -17,5 +17,12 @@ export const availableParams = [
 	'timeout',
 	'important',
 	'meta',
-	'parent'
+	'parent',
+	'stream'
+];
+
+export const responseTypeToTransform = [
+	'json',
+	'document',
+	'text'
 ];

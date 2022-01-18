@@ -11,14 +11,14 @@ import got, { Options, Response as GotResponse } from 'got';
 import AbortablePromise from 'core/promise/abortable';
 import { isOnline } from 'core/net';
 
-import Response, { ResponseTypeValueP } from 'core/request/response';
+import Response, { ResponseTypeValue, ResponseTypeValueP } from 'core/request/response';
 import RequestError from 'core/request/error';
 
 import { RequestEvents } from 'core/request/const';
 
 import { writeableStreamMethods } from 'core/request/engines/const';
 
-import StreamController from 'core/request/simple-stream-controller';
+import { SimpleStreamController, PersistentStreamController, hookNames } from 'core/request/stream-controller';
 
 import { convertDataToSend } from 'core/request/engines/helpers';
 import type { RequestEngine, NormalizedCreateRequestOptions, RequestChunk } from 'core/request/interface';
@@ -33,6 +33,13 @@ const request: RequestEngine = (params) => {
 
 	const
 		[body, contentType] = convertDataToSend(p.body);
+
+	const streamController = p.stream ?
+		new SimpleStreamController<RequestChunk>() :
+		new PersistentStreamController<RequestChunk>();
+
+	const
+		readStream = createStreamReader();
 
 	const
 		headers = {...p.headers};
@@ -63,8 +70,7 @@ const request: RequestEngine = (params) => {
 		}
 
 		const
-			stream = got.stream(p.url, <any>normalizedOpts),
-			streamController = new StreamController<RequestChunk>();
+			stream = got.stream(p.url, <any>normalizedOpts);
 
 		onAbort((reason) => {
 			p.eventEmitter.emit(RequestEvents.ABORT, reason);
@@ -108,29 +114,24 @@ const request: RequestEngine = (params) => {
 				contentLength = <string | null>response.headers['content-length'],
 				totalLength = contentLength != null ? Number(contentLength) : null;
 
-			const rawBody = (async () => {
-				let
-					allChunks,
-					receivedLength = 0;
+			let
+				resBody: ResponseTypeValueP;
 
-				try {
-					for await (const data of stream) {
-						receivedLength += data.length;
+			if (p.stream) {
+				streamController.addHook(hookNames.ASYNC_ITERATOR, () => {
+					void readStream(stream, totalLength);
+				});
 
-						const chunk = {
-							data,
-							loaded: receivedLength,
-							total: totalLength
-						};
+				resBody = null;
 
-						p.eventEmitter.emit(RequestEvents.PROGRESS, chunk);
-						streamController.add(chunk);
-					}
+			} else {
+				const rawBody = (async () => {
+					const
+						receivedLength = await readStream(stream, totalLength).catch(() => 0),
+						allChunks = new Uint8Array(receivedLength);
 
-					streamController.close();
-					allChunks = new Uint8Array(receivedLength);
-
-					let pos = 0;
+					let
+						pos = 0;
 
 					for (const {data} of streamController) {
 						if (data == null) {
@@ -140,22 +141,25 @@ const request: RequestEngine = (params) => {
 						allChunks.set(data, pos);
 						pos += data.length;
 					}
-				} catch {}
 
-				return <Uint8Array>allChunks;
-			})();
+					return allChunks;
+				})();
 
-			let resBody: ResponseTypeValueP;
+				switch (p.responseType) {
+					case 'json':
+					case 'document':
+					case 'text':
+						resBody = rawBody.then((buf: Uint8Array) => new TextDecoder('utf-8').decode(buf));
+						break;
 
-			switch (p.responseType) {
-				case 'json':
-				case 'document':
-				case 'text':
-					resBody = rawBody.then((buf: Uint8Array) => new TextDecoder('utf-8').decode(buf));
-					break;
+					default:
+						resBody = rawBody.then((buf: Uint8Array) => buf.buffer);
+				}
 
-				default:
-					resBody = rawBody.then((buf: Uint8Array) => buf.buffer);
+				resBody = (<Promise<ResponseTypeValue>>resBody).then((data) => {
+					p.eventEmitter.emit(RequestEvents.LOAD, data);
+					return data;
+				});
 			}
 
 			const res = new Response(resBody, {
@@ -182,6 +186,42 @@ const request: RequestEngine = (params) => {
 		}
 
 	}, p.parent);
+
+	function createStreamReader(): (stream: ReturnType<typeof got.stream>, total: number | null) => Promise<number> {
+
+		let
+			promise: Promise<number> | null = null;
+
+		return (stream: ReturnType<typeof got.stream>, totalLength: number | null): Promise<number> => {
+			if (promise != null) {
+				return promise;
+			}
+
+			promise = (async () => {
+				let
+					receivedLength = 0;
+
+				for await (const data of stream) {
+					receivedLength += data.length;
+
+					const chunk = {
+						data,
+						loaded: receivedLength,
+						total: totalLength
+					};
+
+					p.eventEmitter.emit(RequestEvents.PROGRESS, chunk);
+					streamController.add(chunk);
+				}
+
+				streamController.close();
+
+				return receivedLength;
+			})();
+
+			return promise;
+		};
+	}
 };
 
 export default request;

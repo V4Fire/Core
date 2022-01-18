@@ -16,7 +16,7 @@ import type { defaultResponseOpts } from 'core/request/response/const';
 
 import type Headers from 'core/request/headers';
 
-import type StreamController from 'core/request/simple-stream-controller';
+import type { StreamController } from 'core/request/stream-controller';
 
 export type ResponseType =
 	DataType |

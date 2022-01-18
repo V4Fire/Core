@@ -13,11 +13,11 @@ import fetch from 'core/request/engines/mock-fetch';
 import AbortablePromise from 'core/promise/abortable';
 import { isOnline } from 'core/net';
 
-import Response, { ResponseTypeValueP } from 'core/request/response';
+import Response, { ResponseTypeValue, ResponseTypeValueP } from 'core/request/response';
 import RequestError from 'core/request/error';
 
 import { RequestEvents } from 'core/request/const';
-import StreamController from 'core/request/simple-stream-controller';
+import { SimpleStreamController, PersistentStreamController, hookNames } from 'core/request/stream-controller';
 
 import { convertDataToSend } from 'core/request/engines/helpers';
 import type { RequestEngine, NormalizedCreateRequestOptions, RequestChunk } from 'core/request/interface';
@@ -30,6 +30,13 @@ const request: RequestEngine = (params) => {
 	const
 		p = params,
 		controller = new AbortController();
+
+	const streamController = p.stream ?
+		new SimpleStreamController<RequestChunk>() :
+		new PersistentStreamController<RequestChunk>();
+
+	const
+		readStream = createStreamReader();
 
 	const
 		[body, contentType] = convertDataToSend<BodyInit>(p.body, p.contentType);
@@ -73,8 +80,7 @@ const request: RequestEngine = (params) => {
 		}
 
 		const
-			req = fetch(p.url, normalizedOpts),
-			streamController = new StreamController<RequestChunk>();
+			req = fetch(p.url, normalizedOpts);
 
 		let
 			timer;
@@ -93,71 +99,60 @@ const request: RequestEngine = (params) => {
 			clearTimeout(timer);
 
 			const
-				contentLength = response.headers.get('Content-Length'),
-				totalLength = contentLength != null ? Number(contentLength) : null;
-
-			const rawBody = (async () => {
-				let receivedLength = 0;
-
-				if (response.body != null) {
-					const reader: ReadableStreamDefaultReader<Uint8Array> = response.body.getReader();
-
-					while (true) {
-						const {done, value} = await reader.read();
-
-						if (done) {
-							streamController.close();
-							break;
-						}
-
-						receivedLength += value!.length;
-
-						const chunk = {
-							data: value ?? null,
-							loaded: receivedLength,
-							total: totalLength
-						};
-
-						p.eventEmitter.emit(RequestEvents.PROGRESS, chunk);
-						streamController.add(chunk);
-					}
-				}
-
-				const allChunks = new Uint8Array(receivedLength);
-
-				let pos = 0;
-
-				for (const {data} of streamController) {
-					if (data == null) {
-						continue;
-					}
-
-					allChunks.set(data, pos);
-					pos += data.length;
-				}
-
-				return allChunks;
-			})();
+				headers: Dictionary<string> = {};
 
 			let
 				body: ResponseTypeValueP;
-
-			const
-				headers: Dictionary<string> = {};
 
 			response.headers.forEach((value, name) => {
 				headers[name] = value;
 			});
 
-			switch (p.responseType) {
-				case 'json':
-				case 'document':
-				case 'text':
-					body = rawBody.then((buf) => new TextDecoder('utf-8').decode(buf));
-					break;
+			if (p.stream) {
+				streamController.addHook(hookNames.ASYNC_ITERATOR, () => {
+					void readStream(response);
+				});
 
-				default:
-					body = rawBody.then((buf) => buf.buffer);
+				body = null;
+
+			} else {
+				const rawBody = (async () => {
+					const
+						receivedLength = await readStream(response);
+
+					const
+						allChunks = new Uint8Array(receivedLength);
+
+					let
+						pos = 0;
+
+					for (const {data} of streamController) {
+						if (data == null) {
+							continue;
+						}
+
+						allChunks.set(data, pos);
+						pos += data.length;
+					}
+
+					return allChunks;
+				})();
+
+				switch (p.responseType) {
+					case 'json':
+					case 'document':
+					case 'text':
+						body = rawBody.then((buf) => new TextDecoder('utf-8').decode(buf));
+						break;
+
+					default:
+						body = rawBody.then((buf) => buf.buffer);
+				}
+
+				body = (<Promise<ResponseTypeValue>>body).then((data) => {
+					p.eventEmitter.emit(RequestEvents.LOAD, data);
+					return data;
+				});
 			}
 
 			const res = new Response(body, {
@@ -177,7 +172,6 @@ const request: RequestEngine = (params) => {
 
 			p.eventEmitter.emit(RequestEvents.RESPONSE, res);
 			resolve(res);
-
 		}, (error) => {
 			clearTimeout(timer);
 
@@ -188,8 +182,59 @@ const request: RequestEngine = (params) => {
 			streamController.destroy(requestError);
 			reject(requestError);
 		});
-
 	}, p.parent);
+
+	function createStreamReader(): (response: globalThis.Response) => Promise<number> {
+
+		let
+			promise: Promise<number> | null = null;
+
+		return (response: globalThis.Response): Promise<number> => {
+			if (promise != null) {
+				return promise;
+			}
+
+			promise = (async () => {
+				if (response.body == null) {
+					streamController.close();
+					return 0;
+				}
+
+				const
+					contentLength = response.headers.get('Content-Length'),
+					totalLength = contentLength != null ? Number(contentLength) : null,
+					reader: ReadableStreamDefaultReader<Uint8Array> = response.body.getReader();
+
+				let
+					receivedLength = 0;
+
+				while (true) {
+					const
+						{done, value} = await reader.read();
+
+					if (done) {
+						streamController.close();
+						break;
+					}
+
+					receivedLength += value!.length;
+
+					const chunk = {
+						data: value ?? null,
+						loaded: receivedLength,
+						total: totalLength
+					};
+
+					p.eventEmitter.emit(RequestEvents.PROGRESS, chunk);
+					streamController.add(chunk);
+				}
+
+				return receivedLength;
+			})();
+
+			return promise;
+		};
+	}
 };
 
 export default request;
