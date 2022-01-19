@@ -36,7 +36,35 @@ export default class Headers {
 			value: query
 		});
 
-		if (headers != null) {
+		if (Object.isString(headers)) {
+			let
+				lastHeaderName = '';
+
+			for (let o = headers.split(/[\r\n]+/), i = 0; i < o.length; i++) {
+				const
+					header = o[i].trim();
+
+				if (header === '') {
+					continue;
+				}
+
+				const
+					headerChunks = header.split(':', 2);
+
+				if (headerChunks.length === 2) {
+					lastHeaderName = headerChunks[0].trim();
+					headerChunks.shift();
+				}
+
+				const
+					value = <CanUndef<string>>headerChunks[0];
+
+				if (value != null) {
+					this.set(lastHeaderName, value.trim());
+				}
+			}
+
+		} else if (headers != null) {
 			let
 				iter;
 

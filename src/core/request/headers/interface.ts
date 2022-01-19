@@ -16,4 +16,5 @@ export interface HeadersForEachCb {
 export type RawHeaders =
 	Headers |
 	typeof NativeHeaders |
+	string |
 	Dictionary<CanArray<unknown>>;

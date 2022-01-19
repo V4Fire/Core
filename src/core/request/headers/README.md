@@ -40,6 +40,19 @@ const headers2 = new Headers(headers);
 console.log(headers2.get('Content-Language')); // 'en, ru'
 ```
 
+Or, you can pass a string with raw HTTP headers.
+
+```js
+import Headers from 'core/request/headers';
+
+const headers = new Headers(`
+  Content-Language: en, ru
+  Cache-control: no-cache
+`);
+
+console.log(headers.get('Content-Language')); // 'en, ru'
+```
+
 ## Interpolation of headers' keys and values
 
 The class supports a feature when headers' keys or values link to extra values from request data.
