@@ -23,17 +23,20 @@ export function applyQueryForStr(str: string, query?: Dictionary, rgxp: RegExp =
 
 	return str.replace(rgxp, (str, param, adv = '') => {
 		const
-			val = query[param];
+			value = query[param],
+			desc = Object.getOwnPropertyDescriptor(query, param);
 
-		if (val != null) {
-			Object.defineProperty(query, param, {
-				enumerable: false,
-				configurable: true,
-				writable: true,
-				value: query[param]
-			});
+		if (value != null && desc != null) {
+			if (desc.configurable === true && desc.enumerable === true) {
+				Object.defineProperty(query, param, {
+					value,
+					enumerable: false,
+					configurable: true,
+					writable: desc.writable ?? true
+				});
+			}
 
-			return (str.startsWith('/') ? '/' : '') + String(val) + String(Object.isNumber(adv) ? '' : adv);
+			return (str.startsWith('/') ? '/' : '') + String(value) + String(Object.isNumber(adv) ? '' : adv);
 		}
 
 		return '';
