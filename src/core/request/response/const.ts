@@ -11,12 +11,12 @@ import statusCodes from 'core/status-codes';
 import type { ResponseType } from 'core/request';
 
 export const defaultResponseOpts = {
-	responseType: <ResponseType>'text',
 	url: '',
-	okStatuses: new Range(200, 299),
+	redirected: false,
 	status: 200,
-	redirected: null,
 	statusText: 'OK',
+	okStatuses: new Range(200, 299),
+	responseType: <ResponseType>'text',
 	headers: {}
 };
 

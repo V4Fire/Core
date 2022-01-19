@@ -10,21 +10,19 @@
  * [[include:core/request/response/README.md]]
  * @packageDocumentation
  */
+
 import Range from 'core/range';
 import AbortablePromise from 'core/promise/abortable';
 
 import { IS_NODE } from 'core/env';
-import { once } from 'core/functools';
+import { once, deprecated } from 'core/functools';
 import { convertIfDate } from 'core/json';
 import { getDataType } from 'core/mime-type';
 
-import { normalizeHeaderName } from 'core/request/utils';
+import Headers from 'core/request/headers';
+import type StreamBuffer from 'core/request/modules/stream-buffer';
+
 import { defaultResponseOpts, noContentStatusCodes } from 'core/request/response/const';
-
-import Headers, { HeadersInit } from 'core/request/headers';
-
-import type StreamController from 'core/request/simple-stream-controller';
-
 import type { OkStatuses, WrappedDecoders, RequestChunk } from 'core/request/interface';
 
 import type {
@@ -32,8 +30,6 @@ import type {
 	ResponseType,
 	ResponseTypeValue,
 	ResponseTypeValueP,
-
-	ResponseHeaders,
 	ResponseOptions,
 
 	JSONLikeValue
@@ -46,19 +42,39 @@ export * from 'core/request/response/const';
 export * from 'core/request/response/interface';
 
 /**
- * Class of a remote response
+ * Class of a request response
  * @typeparam D - response data type
  */
 export default class Response<
 	D extends Nullable<string | JSONLikeValue | ArrayBuffer | Blob | Document | unknown
 > = unknown> {
 	/**
-	 * Value of the response data type
+	 * The resolved request URL (after resolving redirects, etc.)
+	 */
+	readonly url: string;
+
+	/**
+	 * True if response was obtained through a redirect
+	 */
+	readonly redirected: boolean;
+
+	/**
+	 * Parent operation promise
+	 */
+	readonly parent?: AbortablePromise;
+
+	/**
+	 * True if the request is important
+	 */
+	readonly important?: boolean;
+
+	/**
+	 * Type of the response data
 	 */
 	responseType?: ResponseType;
 
 	/**
-	 * Original value of the response data type
+	 * Original type of the response data
 	 */
 	readonly sourceResponseType?: ResponseType;
 
@@ -68,35 +84,26 @@ export default class Response<
 	readonly status: number;
 
 	/**
-	 * Response’s status message
+	 * Text of the response status
 	 */
 	readonly statusText: string;
 
 	/**
-	 * The request URL or the final URL after redirects
-	 */
-	readonly url: string;
-
-	/**
-	 * True, if response was obtained through a redirect
-	 */
-	readonly redirected: boolean | null;
-
-	/**
-	 * True if the response is valid
+	 * True if the response' status matches with a successful status codes
+	 * (by default it should match range from 200 to 299)
 	 */
 	readonly ok: boolean;
 
 	/**
-	 * List of status codes (or a single code) that is ok for the response,
-	 * also can pass a range of codes
+	 * List of status codes (or a single code) that match successful operation.
+	 * Also, you can pass a range of codes.
 	 */
 	readonly okStatuses: OkStatuses;
 
 	/**
-	 * Map of response headers
+	 * Container of response headers
 	 */
-	readonly headers: ResponseHeaders;
+	readonly headers: Readonly<Headers>;
 
 	/**
 	 * Sequence of response decoders
@@ -104,20 +111,10 @@ export default class Response<
 	readonly decoders: WrappedDecoders;
 
 	/**
-	 * Reviver function for JSON.parse
+	 * Reviver function for `JSON.parse`
 	 * @default `convertIfDate`
 	 */
 	readonly jsonReviver?: JSONCb;
-
-	/**
-	 * True, if the request is important
-	 */
-	readonly important?: boolean;
-
-	/**
-	 * Parent operation promise
-	 */
-	readonly parent?: AbortablePromise;
 
 	/**
 	 * Value of the response body
@@ -127,7 +124,7 @@ export default class Response<
 	/**
 	 * Stream controller for handling async iteration
 	 */
-	readonly streamController?: StreamController<RequestChunk>;
+	readonly stream?: StreamBuffer<RequestChunk>;
 
 	/**
 	 * @param [body] - response body
@@ -135,28 +132,29 @@ export default class Response<
 	 */
 	constructor(body?: ResponseTypeValueP, opts?: ResponseOptions) {
 		const
-			p = Object.mixin(false, {}, defaultResponseOpts, opts),
-			ok = p.okStatuses;
+			p = Object.mixin(false, {}, defaultResponseOpts, opts);
+
+		this.url = p.url;
+		this.redirected = Boolean(p.redirected);
 
 		this.parent = p.parent;
 		this.important = p.important;
+
+		const
+			ok = p.okStatuses;
 
 		this.status = p.status;
 		this.okStatuses = ok;
 		this.statusText = p.statusText;
 
-		this.url = p.url;
-		this.redirected = p.redirected;
-		this.streamController = p.streamController;
-
 		this.ok = ok instanceof Range ?
 			ok.contains(this.status) :
 			Array.concat([], <number>ok).includes(this.status);
 
-		this.headers = this.parseHeaders(p.headers);
+		this.headers = Object.freeze(new Headers(p.headers));
 
 		const
-			contentType = this.getHeader('content-type');
+			contentType = this.headers['content-type'];
 
 		this.responseType = contentType != null ? getDataType(contentType) : p.responseType;
 		this.sourceResponseType = this.responseType;
@@ -180,15 +178,16 @@ export default class Response<
 	}
 
 	/**
-	 * Returns an HTTP header value by the specified name
+	 * Returns an HTTP header' value by the specified name
 	 * @param name
 	 */
+	@deprecated({alternative: 'headers.get'})
 	getHeader(name: string): CanUndef<string> {
-		return this.headers[normalizeHeaderName(name)];
+		return this.headers.get(name) ?? undefined;
 	}
 
 	/**
-	 * Parses a body of the response and returns the result
+	 * Parses the response body and returns a result
 	 */
 	@once
 	decode(): AbortablePromise<D> {
@@ -374,7 +373,7 @@ export default class Response<
 
 				//#endif
 
-				return new Blob([Object.cast(body)], {type: this.getHeader('content-type')});
+				return new Blob([Object.cast(body)], {type: this.headers['content-type']});
 			});
 	}
 
@@ -445,67 +444,5 @@ export default class Response<
 
 				}, this.parent);
 			});
-	}
-
-	/**
-	 * Async iterator to iterate through stream
-	 */
-	async*[Symbol.asyncIterator](): AsyncGenerator<RequestChunk> {
-		if (this.streamController == null) {
-			throw new Error('Stream controller wasn\'t provided');
-		}
-
-		yield* this.streamController[Symbol.asyncIterator]();
-	}
-
-	/**
-	 * Returns a normalized object of HTTP headers from the specified string or object
-	 * @param headers
-	 */
-	protected parseHeaders(
-		headers: CanUndef<string | Dictionary<CanArray<string>> | Headers>
-	): ResponseHeaders {
-		let init: HeadersInit = {};
-
-		if (headers instanceof Headers) {
-			init = headers;
-		} else if (Object.isString(headers)) {
-			for (let o = headers.split(/[\r\n]+/), i = 0; i < o.length; i++) {
-				const
-					header = o[i];
-
-				if (header === '') {
-					continue;
-				}
-
-				const [name, value] = header.split(':', 2);
-				init[normalizeHeaderName(name)] = value.trim();
-			}
-
-		} else if (headers != null) {
-			for (let keys = Object.keys(headers), i = 0; i < keys.length; i++) {
-				const
-					name = keys[i],
-					value = headers[name];
-
-				if (value == null || name === '') {
-					continue;
-				}
-
-				init[normalizeHeaderName(name)] = (Object.isArray(value) ? value.join(';') : value).trim();
-			}
-		}
-
-		const res = new Headers(init);
-
-		return <ResponseHeaders>new Proxy(res, {
-			get(target: Headers, prop: string, receiver: unknown): CanUndef<string> {
-				if (prop in target) {
-					return Reflect.get(target, prop, receiver);
-				}
-
-				return target.get.call(receiver, prop) ?? undefined;
-			}
-		});
 	}
 }
