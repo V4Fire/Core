@@ -6,8 +6,9 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import Headers from 'core/request/headers';
+
 import { caches } from 'core/request/const';
-import { normalizeHeaders } from 'core/request/headers';
 import type { NormalizedCreateRequestOptions } from 'core/request/interface';
 
 /**
@@ -35,10 +36,7 @@ export function getRequestKey<T>(url: string, params?: NormalizedCreateRequestOp
 		bodyKey = '';
 
 	if (params) {
-		for (let o = normalizeHeaders(params.headers), keys = Object.keys(o), i = 0; i < keys.length; i++) {
-			const name = keys[i];
-			plainHeaders.push([name, String(o[name])]);
-		}
+		plainHeaders.push(...new Headers(params.headers));
 
 		plainHeaders.sort(([name1], [name2]) => {
 			if (name1 < name2) {
@@ -64,8 +62,7 @@ export function getRequestKey<T>(url: string, params?: NormalizedCreateRequestOp
 
 			} else if (body instanceof FormData) {
 				body.forEach((el, key) => {
-					// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-					if (el == null) {
+					if (!Object.isTruly(el)) {
 						el = String(el);
 					}
 
