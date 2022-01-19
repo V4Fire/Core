@@ -98,7 +98,7 @@ console.log(headers['content-language']); // 'en, ru'
 console.log(Object.keys(headers)); // ['content-language', 'cache-control']
 ```
 
-To make headers readonly, use `Object.freeze`.
+To make headers read-only, use `Object.freeze`.
 
 ```js
 import Headers from 'core/request/headers';
