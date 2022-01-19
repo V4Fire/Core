@@ -6,4 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-export const requestQuery: unique symbol = Symbol('Request query object');
+export const
+	requestQuery = Symbol('Request query object');
+
+export const
+	NativeHeaders = Object.cast<typeof Headers>(typeof Headers === 'function' ? Headers : Function);

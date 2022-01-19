@@ -13,8 +13,8 @@
 
 import { applyQueryForStr } from 'core/request/helpers/interpolation';
 
-import { requestQuery } from 'core/request/headers/const';
-import type { HeadersForEachCb } from 'core/request/headers/interface';
+import { requestQuery, NativeHeaders } from 'core/request/headers/const';
+import type { RawHeaders, HeadersForEachCb } from 'core/request/headers/interface';
 
 export * from 'core/request/headers/interface';
 
@@ -28,7 +28,7 @@ export default class Headers {
 	 * @param [headers] - headers to initialize
 	 * @param [query] - request query object (to interpolate values from headers)
 	 */
-	constructor(headers?: Dictionary<CanArray<string>> | Headers, query?: Dictionary) {
+	constructor(headers?: RawHeaders, query?: Dictionary) {
 		Object.defineProperty(this, requestQuery, {
 			enumerable: false,
 			configurable: false,
@@ -37,8 +37,18 @@ export default class Headers {
 		});
 
 		if (headers != null) {
-			const
-				iter = headers instanceof Headers ? headers.entries() : Object.entries(headers);
+			let
+				iter;
+
+			if (
+				headers instanceof Headers ||
+				headers instanceof NativeHeaders
+			) {
+				iter = headers.entries();
+
+			} else {
+				iter = Object.entries(headers);
+			}
 
 			for (const [name, value] of iter) {
 				if (value != null) {
@@ -49,7 +59,8 @@ export default class Headers {
 	}
 
 	/**
-	 * Returns an iterator allowing to go through all key-value pairs of headers
+	 * Returns an iterator over headers.
+	 * It produces tuples with headers' names and values.
 	 */
 	[Symbol.iterator](): IterableIterator<[string, string]> {
 		return this.entries();
