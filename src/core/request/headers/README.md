@@ -97,3 +97,23 @@ const headers = new Headers({
 console.log(headers['content-language']); // 'en, ru'
 console.log(Object.keys(headers)); // ['content-language', 'cache-control']
 ```
+
+To make headers readonly, use `Object.freeze`.
+
+```js
+import Headers from 'core/request/headers';
+
+const headers = Object.freeze(new Headers({
+  'Content-Language': ['en', 'ru'],
+  'Cache-Control': 'no-cache'
+}));
+
+try {
+  headers.set('Cache-Control', 'no-store');
+
+} catch (err) {
+  console.log(err);
+}
+
+console.log(headers['cache-control']); // 'no-cache'
+```
