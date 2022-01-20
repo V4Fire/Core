@@ -12,8 +12,20 @@ import type { AbstractCache } from 'core/cache';
 import addTTL from 'core/cache/decorators/ttl';
 import addPersistent from 'core/cache/decorators/persistent';
 
-import { merge } from 'core/request/utils';
-import { storage, cache, pendingCache, caches, methodsWithoutBody } from 'core/request/const';
+import {
+
+	storage,
+
+	cache,
+	pendingCache,
+	caches,
+
+	methodsWithoutBody
+
+} from 'core/request/const';
+
+import Headers from 'core/request/headers';
+import { merge } from 'core/request/helpers';
 
 import type {
 
@@ -42,12 +54,12 @@ export default class RequestContext<D = unknown> {
 	cacheKey?: string;
 
 	/**
-	 * Storage to cache the request
+	 * Storage to cache the resolved request
 	 */
 	readonly cache!: AbstractCache<Nullable<D>>;
 
 	/**
-	 * Storage to cache the pending request
+	 * Storage to cache the request while it pending a response
 	 */
 	readonly pendingCache: AbstractCache<RequestResponse<D>> = Object.cast(pendingCache);
 
@@ -62,12 +74,12 @@ export default class RequestContext<D = unknown> {
 	readonly params!: NormalizedCreateRequestOptions<D>;
 
 	/**
-	 * Sequence of request encoders
+	 * Sequence of request data encoders
 	 */
 	encoders: WrappedEncoders;
 
 	/**
-	 * Sequence of response decoders
+	 * Sequence of response data decoders
 	 */
 	decoders: WrappedDecoders;
 
@@ -77,10 +89,19 @@ export default class RequestContext<D = unknown> {
 	parent!: AbortablePromise;
 
 	/**
-	 * Alias for query parameters of the request
+	 * Alias for `params.query`
+	 * @alias
 	 */
 	get query(): RequestQuery {
 		return this.params.query;
+	}
+
+	/**
+	 * Alias for `params.headers`
+	 * @alias
+	 */
+	get headers(): Headers {
+		return this.params.headers;
 	}
 
 	/**
@@ -92,7 +113,10 @@ export default class RequestContext<D = unknown> {
 	 * @param [params] - request parameters
 	 */
 	constructor(params?: NormalizedCreateRequestOptions<D>) {
-		const p = merge<NormalizedCreateRequestOptions<D>>({}, params);
+		const
+			p = merge<NormalizedCreateRequestOptions<D>>({}, params);
+
+		p.headers = new Headers(p.headers);
 		this.params = p;
 
 		if (p.encoder == null) {
@@ -112,8 +136,14 @@ export default class RequestContext<D = unknown> {
 		this.withoutBody = Boolean(methodsWithoutBody[p.method]);
 		this.canCache = p.cacheMethods.includes(p.method) || false;
 
-		let
-			cacheAPI = (Object.isString(p.cacheStrategy) ? cache[p.cacheStrategy] : p.cacheStrategy) ?? cache.never;
+		let cacheAPI =
+			(
+				Object.isString(p.cacheStrategy) ?
+					cache[p.cacheStrategy] :
+					p.cacheStrategy
+			) ??
+
+			cache.never;
 
 		this.isReady = (async () => {
 			// eslint-disable-next-line require-atomic-updates

@@ -6,11 +6,11 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import Response, { ListenerFn, ResponseTypeValue } from 'core/request/response';
+import Response, { ResponseTypeValue } from 'core/request/response';
 import { caches } from 'core/request/const';
 
-import Super from 'core/request/context/modules/methods';
-import type { RequestResponse, RequestResponseObject, RequestChunk } from 'core/request/interface';
+import Super from 'core/request/modules/context/modules/methods';
+import type { RequestResponse, RequestResponseObject } from 'core/request/interface';
 
 export default class RequestContext<D = unknown> extends Super<D> {
 	/**
@@ -23,8 +23,7 @@ export default class RequestContext<D = unknown> extends Super<D> {
 			cache = this.pendingCache;
 
 		const canCache =
-			key != null &&
-			!cache.has(key) &&
+			key != null && !cache.has(key) &&
 			this.params.engine.pendingCache !== false;
 
 		if (canCache) {
@@ -51,7 +50,7 @@ export default class RequestContext<D = unknown> extends Super<D> {
 	}
 
 	/**
-	 * Middleware to cache a request
+	 * Middleware to cache a response object
 	 * @param res - response object
 	 */
 	saveCache(res: RequestResponseObject<D>): RequestResponseObject<D> {
@@ -67,7 +66,7 @@ export default class RequestContext<D = unknown> extends Super<D> {
 	}
 
 	/**
-	 * Middleware to wrap the specified response value with RequestResponseObject
+	 * Middleware to wrap the specified response value with `RequestResponseObject`
 	 * @param value
 	 */
 	async wrapAsResponse(value: Response<D> | ResponseTypeValue): Promise<RequestResponseObject<D>> {
@@ -81,12 +80,12 @@ export default class RequestContext<D = unknown> extends Super<D> {
 
 		return {
 			response,
+
 			ctx: this,
 			data: await response.decode(),
+
 			dropCache: this.dropCache.bind(this),
-			[Symbol.asyncIterator](): AsyncGenerator<RequestChunk> {
-				return response[Symbol.asyncIterator]();
-			}
+			[Symbol.asyncIterator]: () => response[Symbol.asyncIterator]()
 		};
 	}
 }
