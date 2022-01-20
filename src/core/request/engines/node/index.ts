@@ -136,7 +136,7 @@ const request: RequestEngine = (params) => {
 				}
 			};
 
-			getResponse[Symbol.asyncIterator] = streamBuffer[Symbol.asyncIterator];
+			getResponse[Symbol.asyncIterator] = streamBuffer[Symbol.asyncIterator].bind(streamBuffer);
 
 			const res = new Response(getResponse, {
 				url: response.url,

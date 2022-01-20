@@ -151,7 +151,7 @@ export default function createProviderEngine(
 				res = providerRes.response;
 
 			const getResponse = () => providerRes.data;
-			getResponse[Symbol.asyncIterator] = req[Symbol.asyncIterator];
+			getResponse[Symbol.asyncIterator] = req[Symbol.asyncIterator].bind(req);
 
 			const
 				headers = Object.reject(res.headers, 'content-type');

@@ -79,13 +79,10 @@ export default class RequestContext<D = unknown> extends Super<D> {
 			});
 
 		return {
-			response,
-
-			ctx: this,
 			data: await response.decode(),
-
-			dropCache: this.dropCache.bind(this),
-			[Symbol.asyncIterator]: () => response[Symbol.asyncIterator]()
+			response,
+			ctx: this,
+			dropCache: this.dropCache.bind(this)
 		};
 	}
 }

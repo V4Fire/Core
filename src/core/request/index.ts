@@ -19,10 +19,12 @@ import { isOnline } from 'core/net';
 
 import Response from 'core/request/response';
 import RequestError from 'core/request/error';
-import RequestContext from 'core/request/modules/context';
 
 import { merge } from 'core/request/helpers';
 import { defaultRequestOpts, globalOpts } from 'core/request/const';
+
+import RequestContext from 'core/request/modules/context';
+import { createControllablePromise } from 'core/request/modules/stream-buffer';
 
 import type {
 
@@ -146,8 +148,13 @@ function request<D = unknown>(
 		baseCtx = new RequestContext<D>(merge(defaultRequestOpts, opts));
 
 	const run = (...args) => {
+		const emitter = new EventEmitter({
+			maxListeners: 1e3,
+			newListener: true,
+			wildcard: true
+		});
+
 		const
-			emitter = new EventEmitter({maxListeners: 1e3, newListener: false}),
 			ctx = RequestContext.decorateContext(baseCtx, path, resolver, ...args),
 			requestParams = ctx.params;
 
@@ -156,6 +163,9 @@ function request<D = unknown>(
 			globalOpts,
 			opts: requestParams
 		};
+
+		const
+			responseIterator = createControllablePromise<() => AsyncIterableIterator<RequestChunk>>();
 
 		const requestPromise = <RequestPromise>new AbortablePromise(async (resolve, reject, onAbort) => {
 			const errDetails = {
@@ -274,8 +284,15 @@ function request<D = unknown>(
 					decoders: ctx.decoders
 				};
 
-				const
-					createReq = () => requestParams.engine(reqOpts);
+				const createReq = () => requestParams
+					.engine(reqOpts)
+					.catch((err) => {
+						if (err instanceof RequestError) {
+							Object.assign(err.details, errDetails);
+						}
+
+						return Promise.reject(err);
+					});
 
 				if (requestParams.retry != null) {
 					const retryParams: RetryOptions = Object.isNumber(requestParams.retry) ?
@@ -355,16 +372,13 @@ function request<D = unknown>(
 			}
 
 			async function wrapSuccessResponse(response: Response<D>): Promise<RequestResponseObject<D>> {
+				responseIterator.resolve(response[Symbol.asyncIterator].bind(response));
+
 				const
 					details = {response, ...errDetails};
 
 				if (!response.ok) {
-					const
-						requestError = new RequestError(RequestError.InvalidStatus, details);
-
-					await response.body;
-					response.stream?.destroy(requestError);
-					throw AbortablePromise.wrapReasonToIgnore(requestError);
+					throw AbortablePromise.wrapReasonToIgnore(new RequestError(RequestError.InvalidStatus, details));
 				}
 
 				const
@@ -374,17 +388,17 @@ function request<D = unknown>(
 					data,
 					response,
 					ctx,
-
-					dropCache: ctx.dropCache.bind(ctx),
-
-					[Symbol.asyncIterator](): AsyncGenerator<RequestChunk> {
-						return response[Symbol.asyncIterator]();
-					}
+					dropCache: ctx.dropCache.bind(ctx)
 				};
 			}
 		});
 
 		requestPromise.emitter = emitter;
+		requestPromise[Symbol.asyncIterator] = () => Object.assign(responseIterator.then((iter) => iter()), {
+			[Symbol.asyncIterator]() {
+				return this;
+			}
+		});
 
 		return requestPromise;
 	};

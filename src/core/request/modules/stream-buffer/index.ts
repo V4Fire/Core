@@ -14,6 +14,8 @@
 import { createControllablePromise } from 'core/request/modules/stream-buffer/helpers';
 import type { ControllablePromise } from 'core/request/modules/stream-buffer/interface';
 
+export * from 'core/request/modules/stream-buffer/helpers';
+
 export default class StreamBuffer<T = unknown> {
 	/**
 	 * Returns a boolean stating whether the stream is open or not

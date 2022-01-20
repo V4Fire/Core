@@ -122,7 +122,7 @@ const request: RequestEngine = (params) => {
 			});
 		});
 
-		getResponse[Symbol.asyncIterator] = streamBuffer[Symbol.asyncIterator];
+		getResponse[Symbol.asyncIterator] = streamBuffer[Symbol.asyncIterator].bind(streamBuffer);
 
 		xhr.addEventListener('readystatechange', () => {
 			if (xhr.readyState !== 2) {

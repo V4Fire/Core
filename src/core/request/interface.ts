@@ -90,11 +90,8 @@ export interface RequestChunk {
 
 export interface RequestResponseObject<D = unknown> {
 	data: Nullable<D>;
-	[Symbol.asyncIterator](): AsyncIterable<RequestChunk>;
-
 	ctx: Readonly<RequestContext<D>>;
 	response: Response<D>;
-
 	cache?: CacheType;
 	dropCache(): void;
 }
