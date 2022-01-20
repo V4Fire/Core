@@ -20,18 +20,14 @@ import { convertIfDate } from 'core/json';
 import { getDataType } from 'core/mime-type';
 
 import Headers from 'core/request/headers';
-import type StreamBuffer from 'core/request/modules/stream-buffer';
-
 import { defaultResponseOpts, noContentStatusCodes } from 'core/request/response/const';
 import type { OkStatuses, WrappedDecoders, RequestChunk } from 'core/request/interface';
 
 import type {
 
 	ResponseType,
-	ResponseTypeValue,
 	ResponseTypeValueP,
 	ResponseOptions,
-
 	JSONLikeValue
 
 } from 'core/request/response/interface';
@@ -119,12 +115,7 @@ export default class Response<
 	/**
 	 * Value of the response body
 	 */
-	readonly body: CanPromise<ResponseTypeValue>;
-
-	/**
-	 * Stream controller for handling async iteration
-	 */
-	readonly stream?: StreamBuffer<RequestChunk>;
+	body: ResponseTypeValueP;
 
 	/**
 	 * @param [body] - response body
@@ -152,6 +143,7 @@ export default class Response<
 			Array.concat([], <number>ok).includes(this.status);
 
 		this.headers = Object.freeze(new Headers(p.headers));
+		this.body = body;
 
 		const
 			contentType = this.headers['content-type'];
@@ -173,8 +165,21 @@ export default class Response<
 		} else if (p.jsonReviver !== false) {
 			this.jsonReviver = convertIfDate;
 		}
+	}
 
-		this.body = Object.isFunction(body) ? body() : body;
+	[Symbol.asyncIterator](): AsyncIterableIterator<RequestChunk> {
+		const
+			{body, [Symbol.asyncIterator]: iter} = this;
+
+		if (!Object.isAsyncIterable(body)) {
+			throw new TypeError('The response is not an iterable object');
+		}
+
+		this.body = Object.assign(() => undefined, {
+			[Symbol.asyncIterator]: iter
+		});
+
+		return Object.cast(iter.call(body));
 	}
 
 	/**
@@ -258,7 +263,7 @@ export default class Response<
 	 */
 	@once
 	document(): AbortablePromise<Document | null> {
-		return AbortablePromise.resolve(this.body, this.parent)
+		return AbortablePromise.resolveAndCall(this.body, this.parent)
 			.then<Document | null>((body) => {
 				//#if node_js
 
@@ -292,7 +297,7 @@ export default class Response<
 	 * Parses the response body as a JSON object and returns it
 	 */
 	json(): AbortablePromise<D | null> {
-		return AbortablePromise.resolve(this.body, this.parent)
+		return AbortablePromise.resolveAndCall(this.body, this.parent)
 			.then<D | null>((body) => {
 				if (!IS_NODE && body instanceof Document) {
 					throw new TypeError('Invalid data type');
@@ -322,7 +327,7 @@ export default class Response<
 	 * Parses the response body as an ArrayBuffer object and returns it
 	 */
 	arrayBuffer(): AbortablePromise<ArrayBuffer | null> {
-		return AbortablePromise.resolve(this.body, this.parent)
+		return AbortablePromise.resolveAndCall(this.body, this.parent)
 			.then<ArrayBuffer | null>((body) => {
 				//#unless node_js
 
@@ -352,7 +357,7 @@ export default class Response<
 	 * Parses the response body as a Blob structure and returns it
 	 */
 	blob(): AbortablePromise<Blob | null> {
-		return AbortablePromise.resolve(this.body, this.parent)
+		return AbortablePromise.resolveAndCall(this.body, this.parent)
 			.then<Blob | null>((body) => {
 				if (!IS_NODE && body instanceof Document) {
 					throw new TypeError('Invalid data type');
@@ -382,7 +387,7 @@ export default class Response<
 	 */
 	@once
 	text(): AbortablePromise<string | null> {
-		return AbortablePromise.resolve(this.body, this.parent)
+		return AbortablePromise.resolveAndCall(this.body, this.parent)
 			.then<string | null>((body) => {
 				if (body == null || body instanceof ArrayBuffer && body.byteLength === 0) {
 					return null;
