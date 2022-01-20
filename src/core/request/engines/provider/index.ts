@@ -33,8 +33,6 @@ import type { RequestEngine, RequestOptions } from 'core/request/interface';
 
 import { availableParams } from 'core/request/engines/provider/const';
 import type { AvailableOptions, MethodsMapping, Meta } from 'core/request/engines/provider/interface';
-import Headers from 'core/request/headers';
-import { RequestEvents } from 'core/request/const';
 
 export * from 'core/request/engines/provider/const';
 export * from 'core/request/engines/provider/interface';
@@ -66,7 +64,7 @@ export default function createProviderEngine(
 
 	function dataProviderEngine(params: RequestOptions): AbortablePromise<Response> {
 		const
-			p = <AvailableOptions>Object.select(params, availableParams),
+			p = Object.cast<AvailableOptions>(Object.select(params, availableParams)),
 			provider = getProviderInstance(src, p.meta);
 
 		const defaultRequestMethods = providerMethodProperties.reduceRight((carry, key) => {
@@ -85,12 +83,12 @@ export default function createProviderEngine(
 			...methodsMapping
 		};
 
-		const parent = new AbortablePromise<Response>(async (resolve, reject, onAbort) => {
+		const requestPromise = new AbortablePromise<Response>(async (resolve, reject, onAbort) => {
 			await new Promise((r) => {
 				setImmediate(r);
 			});
 
-			p.parent = <AbortablePromise>parent;
+			p.parent = <AbortablePromise>requestPromise;
 
 			let
 				{providerMethod} = p.meta;
@@ -111,18 +109,16 @@ export default function createProviderEngine(
 				requestMethod = provider[`${providerMethod}Method`] ?? 'post';
 
 			let
-				body = queryMethods[requestMethod] === true ? p.query : p.body;
+				body = queryMethods[requestMethod] === true ? p.query : p.body,
+				urlProp = `base-${providerMethod}-URL`.camelize(false);
 
-			let
-				urlProperty = `base-${providerMethod}-URL`.camelize(false);
-
-			if (!Object.isTruly(provider[urlProperty])) {
-				urlProperty = providerUrlProperties[0];
+			if (!Object.isTruly(provider[urlProp])) {
+				urlProp = providerUrlProperties[0];
 			}
 
 			const providerToRequest = isSimpleRequest ?
 				createMixedProvider(provider, {
-					[urlProperty]: p.url.replace(globalOpts.api ?? '', '')
+					[urlProp]: p.url.replace(globalOpts.api ?? '', '')
 				}) :
 
 				provider;
@@ -135,71 +131,52 @@ export default function createProviderEngine(
 				req = providerToRequest[<string>providerMethod](body, p);
 
 			onAbort((reason) => {
-				params.eventEmitter.emit(RequestEvents.ABORT, reason);
 				req.abort(reason);
 			});
 
-			params.eventEmitter.removeAllListeners('newListener');
-			params.eventEmitter.on('newListener', (event, listener) => {
-				if (Object.values(RequestEvents).includes(event)) {
+			const
+				registeredEvents = Object.createDict<boolean>();
+
+			params.emitter.on('newListener', (event: string) => {
+				if (registeredEvents[event]) {
 					return;
 				}
 
-				req.on(event, listener);
+				registeredEvents[event] = true;
+				req.on(event, (e) => params.emitter.emit(event, e));
 			});
 
-			params.eventEmitter.removeAllListeners('removeListener');
-			params.eventEmitter.on('removeListener', (event, listener) => {
-				if (Object.values(RequestEvents).includes(event)) {
-					return;
-				}
+			const
+				providerRes = await req,
+				res = providerRes.response;
 
-				req.off(event, listener);
-			});
+			const getResponse = () => providerRes.data;
+			getResponse[Symbol.asyncIterator] = req[Symbol.asyncIterator];
 
-			req.on('progress', (chunk) => {
-				params.eventEmitter.emit('progress', chunk);
-			});
+			const
+				headers = Object.reject(res.headers, 'content-type');
 
-			let
-				response: Response;
+			return resolve(new Response(getResponse, {
+				url: res.url,
+				redirected: res.redirected,
 
-			const data = req.then(({data}) => {
-				resolve(response);
-				return data;
-			}, (err) => {
-				reject(err);
-				return null;
-			});
+				parent: params.parent,
+				important: res.important,
 
-			req.on('response', (res) => {
-				const headers = Object.reject(
-					res.headers instanceof Headers ? Object.fromEntries(res.headers) : res.headers,
-					'content-type'
-				);
+				okStatuses: res.okStatuses,
+				status: res.status,
+				statusText: res.statusText,
 
-				response = new Response(data, {
-					responseType: 'object',
-					important: res.important,
-					parent: params.parent,
+				headers,
+				responseType: 'object',
 
-					okStatuses: res.okStatuses,
-					status: res.status,
+				decoder: params.decoders,
+				jsonReviver: params.jsonReviver
+			}));
 
-					url: res.url,
-					statusText: res.statusText,
-					redirected: res.redirected,
-					streamController: res.streamController,
-					headers,
-					decoder: params.decoders,
-					jsonReviver: params.jsonReviver
-				});
-
-				params.eventEmitter.emit('response', response);
-			});
 		}, params.parent);
 
-		return parent;
+		return requestPromise;
 	}
 }
 

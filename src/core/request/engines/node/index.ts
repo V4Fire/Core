@@ -41,12 +41,12 @@ const request: RequestEngine = (params) => {
 	}
 
 	const gotOpts = <Options>{
-		throwHttpErrors: false,
-		method: p.method,
-		timeout: p.timeout,
-		retry: 0,
+		body,
 		headers,
-		body
+		method: p.method,
+		throwHttpErrors: false,
+		timeout: p.timeout,
+		retry: 0
 	};
 
 	return new AbortablePromise<Response>(async (resolve, reject, onAbort) => {
@@ -149,7 +149,7 @@ const request: RequestEngine = (params) => {
 				status: response.statusCode,
 				statusText: response.statusMessage,
 
-				headers: <Dictionary<string>>response.headers,
+				headers: Object.cast(response.headers),
 				responseType: p.responseType,
 
 				decoder: p.decoders,
