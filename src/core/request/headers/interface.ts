@@ -6,15 +6,14 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type Headers from 'core/request/headers';
-import type { NativeHeaders } from 'core/request/headers/const';
+import type V4Headers from 'core/request/headers';
 
 export interface HeadersForEachCb {
-	(value: string, key: string, parent: Headers): any;
+	(value: string, key: string, parent: V4Headers): any;
 }
 
 export type RawHeaders =
+	V4Headers |
 	Headers |
-	typeof NativeHeaders |
 	string |
 	Dictionary<CanArray<unknown>>;

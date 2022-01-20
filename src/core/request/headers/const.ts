@@ -8,6 +8,3 @@
 
 export const
 	requestQuery = Symbol('Request query object');
-
-export const
-	NativeHeaders = Object.cast<typeof Headers>(typeof Headers === 'function' ? Headers : Function);

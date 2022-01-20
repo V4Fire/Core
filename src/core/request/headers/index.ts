@@ -13,12 +13,12 @@
 
 import { applyQueryForStr } from 'core/request/helpers/interpolation';
 
-import { requestQuery, NativeHeaders } from 'core/request/headers/const';
+import { requestQuery } from 'core/request/headers/const';
 import type { RawHeaders, HeadersForEachCb } from 'core/request/headers/interface';
 
 export * from 'core/request/headers/interface';
 
-export default class Headers {
+export default class V4Headers {
 	/**
 	 * Request query object (to interpolate values from headers)
 	 */
@@ -69,8 +69,8 @@ export default class Headers {
 				iter;
 
 			if (
-				headers instanceof Headers ||
-				headers instanceof NativeHeaders
+				headers instanceof V4Headers ||
+				typeof Headers === 'function' && headers instanceof Headers
 			) {
 				iter = headers.entries();
 
