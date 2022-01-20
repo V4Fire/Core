@@ -60,7 +60,7 @@ export default class StreamBuffer<T = unknown> {
 	 */
 	[Symbol.asyncIterator](): AsyncIterableIterator<T> {
 		const that = this;
-		return createIter();
+		return Object.cast(createIter());
 
 		async function* createIter() {
 			that.isAsyncIteratorInvoked = true;
@@ -68,12 +68,9 @@ export default class StreamBuffer<T = unknown> {
 			const
 				{buffer} = that;
 
-			let
-				cursor = 0;
-
 			while (true) {
-				if (cursor < buffer.length) {
-					yield buffer[cursor++];
+				if (buffer.length > 0) {
+					yield buffer.pop();
 					continue;
 				}
 
