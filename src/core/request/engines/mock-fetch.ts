@@ -17,13 +17,14 @@ const mockFetch: typeof fetch = async (input, init?) => {
 		get() {
 			return {
 				getReader(): ReadableStreamDefaultReader<Uint8Array> {
-					const iter = stream[Symbol.asyncIterator]();
+					const
+						iter = stream[Symbol.asyncIterator]();
 
-					return <ReadableStreamDefaultReader<Uint8Array>>{
+					return Object.cast({
 						read(): Promise<ReadableStreamDefaultReadResult<Uint8Array>> {
-							return <Promise<ReadableStreamDefaultReadResult<Uint8Array>>>iter.next();
+							return iter.next();
 						}
-					};
+					});
 				}
 			};
 		}

@@ -18,7 +18,7 @@ import RequestError from 'core/request/error';
 import StreamBuffer from 'core/request/modules/stream-buffer';
 
 import { convertDataToSend } from 'core/request/engines/helpers';
-import type { RequestEngine, NormalizedCreateRequestOptions, RequestChunk } from 'core/request/interface';
+import type { RequestEngine, RequestChunk } from 'core/request/interface';
 
 /**
  * Creates request by using the fetch API with the specified parameters and returns a promise
@@ -46,7 +46,7 @@ const request: RequestEngine = (params) => {
 		headers['Content-Type'] = contentType;
 	}
 
-	const normalizedOpts: RequestInit = {
+	const fetchOpts: RequestInit = {
 		body,
 		headers,
 		method: p.method,
@@ -59,13 +59,11 @@ const request: RequestEngine = (params) => {
 			{status} = await AbortablePromise.resolve(isOnline(), p.parent);
 
 		if (!status) {
-			return reject(new RequestError(RequestError.Offline, {
-				request: <NormalizedCreateRequestOptions>normalizedOpts
-			}));
+			return reject(new RequestError(RequestError.Offline));
 		}
 
 		const
-			req = fetch(p.url, normalizedOpts);
+			req = fetch(p.url, fetchOpts);
 
 		let
 			timer;
@@ -86,7 +84,7 @@ const request: RequestEngine = (params) => {
 				contentLength = res.headers.get('Content-Length'),
 				total = contentLength != null ? Number(contentLength) : undefined;
 
-			const body = () => {
+			const getResponse = () => {
 				switch (p.responseType) {
 					case 'json':
 					case 'document':
@@ -98,7 +96,7 @@ const request: RequestEngine = (params) => {
 				}
 			};
 
-			body[Symbol.asyncIterator] = () => {
+			getResponse[Symbol.asyncIterator] = () => {
 				let
 					loaded = 0;
 
@@ -125,7 +123,7 @@ const request: RequestEngine = (params) => {
 				return streamBuffer[Symbol.asyncIterator]();
 			};
 
-			resolve(new Response(body, {
+			resolve(new Response(getResponse, {
 				url: res.url,
 				redirected: res.redirected,
 

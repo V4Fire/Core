@@ -6,4 +6,9 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-export const writeableStreamMethods = ['POST', 'PUT', 'PATCH', 'DELETE'];
+export const writeableStreamMethods = Object.createDict({
+	POST: true,
+	PUT: true,
+	PATCH: true,
+	DELETE: true
+});

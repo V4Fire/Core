@@ -17,12 +17,10 @@ import { isOnline } from 'core/net';
 
 import Response from 'core/request/response';
 import RequestError from 'core/request/error';
-import { RequestEvents } from 'core/request/const';
+import StreamBuffer from 'core/request/modules/stream-buffer';
 
 import { convertDataToSend } from 'core/request/engines/helpers';
-import type { RequestEngine, NormalizedCreateRequestOptions, RequestChunk } from 'core/request/interface';
-
-import StreamController from 'core/request/simple-stream-controller';
+import type { RequestEngine, RequestChunk } from 'core/request/interface';
 
 /**
  * Creates request by using XMLHttpRequest with the specified parameters and returns a promise
@@ -31,7 +29,8 @@ import StreamController from 'core/request/simple-stream-controller';
 const request: RequestEngine = (params) => {
 	const
 		p = params,
-		xhr = new XMLHttpRequest();
+		xhr = new XMLHttpRequest(),
+		streamBuffer = new StreamBuffer<RequestChunk>();
 
 	let
 		[body, contentType] = convertDataToSend<BodyInit>(p.body, p.contentType);
@@ -65,25 +64,8 @@ const request: RequestEngine = (params) => {
 	}
 
 	if (p.headers) {
-		for (let o = p.headers, keys = Object.keys(o), i = 0; i < keys.length; i++) {
-			const
-				name = keys[i],
-				val = o[name];
-
-			if (Object.isArray(val)) {
-				for (let i = 0; i < val.length; i++) {
-					const
-						el = val[i];
-
-					// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-					if (el != null) {
-						xhr.setRequestHeader(name, el);
-					}
-				}
-
-			} else if (val != null) {
-				xhr.setRequestHeader(name, val);
-			}
+		for (const [name, val] of p.headers) {
+			xhr.setRequestHeader(name, val);
 		}
 	}
 
@@ -93,77 +75,78 @@ const request: RequestEngine = (params) => {
 
 	return new AbortablePromise<Response>(async (resolve, reject, onAbort) => {
 		const
-			{status} = await AbortablePromise.resolve(isOnline(), p.parent),
-			streamController = new StreamController<RequestChunk>();
+			{status} = await AbortablePromise.resolve(isOnline(), p.parent);
 
 		if (!status) {
-			return reject(new RequestError(RequestError.Offline, {
-				request: <NormalizedCreateRequestOptions>xhr
-			}));
+			return reject(new RequestError(RequestError.Offline));
 		}
 
 		onAbort((reason) => {
-			p.eventEmitter.emit(RequestEvents.ABORT, reason);
-			streamController.destroy(reason);
+			streamBuffer.destroy(reason);
 			xhr.abort();
 		});
 
-		p.eventEmitter.removeAllListeners('newListener');
-		p.eventEmitter.on('newListener', (event, listener) => {
-			if (Object.values(RequestEvents).includes(event)) {
+		const
+			registeredEvents = Object.createDict<boolean>();
+
+		p.emitter.on('newListener', (event: string) => {
+			if (registeredEvents[event]) {
 				return;
 			}
 
-			xhr.addEventListener(event, listener);
-		});
+			registeredEvents[event] = true;
 
-		p.eventEmitter.removeAllListeners('removeListener');
-		p.eventEmitter.on('removeListener', (event, listener) => {
-			if (Object.values(RequestEvents).includes(event)) {
-				return;
+			if (event.startsWith('upload.')) {
+				xhr.upload.addEventListener(event.split('.').slice(1).join('.'), (e) => {
+					p.emitter.emit(event, e);
+				});
+
+			} else {
+				xhr.addEventListener(event, (e) => {
+					p.emitter.emit(event, e);
+				});
 			}
-
-			xhr.removeEventListener(event, listener);
 		});
 
-		xhr.addEventListener('progress', (event: ProgressEvent) => {
-			const chunk = {
-				data: null,
-				...Object.select(event, ['loaded', 'total'])
-			};
-
-			p.eventEmitter.emit(RequestEvents.PROGRESS, chunk);
-			streamController.add(chunk);
+		xhr.addEventListener('progress', (e: ProgressEvent) => {
+			streamBuffer.add({
+				total: e.total,
+				loaded: e.loaded
+			});
 		});
 
-		const resBody = new Promise((resolve) => {
+		const getResponse = () => new Promise((resolve) => {
 			xhr.addEventListener('load', () => {
-				streamController.close();
+				streamBuffer.close();
 				resolve(xhr.response);
 			});
 		});
+
+		getResponse[Symbol.asyncIterator] = streamBuffer[Symbol.asyncIterator];
 
 		xhr.addEventListener('readystatechange', () => {
 			if (xhr.readyState !== 2) {
 				return;
 			}
 
-			const response = new Response(resBody, {
+			const response = new Response(getResponse, {
+				url: xhr.responseURL,
+				redirected: p.url !== xhr.responseURL,
+
 				parent: p.parent,
 				important: p.important,
-				url: xhr.responseURL,
-				redirected: null,
-				responseType: p.responseType,
+
 				okStatuses: p.okStatuses,
 				status: xhr.status,
 				statusText: xhr.statusText,
+
 				headers: xhr.getAllResponseHeaders(),
+				responseType: p.responseType,
+
 				decoder: p.decoders,
-				jsonReviver: p.jsonReviver,
-				streamController
+				jsonReviver: p.jsonReviver
 			});
 
-			p.eventEmitter.emit(RequestEvents.RESPONSE, response);
 			resolve(response);
 		});
 
@@ -171,7 +154,7 @@ const request: RequestEngine = (params) => {
 			const
 				requestError = new RequestError(RequestError.Engine, {error});
 
-			streamController.destroy(requestError);
+			streamBuffer.destroy(requestError);
 			reject(new RequestError(RequestError.Engine, {error}));
 		});
 
@@ -179,7 +162,7 @@ const request: RequestEngine = (params) => {
 			const
 				requestError = new RequestError(RequestError.Timeout);
 
-			streamController.destroy(requestError);
+			streamBuffer.destroy(requestError);
 			reject(requestError);
 		});
 
