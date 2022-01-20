@@ -7,15 +7,19 @@
  */
 
 import type { EventEmitter2 as EventEmitter } from 'eventemitter2';
-import type Range from 'core/range';
-import type AbortablePromise from 'core/promise/abortable';
 import type { AbstractCache } from 'core/cache';
 
+import type Range from 'core/range';
+import type AbortablePromise from 'core/promise/abortable';
+
+import type Headers from 'core/request/headers';
+import type { RawHeaders } from 'core/request/headers';
+
 import type Response from 'core/request/response';
-import type { ListenerFn, ResponseType } from 'core/request/response';
+import type { ResponseType } from 'core/request/response';
 
 import type RequestError from 'core/request/error';
-import type RequestContext from 'core/request/context';
+import type RequestContext from 'core/request/modules/context';
 
 import type { defaultRequestOpts } from 'core/request/const';
 import type { StatusCodes } from 'core/status-codes';
@@ -74,27 +78,30 @@ export interface WrappedDecoder<I = unknown, O = unknown> {
 export type Decoders = Iterable<Decoder>;
 export type WrappedDecoders = Iterable<WrappedDecoder>;
 
-export type CacheType = 'memory' | 'offline';
+export type CacheType =
+	'memory' |
+	'offline';
 
 export interface RequestChunk {
-	data: Uint8Array | null;
 	loaded: number;
-	total: number | null;
+	total?: number;
+	data?: Uint8Array;
 }
 
 export interface RequestResponseObject<D = unknown> {
-	[Symbol.asyncIterator](): AsyncGenerator<RequestChunk>;
 	data: Nullable<D>;
-	response: Response<D>;
+	[Symbol.asyncIterator](): AsyncIterable<RequestChunk>;
+
 	ctx: Readonly<RequestContext<D>>;
+	response: Response<D>;
+
 	cache?: CacheType;
 	dropCache(): void;
 }
 
 export type RequestPromise = AbortablePromise & {
-	[Symbol.asyncIterator](): AsyncGenerator<RequestChunk, void>;
-	on(eventName: string, listener: ListenerFn): void;
-	off(eventName: string, listener: ListenerFn): void;
+	emitter: EventEmitter;
+	[Symbol.asyncIterator](): AsyncIterable<RequestChunk>;
 };
 
 export type RequestResponse<D = unknown> = AbortablePromise<RequestResponseObject<D>>;
@@ -110,18 +117,24 @@ export interface RequestResolver<D = unknown, ARGS extends any[] = unknown[]> {
 export interface RequestOptions {
 	readonly url: string;
 	readonly method: RequestMethod;
+
+	readonly emitter: EventEmitter;
+	readonly parent: AbortablePromise;
+
 	readonly timeout?: number;
 	readonly okStatuses?: OkStatuses;
+
 	readonly contentType?: string;
 	readonly responseType?: ResponseType;
+
 	readonly decoders?: WrappedDecoders;
 	readonly jsonReviver?: JSONCb | false;
-	readonly headers?: Dictionary<CanArray<string>>;
+
+	readonly headers?: Headers;
 	readonly body?: RequestBody;
+
 	readonly important?: boolean;
 	readonly credentials?: boolean;
-	readonly parent: AbortablePromise;
-	readonly eventEmitter: EventEmitter;
 }
 
 export type RequestQuery =
@@ -141,18 +154,13 @@ export interface WrappedCreateRequestOptions<D = unknown> extends CreateRequestO
 	 */
 	path: CanUndef<string>;
 
+	headers: Headers;
 	encoder?: WrappedEncoder | WrappedEncoders;
 	decoder?: WrappedDecoder | WrappedDecoders;
 }
 
-export type NormalizedCreateRequestOptions<D = unknown> =
-	typeof defaultRequestOpts &
-	WrappedCreateRequestOptions<D>;
-
-export type ResolverResult =
-	string |
-	string[] |
-	undefined;
+export type NormalizedCreateRequestOptions<D = unknown> = typeof defaultRequestOpts & WrappedCreateRequestOptions<D>;
+export type ResolverResult = CanUndef<CanArray<string>>;
 
 export interface GlobalOptions {
 	api?: Nullable<string>;
@@ -175,19 +183,14 @@ export type Middlewares<D = unknown> =
 
 export type RequestAPIValue<T = string> = Nullable<T> | (() => Nullable<T>);
 
-export type ControllablePromise<R = unknown> = Promise<R> & {
-	resolveNow(value?: R): void;
-	rejectNow(error: any): void;
-};
-
 /**
- * Object with API parameters. If the API is specified it will be concatenated with
- * a request path URL. It can be useful to create request factories. In addition, you can provide a function as a
- * key value, and it will be invoked.
+ * An object with API parameters.
+ * If the API is specified, it will be concatenated with a request path URL.
+ * It can be useful to create request factories. In addition, you can provide a function as a key-value,
+ * and it will be invoked. You can provide a direct URL for the API, such as `'https://google.com'`.
  *
- * You can provide a direct URL for the API, such as `'https://google.com'`.
- * Or you can provide a bunch of parameters to map on .api parameter from the application config.
- * For example, if the config.api is equal to `'https://google.com'`, and you provide parameters, like,
+ * Or you can provide a bunch of parameters to map on `api` parameter from the application config.
+ * For example, if the `config.api` is equal to `'https://google.com'`, and you provide parameters, like,
  *
  * ```
  *   {
@@ -200,7 +203,7 @@ export type ControllablePromise<R = unknown> = Promise<R> & {
  */
 export interface RequestAPI {
 	/**
-	 * Direct value an API URL
+	 * The direct value of API URL
 	 *
 	 * @example
 	 * `'https://google.com'`
@@ -272,7 +275,7 @@ export interface RequestEngine {
 	(params: RequestOptions): AbortablePromise<Response>;
 
 	/**
-	 * The flag indicates that the active requests with the same request hash can be merged
+	 * A flag indicates that the active requests with the same request hash can be merged
 	 * @default `true`
 	 */
 	pendingCache?: boolean;
@@ -294,13 +297,13 @@ export interface CreateRequestOptions<D = unknown> {
 	retry?: RetryOptions | number;
 
 	/**
-	 * Mime type of the request data (if not specified, it will be casted dynamically)
+	 * Mime type of the request data (if not specified, it will be cast dynamically)
 	 */
 	contentType?: string;
 
 	/**
 	 * Type of the response data:
-	 * (if not specified, it will be casted dynamically from response headers):
+	 * (if not specified, it will be cast dynamically from the response headers):
 	 *
 	 * 1. `'text'` - result is interpreted as a simple string;
 	 * 1. `'json'` - result is interpreted as a JSON string;
@@ -311,9 +314,9 @@ export interface CreateRequestOptions<D = unknown> {
 	responseType?: ResponseType;
 
 	/**
-	 * Request body
+	 * Additional request headers
 	 */
-	body?: RequestBody;
+	headers?: RawHeaders;
 
 	/**
 	 * URL query parameters
@@ -321,9 +324,9 @@ export interface CreateRequestOptions<D = unknown> {
 	query?: RequestQuery;
 
 	/**
-	 * Additional request headers
+	 * Request body
 	 */
-	headers?: Dictionary<CanArray<unknown>>;
+	body?: RequestBody;
 
 	/**
 	 * Enables providing of credentials for cross-domain requests
@@ -339,15 +342,15 @@ export interface CreateRequestOptions<D = unknown> {
 	api?: RequestAPI;
 
 	/**
-	 * List of status codes (or a single code) that is ok for response,
-	 * also can pass a range of codes
+	 * List of status codes (or a single code) that match successful operation.
+	 * Also, you can pass a range of codes.
 	 *
 	 * @default `new Range(200, 299)`
 	 */
 	okStatuses?: OkStatuses;
 
 	/**
-	 * Value in milliseconds for the request timeout
+	 * Value in milliseconds for a request timeout
 	 */
 	timeout?: number;
 
@@ -355,10 +358,10 @@ export interface CreateRequestOptions<D = unknown> {
 	 * Strategy of caching for requests that supports it:
 	 *
 	 * 1. `'forever'` - caches all requests and stores their values forever within the active session or
-	 * until the cache expires (if .cacheTTL is specified);
-	 * 1. `'queue'` - caches all requests, but more frequent requests will push less frequent requests;
-	 * 1. `'never'` - never caches any requests;
-	 * 1. custom cache object.
+	 *   until the cache expires (if `cacheTTL` is specified);
+	 * 2. `'queue'` - caches all requests, but more frequent requests will push less frequent requests;
+	 * 3. `'never'` - never caches any requests;
+	 * 4. custom cache object.
 	 */
 	readonly cacheStrategy?: CacheStrategy;
 
@@ -374,8 +377,8 @@ export interface CreateRequestOptions<D = unknown> {
 	cacheMethods?: RequestMethod[];
 
 	/**
-	 * Value in milliseconds that indicates how long a value of the request should keep in
-	 * the cache (all request is stored within the active session without expiring by default)
+	 * Value in milliseconds that indicates how long a request' value should keep in the cache
+	 * (all requests are stored within the active session without expiring by default)
 	 */
 	cacheTTL?: number;
 
@@ -386,26 +389,26 @@ export interface CreateRequestOptions<D = unknown> {
 	offlineCache?: boolean;
 
 	/**
-	 * Value in milliseconds that indicates how long a value of the request should keep in the offline cache
+	 * Value in milliseconds that indicates how long a request' value should keep in the offline cache
 	 * @default `(1).day()`
 	 */
 	offlineCacheTTL?: number;
 
 	/**
-	 * Dictionary or an iterable value with middleware functions:
+	 * A dictionary or iterable value with middleware functions:
 	 * functions take an environment of request parameters and can modify theirs.
 	 *
-	 * Please notice, that the order of middlewares depends on the structure that you use.
-	 * Also, if at least one of middlewares returns a function, than the result of invoking this function
+	 * Please notice that the order of middleware depends on the structure you use.
+	 * Also, if at least one of the middlewares returns a function, the result of invoking this function
 	 * will be returned as the request result. It can be helpful to organize mocks of data and
 	 * other similar cases when you don't want to execute a real request.
 	 */
 	middlewares?: Middlewares<D>;
 
 	/**
-	 * Function (or a sequence of functions) that takes response data of the current request
-	 * and returns a new data to respond. If you provide a sequence of functions, then the first function
-	 * will provide a result to the next function from te sequence, etc.
+	 * A function (or a sequence of functions) takes the current request data
+	 * and returns new data to request. If you provide a sequence of functions,
+	 * the first function will pass result in the next function from the sequence, etc.
 	 */
 	encoder?: Encoder | Encoders;
 
@@ -416,32 +419,32 @@ export interface CreateRequestOptions<D = unknown> {
 	querySerializer?(query: RequestQuery): string;
 
 	/**
-	 * Function (or a sequence of functions) that takes response data of the current request
-	 * and returns a new data to respond. If you provide a sequence of functions, then the first function
-	 * will provide a result to the next function from te sequence, etc.
+	 * A function (or a sequence of functions) takes the current request's response data
+	 * and returns new data to respond. If you provide a sequence of functions,
+	 * the first function will pass a result to the next function from the sequence, etc.
 	 */
 	decoder?: Decoder | Decoders;
 
 	/**
-	 * Reviver function for JSON.parse or false to disable defaults
+	 * Reviver function for `JSON.parse` or false to disable defaults
 	 * @default `convertIfDate`
 	 */
 	jsonReviver?: JSONCb | false;
 
 	/**
-	 * The meta flag that indicates that the request is important: usually it used with middlewares
-	 * to indicate that the request need execute as soon as possible
+	 * A meta flag that indicates that the request is important: is usually used with middleware to indicate that
+	 * the request needs to be executed as soon as possible
 	 */
 	important?: boolean;
 
 	/**
-	 * Dictionary with some extra parameters for the request: usually it used with middlewares for
-	 * providing domain specific information
+	 * A dictionary with some extra parameters for the request: is usually used with middlewares to provide
+	 * domain-specific information
 	 */
 	meta?: Dictionary;
 
 	/**
-	 * Custom request engine
+	 * Request engine to use
 	 */
 	engine?: RequestEngine;
 }

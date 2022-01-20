@@ -15,12 +15,13 @@ import { Cache, RestrictedCache, NeverCache, AbstractCache } from 'core/cache';
 import type { AsyncStorage } from 'core/kv-storage';
 
 import engine from 'core/request/engines';
+import type { RawHeaders } from 'core/request/headers';
 
 import type {
 
-	RequestQuery,
-	RequestMethod,
 	RequestEngine,
+	RequestMethod,
+	RequestQuery,
 	RequestResponse,
 
 	GlobalOptions,
@@ -67,21 +68,13 @@ export const methodsWithoutBody = Object.createDict({
 });
 
 export const defaultRequestOpts = {
+	engine: <RequestEngine>engine,
 	method: <RequestMethod>'GET',
 	cacheStrategy: <CacheStrategy>'never',
 	cacheMethods: <RequestMethod[]>['GET'],
 	offlineCacheTTL: (1).day(),
-	headers: <Dictionary<CanArray<string>>>{},
-	query: <RequestQuery>{},
+	headers: <RawHeaders>{},
 	meta: <Dictionary>{},
-	engine: <RequestEngine>engine,
+	query: <RequestQuery>{},
 	querySerializer: toQueryString
-};
-
-export const RequestEvents = {
-	RESPONSE: 'response',
-	PROGRESS: 'progress',
-	LOAD: 'load',
-	ERROR: 'error',
-	ABORT: 'abort'
 };

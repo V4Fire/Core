@@ -17,19 +17,19 @@ import log from 'core/log';
 import AbortablePromise from 'core/promise/abortable';
 import { isOnline } from 'core/net';
 
-import Response, { ListenerFn } from 'core/request/response';
+import Response from 'core/request/response';
 import RequestError from 'core/request/error';
-import RequestContext from 'core/request/context';
+import RequestContext from 'core/request/modules/context';
 
-import { merge, createControllablePromise } from 'core/request/utils';
-import { defaultRequestOpts, globalOpts, RequestEvents } from 'core/request/const';
+import { merge } from 'core/request/helpers';
+import { defaultRequestOpts, globalOpts } from 'core/request/const';
 
 import type {
 
 	Middleware,
 	CreateRequestOptions,
-
 	RetryOptions,
+
 	RequestResolver,
 	RequestChunk,
 	RequestResponse,
@@ -39,7 +39,7 @@ import type {
 
 } from 'core/request/interface';
 
-export * from 'core/request/utils';
+export * from 'core/request/helpers';
 export * from 'core/request/interface';
 export * from 'core/request/response/interface';
 
@@ -147,24 +147,17 @@ function request<D = unknown>(
 
 	const run = (...args) => {
 		const
+			emitter = new EventEmitter({maxListeners: 1e3, newListener: false}),
 			ctx = RequestContext.decorateContext(baseCtx, path, resolver, ...args),
-			requestParams = ctx.params,
-			responseWithoutBody = createControllablePromise<Response>();
-
-		const eventEmitter = new EventEmitter({
-			wildcard: true,
-			newListener: true,
-			removeListener: true,
-			ignoreErrors: true
-		});
+			requestParams = ctx.params;
 
 		const middlewareParams = {
-			opts: requestParams,
 			ctx,
-			globalOpts
+			globalOpts,
+			opts: requestParams
 		};
 
-		const parent = <RequestPromise>new AbortablePromise(async (resolve, reject, onAbort) => {
+		const requestPromise = <RequestPromise>new AbortablePromise(async (resolve, reject, onAbort) => {
 			const errDetails = {
 				request: requestParams
 			};
@@ -174,10 +167,10 @@ function request<D = unknown>(
 			});
 
 			await new Promise(setImmediate);
-			ctx.parent = parent;
+			ctx.parent = requestPromise;
 
 			if (Object.isPromise(ctx.cache)) {
-				await AbortablePromise.resolve(ctx.isReady, parent);
+				await AbortablePromise.resolve(ctx.isReady, requestPromise);
 			}
 
 			const
@@ -188,7 +181,7 @@ function request<D = unknown>(
 			});
 
 			const
-				middlewareResults = await AbortablePromise.all(tasks, parent),
+				middlewareResults = await AbortablePromise.all(tasks, requestPromise),
 				keyToEncode = ctx.withoutBody ? 'query' : 'body';
 
 			// eslint-disable-next-line require-atomic-updates
@@ -196,7 +189,7 @@ function request<D = unknown>(
 
 			for (let i = 0; i < middlewareResults.length; i++) {
 				// If the middleware returns a function, the function will be executed.
-				// The result of invoking is provided as the result of the whole request.
+				// The result of invoking is provided as a result of the whole request.
 				if (!Object.isFunction(middlewareResults[i])) {
 					continue;
 				}
@@ -255,7 +248,7 @@ function request<D = unknown>(
 					}
 				}
 
-				fromCache = await AbortablePromise.resolve(ctx.cache.has(cacheKey), parent);
+				fromCache = await AbortablePromise.resolve(ctx.cache.has(cacheKey), requestPromise);
 			}
 
 			let
@@ -264,11 +257,11 @@ function request<D = unknown>(
 
 			if (fromCache) {
 				const getFromCache = async () => {
-					cache = (await AbortablePromise.resolve(isOnline(), parent)).status ? 'memory' : 'offline';
+					cache = (await AbortablePromise.resolve(isOnline(), requestPromise)).status ? 'memory' : 'offline';
 					return ctx.cache.get(cacheKey!);
 				};
 
-				res = AbortablePromise.resolveAndCall(getFromCache, parent)
+				res = AbortablePromise.resolveAndCall(getFromCache, requestPromise)
 					.then(ctx.wrapAsResponse.bind(ctx))
 					.then((res) => Object.assign(res, {cache}));
 
@@ -276,15 +269,13 @@ function request<D = unknown>(
 				const reqOpts = {
 					...requestParams,
 					url,
-					parent,
-					eventEmitter,
+					emitter,
+					parent: requestPromise,
 					decoders: ctx.decoders
 				};
 
-				const createReq = () => requestParams.engine(reqOpts).then((res) => {
-					responseWithoutBody.resolveNow(res);
-					return res;
-				});
+				const
+					createReq = () => requestParams.engine(reqOpts);
 
 				if (requestParams.retry != null) {
 					const retryParams: RetryOptions = Object.isNumber(requestParams.retry) ?
@@ -354,7 +345,7 @@ function request<D = unknown>(
 
 			function applyEncoders(data: unknown): unknown {
 				let
-					res = AbortablePromise.resolve(data, parent);
+					res = AbortablePromise.resolve(data, requestPromise);
 
 				Object.forEach(ctx.encoders, (fn, i: number) => {
 					res = res.then((obj) => fn(i > 0 ? obj : Object.fastClone(obj)));
@@ -372,43 +363,30 @@ function request<D = unknown>(
 						requestError = new RequestError(RequestError.InvalidStatus, details);
 
 					await response.body;
-					response.streamController?.destroy(requestError);
+					response.stream?.destroy(requestError);
 					throw AbortablePromise.wrapReasonToIgnore(requestError);
 				}
 
 				const
 					data = await response.decode();
 
-				eventEmitter.emit(RequestEvents.LOAD, data);
-
 				return {
 					data,
 					response,
 					ctx,
+
 					dropCache: ctx.dropCache.bind(ctx),
+
 					[Symbol.asyncIterator](): AsyncGenerator<RequestChunk> {
 						return response[Symbol.asyncIterator]();
 					}
 				};
 			}
-		}).catch((err) => {
-			eventEmitter.emit(RequestEvents.ERROR, err);
-			throw err;
 		});
 
-		parent[Symbol.asyncIterator] = async function* iter() {
-			yield* (await responseWithoutBody)[Symbol.asyncIterator]();
-		};
+		requestPromise.emitter = emitter;
 
-		parent.on = (eventName: string, listener: ListenerFn): void => {
-			eventEmitter.on(eventName, listener);
-		};
-
-		parent.off = (eventName: string, listener: ListenerFn): void => {
-			eventEmitter.off(eventName, listener);
-		};
-
-		return parent;
+		return requestPromise;
 	};
 
 	if (Object.isFunction(resolver)) {
