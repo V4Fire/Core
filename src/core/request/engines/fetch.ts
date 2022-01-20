@@ -13,11 +13,9 @@ import fetch from 'core/request/engines/mock-fetch';
 import AbortablePromise from 'core/promise/abortable';
 import { isOnline } from 'core/net';
 
-import Response, { ResponseTypeValueP } from 'core/request/response';
+import Response from 'core/request/response';
 import RequestError from 'core/request/error';
-
-import { RequestEvents } from 'core/request/const';
-import StreamController from 'core/request/simple-stream-controller';
+import StreamBuffer from 'core/request/modules/stream-buffer';
 
 import { convertDataToSend } from 'core/request/engines/helpers';
 import type { RequestEngine, NormalizedCreateRequestOptions, RequestChunk } from 'core/request/interface';
@@ -29,7 +27,8 @@ import type { RequestEngine, NormalizedCreateRequestOptions, RequestChunk } from
 const request: RequestEngine = (params) => {
 	const
 		p = params,
-		controller = new AbortController();
+		abortController = new AbortController(),
+		streamBuffer = new StreamBuffer<RequestChunk>();
 
 	const
 		[body, contentType] = convertDataToSend<BodyInit>(p.body, p.contentType);
@@ -38,15 +37,8 @@ const request: RequestEngine = (params) => {
 		headers: Record<string, string> = {};
 
 	if (p.headers != null) {
-		for (const name of Object.keys(p.headers)) {
-			const
-				val = p.headers[name];
-
-			if (val == null) {
-				continue;
-			}
-
-			headers[name] = Array.isArray(val) ? val.join(', ') : val;
+		for (const [name, val] of p.headers) {
+			headers[name] = val;
 		}
 	}
 
@@ -56,10 +48,10 @@ const request: RequestEngine = (params) => {
 
 	const normalizedOpts: RequestInit = {
 		body,
-		credentials: p.credentials ? 'include' : 'same-origin',
 		headers,
 		method: p.method,
-		signal: controller.signal
+		credentials: p.credentials ? 'include' : 'same-origin',
+		signal: abortController.signal
 	};
 
 	return new AbortablePromise<Response>(async (resolve, reject, onAbort) => {
@@ -73,110 +65,83 @@ const request: RequestEngine = (params) => {
 		}
 
 		const
-			req = fetch(p.url, normalizedOpts),
-			streamController = new StreamController<RequestChunk>();
+			req = fetch(p.url, normalizedOpts);
 
 		let
 			timer;
 
 		if (p.timeout != null) {
-			timer = setTimeout(() => controller.abort(), p.timeout);
+			timer = setTimeout(() => abortController.abort(), p.timeout);
 		}
 
 		onAbort((reason) => {
-			p.eventEmitter.emit(RequestEvents.ABORT, reason);
-			streamController.destroy(reason);
-			controller.abort();
+			streamBuffer.destroy(reason);
+			abortController.abort();
 		});
 
-		req.then((response) => {
+		req.then((res) => {
 			clearTimeout(timer);
 
 			const
-				contentLength = response.headers.get('Content-Length'),
-				totalLength = contentLength != null ? Number(contentLength) : null;
+				contentLength = res.headers.get('Content-Length'),
+				total = contentLength != null ? Number(contentLength) : undefined;
 
-			const rawBody = (async () => {
-				let receivedLength = 0;
+			const body = () => {
+				switch (p.responseType) {
+					case 'json':
+					case 'document':
+					case 'text':
+						return res.text();
 
-				if (response.body != null) {
-					const reader: ReadableStreamDefaultReader<Uint8Array> = response.body.getReader();
+					default:
+						return res.arrayBuffer();
+				}
+			};
 
-					while (true) {
-						const {done, value} = await reader.read();
+			body[Symbol.asyncIterator] = () => {
+				let
+					loaded = 0;
 
-						if (done) {
-							streamController.close();
-							break;
+				if (res.body != null) {
+					const
+						reader: ReadableStreamDefaultReader<Uint8Array> = res.body.getReader();
+
+					(async () => {
+						while (true) {
+							const
+								{done, value: data} = await reader.read();
+
+							if (done || data == null) {
+								streamBuffer.close();
+								break;
+							}
+
+							loaded += data.length;
+							streamBuffer.add({total, loaded, data});
 						}
-
-						receivedLength += value!.length;
-
-						const chunk = {
-							data: value ?? null,
-							loaded: receivedLength,
-							total: totalLength
-						};
-
-						p.eventEmitter.emit(RequestEvents.PROGRESS, chunk);
-						streamController.add(chunk);
-					}
+					})();
 				}
 
-				const allChunks = new Uint8Array(receivedLength);
+				return streamBuffer[Symbol.asyncIterator]();
+			};
 
-				let pos = 0;
+			resolve(new Response(body, {
+				url: res.url,
+				redirected: res.redirected,
 
-				for (const {data} of streamController) {
-					if (data == null) {
-						continue;
-					}
-
-					allChunks.set(data, pos);
-					pos += data.length;
-				}
-
-				return allChunks;
-			})();
-
-			let
-				body: ResponseTypeValueP;
-
-			const
-				headers: Dictionary<string> = {};
-
-			response.headers.forEach((value, name) => {
-				headers[name] = value;
-			});
-
-			switch (p.responseType) {
-				case 'json':
-				case 'document':
-				case 'text':
-					body = rawBody.then((buf) => new TextDecoder('utf-8').decode(buf));
-					break;
-
-				default:
-					body = rawBody.then((buf) => buf.buffer);
-			}
-
-			const res = new Response(body, {
 				parent: p.parent,
 				important: p.important,
-				url: response.url,
-				redirected: response.redirected,
-				responseType: p.responseType,
-				okStatuses: p.okStatuses,
-				status: response.status,
-				statusText: response.statusText,
-				headers,
-				decoder: p.decoders,
-				jsonReviver: p.jsonReviver,
-				streamController
-			});
 
-			p.eventEmitter.emit(RequestEvents.RESPONSE, res);
-			resolve(res);
+				okStatuses: p.okStatuses,
+				status: res.status,
+				statusText: res.statusText,
+
+				headers: res.headers,
+				responseType: p.responseType,
+
+				decoder: p.decoders,
+				jsonReviver: p.jsonReviver
+			}));
 
 		}, (error) => {
 			clearTimeout(timer);
@@ -185,7 +150,7 @@ const request: RequestEngine = (params) => {
 				type = error.name === 'AbortError' ? RequestError.Timeout : RequestError.Engine,
 				requestError = new RequestError(type, {error});
 
-			streamController.destroy(requestError);
+			streamBuffer.destroy(requestError);
 			reject(requestError);
 		});
 
