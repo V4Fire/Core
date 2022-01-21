@@ -149,13 +149,14 @@ function request<D = unknown>(
 
 	const run = (...args) => {
 		const emitter = new EventEmitter({
-			maxListeners: 1e3,
+			maxListeners: 100,
 			newListener: true,
 			wildcard: true
 		});
 
 		const
 			ctx = RequestContext.decorateContext(baseCtx, path, resolver, ...args),
+			responseIterator = createControllablePromise<() => AsyncIterableIterator<RequestChunk>>(),
 			requestParams = ctx.params;
 
 		const middlewareParams = {
@@ -164,19 +165,16 @@ function request<D = unknown>(
 			opts: requestParams
 		};
 
-		const
-			responseIterator = createControllablePromise<() => AsyncIterableIterator<RequestChunk>>();
+		const errDetails = {
+			request: requestParams
+		};
 
 		const requestPromise = <RequestPromise>new AbortablePromise(async (resolve, reject, onAbort) => {
-			const errDetails = {
-				request: requestParams
-			};
-
 			onAbort((err) => {
 				reject(err ?? new RequestError(RequestError.Abort, errDetails));
 			});
 
-			await new Promise(setImmediate);
+			await Promise.resolve();
 			ctx.parent = requestPromise;
 
 			if (Object.isPromise(ctx.cache)) {
@@ -184,21 +182,21 @@ function request<D = unknown>(
 			}
 
 			const
-				tasks = <Array<CanPromise<unknown>>>[];
+				middlewareTasks = <Array<CanPromise<unknown>>>[];
 
 			Object.forEach(requestParams.middlewares, (fn: Middleware<D>) => {
-				tasks.push(fn(middlewareParams));
+				middlewareTasks.push(fn(middlewareParams));
 			});
 
 			const
-				middlewareResults = await AbortablePromise.all(tasks, requestPromise),
-				keyToEncode = ctx.withoutBody ? 'query' : 'body';
+				middlewareResults = await AbortablePromise.all(middlewareTasks, requestPromise),
+				paramsKeyToEncode = ctx.withoutBody ? 'query' : 'body';
 
 			// eslint-disable-next-line require-atomic-updates
-			requestParams[keyToEncode] = Object.cast(await applyEncoders(requestParams[keyToEncode]));
+			requestParams[paramsKeyToEncode] = Object.cast(await applyEncoders(requestParams[paramsKeyToEncode]));
 
 			for (let i = 0; i < middlewareResults.length; i++) {
-				// If the middleware returns a function, the function will be executed.
+				// If a middleware returns a function, the function will be executed.
 				// The result of invoking is provided as a result of the whole request.
 				if (!Object.isFunction(middlewareResults[i])) {
 					continue;
@@ -228,9 +226,7 @@ function request<D = unknown>(
 			}
 
 			const
-				url = ctx.resolveRequest(globalOpts.api);
-
-			const
+				url = ctx.resolveRequest(globalOpts.api),
 				{cacheKey} = ctx;
 
 			let
@@ -249,9 +245,9 @@ function request<D = unknown>(
 
 					} catch (err) {
 						const
-							isRequestCanceled = {clearAsync: true, abort: true}[err?.type] === true;
+							errType = err?.type;
 
-						if (isRequestCanceled) {
+						if (errType === 'clearAsync' || errType === 'abort') {
 							reject(err);
 							return;
 						}
@@ -262,7 +258,7 @@ function request<D = unknown>(
 			}
 
 			let
-				res,
+				resultPromise,
 				cache = 'none';
 
 			if (fromCache) {
@@ -271,7 +267,7 @@ function request<D = unknown>(
 					return ctx.cache.get(cacheKey!);
 				};
 
-				res = AbortablePromise.resolveAndCall(getFromCache, requestPromise)
+				resultPromise = AbortablePromise.resolveAndCall(getFromCache, requestPromise)
 					.then(ctx.wrapAsResponse.bind(ctx))
 					.then((res) => Object.assign(res, {cache}));
 
@@ -284,15 +280,18 @@ function request<D = unknown>(
 					decoders: ctx.decoders
 				};
 
-				const createReq = () => requestParams
-					.engine(reqOpts)
-					.catch((err) => {
+				const createEngineRequest = () => {
+					const
+						req = requestParams.engine(reqOpts);
+
+					return req.catch((err) => {
 						if (err instanceof RequestError) {
 							Object.assign(err.details, errDetails);
 						}
 
 						return Promise.reject(err);
 					});
+				};
 
 				if (requestParams.retry != null) {
 					const retryParams: RetryOptions = Object.isNumber(requestParams.retry) ?
@@ -306,7 +305,7 @@ function request<D = unknown>(
 					let
 						attempt = 0;
 
-					const createReqWithRetrying = async () => {
+					const createRequestWithRetrying = async () => {
 						const calculateDelay = (attempt: number, err: RequestError) => {
 							const
 								delay = delayFn(attempt, err);
@@ -321,7 +320,7 @@ function request<D = unknown>(
 						};
 
 						try {
-							return await createReq().then(wrapSuccessResponse);
+							return await createEngineRequest().then(wrapSuccessResponse);
 
 						} catch (err) {
 							if (attempt++ >= attemptLimit) {
@@ -335,20 +334,21 @@ function request<D = unknown>(
 								throw err;
 							}
 
-							return createReqWithRetrying();
+							return createRequestWithRetrying();
 						}
 					};
 
-					res = createReqWithRetrying();
+					resultPromise = createRequestWithRetrying();
 
 				} else {
-					res = createReq().then(wrapSuccessResponse);
+					resultPromise = createEngineRequest().then(wrapSuccessResponse);
 				}
 			}
 
-			res = res.then(ctx.saveCache.bind(ctx));
+			resultPromise = resultPromise
+				.then(ctx.saveCache.bind(ctx));
 
-			res
+			resultPromise
 				.then((response) => log(`request:response:${path}`, response.data, {
 					cache,
 					request: requestParams
@@ -356,9 +356,7 @@ function request<D = unknown>(
 
 				.catch((err) => log.error('request', err));
 
-			resolve(
-				ctx.wrapRequest(res)
-			);
+			resolve(ctx.wrapRequest(resultPromise));
 
 			function applyEncoders(data: unknown): unknown {
 				let
@@ -371,7 +369,7 @@ function request<D = unknown>(
 				return res;
 			}
 
-			async function wrapSuccessResponse(response: Response<D>): Promise<RequestResponseObject<D>> {
+			function wrapSuccessResponse(response: Response<D>): RequestResponseObject<D> {
 				responseIterator.resolve(response[Symbol.asyncIterator].bind(response));
 
 				const
@@ -381,19 +379,22 @@ function request<D = unknown>(
 					throw AbortablePromise.wrapReasonToIgnore(new RequestError(RequestError.InvalidStatus, details));
 				}
 
-				const
-					data = await response.decode();
-
 				return {
-					data,
-					response,
 					ctx,
+					response,
+
+					get data() {
+						return response.decode();
+					},
+
+					[Symbol.asyncIterator]: response[Symbol.asyncIterator].bind(response),
 					dropCache: ctx.dropCache.bind(ctx)
 				};
 			}
 		});
 
 		requestPromise.emitter = emitter;
+
 		requestPromise[Symbol.asyncIterator] = () => Object.assign(responseIterator.then((iter) => iter()), {
 			[Symbol.asyncIterator]() {
 				return this;

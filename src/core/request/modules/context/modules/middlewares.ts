@@ -51,25 +51,42 @@ export default class RequestContext<D = unknown> extends Super<D> {
 
 	/**
 	 * Middleware to cache a response object
-	 * @param res - response object
+	 * @param resObj - response object
 	 */
-	saveCache(res: RequestResponseObject<D>): RequestResponseObject<D> {
+	saveCache(resObj: RequestResponseObject<D>): RequestResponseObject<D> {
 		const
 			key = this.cacheKey;
 
 		if (key != null) {
-			void this.cache.set(key, res.data);
+			const save = () => {
+				void resObj.data.then((data) => {
+					if (caches.has(this.cache)) {
+						void this.cache.set(key, data);
+					}
+				});
+			};
+
+			const
+				{response} = resObj;
+
+			if (response.bodyUsed) {
+				save();
+
+			} else if (!response.streamUsed) {
+				response.emitter.once('bodyUsed', save);
+			}
+
 			caches.add(this.cache);
 		}
 
-		return res;
+		return resObj;
 	}
 
 	/**
 	 * Middleware to wrap the specified response value with `RequestResponseObject`
 	 * @param value
 	 */
-	async wrapAsResponse(value: Response<D> | ResponseTypeValue): Promise<RequestResponseObject<D>> {
+	wrapAsResponse(value: Response<D> | ResponseTypeValue): RequestResponseObject<D> {
 		const response = value instanceof Response ?
 			value :
 
@@ -79,9 +96,14 @@ export default class RequestContext<D = unknown> extends Super<D> {
 			});
 
 		return {
-			data: await response.decode(),
-			response,
 			ctx: this,
+			response,
+
+			get data() {
+				return response.decode();
+			},
+
+			[Symbol.asyncIterator]: response[Symbol.asyncIterator].bind(response),
 			dropCache: this.dropCache.bind(this)
 		};
 	}

@@ -206,7 +206,7 @@ export default class RequestContext<D = unknown> extends Super<D> {
 	}
 
 	/**
-	 * Drops the request' cache
+	 * Drops the request cache
 	 */
 	dropCache(): void {
 		const

@@ -89,9 +89,12 @@ export interface RequestChunk {
 }
 
 export interface RequestResponseObject<D = unknown> {
-	data: Nullable<D>;
 	ctx: Readonly<RequestContext<D>>;
 	response: Response<D>;
+
+	data: Promise<Nullable<D>>;
+	[Symbol.asyncIterator](): AsyncIterable<RequestChunk>;
+
 	cache?: CacheType;
 	dropCache(): void;
 }
@@ -374,7 +377,7 @@ export interface CreateRequestOptions<D = unknown> {
 	cacheMethods?: RequestMethod[];
 
 	/**
-	 * Value in milliseconds that indicates how long a request' value should keep in the cache
+	 * Value in milliseconds that indicates how long a request value should keep in the cache
 	 * (all requests are stored within the active session without expiring by default)
 	 */
 	cacheTTL?: number;
@@ -386,7 +389,7 @@ export interface CreateRequestOptions<D = unknown> {
 	offlineCache?: boolean;
 
 	/**
-	 * Value in milliseconds that indicates how long a request' value should keep in the offline cache
+	 * Value in milliseconds that indicates how long a request value should keep in the offline cache
 	 * @default `(1).day()`
 	 */
 	offlineCacheTTL?: number;
@@ -416,7 +419,7 @@ export interface CreateRequestOptions<D = unknown> {
 	querySerializer?(query: RequestQuery): string;
 
 	/**
-	 * A function (or a sequence of functions) takes the current request's response data
+	 * A function (or a sequence of functions) takes the current request response data
 	 * and returns new data to respond. If you provide a sequence of functions,
 	 * the first function will pass a result to the next function from the sequence, etc.
 	 */
@@ -429,7 +432,7 @@ export interface CreateRequestOptions<D = unknown> {
 	jsonReviver?: JSONCb | false;
 
 	/**
-	 * A meta flag that indicates that the request is important: is usually used with middleware to indicate that
+	 * A meta flag that indicates that the request is important: is usually used with middlewares to indicate that
 	 * the request needs to be executed as soon as possible
 	 */
 	important?: boolean;
