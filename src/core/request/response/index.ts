@@ -11,13 +11,16 @@
  * @packageDocumentation
  */
 
-import Range from 'core/range';
-import AbortablePromise from 'core/promise/abortable';
-
-import { IS_NODE } from 'core/env';
+import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 import { once, deprecated } from 'core/functools';
+import { IS_NODE } from 'core/env';
+
 import { convertIfDate } from 'core/json';
 import { getDataType } from 'core/mime-type';
+
+import Range from 'core/range';
+import AbortablePromise from 'core/promise/abortable';
+import symbolGenerator from 'core/symbol';
 
 import Headers from 'core/request/headers';
 import { defaultResponseOpts, noContentStatusCodes } from 'core/request/response/const';
@@ -37,6 +40,9 @@ export * from 'core/request/headers';
 export * from 'core/request/response/const';
 export * from 'core/request/response/interface';
 
+export const
+	$$ = symbolGenerator();
+
 /**
  * Class of a request response
  * @typeparam D - response data type
@@ -50,7 +56,7 @@ export default class Response<
 	readonly url: string;
 
 	/**
-	 * True if response was obtained through a redirect
+	 * True if the response was obtained through a redirect
 	 */
 	readonly redirected: boolean;
 
@@ -60,14 +66,24 @@ export default class Response<
 	readonly parent?: AbortablePromise;
 
 	/**
-	 * True if the request is important
+	 * A meta flag that indicates that the request is important: is usually used with decoders to indicate that
+	 * the request needs to be executed as soon as possible
 	 */
 	readonly important?: boolean;
 
 	/**
 	 * Type of the response data
 	 */
-	responseType?: ResponseType;
+	get responseType(): CanUndef<ResponseType> {
+		return this[$$.responseType] ?? this.sourceResponseType;
+	}
+
+	/**
+	 * Sets a new type of the response data
+	 */
+	protected set responseType(value: CanUndef<ResponseType>) {
+		this[$$.responseType] = value;
+	}
 
 	/**
 	 * Original type of the response data
@@ -75,17 +91,17 @@ export default class Response<
 	readonly sourceResponseType?: ResponseType;
 
 	/**
-	 * Value of the response status code
+	 * Response status code
 	 */
 	readonly status: number;
 
 	/**
-	 * Text of the response status
+	 * Response status text
 	 */
 	readonly statusText: string;
 
 	/**
-	 * True if the response' status matches with a successful status codes
+	 * True if the response status matches with a successful status codes
 	 * (by default it should match range from 200 to 299)
 	 */
 	readonly ok: boolean;
@@ -113,12 +129,54 @@ export default class Response<
 	readonly jsonReviver?: JSONCb;
 
 	/**
-	 * Value of the response body
+	 * Response body value
 	 */
-	body: ResponseTypeValueP;
+	get body(): ResponseTypeValueP {
+		return this[$$.body];
+	}
 
 	/**
-	 * @param [body] - response body
+	 * Sets a new value of the response body
+	 */
+	protected set body(value: ResponseTypeValueP) {
+		this[$$.body] = value;
+	}
+
+	/**
+	 * True, if the response body is already read
+	 */
+	get bodyUsed(): boolean {
+		return Boolean(this[$$.bodyUsed]);
+	}
+
+	/**
+	 * Sets a new status of `bodyUsed`
+	 */
+	protected set bodyUsed(value: boolean) {
+		this[$$.bodyUsed] = value;
+	}
+
+	/**
+	 * True, if the response body is already read as a stream
+	 */
+	get streamUsed(): boolean {
+		return Boolean(this[$$.streamUsed]);
+	}
+
+	/**
+	 * Sets a new status of `streamUsed`
+	 */
+	protected set streamUsed(value: boolean) {
+		this[$$.streamUsed] = value;
+	}
+
+	/**
+	 * Event emitter to broadcast response events
+	 */
+	readonly emitter: EventEmitter = new EventEmitter({maxListeners: 100, newListener: false});
+
+	/**
+	 * @param [body] - response body value
 	 * @param [opts] - additional options
 	 */
 	constructor(body?: ResponseTypeValueP, opts?: ResponseOptions) {
@@ -145,11 +203,8 @@ export default class Response<
 		this.headers = Object.freeze(new Headers(p.headers));
 		this.body = body;
 
-		const
-			contentType = this.headers['content-type'];
-
-		this.responseType = contentType != null ? getDataType(contentType) : p.responseType;
-		this.sourceResponseType = this.responseType;
+		const contentType = this.headers['content-type'];
+		this.sourceResponseType = contentType != null ? getDataType(contentType) : p.responseType;
 
 		// tslint:disable-next-line:prefer-conditional-expression
 		if (p.decoder == null) {
@@ -167,19 +222,27 @@ export default class Response<
 		}
 	}
 
+	/**
+	 * Returns an iterator by the response body.
+	 * Mind, when you parse response via iterator, you won't be able to use other parse methods, like `json` or `text`.
+	 * @emits `asyncIteratorUsed()`
+	 */
 	[Symbol.asyncIterator](): AsyncIterableIterator<RequestChunk> {
+		if (this.bodyUsed) {
+			throw new Error("The response can't be parsed as a stream because it already read");
+		}
+
 		const
-			{body, [Symbol.asyncIterator]: iter} = this;
+			{body} = this;
 
 		if (!Object.isAsyncIterable(body)) {
 			throw new TypeError('The response is not an iterable object');
 		}
 
-		this.body = Object.assign(() => undefined, {
-			[Symbol.asyncIterator]: iter
-		});
+		this.streamUsed = true;
+		this.emitter.emit('asyncIteratorUsed');
 
-		return Object.cast(iter.call(body));
+		return Object.cast(body[Symbol.asyncIterator]());
 	}
 
 	/**
@@ -193,10 +256,19 @@ export default class Response<
 
 	/**
 	 * Parses the response body and returns a result
+	 * @emits `bodyUsed()`
 	 */
 	@once
-	decode(): AbortablePromise<D> {
-		let data;
+	decode(): AbortablePromise<D | null> {
+		if (this.streamUsed) {
+			return AbortablePromise.resolve<D | null>(null);
+		}
+
+		this.bodyUsed = true;
+		this.emitter.emit('bodyUsed');
+
+		let
+			data;
 
 		if (noContentStatusCodes.includes(this.status)) {
 			data = AbortablePromise.resolve(null, this.parent);
