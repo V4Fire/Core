@@ -9,6 +9,10 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.??.?? (2022-??-??)
+
+* Added structredClone as default clone algorithm
+
 ## v3.27.5 (2020-09-29)
 
 #### :bug: Bug Fix
