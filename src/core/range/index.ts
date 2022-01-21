@@ -163,6 +163,9 @@ export default class Range<T extends RangeValue> {
 		}
 	}
 
+	/**
+	 * Returns an iterator from the range
+	 */
 	[Symbol.iterator](): IterableIterator<T> {
 		return this.values();
 	}
