@@ -34,7 +34,6 @@ extend(Object, 'fastClone', (obj, opts?: FastCloneOptions) => {
 			clone = fastCloneJSON(obj, opts);
 		} else {
 			try {
-				// tslint:disable
 				clone = structuredClone(obj);
 			} catch {
 				clone = fastCloneJSON(obj, opts);
