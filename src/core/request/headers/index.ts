@@ -52,7 +52,7 @@ export default class V4Headers {
 					headerChunks = header.split(':', 2);
 
 				if (headerChunks.length === 2) {
-					lastHeaderName = headerChunks[0].trim();
+					lastHeaderName = headerChunks[0];
 					headerChunks.shift();
 				}
 
@@ -60,7 +60,7 @@ export default class V4Headers {
 					value = <CanUndef<string>>headerChunks[0];
 
 				if (value != null) {
-					this.set(lastHeaderName, value.trim());
+					this.append(lastHeaderName, value.split(','));
 				}
 			}
 
@@ -95,7 +95,7 @@ export default class V4Headers {
 	}
 
 	/**
-	 * Returns a header' value by the specified name
+	 * Returns a header value by the specified name
 	 * @param name
 	 */
 	get(name: string): string | null {
@@ -111,7 +111,7 @@ export default class V4Headers {
 	}
 
 	/**
-	 * Sets a new header' value by the specified name.
+	 * Sets a new header value by the specified name.
 	 * To set multiple values for one header, provide its value as a list of values.
 	 *
 	 * @param name
@@ -126,6 +126,7 @@ export default class V4Headers {
 		}
 
 		if (Object.isArray(value)) {
+			this.delete(name);
 			value.forEach((val) => this.append(name, val));
 			return;
 		}
@@ -139,16 +140,23 @@ export default class V4Headers {
 	}
 
 	/**
-	 * Appends a new value into an existing header or adds the header if it does not already exist
+	 * Appends a new value into an existing header or adds the header if it does not already exist.
+	 * To set multiple values for one header, provide its value as a list of values.
 	 *
 	 * @param name
 	 * @param value
 	 */
-	append(name: string, value: string): void {
+	append(name: string, value: CanArray<string>): void {
 		const
-			normalizedName = this.normalizeHeaderName(name);
+			normalizedName = this.normalizeHeaderName(name),
+			normalizedVal = this.normalizeHeaderValue(value);
 
-		if (normalizedName === '') {
+		if (normalizedName === '' || normalizedVal === '') {
+			return;
+		}
+
+		if (Object.isArray(value)) {
+			value.forEach((val) => this.append(name, val));
 			return;
 		}
 
@@ -164,6 +172,7 @@ export default class V4Headers {
 	 * @param name
 	 */
 	delete(name: string): void {
+		delete this[name];
 		delete this[this.normalizeHeaderName(name)];
 	}
 

@@ -6,194 +6,197 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { set, get } from 'core/env';
 import Headers from 'core/request/headers';
 
 describe('core/request/headers', () => {
-	let
-		logOptions,
-		arrHeaders,
-		arrHeadersCopy;
-
-	beforeAll(async () => {
-		arrHeaders = [
-			['header-1', 'value-1'],
-			['header-2', 'value-1, value-2'],
-			['header-3', 'value-1, value-2, value-3']
-		];
-
-		arrHeadersCopy = arrHeaders.map((pair) => [...pair]);
-
-		logOptions = await get('log');
-		set('log', {patterns: []});
-	});
-
-	afterAll(() => {
-		set('log', logOptions);
-	});
-
-	describe('constructor takes initial headers', () => {
-		it('as dictionary', () => {
-			const
-				dict = Object.fromEntries(arrHeaders),
-				init = {...dict},
-				headers = new Headers(init);
-
-			expect(Object.fromEntries(headers.headers)).toEqual(dict);
-		});
-
-		it('as array', () => {
-			const
-				headers = new Headers(arrHeadersCopy);
-
-			expect([...headers.headers]).toEqual(arrHeaders);
-		});
-
-		it('as another Headers instance', () => {
-			const
-				initHeaders = new Headers(arrHeadersCopy),
-				headers = new Headers(initHeaders);
-
-			expect([...headers.headers]).toEqual(arrHeaders);
-		});
-	});
-
-	describe('instance of Header class is iterable', () => {
-		it('allowing to go through all key-value pairs of headers', () => {
-			const
-				headers = new Headers(arrHeadersCopy);
-
-			expect([...headers]).toEqual(arrHeaders);
-		});
-	});
-
-	describe('"append" method', () => {
-		it('appends a new value onto an existing header', () => {
-			const
-				headers = new Headers(arrHeaders);
-
-			headers.append('header-1', 'value-2');
-
-			expect(headers.headers.get('header-1')).toBe('value-1, value-2');
-		});
-
-		it('adds the header if it does not already exist', () => {
-			const
-				headers = new Headers();
-
-			headers.append('header', 'value');
-
-			expect(headers.headers.get('header')).toBe('value');
-		});
-	});
-
-	describe('"delete" method', () => {
-		it('deletes a header with a given name', () => {
-			const
-				headers = new Headers(arrHeaders);
-
-			headers.delete('header-2');
-
-			expect(headers.headers.has('header-1')).toBeTrue();
-			expect(headers.headers.has('header-2')).toBeFalse();
-		});
-	});
-
-	describe('"entries" method', () => {
-		it('returns an iterator allowing to go through all key-value pairs of headers', () => {
-			const
-				headers = new Headers(arrHeadersCopy),
-				iter = headers.entries();
-
-			expect([...iter]).toEqual(arrHeaders);
-		});
-	});
-
-	describe('"forEach" method', () => {
-		it('executes a provided function once for each header', () => {
-			const
-				headers = new Headers(arrHeadersCopy),
-				arr = [];
-
-			headers.forEach((value, key) => {
-				arr.push([key, value]);
+	describe('`constructor`', () => {
+		it('creating headers from a dictionary', () => {
+			const headers = new Headers({
+				'Content-Language': ['en', 'ru'],
+				'Cache-Control': 'no-cache'
 			});
 
-			expect(arr).toEqual(arrHeaders);
+			expect(headers.get('Content-Language')).toBe('en, ru');
+			expect(headers.get('Cache-Control')).toBe('no-cache');
+		});
+
+		it('creating headers from another Headers', () => {
+			const headers = new Headers(new Headers({
+				'Content-Language': ['en', 'ru'],
+				'Cache-Control': 'no-cache'
+			}));
+
+			expect(headers.get('Content-Language')).toBe('en, ru');
+			expect(headers.get('Cache-Control')).toBe('no-cache');
+		});
+
+		it('creating headers from a string', () => {
+			const headers = new Headers(`
+				Content-Language: en,ru
+				Cache-control: no-cache
+			`);
+
+			expect(headers.get('Content-Language')).toBe('en, ru');
+			expect(headers.get('Cache-Control')).toBe('no-cache');
+		});
+
+		it('creating headers from a string with multiline values', () => {
+			const headers = new Headers(`
+				Content-Language: en,
+				                  ru
+				Cache-control: no-cache
+			`);
+
+			expect(headers.get('Content-Language')).toBe('en, ru');
+			expect(headers.get('Cache-Control')).toBe('no-cache');
 		});
 	});
 
-	describe('"get" method', () => {
-		it('returns a String sequence of all the values of a header with a given name', () => {
-			const
-				headers = new Headers(arrHeaders),
-				valueOfHeader1 = headers.get('header-1'),
-				valueOfHeader2 = headers.get('header-2');
+	describe('crud operations', () => {
+		describe('with a dictionary', () => {
+			it('getting a header value', () => {
+				const headers = new Headers({
+					'Cache-Control': 'no-cache'
+				});
 
-			expect(valueOfHeader1).toEqual('value-1');
-			expect(valueOfHeader2).toEqual('value-1, value-2');
+				expect(headers['cache-control']).toBe('no-cache');
+			});
+
+			it('setting a header value', () => {
+				const
+					headers = new Headers();
+
+				headers['cache-control'] = 'no-cache';
+				expect(headers.has('Cache-Control')).toBeTrue();
+			});
+
+			it('deleting a header value', () => {
+				const headers = new Headers({
+					'Cache-Control': 'no-cache'
+				});
+
+				delete headers['cache-control'];
+				expect(headers.has('cache-control')).toBeFalse();
+			});
+
+			it('getting headers keys', () => {
+				const headers = new Headers({
+					'Content-Language': ['en', 'ru']
+				});
+
+				headers['cache-control'] = 'no-cache';
+				expect(Object.keys(headers)).toEqual(['content-language', 'cache-control']);
+			});
 		});
 
-		it('if the requested header doesn\'t exist in this object, it returns null', () => {
-			const
-				headers = new Headers(),
-				value = headers.get('header-2');
+		describe('using API', () => {
+			it('getting a header value', () => {
+				const headers = new Headers({
+					'Cache-Control': 'no-cache'
+				});
 
-			expect(value).toBeNull();
+				expect(headers.get('Cache-Control')).toBe('no-cache');
+				expect(headers.get('cache-control')).toBe('no-cache');
+			});
+
+			it('setting a header value', () => {
+				const
+					headers = new Headers();
+
+				headers.set('cache-control', 'no-cache');
+				expect(headers.get('Cache-Control')).toBe('no-cache');
+			});
+
+			it('setting a header value with normalizing', () => {
+				const
+					headers = new Headers();
+
+				headers.set('cache-control', '  no-cache  ');
+				expect(headers.get('Cache-Control')).toBe('no-cache');
+			});
+
+			it('setting a header value that is already exists', () => {
+				const headers = new Headers({
+					'Cache-Control': 'no-cache'
+				});
+
+				headers.set('cache-control', 'no-store');
+				expect(headers.get('Cache-Control')).toBe('no-store');
+			});
+
+			it('setting a header multiple value that is already exists', () => {
+				const headers = new Headers({
+					'Content-Language': 'en'
+				});
+
+				headers.set('Content-Language', ['ru', 'jp']);
+				expect(headers.get('Content-Language')).toBe('ru, jp');
+			});
+
+			it('appending a header multiple value with normalizing', () => {
+				const headers = new Headers({
+					'Content-Language': 'en'
+				});
+
+				headers.append('Content-Language', ['ru ', '  jp  ']);
+				expect(headers.get('Content-Language')).toBe('en, ru, jp');
+			});
+
+			it('deleting a header value', () => {
+				const headers = new Headers({
+					'Content-Language': ['en', 'ru']
+				});
+
+				expect(headers.has('Content-Language')).toBeTrue();
+				headers.delete('Content-Language');
+
+				expect(headers.get('Content-Language')).toBeNull();
+				expect(headers.has('Content-Language')).toBeFalse();
+			});
 		});
-	});
 
-	describe('"has" method', () => {
-		it('returns a boolean stating whether this object contains a header with a given name', () => {
-			const
-				headers = new Headers(arrHeaders),
-				stateOfHeader1 = headers.has('header-1'),
-				stateOfHeader2 = headers.has('header-4');
+		describe('iterators', () => {
+			it('`keys`', () => {
+				const headers = new Headers({
+					'Content-Language': ['en', 'ru']
+				});
 
-			expect(stateOfHeader1).toBeTrue();
-			expect(stateOfHeader2).toBeFalse();
-		});
-	});
+				headers.set('Cache-Control', 'no-cache');
+				expect([...headers.keys()]).toEqual(['content-language', 'cache-control']);
+			});
 
-	describe('"keys" method', () => {
-		it('returns an iterator allowing you to go through all keys of headers contained in this object', () => {
-			const
-				headers = new Headers(arrHeadersCopy),
-				keysIter = headers.keys(),
-				expectedKeys = arrHeaders.map(([name]) => name);
+			it('`values`', () => {
+				const headers = new Headers({
+					'Content-Language': ['en', 'ru']
+				});
 
-			expect([...keysIter]).toEqual(expectedKeys);
-		});
-	});
+				headers.set('Cache-Control', 'no-cache');
+				expect([...headers.values()]).toEqual(['en, ru', 'no-cache']);
+			});
 
-	describe('"set" method', () => {
-		it('sets a new value for an existing header', () => {
-			const
-				headers = new Headers(arrHeadersCopy);
+			it('`entries`', () => {
+				const headers = new Headers({
+					'Content-Language': ['en', 'ru']
+				});
 
-			headers.set('header-3', 'value-4');
+				headers.set('Cache-Control', 'no-cache');
+				expect([...headers.entries()]).toEqual([
+					['content-language', 'en, ru'],
+					['cache-control', 'no-cache']
+				]);
+			});
 
-			expect(headers.headers.get('header-3')).toBe('value-4');
-		});
+			it('`default iterator`', () => {
+				const headers = new Headers({
+					'Content-Language': ['en', 'ru']
+				});
 
-		it('adds the header if it does not already exist', () => {
-			const
-				headers = new Headers();
-
-			headers.set('header', 'value');
-
-			expect(headers.headers.get('header')).toBe('value');
-		});
-	});
-
-	describe('"values" method', () => {
-		it('returns an iterator allowing you to go through all values of headers', () => {
-			const
-				headers = new Headers(arrHeadersCopy),
-				valuesIter = headers.values(),
-				expectedValues = arrHeaders.map(([, value]) => value);
-
-			expect([...valuesIter]).toEqual(expectedValues);
+				headers.set('Cache-Control', 'no-cache');
+				expect([...headers]).toEqual([
+					['content-language', 'en, ru'],
+					['cache-control', 'no-cache']
+				]);
+			});
 		});
 	});
 });
