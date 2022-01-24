@@ -51,7 +51,7 @@ export interface PersistentOptions {
 	persistentTTL?: number;
 
 	/**
-	 * How to load cache items from the the persistent storage:
+	 * How to load cache items from the persistent storage:
 	 *
 	 * 1. `'onInit'` - the whole stored data will be loaded during the cache initialization;
 	 * 2. `'onDemand'` - each stored item will be loaded from the cache only on the first touch, i.e. on-demand or lazily;

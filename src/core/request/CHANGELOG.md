@@ -9,7 +9,7 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
-## v3.??.?? (2021-??-??)
+## v3.72.0 (2021-12-10)
 
 #### :rocket: New Feature
 
@@ -106,7 +106,7 @@ Changelog
 
 #### :rocket: New Feature
 
-* Added a new feature of request retryings
+* Added a new feature of request retrying
 
 #### :house: Internal
 

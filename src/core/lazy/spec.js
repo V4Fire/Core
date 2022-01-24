@@ -107,19 +107,18 @@ describe('core/lazy', () => {
 		LazyUser.sayName();
 		LazyUser.config = {foo: 'bar'};
 
-		const user1 = new LazyUser('Bob', 23);
+		const
+			user1 = new LazyUser('Bob', 23);
 
 		expect(user1.config).toEqual({foo: 'bar'});
 		expect(scan).toEqual(['sayName']);
 
-		LazyUser.sayName();
-
 		LazyUser.config.attr = 'value';
-		LazyUser.config.errorHandler();
 
-		const user2 = new LazyUser('Bob', 23);
+		const
+			user2 = new LazyUser('Bob', 23);
 
 		expect(user2.config.attr).toBe('value');
-		expect(scan).toEqual(['sayName', 'sayName', 'errorHandler']);
+		expect(scan).toEqual(['sayName', 'sayName']);
 	});
 });

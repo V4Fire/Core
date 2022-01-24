@@ -9,6 +9,16 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.74.0 (2022-01-12)
+
+#### :rocket: New Feature
+
+* Added a new methods `Object.isProxy` and `Object.unwrapProxy`
+
+#### :bug: Bug Fix
+
+* Fixed behavior of `Object.isDictionary`, `Object.isPlainObject`, `Object.isFreeze` with proxy-based objects
+
 ## v3.67.0 (2021-12-01)
 
 #### :rocket: New Feature

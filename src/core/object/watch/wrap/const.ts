@@ -14,42 +14,81 @@ import type { WrapParams, WrapResult, StructureWrappers } from '@src/core/object
 export const iterators = {
 	keys: {
 		type: 'get',
-		*value(target: unknown[], opts: WrapParams): IterableIterator<unknown> {
+		value(target: unknown[], opts: WrapParams): IterableIterator<unknown> {
 			const
-				iterable = <IterableIterator<unknown>>opts.original.call(target);
+				iter = createIter();
 
-			for (let el = iterable.next(); !el.done; el = iterable.next()) {
-				yield el.value;
+			return {
+				[Symbol.iterator]() {
+					return this;
+				},
+
+				next: iter.next.bind(iter)
+			};
+
+			function* createIter() {
+				const
+					iter = <IterableIterator<unknown>>opts.original.call(target);
+
+				for (let el = iter.next(); !el.done; el = iter.next()) {
+					yield el.value;
+				}
 			}
 		}
 	},
 
 	entries: {
 		type: 'get',
-		*value(target: unknown[], opts: WrapParams): IterableIterator<[unknown, unknown]> {
+		value(target: unknown[], opts: WrapParams): IterableIterator<[unknown, unknown]> {
 			const
-				iterable = <IterableIterator<[unknown, unknown]>>opts.original.call(target);
+				iter = createIter();
 
-			for (let el = iterable.next(); !el.done; el = iterable.next()) {
-				const [key, val] = el.value;
+			return {
+				[Symbol.iterator]() {
+					return this;
+				},
 
-				yield [
-					key,
-					getProxyValue(val, key, opts.path, opts.handlers, opts.root, opts.top ?? opts.root, opts.watchOpts)
-				];
+				next: iter.next.bind(iter)
+			};
+
+			function* createIter() {
+				const
+					iter = <IterableIterator<[unknown, unknown]>>opts.original.call(target);
+
+				for (let el = iter.next(); !el.done; el = iter.next()) {
+					const [key, val] = el.value;
+
+					yield [
+						key,
+						getProxyValue(val, key, opts.path, opts.handlers, opts.root, opts.top ?? opts.root, opts.watchOpts)
+					];
+				}
 			}
 		}
 	},
 
 	values: {
 		type: 'get',
-		*value(target: unknown[]): IterableIterator<unknown> {
+		value(target: unknown[]): IterableIterator<unknown> {
 			const
-				iterable = target.entries();
+				iter = createIter();
 
-			for (let el = iterable.next(); !el.done; el = iterable.next()) {
-				const [, val] = el.value;
-				yield val;
+			return {
+				[Symbol.iterator]() {
+					return this;
+				},
+
+				next: iter.next.bind(iter)
+			};
+
+			function* createIter() {
+				const
+					iter = target.entries();
+
+				for (let el = iter.next(); !el.done; el = iter.next()) {
+					const [, val] = el.value;
+					yield val;
+				}
 			}
 		}
 	},

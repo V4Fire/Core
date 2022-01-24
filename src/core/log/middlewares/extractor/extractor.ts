@@ -55,7 +55,7 @@ export class ExtractorMiddleware implements LogMiddleware {
 	 * Returns an error's info structure
 	 *
 	 * @param error - error, which details should be returned
-	 * @param isRoot - if false then adds `name` and `message` of the passed error to it's info
+	 * @param isRoot - if false then adds `name` and `message` of the passed error to its info
 	 * @param depthLimit - maximum depth of nested errors
 	 */
 	protected generateErrorInfo(error: Error, isRoot: boolean = true, depthLimit: number = DEPTH_LIMIT): ErrorInfo {

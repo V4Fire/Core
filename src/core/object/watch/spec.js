@@ -985,6 +985,30 @@ describe('core/object/watch', () => {
 					const {proxy} = watch(obj, {deep: true, engine});
 					expect(proxy.foo).toBe(nested);
 				});
+
+				it('should watch properties added via `Object.defineProperty`', () => {
+					const
+						obj = {},
+						spy = jasmine.createSpy();
+
+					const {proxy} = watch(obj, {immediate: true, engine}, (value, oldValue, info) => {
+						spy(value, oldValue, info.path);
+					});
+
+					Object.defineProperty(proxy, 'bla', {
+						enumerable: true,
+						value: 10
+					});
+
+					expect(spy).toHaveBeenCalledWith(10, undefined, ['bla']);
+
+					expect(Object.getOwnPropertyDescriptor(proxy, 'bla')).toEqual({
+						configurable: false,
+						writable: false,
+						enumerable: true,
+						value: 10
+					});
+				});
 			}
 		});
 	});

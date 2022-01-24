@@ -21,7 +21,7 @@ import type { PerfTimerFactory } from '@src/core/perf/timer/interface';
 export * from '@src/core/perf/timer/interface';
 
 /**
- * Returns a timers factory for the passed config
+ * Returns a timers' factory for the passed config
  * @param config - config, that the new factory will use
  */
 export function getTimerFactory(config: PerfTimerConfig): PerfTimerFactory {

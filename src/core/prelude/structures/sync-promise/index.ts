@@ -66,7 +66,7 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 
 	/**
 	 * Takes an iterable of promises and returns a single SyncPromise that resolves to an array of the results
-	 * of the input promises. This returned promise will resolve when all of the input's promises have been resolved or
+	 * of the input promises. This returned promise will resolve when all the input's promises have been resolved or
 	 * if the input iterable contains no promises. It rejects immediately upon any of the input promises rejecting or
 	 * non-promises throwing an error and will reject with this first rejection message/error.
 	 *
@@ -134,7 +134,7 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 	}
 
 	/**
-	 * Returns a promise that resolves after all of the given promises have either been fulfilled or rejected,
+	 * Returns a promise that resolves after all the given promises have either been fulfilled or rejected,
 	 * with an array of objects describing each promise's outcome.
 	 *
 	 * It is typically used when you have multiple asynchronous tasks that are not dependent on one another to
@@ -240,7 +240,7 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 	}
 
 	/**
-	 * Returns a promise that fulfills or rejects as soon as one of the promises in an iterable fulfills or rejects,
+	 * Returns a promise that fulfills or rejects as soon as one of the promises from the iterable fulfills or rejects,
 	 * with the value or reason from that promise
 	 *
 	 * @param values
@@ -270,7 +270,7 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 	/**
 	 * Takes an iterable of SyncPromise objects and, as soon as one of the promises in the iterable fulfills,
 	 * returns a single promise that resolves with the value from that promise. If no promises in the iterable fulfill
-	 * (if all of the given promises are rejected), then the returned promise is rejected with an AggregateError,
+	 * (if all the given promises are rejected), then the returned promise is rejected with an AggregateError,
 	 * a new subclass of Error that groups together individual errors.
 	 *
 	 * @param values

@@ -29,7 +29,7 @@ export interface NextCallback {
 export interface LogMiddleware {
 	/**
 	 * Processes the events
-	 * (if has data to pass to the next middleware, calls the next callback)
+	 * (if it has data to pass to the next middleware, calls the next callback)
 	 *
 	 * @param events
 	 * @param next

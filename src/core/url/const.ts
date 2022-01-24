@@ -8,7 +8,11 @@
 
 export const
 	isAbsURL = /^(?:\w+:)?\/\//,
-	isURLWithSlash = /^(?:\w+:)?\/+/;
+	isStrictAbsURL = /^\w+:\/\//;
+
+export const
+	startSlashesRgxp = /^\/+/,
+	endSlashesRgxp = /\/+$/;
 
 /**
  * Default function to filter query parameters to serialize with the `toQueryString` method

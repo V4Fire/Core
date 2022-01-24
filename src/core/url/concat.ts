@@ -7,7 +7,7 @@
  */
 
 import { deprecate } from '@src/core/functools/deprecation';
-import { isAbsURL, isURLWithSlash } from '@src/core/url/const';
+import { isStrictAbsURL, startSlashesRgxp, endSlashesRgxp } from '@src/core/url/const';
 
 /**
  * Concatenates the specified parts of URL-s with correctly arranging of slashes and returns a new string
@@ -16,7 +16,7 @@ import { isAbsURL, isURLWithSlash } from '@src/core/url/const';
  *
  * @example
  * ```js
- * // '/foo/baz/bar/bla'
+ * // 'foo/baz/bar/bla'
  * concatURLs('foo/baz', '/bar', 'bla');
  *
  * // 'http://foo.bar/bla'
@@ -35,21 +35,27 @@ export function concatURLs(...urls: Array<Nullable<string>>): string {
 			continue;
 		}
 
-		if (isAbsURL.test(url)) {
+		url = url.replace(endSlashesRgxp, '/');
+
+		if (isStrictAbsURL.test(url)) {
 			res = url;
 			continue;
 		}
 
-		if (url.startsWith('/')) {
-			url = url.slice(1);
-		}
-
-		if (res !== '') {
-			res += res.endsWith('/') ? url : `/${url}`;
+		if (i === 0) {
+			res = url.replace(startSlashesRgxp, (str) => str.slice(0, 2));
 			continue;
 		}
 
-		res = isURLWithSlash.test(url) ? url : `/${url}`;
+		url = url.replace(startSlashesRgxp, '/');
+
+		if (res === '') {
+			res += url;
+
+		} else {
+			url = url.replace(startSlashesRgxp, '');
+			res += res.endsWith('/') ? url : `/${url}`;
+		}
 	}
 
 	return res;

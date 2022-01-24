@@ -199,7 +199,7 @@ export default class Response<
 
 		Object.forEach(this.decoders, (fn) => {
 			decoders = decoders.then((data) => {
-				if (data != null && Object.isFrozen(data)) {
+				if (!Object.isPrimitive(data) && Object.isFrozen(data)) {
 					data = data.valueOf();
 				}
 
@@ -207,20 +207,24 @@ export default class Response<
 			});
 		});
 
-		return decoders.then((res) => {
-			if (Object.isFrozen(res)) {
-				return res;
+		return decoders.then((data) => {
+			if (Object.isFrozen(data)) {
+				return data;
 			}
 
-			if (Object.isArray(res) || Object.isPlainObject(res)) {
-				Object.defineProperty(res, 'valueOf', {
-					value: () => Object.fastClone(res, {freezable: false})
+			if (Object.isArray(data) || Object.isPlainObject(data)) {
+				const
+					originalData = data;
+
+				Object.defineProperty(data, 'valueOf', {
+					configurable: true,
+					value: () => Object.fastClone(originalData, {freezable: false})
 				});
 
-				Object.freeze(res);
+				Object.freeze(data);
 			}
 
-			return res;
+			return data;
 		});
 	}
 

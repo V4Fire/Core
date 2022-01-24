@@ -34,12 +34,14 @@ import {
 
 import type {
 
+	Watcher,
 	WatchPath,
+
 	RawWatchHandler,
 	WatchHandlersSet,
+
 	WatchOptions,
-	InternalWatchOptions,
-	Watcher
+	InternalWatchOptions
 
 } from '@src/core/object/watch/interface';
 
@@ -454,7 +456,7 @@ export function setWatchAccessors(
 		descriptors = Object.getOwnPropertyDescriptor(obj, key);
 
 	if (!descriptors || descriptors.configurable) {
-			Object.defineProperty(proxy, key, {
+		Object.defineProperty(proxy, key, {
 			enumerable: true,
 			configurable: true,
 

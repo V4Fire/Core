@@ -7,5 +7,5 @@
  */
 
 export type ObjectScheme = Dictionary<
-	ObjectScheme | Function | Primitive
+	ObjectScheme | Function | FunctionConstructor | Primitive
 >;

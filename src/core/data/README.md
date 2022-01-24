@@ -286,7 +286,7 @@ interface ProviderOptions {
 }
 ```
 
-### Registering a data provider as the multiton
+### Registering a data provider as the multitone
 
 You can register your data provider by a name in the global storage. For that case, you should use the special decorator `provider`.
 

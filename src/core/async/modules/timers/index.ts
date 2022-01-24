@@ -87,7 +87,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * Unmutes the specified "setImmediate" timer
-	 * @param [id] - operation id (if not defined will be get all handlers)
+	 * @param [id] - operation id (if not defined will be got all handlers)
 	 */
 	unmuteImmediate(id?: TimerId): this;
 
