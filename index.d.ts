@@ -117,6 +117,8 @@ declare function l(strings: any | string[], ...expr: any[]): string;
 declare function setImmediate(fn: AnyFunction): number;
 declare function clearImmediate(id: number): void;
 
+declare function structuredClone<T>(obj: T): T;
+
 type Primitive = string | symbol | number | bigint | boolean | undefined | null;
 
 type CanPromise<T> = T | Promise<T>;
@@ -1028,7 +1030,8 @@ interface ObjectConstructor {
 	fastClone(obj: undefined, opts: FastCloneOptions): <T>(obj: T) => T;
 
 	/**
-	 * Clones the specified object by using a naive but fast `JSON.stringify/parse` strategy and returns a new object.
+	 * Clones the specified object using the `structuredClone` method if possible and returns a new object.
+	 * Otherwise, the method will use a naive but fast `JSON.stringify/parse` strategy.
 	 *
 	 * @param obj
 	 * @param [opts] - additional options

@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.??.?? (2022-??-??)
+
+#### :house: Internal
+
+* Now `Object.fastClone` will use `structredClone` if it is possible
+
 ## v3.27.5 (2020-09-29)
 
 #### :bug: Bug Fix
