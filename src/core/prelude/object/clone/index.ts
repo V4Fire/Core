@@ -65,13 +65,7 @@ extend(Object, 'fastClone', (obj, opts?: FastCloneOptions) => {
 
 	return obj;
 
-	/**
-	 * Algorithm based on `JSON.stringify/parse` strategy
-	 *
-	 * @param obj
-	 * @param [opts] - additional options
-	 */
-	function jsonBasedClone(obj: Object, opts?: FastCloneOptions): Object {
+	function jsonBasedClone(obj: object, opts?: FastCloneOptions): object {
 		if (obj instanceof Map) {
 			const
 				map = new Map();
