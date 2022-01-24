@@ -291,8 +291,8 @@ fdescribe('core/request', () => {
 				expect(req.data)
 					.toBe('{"message": "Success"}');
 
-				expect(req.response.getHeader('Content-Type'))
-					.toBeUndefined();
+				expect(req.response.headers.get('Content-Type'))
+					.toBeNull();
 
 				expect(await req.response.json())
 					.toEqual({message: 'Success'});

@@ -352,7 +352,7 @@ export default class Response<
 
 				if (Object.isString(body) || body instanceof ArrayBuffer) {
 					return this.text().then((text) => {
-						const type = this.getHeader('content-type') ?? 'text/html';
+						const type = this.headers.get('Content-Type') ?? 'text/html';
 						return new DOMParser().parseFromString(text ?? '', Object.cast(type));
 					});
 				}
@@ -368,6 +368,7 @@ export default class Response<
 	/**
 	 * Parses the response body as a JSON object and returns it
 	 */
+	@once
 	json(): AbortablePromise<D | null> {
 		return AbortablePromise.resolveAndCall(this.body, this.parent)
 			.then<D | null>((body) => {
@@ -398,6 +399,7 @@ export default class Response<
 	/**
 	 * Parses the response body as an ArrayBuffer object and returns it
 	 */
+	@once
 	arrayBuffer(): AbortablePromise<ArrayBuffer | null> {
 		return AbortablePromise.resolveAndCall(this.body, this.parent)
 			.then<ArrayBuffer | null>((body) => {
@@ -428,6 +430,7 @@ export default class Response<
 	/**
 	 * Parses the response body as a Blob structure and returns it
 	 */
+	@once
 	blob(): AbortablePromise<Blob | null> {
 		return AbortablePromise.resolveAndCall(this.body, this.parent)
 			.then<Blob | null>((body) => {
@@ -483,7 +486,7 @@ export default class Response<
 				}
 
 				const
-					contentType = this.getHeader('content-type');
+					contentType = this.headers.get('Content-Type');
 
 				let
 					encoding = <BufferEncoding>'utf-8';
