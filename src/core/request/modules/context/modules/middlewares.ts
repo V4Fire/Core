@@ -73,7 +73,22 @@ export default class RequestContext<D = unknown> extends Super<D> {
 				save();
 
 			} else if (!response.streamUsed) {
-				response.emitter.once('bodyUsed', save);
+				const
+					{emitter} = response;
+
+				const saveAndClear = () => {
+					save();
+
+					// eslint-disable-next-line @typescript-eslint/no-use-before-define
+					emitter.off('bodyUsed', clear);
+				};
+
+				const clear = () => {
+					emitter.off('bodyUsed', saveAndClear);
+				};
+
+				emitter.once('bodyUsed', saveAndClear);
+				emitter.once('streamUsed', clear);
 			}
 
 			caches.add(this.cache);
