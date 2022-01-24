@@ -6,23 +6,11 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { set, get } from 'core/env';
-import StreamBuffer from 'core/request/modules/cached-stream';
+import StreamBuffer from 'core/request/modules/stream-buffer';
 
 describe('core/request/modules/stream-buffer', () => {
-	let
-		globalChunks,
-		logOptions;
-
-	beforeAll(async () => {
+	const
 		globalChunks = ['chunk1', 'chunk2', 'chunk3'];
-		logOptions = await get('log');
-		set('log', {patterns: []});
-	});
-
-	afterAll(() => {
-		set('log', logOptions);
-	});
 
 	it('passing values to a stream constructor', () => {
 		const
