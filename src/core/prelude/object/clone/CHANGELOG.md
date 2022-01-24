@@ -11,7 +11,9 @@ Changelog
 
 ## v3.??.?? (2022-??-??)
 
-* Added structredClone as default clone algorithm
+#### :house: Internal
+
+* Now `Object.fastClone` will use `structredClone` if it is possible
 
 ## v3.27.5 (2020-09-29)
 

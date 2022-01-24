@@ -1030,8 +1030,8 @@ interface ObjectConstructor {
 	fastClone(obj: undefined, opts: FastCloneOptions): <T>(obj: T) => T;
 
 	/**
-	 * Clones the specified object by using structuredClone method and returns a new object.
-	 * If it is impossible, then use a naive but fast `JSON.stringify/parse` strategy .
+	 * Clones the specified object using the `structuredClone` method if possible and returns a new object.
+	 * Otherwise, the method will use a naive but fast `JSON.stringify/parse` strategy.
 	 *
 	 * @param obj
 	 * @param [opts] - additional options

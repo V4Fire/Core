@@ -17,6 +17,10 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 * Fixed a bug when `onAbort` calling occurred after promise aborting `core/promise/abortable`
 
+#### :house: Internal
+
+* Now `Object.fastClone` will use `structredClone` if it is possible
+
 ## v3.74.3 (2022-01-13)
 
 #### :boom: Breaking Change
