@@ -13,7 +13,7 @@ Changelog
 
 #### :bug: Bug Fix
 
-* `__proto__` property will be ignored and removed via json reviver to prevent prototype pollution `Object.parse`
+* Now `__proto__ ` properties are ignored and removed via a json reviver to prevent prototype pollution `Object.parse`
 
 ## v3.60.0 (2021-10-01)
 

@@ -14,3 +14,6 @@ import 'core/prelude/object/convert';
 import 'core/prelude/object/create';
 import 'core/prelude/object/mixin';
 import 'core/prelude/object/clone';
+
+export * from 'core/prelude/object/const';
+export * from 'core/prelude/object/helpers';
