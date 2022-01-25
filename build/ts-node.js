@@ -42,7 +42,8 @@ module.exports = () => {
 		transpileOnly: true,
 
 		compilerOptions: {
-			module: 'CommonJS'
+			module: 'commonjs',
+			target: 'es2021'
 		},
 
 		ignore: []
