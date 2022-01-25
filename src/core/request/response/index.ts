@@ -371,9 +371,9 @@ export default class Response<
 	 * Parses the response body as a JSON object and returns it
 	 */
 	@once
-	json(): AbortablePromise<D | null> {
+	json(): AbortablePromise<JSONLikeValue> {
 		return AbortablePromise.resolveAndCall(this.body, this.parent)
-			.then<D | null>((body) => {
+			.then<JSONLikeValue>((body) => {
 				if (body == null) {
 					return null;
 				}
