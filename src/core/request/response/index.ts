@@ -46,7 +46,7 @@ export const
 	$$ = symbolGenerator();
 
 /**
- * Class of a request response
+ * Class to work with a server response data
  * @typeparam D - response data type
  */
 export default class Response<
@@ -115,7 +115,7 @@ export default class Response<
 	readonly okStatuses: OkStatuses;
 
 	/**
-	 * Container of response headers
+	 * Set of response headers
 	 */
 	readonly headers: Readonly<Headers>;
 
@@ -133,16 +133,7 @@ export default class Response<
 	/**
 	 * Response body value
 	 */
-	get body(): ResponseTypeValueP {
-		return this[$$.body];
-	}
-
-	/**
-	 * Sets a new value of the response body
-	 */
-	protected set body(value: ResponseTypeValueP) {
-		this[$$.body] = value;
-	}
+	readonly body: ResponseTypeValueP;
 
 	/**
 	 * True, if the response body is already read
@@ -176,6 +167,11 @@ export default class Response<
 	 * Event emitter to broadcast response events
 	 */
 	readonly emitter: EventEmitter = new EventEmitter({maxListeners: 100, newListener: false});
+
+	/**
+	 * Creates a clone of a response object, identical in every way, but stored in a different variable
+	 */
+	readonly clone: () => Response<D>;
 
 	/**
 	 * @param [body] - response body value
@@ -222,6 +218,17 @@ export default class Response<
 		} else if (p.jsonReviver !== false) {
 			this.jsonReviver = convertIfDate;
 		}
+
+		this.clone = () => {
+			const res = new Response<D>(body, opts);
+
+			Object.assign(res, {
+				bodyUsed: this.bodyUsed,
+				streamUsed: this.streamUsed
+			});
+
+			return res;
+		};
 	}
 
 	/**
@@ -248,7 +255,7 @@ export default class Response<
 	}
 
 	/**
-	 * Returns an HTTP header' value by the specified name
+	 * Returns an HTTP header value by the specified name
 	 * @param name
 	 */
 	@deprecated({alternative: 'headers.get'})
@@ -379,12 +386,12 @@ export default class Response<
 				}
 
 				if (!IS_NODE && body instanceof Document) {
-					throw new TypeError("Can't read response data as JSON");
+					throw new TypeError("Can't read response data as a JSON object");
 				}
 
 				if (body instanceof FormData) {
 					if (!Object.isIterable(body)) {
-						throw new TypeError("Can't parse FormData as JSON because it is not iterable object");
+						throw new TypeError("Can't parse a FormData value as a JSON object because it is not iterable");
 					}
 
 					const
@@ -437,7 +444,7 @@ export default class Response<
 			}
 
 			if (!IS_NODE && body instanceof Document) {
-				throw new TypeError("Can't read response data as FormData");
+				throw new TypeError("Can't read response data as a FormData object");
 			}
 
 			return Object.cast(that.text().then(decodeFromString));
@@ -472,12 +479,16 @@ export default class Response<
 	}
 
 	/**
-	 * Parses the response body as an ArrayBuffer object and returns it
+	 * Parses the response body as an ArrayBuffer and returns it
 	 */
 	@once
 	arrayBuffer(): AbortablePromise<ArrayBuffer> {
 		return AbortablePromise.resolveAndCall(this.body, this.parent)
 			.then<ArrayBuffer>((body) => {
+				if (body == null) {
+					return new ArrayBuffer(0);
+				}
+
 				if (body instanceof ArrayBuffer) {
 					return body;
 				}
