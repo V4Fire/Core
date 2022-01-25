@@ -10,4 +10,7 @@ export const
 	canParse = /^[[{"]|^(?:true|false|null|(?:0\.)?\d+(?:[eE]\d+)?)$/;
 
 export const
+	invalidKey = '__proto__';
+
+export const
 	funcCache = new WeakMap();

@@ -7,7 +7,7 @@
  */
 
 import extend from 'core/prelude/extend';
-import { canParse } from 'core/prelude/object/const';
+import { canParse, invalidKey } from 'core/prelude/object/const';
 
 /** @see [[ObjectConstructor.trySerialize]] */
 extend(Object, 'trySerialize', (value, replacer?: JSONCb) => {
@@ -48,9 +48,21 @@ extend(Object, 'trySerialize', (value, replacer?: JSONCb) => {
 
 /** @see [[ObjectConstructor.parse]] */
 extend(Object, 'parse', (value, reviver?: JSONCb) => {
+	const wrapReviver = (fn) => (key, value) => {
+		if (key === invalidKey) {
+			return;
+		}
+
+		if (Object.isFunction(fn)) {
+			value = fn(key, value);
+		}
+
+		return value;
+	};
+
 	if (Object.isFunction(value)) {
 		reviver = value;
-		return (value) => Object.parse(value, reviver);
+		return (value) => Object.parse(value, wrapReviver(reviver));
 	}
 
 	if (Object.isString(value)) {
@@ -61,7 +73,7 @@ extend(Object, 'parse', (value, reviver?: JSONCb) => {
 		if (canParse.test(value)) {
 			try {
 				const
-					parsedVal = JSON.parse(value, reviver);
+					parsedVal = JSON.parse(value, wrapReviver(reviver));
 
 				if (Object.isNumber(parsedVal)) {
 					return parsedVal.isSafe() ? parsedVal : value;

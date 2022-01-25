@@ -11,6 +11,13 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+
+## v3.??.?? (2021-??-??)
+
+#### :bug: Bug Fix
+
+* `__proto__` property will be ignored and removed via json reviver to prevent prototype pollution `Object.parse`
+
 ## v3.74.4 (2022-01-24)
 
 #### :bug: Bug Fix
