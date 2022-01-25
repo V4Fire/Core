@@ -50,6 +50,12 @@ export type JSONLikeValue =
 	unknown[] |
 	Dictionary;
 
+export interface ResponseChunk<D> {
+	loaded: number;
+	total?: number;
+	data?: D | null;
+}
+
 export interface ResponseOptions {
 	url?: string;
 	redirected?: boolean;

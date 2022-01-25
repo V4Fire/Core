@@ -26,11 +26,12 @@ import Headers from 'core/request/headers';
 import { FormData, Blob } from 'core/request/engines';
 
 import { defaultResponseOpts, noContentStatusCodes } from 'core/request/response/const';
-import type { OkStatuses, WrappedDecoders, RequestChunk } from 'core/request/interface';
+import type { OkStatuses, WrappedDecoders, RequestResponseChunk } from 'core/request/interface';
 
 import type {
 
 	ResponseType,
+	ResponseTypeValue,
 	ResponseTypeValueP,
 	ResponseModeType,
 
@@ -48,7 +49,7 @@ export const
 	$$ = symbolGenerator();
 
 /**
- * Class to work with a server response data
+ * Class to work with server response data
  * @typeparam D - response data type
  */
 export default class Response<
@@ -251,7 +252,7 @@ export default class Response<
 	 * Mind, when you parse response via iterator, you won't be able to use other parse methods, like `json` or `text`.
 	 * @emits `asyncIteratorUsed()`
 	 */
-	[Symbol.asyncIterator](): AsyncIterableIterator<RequestChunk> {
+	[Symbol.asyncIterator](): AsyncIterableIterator<RequestResponseChunk> {
 		if (this.bodyUsed) {
 			throw new Error("The response can't be parsed as a stream because it already read");
 		}
@@ -279,7 +280,13 @@ export default class Response<
 	}
 
 	/**
-	 * Parses the response body and returns a result
+	 * Parses the response body and returns a promise with the result.
+	 * The operation result is memoized, and you can't parse the response as a stream after invoking this method.
+	 *
+	 * A way to parse data is based on the response `Content-Type` header or a passed `responseType` constructor option.
+	 * Also, a sequence of decoders is applied to the parsed result if they are passed with a `decoders`
+	 * constructor option.
+	 *
 	 * @emits `bodyUsed()`
 	 */
 	@once
@@ -295,7 +302,7 @@ export default class Response<
 			data;
 
 		if (noContentStatusCodes.includes(this.status)) {
-			data = AbortablePromise.resolve(null, this.parent);
+			data = null;
 
 		} else {
 			switch (this.sourceResponseType) {
@@ -328,34 +335,7 @@ export default class Response<
 			}
 		}
 
-		let
-			decoders = data.then((obj) => AbortablePromise.resolve(obj, this.parent));
-
-		Object.forEach(this.decoders, (fn) => {
-			decoders = decoders.then((data) => {
-				if (data != null && Object.isFrozen(data)) {
-					data = data.valueOf();
-				}
-
-				return fn(data, Object.cast(this));
-			});
-		});
-
-		return decoders.then((res) => {
-			if (Object.isFrozen(res)) {
-				return res;
-			}
-
-			if (Object.isArray(res) || Object.isPlainObject(res)) {
-				Object.defineProperty(res, 'valueOf', {
-					value: () => Object.fastClone(res, {freezable: false})
-				});
-
-				Object.freeze(res);
-			}
-
-			return res;
-		});
+		return this.applyDecoders(data);
 	}
 
 	/**
@@ -624,5 +604,47 @@ export default class Response<
 
 			}, that.parent);
 		}
+	}
+
+	/**
+	 * Applies given decoders to the specified data and returns a promise with the result
+	 *
+	 * @param data
+	 * @param [decoders]
+	 */
+	protected applyDecoders<T = unknown>(
+		data: CanPromise<ResponseTypeValue>,
+		decoders: WrappedDecoders = this.decoders
+	): T {
+		let
+			res = AbortablePromise.resolve(data, this.parent);
+
+		Object.forEach(decoders, (fn) => {
+			res = res.then((data) => {
+				if (data != null && Object.isFrozen(data)) {
+					data = data.valueOf();
+				}
+
+				return fn(data, Object.cast(this));
+			});
+		});
+
+		res = res.then((res) => {
+			if (Object.isFrozen(res)) {
+				return res;
+			}
+
+			if (Object.isArray(res) || Object.isPlainObject(res)) {
+				Object.defineProperty(res, 'valueOf', {
+					value: () => Object.fastClone(res, {freezable: false})
+				});
+
+				Object.freeze(res);
+			}
+
+			return res;
+		});
+
+		return Object.cast(res);
 	}
 }
