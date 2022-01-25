@@ -2,7 +2,7 @@
 
 This module provides a class to create a set of HTTP headers.
 The class' API is pretty similar to native the [Headers](https://developer.mozilla.org/en-US/docs/Web/API/Headers) class
-but has some extra functionality and doesn't implement the [Guard]((https://developer.mozilla.org/en-US/docs/Glossary/Guard)) conceptions.
+but has some extra functionality and doesn't implement the [Guard](https://developer.mozilla.org/en-US/docs/Glossary/Guard) conceptions.
 
 ## Why not just use the native Headers class?
 
