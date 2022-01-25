@@ -293,6 +293,10 @@ export default class Response<
 					data = this.document();
 					break;
 
+				case 'formData':
+					data = this.formData();
+					break;
+
 				case 'object':
 					data = AbortablePromise.resolve(this.body, this.parent);
 					break;
