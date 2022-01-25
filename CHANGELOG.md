@@ -16,7 +16,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :bug: Bug Fix
 
-* `__proto__` property will be ignored and removed via json reviver to prevent prototype pollution `Object.parse`
+* `__proto__` property will be ignored and removed via json reviver to prevent prototype pollution `core/prelude/object#Object.parse`
 
 ## v3.74.4 (2022-01-24)
 
