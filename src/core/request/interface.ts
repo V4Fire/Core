@@ -82,7 +82,7 @@ export type CacheType =
 	'memory' |
 	'offline';
 
-export interface RequestChunk {
+export interface RequestResponseChunk {
 	loaded: number;
 	total?: number;
 	data?: Uint8Array;
@@ -93,7 +93,7 @@ export interface RequestResponseObject<D = unknown> {
 	response: Response<D>;
 
 	data: Promise<Nullable<D>>;
-	[Symbol.asyncIterator](): AsyncIterable<RequestChunk>;
+	[Symbol.asyncIterator](): AsyncIterable<RequestResponseChunk>;
 
 	cache?: CacheType;
 	dropCache(): void;
@@ -101,7 +101,7 @@ export interface RequestResponseObject<D = unknown> {
 
 export type RequestPromise = AbortablePromise & {
 	emitter: EventEmitter;
-	[Symbol.asyncIterator](): AsyncIterable<RequestChunk>;
+	[Symbol.asyncIterator](): AsyncIterable<RequestResponseChunk>;
 };
 
 export type RequestResponse<D = unknown> = AbortablePromise<RequestResponseObject<D>>;

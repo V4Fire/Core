@@ -33,7 +33,7 @@ import type {
 	RetryOptions,
 
 	RequestResolver,
-	RequestChunk,
+	RequestResponseChunk,
 	RequestResponse,
 	RequestFunctionResponse,
 	RequestResponseObject,
@@ -156,7 +156,7 @@ function request<D = unknown>(
 
 		const
 			ctx = RequestContext.decorateContext(baseCtx, path, resolver, ...args),
-			responseIterator = createControllablePromise<() => AsyncIterableIterator<RequestChunk>>(),
+			responseIterator = createControllablePromise<() => AsyncIterableIterator<RequestResponseChunk>>(),
 			requestParams = ctx.params;
 
 		const middlewareParams = {
