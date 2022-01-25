@@ -18,6 +18,9 @@ import type { RawHeaders, HeadersForEachCb } from 'core/request/headers/interfac
 
 export * from 'core/request/headers/interface';
 
+/**
+ * Class to create a set of HTTP headers
+ */
 export default class V4Headers {
 	/**
 	 * Request query object (to interpolate values from headers)
