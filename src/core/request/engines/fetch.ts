@@ -91,6 +91,9 @@ const request: RequestEngine = (params) => {
 					case 'text':
 						return res.text();
 
+					case 'formData':
+						return res.formData();
+
 					default:
 						return res.arrayBuffer();
 				}

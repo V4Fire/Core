@@ -23,6 +23,8 @@ import AbortablePromise from 'core/promise/abortable';
 import symbolGenerator from 'core/symbol';
 
 import Headers from 'core/request/headers';
+import { FormData, Blob } from 'core/request/engines';
+
 import { defaultResponseOpts, noContentStatusCodes } from 'core/request/response/const';
 import type { OkStatuses, WrappedDecoders, RequestChunk } from 'core/request/interface';
 
@@ -334,9 +336,9 @@ export default class Response<
 	 * Parses the response body as a Document instance and returns it
 	 */
 	@once
-	document(): AbortablePromise<Document | null> {
+	document(): AbortablePromise<Document> {
 		return AbortablePromise.resolveAndCall(this.body, this.parent)
-			.then<Document | null>((body) => {
+			.then<Document>((body) => {
 				//#if node_js
 
 				if (IS_NODE) {
@@ -350,18 +352,14 @@ export default class Response<
 
 				//#endif
 
-				if (Object.isString(body) || body instanceof ArrayBuffer) {
-					return this.text().then((text) => {
-						const type = this.headers.get('Content-Type') ?? 'text/html';
-						return new DOMParser().parseFromString(text ?? '', Object.cast(type));
-					});
+				if (body instanceof Document) {
+					return body;
 				}
 
-				if (!(body instanceof Document)) {
-					throw new TypeError('Invalid data type');
-				}
-
-				return body;
+				return this.text().then((text) => {
+					const type = this.headers.get('Content-Type') ?? 'text/html';
+					return new DOMParser().parseFromString(text, Object.cast(type));
+				});
 			});
 	}
 
@@ -372,17 +370,37 @@ export default class Response<
 	json(): AbortablePromise<D | null> {
 		return AbortablePromise.resolveAndCall(this.body, this.parent)
 			.then<D | null>((body) => {
-				if (!IS_NODE && body instanceof Document) {
-					throw new TypeError('Invalid data type');
-				}
-
-				if (body == null || body === '') {
+				if (body == null) {
 					return null;
 				}
 
-				if (Object.isString(body) || body instanceof ArrayBuffer || body instanceof Uint8Array) {
+				if (!IS_NODE && body instanceof Document) {
+					throw new TypeError("Can't read response data as JSON");
+				}
+
+				if (body instanceof FormData) {
+					if (!Object.isIterable(body)) {
+						throw new TypeError("Can't parse FormData as JSON because it is not iterable object");
+					}
+
+					const
+						res = {};
+
+					for (const [key, val] of Object.cast<Iterable<[string, string]>>(body)) {
+						res[key] = val;
+					}
+
+					return res;
+				}
+
+				const isStringOrBuffer =
+					Object.isString(body) ||
+					body instanceof ArrayBuffer ||
+					ArrayBuffer.isView(body);
+
+				if (isStringOrBuffer) {
 					return this.text().then((text) => {
-						if (text == null || text === '') {
+						if (text === '') {
 							return null;
 						}
 
@@ -390,40 +408,81 @@ export default class Response<
 					});
 				}
 
-				return Object.size(this.decoders) > 0 && !Object.isFrozen(body) ?
-					Object.fastClone(body) :
-					body;
+				return Object.size(this.decoders) > 0 && !Object.isFrozen(body) ? Object.fastClone(body) : body;
 			});
+	}
+
+	/**
+	 * Parses the response body as a FormData object and returns it
+	 */
+	@once
+	formData(): AbortablePromise<FormData> {
+		const
+			that = this;
+
+		return AbortablePromise.resolveAndCall(this.body, this.parent)
+			.then<FormData>(decode);
+
+		function decode(body: ResponseTypeValueP): FormData {
+			if (body == null) {
+				return new FormData();
+			}
+
+			if (body instanceof FormData) {
+				return body;
+			}
+
+			if (!IS_NODE && body instanceof Document) {
+				throw new TypeError("Can't read response data as FormData");
+			}
+
+			return Object.cast(that.text().then(decodeFromString));
+
+			function decodeFromString(body: string): FormData {
+				const
+					formData = new FormData();
+
+				const
+					normalizeRgxp = /[+]/g,
+					records = body.trim().split('&');
+
+				for (let i = 0; i < records.length; i++) {
+					const
+						record = records[i];
+
+					if (record === '') {
+						continue;
+					}
+
+					const
+						chunks = record.split('='),
+						name = chunks.shift()!.replace(normalizeRgxp, ' '),
+						val = chunks.join('=').replace(normalizeRgxp, ' ');
+
+					formData.append(decodeURIComponent(name), decodeURIComponent(val));
+				}
+
+				return formData;
+			}
+		}
 	}
 
 	/**
 	 * Parses the response body as an ArrayBuffer object and returns it
 	 */
 	@once
-	arrayBuffer(): AbortablePromise<ArrayBuffer | null> {
+	arrayBuffer(): AbortablePromise<ArrayBuffer> {
 		return AbortablePromise.resolveAndCall(this.body, this.parent)
-			.then<ArrayBuffer | null>((body) => {
-				//#unless node_js
-
-				if (!IS_NODE && !(body instanceof ArrayBuffer)) {
-					throw new TypeError('Invalid data type');
+			.then<ArrayBuffer>((body) => {
+				if (body instanceof ArrayBuffer) {
+					return body;
 				}
 
-				//#endunless
-
-				//#if node_js
-
-				if (!(body instanceof Buffer) && !(body instanceof ArrayBuffer)) {
-					throw new TypeError('Invalid data type');
+				if (ArrayBuffer.isView(body)) {
+					return body.buffer;
 				}
 
-				//#endif
-
-				if (body.byteLength === 0) {
-					return null;
-				}
-
-				return body;
+				throw new TypeError("Can't read response data as ArrayBuffer");
 			});
 	}
 
@@ -431,29 +490,25 @@ export default class Response<
 	 * Parses the response body as a Blob structure and returns it
 	 */
 	@once
-	blob(): AbortablePromise<Blob | null> {
+	blob(): AbortablePromise<Blob> {
 		return AbortablePromise.resolveAndCall(this.body, this.parent)
-			.then<Blob | null>((body) => {
-				if (!IS_NODE && body instanceof Document) {
-					throw new TypeError('Invalid data type');
-				}
+			.then<Blob>((body) => {
+				const
+					type = this.headers.get('Content-Type') ?? '';
 
 				if (body == null) {
-					return null;
+					return new Blob([], {type});
 				}
 
-				let
-					{Blob} = globalThis;
-
-				//#if node_js
-
-				if (IS_NODE) {
-					Blob = require('node-blob');
+				if (body instanceof Blob) {
+					return body;
 				}
 
-				//#endif
+				if (body instanceof ArrayBuffer || ArrayBuffer.isView(body)) {
+					return new Blob(Object.cast(body), {type});
+				}
 
-				return new Blob([Object.cast(body)], {type: this.headers['content-type']});
+				return new Blob([body.toString()], {type});
 			});
 	}
 
@@ -461,68 +516,83 @@ export default class Response<
 	 * Parses the response body as a string and returns it
 	 */
 	@once
-	text(): AbortablePromise<string | null> {
+	text(): AbortablePromise<string> {
+		const
+			that = this;
+
 		return AbortablePromise.resolveAndCall(this.body, this.parent)
-			.then<string | null>((body) => {
-				if (body == null || body instanceof ArrayBuffer && body.byteLength === 0) {
-					return null;
+			.then<string>(decode);
+
+		function decode(body: ResponseTypeValueP): CanPromise<string> {
+			if (body == null) {
+				return '';
+			}
+
+			if (Object.isString(body)) {
+				return body;
+			}
+
+			if (Object.isDictionary(body)) {
+				return JSON.stringify(body);
+			}
+
+			if (!IS_NODE && body instanceof Document) {
+				return String(body);
+			}
+
+			if (body instanceof FormData) {
+				if (body.toString === Object.prototype.toString) {
+					const
+						res = {};
+
+					body.forEach((val, key) => {
+						res[key] = val;
+					});
+
+					return JSON.stringify(res);
 				}
 
-				if (IS_NODE) {
-					if (body instanceof Buffer && body.byteLength === 0) {
-						throw new TypeError('Invalid data type');
-					}
+				return body.toString();
+			}
 
-				} else if (body instanceof Document) {
-					return String(body);
-				}
+			const
+				contentType = that.headers.get('Content-Type');
 
-				if (Object.isString(body)) {
-					return body;
-				}
+			let
+				encoding = <BufferEncoding>'utf-8';
 
-				if (Object.isDictionary(body)) {
-					return JSON.stringify(body);
-				}
-
+			if (contentType != null) {
 				const
-					contentType = this.headers.get('Content-Type');
+					search = /charset=(\S+)/.exec(contentType);
 
-				let
-					encoding = <BufferEncoding>'utf-8';
-
-				if (contentType != null) {
-					const
-						search = /charset=(\S+)/.exec(contentType);
-
-					if (search) {
-						encoding = <BufferEncoding>search[1].toLowerCase();
-					}
+				if (search) {
+					encoding = <BufferEncoding>search[1].toLowerCase();
 				}
+			}
 
-				if (IS_NODE) {
-					return Buffer.from(Object.cast(body)).toString(encoding);
-				}
+			if (IS_NODE) {
+				return Buffer.from(Object.cast(body)).toString(encoding);
+			}
 
-				if (typeof TextDecoder !== 'undefined') {
-					const decoder = new TextDecoder(encoding, {fatal: true});
-					return decoder.decode(new DataView(Object.cast(body)));
-				}
+			if (typeof TextDecoder !== 'undefined') {
+				const decoder = new TextDecoder(encoding, {fatal: true});
+				return decoder.decode(new DataView(Object.cast(body)));
+			}
 
-				return new AbortablePromise((resolve, reject, onAbort) => {
-					const
-						reader = new FileReader();
+			return new AbortablePromise<string>((resolve, reject, onAbort) => {
+				const
+					reader = new FileReader();
 
-					reader.onload = () => resolve(<string>reader.result);
-					reader.onerror = reject;
-					reader.onerror = reject;
+				reader.onload = () => resolve(String(reader.result));
+				reader.onerror = reject;
+				reader.onerror = reject;
 
-					this.blob().then((blob) => {
-						onAbort(() => reader.abort());
-						reader.readAsText(<Blob>blob, encoding);
-					}).catch(stderr);
+				that.blob().then((blob) => {
+					onAbort(() => reader.abort());
+					reader.readAsText(blob, encoding);
+				}).catch(stderr);
 
-				}, this.parent);
-			});
+			}, that.parent);
+		}
 	}
 }

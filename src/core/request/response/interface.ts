@@ -26,6 +26,7 @@ export type ResponseTypeValue =
 	ArrayBuffer |
 	Buffer |
 	Document |
+	FormData |
 	null |
 	undefined;
 
