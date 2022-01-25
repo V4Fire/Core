@@ -17,7 +17,7 @@ import StreamBuffer from 'core/request/modules/stream-buffer';
 
 import { convertDataToSend } from 'core/request/engines/helpers';
 import { writeableStreamMethods } from 'core/request/engines/node/const';
-import type { RequestEngine, RequestChunk } from 'core/request/interface';
+import type { RequestEngine, RequestResponseChunk } from 'core/request/interface';
 
 /**
  * Creates request by using node.js with the specified parameters and returns a promise
@@ -26,7 +26,7 @@ import type { RequestEngine, RequestChunk } from 'core/request/interface';
 const request: RequestEngine = (params) => {
 	const
 		p = params,
-		streamBuffer = new StreamBuffer<RequestChunk>();
+		streamBuffer = new StreamBuffer<RequestResponseChunk>();
 
 	const
 		[body, contentType] = convertDataToSend(p.body);

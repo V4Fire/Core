@@ -18,7 +18,7 @@ import RequestError from 'core/request/error';
 import StreamBuffer from 'core/request/modules/stream-buffer';
 
 import { convertDataToSend } from 'core/request/engines/helpers';
-import type { RequestEngine, RequestChunk } from 'core/request/interface';
+import type { RequestEngine, RequestResponseChunk } from 'core/request/interface';
 
 /**
  * Creates request by using the fetch API with the specified parameters and returns a promise
@@ -28,7 +28,7 @@ const request: RequestEngine = (params) => {
 	const
 		p = params,
 		abortController = new AbortController(),
-		streamBuffer = new StreamBuffer<RequestChunk>();
+		streamBuffer = new StreamBuffer<RequestResponseChunk>();
 
 	const
 		[body, contentType] = convertDataToSend<BodyInit>(p.body, p.contentType);
