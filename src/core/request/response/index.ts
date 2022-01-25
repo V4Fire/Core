@@ -32,6 +32,8 @@ import type {
 
 	ResponseType,
 	ResponseTypeValueP,
+	ResponseModeType,
+
 	ResponseOptions,
 	JSONLikeValue
 
@@ -61,6 +63,12 @@ export default class Response<
 	 * True if the response was obtained through a redirect
 	 */
 	readonly redirected: boolean;
+
+	/**
+	 * Mode type of the response
+	 * @see https://developer.mozilla.org/en-US/docs/Web/API/Response/type
+	 */
+	readonly type: ResponseModeType;
 
 	/**
 	 * Parent operation promise
@@ -183,6 +191,13 @@ export default class Response<
 
 		this.url = p.url;
 		this.redirected = Boolean(p.redirected);
+
+		if (p.type != null) {
+			this.type = p.type;
+
+		} else {
+			this.type = location.hostname === new URL(this.url).hostname ? 'basic' : 'cors';
+		}
 
 		this.parent = p.parent;
 		this.important = p.important;

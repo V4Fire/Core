@@ -16,6 +16,14 @@ import type { defaultResponseOpts } from 'core/request/response/const';
 
 import type { RawHeaders } from 'core/request/headers';
 
+export type ResponseModeType =
+	'basic' |
+	'cors' |
+	'default' |
+	'error' |
+	'opaque' |
+	'opaqueredirect';
+
 export type ResponseType =
 	DataType |
 	'object';
@@ -45,6 +53,7 @@ export type JSONLikeValue =
 export interface ResponseOptions {
 	url?: string;
 	redirected?: boolean;
+	type?: ResponseModeType;
 
 	parent?: AbortablePromise;
 	important?: boolean;

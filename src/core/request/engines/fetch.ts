@@ -129,6 +129,7 @@ const request: RequestEngine = (params) => {
 			resolve(new Response(getResponse, {
 				url: res.url,
 				redirected: res.redirected,
+				type: res.type,
 
 				parent: p.parent,
 				important: p.important,
