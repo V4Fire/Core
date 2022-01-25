@@ -8,7 +8,7 @@
 
 import nodeFetch from 'node-fetch';
 
-const mockFetch: typeof fetch = async (input, init?) => {
+const node: typeof fetch = async (input, init?) => {
 	const
 		response = await nodeFetch(input, init),
 		stream = response.body;
@@ -33,4 +33,4 @@ const mockFetch: typeof fetch = async (input, init?) => {
 	return <Response>response;
 };
 
-export default mockFetch;
+export default node;

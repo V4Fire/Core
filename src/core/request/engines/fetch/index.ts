@@ -7,7 +7,7 @@
  */
 
 //#if node_js
-import fetch from 'core/request/engines/mock-fetch';
+import fetch from 'core/request/engines/fetch/node';
 //#endif
 
 import AbortablePromise from 'core/promise/abortable';
