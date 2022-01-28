@@ -22,6 +22,23 @@ describe('core/object/watch', () => {
 
 	engines.forEach((engine, engineName) => {
 		describe(`with the "${engineName}" engine`, () => {
+			it('keeping the original prototype', () => {
+				const
+					proto = {c: {d: 1}},
+					obj1 = {a: 1, b: 2, __proto__: proto},
+					obj2 = {a: 1, b: 2, __proto__: proto};
+
+				const
+					{proxy} = watch(obj1, {engine}),
+					{proxy: proxyWithProto} = watch(obj2, {engine, withProto: true});
+
+				expect(Object.getPrototypeOf(obj1)).toBe(proto);
+				expect(Object.getPrototypeOf(obj2)).toBe(proto);
+
+				expect(Object.getPrototypeOf(proxy)).toBe(Object.getPrototypeOf(obj1));
+				expect(Object.getPrototypeOf(proxyWithProto)).toBe(Object.getPrototypeOf(obj2));
+			});
+
 			it('simple watching for an object', (done) => {
 				const
 					obj = {a: 1, b: 2},

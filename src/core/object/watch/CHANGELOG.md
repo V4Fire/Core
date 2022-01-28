@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.73.6 (2022-01-31)
+
+#### :bug: Bug Fix
+
+* Fixed setting of the original prototype to the proxy object with the `accessors` engine
+
 ## v3.73.3 (2022-01-10)
 
 #### :bug: Bug Fix

@@ -6,6 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import { getSameAs } from 'core/prelude/object/helpers';
+
 import {
 
 	muteLabel,
@@ -192,7 +194,7 @@ export function watch<T extends object>(
 			unwrappedObj,
 			toProxyObject,
 			handlers,
-			() => Object.create(unwrappedObj)
+			() => getSameAs(unwrappedObj)
 		);
 
 		// eslint-disable-next-line guard-for-in
