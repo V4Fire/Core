@@ -41,4 +41,4 @@ const extractor = new RequestErrorDetailsExtractor(opts);
 
 If `include` is defined, the extractor gets only headers from this array.
 If `exclude` is defined, the extractor gets all available headers except the specified ones.
-If both options are defined, then only `inlcude` option is using.
+If both options are defined, then only `inlcude` option will be used.
