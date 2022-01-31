@@ -87,6 +87,28 @@ describe('core/request/headers', () => {
 				headers['cache-control'] = 'no-cache';
 				expect(Object.keys(headers)).toEqual(['content-language', 'cache-control']);
 			});
+
+			it('freezing headers', () => {
+				const headers = new Headers({
+					'Cache-Control': 'no-cache'
+				});
+
+				Object.freeze(headers);
+
+				try {
+					headers['cache-control'] = 'no-store';
+				} catch {}
+
+				try {
+					delete headers['content-control'];
+				} catch {}
+
+				try {
+					headers['content-language'] = 'en';
+				} catch {}
+
+				expect(Object.entries(headers)).toEqual([['cache-control', 'no-cache']]);
+			});
 		});
 
 		describe('using API', () => {
@@ -152,6 +174,28 @@ describe('core/request/headers', () => {
 
 				expect(headers.get('Content-Language')).toBeNull();
 				expect(headers.has('Content-Language')).toBeFalse();
+			});
+
+			it('freezing headers', () => {
+				const headers = new Headers({
+					'Cache-Control': 'no-cache'
+				});
+
+				Object.freeze(headers);
+
+				try {
+					headers.append('Cache-Control', 'no-store');
+				} catch {}
+
+				try {
+					headers.delete('cache-control');
+				} catch {}
+
+				try {
+					headers.set('content-language', 'en');
+				} catch {}
+
+				expect(Object.entries(headers)).toEqual([['cache-control', 'no-cache']]);
 			});
 		});
 
