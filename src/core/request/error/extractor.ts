@@ -85,14 +85,12 @@ export class RequestErrorDetailsExtractor implements ErrorDetailsExtractor<Reque
 
 		return filteredHeaders;
 
-		function filterHeaders(headers: Headers, filter: (string) => boolean): Headers {
+		function filterHeaders(headers: Headers, filter: (string) => boolean) {
 			headers.forEach((name) => {
 				if (!filter(name)) {
 					headers.delete(name);
 				}
 			});
-
-			return headers;
 		}
 	}
 }
