@@ -11,12 +11,12 @@
  * @packageDocumentation
  */
 
-import symbolGenerator from '@src/core/symbol';
+import symbolGenerator from 'core/symbol';
 
-import { RequestErrorDetailsExtractor } from '@src/core/request/error';
-import type { Config } from '@src/config/interface';
+import { RequestErrorDetailsExtractor } from 'core/request/error';
+import type { Config } from 'config/interface';
 
-export * from '@src/config/interface';
+export * from 'config/interface';
 
 export const
 	$$ = symbolGenerator();

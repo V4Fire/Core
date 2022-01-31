@@ -11,7 +11,7 @@
  * @packageDocumentation
  */
 
-import SyncPromise from '@src/core/promise/sync';
+import SyncPromise from 'core/promise/sync';
 
 import Super, {
 
@@ -20,9 +20,9 @@ import Super, {
 
 	StrictClearOptionsId
 
-} from '@src/core/async/modules/timers';
+} from 'core/async/modules/timers';
 
-import { isEvent } from '@src/core/async/modules/events/helpers';
+import { isEvent } from 'core/async/modules/events/helpers';
 
 import type {
 
@@ -36,12 +36,12 @@ import type {
 	AsyncOnceOptions,
 	AsyncPromisifyOnceOptions
 
-} from '@src/core/async/interface';
+} from 'core/async/interface';
 
-export * from '@src/core/async/modules/timers';
-export * from '@src/core/async/modules/events/helpers';
+export * from 'core/async/modules/timers';
+export * from 'core/async/modules/events/helpers';
 
-export * from '@src/core/async/interface';
+export * from 'core/async/interface';
 
 export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	/**

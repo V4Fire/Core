@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type { LogLevel } from '@src/core/log/interface';
+import type { LogLevel } from 'core/log/interface';
 
 export const
 	DEFAULT_LEVEL: LogLevel = 'info';

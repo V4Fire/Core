@@ -11,10 +11,10 @@
  * @packageDocumentation
  */
 
-import { consoleCache } from '@src/core/functools/warning/const';
-import type { WarnOptions, InlineWarnOptions, WarnedFn } from '@src/core/functools/warning/interface';
+import { consoleCache } from 'core/functools/warning/const';
+import type { WarnOptions, InlineWarnOptions, WarnedFn } from 'core/functools/warning/interface';
 
-export * from '@src/core/functools/warning/interface';
+export * from 'core/functools/warning/interface';
 
 /**
  * Marks a function with the specified warning

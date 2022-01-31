@@ -1,7 +1,5 @@
 'use strict';
 
-// @ts-check
-
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -36,7 +34,7 @@ module.exports = function init(gulp) {
 			through = require('through2').obj;
 
 		const
-			{src, extend} = require('config'),
+			{src, extend} = require('@config/config'),
 			{config: pzlr, resolve} = require('@pzlr/build-core');
 
 		const files = [
@@ -61,19 +59,19 @@ module.exports = function init(gulp) {
 					path.join(...p.split(path.sep).slice(0, -1), `/${endFolder}/*`));
 
 				const paths = {
-					'@src/*': [
-						`./${src.rel('src')}/*`,
-						...depsList
-					],
-
-					'@tests/*': [
+					'tests/*': [
 						`./${src.rel('tests')}/*`,
 						...createNonSrcDepsList('tests')
 					],
 
-					'@build/*': [
+					'build/*': [
 						`./${src.rel('build')}/*`,
 						...createNonSrcDepsList('build')
+					],
+
+					'*': [
+						`./${src.rel('src')}/*`,
+						...depsList
 					],
 
 					...deps

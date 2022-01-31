@@ -6,8 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { deprecate } from '@src/core/functools/deprecation';
-import { isStrictAbsURL, startSlashesRgxp, endSlashesRgxp } from '@src/core/url/const';
+import { deprecate } from 'core/functools/deprecation';
+import { isStrictAbsURL, startSlashesRgxp, endSlashesRgxp } from 'core/url/const';
 
 /**
  * Concatenates the specified parts of URL-s with correctly arranging of slashes and returns a new string

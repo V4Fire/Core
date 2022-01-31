@@ -11,7 +11,7 @@
  * @packageDocumentation
  */
 
-import { IGNORE } from '@src/core/promise/abortable/const';
+import { IGNORE } from 'core/promise/abortable/const';
 
 import {
 
@@ -26,10 +26,10 @@ import {
 	ConstrResolveHandler,
 	ConstrRejectHandler
 
-} from '@src/core/promise/abortable/interface';
+} from 'core/promise/abortable/interface';
 
-export * from '@src/core/promise/abortable/const';
-export * from '@src/core/promise/abortable/interface';
+export * from 'core/promise/abortable/const';
+export * from 'core/promise/abortable/interface';
 
 /**
  * Class wraps promise-like objects and adds to them some extra functionality,

@@ -37,7 +37,7 @@ module.exports = function init(gulp) {
 		fs = require('fs-extra');
 
 	const
-		{src, monic} = require('config'),
+		{src, monic} = require('@config/config'),
 		{resolve} = require('@pzlr/build-core'),
 		{replaceTscAliasPaths} = require('tsc-alias'),
 		{depsRgxpStr} = include('build/const');

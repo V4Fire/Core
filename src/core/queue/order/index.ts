@@ -11,10 +11,10 @@
  * @packageDocumentation
  */
 
-import Queue from '@src/core/queue/interface';
-import type { InnerQueue, CreateInnerQueue, ElsComparator } from '@src/core/queue/order/interface';
+import Queue from 'core/queue/interface';
+import type { InnerQueue, CreateInnerQueue, ElsComparator } from 'core/queue/order/interface';
 
-export * from '@src/core/queue/order/interface';
+export * from 'core/queue/order/interface';
 
 /**
  * Implementation of an ordered queue data structure

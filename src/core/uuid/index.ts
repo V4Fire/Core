@@ -11,8 +11,8 @@
  * @packageDocumentation
  */
 
-import { IS_NODE } from '@src/core/env';
-import { separatorIndices } from '@src/core/uuid/const';
+import { IS_NODE } from 'core/env';
+import { separatorIndices } from 'core/uuid/const';
 
 /**
  * Generates a UUIDv4 buffer and returns it

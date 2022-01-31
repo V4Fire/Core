@@ -6,12 +6,12 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import BaseError, { ErrorDetailsExtractor, ErrorCtor } from '@src/core/error';
+import BaseError, { ErrorDetailsExtractor, ErrorCtor } from 'core/error';
 
-import { DEPTH_LIMIT } from '@src/core/log/middlewares/extractor/const';
+import { DEPTH_LIMIT } from 'core/log/middlewares/extractor/const';
 
-import type { LogEvent, LogMiddleware, NextCallback } from '@src/core/log/middlewares/interface';
-import type { ErrorInfo } from '@src/core/log/middlewares/extractor/interface';
+import type { LogEvent, LogMiddleware, NextCallback } from 'core/log/middlewares/interface';
+import type { ErrorInfo } from 'core/log/middlewares/extractor/interface';
 
 /**
  * Middleware to extract information from an error log event and store

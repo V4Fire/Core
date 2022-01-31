@@ -6,10 +6,10 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type { ErrorDetailsExtractor, ErrorCtor } from '@src/core/error';
+import type { ErrorDetailsExtractor, ErrorCtor } from 'core/error';
 
-import RequestError from '@src/core/request/error';
-import type { RequestErrorDetailsExtractorSettings } from '@src/core/request/error/interface';
+import RequestError from 'core/request/error';
+import type { RequestErrorDetailsExtractorSettings } from 'core/request/error/interface';
 
 /**
  * Internal filtering settings

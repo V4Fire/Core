@@ -6,15 +6,15 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { getOrCreateLabelValueByHandlers } from '@src/core/object/watch/engines/helpers';
+import { getOrCreateLabelValueByHandlers } from 'core/object/watch/engines/helpers';
 
-import { toProxyObject } from '@src/core/object/watch/const';
-import { structureWrappers } from '@src/core/object/watch/wrap/const';
+import { toProxyObject } from 'core/object/watch/const';
+import { structureWrappers } from 'core/object/watch/wrap/const';
 
-import type { WatchHandlersSet } from '@src/core/object/watch/interface';
-import type { WrapOptions, WrapResult } from '@src/core/object/watch/wrap/interface';
+import type { WatchHandlersSet } from 'core/object/watch/interface';
+import type { WrapOptions, WrapResult } from 'core/object/watch/wrap/interface';
 
-export * from '@src/core/object/watch/wrap/interface';
+export * from 'core/object/watch/wrap/interface';
 
 /**
  * Wraps mutation methods of the specified object that they be able to emit events about mutations

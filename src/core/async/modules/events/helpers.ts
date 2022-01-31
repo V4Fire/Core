@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type { Event } from '@src/core/async/interface';
+import type { Event } from 'core/async/interface';
 
 /**
  * Returns true if the specified value is looks like an event object

@@ -11,4 +11,4 @@
  * @packageDocumentation
  */
 
-export * from '@src/core/prelude/env';
+export * from 'core/prelude/env';

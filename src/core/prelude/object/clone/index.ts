@@ -6,8 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import extend from '@src/core/prelude/extend';
-import type { ValMap } from '@src/core/prelude/object/clone/interface';
+import extend from 'core/prelude/extend';
+import type { ValMap } from 'core/prelude/object/clone/interface';
 
 const
 	objRef = '[[OBJ_REF:base]]',

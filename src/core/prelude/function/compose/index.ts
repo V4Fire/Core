@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import extend from '@src/core/prelude/extend';
+import extend from 'core/prelude/extend';
 
 /** @see [[FunctionConstructor.compose]] */
 extend(Function, 'compose', (...fns: Array<Nullable<AnyFunction>>) => function wrapper(this: unknown, ...args: unknown[]): unknown {

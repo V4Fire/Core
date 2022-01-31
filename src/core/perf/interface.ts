@@ -6,8 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type { GROUPS } from '@src/core/perf/const';
-import type { PerfTimer } from '@src/core/perf/timer/impl';
+import type { GROUPS } from 'core/perf/const';
+import type { PerfTimer } from 'core/perf/timer/impl';
 
 /**
  * Supported group types

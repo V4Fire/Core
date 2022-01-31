@@ -11,7 +11,7 @@
  * @packageDocumentation
  */
 
-import { convertIfDate } from '@src/core/json';
+import { convertIfDate } from 'core/json';
 
 import {
 
@@ -20,7 +20,7 @@ import {
 	syncSessionStorage,
 	asyncSessionStorage
 
-} from '@src/core/kv-storage/engines';
+} from 'core/kv-storage/engines';
 
 import type {
 
@@ -31,9 +31,9 @@ import type {
 	ClearFilter,
 	StorageEngine
 
-} from '@src/core/kv-storage/interface';
+} from 'core/kv-storage/interface';
 
-export * from '@src/core/kv-storage/interface';
+export * from 'core/kv-storage/interface';
 
 /**
  * API for synchronous local storage

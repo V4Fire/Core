@@ -11,5 +11,5 @@
  * @packageDocumentation
  */
 
-export { default } from '@src/core/promise/abortable';
-export * from '@src/core/promise/abortable';
+export { default } from 'core/promise/abortable';
+export * from 'core/promise/abortable';

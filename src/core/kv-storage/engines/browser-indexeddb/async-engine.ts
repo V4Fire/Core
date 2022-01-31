@@ -11,7 +11,7 @@ import type {
 	AsyncEngineOptions,
 	StoreMode
 
-} from '@src/core/kv-storage/engines/browser-indexeddb/interface';
+} from 'core/kv-storage/engines/browser-indexeddb/interface';
 
 /**
  * Implementation of persistent asynchronous key-value storage based on IndexedDB

@@ -19,9 +19,9 @@ import {
 	watchOptions,
 	watchHandlers
 
-} from '@src/core/object/watch/const';
+} from 'core/object/watch/const';
 
-import { bindMutationHooks } from '@src/core/object/watch/wrap';
+import { bindMutationHooks } from 'core/object/watch/wrap';
 
 import {
 
@@ -30,7 +30,7 @@ import {
 	getProxyValue,
 	getOrCreateLabelValueByHandlers
 
-} from '@src/core/object/watch/engines/helpers';
+} from 'core/object/watch/engines/helpers';
 
 import type {
 
@@ -43,7 +43,7 @@ import type {
 	WatchOptions,
 	InternalWatchOptions
 
-} from '@src/core/object/watch/interface';
+} from 'core/object/watch/interface';
 
 /**
  * Watches for changes of the specified object by using accessors

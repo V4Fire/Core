@@ -6,8 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import extend from '@src/core/prelude/extend';
-import { emptyArray } from '@src/core/prelude/array/const';
+import extend from 'core/prelude/extend';
+import { emptyArray } from 'core/prelude/array/const';
 
 /** @see [[Array.union]] */
 extend(Array.prototype, 'union', function union(

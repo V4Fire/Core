@@ -6,8 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type { PerfGroup } from '@src/core/perf';
-import type { PerfTimer } from '@src/core/perf/timer/impl';
+import type { PerfGroup } from 'core/perf';
+import type { PerfTimer } from 'core/perf/timer/impl';
 
 /**
  * A factory to create performance timers

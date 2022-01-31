@@ -11,5 +11,5 @@
  * @packageDocumentation
  */
 
-export { default as select } from '@src/core/object/select';
-export { default as watch } from '@src/core/object/watch';
+export { default as select } from 'core/object/select';
+export { default as watch } from 'core/object/watch';

@@ -8,9 +8,9 @@
 
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 
-import type { Socket } from '@src/core/socket';
-import type { RequestResponseObject } from '@src/core/request';
-import type { Provider, ProviderConstructor } from '@src/core/data/interface';
+import type { Socket } from 'core/socket';
+import type { RequestResponseObject } from 'core/request';
+import type { Provider, ProviderConstructor } from 'core/data/interface';
 
 export const
 	namespace = Symbol('Provider namespace'),

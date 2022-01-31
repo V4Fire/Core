@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type Async from '@src/core/async';
+import type Async from 'core/async';
 
 import type {
 
@@ -21,22 +21,22 @@ import type {
 	AsyncProxyOptions,
 	ClearProxyOptions
 
-} from '@src/core/async/modules/base/interface';
+} from 'core/async/modules/base/interface';
 
 import type {
 
 	AsyncWorkerOptions,
 	AsyncPromiseOptions
 
-} from '@src/core/async/modules/proxy/interface';
+} from 'core/async/modules/proxy/interface';
 
-import type { AsyncPromisifyOnceOptions } from '@src/core/async/modules/events/interface';
+import type { AsyncPromisifyOnceOptions } from 'core/async/modules/events/interface';
 
-export * from '@src/core/async/modules/base/interface';
-export * from '@src/core/async/modules/events/interface';
-export * from '@src/core/async/modules/proxy/interface';
-export * from '@src/core/async/modules/timers/interface';
-export * from '@src/core/async/modules/wrappers/interface';
+export * from 'core/async/modules/base/interface';
+export * from 'core/async/modules/events/interface';
+export * from 'core/async/modules/proxy/interface';
+export * from 'core/async/modules/timers/interface';
+export * from 'core/async/modules/wrappers/interface';
 
 export enum Namespaces {
 	proxy,

@@ -6,8 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import extend from '@src/core/prelude/extend';
-import { createStaticDateComparator } from '@src/core/prelude/date/helpers';
+import extend from 'core/prelude/extend';
+import { createStaticDateComparator } from 'core/prelude/date/helpers';
 
 /** @see [[Date.is]] */
 extend(Date.prototype, 'is', function is(this: Date, date: DateCreateValue, margin: number = 0): boolean {

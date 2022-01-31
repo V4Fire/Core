@@ -19,10 +19,10 @@ import type {
 	MiddlewareParams,
 	GlobalOptions
 
-} from '@src/core/request/interface';
+} from 'core/request/interface';
 
-import type { ResponseTypeValue } from '@src/core/request/response/interface';
-import type { Provider } from '@src/core/data/interface';
+import type { ResponseTypeValue } from 'core/request/response/interface';
+import type { Provider } from 'core/data/interface';
 
 export type MockResponseValue =
 	ResponseTypeValue |

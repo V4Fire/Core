@@ -11,14 +11,14 @@
  * @packageDocumentation
  */
 
-import config from '@src/config';
+import config from 'config';
 
-import * as netEngine from '@src/core/net/engines';
-import { state, emitter } from '@src/core/net/const';
-import type { NetStatus, NetEngine } from '@src/core/net/interface';
+import * as netEngine from 'core/net/engines';
+import { state, emitter } from 'core/net/const';
+import type { NetStatus, NetEngine } from 'core/net/interface';
 
-export * from '@src/core/net/const';
-export * from '@src/core/net/interface';
+export * from 'core/net/const';
+export * from 'core/net/interface';
 
 const
 	{online} = config;
@@ -29,7 +29,7 @@ let
 
 //#if runtime has core/kv-storage
 // eslint-disable-next-line prefer-const
-storage = import('@src/core/kv-storage').then(({asyncLocal}) => asyncLocal.namespace('[[NET]]'));
+storage = import('core/kv-storage').then(({asyncLocal}) => asyncLocal.namespace('[[NET]]'));
 //#endif
 
 /**

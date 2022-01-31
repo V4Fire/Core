@@ -6,17 +6,17 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import SyncPromise from '@src/core/promise/sync';
-import type { SyncStorageNamespace, AsyncStorageNamespace } from '@src/core/kv-storage';
+import SyncPromise from 'core/promise/sync';
+import type { SyncStorageNamespace, AsyncStorageNamespace } from 'core/kv-storage';
 
-import type Cache from '@src/core/cache/interface';
-import type { ClearFilter } from '@src/core/cache/interface';
+import type Cache from 'core/cache/interface';
+import type { ClearFilter } from 'core/cache/interface';
 
-import engines from '@src/core/cache/decorators/persistent/engines';
-import addEmitter from '@src/core/cache/decorators/helpers/add-emitter';
+import engines from 'core/cache/decorators/persistent/engines';
+import addEmitter from 'core/cache/decorators/helpers/add-emitter';
 
-import type { PersistentEngine, CheckablePersistentEngine } from '@src/core/cache/decorators/persistent/engines/interface';
-import type { PersistentOptions, PersistentCache, PersistentTTLDecoratorOptions } from '@src/core/cache/decorators/persistent/interface';
+import type { PersistentEngine, CheckablePersistentEngine } from 'core/cache/decorators/persistent/engines/interface';
+import type { PersistentOptions, PersistentCache, PersistentTTLDecoratorOptions } from 'core/cache/decorators/persistent/interface';
 
 export default class PersistentWrapper<T extends Cache<V, string>, V = unknown> {
 	/**

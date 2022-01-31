@@ -6,9 +6,9 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import Range from '@src/core/range';
-import statusCodes from '@src/core/status-codes';
-import type { ResponseType } from '@src/core/request';
+import Range from 'core/range';
+import statusCodes from 'core/status-codes';
+import type { ResponseType } from 'core/request';
 
 export const defaultResponseOpts = {
 	responseType: <ResponseType>'text',

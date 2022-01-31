@@ -6,14 +6,14 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import '@src/core/prelude/types';
-import '@src/core/prelude/object';
-import '@src/core/prelude/array';
-import '@src/core/prelude/number';
-import '@src/core/prelude/regexp';
-import '@src/core/prelude/function';
-import '@src/core/prelude/string';
-import '@src/core/prelude/global';
-import '@src/core/prelude/date';
-import '@src/core/prelude/i18n';
-import '@src/core/prelude/i18n/helpers';
+import 'core/prelude/types';
+import 'core/prelude/object';
+import 'core/prelude/array';
+import 'core/prelude/number';
+import 'core/prelude/regexp';
+import 'core/prelude/function';
+import 'core/prelude/string';
+import 'core/prelude/global';
+import 'core/prelude/date';
+import 'core/prelude/i18n';
+import 'core/prelude/i18n/helpers';

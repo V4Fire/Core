@@ -11,4 +11,4 @@
  * @packageDocumentation
  */
 
-export * from '@src/core/helpers/string';
+export * from 'core/helpers/string';

@@ -6,12 +6,12 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { convertIfDate } from '@src/core/json';
+import { convertIfDate } from 'core/json';
 
-import { defaultToQueryStringParamsFilter } from '@src/core/url/const';
-import type { ToQueryStringOptions, FromQueryStringOptions } from '@src/core/url/interface';
+import { defaultToQueryStringParamsFilter } from 'core/url/const';
+import type { ToQueryStringOptions, FromQueryStringOptions } from 'core/url/interface';
 
-export * from '@src/core/url/interface';
+export * from 'core/url/interface';
 
 /**
  * Creates a querystring from the specified data and returns it

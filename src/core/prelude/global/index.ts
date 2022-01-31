@@ -6,9 +6,9 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import log from '@src/core/log';
-import extend from '@src/core/prelude/extend';
-import { errorsToIgnore } from '@src/core/prelude/global/const';
+import log from 'core/log';
+import extend from 'core/prelude/extend';
+import { errorsToIgnore } from 'core/prelude/global/const';
 
 /** @see Any */
 extend(globalThis, 'Any', (obj) => obj);

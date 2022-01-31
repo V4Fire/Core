@@ -11,7 +11,7 @@
  * @packageDocumentation
  */
 
-export * from '@src/core/error/interface';
+export * from 'core/error/interface';
 
 /**
  * Superclass of any error to inherit

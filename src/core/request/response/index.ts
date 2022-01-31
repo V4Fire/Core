@@ -11,18 +11,18 @@
  * @packageDocumentation
  */
 
-import Range from '@src/core/range';
-import AbortablePromise from '@src/core/promise/abortable';
+import Range from 'core/range';
+import AbortablePromise from 'core/promise/abortable';
 
-import { IS_NODE } from '@src/core/env';
-import { once } from '@src/core/functools';
-import { convertIfDate } from '@src/core/json';
-import { getDataType } from '@src/core/mime-type';
+import { IS_NODE } from 'core/env';
+import { once } from 'core/functools';
+import { convertIfDate } from 'core/json';
+import { getDataType } from 'core/mime-type';
 
-import { normalizeHeaderName } from '@src/core/request/utils';
-import { defaultResponseOpts, noContentStatusCodes } from '@src/core/request/response/const';
+import { normalizeHeaderName } from 'core/request/utils';
+import { defaultResponseOpts, noContentStatusCodes } from 'core/request/response/const';
 
-import type { OkStatuses, WrappedDecoders } from '@src/core/request/interface';
+import type { OkStatuses, WrappedDecoders } from 'core/request/interface';
 
 import type {
 
@@ -35,10 +35,10 @@ import type {
 
 	JSONLikeValue
 
-} from '@src/core/request/response/interface';
+} from 'core/request/response/interface';
 
-export * from '@src/core/request/response/const';
-export * from '@src/core/request/response/interface';
+export * from 'core/request/response/const';
+export * from 'core/request/response/interface';
 
 /**
  * Class of a remote response

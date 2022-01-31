@@ -7,8 +7,8 @@
  */
 
 import got from 'got';
-import config from '@src/config';
-import { state } from '@src/core/net/const';
+import config from 'config';
+import { state } from 'core/net/const';
 
 const
 	{online} = config;

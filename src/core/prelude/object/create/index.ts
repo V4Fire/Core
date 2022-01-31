@@ -6,10 +6,10 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import extend from '@src/core/prelude/extend';
+import extend from 'core/prelude/extend';
 
-import { deprecate } from '@src/core/functools';
-import { getSameAs } from '@src/core/prelude/object/helpers';
+import { deprecate } from 'core/functools';
+import { getSameAs } from 'core/prelude/object/helpers';
 
 /** @see [[ObjectConstructor.createDict]] */
 extend(Object, 'createDict', (...objects) => {

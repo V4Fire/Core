@@ -7,12 +7,12 @@
  */
 
 import type { EventEmitter2 as EventEmitter } from 'eventemitter2';
-import { deprecate } from '@src/core/functools';
+import { deprecate } from 'core/functools';
 
-import request, { Middlewares, RequestMethod } from '@src/core/request';
-import select, { SelectParams } from '@src/core/object/select';
+import request, { Middlewares, RequestMethod } from 'core/request';
+import select, { SelectParams } from 'core/object/select';
 
-import { emitter } from '@src/core/data/const';
+import { emitter } from 'core/data/const';
 
 import type {
 
@@ -22,7 +22,7 @@ import type {
 	DecodersMap,
 	Mocks
 
-} from '@src/core/data/interface';
+} from 'core/data/interface';
 
 export default abstract class Provider {
 	/**
@@ -34,7 +34,7 @@ export default abstract class Provider {
 	 *
 	 * @example
 	 * ```js
-	 * import request from '@src/core/request';
+	 * import request from 'core/request';
 	 *
 	 * class Parent extends Provider {
 	 *   static request = request({responseType: 'json'})
@@ -54,7 +54,7 @@ export default abstract class Provider {
 	 * @see [[Middlewares]]
 	 * @example
 	 * ```js
-	 * import request from '@src/core/request';
+	 * import request from 'core/request';
 	 *
 	 * class Parent extends Provider {
 	 *   static middlewares = {
@@ -113,7 +113,7 @@ export default abstract class Provider {
 	/**
 	 * Map of data mocks.
 	 * This object can be used with a middleware that implements API for data mocking,
-	 * for example [[attachMock]] from `'@src/core/data/middlewares'`.
+	 * for example [[attachMock]] from `'core/data/middlewares'`.
 	 *
 	 * The key of a map element represent a method request type: 'GET', 'POST', etc.
 	 * The value of a map element represent a list of parameters to match.
@@ -121,7 +121,7 @@ export default abstract class Provider {
 	 * @see [[Middlewares]]
 	 * @example
 	 * ```js
-	 * import { attachMock } from '@src/core/data/middlewares';
+	 * import { attachMock } from 'core/data/middlewares';
 	 *
 	 * class MyProvider extends Provider {
 	 *   static mocks = {

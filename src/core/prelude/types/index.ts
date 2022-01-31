@@ -8,10 +8,10 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import extend from '@src/core/prelude/extend';
+import extend from 'core/prelude/extend';
 
-import { deprecate } from '@src/core/functools';
-import { isNative, toString, nonPrimitiveTypes, READONLY, PROXY } from '@src/core/prelude/types/const';
+import { deprecate } from 'core/functools';
+import { isNative, toString, nonPrimitiveTypes, READONLY, PROXY } from 'core/prelude/types/const';
 
 /** @see [[ObjectConstructor.cast]] */
 extend(Object, 'cast', (value) => value);

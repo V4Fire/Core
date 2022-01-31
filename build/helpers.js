@@ -43,7 +43,7 @@ exports.redefineRequire = function redefineRequire() {
 		path = require('upath');
 
 	const
-		{src} = require('config'),
+		{src} = require('@config/config'),
 		{config: pzlr, resolve} = require('@pzlr/build-core');
 
 	const
@@ -57,22 +57,9 @@ exports.redefineRequire = function redefineRequire() {
 		lib = path.join(outputDest, 'node_modules'),
 		deps = pzlr.dependencies;
 
-	const
-		srcPrefix = '@src/';
-
-	const stripUrlIfNeeded = (url) => {
-		if (url.startsWith(srcPrefix)) {
-			return url.slice(srcPrefix.length);
-		}
-
-		return url;
-	};
-
 	// @ts-ignore
 	// eslint-disable-next-line no-global-assign
 	require = (url) => {
-		url = stripUrlIfNeeded(url);
-
 		if (url in cache) {
 			return staticRequire(cache[url]);
 		}
@@ -87,8 +74,6 @@ exports.redefineRequire = function redefineRequire() {
 	require.main = staticRequire.main;
 
 	require.resolve = (url, opts) => {
-		url = stripUrlIfNeeded(url);
-
 		if (resolve.isNodeModule(url)) {
 			let
 				resolveUrl;

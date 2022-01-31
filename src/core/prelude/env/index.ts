@@ -6,12 +6,12 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import extend from '@src/core/prelude/extend';
-import type { AsyncStorageNamespace } from '@src/core/kv-storage';
+import extend from 'core/prelude/extend';
+import type { AsyncStorageNamespace } from 'core/kv-storage';
 
-import { emitter } from '@src/core/prelude/env/const';
+import { emitter } from 'core/prelude/env/const';
 
-export * from '@src/core/prelude/env/const';
+export * from 'core/prelude/env/const';
 
 const
 	memoryStorage = Object.createDict<Dictionary>();
@@ -21,7 +21,7 @@ let
 
 //#if runtime has core/kv-storage
 // eslint-disable-next-line prefer-const
-storage = import('@src/core/kv-storage').then(({asyncLocal}) => asyncLocal.namespace('[[ENV]]'));
+storage = import('core/kv-storage').then(({asyncLocal}) => asyncLocal.namespace('[[ENV]]'));
 //#endif
 
 /**

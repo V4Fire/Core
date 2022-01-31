@@ -8,8 +8,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import extend from '@src/core/prelude/extend';
-import { createMsFunction, createStaticMsFunction, createStringTypeGetter } from '@src/core/prelude/number/helpers';
+import extend from 'core/prelude/extend';
+import { createMsFunction, createStaticMsFunction, createStringTypeGetter } from 'core/prelude/number/helpers';
 
 const
 	second = 1e3,

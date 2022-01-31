@@ -11,10 +11,10 @@
  * @packageDocumentation
  */
 
-import WorkerQueue from '@src/core/queue/worker/interface';
-import type { Task, Tasks } from '@src/core/queue/worker/simple/interface';
+import WorkerQueue from 'core/queue/worker/interface';
+import type { Task, Tasks } from 'core/queue/worker/simple/interface';
 
-export * from '@src/core/queue/worker/merge/interface';
+export * from 'core/queue/worker/merge/interface';
 
 /**
  * Implementation of a worker queue data structure

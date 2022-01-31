@@ -6,10 +6,10 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import SimpleQueue from '@src/core/queue/simple';
-import AbstractQueue, { InnerQueue, CreateInnerQueue } from '@src/core/queue/interface';
+import SimpleQueue from 'core/queue/simple';
+import AbstractQueue, { InnerQueue, CreateInnerQueue } from 'core/queue/interface';
 
-export * from '@src/core/queue/interface';
+export * from 'core/queue/interface';
 
 export interface Task<T = unknown, V = unknown> {
 	task: T;

@@ -13,13 +13,13 @@
 
 import config from 'config';
 
-import { getTimerFactory } from '@src/core/perf/timer';
-import { mergeConfigs, PerfConfig } from '@src/core/perf/config';
+import { getTimerFactory } from 'core/perf/timer';
+import { mergeConfigs, PerfConfig } from 'core/perf/config';
 
-import type { Perf } from '@src/core/perf/interface';
+import type { Perf } from 'core/perf/interface';
 
-export * from '@src/core/perf/interface';
-export * from '@src/core/perf/timer/impl/interface';
+export * from 'core/perf/interface';
+export * from 'core/perf/timer/impl/interface';
 
 /**
  * Returns a configured instance of the `Perf` class

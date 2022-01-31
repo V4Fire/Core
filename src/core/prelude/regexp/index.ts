@@ -6,10 +6,10 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import extend from '@src/core/prelude/extend';
+import extend from 'core/prelude/extend';
 
-import { isGlobal, escapeRgxp, testCache } from '@src/core/prelude/regexp/const';
-import { createFlagsModifier } from '@src/core/prelude/regexp/helpers';
+import { isGlobal, escapeRgxp, testCache } from 'core/prelude/regexp/const';
+import { createFlagsModifier } from 'core/prelude/regexp/helpers';
 
 /** @see [[RegExpConstructor.escape]] */
 extend(RegExp, 'escape', (value: unknown) => String(value).replace(escapeRgxp, '\\$1'));

@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type { CacheWithEmitter } from '@src/core/cache/decorators/helpers/add-emitter/interface';
+import type { CacheWithEmitter } from 'core/cache/decorators/helpers/add-emitter/interface';
 
 export interface TTLCache<
 	V = unknown,

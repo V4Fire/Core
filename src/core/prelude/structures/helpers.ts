@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import SyncPromise from '@src/core/prelude/structures/sync-promise';
+import SyncPromise from 'core/prelude/structures/sync-promise';
 
 export class Option<T = unknown> extends SyncPromise<T> implements Maybe<T> {
 	readonly type: Maybe['type'] = 'Maybe';

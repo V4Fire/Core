@@ -11,10 +11,10 @@
  * @packageDocumentation
  */
 
-import Queue from '@src/core/queue/interface';
-import type { InnerQueue, CreateInnerQueue } from '@src/core/queue/simple/interface';
+import Queue from 'core/queue/interface';
+import type { InnerQueue, CreateInnerQueue } from 'core/queue/simple/interface';
 
-export * from '@src/core/queue/interface';
+export * from 'core/queue/interface';
 
 /**
  * Simple implementation of a queue data structure

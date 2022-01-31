@@ -6,4 +6,4 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-export * from '@src/core/queue/worker/interface';
+export * from 'core/queue/worker/interface';

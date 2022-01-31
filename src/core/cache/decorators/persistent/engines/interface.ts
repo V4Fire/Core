@@ -6,10 +6,10 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import Async from '@src/core/async';
+import Async from 'core/async';
 
-import type { SyncStorageNamespace, AsyncStorageNamespace } from '@src/core/kv-storage';
-import type Cache from '@src/core/cache/interface';
+import type { SyncStorageNamespace, AsyncStorageNamespace } from 'core/kv-storage';
+import type Cache from 'core/cache/interface';
 
 export interface AbstractPersistentEngine<V = unknown> {
 	/**

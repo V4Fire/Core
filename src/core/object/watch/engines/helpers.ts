@@ -6,10 +6,10 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import watchEngine from '@src/core/object/watch/engines';
+import watchEngine from 'core/object/watch/engines';
 
-import { toOriginalObject } from '@src/core/object/watch/const';
-import type { WatchHandlersSet, InternalWatchOptions } from '@src/core/object/watch/interface';
+import { toOriginalObject } from 'core/object/watch/const';
+import type { WatchHandlersSet, InternalWatchOptions } from 'core/object/watch/interface';
 
 /**
  * Returns true if the specified value is a watch proxy

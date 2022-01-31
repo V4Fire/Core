@@ -6,14 +6,14 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type AbortablePromise from '@src/core/promise/abortable';
-import type { AbstractCache } from '@src/core/cache';
+import type AbortablePromise from 'core/promise/abortable';
+import type { AbstractCache } from 'core/cache';
 
-import addTTL from '@src/core/cache/decorators/ttl';
-import addPersistent from '@src/core/cache/decorators/persistent';
+import addTTL from 'core/cache/decorators/ttl';
+import addPersistent from 'core/cache/decorators/persistent';
 
-import { merge } from '@src/core/request/utils';
-import { storage, cache, pendingCache, caches, methodsWithoutBody } from '@src/core/request/const';
+import { merge } from 'core/request/utils';
+import { storage, cache, pendingCache, caches, methodsWithoutBody } from 'core/request/const';
 
 import type {
 
@@ -23,7 +23,7 @@ import type {
 	WrappedDecoders,
 	WrappedEncoders
 
-} from '@src/core/request/interface';
+} from 'core/request/interface';
 
 export default class RequestContext<D = unknown> {
 	/**

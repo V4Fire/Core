@@ -11,8 +11,8 @@
  * @packageDocumentation
  */
 
-import { normalizeRgxp } from '@src/core/xml/const';
-import { serialize } from '@src/core/xml/engines';
+import { normalizeRgxp } from 'core/xml/const';
+import { serialize } from 'core/xml/engines';
 
 /**
  * Converts the specified XML node to a DATA:URI string

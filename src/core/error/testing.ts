@@ -6,6 +6,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import BaseError from '@src/core/error';
+import BaseError from 'core/error';
 
 export class TestError extends BaseError { }

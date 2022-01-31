@@ -11,9 +11,9 @@
  * @packageDocumentation
  */
 
-import SyncPromise from '@src/core/promise/sync';
-import Async, { EventEmitterLike } from '@src/core/async';
-import { deprecate } from '@src/core/functools';
+import SyncPromise from 'core/promise/sync';
+import Async, { EventEmitterLike } from 'core/async';
+import { deprecate } from 'core/functools';
 
 /**
  * Returns a promise that will be resolved after emitting of all events from the specified emitter
@@ -155,7 +155,7 @@ export const createSyncPromise = deprecate(
 	{
 		alternative: {
 			name: 'SyncPromise',
-			source: '@src/core/promise/sync'
+			source: 'core/promise/sync'
 		}
 	},
 

@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { unimplement } from '@src/core/functools/implementation';
+import { unimplement } from 'core/functools/implementation';
 
 export default [
 	'get',

@@ -6,8 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type Async from '@src/core/async';
-import type { IdObject, ProxyCb, AsyncOptions, AsyncCbOptions } from '@src/core/async/modules/base';
+import type Async from 'core/async';
+import type { IdObject, ProxyCb, AsyncOptions, AsyncCbOptions } from 'core/async/modules/base';
 
 export type TimerId = number | IdObject;
 

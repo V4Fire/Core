@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type engines from '@src/core/perf/timer/engines/index';
+import type engines from 'core/perf/timer/engines/index';
 
 export type PerfTimerEngineName = keyof typeof engines;
 

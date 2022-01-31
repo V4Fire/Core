@@ -8,8 +8,8 @@
 
 import type { EventEmitter2 as EventEmitter } from 'eventemitter2';
 
-import { eventEmitter } from '@src/core/cache/decorators/helpers/add-emitter/const';
-import type Cache from '@src/core/cache/interface';
+import { eventEmitter } from 'core/cache/decorators/helpers/add-emitter/const';
+import type Cache from 'core/cache/interface';
 
 export type MethodsToWrap =
 	'set' |

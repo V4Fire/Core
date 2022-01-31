@@ -6,4 +6,4 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import '@src/core/prelude';
+import 'core/prelude';

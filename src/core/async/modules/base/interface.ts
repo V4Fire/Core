@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type Async from '@src/core/async';
+import type Async from 'core/async';
 
 export type Label = string | symbol;
 export type Group = string;

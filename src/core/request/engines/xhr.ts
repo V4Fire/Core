@@ -10,16 +10,16 @@
 import XMLHttpRequest from 'xhr2';
 //#endif
 
-import AbortablePromise from '@src/core/promise/abortable';
+import AbortablePromise from 'core/promise/abortable';
 
-import { IS_NODE } from '@src/core/env';
-import { isOnline } from '@src/core/net';
+import { IS_NODE } from 'core/env';
+import { isOnline } from 'core/net';
 
-import Response from '@src/core/request/response';
-import RequestError from '@src/core/request/error';
+import Response from 'core/request/response';
+import RequestError from 'core/request/error';
 
-import { convertDataToSend } from '@src/core/request/engines/helpers';
-import type { RequestEngine, NormalizedCreateRequestOptions } from '@src/core/request/interface';
+import { convertDataToSend } from 'core/request/engines/helpers';
+import type { RequestEngine, NormalizedCreateRequestOptions } from 'core/request/interface';
 
 /**
  * Creates request by using XMLHttpRequest with the specified parameters and returns a promise

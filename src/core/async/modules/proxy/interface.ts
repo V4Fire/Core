@@ -6,8 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type Async from '@src/core/async';
-import type { AsyncOptions, AsyncProxyOptions, ProxyCb } from '@src/core/async/interface';
+import type Async from 'core/async';
+import type { AsyncOptions, AsyncProxyOptions, ProxyCb } from 'core/async/interface';
 
 /**
  * Something that looks like a worker
