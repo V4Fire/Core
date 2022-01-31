@@ -14,7 +14,7 @@ These engines can have different peculiarities, so we need to create a new abstr
 There are a few differences between these classes:
 
 1. The `body` property is not a stream object. Instead, it contains raw response data used to initialize an instance.
-2. Each Response instance is an async iterable object. So you can use this feature to process the response as a stream.
+2. Each `Response` instance is an async iterable object. So you can use this feature to process the response as a stream.
    Notice, not every request engine can stream response.
 
   ```js
@@ -28,7 +28,90 @@ There are a few differences between these classes:
 
 ## Extra API
 
-### methods
+### Events
+
+| EventName           | Description                                           | Payload description | Payload |
+|---------------------|-------------------------------------------------------|---------------------|---------|
+| `bodyUsed`          | The response body has been read via `decode`          | -                   | -       |
+| `asyncIteratorUsed` | The response body has been read via an async iterator | -                   | -       |
+
+### Constructor options
+
+With creation of a Response instance you can pass a bunch of options.
+
+```typescript
+export interface ResponseOptions {
+  url?: string;
+  redirected?: boolean;
+  type?: ResponseModeType;
+
+  /**
+   * Parent operation promise
+   */
+  parent?: AbortablePromise;
+
+  /**
+   * A meta flag that indicates that the request is important: is usually used with decoders to indicate that
+   * the request needs to be executed as soon as possible
+   */
+  important?: boolean;
+
+  status?: StatusCodes;
+  statusText?: string;
+
+  /**
+   * List of status codes (or a single code) that match successful operation.
+   * Also, you can pass a range of codes.
+   */
+  okStatuses?: OkStatuses;
+
+  /**
+   * Type of the response data
+   */
+  responseType?: ResponseType;
+
+  /**
+   * Set of response headers
+   */
+  headers?: RawHeaders;
+
+  /**
+   * Sequence of response decoders
+   */
+  decoder?: WrappedDecoder | WrappedDecoders;
+
+  /**
+   * Reviver function for `JSON.parse`
+   * @default `convertIfDate`
+   */
+  jsonReviver?: JSONCb | false;
+}
+```
+
+### Properties
+
+#### emitter
+
+Event emitter to broadcast response events.
+
+```js
+import request from 'core/request';
+
+request('//foo.jpg')
+  .then(({response}) => {
+    response.emitter.once('bodyUsed', () => {
+      console.log('Body has been read');
+    });
+
+    return response.decode();
+  });
+```
+
+#### streamUsed
+
+True, if the response body is already read as a stream.
+
+### Methods
 
 #### decode
 
@@ -42,10 +125,10 @@ Also, a sequence of decoders is applied to the parsed result if they are passed 
 import request from 'core/request';
 
 request('//foo.jpg')
-  .then(({response}) => esponse.decode())
+  .then(({response}) => response.decode())
   .then((img) => console.log(img instanceof Blob));
 
 request('//users', {decoders: [parseProtobuf, normalizeUsers], responseType: 'arrayBuffer'})
-  .then(({response}) => esponse.decode())
+  .then(({response}) => response.decode())
   .then((users) => console.log(users));
 ```
