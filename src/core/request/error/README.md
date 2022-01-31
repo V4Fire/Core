@@ -22,21 +22,23 @@ The second parameter could contain `request` and `response` objects and an `erro
 
 ## RequestErrorDetailsExtractor
 
-The extractor gets details from `RequestError`. A constructor of the class accepts one optional parameter: `headerSettings`.
-These settings allow filtering headers from request and response objects of the error's details object. It helps to hide
+The extractor gets details from `RequestError`. A constructor of the class accepts one optional parameter with extra options.
+These options allow filtering headers from request and response objects of the error's details object. It helps to hide
 sensitive information.
 
-The settings itself look like this:
+The options itself look like this:
 
-```
-const settings = {
-  include: [...],
-  exclude: [...]
+```js
+const opts = {
+  headers: {
+    include: [/*...*/],
+    exclude: [/*...*/]
+  }
 };
 
-const extractor = new RequestErrorDetailsExtractor(settings);
+const extractor = new RequestErrorDetailsExtractor(opts);
 ```
 
-If the `include` array is defined, the extractor gets only headers from this array.
-If the `exclude` array is defined, the extractor gets all available headers except the specified ones.
-If both arrays are defined, then only `inlcude` array is using.
+If `include` is defined, the extractor gets only headers from this array.
+If `exclude` is defined, the extractor gets all available headers except the specified ones.
+If both options are defined, then only `inlcude` option is using.
