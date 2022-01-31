@@ -3,6 +3,13 @@
 This module provides a function that creates a request engine based on the passed data provider.
 You can use this kind of provider for simple requests by using `core/request`.
 
+## Synopsis
+
+* The engine can provide response streaming from an internal provider engine.
+* The engine can provide events from an internal provider engine.
+
+## Example
+
 ```js
 import Provider, { provider } from 'core/data';
 import createProviderEngine from 'core/request/engines/provider';

@@ -6,6 +6,11 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/**
+ * [[include:core/request/engines/node/README.md]]
+ * @packageDocumentation
+ */
+
 import got, { Options, Response as GotResponse } from 'got';
 
 import AbortablePromise from 'core/promise/abortable';

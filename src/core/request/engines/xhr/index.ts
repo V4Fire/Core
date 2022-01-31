@@ -6,6 +6,11 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/**
+ * [[include:core/request/engines/xhr/README.md]]
+ * @packageDocumentation
+ */
+
 //#if node_js
 import XMLHttpRequest from 'xhr2';
 //#endif

@@ -6,6 +6,11 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/**
+ * [[include:core/request/engines/fetch/README.md]]
+ * @packageDocumentation
+ */
+
 //#if node_js
 import fetch from 'core/request/engines/fetch/node';
 //#endif
