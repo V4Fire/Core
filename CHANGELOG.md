@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.74.6 (2022-01-31)
+
+#### :bug: Bug Fix
+
+* `Object.reject/select` shouldn't copy a prototype of the passed object
+
 ## v3.74.5 (2022-01-25)
 
 #### :bug: Bug Fix
