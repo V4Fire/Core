@@ -6,11 +6,13 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import { PROXY } from 'core/prelude/types/const';
+
 export const
 	toProxyObject = Symbol('Link to a proxy object'),
 	toRootObject = Symbol('Link to the root object of watching'),
 	toTopObject = Symbol('Link to the top object of watching'),
-	toOriginalObject = Symbol('Link to an original object');
+	toOriginalObject = PROXY;
 
 export const
 	muteLabel = Symbol('Watcher mute label'),

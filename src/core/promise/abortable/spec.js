@@ -8,6 +8,7 @@
 
 import AbortablePromise from 'core/promise/abortable';
 
+// eslint-disable-next-line max-lines-per-function
 describe('core/promise/abortable', () => {
 	it('simple `then`', async () => {
 		let
@@ -134,6 +135,34 @@ describe('core/promise/abortable', () => {
 		}
 
 		expect(status).toBe('aborted');
+	});
+
+	it('aborting a promise with an asynchronous `onAbort` initializing', async () => {
+		let
+			status = 'pending';
+
+		const promise = new AbortablePromise(async (resolve, reject, onAbort) => {
+			await new Promise((resolve) => setImmediate(resolve));
+
+			onAbort(() => {
+				status = 'aborted';
+			});
+
+			setTimeout(resolve, 100);
+		})
+			.then(() => status = 'resolved');
+
+		try {
+			promise.abort('boom');
+			await promise;
+
+		} catch (err) {
+			expect(err).toBe('boom');
+		}
+
+		expect(status).toBe('pending');
+
+		setImmediate(() => expect(status).toBe('aborted'));
 	});
 
 	it('providing of a parent promise', async () => {

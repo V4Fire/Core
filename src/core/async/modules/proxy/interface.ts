@@ -24,7 +24,7 @@ export interface WorkerLike {
 }
 
 /**
- * Extended type of a worker
+ * Extended type of worker
  */
 export type WorkerLikeP = Function | WorkerLike;
 
@@ -37,7 +37,7 @@ export interface CancelablePromise<T = unknown> extends Promise<T> {
 }
 
 /**
- * Extended type of a promise
+ * Extended type of promise
  */
 export type PromiseLikeP<T = unknown> = (() => PromiseLike<T>) | PromiseLike<T>;
 

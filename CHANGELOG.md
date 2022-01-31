@@ -11,6 +11,86 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.74.5 (2022-01-25)
+
+#### :bug: Bug Fix
+
+* Now `__proto__ ` properties are ignored and removed via a json reviver to prevent prototype pollution `core/prelude/object#Object.parse`
+
+## v3.74.4 (2022-01-24)
+
+#### :bug: Bug Fix
+
+* Fixed a bug when `onAbort` calling occurred after promise aborting `core/promise/abortable`
+
+#### :house: Internal
+
+* Now `Object.fastClone` will use `structredClone` if it is possible
+
+## v3.74.3 (2022-01-13)
+
+#### :boom: Breaking Change
+
+* Changed signature of `ClassConstructor`
+
+#### :house: Internal
+
+* Improved type inferring `core/lazy`
+
+## v3.74.2 (2022-01-12)
+
+#### :bug: Bug Fix
+
+* Don't drop all registered actions after the first invoking `core/lazy`
+
+## v3.74.1 (2022-01-12)
+
+#### :bug: Bug Fix
+
+* Now function hooks can be overridden `core/lazy`
+
+## v3.74.0 (2022-01-12)
+
+#### :rocket: New Feature
+
+* Added a new methods `Object.isProxy` and `Object.unwrapProxy`
+
+#### :bug: Bug Fix
+
+* Fixed behavior of `Object.isDictionary`, `Object.isPlainObject`, `Object.isFreeze` with proxy-based objects
+
+## v3.73.3 (2022-01-10)
+
+#### :bug: Bug Fix
+
+* Fixed emitting of mutation events produced via `Object.defineProperty` `core/object/watch`
+
+## v3.73.2 (2021-12-28)
+
+#### :bug: Bug Fix
+
+* Fixed a bug when adding a new property to the clone object `core/object/proxy-clone`
+
+## v3.73.1 (2021-12-16)
+
+#### :bug: Bug Fix
+
+* Fixed issues with symlinks `build`
+
+## v3.73.0 (2021-12-14)
+
+#### :rocket: New Feature
+
+* Added a new module to create effective read-only view of objects `core/object/proxy-readonly`
+
+#### :bug: Bug Fix
+
+* Now all properties that are added via `Object.defineProperty` can be handled via a proxy-based watcher `core/object/watch`
+
+* `core/object/proxy-clone`:
+  * Fixed removing of properties
+  * Now the clone function supports descriptors too
+
 ## v3.72.0 (2021-12-10)
 
 #### :rocket: New Feature

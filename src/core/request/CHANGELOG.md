@@ -106,7 +106,7 @@ Changelog
 
 #### :rocket: New Feature
 
-* Added a new feature of request retryings
+* Added a new feature of request retrying
 
 #### :house: Internal
 

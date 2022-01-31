@@ -131,7 +131,7 @@ export type FullAsyncOptions<CTX extends object = Async> =
 		periodic?: boolean;
 
 		/**
-		 * If true, then the passed object can be executed as a function if it possible
+		 * If true, then the passed object can be executed as a function if it is possible
 		 */
 		callable?: boolean;
 

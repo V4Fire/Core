@@ -296,7 +296,7 @@ console.log(new Range(0, 10).union(new Range('a', 'z')).toString());
 
 ### clone
 
-The method clones the range and returns a new.
+The method clones the range and returns a cloned one.
 
 ### reverse
 

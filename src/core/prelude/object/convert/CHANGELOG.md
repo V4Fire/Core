@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.74.5 (2022-01-25)
+
+#### :bug: Bug Fix
+
+* Now `__proto__ ` properties are ignored and removed via a json reviver to prevent prototype pollution `Object.parse`
+
 ## v3.60.0 (2021-10-01)
 
 #### :bug: Bug Fix

@@ -117,6 +117,8 @@ declare function l(strings: any | string[], ...expr: any[]): string;
 declare function setImmediate(fn: AnyFunction): number;
 declare function clearImmediate(id: number): void;
 
+declare function structuredClone<T>(obj: T): T;
+
 interface Headers {
 	keys(): IterableIterator<string>;
 	values(): IterableIterator<string>;
@@ -146,18 +148,14 @@ interface AnyOneArgFunction<ARG = any, R = any> extends Function {
 	(arg: ARG): R;
 }
 
-type ClassConstructor<C = unknown, ARGS extends any[] = any[]> = AnyFunction<ARGS, void> & {
-	new: C;
-};
+type ClassConstructor<ARGS extends any[] = any[], R = any> = new (...args: ARGS) => R;
 
 interface StrictDictionary<T = unknown> {
-	[key: string]: T;
+	[key: PropertyKey]: T;
 }
 
-type DictionaryKey = string | symbol | number;
-
 interface Dictionary<T = unknown> {
-	[key: DictionaryKey]: CanUndef<T>;
+	[key: PropertyKey]: CanUndef<T>;
 }
 
 interface Maybe<T = unknown> extends Promise<T> {
@@ -636,13 +634,13 @@ interface ObjectFromArrayOptions<T = boolean> {
 	 * @param el - element value
 	 * @param i - element index
 	 */
-	key?(el: unknown, i: number): DictionaryKey;
+	key?(el: unknown, i: number): PropertyKey;
 
 	/**
 	 * @deprecated
 	 * @see [[ObjectFromArrayOptions.key]]
 	 */
-	keyConverter?(i: number, el: unknown): DictionaryKey;
+	keyConverter?(i: number, el: unknown): PropertyKey;
 
 	/**
 	 * Function that returns an element value
@@ -728,13 +726,13 @@ interface ObjectConstructor {
 	 *
 	 * @param key
 	 */
-	hasOwnProperty(key: DictionaryKey): (obj: any) => boolean;
+	hasOwnProperty(key: PropertyKey): (obj: any) => boolean;
 
 	/**
 	 * Returns a function that returns true if the specified object has own property by a key that the function takes
 	 * @param obj
 	 */
-	hasOwnProperty(obj: any): (key: DictionaryKey) => boolean;
+	hasOwnProperty(obj: any): (key: PropertyKey) => boolean;
 
 	/**
 	 * Returns true if the passed object has an own property by the specified key
@@ -742,7 +740,7 @@ interface ObjectConstructor {
 	 * @param obj
 	 * @param key
 	 */
-	hasOwnProperty(obj: any, key: DictionaryKey): boolean;
+	hasOwnProperty(obj: any, key: PropertyKey): boolean;
 
 	/**
 	 * Sets a value to the passed object by the specified path.
@@ -1039,7 +1037,8 @@ interface ObjectConstructor {
 	fastClone(obj: undefined, opts: FastCloneOptions): <T>(obj: T) => T;
 
 	/**
-	 * Clones the specified object by using a naive but fast `JSON.stringify/parse` strategy and returns a new object.
+	 * Clones the specified object using the `structuredClone` method if possible and returns a new object.
+	 * Otherwise, the method will use a naive but fast `JSON.stringify/parse` strategy.
 	 *
 	 * @param obj
 	 * @param [opts] - additional options
@@ -1900,6 +1899,20 @@ interface ObjectConstructor {
 	 * @param value
 	 */
 	isPromiseLike(value: any): value is PromiseLike<unknown>;
+
+	/**
+	 * Returns true if the specified value is looks like a proxy
+	 * @param value
+	 */
+	isProxy<T>(value: T): T extends Primitive ? false : boolean;
+
+	/**
+	 * If the passed value is a proxy object, the method returns an original object.
+	 * Otherwise, the passed object itself.
+	 *
+	 * @param value
+	 */
+	unwrapProxy<T>(value: T): T;
 
 	/**
 	 * Returns true if the specified value is a map

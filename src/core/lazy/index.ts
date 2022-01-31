@@ -21,9 +21,12 @@ import type { ObjectScheme } from 'core/lazy/interface';
  * @param constructor
  * @param scheme
  */
-export default function makeLazy(constructor: Function | ClassConstructor, scheme?: ObjectScheme): AnyFunction {
+export default function makeLazy<T extends ClassConstructor | AnyFunction>(
+	constructor: T,
+	scheme?: ObjectScheme
+): T extends ClassConstructor ? T & InstanceType<T> : T extends AnyFunction ? T & ReturnType<T> : never {
 	const
-		actions = [constructor];
+		actions = <Function[]>[];
 
 	const mergedScheme = {
 		...getSchemeFromProto(constructor.prototype),
@@ -33,7 +36,7 @@ export default function makeLazy(constructor: Function | ClassConstructor, schem
 	setActions(applyActions, mergedScheme);
 	applyActions.prototype = constructor.prototype;
 
-	return applyActions;
+	return Object.cast(applyActions);
 
 	function applyActions(this: unknown, ...args: unknown[]): unknown {
 		let
@@ -46,12 +49,9 @@ export default function makeLazy(constructor: Function | ClassConstructor, schem
 			ctx = constructor.call(this, ...args);
 		}
 
-		actions.slice(1).forEach((fn) => {
+		actions.forEach((fn) => {
 			fn.call(ctx);
 		});
-
-		actions.splice(1, actions.length);
-		setActions(applyActions, mergedScheme);
 
 		return ctx;
 	}
@@ -93,7 +93,7 @@ export default function makeLazy(constructor: Function | ClassConstructor, schem
 					Object.defineProperty(proxy, key, {
 						configurable: true,
 
-						value: (...args) => {
+						get: () => (...args) => {
 							actions.push(function method(this: object) {
 								const
 									obj = Object.get<Nullable<object>>(this, breadcrumbs);
@@ -107,6 +107,13 @@ export default function makeLazy(constructor: Function | ClassConstructor, schem
 								}
 
 								return obj[key](...args);
+							});
+						},
+
+						set: (fn) => {
+							actions.push(function setter(this: object) {
+								Object.set(this, fullPath, fn);
+								return fn;
 							});
 						}
 					});

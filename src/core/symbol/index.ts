@@ -11,13 +11,15 @@
  * @packageDocumentation
  */
 
+import { PROXY, READONLY } from 'core/prelude/types/const';
+
 /**
  * Returns a factory for flexible creation of unique symbols by the first touch
  * @param fields - list of predefined fields (it can be useful to shim the Proxy API)
  */
 export default function generator(fields?: string[]): StrictDictionary<symbol> {
 	const
-		obj = <StrictDictionary<symbol>>Object.createDict<symbol>();
+		obj = <StrictDictionary<symbol>>Object.createDict();
 
 	if (typeof Proxy !== 'function') {
 		if (fields) {
@@ -31,12 +33,28 @@ export default function generator(fields?: string[]): StrictDictionary<symbol> {
 	}
 
 	return new Proxy(obj, {
-		get(target: typeof obj, prop: string): symbol {
-			if (prop in target) {
-				return target[prop];
+		get: (target, key) => {
+			if (key === PROXY) {
+				return target;
 			}
 
-			return target[prop] = typeof prop === 'symbol' ? prop : Symbol(prop);
+			if (key in target) {
+				return target[key];
+			}
+
+			return target[key] = typeof key === 'symbol' ? key : Symbol(key);
+		},
+
+		set: () => false,
+		defineProperty: () => false,
+		deleteProperty: () => false,
+
+		has: (target, key) => {
+			if (key === READONLY || key === PROXY) {
+				return true;
+			}
+
+			return Reflect.has(target, key);
 		}
 	});
 }

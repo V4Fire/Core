@@ -9,6 +9,22 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.74.4 (2022-01-24)
+
+#### :house: Internal
+
+* Now `Object.fastClone` will use `structredClone` if it is possible
+
+## v3.74.0 (2022-01-12)
+
+#### :rocket: New Feature
+
+* Added a new methods `Object.isProxy` and `Object.unwrapProxy`
+
+#### :bug: Bug Fix
+
+* Fixed behavior of `Object.isDictionary`, `Object.isPlainObject`, `Object.isFreeze` with proxy-based objects
+
 ## v3.70.3 (2021-12-08)
 
 #### :bug: Bug Fix

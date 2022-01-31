@@ -138,5 +138,9 @@ describe('core/prelude/object/convert', () => {
 			const reviver = (key, val) => key === 'a' ? new Set(val) : val;
 			expect(Object.parse(reviver)('{"a": [1]}')).toEqual({a: new Set([1])});
 		});
+
+		it('providing __proto__ as a key', () => {
+			expect(Object.parse('{"__proto__": {"foo": "bar"}}')).toEqual({});
+		});
 	});
 });
