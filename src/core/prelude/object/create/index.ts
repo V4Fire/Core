@@ -195,7 +195,7 @@ export function selectReject(select: boolean): AnyFunction {
 					res.add(<object>key);
 
 				} else {
-					res[<PropertyKey>key] = el;
+					Object.set(res, [key], el);
 				}
 			}
 		});
