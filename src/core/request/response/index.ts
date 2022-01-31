@@ -264,9 +264,11 @@ export default class Response<
 			throw new TypeError('The response is not an iterable object');
 		}
 
-		this.streamUsed = true;
-		this.emitter.emit('asyncIteratorUsed');
+		if (!this.streamUsed) {
+			this.emitter.emit('asyncIteratorUsed');
+		}
 
+		this.streamUsed = true;
 		return Object.cast(body[Symbol.asyncIterator]());
 	}
 
@@ -310,20 +312,20 @@ export default class Response<
 					data = this.json();
 					break;
 
-				case 'arrayBuffer':
-					data = this.arrayBuffer();
-					break;
-
-				case 'blob':
-					data = this.blob();
+				case 'formData':
+					data = this.formData();
 					break;
 
 				case 'document':
 					data = this.document();
 					break;
 
-				case 'formData':
-					data = this.formData();
+				case 'blob':
+					data = this.blob();
+					break;
+
+				case 'arrayBuffer':
+					data = this.arrayBuffer();
 					break;
 
 				case 'object':
@@ -336,37 +338,6 @@ export default class Response<
 		}
 
 		return this.applyDecoders(data);
-	}
-
-	/**
-	 * Parses the response body as a Document instance and returns it
-	 */
-	@once
-	document(): AbortablePromise<Document> {
-		return AbortablePromise.resolveAndCall(this.body, this.parent)
-			.then<Document>((body) => {
-				//#if node_js
-
-				if (IS_NODE) {
-					// eslint-disable-next-line @typescript-eslint/no-var-requires
-					const {JSDOM} = require('jsdom');
-
-					return this.text()
-						.then((text) => new JSDOM(text))
-						.then((res) => Object.get(res, 'window.document'));
-				}
-
-				//#endif
-
-				if (body instanceof Document) {
-					return body;
-				}
-
-				return this.text().then((text) => {
-					const type = this.headers.get('Content-Type') ?? 'text/html';
-					return new DOMParser().parseFromString(text, Object.cast(type));
-				});
-			});
 	}
 
 	/**
@@ -474,51 +445,33 @@ export default class Response<
 	}
 
 	/**
-	 * Parses the response body as an ArrayBuffer and returns it
+	 * Parses the response body as a Document instance and returns it
 	 */
 	@once
-	arrayBuffer(): AbortablePromise<ArrayBuffer> {
+	document(): AbortablePromise<Document> {
 		return AbortablePromise.resolveAndCall(this.body, this.parent)
-			.then<ArrayBuffer>((body) => {
-				if (body == null) {
-					return new ArrayBuffer(0);
+			.then<Document>((body) => {
+				//#if node_js
+
+				if (IS_NODE) {
+					// eslint-disable-next-line @typescript-eslint/no-var-requires
+					const {JSDOM} = require('jsdom');
+
+					return this.text()
+						.then((text) => new JSDOM(text))
+						.then((res) => Object.get(res, 'window.document'));
 				}
 
-				if (body instanceof ArrayBuffer) {
+				//#endif
+
+				if (body instanceof Document) {
 					return body;
 				}
 
-				if (ArrayBuffer.isView(body)) {
-					return body.buffer;
-				}
-
-				throw new TypeError("Can't read response data as ArrayBuffer");
-			});
-	}
-
-	/**
-	 * Parses the response body as a Blob structure and returns it
-	 */
-	@once
-	blob(): AbortablePromise<Blob> {
-		return AbortablePromise.resolveAndCall(this.body, this.parent)
-			.then<Blob>((body) => {
-				const
-					type = this.headers.get('Content-Type') ?? '';
-
-				if (body == null) {
-					return new Blob([], {type});
-				}
-
-				if (body instanceof Blob) {
-					return body;
-				}
-
-				if (body instanceof ArrayBuffer || ArrayBuffer.isView(body)) {
-					return new Blob(Object.cast(body), {type});
-				}
-
-				return new Blob([body.toString()], {type});
+				return this.text().then((text) => {
+					const type = this.headers.get('Content-Type') ?? 'text/html';
+					return new DOMParser().parseFromString(text, Object.cast(type));
+				});
 			});
 	}
 
@@ -607,7 +560,56 @@ export default class Response<
 	}
 
 	/**
-	 * Applies given decoders to the specified data and returns a promise with the result
+	 * Parses the response body as a Blob structure and returns it
+	 */
+	@once
+	blob(): AbortablePromise<Blob> {
+		return AbortablePromise.resolveAndCall(this.body, this.parent)
+			.then<Blob>((body) => {
+				const
+					type = this.headers.get('Content-Type') ?? '';
+
+				if (body == null) {
+					return new Blob([], {type});
+				}
+
+				if (body instanceof Blob) {
+					return body;
+				}
+
+				if (body instanceof ArrayBuffer || ArrayBuffer.isView(body)) {
+					return new Blob(Object.cast(body), {type});
+				}
+
+				return new Blob([body.toString()], {type});
+			});
+	}
+
+	/**
+	 * Parses the response body as an ArrayBuffer and returns it
+	 */
+	@once
+	arrayBuffer(): AbortablePromise<ArrayBuffer> {
+		return AbortablePromise.resolveAndCall(this.body, this.parent)
+			.then<ArrayBuffer>((body) => {
+				if (body == null) {
+					return new ArrayBuffer(0);
+				}
+
+				if (body instanceof ArrayBuffer) {
+					return body;
+				}
+
+				if (ArrayBuffer.isView(body)) {
+					return body.buffer;
+				}
+
+				throw new TypeError("Can't read response data as ArrayBuffer");
+			});
+	}
+
+	/**
+	 * Applies the given decoders to the specified data and returns a promise with the result
 	 *
 	 * @param data
 	 * @param [decoders]
