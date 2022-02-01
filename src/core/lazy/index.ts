@@ -27,7 +27,7 @@ export default function makeLazy<T extends ClassConstructor | AnyFunction>(
 ):
 	T extends ClassConstructor ?
 		T & InstanceType<T> :
-		T extends (...args: infer A) => infer R ? {(...args: A): R; new (...args: A): R} : never {
+		T extends (...args: infer A) => infer R ? {(...args: A): R; new (...args: A): R} & R : never {
 
 	const
 		actions = <Function[]>[];
