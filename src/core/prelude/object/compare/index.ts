@@ -146,7 +146,7 @@ export function createSerializer(
 	return (key, value) => {
 		if (value == null) {
 			init = true;
-			return value;
+			return Object.unwrapProxy(value);
 		}
 
 		const
@@ -173,9 +173,9 @@ export function createSerializer(
 		}
 
 		if (isObj && (value instanceof Map || value instanceof Set)) {
-			return [...value.entries()];
+			return [...Object.unwrapProxy(value).entries()];
 		}
 
-		return value;
+		return Object.unwrapProxy(value);
 	};
 }
