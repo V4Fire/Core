@@ -1,4 +1,3 @@
-/* eslint-disable default-case */
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core

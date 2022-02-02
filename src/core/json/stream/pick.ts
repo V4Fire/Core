@@ -1,4 +1,3 @@
-/* eslint-disable default-case */
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -15,6 +14,7 @@
  import type { JsonToken } from './interface';
  import { FilterBase } from './filterBase';
 
+/* eslint-disable default-case */
 export class Pick extends FilterBase {
 	override*_checkChunk(chunk: JsonToken): Generator<boolean | JsonToken> {
 		switch (chunk.name) {

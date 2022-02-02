@@ -1,4 +1,3 @@
-/* eslint-disable default-case */
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -28,6 +27,7 @@ type FilterStack = Array<JsonToken['value'] | null>;
 
 type ProcessFunction = (chunk: JsonToken) => Generator<JsonToken>;
 
+/* eslint-disable default-case */
 export abstract class FilterBase {
 	static defaultReplacement: JsonToken[] = [{name: 'nullValue', value: null}];
 

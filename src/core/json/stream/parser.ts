@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function */
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -154,7 +153,7 @@ export class Parser {
 		}
 	}
 
-	// eslint-disable-next-line complexity
+	// eslint-disable-next-line complexity, max-lines-per-function
 	*processChunk(chunk: string): Generator<{name: string; value?: string | null | boolean}> {
 		let
 			match: RegExpExecArray | null,
