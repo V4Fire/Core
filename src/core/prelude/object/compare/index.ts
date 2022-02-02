@@ -102,8 +102,8 @@ extend(Object, 'fastCompare', function fastCompare(a: unknown, b: unknown): bool
 		length2 = objB['length'];
 
 	} else if (isMap || isSet) {
-		length1 = a.size;
-		length2 = objA['size'];
+		length1 = objA['size'];
+		length2 = objB['size'];
 
 	} else {
 		length1 = objA['length'] ?? Object.keys(objA).length;
