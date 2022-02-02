@@ -15,6 +15,9 @@ extend(Object, 'fastCompare', function fastCompare(a: unknown, b: unknown): bool
 		return (b) => Object.fastCompare(a, b);
 	}
 
+	a = Object.unwrapProxy(a);
+	b = Object.unwrapProxy(b);
+
 	const
 		isEqual = a === b;
 
@@ -63,18 +66,19 @@ extend(Object, 'fastCompare', function fastCompare(a: unknown, b: unknown): bool
 	if (cantJSONCompare) {
 		if ((isMap || isSet)) {
 			const
+				setA = Object.cast<Set<unknown>>(a),
 				setB = Object.cast<Set<unknown>>(b);
 
-			if (a.size !== setB.size) {
+			if (setA.size !== setB.size) {
 				return false;
 			}
 
-			if (a.size === 0) {
+			if (setA.size === 0) {
 				return true;
 			}
 
 			const
-				aIter = a.entries(),
+				aIter = setA.entries(),
 				bIter = setB.entries();
 
 			for (let aEl = aIter.next(), bEl = bIter.next(); !aEl.done; aEl = aIter.next(), bEl = bIter.next()) {
@@ -98,7 +102,7 @@ extend(Object, 'fastCompare', function fastCompare(a: unknown, b: unknown): bool
 		length2;
 
 	if (isArr) {
-		length1 = a.length;
+		length1 = objA['length'];
 		length2 = objB['length'];
 
 	} else if (isMap || isSet) {
