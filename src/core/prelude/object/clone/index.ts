@@ -31,6 +31,10 @@ extend(Object, 'fastClone', (obj, opts?: FastCloneOptions) => {
 		const
 			p = opts ?? {};
 
+		if (Object.isFrozen(obj) && p.freezable !== false) {
+			return obj;
+		}
+
 		let
 			clone;
 
