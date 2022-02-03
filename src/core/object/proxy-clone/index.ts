@@ -11,10 +11,22 @@
  * @packageDocumentation
  */
 
+import * as support from 'core/const/support';
+
 import { unimplement } from 'core/functools/implementation';
 
 import { toOriginalObject, NULL } from 'core/object/proxy-clone/const';
 import { resolveTarget, getRawValueFromStore, Descriptor } from 'core/object/proxy-clone/helpers';
+
+/**
+ * Returns a clone of the specified object.
+ * If the runtime supports Proxy, it will be used to clone.
+ *
+ * @param obj
+ */
+export function clone<T>(obj: T): T {
+	return support.proxy ? proxyClone(obj) : Object.fastClone(obj, {freezable: false});
+}
 
 /**
  * Returns a clone of the specified object.
@@ -31,7 +43,7 @@ export default function proxyClone<T>(obj: T): T {
 			return obj;
 		}
 
-		if (typeof Proxy !== 'function') {
+		if (!support.proxy) {
 			unimplement({
 				name: 'proxyClone',
 				type: 'function',
