@@ -15,26 +15,27 @@ const original = {
   }
 };
 
-const clone = proxyReadonly(original);
+const
+  readonly = proxyReadonly(original);
 
 try {
-  clone.user.name = 'Jack';
+  readonly.user.name = 'Jack';
 
 } catch (err) {
   console.log(err);
 }
 
 try {
-  clone.user.skills.push('boxing');
+  readonly.user.skills.push('boxing');
 
 } catch (err) {
   console.log(err);
 }
 
-console.log(clone.user.name === original.user.name);
+console.log(readonly.user.name === original.user.name);
 
 // ['singing', 'dancing', 'programming']
-console.log(clone.user.skills);
+console.log(readonly.user.skills);
 
 // ['singing', 'dancing', 'programming']
 console.log(original.user.skills);
@@ -45,3 +46,28 @@ console.log(original.user.skills);
 Because the process of cloning uses native Proxy objects, there are a few limitations:
 
 1. You can't use `Object.preventExtension` at a clone object because it should be applied to the original object.
+
+## Common readonly
+
+The module also exports a common implementation to make objects read-only. If the runtime supports Proxy API, it will be used.
+
+```js
+import { readonly } from 'core/object/proxy-readonly';
+
+const original = {
+  a: 1
+};
+
+const
+  readonly = proxyReadonly(original);
+
+try {
+  readonly.a++;
+
+} catch (err) {
+  console.log(err);
+}
+
+// 1
+console.log(readonly.a);
+```
