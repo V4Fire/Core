@@ -11,8 +11,8 @@
  * @packageDocumentation
  */
 
-import type { JsonToken } from './interface';
-import { StreamBase } from './streamBase';
+import type { JsonToken } from 'core/json/stream/interface';
+import { StreamBase } from 'core/json/stream/streamer/streamBase';
 
 export class StreamObject extends StreamBase {
 	_level: number = 1;

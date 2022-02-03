@@ -11,15 +11,11 @@
  * @packageDocumentation
  */
 
-import { Parser, ParserOptions } from './parser';
-import { Filter } from './filter';
-import { Pick } from './pick';
-import { Assembler, AssemblerOptions } from './assembler';
-import type { StreamBaseOptions } from './streamBase';
-import { StreamArray } from './streamArray';
-import { StreamObject } from './streamObject';
-import type { JsonToken } from './interface';
-import type { FilterBaseOptions } from './filterBase';
+import { Parser, ParserOptions } from 'core/json/stream/parser';
+import { Filter, Pick, FilterBaseOptions } from 'core/json/stream/filter';
+import { Assembler, AssemblerOptions } from 'core/json/stream/assembler';
+import { StreamBaseOptions, StreamArray, StreamObject } from 'core/json/stream/streamer';
+import type { JsonToken } from 'core/json/stream/interface';
 
 export async function* from(
 	iterable: AsyncIterable<Buffer | string>,

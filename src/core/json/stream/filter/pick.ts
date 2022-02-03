@@ -11,8 +11,8 @@
  * @packageDocumentation
  */
 
- import type { JsonToken } from './interface';
- import { FilterBase } from './filterBase';
+ import type { JsonToken } from 'core/json/stream/interface';
+ import { FilterBase } from 'core/json/stream/filter/filterBase';
 
 /* eslint-disable default-case */
 export class Pick extends FilterBase {

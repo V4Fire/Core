@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type { JsonToken } from './interface';
+import type { JsonToken } from 'core/json/stream/interface';
 
 /**
  * [[include:core/json/stream/README.md]]

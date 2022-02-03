@@ -11,8 +11,8 @@
  * @packageDocumentation
  */
 
-import { Assembler } from './assembler';
-import type { JsonToken } from './interface';
+import { Assembler } from 'core/json/stream/assembler';
+import type { JsonToken } from 'core/json/stream/interface';
 
 class Counter {
 	depth: number;

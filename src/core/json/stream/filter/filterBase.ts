@@ -11,7 +11,7 @@
  * @packageDocumentation
  */
 
-import type { JsonToken } from './interface';
+import type { JsonToken } from 'core/json/stream/interface';
 
 export interface FilterBaseOptions {
 	filter?: ((stack: FilterStack, chunk: JsonToken) => boolean) | RegExp | string;
