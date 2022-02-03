@@ -29,7 +29,15 @@ module.exports = () => {
 		return;
 	}
 
-	let tsConfig;
+	let
+		tsConfig;
+
+	const
+		args = require('yargs').option('tsconfig', {boolean: true}).argv;
+
+	if (args.tsconfig) {
+		require('./tsconfig');
+	}
 
 	try {
 		tsConfig = require(path.join(process.cwd(), '/tsconfig.json'));

@@ -24,6 +24,7 @@
   "scripts": {
     "dev": "SOURCEMAPS=true gulp watch:server",
     "build": "gulp build:server",
+    "build:tsconfig": "node build/tsconfig",
     "build:standalone": "gulp build:standalone",
     "watch:standalone": "gulp watch:standalone",
     "test": "npm run build && npm run test:typescript && npm run test:eslint && npm run test:jasmine",
@@ -86,7 +87,8 @@
     "tsconfig": "^7.0.0",
     "typedoc": "^0.22.10",
     "typescript": "4.4.4",
-    "upath": "^2.0.1"
+    "upath": "^2.0.1",
+    "yargs": "^17.3.1"
   },
   "devDependencies": {
     "@types/jasmine": "^3.10.2",
