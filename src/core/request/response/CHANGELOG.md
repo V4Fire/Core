@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.??.?? (2022-??-??)
+
+#### :boom: Breaking Change
+
+* Now to clone and freeze server responses is used Proxy API if it supported
+
 ## v3.72.0 (2021-12-10)
 
 #### :rocket: New Feature
