@@ -24,7 +24,11 @@ import type { ObjectScheme } from 'core/lazy/interface';
 export default function makeLazy<T extends ClassConstructor | AnyFunction>(
 	constructor: T,
 	scheme?: ObjectScheme
-): T extends ClassConstructor ? T & InstanceType<T> : T extends AnyFunction ? T & ReturnType<T> : never {
+):
+	T extends ClassConstructor ?
+		T & InstanceType<T> :
+		T extends (...args: infer A) => infer R ? {(...args: A): R; new (...args: A): R} & R : never {
+
 	const
 		actions = <Function[]>[];
 

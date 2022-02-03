@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.74.7 (2022-01-31)
+
+#### :bug: Bug Fix
+
+* Restored support of Map/WeakMap `Object.reject/select`
+
 ## v3.34.0 (2021-03-03)
 
 #### :rocket: New Feature

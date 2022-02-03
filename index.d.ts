@@ -1693,7 +1693,9 @@ interface ObjectConstructor {
 	isTruly(value: any): boolean;
 
 	/**
-	 * Returns true if the specified value is a plain object
+	 * Returns true if the specified value is a plain object,
+	 * i.e. it has `null` prototype or was constructed via `Object`
+	 *
 	 * @param obj
 	 */
 	isPlainObject<T>(obj: T): obj is
