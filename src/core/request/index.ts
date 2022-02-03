@@ -379,12 +379,19 @@ function request<D = unknown>(
 					throw AbortablePromise.wrapReasonToIgnore(new RequestError(RequestError.InvalidStatus, details));
 				}
 
+				let
+					customData;
+
 				return {
 					ctx,
 					response,
 
 					get data() {
-						return response.decode();
+						return customData ?? response.decode();
+					},
+
+					set data(val: Promise<D>) {
+						customData = Promise.resolve(val);
 					},
 
 					[Symbol.asyncIterator]: response[Symbol.asyncIterator].bind(response),

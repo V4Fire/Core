@@ -110,12 +110,19 @@ export default class RequestContext<D = unknown> extends Super<D> {
 				responseType: 'object'
 			});
 
+		let
+			customData;
+
 		return {
 			ctx: this,
 			response,
 
 			get data() {
-				return response.decode();
+				return customData ?? response.decode();
+			},
+
+			set data(val: Promise<D>) {
+				customData = Promise.resolve(val);
 			},
 
 			[Symbol.asyncIterator]: response[Symbol.asyncIterator].bind(response),

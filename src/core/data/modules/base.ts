@@ -323,7 +323,7 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 
 				let
 					ProviderConstructor,
-					providerInstance;
+					providerInstance: IProvider;
 
 				if (Object.isString(ProviderLink)) {
 					ProviderConstructor = <CanUndef<Dictionary & typeof Provider>>providers[ProviderLink];
@@ -341,16 +341,19 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 					providerInstance = ProviderLink;
 				}
 
-				tasks.push(providerInstance.get(el.query ?? query, el.request).then(({data}) => {
+				tasks.push(providerInstance.get(el.query ?? query, el.request).then(async (res) => {
+					const
+						data = <Nullable<D & object>>(await res.data);
+
 					cloneTasks.push((composition) => Object.set(composition, alias, data?.valueOf()));
 					return Object.set(composition, alias, data);
 				}));
 			}
 
 			return res.then(
-				(res) => Promise.all(tasks).then(() => {
+				(res) => Promise.all(tasks).then(async () => {
 					const
-						data = <Nullable<D & object>>res.data;
+						data = <Nullable<D & object>>(await res.data);
 
 					cloneTasks.push((composition) => Object.set(composition, alias, data?.valueOf()));
 					Object.set(composition, alias, data);
@@ -370,7 +373,8 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 						}
 					});
 
-					res.data = Object.freeze(composition);
+					// eslint-disable-next-line require-atomic-updates
+					res.data = Promise.resolve(Object.freeze(composition));
 					return res;
 				}),
 
