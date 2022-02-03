@@ -15,6 +15,9 @@ import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 import { once, deprecated } from 'core/functools';
 import { IS_NODE } from 'core/env';
 
+import { readonly } from 'core/object/proxy-readonly';
+import { clone } from 'core/object/proxy-clone';
+
 import { convertIfDate } from 'core/json';
 import { getDataType } from 'core/mime-type';
 
@@ -642,10 +645,10 @@ export default class Response<
 
 				Object.defineProperty(data, 'valueOf', {
 					configurable: true,
-					value: () => Object.fastClone(originalData, {freezable: false})
+					value: () => clone(originalData)
 				});
 
-				Object.freeze(data);
+				data = readonly(data);
 			}
 
 			return data;
