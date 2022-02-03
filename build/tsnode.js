@@ -29,8 +29,18 @@ module.exports = () => {
 		return;
 	}
 
-	const
-		tsConfig = require(path.join(process.cwd(), '/client.tsconfig.json'));
+	let tsConfig;
+
+	try {
+		tsConfig = require(path.join(process.cwd(), '/tsconfig.json'));
+
+	} catch (err) {
+		if (err.code === 'MODULE_NOT_FOUND') {
+			throw new ReferenceError('No tsconfig.json found. Generate it with "node node_modules/@v4fire/core/build/tsconfig".');
+		}
+
+		throw err;
+	}
 
 	tsPaths.register({
 		baseUrl: tsConfig.compilerOptions.baseUrl,
@@ -73,3 +83,5 @@ function normalizePaths(p) {
 
 	}, {});
 }
+
+module.exports();

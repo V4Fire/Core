@@ -59,13 +59,13 @@ module.exports = function init(gulp) {
 	/**
 	 * Builds the project as a node.js package with the support of dynamic layers
 	 */
-	gulp.task('build:server', gulp.series([gulp.parallel(['build:tsconfig', 'clean:server']), build]));
+	gulp.task('build:server', gulp.series([gulp.parallel(['clean:server']), build]));
 
 	/**
 	 * Builds the project as a standalone node.js package without the support of dynamic layers
 	 */
 	gulp.task('build:standalone', gulp.series([
-		gulp.parallel(['build:tsconfig', 'clean:standalone']),
+		gulp.parallel(['clean:standalone']),
 		buildStandalone,
 		replaceTscAliases
 	]));

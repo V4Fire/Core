@@ -10,7 +10,8 @@
 
 require('dotenv').config();
 require('./global');
-require('../build/ts-node')();
+require('../build/tsconfig');
+require('../build/tsnode');
 
 const
 	path = require('path'),
