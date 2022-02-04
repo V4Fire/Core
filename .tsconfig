@@ -21,7 +21,6 @@
   },
   "exclude": [
     "dist",
-    "build",
     "config",
     "node_modules",
     "**/*.spec.ts"
