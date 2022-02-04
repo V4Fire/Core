@@ -1033,6 +1033,9 @@ interface ObjectConstructor {
 	 * Clones the specified object using the `structuredClone` method if possible and returns a new object.
 	 * Otherwise, the method will use a naive but fast `JSON.stringify/parse` strategy.
 	 *
+	 * Be careful about cloning `undefined` properties,
+	 * as they can be converted to `null` due to the nature of `JSON.stringify/parse`.
+	 *
 	 * @param obj
 	 * @param [opts] - additional options
 	 */
