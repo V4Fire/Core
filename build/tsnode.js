@@ -25,6 +25,9 @@ let
  * Initializes the `ts-node` and `tsconfig-paths` packages
  */
 module.exports = () => {
+	const
+		{config} = require('@pzlr/build-core');
+
 	if (isInitialized) {
 		return;
 	}
@@ -56,6 +59,9 @@ module.exports = () => {
 		addMatchAll: false
 	});
 
+	const
+		ignore = config.dependencies.map((dep) => `node_modules/(?!${dep})`);
+
 	tsNode.register({
 		transpileOnly: true,
 
@@ -64,7 +70,7 @@ module.exports = () => {
 			target: 'es2021'
 		},
 
-		ignore: []
+		ignore
 	});
 
 	isInitialized = true;
