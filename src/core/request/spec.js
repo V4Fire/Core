@@ -37,7 +37,7 @@ const
 
 fdescribe('core/request', () => {
 	const engines = new Map([
-		// ['node', nodeEngine],
+		['node', nodeEngine],
 		// ['fetch', fetchEngine],
 		// ['xhr', xhrEngine],
 		// ['provider', createProviderEngine('Provider')],
