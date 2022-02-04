@@ -125,7 +125,9 @@ export default class RequestContext<D = unknown> extends Super<D> {
 				customData = Promise.resolve(val);
 			},
 
+			emitter: response.emitter,
 			[Symbol.asyncIterator]: response[Symbol.asyncIterator].bind(response),
+
 			dropCache: this.dropCache.bind(this)
 		};
 	}

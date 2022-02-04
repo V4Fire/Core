@@ -32,12 +32,12 @@ import type {
 	CreateRequestOptions,
 	RetryOptions,
 
+	RequestPromise,
 	RequestResolver,
+
 	RequestResponseChunk,
-	RequestResponse,
 	RequestFunctionResponse,
-	RequestResponseObject,
-	RequestPromise
+	RequestResponseObject
 
 } from 'core/request/interface';
 
@@ -64,7 +64,7 @@ export default request;
  * });
  * ```
  */
-function request<D = unknown>(path: string, opts?: CreateRequestOptions<D>): AbortablePromise<RequestResponse<D>>;
+function request<D = unknown>(path: string, opts?: CreateRequestOptions<D>): RequestPromise<D>;
 
 /**
  * Returns a wrapped request constructor with the specified options.
@@ -169,7 +169,7 @@ function request<D = unknown>(
 			request: requestParams
 		};
 
-		const requestPromise = <RequestPromise>new AbortablePromise(async (resolve, reject, onAbort) => {
+		const requestPromise = new AbortablePromise(async (resolve, reject, onAbort) => {
 			onAbort((err) => {
 				reject(err ?? new RequestError(RequestError.Abort, errDetails));
 			});
@@ -394,13 +394,18 @@ function request<D = unknown>(
 						customData = Promise.resolve(val);
 					},
 
+					emitter: response.emitter,
 					[Symbol.asyncIterator]: response[Symbol.asyncIterator].bind(response),
+
 					dropCache: ctx.dropCache.bind(ctx)
 				};
 			}
 		});
 
-		requestPromise.emitter = emitter;
+		requestPromise['emitter'] = emitter;
+		requestPromise['data'] = new Promise((resolve) => {
+			resolve(requestPromise.then((res: RequestResponseObject) => res.data));
+		});
 
 		requestPromise[Symbol.asyncIterator] = () => Object.assign(responseIterator.then((iter) => iter()), {
 			[Symbol.asyncIterator]() {
