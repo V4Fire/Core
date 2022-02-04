@@ -11,11 +11,33 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-## v3.??.?? (2022-??-??)
+## v3.74.7 (2022-01-31)
+
+#### :bug: Bug Fix
+
+* Restored support of Map/WeakMap `Object.reject/select`
+
+## v3.74.6 (2022-01-31)
+
+#### :bug: Bug Fix
+
+* `Object.reject/select` shouldn't copy a prototype of the passed object
+
+## v3.74.5 (2022-01-25)
+
+#### :bug: Bug Fix
+
+* Now `__proto__ ` properties are ignored and removed via a json reviver to prevent prototype pollution `core/prelude/object#Object.parse`
+
+## v3.74.4 (2022-01-24)
 
 #### :bug: Bug Fix
 
 * Fixed a bug when `onAbort` calling occurred after promise aborting `core/promise/abortable`
+
+#### :house: Internal
+
+* Now `Object.fastClone` will use `structredClone` if it is possible
 
 ## v3.74.3 (2022-01-13)
 

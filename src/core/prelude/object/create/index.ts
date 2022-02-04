@@ -173,7 +173,7 @@ export function selectReject(select: boolean): AnyFunction {
 			}
 		}
 
-		Object.forEach(obj, (el, key: object) => {
+		Object.forEach(obj, (el, key) => {
 			let
 				test: boolean;
 
@@ -192,7 +192,7 @@ export function selectReject(select: boolean): AnyFunction {
 					res.push(el);
 
 				} else if (Object.isSet(res) || Object.isWeakSet(res)) {
-					res.add(key);
+					res.add(<object>key);
 
 				} else {
 					Object.set(res, [key], el);
