@@ -199,8 +199,11 @@ export default class Response<
 		if (p.type != null) {
 			this.type = p.type;
 
-		} else {
+		} else if (!IS_NODE) {
 			this.type = location.hostname === new URL(this.url).hostname ? 'basic' : 'cors';
+
+		} else {
+			this.type = 'basic';
 		}
 
 		this.parent = p.parent;
