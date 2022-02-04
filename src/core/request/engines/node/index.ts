@@ -130,15 +130,7 @@ const request: RequestEngine = (params) => {
 					pos += data.length;
 				}
 
-				switch (p.responseType) {
-					case 'json':
-					case 'document':
-					case 'text':
-						return new TextDecoder('utf-8').decode(completeData);
-
-					default:
-						return completeData.buffer;
-				}
+				return completeData.buffer;
 			};
 
 			getResponse[Symbol.asyncIterator] = streamBuffer[Symbol.asyncIterator].bind(streamBuffer);
