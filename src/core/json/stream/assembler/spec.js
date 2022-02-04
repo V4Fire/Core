@@ -37,7 +37,7 @@ const data = [
 ];
 const target = {a: 1, b: true, c: ['d']};
 
-describe('Json assemlber', () => {
+describe('JSON stream assemlber', () => {
 	it('should assemble token stream to valid object', () => {
 		const assembler = new Assembler();
 		let result;

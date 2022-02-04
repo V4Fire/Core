@@ -15,11 +15,6 @@ import type { JsonToken } from 'core/json/stream/interface';
 
 export interface FilterBaseOptions {
 	filter?: ((stack: FilterStack, chunk: JsonToken) => boolean) | RegExp | string;
-	replacement?: ((stack: FilterStack, chunk: JsonToken) => JsonToken[]) | JsonToken[];
-	pathSeparator?: string;
-	allowEmptyReplacement?: boolean;
-	streamValues?: boolean;
-	streamKeys?: boolean;
 	once?: boolean;
 }
 
@@ -37,8 +32,8 @@ export abstract class FilterBase {
 
 			return (path.length === str.length && path === str) ||
 				(path.length > str.length &&
-					path.substr(0, str.length) === str &&
-					path.substr(str.length, separator.length) === separator);
+					path.startsWith(str) &&
+					path.substring(str.length, str.length + separator.length) === separator);
 		};
 	}
 
@@ -46,14 +41,9 @@ export abstract class FilterBase {
 		return (stack: FilterStack): boolean => regExp.test(stack.join(separator));
 	}
 
-	static arrayReplacement(array: JsonToken[]) {
-		return (): JsonToken[] => array;
-	}
-
 	public processChunk: (chunk: JsonToken) => Generator<JsonToken>;
 
 	protected abstract _checkChunk(chunk: JsonToken): Generator<boolean | JsonToken>;
-	protected readonly _streamKeys?: boolean = true;
 	protected _stack: FilterStack = [];
 	protected _depth: number = 0;
 	protected readonly _once?: boolean;
@@ -68,42 +58,25 @@ export abstract class FilterBase {
 	protected readonly _skipKey: ProcessFunction = this.skipValue('endKey', 'keyValue');
 
 	private _previousToken: string = '';
+	private readonly _separator: string = '.';
 	private _expected?: string;
-	private readonly _replacement: (stack: FilterStack, chunk: JsonToken) => JsonToken[];
-	private readonly _allowEmptyReplacement?: boolean;
 
 	constructor(options: FilterBaseOptions = {}) {
 		this.processChunk = this._check;
 
-		const {filter, pathSeparator: separator = '.', replacement} = options;
+		const {filter} = options;
 
 		if (Object.isString(filter)) {
-			this._filter = FilterBase.stringFilter(filter, separator);
+			this._filter = FilterBase.stringFilter(filter, this._separator);
 
 		} else if (Object.isFunction(filter)) {
 			this._filter = filter;
 
 		} else if (Object.isRegExp(filter)) {
-			this._filter = FilterBase.regExpFilter(filter, separator);
+			this._filter = FilterBase.regExpFilter(filter, this._separator);
 		}
 
-		if (Object.isFunction(replacement)) {
-			this._replacement = replacement;
-
-		} else {
-			this._replacement = FilterBase.arrayReplacement(replacement ?? FilterBase.defaultReplacement);
-		}
-
-		this._allowEmptyReplacement = options.allowEmptyReplacement;
 		this._once = options.once;
-
-		if ('streamValues' in options) {
-			this._streamKeys = options.streamValues;
-		}
-
-		if ('streamKeys' in options) {
-			this._streamKeys = options.streamKeys;
-		}
 	}
 
 	*_check(chunk: JsonToken): Generator<JsonToken> {
@@ -117,7 +90,7 @@ export abstract class FilterBase {
 			case 'falseValue':
 				if (Object.isNumber(this._stack[this._stack.length - 1])) {
 					// Array
-					++this._stack[this._stack.length - 1];
+					++(<number>this._stack[this._stack.length - 1]);
 				}
 
 				break;
@@ -129,7 +102,7 @@ export abstract class FilterBase {
 			case 'numberValue':
 				if (this._previousToken !== 'endNumber' && Object.isNumber(this._stack[this._stack.length - 1])) {
 					// Array
-					++this._stack[this._stack.length - 1];
+					++(<number>this._stack[this._stack.length - 1]);
 				}
 
 				break;
@@ -137,7 +110,7 @@ export abstract class FilterBase {
 			case 'stringValue':
 				if (this._previousToken !== 'endString' && Object.isNumber(this._stack[this._stack.length - 1])) {
 					// Array
-					++this._stack[this._stack.length - 1];
+					++(<number>this._stack[this._stack.length - 1]);
 				}
 
 				break;

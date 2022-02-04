@@ -100,11 +100,9 @@ export class Filter extends FilterBase {
 				if (Object.isString(stack[commonLength])) {
 					const key = stack[commonLength];
 
-					if (this._streamKeys) {
-						yield {name: 'startKey'};
-						yield {name: 'stringChunk', value: key};
-						yield {name: 'endKey'};
-					}
+					yield {name: 'startKey'};
+					yield {name: 'stringChunk', value: key};
+					yield {name: 'endKey'};
 
 					yield {name: 'keyValue', value: key};
 				}
@@ -128,11 +126,9 @@ export class Filter extends FilterBase {
 			} else if (Object.isString(key)) {
 				yield {name: 'startObject'};
 
-				if (this._streamKeys) {
-					yield {name: 'startKey'};
-					yield {name: 'stringChunk', value: key};
-					yield {name: 'endKey'};
-				}
+				yield {name: 'startKey'};
+				yield {name: 'stringChunk', value: key};
+				yield {name: 'endKey'};
 
 				yield {name: 'keyValue', value: key};
 			}
