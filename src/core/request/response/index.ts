@@ -221,7 +221,7 @@ export default class Response<
 			Array.concat([], <number>ok).includes(this.status);
 
 		this.headers = Object.freeze(new Headers(p.headers));
-		this.body = body;
+		this.body = Object.isFunction(body) ? body.once() : body;
 
 		const contentType = this.headers['content-type'];
 		this.sourceResponseType = contentType != null ? getDataType(contentType) : p.responseType;
@@ -271,7 +271,9 @@ export default class Response<
 		}
 
 		if (!this.streamUsed) {
-			this.emitter.emit('asyncIteratorUsed');
+			setImmediate(() => {
+				this.emitter.emit('asyncIteratorUsed');
+			});
 		}
 
 		this.streamUsed = true;
@@ -304,7 +306,10 @@ export default class Response<
 		}
 
 		this.bodyUsed = true;
-		this.emitter.emit('bodyUsed');
+
+		setImmediate(() => {
+			this.emitter.emit('bodyUsed');
+		});
 
 		let
 			data;
@@ -537,10 +542,6 @@ export default class Response<
 				if (search) {
 					encoding = <BufferEncoding>search[1].toLowerCase();
 				}
-			}
-
-			if (IS_NODE) {
-				return Buffer.from(Object.cast(body)).toString(encoding);
 			}
 
 			if (typeof TextDecoder !== 'undefined') {
