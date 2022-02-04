@@ -271,12 +271,10 @@ export default class Response<
 		}
 
 		if (!this.streamUsed) {
-			setImmediate(() => {
-				this.emitter.emit('asyncIteratorUsed');
-			});
+			this.streamUsed = true;
+			this.emitter.emit('asyncIteratorUsed');
 		}
 
-		this.streamUsed = true;
 		return Object.cast(body[Symbol.asyncIterator]());
 	}
 
@@ -299,17 +297,14 @@ export default class Response<
 	 *
 	 * @emits `bodyUsed()`
 	 */
-	@once
 	decode(): AbortablePromise<D | null> {
+		if (this[$$.decodedValue] != null) {
+			return this[$$.decodedValue];
+		}
+
 		if (this.streamUsed) {
 			return AbortablePromise.resolve<D | null>(null);
 		}
-
-		this.bodyUsed = true;
-
-		setImmediate(() => {
-			this.emitter.emit('bodyUsed');
-		});
 
 		let
 			data;
@@ -348,7 +343,13 @@ export default class Response<
 			}
 		}
 
-		return this.applyDecoders(data);
+		const decodedVal = this.applyDecoders(data);
+		this[$$.decodedValue] = decodedVal;
+
+		this.bodyUsed = true;
+		this.emitter.emit('bodyUsed');
+
+		return Object.cast(decodedVal);
 	}
 
 	/**

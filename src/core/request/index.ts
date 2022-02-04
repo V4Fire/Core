@@ -14,7 +14,9 @@
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 import log from 'core/log';
 
+import SyncPromise from 'core/promise/sync';
 import AbortablePromise from 'core/promise/abortable';
+
 import { isOnline } from 'core/net';
 
 import Response from 'core/request/response';
@@ -345,14 +347,17 @@ function request<D = unknown>(
 				}
 			}
 
-			resultPromise = resultPromise
-				.then(ctx.saveCache.bind(ctx));
-
 			resultPromise
-				.then((response) => log(`request:response:${path}`, response.data, {
-					cache,
-					request: requestParams
-				}))
+				.then(ctx.saveCache.bind(ctx))
+
+				.then(async ({response, data}) => {
+					if (response.bodyUsed === true) {
+						log(`request:response:${path}`, await data, {
+							cache,
+							request: requestParams
+						});
+					}
+				})
 
 				.catch((err) => log.error('request', err));
 
@@ -391,7 +396,7 @@ function request<D = unknown>(
 					},
 
 					set data(val: Promise<D>) {
-						customData = Promise.resolve(val);
+						customData = SyncPromise.resolve(val);
 					},
 
 					emitter: response.emitter,

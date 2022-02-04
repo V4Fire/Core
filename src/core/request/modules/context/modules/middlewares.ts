@@ -6,6 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import SyncPromise from 'core/promise/sync';
+
 import Response, { ResponseTypeValue } from 'core/request/response';
 import { caches } from 'core/request/const';
 
@@ -53,48 +55,54 @@ export default class RequestContext<D = unknown> extends Super<D> {
 	 * Middleware to cache a response object
 	 * @param resObj - response object
 	 */
-	saveCache(resObj: RequestResponseObject<D>): RequestResponseObject<D> {
+	saveCache(resObj: RequestResponseObject<D>): Promise<RequestResponseObject<D>> {
 		const
 			key = this.cacheKey;
 
-		if (key != null) {
-			const save = () => {
-				void resObj.data.then((data) => {
-					if (caches.has(this.cache)) {
-						void this.cache.set(key, data);
-					}
-				});
-			};
+		return new SyncPromise((resolve, reject) => {
+			if (key != null) {
+				const save = () => {
+					resObj.data
+						.then((data) => {
+							resolve(resObj);
 
-			const
-				{response} = resObj;
+							if (caches.has(this.cache)) {
+								void this.cache.set(key, data);
+							}
+						})
 
-			if (response.bodyUsed) {
-				save();
+						.catch(reject);
+				};
 
-			} else if (!response.streamUsed) {
 				const
-					{emitter} = response;
+					{response} = resObj;
 
-				const saveAndClear = () => {
+				if (response.bodyUsed) {
 					save();
 
-					// eslint-disable-next-line @typescript-eslint/no-use-before-define
-					emitter.off('bodyUsed', clear);
-				};
+				} else if (!response.streamUsed) {
+					const
+						{emitter} = response;
 
-				const clear = () => {
-					emitter.off('bodyUsed', saveAndClear);
-				};
+					const saveAndClear = () => {
+						save();
 
-				emitter.once('bodyUsed', saveAndClear);
-				emitter.once('streamUsed', clear);
+						// eslint-disable-next-line @typescript-eslint/no-use-before-define
+						emitter.off('bodyUsed', clear);
+					};
+
+					const clear = () => {
+						resolve(resObj);
+						emitter.off('bodyUsed', saveAndClear);
+					};
+
+					emitter.once('bodyUsed', saveAndClear);
+					emitter.once('streamUsed', clear);
+				}
+
+				caches.add(this.cache);
 			}
-
-			caches.add(this.cache);
-		}
-
-		return resObj;
+		});
 	}
 
 	/**
@@ -122,7 +130,7 @@ export default class RequestContext<D = unknown> extends Super<D> {
 			},
 
 			set data(val: Promise<D>) {
-				customData = Promise.resolve(val);
+				customData = SyncPromise.resolve(val);
 			},
 
 			emitter: response.emitter,
