@@ -15,11 +15,11 @@ const numberStart = /\d/y;
 const numberDigit = /\d{0,256}/y;
 
 const patterns = {
-  value1: /["{[\]\-\d]|true\b|false\b|null\b|\s{1,256}/y,
-  string: /[^"\\]{1,256}|\\[bfnrt"\\/]|\\u[\da-fA-F]{4}|"/y,
-  key1: /["}]|\s{1,256}/y,
-  colon: /:|\s{1,256}/y,
-  comma: /[,\]}]|\s{1,256}/y,
+	value1: /["{[\]\-\d]|true\b|false\b|null\b|\s{1,256}/y,
+	string: /[^"\\]{1,256}|\\[bfnrt"\\/]|\\u[\da-fA-F]{4}|"/y,
+	key1: /["}]|\s{1,256}/y,
+	colon: /:|\s{1,256}/y,
+	comma: /[,\]}]|\s{1,256}/y,
 	ws: /\s{1,256}/y,
 	numberStart,
 	numberFracStart: numberStart,
@@ -39,17 +39,6 @@ const fromHex = (s) => String.fromCharCode(parseInt(s.slice(2), 16));
 
 // Short codes: \b \f \n \r \t \" \\ \/
 const codes = {b: '\b', f: '\f', n: '\n', r: '\r', t: '\t', '"': '"', '\\': '\\', '/': '/'};
-
-export interface ParserOptions {
-	packKeys?: boolean;
-	packValues?: boolean;
-	packStrings?: boolean;
-	packNumbers?: boolean;
-	streamKeys?: boolean;
-	streamStrings?: boolean;
-	streamNumbers?: boolean;
-	streamValues?: boolean;
-}
 
 const PARSER_STATE = {
 	VALUE: 'value',
@@ -89,13 +78,6 @@ const
 	};
 
 export class Parser {
-	private readonly _packKeys?: boolean = true;
-	private readonly _packStrings?: boolean = true;
-	private readonly _packNumbers?: boolean = true;
-	private readonly _streamKeys?: boolean = true;
-	private readonly _streamStrings?: boolean = true;
-	private readonly _streamNumbers?: boolean = true;
-
 	private _expect: PARSER_STATE = PARSER_STATE.VALUE;
 	private readonly _stack: PARENT_STATE[] = [];
 	private _parent: PARENT_STATE = PARSER_STATE.EMPTY;
@@ -103,58 +85,8 @@ export class Parser {
 	private _accumulator: string = '';
 	private _buffer: string = '';
 
-	constructor(options: ParserOptions = {}) {
-		if ('packValues' in options) {
-			this._packKeys = options.packValues;
-			this._packStrings = options.packValues;
-			this._packNumbers = options.packValues;
-		}
-
-		if ('packKeys' in options) {
-			this._packKeys = options.packKeys;
-		}
-
-		if ('packStrings' in options) {
-			(this._packStrings = options.packStrings);
-		}
-
-		if ('packNumbers' in options) {
-			this._packNumbers = options.packNumbers;
-		}
-
-		if ('streamValues' in options) {
-			this._streamKeys = options.streamValues;
-			this._streamStrings = options.streamValues;
-			this._streamNumbers = options.streamValues;
-		}
-
-		if ('streamKeys' in options) {
-			this._streamKeys = options.streamKeys;
-		}
-
-		if ('streamStrings' in options) {
-			this._streamStrings = options.streamStrings;
-		}
-
-		if ('streamNumbers' in options) {
-			this._streamNumbers = options.streamNumbers;
-		}
-
-		if (!this._packKeys) {
-			this._streamKeys = true;
-		}
-
-		if (!this._packStrings) {
-			this._streamStrings = true;
-		}
-
-		if (!this._packNumbers) {
-			this._streamNumbers = true;
-		}
-	}
-
 	// eslint-disable-next-line complexity, max-lines-per-function
-	*processChunk(chunk: string): Generator<{name: string; value?: string | null | boolean}> {
+	*processChunk(chunk: string): Generator<{ name: string; value?: string | null | boolean }> {
 		let
 			match: RegExpExecArray | null,
 			value: string | undefined = '',
@@ -187,15 +119,14 @@ export class Parser {
 					// eslint-disable-next-line default-case
 					switch (value) {
 						case '"':
-							if (this._streamStrings) {
-								yield {name: 'startString'};
-							}
+							yield {name: 'startString'};
 
 							this._expect = PARSER_STATE.STRING;
 							break;
 
 						case '{':
 							yield {name: 'startObject'};
+
 							this._stack.push(this._parent);
 							this._parent = PARSER_STATE.OBJECT;
 							this._expect = PARSER_STATE.KEY1;
@@ -203,6 +134,7 @@ export class Parser {
 
 						case '[':
 							yield {name: 'startArray'};
+
 							this._stack.push(this._parent);
 							this._parent = PARSER_STATE.ARRAY;
 							this._expect = PARSER_STATE.VALUE1;
@@ -214,19 +146,15 @@ export class Parser {
 							}
 
 							if (this._openNumber) {
-								if (this._streamNumbers) {
-									yield {name: 'endNumber'};
-								}
+								yield {name: 'endNumber'};
+								yield {name: 'numberValue', value: this._accumulator};
 
 								this._openNumber = false;
-
-								if (this._packNumbers) {
-									yield {name: 'numberValue', value: this._accumulator};
-									this._accumulator = '';
-								}
+								this._accumulator = '';
 							}
 
 							yield {name: 'endArray'};
+
 							this._parent = <PARENT_STATE>this._stack.pop();
 							this._expect = expected[this._parent];
 							break;
@@ -234,24 +162,20 @@ export class Parser {
 						case '-':
 							this._openNumber = true;
 
-							if (this._streamNumbers) {
-								yield {name: 'startNumber'};
-								yield {name: 'numberChunk', value: '-'};
-							}
+							yield {name: 'startNumber'};
+							yield {name: 'numberChunk', value: '-'};
 
-							this._packNumbers && (this._accumulator = '-');
+							this._accumulator = '-';
 							this._expect = PARSER_STATE.NUMBER_START;
 							break;
 
 						case '0':
 							this._openNumber = true;
 
-							if (this._streamNumbers) {
-								yield {name: 'startNumber'};
-								yield {name: 'numberChunk', value: '0'};
-							}
+							yield {name: 'startNumber'};
+							yield {name: 'numberChunk', value: '0'};
 
-							this._packNumbers && (this._accumulator = '0');
+							this._accumulator = '0';
 							this._expect = PARSER_STATE.NUMBER_FRACTION;
 							break;
 
@@ -266,12 +190,10 @@ export class Parser {
 						case '9':
 							this._openNumber = true;
 
-							if (this._streamNumbers) {
-								yield {name: 'startNumber'};
-								yield {name: 'numberChunk', value};
-							}
+							yield {name: 'startNumber'};
+							yield {name: 'numberChunk', value};
 
-							this._packNumbers && (this._accumulator = value);
+							this._accumulator = value;
 							this._expect = PARSER_STATE.NUMBER_DIGIT;
 							break;
 
@@ -307,49 +229,29 @@ export class Parser {
 
 					if (value === '"') {
 						if (this._expect === PARSER_STATE.KEY_VAL) {
-							if (this._streamKeys) {
-								yield {name: 'endKey'};
-							}
+							yield {name: 'endKey'};
+							yield {name: 'keyValue', value: this._accumulator};
 
-							if (this._packKeys) {
-								yield {name: 'keyValue', value: this._accumulator};
-								this._accumulator = '';
-							}
-
+							this._accumulator = '';
 							this._expect = PARSER_STATE.COLON;
 
 						} else {
-							if (this._streamStrings) {
-								yield {name: 'endString'};
-							}
+							yield {name: 'endString'};
+							yield {name: 'stringValue', value: this._accumulator};
 
-							if (this._packStrings) {
-								yield {name: 'stringValue', value: this._accumulator};
-								this._accumulator = '';
-							}
-
+							this._accumulator = '';
 							this._expect = expected[this._parent];
 						}
 
 					} else if (value.length > 1 && value.startsWith('\\')) {
 						const t = value.length === 2 ? codes[value.charAt(1)] : fromHex(value);
-
-						if (this._expect === PARSER_STATE.KEY_VAL ? this._streamKeys : this._streamStrings) {
-							yield {name: 'stringChunk', value: t};
-						}
-
-						if (this._expect === PARSER_STATE.KEY_VAL ? this._packKeys : this._packStrings) {
-							this._accumulator += t;
-						}
+						yield {name: 'stringChunk', value: t};
+						this._accumulator += t;
 
 					} else {
-						if (this._expect === PARSER_STATE.KEY_VAL ? this._streamKeys : this._streamStrings) {
-							yield {name: 'stringChunk', value};
-						}
+						yield {name: 'stringChunk', value};
 
-						if (this._expect === PARSER_STATE.KEY_VAL ? this._packKeys : this._packStrings) {
-							this._accumulator += value;
-						}
+						this._accumulator += value;
 					}
 
 					index += value.length;
@@ -371,10 +273,7 @@ export class Parser {
 					value = match[0];
 
 					if (value === '"') {
-						if (this._streamKeys) {
-							yield {name: 'startKey'};
-						}
-
+						yield {name: 'startKey'};
 						this._expect = PARSER_STATE.KEY_VAL;
 
 					} else if (value === '}') {
@@ -422,16 +321,11 @@ export class Parser {
 					}
 
 					if (this._openNumber) {
-						if (this._streamNumbers) {
-							yield {name: 'endNumber'};
-						}
-
+						yield {name: 'endNumber'};
 						this._openNumber = false;
 
-						if (this._packNumbers) {
-							yield {name: 'numberValue', value: this._accumulator};
-							this._accumulator = '';
-						}
+						yield {name: 'numberValue', value: this._accumulator};
+						this._accumulator = '';
 					}
 
 					value = match[0];
@@ -464,11 +358,9 @@ export class Parser {
 
 					value = match[0];
 
-					if (this._streamNumbers) {
-						yield {name: 'numberChunk', value};
-					}
+					yield {name: 'numberChunk', value};
 
-					this._packNumbers && (this._accumulator += value);
+					this._accumulator += value;
 					this._expect = value === '0' ? PARSER_STATE.NUMBER_FRACTION : PARSER_STATE.NUMBER_DIGIT;
 
 					index += value.length;
@@ -490,11 +382,9 @@ export class Parser {
 					value = match[0];
 
 					if (value.length > 0) {
-						if (this._streamNumbers) {
-							yield {name: 'numberChunk', value};
-						}
+						yield {name: 'numberChunk', value};
 
-						this._packNumbers && (this._accumulator += value);
+						this._accumulator += value;
 
 						index += value.length;
 
@@ -525,11 +415,9 @@ export class Parser {
 
 					value = match[0];
 
-					if (this._streamNumbers) {
-						yield {name: 'numberChunk', value};
-					}
+					yield {name: 'numberChunk', value};
 
-					this._packNumbers && (this._accumulator += value);
+					this._accumulator += value;
 					this._expect = value === '.' ? PARSER_STATE.NUMBER_FRAC_START : PARSER_STATE.NUMBER_EXP_SIGN;
 
 					index += value.length;
@@ -550,11 +438,9 @@ export class Parser {
 
 					value = match[0];
 
-					if (this._streamNumbers) {
-						yield {name: 'numberChunk', value};
-					}
+					yield {name: 'numberChunk', value};
 
-					this._packNumbers && (this._accumulator += value);
+					this._accumulator += value;
 					this._expect = PARSER_STATE.NUMBER_FRAC_DIGIT;
 
 					index += value.length;
@@ -567,11 +453,9 @@ export class Parser {
 					value = match?.[0];
 
 					if (value != null) {
-						if (this._streamNumbers) {
-							yield {name: 'numberChunk', value};
-						}
+						yield {name: 'numberChunk', value};
 
-						this._packNumbers && (this._accumulator += value);
+						this._accumulator += value;
 
 						index += value.length;
 
@@ -602,11 +486,9 @@ export class Parser {
 
 					value = match[0];
 
-					if (this._streamNumbers) {
-						yield {name: 'numberChunk', value};
-					}
+					yield {name: 'numberChunk', value};
 
-					this._packNumbers && (this._accumulator += value);
+					this._accumulator += value;
 					this._expect = PARSER_STATE.NUMBER_EXP_SIGN;
 
 					index += value.length;
@@ -628,11 +510,9 @@ export class Parser {
 
 					value = match[0];
 
-					if (this._streamNumbers) {
-						yield {name: 'numberChunk', value};
-					}
+					yield {name: 'numberChunk', value};
 
-					this._packNumbers && (this._accumulator += value);
+					this._accumulator += value;
 					this._expect = PARSER_STATE.NUMBER_EXP_START;
 
 					index += value.length;
@@ -653,11 +533,9 @@ export class Parser {
 
 					value = match[0];
 
-					if (this._streamNumbers) {
-						yield {name: 'numberChunk', value};
-					}
+					yield {name: 'numberChunk', value};
 
-					this._packNumbers && (this._accumulator += value);
+					this._accumulator += value;
 					this._expect = PARSER_STATE.NUMBER_EXP_DIGIT;
 
 					index += value.length;
@@ -670,11 +548,9 @@ export class Parser {
 					value = match?.[0];
 
 					if (value != null) {
-						if (this._streamNumbers) {
-							yield {name: 'numberChunk', value};
-						}
+						yield {name: 'numberChunk', value};
 
-						this._packNumbers && (this._accumulator += value);
+						this._accumulator += value;
 
 						index += value.length;
 
@@ -705,16 +581,12 @@ export class Parser {
 					value = match[0];
 
 					if (this._openNumber) {
-						if (this._streamNumbers) {
-							yield {name: 'endNumber'};
-						}
+						yield {name: 'endNumber'};
 
 						this._openNumber = false;
 
-						if (this._packNumbers) {
-							yield {name: 'numberValue', value: this._accumulator};
-							this._accumulator = '';
-						}
+						yield {name: 'numberValue', value: this._accumulator};
+						this._accumulator = '';
 					}
 
 					index += value.length;

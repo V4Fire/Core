@@ -6,17 +6,20 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type { JsonToken } from 'core/json/stream/interface';
-
 /**
  * [[include:core/json/stream/README.md]]
  * @packageDocumentation
  */
 
+ import type { JsonToken } from 'core/json/stream/interface';
+
 export interface AssemblerOptions {
 	reviver?(key: string, value: any): any;
 	numberAsString?: boolean;
 }
+
+type AssemblerItem = string | number | boolean | object | any[] | null;
+type AssemblerKey = string | null;
 
 export class Assembler {
 	startObject: () => void = this.baseStartObject(Object);
@@ -24,10 +27,10 @@ export class Assembler {
 	stringValue: (value: string) => void = this._saveValue;
 	endArray: () => void = this.endObject;
 
-	current: string | null | Object | any[] = null;
-	key: string | null | Object | any[] = null;
+	current: AssemblerItem = null;
+	key: AssemblerKey = null;
 
-	private stack: Array<string | null | Object | any[]> = [];
+	private stack: AssemblerItem[] = [];
 	private done: boolean = true;
 	private readonly reviver!: ((key: string, value: any) => any);
 
@@ -51,12 +54,13 @@ export class Assembler {
 		return (this.stack.length >> 1) + (this.done ? 0 : 1);
 	}
 
-	get path(): Array<string | null | Object | any[]> {
-		const path = [];
+	get path(): Array<string | number | boolean | object> {
+		const path: Array<string | number | boolean | object> = [];
 
 		for (let i = 0; i < this.stack.length; i += 2) {
 			const key = this.stack[i + 1];
-			path.push(key == null ? this.stack[i].length : key);
+			const val = key == null ? (<string>this.stack[i]).length : key;
+			path.push(val);
 		}
 
 		return path;
@@ -68,7 +72,7 @@ export class Assembler {
 				// eslint-disable-next-line no-bitwise
 				const index = (level - 1) << 1;
 				this.current = this.stack[index];
-				this.key = this.stack[index + 1];
+				this.key = <AssemblerKey>this.stack[index + 1];
 				this.stack.splice(index);
 
 			} else {
@@ -113,7 +117,7 @@ export class Assembler {
 	endObject(): void {
 		if (this.stack.length > 0) {
 			const value = this.current;
-			this.key = this.stack.pop()!;
+			this.key = <AssemblerKey>this.stack.pop();
 			this.current = this.stack.pop()!;
 			this._saveValue(value);
 
@@ -122,7 +126,7 @@ export class Assembler {
 		}
 	}
 
-	_saveValue(value: string | boolean | null | number | Object): void {
+	_saveValue(value: AssemblerItem): void {
 		if (this.done) {
 			this.current = value;
 
@@ -130,12 +134,12 @@ export class Assembler {
 			this.current.push(value);
 
 		} else {
-			this.current[this.key] = value;
+			this.current![this.key!] = value;
 			this.key = null;
 		}
 	}
 
-	_saveValueWithReviver(value?: string | boolean | null | number | Object): void {
+	_saveValueWithReviver(value?: AssemblerItem): void {
 		if (this.done) {
 			this.current = this.reviver('', value);
 
@@ -148,10 +152,10 @@ export class Assembler {
 			}
 
 		} else {
-			value = this.reviver(this.key, value);
+			value = this.reviver(this.key!, value);
 
 			if (value !== undefined) {
-				this.current[this.key] = value;
+				this.current![this.key!] = value;
 			}
 
 			this.key = null;

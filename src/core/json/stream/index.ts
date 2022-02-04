@@ -11,17 +11,16 @@
  * @packageDocumentation
  */
 
-import { Parser, ParserOptions } from 'core/json/stream/parser';
+import { Parser } from 'core/json/stream/parser';
 import { Filter, Pick, FilterBaseOptions } from 'core/json/stream/filter';
 import { Assembler, AssemblerOptions } from 'core/json/stream/assembler';
 import { StreamBaseOptions, StreamArray, StreamObject } from 'core/json/stream/streamer';
 import type { JsonToken } from 'core/json/stream/interface';
 
 export async function* from(
-	iterable: AsyncIterable<Buffer | string>,
-	options: ParserOptions
+	iterable: AsyncIterable<Buffer | string>
 ): AsyncGenerator<JsonToken> {
-	const parser = new Parser(options);
+	const parser = new Parser();
 
 	for await (const chunk of iterable) {
 		yield* parser.processChunk(chunk.toString());
