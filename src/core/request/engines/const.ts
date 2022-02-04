@@ -20,6 +20,8 @@ export const FormData: typeof globalThis.FormData = (() => {
 			return this.getBuffer().toString();
 		};
 
+		return FormData;
+
 		//#endif
 	}
 
