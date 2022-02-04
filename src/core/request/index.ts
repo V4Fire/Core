@@ -408,8 +408,10 @@ function request<D = unknown>(
 		});
 
 		requestPromise['emitter'] = emitter;
-		requestPromise['data'] = new Promise((resolve) => {
-			resolve(requestPromise.then((res: RequestResponseObject) => res.data));
+
+		Object.defineProperty(requestPromise, 'data', {
+			configurable: true,
+			get: () => requestPromise.then((res: RequestResponseObject) => res.data)
 		});
 
 		requestPromise[Symbol.asyncIterator] = () => Object.assign(responseIterator.then((iter) => iter()), {
