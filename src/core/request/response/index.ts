@@ -584,7 +584,7 @@ export default class Response<
 				}
 
 				if (body instanceof ArrayBuffer || ArrayBuffer.isView(body)) {
-					return new Blob(Object.cast(body), {type});
+					return new Blob([body], {type});
 				}
 
 				return new Blob([body.toString()], {type});
