@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.??.?? (2022-??-??)
+
+#### :boom: Breaking Change
+
+* Now [key, el] responses from an iterator will be destructured before providing to callback `Object.forEach`
+
 ## v3.36.0 (2021-03-16)
 
 #### :boom: Breaking Change

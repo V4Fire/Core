@@ -16,6 +16,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 #### :boom: Breaking Change
 
 * Now to clone and freeze server responses is used Proxy API if it supported `core/request/reponse`
+* Now [key, el] responses from an iterator will be destructured before providing to callback `Object.forEach`
 
 #### :rocket: New Feature
 
