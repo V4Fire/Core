@@ -14,10 +14,10 @@ import { set, get } from 'core/env';
 
 import Provider, { provider } from 'core/data';
 import baseRequest, { globalOpts, RequestError } from 'core/request';
-import Headers from 'core/request/headers';
 import { defaultRequestOpts } from 'core/request/const';
 
 import Response from 'core/request/response';
+import Headers from 'core/request/headers';
 
 import nodeEngine from 'core/request/engines/node';
 import fetchEngine from 'core/request/engines/fetch';
@@ -38,10 +38,10 @@ const
 fdescribe('core/request', () => {
 	const engines = new Map([
 		['node', nodeEngine],
-		// ['fetch', fetchEngine],
-		// ['xhr', xhrEngine],
-		// ['provider', createProviderEngine('Provider')],
-		// ['chain provider', createProviderEngine(TestRequestChainProvider)]
+		['fetch', fetchEngine],
+		['xhr', xhrEngine],
+		['provider', createProviderEngine('Provider')],
+		['chain provider', createProviderEngine(TestRequestChainProvider)]
 	]);
 
 	let
@@ -480,7 +480,7 @@ fdescribe('core/request', () => {
 				await retryDelayTest(() => new Promise((res) => setTimeout(res, 200)), 200);
 			});
 
-			it('retrying with the speedup response', async () => {
+			it('retrying with a speed up response', async () => {
 				const req = await request('http://localhost:4000/retry/speedup', {
 					timeout: 300,
 					retry: 2
@@ -492,7 +492,7 @@ fdescribe('core/request', () => {
 				expect(body.tryNumber).toBe(2);
 			});
 
-			it('failing after given attempts', async () => {
+			it('failing after the given attempts', async () => {
 				let
 					err;
 
@@ -516,7 +516,7 @@ fdescribe('core/request', () => {
 				expect(body.tryNumber).toEqual(3);
 			});
 
-			it('responses with object that contains "url" property', async () => {
+			it('responses an object that contains the "url" property', async () => {
 				const
 					{response: res1} = await request('http://localhost:4000/json/1'),
 					{response: res2} = await request('http://localhost:4000/redirect');
@@ -525,167 +525,121 @@ fdescribe('core/request', () => {
 				expect(res2.url).toBe('http://localhost:4000/json/1');
 			});
 
-			// it('responses with object that contains "headers" property as dictionary that is instance of Headers class', async () => {
-			// 	const
-			// 		{response} = await request('http://localhost:4000/header'),
-			// 		{headers} = response;
-			//
-			// 	expect(headers).toBeInstanceOf(Headers);
-			// 	expect(headers['some-header-name']).toBe('some-header-value');
-			// 	expect(headers.get('some-header-name')).toBe('some-header-value');
-			// });
+			it('response `headers` is an instance of the Headers class', async () => {
+				const
+					{response} = await request('http://localhost:4000/header'),
+					{headers} = response;
 
-			// it('emits "response" event', (done) => {
-			// 	const req = request('http://localhost:4000/json');
-			//
-			// 	req.on('response', (res) => {
-			// 		expect(res).toBeInstanceOf(Response);
-			// 		done();
-			// 	});
-			// });
+				expect(headers).toBeInstanceOf(Headers);
+				expect(headers['some-header-name']).toBe('some-header-value');
+				expect(headers.get('Some-Header-Name')).toBe('some-header-value');
+			});
 
-			// it('emits "error" event', (done) => {
-			// 	const req = request('invalid-url');
-			//
-			// 	req.on('error', (err) => {
-			// 		expect(err).toBeInstanceOf(RequestError);
-			// 		done();
-			// 	});
-			// });
-			//
-			// it('emits "abort" event', (done) => {
-			// 	const
-			// 		req = request('http://localhost:4000/json'),
-			// 		abortListener = jasmine.createSpy();
-			//
-			// 	req.on('abort', abortListener);
-			//
-			// 	req.catch(async () => {
-			// 		await new Promise(setImmediate);
-			// 		expect(abortListener).toHaveBeenCalledWith('reason');
-			// 		done();
-			// 	});
-			//
-			// 	setTimeout(async () => {
-			// 		await new Promise(setImmediate);
-			// 		req.abort('reason');
-			// 	});
-			// });
-			//
-			// it('emits "progress" event', async () => {
-			// 	const
-			// 		req = request('http://localhost:4000/json/1'),
-			// 		chunks = [];
-			//
-			// 	req.on('progress', (chunk) => {
-			// 		chunks.push(chunk);
-			// 	});
-			//
-			// 	await req;
-			//
-			// 	expect(chunks.length).toBeGreaterThan(0);
-			// 	expect(chunks.every((chunk) => 'data' in chunk && 'loaded' in chunk && 'total' in chunk)).toBeTrue();
-			// });
-			//
-			// it('emits "load" event', (done) => {
-			// 	const req = request('http://localhost:4000/json/1', {
-			// 		responseType: 'json'
-			// 	});
-			//
-			// 	req.on('load', (body) => {
-			// 		expect(body).toEqual({id: 1, value: 'things'});
-			// 		done();
-			// 	});
-			// });
-			//
-			// if (name === 'xhr') {
-			// 	xhrTests();
-			//
-			// } else {
-			// 	notXhrTests();
-			// }
-			//
-			// function xhrTests() {
-			// 	it('responses with object that contains "redirected" property', async () => {
-			// 		const
-			// 			{response: res1} = await request('http://localhost:4000/json/1'),
-			// 			{response: res2} = await request('http://localhost:4000/redirect');
-			//
-			// 		expect(res1.redirected).toBeNull();
-			// 		expect(res2.redirected).toBeNull();
-			// 	});
-			//
-			// 	it('returns async iterable promise', async () => {
-			// 		const
-			// 			chunkLengths = [],
-			// 			req = request('http://localhost:4000/favicon.ico');
-			//
-			// 		let
-			// 			loadedBefore = 0,
-			// 			totalLength;
-			//
-			// 		for await (const {loaded, total} of req) {
-			// 			if (totalLength == null) {
-			// 				totalLength = total;
-			// 			}
-			//
-			// 			chunkLengths.push(loaded - loadedBefore);
-			// 			loadedBefore = loaded;
-			// 		}
-			//
-			// 		expect(totalLength).toBe(1150);
-			// 		expect(loadedBefore).toBe(1150);
-			// 		expect(chunkLengths.every((len) => len > 0)).toBeTrue();
-			// 	});
-			//
-			// 	it('resolving with async iterable stream', async () => {
-			// 		const
-			// 			chunkLengths = [],
-			// 			req = await request('http://localhost:4000/favicon.ico');
-			//
-			// 		let
-			// 			loadedBefore = 0,
-			// 			totalLength;
-			//
-			// 		for await (const {loaded, total} of req) {
-			// 			if (totalLength == null) {
-			// 				totalLength = total;
-			// 			}
-			//
-			// 			chunkLengths.push(loaded - loadedBefore);
-			// 			loadedBefore = loaded;
-			// 		}
-			//
-			// 		expect(totalLength).toBe(1150);
-			// 		expect(loadedBefore).toBe(1150);
-			// 		expect(chunkLengths.every((len) => len > 0)).toBeTrue();
-			// 	});
-			// }
+			it('checking the "redirected" property', async () => {
+				const
+					{response: res1} = await request('http://localhost:4000/json/1'),
+					{response: res2} = await request('http://localhost:4000/redirect');
 
-			function notXhrTests() {
-				it('responses with object that contains "redirected" property', async () => {
-					const
-						{response: res1} = await request('http://localhost:4000/json/1'),
-						{response: res2} = await request('http://localhost:4000/redirect');
+				expect(res1.redirected).toBeFalse();
+				expect(res2.redirected).toBeTrue();
+			});
 
-					expect(res1.redirected).toBeFalse();
-					expect(res2.redirected).toBeTrue();
+			it('request promise is an async iterable object', async () => {
+				const
+					chunkLengths = [],
+					req = request('http://localhost:4000/favicon.ico');
+
+				let
+					loadedBefore = 0,
+					totalLength;
+
+				for await (const {loaded, total} of req) {
+					if (totalLength == null) {
+						totalLength = total;
+					}
+
+					chunkLengths.push(loaded - loadedBefore);
+					loadedBefore = loaded;
+				}
+
+				expect(totalLength).toBe(1150);
+				expect(loadedBefore).toBe(1150);
+				expect(chunkLengths.every((len) => len > 0)).toBeTrue();
+			});
+
+			it('request response is an async iterable object', async () => {
+				const
+					chunkLengths = [],
+					req = await request('http://localhost:4000/favicon.ico');
+
+				let
+					loadedBefore = 0,
+					totalLength;
+
+				for await (const {loaded, total} of req) {
+					if (totalLength == null) {
+						totalLength = total;
+					}
+
+					chunkLengths.push(loaded - loadedBefore);
+					loadedBefore = loaded;
+				}
+
+				expect(totalLength).toBe(1150);
+				expect(loadedBefore).toBe(1150);
+				expect(chunkLengths.every((len) => len > 0)).toBeTrue();
+			});
+
+			if (name === 'xhr') {
+				describe('listening XHR events', () => {
+					it('`progress`', async () => {
+						const
+							req = request('http://localhost:4000/json/1'),
+							events = [];
+
+						req.emitter.on('progress', (e) => {
+							events.push(e.type);
+						});
+
+						await req;
+
+						expect(events.length).toBeGreaterThan(0);
+						expect(events[0]).toBe('progress');
+					});
+
+					it('`readystatechange`', async () => {
+						const
+							req = request('http://localhost:4000/json/1'),
+							events = [];
+
+						req.emitter.on('readystatechange', (e) => {
+							events.push(e.type);
+						});
+
+						await req;
+
+						expect(events.length).toBeGreaterThan(0);
+						expect(events[0]).toBe('readystatechange');
+					});
 				});
 
-				it('returns async iterable promise', async () => {
-					const
-						req = request('http://localhost:4000/favicon.ico'),
-						result = await convertStreamToBase64(req);
+			} else {
+				it('getting a response from a stream', async () => {
+					{
+						const
+							req = request('http://localhost:4000/favicon.ico'),
+							result = await convertStreamToBase64(req);
 
-					expect(result).toBe(faviconInBase64);
-				});
+						expect(result).toBe(faviconInBase64);
+					}
 
-				it('resolving with async iterable stream', async () => {
-					const
-						req = await request('http://localhost:4000/favicon.ico'),
-						result = await convertStreamToBase64(req);
+					{
+						const
+							req = await request('http://localhost:4000/favicon.ico'),
+							result = await convertStreamToBase64(req);
 
-					expect(result).toBe(faviconInBase64);
+						expect(result).toBe(faviconInBase64);
+					}
 				});
 			}
 
@@ -841,9 +795,8 @@ function createServer() {
 	});
 
 	serverApp.get('/header', (req, res) => {
-		res
-			.setHeader('Some-Header-Name', 'some-header-value')
-			.sendStatus(200);
+		res.setHeader('Some-Header-Name', 'some-header-value');
+		res.sendStatus(200);
 	});
 
 	serverApp.get('/redirect', (req, res) => {
