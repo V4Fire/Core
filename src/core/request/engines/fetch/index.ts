@@ -85,10 +85,6 @@ const request: RequestEngine = (params) => {
 		req.then((res) => {
 			clearTimeout(timer);
 
-			const
-				contentLength = res.headers.get('Content-Length'),
-				total = contentLength != null ? Number(contentLength) : undefined;
-
 			const getResponse = () => {
 				switch (p.responseType) {
 					case 'json':
@@ -105,6 +101,10 @@ const request: RequestEngine = (params) => {
 			};
 
 			getResponse[Symbol.asyncIterator] = () => {
+				const
+					contentLength = res.headers.get('Content-Length'),
+					total = contentLength != null ? Number(contentLength) : undefined;
+
 				let
 					loaded = 0;
 

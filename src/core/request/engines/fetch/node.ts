@@ -11,22 +11,20 @@ import nodeFetch from 'node-fetch';
 const node: typeof fetch = async (input, init?) => {
 	const
 		response = await nodeFetch(input, init),
-		stream = response.body;
+		{body} = response;
 
 	Object.defineProperty(response, 'body', {
 		get() {
-			return {
-				getReader(): ReadableStreamDefaultReader<Uint8Array> {
-					const
-						iter = stream[Symbol.asyncIterator]();
+			body.getReader = () => {
+				const
+					iter = body[Symbol.asyncIterator]();
 
-					return Object.cast({
-						read(): Promise<ReadableStreamDefaultReadResult<Uint8Array>> {
-							return iter.next();
-						}
-					});
-				}
+				return Object.cast({
+					read: () => iter.next()
+				});
 			};
+
+			return body;
 		}
 	});
 
