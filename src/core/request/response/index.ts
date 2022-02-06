@@ -221,7 +221,14 @@ export default class Response<
 			Array.concat([], <number>ok).includes(this.status);
 
 		this.headers = Object.freeze(new Headers(p.headers));
-		this.body = Object.isFunction(body) ? body.once() : body;
+
+		if (Object.isFunction(body)) {
+			this.body = body.once();
+			this.body[Symbol.asyncIterator] = body[Symbol.asyncIterator].bind(body);
+
+		} else {
+			this.body = body;
+		}
 
 		const contentType = this.headers['content-type'];
 		this.sourceResponseType = contentType != null ? getDataType(contentType) : p.responseType;

@@ -428,11 +428,20 @@ function request<D = unknown>(
 			get: () => requestPromise.then((res: RequestResponseObject) => res.data)
 		});
 
-		requestPromise[Symbol.asyncIterator] = () => Object.assign(responseIterator.then((iter) => iter()), {
-			[Symbol.asyncIterator]() {
-				return this;
-			}
-		});
+		requestPromise[Symbol.asyncIterator] = () => {
+			const
+				iter = responseIterator.then((iter) => iter());
+
+			return {
+				[Symbol.asyncIterator]() {
+					return this;
+				},
+
+				next() {
+					return iter.then((iter) => iter.next());
+				}
+			};
+		};
 
 		return requestPromise;
 	};
