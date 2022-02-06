@@ -37,13 +37,13 @@ describe('core/data', () => {
 		const
 			dp = new TestProvider();
 
-		expect((await dp.get()).data)
+		expect(await dp.get().data)
 			.toEqual({id: 1, value: 'things'});
 
 		const spy = jasmine.createSpy();
 		dp.emitter.on('add', (getData) => spy('add', getData()));
 
-		expect((await dp.add({id: 12345, value: 'abc-def-ghi'})).data)
+		expect(await dp.add({id: 12345, value: 'abc-def-ghi'}).data)
 			.toEqual({message: 'Success'});
 	});
 
@@ -58,9 +58,9 @@ describe('core/data', () => {
 			mdp = dp.name('bla').url('json');
 
 		const spy = jasmine.createSpy();
-		mdp.emitter.on('bla', (getData) => spy('bla', getData()));
+		mdp.emitter.on('bla', async (getData) => spy('bla', await getData()));
 
-		expect((await mdp.post({id: 12345, value: 'abc-def-ghi'})).data)
+		expect(await mdp.post({id: 12345, value: 'abc-def-ghi'}).data)
 			.toEqual({message: 'Success'});
 
 		expect(spy).toHaveBeenCalledWith('bla', {message: 'Success'});
@@ -99,13 +99,13 @@ describe('core/data', () => {
 			// eslint-disable-next-line new-cap
 			dp = new providers['foo.TestNamespacedProvider']();
 
-		expect((await dp.get()).data)
+		expect(await dp.get().data)
 			.toEqual({id: '1', value: 'things'});
 
 		const spy = jasmine.createSpy();
-		dp.emitter.on('upd', (getData) => spy('upd', getData()));
+		dp.emitter.on('upd', async (getData) => spy('upd', await getData()));
 
-		expect((await dp.upd({id: 12345, value: ['abc', 'def', 'ghi']})).data)
+		expect(await dp.upd({id: 12345, value: ['abc', 'def', 'ghi']}).data)
 			.toEqual({message: 'Success'});
 
 		expect(spy).toHaveBeenCalledWith('upd', {message: 'Success'});
