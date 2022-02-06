@@ -86,6 +86,8 @@ const request: RequestEngine = (params) => {
 			stream.on(event, (e) => p.emitter.emit(event, e));
 		});
 
+		p.emitter.emit('drainListeners');
+
 		stream.on('error', (error) => {
 			const
 				type = error.name === 'TimeoutError' ? RequestError.Timeout : RequestError.Engine,

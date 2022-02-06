@@ -6,6 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 import SyncPromise from 'core/promise/sync';
 
 import Response, { ResponseTypeValue } from 'core/request/response';
@@ -133,7 +134,7 @@ export default class RequestContext<D = unknown> extends Super<D> {
 				customData = SyncPromise.resolve(val);
 			},
 
-			emitter: response.emitter,
+			emitter: new EventEmitter({maxListeners: 100}),
 			[Symbol.asyncIterator]: response[Symbol.asyncIterator].bind(response),
 
 			dropCache: this.dropCache.bind(this)

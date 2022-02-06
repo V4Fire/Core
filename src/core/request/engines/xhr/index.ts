@@ -113,6 +113,7 @@ const request: RequestEngine = (params) => {
 			}
 		});
 
+		p.emitter.emit('drainListeners');
 		xhr.addEventListener('progress', (e: ProgressEvent) => {
 			streamBuffer.add({
 				total: e.total,

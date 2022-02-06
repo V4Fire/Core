@@ -146,6 +146,8 @@ export default function createProviderEngine(
 				req.emitter.on(event, (e) => params.emitter.emit(event, e));
 			});
 
+			params.emitter.emit('drainListeners');
+
 			const
 				providerResObj = await req,
 				providerResponse = providerResObj.response;

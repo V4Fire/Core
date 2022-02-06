@@ -157,6 +157,20 @@ function request<D = unknown>(
 		});
 
 		const
+			eventBuffer = new Set<string>();
+
+		emitter.on('newListener', (event) => {
+			if (event !== 'newListener' && event !== 'drainListeners') {
+				eventBuffer.add(event);
+			}
+		});
+
+		emitter.on('drainListeners', () => {
+			eventBuffer.forEach((event) => emitter.emit('newListener', event));
+			eventBuffer.clear();
+		});
+
+		const
 			ctx = RequestContext.decorateContext(baseCtx, path, resolver, ...args),
 			responseIterator = createControllablePromise<() => AsyncIterableIterator<RequestResponseChunk>>(),
 			requestParams = ctx.params;
@@ -399,7 +413,7 @@ function request<D = unknown>(
 						customData = SyncPromise.resolve(val);
 					},
 
-					emitter: response.emitter,
+					emitter,
 					[Symbol.asyncIterator]: response[Symbol.asyncIterator].bind(response),
 
 					dropCache: ctx.dropCache.bind(ctx)
