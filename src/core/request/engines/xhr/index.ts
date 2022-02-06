@@ -120,7 +120,7 @@ const request: RequestEngine = (params) => {
 			});
 		});
 
-		const getResponse = () => new Promise((resolve) => {
+		const getResponse = new Promise((resolve) => {
 			xhr.addEventListener('load', () => {
 				streamBuffer.close();
 				resolve(xhr.response);
