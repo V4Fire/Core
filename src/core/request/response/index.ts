@@ -335,7 +335,7 @@ export default class Response<
 					break;
 
 				case 'object':
-					data = AbortablePromise.resolve(this.body, this.parent);
+					data = AbortablePromise.resolveAndCall(this.body, this.parent);
 					break;
 
 				default:
