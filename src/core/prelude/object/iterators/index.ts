@@ -98,7 +98,12 @@ extend(Object, 'forEach', (
 		passDescriptor == null
 	) {
 		for (const el of obj) {
-			cb(el, null, obj);
+			if (Object.isArray(el) && el.length === 2) {
+				cb(el[1], el[0], obj);
+
+			} else {
+				cb(el, null, obj);
+			}
 		}
 
 		return;
