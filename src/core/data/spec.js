@@ -137,7 +137,7 @@ describe('core/data', () => {
 		const
 			dp = new TestProviderWithExtra();
 
-		expect((await dp.get()).data).toEqual({
+		expect(await dp.get().data).toEqual({
 			bla: Object({id: 1, value: 'things'}),
 			bar: Object({id: 1, value: 'things'}),
 			foo: Object({id: 1, value: 'things'})
