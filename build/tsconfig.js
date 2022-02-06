@@ -74,7 +74,7 @@ module.exports = () => {
 		));
 
 		const createNonSrcDepsList = (endFolder) => resolve.rootDependencies.map((p) =>
-			path.join(...p.split(path.sep).slice(0, -1), `/${endFolder}/*`));
+			path.join('/', ...p.split(path.sep).slice(0, -1), `/${endFolder}/*`));
 
 		const paths = {
 			'tests/*': [
