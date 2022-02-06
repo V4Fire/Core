@@ -143,29 +143,29 @@ export default function createProviderEngine(
 				}
 
 				registeredEvents[event] = true;
-				req.on(event, (e) => params.emitter.emit(event, e));
+				req.emitter.on(event, (e) => params.emitter.emit(event, e));
 			});
 
 			const
-				providerRes = await req,
-				res = providerRes.response;
+				providerResObj = await req,
+				providerResponse = providerResObj.response;
 
-			const getResponse = () => providerRes.data;
+			const getResponse = () => providerResObj.data;
 			getResponse[Symbol.asyncIterator] = req[Symbol.asyncIterator].bind(req);
 
 			const
-				headers = Object.reject(res.headers, 'content-type');
+				headers = Object.reject(providerResponse.headers, 'content-type');
 
 			return resolve(new Response(getResponse, {
-				url: res.url,
-				redirected: res.redirected,
+				url: providerResponse.url,
+				redirected: providerResponse.redirected,
 
 				parent: params.parent,
-				important: res.important,
+				important: providerResponse.important,
 
-				okStatuses: res.okStatuses,
-				status: res.status,
-				statusText: res.statusText,
+				okStatuses: providerResponse.okStatuses,
+				status: providerResponse.status,
+				statusText: providerResponse.statusText,
 
 				headers,
 				responseType: 'object',
