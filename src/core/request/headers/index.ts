@@ -71,11 +71,8 @@ export default class V4Headers {
 			let
 				iter;
 
-			if (
-				headers instanceof V4Headers ||
-				typeof Headers === 'function' && headers instanceof Headers
-			) {
-				iter = headers.entries();
+			if (headers instanceof V4Headers || Object.isFunction(headers.entries)) {
+				iter = Object.cast<Headers>(headers).entries();
 
 			} else {
 				iter = Object.entries(headers);
