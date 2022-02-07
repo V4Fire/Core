@@ -48,6 +48,28 @@ describe('Json parser', () => {
 		});
 	}
 
+	it('should successfully parse json with escaped fields', () => {
+		const parser = new Parser();
+
+		const input = {
+			stringWithTabsAndNewlines: "Did it work?\nNo...\t\tI don't think so...",
+			anArray: [1, 2, true, 'tabs?\t\t\t\u0001\u0002\u0003', false]
+		};
+
+		const iter = createIterator(input, 1);
+		const result = [];
+
+		for (const chunk of iter) {
+			for (const el of parser.processChunk(chunk)) {
+				result.push(el);
+			}
+		}
+
+		console.log(JSON.stringify(result));
+
+		expect(result.length).toBe(108);
+	});
+
 	it('should throw error if json invalid', () => {
 		const parser = new Parser();
 
