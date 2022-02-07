@@ -138,3 +138,76 @@ interface RequestResponseObject<D = unknown> {
   dropCache(): void;
 }
 ```
+
+```js
+import request from 'core/request';
+
+request('https://foo.com/users').then(async ({data, response}) => {
+  console.log(await data, response.status);
+});
+```
+
+Also, you can get `data`, `emitter` or `Symbol.asyncIterator` from a request promise.
+
+```js
+import request from 'core/request';
+import xhr from 'core/request/engines/xhr';
+
+request('https://foo.com/users').data.then((data) => {
+  console.log(data);
+});
+
+request('https://foo.com/users', {engine: xhr}).emitter.on('readystatechange', (e) => {
+  console.log(e);
+});
+```
+
+#### Parsing response data in a stream form
+
+If the used request engine supports streaming, you can use it via an async iterator.
+Notice, you won't switch to another form when you read response as a whole data or in a stream form.
+
+```js
+import request from 'core/request';
+
+(async () => {
+  for await (const {loaded, total, data} of request('https://foo.com/users')) {
+    console.log(loaded, total, data);
+  }
+});
+
+request('https://foo.com/users').then(async (response) => {
+  for await (const {loaded, total, data} of response) {
+    console.log(loaded, total, data);
+  }
+});
+
+request('https://foo.com/users').then(async ({response}) => {
+  for await (const {loaded, total, data} of response) {
+    console.log(loaded, total, data);
+  }
+});
+```
+
+Mind, the XHR engine partially supports streaming based on its `progress` event.
+
+#### Listening to internal engine events
+
+If the used request engine emits some events, you can listen there via the `emitter` property.
+Mind, not every engine dispatch events.
+
+```js
+import request from 'core/request';
+import xhr from 'core/request/engines/xhr';
+
+const
+  req = request('https://foo.com/users', {engine: xhr});
+
+req.emitter.on('progress', (e) => {
+  console.log(e);
+});
+
+req.emitter.on('upload.progress', (e) => {
+  console.log(e);
+});
+```
