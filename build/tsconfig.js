@@ -73,24 +73,40 @@ module.exports = () => {
 			(str, path) => (deps[`${el}/*`] = [`${el}:${path}/*`])[0]
 		));
 
-		const createNonSrcDepsList = (endFolder) => resolve.rootDependencies.map((p) =>
-			path.join('/', ...p.split(path.sep).slice(0, -1), `/${endFolder}/*`));
+		const
+			joinPathsWithoutSrc = (p, endFolder) => path.join('/', ...p.split(path.sep).slice(0, -1), `/${endFolder}/*`),
+			createNonSrcDepsPaths = (endFolder) => resolve.rootDependencies.map((p) => joinPathsWithoutSrc(p, endFolder));
+
+		const createNonSrcParentPaths = (folders) => {
+			const
+				result = {};
+
+			folders.forEach((folder) => {
+				pzlr.dependencies.forEach((dep, i) => {
+					result[path.join(dep, folder, '/*')] = [joinPathsWithoutSrc(resolve.rootDependencies[i], folder)];
+				});
+			});
+
+			return result;
+		};
 
 		const paths = {
 			'tests/*': [
 				`./${src.rel('tests')}/*`,
-				...createNonSrcDepsList('tests')
+				...createNonSrcDepsPaths('tests')
 			],
 
 			'build/*': [
 				`./${src.rel('build')}/*`,
-				...createNonSrcDepsList('build')
+				...createNonSrcDepsPaths('build')
 			],
 
 			'*': [
 				`./${src.rel('src')}/*`,
 				...depsList
 			],
+
+			...createNonSrcParentPaths(['tests', 'build']),
 
 			...deps
 		};
