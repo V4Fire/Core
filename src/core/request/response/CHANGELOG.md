@@ -14,6 +14,16 @@ Changelog
 #### :boom: Breaking Change
 
 * Now to clone and freeze server responses is used Proxy API if it supported
+* Now the `headers` property is an instance of `core/request/headers`
+* The `getHeader` method is marked as deprecated
+* All decode methods always return non-nullable values
+
+#### :rocket: New Feature
+
+* Added missing methods and properties to match the native browsers Response class
+* Added a new `emitter` property to listen to response events
+* Added a new `streamUsed` property to determine when the response was read in a stream form
+* Now a response instance implements `Symbol.asyncIterator`
 
 ## v3.72.0 (2021-12-10)
 

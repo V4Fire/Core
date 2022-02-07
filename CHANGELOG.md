@@ -15,14 +15,41 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :boom: Breaking Change
 
-* Now to clone and freeze server responses is used Proxy API if it supported `core/request/reponse`
 * Now [key, el] responses from an iterator will be destructured before providing to callback `Object.forEach`
+
+* `core/request`:
+  * Now `RequestResponseObject.data` contains a promise with data
+  * Now the `headers` property is an instance of `core/headers`
+
+* `core/request/reponse`:
+  * Now the `headers` property is an instance of `core/request/headers`
+  * Now to clone and freeze server responses is used Proxy API if it supported
+  * The `getHeader` method is marked as deprecated
+  * All decode methods always return non-nullable values
 
 #### :rocket: New Feature
 
 * Added a common function to clone `core/object/proxy-clone`
 * Added a common function to create a read-only view `core/object/proxy-readonly`
 * Added a new bunch of constants `support` to check a runtime for features support `core/const`
+* Added a new module `core/request/headers`
+* Added a new module `core/request/modules/stream-buffer`
+
+* `core/request`:
+  * Now a promise returned from a request function implements `Symbol.asyncIterator`
+  * Now a promise returned from a request function has a new `data` property with the response data
+  * Now a promise returned from a request function has a new `emitter` property with an event emitter to listen to raw engine events
+  * Request headers can be provided as an instance of `core/headers` or native browser Headers
+
+* `core/request/response`:
+  * Added missing methods and properties to match the native browsers Response class
+  * Added a new `emitter` property to listen to response events
+  * Added a new `streamUsed` property to determine when the response was read in a stream form
+  * Now a response instance implements `Symbol.asyncIterator`
+
+#### :memo: Documentation
+
+* Improved documentation `core/request`
 
 ## v3.74.7 (2022-01-31)
 

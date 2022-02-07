@@ -9,6 +9,24 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.??.?? (2022-??-??)
+
+#### :boom: Breaking Change
+
+* Now `RequestResponseObject.data` contains a promise with data
+* Now the `headers` property is an instance of `core/headers`
+
+#### :rocket: New Feature
+
+* Now a promise returned from a request function implements `Symbol.asyncIterator`
+* Now a promise returned from a request function has a new `data` property with the response data
+* Now a promise returned from a request function has a new `emitter` property with an event emitter to listen to raw engine events
+* Request headers can be provided as an instance of `core/headers` or native browser Headers
+
+#### :memo: Documentation
+
+* Improved documentation
+
 ## v3.72.0 (2021-12-10)
 
 #### :rocket: New Feature
