@@ -41,7 +41,7 @@ const request: RequestEngine = (params) => {
 
 	if (contentType != null) {
 		Object.assign(headers, {
-			'Content-Type': contentType
+			'content-type': contentType
 		});
 	}
 
