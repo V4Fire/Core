@@ -9,6 +9,7 @@
 import type AbortablePromise from 'core/promise/abortable';
 import type { AbstractCache } from 'core/cache';
 
+import symbolGenerator from 'core/symbol';
 import addTTL from 'core/cache/decorators/ttl';
 import addPersistent from 'core/cache/decorators/persistent';
 
@@ -37,6 +38,9 @@ import type {
 
 } from 'core/request/interface';
 
+export const
+	$$ = symbolGenerator();
+
 export default class RequestContext<D = unknown> {
 	/**
 	 * Promise of instance initializing
@@ -51,7 +55,16 @@ export default class RequestContext<D = unknown> {
 	/**
 	 * String key to cache the request
 	 */
-	cacheKey?: string;
+	get cacheKey(): CanUndef<string> {
+		return this[$$.cacheKey];
+	}
+
+	/**
+	 * Sets a new string key to cache the request
+	 */
+	protected set cacheKey(value: CanUndef<string>) {
+		this[$$.cacheKey] = value;
+	}
 
 	/**
 	 * Storage to cache the resolved request
@@ -76,12 +89,30 @@ export default class RequestContext<D = unknown> {
 	/**
 	 * Sequence of request data encoders
 	 */
-	encoders: WrappedEncoders;
+	get encoders(): WrappedEncoders {
+		return this[$$.encoders];
+	}
+
+	/**
+	 * Sets a new sequence of request data encoders
+	 */
+	protected set encoders(value: WrappedEncoders) {
+		this[$$.encoders] = value;
+	}
 
 	/**
 	 * Sequence of response data decoders
 	 */
-	decoders: WrappedDecoders;
+	get decoders(): WrappedDecoders {
+		return this[$$.decoders];
+	}
+
+	/**
+	 * Sets a new sequence of response data decoders
+	 */
+	protected set decoders(value: WrappedDecoders) {
+		this[$$.decoders] = value;
+	}
 
 	/**
 	 * Link to a parent operation promise
