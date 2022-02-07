@@ -87,10 +87,10 @@ function request<D = unknown>(opts: CreateRequestOptions<D>): typeof request;
  * This overload helps to create a factory of requests.
  *
  * @param path - request path URL
- * @param resolver - function to resolve a request: it takes a request URL, request environment and arguments
- *   from invoking of the outer function and can modify some request parameters.
+ * @param resolver - function to resolve a request: it takes a request URL, request environment, and arguments
+ *   from invoking the outer function and can modify some request parameters.
  *   Also, if the function returns a new string, the string will be appended to the request URL, or
- *   if the function returns a string that wrapped with an array, the string fully override the original URL.
+ *   if the function returns a string wrapped with an array, the string fully overrides the original URL.
  *
  * @param opts - request options
  *
