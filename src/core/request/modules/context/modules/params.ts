@@ -43,7 +43,7 @@ export const
 
 export default class RequestContext<D = unknown> {
 	/**
-	 * Promise of instance initializing
+	 * Promise that resolves when the instance is already initialized
 	 */
 	readonly isReady: Promise<void>;
 
@@ -72,7 +72,7 @@ export default class RequestContext<D = unknown> {
 	readonly cache!: AbstractCache<Nullable<D>>;
 
 	/**
-	 * Storage to cache the request while it pending a response
+	 * Storage to cache the request while it is pending a response
 	 */
 	readonly pendingCache: AbstractCache<RequestResponse<D>> = Object.cast(pendingCache);
 
@@ -85,6 +85,22 @@ export default class RequestContext<D = unknown> {
 	 * Request parameters
 	 */
 	readonly params!: NormalizedCreateRequestOptions<D>;
+
+	/**
+	 * Alias for `params.query`
+	 * @alias
+	 */
+	get query(): RequestQuery {
+		return this.params.query;
+	}
+
+	/**
+	 * Alias for `params.headers`
+	 * @alias
+	 */
+	get headers(): Headers {
+		return this.params.headers;
+	}
 
 	/**
 	 * Sequence of request data encoders
@@ -118,22 +134,6 @@ export default class RequestContext<D = unknown> {
 	 * Link to a parent operation promise
 	 */
 	parent!: AbortablePromise;
-
-	/**
-	 * Alias for `params.query`
-	 * @alias
-	 */
-	get query(): RequestQuery {
-		return this.params.query;
-	}
-
-	/**
-	 * Alias for `params.headers`
-	 * @alias
-	 */
-	get headers(): Headers {
-		return this.params.headers;
-	}
 
 	/**
 	 * Cache TTL identifier

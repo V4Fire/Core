@@ -107,7 +107,9 @@ export default class RequestContext<D = unknown> extends Super<D> {
 	}
 
 	/**
-	 * Middleware to wrap the specified response value with `RequestResponseObject`
+	 * A middleware to wrap the specified response value with `RequestResponseObject`.
+	 * Use it when wrapping some raw data as the `core/request` response.
+	 *
 	 * @param value
 	 */
 	wrapAsResponse(value: Response<D> | ResponseTypeValue): RequestResponseObject<D> {
