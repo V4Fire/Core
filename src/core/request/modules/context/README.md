@@ -3,6 +3,20 @@
 This module provides a class to wrap a raw request object with adding some useful methods and middlewares.
 You can use an instance within your decoders/encoders/middlewares.
 
+```js
+import request from 'core/request';
+
+request('//users', {
+  middlewares: [
+    ({ctx}) => {
+      if (ctx.query.dropCache) {
+        ctx.dropCache();
+      }
+    }
+  ]
+});
+```
+
 ## Properties
 
 ### canCache
