@@ -12,27 +12,26 @@
  */
 
 import type { JsonToken } from 'core/json/stream/interface';
-import { StreamBase } from 'core/json/stream/streamer/streamBase';
-import type { Assembler } from 'core/json/stream/assembler';
+import { StreamBase } from 'core/json/stream/streamers/modules/base';
 
 export class StreamArray extends StreamBase {
-	_counter: number = 0;
-	_level: number = 1;
+	counter: number = 0;
+	level: number = 1;
 
-	*_wait(chunk: JsonToken): Generator<JsonToken> {
+	*wait(chunk: JsonToken): Generator<JsonToken> {
 		// First chunk should open an array
 		if (chunk.name !== 'startArray') {
 			throw new Error('Top-level object should be an array.');
 		}
 
-		this.processChunk = this._filter;
+		this.processChunk = this.filter;
 
 		yield* this.processChunk(chunk);
 	}
 
-	*_push(): Generator<any> {
-		if ((<string>(<Assembler>this._assembler).current!).length > 0) {
-			yield {key: this._counter++, value: (<any[]>(<Assembler>this._assembler).current!).pop()};
+	*push(): Generator<any> {
+		if (this.assembler.current.length > 0) {
+			yield {key: this.counter++, value: this.assembler.current.pop()};
 		}
 	}
 }

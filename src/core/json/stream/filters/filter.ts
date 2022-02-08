@@ -12,29 +12,28 @@
  */
 
 import type { JsonToken } from 'core/json/stream/interface';
-import { FilterBase } from 'core/json/stream/filter/filterBase';
+import { FilterBase } from 'core/json/stream/filters/modules/base';
 
 /* eslint-disable default-case */
 export class Filter extends FilterBase {
-	syncStack: () => Generator<JsonToken> = this._syncStack.bind(this);
-	private _lastStack: any[] = [];
+	protected lastStack: any[] = [];
 
-	override*_checkChunk(chunk: JsonToken): Generator<JsonToken> {
+	override*checkChunk(chunk: JsonToken): Generator<JsonToken> {
 		switch (chunk.name) {
 			case 'startObject':
-				if (this._filter(this._stack, chunk)) {
-					yield* this._syncStack();
+				if (this.filter(this.stack, chunk)) {
+					yield* this.syncStack();
 					yield chunk;
 
-					this._lastStack.push(null);
+					this.lastStack.push(null);
 				}
 
 				break;
 			case 'startArray':
-				if (this._filter(this._stack, chunk)) {
-					yield* this._syncStack();
+				if (this.filter(this.stack, chunk)) {
+					yield* this.syncStack();
 					yield chunk;
-					this._lastStack.push(-1);
+					this.lastStack.push(-1);
 				}
 
 				break;
@@ -43,31 +42,31 @@ export class Filter extends FilterBase {
 			case 'falseValue':
 			case 'stringValue':
 			case 'numberValue':
-				if (this._filter(this._stack, chunk)) {
-					yield* this._syncStack();
+				if (this.filter(this.stack, chunk)) {
+					yield* this.syncStack();
 					yield chunk;
 				}
 
 				break;
 			case 'startString':
-				if (this._filter(this._stack, chunk)) {
-					yield* this._syncStack();
+				if (this.filter(this.stack, chunk)) {
+					yield* this.syncStack();
 					yield chunk;
-					this.processChunk = this._passString;
+					this.processChunk = this.passString;
 
 				} else {
-					this.processChunk = this._skipString;
+					this.processChunk = this.skipString;
 				}
 
 				break;
 			case 'startNumber':
-				if (this._filter(this._stack, chunk)) {
-					yield* this._syncStack();
+				if (this.filter(this.stack, chunk)) {
+					yield* this.syncStack();
 					yield chunk;
-					this.processChunk = this._passNumber;
+					this.processChunk = this.passNumber;
 
 				} else {
-					this.processChunk = this._skipNumber;
+					this.processChunk = this.skipNumber;
 				}
 
 				break;
@@ -76,9 +75,9 @@ export class Filter extends FilterBase {
 		return false;
 	}
 
-	*_syncStack(): Generator<JsonToken> {
-		const stack = this._stack,
-			last = this._lastStack,
+	*syncStack(): Generator<JsonToken> {
+		const {stack} = this,
+			last = this.lastStack,
 			stackLength = stack.length,
 			lastLength = last.length;
 
@@ -87,7 +86,7 @@ export class Filter extends FilterBase {
 		for (
 			const n = Math.min(stackLength, lastLength);
 			commonLength < n && stack[commonLength] === last[commonLength];
-			++commonLength
+			commonLength++
 		) { }
 
 		// Close old objects
@@ -107,7 +106,7 @@ export class Filter extends FilterBase {
 					yield {name: 'keyValue', value: key};
 				}
 
-				++commonLength;
+				commonLength++;
 
 			} else {
 				yield {name: Object.isNumber(last[commonLength]) ? 'endArray' : 'endObject'};
@@ -115,7 +114,7 @@ export class Filter extends FilterBase {
 		}
 
 		// Open new objects
-		for (let i = commonLength; i < stackLength; ++i) {
+		for (let i = commonLength; i < stackLength; i++) {
 			const key = stack[i];
 
 			if (Object.isNumber(key)) {
@@ -135,6 +134,6 @@ export class Filter extends FilterBase {
 		}
 
 		// Update the last stack
-		this._lastStack = Array.prototype.concat.call(stack);
+		this.lastStack = Array.prototype.concat.call(stack);
 	}
 }

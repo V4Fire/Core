@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { Filter, Pick } from 'core/json/stream/filter';
+import { Filter, Pick } from 'core/json/stream/filters';
 
 const data = [
 	{name: 'startObject'},
@@ -36,8 +36,8 @@ const data = [
 	{name: 'endObject'}
 ];
 
-describe('JSON stream filters', () => {
-	describe('filter', () => {
+describe('JSON stream', () => {
+	describe('Filter', () => {
 		it('should filter token stream', () => {
 			const filter = new Filter({filter: 'a'});
 			const result = [];
@@ -92,7 +92,7 @@ describe('JSON stream filters', () => {
 		});
 	});
 
-	describe('pick', () => {
+	describe('Pick', () => {
 		it('should pick from token stream', () => {
 			const pick = new Pick({filter: 'a'});
 			const result = [];
@@ -119,7 +119,7 @@ describe('JSON stream filters', () => {
 			expect(result).toEqual(data.slice(18, data.length - 1));
 		});
 
-		it('should filter token stream with function', () => {
+		it('should pick from token stream with function', () => {
 			const filterFn = (stack) => stack.includes('b');
 
 			const pick = new Pick({filter: filterFn});

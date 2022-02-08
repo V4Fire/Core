@@ -12,29 +12,28 @@
  */
 
 import type { JsonToken } from 'core/json/stream/interface';
-import { StreamBase } from 'core/json/stream/streamer/streamBase';
-import type { Assembler } from 'core/json/stream/assembler';
+import { StreamBase } from 'core/json/stream/streamers/modules/base';
 
 export class StreamObject extends StreamBase {
-	_level: number = 1;
-	private _lastKey: number | null | string | Object = null;
+	level: number = 1;
+	protected _lastKey: number | null | string | Object = null;
 
-	*_wait(chunk: JsonToken): Generator<JsonToken> {
+	*wait(chunk: JsonToken): Generator<JsonToken> {
 		// First chunk should open an array
 		if (chunk.name !== 'startObject') {
 			throw new Error('Top-level object should be an object.');
 		}
 
-		this.processChunk = this._filter;
+		this.processChunk = this.filter;
 		yield* this.processChunk(chunk);
 	}
 
-	*_push(): Generator<{key: number | null | string | Object; value: any}> {
+	*push(): Generator<{key: number | null | string | Object; value: any}> {
 		if (this._lastKey == null) {
-			this._lastKey = (<Assembler>this._assembler).key;
+			this._lastKey = (this.assembler).key;
 
 		} else {
-			yield {key: this._lastKey, value: (<Assembler>this._assembler).current![<string>this._lastKey]};
+			yield {key: this._lastKey, value: this.assembler.current![<string>this._lastKey]};
 		}
 	}
 }

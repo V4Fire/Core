@@ -10,64 +10,9 @@
  * [[include:core/json/stream/README.md]]
  * @packageDocumentation
  */
-
-const numberStart = /\d/y;
-const numberDigit = /\d{0,256}/y;
-
-const patterns = {
-	value1: /["{[\]\-\d]|true\b|false\b|null\b|\s{1,256}/y,
-	string: /[^"\\]{1,256}|\\[bfnrt"\\/]|\\u[\da-fA-F]{4}|"/y,
-	key1: /["}]|\s{1,256}/y,
-	colon: /:|\s{1,256}/y,
-	comma: /[,\]}]|\s{1,256}/y,
-	ws: /\s{1,256}/y,
-	numberStart,
-	numberFracStart: numberStart,
-	numberExpStart: numberStart,
-	numberDigit,
-	numberFracDigit: numberDigit,
-	numberExpDigit: numberDigit,
-	numberFraction: /[.eE]/y,
-	numberExponent: /[eE]/y,
-	numberExpSign: /[-+]/y
-};
-
-const MAX_PATTERN_SIZE = 16;
-
-// Long hexadecimal codes: \uXXXX
-const fromHex = (s) => String.fromCharCode(parseInt(s.slice(2), 16));
-
-// Short codes: \b \f \n \r \t \" \\ \/
-const codes = {b: '\b', f: '\f', n: '\n', r: '\r', t: '\t', '"': '"', '\\': '\\', '/': '/'};
-
-const PARSER_STATE = {
-	VALUE: 'value',
-	VALUE1: 'value1',
-	STRING: 'string',
-	OBJECT: 'object',
-	KEY: 'key',
-	KEY1: 'key1',
-	ARRAY: 'array',
-	KEY_VAL: 'keyVal',
-	COLON: 'colon',
-	OBJECT_STOP: 'objectStop',
-	ARRAY_STOP: 'arrayStop',
-	NUMBER_START: 'numberStart',
-	NUMBER_FRACTION: 'numberFraction',
-	NUMBER_FRAC_START: 'numberFracStart',
-	NUMBER_FRAC_DIGIT: 'numberFracDigit',
-	NUMBER_EXPONENT: 'numberExponent',
-	NUMBER_DIGIT: 'numberDigit',
-	NUMBER_EXP_SIGN: 'numberExpSign',
-	NUMBER_EXP_START: 'numberExpStart',
-	NUMBER_EXP_DIGIT: 'numberExpDigit',
-	EMPTY: '',
-	DONE: 'done'
-} as const;
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-type PARSER_STATE = typeof PARSER_STATE[keyof typeof PARSER_STATE];
-type PARENT_STATE = typeof PARSER_STATE.OBJECT | typeof PARSER_STATE.ARRAY | typeof PARSER_STATE.EMPTY;
+import { patterns, MAX_PATTERN_SIZE, PARSER_STATE, codes } from 'core/json/stream/const';
+import type { TPARSER_STATE, PARENT_STATE, JsonToken } from 'core/json/stream/interface';
+import { fromHex } from 'core/json/stream/helpers';
 
 const
 	values = {true: true, false: false, null: null},
@@ -78,33 +23,33 @@ const
 	};
 
 export class Parser {
-	private _expect: PARSER_STATE = PARSER_STATE.VALUE;
-	private readonly _stack: PARENT_STATE[] = [];
-	private _parent: PARENT_STATE = PARSER_STATE.EMPTY;
-	private _openNumber: boolean = false;
-	private _accumulator: string = '';
-	private _buffer: string = '';
+	protected expect: TPARSER_STATE = PARSER_STATE.VALUE;
+	protected readonly stack: PARENT_STATE[] = [];
+	protected parent: PARENT_STATE = PARSER_STATE.EMPTY;
+	protected openNumber: boolean = false;
+	protected accumulator: string = '';
+	protected buffer: string = '';
 
 	// eslint-disable-next-line complexity, max-lines-per-function
-	*processChunk(chunk: string): Generator<{ name: string; value?: string | null | boolean }> {
+	*processChunk(chunk: string): Generator<JsonToken> {
 		let
 			match: RegExpExecArray | null,
 			value: string | undefined = '',
 			index = 0;
 
-		this._buffer += chunk;
+		this.buffer += chunk;
 
 		main: for (; ;) {
 			// eslint-disable-next-line default-case
-			switch (this._expect) {
+			switch (this.expect) {
 				case PARSER_STATE.VALUE1:
 				case PARSER_STATE.VALUE:
 					patterns.value1.lastIndex = index;
-					match = patterns.value1.exec(this._buffer);
+					match = patterns.value1.exec(this.buffer);
 
 					if (!match) {
-						if (index + MAX_PATTERN_SIZE < this._buffer.length) {
-							if (index < this._buffer.length) {
+						if (index + MAX_PATTERN_SIZE < this.buffer.length) {
+							if (index < this.buffer.length) {
 								throw new Error('Parser cannot parse input: expected a value');
 							}
 
@@ -121,62 +66,62 @@ export class Parser {
 						case '"':
 							yield {name: 'startString'};
 
-							this._expect = PARSER_STATE.STRING;
+							this.expect = PARSER_STATE.STRING;
 							break;
 
 						case '{':
 							yield {name: 'startObject'};
 
-							this._stack.push(this._parent);
-							this._parent = PARSER_STATE.OBJECT;
-							this._expect = PARSER_STATE.KEY1;
+							this.stack.push(this.parent);
+							this.parent = PARSER_STATE.OBJECT;
+							this.expect = PARSER_STATE.KEY1;
 							break;
 
 						case '[':
 							yield {name: 'startArray'};
 
-							this._stack.push(this._parent);
-							this._parent = PARSER_STATE.ARRAY;
-							this._expect = PARSER_STATE.VALUE1;
+							this.stack.push(this.parent);
+							this.parent = PARSER_STATE.ARRAY;
+							this.expect = PARSER_STATE.VALUE1;
 							break;
 
 						case ']':
-							if (this._expect !== PARSER_STATE.VALUE1) {
+							if (this.expect !== PARSER_STATE.VALUE1) {
 								throw new Error("Parser cannot parse input: unexpected token ']'");
 							}
 
-							if (this._openNumber) {
+							if (this.openNumber) {
 								yield {name: 'endNumber'};
-								yield {name: 'numberValue', value: this._accumulator};
+								yield {name: 'numberValue', value: this.accumulator};
 
-								this._openNumber = false;
-								this._accumulator = '';
+								this.openNumber = false;
+								this.accumulator = '';
 							}
 
 							yield {name: 'endArray'};
 
-							this._parent = <PARENT_STATE>this._stack.pop();
-							this._expect = expected[this._parent];
+							this.parent = <PARENT_STATE>this.stack.pop();
+							this.expect = expected[this.parent];
 							break;
 
 						case '-':
-							this._openNumber = true;
+							this.openNumber = true;
 
 							yield {name: 'startNumber'};
 							yield {name: 'numberChunk', value: '-'};
 
-							this._accumulator = '-';
-							this._expect = PARSER_STATE.NUMBER_START;
+							this.accumulator = '-';
+							this.expect = PARSER_STATE.NUMBER_START;
 							break;
 
 						case '0':
-							this._openNumber = true;
+							this.openNumber = true;
 
 							yield {name: 'startNumber'};
 							yield {name: 'numberChunk', value: '0'};
 
-							this._accumulator = '0';
-							this._expect = PARSER_STATE.NUMBER_FRACTION;
+							this.accumulator = '0';
+							this.expect = PARSER_STATE.NUMBER_FRACTION;
 							break;
 
 						case '1':
@@ -188,24 +133,24 @@ export class Parser {
 						case '7':
 						case '8':
 						case '9':
-							this._openNumber = true;
+							this.openNumber = true;
 
 							yield {name: 'startNumber'};
 							yield {name: 'numberChunk', value};
 
-							this._accumulator = value;
-							this._expect = PARSER_STATE.NUMBER_DIGIT;
+							this.accumulator = value;
+							this.expect = PARSER_STATE.NUMBER_DIGIT;
 							break;
 
 						case 'true':
 						case 'false':
 						case 'null':
-							if (this._buffer.length - index === value.length) {
+							if (this.buffer.length - index === value.length) {
 								break main;
 							}
 
 							yield {name: `${value}Value`, value: values[value]};
-							this._expect = expected[this._parent];
+							this.expect = expected[this.parent];
 							break;
 					}
 
@@ -215,10 +160,10 @@ export class Parser {
 				case PARSER_STATE.KEY_VAL:
 				case PARSER_STATE.STRING:
 					patterns.string.lastIndex = index;
-					match = patterns.string.exec(this._buffer);
+					match = patterns.string.exec(this.buffer);
 
 					if (!match) {
-						if (index < this._buffer.length && (this._buffer.length - index >= 6)) {
+						if (index < this.buffer.length && (this.buffer.length - index >= 6)) {
 							throw new Error('Parser cannot parse input: escaped characters');
 						}
 
@@ -228,30 +173,30 @@ export class Parser {
 					value = match[0];
 
 					if (value === '"') {
-						if (this._expect === PARSER_STATE.KEY_VAL) {
+						if (this.expect === PARSER_STATE.KEY_VAL) {
 							yield {name: 'endKey'};
-							yield {name: 'keyValue', value: this._accumulator};
+							yield {name: 'keyValue', value: this.accumulator};
 
-							this._accumulator = '';
-							this._expect = PARSER_STATE.COLON;
+							this.accumulator = '';
+							this.expect = PARSER_STATE.COLON;
 
 						} else {
 							yield {name: 'endString'};
-							yield {name: 'stringValue', value: this._accumulator};
+							yield {name: 'stringValue', value: this.accumulator};
 
-							this._accumulator = '';
-							this._expect = expected[this._parent];
+							this.accumulator = '';
+							this.expect = expected[this.parent];
 						}
 
 					} else if (value.length > 1 && value.startsWith('\\')) {
 						const t = value.length === 2 ? codes[value.charAt(1)] : fromHex(value);
 						yield {name: 'stringChunk', value: t};
-						this._accumulator += t;
+						this.accumulator += t;
 
 					} else {
 						yield {name: 'stringChunk', value};
 
-						this._accumulator += value;
+						this.accumulator += value;
 					}
 
 					index += value.length;
@@ -260,10 +205,10 @@ export class Parser {
 				case PARSER_STATE.KEY1:
 				case 'key':
 					patterns.key1.lastIndex = index;
-					match = patterns.key1.exec(this._buffer);
+					match = patterns.key1.exec(this.buffer);
 
 					if (!match) {
-						if (index < this._buffer.length) {
+						if (index < this.buffer.length) {
 							throw new Error('Parser cannot parse input: expected an object key');
 						}
 
@@ -274,16 +219,16 @@ export class Parser {
 
 					if (value === '"') {
 						yield {name: 'startKey'};
-						this._expect = PARSER_STATE.KEY_VAL;
+						this.expect = PARSER_STATE.KEY_VAL;
 
 					} else if (value === '}') {
-						if (this._expect !== PARSER_STATE.KEY1) {
+						if (this.expect !== PARSER_STATE.KEY1) {
 							throw new Error("Parser cannot parse input: unexpected token '}'");
 						}
 
 						yield {name: 'endObject'};
-						this._parent = <PARENT_STATE>this._stack.pop();
-						this._expect = expected[this._parent];
+						this.parent = <PARENT_STATE>this.stack.pop();
+						this.expect = expected[this.parent];
 					}
 
 					index += value.length;
@@ -291,10 +236,10 @@ export class Parser {
 
 				case PARSER_STATE.COLON:
 					patterns.colon.lastIndex = index;
-					match = patterns.colon.exec(this._buffer);
+					match = patterns.colon.exec(this.buffer);
 
 					if (!match) {
-						if (index < this._buffer.length) {
+						if (index < this.buffer.length) {
 							throw new Error("Parser cannot parse input: expected ':'");
 						}
 
@@ -302,7 +247,7 @@ export class Parser {
 					}
 
 					value = match[0];
-					value === ':' && (this._expect = PARSER_STATE.VALUE);
+					value === ':' && (this.expect = PARSER_STATE.VALUE);
 
 					index += value.length;
 					break;
@@ -310,33 +255,33 @@ export class Parser {
 				case PARSER_STATE.ARRAY_STOP:
 				case PARSER_STATE.OBJECT_STOP:
 					patterns.comma.lastIndex = index;
-					match = patterns.comma.exec(this._buffer);
+					match = patterns.comma.exec(this.buffer);
 
 					if (!match) {
-						if (index < this._buffer.length) {
+						if (index < this.buffer.length) {
 							throw new Error("Parser cannot parse input: expected ','");
 						}
 
 						break main;
 					}
 
-					if (this._openNumber) {
+					if (this.openNumber) {
 						yield {name: 'endNumber'};
-						this._openNumber = false;
+						this.openNumber = false;
 
-						yield {name: 'numberValue', value: this._accumulator};
-						this._accumulator = '';
+						yield {name: 'numberValue', value: this.accumulator};
+						this.accumulator = '';
 					}
 
 					value = match[0];
 
 					if (value === ',') {
-						this._expect = this._expect === PARSER_STATE.ARRAY_STOP ? PARSER_STATE.VALUE : 'key';
+						this.expect = this.expect === PARSER_STATE.ARRAY_STOP ? PARSER_STATE.VALUE : 'key';
 
 					} else if (value === '}' || value === ']') {
 						yield {name: value === '}' ? 'endObject' : 'endArray'};
-						this._parent = <PARENT_STATE>this._stack.pop();
-						this._expect = expected[this._parent];
+						this.parent = <PARENT_STATE>this.stack.pop();
+						this.expect = expected[this.parent];
 					}
 
 					index += value.length;
@@ -346,10 +291,10 @@ export class Parser {
 				// [0-9]
 				case PARSER_STATE.NUMBER_START:
 					patterns.numberStart.lastIndex = index;
-					match = patterns.numberStart.exec(this._buffer);
+					match = patterns.numberStart.exec(this.buffer);
 
 					if (!match) {
-						if (index < this._buffer.length) {
+						if (index < this.buffer.length) {
 							throw new Error('Parser cannot parse input: expected a starting digit');
 						}
 
@@ -360,8 +305,8 @@ export class Parser {
 
 					yield {name: 'numberChunk', value};
 
-					this._accumulator += value;
-					this._expect = value === '0' ? PARSER_STATE.NUMBER_FRACTION : PARSER_STATE.NUMBER_DIGIT;
+					this.accumulator += value;
+					this.expect = value === '0' ? PARSER_STATE.NUMBER_FRACTION : PARSER_STATE.NUMBER_DIGIT;
 
 					index += value.length;
 					break;
@@ -369,10 +314,10 @@ export class Parser {
 				// [0-9]*
 				case PARSER_STATE.NUMBER_DIGIT:
 					patterns.numberDigit.lastIndex = index;
-					match = patterns.numberDigit.exec(this._buffer);
+					match = patterns.numberDigit.exec(this.buffer);
 
 					if (!match) {
-						if (index < this._buffer.length) {
+						if (index < this.buffer.length) {
 							throw new Error('Parser cannot parse input: expected a digit');
 						}
 
@@ -384,13 +329,13 @@ export class Parser {
 					if (value.length > 0) {
 						yield {name: 'numberChunk', value};
 
-						this._accumulator += value;
+						this.accumulator += value;
 
 						index += value.length;
 
 					} else {
-						if (index < this._buffer.length) {
-							this._expect = PARSER_STATE.NUMBER_FRACTION;
+						if (index < this.buffer.length) {
+							this.expect = PARSER_STATE.NUMBER_FRACTION;
 							break;
 						}
 
@@ -402,11 +347,11 @@ export class Parser {
 				// [\.eE]?
 				case PARSER_STATE.NUMBER_FRACTION:
 					patterns.numberFraction.lastIndex = index;
-					match = patterns.numberFraction.exec(this._buffer);
+					match = patterns.numberFraction.exec(this.buffer);
 
 					if (!match) {
-						if (index < this._buffer.length) {
-							this._expect = expected[this._parent];
+						if (index < this.buffer.length) {
+							this.expect = expected[this.parent];
 							break;
 						}
 
@@ -417,8 +362,8 @@ export class Parser {
 
 					yield {name: 'numberChunk', value};
 
-					this._accumulator += value;
-					this._expect = value === '.' ? PARSER_STATE.NUMBER_FRAC_START : PARSER_STATE.NUMBER_EXP_SIGN;
+					this.accumulator += value;
+					this.expect = value === '.' ? PARSER_STATE.NUMBER_FRAC_START : PARSER_STATE.NUMBER_EXP_SIGN;
 
 					index += value.length;
 					break;
@@ -426,10 +371,10 @@ export class Parser {
 				// [0-9]
 				case PARSER_STATE.NUMBER_FRAC_START:
 					patterns.numberFracStart.lastIndex = index;
-					match = patterns.numberFracStart.exec(this._buffer);
+					match = patterns.numberFracStart.exec(this.buffer);
 
 					if (!match) {
-						if (index < this._buffer.length) {
+						if (index < this.buffer.length) {
 							throw new Error('Parser cannot parse input: expected a fractional part of a number');
 						}
 
@@ -440,8 +385,8 @@ export class Parser {
 
 					yield {name: 'numberChunk', value};
 
-					this._accumulator += value;
-					this._expect = PARSER_STATE.NUMBER_FRAC_DIGIT;
+					this.accumulator += value;
+					this.expect = PARSER_STATE.NUMBER_FRAC_DIGIT;
 
 					index += value.length;
 					break;
@@ -449,19 +394,19 @@ export class Parser {
 				// [0-9]*
 				case PARSER_STATE.NUMBER_FRAC_DIGIT:
 					patterns.numberFracDigit.lastIndex = index;
-					match = patterns.numberFracDigit.exec(this._buffer);
+					match = patterns.numberFracDigit.exec(this.buffer);
 					value = match?.[0];
 
 					if (value != null) {
 						yield {name: 'numberChunk', value};
 
-						this._accumulator += value;
+						this.accumulator += value;
 
 						index += value.length;
 
 					} else {
-						if (index < this._buffer.length) {
-							this._expect = PARSER_STATE.NUMBER_EXPONENT;
+						if (index < this.buffer.length) {
+							this.expect = PARSER_STATE.NUMBER_EXPONENT;
 							break;
 						}
 
@@ -473,11 +418,11 @@ export class Parser {
 				// [eE]?
 				case PARSER_STATE.NUMBER_EXPONENT:
 					patterns.numberExponent.lastIndex = index;
-					match = patterns.numberExponent.exec(this._buffer);
+					match = patterns.numberExponent.exec(this.buffer);
 
 					if (!match) {
-						if (index < this._buffer.length) {
-							this._expect = expected[this._parent];
+						if (index < this.buffer.length) {
+							this.expect = expected[this.parent];
 							break;
 						}
 
@@ -488,8 +433,8 @@ export class Parser {
 
 					yield {name: 'numberChunk', value};
 
-					this._accumulator += value;
-					this._expect = PARSER_STATE.NUMBER_EXP_SIGN;
+					this.accumulator += value;
+					this.expect = PARSER_STATE.NUMBER_EXP_SIGN;
 
 					index += value.length;
 					break;
@@ -497,11 +442,11 @@ export class Parser {
 				// [-+]?
 				case PARSER_STATE.NUMBER_EXP_SIGN:
 					patterns.numberExpSign.lastIndex = index;
-					match = patterns.numberExpSign.exec(this._buffer);
+					match = patterns.numberExpSign.exec(this.buffer);
 
 					if (!match) {
-						if (index < this._buffer.length) {
-							this._expect = PARSER_STATE.NUMBER_EXP_START;
+						if (index < this.buffer.length) {
+							this.expect = PARSER_STATE.NUMBER_EXP_START;
 							break;
 						}
 
@@ -512,8 +457,8 @@ export class Parser {
 
 					yield {name: 'numberChunk', value};
 
-					this._accumulator += value;
-					this._expect = PARSER_STATE.NUMBER_EXP_START;
+					this.accumulator += value;
+					this.expect = PARSER_STATE.NUMBER_EXP_START;
 
 					index += value.length;
 					break;
@@ -521,10 +466,10 @@ export class Parser {
 				// [0-9]
 				case PARSER_STATE.NUMBER_EXP_START:
 					patterns.numberExpStart.lastIndex = index;
-					match = patterns.numberExpStart.exec(this._buffer);
+					match = patterns.numberExpStart.exec(this.buffer);
 
 					if (!match) {
-						if (index < this._buffer.length) {
+						if (index < this.buffer.length) {
 							throw new Error('Parser cannot parse input: expected an exponent part of a number');
 						}
 
@@ -535,8 +480,8 @@ export class Parser {
 
 					yield {name: 'numberChunk', value};
 
-					this._accumulator += value;
-					this._expect = PARSER_STATE.NUMBER_EXP_DIGIT;
+					this.accumulator += value;
+					this.expect = PARSER_STATE.NUMBER_EXP_DIGIT;
 
 					index += value.length;
 					break;
@@ -544,19 +489,19 @@ export class Parser {
 				// [0-9]*
 				case PARSER_STATE.NUMBER_EXP_DIGIT:
 					patterns.numberExpDigit.lastIndex = index;
-					match = patterns.numberExpDigit.exec(this._buffer);
+					match = patterns.numberExpDigit.exec(this.buffer);
 					value = match?.[0];
 
 					if (value != null) {
 						yield {name: 'numberChunk', value};
 
-						this._accumulator += value;
+						this.accumulator += value;
 
 						index += value.length;
 
 					} else {
-						if (index < this._buffer.length) {
-							this._expect = expected[this._parent];
+						if (index < this.buffer.length) {
+							this.expect = expected[this.parent];
 							break;
 						}
 
@@ -567,10 +512,10 @@ export class Parser {
 
 				case PARSER_STATE.DONE:
 					patterns.ws.lastIndex = index;
-					match = patterns.ws.exec(this._buffer);
+					match = patterns.ws.exec(this.buffer);
 
 					if (!match) {
-						if (index < this._buffer.length) {
+						if (index < this.buffer.length) {
 
 							throw new Error('Parser cannot parse input: unexpected characters');
 						}
@@ -580,13 +525,13 @@ export class Parser {
 
 					value = match[0];
 
-					if (this._openNumber) {
+					if (this.openNumber) {
 						yield {name: 'endNumber'};
 
-						this._openNumber = false;
+						this.openNumber = false;
 
-						yield {name: 'numberValue', value: this._accumulator};
-						this._accumulator = '';
+						yield {name: 'numberValue', value: this.accumulator};
+						this.accumulator = '';
 					}
 
 					index += value.length;
@@ -594,6 +539,6 @@ export class Parser {
 			}
 		}
 
-		this._buffer = this._buffer.slice(index);
+		this.buffer = this.buffer.slice(index);
 	}
 }

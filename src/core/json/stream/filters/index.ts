@@ -6,5 +6,5 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-export { StreamArray } from 'core/json/stream/streamer/streamArray';
-export { StreamObject } from 'core/json/stream/streamer/streamObject';
+export { Filter } from 'core/json/stream/filters/filter';
+export { Pick } from 'core/json/stream/filters/pick';

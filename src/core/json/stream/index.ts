@@ -12,10 +12,10 @@
  */
 
 import { Parser } from 'core/json/stream/parser';
-import { Filter, Pick, FilterBaseOptions } from 'core/json/stream/filter';
-import { Assembler, AssemblerOptions } from 'core/json/stream/assembler';
-import { StreamArray, StreamObject } from 'core/json/stream/streamer';
-import type { JsonToken } from 'core/json/stream/interface';
+import { Filter, Pick } from 'core/json/stream/filters';
+import { Assembler } from 'core/json/stream/assembler';
+import { StreamArray, StreamObject } from 'core/json/stream/streamers';
+import type { JsonToken, AssemblerOptions, FilterBaseOptions } from 'core/json/stream/interface';
 
 export async function* from(
 	iterable: AsyncIterable<Buffer | string>

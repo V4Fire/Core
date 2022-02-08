@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { StreamArray, StreamObject } from 'core/json/stream/streamer';
+import { StreamArray, StreamObject } from 'core/json/stream/streamers';
 
 describe('streamers for JSON stream', () => {
 	const data = [

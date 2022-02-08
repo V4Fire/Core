@@ -12,18 +12,18 @@
  */
 
  import type { JsonToken } from 'core/json/stream/interface';
- import { FilterBase } from 'core/json/stream/filter/filterBase';
+ import { FilterBase } from 'core/json/stream/filters/modules/base';
 
 /* eslint-disable default-case */
 export class Pick extends FilterBase {
-	override*_checkChunk(chunk: JsonToken): Generator<boolean | JsonToken> {
+	override*checkChunk(chunk: JsonToken): Generator<boolean | JsonToken> {
 		switch (chunk.name) {
 			case 'startObject':
 			case 'startArray':
-				if (this._filter(this._stack, chunk)) {
+				if (this.filter(this.stack, chunk)) {
 					yield chunk;
-					this.processChunk = this._passObject;
-					this._depth = 1;
+					this.processChunk = this.passObject;
+					this.depth = 1;
 
 					return true;
 				}
@@ -31,9 +31,9 @@ export class Pick extends FilterBase {
 				break;
 
 			case 'startString':
-				if (this._filter(this._stack, chunk)) {
+				if (this.filter(this.stack, chunk)) {
 					yield chunk;
-					this.processChunk = this._passString;
+					this.processChunk = this.passString;
 
 					return true;
 				}
@@ -41,9 +41,9 @@ export class Pick extends FilterBase {
 				break;
 
 			case 'startNumber':
-				if (this._filter(this._stack, chunk)) {
+				if (this.filter(this.stack, chunk)) {
 					yield chunk;
-					this.processChunk = this._passNumber;
+					this.processChunk = this.passNumber;
 
 					return true;
 				}
@@ -55,11 +55,11 @@ export class Pick extends FilterBase {
 			case 'falseValue':
 			case 'stringValue':
 			case 'numberValue':
-				if (this._filter(this._stack, chunk)) {
+				if (this.filter(this.stack, chunk)) {
 					yield chunk;
 
-					if (!this._once) {
-						this.processChunk = this._check;
+					if (!this.once) {
+						this.processChunk = this.check;
 					}
 
 					return true;

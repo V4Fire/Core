@@ -11,36 +11,28 @@
  * @packageDocumentation
  */
 
-import type { JsonToken } from 'core/json/stream/interface';
-
-export interface AssemblerOptions {
-	reviver?(key: string, value: any): any;
-	numberAsString?: boolean;
-}
-
-type AssemblerItem = string | number | boolean | object | any[] | null;
-type AssemblerKey = string | null;
+import type { JsonToken, AssemblerOptions, AssemblerItem, AssemblerKey } from 'core/json/stream/interface';
 
 export class Assembler {
 	startObject: () => void = this.baseStartObject(Object);
 	startArray: () => void = this.baseStartObject(Array);
-	stringValue: (value: string) => void = this._saveValue;
+	stringValue: (value: string) => void = this.saveValue;
 	endArray: () => void = this.endObject;
 
 	current: AssemblerItem = null;
 	key: AssemblerKey = null;
 
-	private stack: AssemblerItem[] = [];
-	private done: boolean = true;
-	private readonly reviver!: ((key: string, value: any) => any);
+	protected stack: AssemblerItem[] = [];
+	protected done: boolean = true;
+	protected readonly reviver!: ((key: string, value: JsonToken) => JsonToken);
 
 	constructor(options?: AssemblerOptions) {
 		if (options) {
 
 			if (Object.isFunction(options.reviver)) {
 				this.reviver = options.reviver;
-				this.stringValue = this._saveValueWithReviver;
-				this._saveValue = this._saveValueWithReviver;
+				this.stringValue = this.saveValueWithReviver;
+				this.saveValue = this.saveValueWithReviver;
 			}
 
 			if (options.numberAsString) {
@@ -99,19 +91,19 @@ export class Assembler {
 	}
 
 	numberValue(value: string): void {
-		this._saveValue(parseFloat(value));
+		this.saveValue(parseFloat(value));
 	}
 
 	nullValue(): void {
-		this._saveValue(null);
+		this.saveValue(null);
 	}
 
 	trueValue(): void {
-		this._saveValue(true);
+		this.saveValue(true);
 	}
 
 	falseValue(): void {
-		this._saveValue(false);
+		this.saveValue(false);
 	}
 
 	endObject(): void {
@@ -119,14 +111,14 @@ export class Assembler {
 			const value = this.current;
 			this.key = <AssemblerKey>this.stack.pop();
 			this.current = this.stack.pop()!;
-			this._saveValue(value);
+			this.saveValue(value);
 
 		} else {
 			this.done = true;
 		}
 	}
 
-	_saveValue(value: AssemblerItem): void {
+	saveValue(value: AssemblerItem): void {
 		if (this.done) {
 			this.current = value;
 
@@ -139,7 +131,7 @@ export class Assembler {
 		}
 	}
 
-	_saveValueWithReviver(value?: AssemblerItem): void {
+	saveValueWithReviver(value?: AssemblerItem): void {
 		if (this.done) {
 			this.current = this.reviver('', value);
 
