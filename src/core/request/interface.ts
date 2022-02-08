@@ -136,7 +136,7 @@ export interface RequestOptions {
 	readonly body?: RequestBody;
 
 	readonly important?: boolean;
-	readonly credentials?: boolean;
+	readonly credentials?: boolean | RequestCredentials;
 }
 
 export type RequestQuery =
@@ -289,14 +289,44 @@ export interface RequestEngine {
  */
 export interface CreateRequestOptions<D = unknown> {
 	/**
-	 * Request method type
+	 * HTTP method to create a request
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods
 	 */
-	readonly method?: RequestMethod;
+	method?: RequestMethod;
 
 	/**
-	 * Options to retry bad requests
+	 * Additional HTTP request headers.
+	 * You can provide them as a simple dictionary or an instance of the Headers class.
+	 * Also, you can pass headers as an instance of the `core/request/headers` class.
+	 *
+	 * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers
 	 */
-	retry?: RetryOptions | number;
+	headers?: RawHeaders;
+
+	/**
+	 * Enables providing of credentials for cross-domain requests.
+	 * Also, you can manage to omit any credentials if the used request engine supports it.
+	 */
+	credentials?: boolean | RequestCredentials;
+
+	/**
+	 * Request parameters that will be serialized to a string and passed via a request URL.
+	 * To customize how to encode data to a query string, see `querySerializer`.
+	 */
+	query?: RequestQuery;
+
+	/**
+	 * Returns a serialized value of the specified query object
+	 * @param query
+	 */
+	querySerializer?(query: RequestQuery): string;
+
+	/**
+	 * Request body.
+	 * Mind, not every HTTP method can send data in this way. For instance,
+	 * GET or HEAD requests can send data only with URLs (@see `query`).
+	 */
+	body?: RequestBody;
 
 	/**
 	 * Mime type of the request data (if not specified, it will be cast dynamically)
@@ -304,44 +334,18 @@ export interface CreateRequestOptions<D = unknown> {
 	contentType?: string;
 
 	/**
-	 * Type of the response data:
+	 * Type of the response data
 	 * (if not specified, it will be cast dynamically from the response headers):
 	 *
 	 * 1. `'text'` - result is interpreted as a simple string;
-	 * 1. `'json'` - result is interpreted as a JSON string;
-	 * 1. `'arrayBuffer'` - result is interpreted as an array buffer;
-	 * 1. `'blob'` - result is interpreted as a binary sequence;
+	 * 1. `'json'` - result is interpreted as a JSON object;
+	 * 1. `'document'` - result is interpreted as an XML/HTML document;
+	 * 1. `'formData'` - result is interpreted as a FormData object;
+	 * 1. `'blob'` - result is interpreted as a Blob object;
+	 * 1. `'arrayBuffer'` - result is interpreted as a raw array buffer;
 	 * 1. `'object'` - result is interpreted "as is" without any converting.
 	 */
 	responseType?: ResponseType;
-
-	/**
-	 * Additional request headers
-	 */
-	headers?: RawHeaders;
-
-	/**
-	 * URL query parameters
-	 */
-	query?: RequestQuery;
-
-	/**
-	 * Request body
-	 */
-	body?: RequestBody;
-
-	/**
-	 * Enables providing of credentials for cross-domain requests
-	 */
-	credentials?: boolean;
-
-	/**
-	 * Map of API parameters.
-	 *
-	 * If the API is specified it will be concatenated with a request path URL. It can be useful to create
-	 * request factories. In addition, you can provide a function as a key value, and it will be invoked.
-	 */
-	api?: RequestAPI;
 
 	/**
 	 * List of status codes (or a single code) that match successful operation.
@@ -357,6 +361,19 @@ export interface CreateRequestOptions<D = unknown> {
 	timeout?: number;
 
 	/**
+	 * Options to retry bad requests or a number of maximum request retries
+	 */
+	retry?: RetryOptions | number;
+
+	/**
+	 * Map of API parameters.
+	 *
+	 * If the API is specified, it will be concatenated with a request path URL. It can be useful to create
+	 * request factories. In addition, you can provide a function as a key value, and it will be invoked.
+	 */
+	api?: RequestAPI;
+
+	/**
 	 * Strategy of caching for requests that supports it:
 	 *
 	 * 1. `'forever'` - caches all requests and stores their values forever within the active session or
@@ -365,7 +382,7 @@ export interface CreateRequestOptions<D = unknown> {
 	 * 3. `'never'` - never caches any requests;
 	 * 4. custom cache object.
 	 */
-	readonly cacheStrategy?: CacheStrategy;
+	cacheStrategy?: CacheStrategy;
 
 	/**
 	 * Unique cache identifier: it can be useful to create request factories with isolated cache storages
@@ -413,12 +430,6 @@ export interface CreateRequestOptions<D = unknown> {
 	 * the first function will pass result in the next function from the sequence, etc.
 	 */
 	encoder?: Encoder | Encoders;
-
-	/**
-	 * Returns serialized value of the specified query object
-	 * @param query
-	 */
-	querySerializer?(query: RequestQuery): string;
 
 	/**
 	 * A function (or a sequence of functions) takes the current request response data

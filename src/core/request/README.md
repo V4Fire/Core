@@ -211,3 +211,220 @@ req.emitter.on('upload.progress', (e) => {
   console.log(e);
 });
 ```
+
+### Request options
+
+#### method
+
+HTTP method to create a request.
+[See more](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods).
+
+```js
+import request from 'core/request';
+
+request('//create-user', {
+  method: 'POST',
+  body: {name: 'Bob'}
+}).data.then(console.log);
+```
+
+#### headers
+
+Additional HTTP request headers. You can provide them as a simple dictionary or an instance of the Headers class.
+Also, you can pass headers as an instance of the `core/request/headers` class.
+[See more](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers).
+
+```js
+import request from 'core/request';
+
+request('//users', {
+  headers: {
+    Authorization: myJWT
+  }
+}).data.then(console.log);
+```
+
+#### credentials
+
+Enables providing of credentials for cross-domain requests.
+Also, you can manage to omit any credentials if the used request engine supports it.
+
+```js
+import request from 'core/request';
+import fetchEngine from 'core/request/engines/fetch';
+
+request('//users', {
+  credentials: false
+}).data.then(console.log);
+
+request('//users', {
+  engine: fetchEngine,
+  credentials: 'omit'
+}).data.then(console.log);
+```
+
+#### query
+
+Request parameters that will be serialized to a string and passed via a request URL.
+To customize how to encode data to a query string, see `querySerializer`.
+
+```js
+import request from 'core/request';
+
+request('//user', {
+  query: {id: 125}
+}).data.then(console.log);
+```
+
+#### querySerializer
+
+Returns a serialized value of the specified query object.
+
+```js
+import request from 'core/request';
+import { toQueryString } from 'core/url';
+
+request('//user', {
+  query: {ids: [125, 35, 454]},
+  querySerializer: (data) => toQueryString(data, {arraySyntax: true})
+}).data.then(console.log);
+```
+
+#### body
+
+Request body. Mind, not every HTTP method can send data in this way. For instance,
+GET or HEAD requests can send data only with URLs (@see `query`).
+
+```js
+import request from 'core/request';
+
+request('//create-user', {
+  method: 'POST',
+  body: {name: 'Bob'}
+}).data.then(console.log);
+
+const form = new FormData();
+
+form.set('name', 'Garry');
+form.set('age', '36');
+
+request('//send-form', {
+  method: 'POST',
+  body: form
+}).data.then(console.log);
+```
+
+#### contentType
+
+A mime type of the request data (if not specified, it will be cast dynamically).
+
+```js
+import request from 'core/request';
+
+request('//create-user', {
+  method: 'POST',
+  body: {name: 'Bob'},
+  contentType: 'application/x-msgpack',
+  encoder: toMessagePack
+}).data.then(console.log);
+```
+
+#### responseType
+
+Type of the response data (if not specified, it will be cast dynamically from the response headers):
+
+1. `'text'` - the result is interpreted as a simple string;
+2. `'json'` - the result is interpreted as a JSON string;
+3. `'document'` - the result is interpreted as an XML/HTML document;
+4. `'formData'` - result is interpreted as a FormData object;
+5. `'blob'` - the result is interpreted as a Blob object;
+6. `'arrayBuffer'` - the result is interpreted as an array buffer;
+7. `'object'` - the result is interpreted "as is" without any converting.
+
+```js
+import request from 'core/request';
+
+request('//users', {
+  responseType: 'arrayBuffer',
+  decoder: fromMessagePack
+}).data.then(console.log);
+```
+
+#### [okStatuses = `new Range(200, 299)`]
+
+List of status codes (or a single code) that match successful operation.
+Also, you can pass a range of codes.
+
+```js
+import request from 'core/request';
+import Range from 'core/range';
+
+request('//users', {
+  okStatuses: [200, 201]
+}).data.then(console.log);
+
+request('//users', {
+  okStatuses: new Range(200, 210)
+}).data.then(console.log);
+```
+
+#### timeout
+
+A value in milliseconds for a request timeout.
+
+```js
+import request from 'core/request';
+
+request('//users', {
+  timeout: (10).seconds()
+}).data.then(console.log);
+```
+
+#### retry
+
+Options to retry bad requests or a number of maximum request retries.
+
+```js
+import request from 'core/request';
+
+request('//users', {
+  timeout: (10).seconds(),
+  retry: 3
+}).data.then(console.log);
+
+request('//users', {
+  timeout: (10).seconds(),
+  retry: {
+    attemps: 3,
+    delay: (attemp) => attemp * (3).seconds()
+  }
+}).data.then(console.log);
+```
+
+```typescript
+/**
+ * @typeparam D - response data type
+ */
+export interface RetryOptions<D = unknown> {
+  /**
+   * Maximum number of attempts to request
+   */
+  attempts?: number;
+
+  /**
+   * Returns a number in milliseconds (or a promise) to wait before the next attempt.
+   * If the function returns false, it will prevent all further attempts.
+   *
+   * @param attempt - current attempt number
+   * @param error - error object
+   */
+  delay?(attempt: number, error: RequestError<D>): number | Promise<void> | false;
+}
+```
+
+#### api
+
+Map of API parameters.
+
+If the API is specified, it will be concatenated with a request path URL. It can be useful to create
+request factories. In addition, you can provide a function as a key value, and it will be invoked.
