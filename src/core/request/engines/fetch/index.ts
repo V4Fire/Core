@@ -51,11 +51,21 @@ const request: RequestEngine = (params) => {
 		headers['Content-Type'] = contentType;
 	}
 
+	let
+		credentials: RequestCredentials = 'same-origin';
+
+	if (Object.isString(p.credentials)) {
+		credentials = p.credentials;
+
+	} else if (p.credentials) {
+		credentials = 'include';
+	}
+
 	const fetchOpts: RequestInit = {
 		body,
 		headers,
+		credentials,
 		method: p.method,
-		credentials: p.credentials ? 'include' : 'same-origin',
 		signal: abortController.signal
 	};
 
