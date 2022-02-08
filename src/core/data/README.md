@@ -321,6 +321,7 @@ It can be useful to provide data providers to components as input properties:
 ```
 
 ### Decorating a request function
+
 #### Request methods
 
 The default implementation of a data provider has an association between HTTP request methods and provider methods:
