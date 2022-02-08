@@ -193,7 +193,14 @@ export abstract class FilterBase {
 		const that = this;
 
 		return function* passValue(chunk: JsonToken) {
-			if (that._expected != null) {
+			if (that._expected === undefined || that._expected === '') {
+				yield chunk;
+
+				if (chunk.name === last) {
+					that._expected = post;
+				}
+
+			} else {
 				const expected = that._expected;
 				that._expected = '';
 
@@ -206,13 +213,6 @@ export abstract class FilterBase {
 
 				} else {
 					yield* that.processChunk(chunk);
-				}
-
-			} else {
-				yield chunk;
-
-				if (chunk.name === last) {
-					that._expected = post;
 				}
 			}
 		};

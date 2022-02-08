@@ -14,7 +14,7 @@
 import { Parser } from 'core/json/stream/parser';
 import { Filter, Pick, FilterBaseOptions } from 'core/json/stream/filter';
 import { Assembler, AssemblerOptions } from 'core/json/stream/assembler';
-import { StreamBaseOptions, StreamArray, StreamObject } from 'core/json/stream/streamer';
+import { StreamArray, StreamObject } from 'core/json/stream/streamer';
 import type { JsonToken } from 'core/json/stream/interface';
 
 export async function* from(
@@ -63,10 +63,9 @@ export async function* pick(
 }
 
 export async function* streamArray(
-	iter: AsyncIterable<JsonToken>,
-	options?: StreamBaseOptions
+	iter: AsyncIterable<JsonToken>
 ): AsyncGenerator<JsonToken> {
-	const iterArray = new StreamArray(options);
+	const iterArray = new StreamArray();
 
 	for await (const chunk of iter) {
 		yield* iterArray.processChunk(chunk);
@@ -74,10 +73,9 @@ export async function* streamArray(
 }
 
 export async function* streamObject(
-	iter: AsyncIterable<JsonToken>,
-	options?: StreamBaseOptions
+	iter: AsyncIterable<JsonToken>
 ): AsyncGenerator<JsonToken> {
-	const objectStream = new StreamObject(options);
+	const objectStream = new StreamObject();
 
 	for await (const chunk of iter) {
 		yield* objectStream.processChunk(chunk);

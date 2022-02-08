@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { Filter } from 'core/json/stream/filter';
+import { Filter, Pick } from 'core/json/stream/filter';
 
 const data = [
 	{name: 'startObject'},
@@ -36,52 +36,102 @@ const data = [
 	{name: 'endObject'}
 ];
 
-describe('JSON stream filter', () => {
-	it('should filter token stream', () => {
-		const filter = new Filter({filter: 'a'});
-		let result;
+describe('JSON stream filters', () => {
+	describe('filter', () => {
+		it('should filter token stream', () => {
+			const filter = new Filter({filter: 'a'});
+			const result = [];
 
-		for (const chunk of data) {
-			for (const el of filter.processChunk(chunk)) {
-				result = el;
+			for (const chunk of data) {
+				for (const el of filter.processChunk(chunk)) {
+					result.push(el);
+				}
 			}
-		}
 
-		expect(result).toEqual({name: 'numberValue', value: '1'});
-	});
-
-	// todo: filter last elem of object is broken
-	it('should filter token stream with regexp', () => {
-		const filter = new Filter({filter: /c/});
-		const result = [];
-
-		for (const chunk of data) {
-			for (const el of filter.processChunk(chunk)) {
+			for (const el of filter.syncStack()) {
 				result.push(el);
 			}
-		}
 
-		for (const el of filter.syncStack()) {
-			result.push(el);
-		}
+			expect(result).toEqual([{name: 'startObject'}, ...data.slice(1, 9), {name: 'endObject'}]);
+		});
 
-		expect(result).toEqual([{name: 'startObject'}, ...data.slice(14, data.length - 2)]);
+		it('should filter token stream with regexp', () => {
+			const filter = new Filter({filter: /c/});
+			const result = [];
+
+			for (const chunk of data) {
+				for (const el of filter.processChunk(chunk)) {
+					result.push(el);
+				}
+			}
+
+			for (const el of filter.syncStack()) {
+				result.push(el);
+			}
+
+			expect(result).toEqual([{name: 'startObject'}, ...data.slice(14, data.length)]);
+		});
+
+		it('should filter token stream with function', () => {
+			const filterFn = (stack) => stack.includes('b');
+
+			const filter = new Filter({filter: filterFn});
+			const result = [];
+
+			for (const chunk of data) {
+				for (const el of filter.processChunk(chunk)) {
+					result.push(el);
+				}
+			}
+
+			for (const el of filter.syncStack()) {
+				result.push(el);
+			}
+
+			expect(result).toEqual([{name: 'startObject'}, ...data.slice(9, 14), {name: 'endObject'}]);
+		});
 	});
 
-	it('should filter token stream with function', () => {
-		const filter = (stack, chunk) => {
-			
-		};
+	describe('pick', () => {
+		it('should pick from token stream', () => {
+			const pick = new Pick({filter: 'a'});
+			const result = [];
 
-		const assembler = new Assembler({filter});
-		let result;
-
-		for (const chunk of data) {
-			for (const el of assembler.processChunk(chunk)) {
-				result = el;
+			for (const chunk of data) {
+				for (const el of pick.processChunk(chunk)) {
+					result.push(el);
+				}
 			}
-		}
 
-		expect(result).toEqual(target);
+			expect(result).toEqual(data.slice(5, 9));
+		});
+
+		it('should pick from token stream with regexp', () => {
+			const pick = new Pick({filter: /c/});
+			const result = [];
+
+			for (const chunk of data) {
+				for (const el of pick.processChunk(chunk)) {
+					result.push(el);
+				}
+			}
+
+			expect(result).toEqual(data.slice(18, data.length - 1));
+		});
+
+		it('should filter token stream with function', () => {
+			const filterFn = (stack) => stack.includes('b');
+
+			const pick = new Pick({filter: filterFn});
+			const result = [];
+
+			for (const chunk of data) {
+				for (const el of pick.processChunk(chunk)) {
+					result.push(el);
+				}
+			}
+
+			expect(result).toEqual([{name: 'trueValue', value: true}]);
+		});
 	});
 });

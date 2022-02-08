@@ -11,7 +11,7 @@
  * @packageDocumentation
  */
 
- import type { JsonToken } from 'core/json/stream/interface';
+import type { JsonToken } from 'core/json/stream/interface';
 
 export interface AssemblerOptions {
 	reviver?(key: string, value: any): any;

@@ -8,4 +8,3 @@
 
 export { StreamArray } from 'core/json/stream/streamer/streamArray';
 export { StreamObject } from 'core/json/stream/streamer/streamObject';
-export { StreamBaseOptions } from 'core/json/stream/streamer/streamBase';
