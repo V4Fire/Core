@@ -44,6 +44,61 @@ request('https://foo.com/create-user', {method: 'POST', body: {name: 'Bob'}}).th
 });
 ```
 
+#### Request URL
+
+There are two variants of request URL-s:
+
+**absolute**
+
+```js
+import request from 'core/request';
+
+request('https://foo.com/users').data.then(console.log);
+```
+
+**relative**
+
+```js
+import request from 'core/request';
+
+request('/users').data.then(console.log);
+```
+
+In the case of a relative URL, the full request URL is based on the application `location`.
+
+```js
+import request from 'core/request';
+
+// location.origin === 'https://foo.com';
+// URL: https://foo.com/users
+request('/users').data.then(console.log);
+
+// location.origin.href === 'https://foo.com/bla';
+// URL: https://foo.com/bla/users
+request('users').data.then(console.log);
+```
+
+But also, you can define the base API URL within your application config. This URL will be used for any relative requests.
+
+__config/index.ts__
+
+```js
+import { extend } from '@v4fire/client/config';
+
+export default extend({
+  api: 'https://api.foo.com'
+});
+```
+
+__foo.ts__
+
+```js
+import request from 'core/request';
+
+// URL: https://api.foo.com/users
+request('/users').data.then(console.log);
+```
+
 ### Creating a new request function with the default request options
 
 This overload is useful to create a wrapped request function.
