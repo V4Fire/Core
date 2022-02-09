@@ -16,6 +16,7 @@ import { FilterBase } from 'core/json/stream/filters/modules/base';
 
 /* eslint-disable default-case */
 export class Filter extends FilterBase {
+	override multiple: boolean = true;
 	protected lastStack: any[] = [];
 
 	override*checkChunk(chunk: JsonToken): Generator<JsonToken> {
@@ -90,7 +91,7 @@ export class Filter extends FilterBase {
 		) { }
 
 		// Close old objects
-		for (let i = lastLength - 1; i > commonLength; --i) {
+		for (let i = lastLength - 1; i > commonLength; i--) {
 			yield {name: Object.isNumber(last[i]) ? 'endArray' : 'endObject'};
 		}
 

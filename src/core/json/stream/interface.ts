@@ -26,7 +26,7 @@ export type AssemblerItem = string | number | boolean | object | any[] | null;
 export type AssemblerKey = string | null;
 
 export interface FilterBaseOptions {
-	once?: boolean;
+	multiple?: boolean;
 	filter?: ((stack: FilterStack, chunk: JsonToken) => boolean) | RegExp | string;
 }
 

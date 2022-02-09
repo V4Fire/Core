@@ -50,7 +50,7 @@ export abstract class StreamBase {
 	}
 
 	// eslint-disable-next-line require-yield
-	*reject(chunk: JsonToken): Generator<void> {
+	*reject(chunk: JsonToken): Generator<JsonToken> {
 		if (Object.isFunction(this.assembler[chunk.name])) {
 			this.assembler[chunk.name](chunk.value);
 

@@ -106,6 +106,32 @@ describe('JSON stream', () => {
 			expect(result).toEqual(data.slice(5, 9));
 		});
 
+		it('should pick from token stream with regexp and return only first occurence', () => {
+			const pick = new Pick({filter: /a|b/});
+			const result = [];
+
+			for (const chunk of data) {
+				for (const el of pick.processChunk(chunk)) {
+					result.push(el);
+				}
+			}
+
+			expect(result).toEqual(data.slice(5, 9));
+		});
+
+		it('should pick from token stream with regexp and return all occurences', () => {
+			const pick = new Pick({filter: /a|b/, multiple: true});
+			const result = [];
+
+			for (const chunk of data) {
+				for (const el of pick.processChunk(chunk)) {
+					result.push(el);
+				}
+			}
+
+			expect(result).toEqual([...data.slice(5, 9), data[13]]);
+		});
+
 		it('should pick from token stream with regexp', () => {
 			const pick = new Pick({filter: /c/});
 			const result = [];

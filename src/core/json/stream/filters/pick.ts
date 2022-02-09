@@ -58,9 +58,7 @@ export class Pick extends FilterBase {
 				if (this.filter(this.stack, chunk)) {
 					yield chunk;
 
-					if (!this.once) {
-						this.processChunk = this.check;
-					}
+					this.processChunk = this.multiple ? this.check : this.skip;
 
 					return true;
 				}

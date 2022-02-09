@@ -37,7 +37,7 @@ export abstract class FilterBase {
 	protected abstract checkChunk(chunk: JsonToken): Generator<boolean | JsonToken>;
 	protected stack: FilterStack = [];
 	protected depth: number = 0;
-	protected readonly once?: boolean;
+	protected multiple?: boolean;
 	protected filter!: (stack: FilterStack, chunk: JsonToken) => boolean;
 
 	protected readonly passNumber: ProcessFunction = this.passValue('endNumber', 'numberValue');
@@ -67,7 +67,7 @@ export abstract class FilterBase {
 			this.filter = FilterBase.regExpFilter(filter, this.separator);
 		}
 
-		this.once = options.once;
+		this.multiple = options.multiple;
 	}
 
 	*check(chunk: JsonToken): Generator<JsonToken> {
@@ -112,11 +112,12 @@ export abstract class FilterBase {
 		const iter = this.checkChunk(chunk);
 		while (true) {
 			const val = iter.next();
+			const {done, value} = val;
 
-			if (val.done && val.value === true) {
+			if (done && (value === true || value === undefined)) {
 				break;
 
-			} else if (val.done && val.value === false) {
+			} else if (done && value === false) {
 				switch (chunk.name) {
 					case 'startObject':
 						this.stack.push(null);
@@ -133,7 +134,7 @@ export abstract class FilterBase {
 				break;
 
 			} else {
-				yield val.value;
+				yield value;
 			}
 		}
 	}
@@ -149,12 +150,12 @@ export abstract class FilterBase {
 
 			case 'endObject':
 			case 'endArray':
-				--this.depth;
+				this.depth--;
 				break;
 		}
 
-		if (!this.depth && !this.once) {
-			this.processChunk = this.check;
+		if (this.depth === 0) {
+			this.processChunk = this.multiple ? this.check : this.skip;
 		}
 	}
 
@@ -175,10 +176,13 @@ export abstract class FilterBase {
 				break;
 		}
 
-		if (!this.depth) {
-			this.processChunk = this.once ? this.pass : this.check;
+		if (this.depth === 0) {
+			this.processChunk = this.multiple ? this.check : this.pass;
 		}
 	}
+
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	*skip(): Generator<JsonToken> {}
 
 	passValue(last: string, post: string): (chunk: JsonToken) => Generator<JsonToken> {
 		const that = this;
@@ -192,12 +196,10 @@ export abstract class FilterBase {
 				}
 
 			} else {
-				const expected = that.expected;
+				const {expected} = that;
 				that.expected = '';
 
-				if (!that.once) {
-					that.processChunk = that.check;
-				}
+				that.processChunk = that.multiple ? that.check : that.skip;
 
 				if (expected === chunk.name) {
 					yield chunk;
@@ -216,7 +218,7 @@ export abstract class FilterBase {
 			if (that.expected != null) {
 				const {expected} = that;
 				that.expected = '';
-				that.processChunk = that.once ? that.pass : that.check;
+				that.processChunk = that.multiple ? that.check : that.pass;
 
 				if (expected !== chunk.name) {
 					yield* that.processChunk(chunk);
