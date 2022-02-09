@@ -99,6 +99,25 @@ import request from 'core/request';
 request('/users').data.then(console.log);
 ```
 
+In addition, you can read or write the `api` property from `core/request#globalOpts` or
+through `globalOpts.api` property within your encoders/decoders/middlewares.
+
+```js
+import request, { globalOpts } from 'core/request';
+
+console.log(globalOpts.api);
+
+request('/users', {
+  middlewares: {
+    api: ({globalOpts}) => {
+      if (globalOpts.api == null) {
+        globalOpts.api = 'https://api.foo.com';
+      }
+    }
+  }
+}).data.then(console.log);
+```
+
 ### Creating a new request function with the default request options
 
 This overload is useful to create a wrapped request function.
@@ -268,6 +287,8 @@ req.emitter.on('upload.progress', (e) => {
 ```
 
 ### Request options
+
+The request function can accept a bunch of optional parameters to make a request.
 
 #### method
 
@@ -450,8 +471,8 @@ request('//users', {
 request('//users', {
   timeout: (10).seconds(),
   retry: {
-    attemps: 3,
-    delay: (attemp) => attemp * (3).seconds()
+    attempts: 3,
+    delay: (attempt) => attempt * (3).seconds()
   }
 }).data.then(console.log);
 ```
@@ -479,7 +500,378 @@ export interface RetryOptions<D = unknown> {
 
 #### api
 
-Map of API parameters.
+A map of API parameters.
 
-If the API is specified, it will be concatenated with a request path URL. It can be useful to create
-request factories. In addition, you can provide a function as a key value, and it will be invoked.
+These parameters apply if the original request URL is not absolute, and they can be used to customize the
+base API URL depending on the runtime environment. If you define the base API URL via
+`config#api` or `globalOpts.api`, these parameters will be mapped on it.
+
+```js
+import request from 'core/request';
+
+// URL (IS_PROD === true): https://foo.com/users
+// URL (IS_PROD === false): https://foo.com/foo-stage
+
+request('/users', {
+  api: {
+    protocol: 'https',
+    domain2: () => IS_PROD ? 'foo' : 'foo-stage',
+    zone: 'com'
+  }
+}).data.then(console.log);
+
+
+// URL (globalOpts.api === 'https://api.foo.com' && IS_PROD === true): https://api.foo.com/users
+// URL (globalOpts.api === 'https://api.foo.com' && IS_PROD === false): https://api.foo-stage.com/users
+
+request('/users', {
+  api: {
+    domain2: () => IS_PROD ? 'foo' : 'foo-stage',
+  }
+}).data.then(console.log);
+```
+
+```typescript
+export interface RequestAPI {
+  /**
+   * The direct value of API URL.
+   * If this parameter is defined, all other parameters will be ignored.
+   *
+   * @example
+   * `'https://google.com'`
+   */
+  url?: RequestAPIValue;
+
+  /**
+   * API protocol
+   *
+   * @example
+   * `'http'`
+   * `'https'`
+   */
+  protocol?: RequestAPIValue;
+
+  /**
+   * Value for an API authorization part
+   *
+   * @example
+   * `'login:password'`
+   */
+  auth?: RequestAPIValue;
+
+  /**
+   * Value for an API domain level 6 part
+   */
+  domain6?: RequestAPIValue;
+
+  /**
+   * Value for an API domain level 5 part
+   */
+  domain5?: RequestAPIValue;
+
+  /**
+   * Value for an API domain level 4 part
+   */
+  domain4?: RequestAPIValue;
+
+  /**
+   * Value for an API domain level 3 part
+   */
+  domain3?: RequestAPIValue;
+
+  /**
+   * Value for an API domain level 2 part
+   */
+  domain2?: RequestAPIValue;
+
+  /**
+   * Value for an API domain zone part
+   */
+  zone?: RequestAPIValue;
+
+  /**
+   * Value for an API api port
+   */
+  port?: RequestAPIValue<string | number>;
+
+  /**
+   * Value for an API namespace part: it follows after '/' character
+   */
+  namespace?: RequestAPIValue;
+}
+```
+
+#### cacheStrategy
+
+A strategy of caching for requests that support caching (by default, only GET requests can be cached):
+
+1. `'forever'` - caches all requests and stores their values forever within the active session or
+   until the cache expires (if `cacheTTL` is specified);
+2. `'queue'` - caches all requests, but more frequent requests will push less frequent requests;
+3. `'never'` - never caches any requests;
+4. Or, you can pass a custom cache object.
+
+```js
+import request from 'core/request';
+import RestrictedCache from 'core/cache/restricted';
+
+request('/users', {
+  cacheStrategy: 'forever'
+}).data.then(console.log);
+
+request('/users', {
+  cacheStrategy: new RestrictedCache(50)
+}).data.then(console.log);
+```
+
+If you set a strategy using string identifiers, all requests will be stored within the global cache objects.
+
+```js
+import request, { cache } from 'core/request';
+
+request('/users', {
+  cacheStrategy: 'forever'
+}).data.then(console.log);
+
+cache.forever.clear();
+```
+
+#### cacheTTL
+
+A value in milliseconds that indicates how long a request value should keep in the cache
+(all requests are stored within the active session without expiring by default).
+
+```js
+import request from 'core/request';
+import RestrictedCache from 'core/cache/restricted';
+
+request('/users', {
+  cacheStrategy: 'forever',
+  cacheTTL: (10).minutes()
+}).data.then(console.log);
+
+request('/users', {
+  cacheStrategy: new RestrictedCache(50),
+  cacheTTL: (10).minutes()
+}).data.then(console.log);
+```
+
+#### offlineCache
+
+This option enables support of offline caching.
+By default, a request can only be taken from a cache if there is no network.
+You can customize this logic by providing a custom cache object with the `core/cache/decorators/persistent` decorator.
+
+```js
+import request from 'core/request';
+import { asyncLocal } from 'core/kv-storage';
+
+import addPersistent from 'core/cache/decorators/persistent';
+import SimpleCache from 'core/cache/simple';
+
+request('/users', {
+  cacheStrategy: 'forever',
+  offlineCache: true
+});
+
+const
+  opts = {loadFromStorage: 'onInit'},
+  persistentCache = await addPersistent(new SimpleCache(), asyncLocal, opts);
+
+request('/users', {
+  cacheStrategy: persistentCache
+});
+```
+
+#### offlineCacheTTL
+
+A value in milliseconds that indicates how long a request value should keep in the offline cache.
+
+```js
+import request from 'core/request';
+import RestrictedCache from 'core/cache/restricted';
+
+request('/users', {
+  cacheStrategy: 'forever',
+  offlineCache: true,
+  offlineCacheTTL: (1).day()
+});
+
+request('/users', {
+  cacheStrategy: new RestrictedCache(50),
+  offlineCache: true,
+  offlineCacheTTL: (1).day()
+}).data.then(console.log);
+```
+
+#### [cacheMethods = `['GET']`]
+
+A list of request methods that supports caching.
+
+```js
+import request from 'core/request';
+
+request('/users', {
+  cacheStrategy: 'forever',
+  cacheMethods: ['GET', 'POST']
+}).data.then(console.log);
+```
+
+#### cacheId
+
+A unique cache identifier: it can be useful to create request factories with isolated cache storages.
+
+```js
+import request from 'core/request';
+
+const createUser = request(
+  'https://foo.com/user',
+
+  (url, {opts, globalOpts, ctx}, name, data) => {
+    opts.body = data;
+    return name;
+  },
+
+  {
+    method: 'POST',
+    cacheId: 'users'
+  }
+);
+
+createUser('bob', {age: 37}).then(async ({data, response}) => {
+  console.log(await data, response.status);
+});
+```
+
+#### middlewares
+
+A dictionary or iterable value with middleware functions: functions take an environment of request parameters and can modify theirs.
+Please notice that the order of middleware depends on the structure you use.
+Also, if at least one of the middlewares returns a function, invoking this function will be returned as the request result.
+It can be helpful to organize mocks of data and other similar cases when you don't want to execute a real request.
+
+```js
+import request from 'core/request';
+
+request('/users', {
+  middlewares: {
+    addAPI({globalOpts}) {
+      if (globalOpts.api == null) {
+        globalOpts.api = 'https://api.foo.com';
+      }
+    },
+
+    addSession({opts}) {
+      opts.headers.set('Authorization', myJWT);
+    }
+  }
+}).data.then(console.log);
+
+// Mocking response data
+request('/users', {
+  middlewares: [
+    ({ctx}) => () => ctx.wrapAsResponse([
+      {name: 'Bob'},
+      {name: 'Robert'}
+    ])
+  ]
+});
+```
+
+#### encoder
+
+A function (or a sequence of functions) takes the current request data and returns new data to request.
+If you provide a sequence of functions, the first function will pass a result in the next function from the sequence, etc.
+
+```js
+import request from 'core/request';
+
+request('//create-user', {
+  method: 'POST',
+  body: {name: 'Bob'},
+  contentType: 'application/x-msgpack',
+  encoder: [normalize, toMessagePack]
+}).data.then(console.log);
+```
+
+#### decoder
+
+A function (or a sequence of functions) takes the current request response data and returns new data to respond.
+If you provide a sequence of functions, the first function will pass a result to the next function from the sequence, etc.
+
+```js
+import request from 'core/request';
+
+request('//users', {
+  responseType: 'arrayBuffer',
+  decoder: fromMessagePack
+}).data.then(console.log);
+```
+
+#### [jsonReviver = `convertIfDate`]
+
+A reviver function for `JSON.parse` or `false` to disable defaults.
+By default, it parses some strings as Date instances.
+
+#### meta
+
+A dictionary with some extra parameters for the request: is usually used with middlewares to provide domain-specific information.
+
+```js
+import request from 'core/request';
+
+request('/users', {
+  meta: {addSession: true},
+
+  middlewares: {
+    addSession({opts}) {
+      if (opts.meta.addSession) {
+        opts.headers.set('Authorization', myJWT);
+      }
+    }
+  }
+}).data.then(console.log);
+```
+
+#### important
+
+A meta flag that indicates that the request is important: is usually used with middlewares to indicate that
+the request needs to be executed as soon as possible.
+
+#### engine
+
+This parameter defined a request engine to use.
+The engine - is a simple function that takes request parameters and returns an abortable promise resolved with the `core/request/response` instance.
+Mind, some engines provide extra features. For instance, you can listen to upload progress events with the XHR engine.
+Or, you can parse responses in a stream form with the Fetch engine.
+
+```js
+import AbortablePromise from 'core/promise/abortable';
+
+import request from 'core/request';
+import Response from 'core/request/response';
+
+import fetchEngine from 'core/request/engines/fetch';
+import xhrEngine from 'core/request/engines/xhr';
+
+request('//users', {
+  engine: fetchEngine,
+  credentials: 'omit'
+}).data.then(console.log);
+
+request('//users', {
+  engine: xhrEngine
+}).data.then(console.log);
+
+request('//users', {
+  engine: (params) => new AbortablePromise((resolve) => {
+    const res = new Response({
+      message: 'Hello world'
+    }, {responseType: 'object'});
+
+    resolve(res);
+
+  }, params.parent)
+
+}).data.then(console.log);
+```
