@@ -9,7 +9,7 @@
 const numberStart = /\d/y;
 const numberDigit = /\d{0,256}/y;
 
-export const patterns = {
+export const PARSER_PATTERNS = {
 	value1: /["{[\]\-\d]|true\b|false\b|null\b|\s{1,256}/y,
 	string: /[^"\\]{1,256}|\\[bfnrt"\\/]|\\u[\da-fA-F]{4}|"/y,
 	key1: /["}]|\s{1,256}/y,
@@ -27,7 +27,9 @@ export const patterns = {
 	numberExpSign: /[-+]/y
 };
 
+export const PARSER_DONE = Symbol('done parser step');
 export const MAX_PATTERN_SIZE = 16;
+export const PARSER_VALUES = {true: true, false: false, null: null};
 
 export const PARSER_STATE = {
 	VALUE: 'value',
@@ -55,4 +57,10 @@ export const PARSER_STATE = {
 } as const;
 
 // Short codes: \b \f \n \r \t \" \\ \/
-export const codes = {b: '\b', f: '\f', n: '\n', r: '\r', t: '\t', '"': '"', '\\': '\\', '/': '/'};
+export const PARSER_CODES = {b: '\b', f: '\f', n: '\n', r: '\r', t: '\t', '"': '"', '\\': '\\', '/': '/'};
+
+export const PARSER_EXPECTED = {
+	[PARSER_STATE.OBJECT]: PARSER_STATE.OBJECT_STOP,
+	[PARSER_STATE.ARRAY]: PARSER_STATE.ARRAY_STOP,
+	[PARSER_STATE.EMPTY]: PARSER_STATE.DONE
+};

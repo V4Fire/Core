@@ -65,8 +65,6 @@ describe('Json parser', () => {
 			}
 		}
 
-		console.log(JSON.stringify(result));
-
 		expect(result.length).toBe(108);
 	});
 
