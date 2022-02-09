@@ -838,6 +838,22 @@ request('/users', {
 A meta flag that indicates that the request is important: is usually used with middlewares to indicate that
 the request needs to be executed as soon as possible.
 
+```js
+import request from 'core/request';
+
+request('/users', {
+  important: true,
+
+  middlewares: {
+    doSomeWork({opts}) {
+      if (opts.meta.important) {
+        // Do some work...
+      }
+    }
+  }
+}).data.then(console.log);
+```
+
 #### engine
 
 This parameter defined a request engine to use.
