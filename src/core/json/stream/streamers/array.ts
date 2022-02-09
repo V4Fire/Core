@@ -30,8 +30,8 @@ export class StreamArray extends StreamBase {
 	}
 
 	*push(): Generator<any> {
-		if (this.assembler.current.length > 0) {
-			yield {key: this.counter++, value: this.assembler.current.pop()};
+		if ((<any[]>this.assembler.current!).length > 0) {
+			yield {key: this.counter++, value: (<any[]>this.assembler.current!).pop()};
 		}
 	}
 }

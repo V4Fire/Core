@@ -10,7 +10,7 @@ import type { PARSER_STATE } from 'core/json/stream/const';
 
 export interface JsonToken {
 	name: string;
-	value?: string | null | boolean | number;
+	value?: string | boolean | number | null;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
@@ -19,14 +19,14 @@ export type PARENT_STATE = typeof PARSER_STATE.OBJECT | typeof PARSER_STATE.ARRA
 
 export interface AssemblerOptions {
 	numberAsString?: boolean;
-	reviver?(key: string, value: any): any;
+	reviver?(key: string, value?: AssemblerItem): any;
 }
 
-export type AssemblerItem = string | number | boolean | object | any[];
+export type AssemblerItem = string | number | boolean | object | any[] | null;
 export type AssemblerKey = string | null;
 
 export interface FilterBaseOptions {
-	multiple?: boolean;
+	once?: boolean;
 	filter?: ((stack: FilterStack, chunk: JsonToken) => boolean) | RegExp | string;
 }
 

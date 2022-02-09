@@ -32,7 +32,6 @@ import {
 	done
 
 } from 'core/json/stream/parser/states';
-debugger;
 
 const handlers = {
 	[PARSER_STATE.VALUE]: value,
@@ -96,6 +95,7 @@ export class Parser {
 				if (val.done) {
 					result = val.value;
 					break;
+
 				} else {
 					yield val.value;
 				}

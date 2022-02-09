@@ -191,6 +191,7 @@ describe('streamers for JSON stream', () => {
 			{name: 'stringValue', value: 'data'},
 			{name: 'endObject'}
 		];
+
 		const target = {
 			a: 1, b: [1, 2, 3], c: {d: 0}, e: 'data'
 		};

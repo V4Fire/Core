@@ -24,7 +24,7 @@ export class Assembler {
 
 	protected stack: AssemblerItem[] = [];
 	protected done: boolean = true;
-	protected readonly reviver!: ((key: string, value: JsonToken) => JsonToken);
+	protected readonly reviver!: ((key: string, value?: AssemblerItem) => any);
 
 	constructor(options?: AssemblerOptions) {
 		if (options) {
@@ -78,7 +78,7 @@ export class Assembler {
 		return this;
 	}
 
-	*processChunk(chunk: JsonToken): Generator<any> {
+	*processChunk(chunk: JsonToken): Generator<AssemblerItem> {
 		this[chunk.name]?.(chunk.value);
 
     if (this.done) {
