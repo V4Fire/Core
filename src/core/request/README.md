@@ -845,8 +845,8 @@ request('/users', {
   important: true,
 
   middlewares: {
-    doSomeWork({opts}) {
-      if (opts.meta.important) {
+    doSomeWork({ctx}) {
+      if (ctx.important) {
         // Do some work...
       }
     }
