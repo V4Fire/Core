@@ -10,25 +10,43 @@ import type { JsonToken, StreamedObject } from 'core/json/stream/interface';
 import { StreamBase } from 'core/json/stream/streamers/modules/base';
 
 export class StreamObject extends StreamBase {
+	/**
+	 * Current level of element being streamed
+	 */
 	level: number = 1;
-	protected _lastKey: string | null = null;
 
+	/**
+	 * Last key of assembled object property
+	 */
+	protected lastKey: string | null = null;
+
+	/**
+	 * Wait for start object token
+	 * otherwise throw an error
+	 *
+	 * @param chunk
+	 */
 	*wait(chunk: JsonToken): Generator<StreamedObject> {
 		// First chunk should open an array
 		if (chunk.name !== 'startObject') {
 			throw new Error('Top-level object should be an object.');
 		}
 
-		this.processChunk = this.filter;
+		this.processChunk = this.assembleChunk;
 		yield* this.processChunk(chunk);
 	}
 
+	/**
+	 * Yielding object key/value pairs
+	 */
 	*push(): Generator<StreamedObject> {
-		if (this._lastKey == null) {
-			this._lastKey = (this.assembler).key;
+		if (this.lastKey == null) {
+			this.lastKey = this.assembler.key;
 
 		} else {
-			yield {key: this._lastKey, value: this.assembler.current![this._lastKey]};
+			yield {key: this.lastKey, value: this.assembler.current![this.lastKey]};
+			this.assembler.current = {};
+			this.lastKey = null;
 		}
 	}
 }

@@ -8,8 +8,12 @@
 
 import type { Parser } from 'core/json/stream/parser';
 import type { JsonToken, PARENT_STATE } from 'core/json/stream/interface';
-import { PARSER_STATE, PARSER_DONE, PARSER_EXPECTED } from 'core/json/stream/const';
+import { PARSER_STATE, PARSER_DONE, PARSER_EXPECTED, PARSER_STATES } from 'core/json/stream/const';
 
+/**
+ * Parse buffer for end of current structure (object or array)
+ * and generate tokens `endObject` or `endArray`
+ */
 export function* stop(this: Parser): Generator<JsonToken> {
 	this.patterns.comma.lastIndex = this.index;
 	this.match = this.patterns.comma.exec(this.buffer);
@@ -43,3 +47,6 @@ export function* stop(this: Parser): Generator<JsonToken> {
 
 	this.index += this.value.length;
 }
+
+PARSER_STATES[PARSER_STATE.ARRAY_STOP] = stop;
+PARSER_STATES[PARSER_STATE.OBJECT_STOP] = stop;

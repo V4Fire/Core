@@ -8,8 +8,12 @@
 
 import type { Parser } from 'core/json/stream/parser';
 import type { JsonToken, PARENT_STATE } from 'core/json/stream/interface';
-import { MAX_PATTERN_SIZE, PARSER_STATE, PARSER_VALUES, PARSER_DONE, PARSER_EXPECTED } from 'core/json/stream/const';
+import { MAX_PATTERN_SIZE, PARSER_STATE, PARSER_VALUES, PARSER_DONE, PARSER_EXPECTED, PARSER_STATES } from 'core/json/stream/const';
 
+/**
+ * Parse buffer for value, generate the sequence of tokens
+ * and set the next expected value
+ */
 export function* value(this: Parser): Generator<JsonToken> {
 	this.patterns.value1.lastIndex = this.index;
 	this.match = this.patterns.value1.exec(this.buffer);
@@ -123,3 +127,6 @@ export function* value(this: Parser): Generator<JsonToken> {
 
 	this.index += this.value.length;
 }
+
+PARSER_STATES[PARSER_STATE.VALUE] = value;
+PARSER_STATES[PARSER_STATE.VALUE1] = value;

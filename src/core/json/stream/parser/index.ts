@@ -6,55 +6,66 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { PARSER_STATE, PARSER_PATTERNS, PARSER_DONE } from 'core/json/stream/const';
+import { PARSER_STATE, PARSER_PATTERNS, PARSER_DONE, PARSER_STATES } from 'core/json/stream/const';
 import type { TPARSER_STATE, PARENT_STATE, JsonToken } from 'core/json/stream/interface';
-import * as parser from 'core/json/stream/parser/states';
-
-const handlers = {
-	[PARSER_STATE.VALUE]: parser.value,
-	[PARSER_STATE.VALUE1]: parser.value,
-	[PARSER_STATE.KEY1]: parser.key,
-	[PARSER_STATE.KEY]: parser.key,
-	[PARSER_STATE.KEY_VAL]: parser.string,
-	[PARSER_STATE.STRING]: parser.string,
-	[PARSER_STATE.COLON]: parser.colon,
-	[PARSER_STATE.ARRAY_STOP]: parser.stop,
-	[PARSER_STATE.OBJECT_STOP]: parser.stop,
-	// Number chunks
-	// [0-9]
-	[PARSER_STATE.NUMBER_START]: parser.numberStart,
-	// [0-9]*
-	[PARSER_STATE.NUMBER_DIGIT]: parser.numberDigit,
-	// [\.eE]?
-	[PARSER_STATE.NUMBER_FRACTION]: parser.numberFraction,
-	// [0-9]
-	[PARSER_STATE.NUMBER_FRAC_START]: parser.numberFractionStart,
-	// [0-9]*
-	[PARSER_STATE.NUMBER_FRAC_DIGIT]: parser.numberFractionDigit,
-	// [eE]?
-	[PARSER_STATE.NUMBER_EXPONENT]: parser.numberExponent,
-	// [-+]?
-	[PARSER_STATE.NUMBER_EXP_SIGN]: parser.numberExpSign,
-	// [0-9]
-	[PARSER_STATE.NUMBER_EXP_START]: parser.numberExpStart,
-	// [0-9]*
-	[PARSER_STATE.NUMBER_EXP_DIGIT]: parser.numberExpDigit,
-	[PARSER_STATE.DONE]: parser.done
-};
 
 export class Parser {
+	/**
+	 * Next expected chunk in stream
+	 */
 	protected expect: TPARSER_STATE = PARSER_STATE.VALUE;
+
+	/**
+	 * An array of parent objects for a current parsed structure
+	 */
 	protected readonly stack: PARENT_STATE[] = [];
+
+	/**
+	 * Current parent of parsed structure
+	 */
 	protected parent: PARENT_STATE = PARSER_STATE.EMPTY;
+
+	/**
+	 * Is parser parsing number now
+	 */
 	protected openNumber: boolean = false;
+
+	/**
+	 * Is parser parsing number now
+	 */
 	protected accumulator: string = '';
+
+	/**
+	 * Current piece of JSON
+	 */
 	protected buffer: string = '';
+
+	/**
+	 * Current match value after regExp execution
+	 */
 	protected match?: RegExpExecArray | null;
+
+	/**
+	 * Current parsed value
+	 */
 	protected value?: string = '';
+
+	/**
+	 * Current index in buffer parsing process
+	 */
 	protected index: number = 0;
+
+	/**
+	 * Collection of regExps for parsing
+	 * different types of data
+	 */
 	protected patterns: Record<string, RegExp> = PARSER_PATTERNS;
 
-	// eslint-disable-next-line complexity, max-lines-per-function
+	/**
+	 * Process piece of JSON and yield tokens
+	 *
+	 * @param chunk
+	 */
 	*processChunk(chunk: string): Generator<JsonToken> {
 		this.buffer += chunk;
 		this.match = null;
@@ -62,7 +73,7 @@ export class Parser {
 		this.index = 0;
 
 		while (true) {
-			const handler = handlers[this.expect];
+			const handler = PARSER_STATES[this.expect];
 			const iter: Generator<JsonToken> = handler.call(this);
 			let result;
 

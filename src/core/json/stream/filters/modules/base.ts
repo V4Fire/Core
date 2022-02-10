@@ -10,8 +10,12 @@ import type { JsonToken, FilterStack, ProcessFunction, FilterBaseOptions } from 
 
 /* eslint-disable default-case */
 export abstract class FilterBase {
-	static defaultReplacement: JsonToken[] = [{name: 'nullValue', value: null}];
-
+	/**
+	 * Create string filter
+	 *
+	 * @param str
+	 * @param separator
+	 */
 	static stringFilter(str: string, separator: string) {
 		return (stack: FilterStack): boolean => {
 			const path = stack.join(separator);
@@ -23,34 +27,96 @@ export abstract class FilterBase {
 		};
 	}
 
+	/**
+	 * Create regExp filter
+	 *
+	 * @param str
+	 * @param separator
+	 */
 	static regExpFilter(regExp: RegExp, separator: string) {
 		return (stack: FilterStack): boolean => regExp.test(stack.join(separator));
 	}
 
+	/**
+	 * Current chunks process method
+	 */
 	public processChunk: (chunk: JsonToken) => Generator<JsonToken>;
 
+	/**
+	 * Method for check chunk filter matching
+	 */
 	protected abstract checkChunk(chunk: JsonToken): Generator<boolean | JsonToken>;
+
+	/**
+	 * Stack of processed tokens
+	 */
 	protected stack: FilterStack = [];
+
+	/**
+	 * Depth of current structure
+	 */
 	protected depth: number = 0;
-	protected multiple?: boolean;
+
+	/**
+	 * If true filtration will return all matched filter reults,
+	 * otherwise only the first match will be returned
+	 */
+	protected multiple: boolean = false;
+
+	/**
+	 * Filter function from options
+	 */
 	protected filter!: (stack: FilterStack, chunk: JsonToken) => boolean;
 
+	/**
+	 * Function for pass number
+	 */
 	protected readonly passNumber: ProcessFunction = this.passValue('endNumber', 'numberValue');
+
+	/**
+	 * Function for pass string
+	 */
 	protected readonly passString: ProcessFunction = this.passValue('endString', 'stringValue');
+
+	/**
+	 * Function for pass key
+	 */
 	protected readonly passKey: ProcessFunction = this.passValue('endKey', 'keyValue');
 
+	/**
+	 * Function for skip number
+	 */
 	protected readonly skipNumber: ProcessFunction = this.skipValue('endNumber', 'numberValue');
+
+	/**
+	 * Function for skip string
+	 */
 	protected readonly skipString: ProcessFunction = this.skipValue('endString', 'stringValue');
+
+	/**
+	 * Function for skip key
+	 */
 	protected readonly skipKey: ProcessFunction = this.skipValue('endKey', 'keyValue');
 
+	/**
+	 * Previous token in stream
+	 */
 	protected previousToken: string = '';
+
+	/**
+	 * Separator for stack
+	 */
 	protected readonly separator: string = '.';
+
+	/**
+	 * Next expected token
+	 */
 	protected expected?: string;
 
 	constructor(options: FilterBaseOptions = {}) {
 		this.processChunk = this.check;
 
-		const {filter} = options;
+		const {filter, multiple} = options;
 
 		if (Object.isString(filter)) {
 			this.filter = FilterBase.stringFilter(filter, this.separator);
@@ -62,9 +128,16 @@ export abstract class FilterBase {
 			this.filter = FilterBase.regExpFilter(filter, this.separator);
 		}
 
-		this.multiple = options.multiple;
+		if (multiple) {
+			this.multiple = multiple;
+		}
 	}
 
+	/**
+	 * Check current chunk token for filter satisfaction
+	 *
+	 * @param chunk
+	 */
 	*check(chunk: JsonToken): Generator<JsonToken> {
 		switch (chunk.name) {
 			case 'startObject':
@@ -134,6 +207,11 @@ export abstract class FilterBase {
 		}
 	}
 
+	/**
+	 * Pass entire object entity in token stream
+	 *
+	 * @param chunk
+	 */
 	*passObject(chunk: JsonToken): Generator<JsonToken> {
 		yield chunk;
 
@@ -154,10 +232,20 @@ export abstract class FilterBase {
 		}
 	}
 
+	/**
+	 * Pass one token in token stream
+	 *
+	 * @param chunk
+	 */
 	*pass(chunk: JsonToken): Generator<JsonToken> {
 		yield chunk;
 	}
 
+	/**
+	 * Skip entire object in token stream
+	 *
+	 * @param chunk
+	 */
 	skipObject(chunk: JsonToken): void {
 		switch (chunk.name) {
 			case 'startObject':
@@ -176,9 +264,20 @@ export abstract class FilterBase {
 		}
 	}
 
+	/**
+	 * Skip all tokens
+	 *
+	 * @param chunk
+	 */
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
 	*skip(): Generator<JsonToken> {}
 
+	/**
+	 * Function constructor for creating pass functions for primitives
+	 *
+	 * @param last
+	 * @param post
+	 */
 	passValue(last: string, post: string): (chunk: JsonToken) => Generator<JsonToken> {
 		const that = this;
 
@@ -206,6 +305,12 @@ export abstract class FilterBase {
 		};
 	}
 
+	/**
+	 * Function constructor for creating skip functions for primitives
+	 *
+	 * @param last
+	 * @param post
+	 */
 	skipValue(last: string, post: string): (chunk: JsonToken) => Generator<JsonToken> {
 		const that = this;
 

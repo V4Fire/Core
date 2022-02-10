@@ -11,9 +11,21 @@ import { FilterBase } from 'core/json/stream/filters/modules/base';
 
 /* eslint-disable default-case */
 export class Filter extends FilterBase {
+	/**
+	 * Filter can work only in multiple mode
+	 */
 	override multiple: boolean = true;
+
+	/**
+	 * Stack for the current object that is being filtered
+	 */
 	protected lastStack: FilterStack = [];
 
+	/**
+	 * Check is chunk matched specified filter
+	 *
+	 * @param chunk
+	 */
 	override*checkChunk(chunk: JsonToken): Generator<JsonToken> {
 		switch (chunk.name) {
 			case 'startObject':
@@ -75,6 +87,10 @@ export class Filter extends FilterBase {
 		return false;
 	}
 
+	/**
+	 * Close all unclosed tokens
+	 * must be called after the end of the filtration
+	 */
 	*syncStack(): Generator<JsonToken> {
 		const {stack} = this,
 			last = this.lastStack,

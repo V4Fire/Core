@@ -8,8 +8,11 @@
 
 import type { Parser } from 'core/json/stream/parser';
 import type { JsonToken } from 'core/json/stream/interface';
-import { PARSER_DONE } from 'core/json/stream/const';
+import { PARSER_DONE, PARSER_STATES, PARSER_STATE } from 'core/json/stream/const';
 
+/**
+ * Parse the buffer, add tokens for closing number chunk if needed, and finish parsing
+ */
 export function* done(this: Parser): Generator<JsonToken> {
 	this.patterns.ws.lastIndex = this.index;
 	this.match = this.patterns.ws.exec(this.buffer);
@@ -36,3 +39,5 @@ export function* done(this: Parser): Generator<JsonToken> {
 
 	this.index += this.value.length;
 }
+
+PARSER_STATES[PARSER_STATE.DONE] = done;

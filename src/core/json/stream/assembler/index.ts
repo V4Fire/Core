@@ -9,21 +9,59 @@
 import type { JsonToken, AssemblerOptions, AssemblerItem, AssemblerKey } from 'core/json/stream/interface';
 
 export class Assembler {
+	/**
+	 * Handler for processing start of object
+	 */
 	startObject: () => void = this.baseStartObject(Object);
+
+	/**
+	 * Handler for processing start of array
+	 */
 	startArray: () => void = this.baseStartObject(Array);
+
+	/**
+	 * Handler for processing string value
+	 */
 	stringValue: (value: string) => void = this.saveValue;
+
+	/**
+	 * Handler for processing end of array
+	 */
 	endArray: () => void = this.endObject;
 
+	/**
+	 * The current object is being assembled
+	 * If it is an array, new subobjects will be added to it
+	 * If it is an object, new properties will be added to it
+	 * Otherwise, it can be one of primitive value
+	 */
 	current: AssemblerItem = null;
+
+	/**
+	 * A string for a property key
+	 * used to keep a property name until
+	 * a corresponding subobject is assembled
+	 */
 	key: AssemblerKey = null;
 
+	/**
+	 * An array of parent objects for an object in current
+	 */
 	protected stack: AssemblerItem[] = [];
+
+	/**
+	 * Indicates that a current object is fully assembled
+	 */
 	protected done: boolean = true;
+
+	/**
+	 * Function for transform values after assembling
+	 * identical to reviver from JSON.parse
+	 */
 	protected readonly reviver!: ((key: string, value?: AssemblerItem) => any);
 
 	constructor(options?: AssemblerOptions) {
 		if (options) {
-
 			if (Object.isFunction(options.reviver)) {
 				this.reviver = options.reviver;
 				this.stringValue = this.saveValueWithReviver;
@@ -36,11 +74,17 @@ export class Assembler {
 		}
 	}
 
+	/**
+	 * Returns a current object depth
+	 */
 	get depth(): number {
 		// eslint-disable-next-line no-bitwise
 		return (this.stack.length >> 1) + (this.done ? 0 : 1);
 	}
 
+	/**
+	 * Return current stack
+	 */
 	get path(): Array<string | number | boolean | object> {
 		const path: Array<string | number | boolean | object> = [];
 
@@ -53,6 +97,11 @@ export class Assembler {
 		return path;
 	}
 
+	/**
+	 * Move current level pointer into specified level
+	 *
+	 * @param level
+	 */
 	dropToLevel(level: number): this {
 		if (level < this.depth) {
 			if (level > 0) {
@@ -73,6 +122,11 @@ export class Assembler {
 		return this;
 	}
 
+	/**
+	 * Assemble piece of data
+	 *
+	 * @param chunk
+	 */
 	*processChunk(chunk: JsonToken): Generator<AssemblerItem> {
 		this[chunk.name]?.(chunk.value);
 
@@ -81,26 +135,48 @@ export class Assembler {
 		}
 	}
 
+	/**
+	 * Handler for processing object key value
+	 *
+	 * @param value
+	 */
 	keyValue(value: string): void {
 		this.key = value;
 	}
 
+	/**
+	 * Handler for processing number value
+	 *
+	 * @param value
+	 */
 	numberValue(value: string): void {
 		this.saveValue(parseFloat(value));
 	}
 
+	/**
+	 * Handler for processing null value
+	 */
 	nullValue(): void {
 		this.saveValue(null);
 	}
 
+	/**
+	 * Handler for processing true boolean value
+	 */
 	trueValue(): void {
 		this.saveValue(true);
 	}
 
+	/**
+	 * Handler for processing false boolean value
+	 */
 	falseValue(): void {
 		this.saveValue(false);
 	}
 
+	/**
+	 * Handler for processing end of object
+	 */
 	endObject(): void {
 		if (this.stack.length > 0) {
 			const value = this.current;
@@ -113,6 +189,11 @@ export class Assembler {
 		}
 	}
 
+	/**
+	 * Save assembled value into internal storage
+	 *
+	 * @param value
+	 */
 	saveValue(value: AssemblerItem): void {
 		if (this.done) {
 			this.current = value;
@@ -126,13 +207,19 @@ export class Assembler {
 		}
 	}
 
+	/**
+	 * Save assembled value into
+	 * internal storage with custom reviver
+	 *
+	 * @param value
+	 */
 	saveValueWithReviver(value?: AssemblerItem): void {
 		if (this.done) {
 			this.current = this.reviver('', value);
 
 		} else if (Object.isArray(this.current)) {
 			value = this.reviver(this.current.length.toString(), value);
-			this.current.push(value);
+			this.current.push(value!);
 
 			if (value === undefined) {
 				delete this.current[this.current.length - 1];
@@ -149,6 +236,12 @@ export class Assembler {
 		}
 	}
 
+	/**
+	 * Function constructor for creating
+	 * handlers of start complex values (object or array)
+	 *
+	 * @param Type
+	 */
 	baseStartObject(Type: ObjectConstructor | ArrayConstructor) {
 		return (): void => {
 			if (this.done) {
@@ -158,7 +251,7 @@ export class Assembler {
 				this.stack.push(this.current, this.key);
 			}
 
-			this.current = new Type();
+			this.current = <AssemblerItem>new Type();
 			this.key = null;
 		};
 	}

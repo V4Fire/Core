@@ -9,9 +9,14 @@
  import type { JsonToken } from 'core/json/stream/interface';
  import { FilterBase } from 'core/json/stream/filters/modules/base';
 
-/* eslint-disable default-case */
-export class Pick extends FilterBase {
-	override*checkChunk(chunk: JsonToken): Generator<boolean | JsonToken> {
+ export class Pick extends FilterBase {
+	/**
+	 * Check is chunk matched specified filter
+	 *
+	 * @param chunk
+	 */
+	 override*checkChunk(chunk: JsonToken): Generator<boolean | JsonToken> {
+		/* eslint-disable default-case */
 		switch (chunk.name) {
 			case 'startObject':
 			case 'startArray':

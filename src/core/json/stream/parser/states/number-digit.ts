@@ -8,8 +8,11 @@
 
 import type { Parser } from 'core/json/stream/parser';
 import type { JsonToken } from 'core/json/stream/interface';
-import { PARSER_DONE, PARSER_STATE } from 'core/json/stream/const';
+import { PARSER_DONE, PARSER_STATES, PARSER_STATE } from 'core/json/stream/const';
 
+/**
+ * Parse buffer and generate from the digits [0-9]* token `numberChunk` with number value
+ */
 export function* numberDigit(this: Parser): Generator<JsonToken> {
 	this.patterns.numberDigit.lastIndex = this.index;
 	this.match = this.patterns.numberDigit.exec(this.buffer);
@@ -40,3 +43,5 @@ export function* numberDigit(this: Parser): Generator<JsonToken> {
 		return PARSER_DONE;
 	}
 }
+
+PARSER_STATES[PARSER_STATE.NUMBER_DIGIT] = numberDigit;

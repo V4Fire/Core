@@ -8,8 +8,12 @@
 
 import type { Parser } from 'core/json/stream/parser';
 import type { JsonToken } from 'core/json/stream/interface';
-import { PARSER_DONE, PARSER_EXPECTED, PARSER_STATE } from 'core/json/stream/const';
+import { PARSER_DONE, PARSER_EXPECTED, PARSER_STATES, PARSER_STATE } from 'core/json/stream/const';
 
+/**
+ * Parse buffer for exponent symbol [eE]?
+ * and generate token `numberChunk` with symbol value
+ */
 export function* numberExponent(this: Parser): Generator<JsonToken> {
 	this.patterns.numberExponent.lastIndex = this.index;
 	this.match = this.patterns.numberExponent.exec(this.buffer);
@@ -32,3 +36,5 @@ export function* numberExponent(this: Parser): Generator<JsonToken> {
 
 	this.index += this.value.length;
 }
+
+PARSER_STATES[PARSER_STATE.NUMBER_EXPONENT] = numberExponent;

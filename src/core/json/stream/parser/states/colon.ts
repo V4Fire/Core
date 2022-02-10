@@ -8,8 +8,11 @@
 
 import type { Parser } from 'core/json/stream/parser';
 import type { JsonToken } from 'core/json/stream/interface';
-import { PARSER_STATE, PARSER_DONE } from 'core/json/stream/const';
+import { PARSER_STATE, PARSER_DONE, PARSER_STATES } from 'core/json/stream/const';
 
+/**
+ * Parse buffer for colon and set expected element to object value
+ */
 // eslint-disable-next-line require-yield
 export function* colon(this: Parser): Generator<JsonToken> {
 	this.patterns.colon.lastIndex = this.index;
@@ -28,3 +31,5 @@ export function* colon(this: Parser): Generator<JsonToken> {
 
 	this.index += this.value.length;
 }
+
+PARSER_STATES[PARSER_STATE.COLON] = colon;

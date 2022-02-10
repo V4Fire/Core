@@ -45,8 +45,8 @@ export const PARSER_STATE = {
 	ARRAY_STOP: 'arrayStop',
 	NUMBER_START: 'numberStart',
 	NUMBER_FRACTION: 'numberFraction',
-	NUMBER_FRAC_START: 'numberFracStart',
-	NUMBER_FRAC_DIGIT: 'numberFracDigit',
+	NUMBER_FRACTION_START: 'numberFracStart',
+	NUMBER_FRACTION_DIGIT: 'numberFracDigit',
 	NUMBER_EXPONENT: 'numberExponent',
 	NUMBER_DIGIT: 'numberDigit',
 	NUMBER_EXP_SIGN: 'numberExpSign',
@@ -64,3 +64,5 @@ export const PARSER_EXPECTED = {
 	[PARSER_STATE.ARRAY]: PARSER_STATE.ARRAY_STOP,
 	[PARSER_STATE.EMPTY]: PARSER_STATE.DONE
 };
+
+export const PARSER_STATES = {};

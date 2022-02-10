@@ -8,8 +8,12 @@
 
 import type { Parser } from 'core/json/stream/parser';
 import type { JsonToken } from 'core/json/stream/interface';
-import { PARSER_DONE, PARSER_STATE } from 'core/json/stream/const';
+import { PARSER_DONE, PARSER_STATES, PARSER_STATE } from 'core/json/stream/const';
 
+/**
+ * Parse buffer for exp signs [-+]?*
+ * and generate token `numberChunk` with sign
+ */
 export function* numberExpSign(this: Parser): Generator<JsonToken> {
 	this.patterns.numberExpSign.lastIndex = this.index;
 	this.match = this.patterns.numberExpSign.exec(this.buffer);
@@ -32,3 +36,5 @@ export function* numberExpSign(this: Parser): Generator<JsonToken> {
 
 	this.index += this.value.length;
 }
+
+PARSER_STATES[PARSER_STATE.NUMBER_EXP_SIGN] = numberExpSign;

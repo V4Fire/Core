@@ -10,20 +10,41 @@ import { Assembler } from 'core/json/stream/assembler';
 import type { JsonToken } from 'core/json/stream/interface';
 
 export abstract class StreamBase {
-	abstract wait?(chunk: JsonToken): Generator<any>;
-	abstract push(discard?: boolean): Generator<any>;
+	/**
+	 * Method for checking the correctness of
+	 * stream of tokens
+	 *
+	 * @param chunk
+	 */
+	abstract wait(chunk: JsonToken): Generator<any>;
 
-	protected filter: (chunk: JsonToken) => Generator<any> = this.processChunk;
+	/**
+	 * Method for yielding assembled tokens
+	 */
+	abstract push(): Generator<any>;
+
+	/**
+	 * Instace of the assembler for assembling
+	 * streamed tokens into values
+	 */
 	protected assembler: Assembler;
+
+	/**
+	 * Current depth of the streamed structure
+	 */
 	protected abstract level: number;
-	protected readonly savedAssembler?: Assembler;
 
 	constructor() {
-		this.processChunk = this.wait ?? this.filter;
+		this.processChunk = this.wait;
 		this.assembler = new Assembler();
 	}
 
-	*processChunk(chunk: JsonToken): Generator<any> {
+	/**
+	 * Assemble token chunk
+	 *
+	 * @param chunk
+	 */
+	*assembleChunk(chunk: JsonToken): Generator<any> {
 		if (Object.isFunction(this.assembler[chunk.name])) {
 			this.assembler[chunk.name](chunk.value);
 
@@ -33,26 +54,5 @@ export abstract class StreamBase {
 		}
 	}
 
-	*accept(chunk: JsonToken): Generator<JsonToken> {
-		if (Object.isFunction(this.assembler[chunk.name])) {
-			this.assembler[chunk.name](chunk.value);
-
-			if (this.assembler.depth === this.level) {
-				yield* this.push();
-				this.processChunk = this.filter;
-			}
-		}
-	}
-
-	// eslint-disable-next-line require-yield
-	*reject(chunk: JsonToken): Generator<JsonToken> {
-		if (Object.isFunction(this.assembler[chunk.name])) {
-			this.assembler[chunk.name](chunk.value);
-
-			if (this.assembler.depth === this.level) {
-				this.assembler = this.savedAssembler!;
-				this.processChunk = this.filter;
-			}
-		}
-	}
+	protected processChunk?(chunk: JsonToken): Generator<any>;
 }
