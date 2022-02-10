@@ -22,7 +22,7 @@ export interface AssemblerOptions {
 	reviver?(key: string, value?: AssemblerItem): any;
 }
 
-export type AssemblerItem = string | number | boolean | object | any[] | null;
+export type AssemblerItem = string | number | boolean | AssemblerItem[] | Dictionary<AssemblerItem> | null;
 export type AssemblerKey = string | null;
 
 export interface FilterBaseOptions {
@@ -33,3 +33,13 @@ export interface FilterBaseOptions {
 export type FilterStack = Array<JsonToken['value'] | null>;
 
 export type ProcessFunction = (chunk: JsonToken) => Generator<JsonToken>;
+
+export interface StreamedArray {
+	key: number;
+	value: any;
+}
+
+export interface StreamedObject {
+	key: string;
+	value: any;
+}

@@ -6,18 +6,13 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-/**
- * [[include:core/json/stream/README.md]]
- * @packageDocumentation
- */
-
-import type { JsonToken } from 'core/json/stream/interface';
+import type { FilterStack, JsonToken } from 'core/json/stream/interface';
 import { FilterBase } from 'core/json/stream/filters/modules/base';
 
 /* eslint-disable default-case */
 export class Filter extends FilterBase {
 	override multiple: boolean = true;
-	protected lastStack: any[] = [];
+	protected lastStack: FilterStack = [];
 
 	override*checkChunk(chunk: JsonToken): Generator<JsonToken> {
 		switch (chunk.name) {
@@ -30,6 +25,7 @@ export class Filter extends FilterBase {
 				}
 
 				break;
+
 			case 'startArray':
 				if (this.filter(this.stack, chunk)) {
 					yield* this.syncStack();
@@ -38,6 +34,7 @@ export class Filter extends FilterBase {
 				}
 
 				break;
+
 			case 'nullValue':
 			case 'trueValue':
 			case 'falseValue':
@@ -49,6 +46,7 @@ export class Filter extends FilterBase {
 				}
 
 				break;
+
 			case 'startString':
 				if (this.filter(this.stack, chunk)) {
 					yield* this.syncStack();
@@ -60,6 +58,7 @@ export class Filter extends FilterBase {
 				}
 
 				break;
+
 			case 'startNumber':
 				if (this.filter(this.stack, chunk)) {
 					yield* this.syncStack();

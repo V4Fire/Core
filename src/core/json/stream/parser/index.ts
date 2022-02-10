@@ -6,63 +6,40 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-/**
- * [[include:core/json/stream/README.md]]
- * @packageDocumentation
- */
-
 import { PARSER_STATE, PARSER_PATTERNS, PARSER_DONE } from 'core/json/stream/const';
 import type { TPARSER_STATE, PARENT_STATE, JsonToken } from 'core/json/stream/interface';
-import {
-
-	value,
-	key,
-	string,
-	colon,
-	stop,
-	numberStart,
-	numberDigit,
-	numberFraction,
-	numberFractionStart,
-	numberFractionDigit,
-	numberExponent,
-	numberExpStart,
-	numberExpSign,
-	numberExpDigit,
-	done
-
-} from 'core/json/stream/parser/states';
+import * as parser from 'core/json/stream/parser/states';
 
 const handlers = {
-	[PARSER_STATE.VALUE]: value,
-	[PARSER_STATE.VALUE1]: value,
-	[PARSER_STATE.KEY1]: key,
-	[PARSER_STATE.KEY]: key,
-	[PARSER_STATE.KEY_VAL]: string,
-	[PARSER_STATE.STRING]: string,
-	[PARSER_STATE.COLON]: colon,
-	[PARSER_STATE.ARRAY_STOP]: stop,
-	[PARSER_STATE.OBJECT_STOP]: stop,
+	[PARSER_STATE.VALUE]: parser.value,
+	[PARSER_STATE.VALUE1]: parser.value,
+	[PARSER_STATE.KEY1]: parser.key,
+	[PARSER_STATE.KEY]: parser.key,
+	[PARSER_STATE.KEY_VAL]: parser.string,
+	[PARSER_STATE.STRING]: parser.string,
+	[PARSER_STATE.COLON]: parser.colon,
+	[PARSER_STATE.ARRAY_STOP]: parser.stop,
+	[PARSER_STATE.OBJECT_STOP]: parser.stop,
 	// Number chunks
 	// [0-9]
-	[PARSER_STATE.NUMBER_START]: numberStart,
+	[PARSER_STATE.NUMBER_START]: parser.numberStart,
 	// [0-9]*
-	[PARSER_STATE.NUMBER_DIGIT]: numberDigit,
+	[PARSER_STATE.NUMBER_DIGIT]: parser.numberDigit,
 	// [\.eE]?
-	[PARSER_STATE.NUMBER_FRACTION]: numberFraction,
+	[PARSER_STATE.NUMBER_FRACTION]: parser.numberFraction,
 	// [0-9]
-	[PARSER_STATE.NUMBER_FRAC_START]: numberFractionStart,
+	[PARSER_STATE.NUMBER_FRAC_START]: parser.numberFractionStart,
 	// [0-9]*
-	[PARSER_STATE.NUMBER_FRAC_DIGIT]: numberFractionDigit,
+	[PARSER_STATE.NUMBER_FRAC_DIGIT]: parser.numberFractionDigit,
 	// [eE]?
-	[PARSER_STATE.NUMBER_EXPONENT]: numberExponent,
+	[PARSER_STATE.NUMBER_EXPONENT]: parser.numberExponent,
 	// [-+]?
-	[PARSER_STATE.NUMBER_EXP_SIGN]: numberExpSign,
+	[PARSER_STATE.NUMBER_EXP_SIGN]: parser.numberExpSign,
 	// [0-9]
-	[PARSER_STATE.NUMBER_EXP_START]: numberExpStart,
+	[PARSER_STATE.NUMBER_EXP_START]: parser.numberExpStart,
 	// [0-9]*
-	[PARSER_STATE.NUMBER_EXP_DIGIT]: numberExpDigit,
-	[PARSER_STATE.DONE]: done
+	[PARSER_STATE.NUMBER_EXP_DIGIT]: parser.numberExpDigit,
+	[PARSER_STATE.DONE]: parser.done
 };
 
 export class Parser {
@@ -89,7 +66,7 @@ export class Parser {
 			const iter: Generator<JsonToken> = handler.call(this);
 			let result;
 
-			while(true) {
+			while (true) {
 				const val = iter.next();
 
 				if (val.done) {

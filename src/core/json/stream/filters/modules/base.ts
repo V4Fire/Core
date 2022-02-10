@@ -6,11 +6,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-/**
- * [[include:core/json/stream/README.md]]
- * @packageDocumentation
- */
-
 import type { JsonToken, FilterStack, ProcessFunction, FilterBaseOptions } from 'core/json/stream/interface';
 
 /* eslint-disable default-case */

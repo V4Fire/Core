@@ -6,19 +6,14 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-/**
- * [[include:core/json/stream/README.md]]
- * @packageDocumentation
- */
-
-import type { JsonToken } from 'core/json/stream/interface';
+import type { JsonToken, StreamedObject } from 'core/json/stream/interface';
 import { StreamBase } from 'core/json/stream/streamers/modules/base';
 
 export class StreamObject extends StreamBase {
 	level: number = 1;
-	protected _lastKey: number | null | string | Object = null;
+	protected _lastKey: string | null = null;
 
-	*wait(chunk: JsonToken): Generator<JsonToken> {
+	*wait(chunk: JsonToken): Generator<StreamedObject> {
 		// First chunk should open an array
 		if (chunk.name !== 'startObject') {
 			throw new Error('Top-level object should be an object.');
@@ -28,12 +23,12 @@ export class StreamObject extends StreamBase {
 		yield* this.processChunk(chunk);
 	}
 
-	*push(): Generator<{key: number | null | string | Object; value: any}> {
+	*push(): Generator<StreamedObject> {
 		if (this._lastKey == null) {
 			this._lastKey = (this.assembler).key;
 
 		} else {
-			yield {key: this._lastKey, value: this.assembler.current![<string>this._lastKey]};
+			yield {key: this._lastKey, value: this.assembler.current![this._lastKey]};
 		}
 	}
 }

@@ -6,11 +6,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-/**
- * [[include:core/json/stream/README.md]]
- * @packageDocumentation
- */
-
 import type { JsonToken, AssemblerOptions, AssemblerItem, AssemblerKey } from 'core/json/stream/interface';
 
 export class Assembler {

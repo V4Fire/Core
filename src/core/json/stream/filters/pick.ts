@@ -6,11 +6,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-/**
- * [[include:core/json/stream/README.md]]
- * @packageDocumentation
- */
-
  import type { JsonToken } from 'core/json/stream/interface';
  import { FilterBase } from 'core/json/stream/filters/modules/base';
 

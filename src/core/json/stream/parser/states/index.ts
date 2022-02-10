@@ -1,3 +1,11 @@
+/*!
+ * V4Fire Core
+ * https://github.com/V4Fire/Core
+ *
+ * Released under the MIT license
+ * https://github.com/V4Fire/Core/blob/master/LICENSE
+ */
+
 export { colon } from 'core/json/stream/parser/states/colon';
 export { done } from 'core/json/stream/parser/states/done';
 export { key } from 'core/json/stream/parser/states/key';

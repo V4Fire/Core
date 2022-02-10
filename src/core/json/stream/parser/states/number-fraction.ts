@@ -6,11 +6,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-/**
- * [[include:core/json/stream/README.md]]
- * @packageDocumentation
- */
-
 import type { Parser } from 'core/json/stream/parser';
 import type { JsonToken } from 'core/json/stream/interface';
 import { PARSER_DONE, PARSER_EXPECTED, PARSER_STATE } from 'core/json/stream/const';

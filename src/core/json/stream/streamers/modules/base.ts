@@ -6,19 +6,14 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-/**
- * [[include:core/json/stream/README.md]]
- * @packageDocumentation
- */
-
 import { Assembler } from 'core/json/stream/assembler';
 import type { JsonToken } from 'core/json/stream/interface';
 
 export abstract class StreamBase {
-	abstract wait?(chunk: JsonToken): Generator<JsonToken>;
+	abstract wait?(chunk: JsonToken): Generator<any>;
 	abstract push(discard?: boolean): Generator<any>;
 
-	protected filter: (chunk: JsonToken) => Generator<JsonToken> = this.processChunk;
+	protected filter: (chunk: JsonToken) => Generator<any> = this.processChunk;
 	protected assembler: Assembler;
 	protected abstract level: number;
 	protected readonly savedAssembler?: Assembler;
@@ -28,7 +23,7 @@ export abstract class StreamBase {
 		this.assembler = new Assembler();
 	}
 
-	*processChunk(chunk: JsonToken): Generator<JsonToken> {
+	*processChunk(chunk: JsonToken): Generator<any> {
 		if (Object.isFunction(this.assembler[chunk.name])) {
 			this.assembler[chunk.name](chunk.value);
 
