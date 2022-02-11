@@ -141,7 +141,7 @@ export function* value(this: Parser): Generator<JsonToken> {
 			break;
 
 		default:
-			throw new SyntaxError('Unknown token');
+			// Do nothing;
 	}
 
 	this.index += this.value.length;
