@@ -7,92 +7,106 @@
  */
 
 import type { Parser } from 'core/json/stream/parser';
-import type { JsonToken, PARENT_STATE } from 'core/json/stream/interface';
-import { MAX_PATTERN_SIZE, PARSER_STATE, PARSER_VALUES, PARSER_DONE, PARSER_EXPECTED, PARSER_STATES } from 'core/json/stream/const';
+
+import {
+
+	parserStates,
+	parserStateTypes,
+	parserExpected,
+
+	MAX_PATTERN_SIZE,
+	PARSING_COMPLETE
+
+} from 'core/json/stream/const';
+
+import type { JsonToken, ParentParserState } from 'core/json/stream/interface';
 
 /**
- * Parse buffer for value, generate the sequence of tokens
- * and set the next expected value
+ * Parses the buffer for a value, generates a sequence of tokens, and sets the next expected value
  */
 export function* value(this: Parser): Generator<JsonToken> {
 	this.patterns.value1.lastIndex = this.index;
 	this.match = this.patterns.value1.exec(this.buffer);
 
-	if (!this.match) {
+	if (this.match == null) {
 		if (this.index + MAX_PATTERN_SIZE < this.buffer.length) {
 			if (this.index < this.buffer.length) {
-				throw new Error('Parser cannot parse input: expected a value');
+				throw new SyntaxError("Can't parse the input: expected a value");
 			}
 
-			throw new Error('Parser has expected a value');
+			throw new SyntaxError('The parser has expected a value');
 		}
 
-		return PARSER_DONE;
+		return PARSING_COMPLETE;
 	}
 
 	this.value = this.match[0];
 
-	// eslint-disable-next-line default-case
 	switch (this.value) {
 		case '"':
 			yield {name: 'startString'};
 
-			this.expect = PARSER_STATE.STRING;
+			this.expect = parserStateTypes.STRING;
 			break;
 
 		case '{':
 			yield {name: 'startObject'};
 
 			this.stack.push(this.parent);
-			this.parent = PARSER_STATE.OBJECT;
-			this.expect = PARSER_STATE.KEY1;
+			this.parent = parserStateTypes.OBJECT;
+			this.expect = parserStateTypes.KEY1;
+
 			break;
 
 		case '[':
 			yield {name: 'startArray'};
 
 			this.stack.push(this.parent);
-			this.parent = PARSER_STATE.ARRAY;
-			this.expect = PARSER_STATE.VALUE1;
+			this.parent = parserStateTypes.ARRAY;
+			this.expect = parserStateTypes.VALUE1;
+
 			break;
 
 		case ']':
-			if (this.expect !== PARSER_STATE.VALUE1) {
-				throw new Error("Parser cannot parse input: unexpected token ']'");
+			if (this.expect !== parserStateTypes.VALUE1) {
+				throw new SyntaxError("Parser cannot parse input: unexpected token ']'");
 			}
 
-			if (this.openNumber) {
+			if (this.isOpenNumber) {
 				yield {name: 'endNumber'};
 				yield {name: 'numberValue', value: this.accumulator};
 
-				this.openNumber = false;
+				this.isOpenNumber = false;
 				this.accumulator = '';
 			}
 
 			yield {name: 'endArray'};
 
-			this.parent = <PARENT_STATE>this.stack.pop();
-			this.expect = PARSER_EXPECTED[this.parent];
+			this.parent = <ParentParserState>this.stack.pop();
+			this.expect = parserExpected[this.parent];
+
 			break;
 
 		case '-':
-			this.openNumber = true;
+			this.isOpenNumber = true;
 
 			yield {name: 'startNumber'};
 			yield {name: 'numberChunk', value: '-'};
 
 			this.accumulator = '-';
-			this.expect = PARSER_STATE.NUMBER_START;
+			this.expect = parserStateTypes.NUMBER_START;
+
 			break;
 
 		case '0':
-			this.openNumber = true;
+			this.isOpenNumber = true;
 
 			yield {name: 'startNumber'};
 			yield {name: 'numberChunk', value: '0'};
 
 			this.accumulator = '0';
-			this.expect = PARSER_STATE.NUMBER_FRACTION;
+			this.expect = parserStateTypes.NUMBER_FRACTION;
+
 			break;
 
 		case '1':
@@ -104,29 +118,34 @@ export function* value(this: Parser): Generator<JsonToken> {
 		case '7':
 		case '8':
 		case '9':
-			this.openNumber = true;
+			this.isOpenNumber = true;
 
 			yield {name: 'startNumber'};
 			yield {name: 'numberChunk', value: this.value};
 
 			this.accumulator = this.value;
-			this.expect = PARSER_STATE.NUMBER_DIGIT;
+			this.expect = parserStateTypes.NUMBER_DIGIT;
+
 			break;
 
 		case 'true':
 		case 'false':
 		case 'null':
 			if (this.buffer.length - this.index === this.value.length) {
-				return PARSER_DONE;
+				return PARSING_COMPLETE;
 			}
 
-			yield {name: `${this.value}Value`, value: PARSER_VALUES[this.value]};
-			this.expect = PARSER_EXPECTED[this.parent];
+			yield {name: `${this.value}Value`, value: Object.parse(this.value)};
+			this.expect = parserExpected[this.parent];
+
 			break;
+
+		default:
+			throw new SyntaxError('Unknown token');
 	}
 
 	this.index += this.value.length;
 }
 
-PARSER_STATES[PARSER_STATE.VALUE] = value;
-PARSER_STATES[PARSER_STATE.VALUE1] = value;
+parserStates[parserStateTypes.VALUE] = value;
+parserStates[parserStateTypes.VALUE1] = value;

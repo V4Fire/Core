@@ -7,43 +7,44 @@
  */
 
 import type { Parser } from 'core/json/stream/parser';
-import type { JsonToken, PARENT_STATE } from 'core/json/stream/interface';
-import { PARSER_STATE, PARSER_DONE, PARSER_EXPECTED, PARSER_STATES } from 'core/json/stream/const';
+
+import { parserStates, parserStateTypes, parserExpected, PARSING_COMPLETE } from 'core/json/stream/const';
+import type { JsonToken, ParentParserState } from 'core/json/stream/interface';
 
 /**
- * Parse buffer for object key and generate token `startKey`
- * or if object ended generate `endObject` token
+ * Parses the buffer for an object key and generates a token `startKey`.
+ * Or if the object ended generates `endObject` token.
  */
 export function* key(this: Parser): Generator<JsonToken> {
 	this.patterns.key1.lastIndex = this.index;
 	this.match = this.patterns.key1.exec(this.buffer);
 
-	if (!this.match) {
+	if (this.match == null) {
 		if (this.index < this.buffer.length) {
-			throw new Error('Parser cannot parse input: expected an object key');
+			throw new SyntaxError("Can't parse the input: expected an object key");
 		}
 
-		return PARSER_DONE;
+		return PARSING_COMPLETE;
 	}
 
 	this.value = this.match[0];
 
 	if (this.value === '"') {
 		yield {name: 'startKey'};
-		this.expect = PARSER_STATE.KEY_VAL;
+		this.expect = parserStateTypes.KEY_VAL;
 
 	} else if (this.value === '}') {
-		if (this.expect !== PARSER_STATE.KEY1) {
-			throw new Error("Parser cannot parse input: unexpected token '}'");
+		if (this.expect !== parserStateTypes.KEY1) {
+			throw new SyntaxError("Can't parse the input: unexpected token '}'");
 		}
 
 		yield {name: 'endObject'};
-		this.parent = <PARENT_STATE>this.stack.pop();
-		this.expect = PARSER_EXPECTED[this.parent];
+		this.parent = <ParentParserState>this.stack.pop();
+		this.expect = parserExpected[this.parent];
 	}
 
 	this.index += this.value.length;
 }
 
-PARSER_STATES[PARSER_STATE.KEY] = key;
-PARSER_STATES[PARSER_STATE.KEY1] = key;
+parserStates[parserStateTypes.KEY] = key;
+parserStates[parserStateTypes.KEY1] = key;

@@ -7,41 +7,44 @@
  */
 
 import type { Parser } from 'core/json/stream/parser';
+
+import { parserStates, parserStateTypes, PARSING_COMPLETE } from 'core/json/stream/const';
 import type { JsonToken } from 'core/json/stream/interface';
-import { PARSER_DONE, PARSER_STATES, PARSER_STATE } from 'core/json/stream/const';
 
 /**
- * Parse buffer and generate from the digits [0-9]* token `numberChunk` with number value
+ * Parses the buffer and generates from digits `[0-9]*` a token `numberChunk` with a number value
  */
 export function* numberDigit(this: Parser): Generator<JsonToken> {
 	this.patterns.numberDigit.lastIndex = this.index;
 	this.match = this.patterns.numberDigit.exec(this.buffer);
 
-	if (!this.match) {
+	if (this.match == null) {
 		if (this.index < this.buffer.length) {
-			throw new Error('Parser cannot parse input: expected a digit');
+			throw new SyntaxError("Can't parse the input: expected a digit");
 		}
 
-		return PARSER_DONE;
+		return PARSING_COMPLETE;
 	}
 
 	this.value = this.match[0];
 
 	if (this.value.length > 0) {
-		yield {name: 'numberChunk', value: this.value};
+		yield {
+			name: 'numberChunk',
+			value: this.value
+		};
 
 		this.accumulator += this.value;
-
 		this.index += this.value.length;
 
 	} else {
 		if (this.index < this.buffer.length) {
-			this.expect = PARSER_STATE.NUMBER_FRACTION;
+			this.expect = parserStateTypes.NUMBER_FRACTION;
 			return;
 		}
 
-		return PARSER_DONE;
+		return PARSING_COMPLETE;
 	}
 }
 
-PARSER_STATES[PARSER_STATE.NUMBER_DIGIT] = numberDigit;
+parserStates[parserStateTypes.NUMBER_DIGIT] = numberDigit;

@@ -7,34 +7,37 @@
  */
 
 import type { Parser } from 'core/json/stream/parser';
+
+import { parserStates, parserStateTypes, PARSING_COMPLETE } from 'core/json/stream/const';
 import type { JsonToken } from 'core/json/stream/interface';
-import { PARSER_DONE, PARSER_STATES, PARSER_STATE } from 'core/json/stream/const';
 
 /**
- * Parse buffer for exp signs [-+]?*
- * and generate token `numberChunk` with sign
+ * Parses the buffer for signs `[-+]?*` and generates a token `numberChunk` with a sign
  */
 export function* numberExpSign(this: Parser): Generator<JsonToken> {
 	this.patterns.numberExpSign.lastIndex = this.index;
 	this.match = this.patterns.numberExpSign.exec(this.buffer);
 
-	if (!this.match) {
+	if (this.match == null) {
 		if (this.index < this.buffer.length) {
-			this.expect = PARSER_STATE.NUMBER_EXP_START;
+			this.expect = parserStateTypes.NUMBER_EXP_START;
 			return;
 		}
 
-		return PARSER_DONE;
+		return PARSING_COMPLETE;
 	}
 
 	this.value = this.match[0];
 
-	yield {name: 'numberChunk', value: this.value};
+	yield {
+		name: 'numberChunk',
+		value: this.value
+	};
 
 	this.accumulator += this.value;
-	this.expect = PARSER_STATE.NUMBER_EXP_START;
+	this.expect = parserStateTypes.NUMBER_EXP_START;
 
 	this.index += this.value.length;
 }
 
-PARSER_STATES[PARSER_STATE.NUMBER_EXP_SIGN] = numberExpSign;
+parserStates[parserStateTypes.NUMBER_EXP_SIGN] = numberExpSign;

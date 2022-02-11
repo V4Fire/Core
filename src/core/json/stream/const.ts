@@ -6,10 +6,18 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-const numberStart = /\d/y;
-const numberDigit = /\d{0,256}/y;
+export const
+	MAX_PATTERN_SIZE = 16,
+	PARSING_COMPLETE = Symbol('Parser final step');
 
-export const PARSER_PATTERNS = {
+export const
+	parserStates = {};
+
+const
+	numberStart = /\d/y,
+	numberDigit = /\d{0,256}/y;
+
+export const parserPatterns = {
 	value1: /["{[\]\-\d]|true\b|false\b|null\b|\s{1,256}/y,
 	string: /[^"\\]{1,256}|\\[bfnrt"\\/]|\\u[\da-fA-F]{4}|"/y,
 	key1: /["}]|\s{1,256}/y,
@@ -27,11 +35,7 @@ export const PARSER_PATTERNS = {
 	numberExpSign: /[-+]/y
 };
 
-export const PARSER_DONE = Symbol('done parser step');
-export const MAX_PATTERN_SIZE = 16;
-export const PARSER_VALUES = {true: true, false: false, null: null};
-
-export const PARSER_STATE = {
+export const parserStateTypes = {
 	VALUE: 'value',
 	VALUE1: 'value1',
 	STRING: 'string',
@@ -56,13 +60,19 @@ export const PARSER_STATE = {
 	DONE: 'done'
 } as const;
 
-// Short codes: \b \f \n \r \t \" \\ \/
-export const PARSER_CODES = {b: '\b', f: '\f', n: '\n', r: '\r', t: '\t', '"': '"', '\\': '\\', '/': '/'};
-
-export const PARSER_EXPECTED = {
-	[PARSER_STATE.OBJECT]: PARSER_STATE.OBJECT_STOP,
-	[PARSER_STATE.ARRAY]: PARSER_STATE.ARRAY_STOP,
-	[PARSER_STATE.EMPTY]: PARSER_STATE.DONE
+export const parserExpected = {
+	[parserStateTypes.OBJECT]: parserStateTypes.OBJECT_STOP,
+	[parserStateTypes.ARRAY]: parserStateTypes.ARRAY_STOP,
+	[parserStateTypes.EMPTY]: parserStateTypes.DONE
 };
 
-export const PARSER_STATES = {};
+export const parserCharCodes = {
+	b: '\b',
+	f: '\f',
+	n: '\n',
+	r: '\r',
+	t: '\t',
+	'"': '"',
+	'\\': '\\',
+	'/': '/'
+};

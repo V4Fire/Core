@@ -31,9 +31,7 @@ import type {
 	ResponseTypeValueP,
 
 	ResponseHeaders,
-	ResponseOptions,
-
-	JSONLikeValue
+	ResponseOptions
 
 } from 'core/request/response/interface';
 

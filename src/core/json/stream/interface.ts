@@ -6,28 +6,31 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type { PARSER_STATE } from 'core/json/stream/const';
+import type { parserStateTypes } from 'core/json/stream/const';
 
 export interface JsonToken {
 	name: string;
 	value?: string | boolean | number | null;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export type TPARSER_STATE = typeof PARSER_STATE[keyof typeof PARSER_STATE];
-export type PARENT_STATE = typeof PARSER_STATE.OBJECT | typeof PARSER_STATE.ARRAY | typeof PARSER_STATE.EMPTY;
+export type ParserState = typeof parserStateTypes[keyof typeof parserStateTypes];
+
+export type ParentParserState =
+	typeof parserStateTypes.OBJECT |
+	typeof parserStateTypes.ARRAY |
+	typeof parserStateTypes.EMPTY;
 
 export interface AssemblerOptions {
 	numberAsString?: boolean;
 	reviver?(key: string, value?: AssemblerItem): any;
 }
 
-export type AssemblerItem = string | number | boolean | AssemblerItem[] | Dictionary<AssemblerItem> | null;
+export type AssemblerItem = JSONLikeValue;
 export type AssemblerKey = string | null;
 
 export interface FilterBaseOptions {
 	multiple?: boolean;
-	filter?: ((stack: FilterStack, chunk: JsonToken) => boolean) | RegExp | string;
+	filter?: RegExp | string | ((stack: FilterStack, chunk: JsonToken) => boolean);
 }
 
 export type FilterStack = Array<JsonToken['value'] | null>;

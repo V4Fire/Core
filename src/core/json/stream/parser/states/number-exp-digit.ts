@@ -7,12 +7,12 @@
  */
 
 import type { Parser } from 'core/json/stream/parser';
+
+import { parserStates, parserStateTypes, parserExpected, PARSING_COMPLETE } from 'core/json/stream/const';
 import type { JsonToken } from 'core/json/stream/interface';
-import { PARSER_DONE, PARSER_EXPECTED, PARSER_STATES, PARSER_STATE } from 'core/json/stream/const';
 
 /**
- * Parse buffer for exp digits [0-9]*
- * and generate token `numberChunk` with number value
+ * Parses the buffer for a digit expression `[0-9]*` and generates a token `numberChunk` with a number value
  */
 export function* numberExpDigit(this: Parser): Generator<JsonToken> {
 	this.patterns.numberExpDigit.lastIndex = this.index;
@@ -20,20 +20,22 @@ export function* numberExpDigit(this: Parser): Generator<JsonToken> {
 	this.value = this.match?.[0];
 
 	if (this.value != null) {
-		yield {name: 'numberChunk', value: this.value};
+		yield {
+			name: 'numberChunk',
+			value: this.value
+		};
 
 		this.accumulator += this.value;
-
 		this.index += this.value.length;
 
 	} else {
 		if (this.index < this.buffer.length) {
-			this.expect = PARSER_EXPECTED[this.parent];
+			this.expect = parserExpected[this.parent];
 			return;
 		}
 
-		return PARSER_DONE;
+		return PARSING_COMPLETE;
 	}
 }
 
-PARSER_STATES[PARSER_STATE.NUMBER_EXP_DIGIT] = numberExpDigit;
+parserStates[parserStateTypes.NUMBER_EXP_DIGIT] = numberExpDigit;

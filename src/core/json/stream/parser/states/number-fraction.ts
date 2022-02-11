@@ -7,34 +7,37 @@
  */
 
 import type { Parser } from 'core/json/stream/parser';
+
+import { parserStates, parserStateTypes, parserExpected, PARSING_COMPLETE } from 'core/json/stream/const';
 import type { JsonToken } from 'core/json/stream/interface';
-import { PARSER_DONE, PARSER_EXPECTED, PARSER_STATES, PARSER_STATE } from 'core/json/stream/const';
 
 /**
- * Parse buffer for number fraction symbol [\.eE]?
- * and generate token `numberChunk` with fraction symbol
+ * Parses the buffer for a numeric fraction symbol `[\.eE]?` and generates a token `numberChunk` with a fraction symbol
  */
 export function* numberFraction(this: Parser): Generator<JsonToken> {
 	this.patterns.numberFraction.lastIndex = this.index;
 	this.match = this.patterns.numberFraction.exec(this.buffer);
 
-	if (!this.match) {
+	if (this.match == null) {
 		if (this.index < this.buffer.length) {
-			this.expect = PARSER_EXPECTED[this.parent];
+			this.expect = parserExpected[this.parent];
 			return;
 		}
 
-		return PARSER_DONE;
+		return PARSING_COMPLETE;
 	}
 
 	this.value = this.match[0];
 
-	yield {name: 'numberChunk', value: this.value};
+	yield {
+		name: 'numberChunk',
+		value: this.value
+	};
 
 	this.accumulator += this.value;
-	this.expect = this.value === '.' ? PARSER_STATE.NUMBER_FRACTION_START : PARSER_STATE.NUMBER_EXP_SIGN;
+	this.expect = this.value === '.' ? parserStateTypes.NUMBER_FRACTION_START : parserStateTypes.NUMBER_EXP_SIGN;
 
 	this.index += this.value.length;
 }
 
-PARSER_STATES[PARSER_STATE.NUMBER_FRACTION] = numberFraction;
+parserStates[parserStateTypes.NUMBER_FRACTION] = numberFraction;

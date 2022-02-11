@@ -31,14 +31,6 @@ export type ResponseTypeValueP =
 	CanPromise<ResponseTypeValue> |
 	(() => CanPromise<ResponseTypeValue>);
 
-export type JSONLikeValue =
-	string |
-	number |
-	boolean |
-	null |
-	unknown[] |
-	Dictionary;
-
 export interface ResponseHeaders {
 	readonly [name: PropertyKey]: string;
 }

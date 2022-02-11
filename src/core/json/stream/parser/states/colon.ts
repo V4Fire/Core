@@ -6,30 +6,35 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/* eslint-disable require-yield */
+
 import type { Parser } from 'core/json/stream/parser';
+
+import { parserStates, parserStateTypes, PARSING_COMPLETE } from 'core/json/stream/const';
 import type { JsonToken } from 'core/json/stream/interface';
-import { PARSER_STATE, PARSER_DONE, PARSER_STATES } from 'core/json/stream/const';
 
 /**
- * Parse buffer for colon and set expected element to object value
+ * Parses the buffer for a colon and sets the expected element to a parser expect value
  */
-// eslint-disable-next-line require-yield
 export function* colon(this: Parser): Generator<JsonToken> {
 	this.patterns.colon.lastIndex = this.index;
 	this.match = this.patterns.colon.exec(this.buffer);
 
-	if (!this.match) {
+	if (this.match == null) {
 		if (this.index < this.buffer.length) {
-			throw new Error("Parser cannot parse input: expected ':'");
+			throw new SyntaxError("Can't parse the input: expected ':'");
 		}
 
-		return PARSER_DONE;
+		return PARSING_COMPLETE;
 	}
 
 	this.value = this.match[0];
-	this.value === ':' && (this.expect = PARSER_STATE.VALUE);
+
+	if (this.value === ':') {
+		this.expect = parserStateTypes.VALUE;
+	}
 
 	this.index += this.value.length;
 }
 
-PARSER_STATES[PARSER_STATE.COLON] = colon;
+parserStates[parserStateTypes.COLON] = colon;

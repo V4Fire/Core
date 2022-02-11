@@ -7,37 +7,40 @@
  */
 
 import type { Parser } from 'core/json/stream/parser';
+
+import { parserStates, parserStateTypes, PARSING_COMPLETE } from 'core/json/stream/const';
 import type { JsonToken } from 'core/json/stream/interface';
-import { PARSER_DONE, PARSER_STATES, PARSER_STATE } from 'core/json/stream/const';
 
 /**
- * Parse the buffer, add tokens for closing number chunk if needed, and finish parsing
+ * Parses the buffer, adds tokens to close a numeric chunk if needed, and finishes the parsing
  */
 export function* done(this: Parser): Generator<JsonToken> {
 	this.patterns.ws.lastIndex = this.index;
 	this.match = this.patterns.ws.exec(this.buffer);
 
-	if (!this.match) {
+	if (this.match == null) {
 		if (this.index < this.buffer.length) {
-
-			throw new Error('Parser cannot parse input: unexpected characters');
+			throw new SyntaxError("Can't parse the input: unexpected characters");
 		}
 
-		return PARSER_DONE;
+		return PARSING_COMPLETE;
 	}
 
 	this.value = this.match[0];
 
-	if (this.openNumber) {
+	if (this.isOpenNumber) {
 		yield {name: 'endNumber'};
+		this.isOpenNumber = false;
 
-		this.openNumber = false;
+		yield {
+			name: 'numberValue',
+			value: this.accumulator
+		};
 
-		yield {name: 'numberValue', value: this.accumulator};
 		this.accumulator = '';
 	}
 
 	this.index += this.value.length;
 }
 
-PARSER_STATES[PARSER_STATE.DONE] = done;
+parserStates[parserStateTypes.DONE] = done;

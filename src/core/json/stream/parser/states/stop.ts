@@ -7,28 +7,29 @@
  */
 
 import type { Parser } from 'core/json/stream/parser';
-import type { JsonToken, PARENT_STATE } from 'core/json/stream/interface';
-import { PARSER_STATE, PARSER_DONE, PARSER_EXPECTED, PARSER_STATES } from 'core/json/stream/const';
+
+import { parserStates, parserStateTypes, parserExpected, PARSING_COMPLETE } from 'core/json/stream/const';
+import type { JsonToken, ParentParserState } from 'core/json/stream/interface';
 
 /**
- * Parse buffer for end of current structure (object or array)
- * and generate tokens `endObject` or `endArray`
+ * Parses the buffer for the end of the current structure (an object or array) and
+ * generates tokens `endObject` or `endArray`
  */
 export function* stop(this: Parser): Generator<JsonToken> {
 	this.patterns.comma.lastIndex = this.index;
 	this.match = this.patterns.comma.exec(this.buffer);
 
-	if (!this.match) {
+	if (this.match == null) {
 		if (this.index < this.buffer.length) {
-			throw new Error("Parser cannot parse input: expected ','");
+			throw new SyntaxError("Parser cannot parse input: expected ','");
 		}
 
-		return PARSER_DONE;
+		return PARSING_COMPLETE;
 	}
 
-	if (this.openNumber) {
+	if (this.isOpenNumber) {
 		yield {name: 'endNumber'};
-		this.openNumber = false;
+		this.isOpenNumber = false;
 
 		yield {name: 'numberValue', value: this.accumulator};
 		this.accumulator = '';
@@ -37,16 +38,16 @@ export function* stop(this: Parser): Generator<JsonToken> {
 	this.value = this.match[0];
 
 	if (this.value === ',') {
-		this.expect = this.expect === PARSER_STATE.ARRAY_STOP ? PARSER_STATE.VALUE : 'key';
+		this.expect = this.expect === parserStateTypes.ARRAY_STOP ? parserStateTypes.VALUE : 'key';
 
 	} else if (this.value === '}' || this.value === ']') {
 		yield {name: this.value === '}' ? 'endObject' : 'endArray'};
-		this.parent = <PARENT_STATE>this.stack.pop();
-		this.expect = PARSER_EXPECTED[this.parent];
+		this.parent = <ParentParserState>this.stack.pop();
+		this.expect = parserExpected[this.parent];
 	}
 
 	this.index += this.value.length;
 }
 
-PARSER_STATES[PARSER_STATE.ARRAY_STOP] = stop;
-PARSER_STATES[PARSER_STATE.OBJECT_STOP] = stop;
+parserStates[parserStateTypes.ARRAY_STOP] = stop;
+parserStates[parserStateTypes.OBJECT_STOP] = stop;

@@ -6,65 +6,64 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { PARSER_PATTERNS, PARSER_DONE, PARSER_STATES } from 'core/json/stream/const';
-import { PARSER_STATE } from 'core/json/stream/parser/states';
-import type { TPARSER_STATE, PARENT_STATE, JsonToken } from 'core/json/stream/interface';
+import { parserStateTypes, parserPatterns, PARSING_COMPLETE } from 'core/json/stream/const';
+
+import { parserStates } from 'core/json/stream/parser/states';
+import type { ParserState, ParentParserState, JsonToken } from 'core/json/stream/interface';
 
 export class Parser {
 	/**
-	 * Next expected chunk in stream
+	 * The current parent of a parsed structure
 	 */
-	protected expect: TPARSER_STATE = PARSER_STATE.VALUE;
+	protected parent: ParentParserState = parserStateTypes.EMPTY;
 
 	/**
-	 * An array of parent objects for a current parsed structure
+	 * An array of parent objects for the current parsed structure
 	 */
-	protected readonly stack: PARENT_STATE[] = [];
+	protected readonly stack: ParentParserState[] = [];
 
 	/**
-	 * Current parent of parsed structure
-	 */
-	protected parent: PARENT_STATE = PARSER_STATE.EMPTY;
-
-	/**
-	 * Is parser parsing number now
-	 */
-	protected openNumber: boolean = false;
-
-	/**
-	 * Accumulator for current parsed structure
-	 */
-	protected accumulator: string = '';
-
-	/**
-	 * Current piece of JSON
+	 * The current piece of JSON
 	 */
 	protected buffer: string = '';
 
 	/**
-	 * Current match value after regExp execution
+	 * Accumulator for the current parsed structure
 	 */
-	protected match?: RegExpExecArray | null;
+	protected accumulator: string = '';
 
 	/**
-	 * Current parsed value
+	 * The current parsed value
 	 */
 	protected value?: string = '';
 
 	/**
-	 * Current index in buffer parsing process
+	 * The current index in a buffer parsing process
 	 */
 	protected index: number = 0;
 
 	/**
-	 * Collection of regExps for parsing
-	 * different types of data
+	 * The current match value after RegExp execution
 	 */
-	protected patterns: Record<string, RegExp> = PARSER_PATTERNS;
+	protected match?: RegExpExecArray | null;
 
 	/**
-	 * Process piece of JSON and yield tokens
-	 *
+	 * The next expected chunk in a stream
+	 */
+	protected expect: ParserState = parserStateTypes.VALUE;
+
+	/**
+	 * Dictionary with RegExp-s to different types of data
+	 */
+	protected patterns: Record<string, RegExp> = parserPatterns;
+
+	/**
+	 * Is the parser parsing a number now
+	 */
+	protected isOpenNumber: boolean = false;
+
+	/**
+	 * Processes the passed JSON chunk and yields tokens
 	 * @param chunk
 	 */
 	*processChunk(chunk: string): Generator<JsonToken> {
@@ -74,15 +73,19 @@ export class Parser {
 		this.index = 0;
 
 		while (true) {
-			const handler = PARSER_STATES[this.expect];
-			const iter: Generator<JsonToken> = handler.call(this);
-			let result;
+			const
+				handler = parserStates[this.expect],
+				iter: Generator<JsonToken> = handler.call(this);
+
+			let
+				res;
 
 			while (true) {
-				const val = iter.next();
+				const
+					val = iter.next();
 
 				if (val.done) {
-					result = val.value;
+					res = val.value;
 					break;
 
 				} else {
@@ -90,7 +93,7 @@ export class Parser {
 				}
 			}
 
-			if (result === PARSER_DONE) {
+			if (res === PARSING_COMPLETE) {
 				break;
 			}
 		}

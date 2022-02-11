@@ -7,33 +7,37 @@
  */
 
 import type { Parser } from 'core/json/stream/parser';
+
+import { parserStates, parserStateTypes, PARSING_COMPLETE } from 'core/json/stream/const';
 import type { JsonToken } from 'core/json/stream/interface';
-import { PARSER_DONE, PARSER_STATES, PARSER_STATE } from 'core/json/stream/const';
 
 /**
- * Parse buffer for first digit [0-9] in exp number
- * and generate token `numberChunk` with digit value
+ * Parses the buffer for the first digit `[0-9]` in a numeric expression and
+ * generates a token `numberChunk` with a digit value
  */
 export function* numberExpStart(this: Parser): Generator<JsonToken> {
 	this.patterns.numberExpStart.lastIndex = this.index;
 	this.match = this.patterns.numberExpStart.exec(this.buffer);
 
-	if (!this.match) {
+	if (this.match == null) {
 		if (this.index < this.buffer.length) {
-			throw new Error('Parser cannot parse input: expected an exponent part of a number');
+			throw new SyntaxError("Can't parse the input:  expected an exponent part of a number");
 		}
 
-		return PARSER_DONE;
+		return PARSING_COMPLETE;
 	}
 
 	this.value = this.match[0];
 
-	yield {name: 'numberChunk', value: this.value};
+	yield {
+		name: 'numberChunk',
+		value: this.value
+	};
 
 	this.accumulator += this.value;
-	this.expect = PARSER_STATE.NUMBER_EXP_DIGIT;
+	this.expect = parserStateTypes.NUMBER_EXP_DIGIT;
 
 	this.index += this.value.length;
 }
 
-PARSER_STATES[PARSER_STATE.NUMBER_EXP_START] = numberExpStart;
+parserStates[parserStateTypes.NUMBER_EXP_START] = numberExpStart;
