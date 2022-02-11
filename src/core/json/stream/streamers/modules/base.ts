@@ -11,6 +11,13 @@ import type { JsonToken } from 'core/json/stream/interface';
 
 export abstract class StreamBase {
 	/**
+	 * Current chunk process function
+	 *
+	 * @param chunk
+	 */
+	processChunk: (chunk: JsonToken) => Generator<any> = this.wait;
+
+	/**
 	 * Method for checking the correctness of
 	 * stream of tokens
 	 *
@@ -27,17 +34,12 @@ export abstract class StreamBase {
 	 * Instace of the assembler for assembling
 	 * streamed tokens into values
 	 */
-	protected assembler: Assembler;
+	protected assembler: Assembler = new Assembler();
 
 	/**
 	 * Current depth of the streamed structure
 	 */
 	protected abstract level: number;
-
-	constructor() {
-		this.processChunk = this.wait;
-		this.assembler = new Assembler();
-	}
 
 	/**
 	 * Assemble token chunk
@@ -53,6 +55,4 @@ export abstract class StreamBase {
 			}
 		}
 	}
-
-	protected processChunk?(chunk: JsonToken): Generator<any>;
 }

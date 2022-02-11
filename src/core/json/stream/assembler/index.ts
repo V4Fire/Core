@@ -10,17 +10,19 @@ import type { JsonToken, AssemblerOptions, AssemblerItem, AssemblerKey } from 'c
 
 export class Assembler {
 	/**
-	 * Handler for processing start of object
+	 * Handler for processing start of an object
 	 */
 	startObject: () => void = this.baseStartObject(Object);
 
 	/**
-	 * Handler for processing start of array
+	 * Handler for processing start of an array
 	 */
 	startArray: () => void = this.baseStartObject(Array);
 
 	/**
-	 * Handler for processing string value
+	 * Handler for processing a string value
+	 *
+	 * @param value
 	 */
 	stringValue: (value: string) => void = this.saveValue;
 
@@ -57,6 +59,9 @@ export class Assembler {
 	/**
 	 * Function for transform values after assembling
 	 * identical to reviver from JSON.parse
+	 *
+	 * @param key
+	 * @param value
 	 */
 	protected readonly reviver!: ((key: string, value?: AssemblerItem) => any);
 
@@ -83,7 +88,7 @@ export class Assembler {
 	}
 
 	/**
-	 * Return current stack
+	 * Returns a current stack
 	 */
 	get path(): Array<string | number | boolean | object> {
 		const path: Array<string | number | boolean | object> = [];
@@ -98,7 +103,7 @@ export class Assembler {
 	}
 
 	/**
-	 * Move current level pointer into specified level
+	 * Change current level of assembling process
 	 *
 	 * @param level
 	 */

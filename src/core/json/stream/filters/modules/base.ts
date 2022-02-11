@@ -30,7 +30,7 @@ export abstract class FilterBase {
 	/**
 	 * Create regExp filter
 	 *
-	 * @param str
+	 * @param regExp
 	 * @param separator
 	 */
 	static regExpFilter(regExp: RegExp, separator: string) {
@@ -39,11 +39,15 @@ export abstract class FilterBase {
 
 	/**
 	 * Current chunks process method
+	 *
+	 * @param chunk
 	 */
 	public processChunk: (chunk: JsonToken) => Generator<JsonToken>;
 
 	/**
 	 * Method for check chunk filter matching
+	 *
+	 * @param chunk
 	 */
 	protected abstract checkChunk(chunk: JsonToken): Generator<boolean | JsonToken>;
 
@@ -65,36 +69,51 @@ export abstract class FilterBase {
 
 	/**
 	 * Filter function from options
+	 *
+	 * @param stack
+	 * @param chunk
 	 */
 	protected filter!: (stack: FilterStack, chunk: JsonToken) => boolean;
 
 	/**
-	 * Function for pass number
+	 * Method for passing number
+	 *
+	 * @param chunk
 	 */
 	protected readonly passNumber: ProcessFunction = this.passValue('endNumber', 'numberValue');
 
 	/**
-	 * Function for pass string
+	 * Method for passing string
+	 *
+	 * @param chunk
 	 */
 	protected readonly passString: ProcessFunction = this.passValue('endString', 'stringValue');
 
 	/**
-	 * Function for pass key
+	 * Method for passing key
+	 *
+	 * @param chunk
 	 */
 	protected readonly passKey: ProcessFunction = this.passValue('endKey', 'keyValue');
 
 	/**
-	 * Function for skip number
+	 * Method for skippipng number
+	 *
+	 * @param chunk
 	 */
 	protected readonly skipNumber: ProcessFunction = this.skipValue('endNumber', 'numberValue');
 
 	/**
-	 * Function for skip string
+	 * Method for skipping string
+	 *
+	 * @param chunk
 	 */
 	protected readonly skipString: ProcessFunction = this.skipValue('endString', 'stringValue');
 
 	/**
-	 * Function for skip key
+	 * Method for skipping key
+	 *
+	 * @param cnunk
 	 */
 	protected readonly skipKey: ProcessFunction = this.skipValue('endKey', 'keyValue');
 
@@ -134,7 +153,7 @@ export abstract class FilterBase {
 	}
 
 	/**
-	 * Check current chunk token for filter satisfaction
+	 * Check current chunk for filter satisfaction
 	 *
 	 * @param chunk
 	 */
@@ -208,7 +227,7 @@ export abstract class FilterBase {
 	}
 
 	/**
-	 * Pass entire object entity in token stream
+	 * Pass entire object entity in output token stream
 	 *
 	 * @param chunk
 	 */
@@ -233,7 +252,7 @@ export abstract class FilterBase {
 	}
 
 	/**
-	 * Pass one token in token stream
+	 * Pass one token in output token stream
 	 *
 	 * @param chunk
 	 */
@@ -266,8 +285,6 @@ export abstract class FilterBase {
 
 	/**
 	 * Skip all tokens
-	 *
-	 * @param chunk
 	 */
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
 	*skip(): Generator<JsonToken> {}

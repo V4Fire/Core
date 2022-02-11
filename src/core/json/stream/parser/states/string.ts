@@ -12,7 +12,7 @@ import { PARSER_CODES, PARSER_DONE, PARSER_EXPECTED, PARSER_STATES, PARSER_STATE
 import { fromHex } from 'core/json/stream/helpers';
 
 /**
- * Parse buffer for end of key or string
+ * Parse buffer for the end of key or string
  * and generate the sequence of tokens
  * `endKey`, `keyValue` for key and
  * `endString`, `stringValue` and `stringChunk` for string

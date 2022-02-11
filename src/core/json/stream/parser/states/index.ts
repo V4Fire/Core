@@ -21,3 +21,5 @@ export { numberFractionStart } from 'core/json/stream/parser/states/number-fract
 export { stop } from 'core/json/stream/parser/states/stop';
 export { string } from 'core/json/stream/parser/states/string';
 export { value } from 'core/json/stream/parser/states/value';
+
+export { PARSER_STATE } from 'core/json/stream/const';

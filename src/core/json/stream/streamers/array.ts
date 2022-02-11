@@ -21,7 +21,7 @@ export class StreamArray extends StreamBase {
 	level: number = 1;
 
 	/**
-	 * Wait for start array token
+	 * Wait for the start of the array token
 	 * otherwise throw an error
 	 *
 	 * @param chunk

@@ -6,7 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { PARSER_STATE, PARSER_PATTERNS, PARSER_DONE, PARSER_STATES } from 'core/json/stream/const';
+import { PARSER_PATTERNS, PARSER_DONE, PARSER_STATES } from 'core/json/stream/const';
+import { PARSER_STATE } from 'core/json/stream/parser/states';
 import type { TPARSER_STATE, PARENT_STATE, JsonToken } from 'core/json/stream/interface';
 
 export class Parser {
@@ -31,7 +32,7 @@ export class Parser {
 	protected openNumber: boolean = false;
 
 	/**
-	 * Is parser parsing number now
+	 * Accumulator for current parsed structure
 	 */
 	protected accumulator: string = '';
 
