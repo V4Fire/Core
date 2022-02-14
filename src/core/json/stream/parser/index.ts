@@ -53,7 +53,7 @@ export default class Parser {
 	protected matched?: RegExpExecArray | null;
 
 	/**
-	 * The next expected token from a stream
+	 * The next expected parser state from a stream
 	 */
 	protected expected: ParserState = parserStateTypes.VALUE;
 
