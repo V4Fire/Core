@@ -8,7 +8,7 @@
 
 import type { Token } from 'core/json/stream/interface';
 
-import Super from 'core/json/stream/filters/modules/base';
+import Super from 'core/json/stream/filters/abstract-filter';
 import type { FilterStack } from 'core/json/stream/filters/interface';
 
 export default class Filter extends Super {
@@ -22,11 +22,7 @@ export default class Filter extends Super {
 	 */
 	protected objStack: FilterStack = [];
 
-	/**
-	 * Closes all unclosed tokens and returns a Generator of filtered tokens.
-	 * The method must be called after the end of filtration.
-	 */
-	*syncStack(): Generator<Token> {
+	override*syncStack(): Generator<Token> {
 		const
 			{stack, objStack} = this;
 

@@ -7,7 +7,7 @@
  */
 
 import type { Token } from 'core/json/stream/interface';
-import Super from 'core/json/stream/filters/modules/base';
+import Super from 'core/json/stream/filters/abstract-filter';
 
 export default class Pick extends Super {
 	override*checkToken(chunk: Token): Generator<boolean | Token> {

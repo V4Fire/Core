@@ -14,7 +14,7 @@ import type { TokenProcessor, TokenFilter, FilterStack, FilterOptions } from 'co
 export const
 	$$ = symbolGenerator();
 
-export default abstract class Filter {
+export default abstract class AbstractFilter {
 	/**
 	 * Creates a function to filter only chunks by the specified path
 	 *
@@ -143,16 +143,25 @@ export default abstract class Filter {
 		this.processToken = this.check;
 
 		if (Object.isString(filter)) {
-			this.filter = Filter.createPathFilter(filter);
+			this.filter = AbstractFilter.createPathFilter(filter);
 
 		} else if (Object.isRegExp(filter)) {
-			this.filter = Filter.createRegExpFilter(filter);
+			this.filter = AbstractFilter.createRegExpFilter(filter);
 
 		} else {
 			this.filter = filter;
 		}
 
 		this.multiple = opts.multiple ?? this.multiple;
+	}
+
+	/**
+	 * Closes all unclosed tokens and returns a Generator of filtered tokens.
+	 * The method must be called after the end of filtration.
+	 */
+	// eslint-disable-next-line require-yield
+	*syncStack(): Generator<Token> {
+		return undefined;
 	}
 
 	/**
