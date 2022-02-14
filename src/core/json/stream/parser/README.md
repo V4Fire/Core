@@ -56,6 +56,20 @@ for await (const token of parser) {
 }
 ```
 
+The method can also take a list of filters to apply.
+
+```js
+import Parser from 'core/json/stream/parser';
+import { Filter } from 'core/json/stream/filters';
+
+const
+  parser = Parser.from('[{a: {a: 1, b: 2}, b: 2}, {a: {b: 3}, v: 2}]', new Filter(/\d+\.a/), new Filter('0.a.a'));
+
+for await (const token of parser) {
+  console.log(token);
+}
+```
+
 ### Instance
 
 #### processChunk

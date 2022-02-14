@@ -11,6 +11,7 @@
  * @packageDocumentation
  */
 
+import type AbstractFilter from 'core/json/stream/filters/abstract-filter';
 import { parserStateTypes, parserPatterns, PARSING_COMPLETE } from 'core/json/stream/const';
 
 import { parserStates } from 'core/json/stream/parser/states';
@@ -19,14 +20,43 @@ import type { ParserState, ParentParserState, Token } from 'core/json/stream/int
 export default class Parser {
 	/**
 	 * Parses the specified iterable object as a JSON stream and yields tokens via a Generator
+	 *
 	 * @param source
+	 * @param [filters] - list of filters to apply to the output iterable
 	 */
-	static async*from(source: Iterable<string>): AsyncGenerator<Token> {
+	static async*from(source: Iterable<string>, ...filters: AbstractFilter[]): AsyncGenerator<Token> {
+		filters = filters.slice();
+
 		const
 			parser = new Parser();
 
 		for await (const chunk of source) {
-			yield* parser.processChunk(chunk);
+			let
+				tokens = <IterableIterator<Token>>parser.processChunk(chunk);
+
+			while (filters.length > 0) {
+				const
+					newTokens = <Token[]>[],
+					filter = filters.shift();
+
+				if (filter == null) {
+					continue;
+				}
+
+				for (const token of tokens) {
+					newTokens.push(...filter.processToken(token));
+				}
+
+				for (const token of filter.syncStack()) {
+					newTokens.push(token);
+				}
+
+				tokens = newTokens.values();
+			}
+
+			for (const token of tokens) {
+				yield token;
+			}
 		}
 	}
 
