@@ -9,11 +9,11 @@ The class instance takes a JSON chunk and returns a Generator that produces pars
 import Parser from 'core/json/stream/parser';
 
 const
-  parser = new Parser(),
+  parser = Parser.from(['{"key', '": 2', '}']);
   tokens = [];
 
-for (const chunk of ['{"key', '": 2', '}']) {
-  tokens.push(...parser.processChunk(chunk));
+for await (const token of parser) {
+  tokens.push(token);
 }
 
 /* [
@@ -33,7 +33,32 @@ console.log(tokens);
 
 ## API
 
-### processChunk
+### Static
+
+#### from
+
+The method parses the specified iterable object as a JSON stream and yields tokens via an asynchronous Generator.
+
+```js
+import Parser from 'core/json/stream/parser';
+
+const
+  parser = Parser.from('[1]');
+
+for await (const token of parser) {
+  // {name: 'startArray'},
+  // {name: 'startNumber'},
+  // {name: 'numberChunk', value: '1'},
+  // {name: 'endNumber'},
+  // {name: 'numberValue', value: '1'},
+  // {name: 'endArray'}
+  console.log(token);
+}
+```
+
+### Instance
+
+#### processChunk
 
 The method processes the passed JSON chunk and yields tokens via a Generator.
 

@@ -18,6 +18,19 @@ import type { ParserState, ParentParserState, JsonToken } from 'core/json/stream
 
 export default class Parser {
 	/**
+	 * Parses the specified iterable object as a JSON stream and yields tokens via a Generator
+	 * @param source
+	 */
+	static async*from(source: Iterable<string>): AsyncGenerator<JsonToken> {
+		const
+			parser = new Parser();
+
+		for await (const chunk of source) {
+			yield* parser.processChunk(chunk);
+		}
+	}
+
+	/**
 	 * The current parent of a parsed structure
 	 */
 	protected parent: ParentParserState = parserStateTypes.EMPTY;
@@ -68,7 +81,7 @@ export default class Parser {
 	protected isOpenNumber: boolean = false;
 
 	/**
-	 * Processes the passed JSON chunk and yields tokens
+	 * Processes the passed JSON chunk and yields tokens via an asynchronous Generator
 	 * @param chunk
 	 */
 	*processChunk(chunk: string): Generator<JsonToken> {

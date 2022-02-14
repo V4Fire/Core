@@ -9,7 +9,7 @@
 import Parser from 'core/json/stream/parser';
 
 describe('core/json/stream/parser', () => {
-	it('should parse JSON chunks to tokens with the specified bytes step', () => {
+	it('should parse JSON chunks to tokens with the specified bytes step', async () => {
 		const input = {
 			a: 1,
 			b: true,
@@ -21,13 +21,10 @@ describe('core/json/stream/parser', () => {
 		};
 
 		const
-			parser = new Parser(),
 			res = [];
 
-		for (const chunk of createChunkIterator(input, 3)) {
-			for (const el of parser.processChunk(chunk)) {
-				res.push(el);
-			}
+		for await (const token of Parser.from(createChunkIterator(input, 3))) {
+			res.push(token);
 		}
 
 		expect(res).toEqual([
@@ -103,8 +100,8 @@ describe('core/json/stream/parser', () => {
 			res = [];
 
 		for (const chunk of iter) {
-			for (const el of parser.processChunk(chunk)) {
-				res.push(el);
+			for (const token of parser.processChunk(chunk)) {
+				res.push(token);
 			}
 		}
 
