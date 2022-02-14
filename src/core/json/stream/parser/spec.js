@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { Parser } from 'core/json/stream/parser';
+import Parser from 'core/json/stream/parser';
 
 describe('core/json/stream/parser', () => {
 	it('should parse JSON chunks to tokens with the specified bytes step', () => {

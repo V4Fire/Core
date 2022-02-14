@@ -11,7 +11,7 @@ import { parserStateTypes, parserPatterns, PARSING_COMPLETE } from 'core/json/st
 import { parserStates } from 'core/json/stream/parser/states';
 import type { ParserState, ParentParserState, JsonToken } from 'core/json/stream/interface';
 
-export class Parser {
+export default class Parser {
 	/**
 	 * The current parent of a parsed structure
 	 */

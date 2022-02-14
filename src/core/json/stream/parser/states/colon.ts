@@ -8,7 +8,7 @@
 
 /* eslint-disable require-yield */
 
-import type { Parser } from 'core/json/stream/parser';
+import type Parser from 'core/json/stream/parser';
 
 import { parserStates, parserStateTypes, PARSING_COMPLETE } from 'core/json/stream/const';
 import type { JsonToken } from 'core/json/stream/interface';

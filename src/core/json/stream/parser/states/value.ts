@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type { Parser } from 'core/json/stream/parser';
+import type Parser from 'core/json/stream/parser';
 
 import {
 

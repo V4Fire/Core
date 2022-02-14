@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type { Parser } from 'core/json/stream/parser';
+import type Parser from 'core/json/stream/parser';
 
 import { parserStates, parserStateTypes, parserExpected, PARSING_COMPLETE } from 'core/json/stream/const';
 import type { JsonToken } from 'core/json/stream/interface';
