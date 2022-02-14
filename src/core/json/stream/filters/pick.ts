@@ -6,23 +6,19 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
- import type { JsonToken } from 'core/json/stream/interface';
- import { FilterBase } from 'core/json/stream/filters/modules/base';
+import type { JsonToken } from 'core/json/stream/interface';
+import Super from 'core/json/stream/filters/modules/base';
 
- export class Pick extends FilterBase {
-	/**
-	 * Check is chunk matched specified filter
-	 *
-	 * @param chunk
-	 */
-	 override*checkChunk(chunk: JsonToken): Generator<boolean | JsonToken> {
-		/* eslint-disable default-case */
+export default class Pick extends Super {
+	override*checkChunk(chunk: JsonToken): Generator<boolean | JsonToken> {
 		switch (chunk.name) {
 			case 'startObject':
 			case 'startArray':
 				if (this.filter(this.stack, chunk)) {
 					yield chunk;
-					this.processChunk = this.passObject;
+
+					// eslint-disable-next-line @typescript-eslint/unbound-method
+					this.processToken = this.passObject;
 					this.depth = 1;
 
 					return true;
@@ -33,7 +29,7 @@
 			case 'startString':
 				if (this.filter(this.stack, chunk)) {
 					yield chunk;
-					this.processChunk = this.passString;
+					this.processToken = this.passString;
 
 					return true;
 				}
@@ -43,7 +39,7 @@
 			case 'startNumber':
 				if (this.filter(this.stack, chunk)) {
 					yield chunk;
-					this.processChunk = this.passNumber;
+					this.processToken = this.passNumber;
 
 					return true;
 				}
@@ -58,12 +54,16 @@
 				if (this.filter(this.stack, chunk)) {
 					yield chunk;
 
-					this.processChunk = this.multiple ? this.check : this.skip;
+					// eslint-disable-next-line @typescript-eslint/unbound-method
+					this.processToken = this.multiple ? this.check : this.skip;
 
 					return true;
 				}
 
 				break;
+
+			default:
+				// Do nothing
 		}
 
 		return false;

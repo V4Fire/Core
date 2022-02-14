@@ -6,47 +6,76 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type { JsonToken, FilterStack, ProcessFunction, FilterBaseOptions } from 'core/json/stream/interface';
+import symbolGenerator from 'core/symbol';
 
-/* eslint-disable default-case */
-export abstract class FilterBase {
+import type { JsonToken, JsonTokenName } from 'core/json/stream/interface';
+import type { TokenProcessor, TokenFilter, FilterStack, FilterOptions } from 'core/json/stream/filters/interface';
+
+export const
+	$$ = symbolGenerator();
+
+export default abstract class Filter {
 	/**
-	 * Create string filter
+	 * Creates a function to filter only chunks by the specified path
 	 *
-	 * @param str
-	 * @param separator
+	 * @param path
+	 * @example
+	 * ```js
+	 * const filter = createPathFilter('foo.bla.bar');
+	 * ```
 	 */
-	static stringFilter(str: string, separator: string) {
-		return (stack: FilterStack): boolean => {
-			const path = stack.join(separator);
+	static createPathFilter(path: string): TokenFilter {
+		return (stack) => {
+			const
+				sep = '.',
+				parsedPath = stack.join(sep);
 
-			return (path.length === str.length && path === str) ||
-				(path.length > str.length &&
-					path.startsWith(str) &&
-					path.substring(str.length, str.length + separator.length) === separator);
+			if (parsedPath.length === path.length && parsedPath === path) {
+				return true;
+			}
+
+			if (parsedPath.length <= path.length || !parsedPath.startsWith(path)) {
+				return false;
+			}
+
+			return parsedPath.substring(path.length, path.length + sep.length) === sep;
 		};
 	}
 
 	/**
-	 * Create regExp filter
+	 * Creates a function to filter only chunks with paths matched to the specified regular expression
 	 *
-	 * @param regExp
-	 * @param separator
+	 * @param rgxp
+	 * @example
+	 * ```js
+	 * const filter = createRegExpFilter(/\d+\.foo\.bar/);
+	 * ```
 	 */
-	static regExpFilter(regExp: RegExp, separator: string) {
-		return (stack: FilterStack): boolean => regExp.test(stack.join(separator));
+	static createRegExpFilter(rgxp: RegExp): TokenFilter {
+		return (stack) => rgxp.test(stack.join('.'));
 	}
 
 	/**
-	 * Current chunks process method
-	 *
-	 * @param chunk
+	 * Processes the passed JSON token and yields tokens
 	 */
-	public processChunk: (chunk: JsonToken) => Generator<JsonToken>;
+	get processToken(): TokenProcessor {
+		return this[$$.processChunk];
+	}
 
 	/**
-	 * Method for check chunk filter matching
-	 *
+	 * Sets a new process function the passed JSON chunk and yields tokens
+	 */
+	set processToken(val: TokenProcessor) {
+		this[$$.processChunk] = val;
+	}
+
+	/**
+	 * If true the filtration will return all matched filter results, otherwise only the first match will be returned
+	 */
+	readonly multiple: boolean = false;
+
+	/**
+	 * Checks that specified chunk is matched for the filter
 	 * @param chunk
 	 */
 	protected abstract checkChunk(chunk: JsonToken): Generator<boolean | JsonToken>;
@@ -57,108 +86,84 @@ export abstract class FilterBase {
 	protected stack: FilterStack = [];
 
 	/**
-	 * Depth of current structure
+	 * Depth of the current structure
 	 */
 	protected depth: number = 0;
 
 	/**
-	 * If true filtration will return all matched filter reults,
-	 * otherwise only the first match will be returned
-	 */
-	protected multiple: boolean = false;
-
-	/**
-	 * Filter function from options
+	 * Function to filter a sequence of parsed tokens
 	 *
 	 * @param stack
 	 * @param chunk
 	 */
-	protected filter!: (stack: FilterStack, chunk: JsonToken) => boolean;
+	protected filter: TokenFilter;
 
 	/**
-	 * Method for passing number
-	 *
-	 * @param chunk
+	 * Method to pass numeric tokens
 	 */
-	protected readonly passNumber: ProcessFunction = this.passValue('endNumber', 'numberValue');
+	protected readonly passNumber: TokenProcessor = this.passValue('endNumber', 'numberValue');
 
 	/**
-	 * Method for passing string
-	 *
-	 * @param chunk
+	 * Method to skip numeric tokens
 	 */
-	protected readonly passString: ProcessFunction = this.passValue('endString', 'stringValue');
+	protected readonly skipNumber: TokenProcessor = this.skipValue('endNumber', 'numberValue');
 
 	/**
-	 * Method for passing key
-	 *
-	 * @param chunk
+	 * Method to pass string tokens
 	 */
-	protected readonly passKey: ProcessFunction = this.passValue('endKey', 'keyValue');
+	protected readonly passString: TokenProcessor = this.passValue('endString', 'stringValue');
 
 	/**
-	 * Method for skippipng number
-	 *
-	 * @param chunk
+	 * Method to skip string tokens
 	 */
-	protected readonly skipNumber: ProcessFunction = this.skipValue('endNumber', 'numberValue');
+	protected readonly skipString: TokenProcessor = this.skipValue('endString', 'stringValue');
 
 	/**
-	 * Method for skipping string
-	 *
-	 * @param chunk
+	 * Method to pass key tokens
 	 */
-	protected readonly skipString: ProcessFunction = this.skipValue('endString', 'stringValue');
+	protected readonly passKey: TokenProcessor = this.passValue('endKey', 'keyValue');
 
 	/**
-	 * Method for skipping key
-	 *
-	 * @param cnunk
+	 * Method to skip key tokens
 	 */
-	protected readonly skipKey: ProcessFunction = this.skipValue('endKey', 'keyValue');
+	protected readonly skipKey: TokenProcessor = this.skipValue('endKey', 'keyValue');
 
 	/**
-	 * Previous token in stream
+	 * Name of the previous parsed token
 	 */
-	protected previousToken: string = '';
+	protected previousToken: JsonTokenName = '';
 
 	/**
-	 * Separator for stack
+	 * Name of the next expected token from a stream
 	 */
-	protected readonly separator: string = '.';
+	protected expectedToken?: JsonTokenName;
 
-	/**
-	 * Next expected token
-	 */
-	protected expected?: string;
-
-	constructor(options: FilterBaseOptions = {}) {
-		this.processChunk = this.check;
-
-		const {filter, multiple} = options;
+	protected constructor(filter: TokenFilter, opts: FilterOptions = {}) {
+		// eslint-disable-next-line @typescript-eslint/unbound-method
+		this.processToken = this.check;
 
 		if (Object.isString(filter)) {
-			this.filter = FilterBase.stringFilter(filter, this.separator);
-
-		} else if (Object.isFunction(filter)) {
-			this.filter = filter;
+			this.filter = Filter.createPathFilter(filter);
 
 		} else if (Object.isRegExp(filter)) {
-			this.filter = FilterBase.regExpFilter(filter, this.separator);
+			this.filter = Filter.createRegExpFilter(filter);
+
+		} else {
+			this.filter = filter;
 		}
 
-		if (multiple) {
-			this.multiple = multiple;
-		}
+		this.multiple = opts.multiple ?? this.multiple;
 	}
 
 	/**
-	 * Check current chunk for filter satisfaction
-	 *
-	 * @param chunk
+	 * Check the specified token for filter satisfaction
+	 * @param token
 	 */
-	*check(chunk: JsonToken): Generator<JsonToken> {
-		switch (chunk.name) {
+	protected*check(token: JsonToken): Generator<JsonToken> {
+		const
+			last = this.stack.length - 1;
+
+		switch (token.name) {
 			case 'startObject':
 			case 'startArray':
 			case 'startString':
@@ -166,56 +171,69 @@ export abstract class FilterBase {
 			case 'nullValue':
 			case 'trueValue':
 			case 'falseValue':
-				if (Object.isNumber(this.stack[this.stack.length - 1])) {
+				if (Object.isNumber(this.stack[last])) {
 					// Array
-					(<number>this.stack[this.stack.length - 1])++;
+					(<number>this.stack[last])++;
 				}
 
 				break;
 
 			case 'keyValue':
-				this.stack[this.stack.length - 1] = chunk.value;
+				this.stack[last] = token.value;
 				break;
 
 			case 'numberValue':
-				if (this.previousToken !== 'endNumber' && Object.isNumber(this.stack[this.stack.length - 1])) {
+				if (this.previousToken !== 'endNumber' && Object.isNumber(this.stack[last])) {
 					// Array
-					(<number>this.stack[this.stack.length - 1])++;
+					(<number>this.stack[last])++;
 				}
 
 				break;
 
 			case 'stringValue':
-				if (this.previousToken !== 'endString' && Object.isNumber(this.stack[this.stack.length - 1])) {
+				if (this.previousToken !== 'endString' && Object.isNumber(this.stack[last])) {
 					// Array
-					(<number>this.stack[this.stack.length - 1])++;
+					(<number>this.stack[last])++;
 				}
 
 				break;
+
+			default:
+				// Do nothing
 		}
 
-		this.previousToken = chunk.name;
+		this.previousToken = token.name;
 
-		const iter = this.checkChunk(chunk);
+		const
+			iter = this.checkChunk(token);
+
 		while (true) {
-			const val = iter.next();
-			const {done, value} = val;
+			const {
+				done,
+				value
+			} = iter.next();
 
 			if (done && (value === true || value === undefined)) {
 				break;
+			}
 
-			} else if (done && value === false) {
-				switch (chunk.name) {
+			if (done && value === false) {
+				switch (token.name) {
 					case 'startObject':
 						this.stack.push(null);
 						break;
+
 					case 'startArray':
 						this.stack.push(-1);
 						break;
+
 					case 'endObject':
 					case 'endArray':
 						this.stack.pop();
 						break;
+
+					default:
+						// Do nothing
 				}
 
 				break;
@@ -227,13 +245,54 @@ export abstract class FilterBase {
 	}
 
 	/**
-	 * Pass entire object entity in output token stream
-	 *
+	 * Passes the passed token into an output token stream
+	 * @param token
+	 */
+	protected*pass(token: JsonToken): Generator<JsonToken> {
+		yield token;
+	}
+
+	/**
+	 * Skips the passed token from an output token stream
+	 */
+	// eslint-disable-next-line require-yield
+	protected*skip(_: JsonToken): Generator<JsonToken> {
+		return undefined;
+	}
+
+	/**
+	 * Passes the passed object token into an output token stream
+	 * @param token
+	 */
+	protected*passObject(token: JsonToken): Generator<JsonToken> {
+		yield token;
+
+		switch (token.name) {
+			case 'startObject':
+			case 'startArray':
+				this.depth++;
+				break;
+
+			case 'endObject':
+			case 'endArray':
+				this.depth--;
+				break;
+
+			default:
+				// Do nothing
+		}
+
+		if (this.depth === 0) {
+			// eslint-disable-next-line @typescript-eslint/unbound-method
+			this.processToken = this.multiple ? this.check : this.skip;
+		}
+	}
+
+	/**
+	 * Skips the passed object token from an output token stream
 	 * @param chunk
 	 */
-	*passObject(chunk: JsonToken): Generator<JsonToken> {
-		yield chunk;
-
+	protected skipObject(chunk: JsonToken): void {
 		switch (chunk.name) {
 			case 'startObject':
 			case 'startArray':
@@ -244,106 +303,80 @@ export abstract class FilterBase {
 			case 'endArray':
 				this.depth--;
 				break;
+
+			default:
+				// Do nothing
 		}
 
 		if (this.depth === 0) {
-			this.processChunk = this.multiple ? this.check : this.skip;
+			// eslint-disable-next-line @typescript-eslint/unbound-method
+			this.processToken = this.multiple ? this.check : this.pass;
 		}
 	}
 
 	/**
-	 * Pass one token in output token stream
+	 * Creates a function to pass tokens into an output token stream
 	 *
-	 * @param chunk
+	 * @param currentToken
+	 * @param expectedToken
 	 */
-	*pass(chunk: JsonToken): Generator<JsonToken> {
-		yield chunk;
-	}
-
-	/**
-	 * Skip entire object in token stream
-	 *
-	 * @param chunk
-	 */
-	skipObject(chunk: JsonToken): void {
-		switch (chunk.name) {
-			case 'startObject':
-			case 'startArray':
-				this.depth++;
-				break;
-
-			case 'endObject':
-			case 'endArray':
-				--this.depth;
-				break;
-		}
-
-		if (this.depth === 0) {
-			this.processChunk = this.multiple ? this.check : this.pass;
-		}
-	}
-
-	/**
-	 * Skip all tokens
-	 */
-	// eslint-disable-next-line @typescript-eslint/no-empty-function
-	*skip(): Generator<JsonToken> {}
-
-	/**
-	 * Function constructor for creating pass functions for primitives
-	 *
-	 * @param last
-	 * @param post
-	 */
-	passValue(last: string, post: string): (chunk: JsonToken) => Generator<JsonToken> {
+	protected passValue(currentToken: JsonTokenName, expectedToken: JsonTokenName): TokenProcessor {
 		const that = this;
 
 		return function* passValue(chunk: JsonToken) {
-			if (that.expected === undefined || that.expected === '') {
+			if (that.expectedToken === undefined || that.expectedToken === '') {
 				yield chunk;
 
-				if (chunk.name === last) {
-					that.expected = post;
+				if (chunk.name === currentToken) {
+					// eslint-disable-next-line require-atomic-updates
+					that.expectedToken = expectedToken;
 				}
 
 			} else {
-				const {expected} = that;
-				that.expected = '';
+				const
+					{expectedToken} = that;
 
-				that.processChunk = that.multiple ? that.check : that.skip;
+				that.expectedToken = '';
 
-				if (expected === chunk.name) {
+				// eslint-disable-next-line @typescript-eslint/unbound-method
+				that.processToken = that.multiple ? that.check : that.skip;
+
+				if (expectedToken === chunk.name) {
 					yield chunk;
 
 				} else {
-					yield* that.processChunk(chunk);
+					yield* that.processToken(chunk);
 				}
 			}
 		};
 	}
 
 	/**
-	 * Function constructor for creating skip functions for primitives
+	 * Creates a function to skip tokens from an output token stream
 	 *
-	 * @param last
-	 * @param post
+	 * @param currentToken
+	 * @param expectedToken
 	 */
-	skipValue(last: string, post: string): (chunk: JsonToken) => Generator<JsonToken> {
+	protected skipValue(currentToken: JsonTokenName, expectedToken: JsonTokenName): TokenProcessor {
 		const that = this;
 
 		return function* skipValue(chunk: JsonToken): Generator<JsonToken> {
-			if (that.expected != null) {
-				const {expected} = that;
-				that.expected = '';
-				that.processChunk = that.multiple ? that.check : that.pass;
+			if (that.expectedToken != null) {
+				const
+					{expectedToken} = that;
 
-				if (expected !== chunk.name) {
-					yield* that.processChunk(chunk);
+				that.expectedToken = '';
+
+				// eslint-disable-next-line @typescript-eslint/unbound-method
+				that.processToken = that.multiple ? that.check : that.pass;
+
+				if (expectedToken !== chunk.name) {
+					yield* that.processToken(chunk);
 				}
 
-			} else if (chunk.name === last) {
-					that.expected = post;
-				}
+			} else if (chunk.name === currentToken) {
+				that.expectedToken = expectedToken;
+			}
 		};
 	}
 }
