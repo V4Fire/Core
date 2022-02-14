@@ -6,6 +6,11 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/**
+ * [[include:core/json/stream/parser/README.md]]
+ * @packageDocumentation
+ */
+
 import { parserStateTypes, parserPatterns, PARSING_COMPLETE } from 'core/json/stream/const';
 
 import { parserStates } from 'core/json/stream/parser/states';
