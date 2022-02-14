@@ -14,14 +14,14 @@
 import { parserStateTypes, parserPatterns, PARSING_COMPLETE } from 'core/json/stream/const';
 
 import { parserStates } from 'core/json/stream/parser/states';
-import type { ParserState, ParentParserState, JsonToken } from 'core/json/stream/interface';
+import type { ParserState, ParentParserState, Token } from 'core/json/stream/interface';
 
 export default class Parser {
 	/**
 	 * Parses the specified iterable object as a JSON stream and yields tokens via a Generator
 	 * @param source
 	 */
-	static async*from(source: Iterable<string>): AsyncGenerator<JsonToken> {
+	static async*from(source: Iterable<string>): AsyncGenerator<Token> {
 		const
 			parser = new Parser();
 
@@ -84,7 +84,7 @@ export default class Parser {
 	 * Processes the passed JSON chunk and yields tokens via an asynchronous Generator
 	 * @param chunk
 	 */
-	*processChunk(chunk: string): Generator<JsonToken> {
+	*processChunk(chunk: string): Generator<Token> {
 		this.buffer += chunk;
 		this.matched = null;
 
@@ -94,7 +94,7 @@ export default class Parser {
 		while (true) {
 			const
 				handler = parserStates[this.expected],
-				iter: Generator<JsonToken> = handler.call(this);
+				iter: Generator<Token> = handler.call(this);
 
 			let
 				res;

@@ -9,12 +9,12 @@
 import type Parser from 'core/json/stream/parser';
 
 import { parserStates, parserStateTypes, PARSING_COMPLETE } from 'core/json/stream/const';
-import type { JsonToken } from 'core/json/stream/interface';
+import type { Token } from 'core/json/stream/interface';
 
 /**
  * Parses the buffer and generates from digits `[0-9]*` a token `numberChunk` with a number value
  */
-export function* numberDigit(this: Parser): Generator<JsonToken> {
+export function* numberDigit(this: Parser): Generator<Token> {
 	this.patterns.numberDigit.lastIndex = this.index;
 	this.matched = this.patterns.numberDigit.exec(this.buffer);
 

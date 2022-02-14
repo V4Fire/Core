@@ -9,13 +9,13 @@
 import type Parser from 'core/json/stream/parser';
 
 import { parserStates, parserStateTypes, PARSING_COMPLETE } from 'core/json/stream/const';
-import type { JsonToken } from 'core/json/stream/interface';
+import type { Token } from 'core/json/stream/interface';
 
 /**
  * Parses the buffer for the first digit `[0-9]` in a numeric expression and
  * generates a token `numberChunk` with a digit value
  */
-export function* numberExpStart(this: Parser): Generator<JsonToken> {
+export function* numberExpStart(this: Parser): Generator<Token> {
 	this.patterns.numberExpStart.lastIndex = this.index;
 	this.matched = this.patterns.numberExpStart.exec(this.buffer);
 

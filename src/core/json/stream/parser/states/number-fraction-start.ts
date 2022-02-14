@@ -9,13 +9,13 @@
 import type Parser from 'core/json/stream/parser';
 
 import { parserStates, parserStateTypes, PARSING_COMPLETE } from 'core/json/stream/const';
-import type { JsonToken } from 'core/json/stream/interface';
+import type { Token } from 'core/json/stream/interface';
 
 /**
  * Parse the buffer for the first digit in a number fraction `[0-9]`
  * and generates a token `numberChunk` with a fraction value
  */
-export function* numberFractionStart(this: Parser): Generator<JsonToken> {
+export function* numberFractionStart(this: Parser): Generator<Token> {
 	this.patterns.numberFracStart.lastIndex = this.index;
 	this.matched = this.patterns.numberFracStart.exec(this.buffer);
 

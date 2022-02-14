@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type { JsonToken, AssemblerOptions, AssemblerItem, AssemblerKey } from 'core/json/stream/interface';
+import type { Token, AssemblerOptions, AssemblerItem, AssemblerKey } from 'core/json/stream/interface';
 
 export class Assembler {
 	/**
@@ -132,7 +132,7 @@ export class Assembler {
 	 *
 	 * @param chunk
 	 */
-	*processChunk(chunk: JsonToken): Generator<AssemblerItem> {
+	*processChunk(chunk: Token): Generator<AssemblerItem> {
 		this[chunk.name]?.(chunk.value);
 
     if (this.done) {

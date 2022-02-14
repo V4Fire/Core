@@ -9,12 +9,12 @@
 import type Parser from 'core/json/stream/parser';
 
 import { parserStates, parserStateTypes, PARSING_COMPLETE } from 'core/json/stream/const';
-import type { JsonToken } from 'core/json/stream/interface';
+import type { Token } from 'core/json/stream/interface';
 
 /**
  * Parses the buffer, adds tokens to close a numeric chunk if needed, and finishes the parsing
  */
-export function* done(this: Parser): Generator<JsonToken> {
+export function* done(this: Parser): Generator<Token> {
 	this.patterns.ws.lastIndex = this.index;
 	this.matched = this.patterns.ws.exec(this.buffer);
 

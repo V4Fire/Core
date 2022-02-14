@@ -8,7 +8,7 @@
 
 import symbolGenerator from 'core/symbol';
 
-import type { JsonToken, JsonTokenName } from 'core/json/stream/interface';
+import type { Token, TokenName } from 'core/json/stream/interface';
 import type { TokenProcessor, TokenFilter, FilterStack, FilterOptions } from 'core/json/stream/filters/interface';
 
 export const
@@ -75,10 +75,10 @@ export default abstract class Filter {
 	readonly multiple: boolean = false;
 
 	/**
-	 * Checks that specified chunk is matched for the filter
+	 * Checks that specified token is matched for the filter
 	 * @param chunk
 	 */
-	protected abstract checkChunk(chunk: JsonToken): Generator<boolean | JsonToken>;
+	protected abstract checkToken(chunk: Token): Generator<boolean | Token>;
 
 	/**
 	 * Stack of processed tokens
@@ -131,12 +131,12 @@ export default abstract class Filter {
 	/**
 	 * Name of the previous parsed token
 	 */
-	protected previousToken: JsonTokenName = '';
+	protected previousToken: TokenName = '';
 
 	/**
 	 * Name of the next expected token from a stream
 	 */
-	protected expectedToken?: JsonTokenName;
+	protected expectedToken?: TokenName;
 
 	protected constructor(filter: TokenFilter, opts: FilterOptions = {}) {
 		// eslint-disable-next-line @typescript-eslint/unbound-method
@@ -159,7 +159,7 @@ export default abstract class Filter {
 	 * Check the specified token for filter satisfaction
 	 * @param token
 	 */
-	protected*check(token: JsonToken): Generator<JsonToken> {
+	protected*check(token: Token): Generator<Token> {
 		const
 			last = this.stack.length - 1;
 
@@ -205,7 +205,7 @@ export default abstract class Filter {
 		this.previousToken = token.name;
 
 		const
-			iter = this.checkChunk(token);
+			iter = this.checkToken(token);
 
 		while (true) {
 			const {
@@ -248,7 +248,7 @@ export default abstract class Filter {
 	 * Passes the passed token into an output token stream
 	 * @param token
 	 */
-	protected*pass(token: JsonToken): Generator<JsonToken> {
+	protected*pass(token: Token): Generator<Token> {
 		yield token;
 	}
 
@@ -256,7 +256,7 @@ export default abstract class Filter {
 	 * Skips the passed token from an output token stream
 	 */
 	// eslint-disable-next-line require-yield
-	protected*skip(_: JsonToken): Generator<JsonToken> {
+	protected*skip(_: Token): Generator<Token> {
 		return undefined;
 	}
 
@@ -264,7 +264,7 @@ export default abstract class Filter {
 	 * Passes the passed object token into an output token stream
 	 * @param token
 	 */
-	protected*passObject(token: JsonToken): Generator<JsonToken> {
+	protected*passObject(token: Token): Generator<Token> {
 		yield token;
 
 		switch (token.name) {
@@ -292,7 +292,7 @@ export default abstract class Filter {
 	 * Skips the passed object token from an output token stream
 	 * @param chunk
 	 */
-	protected skipObject(chunk: JsonToken): void {
+	protected skipObject(chunk: Token): void {
 		switch (chunk.name) {
 			case 'startObject':
 			case 'startArray':
@@ -320,10 +320,10 @@ export default abstract class Filter {
 	 * @param currentToken
 	 * @param expectedToken
 	 */
-	protected passValue(currentToken: JsonTokenName, expectedToken: JsonTokenName): TokenProcessor {
+	protected passValue(currentToken: TokenName, expectedToken: TokenName): TokenProcessor {
 		const that = this;
 
-		return function* passValue(chunk: JsonToken) {
+		return function* passValue(chunk: Token) {
 			if (that.expectedToken === undefined || that.expectedToken === '') {
 				yield chunk;
 
@@ -357,10 +357,10 @@ export default abstract class Filter {
 	 * @param currentToken
 	 * @param expectedToken
 	 */
-	protected skipValue(currentToken: JsonTokenName, expectedToken: JsonTokenName): TokenProcessor {
+	protected skipValue(currentToken: TokenName, expectedToken: TokenName): TokenProcessor {
 		const that = this;
 
-		return function* skipValue(chunk: JsonToken): Generator<JsonToken> {
+		return function* skipValue(chunk: Token): Generator<Token> {
 			if (that.expectedToken != null) {
 				const
 					{expectedToken} = that;

@@ -11,12 +11,12 @@
 import type Parser from 'core/json/stream/parser';
 
 import { parserStates, parserStateTypes, PARSING_COMPLETE } from 'core/json/stream/const';
-import type { JsonToken } from 'core/json/stream/interface';
+import type { Token } from 'core/json/stream/interface';
 
 /**
  * Parses the buffer for a colon and sets the expected element to a parser expect value
  */
-export function* colon(this: Parser): Generator<JsonToken> {
+export function* colon(this: Parser): Generator<Token> {
 	this.patterns.colon.lastIndex = this.index;
 	this.matched = this.patterns.colon.exec(this.buffer);
 

@@ -6,11 +6,11 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type { JsonToken } from 'core/json/stream/interface';
+import type { Token } from 'core/json/stream/interface';
 import Super from 'core/json/stream/filters/modules/base';
 
 export default class Pick extends Super {
-	override*checkChunk(chunk: JsonToken): Generator<boolean | JsonToken> {
+	override*checkToken(chunk: Token): Generator<boolean | Token> {
 		switch (chunk.name) {
 			case 'startObject':
 			case 'startArray':

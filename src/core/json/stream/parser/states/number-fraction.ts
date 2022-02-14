@@ -9,12 +9,12 @@
 import type Parser from 'core/json/stream/parser';
 
 import { parserStates, parserStateTypes, parserExpected, PARSING_COMPLETE } from 'core/json/stream/const';
-import type { JsonToken } from 'core/json/stream/interface';
+import type { Token } from 'core/json/stream/interface';
 
 /**
  * Parses the buffer for a numeric fraction symbol `[\.eE]?` and generates a token `numberChunk` with a fraction symbol
  */
-export function* numberFraction(this: Parser): Generator<JsonToken> {
+export function* numberFraction(this: Parser): Generator<Token> {
 	this.patterns.numberFraction.lastIndex = this.index;
 	this.matched = this.patterns.numberFraction.exec(this.buffer);
 

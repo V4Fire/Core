@@ -19,12 +19,12 @@ import {
 
 } from 'core/json/stream/const';
 
-import type { JsonToken, ParentParserState } from 'core/json/stream/interface';
+import type { Token, ParentParserState } from 'core/json/stream/interface';
 
 /**
  * Parses the buffer for a value, generates a sequence of tokens, and sets the next expected value
  */
-export function* value(this: Parser): Generator<JsonToken> {
+export function* value(this: Parser): Generator<Token> {
 	this.patterns.value1.lastIndex = this.index;
 	this.matched = this.patterns.value1.exec(this.buffer);
 

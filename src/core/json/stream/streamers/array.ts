@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type { JsonToken, StreamedArray } from 'core/json/stream/interface';
+import type { Token, StreamedArray } from 'core/json/stream/interface';
 import { StreamBase } from 'core/json/stream/streamers/modules/base';
 
 export class StreamArray extends StreamBase {
@@ -26,7 +26,7 @@ export class StreamArray extends StreamBase {
 	 *
 	 * @param chunk
 	 */
-	*wait(chunk: JsonToken): Generator<StreamedArray> {
+	*wait(chunk: Token): Generator<StreamedArray> {
 		// First chunk should open an array
 		if (chunk.name !== 'startArray') {
 			throw new Error('Top-level object should be an array.');

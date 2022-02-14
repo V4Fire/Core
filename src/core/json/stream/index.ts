@@ -15,7 +15,7 @@ import Parser from 'core/json/stream/parser';
 import { Filter, Pick } from 'core/json/stream/filters';
 import { Assembler } from 'core/json/stream/assembler';
 import { StreamArray, StreamObject } from 'core/json/stream/streamers';
-import type { JsonToken, AssemblerOptions, FilterBaseOptions, StreamedArray, StreamedObject } from 'core/json/stream/interface';
+import type { Token, AssemblerOptions, FilterOptions, StreamedArray, StreamedObject } from 'core/json/stream/interface';
 
 /**
  * Iterate through async iterator of JSON pieces
@@ -25,7 +25,7 @@ import type { JsonToken, AssemblerOptions, FilterBaseOptions, StreamedArray, Str
  */
 export async function* from(
 	iterable: AsyncIterable<Buffer | string>
-): AsyncGenerator<JsonToken> {
+): AsyncGenerator<Token> {
 	const parser = new Parser();
 
 	for await (const chunk of iterable) {
@@ -41,7 +41,7 @@ export async function* from(
  * @param options
  */
 export async function* assemble(
-	iterable: AsyncIterable<JsonToken>,
+	iterable: AsyncIterable<Token>,
 	options?: AssemblerOptions
 ): AsyncGenerator<any> {
 	const assembler = new Assembler(options);
@@ -59,13 +59,13 @@ export async function* assemble(
  * @param options
  */
 export async function* filter(
-	iterable: AsyncIterable<JsonToken>,
-	options?: FilterBaseOptions
-): AsyncGenerator<JsonToken> {
+	iterable: AsyncIterable<Token>,
+	options?: FilterOptions
+): AsyncGenerator<Token> {
 	const filter = new Filter(options);
 
 	for await (const chunk of iterable) {
-		yield* filter.processChunk(chunk);
+		yield* filter.processToken(chunk);
 	}
 
 	yield* filter.syncStack();
@@ -79,13 +79,13 @@ export async function* filter(
  * @param options
  */
 export async function* pick(
-	iterable: AsyncIterable<JsonToken>,
-	options?: FilterBaseOptions
-): AsyncGenerator<JsonToken> {
+	iterable: AsyncIterable<Token>,
+	options?: FilterOptions
+): AsyncGenerator<Token> {
 	const pick = new Pick(options);
 
 	for await (const chunk of iterable) {
-		yield* pick.processChunk(chunk);
+		yield* pick.processToken(chunk);
 	}
 }
 
@@ -96,7 +96,7 @@ export async function* pick(
  * @param iterable
  */
 export async function* streamArray(
-	iterable: AsyncIterable<JsonToken>
+	iterable: AsyncIterable<Token>
 ): AsyncGenerator<StreamedArray> {
 	const iterArray = new StreamArray();
 
@@ -112,7 +112,7 @@ export async function* streamArray(
  * @param iterable
  */
 export async function* streamObject(
-	iterable: AsyncIterable<JsonToken>
+	iterable: AsyncIterable<Token>
 ): AsyncGenerator<StreamedObject> {
 	const objectStream = new StreamObject();
 

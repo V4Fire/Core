@@ -8,34 +8,54 @@
 
 import type { parserStateTypes } from 'core/json/stream/const';
 
-export interface JsonToken {
-	name: string;
-	value?: string | boolean | number | null;
-}
-
-export type ParserState = typeof parserStateTypes[keyof typeof parserStateTypes];
+export type ParserState = typeof parserStateTypes[
+	keyof typeof parserStateTypes
+];
 
 export type ParentParserState =
 	typeof parserStateTypes.OBJECT |
 	typeof parserStateTypes.ARRAY |
 	typeof parserStateTypes.EMPTY;
 
-export interface AssemblerOptions {
-	numberAsString?: boolean;
-	reviver?(key: string, value?: AssemblerItem): any;
+export type TokenName =
+	'' |
+	'startObject' |
+	'endObject' |
+	'startArray' |
+	'endArray' |
+	'startKey' |
+	'stringChunk' |
+	'endKey' |
+	'keyValue' |
+	'startString' |
+	'endString' |
+	'stringValue' |
+	'startNumber' |
+	'numberChunk' |
+	'numberValue' |
+	'endNumber' |
+	'nullValue' |
+	'trueValue' |
+	'falseValue';
+
+export type TokenValue =
+	string |
+	boolean |
+	number |
+	null;
+
+export interface Token {
+	name: TokenName;
+	value?: TokenValue;
 }
 
 export type AssemblerItem = JSONLikeValue;
 export type AssemblerKey = string | null;
 
-export interface FilterBaseOptions {
-	multiple?: boolean;
-	filter?: RegExp | string | ((stack: FilterStack, chunk: JsonToken) => boolean);
+export interface AssemblerOptions {
+	numberAsString?: boolean;
+	reviver?(key: AssemblerKey, value?: AssemblerItem): any;
 }
-
-export type FilterStack = Array<JsonToken['value'] | null>;
-
-export type ProcessFunction = (chunk: JsonToken) => Generator<JsonToken>;
 
 export interface StreamedArray {
 	key: number;

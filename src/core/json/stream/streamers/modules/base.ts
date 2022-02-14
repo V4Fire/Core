@@ -7,7 +7,7 @@
  */
 
 import { Assembler } from 'core/json/stream/assembler';
-import type { JsonToken } from 'core/json/stream/interface';
+import type { Token } from 'core/json/stream/interface';
 
 export abstract class StreamBase {
 	/**
@@ -15,7 +15,7 @@ export abstract class StreamBase {
 	 *
 	 * @param chunk
 	 */
-	processChunk: (chunk: JsonToken) => Generator<any> = this.wait;
+	processChunk: (chunk: Token) => Generator<any> = this.wait;
 
 	/**
 	 * Method for checking the correctness of
@@ -23,7 +23,7 @@ export abstract class StreamBase {
 	 *
 	 * @param chunk
 	 */
-	abstract wait(chunk: JsonToken): Generator<any>;
+	abstract wait(chunk: Token): Generator<any>;
 
 	/**
 	 * Method for yielding assembled tokens
@@ -46,7 +46,7 @@ export abstract class StreamBase {
 	 *
 	 * @param chunk
 	 */
-	*assembleChunk(chunk: JsonToken): Generator<any> {
+	*assembleChunk(chunk: Token): Generator<any> {
 		if (Object.isFunction(this.assembler[chunk.name])) {
 			this.assembler[chunk.name](chunk.value);
 

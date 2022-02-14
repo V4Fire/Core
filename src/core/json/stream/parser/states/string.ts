@@ -20,13 +20,13 @@ import {
 } from 'core/json/stream/const';
 
 import { fromHex } from 'core/json/stream/parser/helpers';
-import type { JsonToken } from 'core/json/stream/interface';
+import type { Token } from 'core/json/stream/interface';
 
 /**
  * Parses the buffer for the end of a key or string and generates a sequence of tokens
  * `endKey`, `keyValue` for a key or `endString`, `stringValue` and `stringChunk` for a string
  */
-export function* string(this: Parser): Generator<JsonToken> {
+export function* string(this: Parser): Generator<Token> {
 	this.patterns.string.lastIndex = this.index;
 	this.matched = this.patterns.string.exec(this.buffer);
 

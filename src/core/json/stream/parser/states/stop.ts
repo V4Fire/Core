@@ -9,13 +9,13 @@
 import type Parser from 'core/json/stream/parser';
 
 import { parserStates, parserStateTypes, parserExpected, PARSING_COMPLETE } from 'core/json/stream/const';
-import type { JsonToken, ParentParserState } from 'core/json/stream/interface';
+import type { Token, ParentParserState } from 'core/json/stream/interface';
 
 /**
  * Parses the buffer for the end of the current structure (an object or array) and
  * generates tokens `endObject` or `endArray`
  */
-export function* stop(this: Parser): Generator<JsonToken> {
+export function* stop(this: Parser): Generator<Token> {
 	this.patterns.comma.lastIndex = this.index;
 	this.matched = this.patterns.comma.exec(this.buffer);
 

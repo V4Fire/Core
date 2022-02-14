@@ -9,13 +9,13 @@
 import type Parser from 'core/json/stream/parser';
 
 import { parserStates, parserStateTypes, parserExpected, PARSING_COMPLETE } from 'core/json/stream/const';
-import type { JsonToken, ParentParserState } from 'core/json/stream/interface';
+import type { Token, ParentParserState } from 'core/json/stream/interface';
 
 /**
  * Parses the buffer for an object key and generates a token `startKey`.
  * Or if the object ended generates `endObject` token.
  */
-export function* key(this: Parser): Generator<JsonToken> {
+export function* key(this: Parser): Generator<Token> {
 	this.patterns.key1.lastIndex = this.index;
 	this.matched = this.patterns.key1.exec(this.buffer);
 

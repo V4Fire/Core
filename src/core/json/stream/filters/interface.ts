@@ -6,9 +6,9 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type { JsonToken, JsonTokenValue } from 'core/json/stream/interface';
+import type { Token, TokenValue } from 'core/json/stream/interface';
 
-export type FilterStack = Array<Nullable<JsonTokenValue>>;
+export type FilterStack = Array<Nullable<TokenValue>>;
 
 export interface FilterOptions {
 	/**
@@ -18,9 +18,9 @@ export interface FilterOptions {
 }
 
 export interface TokenProcessor {
-	(token: JsonToken): Generator<JsonToken>;
+	(token: Token): Generator<Token>;
 }
 
 export interface TokenFilter {
-	(stack: FilterStack, token: JsonToken): boolean;
+	(stack: FilterStack, token: Token): boolean;
 }

@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type { JsonToken } from 'core/json/stream/interface';
+import type { Token } from 'core/json/stream/interface';
 
 import Super from 'core/json/stream/filters/modules/base';
 import type { FilterStack } from 'core/json/stream/filters/interface';
@@ -26,7 +26,7 @@ export default class Filter extends Super {
 	 * Closes all unclosed tokens and returns a Generator of filtered tokens.
 	 * The method must be called after the end of filtration.
 	 */
-	*syncStack(): Generator<JsonToken> {
+	*syncStack(): Generator<Token> {
 		const
 			{stack, objStack} = this;
 
@@ -92,7 +92,7 @@ export default class Filter extends Super {
 		this.objStack = Array.prototype.concat.call(stack);
 	}
 
-	protected override*checkChunk(chunk: JsonToken): Generator<JsonToken> {
+	protected override*checkToken(chunk: Token): Generator<Token> {
 		switch (chunk.name) {
 			case 'startObject':
 				if (this.filter(this.stack, chunk)) {
