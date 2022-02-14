@@ -86,6 +86,7 @@ This is the list of data objects produced by Parser in the correct order:
 // Sequence of string chunks:
 ({name: 'stringChunk', value: 'string value chunk'});
 ({name: 'endKey'});
+({name: 'keyValue', value: 'key value'});
 
 // ----
 
@@ -95,6 +96,7 @@ This is the list of data objects produced by Parser in the correct order:
 // Sequence of string chunks:
 ({name: 'stringChunk', value: 'string value chunk'});
 ({name: 'endString'});
+({name: 'stringValue', value: 'string value'});
 
 // ----
 
@@ -104,12 +106,14 @@ This is the list of data objects produced by Parser in the correct order:
 // Sequence of number chunks (as strings):
 ({name: 'numberChunk', value: 'string value chunk'});
 ({name: 'endNumber'});
+({name: 'numberValue', value: 'string value'});
 
 // ----
 
 // null, true, false
 ({name: 'nullValue', value: null});
 ({name: 'trueValue', value: true});
+({name: 'falseValue', value: false});
 ```
 
 All value chunks (stringChunk and numberChunk) should be concatenated in order to produce a final value.
