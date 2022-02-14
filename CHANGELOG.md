@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.??.?? (2022-??-??)
+
+#### :rocket: New Feature
+
+* Added a new module `core/json/stream`
+
 ## v3.74.7 (2022-01-31)
 
 #### :bug: Bug Fix
