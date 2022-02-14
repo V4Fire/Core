@@ -16,18 +16,18 @@ import type { JsonToken } from 'core/json/stream/interface';
  */
 export function* numberExpSign(this: Parser): Generator<JsonToken> {
 	this.patterns.numberExpSign.lastIndex = this.index;
-	this.match = this.patterns.numberExpSign.exec(this.buffer);
+	this.matched = this.patterns.numberExpSign.exec(this.buffer);
 
-	if (this.match == null) {
+	if (this.matched == null) {
 		if (this.index < this.buffer.length) {
-			this.expect = parserStateTypes.NUMBER_EXP_START;
+			this.expected = parserStateTypes.NUMBER_EXP_START;
 			return;
 		}
 
 		return PARSING_COMPLETE;
 	}
 
-	this.value = this.match[0];
+	this.value = this.matched[0];
 
 	yield {
 		name: 'numberChunk',
@@ -35,7 +35,7 @@ export function* numberExpSign(this: Parser): Generator<JsonToken> {
 	};
 
 	this.accumulator += this.value;
-	this.expect = parserStateTypes.NUMBER_EXP_START;
+	this.expected = parserStateTypes.NUMBER_EXP_START;
 
 	this.index += this.value.length;
 }

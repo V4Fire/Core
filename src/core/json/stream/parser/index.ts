@@ -50,12 +50,12 @@ export default class Parser {
 	/**
 	 * The current match value after RegExp execution
 	 */
-	protected match?: RegExpExecArray | null;
+	protected matched?: RegExpExecArray | null;
 
 	/**
-	 * The next expected chunk in a stream
+	 * The next expected token from a stream
 	 */
-	protected expect: ParserState = parserStateTypes.VALUE;
+	protected expected: ParserState = parserStateTypes.VALUE;
 
 	/**
 	 * Dictionary with RegExp-s to different types of data
@@ -73,13 +73,14 @@ export default class Parser {
 	 */
 	*processChunk(chunk: string): Generator<JsonToken> {
 		this.buffer += chunk;
-		this.match = null;
+		this.matched = null;
+
 		this.value = '';
 		this.index = 0;
 
 		while (true) {
 			const
-				handler = parserStates[this.expect],
+				handler = parserStates[this.expected],
 				iter: Generator<JsonToken> = handler.call(this);
 
 			let

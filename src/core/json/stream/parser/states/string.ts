@@ -28,9 +28,9 @@ import type { JsonToken } from 'core/json/stream/interface';
  */
 export function* string(this: Parser): Generator<JsonToken> {
 	this.patterns.string.lastIndex = this.index;
-	this.match = this.patterns.string.exec(this.buffer);
+	this.matched = this.patterns.string.exec(this.buffer);
 
-	if (this.match == null) {
+	if (this.matched == null) {
 		if (this.index < this.buffer.length && (this.buffer.length - this.index >= 6)) {
 			throw new SyntaxError("Can't parse the input: escaped characters");
 		}
@@ -38,22 +38,22 @@ export function* string(this: Parser): Generator<JsonToken> {
 		return PARSING_COMPLETE;
 	}
 
-	this.value = this.match[0];
+	this.value = this.matched[0];
 
 	if (this.value === '"') {
-		if (this.expect === parserStateTypes.KEY_VAL) {
+		if (this.expected === parserStateTypes.KEY_VAL) {
 			yield {name: 'endKey'};
 			yield {name: 'keyValue', value: this.accumulator};
 
 			this.accumulator = '';
-			this.expect = parserStateTypes.COLON;
+			this.expected = parserStateTypes.COLON;
 
 		} else {
 			yield {name: 'endString'};
 			yield {name: 'stringValue', value: this.accumulator};
 
 			this.accumulator = '';
-			this.expect = parserExpected[this.parent];
+			this.expected = parserExpected[this.parent];
 		}
 
 	} else if (this.value.length > 1 && this.value.startsWith('\\')) {

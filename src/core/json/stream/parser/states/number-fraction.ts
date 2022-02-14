@@ -16,18 +16,18 @@ import type { JsonToken } from 'core/json/stream/interface';
  */
 export function* numberFraction(this: Parser): Generator<JsonToken> {
 	this.patterns.numberFraction.lastIndex = this.index;
-	this.match = this.patterns.numberFraction.exec(this.buffer);
+	this.matched = this.patterns.numberFraction.exec(this.buffer);
 
-	if (this.match == null) {
+	if (this.matched == null) {
 		if (this.index < this.buffer.length) {
-			this.expect = parserExpected[this.parent];
+			this.expected = parserExpected[this.parent];
 			return;
 		}
 
 		return PARSING_COMPLETE;
 	}
 
-	this.value = this.match[0];
+	this.value = this.matched[0];
 
 	yield {
 		name: 'numberChunk',
@@ -35,7 +35,7 @@ export function* numberFraction(this: Parser): Generator<JsonToken> {
 	};
 
 	this.accumulator += this.value;
-	this.expect = this.value === '.' ? parserStateTypes.NUMBER_FRACTION_START : parserStateTypes.NUMBER_EXP_SIGN;
+	this.expected = this.value === '.' ? parserStateTypes.NUMBER_FRACTION_START : parserStateTypes.NUMBER_EXP_SIGN;
 
 	this.index += this.value.length;
 }

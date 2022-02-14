@@ -16,8 +16,8 @@ import type { JsonToken } from 'core/json/stream/interface';
  */
 export function* numberExpDigit(this: Parser): Generator<JsonToken> {
 	this.patterns.numberExpDigit.lastIndex = this.index;
-	this.match = this.patterns.numberExpDigit.exec(this.buffer);
-	this.value = this.match?.[0];
+	this.matched = this.patterns.numberExpDigit.exec(this.buffer);
+	this.value = this.matched?.[0];
 
 	if (this.value != null) {
 		yield {
@@ -30,7 +30,7 @@ export function* numberExpDigit(this: Parser): Generator<JsonToken> {
 
 	} else {
 		if (this.index < this.buffer.length) {
-			this.expect = parserExpected[this.parent];
+			this.expected = parserExpected[this.parent];
 			return;
 		}
 

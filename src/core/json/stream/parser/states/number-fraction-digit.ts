@@ -16,8 +16,8 @@ import type { JsonToken } from 'core/json/stream/interface';
  */
 export function* numberFractionDigit(this: Parser): Generator<JsonToken> {
 	this.patterns.numberFracDigit.lastIndex = this.index;
-	this.match = this.patterns.numberFracDigit.exec(this.buffer);
-	this.value = this.match?.[0];
+	this.matched = this.patterns.numberFracDigit.exec(this.buffer);
+	this.value = this.matched?.[0];
 
 	if (this.value != null) {
 		yield {
@@ -30,7 +30,7 @@ export function* numberFractionDigit(this: Parser): Generator<JsonToken> {
 
 	} else {
 		if (this.index < this.buffer.length) {
-			this.expect = parserStateTypes.NUMBER_EXPONENT;
+			this.expected = parserStateTypes.NUMBER_EXPONENT;
 			return;
 		}
 

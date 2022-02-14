@@ -16,9 +16,9 @@ import type { JsonToken } from 'core/json/stream/interface';
  */
 export function* numberDigit(this: Parser): Generator<JsonToken> {
 	this.patterns.numberDigit.lastIndex = this.index;
-	this.match = this.patterns.numberDigit.exec(this.buffer);
+	this.matched = this.patterns.numberDigit.exec(this.buffer);
 
-	if (this.match == null) {
+	if (this.matched == null) {
 		if (this.index < this.buffer.length) {
 			throw new SyntaxError("Can't parse the input: expected a digit");
 		}
@@ -26,7 +26,7 @@ export function* numberDigit(this: Parser): Generator<JsonToken> {
 		return PARSING_COMPLETE;
 	}
 
-	this.value = this.match[0];
+	this.value = this.matched[0];
 
 	if (this.value.length > 0) {
 		yield {
@@ -39,7 +39,7 @@ export function* numberDigit(this: Parser): Generator<JsonToken> {
 
 	} else {
 		if (this.index < this.buffer.length) {
-			this.expect = parserStateTypes.NUMBER_FRACTION;
+			this.expected = parserStateTypes.NUMBER_FRACTION;
 			return;
 		}
 

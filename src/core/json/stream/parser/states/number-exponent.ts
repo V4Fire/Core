@@ -15,18 +15,18 @@ import { parserStates, parserStateTypes, parserExpected, PARSING_COMPLETE } from
  */
 export function* numberExponent(this: Parser): Generator<JsonToken> {
 	this.patterns.numberExponent.lastIndex = this.index;
-	this.match = this.patterns.numberExponent.exec(this.buffer);
+	this.matched = this.patterns.numberExponent.exec(this.buffer);
 
-	if (this.match == null) {
+	if (this.matched == null) {
 		if (this.index < this.buffer.length) {
-			this.expect = parserExpected[this.parent];
+			this.expected = parserExpected[this.parent];
 			return;
 		}
 
 		return PARSING_COMPLETE;
 	}
 
-	this.value = this.match[0];
+	this.value = this.matched[0];
 
 	yield {
 		name: 'numberChunk',
@@ -34,7 +34,7 @@ export function* numberExponent(this: Parser): Generator<JsonToken> {
 	};
 
 	this.accumulator += this.value;
-	this.expect = parserStateTypes.NUMBER_EXP_SIGN;
+	this.expected = parserStateTypes.NUMBER_EXP_SIGN;
 
 	this.index += this.value.length;
 }

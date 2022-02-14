@@ -26,9 +26,9 @@ import type { JsonToken, ParentParserState } from 'core/json/stream/interface';
  */
 export function* value(this: Parser): Generator<JsonToken> {
 	this.patterns.value1.lastIndex = this.index;
-	this.match = this.patterns.value1.exec(this.buffer);
+	this.matched = this.patterns.value1.exec(this.buffer);
 
-	if (this.match == null) {
+	if (this.matched == null) {
 		if (this.index + MAX_PATTERN_SIZE < this.buffer.length) {
 			if (this.index < this.buffer.length) {
 				throw new SyntaxError("Can't parse the input: expected a value");
@@ -40,13 +40,13 @@ export function* value(this: Parser): Generator<JsonToken> {
 		return PARSING_COMPLETE;
 	}
 
-	this.value = this.match[0];
+	this.value = this.matched[0];
 
 	switch (this.value) {
 		case '"':
 			yield {name: 'startString'};
 
-			this.expect = parserStateTypes.STRING;
+			this.expected = parserStateTypes.STRING;
 			break;
 
 		case '{':
@@ -54,7 +54,7 @@ export function* value(this: Parser): Generator<JsonToken> {
 
 			this.stack.push(this.parent);
 			this.parent = parserStateTypes.OBJECT;
-			this.expect = parserStateTypes.KEY1;
+			this.expected = parserStateTypes.KEY1;
 
 			break;
 
@@ -63,12 +63,12 @@ export function* value(this: Parser): Generator<JsonToken> {
 
 			this.stack.push(this.parent);
 			this.parent = parserStateTypes.ARRAY;
-			this.expect = parserStateTypes.VALUE1;
+			this.expected = parserStateTypes.VALUE1;
 
 			break;
 
 		case ']':
-			if (this.expect !== parserStateTypes.VALUE1) {
+			if (this.expected !== parserStateTypes.VALUE1) {
 				throw new SyntaxError("Parser cannot parse input: unexpected token ']'");
 			}
 
@@ -83,7 +83,7 @@ export function* value(this: Parser): Generator<JsonToken> {
 			yield {name: 'endArray'};
 
 			this.parent = <ParentParserState>this.stack.pop();
-			this.expect = parserExpected[this.parent];
+			this.expected = parserExpected[this.parent];
 
 			break;
 
@@ -94,7 +94,7 @@ export function* value(this: Parser): Generator<JsonToken> {
 			yield {name: 'numberChunk', value: '-'};
 
 			this.accumulator = '-';
-			this.expect = parserStateTypes.NUMBER_START;
+			this.expected = parserStateTypes.NUMBER_START;
 
 			break;
 
@@ -105,7 +105,7 @@ export function* value(this: Parser): Generator<JsonToken> {
 			yield {name: 'numberChunk', value: '0'};
 
 			this.accumulator = '0';
-			this.expect = parserStateTypes.NUMBER_FRACTION;
+			this.expected = parserStateTypes.NUMBER_FRACTION;
 
 			break;
 
@@ -124,7 +124,7 @@ export function* value(this: Parser): Generator<JsonToken> {
 			yield {name: 'numberChunk', value: this.value};
 
 			this.accumulator = this.value;
-			this.expect = parserStateTypes.NUMBER_DIGIT;
+			this.expected = parserStateTypes.NUMBER_DIGIT;
 
 			break;
 
@@ -136,7 +136,7 @@ export function* value(this: Parser): Generator<JsonToken> {
 			}
 
 			yield {name: `${this.value}Value`, value: Object.parse(this.value)};
-			this.expect = parserExpected[this.parent];
+			this.expected = parserExpected[this.parent];
 
 			break;
 

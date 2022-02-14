@@ -18,9 +18,9 @@ import type { JsonToken } from 'core/json/stream/interface';
  */
 export function* colon(this: Parser): Generator<JsonToken> {
 	this.patterns.colon.lastIndex = this.index;
-	this.match = this.patterns.colon.exec(this.buffer);
+	this.matched = this.patterns.colon.exec(this.buffer);
 
-	if (this.match == null) {
+	if (this.matched == null) {
 		if (this.index < this.buffer.length) {
 			throw new SyntaxError("Can't parse the input: expected ':'");
 		}
@@ -28,10 +28,10 @@ export function* colon(this: Parser): Generator<JsonToken> {
 		return PARSING_COMPLETE;
 	}
 
-	this.value = this.match[0];
+	this.value = this.matched[0];
 
 	if (this.value === ':') {
-		this.expect = parserStateTypes.VALUE;
+		this.expected = parserStateTypes.VALUE;
 	}
 
 	this.index += this.value.length;

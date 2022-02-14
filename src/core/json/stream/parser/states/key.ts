@@ -17,9 +17,9 @@ import type { JsonToken, ParentParserState } from 'core/json/stream/interface';
  */
 export function* key(this: Parser): Generator<JsonToken> {
 	this.patterns.key1.lastIndex = this.index;
-	this.match = this.patterns.key1.exec(this.buffer);
+	this.matched = this.patterns.key1.exec(this.buffer);
 
-	if (this.match == null) {
+	if (this.matched == null) {
 		if (this.index < this.buffer.length) {
 			throw new SyntaxError("Can't parse the input: expected an object key");
 		}
@@ -27,20 +27,20 @@ export function* key(this: Parser): Generator<JsonToken> {
 		return PARSING_COMPLETE;
 	}
 
-	this.value = this.match[0];
+	this.value = this.matched[0];
 
 	if (this.value === '"') {
 		yield {name: 'startKey'};
-		this.expect = parserStateTypes.KEY_VAL;
+		this.expected = parserStateTypes.KEY_VAL;
 
 	} else if (this.value === '}') {
-		if (this.expect !== parserStateTypes.KEY1) {
+		if (this.expected !== parserStateTypes.KEY1) {
 			throw new SyntaxError("Can't parse the input: unexpected token '}'");
 		}
 
 		yield {name: 'endObject'};
 		this.parent = <ParentParserState>this.stack.pop();
-		this.expect = parserExpected[this.parent];
+		this.expected = parserExpected[this.parent];
 	}
 
 	this.index += this.value.length;
