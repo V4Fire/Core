@@ -11,7 +11,7 @@
  * @packageDocumentation
  */
 
-import { Parser } from 'core/json/stream/parser';
+import Parser from 'core/json/stream/parser';
 import { Filter, Pick } from 'core/json/stream/filters';
 import { Assembler } from 'core/json/stream/assembler';
 import { StreamArray, StreamObject } from 'core/json/stream/streamers';
