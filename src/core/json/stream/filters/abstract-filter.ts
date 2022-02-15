@@ -8,13 +8,13 @@
 
 import symbolGenerator from 'core/symbol';
 
-import type { Token, TokenName } from 'core/json/stream/interface';
-import type { TokenProcessor, TokenFilter, FilterStack, FilterOptions } from 'core/json/stream/filters/interface';
+import type { Token, TokenName, TokenProcessor, TokenProcessorFn } from 'core/json/stream/parser';
+import type { TokenFilter, FilterStack, FilterOptions } from 'core/json/stream/filters/interface';
 
 export const
 	$$ = symbolGenerator();
 
-export default abstract class AbstractFilter {
+export default abstract class AbstractFilter implements TokenProcessor {
 	/**
 	 * Creates a function to filter only chunks by the specified path
 	 *
@@ -56,29 +56,37 @@ export default abstract class AbstractFilter {
 	}
 
 	/**
-	 * Processes the passed JSON token and yields tokens
-	 */
-	get processToken(): TokenProcessor {
-		return this[$$.processChunk];
-	}
-
-	/**
-	 * Sets a new process function the passed JSON chunk and yields tokens
-	 */
-	set processToken(val: TokenProcessor) {
-		this[$$.processChunk] = val;
-	}
-
-	/**
 	 * If true the filtration will return all matched filter results, otherwise only the first match will be returned
 	 */
 	readonly multiple: boolean = false;
 
 	/**
+	 * Processes the passed JSON token and yields tokens
+	 */
+	get processToken(): TokenProcessorFn {
+		return this[$$.processChunk];
+	}
+
+	/**
+	 * Sets a new process function to parse JSON chunk and yield tokens
+	 */
+	protected set processToken(val: TokenProcessorFn) {
+		this[$$.processChunk] = val;
+	}
+
+	/**
 	 * Checks that specified token is matched for the filter
+	 * @param token
+	 */
+	protected abstract checkToken(token: Token): Generator<boolean | Token>;
+
+	/**
+	 * Function to filter a sequence of parsed tokens
+	 *
+	 * @param stack
 	 * @param chunk
 	 */
-	protected abstract checkToken(chunk: Token): Generator<boolean | Token>;
+	protected filter: TokenFilter;
 
 	/**
 	 * Stack of processed tokens
@@ -91,44 +99,6 @@ export default abstract class AbstractFilter {
 	protected depth: number = 0;
 
 	/**
-	 * Function to filter a sequence of parsed tokens
-	 *
-	 * @param stack
-	 * @param chunk
-	 */
-	protected filter: TokenFilter;
-
-	/**
-	 * Method to pass numeric tokens
-	 */
-	protected readonly passNumber: TokenProcessor = this.passValue('endNumber', 'numberValue');
-
-	/**
-	 * Method to skip numeric tokens
-	 */
-	protected readonly skipNumber: TokenProcessor = this.skipValue('endNumber', 'numberValue');
-
-	/**
-	 * Method to pass string tokens
-	 */
-	protected readonly passString: TokenProcessor = this.passValue('endString', 'stringValue');
-
-	/**
-	 * Method to skip string tokens
-	 */
-	protected readonly skipString: TokenProcessor = this.skipValue('endString', 'stringValue');
-
-	/**
-	 * Method to pass key tokens
-	 */
-	protected readonly passKey: TokenProcessor = this.passValue('endKey', 'keyValue');
-
-	/**
-	 * Method to skip key tokens
-	 */
-	protected readonly skipKey: TokenProcessor = this.skipValue('endKey', 'keyValue');
-
-	/**
 	 * Name of the previous parsed token
 	 */
 	protected previousToken: TokenName = '';
@@ -137,6 +107,36 @@ export default abstract class AbstractFilter {
 	 * Name of the next expected token from a stream
 	 */
 	protected expectedToken?: TokenName;
+
+	/**
+	 * Method to pass numeric tokens
+	 */
+	protected readonly passNumber: TokenProcessorFn = this.passValue('endNumber', 'numberValue');
+
+	/**
+	 * Method to skip numeric tokens
+	 */
+	protected readonly skipNumber: TokenProcessorFn = this.skipValue('endNumber', 'numberValue');
+
+	/**
+	 * Method to pass string tokens
+	 */
+	protected readonly passString: TokenProcessorFn = this.passValue('endString', 'stringValue');
+
+	/**
+	 * Method to skip string tokens
+	 */
+	protected readonly skipString: TokenProcessorFn = this.skipValue('endString', 'stringValue');
+
+	/**
+	 * Method to pass key tokens
+	 */
+	protected readonly passKey: TokenProcessorFn = this.passValue('endKey', 'keyValue');
+
+	/**
+	 * Method to skip key tokens
+	 */
+	protected readonly skipKey: TokenProcessorFn = this.skipValue('endKey', 'keyValue');
 
 	protected constructor(filter: TokenFilter, opts: FilterOptions = {}) {
 		// eslint-disable-next-line @typescript-eslint/unbound-method
@@ -160,7 +160,7 @@ export default abstract class AbstractFilter {
 	 * The method must be called after the end of filtration.
 	 */
 	// eslint-disable-next-line require-yield
-	*syncStack(): Generator<Token> {
+	*finishTokenProcessing(): Generator<Token> {
 		return undefined;
 	}
 
@@ -329,7 +329,7 @@ export default abstract class AbstractFilter {
 	 * @param currentToken
 	 * @param expectedToken
 	 */
-	protected passValue(currentToken: TokenName, expectedToken: TokenName): TokenProcessor {
+	protected passValue(currentToken: TokenName, expectedToken: TokenName): TokenProcessorFn {
 		const that = this;
 
 		return function* passValue(chunk: Token) {
@@ -366,7 +366,7 @@ export default abstract class AbstractFilter {
 	 * @param currentToken
 	 * @param expectedToken
 	 */
-	protected skipValue(currentToken: TokenName, expectedToken: TokenName): TokenProcessor {
+	protected skipValue(currentToken: TokenName, expectedToken: TokenName): TokenProcessorFn {
 		const that = this;
 
 		return function* skipValue(chunk: Token): Generator<Token> {

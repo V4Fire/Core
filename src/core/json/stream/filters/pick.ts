@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type { Token } from 'core/json/stream/interface';
+import type { Token } from 'core/json/stream/parser';
 import Super from 'core/json/stream/filters/abstract-filter';
 
 export default class Pick extends Super {

@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type { Token } from 'core/json/stream/interface';
+import type { Token } from 'core/json/stream/parser';
 
 import Super from 'core/json/stream/filters/abstract-filter';
 import type { FilterStack } from 'core/json/stream/filters/interface';
@@ -22,7 +22,7 @@ export default class Filter extends Super {
 	 */
 	protected objStack: FilterStack = [];
 
-	override*syncStack(): Generator<Token> {
+	override*finishTokenProcessing(): Generator<Token> {
 		const
 			{stack, objStack} = this;
 
@@ -92,7 +92,7 @@ export default class Filter extends Super {
 		switch (chunk.name) {
 			case 'startObject':
 				if (this.filter(this.stack, chunk)) {
-					yield* this.syncStack();
+					yield* this.finishTokenProcessing();
 					yield chunk;
 
 					this.objStack.push(null);
@@ -102,7 +102,7 @@ export default class Filter extends Super {
 
 			case 'startArray':
 				if (this.filter(this.stack, chunk)) {
-					yield* this.syncStack();
+					yield* this.finishTokenProcessing();
 					yield chunk;
 
 					this.objStack.push(-1);
@@ -116,7 +116,7 @@ export default class Filter extends Super {
 			case 'stringValue':
 			case 'numberValue':
 				if (this.filter(this.stack, chunk)) {
-					yield* this.syncStack();
+					yield* this.finishTokenProcessing();
 					yield chunk;
 				}
 
@@ -124,7 +124,7 @@ export default class Filter extends Super {
 
 			case 'startString':
 				if (this.filter(this.stack, chunk)) {
-					yield* this.syncStack();
+					yield* this.finishTokenProcessing();
 					yield chunk;
 
 					this.processToken = this.passString;
@@ -137,7 +137,7 @@ export default class Filter extends Super {
 
 			case 'startNumber':
 				if (this.filter(this.stack, chunk)) {
-					yield* this.syncStack();
+					yield* this.finishTokenProcessing();
 					yield chunk;
 
 					this.processToken = this.passNumber;
