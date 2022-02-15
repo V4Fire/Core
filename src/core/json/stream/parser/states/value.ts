@@ -131,13 +131,16 @@ export function* value(this: Parser): Generator<Token> {
 		case 'true':
 		case 'false':
 		case 'null':
+			yield {
+				name: `${this.value}Value`,
+				value: Object.parse(this.value)
+			};
+
 			if (this.buffer.length - this.index === this.value.length) {
 				return PARSING_COMPLETE;
 			}
 
-			yield {name: `${this.value}Value`, value: Object.parse(this.value)};
 			this.expected = parserExpected[this.parent];
-
 			break;
 
 		default:
