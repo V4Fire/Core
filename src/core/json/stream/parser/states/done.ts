@@ -18,16 +18,6 @@ export function* done(this: Parser): Generator<Token> {
 	this.patterns.ws.lastIndex = this.index;
 	this.matched = this.patterns.ws.exec(this.buffer);
 
-	if (this.matched == null) {
-		if (this.index < this.buffer.length) {
-			throw new SyntaxError("Can't parse the input: unexpected characters");
-		}
-
-		return PARSING_COMPLETE;
-	}
-
-	this.value = this.matched[0];
-
 	if (this.isOpenNumber) {
 		yield {name: 'endNumber'};
 		this.isOpenNumber = false;
@@ -40,6 +30,15 @@ export function* done(this: Parser): Generator<Token> {
 		this.accumulator = '';
 	}
 
+	if (this.matched == null) {
+		if (this.index < this.buffer.length) {
+			throw new SyntaxError("Can't parse the input: unexpected characters");
+		}
+
+		return PARSING_COMPLETE;
+	}
+
+	this.value = this.matched[0];
 	this.index += this.value.length;
 }
 

@@ -19,7 +19,7 @@ export function* numberExpDigit(this: Parser): Generator<Token> {
 	this.matched = this.patterns.numberExpDigit.exec(this.buffer);
 	this.value = this.matched?.[0];
 
-	if (this.value != null) {
+	if (this.value != null && this.value !== '') {
 		yield {
 			name: 'numberChunk',
 			value: this.value
@@ -29,12 +29,7 @@ export function* numberExpDigit(this: Parser): Generator<Token> {
 		this.index += this.value.length;
 
 	} else {
-		if (this.index < this.buffer.length) {
-			this.expected = parserExpected[this.parent];
-			return;
-		}
-
-		return PARSING_COMPLETE;
+		this.expected = parserExpected[this.parent];
 	}
 }
 

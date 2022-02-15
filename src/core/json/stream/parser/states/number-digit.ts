@@ -10,6 +10,7 @@ import type Parser from 'core/json/stream/parser';
 
 import { parserStates, parserStateTypes, PARSING_COMPLETE } from 'core/json/stream/parser/const';
 import type { Token } from 'core/json/stream/parser/interface';
+import { parserExpected } from 'core/json/stream/parser';
 
 /**
  * Parses the buffer and generates from digits `[0-9]*` a token `numberChunk` with a number value
@@ -43,7 +44,7 @@ export function* numberDigit(this: Parser): Generator<Token> {
 			return;
 		}
 
-		return PARSING_COMPLETE;
+		this.expected = parserExpected[this.parent];
 	}
 }
 

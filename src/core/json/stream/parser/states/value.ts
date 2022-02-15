@@ -136,10 +136,6 @@ export function* value(this: Parser): Generator<Token> {
 				value: Object.parse(this.value)
 			};
 
-			if (this.buffer.length - this.index === this.value.length) {
-				return PARSING_COMPLETE;
-			}
-
 			this.expected = parserExpected[this.parent];
 			break;
 

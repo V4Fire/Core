@@ -10,6 +10,7 @@ import type Parser from 'core/json/stream/parser';
 
 import { parserStates, parserStateTypes, PARSING_COMPLETE } from 'core/json/stream/parser/const';
 import type { Token } from 'core/json/stream/parser/interface';
+import { parserExpected } from 'core/json/stream/parser';
 
 /**
  * Parses the buffer for number fraction digits `[0-9]` and generates a token `numberChunk` with a fraction value
@@ -19,7 +20,7 @@ export function* numberFractionDigit(this: Parser): Generator<Token> {
 	this.matched = this.patterns.numberFracDigit.exec(this.buffer);
 	this.value = this.matched?.[0];
 
-	if (this.value != null) {
+	if (this.value != null && this.value !== '') {
 		yield {
 			name: 'numberChunk',
 			value: this.value
@@ -34,7 +35,7 @@ export function* numberFractionDigit(this: Parser): Generator<Token> {
 			return;
 		}
 
-		return PARSING_COMPLETE;
+		this.expected = parserExpected[this.parent];
 	}
 }
 

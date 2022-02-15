@@ -9,6 +9,178 @@
 import Parser from 'core/json/stream/parser';
 
 describe('core/json/stream/parser', () => {
+	describe('parsing of primitive values', () => {
+		it('integer numbers', () => {
+			expect([...new Parser().processChunk('100500')]).toEqual([
+				{name: 'startNumber'},
+				{name: 'numberChunk', value: '1'},
+				{name: 'numberChunk', value: '00500'},
+				{name: 'endNumber'},
+				{name: 'numberValue', value: '100500'}
+			]);
+
+			expect([...new Parser().processChunk('-12')]).toEqual([
+				{name: 'startNumber'},
+				{name: 'numberChunk', value: '-'},
+				{name: 'numberChunk', value: '1'},
+				{name: 'numberChunk', value: '2'},
+				{name: 'endNumber'},
+				{name: 'numberValue', value: '-12'}
+			]);
+		});
+
+		it('numbers with a floating points', () => {
+			expect([...new Parser().processChunk('12.3')]).toEqual([
+				{name: 'startNumber'},
+				{name: 'numberChunk', value: '1'},
+				{name: 'numberChunk', value: '2'},
+				{name: 'numberChunk', value: '.'},
+				{name: 'numberChunk', value: '3'},
+				{name: 'endNumber'},
+				{name: 'numberValue', value: '12.3'}
+			]);
+
+			expect([...new Parser().processChunk('-12.300')]).toEqual([
+				{name: 'startNumber'},
+				{name: 'numberChunk', value: '-'},
+				{name: 'numberChunk', value: '1'},
+				{name: 'numberChunk', value: '2'},
+				{name: 'numberChunk', value: '.'},
+				{name: 'numberChunk', value: '3'},
+				{name: 'numberChunk', value: '00'},
+				{name: 'endNumber'},
+				{name: 'numberValue', value: '-12.300'}
+			]);
+		});
+
+		it('numbers in an exponential form', () => {
+			expect([...new Parser().processChunk('12e10')]).toEqual([
+				{name: 'startNumber'},
+				{name: 'numberChunk', value: '1'},
+				{name: 'numberChunk', value: '2'},
+				{name: 'numberChunk', value: 'e'},
+				{name: 'numberChunk', value: '1'},
+				{name: 'numberChunk', value: '0'},
+				{name: 'endNumber'},
+				{name: 'numberValue', value: '12e10'}
+			]);
+
+			expect([...new Parser().processChunk('-1E2')]).toEqual([
+				{name: 'startNumber'},
+				{name: 'numberChunk', value: '-'},
+				{name: 'numberChunk', value: '1'},
+				{name: 'numberChunk', value: 'E'},
+				{name: 'numberChunk', value: '2'},
+				{name: 'endNumber'},
+				{name: 'numberValue', value: '-1E2'}
+			]);
+
+			expect([...new Parser().processChunk('-1.4e2')]).toEqual([
+				{name: 'startNumber'},
+				{name: 'numberChunk', value: '-'},
+				{name: 'numberChunk', value: '1'},
+				{name: 'numberChunk', value: '.'},
+				{name: 'numberChunk', value: '4'},
+				{name: 'numberChunk', value: 'e'},
+				{name: 'numberChunk', value: '2'},
+				{name: 'endNumber'},
+				{name: 'numberValue', value: '-1.4e2'}
+			]);
+
+			expect([...new Parser().processChunk('4.4e-2')]).toEqual([
+				{name: 'startNumber'},
+				{name: 'numberChunk', value: '4'},
+				{name: 'numberChunk', value: '.'},
+				{name: 'numberChunk', value: '4'},
+				{name: 'numberChunk', value: 'e'},
+				{name: 'numberChunk', value: '-'},
+				{name: 'numberChunk', value: '2'},
+				{name: 'endNumber'},
+				{name: 'numberValue', value: '4.4e-2'}
+			]);
+
+			expect([...new Parser().processChunk('-4.4e-2')]).toEqual([
+				{name: 'startNumber'},
+				{name: 'numberChunk', value: '-'},
+				{name: 'numberChunk', value: '4'},
+				{name: 'numberChunk', value: '.'},
+				{name: 'numberChunk', value: '4'},
+				{name: 'numberChunk', value: 'e'},
+				{name: 'numberChunk', value: '-'},
+				{name: 'numberChunk', value: '2'},
+				{name: 'endNumber'},
+				{name: 'numberValue', value: '-4.4e-2'}
+			]);
+		});
+
+		it('strings', () => {
+			expect([...new Parser().processChunk('"foo bar"')]).toEqual([
+				{
+					name: 'startString'
+				},
+
+				{
+					name: 'stringChunk',
+					value: 'foo bar'
+				},
+
+				{
+					name: 'endString'
+				},
+
+				{
+					name: 'stringValue',
+					value: 'foo bar'
+				}
+			]);
+
+			expect([...new Parser().processChunk('"foo\t\tbar"')]).toEqual([
+				{
+					name: 'startString'
+				},
+
+				{
+					name: 'stringChunk',
+					value: 'foo\t\tbar'
+				},
+
+				{
+					name: 'endString'
+				},
+
+				{
+					name: 'stringValue',
+					value: 'foo\t\tbar'
+				}
+			]);
+		});
+
+		it('booleans', () => {
+			expect([...new Parser().processChunk('true')]).toEqual([
+				{
+					name: 'trueValue',
+					value: true
+				}
+			]);
+
+			expect([...new Parser().processChunk('false')]).toEqual([
+				{
+					name: 'falseValue',
+					value: false
+				}
+			]);
+		});
+
+		it('null', () => {
+			expect([...new Parser().processChunk('null')]).toEqual([
+				{
+					name: 'nullValue',
+					value: null
+				}
+			]);
+		});
+	});
+
 	it('should parse JSON chunks to tokens with the specified bytes step', async () => {
 		const input = {
 			a: 1,

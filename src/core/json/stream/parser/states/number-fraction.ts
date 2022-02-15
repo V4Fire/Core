@@ -35,7 +35,10 @@ export function* numberFraction(this: Parser): Generator<Token> {
 	};
 
 	this.accumulator += this.value;
-	this.expected = this.value === '.' ? parserStateTypes.NUMBER_FRACTION_START : parserStateTypes.NUMBER_EXP_SIGN;
+
+	this.expected = this.value === '.' ?
+		parserStateTypes.NUMBER_FRACTION_START :
+		parserStateTypes.NUMBER_EXP_SIGN;
 
 	this.index += this.value.length;
 }
