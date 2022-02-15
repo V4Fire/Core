@@ -59,9 +59,6 @@ module.exports = () => {
 		addMatchAll: false
 	});
 
-	const
-		ignore = config.dependencies.map((dep) => `node_modules/(?!${dep})`);
-
 	tsNode.register({
 		transpileOnly: true,
 
@@ -70,7 +67,7 @@ module.exports = () => {
 			target: 'es2021'
 		},
 
-		ignore
+		ignore: []
 	});
 
 	isInitialized = true;
