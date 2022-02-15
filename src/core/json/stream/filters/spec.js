@@ -6,158 +6,136 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import Parser from 'core/json/stream/parser';
 import { Filter, Pick } from 'core/json/stream/filters';
 
-const data = [
-	{name: 'startObject'},
-	{name: 'startKey'},
-	{name: 'stringChunk', value: 'a'},
-	{name: 'endKey'},
-	{name: 'keyValue', value: 'a'},
-	{name: 'startNumber'},
-	{name: 'numberChunk', value: '1'},
-	{name: 'endNumber'},
-	{name: 'numberValue', value: '1'},
-	{name: 'startKey'},
-	{name: 'stringChunk', value: 'b'},
-	{name: 'endKey'},
-	{name: 'keyValue', value: 'b'},
-	{name: 'trueValue', value: true},
-	{name: 'startKey'},
-	{name: 'stringChunk', value: 'c'},
-	{name: 'endKey'},
-	{name: 'keyValue', value: 'c'},
-	{name: 'startArray'},
-	{name: 'startString'},
-	{name: 'stringChunk', value: 'd'},
-	{name: 'endString'},
-	{name: 'stringValue', value: 'd'},
-	{name: 'endArray'},
-	{name: 'endObject'}
-];
+describe('core/json/stream/filters', () => {
+	describe('`Filter`', () => {
+		it('filtering tokens by the specified path', async () => {
+			const input = `{
+				"a": {
+					"b": [1, 2, 3]
+				},
 
-describe('JSON stream', () => {
-	describe('Filter', () => {
-		it('should filter token stream', () => {
-			const filter = new Filter({filter: 'a'});
-			const result = [];
+				"c": 2
+			}`;
 
-			for (const chunk of data) {
-				for (const el of filter.processChunk(chunk)) {
-					result.push(el);
-				}
+			const
+				res = [];
+
+			for await (const token of Parser.from([input], new Filter('a.b'))) {
+				res.push(token);
 			}
 
-			for (const el of filter.syncStack()) {
-				result.push(el);
-			}
-
-			expect(result).toEqual([{name: 'startObject'}, ...data.slice(1, 9), {name: 'endObject'}]);
+			expect(res)
+				.toEqual([
+					...new Parser().processChunk(`{
+					"a": {
+						"b": [1, 2, 3]
+					}
+				}`)
+				]);
 		});
 
-		it('should filter token stream with regexp', () => {
-			const filter = new Filter({filter: /c/});
-			const result = [];
+		it('filtering tokens by the specified RegExp', async () => {
+			const
+				input = '[{"a": 1}, [1], true, null]',
+				res = [];
 
-			for (const chunk of data) {
-				for (const el of filter.processChunk(chunk)) {
-					result.push(el);
-				}
+			for await (const token of Parser.from([input], new Filter(/^[02]\.?/))) {
+				res.push(token);
 			}
 
-			for (const el of filter.syncStack()) {
-				result.push(el);
-			}
-
-			expect(result).toEqual([{name: 'startObject'}, ...data.slice(14, data.length)]);
+			expect(res)
+				.toEqual([...new Parser().processChunk('[{"a": 1}, true]')]);
 		});
 
-		it('should filter token stream with function', () => {
-			const filterFn = (stack) => stack.includes('b');
+		it('filtering tokens by the specified function', async () => {
+			const
+				input = '[{"a": 1}, [1], true, {"a": 2}]',
+				res = [];
 
-			const filter = new Filter({filter: filterFn});
-			const result = [];
-
-			for (const chunk of data) {
-				for (const el of filter.processChunk(chunk)) {
-					result.push(el);
-				}
+			for await (const token of Parser.from([input], new Filter((stack) => stack.includes('a')))) {
+				res.push(token);
 			}
 
-			for (const el of filter.syncStack()) {
-				result.push(el);
-			}
-
-			expect(result).toEqual([{name: 'startObject'}, ...data.slice(9, 14), {name: 'endObject'}]);
+			expect(res)
+				.toEqual([...new Parser().processChunk('[{"a": 1}, {"a": 2}]')]);
 		});
 	});
 
-	describe('Pick', () => {
-		it('should pick from token stream', () => {
-			const pick = new Pick({filter: 'a'});
-			const result = [];
+	describe('`Pick`', () => {
+		it('picking a token by the specified path', async () => {
+			const input = `{
+				"a": {
+					"b": [1, 2, 3]
+				},
 
-			for (const chunk of data) {
-				for (const el of pick.processChunk(chunk)) {
-					result.push(el);
-				}
+				"c": 2
+			}`;
+
+			const
+				res = [];
+
+			for await (const token of Parser.from([input], new Pick('a.b'))) {
+				res.push(token);
 			}
 
-			expect(result).toEqual(data.slice(5, 9));
+			expect(res).toEqual([...new Parser().processChunk('[1, 2, 3]')]);
 		});
 
-		it('should pick from token stream with regexp and return only first occurence', () => {
-			const pick = new Pick({filter: /a|b/});
-			const result = [];
+		it('picking the first token matched with the specified RegExp', async () => {
+			const
+				input = '[{"a": 1}, [1], true, null]',
+				res = [];
 
-			for (const chunk of data) {
-				for (const el of pick.processChunk(chunk)) {
-					result.push(el);
-				}
+			for await (const token of Parser.from([input], new Pick(/^[02]\.?/))) {
+				res.push(token);
 			}
 
-			expect(result).toEqual(data.slice(5, 9));
+			expect(res).toEqual([...new Parser().processChunk('{"a": 1}')]);
 		});
 
-		it('should pick from token stream with regexp and return all occurences', () => {
-			const pick = new Pick({filter: /a|b/, multiple: true});
-			const result = [];
+		it('picking all tokens matched with the specified RegExp', async () => {
+			const
+				input = '[{"a": 1}, [1], true, null]',
+				res = [];
 
-			for (const chunk of data) {
-				for (const el of pick.processChunk(chunk)) {
-					result.push(el);
-				}
+			for await (const token of Parser.from([input], new Pick(/^[02]\.?/, {multiple: true}))) {
+				res.push(token);
 			}
 
-			expect(result).toEqual([...data.slice(5, 9), data[13]]);
+			expect(res).toEqual([
+				...new Parser().processChunk('{"a": 1}'),
+				...new Parser().processChunk('true')
+			]);
 		});
 
-		it('should pick from token stream with regexp', () => {
-			const pick = new Pick({filter: /c/});
-			const result = [];
+		it('picking the first token filtered by the specified function', async () => {
+			const
+				input = '[{"a": 1}, [1], true, {"a": 2}]',
+				res = [];
 
-			for (const chunk of data) {
-				for (const el of pick.processChunk(chunk)) {
-					result.push(el);
-				}
+			for await (const token of Parser.from([input], new Pick((stack) => stack.includes('a')))) {
+				res.push(token);
 			}
 
-			expect(result).toEqual(data.slice(18, data.length - 1));
+			expect(res).toEqual([...new Parser().processChunk('1')]);
 		});
 
-		it('should pick from token stream with function', () => {
-			const filterFn = (stack) => stack.includes('b');
+		it('picking all tokens filtered by the specified function', async () => {
+			const
+				input = '[{"a": 1}, [1], true, {"a": 2}]',
+				res = [];
 
-			const pick = new Pick({filter: filterFn});
-			const result = [];
-
-			for (const chunk of data) {
-				for (const el of pick.processChunk(chunk)) {
-					result.push(el);
-				}
+			for await (const token of Parser.from([input], new Pick((stack) => stack.includes('a'), {multiple: true}))) {
+				res.push(token);
 			}
 
-			expect(result).toEqual([{name: 'trueValue', value: true}]);
+			expect(res).toEqual([
+				...new Parser().processChunk('1'),
+				...new Parser().processChunk('2')
+			]);
 		});
 	});
 });
