@@ -11,20 +11,31 @@
  * @packageDocumentation
  */
 
-import type AbstractFilter from 'core/json/stream/filters/abstract-filter';
-import { parserStateTypes, parserPatterns, PARSING_COMPLETE } from 'core/json/stream/const';
-
 import { parserStates } from 'core/json/stream/parser/states';
-import type { ParserState, ParentParserState, Token } from 'core/json/stream/interface';
+import { parserStateTypes, parserPatterns, PARSING_COMPLETE } from 'core/json/stream/parser/const';
+
+import type {
+
+	ParserState,
+	ParentParserState,
+
+	Token,
+	TokenProcessor
+
+} from 'core/json/stream/parser/interface';
+
+export * from 'core/json/stream/parser/const';
+export * from 'core/json/stream/parser/interface';
 
 export default class Parser {
+	/**
 	/**
 	 * Parses the specified iterable object as a JSON stream and yields tokens via a Generator
 	 *
 	 * @param source
-	 * @param [filters] - list of filters to apply to the output iterable
+	 * @param [filters] - list of token processors to apply to the output iterable
 	 */
-	static async*from(source: Iterable<string>, ...filters: AbstractFilter[]): AsyncGenerator<Token> {
+	static async*from(source: Iterable<string>, ...filters: TokenProcessor[]): AsyncGenerator<Token> {
 		filters = filters.slice();
 
 		const
@@ -47,8 +58,10 @@ export default class Parser {
 					newTokens.push(...filter.processToken(token));
 				}
 
-				for (const token of filter.syncStack()) {
-					newTokens.push(token);
+				if (filter.finishTokenProcessing != null) {
+					for (const token of filter.finishTokenProcessing()) {
+						newTokens.push(token);
+					}
 				}
 
 				tokens = newTokens.values();

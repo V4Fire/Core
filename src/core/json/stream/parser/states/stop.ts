@@ -8,8 +8,8 @@
 
 import type Parser from 'core/json/stream/parser';
 
-import { parserStates, parserStateTypes, parserExpected, PARSING_COMPLETE } from 'core/json/stream/const';
-import type { Token, ParentParserState } from 'core/json/stream/interface';
+import { parserStates, parserStateTypes, parserExpected, PARSING_COMPLETE } from 'core/json/stream/parser/const';
+import type { Token, ParentParserState } from 'core/json/stream/parser/interface';
 
 /**
  * Parses the buffer for the end of the current structure (an object or array) and

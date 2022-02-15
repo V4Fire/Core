@@ -22,4 +22,4 @@ export * from 'core/json/stream/parser/states/stop';
 export * from 'core/json/stream/parser/states/string';
 export * from 'core/json/stream/parser/states/value';
 
-export { parserStates, parserStateTypes } from 'core/json/stream/const';
+export { parserStates, parserStateTypes } from 'core/json/stream/parser/const';

@@ -17,9 +17,9 @@ import {
 	MAX_PATTERN_SIZE,
 	PARSING_COMPLETE
 
-} from 'core/json/stream/const';
+} from 'core/json/stream/parser/const';
 
-import type { Token, ParentParserState } from 'core/json/stream/interface';
+import type { Token, ParentParserState } from 'core/json/stream/parser/interface';
 
 /**
  * Parses the buffer for a value, generates a sequence of tokens, and sets the next expected value

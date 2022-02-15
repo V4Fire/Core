@@ -8,8 +8,8 @@
 
 import type Parser from 'core/json/stream/parser';
 
-import { parserStates, parserStateTypes, PARSING_COMPLETE } from 'core/json/stream/const';
-import type { Token } from 'core/json/stream/interface';
+import { parserStates, parserStateTypes, PARSING_COMPLETE } from 'core/json/stream/parser/const';
+import type { Token } from 'core/json/stream/parser/interface';
 
 /**
  * Parse the buffer for the first digit in a number fraction `[0-9]`

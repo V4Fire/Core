@@ -12,15 +12,16 @@ import {
 
 	parserStates,
 	parserStateTypes,
+
 	parserCharCodes,
 	parserExpected,
 
 	PARSING_COMPLETE
 
-} from 'core/json/stream/const';
+} from 'core/json/stream/parser/const';
 
 import { fromHex } from 'core/json/stream/parser/helpers';
-import type { Token } from 'core/json/stream/interface';
+import type { Token } from 'core/json/stream/parser/interface';
 
 /**
  * Parses the buffer for the end of a key or string and generates a sequence of tokens

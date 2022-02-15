@@ -7,8 +7,9 @@
  */
 
 import type Parser from 'core/json/stream/parser';
-import type { Token } from 'core/json/stream/interface';
-import { parserStates, parserStateTypes, parserExpected, PARSING_COMPLETE } from 'core/json/stream/const';
+
+import { parserStates, parserStateTypes, parserExpected, PARSING_COMPLETE } from 'core/json/stream/parser/const';
+import type { Token } from 'core/json/stream/parser/interface';
 
 /**
  * Parses the buffer for an exponent symbol `[eE]?` and generates a token `numberChunk` with a symbol value

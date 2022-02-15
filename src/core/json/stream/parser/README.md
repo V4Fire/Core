@@ -56,14 +56,16 @@ for await (const token of parser) {
 }
 ```
 
-The method can also take a list of filters to apply.
+The method can also take a list of token processors to apply.
 
 ```js
 import Parser from 'core/json/stream/parser';
+
+import Assembler from 'core/json/stream/assembler';
 import { Filter } from 'core/json/stream/filters';
 
 const
-  parser = Parser.from('[{a: {a: 1, b: 2}, b: 2}, {a: {b: 3}, v: 2}]', new Filter(/\d+\.a/), new Filter('0.a.a'));
+  parser = Parser.from('[{a: {a: 1, b: 2}, b: 2}, {a: {b: 3}, v: 2}]', new Filter(/\d+\.a/), new Assembler());
 
 for await (const token of parser) {
   console.log(token);
