@@ -25,9 +25,6 @@ let
  * Initializes the `ts-node` and `tsconfig-paths` packages
  */
 module.exports = () => {
-	const
-		{config} = require('@pzlr/build-core');
-
 	if (isInitialized) {
 		return;
 	}
