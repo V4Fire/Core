@@ -171,7 +171,7 @@ extend(Object, 'isPromiseLike', (value) => {
 /** @see [[ObjectConstructor.isProxy]] */
 extend(Object, 'isProxy', (value) => value?.[PROXY] != null);
 
-/** @see [[ObjectConstructor.isProxy]] */
+/** @see [[ObjectConstructor.unwrapProxy]] */
 extend(Object, 'unwrapProxy', (value) => {
 	while (value?.[PROXY]) {
 		value = value[PROXY];
