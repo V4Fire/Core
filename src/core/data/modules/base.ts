@@ -488,6 +488,9 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 
 	/**
 	 * Sets a readonly value by the specified key to the current provider
+	 *
+	 * @param key
+	 * @param val
 	 */
 	protected setReadonlyParam(key: string, val: unknown): void {
 		Object.defineProperty(this, key, {
