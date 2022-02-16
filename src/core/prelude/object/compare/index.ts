@@ -15,6 +15,9 @@ extend(Object, 'fastCompare', function fastCompare(a: unknown, b: unknown): bool
 		return (b) => Object.fastCompare(a, b);
 	}
 
+	a = Object.unwrapProxy(a);
+	b = Object.unwrapProxy(b);
+
 	const
 		isEqual = a === b;
 
@@ -63,18 +66,19 @@ extend(Object, 'fastCompare', function fastCompare(a: unknown, b: unknown): bool
 	if (cantJSONCompare) {
 		if ((isMap || isSet)) {
 			const
+				setA = Object.cast<Set<unknown>>(a),
 				setB = Object.cast<Set<unknown>>(b);
 
-			if (a.size !== setB.size) {
+			if (setA.size !== setB.size) {
 				return false;
 			}
 
-			if (a.size === 0) {
+			if (setA.size === 0) {
 				return true;
 			}
 
 			const
-				aIter = a.entries(),
+				aIter = setA.entries(),
 				bIter = setB.entries();
 
 			for (let aEl = aIter.next(), bEl = bIter.next(); !aEl.done; aEl = aIter.next(), bEl = bIter.next()) {
@@ -98,12 +102,12 @@ extend(Object, 'fastCompare', function fastCompare(a: unknown, b: unknown): bool
 		length2;
 
 	if (isArr) {
-		length1 = a.length;
+		length1 = objA['length'];
 		length2 = objB['length'];
 
 	} else if (isMap || isSet) {
-		length1 = a.size;
-		length2 = objA['size'];
+		length1 = objA['size'];
+		length2 = objB['size'];
 
 	} else {
 		length1 = objA['length'] ?? Object.keys(objA).length;
@@ -146,7 +150,7 @@ export function createSerializer(
 	return (key, value) => {
 		if (value == null) {
 			init = true;
-			return value;
+			return Object.unwrapProxy(value);
 		}
 
 		const
@@ -173,9 +177,9 @@ export function createSerializer(
 		}
 
 		if (isObj && (value instanceof Map || value instanceof Set)) {
-			return [...value.entries()];
+			return [...Object.unwrapProxy(value).entries()];
 		}
 
-		return value;
+		return Object.unwrapProxy(value);
 	};
 }

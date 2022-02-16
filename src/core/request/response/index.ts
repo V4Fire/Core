@@ -14,6 +14,9 @@
 import Range from 'core/range';
 import AbortablePromise from 'core/promise/abortable';
 
+import { readonly } from 'core/object/proxy-readonly';
+import { clone } from 'core/object/proxy-clone';
+
 import { IS_NODE } from 'core/env';
 import { once } from 'core/functools';
 import { convertIfDate } from 'core/json';
@@ -216,10 +219,10 @@ export default class Response<
 
 				Object.defineProperty(data, 'valueOf', {
 					configurable: true,
-					value: () => Object.fastClone(originalData, {freezable: false})
+					value: () => clone(originalData)
 				});
 
-				Object.freeze(data);
+				data = readonly(data);
 			}
 
 			return data;
