@@ -173,7 +173,7 @@ extend(Object, 'isProxy', (value) => value?.[PROXY] != null);
 
 /** @see [[ObjectConstructor.unwrapProxy]] */
 extend(Object, 'unwrapProxy', (value) => {
-	while (value?.[PROXY]) {
+	while (value?.[PROXY] && value[PROXY] !== value) {
 		value = value[PROXY];
 	}
 
