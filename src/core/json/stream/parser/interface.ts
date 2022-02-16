@@ -49,11 +49,11 @@ export interface Token {
 	value?: TokenValue;
 }
 
-export interface TokenProcessorFn {
-	(token: Token): Generator<Token>;
+export interface TokenProcessorFn<T> {
+	(token: Token): Generator<T>;
 }
 
-export interface TokenProcessor {
-	processToken: TokenProcessorFn;
-	finishTokenProcessing?(): Generator<Token>;
+export interface TokenProcessor<T> {
+	processToken: TokenProcessorFn<T>;
+	finishTokenProcessing?(): Generator<T>;
 }

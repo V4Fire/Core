@@ -42,7 +42,7 @@ export class StreamArray extends StreamBase {
 	 */
 	*push(): Generator<StreamedArray> {
 		const
-			{current} = this.assembler;
+			{item} = this.assembler;
 
 		if (Object.isArray(current) && current.length > 0) {
 			yield {key: this.counter++, value: current.pop()};

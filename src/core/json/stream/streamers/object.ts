@@ -44,8 +44,8 @@ export class StreamObject extends StreamBase {
 			this.lastKey = this.assembler.key;
 
 		} else {
-			yield {key: this.lastKey, value: this.assembler.current![this.lastKey]};
-			this.assembler.current = {};
+			yield {key: this.lastKey, value: this.assembler.item![this.lastKey]};
+			this.assembler.item = {};
 			this.lastKey = null;
 		}
 	}
