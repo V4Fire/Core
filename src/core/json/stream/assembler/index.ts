@@ -6,55 +6,51 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type { Token, AssemblerOptions, AssemblerItem, AssemblerKey } from 'core/json/stream/interface';
+import type { Token, TokenProcessor } from 'core/json/stream/parser';
 
-export class Assembler {
-	/**
-	 * Handler for processing start of an object
-	 */
-	startObject: () => void = this.baseStartObject(Object);
+import type {
 
-	/**
-	 * Handler for processing start of an array
-	 */
-	startArray: () => void = this.baseStartObject(Array);
+	AssembleReviver,
+	AssemblerOptions,
 
-	/**
-	 * Handler for processing a string value
-	 *
-	 * @param value
-	 */
-	stringValue: (value: string) => void = this.saveValue;
+	AssembleKey,
+	AssembleItem
 
+} from 'core/json/stream/assembler/interface';
+
+export * from 'core/json/stream/assembler/interface';
+
+export default class Assembler implements TokenProcessor<AssembleItem> {
 	/**
-	 * Handler for processing end of array
+	 * Property key of the active assembled item
 	 */
-	endArray: () => void = this.endObject;
+	protected key: AssembleKey = null;
 
 	/**
-	 * The current object is being assembled
-	 * If it is an array, new subobjects will be added to it
-	 * If it is an object, new properties will be added to it
-	 * Otherwise, it can be one of primitive value
+	 * A value of the active assembled item.
+	 * If it is a container (object or array), all new assembled values will be added to it.
 	 */
-	current: AssemblerItem = null;
+	protected item: AssembleItem = null;
 
 	/**
-	 * A string for a property key
-	 * used to keep a property name until
-	 * a corresponding subobject is assembled
+	 * Indicates that the active item is fully assembled
 	 */
-	key: AssemblerKey = null;
+	protected isItemDone: boolean = true;
 
 	/**
-	 * An array of parent objects for an object in current
+	 * List of assembled parent items to the current
 	 */
-	protected stack: AssemblerItem[] = [];
+	protected stack: AssembleItem[] = [];
 
 	/**
-	 * Indicates that a current object is fully assembled
+	 * Handler to process an object start
 	 */
-	protected done: boolean = true;
+	protected startObject: AnyFunction = this.createStartObjectHandler(Object);
+
+	/**
+	 * Handler to process an array start
+	 */
+	protected startArray: AnyFunction = this.createStartObjectHandler(Array);
 
 	/**
 	 * Function for transform values after assembling
@@ -63,68 +59,17 @@ export class Assembler {
 	 * @param key
 	 * @param value
 	 */
-	protected readonly reviver!: ((key: string, value?: AssemblerItem) => any);
+	protected readonly reviver?: AssembleReviver;
 
-	constructor(options?: AssemblerOptions) {
-		if (options) {
-			if (Object.isFunction(options.reviver)) {
-				this.reviver = options.reviver;
-				this.stringValue = this.saveValueWithReviver;
-				this.saveValue = this.saveValueWithReviver;
-			}
-
-			if (options.numberAsString) {
-				this.numberValue = this.stringValue;
-			}
-		}
-	}
-
-	/**
-	 * Returns a current object depth
-	 */
-	get depth(): number {
-		// eslint-disable-next-line no-bitwise
-		return (this.stack.length >> 1) + (this.done ? 0 : 1);
-	}
-
-	/**
-	 * Returns a current stack
-	 */
-	get path(): Array<string | number | boolean | object> {
-		const path: Array<string | number | boolean | object> = [];
-
-		for (let i = 0; i < this.stack.length; i += 2) {
-			const key = this.stack[i + 1];
-			const val = key == null ? (<string>this.stack[i]).length : key;
-			path.push(val);
+	constructor(opts: AssemblerOptions = {}) {
+		if (Object.isFunction(opts.reviver)) {
+			this.reviver = opts.reviver;
 		}
 
-		return path;
-	}
-
-	/**
-	 * Change current level of assembling process
-	 *
-	 * @param level
-	 */
-	dropToLevel(level: number): this {
-		if (level < this.depth) {
-			if (level > 0) {
-				// eslint-disable-next-line no-bitwise
-				const index = (level - 1) << 1;
-				this.current = this.stack[index];
-				this.key = <AssemblerKey>this.stack[index + 1];
-				this.stack.splice(index);
-
-			} else {
-				this.stack = [];
-				this.current = null;
-				this.key = null;
-				this.done = true;
-			}
+		if (opts.numberAsString) {
+			// eslint-disable-next-line @typescript-eslint/unbound-method
+			this.numberValue = this.stringValue;
 		}
-
-		return this;
 	}
 
 	/**
@@ -132,132 +77,127 @@ export class Assembler {
 	 *
 	 * @param chunk
 	 */
-	*processChunk(chunk: Token): Generator<AssemblerItem> {
+	*processToken(chunk: Token): Generator<AssembleItem> {
 		this[chunk.name]?.(chunk.value);
 
-    if (this.done) {
-			yield this.current;
+		if (this.isItemDone) {
+			yield this.item;
 		}
 	}
 
 	/**
-	 * Handler for processing object key value
-	 *
+	 * Creates a handler to process starting of an object or array
+	 * @param Constr - constructor to create a structure
+	 */
+	protected createStartObjectHandler(Constr: ObjectConstructor | ArrayConstructor): AnyFunction {
+		return () => {
+			if (this.isItemDone) {
+				this.isItemDone = false;
+
+			} else {
+				this.stack.push(this.item, this.key);
+			}
+
+			this.item = Object.cast(new Constr());
+			this.key = null;
+		};
+	}
+
+	/**
+	 * Handler to process an object key value
 	 * @param value
 	 */
-	keyValue(value: string): void {
+	protected keyValue(value: string): void {
 		this.key = value;
 	}
 
 	/**
-	 * Handler for processing number value
-	 *
+	 * Handler to process a string value
 	 * @param value
 	 */
-	numberValue(value: string): void {
+	protected stringValue(value: string): void {
+		this.saveValue(value);
+	}
+
+	/**
+	 * Handler to process a number value
+	 * @param value
+	 */
+	protected numberValue(value: string): void {
 		this.saveValue(parseFloat(value));
 	}
 
 	/**
-	 * Handler for processing null value
+	 * Handler to process nullish values
 	 */
-	nullValue(): void {
+	protected nullValue(): void {
 		this.saveValue(null);
 	}
 
 	/**
-	 * Handler for processing true boolean value
+	 * Handler to process a truly boolean value
 	 */
-	trueValue(): void {
+	protected trueValue(): void {
 		this.saveValue(true);
 	}
 
 	/**
-	 * Handler for processing false boolean value
+	 * Handler to process a falsy boolean value
 	 */
-	falseValue(): void {
+	protected falseValue(): void {
 		this.saveValue(false);
 	}
 
 	/**
-	 * Handler for processing end of object
+	 * Handler to process an object end
 	 */
-	endObject(): void {
+	protected endObject(): void {
 		if (this.stack.length > 0) {
-			const value = this.current;
-			this.key = <AssemblerKey>this.stack.pop();
-			this.current = this.stack.pop()!;
-			this.saveValue(value);
+			const
+				{item} = this;
+
+			this.key = Object.cast(this.stack.pop());
+			this.item = this.stack.pop() ?? null;
+
+			this.saveValue(item);
 
 		} else {
-			this.done = true;
+			this.isItemDone = true;
 		}
 	}
 
 	/**
-	 * Save assembled value into internal storage
-	 *
-	 * @param value
+	 * Handler to process an array end
 	 */
-	saveValue(value: AssemblerItem): void {
-		if (this.done) {
-			this.current = value;
-
-		} else if (Object.isArray(this.current)) {
-			this.current.push(value);
-
-		} else {
-			this.current![this.key!] = value;
-			this.key = null;
-		}
+	protected endArray(): void {
+		this.endObject();
 	}
 
 	/**
-	 * Save assembled value into
-	 * internal storage with custom reviver
-	 *
-	 * @param value
+	 * Saves an assembled item into the internal structure
+	 * @param item
 	 */
-	saveValueWithReviver(value?: AssemblerItem): void {
-		if (this.done) {
-			this.current = this.reviver('', value);
+	protected saveValue(item: AssembleItem): void {
+		if (this.isItemDone) {
+			this.item = this.reviver?.('', item) ?? item;
 
-		} else if (Object.isArray(this.current)) {
-			value = this.reviver(this.current.length.toString(), value);
-			this.current.push(value!);
+		} else if (Object.isArray(this.item)) {
+			const
+				val = this.reviver?.(String(this.item.length), item) ?? item;
 
-			if (value === undefined) {
-				delete this.current[this.current.length - 1];
+			if (val !== undefined) {
+				this.item.push(val);
 			}
 
-		} else {
-			value = this.reviver(this.key!, value);
+		} else if (Object.isDictionary(this.item) && Object.isString(this.key)) {
+			const
+				val = this.reviver?.(this.key, item) ?? item;
 
-			if (value !== undefined) {
-				this.current![this.key!] = value;
+			if (val !== undefined) {
+				this.item[this.key] = val;
 			}
 
 			this.key = null;
 		}
-	}
-
-	/**
-	 * Function constructor for creating
-	 * handlers of start complex values (object or array)
-	 *
-	 * @param Type
-	 */
-	baseStartObject(Type: ObjectConstructor | ArrayConstructor) {
-		return (): void => {
-			if (this.done) {
-				this.done = false;
-
-			} else {
-				this.stack.push(this.current, this.key);
-			}
-
-			this.current = <AssemblerItem>new Type();
-			this.key = null;
-		};
 	}
 }
