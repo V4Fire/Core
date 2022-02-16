@@ -19,6 +19,8 @@ export type FilterStack = Array<
 	Nullable<TokenValue>
 >;
 
-export interface TokenFilter {
+export interface TokenFilterFn {
 	(stack: FilterStack, token: Token): boolean;
 }
+
+export type TokenFilter = string | RegExp | TokenFilterFn;

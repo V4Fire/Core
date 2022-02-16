@@ -8,8 +8,25 @@
 
 import symbolGenerator from 'core/symbol';
 
-import type { Token, TokenName, TokenProcessor, TokenProcessorFn } from 'core/json/stream/parser';
-import type { TokenFilter, FilterStack, FilterOptions } from 'core/json/stream/filters/interface';
+import type {
+
+	Token,
+	TokenName,
+
+	TokenProcessor,
+	TokenProcessorFn
+
+} from 'core/json/stream/parser';
+
+import type {
+
+	TokenFilter,
+	TokenFilterFn,
+
+	FilterStack,
+	FilterOptions
+
+} from 'core/json/stream/filters/interface';
 
 export const
 	$$ = symbolGenerator();
@@ -24,7 +41,7 @@ export default abstract class AbstractFilter implements TokenProcessor<Token> {
 	 * const filter = createPathFilter('foo.bla.bar');
 	 * ```
 	 */
-	static createPathFilter(path: string): TokenFilter {
+	static createPathFilter(path: string): TokenFilterFn {
 		return (stack) => {
 			const
 				sep = '.',
@@ -51,7 +68,7 @@ export default abstract class AbstractFilter implements TokenProcessor<Token> {
 	 * const filter = createRegExpFilter(/\d+\.foo\.bar/);
 	 * ```
 	 */
-	static createRegExpFilter(rgxp: RegExp): TokenFilter {
+	static createRegExpFilter(rgxp: RegExp): TokenFilterFn {
 		return (stack) => rgxp.test(stack.join('.'));
 	}
 
@@ -86,7 +103,7 @@ export default abstract class AbstractFilter implements TokenProcessor<Token> {
 	 * @param stack
 	 * @param chunk
 	 */
-	protected filter: TokenFilter;
+	protected filter: TokenFilterFn;
 
 	/**
 	 * Stack of processed tokens

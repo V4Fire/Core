@@ -9,7 +9,7 @@
 import type { Token } from 'core/json/stream/parser';
 
 import Super from 'core/json/stream/filters/abstract-filter';
-import type { FilterStack } from 'core/json/stream/filters/interface';
+import type { TokenFilter, FilterStack, FilterOptions } from 'core/json/stream/filters/interface';
 
 export default class Filter extends Super {
 	/**
@@ -21,6 +21,10 @@ export default class Filter extends Super {
 	 * Stack for the current object that is being filtered
 	 */
 	protected objStack: FilterStack = [];
+
+	public constructor(filter: TokenFilter, opts?: FilterOptions) {
+		super(filter, opts);
+	}
 
 	override*finishTokenProcessing(): Generator<Token> {
 		const

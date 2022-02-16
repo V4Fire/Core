@@ -33,42 +33,45 @@ export default class Parser {
 	 * Parses the specified iterable object as a JSON stream and yields tokens via a Generator
 	 *
 	 * @param source
-	 * @param [filters] - list of token processors to apply to the output iterable
+	 * @param [processors] - list of token processors to apply to the output iterable
 	 */
-	static async*from(source: Iterable<string>, ...filters: TokenProcessor[]): AsyncGenerator<Token> {
-		filters = filters.slice();
+	static async*from<T extends Array<TokenProcessor<any>>>(
+		source: Iterable<string>,
+		...processors: T
+	): T extends [] ?
+		AsyncGenerator<Token> :
+		T extends [TokenProcessor<infer R>] ?
+			AsyncGenerator<R> :
+			T extends [...infer A, TokenProcessor<infer R>] ? AsyncGenerator<R> : unknown {
 
 		const
 			parser = new Parser();
 
 		for await (const chunk of source) {
 			let
-				tokens = <IterableIterator<Token>>parser.processChunk(chunk);
+				stream = <IterableIterator<any>>parser.processChunk(chunk),
+				currentProcessor = 0;
 
-			while (filters.length > 0) {
+			while (currentProcessor < processors.length) {
 				const
-					newTokens = <Token[]>[],
-					filter = filters.shift();
+					processedValues = <unknown[]>[],
+					processor = processors[currentProcessor++];
 
-				if (filter == null) {
-					continue;
+				for (const token of stream) {
+					processedValues.push(...processor.processToken(token));
 				}
 
-				for (const token of tokens) {
-					newTokens.push(...filter.processToken(token));
-				}
-
-				if (filter.finishTokenProcessing != null) {
-					for (const token of filter.finishTokenProcessing()) {
-						newTokens.push(token);
+				if (processor.finishTokenProcessing != null) {
+					for (const token of processor.finishTokenProcessing()) {
+						processedValues.push(token);
 					}
 				}
 
-				tokens = newTokens.values();
+				stream = processedValues.values();
 			}
 
-			for (const token of tokens) {
-				yield token;
+			for (const val of stream) {
+				yield Object.cast(val);
 			}
 		}
 	}
