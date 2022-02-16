@@ -65,10 +65,11 @@ import Assembler from 'core/json/stream/assembler';
 import { Filter } from 'core/json/stream/filters';
 
 const
-  parser = Parser.from('[{a: {a: 1, b: 2}, b: 2}, {a: {b: 3}, v: 2}]', new Filter(/\d+\.a/), new Assembler());
+  parser = Parser.from('[{"a": 1}, {"b": 2}]', new Filter(/\d+\.a/), new Assembler());
 
-for await (const token of parser) {
-  console.log(token);
+for await (const result of parser) {
+  // [{a: 1}]
+  console.log(result);
 }
 ```
 
