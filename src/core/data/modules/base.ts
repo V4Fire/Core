@@ -9,6 +9,7 @@
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 
 import symbolGenerator from 'core/symbol';
+import { readonly } from 'core/object/proxy-readonly';
 
 import { deprecate } from 'core/functools';
 import { concatURLs } from 'core/url';
@@ -370,7 +371,7 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 						}
 					});
 
-					res.data = Object.freeze(composition);
+					res.data = readonly(composition);
 					return res;
 				}),
 
@@ -487,6 +488,9 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 
 	/**
 	 * Sets a readonly value by the specified key to the current provider
+	 *
+	 * @param key
+	 * @param val
 	 */
 	protected setReadonlyParam(key: string, val: unknown): void {
 		Object.defineProperty(this, key, {

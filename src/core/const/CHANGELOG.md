@@ -11,12 +11,6 @@ Changelog
 
 ## v3.??.?? (2022-??-??)
 
-#### :boom: Breaking Change
-
-* Now to clone and freeze server responses is used Proxy API if it supported
-
-## v3.72.0 (2021-12-10)
-
 #### :rocket: New Feature
 
-* Now `Response` can take body as a function or promise
+* Added a new bunch of constants `support` to check a runtime for features support

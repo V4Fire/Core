@@ -11,8 +11,20 @@
  * @packageDocumentation
  */
 
+import * as support from 'core/const/support';
+
 import { unimplement } from 'core/functools/implementation';
 import { READONLY, PROXY } from 'core/prelude/types/const';
+
+/**
+ * Returns a read-only view of the specified object.
+ * If the runtime supports Proxy, it will be used to create a view.
+ *
+ * @param obj
+ */
+export function readonly<T>(obj: T): T {
+	return support.proxy ? proxyReadonly(obj) : Object.freeze(obj);
+}
 
 /**
  * Returns a read-only view of the specified object.
@@ -28,7 +40,7 @@ export default function proxyReadonly<T>(obj: T): Readonly<T> {
 			return obj;
 		}
 
-		if (typeof Proxy !== 'function') {
+		if (!support.proxy) {
 			unimplement({
 				name: 'proxyReadonly',
 				type: 'function',
