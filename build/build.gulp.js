@@ -111,13 +111,13 @@ module.exports = function init(gulp) {
 		const
 			isPathInside = require('is-path-inside');
 
-			const
-				tsConfig = fs.readJSONSync(src.rel(`./${opts.type}.tsconfig.json`));
+		const
+			tsConfig = fs.readJSONSync(src.rel(`./${opts.type}.tsconfig.json`));
 
-			filesToBuild = [
-				...tsConfig.include || [],
-				...resolve.rootDependencies.map((el) => `${el}/**/*.@(ts|js)`)
-			];
+		filesToBuild = [
+			...tsConfig.include || [],
+			...resolve.rootDependencies.map((el) => `${el}/**/*.@(ts|js)`)
+		];
 
 		const
 			isDep = new RegExp(`(^.*?(?:^|[\\/])(${depsRgxpStr}))(?:$|[\\/])`),
