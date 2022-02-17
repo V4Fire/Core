@@ -6,78 +6,54 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { Assembler } from 'core/json/stream/assembler';
+import { convertIfDate } from 'core/json';
 
-const data = [
-	{name: 'startObject'},
-	{name: 'startKey'},
-	{name: 'stringChunk', value: 'a'},
-	{name: 'endKey'},
-	{name: 'keyValue', value: 'a'},
-	{name: 'startNumber'},
-	{name: 'numberChunk', value: '1'},
-	{name: 'endNumber'},
-	{name: 'numberValue', value: '1'},
-	{name: 'startKey'},
-	{name: 'stringChunk', value: 'b'},
-	{name: 'endKey'},
-	{name: 'keyValue', value: 'b'},
-	{name: 'trueValue', value: true},
-	{name: 'startKey'},
-	{name: 'stringChunk', value: 'c'},
-	{name: 'endKey'},
-	{name: 'keyValue', value: 'c'},
-	{name: 'startArray'},
-	{name: 'startString'},
-	{name: 'stringChunk', value: 'd'},
-	{name: 'endString'},
-	{name: 'stringValue', value: 'd'},
-	{name: 'endArray'},
-	{name: 'endObject'}
-];
-const target = {a: 1, b: true, c: ['d']};
+import Parser from 'core/json/stream/parser';
+import Assembler from 'core/json/stream/assembler';
 
-describe('JSON stream assemlber', () => {
-	it('should assemble token stream to valid object', () => {
-		const assembler = new Assembler();
-		let result;
+describe('core/json/stream/assembler', () => {
+	it('should assemble tokens to a valid object', async () => {
+		const data = [
+			{
+				a: 1,
+				b: {c: [1, 2, 3]}
+			},
 
-		for (const chunk of data) {
-			for (const el of assembler.processChunk(chunk)) {
-				result = el;
-			}
+			true,
+			false,
+			null,
+
+			'hello world',
+			'bla\t\'bla\'\n"bla"',
+
+			2,
+			-1,
+			1e10,
+			-1E10,
+			1e-10,
+			1.2,
+			-1.242,
+			3.53e-2,
+			-7.341E-5
+		];
+
+		for await (const val of Parser.from(JSON.stringify(data), new Assembler())) {
+			expect(val).toEqual(data);
 		}
-
-		expect(result).toEqual(target);
 	});
 
-	it('should assemble token stream with custom reviver', () => {
-		const reviver = () => 5;
-		const assembler = new Assembler({reviver});
-		let result;
+	it('should assemble a tokens to a valid object with the custom reviver', async () => {
+		const
+			data = [new Date()];
 
-		for (const chunk of data) {
-			for (const el of assembler.processChunk(chunk)) {
-				result = el;
-			}
+		for await (const val of Parser.from(JSON.stringify(data), new Assembler({reviver: convertIfDate}))) {
+			expect(val).toEqual(data);
 		}
-
-		expect(result).toEqual({a: 5, b: 5, c: 5});
 	});
 
-	it('should assemble token stream with numbers as strings', () => {
-		const assembler = new Assembler({numberAsString: true});
-		let result;
-
-		for (const chunk of data) {
-			for (const el of assembler.processChunk(chunk)) {
-				result = el;
-			}
+	it('should assemble tokens to a valid object with numbers as strings', async () => {
+		for await (const val of Parser.from('1.4e-3', new Assembler({numberAsString: true}))) {
+			expect(val).toEqual('1.4e-3');
 		}
-
-		const patchedTarget = {...target};
-		patchedTarget.a = '1';
-
-		expect(result).toEqual(patchedTarget);
 	});
 });
