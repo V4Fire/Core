@@ -52,8 +52,8 @@ describe('core/json/stream/assembler', () => {
 	});
 
 	it('should assemble tokens to a valid object with numbers as strings', async () => {
-		for await (const val of Parser.from('1.4e-3', new Assembler({numberAsString: true}))) {
-			expect(val).toEqual('1.4e-3');
+		for await (const val of Parser.from('-13.4e-3', new Assembler({numberAsString: true}))) {
+			expect(val).toEqual('-13.4e-3');
 		}
 	});
 });

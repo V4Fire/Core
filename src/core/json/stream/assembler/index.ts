@@ -28,7 +28,7 @@ export default class Assembler<T = unknown> implements TokenProcessor<T> {
 	/**
 	 * Indicates that the active value is fully assembled
 	 */
-	protected isValueAssembled: boolean = true;
+	protected isValueAssembled: boolean = false;
 
 	/**
 	 * Stack of nested assembled items contained within the active assembling value
@@ -71,7 +71,7 @@ export default class Assembler<T = unknown> implements TokenProcessor<T> {
 	*processToken(chunk: Token): Generator<T> {
 		this[chunk.name]?.(chunk.value);
 
-		if (this.isValueAssembled && this.value !== NULL) {
+		if (this.isValueAssembled) {
 			yield Object.cast(this.value);
 		}
 	}
@@ -82,10 +82,7 @@ export default class Assembler<T = unknown> implements TokenProcessor<T> {
 	 */
 	protected createStartObjectHandler(Constr: ObjectConstructor | ArrayConstructor): AnyFunction {
 		return () => {
-			if (this.isValueAssembled) {
-				this.isValueAssembled = false;
-
-			} else {
+			if (this.value !== NULL) {
 				this.stack.push(this.value, this.key);
 			}
 
