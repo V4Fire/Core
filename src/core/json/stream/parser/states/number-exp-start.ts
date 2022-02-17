@@ -21,7 +21,7 @@ export function* numberExpStart(this: Parser): Generator<Token> {
 
 	if (this.matched == null) {
 		if (this.index < this.buffer.length) {
-			throw new SyntaxError("Can't parse the input:  expected an exponent part of a number");
+			throw new SyntaxError("Can't parse the input: expected an exponent part of a number");
 		}
 
 		return PARSING_COMPLETE;
