@@ -29,7 +29,6 @@ export * from 'core/json/stream/parser/interface';
 
 export default class Parser {
 	/**
-	/**
 	 * Parses the specified iterable object as a JSON stream and yields tokens via a Generator
 	 *
 	 * @param source
