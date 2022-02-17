@@ -6,7 +6,4 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-export interface AssemblerOptions {
-	numberAsString?: boolean;
-	reviver?: JSONCb;
-}
+export const NULL = {};

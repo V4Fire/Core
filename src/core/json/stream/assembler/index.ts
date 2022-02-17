@@ -8,29 +8,22 @@
 
 import type { Token, TokenProcessor } from 'core/json/stream/parser';
 
-import type {
-
-	AssembleReviver,
-	AssemblerOptions,
-
-	AssembleKey,
-	AssembleValue
-
-} from 'core/json/stream/assembler/interface';
+import { NULL } from 'core/json/stream/assembler/const';
+import type { AssemblerOptions } from 'core/json/stream/assembler/interface';
 
 export * from 'core/json/stream/assembler/interface';
 
-export default class Assembler implements TokenProcessor<AssembleValue> {
+export default class Assembler<T = unknown> implements TokenProcessor<T> {
 	/**
 	 * Property key of the active assembling value
 	 */
-	protected key: AssembleKey = null;
+	protected key: string | null = null;
 
 	/**
 	 * A value of the active assembled item.
 	 * If it is a container (object or array), all new assembled values will be added to it.
 	 */
-	protected value: AssembleValue = null;
+	protected value: unknown = NULL;
 
 	/**
 	 * Indicates that the active value is fully assembled
@@ -40,7 +33,7 @@ export default class Assembler implements TokenProcessor<AssembleValue> {
 	/**
 	 * Stack of nested assembled items contained within the active assembling value
 	 */
-	protected stack: AssembleValue[] = [];
+	protected stack: unknown[] = [];
 
 	/**
 	 * Handler to process an object start
@@ -59,7 +52,7 @@ export default class Assembler implements TokenProcessor<AssembleValue> {
 	 * @param key
 	 * @param value
 	 */
-	protected readonly reviver?: AssembleReviver;
+	protected readonly reviver?: JSONCb;
 
 	constructor(opts: AssemblerOptions = {}) {
 		if (Object.isFunction(opts.reviver)) {
@@ -75,11 +68,11 @@ export default class Assembler implements TokenProcessor<AssembleValue> {
 	/**
 	 * Processes the passed JSON token and yields the assembled value
 	 */
-	*processToken(chunk: Token): Generator<AssembleValue> {
+	*processToken(chunk: Token): Generator<T> {
 		this[chunk.name]?.(chunk.value);
 
-		if (this.isValueAssembled) {
-			yield this.value;
+		if (this.isValueAssembled && this.value !== NULL) {
+			yield Object.cast(this.value);
 		}
 	}
 
@@ -156,7 +149,6 @@ export default class Assembler implements TokenProcessor<AssembleValue> {
 
 			this.key = Object.cast(this.stack.pop());
 			this.value = this.stack.pop() ?? null;
-
 			this.saveValue(value);
 
 		} else {
@@ -172,16 +164,16 @@ export default class Assembler implements TokenProcessor<AssembleValue> {
 	}
 
 	/**
-	 * Saves an assembled item into the internal structure
-	 * @param item
+	 * Saves an assembled value into the internal structure
+	 * @param value
 	 */
-	protected saveValue(item: AssembleValue): void {
+	protected saveValue(value: unknown): void {
 		if (this.isValueAssembled) {
-			this.value = this.reviver?.('', item) ?? item;
+			this.value = this.reviver?.('', value) ?? value;
 
 		} else if (Object.isArray(this.value)) {
 			const
-				val = this.reviver?.(String(this.value.length), item) ?? item;
+				val = this.reviver?.(String(this.value.length), value) ?? value;
 
 			if (val !== undefined) {
 				this.value.push(val);
@@ -189,7 +181,7 @@ export default class Assembler implements TokenProcessor<AssembleValue> {
 
 		} else if (Object.isDictionary(this.value) && Object.isString(this.key)) {
 			const
-				val = this.reviver?.(this.key, item) ?? item;
+				val = this.reviver?.(this.key, value) ?? value;
 
 			if (val !== undefined) {
 				this.value[this.key] = val;
