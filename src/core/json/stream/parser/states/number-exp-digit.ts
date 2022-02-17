@@ -8,7 +8,7 @@
 
 import type Parser from 'core/json/stream/parser';
 
-import { parserStates, parserStateTypes, parserExpected } from 'core/json/stream/parser/const';
+import { parserStates, parserStateTypes, parserExpected, PARSING_COMPLETE } from 'core/json/stream/parser/const';
 import type { Token } from 'core/json/stream/parser/interface';
 
 /**
@@ -29,7 +29,12 @@ export function* numberExpDigit(this: Parser): Generator<Token> {
 		this.index += this.value.length;
 
 	} else {
-		this.expected = parserExpected[this.parent];
+		if (this.index < this.buffer.length) {
+			this.expected = parserExpected[this.parent];
+			return;
+		}
+
+		return PARSING_COMPLETE;
 	}
 }
 

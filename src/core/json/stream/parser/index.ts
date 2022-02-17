@@ -48,30 +48,20 @@ export default class Parser {
 			parser = new Parser();
 
 		for await (const chunk of source) {
-			let
-				stream = <IterableIterator<any>>parser.processChunk(chunk),
-				currentProcessor = 0;
+			yield* process(parser.processChunk(chunk));
+		}
 
-			while (currentProcessor < processors.length) {
-				const
-					processedValues = <unknown[]>[],
-					processor = processors[currentProcessor++];
+		yield* process(parser.finishChunkProcessing());
 
-				for (const token of stream) {
-					processedValues.push(...processor.processToken(token));
-				}
-
-				if (processor.finishTokenProcessing != null) {
-					for (const token of processor.finishTokenProcessing()) {
-						processedValues.push(token);
-					}
-				}
-
-				stream = processedValues.values();
+		function* process(stream: IterableIterator<any>, currentProcessor: number = 0): IterableIterator<any> {
+			if (currentProcessor >= processors.length) {
+				yield* stream;
+				return;
 			}
 
 			for (const val of stream) {
-				yield Object.cast(val);
+				const processor = processors[currentProcessor];
+				yield* process(processor.processToken(val), currentProcessor + 1);
 			}
 		}
 	}
@@ -125,6 +115,17 @@ export default class Parser {
 	 * Is the parser parsing a number now
 	 */
 	protected isOpenNumber: boolean = false;
+
+	/**
+	 * Closes all unclosed tokens and returns a Generator of tokens.
+	 * The method must be called after the end of parsing.
+	 */
+	*finishChunkProcessing(): Generator<Token> {
+		if (this.expected !== parserStateTypes.DONE) {
+			this.expected = parserStateTypes.DONE;
+			yield* parserStates[this.expected].call(this);
+		}
+	}
 
 	/**
 	 * Processes the passed JSON chunk and yields tokens via an asynchronous Generator

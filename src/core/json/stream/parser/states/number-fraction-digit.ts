@@ -10,7 +10,6 @@ import type Parser from 'core/json/stream/parser';
 
 import { parserStates, parserStateTypes, PARSING_COMPLETE } from 'core/json/stream/parser/const';
 import type { Token } from 'core/json/stream/parser/interface';
-import { parserExpected } from 'core/json/stream/parser';
 
 /**
  * Parses the buffer for number fraction digits `[0-9]` and generates a token `numberChunk` with a fraction value
@@ -35,7 +34,7 @@ export function* numberFractionDigit(this: Parser): Generator<Token> {
 			return;
 		}
 
-		this.expected = parserExpected[this.parent];
+		return PARSING_COMPLETE;
 	}
 }
 
