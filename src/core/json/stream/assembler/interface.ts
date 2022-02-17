@@ -6,11 +6,11 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-export type AssembleItem = JSONLikeValue;
 export type AssembleKey = string | null;
+export type AssembleValue = JSONLikeValue;
 
 export interface AssembleReviver {
-	(key: AssembleKey, value?: AssembleItem): AnyToIgnore;
+	(key: AssembleKey, value?: AssembleValue): AnyToIgnore;
 }
 
 export interface AssemblerOptions {

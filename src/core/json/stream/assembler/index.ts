@@ -14,15 +14,15 @@ import type {
 	AssemblerOptions,
 
 	AssembleKey,
-	AssembleItem
+	AssembleValue
 
 } from 'core/json/stream/assembler/interface';
 
 export * from 'core/json/stream/assembler/interface';
 
-export default class Assembler implements TokenProcessor<AssembleItem> {
+export default class Assembler implements TokenProcessor<AssembleValue> {
 	/**
-	 * Property key of the active assembled item
+	 * Property key of the active assembling value
 	 */
 	protected key: AssembleKey = null;
 
@@ -30,17 +30,17 @@ export default class Assembler implements TokenProcessor<AssembleItem> {
 	 * A value of the active assembled item.
 	 * If it is a container (object or array), all new assembled values will be added to it.
 	 */
-	protected item: AssembleItem = null;
+	protected value: AssembleValue = null;
 
 	/**
-	 * Indicates that the active item is fully assembled
+	 * Indicates that the active value is fully assembled
 	 */
-	protected isItemDone: boolean = true;
+	protected isValueAssembled: boolean = true;
 
 	/**
-	 * List of assembled parent items to the current
+	 * Stack of nested assembled items contained within the active assembling value
 	 */
-	protected stack: AssembleItem[] = [];
+	protected stack: AssembleValue[] = [];
 
 	/**
 	 * Handler to process an object start
@@ -53,8 +53,8 @@ export default class Assembler implements TokenProcessor<AssembleItem> {
 	protected startArray: AnyFunction = this.createStartObjectHandler(Array);
 
 	/**
-	 * Function for transform values after assembling
-	 * identical to reviver from JSON.parse
+	 * Function to transform a value after assembling.
+	 * Its API is identical to the reviver from `JSON.parse`.
 	 *
 	 * @param key
 	 * @param value
@@ -73,15 +73,13 @@ export default class Assembler implements TokenProcessor<AssembleItem> {
 	}
 
 	/**
-	 * Assemble piece of data
-	 *
-	 * @param chunk
+	 * Processes the passed JSON token and yields the assembled value
 	 */
-	*processToken(chunk: Token): Generator<AssembleItem> {
+	*processToken(chunk: Token): Generator<AssembleValue> {
 		this[chunk.name]?.(chunk.value);
 
-		if (this.isItemDone) {
-			yield this.item;
+		if (this.isValueAssembled) {
+			yield this.value;
 		}
 	}
 
@@ -91,14 +89,14 @@ export default class Assembler implements TokenProcessor<AssembleItem> {
 	 */
 	protected createStartObjectHandler(Constr: ObjectConstructor | ArrayConstructor): AnyFunction {
 		return () => {
-			if (this.isItemDone) {
-				this.isItemDone = false;
+			if (this.isValueAssembled) {
+				this.isValueAssembled = false;
 
 			} else {
-				this.stack.push(this.item, this.key);
+				this.stack.push(this.value, this.key);
 			}
 
-			this.item = Object.cast(new Constr());
+			this.value = Object.cast(new Constr());
 			this.key = null;
 		};
 	}
@@ -154,15 +152,15 @@ export default class Assembler implements TokenProcessor<AssembleItem> {
 	protected endObject(): void {
 		if (this.stack.length > 0) {
 			const
-				{item} = this;
+				{value} = this;
 
 			this.key = Object.cast(this.stack.pop());
-			this.item = this.stack.pop() ?? null;
+			this.value = this.stack.pop() ?? null;
 
-			this.saveValue(item);
+			this.saveValue(value);
 
 		} else {
-			this.isItemDone = true;
+			this.isValueAssembled = true;
 		}
 	}
 
@@ -177,24 +175,24 @@ export default class Assembler implements TokenProcessor<AssembleItem> {
 	 * Saves an assembled item into the internal structure
 	 * @param item
 	 */
-	protected saveValue(item: AssembleItem): void {
-		if (this.isItemDone) {
-			this.item = this.reviver?.('', item) ?? item;
+	protected saveValue(item: AssembleValue): void {
+		if (this.isValueAssembled) {
+			this.value = this.reviver?.('', item) ?? item;
 
-		} else if (Object.isArray(this.item)) {
+		} else if (Object.isArray(this.value)) {
 			const
-				val = this.reviver?.(String(this.item.length), item) ?? item;
+				val = this.reviver?.(String(this.value.length), item) ?? item;
 
 			if (val !== undefined) {
-				this.item.push(val);
+				this.value.push(val);
 			}
 
-		} else if (Object.isDictionary(this.item) && Object.isString(this.key)) {
+		} else if (Object.isDictionary(this.value) && Object.isString(this.key)) {
 			const
 				val = this.reviver?.(this.key, item) ?? item;
 
 			if (val !== undefined) {
-				this.item[this.key] = val;
+				this.value[this.key] = val;
 			}
 
 			this.key = null;
