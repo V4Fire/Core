@@ -21,46 +21,45 @@ describe('core/json/stream/filters', () => {
 			}`;
 
 			const
-				res = [];
+				tokens = [];
 
 			for await (const token of Parser.from([input], new Filter('a.b'))) {
-				res.push(token);
+				tokens.push(token);
 			}
 
-			expect(res)
-				.toEqual([
-					...new Parser().processChunk(`{
+			const expected = [
+				...new Parser().processChunk(`{
 					"a": {
 						"b": [1, 2, 3]
 					}
 				}`)
-				]);
+			];
+
+			expect(tokens).toEqual(expected);
 		});
 
 		it('filtering tokens by the specified RegExp', async () => {
 			const
 				input = '[{"a": 1}, [1], true, null]',
-				res = [];
+				tokens = [];
 
 			for await (const token of Parser.from([input], new Filter(/^[02]\.?/))) {
-				res.push(token);
+				tokens.push(token);
 			}
 
-			expect(res)
-				.toEqual([...new Parser().processChunk('[{"a": 1}, true]')]);
+			expect(tokens).toEqual([...new Parser().processChunk('[{"a": 1}, true]')]);
 		});
 
 		it('filtering tokens by the specified function', async () => {
 			const
 				input = '[{"a": 1}, [1], true, {"a": 2}]',
-				res = [];
+				tokens = [];
 
 			for await (const token of Parser.from([input], new Filter((stack) => stack.includes('a')))) {
-				res.push(token);
+				tokens.push(token);
 			}
 
-			expect(res)
-				.toEqual([...new Parser().processChunk('[{"a": 1}, {"a": 2}]')]);
+			expect(tokens).toEqual([...new Parser().processChunk('[{"a": 1}, {"a": 2}]')]);
 		});
 	});
 
@@ -75,37 +74,37 @@ describe('core/json/stream/filters', () => {
 			}`;
 
 			const
-				res = [];
+				tokens = [];
 
 			for await (const token of Parser.from([input], new Pick('a.b'))) {
-				res.push(token);
+				tokens.push(token);
 			}
 
-			expect(res).toEqual([...new Parser().processChunk('[1, 2, 3]')]);
+			expect(tokens).toEqual([...new Parser().processChunk('[1, 2, 3]')]);
 		});
 
 		it('picking the first token matched with the specified RegExp', async () => {
 			const
 				input = '[{"a": 1}, [1], true, null]',
-				res = [];
+				tokens = [];
 
 			for await (const token of Parser.from([input], new Pick(/^[02]\.?/))) {
-				res.push(token);
+				tokens.push(token);
 			}
 
-			expect(res).toEqual([...new Parser().processChunk('{"a": 1}')]);
+			expect(tokens).toEqual([...new Parser().processChunk('{"a": 1}')]);
 		});
 
 		it('picking all tokens matched with the specified RegExp', async () => {
 			const
 				input = '[{"a": 1}, [1], true, null]',
-				res = [];
+				tokens = [];
 
 			for await (const token of Parser.from([input], new Pick(/^[02]\.?/, {multiple: true}))) {
-				res.push(token);
+				tokens.push(token);
 			}
 
-			expect(res).toEqual([
+			expect(tokens).toEqual([
 				...new Parser().processChunk('{"a": 1}'),
 				...new Parser().processChunk('true')
 			]);
@@ -114,27 +113,35 @@ describe('core/json/stream/filters', () => {
 		it('picking the first token filtered by the specified function', async () => {
 			const
 				input = '[{"a": 1}, [1], true, {"a": 2}]',
-				res = [];
+				tokens = [];
 
 			for await (const token of Parser.from([input], new Pick((stack) => stack.includes('a')))) {
-				res.push(token);
+				tokens.push(token);
 			}
 
-			expect(res).toEqual([...new Parser().processChunk('1')]);
+			const parser = new Parser();
+			expect(tokens).toEqual([...parser.processChunk('1'), ...parser.finishChunkProcessing()]);
 		});
 
 		it('picking all tokens filtered by the specified function', async () => {
 			const
 				input = '[{"a": 1}, [1], true, {"a": 2}]',
-				res = [];
+				tokens = [];
 
 			for await (const token of Parser.from([input], new Pick((stack) => stack.includes('a'), {multiple: true}))) {
-				res.push(token);
+				tokens.push(token);
 			}
 
-			expect(res).toEqual([
-				...new Parser().processChunk('1'),
-				...new Parser().processChunk('2')
+			const
+				parser1 = new Parser(),
+				parser2 = new Parser();
+
+			expect(tokens).toEqual([
+				...parser1.processChunk('1'),
+				...parser1.finishChunkProcessing(),
+
+				...parser2.processChunk('2'),
+				...parser2.finishChunkProcessing()
 			]);
 		});
 	});
