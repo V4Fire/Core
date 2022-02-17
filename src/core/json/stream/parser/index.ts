@@ -59,9 +59,15 @@ export default class Parser {
 				return;
 			}
 
+			const
+				processor = processors[currentProcessor];
+
 			for (const val of stream) {
-				const processor = processors[currentProcessor];
 				yield* process(processor.processToken(val), currentProcessor + 1);
+			}
+
+			if (processor.finishTokenProcessing != null) {
+				yield* process(processor.finishTokenProcessing(), currentProcessor + 1);
 			}
 		}
 	}
