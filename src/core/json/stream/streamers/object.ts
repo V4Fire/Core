@@ -9,7 +9,7 @@
 import type { Token } from 'core/json/stream/parser';
 import { Streamer, StreamedObject } from 'core/json/stream/streamers/interface';
 
-export class StreamObject<T = unknown> extends Streamer<StreamedObject<T>> {
+export default class StreamObject<T = unknown> extends Streamer<StreamedObject<T>> {
 	/**
 	 * Last key of the current streamed object property
 	 */
