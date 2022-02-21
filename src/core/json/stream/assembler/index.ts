@@ -15,23 +15,31 @@ export * from 'core/json/stream/assembler/interface';
 
 export default class Assembler<T = unknown> implements TokenProcessor<T> {
 	/**
+	 * A value of the active assembled item.
+	 * If it is a container (object or array), all new assembled values will be added to it.
+	 */
+	value: unknown = NULL;
+
+	/**
+	 * Indicates that the active value is fully assembled
+	 */
+	isValueAssembled: boolean = false;
+
+	/**
+	 * Depth of the assembling structure
+	 */
+	get depth(): number {
+		// To ignore keys from the stack divide length by two
+		return (Math.floor(this.stack.length / 2)) + (this.isValueAssembled ? 0 : 1);
+	}
+
+	/**
 	 * Property key of the active assembling value
 	 */
 	protected key: string | null = null;
 
 	/**
-	 * A value of the active assembled item.
-	 * If it is a container (object or array), all new assembled values will be added to it.
-	 */
-	protected value: unknown = NULL;
-
-	/**
-	 * Indicates that the active value is fully assembled
-	 */
-	protected isValueAssembled: boolean = false;
-
-	/**
-	 * Stack of nested assembled items contained within the active assembling value
+	 * Stack of nested assembled items and keys contained within the active assembling value
 	 */
 	protected stack: unknown[] = [];
 
@@ -82,6 +90,10 @@ export default class Assembler<T = unknown> implements TokenProcessor<T> {
 	 */
 	protected createStartObjectHandler(Constr: ObjectConstructor | ArrayConstructor): AnyFunction {
 		return () => {
+			if (this.isValueAssembled) {
+				this.isValueAssembled = false;
+			}
+
 			if (this.value !== NULL) {
 				this.stack.push(this.value, this.key);
 			}
@@ -104,6 +116,7 @@ export default class Assembler<T = unknown> implements TokenProcessor<T> {
 	 * @param value
 	 */
 	protected stringValue(value: string): void {
+		this.endPrimitive();
 		this.saveValue(value);
 	}
 
@@ -112,6 +125,7 @@ export default class Assembler<T = unknown> implements TokenProcessor<T> {
 	 * @param value
 	 */
 	protected numberValue(value: string): void {
+		this.endPrimitive();
 		this.saveValue(parseFloat(value));
 	}
 
@@ -119,6 +133,7 @@ export default class Assembler<T = unknown> implements TokenProcessor<T> {
 	 * Handler to process nullish values
 	 */
 	protected nullValue(): void {
+		this.endPrimitive();
 		this.saveValue(null);
 	}
 
@@ -126,6 +141,7 @@ export default class Assembler<T = unknown> implements TokenProcessor<T> {
 	 * Handler to process a truly boolean value
 	 */
 	protected trueValue(): void {
+		this.endPrimitive();
 		this.saveValue(true);
 	}
 
@@ -133,6 +149,7 @@ export default class Assembler<T = unknown> implements TokenProcessor<T> {
 	 * Handler to process a falsy boolean value
 	 */
 	protected falseValue(): void {
+		this.endPrimitive();
 		this.saveValue(false);
 	}
 
@@ -158,6 +175,15 @@ export default class Assembler<T = unknown> implements TokenProcessor<T> {
 	 */
 	protected endArray(): void {
 		this.endObject();
+	}
+
+	/**
+	 * Handler to process ending of primitive values
+	 */
+	protected endPrimitive(): void {
+		if (this.value === NULL) {
+			this.isValueAssembled = true;
+		}
 	}
 
 	/**
