@@ -9,12 +9,9 @@
 import type { Token } from 'core/json/stream/parser';
 
 import Super from 'core/json/stream/filters/abstract-filter';
-import type { TokenFilter, FilterStack, FilterOptions } from 'core/json/stream/filters/interface';
+import type { TokenFilter, FilterStack } from 'core/json/stream/filters/interface';
 
 export default class Filter extends Super {
-	/**
-	 * Filter can work only in a multiple mode
-	 */
 	override readonly multiple: boolean = true;
 
 	/**
@@ -22,8 +19,8 @@ export default class Filter extends Super {
 	 */
 	protected objStack: FilterStack = [];
 
-	public constructor(filter: TokenFilter, opts?: FilterOptions) {
-		super(filter, opts);
+	public constructor(filter: TokenFilter) {
+		super(filter);
 	}
 
 	override*finishTokenProcessing(): Generator<Token> {

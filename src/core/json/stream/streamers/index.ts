@@ -8,3 +8,5 @@
 
 export { default as ArrayStreamer } from 'core/json/stream/streamers/array';
 export { default as ObjectStreamer } from 'core/json/stream/streamers/object';
+
+export * from 'core/json/stream/streamers/interface';

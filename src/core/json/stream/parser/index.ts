@@ -29,13 +29,13 @@ export * from 'core/json/stream/parser/interface';
 
 export default class Parser {
 	/**
-	 * Parses the specified iterable object as a JSON stream and yields tokens via a Generator
+	 * Parses the specified iterable object as a JSON stream and yields tokens or values via a Generator
 	 *
 	 * @param source
 	 * @param [processors] - list of token processors to apply to the output iterable
 	 */
 	static async*from<T extends Array<TokenProcessor<any>>>(
-		source: Iterable<string>,
+		source: Iterable<string> | AsyncIterable<string>,
 		...processors: T
 	): T extends [] ?
 		AsyncGenerator<Token> :

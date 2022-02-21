@@ -62,6 +62,9 @@ export default class Assembler<T = unknown> implements TokenProcessor<T> {
 	 */
 	protected readonly reviver?: JSONCb;
 
+	/**
+	 * @param [opts] - additional options
+	 */
 	constructor(opts: AssemblerOptions = {}) {
 		if (Object.isFunction(opts.reviver)) {
 			this.reviver = opts.reviver;

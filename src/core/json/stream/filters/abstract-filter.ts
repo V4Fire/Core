@@ -155,6 +155,10 @@ export default abstract class AbstractFilter implements TokenProcessor<Token> {
 	 */
 	protected readonly skipKey: TokenProcessorFn<Token> = this.skipValue('endKey', 'keyValue');
 
+	/**
+	 * @param filter
+	 * @param [opts] - additional filter options
+	 */
 	protected constructor(filter: TokenFilter, opts: FilterOptions = {}) {
 		// eslint-disable-next-line @typescript-eslint/unbound-method
 		this.processToken = this.check;
