@@ -58,6 +58,7 @@ module.exports = () => {
 
 	tsNode.register({
 		transpileOnly: true,
+		swc: true,
 
 		compilerOptions: {
 			module: 'commonjs',

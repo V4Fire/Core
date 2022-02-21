@@ -82,7 +82,7 @@
     "path-equal": "^1.1.2",
     "requestidlecallback": "^0.3.0",
     "through2": "^4.0.2",
-    "ts-node": "^10.4.0",
+    "ts-node": "^10.5.0",
     "tsc-alias": "^1.4.2",
     "tsconfig": "^7.0.0",
     "typedoc": "^0.22.10",
