@@ -11,112 +11,114 @@
  * @packageDocumentation
  */
 
-import Parser from 'core/json/stream/parser';
-import { Filter, Pick } from 'core/json/stream/filters';
-import { Assembler } from 'core/json/stream/assembler';
-import { StreamArray, StreamObject } from 'core/json/stream/streamers';
-import type { Token, AssemblerOptions, FilterOptions, StreamedArray, StreamedObject } from 'core/json/stream/interface';
+import Parser, { Token } from 'core/json/stream/parser';
+import Assembler, { AssemblerOptions } from 'core/json/stream/assembler';
+
+import {
+
+	Pick,
+	Filter,
+
+	FilterOptions,
+	TokenFilter
+
+} from 'core/json/stream/filters';
+
+import {
+
+	ArrayStreamer,
+	ObjectStreamer,
+
+	StreamedArray,
+	StreamedObject
+
+} from 'core/json/stream/streamers';
 
 /**
- * Iterate through async iterator of JSON pieces
- * and transform it into tokens
- *
- * @param iterable
+ * Parses the specified iterable object as a JSON stream and yields tokens via a Generator
+ * @param source
  */
-export async function* from(
-	iterable: AsyncIterable<Buffer | string>
-): AsyncGenerator<Token> {
-	const parser = new Parser();
-
-	for await (const chunk of iterable) {
-		yield* parser.processChunk(chunk.toString());
-	}
+export function from(source: Iterable<string> | AsyncIterable<string>): AsyncGenerator<Token> {
+	return Parser.from(source);
 }
 
 /**
- * Iterate through async iterator of tokens
- * and transform it back into JSON
+ * Takes the specified iterable object of tokens and filters it via the specified filter
  *
- * @param iterable
- * @param options
+ * @param source
+ * @param filter
  */
-export async function* assemble(
-	iterable: AsyncIterable<Token>,
-	options?: AssemblerOptions
-): AsyncGenerator<any> {
-	const assembler = new Assembler(options);
+export async function* filter(source: AsyncIterable<Token>, filter: TokenFilter): AsyncGenerator<Token> {
+	const
+		f = new Filter(filter);
 
-	for await (const chunk of iterable) {
-		yield* assembler.processChunk(chunk);
+	for await (const chunk of source) {
+		yield* f.processToken(chunk);
 	}
+
+	yield* f.finishTokenProcessing();
 }
 
 /**
- * Iterate through async iterator of tokens
- * and filter it by a filter in options
+ * Takes the specified iterable object of tokens and pick from it value that matches the specified selector
  *
- * @param iterable
- * @param options
- */
-export async function* filter(
-	iterable: AsyncIterable<Token>,
-	options?: FilterOptions
-): AsyncGenerator<Token> {
-	const filter = new Filter(options);
-
-	for await (const chunk of iterable) {
-		yield* filter.processToken(chunk);
-	}
-
-	yield* filter.syncStack();
-}
-
-/**
- * Iterate through async iterator of tokens
- * and picks first filter match
- *
- * @param iterable
- * @param options
+ * @param source
+ * @param selector
+ * @param [opts] - additional filter options
  */
 export async function* pick(
-	iterable: AsyncIterable<Token>,
-	options?: FilterOptions
+	source: AsyncIterable<Token>,
+	selector: TokenFilter,
+	opts?: FilterOptions
 ): AsyncGenerator<Token> {
-	const pick = new Pick(options);
+	const
+		p = new Pick(selector, opts);
 
-	for await (const chunk of iterable) {
-		yield* pick.processToken(chunk);
+	for await (const chunk of source) {
+		yield* p.processToken(chunk);
 	}
 }
 
 /**
- * Iterate through async iterator of tokens, which represent an array
- * assemble and stream all values from it during iteration
+ * Takes the specified iterable object of tokens and yields an assembled item from it
  *
- * @param iterable
+ * @param source
+ * @param [opts] - additional options
  */
-export async function* streamArray(
-	iterable: AsyncIterable<Token>
-): AsyncGenerator<StreamedArray> {
-	const iterArray = new StreamArray();
+export async function* assemble<T = unknown>(
+	source: AsyncIterable<Token>,
+	opts?: AssemblerOptions
+): AsyncGenerator<T> {
+	const
+		a = new Assembler<T>(opts);
 
-	for await (const chunk of iterable) {
-		yield* iterArray.processChunk(chunk);
+	for await (const chunk of source) {
+		yield* a.processToken(chunk);
 	}
 }
 
 /**
- * Iterate through async iterator of tokens, which represent an object
- * assemble and stream all key/value pairs from it during iteration
- *
- * @param iterable
+ * Takes the specified iterable object of tokens representing an array and yields assembled array items
+ * @param source
  */
-export async function* streamObject(
-	iterable: AsyncIterable<Token>
-): AsyncGenerator<StreamedObject> {
-	const objectStream = new StreamObject();
+export async function* streamArray<T = unknown>(source: AsyncIterable<Token>): AsyncGenerator<StreamedArray<T>> {
+	const
+		s = new ArrayStreamer<T>();
 
-	for await (const chunk of iterable) {
-		yield* objectStream.processChunk(chunk);
+	for await (const chunk of source) {
+		yield* s.processToken(chunk);
+	}
+}
+
+/**
+ * Takes the specified iterable object of tokens representing an object and yields assembled object items
+ * @param source
+ */
+export async function* streamObject<T = unknown>(source: AsyncIterable<Token>): AsyncGenerator<StreamedObject<T>> {
+	const
+		s = new ObjectStreamer<T>();
+
+	for await (const chunk of source) {
+		yield* s.processToken(chunk);
 	}
 }
