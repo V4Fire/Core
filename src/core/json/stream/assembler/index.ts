@@ -15,6 +15,11 @@ export * from 'core/json/stream/assembler/interface';
 
 export default class Assembler<T = unknown> implements TokenProcessor<T> {
 	/**
+	 * Property key of the active assembling value
+	 */
+	key: string | null = null;
+
+	/**
 	 * A value of the active assembled item.
 	 * If it is a container (object or array), all new assembled values will be added to it.
 	 */
@@ -32,11 +37,6 @@ export default class Assembler<T = unknown> implements TokenProcessor<T> {
 		// To ignore keys from the stack divide length by two
 		return (Math.floor(this.stack.length / 2)) + (this.isValueAssembled ? 0 : 1);
 	}
-
-	/**
-	 * Property key of the active assembling value
-	 */
-	protected key: string | null = null;
 
 	/**
 	 * Stack of nested assembled items and keys contained within the active assembling value
