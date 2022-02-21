@@ -6,46 +6,34 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type { Token, StreamedArray } from 'core/json/stream/interface';
-import { StreamBase } from 'core/json/stream/streamers/modules/base';
+import type { Token } from 'core/json/stream/parser';
+import { Streamer, StreamedArray } from 'core/json/stream/streamers/interface';
 
-export class StreamArray extends StreamBase {
+export default class ArrayStreamer<T = unknown> extends Streamer<StreamedArray<T>> {
 	/**
-	 * Current index of element being streamed
+	 * Index of the current streamed array element
 	 */
-	counter: number = 0;
+	protected index: number = 0;
 
-	/**
-	 * Current level of element being streamed
-	 */
-	level: number = 1;
-
-	/**
-	 * Wait for the start of the array token
-	 * otherwise throw an error
-	 *
-	 * @param chunk
-	 */
-	*wait(chunk: Token): Generator<StreamedArray> {
-		// First chunk should open an array
+	/** @inheritDoc */
+	protected checkToken(chunk: Token): boolean {
 		if (chunk.name !== 'startArray') {
-			throw new Error('Top-level object should be an array.');
+			throw new TypeError('The top-level object should be an array');
 		}
 
-		this.processChunk = this.assembleChunk;
-
-		yield* this.processChunk(chunk);
+		return true;
 	}
 
-	/**
-	 * Yielding array values
-	 */
-	*push(): Generator<StreamedArray> {
+	/** @inheritDoc */
+	protected*push(): Generator<StreamedArray<T>> {
 		const
-			{item} = this.assembler;
+			{value} = this.assembler;
 
-		if (Object.isArray(current) && current.length > 0) {
-			yield {key: this.counter++, value: current.pop()};
+		if (Object.isArray(value) && value.length > 0) {
+			yield {
+				index: this.index++,
+				value: Object.cast(value.pop())
+			};
 		}
 	}
 }

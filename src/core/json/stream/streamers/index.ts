@@ -6,5 +6,4 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-export { StreamArray } from 'core/json/stream/streamers/array';
-export { StreamObject } from 'core/json/stream/streamers/object';
+export { default as ArrayStreamer } from 'core/json/stream/streamers/array';

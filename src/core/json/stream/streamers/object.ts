@@ -6,47 +6,40 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type { Token, StreamedObject } from 'core/json/stream/interface';
-import { StreamBase } from 'core/json/stream/streamers/modules/base';
+import type { Token } from 'core/json/stream/parser';
+import { Streamer, StreamedObject } from 'core/json/stream/streamers/interface';
 
-export class StreamObject extends StreamBase {
+export class StreamObject<T = unknown> extends Streamer<StreamedObject<T>> {
 	/**
-	 * Current level of element being streamed
+	 * Last key of the current streamed object property
 	 */
-	level: number = 1;
+	protected key: string | null = null;
 
-	/**
-	 * Last key of assembled object property
-	 */
-	protected lastKey: string | null = null;
-
-	/**
-	 * Wait for start object token
-	 * otherwise throw an error
-	 *
-	 * @param chunk
-	 */
-	*wait(chunk: Token): Generator<StreamedObject> {
-		// First chunk should open an array
+	/** @inheritDoc */
+	protected checkToken(chunk: Token): boolean {
 		if (chunk.name !== 'startObject') {
-			throw new Error('Top-level object should be an object.');
+			throw new TypeError('The top-level object should be an object');
 		}
 
-		this.processChunk = this.assembleChunk;
-		yield* this.processChunk(chunk);
+		return true;
 	}
 
-	/**
-	 * Yielding object key/value pairs
-	 */
-	*push(): Generator<StreamedObject> {
-		if (this.lastKey == null) {
-			this.lastKey = this.assembler.key;
+	/** @inheritDoc */
+	protected*push(): Generator<StreamedObject<T>> {
+		const
+			{key, value} = this.assembler;
 
-		} else {
-			yield {key: this.lastKey, value: this.assembler.item![this.lastKey]};
-			this.assembler.item = {};
-			this.lastKey = null;
+		if (this.key == null) {
+			this.key = key;
+
+		} else if (Object.isDictionary(value)) {
+			yield {
+				key: this.key,
+				value: Object.cast(value[this.key])
+			};
+
+			this.key = null;
+			this.assembler.value = {};
 		}
 	}
 }
