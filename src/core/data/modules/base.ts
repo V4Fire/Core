@@ -9,7 +9,6 @@
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 
 import symbolGenerator from 'core/symbol';
-import { readonly } from 'core/object/proxy-readonly';
 
 import { deprecate } from 'core/functools';
 import { concatURLs } from 'core/url';
@@ -371,7 +370,7 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 						}
 					});
 
-					res.data = readonly(composition);
+					res.data = Object.freeze(composition);
 					return res;
 				}),
 
