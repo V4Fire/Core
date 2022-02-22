@@ -7,7 +7,7 @@
  */
 
 import type { Token } from 'core/json/stream/parser';
-import { Streamer, StreamedObject } from 'core/json/stream/streamers/interface';
+import Streamer, { StreamedObject } from 'core/json/stream/streamers/interface';
 
 export default class StreamObject<T = unknown> extends Streamer<StreamedObject<T>> {
 	/**

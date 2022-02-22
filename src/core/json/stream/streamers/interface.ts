@@ -19,7 +19,7 @@ export interface StreamedObject<T = unknown> {
 	value: T;
 }
 
-export abstract class Streamer<T = unknown> implements TokenProcessor<T> {
+export default abstract class Streamer<T = unknown> implements TokenProcessor<T> {
 	/**
 	 * Actual depth of the streamed structure
 	 */

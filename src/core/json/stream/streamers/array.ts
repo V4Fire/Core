@@ -7,7 +7,7 @@
  */
 
 import type { Token } from 'core/json/stream/parser';
-import { Streamer, StreamedArray } from 'core/json/stream/streamers/interface';
+import Streamer, { StreamedArray } from 'core/json/stream/streamers/interface';
 
 export default class ArrayStreamer<T = unknown> extends Streamer<StreamedArray<T>> {
 	/**
