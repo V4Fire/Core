@@ -83,6 +83,10 @@ If it is a container (object or array), all new assembled values will be added t
 
 Indicates that the active value is fully assembled.
 
+#### depth
+
+A depth of the assembling structure.
+
 ### Methods
 
 #### processToken
