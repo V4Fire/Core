@@ -27,33 +27,13 @@ export default class Assembler<T = unknown> implements TokenProcessor<T> {
 	/**
 	 * Property key of the active assembling value
 	 */
-	get key(): string | null {
-		return this[$$.key] ?? null;
-	}
-
-	/**
-	 * Sets a property key of the active assembling value
-	 * @param value
-	 */
-	protected set key(value: string | null) {
-		this[$$.key] = value;
-	}
+	key: string | null = null;
 
 	/**
 	 * A value of the active assembled item.
 	 * If it is a container (object or array), all new assembled values will be added to it.
 	 */
-	get value(): unknown {
-		return this[$$.value] ?? NULL;
-	}
-
-	/**
-	 * Sets a value of the active assembled item
-	 * @param value
-	 */
-	protected set value(value: unknown) {
-		this[$$.value] = value;
-	}
+	value: unknown = NULL;
 
 	/**
 	 * Indicates that the active value is fully assembled
