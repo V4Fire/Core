@@ -13,10 +13,4 @@ Changelog
 
 #### :rocket: New Feature
 
-* Added a common function to create a read-only view
-
-## v3.73.0 (2021-12-14)
-
-#### :rocket: New Feature
-
-* Initial release
+* Added a new bunch of constants `support` to check a runtime for features support

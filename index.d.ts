@@ -119,7 +119,22 @@ declare function clearImmediate(id: number): void;
 
 declare function structuredClone<T>(obj: T): T;
 
-type Primitive = string | symbol | number | bigint | boolean | undefined | null;
+type Primitive =
+	string |
+	symbol |
+	number |
+	bigint |
+	boolean |
+	undefined |
+	null;
+
+type JSONLikeValue =
+	string |
+	number |
+	boolean |
+	null |
+	JSONLikeValue[] |
+	Dictionary<JSONLikeValue>;
 
 type CanPromise<T> = T | Promise<T>;
 type CanArray<T> = T | T[];

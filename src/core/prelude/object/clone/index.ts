@@ -31,6 +31,10 @@ extend(Object, 'fastClone', (obj, opts?: FastCloneOptions) => {
 		const
 			p = opts ?? {};
 
+		if (Object.isFrozen(obj) && p.freezable !== false) {
+			return obj;
+		}
+
 		let
 			clone;
 
@@ -181,18 +185,19 @@ export function createSerializer(
 
 	return (key, value) => {
 		if (init && value === base) {
-			return objRef;
+			value = objRef;
+
+		} else {
+			if (!init) {
+				init = true;
+			}
+
+			if (replacer) {
+				value = replacer(key, value);
+			}
 		}
 
-		if (!init) {
-			init = true;
-		}
-
-		if (replacer) {
-			return replacer(key, value);
-		}
-
-		return value;
+		return Object.unwrapProxy(value);
 	};
 }
 

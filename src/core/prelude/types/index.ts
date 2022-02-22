@@ -171,8 +171,14 @@ extend(Object, 'isPromiseLike', (value) => {
 /** @see [[ObjectConstructor.isProxy]] */
 extend(Object, 'isProxy', (value) => value?.[PROXY] != null);
 
-/** @see [[ObjectConstructor.isProxy]] */
-extend(Object, 'unwrapProxy', (value) => value?.[PROXY] ?? value);
+/** @see [[ObjectConstructor.unwrapProxy]] */
+extend(Object, 'unwrapProxy', (value) => {
+	while (value?.[PROXY] && value[PROXY] !== value) {
+		value = value[PROXY];
+	}
+
+	return value;
+});
 
 /** @see [[ObjectConstructor.isMap]] */
 extend(Object, 'isMap', (value) => value instanceof Map);
