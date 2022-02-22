@@ -68,7 +68,24 @@ for await (const val of parser) {
 }
 ```
 
-### processToken
+### Getters
+
+#### key
+
+A property key of the active assembling value.
+
+#### value
+
+A value of the active assembled item.
+If it is a container (object or array), all new assembled values will be added to it.
+
+#### isValueAssembled
+
+Indicates that the active value is fully assembled.
+
+### Methods
+
+#### processToken
 
 Processes the passed JSON token and yields the assembled values
 
