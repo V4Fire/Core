@@ -1,6 +1,6 @@
 # core/json/stream/filters
 
-The module provides a bunch of classes to filter tokens produced by `json/stream/parser` Parser.
+This module provides a bunch of classes to filter tokens produced by `json/stream/parser` Parser.
 Also, the module provides an abstract class to create your own filters.
 
 ## Usage

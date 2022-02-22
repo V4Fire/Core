@@ -1,6 +1,6 @@
 # core/json/stream/assembler
 
-The module provides a class to assemble JS values from an iterable of tokens produced by `json/stream/parser` Parser.
+This module provides a class to assemble JS values from an iterable of tokens produced by `json/stream/parser` Parser.
 
 ## Usage
 

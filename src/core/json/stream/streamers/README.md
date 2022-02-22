@@ -1,6 +1,6 @@
 # core/json/stream/streamers
 
-The module provides a bunch of classes to stream object or array elements.
+This module provides a bunch of classes to stream object or array elements.
 Also, the module provides an abstract class to create your own streamers
 
 ## Usage
