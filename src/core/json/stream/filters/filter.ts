@@ -89,7 +89,8 @@ export default class Filter extends Super {
 		this.objStack = Array.prototype.concat.call(stack);
 	}
 
-	protected override*checkToken(chunk: Token): Generator<Token> {
+	/** @inheritDoc */
+	protected*checkToken(chunk: Token): Generator<Token> {
 		switch (chunk.name) {
 			case 'startObject':
 				if (this.filter(this.stack, chunk)) {
