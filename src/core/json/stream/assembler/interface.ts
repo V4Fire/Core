@@ -7,6 +7,14 @@
  */
 
 export interface AssemblerOptions {
+	/**
+	 * Should or not parse numeric values as string literals
+	 * @default `false`
+	 */
 	numberAsString?: boolean;
+
+	/**
+	 * Reviver function similar to `JSON.parse`
+	 */
 	reviver?: JSONCb;
 }

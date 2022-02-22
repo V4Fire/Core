@@ -6,6 +6,11 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+/**
+ * [[include:core/json/stream/assembler/README.md]]
+ * @packageDocumentation
+ */
+
 import type { Token, TokenProcessor } from 'core/json/stream/parser';
 
 import { NULL } from 'core/json/stream/assembler/const';
@@ -77,7 +82,7 @@ export default class Assembler<T = unknown> implements TokenProcessor<T> {
 	}
 
 	/**
-	 * Processes the passed JSON token and yields the assembled value
+	 * Processes the passed JSON token and yields the assembled values
 	 */
 	*processToken(chunk: Token): Generator<T> {
 		this[chunk.name]?.(chunk.value);
