@@ -29,9 +29,6 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :rocket: New Feature
 
-* Added a common function to clone `core/object/proxy-clone`
-* Added a common function to create a read-only view `core/object/proxy-readonly`
-* Added a new bunch of constants `support` to check a runtime for features support `core/const`
 * Added a new module `core/request/headers`
 * Added a new module `core/request/modules/stream-buffer`
 
@@ -50,6 +47,15 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 #### :memo: Documentation
 
 * Improved documentation `core/request`
+
+## v3.75.0 (2022-02-22)
+
+#### :rocket: New Feature
+
+* Added a new module `core/json/stream`
+* Added a common function to clone `core/object/proxy-clone`
+* Added a common function to create a read-only view `core/object/proxy-readonly`
+* Added a new bunch of constants `support` to check a runtime for features support `core/const`
 
 ## v3.74.7 (2022-01-31)
 
