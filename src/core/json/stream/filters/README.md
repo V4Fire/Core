@@ -258,7 +258,7 @@ export default class PickObject extends Super {
 }
 ```
 
-#### Public methods
+#### API
 
 ##### processToken
 
