@@ -1,6 +1,7 @@
 # core/request
 
 This module provides API to request/submit data using different runtime engines, like XHR, Fetch, etc.
+The submodules contain different classes to work with HTTP headers, server responses and errors.
 
 ```js
 import request from 'core/request';
