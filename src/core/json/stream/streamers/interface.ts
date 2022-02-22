@@ -6,7 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import Assembler from 'core/json/stream/assembler';
+import Assembler, { AssemblerOptions } from 'core/json/stream/assembler';
 import type { Token, TokenProcessor } from 'core/json/stream/parser';
 
 export interface StreamedArray<T = unknown> {
@@ -28,7 +28,7 @@ export default abstract class Streamer<T = unknown> implements TokenProcessor<T>
 	/**
 	 * Instance of a token assembler
 	 */
-	protected assembler: Assembler = new Assembler<T>();
+	protected assembler: Assembler;
 
 	/**
 	 * True if the streamed structure is already checked
@@ -45,6 +45,13 @@ export default abstract class Streamer<T = unknown> implements TokenProcessor<T>
 	 * Method to yield assembled tokens
 	 */
 	protected abstract push(): Generator<T>;
+
+	/**
+	 * @param [opts] - assembler options
+	 */
+	protected constructor(opts?: AssemblerOptions) {
+		this.assembler = new Assembler(opts);
+	}
 
 	/**
 	 * Processes the passed JSON token and yields the assembled value

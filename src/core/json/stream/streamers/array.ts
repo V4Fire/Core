@@ -7,6 +7,8 @@
  */
 
 import type { Token } from 'core/json/stream/parser';
+import type { AssemblerOptions } from 'core/json/stream/assembler';
+
 import Streamer, { StreamedArray } from 'core/json/stream/streamers/interface';
 
 export default class ArrayStreamer<T = unknown> extends Streamer<StreamedArray<T>> {
@@ -14,6 +16,10 @@ export default class ArrayStreamer<T = unknown> extends Streamer<StreamedArray<T
 	 * Index of the current streamed array element
 	 */
 	protected index: number = 0;
+
+	public constructor(opts?: AssemblerOptions) {
+		super(opts);
+	}
 
 	/** @inheritDoc */
 	protected checkToken(chunk: Token): boolean {
