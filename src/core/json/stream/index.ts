@@ -99,11 +99,16 @@ export async function* assemble<T = unknown>(
 
 /**
  * Takes the specified iterable object of tokens representing an array and yields assembled array items
+ *
  * @param source
+ * @param [opts] - additional options
  */
-export async function* streamArray<T = unknown>(source: AsyncIterable<Token>): AsyncGenerator<StreamedArray<T>> {
+export async function* streamArray<T = unknown>(
+	source: AsyncIterable<Token>,
+	opts?: AssemblerOptions
+): AsyncGenerator<StreamedArray<T>> {
 	const
-		s = new ArrayStreamer<T>();
+		s = new ArrayStreamer<T>(opts);
 
 	for await (const chunk of source) {
 		yield* s.processToken(chunk);
@@ -112,11 +117,16 @@ export async function* streamArray<T = unknown>(source: AsyncIterable<Token>): A
 
 /**
  * Takes the specified iterable object of tokens representing an object and yields assembled object items
+ *
  * @param source
+ * @param [opts] - additional options
  */
-export async function* streamObject<T = unknown>(source: AsyncIterable<Token>): AsyncGenerator<StreamedObject<T>> {
+export async function* streamObject<T = unknown>(
+	source: AsyncIterable<Token>,
+	opts?: AssemblerOptions
+): AsyncGenerator<StreamedObject<T>> {
 	const
-		s = new ObjectStreamer<T>();
+		s = new ObjectStreamer<T>(opts);
 
 	for await (const chunk of source) {
 		yield* s.processToken(chunk);
