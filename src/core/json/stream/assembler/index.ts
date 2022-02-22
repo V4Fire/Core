@@ -84,6 +84,9 @@ export default class Assembler<T = unknown> implements TokenProcessor<T> {
 
 		if (this.isValueAssembled) {
 			yield Object.cast(this.value);
+
+			this.value = NULL;
+			this.isValueAssembled = false;
 		}
 	}
 
