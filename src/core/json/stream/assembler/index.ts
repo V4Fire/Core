@@ -11,6 +11,8 @@
  * @packageDocumentation
  */
 
+import symbolGenerator from 'core/symbol';
+
 import type { Token, TokenProcessor } from 'core/json/stream/parser';
 
 import { NULL } from 'core/json/stream/assembler/const';
@@ -18,22 +20,55 @@ import type { AssemblerOptions } from 'core/json/stream/assembler/interface';
 
 export * from 'core/json/stream/assembler/interface';
 
+export const
+	$$ = symbolGenerator();
+
 export default class Assembler<T = unknown> implements TokenProcessor<T> {
 	/**
 	 * Property key of the active assembling value
 	 */
-	key: string | null = null;
+	get key(): string | null {
+		return this[$$.key] ?? null;
+	}
+
+	/**
+	 * Sets a property key of the active assembling value
+	 * @param value
+	 */
+	protected set key(value: string | null) {
+		this[$$.key] = value;
+	}
 
 	/**
 	 * A value of the active assembled item.
 	 * If it is a container (object or array), all new assembled values will be added to it.
 	 */
-	value: unknown = NULL;
+	get value(): unknown {
+		return this[$$.value] ?? NULL;
+	}
+
+	/**
+	 * Sets a value of the active assembled item
+	 * @param value
+	 */
+	protected set value(value: unknown) {
+		this[$$.value] = value;
+	}
 
 	/**
 	 * Indicates that the active value is fully assembled
 	 */
-	isValueAssembled: boolean = false;
+	get isValueAssembled(): boolean {
+		return this[$$.isValueAssembled] ?? false;
+	}
+
+	/**
+	 * Sets the value assembling status
+	 * @param value
+	 */
+	protected set isValueAssembled(value: boolean) {
+		this[$$.isValueAssembled] = value;
+	}
 
 	/**
 	 * Depth of the assembling structure
