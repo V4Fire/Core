@@ -260,6 +260,13 @@ export default class PickObject extends Super {
 
 #### API
 
+##### constructor
+
+The instance constructor takes two parameters.
+The first one is a filter. The second one is an object with optional filter parameters.
+A filter can be defined via a string, regular expression, or function.
+By providing the optional `multiple` parameter, you can customize should or not to stop filter after the first successful token.
+
 ##### processToken
 
 Processes the passed JSON token and yields tokens.
