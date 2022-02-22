@@ -68,7 +68,7 @@ for await (const val of parser) {
 }
 ```
 
-### Getters
+### Properties
 
 #### key
 
@@ -78,6 +78,8 @@ A property key of the active assembling value.
 
 A value of the active assembled item.
 If it is a container (object or array), all new assembled values will be added to it.
+
+### Getters
 
 #### isValueAssembled
 
