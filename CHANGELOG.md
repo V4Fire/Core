@@ -13,10 +13,6 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 ## v3.??.?? (2022-??-??)
 
-#### :boom: Breaking Change
-
-* Now to clone and freeze server responses is used Proxy API if it supported `core/request/reponse`
-
 #### :rocket: New Feature
 
 * Added a new module `core/json/stream`
