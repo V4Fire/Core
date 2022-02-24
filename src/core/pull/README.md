@@ -1,60 +1,57 @@
 # core/pull
-Примерно так себе представляю API этого модуля:
-
+### Usage
 ```js
 import Pull from 'core/pull';
 
 const pull = new Pull(
-  // Функция, возвращающая значение, которое должно храниться в пуле
-  () => {},
+  // function return value that are stored in pull
+  ()=>Object(),
 
-  // Стартовое количество ячеек в пуле
+  // start number of objects in pull
   10
 );
 
-// Размер пула
+// pull size
 console.log(pull.size);
 
-// Максимальный размер пула если задан (см передачу параметров)
+// max size of pull if exist (look constructor params)
 console.log(pull.maxSize);
 
-// Количество доступных ресурсов
+// Number of objects in pull that are avalible now
 console.log(pull.available);
 
-// Если мест нет, то кинет исключение
-// вызов free освобождает ресурс и возвращает в пул
+// if there zero object throw error
+// call free will return the value back to pull
 const {free, value} = pull.take();
 
-// Если мест нет, то добавляет в пул новое значение и возвращает его
+// if there aren't any avalible objects, will create one
 const {free, value} = pull.takeOrCreate();
 
-// Возвращает core/promise/sync (если мест нет, то промис не зарезолвится пока места не появятся)
+// return core/promise/sync (wait until something call free(value)
 pull.takeOrWait().then(({free, value}) => {});
 ```
 
-Конструктор pull может принимать объект доп настроек
+Pull's constructor can except additional settings
 
 ```js
 import Pull from 'core/pull';
 
 const pull = new Pull(
-  // Функция, возвращающая значение, которое должно храниться в пуле
   () => {},
-
-  // Стартовое количество ячеек в пуле
   10,
 
   {
-    // После достижения 20 takeOrCreate будет тоже бросать исключение
+    // After Pull's size equal 20
+    // takeOrCreate will throw error if there aren't avalible objects
     maxSize: 20,
 
-    // Обработчик, который будет вызывать при вызове take.
-    // Принимает ссылку на освобождаемый ресурс и ссылку на сам пул, а также параметры переданные в take и аналоги (если есть)
-    onTake: (resource, pull, ...args) => {},
+    // Hook that will be called before take, takeOrCreate
+    // Expect value that will be returned from take, link to pull, and additional params
+    onTake: (resource, pull, args) => {},
 
-    // Обработчик, который будет вызывать при вызове free.
-    // Принимает ссылку на освобождаемый ресурс и ссылку на сам пул, а также параметры переданные в free (если есть)
-    onFree: (resource, pull, ...args) => {}
+    // Hook that will be called before free
+    // Expect value that are given to free, link to pull, and additional params
+    onFree: (resource, pull, args) => {}
   }
 );
 ```
