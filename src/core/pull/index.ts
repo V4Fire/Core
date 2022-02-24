@@ -84,8 +84,8 @@ export default class Pull<T> {
 		this.available = size;
 
 		for (let i = 0; i < size; i++) {
-this.stack.push(objectFactory());
-}
+			this.stack.push(objectFactory());
+		}
 
 	}
 

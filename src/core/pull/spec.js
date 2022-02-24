@@ -17,24 +17,24 @@ describe('core/pull', () => {
 			let takeCount = 0;
 			const settings = {};
 			if(maxSize) {
- settings.maxSize = maxSize;
-}
+			 settings.maxSize = maxSize;
+			}
 
 			if(onFree) {
- settings.onFree = (value, pull, args) => {
-				freeCount++;
-				lastValue = value;
-				fArgs = args;
-			};
+					settings.onFree = (value, pull, args) => {
+					freeCount++;
+					lastValue = value;
+					fArgs = args;
+				};
 }
 
 			if(onTake) {
- settings.onTake = (value, pull, args) => {
-				takeCount++;
-				lastValue = value;
-				fArgs = args;
-			};
-}
+				settings.onTake = (value, pull, args) => {
+					takeCount++;
+					lastValue = value;
+					fArgs = args;
+				};
+			}
 
 			const pull = new Pull(Object, 10, settings);
 
@@ -65,8 +65,8 @@ describe('core/pull', () => {
 			expect(pull.available).toBe(9);
 
 		  for(let i = 0; i < 10; i++) {
- pull.takeOrCreate();
-}
+			 pull.takeOrCreate();
+			}
 
 			expect(pull.available).toBe(0);
 			expect(pull.size).toBe(11);
