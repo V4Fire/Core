@@ -13,7 +13,7 @@
 
 import { SyncPromise } from 'core/prelude/structures';
 
-interface SpecialSettings<T>{
+interface SpecialSettings<T>   {
 	maxSize:number;
 	onTake(value:T, pull:Pull<T>, args:any): void;
 	onFree(value:T, pull:Pull<T>, args:any): void;
