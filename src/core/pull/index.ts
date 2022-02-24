@@ -11,16 +11,28 @@
  * @packageDocumentation
  */
 
-import AbstractPull, { SpecialSettings, ReturnType } from 'core/pull/interface';
 import { SyncPromise } from 'core/prelude/structures';
+
+ interface SpecialSettings<T>{
+	maxSize:number;
+	onTake:(value:T,pull:Pull<T>,args:any)=>void;
+	onFree:(value:T,pull:Pull<T>,args:any)=>void;
+}
+
+ interface ReturnType<T>{
+	free(val:T, args:any): void;
+	value:T;
+}
 
 /**
  * Simple implementation of pull with stack
  * @typeparam T - pull element
  */
-export default class Pull<T> extends AbstractPull<T> {
+export default class Pull<T>  {
 
-	/** @inheritDoc  */
+	/**
+	 * Amount of available now objects
+	 */
 	available: number;
 
 	/**
@@ -28,16 +40,30 @@ export default class Pull<T> extends AbstractPull<T> {
 	 */
 	stack:T[]=[];
 
-	/** @inheritDoc  */
-	onFree:(resources: T, pull: AbstractPull<T>, args: any)=> void;
+	/**
+	 * Hook that are activated before (free) function
+	 * @param value value from free(value)
+	 * @param pull this pull
+	 * @param args params that are given in free(value,...args)
+	 */
+	onFree:(value: T, pull: Pull<T>, args: any)=> void;
 
-	/** @inheritDoc  */
-	onTake:(resources: T, pull: AbstractPull<T>, args: any)=> void;
+	/**
+	 * Hook that are activated before this.take or this.takeOrCreate
+	 * @param value value that are return from this.take
+	 * @param pull this pull
+	 * @param args params in this.take(...args)
+	 */
+	onTake:(value: T, pull: Pull<T>, args: any)=> void;
 
-	/** @inheritDoc  */
+	/**
+	 * Amount of objects that are available or busy in pull
+	 */
 	size: number;
 
-	/** @inheritDoc  */
+	/**
+	 * Max size of pull, default value infinity
+	 */
 	maxSize:number;
 
 	/**
@@ -48,7 +74,6 @@ export default class Pull<T> extends AbstractPull<T> {
 	 */
 	constructor(objectFactory:()=>T, size:number = 0,
 							settings:Partial<SpecialSettings<T>> = {}) {
-		super();
 		this.maxSize = settings.maxSize ?? Infinity;
 		this.onFree = settings.onFree ?? (() => 1);
 
@@ -63,10 +88,15 @@ export default class Pull<T> extends AbstractPull<T> {
 
 	}
 
-	/** @inheritDoc  */
+	/**
+	 * Factory from constructor argument
+	 */
 	readonly objectFactory=():T => (<T>{});
 
-	/** @inheritDoc  */
+	/**
+	 * Return object from pull. Throw error if pull is empty
+	 * @param args params for hooks
+	 */
 	take(...args:any): ReturnType<T> {
 		const value = this.stack.pop();
 		if(value === undefined) {
@@ -78,7 +108,10 @@ export default class Pull<T> extends AbstractPull<T> {
 		return {free: this.free.bind(this), value};
 	}
 
-	/** @inheritDoc  */
+	/**
+	 * Take but if this.take throw error create new object
+	 * @param args params for hooks
+	 */
 	takeOrCreate(...args:any): ReturnType<T> {
 		if(this.available === 0 && this.size < this.maxSize) {
 			this.size++;
@@ -89,7 +122,10 @@ export default class Pull<T> extends AbstractPull<T> {
 		return this.take(...args);
 	}
 
-	/** @inheritDoc  */
+	/**
+	 * Return a Promise
+	 * @param args params for hooks
+	 */
 	takeOrWait(...args:any): SyncPromise<ReturnType<T>> {
 		return new SyncPromise((r) => {
 			const fn = () => {
