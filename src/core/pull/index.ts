@@ -5,10 +5,12 @@
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
+
 /**
  * [[include:core/pull/README.md]]
  * @packageDocumentation
  */
+
 import AbstractPull, { SpecialSettings, ReturnType } from 'core/pull/interface';
 import { SyncPromise } from 'core/prelude/structures';
 
