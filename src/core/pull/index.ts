@@ -15,8 +15,8 @@ import { SyncPromise } from 'core/prelude/structures';
 
  interface SpecialSettings<T>{
 	maxSize:number;
-	onTake:(value:T,pull:Pull<T>,args:any)=>void;
-	onFree:(value:T,pull:Pull<T>,args:any)=>void;
+	onTake(value:T, pull:Pull<T>, args:any): void;
+	onFree(value:T, pull:Pull<T>, args:any): void;
 }
 
  interface ReturnType<T>{
@@ -28,7 +28,7 @@ import { SyncPromise } from 'core/prelude/structures';
  * Simple implementation of pull with stack
  * @typeparam T - pull element
  */
-export default class Pull<T>  {
+export default class Pull<T> {
 
 	/**
 	 * Amount of available now objects
@@ -36,7 +36,7 @@ export default class Pull<T>  {
 	available: number;
 
 	/**
-	 * data structure that contain pull's object
+	 * Data structure that contain pull's object
 	 */
 	stack:T[]=[];
 
@@ -67,7 +67,7 @@ export default class Pull<T>  {
 	maxSize:number;
 
 	/**
-	 * constructor that can create object immediately
+	 * Constructor that can create object immediately
 	 * @param objectFactory
 	 * @param size amount of object that will be created at initialization
 	 * @param settings settings like "max pull size" and hooks
@@ -83,8 +83,9 @@ export default class Pull<T>  {
 		this.size = size;
 		this.available = size;
 
-		for (let i = 0; i < size; i++)
-			this.stack.push(objectFactory());
+		for (let i = 0; i < size; i++) {
+this.stack.push(objectFactory());
+}
 
 	}
 
@@ -140,7 +141,7 @@ export default class Pull<T>  {
 	}
 
 	/**
-	 * function that add value to pull
+	 * Function that add value to pull
 	 * @param value pull's object
 	 * @param args args for hook
 	 */
