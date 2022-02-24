@@ -13,13 +13,13 @@
 
 import { SyncPromise } from 'core/prelude/structures';
 
- interface SpecialSettings<T>{
+interface SpecialSettings<T>{
 	maxSize:number;
 	onTake(value:T, pull:Pull<T>, args:any): void;
 	onFree(value:T, pull:Pull<T>, args:any): void;
 }
 
- interface ReturnType<T>{
+interface ReturnType<T>{
 	free(val:T, args:any): void;
 	value:T;
 }
@@ -136,6 +136,7 @@ export default class Pull<T> {
 		};
 
 			fn();
+			// Attention
 			setInterval(fn, 100);
 		});
 	}
