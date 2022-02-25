@@ -50,6 +50,7 @@ export default class Pull<T> {
 
 	/**
 	 * Hook that are activated before this.take or this.takeOrCreate
+	 *
 	 * @param value value that are return from this.take
 	 * @param pull this pull
 	 * @param args params in this.take(...args)
