@@ -11,7 +11,7 @@
  * @packageDocumentation
  */
 
-import { SyncPromise } from 'core/prelude/structures';
+import SyncPromise from 'core/promise/sync';
 
 interface SpecialSettings<T>{
 	maxSize:number;
