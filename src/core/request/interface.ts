@@ -106,6 +106,17 @@ export interface WrappedDecoder<I = unknown, O = unknown> {
 export type Decoders = Iterable<Decoder>;
 export type WrappedDecoders = Iterable<WrappedDecoder>;
 
+export interface StreamDecoder<I = unknown, O = unknown> {
+	(data: I, params: MiddlewareParams, response: Response): Iterable<O> | AsyncIterable<O>;
+}
+
+export interface WrappedStreamDecoder<I = unknown, O = unknown> {
+	(data: I, response: Response): Iterable<O> | AsyncIterable<O>;
+}
+
+export type StreamDecoders = Iterable<StreamDecoder>;
+export type WrappedStreamDecoders = Iterable<WrappedStreamDecoder>;
+
 export interface RequestResponseChunk {
 	loaded: number;
 	total?: number;
@@ -374,7 +385,7 @@ export interface CreateRequestOptions<D = unknown> {
 	offlineCacheTTL?: number;
 
 	/**
-	 * List of request methods that supports caching
+	 * List of request methods that support caching
 	 * @default `['GET']`
 	 */
 	cacheMethods?: RequestMethod[];
@@ -435,6 +446,14 @@ export interface CreateRequestOptions<D = unknown> {
 	 * the first function will pass a result to the next function from the sequence, etc.
 	 */
 	decoder?: Decoder | Decoders;
+
+	/**
+	 * A function (or a sequence of functions) takes the current request response data chunk
+	 * and yields a new chunk to respond via an iterator. If you provide a sequence of functions,
+	 * the first function will pass a result to the next function from the sequence, etc.
+	 * This parameter is used when you're parsing responses in a stream form.
+	 */
+	streamDecoder?: StreamDecoder | StreamDecoders;
 
 	/**
 	 * Reviver function for `JSON.parse` or false to disable defaults.

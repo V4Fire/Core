@@ -59,8 +59,17 @@ export default class StreamBuffer<T = unknown> {
 	 * Returns an async iterator allowing to go through the stream
 	 */
 	[Symbol.asyncIterator](): AsyncIterableIterator<T> {
-		const that = this;
-		return Object.cast(createIter());
+		const
+			that = this,
+			iter = createIter();
+
+		return {
+			[Symbol.asyncIterator]() {
+				return this;
+			},
+
+			next: iter.next.bind(iter)
+		};
 
 		async function* createIter() {
 			that.isAsyncIteratorInvoked = true;

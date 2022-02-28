@@ -18,15 +18,26 @@ import { IS_NODE } from 'core/env';
 import { convertIfDate } from 'core/json';
 import { getDataType } from 'core/mime-type';
 
-import Range from 'core/range';
+import Parser, { Token } from 'core/json/stream/parser';
 import AbortablePromise from 'core/promise/abortable';
+
+import Range from 'core/range';
 import symbolGenerator from 'core/symbol';
 
 import Headers from 'core/request/headers';
 import { FormData, Blob } from 'core/request/engines';
 
 import { defaultResponseOpts, noContentStatusCodes } from 'core/request/response/const';
-import type { OkStatuses, WrappedDecoders, RequestResponseChunk } from 'core/request/interface';
+
+import type {
+
+	OkStatuses,
+	RequestResponseChunk,
+
+	WrappedDecoders,
+	WrappedStreamDecoders
+
+} from 'core/request/interface';
 
 import type {
 
@@ -134,6 +145,11 @@ export default class Response<
 	readonly decoders: WrappedDecoders;
 
 	/**
+	 * Sequence of response decoders to apply for chunks when you are parsing response in a stream form
+	 */
+	readonly streamDecoders: WrappedStreamDecoders;
+
+	/**
 	 * Reviver function for `JSON.parse`
 	 * @default `convertIfDate`
 	 */
@@ -236,6 +252,14 @@ export default class Response<
 
 		} else {
 			this.decoders = Object.isFunction(p.decoder) ? [p.decoder] : p.decoder;
+		}
+
+		// tslint:disable-next-line:prefer-conditional-expression
+		if (p.streamDecoder == null) {
+			this.streamDecoders = [];
+
+		} else {
+			this.streamDecoders = Object.isFunction(p.streamDecoder) ? [p.streamDecoder] : p.streamDecoder;
 		}
 
 		if (Object.isFunction(p.jsonReviver)) {
@@ -406,6 +430,23 @@ export default class Response<
 	}
 
 	/**
+	 * Parse the response data stream as a JSON tokens and yields them via an async iterator
+	 */
+	@once
+	jsonStream(): AsyncIterableIterator<Token> {
+		const
+			iter = Parser.from(this.textStream());
+
+		return {
+			[Symbol.asyncIterator]() {
+				return this;
+			},
+
+			next: iter.next.bind(iter)
+		};
+	}
+
+	/**
 	 * Parses the response body as a FormData object and returns it
 	 */
 	@once
@@ -496,79 +537,35 @@ export default class Response<
 	 */
 	@once
 	text(): AbortablePromise<string> {
-		const
-			that = this;
-
 		return AbortablePromise.resolveAndCall(this.body, this.parent)
-			.then<string>(decode);
+			.then<string>((body) => this.decodeToString(body));
+	}
 
-		function decode(body: ResponseTypeValueP): CanPromise<string> {
-			if (body == null) {
-				return '';
-			}
+	/**
+	 * Parse the response data stream as a text chunks and yields them via an async iterator
+	 */
+	@once
+	textStream(): AsyncIterableIterator<string> {
+		const
+			iter = this[Symbol.asyncIterator]();
 
-			if (Object.isString(body)) {
-				return body;
-			}
+		const transformedIter = {
+			[Symbol.asyncIterator]() {
+				return this;
+			},
 
-			if (Object.isDictionary(body)) {
-				return JSON.stringify(body);
-			}
-
-			if (!IS_NODE && body instanceof Document) {
-				return String(body);
-			}
-
-			if (body instanceof FormData) {
-				if (body.toString === Object.prototype.toString) {
-					const
-						res = {};
-
-					body.forEach((val, key) => {
-						res[key] = val;
-					});
-
-					return JSON.stringify(res);
-				}
-
-				return body.toString();
-			}
-
-			const
-				contentType = that.headers.get('Content-Type');
-
-			let
-				encoding = <BufferEncoding>'utf-8';
-
-			if (contentType != null) {
+			next: async () => {
 				const
-					search = /charset=(\S+)/.exec(contentType);
+					{done, value} = await iter.next();
 
-				if (search) {
-					encoding = <BufferEncoding>search[1].toLowerCase();
-				}
+				return {
+					done,
+					value: await this.decodeToString(value.data)
+				};
 			}
+		};
 
-			if (typeof TextDecoder !== 'undefined') {
-				const decoder = new TextDecoder(encoding, {fatal: true});
-				return decoder.decode(new DataView(Object.cast(body)));
-			}
-
-			return new AbortablePromise<string>((resolve, reject, onAbort) => {
-				const
-					reader = new FileReader();
-
-				reader.onload = () => resolve(String(reader.result));
-				reader.onerror = reject;
-				reader.onerror = reject;
-
-				that.blob().then((blob) => {
-					onAbort(() => reader.abort());
-					reader.readAsText(blob, encoding);
-				}).catch(stderr);
-
-			}, that.parent);
-		}
+		return this.applyStreamDecoders(transformedIter);
 	}
 
 	/**
@@ -577,24 +574,7 @@ export default class Response<
 	@once
 	blob(): AbortablePromise<Blob> {
 		return AbortablePromise.resolveAndCall(this.body, this.parent)
-			.then<Blob>((body) => {
-				const
-					type = this.headers.get('Content-Type') ?? '';
-
-				if (body == null) {
-					return new Blob([], {type});
-				}
-
-				if (body instanceof Blob) {
-					return body;
-				}
-
-				if (body instanceof ArrayBuffer || ArrayBuffer.isView(body)) {
-					return new Blob([body], {type});
-				}
-
-				return new Blob([body.toString()], {type});
-			});
+			.then<Blob>((body) => this.decodeToBlob(body));
 	}
 
 	/**
@@ -633,15 +613,15 @@ export default class Response<
 		let
 			res = AbortablePromise.resolve(data, this.parent);
 
-		Object.forEach(decoders, (fn) => {
+		for (const decoder of decoders) {
 			res = res.then((data) => {
 				if (data != null && Object.isFrozen(data)) {
 					data = data.valueOf();
 				}
 
-				return fn(data, Object.cast(this));
+				return decoder(data, Object.cast(this));
 			});
-		});
+		}
 
 		res = res.then((data) => {
 			if (Object.isFrozen(data)) {
@@ -664,5 +644,140 @@ export default class Response<
 		});
 
 		return Object.cast(res);
+	}
+
+	/**
+	 * Applies the given decoders to the specified data stream and yields values via an asynchronous iterator
+	 *
+	 * @param stream
+	 * @param [decoders]
+	 */
+	protected applyStreamDecoders<T>(
+		stream: Iterable<unknown> | AsyncIterable<unknown>,
+		decoders: WrappedStreamDecoders = this.streamDecoders
+	): AsyncIterableIterator<T> {
+		const
+			that = this,
+			indexedDecoders = [...decoders];
+
+		return applyDecoders(stream);
+
+		async function* applyDecoders(
+			stream: Iterable<any> | AsyncIterable<any>,
+			currentDecoder: number = 0
+		): AsyncIterableIterator<any> {
+			const
+				decoder = indexedDecoders[currentDecoder];
+
+			for await (const val of stream) {
+				if (Object.isFunction(decoder)) {
+					const transformedStream = decoder(val, Object.cast(that));
+					yield* applyDecoders(transformedStream, currentDecoder + 1);
+
+				} else {
+					yield val;
+				}
+			}
+		}
+	}
+
+	/**
+	 * Converts the specified data to a Blob structure and returns it
+	 *
+	 * @param data
+	 * @param [type] - blob type, by default it takes from response headers
+	 */
+	protected decodeToBlob(
+		data: unknown,
+		type: string = this.headers.get('Content-Type') ?? ''
+	): Blob {
+		if (data == null) {
+			return new Blob([], {type});
+		}
+
+		if (data instanceof Blob) {
+			return data;
+		}
+
+		if (data instanceof ArrayBuffer || ArrayBuffer.isView(data)) {
+			return new Blob([data], {type});
+		}
+
+		return new Blob([Object.cast<object>(data).toString()], {type});
+	}
+
+	/**
+	 * Converts the specified data to a string and returns it
+	 *
+	 * @param data
+	 * @param [encoding] - string encoding
+	 */
+	protected decodeToString(data: unknown, encoding?: string): AbortablePromise<string> {
+		return AbortablePromise.resolveAndCall(data, this.parent)
+			.then<string>((body) => {
+				if (encoding == null) {
+					encoding = <BufferEncoding>'utf-8';
+
+					if (body == null) {
+						return '';
+					}
+
+					if (Object.isString(body)) {
+						return body;
+					}
+
+					if (Object.isDictionary(body)) {
+						return JSON.stringify(body);
+					}
+
+					if (!IS_NODE && body instanceof Document) {
+						return String(body);
+					}
+
+					if (body instanceof FormData) {
+						if (body.toString === Object.prototype.toString) {
+							const
+								res = {};
+
+							body.forEach((val, key) => {
+								res[key] = val;
+							});
+
+							return JSON.stringify(res);
+						}
+
+						return body.toString();
+					}
+
+					const
+						contentType = this.headers.get('Content-Type');
+
+					if (contentType != null) {
+						const
+							search = /charset=(\S+)/.exec(contentType);
+
+						if (search) {
+							encoding = <BufferEncoding>search[1].toLowerCase();
+						}
+					}
+				}
+
+				if (typeof TextDecoder !== 'undefined') {
+					const decoder = new TextDecoder(encoding, {fatal: true});
+					return decoder.decode(new DataView(Object.cast(body)));
+				}
+
+				return new AbortablePromise<string>((resolve, reject, onAbort) => {
+					const
+						reader = new FileReader();
+
+					onAbort(() => reader.abort());
+					reader.onload = () => resolve(String(reader.result));
+					reader.onerror = reject;
+
+					reader.readAsText(this.decodeToBlob(data), encoding);
+
+				}, this.parent);
+			});
 	}
 }

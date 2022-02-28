@@ -11,9 +11,19 @@ import type AbortablePromise from 'core/promise/abortable';
 import type { StatusCodes } from 'core/status-codes';
 import type { DataType } from 'core/mime-type';
 
-import type { OkStatuses, WrappedDecoders, WrappedDecoder } from 'core/request/interface';
-import type { defaultResponseOpts } from 'core/request/response/const';
+import type {
 
+	OkStatuses,
+
+	WrappedDecoder,
+	WrappedDecoders,
+
+	WrappedStreamDecoder,
+	WrappedStreamDecoders
+
+} from 'core/request/interface';
+
+import type { defaultResponseOpts } from 'core/request/response/const';
 import type { RawHeaders } from 'core/request/headers';
 
 export type ResponseModeType =
@@ -72,6 +82,7 @@ export interface ResponseOptions {
 	headers?: RawHeaders;
 
 	decoder?: WrappedDecoder | WrappedDecoders;
+	streamDecoder?: WrappedStreamDecoder | WrappedStreamDecoders;
 	jsonReviver?: JSONCb | false;
 }
 
