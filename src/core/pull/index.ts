@@ -12,17 +12,7 @@
  */
 
 import SyncPromise from 'core/promise/sync';
-
-interface SpecialSettings<T>{
-	maxSize:number;
-	onTake(value:T, pull:Pull<T>, args:any): void;
-	onFree(value:T, pull:Pull<T>, args:any): void;
-}
-
-interface ReturnType<T>{
-	free(val:T, args:any): void;
-	value:T;
-}
+import type { hook, ReturnType, SpecialSettings } from 'core/pull/interface';
 
 /**
  * Simple implementation of pull with stack
@@ -38,15 +28,16 @@ export default class Pull<T> {
 	/**
 	 * Data structure that contain pull's object
 	 */
-	stack:T[]=[];
+	stack: T[] = [];
 
 	/**
 	 * Hook that are activated before (free) function
+	 *
 	 * @param value value from free(value)
 	 * @param pull this pull
 	 * @param args params that are given in free(value,...args)
 	 */
-	onFree:(value: T, pull: Pull<T>, args: any)=> void;
+	onFree?: hook<T>;
 
 	/**
 	 * Hook that are activated before this.take or this.takeOrCreate
@@ -55,7 +46,7 @@ export default class Pull<T> {
 	 * @param pull this pull
 	 * @param args params in this.take(...args)
 	 */
-	onTake:(value: T, pull: Pull<T>, args: any)=> void;
+	onTake?: hook<T>;
 
 	/**
 	 * Amount of objects that are available or busy in pull
@@ -65,20 +56,28 @@ export default class Pull<T> {
 	/**
 	 * Max size of pull, default value infinity
 	 */
-	maxSize:number;
+	maxSize: number;
+
+	/**
+	 * Factory from constructor argument
+	 */
+	objectFactory: () => T;
 
 	/**
 	 * Constructor that can create object immediately
+	 *
 	 * @param objectFactory
 	 * @param size amount of object that will be created at initialization
 	 * @param settings settings like "max pull size" and hooks
 	 */
-	constructor(objectFactory:()=>T, size:number = 0,
-							settings:Partial<SpecialSettings<T>> = {}) {
-		this.maxSize = settings.maxSize ?? Infinity;
-		this.onFree = settings.onFree ?? (() => 1);
+	constructor(objectFactory: () => T,
+							size: number = 0,
+							settings: Partial<SpecialSettings<T>> = {}) {
 
-		this.onTake = settings.onTake ?? (() => 1);
+		this.maxSize = settings.maxSize ?? Infinity;
+		this.onFree = settings.onFree;
+
+		this.onTake = settings.onTake;
 
 		this.objectFactory = objectFactory;
 		this.size = size;
@@ -91,31 +90,35 @@ export default class Pull<T> {
 	}
 
 	/**
-	 * Factory from constructor argument
-	 */
-	readonly objectFactory=():T => (<T>{});
-
-	/**
 	 * Return object from pull. Throw error if pull is empty
+	 *
 	 * @param args params for hooks
 	 */
-	take(...args:any): ReturnType<T> {
+	take(...args: unknown[]): ReturnType<T> {
 		const value = this.stack.pop();
-		if(value === undefined) {
+		if (value === undefined) {
 			throw new Error('Pull is empty');
 		}
 
 		this.available--;
-		this.onTake(value, this, args);
-		return {free: this.free.bind(this), value};
+
+		if (this.onTake) {
+			this.onTake(value, this, args);
+		}
+
+		return {
+			free: this.free.bind(this),
+			value
+		};
 	}
 
 	/**
 	 * Take but if this.take throw error create new object
+	 *
 	 * @param args params for hooks
 	 */
-	takeOrCreate(...args:any): ReturnType<T> {
-		if(this.available === 0 && this.size < this.maxSize) {
+	takeOrCreate(...args: unknown[]): ReturnType<T> {
+		if (this.available === 0 && this.size < this.maxSize) {
 			this.size++;
 			this.available++;
 			this.stack.push(this.objectFactory());
@@ -126,29 +129,38 @@ export default class Pull<T> {
 
 	/**
 	 * Return a Promise
+	 *
 	 * @param args params for hooks
 	 */
-	takeOrWait(...args:any): SyncPromise<ReturnType<T>> {
+	takeOrWait(...args: unknown[]): SyncPromise<ReturnType<T>> {
+
 		return new SyncPromise((r) => {
+
 			const fn = () => {
-			if(this.available > 0) {
-				r(this.take(...args));
-			}
-		};
+				if (this.available > 0) {
+					r(this.take(...args));
+				}
+			};
 
 			fn();
 			// Attention
 			setInterval(fn, 100);
+
 		});
 	}
 
 	/**
 	 * Function that add value to pull
+	 *
 	 * @param value pull's object
 	 * @param args args for hook
 	 */
-	free(value:T, ...args:any):void {
-		this.onFree(value, this, args);
+	free(value: T, ...args: unknown[]): void {
+
+		if (this.onFree) {
+			this.onFree(value, this, args);
+		}
+
 		this.available++;
 		this.stack.push(value);
 	}
