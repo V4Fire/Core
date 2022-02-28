@@ -707,7 +707,7 @@ request('/users', {
 
 #### [cacheMethods = `['GET']`]
 
-A list of request methods that supports caching.
+A list of request methods that support caching.
 
 ```js
 import request from 'core/request';
