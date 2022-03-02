@@ -22,6 +22,15 @@ describe('core/promise', () => {
 			expect(await promise.reject('Boom!').catch((msg) => msg)).toBe('Boom!');
 		});
 
+		it('should provide a getter to check if the promise is pending', async () => {
+			const promise = createControllablePromise();
+
+			expect(promise.isPending).toBeTrue();
+			promise.resolve(10);
+
+			expect(promise.isPending).toBeFalse();
+		});
+
 		it('providing a custom promise constructor', () => {
 			const promise = createControllablePromise({
 				type: SyncPromise

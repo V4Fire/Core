@@ -7,6 +7,11 @@
  */
 
 export interface ControllablePromise<T = unknown> extends Promise<T> {
+	/**
+	 * True if the current promise is pending
+	 */
+	readonly isPending: boolean;
+
 	resolve(value?: T | PromiseLike<T>, ...args: any[]): this;
 	reject(reason: any, ...args: any[]): this;
 }

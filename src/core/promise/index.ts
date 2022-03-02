@@ -26,14 +26,37 @@ export function createControllablePromise(opts: CreateControllablePromiseOptions
 
 	let
 		resolve,
-		reject;
+		reject,
+		isPending = true;
 
 	const promise = <ControllablePromise>new Constr((res, rej, ...args) => {
-		resolve = res;
-		reject = rej;
+		resolve = (...args) => {
+			isPending = false;
 
-		opts.executor?.(res, rej, ...args);
+			// eslint-disable-next-line no-useless-call
+			res.call(null, ...args);
+		};
+
+		reject = (...args) => {
+			isPending = false;
+
+			// eslint-disable-next-line no-useless-call
+			rej.call(null, ...args);
+		};
+
+		opts.executor?.(resolve, reject, ...args);
 	});
+
+	if (!('isPending' in promise)) {
+		Object.defineProperty(promise, 'isPending', {
+			enumerable: true,
+			configurable: true,
+
+			get() {
+				return isPending;
+			}
+		});
+	}
 
 	promise.resolve = (...args) => {
 		resolve(...args);
