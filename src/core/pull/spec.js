@@ -82,6 +82,34 @@ describe('core/pull', () => {
 		expect(onClear.clear).toHaveBeenCalledTimes(1);
 	});
 
+	it('promise queue', () => {
+		const pull = new Pull(Array);
+		let i = 0;
+		pull.borrowOrWait().then(() => {
+			expect(i).toBe(1);
+			i++;
+		});
+
+		pull.borrowOrWait().then(() => {
+			expect(i).toBe(2);
+			i++;
+		});
+
+		pull.takeOrWait().then(() => {
+			expect(i).toBe(3);
+			i++;
+		});
+
+		i++;
+		const {value, free} = pull.takeOrCreate();
+		free(value);
+		const {value: value2, destroy: destroy2} = pull.takeOrCreate();
+		destroy2(value2);
+
+		expect(i).toBe(4);
+
+	});
+
 	it('simple usage', () => {
 		const test = (maxSize, onFree = true, onTake = true) => {
 			let freeCount = 0;

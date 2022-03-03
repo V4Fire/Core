@@ -11,9 +11,13 @@
  * @packageDocumentation
  */
 
+import { EventEmitter2 as EventEmitter } from 'eventemitter2';
+import { generate, serialize } from 'core/uuid';
 import SyncPromise from 'core/promise/sync';
 import type { hook, PartialOpts, ReturnType } from 'core/pull/interface';
 import { hashProperty, viewerCount } from 'core/pull/const';
+import { resolveAfterEvents } from 'core/event';
+import { Queue } from 'core/queue';
 
 /**
  * Simple implementation of pull with stack
@@ -71,6 +75,11 @@ export default class Pull<T> {
 	 */
 	objectFactory: (...args: unknown[]) => T;
 
+	eventEmitter: EventEmitter;
+
+	events: Queue<string> = new Queue();
+	borrowEventsInQueue: Map<string, true> = new Map();
+
 	/**
 	 * Constructor that initialize pull
 	 *
@@ -114,6 +123,8 @@ export default class Pull<T> {
 		this.destructor = settings.destructor;
 
 		this.objectFactory = objectFactory;
+
+		this.eventEmitter = new EventEmitter();
 
 		for (let i = 0; i < size; i++) {
 			this.createElement(createOpts);
@@ -170,19 +181,17 @@ export default class Pull<T> {
 	 * @param args - params for hashFn and hooks
 	 */
 	takeOrWait(...args: unknown[]): SyncPromise<ReturnType<T>> {
+		const event = serialize(generate());
 
 		return new SyncPromise((r) => {
+			if (this.canTake(...args) !== 0) {
+				r(this.take(...args));
+			}
 
-			const fn = () => {
-				if (this.canTake(...args) > 0) {
-					r(this.take(...args));
-				}
-			};
+			this.events.push(event);
 
-			fn();
-			// Attention
-			setInterval(fn, 100);
-
+			r(resolveAfterEvents(this.eventEmitter, event)
+				.then(() => this.take(...args)));
 		});
 	}
 
@@ -242,18 +251,20 @@ export default class Pull<T> {
 	 * @param args - params for hashFn and hooks
 	 */
 	borrowOrWait(...args: unknown[]): SyncPromise<ReturnType<T>> {
+		const event = this.hashFn(...args);
+
 		return new SyncPromise((r) => {
+			if (this.canBorrow(...args)) {
+				r(this.borrow(...args));
+			}
 
-			const fn = () => {
-				if (this.canBorrow(...args)) {
-					r(this.borrow(...args));
-				}
-			};
+			if (this.borrowEventsInQueue.get(event) === undefined) {
+				this.events.push(event);
+				this.borrowEventsInQueue.set(event, true);
+			}
 
-			fn();
-			// Attention
-			setInterval(fn, 100);
-
+			r(resolveAfterEvents(this.eventEmitter, event)
+				.then(() => this.borrow(...args)));
 		});
 	}
 
@@ -304,6 +315,12 @@ export default class Pull<T> {
 		if (value[viewerCount] === 0) {
 			this.storeForTake.get(value[hashProperty])
 				?.push(value);
+		}
+
+		const event = this.events.pop();
+		if (event !== undefined) {
+			this.eventEmitter.emit(event);
+			this.borrowEventsInQueue.delete(event);
 		}
 	}
 
