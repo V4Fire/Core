@@ -77,7 +77,14 @@ export default class Pull<T> {
 
 	eventEmitter: EventEmitter;
 
+	/**
+	 * Active event queue
+	 */
 	events: Queue<string> = new Queue();
+
+	/**
+	 * Active borrow events
+	 */
 	borrowEventsInQueue: Map<string, true> = new Map();
 
 	/**
