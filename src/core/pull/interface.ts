@@ -1,3 +1,11 @@
+/*!
+ * V4Fire Core
+ * https://github.com/V4Fire/Core
+ *
+ * Released under the MIT license
+ * https://github.com/V4Fire/Core/blob/master/LICENSE
+ */
+
 import type Pull from 'core/pull/index';
 
 export type hook<T> = (value: T, pull: Pull<T>, args: unknown[]) => void;
