@@ -34,18 +34,18 @@ export default class Pull<T> {
 	/**
 	 * Hook that are activated before (free) function
 	 *
-	 * @param value value from free(value)
-	 * @param pull this pull
-	 * @param args params that are given in free(value,...args)
+	 * @param value - value from free(value)
+	 * @param pull - this pull
+	 * @param args - params that are given in free(value,...args)
 	 */
 	onFree?: hook<T>;
 
 	/**
 	 * Hook that are activated before this.take or this.takeOrCreate
 	 *
-	 * @param value value that are return from this.take
-	 * @param pull this pull
-	 * @param args params in this.take(...args)
+	 * @param value - value that are return from this.take
+	 * @param pull - this pull
+	 * @param args - params in this.take(...args)
 	 */
 	onTake?: hook<T>;
 
@@ -133,7 +133,7 @@ export default class Pull<T> {
 	/**
 	 * Return object from pull. Throw error if pull is empty
 	 *
-	 * @param args params for hooks
+	 * @param args - params for hasFn and hooks
 	 */
 	take(...args: unknown[]): ReturnType<T> {
 		const value = this.storeForTake.get(this.hashFn(...args))
@@ -260,7 +260,7 @@ export default class Pull<T> {
 	/**
 	 * Clear pull from all resources with call this.destruct and call hook onClear
 	 *
-	 * @param args
+	 * @param args - params for hook
 	 */
 	clear(...args: unknown[]): void {
 		if (this.onClear !== undefined) {
@@ -284,8 +284,8 @@ export default class Pull<T> {
 	/**
 	 * Function that add value to pull
 	 *
-	 * @param value pull's object
-	 * @param args args for hook
+	 * @param value - pull's object
+	 * @param args - args for hook
 	 */
 	free(value: T, ...args: unknown[]): void {
 
@@ -293,7 +293,7 @@ export default class Pull<T> {
 			this.onFree(value, this, args);
 		}
 
-			value[viewerCount]--;
+		value[viewerCount]--;
 
 		if (value[viewerCount] === 0 &&
 			this.storeForBorrow.get(value[hashProperty]) === value) {
@@ -301,7 +301,7 @@ export default class Pull<T> {
 			this.storeForBorrow.delete(value[hashProperty]);
 		}
 
-		if(value[viewerCount] === 0) {
+		if (value[viewerCount] === 0) {
 			this.storeForTake.get(value[hashProperty])
 				?.push(value);
 		}
