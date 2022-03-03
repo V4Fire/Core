@@ -12,7 +12,8 @@
  */
 
 import SyncPromise from 'core/promise/sync';
-import type { hook, ReturnType, SpecialSettings } from 'core/pull/interface';
+import type { hook, PartialOpts, ReturnType } from 'core/pull/interface';
+import { hashProperty, viewerCount } from 'core/pull/const';
 
 /**
  * Simple implementation of pull with stack
@@ -21,14 +22,14 @@ import type { hook, ReturnType, SpecialSettings } from 'core/pull/interface';
 export default class Pull<T> {
 
 	/**
-	 * Amount of available now objects
-	 */
-	available: number;
-
-	/**
 	 * Data structure that contain pull's object
 	 */
-	stack: T[] = [];
+	storeForTake: Map<string, T[]> = new Map();
+
+	/**
+	 * Data structure that contain pull's shared object
+	 */
+	storeForBorrow: Map<string, T> = new Map();
 
 	/**
 	 * Hook that are activated before (free) function
@@ -49,44 +50,84 @@ export default class Pull<T> {
 	onTake?: hook<T>;
 
 	/**
-	 * Amount of objects that are available or busy in pull
+	 * Function that calculate hash of resource
+	 *
+	 * @param args - params passed to take or borrow or createOpts from constructor
 	 */
-	size: number;
+	hashFn: (...args: unknown[]) => string;
 
 	/**
-	 * Max size of pull, default value infinity
+	 * Hook that called on this.clear
 	 */
-	maxSize: number;
+	onClear?: (pull: Pull<T>, ...args: unknown[]) => void;
+
+	/**
+	 * Hook that destruct object
+	 */
+	destructor?: (resource: T) => void;
 
 	/**
 	 * Factory from constructor argument
 	 */
-	objectFactory: () => T;
+	objectFactory: (...args: unknown[]) => T;
+
+	/**
+	 * Constructor that initialize pull
+	 *
+	 * @param objectFactory
+	 * @param settings - settings like "max pull size" and hooks
+	 */
+	constructor(objectFactory: () => T,
+							settings: PartialOpts<T>)
 
 	/**
 	 * Constructor that can create object immediately
 	 *
 	 * @param objectFactory
-	 * @param size amount of object that will be created at initialization
-	 * @param settings settings like "max pull size" and hooks
+	 * @param size - amount of object that will be created at initialization
+	 * @param createOpts - options passed to objectFactory for first (size) elements
+	 * @param settings - settings like "max pull size" and hooks
 	 */
 	constructor(objectFactory: () => T,
-							size: number = 0,
-							settings: Partial<SpecialSettings<T>> = {}) {
+							size: number,
+							createOpts: unknown[],
+							settings: PartialOpts<T>)
 
-		this.maxSize = settings.maxSize ?? Infinity;
+	constructor(objectFactory: () => T,
+							size: number | PartialOpts<T> = {},
+							createOpts: unknown[] = [],
+							settings: PartialOpts<T> = {}) {
+
+		if (typeof size !== 'number') {
+			settings = size;
+			size = 0;
+		}
+
 		this.onFree = settings.onFree;
 
 		this.onTake = settings.onTake;
 
+		this.onClear = settings.onClear;
+
+		this.hashFn = settings.hashFn ?? (() => '');
+
+		this.destructor = settings.destructor;
+
 		this.objectFactory = objectFactory;
-		this.size = size;
-		this.available = size;
 
 		for (let i = 0; i < size; i++) {
-			this.stack.push(objectFactory());
+			this.createElement(createOpts);
 		}
+	}
 
+	/**
+	 * Return how many items of types ...args you can take
+	 *
+	 * @param args - args for hashFn
+	 */
+	canTake(...args: unknown[]): number {
+		const array = this.storeForTake.get(this.hashFn(...args));
+		return array !== undefined ? array.length : 0;
 	}
 
 	/**
@@ -95,33 +136,29 @@ export default class Pull<T> {
 	 * @param args params for hooks
 	 */
 	take(...args: unknown[]): ReturnType<T> {
-		const value = this.stack.pop();
+		const value = this.storeForTake.get(this.hashFn(...args))
+			?.pop();
 		if (value === undefined) {
 			throw new Error('Pull is empty');
 		}
-
-		this.available--;
 
 		if (this.onTake) {
 			this.onTake(value, this, args);
 		}
 
-		return {
-			free: this.free.bind(this),
-			value
-		};
+		value[viewerCount]++;
+
+		return this.returnValue(value);
 	}
 
 	/**
 	 * Take but if this.take throw error create new object
 	 *
-	 * @param args params for hooks
+	 * @param args - params for hashFn and hooks
 	 */
 	takeOrCreate(...args: unknown[]): ReturnType<T> {
-		if (this.available === 0 && this.size < this.maxSize) {
-			this.size++;
-			this.available++;
-			this.stack.push(this.objectFactory());
+		if (this.canTake(...args) === 0) {
+			this.createElement(args);
 		}
 
 		return this.take(...args);
@@ -130,14 +167,14 @@ export default class Pull<T> {
 	/**
 	 * Return a Promise
 	 *
-	 * @param args params for hooks
+	 * @param args - params for hashFn and hooks
 	 */
 	takeOrWait(...args: unknown[]): SyncPromise<ReturnType<T>> {
 
 		return new SyncPromise((r) => {
 
 			const fn = () => {
-				if (this.available > 0) {
+				if (this.canTake(...args) > 0) {
 					r(this.take(...args));
 				}
 			};
@@ -147,6 +184,101 @@ export default class Pull<T> {
 			setInterval(fn, 100);
 
 		});
+	}
+
+	/**
+	 * Return if you can borrow item with ...args
+	 *
+	 * @param args - params for hashFn and hooks
+	 */
+	canBorrow(...args: unknown[]): boolean {
+		const hash = this.hashFn(...args);
+
+		return !(!this.storeForBorrow.has(hash) &&
+			this.canTake(...args) === 0);
+	}
+
+	/**
+	 * Borrow shared resources from pull
+	 *
+	 * @param args - params for hashFn and hooks
+	 */
+	borrow(...args: unknown[]): ReturnType<T> {
+		const hash = this.hashFn(...args);
+		let value = this.storeForBorrow.get(hash);
+
+		if (value === undefined) {
+			value = this.storeForTake.get(hash)
+				?.pop();
+
+			if (value === undefined) {
+				throw Error('Pull is empty');
+			}
+
+			this.storeForBorrow.set(hash, value);
+		}
+
+		value[viewerCount]++;
+
+		return this.returnValue(value);
+	}
+
+	/**
+	 * Borrow resource from pull or create it if can't
+	 *
+	 * @param args - params for hashFn and hooks
+	 */
+	borrowOrCreate(...args: unknown[]): ReturnType<T> {
+		if (!this.canBorrow(...args)) {
+			this.createElement(args);
+		}
+
+		return this.borrow(...args);
+	}
+
+	/**
+	 * Borrow resource from pull or wait until somebody free resource
+	 *
+	 * @param args - params for hashFn and hooks
+	 */
+	borrowOrWait(...args: unknown[]): SyncPromise<ReturnType<T>> {
+		return new SyncPromise((r) => {
+
+			const fn = () => {
+				if (this.canBorrow(...args)) {
+					r(this.borrow(...args));
+				}
+			};
+
+			fn();
+			// Attention
+			setInterval(fn, 100);
+
+		});
+	}
+
+	/**
+	 * Clear pull from all resources with call this.destruct and call hook onClear
+	 *
+	 * @param args
+	 */
+	clear(...args: unknown[]): void {
+		if (this.onClear !== undefined) {
+			this.onClear(this, ...args);
+		}
+
+		this.storeForTake.forEach((array: T[]) => {
+			while (array.length !== 0) {
+				this.destructor?.(<T>array.pop());
+			}
+		});
+
+		this.storeForBorrow.forEach((el: T) => {
+			this.destructor?.(el);
+		});
+
+		this.storeForTake.clear();
+		this.storeForBorrow.clear();
 	}
 
 	/**
@@ -161,7 +293,48 @@ export default class Pull<T> {
 			this.onFree(value, this, args);
 		}
 
-		this.available++;
-		this.stack.push(value);
+			value[viewerCount]--;
+
+		if (value[viewerCount] === 0 &&
+			this.storeForBorrow.get(value[hashProperty]) === value) {
+
+			this.storeForBorrow.delete(value[hashProperty]);
+		}
+
+		if(value[viewerCount] === 0) {
+			this.storeForTake.get(value[hashProperty])
+				?.push(value);
+		}
 	}
+
+	createElement(args: unknown[]): void {
+		const hash = this.hashFn(...args);
+		if (!this.storeForTake.has(hash)) {
+			this.storeForTake.set(hash, []);
+		}
+
+		const value = this.objectFactory(...args);
+		value[hashProperty] = hash;
+		value[viewerCount] = 0;
+		this.storeForTake.get(hash)
+			?.push(value);
+	}
+
+	returnValue(value: T): ReturnType<T> {
+		return {
+			free: this.free.bind(this),
+			value,
+			destroy: (resource: T) => {
+				this.free(resource);
+
+				if (value[viewerCount] === 0) {
+					this.storeForTake.get(resource[hashProperty])
+						?.pop();
+
+					this.destructor?.(resource);
+				}
+			}
+		};
+	}
+
 }
