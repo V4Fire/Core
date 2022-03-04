@@ -22,7 +22,7 @@ describe('core/promise', () => {
 			expect(await promise.reject('Boom!').catch((msg) => msg)).toBe('Boom!');
 		});
 
-		it('should provide a getter to check if the promise is pending', async () => {
+		it('should provide a getter to check if the promise is pending', () => {
 			const promise = createControllablePromise();
 
 			expect(promise.isPending).toBeTrue();
@@ -71,6 +71,31 @@ describe('core/promise', () => {
 				promise.abort('Boom!');
 				await promise;
 			} catch {}
+
+			expect(res).toBe('Boom!');
+		});
+
+		it('providing a custom promise constructor and extra arguments', async () => {
+			const parent = AbortablePromise.reject('Boom!');
+
+			parent.catch(() => {
+				// Do nothing
+			});
+
+			const promise = createControllablePromise({
+				type: AbortablePromise,
+				args: [parent]
+			});
+
+			let
+				res;
+
+			try {
+				await promise.resolve(10);
+
+			} catch (err) {
+				res = err;
+			}
 
 			expect(res).toBe('Boom!');
 		});
