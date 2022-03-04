@@ -7,4 +7,5 @@
  */
 
 export const hashProperty = Symbol('hashProperty'),
-	viewerCount = Symbol('viewerCount');
+	viewerCount = Symbol('viewerCount'),
+	defaultValue = '';

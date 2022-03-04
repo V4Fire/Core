@@ -12,28 +12,35 @@
  */
 
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
-import { generate, serialize } from 'core/uuid';
-import SyncPromise from 'core/promise/sync';
-import type { hook, PartialOpts, ReturnType } from 'core/pull/interface';
-import { hashProperty, viewerCount } from 'core/pull/const';
 import { resolveAfterEvents } from 'core/event';
+
+import SyncPromise from 'core/promise/sync';
+
+import { generate, serialize } from 'core/uuid';
 import { Queue } from 'core/queue';
+
+import type { hook, Options, ReturnType } from 'core/pull/interface';
+import { defaultValue, hashProperty, viewerCount } from 'core/pull/const';
 
 /**
  * Simple implementation of pull with stack
  * @typeparam T - pull element
  */
 export default class Pull<T> {
+	/**
+	 * Factory from constructor argument
+	 */
+	protected objectFactory: (...args: unknown[]) => T;
 
 	/**
 	 * Data structure that contain pull's object
 	 */
-	storeForTake: Map<string, T[]> = new Map();
+	protected readonly resourceStore: Map<string, T[]> = new Map();
 
 	/**
 	 * Data structure that contain pull's shared object
 	 */
-	storeForBorrow: Map<string, T> = new Map();
+	protected readonly borrowedResourceStore: Map<string, T> = new Map();
 
 	/**
 	 * Hook that are activated before (free) function
@@ -42,7 +49,7 @@ export default class Pull<T> {
 	 * @param pull - this pull
 	 * @param args - params that are given in free(value,...args)
 	 */
-	onFree?: hook<T>;
+	protected onFree?: hook<T>;
 
 	/**
 	 * Hook that are activated before this.take or this.takeOrCreate
@@ -51,41 +58,36 @@ export default class Pull<T> {
 	 * @param pull - this pull
 	 * @param args - params in this.take(...args)
 	 */
-	onTake?: hook<T>;
+	protected onTake?: hook<T>;
 
 	/**
 	 * Function that calculate hash of resource
 	 *
 	 * @param args - params passed to take or borrow or createOpts from constructor
 	 */
-	hashFn: (...args: unknown[]) => string;
+	protected hashFn: (...args: unknown[]) => string;
 
 	/**
 	 * Hook that called on this.clear
 	 */
-	onClear?: (pull: Pull<T>, ...args: unknown[]) => void;
+	protected onClear?: (pull: Pull<T>, ...args: unknown[]) => void;
 
 	/**
 	 * Hook that destruct object
 	 */
-	destructor?: (resource: T) => void;
+	protected destructor?: (resource: T) => void;
 
-	/**
-	 * Factory from constructor argument
-	 */
-	objectFactory: (...args: unknown[]) => T;
-
-	eventEmitter: EventEmitter;
+	protected emitter: EventEmitter;
 
 	/**
 	 * Active event queue
 	 */
-	events: Queue<string> = new Queue();
+	protected events: Queue<string> = new Queue();
 
 	/**
 	 * Active borrow events
 	 */
-	borrowEventsInQueue: Map<string, true> = new Map();
+	protected borrowEventsInQueue: Map<string, true> = new Map();
 
 	/**
 	 * Constructor that initialize pull
@@ -93,8 +95,10 @@ export default class Pull<T> {
 	 * @param objectFactory
 	 * @param settings - settings like "max pull size" and hooks
 	 */
-	constructor(objectFactory: () => T,
-							settings: PartialOpts<T>)
+	constructor(
+		objectFactory: () => T,
+		settings: Options<T>
+	)
 
 	/**
 	 * Constructor that can create object immediately
@@ -104,34 +108,38 @@ export default class Pull<T> {
 	 * @param createOpts - options passed to objectFactory for first (size) elements
 	 * @param settings - settings like "max pull size" and hooks
 	 */
-	constructor(objectFactory: () => T,
-							size: number,
-							createOpts: unknown[],
-							settings: PartialOpts<T>)
+	constructor(
+		objectFactory: () => T,
+		size: number,
+		createOpts: unknown[],
+		settings: Options<T>
+	)
 
-	constructor(objectFactory: () => T,
-							size: number | PartialOpts<T> = {},
-							createOpts: unknown[] = [],
-							settings: PartialOpts<T> = {}) {
+	constructor(
+		objectFactory: () => T,
+		size: number | Options<T> = {},
+		createOpts: unknown[] = [],
+		opts: Options<T> = {}
+	) {
 
-		if (typeof size !== 'number') {
-			settings = size;
+		if (!Object.isNumber(size)) {
+			opts = size;
 			size = 0;
 		}
 
-		this.onFree = settings.onFree;
+		this.onFree = opts.onFree;
 
-		this.onTake = settings.onTake;
+		this.onTake = opts.onTake;
 
-		this.onClear = settings.onClear;
+		this.onClear = opts.onClear;
 
-		this.hashFn = settings.hashFn ?? (() => '');
+		this.hashFn = opts.hashFn ?? (() => defaultValue);
 
-		this.destructor = settings.destructor;
+		this.destructor = opts.destructor;
 
 		this.objectFactory = objectFactory;
 
-		this.eventEmitter = new EventEmitter();
+		this.emitter = new EventEmitter();
 
 		for (let i = 0; i < size; i++) {
 			this.createElement(createOpts);
@@ -144,7 +152,7 @@ export default class Pull<T> {
 	 * @param args - args for hashFn
 	 */
 	canTake(...args: unknown[]): number {
-		const array = this.storeForTake.get(this.hashFn(...args));
+		const array = this.resourceStore.get(this.hashFn(...args));
 		return array !== undefined ? array.length : 0;
 	}
 
@@ -154,9 +162,10 @@ export default class Pull<T> {
 	 * @param args - params for hasFn and hooks
 	 */
 	take(...args: unknown[]): ReturnType<T> {
-		const value = this.storeForTake.get(this.hashFn(...args))
+		const value = this.resourceStore.get(this.hashFn(...args))
 			?.pop();
-		if (value === undefined) {
+
+		if (value == null) {
 			throw new Error('Pull is empty');
 		}
 
@@ -197,7 +206,7 @@ export default class Pull<T> {
 
 			this.events.push(event);
 
-			r(resolveAfterEvents(this.eventEmitter, event)
+			r(resolveAfterEvents(this.emitter, event)
 				.then(() => this.take(...args)));
 		});
 	}
@@ -210,7 +219,7 @@ export default class Pull<T> {
 	canBorrow(...args: unknown[]): boolean {
 		const hash = this.hashFn(...args);
 
-		return !(!this.storeForBorrow.has(hash) &&
+		return !(!this.borrowedResourceStore.has(hash) &&
 			this.canTake(...args) === 0);
 	}
 
@@ -221,18 +230,15 @@ export default class Pull<T> {
 	 */
 	borrow(...args: unknown[]): ReturnType<T> {
 		const hash = this.hashFn(...args);
-		let value = this.storeForBorrow.get(hash);
+		let value = this.borrowedResourceStore.get(hash);
 
-		if (value === undefined) {
-			value = this.storeForTake.get(hash)
-				?.pop();
+		value = value == null ? this.resourceStore.get(hash)?.pop() : value;
 
-			if (value === undefined) {
-				throw Error('Pull is empty');
-			}
-
-			this.storeForBorrow.set(hash, value);
+		if (value == null) {
+			throw Error('Pull is empty');
 		}
+
+		this.borrowedResourceStore.set(hash, value);
 
 		value[viewerCount]++;
 
@@ -265,12 +271,12 @@ export default class Pull<T> {
 				r(this.borrow(...args));
 			}
 
-			if (this.borrowEventsInQueue.get(event) === undefined) {
+			if (this.borrowEventsInQueue.get(event) == null) {
 				this.events.push(event);
 				this.borrowEventsInQueue.set(event, true);
 			}
 
-			r(resolveAfterEvents(this.eventEmitter, event)
+			r(resolveAfterEvents(this.emitter, event)
 				.then(() => this.borrow(...args)));
 		});
 	}
@@ -285,18 +291,18 @@ export default class Pull<T> {
 			this.onClear(this, ...args);
 		}
 
-		this.storeForTake.forEach((array: T[]) => {
+		this.resourceStore.forEach((array: T[]) => {
 			while (array.length !== 0) {
 				this.destructor?.(<T>array.pop());
 			}
 		});
 
-		this.storeForBorrow.forEach((el: T) => {
+		this.borrowedResourceStore.forEach((el: T) => {
 			this.destructor?.(el);
 		});
 
-		this.storeForTake.clear();
-		this.storeForBorrow.clear();
+		this.resourceStore.clear();
+		this.borrowedResourceStore.clear();
 	}
 
 	/**
@@ -306,45 +312,48 @@ export default class Pull<T> {
 	 * @param args - args for hook
 	 */
 	free(value: T, ...args: unknown[]): void {
-
 		if (this.onFree) {
 			this.onFree(value, this, args);
 		}
 
 		value[viewerCount]--;
 
-		if (value[viewerCount] === 0 &&
-			this.storeForBorrow.get(value[hashProperty]) === value) {
+		if (
+			value[viewerCount] === 0 &&
+			this.borrowedResourceStore.get(value[hashProperty]) === value
+		) {
 
-			this.storeForBorrow.delete(value[hashProperty]);
+			this.borrowedResourceStore.delete(value[hashProperty]);
 		}
 
 		if (value[viewerCount] === 0) {
-			this.storeForTake.get(value[hashProperty])
+			this.resourceStore.get(value[hashProperty])
 				?.push(value);
 		}
 
 		const event = this.events.pop();
+
 		if (event !== undefined) {
-			this.eventEmitter.emit(event);
+			this.emitter.emit(event);
 			this.borrowEventsInQueue.delete(event);
 		}
 	}
 
-	createElement(args: unknown[]): void {
+	protected createElement(args: unknown[]): void {
 		const hash = this.hashFn(...args);
-		if (!this.storeForTake.has(hash)) {
-			this.storeForTake.set(hash, []);
+
+		if (!this.resourceStore.has(hash)) {
+			this.resourceStore.set(hash, []);
 		}
 
 		const value = this.objectFactory(...args);
 		value[hashProperty] = hash;
 		value[viewerCount] = 0;
-		this.storeForTake.get(hash)
+		this.resourceStore.get(hash)
 			?.push(value);
 	}
 
-	returnValue(value: T): ReturnType<T> {
+	protected returnValue(value: T): ReturnType<T> {
 		return {
 			free: this.free.bind(this),
 			value,
@@ -352,7 +361,7 @@ export default class Pull<T> {
 				this.free(resource);
 
 				if (value[viewerCount] === 0) {
-					this.storeForTake.get(resource[hashProperty])
+					this.resourceStore.get(resource[hashProperty])
 						?.pop();
 
 					this.destructor?.(resource);
