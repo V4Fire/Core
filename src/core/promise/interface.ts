@@ -37,12 +37,24 @@ export interface ControllablePromiseRejectHandler {
 	(reason?: unknown, ...args: any[]): AnyToIgnore;
 }
 
-export interface CreateControllablePromiseOptions<T = unknown> {
+export interface ControllablePromiseExecutor<T = unknown> {
+	(
+		resolve: ControllablePromiseResolveHandler<T>,
+		reject: ControllablePromiseRejectHandler,
+		...args: any[]
+	): AnyToIgnore;
+}
+
+export interface ControllablePromiseConstructor<T = unknown> {
+	new(executor: ControllablePromiseExecutor<T>, ...args: any[]): PromiseLike<T>;
+}
+
+export interface CreateControllablePromiseOptions<T extends ControllablePromiseConstructor> {
 	/**
 	 * Promise constructor
 	 * @default `Promise`
 	 */
-	type?: PromiseConstructor;
+	type?: T;
 
 	/**
 	 * Promise constructor executor
@@ -52,7 +64,7 @@ export interface CreateControllablePromiseOptions<T = unknown> {
 	 * @param args
 	 */
 	executor?(
-		resolve: ControllablePromiseResolveHandler<T>,
+		resolve: ControllablePromiseResolveHandler,
 		reject: ControllablePromiseRejectHandler,
 		...args: any[]
 	): AnyToIgnore;

@@ -6,7 +6,13 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import type { ControllablePromise, CreateControllablePromiseOptions } from 'core/promise/interface';
+import type {
+
+	ControllablePromise,
+	ControllablePromiseConstructor,
+	CreateControllablePromiseOptions
+
+} from 'core/promise/interface';
 
 export * from 'core/promise/interface';
 
@@ -20,7 +26,9 @@ export * from 'core/promise/interface';
  * promise.resolve(10);
  * ```
  */
-export function createControllablePromise(opts: CreateControllablePromiseOptions = {}): ControllablePromise {
+export function createControllablePromise<T extends ControllablePromiseConstructor>(
+	opts: CreateControllablePromiseOptions<T> = {}
+): ControllablePromise<T extends (new(...args: any) => infer R) ? R : Promise<unknown>> {
 	const
 		Constr = opts.type ?? Promise,
 		args = opts.args ?? [];
@@ -51,7 +59,7 @@ export function createControllablePromise(opts: CreateControllablePromiseOptions
 	};
 
 	// @ts-ignore (args is an iterable)
-	const promise = <ControllablePromise>new Constr(executor, ...args);
+	const promise = <ControllablePromise<T>>new Constr(executor, ...args);
 
 	if (!('isPending' in promise)) {
 		Object.defineProperty(promise, 'isPending', {
@@ -74,5 +82,5 @@ export function createControllablePromise(opts: CreateControllablePromiseOptions
 		return promise;
 	};
 
-	return promise;
+	return Object.cast(promise);
 }
