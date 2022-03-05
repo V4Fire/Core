@@ -21,8 +21,7 @@ export interface Options<T> {
 	 * @param pull - this pull
 	 * @param args - params in this.take(...args)
 	 */
-	// eslint-disable-next-line @typescript-eslint/method-signature-style
-	onTake?: (value: T, pull: Pull<T>, args: any) => void;
+	onTake?: hook<T>;
 
 	/**
 	 * Hook that are activated before (free) function
@@ -31,8 +30,7 @@ export interface Options<T> {
 	 * @param pull - this pull
 	 * @param args - params that are given in free(value,...args)
 	 */
-	// eslint-disable-next-line @typescript-eslint/method-signature-style
-	onFree?: (value: T, pull: Pull<T>, args: any) => void;
+	onFree?: hook<T>;
 
 	/**
 	 * Function that calculate hash of resource
