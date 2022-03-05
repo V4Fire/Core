@@ -12,9 +12,10 @@
  */
 
 import log from 'core/log';
+import { isOnline } from 'core/net';
 
 import AbortablePromise from 'core/promise/abortable';
-import { isOnline } from 'core/net';
+import { createControllablePromise } from 'core/promise';
 
 import Response from 'core/request/response';
 import RequestError from 'core/request/error';
@@ -243,6 +244,12 @@ function request<D = unknown>(
 							return;
 						}
 					}
+
+				} else if (requestParams.engine.pendingCache !== false) {
+					void ctx.pendingCache.set(cacheKey, Object.cast(createControllablePromise({
+						type: AbortablePromise,
+						args: [parent]
+					})));
 				}
 
 				fromCache = await AbortablePromise.resolve(ctx.cache.has(cacheKey), parent);
@@ -270,8 +277,10 @@ function request<D = unknown>(
 					decoders: ctx.decoders
 				};
 
-				const
-					createReq = () => requestParams.engine(reqOpts);
+				const createReq = () => {
+					const {engine} = requestParams;
+					return engine(reqOpts, Object.cast(middlewareParams));
+				};
 
 				if (requestParams.retry != null) {
 					const retryParams: RetryOptions = Object.isNumber(requestParams.retry) ?
