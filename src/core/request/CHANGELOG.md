@@ -11,6 +11,10 @@ Changelog
 
 ## v3.??.?? (2022-??-??)
 
+#### :rocket: New Feature
+
+* Now `RequestEngine` will take `MiddlewareParams` as a second argument
+
 #### :bug: Bug Fix
 
 * Fixed a race condition while checking and saving pending requests to the cache

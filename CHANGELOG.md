@@ -15,6 +15,8 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :rocket: New Feature
 
+* Now `RequestEngine` will take `MiddlewareParams` as a second argument `core/request`
+
 * `core/promise`:
   * Added a new promise wrapper `createControllablePromise`
   * Added a new promise helper `isControllablePromise`
