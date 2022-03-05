@@ -674,7 +674,7 @@ export interface RequestOptions {
  * Request engine
  */
 export interface RequestEngine {
-	(params: RequestOptions): AbortablePromise<Response>;
+	(request: RequestOptions, params: MiddlewareParams): AbortablePromise<Response>;
 
 	/**
 	 * A flag indicates that the active requests with the same request hash can be merged

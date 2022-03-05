@@ -11,10 +11,8 @@
  * @packageDocumentation
  */
 
-import { createControllablePromise } from 'core/request/modules/stream-buffer/helpers';
+import { createControllablePromise } from 'core/promise';
 import type { ControllablePromise } from 'core/request/modules/stream-buffer/interface';
-
-export * from 'core/request/modules/stream-buffer/helpers';
 
 export default class StreamBuffer<T = unknown> {
 	/**

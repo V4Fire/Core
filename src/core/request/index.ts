@@ -18,6 +18,7 @@ import SyncPromise from 'core/promise/sync';
 import AbortablePromise from 'core/promise/abortable';
 
 import { isOnline } from 'core/net';
+import { createControllablePromise } from 'core/promise';
 
 import Response from 'core/request/response';
 import RequestError from 'core/request/error';
@@ -26,7 +27,6 @@ import { merge } from 'core/request/helpers';
 import { defaultRequestOpts, globalOpts } from 'core/request/const';
 
 import RequestContext from 'core/request/modules/context';
-import { createControllablePromise } from 'core/request/modules/stream-buffer';
 
 import type {
 
@@ -172,7 +172,6 @@ function request<D = unknown>(
 
 		const
 			ctx = RequestContext.decorateContext(baseCtx, path, resolver, ...args),
-			responseIterator = createControllablePromise<() => AsyncIterableIterator<RequestResponseChunk>>(),
 			requestParams = ctx.params;
 
 		const middlewareParams = {
@@ -268,6 +267,12 @@ function request<D = unknown>(
 							return;
 						}
 					}
+
+				} else if (requestParams.engine.pendingCache !== false) {
+					void ctx.pendingCache.set(cacheKey, Object.cast(createControllablePromise({
+						type: AbortablePromise,
+						args: [ctx.parent]
+					})));
 				}
 
 				fromCache = await AbortablePromise.resolve(ctx.cache.has(cacheKey), requestPromise);
@@ -298,7 +303,10 @@ function request<D = unknown>(
 
 				const createEngineRequest = () => {
 					const
-						req = requestParams.engine(reqOpts);
+						{engine} = requestParams;
+
+					const
+						req = engine(reqOpts, Object.cast(middlewareParams));
 
 					return req.catch((err) => {
 						if (err instanceof RequestError) {
@@ -389,7 +397,8 @@ function request<D = unknown>(
 			}
 
 			function wrapSuccessResponse(response: Response<D>): RequestResponseObject<D> {
-				responseIterator.resolve(response[Symbol.asyncIterator].bind(response));
+				// eslint-disable-next-line @typescript-eslint/no-use-before-define
+				void responseIterator.resolve(response[Symbol.asyncIterator].bind(response));
 
 				const
 					details = {response, ...errDetails};
@@ -423,6 +432,11 @@ function request<D = unknown>(
 
 		requestPromise['emitter'] = emitter;
 
+		const responseIterator = createControllablePromise({
+			type: AbortablePromise,
+			args: [ctx.parent]
+		});
+
 		Object.defineProperty(requestPromise, 'data', {
 			configurable: true,
 			get: () => requestPromise.then((res: RequestResponseObject) => res.data)
@@ -430,7 +444,7 @@ function request<D = unknown>(
 
 		requestPromise[Symbol.asyncIterator] = () => {
 			const
-				iter = responseIterator.then((iter) => iter());
+				iter = responseIterator.then<AsyncIterableIterator<RequestResponseChunk>>((iter: Function) => iter());
 
 			return {
 				[Symbol.asyncIterator]() {

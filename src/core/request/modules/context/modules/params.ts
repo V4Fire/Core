@@ -7,6 +7,7 @@
  */
 
 import type AbortablePromise from 'core/promise/abortable';
+import type { ControllablePromise } from 'core/promise';
 import type { AbstractCache } from 'core/cache';
 
 import symbolGenerator from 'core/symbol';
@@ -74,7 +75,9 @@ export default class RequestContext<D = unknown> {
 	/**
 	 * Storage to cache the request while it is pending a response
 	 */
-	readonly pendingCache: AbstractCache<RequestResponse<D>> = Object.cast(pendingCache);
+	readonly pendingCache: AbstractCache<
+		ControllablePromise<RequestResponse<D>> | RequestResponse<D>
+	> = Object.cast(pendingCache);
 
 	/**
 	 * True if the request can provide parameters only as a query string

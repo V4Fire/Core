@@ -48,6 +48,26 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 * Improved documentation `core/request`
 
+## v3.76.0 (2022-03-05)
+
+#### :rocket: New Feature
+
+* Now `RequestEngine` will take `MiddlewareParams` as a second argument `core/request`
+
+* `core/promise`:
+  * Added a new promise wrapper `createControllablePromise`
+  * Added a new promise helper `isControllablePromise`
+
+#### :bug: Bug Fix
+
+* Fixed a race condition while checking and saving pending requests to the cache `core/request`
+
+## v3.75.1 (2022-03-05)
+
+#### :house: Internal
+
+* Freezing versions of all dependencies from package.json
+
 ## v3.75.0 (2022-02-22)
 
 #### :rocket: New Feature
