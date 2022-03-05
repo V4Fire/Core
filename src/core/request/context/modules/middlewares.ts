@@ -6,6 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import { isControllablePromise, ControllablePromise } from 'core/promise';
+
 import Response, { ResponseTypeValue } from 'core/request/response';
 import { caches } from 'core/request/const';
 
@@ -20,11 +22,12 @@ export default class RequestContext<D = unknown> extends Super<D> {
 	wrapRequest(promise: RequestResponse<D>): RequestResponse<D> {
 		const
 			key = this.cacheKey,
-			cache = this.pendingCache;
+			cache = this.pendingCache,
+			cacheVal = key != null ? cache.get(key) : null;
 
 		const canCache =
 			key != null &&
-			!cache.has(key) &&
+			isControllablePromise(cacheVal) &&
 			this.params.engine.pendingCache !== false;
 
 		if (canCache) {
@@ -44,7 +47,15 @@ export default class RequestContext<D = unknown> extends Super<D> {
 				}
 			);
 
-			void cache.set(key, promise);
+			const pendingRequest = Object.cast<ControllablePromise<RequestResponse<D>>>(
+				cacheVal
+			).resolve(promise);
+
+			pendingRequest.catch(() => {
+				// Loopback
+			});
+
+			void cache.set(key, pendingRequest);
 		}
 
 		return promise;

@@ -7,6 +7,7 @@
  */
 
 import type AbortablePromise from 'core/promise/abortable';
+import type { ControllablePromise } from 'core/promise';
 import type { AbstractCache } from 'core/cache';
 
 import addTTL from 'core/cache/decorators/ttl';
@@ -49,7 +50,9 @@ export default class RequestContext<D = unknown> {
 	/**
 	 * Storage to cache the pending request
 	 */
-	readonly pendingCache: AbstractCache<RequestResponse<D>> = Object.cast(pendingCache);
+	readonly pendingCache: AbstractCache<
+		ControllablePromise<RequestResponse<D>> | RequestResponse<D>
+	> = Object.cast(pendingCache);
 
 	/**
 	 * True if the request can provide parameters only as a query string
