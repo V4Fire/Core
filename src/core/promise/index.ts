@@ -17,6 +17,21 @@ import type {
 export * from 'core/promise/interface';
 
 /**
+ * Returns true if the specified promise implements the interface of `ControllablePromise`
+ * @param promise
+ */
+export function isControllablePromise<T extends PromiseLike<any>>(promise: T): promise is ControllablePromise<T>;
+
+/**
+ * Returns true if the specified object implements the interface of `ControllablePromise`
+ * @param obj
+ */
+export function isControllablePromise(obj: unknown): obj is ControllablePromise<PromiseLike<unknown>>;
+export function isControllablePromise(obj: unknown): boolean {
+	return Object.isPromiseLike(obj) && 'resolve' in obj;
+}
+
+/**
  * Creates a promise that can be resolved from the "outside"
  *
  * @param [opts] - additional options

@@ -35,3 +35,20 @@ const abortablePromise = createControllablePromise({
 
 abortablePromise.abort();
 ```
+
+## isControllablePromise
+
+Returns true if the specified object implements the interface of `ControllablePromise`.
+
+```js
+import { createControllablePromise, isControllablePromise } from 'core/promise';
+
+// true
+console.log(isControllablePromise(createControllablePromise()));
+
+// false
+console.log(isControllablePromise(Promise.resolve()));
+
+// false
+console.log(isControllablePromise(1));
+```

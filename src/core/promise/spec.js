@@ -8,7 +8,8 @@
 
 import SyncPromise from 'core/promise/sync';
 import AbortablePromise from 'core/promise/abortable';
-import { createControllablePromise } from 'core/promise';
+
+import { createControllablePromise, isControllablePromise } from 'core/promise';
 
 describe('core/promise', () => {
 	describe('`createControllablePromise`', () => {
@@ -98,6 +99,19 @@ describe('core/promise', () => {
 			}
 
 			expect(res).toBe('Boom!');
+		});
+	});
+
+	describe('`isControllablePromise`', () => {
+		it('should return true for controllable promises', () => {
+			expect(isControllablePromise(createControllablePromise())).toBeTrue();
+			expect(isControllablePromise(createControllablePromise({type: AbortablePromise}))).toBeTrue();
+		});
+
+		it('should return false for non-controllable promises or non-promise values', () => {
+			expect(isControllablePromise(Promise.resolve(1))).toBeFalse();
+			expect(isControllablePromise(AbortablePromise.resolve(1))).toBeFalse();
+			expect(isControllablePromise(1)).toBeFalse();
 		});
 	});
 });
