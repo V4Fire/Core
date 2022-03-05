@@ -278,7 +278,7 @@ function request<D = unknown>(
 				};
 
 				const
-					createReq = () => requestParams.engine(reqOpts);
+					createReq = () => requestParams.engine.call(null, reqOpts, Object.cast(middlewareParams));
 
 				if (requestParams.retry != null) {
 					const retryParams: RetryOptions = Object.isNumber(requestParams.retry) ?
