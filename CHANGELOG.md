@@ -19,6 +19,10 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
   * Added a new promise wrapper `createControllablePromise`
   * Added a new promise helper `isControllablePromise`
 
+#### :bug: Bug Fix
+
+* Fixed a race condition while checking and saving pending requests to the cache `core/request`
+
 ## v3.75.0 (2022-02-22)
 
 #### :rocket: New Feature
