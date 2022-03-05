@@ -277,8 +277,10 @@ function request<D = unknown>(
 					decoders: ctx.decoders
 				};
 
-				const
-					createReq = () => requestParams.engine.call(null, reqOpts, Object.cast(middlewareParams));
+				const createReq = () => {
+					const {engine} = requestParams;
+					return engine(reqOpts, Object.cast(middlewareParams));
+				};
 
 				if (requestParams.retry != null) {
 					const retryParams: RetryOptions = Object.isNumber(requestParams.retry) ?
