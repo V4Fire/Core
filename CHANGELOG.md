@@ -13,9 +13,11 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 ## v3.??.?? (2022-??-??)
 
-#### :bug: Bug Fix
+#### :rocket: New Feature
 
-* Added a new promise wrapper `createControllablePromise`
+* `core/promise`:
+  * Added a new promise wrapper `createControllablePromise`
+  * Added a new promise helper `isControllablePromise`
 
 ## v3.75.0 (2022-02-22)
 

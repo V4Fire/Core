@@ -11,6 +11,7 @@ Changelog
 
 ## v3.??.?? (2022-??-??)
 
-#### :bug: Bug Fix
+#### :rocket: New Feature
 
 * Added a new promise wrapper `createControllablePromise`
+* Added a new promise helper `isControllablePromise`
