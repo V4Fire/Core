@@ -25,6 +25,12 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 * Fixed a race condition while checking and saving pending requests to the cache `core/request`
 
+## v3.75.1 (2022-03-05)
+
+#### :house: Internal
+
+* Freezing versions of all dependencies from package.json
+
 ## v3.75.0 (2022-02-22)
 
 #### :rocket: New Feature
