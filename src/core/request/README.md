@@ -200,6 +200,9 @@ interface RequestResponseObject<D = unknown> {
   // A promise with the response data
   data: Promise<Nullable<D>>;
 
+  // An asynchronous iterable object to parse the response in a stream form
+  stream: AsyncIterableIterator<unknown>;
+
   // An emitter to listen to raw request engine events
   emitter: EventEmitter;
 
@@ -249,7 +252,7 @@ import request from 'core/request';
   for await (const {loaded, total, data} of request('https://foo.com/users')) {
     console.log(loaded, total, data);
   }
-});
+})();
 
 request('https://foo.com/users').then(async (response) => {
   for await (const {loaded, total, data} of response) {
@@ -260,6 +263,30 @@ request('https://foo.com/users').then(async (response) => {
 request('https://foo.com/users').then(async ({response}) => {
   for await (const {loaded, total, data} of response) {
     console.log(loaded, total, data);
+  }
+});
+```
+
+If you want to process only stream data without `total` and `loaded` fields, use the `stream` getter.
+
+```js
+import request from 'core/request';
+
+(async () => {
+  for await (const data of request('https://foo.com/users').stream) {
+    console.log(data);
+  }
+})();
+
+request('https://foo.com/users').then(async (response) => {
+  for await (const data of response.stream) {
+    console.log(data);
+  }
+});
+
+request('https://foo.com/users').then(async ({response}) => {
+  for await (const data of response.decodeStream()) {
+    console.log(data);
   }
 });
 ```
@@ -807,6 +834,28 @@ request('//users', {
   responseType: 'arrayBuffer',
   decoder: fromMessagePack
 }).data.then(console.log);
+```
+
+#### streamDecoder
+
+A function (or a sequence of functions) takes the current request response data chunk and yields a new chunk to respond via an async iterator.
+If you provide a sequence of functions, the first function will pass a result to the next function from the sequence, etc.
+This parameter is used when you're parsing responses in a stream form.
+
+```js
+import request from 'core/request';
+import { streamArray } from 'core/json/stream';
+
+const {stream} = request('//users', {
+  responseType: 'json',
+  streamDecoder: streamArray
+});
+
+(async () => {
+  for await (const chunk of stream) {
+    console.log(chunk);
+  }
+})();
 ```
 
 #### [jsonReviver = `convertIfDate`]
