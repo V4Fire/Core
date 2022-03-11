@@ -19,6 +19,8 @@ import { convertIfDate } from 'core/json';
 import { getDataType } from 'core/mime-type';
 
 import Parser, { Token } from 'core/json/stream/parser';
+
+import { createControllablePromise } from 'core/promise';
 import AbortablePromise from 'core/promise/abortable';
 
 import Range from 'core/range';
@@ -284,11 +286,11 @@ export default class Response<
 	/**
 	 * Returns an iterator by the response body.
 	 * Mind, when you parse response via iterator, you won't be able to use other parse methods, like `json` or `text`.
-	 * @emits `asyncIteratorUsed()`
+	 * @emits `streamUsed()`
 	 */
 	[Symbol.asyncIterator](): AsyncIterableIterator<RequestResponseChunk> {
 		if (this.bodyUsed) {
-			throw new Error("The response can't be parsed as a stream because it already read");
+			throw new Error("The response can't be consumed as a stream because it already read");
 		}
 
 		const
@@ -300,7 +302,7 @@ export default class Response<
 
 		if (!this.streamUsed) {
 			this.streamUsed = true;
-			this.emitter.emit('asyncIteratorUsed');
+			this.emitter.emit('streamUsed');
 		}
 
 		return Object.cast(body[Symbol.asyncIterator]());
@@ -322,8 +324,6 @@ export default class Response<
 	 * A way to parse data is based on the response `Content-Type` header or a passed `responseType` constructor option.
 	 * Also, a sequence of decoders is applied to the parsed result if they are passed with a `decoders`
 	 * constructor option.
-	 *
-	 * @emits `bodyUsed()`
 	 */
 	decode(): AbortablePromise<D | null> {
 		if (this[$$.decodedValue] != null) {
@@ -331,8 +331,15 @@ export default class Response<
 		}
 
 		if (this.streamUsed) {
-			return AbortablePromise.resolve<D | null>(null);
+			throw new Error("The response can't be read because it's already consuming as a stream");
 		}
+
+		const cache = createControllablePromise({
+			type: AbortablePromise,
+			args: [this.parent]
+		});
+
+		this[$$.decodedValue] = cache;
 
 		let
 			data;
@@ -363,7 +370,7 @@ export default class Response<
 					break;
 
 				case 'object':
-					data = AbortablePromise.resolveAndCall(this.body, this.parent);
+					data = this.readBody();
 					break;
 
 				default:
@@ -374,9 +381,55 @@ export default class Response<
 		const decodedVal = this.applyDecoders(data);
 		this[$$.decodedValue] = decodedVal;
 
-		this.bodyUsed = true;
-		this.emitter.emit('bodyUsed');
+		void cache.resolve(decodedVal);
+		return Object.cast(decodedVal);
+	}
 
+	/**
+	 * Parses the response body as a stream and yields chunks via an async iterator.
+	 * The operation result is memoized, and you can't parse the response as a whole data after invoking this method.
+	 *
+	 * A way to parse data chunks is based on the response `Content-Type` header or a passed `responseType`
+	 * constructor option. Also, a sequence of stream decoders is applied to the parsed chunk if they are
+	 * passed with a `streamDecoders` constructor option.
+	 */
+	decodeStream<T = unknown>(): AbortablePromise<AsyncIterableIterator<T>> {
+		if (this[$$.decodedStreamValue] != null) {
+			return this[$$.decodedStreamValue];
+		}
+
+		const cache = createControllablePromise({
+			type: AbortablePromise,
+			args: [this.parent]
+		});
+
+		this[$$.decodedStreamValue] = cache;
+
+		let
+			stream;
+
+		if (noContentStatusCodes.includes(this.status)) {
+			stream = [].values();
+
+		} else {
+			switch (this.sourceResponseType) {
+				case 'json':
+					stream = this.jsonStream();
+					break;
+
+				case 'text':
+					stream = this.textStream();
+					break;
+
+				default:
+					stream = this.stream();
+			}
+		}
+
+		const decodedVal = this.applyStreamDecoders(stream);
+		this[$$.decodedStreamValue] = decodedVal;
+
+		void cache.resolve(decodedVal);
 		return Object.cast(decodedVal);
 	}
 
@@ -385,48 +438,47 @@ export default class Response<
 	 */
 	@once
 	json(): AbortablePromise<JSONLikeValue> {
-		return AbortablePromise.resolveAndCall(this.body, this.parent)
-			.then<JSONLikeValue>((body) => {
-				if (body == null) {
-					return null;
+		return this.readBody().then<JSONLikeValue>((body) => {
+			if (body == null) {
+				return null;
+			}
+
+			if (!IS_NODE && body instanceof Document) {
+				throw new TypeError("Can't read response data as a JSON object");
+			}
+
+			if (body instanceof FormData) {
+				if (!Object.isIterable(body)) {
+					throw new TypeError("Can't parse a FormData value as a JSON object because it is not iterable");
 				}
 
-				if (!IS_NODE && body instanceof Document) {
-					throw new TypeError("Can't read response data as a JSON object");
+				const
+					res = {};
+
+				for (const [key, val] of Object.cast<Iterable<[string, string]>>(body)) {
+					res[key] = val;
 				}
 
-				if (body instanceof FormData) {
-					if (!Object.isIterable(body)) {
-						throw new TypeError("Can't parse a FormData value as a JSON object because it is not iterable");
+				return res;
+			}
+
+			const isStringOrBuffer =
+				Object.isString(body) ||
+				body instanceof ArrayBuffer ||
+				ArrayBuffer.isView(body);
+
+			if (isStringOrBuffer) {
+				return this.text().then((text) => {
+					if (text === '') {
+						return null;
 					}
 
-					const
-						res = {};
+					return JSON.parse(text, this.jsonReviver);
+				});
+			}
 
-					for (const [key, val] of Object.cast<Iterable<[string, string]>>(body)) {
-						res[key] = val;
-					}
-
-					return res;
-				}
-
-				const isStringOrBuffer =
-					Object.isString(body) ||
-					body instanceof ArrayBuffer ||
-					ArrayBuffer.isView(body);
-
-				if (isStringOrBuffer) {
-					return this.text().then((text) => {
-						if (text === '') {
-							return null;
-						}
-
-						return JSON.parse(text, this.jsonReviver);
-					});
-				}
-
-				return Object.size(this.decoders) > 0 && !Object.isFrozen(body) ? Object.fastClone(body) : body;
-			});
+			return Object.size(this.decoders) > 0 && !Object.isFrozen(body) ? Object.fastClone(body) : body;
+		});
 	}
 
 	/**
@@ -454,8 +506,7 @@ export default class Response<
 		const
 			that = this;
 
-		return AbortablePromise.resolveAndCall(this.body, this.parent)
-			.then<FormData>(decode);
+		return this.readBody().then<FormData>(decode);
 
 		function decode(body: ResponseTypeValueP): FormData {
 			if (body == null) {
@@ -506,30 +557,29 @@ export default class Response<
 	 */
 	@once
 	document(): AbortablePromise<Document> {
-		return AbortablePromise.resolveAndCall(this.body, this.parent)
-			.then<Document>((body) => {
-				//#if node_js
+		return this.readBody().then<Document>((body) => {
+			//#if node_js
 
-				if (IS_NODE) {
-					// eslint-disable-next-line @typescript-eslint/no-var-requires
-					const {JSDOM} = require('jsdom');
+			if (IS_NODE) {
+				// eslint-disable-next-line @typescript-eslint/no-var-requires
+				const {JSDOM} = require('jsdom');
 
-					return this.text()
-						.then((text) => new JSDOM(text))
-						.then((res) => Object.get(res, 'window.document'));
-				}
+				return this.text()
+					.then((text) => new JSDOM(text))
+					.then((res) => Object.get(res, 'window.document'));
+			}
 
-				//#endif
+			//#endif
 
-				if (body instanceof Document) {
-					return body;
-				}
+			if (body instanceof Document) {
+				return body;
+			}
 
-				return this.text().then((text) => {
-					const type = this.headers.get('Content-Type') ?? 'text/html';
-					return new DOMParser().parseFromString(text, Object.cast(type));
-				});
+			return this.text().then((text) => {
+				const type = this.headers.get('Content-Type') ?? 'text/html';
+				return new DOMParser().parseFromString(text, Object.cast(type));
 			});
+		});
 	}
 
 	/**
@@ -537,19 +587,18 @@ export default class Response<
 	 */
 	@once
 	text(): AbortablePromise<string> {
-		return AbortablePromise.resolveAndCall(this.body, this.parent)
-			.then<string>((body) => this.decodeToString(body));
+		return this.readBody().then<string>((body) => this.decodeToString(body));
 	}
 
 	/**
-	 * Parse the response data stream as a text chunks and yields them via an async iterator
+	 * Parses the response data stream as a text chunks and yields them via an async iterator
 	 */
 	@once
 	textStream(): AsyncIterableIterator<string> {
 		const
 			iter = this[Symbol.asyncIterator]();
 
-		const transformedIter = {
+		return {
 			[Symbol.asyncIterator]() {
 				return this;
 			},
@@ -564,8 +613,23 @@ export default class Response<
 				};
 			}
 		};
+	}
 
-		return this.applyStreamDecoders(transformedIter);
+	/**
+	 * Parses the response data stream as an ArrayBuffer chunks and yields them via an async iterator
+	 */
+	@once
+	stream(): AsyncIterableIterator<ArrayBuffer> {
+		const
+			iter = this[Symbol.asyncIterator]();
+
+		return {
+			[Symbol.asyncIterator]() {
+				return this;
+			},
+
+			next: () => iter.next.bind(iter)
+		};
 	}
 
 	/**
@@ -573,8 +637,7 @@ export default class Response<
 	 */
 	@once
 	blob(): AbortablePromise<Blob> {
-		return AbortablePromise.resolveAndCall(this.body, this.parent)
-			.then<Blob>((body) => this.decodeToBlob(body));
+		return this.readBody().then<Blob>((body) => this.decodeToBlob(body));
 	}
 
 	/**
@@ -582,22 +645,36 @@ export default class Response<
 	 */
 	@once
 	arrayBuffer(): AbortablePromise<ArrayBuffer> {
-		return AbortablePromise.resolveAndCall(this.body, this.parent)
-			.then<ArrayBuffer>((body) => {
-				if (body == null) {
-					return new ArrayBuffer(0);
-				}
+		return this.readBody().then<ArrayBuffer>((body) => {
+			if (body == null) {
+				return new ArrayBuffer(0);
+			}
 
-				if (body instanceof ArrayBuffer) {
-					return body;
-				}
+			if (body instanceof ArrayBuffer) {
+				return body;
+			}
 
-				if (ArrayBuffer.isView(body)) {
-					return body.buffer;
-				}
+			if (ArrayBuffer.isView(body)) {
+				return body.buffer;
+			}
 
-				throw new TypeError("Can't read response data as ArrayBuffer");
-			});
+			throw new TypeError("Can't read response data as ArrayBuffer");
+		});
+	}
+
+	/**
+	 * Reads the response body or throws an exception if reading is impossible
+	 * @emits `bodyUsed()`
+	 */
+	protected readBody(): AbortablePromise<ResponseTypeValue> {
+		if (this.streamUsed) {
+			throw new Error("The response can't be read because it's already consuming as a stream");
+		}
+
+		this.bodyUsed = true;
+		this.emitter.emit('bodyUsed');
+
+		return AbortablePromise.resolveAndCall(this.body, this.parent);
 	}
 
 	/**

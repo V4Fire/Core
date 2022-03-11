@@ -33,7 +33,7 @@ There are a few differences between these classes:
 | EventName           | Description                                           | Payload description | Payload |
 |---------------------|-------------------------------------------------------|---------------------|---------|
 | `bodyUsed`          | The response body has been read via `decode`          | -                   | -       |
-| `asyncIteratorUsed` | The response body has been read via an async iterator | -                   | -       |
+| `streamUsed` | The response body has been read via an async iterator | -                   | -       |
 
 ### Constructor options
 
