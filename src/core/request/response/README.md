@@ -158,7 +158,7 @@ request('//users', {decoders: [parseProtobuf, normalizeUsers], responseType: 'ar
 #### decodeStream
 
 Parses the response body as a stream and yields chunks via an async iterator.
-The operation result is memoized, and you can't parse the response as a whole data after invoking this method.
+You can't parse the response as a whole data after invoking this method.
 
 A way to parse data chunks is based on the response `Content-Type` header or a passed `responseType`constructor option.
 Also, a sequence of stream decoders is applied to the parsed chunk if they are passed with a `streamDecoders` constructor option.

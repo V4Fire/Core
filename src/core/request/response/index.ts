@@ -387,24 +387,13 @@ export default class Response<
 
 	/**
 	 * Parses the response body as a stream and yields chunks via an async iterator.
-	 * The operation result is memoized, and you can't parse the response as a whole data after invoking this method.
+	 * You can't parse the response as a whole data after invoking this method.
 	 *
 	 * A way to parse data chunks is based on the response `Content-Type` header or a passed `responseType`
 	 * constructor option. Also, a sequence of stream decoders is applied to the parsed chunk if they are
 	 * passed with a `streamDecoders` constructor option.
 	 */
-	decodeStream<T = unknown>(): AbortablePromise<AsyncIterableIterator<T>> {
-		if (this[$$.decodedStreamValue] != null) {
-			return this[$$.decodedStreamValue];
-		}
-
-		const cache = createControllablePromise({
-			type: AbortablePromise,
-			args: [this.parent]
-		});
-
-		this[$$.decodedStreamValue] = cache;
-
+	decodeStream<T = unknown>(): AsyncIterableIterator<T> {
 		let
 			stream;
 
@@ -426,11 +415,7 @@ export default class Response<
 			}
 		}
 
-		const decodedVal = this.applyStreamDecoders(stream);
-		this[$$.decodedStreamValue] = decodedVal;
-
-		void cache.resolve(decodedVal);
-		return Object.cast(decodedVal);
+		return this.applyStreamDecoders(stream);
 	}
 
 	/**
@@ -671,8 +656,10 @@ export default class Response<
 			throw new Error("The response can't be read because it's already consuming as a stream");
 		}
 
-		this.bodyUsed = true;
-		this.emitter.emit('bodyUsed');
+		if (!this.bodyUsed) {
+			this.bodyUsed = true;
+			this.emitter.emit('bodyUsed');
+		}
 
 		return AbortablePromise.resolveAndCall(this.body, this.parent);
 	}
