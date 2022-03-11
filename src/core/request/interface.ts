@@ -128,8 +128,10 @@ export interface RequestResponseObject<D = unknown> {
 	response: Response<D>;
 
 	data: Promise<Nullable<D>>;
+	stream: AsyncIterableIterator<unknown>;
+
 	emitter: EventEmitter;
-	[Symbol.asyncIterator](): AsyncIterable<RequestResponseChunk>;
+	[Symbol.asyncIterator](): AsyncIterableIterator<RequestResponseChunk>;
 
 	cache?: CacheType;
 	dropCache(): void;
@@ -139,8 +141,9 @@ export type RequestResponse<D = unknown> = AbortablePromise<RequestResponseObjec
 
 export interface RequestPromise<D = unknown> extends RequestResponse<D> {
 	data: Promise<Nullable<D>>;
+	stream: AsyncIterableIterator<unknown>;
 	emitter: EventEmitter;
-	[Symbol.asyncIterator](): AsyncIterable<RequestResponseChunk>;
+	[Symbol.asyncIterator](): AsyncIterableIterator<RequestResponseChunk>;
 }
 
 export interface RequestFunctionResponse<D = unknown, ARGS extends any[] = unknown[]> {

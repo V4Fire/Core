@@ -422,6 +422,10 @@ function request<D = unknown>(
 						customData = SyncPromise.resolve(val);
 					},
 
+					get stream() {
+						return response.decodeStream();
+					},
+
 					emitter,
 					[Symbol.asyncIterator]: response[Symbol.asyncIterator].bind(response),
 
@@ -440,6 +444,11 @@ function request<D = unknown>(
 		Object.defineProperty(requestPromise, 'data', {
 			configurable: true,
 			get: () => requestPromise.then((res: RequestResponseObject) => res.data)
+		});
+
+		Object.defineProperty(requestPromise, 'stream', {
+			configurable: true,
+			get: () => requestPromise.then((res: RequestResponseObject) => res.stream)
 		});
 
 		requestPromise[Symbol.asyncIterator] = () => {

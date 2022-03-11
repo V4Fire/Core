@@ -148,6 +148,10 @@ export default class RequestContext<D = unknown> extends Super<D> {
 				customData = SyncPromise.resolve(val);
 			},
 
+			get stream() {
+				return response.decodeStream();
+			},
+
 			emitter: new EventEmitter({maxListeners: 100}),
 			[Symbol.asyncIterator]: response[Symbol.asyncIterator].bind(response),
 
