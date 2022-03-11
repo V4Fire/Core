@@ -30,10 +30,10 @@ There are a few differences between these classes:
 
 ### Events
 
-| EventName           | Description                                           | Payload description | Payload |
-|---------------------|-------------------------------------------------------|---------------------|---------|
-| `bodyUsed`          | The response body has been read via `decode`          | -                   | -       |
-| `streamUsed` | The response body has been read via an async iterator | -                   | -       |
+| EventName      | Description                                           | Payload description | Payload |
+|----------------|-------------------------------------------------------|---------------------|---------|
+| `bodyUsed`     | The response body has been read via `decode`          | -                   | -       |
+| `streamUsed`   | The response body has been read via an async iterator | -                   | -       |
 
 ### Constructor options
 
@@ -60,7 +60,7 @@ export interface ResponseOptions {
   statusText?: string;
 
   /**
-   * List of status codes (or a single code) that match successful operation.
+   * A list of status codes (or a single code) that match successful operation.
    * Also, you can pass a range of codes.
    */
   okStatuses?: OkStatuses;
@@ -76,9 +76,14 @@ export interface ResponseOptions {
   headers?: RawHeaders;
 
   /**
-   * Sequence of response decoders
+   * A function or sequence of functions to decode a response body
    */
   decoder?: WrappedDecoder | WrappedDecoders;
+
+  /**
+   * A function or sequence of functions to decode a response chunk when you are parsing the response in a stream form
+   */
+  streamDecoder?: WrappedStreamDecoder | WrappedStreamDecoders;
 
   /**
    * Reviver function for `JSON.parse`
@@ -89,6 +94,27 @@ export interface ResponseOptions {
 ```
 
 ### Properties
+
+#### streamUsed
+
+True, if the response body is already read as a stream.
+
+#### okStatuses
+
+A list of status codes (or a single code) that match successful operation.
+Also, you can pass a range of codes.
+
+#### decoders
+
+A sequence of response decoders.
+
+#### streamDecoders
+
+A sequence of response decoders to apply for chunks when you are parsing response in a stream form.
+
+#### jsonReviver
+
+A reviver function for `JSON.parse`.
 
 #### emitter
 
@@ -106,10 +132,6 @@ request('//foo.jpg')
     return response.decode();
   });
 ```
-
-#### streamUsed
-
-True, if the response body is already read as a stream.
 
 ### Methods
 
@@ -131,4 +153,93 @@ request('//foo.jpg')
 request('//users', {decoders: [parseProtobuf, normalizeUsers], responseType: 'arrayBuffer'})
   .then(({response}) => response.decode())
   .then((users) => console.log(users));
+```
+
+#### decodeStream
+
+Parses the response body as a stream and yields chunks via an async iterator.
+The operation result is memoized, and you can't parse the response as a whole data after invoking this method.
+
+A way to parse data chunks is based on the response `Content-Type` header or a passed `responseType`constructor option.
+Also, a sequence of stream decoders is applied to the parsed chunk if they are passed with a `streamDecoders` constructor option.
+
+```js
+import request from 'core/request';
+import { streamArray } from 'core/json/stream';
+
+request('//foo.jpg')
+  .then(async ({response}) => {
+    for await (const chunk of response.decodeStream()) {
+      console.log(chunk instanceof ArrayBuffer);
+    }
+  });
+
+request('//users', {streamDecoders: [streamArray], responseType: 'json'})
+  .then(async ({response}) => {
+    for await (const user of response.decodeStream()) {
+      console.log(user);
+    }
+  });
+```
+
+#### jsonStream
+
+Parses the response data stream as a JSON tokens and yields them via an async iterator.
+
+```js
+import request from 'core/request';
+import { streamArray } from 'core/json/stream';
+
+request('//users', {streamDecoders: [streamArray]})
+  .then(async ({response}) => {
+    for await (const user of response.jsonStream()) {
+      console.log(user);
+    }
+  });
+```
+
+#### textStream
+
+Parses the response data stream as a text chunks and yields them via an async iterator.
+
+```js
+import request from 'core/request';
+
+request('//users')
+  .then(async ({response}) => {
+    for await (const textFragment of response.textStream()) {
+      console.log(textFragment);
+    }
+  });
+```
+
+#### stream
+
+Parses the response data stream as an ArrayBuffer chunks and yields them via an async iterator.
+
+```js
+import request from 'core/request';
+
+request('//users')
+  .then(async ({response}) => {
+    for await (const chunkBuffer of response.stream()) {
+      console.log(chunkBuffer);
+    }
+  });
+```
+
+#### [Symbol.asyncIterator]
+
+Returns an iterator by the response body.
+Mind, when you parse response via iterator, you won't be able to use other parse methods, like `json` or `text`.
+
+```js
+import request from 'core/request';
+
+request('//users')
+  .then(async ({response}) => {
+    for await (const {loaded, total, data} of response) {
+      console.log(loaded, total, data);
+    }
+  });
 ```

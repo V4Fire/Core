@@ -131,7 +131,7 @@ export default class Response<
 	readonly ok: boolean;
 
 	/**
-	 * List of status codes (or a single code) that match successful operation.
+	 * A list of status codes (or a single code) that match successful operation.
 	 * Also, you can pass a range of codes.
 	 */
 	readonly okStatuses: OkStatuses;
@@ -482,7 +482,7 @@ export default class Response<
 	}
 
 	/**
-	 * Parse the response data stream as a JSON tokens and yields them via an async iterator
+	 * Parses the response data stream as a JSON tokens and yields them via an async iterator
 	 */
 	@once
 	jsonStream(): AsyncIterableIterator<Token> {
