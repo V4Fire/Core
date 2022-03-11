@@ -43,7 +43,7 @@ export default class StreamBuffer<T = unknown> {
 	constructor(values: Iterable<T> = []) {
 		this.buffer = [...values];
 		this.isAsyncIteratorInvoked = false;
-		this.pendingPromise = createControllablePromise();
+		this.pendingPromise = createControllablePromise<T>();
 	}
 
 	/**
@@ -101,7 +101,7 @@ export default class StreamBuffer<T = unknown> {
 
 		this.buffer.push(value);
 		this.pendingPromise!.resolve();
-		this.pendingPromise = createControllablePromise();
+		this.pendingPromise = createControllablePromise<T>();
 	}
 
 	/**
