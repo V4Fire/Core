@@ -247,7 +247,7 @@ export interface CreateRequestOptions<D = unknown> {
 	responseType?: ResponseType;
 
 	/**
-	 * List of status codes (or a single code) that match successful operation.
+	 * A list of status codes (or a single code) that match successful operation.
 	 * Also, you can pass a range of codes.
 	 *
 	 * @default `new Range(200, 299)`

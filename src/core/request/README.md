@@ -369,8 +369,8 @@ request('//user', {
 
 #### body
 
-Request body. Mind, not every HTTP method can send data in this way. For instance,
-GET or HEAD requests can send data only with URLs (@see `query`).
+A request body. Mind, not every HTTP method can send data in this way.
+For instance, GET or HEAD requests can send data only with URLs (@see `query`).
 
 ```js
 import request from 'core/request';
@@ -408,7 +408,7 @@ request('//create-user', {
 
 #### responseType
 
-Type of the response data (if not specified, it will be cast dynamically from the response headers):
+A type of the response data (if not specified, it will be cast dynamically from the response headers):
 
 1. `'text'` - the result is interpreted as a simple string;
 2. `'json'` - the result is interpreted as a JSON string;
@@ -429,7 +429,7 @@ request('//users', {
 
 #### [okStatuses = `new Range(200, 299)`]
 
-List of status codes (or a single code) that match successful operation.
+A list of status codes (or a single code) that match successful operation.
 Also, you can pass a range of codes.
 
 ```js
