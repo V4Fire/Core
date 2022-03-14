@@ -11,6 +11,8 @@
  * @packageDocumentation
  */
 
+import { sequence } from 'core/iter/combinators';
+
 import Parser, { Token } from 'core/json/stream/parser';
 import Assembler, { AssemblerOptions } from 'core/json/stream/assembler';
 
@@ -19,7 +21,9 @@ import {
 	Pick,
 	Filter,
 
+	FilterToken,
 	FilterOptions,
+
 	TokenFilter
 
 } from 'core/json/stream/filters';
@@ -74,9 +78,59 @@ export async function* pick(
 	const
 		p = new Pick(selector, opts);
 
-	for await (const chunk of source) {
-		yield* p.processToken(chunk);
+	for await (const token of source) {
+		const
+			tokens = [...p.processToken(token)],
+			lastToken = <Nullable<FilterToken>>tokens[tokens.length - 1];
+
+		if (lastToken?.filterComplete) {
+			for (let i = 0; i < tokens.length; i++) {
+				const
+					token = tokens[i];
+
+				if (token === lastToken) {
+					yield Object.reject(lastToken, 'filterComplete');
+					return;
+				}
+
+				yield token;
+			}
+
+		} else {
+			yield* Object.cast(tokens);
+		}
 	}
+}
+
+export function andPick(
+	source: AsyncIterable<Token>,
+	selector: TokenFilter,
+	opts?: FilterOptions
+): AsyncGenerator<Token> {
+	let
+		stage = 0;
+
+	const startObject: AsyncIterableIterator<Token> = {
+		[Symbol.asyncIterator]() {
+			return this;
+		},
+
+		next() {
+			if (stage++ === 0) {
+				return Promise.resolve({
+					value: {name: 'startObject'},
+					done: false
+				});
+			}
+
+			return Promise.resolve({
+				value: undefined,
+				done: true
+			});
+		}
+	};
+
+	return pick(sequence(startObject, source), selector, opts);
 }
 
 /**
