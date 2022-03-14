@@ -205,7 +205,11 @@ type PromiseType<T> =
 type ReturnPromise<T extends AnyFunction<any[], unknown>> = (...args: Parameters<T>) => Promise<ReturnType<T>>;
 
 type DictionaryType<T extends Dictionary> = T extends Dictionary<infer V> ? NonNullable<V> : T;
-type IterableType<T extends Iterable<any>> = T extends Iterable<infer V> ? V : T;
+
+type IterableType<T extends Iterable<any> | AsyncIterable<any>> =
+	T extends Iterable<infer V> ?
+		V :
+		T extends AsyncIterable<infer V> ? V : T;
 
 /**
  * Overrides properties of the specified type or interface.
