@@ -29,6 +29,8 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :rocket: New Feature
 
+* Added a new module `core/iter`
+* Added a new module `core/iter/combinators`
 * Added a new module `core/request/headers`
 * Added a new module `core/request/modules/stream-buffer`
 
