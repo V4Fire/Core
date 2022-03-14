@@ -6,8 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { sequence } from 'core/iter/combinators';
 import { intoIter } from 'core/iter';
+import { sequence } from 'core/iter/combinators';
 import { from, pick, andPick, assemble, streamArray } from 'core/json/stream';
 
 describe('core/iter/combinators', () => {
