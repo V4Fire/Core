@@ -110,6 +110,10 @@ extend(Object, 'isIterator', (value) => {
 	return typeof value.next === 'function';
 });
 
+/** @see [[ObjectConstructor.isAsyncIterator]] */
+extend(Object, 'isAsyncIterator', (value) =>
+	Object.isIterator(value) && Object.isAsyncIterable(value));
+
 /** @see [[ObjectConstructor.isIterable]] */
 extend(Object, 'isIterable', (value) => {
 	if (value == null) {
