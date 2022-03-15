@@ -124,24 +124,24 @@ import Pull from 'core/pull';
 const pull = new Pull(
   () => Array(1, 2, 3),
   {
-    // Hook that will be called before take, takeOrCreate
-    // Expect value that will be returned from take, link to pull, and additional params
+    // hook that will be called before take, takeOrCreate
+    // expect value that will be returned from take, link to pull, and additional params
     onTake: (resource, pull, ...args) => {
       console.log(resource, args)
     },
 
-    // Hook that will be called before free
-    // Expect value that are given to free, link to pull, and additional params
+    // hook that will be called before free
+    // expect value that are given to free, link to pull, and additional params
     onFree: (resource, pull, ...args) => {
       console.log(resource, args)
     },
 
-    // Function that destroy given object
+    // function that destroy given object
     destructor: (value) => {
       console.log("destructed: ", value)
     },
 
-    // Hook that will be called before clear
+    // hook that will be called before clear
     onClear: () => {
       console.log("cleared")
     }
@@ -177,7 +177,7 @@ import Pull from 'core/pull';
 const pull = new Pull(
   () => Array(1, 2, 3),
   {
-    // Take args that are given to function and convert them to string
+    // take args that are given to function and convert them to string
     hashFn: (...args) => JSON.stringify(args)
   }
 );
