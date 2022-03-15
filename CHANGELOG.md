@@ -33,6 +33,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 * Added a new module `core/iter/combinators`
 * Added a new module `core/request/headers`
 * Added a new module `core/request/modules/stream-buffer`
+* Added a new method `Object.isAsyncGenerator`
 
 * `core/request`:
   * Now a promise returned from a request function implements `Symbol.asyncIterator`
