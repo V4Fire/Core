@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.77.0 (2022-03-15)
+
+#### :rocket: New Feature
+
+* Added a new method `Object.isAsyncIterator`
+
 ## v3.76.0 (2022-03-05)
 
 #### :rocket: New Feature
