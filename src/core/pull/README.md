@@ -45,7 +45,7 @@ pull.takeOrWait()
   });
 ```
 
-### Borrow
+## Borrow
 
 You can use one object at multiple places at same time
 
