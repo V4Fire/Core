@@ -35,15 +35,21 @@ The function has various overloads:
 
   // [0, 1, 2]
   console.log([...intoIter(3)]);
+
+  // [0, -1, -2]
+  console.log([...intoIter(-3)]);
   ```
 
-4. If the passed value is a dictionary, the function creates an iterator over the dictionary values.
+4. If the passed value is a string, the function creates an iterator over the string graphical letters.
 
   ```js
   import { intoIter } from 'core/iter';
 
-  // [1, 2]
-  console.log([...intoIter({a: 1, b: 2})]);
+  // ['f', 'o', 'o']
+  console.log([...intoIter('foo')]);
+
+  // ['1', '😃', 'à', '🇷🇺', '👩🏽‍❤️‍💋‍👨']
+  console.log([...intoIter('1😃à🇷🇺👩🏽‍❤️‍💋‍👨')]);
   ```
 
 5. If the passed value is a dictionary, the function creates an iterator over the dictionary values.

@@ -36,6 +36,18 @@ export function intoIter(obj: null | undefined): IterableIterator<undefined>;
 export function intoIter(obj: number): IterableIterator<number>;
 
 /**
+ * Creates an iterator over the passed string by graphical letters
+ * @param obj
+ */
+export function intoIter(obj: string): IterableIterator<string>;
+
+/**
+ * Creates an iterator over values from the specified dictionary and returns it
+ * @param obj
+ */
+export function intoIter<T extends Dictionary>(obj: T): IterableIterator<DictionaryType<T>>;
+
+/**
  * Creates an iterator from the passed generator function and returns it
  * @param obj
  */
@@ -46,12 +58,6 @@ export function intoIter<T = unknown>(obj: GeneratorFunction): IterableIterator<
  * @param obj
  */
 export function intoIter<T = unknown>(obj: AsyncGeneratorFunction): AsyncIterableIterator<T>;
-
-/**
- * Creates an iterator over values from the specified dictionary and returns it
- * @param obj
- */
-export function intoIter<T extends Dictionary>(obj: T): IterableIterator<DictionaryType<T>>;
 
 /**
  * Creates a new iterator based on the specified iterable structure and returns it
