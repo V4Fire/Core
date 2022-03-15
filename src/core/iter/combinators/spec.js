@@ -32,9 +32,19 @@ describe('core/iter/combinators', () => {
 				streamArray(andPick(tokens, 'data'))
 			);
 
+			const
+				res = [];
+
 			for await (const val of seq) {
-				console.log(val);
+				res.push(val);
 			}
+
+			expect(res).toEqual([
+				3,
+				{index: 0, value: {user: 'Bob', age: 21}},
+				{index: 1, value: {user: 'Ben', age: 24}},
+				{index: 2, value: {user: 'Rob', age: 28}}
+			]);
 		});
 	});
 });

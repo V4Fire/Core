@@ -6,7 +6,9 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import { from, filter, pick, assemble, streamArray, streamObject } from 'core/json/stream';
+import { intoIter } from 'core/iter';
+import { sequence } from 'core/iter/combinators';
+import { from, filter, pick, andPick, assemble, streamArray, streamObject } from 'core/json/stream';
 
 describe('core/json/stream', () => {
 	describe('`from`', () => {
@@ -125,6 +127,36 @@ describe('core/json/stream', () => {
 				{name: 'endNumber'},
 				{name: 'numberValue', value: '3'},
 				{name: 'endArray'}
+			]);
+		});
+
+		it('should combine several picks', async () => {
+			const tokens = intoIter(from(JSON.stringify({
+				total: 3,
+				data: [
+					{user: 'Bob', age: 21},
+					{user: 'Ben', age: 24},
+					{user: 'Rob', age: 28}
+				]
+			})));
+
+			const seq = sequence(
+				assemble(pick(tokens, 'total')),
+				assemble(andPick(tokens, 'data.0')),
+				assemble(andPick(tokens, '1', {from: 'array'}))
+			);
+
+			const
+				res = [];
+
+			for await (const val of seq) {
+				res.push(val);
+			}
+
+			expect(res).toEqual([
+				3,
+				{user: 'Bob', age: 21},
+				{user: 'Rob', age: 28}
 			]);
 		});
 	});
