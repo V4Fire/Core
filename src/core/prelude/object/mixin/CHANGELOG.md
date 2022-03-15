@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.77.0 (2022-03-15)
+
+#### :bug: Bug Fix
+
+* Fixed an issue when extending an object with preserving descriptors and array concatenation `Object.mixin`
+
 ## v3.36.0 (2021-03-16)
 
 #### :boom: Breaking Change

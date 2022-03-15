@@ -16,6 +16,12 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 #### :rocket: New Feature
 
 * Added a new method `Object.isAsyncIterator`
+* Now iterations over iterable structures have indices as the second argument of a passed callback function `Object.forEach`
+
+#### :bug: Bug Fix
+
+* Fixed an issue when extending an object with preserving descriptors and array concatenation `Object.mixin`
+* Fixed an issue when iterating over non-dictionary object with enabled `passDescriptor` `Object.forEach`
 
 ## v3.76.0 (2022-03-05)
 
