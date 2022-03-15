@@ -1865,6 +1865,12 @@ interface ObjectConstructor {
 	isGenerator(value: any): value is GeneratorFunction;
 
 	/**
+	 * Returns true if the specified value is an async generator function
+	 * @param value
+	 */
+	isAsyncGenerator(value: any): value is AsyncGeneratorFunction;
+
+	/**
 	 * Returns true if the specified value is an iterable structure
 	 * @param value
 	 */
