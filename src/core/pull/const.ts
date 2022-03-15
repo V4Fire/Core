@@ -6,6 +6,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-export const hashProperty = Symbol('hashProperty'),
-	viewerCount = Symbol('viewerCount'),
+export const
+	hashProperty = Symbol('hash value of object'),
+	viewerCount = Symbol('the number of objects that have a resource'),
 	defaultValue = '';
