@@ -6,6 +6,8 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+import type { GetTypeType } from 'core/prelude/object/interface';
+
 /**
  * Returns true if the specified value is a container structure
  * @param value
@@ -42,9 +44,17 @@ export function canExtendProto(value: unknown): boolean {
  * Returns a type of the specified value
  * @param value
  */
-export function getType(value: unknown): string {
-	if (!Object.isTruly(value) || typeof value !== 'object') {
+export function getType(value: unknown): GetTypeType {
+	if (value == null || typeof value !== 'object') {
 		return '';
+	}
+
+	if (Object.isArray(value)) {
+		return 'array';
+	}
+
+	if (Object.isArrayLike(value)) {
+		return 'arrayLike';
 	}
 
 	if (Object.isMap(value)) {
@@ -61,18 +71,6 @@ export function getType(value: unknown): string {
 
 	if (Object.isWeakSet(value)) {
 		return 'weakSet';
-	}
-
-	if (Object.isGenerator(value)) {
-		return 'generator';
-	}
-
-	if (Object.isArrayLike(value)) {
-		return 'array';
-	}
-
-	if (Object.isIterator(value) || Object.isIterable(value)) {
-		return 'iterator';
 	}
 
 	return 'object';

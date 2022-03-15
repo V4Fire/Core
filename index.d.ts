@@ -606,7 +606,7 @@ interface ObjectForEachOptions {
 
 	/**
 	 * If true, the function will iterate all object properties, but not only enumerable.
-	 * Non enumerable properties from a prototype are ignored.
+	 * Non-enumerable properties from a prototype are ignored.
 	 *
 	 * @default `false`
 	 * @example
@@ -1868,19 +1868,25 @@ interface ObjectConstructor {
 	 * Returns true if the specified value is an iterable structure
 	 * @param value
 	 */
-	isIterable(value: any): value is IterableIterator<unknown>;
+	isIterable(value: any): value is Iterable<unknown>;
 
 	/**
 	 * Returns true if the specified value is an async iterable structure
 	 * @param value
 	 */
-	isAsyncIterable(value: any): value is AsyncIterableIterator<unknown>;
+	isAsyncIterable(value: any): value is AsyncIterable<unknown>;
 
 	/**
 	 * Returns true if the specified value is an iterator
 	 * @param value
 	 */
 	isIterator(value: any): value is Iterator<unknown>;
+
+	/**
+	 * Returns true if the specified value is an async iterator
+	 * @param value
+	 */
+	isAsyncIterator(value: any): value is AsyncIterator<unknown>;
 
 	/**
 	 * Returns true if the specified value is a string

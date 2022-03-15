@@ -15,6 +15,17 @@ Changelog
 
 * Now [key, el] responses from an iterator will be destructured before providing to callback `Object.forEach`
 
+## v3.77.0 (2022-03-15)
+
+#### :rocket: New Feature
+
+* Now iterations over iterable structures have indices as the second argument of a passed callback function `Object.forEach`
+
+#### :bug: Bug Fix
+
+* Fixed an issue when extending an object with preserving descriptors and array concatenation `Object.mixin`
+* Fixed an issue when iterating over non-dictionary object with enabled `passDescriptor` `Object.forEach`
+
 ## v3.74.4 (2022-01-24)
 
 #### :house: Internal
