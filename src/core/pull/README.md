@@ -33,7 +33,7 @@ const {
   value: value1
 } = pull.takeOrCreate();
 
-//destroy object instead of returning to pull
+// destroy object instead of returning to pull
 destroy(value1)
 
 // return core/promise/sync (wait until something call free(value))
@@ -54,7 +54,6 @@ import Pull from 'core/pull';
 
 const pull = new Pull(() => Object(), 1);
 
-//
 console.log(pull.canBorrow()); // true
 
 // throw error if pull.canBorrow()==false
@@ -74,16 +73,12 @@ const {value: value2} = pull.borrowOrCreate();
 
 console.log(value === value1) // true
 
-//destroy object if nobody use it
+// destroy object if nobody use it
 destroy(value1)
 
 // return core/promise/sync (wait until something call free(value)
 pull.takeOrWait()
-  .then(({
-           free,
-           value
-         }) => {
-  });
+  .then(({free, value}) => {});
 ```
 
 ## Constructor
@@ -94,7 +89,7 @@ Pull constructor can expect additional settings.
 let pull = new Pull(
   () => Array(),
   {
-    //some hooks
+    // some hooks
   }
 );
 
@@ -108,7 +103,7 @@ let anotherPull = new Pull(
   // only for object that created immediately
   ['lol'],
   {
-    //some hooks
+    // some hooks
   }
 );
 
@@ -121,7 +116,7 @@ console.log(value) // ["lol"]
 
 ## Settings
 
-Pull's constructor can except additional settings
+Pull's settings
 
 ```js
 import Pull from 'core/pull';
@@ -174,7 +169,7 @@ pull.clear() // cleared
 
 ## Hash
 
-Pull can separate. Objects separated via id.
+Pull can separate objects. Objects separated via id.
 
 ```js
 import Pull from 'core/pull';
