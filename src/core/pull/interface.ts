@@ -15,7 +15,7 @@ export type PullHook<T> = (value: T, pull: Pull<T>, ...args: unknown[]) => void;
 
 export interface PullOptions<T> {
 	/**
-	 * Hook that are activated before this.take or this.takeOrCreate
+	 * Hook that are activated before `this.take` or `this.takeOrCreate`
 	 *
 	 * @param value - value that are return from this.take
 	 * @param pull - this pull
@@ -43,7 +43,7 @@ export interface PullOptions<T> {
 	 * Hook that called on 'this.clear'
 	 *
 	 * @param pull - this pull
-	 * @param args - params given to Pull.clear()
+	 * @param args - params given to `Pull.clear()`
 	 */
 	onClear?(pull: Pull<T>, ...args: unknown[]): void;
 
