@@ -29,10 +29,23 @@ export function intoIter(obj: boolean): IterableIterator<number>;
 export function intoIter(obj: null | undefined): IterableIterator<undefined>;
 
 /**
- * Creates an iterator from zero to the passed number and returns it
+ * Creates an iterator from zero to the passed number (non including) and returns it
  * @param obj
  */
-export function intoIter<T extends number>(obj: T): IterableIterator<T>;
+// eslint-disable-next-line @typescript-eslint/unified-signatures
+export function intoIter(obj: number): IterableIterator<number>;
+
+/**
+ * Creates an iterator from the passed generator function and returns it
+ * @param obj
+ */
+export function intoIter<T = unknown>(obj: GeneratorFunction): IterableIterator<T>;
+
+/**
+ * Creates an iterator from the passed async generator function and returns it
+ * @param obj
+ */
+export function intoIter<T = unknown>(obj: AsyncGeneratorFunction): AsyncIterableIterator<T>;
 
 /**
  * Creates an iterator over values from the specified dictionary and returns it
@@ -71,6 +84,10 @@ export function intoIter(obj: unknown): IterableIterator<unknown> | AsyncIterabl
 
 	if (Object.isString(obj)) {
 		return obj.letters();
+	}
+
+	if (Object.isGenerator(obj) || Object.isAsyncGenerator(obj)) {
+		return intoIter(Object.cast(obj()));
 	}
 
 	if (typeof obj === 'object') {
