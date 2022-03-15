@@ -77,7 +77,7 @@ describe('core/json/stream/filters', () => {
 				tokens = [];
 
 			for await (const token of Parser.from([input], new Pick('a.b'))) {
-				tokens.push(token);
+				tokens.push(Object.reject(token, 'filterComplete'));
 			}
 
 			expect(tokens).toEqual([...new Parser().processChunk('[1, 2, 3]')]);
@@ -89,7 +89,7 @@ describe('core/json/stream/filters', () => {
 				tokens = [];
 
 			for await (const token of Parser.from([input], new Pick(/^[02]\.?/))) {
-				tokens.push(token);
+				tokens.push(Object.reject(token, 'filterComplete'));
 			}
 
 			expect(tokens).toEqual([...new Parser().processChunk('{"a": 1}')]);
@@ -101,7 +101,7 @@ describe('core/json/stream/filters', () => {
 				tokens = [];
 
 			for await (const token of Parser.from([input], new Pick(/^[02]\.?/, {multiple: true}))) {
-				tokens.push(token);
+				tokens.push(Object.reject(token, 'filterComplete'));
 			}
 
 			expect(tokens).toEqual([
@@ -116,7 +116,7 @@ describe('core/json/stream/filters', () => {
 				tokens = [];
 
 			for await (const token of Parser.from([input], new Pick((stack) => stack.includes('a')))) {
-				tokens.push(token);
+				tokens.push(Object.reject(token, 'filterComplete'));
 			}
 
 			const parser = new Parser();
@@ -129,7 +129,7 @@ describe('core/json/stream/filters', () => {
 				tokens = [];
 
 			for await (const token of Parser.from([input], new Pick((stack) => stack.includes('a'), {multiple: true}))) {
-				tokens.push(token);
+				tokens.push(Object.reject(token, 'filterComplete'));
 			}
 
 			const
