@@ -66,18 +66,18 @@ extend(Object, 'mixin', function mixin(
 
 	let
 		resolvedTarget: object,
-		type = getType(target);
+		targetType = getType(target);
 
-	if (type === '') {
+	if (targetType === '') {
 		for (let i = 0; i < objects.length; i++) {
-			type = getType(objects[i]);
+			targetType = getType(objects[i]);
 
-			if (type !== '') {
+			if (targetType !== '') {
 				break;
 			}
 		}
 
-		switch (type) {
+		switch (targetType) {
 			case 'object':
 				resolvedTarget = {};
 				break;
@@ -107,12 +107,12 @@ extend(Object, 'mixin', function mixin(
 	}
 
 	const
-		simpleTypes = {object: true, array: true},
-		dataIsSimple = simpleTypes[type] === true;
+		simpleObjTypes = {array: true, arrayLike: true, object: true},
+		targetIsSimpleObj = simpleObjTypes[targetType] != null;
 
 	const canUseNativeAssign =
 		!p.deep &&
-		dataIsSimple &&
+		targetIsSimpleObj &&
 
 		!skipUndefs &&
 		!concatArrays &&
@@ -132,7 +132,7 @@ extend(Object, 'mixin', function mixin(
 	let
 		setter;
 
-	switch (type) {
+	switch (targetType) {
 		case 'weakMap':
 		case 'map':
 			setter = (data, key, val) => {
@@ -169,12 +169,6 @@ extend(Object, 'mixin', function mixin(
 			};
 	}
 
-	const forEachParams = <ObjectForEachOptions>{
-		passDescriptor: withDescriptors || onlyAccessors,
-		withNonEnumerables: p.withNonEnumerables,
-		propsToIterate: Object.isTruly(p.deep) ? 'all' : 'own'
-	};
-
 	for (let i = 0; i < objects.length; i++) {
 		const
 			extender = Object.cast<Nullable<object>>(objects[i]);
@@ -184,9 +178,24 @@ extend(Object, 'mixin', function mixin(
 		}
 
 		const
-			isSimple = simpleTypes[getType(extender)] === true;
+			extenderType = getType(extender),
+			extenderIsSimpleObj = simpleObjTypes[extenderType] != null;
 
-		Object.forEach(extender, (el, key: PropertyKey) => {
+		const
+			forEachParams: ObjectForEachOptions = {};
+
+		if (extenderIsSimpleObj) {
+			if (extenderType === 'array') {
+				forEachParams.passDescriptor = withDescriptors;
+
+			} else {
+				forEachParams.passDescriptor = withDescriptors || onlyAccessors;
+				forEachParams.withNonEnumerables = p.withNonEnumerables;
+				forEachParams.propsToIterate = Object.isTruly(p.deep) ? 'all' : 'own';
+			}
+		}
+
+		Object.forEach(extender, forEachParams, (el, key: PropertyKey) => {
 			if (p.filter && !Object.isTruly(p.filter(el, key, extender))) {
 				return;
 			}
@@ -195,7 +204,7 @@ extend(Object, 'mixin', function mixin(
 				Object.cast<PropertyDescriptor>(el) :
 				null;
 
-			const needExtendDescriptor = dataIsSimple && isSimple && (
+			const needExtendDescriptor = targetIsSimpleObj && extenderIsSimpleObj && (
 				withDescriptors ||
 				onlyAccessors && propDesc != null && (propDesc.get != null || propDesc.set != null)
 			);
@@ -217,49 +226,53 @@ extend(Object, 'mixin', function mixin(
 						set: propDesc.set
 					});
 
-				} else if (!skipUndefs || !('value' in propDesc) || propDesc.value !== undefined) {
-					Object.defineProperty(resolvedTarget, key, propDesc);
+					return;
 				}
 
-				return;
+				if (!p.deep || !('value' in propDesc) || !skipUndefs && propDesc.value === undefined) {
+					Object.defineProperty(resolvedTarget, key, propDesc);
+					return;
+				}
 			}
 
 			let
 				oldVal = Object.get(resolvedTarget, [key]);
 
 			const
-				extVal = isSimple ? extender[key] : el;
+				newVal = extenderIsSimpleObj ? extender[key] : el;
 
-			if (extVal === resolvedTarget || extVal === extender) {
+			if (newVal === resolvedTarget || newVal === extender) {
 				return;
 			}
 
 			let
-				canDeepExtend = Object.isTruly(extVal);
+				canDeepExtend = Object.isTruly(newVal);
 
 			if (canDeepExtend && p.extendFilter != null) {
-				canDeepExtend = Object.isTruly(p.extendFilter(extVal, key, resolvedTarget));
+				canDeepExtend = Object.isTruly(p.extendFilter(newVal, key, resolvedTarget));
 			}
 
 			let
-				valIsArray = false,
+				newValIsArray = false,
 				struct;
 
 			if (canDeepExtend) {
-				valIsArray = Object.isArray(extVal);
-				struct = valIsArray ? [] : getSameAs(extVal);
+				newValIsArray = Object.isArray(newVal);
+				struct = newValIsArray ? [] : getSameAs(newVal);
 				canDeepExtend = struct != null;
 			}
 
 			if (p.deep && canDeepExtend) {
-				const
-					canExtendSrcProto = p.withProto && dataIsSimple && canExtendProto(oldVal);
+				const canExtendOldValProto =
+					p.withProto &&
+					targetIsSimpleObj &&
+					canExtendProto(oldVal);
 
 				let
-					srcIsArray = Object.isArray(oldVal);
+					oldValIsArray = Object.isArray(oldVal);
 
-				if (canExtendSrcProto && !Object.hasOwnProperty(resolvedTarget, key)) {
-					if (srcIsArray) {
+				if (canExtendOldValProto && !Object.hasOwnProperty(resolvedTarget, key)) {
+					if (oldValIsArray) {
 						oldVal = Array.from(Object.cast(oldVal));
 
 					} else {
@@ -272,25 +285,35 @@ extend(Object, 'mixin', function mixin(
 				let
 					clone;
 
-				if (valIsArray) {
+				if (newValIsArray) {
 					let
 						isProto = false,
 						construct;
 
-					if (!srcIsArray && canExtendSrcProto && concatArrays) {
+					if (!oldValIsArray && canExtendOldValProto && concatArrays) {
 						construct = Object.getPrototypeOf(oldVal);
-						srcIsArray = construct != null && Object.isArray(construct);
-						isProto = srcIsArray;
+						oldValIsArray = construct != null && Object.isArray(construct);
+						isProto = oldValIsArray;
 					}
 
-					if (srcIsArray) {
+					if (oldValIsArray) {
 						if (concatArrays) {
 							const
 								old = isProto ? construct : oldVal;
 
-							resolvedTarget[key] = Object.isFunction(concatFn) ?
-								concatFn(old, extVal, key) :
-								old.concat(extVal);
+							const mergedArr = Object.isFunction(concatFn) ?
+								concatFn(old, newVal, key) :
+								old.concat(newVal);
+
+							if (needExtendDescriptor && propDesc != null) {
+								Object.defineProperty(resolvedTarget, key, {
+									...propDesc,
+									value: mergedArr
+								});
+
+							} else {
+								resolvedTarget[key] = mergedArr;
+							}
 
 							return;
 						}
@@ -305,13 +328,23 @@ extend(Object, 'mixin', function mixin(
 					clone = isContainer(oldVal) ? oldVal : struct ?? {};
 				}
 
-				Object.set(resolvedTarget, [key], Object.mixin(p, clone, extVal));
+				const
+					mergedVal = Object.mixin(p, clone, newVal);
+
+				if (needExtendDescriptor && propDesc != null) {
+					Object.defineProperty(resolvedTarget, key, {
+						...propDesc,
+						value: mergedVal
+					});
+
+				} else {
+					Object.set(resolvedTarget, [key], mergedVal);
+				}
 
 			} else {
-				setter(resolvedTarget, key, extVal);
+				setter(resolvedTarget, key, newVal);
 			}
-
-		}, forEachParams);
+		});
 	}
 
 	return resolvedTarget;
