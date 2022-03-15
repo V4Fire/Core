@@ -53,7 +53,7 @@ export default abstract class Queue<T> {
 	abstract pop(): CanUndef<T>;
 
 	/**
-	 * Alias to .push
+	 * Alias to `push`
 	 * @see [[Queue.push]]
 	 */
 	unshift(el: T): ReturnType<this['push']> {
@@ -61,7 +61,7 @@ export default abstract class Queue<T> {
 	}
 
 	/**
-	 * Alias to .pop
+	 * Alias to `pop`
 	 * @see [[Queue.pop]]
 	 */
 	shift(): ReturnType<this['pop']> {
