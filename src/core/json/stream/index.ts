@@ -38,6 +38,10 @@ import {
 
 } from 'core/json/stream/streamers';
 
+import type { AndPickOptions } from 'core/json/stream/interface';
+
+export * from 'core/json/stream/interface';
+
 /**
  * Parses the specified iterable object as a JSON stream and yields tokens via a Generator
  * @param source
@@ -64,7 +68,7 @@ export async function* filter(source: AsyncIterable<Token>, filter: TokenFilter)
 }
 
 /**
- * Takes the specified iterable object of tokens and pick from it value that matches the specified selector
+ * Takes the specified iterable object of tokens and picks from it a value that matches the specified selector
  *
  * @param source
  * @param selector
@@ -102,10 +106,40 @@ export async function* pick(
 	}
 }
 
+/**
+ * Takes the specified iterable object of tokens that has already been `pick` or `pickAnd` applied to,
+ * and picks from it a value that matches the specified selector.
+ * Use this function when you need to combine two or more Pick-s from a one token stream.
+ *
+ * @param source
+ * @param selector
+ * @param opts
+ *
+ * @example
+ * ```js
+ * const tokens = intoIter(from(JSON.stringify({
+ *   total: 3,
+ *   data: [
+ *     {user: 'Bob', age: 21},
+ *     {user: 'Ben', age: 24},
+ *     {user: 'Rob', age: 28}
+ *   ]
+ * })));
+ *
+ * const seq = sequence(
+ *   assemble(pick(tokens, 'total')),
+ *   streamArray(andPick(tokens, 'data'))
+ * );
+ *
+ * for await (const val of seq) {
+ *   console.log(val);
+ * }
+ * ```
+ */
 export function andPick(
 	source: AsyncIterable<Token>,
 	selector: TokenFilter,
-	opts?: FilterOptions
+	opts?: AndPickOptions
 ): AsyncGenerator<Token> {
 	let
 		stage = 0;
@@ -118,7 +152,7 @@ export function andPick(
 		next() {
 			if (stage++ === 0) {
 				return Promise.resolve({
-					value: {name: 'startObject'},
+					value: <Token>{name: `start-${opts?.from ?? 'object'}`.camelize(false)},
 					done: false
 				});
 			}

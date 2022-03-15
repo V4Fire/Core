@@ -70,6 +70,36 @@ for await (const token of parser) {
 }
 ```
 
+### andPick
+
+Takes the specified iterable object of tokens that has already been `pick` or `pickAnd` applied to,
+and picks from it a value that matches the specified selector.
+Use this function when you need to combine two or more Pick-s from a one token stream.
+
+```js
+import { intoIter } from 'core/iter';
+import { sequence } from 'core/iter/combinators';
+import { from, pick, andPick, assemble, streamArray } from 'core/json/stream';
+
+const tokens = intoIter(from(JSON.stringify({
+  total: 3,
+  data: [
+    {user: 'Bob', age: 21},
+    {user: 'Ben', age: 24},
+    {user: 'Rob', age: 28}
+  ]
+})));
+
+const seq = sequence(
+  assemble(pick(tokens, 'total')),
+  streamArray(andPick(tokens, 'data'))
+);
+
+for await (const val of seq) {
+  console.log(val);
+}
+```
+
 ### assemble
 
 Takes the specified iterable object of tokens and yields an assembled item from it.
