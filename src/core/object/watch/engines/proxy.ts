@@ -218,7 +218,7 @@ export function watch<T extends object>(
 			const
 				val = target[key];
 
-			if (Object.isPrimitive(val) || resolvedRoot[muteLabel] === true) {
+			if (Object.isPrimitive(val) || resolvedRoot[muteLabel] === true || obj[muteLabel] === true) {
 				return val;
 			}
 

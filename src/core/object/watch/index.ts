@@ -886,3 +886,18 @@ export function unset(
 
 	engine.unset(obj, path, handlers);
 }
+
+/**
+ * The function unmutes all mutation events for the specified proxy object
+ *
+ * @param obj
+ * @param engine
+ * @example
+ * ```js
+ * ```
+ */
+export function unwatchable(obj: object, engine:any): object {
+	const {proxy} = watch(obj, {engine});
+	mute(proxy);
+	return proxy;
+}
