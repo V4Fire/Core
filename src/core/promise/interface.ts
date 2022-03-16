@@ -30,11 +30,11 @@ export type ControllablePromise<P extends PromiseLike<any> = Promise<unknown>> =
 };
 
 export interface ControllablePromiseResolveHandler<T = unknown> {
-	(value?: T | PromiseLike<T>, ...args: any[]): AnyToIgnore;
+	(value?: T | PromiseLike<T>, ...args: any[]): void;
 }
 
 export interface ControllablePromiseRejectHandler {
-	(reason?: unknown, ...args: any[]): AnyToIgnore;
+	(reason?: unknown, ...args: any[]): void;
 }
 
 export interface ControllablePromiseExecutor<T = unknown> {
@@ -42,7 +42,7 @@ export interface ControllablePromiseExecutor<T = unknown> {
 		resolve: ControllablePromiseResolveHandler<T>,
 		reject: ControllablePromiseRejectHandler,
 		...args: any[]
-	): AnyToIgnore;
+	): void;
 }
 
 export interface ControllablePromiseConstructor<T = unknown> {
@@ -67,7 +67,7 @@ export interface CreateControllablePromiseOptions<T extends ControllablePromiseC
 		resolve: ControllablePromiseResolveHandler,
 		reject: ControllablePromiseRejectHandler,
 		...args: any[]
-	): AnyToIgnore;
+	): void;
 
 	/**
 	 * Extra arguments to pass to the promise constructor

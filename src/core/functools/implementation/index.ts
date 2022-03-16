@@ -24,7 +24,7 @@ export * from 'core/functools/warning/interface';
 export function unimplement<T extends Function>(
 	opts: WarnOptions,
 	fn: T
-): T extends ((...args: infer A) => any) ? WarnedFn<A, AnyToIgnore> : T;
+): T extends ((...args: infer A) => any) ? WarnedFn<A, void> : T;
 
 /**
  * Emits an "unimplemented" warning with the specified parameters
@@ -37,7 +37,7 @@ export function unimplement(opts: InlineWarnOptions): void;
  * @param fn - function to wrap
  */
 export function unimplement<T extends Function>(fn: T): T extends ((...args: infer A) => any) ?
-	WarnedFn<A, AnyToIgnore> :
+	WarnedFn<A, void> :
 	T;
 
 export function unimplement<T extends Function>(
