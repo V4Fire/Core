@@ -206,6 +206,8 @@ type ReturnPromise<T extends AnyFunction<any[], unknown>> = (...args: Parameters
 
 type DictionaryType<T extends Dictionary> = T extends Dictionary<infer V> ? NonNullable<V> : T;
 
+type AnyIterable<T = unknown> = Iterable<T> | AsyncIterable<T>;
+
 type IterableType<T extends Iterable<any> | AsyncIterable<any>> =
 	T extends Iterable<infer V> ?
 		V :
