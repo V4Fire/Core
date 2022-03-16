@@ -8,7 +8,7 @@ This module provides a class to create a pull structure
 import Pull from 'core/pull';
 
 const pull = new Pull(
-  // function return value that are stored in pull
+  // function return value that will be stored in pull
   () => Object(),
 
   // start number of objects in pull
@@ -18,7 +18,7 @@ const pull = new Pull(
 // Number of objects in pull that are avalible now
 console.log(pull.canTake()); // 10
 
-// if there zero object throw error
+// if there aren't any avalible objects, throw error
 const {
   free,
   value
@@ -33,16 +33,12 @@ const {
   value: value1
 } = pull.takeOrCreate();
 
-// destroy object instead of returning to pull
+// destroy object instead of returning it to pull
 destroy(value1)
 
 // return core/promise/sync (wait until something call free(value))
 pull.takeOrWait()
-  .then(({
-           free,
-           value
-         }) => {
-  });
+  .then(({free, value}) => {});
 ```
 
 ## Borrow
@@ -56,7 +52,7 @@ const pull = new Pull(() => Object(), 1);
 
 console.log(pull.canBorrow()); // true
 
-// throw error if pull.canBorrow()==false
+// throw error, if pull is empty
 const {
   free,
   value
@@ -68,12 +64,12 @@ const {
   value: value1
 } = pull.borrow();
 
-// if there aren't any avalible objects, will create one
+// if pull is empty, will create one
 const {value: value2} = pull.borrowOrCreate();
 
 console.log(value === value1) // true
 
-// destroy object if nobody use it
+// destroy object, if nobody use it
 destroy(value1)
 
 // return core/promise/sync (wait until something call free(value)
@@ -96,11 +92,11 @@ let pull = new Pull(
 let anotherPull = new Pull(
   (firstItem) => [firstItem],
 
-  // how any object will be created immediately
+  // how many object will be created immediately
   4,
 
   // params passed to objectFactory
-  // only for object that created immediately
+  // only for objects that will be created immediately
   ['lol'],
   {
     // some hooks
@@ -169,15 +165,18 @@ pull.clear() // cleared
 
 ## Hash
 
-Pull can separate objects. Objects separated via id.
+Pull can separate objects. Objects separated via id. Id is generated with hashFn.
 
 ```js
 import Pull from 'core/pull';
 
 const pull = new Pull(
   () => Array(1, 2, 3),
+  2,
+  ['initial objects'], // createOpts
   {
     // take args that are given to function and convert them to string
+    // arg - params passed to takeOrCreate, borrowOrCreate, createOpts
     hashFn: (...args) => JSON.stringify(args)
   }
 );
@@ -196,4 +195,6 @@ console.log(pull.canTake('hi')) // 1
 console.log(pull.canTake('hey')) // 0
 
 console.log(pull.canTake()) // 0
+
+console.log(pull.canTake('initial objects')) // 2
 ```
