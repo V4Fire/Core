@@ -15,7 +15,7 @@ export type PullHook<T> = (value: T, pull: Pull<T>, ...args: unknown[]) => void;
 
 export interface PullOptions<T> {
 	/**
-	 * Hook that are activated before `this.take` or `this.takeOrCreate`
+	 * Hook that is activated before `this.take` or `this.takeOrCreate`
 	 *
 	 * @param value - value that are return from `this.take`
 	 * @param pull - this pull
@@ -24,7 +24,7 @@ export interface PullOptions<T> {
 	onTake?: PullHook<T>;
 
 	/**
-	 * Hook that are activated before (free) function
+	 * Hook that is activated before (free) function
 	 *
 	 * @param value - value from free(value)
 	 * @param pull - this pull
@@ -35,12 +35,12 @@ export interface PullOptions<T> {
 	/**
 	 * Function that calculate hash of resource
 	 *
-	 * @param args - params passed to take or borrow or createOpts from constructor
+	 * @param args - params passed to objectFactory
 	 */
 	hashFn?(...args: unknown[]): string;
 
 	/**
-	 * Hook that called on 'this.clear'
+	 * Hook that is called on 'this.clear'
 	 *
 	 * @param pull - this pull
 	 * @param args - params given to `Pull.clear()`
@@ -48,7 +48,7 @@ export interface PullOptions<T> {
 	onClear?(pull: Pull<T>, ...args: unknown[]): void;
 
 	/**
-	 * Hook that destruct object
+	 * Hook that destructs object
 	 *
 	 * @param resource - resource that will be destructed
 	 */
@@ -70,7 +70,7 @@ export interface PullReturnType<T> {
 	value: T;
 
 	/**
-	 * Function to destruct value instead of returning it to pull
+	 * Function that destruct value instead of returning it to pull
 	 *
 	 * @param resource - value from pull
 	 */

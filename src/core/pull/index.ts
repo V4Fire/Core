@@ -46,37 +46,37 @@ export default class Pull<T> {
 	protected readonly borrowedResourceStore: Map<string, T> = new Map();
 
 	/**
-	 * Hook that are activated before (free) function
+	 * Hook that is activated before (free) function
 	 *
 	 * @param value - value from free(value)
 	 * @param pull - this pull
-	 * @param args - params that are given in free(value,...args)
+	 * @param args - args that are given to free(value,...args)
 	 */
 	protected onFree?: PullHook<T>;
 
 	/**
-	 * Hook that are activated before `this.take` or `this.takeOrCreate`
+	 * Hook that is activated before `this.take` or `this.takeOrCreate`
 	 *
 	 * @param value - value that are returned from `this.take`
 	 * @param pull - this pull
-	 * @param args - params in `this.take(...args)`
+	 * @param args - args in `this.take(...args)`
 	 */
 	protected onTake?: PullHook<T>;
 
 	/**
 	 * Function that calculate hash of resource
 	 *
-	 * @param args - params passed to take or borrow or createOpts from constructor
+	 * @param args - params passed to `this.objectFactory`
 	 */
 	protected hashFn: (...args: unknown[]) => string;
 
 	/**
-	 * Hook that called before 'this.clear'
+	 * Hook that is called before 'this.clear'
 	 */
 	protected onClear?: (pull: Pull<T>, ...args: unknown[]) => void;
 
 	/**
-	 * Hook that destruct object
+	 * Function that destruct object
 	 */
 	protected destructor?: (resource: T) => void;
 
@@ -86,20 +86,20 @@ export default class Pull<T> {
 	protected emitter: EventEmitter;
 
 	/**
-	 * Active event queue
+	 * Queue of active events
 	 */
 	protected events: Queue<string> = new Queue();
 
 	/**
-	 * Active borrow events
+	 * Map of active borrow events
 	 */
 	protected borrowEventsInQueue: Map<string, true> = new Map();
 
 	/**
-	 * Constructor that initialize pull
+	 * Constructor that initializes pull
 	 *
 	 * @param objectFactory
-	 * @param settings - settings like "max pull size" and hooks
+	 * @param settings - settings like hooks
 	 */
 	constructor(
 		objectFactory: () => T,
@@ -107,12 +107,12 @@ export default class Pull<T> {
 	)
 
 	/**
-	 * Constructor that can create object immediately
+	 * Constructor that can create objects immediately
 	 *
 	 * @param objectFactory
 	 * @param size - amount of object that will be created at initialization
 	 * @param createOpts - options passed to objectFactory for first (size) elements
-	 * @param settings - settings like "max pull size" and hooks
+	 * @param settings - settings like hooks
 	 */
 	constructor(
 		objectFactory: () => T,
@@ -198,7 +198,7 @@ export default class Pull<T> {
 	}
 
 	/**
-	 * Return a Promise, that will be resolved after somebody releases item
+	 * Return a Promise, that will be resolved after somebody returns element to pull
 	 *
 	 * @param args - params for hashFn and hooks
 	 */
@@ -218,7 +218,7 @@ export default class Pull<T> {
 	}
 
 	/**
-	 * Check can you borrow item with ...args
+	 * Check if you can borrow element with ...args
 	 *
 	 * @param args - params for hashFn and hooks
 	 */
@@ -265,7 +265,7 @@ export default class Pull<T> {
 	}
 
 	/**
-	 * Borrow resource from pull or wait until somebody free resource
+	 * Borrow resource from pull or wait until somebody returns resource to pull
 	 *
 	 * @param args - params for hashFn and hooks
 	 */
@@ -313,7 +313,7 @@ export default class Pull<T> {
 	}
 
 	/**
-	 * Function that return a value to the pull
+	 * Function that returns a value to the pull
 	 *
 	 * @param value - pull's object
 	 * @param args - args for hook
