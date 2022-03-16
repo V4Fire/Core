@@ -109,7 +109,7 @@ export default function createProviderEngine(
 				requestMethod = provider[`${providerMethod}Method`] ?? 'post';
 
 			let
-				body = queryMethods[requestMethod] === true ? p.query : p.body,
+				body = queryMethods[requestMethod] != null ? p.query : p.body,
 				urlProp = `base-${providerMethod}-URL`.camelize(false);
 
 			if (!Object.isTruly(provider[urlProp])) {
