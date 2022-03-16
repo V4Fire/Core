@@ -15,7 +15,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :boom: Breaking Change
 
-* Now [key, el] responses from an iterator will be destructured before providing to callback `Object.forEach`
+* Now `[key, el]` responses from an iterator will be destructured before providing to callback `Object.forEach`
 
 * `core/request`:
   * Now `RequestResponseObject.data` contains a promise with data

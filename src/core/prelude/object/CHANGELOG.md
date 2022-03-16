@@ -13,7 +13,7 @@ Changelog
 
 #### :boom: Breaking Change
 
-* Now [key, el] responses from an iterator will be destructured before providing to callback `Object.forEach`
+* Now `[key, el]` responses from an iterator will be destructured before providing to callback `Object.forEach`
 
 ## v3.77.0 (2022-03-15)
 
