@@ -173,6 +173,7 @@ export default function createProviderEngine(
 				responseType: 'object',
 
 				decoder: params.decoders,
+				streamDecoder: params.streamDecoders,
 				jsonReviver: params.jsonReviver
 			}));
 

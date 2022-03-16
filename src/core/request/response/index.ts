@@ -594,7 +594,7 @@ export default class Response<
 
 				return {
 					done,
-					value: await this.decodeToString(value.data)
+					value: done ? value : await this.decodeToString(value.data)
 				};
 			}
 		};
@@ -717,7 +717,7 @@ export default class Response<
 	 * @param [decoders]
 	 */
 	protected applyStreamDecoders<T>(
-		stream: Iterable<unknown> | AsyncIterable<unknown>,
+		stream: AnyIterable,
 		decoders: WrappedStreamDecoders = this.streamDecoders
 	): AsyncIterableIterator<T> {
 		const
@@ -726,22 +726,30 @@ export default class Response<
 
 		return applyDecoders(stream);
 
-		async function* applyDecoders(
-			stream: Iterable<any> | AsyncIterable<any>,
+		// eslint-disable-next-line @typescript-eslint/require-await
+		function applyDecoders<T>(
+			stream: AnyIterable,
 			currentDecoder: number = 0
-		): AsyncIterableIterator<any> {
+		): AsyncIterableIterator<T> {
 			const
 				decoder = indexedDecoders[currentDecoder];
 
-			for await (const val of stream) {
-				if (Object.isFunction(decoder)) {
-					const transformedStream = decoder(val, Object.cast(that));
-					yield* applyDecoders(transformedStream, currentDecoder + 1);
-
-				} else {
-					yield val;
-				}
+			if (Object.isFunction(decoder)) {
+				const transformedStream = decoder(stream, Object.cast(that));
+				return applyDecoders(transformedStream, currentDecoder + 1);
 			}
+
+			let
+				i;
+
+			if (Object.isAsyncIterable(stream)) {
+				i = stream[Symbol.asyncIterator]();
+
+			} else {
+				i = stream[Symbol.iterator]();
+			}
+
+			return Object.cast(i);
 		}
 	}
 
@@ -828,7 +836,12 @@ export default class Response<
 
 				if (typeof TextDecoder !== 'undefined') {
 					const decoder = new TextDecoder(encoding, {fatal: true});
-					return decoder.decode(new DataView(Object.cast(body)));
+
+					if (body instanceof ArrayBuffer) {
+						return decoder.decode(new DataView(body));
+					}
+
+					return decoder.decode(Object.cast(body));
 				}
 
 				return new AbortablePromise<string>((resolve, reject, onAbort) => {

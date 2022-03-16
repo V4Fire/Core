@@ -150,6 +150,7 @@ const request: RequestEngine = (params) => {
 				responseType: p.responseType,
 
 				decoder: p.decoders,
+				streamDecoder: p.streamDecoders,
 				jsonReviver: p.jsonReviver
 			});
 

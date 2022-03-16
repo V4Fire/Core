@@ -298,7 +298,8 @@ function request<D = unknown>(
 					url,
 					emitter,
 					parent: requestPromise,
-					decoders: ctx.decoders
+					decoders: ctx.decoders,
+					streamDecoders: ctx.streamDecoders
 				};
 
 				const createEngineRequest = () => {

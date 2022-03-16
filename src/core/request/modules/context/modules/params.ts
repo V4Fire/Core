@@ -32,10 +32,13 @@ import { merge } from 'core/request/helpers';
 import type {
 
 	NormalizedCreateRequestOptions,
+
 	RequestQuery,
 	RequestResponse,
+
+	WrappedEncoders,
 	WrappedDecoders,
-	WrappedEncoders
+	WrappedStreamDecoders
 
 } from 'core/request/interface';
 
@@ -134,6 +137,20 @@ export default class RequestContext<D = unknown> {
 	}
 
 	/**
+	 * Sequence of response data decoders
+	 */
+	get streamDecoders(): WrappedStreamDecoders {
+		return this[$$.streamDecoders];
+	}
+
+	/**
+	 * Sets a new sequence of response data decoders
+	 */
+	protected set streamDecoders(value: WrappedStreamDecoders) {
+		this[$$.streamDecoders] = value;
+	}
+
+	/**
 	 * Link to a parent operation promise
 	 */
 	parent!: AbortablePromise;
@@ -165,6 +182,13 @@ export default class RequestContext<D = unknown> {
 
 		} else {
 			this.decoders = Object.isFunction(p.decoder) ? [p.decoder] : p.decoder;
+		}
+
+		if (p.streamDecoder == null) {
+			this.streamDecoders = [];
+
+		} else {
+			this.streamDecoders = Object.isFunction(p.streamDecoder) ? [p.streamDecoder] : p.streamDecoder;
 		}
 
 		this.withoutBody = Boolean(methodsWithoutBody[p.method]);

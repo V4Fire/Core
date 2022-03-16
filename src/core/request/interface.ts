@@ -107,11 +107,11 @@ export type Decoders = Iterable<Decoder>;
 export type WrappedDecoders = Iterable<WrappedDecoder>;
 
 export interface StreamDecoder<I = unknown, O = unknown> {
-	(data: I, params: MiddlewareParams, response: Response): Iterable<O> | AsyncIterable<O>;
+	(data: AnyIterable<I>, params: MiddlewareParams, response: Response): AnyIterable<O>;
 }
 
 export interface WrappedStreamDecoder<I = unknown, O = unknown> {
-	(data: I, response: Response): Iterable<O> | AsyncIterable<O>;
+	(data: AnyIterable<I>, response: Response): AnyIterable<O>;
 }
 
 export type StreamDecoders = Iterable<StreamDecoder>;
@@ -646,6 +646,7 @@ export interface WrappedCreateRequestOptions<D = unknown> extends CreateRequestO
 	headers: Headers;
 	encoder?: WrappedEncoder | WrappedEncoders;
 	decoder?: WrappedDecoder | WrappedDecoders;
+	streamDecoder?: WrappedStreamDecoder | WrappedStreamDecoders;
 }
 
 export type NormalizedCreateRequestOptions<D = unknown> = typeof defaultRequestOpts & WrappedCreateRequestOptions<D>;
@@ -664,6 +665,7 @@ export interface RequestOptions {
 	readonly responseType?: ResponseType;
 
 	readonly decoders?: WrappedDecoders;
+	readonly streamDecoders?: WrappedStreamDecoders;
 	readonly jsonReviver?: JSONCb | false;
 
 	readonly headers?: Headers;
