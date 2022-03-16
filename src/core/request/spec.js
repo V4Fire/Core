@@ -12,6 +12,9 @@
 import express from 'express';
 import { set, get } from 'core/env';
 
+import { sequence } from 'core/iter/combinators';
+import { pick, andPick, assemble, streamArray } from 'core/json/stream';
+
 import Provider, { provider } from 'core/data';
 import baseRequest, { globalOpts, RequestError } from 'core/request';
 import { defaultRequestOpts } from 'core/request/const';
@@ -641,6 +644,29 @@ describe('core/request', () => {
 						expect(result).toBe(faviconBase64);
 					}
 				});
+
+				it('parsing JSON from a stream', async () => {
+					const req = request('http://localhost:4000/json/users', {
+						streamDecoder: (data) => sequence(
+							assemble(pick(data, 'total')),
+							streamArray(andPick(data, 'data'))
+						)
+					});
+
+					const
+						res = [];
+
+					for await (const token of await req.stream) {
+						res.push(token);
+					}
+
+					expect(res).toEqual([
+						3,
+						{index: 0, value: {name: 'Bob', age: 21}},
+						{index: 1, value: {name: 'Ben', age: 45}},
+						{index: 2, value: {name: 'Rob', age: 32}}
+					]);
+				});
 			}
 
 			async function retryDelayTest(delay, delayMS) {
@@ -711,6 +737,28 @@ function createServer() {
 		} else {
 			res.sendStatus(422);
 		}
+	});
+
+	serverApp.get('/json/users', (req, res) => {
+		res.status(200).json({
+			total: 3,
+			data: [
+				{
+					name: 'Bob',
+					age: 21
+				},
+
+				{
+					name: 'Ben',
+					age: 45
+				},
+
+				{
+					name: 'Rob',
+					age: 32
+				}
+			]
+		});
 	});
 
 	serverApp.get('/xml/text', (req, res) => {
