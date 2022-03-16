@@ -52,7 +52,7 @@ export default class Parser {
 
 		yield* process(parser.finishChunkProcessing());
 
-		function* process(stream: IterableIterator<any>, currentProcessor: number = 0): IterableIterator<any> {
+		function* process(stream: IterableIterator<any>, currentProcessor: number = 0): IterableIterator<unknown> {
 			if (currentProcessor >= processors.length) {
 				yield* stream;
 				return;

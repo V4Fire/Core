@@ -17,22 +17,25 @@
  */
 export function sequence<T extends Iterable<any>>(
 	...iterables: T[]
-): T extends Iterable<infer R> ? IterableIterator<R> : IterableIterator<unknown>;
+): IterableIterator<IterableType<T>>;
 
 /**
  * Takes async iterable objects and returns a new async iterator that produces values from them sequentially
+ *
+ * @param iterable
  * @param iterables
  */
-export function sequence<T extends AsyncIterable<any>>(
-	...iterables: T[]
-): T extends AsyncIterable<infer R> ? AsyncIterableIterator<R> : AsyncIterableIterator<unknown>;
+export function sequence<T extends AsyncIterable<any>, A extends AnyIterable<any>>(
+	iterable: T,
+	...iterables: A[]
+): AsyncIterableIterator<IterableType<T> | IterableType<A>>;
 
 export function sequence(
-	...iterables: Array<Iterable<unknown> | AsyncIterable<unknown>>
+	...iterables: AnyIterable[]
 ): IterableIterator<unknown> | AsyncIterableIterator<unknown> {
 	let
 		cursor = 0,
-		iter: Iterator<unknown>;
+		iter;
 
 	const
 		isAsync = Object.isAsyncIterable(iterables[cursor]);
@@ -43,13 +46,13 @@ export function sequence(
 				return this;
 			},
 
-			async next(): Promise<IteratorResult<any>> {
+			async next(): Promise<IteratorResult<unknown>> {
 				if (cursor >= iterables.length) {
 					return Promise.resolve({value: undefined, done: true});
 				}
 
 				if (!Object.isTruly(iter)) {
-					iter = iterables[cursor][Symbol.asyncIterator]();
+					iter = getIter(iterables[cursor]);
 				}
 
 				let
@@ -57,10 +60,24 @@ export function sequence(
 
 				while ((res = await iter.next(), res.done) && ++cursor < iterables.length) {
 					// eslint-disable-next-line require-atomic-updates
-					iter = iterables[cursor][Symbol.asyncIterator]();
+					iter = getIter(iterables[cursor]);
 				}
 
 				return res;
+
+				function getIter(obj: AnyIterable): AsyncIterableIterator<unknown> {
+					let
+						i;
+
+					if (Object.isAsyncIterable(obj)) {
+						i = obj[Symbol.asyncIterator]();
+
+					} else {
+						i = obj[Symbol.iterator]();
+					}
+
+					return Object.cast(i);
+				}
 			}
 		};
 	}
@@ -70,7 +87,7 @@ export function sequence(
 			return this;
 		},
 
-		next(): IteratorResult<any> {
+		next(): IteratorResult<unknown> {
 			if (cursor >= iterables.length) {
 				return {value: undefined, done: true};
 			}

@@ -45,7 +45,7 @@ export function isControllablePromise(obj: unknown): boolean {
  */
 export function createControllablePromise<T extends ControllablePromiseConstructor>(
 	opts: CreateControllablePromiseOptions<T>
-): ControllablePromise<T extends (new(...args: any) => infer R) ? R : Promise<unknown>>;
+): ControllablePromise<T extends (new(...args: any[]) => infer R) ? R : Promise<unknown>>;
 
 /**
  * Creates a promise that can be resolved from the "outside"

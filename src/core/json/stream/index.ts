@@ -46,7 +46,7 @@ export * from 'core/json/stream/interface';
  * Parses the specified iterable object as a JSON stream and yields tokens via a Generator
  * @param source
  */
-export function from(source: Iterable<string> | AsyncIterable<string>): AsyncGenerator<Token> {
+export function from(source: AnyIterable<string>): AsyncGenerator<Token> {
 	return Parser.from(source);
 }
 
@@ -56,7 +56,7 @@ export function from(source: Iterable<string> | AsyncIterable<string>): AsyncGen
  * @param source
  * @param filter
  */
-export async function* filter(source: AsyncIterable<Token>, filter: TokenFilter): AsyncGenerator<Token> {
+export async function* filter(source: AnyIterable<Token>, filter: TokenFilter): AsyncGenerator<Token> {
 	const
 		f = new Filter(filter);
 
@@ -75,7 +75,7 @@ export async function* filter(source: AsyncIterable<Token>, filter: TokenFilter)
  * @param [opts] - additional filter options
  */
 export async function* pick(
-	source: AsyncIterable<Token>,
+	source: AnyIterable<Token>,
 	selector: TokenFilter,
 	opts?: FilterOptions
 ): AsyncGenerator<Token> {
@@ -137,7 +137,7 @@ export async function* pick(
  * ```
  */
 export function andPick(
-	source: AsyncIterable<Token>,
+	source: AnyIterable<Token>,
 	selector: TokenFilter,
 	opts?: AndPickOptions
 ): AsyncGenerator<Token> {
@@ -174,7 +174,7 @@ export function andPick(
  * @param [opts] - additional options
  */
 export async function* assemble<T = unknown>(
-	source: AsyncIterable<Token>,
+	source: AnyIterable<Token>,
 	opts?: AssemblerOptions
 ): AsyncGenerator<T> {
 	const
@@ -192,7 +192,7 @@ export async function* assemble<T = unknown>(
  * @param [opts] - additional options
  */
 export async function* streamArray<T = unknown>(
-	source: AsyncIterable<Token>,
+	source: AnyIterable<Token>,
 	opts?: AssemblerOptions
 ): AsyncGenerator<StreamedArray<T>> {
 	const
@@ -210,7 +210,7 @@ export async function* streamArray<T = unknown>(
  * @param [opts] - additional options
  */
 export async function* streamObject<T = unknown>(
-	source: AsyncIterable<Token>,
+	source: AnyIterable<Token>,
 	opts?: AssemblerOptions
 ): AsyncGenerator<StreamedObject<T>> {
 	const
