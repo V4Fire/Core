@@ -8,5 +8,7 @@
 
 export const
 	hashProperty = Symbol('hash value of object'),
-	viewerCount = Symbol('the number of objects that have a resource'),
+	viewerCount = Symbol('number of objects that use this resource'),
+
+	// Default value of hash, if hashFn isn't specified
 	defaultValue = '';

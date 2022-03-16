@@ -81,7 +81,7 @@ export default class Pull<T> {
 	protected destructor?: (resource: T) => void;
 
 	/**
-	 * @see EventEmitter
+	 * @see [[EventEmitter]]
 	 */
 	protected emitter: EventEmitter;
 
@@ -367,8 +367,8 @@ export default class Pull<T> {
 	}
 
 	/**
-	 * @see PullReturnType
 	 * Return object that contain value and free, destroy functions
+	 * @see PullReturnType
 	 *
 	 * @param value - value that will be returned
 	 * @protected
