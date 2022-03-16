@@ -16,19 +16,21 @@ import log from 'core/log';
 import { concatURLs } from 'core/url';
 import { getDataTypeFromURI } from 'core/mime-type';
 
-import { merge } from 'core/request/utils';
 import { globalOpts, isAbsoluteURL } from 'core/request/const';
+import { merge } from 'core/request/helpers';
 
 import type {
 
 	NormalizedCreateRequestOptions,
 	RequestResolver,
+
 	WrappedEncoder,
-	WrappedDecoder
+	WrappedDecoder,
+	WrappedStreamDecoder
 
 } from 'core/request/interface';
 
-import Super from 'core/request/context/modules/middlewares';
+import Super from 'core/request/modules/context/modules/middlewares';
 
 /**
  * Context of a request
@@ -66,16 +68,18 @@ export default class RequestContext<D = unknown> extends Super<D> {
 				time = Date.now(),
 				res = fn(data, middlewareParams, ...args);
 
-			const
-				loggingContext = `request:${namespace}:${key}:${path}`,
-				getTime = () => `Finished at ${Date.now() - time}ms`,
-				clone = (data) => (() => Object.isPlainObject(data) || Object.isArray(data) ? Object.fastClone(data) : data);
+			if (namespace !== 'streamDecoders') {
+				const
+					loggingContext = `request:${namespace}:${key}:${path}`,
+					getTime = () => `Finished at ${Date.now() - time}ms`,
+					clone = (data) => (() => Object.isPlainObject(data) || Object.isArray(data) ? Object.fastClone(data) : data);
 
-			if (Object.isPromise(res)) {
-				res.then((data) => log(loggingContext, getTime(), clone(data)), stderr);
+				if (Object.isPromise(res)) {
+					res.then((data) => log(loggingContext, getTime(), clone(data)), stderr);
 
-			} else {
-				log(loggingContext, getTime(), clone(res));
+				} else {
+					log(loggingContext, getTime(), clone(res));
+				}
 			}
 
 			return res;
@@ -83,7 +87,8 @@ export default class RequestContext<D = unknown> extends Super<D> {
 
 		const
 			encoders = <WrappedEncoder[]>[],
-			decoders = <WrappedDecoder[]>[];
+			decoders = <WrappedDecoder[]>[],
+			streamDecoders = <WrappedStreamDecoder[]>[];
 
 		Object.forEach(merge(ctx.encoders), (el, key) => {
 			encoders.push(wrapProcessor('encoders', el, key));
@@ -93,11 +98,16 @@ export default class RequestContext<D = unknown> extends Super<D> {
 			decoders.push(wrapProcessor('decoders', el, key));
 		});
 
+		Object.forEach(merge(ctx.streamDecoders), (el, key) => {
+			streamDecoders.push(wrapProcessor('streamDecoders', el, key));
+		});
+
 		Object.assign(forkedCtx, {
 			params,
 
 			encoders,
 			decoders,
+			streamDecoders,
 
 			// Bind middlewares to a new context
 			saveCache: ctx.saveCache.bind(forkedCtx),

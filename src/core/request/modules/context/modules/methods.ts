@@ -8,17 +8,19 @@
 
 import { deprecated } from 'core/functools';
 import { concatURLs, fromQueryString } from 'core/url';
-import { normalizeHeaders, applyQueryForStr, getRequestKey } from 'core/request/utils';
 
 import { globalOpts } from 'core/request/const';
-import { queryTplRgxp, resolveURLRgxp } from 'core/request/context/const';
+import { queryTplRgxp, resolveURLRgxp } from 'core/request/modules/context/const';
+import { applyQueryForStr, getRequestKey } from 'core/request/helpers';
+
+import Headers from 'core/request/headers';
 import type { RequestAPI } from 'core/request/interface';
 
-import Super from 'core/request/context/modules/params';
+import Super from 'core/request/modules/context/modules/params';
 
 export default class RequestContext<D = unknown> extends Super<D> {
 	/**
-	 * Generates a string cache key for specified url and returns it
+	 * Generates a string cache key for specified URL and returns it
 	 * @param url
 	 */
 	getRequestKey(url: string): string {
@@ -165,11 +167,11 @@ export default class RequestContext<D = unknown> extends Super<D> {
 			}
 
 			if (Object.isPlainObject(data)) {
-				p.headers = normalizeHeaders(p.headers, data);
+				p.headers = new Headers(p.headers, data);
 				url = applyQueryForStr(url, data, queryTplRgxp);
 
 			} else {
-				p.headers = normalizeHeaders(p.headers);
+				p.headers = new Headers(p.headers);
 			}
 
 			const
@@ -204,7 +206,7 @@ export default class RequestContext<D = unknown> extends Super<D> {
 	}
 
 	/**
-	 * Drops a value of the request from the cache
+	 * Drops the request cache
 	 */
 	dropCache(): void {
 		const

@@ -110,7 +110,12 @@ extend(Object, 'forEach', (
 				i = 0;
 
 			for (const el of obj) {
-				cb(el, i++, obj);
+				if (Object.isArray(el) && el.length === 2) {
+					cb(el[1], el[0], obj);
+
+				} else {
+					cb(el, i++, obj);
+				}
 			}
 
 			return;

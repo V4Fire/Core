@@ -15,7 +15,7 @@ export interface Details<D = unknown> extends Dictionary {
 	error?: object;
 }
 
-export interface RequestErrorDetailsExtractorSettings {
+export interface RequestErrorDetailsExtractorOptions {
 	headers: {
 		include?: string[];
 		exclude?: string[];

@@ -119,6 +119,13 @@ declare function clearImmediate(id: number): void;
 
 declare function structuredClone<T>(obj: T): T;
 
+interface Headers {
+	keys(): IterableIterator<string>;
+	values(): IterableIterator<string>;
+	entries(): IterableIterator<[string, string]>;
+	[Symbol.iterator]: IterableIterator<[string, string]>;
+}
+
 type Primitive =
 	string |
 	symbol |
@@ -198,7 +205,13 @@ type PromiseType<T> =
 type ReturnPromise<T extends AnyFunction<any[], unknown>> = (...args: Parameters<T>) => Promise<ReturnType<T>>;
 
 type DictionaryType<T extends Dictionary> = T extends Dictionary<infer V> ? NonNullable<V> : T;
-type IterableType<T extends Iterable<any>> = T extends Iterable<infer V> ? V : T;
+
+type AnyIterable<T = unknown> = Iterable<T> | AsyncIterable<T>;
+
+type IterableType<T extends Iterable<any> | AsyncIterable<any>> =
+	T extends Iterable<infer V> ?
+		V :
+		T extends AsyncIterable<infer V> ? V : T;
 
 /**
  * Overrides properties of the specified type or interface.
@@ -1852,6 +1865,12 @@ interface ObjectConstructor {
 	 * @param value
 	 */
 	isGenerator(value: any): value is GeneratorFunction;
+
+	/**
+	 * Returns true if the specified value is an async generator function
+	 * @param value
+	 */
+	isAsyncGenerator(value: any): value is AsyncGeneratorFunction;
 
 	/**
 	 * Returns true if the specified value is an iterable structure

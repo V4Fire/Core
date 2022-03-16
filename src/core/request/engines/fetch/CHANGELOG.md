@@ -1,0 +1,17 @@
+Changelog
+=========
+
+> **Tags:**
+> - :boom:       [Breaking Change]
+> - :rocket:     [New Feature]
+> - :bug:        [Bug Fix]
+> - :memo:       [Documentation]
+> - :house:      [Internal]
+> - :nail_care:  [Polish]
+
+## v3.??.?? (2022-??-??)
+
+#### :rocket: New Feature
+
+* Added support for a stream interface
+* Added support of `FormData` responses

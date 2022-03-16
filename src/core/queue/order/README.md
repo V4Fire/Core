@@ -2,12 +2,12 @@
 
 This module provides a class to organize an ordered [[Queue]] data structure.
 
-## comparator
+## Comparator
 
 To compare different elements from a queue is used the special comparator function that has the same API with
 the native `Array.prototype.sort` comparator. To provide a comparator, use the structure' constructor.
 
-## usage
+## Usage
 
 ```js
 import OrderedQueue from 'core/queue/order';

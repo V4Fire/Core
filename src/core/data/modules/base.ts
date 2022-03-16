@@ -7,8 +7,10 @@
  */
 
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
-
 import symbolGenerator from 'core/symbol';
+
+import { readonly } from 'core/object/proxy-readonly';
+import { unimplement } from 'core/functools/implementation';
 
 import { deprecate } from 'core/functools';
 import { concatURLs } from 'core/url';
@@ -323,7 +325,7 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 
 				let
 					ProviderConstructor,
-					providerInstance;
+					providerInstance: IProvider;
 
 				if (Object.isString(ProviderLink)) {
 					ProviderConstructor = <CanUndef<Dictionary & typeof Provider>>providers[ProviderLink];
@@ -341,19 +343,24 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 					providerInstance = ProviderLink;
 				}
 
-				tasks.push(providerInstance.get(el.query ?? query, el.request).then(({data}) => {
+				tasks.push(providerInstance.get(el.query ?? query, el.request).then(async (res) => {
+					const
+						data = <Nullable<D & object>>(await res.data);
+
+					Object.set(composition, alias, data);
 					cloneTasks.push((composition) => Object.set(composition, alias, data?.valueOf()));
-					return Object.set(composition, alias, data);
+
+					return data;
 				}));
 			}
 
-			return res.then(
-				(res) => Promise.all(tasks).then(() => {
+			const compositionRes = res.then(
+				(res) => Promise.all(tasks).then(async () => {
 					const
-						data = <Nullable<D & object>>res.data;
+						data = <Nullable<D & object>>(await res.data);
 
-					cloneTasks.push((composition) => Object.set(composition, alias, data?.valueOf()));
 					Object.set(composition, alias, data);
+					cloneTasks.push((composition) => Object.set(composition, alias, data?.valueOf()));
 
 					Object.defineProperty(composition, 'valueOf', {
 						writable: true,
@@ -370,7 +377,8 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 						}
 					});
 
-					res.data = Object.freeze(composition);
+					// eslint-disable-next-line require-atomic-updates
+					res.data = Promise.resolve(readonly(composition));
 					return res;
 				}),
 
@@ -382,6 +390,21 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 					}
 				}
 			);
+
+			Object.defineProperty(compositionRes, 'data', {
+				configurable: true,
+				get: () => compositionRes.then((res: RequestResponseObject) => res.data)
+			});
+
+			compositionRes[Symbol.asyncIterator] = () => {
+				unimplement({
+					name: 'Symbol.asyncIterator',
+					type: 'property',
+					notice: "Requests with extra providers can't be streamed"
+				});
+			};
+
+			return compositionRes;
 		}
 
 		return res;

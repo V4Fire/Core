@@ -11,34 +11,39 @@
  * @packageDocumentation
  */
 
+import { EventEmitter2 as EventEmitter } from 'eventemitter2';
 import log from 'core/log';
-import { isOnline } from 'core/net';
 
+import SyncPromise from 'core/promise/sync';
 import AbortablePromise from 'core/promise/abortable';
+
+import { isOnline } from 'core/net';
 import { createControllablePromise } from 'core/promise';
 
 import Response from 'core/request/response';
 import RequestError from 'core/request/error';
-import RequestContext from 'core/request/context';
 
-import { merge } from 'core/request/utils';
+import { merge } from 'core/request/helpers';
 import { defaultRequestOpts, globalOpts } from 'core/request/const';
+
+import RequestContext from 'core/request/modules/context';
 
 import type {
 
 	Middleware,
 	CreateRequestOptions,
-
 	RetryOptions,
+
+	RequestPromise,
 	RequestResolver,
 
-	RequestResponse,
+	RequestResponseChunk,
 	RequestFunctionResponse,
 	RequestResponseObject
 
 } from 'core/request/interface';
 
-export * from 'core/request/utils';
+export * from 'core/request/helpers';
 export * from 'core/request/interface';
 export * from 'core/request/response/interface';
 
@@ -61,7 +66,7 @@ export default request;
  * });
  * ```
  */
-function request<D = unknown>(path: string, opts?: CreateRequestOptions<D>): AbortablePromise<RequestResponse<D>>;
+function request<D = unknown>(path: string, opts?: CreateRequestOptions<D>): RequestPromise<D>;
 
 /**
  * Returns a wrapped request constructor with the specified options.
@@ -82,10 +87,10 @@ function request<D = unknown>(opts: CreateRequestOptions<D>): typeof request;
  * This overload helps to create a factory of requests.
  *
  * @param path - request path URL
- * @param resolver - function to resolve a request: it takes a request URL, request environment and arguments
- *   from invoking of the outer function and can modify some request parameters.
+ * @param resolver - function to resolve a request: it takes a request URL, request environment, and arguments
+ *   from invoking the outer function and can modify some request parameters.
  *   Also, if the function returns a new string, the string will be appended to the request URL, or
- *   if the function returns a string that wrapped with an array, the string fully override the original URL.
+ *   if the function returns a string wrapped with an array, the string fully overrides the original URL.
  *
  * @param opts - request options
  *
@@ -145,49 +150,69 @@ function request<D = unknown>(
 		baseCtx = new RequestContext<D>(merge(defaultRequestOpts, opts));
 
 	const run = (...args) => {
+		const emitter = new EventEmitter({
+			maxListeners: 100,
+			newListener: true,
+			wildcard: true
+		});
+
+		const
+			eventBuffer = new Set<string>();
+
+		emitter.on('newListener', (event) => {
+			if (event !== 'newListener' && event !== 'drainListeners') {
+				eventBuffer.add(event);
+			}
+		});
+
+		emitter.on('drainListeners', () => {
+			eventBuffer.forEach((event) => emitter.emit('newListener', event));
+			eventBuffer.clear();
+		});
+
 		const
 			ctx = RequestContext.decorateContext(baseCtx, path, resolver, ...args),
 			requestParams = ctx.params;
 
 		const middlewareParams = {
-			opts: requestParams,
 			ctx,
-			globalOpts
+			globalOpts,
+			opts: requestParams
 		};
 
-		const parent = new AbortablePromise(async (resolve, reject, onAbort) => {
-			const errDetails = {
-				request: requestParams
-			};
+		const errDetails = {
+			request: requestParams
+		};
 
+		const requestPromise = new AbortablePromise(async (resolve, reject, onAbort) => {
 			onAbort((err) => {
 				reject(err ?? new RequestError(RequestError.Abort, errDetails));
 			});
 
-			await new Promise(setImmediate);
-			ctx.parent = parent;
+			await Promise.resolve();
+			ctx.parent = requestPromise;
 
 			if (Object.isPromise(ctx.cache)) {
-				await AbortablePromise.resolve(ctx.isReady, parent);
+				await AbortablePromise.resolve(ctx.isReady, requestPromise);
 			}
 
 			const
-				tasks = <Array<CanPromise<unknown>>>[];
+				middlewareTasks = <Array<CanPromise<unknown>>>[];
 
 			Object.forEach(requestParams.middlewares, (fn: Middleware<D>) => {
-				tasks.push(fn(middlewareParams));
+				middlewareTasks.push(fn(middlewareParams));
 			});
 
 			const
-				middlewareResults = await AbortablePromise.all(tasks, parent),
-				keyToEncode = ctx.withoutBody ? 'query' : 'body';
+				middlewareResults = await AbortablePromise.all(middlewareTasks, requestPromise),
+				paramsKeyToEncode = ctx.withoutBody ? 'query' : 'body';
 
 			// eslint-disable-next-line require-atomic-updates
-			requestParams[keyToEncode] = Object.cast(await applyEncoders(requestParams[keyToEncode]));
+			requestParams[paramsKeyToEncode] = Object.cast(await applyEncoders(requestParams[paramsKeyToEncode]));
 
 			for (let i = 0; i < middlewareResults.length; i++) {
-				// If the middleware returns a function, the function will be executed.
-				// The result of invoking is provided as the result of the whole request.
+				// If a middleware returns a function, the function will be executed.
+				// The result of invoking is provided as a result of the whole request.
 				if (!Object.isFunction(middlewareResults[i])) {
 					continue;
 				}
@@ -216,9 +241,7 @@ function request<D = unknown>(
 			}
 
 			const
-				url = ctx.resolveRequest(globalOpts.api);
-
-			const
+				url = ctx.resolveRequest(globalOpts.api),
 				{cacheKey} = ctx;
 
 			let
@@ -237,9 +260,9 @@ function request<D = unknown>(
 
 					} catch (err) {
 						const
-							isRequestCanceled = {clearAsync: true, abort: true}[err?.type] === true;
+							errType = err?.type;
 
-						if (isRequestCanceled) {
+						if (errType === 'clearAsync' || errType === 'abort') {
 							reject(err);
 							return;
 						}
@@ -248,24 +271,24 @@ function request<D = unknown>(
 				} else if (requestParams.engine.pendingCache !== false) {
 					void ctx.pendingCache.set(cacheKey, Object.cast(createControllablePromise({
 						type: AbortablePromise,
-						args: [parent]
+						args: [ctx.parent]
 					})));
 				}
 
-				fromCache = await AbortablePromise.resolve(ctx.cache.has(cacheKey), parent);
+				fromCache = await AbortablePromise.resolve(ctx.cache.has(cacheKey), requestPromise);
 			}
 
 			let
-				res,
+				resultPromise,
 				cache = 'none';
 
 			if (fromCache) {
 				const getFromCache = async () => {
-					cache = (await AbortablePromise.resolve(isOnline(), parent)).status ? 'memory' : 'offline';
+					cache = (await AbortablePromise.resolve(isOnline(), requestPromise)).status ? 'memory' : 'offline';
 					return ctx.cache.get(cacheKey!);
 				};
 
-				res = AbortablePromise.resolveAndCall(getFromCache, parent)
+				resultPromise = AbortablePromise.resolveAndCall(getFromCache, requestPromise)
 					.then(ctx.wrapAsResponse.bind(ctx))
 					.then((res) => Object.assign(res, {cache}));
 
@@ -273,13 +296,26 @@ function request<D = unknown>(
 				const reqOpts = {
 					...requestParams,
 					url,
-					parent,
-					decoders: ctx.decoders
+					emitter,
+					parent: requestPromise,
+					decoders: ctx.decoders,
+					streamDecoders: ctx.streamDecoders
 				};
 
-				const createReq = () => {
-					const {engine} = requestParams;
-					return engine(reqOpts, Object.cast(middlewareParams));
+				const createEngineRequest = () => {
+					const
+						{engine} = requestParams;
+
+					const
+						req = engine(reqOpts, Object.cast(middlewareParams));
+
+					return req.catch((err) => {
+						if (err instanceof RequestError) {
+							Object.assign(err.details, errDetails);
+						}
+
+						return Promise.reject(err);
+					});
 				};
 
 				if (requestParams.retry != null) {
@@ -294,7 +330,7 @@ function request<D = unknown>(
 					let
 						attempt = 0;
 
-					const createReqWithRetrying = async () => {
+					const createRequestWithRetrying = async () => {
 						const calculateDelay = (attempt: number, err: RequestError) => {
 							const
 								delay = delayFn(attempt, err);
@@ -309,7 +345,7 @@ function request<D = unknown>(
 						};
 
 						try {
-							return await createReq().then(wrapSuccessResponse);
+							return await createEngineRequest().then(wrapSuccessResponse);
 
 						} catch (err) {
 							if (attempt++ >= attemptLimit) {
@@ -323,34 +359,36 @@ function request<D = unknown>(
 								throw err;
 							}
 
-							return createReqWithRetrying();
+							return createRequestWithRetrying();
 						}
 					};
 
-					res = createReqWithRetrying();
+					resultPromise = createRequestWithRetrying();
 
 				} else {
-					res = createReq().then(wrapSuccessResponse);
+					resultPromise = createEngineRequest().then(wrapSuccessResponse);
 				}
 			}
 
-			res = res.then(ctx.saveCache.bind(ctx));
+			resultPromise
+				.then(ctx.saveCache.bind(ctx))
 
-			res
-				.then((response) => log(`request:response:${path}`, response.data, {
-					cache,
-					request: requestParams
-				}))
+				.then(async ({response, data}) => {
+					if (response.bodyUsed === true) {
+						log(`request:response:${path}`, await data, {
+							cache,
+							request: requestParams
+						});
+					}
+				})
 
 				.catch((err) => log.error('request', err));
 
-			resolve(
-				ctx.wrapRequest(res)
-			);
+			resolve(ctx.wrapRequest(resultPromise));
 
 			function applyEncoders(data: unknown): unknown {
 				let
-					res = AbortablePromise.resolve(data, parent);
+					res = AbortablePromise.resolve(data, requestPromise);
 
 				Object.forEach(ctx.encoders, (fn, i: number) => {
 					res = res.then((obj) => fn(i > 0 ? obj : Object.fastClone(obj)));
@@ -359,7 +397,10 @@ function request<D = unknown>(
 				return res;
 			}
 
-			async function wrapSuccessResponse(response: Response<D>): Promise<RequestResponseObject<D>> {
+			function wrapSuccessResponse(response: Response<D>): RequestResponseObject<D> {
+				// eslint-disable-next-line @typescript-eslint/no-use-before-define
+				void responseIterator.resolve(response[Symbol.asyncIterator].bind(response));
+
 				const
 					details = {response, ...errDetails};
 
@@ -367,19 +408,66 @@ function request<D = unknown>(
 					throw AbortablePromise.wrapReasonToIgnore(new RequestError(RequestError.InvalidStatus, details));
 				}
 
-				const
-					data = await response.decode();
+				let
+					customData;
 
 				return {
-					data,
-					response,
 					ctx,
+					response,
+
+					get data() {
+						return customData ?? response.decode();
+					},
+
+					set data(val: Promise<D>) {
+						customData = SyncPromise.resolve(val);
+					},
+
+					get stream() {
+						return response.decodeStream();
+					},
+
+					emitter,
+					[Symbol.asyncIterator]: response[Symbol.asyncIterator].bind(response),
+
 					dropCache: ctx.dropCache.bind(ctx)
 				};
 			}
 		});
 
-		return parent;
+		requestPromise['emitter'] = emitter;
+
+		const responseIterator = createControllablePromise({
+			type: AbortablePromise,
+			args: [ctx.parent]
+		});
+
+		Object.defineProperty(requestPromise, 'data', {
+			configurable: true,
+			get: () => requestPromise.then((res: RequestResponseObject) => res.data)
+		});
+
+		Object.defineProperty(requestPromise, 'stream', {
+			configurable: true,
+			get: () => requestPromise.then((res: RequestResponseObject) => res.stream)
+		});
+
+		requestPromise[Symbol.asyncIterator] = () => {
+			const
+				iter = responseIterator.then<AsyncIterableIterator<RequestResponseChunk>>((iter: Function) => iter());
+
+			return {
+				[Symbol.asyncIterator]() {
+					return this;
+				},
+
+				next() {
+					return iter.then((iter) => iter.next());
+				}
+			};
+		};
+
+		return requestPromise;
 	};
 
 	if (Object.isFunction(resolver)) {

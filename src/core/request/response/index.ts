@@ -11,86 +11,78 @@
  * @packageDocumentation
  */
 
-import Range from 'core/range';
-import AbortablePromise from 'core/promise/abortable';
-
+import { EventEmitter2 as EventEmitter } from 'eventemitter2';
+import { once, deprecated } from 'core/functools';
 import { IS_NODE } from 'core/env';
-import { once } from 'core/functools';
+
 import { convertIfDate } from 'core/json';
 import { getDataType } from 'core/mime-type';
 
-import { normalizeHeaderName } from 'core/request/utils';
+import Parser, { Token } from 'core/json/stream/parser';
+
+import { createControllablePromise } from 'core/promise';
+import AbortablePromise from 'core/promise/abortable';
+
+import Range from 'core/range';
+import symbolGenerator from 'core/symbol';
+
+import Headers from 'core/request/headers';
+import { FormData, Blob } from 'core/request/engines';
+
 import { defaultResponseOpts, noContentStatusCodes } from 'core/request/response/const';
 
-import type { OkStatuses, WrappedDecoders } from 'core/request/interface';
+import type {
+
+	OkStatuses,
+	RequestResponseChunk,
+
+	WrappedDecoder,
+	WrappedStreamDecoder
+
+} from 'core/request/interface';
 
 import type {
 
 	ResponseType,
 	ResponseTypeValue,
 	ResponseTypeValueP,
+	ResponseModeType,
 
-	ResponseHeaders,
-	ResponseOptions
+	ResponseOptions,
+	JSONLikeValue
 
 } from 'core/request/response/interface';
+
+export * from 'core/request/headers';
 
 export * from 'core/request/response/const';
 export * from 'core/request/response/interface';
 
+export const
+	$$ = symbolGenerator();
+
 /**
- * Class of a remote response
+ * Class to work with server response data
  * @typeparam D - response data type
  */
 export default class Response<
 	D extends Nullable<string | JSONLikeValue | ArrayBuffer | Blob | Document | unknown
 > = unknown> {
 	/**
-	 * Value of the response data type
+	 * The resolved request URL (after resolving redirects, etc.)
 	 */
-	responseType?: ResponseType;
+	readonly url: string;
 
 	/**
-	 * Original value of the response data type
+	 * True if the response was obtained through a redirect
 	 */
-	readonly sourceResponseType?: ResponseType;
+	readonly redirected: boolean;
 
 	/**
-	 * Value of the response status code
+	 * Mode type of the response
+	 * @see https://developer.mozilla.org/en-US/docs/Web/API/Response/type
 	 */
-	readonly status: number;
-
-	/**
-	 * True if the response is valid
-	 */
-	readonly ok: boolean;
-
-	/**
-	 * List of status codes (or a single code) that is ok for the response,
-	 * also can pass a range of codes
-	 */
-	readonly okStatuses: OkStatuses;
-
-	/**
-	 * Map of response headers
-	 */
-	readonly headers: ResponseHeaders;
-
-	/**
-	 * Sequence of response decoders
-	 */
-	readonly decoders: WrappedDecoders;
-
-	/**
-	 * Reviver function for JSON.parse
-	 * @default `convertIfDate`
-	 */
-	readonly jsonReviver?: JSONCb;
-
-	/**
-	 * True, if the request is important
-	 */
-	readonly important?: boolean;
+	readonly type: ResponseModeType;
 
 	/**
 	 * Parent operation promise
@@ -98,43 +90,176 @@ export default class Response<
 	readonly parent?: AbortablePromise;
 
 	/**
-	 * Value of the response body
+	 * A meta flag that indicates that the request is important: is usually used with decoders to indicate that
+	 * the request needs to be executed as soon as possible
 	 */
-	readonly body: CanPromise<ResponseTypeValue>;
+	readonly important?: boolean;
 
 	/**
-	 * @param [body] - response body
+	 * Type of the response data
+	 */
+	get responseType(): CanUndef<ResponseType> {
+		return this[$$.responseType] ?? this.sourceResponseType;
+	}
+
+	/**
+	 * Sets a new type of the response data
+	 */
+	protected set responseType(value: CanUndef<ResponseType>) {
+		this[$$.responseType] = value;
+	}
+
+	/**
+	 * Original type of the response data
+	 */
+	readonly sourceResponseType?: ResponseType;
+
+	/**
+	 * Response status code
+	 */
+	readonly status: number;
+
+	/**
+	 * Response status text
+	 */
+	readonly statusText: string;
+
+	/**
+	 * True if the response status matches with a successful status codes
+	 * (by default it should match range from 200 to 299)
+	 */
+	readonly ok: boolean;
+
+	/**
+	 * A list of status codes (or a single code) that match successful operation.
+	 * Also, you can pass a range of codes.
+	 */
+	readonly okStatuses: OkStatuses;
+
+	/**
+	 * Set of response headers
+	 */
+	readonly headers: Readonly<Headers>;
+
+	/**
+	 * List of response decoders
+	 */
+	readonly decoders: WrappedDecoder[];
+
+	/**
+	 * List of response decoders to apply for chunks when you are parsing response in a stream form
+	 */
+	readonly streamDecoders: WrappedStreamDecoder[];
+
+	/**
+	 * Reviver function for `JSON.parse`
+	 * @default `convertIfDate`
+	 */
+	readonly jsonReviver?: JSONCb;
+
+	/**
+	 * Response body value
+	 */
+	readonly body: ResponseTypeValueP;
+
+	/**
+	 * True, if the response body is already read
+	 */
+	get bodyUsed(): boolean {
+		return Boolean(this[$$.bodyUsed]);
+	}
+
+	/**
+	 * Sets a new status of `bodyUsed`
+	 */
+	protected set bodyUsed(value: boolean) {
+		this[$$.bodyUsed] = value;
+	}
+
+	/**
+	 * True, if the response body is already read as a stream
+	 */
+	get streamUsed(): boolean {
+		return Boolean(this[$$.streamUsed]);
+	}
+
+	/**
+	 * Sets a new status of `streamUsed`
+	 */
+	protected set streamUsed(value: boolean) {
+		this[$$.streamUsed] = value;
+	}
+
+	/**
+	 * Event emitter to broadcast response events
+	 */
+	readonly emitter: EventEmitter = new EventEmitter({maxListeners: 100, newListener: false});
+
+	/**
+	 * Creates a clone of a response object, identical in every way, but stored in a different variable
+	 */
+	readonly clone: () => Response<D>;
+
+	/**
+	 * @param [body] - response body value
 	 * @param [opts] - additional options
 	 */
 	constructor(body?: ResponseTypeValueP, opts?: ResponseOptions) {
 		const
-			p = Object.mixin(false, {}, defaultResponseOpts, opts),
-			ok = p.okStatuses;
+			p = Object.mixin(false, {}, defaultResponseOpts, opts);
+
+		this.url = p.url;
+		this.redirected = Boolean(p.redirected);
+
+		if (p.type != null) {
+			this.type = p.type;
+
+		} else if (!IS_NODE) {
+			this.type = location.hostname === new URL(this.url).hostname ? 'basic' : 'cors';
+
+		} else {
+			this.type = 'basic';
+		}
 
 		this.parent = p.parent;
 		this.important = p.important;
 
+		const
+			ok = p.okStatuses;
+
 		this.status = p.status;
 		this.okStatuses = ok;
+		this.statusText = p.statusText;
 
 		this.ok = ok instanceof Range ?
 			ok.contains(this.status) :
 			Array.concat([], <number>ok).includes(this.status);
 
-		this.headers = this.parseHeaders(p.headers);
+		this.headers = Object.freeze(new Headers(p.headers));
 
-		const
-			contentType = this.getHeader('content-type');
+		if (Object.isFunction(body)) {
+			this.body = body.once();
+			this.body[Symbol.asyncIterator] = body[Symbol.asyncIterator].bind(body);
 
-		this.responseType = contentType != null ? getDataType(contentType) : p.responseType;
-		this.sourceResponseType = this.responseType;
+		} else {
+			this.body = body;
+		}
 
-		// tslint:disable-next-line:prefer-conditional-expression
+		const contentType = this.headers['content-type'];
+		this.sourceResponseType = contentType != null ? getDataType(contentType) : p.responseType;
+
 		if (p.decoder == null) {
 			this.decoders = [];
 
 		} else {
-			this.decoders = Object.isFunction(p.decoder) ? [p.decoder] : p.decoder;
+			this.decoders = Object.isFunction(p.decoder) ? [p.decoder] : [...p.decoder];
+		}
+
+		if (p.streamDecoder == null) {
+			this.streamDecoders = [];
+
+		} else {
+			this.streamDecoders = Object.isFunction(p.streamDecoder) ? [p.streamDecoder] : [...p.streamDecoder];
 		}
 
 		if (Object.isFunction(p.jsonReviver)) {
@@ -144,26 +269,81 @@ export default class Response<
 			this.jsonReviver = convertIfDate;
 		}
 
-		this.body = Object.isFunction(body) ? body() : body;
+		this.clone = () => {
+			const res = new Response<D>(body, opts);
+
+			Object.assign(res, {
+				bodyUsed: this.bodyUsed,
+				streamUsed: this.streamUsed
+			});
+
+			return res;
+		};
+	}
+
+	/**
+	 * Returns an iterator by the response body.
+	 * Mind, when you parse response via iterator, you won't be able to use other parse methods, like `json` or `text`.
+	 * @emits `streamUsed()`
+	 */
+	[Symbol.asyncIterator](): AsyncIterableIterator<RequestResponseChunk> {
+		if (this.bodyUsed) {
+			throw new Error("The response can't be consumed as a stream because it already read");
+		}
+
+		const
+			{body} = this;
+
+		if (!Object.isAsyncIterable(body)) {
+			throw new TypeError('The response is not an iterable object');
+		}
+
+		if (!this.streamUsed) {
+			this.streamUsed = true;
+			this.emitter.emit('streamUsed');
+		}
+
+		return Object.cast(body[Symbol.asyncIterator]());
 	}
 
 	/**
 	 * Returns an HTTP header value by the specified name
 	 * @param name
 	 */
+	@deprecated({alternative: 'headers.get'})
 	getHeader(name: string): CanUndef<string> {
-		return this.headers[normalizeHeaderName(name)];
+		return this.headers.get(name) ?? undefined;
 	}
 
 	/**
-	 * Parses a body of the response and returns the result
+	 * Parses the response body and returns a promise with the result.
+	 * The operation result is memoized, and you can't parse the response as a stream after invoking this method.
+	 *
+	 * A way to parse data is based on the response `Content-Type` header or a passed `responseType` constructor option.
+	 * Also, a sequence of decoders is applied to the parsed result if they are passed with a `decoders`
+	 * constructor option.
 	 */
-	@once
-	decode(): AbortablePromise<D> {
-		let data;
+	decode(): AbortablePromise<D | null> {
+		if (this[$$.decodedValue] != null) {
+			return this[$$.decodedValue];
+		}
+
+		if (this.streamUsed) {
+			throw new Error("The response can't be read because it's already consuming as a stream");
+		}
+
+		const cache = createControllablePromise({
+			type: AbortablePromise,
+			args: [this.parent]
+		});
+
+		this[$$.decodedValue] = cache;
+
+		let
+			data;
 
 		if (noContentStatusCodes.includes(this.status)) {
-			data = AbortablePromise.resolve(null, this.parent);
+			data = null;
 
 		} else {
 			switch (this.sourceResponseType) {
@@ -171,20 +351,24 @@ export default class Response<
 					data = this.json();
 					break;
 
-				case 'arrayBuffer':
-					data = this.arrayBuffer();
-					break;
-
-				case 'blob':
-					data = this.blob();
+				case 'formData':
+					data = this.formData();
 					break;
 
 				case 'document':
 					data = this.document();
 					break;
 
+				case 'blob':
+					data = this.blob();
+					break;
+
+				case 'arrayBuffer':
+					data = this.arrayBuffer();
+					break;
+
 				case 'object':
-					data = AbortablePromise.resolve(this.body, this.parent);
+					data = this.readBody();
 					break;
 
 				default:
@@ -192,20 +376,324 @@ export default class Response<
 			}
 		}
 
-		let
-			decoders = data.then((obj) => AbortablePromise.resolve(obj, this.parent));
+		const decodedVal = this.applyDecoders(data);
+		this[$$.decodedValue] = decodedVal;
 
-		Object.forEach(this.decoders, (fn) => {
-			decoders = decoders.then((data) => {
-				if (!Object.isPrimitive(data) && Object.isFrozen(data)) {
+		void cache.resolve(decodedVal);
+		return Object.cast(decodedVal);
+	}
+
+	/**
+	 * Parses the response body as a stream and yields chunks via an async iterator.
+	 * You can't parse the response as a whole data after invoking this method.
+	 *
+	 * A way to parse data chunks is based on the response `Content-Type` header or a passed `responseType`
+	 * constructor option. Also, a sequence of stream decoders is applied to the parsed chunk if they are
+	 * passed with a `streamDecoders` constructor option.
+	 */
+	decodeStream<T = unknown>(): AsyncIterableIterator<T> {
+		let
+			stream;
+
+		if (noContentStatusCodes.includes(this.status)) {
+			stream = [].values();
+
+		} else {
+			switch (this.sourceResponseType) {
+				case 'json':
+					stream = this.jsonStream();
+					break;
+
+				case 'text':
+					stream = this.textStream();
+					break;
+
+				default:
+					stream = this.stream();
+			}
+		}
+
+		return this.applyStreamDecoders(stream);
+	}
+
+	/**
+	 * Parses the response body as a JSON object and returns it
+	 */
+	@once
+	json(): AbortablePromise<JSONLikeValue> {
+		return this.readBody().then<JSONLikeValue>((body) => {
+			if (body == null) {
+				return null;
+			}
+
+			if (!IS_NODE && body instanceof Document) {
+				throw new TypeError("Can't read response data as a JSON object");
+			}
+
+			if (body instanceof FormData) {
+				if (!Object.isIterable(body)) {
+					throw new TypeError("Can't parse a FormData value as a JSON object because it is not iterable");
+				}
+
+				const
+					res = {};
+
+				for (const [key, val] of Object.cast<Iterable<[string, string]>>(body)) {
+					res[key] = val;
+				}
+
+				return res;
+			}
+
+			const isStringOrBuffer =
+				Object.isString(body) ||
+				body instanceof ArrayBuffer ||
+				ArrayBuffer.isView(body);
+
+			if (isStringOrBuffer) {
+				return this.text().then((text) => {
+					if (text === '') {
+						return null;
+					}
+
+					return JSON.parse(text, this.jsonReviver);
+				});
+			}
+
+			return Object.size(this.decoders) > 0 && !Object.isFrozen(body) ? Object.fastClone(body) : body;
+		});
+	}
+
+	/**
+	 * Parses the response data stream as a JSON tokens and yields them via an async iterator
+	 */
+	@once
+	jsonStream(): AsyncIterableIterator<Token> {
+		const
+			iter = Parser.from(this.textStream());
+
+		return {
+			[Symbol.asyncIterator]() {
+				return this;
+			},
+
+			next: iter.next.bind(iter)
+		};
+	}
+
+	/**
+	 * Parses the response body as a FormData object and returns it
+	 */
+	@once
+	formData(): AbortablePromise<FormData> {
+		const
+			that = this;
+
+		return this.readBody().then<FormData>(decode);
+
+		function decode(body: ResponseTypeValueP): FormData {
+			if (body == null) {
+				return new FormData();
+			}
+
+			if (body instanceof FormData) {
+				return body;
+			}
+
+			if (!IS_NODE && body instanceof Document) {
+				throw new TypeError("Can't read response data as a FormData object");
+			}
+
+			return Object.cast(that.text().then(decodeFromString));
+
+			function decodeFromString(body: string): FormData {
+				const
+					formData = new FormData();
+
+				const
+					normalizeRgxp = /[+]/g,
+					records = body.trim().split('&');
+
+				for (let i = 0; i < records.length; i++) {
+					const
+						record = records[i];
+
+					if (record === '') {
+						continue;
+					}
+
+					const
+						chunks = record.split('='),
+						name = chunks.shift()!.replace(normalizeRgxp, ' '),
+						val = chunks.join('=').replace(normalizeRgxp, ' ');
+
+					formData.append(decodeURIComponent(name), decodeURIComponent(val));
+				}
+
+				return formData;
+			}
+		}
+	}
+
+	/**
+	 * Parses the response body as a Document instance and returns it
+	 */
+	@once
+	document(): AbortablePromise<Document> {
+		return this.readBody().then<Document>((body) => {
+			//#if node_js
+
+			if (IS_NODE) {
+				// eslint-disable-next-line @typescript-eslint/no-var-requires
+				const {JSDOM} = require('jsdom');
+
+				return this.text()
+					.then((text) => new JSDOM(text))
+					.then((res) => Object.get(res, 'window.document'));
+			}
+
+			//#endif
+
+			if (body instanceof Document) {
+				return body;
+			}
+
+			return this.text().then((text) => {
+				const type = this.headers.get('Content-Type') ?? 'text/html';
+				return new DOMParser().parseFromString(text, Object.cast(type));
+			});
+		});
+	}
+
+	/**
+	 * Parses the response body as a string and returns it
+	 */
+	@once
+	text(): AbortablePromise<string> {
+		return this.readBody().then<string>((body) => this.decodeToString(body));
+	}
+
+	/**
+	 * Parses the response data stream as a text chunks and yields them via an async iterator
+	 */
+	@once
+	textStream(): AsyncIterableIterator<string> {
+		const
+			iter = this.stream();
+
+		return {
+			[Symbol.asyncIterator]() {
+				return this;
+			},
+
+			next: async () => {
+				const
+					{done, value} = await iter.next();
+
+				return {
+					done,
+					value: done ? '' : await this.decodeToString(value)
+				};
+			}
+		};
+	}
+
+	/**
+	 * Parses the response data stream as an ArrayBuffer chunks and yields them via an async iterator
+	 */
+	@once
+	stream(): AsyncIterableIterator<ArrayBuffer> {
+		const
+			iter = this[Symbol.asyncIterator]();
+
+		return {
+			[Symbol.asyncIterator]() {
+				return this;
+			},
+
+			next: async () => {
+				const
+					{done, value} = await iter.next();
+
+				return {
+					done,
+					value: done ? undefined : value.data
+				};
+			}
+		};
+	}
+
+	/**
+	 * Parses the response body as a Blob structure and returns it
+	 */
+	@once
+	blob(): AbortablePromise<Blob> {
+		return this.readBody().then<Blob>((body) => this.decodeToBlob(body));
+	}
+
+	/**
+	 * Parses the response body as an ArrayBuffer and returns it
+	 */
+	@once
+	arrayBuffer(): AbortablePromise<ArrayBuffer> {
+		return this.readBody().then<ArrayBuffer>((body) => {
+			if (body == null) {
+				return new ArrayBuffer(0);
+			}
+
+			if (body instanceof ArrayBuffer) {
+				return body;
+			}
+
+			if (ArrayBuffer.isView(body)) {
+				return body.buffer;
+			}
+
+			throw new TypeError("Can't read response data as ArrayBuffer");
+		});
+	}
+
+	/**
+	 * Reads the response body or throws an exception if reading is impossible
+	 * @emits `bodyUsed()`
+	 */
+	protected readBody(): AbortablePromise<ResponseTypeValue> {
+		if (this.streamUsed) {
+			throw new Error("The response can't be read because it's already consuming as a stream");
+		}
+
+		if (!this.bodyUsed) {
+			this.bodyUsed = true;
+			this.emitter.emit('bodyUsed');
+		}
+
+		return AbortablePromise.resolveAndCall(this.body, this.parent);
+	}
+
+	/**
+	 * Applies the given decoders to the specified data and returns a promise with the result
+	 *
+	 * @param data
+	 * @param [decoders]
+	 */
+	protected applyDecoders<T = unknown>(
+		data: CanPromise<ResponseTypeValue>,
+		decoders: WrappedDecoder[] = this.decoders
+	): T {
+		let
+			res = AbortablePromise.resolve(data, this.parent);
+
+		for (const decoder of decoders) {
+			res = res.then((data) => {
+				if (data != null && Object.isFrozen(data)) {
 					data = data.valueOf();
 				}
 
-				return fn(data, Object.cast(this));
+				return decoder(data, Object.cast(this));
 			});
-		});
+		}
 
-		return decoders.then((data) => {
+		res = res.then((data) => {
 			if (Object.isFrozen(data)) {
 				return data;
 			}
@@ -224,238 +712,154 @@ export default class Response<
 
 			return data;
 		});
+
+		return Object.cast(res);
 	}
 
 	/**
-	 * Parses the response body as a Document instance and returns it
+	 * Applies the given decoders to the specified data stream and yields values via an asynchronous iterator
+	 *
+	 * @param stream
+	 * @param [decoders]
 	 */
-	@once
-	document(): AbortablePromise<Document | null> {
-		return AbortablePromise.resolve(this.body, this.parent)
-			.then<Document | null>((body) => {
-				//#if node_js
+	protected applyStreamDecoders<T>(
+		stream: AnyIterable,
+		decoders: WrappedStreamDecoder[] = this.streamDecoders
+	): AsyncIterableIterator<T> {
+		const
+			that = this;
 
-				if (IS_NODE) {
-					// eslint-disable-next-line @typescript-eslint/no-var-requires
-					const {JSDOM} = require('jsdom');
+		return applyDecoders(stream);
 
-					return this.text()
-						.then((text) => new JSDOM(text))
-						.then((res) => Object.get(res, 'window.document'));
-				}
+		// eslint-disable-next-line @typescript-eslint/require-await
+		function applyDecoders<T>(
+			stream: AnyIterable,
+			currentDecoder: number = 0
+		): AsyncIterableIterator<T> {
+			const
+				decoder = decoders[currentDecoder];
 
-				//#endif
+			if (Object.isFunction(decoder)) {
+				const transformedStream = decoder(stream, Object.cast(that));
+				return applyDecoders(transformedStream, currentDecoder + 1);
+			}
 
-				if (Object.isString(body) || body instanceof ArrayBuffer) {
-					return this.text().then((text) => {
-						const type = this.getHeader('content-type') ?? 'text/html';
-						return new DOMParser().parseFromString(text ?? '', Object.cast(type));
-					});
-				}
+			let
+				i;
 
-				if (!(body instanceof Document)) {
-					throw new TypeError('Invalid data type');
-				}
+			if (Object.isAsyncIterable(stream)) {
+				i = stream[Symbol.asyncIterator]();
 
-				return body;
-			});
+			} else {
+				i = stream[Symbol.iterator]();
+			}
+
+			return Object.cast(i);
+		}
 	}
 
 	/**
-	 * Parses the response body as a JSON object and returns it
+	 * Converts the specified data to a Blob structure and returns it
+	 *
+	 * @param data
+	 * @param [type] - blob type, by default it takes from response headers
 	 */
-	json(): AbortablePromise<D | null> {
-		return AbortablePromise.resolve(this.body, this.parent)
-			.then<D | null>((body) => {
-				if (!IS_NODE && body instanceof Document) {
-					throw new TypeError('Invalid data type');
-				}
+	protected decodeToBlob(
+		data: unknown,
+		type: string = this.headers.get('Content-Type') ?? ''
+	): Blob {
+		if (data == null) {
+			return new Blob([], {type});
+		}
 
-				if (body == null || body === '') {
-					return null;
-				}
+		if (data instanceof Blob) {
+			return data;
+		}
 
-				if (Object.isString(body) || body instanceof ArrayBuffer || body instanceof Uint8Array) {
-					return this.text().then((text) => {
-						if (text == null || text === '') {
-							return null;
-						}
+		if (data instanceof ArrayBuffer || ArrayBuffer.isView(data)) {
+			return new Blob([data], {type});
+		}
 
-						return JSON.parse(text, this.jsonReviver);
-					});
-				}
-
-				return Object.size(this.decoders) > 0 && !Object.isFrozen(body) ?
-					Object.fastClone(body) :
-					body;
-			});
+		return new Blob([Object.cast<object>(data).toString()], {type});
 	}
 
 	/**
-	 * Parses the response body as an ArrayBuffer object and returns it
+	 * Converts the specified data to a string and returns it
+	 *
+	 * @param data
+	 * @param [encoding] - string encoding
 	 */
-	arrayBuffer(): AbortablePromise<ArrayBuffer | null> {
-		return AbortablePromise.resolve(this.body, this.parent)
-			.then<ArrayBuffer | null>((body) => {
-				//#unless node_js
-
-				if (!IS_NODE && !(body instanceof ArrayBuffer)) {
-					throw new TypeError('Invalid data type');
-				}
-
-				//#endunless
-
-				//#if node_js
-
-				if (!(body instanceof Buffer) && !(body instanceof ArrayBuffer)) {
-					throw new TypeError('Invalid data type');
-				}
-
-				//#endif
-
-				if (body.byteLength === 0) {
-					return null;
-				}
-
-				return body;
-			});
-	}
-
-	/**
-	 * Parses the response body as a Blob structure and returns it
-	 */
-	blob(): AbortablePromise<Blob | null> {
-		return AbortablePromise.resolve(this.body, this.parent)
-			.then<Blob | null>((body) => {
-				if (!IS_NODE && body instanceof Document) {
-					throw new TypeError('Invalid data type');
-				}
-
-				if (body == null) {
-					return null;
-				}
-
-				let
-					{Blob} = globalThis;
-
-				//#if node_js
-
-				if (IS_NODE) {
-					Blob = require('node-blob');
-				}
-
-				//#endif
-
-				return new Blob([Object.cast(body)], {type: this.getHeader('content-type')});
-			});
-	}
-
-	/**
-	 * Parses the response body as a string and returns it
-	 */
-	@once
-	text(): AbortablePromise<string | null> {
-		return AbortablePromise.resolve(this.body, this.parent)
-			.then<string | null>((body) => {
-				if (body == null || body instanceof ArrayBuffer && body.byteLength === 0) {
-					return null;
-				}
-
-				if (IS_NODE) {
-					if (body instanceof Buffer && body.byteLength === 0) {
-						throw new TypeError('Invalid data type');
-					}
-
-				} else if (body instanceof Document) {
-					return String(body);
-				}
-
-				if (Object.isString(body)) {
-					return body;
-				}
-
-				if (Object.isDictionary(body)) {
-					return JSON.stringify(body);
-				}
-
-				const
-					contentType = this.getHeader('content-type');
-
-				let
+	protected decodeToString(data: unknown, encoding?: string): AbortablePromise<string> {
+		return AbortablePromise.resolveAndCall(data, this.parent)
+			.then<string>((body) => {
+				if (encoding == null) {
 					encoding = <BufferEncoding>'utf-8';
 
-				if (contentType != null) {
-					const
-						search = /charset=(\S+)/.exec(contentType);
-
-					if (search) {
-						encoding = <BufferEncoding>search[1].toLowerCase();
+					if (body == null) {
+						return '';
 					}
-				}
 
-				if (IS_NODE) {
-					return Buffer.from(Object.cast(body)).toString(encoding);
+					if (Object.isString(body)) {
+						return body;
+					}
+
+					if (Object.isDictionary(body)) {
+						return JSON.stringify(body);
+					}
+
+					if (!IS_NODE && body instanceof Document) {
+						return String(body);
+					}
+
+					if (body instanceof FormData) {
+						if (body.toString === Object.prototype.toString) {
+							const
+								res = {};
+
+							body.forEach((val, key) => {
+								res[key] = val;
+							});
+
+							return JSON.stringify(res);
+						}
+
+						return body.toString();
+					}
+
+					const
+						contentType = this.headers.get('Content-Type');
+
+					if (contentType != null) {
+						const
+							search = /charset=(\S+)/.exec(contentType);
+
+						if (search) {
+							encoding = <BufferEncoding>search[1].toLowerCase();
+						}
+					}
 				}
 
 				if (typeof TextDecoder !== 'undefined') {
 					const decoder = new TextDecoder(encoding, {fatal: true});
-					return decoder.decode(new DataView(Object.cast(body)));
+
+					if (body instanceof ArrayBuffer) {
+						return decoder.decode(new DataView(body));
+					}
+
+					return decoder.decode(Object.cast(body));
 				}
 
-				return new AbortablePromise((resolve, reject, onAbort) => {
+				return new AbortablePromise<string>((resolve, reject, onAbort) => {
 					const
 						reader = new FileReader();
 
-					reader.onload = () => resolve(<string>reader.result);
-					reader.onerror = reject;
+					onAbort(() => reader.abort());
+					reader.onload = () => resolve(String(reader.result));
 					reader.onerror = reject;
 
-					this.blob().then((blob) => {
-						onAbort(() => reader.abort());
-						reader.readAsText(<Blob>blob, encoding);
-					}).catch(stderr);
+					reader.readAsText(this.decodeToBlob(data), encoding);
 
 				}, this.parent);
 			});
-	}
-
-	/**
-	 * Returns a normalized object of HTTP headers from the specified string or object
-	 * @param headers
-	 */
-	protected parseHeaders(
-		headers: CanUndef<string | Dictionary<CanArray<string>>>
-	): ResponseHeaders {
-		const
-			res = {};
-
-		if (Object.isString(headers)) {
-			for (let o = headers.split(/[\r\n]+/), i = 0; i < o.length; i++) {
-				const
-					header = o[i];
-
-				if (header === '') {
-					continue;
-				}
-
-				const [name, value] = header.split(':', 2);
-				res[normalizeHeaderName(name)] = value.trim();
-			}
-
-		} else if (headers != null) {
-			for (let keys = Object.keys(headers), i = 0; i < keys.length; i++) {
-				const
-					name = keys[i],
-					value = headers[name];
-
-				if (value == null || name === '') {
-					continue;
-				}
-
-				res[normalizeHeaderName(name)] = (Object.isArray(value) ? value.join(';') : value).trim();
-			}
-		}
-
-		return Object.freeze(res);
 	}
 }

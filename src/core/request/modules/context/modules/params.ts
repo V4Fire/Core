@@ -10,25 +10,44 @@ import type AbortablePromise from 'core/promise/abortable';
 import type { ControllablePromise } from 'core/promise';
 import type { AbstractCache } from 'core/cache';
 
+import symbolGenerator from 'core/symbol';
 import addTTL from 'core/cache/decorators/ttl';
 import addPersistent from 'core/cache/decorators/persistent';
 
-import { merge } from 'core/request/utils';
-import { storage, cache, pendingCache, caches, methodsWithoutBody } from 'core/request/const';
+import {
+
+	storage,
+
+	cache,
+	pendingCache,
+	caches,
+
+	methodsWithoutBody
+
+} from 'core/request/const';
+
+import Headers from 'core/request/headers';
+import { merge } from 'core/request/helpers';
 
 import type {
 
 	NormalizedCreateRequestOptions,
+
 	RequestQuery,
 	RequestResponse,
+
+	WrappedEncoders,
 	WrappedDecoders,
-	WrappedEncoders
+	WrappedStreamDecoders
 
 } from 'core/request/interface';
 
+export const
+	$$ = symbolGenerator();
+
 export default class RequestContext<D = unknown> {
 	/**
-	 * Promise of instance initializing
+	 * Promise that resolves when the instance is already initialized
 	 */
 	readonly isReady: Promise<void>;
 
@@ -40,15 +59,24 @@ export default class RequestContext<D = unknown> {
 	/**
 	 * String key to cache the request
 	 */
-	cacheKey?: string;
+	get cacheKey(): CanUndef<string> {
+		return this[$$.cacheKey];
+	}
 
 	/**
-	 * Storage to cache the request
+	 * Sets a new string key to cache the request
+	 */
+	protected set cacheKey(value: CanUndef<string>) {
+		this[$$.cacheKey] = value;
+	}
+
+	/**
+	 * Storage to cache the resolved request
 	 */
 	readonly cache!: AbstractCache<Nullable<D>>;
 
 	/**
-	 * Storage to cache the pending request
+	 * Storage to cache the request while it is pending a response
 	 */
 	readonly pendingCache: AbstractCache<
 		ControllablePromise<RequestResponse<D>> | RequestResponse<D>
@@ -65,26 +93,67 @@ export default class RequestContext<D = unknown> {
 	readonly params!: NormalizedCreateRequestOptions<D>;
 
 	/**
-	 * Sequence of request encoders
+	 * Alias for `params.query`
+	 * @alias
 	 */
-	encoders: WrappedEncoders;
+	get query(): RequestQuery {
+		return this.params.query;
+	}
 
 	/**
-	 * Sequence of response decoders
+	 * Alias for `params.headers`
+	 * @alias
 	 */
-	decoders: WrappedDecoders;
+	get headers(): Headers {
+		return this.params.headers;
+	}
+
+	/**
+	 * Sequence of request data encoders
+	 */
+	get encoders(): WrappedEncoders {
+		return this[$$.encoders];
+	}
+
+	/**
+	 * Sets a new sequence of request data encoders
+	 */
+	protected set encoders(value: WrappedEncoders) {
+		this[$$.encoders] = value;
+	}
+
+	/**
+	 * Sequence of response data decoders
+	 */
+	get decoders(): WrappedDecoders {
+		return this[$$.decoders];
+	}
+
+	/**
+	 * Sets a new sequence of response data decoders
+	 */
+	protected set decoders(value: WrappedDecoders) {
+		this[$$.decoders] = value;
+	}
+
+	/**
+	 * Sequence of response data decoders
+	 */
+	get streamDecoders(): WrappedStreamDecoders {
+		return this[$$.streamDecoders];
+	}
+
+	/**
+	 * Sets a new sequence of response data decoders
+	 */
+	protected set streamDecoders(value: WrappedStreamDecoders) {
+		this[$$.streamDecoders] = value;
+	}
 
 	/**
 	 * Link to a parent operation promise
 	 */
 	parent!: AbortablePromise;
-
-	/**
-	 * Alias for query parameters of the request
-	 */
-	get query(): RequestQuery {
-		return this.params.query;
-	}
 
 	/**
 	 * Cache TTL identifier
@@ -95,7 +164,10 @@ export default class RequestContext<D = unknown> {
 	 * @param [params] - request parameters
 	 */
 	constructor(params?: NormalizedCreateRequestOptions<D>) {
-		const p = merge<NormalizedCreateRequestOptions<D>>({}, params);
+		const
+			p = merge<NormalizedCreateRequestOptions<D>>({}, params);
+
+		p.headers = new Headers(p.headers);
 		this.params = p;
 
 		if (p.encoder == null) {
@@ -112,11 +184,24 @@ export default class RequestContext<D = unknown> {
 			this.decoders = Object.isFunction(p.decoder) ? [p.decoder] : p.decoder;
 		}
 
+		if (p.streamDecoder == null) {
+			this.streamDecoders = [];
+
+		} else {
+			this.streamDecoders = Object.isFunction(p.streamDecoder) ? [p.streamDecoder] : p.streamDecoder;
+		}
+
 		this.withoutBody = Boolean(methodsWithoutBody[p.method]);
 		this.canCache = p.cacheMethods.includes(p.method) || false;
 
-		let
-			cacheAPI = (Object.isString(p.cacheStrategy) ? cache[p.cacheStrategy] : p.cacheStrategy) ?? cache.never;
+		let cacheAPI =
+			(
+				Object.isString(p.cacheStrategy) ?
+					cache[p.cacheStrategy] :
+					p.cacheStrategy
+			) ??
+
+			cache.never;
 
 		this.isReady = (async () => {
 			// eslint-disable-next-line require-atomic-updates

@@ -64,7 +64,7 @@ export default function createProviderEngine(
 
 	function dataProviderEngine(params: RequestOptions): AbortablePromise<Response> {
 		const
-			p = <AvailableOptions>Object.select(params, availableParams),
+			p = Object.cast<AvailableOptions>(Object.select(params, availableParams)),
 			provider = getProviderInstance(src, p.meta);
 
 		const defaultRequestMethods = providerMethodProperties.reduceRight((carry, key) => {
@@ -83,12 +83,12 @@ export default function createProviderEngine(
 			...methodsMapping
 		};
 
-		const parent = new AbortablePromise<Response>(async (resolve, reject, onAbort): AbortablePromise<Response> => {
+		const requestPromise = new AbortablePromise<Response>(async (resolve, reject, onAbort) => {
 			await new Promise((r) => {
 				setImmediate(r);
 			});
 
-			p.parent = <AbortablePromise>parent;
+			p.parent = <AbortablePromise>requestPromise;
 
 			let
 				{providerMethod} = p.meta;
@@ -109,18 +109,16 @@ export default function createProviderEngine(
 				requestMethod = provider[`${providerMethod}Method`] ?? 'post';
 
 			let
-				body = queryMethods[requestMethod] === true ? p.query : p.body;
+				body = queryMethods[requestMethod] != null ? p.query : p.body,
+				urlProp = `base-${providerMethod}-URL`.camelize(false);
 
-			let
-				urlProperty = `base-${providerMethod}-URL`.camelize(false);
-
-			if (!Object.isTruly(provider[urlProperty])) {
-				urlProperty = providerUrlProperties[0];
+			if (!Object.isTruly(provider[urlProp])) {
+				urlProp = providerUrlProperties[0];
 			}
 
 			const providerToRequest = isSimpleRequest ?
 				createMixedProvider(provider, {
-					[urlProperty]: p.url.replace(globalOpts.api ?? '', '')
+					[urlProp]: p.url.replace(globalOpts.api ?? '', '')
 				}) :
 
 				provider;
@@ -132,32 +130,82 @@ export default function createProviderEngine(
 			const
 				req = providerToRequest[<string>providerMethod](body, p);
 
-			onAbort(() => {
-				req.abort();
+			onAbort((reason) => {
+				req.abort(reason);
 			});
 
 			const
-				{data, response: res} = await req;
+				registeredEvents = Object.createDict<boolean>();
+
+			params.emitter.on('newListener', (event: string) => {
+				if (registeredEvents[event]) {
+					return;
+				}
+
+				registeredEvents[event] = true;
+				req.emitter.on(event, (e) => params.emitter.emit(event, e));
+			});
+
+			params.emitter.emit('drainListeners');
 
 			const
-				headers = Object.reject(res.headers, 'content-type');
+				providerResObj = await req,
+				providerResponse = providerResObj.response;
 
-			return resolve(new Response(data, {
-				responseType: 'object',
-				important: res.important,
+			const getResponse = () => providerResObj.data;
+			getResponse[Symbol.asyncIterator] = () => {
+				const
+					type = providerResponse.sourceResponseType;
+
+				if (!(`${type}Stream` in providerResponse)) {
+					return providerResponse[Symbol.asyncIterator]();
+				}
+
+				const
+					stream = providerResponse.decodeStream();
+
+				return {
+					[Symbol.asyncIterator]() {
+						return this;
+					},
+
+					async next() {
+						const
+							{done, value} = <IteratorResult<unknown>>(await stream.next());
+
+						return {
+							done,
+							value: {data: value}
+						};
+					}
+				};
+			};
+
+			const
+				headers = Object.reject(providerResponse.headers, 'content-type');
+
+			return resolve(new Response(getResponse, {
+				url: providerResponse.url,
+				redirected: providerResponse.redirected,
+
 				parent: params.parent,
+				important: providerResponse.important,
 
-				okStatuses: res.okStatuses,
-				status: res.status,
+				okStatuses: providerResponse.okStatuses,
+				status: providerResponse.status,
+				statusText: providerResponse.statusText,
 
 				headers,
+				responseType: 'object',
+
 				decoder: params.decoders,
+				streamDecoder: params.streamDecoders,
 				jsonReviver: params.jsonReviver
 			}));
 
 		}, params.parent);
 
-		return parent;
+		return requestPromise;
 	}
 }
 

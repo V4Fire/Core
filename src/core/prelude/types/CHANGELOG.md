@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.??.?? (2022-??-??)
+
+#### :rocket: New Feature
+
+* Added a new method `Object.isAsyncGenerator`
+
 ## v3.77.0 (2022-03-15)
 
 #### :rocket: New Feature

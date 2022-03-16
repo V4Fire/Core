@@ -33,14 +33,18 @@ export interface Meta extends Dictionary {
 export interface AvailableOptions {
 	url: string;
 	method: RequestMethod;
-	contentType?: string;
-	body?: RequestBody;
-	query: RequestQuery;
+
 	headers: Dictionary<CanArray<unknown>>;
-	okStatuses?: OkStatuses;
+	query: RequestQuery;
+	body?: RequestBody;
+
 	timeout?: number;
-	important?: boolean;
+	contentType?: string;
+	okStatuses?: OkStatuses;
+
 	meta: Meta;
+	important?: boolean;
+
 	parent?: AbortablePromise;
 }
 
