@@ -106,11 +106,11 @@ Also, you can pass a range of codes.
 
 #### decoders
 
-A sequence of response decoders.
+A list of response decoders.
 
 #### streamDecoders
 
-A sequence of response decoders to apply for chunks when you are parsing response in a stream form.
+A list of response decoders to apply for chunks when you are parsing response in a stream form.
 
 #### jsonReviver
 
