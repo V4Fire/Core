@@ -153,7 +153,33 @@ export default function createProviderEngine(
 				providerResponse = providerResObj.response;
 
 			const getResponse = () => providerResObj.data;
-			getResponse[Symbol.asyncIterator] = req[Symbol.asyncIterator].bind(req);
+			getResponse[Symbol.asyncIterator] = () => {
+				const
+					type = providerResponse.sourceResponseType;
+
+				if (!(`${type}Stream` in providerResponse)) {
+					return providerResponse[Symbol.asyncIterator]();
+				}
+
+				const
+					stream = providerResponse.decodeStream();
+
+				return {
+					[Symbol.asyncIterator]() {
+						return this;
+					},
+
+					async next() {
+						const
+							{done, value} = <IteratorResult<unknown>>(await stream.next());
+
+						return {
+							done,
+							value: {data: value}
+						};
+					}
+				};
+			};
 
 			const
 				headers = Object.reject(providerResponse.headers, 'content-type');

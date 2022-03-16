@@ -36,8 +36,8 @@ import type {
 	OkStatuses,
 	RequestResponseChunk,
 
-	WrappedDecoders,
-	WrappedStreamDecoders
+	WrappedDecoder,
+	WrappedStreamDecoder
 
 } from 'core/request/interface';
 
@@ -142,14 +142,14 @@ export default class Response<
 	readonly headers: Readonly<Headers>;
 
 	/**
-	 * Sequence of response decoders
+	 * List of response decoders
 	 */
-	readonly decoders: WrappedDecoders;
+	readonly decoders: WrappedDecoder[];
 
 	/**
-	 * Sequence of response decoders to apply for chunks when you are parsing response in a stream form
+	 * List of response decoders to apply for chunks when you are parsing response in a stream form
 	 */
-	readonly streamDecoders: WrappedStreamDecoders;
+	readonly streamDecoders: WrappedStreamDecoder[];
 
 	/**
 	 * Reviver function for `JSON.parse`
@@ -248,20 +248,18 @@ export default class Response<
 		const contentType = this.headers['content-type'];
 		this.sourceResponseType = contentType != null ? getDataType(contentType) : p.responseType;
 
-		// tslint:disable-next-line:prefer-conditional-expression
 		if (p.decoder == null) {
 			this.decoders = [];
 
 		} else {
-			this.decoders = Object.isFunction(p.decoder) ? [p.decoder] : p.decoder;
+			this.decoders = Object.isFunction(p.decoder) ? [p.decoder] : [...p.decoder];
 		}
 
-		// tslint:disable-next-line:prefer-conditional-expression
 		if (p.streamDecoder == null) {
 			this.streamDecoders = [];
 
 		} else {
-			this.streamDecoders = Object.isFunction(p.streamDecoder) ? [p.streamDecoder] : p.streamDecoder;
+			this.streamDecoders = Object.isFunction(p.streamDecoder) ? [p.streamDecoder] : [...p.streamDecoder];
 		}
 
 		if (Object.isFunction(p.jsonReviver)) {
@@ -581,7 +579,7 @@ export default class Response<
 	@once
 	textStream(): AsyncIterableIterator<string> {
 		const
-			iter = this[Symbol.asyncIterator]();
+			iter = this.stream();
 
 		return {
 			[Symbol.asyncIterator]() {
@@ -594,7 +592,7 @@ export default class Response<
 
 				return {
 					done,
-					value: done ? value : await this.decodeToString(value.data)
+					value: done ? '' : await this.decodeToString(value)
 				};
 			}
 		};
@@ -613,7 +611,15 @@ export default class Response<
 				return this;
 			},
 
-			next: () => iter.next.bind(iter)
+			next: async () => {
+				const
+					{done, value} = await iter.next();
+
+				return {
+					done,
+					value: done ? undefined : value.data
+				};
+			}
 		};
 	}
 
@@ -672,7 +678,7 @@ export default class Response<
 	 */
 	protected applyDecoders<T = unknown>(
 		data: CanPromise<ResponseTypeValue>,
-		decoders: WrappedDecoders = this.decoders
+		decoders: WrappedDecoder[] = this.decoders
 	): T {
 		let
 			res = AbortablePromise.resolve(data, this.parent);
@@ -718,11 +724,10 @@ export default class Response<
 	 */
 	protected applyStreamDecoders<T>(
 		stream: AnyIterable,
-		decoders: WrappedStreamDecoders = this.streamDecoders
+		decoders: WrappedStreamDecoder[] = this.streamDecoders
 	): AsyncIterableIterator<T> {
 		const
-			that = this,
-			indexedDecoders = [...decoders];
+			that = this;
 
 		return applyDecoders(stream);
 
@@ -732,7 +737,7 @@ export default class Response<
 			currentDecoder: number = 0
 		): AsyncIterableIterator<T> {
 			const
-				decoder = indexedDecoders[currentDecoder];
+				decoder = decoders[currentDecoder];
 
 			if (Object.isFunction(decoder)) {
 				const transformedStream = decoder(stream, Object.cast(that));
