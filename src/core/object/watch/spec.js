@@ -852,23 +852,24 @@ describe('core/object/watch', () => {
 			});
 
 			it('setting up an object unwatchable', () => {
-				spyOn(console, 'log').and.callThrough();
 				const
 					obj = {a: 1, b: unwatchable({c: 2, d: {e: 3}}, engine)},
 					spy = jasmine.createSpy();
 
-				const {proxy} = watch(obj, {immediate: true, engine}, (value, oldValue, info) => {
+				const {proxy, set} = watch(obj, {immediate: true, engine}, (value, oldValue, info) => {
 					spy(value, oldValue, info.path);
 				});
 
 				proxy.b.c = 3;
 				proxy.b.d.e = 4;
 
-				set(proxy.b, 'e', 6);
-
-				console.log(proxy.b);
+				set('b.e', 6);
 
 				expect(spy).not.toHaveBeenCalled();
+
+				proxy.a = 2;
+
+				expect(spy).toHaveBeenCalled();
 			});
 
 			it('setting of new properties', () => {

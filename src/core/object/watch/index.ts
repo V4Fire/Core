@@ -888,16 +888,29 @@ export function unset(
 }
 
 /**
- * The function unmutes all mutation events for the specified proxy object
+ * The function mute object children
  *
  * @param obj
- * @param engine
  * @example
  * ```js
+ * const obj = {a: 1,
+ *   b: unwatchable({c: 2})
+ * },
+ *
+ * const {proxy, set} = watch(obj, {immediate: true}, (value, oldValue, info) => {
+ *  console.log(value, oldValue)
+ * });
+ *
+ * // This mutation won't invoke our callback
+ * proxy.b.c = 3;
+ *
+ * // 1 2
+ * proxy.a = 2;
  * ```
  */
-export function unwatchable(obj: object, engine:any): object {
-	const {proxy} = watch(obj, {engine});
+export function unwatchable(obj: object): object {
+	const {proxy} = watch(obj);
 	mute(proxy);
+
 	return proxy;
 }
