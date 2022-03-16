@@ -895,10 +895,10 @@ export function unset(
  * ```js
  * const obj = {a: 1,
  *   b: unwatchable({c: 2})
- * },
+ * };
  *
  * const {proxy, set} = watch(obj, {immediate: true}, (value, oldValue, info) => {
- *  console.log(value, oldValue)
+ *  console.log(value, oldValue);
  * });
  *
  * // This mutation won't invoke our callback

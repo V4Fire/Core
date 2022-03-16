@@ -1045,3 +1045,24 @@ set(proxy, 'skills.programming', 80)
 // This mutation will invoke our callback
 proxy.skills.programming++;
 ```
+
+### unwatchable
+
+Object children can be marked as unwatchable.
+Unwatchable objects don't invoke callbacks.
+
+```js
+const obj = {a: 1,
+  b: unwatchable({c: 2})
+};
+
+const {proxy, set} = watch(obj, {immediate: true}, (value, oldValue, info) => {
+ console.log(value, oldValue);
+});
+
+// This mutation won't invoke our callback
+proxy.b.c = 3;
+
+// 1 2
+proxy.a = 2;
+```
