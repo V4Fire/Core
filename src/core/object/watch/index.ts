@@ -705,7 +705,7 @@ export function mute(obj: object): boolean {
  *  console.log(value, oldValue);
  * });
  *
- * // This mutation won't invoke our callback
+ * // This mutation will be ignored by the watcher
  * proxy.b.c = 3;
  *
  * // 1 2
