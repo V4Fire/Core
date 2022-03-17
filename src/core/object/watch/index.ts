@@ -692,6 +692,34 @@ export function mute(obj: object): boolean {
 }
 
 /**
+ * The function mute object children
+ *
+ * @param obj
+ * @example
+ * ```js
+ * const obj = {a: 1,
+ *   b: unwatchable({c: 2})
+ * };
+ *
+ * const {proxy, set} = watch(obj, {immediate: true}, (value, oldValue, info) => {
+ *  console.log(value, oldValue);
+ * });
+ *
+ * // This mutation won't invoke our callback
+ * proxy.b.c = 3;
+ *
+ * // 1 2
+ * proxy.a = 2;
+ * ```
+ */
+export function unwatchable<T extends object>(obj: T): T {
+	const {proxy} = watch(obj);
+	mute(proxy);
+
+	return proxy;
+}
+
+/**
  * The function unmutes all mutation events for the specified proxy object
  *
  * @param obj
@@ -885,32 +913,4 @@ export function unset(
 	}
 
 	engine.unset(obj, path, handlers);
-}
-
-/**
- * The function mute object children
- *
- * @param obj
- * @example
- * ```js
- * const obj = {a: 1,
- *   b: unwatchable({c: 2})
- * };
- *
- * const {proxy, set} = watch(obj, {immediate: true}, (value, oldValue, info) => {
- *  console.log(value, oldValue);
- * });
- *
- * // This mutation won't invoke our callback
- * proxy.b.c = 3;
- *
- * // 1 2
- * proxy.a = 2;
- * ```
- */
-export function unwatchable(obj: object): object {
-	const {proxy} = watch(obj);
-	mute(proxy);
-
-	return proxy;
 }
