@@ -9,26 +9,26 @@
 import type Pull from 'core/pull/index';
 
 /**
- * Interface for hooks like onTake and onFree
+ * Interface for hooks like `onTake` and `onFree`
  */
 export type PullHook<T> = (value: T, pull: Pull<T>, ...args: unknown[]) => void;
 
 export interface PullOptions<T> {
 	/**
-	 * Hook that is activated before `this.take` or `this.takeOrCreate`
+	 * Hook that is executed before `this.take` or `this.takeOrCreate`
 	 *
 	 * @param value - value that are return from `this.take`
 	 * @param pull - this pull
-	 * @param args - params in this.take(...args)
+	 * @param args - params in `this.take(...args)`
 	 */
 	onTake?: PullHook<T>;
 
 	/**
-	 * Hook that is activated before (free) function
+	 * Hook that is executed before `free` function
 	 *
-	 * @param value - value from free(value)
+	 * @param value - value from `free(value)`
 	 * @param pull - this pull
-	 * @param args - params that are given in free(value,...args)
+	 * @param args - params that are given in `free(value,...args)`
 	 */
 	onFree?: PullHook<T>;
 
@@ -55,7 +55,7 @@ export interface PullOptions<T> {
 	destructor?(resource: T): void;
 }
 
-export interface PullReturnType<T> {
+export interface PullResource<T> {
 	/**
 	 * Return value back to pull
 	 *

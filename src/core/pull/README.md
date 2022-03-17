@@ -11,7 +11,7 @@ const pull = new Pull(
   // function return value that will be stored in pull
   () => Object(),
 
-  // start number of objects in pull
+  // start number of objects in the pull
   10
 );
 
@@ -33,17 +33,17 @@ const {
   value: value1
 } = pull.takeOrCreate();
 
-// destroy object instead of returning it to pull
+// destroys an object instead of returning it to the pull
 destroy(value1)
 
-// return core/promise/sync (wait until something call free(value))
+// returns core/promise/sync (wait until something call free(value))
 pull.takeOrWait()
   .then(({free, value}) => {});
 ```
 
 ## Borrow
 
-You can use one object at multiple places at same time
+You can use one object at multiple places at same the time
 
 ```js
 import Pull from 'core/pull';
@@ -64,15 +64,15 @@ const {
   value: value1
 } = pull.borrow();
 
-// if pull is empty, will create one
+// if the pull is empty, will create one
 const {value: value2} = pull.borrowOrCreate();
 
 console.log(value === value1) // true
 
-// destroy object, if nobody use it
+// destroys an object, if nobody use it
 destroy(value1)
 
-// return core/promise/sync (wait until something call free(value)
+// returns core/promise/sync (wait until call of free(value))
 pull.takeOrWait()
   .then(({free, value}) => {});
 ```
@@ -92,10 +92,10 @@ let pull = new Pull(
 let anotherPull = new Pull(
   (firstItem) => [firstItem],
 
-  // how many object will be created immediately
+  // how many objects will be created immediately
   4,
 
-  // params passed to objectFactory
+  // params that will be passes to the object factory
   // only for objects that will be created immediately
   ['lol'],
   {
@@ -120,14 +120,14 @@ import Pull from 'core/pull';
 const pull = new Pull(
   () => Array(1, 2, 3),
   {
-    // hook that will be called before take, takeOrCreate
-    // expect value that will be returned from take, link to pull, and additional params
+    // callbacks that will be invoked on `take` or `takeOrCreate` call
+    // expect value that will be returned from `take`, link to pull, and additional params
     onTake: (resource, pull, ...args) => {
       console.log(resource, args)
     },
 
-    // hook that will be called before free
-    // expect value that are given to free, link to pull, and additional params
+    // hook that will be called before `free`
+    // expect value that are given to `free`, link to pull, and additional params
     onFree: (resource, pull, ...args) => {
       console.log(resource, args)
     },
@@ -176,7 +176,7 @@ const pull = new Pull(
   ['initial objects'], // createOpts
   {
     // take args that are given to function and convert them to string
-    // arg - params passed to takeOrCreate, borrowOrCreate, createOpts
+    // arg - params passed to `takeOrCreate`, `borrowOrCreate`, `createOpts`
     hashFn: (...args) => JSON.stringify(args)
   }
 );

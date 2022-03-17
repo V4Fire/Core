@@ -19,7 +19,7 @@ import SyncPromise from 'core/promise/sync';
 import { generate, serialize } from 'core/uuid';
 import { Queue } from 'core/queue';
 
-import type { PullHook, PullOptions, PullReturnType } from 'core/pull/interface';
+import type { PullHook, PullOptions, PullResource } from 'core/pull/interface';
 import { defaultValue, hashProperty, viewerCount } from 'core/pull/const';
 
 export * from 'core/pull/const';
@@ -36,26 +36,26 @@ export default class Pull<T> {
 	protected objectFactory: (...args: unknown[]) => T;
 
 	/**
-	 * Data structure that contain pull's object
+	 * Data structure that contains pull's objects
 	 */
 	protected readonly resourceStore: Map<string, T[]> = new Map();
 
 	/**
-	 * Data structure that contain pull's shared object
+	 * Data structure that contains pull's shared objects
 	 */
 	protected readonly borrowedResourceStore: Map<string, T> = new Map();
 
 	/**
-	 * Hook that is activated before (free) function
+	 * Hook that is executed before `free` function
 	 *
-	 * @param value - value from free(value)
+	 * @param value - value from `free(value)`
 	 * @param pull - this pull
-	 * @param args - args that are given to free(value,...args)
+	 * @param args - args that are given to `free(value,...args)`
 	 */
 	protected onFree?: PullHook<T>;
 
 	/**
-	 * Hook that is activated before `this.take` or `this.takeOrCreate`
+	 * Hook that is executed before `this.take` or `this.takeOrCreate`
 	 *
 	 * @param value - value that are returned from `this.take`
 	 * @param pull - this pull
@@ -64,26 +64,26 @@ export default class Pull<T> {
 	protected onTake?: PullHook<T>;
 
 	/**
-	 * Function that calculate hash of resource
+	 * Calculates a hash of the resource
 	 *
 	 * @param args - params passed to `this.objectFactory`
 	 */
 	protected hashFn: (...args: unknown[]) => string;
 
 	/**
-	 * Hook that is called before 'this.clear'
+	 * Hook that is called before `this.clear`
 	 */
 	protected onClear?: (pull: Pull<T>, ...args: unknown[]) => void;
 
 	/**
-	 * Function that destruct object
+	 * Object destructor
 	 */
 	protected destructor?: (resource: T) => void;
 
 	/**
 	 * @see [[EventEmitter]]
 	 */
-	protected emitter: EventEmitter;
+	protected emitter: EventEmitter=new EventEmitter();
 
 	/**
 	 * Queue of active events
@@ -102,7 +102,7 @@ export default class Pull<T> {
 	 * @param settings - settings like hooks
 	 */
 	constructor(
-		objectFactory: () => T,
+		objectFactory: (...args: unknown[]) => T,
 		settings: PullOptions<T>
 	)
 
@@ -111,26 +111,42 @@ export default class Pull<T> {
 	 *
 	 * @param objectFactory
 	 * @param size - amount of object that will be created at initialization
+	 * @param settings - settings like hooks
+	 */
+	constructor(
+		objectFactory: (...args: unknown[]) => T,
+		size: number,
+		settings: PullOptions<T>
+	)
+
+	/**
+	 * Constructor that can create objects immediately with initial arguments
+	 *
+	 * @param objectFactory
+	 * @param size - amount of object that will be created at initialization
 	 * @param createOpts - options passed to objectFactory for first (size) elements
 	 * @param settings - settings like hooks
 	 */
 	constructor(
-		objectFactory: () => T,
+		objectFactory: (...args: unknown[]) => T,
 		size: number,
 		createOpts: unknown[],
 		settings: PullOptions<T>
 	)
 
 	constructor(
-		objectFactory: () => T,
-		size: number | PullOptions<T> = {},
-		createOpts: unknown[] = [],
+		objectFactory: (...args: unknown[]) => T,
+		size: number | PullOptions<T>,
+		createOpts: unknown[] | PullOptions<T> = [],
 		opts: PullOptions<T> = {}
 	) {
 
 		if (!Object.isNumber(size)) {
 			opts = size;
 			size = 0;
+		} else if (Object.isDictionary(createOpts)) {
+			opts = createOpts;
+			createOpts = [];
 		}
 
 		this.onFree = opts.onFree;
@@ -145,15 +161,13 @@ export default class Pull<T> {
 
 		this.objectFactory = objectFactory;
 
-		this.emitter = new EventEmitter();
-
 		for (let i = 0; i < size; i++) {
-			this.createElement(createOpts);
+			this.createElement(<unknown[]>createOpts);
 		}
 	}
 
 	/**
-	 * Return how many elements of type `...args` you can take
+	 * Return how many elements of type `hashFn(...args)` you can take
 	 *
 	 * @param args - args for hashFn
 	 */
@@ -163,16 +177,16 @@ export default class Pull<T> {
 	}
 
 	/**
-	 * Returns an object from the pull. Will throw an error if the pull is empty
+	 * Returns an object from the pull. Will return undefined if the pull is empty
 	 *
 	 * @param args - params for hasFn and hooks
 	 */
-	take(...args: unknown[]): PullReturnType<T> {
+	take(...args: unknown[]): PullResource<T> {
 		const value = this.resourceStore.get(this.hashFn(...args))
 			?.pop();
 
 		if (value == null) {
-			throw new Error('Pull is empty');
+			throw undefined;
 		}
 
 		if (this.onTake) {
@@ -181,7 +195,7 @@ export default class Pull<T> {
 
 		value[viewerCount]++;
 
-		return this.returnValue(value);
+		return this.createPullResource(value);
 	}
 
 	/**
@@ -189,7 +203,7 @@ export default class Pull<T> {
 	 *
 	 * @param args - params for hashFn and hooks
 	 */
-	takeOrCreate(...args: unknown[]): PullReturnType<T> {
+	takeOrCreate(...args: unknown[]): PullResource<T> {
 		if (this.canTake(...args) === 0) {
 			this.createElement(args);
 		}
@@ -202,7 +216,7 @@ export default class Pull<T> {
 	 *
 	 * @param args - params for hashFn and hooks
 	 */
-	takeOrWait(...args: unknown[]): SyncPromise<PullReturnType<T>> {
+	takeOrWait(...args: unknown[]): SyncPromise<PullResource<T>> {
 		const event = serialize(generate());
 
 		return new SyncPromise((r) => {
@@ -230,25 +244,28 @@ export default class Pull<T> {
 	}
 
 	/**
-	 * Borrow shared resources from pull
+	 * Borrow shared resources from pull, return undefined if the pull is empty
 	 *
 	 * @param args - params for hashFn and hooks
 	 */
-	borrow(...args: unknown[]): PullReturnType<T> {
+	borrow(...args: unknown[]): PullResource<T> {
 		const hash = this.hashFn(...args);
 		let value = this.borrowedResourceStore.get(hash);
 
-		value = value == null ? this.resourceStore.get(hash)?.pop() : value;
+		value = value == null ?
+this.resourceStore.get(hash)
+			?.pop() :
+value;
 
 		if (value == null) {
-			throw Error('Pull is empty');
+			throw undefined;
 		}
 
 		this.borrowedResourceStore.set(hash, value);
 
 		value[viewerCount]++;
 
-		return this.returnValue(value);
+		return this.createPullResource(value);
 	}
 
 	/**
@@ -256,7 +273,7 @@ export default class Pull<T> {
 	 *
 	 * @param args - params for hashFn and hooks
 	 */
-	borrowOrCreate(...args: unknown[]): PullReturnType<T> {
+	borrowOrCreate(...args: unknown[]): PullResource<T> {
 		if (!this.canBorrow(...args)) {
 			this.createElement(args);
 		}
@@ -269,7 +286,7 @@ export default class Pull<T> {
 	 *
 	 * @param args - params for hashFn and hooks
 	 */
-	borrowOrWait(...args: unknown[]): SyncPromise<PullReturnType<T>> {
+	borrowOrWait(...args: unknown[]): SyncPromise<PullResource<T>> {
 		const event = this.hashFn(...args);
 
 		return new SyncPromise((r) => {
@@ -289,7 +306,7 @@ export default class Pull<T> {
 
 	/**
 	 * Delete all elements in pull
-	 * also call `this.onClear` and 'this.destruct' for every resource
+	 * also call `this.onClear` and `this.destruct` for every resource
 	 *
 	 * @param args - params for hook
 	 */
@@ -368,12 +385,11 @@ export default class Pull<T> {
 
 	/**
 	 * Return object that contain value and free, destroy functions
-	 * @see PullReturnType
+	 * @see [[PullResource]]
 	 *
 	 * @param value - value that will be returned
-	 * @protected
 	 */
-	protected returnValue(value: T): PullReturnType<T> {
+	protected createPullResource(value: T): PullResource<T> {
 		return {
 			free: this.free.bind(this),
 			value,
