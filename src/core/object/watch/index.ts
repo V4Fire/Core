@@ -692,7 +692,7 @@ export function mute(obj: object): boolean {
 }
 
 /**
- * The function mute object children
+ * Wraps the specified object with unwatchable proxy, i.e. any mutations of this proxy can’t be watched
  *
  * @param obj
  * @example
