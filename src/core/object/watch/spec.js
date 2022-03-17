@@ -836,21 +836,6 @@ describe('core/object/watch', () => {
 				expect(spy).toHaveBeenCalledWith(4, 2, ['b']);
 			});
 
-			it('canceling of watching', () => {
-				const
-					obj = {a: 1, b: 2},
-					spy = jasmine.createSpy();
-
-				const {proxy, unwatch} = watch(obj, {immediate: true, engine}, (value, oldValue, info) => {
-					spy(value, oldValue, info.path);
-				});
-
-				unwatch();
-
-				proxy.a = 2;
-				expect(spy).not.toHaveBeenCalled();
-			});
-
 			it('marking a part of the watched object as unwatchable', () => {
 				const
 					obj = {a: 1, b: unwatchable({c: 2, d: {e: 3}}, engine)},
@@ -870,6 +855,21 @@ describe('core/object/watch', () => {
 				proxy.a = 2;
 
 				expect(spy).toHaveBeenCalled();
+			});
+
+			it('canceling of watching', () => {
+				const
+					obj = {a: 1, b: 2},
+					spy = jasmine.createSpy();
+
+				const {proxy, unwatch} = watch(obj, {immediate: true, engine}, (value, oldValue, info) => {
+					spy(value, oldValue, info.path);
+				});
+
+				unwatch();
+
+				proxy.a = 2;
+				expect(spy).not.toHaveBeenCalled();
 			});
 
 			it('setting of new properties', () => {

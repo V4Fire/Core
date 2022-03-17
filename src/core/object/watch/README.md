@@ -954,8 +954,7 @@ proxy.skills.programming++;
 
 ### unwatchable
 
-Object children can be marked as unwatchable.
-Unwatchable objects don't invoke callbacks.
+Wraps the specified object with unwatchable proxy, i.e. any mutations of this proxy can’t be watched
 
 ```js
 const obj = {
@@ -967,7 +966,7 @@ const {proxy} = watch(obj, {immediate: true}, (value, oldValue) => {
  console.log(value, oldValue);
 });
 
-// This mutation won't invoke our callback
+// This mutation will be ignored by the watcher
 proxy.b.c = 3;
 
 // 1 2
