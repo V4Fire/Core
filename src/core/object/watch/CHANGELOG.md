@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.??.?? (2022-??-??)
+
+#### :rocket: New Feature
+
+* Added a new global function `unwatchable`
+
 ## v3.73.3 (2022-01-10)
 
 #### :bug: Bug Fix
