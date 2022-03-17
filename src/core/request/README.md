@@ -844,15 +844,34 @@ This parameter is used when you're parsing responses in a stream form.
 
 ```js
 import request from 'core/request';
-import { streamArray } from 'core/json/stream';
 
+import { sequence } from 'core/iter/combinators';
+import { pick, andPick, assemble, streamArray } from 'core/json/stream';
+
+/*
+  {
+    "total": 3,
+    "data": [
+      {"name": "Bob", "age": 21},
+      {"name": "Rob", "age": 24},
+      {"name": "Jack", "age": 50}
+    ]
+  }
+ */
 const {stream} = request('//users', {
   responseType: 'json',
-  streamDecoder: streamArray
+  streamDecoder: (data) => sequence(
+    assemble(pick(data, 'total')),
+    streamArray(andPick(data, 'data'))
+  )
 });
 
 (async () => {
   for await (const chunk of stream) {
+    // 3
+    // {"name": "Bob", "age": 21}
+    // {"name": "Rob", "age": 24}
+    // {"name": "Jack", "age": 50}
     console.log(chunk);
   }
 })();
