@@ -851,7 +851,7 @@ describe('core/object/watch', () => {
 				expect(spy).not.toHaveBeenCalled();
 			});
 
-			it('setting up an object unwatchable', () => {
+			it('marking a part of the watched object as unwatchable', () => {
 				const
 					obj = {a: 1, b: unwatchable({c: 2, d: {e: 3}}, engine)},
 					spy = jasmine.createSpy();
