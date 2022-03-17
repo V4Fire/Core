@@ -10,6 +10,10 @@ import type Pull from 'core/pull/index';
 
 /**
  * Interface for hooks like `onTake` and `onFree`
+ *
+ * @param value - value passed to function
+ * @param pull - this pull
+ * @param args - arguments passed to function
  */
 export type PullHook<T> = (value: T, pull: Pull<T>, ...args: unknown[]) => void;
 
@@ -24,7 +28,7 @@ export interface PullOptions<T> {
 	onTake?: PullHook<T>;
 
 	/**
-	 * Hook that is executed before `free` function
+	 * Handler: releasing of some resource
 	 *
 	 * @param value - value from `free(value)`
 	 * @param pull - this pull

@@ -36,7 +36,7 @@ const {
 // destroys an object instead of returning it to the pull
 destroy(value1)
 
-// returns core/promise/sync (wait until something call free(value))
+// returns core/promise/sync (wait until a call of free(value))
 pull.takeOrWait()
   .then(({free, value}) => {});
 ```

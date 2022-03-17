@@ -31,64 +31,53 @@ export * from 'core/pull/interface';
  */
 export default class Pull<T> {
 	/**
-	 * Factory from constructor argument
+	 * A factory to create a new resource.
+	 * The function take arguments that are passed to `takeOrCreate`, `borrowAndCreate`, etc.
 	 */
 	protected objectFactory: (...args: unknown[]) => T;
 
 	/**
-	 * Data structure that contains pull's objects
-	 */
-	protected readonly resourceStore: Map<string, T[]> = new Map();
-
-	/**
-	 * Data structure that contains pull's shared objects
-	 */
-	protected readonly borrowedResourceStore: Map<string, T> = new Map();
-
-	/**
-	 * Hook that is executed before `free` function
-	 *
-	 * @param value - value from `free(value)`
-	 * @param pull - this pull
-	 * @param args - args that are given to `free(value,...args)`
+	 * Handler: releasing of some resource
 	 */
 	protected onFree?: PullHook<T>;
 
 	/**
-	 * Hook that is executed before `this.take` or `this.takeOrCreate`
-	 *
-	 * @param value - value that are returned from `this.take`
-	 * @param pull - this pull
-	 * @param args - args in `this.take(...args)`
+	 * Handler: taking some resource via `take` or `takeOrCreate` methods
 	 */
 	protected onTake?: PullHook<T>;
 
 	/**
 	 * Calculates a hash of the resource
 	 *
-	 * @param args - params passed to `this.objectFactory`
+	 * @param args - arguments passed to `objectFactory`
 	 */
 	protected hashFn: (...args: unknown[]) => string;
 
 	/**
-	 * Hook that is called before `this.clear`
+	 * Handler: clearing of pull' resources
+	 *
+	 * @param pull - this pull
+	 * @param args - args in `this.clear(...args)`
 	 */
 	protected onClear?: (pull: Pull<T>, ...args: unknown[]) => void;
 
 	/**
 	 * Object destructor
+	 *
+	 * @param resource - resource that will be destructed
 	 */
 	protected destructor?: (resource: T) => void;
 
 	/**
+	 * Event emitter to broadcast pull' events
 	 * @see [[EventEmitter]]
 	 */
-	protected emitter: EventEmitter=new EventEmitter();
+	protected emitter: EventEmitter = new EventEmitter();
 
 	/**
 	 * Queue of active events
 	 */
-	protected events: Queue<string> = new Queue();
+	protected events: Map<string, Queue<string>> = new Map();
 
 	/**
 	 * Map of active borrow events
@@ -96,14 +85,24 @@ export default class Pull<T> {
 	protected borrowEventsInQueue: Map<string, true> = new Map();
 
 	/**
+	 * Store of pull resources
+	 */
+	protected readonly resourceStore: Map<string, T[]> = new Map();
+
+	/**
+	 * Store of borrowed resources
+	 */
+	protected readonly borrowedResourceStore: Map<string, T> = new Map();
+
+	/**
 	 * Constructor that initializes pull
 	 *
 	 * @param objectFactory
-	 * @param settings - settings like hooks
+	 * @param opts - settings like hooks
 	 */
 	constructor(
 		objectFactory: (...args: unknown[]) => T,
-		settings: PullOptions<T>
+		opts: PullOptions<T>
 	)
 
 	/**
@@ -111,27 +110,27 @@ export default class Pull<T> {
 	 *
 	 * @param objectFactory
 	 * @param size - amount of object that will be created at initialization
-	 * @param settings - settings like hooks
+	 * @param opts - settings like hooks
 	 */
 	constructor(
 		objectFactory: (...args: unknown[]) => T,
 		size: number,
-		settings: PullOptions<T>
+		opts: PullOptions<T>
 	)
 
 	/**
-	 * Constructor that can create objects immediately with initial arguments
+	 * Constructor that can create objects immediately with additional arguments
 	 *
 	 * @param objectFactory
 	 * @param size - amount of object that will be created at initialization
-	 * @param createOpts - options passed to objectFactory for first (size) elements
-	 * @param settings - settings like hooks
+	 * @param createOpts - options passed to `objectFactory` for first (size) elements
+	 * @param opts - settings like hooks
 	 */
 	constructor(
 		objectFactory: (...args: unknown[]) => T,
 		size: number,
 		createOpts: unknown[],
-		settings: PullOptions<T>
+		opts: PullOptions<T>
 	)
 
 	constructor(
@@ -167,7 +166,8 @@ export default class Pull<T> {
 	}
 
 	/**
-	 * Return how many elements of type `hashFn(...args)` you can take
+	 * Returns how many elements of the specified kind you can take.
+	 * The method takes arguments that will be used to calculate a resource hash.
 	 *
 	 * @param args - args for hashFn
 	 */
@@ -177,12 +177,14 @@ export default class Pull<T> {
 	}
 
 	/**
-	 * Returns an object from the pull. Will return undefined if the pull is empty
+	 * Returns an object from the pull. Will return undefined if the pull is empty.
+	 * The method takes arguments that will be used to calculate a resource hash.
 	 *
 	 * @param args - params for hasFn and hooks
 	 */
 	take(...args: unknown[]): PullResource<T> {
-		const value = this.resourceStore.get(this.hashFn(...args))
+		const value = this.resourceStore
+			.get(this.hashFn(...args))
 			?.pop();
 
 		if (value == null) {
@@ -199,7 +201,8 @@ export default class Pull<T> {
 	}
 
 	/**
-	 * If pull is empty, create a new element and returns it, otherwise it works like `this.take`
+	 * If pull is empty, create a new element and returns it, otherwise it works like `this.take`.
+	 * The method takes arguments that will be used to calculate a resource hash.
 	 *
 	 * @param args - params for hashFn and hooks
 	 */
@@ -212,27 +215,34 @@ export default class Pull<T> {
 	}
 
 	/**
-	 * Return a Promise, that will be resolved after somebody returns element to pull
+	 * Return a Promise that will be resolved after resource will be available in the pull.
+	 * The method takes arguments that will be used to calculate a resource hash.
 	 *
 	 * @param args - params for hashFn and hooks
 	 */
 	takeOrWait(...args: unknown[]): SyncPromise<PullResource<T>> {
-		const event = serialize(generate());
+		const event = this.hashFn(...args);
+		const sequence = serialize(generate());
 
 		return new SyncPromise((r) => {
 			if (this.canTake(...args) !== 0) {
 				r(this.take(...args));
 			}
 
-			this.events.push(event);
+			if(!this.events.has(event)) {
+				this.events.set(event, new Queue());
+			}
 
-			r(resolveAfterEvents(this.emitter, event)
+			this.events.get(event)?.push(sequence);
+
+			r(resolveAfterEvents(this.emitter, sequence)
 				.then(() => this.take(...args)));
 		});
 	}
 
 	/**
-	 * Check if you can borrow element with ...args
+	 * Check if you can borrow element.
+	 * The method takes arguments that will be used to calculate a resource hash.
 	 *
 	 * @param args - params for hashFn and hooks
 	 */
@@ -244,7 +254,8 @@ export default class Pull<T> {
 	}
 
 	/**
-	 * Borrow shared resources from pull, return undefined if the pull is empty
+	 * Borrow shared resources from pull, return undefined if the pull is empty.
+	 * The method takes arguments that will be used to calculate a resource hash.
 	 *
 	 * @param args - params for hashFn and hooks
 	 */
@@ -253,9 +264,9 @@ export default class Pull<T> {
 		let value = this.borrowedResourceStore.get(hash);
 
 		value = value == null ?
-this.resourceStore.get(hash)
-			?.pop() :
-value;
+			this.resourceStore.get(hash)
+				?.pop() :
+			value;
 
 		if (value == null) {
 			throw undefined;
@@ -269,7 +280,8 @@ value;
 	}
 
 	/**
-	 * Borrow resource from pull or create it if can't
+	 * Borrow resource from pull or create it if can't.
+	 * The method takes arguments that will be used to calculate a resource hash.
 	 *
 	 * @param args - params for hashFn and hooks
 	 */
@@ -282,12 +294,14 @@ value;
 	}
 
 	/**
-	 * Borrow resource from pull or wait until somebody returns resource to pull
+	 * Borrow resource from pull or wait after resource will be available in the pull.
+	 * The method takes arguments that will be used to calculate a resource hash.
 	 *
 	 * @param args - params for hashFn and hooks
 	 */
 	borrowOrWait(...args: unknown[]): SyncPromise<PullResource<T>> {
-		const event = this.hashFn(...args);
+		const event = `${this.hashFn(...args)}borrow`;
+		const sequence = serialize(generate());
 
 		return new SyncPromise((r) => {
 			if (this.canBorrow(...args)) {
@@ -295,7 +309,11 @@ value;
 			}
 
 			if (this.borrowEventsInQueue.get(event) == null) {
-				this.events.push(event);
+				if(!this.events.has(event)) {
+					this.events.set(event, new Queue());
+				}
+
+				this.events.get(event)?.push(sequence);
 				this.borrowEventsInQueue.set(event, true);
 			}
 
@@ -308,7 +326,7 @@ value;
 	 * Delete all elements in pull
 	 * also call `this.onClear` and `this.destruct` for every resource
 	 *
-	 * @param args - params for hook
+	 * @param args - params for 'onClear' hook
 	 */
 	clear(...args: unknown[]): void {
 		if (this.onClear !== undefined) {
@@ -355,9 +373,9 @@ value;
 				?.push(value);
 		}
 
-		const event = this.events.pop();
+		const event = this.events.get(value[hashProperty])?.pop();
 
-		if (event !== undefined) {
+		if (event != null) {
 			this.emitter.emit(event);
 			this.borrowEventsInQueue.delete(event);
 		}
