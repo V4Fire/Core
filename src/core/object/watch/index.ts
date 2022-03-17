@@ -697,11 +697,12 @@ export function mute(obj: object): boolean {
  * @param obj
  * @example
  * ```js
- * const obj = {a: 1,
+ * const obj = {
+ *   a: 1,
  *   b: unwatchable({c: 2})
  * };
  *
- * const {proxy, set} = watch(obj, {immediate: true}, (value, oldValue, info) => {
+ * const {proxy} = watch(obj, {immediate: true}, (value, oldValue) => {
  *  console.log(value, oldValue);
  * });
  *
