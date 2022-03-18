@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.79.0 (2022-03-18)
+
+#### :rocket: New Feature
+
+* Added a new global function `unwatchable` `core/object/watch`
+
 ## v3.78.0 (2022-03-16)
 
 #### :boom: Breaking Change
