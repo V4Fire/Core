@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.79.1 (2022-03-18)
+
+#### :bug: Bug Fix
+
+* Restored the fixed `package-lock.json`
+
 ## v3.79.0 (2022-03-18)
 
 #### :rocket: New Feature
