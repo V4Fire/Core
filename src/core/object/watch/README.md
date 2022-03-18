@@ -954,7 +954,7 @@ proxy.skills.programming++;
 
 ### unwatchable
 
-Wraps the specified object with unwatchable proxy, i.e. any mutations of this proxy can’t be watched
+Wraps the specified object with unwatchable proxy, i.e. any mutations of this proxy can’t be watched.
 
 ```js
 const obj = {
