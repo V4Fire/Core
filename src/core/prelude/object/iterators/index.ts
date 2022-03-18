@@ -14,7 +14,7 @@ extend(Object, 'forEach', (
 	optsOrCb: ObjectForEachOptions | AnyFunction,
 	cbOrOpts?: AnyFunction | ObjectForEachOptions
 ) => {
-	if (!Object.isTruly(obj)) {
+	if (obj == null) {
 		return;
 	}
 
@@ -41,9 +41,13 @@ extend(Object, 'forEach', (
 		passDescriptor = p.passDescriptor ?? p.withDescriptor;
 
 	let
-		notOwn;
+		notOwn: Nullable<boolean | -1>;
 
 	switch (p.propsToIterate) {
+		case 'all':
+			notOwn = true;
+			break;
+
 		case 'own':
 			notOwn = false;
 			break;
@@ -52,20 +56,8 @@ extend(Object, 'forEach', (
 			notOwn = -1;
 			break;
 
-		case 'all':
-			notOwn = true;
-			break;
-
 		default:
 			notOwn = p.notOwn;
-	}
-
-	if (Object.isArray(obj)) {
-		for (let i = 0; i < obj.length; i++) {
-			cb(obj[i], i, obj);
-		}
-
-		return;
 	}
 
 	if (Object.isString(obj)) {
@@ -73,7 +65,19 @@ extend(Object, 'forEach', (
 			i = 0;
 
 		for (const el of obj) {
-			cb(el, i++, obj);
+			let
+				iterVal: string | PropertyDescriptor = el;
+
+			if (passDescriptor) {
+				iterVal = {
+					enumerable: true,
+					configurable: false,
+					writable: false,
+					value: el
+				};
+			}
+
+			cb(iterVal, i++, obj);
 		}
 
 		return;
@@ -83,25 +87,39 @@ extend(Object, 'forEach', (
 		return;
 	}
 
-	if (Object.isMap(obj) || Object.isSet(obj)) {
-		for (let o = obj.entries(), i = o.next(); !i.done; i = o.next()) {
-			const [key, el] = i.value;
-			cb(el, key, obj);
+	if (!passDescriptor && notOwn == null) {
+		if (Object.isArray(obj)) {
+			for (let i = 0; i < obj.length; i++) {
+				cb(obj[i], i, obj);
+			}
+
+			return;
 		}
 
-		return;
-	}
+		if (Object.isMap(obj) || Object.isSet(obj)) {
+			for (let o = obj.entries(), i = o.next(); !i.done; i = o.next()) {
+				const [key, el] = i.value;
+				cb(el, key, obj);
+			}
 
-	if (
-		Object.isIterable(obj) &&
-		notOwn == null &&
-		passDescriptor == null
-	) {
-		for (const el of obj) {
-			cb(el, null, obj);
+			return;
 		}
 
-		return;
+		if (Object.isIterable(obj)) {
+			let
+				i = 0;
+
+			for (const el of obj) {
+				if (Object.isArray(el) && el.length === 2) {
+					cb(el[1], el[0], obj);
+
+				} else {
+					cb(el, i++, obj);
+				}
+			}
+
+			return;
+		}
 	}
 
 	if (Object.isTruly(notOwn)) {

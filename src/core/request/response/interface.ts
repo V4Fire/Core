@@ -11,8 +11,28 @@ import type AbortablePromise from 'core/promise/abortable';
 import type { StatusCodes } from 'core/status-codes';
 import type { DataType } from 'core/mime-type';
 
-import type { OkStatuses, WrappedDecoders, WrappedDecoder } from 'core/request/interface';
+import type {
+
+	OkStatuses,
+
+	WrappedDecoder,
+	WrappedDecoders,
+
+	WrappedStreamDecoder,
+	WrappedStreamDecoders
+
+} from 'core/request/interface';
+
 import type { defaultResponseOpts } from 'core/request/response/const';
+import type { RawHeaders } from 'core/request/headers';
+
+export type ResponseModeType =
+	'basic' |
+	'cors' |
+	'default' |
+	'error' |
+	'opaque' |
+	'opaqueredirect';
 
 export type ResponseType =
 	DataType |
@@ -24,6 +44,7 @@ export type ResponseTypeValue =
 	ArrayBuffer |
 	Buffer |
 	Document |
+	FormData |
 	null |
 	undefined;
 
@@ -31,18 +52,37 @@ export type ResponseTypeValueP =
 	CanPromise<ResponseTypeValue> |
 	(() => CanPromise<ResponseTypeValue>);
 
-export interface ResponseHeaders {
-	readonly [name: PropertyKey]: string;
+export type JSONLikeValue =
+	string |
+	number |
+	boolean |
+	null |
+	unknown[] |
+	Dictionary;
+
+export interface ResponseChunk<D> {
+	loaded: number;
+	total?: number;
+	data?: D | null;
 }
 
 export interface ResponseOptions {
+	url?: string;
+	redirected?: boolean;
+	type?: ResponseModeType;
+
 	parent?: AbortablePromise;
 	important?: boolean;
-	responseType?: ResponseType;
-	okStatuses?: OkStatuses;
+
 	status?: StatusCodes;
-	headers?: string | Dictionary<string>;
+	statusText?: string;
+	okStatuses?: OkStatuses;
+
+	responseType?: ResponseType;
+	headers?: RawHeaders;
+
 	decoder?: WrappedDecoder | WrappedDecoders;
+	streamDecoder?: WrappedStreamDecoder | WrappedStreamDecoders;
 	jsonReviver?: JSONCb | false;
 }
 

@@ -9,81 +9,88 @@
 import type { ErrorDetailsExtractor, ErrorCtor } from 'core/error';
 
 import RequestError from 'core/request/error';
-import type { RequestErrorDetailsExtractorSettings } from 'core/request/error/interface';
+import Headers, { RawHeaders } from 'core/request/headers';
 
-/**
- * Internal filtering settings
- */
-interface SettingsPreprocessedFiltering {
+import type { RequestErrorDetailsExtractorOptions } from 'core/request/error/interface';
+
+interface FilterParams {
 	include: Set<string>;
 	exclude: Set<string>;
 }
 
 /**
- * Extractor that gets details from `RequestError`
+ * Extractor to get details from `RequestError`
  */
 export class RequestErrorDetailsExtractor implements ErrorDetailsExtractor<RequestError> {
 	/** @inheritDoc */
 	target: ErrorCtor<RequestError> = RequestError;
 
 	/**
-	 * Settings that define which header makes its way to the result
+	 * Parameters to define which header makes its way to the result
 	 */
-	protected headerSettings: SettingsPreprocessedFiltering;
+	protected headersFilterParams: FilterParams;
 
-	constructor(settings?: RequestErrorDetailsExtractorSettings) {
-		this.headerSettings = {
-			include: new Set(settings?.headers.include),
-			exclude: new Set(settings?.headers.exclude)
+	constructor(opts?: RequestErrorDetailsExtractorOptions) {
+		this.headersFilterParams = {
+			include: new Set(opts?.headers.include),
+			exclude: new Set(opts?.headers.exclude)
 		};
 	}
 
 	/** @inheritDoc */
 	extract(error: RequestError): unknown {
+		const
+			d = error.details;
+
 		return {
-			url: error.details.request?.url,
+			url: d.request?.url,
 			type: error.type,
 
-			status: error.details.response?.status,
-			method: error.details.request?.method,
-			query: error.details.request?.query,
+			status: d.response?.status,
+			method: d.request?.method,
+			query: d.request?.query,
 
-			contentType: error.details.request?.contentType,
-			withCredentials: error.details.request?.credentials,
+			contentType: d.request?.contentType,
+			withCredentials: d.request?.credentials,
 
-			requestHeaders: this.prepareHeaders(error.details.request?.headers),
-			requestBody: error.details.request?.body,
+			requestHeaders: this.prepareHeaders(d.request?.headers),
+			requestBody: d.request?.body,
 
-			responseHeaders: this.prepareHeaders(error.details.response?.headers),
-			responseBody: error.details.response?.body
+			responseHeaders: this.prepareHeaders(d.response?.headers),
+			responseBody: d.response?.body
 		};
 	}
 
 	/**
-	 * Filters the specified headers according to settings {@see headerSettings}
+	 * Filters the specified headers according to settings
+	 *
+	 * @see headersFilterParams
 	 * @param headers - headers that need to be filtered
 	 */
-	protected prepareHeaders(headers: CanUndef<Dictionary<CanArray<string>>>): CanUndef<Dictionary<CanArray<string>>> {
-		let
-			filteredHeaders = headers;
+	protected prepareHeaders(headers: CanUndef<RawHeaders>): CanUndef<Headers> {
+		if (headers == null) {
+			return;
+		}
 
-		const filterHeaders = (originalHeaders, filter) =>
-			Object.keys(originalHeaders)
-				.filter(filter)
-				.reduce((headers, headerName) => {
-					headers[headerName] = originalHeaders[headerName];
-					return headers;
-				}, {});
+		const
+			p = this.headersFilterParams,
+			filteredHeaders = new Headers(headers);
 
-		if (headers) {
-			if (this.headerSettings.include.size > 0) {
-				filteredHeaders = filterHeaders(headers, (headerName) => this.headerSettings.include.has(headerName));
+		if (p.include.size > 0) {
+			filterHeaders(filteredHeaders, (headerName) => p.include.has(headerName));
 
-			} else if (this.headerSettings.exclude.size > 0) {
-				filteredHeaders = filterHeaders(headers, (headerName) => !this.headerSettings.exclude.has(headerName));
-			}
+		} else if (p.exclude.size > 0) {
+			filterHeaders(filteredHeaders, (headerName) => !p.exclude.has(headerName));
 		}
 
 		return filteredHeaders;
+
+		function filterHeaders(headers: Headers, filter: (string) => boolean) {
+			headers.forEach((name) => {
+				if (!filter(name)) {
+					headers.delete(name);
+				}
+			});
+		}
 	}
 }

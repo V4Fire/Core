@@ -1,4 +1,5 @@
 /* eslint-disable max-lines-per-function */
+/* eslint-disable max-lines */
 
 /*!
  * V4Fire Core
@@ -11,9 +12,15 @@
 import express from 'express';
 import { set, get } from 'core/env';
 
+import { sequence } from 'core/iter/combinators';
+import { pick, andPick, assemble, streamArray } from 'core/json/stream';
+
 import Provider, { provider } from 'core/data';
 import baseRequest, { globalOpts, RequestError } from 'core/request';
 import { defaultRequestOpts } from 'core/request/const';
+
+import Response from 'core/request/response';
+import Headers from 'core/request/headers';
 
 import nodeEngine from 'core/request/engines/node';
 import fetchEngine from 'core/request/engines/fetch';
@@ -28,7 +35,8 @@ class TestRequestChainProvider extends Provider {
 }
 
 const
-	emptyBodyStatuses = [204, 304];
+	emptyBodyStatuses = [204, 304],
+	faviconBase64 = 'AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAnISL6JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL5JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL1JyEi9ichIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEihCchIpgnISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEixCUgIRMmICEvJyEi5ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIrYnISKSJyEi9ichIlxQREUAHxobAichIo4nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISJeJyEiICchIuAnISJJJiAhbCYgITgmICEnJyEi4ichIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEiXichIiAnISLdJyEihichIuknISKkIRwdBCchIoUnISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIl4nISIgJyEi4ichIu4nISL/JyEi8CYgIT8mICEhJyEi3CchIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISJeJyEiHychIuUnISL/JyEi/ychIv8nISKrIh0eBiYhInwnISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEiXSYgITUnISLvJyEi/ychIv8nISL/JyEi9CYgIUcmICEbJyEi1ichIv8nISL/JyEi/ychIv8nISL/JyEi/ichImknISKjJyEi/ychIv8nISL/JyEi/ychIv8nISKzIRwdBiYhIX0nISL/JyEi/ychIv8nISL/JyEi/ychIvwnISK+JyEi9CchIv8nISL/JyEi/ychIv8nISL/JyEi9yYhIoonISKzJyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ichIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL6JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==';
 
 describe('core/request', () => {
 	const engines = new Map([
@@ -90,28 +98,30 @@ describe('core/request', () => {
 			});
 
 			it('blob `get`', async () => {
-				const req = await request('http://localhost:3000/favicon.ico');
-				expect(req.data.type).toBe('image/x-icon');
-				expect(req.data.size).toBe(1150);
+				const
+					data = await request('http://localhost:4000/favicon.ico').data;
+
+				expect(data.type).toBe('image/x-icon');
+				expect(data.size).toBe(1150);
 			});
 
 			it('json `get`', async () => {
-				expect((await request('http://localhost:3000/json/1')).data)
-					.toEqual({id: 1, value: 'things'});
+				const data = await request('http://localhost:4000/json/1').data;
+				expect(data).toEqual({id: 1, value: 'things'});
 			});
 
 			it('json `get` with caching', async () => {
 				const
-					url = 'http://localhost:3000/json/1',
+					url = 'http://localhost:4000/json/1',
 					get = request({cacheStrategy: 'forever', cacheTTL: 10});
 
-				await get(url);
+				await get(url).data;
 
 				const
 					req = await get(url);
 
 				expect(req.cache).toBe('memory');
-				expect(req.data).toEqual({id: 1, value: 'things'});
+				expect(await req.data).toEqual({id: 1, value: 'things'});
 
 				return new Promise(((resolve) => {
 					setTimeout(async () => {
@@ -120,7 +130,7 @@ describe('core/request', () => {
 								req = await get(url);
 
 							expect(req.cache).toBeUndefined();
-							expect(req.data).toEqual({id: 1, value: 'things'});
+							expect(await req.data).toEqual({id: 1, value: 'things'});
 							req.dropCache();
 						}
 
@@ -129,7 +139,7 @@ describe('core/request', () => {
 								req = await get(url);
 
 							expect(req.cache).toBeUndefined();
-							expect(req.data).toEqual({id: 1, value: 'things'});
+							expect(await req.data).toEqual({id: 1, value: 'things'});
 						}
 
 						resolve();
@@ -138,25 +148,22 @@ describe('core/request', () => {
 			});
 
 			it('text/xml `get`', async () => {
-				expect((await request('http://localhost:3000/xml/text')).data.querySelector('foo').textContent)
-					.toBe('Hello world');
+				const data = await request('http://localhost:4000/xml/text').data;
+				expect(data.querySelector('foo').textContent).toBe('Hello world');
 			});
 
 			it('application/xml `get`', async () => {
-				expect((await request('http://localhost:3000/xml/app')).data.querySelector('foo').textContent)
-					.toBe('Hello world');
+				const data = await request('http://localhost:4000/xml/app').data;
+				expect(data.querySelector('foo').textContent).toBe('Hello world');
 			});
 
 			it('xml `get` with a query', async () => {
-				const
-					{data} = await request('http://localhost:3000/search', {query: {q: 'bla'}});
-
-				expect(data.querySelector('results').children[0].textContent)
-					.toBe('one');
+				const data = await request('http://localhost:4000/search', {query: {q: 'bla'}}).data;
+				expect(data.querySelector('results').children[0].textContent).toBe('one');
 			});
 
 			it('json `post`', async () => {
-				const req = await request('http://localhost:3000/json', {
+				const req = await request('http://localhost:4000/json', {
 					method: 'POST',
 					body: {
 						id: 12345,
@@ -164,7 +171,7 @@ describe('core/request', () => {
 					}
 				});
 
-				expect(req.data)
+				expect(await req.data)
 					.toEqual({message: 'Success'});
 
 				expect(req.response.status)
@@ -175,8 +182,11 @@ describe('core/request', () => {
 			});
 
 			it('json `post` with the specified response status', async () => {
+				let
+					err;
+
 				try {
-					await request('http://localhost:3000/json', {
+					await request('http://localhost:4000/json', {
 						method: 'POST',
 						okStatuses: 200,
 						body: {
@@ -185,17 +195,19 @@ describe('core/request', () => {
 						}
 					});
 
-				} catch (err) {
-					expect(err).toBeInstanceOf(RequestError);
-					expect(err.type).toBe(RequestError.InvalidStatus);
-					expect(err.message).toBe('[invalidStatus] POST http://localhost:3000/json 201');
-					expect(err.details.request.method).toBe('POST');
-					expect(err.details.response.status).toBe(201);
+				} catch (e) {
+					err = e;
 				}
+
+				expect(err).toBeInstanceOf(RequestError);
+				expect(err.type).toBe(RequestError.InvalidStatus);
+				expect(err.message).toBe('[invalidStatus] POST http://localhost:4000/json 201');
+				expect(err.details.request.method).toBe('POST');
+				expect(err.details.response.status).toBe(201);
 			});
 
 			it('json `post` with encoders/decoders', async () => {
-				const req = await request('http://localhost:3000/json', {
+				const req = await request('http://localhost:4000/json', {
 					method: 'POST',
 
 					encoder: [
@@ -220,7 +232,7 @@ describe('core/request', () => {
 					}
 				});
 
-				expect(req.data)
+				expect(await req.data)
 					.toEqual({message: 'ok'});
 
 				expect(req.response.status)
@@ -228,7 +240,7 @@ describe('core/request', () => {
 			});
 
 			it('json `post` with middlewares', async () => {
-				const req = await request('http://localhost:3000/json', {
+				const req = await request('http://localhost:4000/json', {
 					method: 'POST',
 
 					middlewares: {
@@ -246,15 +258,15 @@ describe('core/request', () => {
 					}
 				});
 
-				expect(req.data)
+				expect(await req.data)
 					.toEqual({message: 'Success'});
 
 				expect(req.response.status)
 					.toBe(201);
 			});
 
-			it('json `post` with the middleware that return a function', async () => {
-				const req = await request('http://localhost:3000/json', {
+			it('json `post` with a middleware that returns a function', async () => {
+				const req = await request('http://localhost:4000/json', {
 					method: 'POST',
 
 					middlewares: {
@@ -268,7 +280,7 @@ describe('core/request', () => {
 					}
 				});
 
-				expect(req.data)
+				expect(await req.data)
 					.toEqual({message: 'fake'});
 
 				expect(req.response.status)
@@ -276,18 +288,18 @@ describe('core/request', () => {
 			});
 
 			it('json `put` with headers', async () => {
-				const req = await request('http://localhost:3000/json/2', {
+				const req = await request('http://localhost:4000/json/2', {
 					method: 'PUT',
 					headers: {
 						Accept: 'application/json'
 					}
 				});
 
-				expect(req.data)
+				expect(await req.data)
 					.toBe('{"message": "Success"}');
 
-				expect(req.response.getHeader('Content-Type'))
-					.toBeUndefined();
+				expect(req.response.headers.get('Content-Type'))
+					.toBeNull();
 
 				expect(await req.response.json())
 					.toEqual({message: 'Success'});
@@ -296,19 +308,19 @@ describe('core/request', () => {
 					.toBe(200);
 			});
 
-			it('providing the API schema', async () => {
+			it('providing an API schema', async () => {
 				const req = await request('/1', {
 					api: {
 						protocol: 'http',
 						zone: () => 'localhost',
 						domain2: '',
 						domain3: '',
-						port: 3000,
+						port: 4000,
 						namespace: 'json'
 					}
 				});
 
-				expect(req.data)
+				expect(await req.data)
 					.toEqual({
 						id: 1,
 						value: 'things'
@@ -318,16 +330,13 @@ describe('core/request', () => {
 					.toBe(200);
 			});
 
-			it('resolving API schema to URL', async () => {
+			it('resolving an API schema to URL', async () => {
 				let
 					resolvedUrl;
 
 				const engine = (params) => {
 					resolvedUrl = params.url;
-					return Promise.resolve({
-						ok: true,
-						decode: () => ''
-					});
+					return Promise.resolve(new Response(''));
 				};
 
 				await request('/then', {
@@ -339,6 +348,7 @@ describe('core/request', () => {
 						port: 8123,
 						namespace: 'core'
 					},
+
 					engine
 				});
 
@@ -346,13 +356,13 @@ describe('core/request', () => {
 			});
 
 			it('request builder', async () => {
-				let get = request({api: {protocol: 'http', port: 3000, domain3: ''}});
+				let get = request({api: {protocol: 'http', port: 4000, domain3: ''}});
 				get = get({api: {zone: 'localhost', namespace: 'json', domain2: ''}});
 
 				const
 					req = await get('/1');
 
-				expect(req.data).toEqual({
+				expect(await req.data).toEqual({
 					id: 1,
 					value: 'things'
 				});
@@ -363,10 +373,10 @@ describe('core/request', () => {
 			it('request factory', async () => {
 				const
 					resolver = (url, params, type) => type === 'get' ? '/json/1' : '',
-					get = request('http://localhost:3000', resolver),
+					get = request('http://localhost:4000', resolver),
 					req = await get('get');
 
-				expect(req.data).toEqual({
+				expect(await req.data).toEqual({
 					id: 1,
 					value: 'things'
 				});
@@ -376,19 +386,20 @@ describe('core/request', () => {
 
 			it('request factory with rewriting of URL', async () => {
 				const
-					resolver = () => ['http://localhost:3000', 'json', 1],
+					resolver = () => ['http://localhost:4000', 'json', 1],
 					get = request('https://run.mocky.io/v3/', resolver),
 					req = await get();
 
-				expect(req.data).toEqual({id: 1, value: 'things'});
+				expect(await req.data).toEqual({id: 1, value: 'things'});
 				expect(req.response.status).toBe(200);
 			});
 
-			it('404', async () => {
-				let err;
+			it('catching 404', async () => {
+				let
+					err;
 
 				try {
-					await request('http://localhost:3000/bla');
+					await request('http://localhost:4000/bla');
 
 				} catch (e) {
 					err = e;
@@ -396,16 +407,17 @@ describe('core/request', () => {
 
 				expect(err).toBeInstanceOf(RequestError);
 				expect(err.type).toBe(RequestError.InvalidStatus);
-				expect(err.message).toBe('[invalidStatus] GET http://localhost:3000/bla 404');
+				expect(err.message).toBe('[invalidStatus] GET http://localhost:4000/bla 404');
 				expect(err.details.request.method).toBe('GET');
 				expect(err.details.response.status).toBe(404);
 			});
 
 			it('aborting of a request', async () => {
-				let err;
+				let
+					err;
 
 				try {
-					const req = request('http://localhost:3000/json/1');
+					const req = request('http://localhost:4000/json/1');
 					req.abort();
 					await req;
 
@@ -415,16 +427,17 @@ describe('core/request', () => {
 
 				expect(err).toBeInstanceOf(RequestError);
 				expect(err.type).toBe(RequestError.Abort);
-				expect(err.message).toBe('[abort] GET http://localhost:3000/json/1');
+				expect(err.message).toBe('[abort] GET http://localhost:4000/json/1');
 				expect(err.details.request.method).toBe('GET');
 				expect(err.details.response).toBeUndefined();
 			});
 
 			it('request with a low timeout', async () => {
-				let err;
+				let
+					err;
 
 				try {
-					await request('http://localhost:3000/delayed', {timeout: 100});
+					await request('http://localhost:4000/delayed', {timeout: 100});
 
 				} catch (e) {
 					err = e;
@@ -432,26 +445,26 @@ describe('core/request', () => {
 
 				expect(err).toBeInstanceOf(RequestError);
 				expect(err.type).toBe(RequestError.Timeout);
-				expect(err.message).toBe('[timeout]');
+				expect(err.message).toBe('[timeout] GET http://localhost:4000/delayed');
 				expect(err.details.response).toBeUndefined();
 			});
 
 			it('request with a high timeout', async () => {
-				const req = await request('http://localhost:3000/delayed', {timeout: 500});
+				const req = await request('http://localhost:4000/delayed', {timeout: 500});
 				expect(req.response.ok).toBeTrue();
 			});
 
-			describe('responses with no message body', () => {
+			describe('responses with a no message body', () => {
 				for (const status of emptyBodyStatuses) {
 					it(`response with ${status} status`, async () => {
-						const req = await request(`http://localhost:3000/octet/${status}`, {okStatuses: status});
-						expect(req.data).toBe(null);
+						const req = await request(`http://localhost:4000/octet/${status}`, {okStatuses: status});
+						expect(await req.data).toBe(null);
 					});
 				}
 			});
 
 			it('retrying of a request', async () => {
-				const req = request('http://localhost:3000/retry', {
+				const req = request('http://localhost:4000/retry', {
 					retry: {
 						attempts: 5,
 						delay: () => 0
@@ -470,8 +483,8 @@ describe('core/request', () => {
 				await retryDelayTest(() => new Promise((res) => setTimeout(res, 200)), 200);
 			});
 
-			it('retrying with the speedup response', async () => {
-				const req = await request('http://localhost:3000/retry/speedup', {
+			it('retrying with a speed up response', async () => {
+				const req = await request('http://localhost:4000/retry/speedup', {
 					timeout: 300,
 					retry: 2
 				});
@@ -482,29 +495,184 @@ describe('core/request', () => {
 				expect(body.tryNumber).toBe(2);
 			});
 
-			it('failing after given attempts', async () => {
+			it('failing after the given attempts', async () => {
+				let
+					err;
+
 				try {
-					await request('http://localhost:3000/retry/bad', {retry: 3});
+					await request('http://localhost:4000/retry/bad', {retry: 3});
 
-				} catch (err) {
-					const
-						body = await err.details.response.json();
-
-					expect(err).toBeInstanceOf(RequestError);
-					expect(err.type).toBe(RequestError.InvalidStatus);
-					expect(err.message).toBe('[invalidStatus] GET http://localhost:3000/retry/bad 500');
-
-					expect(err.details.request.method).toBe('GET');
-					expect(err.details.response.status).toBe(500);
-
-					expect(body.tryNumber).toEqual(3);
+				} catch (e) {
+					err = e;
 				}
+
+				const
+					body = await err.details.response.json();
+
+				expect(err).toBeInstanceOf(RequestError);
+				expect(err.type).toBe(RequestError.InvalidStatus);
+				expect(err.message).toBe('[invalidStatus] GET http://localhost:4000/retry/bad 500');
+
+				expect(err.details.request.method).toBe('GET');
+				expect(err.details.response.status).toBe(500);
+
+				expect(body.tryNumber).toEqual(3);
 			});
+
+			it('responses an object that contains the "url" property', async () => {
+				const
+					{response: res1} = await request('http://localhost:4000/json/1'),
+					{response: res2} = await request('http://localhost:4000/redirect');
+
+				expect(res1.url).toBe('http://localhost:4000/json/1');
+				expect(res2.url).toBe('http://localhost:4000/json/1');
+			});
+
+			it('response `headers` is an instance of the Headers class', async () => {
+				const
+					{response} = await request('http://localhost:4000/header'),
+					{headers} = response;
+
+				expect(headers).toBeInstanceOf(Headers);
+				expect(headers['some-header-name']).toBe('some-header-value');
+				expect(headers.get('Some-Header-Name')).toBe('some-header-value');
+			});
+
+			it('checking the "redirected" property', async () => {
+				const
+					{response: res1} = await request('http://localhost:4000/json/1'),
+					{response: res2} = await request('http://localhost:4000/redirect');
+
+				expect(res1.redirected).toBeFalse();
+				expect(res2.redirected).toBeTrue();
+			});
+
+			it('request promise is an async iterable object', async () => {
+				const
+					chunkLengths = [],
+					req = request('http://localhost:4000/favicon.ico');
+
+				let
+					loadedBefore = 0,
+					totalLength;
+
+				for await (const {loaded, total} of req) {
+					if (totalLength == null) {
+						totalLength = total;
+					}
+
+					chunkLengths.push(loaded - loadedBefore);
+					loadedBefore = loaded;
+				}
+
+				expect(totalLength).toBe(1150);
+				expect(loadedBefore).toBe(1150);
+				expect(chunkLengths.every((len) => len > 0)).toBeTrue();
+			});
+
+			it('request response is an async iterable object', async () => {
+				const
+					chunkLengths = [],
+					req = await request('http://localhost:4000/favicon.ico');
+
+				let
+					loadedBefore = 0,
+					totalLength;
+
+				for await (const {loaded, total} of req) {
+					if (totalLength == null) {
+						totalLength = total;
+					}
+
+					chunkLengths.push(loaded - loadedBefore);
+					loadedBefore = loaded;
+				}
+
+				expect(totalLength).toBe(1150);
+				expect(loadedBefore).toBe(1150);
+				expect(chunkLengths.every((len) => len > 0)).toBeTrue();
+			});
+
+			if (name === 'xhr') {
+				describe('listening XHR events', () => {
+					it('`progress`', async () => {
+						const
+							req = request('http://localhost:4000/json/1'),
+							events = [];
+
+						req.emitter.on('progress', (e) => {
+							events.push(e.type);
+						});
+
+						await req;
+
+						expect(events.length).toBeGreaterThan(0);
+						expect(events[0]).toBe('progress');
+					});
+
+					it('`readystatechange`', async () => {
+						const
+							req = request('http://localhost:4000/json/1'),
+							events = [];
+
+						req.emitter.on('readystatechange', (e) => {
+							events.push(e.type);
+						});
+
+						await req;
+
+						expect(events.length).toBeGreaterThan(0);
+						expect(events[0]).toBe('readystatechange');
+					});
+				});
+
+			} else {
+				it('getting a response from a stream', async () => {
+					{
+						const
+							req = request('http://localhost:4000/favicon.ico'),
+							result = await convertStreamToBase64(req);
+
+						expect(result).toBe(faviconBase64);
+					}
+
+					{
+						const
+							req = await request('http://localhost:4000/favicon.ico'),
+							result = await convertStreamToBase64(req);
+
+						expect(result).toBe(faviconBase64);
+					}
+				});
+
+				it('parsing JSON from a stream', async () => {
+					const req = request('http://localhost:4000/json/users', {
+						streamDecoder: (data) => sequence(
+							assemble(pick(data, 'total')),
+							streamArray(andPick(data, 'data'))
+						)
+					});
+
+					const
+						res = [];
+
+					for await (const token of await req.stream) {
+						res.push(token);
+					}
+
+					expect(res).toEqual([
+						3,
+						{index: 0, value: {name: 'Bob', age: 21}},
+						{index: 1, value: {name: 'Ben', age: 45}},
+						{index: 2, value: {name: 'Rob', age: 32}}
+					]);
+				});
+			}
 
 			async function retryDelayTest(delay, delayMS) {
 				const startTime = new Date().getTime();
 
-				const req = request('http://localhost:3000/retry', {
+				const req = request('http://localhost:4000/retry', {
 					retry: {
 						attempts: 5,
 						delay
@@ -520,6 +688,23 @@ describe('core/request', () => {
 
 				expect(firstRequest - startTime).toBeLessThan(delayMS);
 				requestDelays.forEach((time) => expect(time).toBeGreaterThanOrEqual(delayMS));
+			}
+
+			async function convertStreamToBase64(stream) {
+				let
+					buffer = null,
+					pos = 0;
+
+				for await (const {data, loaded, total} of stream) {
+					if (buffer == null) {
+						buffer = new Uint8Array(total);
+					}
+
+					buffer.set(data, pos);
+					pos = loaded;
+				}
+
+				return Buffer.from(buffer).toString('base64');
 			}
 		});
 	});
@@ -554,6 +739,28 @@ function createServer() {
 		}
 	});
 
+	serverApp.get('/json/users', (req, res) => {
+		res.status(200).json({
+			total: 3,
+			data: [
+				{
+					name: 'Bob',
+					age: 21
+				},
+
+				{
+					name: 'Ben',
+					age: 45
+				},
+
+				{
+					name: 'Rob',
+					age: 32
+				}
+			]
+		});
+	});
+
 	serverApp.get('/xml/text', (req, res) => {
 		res.type('text/xml');
 		res.status(200).send('<foo>Hello world</foo>');
@@ -585,11 +792,8 @@ function createServer() {
 	});
 
 	serverApp.get('/favicon.ico', (req, res) => {
-		const
-			faviconInBase64 = 'AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAnISL6JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL5JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL1JyEi9ichIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEihCchIpgnISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEixCUgIRMmICEvJyEi5ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIrYnISKSJyEi9ichIlxQREUAHxobAichIo4nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISJeJyEiICchIuAnISJJJiAhbCYgITgmICEnJyEi4ichIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEiXichIiAnISLdJyEihichIuknISKkIRwdBCchIoUnISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIl4nISIgJyEi4ichIu4nISL/JyEi8CYgIT8mICEhJyEi3CchIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISJeJyEiHychIuUnISL/JyEi/ychIv8nISKrIh0eBiYhInwnISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEiXSYgITUnISLvJyEi/ychIv8nISL/JyEi9CYgIUcmICEbJyEi1ichIv8nISL/JyEi/ychIv8nISL/JyEi/ichImknISKjJyEi/ychIv8nISL/JyEi/ychIv8nISKzIRwdBiYhIX0nISL/JyEi/ychIv8nISL/JyEi/ychIvwnISK+JyEi9CchIv8nISL/JyEi/ychIv8nISL/JyEi9yYhIoonISKzJyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ichIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL6JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL/JyEi/ychIv8nISL6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==';
-
 		res.type('image/x-icon');
-		res.send(Buffer.from(faviconInBase64, 'base64'));
+		res.send(Buffer.from(faviconBase64, 'base64'));
 	});
 
 	for (const status of emptyBodyStatuses) {
@@ -638,5 +842,14 @@ function createServer() {
 		tryNumber++;
 	});
 
-	return serverApp.listen(3000);
+	serverApp.get('/header', (req, res) => {
+		res.setHeader('Some-Header-Name', 'some-header-value');
+		res.sendStatus(200);
+	});
+
+	serverApp.get('/redirect', (req, res) => {
+		res.redirect('http://localhost:4000/json/1');
+	});
+
+	return serverApp.listen(4000);
 }

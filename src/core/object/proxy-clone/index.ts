@@ -35,7 +35,7 @@ export function clone<T>(obj: T): T {
  * @param obj
  */
 export default function proxyClone<T>(obj: T): T {
-	const store = new WeakMap<object, Map<unknown, unknown>>();
+	const store = new WeakMap<object, Map<string | symbol, unknown>>();
 	return clone(obj);
 
 	function clone<T>(obj: T): T {
@@ -400,16 +400,19 @@ export default function proxyClone<T>(obj: T): T {
 				}
 
 				const
-					keys = new Set(Reflect.ownKeys(resolvedTarget));
+					keys = new Set(Reflect.ownKeys(resolvedTarget)),
+					iter = store.get(resolvedTarget)?.entries();
 
-				Object.forEach(store.get(resolvedTarget)?.entries(), ([key, val]) => {
-					if (val === NULL) {
-						keys.delete(key);
+				if (iter != null) {
+					for (const [key, val] of iter) {
+						if (val === NULL) {
+							keys.delete(key);
 
-					} else if (key in resolvedTarget) {
-						keys.add(key);
+						} else if (key in resolvedTarget) {
+							keys.add(key);
+						}
 					}
-				});
+				}
 
 				return [...keys];
 			},

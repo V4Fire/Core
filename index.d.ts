@@ -119,6 +119,13 @@ declare function clearImmediate(id: number): void;
 
 declare function structuredClone<T>(obj: T): T;
 
+interface Headers {
+	keys(): IterableIterator<string>;
+	values(): IterableIterator<string>;
+	entries(): IterableIterator<[string, string]>;
+	[Symbol.iterator]: IterableIterator<[string, string]>;
+}
+
 type Primitive =
 	string |
 	symbol |
@@ -198,7 +205,13 @@ type PromiseType<T> =
 type ReturnPromise<T extends AnyFunction<any[], unknown>> = (...args: Parameters<T>) => Promise<ReturnType<T>>;
 
 type DictionaryType<T extends Dictionary> = T extends Dictionary<infer V> ? NonNullable<V> : T;
-type IterableType<T extends Iterable<any>> = T extends Iterable<infer V> ? V : T;
+
+type AnyIterable<T = unknown> = Iterable<T> | AsyncIterable<T>;
+
+type IterableType<T extends Iterable<any> | AsyncIterable<any>> =
+	T extends Iterable<infer V> ?
+		V :
+		T extends AsyncIterable<infer V> ? V : T;
 
 /**
  * Overrides properties of the specified type or interface.
@@ -595,7 +608,7 @@ interface ObjectForEachOptions {
 
 	/**
 	 * If true, the function will iterate all object properties, but not only enumerable.
-	 * Non enumerable properties from a prototype are ignored.
+	 * Non-enumerable properties from a prototype are ignored.
 	 *
 	 * @default `false`
 	 * @example
@@ -1854,22 +1867,34 @@ interface ObjectConstructor {
 	isGenerator(value: any): value is GeneratorFunction;
 
 	/**
+	 * Returns true if the specified value is an async generator function
+	 * @param value
+	 */
+	isAsyncGenerator(value: any): value is AsyncGeneratorFunction;
+
+	/**
 	 * Returns true if the specified value is an iterable structure
 	 * @param value
 	 */
-	isIterable(value: any): value is IterableIterator<unknown>;
+	isIterable(value: any): value is Iterable<unknown>;
 
 	/**
 	 * Returns true if the specified value is an async iterable structure
 	 * @param value
 	 */
-	isAsyncIterable(value: any): value is AsyncIterableIterator<unknown>;
+	isAsyncIterable(value: any): value is AsyncIterable<unknown>;
 
 	/**
 	 * Returns true if the specified value is an iterator
 	 * @param value
 	 */
 	isIterator(value: any): value is Iterator<unknown>;
+
+	/**
+	 * Returns true if the specified value is an async iterator
+	 * @param value
+	 */
+	isAsyncIterator(value: any): value is AsyncIterator<unknown>;
 
 	/**
 	 * Returns true if the specified value is a string

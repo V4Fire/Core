@@ -692,6 +692,35 @@ export function mute(obj: object): boolean {
 }
 
 /**
+ * Wraps the specified object with unwatchable proxy, i.e. any mutations of this proxy can’t be watched
+ *
+ * @param obj
+ * @example
+ * ```js
+ * const obj = {
+ *   a: 1,
+ *   b: unwatchable({c: 2})
+ * };
+ *
+ * const {proxy} = watch(obj, {immediate: true}, (value, oldValue) => {
+ *  console.log(value, oldValue);
+ * });
+ *
+ * // This mutation will be ignored by the watcher
+ * proxy.b.c = 3;
+ *
+ * // 1 2
+ * proxy.a = 2;
+ * ```
+ */
+export function unwatchable<T extends object>(obj: T): T {
+	const {proxy} = watch(obj);
+	mute(proxy);
+
+	return proxy;
+}
+
+/**
  * The function unmutes all mutation events for the specified proxy object
  *
  * @param obj

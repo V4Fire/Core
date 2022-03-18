@@ -7,6 +7,8 @@
  */
 
 import { IS_NODE } from 'core/env';
+import { FormData } from 'core/request/engines/const';
+
 import type { RequestBody } from 'core/request/interface';
 
 /**
@@ -36,19 +38,8 @@ export function convertDataToSend<T = RequestBody>(data: unknown, contentType?: 
 		}
 
 		if (needForm) {
-			let
-				formData;
-
-			if (IS_NODE) {
-				//#if node_js
-				// eslint-disable-next-line @typescript-eslint/no-var-requires
-				const FormData = require('form-data');
+			const
 				formData = new FormData();
-				//#endif
-
-			} else {
-				formData = new FormData();
-			}
 
 			const append = (key, val) => {
 				if (Object.isIterable(val)) {

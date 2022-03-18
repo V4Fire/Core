@@ -952,6 +952,27 @@ mute(proxy);
 proxy.skills.programming++;
 ```
 
+### unwatchable
+
+Wraps the specified object with unwatchable proxy, i.e. any mutations of this proxy can’t be watched.
+
+```js
+const obj = {
+  a: 1,
+  b: unwatchable({c: 2})
+};
+
+const {proxy} = watch(obj, {immediate: true}, (value, oldValue) => {
+ console.log(value, oldValue);
+});
+
+// This mutation will be ignored by the watcher
+proxy.b.c = 3;
+
+// 1 2
+proxy.a = 2;
+```
+
 ### unmute
 
 The function unmutes all mutation events for the specified proxy object.

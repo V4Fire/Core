@@ -9,6 +9,13 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.78.0 (2022-03-16)
+
+#### :rocket: New Feature
+
+* Added support for a stream interface
+* Added support for request events
+
 ## v3.35.0 (2021-03-04)
 
 #### :bug: Bug Fix

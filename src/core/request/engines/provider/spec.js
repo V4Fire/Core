@@ -145,12 +145,12 @@ describe('core/request/engine/provider', () => {
 	});
 
 	it('response type is correct for XML', async () => {
-		expect((await dataProvider.get()).data.querySelector('foo').textContent)
+		expect((await dataProvider.get().data).querySelector('foo').textContent)
 			.toBe('Hello world');
 	});
 
 	it('methods mapping', async () => {
-		expect((await jsonProvider.peek()).data)
+		expect(await jsonProvider.peek().data)
 			.toEqual({id: 1, value: 'things'});
 	});
 
@@ -159,7 +159,7 @@ describe('core/request/engine/provider', () => {
 			value: 'abc-def-ghi'
 		});
 
-		expect(req.data)
+		expect(await req.data)
 			.toEqual({message: 'ok'});
 
 		expect(req.response.status)
@@ -174,7 +174,7 @@ describe('core/request/engine/provider', () => {
 			value: ['abc', 'def', 'ghi']
 		});
 
-		expect(req.data)
+		expect(await req.data)
 			.toEqual({message: 'ok', error: false});
 
 		expect(req.response.status)
@@ -188,7 +188,7 @@ describe('core/request/engine/provider', () => {
 			})
 		});
 
-		expect((await req('/json', {method: 'POST'})).data)
+		expect(await req('/json', {method: 'POST'}).data)
 			.toEqual({id: 1, value: 'things'});
 	});
 
