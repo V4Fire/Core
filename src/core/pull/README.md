@@ -18,14 +18,14 @@ const pull = new Pull(
 // Number of objects in pull that are avalible now
 console.log(pull.canTake()); // 10
 
-// if there aren't any avalible objects, throw error
+// if there aren't any avalible objects, return null as a value
 const {
   free,
   value
 } = pull.take();
 
 // call free will return the value back to pull
-free(value)
+free()
 
 // if there aren't any avalible objects, will create one
 const {
@@ -34,7 +34,7 @@ const {
 } = pull.takeOrCreate();
 
 // destroys an object instead of returning it to the pull
-destroy(value1)
+destroy()
 
 // returns core/promise/sync (wait until a call of free(value))
 pull.takeOrWait()
@@ -52,11 +52,8 @@ const pull = new Pull(() => Object(), 1);
 
 console.log(pull.canBorrow()); // true
 
-// throw error, if pull is empty
-const {
-  free,
-  value
-} = pull.borrow();
+// return null as a value, if pull is empty
+const {value} = pull.borrow();
 
 // you can borrow one object mulriple times
 const {
@@ -70,7 +67,7 @@ const {value: value2} = pull.borrowOrCreate();
 console.log(value === value1) // true
 
 // destroys an object, if nobody use it
-destroy(value1)
+destroy()
 
 // returns core/promise/sync (wait until call of free(value))
 pull.takeOrWait()
@@ -151,14 +148,14 @@ let {
 
 value.push(4)
 
-free(value, 'hello', 'world') // [1, 2, 3, 4] ['hello', 'world']
+free('hello', 'world') // [1, 2, 3, 4] ['hello', 'world']
 
 let {
   value: newValue,
   destroy
 } = pull.takeOrCreate('hey') // [1, 2, 3] ['hey']
 
-destroy(newValue) // destructed: [1, 2, 3, 4]
+destroy() // destructed: [1, 2, 3, 4]
 
 pull.clear() // cleared
 ```
@@ -188,7 +185,7 @@ let {
 
 console.log(value) // [1, 2, 3]
 
-free(value)
+free()
 
 console.log(pull.canTake('hi')) // 1
 

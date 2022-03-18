@@ -16,7 +16,7 @@ describe('core/pull', () => {
 		const arr = value;
 		expect(value).toBeInstanceOf(Array);
 
-		free(value);
+		free();
 
 		expect(pull.canTake()).toBe(1);
 		expect(pull.canBorrow()).toBe(true);
@@ -29,7 +29,7 @@ describe('core/pull', () => {
 
 		const promise = pull.takeOrWait();
 
-		free2(value);
+		free2();
 
 		const {value: value3, free: free3} = await promise;
 
@@ -37,13 +37,14 @@ describe('core/pull', () => {
 		expect(pull.canTake()).toBe(0);
 		expect(pull.canBorrow()).toBe(false);
 
-		free3(value3);
+		free3();
 
 		expect(pull.canTake()).toBe(1);
 		expect(pull.canBorrow()).toBe(true);
 	});
 
 	it('borrow usage', async () => {
+		spyOn(console, 'log').and.callThrough();
 		const pull = new Pull(Array);
 
 		const {value, free} = pull.borrowOrCreate();
@@ -56,99 +57,175 @@ describe('core/pull', () => {
 		expect(value1).toBe(value);
 		expect(pull.canBorrow()).toBe(true);
 
-		free(value);
+		free();
 
 		expect(pull.canTake()).toBe(0);
 
-		destroy(value1);
+		destroy();
 
 		expect(pull.canBorrow()).toBe(false);
 
-		const {value: value2, free: free2} = pull.takeOrCreate();
+		const {free: free2} = pull.takeOrCreate();
 
 		const promise = pull.borrowOrWait();
 
-		free2(value2);
+		free2();
 
 		const {value: value3} = await promise;
 
 		expect(value3).toBeInstanceOf(Array);
 	});
 
-	it('hash function and onTake, onFree', () => {
-		let lastTaken = null;
-		let lastFreed = null;
+	it('take or borrow from empty queue', () => {
+		const pull = new Pull(Array);
 
-		const pull = new Pull(Array, 1, [1, 2], {
-				hashFn: (...args) => JSON.stringify(args),
+		expect(pull.canTake()).toBe(0);
+
+		const {value, free} = pull.take();
+
+		expect(value).toBe(null);
+		expect(() => free(value)).toThrowError();
+
+		expect(pull.canBorrow()).toBe(false);
+
+		const {value: value1, free: free1} = pull.borrow();
+
+		expect(value1).toBe(null);
+		expect(free1).toThrowError();
+	});
+
+	describe('constructors', () => {
+		it('onle objectFactory', () => {
+			const pull = new Pull(Array);
+
+			const {value} = pull.takeOrCreate();
+			expect(value).toBeInstanceOf(Array);
+		});
+
+		it('objectFactory with size', () => {
+			const pull = new Pull(Array, 2);
+
+			expect(pull.canTake()).toBe(2);
+
+			const {value} = pull.take();
+			expect(value).toBeInstanceOf(Array);
+		});
+
+		it('objectFactory with size and createOpts', () => {
+			const pull = new Pull(Array, 2, [1, 2]);
+
+			expect(pull.canTake()).toBe(2);
+
+			const {value} = pull.take();
+			expect(value).toEqual([1, 2]);
+		});
+	});
+
+	describe('hooks', () => {
+		it('onTake', () => {
+			let lastTaken = null;
+
+			const pull = new Pull(Array, 1, [1, 2], {
 				onTake: (value, pull, ...args) => {
 					lastTaken = [value, args];
-				},
+				}
+			});
+
+			 const {value} = pull.take('hi');
+
+			expect(lastTaken).toEqual([value, ['hi']]);
+		});
+
+		it('onFree', () => {
+			let lastFreed = null;
+
+			const pull = new Pull(Array, 1, [1, 2], {
 				onFree: (value, pull, ...args) => {
 					lastFreed = [value, args];
 				}
+			});
+
+			const {value, free} = pull.take('hi');
+
+			free('hello');
+
+			expect(lastFreed).toEqual([value, ['hello']]);
 		});
 
-		expect(pull.canTake()).toBe(0);
-		expect(pull.canTake(1, 2)).toBe(1);
+		it('hashFn', () => {
+			const pull = new Pull(Array, 1, [1, 2], {
+				hashFn: (...args) => JSON.stringify(args)
+			});
 
-		const {value, free} = pull.take(1, 2);
+			expect(pull.canTake()).toBe(0);
+			expect(pull.canTake(1, 2)).toBe(1);
 
-		expect(value).toEqual([1, 2]);
-		expect(lastTaken).toEqual([[1, 2], [1, 2]]);
+			const {value, free} = pull.take(1, 2);
 
-		value.push(3);
+			expect(value).toEqual([1, 2]);
 
-		free(value, 'a', 'r');
-		expect(lastFreed).toEqual([[1, 2, 3], ['a', 'r']]);
+			value.push(3);
 
-		const {value: value1, free: free1} = pull.takeOrCreate(1, 2);
+			free();
 
-		expect(value1).toEqual([1, 2, 3]);
-		expect(lastTaken).toEqual([[1, 2, 3], [1, 2]]);
+			const {value: value1, free: free1} = pull.takeOrCreate(1, 2);
 
-		free1(value1, 'g', 's');
-		expect(lastFreed).toEqual([[1, 2, 3], ['g', 's']]);
+			expect(value1).toEqual([1, 2, 3]);
 
-		const {value: value2, free: free2} = pull.takeOrCreate(1, 2, 4);
+			free1();
 
-		expect(value2).toEqual([1, 2, 4]);
-		expect(lastTaken).toEqual([[1, 2, 4], [1, 2, 4]]);
+			const {value: value2} = pull.takeOrCreate(1, 2, 4);
 
-		free2(value2, 'lol');
-		expect(lastFreed).toEqual([[1, 2, 4], ['lol']]);
-	});
+			expect(value2).toEqual([1, 2, 4]);
+		});
 
-	it('clear pull', () => {
-		let lastDestructed = null;
-		let clearArgs = null;
+		it('onClear', () => {
+			let clearArgs = null;
 
-		const pull = new Pull(
-			(...args) => [1, 2, ...args],
-			2,
-			[3, 4],
-			{
-				destructor: (el) => {
-					lastDestructed = el;
-				},
-				onClear: (pull, ...args) => {
-					clearArgs = args;
+			const pull = new Pull(
+				(...args) => [1, 2, ...args],
+				2,
+				[3, 4],
+				{
+					onClear: (pull, ...args) => {
+						clearArgs = args;
+					}
 				}
-			}
-		);
+			);
 
-		const {value, destroy} = pull.take();
+			pull.clear('clear', 'args');
 
-		expect(value).toEqual([1, 2, 3, 4]);
+			expect(pull.canTake()).toBe(0);
+			expect(clearArgs).toEqual(['clear', 'args']);
+		});
 
-		destroy(value);
+		it('destructor', () => {
+			let lastDestructed = null;
 
-		expect(pull.canTake()).toBe(1);
-		expect(lastDestructed).toEqual([1, 2, 3, 4]);
+			const pull = new Pull(
+				() => [1, 2],
+				2,
+				{
+					destructor: (el) => {
+						lastDestructed = el;
+					}
+				}
+			);
 
-		pull.clear('clear', 'args');
+			const {value, destroy} = pull.take();
 
-		expect(pull.canTake()).toBe(0);
-		expect(clearArgs).toEqual(['clear', 'args']);
+			expect(value).toEqual([1, 2]);
+
+			value.push(3);
+
+			destroy();
+
+			expect(pull.canTake()).toBe(1);
+			expect(lastDestructed).toEqual([1, 2, 3]);
+
+			pull.clear('clear', 'args');
+
+			expect(lastDestructed).toEqual([1, 2]);
+		});
 	});
 });

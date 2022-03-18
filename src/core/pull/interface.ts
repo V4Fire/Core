@@ -17,56 +17,80 @@ import type Pull from 'core/pull/index';
  */
 export type PullHook<T> = (value: T, pull: Pull<T>, ...args: unknown[]) => void;
 
+/**
+ * Hook that is executed before `this.take` or `this.takeOrCreate`
+ *
+ * @param value - value that are return from `this.take`
+ * @param pull - this pull
+ * @param args - params in `this.take(...args)`
+ */
+export type PullOnTake<T> = PullHook<T>;
+
+/**
+ * Handler: releasing of some resource
+ *
+ * @param value - value from `free(value)`
+ * @param pull - this pull
+ * @param args - params that are given in `free(value,...args)`
+ */
+export type PullOnFree<T> = PullHook<T>;
+
+/**
+ * Returns a hash value for the specified arguments
+ *
+ * @param args - arguments passed to `objectFactory`
+ */
+export type PullHashFn = (...args: unknown[]) => string;
+
+/**
+ * Handler: clearing of pull' resources
+ *
+ * @param pull - this pull
+ * @param args - args in `this.clear(...args)`
+ */
+export type PullOnClear<T> = (pull: Pull<T>, ...args: unknown[]) => void;
+
+/**
+ * Object destructor
+ *
+ * @param resource - resource that will be destructed
+ */
+export type PullDestructor<T> = (resource: T) => void;
+
 export interface PullOptions<T> {
 	/**
-	 * Hook that is executed before `this.take` or `this.takeOrCreate`
-	 *
-	 * @param value - value that are return from `this.take`
-	 * @param pull - this pull
-	 * @param args - params in `this.take(...args)`
-	 */
-	onTake?: PullHook<T>;
-
-	/**
 	 * Handler: releasing of some resource
-	 *
-	 * @param value - value from `free(value)`
-	 * @param pull - this pull
-	 * @param args - params that are given in `free(value,...args)`
 	 */
-	onFree?: PullHook<T>;
+	onFree?: PullOnFree<T>;
 
 	/**
-	 * Function that calculate hash of resource
-	 *
-	 * @param args - params passed to objectFactory
+	 * Handler: taking some resource via `take` or `takeOrCreate` methods
 	 */
-	hashFn?(...args: unknown[]): string;
+	onTake?: PullOnTake<T>;
 
 	/**
-	 * Hook that is called on 'this.clear'
-	 *
-	 * @param pull - this pull
-	 * @param args - params given to `Pull.clear()`
+	 * Returns a hash value for the specified arguments
 	 */
-	onClear?(pull: Pull<T>, ...args: unknown[]): void;
+	hashFn?: PullHashFn;
 
 	/**
-	 * Hook that destructs object
-	 *
-	 * @param resource - resource that will be destructed
+	 * Handler: clearing of pull' resources
 	 */
-	destructor?(resource: T): void;
+	onClear?: PullOnClear<T>;
+
+	/**
+	 * Object destructor
+	 */
+	destructor?: PullDestructor<T>;
 }
 
 export interface PullResource<T> {
 	/**
 	 * Return value back to pull
 	 *
-	 * @param val - value from pull
 	 * @param args - additional params given to hook onFree
 	 */
-	free(val: T, ...args: any): void;
+	free(...args: any): void;
 
 	/**
 	 * Value from pull
@@ -75,8 +99,8 @@ export interface PullResource<T> {
 
 	/**
 	 * Function that destruct value instead of returning it to pull
-	 *
-	 * @param resource - value from pull
 	 */
-	destroy(resource: T): void;
+	destroy(): void;
 }
+
+export interface NullablePullResource<T> extends PullResource<Nullable<T>>{}
