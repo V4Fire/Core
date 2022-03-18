@@ -80,7 +80,7 @@ describe('core/prelude/object/clone/fastClone', () => {
 			obj = Object.freeze({a: 1, b: 2}),
 			clone = Object.fastClone(obj, {freezable: true});
 
-		expect(clone).not.toBe(obj);
+		expect(clone).toBe(obj);
 		expect(clone).toEqual(obj);
 		expect(Object.isFrozen(clone)).toBeTrue();
 	});

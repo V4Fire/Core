@@ -11,6 +11,15 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.75.0 (2022-02-22)
+
+#### :rocket: New Feature
+
+* Added a new module `core/json/stream`
+* Added a common function to clone `core/object/proxy-clone`
+* Added a common function to create a read-only view `core/object/proxy-readonly`
+* Added a new bunch of constants `support` to check a runtime for features support `core/const`
+
 ## v3.74.7 (2022-01-31)
 
 #### :bug: Bug Fix

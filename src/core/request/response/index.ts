@@ -31,9 +31,7 @@ import type {
 	ResponseTypeValueP,
 
 	ResponseHeaders,
-	ResponseOptions,
-
-	JSONLikeValue
+	ResponseOptions
 
 } from 'core/request/response/interface';
 
@@ -221,7 +219,7 @@ export default class Response<
 					value: () => Object.fastClone(originalData, {freezable: false})
 				});
 
-				Object.freeze(data);
+				data = Object.freeze(data);
 			}
 
 			return data;

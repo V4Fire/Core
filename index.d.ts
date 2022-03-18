@@ -119,7 +119,22 @@ declare function clearImmediate(id: number): void;
 
 declare function structuredClone<T>(obj: T): T;
 
-type Primitive = string | symbol | number | bigint | boolean | undefined | null;
+type Primitive =
+	string |
+	symbol |
+	number |
+	bigint |
+	boolean |
+	undefined |
+	null;
+
+type JSONLikeValue =
+	string |
+	number |
+	boolean |
+	null |
+	JSONLikeValue[] |
+	Dictionary<JSONLikeValue>;
 
 type CanPromise<T> = T | Promise<T>;
 type CanArray<T> = T | T[];
@@ -1011,10 +1026,13 @@ interface ObjectConstructor {
 
 	/**
 	 * Compares two specified objects by using a naive but fast `JSON.stringify/parse` strategy and
-	 * returns true if their are equal.
+	 * returns true if they are equal.
 	 *
 	 * Mind, that this method uses non-stable version `JSON.stringify`, i.e.,
 	 * it can work incorrectly with object like `{a: 1, b: 2}` and `{b: 2, a: 1}`.
+	 *
+	 * Be careful with comparing `undefined` and `NaN` values, as they can be converted to `null` due to
+	 * the nature of `JSON.stringify`.
 	 *
 	 * @param a
 	 * @param b
@@ -1033,6 +1051,9 @@ interface ObjectConstructor {
 	 * Clones the specified object using the `structuredClone` method if possible and returns a new object.
 	 * Otherwise, the method will use a naive but fast `JSON.stringify/parse` strategy.
 	 *
+	 * Be careful with cloning `undefined` and `NaN` values, as they can be converted to `null` due to
+	 * the nature of `JSON.stringify/parse`.
+	 *
 	 * @param obj
 	 * @param [opts] - additional options
 	 */
@@ -1043,6 +1064,9 @@ interface ObjectConstructor {
 	 *
 	 * Mind, that this method uses non-stable version `JSON.stringify`, i.e.,
 	 * it can work incorrectly with object like `{a: 1, b: 2}` and `{b: 2, a: 1}`.
+	 *
+	 * Be careful with comparing `undefined` and `NaN` values, as they can be converted to `null` due to
+	 * the nature of `JSON.stringify`.
 	 *
 	 * @param obj
 	 */

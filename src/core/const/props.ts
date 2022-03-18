@@ -16,5 +16,6 @@ export const defProp = Object.freeze({
 export const defReadonlyProp = Object.freeze({
 	configurable: true,
 	enumerable: true,
+	writable: false,
 	value: undefined
 });

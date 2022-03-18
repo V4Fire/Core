@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.75.0 (2022-02-22)
+
+#### :rocket: New Feature
+
+* Added a common function to clone
+
 ## v3.73.2 (2021-12-28)
 
 #### :bug: Bug Fix
