@@ -64,7 +64,7 @@ const request: RequestEngine = (params) => {
 			xhr.responseType = 'arraybuffer';
 	}
 
-	if (p.credentials) {
+	if (p.credentials !== false) {
 		xhr.withCredentials = true;
 	}
 

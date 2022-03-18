@@ -180,23 +180,24 @@ describe('core/pull', () => {
 		});
 
 		it('onClear', () => {
-		let clearArgs = null;
+			spyOn(console, 'log').and.callThrough();
+			let clearArgs = null;
 
-		const pull = new Pull(
-			(...args) => [1, 2, ...args],
-			2,
-			[3, 4],
-			{
-				onClear: (pull, ...args) => {
-					clearArgs = args;
+			const pull = new Pull(
+				(...args) => [1, 2, ...args],
+				2,
+				[3, 4],
+				{
+					onClear: (pull, ...args) => {
+						clearArgs = args;
+					}
 				}
-			}
-		);
+			);
 
-		// Pull.clear('clear', 'args');
-		//
-		// expect(pull.canTake()).toBe(0);
-		// expect(clearArgs).toEqual(['clear', 'args']);
+			pull.clear('clear', 'args');
+
+			expect(pull.canTake()).toBe(0);
+			expect(clearArgs).toEqual(['clear', 'args']);
 		});
 
 		it('destructor', () => {
