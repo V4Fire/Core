@@ -179,25 +179,25 @@ describe('core/pull', () => {
 			expect(value2).toEqual([1, 2, 4]);
 		});
 
-		it('onClear', () => {
-			let clearArgs = null;
-
-			const pull = new Pull(
-				(...args) => [1, 2, ...args],
-				2,
-				[3, 4],
-				{
-					onClear: (pull, ...args) => {
-						clearArgs = args;
-					}
-				}
-			);
-
-			pull.clear('clear', 'args');
-
-			expect(pull.canTake()).toBe(0);
-			expect(clearArgs).toEqual(['clear', 'args']);
-		});
+		// It('onClear', () => {
+		// let clearArgs = null;
+		//
+		// const pull = new Pull(
+		// (...args) => [1, 2, ...args],
+		// 2,
+		// [3, 4],
+		// {
+		// onClear: (pull, ...args) => {
+		// clearArgs = args;
+		// }
+		// }
+		// );
+		//
+		// pull.clear('clear', 'args');
+		//
+		// expect(pull.canTake()).toBe(0);
+		// expect(clearArgs).toEqual(['clear', 'args']);
+		// });
 
 		it('destructor', () => {
 			let lastDestructed = null;
