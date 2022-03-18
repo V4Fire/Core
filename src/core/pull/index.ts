@@ -344,9 +344,9 @@ export default class Pull<T> {
 		}
 
 		this.resourceStore.forEach((array: T[]) => {
-			while (array.length !== 0) {
-				this.destructor?.(<T>array.pop());
-			}
+			// While (array.length !== 0) {
+			// 	this.destructor?.(<T>array.pop());
+			// }
 		});
 
 		this.borrowedResourceStore.forEach((el: T) => {
