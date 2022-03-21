@@ -7,6 +7,6 @@
  */
 
 /**
- * Mark array of regexp if should events should be excluded
+ * Mark array of regexps as excluding
  */
 export const EXCLUDE = Symbol('is pattern excluded');

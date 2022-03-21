@@ -38,8 +38,24 @@ export interface PerfTimerConfig {
  * Filtering settings by group
  */
 export type PerfGroupFilters = {
-	[K in PerfGroup]?: string[] | boolean;
+	[K in PerfGroup]?: PerfIncludeFilter | string[] | boolean;
 };
+
+/**
+ * Include exclude pattern for groups
+ */
+export interface PerfIncludeFilter {
+	/**
+	 * Include only specific events
+	 */
+	include?: string[];
+
+	/**
+	 * Exclude only specific events
+	 * if include and exclude are both presented, will be used only include
+	 */
+	exclude?: string[];
+}
 
 /**
  * Simple filtering predicates for each group.

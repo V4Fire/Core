@@ -11,9 +11,18 @@
  * @packageDocumentation
  */
 
-import type { PerfConfig, PerfTimerConfig, PerfPredicates, PerfGroupFilters } from 'core/perf/config/interface';
+import type {
+
+	PerfConfig,
+	PerfTimerConfig,
+	PerfPredicates,
+	PerfGroupFilters,
+	PerfIncludeFilter
+
+} from 'core/perf/config/interface';
 import { GROUPS } from 'core/perf/const';
 import engines, { PerfTimerEngine } from 'core/perf/timer/engines';
+import { EXCLUDE } from 'core/perf/config/const';
 
 export * from 'core/perf/config/interface';
 
@@ -37,6 +46,10 @@ export function createPredicates(filters: PerfGroupFilters): PerfPredicates {
 		acc[groupName] = (ns: string) => {
 
 			if (Object.isArray(groupFilters)) {
+				if(groupFilters[EXCLUDE] === true) {
+					return !groupFilters.some((filter) => filter.test(ns));
+				}
+
 				return groupFilters.some((filter) => filter.test(ns));
 			}
 
@@ -61,10 +74,24 @@ export function mergeConfigs(baseConfig: PerfConfig, ...configs: Array<Partial<P
  * Preprocesses raw performance config filters and returns collection of regexps or boolean
  * @param filters - raw performance config filters
  */
-function createFilters(filters: CanUndef<string[] | boolean>): RegExp[] | boolean {
+function createFilters(filters: CanUndef<PerfIncludeFilter | string[] | boolean>): RegExp[] | boolean {
+	if(filters == null || Object.isBoolean(filters)) {
+		return filters ?? true;
+	}
+
 	if (Object.isArray(filters)) {
 		return filters.map((filter) => new RegExp(filter));
 	}
 
-	return filters ?? true;
+	if(Object.isArray(filters.include)) {
+		return filters.include.map((filter) => new RegExp(filter));
+	}
+
+	if(filters.exclude == null) {
+		return true;
+	}
+
+	const regexpFilter = filters.exclude.map((filter) => new RegExp(filter));
+	regexpFilter[EXCLUDE] = true;
+	return regexpFilter;
 }
