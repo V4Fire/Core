@@ -21,7 +21,7 @@ import { Queue } from 'core/queue';
 
 import type {
 
-	NullablePullResource,
+	NullablePullReturnedResource,
 	PullDestructor,
 	PullHashFn,
 	PullOnClear,
@@ -188,7 +188,7 @@ export default class Pull<T> {
 	 *
 	 * @param args - params for hasFn and hooks
 	 */
-	take(...args: unknown[]): NullablePullResource<T> {
+	take(...args: unknown[]): NullablePullReturnedResource<T> {
 		const value = this.resourceStore
 			.get(this.hashFn(...args))
 			?.pop();
@@ -266,7 +266,7 @@ export default class Pull<T> {
 	 *
 	 * @param args - params for hashFn and hooks
 	 */
-	borrow(...args: unknown[]): NullablePullResource<T> {
+	borrow(...args: unknown[]): NullablePullReturnedResource<T> {
 		const hash = this.hashFn(...args);
 		let value = this.borrowedResourceStore.get(hash);
 
@@ -428,7 +428,7 @@ export default class Pull<T> {
 	 *
 	 * @param value - value that will be returned
 	 */
-	protected createPullResource(value: PullResource<T> | null): NullablePullResource<T> {
+	protected createPullResource(value: PullResource<T> | null): NullablePullReturnedResource<T> {
 		return {
 			free: (...args: unknown[]) => this.free(value, ...args),
 			value,
