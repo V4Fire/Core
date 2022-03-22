@@ -39,7 +39,7 @@ export * from 'core/pull/interface';
 
 /**
  * Implementation of pull
- * @typeparam T - pull element
+ * @typeparam T - pull resource
  */
 export default class Pull<T> {
 	/**
@@ -207,7 +207,7 @@ export default class Pull<T> {
 	}
 
 	/**
-	 * If the pull is empty, create a new element and returns it, otherwise it works like `this.take`.
+	 * If the pull is empty, create a new resource and returns it, otherwise it works like `this.take`.
 	 * The method takes arguments that will be used to calculate a resource hash.
 	 *
 	 * @param args - params for hashFn and hooks
@@ -248,7 +248,7 @@ export default class Pull<T> {
 	}
 
 	/**
-	 * Check if you can borrow element.
+	 * Check if you can borrow resource.
 	 * The method takes arguments that will be used to calculate a resource hash.
 	 *
 	 * @param args - params for hashFn and hooks
@@ -404,7 +404,7 @@ export default class Pull<T> {
 	}
 
 	/**
-	 * Creates an element and stores it in the pull
+	 * Creates a resource and stores it in the pull
 	 *
 	 * @param args - params for hashFn and objectFactory
 	 * @protected
