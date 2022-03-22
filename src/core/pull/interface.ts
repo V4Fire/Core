@@ -104,7 +104,7 @@ export interface PullReturnedResource<T> {
 	destroy(): void;
 }
 
-export type PullElement<T> = { [hashProperty]: string; [viewerCount]: number } & T;
+export type PullResource<T> = { [hashProperty]: string; [viewerCount]: number } & T;
 
 export interface NullablePullReturnedResource<T> extends PullReturnedResource<Nullable<T>> {
 }

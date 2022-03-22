@@ -29,7 +29,7 @@ import type {
 	PullOnTake,
 	PullOptions,
 	PullReturnedResource,
-	PullElement
+	PullResource
 
 } from 'core/pull/interface';
 import { defaultValue, hashProperty, viewerCount } from 'core/pull/const';
@@ -92,12 +92,12 @@ export default class Pull<T> {
 	/**
 	 * Store of pull resources
 	 */
-	protected readonly resourceStore: Map<string, Array<PullElement<T>>> = new Map();
+	protected readonly resourceStore: Map<string, Array<PullResource<T>>> = new Map();
 
 	/**
 	 * Store of borrowed resources
 	 */
-	protected readonly borrowedResourceStore: Map<string, PullElement<T>> = new Map();
+	protected readonly borrowedResourceStore: Map<string, PullResource<T>> = new Map();
 
 	/**
 	 * Constructor that initializes pull
@@ -348,14 +348,14 @@ export default class Pull<T> {
 			this.onClear(this, ...args);
 		}
 
-		this.resourceStore.forEach((array: Array<PullElement<T>>) => {
+		this.resourceStore.forEach((array: Array<PullResource<T>>) => {
 			while (array.length !== 0) {
 				const value = array.pop();
 				this.destructor?.(<T>value);
 			}
 		});
 
-		this.borrowedResourceStore.forEach((el: PullElement<T>) => {
+		this.borrowedResourceStore.forEach((el: PullResource<T>) => {
 			this.destructor?.(el);
 		});
 
@@ -369,7 +369,7 @@ export default class Pull<T> {
 	 * @param value - pull's object
 	 * @param args - args for hook
 	 */
-	protected free(value: PullElement<T> | null, ...args: unknown[]): void {
+	protected free(value: PullResource<T> | null, ...args: unknown[]): void {
 		if (value == null) {
 			throw Error('value is undefined');
 		}
@@ -416,7 +416,7 @@ export default class Pull<T> {
 			this.resourceStore.set(hash, []);
 		}
 
-		const value = <PullElement<T>>this.objectFactory(...args);
+		const value = <PullResource<T>>this.objectFactory(...args);
 		value[hashProperty] = hash;
 		value[viewerCount] = 0;
 		this.resourceStore.get(hash)
@@ -428,7 +428,7 @@ export default class Pull<T> {
 	 *
 	 * @param value - value that will be returned
 	 */
-	protected createPullResource(value: PullElement<T> | null): NullablePullReturnedResource<T> {
+	protected createPullResource(value: PullResource<T> | null): NullablePullReturnedResource<T> {
 		return {
 			free: (...args: unknown[]) => this.free(value, ...args),
 			value,
