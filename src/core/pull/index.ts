@@ -369,7 +369,7 @@ export default class Pull<T> {
 	 * @param value - pull's object
 	 * @param args - args for hook
 	 */
-	free(value: PullResource<T> | null, ...args: unknown[]): void {
+	protected free(value: PullResource<T> | null, ...args: unknown[]): void {
 		if (value == null) {
 			throw Error('value is undefined');
 		}
