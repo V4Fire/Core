@@ -86,7 +86,7 @@ export default class Pull<T> {
 	/**
 	 * Map of active borrow events
 	 */
-	protected borrowEventsInQueue: Map<string, true> = new Map();
+	protected borrowEventsInQueue: Map<string, string> = new Map();
 
 	/**
 	 * Store of pull resources
@@ -147,6 +147,7 @@ export default class Pull<T> {
 		if (!Object.isNumber(size)) {
 			opts = size;
 			size = 0;
+
 		} else if (Object.isDictionary(createOpts)) {
 			opts = createOpts;
 			createOpts = [];
@@ -306,7 +307,7 @@ export default class Pull<T> {
 	 */
 	borrowOrWait(...args: unknown[]): SyncPromise<PullResource<T>> {
 		const event = this.hashFn(...args);
-		const sequence = serialize(generate());
+		let sequence = serialize(generate());
 
 		return new SyncPromise((r) => {
 			if (this.canBorrow(...args)) {
@@ -321,7 +322,10 @@ export default class Pull<T> {
 				this.events.get(event)
 					?.push(sequence);
 
-				this.borrowEventsInQueue.set(event, true);
+				this.borrowEventsInQueue.set(event, sequence);
+
+			}else{
+				sequence = <string>this.borrowEventsInQueue.get(event);
 			}
 
 			r(resolveAfterEvents(this.emitter, sequence)
@@ -399,7 +403,7 @@ export default class Pull<T> {
 	}
 
 	/**
-	 * Create an element and add it to the pull
+	 * Creates an element and stores it in the pull
 	 *
 	 * @param args - params for hashFn and objectFactory
 	 * @protected
@@ -419,7 +423,6 @@ export default class Pull<T> {
 	}
 
 	/**
-	 * Return object that contain value and free, destroy functions
 	 * @see [[PullResource]]
 	 *
 	 * @param value - value that will be returned

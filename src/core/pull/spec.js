@@ -76,7 +76,7 @@ describe('core/pull', () => {
 		expect(value3).toBeInstanceOf(Array);
 	});
 
-	it('take or borrow from empty queue', () => {
+	it('take or borrow from an empty pull', () => {
 		const pull = new Pull(Array);
 
 		expect(pull.canTake()).toBe(0);
@@ -95,7 +95,7 @@ describe('core/pull', () => {
 	});
 
 	describe('constructors', () => {
-		it('onle objectFactory', () => {
+		it('only objectFactory', () => {
 			const pull = new Pull(Array);
 
 			const {value} = pull.takeOrCreate();
