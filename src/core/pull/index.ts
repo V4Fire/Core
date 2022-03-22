@@ -28,6 +28,7 @@ import type {
 	PullOnFree,
 	PullOnTake,
 	PullOptions,
+	PullReturnedResource,
 	PullResource
 
 } from 'core/pull/interface';
@@ -91,12 +92,12 @@ export default class Pull<T> {
 	/**
 	 * Store of pull resources
 	 */
-	protected readonly resourceStore: Map<string, T[]> = new Map();
+	protected readonly resourceStore: Map<string, Array<PullResource<T>>> = new Map();
 
 	/**
 	 * Store of borrowed resources
 	 */
-	protected readonly borrowedResourceStore: Map<string, T> = new Map();
+	protected readonly borrowedResourceStore: Map<string, PullResource<T>> = new Map();
 
 	/**
 	 * Constructor that initializes pull
@@ -211,12 +212,12 @@ export default class Pull<T> {
 	 *
 	 * @param args - params for hashFn and hooks
 	 */
-	takeOrCreate(...args: unknown[]): PullResource<T> {
+	takeOrCreate(...args: unknown[]): PullReturnedResource<T> {
 		if (this.canTake(...args) === 0) {
 			this.createElement(args);
 		}
 
-		return <PullResource<T>>this.take(...args);
+		return <PullReturnedResource<T>>this.take(...args);
 	}
 
 	/**
@@ -225,7 +226,7 @@ export default class Pull<T> {
 	 *
 	 * @param args - params for hashFn and hooks
 	 */
-	takeOrWait(...args: unknown[]): SyncPromise<PullResource<T>> {
+	takeOrWait(...args: unknown[]): SyncPromise<PullReturnedResource<T>> {
 		const event = this.hashFn(...args);
 		const sequence = serialize(generate());
 
@@ -291,12 +292,12 @@ export default class Pull<T> {
 	 *
 	 * @param args - params for hashFn and hooks
 	 */
-	borrowOrCreate(...args: unknown[]): PullResource<T> {
+	borrowOrCreate(...args: unknown[]): PullReturnedResource<T> {
 		if (!this.canBorrow(...args)) {
 			this.createElement(args);
 		}
 
-		return <PullResource<T>>this.borrow(...args);
+		return <PullReturnedResource<T>>this.borrow(...args);
 	}
 
 	/**
@@ -305,7 +306,7 @@ export default class Pull<T> {
 	 *
 	 * @param args - params for hashFn and hooks
 	 */
-	borrowOrWait(...args: unknown[]): SyncPromise<PullResource<T>> {
+	borrowOrWait(...args: unknown[]): SyncPromise<PullReturnedResource<T>> {
 		const event = this.hashFn(...args);
 		let sequence = serialize(generate());
 
@@ -324,7 +325,7 @@ export default class Pull<T> {
 
 				this.borrowEventsInQueue.set(event, sequence);
 
-			}else{
+			} else {
 				sequence = <string>this.borrowEventsInQueue.get(event);
 			}
 
@@ -347,14 +348,14 @@ export default class Pull<T> {
 			this.onClear(this, ...args);
 		}
 
-		this.resourceStore.forEach((array: T[]) => {
+		this.resourceStore.forEach((array: Array<PullResource<T>>) => {
 			while (array.length !== 0) {
 				const value = array.pop();
 				this.destructor?.(<T>value);
 			}
 		});
 
-		this.borrowedResourceStore.forEach((el: T) => {
+		this.borrowedResourceStore.forEach((el: PullResource<T>) => {
 			this.destructor?.(el);
 		});
 
@@ -368,7 +369,7 @@ export default class Pull<T> {
 	 * @param value - pull's object
 	 * @param args - args for hook
 	 */
-	free(value: T | null, ...args: unknown[]): void {
+	free(value: PullResource<T> | null, ...args: unknown[]): void {
 		if (value == null) {
 			throw Error('value is undefined');
 		}
@@ -415,7 +416,7 @@ export default class Pull<T> {
 			this.resourceStore.set(hash, []);
 		}
 
-		const value = this.objectFactory(...args);
+		const value = <PullResource<T>>this.objectFactory(...args);
 		value[hashProperty] = hash;
 		value[viewerCount] = 0;
 		this.resourceStore.get(hash)
@@ -427,7 +428,7 @@ export default class Pull<T> {
 	 *
 	 * @param value - value that will be returned
 	 */
-	protected createPullResource(value: T | null): NullablePullResource<T> {
+	protected createPullResource(value: PullResource<T> | null): NullablePullResource<T> {
 		return {
 			free: (...args: unknown[]) => this.free(value, ...args),
 			value,

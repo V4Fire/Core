@@ -7,6 +7,7 @@
  */
 
 import type Pull from 'core/pull/index';
+import { hashProperty, viewerCount } from 'core/pull/index';
 
 /**
  * Interface for hooks like `onTake` and `onFree`
@@ -84,7 +85,7 @@ export interface PullOptions<T> {
 	destructor?: PullDestructor<T>;
 }
 
-export interface PullResource<T> {
+export interface PullReturnedResource<T> {
 	/**
 	 * Return value back to pull
 	 *
@@ -103,4 +104,6 @@ export interface PullResource<T> {
 	destroy(): void;
 }
 
-export interface NullablePullResource<T> extends PullResource<Nullable<T>>{}
+export type PullResource<T> = {[hashProperty]:string; [viewerCount]:number} &T;
+
+export interface NullablePullResource<T> extends PullReturnedResource<Nullable<T>>{}
