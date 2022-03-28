@@ -42,7 +42,7 @@ export * from 'core/pool/const';
 export * from 'core/pool/interface';
 
 /**
- * Implementation of pool
+ * Implementation of an object pool structure
  * @typeparam T - pool resource
  */
 export default class Pool<T = unknown> {
