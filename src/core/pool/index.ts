@@ -23,6 +23,7 @@ import { hashVal, borrowCounter } from 'core/pool/const';
 
 import type {
 
+	Args,
 	HashFn,
 
 	Resource,
@@ -144,7 +145,7 @@ export default class Pool<T = unknown> {
 	 */
 	constructor(
 		resourceFactory: ResourceFactory<T>,
-		args: unknown[],
+		args: Args,
 		opts?: PoolOptions<T>
 	);
 
@@ -156,23 +157,23 @@ export default class Pool<T = unknown> {
 
 	constructor(
 		resourceFactory: ResourceFactory<T>,
-		argsOrOpts?: unknown[] | PoolOptions<T>,
+		argsOrOpts?: Args | PoolOptions<T>,
 		opts?: PoolOptions<T>
 	) {
 		const
 			p: PoolOptions<T> = {...opts};
 
 		let
-			args: unknown[] = [];
+			args: unknown[] | Function = [];
 
-		if (Object.isArray(argsOrOpts)) {
+		if (Object.isArray(argsOrOpts) || Object.isFunction(argsOrOpts)) {
 			args = argsOrOpts;
 
 		} else if (Object.isDictionary(argsOrOpts)) {
 			Object.assign(p, argsOrOpts);
 		}
 
-		Object.assign(this, p);
+		Object.assign(this, Object.reject(p, 'size'));
 
 		this.hashFn ??= (() => '[DEFAULT]');
 		this.resourceFactory = resourceFactory;
@@ -181,7 +182,7 @@ export default class Pool<T = unknown> {
 			size = p.size ?? 0;
 
 		for (let i = 0; i < size; i++) {
-			this.createResource(...args);
+			this.createResource(...Object.isFunction(args) ? args(i) : args);
 		}
 	}
 
@@ -224,7 +225,7 @@ export default class Pool<T = unknown> {
 	 */
 	takeOrCreate(...args: unknown[]): WrappedResource<T> {
 		if (this.canTake(...args) === 0) {
-			this.createResource(args);
+			this.createResource(...args);
 		}
 
 		return Object.cast(this.take(...args));
@@ -247,6 +248,7 @@ export default class Pool<T = unknown> {
 		return new SyncPromise((r) => {
 			if (this.canTake(...args) !== 0) {
 				r(this.take(...args));
+				return;
 			}
 
 			let
@@ -309,7 +311,7 @@ export default class Pool<T = unknown> {
 	 */
 	borrowOrCreate(...args: unknown[]): WrappedResource<T> {
 		if (!this.canBorrow(...args)) {
-			this.createResource(args);
+			this.createResource(...args);
 		}
 
 		return Object.cast(this.borrow(...args));
@@ -337,6 +339,7 @@ export default class Pool<T = unknown> {
 		return new SyncPromise((r) => {
 			if (this.canBorrow(...args)) {
 				r(this.borrow(...args));
+				return;
 			}
 
 			const
@@ -372,18 +375,11 @@ export default class Pool<T = unknown> {
 			destructor = this.resourceDestructor;
 
 		if (destructor != null) {
-			this.resourceStore.forEach((resources) => {
-				while (resources.length !== 0) {
-					const
-						resource = resources.pop();
-
-					if (resource != null) {
-						destructor(resource);
-					}
-				}
+			this.availableResources.forEach((resource) => {
+				destructor(resource);
 			});
 
-			this.borrowedResourceStore.forEach((resource) => {
+			this.unavailableResources.forEach((resource) => {
 				destructor(resource);
 			});
 		}
@@ -445,8 +441,17 @@ export default class Pool<T = unknown> {
 		const
 			resource = <Resource<T>>this.resourceFactory(...args);
 
-		resource[hashVal] = hash;
-		resource[borrowCounter] = 0;
+		Object.defineProperty(resource, hashVal, {
+			configurable: true,
+			writable: true,
+			value: hash
+		});
+
+		Object.defineProperty(resource, borrowCounter, {
+			configurable: true,
+			writable: true,
+			value: 0
+		});
 
 		store.push(resource);
 		this.availableResources.add(resource);
@@ -459,19 +464,41 @@ export default class Pool<T = unknown> {
 	 * @param resource
 	 */
 	protected wrapResource(resource: Resource<T> | null): OptionalWrappedResource<T> {
+		let
+			released = false;
+
 		return {
 			value: resource,
 
 			free: (...args) => {
+				if (released) {
+					return;
+				}
+
+				released = true;
+
 				if (resource != null) {
 					this.free(resource, ...args);
 				}
 			},
 
 			destroy: () => {
+				if (released) {
+					return;
+				}
+
+				released = true;
+
 				if (resource != null) {
+					const
+						{onFree} = this;
+
+					this.onFree = undefined;
+
 					this.free(resource);
 					this.availableResources.delete(resource);
+
+					this.onFree = onFree;
 
 					if (resource[borrowCounter] === 0) {
 						this.resourceStore.get(resource[hashVal])?.pop();

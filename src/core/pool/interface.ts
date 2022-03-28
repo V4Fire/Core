@@ -76,6 +76,12 @@ export interface PoolOptions<T = unknown> {
 	onClear?: PoolHook<T>;
 }
 
+export interface ArgsFn {
+	(i: number): unknown[];
+}
+
+export type Args = unknown[] | ArgsFn;
+
 export interface HashFn {
 	(...args: unknown[]): string;
 }
