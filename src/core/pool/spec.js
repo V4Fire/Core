@@ -6,68 +6,68 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import Pull from 'core/pull';
+import Pool from 'core/pool';
 
-describe('core/pull', () => {
+describe('core/pool', () => {
 	it('simple usage', async () => {
-		const pull = new Pull(Array);
-		const {value, free} = pull.takeOrCreate();
+		const pool = new Pool(Array);
+		const {value, free} = pool.takeOrCreate();
 
 		const arr = value;
 		expect(value).toBeInstanceOf(Array);
 
 		free();
 
-		expect(pull.canTake()).toBe(1);
-		expect(pull.canBorrow()).toBe(true);
+		expect(pool.canTake()).toBe(1);
+		expect(pool.canBorrow()).toBe(true);
 
-		const {value: value2, free: free2} = pull.take();
+		const {value: value2, free: free2} = pool.take();
 
 		expect(value2).toBe(arr);
-		expect(pull.canTake()).toBe(0);
-		expect(pull.canBorrow()).toBe(false);
+		expect(pool.canTake()).toBe(0);
+		expect(pool.canBorrow()).toBe(false);
 
-		const promise = pull.takeOrWait();
+		const promise = pool.takeOrWait();
 
 		free2();
 
 		const {value: value3, free: free3} = await promise;
 
 		expect(value3).toBe(arr);
-		expect(pull.canTake()).toBe(0);
-		expect(pull.canBorrow()).toBe(false);
+		expect(pool.canTake()).toBe(0);
+		expect(pool.canBorrow()).toBe(false);
 
 		free3();
 
-		expect(pull.canTake()).toBe(1);
-		expect(pull.canBorrow()).toBe(true);
+		expect(pool.canTake()).toBe(1);
+		expect(pool.canBorrow()).toBe(true);
 	});
 
 	it('borrow usage', async () => {
 		spyOn(console, 'log').and.callThrough();
-		const pull = new Pull(Array);
+		const pool = new Pool(Array);
 
-		const {value, free} = pull.borrowOrCreate();
+		const {value, free} = pool.borrowOrCreate();
 
 		expect(value).toBeInstanceOf(Array);
-		expect(pull.canBorrow()).toBe(true);
+		expect(pool.canBorrow()).toBe(true);
 
-		const {value: value1, destroy} = pull.borrow();
+		const {value: value1, destroy} = pool.borrow();
 
 		expect(value1).toBe(value);
-		expect(pull.canBorrow()).toBe(true);
+		expect(pool.canBorrow()).toBe(true);
 
 		free();
 
-		expect(pull.canTake()).toBe(0);
+		expect(pool.canTake()).toBe(0);
 
 		destroy();
 
-		expect(pull.canBorrow()).toBe(false);
+		expect(pool.canBorrow()).toBe(false);
 
-		const {free: free2} = pull.takeOrCreate();
+		const {free: free2} = pool.takeOrCreate();
 
-		const promise = pull.borrowOrWait();
+		const promise = pool.borrowOrWait();
 
 		free2();
 
@@ -76,19 +76,19 @@ describe('core/pull', () => {
 		expect(value3).toBeInstanceOf(Array);
 	});
 
-	it('take or borrow from an empty pull', () => {
-		const pull = new Pull(Array);
+	it('take or borrow from an empty pool', () => {
+		const pool = new Pool(Array);
 
-		expect(pull.canTake()).toBe(0);
+		expect(pool.canTake()).toBe(0);
 
-		const {value, free} = pull.take();
+		const {value, free} = pool.take();
 
 		expect(value).toBe(null);
 		expect(() => free(value)).toThrowError();
 
-		expect(pull.canBorrow()).toBe(false);
+		expect(pool.canBorrow()).toBe(false);
 
-		const {value: value1, free: free1} = pull.borrow();
+		const {value: value1, free: free1} = pool.borrow();
 
 		expect(value1).toBe(null);
 		expect(free1).toThrowError();
@@ -96,27 +96,27 @@ describe('core/pull', () => {
 
 	describe('constructors', () => {
 		it('only objectFactory', () => {
-			const pull = new Pull(Array);
+			const pool = new Pool(Array);
 
-			const {value} = pull.takeOrCreate();
+			const {value} = pool.takeOrCreate();
 			expect(value).toBeInstanceOf(Array);
 		});
 
 		it('objectFactory with size', () => {
-			const pull = new Pull(Array, 2);
+			const pool = new Pool(Array, 2);
 
-			expect(pull.canTake()).toBe(2);
+			expect(pool.canTake()).toBe(2);
 
-			const {value} = pull.take();
+			const {value} = pool.take();
 			expect(value).toBeInstanceOf(Array);
 		});
 
 		it('objectFactory with size and createOpts', () => {
-			const pull = new Pull(Array, 2, [1, 2]);
+			const pool = new Pool(Array, 2, [1, 2]);
 
-			expect(pull.canTake()).toBe(2);
+			expect(pool.canTake()).toBe(2);
 
-			const {value} = pull.take();
+			const {value} = pool.take();
 			expect(value).toEqual([1, 2]);
 		});
 	});
@@ -125,13 +125,13 @@ describe('core/pull', () => {
 		it('onTake', () => {
 			let lastTaken = null;
 
-			const pull = new Pull(Array, 1, [1, 2], {
-				onTake: (value, pull, ...args) => {
+			const pool = new Pool(Array, 1, [1, 2], {
+				onTake: (value, pool, ...args) => {
 					lastTaken = [value, args];
 				}
 			});
 
-			 const {value} = pull.take('hi');
+			 const {value} = pool.take('hi');
 
 			expect(lastTaken).toEqual([value, ['hi']]);
 		});
@@ -139,13 +139,13 @@ describe('core/pull', () => {
 		it('onFree', () => {
 			let lastFreed = null;
 
-			const pull = new Pull(Array, 1, [1, 2], {
-				onFree: (value, pull, ...args) => {
+			const pool = new Pool(Array, 1, [1, 2], {
+				onFree: (value, pool, ...args) => {
 					lastFreed = [value, args];
 				}
 			});
 
-			const {value, free} = pull.take('hi');
+			const {value, free} = pool.take('hi');
 
 			free('hello');
 
@@ -153,14 +153,14 @@ describe('core/pull', () => {
 		});
 
 		it('hashFn', () => {
-			const pull = new Pull(Array, 1, [1, 2], {
+			const pool = new Pool(Array, 1, [1, 2], {
 				hashFn: (...args) => JSON.stringify(args)
 			});
 
-			expect(pull.canTake()).toBe(0);
-			expect(pull.canTake(1, 2)).toBe(1);
+			expect(pool.canTake()).toBe(0);
+			expect(pool.canTake(1, 2)).toBe(1);
 
-			const {value, free} = pull.take(1, 2);
+			const {value, free} = pool.take(1, 2);
 
 			expect(value).toEqual([1, 2]);
 
@@ -168,13 +168,13 @@ describe('core/pull', () => {
 
 			free();
 
-			const {value: value1, free: free1} = pull.takeOrCreate(1, 2);
+			const {value: value1, free: free1} = pool.takeOrCreate(1, 2);
 
 			expect(value1).toEqual([1, 2, 3]);
 
 			free1();
 
-			const {value: value2} = pull.takeOrCreate(1, 2, 4);
+			const {value: value2} = pool.takeOrCreate(1, 2, 4);
 
 			expect(value2).toEqual([1, 2, 4]);
 		});
@@ -183,27 +183,27 @@ describe('core/pull', () => {
 			spyOn(console, 'log').and.callThrough();
 			let clearArgs = null;
 
-			const pull = new Pull(
+			const pool = new Pool(
 				(...args) => [1, 2, ...args],
 				2,
 				[3, 4],
 				{
-					onClear: (pull, ...args) => {
+					onClear: (pool, ...args) => {
 						clearArgs = args;
 					}
 				}
 			);
 
-			pull.clear('clear', 'args');
+			pool.clear('clear', 'args');
 
-			expect(pull.canTake()).toBe(0);
+			expect(pool.canTake()).toBe(0);
 			expect(clearArgs).toEqual(['clear', 'args']);
 		});
 
 		it('destructor', () => {
 			let lastDestructed = null;
 
-			const pull = new Pull(
+			const pool = new Pool(
 				() => [1, 2],
 				2,
 				{
@@ -213,7 +213,7 @@ describe('core/pull', () => {
 				}
 			);
 
-			const {value, destroy} = pull.take();
+			const {value, destroy} = pool.take();
 
 			expect(value).toEqual([1, 2]);
 
@@ -221,10 +221,10 @@ describe('core/pull', () => {
 
 			destroy();
 
-			expect(pull.canTake()).toBe(1);
+			expect(pool.canTake()).toBe(1);
 			expect(lastDestructed).toEqual([1, 2, 3]);
 
-			pull.clear('clear', 'args');
+			pool.clear('clear', 'args');
 
 			expect(lastDestructed).toEqual([1, 2]);
 		});

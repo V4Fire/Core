@@ -1,43 +1,43 @@
-# core/pull
+# core/pool
 
-This module provides a class to create a pull structure
+This module provides a class to create a pool structure
 
 ## Usage
 
 ```js
-import Pull from 'core/pull';
+import Pool from 'core/pool';
 
-const pull = new Pull(
-  // function return value that will be stored in pull
+const pool = new Pool(
+  // function return value that will be stored in pool
   () => Object(),
 
-  // start number of objects in the pull
+  // start number of objects in the pool
   10
 );
 
-// Number of objects in pull that are avalible now
-console.log(pull.canTake()); // 10
+// Number of objects in pool that are avalible now
+console.log(pool.canTake()); // 10
 
 // if there aren't any avalible objects, return null as a value
 const {
   free,
   value
-} = pull.take();
+} = pool.take();
 
-// call free will return the value back to pull
+// call free will return the value back to pool
 free()
 
 // if there aren't any avalible objects, will create one
 const {
   destroy,
   value: value1
-} = pull.takeOrCreate();
+} = pool.takeOrCreate();
 
-// destroys an object instead of returning it to the pull
+// destroys an object instead of returning it to the pool
 destroy()
 
 // returns core/promise/sync (wait until a call of free(value))
-pull.takeOrWait()
+pool.takeOrWait()
   .then(({free, value}) => {});
 ```
 
@@ -46,23 +46,23 @@ pull.takeOrWait()
 You can use one object at multiple places at same the time
 
 ```js
-import Pull from 'core/pull';
+import Pool from 'core/pool';
 
-const pull = new Pull(() => Object(), 1);
+const pool = new Pool(() => Object(), 1);
 
-console.log(pull.canBorrow()); // true
+console.log(pool.canBorrow()); // true
 
-// return null as a value, if pull is empty
-const {value} = pull.borrow();
+// return null as a value, if pool is empty
+const {value} = pool.borrow();
 
 // you can borrow one object mulriple times
 const {
   destroy,
   value: value1
-} = pull.borrow();
+} = pool.borrow();
 
-// if the pull is empty, will create one
-const {value: value2} = pull.borrowOrCreate();
+// if the pool is empty, will create one
+const {value: value2} = pool.borrowOrCreate();
 
 console.log(value === value1) // true
 
@@ -70,23 +70,23 @@ console.log(value === value1) // true
 destroy()
 
 // returns core/promise/sync (wait until call of free(value))
-pull.takeOrWait()
+pool.takeOrWait()
   .then(({free, value}) => {});
 ```
 
 ## Constructor
 
-Pull constructor can expect additional settings.
+Pool constructor can expect additional settings.
 
 ```js
-let pull = new Pull(
+let pool = new Pool(
   () => Array(),
   {
     // some hooks
   }
 );
 
-let anotherPull = new Pull(
+let anotherPool = new Pool(
   (firstItem) => [firstItem],
 
   // how many objects will be created immediately
@@ -100,32 +100,32 @@ let anotherPull = new Pull(
   }
 );
 
-console.log(anotherPull.canTake()) // 4
+console.log(anotherPool.canTake()) // 4
 
-let {value} = pull.take()
+let {value} = pool.take()
 
 console.log(value) // ["lol"]
 ```
 
 ## Settings
 
-Pull's settings
+Pool's settings
 
 ```js
-import Pull from 'core/pull';
+import Pool from 'core/pool';
 
-const pull = new Pull(
+const pool = new Pool(
   () => Array(1, 2, 3),
   {
     // callbacks that will be invoked on `take` or `takeOrCreate` call
-    // expect value that will be returned from `take`, link to pull, and additional params
-    onTake: (resource, pull, ...args) => {
+    // expect value that will be returned from `take`, link to pool, and additional params
+    onTake: (resource, pool, ...args) => {
       console.log(resource, args)
     },
 
     // hook that will be called before `free`
-    // expect value that are given to `free`, link to pull, and additional params
-    onFree: (resource, pull, ...args) => {
+    // expect value that are given to `free`, link to pool, and additional params
+    onFree: (resource, pool, ...args) => {
       console.log(resource, args)
     },
 
@@ -144,7 +144,7 @@ const pull = new Pull(
 let {
   value,
   free
-} = pull.takeOrCreate('hi') // [1, 2, 3] ['hi']
+} = pool.takeOrCreate('hi') // [1, 2, 3] ['hi']
 
 value.push(4)
 
@@ -153,21 +153,21 @@ free('hello', 'world') // [1, 2, 3, 4] ['hello', 'world']
 let {
   value: newValue,
   destroy
-} = pull.takeOrCreate('hey') // [1, 2, 3] ['hey']
+} = pool.takeOrCreate('hey') // [1, 2, 3] ['hey']
 
 destroy() // destructed: [1, 2, 3, 4]
 
-pull.clear() // cleared
+pool.clear() // cleared
 ```
 
 ## Hash
 
-Pull can separate objects. Objects separated via id. Id is generated with hashFn.
+Pool can separate objects. Objects separated via id. Id is generated with hashFn.
 
 ```js
-import Pull from 'core/pull';
+import Pool from 'core/pool';
 
-const pull = new Pull(
+const pool = new Pool(
   () => Array(1, 2, 3),
   2,
   ['initial objects'], // createOpts
@@ -181,17 +181,17 @@ const pull = new Pull(
 let {
   value,
   free
-} = pull.takeOrCreate('hi')
+} = pool.takeOrCreate('hi')
 
 console.log(value) // [1, 2, 3]
 
 free()
 
-console.log(pull.canTake('hi')) // 1
+console.log(pool.canTake('hi')) // 1
 
-console.log(pull.canTake('hey')) // 0
+console.log(pool.canTake('hey')) // 0
 
-console.log(pull.canTake()) // 0
+console.log(pool.canTake()) // 0
 
-console.log(pull.canTake('initial objects')) // 2
+console.log(pool.canTake('initial objects')) // 2
 ```
