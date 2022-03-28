@@ -41,6 +41,11 @@ export interface PoolOptions<T = unknown> {
 	size?: number;
 
 	/**
+	 * The maximum number of resources that the pool can contain
+	 */
+	maxSize?: number;
+
+	/**
 	 * A function to destroy one resource from the pool
 	 */
 	resourceDestructor?: ResourceDestructor<T>;

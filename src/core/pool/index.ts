@@ -47,6 +47,25 @@ export * from 'core/pool/interface';
  */
 export default class Pool<T = unknown> {
 	/**
+	 * The maximum number of resources that the pool can contain
+	 */
+	readonly maxSize: number = Infinity;
+
+	/**
+	 * Number of resources that are stored in the pool
+	 */
+	get size(): number {
+		return this.availableResources.size + this.unavailableResources.size;
+	}
+
+	/**
+	 * Number of available resources that are stored in the pool
+	 */
+	get available(): number {
+		return this.availableResources.size;
+	}
+
+	/**
 	 * A factory to create a new resource for the pool.
 	 * The function take arguments that are passed to `takeOrCreate`, `borrowAndCreate`, etc.
 	 */
@@ -71,12 +90,22 @@ export default class Pool<T = unknown> {
 	/**
 	 * Store of pool resources
 	 */
-	protected readonly resourceStore: Map<string, Array<Resource<T>>> = new Map();
+	protected resourceStore: Map<string, Array<Resource<T>>> = new Map();
 
 	/**
 	 * Store of borrowed pool resources
 	 */
-	protected readonly borrowedResourceStore: Map<string, Resource<T>> = new Map();
+	protected borrowedResourceStore: Map<string, Resource<T>> = new Map();
+
+	/**
+	 * Set of all available resources
+	 */
+	protected availableResources: Set<Resource<Resource<T>>> = new Set();
+
+	/**
+	 * Set of all unavailable resources
+	 */
+	protected unavailableResources: Set<Resource<Resource<T>>> = new Set();
 
 	/**
 	 * Queue of active events
@@ -173,11 +202,14 @@ export default class Pool<T = unknown> {
 			return this.wrapResource(null);
 		}
 
+		resource[borrowCounter]++;
+		this.availableResources.delete(resource);
+		this.unavailableResources.add(resource);
+
 		if (this.onTake != null) {
 			this.onTake(resource, this, ...args);
 		}
 
-		resource[borrowCounter]++;
 		return this.wrapResource(resource);
 	}
 
@@ -398,6 +430,10 @@ export default class Pool<T = unknown> {
 		const
 			hash = this.hashFn(...args);
 
+		if (this.maxSize <= this.size) {
+			throw new Error('The pool contains too many resources');
+		}
+
 		let
 			store = this.resourceStore.get(hash);
 
@@ -413,6 +449,8 @@ export default class Pool<T = unknown> {
 		resource[borrowCounter] = 0;
 
 		store.push(resource);
+		this.availableResources.add(resource);
+
 		return resource;
 	}
 
@@ -425,15 +463,20 @@ export default class Pool<T = unknown> {
 			value: resource,
 
 			free: (...args) => {
-				this.free(resource, ...args);
+				if (resource != null) {
+					this.free(resource, ...args);
+				}
 			},
 
 			destroy: () => {
-				this.free(resource);
+				if (resource != null) {
+					this.free(resource);
+					this.availableResources.delete(resource);
 
-				if (resource != null && resource[borrowCounter] === 0) {
-					this.resourceStore.get(resource[hashVal])?.pop();
-					this.resourceDestructor?.(resource);
+					if (resource[borrowCounter] === 0) {
+						this.resourceStore.get(resource[hashVal])?.pop();
+						this.resourceDestructor?.(resource);
+					}
 				}
 			}
 		};
@@ -446,16 +489,10 @@ export default class Pool<T = unknown> {
 	 * @param resource
 	 * @param [args]
 	 */
-	protected free(resource: Resource<T> | null, ...args: unknown[]): this {
-		if (resource == null) {
-			throw new ReferenceError('The passed resource is nullish');
-		}
-
-		if (this.onFree != null) {
-			this.onFree(resource, this, ...args);
-		}
-
+	protected free(resource: Resource<T>, ...args: unknown[]): this {
 		resource[borrowCounter]--;
+		this.unavailableResources.delete(resource);
+		this.availableResources.add(resource);
 
 		if (
 			resource[borrowCounter] === 0 &&
@@ -473,6 +510,10 @@ export default class Pool<T = unknown> {
 
 		if (event != null) {
 			this.emitter.emit(event);
+		}
+
+		if (this.onFree != null) {
+			this.onFree(resource, this, ...args);
 		}
 
 		return this;
