@@ -9,224 +9,447 @@
 import Pool from 'core/pool';
 
 describe('core/pool', () => {
-	it('simple usage', async () => {
-		const pool = new Pool(Array);
-		const {value, free} = pool.takeOrCreate();
-
-		const arr = value;
-		expect(value).toBeInstanceOf(Array);
-
-		free();
-
-		expect(pool.canTake()).toBe(1);
-		expect(pool.canBorrow()).toBe(true);
-
-		const {value: value2, free: free2} = pool.take();
-
-		expect(value2).toBe(arr);
-		expect(pool.canTake()).toBe(0);
-		expect(pool.canBorrow()).toBe(false);
-
-		const promise = pool.takeOrWait();
-
-		free2();
-
-		const {value: value3, free: free3} = await promise;
-
-		expect(value3).toBe(arr);
-		expect(pool.canTake()).toBe(0);
-		expect(pool.canBorrow()).toBe(false);
-
-		free3();
-
-		expect(pool.canTake()).toBe(1);
-		expect(pool.canBorrow()).toBe(true);
-	});
-
-	it('borrow usage', async () => {
-		spyOn(console, 'log').and.callThrough();
-		const pool = new Pool(Array);
-
-		const {value, free} = pool.borrowOrCreate();
-
-		expect(value).toBeInstanceOf(Array);
-		expect(pool.canBorrow()).toBe(true);
-
-		const {value: value1, destroy} = pool.borrow();
-
-		expect(value1).toBe(value);
-		expect(pool.canBorrow()).toBe(true);
-
-		free();
-
-		expect(pool.canTake()).toBe(0);
-
-		destroy();
-
-		expect(pool.canBorrow()).toBe(false);
-
-		const {free: free2} = pool.takeOrCreate();
-
-		const promise = pool.borrowOrWait();
-
-		free2();
-
-		const {value: value3} = await promise;
-
-		expect(value3).toBeInstanceOf(Array);
-	});
-
-	it('take or borrow from an empty pool', () => {
-		const pool = new Pool(Array);
-
-		expect(pool.canTake()).toBe(0);
-
-		const {value, free} = pool.take();
-
-		expect(value).toBe(null);
-		expect(() => free(value)).toThrowError();
-
-		expect(pool.canBorrow()).toBe(false);
-
-		const {value: value1, free: free1} = pool.borrow();
-
-		expect(value1).toBe(null);
-		expect(free1).toThrowError();
-	});
-
-	describe('constructors', () => {
-		it('only objectFactory', () => {
-			const pool = new Pool(Array);
-
-			const {value} = pool.takeOrCreate();
-			expect(value).toBeInstanceOf(Array);
+	describe('constructor', () => {
+		it('should create a pool with a zero size', () => {
+			const pool = new Pool(() => []);
+			expect(pool.size).toBe(0);
 		});
 
-		it('objectFactory with size', () => {
-			const pool = new Pool(Array, 2);
-
-			expect(pool.canTake()).toBe(2);
-
-			const {value} = pool.take();
-			expect(value).toBeInstanceOf(Array);
+		it('should create a pool with the specified size', () => {
+			const pool = new Pool(() => [], {size: 10});
+			expect(pool.size).toBe(10);
 		});
 
-		it('objectFactory with size and createOpts', () => {
-			const pool = new Pool(Array, 2, [1, 2]);
+		it('should create a pool with passing the extra arguments to a resource constructor', () => {
+			const pool = new Pool((...values) => [...values], (i) => [i], {
+				size: 2,
+				hashFn: (...args) => Object.fastHash(args)
+			});
 
-			expect(pool.canTake()).toBe(2);
+			expect(pool.size).toBe(2);
+			expect(pool.take(0).value).toEqual([0]);
+			expect(pool.take(1).value).toEqual([1]);
+			expect(pool.take(2).value).toBeNull();
+		});
 
-			const {value} = pool.take();
-			expect(value).toEqual([1, 2]);
+		it('should create a pool with hashing of resources', () => {
+			const
+				pool = new Pool((...values) => [...values], [1, 2, 3], {size: 1});
+
+			expect(pool.size).toBe(1);
+			expect(pool.take().value).toEqual([1, 2, 3]);
+		});
+
+		it('should throw an exception if `maxSize` less than `size`', () => {
+			let err;
+
+			try {
+				// eslint-disable-next-line no-new
+				new Pool(() => [], {
+					size: 2,
+					maxSize: 1
+				});
+
+			} catch (e) {
+				err = e;
+			}
+
+			expect(err.message).toBe('The pool contains too many resources');
 		});
 	});
 
-	describe('hooks', () => {
-		it('onTake', () => {
-			let lastTaken = null;
+	describe('`take`', () => {
+		it('should return an available resource from the pool', () => {
+			const pool = new Pool(() => [], {size: 2});
 
-			const pool = new Pool(Array, 1, [1, 2], {
-				onTake: (value, pool, ...args) => {
-					lastTaken = [value, args];
+			expect(pool.size).toBe(2);
+			expect(pool.available).toBe(2);
+
+			expect(pool.take().value).toEqual([]);
+
+			expect(pool.size).toBe(2);
+			expect(pool.available).toBe(1);
+		});
+
+		it('should return a nullish wrapper if the pool is empty', () => {
+			const
+				pool = new Pool((...values) => [...values]);
+
+			expect(pool.size).toBe(0);
+			expect(pool.available).toBe(0);
+			expect(pool.take().value).toBeNull();
+		});
+
+		it('should release a resource after invoking of `free`', () => {
+			const
+				pool = new Pool(() => [], {size: 1}),
+				resource = pool.take();
+
+			expect(pool.size).toBe(1);
+			expect(pool.available).toBe(0);
+
+			resource.free();
+
+			expect(pool.size).toBe(1);
+			expect(pool.available).toBe(1);
+		});
+
+		it('should release a nullish resource after invoking of `free`', () => {
+			const
+				pool = new Pool(() => []),
+				resource = pool.take();
+
+			expect(pool.size).toBe(0);
+			expect(pool.available).toBe(0);
+
+			resource.free();
+
+			expect(pool.size).toBe(0);
+			expect(pool.available).toBe(0);
+		});
+
+		it('should ignore more than one invoking of `free`', () => {
+			const
+				pool = new Pool(() => [], {size: 1}),
+				resource = pool.take();
+
+			expect(pool.size).toBe(1);
+			expect(pool.available).toBe(0);
+
+			resource.free();
+			resource.free();
+			resource.free();
+
+			expect(pool.size).toBe(1);
+			expect(pool.available).toBe(1);
+		});
+
+		it('should destroy a resource after invoking of `destroy`', () => {
+			const
+				pool = new Pool(() => [], {size: 1}),
+				resource = pool.take();
+
+			expect(pool.size).toBe(1);
+			expect(pool.available).toBe(0);
+
+			resource.destroy();
+
+			expect(pool.size).toBe(0);
+			expect(pool.available).toBe(0);
+		});
+
+		it('should destroy a nullish resource after invoking of `destroy`', () => {
+			const
+				pool = new Pool(() => []),
+				resource = pool.take();
+
+			expect(pool.size).toBe(0);
+			expect(pool.available).toBe(0);
+
+			resource.destroy();
+
+			expect(pool.size).toBe(0);
+			expect(pool.available).toBe(0);
+		});
+
+		it('should ignore more than one invoking of `destroy`', () => {
+			const
+				pool = new Pool(() => [], {size: 1}),
+				resource = pool.take();
+
+			expect(pool.size).toBe(1);
+			expect(pool.available).toBe(0);
+
+			resource.destroy();
+			resource.destroy();
+			resource.destroy();
+
+			expect(pool.size).toBe(0);
+			expect(pool.available).toBe(0);
+		});
+
+		it('should ignore invoking of `destroy` after `free`', () => {
+			const
+				pool = new Pool(() => [], {size: 1}),
+				resource = pool.take();
+
+			expect(pool.size).toBe(1);
+			expect(pool.available).toBe(0);
+
+			resource.free();
+			resource.destroy();
+
+			expect(pool.size).toBe(1);
+			expect(pool.available).toBe(1);
+		});
+
+		it('should ignore invoking of `free` after `destroy`', () => {
+			const
+				pool = new Pool(() => [], {size: 1}),
+				resource = pool.take();
+
+			expect(pool.size).toBe(1);
+			expect(pool.available).toBe(0);
+
+			resource.destroy();
+			resource.free();
+
+			expect(pool.size).toBe(0);
+			expect(pool.available).toBe(0);
+		});
+
+		it('should throw an exception if `maxSize` less than `size`', () => {
+			const pool = new Pool(() => [], {
+				maxSize: 2
+			});
+
+			expect(pool.maxSize).toBe(2);
+
+			pool.takeOrCreate();
+			pool.takeOrCreate();
+
+			let
+				err;
+
+			try {
+				pool.takeOrCreate();
+
+			} catch (e) {
+				err = e;
+			}
+
+			expect(err.message).toBe('The pool contains too many resources');
+		});
+
+		it('attaching the `onTake` hook handler', () => {
+			const scan = [];
+
+			const pool = new Pool(() => [], {
+				size: 1,
+				onTake: (...args) => {
+					scan.push(args);
 				}
 			});
 
-			 const {value} = pool.take('hi');
+			expect(pool.size).toBe(1);
+			expect(pool.available).toBe(1);
 
-			expect(lastTaken).toEqual([value, ['hi']]);
+			pool.take(1, 2, 3);
+
+			expect(pool.available).toBe(0);
+
+			pool.take(4, 5, 6);
+
+			expect(scan.length).toBe(1);
+			expect(scan[0][0]).toEqual([]);
+			expect(scan[0][1]).toBe(pool);
+
+			expect(scan[0].slice(2)).toEqual([1, 2, 3]);
 		});
 
-		it('onFree', () => {
-			let lastFreed = null;
+		it('attaching the `onFree` hook handler', () => {
+			const scan = [];
 
-			const pool = new Pool(Array, 1, [1, 2], {
-				onFree: (value, pool, ...args) => {
-					lastFreed = [value, args];
+			const pool = new Pool(() => [], {
+				size: 1,
+				onFree: (...args) => {
+					scan.push(args);
 				}
 			});
 
-			const {value, free} = pool.take('hi');
+			expect(pool.size).toBe(1);
+			expect(pool.available).toBe(1);
 
-			free('hello');
+			const
+				resource = pool.take();
 
-			expect(lastFreed).toEqual([value, ['hello']]);
+			expect(pool.available).toBe(0);
+
+			pool.take().free(1, 2, 3);
+			resource.free(4, 5, 6);
+
+			expect(scan.length).toBe(1);
+			expect(scan[0][0]).toEqual([]);
+			expect(scan[0][1]).toBe(pool);
+
+			expect(scan[0].slice(2)).toEqual([4, 5, 6]);
+		});
+	});
+
+	describe('`takeOrCreate`', () => {
+		it('should return an available resource from the pool', () => {
+			const pool = new Pool(() => [], {size: 2});
+
+			expect(pool.size).toBe(2);
+			expect(pool.available).toBe(2);
+
+			expect(pool.takeOrCreate().value).toEqual([]);
+
+			expect(pool.size).toBe(2);
+			expect(pool.available).toBe(1);
 		});
 
-		it('hashFn', () => {
-			const pool = new Pool(Array, 1, [1, 2], {
-				hashFn: (...args) => JSON.stringify(args)
+		it('should create a new resource if the pool is empty', () => {
+			const
+				pool = new Pool((...values) => [...values]);
+
+			expect(pool.size).toBe(0);
+			expect(pool.available).toBe(0);
+
+			const
+				resource = pool.takeOrCreate(1, 2, 3);
+
+			expect(pool.size).toBe(1);
+			expect(pool.available).toBe(0);
+
+			expect(resource.value).toEqual([1, 2, 3]);
+			resource.free();
+
+			expect(pool.size).toBe(1);
+			expect(pool.available).toBe(1);
+		});
+
+		it('should return an available resource from the pool matched by a hash', () => {
+			const pool = new Pool((...values) => [...values], {
+				hashFn: (...args) => Object.fastHash(args)
 			});
 
-			expect(pool.canTake()).toBe(0);
-			expect(pool.canTake(1, 2)).toBe(1);
+			pool.takeOrCreate(1, 2, 3).free();
 
-			const {value, free} = pool.take(1, 2);
+			const
+				resource = pool.take(1, 2, 3);
 
-			expect(value).toEqual([1, 2]);
+			expect(resource.value).toEqual([1, 2, 3]);
 
-			value.push(3);
-
-			free();
-
-			const {value: value1, free: free1} = pool.takeOrCreate(1, 2);
-
-			expect(value1).toEqual([1, 2, 3]);
-
-			free1();
-
-			const {value: value2} = pool.takeOrCreate(1, 2, 4);
-
-			expect(value2).toEqual([1, 2, 4]);
+			resource.free();
+			expect(pool.take(1, 2).value).toBeNull();
 		});
 
-		it('onClear', () => {
-			spyOn(console, 'log').and.callThrough();
-			let clearArgs = null;
+		it('attaching the `onTake` hook handler', () => {
+			const scan = [];
 
-			const pool = new Pool(
-				(...args) => [1, 2, ...args],
-				2,
-				[3, 4],
-				{
-					onClear: (pool, ...args) => {
-						clearArgs = args;
-					}
+			const pool = new Pool((...values) => [...values], {
+				onTake: (...args) => {
+					scan.push(args);
 				}
-			);
+			});
 
-			pool.clear('clear', 'args');
+			expect(pool.size).toBe(0);
+			expect(pool.available).toBe(0);
 
-			expect(pool.canTake()).toBe(0);
-			expect(clearArgs).toEqual(['clear', 'args']);
+			pool.takeOrCreate(1, 2, 3);
+
+			expect(pool.size).toBe(1);
+			expect(pool.available).toBe(0);
+
+			pool.takeOrCreate(4, 5, 6);
+
+			expect(pool.size).toBe(2);
+			expect(pool.available).toBe(0);
+
+			expect(scan.length).toBe(2);
+
+			expect(scan[0][0]).toEqual([1, 2, 3]);
+			expect(scan[0][1]).toBe(pool);
+			expect(scan[0].slice(2)).toEqual([1, 2, 3]);
+
+			expect(scan[1][0]).toEqual([4, 5, 6]);
+			expect(scan[1][1]).toBe(pool);
+			expect(scan[1].slice(2)).toEqual([4, 5, 6]);
 		});
 
-		it('destructor', () => {
-			let lastDestructed = null;
+		it('attaching the `onFree` hook handler', () => {
+			const scan = [];
 
-			const pool = new Pool(
-				() => [1, 2],
-				2,
-				{
-					destructor: (el) => {
-						lastDestructed = el;
-					}
+			const pool = new Pool(() => [], {
+				onFree: (...args) => {
+					scan.push(args);
 				}
-			);
+			});
 
-			const {value, destroy} = pool.take();
+			pool.takeOrCreate().free(1, 2, 3);
+			pool.takeOrCreate().destroy();
+			pool.takeOrCreate().free(4, 5, 6);
 
-			expect(value).toEqual([1, 2]);
+			expect(scan.length).toBe(2);
 
-			value.push(3);
+			expect(scan[0][0]).toEqual([]);
+			expect(scan[0][1]).toBe(pool);
+			expect(scan[0].slice(2)).toEqual([1, 2, 3]);
 
-			destroy();
+			expect(scan[1][0]).toEqual([]);
+			expect(scan[1][1]).toBe(pool);
+			expect(scan[1].slice(2)).toEqual([4, 5, 6]);
+		});
+	});
 
-			expect(pool.canTake()).toBe(1);
-			expect(lastDestructed).toEqual([1, 2, 3]);
+	describe('`takeOrWait`', () => {
+		it('should return an available resource from the pool', () => {
+			const pool = new Pool(() => [], {size: 2});
 
-			pool.clear('clear', 'args');
+			expect(pool.size).toBe(2);
+			expect(pool.available).toBe(2);
 
-			expect(lastDestructed).toEqual([1, 2]);
+			let val;
+
+			pool.takeOrWait().then(({value}) => val = value);
+
+			expect(pool.size).toBe(2);
+			expect(pool.available).toBe(1);
+
+			expect(val).toEqual([]);
+		});
+
+		it('should wait an available resource from the pool', async () => {
+			const
+				pool = new Pool((...values) => [...values], {size: 1});
+
+			const
+				resource = pool.take();
+
+			expect(pool.size).toBe(1);
+			expect(pool.available).toBe(0);
+
+			const
+				resourcePromise1 = pool.takeOrWait(),
+				resourcePromise2 = pool.takeOrWait();
+
+			resource.free();
+			expect((await resourcePromise1).value).toEqual([]);
+
+			pool.takeOrCreate(1, 2, 3).free();
+			expect((await resourcePromise2).value).toEqual([1, 2, 3]);
+		});
+
+		it('attaching the `onTake` hook handler', () => {
+			const scan = [];
+
+			const pool = new Pool(() => [], {
+				size: 1,
+				onTake: (...args) => {
+					scan.push(args);
+				}
+			});
+
+			expect(pool.size).toBe(1);
+			expect(pool.available).toBe(1);
+
+			pool.takeOrWait(1, 2, 3);
+
+			expect(pool.available).toBe(0);
+
+			pool.takeOrWait(4, 5, 6);
+			pool.takeOrCreate().free();
+
+			expect(scan.length).toBe(3);
+
+			expect(scan[0][0]).toEqual([]);
+			expect(scan[0][1]).toBe(pool);
+			expect(scan[0].slice(2)).toEqual([1, 2, 3]);
+
+			expect(scan[2][0]).toEqual([]);
+			expect(scan[2][1]).toBe(pool);
+			expect(scan[2].slice(2)).toEqual([4, 5, 6]);
 		});
 	});
 });
