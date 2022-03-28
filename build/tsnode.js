@@ -50,8 +50,6 @@ module.exports = () => {
 		throw err;
 	}
 
-	console.log(normalizePaths(tsConfig.compilerOptions.paths));
-
 	tsPaths.register({
 		baseUrl: tsConfig.compilerOptions.baseUrl,
 		paths: normalizePaths(tsConfig.compilerOptions.paths),
@@ -69,7 +67,6 @@ module.exports = () => {
 		ignore: []
 	});
 
-	console.log('initialized');
 	isInitialized = true;
 };
 
