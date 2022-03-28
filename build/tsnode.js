@@ -64,7 +64,9 @@ module.exports = () => {
 			target: 'es2021'
 		},
 
-		ignore: []
+		ignore: [],
+
+		swc: true
 	});
 
 	isInitialized = true;
