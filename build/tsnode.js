@@ -79,19 +79,12 @@ function normalizePaths(p) {
 			paths = p[val];
 
 		acc[val] = paths.map((pathEl) => {
-			let
-				normalizedPath = path.normalize(pathEl);
-
 			const
+				normalizedPath = path.normalize(pathEl),
 				normalizedCwd = path.normalize(process.cwd());
 
 			if (path.isAbsolute(normalizedPath)) {
-				return normalizedPath.replace(normalizedCwd, '.');
-
-			}
-
-			if (!normalizedPath.startsWith('./')) {
-				normalizedPath = `./${normalizedPath}`;
+				return normalizedPath.replace(normalizedCwd, '');
 			}
 
 			return normalizedPath;
