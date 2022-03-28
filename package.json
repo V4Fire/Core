@@ -91,8 +91,6 @@
     "yargs": "^17.3.1"
   },
   "devDependencies": {
-    "@swc/core": "^1.2.143",
-    "@swc/helpers": "^0.3.3",
     "@types/jasmine": "^3.10.2",
     "@v4fire/linters": "^1.9.0",
     "abort-controller": "^3.0.0",
