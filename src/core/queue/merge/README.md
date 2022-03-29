@@ -22,5 +22,9 @@ console.log(queue.length); // 1
 
 queue.push({a: 2});
 
+console.log(queue.head);   // {a: 1}
 console.log(queue.length); // 2
+
+queue.clear();
+console.log(queue.length); // 0
 ```
