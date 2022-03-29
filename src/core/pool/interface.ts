@@ -37,11 +37,13 @@ export interface OptionalWrappedResource<T> extends WrappedResource<Nullable<T>>
 export interface PoolOptions<T = unknown> {
 	/**
 	 * Number of resources to create at pull initialization
+	 * @default `0`
 	 */
 	size?: number;
 
 	/**
 	 * The maximum number of resources that the pool can contain
+	 * @default `Infinity`
 	 */
 	maxSize?: number;
 
