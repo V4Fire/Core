@@ -211,6 +211,9 @@ const pool = new Pool(createDbConnection, {
 // 10
 console.log(pool.size);
 
+// This resource will be destroyed too
+pool.take();
+
 pool.clear();
 
 // 0
@@ -314,13 +317,59 @@ export interface PoolOptions<T = unknown> {
 
 The maximum number of resources that the pool can contain.
 
+```js
+import Pool from 'core/pool';
+
+const pool = new Pool((...values) => [...values], {
+  maxSize: 2
+});
+
+// 2
+console.log(pool.maxSize);
+```
+
 #### size
 
 Number of resources that are stored in the pool.
 
+```js
+import Pool from 'core/pool';
+
+const
+  pool = new Pool(createDBConnection, {size: 5});
+
+// 5
+console.log(pool.size);
+
+pool.take();
+
+// 5
+console.log(pool.size);
+```
+
 #### available
 
 Number of available resources that are stored in the pool.
+
+```js
+import Pool from 'core/pool';
+
+const
+  pool = new Pool(createDBConnection, {size: 5});
+
+// 5
+console.log(pool.available);
+
+pool.take();
+
+// 4
+console.log(pool.available);
+
+pool.borrow();
+
+// 4
+console.log(pool.available);
+```
 
 ### Methods
 
@@ -332,6 +381,16 @@ The passed arguments will be used to calculate a resource hash. Also, they will 
 The returned result is wrapped with a structure that contains methods to release or drop this resource.
 If the pool is empty, the structure value field will be nullish.
 
+```js
+import Pool from 'core/pool';
+
+const
+  pool = new Pool(() => [], {size: 5});
+
+// []
+console.log(pool.take().value);
+```
+
 #### takeOrCreate
 
 Returns an available resource from the pool.
@@ -340,6 +399,16 @@ The passed arguments will be used to calculate a resource hash. Also, they will 
 The returned result is wrapped with a structure that contains methods to release or drop this resource.
 If the pool is empty, it creates a new resource and returns it.
 
+```js
+import Pool from 'core/pool';
+
+const
+  pool = new Pool((...values) => [...values]);
+
+// [1, 2, 3]
+console.log(pool.takeOrCreate(1, 2, 3).value);
+```
+
 #### takeOrWait
 
 Returns a promise with an available resource from the pull.
@@ -347,6 +416,20 @@ The passed arguments will be used to calculate a resource hash. Also, they will 
 
 The returned result is wrapped with a structure that contains methods to release or drop this resource.
 If the pool is empty, the promise will wait till it release.
+
+```js
+import Pool from 'core/pool';
+
+const
+  pool = new Pool((...values) => [...values]);
+
+pool.takeOrWait().then(({value}) => {
+  // [1, 2, 3]
+  console.log(value);
+});
+
+pool.takeOrCreate(1, 2, 3).free();
+```
 
 #### borrow
 
@@ -359,6 +442,22 @@ Mind, you can’t take this resource from the pool when it’s borrowed.
 The returned result is wrapped with a structure that contains methods to release or drop this resource.
 If the pool is empty, the structure value field will be nullish.
 
+```js
+import Pool from 'core/pool';
+
+const
+  pool = new Pool(() => [], {size: 1});
+
+// []
+console.log(pool.borrow().value);
+
+// []
+console.log(pool.borrow().value);
+
+// []
+console.log(pool.borrow().value);
+```
+
 #### borrowOrCreate
 
 Borrows an available resource from the pool.
@@ -369,6 +468,19 @@ Mind, you can’t take this resource from the pool when it’s borrowed.
 
 The returned result is wrapped with a structure that contains methods to release or drop this resource.
 If the pool is empty, it creates a new resource and returns it.
+
+```js
+import Pool from 'core/pool';
+
+const
+  pool = new Pool((...values) => [...values]);
+
+// [1, 2, 3]
+console.log(pool.borrowOrCreate(1, 2, 3).value);
+
+// [1, 2, 3]
+console.log(pool.borrow().value);
+```
 
 #### borrowOrWait
 
@@ -381,7 +493,38 @@ Mind, you can’t take this resource from the pool when it’s borrowed.
 The returned result is wrapped with a structure that contains methods to release or drop this resource.
 If the pool is empty, the promise will wait till it release.
 
+```js
+import Pool from 'core/pool';
+
+const
+  pool = new Pool((...values) => [...values]);
+
+pool.takeOrWait().then(({value}) => {
+  // [1, 2, 3]
+  console.log(value);
+});
+
+pool.takeOrCreate(1, 2, 3).free();
+```
+
 #### clear
 
 Clears the pool, i.e. drops all created resource.
 The method takes arguments that will be provided to hook handlers.
+
+```js
+import Pool from 'core/pool';
+
+const pool = new Pool(createDbConnection, {
+  size: 10,
+  resourceDestructor: (resource) => resource.disconnect()
+});
+
+// 10
+console.log(pool.size);
+
+pool.clear();
+
+// 0
+console.log(pool.size);
+```
