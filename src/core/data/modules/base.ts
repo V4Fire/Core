@@ -466,6 +466,14 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 		return this.updateRequest(url, eventName, req);
 	}
 
+	/**
+	 * @alias
+	 * @see [[Provider.upd]]
+	 */
+	update<D = unknown>(body?: RequestBody, opts?: CreateRequestOptions<D>): RequestResponse<D> {
+		return this.upd(body, opts);
+	}
+
 	/** @inheritDoc */
 	upd<D = unknown>(body?: RequestBody, opts?: CreateRequestOptions<D>): RequestResponse<D> {
 		const
@@ -480,6 +488,14 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 		}));
 
 		return this.updateRequest(url, eventName, req);
+	}
+
+	/**
+	 * @alias
+	 * @see [[Provider.del]]
+	 */
+	delete<D = unknown>(body?: RequestBody, opts?: CreateRequestOptions<D>): RequestResponse<D> {
+		return this.del(body, opts);
 	}
 
 	/** @inheritDoc */
