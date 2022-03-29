@@ -175,7 +175,7 @@ export default class Pool<T = unknown> {
 
 		Object.assign(this, Object.reject(p, 'size'));
 
-		this.hashFn ??= (() => '[DEFAULT]');
+		this.hashFn ??= (() => '[[DEFAULT]]');
 		this.resourceFactory = resourceFactory;
 
 		const
