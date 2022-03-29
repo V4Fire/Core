@@ -150,7 +150,7 @@ export default abstract class WorkerQueue<T, V = unknown> extends AbstractQueue<
 				setTimeout(cb, i);
 
 			} else {
-				setImmediate(cb);
+				cb();
 			}
 		});
 	}
