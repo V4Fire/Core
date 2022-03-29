@@ -387,6 +387,9 @@ export default class Pool<T = unknown> {
 		this.resourceStore.clear();
 		this.borrowedResourceStore.clear();
 
+		this.availableResources.clear();
+		this.unavailableResources.clear();
+
 		if (this.onClear != null) {
 			this.onClear(this, ...args);
 		}
