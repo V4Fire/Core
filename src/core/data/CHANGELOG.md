@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.??.?? (2022-??-??)
+
+#### :rocket: New Feature
+
+* Added new alias methods `update` and `delete`
+
 ## v3.57.0 (2021-08-31)
 
 #### :boom: Breaking Changes
