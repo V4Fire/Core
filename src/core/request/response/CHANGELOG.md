@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.80.1 (2022-03-29)
+
+#### :bug: Bug Fix
+
+* Fixed a bug when `url` is not provided
+
 ## v3.78.0 (2022-03-16)
 
 #### :boom: Breaking Change
