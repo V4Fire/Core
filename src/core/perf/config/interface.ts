@@ -42,7 +42,7 @@ export type PerfGroupFilters = {
 };
 
 /**
- * Include exclude pattern for groups
+ * Include/exclude patterns for settings
  */
 export interface PerfIncludeFilter {
 	/**
@@ -51,22 +51,21 @@ export interface PerfIncludeFilter {
 	include?: string[];
 
 	/**
-	 * Exclude only specific events
-	 * if include and exclude are both presented, will be used only include
+	 * Exclude only specific events.
+	 * If `include` and `exclude` are both presented, will be used only include.
 	 */
 	exclude?: string[];
 }
 
 /**
- * Simple filtering predicates for each group.
- * Produced from filtering settings.
+ * Filtering predicate
+ */
+export type PerfPredicate = (ns: string) => boolean;
+
+/**
+ * Simple filtering predicates for each group
  * @see PerfGroupFilters
  */
 export type PerfPredicates = {
 	[K in PerfGroup]: PerfPredicate;
 };
-
-/**
- * Filtering predicate
- */
-export type PerfPredicate = (ns: string) => boolean;
