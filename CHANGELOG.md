@@ -16,7 +16,6 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 #### :rocket: New Feature
 
 * Added a new module `core/pull`
-* Added a new global class `Pull` `core/pull`
 
 ## v3.79.1 (2022-03-18)
 
