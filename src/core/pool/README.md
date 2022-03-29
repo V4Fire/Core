@@ -1,197 +1,387 @@
 # core/pool
 
-This module provides a class to create a pool structure
+This module provides a class to create an object pool structure. The pool supports a classical API when you take and
+release some resources from the pool, and the API with support of sharing resources between different consumers.
+In addition, the pool supports segmentation of resources via a provided hash function.
 
-## Usage
-
-```js
-import Pool from 'core/pool';
-
-const pool = new Pool(
-  // function return value that will be stored in pool
-  () => Object(),
-
-  // start number of objects in the pool
-  10
-);
-
-// Number of objects in pool that are avalible now
-console.log(pool.canTake()); // 10
-
-// if there aren't any avalible objects, return null as a value
-const {
-  free,
-  value
-} = pool.take();
-
-// call free will return the value back to pool
-free()
-
-// if there aren't any avalible objects, will create one
-const {
-  destroy,
-  value: value1
-} = pool.takeOrCreate();
-
-// destroys an object instead of returning it to the pool
-destroy()
-
-// returns core/promise/sync (wait until a call of free(value))
-pool.takeOrWait()
-  .then(({free, value}) => {});
-```
-
-## Borrow
-
-You can use one object at multiple places at same the time
+## "Classical" API
 
 ```js
 import Pool from 'core/pool';
 
-const pool = new Pool(() => Object(), 1);
+const
+  pool = new Pool(createDBConnection, {size: 5});
 
-console.log(pool.canBorrow()); // true
+// Number of resources in the pool (5)
+console.log(pool.size);
 
-// return null as a value, if pool is empty
-const {value} = pool.borrow();
+// Number of available resources in the pool (5)
+console.log(pool.available);
 
-// you can borrow one object mulriple times
-const {
-  destroy,
-  value: value1
-} = pool.borrow();
+// If the pool is empty, `value` will be nullish
+const {value, free, destroy} = pool.take();
 
-// if the pool is empty, will create one
-const {value: value2} = pool.borrowOrCreate();
+// 5
+console.log(pool.size);
 
-console.log(value === value1) // true
+// 4
+console.log(pool.available);
 
-// destroys an object, if nobody use it
-destroy()
+// Releasing a resource and returning it to the pool
+free();
 
-// returns core/promise/sync (wait until call of free(value))
-pool.takeOrWait()
-  .then(({free, value}) => {});
+// 5
+console.log(pool.available);
+
+// Creating a new resource if the pool is empty
+const anotherResource = pool.takeOrCreate();
+
+// Destroying a resource instead of returning it to the pool
+// (if you provide a resource destructor when creating a pull instance, it will be used there)
+anotherResource.destroy();
+
+// Returning a promise that resolves with a resource from the pool
+pool.takeOrWait().then(({value, free, destroy}) => {});
 ```
 
-## Constructor
+## Borrowing of resources
 
-Pool constructor can expect additional settings.
-
-```js
-let pool = new Pool(
-  () => Array(),
-  {
-    // some hooks
-  }
-);
-
-let anotherPool = new Pool(
-  (firstItem) => [firstItem],
-
-  // how many objects will be created immediately
-  4,
-
-  // params that will be passes to the object factory
-  // only for objects that will be created immediately
-  ['lol'],
-  {
-    // some hooks
-  }
-);
-
-console.log(anotherPool.canTake()) // 4
-
-let {value} = pool.take()
-
-console.log(value) // ["lol"]
-```
-
-## Settings
-
-Pool's settings
+Using API of borrowing you can share resources between different consumers without taking their from the pool.
+If you borrow a resource, you can't `take` it till all borrow consumers release it.
 
 ```js
 import Pool from 'core/pool';
 
-const pool = new Pool(
-  () => Array(1, 2, 3),
-  {
-    // callbacks that will be invoked on `take` or `takeOrCreate` call
-    // expect value that will be returned from `take`, link to pool, and additional params
-    onTake: (resource, pool, ...args) => {
-      console.log(resource, args)
-    },
+const
+  pool = new Pool(createDOMObserver, {size: 1});
 
-    // hook that will be called before `free`
-    // expect value that are given to `free`, link to pool, and additional params
-    onFree: (resource, pool, ...args) => {
-      console.log(resource, args)
-    },
+// Number of resources in the pool (5)
+console.log(pool.size);
 
-    // function that destroy given object
-    destructor: (value) => {
-      console.log("destructed: ", value)
-    },
+// Number of available resources in the pool (5)
+console.log(pool.available);
 
-    // hook that will be called before clear
-    onClear: () => {
-      console.log("cleared")
-    }
-  }
-);
+// If the pool is empty, `value` will be nullish
+const resource1 = pool.borrow();
 
-let {
-  value,
-  free
-} = pool.takeOrCreate('hi') // [1, 2, 3] ['hi']
+console.log(resource1.value);
 
-value.push(4)
+// 5
+console.log(pool.size);
 
-free('hello', 'world') // [1, 2, 3, 4] ['hello', 'world']
+// 5
+console.log(pool.available);
 
-let {
-  value: newValue,
-  destroy
-} = pool.takeOrCreate('hey') // [1, 2, 3] ['hey']
+// You can't take a resource if it already borrowed
+console.log(pool.take().value === null);
 
-destroy() // destructed: [1, 2, 3, 4]
+// But, you can borrow it
+const resource2 = pool.borrow();
 
-pool.clear() // cleared
+console.log(resource2.value);
+
+// Releasing resources and returning their to the pool
+resource1.free();
+resource2.free();
+
+// Now you can take it
+console.log(pool.take().value);
+
+// Creating a new resource if the pool is empty
+const anotherResource = pool.borrowOrCreate();
+
+// Destroying a resource instead of releasing it
+// (if you provide a resource destructor when creating a pull instance, it will be used there)
+anotherResource.destroy();
+
+// Returning a promise that resolves with a borrowed resource from the pool
+pool.borrowOrWait().then(({value, free, destroy}) => {});
 ```
 
-## Hash
+## Providing arguments to a resource constructor
 
-Pool can separate objects. Objects separated via id. Id is generated with hashFn.
+There is a possibility to provide arguments into a resource constructor.
+Just pass them as the second argument into the pool constructor.
 
 ```js
 import Pool from 'core/pool';
 
-const pool = new Pool(
-  () => Array(1, 2, 3),
-  2,
-  ['initial objects'], // createOpts
-  {
-    // take args that are given to function and convert them to string
-    // arg - params passed to `takeOrCreate`, `borrowOrCreate`, `createOpts`
-    hashFn: (...args) => JSON.stringify(args)
-  }
-);
-
-let {
-  value,
-  free
-} = pool.takeOrCreate('hi')
-
-console.log(value) // [1, 2, 3]
-
-free()
-
-console.log(pool.canTake('hi')) // 1
-
-console.log(pool.canTake('hey')) // 0
-
-console.log(pool.canTake()) // 0
-
-console.log(pool.canTake('initial objects')) // 2
+// The pull contains two arrays: [1, 2, 3], [1, 2, 3]
+const pool = new Pool((...values) => [...values], [1, 2, 3], {
+  size: 2
+});
 ```
+
+Also, you can pass arguments as a function.
+This function will be invoked with a resource index and should return arguments to pass.
+
+```js
+import Pool from 'core/pool';
+
+// The pull contains two arrays: [0], [1]
+const pool = new Pool((...values) => [...values], (i) => [i], {
+  size: 2
+});
+```
+
+In addition, you can provide arguments to create a resource to `takeOrCreate` and `borrowOrCreate` methods.
+
+```js
+import Pool from 'core/pool';
+
+const
+  pool = new Pool((...values) => [...values]);
+
+// [1]
+console.log(pool.takeOrCreate(1).value);
+
+// [1, 2, 3]
+console.log(pool.borrowOrCreate(1, 2, 3).value);
+```
+
+## Segmentation of resources
+
+You can add a function to calculate a hash of the created resource.
+Using this hash, you will be able to take or borrow a resource that matches to the specified hash.
+
+```js
+import Pool from 'core/pool';
+
+// The pull contains five arrays: [0], [1], [2], [3], [4]
+const pool = new Pool((...values) => [...values], (i) => [i], {
+  size: 5,
+  hashFn: (...args) => Object.fastHash(args)
+});
+
+// All arguments that are passed to the pool methods are using to calculate a hash
+// [1]
+console.log(pool.take(1).value)
+
+// The pool doesn’t have any resources matched with the passed hash
+console.log(pool.take(2, 3).value === null)
+
+// [2]
+console.log(pool.borrow(2).value);
+```
+
+## Limiting the pool size
+
+By passing a `maxSize` property you can define how many elements can be contained in the pool.
+Mind, if you also pass a `size` property larger than `maxSize`, there will be generated an exception.
+
+```js
+import Pool from 'core/pool';
+
+const pool = new Pool((...values) => [...values], {
+  maxSize: 2
+});
+
+// 2
+console.log(pool.maxSize);
+
+// [1]
+console.log(pool.takeOrCreate(1).value);
+
+// [2]
+console.log(pool.takeOrCreate(2).value);
+
+try {
+  // [3]
+  console.log(pool.takeOrCreate(2).value);
+
+} catch (err) {
+  // The pool contains too many resources
+  console.log(err.message);
+}
+```
+
+## Clearing a pool
+
+You can clear a pool and destroys all created resources via invoking the `clear` method.
+If you provide a resource destructor when creating a pull instance, it will be with this method.
+
+```js
+import Pool from 'core/pool';
+
+const pool = new Pool(createDbConnection, {
+  size: 10,
+  resourceDestructor: (resource) => resource.disconnect()
+});
+
+// 10
+console.log(pool.size);
+
+pool.clear();
+
+// 0
+console.log(pool.size);
+```
+
+## Hook handlers
+
+You can pass callback functions to handle `take`, `borrow`, `free`, `clear` pool hooks.
+Besides regular arguments, these handlers take arguments that are passed to the associated methods.
+
+```js
+import Pool from 'core/pool';
+
+const pool = new Pool((...values) => [...values], {
+  size: 5,
+
+  onTake(resource, pool, ...args) {
+    console.log(resource, pool, ...args);
+  },
+
+  onBorrow(resource, pool, ...args) {
+    console.log(resource, pool, ...args);
+  },
+
+  onFree(resource, pool, ...args) {
+    console.log(resource, pool, ...args);
+  },
+
+  onClear(pool, ...args) {
+    console.log(pool, ...args);
+  }
+});
+
+pool.take(1, 2, 3);
+pool.takeOrCreate(7, 2).free(10);
+pool.takeOrWait({foo: 'bla'});
+
+pool.borrow(6, 3);
+pool.borrowOrCreate(7, 2).free(10);
+pool.borrowOrWait({foo: 'bla'});
+
+pool.clear();
+```
+
+## API
+
+### Constructor options
+
+The structure constructor can take an object with optional parameters.
+
+```typescript
+export interface PoolOptions<T = unknown> {
+  /**
+   * Number of resources to create at pull initialization
+   * @default `0`
+   */
+  size?: number;
+
+  /**
+   * The maximum number of resources that the pool can contain
+   * @default `Infinity`
+   */
+  maxSize?: number;
+
+  /**
+   * A function to destroy one resource from the pool
+   */
+  resourceDestructor?: ResourceDestructor<T>;
+
+  /**
+   * A function to calculate a hash string for the specified arguments
+   */
+  hashFn?: HashFn;
+
+  /**
+   * Handler: taking some resource via `take` methods
+   */
+  onTake?: ResourceHook<T>;
+
+  /**
+   * Handler: taking some resource via `borrow` methods
+   */
+  onBorrow?: ResourceHook<T>;
+
+  /**
+   * Handler: releasing of some resource
+   */
+  onFree?: ResourceHook<T>;
+
+  /**
+   * Handler: clearing of all pool resources
+   */
+  onClear?: PoolHook<T>;
+}
+```
+
+### Getters
+
+#### maxSize
+
+The maximum number of resources that the pool can contain.
+
+#### size
+
+Number of resources that are stored in the pool.
+
+#### available
+
+Number of available resources that are stored in the pool.
+
+### Methods
+
+#### take
+
+Returns an available resource from the pool.
+The passed arguments will be used to calculate a resource hash. Also, they will be provided to hook handlers.
+
+The returned result is wrapped with a structure that contains methods to release or drop this resource.
+If the pool is empty, the structure value field will be nullish.
+
+#### takeOrCreate
+
+Returns an available resource from the pool.
+The passed arguments will be used to calculate a resource hash. Also, they will be provided to hook handlers.
+
+The returned result is wrapped with a structure that contains methods to release or drop this resource.
+If the pool is empty, it creates a new resource and returns it.
+
+#### takeOrWait
+
+Returns a promise with an available resource from the pull.
+The passed arguments will be used to calculate a resource hash. Also, they will be provided to hook handlers.
+
+The returned result is wrapped with a structure that contains methods to release or drop this resource.
+If the pool is empty, the promise will wait till it release.
+
+#### borrow
+
+Borrows an available resource from the pool.
+The passed arguments will be used to calculate a resource hash. Also, they will be provided to hook handlers.
+
+When a resource is borrowed, it won’t be dropped from the pool. I.e. you can share it with other consumers.
+Mind, you can’t take this resource from the pool when it’s borrowed.
+
+The returned result is wrapped with a structure that contains methods to release or drop this resource.
+If the pool is empty, the structure value field will be nullish.
+
+#### borrowOrCreate
+
+Borrows an available resource from the pool.
+The passed arguments will be used to calculate a resource hash. Also, they will be provided to hook handlers.
+
+When a resource is borrowed, it won’t be dropped from the pool. I.e. you can share it with other consumers.
+Mind, you can’t take this resource from the pool when it’s borrowed.
+
+The returned result is wrapped with a structure that contains methods to release or drop this resource.
+If the pool is empty, it creates a new resource and returns it.
+
+#### borrowOrWait
+
+Returns a promise with a borrowed resource from the pull.
+The passed arguments will be used to calculate a resource hash. Also, they will be provided to hook handlers.
+
+When a resource is borrowed, it won’t be dropped from the pool. I.e. you can share it with other consumers.
+Mind, you can’t take this resource from the pool when it’s borrowed.
+
+The returned result is wrapped with a structure that contains methods to release or drop this resource.
+If the pool is empty, the promise will wait till it release.
+
+#### clear
+
+Clears the pool, i.e. drops all created resource.
+The method takes arguments that will be provided to hook handlers.
