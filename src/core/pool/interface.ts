@@ -95,7 +95,7 @@ export interface ResourceDestructor<T = unknown> {
 }
 
 export interface ResourceHook<T = unknown> {
-	(value: T, pool: Pool<T>, ...args: unknown[]): void;
+	(resource: T, pool: Pool<T>, ...args: unknown[]): void;
 }
 
 export interface PoolHook<T = unknown> {
