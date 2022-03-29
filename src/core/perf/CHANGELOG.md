@@ -13,8 +13,7 @@ Changelog
 
 #### :rocket: New Feature
 
-* Added ability to use include, exclude filters.
-
+* Added ability to use include and exclude filters
 
 ## v3.61.0 (2021-10-20)
 

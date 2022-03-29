@@ -6,7 +6,4 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-/**
- * Mark array of regexps as excluding
- */
-export const EXCLUDE = Symbol('is pattern excluded');
+export const EXCLUDE = Symbol('This value is excluded');

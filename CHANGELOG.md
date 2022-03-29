@@ -15,7 +15,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :rocket: New Feature
 
-* Added ability to use include, exclude filters `core/perf`
+* Added ability to use include and exclude filters `core/perf`
 
 ## v3.80.1 (2022-03-29)
 
