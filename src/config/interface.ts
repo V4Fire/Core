@@ -7,8 +7,8 @@
  */
 
 import type { LogConfig } from 'core/log';
-import type { OnlineCheckConfig } from 'core/net';
 import type { PerfConfig } from 'core/perf/config';
+import type { OnlineCheckConfig } from 'core/net';
 
 export interface Config {
 	/**
@@ -28,7 +28,7 @@ export interface Config {
 	api: CanUndef<string>;
 
 	/**
-	 * Options for "core/log" module
+	 * Options for the "core/log" module
 	 */
 	log: LogConfig;
 
@@ -38,7 +38,7 @@ export interface Config {
 	perf: PerfConfig;
 
 	/**
-	 * Options for a module that checks online connection
+	 * Options for the "core/net" module
 	 */
 	online: OnlineCheckConfig;
 }
