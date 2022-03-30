@@ -220,7 +220,7 @@ pool.clear();
 console.log(pool.size);
 ```
 
-## Hook handlers
+## Attaching hook handlers
 
 You can pass callback functions to handle `take`, `borrow`, `free`, `clear` pool hooks.
 Besides regular arguments, these handlers take arguments that are passed to the associated methods.
