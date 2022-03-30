@@ -62,6 +62,10 @@ export function setLocale(value: string | undefined, def?: boolean): string | un
 	const
 		oldVal = locale.value;
 
+	if (value === oldVal) {
+		return;
+	}
+
 	locale.value = value;
 	locale.isDefined = Boolean(def);
 
