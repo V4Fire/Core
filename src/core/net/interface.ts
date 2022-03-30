@@ -17,50 +17,50 @@ export interface NetState {
 
 export interface NetStatus {
 	/**
-	 * If true, then a host has a connection to the internet
+	 * If true, then a host has the Internet connection
 	 */
 	status: boolean;
 
 	/**
-	 * Date of last online session
+	 * Date of the last online session
 	 */
 	lastOnline?: Date;
 }
 
 export interface OnlineCheckConfig {
 	/**
-	 * URL to check online connection
+	 * URL to check the online connection
 	 * (with the "browser.request" engine can be used only image URL-s)
 	 */
 	checkURL?: CanUndef<string>;
 
 	/**
-	 * How often need to check online connection (ms)
+	 * How often need to check the online connection (ms)
 	 */
 	checkInterval?: number;
 
 	/**
-	 * The timeout of downloading the check URL
+	 * Timeout of a connection checking request
 	 */
 	checkTimeout?: number;
 
 	/**
-	 * How often to update the time of the last online connection
-	 */
-	lastDateSyncInterval?: number;
-
-	/**
-	 * The number of retries of downloading the check URL
+	 * The maximum number of retries to check the online connection
 	 */
 	retryCount?: number;
 
 	/**
-	 * How long to store the result of checking in the local cache
+	 * How often to update the last online connection time
 	 */
-	cacheTTL?: number;
+	lastDateSyncInterval?: number;
 
 	/**
-	 * True, if we need to save the time of the last online connection in a local storage
+	 * True, if we need to save a time of the last online connection in the local cache
 	 */
 	persistence?: boolean;
+
+	/**
+	 * How long to store a checking result in the local cache
+	 */
+	cacheTTL?: number;
 }
