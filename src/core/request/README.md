@@ -184,7 +184,7 @@ const wrappedRequest = request(
 wrappedRequest('bla', 'baz', {age: 37})
 ```
 
-### Returning value of a request
+### Returning request value
 
 After creating a request, the function returns an instance of `core/promise/abortable`.
 The promise resolves with a special response object.
