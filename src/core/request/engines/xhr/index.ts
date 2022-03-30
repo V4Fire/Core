@@ -38,7 +38,7 @@ const request: RequestEngine = (params) => {
 		streamBuffer = new StreamBuffer<RequestResponseChunk>();
 
 	let
-		[body, contentType] = convertDataToSend<BodyInit>(p.body, p.contentType);
+		[body, contentType] = convertDataToSend(p.body, p.contentType);
 
 	if (!IS_NODE && body instanceof FormData && contentType == null) {
 		contentType = '';

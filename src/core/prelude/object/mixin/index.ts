@@ -24,7 +24,7 @@ extend(Object, 'mixin', function mixin(
 	}
 
 	const
-		p = <ObjectMixinOptions>{};
+		p: ObjectMixinOptions = {};
 
 	if (Object.isBoolean(opts)) {
 		p.deep = opts;

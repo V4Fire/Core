@@ -9,7 +9,7 @@
 import { IS_NODE } from 'core/env';
 import { FormData } from 'core/request/engines/const';
 
-import type { RequestBody } from 'core/request/interface';
+import type { NormalizedRequestBody } from 'core/request/interface';
 
 /**
  * Converts the specified data to send via request engines.
@@ -19,25 +19,33 @@ import type { RequestBody } from 'core/request/interface';
  * @param data
  * @param [contentType]
  */
-export function convertDataToSend<T = RequestBody>(data: unknown, contentType?: string): [Nullable<T>, string?] {
-	let
-		normalizedData;
+export function convertDataToSend(
+	data: unknown,
+	contentType?: string
+): [NormalizedRequestBody?, string?] {
+	if (data == null) {
+		return [undefined, contentType];
+	}
 
-	if (Object.isPlainObject(data)) {
+	if (Object.isPrimitive(data)) {
+		return [String(data), contentType];
+	}
+
+	if (Object.isDictionary(data)) {
 		const
 			keys = Object.keys(data);
 
 		let
-			needForm = false;
+			needFormData = false;
 
 		for (let i = 0; i < keys.length; i++) {
 			if (needFormToSend(data[keys[i]])) {
-				needForm = true;
+				needFormData = true;
 				break;
 			}
 		}
 
-		if (needForm) {
+		if (needFormData) {
 			const
 				formData = new FormData();
 
@@ -60,21 +68,17 @@ export function convertDataToSend<T = RequestBody>(data: unknown, contentType?: 
 				append(key, data[key]);
 			}
 
-			normalizedData = formData;
-
-		} else {
-			normalizedData = JSON.stringify(data);
-
-			if (contentType == null) {
-				contentType = 'application/json;charset=UTF-8';
-			}
+			return [formData, contentType];
 		}
 
-	} else if (Object.isNumber(data) || Object.isBoolean(data)) {
-		normalizedData = String(data);
+		if (contentType == null) {
+			contentType = 'application/json;charset=UTF-8';
+		}
+
+		return [JSON.stringify(data), contentType];
 	}
 
-	return [normalizedData, contentType];
+	return [Object.cast(data), contentType];
 
 	function needFormToSend(val: unknown): boolean {
 		if (Object.isArray(val)) {

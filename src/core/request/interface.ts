@@ -60,6 +60,11 @@ export type RequestBody =
 	ArrayBuffer |
 	Blob;
 
+export type NormalizedRequestBody = Exclude<
+	RequestBody,
+	number | boolean | Dictionary
+>;
+
 export type OkStatuses =
 	Range<number> |
 	StatusCodes |

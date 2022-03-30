@@ -36,7 +36,7 @@ const request: RequestEngine = (params) => {
 		streamBuffer = new StreamBuffer<RequestResponseChunk>();
 
 	const
-		[body, contentType] = convertDataToSend<BodyInit>(p.body, p.contentType);
+		[body, contentType] = convertDataToSend(p.body, p.contentType);
 
 	const
 		headers: Record<string, string> = {};

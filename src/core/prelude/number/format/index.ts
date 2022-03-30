@@ -86,7 +86,7 @@ extend(Number.prototype, 'format', function format(
 		if (formatter == null) {
 			const
 				chunks = pattern.split(';'),
-				opts = <Intl.NumberFormatOptions>{};
+				opts: Intl.NumberFormatOptions = {};
 
 			for (let i = 0; i < chunks.length; i++) {
 				const

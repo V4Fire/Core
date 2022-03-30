@@ -20,7 +20,7 @@ export interface Config {
 	 * Default system locale
 	 * (used for internalizing)
 	 */
-	locale: string;
+	locale?: string;
 
 	/**
 	 * Base API URL: primary service domain
