@@ -139,7 +139,7 @@ postWithoutCredentials('https://foo.com/create-user', {body: {name: 'Bob'}}).the
 });
 ```
 
-### Creating a new request function with the default request options
+### Creating a new request factory with the specified URL and default request options
 
 The third overload helps to create a factory of requests.
 It takes a URL to request, additional options (optional), and the special resolve function.
