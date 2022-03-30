@@ -54,7 +54,11 @@ if (IS_NODE) {
  * @param [def] - if true, then the language is marked as default
  * @emits `setLocale(value: string, oldValue?: string)`
  */
-export function setLocale(value: string, def?: boolean): string {
+export function setLocale(value: string | undefined, def?: boolean): string | undefined {
+	if (value == null) {
+		return;
+	}
+
 	const
 		oldVal = locale.value;
 
