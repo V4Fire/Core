@@ -139,7 +139,7 @@ postWithoutCredentials('https://foo.com/create-user', {body: {name: 'Bob'}}).the
 });
 ```
 
-### Creating a new request function with the default request options
+### Creating a new request factory with the specified URL and default request options
 
 The third overload helps to create a factory of requests.
 It takes a URL to request, additional options (optional), and the special resolve function.
@@ -172,19 +172,19 @@ createUser('bob', {age: 37}).then(async ({data, response}) => {
 const wrappedRequest = request(
   'https://foo.com/user',
 
-  (url, {opts, globalOpts, ctx}, name, data) => {
-    opts.body = data;
+  (url, {opts, globalOpts, ctx}, ...args) => {
+    opts.body = args.at(-1);
 
     // If the resolver function returns an array of string, it will replace the original request URL
-    return ['https://bla.com', 'bla', 'baz'];
+    return ['https://bla.com', ...args.slice(0, -1)];
   }
 );
 
 // GET: https://bla.com/bla/baz
-wrappedRequest('bla', 'baz')
+wrappedRequest('bla', 'baz', {age: 37})
 ```
 
-### Returning value of a request
+### Returning request value
 
 After creating a request, the function returns an instance of `core/promise/abortable`.
 The promise resolves with a special response object.

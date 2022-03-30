@@ -17,6 +17,22 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 * Added ability to use include and exclude filters `core/perf`
 
+## v3.80.1 (2022-03-29)
+
+#### :rocket: New Feature
+
+* Added new alias methods `update` and `delete` `core/data`
+
+#### :bug: Bug Fix
+
+* Fixed a bug when `url` is not provided `core/request/response`
+
+## v3.80.0 (2022-03-29)
+
+#### :rocket: New Feature
+
+* Added a new module `core/pool`
+
 ## v3.79.1 (2022-03-18)
 
 #### :bug: Bug Fix

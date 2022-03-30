@@ -214,7 +214,7 @@ export default class Response<
 		if (p.type != null) {
 			this.type = p.type;
 
-		} else if (!IS_NODE) {
+		} else if (!IS_NODE && Object.size(this.url) > 0) {
 			this.type = location.hostname === new URL(this.url).hostname ? 'basic' : 'cors';
 
 		} else {

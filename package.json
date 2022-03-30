@@ -5,7 +5,7 @@
   "main": "lib/core/index.js",
   "typings": "index.d.ts",
   "license": "MIT",
-  "version": "3.79.1",
+  "version": "3.80.1",
   "author": "kobezzza <kobezzza@gmail.com> (https://github.com/kobezzza)",
   "repository": {
     "type": "git",
@@ -30,7 +30,7 @@
     "test": "npm run build && npm run test:typescript && npm run test:eslint && npm run test:jasmine",
     "test:linters": "npm run test:typescript && npm run test:eslint",
     "test:typescript": "node node_modules/@v4fire/typescript-check",
-    "test:eslint": "eslint ./config/**/*.js ./build/**/*.js ./src/**/*.js ./src/**/*.ts",
+    "test:eslint": "eslint './config/**/*.js' './build/**/*.js' './src/**/*.js' './src/**/*.ts'",
     "test:jasmine": "nyc --reporter=lcov --reporter=text jasmine",
     "up": "npm i && gulp build:standalone && gulp build:doc"
   },
