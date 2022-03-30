@@ -7,7 +7,7 @@
  */
 
 import { EventEmitter2 as EventEmitter } from 'eventemitter2';
-import type { State } from 'core/net/interface';
+import type { NetState } from 'core/net/interface';
 
 /**
  * Event emitter to broadcast network events
@@ -22,7 +22,7 @@ export const
 export const
 	event = emitter;
 
-export const state = <Partial<State>>{
+export const state = <Partial<NetState>>{
 	status: undefined,
 	lastOnline: undefined
 };

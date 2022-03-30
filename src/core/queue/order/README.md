@@ -24,11 +24,18 @@ queue.push(2);
 queue.push(-1);
 queue.push(5);
 
-console.log(a.pop()); // 5
-console.log(a.pop()); // 5
-console.log(a.pop()); // 5
-console.log(a.pop()); // 2
-console.log(a.pop()); // 2
-console.log(a.pop()); // 1
-console.log(a.pop()); // -1
+console.log(queue.length); // 8
+
+console.log(queue.head);   // 5
+console.log(queue.pop());  // 5
+
+console.log(queue.head);   // 5
+console.log(queue.pop());  // 5
+
+console.log(queue.pop());  // 5
+console.log(queue.pop());  // 2
+console.log(queue.pop());  // 2
+
+queue.clear();
+console.log(queue.length); // 0
 ```

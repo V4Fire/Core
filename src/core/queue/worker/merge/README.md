@@ -37,4 +37,7 @@ console.log(queue.length); // 1
 queue.push({a: 4});
 
 console.log(queue.length); // 2
+
+queue.clear();
+console.log(queue.length); // 0
 ```
