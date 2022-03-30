@@ -14,18 +14,18 @@ export interface Config {
 	/**
 	 * Base application name
 	 */
-	appName?: CanUndef<string>;
+	appName: CanUndef<string>;
 
 	/**
 	 * Default system locale
 	 * (used for internalizing)
 	 */
-	locale?: string;
+	locale: CanUndef<string>;
 
 	/**
 	 * Base API URL: primary service domain
 	 */
-	api?: CanUndef<string>;
+	api: CanUndef<string>;
 
 	/**
 	 * Options for "core/log" module

@@ -10,7 +10,7 @@ export interface Locale {
 	/**
 	 * Locale value
 	 */
-	value: string;
+	value: CanUndef<string>;
 
 	/**
 	 * True if the locale is already defined
