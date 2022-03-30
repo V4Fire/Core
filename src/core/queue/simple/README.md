@@ -2,8 +2,6 @@
 
 This module provides a class to organize a simple [[Queue]] data structure.
 
-## Usage
-
 ```js
 import Queue from 'core/queue/simple';
 

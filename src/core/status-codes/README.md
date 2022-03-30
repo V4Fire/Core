@@ -12,7 +12,7 @@ console.log(StatusCodes.MOVED_PERMANENTLY);
 console.log(StatusCodes.NOT_FOUND);
 ```
 
-List of supported statuses:
+## List of supported statuses
 
 ```typescript
 enum StatusCodes {

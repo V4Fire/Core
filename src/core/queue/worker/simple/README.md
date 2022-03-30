@@ -2,8 +2,6 @@
 
 This module provides a class to organize a [[WorkerQueue]] data structure.
 
-## Usage
-
 ```js
 import WorkerQueue from 'core/queue/worker/simple';
 
