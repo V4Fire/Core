@@ -46,7 +46,11 @@ export default {
 
 ## Events
 
-The module exports an event emitter to handle connection events.
+| EventName | Description                                    | Payload description          | Payload     |
+|-----------|------------------------------------------------|------------------------------|-------------|
+| `online`  | The network connection has appeared            | -                            | -           |
+| `offline` | The network connection has lost                | When was the last connection | `Date`      |
+| `status`  | The network connection status has been changed | Connection status            | `NetStatus` |
 
 ```js
 import * as net from 'core/net';
@@ -63,7 +67,7 @@ net.emitter.emitter.on('status', (e) => {
   console.log(`Connection is ${e.status ? 'online' : 'offline'}`);
 
   if (!e.status) {
-    console.log(`I have been online at ${el.lastOnline}`);
+    console.log(`I have been online at ${e.lastOnline}`);
   }
 });
 ```
