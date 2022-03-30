@@ -556,12 +556,6 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 	 * @param [onRejected]
 	 * @param [onAbort]
 	 */
-	then(
-		onFulfilled?: Nullable<ResolveHandler<T>>,
-		onRejected?: Nullable<RejectHandler<T>>,
-		onAbort?: Nullable<ConstrRejectHandler>
-	): AbortablePromise<T>;
-
 	then<R>(
 		onFulfilled: Nullable<ResolveHandler<T>>,
 		onRejected: RejectHandler<R>,
@@ -579,6 +573,12 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 		onRejected: RejectHandler<R>,
 		onAbort?: Nullable<ConstrRejectHandler>
 	): AbortablePromise<V | R>;
+
+	then(
+		onFulfilled?: Nullable<ResolveHandler<T>>,
+		onRejected?: Nullable<RejectHandler<T>>,
+		onAbort?: Nullable<ConstrRejectHandler>
+	): AbortablePromise<T>;
 
 	then(
 		onFulfilled: Nullable<ResolveHandler>,
