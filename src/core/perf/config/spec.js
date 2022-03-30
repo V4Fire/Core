@@ -5,7 +5,7 @@
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
-import {perf as perfFactory} from 'core/perf';
+import { perf as perfFactory } from 'core/perf';
 
 describe('core/perf', () => {
 	it('old pattern', () => {
