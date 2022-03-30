@@ -172,16 +172,16 @@ createUser('bob', {age: 37}).then(async ({data, response}) => {
 const wrappedRequest = request(
   'https://foo.com/user',
 
-  (url, {opts, globalOpts, ctx}, name, data) => {
-    opts.body = data;
+  (url, {opts, globalOpts, ctx}, ...args) => {
+    opts.body = args.at(-1);
 
     // If the resolver function returns an array of string, it will replace the original request URL
-    return ['https://bla.com', 'bla', 'baz'];
+    return ['https://bla.com', ...args.slice(0, -1)];
   }
 );
 
 // GET: https://bla.com/bla/baz
-wrappedRequest('bla', 'baz')
+wrappedRequest('bla', 'baz', {age: 37})
 ```
 
 ### Returning value of a request
