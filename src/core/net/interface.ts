@@ -10,7 +10,7 @@ export interface NetEngine {
 	isOnline(): CanPromise<Nullable<boolean>>;
 }
 
-export interface State {
+export interface NetState {
 	status?: Nullable<boolean>;
 	lastOnline?: Nullable<Date>;
 }
