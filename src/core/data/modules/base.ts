@@ -345,12 +345,12 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 
 				tasks.push(providerInstance.get(el.query ?? query, el.request).then(async (res) => {
 					const
-						data = <Nullable<D & object>>(await res.data);
+						data = <Nullable<RequestResponseObject>>(await res.data);
 
 					Object.set(composition, alias, data);
 					cloneTasks.push((composition) => Object.set(composition, alias, data?.valueOf()));
 
-					return data;
+					return data!;
 				}));
 			}
 

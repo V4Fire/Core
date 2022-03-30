@@ -689,7 +689,7 @@ export default class Response<
 					data = data.valueOf();
 				}
 
-				return decoder(data, Object.cast(this));
+				return <typeof data>decoder(data, Object.cast(this));
 			});
 		}
 
