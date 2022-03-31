@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.??.? (2022-??-??)
+
+#### :bug: Bug Fix
+
+* Fixed TS type inferring
+
 ## v3.60.3 (2021-10-05)
 
 #### :bug: Bug Fix

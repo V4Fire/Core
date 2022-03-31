@@ -17,6 +17,12 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 * Added ability to use include and exclude filters `core/perf`
 
+#### :bug: Bug Fix
+
+* Fixed TS type inferring:
+  * `core/promise/sync`
+  * `core/promise/abortable`
+
 ## v3.80.1 (2022-03-29)
 
 #### :rocket: New Feature
