@@ -45,6 +45,7 @@
     "jsdom": "18.1.1",
     "tslib": "2.3.1",
     "w3c-xmlserializer": "2.0.0",
+    "ts-node": "10.7.0",
     "@swc/core": "1.2.147",
     "@swc/helpers": "0.3.8",
     "regenerator-runtime": "0.13.9"
@@ -62,7 +63,7 @@
     "@types/node": "16.11.25",
     "@types/through2": "2.0.36",
     "@v4fire/config": "1.0.0",
-    "config": "1.31.0",
+    "@config/config": "npm:config@1.31.0",
     "del": "6.0.0",
     "dotenv": "10.0.0",
     "fake-indexeddb": "3.1.7",
