@@ -14,8 +14,12 @@ import * as net from 'core/net';
 
 To enable online checking you need to add a configuration within your runtime config module (`src/config`).
 
+__config/index.ts__
+
 ```js
-export default {
+import { extend } from '@v4fire/core/config';
+
+extend({
   online: {
     // URL to check the online connection
     // (with the "browser.request" engine can be used only image URL-s)
@@ -41,7 +45,7 @@ export default {
     // How long to store a checking result in the local cache
     cacheTTL: 0.3.second()
   }
-}
+});
 ```
 
 ## Events
