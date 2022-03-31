@@ -18,11 +18,6 @@ require('../lib/core');
  * The task brings a feature to extend one tsconfig.json from another from a different project.
  * Also, this task generates URL-s for the "paths" options of the config.
  * Be sure that you run this task before trying to compile TS files.
- *
- * @example
- * ```bash
- * npx v4fire tsconfig
- * ```
  */
 module.exports = () => {
 	const
@@ -37,19 +32,9 @@ module.exports = () => {
 	const
 		{config: pzlr, resolve} = require('@pzlr/build-core');
 
-	const src = {
-		cwd() {
-			return resolve.cwd;
-		},
-
-		rel(p, ...args) {
-			return path.join(path.relative(this.cwd(), this[p] ? this[p]() : p), ...args);
-		},
-
-		lib(...args) {
-			return path.resolve(resolve.lib, ...args);
-		}
-	};
+	const
+		// @ts-ignore
+		{src} = require('@config/config');
 
 	const
 		globOpts = {ignore: ['**/node_modules/**']};
