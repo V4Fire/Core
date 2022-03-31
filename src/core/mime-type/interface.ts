@@ -10,5 +10,6 @@ export type DataType =
 	'text' |
 	'json' |
 	'document' |
-	'arrayBuffer' |
-	'blob';
+	'formData' |
+	'blob' |
+	'arrayBuffer';

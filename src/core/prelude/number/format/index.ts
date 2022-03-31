@@ -65,7 +65,7 @@ extend(Number, 'pad', (value: number | NumberPadOptions, lengthOrOpts: number | 
 extend(Number.prototype, 'format', function format(
 	this: number,
 	patternOrOpts?: number | string | Intl.NumberFormatOptions,
-	locale: CanArray<string> = defaultLocale.value
+	locale: CanUndef<CanArray<string>> = defaultLocale.value
 ): string {
 	if (patternOrOpts === undefined && !globalFormatOpts.init) {
 		return this.toLocaleString(locale);
@@ -86,7 +86,7 @@ extend(Number.prototype, 'format', function format(
 		if (formatter == null) {
 			const
 				chunks = pattern.split(';'),
-				opts = <Intl.NumberFormatOptions>{};
+				opts: Intl.NumberFormatOptions = {};
 
 			for (let i = 0; i < chunks.length; i++) {
 				const

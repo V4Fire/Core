@@ -14,7 +14,7 @@
  * @param method
  */
 export default function extend(obj: Function | object, name: string, method: Function | PropertyDescriptor): void {
-	const descriptor = <PropertyDescriptor>{
+	const descriptor: PropertyDescriptor = {
 		configurable: true
 	};
 

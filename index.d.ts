@@ -119,7 +119,29 @@ declare function clearImmediate(id: number): void;
 
 declare function structuredClone<T>(obj: T): T;
 
-type Primitive = string | symbol | number | bigint | boolean | undefined | null;
+interface Headers {
+	keys(): IterableIterator<string>;
+	values(): IterableIterator<string>;
+	entries(): IterableIterator<[string, string]>;
+	[Symbol.iterator]: IterableIterator<[string, string]>;
+}
+
+type Primitive =
+	string |
+	symbol |
+	number |
+	bigint |
+	boolean |
+	undefined |
+	null;
+
+type JSONLikeValue =
+	string |
+	number |
+	boolean |
+	null |
+	JSONLikeValue[] |
+	Dictionary<JSONLikeValue>;
 
 type CanPromise<T> = T | Promise<T>;
 type CanArray<T> = T | T[];
@@ -183,7 +205,13 @@ type PromiseType<T> =
 type ReturnPromise<T extends AnyFunction<any[], unknown>> = (...args: Parameters<T>) => Promise<ReturnType<T>>;
 
 type DictionaryType<T extends Dictionary> = T extends Dictionary<infer V> ? NonNullable<V> : T;
-type IterableType<T extends Iterable<any>> = T extends Iterable<infer V> ? V : T;
+
+type AnyIterable<T = unknown> = Iterable<T> | AsyncIterable<T>;
+
+type IterableType<T extends Iterable<any> | AsyncIterable<any>> =
+	T extends Iterable<infer V> ?
+		V :
+		T extends AsyncIterable<infer V> ? V : T;
 
 /**
  * Overrides properties of the specified type or interface.
@@ -580,7 +608,7 @@ interface ObjectForEachOptions {
 
 	/**
 	 * If true, the function will iterate all object properties, but not only enumerable.
-	 * Non enumerable properties from a prototype are ignored.
+	 * Non-enumerable properties from a prototype are ignored.
 	 *
 	 * @default `false`
 	 * @example
@@ -1011,10 +1039,13 @@ interface ObjectConstructor {
 
 	/**
 	 * Compares two specified objects by using a naive but fast `JSON.stringify/parse` strategy and
-	 * returns true if their are equal.
+	 * returns true if they are equal.
 	 *
 	 * Mind, that this method uses non-stable version `JSON.stringify`, i.e.,
 	 * it can work incorrectly with object like `{a: 1, b: 2}` and `{b: 2, a: 1}`.
+	 *
+	 * Be careful with comparing `undefined` and `NaN` values, as they can be converted to `null` due to
+	 * the nature of `JSON.stringify`.
 	 *
 	 * @param a
 	 * @param b
@@ -1033,6 +1064,9 @@ interface ObjectConstructor {
 	 * Clones the specified object using the `structuredClone` method if possible and returns a new object.
 	 * Otherwise, the method will use a naive but fast `JSON.stringify/parse` strategy.
 	 *
+	 * Be careful with cloning `undefined` and `NaN` values, as they can be converted to `null` due to
+	 * the nature of `JSON.stringify/parse`.
+	 *
 	 * @param obj
 	 * @param [opts] - additional options
 	 */
@@ -1043,6 +1077,9 @@ interface ObjectConstructor {
 	 *
 	 * Mind, that this method uses non-stable version `JSON.stringify`, i.e.,
 	 * it can work incorrectly with object like `{a: 1, b: 2}` and `{b: 2, a: 1}`.
+	 *
+	 * Be careful with comparing `undefined` and `NaN` values, as they can be converted to `null` due to
+	 * the nature of `JSON.stringify`.
 	 *
 	 * @param obj
 	 */
@@ -1830,22 +1867,34 @@ interface ObjectConstructor {
 	isGenerator(value: any): value is GeneratorFunction;
 
 	/**
+	 * Returns true if the specified value is an async generator function
+	 * @param value
+	 */
+	isAsyncGenerator(value: any): value is AsyncGeneratorFunction;
+
+	/**
 	 * Returns true if the specified value is an iterable structure
 	 * @param value
 	 */
-	isIterable(value: any): value is IterableIterator<unknown>;
+	isIterable(value: any): value is Iterable<unknown>;
 
 	/**
 	 * Returns true if the specified value is an async iterable structure
 	 * @param value
 	 */
-	isAsyncIterable(value: any): value is AsyncIterableIterator<unknown>;
+	isAsyncIterable(value: any): value is AsyncIterable<unknown>;
 
 	/**
 	 * Returns true if the specified value is an iterator
 	 * @param value
 	 */
 	isIterator(value: any): value is Iterator<unknown>;
+
+	/**
+	 * Returns true if the specified value is an async iterator
+	 * @param value
+	 */
+	isAsyncIterator(value: any): value is AsyncIterator<unknown>;
 
 	/**
 	 * Returns true if the specified value is a string

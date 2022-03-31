@@ -98,7 +98,7 @@ extend(Object, 'fromArray', (
 		return map;
 	}
 
-	const p = <ObjectFromArrayOptions>{
+	const p: ObjectFromArrayOptions = {
 		key: String,
 		value: () => true,
 		...opts

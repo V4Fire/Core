@@ -19,7 +19,7 @@ export default function sendEvent(event: string, hint?: string, extra?: [...stri
 };
 ```
 
-__core/analytics/engines/index.ts__
+__core/analytics/engines__
 
 ```typescript
 export { default } from 'core/analytics/engines/ga';

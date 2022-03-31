@@ -15,7 +15,8 @@ const original = {
   }
 };
 
-const clone = proxyClone(original);
+const
+  clone = proxyClone(original);
 
 clone.user.name = 'Jack';
 clone.user.skills.push('boxing');
@@ -37,3 +38,33 @@ Because the process of cloning uses native Proxy objects, there are a few limita
 2. `Object.isExtensible` always returns a value from the original object.
 3. If the original object prevents extensions, then a cloned object will also prevent these extensions.
 4. You can't redefine a property descriptor if it contains `configurable: false` attribute in the original object.
+
+## Common clone
+
+The module also exports a common implementation to clone objects. If the runtime supports Proxy API, it will be used.
+
+```js
+import { clone } from 'core/object/proxy-clone';
+
+const original = {
+  user: {
+    name: 'Bob',
+    age: 56,
+    skills: ['singing', 'dancing', 'programming']
+  }
+};
+
+const
+  clone = clone(original);
+
+clone.user.name = 'Jack';
+clone.user.skills.push('boxing');
+
+console.log(clone.user.name !== original.user.name);
+
+// ['singing', 'dancing', 'programming', 'boxing']
+console.log(clone.user.skills);
+
+// ['singing', 'dancing', 'programming']
+console.log(original.user.skills);
+```

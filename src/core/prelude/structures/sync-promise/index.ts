@@ -423,11 +423,6 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 	 * @param [onFulfilled]
 	 * @param [onRejected]
 	 */
-	then(
-		onFulfilled?: Nullable<ResolveHandler<T>>,
-		onRejected?: Nullable<RejectHandler<T>>
-	): SyncPromise<T>;
-
 	then<R>(
 		onFulfilled: Nullable<ResolveHandler<T>>,
 		onRejected: RejectHandler<R>
@@ -442,6 +437,11 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 		onFulfilled: ResolveHandler<T, V>,
 		onRejected: RejectHandler<R>
 	): SyncPromise<V | R>;
+
+	then(
+		onFulfilled?: Nullable<ResolveHandler<T>>,
+		onRejected?: Nullable<RejectHandler<T>>
+	): SyncPromise<T>;
 
 	then(
 		onFulfilled: Nullable<ResolveHandler>,
@@ -471,8 +471,8 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 	 *
 	 * @param [onRejected]
 	 */
-	catch(onRejected?: Nullable<RejectHandler<T>>): SyncPromise<T>;
 	catch<R>(onRejected: RejectHandler<R>): SyncPromise<R>;
+	catch(onRejected?: Nullable<RejectHandler<T>>): SyncPromise<T>;
 	catch(onRejected?: RejectHandler): SyncPromise {
 		return new SyncPromise((resolve, reject) => {
 			const rejectWrapper = (err) => {

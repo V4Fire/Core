@@ -8,7 +8,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import watch, { mute, unmute, set, unset, isProxy } from 'core/object/watch';
+import watch, { mute, unmute, unwatchable, set, unset, isProxy } from 'core/object/watch';
 
 import * as proxyEngine from 'core/object/watch/engines/proxy';
 import * as accEngine from 'core/object/watch/engines/accessors';
@@ -834,6 +834,27 @@ describe('core/object/watch', () => {
 
 				proxy.b = 4;
 				expect(spy).toHaveBeenCalledWith(4, 2, ['b']);
+			});
+
+			it('marking a part of the watched object as unwatchable', () => {
+				const
+					obj = {a: 1, b: unwatchable({c: 2, d: {e: 3}}, engine)},
+					spy = jasmine.createSpy();
+
+				const {proxy, set} = watch(obj, {immediate: true, engine}, (value, oldValue, info) => {
+					spy(value, oldValue, info.path);
+				});
+
+				proxy.b.c = 3;
+				proxy.b.d.e = 4;
+
+				set('b.e', 6);
+
+				expect(spy).not.toHaveBeenCalled();
+
+				proxy.a = 2;
+
+				expect(spy).toHaveBeenCalled();
 			});
 
 			it('canceling of watching', () => {

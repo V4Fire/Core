@@ -21,7 +21,7 @@ export * from 'config/interface';
 export const
 	$$ = symbolGenerator();
 
-const config = <Config>{
+const config: Config = {
 	get appName() {
 		if ($$.appName in this) {
 			return this[$$.appName];

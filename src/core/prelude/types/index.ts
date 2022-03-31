@@ -101,6 +101,9 @@ extend(Object, 'isSimpleFunction', (value) => typeof value === 'function');
 /** @see [[ObjectConstructor.isGenerator]] */
 extend(Object, 'isGenerator', (value) => typeof value === 'function' && value.constructor.name === 'GeneratorFunction');
 
+/** @see [[ObjectConstructor.isAsyncGenerator]] */
+extend(Object, 'isAsyncGenerator', (value) => typeof value === 'function' && value.constructor.name === 'AsyncGeneratorFunction');
+
 /** @see [[ObjectConstructor.isIterator]] */
 extend(Object, 'isIterator', (value) => {
 	if (!value || typeof value !== 'object') {
@@ -109,6 +112,10 @@ extend(Object, 'isIterator', (value) => {
 
 	return typeof value.next === 'function';
 });
+
+/** @see [[ObjectConstructor.isAsyncIterator]] */
+extend(Object, 'isAsyncIterator', (value) =>
+	Object.isIterator(value) && Object.isAsyncIterable(value));
 
 /** @see [[ObjectConstructor.isIterable]] */
 extend(Object, 'isIterable', (value) => {
@@ -171,8 +178,14 @@ extend(Object, 'isPromiseLike', (value) => {
 /** @see [[ObjectConstructor.isProxy]] */
 extend(Object, 'isProxy', (value) => value?.[PROXY] != null);
 
-/** @see [[ObjectConstructor.isProxy]] */
-extend(Object, 'unwrapProxy', (value) => value?.[PROXY] ?? value);
+/** @see [[ObjectConstructor.unwrapProxy]] */
+extend(Object, 'unwrapProxy', (value) => {
+	while (value?.[PROXY] && value[PROXY] !== value) {
+		value = value[PROXY];
+	}
+
+	return value;
+});
 
 /** @see [[ObjectConstructor.isMap]] */
 extend(Object, 'isMap', (value) => value instanceof Map);

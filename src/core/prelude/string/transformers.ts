@@ -78,7 +78,7 @@ extend(String.prototype, 'camelize', function camelize(
 	upperOrOpts: boolean | StringCamelizeOptions
 ): string {
 	const
-		opts = <StringCamelizeOptions>{};
+		opts: StringCamelizeOptions = {};
 
 	if (Object.isBoolean(upperOrOpts)) {
 		opts.upper = upperOrOpts;
@@ -121,7 +121,7 @@ extend(String.prototype, 'dasherize', function dasherize(
 	stableOrOpts?: boolean | StringDasherizeOptions
 ): string {
 	const
-		opts = <StringDasherizeOptions>{};
+		opts: StringDasherizeOptions = {};
 
 	if (Object.isBoolean(stableOrOpts)) {
 		opts.stable = stableOrOpts;
@@ -163,7 +163,7 @@ extend(String.prototype, 'underscore', function underscore(
 	stableOrOpts?: boolean | StringUnderscoreOptions
 ): string {
 	const
-		opts = <StringUnderscoreOptions>{};
+		opts: StringUnderscoreOptions = {};
 
 	if (Object.isBoolean(stableOrOpts)) {
 		opts.stable = stableOrOpts;

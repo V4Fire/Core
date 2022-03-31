@@ -96,9 +96,9 @@ describe('core/prelude/object/iterators/forEach', () => {
 		});
 
 		expect(scan).toEqual([
-			[1, null, data],
-			[2, null, data],
-			[3, null, data]
+			[1, 0, data],
+			[2, 1, data],
+			[3, 2, data]
 		]);
 	});
 

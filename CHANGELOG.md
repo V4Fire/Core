@@ -11,6 +11,137 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.??.?? (2022-??-??)
+
+#### :memo: Documentation
+
+* Added an example of usage:
+  * `core/data/middlewares/attach-mock`
+  * `core/data/middlewares/attach-status`
+  * `core/data/middlewares/wait`
+
+## v3.81.0 (2022-03-31)
+
+#### :rocket: New Feature
+
+* Added ability to use include and exclude filters `core/perf`
+
+#### :bug: Bug Fix
+
+* Fixed TS type inferring:
+  * `core/promise/sync`
+  * `core/promise/abortable`
+
+## v3.80.1 (2022-03-29)
+
+#### :rocket: New Feature
+
+* Added new alias methods `update` and `delete` `core/data`
+
+#### :bug: Bug Fix
+
+* Fixed a bug when `url` is not provided `core/request/response`
+
+## v3.80.0 (2022-03-29)
+
+#### :rocket: New Feature
+
+* Added a new module `core/pool`
+
+## v3.79.1 (2022-03-18)
+
+#### :bug: Bug Fix
+
+* Restored the fixed `package-lock.json`
+
+## v3.79.0 (2022-03-18)
+
+#### :rocket: New Feature
+
+* Added a new global function `unwatchable` `core/object/watch`
+
+## v3.78.0 (2022-03-16)
+
+#### :boom: Breaking Change
+
+* Now `[key, el]` responses from an iterator will be destructured before providing to callback `Object.forEach`
+
+* `core/request`:
+  * Now `RequestResponseObject.data` contains a promise with data
+  * Now the `headers` property is an instance of `core/headers`
+
+* `core/request/reponse`:
+  * Now the `headers` property is an instance of `core/request/headers`
+  * Now to clone and freeze server responses is used Proxy API if it supported
+  * The `getHeader` method is marked as deprecated
+  * All decode methods always return non-nullable values
+
+#### :rocket: New Feature
+
+* Added a new module `core/iter`
+* Added a new module `core/iter/combinators`
+* Added a new module `core/request/headers`
+* Added a new module `core/request/modules/stream-buffer`
+* Added a new method `Object.isAsyncGenerator`
+* Added a new type `AnyIterable`
+
+* `core/request`:
+  * Now a promise returned from a request function implements `Symbol.asyncIterator`
+  * Now a promise returned from a request function has a new `data` property with the response data
+  * Now a promise returned from a request function has a new `emitter` property with an event emitter to listen to raw engine events
+  * Request headers can be provided as an instance of `core/headers` or native browser Headers
+
+* `core/request/response`:
+  * Added missing methods and properties to match the native browsers Response class
+  * Added a new `emitter` property to listen to response events
+  * Added a new `streamUsed` property to determine when the response was read in a stream form
+  * Now a response instance implements `Symbol.asyncIterator`
+
+#### :memo: Documentation
+
+* Improved documentation `core/request`
+
+## v3.77.0 (2022-03-15)
+
+#### :rocket: New Feature
+
+* Added a new method `Object.isAsyncIterator`
+* Now iterations over iterable structures have indices as the second argument of a passed callback function `Object.forEach`
+
+#### :bug: Bug Fix
+
+* Fixed an issue when extending an object with preserving descriptors and array concatenation `Object.mixin`
+* Fixed an issue when iterating over non-dictionary object with enabled `passDescriptor` `Object.forEach`
+*
+## v3.76.0 (2022-03-05)
+
+#### :rocket: New Feature
+
+* Now `RequestEngine` will take `MiddlewareParams` as a second argument `core/request`
+
+* `core/promise`:
+  * Added a new promise wrapper `createControllablePromise`
+  * Added a new promise helper `isControllablePromise`
+
+#### :bug: Bug Fix
+
+* Fixed a race condition while checking and saving pending requests to the cache `core/request`
+
+## v3.75.1 (2022-03-05)
+
+#### :house: Internal
+
+* Freezing versions of all dependencies from package.json
+
+## v3.75.0 (2022-02-22)
+
+#### :rocket: New Feature
+
+* Added a new module `core/json/stream`
+* Added a common function to clone `core/object/proxy-clone`
+* Added a common function to create a read-only view `core/object/proxy-readonly`
+* Added a new bunch of constants `support` to check a runtime for features support `core/const`
+
 ## v3.74.7 (2022-01-31)
 
 #### :bug: Bug Fix

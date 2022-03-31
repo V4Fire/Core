@@ -29,7 +29,7 @@ extend(Array.prototype, 'union', function union(
 			}
 
 			if (Object.isIterable(val) && !Object.isPrimitive(val)) {
-				yield* val[Symbol.iterator]();
+				yield* Object.cast(val[Symbol.iterator]());
 
 			} else {
 				yield val;

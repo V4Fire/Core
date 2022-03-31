@@ -14,39 +14,47 @@ import * as net from 'core/net';
 
 To enable online checking you need to add a configuration within your runtime config module (`src/config`).
 
+__config__
+
 ```js
-export default {
+import { extend } from '@v4fire/core/config';
+
+extend({
   online: {
-    // URL to check online connection
+    // URL to check the online connection
     // (with the "browser.request" engine can be used only image URL-s)
     checkURL: 'https://google.com/favicon.ico',
 
     // Default options:
 
-    // How often need to check online connection (ms)
+    // How often need to check the online connection (ms)
     checkInterval: (5).seconds(),
 
-    // The timeout of downloading the check URL
+    // Timeout of a connection checking request
     checkTimeout: (2).seconds(),
 
-    // The number of retries of downloading the check URL
+    // The maximum number of retries to check the online connection
     retryCount: 3,
 
-    // How long to store the result of checking in the local cache
-    cacheTTL: 0.3.second(),
+    // How often to update the last online connection time
+    lastDateSyncInterval: (1).minute(),
 
-    // True, if we need to save the time of the last online connection in a local storage
+    // True, if we need to save a time of the last online connection in the local cache
     persistence: true,
 
-    // How often to update the time of the last online connection
-    lastDateSyncInterval: (1).minute()
+    // How long to store a checking result in the local cache
+    cacheTTL: 0.3.second()
   }
-}
+});
 ```
 
 ## Events
 
-The module exports an event emitter to handle connection events.
+| EventName | Description                                    | Payload description          | Payload     |
+|-----------|------------------------------------------------|------------------------------|-------------|
+| `online`  | The network connection has appeared            | -                            | -           |
+| `offline` | The network connection has lost                | When was the last connection | `Date`      |
+| `status`  | The network connection status has been changed | Connection status            | `NetStatus` |
 
 ```js
 import * as net from 'core/net';
@@ -63,7 +71,7 @@ net.emitter.emitter.on('status', (e) => {
   console.log(`Connection is ${e.status ? 'online' : 'offline'}`);
 
   if (!e.status) {
-    console.log(`I have been online at ${el.lastOnline}`);
+    console.log(`I have been online at ${e.lastOnline}`);
   }
 });
 ```
@@ -72,7 +80,7 @@ net.emitter.emitter.on('status', (e) => {
 
 The module supports different implementations to check the online connection.
 The implementations are placed within `core/net/engines`. By default, it uses a strategy by requesting
-some recourse from the internet, like a Google favicon. But you can manually provide an engine to use.
+some recourses from the internet, like a Google favicon. But you can manually provide an engine to use.
 
 ```js
 import * as net from 'core/net';

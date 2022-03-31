@@ -286,7 +286,7 @@ interface ProviderOptions {
 }
 ```
 
-### Registering a data provider as the multitone
+### Registering a data provider as the multiton
 
 You can register your data provider by a name in the global storage. For that case, you should use the special decorator `provider`.
 
@@ -321,6 +321,7 @@ It can be useful to provide data providers to components as input properties:
 ```
 
 ### Decorating a request function
+
 #### Request methods
 
 The default implementation of a data provider has an association between HTTP request methods and provider methods:
@@ -773,6 +774,7 @@ export default class User extends Provider {
         }
 
         response.status = 200;
+
         return {
           id: 1,
           name: "Andrey",
@@ -800,7 +802,7 @@ export default class User extends Provider {
 
 #### Enabling data mocks for a provider
 
-By default, all data mocks is disabled, but you can enable it just type to a console of a browser:
+By default, all data mocks are disabled, but you can enable them just type to a console of a browser:
 
 ```js
 // Enables mocks for the User provider

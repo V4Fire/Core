@@ -11,10 +11,22 @@
  * @packageDocumentation
  */
 
+import * as support from 'core/const/support';
+
 import { unimplement } from 'core/functools/implementation';
 
 import { toOriginalObject, NULL } from 'core/object/proxy-clone/const';
 import { resolveTarget, getRawValueFromStore, Descriptor } from 'core/object/proxy-clone/helpers';
+
+/**
+ * Returns a clone of the specified object.
+ * If the runtime supports Proxy, it will be used to clone.
+ *
+ * @param obj
+ */
+export function clone<T>(obj: T): T {
+	return support.proxy ? proxyClone(obj) : Object.fastClone(obj, {freezable: false});
+}
 
 /**
  * Returns a clone of the specified object.
@@ -23,7 +35,7 @@ import { resolveTarget, getRawValueFromStore, Descriptor } from 'core/object/pro
  * @param obj
  */
 export default function proxyClone<T>(obj: T): T {
-	const store = new WeakMap<object, Map<unknown, unknown>>();
+	const store = new WeakMap<object, Map<string | symbol, unknown>>();
 	return clone(obj);
 
 	function clone<T>(obj: T): T {
@@ -31,7 +43,7 @@ export default function proxyClone<T>(obj: T): T {
 			return obj;
 		}
 
-		if (typeof Proxy !== 'function') {
+		if (!support.proxy) {
 			unimplement({
 				name: 'proxyClone',
 				type: 'function',
@@ -388,16 +400,19 @@ export default function proxyClone<T>(obj: T): T {
 				}
 
 				const
-					keys = new Set(Reflect.ownKeys(resolvedTarget));
+					keys = new Set(Reflect.ownKeys(resolvedTarget)),
+					iter = store.get(resolvedTarget)?.entries();
 
-				Object.forEach(store.get(resolvedTarget)?.entries(), ([key, val]) => {
-					if (val === NULL) {
-						keys.delete(key);
+				if (iter != null) {
+					for (const [key, val] of iter) {
+						if (val === NULL) {
+							keys.delete(key);
 
-					} else if (key in resolvedTarget) {
-						keys.add(key);
+						} else if (key in resolvedTarget) {
+							keys.add(key);
+						}
 					}
-				});
+				}
 
 				return [...keys];
 			},
