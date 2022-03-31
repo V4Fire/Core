@@ -14,7 +14,7 @@ const perf = factory({
     engine: 'console',
     filters: {
       network: {
-        include: ['login'],
+        include: ['login']
       }
     }
   }
@@ -49,7 +49,7 @@ const perf = factory({
     engine: 'console',
     filters: {
       network: {
-        exclude: ['login'],
+        exclude: ['login']
       }
     }
   }
@@ -66,6 +66,63 @@ timer.finish(timerId);
 // because `exclude` contain login
 
 const newId = timer.start('logout');
+
+// Some computation
+
+timer.finish(newId);
+// Print used time and name of the timer
+```
+
+#### include and exclude at same time
+
+exclude pattern will be ignored
+
+```js
+import { perf as factory } from 'core/perf';
+
+const perf = factory({
+  timer: {
+    engine: 'console',
+    filters: {
+      network: {
+        include: ['login'],
+        exclude: ['login']
+      }
+    }
+  }
+});
+
+const timer = perf.getTimer('network').namespace('auth');
+
+const newId = timer.start('login');
+
+// Some computation
+
+timer.finish(newId);
+// Print used time and name of the timer
+```
+
+#### include and exclude for namespace
+
+if filters applies to namespace all namespace will be ignored or printed
+
+```js
+import { perf as factory } from 'core/perf';
+
+const perf = factory({
+  timer: {
+    engine: 'console',
+    filters: {
+      network: {
+        include: ['login']
+      }
+    }
+  }
+});
+
+const timer = perf.getTimer('network').namespace('login');
+
+const newId = timer.start('anything');
 
 // Some computation
 

@@ -37,7 +37,7 @@ export function getTimerEngine(config: PerfTimerConfig): PerfTimerEngine {
 }
 
 /**
- * Create filter predicates for every group
+ * Creates filter predicates for every group
  * @param filters - filters from the performance config
  */
 export function createPredicates(filters: PerfGroupFilters): PerfPredicates {
@@ -47,7 +47,7 @@ export function createPredicates(filters: PerfGroupFilters): PerfPredicates {
 
 		acc[groupName] = (ns) => {
 			if (Object.isArray(groupFilters)) {
-				if(groupFilters[EXCLUDE] === true) {
+				if (groupFilters[EXCLUDE] === true) {
 					return !groupFilters.some((filter) => filter.test(ns));
 				}
 
