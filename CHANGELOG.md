@@ -15,7 +15,9 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :memo: Documentation
 
-* Added an example of usage `core/data/middlewares/attach-status`
+* Added an example of usage:
+  * `core/data/middlewares/attach-status`
+  * `core/data/middlewares/wait`
 
 ## v3.81.0 (2022-03-31)
 
