@@ -6,7 +6,7 @@ This module provides a middleware to attach mock data to a request.
 
 ```js
 import Provider, { provider } from 'core/data';
-import attachMock from 'core/data/middlewares/attach-mock';
+import { attachMock } from 'core/data/middlewares';
 
 @provider
 export default class User extends Provider {
@@ -48,7 +48,7 @@ Also, the middleware supports dynamically casting responses:
 
 ```js
 import Provider, { provider } from 'core/data';
-import attachMock from 'core/data/middlewares/attach-mock';
+import { attachMock } from 'core/data/middlewares';
 
 @provider
 export default class User extends Provider {
@@ -83,7 +83,7 @@ Finally, you can use dynamic importing with mocks:
 
 ```js
 import Provider, { provider } from 'core/data';
-import attachMock from 'core/data/middlewares/attach-mock';
+import { attachMock } from 'core/data/middlewares';
 
 @provider
 export default class User extends Provider {

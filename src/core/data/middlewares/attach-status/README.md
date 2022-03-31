@@ -4,7 +4,7 @@ This module provides a decoder middleware to attach a response status to the res
 
 ```js
 import Provider, { provider } from 'core/data';
-import attachStatus from 'core/data/middlewares/attach-status';
+import { attachStatus } from 'core/data/middlewares';
 
 @provider
 export default class User extends Provider {
