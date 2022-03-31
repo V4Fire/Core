@@ -7,28 +7,28 @@
  */
 
 import type { LogConfig } from 'core/log';
-import type { OnlineCheckConfig } from 'core/net';
 import type { PerfConfig } from 'core/perf/config';
+import type { OnlineCheckConfig } from 'core/net';
 
 export interface Config {
 	/**
 	 * Base application name
 	 */
-	appName?: CanUndef<string>;
+	appName: CanUndef<string>;
 
 	/**
 	 * Default system locale
 	 * (used for internalizing)
 	 */
-	locale: string;
+	locale: CanUndef<string>;
 
 	/**
 	 * Base API URL: primary service domain
 	 */
-	api?: CanUndef<string>;
+	api: CanUndef<string>;
 
 	/**
-	 * Options for "core/log" module
+	 * Options for the "core/log" module
 	 */
 	log: LogConfig;
 
@@ -38,7 +38,7 @@ export interface Config {
 	perf: PerfConfig;
 
 	/**
-	 * Options for a module that checks online connection
+	 * Options for the "core/net" module
 	 */
 	online: OnlineCheckConfig;
 }

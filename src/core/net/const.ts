@@ -22,7 +22,7 @@ export const
 export const
 	event = emitter;
 
-export const state = <Partial<NetState>>{
+export const state: NetState = {
 	status: undefined,
 	lastOnline: undefined
 };

@@ -186,8 +186,11 @@ extend(Object, 'set', function set(
 		};
 	}
 
-	const
-		p = <ObjectSetOptions>{separator: '.', concat: false, ...Object.isPlainObject(path) ? path : opts};
+	const p: ObjectSetOptions = {
+		separator: '.',
+		concat: false,
+		...Object.isPlainObject(path) ? path : opts
+	};
 
 	if (Object.isArray(path) || Object.isString(path)) {
 		if (arguments.length < 2) {

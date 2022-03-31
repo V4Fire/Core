@@ -153,7 +153,7 @@ export async function attachMock(this: Provider, params: MiddlewareParams): Prom
 		return;
 	}
 
-	const customResponse = <typeof currentRequest>{
+	const customResponse: typeof currentRequest = {
 		status: undefined,
 		responseType: undefined,
 		decoders: undefined

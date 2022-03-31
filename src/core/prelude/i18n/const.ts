@@ -25,7 +25,7 @@ export const
 /**
  * System language
  */
-export const locale = <Locale>{
+export const locale: Locale = {
 	value: '',
 	isDefined: false,
 	isInitialized: Promise.resolve()

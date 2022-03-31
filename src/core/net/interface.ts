@@ -6,15 +6,6 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-export interface NetEngine {
-	isOnline(): CanPromise<Nullable<boolean>>;
-}
-
-export interface NetState {
-	status?: Nullable<boolean>;
-	lastOnline?: Nullable<Date>;
-}
-
 export interface NetStatus {
 	/**
 	 * If true, then a host has the Internet connection
@@ -26,6 +17,10 @@ export interface NetStatus {
 	 */
 	lastOnline?: Date;
 }
+
+export type NetState = {
+	[K in keyof NetStatus]?: Nullable<NetStatus[K]>;
+};
 
 export interface OnlineCheckConfig {
 	/**
@@ -63,4 +58,8 @@ export interface OnlineCheckConfig {
 	 * How long to store a checking result in the local cache
 	 */
 	cacheTTL?: number;
+}
+
+export interface NetEngine {
+	isOnline(): CanPromise<Nullable<boolean>>;
 }
