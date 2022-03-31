@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.??.?? (2022-??-??)
+
+#### :memo: Documentation
+
+* Added an example of usage `core/data/middlewares/attach-status`
+
 ## v3.81.0 (2022-03-31)
 
 #### :rocket: New Feature
