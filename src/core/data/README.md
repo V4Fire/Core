@@ -774,6 +774,7 @@ export default class User extends Provider {
         }
 
         response.status = 200;
+
         return {
           id: 1,
           name: "Andrey",

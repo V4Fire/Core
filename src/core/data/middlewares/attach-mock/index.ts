@@ -44,7 +44,7 @@ env.emitter.on('set.mock', setConfig);
 env.emitter.on('remove.mock', setConfig);
 
 /**
- * Middleware: attaches mock data from .mocks
+ * Middleware: attaches mock data from the `mocks` property
  * @param params
  */
 export async function attachMock(this: Provider, params: MiddlewareParams): Promise<CanUndef<Function>> {
