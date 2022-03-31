@@ -97,9 +97,9 @@ export default class User extends Provider {
 }
 ```
 
-## Enabling data mocks for a provider
+## Enabling data mocks
 
-By default, all data mocks is disabled, but you can enable it just type to a console of a browser:
+By default, all data mocks are disabled, but you can enable it just type to a console of a browser:
 
 ```js
 // Enables mocks for the User provider
