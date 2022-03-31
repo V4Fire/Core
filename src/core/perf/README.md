@@ -36,7 +36,7 @@ There are two ways to use this module: with a custom configuration or default on
 The default module export refers to a performance metrics factory configured using the runtime config from `src/config`.
 To configure it, define a `perf` property within your config file.
 
-__config/index.ts__
+__config__
 
 ```js
 import { extend } from '@v4fire/core/config';

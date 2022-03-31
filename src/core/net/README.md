@@ -14,7 +14,7 @@ import * as net from 'core/net';
 
 To enable online checking you need to add a configuration within your runtime config module (`src/config`).
 
-__config/index.ts__
+__config__
 
 ```js
 import { extend } from '@v4fire/core/config';

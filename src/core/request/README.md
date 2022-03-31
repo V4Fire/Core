@@ -81,7 +81,7 @@ request('users').data.then(console.log);
 
 But also, you can define the base API URL within your application config. This URL will be used for any relative requests.
 
-__config/index.ts__
+__config__
 
 ```js
 import { extend } from '@v4fire/client/config';
