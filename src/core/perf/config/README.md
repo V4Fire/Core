@@ -1,131 +1,55 @@
 # core/perf/config
 
-Bunch of helpers to work with the performance config.
+This module provides a bunch of helpers to configure the `core/perf` module.
 
-## Perf config
+## Configuration interface
 
-Perf support include, exclude pattern to ignore specific timer events
+```typescript
+/**
+ * General config for performance metrics
+ */
+export interface PerfConfig {
+  /**
+   * Performance timers config
+   */
+  timer: PerfTimerConfig;
+}
 
-```js
-import { perf as factory } from 'core/perf';
+/**
+ * Performance timers config
+ */
+export interface PerfTimerConfig {
+  /**
+   * Name of the used engine
+   */
+  engine: PerfTimerEngineName;
 
-const perf = factory({
-  timer: {
-    engine: 'console',
-    filters: {
-      network: {
-        include: ['login']
-      }
-    }
-  }
-});
+  /**
+   * Settings to filter perf events by groups
+   */
+  filters?: PerfGroupFilters;
+}
 
-const timer = perf.getTimer('network').namespace('auth');
+/**
+ * Settings to filter perf events by groups
+ */
+export type PerfGroupFilters = {
+  [K in PerfGroup]?: PerfIncludeFilter | string[] | boolean;
+};
 
-const timerId = timer.start('login');
+/**
+ * Include/exclude patterns for perf filters
+ */
+export interface PerfIncludeFilter {
+  /**
+   * Include only specific events
+   */
+  include?: string[];
 
-// Some computation
-
-timer.finish(timerId);
-// Print used time and name of the timer
-// Like: network.auth.login took 0.11822200007736683 ms
-
-const newId = timer.start('logout');
-
-// Some computation
-
-timer.finish(newId);
-// Won't print anything,
-// because `include` doesn't contain logout
-```
-
-#### exclude pattern
-
-```js
-import { perf as factory } from 'core/perf';
-
-const perf = factory({
-  timer: {
-    engine: 'console',
-    filters: {
-      network: {
-        exclude: ['login']
-      }
-    }
-  }
-});
-
-const timer = perf.getTimer('network').namespace('auth');
-
-const timerId = timer.start('login');
-
-// Some computation
-
-timer.finish(timerId);
-// Won't print anything,
-// because `exclude` contain login
-
-const newId = timer.start('logout');
-
-// Some computation
-
-timer.finish(newId);
-// Print used time and name of the timer
-```
-
-#### include and exclude at same time
-
-exclude pattern will be ignored
-
-```js
-import { perf as factory } from 'core/perf';
-
-const perf = factory({
-  timer: {
-    engine: 'console',
-    filters: {
-      network: {
-        include: ['login'],
-        exclude: ['login']
-      }
-    }
-  }
-});
-
-const timer = perf.getTimer('network').namespace('auth');
-
-const newId = timer.start('login');
-
-// Some computation
-
-timer.finish(newId);
-// Print used time and name of the timer
-```
-
-#### include and exclude for namespace
-
-if filters applies to namespace all namespace will be ignored or printed
-
-```js
-import { perf as factory } from 'core/perf';
-
-const perf = factory({
-  timer: {
-    engine: 'console',
-    filters: {
-      network: {
-        include: ['login']
-      }
-    }
-  }
-});
-
-const timer = perf.getTimer('network').namespace('login');
-
-const newId = timer.start('anything');
-
-// Some computation
-
-timer.finish(newId);
-// Print used time and name of the timer
+  /**
+   * Exclude only specific events.
+   * If `include` and `exclude` are both presented, will be used only include.
+   */
+  exclude?: string[];
+}
 ```

@@ -24,25 +24,25 @@ export interface PerfConfig {
  */
 export interface PerfTimerConfig {
 	/**
-	 * Engine name
+	 * Name of the used engine
 	 */
 	engine: PerfTimerEngineName;
 
 	/**
-	 * Filtering settings for each group
+	 * Settings to filter perf events by groups
 	 */
 	filters?: PerfGroupFilters;
 }
 
 /**
- * Filtering settings by group
+ * Settings to filter perf events by groups
  */
 export type PerfGroupFilters = {
 	[K in PerfGroup]?: PerfIncludeFilter | string[] | boolean;
 };
 
 /**
- * Include/exclude patterns for settings
+ * Include/exclude patterns for perf filters
  */
 export interface PerfIncludeFilter {
 	/**
