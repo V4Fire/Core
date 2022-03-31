@@ -421,7 +421,7 @@ export default class Response<
 	 */
 	@once
 	json(): AbortablePromise<JSONLikeValue> {
-		return this.readBody().then<JSONLikeValue>((body) => {
+		return this.readBody().then((body) => {
 			if (body == null) {
 				return null;
 			}
@@ -436,13 +436,13 @@ export default class Response<
 				}
 
 				const
-					res = {};
+					decodedBody = {};
 
 				for (const [key, val] of Object.cast<Iterable<[string, string]>>(body)) {
-					res[key] = val;
+					decodedBody[key] = val;
 				}
 
-				return res;
+				return decodedBody;
 			}
 
 			const isStringOrBuffer =
@@ -460,7 +460,11 @@ export default class Response<
 				});
 			}
 
-			return Object.size(this.decoders) > 0 && !Object.isFrozen(body) ? Object.fastClone(body) : body;
+			const decodedBody = Object.size(this.decoders) > 0 && !Object.isFrozen(body) ?
+				Object.fastClone(body) :
+				body;
+
+			return Object.cast(decodedBody);
 		});
 	}
 
@@ -489,7 +493,7 @@ export default class Response<
 		const
 			that = this;
 
-		return this.readBody().then<FormData>(decode);
+		return this.readBody().then(decode);
 
 		function decode(body: ResponseTypeValueP): FormData {
 			if (body == null) {
@@ -540,7 +544,7 @@ export default class Response<
 	 */
 	@once
 	document(): AbortablePromise<Document> {
-		return this.readBody().then<Document>((body) => {
+		return this.readBody().then((body) => {
 			//#if node_js
 
 			if (IS_NODE) {
@@ -549,7 +553,7 @@ export default class Response<
 
 				return this.text()
 					.then((text) => new JSDOM(text))
-					.then((res) => Object.get(res, 'window.document'));
+					.then<Document>((res) => Object.get(res, 'window.document'));
 			}
 
 			//#endif
@@ -570,7 +574,7 @@ export default class Response<
 	 */
 	@once
 	text(): AbortablePromise<string> {
-		return this.readBody().then<string>((body) => this.decodeToString(body));
+		return this.readBody().then((body) => this.decodeToString(body));
 	}
 
 	/**
@@ -628,7 +632,7 @@ export default class Response<
 	 */
 	@once
 	blob(): AbortablePromise<Blob> {
-		return this.readBody().then<Blob>((body) => this.decodeToBlob(body));
+		return this.readBody().then((body) => this.decodeToBlob(body));
 	}
 
 	/**
@@ -636,7 +640,7 @@ export default class Response<
 	 */
 	@once
 	arrayBuffer(): AbortablePromise<ArrayBuffer> {
-		return this.readBody().then<ArrayBuffer>((body) => {
+		return this.readBody().then((body) => {
 			if (body == null) {
 				return new ArrayBuffer(0);
 			}
@@ -689,7 +693,7 @@ export default class Response<
 					data = data.valueOf();
 				}
 
-				return decoder(data, Object.cast(this));
+				return Object.cast(decoder(data, Object.cast(this)));
 			});
 		}
 
@@ -791,7 +795,7 @@ export default class Response<
 	 */
 	protected decodeToString(data: unknown, encoding?: string): AbortablePromise<string> {
 		return AbortablePromise.resolveAndCall(data, this.parent)
-			.then<string>((body) => {
+			.then((body) => {
 				if (encoding == null) {
 					encoding = <BufferEncoding>'utf-8';
 
