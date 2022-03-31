@@ -37,7 +37,6 @@ import type {
 	RequestPromise,
 	RequestResolver,
 
-	RequestResponseChunk,
 	RequestFunctionResponse,
 	RequestResponseObject
 
@@ -442,19 +441,19 @@ function request<D = unknown>(
 			args: [ctx.parent]
 		});
 
-		Object.defineProperty(requestPromise, 'data', {
+		void Object.defineProperty(requestPromise, 'data', {
 			configurable: true,
 			get: () => requestPromise.then((res: RequestResponseObject) => res.data)
 		});
 
-		Object.defineProperty(requestPromise, 'stream', {
+		void Object.defineProperty(requestPromise, 'stream', {
 			configurable: true,
 			get: () => requestPromise.then((res: RequestResponseObject) => res.stream)
 		});
 
 		requestPromise[Symbol.asyncIterator] = () => {
 			const
-				iter = responseIterator.then<AsyncIterableIterator<RequestResponseChunk>>((iter: Function) => iter());
+				iter = responseIterator.then((iter: Function) => iter());
 
 			return {
 				[Symbol.asyncIterator]() {

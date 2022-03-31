@@ -343,15 +343,20 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 					providerInstance = ProviderLink;
 				}
 
-				tasks.push(providerInstance.get(el.query ?? query, el.request).then(async (res) => {
-					const
-						data = <Nullable<D & object>>(await res.data);
+				const
+					req = providerInstance.get(el.query ?? query, el.request);
 
-					Object.set(composition, alias, data);
-					cloneTasks.push((composition) => Object.set(composition, alias, data?.valueOf()));
+				tasks.push(
+					req.then(async (res) => {
+						const
+							data = <Nullable<D & object>>(await res.data);
 
-					return data;
-				}));
+						Object.set(composition, alias, data);
+						cloneTasks.push((composition) => Object.set(composition, alias, data?.valueOf()));
+
+						return res;
+					})
+				);
 			}
 
 			const compositionRes = res.then(
