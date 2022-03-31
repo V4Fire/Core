@@ -88,7 +88,7 @@ function localI18n(val: unknown, customLocale?: string): string {
 		str = String(val),
 		localeName = customLocale == null ? locale.value : customLocale;
 
-	if (Object.isTruly(localeName)) {
+	if (Object.isTruly(localeName) && localeName != null) {
 		const w = langDict[localeName]?.[str];
 		return w != null ? String(w) : str;
 	}
