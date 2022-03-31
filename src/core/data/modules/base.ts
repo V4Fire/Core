@@ -350,7 +350,7 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 					Object.set(composition, alias, data);
 					cloneTasks.push((composition) => Object.set(composition, alias, data?.valueOf()));
 
-					return <RequestResponseObject>data;
+					return res;
 				}));
 			}
 
