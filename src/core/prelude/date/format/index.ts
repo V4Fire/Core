@@ -14,7 +14,7 @@ import { createStaticDateFormatter } from 'core/prelude/date/helpers';
 /** @see [[Date.short]] */
 extend(Date.prototype, 'short', function short(
 	this: Date,
-	locale: CanArray<string> = defaultLocale.value
+	locale: CanUndef<CanArray<string>> = defaultLocale.value
 ): string {
 	return this.format('d:numeric;M:numeric;Y:numeric', locale);
 });
@@ -25,7 +25,7 @@ extend(Date, 'short', createStaticDateFormatter('short'));
 /** @see [[Date.medium]] */
 extend(Date.prototype, 'medium', function medium(
 	this: Date,
-	locale: CanArray<string> = defaultLocale.value
+	locale: CanUndef<CanArray<string>> = defaultLocale.value
 ): string {
 	return this.format('d:numeric;M:long;Y:numeric', locale);
 });
@@ -36,7 +36,7 @@ extend(Date, 'medium', createStaticDateFormatter('medium'));
 /** @see [[Date.long]] */
 extend(Date.prototype, 'long', function long(
 	this: Date,
-	locale: CanArray<string> = defaultLocale.value
+	locale: CanUndef<CanArray<string>> = defaultLocale.value
 ): string {
 	return this.format('d:numeric;M:long;Y:numeric;h:2-digit;m:2-digit;s:2-digit', locale);
 });
@@ -48,7 +48,7 @@ extend(Date, 'long', createStaticDateFormatter('long'));
 extend(Date.prototype, 'format', function format(
 	this: Date,
 	patternOrOpts: string | Intl.DateTimeFormatOptions,
-	locale: CanArray<string> = defaultLocale.value
+	locale: CanUndef<CanArray<string>> = defaultLocale.value
 ): string {
 	if (Object.isPlainObject(patternOrOpts)) {
 		return this.toLocaleString(locale, patternOrOpts);
