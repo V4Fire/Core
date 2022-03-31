@@ -471,8 +471,8 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 	 *
 	 * @param [onRejected]
 	 */
-	catch(onRejected?: Nullable<RejectHandler<T>>): SyncPromise<T>;
 	catch<R>(onRejected: RejectHandler<R>): SyncPromise<R>;
+	catch(onRejected?: Nullable<RejectHandler<T>>): SyncPromise<T>;
 	catch(onRejected?: RejectHandler): SyncPromise {
 		return new SyncPromise((resolve, reject) => {
 			const rejectWrapper = (err) => {

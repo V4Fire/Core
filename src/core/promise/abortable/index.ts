@@ -623,8 +623,8 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 	 *
 	 * @param [onRejected]
 	 */
-	catch(onRejected?: Nullable<RejectHandler<T>>): AbortablePromise<T>;
 	catch<R>(onRejected: RejectHandler<R>): AbortablePromise<R>;
+	catch(onRejected?: Nullable<RejectHandler<T>>): AbortablePromise<T>;
 	catch(onRejected?: RejectHandler): AbortablePromise<any> {
 		return new AbortablePromise((resolve, reject, onAbort) => {
 			const rejectWrapper = (val) => {
