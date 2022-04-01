@@ -644,7 +644,7 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 			req = factory();
 
 		req
-			.then((res) => {
+			.then(async (res) => {
 				try {
 					const
 						cache = requestCache[this.cacheId];
@@ -665,7 +665,8 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 				}
 
 				if (event != null) {
-					this.emitter.emit(event, () => res.data);
+					const data = await res.data;
+					this.emitter.emit(event, () => data);
 				}
 			})
 
