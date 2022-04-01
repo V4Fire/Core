@@ -134,7 +134,7 @@ export interface Provider {
 	 *
 	 * @param [body] - request body
 	 * @param [opts] - additional request options
-	 * @emits `add<T>(data: () => T)`
+	 * @emits `add<T>(data: () => AbortablePromise<T>)`
 	 */
 	add<D = unknown>(body?: RequestBody, opts?: CreateRequestOptions<D>): RequestResponse<D>;
 
@@ -144,7 +144,7 @@ export interface Provider {
 	 *
 	 * @param [body] - request body
 	 * @param [opts] - additional request options
-	 * @emits `upd<T>(data: () => T)`
+	 * @emits `upd<T>(data: () => AbortablePromise<T>)`
 	 */
 	upd<D = unknown>(body?: RequestBody, opts?: CreateRequestOptions<D>): RequestResponse<D>;
 
@@ -154,7 +154,7 @@ export interface Provider {
 	 *
 	 * @param [body] - request body
 	 * @param [opts] - additional request options
-	 * @emits `del<T>(data: () => T)`
+	 * @emits `del<T>(data: () => AbortablePromise<T>)`
 	 */
 	del<D = unknown>(body?: RequestBody, opts?: CreateRequestOptions<D>): RequestResponse<D>;
 }

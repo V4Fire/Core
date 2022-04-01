@@ -370,7 +370,7 @@ export default class Pool<T = unknown> {
 	 *
 	 * @param [args]
 	 */
-	clear(...args: unknown[]): this {
+	clear(...args: unknown[]): void {
 		const
 			destructor = this.resourceDestructor;
 
@@ -393,8 +393,6 @@ export default class Pool<T = unknown> {
 		if (this.onClear != null) {
 			this.onClear(this, ...args);
 		}
-
-		return this;
 	}
 
 	/**
@@ -519,7 +517,7 @@ export default class Pool<T = unknown> {
 	 * @param resource
 	 * @param [args]
 	 */
-	protected free(resource: Resource<T>, ...args: unknown[]): this {
+	protected free(resource: Resource<T>, ...args: unknown[]): void {
 		resource[borrowCounter]--;
 		this.unavailableResources.delete(resource);
 		this.availableResources.add(resource);
@@ -545,7 +543,5 @@ export default class Pool<T = unknown> {
 		if (this.onFree != null) {
 			this.onFree(resource, this, ...args);
 		}
-
-		return this;
 	}
 }
