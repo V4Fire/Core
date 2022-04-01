@@ -11,7 +11,11 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-## v3.??.?? (2022-??-??)
+## v3.81.1 (2022-04-01)
+
+#### :bug: Bug Fix
+
+* Fixed a bug when event data is provided as a promise `core/data`
 
 #### :memo: Documentation
 
