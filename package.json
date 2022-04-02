@@ -46,9 +46,8 @@
     "tslib": "2.3.1",
     "w3c-xmlserializer": "2.0.0",
     "ts-node": "10.7.0",
-    "@swc/core": "1.2.147",
-    "@swc/helpers": "0.3.8",
-    "regenerator-runtime": "0.13.9"
+    "@swc/core": "1.2.152",
+    "@swc/helpers": "0.3.8"
   },
   "optionalDependencies": {
     "@babel/core": "7.17.5",
