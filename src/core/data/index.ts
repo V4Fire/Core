@@ -41,6 +41,7 @@ export {
 	Middlewares,
 	MiddlewareParams,
 
+	RequestPromise,
 	RequestResponse,
 	RequestResponseObject,
 	RequestFunctionResponse,
