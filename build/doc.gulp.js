@@ -66,5 +66,5 @@ module.exports = function init(gulp) {
 	/**
 	 * The main task to generate documentation
 	 */
-	gulp.task('build:doc', gulp.series(['build:doc:typedoc', 'build:doc:normalize']));
+	gulp.task('build:doc', gulp.series(['build:tsconfig', 'build:doc:typedoc', 'build:doc:normalize']));
 };
