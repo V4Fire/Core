@@ -31,6 +31,61 @@ extend(Object, 'isTruly', (value) => Boolean(value));
 /** @see [[ObjectConstructor.isPrimitive]] */
 extend(Object, 'isPrimitive', (value) => !value || !nonPrimitiveTypes[typeof value]);
 
+/** @see [[ObjectConstructor.isUndef]] */
+extend(Object, 'isUndef', (value) => value === undefined);
+
+/** @see [[ObjectConstructor.isNull]] */
+// eslint-disable-next-line eqeqeq
+extend(Object, 'isNull', (value) => value === null);
+
+/** @see [[ObjectConstructor.isNullable]] */
+extend(Object, 'isNullable', (value) => value == null);
+
+/** @see [[ObjectConstructor.isString]] */
+extend(Object, 'isString', (value) => typeof value === 'string');
+
+/** @see [[ObjectConstructor.isNumber]] */
+extend(Object, 'isNumber', (value) => typeof value === 'number');
+
+/** @see [[ObjectConstructor.isBoolean]] */
+extend(Object, 'isBoolean', (value) => typeof value === 'boolean');
+
+/** @see [[ObjectConstructor.isSymbol]] */
+extend(Object, 'isSymbol', (value) => typeof value === 'symbol');
+
+/** @see [[ObjectConstructor.isRegExp]] */
+extend(Object, 'isRegExp', (value) => value instanceof RegExp);
+
+/** @see [[ObjectConstructor.isDate]] */
+extend(Object, 'isDate', (value) => value instanceof Date);
+
+/** @see [[ObjectConstructor.isArray]] */
+extend(Object, 'isArray', Array.isArray);
+
+/** @see [[ObjectConstructor.isArrayLike]] */
+extend(Object, 'isArrayLike', (value) => {
+	const
+		t = typeof value;
+
+	if (value == null || t !== 'object') {
+		return t === 'string';
+	}
+
+	return Array.isArray(value) || value.length > 0 && 0 in value || value.length === 0;
+});
+
+/** @see [[ObjectConstructor.isMap]] */
+extend(Object, 'isMap', (value) => value instanceof Map);
+
+/** @see [[ObjectConstructor.isWeakMap]] */
+extend(Object, 'isWeakMap', (value) => value instanceof WeakMap);
+
+/** @see [[ObjectConstructor.isSet]] */
+extend(Object, 'isSet', (value) => value instanceof Set);
+
+/** @see [[ObjectConstructor.isWeakSet]] */
+extend(Object, 'isWeakSet', (value) => value instanceof WeakSet);
+
 /** @see [[ObjectConstructor.isDictionary]] */
 extend(Object, 'isDictionary', isPlainObject);
 
@@ -75,21 +130,6 @@ extend(Object, 'isSimpleObject', (value) => {
 	}
 
 	return toString.call(value) === '[object Object]';
-});
-
-/** @see [[ObjectConstructor.isArray]] */
-extend(Object, 'isArray', Array.isArray);
-
-/** @see [[ObjectConstructor.isArrayLike]] */
-extend(Object, 'isArrayLike', (value) => {
-	const
-		t = typeof value;
-
-	if (value == null || t !== 'object') {
-		return t === 'string';
-	}
-
-	return Array.isArray(value) || value.length > 0 && 0 in value || value.length === 0;
 });
 
 /** @see [[ObjectConstructor.isFunction]] */
@@ -139,24 +179,6 @@ extend(Object, 'isAsyncIterable', (value) => {
 	);
 });
 
-/** @see [[ObjectConstructor.isString]] */
-extend(Object, 'isString', (value) => typeof value === 'string');
-
-/** @see [[ObjectConstructor.isNumber]] */
-extend(Object, 'isNumber', (value) => typeof value === 'number');
-
-/** @see [[ObjectConstructor.isBoolean]] */
-extend(Object, 'isBoolean', (value) => typeof value === 'boolean');
-
-/** @see [[ObjectConstructor.isSymbol]] */
-extend(Object, 'isSymbol', (value) => typeof value === 'symbol');
-
-/** @see [[ObjectConstructor.isRegExp]] */
-extend(Object, 'isRegExp', (value) => value instanceof RegExp);
-
-/** @see [[ObjectConstructor.isDate]] */
-extend(Object, 'isDate', (value) => value instanceof Date);
-
 /** @see [[ObjectConstructor.isPromise]] */
 extend(Object, 'isPromise', (value) => {
 	if (value) {
@@ -187,27 +209,6 @@ extend(Object, 'unwrapProxy', (value) => {
 	return value;
 });
 
-/** @see [[ObjectConstructor.isMap]] */
-extend(Object, 'isMap', (value) => value instanceof Map);
-
-/** @see [[ObjectConstructor.isWeakMap]] */
-extend(Object, 'isWeakMap', (value) => value instanceof WeakMap);
-
-/** @see [[ObjectConstructor.isSet]] */
-extend(Object, 'isSet', (value) => value instanceof Set);
-
-/** @see [[ObjectConstructor.isWeakSet]] */
-extend(Object, 'isWeakSet', (value) => value instanceof WeakSet);
-
-/**
- * @deprecated
- * @see [[ObjectConstructor.isDictionary]]
- */
-extend(Object, 'isObject', deprecate({
-	name: 'isObject',
-	renamedTo: 'isDictionary'
-}, isPlainObject));
-
 const {
 	isExtensible,
 	isSealed,
@@ -227,3 +228,12 @@ Object.isSealed = (value) =>
 
 Object.isFrozen = (value) =>
 	value == null || isFrozen(value) || value[READONLY] === true;
+
+/**
+ * @deprecated
+ * @see [[ObjectConstructor.isDictionary]]
+ */
+extend(Object, 'isObject', deprecate({
+	name: 'isObject',
+	renamedTo: 'isDictionary'
+}, isPlainObject));
