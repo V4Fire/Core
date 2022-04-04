@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.82.1 (2022-04-04)
+
+#### :nail_care: Polish
+
+* Added re-export for `RequestPromise`
+
 ## v3.81.3 (2022-04-04)
 
 #### :bug: Bug Fix
