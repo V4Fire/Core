@@ -397,18 +397,27 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 				}
 			);
 
+			compositionRes['emitter'] = new EventEmitter();
+
 			Object.defineProperty(compositionRes, 'data', {
+				enumerable: true,
 				configurable: true,
 				get: () => compositionRes.then((res: RequestResponseObject) => res.data)
 			});
 
-			compositionRes[Symbol.asyncIterator] = () => {
-				unimplement({
-					name: 'Symbol.asyncIterator',
-					type: 'property',
-					notice: "Requests with extra providers can't be streamed"
-				});
-			};
+			const unimplementStream = unimplement.bind(null, {
+				name: 'Symbol.asyncIterator',
+				type: 'property',
+				notice: "Requests with extra providers can't be streamed"
+			});
+
+			Object.defineProperty(compositionRes, 'stream', {
+				enumerable: true,
+				configurable: true,
+				get: unimplementStream
+			});
+
+			compositionRes[Symbol.asyncIterator] = unimplementStream;
 
 			return Object.cast(compositionRes);
 		}

@@ -436,19 +436,21 @@ function request<D = unknown>(
 
 		requestPromise['emitter'] = emitter;
 
-		const responseIterator = createControllablePromise({
-			type: AbortablePromise,
-			args: [ctx.parent]
-		});
-
 		void Object.defineProperty(requestPromise, 'data', {
+			enumerable: true,
 			configurable: true,
 			get: () => requestPromise.then((res: RequestResponseObject) => res.data)
 		});
 
 		void Object.defineProperty(requestPromise, 'stream', {
+			enumerable: true,
 			configurable: true,
 			get: () => requestPromise.then((res: RequestResponseObject) => res.stream)
+		});
+
+		const responseIterator = createControllablePromise({
+			type: AbortablePromise,
+			args: [ctx.parent]
 		});
 
 		requestPromise[Symbol.asyncIterator] = () => {
