@@ -47,6 +47,7 @@ module.exports = function initGulp(gulp = require('gulp')) {
 	const {wrapGulp} = include('build/wrap.gulp');
 	wrapGulp(gulp);
 
+	include('build/tsconfig.gulp')(gulp);
 	include('build/build.gulp')(gulp);
 	include('build/doc.gulp')(gulp);
 	include('build/other.gulp')(gulp);
