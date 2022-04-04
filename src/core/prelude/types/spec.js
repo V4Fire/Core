@@ -29,24 +29,24 @@ describe('core/prelude/types', () => {
 	});
 
 	it('`Object.isUndef`', () => {
-		expect(Object.isString(undefined)).toBeTrue();
-		expect(Object.isString(null)).toBeFalse();
-		expect(Object.isString(0)).toBeFalse();
-		expect(Object.isString('')).toBeFalse();
+		expect(Object.isUndef(undefined)).toBeTrue();
+		expect(Object.isUndef(null)).toBeFalse();
+		expect(Object.isUndef(0)).toBeFalse();
+		expect(Object.isUndef('')).toBeFalse();
 	});
 
 	it('`Object.isNull`', () => {
-		expect(Object.isString(null)).toBeTrue();
-		expect(Object.isString(undefined)).toBeFalse();
-		expect(Object.isString(0)).toBeFalse();
-		expect(Object.isString('')).toBeFalse();
+		expect(Object.isNull(null)).toBeTrue();
+		expect(Object.isNull(undefined)).toBeFalse();
+		expect(Object.isNull(0)).toBeFalse();
+		expect(Object.isNull('')).toBeFalse();
 	});
 
 	it('`Object.isNullable`', () => {
-		expect(Object.isString(null)).toBeTrue();
-		expect(Object.isString(undefined)).toBeTrue();
-		expect(Object.isString(0)).toBeFalse();
-		expect(Object.isString('')).toBeFalse();
+		expect(Object.isNullable(null)).toBeTrue();
+		expect(Object.isNullable(undefined)).toBeTrue();
+		expect(Object.isNullable(0)).toBeFalse();
+		expect(Object.isNullable('')).toBeFalse();
 	});
 
 	it('`Object.isString`', () => {
