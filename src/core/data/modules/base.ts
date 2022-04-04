@@ -28,12 +28,13 @@ import {
 
 	RequestQuery,
 	RequestMethod,
-	RequestResponse,
 	RequestBody,
 
+	RequestPromise,
+	RequestResponseObject,
+
 	ResolverResult,
-	RequestFunctionResponse,
-	RequestResponseObject
+	RequestFunctionResponse
 
 } from 'core/request';
 
@@ -285,7 +286,7 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 	}
 
 	/** @inheritDoc */
-	get<D = unknown>(query?: RequestQuery, opts?: CreateRequestOptions<D>): RequestResponse<D> {
+	get<D = unknown>(query?: RequestQuery, opts?: CreateRequestOptions<D>): RequestPromise<D> {
 		const
 			url = this.resolveURL(this.baseGetURL),
 			alias = this.alias ?? this.providerName;
@@ -409,14 +410,14 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 				});
 			};
 
-			return compositionRes;
+			return Object.cast(compositionRes);
 		}
 
 		return res;
 	}
 
 	/** @inheritDoc */
-	peek<D = unknown>(query?: RequestQuery, opts?: CreateRequestOptions<D>): RequestResponse<D> {
+	peek<D = unknown>(query?: RequestQuery, opts?: CreateRequestOptions<D>): RequestPromise<D> {
 		const
 			url = this.resolveURL(this.basePeekURL),
 			eventName = this.name(),
@@ -436,7 +437,7 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 	}
 
 	/** @inheritDoc */
-	post<D = unknown>(body?: RequestBody, opts?: CreateRequestOptions<D>): RequestResponse<D> {
+	post<D = unknown>(body?: RequestBody, opts?: CreateRequestOptions<D>): RequestPromise<D> {
 		const
 			url = this.resolveURL(),
 			eventName = this.name(),
@@ -456,7 +457,7 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 	}
 
 	/** @inheritDoc */
-	add<D = unknown>(body?: RequestBody, opts?: CreateRequestOptions<D>): RequestResponse<D> {
+	add<D = unknown>(body?: RequestBody, opts?: CreateRequestOptions<D>): RequestPromise<D> {
 		const
 			url = this.resolveURL(this.baseAddURL),
 			eventName = this.name() ?? 'add',
@@ -475,12 +476,12 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 	 * @alias
 	 * @see [[Provider.upd]]
 	 */
-	update<D = unknown>(body?: RequestBody, opts?: CreateRequestOptions<D>): RequestResponse<D> {
+	update<D = unknown>(body?: RequestBody, opts?: CreateRequestOptions<D>): RequestPromise<D> {
 		return this.upd(body, opts);
 	}
 
 	/** @inheritDoc */
-	upd<D = unknown>(body?: RequestBody, opts?: CreateRequestOptions<D>): RequestResponse<D> {
+	upd<D = unknown>(body?: RequestBody, opts?: CreateRequestOptions<D>): RequestPromise<D> {
 		const
 			url = this.resolveURL(this.baseUpdURL),
 			eventName = this.name() ?? 'upd',
@@ -499,12 +500,12 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 	 * @alias
 	 * @see [[Provider.del]]
 	 */
-	delete<D = unknown>(body?: RequestBody, opts?: CreateRequestOptions<D>): RequestResponse<D> {
+	delete<D = unknown>(body?: RequestBody, opts?: CreateRequestOptions<D>): RequestPromise<D> {
 		return this.del(body, opts);
 	}
 
 	/** @inheritDoc */
-	del<D = unknown>(body?: RequestBody, opts?: CreateRequestOptions<D>): RequestResponse<D> {
+	del<D = unknown>(body?: RequestBody, opts?: CreateRequestOptions<D>): RequestPromise<D> {
 		const
 			url = this.resolveURL(this.baseDelURL),
 			eventName = this.name() ?? 'del',
@@ -606,7 +607,7 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 	 * @param url - request url
 	 * @param factory - request factory
 	 */
-	protected updateRequest<D = unknown>(url: string, factory: RequestFunctionResponse<D>): RequestResponse<D>;
+	protected updateRequest<D = unknown>(url: string, factory: RequestFunctionResponse<D>): RequestPromise<D>;
 
 	/**
 	 * Updates the specified request with adding caching, etc.
@@ -619,13 +620,13 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 		url: string,
 		event: string,
 		factory: RequestFunctionResponse<D>
-	): RequestResponse<D>;
+	): RequestPromise<D>;
 
 	protected updateRequest<D = unknown>(
 		url: string,
 		eventOrFactory: string | RequestFunctionResponse<D>,
 		factory?: RequestFunctionResponse<D>
-	): RequestResponse<D> {
+	): RequestPromise<D> {
 		let
 			event;
 

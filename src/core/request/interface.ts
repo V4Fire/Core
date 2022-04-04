@@ -152,7 +152,7 @@ export interface RequestPromise<D = unknown> extends RequestResponse<D> {
 }
 
 export interface RequestFunctionResponse<D = unknown, ARGS extends any[] = unknown[]> {
-	(...args: ARGS extends Array<infer V> ? V[] : unknown[]): RequestResponse<D>;
+	(...args: ARGS extends Array<infer V> ? V[] : unknown[]): RequestPromise<D>;
 }
 
 export interface RequestResolver<D = unknown, ARGS extends any[] = unknown[]> {
