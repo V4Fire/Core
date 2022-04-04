@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.81.2 (2022-04-04)
+
+#### :bug: Bug Fix
+
+* All request methods should return `RequestPromise`, but not `RequestResponse` `core/request` `core/data`
+
 ## v3.81.1 (2022-04-01)
 
 #### :memo: Documentation

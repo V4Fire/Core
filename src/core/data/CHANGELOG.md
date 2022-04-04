@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.81.2 (2022-04-04)
+
+#### :bug: Bug Fix
+
+* All request methods should return `RequestPromise`, but not `RequestResponse`
+
 ## v3.80.1 (2022-03-29)
 
 #### :rocket: New Feature
