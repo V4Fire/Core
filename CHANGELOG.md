@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.81.3 (2022-04-04)
+
+#### :bug: Bug Fix
+
+* Added missing API for request responses with extra providers `core/data`
+
 ## v3.81.2 (2022-04-04)
 
 #### :bug: Bug Fix

@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.81.3 (2022-04-04)
+
+#### :bug: Bug Fix
+
+* Added missing API for request responses with extra providers
+
 ## v3.81.2 (2022-04-04)
 
 #### :bug: Bug Fix
