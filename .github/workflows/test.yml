@@ -50,9 +50,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build tsconfig
-        run: npm run build:tsconfig
-
       - name: Build the project
         run: npm run build
 
@@ -82,9 +79,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build tsconfig
-        run: npm run build:tsconfig
-
       - name: Build the project
         run: npm run build -- --es ES5
 
@@ -108,9 +102,6 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-
-      - name: Build tsconfig
-        run: npm run build:tsconfig
 
       - name: Build the project
         run: npm run build:standalone
