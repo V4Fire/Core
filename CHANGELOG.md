@@ -11,6 +11,16 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.82.0 (2022-04-04)
+
+#### :rocket: New Feature
+
+* Added `tsnode` initialization script `build/tsnode`
+
+#### :boom: Breaking Change
+
+* Build `tsconfig` is now a standalone script `build/tsconfig`
+
 ## v3.81.1 (2022-04-01)
 
 #### :memo: Documentation
