@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.83.0 (2022-04-05)
+
+#### :rocket: New Feature
+
+* Added a new static method `borrowRequestPromiseAPI`
+
 ## v3.82.1 (2022-04-04)
 
 #### :nail_care: Polish

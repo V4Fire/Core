@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.83.0 (2022-04-05)
+
+#### :rocket: New Feature
+
+* Added a new static method `borrowRequestPromiseAPI` `core/data`
+
 ## v3.82.1 (2022-04-04)
 
 #### :nail_care: Polish
