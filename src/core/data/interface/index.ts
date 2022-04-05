@@ -12,7 +12,19 @@
  */
 
 import type { EventEmitterLike } from 'core/async';
-import type { CreateRequestOptions, RequestQuery, RequestMethod, RequestResponse, RequestBody } from 'core/request';
+
+import type {
+
+	CreateRequestOptions,
+
+	RequestQuery,
+	RequestMethod,
+	RequestBody,
+
+	RequestPromise
+
+} from 'core/request';
+
 import type { ModelMethod } from 'core/data/interface/types';
 
 export * from 'core/data/interface/types';
@@ -108,7 +120,7 @@ export interface Provider {
 	 * @param [query] - request query
 	 * @param [opts] - additional request options
 	 */
-	get<D = unknown>(query?: RequestQuery, opts?: CreateRequestOptions<D>): RequestResponse<D>;
+	get<D = unknown>(query?: RequestQuery, opts?: CreateRequestOptions<D>): RequestPromise<D>;
 
 	/**
 	 * Checks accessibility of the provider by a query.
@@ -117,7 +129,7 @@ export interface Provider {
 	 * @param [query] - request query
 	 * @param [opts] - additional request options
 	 */
-	peek<D = unknown>(query?: RequestQuery, opts?: CreateRequestOptions<D>): RequestResponse<D>;
+	peek<D = unknown>(query?: RequestQuery, opts?: CreateRequestOptions<D>): RequestPromise<D>;
 
 	/**
 	 * Sends custom data to the provider without any logically effect.
@@ -126,7 +138,7 @@ export interface Provider {
 	 * @param [body] - request body
 	 * @param [opts] - additional request options
 	 */
-	post<D = unknown>(body?: RequestBody, opts?: CreateRequestOptions<D>): RequestResponse<D>;
+	post<D = unknown>(body?: RequestBody, opts?: CreateRequestOptions<D>): RequestPromise<D>;
 
 	/**
 	 * Add new data to the provider.
@@ -136,7 +148,7 @@ export interface Provider {
 	 * @param [opts] - additional request options
 	 * @emits `add<T>(data: () => AbortablePromise<T>)`
 	 */
-	add<D = unknown>(body?: RequestBody, opts?: CreateRequestOptions<D>): RequestResponse<D>;
+	add<D = unknown>(body?: RequestBody, opts?: CreateRequestOptions<D>): RequestPromise<D>;
 
 	/**
 	 * Updates data of the provider by a query.
@@ -146,7 +158,7 @@ export interface Provider {
 	 * @param [opts] - additional request options
 	 * @emits `upd<T>(data: () => AbortablePromise<T>)`
 	 */
-	upd<D = unknown>(body?: RequestBody, opts?: CreateRequestOptions<D>): RequestResponse<D>;
+	upd<D = unknown>(body?: RequestBody, opts?: CreateRequestOptions<D>): RequestPromise<D>;
 
 	/**
 	 * Deletes data of the provider by a query.
@@ -156,5 +168,5 @@ export interface Provider {
 	 * @param [opts] - additional request options
 	 * @emits `del<T>(data: () => AbortablePromise<T>)`
 	 */
-	del<D = unknown>(body?: RequestBody, opts?: CreateRequestOptions<D>): RequestResponse<D>;
+	del<D = unknown>(body?: RequestBody, opts?: CreateRequestOptions<D>): RequestPromise<D>;
 }

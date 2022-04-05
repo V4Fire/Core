@@ -1723,6 +1723,128 @@ interface ObjectConstructor {
 	isTruly(value: any): boolean;
 
 	/**
+	 * Returns true if the specified value has a primitive type
+	 * @param value
+	 */
+	isPrimitive(value: any): value is Primitive;
+
+	/**
+	 * Returns true if the specified value is undefined
+	 * @param value
+	 */
+	isUndef(value: any): value is undefined;
+
+	/**
+	 * Returns true if the specified value is null
+	 * @param value
+	 */
+	isNull(value: any): value is null;
+
+	/**
+	 * Returns true if the specified value is null or undefined
+	 * @param value
+	 */
+	isNullable(value: any): value is null | undefined;
+
+	/**
+	 * Returns true if the specified value is a string
+	 * @param value
+	 */
+	isString(value: any): value is string;
+
+	/**
+	 * Returns true if the specified value is a number
+	 * @param value
+	 */
+	isNumber(value: any): value is number;
+
+	/**
+	 * Returns true if the specified value is a boolean
+	 * @param value
+	 */
+	isBoolean(value: any): value is boolean;
+
+	/**
+	 * Returns true if the specified value is a symbol
+	 * @param value
+	 */
+	isSymbol(value: any): value is symbol;
+
+	/**
+	 * Returns true if the specified value is a regular expression
+	 * @param value
+	 */
+	isRegExp(value: any): value is RegExp;
+
+	/**
+	 * Returns true if the specified value is a date
+	 * @param value
+	 */
+	isDate(value: any): value is Date;
+
+	/**
+	 * Returns true if the specified value is an array
+	 * @param value
+	 */
+	isArray(value: any): value is unknown[];
+
+	/**
+	 * Returns true if the specified value is looks like an array
+	 * @param value
+	 */
+	isArrayLike(value: any): value is ArrayLike<any>;
+
+	/**
+	 * Returns true if the specified value is a map
+	 * @param value
+	 */
+	isMap(value: any): value is Map<unknown, unknown>;
+
+	/**
+	 * Returns true if the specified value is a weak map
+	 * @param value
+	 */
+	isWeakMap(value: any): value is WeakMap<object, unknown>;
+
+	/**
+	 * Returns true if the specified value is a set
+	 * @param value
+	 */
+	isSet(value: any): value is Set<unknown>;
+
+	/**
+	 * Returns true if the specified value is a weak set
+	 * @param value
+	 */
+	isWeakSet(value: any): value is WeakSet<object>;
+
+	/**
+	 * Returns true if the specified value is a dictionary.
+	 * This method is similar to "isPlainObject", but it has another output TS type:
+	 * instead of inferring of an output type the method always cast the type to a dictionary.
+	 *
+	 * @param value
+	 *
+	 * @example
+	 * ```typescript
+	 * interface Foo {
+	 *   bar(): number;
+	 * }
+	 *
+	 * function foo(val: number | Foo) {
+	 *   if (Object.isPlainObject(val)) {
+	 *     val.bar(); // All fine
+	 *   }
+	 *
+	 *   if (Object.isDictionary(val)) {
+	 *     val.bar(); // Warning: object is of type unknown
+	 *   }
+	 * }
+	 * ```
+	 */
+	isDictionary(value: any): value is Dictionary;
+
+	/**
 	 * Returns true if the specified value is a plain object,
 	 * i.e. it has `null` prototype or was constructed via `Object`
 	 *
@@ -1784,45 +1906,6 @@ interface ObjectConstructor {
 		? Dictionary : T extends object ? NonNullable<T> : Dictionary;
 
 	/**
-	 * Returns true if the specified value is a dictionary.
-	 * This method is similar to "isPlainObject", but it has another output TS type:
-	 * instead of inferring of an output type the method always cast the type to a dictionary.
-	 *
-	 * @param value
-	 *
-	 * @example
-	 * ```typescript
-	 * interface Foo {
-	 *   bar(): number;
-	 * }
-	 *
-	 * function foo(val: number | Foo) {
-	 *   if (Object.isPlainObject(val)) {
-	 *     val.bar(); // All fine
-	 *   }
-	 *
-	 *   if (Object.isDictionary(val)) {
-	 *     val.bar(); // Warning: object is of type unknown
-	 *   }
-	 * }
-	 * ```
-	 */
-	isDictionary(value: any): value is Dictionary;
-
-	/**
-	 * @deprecated
-	 * @see [[ObjectConstructor.isPlainObject]]
-	 * @see [[ObjectConstructor.isDictionary]]
-	 */
-	isObject(value: any): value is Dictionary;
-
-	/**
-	 * Returns true if the specified value has a primitive type
-	 * @param value
-	 */
-	isPrimitive(value: any): value is Primitive;
-
-	/**
 	 * Returns true if the specified value is a custom (not native) object or function
 	 * @param value
 	 */
@@ -1833,18 +1916,6 @@ interface ObjectConstructor {
 	 * @param value
 	 */
 	isSimpleObject<T extends object = object>(value: any): value is T;
-
-	/**
-	 * Returns true if the specified value is an array
-	 * @param value
-	 */
-	isArray(value: any): value is unknown[];
-
-	/**
-	 * Returns true if the specified value is looks like an array
-	 * @param value
-	 */
-	isArrayLike(value: any): value is ArrayLike<any>;
 
 	/**
 	 * Returns true if the specified value is a function
@@ -1897,42 +1968,6 @@ interface ObjectConstructor {
 	isAsyncIterator(value: any): value is AsyncIterator<unknown>;
 
 	/**
-	 * Returns true if the specified value is a string
-	 * @param value
-	 */
-	isString(value: any): value is string;
-
-	/**
-	 * Returns true if the specified value is a number
-	 * @param value
-	 */
-	isNumber(value: any): value is number;
-
-	/**
-	 * Returns true if the specified value is a boolean
-	 * @param value
-	 */
-	isBoolean(value: any): value is boolean;
-
-	/**
-	 * Returns true if the specified value is a symbol
-	 * @param value
-	 */
-	isSymbol(value: any): value is symbol;
-
-	/**
-	 * Returns true if the specified value is a regular expression
-	 * @param value
-	 */
-	isRegExp(value: any): value is RegExp;
-
-	/**
-	 * Returns true if the specified value is a date
-	 * @param value
-	 */
-	isDate(value: any): value is Date;
-
-	/**
 	 * Returns true if the specified value is a promise
 	 * @param value
 	 */
@@ -1959,28 +1994,11 @@ interface ObjectConstructor {
 	unwrapProxy<T>(value: T): T;
 
 	/**
-	 * Returns true if the specified value is a map
-	 * @param value
+	 * @deprecated
+	 * @see [[ObjectConstructor.isPlainObject]]
+	 * @see [[ObjectConstructor.isDictionary]]
 	 */
-	isMap(value: any): value is Map<unknown, unknown>;
-
-	/**
-	 * Returns true if the specified value is a weak map
-	 * @param value
-	 */
-	isWeakMap(value: any): value is WeakMap<object, unknown>;
-
-	/**
-	 * Returns true if the specified value is a set
-	 * @param value
-	 */
-	isSet(value: any): value is Set<unknown>;
-
-	/**
-	 * Returns true if the specified value is a weak set
-	 * @param value
-	 */
-	isWeakSet(value: any): value is WeakSet<object>;
+	isObject(value: any): value is Dictionary;
 }
 
 interface ArrayConstructor {

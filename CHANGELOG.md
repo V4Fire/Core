@@ -11,7 +11,7 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-## v3.82.0 (2022-04-04)
+## v3.84.0 (2022-04-06)
 
 #### :rocket: New Feature
 
@@ -21,6 +21,36 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 * Build `tsconfig` is now a standalone script `build/tsconfig`
 * `config` package now uses alias `@config/config`
+
+## v3.83.0 (2022-04-05)
+
+#### :rocket: New Feature
+
+* Added a new static method `borrowRequestPromiseAPI` `core/data`
+
+## v3.82.1 (2022-04-04)
+
+#### :nail_care: Polish
+
+* Added re-export for `RequestPromise` `core/data`
+
+## v3.82.0 (2022-04-04)
+
+#### :rocket: New Feature
+
+* Added new methods `Object.isUndef`, `Object.isNull`, `Object.isNullable` `prelude`
+
+## v3.81.3 (2022-04-04)
+
+#### :bug: Bug Fix
+
+* Added missing API for request responses with extra providers `core/data`
+
+## v3.81.2 (2022-04-04)
+
+#### :bug: Bug Fix
+
+* All request methods should return `RequestPromise`, but not `RequestResponse` `core/request` `core/data`
 
 ## v3.81.1 (2022-04-01)
 
