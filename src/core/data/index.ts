@@ -84,7 +84,7 @@ export default class Provider extends DefaultProvider {
 			get: () => from.stream
 		});
 
-		res[Symbol.asyncIterator] = from[Symbol.asyncIterator];
+		res[Symbol.asyncIterator] = from[Symbol.asyncIterator].bind(from);
 
 		return res;
 	}
