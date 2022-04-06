@@ -1,7 +1,3 @@
-// @ts-check
-
-'use strict';
-
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -10,13 +6,16 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
+// @ts-check
+
+'use strict';
+
 const
 	tsNode = require('ts-node'),
 	tsPaths = require('tsconfig-paths');
 
 const
-	path = require('upath'),
-	process = require('process');
+	path = require('upath');
 
 let
 	isInitialized = false;
