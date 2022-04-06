@@ -2,6 +2,14 @@
 
 This folder contains files with Gulp/Webpack/helper scripts to build/validate/etc. the project.
 
+## tsconfig.js
+
+This file provides a function to compile `.tsconfig` from the application root to `tsconfig.json` (it's necessary to compile TS files).
+
+## build-tsconfig.js
+
+This file immediately executes a function to generate `tsconfig`.
+
 ## tsconfig.gulp.js
 
 This task compiles `.tsconfig` from the application root to `tsconfig.json` (it's necessary to compile TS files).
@@ -10,13 +18,10 @@ This task compiles `.tsconfig` from the application root to `tsconfig.json` (it'
 npx gulp build:tsconfig
 ```
 
-## tsconfig.js
+## tsnode.js
 
-This file provides a function to compile `.tsconfig` from the application root to `tsconfig.json` (it's necessary to compile TS files).
-
-## build-tsconfig.js
-
-This file immediately executes the function to generate `tsconfig`.
+This files initializes the [`ts-node`](https://www.npmjs.com/package/ts-node) package to run tests or execute any
+TS files "on the fly".
 
 ## include.js
 
@@ -80,7 +85,3 @@ This file provides a bunch of helper gulp tasks.
 ## helpers.js
 
 This file provides a bunch of helper functions to build the project.
-
-## tsnode.js
-
-This files initializes [`ts-node`](https://www.npmjs.com/package/ts-node) package to run tests or execute any ts file in runtime.

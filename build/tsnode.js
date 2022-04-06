@@ -1,3 +1,7 @@
+// @ts-check
+
+'use strict';
+
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -5,10 +9,6 @@
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
-
-// @ts-check
-
-'use strict';
 
 const
 	tsNode = require('ts-node'),
@@ -23,7 +23,7 @@ let
 /**
  * Initializes the `ts-node` and `tsconfig-paths` packages
  */
-module.exports = function initializeTsNode() {
+module.exports = function initTsNode() {
 	if (isInitialized) {
 		return;
 	}
@@ -64,10 +64,10 @@ module.exports = function initializeTsNode() {
 	isInitialized = true;
 };
 
-function normalizePaths(p) {
-	return Object.keys(p).reduce((acc, val) => {
+function normalizePaths(pathsMap) {
+	return Object.keys(pathsMap).reduce((acc, val) => {
 		const
-			paths = p[val];
+			paths = pathsMap[val];
 
 		acc[val] = paths.map((pathEl) => {
 			const

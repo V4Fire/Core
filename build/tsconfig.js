@@ -1,3 +1,8 @@
+// @ts-check
+/// <reference path="../index.d.ts"/>
+
+'use strict';
+
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -5,12 +10,6 @@
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
-
-/// <reference path="../index.d.ts"/>
-
-// @ts-check
-
-'use strict';
 
 require('../lib/core');
 
