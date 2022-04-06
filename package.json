@@ -24,7 +24,7 @@
   "scripts": {
     "dev": "SOURCEMAPS=true gulp watch:server",
     "build": "gulp build:server",
-    "build:tsconfig": "node build/tsconfig",
+    "build:tsconfig": "node build/build-tsconfig",
     "build:standalone": "gulp build:standalone",
     "watch:standalone": "gulp watch:standalone",
     "test": "npm run build && npm run test:typescript && npm run test:eslint && npm run test:jasmine",

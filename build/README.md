@@ -10,11 +10,11 @@ This task compiles `.tsconfig` from the application root to `tsconfig.json` (it'
 npx gulp build:tsconfig
 ```
 
-## build-tsconfig.js
+## tsconfig.js
 
 This file provides a function to compile `.tsconfig` from the application root to `tsconfig.json` (it's necessary to compile TS files).
 
-## tsconfig.js
+## build-tsconfig.js
 
 This file immediately executes the function to generate `tsconfig`.
 
