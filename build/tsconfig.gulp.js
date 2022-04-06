@@ -21,8 +21,7 @@
  */
 module.exports = function init(gulp) {
 	gulp.task('build:tsconfig', (done) => {
-		require('./tsconfig');
-
+		require('./build-tsconfig')();
 		done();
 	});
 };

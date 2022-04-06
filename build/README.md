@@ -10,6 +10,14 @@ This task compiles `.tsconfig` from the application root to `tsconfig.json` (it'
 npx gulp build:tsconfig
 ```
 
+## build-tsconfig.js
+
+This file provides a function to compile `.tsconfig` from the application root to `tsconfig.json` (it's necessary to compile TS files).
+
+## tsconfig.js
+
+This file immediately executes the function to generate `tsconfig`.
+
 ## include.js
 
 This file provides a wrapper over node.js `require` function with adding support of layers, which are declared within the `.pzlrrc` file.
@@ -72,3 +80,7 @@ This file provides a bunch of helper gulp tasks.
 ## helpers.js
 
 This file provides a bunch of helper functions to build the project.
+
+## tsnode.js
+
+This files initializes [`ts-node`](https://www.npmjs.com/package/ts-node) package to run tests or execute any ts file in runtime.
