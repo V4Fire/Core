@@ -13,15 +13,18 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 ## v3.84.0 (2022-04-06)
 
-#### :rocket: New Feature
-
-* Added `tsnode` initialization script `build/tsnode`
-
 #### :boom: Breaking Change
 
-* Build `tsconfig` is now a standalone script `build/build-tsconfig`
-* `config` package now uses alias `@config/config`
 * By default, the `ES` flag is set to `ES6` for production builds and `ES2019` for development builds
+* The `config` package now uses an alias `@config/config`
+
+#### :rocket: New Feature
+
+* Added a `tsnode` initialization script `build/tsnode`
+
+#### :house: Internal
+
+* Moved a script to build `.tsconfig` files to a separate file `build/build-tsconfig`
 
 ## v3.83.0 (2022-04-05)
 

@@ -9,6 +9,20 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.84.0 (2022-04-06)
+
+#### :boom: Breaking Change
+
+* The `config` package now uses an alias `@config/config`
+
+#### :rocket: New Feature
+
+* Added a `tsnode` initialization script `build/tsnode`
+
+#### :house: Internal
+
+* Moved a script to build `.tsconfig` files to a separate file `build/build-tsconfig`
+
 ## v3.55.0 (2021-07-24)
 
 #### :rocket: New Feature
