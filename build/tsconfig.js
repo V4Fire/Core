@@ -15,11 +15,11 @@
 require('../lib/core');
 
 /**
- * The task brings a feature to extend one tsconfig.json from another from a different project.
- * Also, this task generates URL-s for the "paths" options of the config.
- * Be sure that you run this task before trying to compile TS files.
+ * Builds the project `.tsconfig` file.
+ * The function brings a feature to extend one `tsconfig.json` from another from a different project.
+ * Also, this function generates URL-s for the `paths` options of the config.
  */
-module.exports = () => {
+module.exports = function buildTSConfig() {
 	const
 		fs = require('fs'),
 		find = require('find-up').sync,
