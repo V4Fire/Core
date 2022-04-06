@@ -58,7 +58,7 @@ const IncludeOptions = {};
  * include('@super/build/i18n', {return: 'source');
  * ```
  */
-module.exports = function init(layers) {
+module.exports = function createInclude(layers) {
 	return function include(src, cwdOrOpts) {
 		const
 			opts = {};

@@ -8,7 +8,7 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-require('config');
+require('@config/config');
 
 /**
  * Initializes the specified gulp instance.
@@ -18,7 +18,7 @@ require('config');
  *
  * @example
  * ```js
- * require('config');
+ * require('@config/config');
  *
  * module.exports = function (gulp = require('gulp')) {
  *   // Include the parent config

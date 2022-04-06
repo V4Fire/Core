@@ -23,13 +23,13 @@ Object.defineProperties(globalThis, {
 
 	API_URL: {
 		get() {
-			return require('config').apiURL();
+			return require('@config/config').apiURL();
 		}
 	},
 
 	isProd: {
 		get() {
-			return require('config').environment === 'production';
+			return require('@config/config').environment === 'production';
 		}
 	},
 

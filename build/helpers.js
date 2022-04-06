@@ -43,7 +43,7 @@ exports.redefineRequire = function redefineRequire() {
 		path = require('upath');
 
 	const
-		{src} = require('config'),
+		{src} = require('@config/config'),
 		{config: pzlr, resolve} = require('@pzlr/build-core');
 
 	const
@@ -57,6 +57,7 @@ exports.redefineRequire = function redefineRequire() {
 		lib = path.join(outputDest, 'node_modules'),
 		deps = pzlr.dependencies;
 
+	// @ts-ignore
 	// eslint-disable-next-line no-global-assign
 	require = (url) => {
 		if (url in cache) {
