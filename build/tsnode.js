@@ -24,7 +24,7 @@ let
 /**
  * Initializes the `ts-node` and `tsconfig-paths` packages
  */
-module.exports = () => {
+module.exports = function initializeTsNode() {
 	if (isInitialized) {
 		return;
 	}
