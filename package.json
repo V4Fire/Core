@@ -51,12 +51,15 @@
     "w3c-xmlserializer": "2.0.0"
   },
   "optionalDependencies": {
+    "@babel/runtime": "7.17.0",
     "@babel/core": "7.17.5",
     "@babel/helpers": "7.17.7",
     "@babel/parser": "7.17.7",
     "@babel/plugin-proposal-decorators": "7.17.2",
     "@babel/plugin-transform-runtime": "7.17.0",
     "@babel/preset-env": "7.16.11",
+    "@babel/template": "7.16.7",
+    "@babel/helper-module-transforms": "7.16.7",
     "@babel/preset-typescript": "7.16.7",
     "@config/config": "npm:config@1.31.0",
     "@pzlr/build-core": "2.13.0",
@@ -67,6 +70,7 @@
     "@types/through2": "2.0.36",
     "@v4fire/config": "1.0.0",
     "del": "6.0.0",
+    "glob": "7.2.0",
     "dotenv": "10.0.0",
     "fake-indexeddb": "3.1.7",
     "find-up": "5.0.0",
