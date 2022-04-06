@@ -19,9 +19,9 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :boom: Breaking Change
 
-* Build `tsconfig` is now a standalone script `build/tsconfig`
+* Build `tsconfig` is now a standalone script `build/build-tsconfig`
 * `config` package now uses alias `@config/config`
-* By default, the `ES` flag is set to `ES6` for production builds and `ES2019` for development builds.
+* By default, the `ES` flag is set to `ES6` for production builds and `ES2019` for development builds
 
 ## v3.83.0 (2022-04-05)
 
