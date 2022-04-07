@@ -34,14 +34,15 @@ export default class Parser {
 	 * @param source
 	 * @param [processors] - list of token processors to apply to the output iterable
 	 */
-	static async*from<T extends Array<TokenProcessor<any>>>(
+	static async*from<T extends Array<TokenProcessor<any>>,
+		R extends T extends [] ?
+			Token :
+			T extends [TokenProcessor<infer L>] ?
+				L :
+				T extends [...infer A, TokenProcessor<infer L>] ? L : unknown>(
 		source: Iterable<string> | AsyncIterable<string>,
 		...processors: T
-	): T extends [] ?
-		AsyncGenerator<Token> :
-		T extends [TokenProcessor<infer R>] ?
-			AsyncGenerator<R> :
-			T extends [...infer A, TokenProcessor<infer R>] ? AsyncGenerator<R> : unknown {
+	): AsyncGenerator<R> {
 
 		const
 			parser = new Parser();
@@ -52,9 +53,9 @@ export default class Parser {
 
 		yield* process(parser.finishChunkProcessing());
 
-		function* process(stream: IterableIterator<any>, currentProcessor: number = 0): IterableIterator<unknown> {
+		function* process(stream: IterableIterator<any>, currentProcessor: number = 0): Generator<R> {
 			if (currentProcessor >= processors.length) {
-				yield* stream;
+				yield* <Generator<R>>stream;
 				return;
 			}
 
