@@ -28,8 +28,8 @@ import { weakMemoizeCache, longMemoizeCache } from 'core/promise/sync/const';
 export function memoize<T = unknown>(keyOrPromise: unknown | PromiseLikeP<T>, promise?: PromiseLikeP<T>): Promise<T> {
 	return new SyncPromise((resolve, reject) => {
 		if (keyOrPromise != null && typeof keyOrPromise === 'object') {
-			if (weakMemoizeCache.has(keyOrPromise!)) {
-				return resolve(weakMemoizeCache.get(keyOrPromise!));
+			if (weakMemoizeCache.has(keyOrPromise)) {
+				return resolve(weakMemoizeCache.get(keyOrPromise));
 			}
 
 		} else if (Object.isPrimitive(keyOrPromise) && longMemoizeCache.has(keyOrPromise)) {
@@ -46,7 +46,7 @@ export function memoize<T = unknown>(keyOrPromise: unknown | PromiseLikeP<T>, pr
 		p
 			.then((val) => {
 				if (keyOrPromise != null && typeof keyOrPromise === 'object') {
-					weakMemoizeCache.set(keyOrPromise!, val);
+					weakMemoizeCache.set(keyOrPromise, val);
 
 				} else {
 					longMemoizeCache.set(keyOrPromise, val);
