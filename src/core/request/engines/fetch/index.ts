@@ -127,7 +127,7 @@ const request: RequestEngine = (params) => {
 							const
 								{done, value: data} = await reader.read();
 
-							if (done || data == null) {
+							if (done) {
 								streamBuffer.close();
 								break;
 							}

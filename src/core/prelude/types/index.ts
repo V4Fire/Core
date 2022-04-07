@@ -44,7 +44,7 @@ function isPlainObject(value: unknown): boolean {
 		return false;
 	}
 
-	const constr = value!.constructor;
+	const constr = value.constructor;
 	// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 	return !constr || constr === Object;
 }

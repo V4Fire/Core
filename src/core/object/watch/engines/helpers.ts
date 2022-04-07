@@ -20,7 +20,7 @@ export function isProxy(value: unknown): value is object {
 		return false;
 	}
 
-	return toOriginalObject in value!;
+	return toOriginalObject in value;
 }
 
 /**
@@ -28,8 +28,8 @@ export function isProxy(value: unknown): value is object {
  * @param value
  */
 export function unwrap(value: unknown): CanUndef<object> {
-	value = value != null && typeof value === 'object' && value![toOriginalObject] || value;
-	return value != null && typeof value === 'object' && !Object.isFrozen(value) ? value! : undefined;
+	value = value != null && typeof value === 'object' && value[toOriginalObject] || value;
+	return value != null && typeof value === 'object' && !Object.isFrozen(value) ? value : undefined;
 }
 
 /**
