@@ -53,7 +53,7 @@ export default class Parser {
 
 		yield* process(parser.finishChunkProcessing());
 
-		function* process(stream: IterableIterator<any>, currentProcessor: number = 0): Generator<R> {
+		function* process(stream: IterableIterator<any>, currentProcessor: number = 0): Generator<any> {
 			if (currentProcessor >= processors.length) {
 				yield* <Generator<R>>stream;
 				return;
