@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.??.?? (2022-??-??)
+
+#### :house: Internal
+
+* Updated dependencies: typescript@4.6.3
+
 ## v3.84.0 (2022-04-06)
 
 #### :boom: Breaking Change
