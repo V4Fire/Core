@@ -1,3 +1,5 @@
+/* eslint-disable no-misleading-character-class */
+
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -5,8 +7,6 @@
  * Released under the MIT license
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
-
-/* eslint-disable no-misleading-character-class */
 
 export const
 	capitalizeCache = Object.createDict<string>(),

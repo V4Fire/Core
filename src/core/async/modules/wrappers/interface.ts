@@ -149,6 +149,5 @@ export interface WrappedAsyncStorageNamespace {
 
 export interface WrappedAsyncStorage extends WrappedAsyncStorageNamespace {
 	/** @see [[AsyncStorage.namespace]] */
-	namespace(name: string, opts: AsyncOptionsForWrappers): WrappedAsyncStorageNamespace;
-	namespace(name: string): WrappedAsyncStorageNamespace;
+	namespace(name: string, opts?: AsyncOptionsForWrappers): WrappedAsyncStorageNamespace;
 }
