@@ -29,21 +29,28 @@ export * from 'core/json/stream/parser/interface';
 
 export default class Parser {
 	/**
+	 * Parses the specified iterable object as a JSON stream and yields tokens via a Generator
+	 * @param source
+	 */
+	static from(source: Iterable<string> | AsyncIterable<string>): AsyncGenerator<Token>;
+
+	/**
 	 * Parses the specified iterable object as a JSON stream and yields tokens or values via a Generator
 	 *
 	 * @param source
 	 * @param [processors] - list of token processors to apply to the output iterable
 	 */
-	static async*from<T extends Array<TokenProcessor<any>>,
-		R extends T extends [] ?
-			Token :
-			T extends [TokenProcessor<infer L>] ?
-				L :
-				T extends [...infer A, TokenProcessor<infer L>] ? L : unknown>(
+	static from<T extends Array<TokenProcessor<any>>>(
 		source: Iterable<string> | AsyncIterable<string>,
 		...processors: T
-	): AsyncGenerator<R> {
+	): T extends [TokenProcessor<infer R>] ?
+		AsyncGenerator<R> :
+		T extends [...infer A, TokenProcessor<infer R>] ? AsyncGenerator<R> : unknown;
 
+	static async*from(
+		source: Iterable<string> | AsyncIterable<string>,
+		...processors: Array<TokenProcessor<unknown>>
+	): AsyncGenerator {
 		const
 			parser = new Parser();
 
@@ -53,9 +60,12 @@ export default class Parser {
 
 		yield* process(parser.finishChunkProcessing());
 
-		function* process(stream: IterableIterator<any>, currentProcessor: number = 0): Generator<any> {
+		function* process(stream: IterableIterator<unknown>, currentProcessor: number = 0): Generator {
 			if (currentProcessor >= processors.length) {
-				yield* <Generator<R>>stream;
+				for (const el of stream) {
+					yield el;
+				}
+
 				return;
 			}
 
@@ -63,7 +73,7 @@ export default class Parser {
 				processor = processors[currentProcessor];
 
 			for (const val of stream) {
-				yield* process(processor.processToken(val), currentProcessor + 1);
+				yield* process(processor.processToken(Object.cast(val)), currentProcessor + 1);
 			}
 
 			if (processor.finishTokenProcessing != null) {
