@@ -1,5 +1,4 @@
-/* eslint-disable max-lines-per-function */
-/* eslint-disable @typescript-eslint/strict-boolean-expressions */
+/* eslint-disable max-lines-per-function, @typescript-eslint/strict-boolean-expressions */
 
 /*!
  * V4Fire Core

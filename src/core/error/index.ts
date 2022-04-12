@@ -20,7 +20,7 @@ export default class BaseError extends Error {
 	/**
 	 * An error that causes the current error
 	 */
-	readonly cause?: Error;
+	override readonly cause?: Error;
 
 	/**
 	 * Internal storage for an error message

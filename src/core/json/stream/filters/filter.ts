@@ -39,7 +39,9 @@ export default class Filter extends Super {
 			const n = Math.min(stackLength, objStackLength);
 			commonLength < n && stack[commonLength] === objStack[commonLength];
 			commonLength++
-		) { }
+		) {
+			// Pass
+		}
 
 		// Close old objects
 		for (let i = objStackLength - 1; i > commonLength; i--) {

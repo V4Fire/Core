@@ -118,7 +118,7 @@ export function intoIter(obj: unknown): IterableIterator<unknown> | AsyncIterabl
 			return iter;
 		}
 
-		return Object.values(obj!).values();
+		return Object.values(obj).values();
 	}
 
 	return [obj].values();

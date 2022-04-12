@@ -123,10 +123,12 @@ const request: RequestEngine = (params) => {
 						reader: ReadableStreamDefaultReader<Uint8Array> = res.body.getReader();
 
 					(async () => {
+						// eslint-disable-next-line no-constant-condition
 						while (true) {
 							const
 								{done, value: data} = await reader.read();
 
+							// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 							if (done || data == null) {
 								streamBuffer.close();
 								break;

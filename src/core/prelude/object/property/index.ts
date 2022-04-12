@@ -124,7 +124,7 @@ extend(Object, 'has', (
 		}
 
 		if (typeof res === 'object') {
-			return key in res!;
+			return key in res;
 		}
 
 		return Object.cast<Dictionary>(res)[key] !== undefined;
