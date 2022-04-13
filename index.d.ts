@@ -2646,7 +2646,7 @@ interface Number {
 	isInteger(): boolean;
 
 	/**
-	 * Returns true if the number is float
+	 * Returns true if the number is a float
 	 */
 	isFloat(): boolean;
 
@@ -2809,7 +2809,7 @@ interface RegExpConstructor {
 	test(rgxp: RegExp): (str: string) => boolean;
 
 	/**
-	 * Returns a curried version of `inverted` RegExp.test
+	 * Returns a curried version of `inverted` `RegExp.test`
 	 * @param str
 	 */
 	test(str: string): (rgxp: RegExp) => boolean;
@@ -2892,7 +2892,7 @@ interface DateConstructor {
 	 *  1. another date object
 	 *  1. number of milliseconds (if the number is integer)
 	 *  1. number of seconds (if the number is float)
-	 *  1. string pattern by using the native Date.parse with some polyfills
+	 *  1. string pattern by using the native `Date.parse` with some polyfills
 	 *  1. string aliases:
 	 *     1. `'now'` - is an alias for the now date
 	 *     1. `'today'` - is an alias for the beginning of the today
