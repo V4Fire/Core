@@ -214,6 +214,13 @@ type IterableType<T extends Iterable<any> | AsyncIterable<any>> =
 		T extends AsyncIterable<infer V> ? V : T;
 
 /**
+ * Creates an interface based on the specified type or interface but every property can be edited
+ */
+type Writable<T> = {
+	-readonly [K in keyof T]: T[K];
+};
+
+/**
  * Overrides properties of the specified type or interface.
  * Don't use this helper if you simply extend one type from another, i.e. without overriding properties.
  *
