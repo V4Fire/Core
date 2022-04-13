@@ -11,7 +11,11 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-## v3.??.?? (2022-??-??)
+## v3.85.0 (2022-04-13)
+
+#### :rocket: New Feature
+
+* Added a new TS type-function `Writable`
 
 #### :house: Internal
 
