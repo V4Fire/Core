@@ -437,14 +437,14 @@ function request<D = unknown>(
 		requestPromise['emitter'] = emitter;
 
 		void Object.defineProperty(requestPromise, 'data', {
-			enumerable: true,
 			configurable: true,
+			enumerable: true,
 			get: () => requestPromise.then((res: RequestResponseObject) => res.data)
 		});
 
 		void Object.defineProperty(requestPromise, 'stream', {
-			enumerable: true,
 			configurable: true,
+			enumerable: true,
 			get: () => requestPromise.then((res: RequestResponseObject) => res.stream)
 		});
 

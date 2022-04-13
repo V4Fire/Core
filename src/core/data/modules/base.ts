@@ -400,8 +400,8 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 			compositionRes['emitter'] = new EventEmitter();
 
 			void Object.defineProperty(compositionRes, 'data', {
-				enumerable: true,
 				configurable: true,
+				enumerable: true,
 				get: () => compositionRes.then((res: RequestResponseObject) => res.data)
 			});
 
@@ -412,8 +412,8 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 			});
 
 			void Object.defineProperty(compositionRes, 'stream', {
-				enumerable: true,
 				configurable: true,
+				enumerable: true,
 				get: unimplementedStream
 			});
 

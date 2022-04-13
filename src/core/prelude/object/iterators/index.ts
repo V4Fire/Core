@@ -70,8 +70,8 @@ extend(Object, 'forEach', (
 
 			if (passDescriptor) {
 				iterVal = {
-					enumerable: true,
 					configurable: false,
+					enumerable: true,
 					writable: false,
 					value: el
 				};

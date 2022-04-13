@@ -457,8 +457,8 @@ export function setWatchAccessors(
 
 	if (!descriptors || descriptors.configurable) {
 		Object.defineProperty(proxy, key, {
-			enumerable: true,
 			configurable: true,
+			enumerable: true,
 
 			get(): unknown {
 				const

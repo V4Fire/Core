@@ -208,8 +208,8 @@ export default function proxyClone<T>(obj: T): T {
 				} else {
 					Object.defineProperty(receiver, key, {
 						configurable: true,
-						writable: true,
 						enumerable: true,
+						writable: true,
 						value: val
 					});
 				}
@@ -286,9 +286,9 @@ export default function proxyClone<T>(obj: T): T {
 
 						set: (value) => {
 							Object.defineProperty(resolvedTarget, key, {
+								configurable: true,
 								enumerable: true,
 								writable: true,
-								configurable: true,
 								value
 							});
 						},

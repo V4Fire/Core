@@ -133,8 +133,8 @@ export default class V4Headers {
 		}
 
 		Object.defineProperty(this, normalizedName, {
-			enumerable: true,
 			configurable: true,
+			enumerable: true,
 			writable: true,
 			value: this.normalizeHeaderValue(value)
 		});

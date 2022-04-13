@@ -139,8 +139,8 @@ export default function makeLazy<T extends ClassConstructor | AnyFunction>(
 					}
 
 					Object.defineProperty(proxy, key, {
-						enumerable: true,
 						configurable: true,
+						enumerable: true,
 
 						get: () => proxy[store],
 

@@ -636,8 +636,8 @@ function watch<T extends object>(
 			}
 
 			Object.defineProperty(tiedWith, key, {
-				enumerable: true,
 				configurable: true,
+				enumerable: true,
 
 				get(): unknown {
 					return proxy[key];

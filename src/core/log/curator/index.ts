@@ -57,6 +57,7 @@ export default function log(context: string | LogMessageOptions, ...details: unk
 			'details',
 
 			{
+				configurable: true,
 				enumerable: true,
 
 				get(): unknown[] {
