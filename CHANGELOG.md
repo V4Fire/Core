@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.85.0 (2022-04-14)
+
+#### :house: Internal
+
+* Downgraded TS to `4.6.2`
+
 ## v3.85.0 (2022-04-13)
 
 #### :rocket: New Feature
