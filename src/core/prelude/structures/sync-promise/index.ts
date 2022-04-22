@@ -72,25 +72,9 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 	 *
 	 * @param values
 	 */
-	static all<T1, T2, T3, T4, T5>(
-		values: [Value<T1>, Value<T2>, Value<T3>, Value<T4>, Value<T5>]
-	): SyncPromise<[T1, T2, T3, T4, T5]>;
-
-	static all<T1, T2, T3, T4>(
-		values: [Value<T1>, Value<T2>, Value<T3>, Value<T4>]
-	): SyncPromise<[T1, T2, T3, T4]>;
-
-	static all<T1, T2, T3>(
-		values: [Value<T1>, Value<T2>, Value<T3>]
-	): SyncPromise<[T1, T2, T3]>;
-
-	static all<T1, T2>(
-		values: [Value<T1>, Value<T2>]
-	): SyncPromise<[T1, T2]>;
-
-	static all<T1>(
-		values: [Value<T1>]
-	): SyncPromise<[T1]>;
+	static all<T extends any[] | []>(
+		values: T
+	): SyncPromise<{[K in keyof T]: Awaited<T[K]>}>;
 
 	static all<T extends Iterable<Value>>(
 		values: T
@@ -145,43 +129,9 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 	 *
 	 * @param values
 	 */
-	static allSettled<T1, T2, T3, T4, T5>(
-		values: [Value<T1>, Value<T2>, Value<T3>, Value<T4>, Value<T5>]
-	): SyncPromise<[
-		PromiseSettledResult<T1>,
-		PromiseSettledResult<T2>,
-		PromiseSettledResult<T3>,
-		PromiseSettledResult<T4>,
-		PromiseSettledResult<T5>
-	]>;
-
-	static allSettled<T1, T2, T3, T4>(
-		values: [Value<T1>, Value<T2>, Value<T3>, Value<T4>]
-	): SyncPromise<[
-		PromiseSettledResult<T1>,
-		PromiseSettledResult<T2>,
-		PromiseSettledResult<T3>,
-		PromiseSettledResult<T4>
-	]>;
-
-	static allSettled<T1, T2, T3>(
-		values: [Value<T1>, Value<T2>, Value<T3>]
-	): SyncPromise<[
-		PromiseSettledResult<T1>,
-		PromiseSettledResult<T2>,
-		PromiseSettledResult<T3>
-	]>;
-
-	static allSettled<T1, T2>(
-		values: [Value<T1>, Value<T2>]
-	): SyncPromise<[
-		PromiseSettledResult<T1>,
-		PromiseSettledResult<T2>
-	]>;
-
-	static allSettled<T1>(
-		values: [Value<T1>]
-	): SyncPromise<[PromiseSettledResult<T1>]>;
+	static allSettled<T extends any[] | []>(
+		values: T
+	): SyncPromise<{[K in keyof T]: PromiseSettledResult<Awaited<T[K]>>}>;
 
 	static allSettled<T extends Iterable<Value>>(
 		values: T
