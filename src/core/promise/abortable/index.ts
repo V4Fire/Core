@@ -140,7 +140,7 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 	): AbortablePromise<Array<T extends Iterable<Value<infer V>> ? V : unknown>> {
 		return new AbortablePromise((resolve, reject, onAbort) => {
 			const
-				promises = <AbortablePromise[]>[];
+				promises: AbortablePromise[] = [];
 
 			for (const el of values) {
 				promises.push(AbortablePromise.resolve(el, parent));
@@ -212,7 +212,7 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 	> {
 		return new AbortablePromise((resolve, _, onAbort) => {
 			const
-				promises = <AbortablePromise[]>[];
+				promises: AbortablePromise[] = [];
 
 			for (const el of values) {
 				promises.push(AbortablePromise.resolve(el, parent));
@@ -279,7 +279,7 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 	): AbortablePromise<T extends Iterable<Value<infer V>> ? V : unknown> {
 		return new AbortablePromise((resolve, reject, onAbort) => {
 			const
-				promises = <AbortablePromise[]>[];
+				promises: AbortablePromise[] = [];
 
 			for (const el of values) {
 				promises.push(AbortablePromise.resolve(el, parent));
@@ -316,7 +316,7 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 	): AbortablePromise<T extends Iterable<Value<infer V>> ? V : unknown> {
 		return new AbortablePromise((resolve, reject, onAbort) => {
 			const
-				promises = <AbortablePromise[]>[];
+				promises: AbortablePromise[] = [];
 
 			for (const el of values) {
 				promises.push(AbortablePromise.resolve(el, parent));
@@ -334,7 +334,7 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 			});
 
 			const
-				errors = <Error[]>[];
+				errors: Error[] = [];
 
 			for (let i = 0; i < promises.length; i++) {
 				promises[i].then(resolve, onReject);

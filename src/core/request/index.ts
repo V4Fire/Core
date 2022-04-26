@@ -218,7 +218,7 @@ function request<D = unknown>(
 
 				resolve((() => {
 					const
-						res = <unknown[]>[];
+						res: unknown[] = [];
 
 					for (let j = i; j < middlewareResults.length; j++) {
 						const

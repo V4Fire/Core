@@ -99,7 +99,7 @@ export default class RequestContext<D = unknown> extends Super<D> {
 		function resolveDomains({def = [], slice = 0, join = true}: DomainParams = {}) {
 			const
 				list = Array.from({length: 6}, (el, i) => i + 1).slice(slice).reverse(),
-				url = <string[]>[];
+				url: string[] = [];
 
 			for (let i = 0; i < list.length; i++) {
 				const

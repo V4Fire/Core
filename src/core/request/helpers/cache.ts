@@ -30,7 +30,7 @@ export function dropCache(): void {
  */
 export function getRequestKey<T>(url: string, params?: NormalizedCreateRequestOptions<T>): string {
 	const
-		plainHeaders = <string[][]>[];
+		plainHeaders: string[][] = [];
 
 	let
 		bodyKey = '';

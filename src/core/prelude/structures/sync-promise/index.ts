@@ -85,7 +85,7 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 	): SyncPromise<Array<T extends Iterable<Value<infer V>> ? V : unknown>> {
 		return new SyncPromise((resolve, reject) => {
 			const
-				promises = <SyncPromise[]>[];
+				promises: SyncPromise[] = [];
 
 			for (const el of values) {
 				promises.push(SyncPromise.resolve(el));
@@ -142,7 +142,7 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 	): SyncPromise<Array<T extends Iterable<Value<infer V>> ? PromiseSettledResult<V> : PromiseSettledResult<unknown>>> {
 		return new SyncPromise((resolve) => {
 			const
-				promises = <SyncPromise[]>[];
+				promises: SyncPromise[] = [];
 
 			for (const el of values) {
 				promises.push(SyncPromise.resolve(el));
@@ -200,7 +200,7 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 	): SyncPromise<T extends Iterable<Value<infer V>> ? V : unknown> {
 		return new SyncPromise((resolve, reject) => {
 			const
-				promises = <SyncPromise[]>[];
+				promises: SyncPromise[] = [];
 
 			for (const el of values) {
 				promises.push(SyncPromise.resolve(el));
@@ -230,7 +230,7 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 	): SyncPromise<T extends Iterable<Value<infer V>> ? V : unknown> {
 		return new SyncPromise((resolve, reject) => {
 			const
-				promises = <SyncPromise[]>[];
+				promises: SyncPromise[] = [];
 
 			for (const el of values) {
 				promises.push(SyncPromise.resolve(el));
@@ -242,7 +242,7 @@ export default class SyncPromise<T = unknown> implements Promise<T> {
 			}
 
 			const
-				errors = <Error[]>[];
+				errors: Error[] = [];
 
 			for (let i = 0; i < promises.length; i++) {
 				promises[i].then(resolve, onReject);

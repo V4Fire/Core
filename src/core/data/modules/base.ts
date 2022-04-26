@@ -312,8 +312,8 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 		if (extraProviders) {
 			const
 				composition = <D & object>{},
-				tasks = <Array<AbortablePromise<RequestResponseObject>>>[],
-				cloneTasks = <Function[]>[];
+				tasks: Array<AbortablePromise<RequestResponseObject>> = [],
+				cloneTasks: Function[] = [];
 
 			for (let keys = Object.keys(extraProviders), i = 0; i < keys.length; i++) {
 				const

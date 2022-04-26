@@ -274,7 +274,7 @@ function watch<T extends object>(
 	if (handler != null && unwrappedObj != null) {
 		let
 			dynamicValStore,
-			argsQueue = <any[]>[];
+			argsQueue: any[] = [];
 
 		wrappedHandler = (value, oldValue, info) => {
 			const
@@ -562,7 +562,7 @@ function watch<T extends object>(
 			// Check if the mutation matches by prefixes/postfixes with another properties
 			if (pref || post) {
 				const
-					tiedPath = <unknown[]>[];
+					tiedPath: unknown[] = [];
 
 				let
 					dynamic = false;

@@ -54,7 +54,7 @@ export class ConfigurableMiddleware implements LogMiddleware {
 
 		if (this.queue.length > 0) {
 			const
-				queuedEvents = <LogEvent[]>[];
+				queuedEvents: LogEvent[] = [];
 
 			for (let o = this.queue, i = 0; i < o.length; i++) {
 				const
@@ -74,7 +74,7 @@ export class ConfigurableMiddleware implements LogMiddleware {
 
 		if (Array.isArray(events)) {
 			const
-				filteredEvents = <LogEvent[]>[];
+				filteredEvents: LogEvent[] = [];
 
 			for (let o = events, i = 0; i < o.length; i++) {
 				const
