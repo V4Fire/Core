@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.86.0 (2022-04-26)
+
+#### :rocket: New Feature
+
+* Added a new feature of hook handlers `core/lazy`
+
 ## v3.85.1 (2022-04-14)
 
 #### :house: Internal

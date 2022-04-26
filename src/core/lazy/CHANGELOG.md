@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.86.0 (2022-04-26)
+
+#### :rocket: New Feature
+
+* Added a new feature of hook handlers
+
 ## v3.74.3 (2022-01-13)
 
 #### :house: Internal
