@@ -25,7 +25,7 @@ import type { ObjectScheme, Hooks } from 'core/lazy/interface';
 export default function makeLazy<T extends ClassConstructor | AnyFunction>(
 	constructor: T,
 	scheme?: ObjectScheme,
-	hooks?: Hooks
+	hooks?: Hooks<T extends ClassConstructor ? InstanceType<T> : T extends (...args: infer A) => infer R ? R : object>
 ):
 	T extends ClassConstructor ?
 		T & InstanceType<T> :
@@ -121,7 +121,7 @@ export default function makeLazy<T extends ClassConstructor | AnyFunction>(
 							});
 
 							if (contexts.length > 0 && hooks?.call != null) {
-								return hooks.call[fullPath.join('.')]?.(contexts, ...args);
+								return hooks.call[fullPath.join('.')]?.(Object.cast(contexts), ...args);
 							}
 						},
 
@@ -132,7 +132,7 @@ export default function makeLazy<T extends ClassConstructor | AnyFunction>(
 							});
 
 							if (contexts.length > 0 && hooks?.set != null) {
-								hooks.set[fullPath.join('.')]?.(contexts, fn);
+								hooks.set[fullPath.join('.')]?.(Object.cast(contexts), fn);
 							}
 						}
 					});
@@ -162,7 +162,7 @@ export default function makeLazy<T extends ClassConstructor | AnyFunction>(
 								path = fullPath.join('.');
 
 							if (contexts.length > 0 && hooks?.get?.[path] != null) {
-								return hooks.get[path]!(contexts);
+								return hooks.get[path]!(Object.cast(contexts));
 							}
 
 							return proxy[store];
@@ -175,7 +175,7 @@ export default function makeLazy<T extends ClassConstructor | AnyFunction>(
 							});
 
 							if (contexts.length > 0 && hooks?.set != null) {
-								hooks.set[fullPath.join('.')]?.(contexts, val);
+								hooks.set[fullPath.join('.')]?.(Object.cast(contexts), val);
 							}
 
 							if (
@@ -188,7 +188,7 @@ export default function makeLazy<T extends ClassConstructor | AnyFunction>(
 							}
 
 							const childProxy = Object.create(val);
-							setActions(childProxy, <Exclude<typeof scheme, Primitive>>scheme, fullPath);
+							setActions(childProxy, Object.cast(scheme), fullPath);
 							proxy[store] = childProxy;
 						}
 					});

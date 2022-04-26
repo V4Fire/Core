@@ -8,22 +8,22 @@
 
 export type ObjectScheme = Dictionary<
 	ObjectScheme | Function | FunctionConstructor | Primitive
->;
+	>;
 
-export interface GetHook {
-	(contexts: object[]): void;
+export interface GetHook<T extends object = object> {
+	(contexts: T[]): void;
 }
 
-export interface SetHook {
-	(contexts: object[], value: unknown): void;
+export interface SetHook<T extends object = object> {
+	(contexts: T[], value: unknown): void;
 }
 
-export interface CallHook {
-	(contexts: object[], ...args: unknown[]): void;
+export interface CallHook<T extends object = object> {
+	(contexts: T[], ...args: unknown[]): void;
 }
 
-export interface Hooks {
-	get?: Dictionary<GetHook>;
-	set?: Dictionary<SetHook>;
-	call?: Dictionary<CallHook>;
+export interface Hooks<T extends object = object> {
+	get?: Dictionary<GetHook<T>>;
+	set?: Dictionary<SetHook<T>>;
+	call?: Dictionary<CallHook<T>>;
 }
