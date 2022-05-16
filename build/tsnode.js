@@ -15,7 +15,8 @@ const
 	tsPaths = require('tsconfig-paths');
 
 const
-	path = require('upath');
+	path = require('upath'),
+	Module = require('module');
 
 let
 	isInitialized = false;
@@ -46,6 +47,22 @@ module.exports = function initTsNode() {
 		baseUrl: tsConfig.compilerOptions.baseUrl,
 		paths: normalizePaths(tsConfig.compilerOptions.paths),
 		addMatchAll: false
+	});
+
+	const
+		// @ts-ignore
+		currentVal = Module._resolveFilename;
+
+	// Set a hook to prevent overwriting the path resolver function
+	// For example, PW overrides _resolveFilename with its own version, which does not work correctly
+	Object.defineProperty(Module, '_resolveFilename', {
+		get() {
+			return currentVal;
+		},
+
+		set() {
+			// ...
+		}
 	});
 
 	tsNode.register({
