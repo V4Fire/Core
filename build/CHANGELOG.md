@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.86.2 (2022-05-16)
+
+#### :bug: Bug Fix
+
+* Fixed an issues with `Module._resolveFilename` was overwritten by the `playwright`
+
 ## v3.84.0 (2022-04-06)
 
 #### :boom: Breaking Change
