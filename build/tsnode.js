@@ -55,6 +55,7 @@ module.exports = function initTsNode() {
 
 	// Set a hook to prevent overwriting the path resolver function
 	// For example, PW overrides _resolveFilename with its own version, which does not work correctly
+	// PW also does not have an option to disable overwritten
 	Object.defineProperty(Module, '_resolveFilename', {
 		get() {
 			return currentVal;
