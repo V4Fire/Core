@@ -11,7 +11,7 @@
  * @packageDocumentation
  */
 
-import type { ObjectScheme } from 'core/lazy/interface';
+import type { ObjectScheme, Hooks } from 'core/lazy/interface';
 
 /**
  * Creates a new function based on the passed function or class and returns it.
@@ -19,18 +19,21 @@ import type { ObjectScheme } from 'core/lazy/interface';
  * The queue will drain after invoking the created function.
  *
  * @param constructor
- * @param scheme
+ * @param [scheme] - additional scheme of the structure to create
+ * @param [hooks] - dictionary of hook handlers
  */
 export default function makeLazy<T extends ClassConstructor | AnyFunction>(
 	constructor: T,
-	scheme?: ObjectScheme
+	scheme?: ObjectScheme,
+	hooks?: Hooks<T extends ClassConstructor ? InstanceType<T> : T extends (...args: infer A) => infer R ? R : object>
 ):
 	T extends ClassConstructor ?
 		T & InstanceType<T> :
 		T extends (...args: infer A) => infer R ? {(...args: A): R; new (...args: A): R} & R : never {
 
 	const
-		actions = <Function[]>[];
+		contexts: object[] = [],
+		actions: Function[] = [];
 
 	const mergedScheme = {
 		...getSchemeFromProto(constructor.prototype),
@@ -51,6 +54,10 @@ export default function makeLazy<T extends ClassConstructor | AnyFunction>(
 
 		} else {
 			ctx = constructor.call(this, ...args);
+		}
+
+		if (hooks != null) {
+			contexts.push(ctx);
 		}
 
 		actions.forEach((fn) => {
@@ -112,6 +119,10 @@ export default function makeLazy<T extends ClassConstructor | AnyFunction>(
 
 								return obj[key](...args);
 							});
+
+							if (contexts.length > 0 && hooks?.call != null) {
+								return hooks.call[fullPath.join('.')]?.(Object.cast(contexts), ...args);
+							}
 						},
 
 						set: (fn) => {
@@ -119,6 +130,10 @@ export default function makeLazy<T extends ClassConstructor | AnyFunction>(
 								Object.set(this, fullPath, fn);
 								return fn;
 							});
+
+							if (contexts.length > 0 && hooks?.set != null) {
+								hooks.set[fullPath.join('.')]?.(Object.cast(contexts), fn);
+							}
 						}
 					});
 
@@ -139,16 +154,29 @@ export default function makeLazy<T extends ClassConstructor | AnyFunction>(
 					}
 
 					Object.defineProperty(proxy, key, {
-						enumerable: true,
 						configurable: true,
+						enumerable: true,
 
-						get: () => proxy[store],
+						get: () => {
+							const
+								path = fullPath.join('.');
+
+							if (contexts.length > 0 && hooks?.get?.[path] != null) {
+								return hooks.get[path]!(Object.cast(contexts));
+							}
+
+							return proxy[store];
+						},
 
 						set: (val) => {
 							actions.push(function setter(this: object) {
 								Object.set(this, fullPath, val);
 								return val;
 							});
+
+							if (contexts.length > 0 && hooks?.set != null) {
+								hooks.set[fullPath.join('.')]?.(Object.cast(contexts), val);
+							}
 
 							if (
 								Object.isPrimitive(val) ||
@@ -160,7 +188,7 @@ export default function makeLazy<T extends ClassConstructor | AnyFunction>(
 							}
 
 							const childProxy = Object.create(val);
-							setActions(childProxy, <Exclude<typeof scheme, Primitive>>scheme, fullPath);
+							setActions(childProxy, Object.cast(scheme), fullPath);
 							proxy[store] = childProxy;
 						}
 					});

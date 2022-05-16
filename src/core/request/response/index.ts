@@ -606,7 +606,7 @@ export default class Response<
 	 * Parses the response data stream as an ArrayBuffer chunks and yields them via an async iterator
 	 */
 	@once
-	stream(): AsyncIterableIterator<ArrayBuffer> {
+	stream(): AsyncIterableIterator<ArrayBuffer | undefined> {
 		const
 			iter = this[Symbol.asyncIterator]();
 

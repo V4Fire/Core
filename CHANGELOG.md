@@ -11,6 +11,34 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.86.1 (2022-04-26)
+
+#### :house: Internal
+
+* Improved TS type inferring `core/lazy`
+
+## v3.86.0 (2022-04-26)
+
+#### :rocket: New Feature
+
+* Added a new feature of hook handlers `core/lazy`
+
+## v3.85.1 (2022-04-14)
+
+#### :house: Internal
+
+* Downgraded TS to `4.6.2`
+
+## v3.85.0 (2022-04-13)
+
+#### :rocket: New Feature
+
+* Added a new TS type-function `Writable`
+
+#### :house: Internal
+
+* Updated dependencies: typescript@4.6.3
+
 ## v3.84.0 (2022-04-06)
 
 #### :boom: Breaking Change

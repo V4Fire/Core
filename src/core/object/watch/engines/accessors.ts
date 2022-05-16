@@ -283,9 +283,9 @@ export function set(obj: object, path: WatchPath, value: unknown, handlers: Watc
 					return;
 				}
 
-				ref![muteLabel] = true;
-				set(ref!, [key], val, handlers);
-				ref![muteLabel] = false;
+				ref[muteLabel] = true;
+				set(ref, [key], val, handlers);
+				ref[muteLabel] = false;
 			}
 		});
 	}
@@ -457,8 +457,8 @@ export function setWatchAccessors(
 
 	if (!descriptors || descriptors.configurable) {
 		Object.defineProperty(proxy, key, {
-			enumerable: true,
 			configurable: true,
+			enumerable: true,
 
 			get(): unknown {
 				const

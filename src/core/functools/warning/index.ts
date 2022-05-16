@@ -71,7 +71,7 @@ export function warn<T extends Function>(
 			wasMovedOrRenamed = p.movedTo != null || p.renamedTo != null;
 
 		const
-			msg = <string[]>[];
+			msg: string[] = [];
 
 		switch (p.context) {
 			case 'deprecated':

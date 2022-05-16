@@ -73,14 +73,14 @@ export default class Provider extends DefaultProvider {
 		res.emitter = from.emitter;
 
 		void Object.defineProperty(res, 'data', {
-			enumerable: true,
 			configurable: true,
+			enumerable: true,
 			get: () => from.data
 		});
 
 		void Object.defineProperty(res, 'stream', {
-			enumerable: true,
 			configurable: true,
+			enumerable: true,
 			get: () => from.stream
 		});
 

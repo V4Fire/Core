@@ -86,9 +86,9 @@ export default class RequestContext<D = unknown> extends Super<D> {
 		};
 
 		const
-			encoders = <WrappedEncoder[]>[],
-			decoders = <WrappedDecoder[]>[],
-			streamDecoders = <WrappedStreamDecoder[]>[];
+			encoders: WrappedEncoder[] = [],
+			decoders: WrappedDecoder[] = [],
+			streamDecoders: WrappedStreamDecoder[] = [];
 
 		Object.forEach(merge(ctx.encoders), (el, key) => {
 			encoders.push(wrapProcessor('encoders', el, key));

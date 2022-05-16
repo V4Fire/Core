@@ -35,7 +35,7 @@ export class LogPipeline {
 
 		if (Array.isArray(events)) {
 			const
-				filteredEvents = <LogEvent[]>[];
+				filteredEvents: LogEvent[] = [];
 
 			for (let i = 0; i < events.length; i++) {
 				const

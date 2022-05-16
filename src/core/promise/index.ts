@@ -94,8 +94,8 @@ export function createControllablePromise(
 
 	if (!('isPending' in promise)) {
 		Object.defineProperty(promise, 'isPending', {
-			enumerable: true,
 			configurable: true,
+			enumerable: true,
 
 			get() {
 				return isPending;

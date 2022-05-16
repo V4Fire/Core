@@ -12,7 +12,7 @@ export enum State {
 	rejected
 }
 
-export type Value<T = unknown> = PromiseLike<T> | T;
+export type Value<T = unknown> = CanPromiseLike<T>;
 export type ExecutableValue<T = unknown> = (() => T) | Value<T>;
 
 export interface ConstrResolveHandler<T = unknown> {

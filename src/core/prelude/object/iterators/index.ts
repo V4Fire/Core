@@ -70,8 +70,8 @@ extend(Object, 'forEach', (
 
 			if (passDescriptor) {
 				iterVal = {
-					enumerable: true,
 					configurable: false,
+					enumerable: true,
 					writable: false,
 					value: el
 				};
@@ -151,12 +151,12 @@ extend(Object, 'forEach', (
 	}
 
 	const
-		keys = Object[p.withNonEnumerables ? 'getOwnPropertyNames' : 'keys'](obj!);
+		keys = Object[p.withNonEnumerables ? 'getOwnPropertyNames' : 'keys'](obj);
 
 	for (let i = 0; i < keys.length; i++) {
 		const
 			key = keys[i],
-			el = passDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : obj![key];
+			el = passDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : obj[key];
 
 		cb(el, key, obj);
 	}

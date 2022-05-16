@@ -312,8 +312,8 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 		if (extraProviders) {
 			const
 				composition = <D & object>{},
-				tasks = <Array<AbortablePromise<RequestResponseObject>>>[],
-				cloneTasks = <Function[]>[];
+				tasks: Array<AbortablePromise<RequestResponseObject>> = [],
+				cloneTasks: Function[] = [];
 
 			for (let keys = Object.keys(extraProviders), i = 0; i < keys.length; i++) {
 				const
@@ -399,25 +399,25 @@ export default abstract class Provider extends ParamsProvider implements IProvid
 
 			compositionRes['emitter'] = new EventEmitter();
 
-			Object.defineProperty(compositionRes, 'data', {
-				enumerable: true,
+			void Object.defineProperty(compositionRes, 'data', {
 				configurable: true,
+				enumerable: true,
 				get: () => compositionRes.then((res: RequestResponseObject) => res.data)
 			});
 
-			const unimplementStream = unimplement.bind(null, {
+			const unimplementedStream = unimplement.bind(null, {
 				name: 'Symbol.asyncIterator',
 				type: 'property',
 				notice: "Requests with extra providers can't be streamed"
 			});
 
-			Object.defineProperty(compositionRes, 'stream', {
-				enumerable: true,
+			void Object.defineProperty(compositionRes, 'stream', {
 				configurable: true,
-				get: unimplementStream
+				enumerable: true,
+				get: unimplementedStream
 			});
 
-			compositionRes[Symbol.asyncIterator] = unimplementStream;
+			compositionRes[Symbol.asyncIterator] = unimplementedStream;
 
 			return Object.cast(compositionRes);
 		}
