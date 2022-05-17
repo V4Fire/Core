@@ -49,18 +49,17 @@ module.exports = function initTsNode() {
 		addMatchAll: false
 	});
 
+	console.log('`Module._resolveFilename` will be locked and cannot be overwritten in the future');
+
 	const
-		// @ts-ignore
-		currentVal = Module._resolveFilename;
+		resolver = Module['_resolveFilename'];
 
-	console.log('Module._resolveFilename will be locked and cannot be overwritten now');
-
-	// Set a hook to prevent overwriting the path resolver function
-	// For example, PW overrides _resolveFilename with its own version, which does not work correctly
-	// PW also does not have an option to disable overwritten
+	// Sets a hook to prevent overwriting the path resolver function.
+	// For example, PW overrides `_resolveFilename` with its own version, which does not work correctly.
+	// Unfortunately, PW does not have any option to disable this behavior.
 	Object.defineProperty(Module, '_resolveFilename', {
 		get() {
-			return currentVal;
+			return resolver;
 		},
 
 		set() {
