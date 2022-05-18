@@ -15,7 +15,8 @@ const
 	tsPaths = require('tsconfig-paths');
 
 const
-	path = require('upath');
+	path = require('upath'),
+	Module = require('module');
 
 let
 	isInitialized = false;
@@ -46,6 +47,24 @@ module.exports = function initTsNode() {
 		baseUrl: tsConfig.compilerOptions.baseUrl,
 		paths: normalizePaths(tsConfig.compilerOptions.paths),
 		addMatchAll: false
+	});
+
+	console.log('`Module._resolveFilename` will be locked and cannot be overwritten in the future');
+
+	const
+		resolver = Module['_resolveFilename'];
+
+	// Sets a hook to prevent overwriting the path resolver function.
+	// For example, PW overrides `_resolveFilename` with its own version, which does not work correctly.
+	// Unfortunately, PW does not have any option to disable this behavior.
+	Object.defineProperty(Module, '_resolveFilename', {
+		get() {
+			return resolver;
+		},
+
+		set() {
+			// ...
+		}
 	});
 
 	tsNode.register({
