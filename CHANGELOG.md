@@ -11,11 +11,11 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-## v3.??.?? (????-??-??)
+## v3.86.2 (2022-05-18)
 
 #### :bug: Bug Fix
 
-* Fixed an issues with `Module._resolveFilename` was overwritten by the `playwright` `build/tsnode`
+* Fixed an issue with `Module._resolveFilename` was overwritten by Playwright `build/tsnode`
 
 ## v3.86.1 (2022-04-26)
 
