@@ -469,7 +469,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	 */
 	iterable<T>(
 		iterable: Iterable<T> | AsyncIterable<T>,
-		opts: AsyncOptions
+		opts?: AsyncOptions
 	): AsyncIterable<T> | AsyncIterable<T> & Iterable<T> {
 		const
 			baseIterator = this.getBaseIterator(iterable);
