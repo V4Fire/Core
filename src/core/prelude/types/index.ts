@@ -153,9 +153,17 @@ extend(Object, 'isIterator', (value) => {
 	return typeof value.next === 'function';
 });
 
+/** @see [[ObjectConstructor.isIterableIterator]] */
+extend(Object, 'isIterableIterator', (value) =>
+	Object.isIterator(value) && Object.isIterable(value));
+
 /** @see [[ObjectConstructor.isAsyncIterator]] */
 extend(Object, 'isAsyncIterator', (value) =>
 	Object.isIterator(value) && Object.isAsyncIterable(value));
+
+/** @see [[ObjectConstructor.isAnyIterator]] */
+extend(Object, 'isAnyIterator', (value) =>
+	Object.isIterator(value) || Object.isAsyncIterator(value));
 
 /** @see [[ObjectConstructor.isIterable]] */
 extend(Object, 'isIterable', (value) => {
@@ -178,6 +186,10 @@ extend(Object, 'isAsyncIterable', (value) => {
 		typeof Symbol === 'function' ? value[Symbol.asyncIterator] : typeof value['@@asyncIterator'] === 'function'
 	);
 });
+
+/** @see [[ObjectConstructor.isAnyIterable]] */
+extend(Object, 'isAnyIterable', (value) =>
+	Object.isIterable(value) || Object.isAsyncIterable(value));
 
 /** @see [[ObjectConstructor.isPromise]] */
 extend(Object, 'isPromise', (value) => {
