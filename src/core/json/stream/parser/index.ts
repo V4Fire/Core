@@ -32,7 +32,7 @@ export default class Parser {
 	 * Parses the specified iterable object as a JSON stream and yields tokens via a Generator
 	 * @param source
 	 */
-	static from(source: Iterable<string> | AsyncIterable<string>): AsyncGenerator<Token>;
+	static from(source: AnyIterable<string>): AsyncGenerator<Token>;
 
 	/**
 	 * Parses the specified iterable object as a JSON stream and yields tokens or values via a Generator
@@ -48,7 +48,7 @@ export default class Parser {
 		T extends [...infer A, TokenProcessor<infer R>] ? AsyncGenerator<R> : unknown;
 
 	static async*from(
-		source: Iterable<string> | AsyncIterable<string>,
+		source: AnyIterable<string>,
 		...processors: Array<TokenProcessor<unknown>>
 	): AsyncGenerator {
 		const

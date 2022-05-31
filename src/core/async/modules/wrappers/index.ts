@@ -49,7 +49,7 @@ export * from 'core/async/interface';
 export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	/**
 	 * The wrapper takes a link to the "raw" data provider and returns a new object that based
-	 * on the original, but all async methods and properties are wrapped by Async.
+	 * on the original, but all asynchronous methods and properties are wrapped by Async.
 	 * Notice, the wrapped methods can take additional Async parameters, like group or label.
 	 * If you don't provide a group, it will be taken from the provider name.
 	 *
@@ -147,7 +147,7 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 
 	/**
 	 * The wrapper takes a link to the "raw" event emitter and returns a new object that based
-	 * on the original, but all async methods and properties are wrapped by Async.
+	 * on the original, but all asynchronous methods and properties are wrapped by Async.
 	 * Notice, the wrapped methods can take additional Async parameters, like group or label.
 	 * In addition, the wrapper adds new methods, like "on" or "off", to make the emitter API more standard.
 	 *
@@ -258,8 +258,8 @@ export default class Async<CTX extends object = Async<any>> extends Super<CTX> {
 	}
 
 	/**
-	 * The wrapper takes a link to the "raw" async storage and returns a new object that based
-	 * on the original, but all async methods and properties are wrapped by Async.
+	 * The wrapper takes a link to the "raw" asynchronous storage and returns a new object that based
+	 * on the original, but all asynchronous methods and properties are wrapped by Async.
 	 * Notice, the wrapped methods can take additional Async parameters, like group or label.
 	 *
 	 * @param storage

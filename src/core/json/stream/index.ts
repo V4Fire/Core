@@ -11,7 +11,7 @@
  * @packageDocumentation
  */
 
-import { sequence } from 'core/iter/combinators';
+import { seq } from 'core/iter/combinators';
 
 import Parser, { Token } from 'core/json/stream/parser';
 import Assembler, { AssemblerOptions } from 'core/json/stream/assembler';
@@ -126,7 +126,7 @@ export async function* pick(
  *   ]
  * })));
  *
- * const seq = sequence(
+ * const seq = seq(
  *   assemble(pick(tokens, 'total')),
  *   streamArray(andPick(tokens, 'data'))
  * );
@@ -164,7 +164,7 @@ export function andPick(
 		}
 	};
 
-	return pick(sequence(startObject, source), selector, opts);
+	return pick(seq(startObject, source), selector, opts);
 }
 
 /**

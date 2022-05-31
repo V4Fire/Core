@@ -2,16 +2,16 @@
 
 This module provides a bunch of helpers to combine different iterable structures.
 
-## sequence
+## seq
 
 Takes iterable objects and returns a new iterator that produces values from them sequentially.
 
 ```js
-import { sequence } from 'core/iterr/combinators';
+import { seq } from 'core/iterr/combinators';
 
 // [1, 2, 3, 4, 5, 6]
 console.log([
-  ...sequence([1, 2], new Set([3, 4], [5, 6].values()))
+  ...seq([1, 2], new Set([3, 4], [5, 6].values()))
 ]);
 ```
 
@@ -19,7 +19,7 @@ If the first passed object has an asynchronous iterator, the result iterator wil
 
 ```js
 import { intoIter } from 'core/iter';
-import { sequence } from 'core/iterr/combinators';
+import { seq } from 'core/iterr/combinators';
 import { from, pick, andPick, assemble, streamArray } from 'core/json/stream';
 
 const tokens = intoIter(from(JSON.stringify({
@@ -40,7 +40,7 @@ const tokens = intoIter(from(JSON.stringify({
   ]
 })));
 
-const seq = sequence(
+const seq = seq(
   assemble(pick(tokens, 'total')),
   streamArray(andPick(tokens, 'data'))
 );

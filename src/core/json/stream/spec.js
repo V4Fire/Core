@@ -140,7 +140,7 @@ describe('core/json/stream', () => {
 				]
 			})));
 
-			const seq = sequence(
+			const seq = seq(
 				assemble(pick(tokens, 'total')),
 				assemble(andPick(tokens, 'data.0')),
 				assemble(andPick(tokens, '1', {from: 'array'}))

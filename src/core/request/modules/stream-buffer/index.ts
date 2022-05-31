@@ -54,7 +54,7 @@ export default class StreamBuffer<T = unknown> {
 	}
 
 	/**
-	 * Returns an async iterator allowing to go through the stream
+	 * Returns an asynchronous iterator allowing to go through the stream
 	 */
 	[Symbol.asyncIterator](): AsyncIterableIterator<T> {
 		const

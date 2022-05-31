@@ -13,26 +13,30 @@
 
 /**
  * Takes iterable objects and returns a new iterator that produces values from them sequentially
- * @param iterables
- */
-export function sequence<T extends Iterable<any>>(
-	...iterables: T[]
-): IterableIterator<IterableType<T>>;
-
-/**
- * Takes async iterable objects and returns a new async iterator that produces values from them sequentially
  *
  * @param iterable
  * @param iterables
  */
-export function sequence<T extends AsyncIterable<any>, A extends AnyIterable<any>>(
+export function seq<T extends Iterable<any>, A extends AnyIterable>(
+	iterable: T,
+	...iterables: A[]
+): IterableIterator<IterableType<T> | IterableType<A>>;
+
+/**
+ * Takes asynchronous iterable objects and returns a new asynchronous iterator
+ * that produces values from them sequentially
+ *
+ * @param iterable
+ * @param iterables
+ */
+export function seq<T extends AsyncIterable<any>, A extends AnyIterable<any>>(
 	iterable: T,
 	...iterables: A[]
 ): AsyncIterableIterator<IterableType<T> | IterableType<A>>;
 
-export function sequence(
+export function seq(
 	...iterables: AnyIterable[]
-): IterableIterator<unknown> | AsyncIterableIterator<unknown> {
+): AnyIterableIterator {
 	let
 		cursor = 0,
 		iter;

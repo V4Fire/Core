@@ -21,7 +21,7 @@ export interface AbstractPersistentEngine<V = unknown> {
 
 export abstract class AbstractPersistentEngine<V = unknown> {
 	/**
-	 * API for async operations
+	 * API for asynchronous operations
 	 */
 	protected async: Async = new Async();
 

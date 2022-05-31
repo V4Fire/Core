@@ -54,7 +54,7 @@ export function intoIter<T extends Dictionary>(obj: T): IterableIterator<Diction
 export function intoIter<T = unknown>(obj: GeneratorFunction): IterableIterator<T>;
 
 /**
- * Creates an iterator from the passed async generator function and returns it
+ * Creates an iterator from the passed asynchronous generator function and returns it
  * @param obj
  */
 export function intoIter<T = unknown>(obj: AsyncGeneratorFunction): AsyncIterableIterator<T>;
@@ -66,12 +66,12 @@ export function intoIter<T = unknown>(obj: AsyncGeneratorFunction): AsyncIterabl
 export function intoIter<T extends Iterable<any>>(obj: T): IterableIterator<IterableType<T>>;
 
 /**
- * Creates a new async iterator based on the specified async iterable structure and returns it
+ * Creates a new asynchronous iterator based on the specified asynchronous iterable structure and returns it
  * @param obj
  */
 export function intoIter<T extends AsyncIterable<any>>(obj: T): AsyncIterableIterator<IterableType<T>>;
 
-export function intoIter(obj: unknown): IterableIterator<unknown> | AsyncIterableIterator<unknown> {
+export function intoIter(obj: unknown): AnyIterableIterator {
 	if (obj == null) {
 		return [].values();
 	}

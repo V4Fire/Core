@@ -646,7 +646,7 @@ describe('core/request', () => {
 
 				it('parsing JSON from a stream', async () => {
 					const req = request('http://localhost:4000/json/users', {
-						streamDecoder: (data) => sequence(
+						streamDecoder: (data) => seq(
 							assemble(pick(data, 'total')),
 							streamArray(andPick(data, 'data'))
 						)

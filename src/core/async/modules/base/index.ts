@@ -38,7 +38,7 @@ export * from 'core/async/interface';
 
 export default class Async<CTX extends object = Async<any>> {
 	/**
-	 * Map of namespaces for async operations
+	 * Map of namespaces for asynchronous operations
 	 */
 	static namespaces: NamespacesDictionary = namespaces;
 
@@ -55,7 +55,7 @@ export default class Async<CTX extends object = Async<any>> {
 	locked: boolean = false;
 
 	/**
-	 * Cache for async operations
+	 * Cache for asynchronous operations
 	 */
 	protected readonly cache: Dictionary<GlobalCache> = Object.createDict();
 
@@ -70,7 +70,7 @@ export default class Async<CTX extends object = Async<any>> {
 	protected readonly idsMap: WeakMap<object, object> = new WeakMap();
 
 	/**
-	 * Context of applying for async handlers
+	 * Context of applying for asynchronous handlers
 	 */
 	protected readonly ctx: CTX;
 
@@ -81,7 +81,7 @@ export default class Async<CTX extends object = Async<any>> {
 	protected readonly context: CTX;
 
 	/**
-	 * Set of used async namespaces
+	 * Set of used asynchronous namespaces
 	 */
 	protected readonly usedNamespaces: Set<string> = new Set();
 
@@ -117,7 +117,7 @@ export default class Async<CTX extends object = Async<any>> {
 	}
 
 	/**
-	 * Clears all async tasks
+	 * Clears all asynchronous tasks
 	 * @param [opts] - additional options for the operation
 	 */
 	clearAll(opts?: ClearOptions): this {
@@ -138,7 +138,7 @@ export default class Async<CTX extends object = Async<any>> {
 	}
 
 	/**
-	 * Mutes all async tasks
+	 * Mutes all asynchronous tasks
 	 * @param [opts] - additional options for the operation
 	 */
 	muteAll(opts?: ClearOptions): this {
@@ -156,7 +156,7 @@ export default class Async<CTX extends object = Async<any>> {
 	}
 
 	/**
-	 * Unmutes all async tasks
+	 * Unmutes all asynchronous tasks
 	 * @param [opts] - additional options for the operation
 	 */
 	unmuteAll(opts?: ClearOptions): this {
@@ -174,7 +174,7 @@ export default class Async<CTX extends object = Async<any>> {
 	}
 
 	/**
-	 * Suspends all async tasks
+	 * Suspends all asynchronous tasks
 	 * @param [opts] - additional options for the operation
 	 */
 	suspendAll(opts?: ClearOptions): this {
@@ -192,7 +192,7 @@ export default class Async<CTX extends object = Async<any>> {
 	}
 
 	/**
-	 * Unsuspends all async tasks
+	 * Unsuspends all asynchronous tasks
 	 * @param [opts] - additional options for the operation
 	 */
 	unsuspendAll(opts?: ClearOptions): this {
@@ -238,7 +238,7 @@ export default class Async<CTX extends object = Async<any>> {
 	}
 
 	/**
-	 * Registers the specified async task
+	 * Registers the specified asynchronous task
 	 * @param task
 	 */
 	protected registerTask<R = unknown>(task: FullAsyncOptions<any>): R | null {
@@ -715,7 +715,7 @@ export default class Async<CTX extends object = Async<any>> {
 	}
 
 	/**
-	 * Marks all async tasks from the namespace by the specified label
+	 * Marks all asynchronous tasks from the namespace by the specified label
 	 *
 	 * @param label
 	 * @param opts - operation options

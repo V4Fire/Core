@@ -90,7 +90,7 @@ const tokens = intoIter(from(JSON.stringify({
   ]
 })));
 
-const seq = sequence(
+const seq = seq(
   assemble(pick(tokens, 'total')),
   streamArray(andPick(tokens, 'data'))
 );

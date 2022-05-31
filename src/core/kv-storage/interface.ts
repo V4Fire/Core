@@ -89,7 +89,7 @@ export type AsyncStorageNamespace = {
  */
 export interface AsyncStorage extends AsyncStorageNamespace {
 	/**
-	 * Returns an async storage object by the specified namespace
+	 * Returns an asynchronous storage object by the specified namespace
 	 * @param name
 	 */
 	namespace(name: string): AsyncStorageNamespace;
