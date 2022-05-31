@@ -1,24 +1,32 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
+
     "target": "es5",
     "module": "commonjs",
-    "downlevelIteration": true,
+
     "esModuleInterop": true,
-    "importHelpers": true,
-    "importsNotUsedAsValues": "error",
+    "downlevelIteration": true,
+
     "lib": ["dom", "esnext"],
+    "experimentalDecorators": true,
+    "importHelpers": true,
+
     "allowJs": false,
     "skipLibCheck": false,
+
     "strictNullChecks": true,
     "strictFunctionTypes": true,
     "strictPropertyInitialization": true,
-    "experimentalDecorators": true,
-    "noImplicitOverride": true
+
+    "noImplicitOverride": true,
+    "importsNotUsedAsValues": "error"
   },
+
   "typeAcquisition": {
     "exclude": ["node"]
   },
+
   "exclude": [
     "dist",
     "config",
