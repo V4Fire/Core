@@ -40,6 +40,8 @@ interface Function {
 	 */
 	throttle<T extends AnyFunction>(this: T, opts: ThrottleOptions): AnyFunction<Parameters<T>, void>;
 
+	addToPrototype<T extends AnyFunction>(this: T, args: Array<Dictionary<Function> | Function>): T;
+
 	/**
 	 * Returns a new function based on the target that wraps the returning value into the Either structure.
 	 * If the first argument of the created function is taken null or undefined, the function returns the rejected value.

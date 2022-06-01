@@ -12,3 +12,4 @@ import 'core/prelude/function/lazy';
 import 'core/prelude/function/compose';
 import 'core/prelude/function/curry';
 import 'core/prelude/function/monad';
+import 'core/prelude/function/extend';
