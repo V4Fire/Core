@@ -25,6 +25,7 @@ import nodeEngine from 'core/request/engines/node';
 import fetchEngine from 'core/request/engines/fetch';
 import xhrEngine from 'core/request/engines/xhr';
 import createProviderEngine from 'core/request/engines/provider';
+import { RequestErrorDetailsExtractor } from './error';
 
 @provider
 class TestRequestChainProvider extends Provider {
@@ -409,6 +410,37 @@ describe('core/request', () => {
 				expect(err.message).toBe('[invalidStatus] GET http://localhost:4000/bla 404');
 				expect(err.details.request.method).toBe('GET');
 				expect(err.details.response.status).toBe(404);
+			});
+
+			it('RequestErrorDetailsExtractor, include and exclude specific header', async () => {
+				let
+					err;
+				const extractorInclude = new RequestErrorDetailsExtractor({headers: {include: ['content-type']}}),
+				 extractorExclude = new RequestErrorDetailsExtractor({headers: {exclude: ['content-type']}}),
+				 extractorBoth = new RequestErrorDetailsExtractor({
+					headers: {
+						include: ['content-type'],
+						exclude: ['content-type']
+					}
+				});
+
+				try {
+					await request('http://localhost:4000/bla');
+
+				} catch (e) {
+					err = e;
+				}
+
+				const extractedErrorInclude = extractorInclude.extract(err);
+				const extractedErrorExclude = extractorExclude.extract(err);
+				const extractedErrorBoth = extractorBoth.extract(err);
+
+				expect(extractedErrorInclude.responseHeaders.has('content-type')).toBe(true);
+				expect(Object.keys(extractedErrorInclude.responseHeaders).length).toBe(1);
+
+				expect(extractedErrorBoth).toEqual(extractedErrorInclude);
+
+				expect(extractedErrorExclude.responseHeaders.has('content-type')).toBe(false);
 			});
 
 			it('aborting of a request', async () => {
