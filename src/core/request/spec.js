@@ -25,7 +25,7 @@ import nodeEngine from 'core/request/engines/node';
 import fetchEngine from 'core/request/engines/fetch';
 import xhrEngine from 'core/request/engines/xhr';
 import createProviderEngine from 'core/request/engines/provider';
-import { RequestErrorDetailsExtractor } from './error';
+import { RequestErrorDetailsExtractor } from 'core/request/error';
 
 @provider
 class TestRequestChainProvider extends Provider {
@@ -415,6 +415,7 @@ describe('core/request', () => {
 			it('RequestErrorDetailsExtractor, include and exclude specific header', async () => {
 				let
 					err;
+
 				const extractorInclude = new RequestErrorDetailsExtractor({headers: {include: ['content-type']}}),
 				 extractorExclude = new RequestErrorDetailsExtractor({headers: {exclude: ['content-type']}}),
 				 extractorBoth = new RequestErrorDetailsExtractor({
