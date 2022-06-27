@@ -417,8 +417,9 @@ describe('core/request', () => {
 					err;
 
 				const extractorInclude = new RequestErrorDetailsExtractor({headers: {include: ['content-type']}}),
-				 extractorExclude = new RequestErrorDetailsExtractor({headers: {exclude: ['content-type']}}),
-				 extractorBoth = new RequestErrorDetailsExtractor({
+					extractorExclude = new RequestErrorDetailsExtractor({headers: {exclude: ['content-type']}});
+
+				const extractorBoth = new RequestErrorDetailsExtractor({
 					headers: {
 						include: ['content-type'],
 						exclude: ['content-type']
