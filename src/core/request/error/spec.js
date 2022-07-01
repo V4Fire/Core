@@ -106,7 +106,7 @@ describe('core/request/error', () => {
 			type: 'timeout',
 			status: 404,
 			method: 'POST',
-			query: {},
+			query: {googleIt: 'yes'},
 			contentType: 'application/json; charset=utf-8',
 			withCredentials: false,
 			requestHeaders: new V4Headers({
