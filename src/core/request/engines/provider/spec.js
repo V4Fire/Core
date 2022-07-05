@@ -166,7 +166,7 @@ describe('core/request/engine/provider', () => {
 			.toBe(201);
 
 		expect(req.response.ok)
-			.toBeTrue();
+			.toBe(true);
 	});
 
 	it('middlewares', async () => {

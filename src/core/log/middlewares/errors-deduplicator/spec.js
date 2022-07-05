@@ -104,11 +104,11 @@ describe('middlewares/errors-deduplicator', () => {
 
 	describe('factory', () => {
 		it('has "errorsDeduplicator" instance', () => {
-			expect('errorsDeduplicator' in middlewareFactory).toBeTrue();
+			expect('errorsDeduplicator' in middlewareFactory).toBe(true);
 		});
 
 		it('"errorsDeduplicator" is instance of ErrorsDeduplicatorMiddleware', () => {
-			expect(middlewareFactory.errorsDeduplicator() instanceof ErrorsDeduplicatorMiddleware).toBeTrue();
+			expect(middlewareFactory.errorsDeduplicator() instanceof ErrorsDeduplicatorMiddleware).toBe(true);
 		});
 	});
 });

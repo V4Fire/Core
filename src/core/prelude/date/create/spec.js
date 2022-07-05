@@ -14,10 +14,10 @@ describe('core/prelude/date/create', () => {
 
 		it('new date without base', () => {
 			const date = new Date();
-			expect(Date.create().is(date, 10e3)).toBeTrue();
+			expect(Date.create().is(date, 10e3)).toBe(true);
 
 			for (let v = [null, undefined, ''], i = 0; i < v.length; i++) {
-				expect(Date.create(v[i]).is(date, 10e3)).toBeTrue();
+				expect(Date.create(v[i]).is(date, 10e3)).toBe(true);
 			}
 		});
 

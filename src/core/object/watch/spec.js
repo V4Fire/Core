@@ -613,19 +613,19 @@ describe('core/object/watch', () => {
 
 				expect(proxy.add(1)).toBe(proxy);
 				expect(spy).toHaveBeenCalledWith(1, undefined, [1]);
-				expect(set.has(1)).toBeTrue();
+				expect(set.has(1)).toBe(true);
 
 				expect(proxy.add(2)).toBe(proxy);
 				expect(spy).toHaveBeenCalledWith(2, undefined, [2]);
-				expect(set.has(2)).toBeTrue();
+				expect(set.has(2)).toBe(true);
 
-				expect(proxy.delete(2)).toBeTrue();
+				expect(proxy.delete(2)).toBe(true);
 				expect(spy).toHaveBeenCalledWith(undefined, 2, [2]);
-				expect(set.has(2)).toBeFalse();
+				expect(set.has(2)).toBe(false);
 
 				expect(proxy.clear()).toBeUndefined();
 				expect(spy).toHaveBeenCalledWith(undefined, undefined, []);
-				expect(set.has(1)).toBeFalse();
+				expect(set.has(1)).toBe(false);
 			});
 
 			it("watching for a set' iterator", () => {
@@ -667,18 +667,18 @@ describe('core/object/watch', () => {
 
 				expect(proxy.add(key1)).toBe(proxy);
 				expect(spy).toHaveBeenCalledWith(key1, undefined, [key1]);
-				expect(set.has(key1)).toBeTrue();
+				expect(set.has(key1)).toBe(true);
 
 				const
 					key2 = {};
 
 				expect(proxy.add(key2)).toBe(proxy);
 				expect(spy).toHaveBeenCalledWith(key2, undefined, [key2]);
-				expect(set.has(key2)).toBeTrue();
+				expect(set.has(key2)).toBe(true);
 
-				expect(proxy.delete(key2)).toBeTrue();
+				expect(proxy.delete(key2)).toBe(true);
 				expect(spy).toHaveBeenCalledWith(undefined, key2, [key2]);
-				expect(set.has(key2)).toBeFalse();
+				expect(set.has(key2)).toBe(false);
 			});
 
 			it('watching for a map', () => {
@@ -698,14 +698,14 @@ describe('core/object/watch', () => {
 				expect(spy).toHaveBeenCalledWith(2, undefined, [5]);
 				expect(map.get(5)).toBe(2);
 
-				expect(proxy.delete(5)).toBeTrue();
+				expect(proxy.delete(5)).toBe(true);
 				expect(spy).toHaveBeenCalledWith(undefined, 2, [5]);
-				expect(map.has(5)).toBeFalse();
+				expect(map.has(5)).toBe(false);
 
 				expect(proxy.clear()).toBeUndefined();
 				expect(spy).toHaveBeenCalledWith(undefined, undefined, []);
-				expect(map.has(0)).toBeFalse();
-				expect(map.has(1)).toBeFalse();
+				expect(map.has(0)).toBe(false);
+				expect(map.has(1)).toBe(false);
 			});
 
 			it("watching for a map' iterator", () => {
@@ -756,9 +756,9 @@ describe('core/object/watch', () => {
 				expect(spy).toHaveBeenCalledWith(23, undefined, [key2]);
 				expect(map.get(key2)).toBe(23);
 
-				expect(proxy.delete(key2)).toBeTrue();
+				expect(proxy.delete(key2)).toBe(true);
 				expect(spy).toHaveBeenCalledWith(undefined, 23, [key2]);
-				expect(map.has(key2)).toBeFalse();
+				expect(map.has(key2)).toBe(false);
 			});
 
 			it('tying a watcher to another object', () => {
@@ -988,9 +988,9 @@ describe('core/object/watch', () => {
 			});
 
 			it('isProxy', () => {
-				expect(isProxy(watch({}, {immediate: true, engine}).proxy)).toBeTrue();
-				expect(isProxy(null)).toBeFalse();
-				expect(isProxy({})).toBeFalse();
+				expect(isProxy(watch({}, {immediate: true, engine}).proxy)).toBe(true);
+				expect(isProxy(null)).toBe(false);
+				expect(isProxy({})).toBe(false);
 			});
 
 			if (engineName === 'proxy') {

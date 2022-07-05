@@ -33,7 +33,7 @@ describe('core/object/proxy-clone', () => {
 		delete clone.user.name;
 
 		expect(clone.user.name).toBe(undefined);
-		expect('name' in clone.user).toBeFalse();
+		expect('name' in clone.user).toBe(false);
 
 		expect(original.user.name).toBe('Bob');
 	});
@@ -89,7 +89,7 @@ describe('core/object/proxy-clone', () => {
 		delete clone.user.name;
 
 		expect(clone.user.name).toBe(undefined);
-		expect('name' in clone.user).toBeFalse();
+		expect('name' in clone.user).toBe(false);
 
 		expect(original.user.name).toBe('Bob');
 	});
@@ -279,8 +279,8 @@ describe('core/object/proxy-clone', () => {
 		expect(original.get(user).name).toBe('Bob');
 
 		expect(clone.get(user).skills).toBeInstanceOf(WeakSet);
-		expect(clone.get(user).skills.has(boxing)).toBeTrue();
-		expect(original.get(user).skills.has(boxing)).toBeFalse();
+		expect(clone.get(user).skills.has(boxing)).toBe(true);
+		expect(original.get(user).skills.has(boxing)).toBe(false);
 	});
 
 	it('cloning an iterable object', () => {

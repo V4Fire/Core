@@ -273,11 +273,11 @@ describe('core/async/modules/timers', () => {
 
 	it('promise value of `idle`', async () => {
 		const $a = new Async();
-		expect(Object.isNumber((await $a.idle()).timeRemaining())).toBeTrue();
+		expect(Object.isNumber((await $a.idle()).timeRemaining())).toBe(true);
 	});
 
 	it('promise value of `wait`', async () => {
 		const $a = new Async();
-		expect(await $a.wait(() => 1)).toBeTrue();
+		expect(await $a.wait(() => 1)).toBe(true);
 	});
 });

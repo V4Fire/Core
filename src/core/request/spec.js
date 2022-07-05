@@ -177,7 +177,7 @@ describe('core/request', () => {
 					.toBe(201);
 
 				expect(req.response.ok)
-					.toBeTrue();
+					.toBe(true);
 			});
 
 			it('json `post` with the specified response status', async () => {
@@ -450,7 +450,7 @@ describe('core/request', () => {
 
 			it('request with a high timeout', async () => {
 				const req = await request('http://localhost:4000/delayed', {timeout: 500});
-				expect(req.response.ok).toBeTrue();
+				expect(req.response.ok).toBe(true);
 			});
 
 			describe('responses with a no message body', () => {
@@ -488,7 +488,7 @@ describe('core/request', () => {
 					retry: 2
 				});
 
-				expect(req.response.ok).toBeTrue();
+				expect(req.response.ok).toBe(true);
 
 				const body = await req.response.json();
 				expect(body.tryNumber).toBe(2);
@@ -542,8 +542,8 @@ describe('core/request', () => {
 					{response: res1} = await request('http://localhost:4000/json/1'),
 					{response: res2} = await request('http://localhost:4000/redirect');
 
-				expect(res1.redirected).toBeFalse();
-				expect(res2.redirected).toBeTrue();
+				expect(res1.redirected).toBe(false);
+				expect(res2.redirected).toBe(true);
 			});
 
 			it('request promise is an async iterable object', async () => {
@@ -566,7 +566,7 @@ describe('core/request', () => {
 
 				expect(totalLength).toBe(1150);
 				expect(loadedBefore).toBe(1150);
-				expect(chunkLengths.every((len) => len > 0)).toBeTrue();
+				expect(chunkLengths.every((len) => len > 0)).toBe(true);
 			});
 
 			it('request response is an async iterable object', async () => {
@@ -589,7 +589,7 @@ describe('core/request', () => {
 
 				expect(totalLength).toBe(1150);
 				expect(loadedBefore).toBe(1150);
-				expect(chunkLengths.every((len) => len > 0)).toBeTrue();
+				expect(chunkLengths.every((len) => len > 0)).toBe(true);
 			});
 
 			if (name === 'xhr') {
