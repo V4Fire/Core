@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.??.?? (2022-??-??)
+
+#### :bug: Bug Fix
+
+* [Fixed a bug with filtering request headers](https://github.com/V4Fire/Core/issues/298) `core/request/error`
+
 ## v3.86.3 (2022-06-10)
 
 #### :house: Internal
