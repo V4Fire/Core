@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.??.?? (2022-??-??)
+
+#### :bug: Bug Fix
+
+* [Fixed a bug with filtering request headers](https://github.com/V4Fire/Core/issues/298)
+
 ## v3.69.0 (2021-12-03)
 
 #### :rocket: New Feature
