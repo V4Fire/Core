@@ -11,7 +11,7 @@ import { consoleEngine } from 'core/perf/timer/engines/console';
 
 describe('core/perf/timer', () => {
 	beforeEach(() => {
-		spyOn(consoleEngine, 'sendDelta');
+		jest.spyOn(consoleEngine, 'sendDelta');
 	});
 
 	describe('factory method', () => {
@@ -33,7 +33,7 @@ describe('core/perf/timer', () => {
 			});
 
 			it('returns timers that work with different timers runners when different groups are passed as the first argument', () => {
-				spyOn(console, 'warn');
+				jest.spyOn(console, 'warn');
 				const factory = getTimerFactory({engine: 'console'});
 
 				const firstTimer = factory.getTimer('components');
@@ -84,7 +84,7 @@ describe('core/perf/timer', () => {
 			});
 
 			it('returns timers that work with different timers runners when different groups but the same scope are passed as arguments', () => {
-				spyOn(console, 'warn');
+				jest.spyOn(console, 'warn');
 				const factory = getTimerFactory({engine: 'console'});
 
 				const firstTimer = factory.getScopedTimer('components', 'main-page');
@@ -103,7 +103,7 @@ describe('core/perf/timer', () => {
 			});
 
 			it('returns timers that work with different timers runners when the same group but different scopes are passed as arguments', () => {
-				spyOn(console, 'warn');
+				jest.spyOn(console, 'warn');
 				const factory = getTimerFactory({engine: 'console'});
 				const firstTimer = factory.getScopedTimer('components', 'main-page');
 				const firstTimerId = firstTimer.start('auth');
@@ -138,7 +138,7 @@ describe('core/perf/timer', () => {
 
 	describe('several factories', () => {
 		it('create different timers runners for the same group', () => {
-			spyOn(console, 'warn');
+			jest.spyOn(console, 'warn');
 			const firstFactory = getTimerFactory({engine: 'console'});
 			const secondFactory = getTimerFactory({engine: 'console'});
 
@@ -158,7 +158,7 @@ describe('core/perf/timer', () => {
 		});
 
 		it('create different timers runners for the different groups', () => {
-			spyOn(console, 'warn');
+			jest.spyOn(console, 'warn');
 			const firstFactory = getTimerFactory({engine: 'console'});
 			const secondFactory = getTimerFactory({engine: 'console'});
 
@@ -178,7 +178,7 @@ describe('core/perf/timer', () => {
 		});
 
 		it('create different scoped timers runners for the same group and scope', () => {
-			spyOn(console, 'warn');
+			jest.spyOn(console, 'warn');
 			const firstFactory = getTimerFactory({engine: 'console'});
 			const secondFactory = getTimerFactory({engine: 'console'});
 
@@ -198,7 +198,7 @@ describe('core/perf/timer', () => {
 		});
 
 		it('create different scoped timers runners for different groups but the same scope', () => {
-			spyOn(console, 'warn');
+			jest.spyOn(console, 'warn');
 			const firstFactory = getTimerFactory({engine: 'console'});
 			const secondFactory = getTimerFactory({engine: 'console'});
 
@@ -218,7 +218,7 @@ describe('core/perf/timer', () => {
 		});
 
 		it('create different scoped timers runners for the same group but different scopes', () => {
-			spyOn(console, 'warn');
+			jest.spyOn(console, 'warn');
 			const firstFactory = getTimerFactory({engine: 'console'});
 			const secondFactory = getTimerFactory({engine: 'console'});
 

@@ -17,7 +17,7 @@ import { INDEX_STORAGE_NAME } from 'core/cache/decorators/persistent/engines/con
 
 describe('core/cache/decorators', () => {
 	it('complex test', async () => {
-		spyOn(Date, 'now').and.returnValue(0);
+		jest.spyOn(Date, 'now').mockReturnValue(0);
 
 		const opts = {
 			loadFromStorage: 'onInit'

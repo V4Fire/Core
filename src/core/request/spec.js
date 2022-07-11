@@ -73,10 +73,10 @@ describe('core/request', () => {
 		server = createServer();
 	});
 
-	afterAll((done) => {
+	afterAll(async () => {
 		globalOpts.api = api;
 
-		server.close(done);
+		await server.close();
 		defaultRequestOpts.engine = defaultEngine;
 
 		set('log', logOptions);

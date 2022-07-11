@@ -30,8 +30,8 @@ describe('core/object/proxy-readonly', () => {
 		expect(readonly.user.name).toBe('Bob');
 		expect(original.user.name).toBe('Bob');
 
-		expect(readonly.user.skills).toEqual(['singing', 'dancing', 'programming']);
-		expect(original.user.skills).toEqual(['singing', 'dancing', 'programming']);
+		expect([...readonly.user.skills]).toEqual(['singing', 'dancing', 'programming']);
+		expect([...original.user.skills]).toEqual(['singing', 'dancing', 'programming']);
 
 		expect(() => {
 			delete readonly.user.name;

@@ -27,11 +27,11 @@
     "build:tsconfig": "node build/build-tsconfig",
     "build:standalone": "gulp build:standalone",
     "watch:standalone": "gulp watch:standalone",
-    "test": "npm run build && npm run test:typescript && npm run test:eslint && npm run test:jasmine",
+    "test": "npm run build && npm run test:typescript && npm run test:eslint && npm run test:jest",
     "test:linters": "npm run test:typescript && npm run test:eslint",
     "test:typescript": "node node_modules/@v4fire/typescript-check",
     "test:eslint": "eslint config build src",
-    "test:jasmine": "nyc --reporter=lcov --reporter=text jasmine",
+    "test:jest": "export NODE_ENV=development&&jest --coverage",
     "up": "npm i && gulp build:standalone && gulp build:doc"
   },
   "dependencies": {

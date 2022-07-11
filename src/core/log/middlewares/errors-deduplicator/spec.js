@@ -25,20 +25,20 @@ describe('middlewares/errors-deduplicator', () => {
 			const
 				event = createLogEvent(),
 				eventCopy = copyLogEvent(event),
-				nextCallbackSpy = jasmine.createSpy('next');
+				nextCallbackSpy = jest.fn().mockName('next');
 
 			middleware.exec(event, nextCallbackSpy);
-			expect(nextCallbackSpy).toHaveBeenCalledOnceWith(eventCopy);
+			expect(nextCallbackSpy).toHaveBeenLastCalledWith(eventCopy);
 		});
 
 		it('single error occurrence - the event should pass to the next middleware', () => {
 			const
 				event = createLogEvent(new Error('My awesome error')),
 				eventCopy = copyLogEvent(event),
-				nextCallbackSpy = jasmine.createSpy('next');
+				nextCallbackSpy = jest.fn().mockName('next');
 
 			middleware.exec(event, nextCallbackSpy);
-			expect(nextCallbackSpy).toHaveBeenCalledOnceWith(eventCopy);
+			expect(nextCallbackSpy).toHaveBeenLastCalledWith(eventCopy);
 		});
 
 		it('multiple error occurrences - only the first event should pass to the next middleware', () => {
@@ -47,13 +47,13 @@ describe('middlewares/errors-deduplicator', () => {
 				firstEvent = createLogEvent(error, 'first'),
 				firstEventCopy = copyLogEvent(firstEvent),
 				secondEvent = createLogEvent(error, 'second'),
-				firstNextCallbackSpy = jasmine.createSpy('firstNext'),
-				secondNextCallbackSpy = jasmine.createSpy('secondNext');
+				firstNextCallbackSpy = jest.fn().mockName('firstNext'),
+				secondNextCallbackSpy = jest.fn().mockName('secondNext');
 
 			middleware.exec(firstEvent, firstNextCallbackSpy);
 			middleware.exec(secondEvent, secondNextCallbackSpy);
 
-			expect(firstNextCallbackSpy).toHaveBeenCalledOnceWith(firstEventCopy);
+			expect(firstNextCallbackSpy).toHaveBeenLastCalledWith(firstEventCopy);
 			expect(secondNextCallbackSpy).not.toHaveBeenCalled();
 		});
 
@@ -63,14 +63,14 @@ describe('middlewares/errors-deduplicator', () => {
 				firstEventCopy = copyLogEvent(firstEvent),
 				secondEvent = createLogEvent(new Error('Error'), 'second'),
 				secondEventCopy = copyLogEvent(secondEvent),
-				firstNextCallbackSpy = jasmine.createSpy('firstNext'),
-				secondNextCallbackSpy = jasmine.createSpy('secondNext');
+				firstNextCallbackSpy = jest.fn().mockName('firstNext'),
+				secondNextCallbackSpy = jest.fn().mockName('secondNext');
 
 			middleware.exec(firstEvent, firstNextCallbackSpy);
 			middleware.exec(secondEvent, secondNextCallbackSpy);
 
-			expect(firstNextCallbackSpy).toHaveBeenCalledOnceWith(firstEventCopy);
-			expect(secondNextCallbackSpy).toHaveBeenCalledOnceWith(secondEventCopy);
+			expect(firstNextCallbackSpy).toHaveBeenLastCalledWith(firstEventCopy);
+			expect(secondNextCallbackSpy).toHaveBeenLastCalledWith(secondEventCopy);
 		});
 
 		function createLogEvent(error, context = 'test') {

@@ -37,7 +37,7 @@ describe('core/async/modules/base `muteAll/unmuteAll`', () => {
 				expect(i).toBeGreaterThanOrEqual(2);
 				$a.clearAll();
 				done();
-			}, 5);
+			}, 10);
 		}, 5);
 	});
 

@@ -98,7 +98,7 @@ describe('core/async/modules/proxy `worker`', () => {
 		{
 			const
 				$a = new Async(),
-				spy = jasmine.createSpy(),
+				spy = jest.fn(),
 				res = [];
 
 			$a.worker(onResolve(res, 'first'), {label: $$.foo, onClear: onReject(spy)});
@@ -111,7 +111,7 @@ describe('core/async/modules/proxy `worker`', () => {
 		{
 			const
 				$a = new Async(),
-				spy = jasmine.createSpy(),
+				spy = jest.fn(),
 				res = [];
 
 			$a.worker(onResolve(res, 'first'), {label: $$.foo, join: true, onMerge: onMerge(spy, 'first')});
@@ -124,7 +124,7 @@ describe('core/async/modules/proxy `worker`', () => {
 		{
 			const
 				$a = new Async(),
-				spy = jasmine.createSpy(),
+				spy = jest.fn(),
 				res = [];
 
 			$a.worker(onResolve(res, 'first'), {label: $$.foo, join: 'replace', onClear: onReject(spy)});

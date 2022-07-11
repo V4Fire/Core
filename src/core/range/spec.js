@@ -91,36 +91,36 @@ describe('core/range', () => {
 	});
 
 	it('infinity ranges', () => {
-		expect(new Range().span()).toBePositiveInfinity();
+		expect(new Range().span()).toBe(Number.POSITIVE_INFINITY);
 		expect(new Range().toString()).toBe('..');
 		expect(new Range().contains(-10)).toBe(true);
 		expect(() => new Range().toArray())
 			.toThrowError("Can't create an array of the infinitive range. Use an iterator instead.");
 
-		expect(new Range(0).span()).toBePositiveInfinity();
+		expect(new Range(0).span()).toBe(Number.POSITIVE_INFINITY);
 		expect(new Range(0).toString()).toBe('0..');
 		expect(new Range(0).contains(-10)).toBe(false);
 		expect(new Range(0).contains(10)).toBe(true);
 		expect(new Range(0).contains(0)).toBe(true);
 		expect(new Range([0]).contains(0)).toBe(false);
 
-		expect(new Range(null, 0).span()).toBePositiveInfinity();
+		expect(new Range(null, 0).span()).toBe(Number.POSITIVE_INFINITY);
 		expect(new Range(-Infinity, 0).toString()).toBe('..0');
 		expect(new Range(null, 0).contains(-10)).toBe(true);
 		expect(new Range(null, 0).contains(10)).toBe(false);
 		expect(new Range(null, 0).contains(0)).toBe(true);
 		expect(new Range(null, [0]).contains(0)).toBe(false);
 
-		expect(new Range(new Date()).span()).toBePositiveInfinity();
+		expect(new Range(new Date()).span()).toBe(Number.POSITIVE_INFINITY);
 
-		expect(new Range('a').span()).toBePositiveInfinity();
+		expect(new Range('a').span()).toBe(Number.POSITIVE_INFINITY);
 		expect(new Range('a').toString()).toBe('a..');
 		expect(new Range('a').contains('0')).toBe(false);
 		expect(new Range('a').contains('c')).toBe(true);
 		expect(new Range('a').contains('a')).toBe(true);
 		expect(new Range(['a']).contains('a')).toBe(false);
 
-		expect(new Range(null, 'a').span()).toBePositiveInfinity();
+		expect(new Range(null, 'a').span()).toBe(Number.POSITIVE_INFINITY);
 		expect(new Range(-Infinity, 'a').toString()).toBe('..a');
 		expect(new Range(null, 'a').contains('0')).toBe(true);
 		expect(new Range(null, 'a').contains('c')).toBe(false);
