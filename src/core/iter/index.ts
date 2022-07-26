@@ -48,6 +48,12 @@ export function intoIter(obj: string): IterableIterator<string>;
 export function intoIter<T extends Dictionary>(obj: T): IterableIterator<DictionaryType<T>>;
 
 /**
+ * Creates an iterator over values from the specified array-like object and returns it
+ * @param obj
+ */
+export function intoIter<T extends ArrayLike<T>>(obj: T): IterableIterator<T>;
+
+/**
  * Creates an iterator from the passed generator function and returns it
  * @param obj
  */
@@ -96,7 +102,7 @@ export function intoIter(obj: unknown): IterableIterator<unknown> | AsyncIterabl
 		return intoIter(Object.cast(obj()));
 	}
 
-	if (typeof obj === 'object') {
+	if (typeof obj === 'object' || Object.isArrayLike(obj)) {
 		const
 			isSyncIter = Object.isIterable(obj);
 
