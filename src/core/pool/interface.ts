@@ -24,7 +24,7 @@ export interface WrappedResource<T = unknown> {
 	 * Returns the resource to the pool
 	 * @param args - extra arguments to pass to the `onFree` hook handler
 	 */
-	free(...args: unknown[]): void;
+	free(...args: any[]): void;
 
 	/**
 	 * Destroys the resource instead of returning it to the pool
@@ -79,17 +79,17 @@ export interface PoolOptions<T = unknown> {
 }
 
 export interface ArgsFn {
-	(i: number): unknown[];
+	(i: number): any[];
 }
 
-export type Args = unknown[] | ArgsFn;
+export type Args = any[] | ArgsFn;
 
 export interface HashFn {
-	(...args: unknown[]): string;
+	(...args: any[]): string;
 }
 
 export interface ResourceFactory<T = unknown> {
-	(...args: unknown[]): T;
+	(...args: any[]): T;
 }
 
 export interface ResourceDestructor<T = unknown> {
@@ -97,9 +97,9 @@ export interface ResourceDestructor<T = unknown> {
 }
 
 export interface ResourceHook<T = unknown> {
-	(resource: T, pool: Pool<T>, ...args: unknown[]): void;
+	(resource: T, pool: Pool<T>, ...args: any[]): void;
 }
 
 export interface PoolHook<T = unknown> {
-	(pool: Pool<T>, ...args: unknown[]): void;
+	(pool: Pool<T>, ...args: any[]): void;
 }
