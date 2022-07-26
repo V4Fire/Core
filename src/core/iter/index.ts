@@ -102,7 +102,29 @@ export function intoIter(obj: unknown): IterableIterator<unknown> | AsyncIterabl
 		return intoIter(Object.cast(obj()));
 	}
 
-	if (Object.isArrayLike(obj) || typeof obj === 'object') {
+	if (Object.isArrayLike(obj)) {
+		let
+			cursor = 0;
+
+		return {
+			[Symbol.iterator]() {
+				return this;
+			},
+
+			next(): IteratorResult<unknown> {
+				const res = {
+					value: obj[cursor],
+					done: cursor === obj.length
+				};
+
+				cursor++;
+
+				return res;
+			}
+		};
+	}
+
+	if (typeof obj === 'object') {
 		const
 			isSyncIter = Object.isIterable(obj);
 
