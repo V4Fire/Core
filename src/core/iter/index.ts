@@ -106,20 +106,19 @@ export function intoIter(obj: unknown): IterableIterator<unknown> | AsyncIterabl
 		let
 			cursor = 0;
 
+		const
+			objLength = obj.length;
+
 		return {
 			[Symbol.iterator]() {
 				return this;
 			},
 
 			next(): IteratorResult<unknown> {
-				const res = {
-					value: obj[cursor],
-					done: cursor === obj.length
+				return {
+					value: (cursor < objLength) ? obj[cursor++] : undefined,
+					done: cursor === objLength
 				};
-
-				cursor++;
-
-				return res;
 			}
 		};
 	}
