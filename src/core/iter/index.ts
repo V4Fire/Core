@@ -115,10 +115,18 @@ export function intoIter(obj: unknown): IterableIterator<unknown> | AsyncIterabl
 			},
 
 			next(): IteratorResult<unknown> {
-				return {
-					value: (cursor < objLength) ? obj[cursor++] : undefined,
-					done: cursor === objLength
+				const done = cursor === objLength;
+
+				const res = {
+					value: (cursor < objLength) ? obj[cursor] : undefined,
+					done
 				};
+
+				if (!done) {
+					cursor++;
+				}
+
+				return res;
 			}
 		};
 	}
