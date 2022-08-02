@@ -51,7 +51,7 @@ export function intoIter<T extends Dictionary>(obj: T): IterableIterator<Diction
  * Creates an iterator over values from the specified array-like object and returns it
  * @param obj
  */
-export function intoIter<T extends ArrayLike<any>>(obj: T): IterableIterator<any>;
+export function intoIter<T = unknown>(obj: ArrayLike<T>): IterableIterator<T>;
 
 /**
  * Creates an iterator from the passed generator function and returns it
