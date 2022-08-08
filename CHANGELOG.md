@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.??.?? (2022-??-??)
+
+#### :boom: Breaking Change
+
+* By default, the `ES` flag is set to `ES2021` for development builds
+
 ## v3.86.4 (2022-07-05)
 
 #### :bug: Bug Fix
