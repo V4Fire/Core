@@ -9,11 +9,11 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
-## v?.??.? (2022-??-??)
+## v3.87.0 (2022-08-08)
 
 #### :rocket: New Feature
 
-* Added overload for `ArrayLike` incoming parameter
+* Added a new overload for the `intoIter` method to create an iterator from an array-like object
 
 ## v3.78.0 (2022-03-16)
 
