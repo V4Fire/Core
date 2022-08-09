@@ -92,6 +92,16 @@ export default class OrderedQueue<T> extends Queue<T> {
 		}
 	}
 
+	/** @inheritDoc */
+	clone(): OrderedQueue<T> {
+		const
+			newQueue = new OrderedQueue<T>(this.comparator);
+
+		Object.assign(newQueue, this);
+
+		return newQueue;
+	}
+
 	/**
 	 * Returns a new blank inner queue to store elements
 	 */

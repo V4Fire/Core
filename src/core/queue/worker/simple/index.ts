@@ -49,6 +49,16 @@ export default class SimpleWorkerQueue<T, V = unknown> extends WorkerQueue<T, V>
 		return taskObj.promise;
 	}
 
+	/** @inheritDoc */
+	clone(): SimpleWorkerQueue<T, V> {
+		const
+			newQueue = new SimpleWorkerQueue<T, V>(this.worker);
+
+		Object.assign(newQueue, this);
+
+		return newQueue;
+	}
+
 	protected override perform(): void {
 		if (this.length === 0) {
 			this.activeWorkers--;

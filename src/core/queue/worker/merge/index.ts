@@ -110,6 +110,15 @@ export default class MergeWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> 
 		}
 	}
 
+	override clone(): MergeWorkerQueue<T, V> {
+		const
+			newQueue = new MergeWorkerQueue<T, V>(this.worker, {});
+
+		Object.assign(newQueue, this);
+
+		return newQueue;
+	}
+
 	protected override perform(): void {
 		if (this.length === 0) {
 			this.activeWorkers--;

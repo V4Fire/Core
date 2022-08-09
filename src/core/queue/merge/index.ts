@@ -34,7 +34,7 @@ export default class MergeQueue<T> extends AbstractQueue<T> {
 			return undefined;
 		}
 
-		return this.tasksMap[this.innerQueue.head!];
+		return this.tasksMap.get(this.innerQueue.head!);
 	}
 
 	/** @inheritDoc */
@@ -50,7 +50,7 @@ export default class MergeQueue<T> extends AbstractQueue<T> {
 	/**
 	 * The map of registered tasks
 	 */
-	protected tasksMap: Dictionary<T> = Object.createDict();
+	protected tasksMap: Map<string, T> = new Map();
 
 	/**
 	 * Function to calculate a task hash
@@ -72,8 +72,8 @@ export default class MergeQueue<T> extends AbstractQueue<T> {
 		const
 			hash = this.hashFn(task);
 
-		if (this.tasksMap[hash] == null) {
-			this.tasksMap[hash] = task;
+		if (!this.tasksMap.has(hash)) {
+			this.tasksMap.set(hash, task);
 			this.innerQueue.push(hash);
 		}
 
@@ -89,7 +89,7 @@ export default class MergeQueue<T> extends AbstractQueue<T> {
 		const
 			{head} = this;
 
-		delete this.tasksMap[this.innerQueue.head!];
+		this.tasksMap.delete(this.innerQueue.head!);
 		this.innerQueue.shift();
 
 		return head;
@@ -99,8 +99,18 @@ export default class MergeQueue<T> extends AbstractQueue<T> {
 	clear(): void {
 		if (this.length > 0) {
 			this.innerQueue = this.createInnerQueue();
-			this.tasksMap = Object.createDict();
+			this.tasksMap = new Map();
 		}
+	}
+
+	/** @inheritDoc */
+	clone(): MergeQueue<T> {
+		const
+			newQueue = new MergeQueue<T>();
+
+		Object.assign(newQueue, this);
+
+		return newQueue;
 	}
 
 	/**

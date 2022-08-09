@@ -108,6 +108,16 @@ export default class SimpleQueue<T> extends Queue<T> {
 		}
 	}
 
+	/** @inheritDoc */
+	clone(): SimpleQueue<T> {
+		const
+			newQueue = new SimpleQueue<T>();
+
+		Object.assign(newQueue, this);
+
+		return newQueue;
+	}
+
 	/**
 	 * Returns a new blank inner queue to store elements
 	 */

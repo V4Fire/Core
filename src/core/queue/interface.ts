@@ -72,4 +72,53 @@ export default abstract class Queue<T> {
 	 * Clears the queue
 	 */
 	abstract clear(): void;
+
+	/**
+	 * Clones the queue
+	 */
+	abstract clone(): Queue<T>;
+
+	/**
+	 * Returns iterator
+	 */
+	[Symbol.iterator](): IterableIterator<unknown> {
+		const
+			clonedQueue = this.clone();
+
+		return {
+			[Symbol.iterator]() {
+				return this;
+			},
+
+			next(): IteratorResult<unknown> {
+				const
+					done = clonedQueue.length <= 0,
+					value = clonedQueue.pop();
+
+				return {value, done};
+			}
+		};
+	}
+
+	/**
+	 * Returns async iterator
+	 */
+	[Symbol.asyncIterator](): AsyncIterableIterator<unknown> {
+		const
+			clonedQueue = this.clone();
+
+		return {
+			[Symbol.asyncIterator]() {
+				return this;
+			},
+
+			next(): Promise<IteratorResult<unknown>> {
+				const
+					done = clonedQueue.length <= 0,
+					value = clonedQueue.pop();
+
+				return Promise.resolve({value, done});
+			}
+		};
+	}
 }
