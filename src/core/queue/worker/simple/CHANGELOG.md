@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.??.? (2022-0?-??)
+
+#### :rocket: New Feature
+
+* Added new `clone` method
+
 ## v3.22.2 (2020-07-21)
 
 #### :house: Internal

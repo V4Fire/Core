@@ -94,4 +94,34 @@ describe('core/queue/worker/merge', () => {
 		expect(queue.length).toBe(0);
 		expect(res).toEqual([1]);
 	});
+
+	it('cloning a queue', () => {
+		const
+			res = [];
+
+		const queue = new MergeQueue((task) => {
+			res.push(task.a);
+			return Promise.resolve();
+
+		}, {concurrency: 1});
+
+		queue.unshift({a: 1});
+		queue.unshift({a: 2});
+		queue.unshift({a: 3});
+
+		expect(queue.head).toBe(0);
+		expect(queue.length).toBe(2);
+		expect(res).toEqual([1]);
+
+		const
+			clonedQueue = queue.clone();
+
+		expect(queue !== clonedQueue).toBe(true);
+
+		expect(queue.shift()).toBe({a: 2});
+
+		expect(clonedQueue.head).toBe(0);
+		expect(clonedQueue.length).toBe(2);
+		expect(clonedQueue.shift()).toBe({a: 2});
+	});
 });
