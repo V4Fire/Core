@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.??.?? (2022-??-??)
+
+#### :bug: Bug Fix
+
+* Fixed setting of new deep properties of the `accessors` engine
+
 ## v3.79.0 (2022-03-18)
 
 #### :rocket: New Feature

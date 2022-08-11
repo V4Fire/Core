@@ -276,8 +276,8 @@ export function set(obj: object, path: WatchPath, value: unknown, handlers: Watc
 		refPath = Array.concat([], ctxPath.slice(1), normalizedPath.slice(0, -1)),
 		fullRefPath = Array.concat([], ctxPath.slice(0, 1), refPath);
 
-	if (normalizedPath.length > 1 && Object.get(obj, refPath) == null) {
-		Object.set(obj, refPath, {}, {
+	if (normalizedPath.length > 1 && Object.get(unwrappedObj, refPath) == null) {
+		Object.set(unwrappedObj, refPath, {}, {
 			setter: (ref, key, val) => {
 				if (ref == null || typeof ref !== 'object') {
 					return;
@@ -296,7 +296,7 @@ export function set(obj: object, path: WatchPath, value: unknown, handlers: Watc
 		top = proxy?.[toTopObject] ?? unwrappedObj;
 
 	const
-		ref = Object.get(top, refPath),
+		ref = <object>Object.get(top, refPath),
 		type = getProxyType(ref);
 
 	switch (type) {
@@ -339,7 +339,7 @@ export function set(obj: object, path: WatchPath, value: unknown, handlers: Watc
 			}
 
 			const resolvedProxy = setWatchAccessors(
-				unwrappedObj,
+				ref,
 				key,
 				resolvedPath,
 				handlers,
@@ -383,7 +383,7 @@ export function unset(obj: object, path: WatchPath, handlers: WatchHandlersSet):
 		top = proxy?.[toTopObject] ?? unwrappedObj;
 
 	const
-		ref = Object.get(top, refPath),
+		ref = <object>Object.get(top, refPath),
 		type = getProxyType(ref);
 
 	switch (type) {
@@ -410,7 +410,7 @@ export function unset(obj: object, path: WatchPath, handlers: WatchHandlersSet):
 				resolvedTop = hasPath ? top : undefined;
 
 			const resolvedProxy = setWatchAccessors(
-				unwrappedObj,
+				ref,
 				key,
 				resolvedPath,
 				handlers,
