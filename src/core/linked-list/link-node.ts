@@ -36,11 +36,10 @@ export default class LinkNode<T> {
 	 */
 	prev: Nullable<LinkNode<T>> = null;
 
-	constructor(data: T, id?: string) {
+	/**
+	 * @param [data] - data to add
+	 */
+	constructor(data: T) {
 		this.data = data;
-
-		if (id != null) {
-			this.id = id;
-		}
 	}
 }

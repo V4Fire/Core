@@ -19,14 +19,14 @@ import LinkNode from 'core/linked-list/link-node';
  */
 export default class LinkedList<T> {
 	/**
-	 * Linked list first element
+	 * Linked list first element node
 	 */
-	head: Nullable<LinkNode<T>> = null;
+	protected firstNode: Nullable<LinkNode<T>> = null;
 
 	/**
-	 * Linked list last element
+	 * Linked list last element node
 	 */
-	tail: Nullable<LinkNode<T>> = null;
+	protected lastNode: Nullable<LinkNode<T>> = null;
 
 	/**
 	 * Internal length value
@@ -41,104 +41,145 @@ export default class LinkedList<T> {
 	}
 
 	/**
-	 * Adds one element to the beginning of the linked list and returns the new length of the list
+	 * Linked list first element
 	 */
-	unshift(data: T, id?: string): number {
-		const
-			link = new LinkNode<T>(data, id);
+	get first(): CanUndef<T> {
+		return this.firstNode?.data;
+	}
 
-		if (this.head != null) {
-			this.head.prev = link;
+	/**
+	 * Linked list last element
+	 */
+	get last(): CanUndef<T> {
+		return this.lastNode?.data;
+	}
+
+	/**
+	 * @param [iterable] - creates a list based on the iterable
+	 */
+	constructor(iterable?: Iterable<T>) {
+		if (Object.isIterable(iterable)) {
+			for (const el of iterable) {
+				this.push(el);
+			}
+		}
+	}
+
+	/**
+	 * Adds one element to the beginning of the linked list and returns the new length of the list
+	 * @param data
+	 */
+	unshift(data: T): number {
+		const
+			link = new LinkNode<T>(data);
+
+		if (this.firstNode != null) {
+			this.firstNode.prev = link;
 
 		} else {
-			this.tail = link;
+			this.lastNode = link;
 		}
 
-		link.next = this.head;
-		this.head = link;
+		link.next = this.firstNode;
+		this.firstNode = link;
 
 		return ++this.lengthStore;
 	}
 
 	/**
 	 * Removes the first element from the linked list and returns that removed element.
-	 * This method changes the length of the list
+	 * This method changes the length of the list.
 	 */
-	shift(): Nullable<LinkNode<T>> {
+	shift(): CanUndef<T> {
 		if (this.lengthStore === 0) {
-			return null;
+			return;
 		}
 
 		this.lengthStore--;
 
 		const
-			tmp = this.head;
+			tmp = this.firstNode;
 
 		if (tmp == null) {
-			return null;
+			return;
 		}
 
-		this.head = tmp.next;
+		this.firstNode = tmp.next;
 
-		if (this.head == null) {
+		if (this.firstNode == null) {
 			this.clear();
-			return tmp;
+			return tmp.data;
 		}
 
 		tmp.next = null;
 
-		return tmp;
+		return tmp.data;
 	}
 
 	/**
 	 * Adds one element to the end of the linked list and returns the new length of the list
+	 * @param data
 	 */
-	push(data: T, id?: string): number {
+	push(data: T): number {
 		const
-			link = new LinkNode<T>(data, id);
+			link = new LinkNode<T>(data);
 
-		if (this.tail == null) {
-			this.head = link;
+		if (this.lastNode == null) {
+			this.firstNode = link;
 
 		} else {
-			this.tail.next = link;
-			link.prev = this.tail;
+			this.lastNode.next = link;
+			link.prev = this.lastNode;
 		}
 
-		this.tail = link;
+		this.lastNode = link;
 
 		return ++this.lengthStore;
 	}
 
 	/**
 	 * Removes the last element from the linked list and returns that removed element.
-	 * This method changes the length of the list
+	 * This method changes the length of the list.
 	 */
-	pop(): Nullable<LinkNode<T>> {
+	pop(): CanUndef<T> {
 		if (this.lengthStore === 0) {
-			return null;
+			return;
 		}
 
 		this.lengthStore--;
 
 		const
-			tmp = this.tail;
+			tmp = this.lastNode;
 
 		if (tmp == null) {
-			return null;
+			return;
 		}
 
-		this.tail = tmp.prev;
+		this.lastNode = tmp.prev;
 
-		if (this.tail == null) {
+		if (this.lastNode == null) {
 			this.clear();
-			return tmp;
+			return tmp.data;
 		}
 
-		this.tail.next = null;
+		this.lastNode.next = null;
 		tmp.prev = null;
 
-		return tmp;
+		return tmp.data;
+	}
+
+	/**
+	 * Returns true if a specified value exists in the list
+	 * @param value
+	 */
+	has(value: T): boolean {
+		for (const el of this) {
+			if (el === value) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
@@ -146,13 +187,55 @@ export default class LinkedList<T> {
 	 */
 	clear(): void {
 		this.lengthStore = 0;
-		this.head = null;
-		this.tail = null;
+		this.firstNode = null;
+		this.lastNode = null;
 	}
 
+	/**
+	 * Makes a shallow copy of current linked list
+	 */
+	clone(): LinkedList<T> {
+		return new LinkedList<T>(this);
+	}
+
+	/**
+	 * Returns an iterator from the last element
+	 */
+	reverse(): IterableIterator<T> {
+		let
+			current = this.lastNode,
+			cursor = 0;
+
+		const
+			length = this.lengthStore;
+
+		return {
+			[Symbol.iterator]() {
+				return this;
+			},
+
+			next(): IteratorResult<T> {
+				const
+					done = length <= cursor++,
+					value = current;
+
+				current = value?.prev;
+
+				if (done || value == null) {
+					return {done: true, value: undefined};
+				}
+
+				return {done, value: value.data};
+			}
+		};
+	}
+
+	/**
+	 * Returns an iterator by list values
+	 */
 	[Symbol.iterator](): IterableIterator<T> {
 		let
-			current = this.head,
+			current = this.firstNode,
 			cursor = 0;
 
 		const
@@ -174,7 +257,7 @@ export default class LinkedList<T> {
 					return {done: true, value: undefined};
 				}
 
-				return {done: false, value: value.data};
+				return {done, value: value.data};
 			}
 		};
 	}
