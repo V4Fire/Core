@@ -13,7 +13,7 @@ Changelog
 
 #### :bug: Bug Fix
 
-* Fixed setting of new deep properties of the `accessors` engine
+* Fixed deep setting of new properties of the `accessors` engine
 
 ## v3.79.0 (2022-03-18)
 

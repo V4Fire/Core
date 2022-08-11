@@ -15,7 +15,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :bug: Bug Fix
 
-* Fixed setting of new deep properties of the `accessors` engine of the `watch` module
+* Fixed deep setting of new properties of the `accessors` engine of the `watch` module
 
 ## v3.87.0 (2022-08-08)
 

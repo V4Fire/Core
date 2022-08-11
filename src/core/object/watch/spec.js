@@ -906,7 +906,7 @@ describe('core/object/watch', () => {
 				}
 			});
 
-			it('setting of new deep properties', () => {
+			it('deep setting of new properties', () => {
 				{
 					const
 						obj = {},
