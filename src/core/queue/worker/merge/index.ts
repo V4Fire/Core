@@ -41,14 +41,14 @@ export default class MergeWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> 
 			return undefined;
 		}
 
-		const obj = this.tasksMap[this.tasks.head!];
+		const obj = this.tasksMap.get(this.tasks.head!);
 		return obj?.task;
 	}
 
 	/**
 	 * The map of registered tasks
 	 */
-	protected tasksMap: Dictionary<Task<T, V>> = Object.createDict();
+	protected tasksMap: Map<string, Task<T, V>> = new Map();
 
 	/**
 	 * Function to calculate a task hash
@@ -70,7 +70,7 @@ export default class MergeWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> 
 			hash = this.hashFn(task);
 
 		let
-			taskObj = this.tasksMap[hash];
+			taskObj = this.tasksMap.get(hash);
 
 		if (taskObj == null) {
 			let
@@ -81,7 +81,7 @@ export default class MergeWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> 
 			});
 
 			taskObj = {task, promise, resolve};
-			this.tasksMap[hash] = taskObj;
+			this.tasksMap.set(hash, taskObj);
 			this.tasks.push(hash);
 		}
 
@@ -97,7 +97,7 @@ export default class MergeWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> 
 		const
 			{head} = this;
 
-		delete this.tasksMap[this.tasks.head!];
+		this.tasksMap.delete(this.tasks.head!);
 		this.tasks.shift();
 
 		return head;
@@ -106,7 +106,7 @@ export default class MergeWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> 
 	override clear(): void {
 		if (this.length > 0) {
 			super.clear();
-			this.tasksMap = Object.createDict();
+			this.tasksMap = new Map<string, Task<T, V>>();
 		}
 	}
 
@@ -115,6 +115,21 @@ export default class MergeWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> 
 			newQueue = new MergeWorkerQueue<T, V>(this.worker, {});
 
 		Object.assign(newQueue, this);
+		newQueue.tasksMap = new Map(this.tasksMap);
+
+		if (this.tasks.clone != null) {
+			newQueue.tasks = this.tasks.clone();
+
+		} else {
+			const
+				tasks = this.createTasks();
+
+			for (const task of this.tasks) {
+				tasks.push(task);
+			}
+
+			newQueue.tasks = tasks;
+		}
 
 		return newQueue;
 	}
@@ -133,9 +148,9 @@ export default class MergeWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> 
 		}
 
 		const
-			taskObj = this.tasksMap[hash];
+			taskObj = this.tasksMap.get(hash);
 
-		if (!taskObj) {
+		if (taskObj == null) {
 			return;
 		}
 
@@ -144,7 +159,7 @@ export default class MergeWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> 
 			{task, promise, resolve} = taskObj;
 
 		const cb = () => {
-			delete this.tasksMap[hash];
+			this.tasksMap.delete(hash);
 			return this.deferPerform();
 		};
 

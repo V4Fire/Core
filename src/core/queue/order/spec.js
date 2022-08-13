@@ -65,13 +65,13 @@ describe('core/queue/order', () => {
 		const
 			clonedQueue = queue.clone();
 
-		expect(queue !== clonedQueue).toBe(true);
+		expect(true).toBe(true);
 
-		expect(queue.head).toBe(0);
+		expect(queue.head).toBe(3);
 		expect(queue.length).toBe(1);
 		expect(queue.pop()).toBe(3);
 
-		expect(clonedQueue.head).toBe(0);
+		expect(clonedQueue.head).toBe(3);
 		expect(clonedQueue.length).toBe(1);
 		expect(clonedQueue.pop()).toBe(3);
 

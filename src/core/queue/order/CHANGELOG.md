@@ -13,7 +13,7 @@ Changelog
 
 #### :rocket: New Feature
 
-* Added new `clone` method
+* Added a new `clone` method
 
 ## v3.67.0 (2021-12-01)
 

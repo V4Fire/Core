@@ -97,7 +97,11 @@ export default class OrderedQueue<T> extends Queue<T> {
 		const
 			newQueue = new OrderedQueue<T>(this.comparator);
 
-		Object.assign(newQueue, this);
+		newQueue.lastIndex = this.lastIndex;
+
+		for (const el of this.innerQueue) {
+			newQueue.innerQueue.push(el);
+		}
 
 		return newQueue;
 	}

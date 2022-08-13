@@ -104,19 +104,46 @@ describe('core/queue/worker/simple', () => {
 		queue.unshift({a: 2});
 		queue.unshift({a: 3});
 
-		expect(queue.head).toBe(0);
-		expect(queue.length).toBe(2);
-		expect(res).toEqual([1]);
-
 		const
 			clonedQueue = queue.clone();
 
 		expect(queue !== clonedQueue).toBe(true);
+		expect(queue.tasks !== clonedQueue.tasks).toBe(true);
 
-		expect(queue.shift()).toBe({a: 2});
+		expect(queue.length).toBe(2);
+		expect(queue.shift()).toEqual({a: 2});
+		expect(queue.length).toBe(1);
 
-		expect(clonedQueue.head).toBe(0);
 		expect(clonedQueue.length).toBe(2);
-		expect(clonedQueue.shift()).toBe({a: 2});
+	});
+
+	it('iterating queue asynchronously', async () => {
+		const
+			res = [];
+
+		const queue = new WorkerQueue((task) => {
+			res.push(task.a);
+			return Promise.resolve();
+
+		}, {concurrency: 2});
+
+		queue.unshift({a: 1});
+		queue.unshift({a: 2});
+		queue.unshift({a: 3});
+
+		 const iterate = async () => {
+			 let
+				 counter = 0;
+
+			 for await (const el of queue) {
+				 res.push(el.a);
+
+				 if (++counter === queue.length) {
+					 return res;
+				 }
+			 }
+		};
+
+		await expectAsync(iterate()).toBeResolvedTo([1, 2, 3]);
 	});
 });

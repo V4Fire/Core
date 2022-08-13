@@ -56,6 +56,20 @@ export default class SimpleWorkerQueue<T, V = unknown> extends WorkerQueue<T, V>
 
 		Object.assign(newQueue, this);
 
+		if (this.tasks.clone != null) {
+			newQueue.tasks = this.tasks.clone();
+
+		} else {
+			const
+				tasks = this.createTasks();
+
+			for (const task of this.tasks) {
+				tasks.push(task);
+			}
+
+			newQueue.tasks = tasks;
+		}
+
 		return newQueue;
 	}
 

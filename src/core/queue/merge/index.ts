@@ -106,9 +106,18 @@ export default class MergeQueue<T> extends AbstractQueue<T> {
 	/** @inheritDoc */
 	clone(): MergeQueue<T> {
 		const
-			newQueue = new MergeQueue<T>();
+			newQueue = new MergeQueue<T>(this.hashFn);
 
-		Object.assign(newQueue, this);
+		newQueue.tasksMap = new Map(this.tasksMap);
+
+		if (this.innerQueue.clone != null) {
+			newQueue.innerQueue = this.innerQueue.clone();
+
+		} else {
+			for (const el of this.innerQueue) {
+				newQueue.innerQueue.push(el);
+			}
+		}
 
 		return newQueue;
 	}
