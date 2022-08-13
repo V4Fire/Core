@@ -11,8 +11,9 @@
  * @packageDocumentation
  */
 
-import Queue from 'core/queue/interface';
-import type { InnerQueue, CreateInnerQueue } from 'core/queue/simple/interface';
+import Queue, { InnerQueue } from 'core/queue/interface';
+import type { CreateInnerQueue } from 'core/queue/simple/interface';
+import LinkedList from 'core/linked-list';
 
 export * from 'core/queue/interface';
 
@@ -28,28 +29,13 @@ export default class SimpleQueue<T> extends Queue<T> {
 
 	/** @inheritDoc */
 	get head(): CanUndef<T> {
-		return this.innerQueue[this.headCursor];
+		return this.innerQueue.first;
 	}
 
 	/** @inheritDoc */
 	get length(): number {
-		return this.lengthStore;
+		return this.innerQueue.length;
 	}
-
-	/**
-	 * Index of the head
-	 */
-	protected headCursor: number = 0;
-
-	/**
-	 * Index of the nearest empty cell
-	 */
-	protected emptyCursor: number = 0;
-
-	/**
-	 * Internal length value
-	 */
-	protected lengthStore: number = 0;
 
 	/**
 	 * Inner queue to store elements
@@ -64,47 +50,20 @@ export default class SimpleQueue<T> extends Queue<T> {
 
 	/** @inheritDoc */
 	push(task: T): number {
-		this.lengthStore++;
-		this.innerQueue[this.emptyCursor++] = task;
-
-		if (this.emptyCursor === this.headCursor) {
-			this.emptyCursor = this.lengthStore;
-		}
+		this.innerQueue.push(task);
 
 		return this.length;
 	}
 
 	/** @inheritDoc */
 	pop(): CanUndef<T> {
-		if (this.length === 0) {
-			return;
-		}
-
-		const {head} = this;
-		this.lengthStore--;
-
-		if (this.length === 0) {
-			this.headCursor = 0;
-			this.emptyCursor = 0;
-
-		} else {
-			if (this.emptyCursor > this.headCursor) {
-				this.emptyCursor = this.headCursor;
-			}
-
-			this.headCursor++;
-		}
-
-		return head;
+		return this.innerQueue.shift();
 	}
 
 	/** @inheritDoc */
 	clear(): void {
 		if (this.length > 0) {
-			this.innerQueue = this.createInnerQueue();
-			this.lengthStore = 0;
-			this.emptyCursor = 0;
-			this.headCursor = 0;
+			this.innerQueue.clear?.();
 		}
 	}
 
@@ -113,13 +72,25 @@ export default class SimpleQueue<T> extends Queue<T> {
 		const
 			newQueue = new SimpleQueue<T>();
 
-		Object.assign(newQueue, this);
+		if (this.innerQueue.clone != null) {
+			newQueue.innerQueue = this.innerQueue.clone();
+
+		} else {
+			for (const el of this.innerQueue) {
+				newQueue.push(el);
+			}
+		}
 
 		return newQueue;
+	}
+
+	/** @inheritDoc */
+	[Symbol.iterator](): IterableIterator<T> {
+		return this.innerQueue[Symbol.iterator]();
 	}
 
 	/**
 	 * Returns a new blank inner queue to store elements
 	 */
-	protected createInnerQueue: CreateInnerQueue<this['InnerQueue']> = () => [];
+	protected createInnerQueue: CreateInnerQueue<this['InnerQueue']> = () => new LinkedList<T>();
 }

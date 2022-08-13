@@ -79,21 +79,34 @@ describe('core/queue/simple', () => {
 
 	it('cloning a queue', () => {
 		const
-			queue = new SimpleQueue();
+			queue = new SimpleQueue(),
+			item = {a: 1};
 
-		queue.push(3);
+		queue.push(item);
 
 		const
 			clonedQueue = queue.clone();
 
 		expect(queue !== clonedQueue).toBe(true);
+		expect(queue.innerQueue !== clonedQueue.innerQueue).toBe(true);
 
-		expect(queue.head).toBe(0);
+		expect(queue.head).toBe(item);
 		expect(queue.length).toBe(1);
-		expect(queue.pop()).toBe(3);
+		expect(queue.pop()).toBe(item);
 
-		expect(clonedQueue.head).toBe(0);
+		expect(clonedQueue.head).toBe(item);
 		expect(clonedQueue.length).toBe(1);
-		expect(clonedQueue.pop()).toBe(3);
+		expect(clonedQueue.pop()).toBe(item);
+	});
+
+	it('iterating a queue', () => {
+		const
+			queue = new SimpleQueue();
+
+		queue.push(1);
+		queue.push(2);
+		queue.push(3);
+
+		expect([...queue]).toEqual([1, 2, 3]);
 	});
 });
