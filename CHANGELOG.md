@@ -11,6 +11,12 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.??.?? (2022-??-??)
+
+#### :bug: Bug Fix
+
+* Fixed setting new properties of a watchable object by a deep path using the accessor-based engine `core/object/watch`
+
 ## v3.87.0 (2022-08-08)
 
 #### :rocket: New Feature

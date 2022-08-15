@@ -306,18 +306,18 @@ export function watch<T extends object>(
 					return true;
 				}
 
-				for (let o = handlers.values(), el = o.next(); !el.done; el = o.next()) {
+				handlers.forEach((handler) => {
 					const
 						path = resolvedPath.concat(normalizedKey);
 
-					el.value(val, oldVal, {
+					handler(val, oldVal, {
 						obj: unwrappedObj,
 						root: resolvedRoot,
 						top,
 						fromProto,
 						path
 					});
-				}
+				});
 			}
 
 			return true;
