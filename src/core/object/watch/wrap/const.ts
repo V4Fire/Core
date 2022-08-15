@@ -99,6 +99,13 @@ export const iterators = {
 	}
 };
 
+export const mapIterator = {
+	[Symbol.iterator]: {
+		type: 'get',
+		value: (target: unknown[]): IterableIterator<unknown> => target.entries()
+	}
+};
+
 export const deleteMethods = {
 	delete: (
 		target: Map<unknown, unknown> | Set<unknown>,
@@ -125,6 +132,7 @@ export const clearMethods = {
 
 export const weakMapMethods = {
 	...deleteMethods,
+	...mapIterator,
 
 	get: {
 		type: 'get',
