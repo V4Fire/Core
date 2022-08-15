@@ -8,7 +8,7 @@
 
 import DefaultCache from 'core/cache/default';
 
-describe('core/cache/simple', () => {
+describe('core/cache/default', () => {
 	it('default value', () => {
 		const
 			cache = new DefaultCache(Array);
@@ -109,7 +109,7 @@ describe('core/cache/simple', () => {
 
 	it('`clones`', () => {
 		const
-			cache = new DefaultCache(),
+			cache = new DefaultCache(() => 10),
 			obj = {a: 1};
 
 		cache.set('foo', 1);

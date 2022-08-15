@@ -7,7 +7,7 @@
  */
 
 /**
- * [[include:core/cache/simple/README.md]]
+ * [[include:core/cache/default/README.md]]
  * @packageDocumentation
  */
 
@@ -43,5 +43,16 @@ export default class DefaultCache<K = unknown, V = unknown> extends SimpleCache<
 		}
 
 		return this.storage.get(key);
+	}
+
+	/** @see [[Cache.clone]] */
+	override clone(): DefaultCache<K, V> {
+		const
+			newCache = new DefaultCache<K, V>(this.defaultFactory),
+			mixin = {storage: new Map(this.storage)};
+
+		Object.assign(newCache, mixin);
+
+		return newCache;
 	}
 }
