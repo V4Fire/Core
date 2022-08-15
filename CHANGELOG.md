@@ -15,7 +15,9 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 #### :bug: Bug Fix
 
-* Fixed setting new properties of a watchable object by a deep path using the accessor-based engine `core/object/watch`
+* `core/object/watch`:
+  * Fixed setting new properties of a watchable object by a deep path using the accessor-based engine
+  * Now watchable Map uses the `entries` iterator by default
 
 ## v3.87.0 (2022-08-08)
 

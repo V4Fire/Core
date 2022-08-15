@@ -718,7 +718,9 @@ describe('core/object/watch', () => {
 					spy(value, oldValue, info.path);
 				});
 
-				[...proxy][0].a++;
+				expect([...map]).toEqual([...new Map([[key, {a: 1}]])]);
+
+				[...proxy][0][1].a++;
 				expect(spy).toHaveBeenCalledWith(2, 1, [key, 'a']);
 				expect(map).toEqual(new Map([[key, {a: 2}]]));
 
