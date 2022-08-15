@@ -11,16 +11,6 @@ Changelog
 
 ## v3.??.? (2022-0?-??)
 
-####  :boom: Breaking Change
-
-* Change type parameters from `<V, K>` to `<K, V>`
-
-## v3.20.0 (2020-07-05)
-
-#### :boom: Breaking Change
-
-* Changed the returning value of `clear` from `Set` to `Map`
-
 #### :rocket: New Feature
 
-* Added tests
+* Initial release

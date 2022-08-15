@@ -9,6 +9,16 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.??.? (2022-0?-??)
+
+#### :rocket: New Feature
+
+* Add a new method `clone`
+
+####  :boom: Breaking Change
+
+* Change type parameters from `<V, K>` to `<K, V>`
+
 ## v3.50.0 (2021-06-07)
 
 #### :rocket: New Feature

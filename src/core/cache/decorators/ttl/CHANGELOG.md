@@ -9,6 +9,16 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.??.? (2022-0?-??)
+
+#### :bug: Bug Fix
+
+* Fixed TS type inferring
+
+####  :boom: Breaking Change
+
+* Change type parameters from `<V, K>` to `<K, V>`
+
 ## v3.47.0 (2021-05-17)
 
 #### :bug: Bug Fix

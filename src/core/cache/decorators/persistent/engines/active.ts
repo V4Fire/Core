@@ -18,7 +18,7 @@ export default class ActivePersistentEngine<V> extends UncheckablePersistentEngi
 	 */
 	protected ttlIndex: Dictionary<number> = Object.createDict();
 
-	override async initCache(cache: Cache<V>): Promise<void> {
+	override async initCache(cache: Cache<string, V>): Promise<void> {
 		if (await this.storage.has(INDEX_STORAGE_NAME)) {
 			this.ttlIndex = (await this.storage.get<Dictionary<number>>(INDEX_STORAGE_NAME))!;
 

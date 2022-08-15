@@ -18,7 +18,7 @@ import addEmitter from 'core/cache/decorators/helpers/add-emitter';
 import type { PersistentEngine, CheckablePersistentEngine } from 'core/cache/decorators/persistent/engines/interface';
 import type { PersistentOptions, PersistentCache, PersistentTTLDecoratorOptions } from 'core/cache/decorators/persistent/interface';
 
-export default class PersistentWrapper<T extends Cache<V, string>, V = unknown> {
+export default class PersistentWrapper<T extends Cache<string, V>, V = unknown> {
 	/**
 	 * Default TTL to store items
 	 */
@@ -32,7 +32,7 @@ export default class PersistentWrapper<T extends Cache<V, string>, V = unknown> 
 	/**
 	 * Wrapped cache object
 	 */
-	protected readonly wrappedCache: PersistentCache<V>;
+	protected readonly wrappedCache: PersistentCache<string, V>;
 
 	/**
 	 * Engine to save cache items within a storage
@@ -61,7 +61,7 @@ export default class PersistentWrapper<T extends Cache<V, string>, V = unknown> 
 	/**
 	 * Returns an instance of the wrapped cache
 	 */
-	async getInstance(): Promise<PersistentCache<V>> {
+	async getInstance(): Promise<PersistentCache<string, V>> {
 		if (this.engine.initCache) {
 			await this.engine.initCache(this.cache);
 		}
@@ -80,7 +80,7 @@ export default class PersistentWrapper<T extends Cache<V, string>, V = unknown> 
 			set: originalSet,
 			clear: originalClear,
 			subscribe
-		} = addEmitter<T, V, string>(this.cache);
+		} = addEmitter<T, string, V>(this.cache);
 
 		this.wrappedCache.has = this.getDefaultImplementation('has');
 		this.wrappedCache.get = this.getDefaultImplementation('get');

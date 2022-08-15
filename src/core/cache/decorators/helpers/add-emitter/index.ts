@@ -40,12 +40,12 @@ export const
  *
  * @param cache
  */
-const addEmitter: AddEmitter = <T extends Cache<V, K>, V = unknown, K extends string = string>(cache) => {
+const addEmitter: AddEmitter = <T extends Cache<K, V>, K = unknown, V = unknown>(cache: T) => {
 	const
-		expandedCache = <Overwrite<CacheWithEmitter<V, K, T>, {[eventEmitter]?: EventEmitter}>><unknown>cache;
+		expandedCache = <Overwrite<CacheWithEmitter<K, V, T>, {[eventEmitter]?: EventEmitter}>><unknown>cache;
 
 	const
-		cacheWithEmitter = <CacheWithEmitter<V, K, T>>expandedCache;
+		cacheWithEmitter = <CacheWithEmitter<K, V, T>>expandedCache;
 
 	let
 		emitter;

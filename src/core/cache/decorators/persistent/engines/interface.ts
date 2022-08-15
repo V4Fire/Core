@@ -16,7 +16,7 @@ export interface AbstractPersistentEngine<V = unknown> {
 	 * Initializes a new cache instance from the past one
 	 * @param cache
 	 */
-	initCache?(cache: Cache<V>): CanPromise<void>;
+	initCache?(cache: Cache<unknown, V>): CanPromise<void>;
 }
 
 export abstract class AbstractPersistentEngine<V = unknown> {

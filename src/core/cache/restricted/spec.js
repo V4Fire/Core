@@ -124,4 +124,25 @@ describe('core/cache/restricted', () => {
 		expect(cache.has('foo')).toBe(false);
 		expect(cache.has('bar')).toBe(false);
 	});
+
+	it('`clones`', () => {
+		const
+			cache = new RestrictedCache(),
+			obj = {a: 1};
+
+		cache.set('foo', 1);
+		cache.set('bar', obj);
+
+		expect(cache.has('foo')).toBeTrue();
+		expect(cache.has('bar')).toBeTrue();
+
+		const newCache = cache.clone();
+
+		expect(cache !== newCache).toBeTrue();
+		expect(newCache.has('foo')).toBeTrue();
+		expect(newCache.has('bar')).toBeTrue();
+		expect(cache.storage !== newCache.storage).toBeTrue();
+		expect(cache.queue !== newCache.queue).toBeTrue();
+		expect(cache.get('bar') === newCache.get('bar')).toBeTrue();
+	});
 });

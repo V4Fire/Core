@@ -22,8 +22,8 @@ export * from 'core/cache/decorators/ttl/interface';
 /**
  * Wraps the specified cache object to add a feature of the cache expiring
  *
- * @typeparam V - value type of the cache object
  * @typeparam K - key type of the cache object
+ * @typeparam V - value type of the cache object
  *
  * @param cache - cache object to wrap
  * @param ttl - default ttl value in milliseconds
@@ -41,20 +41,20 @@ export * from 'core/cache/decorators/ttl/interface';
  * ```
  */
 export default function addTTL<
-	T extends Cache<V, K>,
+	T extends Cache<K, V>,
+	K = unknown,
 	V = unknown,
-	K extends string = string,
->(cache: T, ttl?: number): TTLCache<V, K, CacheWithEmitter<V, K, T>> {
+>(cache: Cache<K, V>, ttl?: number): TTLCache<K, V, CacheWithEmitter<K, V, T>> {
 	// eslint-disable-next-line @typescript-eslint/unbound-method
 	const {
 		remove: originalRemove,
 		set: originalSet,
 		clear: originalClear,
 		subscribe
-	} = addEmitter<TTLCache<V, K>, V, K>(<TTLCache<V, K>><unknown>cache);
+	} = addEmitter<TTLCache<K, V>, K, V>(<TTLCache<K, V>><unknown>cache);
 
 	const
-		cacheWithTTL: TTLCache<V, K> = Object.create(cache),
+		cacheWithTTL: TTLCache<K, V> = Object.create(cache),
 		ttlTimers = new Map<K, number | NodeJS.Timeout>();
 
 	cacheWithTTL.set = (key: K, value: V, opts?: TTLDecoratorOptions & Parameters<T['set']>[2]) => {

@@ -25,7 +25,11 @@ export interface MutationHandler<M extends AnyFunction = AnyFunction> {
 	(e: MutationEvent<M>): void;
 }
 
-export interface CacheWithEmitter<V = unknown, K = string, T extends Cache<V, K> = Cache<V, K>> extends Cache<V, K> {
+export interface CacheWithEmitter<
+	K = unknown,
+	V = unknown,
+	T extends Cache<K, V> = Cache<K, V>
+	> extends Cache<K, V> {
 	/** @override */
 	set(key: K, value: V, opts?: Parameters<T['set']>[2]): V;
 
@@ -36,9 +40,9 @@ export interface CacheWithEmitter<V = unknown, K = string, T extends Cache<V, K>
 }
 
 export type AddEmitter =
-	<T extends Cache<V, K>, V = unknown, K extends string = string>(cache: T) => AddEmitterReturn<T>;
+	<T extends Cache<K, V>, K = unknown, V = unknown>(cache: T) => AddEmitterReturn<T>;
 
-export interface AddEmitterReturn<T extends Cache<V, K>, V = unknown, K extends string = string> {
+export interface AddEmitterReturn<T extends Cache<K, V>, K = unknown, V = unknown> {
 	/** @see [[Cache.set]] */
 	set: T['set'];
 

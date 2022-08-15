@@ -78,4 +78,19 @@ describe('core/cache/never', () => {
 
 		expect(cache.clear((el) => el > 1)).toEqual(new Map([]));
 	});
+
+	it('`clones`', () => {
+		const
+			cache = new NeverCache();
+
+		cache.set('foo', 1);
+		expect(cache.has('foo')).toBeFalse();
+
+		const
+			newCache = cache.clone();
+
+		expect(cache !== newCache).toBeTrue();
+		expect(newCache.has('foo')).toBeFalse();
+		expect(cache.storage !== newCache.storage).toBeTrue();
+	});
 });
