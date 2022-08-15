@@ -13,6 +13,10 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 ## v3.??.?? (2022-??-??)
 
+#### :boom: Breaking Change
+
+* By default, the `ES` flag is set to `ES2021` for development builds `config`
+
 #### :bug: Bug Fix
 
 * `core/object/watch`:
