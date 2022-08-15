@@ -906,6 +906,48 @@ describe('core/object/watch', () => {
 				}
 			});
 
+			it('deep setting of new properties', () => {
+				{
+					const
+						obj = {},
+						spy = jasmine.createSpy();
+
+					const {proxy, set} = watch(obj, {immediate: true, engine, deep: true}, (value, oldValue, info) => {
+						spy(value, oldValue, info.path);
+					});
+
+					set('a.b', 1);
+					expect(spy).toHaveBeenCalledWith(1, undefined, ['a', 'b']);
+					expect(proxy.a?.b).toBe(1);
+					expect(obj.a?.b).toBe(1);
+
+					proxy.a.b = 2;
+					expect(spy).toHaveBeenCalledWith(2, 1, ['a', 'b']);
+					expect(proxy.a?.b).toBe(2);
+					expect(obj.a?.b).toBe(2);
+				}
+
+				{
+					const
+						obj = {},
+						spy = jasmine.createSpy();
+
+					const {proxy} = watch(obj, {immediate: true, engine, deep: true}, (value, oldValue, info) => {
+						spy(value, oldValue, info.path);
+					});
+
+					set(proxy, 'a.b', 1, engine);
+					expect(spy).toHaveBeenCalledWith(1, undefined, ['a', 'b']);
+					expect(proxy.a?.b).toBe(1);
+					expect(obj.a?.b).toBe(1);
+
+					proxy.a.b = 2;
+					expect(spy).toHaveBeenCalledWith(2, 1, ['a', 'b']);
+					expect(proxy.a?.b).toBe(2);
+					expect(obj.a?.b).toBe(2);
+				}
+			});
+
 			it('deleting of properties', () => {
 				{
 					const

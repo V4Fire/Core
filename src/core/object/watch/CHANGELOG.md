@@ -9,6 +9,12 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.??.?? (2022-??-??)
+
+#### :bug: Bug Fix
+
+* Fixed setting new properties of a watchable object by a deep path using the accessor-based engine
+
 ## v3.79.0 (2022-03-18)
 
 #### :rocket: New Feature
