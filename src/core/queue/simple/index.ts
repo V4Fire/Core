@@ -11,7 +11,7 @@
  * @packageDocumentation
  */
 
-import Queue, { InnerQueue } from 'core/queue/interface';
+import Queue from 'core/queue/interface';
 import type { CreateInnerQueue } from 'core/queue/simple/interface';
 import LinkedList from 'core/linked-list';
 
@@ -25,7 +25,7 @@ export default class SimpleQueue<T> extends Queue<T> {
 	/**
 	 * Type: inner queue to store elements
 	 */
-	readonly InnerQueue!: InnerQueue<T>;
+	readonly InnerQueue!: LinkedList<T>;
 
 	/** @inheritDoc */
 	get head(): CanUndef<T> {
@@ -63,7 +63,7 @@ export default class SimpleQueue<T> extends Queue<T> {
 	/** @inheritDoc */
 	clear(): void {
 		if (this.length > 0) {
-			this.innerQueue.clear?.();
+			this.innerQueue.clear();
 		}
 	}
 
@@ -72,14 +72,7 @@ export default class SimpleQueue<T> extends Queue<T> {
 		const
 			newQueue = new SimpleQueue<T>();
 
-		if (this.innerQueue.clone != null) {
-			newQueue.innerQueue = this.innerQueue.clone();
-
-		} else {
-			for (const el of this.innerQueue) {
-				newQueue.push(el);
-			}
-		}
+		newQueue.innerQueue = this.innerQueue.clone();
 
 		return newQueue;
 	}

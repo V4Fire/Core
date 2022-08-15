@@ -9,7 +9,6 @@
 export interface InnerQueue<T = unknown> {
 	readonly length: number;
 	readonly head?: CanUndef<T>;
-	readonly first?: CanUndef<T>;
 	push(task: T): number;
 	unshift(task: T): number;
 	pop(): CanUndef<T>;
