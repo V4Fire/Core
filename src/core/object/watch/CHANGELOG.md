@@ -13,7 +13,7 @@ Changelog
 
 #### :bug: Bug Fix
 
-* Fixed deep setting of new properties of the `accessors` engine
+* Fixed setting new properties of a watchable object by a deep path using the accessor-based engine
 
 ## v3.79.0 (2022-03-18)
 
