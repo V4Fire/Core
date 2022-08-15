@@ -167,8 +167,10 @@ export function watch<T extends object>(
 	const wrapOpts = {
 		root: resolvedRoot,
 		top,
+
 		path: resolvedPath,
 		originalPath: resolvedPath,
+
 		fromProto,
 		watchOpts: opts
 	};
@@ -176,22 +178,28 @@ export function watch<T extends object>(
 	if (Object.isArray(unwrappedObj)) {
 		bindMutationHooks(unwrappedObj, wrapOpts, handlers);
 
-		proxy = getOrCreateLabelValueByHandlers<unknown[]>(
+		const arrayProxy = getOrCreateLabelValueByHandlers<unknown[]>(
 			unwrappedObj,
+
 			toProxyObject,
 			handlers,
+
 			unwrappedObj
 		);
 
-		for (let i = 0; i < (<unknown[]>proxy).length; i++) {
-			proxy[i] = getProxyValue(proxy[i], i, path, handlers, resolvedRoot, top, opts);
+		proxy = arrayProxy;
+
+		for (let i = 0; i < arrayProxy.length; i++) {
+			arrayProxy[i] = getProxyValue(arrayProxy[i], i, path, handlers, resolvedRoot, top, opts);
 		}
 
 	} else if (Object.isDictionary(unwrappedObj)) {
 		proxy = getOrCreateLabelValueByHandlers<object>(
 			unwrappedObj,
+
 			toProxyObject,
 			handlers,
+
 			() => Object.create(unwrappedObj)
 		);
 
@@ -214,13 +222,7 @@ export function watch<T extends object>(
 
 	} else {
 		bindMutationHooks(unwrappedObj, wrapOpts, handlers);
-
-		proxy = getOrCreateLabelValueByHandlers<unknown[]>(
-			unwrappedObj,
-			toProxyObject,
-			handlers,
-			unwrappedObj
-		);
+		proxy = getOrCreateLabelValueByHandlers(unwrappedObj, toProxyObject, handlers, unwrappedObj);
 	}
 
 	Object.defineProperty(proxy, watchPath, {
@@ -263,12 +265,12 @@ export function set(obj: object, path: WatchPath, value: unknown, handlers: Watc
 	const
 		unwrappedObj = unwrap(obj);
 
-	if (!unwrappedObj) {
+	if (unwrappedObj == null) {
 		return;
 	}
 
 	const
-		normalizedPath = <string[]>(Object.isArray(path) ? path : path.split('.')),
+		normalizedPath = Object.isArray(path) ? path : path.split('.'),
 		prop = normalizedPath[normalizedPath.length - 1];
 
 	const
@@ -291,15 +293,20 @@ export function set(obj: object, path: WatchPath, value: unknown, handlers: Watc
 	}
 
 	const
-		proxy = getOrCreateLabelValueByHandlers<object>(unwrappedObj, toProxyObject, handlers),
+		proxy = getOrCreateLabelValueByHandlers<object>(unwrappedObj, toProxyObject, handlers);
+
+	const
 		root = proxy?.[toTopObject] ?? unwrappedObj,
 		top = proxy?.[toTopObject] ?? unwrappedObj;
 
 	const
-		ref = <object>Object.get(top, refPath),
-		type = getProxyType(ref);
+		ref = Object.get<object>(top, refPath);
 
-	switch (type) {
+	if (ref == null) {
+		throw new TypeError('Invalid data type to watch');
+	}
+
+	switch (getProxyType(ref)) {
 		case 'set':
 			throw new TypeError('Invalid data type to watch');
 
@@ -313,38 +320,32 @@ export function set(obj: object, path: WatchPath, value: unknown, handlers: Watc
 
 		default: {
 			const
-				key = String(prop);
+				key = String(prop),
+				hasPath = fullRefPath.length > 0;
 
 			const
-				hasPath = fullRefPath.length > 0,
 				resolvedPath = hasPath ? fullRefPath : undefined,
 				resolvedRoot = hasPath ? root : unwrappedObj,
 				resolvedTop = hasPath ? top : undefined;
 
-			let
-				currentProxy;
-
-			if (unwrappedObj !== obj) {
-				currentProxy = obj;
-
-			} else {
-				currentProxy =
-					(<CanUndef<WeakMap<object, Dictionary>>>unwrappedObj[toProxyObject])?.get(handlers) ??
-					Object.createDict();
-			}
+			const
+				refProxy = ref[toProxyObject]?.get(handlers) ?? Object.createDict();
 
 			// eslint-disable-next-line @typescript-eslint/unbound-method
-			if (!Object.isFunction(Object.getOwnPropertyDescriptor(currentProxy, key)?.get)) {
-				unwrappedObj[key] = currentProxy[key];
+			if (!Object.isFunction(Object.getOwnPropertyDescriptor(refProxy, key)?.get)) {
+				ref[key] = refProxy[key];
 			}
 
 			const resolvedProxy = setWatchAccessors(
 				ref,
 				key,
+
 				resolvedPath,
 				handlers,
+
 				resolvedRoot,
 				resolvedTop,
+
 				{deep: true}
 			);
 
@@ -489,25 +490,30 @@ export function setWatchAccessors(
 
 						if (fromProto === 1) {
 							fromProto = false;
-							opts!.fromProto = fromProto;
+
+							if (opts != null) {
+								opts.fromProto = fromProto;
+							}
 						}
 
 					} catch {
 						return;
 					}
 
-					for (let o = handlers.values(), el = o.next(); !el.done; el = o.next()) {
+					handlers.forEach((handler) => {
 						const
 							resolvedPath = Array.concat([], path ?? [], key);
 
-						el.value(val, oldVal, {
+						handler(val, oldVal, {
 							obj,
+
 							root,
 							top,
-							fromProto,
-							path: resolvedPath
+
+							path: resolvedPath,
+							fromProto: Boolean(fromProto)
 						});
-					}
+					});
 				}
 			}
 		});
