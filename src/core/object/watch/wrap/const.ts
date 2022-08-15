@@ -95,14 +95,7 @@ export const iterators = {
 
 	[Symbol.iterator]: {
 		type: 'get',
-		value: (target: unknown[]): IterableIterator<unknown> => target.values()
-	}
-};
-
-export const mapIterator = {
-	[Symbol.iterator]: {
-		type: 'get',
-		value: (target: unknown[]): IterableIterator<unknown> => target.entries()
+		value: (target: unknown[]): IterableIterator<unknown> => Object.isMap(target) ? target.entries() : target.values()
 	}
 };
 
@@ -132,7 +125,6 @@ export const clearMethods = {
 
 export const weakMapMethods = {
 	...deleteMethods,
-	...mapIterator,
 
 	get: {
 		type: 'get',
