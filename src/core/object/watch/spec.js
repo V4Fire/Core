@@ -710,7 +710,7 @@ describe('core/object/watch', () => {
 				const
 					key = {b: 1},
 					map = new Map([[key, {a: 1}]]),
-					spy = jasmine.createSpy();
+					spy = jest.fn();
 
 				const {proxy} = watch(map, {deep: true, immediate: true, engine}, (value, oldValue, info) => {
 					spy(value, oldValue, info.path);
@@ -910,7 +910,7 @@ describe('core/object/watch', () => {
 				{
 					const
 						obj = {},
-						spy = jasmine.createSpy();
+						spy = jest.fn();
 
 					const {proxy, set} = watch(obj, {immediate: true, engine, deep: true}, (value, oldValue, info) => {
 						spy(value, oldValue, info.path);
@@ -930,7 +930,7 @@ describe('core/object/watch', () => {
 				{
 					const
 						obj = {},
-						spy = jasmine.createSpy();
+						spy = jest.fn();
 
 					const {proxy} = watch(obj, {immediate: true, engine, deep: true}, (value, oldValue, info) => {
 						spy(value, oldValue, info.path);
