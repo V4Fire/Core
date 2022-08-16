@@ -31,7 +31,7 @@
     "test:linters": "npm run test:typescript && npm run test:eslint",
     "test:typescript": "node node_modules/@v4fire/typescript-check",
     "test:eslint": "eslint config build src",
-    "test:jest": "export NODE_ENV=development&&jest --coverage",
+    "test:jest": "export NODE_ENV=development&&jest --coverage --runInBand",
     "up": "npm i && gulp build:standalone && gulp build:doc"
   },
   "dependencies": {
