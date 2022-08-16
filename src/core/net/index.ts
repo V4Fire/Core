@@ -16,6 +16,7 @@ import config from 'config';
 import * as netEngine from 'core/net/engines';
 import { state, emitter } from 'core/net/const';
 import type { NetStatus, NetEngine } from 'core/net/interface';
+import { IS_NODE } from 'core/prelude/env';
 
 export * from 'core/net/const';
 export * from 'core/net/interface';
@@ -188,6 +189,10 @@ export async function updateStatus(): Promise<void> {
 			checkTimer = undefined;
 			updateStatus().catch(stderr);
 		}, online.checkInterval);
+
+		if (IS_NODE) {
+			checkTimer.unref();
+		}
 	}
 }
 

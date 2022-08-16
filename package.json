@@ -31,7 +31,7 @@
     "test:linters": "npm run test:typescript && npm run test:eslint",
     "test:typescript": "node node_modules/@v4fire/typescript-check",
     "test:eslint": "eslint config build src",
-    "test:jest": "export NODE_ENV=development&&jest --coverage --forceExit",
+    "test:jest": "export NODE_ENV=development&&jest --coverage",
     "up": "npm i && gulp build:standalone && gulp build:doc"
   },
   "dependencies": {
@@ -99,7 +99,7 @@
     "upath": "2.0.1"
   },
   "devDependencies": {
-    "@types/jest": "^28.1.4",
+    "@types/jest": "28.1.4",
     "@v4fire/linters": "1.9.0",
     "abort-controller": "3.0.0",
     "express": "4.17.3",

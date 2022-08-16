@@ -8,10 +8,10 @@ export default {
 	testMatch: ['<rootDir>/**/*[sS]pec.js'],
 	rootDir: 'dist/server',
 	testTimeout: 15000,
-	setupFilesAfterEnv: ['./setupTest.js'],
 	testEnvironment: 'node',
-	bail: 1,
+	bail: 2,
 	coverageReporters: ['lcov'],
+	reporters: ['default', 'github-actions', 'summary'],
   // All imported modules in your tests should be mocked automatically
   // automock: false,
 

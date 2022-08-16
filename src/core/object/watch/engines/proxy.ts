@@ -227,7 +227,7 @@ export function watch<T extends object>(
 				isCustomObject = isArray || Object.isCustomObject(target);
 
 			if (isArray && !Reflect.has(target, Symbol.isConcatSpreadable)) {
-				target[Symbol.isConcatSpreadable] = true;
+				Object.defineSymbol(target, Symbol.isConcatSpreadable, true);
 			}
 
 			if (Object.isSymbol(key) || blackListStore.has(key)) {

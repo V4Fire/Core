@@ -80,7 +80,7 @@ export default function proxyClone<T>(obj: T): T {
 					isCustomObject = isArray || Object.isCustomObject(resolvedTarget);
 
 				if (isArray && !Reflect.has(resolvedTarget, Symbol.isConcatSpreadable)) {
-					resolvedTarget[Symbol.isConcatSpreadable] = true;
+					Object.defineSymbol(resolvedTarget, Symbol.isConcatSpreadable, true);
 				}
 
 				if (Object.isFunction(val) && !isCustomObject) {

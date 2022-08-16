@@ -1,3 +1,4 @@
+/* eslint-disable capitalized-comments,no-tabs */
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core

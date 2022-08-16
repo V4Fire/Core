@@ -230,6 +230,9 @@ describe('core/prelude/object/iterators/forEach', () => {
 			scan.push(args);
 		});
 
+		// TODO ask Andrey about this iterator
+		expect([...data]).toEqual([1, 2, 3]);
+
 		expect(scan).toEqual([[1, 'a', data]]);
 	});
 

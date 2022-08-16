@@ -772,6 +772,16 @@ interface ObjectConstructor {
 	hasOwnProperty(obj: any, key: PropertyKey): boolean;
 
 	/**
+	 * Sets a value to the passed object by symbol with {enumerable: false}.
+	 * Return the object.
+	 *
+	 * @param obj
+	 * @param symbol
+	 * @param value
+	 * */
+	defineSymbol(obj: any, symbol: symbol, value: any): boolean;
+
+	/**
 	 * Sets a value to the passed object by the specified path.
 	 * The final function returns a value that was added.
 	 *

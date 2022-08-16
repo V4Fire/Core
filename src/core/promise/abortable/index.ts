@@ -45,7 +45,7 @@ export default class AbortablePromise<T = unknown> implements Promise<T> {
 	 * @param reason
 	 */
 	static wrapReasonToIgnore<T extends object>(reason: T): T {
-		reason[IGNORE] = true;
+		Object.defineSymbol(reason, IGNORE, true);
 		return reason;
 	}
 
