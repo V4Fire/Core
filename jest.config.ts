@@ -5,8 +5,8 @@
 
 export default {
 	projects: ['<rootDir>'],
-	testMatch: ['<rootDir>/**/*[sS]pec.js'],
-	rootDir: 'dist/server',
+	testMatch: ['<rootDir>/dist/server/**/*[sS]pec.js'],
+	rootDir: './',
 	testTimeout: 15000,
 	testEnvironment: 'node',
 	bail: 2,
@@ -31,7 +31,7 @@ export default {
   // collectCoverageFrom: undefined,
 
   // The directory where Jest should output its coverage files
-  coverageDirectory: './coverage',
+  coverageDirectory: '<rootDir>/coverage',
 
   // An array of regexp pattern strings used to skip coverage collection
   // coveragePathIgnorePatterns: [
