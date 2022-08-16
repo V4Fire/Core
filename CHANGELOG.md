@@ -11,6 +11,30 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.87.1 (2022-08-15)
+
+#### :boom: Breaking Change
+
+* By default, the `ES` flag is set to `ES2021` for development builds `config`
+
+#### :bug: Bug Fix
+
+* `core/object/watch`:
+  * Fixed setting new properties of a watchable object by a deep path using the accessor-based engine
+  * Now watchable Map uses the `entries` iterator by default
+
+## v3.87.0 (2022-08-08)
+
+#### :rocket: New Feature
+
+* Added a new overload for the `intoIter` method to create an iterator from an array-like object
+
+## v3.86.4 (2022-07-05)
+
+#### :bug: Bug Fix
+
+* [Fixed a bug with filtering request headers](https://github.com/V4Fire/Core/issues/298) `core/request/error`
+
 ## v3.86.3 (2022-06-10)
 
 #### :house: Internal

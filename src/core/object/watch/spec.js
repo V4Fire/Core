@@ -1,5 +1,3 @@
-/* eslint-disable max-lines-per-function, max-lines,no-tabs */
-
 /*!
  * V4Fire Core
  * https://github.com/V4Fire/Core
@@ -708,31 +706,32 @@ describe('core/object/watch', () => {
 				expect(map.has(1)).toBe(false);
 			});
 
-			// TODO: влить мр https://github.com/V4Fire/Core/pull/317
-			// it("watching for a map' iterator", () => {
-			// 	const
-			// 		key = {b: 1},
-			// 		map = new Map([[key, {a: 1}]]),
-			// 		spy = jest.fn();
-			//
-			// 	const {proxy} = watch(map, {deep: true, immediate: true, engine}, (value, oldValue, info) => {
-			// 		spy(value, oldValue, info.path);
-			// 	});
-			//
-			// 	[...proxy][0].a++;
-			// 	expect(spy).toHaveBeenCalledWith(2, 1, [key, 'a']);
-			// 	expect(map).toEqual(new Map([[key, {a: 2}]]));
-			//
-			// 	[...proxy.values()][0].a++;
-			// 	expect(spy).toHaveBeenCalledWith(3, 2, [key, 'a']);
-			// 	expect(map).toEqual(new Map([[key, {a: 3}]]));
-			//
-			// 	[...proxy.entries()][0][1].a++;
-			// 	expect(spy).toHaveBeenCalledWith(4, 3, [key, 'a']);
-			// 	expect(map).toEqual(new Map([[key, {a: 4}]]));
-			//
-			// 	expect([...proxy.keys()].length).toBe(1);
-			// });
+			it("watching for a map' iterator", () => {
+				const
+					key = {b: 1},
+					map = new Map([[key, {a: 1}]]),
+					spy = jasmine.createSpy();
+
+				const {proxy} = watch(map, {deep: true, immediate: true, engine}, (value, oldValue, info) => {
+					spy(value, oldValue, info.path);
+				});
+
+				expect([...map]).toEqual([...new Map([[key, {a: 1}]])]);
+
+				[...proxy][0][1].a++;
+				expect(spy).toHaveBeenCalledWith(2, 1, [key, 'a']);
+				expect(map).toEqual(new Map([[key, {a: 2}]]));
+
+				[...proxy.values()][0].a++;
+				expect(spy).toHaveBeenCalledWith(3, 2, [key, 'a']);
+				expect(map).toEqual(new Map([[key, {a: 3}]]));
+
+				[...proxy.entries()][0][1].a++;
+				expect(spy).toHaveBeenCalledWith(4, 3, [key, 'a']);
+				expect(map).toEqual(new Map([[key, {a: 4}]]));
+
+				expect([...proxy.keys()].length).toBe(1);
+			});
 
 			it('watching for a weak map', () => {
 				const
@@ -904,6 +903,48 @@ describe('core/object/watch', () => {
 
 					proxy.a = 2;
 					expect(spy).toHaveBeenCalledWith(2, 1, ['a']);
+				}
+			});
+
+			it('deep setting of new properties', () => {
+				{
+					const
+						obj = {},
+						spy = jasmine.createSpy();
+
+					const {proxy, set} = watch(obj, {immediate: true, engine, deep: true}, (value, oldValue, info) => {
+						spy(value, oldValue, info.path);
+					});
+
+					set('a.b', 1);
+					expect(spy).toHaveBeenCalledWith(1, undefined, ['a', 'b']);
+					expect(proxy.a?.b).toBe(1);
+					expect(obj.a?.b).toBe(1);
+
+					proxy.a.b = 2;
+					expect(spy).toHaveBeenCalledWith(2, 1, ['a', 'b']);
+					expect(proxy.a?.b).toBe(2);
+					expect(obj.a?.b).toBe(2);
+				}
+
+				{
+					const
+						obj = {},
+						spy = jasmine.createSpy();
+
+					const {proxy} = watch(obj, {immediate: true, engine, deep: true}, (value, oldValue, info) => {
+						spy(value, oldValue, info.path);
+					});
+
+					set(proxy, 'a.b', 1, engine);
+					expect(spy).toHaveBeenCalledWith(1, undefined, ['a', 'b']);
+					expect(proxy.a?.b).toBe(1);
+					expect(obj.a?.b).toBe(1);
+
+					proxy.a.b = 2;
+					expect(spy).toHaveBeenCalledWith(2, 1, ['a', 'b']);
+					expect(proxy.a?.b).toBe(2);
+					expect(obj.a?.b).toBe(2);
 				}
 			});
 
