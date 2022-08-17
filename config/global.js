@@ -11,8 +11,8 @@
 const
 	path = require('path');
 
-// Fix: globalThis.isProd = false;
-// Fix: globalThis.include = require;
+globalThis.isProd = false;
+globalThis.include = require;
 
 Object.defineProperties(globalThis, {
 	include: {
