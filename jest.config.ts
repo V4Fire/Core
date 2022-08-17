@@ -5,10 +5,11 @@
 
 export default {
 	projects: ['<rootDir>'],
-	testMatch: ['<rootDir>/dist/server/**/*[sS]pec.js'],
+	testMatch: ['<rootDir>/src/**/*[sS]pec.ts'],//'<rootDir>/dist/server/**/*[sS]pec.js',
 	rootDir: './',
 	testTimeout: 15000,
 	testEnvironment: 'node',
+	preset: 'ts-jest',
 	bail: 2,
 	coverageReporters: ['lcov'],
 	reporters: ['default', 'github-actions', 'summary'],
