@@ -114,7 +114,6 @@ export default class List<T> {
 		}
 
 		first.next = null;
-
 		return first.data;
 	}
 
@@ -135,7 +134,6 @@ export default class List<T> {
 		}
 
 		this.lastNode = link;
-
 		return ++this.lengthStore;
 	}
 
