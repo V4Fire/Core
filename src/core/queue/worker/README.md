@@ -63,7 +63,7 @@ console.log(queue.length); // 2
 How often to update task statuses, i.e. the next batch of tasks will be executed at the specified interval
 (by default on the next tick of the process).
 
-### Properties
+### Class properties
 
 #### concurrency
 
