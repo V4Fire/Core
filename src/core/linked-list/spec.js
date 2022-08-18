@@ -91,7 +91,7 @@ describe('core/linked-list', () => {
 		expect(list.includes(10)).toBeFalse();
 	});
 
-	it('should implement iterable API', () => {
+	it('should implement the iterable API', () => {
 		const
 			list = new LinkedList([1, 2, 3]);
 
