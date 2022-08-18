@@ -9,7 +9,7 @@
 import MergeQueue from 'core/queue/merge';
 
 describe('core/queue/merge', () => {
-	it('simple usage', () => {
+	it('should put and remove elements from the queue in the correct order', () => {
 		const
 			queue = new MergeQueue();
 
@@ -17,17 +17,27 @@ describe('core/queue/merge', () => {
 		expect(queue.push(3)).toBe(1);
 		expect(queue.push(4)).toBe(2);
 		expect(queue.push(4)).toBe(2);
-
 		expect(queue.head).toBe(3);
-		expect(queue.length).toBe(2);
 
 		expect(queue.pop()).toBe(3);
-
 		expect(queue.head).toBe(4);
+	});
+
+	it('should return the queue length', () => {
+		const
+			queue = new MergeQueue();
+
+		queue.push(3);
+		queue.push(3);
+		queue.push(4);
+		queue.push(4);
+		expect(queue.length).toBe(2);
+
+		queue.pop();
 		expect(queue.length).toBe(1);
 	});
 
-	it('alternative API', () => {
+	it('should implement the alternative API', () => {
 		const
 			queue = new MergeQueue();
 
@@ -45,20 +55,21 @@ describe('core/queue/merge', () => {
 		expect(queue.length).toBe(1);
 	});
 
-	it('clearing of a queue', () => {
+	it('should implement the iterable API', () => {
 		const
 			queue = new MergeQueue();
 
-		expect(queue.push(3)).toBe(1);
-		expect(queue.push(4)).toBe(2);
+		queue.push(1);
+		queue.push(1);
+		queue.push(2);
+		queue.push(2);
+		queue.push(3);
+		queue.push(3);
 
-		queue.clear();
-
-		expect(queue.head).toBeUndefined();
-		expect(queue.length).toBe(0);
+		expect([...queue]).toEqual([1, 2, 3]);
 	});
 
-	it('cloning a queue', () => {
+	it('calling `clone` should clone the queue', () => {
 		const
 			queue = new MergeQueue(),
 			item = {a: 1};
@@ -80,14 +91,17 @@ describe('core/queue/merge', () => {
 		expect(clonedQueue.pop()).toBe(item);
 	});
 
-	it('iterating a queue', () => {
+	it('calling `clear` should clear the queue', () => {
 		const
 			queue = new MergeQueue();
 
-		queue.push(1);
-		queue.push(2);
 		queue.push(3);
+		queue.push(3);
+		queue.push(4);
 
-		expect([...queue]).toEqual([1, 2, 3]);
+		queue.clear();
+
+		expect(queue.head).toBeUndefined();
+		expect(queue.length).toBe(0);
 	});
 });

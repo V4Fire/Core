@@ -13,7 +13,8 @@ Changelog
 
 #### :rocket: New Feature
 
-* Added base realisation of `[Symbol.iterator]` and `[Symbol.asyncIterator]` methods to abstract class
+* Added a new method to clone a queue
+* Now any queue can be traversed with an iterator
 
 ## v3.67.0 (2021-12-01)
 

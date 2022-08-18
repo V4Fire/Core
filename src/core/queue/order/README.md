@@ -1,11 +1,12 @@
 # core/queue/order
 
 This module provides a class to organize an ordered [[Queue]] data structure.
+See [`core/queue`](src_core_queue.html) for more information.
 
 ## Comparator
 
-To compare different elements from a queue is used the special comparator function that has the same API with
-the native `Array.prototype.sort` comparator. To provide a comparator, use the structure' constructor.
+To compare different elements from the queue, a special comparator function is used, which has the same API as
+the native comparator `Array.prototype.sort`. To provide a comparator, use the structure constructor.
 
 ## Usage
 

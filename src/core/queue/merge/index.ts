@@ -19,12 +19,12 @@ import type { HashFn, InnerQueue, CreateInnerQueue } from 'core/queue/merge/inte
 export * from 'core/queue/merge/interface';
 
 /**
- * Implementation of a queue data structure with support of task merging by the specified hash function
- * @typeparam T - queue element
+ * Implementation of a queue data structure with support of task merging by a specified hash function
+ * @typeparam T - the queue element
  */
 export default class MergeQueue<T> extends AbstractQueue<T> {
 	/**
-	 * Type: inner queue to store elements
+	 * Type: the internal queue to store elements
 	 */
 	readonly InnerQueue!: InnerQueue<string>;
 
@@ -43,23 +43,23 @@ export default class MergeQueue<T> extends AbstractQueue<T> {
 	}
 
 	/**
-	 * Inner queue to store elements
+	 * The internal queue to store elements
 	 */
 	protected innerQueue: this['InnerQueue'];
 
 	/**
-	 * The map of registered tasks
+	 * A map of registered tasks
 	 */
 	protected tasksMap: Map<string, T> = new Map();
 
 	/**
-	 * Function to calculate a task hash
+	 * A function to calculate task hashes
 	 */
 	protected readonly hashFn: HashFn<T>;
 
 	/**
 	 * @override
-	 * @param [hashFn]
+	 * @param [hashFn] - a function to calculate task hashes
 	 */
 	constructor(hashFn?: HashFn<T>) {
 		super();
@@ -105,9 +105,7 @@ export default class MergeQueue<T> extends AbstractQueue<T> {
 
 	/** @inheritDoc */
 	clone(): MergeQueue<T> {
-		const
-			newQueue = new MergeQueue<T>(this.hashFn);
-
+		const newQueue = new MergeQueue<T>(this.hashFn);
 		newQueue.tasksMap = new Map(this.tasksMap);
 
 		if (this.innerQueue.clone != null) {
@@ -123,7 +121,7 @@ export default class MergeQueue<T> extends AbstractQueue<T> {
 	}
 
 	/**
-	 * Returns a new blank inner queue to store elements
+	 * Returns a new blank internal queue to store elements
 	 */
 	protected createInnerQueue: CreateInnerQueue<this['InnerQueue']> = () => new SimpleQueue();
 }

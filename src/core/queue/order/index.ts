@@ -17,12 +17,12 @@ import type { InnerQueue, CreateInnerQueue, ElsComparator } from 'core/queue/ord
 export * from 'core/queue/order/interface';
 
 /**
- * Implementation of an ordered queue data structure
- * @typeparam T - queue element
+ * Implementation of an ordered queue data structure based on a binary heap
+ * @typeparam T - the queue element
  */
 export default class OrderedQueue<T> extends Queue<T> {
 	/**
-	 * Type: inner queue to store elements
+	 * Type: the internal queue to store elements
 	 */
 	readonly InnerQueue!: InnerQueue<T>;
 
@@ -37,22 +37,22 @@ export default class OrderedQueue<T> extends Queue<T> {
 	}
 
 	/**
-	 * Index of the last element from the queue
+	 * An index of the last element from the queue
 	 */
 	protected lastIndex: number = -1;
 
 	/**
-	 * Inner queue to store elements
+	 * The internal queue to store elements
 	 */
 	protected innerQueue: this['InnerQueue'];
 
 	/**
-	 * Function to compare tasks
+	 * A function to compare tasks
 	 */
 	protected comparator: ElsComparator<T>;
 
 	/**
-	 * @param comparator
+	 * @param comparator - a function to compare tasks
 	 */
 	constructor(comparator: ElsComparator<T>) {
 		super();
@@ -94,9 +94,7 @@ export default class OrderedQueue<T> extends Queue<T> {
 
 	/** @inheritDoc */
 	clone(): OrderedQueue<T> {
-		const
-			newQueue = new OrderedQueue<T>(this.comparator);
-
+		const newQueue = new OrderedQueue<T>(this.comparator);
 		newQueue.lastIndex = this.lastIndex;
 
 		for (const el of this.innerQueue) {
@@ -107,12 +105,12 @@ export default class OrderedQueue<T> extends Queue<T> {
 	}
 
 	/**
-	 * Returns a new blank inner queue to store elements
+	 * Returns a new blank internal queue to store elements
 	 */
 	protected createInnerQueue: CreateInnerQueue<this['InnerQueue']> = () => [];
 
 	/**
-	 * Raises the headIndex queue element of the queue up
+	 * Pushes the last queue element to the top
 	 */
 	protected fromBottom(): void {
 		let
@@ -139,7 +137,7 @@ export default class OrderedQueue<T> extends Queue<T> {
 	}
 
 	/**
-	 * Puts the first queue element down the queue
+	 * Pushes the first queue element down
 	 */
 	protected toBottom(): void {
 		let

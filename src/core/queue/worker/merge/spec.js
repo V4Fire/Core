@@ -9,7 +9,7 @@
 import MergeQueue from 'core/queue/worker/merge';
 
 describe('core/queue/worker/merge', () => {
-	it('simple usage', async () => {
+	it('should put and remove elements from the queue in the correct order', async () => {
 		const
 			res = [];
 
@@ -41,7 +41,7 @@ describe('core/queue/worker/merge', () => {
 		});
 	});
 
-	it('alternative API', async () => {
+	it('should implement the alternative API', async () => {
 		const
 			res = [];
 
@@ -73,57 +73,7 @@ describe('core/queue/worker/merge', () => {
 		});
 	});
 
-	it('clearing of a queue', () => {
-		const
-			res = [];
-
-		const queue = new MergeQueue((task) => {
-			res.push(task.a);
-			return Promise.resolve();
-
-		}, {concurrency: 1});
-
-		queue.unshift({a: 1});
-		queue.unshift({a: 2});
-		queue.unshift({a: 3});
-
-		expect(queue.length).toBe(2);
-
-		queue.clear();
-
-		expect(queue.length).toBe(0);
-		expect(res).toEqual([1]);
-	});
-
-	it('cloning a queue', () => {
-		const
-			res = [];
-
-		const queue = new MergeQueue((task) => {
-			res.push(task.a);
-			return Promise.resolve();
-
-		}, {concurrency: 1});
-
-		queue.unshift({a: 1});
-		queue.unshift({a: 2});
-		queue.unshift({a: 3});
-
-		const
-			clonedQueue = queue.clone();
-
-		expect(queue !== clonedQueue).toBe(true);
-		expect(queue.tasks !== clonedQueue.tasks).toBe(true);
-		expect(queue.tasksMap !== clonedQueue.tasksMap).toBe(true);
-
-		expect(queue.length).toBe(2);
-		expect(queue.shift()).toEqual({a: 2});
-		expect(queue.length).toBe(1);
-
-		expect(clonedQueue.length).toBe(2);
-	});
-
-	it('iterating queue asynchronously', async () => {
+	it('should implement the iterable API', async () => {
 		const
 			res = [];
 
@@ -151,5 +101,48 @@ describe('core/queue/worker/merge', () => {
 		};
 
 		await expectAsync(iterate()).toBeResolvedTo([1, 2, 3]);
+	});
+
+	it('calling `clone` should clone the queue', () => {
+		const queue = new MergeQueue(Promise.resolve, {concurrency: 1});
+
+		queue.unshift({a: 1});
+		queue.unshift({a: 2});
+		queue.unshift({a: 3});
+
+		const
+			clonedQueue = queue.clone();
+
+		expect(queue !== clonedQueue).toBe(true);
+		expect(queue.tasks !== clonedQueue.tasks).toBe(true);
+		expect(queue.tasksMap !== clonedQueue.tasksMap).toBe(true);
+
+		expect(queue.length).toBe(2);
+		expect(queue.shift()).toEqual({a: 2});
+		expect(queue.length).toBe(1);
+
+		expect(clonedQueue.length).toBe(2);
+	});
+
+	it('calling `clear` should clear the queue', () => {
+		const
+			res = [];
+
+		const queue = new MergeQueue((task) => {
+			res.push(task.a);
+			return Promise.resolve();
+
+		}, {concurrency: 1});
+
+		queue.unshift({a: 1});
+		queue.unshift({a: 2});
+		queue.unshift({a: 3});
+
+		expect(queue.length).toBe(2);
+
+		queue.clear();
+
+		expect(queue.length).toBe(0);
+		expect(res).toEqual([1]);
 	});
 });

@@ -1,8 +1,9 @@
 # core/queue
 
-This module provides an abstract class for a [[Queue]] data structure.
-The submodules contain different classes and interfaces that extends or implements that class.
+This module provides an abstract class for any [[Queue]] data structure.
+For convenience, the underlying queue API is fairly close to the regular JS array API.
 
+The submodules contain different classes and interfaces that extends or implements that class.
 The main module re-exports these implementations:
 
 * `AbstractQueue` — an alias for [`core/queue/interface/Queue`](src_core_queue_interface.html);
@@ -16,11 +17,134 @@ The main module re-exports these implementations:
 
 ## API
 
-The base API is pretty close to a JS array: `push/unshift`, `pop/shift`, `length`.
-Notice, the `shift` and `unshift` methods just aliases for `pop` and `push`.
-In addition, the API declares `head` to get the first element from a queue and `clear` to clear the whole queue.
+### Own API
 
-## Simple implementation
+#### head
+
+The first element in the queue.
+
+```js
+import Queue from 'core/queue/simple';
+
+const
+ queue = new Queue();
+
+queue.push(1);
+queue.push(5);
+
+console.log(queue.head); // 1
+```
+
+#### clone
+
+Creates a new queue based on the current one and returns it.
+
+```js
+import Queue from 'core/queue/simple';
+
+const
+ queue1 = new Queue();
+
+queue1.push(1);
+queue1.push(5);
+
+const
+  queue2 = queue1.clone();
+
+console.log(queue2.head);       // 1
+console.log(queue1 !== queue2); // true
+```
+
+#### clear
+
+Clears the queue.
+
+```js
+import Queue from 'core/queue/simple';
+
+const
+  queue = new Queue();
+
+queue.push(1);
+queue.push(5);
+
+console.log(queue.head); // 1
+
+queue.clear();
+
+console.log(queue.head);   // undefined
+console.log(queue.length); // 0
+```
+
+### Array-Like API
+
+For convenience, the underlying queue API is fairly close to the regular JS array API.
+
+1. That is, you have methods for adding and removing elements: `push/unshift` and `pop/shift`.
+   Notice, the `shift` and `unshift` methods just aliases for `pop` and `push`.
+
+   ```js
+   import Queue from 'core/queue/simple';
+
+   const
+     queue = new Queue();
+
+   queue.push(1);
+   queue.unshift(5);
+
+   console.log(queue.pop());   // 1
+   console.log(queue.shift()); // 5
+   ```
+
+2. You can also find out the number of elements in the queue using the `length` getter.
+
+   ```js
+   import Queue from 'core/queue/simple';
+
+   const
+     queue = new Queue();
+
+   queue.push(1);
+   queue.push(5);
+
+   console.log(queue.length);  // 2
+   ```
+
+3. Like arrays, any queue can be traversed using an iterator.
+
+   ```js
+   import Queue from 'core/queue/simple';
+
+   const
+     queue = new Queue();
+
+   queue.push(1);
+   queue.push(5);
+
+   // [1, 5]
+   console.log([...queue]);
+   ```
+
+In addition, the API declares `head` to get the first element from the queue and `clear` to clear the queue.
+
+```js
+import Queue from 'core/queue/simple';
+
+const
+ queue = new Queue();
+
+queue.push(1);
+queue.push(5);
+
+console.log(queue.head); // 1
+
+queue.clear();
+
+console.log(queue.head);   // undefined
+console.log(queue.length); // 0
+```
+
+### Simple implementation
 
 ```js
 import { AbstractQueue } from 'core/queue';
@@ -40,20 +164,14 @@ export default class Queue extends AbstractQueue {
     return this.internalQueue.push(el);
   }
 
-  // An alias for `push`.
-  // The method has the default implementation.
-  unshift(el) {
-    return this.push(el);
-  }
-
   pop() {
     return this.internalQueue.shift();
   }
 
-  // An alias for `pop`.
-  // The method has the default implementation.
-  shift() {
-    return this.pop();
+  clone() {
+    const queue = new Queue();
+    queue.internalQueue = this.internalQueue.slice();
+    return queue;
   }
 
   clear() {

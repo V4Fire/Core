@@ -28,10 +28,10 @@ import type {
 export * from 'core/queue/worker/merge/interface';
 
 /**
- * Implementation of a worker queue data structure with support of task merging by the specified hash function
+ * Implementation of a worker queue data structure with support of task merging by a specified hash function
  *
- * @typeparam T - task element
- * @typeparam V - worker value
+ * @typeparam T - the task element
+ * @typeparam V - the worker value
  */
 export default class MergeWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> {
 	override readonly Tasks!: Tasks<string>;
@@ -46,19 +46,19 @@ export default class MergeWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> 
 	}
 
 	/**
-	 * The map of registered tasks
+	 * A map of registered tasks
 	 */
 	protected tasksMap: Map<string, Task<T, V>> = new Map();
 
 	/**
-	 * Function to calculate a task hash
+	 * A function to calculate task hashes
 	 */
 	protected readonly hashFn: HashFn<T>;
 
 	/**
 	 * @override
 	 * @param worker
-	 * @param [opts]
+	 * @param [opts] - additional options
 	 */
 	constructor(worker: QueueWorker<T, V>, opts: WorkerQueueOptions<T>) {
 		super(worker, opts);

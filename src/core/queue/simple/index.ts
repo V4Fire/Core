@@ -19,12 +19,12 @@ import type { CreateInnerQueue } from 'core/queue/simple/interface';
 export * from 'core/queue/interface';
 
 /**
- * Simple implementation of a queue data structure
- * @typeparam T - queue element
+ * Implementation of a queue data structure based on a linked-list
+ * @typeparam T - the queue element
  */
 export default class SimpleQueue<T> extends Queue<T> {
 	/**
-	 * Type: inner queue to store elements
+	 * Type: the internal queue to store elements
 	 */
 	readonly InnerQueue!: LinkedList<T>;
 
@@ -39,7 +39,7 @@ export default class SimpleQueue<T> extends Queue<T> {
 	}
 
 	/**
-	 * Inner queue to store elements
+	 * The internal queue to store elements
 	 */
 	protected innerQueue: this['InnerQueue'];
 
@@ -80,7 +80,7 @@ export default class SimpleQueue<T> extends Queue<T> {
 	}
 
 	/**
-	 * Returns a new blank inner queue to store elements
+	 * Returns a new blank internal queue to store elements
 	 */
 	protected createInnerQueue: CreateInnerQueue<this['InnerQueue']> = () => new LinkedList<T>();
 }

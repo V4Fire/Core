@@ -13,12 +13,12 @@ Changelog
 
 #### :rocket: New Feature
 
-* Added a new `clone` method
-* Added `[Symbol.iterator]` method
+* Implemented a new `clone` method
+* Implemented iterable behavior
 
 #### :bug: Bug Fix
 
-* Changed the `InnerQueue` structure to the `LinkedList`
+* Changed the internal queue structure to `core/linked-list`
 
 ## v3.67.0 (2021-12-01)
 

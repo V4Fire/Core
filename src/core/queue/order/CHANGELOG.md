@@ -13,7 +13,8 @@ Changelog
 
 #### :rocket: New Feature
 
-* Added a new `clone` method
+* Implemented a new `clone` method
+* Implemented iterable behavior
 
 ## v3.67.0 (2021-12-01)
 

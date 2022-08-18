@@ -9,11 +9,15 @@
 export interface InnerQueue<T = unknown> {
 	readonly length: number;
 	readonly head?: CanUndef<T>;
+	[Symbol.iterator](): IterableIterator<T>;
+
 	push(task: T): number;
 	unshift(task: T): number;
+
 	pop(): CanUndef<T>;
 	shift(): CanUndef<T>;
-	[Symbol.iterator](): IterableIterator<T>;
+
+	clone?(): InnerQueue<T>;
 }
 
 export interface CreateInnerQueue<T extends InnerQueue<any> = InnerQueue> {
@@ -33,7 +37,7 @@ export interface QueueOptions<T extends InnerQueue<any> = InnerQueue> {
  */
 export default abstract class Queue<T> {
 	/**
-	 * The queue head
+	 * The first element in the queue
 	 */
 	abstract readonly head: CanUndef<T>;
 
