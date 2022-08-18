@@ -54,7 +54,7 @@ jobs:
         run: npm run build
 
       - name: Run tests
-        run: npm run test:jest
+        run: npm run test:ci:jest
 
       - name: Coveralls
         uses: coverallsapp/github-action@master
@@ -83,7 +83,7 @@ jobs:
         run: npm run build -- --es ES5
 
       - name: Run tests
-        run: npm run test:jest
+        run: npm run test:ci:jest
 
   build-standalone:
     runs-on: ubuntu-latest
