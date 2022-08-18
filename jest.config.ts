@@ -9,9 +9,8 @@ export default {
 	rootDir: './',
 	testTimeout: 15000,
 	testEnvironment: 'node',
-	preset: 'ts-jest',
 	bail: 2,
-	reporters: ['default', 'github-actions', 'summary'],
+	reporters: ['default'],
 
 	silent: true,
   clearMocks: true,
