@@ -1,12 +1,11 @@
 # core/queue/worker
 
 This module provides an abstract class for a [[WorkerQueue]] data structure.
-The submodules contain different implementations of that class.
+The submodules contain different implementations of that class. See [`core/queue`](src_core_queue.html) for more information.
 
-## Implementations:
+## Implementations
 
 * [SimpleWorkerQueue](src_core_queue_worker_simple.html)
-
 * [MergeWorkerQueue](src_core_queue_worker_merge.html)
 
 ## API
@@ -61,10 +60,10 @@ console.log(queue.length); // 2
 
 ##### [refreshInterval]
 
-How often to refresh task statuses, i.e., the next butch of tasks will be executed after the specified interval
-(by default, on the next process tick).
+How often to update task statuses, i.e. the next batch of tasks will be executed at the specified interval
+(by default on the next tick of the process).
 
-### Properties
+### Class properties
 
 #### concurrency
 
@@ -72,9 +71,9 @@ The maximum number of concurrent workers.
 
 #### refreshInterval
 
-How often to refresh task statuses, i.e., the next butch of tasks will be executed after the specified interval
-(by default, on the next process tick).
+How often to update task statuses, i.e. the next batch of tasks will be executed at the specified interval
+(by default on the next tick of the process).
 
 #### activeWorkers
 
-Number of active workers (in process).
+Number of active workers.

@@ -1,12 +1,8 @@
 # core/queue/worker/merge
 
-This module provides a class to organize a [[WorkerQueue]] data structure with support of task merging by the specified hash function.
-It means that the same tasks aren't duplicated.
-
-## Providing a hash function
-
-To provide a function to calculate task hashes, use the structure constructor `hashFn` option.
-By default, the hash is calculated via `Object.fastHash`.
+This module provides a class to organize a [[WorkerQueue]] data structure with support of task merging by a specified hash function.
+It means that the same tasks aren't duplicated. See [`core/queue/worker`](src_core_queue_worker.html) and
+[`core/queue`](src_core_queue.html) for more information.
 
 ## Usage
 
@@ -40,4 +36,22 @@ console.log(queue.length); // 2
 
 queue.clear();
 console.log(queue.length); // 0
+```
+
+### Providing a hash function
+
+To provide a function to calculate task hashes, use the structure constructor `hashFn` option.
+By default, all hashes are calculated via `Object.fastHash`.
+
+```js
+import MergeQueue from 'core/queue/worker/merge';
+
+const queue = new MergeQueue((task) => {
+  console.log(task);
+}, {
+  hashFn: (task) => JSON.stringify(task)
+});
+
+queue.push({a: 1});
+queue.push({a: 1});
 ```
