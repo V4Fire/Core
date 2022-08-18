@@ -236,7 +236,7 @@ describe('core/prelude/object/iterators/forEach', () => {
 		expect(scan).toEqual([[1, 'a', data]]);
 	});
 
-	t('iteration of an iterator with object flags (legacy)', () => {
+	it('iteration of an iterator with object flags (legacy)', () => {
 		const
 			data = Object.assign([1, 2, 3].values(), {a: 1}),
 			scan = [];
@@ -244,6 +244,8 @@ describe('core/prelude/object/iterators/forEach', () => {
 		Object.forEach(data, {notOwn: false}, (...args) => {
 			scan.push(args);
 		});
+
+		expect([...data]).toEqual([1, 2, 3]);
 
 		expect(scan).toEqual([[1, 'a', data]]);
 	});
