@@ -65,6 +65,23 @@ const
 console.log(list.last);
 ```
 
+#### clear
+
+Clears all nodes from the list.
+
+```js
+import LinkedList from 'core/linked-list';
+
+const
+  list = new LinkedList([1, 2, 3]);
+
+list.clear();
+
+console.log(list.first);  // undefined
+console.log(list.last);   // undefined
+console.log(list.length); // 0
+```
+
 #### reverse
 
 Returns an iterator over the data in the list.
@@ -109,13 +126,12 @@ For convenience, the LinkedList API is similar to the regular JS Array API:
    import LinkedList from 'core/linked-list';
 
    const
-     list = new LinkedList();
+     list = new LinkedList([-0, 1, NaN, 2]);
 
-   list.push(10);
-   list.push(11);
-
-   console.log(list.includes(10)); // true
-   console.log(list.includes(12)); // false
+   console.log(list.includes(0));   // true
+   console.log(list.includes(1));   // true
+   console.log(list.includes(NaN)); // true
+   console.log(list.includes(12));  // false
    ```
 
 3. Use the `length` getter to get the number of nodes in the list. The `push/unshift` methods also return the length of the list.
