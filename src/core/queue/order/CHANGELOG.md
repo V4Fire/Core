@@ -9,6 +9,13 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
+## v3.??.? (2022-0?-??)
+
+#### :rocket: New Feature
+
+* Implemented a new `clone` method
+* Implemented iterable behavior
+
 ## v3.67.0 (2021-12-01)
 
 #### :boom: Breaking Change

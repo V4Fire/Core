@@ -11,48 +11,35 @@
  * @packageDocumentation
  */
 
+import LinkedList from 'core/linked-list';
+
 import Queue from 'core/queue/interface';
-import type { InnerQueue, CreateInnerQueue } from 'core/queue/simple/interface';
+import type { CreateInnerQueue } from 'core/queue/simple/interface';
 
 export * from 'core/queue/interface';
 
 /**
- * Simple implementation of a queue data structure
- * @typeparam T - queue element
+ * Implementation of a queue data structure based on a linked-list
+ * @typeparam T - the queue element
  */
 export default class SimpleQueue<T> extends Queue<T> {
 	/**
-	 * Type: inner queue to store elements
+	 * Type: the internal queue to store elements
 	 */
-	readonly InnerQueue!: InnerQueue<T>;
+	readonly InnerQueue!: LinkedList<T>;
 
 	/** @inheritDoc */
 	get head(): CanUndef<T> {
-		return this.innerQueue[this.headCursor];
+		return this.innerQueue.first;
 	}
 
 	/** @inheritDoc */
 	get length(): number {
-		return this.lengthStore;
+		return this.innerQueue.length;
 	}
 
 	/**
-	 * Index of the head
-	 */
-	protected headCursor: number = 0;
-
-	/**
-	 * Index of the nearest empty cell
-	 */
-	protected emptyCursor: number = 0;
-
-	/**
-	 * Internal length value
-	 */
-	protected lengthStore: number = 0;
-
-	/**
-	 * Inner queue to store elements
+	 * The internal queue to store elements
 	 */
 	protected innerQueue: this['InnerQueue'];
 
@@ -64,52 +51,35 @@ export default class SimpleQueue<T> extends Queue<T> {
 
 	/** @inheritDoc */
 	push(task: T): number {
-		this.lengthStore++;
-		this.innerQueue[this.emptyCursor++] = task;
-
-		if (this.emptyCursor === this.headCursor) {
-			this.emptyCursor = this.lengthStore;
-		}
-
+		this.innerQueue.push(task);
 		return this.length;
 	}
 
 	/** @inheritDoc */
 	pop(): CanUndef<T> {
-		if (this.length === 0) {
-			return;
-		}
-
-		const {head} = this;
-		this.lengthStore--;
-
-		if (this.length === 0) {
-			this.headCursor = 0;
-			this.emptyCursor = 0;
-
-		} else {
-			if (this.emptyCursor > this.headCursor) {
-				this.emptyCursor = this.headCursor;
-			}
-
-			this.headCursor++;
-		}
-
-		return head;
+		return this.innerQueue.shift();
 	}
 
 	/** @inheritDoc */
 	clear(): void {
 		if (this.length > 0) {
-			this.innerQueue = this.createInnerQueue();
-			this.lengthStore = 0;
-			this.emptyCursor = 0;
-			this.headCursor = 0;
+			this.innerQueue.clear();
 		}
 	}
 
+	/** @inheritDoc */
+	clone(): SimpleQueue<T> {
+		const newQueue = new SimpleQueue<T>();
+		newQueue.innerQueue = this.innerQueue.slice();
+		return newQueue;
+	}
+
+	override values(): IterableIterator<T> {
+		return this.innerQueue.values();
+	}
+
 	/**
-	 * Returns a new blank inner queue to store elements
+	 * Returns a new blank internal queue to store elements
 	 */
-	protected createInnerQueue: CreateInnerQueue<this['InnerQueue']> = () => [];
+	protected createInnerQueue: CreateInnerQueue<this['InnerQueue']> = () => new LinkedList<T>();
 }

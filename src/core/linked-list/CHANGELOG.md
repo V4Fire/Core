@@ -9,15 +9,8 @@ Changelog
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
-## v3.??.? (2022-0?-??)
+## v3.??.? (2022-??-??)
 
 #### :rocket: New Feature
 
-* Implemented a new `clone` method
-* Implemented iterable behavior
-
-## v3.20.0 (2020-07-05)
-
-#### :rocket: New Feature
-
-* Added tests
+* Initial release

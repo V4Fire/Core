@@ -19,8 +19,8 @@ export * from 'core/queue/worker/merge/interface';
 /**
  * Implementation of a worker queue data structure
  *
- * @typeparam T - task element
- * @typeparam V - worker value
+ * @typeparam T - the task element
+ * @typeparam V - the worker value
  */
 export default class SimpleWorkerQueue<T, V = unknown> extends WorkerQueue<T, V> {
 	override readonly Tasks!: Tasks<Task<T>>;
@@ -47,6 +47,28 @@ export default class SimpleWorkerQueue<T, V = unknown> extends WorkerQueue<T, V>
 		this.start();
 
 		return taskObj.promise;
+	}
+
+	/** @inheritDoc */
+	clone(): SimpleWorkerQueue<T, V> {
+		const newQueue = new SimpleWorkerQueue<T, V>(this.worker);
+		Object.assign(newQueue, this);
+
+		if (this.tasks.clone != null) {
+			newQueue.tasks = this.tasks.clone();
+
+		} else {
+			const
+				tasks = this.createTasks();
+
+			for (const task of this.tasks) {
+				tasks.push(task);
+			}
+
+			newQueue.tasks = tasks;
+		}
+
+		return newQueue;
 	}
 
 	protected override perform(): void {
