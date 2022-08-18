@@ -153,32 +153,32 @@ console.log(queue.length); // 0
 import { AbstractQueue } from 'core/queue';
 
 export default class Queue extends AbstractQueue {
-  #internalQueue = [];
+  internalQueue = [];
 
   get head() {
-    return this.#internalQueue[0];
+    return this.internalQueue[0];
   }
 
   get length() {
-    return this.#internalQueue.length;
+    return this.internalQueue.length;
   }
 
   push(el) {
-    return this.#internalQueue.push(el);
+    return this.internalQueue.push(el);
   }
 
   pop() {
-    return this.#internalQueue.shift();
+    return this.internalQueue.shift();
   }
 
   clone() {
     const queue = new Queue();
-    queue.internalQueue = this.#internalQueue.slice();
+    queue.internalQueue = this.internalQueue.slice();
     return queue;
   }
 
   clear() {
-    this.#internalQueue = [];
+    this.internalQueue = [];
   }
 }
 ```
