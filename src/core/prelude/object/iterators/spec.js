@@ -230,10 +230,8 @@ describe('core/prelude/object/iterators/forEach', () => {
 			scan.push(args);
 		});
 
-		// TODO ask Andrey about this iterator
-		expect([...data]).toEqual([1, 2, 3]);
-
-		expect(scan).toEqual([[1, 'a', data]]);
+		expect(scan).toEqual([[1, 'a', expect.anything()]]);
+		expect(scan[0][2]).toBe(data);
 	});
 
 	it('iteration of an iterator with object flags (legacy)', () => {
@@ -245,8 +243,7 @@ describe('core/prelude/object/iterators/forEach', () => {
 			scan.push(args);
 		});
 
-		expect([...data]).toEqual([1, 2, 3]);
-
-		expect(scan).toEqual([[1, 'a', data]]);
+		expect(scan).toEqual([[1, 'a', expect.anything()]]);
+		expect(scan[0][2]).toBe(data);
 	});
 });

@@ -15,6 +15,7 @@ import SimpleCache from 'core/cache/simple';
 import RestrictedCache from 'core/cache/restricted';
 
 import { INDEX_STORAGE_NAME, TTL_POSTFIX } from 'core/cache/decorators/persistent/engines/const';
+import engines from 'core/cache/decorators/persistent/engines';
 
 describe('core/cache/decorators/persistent', () => {
 	beforeEach(async () => {
@@ -218,16 +219,21 @@ describe('core/cache/decorators/persistent', () => {
 	});
 
 	describe('`onDemand` loading from the storage', () => {
-		// TODO: find a way to mock a constructor
-		/* eslint-disable no-tabs */
-		// it('should work by default', async () => {
-		// 	jest.spyOn(engines, 'onDemand');
-		//
-		// 	await addPersistent(new SimpleCache(), asyncLocal);
-		//
-		// 	expect(engines.onDemand.mock.calls.length).toBe(1);
-		// });
-		/* eslint-enable no-tabs */
+		it('should work by default', async () => {
+			const fn = jest.fn();
+			const {onDemand} = engines;
+
+			engines.onDemand = function onDemand() {
+				fn();
+			};
+
+			await addPersistent(new SimpleCache(), asyncLocal);
+
+			// eslint-disable-next-line require-atomic-updates
+			engines.onDemand = onDemand;
+
+			expect(fn.mock.calls.length).toBe(1);
+		});
 
 		it('must save an item at the first demand', async () => {
 			const opts = {
