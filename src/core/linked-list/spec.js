@@ -6,119 +6,122 @@
  * https://github.com/V4Fire/Core/blob/master/LICENSE
  */
 
-import LinkedList from './linked-list';
+import LinkedList from 'core/linked-list';
 
 describe('core/linked-list', () => {
-	it('base linked list behaviour', () => {
-		const
-			list = new LinkedList();
-
-		list.push(1);
-
-		expect(list.length).toBe(1);
-		expect(list.first).toBe(1);
-		expect(list.last).toBe(1);
-		expect(list.first === list.last).toBe(true);
-
-		list.push(2);
-		expect(list.length).toBe(2);
-
-		expect(list.pop()).toBe(2);
-		expect(list.length).toBe(1);
-
-		expect(list.pop()).toBe(1);
-		expect(list.length).toBe(0);
-		expect(list.first).toBeUndefined();
-		expect(list.last).toBeUndefined();
-
-		list.unshift(3);
-		expect(list.length).toBe(1);
-
-		list.unshift(4);
-		expect(list.length).toBe(2);
-
-		expect(list.shift()).toBe(4);
-
-		expect(list.length).toBe(1);
-		expect(list.first).toBe(3);
-		expect(list.last).toBe(3);
-
-		expect(list.shift()).toBe(3);
-		expect(list.length).toBe(0);
-		expect(list.first).toBeUndefined();
-		expect(list.last).toBeUndefined();
-
-		list.unshift(3);
-		list.clear();
-
-		expect(list.length).toBe(0);
-		expect(list.first).toBeUndefined();
-		expect(list.last).toBeUndefined();
-	});
-
-	it('creating a linked list from iterable', () => {
+	it('should return the first value from the list', () => {
 		const
 			list = new LinkedList([1, 2, 3]);
 
 		expect(list.first).toBe(1);
+
+		list.shift();
+		expect(list.first).toBe(2);
+
+		list.unshift(0);
+		expect(list.first).toBe(0);
+	});
+
+	it('should return the last value from the list', () => {
+		const
+			list = new LinkedList([1, 2, 3]);
+
 		expect(list.last).toBe(3);
-		expect([...list]).toEqual([1, 2, 3]);
-	});
 
-	it('iterating a linked list', () => {
-		const
-			list = new LinkedList();
-
-		list.push(1);
-		list.push(2);
-		list.push(3);
-
-		expect([...list]).toEqual([1, 2, 3]);
-	});
-
-	it('check if list contains value', () => {
-		const
-			list = new LinkedList();
-
-		list.push(1);
-		list.push(2);
-		list.push(3);
-
-		expect(list.has(2)).toBe(true);
-		expect(list.has(10)).toBe(false);
-	});
-
-	it('reverse iterating a linked list', () => {
-		const
-			list = new LinkedList();
-
-		list.push(1);
-		list.push(2);
-		list.push(3);
-
-		expect([...list.reverse()]).toEqual([3, 2, 1]);
-	});
-
-	it('cloning a linked list', () => {
-		const
-			list = new LinkedList();
-
-		list.push(1);
-		list.push(2);
-
-		const
-			clonedList = list.clone();
-
-		expect(list !== clonedList).toBe(true);
-
-		expect(list.first).toBe(1);
+		list.pop();
 		expect(list.last).toBe(2);
-		expect(list.length).toBe(2);
-		expect(list.pop()).toBe(2);
 
-		expect(clonedList.first).toBe(1);
-		expect(clonedList.last).toBe(2);
-		expect(clonedList.length).toBe(2);
-		expect(clonedList.shift()).toBe(1);
+		list.push(4);
+		expect(list.last).toBe(4);
+	});
+
+	it('should return the list length', () => {
+		const
+			list = new LinkedList([1, 2, 3]);
+
+		expect(list.length).toBe(3);
+
+		list.pop();
+		expect(list.length).toBe(2);
+
+		list.push(4);
+		expect(list.length).toBe(3);
+	});
+
+	it('should implement Array-Like add/remove API', () => {
+		const
+			list = new LinkedList([1, 2, 3]);
+
+		expect(list.pop()).toBe(3);
+		expect(list.shift()).toBe(1);
+
+		expect(list.push(4)).toBe(list.length);
+		expect(list.pop()).toBe(4);
+
+		expect(list.unshift(0)).toBe(list.length);
+		expect(list.shift()).toBe(0);
+	});
+
+	it('should implement Array-Like slice API', () => {
+		const
+			a = {},
+			list = new LinkedList([a, 2, 3]);
+
+		expect(list.slice()).not.toBe(list);
+		expect([...list.slice()]).toEqual([a, 2, 3]);
+		expect(list.slice().first).toBe(a);
+
+		expect([...list.slice(1)]).toEqual([2, 3]);
+		expect([...list.slice(-1)]).toEqual([3]);
+
+		expect([...list.slice(0, -1)]).toEqual([a, 2]);
+		expect([...list.slice(0, -12)]).toEqual([]);
+
+		expect([...list.slice(1, 2)]).toEqual([2]);
+		expect([...list.slice(2, 1)]).toEqual([]);
+	});
+
+	it('should implement Array-Like includes API', () => {
+		const
+			list = new LinkedList([-0, 1, NaN, 3]);
+
+		expect(list.includes(0)).toBeTrue();
+		expect(list.includes(1)).toBeTrue();
+		expect(list.includes(NaN)).toBeTrue();
+		expect(list.includes(10)).toBeFalse();
+	});
+
+	it('should implement iterable API', () => {
+		const
+			list = new LinkedList([1, 2, 3]);
+
+		expect(Object.isIterable(list)).toBeTrue();
+		expect(Object.isIterator(list.values())).toBeTrue();
+
+		expect([...list]).toEqual([1, 2, 3]);
+		expect([...list.values()]).toEqual([1, 2, 3]);
+	});
+
+	it('calling `reverse` must return a reversed iterator', () => {
+		const
+			list = new LinkedList([1, 2, 3]);
+
+		expect(Object.isIterator(list.reverse())).toBeTrue();
+		expect([...list.reverse()]).toEqual([3, 2, 1]);
+		expect([...new LinkedList(list.reverse())]).toEqual([3, 2, 1]);
+	});
+
+	it('calling `clear` should clear the list', () => {
+		const
+			list = new LinkedList([1, 2, 3]);
+
+		list.clear();
+
+		expect(list.first).toBeUndefined();
+		expect(list.last).toBeUndefined();
+		expect(list.length).toBe(0);
+
+		expect([...list]).toEqual([]);
+		expect([...list.reverse()]).toEqual([]);
 	});
 });
