@@ -109,6 +109,34 @@ export default abstract class WorkerQueue<T, V = unknown> extends AbstractQueue<
 	/** @inheritDoc */
 	abstract override push(task: T): unknown;
 
+	/**
+	 * Returns an asynchronous iterator over the queue elements
+	 */
+	[Symbol.asyncIterator](): AsyncIterableIterator<T> {
+		const
+			clonedQueue = this.clone();
+
+		return {
+			[Symbol.asyncIterator]() {
+				return this;
+			},
+
+			next(): Promise<IteratorResult<T>> {
+				return new Promise((resolve) => {
+					const
+						done = clonedQueue.length <= 0,
+						value = clonedQueue.pop();
+
+					if (done || value == null) {
+						return resolve({done: true, value: undefined});
+					}
+
+					return resolve({done, value});
+				});
+			}
+		};
+	}
+
 	/** @inheritDoc */
 	pop(): CanUndef<T> {
 		const {head} = this;

@@ -13,8 +13,6 @@ export interface InnerQueue<T = unknown> {
 	unshift(task: T): number;
 	pop(): CanUndef<T>;
 	shift(): CanUndef<T>;
-	clear?(): void;
-	clone?(): InnerQueue<T>;
 	[Symbol.iterator](): IterableIterator<T>;
 }
 
@@ -24,34 +22,34 @@ export interface CreateInnerQueue<T extends InnerQueue<any> = InnerQueue> {
 
 export interface QueueOptions<T extends InnerQueue<any> = InnerQueue> {
 	/**
-	 * Factory to create an inner queue to store elements
+	 * A factory to create an internal queue to store elements
 	 */
 	queueFactory?: CreateInnerQueue<T>;
 }
 
 /**
- * Abstract class for a queue data structure
+ * An abstract class for any queue data structure
  * @typeparam T - queue element
  */
 export default abstract class Queue<T> {
 	/**
-	 * Queue head
+	 * The queue head
 	 */
 	abstract readonly head: CanUndef<T>;
 
 	/**
-	 * Queue length
+	 * Number of elements in the queue
 	 */
 	abstract readonly length: number;
 
 	/**
-	 * Adds an element to the queue
+	 * Adds a new element to the queue
 	 * @param el
 	 */
 	abstract push(el: T): unknown;
 
 	/**
-	 * Removes a head element from the queue and returns it
+	 * Removes the head element from the queue and returns it
 	 */
 	abstract pop(): CanUndef<T>;
 
@@ -77,12 +75,12 @@ export default abstract class Queue<T> {
 	abstract clear(): void;
 
 	/**
-	 * Clones the queue
+	 * Creates a new queue based on the current one and returns it
 	 */
 	abstract clone(): Queue<T>;
 
 	/**
-	 * Returns iterator
+	 * Returns an iterator over the queue elements
 	 */
 	[Symbol.iterator](): IterableIterator<T> {
 		const
@@ -103,34 +101,6 @@ export default abstract class Queue<T> {
 				}
 
 				return {done, value};
-			}
-		};
-	}
-
-	/**
-	 * Returns async iterator
-	 */
-	[Symbol.asyncIterator](): AsyncIterableIterator<T> {
-		const
-			clonedQueue = this.clone();
-
-		return {
-			[Symbol.asyncIterator]() {
-				return this;
-			},
-
-			next(): Promise<IteratorResult<T>> {
-				return new Promise((resolve) => {
-					const
-						done = clonedQueue.length <= 0,
-						value = clonedQueue.pop();
-
-					if (done || value == null) {
-						return resolve({done: true, value: undefined});
-					}
-
-					return resolve({done, value});
-				});
 			}
 		};
 	}
