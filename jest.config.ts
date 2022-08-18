@@ -5,7 +5,7 @@
 
 export default {
 	projects: ['<rootDir>'],
-	testMatch: ['<rootDir>/src/**/*[sS]pec.ts'],//'<rootDir>/dist/server/**/*[sS]pec.js',
+	testMatch: ['<rootDir>/dist/server/**/*[sS]pec.js', '<rootDir>/src/**/*[sS]pec.ts'],
 	rootDir: './',
 	testTimeout: 15000,
 	testEnvironment: 'node',
