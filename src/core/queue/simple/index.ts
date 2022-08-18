@@ -11,9 +11,10 @@
  * @packageDocumentation
  */
 
+import LinkedList from 'core/linked-list';
+
 import Queue from 'core/queue/interface';
 import type { CreateInnerQueue } from 'core/queue/simple/interface';
-import LinkedList from 'core/linked-list';
 
 export * from 'core/queue/interface';
 
@@ -51,7 +52,6 @@ export default class SimpleQueue<T> extends Queue<T> {
 	/** @inheritDoc */
 	push(task: T): number {
 		this.innerQueue.push(task);
-
 		return this.length;
 	}
 
@@ -69,11 +69,8 @@ export default class SimpleQueue<T> extends Queue<T> {
 
 	/** @inheritDoc */
 	clone(): SimpleQueue<T> {
-		const
-			newQueue = new SimpleQueue<T>();
-
-		newQueue.innerQueue = this.innerQueue.clone();
-
+		const newQueue = new SimpleQueue<T>();
+		newQueue.innerQueue = this.innerQueue.slice();
 		return newQueue;
 	}
 
