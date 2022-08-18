@@ -87,6 +87,13 @@ export default abstract class Queue<T> {
 	 * Returns an iterator over the queue elements
 	 */
 	[Symbol.iterator](): IterableIterator<T> {
+		return this.values();
+	}
+
+	/**
+	 * Returns an iterator over the queue elements
+	 */
+	values(): IterableIterator<T> {
 		const
 			clonedQueue = this.clone();
 

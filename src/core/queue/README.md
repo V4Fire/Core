@@ -123,6 +123,9 @@ For convenience, the underlying queue API is fairly close to the regular JS arra
 
    // [1, 5]
    console.log([...queue]);
+
+   // [1, 5]
+   console.log([...queue.values()]);
    ```
 
 In addition, the API declares `head` to get the first element from the queue and `clear` to clear the queue.

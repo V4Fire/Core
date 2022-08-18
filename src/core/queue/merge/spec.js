@@ -66,6 +66,8 @@ describe('core/queue/merge', () => {
 		queue.push(3);
 		queue.push(3);
 
+		expect(Object.isIterator(queue.values())).toBeTrue();
+		expect([...queue.values()]).toEqual([1, 2, 3]);
 		expect([...queue]).toEqual([1, 2, 3]);
 	});
 

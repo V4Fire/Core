@@ -74,9 +74,8 @@ export default class SimpleQueue<T> extends Queue<T> {
 		return newQueue;
 	}
 
-	/** @inheritDoc */
-	[Symbol.iterator](): IterableIterator<T> {
-		return this.innerQueue[Symbol.iterator]();
+	override values(): IterableIterator<T> {
+		return this.innerQueue.values();
 	}
 
 	/**
