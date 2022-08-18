@@ -11,4 +11,4 @@
  * @packageDocumentation
  */
 
-export { default } from 'core/linked-list/linked-list';
+export { default } from 'core/linked-list/list';
