@@ -11,6 +11,20 @@ Changelog
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
+## v3.??.? (2022-0?-??)
+
+#### :rocket: New Feature
+
+* Added a new module `core/linked-list`
+
+* `core/queue`:
+  * Added a new method to clone a queue
+  * Now any queue can be traversed with an iterator
+
+#### :bug: Bug Fix
+
+* Changed the internal queue structure to `core/linked-list` `core/queue/simple`
+
 ## v3.87.0 (2022-08-08)
 
 #### :rocket: New Feature
