@@ -31,13 +31,14 @@
     "test:linters": "npm run test:typescript && npm run test:eslint",
     "test:typescript": "node node_modules/@v4fire/typescript-check",
     "test:eslint": "eslint config build src",
-    "test:jest": "export NODE_ENV=development&&jest --coverage --runInBand",
+    "test:jest": "cross-env NODE_ENV=development && jest",
     "up": "npm i && gulp build:standalone && gulp build:doc"
   },
   "dependencies": {
     "@swc/core": "1.2.153",
     "@swc/helpers": "0.3.8",
     "@types/got": "9.6.12",
+    "cross-env": "7.0.3",
     "dom-storage": "2.1.0",
     "eventemitter2": "6.4.5",
     "form-data": "4.0.0",

@@ -13,6 +13,7 @@ describe('core/perf/timer/engines/console', () => {
 		it('calls `console.warn`', () => {
 			const spy = jest.spyOn(console, 'warn');
 			consoleEngine.sendDelta('login', 3);
+
 			expect(spy).toHaveBeenCalledTimes(1);
 			expect(spy).toHaveBeenLastCalledWith('login took 3 ms');
 		});
@@ -20,6 +21,7 @@ describe('core/perf/timer/engines/console', () => {
 		it('calls `console.warn` with additional data', () => {
 			const spy = jest.spyOn(console, 'warn');
 			consoleEngine.sendDelta('login', 5, {title: 'secret'});
+
 			expect(spy).toHaveBeenCalledTimes(1);
 			expect(spy).toHaveBeenLastCalledWith('login took 5 ms', {title: 'secret'});
 		});
@@ -29,6 +31,7 @@ describe('core/perf/timer/engines/console', () => {
 			jest.spyOn(console, 'warn');
 			jest.spyOn(console, 'log');
 			consoleEngine.sendDelta('login', 1);
+
 			expect(console.log).not.toHaveBeenCalled();
 		});
 
@@ -37,6 +40,7 @@ describe('core/perf/timer/engines/console', () => {
 			jest.spyOn(console, 'warn');
 			jest.spyOn(console, 'error');
 			consoleEngine.sendDelta('login', 1);
+
 			expect(console.error).not.toHaveBeenCalled();
 		});
 	});

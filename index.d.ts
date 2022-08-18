@@ -773,13 +773,13 @@ interface ObjectConstructor {
 
 	/**
 	 * Sets a value to the passed object by symbol with {enumerable: false}.
-	 * Return the object.
+	 * Returns the object.
 	 *
 	 * @param obj
 	 * @param symbol
 	 * @param value
 	 * */
-	defineSymbol(obj: any, symbol: symbol, value: any): boolean;
+	defineSymbol<T>(obj: T, symbol: symbol, value: any): T;
 
 	/**
 	 * Sets a value to the passed object by the specified path.

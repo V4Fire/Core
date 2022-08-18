@@ -13,27 +13,27 @@ describe('BaseError', () => {
 	describe('inheritance.', () => {
 		it('`BaseError` is instance of `Error`', () => {
 			const e = new BaseError();
-			expect(e instanceof Error).toBe(true);
+			expect(e).toBeInstanceOf(Error);
 		});
 
 		it('`BaseError` is instance of itself', () => {
 			const e = new BaseError();
-			expect(e instanceof BaseError).toBe(true);
+			expect(e).toBeInstanceOf(BaseError);
 		});
 
 		it('an error derived from `BaseError` is instance of `Error`', () => {
 			const e = new TestError();
-			expect(e instanceof Error).toBe(true);
+			expect(e).toBeInstanceOf(Error);
 		});
 
 		it('an error derived from `BaseError` is instance of `BaseError`', () => {
 			const e = new TestError();
-			expect(e instanceof BaseError).toBe(true);
+			expect(e).toBeInstanceOf(BaseError);
 		});
 
 		it('an error derived from `BaseError` is instance of itself', () => {
 			const e = new TestError();
-			expect(e instanceof TestError).toBe(true);
+			expect(e).toBeInstanceOf(TestError);
 		});
 	});
 
