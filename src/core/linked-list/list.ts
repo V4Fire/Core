@@ -175,9 +175,18 @@ export default class List<T> {
 	 * @param data
 	 */
 	includes(data: T): boolean {
-		for (const el of this) {
-			if (el === data) {
-				return true;
+		if (Number.isNaN(data)) {
+			for (const el of this) {
+				if (Number.isNaN(el)) {
+					return true;
+				}
+			}
+
+		} else {
+			for (const el of this) {
+				if (el === data) {
+					return true;
+				}
 			}
 		}
 
