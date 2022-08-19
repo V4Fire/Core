@@ -29,6 +29,7 @@ describe('middlewares/errors-deduplicator', () => {
 
 			middleware.exec(event, nextCallbackSpy);
 			expect(nextCallbackSpy).toHaveBeenLastCalledWith(eventCopy);
+			expect(nextCallbackSpy).toHaveBeenCalledTimes(1);
 		});
 
 		it('single error occurrence - the event should pass to the next middleware', () => {
@@ -39,6 +40,7 @@ describe('middlewares/errors-deduplicator', () => {
 
 			middleware.exec(event, nextCallbackSpy);
 			expect(nextCallbackSpy).toHaveBeenLastCalledWith(eventCopy);
+			expect(nextCallbackSpy).toHaveBeenCalledTimes(1);
 		});
 
 		it('multiple error occurrences - only the first event should pass to the next middleware', () => {
@@ -54,6 +56,8 @@ describe('middlewares/errors-deduplicator', () => {
 			middleware.exec(secondEvent, secondNextCallbackSpy);
 
 			expect(firstNextCallbackSpy).toHaveBeenLastCalledWith(firstEventCopy);
+			expect(firstNextCallbackSpy).toHaveBeenCalledTimes(1);
+
 			expect(secondNextCallbackSpy).not.toHaveBeenCalled();
 		});
 
@@ -70,7 +74,10 @@ describe('middlewares/errors-deduplicator', () => {
 			middleware.exec(secondEvent, secondNextCallbackSpy);
 
 			expect(firstNextCallbackSpy).toHaveBeenLastCalledWith(firstEventCopy);
+			expect(firstNextCallbackSpy).toHaveBeenCalledTimes(1);
+
 			expect(secondNextCallbackSpy).toHaveBeenLastCalledWith(secondEventCopy);
+			expect(secondNextCallbackSpy).toHaveBeenCalledTimes(1);
 		});
 
 		function createLogEvent(error, context = 'test') {

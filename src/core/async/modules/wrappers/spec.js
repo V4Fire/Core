@@ -312,6 +312,7 @@ describe('core/async/modules/wrappers', () => {
 					await $a.clearAll({group: 'bla'});
 					await promise;
 					expect(spyPromise).toHaveBeenLastCalledWith({type: 'clearAsync', reason: 'group'});
+					expect(spyPromise).toHaveBeenCalledTimes(1);
 				});
 
 				it('should consider the `group` parameter', async () => {
@@ -327,6 +328,7 @@ describe('core/async/modules/wrappers', () => {
 					await $a.clearAll({group: 'bla'});
 					await promise;
 					expect(spyPromise).toHaveBeenLastCalledWith({type: 'clearAsync', reason: 'group'});
+					expect(spyPromise).toHaveBeenCalledTimes(1);
 				});
 
 				it('should consider the `label` parameter', async () => {
@@ -342,6 +344,7 @@ describe('core/async/modules/wrappers', () => {
 					await $a.clearAll({label: 'qoo'});
 					await promise;
 					expect(spyPromise).toHaveBeenLastCalledWith({type: 'clearAsync', reason: 'label'});
+					expect(spyPromise).toHaveBeenCalledTimes(1);
 				});
 
 				it('should consider the `join` parameter', async () => {
@@ -376,7 +379,10 @@ describe('core/async/modules/wrappers', () => {
 					await Promise.all([promiseWithoutLocal, promiseWithLocal]);
 
 					expect(spyWithoutLocal).toHaveBeenLastCalledWith('resolved');
+					expect(spyWithoutLocal).toHaveBeenCalledTimes(1);
+
 					expect(spyWithLocal).toHaveBeenLastCalledWith({type: 'clearAsync', reason: 'group'});
+					expect(spyWithLocal).toHaveBeenCalledTimes(1);
 				});
 
 				it('should separate async options from additional parameters', () => {

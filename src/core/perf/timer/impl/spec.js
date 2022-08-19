@@ -90,6 +90,7 @@ describe('core/perf/timer/impl', () => {
 				testEngine.getTimestampFromTimeOrigin.mockReturnValueOnce(1);
 				timer.finish(timerId);
 				expect(testEngine.sendDelta).toHaveBeenLastCalledWith('manual.metrics', 1, undefined);
+				expect(testEngine.sendDelta).toHaveBeenCalledTimes(1);
 			});
 
 			it('sends additional data along with a delta', () => {
@@ -100,6 +101,7 @@ describe('core/perf/timer/impl', () => {
 				testEngine.getTimestampFromTimeOrigin.mockReturnValueOnce(1);
 				timer.finish(timerId, {name: 'secret'});
 				expect(testEngine.sendDelta).toHaveBeenLastCalledWith('manual.metrics', 1, {name: 'secret'});
+				expect(testEngine.sendDelta).toHaveBeenCalledTimes(1);
 			});
 
 			it('does not send a delta if the metric does not match a filter predicate', () => {
@@ -139,6 +141,7 @@ describe('core/perf/timer/impl', () => {
 				expect(console.warn).not.toHaveBeenCalled();
 				timer.finish(timerId);
 				expect(testEngine.sendDelta).toHaveBeenLastCalledWith('manual.metrics', 1, undefined);
+				expect(testEngine.sendDelta).toHaveBeenCalledTimes(1);
 				expect(console.warn).toHaveBeenCalled();
 			});
 
@@ -151,6 +154,7 @@ describe('core/perf/timer/impl', () => {
 				testEngine.getTimestampFromTimeOrigin.mockReturnValueOnce(2);
 				timer.finish(timerId);
 				expect(testEngine.sendDelta).toHaveBeenLastCalledWith('manual.metrics', 1, undefined);
+				expect(testEngine.sendDelta).toHaveBeenCalledTimes(1);
 			});
 		});
 
@@ -161,6 +165,7 @@ describe('core/perf/timer/impl', () => {
 				testEngine.getTimestampFromTimeOrigin.mockReturnValueOnce(1);
 				timer.markTimestamp('mark');
 				expect(testEngine.sendDelta).toHaveBeenLastCalledWith('manual.mark', 1, undefined);
+				expect(testEngine.sendDelta).toHaveBeenCalledTimes(1);
 			});
 
 			it('sends additional data along with a delta', () => {
@@ -169,6 +174,7 @@ describe('core/perf/timer/impl', () => {
 				testEngine.getTimestampFromTimeOrigin.mockReturnValueOnce(1);
 				timer.markTimestamp('mark', {title: 'none'});
 				expect(testEngine.sendDelta).toHaveBeenLastCalledWith('manual.mark', 1, {title: 'none'});
+				expect(testEngine.sendDelta).toHaveBeenCalledTimes(1);
 			});
 
 			it('sends a delta if matches a filter predicate', () => {
@@ -177,6 +183,7 @@ describe('core/perf/timer/impl', () => {
 				testEngine.getTimestampFromTimeOrigin.mockReturnValueOnce(1);
 				timer.markTimestamp('mark');
 				expect(testEngine.sendDelta).toHaveBeenLastCalledWith('manual.mark', 1, undefined);
+				expect(testEngine.sendDelta).toHaveBeenCalledTimes(1);
 			});
 
 			it('throws an exception if metrics name is not defined', () => {
@@ -206,6 +213,7 @@ describe('core/perf/timer/impl', () => {
 				testEngine.getTimestampFromTimeOrigin.mockReturnValueOnce(1);
 				timer.markTimestamp('mark');
 				expect(testEngine.sendDelta).toHaveBeenLastCalledWith('manual.mark', 0, undefined);
+				expect(testEngine.sendDelta).toHaveBeenCalledTimes(1);
 			});
 
 			it('is affected by scoped runner when is called in some time after creating of the runner', () => {
@@ -215,6 +223,7 @@ describe('core/perf/timer/impl', () => {
 				testEngine.getTimestampFromTimeOrigin.mockReturnValueOnce(3);
 				timer.markTimestamp('mark');
 				expect(testEngine.sendDelta).toHaveBeenLastCalledWith('manual.mark', 2, undefined);
+				expect(testEngine.sendDelta).toHaveBeenCalledTimes(1);
 			});
 		});
 
@@ -225,6 +234,7 @@ describe('core/perf/timer/impl', () => {
 				testEngine.getTimestampFromTimeOrigin.mockReturnValueOnce(1);
 				timer.markTimestamp('attach-headers');
 				expect(testEngine.sendDelta).toHaveBeenLastCalledWith('network.auth.attach-headers', 1, undefined);
+				expect(testEngine.sendDelta).toHaveBeenCalledTimes(1);
 			});
 
 			it('enriches the namespace for `markTimestamp` method several times in a row', () => {
@@ -238,6 +248,7 @@ describe('core/perf/timer/impl', () => {
 				testEngine.getTimestampFromTimeOrigin.mockReturnValueOnce(1);
 				timer.markTimestamp('attach-headers');
 				expect(testEngine.sendDelta).toHaveBeenLastCalledWith('network.auth.v1.api.attach-headers', 1, undefined);
+				expect(testEngine.sendDelta).toHaveBeenCalledTimes(1);
 			});
 
 			it('creates another timer instance which `markTimestamp` method does not affect the same method of the previous timer', () => {
@@ -267,6 +278,7 @@ describe('core/perf/timer/impl', () => {
 				testEngine.getTimestampFromTimeOrigin.mockReturnValueOnce(1);
 				timer.finish(timerId);
 				expect(testEngine.sendDelta).toHaveBeenLastCalledWith('network.auth.login', 1, undefined);
+				expect(testEngine.sendDelta).toHaveBeenCalledTimes(1);
 			});
 
 			it('enriches the namespace for `start`/`finish` methods several times in a row', () => {
@@ -282,6 +294,7 @@ describe('core/perf/timer/impl', () => {
 				testEngine.getTimestampFromTimeOrigin.mockReturnValueOnce(1);
 				timer.finish(timerId);
 				expect(testEngine.sendDelta).toHaveBeenLastCalledWith('network.auth.v1.api.login', 1, undefined);
+				expect(testEngine.sendDelta).toHaveBeenCalledTimes(1);
 			});
 
 			it('creates another timer instance which `start`/`finish` methods do not affect the same methods of the previous timer', () => {
@@ -363,6 +376,7 @@ describe('core/perf/timer/impl', () => {
 			testEngine.getTimestampFromTimeOrigin.mockReturnValueOnce(6);
 			timer.finish(timerId);
 			expect(testEngine.sendDelta).toHaveBeenLastCalledWith('components.update', 2, undefined);
+			expect(testEngine.sendDelta).toHaveBeenCalledTimes(1);
 		});
 	});
 });
